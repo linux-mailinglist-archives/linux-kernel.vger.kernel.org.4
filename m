@@ -2,496 +2,202 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E442F69B93E
-	for <lists+linux-kernel@lfdr.de>; Sat, 18 Feb 2023 11:10:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5AF8269B936
+	for <lists+linux-kernel@lfdr.de>; Sat, 18 Feb 2023 11:01:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229824AbjBRKKi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 18 Feb 2023 05:10:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53826 "EHLO
+        id S229795AbjBRKBs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 18 Feb 2023 05:01:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49872 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229799AbjBRKKg (ORCPT
+        with ESMTP id S229591AbjBRKBq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 18 Feb 2023 05:10:36 -0500
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE94738EAE;
-        Sat, 18 Feb 2023 02:10:34 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1676715034; x=1708251034;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=VPEU2lWtGSsQ2DQEDg0RPt/xKtiEwV4ZLRV4gGamits=;
-  b=YP7l6rfhqU1jrnax9U1SUbfO6EqRdGOSXYJdr1GM9sal9WyyVZO0kKPL
-   4JFpAD4bp7mihrg0Ru2xR3N2bmotS8ymnZVOAvKEkprNrQiQDC4Ug50tB
-   vJANZsC45GeVhyr0y+6UVjwB8UbZ50WLPylj5rAP0whoG3LUT4cwaWkHg
-   qSy6tz9ngMFhDR+YqddWVLQLtaYdJRcOg85B+1cRD0f00xnTVl7Vm8BqA
-   zfDpCfBshniwzbEEtHPRqMCQHRdVq4o3gly6luxCJaMKkYa0Z010uxvsy
-   gGdiHgLaR9fd5tGodvpxkghci2JNOLUidEO404gA3N11JWAcVfUJdt8ep
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10624"; a="330828269"
-X-IronPort-AV: E=Sophos;i="5.97,306,1669104000"; 
-   d="scan'208";a="330828269"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Feb 2023 02:10:34 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10624"; a="648350640"
-X-IronPort-AV: E=Sophos;i="5.97,306,1669104000"; 
-   d="scan'208";a="648350640"
-Received: from yilunxu-optiplex-7050.sh.intel.com (HELO localhost) ([10.239.159.165])
-  by orsmga006.jf.intel.com with ESMTP; 18 Feb 2023 02:10:32 -0800
-Date:   Sat, 18 Feb 2023 17:59:38 +0800
-From:   Xu Yilun <yilun.xu@intel.com>
-To:     Marco Pagani <marpagan@redhat.com>
-Cc:     Moritz Fischer <mdf@kernel.org>, Wu Hao <hao.wu@intel.com>,
-        Tom Rix <trix@redhat.com>, linux-kernel@vger.kernel.org,
-        linux-fpga@vger.kernel.org
-Subject: Re: [RFC PATCH 1/4] fpga: add initial KUnit test suite
-Message-ID: <Y/Chiq2kiAFGZpV6@yilunxu-OptiPlex-7050>
-References: <20230203170653.414990-1-marpagan@redhat.com>
- <20230203170653.414990-2-marpagan@redhat.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230203170653.414990-2-marpagan@redhat.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+        Sat, 18 Feb 2023 05:01:46 -0500
+Received: from nautica.notk.org (nautica.notk.org [91.121.71.147])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E07EA36697;
+        Sat, 18 Feb 2023 02:01:44 -0800 (PST)
+Received: by nautica.notk.org (Postfix, from userid 108)
+        id 4C854C01E; Sat, 18 Feb 2023 11:02:07 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=codewreck.org; s=2;
+        t=1676714527; bh=NFmYvXV61X47590TdvsFDX3eZIEYY1RVNT6C/giG+Bs=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=GzWvUSinsvSQMaaeDYhi5/lerYSbBC2DXRh1NoVyUdo0nZMAjKfq5X7dT+ry4lmHm
+         xPpTxUWBoIOHQ/RQkeXMvU6pJZdxW33BVMBzwoUy5u9Ko0KGtyt5Bif68NkxB1ApIQ
+         JL5XXAmEK2teXQzWkP5PlgsnNcofY2AJ5R/78VtBagM3Oa4RmUq0TBOIhW41sEPwys
+         /5zzW/aIhXrc847a6j+/415gJbL04MPk+Vcm7mEnwxERbsvACxcVVWfTZdjEUHdVrC
+         Qt/UAUI6myqPHNRe1M7T5KKtqFsprnBX7+bU95INzh4iZEhEjrpY2Tisg6Sx0LtrrV
+         r+uCU1zLEO4Xw==
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+X-Spam-Level: 
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
+Received: from odin.codewreck.org (localhost [127.0.0.1])
+        by nautica.notk.org (Postfix) with ESMTPS id 23129C009;
+        Sat, 18 Feb 2023 11:02:03 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=codewreck.org; s=2;
+        t=1676714526; bh=NFmYvXV61X47590TdvsFDX3eZIEYY1RVNT6C/giG+Bs=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=NMzB2HuMjWh9W+IaPRu8g+7WB9qjmuO0Cw9KeQNH7x/Mwf6Pfjwwb3BMC7MSGS7Nd
+         q7q++Mw+gDrxPW4yyN1W0HKdGAB7D/kG2tMB7TyWgHvg6COxy+g33cNJLZcfEyni5g
+         +Lb96rBrUXDFo+riV0Lt0asRZALM+8rMl97Ksl/RhRmLQPALz70W72PjD4QeJy9oux
+         pD5ovrmo6qyg9i3c95qQTMi/koybtUIx9m0T3+Tx/vBWBcI8iBB6icj1KXjRYYLYp/
+         OSbfzBU+wbfQX1qZop/gEom7wmRr99DxXJTaaflZFYBxEvQ12vZvOjWKIDWKs+KwjQ
+         4DzATOGyNX6lA==
+Received: from localhost (odin.codewreck.org [local])
+        by odin.codewreck.org (OpenSMTPD) with ESMTPA id 629c7762;
+        Sat, 18 Feb 2023 10:01:37 +0000 (UTC)
+Date:   Sat, 18 Feb 2023 19:01:22 +0900
+From:   asmadeus@codewreck.org
+To:     Eric Van Hensbergen <ericvh@kernel.org>
+Cc:     v9fs-developer@lists.sourceforge.net, rminnich@gmail.com,
+        lucho@ionkov.net, linux-kernel@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux_oss@crudebyte.com
+Subject: Re: [PATCH v4 10/11] fs/9p: writeback mode fixes
+Message-ID: <Y/Ch8o/6HVS8Iyeh@codewreck.org>
+References: <20230124023834.106339-1-ericvh@kernel.org>
+ <20230218003323.2322580-1-ericvh@kernel.org>
+ <20230218003323.2322580-11-ericvh@kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20230218003323.2322580-11-ericvh@kernel.org>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023-02-03 at 18:06:50 +0100, Marco Pagani wrote:
-> Introduce an initial KUnit suite to test the core components of the
-> FPGA subsystem.
+Eric Van Hensbergen wrote on Sat, Feb 18, 2023 at 12:33:22AM +0000:
+> This fixes several detected problems from preivous
+> patches when running with writeback mode.  In
+> particular this fixes issues with files which are opened
+> as write only and getattr on files which dirty caches.
+> 
+> This patch makes sure that cache behavior for an open file is stored in
+> the client copy of fid->mode.  This allows us to reflect cache behavior
+> from mount flags, open mode, and information from the server to
+> inform readahead and writeback behavior.
+> 
+> This includes adding support for a 9p semantic that qid.version==0
+> is used to mark a file as non-cachable which is important for
+> synthetic files.  This may have a side-effect of not supporting
+> caching on certain legacy file servers that do not properly set
+> qid.version.  There is also now a mount flag which can disable
+> the qid.version behavior.
+> 
+> Signed-off-by: Eric Van Hensbergen <ericvh@kernel.org>
 
-I'm not familiar with kunit, and I spend some time to read the
-Documentation/dev-tools/kunit/, sorry for late response.
+Didn't have time to review it all thoroughly, sending what I have
+anyway...
 
-> 
-> The test suite consists of two test cases. The first test case checks
-> the programming of a static image on a fake FPGA with a single hardware
-> bridge. The FPGA is first programmed using a test image stored in a
-> buffer, and then with the same image linked to a single-entry
-> scatter-gather list.
-> 
-> The second test case models dynamic partial reconfiguration. The FPGA
-> is first configured with a static image that implements a
-> reconfigurable design containing a sub-region controlled by two soft
-> bridges. Then, the reconfigurable sub-region is reconfigured using
-> a fake partial bitstream image. After the reconfiguration, the test
-> checks that the soft bridges have been correctly activated.
-> 
-> Signed-off-by: Marco Pagani <marpagan@redhat.com>
-> ---
->  drivers/fpga/Kconfig            |   2 +
->  drivers/fpga/Makefile           |   3 +
->  drivers/fpga/tests/.kunitconfig |   5 +
->  drivers/fpga/tests/Kconfig      |  15 ++
->  drivers/fpga/tests/Makefile     |   6 +
->  drivers/fpga/tests/fpga-tests.c | 264 ++++++++++++++++++++++++++++++++
->  6 files changed, 295 insertions(+)
->  create mode 100644 drivers/fpga/tests/.kunitconfig
->  create mode 100644 drivers/fpga/tests/Kconfig
->  create mode 100644 drivers/fpga/tests/Makefile
->  create mode 100644 drivers/fpga/tests/fpga-tests.c
-> 
-> diff --git a/drivers/fpga/Kconfig b/drivers/fpga/Kconfig
-> index 0a00763b9f28..2f689ac4ba3a 100644
-> --- a/drivers/fpga/Kconfig
-> +++ b/drivers/fpga/Kconfig
-> @@ -276,4 +276,6 @@ config FPGA_MGR_LATTICE_SYSCONFIG_SPI
->  	  FPGA manager driver support for Lattice FPGAs programming over slave
->  	  SPI sysCONFIG interface.
+> diff --git a/Documentation/filesystems/9p.rst b/Documentation/filesystems/9p.rst
+> index 0e800b8f73cc..0c2c7a181d85 100644
+> --- a/Documentation/filesystems/9p.rst
+> +++ b/Documentation/filesystems/9p.rst
+> @@ -79,18 +79,14 @@ Options
 >  
-> +source "drivers/fpga/tests/Kconfig"
-> +
->  endif # FPGA
-> diff --git a/drivers/fpga/Makefile b/drivers/fpga/Makefile
-> index 72e554b4d2f7..352a2612623e 100644
-> --- a/drivers/fpga/Makefile
-> +++ b/drivers/fpga/Makefile
-> @@ -55,3 +55,6 @@ obj-$(CONFIG_FPGA_DFL_NIOS_INTEL_PAC_N3000)	+= dfl-n3000-nios.o
+>    cache=mode	specifies a caching policy.  By default, no caches are used.
 >  
->  # Drivers for FPGAs which implement DFL
->  obj-$(CONFIG_FPGA_DFL_PCI)		+= dfl-pci.o
-> +
-> +# KUnit tests
-> +obj-$(CONFIG_FPGA_KUNIT_TESTS)		+= tests/
-> diff --git a/drivers/fpga/tests/.kunitconfig b/drivers/fpga/tests/.kunitconfig
-> new file mode 100644
-> index 000000000000..a1c2a2974c39
-> --- /dev/null
-> +++ b/drivers/fpga/tests/.kunitconfig
-> @@ -0,0 +1,5 @@
-> +CONFIG_KUNIT=y
-> +CONFIG_FPGA=y
-> +CONFIG_FPGA_REGION=y
-> +CONFIG_FPGA_BRIDGE=y
-> +CONFIG_FPGA_KUNIT_TESTS=y
-> diff --git a/drivers/fpga/tests/Kconfig b/drivers/fpga/tests/Kconfig
-> new file mode 100644
-> index 000000000000..5198e605b38d
-> --- /dev/null
-> +++ b/drivers/fpga/tests/Kconfig
-> @@ -0,0 +1,15 @@
-> +config FPGA_KUNIT_TESTS
-> +	tristate "FPGA KUnit tests" if !KUNIT_ALL_TESTS
-> +	depends on FPGA && FPGA_REGION && FPGA_BRIDGE && KUNIT
-> +	default KUNIT_ALL_TESTS
-> +	help
-> +	  Builds unit tests for the FPGA subsystem. This option
-> +	  is not useful for distributions or general kernels,
-> +	  but only for kernel developers working on the FPGA
-> +	  subsystem and its associated drivers.
-> +
-> +	  For more information on KUnit and unit tests in general,
-> +	  please refer to the KUnit documentation in
-> +	  Documentation/dev-tools/kunit/.
-> +
-> +	  If in doubt, say "N".
-> diff --git a/drivers/fpga/tests/Makefile b/drivers/fpga/tests/Makefile
-> new file mode 100644
-> index 000000000000..74346ae62457
-> --- /dev/null
-> +++ b/drivers/fpga/tests/Makefile
-> @@ -0,0 +1,6 @@
-> +# SPDX-License-Identifier: GPL-2.0
-> +
-> +obj-$(CONFIG_FPGA_KUNIT_TESTS) += fake-fpga-mgr.o
-> +obj-$(CONFIG_FPGA_KUNIT_TESTS) += fake-fpga-region.o
-> +obj-$(CONFIG_FPGA_KUNIT_TESTS) += fake-fpga-bridge.o
+> -                        none
+> -				default no cache policy, metadata and data
+> -                                alike are synchronous.
+> -			loose
+> -				no attempts are made at consistency,
+> -                                intended for exclusive, read-only mounts
+> -                        fscache
+> -				use FS-Cache for a persistent, read-only
+> -				cache backend.
+> -                        mmap
+> -				minimal cache that is only used for read-write
+> -                                mmap.  Northing else is cached, like cache=none
+> +			=========	=============================================
+> +			none		no cache of file or metadata
+> +			readahead	readahead caching of files
+> +			writeback	delayed writeback of files
+> +			mmap		support mmap operations read/write with cache
+> +			loose		meta-data and file cache with no coherency
+> +			fscache		use FS-Cache for a persistent cache backend
+> +			=========	=============================================
 
-It is better the patches for fake components come first, otherwise may
-break the compilation. Also not friendly for review.
+perhaps a word saying the caches are incremental, only one can be used,
+and listing them in order?
+e.g. it's not clear from this that writeback also enables readahead,
+and as a user I'd try to use cache=readahead,cache=writeback and wonder
+why that doesn't work (well, I guess it would in that order...)
 
-> +obj-$(CONFIG_FPGA_KUNIT_TESTS) += fpga-tests.o
 
-Maybe fpga-test.o?
+> diff --git a/fs/9p/fid.c b/fs/9p/fid.c
+> index 805151114e96..8c1697619f3d 100644
+> --- a/fs/9p/fid.c
+> +++ b/fs/9p/fid.c
+> @@ -41,14 +40,24 @@ void v9fs_fid_add(struct dentry *dentry, struct p9_fid **pfid)
+>  	*pfid = NULL;
+>  }
+>  
+> +static bool v9fs_is_writeable(int mode)
+> +{
+> +	if ((mode & P9_OWRITE) || (mode & P9_ORDWR))
 
-And could they be built in a single module? I haven't find a reason
-these fake components been used alone.
+(style) that's usually written 'if (mode & (P9_OWRITE | P9_ORDWR))'
 
-> diff --git a/drivers/fpga/tests/fpga-tests.c b/drivers/fpga/tests/fpga-tests.c
-> new file mode 100644
-> index 000000000000..33f04079b32f
-> --- /dev/null
-> +++ b/drivers/fpga/tests/fpga-tests.c
-> @@ -0,0 +1,264 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/*
-> + * Test suite for the FPGA subsystem
+(I don't really care, the compiler will likely generate the same more
+efficient check)
+
+> @@ -32,4 +34,33 @@ static inline struct p9_fid *v9fs_fid_clone(struct dentry *dentry)
+>  	p9_fid_put(fid);
+>  	return nfid;
+>  }
+> +/**
+> + * v9fs_fid_addmodes - add cache flags to fid mode (for client use only)
+> + * @fid: fid to augment
+> + * @s_flags: session info mount flags
+> + * @s_cache: session info cache flags
+> + * @f_flags: unix open flags
 > + *
-> + * Copyright (C) 2023 Red Hat, Inc. All rights reserved.
-> + *
-> + * Author: Marco Pagani <marpagan@redhat.com>
-> + */
-> +
-> +#include <kunit/test.h>
-> +#include <linux/platform_device.h>
-> +#include <linux/scatterlist.h>
-> +
-> +#include <linux/fpga/fpga-mgr.h>
-> +#include <linux/fpga/fpga-region.h>
-> +#include <linux/fpga/fpga-bridge.h>
-> +
-> +#include "fake-fpga-region.h"
-> +#include "fake-fpga-bridge.h"
-> +#include "fake-fpga-mgr.h"
-> +
-> +#define FAKE_BIT_BLOCKS		16
-> +#define FAKE_BIT_SIZE		(FPGA_TEST_BIT_BLOCK * FAKE_BIT_BLOCKS)
-> +
-> +static u8 fake_bit[FAKE_BIT_SIZE];
-> +
-> +static int init_sgt_bit(struct sg_table *sgt, void *bit, size_t len)
-> +{
-> +	int ret;
-> +
-> +	ret = sg_alloc_table(sgt, 1, GFP_KERNEL);
-> +	if (ret)
-> +		return ret;
-> +
-> +	sg_init_one(sgt->sgl, bit, len);
-> +
-> +	return ret;
-> +}
-> +
-> +static void free_sgt_bit(struct sg_table *sgt)
-> +{
-> +	if (sgt)
-> +		sg_free_table(sgt);
-> +}
-> +
-> +static void fpga_build_base_sys(struct kunit *test, struct fake_fpga_mgr *mgr_ctx,
-> +				struct fake_fpga_bridge *bridge_ctx,
-> +				struct fake_fpga_region *region_ctx)
-> +{
-> +	int ret;
-> +
-> +	ret = fake_fpga_mgr_register(mgr_ctx, test);
-> +	KUNIT_ASSERT_EQ(test, ret, 0);
-> +
-> +	ret = fake_fpga_bridge_register(bridge_ctx, test);
-> +	KUNIT_ASSERT_EQ(test, ret, 0);
-> +
-> +	ret = fake_fpga_region_register(region_ctx, mgr_ctx->mgr, test);
-> +	KUNIT_ASSERT_EQ(test, ret, 0);
-> +
-> +	ret = fake_fpga_region_add_bridge(region_ctx, bridge_ctx->bridge);
-> +	KUNIT_ASSERT_EQ(test, ret, 0);
-> +}
-> +
-> +static void fpga_free_base_sys(struct fake_fpga_mgr *mgr_ctx,
-> +			       struct fake_fpga_bridge *bridge_ctx,
-> +			       struct fake_fpga_region *region_ctx)
-> +{
-> +	if (region_ctx)
-> +		fake_fpga_region_unregister(region_ctx);
-> +
-> +	if (bridge_ctx)
-> +		fake_fpga_bridge_unregister(bridge_ctx);
-> +
-> +	if (region_ctx)
-> +		fake_fpga_mgr_unregister(mgr_ctx);
-> +}
-> +
-> +static int fpga_suite_init(struct kunit_suite *suite)
-> +{
-> +	fake_fpga_mgr_fill_header(fake_bit);
+> + * make sure mode reflects flags of underlying mounts
+> + * also qid.version == 0 reflects a synthetic or legacy file system
+> + * NOTE: these are set after open so only reflect 9p client not
+> + * underlying file system on server.
 
-Do we need to run it before every case? Or just run once for all cases?
+Ok, so ignore my comment about that in other commit; but that note
+really should also be in the header or commits should make sense in
+order...
+Rand aside, what's the point? It saves a lookup for the session in
+v9fs_file_read/write_iter ? We don't support changing cache mode for new
+fids with `mount -o remount` do we...
 
-> +
-> +	return 0;
-> +}
-> +
-> +static void fpga_base_test(struct kunit *test)
-> +{
-> +	int ret;
-> +
-> +	struct fake_fpga_mgr mgr_ctx;
-> +	struct fake_fpga_bridge base_bridge_ctx;
-> +	struct fake_fpga_region base_region_ctx;
-> +
-> +	struct fpga_image_info *test_img_info;
-> +
-> +	struct sg_table sgt_bit;
-> +
-> +	fpga_build_base_sys(test, &mgr_ctx, &base_bridge_ctx, &base_region_ctx);
-> +
-> +	/* Allocate a fake test image using a buffer */
-> +	test_img_info = fpga_image_info_alloc(&mgr_ctx.pdev->dev);
-> +	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, test_img_info);
-> +
-> +	test_img_info->buf = fake_bit;
-> +	test_img_info->count = sizeof(fake_bit);
-> +
-> +	kunit_info(test, "fake bitstream size: %zu\n", test_img_info->count);
-> +
-> +	KUNIT_EXPECT_EQ(test, 0, fake_fpga_mgr_get_rcfg_count(&mgr_ctx));
-> +
-> +	KUNIT_EXPECT_EQ(test, 0, fake_fpga_bridge_get_state(&base_bridge_ctx));
-> +	KUNIT_EXPECT_EQ(test, 0, fake_fpga_bridge_get_cycles_count(&base_bridge_ctx));
-> +
-> +	/* Program the fake FPGA using the image buffer */
-> +	base_region_ctx.region->info = test_img_info;
-> +	ret = fpga_region_program_fpga(base_region_ctx.region);
-> +	KUNIT_ASSERT_EQ(test, ret, 0);
-> +
-> +	fake_fpga_mgr_check_write_buf(&mgr_ctx);
-> +
-> +	KUNIT_EXPECT_EQ(test, 1, fake_fpga_mgr_get_rcfg_count(&mgr_ctx));
-> +
-> +	KUNIT_EXPECT_EQ(test, 1, fake_fpga_bridge_get_state(&base_bridge_ctx));
-> +	KUNIT_EXPECT_EQ(test, 1, fake_fpga_bridge_get_cycles_count(&base_bridge_ctx));
-> +
-> +	fpga_image_info_free(test_img_info);
-> +
-> +	/* Allocate another fake test image using a scatter list */
-> +	test_img_info = fpga_image_info_alloc(&mgr_ctx.pdev->dev);
-> +	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, test_img_info);
-> +
-> +	ret = init_sgt_bit(&sgt_bit, fake_bit, FAKE_BIT_SIZE);
-> +	KUNIT_ASSERT_EQ(test, ret, 0);
+Ah, I see you're adding DIRECT to the mode if you fail opening the
+writeback fid; ok that makes more sense.
+I'd appreciate a comment as well for that, around the enum definition
+rather than here, if you want to humor me on this.
 
-This is not fpga function, do we need the ASSERT?
 
-> +
-> +	test_img_info->sgt = &sgt_bit;
-> +
-> +	/* Re-program the fake FPGA using the image scatter list */
-> +	base_region_ctx.region->info = test_img_info;
-> +	ret = fpga_region_program_fpga(base_region_ctx.region);
-> +	KUNIT_ASSERT_EQ(test, ret, 0);
-> +
-> +	fake_fpga_mgr_check_write_sg(&mgr_ctx);
-> +
-> +	KUNIT_EXPECT_EQ(test, 2, fake_fpga_mgr_get_rcfg_count(&mgr_ctx));
-> +
-> +	KUNIT_EXPECT_EQ(test, 1, fake_fpga_bridge_get_state(&base_bridge_ctx));
-> +	KUNIT_EXPECT_EQ(test, 2, fake_fpga_bridge_get_cycles_count(&base_bridge_ctx));
-> +
-> +	free_sgt_bit(&sgt_bit);
-> +	fpga_image_info_free(test_img_info);
-> +	fpga_free_base_sys(&mgr_ctx, &base_bridge_ctx, &base_region_ctx);
-> +}
-> +
-> +static void fpga_pr_test(struct kunit *test)
-> +{
-> +	int ret;
-> +
-> +	struct fake_fpga_mgr mgr_ctx;
-> +	struct fake_fpga_bridge base_bridge_ctx;
-> +	struct fake_fpga_region base_region_ctx;
-> +
-> +	struct fake_fpga_bridge pr_bridge_0_ctx;
-> +	struct fake_fpga_bridge pr_bridge_1_ctx;
-> +	struct fake_fpga_region pr_region_ctx;
-> +
-> +	struct fpga_image_info *test_static_img_info;
-> +	struct fpga_image_info *test_pr_img_info;
-> +
-> +	fpga_build_base_sys(test, &mgr_ctx, &base_bridge_ctx, &base_region_ctx);
+> v9fs_file.c
+> @@ -59,7 +59,19 @@ int v9fs_file_open(struct inode *inode, struct file *file)
+>  		if (IS_ERR(fid))
+>  			return PTR_ERR(fid);
+>  
+> -		err = p9_client_open(fid, omode);
+> +		if ((v9ses->cache >= CACHE_WRITEBACK) && (omode & P9_OWRITE)) {
+> +			int writeback_omode = (omode & !P9_OWRITE) | P9_ORDWR;
 
-If we need the base region/bridge/mgr for each case, could we create
-global ones in .init(), or .suite_init()?
+omode & ~P9_OWRITE ?
+`!P9_OWRITE` will be 0...
 
-> +
-> +	/* Allocate a fake test image using a buffer */
-> +	test_static_img_info = fpga_image_info_alloc(&mgr_ctx.pdev->dev);
-> +	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, test_static_img_info);
-> +
-> +	test_static_img_info->buf = fake_bit;
-> +	test_static_img_info->count = sizeof(fake_bit);
+> diff --git a/fs/9p/vfs_super.c b/fs/9p/vfs_super.c
+> index 5fc6a945bfff..797f717e1a91 100644
+> --- a/fs/9p/vfs_super.c
+> +++ b/fs/9p/vfs_super.c
 
-Same concern, may remove the test image info initialization from each
-test case code.
+> @@ -323,16 +327,17 @@ static int v9fs_write_inode_dotl(struct inode *inode,
+>  	 */
+>  	v9inode = V9FS_I(inode);
+>  	p9_debug(P9_DEBUG_VFS, "%s: inode %p, writeback_fid %p\n",
+> -		 __func__, inode, v9inode->writeback_fid);
+> -	if (!v9inode->writeback_fid)
+> -		return 0;
+> +		 __func__, inode, fid);
+> +	if (!fid)
+> +		return -EINVAL;
 
-> +
-> +	kunit_info(test, "fake bitstream size: %zu\n", test_static_img_info->count);
-> +
-> +	KUNIT_EXPECT_EQ(test, 0, fake_fpga_mgr_get_rcfg_count(&mgr_ctx));
-> +
-> +	KUNIT_EXPECT_EQ(test, 0, fake_fpga_bridge_get_state(&base_bridge_ctx));
-> +	KUNIT_EXPECT_EQ(test, 0, fake_fpga_bridge_get_cycles_count(&base_bridge_ctx));
-> +
-> +	/* Program the fake FPGA using the image buffer */
-> +	base_region_ctx.region->info = test_static_img_info;
-> +	ret = fpga_region_program_fpga(base_region_ctx.region);
-> +	KUNIT_ASSERT_EQ(test, ret, 0);
-> +
-> +	fake_fpga_mgr_check_write_buf(&mgr_ctx);
-> +
-> +	KUNIT_EXPECT_EQ(test, 1, fake_fpga_mgr_get_rcfg_count(&mgr_ctx));
-> +
-> +	KUNIT_EXPECT_EQ(test, 1, fake_fpga_bridge_get_state(&base_bridge_ctx));
-> +	KUNIT_EXPECT_EQ(test, 1, fake_fpga_bridge_get_cycles_count(&base_bridge_ctx));
-> +
-> +	/* The static image contains a reconfigurable sub-region with two soft bridges */
-
-Till now I didn't find any difference with fpga_base_test.
-And I can't figure out how the "static parent region - sub pr region"
-topology is created?
-
-> +	ret = fake_fpga_bridge_register(&pr_bridge_0_ctx, test);
-> +	KUNIT_ASSERT_EQ(test, ret, 0);
-> +
-> +	ret = fake_fpga_bridge_register(&pr_bridge_1_ctx, test);
-> +	KUNIT_ASSERT_EQ(test, ret, 0);
-> +
-> +	ret = fake_fpga_region_register(&pr_region_ctx, mgr_ctx.mgr, test);
-> +	KUNIT_ASSERT_EQ(test, ret, 0);
-> +
-> +	ret = fake_fpga_region_add_bridge(&pr_region_ctx, pr_bridge_0_ctx.bridge);
-> +	KUNIT_ASSERT_EQ(test, ret, 0);
-> +
-> +	ret = fake_fpga_region_add_bridge(&pr_region_ctx, pr_bridge_1_ctx.bridge);
-> +	KUNIT_ASSERT_EQ(test, ret, 0);
-> +
-> +	/* Allocate a fake partial test image using a buffer */
-> +	test_pr_img_info = fpga_image_info_alloc(&mgr_ctx.pdev->dev);
-> +	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, test_pr_img_info);
-> +
-> +	test_pr_img_info->buf = fake_bit;
-> +	test_pr_img_info->count = sizeof(fake_bit) / 2;
-> +	test_pr_img_info->flags = FPGA_MGR_PARTIAL_RECONFIG;
-> +
-> +	kunit_info(test, "fake partial bitstream size: %zu\n", test_pr_img_info->count);
-> +
-> +	/* Program the reconfigurable sub-region */
-> +	pr_region_ctx.region->info = test_pr_img_info;
-> +	ret = fpga_region_program_fpga(pr_region_ctx.region);
-> +	KUNIT_ASSERT_EQ(test, ret, 0);
-> +
-> +	fake_fpga_mgr_check_write_buf(&mgr_ctx);
-> +
-> +	KUNIT_EXPECT_EQ(test, 2, fake_fpga_mgr_get_rcfg_count(&mgr_ctx));
-> +
-> +	KUNIT_EXPECT_EQ(test, 1, fake_fpga_bridge_get_state(&pr_bridge_0_ctx));
-> +	KUNIT_EXPECT_EQ(test, 1, fake_fpga_bridge_get_cycles_count(&pr_bridge_0_ctx));
-> +
-> +	KUNIT_EXPECT_EQ(test, 1, fake_fpga_bridge_get_state(&pr_bridge_1_ctx));
-> +	KUNIT_EXPECT_EQ(test, 1, fake_fpga_bridge_get_cycles_count(&pr_bridge_1_ctx));
-> +
-> +	/* Check that the base bridge has not been disabled */
-> +	KUNIT_EXPECT_EQ(test, 1, fake_fpga_bridge_get_state(&base_bridge_ctx));
-> +	KUNIT_EXPECT_EQ(test, 1, fake_fpga_bridge_get_cycles_count(&base_bridge_ctx));
-> +
-> +	fpga_image_info_free(test_pr_img_info);
-> +	fpga_image_info_free(test_static_img_info);
-> +
-> +	fake_fpga_region_unregister(&pr_region_ctx);
-> +	fake_fpga_bridge_unregister(&pr_bridge_0_ctx);
-> +	fake_fpga_bridge_unregister(&pr_bridge_1_ctx);
-> +
-> +	fpga_free_base_sys(&mgr_ctx, &base_bridge_ctx, &base_region_ctx);
-
-Same concern, may put them in .exit() or suite_exit()?
-
-> +}
-> +
-> +static struct kunit_case fpga_test_cases[] = {
-> +	KUNIT_CASE(fpga_base_test),
-> +	KUNIT_CASE(fpga_pr_test),
-
-I feel there are too many tasks for each test case, and some duplicated
-routines.
-
-Could we have a suite for the common routine test in each case, like
-region/bridge/mgr (un)register, fpga image alloc ... And another suite
-which have these common routines in .init() or .suite_init().
-
-> +	{},
-> +};
-> +
-> +static struct kunit_suite fpga_test_suite = {
-> +	.name = "fpga-tests",
-
-I see from style.rst that:
-  
-  "Names should use underscores, not dashes, to separate words"
-
-and
-
-  "*Do not* include "test" or "kunit" directly in the subsystem name
-   unless we are actually testing other tests or the kunit framework
-   itself"
-
-So IIUC I assume the name should be "fpga"?
-
-BTW: I do see some existing test cases that are not conform to the style,
-even the examples in doc itself.
-
-Thanks,
-Yilun
-
-> +	.suite_init = fpga_suite_init,
-> +	.test_cases = fpga_test_cases,
-> +};
-> +
-> +kunit_test_suite(fpga_test_suite);
-> -- 
-> 2.39.1
-> 
+Hmm, what happens if we return EINVAL here?
+Might want a WARN_ONCE or something?
