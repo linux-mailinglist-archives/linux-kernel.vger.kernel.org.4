@@ -2,91 +2,174 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6878169B8C8
-	for <lists+linux-kernel@lfdr.de>; Sat, 18 Feb 2023 09:40:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2826269B8C9
+	for <lists+linux-kernel@lfdr.de>; Sat, 18 Feb 2023 09:46:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229664AbjBRIkj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 18 Feb 2023 03:40:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38500 "EHLO
+        id S229636AbjBRIpt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 18 Feb 2023 03:45:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40426 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229441AbjBRIkh (ORCPT
+        with ESMTP id S229441AbjBRIpr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 18 Feb 2023 03:40:37 -0500
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F8DB39BB3;
-        Sat, 18 Feb 2023 00:40:36 -0800 (PST)
-Received: from localhost (89-26-75-29.goll.dyn.salzburg-online.at [89.26.75.29])
+        Sat, 18 Feb 2023 03:45:47 -0500
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 035F44988D
+        for <linux-kernel@vger.kernel.org>; Sat, 18 Feb 2023 00:45:44 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        (Authenticated sender: sebastianfricke)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 9C616660212B;
-        Sat, 18 Feb 2023 08:40:34 +0000 (GMT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1676709634;
-        bh=DZ4yl6pLDxAn2zGVTcu68iBMqMhqGYiMmgtbG2Io9u0=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=f3mjSIHKh+1g/v/FQEA3nV3EyS3Ese4havM2n5ssHpnM2j7nmDXt1KLtaotl6uL4W
-         nzuwuljjaH1zX8cGzJDUkMDK9u9C2VDr8yEATKnKye1XVJ2O/Bf7jX+elzvJAJzO66
-         IEU9xlI7RECif488RgR00eq0Eh1rYfAkcAjo9UHaLQYeEb4IPvID87PKhISh8Ln9Mm
-         pV8yJHOSXzC8Azwct3wT/ZroGNn/bztHyrLrq9/A/GH4KO4Y4U/4DPsvENi0j9ck2K
-         Ixrj5sPOobbqhDfoUZyQWIwacbzjvkSu0IePkQpVAc+uRoSbsSf1/6ywOf1BjRVNWv
-         k960a3XxDXvSg==
-Date:   Sat, 18 Feb 2023 09:40:31 +0100
-From:   Sebastian Fricke <sebastian.fricke@collabora.com>
-To:     Vishal Parmar <vishistriker@gmail.com>
-Cc:     laurent.pinchart@ideasonboard.com, mchehab@kernel.org,
-        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] first patch test
-Message-ID: <20230218084031.xn2valzzjmx6vgzh@basti-XPS-13-9310>
-References: <20230218031238.5747-1-vishistriker@gmail.com>
+        by smtp-out1.suse.de (Postfix) with ESMTPS id A00B421DCE;
+        Sat, 18 Feb 2023 08:45:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1676709942; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=/AM7lDOg+R9kS69a7Vh5ZjVbAdMxKs6asZt00ye7K3Y=;
+        b=eDF6Asy21+jDFD6GrlGr/LD7dgwZt4U4yKcaOKPmg8ede093+EiCLtEk8LJ5h6b97YIUTo
+        havD96Pc3Vso0e9wHOFU7TNVTrWQWAptZ/9nS5RxTuaU8fBaNJ317LTZZpcfmmR9lCP35j
+        6tUZc0dOuRrqpdUkIvmbN00cgfIoDT8=
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 71DCC134BA;
+        Sat, 18 Feb 2023 08:45:42 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id XyfHGTaQ8GOQeQAAMHmgww
+        (envelope-from <jgross@suse.com>); Sat, 18 Feb 2023 08:45:42 +0000
+Message-ID: <b5d608ff-84a3-c167-829c-3f19346103bf@suse.com>
+Date:   Sat, 18 Feb 2023 09:45:41 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Disposition: inline
-In-Reply-To: <20230218031238.5747-1-vishistriker@gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH] xen: sysfs: make kobj_type structure constant
+Content-Language: en-US
+To:     =?UTF-8?Q?Thomas_Wei=c3=9fschuh?= <linux@weissschuh.net>,
+        Stefano Stabellini <sstabellini@kernel.org>,
+        Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>
+Cc:     xen-devel@lists.xenproject.org, linux-kernel@vger.kernel.org
+References: <20230216-kobj_type-xen-v1-1-742423de7d71@weissschuh.net>
+From:   Juergen Gross <jgross@suse.com>
+In-Reply-To: <20230216-kobj_type-xen-v1-1-742423de7d71@weissschuh.net>
+Content-Type: multipart/signed; micalg=pgp-sha256;
+ protocol="application/pgp-signature";
+ boundary="------------MmQQrjQJT0gWYRfJIYOrtzJl"
+X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hey Vishal,
+This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
+--------------MmQQrjQJT0gWYRfJIYOrtzJl
+Content-Type: multipart/mixed; boundary="------------TBM4MKgme1ejF5raTXbMT4kX";
+ protected-headers="v1"
+From: Juergen Gross <jgross@suse.com>
+To: =?UTF-8?Q?Thomas_Wei=c3=9fschuh?= <linux@weissschuh.net>,
+ Stefano Stabellini <sstabellini@kernel.org>,
+ Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>
+Cc: xen-devel@lists.xenproject.org, linux-kernel@vger.kernel.org
+Message-ID: <b5d608ff-84a3-c167-829c-3f19346103bf@suse.com>
+Subject: Re: [PATCH] xen: sysfs: make kobj_type structure constant
+References: <20230216-kobj_type-xen-v1-1-742423de7d71@weissschuh.net>
+In-Reply-To: <20230216-kobj_type-xen-v1-1-742423de7d71@weissschuh.net>
 
-actually sending noise to the mailing list is not very nice.
-And you also just did the same mistake as someone else a few weeks ago.
+--------------TBM4MKgme1ejF5raTXbMT4kX
+Content-Type: multipart/mixed; boundary="------------moL9X0pvK81uoCMSFz1yfGiw"
 
-Please see this mail:
-https://lore.kernel.org/linux-media/49d1dece-cb90-23f3-977e-98905b1a0abc@collabora.com/
+--------------moL9X0pvK81uoCMSFz1yfGiw
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: base64
 
-If you don't know what to do for your first patch, then either ask in
-the mailing list or have a look into the TODO files in
-drivers/staging/media or ask on the IRC channel: https://linuxtv.org/irc/
+T24gMTYuMDIuMjMgMDI6MTAsIFRob21hcyBXZWnDn3NjaHVoIHdyb3RlOg0KPiBTaW5jZSBj
+b21taXQgZWU2ZDNkZDRlZDQ4ICgiZHJpdmVyIGNvcmU6IG1ha2Uga29ial90eXBlIGNvbnN0
+YW50LiIpDQo+IHRoZSBkcml2ZXIgY29yZSBhbGxvd3MgdGhlIHVzYWdlIG9mIGNvbnN0IHN0
+cnVjdCBrb2JqX3R5cGUuDQo+IA0KPiBUYWtlIGFkdmFudGFnZSBvZiB0aGlzIHRvIGNvbnN0
+aWZ5IHRoZSBzdHJ1Y3R1cmUgZGVmaW5pdGlvbiB0byBwcmV2ZW50DQo+IG1vZGlmaWNhdGlv
+biBhdCBydW50aW1lLg0KPiANCj4gU2lnbmVkLW9mZi1ieTogVGhvbWFzIFdlacOfc2NodWgg
+PGxpbnV4QHdlaXNzc2NodWgubmV0Pg0KDQpSZXZpZXdlZC1ieTogSnVlcmdlbiBHcm9zcyA8
+amdyb3NzQHN1c2UuY29tPg0KDQoNCkp1ZXJnZW4NCg0K
+--------------moL9X0pvK81uoCMSFz1yfGiw
+Content-Type: application/pgp-keys; name="OpenPGP_0xB0DE9DD628BF132F.asc"
+Content-Disposition: attachment; filename="OpenPGP_0xB0DE9DD628BF132F.asc"
+Content-Description: OpenPGP public key
+Content-Transfer-Encoding: quoted-printable
 
-Greetings,
-Sebastian
+-----BEGIN PGP PUBLIC KEY BLOCK-----
 
-On 18.02.2023 08:42, Vishal Parmar wrote:
->Signed-off-by: Vishal Parmar <vishistriker@gmail.com>
->---
-> drivers/media/usb/uvc/uvc_driver.c | 2 +-
-> 1 file changed, 1 insertion(+), 1 deletion(-)
->
->diff --git a/drivers/media/usb/uvc/uvc_driver.c b/drivers/media/usb/uvc/uvc_driver.c
->index e4bcb5011360..c79dcee2213f 100644
->--- a/drivers/media/usb/uvc/uvc_driver.c
->+++ b/drivers/media/usb/uvc/uvc_driver.c
->@@ -2082,7 +2082,7 @@ static int uvc_probe(struct usb_interface *intf,
-> 		(const struct uvc_device_info *)id->driver_info;
-> 	int function;
-> 	int ret;
->-
->+        pr_info("I changed uvcvideo driver in the Linux Kernel\n");
-> 	/* Allocate memory for the device and initialize it. */
-> 	dev = kzalloc(sizeof(*dev), GFP_KERNEL);
-> 	if (dev == NULL)
->-- 
->2.34.1
->
+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
+jR/i1DG86lem3iBDXzXsZDn8R38=3D
+=3D2wuH
+-----END PGP PUBLIC KEY BLOCK-----
+
+--------------moL9X0pvK81uoCMSFz1yfGiw--
+
+--------------TBM4MKgme1ejF5raTXbMT4kX--
+
+--------------MmQQrjQJT0gWYRfJIYOrtzJl
+Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="OpenPGP_signature"
+
+-----BEGIN PGP SIGNATURE-----
+
+wsB5BAABCAAjFiEEhRJncuj2BJSl0Jf3sN6d1ii/Ey8FAmPwkDUFAwAAAAAACgkQsN6d1ii/Ey/y
+lQf/fyO7A0Z0KDCFSdV1ijk0nwr5JoV62G8k7lqQK+P1UrxcVCfbyaTHpvBfqusWxIAqVAai5vpW
+rodyoqa0Gf7UkvipLiDx+DNFOwxiQ8QBIGuvo4XoI+N2jo2s/Dua3Onoccao2+hntZZF1ncO3Pm/
+ITXOrGyIbFm11pZSRGr2AhFnKDk6WK2e8D2jrAQwoTW90xYKWlJDEoUNBp5+hN95fbXkVPswTzxQ
+csnUHrKp5TDt/a5Y+bdzd2pnRQVSp7ECs27Zx1TiEIoY7EcXGQ0S6w2ng4leByJH6B9jidUdR0vU
+GuK0axjhfdHXOx2+dXALojk/GmcEgFwx5Y79d88J6w==
+=n0/L
+-----END PGP SIGNATURE-----
+
+--------------MmQQrjQJT0gWYRfJIYOrtzJl--
