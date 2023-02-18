@@ -2,104 +2,246 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B190D69B941
-	for <lists+linux-kernel@lfdr.de>; Sat, 18 Feb 2023 11:11:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B31FF69B95E
+	for <lists+linux-kernel@lfdr.de>; Sat, 18 Feb 2023 11:24:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229847AbjBRKLl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 18 Feb 2023 05:11:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54734 "EHLO
+        id S229772AbjBRKYW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 18 Feb 2023 05:24:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34220 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229799AbjBRKLk (ORCPT
+        with ESMTP id S229507AbjBRKYU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 18 Feb 2023 05:11:40 -0500
-Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B28FD37577
-        for <linux-kernel@vger.kernel.org>; Sat, 18 Feb 2023 02:11:38 -0800 (PST)
-Received: by mail-ed1-x536.google.com with SMTP id t19so1098460edi.13
-        for <linux-kernel@vger.kernel.org>; Sat, 18 Feb 2023 02:11:38 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=dTrZlM/1j34PmNemq7d5HYpo1rmgNzw7BezUEBROqsY=;
-        b=GV1pVXEHTU3KwzBKiZmlxiL54Wv26ipKjZ7O0pei0QV8W/TvzR5zSbbvM8TQzq6p+9
-         uo+R/o+KLvFeygL4CC8eLWB2Y6wKqfzg6mdHaAYMsF3Y78+MBJiwae8qos+Iz+U5ReTw
-         i0hqLEngqwYwvnrpgipCN/g3VsT0Ocbb6aaFqMwICxo7oOq+TgkWVWvRXaueMSSmWQtm
-         XCgbjdkXPQkmPx0/bdblYUi3AyobQ6gfRoPFEy12lTJr4HKOg0iKyHI1tvBtVduSulYM
-         Tf2FLhyxnmgjU9X5dIX8RXeMLtxudEt/Ou/JqO2vs0LECEt9+faLxnJKjmlPXc0R7WP9
-         fdgg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=dTrZlM/1j34PmNemq7d5HYpo1rmgNzw7BezUEBROqsY=;
-        b=jvpktIfuZJnBuoSxhnVWJsfiOjmF3OxhVuo7un23c1kD9EQZhb/w3nH5MgYQTYNZ3z
-         pAEqWV6Dd6w2Fsp2EDamuRM0abWnOHCgYzs4Vs4M19sz0mwBmluqwNo2Ac0jDHecgBC5
-         kF5nSDBYee1w0Avymn/PC3iqYaiM0iSXJchKkzuk9VILFljqQa7+0KFvjb0XhMDfzbE2
-         Eu2Mx3iPYb7/a5XNDxAQN0KiwMREGOJP+kjT0Mx7f7WHEkHNXmaEjgd8XHx95ioQOJL7
-         XHkCET1iigpkQ62tG4C/juA0jCpiSBbtq+LbjXInB7UY67Yzj7Jopy2JFExDjjO0mUL+
-         wCxg==
-X-Gm-Message-State: AO0yUKXP6CT14herUiaBMvUtWDHP4OypKEs3dF4NlNAY6XYJeGf+2GiY
-        ny4jxEoOB+m5XuOOoZjhkEwQLHYp5UMclaww
-X-Google-Smtp-Source: AK7set9DV1fZtUekvagyuUQrTVveo/fbiaq0+hMrloLoKRYw7+NmcQbHmPPzdZcK10xee5YHOtLL9A==
-X-Received: by 2002:a17:906:5a42:b0:8b1:7ac6:3186 with SMTP id my2-20020a1709065a4200b008b17ac63186mr6106770ejc.68.1676715097203;
-        Sat, 18 Feb 2023 02:11:37 -0800 (PST)
-Received: from [192.168.1.109] ([178.197.216.144])
-        by smtp.gmail.com with ESMTPSA id sa14-20020a170906edae00b008b176df2899sm2638876ejb.160.2023.02.18.02.11.35
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 18 Feb 2023 02:11:36 -0800 (PST)
-Message-ID: <0771a2db-53b8-20c0-eb28-f254f2eb6b25@linaro.org>
-Date:   Sat, 18 Feb 2023 11:11:34 +0100
+        Sat, 18 Feb 2023 05:24:20 -0500
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A521310ABB;
+        Sat, 18 Feb 2023 02:24:19 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1676715859; x=1708251859;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=CCD9Tacgmqwo7OXIk2hPU2SzxlmvsHxP3x7TcQdl+8Q=;
+  b=oIM7P6IGwwC/ek94+MqeHXw0biHzny4YkpmqWkhIGHDKpVAbQNdQvK+z
+   QNYNk4gG8y3x6R9tgilX+Tm9kRK6gbW1a4s7IQB+LyYHP+fk88Qc1MBRU
+   AAEx8h/RCdL5BE2XjOz5Ckz1knUM+z/wFQ4vKMd/NhRAF1DO6/BHIXpnC
+   a+ayYnxaIAEQc7OzrBH6xnSlhdPcJR6jv/EEhdcMJCQx82hffW4cmPIpf
+   XEEo4WsYLtR1qiBNgLossH9DNbUUJ+Sy0VR3kZjSiA9WDLJwBXnvRfZI8
+   JafABK+kgXtPvyKu9KGtaLgMob3NzL8kpA8bot+3zMv85MI9RwbAMR+9V
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10624"; a="315874062"
+X-IronPort-AV: E=Sophos;i="5.97,306,1669104000"; 
+   d="scan'208";a="315874062"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Feb 2023 02:24:19 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10624"; a="999765276"
+X-IronPort-AV: E=Sophos;i="5.97,306,1669104000"; 
+   d="scan'208";a="999765276"
+Received: from yilunxu-optiplex-7050.sh.intel.com (HELO localhost) ([10.239.159.165])
+  by fmsmga005.fm.intel.com with ESMTP; 18 Feb 2023 02:24:17 -0800
+Date:   Sat, 18 Feb 2023 18:13:23 +0800
+From:   Xu Yilun <yilun.xu@intel.com>
+To:     Marco Pagani <marpagan@redhat.com>
+Cc:     linux-fpga@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [RFC PATCH 2/4] fpga: add fake FPGA region
+Message-ID: <Y/Ckw+F/sb2er2oK@yilunxu-OptiPlex-7050>
+References: <20230203170653.414990-1-marpagan@redhat.com>
+ <20230203170653.414990-3-marpagan@redhat.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH 1/4] ASoC: dt-bindings: renesas,rz-ssi: Update interrupts
- and interrupt-names properties
-Content-Language: en-US
-To:     Prabhakar <prabhakar.csengg@gmail.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Magnus Damm <magnus.damm@gmail.com>,
-        Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>
-Cc:     alsa-devel@alsa-project.org, linux-renesas-soc@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Biju Das <biju.das.jz@bp.renesas.com>,
-        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-References: <20230217185225.43310-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
- <20230217185225.43310-2-prabhakar.mahadev-lad.rj@bp.renesas.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230217185225.43310-2-prabhakar.mahadev-lad.rj@bp.renesas.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230203170653.414990-3-marpagan@redhat.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 17/02/2023 19:52, Prabhakar wrote:
-> From: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+On 2023-02-03 at 18:06:51 +0100, Marco Pagani wrote:
+> Add fake FPGA region platform driver with support functions. This
+> module is part of the KUnit test suite for the FPGA subsystem.
 > 
-> From R01UH0914EJ0120 Rev.1.20 HW manual, for full duplex channels
-> (SSI0/1/3) dma_rt interrupt has now being marked as reserved and similarly
-> for half duplex channel (SSI2) dma_rx and dma_tx interrupts have now being
-> marked as reserved (this applies to RZ/G2L and alike SoC's). This patch
-> updates the binding doc to match the same.
+> Signed-off-by: Marco Pagani <marpagan@redhat.com>
+> ---
+>  drivers/fpga/tests/fake-fpga-region.c | 186 ++++++++++++++++++++++++++
+>  drivers/fpga/tests/fake-fpga-region.h |  37 +++++
+>  2 files changed, 223 insertions(+)
+>  create mode 100644 drivers/fpga/tests/fake-fpga-region.c
+>  create mode 100644 drivers/fpga/tests/fake-fpga-region.h
+> 
+> diff --git a/drivers/fpga/tests/fake-fpga-region.c b/drivers/fpga/tests/fake-fpga-region.c
+> new file mode 100644
+> index 000000000000..095397e41837
+> --- /dev/null
+> +++ b/drivers/fpga/tests/fake-fpga-region.c
+> @@ -0,0 +1,186 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/*
+> + * Driver for fake FPGA region
+> + *
+> + * Copyright (C) 2023 Red Hat, Inc. All rights reserved.
+> + *
+> + * Author: Marco Pagani <marpagan@redhat.com>
+> + */
+> +
+> +#include <linux/device.h>
+> +#include <linux/platform_device.h>
+> +#include <linux/fpga/fpga-mgr.h>
+> +#include <linux/fpga/fpga-region.h>
+> +#include <linux/fpga/fpga-bridge.h>
+> +#include <kunit/test.h>
+> +
+> +#include "fake-fpga-region.h"
+> +
+> +#define FAKE_FPGA_REGION_DEV_NAME	"fake_fpga_region"
+> +
+> +struct fake_region_priv {
+> +	int id;
+> +	struct kunit *test;
+> +};
+> +
+> +struct fake_region_data {
+> +	struct fpga_manager *mgr;
+> +	struct kunit *test;
+> +};
+> +
+> +/**
+> + * fake_fpga_region_register - register a fake FPGA region
+> + * @region_ctx: fake FPGA region context data structure.
+> + * @test: KUnit test context object.
+> + *
+> + * Return: 0 if registration succeeded, an error code otherwise.
+> + */
+> +int fake_fpga_region_register(struct fake_fpga_region *region_ctx,
+> +			      struct fpga_manager *mgr, struct kunit *test)
+> +{
+> +	struct fake_region_data pdata;
+> +	struct fake_region_priv *priv;
+> +	int ret;
+> +
+> +	pdata.mgr = mgr;
+> +	pdata.test = test;
+> +
+> +	region_ctx->pdev = platform_device_alloc(FAKE_FPGA_REGION_DEV_NAME,
+> +						 PLATFORM_DEVID_AUTO);
+> +	if (IS_ERR(region_ctx->pdev)) {
+> +		pr_err("Fake FPGA region device allocation failed\n");
+> +		return -ENOMEM;
+> +	}
+> +
+> +	platform_device_add_data(region_ctx->pdev, &pdata, sizeof(pdata));
+> +
+> +	ret = platform_device_add(region_ctx->pdev);
+> +	if (ret) {
+> +		pr_err("Fake FPGA region device add failed\n");
+> +		platform_device_put(region_ctx->pdev);
+> +		return ret;
+> +	}
+> +
+> +	region_ctx->region = platform_get_drvdata(region_ctx->pdev);
+> +
+> +	if (test) {
+> +		priv = region_ctx->region->priv;
+> +		kunit_info(test, "Fake FPGA region %d registered\n", priv->id);
+> +	}
+> +
+> +	return 0;
+> +}
+> +EXPORT_SYMBOL_GPL(fake_fpga_region_register);
+> +
+> +/**
+> + * fake_fpga_region_unregister - unregister a fake FPGA region
+> + * @region_ctx: fake FPGA region context data structure.
+> + */
+> +void fake_fpga_region_unregister(struct fake_fpga_region *region_ctx)
+> +{
+> +	struct fake_region_priv *priv;
+> +	struct kunit *test;
+> +	int id;
+> +
+> +	priv = region_ctx->region->priv;
+> +	test = priv->test;
+> +	id = priv->id;
+> +
+> +	if (region_ctx->pdev) {
+> +		platform_device_unregister(region_ctx->pdev);
+> +		if (test)
+> +			kunit_info(test, "Fake FPGA region %d unregistered\n", id);
+> +	}
+> +}
+> +EXPORT_SYMBOL_GPL(fake_fpga_region_unregister);
+> +
+> +/**
+> + * fake_fpga_region_add_bridge - add a bridge to a fake FPGA region
+> + * @region_ctx: fake FPGA region context data structure.
+> + * @bridge: FPGA bridge.
+> + *
+> + * Return: 0 if registration succeeded, an error code otherwise.
+> + */
+> +int fake_fpga_region_add_bridge(struct fake_fpga_region *region_ctx,
+> +				struct fpga_bridge *bridge)
+> +{
+> +	struct fake_region_priv *priv;
+> +	int ret;
+> +
+> +	priv = region_ctx->region->priv;
+> +
+> +	ret = fpga_bridge_get_to_list(bridge->dev.parent, NULL,
+> +				      &region_ctx->region->bridge_list);
+> +
+> +	if (priv->test && !ret)
+> +		kunit_info(priv->test, "Bridge added to fake FPGA region %d\n",
+> +			   priv->id);
+> +
+> +	return ret;
+> +}
+> +EXPORT_SYMBOL_GPL(fake_fpga_region_add_bridge);
+> +
+> +static int fake_fpga_region_probe(struct platform_device *pdev)
+> +{
+> +	struct device *dev;
+> +	struct fpga_region *region;
+> +	struct fpga_manager *mgr;
+> +	struct fake_region_data *pdata;
+> +	struct fake_region_priv *priv;
+> +	static int id_count;
+> +
+> +	dev = &pdev->dev;
+> +	pdata = dev_get_platdata(dev);
+> +
+> +	priv = devm_kzalloc(dev, sizeof(*priv), GFP_KERNEL);
+> +	if (!priv)
+> +		return -ENOMEM;
+> +
+> +	mgr = fpga_mgr_get(pdata->mgr->dev.parent);
+> +	if (IS_ERR(mgr))
+> +		return PTR_ERR(mgr);
+> +
+> +	/*
+> +	 * No get_bridges() method since the bridges list is
+> +	 * pre-built using fake_fpga_region_add_bridge()
+> +	 */
 
-Do not use "This commit/patch".
-https://elixir.bootlin.com/linux/v5.17.1/source/Documentation/process/submitting-patches.rst#L95
+This is not the common use for drivers to associate the region & bridge,
+Better to realize the get_bridges() method.
 
-Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Thanks,
+Yilun
 
-Best regards,
-Krzysztof
-
+> +	region = fpga_region_register(dev, mgr, NULL);
+> +	if (IS_ERR(region)) {
+> +		fpga_mgr_put(mgr);
+> +		return PTR_ERR(region);
+> +	}
+> +
+> +	priv->test = pdata->test;
+> +	priv->id = id_count++;
+> +	region->priv = priv;
+> +
+> +	platform_set_drvdata(pdev, region);
+> +
+> +	return 0;
+> +}
