@@ -2,85 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CF6BF69B9FC
-	for <lists+linux-kernel@lfdr.de>; Sat, 18 Feb 2023 13:26:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3357A69BA01
+	for <lists+linux-kernel@lfdr.de>; Sat, 18 Feb 2023 13:31:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229616AbjBRM0r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 18 Feb 2023 07:26:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54050 "EHLO
+        id S229629AbjBRMbl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 18 Feb 2023 07:31:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55936 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229460AbjBRM0p (ORCPT
+        with ESMTP id S229441AbjBRMbj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 18 Feb 2023 07:26:45 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A58321555D
-        for <linux-kernel@vger.kernel.org>; Sat, 18 Feb 2023 04:25:58 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1676723157;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=RijZqlt6QPxnZ5qsCx6gnldqHryetV8XG7/DeGD2O5Y=;
-        b=UT5cEKPmutgk7KsDPAfH9i/IEh31slq4azgIHIgcUFCpKr33cmVBzDqDouMhefyucAaSdQ
-        tQK4h2htiTY+Y+YUzepBS5k6lAoSe9LQhChXQ1IXW+8JulYr15CzefJTMiw9XXN1816XML
-        AQMMHbgVn5NPfGdmaR8mOqJAqbdU6gM=
-Received: from mail-lj1-f200.google.com (mail-lj1-f200.google.com
- [209.85.208.200]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-673-lCUdsbQzNtqCbGrkB4DC2g-1; Sat, 18 Feb 2023 07:25:56 -0500
-X-MC-Unique: lCUdsbQzNtqCbGrkB4DC2g-1
-Received: by mail-lj1-f200.google.com with SMTP id y7-20020a05651c154700b00294702afedaso595552ljp.21
-        for <linux-kernel@vger.kernel.org>; Sat, 18 Feb 2023 04:25:56 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=RijZqlt6QPxnZ5qsCx6gnldqHryetV8XG7/DeGD2O5Y=;
-        b=RHszu5erA6l5xNp0/Q+uwFgBgCbs7+38QD4E+8cBr0Umt+zThgipH+S81WS602ucg3
-         o93AkLQ46KsnDA8liRrwOOW/QCWNZ5o1EOv/JpsOvQ1cD2o/WDnvMJ9JOpzWNuNBUSf6
-         75VSyTqWVAQHiY33y6J3EoWo7s8C/ItnVy9I1g8u5Cf8ak+PBNepxE0joYYrK795+EZS
-         NcisuQU1MMlZ/UUVOeFuIqwj4qwVgokhAcTiZej0FigibXqSCVhd+QJ6j5OgbahOIzaZ
-         Pp6mzVJf6zCisvx9/QUVXWApLqEURX5CG/UBtWZBnwnf1hOm3cYsMiv7Jxq499Nx1S8A
-         O/ZQ==
-X-Gm-Message-State: AO0yUKU0PJdOdNQoyQemWEc2ze3gNK81L7pPrOx5X9/fjY8neWx7pmyY
-        5DnjWBSxvWYxvR2TGM7fcxTTc96VppOhnAGWIZWJGWbB90JolXL3rzlecaPJfUkgN9G0/R3NySu
-        pQQKgamkK/U6gMUjLxAV29+bQ8mehK7kknn0FZCN9
-X-Received: by 2002:ac2:46f8:0:b0:4db:38ba:618d with SMTP id q24-20020ac246f8000000b004db38ba618dmr1266293lfo.12.1676723154856;
-        Sat, 18 Feb 2023 04:25:54 -0800 (PST)
-X-Google-Smtp-Source: AK7set/Z7L8+b7P0J8LwiD8xHpb8nnAbtyDGwQ25yG4cizIYlJMz2FM+E2DWgrE9e6Ejw2J20Q2KybtR01oL+r0Zquw=
-X-Received: by 2002:ac2:46f8:0:b0:4db:38ba:618d with SMTP id
- q24-20020ac246f8000000b004db38ba618dmr1266288lfo.12.1676723154517; Sat, 18
- Feb 2023 04:25:54 -0800 (PST)
+        Sat, 18 Feb 2023 07:31:39 -0500
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC20F1A49D;
+        Sat, 18 Feb 2023 04:31:35 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1676723495; x=1708259495;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=S028D5c6UYWqGo48un+I7652dIORVPsRCodlwNhSyzM=;
+  b=hSwCFNENAv9U2uj6O++FpluDyBsWcAGce82IEZ7uAg7HSfOeMQDU77BM
+   WUMoiEb8BxrFxtLOrMlrBjWCRrb5mmdlplymTd2clofdf8gg/CzvQv8xR
+   DY4DF6yMAulfiJiHiT4TBxL6wALRku6t+ahlP5+uRUjWz+NPZSEuyWfzu
+   GUhS6jcz5452VGT+etifttCc2ns2QyPNSn76fE8h7NtgsPyWlr2rf6HB+
+   k0ou82pC/DKZn7RBW4MY4J38dw77zNWrD1NdpDZ++vMHwAJ3L13AoZfjg
+   64xth+fsbiRKAYMq0DxJgX/EeUNcpdBFSdem1kQsa4xHJmejAHaQBMkNF
+   Q==;
+X-IronPort-AV: E=Sophos;i="5.97,307,1669100400"; 
+   d="scan'208";a="212615206"
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa1.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 18 Feb 2023 05:31:35 -0700
+Received: from chn-vm-ex02.mchp-main.com (10.10.85.144) by
+ chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.16; Sat, 18 Feb 2023 05:31:35 -0700
+Received: from soft-dev3-1.microsemi.net (10.10.115.15) by
+ chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server id
+ 15.1.2507.16 via Frontend Transport; Sat, 18 Feb 2023 05:31:32 -0700
+From:   Horatiu Vultur <horatiu.vultur@microchip.com>
+To:     <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+CC:     <andrew@lunn.ch>, <hkallweit1@gmail.com>, <linux@armlinux.org.uk>,
+        <davem@davemloft.net>, <edumazet@google.com>, <kuba@kernel.org>,
+        <pabeni@redhat.com>, <richardcochran@gmail.com>,
+        Horatiu Vultur <horatiu.vultur@microchip.com>
+Subject: [PATCH net-next v2] net: phy: micrel: Add support for PTP_PF_PEROUT for lan8841
+Date:   Sat, 18 Feb 2023 13:30:38 +0100
+Message-ID: <20230218123038.2761383-1-horatiu.vultur@microchip.com>
+X-Mailer: git-send-email 2.38.0
 MIME-Version: 1.0
-References: <b64705e3-2e63-a466-f829-f9568b06766a@googlemail.com>
- <CACAvsv4sOtPjCVnEcKd2RCUqYWxSn5XKyksbS-Bds2qCqyusVw@mail.gmail.com>
- <1cdb84ac-f7a8-66ba-98fc-3db302b49a5a@googlemail.com> <dab6eb81-db3f-8fa1-84ad-9b40e209514b@googlemail.com>
- <CACAvsv5iYdF3P8AbyrbYo3zGmYRYhxDWn7WbAR5V9qHpbgBXRA@mail.gmail.com>
- <1632a9ef-2954-c8f0-cdc9-03157c9d8547@googlemail.com> <5abbee70-cc84-1528-c3d8-9befd9edd611@googlemail.com>
- <5cf46df8-0fa2-e9f5-aa8e-7f7f703d96dd@googlemail.com> <f72fe15b-db1d-56dd-aaf6-3cba68a8bf0a@leemhuis.info>
- <CACO55tvR4ydDOXt=9nbR3n2aFLKrj8zeuGRR_xpezVQBBLrjqg@mail.gmail.com>
- <a6188878-f84c-0fcc-9509-b9d7ab797f4c@leemhuis.info> <d031f0a5-8d5e-af51-6db6-11844de3eeba@googlemail.com>
- <CAPM=9tz+wksJTvMi_4Ef7XWezfH0ReN2se189s8Q=obJjHC+Fw@mail.gmail.com>
- <4e786e22-f17a-da76-5129-8fef0c7c825a@googlemail.com> <b829633e-ccc4-7a54-1cad-f29254de1251@leemhuis.info>
- <CACO55tsvM07_6mGU3dCgeji0a6B4JJKSDOOBuCHv2Mw3rYbCHg@mail.gmail.com> <181bea6a-e501-f5bd-b002-de7a244a921a@googlemail.com>
-In-Reply-To: <181bea6a-e501-f5bd-b002-de7a244a921a@googlemail.com>
-From:   Karol Herbst <kherbst@redhat.com>
-Date:   Sat, 18 Feb 2023 13:25:42 +0100
-Message-ID: <CACO55tsGXfy9-a-nexvcn7pnDGoEWXMqhiQEBwCDkGyOeT1sXQ@mail.gmail.com>
-Subject: Re: linux-6.2-rc4+ hangs on poweroff/reboot: Bisected
-To:     Chris Clayton <chris2553@googlemail.com>
-Cc:     Linux regressions mailing list <regressions@lists.linux.dev>,
-        Dave Airlie <airlied@gmail.com>,
-        Ben Skeggs <skeggsb@gmail.com>, bskeggs@redhat.com,
-        Lyude Paul <lyude@redhat.com>,
-        ML nouveau <nouveau@lists.freedesktop.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        ML dri-devel <dri-devel@lists.freedesktop.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -88,123 +62,477 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Feb 18, 2023 at 1:22 PM Chris Clayton <chris2553@googlemail.com> wrote:
->
->
->
-> On 15/02/2023 11:09, Karol Herbst wrote:
-> > On Wed, Feb 15, 2023 at 11:36 AM Linux regression tracking #update
-> > (Thorsten Leemhuis) <regressions@leemhuis.info> wrote:
-> >>
-> >> On 13.02.23 10:14, Chris Clayton wrote:
-> >>> On 13/02/2023 02:57, Dave Airlie wrote:
-> >>>> On Sun, 12 Feb 2023 at 00:43, Chris Clayton <chris2553@googlemail.com> wrote:
-> >>>>>
-> >>>>>
-> >>>>>
-> >>>>> On 10/02/2023 19:33, Linux regression tracking (Thorsten Leemhuis) wrote:
-> >>>>>> On 10.02.23 20:01, Karol Herbst wrote:
-> >>>>>>> On Fri, Feb 10, 2023 at 7:35 PM Linux regression tracking (Thorsten
-> >>>>>>> Leemhuis) <regressions@leemhuis.info> wrote:
-> >>>>>>>>
-> >>>>>>>> On 08.02.23 09:48, Chris Clayton wrote:
-> >>>>>>>>>
-> >>>>>>>>> I'm assuming  that we are not going to see a fix for this regression before 6.2 is released.
-> >>>>>>>>
-> >>>>>>>> Yeah, looks like it. That's unfortunate, but happens. But there is still
-> >>>>>>>> time to fix it and there is one thing I wonder:
-> >>>>>>>>
-> >>>>>>>> Did any of the nouveau developers look at the netconsole captures Chris
-> >>>>>>>> posted more than a week ago to check if they somehow help to track down
-> >>>>>>>> the root of this problem?
-> >>>>>>>
-> >>>>>>> I did now and I can't spot anything. I think at this point it would
-> >>>>>>> make sense to dump the active tasks/threads via sqsrq keys to see if
-> >>>>>>> any is in a weird state preventing the machine from shutting down.
-> >>>>>>
-> >>>>>> Many thx for looking into it!
-> >>>>>
-> >>>>> Yes, thanks Karol.
-> >>>>>
-> >>>>> Attached is the output from dmesg when this block of code:
-> >>>>>
-> >>>>>         /bin/mount /dev/sda7 /mnt/sda7
-> >>>>>         /bin/mountpoint /proc || /bin/mount /proc
-> >>>>>         /bin/dmesg -w > /mnt/sda7/sysrq.dmesg.log &
-> >>>>>         /bin/echo t > /proc/sysrq-trigger
-> >>>>>         /bin/sleep 1
-> >>>>>         /bin/sync
-> >>>>>         /bin/sleep 1
-> >>>>>         kill $(pidof dmesg)
-> >>>>>         /bin/umount /mnt/sda7
-> >>>>>
-> >>>>> is executed immediately before /sbin/reboot is called as the final step of rebooting my system.
-> >>>>>
-> >>>>> I hope this is what you were looking for, but if not, please let me know what you need
-> >>>
-> >>> Thanks Dave. [...]
-> >> FWIW, in case anyone strands here in the archives: the msg was
-> >> truncated. The full post can be found in a new thread:
-> >>
-> >> https://lore.kernel.org/lkml/e0b80506-b3cf-315b-4327-1b988d86031e@googlemail.com/
-> >>
-> >> Sadly it seems the info "With runpm=0, both reboot and poweroff work on
-> >> my laptop." didn't bring us much further to a solution. :-/ I don't
-> >> really like it, but for regression tracking I'm now putting this on the
-> >> back-burner, as a fix is not in sight.
-> >>
-> >> #regzbot monitor:
-> >> https://lore.kernel.org/lkml/e0b80506-b3cf-315b-4327-1b988d86031e@googlemail.com/
-> >> #regzbot backburner: hard to debug and apparently rare
-> >> #regzbot ignore-activity
-> >>
-> >
-> > yeah.. this bug looks a little annoying. Sadly the only Turing based
-> > laptop I got doesn't work on Nouveau because of firmware related
-> > issues and we probably need to get updated ones from Nvidia here :(
-> >
-> > But it's a bit weird that the kernel doesn't shutdown, because I don't
-> > see anything in the logs which would prevent that from happening.
-> > Unless it's waiting on one of the tasks to complete, but none of them
-> > looked in any way nouveau related.
-> >
-> > If somebody else has any fancy kernel debugging tips here to figure
-> > out why it hangs, that would be very helpful...
-> >
->
-> I think I've figured this out. It's to do with how my system is configured. I do have an initrd, but the only thing on
-> it is the cpu microcode which, it is recommended, should be loaded early. The absence of the NVidia firmare from an
-> initrd doesn't matter because the drivers for the hardware that need to load firmware are all built as modules, So, by
-> the time the devices are configured via udev, the root partition is mounted and the drivers can get at the firmware.
->
-> I've found, by turning on nouveau debug and taking a video of the screen as the system shuts down, that nouveau seems to
-> be trying to run the scrubber very very late in the shutdown process. The problem is that by this time, I think the root
-> partition, and thus the scrubber binary, have become inaccessible.
->
-> I seem to have two choices - either make the firmware accessible on an initrd or unload the module in a shutdown script
-> before the scrubber binary becomes inaccessible. The latter of these is the workaround I have implemented whilst the
-> problem I reported has been under investigation. For simplicity, I think I'll promote my workaround to being the
-> permanent solution.
->
-> So, apologies (and thanks) to everyone whose time I have taken up with this non-bug.
->
+Lan8841 has 10 GPIOs and it has 2 events(EVENT_A and EVENT_B). It is
+possible to assigned the 2 events to any of the GPIOs, but a GPIO can
+have only 1 event at a time.
+These events are used to generate periodic signals. It is possible to
+configure the length, the start time and the period of the signal by
+configuring the event.
+Currently the SW uses only EVENT_A to generate the perout.
 
-Well.. nouveau shouldn't prevent the system from shutting down if the
-firmware file isn't available. Or at least it should print a
-warning/error. Mind messing with the code a little to see if skipping
-it kind of works? I probably can also come up with a patch by next
-week.
+These events are generated by comparing the target time with the PHC
+time. In case the PHC time is changed to a value bigger than the target
+time + reload time, then it would generate only 1 event and then it
+would stop because target time + reload time is small than PHC time.
+Therefore it is required to change also the target time every time when
+the PHC is changed. The same will apply also when the PHC time is
+changed to a smaller value.
 
-> Chris
->
-> >> Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
-> >> --
-> >> Everything you wanna know about Linux kernel regression tracking:
-> >> https://linux-regtracking.leemhuis.info/about/#tldr
-> >> That page also explains what to do if mails like this annoy you.
-> >>
-> >> #regzbot ignore-activity
-> >>
-> >
->
+This was tested using:
+testptp -L 6,2
+testptp -p 1000000000 -w 200000000
+
+Signed-off-by: Horatiu Vultur <horatiu.vultur@microchip.com>
+---
+v1->v2:
+- simplify code using phy_set/clear_bits_mmd and phy_modify_mmd
+- check the return value of phy_*_mmd functions and act upon it
+- use pr_warn_ratelimited instead of phydev_warn
+- use devm_kcalloc instead of devm_kmalloc_array
+- move code around to not have forward declarations
+---
+ drivers/net/phy/micrel.c | 369 ++++++++++++++++++++++++++++++++++++++-
+ 1 file changed, 367 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/net/phy/micrel.c b/drivers/net/phy/micrel.c
+index 2c84fccef4f64..373e0dfe33444 100644
+--- a/drivers/net/phy/micrel.c
++++ b/drivers/net/phy/micrel.c
+@@ -318,6 +318,7 @@ struct kszphy_ptp_priv {
+ 	struct ptp_clock_info ptp_clock_info;
+ 	/* Lock for ptp_clock */
+ 	struct mutex ptp_lock;
++	struct ptp_pin_desc *pin_config;
+ };
+ 
+ struct kszphy_priv {
+@@ -3658,6 +3659,63 @@ static int lan8841_hwtstamp(struct mii_timestamper *mii_ts, struct ifreq *ifr)
+ 	return copy_to_user(ifr->ifr_data, &config, sizeof(config)) ? -EFAULT : 0;
+ }
+ 
++#define LAN8841_EVENT_A		0
++#define LAN8841_EVENT_B		1
++#define LAN8841_PTP_LTC_TARGET_SEC_HI(event)	((event) == LAN8841_EVENT_A ? 278 : 288)
++#define LAN8841_PTP_LTC_TARGET_SEC_LO(event)	((event) == LAN8841_EVENT_A ? 279 : 289)
++#define LAN8841_PTP_LTC_TARGET_NS_HI(event)	((event) == LAN8841_EVENT_A ? 280 : 290)
++#define LAN8841_PTP_LTC_TARGET_NS_LO(event)	((event) == LAN8841_EVENT_A ? 281 : 291)
++
++static int lan8841_ptp_set_target(struct kszphy_ptp_priv *ptp_priv, u8 event,
++				  s64 sec, u32 nsec)
++{
++	struct phy_device *phydev = ptp_priv->phydev;
++	int ret;
++
++	ret = phy_write_mmd(phydev, 2, LAN8841_PTP_LTC_TARGET_SEC_HI(event),
++			    upper_16_bits(sec));
++	ret |= phy_write_mmd(phydev, 2, LAN8841_PTP_LTC_TARGET_SEC_LO(event),
++			     lower_16_bits(sec));
++	ret |= phy_write_mmd(phydev, 2, LAN8841_PTP_LTC_TARGET_NS_HI(event) & 0x3fff,
++			     upper_16_bits(nsec));
++	ret |= phy_write_mmd(phydev, 2, LAN8841_PTP_LTC_TARGET_NS_LO(event),
++			     lower_16_bits(nsec));
++
++	return ret;
++}
++
++#define LAN8841_BUFFER_TIME	2
++
++static int lan8841_ptp_update_target(struct kszphy_ptp_priv *ptp_priv,
++				     const struct timespec64 *ts)
++{
++	return lan8841_ptp_set_target(ptp_priv, LAN8841_EVENT_A,
++				      ts->tv_sec + LAN8841_BUFFER_TIME, ts->tv_nsec);
++}
++
++#define LAN8841_PTP_LTC_TARGET_RELOAD_SEC_HI(event)	((event) == LAN8841_EVENT_A ? 282 : 292)
++#define LAN8841_PTP_LTC_TARGET_RELOAD_SEC_LO(event)	((event) == LAN8841_EVENT_A ? 283 : 293)
++#define LAN8841_PTP_LTC_TARGET_RELOAD_NS_HI(event)	((event) == LAN8841_EVENT_A ? 284 : 294)
++#define LAN8841_PTP_LTC_TARGET_RELOAD_NS_LO(event)	((event) == LAN8841_EVENT_A ? 285 : 295)
++
++static int lan8841_ptp_set_reload(struct kszphy_ptp_priv *ptp_priv, u8 event,
++				  s64 sec, u32 nsec)
++{
++	struct phy_device *phydev = ptp_priv->phydev;
++	int ret;
++
++	ret = phy_write_mmd(phydev, 2, LAN8841_PTP_LTC_TARGET_RELOAD_SEC_HI(event),
++			    upper_16_bits(sec));
++	ret |= phy_write_mmd(phydev, 2, LAN8841_PTP_LTC_TARGET_RELOAD_SEC_LO(event),
++			     lower_16_bits(sec));
++	ret |= phy_write_mmd(phydev, 2, LAN8841_PTP_LTC_TARGET_RELOAD_NS_HI(event) & 0x3fff,
++			     upper_16_bits(nsec));
++	ret |= phy_write_mmd(phydev, 2, LAN8841_PTP_LTC_TARGET_RELOAD_NS_LO(event),
++			     lower_16_bits(nsec));
++
++	return ret;
++}
++
+ #define LAN8841_PTP_LTC_SET_SEC_HI	262
+ #define LAN8841_PTP_LTC_SET_SEC_MID	263
+ #define LAN8841_PTP_LTC_SET_SEC_LO	264
+@@ -3671,6 +3729,7 @@ static int lan8841_ptp_settime64(struct ptp_clock_info *ptp,
+ 	struct kszphy_ptp_priv *ptp_priv = container_of(ptp, struct kszphy_ptp_priv,
+ 							ptp_clock_info);
+ 	struct phy_device *phydev = ptp_priv->phydev;
++	int ret;
+ 
+ 	/* Set the value to be stored */
+ 	mutex_lock(&ptp_priv->ptp_lock);
+@@ -3683,9 +3742,10 @@ static int lan8841_ptp_settime64(struct ptp_clock_info *ptp,
+ 	/* Set the command to load the LTC */
+ 	phy_write_mmd(phydev, 2, LAN8841_PTP_CMD_CTL,
+ 		      LAN8841_PTP_CMD_CTL_PTP_LTC_LOAD);
++	ret = lan8841_ptp_update_target(ptp_priv, ts);
+ 	mutex_unlock(&ptp_priv->ptp_lock);
+ 
+-	return 0;
++	return ret;
+ }
+ 
+ #define LAN8841_PTP_LTC_RD_SEC_HI	358
+@@ -3740,6 +3800,7 @@ static int lan8841_ptp_adjtime(struct ptp_clock_info *ptp, s64 delta)
+ 	bool add = true;
+ 	u32 nsec;
+ 	s32 sec;
++	int ret;
+ 
+ 	/* The HW allows up to 15 sec to adjust the time, but here we limit to
+ 	 * 10 sec the adjustment. The reason is, in case the adjustment is 14
+@@ -3803,7 +3864,13 @@ static int lan8841_ptp_adjtime(struct ptp_clock_info *ptp, s64 delta)
+ 	}
+ 	mutex_unlock(&ptp_priv->ptp_lock);
+ 
+-	return 0;
++	/* Update the target clock */
++	ptp->gettime64(ptp, &ts);
++	mutex_lock(&ptp_priv->ptp_lock);
++	ret = lan8841_ptp_update_target(ptp_priv, &ts);
++	mutex_unlock(&ptp_priv->ptp_lock);
++
++	return ret;
+ }
+ 
+ #define LAN8841_PTP_LTC_RATE_ADJ_HI		269
+@@ -3839,6 +3906,284 @@ static int lan8841_ptp_adjfine(struct ptp_clock_info *ptp, long scaled_ppm)
+ 	return 0;
+ }
+ 
++static int lan8841_ptp_verify(struct ptp_clock_info *ptp, unsigned int pin,
++			      enum ptp_pin_function func, unsigned int chan)
++{
++	switch (func) {
++	case PTP_PF_NONE:
++	case PTP_PF_PEROUT:
++		break;
++	default:
++		return -1;
++	}
++
++	return 0;
++}
++
++#define LAN8841_PTP_GPIO_NUM	10
++#define LAN8841_GPIO_EN		128
++#define LAN8841_GPIO_DIR	129
++#define LAN8841_GPIO_BUF	130
++
++static int lan8841_ptp_perout_off(struct kszphy_ptp_priv *ptp_priv, int pin)
++{
++	struct phy_device *phydev = ptp_priv->phydev;
++	int ret;
++
++	ret = phy_clear_bits_mmd(phydev, 2, LAN8841_GPIO_EN, BIT(pin));
++	ret |= phy_clear_bits_mmd(phydev, 2, LAN8841_GPIO_DIR, BIT(pin));
++	ret |= phy_clear_bits_mmd(phydev, 2, LAN8841_GPIO_BUF, BIT(pin));
++
++	return ret;
++}
++
++static int lan8841_ptp_perout_on(struct kszphy_ptp_priv *ptp_priv, int pin)
++{
++	struct phy_device *phydev = ptp_priv->phydev;
++	int ret;
++
++	ret = phy_set_bits_mmd(phydev, 2, LAN8841_GPIO_EN, BIT(pin));
++	ret |= phy_set_bits_mmd(phydev, 2, LAN8841_GPIO_DIR, BIT(pin));
++	ret |= phy_set_bits_mmd(phydev, 2, LAN8841_GPIO_BUF, BIT(pin));
++
++	return ret;
++}
++
++#define LAN8841_GPIO_DATA_SEL1				131
++#define LAN8841_GPIO_DATA_SEL2				132
++#define LAN8841_GPIO_DATA_SEL_GPIO_DATA_SEL_EVENT_MASK	GENMASK(2, 0)
++#define LAN8841_GPIO_DATA_SEL_GPIO_DATA_SEL_EVENT_A	1
++#define LAN8841_GPIO_DATA_SEL_GPIO_DATA_SEL_EVENT_B	2
++#define LAN8841_PTP_GENERAL_CONFIG			257
++#define LAN8841_PTP_GENERAL_CONFIG_LTC_EVENT_POL_A	BIT(1)
++#define LAN8841_PTP_GENERAL_CONFIG_LTC_EVENT_POL_B	BIT(3)
++#define LAN8841_PTP_GENERAL_CONFIG_LTC_EVENT_A_MASK	GENMASK(7, 4)
++#define LAN8841_PTP_GENERAL_CONFIG_LTC_EVENT_B_MASK	GENMASK(11, 8)
++#define LAN8841_PTP_GENERAL_CONFIG_LTC_EVENT_A		4
++#define LAN8841_PTP_GENERAL_CONFIG_LTC_EVENT_B		7
++
++static int lan8841_ptp_remove_event(struct kszphy_ptp_priv *ptp_priv, int pin,
++				    u8 event)
++{
++	struct phy_device *phydev = ptp_priv->phydev;
++	u16 tmp;
++	int ret;
++
++	/* Now remove pin from the event. GPIO_DATA_SEL1 contains the GPIO
++	 * pins 0-4 while GPIO_DATA_SEL2 contains GPIO pins 5-9, therefore
++	 * depending on the pin, it requires to read a different register
++	 */
++	if (pin < 5) {
++		tmp = LAN8841_GPIO_DATA_SEL_GPIO_DATA_SEL_EVENT_MASK << (3 * pin);
++		ret = phy_clear_bits_mmd(phydev, 2, LAN8841_GPIO_DATA_SEL1, tmp);
++	} else {
++		tmp = LAN8841_GPIO_DATA_SEL_GPIO_DATA_SEL_EVENT_MASK << (3 * (pin - 5));
++		ret = phy_clear_bits_mmd(phydev, 2, LAN8841_GPIO_DATA_SEL2, tmp);
++	}
++	if (ret)
++		return ret;
++
++	/* Disable the event */
++	if (event == LAN8841_EVENT_A)
++		tmp = LAN8841_PTP_GENERAL_CONFIG_LTC_EVENT_POL_A |
++		      LAN8841_PTP_GENERAL_CONFIG_LTC_EVENT_A_MASK;
++	else
++		tmp = LAN8841_PTP_GENERAL_CONFIG_LTC_EVENT_POL_B |
++		      LAN8841_PTP_GENERAL_CONFIG_LTC_EVENT_B_MASK;
++	return phy_clear_bits_mmd(phydev, 2, LAN8841_GPIO_EN, tmp);
++}
++
++static int lan8841_ptp_enable_event(struct kszphy_ptp_priv *ptp_priv, int pin,
++				    u8 event, int pulse_width)
++{
++	struct phy_device *phydev = ptp_priv->phydev;
++	u16 tmp;
++	int ret;
++
++	/* Enable the event */
++	if (event == LAN8841_EVENT_A)
++		ret = phy_modify_mmd(phydev, 2, LAN8841_PTP_GENERAL_CONFIG,
++				     LAN8841_PTP_GENERAL_CONFIG_LTC_EVENT_POL_A |
++				     LAN8841_PTP_GENERAL_CONFIG_LTC_EVENT_A_MASK,
++				     LAN8841_PTP_GENERAL_CONFIG_LTC_EVENT_POL_A |
++				     pulse_width << LAN8841_PTP_GENERAL_CONFIG_LTC_EVENT_A);
++	else
++		ret = phy_modify_mmd(phydev, 2, LAN8841_PTP_GENERAL_CONFIG,
++				     LAN8841_PTP_GENERAL_CONFIG_LTC_EVENT_POL_B |
++				     LAN8841_PTP_GENERAL_CONFIG_LTC_EVENT_B_MASK,
++				     LAN8841_PTP_GENERAL_CONFIG_LTC_EVENT_POL_B |
++				     pulse_width << LAN8841_PTP_GENERAL_CONFIG_LTC_EVENT_B);
++	if (ret)
++		return ret;
++
++	/* Now connect the pin to the event. GPIO_DATA_SEL1 contains the GPIO
++	 * pins 0-4 while GPIO_DATA_SEL2 contains GPIO pins 5-9, therefore
++	 * depending on the pin, it requires to read a different register
++	 */
++	if (event == LAN8841_EVENT_A)
++		tmp = LAN8841_GPIO_DATA_SEL_GPIO_DATA_SEL_EVENT_A;
++	else
++		tmp = LAN8841_GPIO_DATA_SEL_GPIO_DATA_SEL_EVENT_B;
++
++	if (pin < 5)
++		ret = phy_set_bits_mmd(phydev, 2, LAN8841_GPIO_DATA_SEL1,
++				       tmp << (3 * pin));
++	else
++		ret = phy_set_bits_mmd(phydev, 2, LAN8841_GPIO_DATA_SEL2,
++				       tmp << (3 * (pin - 5)));
++
++	return ret;
++}
++
++#define LAN8841_PTP_GENERAL_CONFIG_LTC_EVENT_200MS	13
++#define LAN8841_PTP_GENERAL_CONFIG_LTC_EVENT_100MS	12
++#define LAN8841_PTP_GENERAL_CONFIG_LTC_EVENT_50MS	11
++#define LAN8841_PTP_GENERAL_CONFIG_LTC_EVENT_10MS	10
++#define LAN8841_PTP_GENERAL_CONFIG_LTC_EVENT_5MS	9
++#define LAN8841_PTP_GENERAL_CONFIG_LTC_EVENT_1MS	8
++#define LAN8841_PTP_GENERAL_CONFIG_LTC_EVENT_500US	7
++#define LAN8841_PTP_GENERAL_CONFIG_LTC_EVENT_100US	6
++#define LAN8841_PTP_GENERAL_CONFIG_LTC_EVENT_50US	5
++#define LAN8841_PTP_GENERAL_CONFIG_LTC_EVENT_10US	4
++#define LAN8841_PTP_GENERAL_CONFIG_LTC_EVENT_5US	3
++#define LAN8841_PTP_GENERAL_CONFIG_LTC_EVENT_1US	2
++#define LAN8841_PTP_GENERAL_CONFIG_LTC_EVENT_500NS	1
++#define LAN8841_PTP_GENERAL_CONFIG_LTC_EVENT_100NS	0
++
++static int lan8841_ptp_perout(struct ptp_clock_info *ptp,
++			      struct ptp_clock_request *rq, int on)
++{
++	struct kszphy_ptp_priv *ptp_priv = container_of(ptp, struct kszphy_ptp_priv,
++							ptp_clock_info);
++	struct phy_device *phydev = ptp_priv->phydev;
++	struct timespec64 ts_on, ts_period;
++	s64 on_nsec, period_nsec;
++	int pulse_width;
++	int pin;
++	int ret;
++
++	if (rq->perout.flags & ~PTP_PEROUT_DUTY_CYCLE)
++		return -EOPNOTSUPP;
++
++	pin = ptp_find_pin(ptp_priv->ptp_clock, PTP_PF_PEROUT, rq->perout.index);
++	if (pin == -1 || pin >= LAN8841_PTP_GPIO_NUM)
++		return -EINVAL;
++
++	if (!on) {
++		ret = lan8841_ptp_perout_off(ptp_priv, pin);
++		if (ret)
++			return ret;
++
++		return lan8841_ptp_remove_event(ptp_priv, LAN8841_EVENT_A, pin);
++	}
++
++	ts_on.tv_sec = rq->perout.on.sec;
++	ts_on.tv_nsec = rq->perout.on.nsec;
++	on_nsec = timespec64_to_ns(&ts_on);
++
++	ts_period.tv_sec = rq->perout.period.sec;
++	ts_period.tv_nsec = rq->perout.period.nsec;
++	period_nsec = timespec64_to_ns(&ts_period);
++
++	if (period_nsec < 200) {
++		pr_warn_ratelimited("%s: perout period too small, minimim is 200 nsec\n",
++				    phydev_name(phydev));
++		return -EOPNOTSUPP;
++	}
++
++	if (on_nsec >= period_nsec) {
++		pr_warn_ratelimited("%s: pulse width must be smaller than period\n",
++				    phydev_name(phydev));
++		return -EINVAL;
++	}
++
++	switch (on_nsec) {
++	case 200000000:
++		pulse_width = LAN8841_PTP_GENERAL_CONFIG_LTC_EVENT_200MS;
++		break;
++	case 100000000:
++		pulse_width = LAN8841_PTP_GENERAL_CONFIG_LTC_EVENT_100MS;
++		break;
++	case 50000000:
++		pulse_width = LAN8841_PTP_GENERAL_CONFIG_LTC_EVENT_50MS;
++		break;
++	case 10000000:
++		pulse_width = LAN8841_PTP_GENERAL_CONFIG_LTC_EVENT_10MS;
++		break;
++	case 5000000:
++		pulse_width = LAN8841_PTP_GENERAL_CONFIG_LTC_EVENT_5MS;
++		break;
++	case 1000000:
++		pulse_width = LAN8841_PTP_GENERAL_CONFIG_LTC_EVENT_1MS;
++		break;
++	case 500000:
++		pulse_width = LAN8841_PTP_GENERAL_CONFIG_LTC_EVENT_500US;
++		break;
++	case 100000:
++		pulse_width = LAN8841_PTP_GENERAL_CONFIG_LTC_EVENT_100US;
++		break;
++	case 50000:
++		pulse_width = LAN8841_PTP_GENERAL_CONFIG_LTC_EVENT_50US;
++		break;
++	case 10000:
++		pulse_width = LAN8841_PTP_GENERAL_CONFIG_LTC_EVENT_10US;
++		break;
++	case 5000:
++		pulse_width = LAN8841_PTP_GENERAL_CONFIG_LTC_EVENT_5US;
++		break;
++	case 1000:
++		pulse_width = LAN8841_PTP_GENERAL_CONFIG_LTC_EVENT_1US;
++		break;
++	case 500:
++		pulse_width = LAN8841_PTP_GENERAL_CONFIG_LTC_EVENT_500NS;
++		break;
++	case 100:
++		pulse_width = LAN8841_PTP_GENERAL_CONFIG_LTC_EVENT_100NS;
++		break;
++	default:
++		pr_warn_ratelimited("%s: Use default duty cycle of 100ns\n",
++				    phydev_name(phydev));
++		pulse_width = LAN8841_PTP_GENERAL_CONFIG_LTC_EVENT_100NS;
++		break;
++	}
++
++	mutex_lock(&ptp_priv->ptp_lock);
++	ret = lan8841_ptp_set_target(ptp_priv, LAN8841_EVENT_A, rq->perout.start.sec,
++				     rq->perout.start.nsec);
++	mutex_unlock(&ptp_priv->ptp_lock);
++	if (ret)
++		return ret;
++
++	ret = lan8841_ptp_set_reload(ptp_priv, LAN8841_EVENT_A, rq->perout.period.sec,
++				     rq->perout.period.nsec);
++	if (ret)
++		return ret;
++
++	ret = lan8841_ptp_enable_event(ptp_priv, pin, LAN8841_EVENT_A,
++				       pulse_width);
++	if (ret)
++		return ret;
++
++	ret = lan8841_ptp_perout_on(ptp_priv, pin);
++	if (ret)
++		lan8841_ptp_remove_event(ptp_priv, pin, LAN8841_EVENT_A);
++
++	return ret;
++}
++
++static int lan8841_ptp_enable(struct ptp_clock_info *ptp,
++			      struct ptp_clock_request *rq, int on)
++{
++	switch (rq->type) {
++	case PTP_CLK_REQ_PEROUT:
++		return lan8841_ptp_perout(ptp, rq, on);
++	default:
++		return -EOPNOTSUPP;
++	}
++
++	return 0;
++}
++
+ static struct ptp_clock_info lan8841_ptp_clock_info = {
+ 	.owner		= THIS_MODULE,
+ 	.name		= "lan8841 ptp",
+@@ -3847,6 +4192,10 @@ static struct ptp_clock_info lan8841_ptp_clock_info = {
+ 	.settime64	= lan8841_ptp_settime64,
+ 	.adjtime	= lan8841_ptp_adjtime,
+ 	.adjfine	= lan8841_ptp_adjfine,
++	.verify         = lan8841_ptp_verify,
++	.enable         = lan8841_ptp_enable,
++	.n_per_out      = LAN8841_PTP_GPIO_NUM,
++	.n_pins         = LAN8841_PTP_GPIO_NUM,
+ };
+ 
+ #define LAN8841_OPERATION_MODE_STRAP_LOW_REGISTER 3
+@@ -3874,7 +4223,23 @@ static int lan8841_probe(struct phy_device *phydev)
+ 	priv = phydev->priv;
+ 	ptp_priv = &priv->ptp_priv;
+ 
++	ptp_priv->pin_config = devm_kcalloc(&phydev->mdio.dev,
++					    LAN8841_PTP_GPIO_NUM,
++					    sizeof(*ptp_priv->pin_config),
++					    GFP_KERNEL);
++	if (!ptp_priv->pin_config)
++		return -ENOMEM;
++
++	for (int i = 0; i < LAN8841_PTP_GPIO_NUM; ++i) {
++		struct ptp_pin_desc *p = &ptp_priv->pin_config[i];
++
++		snprintf(p->name, sizeof(p->name), "pin%d", i);
++		p->index = i;
++		p->func = PTP_PF_NONE;
++	}
++
+ 	ptp_priv->ptp_clock_info = lan8841_ptp_clock_info;
++	ptp_priv->ptp_clock_info.pin_config = ptp_priv->pin_config;
+ 	ptp_priv->ptp_clock = ptp_clock_register(&ptp_priv->ptp_clock_info,
+ 						 &phydev->mdio.dev);
+ 	if (IS_ERR(ptp_priv->ptp_clock)) {
+-- 
+2.38.0
 
