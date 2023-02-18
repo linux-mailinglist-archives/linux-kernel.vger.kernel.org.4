@@ -2,57 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 11FF369B6B6
+	by mail.lfdr.de (Postfix) with ESMTP id AA8EB69B6B8
 	for <lists+linux-kernel@lfdr.de>; Sat, 18 Feb 2023 01:29:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229818AbjBRA3D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Feb 2023 19:29:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41670 "EHLO
+        id S230050AbjBRA3F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Feb 2023 19:29:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41792 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229872AbjBRA2u (ORCPT
+        with ESMTP id S229885AbjBRA2v (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Feb 2023 19:28:50 -0500
-Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 184F35D3DC
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Feb 2023 16:28:49 -0800 (PST)
-Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-53659386dc8so20702647b3.6
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Feb 2023 16:28:49 -0800 (PST)
+        Fri, 17 Feb 2023 19:28:51 -0500
+Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 113A15F252
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Feb 2023 16:28:50 -0800 (PST)
+Received: by mail-yb1-xb49.google.com with SMTP id 188-20020a2503c5000000b008e1de4c1e7dso2280796ybd.17
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Feb 2023 16:28:50 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=nelWhEWWDb3ok6PYl3fRG2FGkHP98SSg6vQYnhj1QJk=;
-        b=UvLBkxS6HWSvm6F/1ZojF9oUJKGMsoR6TJYUH52tIUGTUnHPSS4OjC8ZKXvwZwASAV
-         tHFCfrP/r3B6sftGO2ROO6qyp0hWV5ssCNe8BVzZ/8UYiB4V6Kh8RSM5cqHAivyWBXpO
-         lalg+riEaU3qUCklp3VFoj3s+ykjm2m5yzWRFdOAwMvlFIaPzMq9C6wMUYVDqXxeAYN4
-         ydi5/oNHHp4Z8bFgiq0SG1+hakJtq3Bas6/hdi8e26/G9KknLRZXzrhTcc3TXa9yzpwQ
-         m8r8Qx+aRsi+iePo4b0oOe0PRXw52ZFZExKevE8Zt1tK+nMw9eyeE3g+fji1JRRzlVBM
-         Sb3g==
+        bh=8nfyEWndKsa3tyc1KlPsVZDyN8xlZ4zW0vpf47Ary0I=;
+        b=ghgOaEONmk3TxY7Vbd4llR8C6ZhiH535rAEn2mRoH4sgelGi+DzvBNDNzGInJZzqfs
+         MEErbyZH29/h7FEPNCh9VZcW/Bm4YgRch9ir0kS2NDXVsbFg5l6v2m5+GdPoQ68p73Au
+         kx7/25Br5F6Yw90cWFqLg3eViGqsOMcWI58kCeCLrtLPN7KaOw1BIGgyIswJlZykM+9O
+         0y4w9vz06OJ9NLQ+jIbxIwJsCdh/V36xONqd3gjqH80qszv271zhh3nf8DhiYiNLA2qQ
+         k8oLBo0ZQMuPQXPM4GYcllmYMP6s7dZX1ehwhZA1pOfZpnWcQPV0VVxxICdxJelUUbzk
+         U9lw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=nelWhEWWDb3ok6PYl3fRG2FGkHP98SSg6vQYnhj1QJk=;
-        b=quRgufxWyMhwKPm5XptNlcLylFb7dMsE2Zl8L+/6tHn6rru8rRZOrKznOokuR/i2OP
-         xYySJfAcP8s+iXOm1K7cyHhFtKCjCQDI9Nui/7g62uvSJ62kXBf4QzCWzIKbjgh0JbQS
-         4PG71p6DxktD9QVDAP+rQd/GPPUQhjJxs+Sg+9dgcvNFmN3FKnwcX8hlP/+2PYxEI0iY
-         +1+IGFstgoja0Om4y3AoDHOwNDwprlljIlB6PqHKtZa90fMe73s/VkNcZnATAVkbpayq
-         yKdfwV1L19Y/Nnka7qku3inlAMaFHiXWsvnoRCFlXZSOnlP9s/G3tgqeXN3MouXe9CEw
-         zfWg==
-X-Gm-Message-State: AO0yUKXCrSMAk/0akckQIHPYxgwYvqJNIIm63L95NeqZIe0X5fhcFfLp
-        1tMO7AyeoP7HxiUSN04gLyyPWkr84by35lDz
-X-Google-Smtp-Source: AK7set/Hqt7/tFdWTqNQyJko4/eRErfrIERd8YtMlK8cdL7HORy0LZ2CmPBJNFYLl26tfN06LjHCnVCVpHyEbeAH
+        bh=8nfyEWndKsa3tyc1KlPsVZDyN8xlZ4zW0vpf47Ary0I=;
+        b=s8B0tOqgX8vcKTYrHBQBdT1oUZ3EGwnGoCLmybxnIwa4n7Zhb0wnkPWZs4vVe2B0gJ
+         kdbiuQsNZfeMSJ0ArfCD+JueRq8yUBD8u9NMlLwcWNT0eIisXBIgBmES3kpN2esXL+YA
+         6SrUOZjl5lpC8YJnSSx1bZFFIZF+W2ShwhsEDKijLNncYbPwGoNbJFDspUmj/SAyWA3M
+         yNTg/5EB7z0+P8kLpx43cd4rNWABw+N75mbKDjtmuBtHxvdEQ71P2ZPsHn8Z3hy2HzA3
+         hdk97J1ft/C4wixEyelLJoNx08YOxXYh/6pd3QIm1VeanwuXsH9S93NzmdkdD9g3KTaI
+         8FGg==
+X-Gm-Message-State: AO0yUKV/ys6LJDzMLR91QYaHn8uzP+tXTKQzI0htQMvqoKsdcwlpkRZo
+        QkBnMaFhQTFqRAJc+OOcNK7EAYOfWwsvhVWH
+X-Google-Smtp-Source: AK7set+i/pEV+wA/Uyq68EOFTB/N9gXVBIKZiQfbLrFGkhuKCKH/yF+5J8fuZrkmB0Jrum8skN72smbY4sjy/+UA
 X-Received: from jthoughton.c.googlers.com ([fda3:e722:ac3:cc00:14:4d90:c0a8:2a4f])
- (user=jthoughton job=sendgmr) by 2002:a81:b705:0:b0:534:d71f:14e6 with SMTP
- id v5-20020a81b705000000b00534d71f14e6mr53479ywh.9.1676680128284; Fri, 17 Feb
- 2023 16:28:48 -0800 (PST)
-Date:   Sat, 18 Feb 2023 00:27:38 +0000
+ (user=jthoughton job=sendgmr) by 2002:a05:6902:241:b0:8db:41c9:aa6f with SMTP
+ id k1-20020a056902024100b008db41c9aa6fmr200113ybs.2.1676680129319; Fri, 17
+ Feb 2023 16:28:49 -0800 (PST)
+Date:   Sat, 18 Feb 2023 00:27:39 +0000
 In-Reply-To: <20230218002819.1486479-1-jthoughton@google.com>
 Mime-Version: 1.0
 References: <20230218002819.1486479-1-jthoughton@google.com>
 X-Mailer: git-send-email 2.39.2.637.g21b0678d19-goog
-Message-ID: <20230218002819.1486479-6-jthoughton@google.com>
-Subject: [PATCH v2 05/46] rmap: hugetlb: switch from page_dup_file_rmap to page_add_file_rmap
+Message-ID: <20230218002819.1486479-7-jthoughton@google.com>
+Subject: [PATCH v2 06/46] hugetlb: add CONFIG_HUGETLB_HIGH_GRANULARITY_MAPPING
 From:   James Houghton <jthoughton@google.com>
 To:     Mike Kravetz <mike.kravetz@oracle.com>,
         Muchun Song <songmuchun@bytedance.com>,
@@ -86,145 +86,44 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This only applies to file-backed HugeTLB, and it should be a no-op until
-high-granularity mapping is possible. Also update page_remove_rmap to
-support the eventual case where !compound && folio_test_hugetlb().
-
-HugeTLB doesn't use LRU or mlock, so we avoid those bits. This also
-means we don't need to use subpage_mapcount; if we did, it would
-overflow with only a few mappings.
-
-There is still one caller of page_dup_file_rmap left: copy_present_pte,
-and it is always called with compound=false in this case.
+This adds the Kconfig to enable or disable high-granularity mapping.
+Each architecture must explicitly opt-in to it (via
+ARCH_WANT_HUGETLB_HIGH_GRANULARITY_MAPPING), but when opted in, HGM will
+be enabled by default if HUGETLB_PAGE is enabled.
 
 Signed-off-by: James Houghton <jthoughton@google.com>
 
-diff --git a/mm/hugetlb.c b/mm/hugetlb.c
-index 08004371cfed..6c008c9de80e 100644
---- a/mm/hugetlb.c
-+++ b/mm/hugetlb.c
-@@ -5077,7 +5077,7 @@ int copy_hugetlb_page_range(struct mm_struct *dst, struct mm_struct *src,
- 			 * sleep during the process.
- 			 */
- 			if (!PageAnon(ptepage)) {
--				page_dup_file_rmap(ptepage, true);
-+				page_add_file_rmap(ptepage, src_vma, true);
- 			} else if (page_try_dup_anon_rmap(ptepage, true,
- 							  src_vma)) {
- 				pte_t src_pte_old = entry;
-@@ -5910,7 +5910,7 @@ static vm_fault_t hugetlb_no_page(struct mm_struct *mm,
- 	if (anon_rmap)
- 		hugepage_add_new_anon_rmap(folio, vma, haddr);
- 	else
--		page_dup_file_rmap(&folio->page, true);
-+		page_add_file_rmap(&folio->page, vma, true);
- 	new_pte = make_huge_pte(vma, &folio->page, ((vma->vm_flags & VM_WRITE)
- 				&& (vma->vm_flags & VM_SHARED)));
- 	/*
-@@ -6301,7 +6301,7 @@ int hugetlb_mcopy_atomic_pte(struct mm_struct *dst_mm,
- 		goto out_release_unlock;
+diff --git a/fs/Kconfig b/fs/Kconfig
+index 2685a4d0d353..a072bbe3439a 100644
+--- a/fs/Kconfig
++++ b/fs/Kconfig
+@@ -246,6 +246,18 @@ config HUGETLBFS
+ config HUGETLB_PAGE
+ 	def_bool HUGETLBFS
  
- 	if (folio_in_pagecache)
--		page_dup_file_rmap(&folio->page, true);
-+		page_add_file_rmap(&folio->page, dst_vma, true);
- 	else
- 		hugepage_add_new_anon_rmap(folio, dst_vma, dst_addr);
- 
-diff --git a/mm/migrate.c b/mm/migrate.c
-index d3964c414010..b0f87f19b536 100644
---- a/mm/migrate.c
-+++ b/mm/migrate.c
-@@ -254,7 +254,7 @@ static bool remove_migration_pte(struct folio *folio,
- 				hugepage_add_anon_rmap(new, vma, pvmw.address,
- 						       rmap_flags);
- 			else
--				page_dup_file_rmap(new, true);
-+				page_add_file_rmap(new, vma, true);
- 			set_huge_pte_at(vma->vm_mm, pvmw.address, pvmw.pte, pte);
- 		} else
- #endif
-diff --git a/mm/rmap.c b/mm/rmap.c
-index 15ae24585fc4..c010d0af3a82 100644
---- a/mm/rmap.c
-+++ b/mm/rmap.c
-@@ -1318,21 +1318,21 @@ void page_add_file_rmap(struct page *page, struct vm_area_struct *vma,
- 	int nr = 0, nr_pmdmapped = 0;
- 	bool first;
- 
--	VM_BUG_ON_PAGE(compound && !PageTransHuge(page), page);
-+	VM_BUG_ON_PAGE(compound && !PageTransHuge(page)
-+				&& !folio_test_hugetlb(folio), page);
- 
- 	/* Is page being mapped by PTE? Is this its first map to be added? */
- 	if (likely(!compound)) {
- 		first = atomic_inc_and_test(&page->_mapcount);
- 		nr = first;
--		if (first && folio_test_large(folio)) {
-+		if (first && folio_test_large(folio)
-+			  && !folio_test_hugetlb(folio)) {
- 			nr = atomic_inc_return_relaxed(mapped);
- 			nr = (nr < COMPOUND_MAPPED);
- 		}
--	} else if (folio_test_pmd_mappable(folio)) {
--		/* That test is redundant: it's for safety or to optimize out */
--
-+	} else {
- 		first = atomic_inc_and_test(&folio->_entire_mapcount);
--		if (first) {
-+		if (first && !folio_test_hugetlb(folio)) {
- 			nr = atomic_add_return_relaxed(COMPOUND_MAPPED, mapped);
- 			if (likely(nr < COMPOUND_MAPPED + COMPOUND_MAPPED)) {
- 				nr_pmdmapped = folio_nr_pages(folio);
-@@ -1347,6 +1347,9 @@ void page_add_file_rmap(struct page *page, struct vm_area_struct *vma,
- 		}
- 	}
- 
-+	if (folio_test_hugetlb(folio))
-+		return;
++config ARCH_WANT_HUGETLB_HIGH_GRANULARITY_MAPPING
++	bool
 +
- 	if (nr_pmdmapped)
- 		__lruvec_stat_mod_folio(folio, folio_test_swapbacked(folio) ?
- 			NR_SHMEM_PMDMAPPED : NR_FILE_PMDMAPPED, nr_pmdmapped);
-@@ -1376,8 +1379,7 @@ void page_remove_rmap(struct page *page, struct vm_area_struct *vma,
- 	VM_BUG_ON_PAGE(compound && !PageHead(page), page);
- 
- 	/* Hugetlb pages are not counted in NR_*MAPPED */
--	if (unlikely(folio_test_hugetlb(folio))) {
--		/* hugetlb pages are always mapped with pmds */
-+	if (unlikely(folio_test_hugetlb(folio)) && compound) {
- 		atomic_dec(&folio->_entire_mapcount);
- 		return;
- 	}
-@@ -1386,15 +1388,14 @@ void page_remove_rmap(struct page *page, struct vm_area_struct *vma,
- 	if (likely(!compound)) {
- 		last = atomic_add_negative(-1, &page->_mapcount);
- 		nr = last;
--		if (last && folio_test_large(folio)) {
-+		if (last && folio_test_large(folio)
-+			 && !folio_test_hugetlb(folio)) {
- 			nr = atomic_dec_return_relaxed(mapped);
- 			nr = (nr < COMPOUND_MAPPED);
- 		}
--	} else if (folio_test_pmd_mappable(folio)) {
--		/* That test is redundant: it's for safety or to optimize out */
--
-+	} else {
- 		last = atomic_add_negative(-1, &folio->_entire_mapcount);
--		if (last) {
-+		if (last && !folio_test_hugetlb(folio)) {
- 			nr = atomic_sub_return_relaxed(COMPOUND_MAPPED, mapped);
- 			if (likely(nr < COMPOUND_MAPPED)) {
- 				nr_pmdmapped = folio_nr_pages(folio);
-@@ -1409,6 +1410,9 @@ void page_remove_rmap(struct page *page, struct vm_area_struct *vma,
- 		}
- 	}
- 
-+	if (folio_test_hugetlb(folio))
-+		return;
++config HUGETLB_HIGH_GRANULARITY_MAPPING
++	bool "HugeTLB high-granularity mapping support"
++	default n
++	depends on ARCH_WANT_HUGETLB_HIGH_GRANULARITY_MAPPING
++	help
++	  HugeTLB high-granularity mapping (HGM) allows userspace to issue
++	  UFFDIO_CONTINUE on HugeTLB mappings in PAGE_SIZE chunks.
++	  HGM is incompatible with the HugeTLB Vmemmap Optimization (HVO).
 +
- 	if (nr_pmdmapped) {
- 		if (folio_test_anon(folio))
- 			idx = NR_ANON_THPS;
+ #
+ # Select this config option from the architecture Kconfig, if it is preferred
+ # to enable the feature of HugeTLB Vmemmap Optimization (HVO).
+@@ -257,6 +269,7 @@ config HUGETLB_PAGE_OPTIMIZE_VMEMMAP
+ 	def_bool HUGETLB_PAGE
+ 	depends on ARCH_WANT_HUGETLB_PAGE_OPTIMIZE_VMEMMAP
+ 	depends on SPARSEMEM_VMEMMAP
++	depends on !HUGETLB_HIGH_GRANULARITY_MAPPING
+ 
+ config HUGETLB_PAGE_OPTIMIZE_VMEMMAP_DEFAULT_ON
+ 	bool "HugeTLB Vmemmap Optimization (HVO) defaults to on"
 -- 
 2.39.2.637.g21b0678d19-goog
 
