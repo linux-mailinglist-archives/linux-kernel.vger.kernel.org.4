@@ -2,92 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 66BE769B813
-	for <lists+linux-kernel@lfdr.de>; Sat, 18 Feb 2023 05:45:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A254769B818
+	for <lists+linux-kernel@lfdr.de>; Sat, 18 Feb 2023 05:54:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229551AbjBREpB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Feb 2023 23:45:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59768 "EHLO
+        id S229595AbjBREyB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Feb 2023 23:54:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34712 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229436AbjBREo7 (ORCPT
+        with ESMTP id S229436AbjBREx7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Feb 2023 23:44:59 -0500
-Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA8621C591
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Feb 2023 20:44:57 -0800 (PST)
-Received: from [2a02:8108:8980:2478:8cde:aa2c:f324:937e]; authenticated
-        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        id 1pTF5j-0000sJ-En; Sat, 18 Feb 2023 05:44:55 +0100
-Message-ID: <3ff87754-70f2-079c-d522-2330d0ffb5fd@leemhuis.info>
-Date:   Sat, 18 Feb 2023 05:44:55 +0100
+        Fri, 17 Feb 2023 23:53:59 -0500
+Received: from mail.zytor.com (unknown [IPv6:2607:7c80:54:3::138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B18C37552;
+        Fri, 17 Feb 2023 20:53:58 -0800 (PST)
+Received: from [127.0.0.1] ([73.223.221.228])
+        (authenticated bits=0)
+        by mail.zytor.com (8.17.1/8.17.1) with ESMTPSA id 31I4p62D4097556
+        (version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NO);
+        Fri, 17 Feb 2023 20:51:06 -0800
+DKIM-Filter: OpenDKIM Filter v2.11.0 mail.zytor.com 31I4p62D4097556
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zytor.com;
+        s=2023020601; t=1676695867;
+        bh=ZsTHAJ2M1Xz9JWuAr5Ye7uhY5qSpwDVmBE6pAy6Pnuk=;
+        h=Date:From:To:CC:Subject:In-Reply-To:References:From;
+        b=pSF0bVgQSOMYifL3Yscavmko2uodmIldbVyi+FjaGVFUtkZmJoPM5m8kmf4kGcrKE
+         0BH3WDlaqOROUPWYZQQ5pT0usvxFq0FiAJvmThmQl8+Wg/iUiQxfeQGxl0N/BMKbnA
+         Be5cmEnrH1EKgGVHexICr8I+1zUnTYXKC/PsVVoG4toZbBIbs+PMSL+ywSqdSi6rjJ
+         MNNadqgNa/HWpaDO7mbfEL39gs5WcwaileKqp0gssngfjJZIbTvzQ/5jflY79yEXld
+         gHNVbU0qrLlmv5meHXuueCPhIG1OONBW8PJkjgbuTjKppA729SwWj9z+1rObRb7CYf
+         2i2Hy1+df2FeA==
+Date:   Fri, 17 Feb 2023 20:51:03 -0800
+From:   "H. Peter Anvin" <hpa@zytor.com>
+To:     Ammar Faizi <ammarfaizi2@gnuweeb.org>, Xin Li <xin3.li@intel.com>
+CC:     Dave Hansen <dave.hansen@intel.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Andrew Cooper <Andrew.Cooper3@citrix.com>,
+        Brian Gerst <brgerst@gmail.com>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Shuah Khan <shuah@kernel.org>, Ingo Molnar <mingo@kernel.org>,
+        Andy Lutomirski <luto@kernel.org>,
+        x86 Mailing List <x86@kernel.org>,
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        Linux Kselftest Mailing List 
+        <linux-kselftest@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: =?US-ASCII?Q?Re=3A_=5BRFC_PATCH_v5_0/2=5D_sysret=5Frip_up?= =?US-ASCII?Q?date_for_the_Intel_FRED_architecture?=
+User-Agent: K-9 Mail for Android
+In-Reply-To: <Y/BTvGJT1QEz15w7@biznet-home.integral.gnuweeb.org>
+References: <BC632CA8-D2CB-4781-82E5-9810347293B0@zytor.com> <Y8+hGxVpgFVcm15g@biznet-home.integral.gnuweeb.org> <20230125034958.734527-1-ammarfaizi2@gnuweeb.org> <SA1PR11MB67345C4DFEE720C08D30D93DA8CE9@SA1PR11MB6734.namprd11.prod.outlook.com> <Y9DpNG+jb8G/lhA1@biznet-home.integral.gnuweeb.org> <SA1PR11MB673480C4129F7A7EA9DFAF4AA8CE9@SA1PR11MB6734.namprd11.prod.outlook.com> <A5C220D5-BCE6-42DC-8115-ED41CD011993@zytor.com> <Y9FpxEz2+LJc7vJP@biznet-home.integral.gnuweeb.org> <SA1PR11MB673454F82DEBD8A1C7009C79A8CE9@SA1PR11MB6734.namprd11.prod.outlook.com> <SA1PR11MB67342D0472C023619BDEFB26A8A39@SA1PR11MB6734.namprd11.prod.outlook.com> <Y/BTvGJT1QEz15w7@biznet-home.integral.gnuweeb.org>
+Message-ID: <18C482AB-D01D-4AAC-BBA2-7A0F7D26ADA8@zytor.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.2
-Subject: Re: 6.2-rc7 fails building on Talos II: memory.c:(.text+0x2e14):
- undefined reference to `hash__tlb_flush'
-Content-Language: en-US, de-DE
-From:   "Linux regression tracking #update (Thorsten Leemhuis)" 
-        <regressions@leemhuis.info>
-To:     "Erhard F." <erhard_f@mailbox.org>, linuxppc-dev@lists.ozlabs.org
-Cc:     linux-kernel@vger.kernel.org,
-        Linux kernel regressions list <regressions@lists.linux.dev>
-Reply-To: Linux regressions mailing list <regressions@lists.linux.dev>,
-          Linux regressions mailing list 
-          <regressions@lists.linux.dev>
-References: <20230216005535.6bff7aa6@yea>
- <e9923ff8-4027-9188-fd04-77d0bbbc6573@leemhuis.info>
-In-Reply-To: <e9923ff8-4027-9188-fd04-77d0bbbc6573@leemhuis.info>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1676695497;99ef2ce6;
-X-HE-SMSGID: 1pTF5j-0000sJ-En
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain;
+ charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-[TLDR: This mail in primarily relevant for Linux regression tracking. A
-change or fix related to the regression discussed in this thread was
-posted or applied, but it did not use a Link: tag to point to the
-report, as Linus and the documentation call for. Things happen, no
-worries -- but now the regression tracking bot needs to be told manually
-about the fix. See link in footer if these mails annoy you.]
+On February 17, 2023 8:27:40 PM PST, Ammar Faizi <ammarfaizi2@gnuweeb=2Eorg=
+> wrote:
+>On Wed, Feb 15, 2023 at 07:42:47AM +0000, Li, Xin3 wrote:
+>> Hi Faizi,
+>>=20
+>> Any update on this patch set?
+>
+>No comment from HPA=2E But after the recent discussion with Andrew, I
+>think at least it's now clear that we are not going to use "+r"(rsp) to
+>avoid the red zone problem=2E
+>
+>I am on leave today=2E Will send revision v8 on Monday=2E
+>
+>Thanks,
+>
 
-On 16.02.23 11:09, Linux regression tracking (Thorsten Leemhuis) wrote:
-> 
-> On 16.02.23 00:55, Erhard F. wrote:
->> Just noticed a build failure on 6.2-rc7 for my Talos 2 (.config attached):
->>
->>  # make
->>   CALL    scripts/checksyscalls.sh
->>   UPD     include/generated/utsversion.h
->>   CC      init/version-timestamp.o
->>   LD      .tmp_vmlinux.kallsyms1
->> ld: ld: DWARF error: could not find abbrev number 6
->> mm/memory.o: in function `unmap_page_range':
->> memory.c:(.text+0x2e14): undefined reference to `hash__tlb_flush'
->> ld: memory.c:(.text+0x2f8c): undefined reference to `hash__tlb_flush'
->> ld: ld: DWARF error: could not find abbrev number 3117
->> mm/mmu_gather.o: in function `tlb_remove_table':
->> mmu_gather.c:(.text+0x584): undefined reference to `hash__tlb_flush'
->> ld: mmu_gather.c:(.text+0x6c4): undefined reference to `hash__tlb_flush'
->> ld: mm/mmu_gather.o: in function `tlb_flush_mmu':
->> mmu_gather.c:(.text+0x80c): undefined reference to `hash__tlb_flush'
->> ld: mm/mmu_gather.o:mmu_gather.c:(.text+0xbe0): more undefined references to `hash__tlb_flush' follow
->> make[1]: *** [scripts/Makefile.vmlinux:35: vmlinux] Fehler 1
->> make: *** [Makefile:1264: vmlinux] Error 2
+My apologies, I missed your latest response in the torrent of email=2E The=
+ redzone issue is weird; it ought to be breaking all over the place, not ju=
+st this=2E
 
-#regzbot fix: 4302abc628fc0dc08e5855f21bbfa
-#regzbot ignore-activity
-
-Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
---
-Everything you wanna know about Linux kernel regression tracking:
-https://linux-regtracking.leemhuis.info/about/#tldr
-That page also explains what to do if mails like this annoy you.
-
-
+Let me take a quick look at it=2E=2E=2E
