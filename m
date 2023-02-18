@@ -2,154 +2,180 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E9B0D69BD82
-	for <lists+linux-kernel@lfdr.de>; Sat, 18 Feb 2023 23:24:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EB50369BD86
+	for <lists+linux-kernel@lfdr.de>; Sat, 18 Feb 2023 23:36:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229578AbjBRWYY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 18 Feb 2023 17:24:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37048 "EHLO
+        id S229553AbjBRWgW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 18 Feb 2023 17:36:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40006 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229436AbjBRWYW (ORCPT
+        with ESMTP id S229436AbjBRWgU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 18 Feb 2023 17:24:22 -0500
-Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5554211156;
-        Sat, 18 Feb 2023 14:24:21 -0800 (PST)
-Received: by mail-wr1-x433.google.com with SMTP id w18so1120474wrv.11;
-        Sat, 18 Feb 2023 14:24:21 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=ZuG2o2GL/RNJE8s44PFg/nieunuAxpEhxU6KAMrsGL4=;
-        b=I2jVuYWJxksxcMHQQpuoXzhLieMj0S63A9cp7urpwrV1cDglutxDwlQEKR8DXJMYns
-         2jFY8AEl5JSxMStjTx8xEmfbME9H8+hWdx/K6mhmNrjLqWDNkRjx3utbDI7yAJBK8CE5
-         yL9XWi2+3vz0e9q5s4AvAAqmBl2KIMC39AgiQuvyq5pmIuaD5DfiRjlzvjp9FEuLH/tZ
-         1plqInPGFLnv+q92zAAE4UyOSHtLqNwHVWF095NwhCFVlFCRIGATDIIMF1FNVoo0O6VW
-         VE4NTLJTdz/GEa5hMJwYJiJRf33u4h1l4FgQ8T7lnUPeVfk0sImXmjSni8zBXWMw9jjT
-         ZJ1A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=ZuG2o2GL/RNJE8s44PFg/nieunuAxpEhxU6KAMrsGL4=;
-        b=Erfn3rxGKlI0L0hU5LGaVQt3mXOZoKG+pbZFz9ip8Sle/8XVj9kaFl+o8qIkFl/CK/
-         ILtZd5gWtW5EohxKUJCewTwkjqYuA72a3FnRJq0taVoCvIVQTqOgiFp6mzsgHvY+HsvG
-         ym4R0h0kW/uISpsDVmmh7Z/eKdpA+jZQ6DDoH0qPJyAfkwOtmKEKhcyHJBkZJWAvQBZ9
-         gtivi5tlFA5gNhjepBac5h49+OUKnNv69QtzFB0pbWk7KxEoOxzi5meUwBS7Wbopv0jl
-         Vh08nEHXPIWjniR8K+f+PdoQ0Mr3VckTn2xnIrJEQUQy+IJGp7d17OgjKDGooi4F/nPI
-         n2UA==
-X-Gm-Message-State: AO0yUKX+lumYHD18a4qqFi7BBEJfy5o2eNY2zL+oUOzNMVafOcpLYOfL
-        /K3KEHVV5FKkRHw8k3zkMuJjH5eel5DU13lvgyGMRrrB
-X-Google-Smtp-Source: AK7set/8C2BA2FqfnJj/e7X7zoX19p8JKyl+A/sZzeZ6ksu1sutnX7O97s6TC9bvDSG5NOVWYJZYRpzaP5aCtq9OU5c=
-X-Received: by 2002:a5d:6e8a:0:b0:2c5:50db:e9fc with SMTP id
- k10-20020a5d6e8a000000b002c550dbe9fcmr60421wrz.674.1676759059334; Sat, 18 Feb
- 2023 14:24:19 -0800 (PST)
+        Sat, 18 Feb 2023 17:36:20 -0500
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0EAA015552
+        for <linux-kernel@vger.kernel.org>; Sat, 18 Feb 2023 14:36:18 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1676759778; x=1708295778;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=PsNI8hqW4WKziUwOLNXzi3I+iAtaihsXjk/rEwtmdxQ=;
+  b=njS8nymmM7BIfU1ougTye70ygdL5vAjOBPN848pDXCQ5bv8V+BdjuDRI
+   sP6UWH6cIY/Vfd9ELyB1meoCpH5FULmtPzdz2iWJDb4GXI6Gf79yZr2Ad
+   oly1SR8O5Ap1MNyrXOyE/Cq9lF0WKYofpnXnfMRztpQIoRRKHToxnCN7r
+   9k7aCTzw6cGrftXiNzxhQMcPCcOEuUMYbdyXLdzt2q5dfdAT9oLgo3p9i
+   bMo6BfS0JssM5ahQDowgOZPt3gUbBsNtvhIKu+5O5UQQqCRh8K/oQQfMk
+   4eod5iFkh1bRQTuf1UY+5KRqm1jjQ8sQ1JYGqOEmzkc16gCUKkH9AJwpE
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10625"; a="332213047"
+X-IronPort-AV: E=Sophos;i="5.97,309,1669104000"; 
+   d="scan'208";a="332213047"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Feb 2023 14:36:18 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10625"; a="670935601"
+X-IronPort-AV: E=Sophos;i="5.97,309,1669104000"; 
+   d="scan'208";a="670935601"
+Received: from lkp-server01.sh.intel.com (HELO 4455601a8d94) ([10.239.97.150])
+  by orsmga002.jf.intel.com with ESMTP; 18 Feb 2023 14:36:16 -0800
+Received: from kbuild by 4455601a8d94 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pTVoW-000Coz-0W;
+        Sat, 18 Feb 2023 22:36:16 +0000
+Date:   Sun, 19 Feb 2023 06:35:22 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Masahiro Yamada <yamada.masahiro@socionext.com>
+Cc:     oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
+        Nathan Chancellor <natechancellor@gmail.com>
+Subject: cc1: error: arch/sh/include/mach-hp6xx: No such file or directory
+Message-ID: <202302190641.30VVXnPb-lkp@intel.com>
 MIME-Version: 1.0
-References: <20230124023834.106339-1-ericvh@kernel.org> <20230218003323.2322580-11-ericvh@kernel.org>
- <Y/Ch8o/6HVS8Iyeh@codewreck.org> <1983433.kCcYWV5373@silver>
-In-Reply-To: <1983433.kCcYWV5373@silver>
-From:   Eric Van Hensbergen <ericvh@gmail.com>
-Date:   Sat, 18 Feb 2023 16:24:08 -0600
-Message-ID: <CAFkjPT=xhEEedeYcyn1FFcngqOJf_+8ynz4zeLbsXPOGoY6aqw@mail.gmail.com>
-Subject: Re: [PATCH v4 10/11] fs/9p: writeback mode fixes
-To:     Christian Schoenebeck <linux_oss@crudebyte.com>
-Cc:     Eric Van Hensbergen <ericvh@kernel.org>, asmadeus@codewreck.org,
-        v9fs-developer@lists.sourceforge.net, rminnich@gmail.com,
-        lucho@ionkov.net, linux-kernel@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Yeah, I guess it depends on what options we want to separate,
-writeback == mmap so we can eliminate one option and just use mmap I
-suppose.  I feel like readahead has value as it maintains the most
-consistency on the host file system since it shouldn't be doing any
-writeback buffering.  readahead and mmap are different than loose in
-that they don't do any do any dir cache.  To your earlier comments (in
-a different thread) it very well may be that eventually we separate
-these into file_cache=[ readahead | mmap | loose ] and dir_cache = [
-tight | temporal | loose ] and fscache is its own beast.  It struck me
-as well with xattr enabled we may want to have separate caches for
-xattr caching since it generates a load of traffic with security on.
+Hi Masahiro,
 
-On Sat, Feb 18, 2023 at 1:58 PM Christian Schoenebeck
-<linux_oss@crudebyte.com> wrote:
->
-> On Saturday, February 18, 2023 11:01:22 AM CET asmadeus@codewreck.org wrote:
-> > Eric Van Hensbergen wrote on Sat, Feb 18, 2023 at 12:33:22AM +0000:
-> > > This fixes several detected problems from preivous
-> > > patches when running with writeback mode.  In
-> > > particular this fixes issues with files which are opened
-> > > as write only and getattr on files which dirty caches.
-> > >
-> > > This patch makes sure that cache behavior for an open file is stored in
-> > > the client copy of fid->mode.  This allows us to reflect cache behavior
-> > > from mount flags, open mode, and information from the server to
-> > > inform readahead and writeback behavior.
-> > >
-> > > This includes adding support for a 9p semantic that qid.version==0
-> > > is used to mark a file as non-cachable which is important for
-> > > synthetic files.  This may have a side-effect of not supporting
-> > > caching on certain legacy file servers that do not properly set
-> > > qid.version.  There is also now a mount flag which can disable
-> > > the qid.version behavior.
-> > >
-> > > Signed-off-by: Eric Van Hensbergen <ericvh@kernel.org>
-> >
-> > Didn't have time to review it all thoroughly, sending what I have
-> > anyway...
-> >
-> > > diff --git a/Documentation/filesystems/9p.rst b/Documentation/filesystems/9p.rst
-> > > index 0e800b8f73cc..0c2c7a181d85 100644
-> > > --- a/Documentation/filesystems/9p.rst
-> > > +++ b/Documentation/filesystems/9p.rst
-> > > @@ -79,18 +79,14 @@ Options
-> > >
-> > >    cache=mode       specifies a caching policy.  By default, no caches are used.
-> > >
-> > > -                        none
-> > > -                           default no cache policy, metadata and data
-> > > -                                alike are synchronous.
-> > > -                   loose
-> > > -                           no attempts are made at consistency,
-> > > -                                intended for exclusive, read-only mounts
-> > > -                        fscache
-> > > -                           use FS-Cache for a persistent, read-only
-> > > -                           cache backend.
-> > > -                        mmap
-> > > -                           minimal cache that is only used for read-write
-> > > -                                mmap.  Northing else is cached, like cache=none
-> > > +                   =========       =============================================
-> > > +                   none            no cache of file or metadata
-> > > +                   readahead       readahead caching of files
-> > > +                   writeback       delayed writeback of files
-> > > +                   mmap            support mmap operations read/write with cache
-> > > +                   loose           meta-data and file cache with no coherency
-> > > +                   fscache         use FS-Cache for a persistent cache backend
-> > > +                   =========       =============================================
-> >
-> > perhaps a word saying the caches are incremental, only one can be used,
-> > and listing them in order?
-> > e.g. it's not clear from this that writeback also enables readahead,
-> > and as a user I'd try to use cache=readahead,cache=writeback and wonder
-> > why that doesn't work (well, I guess it would in that order...)
->
-> +1 on docs
->
-> The question was also whether to make these true separate options before being
-> merged.
->
-> I give these patches a spin tomorrow.
->
->
->
+FYI, the error/warning still remains.
+
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   5e725d112e1a54c2611d5dffd124a79415d0f0de
+commit: 4c8dd95a723d9cccf8810be54aa62be82885c9d8 kbuild: add some extra warning flags unconditionally
+date:   3 years, 9 months ago
+config: sh-randconfig-r021-20230219 (https://download.01.org/0day-ci/archive/20230219/202302190641.30VVXnPb-lkp@intel.com/config)
+compiler: sh4-linux-gcc (GCC) 12.1.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=4c8dd95a723d9cccf8810be54aa62be82885c9d8
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout 4c8dd95a723d9cccf8810be54aa62be82885c9d8
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=sh olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=sh SHELL=/bin/bash
+
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202302190641.30VVXnPb-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+>> cc1: error: arch/sh/include/mach-hp6xx: No such file or directory [-Werror=missing-include-dirs]
+>> cc1: error: arch/sh/include/mach-hp6xx: No such file or directory [-Werror=missing-include-dirs]
+   cc1: all warnings being treated as errors
+--
+>> cc1: error: arch/sh/include/mach-hp6xx: No such file or directory [-Werror=missing-include-dirs]
+>> cc1: error: arch/sh/include/mach-hp6xx: No such file or directory [-Werror=missing-include-dirs]
+   arch/sh/kernel/hw_breakpoint.c: In function 'arch_bp_generic_fields':
+   arch/sh/kernel/hw_breakpoint.c:159:27: error: this statement may fall through [-Werror=implicit-fallthrough=]
+     159 |                 *gen_type = HW_BREAKPOINT_R;
+         |                 ~~~~~~~~~~^~~~~~~~~~~~~~~~~
+   arch/sh/kernel/hw_breakpoint.c:160:9: note: here
+     160 |         case SH_BREAKPOINT_WRITE:
+         |         ^~~~
+   cc1: all warnings being treated as errors
+--
+>> cc1: error: arch/sh/include/mach-hp6xx: No such file or directory [-Werror=missing-include-dirs]
+>> cc1: error: arch/sh/include/mach-hp6xx: No such file or directory [-Werror=missing-include-dirs]
+   arch/sh/kernel/machvec.c: In function 'early_parse_mv':
+   arch/sh/kernel/machvec.c:43:15: error: variable 'mv_comma' set but not used [-Werror=unused-but-set-variable]
+      43 |         char *mv_comma;
+         |               ^~~~~~~~
+   arch/sh/kernel/machvec.c: In function 'sh_mv_setup':
+   arch/sh/kernel/machvec.c:104:33: error: array subscript 'struct sh_machine_vector[0]' is partly outside array bounds of 'long int[1]' [-Werror=array-bounds]
+     104 |                         sh_mv = *(struct sh_machine_vector *)&__machvec_start;
+         |                                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   In file included from arch/sh/kernel/machvec.c:13:
+   arch/sh/include/asm/sections.h:7:13: note: object '__machvec_start' of size 4
+       7 | extern long __machvec_start, __machvec_end;
+         |             ^~~~~~~~~~~~~~~
+   cc1: all warnings being treated as errors
+--
+>> cc1: error: arch/sh/include/mach-hp6xx: No such file or directory [-Werror=missing-include-dirs]
+>> cc1: error: arch/sh/include/mach-hp6xx: No such file or directory [-Werror=missing-include-dirs]
+   arch/sh/kernel/ptrace_32.c: In function 'arch_ptrace':
+   arch/sh/kernel/ptrace_32.c:380:40: error: comparison of unsigned expression in '< 0' is always false [-Werror=type-limits]
+     380 |                 if ((addr & 3) || addr < 0 ||
+         |                                        ^
+   arch/sh/kernel/ptrace_32.c:420:40: error: comparison of unsigned expression in '< 0' is always false [-Werror=type-limits]
+     420 |                 if ((addr & 3) || addr < 0 ||
+         |                                        ^
+   cc1: all warnings being treated as errors
+--
+>> cc1: error: arch/sh/include/mach-hp6xx: No such file or directory [-Werror=missing-include-dirs]
+>> cc1: error: arch/sh/include/mach-hp6xx: No such file or directory [-Werror=missing-include-dirs]
+   arch/sh/kernel/kgdb.c: In function 'kgdb_arch_handle_exception':
+   arch/sh/kernel/kgdb.c:267:20: error: this statement may fall through [-Werror=implicit-fallthrough=]
+     267 |                 if (kgdb_hex2long(&ptr, &addr))
+         |                    ^
+   arch/sh/kernel/kgdb.c:269:9: note: here
+     269 |         case 'D':
+         |         ^~~~
+   cc1: all warnings being treated as errors
+--
+>> cc1: error: arch/sh/include/mach-hp6xx: No such file or directory [-Werror=missing-include-dirs]
+>> cc1: error: arch/sh/include/mach-hp6xx: No such file or directory [-Werror=missing-include-dirs]
+   arch/sh/kernel/kprobes.c: In function 'kprobe_exceptions_notify':
+   arch/sh/kernel/kprobes.c:481:24: error: variable 'p' set but not used [-Werror=unused-but-set-variable]
+     481 |         struct kprobe *p = NULL;
+         |                        ^
+   cc1: all warnings being treated as errors
+--
+>> cc1: error: arch/sh/include/mach-hp6xx: No such file or directory [-Werror=missing-include-dirs]
+>> cc1: error: arch/sh/include/mach-hp6xx: No such file or directory [-Werror=missing-include-dirs]
+   arch/sh/kernel/disassemble.c: In function 'print_sh_insn':
+   arch/sh/kernel/disassemble.c:295:13: error: variable 'lastsp' set but not used [-Werror=unused-but-set-variable]
+     295 |         int lastsp;
+         |             ^~~~~~
+   arch/sh/kernel/disassemble.c:478:36: error: this statement may fall through [-Werror=implicit-fallthrough=]
+     478 |                                 if (0)
+         |                                    ^
+   arch/sh/kernel/disassemble.c:480:25: note: here
+     480 |                         case F_REG_N:
+         |                         ^~~~
+   arch/sh/kernel/disassemble.c:487:36: error: this statement may fall through [-Werror=implicit-fallthrough=]
+     487 |                                 if (rn & 1) {
+         |                                    ^
+   arch/sh/kernel/disassemble.c:491:25: note: here
+     491 |                         d_reg_n:
+         |                         ^~~~~~~
+   arch/sh/kernel/disassemble.c:496:36: error: this statement may fall through [-Werror=implicit-fallthrough=]
+     496 |                                 if (rm & 1) {
+         |                                    ^
+   arch/sh/kernel/disassemble.c:500:25: note: here
+     500 |                         case D_REG_M:
+         |                         ^~~~
+   cc1: all warnings being treated as errors
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
