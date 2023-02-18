@@ -2,66 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4766F69BB9A
-	for <lists+linux-kernel@lfdr.de>; Sat, 18 Feb 2023 20:21:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E6A869BB9E
+	for <lists+linux-kernel@lfdr.de>; Sat, 18 Feb 2023 20:35:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229602AbjBRTVb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 18 Feb 2023 14:21:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56568 "EHLO
+        id S229580AbjBRTeo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 18 Feb 2023 14:34:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60062 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229472AbjBRTVa (ORCPT
+        with ESMTP id S229472AbjBRTem (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 18 Feb 2023 14:21:30 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E298C1557F;
-        Sat, 18 Feb 2023 11:21:28 -0800 (PST)
+        Sat, 18 Feb 2023 14:34:42 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D925A12BC1
+        for <linux-kernel@vger.kernel.org>; Sat, 18 Feb 2023 11:34:41 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 95E82B80860;
-        Sat, 18 Feb 2023 19:21:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1D8D9C433D2;
-        Sat, 18 Feb 2023 19:21:26 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5F2A560B81
+        for <linux-kernel@vger.kernel.org>; Sat, 18 Feb 2023 19:34:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9DC6EC433EF;
+        Sat, 18 Feb 2023 19:34:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1676748086;
-        bh=ERRPUkuGs6ei/8zsYh5mEgzu5rkdv0mpyjaQrJ0AMOg=;
+        s=k20201202; t=1676748880;
+        bh=J8R7tycmH1fFJwxe7RtFsmH6kS9YO9Df/2j/ET27ZGc=;
         h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=mror2wFvyMD2N3YigBLNVVHAfx1IyQ4AYJD/NIo9/jBRow+wLe92vyOvSr9JQiHKX
-         +Gilf17WaafLm/g3Tz41Uuts2fUekVGMrZLWvlZQNuICD0Sutt4MimqDsXiGDe38r8
-         WtFYaQYeJIZM1rIp2PyCNVJyRVz2EcM571P+QP4p/Skg7bbNuNrz998ex5dhg5Q7e5
-         N5XYEhaMpVs1mWHAhmNrKjdmncSgTk/eqIgP8l0ZiJyp/EB+MpEEki6Nmf7TMd7dT6
-         YND2qfA9q5OOetFy9FHSvuxoOxx7ie9JkKxpnGAZTRPf7e4nFGx0YMSaxgFeZH3CAS
-         zGaye6ZL6n80g==
+        b=N8QqmAuxa0EVfhSozi4NbGPndGwfmqrimGk7SZZf40hjdYFTMQTSxX/H60w3byJL0
+         ULfy0sBAht/6rlLLmhwpJp+H8BNI1g728/b2WAqnOooB8vMe0Fw75QF6Iv7+9PTiuo
+         hs/EhavNse/oMSXZulx2Zsh3TKrPAmYtIJ307mQke7c9M8IrT9Zp5O2aaqVccZc0kW
+         Pz1k0XUmPKjQubb0Kal7lyKcfRTO8PCRP1vKspz1HE95h1sVbZiuULPpLEpz5oBImY
+         c9+eFPZjQC4AEm1oyRst+7npPYVSiTXXzIqG8AcPmXhw5ZG3qwQN2W44zICEyPLgM0
+         u1F+sW6HB294Q==
 Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id B139C5C0ACF; Sat, 18 Feb 2023 11:21:23 -0800 (PST)
-Date:   Sat, 18 Feb 2023 11:21:23 -0800
+        id 6F60B5C0ACF; Sat, 18 Feb 2023 11:34:38 -0800 (PST)
+Date:   Sat, 18 Feb 2023 11:34:38 -0800
 From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     Joel Fernandes <joel@joelfernandes.org>
-Cc:     Alan Stern <stern@rowland.harvard.edu>,
-        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
-        kernel-team@meta.com, mingo@kernel.org, parri.andrea@gmail.com,
-        will@kernel.org, peterz@infradead.org, boqun.feng@gmail.com,
-        npiggin@gmail.com, dhowells@redhat.com, j.alglave@ucl.ac.uk,
-        luc.maranget@inria.fr, akiyks@gmail.com
-Subject: Re: Current LKMM patch disposition
-Message-ID: <20230218192123.GC2948950@paulmck-ThinkPad-P17-Gen-1>
+To:     Zqiang <qiang1.zhang@intel.com>
+Cc:     dave@stgolabs.net, josh@joshtriplett.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] locktorture: Add raw_spinlock* torture tests for
+ PREEMPT_RT kernels
+Message-ID: <20230218193438.GE2948950@paulmck-ThinkPad-P17-Gen-1>
 Reply-To: paulmck@kernel.org
-References: <20230204014941.GS2948950@paulmck-ThinkPad-P17-Gen-1>
- <Y95yhJgNq8lMXPdF@rowland.harvard.edu>
- <20230204222411.GC2948950@paulmck-ThinkPad-P17-Gen-1>
- <Y9+41ctA54pjm/KG@google.com>
- <Y+FJSzUoGTgReLPB@rowland.harvard.edu>
- <Y+fN2fvUjGDWBYrv@google.com>
- <Y+f4TYZ9BPlt8y8B@rowland.harvard.edu>
- <CAEXW_YRuTfjc=5OAskTV0Qt_zSJTPP3-01=Y=SypMdPsF_weAQ@mail.gmail.com>
- <Y+hWAksfk4C0M2gB@rowland.harvard.edu>
- <CAEXW_YQ3fvFDNi9wG5w4Zqkbda8SUByOnM6y6MXQpxT9oQw8xQ@mail.gmail.com>
+References: <20230215061035.1534950-1-qiang1.zhang@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAEXW_YQ3fvFDNi9wG5w4Zqkbda8SUByOnM6y6MXQpxT9oQw8xQ@mail.gmail.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+In-Reply-To: <20230215061035.1534950-1-qiang1.zhang@intel.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,89 +57,103 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Feb 18, 2023 at 01:13:59AM -0500, Joel Fernandes wrote:
-> Hi Alan,
+On Wed, Feb 15, 2023 at 02:10:35PM +0800, Zqiang wrote:
+> For PREEMPT_RT kernel, the spin_lock, spin_lock_irq will converted
+> to sleepable rt_spin_lock and the interrupt related suffix for
+> spin_lock/unlock(_irq, irqsave/irqrestore) do not affect CPU's
+> interrupt state. this commit therefore add raw_spin_lock torture
+> tests, this is a strict spin lock implementation in RT kernels.
 > 
-> On Sat, Feb 11, 2023 at 9:59 PM Alan Stern <stern@rowland.harvard.edu> wrote:
-> >
-> [...]
-> >
-> > Would you like to post a few examples showing some of the most difficult
-> > points you encountered?  Maybe explanation.txt can be improved.
-> 
-> One additional feedback I wanted to mention, regarding this paragraph
-> under "WARNING":
-> ===========
-> The protections provided by READ_ONCE(), WRITE_ONCE(), and others are
-> not perfect; and under some circumstances it is possible for the
-> compiler to undermine the memory model. Here is an example. Suppose
-> both branches of an "if" statement store the same value to the same
-> location:
-> r1 = READ_ONCE(x);
-> if (r1) {
-> WRITE_ONCE(y, 2);
-> ... /* do something */
-> } else {
-> WRITE_ONCE(y, 2);
-> ... /* do something else */
-> }
-> ===========
-> 
-> I tried lots of different compilers with varying degrees of
-> optimization, in all cases I find that the conditional instruction
-> always appears in program order before the stores inside the body of
-> the conditional. So I am not sure if this is really a valid concern on
-> current compilers, if not - could you provide an example of a compiler
-> and options that cause it?
-> 
-> In any case, if it is a theoretical concern, it could be clarified
-> that this is a theoretical possibility in the text.  And if it is a
-> real/practical concern, then it could be mentioned the specific
-> compiler/arch this was seen in.
+> Signed-off-by: Zqiang <qiang1.zhang@intel.com>
 
-I could be misremembering, but I believe that this reordering has been
-seen in the past.
+A nice addition!  Is this something you will be testing regularly?
+If not, should there be additional locktorture scenarios, perhaps prefixed
+by "RT-" to hint that they are not normally available?
 
-							Thanx, Paul
+Or did you have some other plan for making use of these?
 
-> Thanks!
+						Thanx, Paul
+
+> ---
+>  kernel/locking/locktorture.c | 58 ++++++++++++++++++++++++++++++++++++
+>  1 file changed, 58 insertions(+)
 > 
->  - Joel
+> diff --git a/kernel/locking/locktorture.c b/kernel/locking/locktorture.c
+> index 9425aff08936..521197366f27 100644
+> --- a/kernel/locking/locktorture.c
+> +++ b/kernel/locking/locktorture.c
+> @@ -257,6 +257,61 @@ static struct lock_torture_ops spin_lock_irq_ops = {
+>  	.name		= "spin_lock_irq"
+>  };
+>  
+> +#ifdef CONFIG_PREEMPT_RT
+> +static DEFINE_RAW_SPINLOCK(torture_raw_spinlock);
+> +
+> +static int torture_raw_spin_lock_write_lock(int tid __maybe_unused)
+> +__acquires(torture_raw_spinlock)
+> +{
+> +	raw_spin_lock(&torture_raw_spinlock);
+> +	return 0;
+> +}
+> +
+> +static void torture_raw_spin_lock_write_unlock(int tid __maybe_unused)
+> +__releases(torture_raw_spinlock)
+> +{
+> +	raw_spin_unlock(&torture_raw_spinlock);
+> +}
+> +
+> +static struct lock_torture_ops raw_spin_lock_ops = {
+> +	.writelock	= torture_raw_spin_lock_write_lock,
+> +	.write_delay	= torture_spin_lock_write_delay,
+> +	.task_boost	= torture_rt_boost,
+> +	.writeunlock	= torture_raw_spin_lock_write_unlock,
+> +	.readlock	= NULL,
+> +	.read_delay	= NULL,
+> +	.readunlock	= NULL,
+> +	.name		= "raw_spin_lock"
+> +};
+> +
+> +static int torture_raw_spin_lock_write_lock_irq(int tid __maybe_unused)
+> +__acquires(torture_raw_spinlock)
+> +{
+> +	unsigned long flags;
+> +
+> +	raw_spin_lock_irqsave(&torture_raw_spinlock, flags);
+> +	cxt.cur_ops->flags = flags;
+> +	return 0;
+> +}
+> +
+> +static void torture_raw_spin_lock_write_unlock_irq(int tid __maybe_unused)
+> +__releases(torture_raw_spinlock)
+> +{
+> +	raw_spin_unlock_irqrestore(&torture_raw_spinlock, cxt.cur_ops->flags);
+> +}
+> +
+> +static struct lock_torture_ops raw_spin_lock_irq_ops = {
+> +	.writelock	= torture_raw_spin_lock_write_lock_irq,
+> +	.write_delay	= torture_spin_lock_write_delay,
+> +	.task_boost	= torture_rt_boost,
+> +	.writeunlock	= torture_raw_spin_lock_write_unlock_irq,
+> +	.readlock	= NULL,
+> +	.read_delay	= NULL,
+> +	.readunlock	= NULL,
+> +	.name		= "raw_spin_lock_irq"
+> +};
+> +#endif
+> +
+>  static DEFINE_RWLOCK(torture_rwlock);
+>  
+>  static int torture_rwlock_write_lock(int tid __maybe_unused)
+> @@ -1017,6 +1072,9 @@ static int __init lock_torture_init(void)
+>  	static struct lock_torture_ops *torture_ops[] = {
+>  		&lock_busted_ops,
+>  		&spin_lock_ops, &spin_lock_irq_ops,
+> +#ifdef CONFIG_PREEMPT_RT
+> +		&raw_spin_lock_ops, &raw_spin_lock_irq_ops,
+> +#endif
+>  		&rw_lock_ops, &rw_lock_irq_ops,
+>  		&mutex_lock_ops,
+>  		&ww_mutex_lock_ops,
+> -- 
+> 2.25.1
 > 
-> 
-> 
-> >
-> > > > I'm not sure that breaking this relation up into pieces will make it any
-> > > > easier to understand.
-> > >
-> > > Yes, but I tried. I will keep trying to understand your last patch
-> > > more. Especially I am still not sure, why in the case of an SRCU
-> > > reader on a single CPU, the following does not work:
-> > > let srcu-rscs = ([Srcu-lock]; data; [Srcu-unlock]).
-> >
-> > You have to understand that herd7 does not track dependencies through
-> > stores and subsequent loads.  That is, if you have something like:
-> >
-> >         r1 = READ_ONCE(*x);
-> >         WRITE_ONCE(*y, r1);
-> >         r2 = READ_ONCE(*y);
-> >         WRITE_ONCE(*z, r2);
-> >
-> > then herd7 will realize that the write to y depends on the value read
-> > from x, and it will realize that the write to z depends on the value
-> > read from y.  But it will not realize that the write to z depends on the
-> > value read from x; it loses track of that dependency because of the
-> > intervening store/load from y.
-> >
-> > More to the point, if you have:
-> >
-> >         r1 = srcu_read_lock(lock);
-> >         WRITE_ONCE(*y, r1);
-> >         r2 = READ_ONCE(*y);
-> >         srcu_read_unlock(lock, r2);
-> >
-> > then herd7 will not realize that the value of r2 depends on the value of
-> > r1.  So there will be no data dependency from the srcu_read_lock() to
-> > the srcu_read_unlock().
-> >
-> > Alan
