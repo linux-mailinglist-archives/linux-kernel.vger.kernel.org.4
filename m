@@ -2,131 +2,160 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A948E69B7A7
-	for <lists+linux-kernel@lfdr.de>; Sat, 18 Feb 2023 03:07:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2675369B7B0
+	for <lists+linux-kernel@lfdr.de>; Sat, 18 Feb 2023 03:18:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229669AbjBRCHr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Feb 2023 21:07:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57402 "EHLO
+        id S229681AbjBRCSt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Feb 2023 21:18:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33620 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229445AbjBRCHq (ORCPT
+        with ESMTP id S229445AbjBRCSs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Feb 2023 21:07:46 -0500
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 078295F242;
-        Fri, 17 Feb 2023 18:07:45 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1676686065; x=1708222065;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=mJAHrXAWrfL2lvxNdKWgwnv47B8c9wg7eap7KWQCYtQ=;
-  b=Gm7tycKTAUgDzcA7xtci3AuQZRDY7r3AUrmBG4eP5aiAqj8W3ZPVD1FO
-   OWnws3ndg1Rly0VWNt7JSSI6hJpEluLq2RpcVuP6rR77xpRyHhOctqcgQ
-   ADTiGb7Vwr/wUwZ7dg3HYuaUKHNxYi52Q/djcr4wnA85wXje8aVi3fP/m
-   rN33TYYLBLwdaFccZOKjs5DNLDPOJT938P+ITIqdVO/4i+TQsQmfa9rLm
-   zMrG+LVIjTyg2bfWE8LwXLeFzcsVhkbwgvgy5lPwMB5+U70gsvcQV9V4A
-   oQTH0EzWbshHI0K02SBS1XKZj4DFkT44okJkt/jFQ8thuDpLz7VhqP5kE
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10624"; a="311763201"
-X-IronPort-AV: E=Sophos;i="5.97,306,1669104000"; 
-   d="scan'208";a="311763201"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Feb 2023 18:07:44 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10624"; a="813551667"
-X-IronPort-AV: E=Sophos;i="5.97,306,1669104000"; 
-   d="scan'208";a="813551667"
-Received: from lkp-server01.sh.intel.com (HELO 4455601a8d94) ([10.239.97.150])
-  by fmsmga001.fm.intel.com with ESMTP; 17 Feb 2023 18:07:43 -0800
-Received: from kbuild by 4455601a8d94 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pTCda-000C0L-15;
-        Sat, 18 Feb 2023 02:07:42 +0000
-Date:   Sat, 18 Feb 2023 10:07:22 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Hans Verkuil <hverkuil@xs4all.nl>
-Cc:     llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-        linux-kernel@vger.kernel.org,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        linux-media@vger.kernel.org
-Subject: drivers/staging/media/deprecated/saa7146/common/saa7146_hlp.c:648:5:
- warning: stack frame size (1072) exceeds limit (1024) in
- 'saa7146_enable_overlay'
-Message-ID: <202302180911.6Dde6M71-lkp@intel.com>
+        Fri, 17 Feb 2023 21:18:48 -0500
+Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BACE3A872;
+        Fri, 17 Feb 2023 18:18:45 -0800 (PST)
+Received: from canpemm500010.china.huawei.com (unknown [172.30.72.55])
+        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4PJXKw5flWzJpsJ;
+        Sat, 18 Feb 2023 10:13:56 +0800 (CST)
+Received: from [10.174.178.185] (10.174.178.185) by
+ canpemm500010.china.huawei.com (7.192.105.118) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.6; Sat, 18 Feb 2023 10:18:43 +0800
+Subject: Re: [PATCH v3 1/2] ext4: commit super block if fs record error when
+ journal record without error
+To:     Jan Kara <jack@suse.cz>
+References: <20230214022905.765088-1-yebin@huaweicloud.com>
+ <20230214022905.765088-2-yebin@huaweicloud.com>
+ <20230216173159.zkj4qd2nmj2yjpkr@quack3> <63EEDC19.6010204@huawei.com>
+ <20230217105647.g6blbinkvnsyy2or@quack3>
+CC:     Ye Bin <yebin@huaweicloud.com>, <tytso@mit.edu>,
+        <adilger.kernel@dilger.ca>, <linux-ext4@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+From:   "yebin (H)" <yebin10@huawei.com>
+Message-ID: <63F03582.1020303@huawei.com>
+Date:   Sat, 18 Feb 2023 10:18:42 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:38.0) Gecko/20100101
+ Thunderbird/38.1.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230217105647.g6blbinkvnsyy2or@quack3>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.174.178.185]
+X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
+ canpemm500010.china.huawei.com (7.192.105.118)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Hans,
-
-First bad commit (maybe != root cause):
-
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   dbeed98d89ea91ae68ff6dce6060671726292e85
-commit: e33fdb5a02490059e2f48ced2c038c8a46c6476d media: saa7146: deprecate hexium_gemini/orion, mxb and ttpci
-date:   6 months ago
-config: powerpc-allyesconfig (https://download.01.org/0day-ci/archive/20230218/202302180911.6Dde6M71-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project db89896bbbd2251fff457699635acbbedeead27f)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install powerpc cross compiling tool for clang build
-        # apt-get install binutils-powerpc-linux-gnu
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=e33fdb5a02490059e2f48ced2c038c8a46c6476d
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout e33fdb5a02490059e2f48ced2c038c8a46c6476d
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=powerpc olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=powerpc SHELL=/bin/bash drivers/staging/media/deprecated/saa7146/common/
-
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202302180911.6Dde6M71-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
->> drivers/staging/media/deprecated/saa7146/common/saa7146_hlp.c:648:5: warning: stack frame size (1072) exceeds limit (1024) in 'saa7146_enable_overlay' [-Wframe-larger-than]
-   int saa7146_enable_overlay(struct saa7146_fh *fh)
-       ^
-   257/1072 (23.97%) spills, 815/1072 (76.03%) variables
-   1 warning generated.
 
 
-vim +/saa7146_enable_overlay +648 drivers/staging/media/deprecated/saa7146/common/saa7146_hlp.c
+On 2023/2/17 18:56, Jan Kara wrote:
+> On Fri 17-02-23 09:44:57, yebin (H) wrote:
+>> On 2023/2/17 1:31, Jan Kara wrote:
+>>> On Tue 14-02-23 10:29:04, Ye Bin wrote:
+>>>> From: Ye Bin <yebin10@huawei.com>
+>>>>
+>>>> Now, 'es->s_state' maybe covered by recover journal. And journal errno
+>>>> maybe not recorded in journal sb as IO error. ext4_update_super() only
+>>>> update error information when 'sbi->s_add_error_count' large than zero.
+>>>> Then 'EXT4_ERROR_FS' flag maybe lost.
+>>>> To solve above issue commit error information after recover journal.
+>>>>
+>>>> Signed-off-by: Ye Bin <yebin10@huawei.com>
+>>>> ---
+>>>>    fs/ext4/super.c | 12 ++++++++++++
+>>>>    1 file changed, 12 insertions(+)
+>>>>
+>>>> diff --git a/fs/ext4/super.c b/fs/ext4/super.c
+>>>> index dc3907dff13a..b94754ba8556 100644
+>>>> --- a/fs/ext4/super.c
+>>>> +++ b/fs/ext4/super.c
+>>>> @@ -5932,6 +5932,18 @@ static int ext4_load_journal(struct super_block *sb,
+>>>>    		goto err_out;
+>>>>    	}
+>>>> +	if (unlikely(es->s_error_count && !jbd2_journal_errno(journal) &&
+>>>> +		     !(le16_to_cpu(es->s_state) & EXT4_ERROR_FS))) {
+>>>> +		EXT4_SB(sb)->s_mount_state |= EXT4_ERROR_FS;
+>>>> +		es->s_state |= cpu_to_le16(EXT4_ERROR_FS);
+>>>> +		err = ext4_commit_super(sb);
+>>>> +		if (err) {
+>>>> +			ext4_msg(sb, KERN_ERR,
+>>>> +				 "Failed to commit error information, please repair fs force!");
+>>>> +			goto err_out;
+>>>> +		}
+>>>> +	}
+>>>> +
+>>> Hum, I'm not sure I follow here. If journal replay has overwritten the
+>>> superblock (and thus the stored error info), then I'd expect
+>>> es->s_error_count got overwritten (possibly to 0) as well. And this is
+>>> actually relatively realistic scenario with errors=remount-ro behavior when
+>>> the first fs error happens.
+>>>
+>>> What I intended in my original suggestion was to save es->s_error_count,
+>>> es->s_state & EXT4_ERROR_FS, es->s_first_error_*, es->s_last_error_* before
+>>> doing journal replay in ext4_load_journal() and then after journal replay
+>>> merge this info back to the superblock
+>> Actually，commit 1c13d5c08728 ("ext4: Save error information to the
+>> superblock for analysis")
+>> already merged error info back to the superblock after journal replay except
+>> 'es->s_state'.
+>> The problem I have now is that the error flag in the journal superblock was
+>> not recorded,
+>> but the error message was recorded in the superblock. So it leads to
+>> ext4_clear_journal_err()
+>> does not detect errors and marks the file system as an error. Because
+>> ext4_update_super() is
+>> only set error flag  when 'sbi->s_add_error_count  > 0'. Although
+>> 'sbi->s_mount_state' is
+>> written to the super block when umount, but it is also conditional.
+>> So I handle the scenario "es->s_error_count && !jbd2_journal_errno(journal)
+>> &&
+>> !(le16_to_cpu(es->s_state) & EXT4_ERROR_FS)". Maybe we can just store
+>> 'EXT4_SB(sb)->s_mount_state & EXT4_ERROR_FS' back to the superblock. But i
+>> prefer to mark fs as error if it contain detail error info without
+>> EXT4_ERROR_FS.
+> Aha, thanks for explanation! So now I finally understand what the problem
+> exactly is. I'm not sure relying on es->s_error_count is too good. Probably
+> it works but I'd be calmer if when saving error info we also did:
+>
+> 	bool error_fs = es->s_state & cpu_to_le16(EXT4_ERROR_FS);
+>
+> 	copy other info
+> 	err = jbd2_journal_load(journal);
+> 	restore other info
+> 	if (error_fs)
+> 		es->s_state |= cpu_to_le16(EXT4_ERROR_FS);
+> 	/* Write out restored error information to the superblock */
+> 	err2 = ext4_commit_super(sb);
+>
+> and be done with this. I don't think trying to optimize away the committing
+> of the superblock when we had to replay the journal is really worth it.
+>
+> Does this solve your concerns?
+>
+> 								Honza
+Thanks for your suggestion.
 
-^1da177e4c3f41 drivers/media/common/saa7146_hlp.c Linus Torvalds 2005-04-16  647  
-^1da177e4c3f41 drivers/media/common/saa7146_hlp.c Linus Torvalds 2005-04-16 @648  int saa7146_enable_overlay(struct saa7146_fh *fh)
-^1da177e4c3f41 drivers/media/common/saa7146_hlp.c Linus Torvalds 2005-04-16  649  {
-^1da177e4c3f41 drivers/media/common/saa7146_hlp.c Linus Torvalds 2005-04-16  650  	struct saa7146_dev *dev = fh->dev;
-^1da177e4c3f41 drivers/media/common/saa7146_hlp.c Linus Torvalds 2005-04-16  651  	struct saa7146_vv *vv = dev->vv_data;
-^1da177e4c3f41 drivers/media/common/saa7146_hlp.c Linus Torvalds 2005-04-16  652  
-5da545ad08a3c6 drivers/media/common/saa7146_hlp.c Hans Verkuil   2012-05-01  653  	saa7146_set_window(dev, vv->ov.win.w.width, vv->ov.win.w.height, vv->ov.win.field);
-5da545ad08a3c6 drivers/media/common/saa7146_hlp.c Hans Verkuil   2012-05-01  654  	saa7146_set_position(dev, vv->ov.win.w.left, vv->ov.win.w.top, vv->ov.win.w.height, vv->ov.win.field, vv->ov_fmt->pixelformat);
-^1da177e4c3f41 drivers/media/common/saa7146_hlp.c Linus Torvalds 2005-04-16  655  	saa7146_set_output_format(dev, vv->ov_fmt->trans);
-^1da177e4c3f41 drivers/media/common/saa7146_hlp.c Linus Torvalds 2005-04-16  656  	saa7146_set_clipping_rect(fh);
-^1da177e4c3f41 drivers/media/common/saa7146_hlp.c Linus Torvalds 2005-04-16  657  
-^1da177e4c3f41 drivers/media/common/saa7146_hlp.c Linus Torvalds 2005-04-16  658  	/* enable video dma1 */
-^1da177e4c3f41 drivers/media/common/saa7146_hlp.c Linus Torvalds 2005-04-16  659  	saa7146_write(dev, MC1, (MASK_06 | MASK_22));
-^1da177e4c3f41 drivers/media/common/saa7146_hlp.c Linus Torvalds 2005-04-16  660  	return 0;
-^1da177e4c3f41 drivers/media/common/saa7146_hlp.c Linus Torvalds 2005-04-16  661  }
-^1da177e4c3f41 drivers/media/common/saa7146_hlp.c Linus Torvalds 2005-04-16  662  
+I think if journal super block has 'j_errno' ext4_clear_journal_err() 
+will commit error info.
+The scenario we need to deal with is:(1) journal super block has no 
+'j_errno'; (2) super
+block has detail error info, but 'es->s_state' has no 'EXT4_ERROR_FS', 
+It means super
+block in journal has no error flag and the newest super block has error 
+flag. so we
+need to store error flag to 'es->s_state', and commit it to disk.If 
+'es->s_state' has
+  'EXT4_ERROR_FS', it means super block in journal has error flag, so we 
+do not need
+to store error flag in super block.
 
-:::::: The code at line 648 was first introduced by commit
-:::::: 1da177e4c3f41524e886b7f1b8a0c1fc7321cac2 Linux-2.6.12-rc2
+I don't know if I can explain my idea of repair.
 
-:::::: TO: Linus Torvalds <torvalds@ppc970.osdl.org>
-:::::: CC: Linus Torvalds <torvalds@ppc970.osdl.org>
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
