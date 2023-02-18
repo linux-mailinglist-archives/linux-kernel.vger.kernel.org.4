@@ -2,57 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CEC3269B8C0
-	for <lists+linux-kernel@lfdr.de>; Sat, 18 Feb 2023 09:33:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D5F869B8C1
+	for <lists+linux-kernel@lfdr.de>; Sat, 18 Feb 2023 09:33:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229629AbjBRIdI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 18 Feb 2023 03:33:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33114 "EHLO
+        id S229820AbjBRIdL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 18 Feb 2023 03:33:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33182 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229780AbjBRIdD (ORCPT
+        with ESMTP id S229799AbjBRIdF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 18 Feb 2023 03:33:03 -0500
+        Sat, 18 Feb 2023 03:33:05 -0500
 Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43D5D42BE1
-        for <linux-kernel@vger.kernel.org>; Sat, 18 Feb 2023 00:33:02 -0800 (PST)
-Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-5365a8dd33aso26531997b3.22
-        for <linux-kernel@vger.kernel.org>; Sat, 18 Feb 2023 00:33:02 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E061547432
+        for <linux-kernel@vger.kernel.org>; Sat, 18 Feb 2023 00:33:04 -0800 (PST)
+Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-5367836c7e1so5418237b3.13
+        for <linux-kernel@vger.kernel.org>; Sat, 18 Feb 2023 00:33:04 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=cc:to:from:subject:references:mime-version:message-id:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=Qjy8cu1Mo/UjSfKWZ07U2cuwjaexJWXy+SB7TrdOfOk=;
-        b=f53tiO60I7XJ6TYtB0DYyxwXSpcAe/3+SEcd0gpn65PwjUBmVPmeN9N9fDUOBYx5B4
-         +X7KrrUprexujhvtlkEgvIfjbcMWCznLWm9Q2HYqghq4BXq9y2mFTVxVx9jn5Y7y1eaZ
-         ffgr0uY71tCr9u2eDrFwAts+aRI1E/vJIOLkcQ91jVmvN1VQrZjcdFFzvqqHIslrdbWF
-         zE0iNSA99G7liBZMABYJlwRR+RuoBa0pi01AOq5G9xUZwbkpk56WZEVQz5Dhs1UiItM7
-         ns4h02cjsUESNq7Mu34jCsSe1nJzft00ohzoO6r6GKzCXjmwM8yYdk/4KBW9yf2aOPnQ
-         Edxg==
+        bh=+eMvh/5RpB1yBDTApxHgHfIOTnGW3OoKdzhdswhPdc8=;
+        b=IBwqlFD+FCaDqWg/idHuaAxR0CYrFVJMbtxMjDSvmEkNhayk8QbmlvNJQNqxg+alsM
+         ZvC/mNmTjTx1Rbw1rctbABzwis4tAMyEDJwLoZrHPxngikDinW09R+TTuLG/2vWGLYQg
+         9T67C6HKuhhJHJQ0szi2JKR1/BxRvaw5zELhdmSWxcTbM846z2AHMpjIBLEKBqiQF1ns
+         tQzQ5EBuAClKshZu3NT4MOAPtPQiEKgCwXBlT0OGTqyX0FoIWqHVUGy9lUN0Mf40iWcO
+         UVhio5dw3Jr3hrTFlgm26scaAUGjdEGwTps4agz0k6HbkE47VOdhQFyCO+srFRnt/E6v
+         45ug==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:from:subject:references:mime-version:message-id:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Qjy8cu1Mo/UjSfKWZ07U2cuwjaexJWXy+SB7TrdOfOk=;
-        b=Dz/LjpEo0lpa62nAwfMfQ3COzt+XGNLzmHodpi/utgV44vPTSjrVk/ovJywE2zwFuy
-         CtOui4jb+Z0FYmt1sEb8PWgK24VDsFiD004pG6ekTzQWL5fBtXw/QHYIWZLx3TWE9Iqv
-         ccaBCZijN+Scj3lsi41r1sIcF9pDnlkH+lvxWjkUhshaOriiJV32mH2+dvp0gI1AZLYg
-         93eiNlX55TSOAwYn21GedpXxZPhJha8VOo/QvOMYR74SIYzS46f8JcYkcLKsmbbYwy63
-         XBWP56Wa/TurR5ruwa9dRvKUSLXKtLtGOqdB51QprHKb7sVZkZrPdTwMVqNj2+SSd8AA
-         HhXQ==
-X-Gm-Message-State: AO0yUKVGB80veUV+39yJqMbBuT699ob+JR1Z9CYs9WlndtZxAQKdtmD8
-        6ESe1+0lAUXPpFvMf4PAHj5iFKgfi7LqkmY=
-X-Google-Smtp-Source: AK7set+48hgPOTFKTqBSI90PC+RvCcTohAUN+b4zsz5OY4rILu8FJ6rmwMaDGyWWzun7reT7l5xJktc/c1ZgOb4=
+        bh=+eMvh/5RpB1yBDTApxHgHfIOTnGW3OoKdzhdswhPdc8=;
+        b=A2uvypY4LhLBSQUFfd2j/p1WfL2xeLZpYJv4goWYtQI0madhyzgD0+Te2k4Z/WOpcO
+         4Su/BegTiC+z7FBsJVmtoRBi0la5i12AvB8MRomQy6PPnkP3OBvz9/S6KZzKevB0xw71
+         msUfGgdb5YgEgGFVqudXklXR172COMuujLi4pAaGwNKP6rJw8Fe+W8Lg6mx9n7g1Ca9d
+         zZcipQgDRmVs8M/J5OR7Hv+xqIN+V3lYQiwMNUCIxhMN3nci9gjb5wYxAk8M3Xh1iDrI
+         T/pt40OENXhQkiIbrJ4VU3hzeyaQeI8b62K+bHNqDhObapzFZ0CWKkygYyxFXgkh/l9n
+         Cl6g==
+X-Gm-Message-State: AO0yUKXK5hAPyIh7WkekOC+AfaamkOocB8sNouQk89w9/mkTKaSkDt8j
+        gCgZ9NuTDbEA1MceJl3BOlQoJWrOzU8sLaQ=
+X-Google-Smtp-Source: AK7set9hRgiEvFBiFppHL8eT54ybwc2hZv7z3Blb0CFN5CcOP1YQbX8QCulFE4e/SFDWs0v35PqiJF0QK13gDmk=
 X-Received: from saravanak.san.corp.google.com ([2620:15c:2d:3:382:7632:f7fc:4737])
- (user=saravanak job=sendgmr) by 2002:a5b:688:0:b0:931:2b11:6584 with SMTP id
- j8-20020a5b0688000000b009312b116584mr1169840ybq.591.1676709181337; Sat, 18
- Feb 2023 00:33:01 -0800 (PST)
-Date:   Sat, 18 Feb 2023 00:32:49 -0800
+ (user=saravanak job=sendgmr) by 2002:a81:ca03:0:b0:52e:fb7a:94b7 with SMTP id
+ p3-20020a81ca03000000b0052efb7a94b7mr349890ywi.7.1676709184201; Sat, 18 Feb
+ 2023 00:33:04 -0800 (PST)
+Date:   Sat, 18 Feb 2023 00:32:50 -0800
 In-Reply-To: <20230218083252.2044423-1-saravanak@google.com>
-Message-Id: <20230218083252.2044423-3-saravanak@google.com>
+Message-Id: <20230218083252.2044423-4-saravanak@google.com>
 Mime-Version: 1.0
 References: <20230218083252.2044423-1-saravanak@google.com>
 X-Mailer: git-send-email 2.39.2.637.g21b0678d19-goog
-Subject: [RFC v1 2/4] regulator: core: Add sysfs class backward compatibility
+Subject: [RFC v1 3/4] regulator: core: Probe regulator devices
 From:   Saravana Kannan <saravanak@google.com>
 To:     Liam Girdwood <lgirdwood@gmail.com>,
         Mark Brown <broonie@kernel.org>
@@ -78,80 +78,56 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-A regulator device's sysfs directory used to be created under
-/sys/class/regulator when it is added to a class. Since the device is
-now moved to be under a bus, add symlinks from /sys/class/regulator to
-the real device sysfs directory.
+Since devices added to a bus can be probed, add a stub probe function
+for regulator devices.
 
 Signed-off-by: Saravana Kannan <saravanak@google.com>
 ---
- drivers/regulator/core.c | 19 +++++++++++++++++++
- 1 file changed, 19 insertions(+)
+ drivers/regulator/core.c | 17 +++++++++++++++++
+ 1 file changed, 17 insertions(+)
 
 diff --git a/drivers/regulator/core.c b/drivers/regulator/core.c
-index 1a212edcf216..b6700d50d230 100644
+index b6700d50d230..d5f9fdd79c14 100644
 --- a/drivers/regulator/core.c
 +++ b/drivers/regulator/core.c
-@@ -43,6 +43,7 @@ static LIST_HEAD(regulator_coupler_list);
- static bool has_full_constraints;
+@@ -5780,6 +5780,17 @@ static const struct dev_pm_ops __maybe_unused regulator_pm_ops = {
+ };
+ #endif
  
- static struct dentry *debugfs_root;
-+static struct class_compat *regulator_compat_class;
- 
- /*
-  * struct regulator_map
-@@ -5636,6 +5637,11 @@ regulator_register(struct device *dev,
- 	if (ret != 0)
- 		goto unset_supplies;
- 
-+	if (class_compat_create_link(regulator_compat_class, &rdev->dev,
-+				     rdev->dev.parent))
-+		dev_warn(&rdev->dev,
-+			 "Failed to create compatibility class link\n");
++static int regulator_drv_probe(struct device *dev)
++{
++	return 0;
++}
 +
- 	rdev_init_debugfs(rdev);
- 
- 	/* try to resolve regulators coupling since a new one was registered */
-@@ -5702,6 +5708,8 @@ void regulator_unregister(struct regulator_dev *rdev)
- 	unset_regulator_supplies(rdev);
- 	list_del(&rdev->list);
- 	regulator_ena_gpio_free(rdev);
-+	class_compat_remove_link(regulator_compat_class, &rdev->dev,
-+				 rdev->dev.parent);
- 	device_unregister(&rdev->dev);
- 
- 	mutex_unlock(&regulator_list_mutex);
-@@ -6107,7 +6115,13 @@ static int __init regulator_init(void)
- {
- 	int ret;
- 
-+	regulator_compat_class = class_compat_register("regulator");
-+	if (!regulator_compat_class)
-+		return -ENOMEM;
++static struct device_driver regulator_drv = {
++	.name = "regulator_drv",
++	.bus = &regulator_bus,
++	.probe = regulator_drv_probe,
++};
 +
- 	ret = bus_register(&regulator_bus);
+ struct bus_type regulator_bus = {
+ 	.name = "regulator",
+ 	.remove = regulator_dev_release,
+@@ -6123,6 +6134,10 @@ static int __init regulator_init(void)
+ 	if (ret)
+ 		goto unreg_compat;
+ 
++	ret = driver_register(&regulator_drv);
 +	if (ret)
-+		goto unreg_compat;
- 
++		goto unreg_bus;
++
  	debugfs_root = debugfs_create_dir("regulator", NULL);
  	if (!debugfs_root)
-@@ -6120,11 +6134,16 @@ static int __init regulator_init(void)
- 	debugfs_create_file("regulator_summary", 0444, debugfs_root,
- 			    NULL, &regulator_summary_fops);
- #endif
-+
- 	regulator_dummy_init();
- 
- 	regulator_coupler_register(&generic_regulator_coupler);
+ 		pr_warn("regulator: Failed to create debugfs directory\n");
+@@ -6141,6 +6156,8 @@ static int __init regulator_init(void)
  
  	return ret;
-+
-+unreg_compat:
-+	class_compat_unregister(regulator_compat_class);
-+	return ret;
- }
  
- /* init early to allow our consumers to complete system booting */
++unreg_bus:
++	bus_unregister(&regulator_bus);
+ unreg_compat:
+ 	class_compat_unregister(regulator_compat_class);
+ 	return ret;
 -- 
 2.39.2.637.g21b0678d19-goog
 
