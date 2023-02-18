@@ -2,58 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B75E969B6C0
-	for <lists+linux-kernel@lfdr.de>; Sat, 18 Feb 2023 01:31:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 97AFA69B6D0
+	for <lists+linux-kernel@lfdr.de>; Sat, 18 Feb 2023 01:31:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230256AbjBRAbA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Feb 2023 19:31:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43520 "EHLO
+        id S230109AbjBRA35 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Feb 2023 19:29:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41840 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229773AbjBRA36 (ORCPT
+        with ESMTP id S229773AbjBRA3X (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Feb 2023 19:29:58 -0500
-Received: from mail-ua1-x949.google.com (mail-ua1-x949.google.com [IPv6:2607:f8b0:4864:20::949])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D764F692BA
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Feb 2023 16:29:19 -0800 (PST)
-Received: by mail-ua1-x949.google.com with SMTP id f9-20020ab049c9000000b00419afefbe3eso547545uad.4
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Feb 2023 16:29:19 -0800 (PST)
+        Fri, 17 Feb 2023 19:29:23 -0500
+Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D8F66C00F
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Feb 2023 16:29:01 -0800 (PST)
+Received: by mail-yb1-xb49.google.com with SMTP id k72-20020a25244b000000b0083fa6f15c2fso1931074ybk.16
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Feb 2023 16:29:01 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1676680159;
+        d=google.com; s=20210112;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=iq/7jaT5OFDRS9NrMnKt72E+h6CEDJFDrueWaD5zQ0Y=;
-        b=LJj15ou5aMEGPdFnqegHuN/91OeXfp4rRCRW3cHsebkq5WCcCf2NnXo+eHh1uMaO0x
-         HGob/Qz7INsRX4HMjLzhzpa+KbL6w+JBpKkbb6I/Ysl4ceV4fqt+kMp8qMdpjJbgCgDd
-         Tcz7EoAzke3MYE3bcoJtrb8uvPbhZOxumTn85X2FXJuWHnvKqPNwDU25UykrRCmdga/F
-         knEIFRpT0+EamIE3eGJxptV9TuGnb5/oXNb+6p7X3bGPy9+qYpYd06XgumHdicpJSnfx
-         vsXDE/Y+0UGaB7YP7fdTkJQcKpB/Er0uopshKy4OGw0b9a8rj98PAJY4bfzYQJ4aBoYZ
-         rlXw==
+        bh=0wSMKMWzwfQ8fLAFHXt0NmwJTi1H1o52qxxMn528B3Y=;
+        b=axPHyxy1GBdJ3j5NWk4sW5NYHawOKf9AoibB4HV5FfIZJydc97adJIODrPR+QPgxNK
+         nr00e5FMgkdE8K907sG4ZDoHr5Lt8bsvRMbzhBZu9D/vDZvX+woxXErLOoWLQSU7lSB3
+         ColvlhjaPZZh6IxAnrEln+IITIxYCmy04Z2l1SbzE3B6POnZJUSMCAYWIRaT1Yw6pXLR
+         Wq0cbmdstbtdCR3d2d+bJjVqqNZDwx8tE8yRYgFkpy+28U20Db+9VK0iOYSso+pD2sG8
+         OJeoIbKDbGGxUqdzljTj52m+1rUrxcY+G67jmbfYWqpHTo5y/BK5aqWA0UQIkWR55NRP
+         GAqA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1676680159;
+        d=1e100.net; s=20210112;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=iq/7jaT5OFDRS9NrMnKt72E+h6CEDJFDrueWaD5zQ0Y=;
-        b=h52h9LsO2+kALS3Uzc3ZFJ/Q3YCMhrMgvqr3U24xXrk+RYkys4/CGnLKgP3g9DbT+s
-         dWJPnkz976UMx+uM9z+1O7fCy3pT1LbHMxu7EwlHkClJDAPPW9DDy/UzCY1vyvzscpvn
-         lG9r8n/6e7QFzPAnbspy2qlXEItj6BB0kwYo1qLq7fv+flPIa7m2c2keWjiMnqaR6nrb
-         gJDbk7ZVd0QEJFmiN0ZkLxL/8laBFs4rRbFtVY8o5Iael+V7ZZdfUyWpCrPHbKEgTZ+8
-         InMMeB2urEAD8Llqpe87wzlDJzggexTvwcPUk+Cwpjqp1ciYSYAyaD9+HOsiHoeie4O4
-         BFbg==
-X-Gm-Message-State: AO0yUKVaeD27MiKgHlL7DA3SyU5UbqAWtkmf+feLYNu+5cORjikB/erA
-        3nSpRHu8rfoemmpzZ0HHU7kQIT2Q3rE0vgQ1
-X-Google-Smtp-Source: AK7set8EhVlNCK9IccPiC1WcAxl/BD8tBcWSdj7osxR3aU5m9A2R/pd4W9j1Bya2QmGiWMHJAKk9Wk9ZzEwHF/MA
+        bh=0wSMKMWzwfQ8fLAFHXt0NmwJTi1H1o52qxxMn528B3Y=;
+        b=M9PdICCwevoqsB+YVTZsRvQA61+M95wXb0iiBN3kIbODe4IrbG7LRQmgVpBlmVrqaS
+         3PDMXLyKm5+6I0IXX1hKLyLZdou2vq95clAAR4aCJGS/qRCvtcAjtqz40z7Y5lMaK9KV
+         l0E9+fyxGoU4kbf198vOow1giRLatW4yVE/bHiPLqaRhoWLyrec8sTlUMOxnQyG7V4Yl
+         OJNMLEeAKhvBq3QytuB34asEcjSPnnVWKLhZTdWfg7zb7hpD1jpUn15fOct9SWRFBABH
+         WcWWYLlpe5zA91qiP5lJn4J+vmB984/78vdtDnOS9Fc/0Q9vkYn9A9algB6N+kmL6hzW
+         Aa4g==
+X-Gm-Message-State: AO0yUKUGGrCD7M5JpPpo+d/M2EdLTg+ulxaUvXg1m2BkERda9pyfJIUJ
+        Uu30ZxWxXHgh0wnMwBQ7wgQAQC5hRf6PGl5/
+X-Google-Smtp-Source: AK7set8P4IRNjQRV3GSaApBMgcJvUr/kZLWUTr2MSxmgTV4ZqD4cm7y5M6XYvFN0JDI5vO1MJ3hc9iawF3gnH6MW
 X-Received: from jthoughton.c.googlers.com ([fda3:e722:ac3:cc00:14:4d90:c0a8:2a4f])
- (user=jthoughton job=sendgmr) by 2002:a67:f1c6:0:b0:3ec:ab8:a571 with SMTP id
- v6-20020a67f1c6000000b003ec0ab8a571mr271401vsm.55.1676680139239; Fri, 17 Feb
- 2023 16:28:59 -0800 (PST)
-Date:   Sat, 18 Feb 2023 00:27:49 +0000
+ (user=jthoughton job=sendgmr) by 2002:a05:690c:38d:b0:533:a15a:d33e with SMTP
+ id bh13-20020a05690c038d00b00533a15ad33emr73114ywb.5.1676680140092; Fri, 17
+ Feb 2023 16:29:00 -0800 (PST)
+Date:   Sat, 18 Feb 2023 00:27:50 +0000
 In-Reply-To: <20230218002819.1486479-1-jthoughton@google.com>
 Mime-Version: 1.0
 References: <20230218002819.1486479-1-jthoughton@google.com>
 X-Mailer: git-send-email 2.39.2.637.g21b0678d19-goog
-Message-ID: <20230218002819.1486479-17-jthoughton@google.com>
-Subject: [PATCH v2 16/46] hugetlb: make default arch_make_huge_pte understand
- small mappings
+Message-ID: <20230218002819.1486479-18-jthoughton@google.com>
+Subject: [PATCH v2 17/46] hugetlbfs: do a full walk to check if vma maps a page
 From:   James Houghton <jthoughton@google.com>
 To:     Mike Kravetz <mike.kravetz@oracle.com>,
         Muchun Song <songmuchun@bytedance.com>,
@@ -87,26 +86,45 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is a simple change: don't create a "huge" PTE if we are making a
-regular, PAGE_SIZE PTE. All architectures that want to implement HGM
-likely need to be changed in a similar way if they implement their own
-version of arch_make_huge_pte.
+Because it is safe to do so, do a full high-granularity page table walk
+to check if the page is mapped.
 
 Signed-off-by: James Houghton <jthoughton@google.com>
 
-diff --git a/include/linux/hugetlb.h b/include/linux/hugetlb.h
-index 726d581158b1..b767b6889dea 100644
---- a/include/linux/hugetlb.h
-+++ b/include/linux/hugetlb.h
-@@ -899,7 +899,7 @@ static inline void arch_clear_hugepage_flags(struct page *page) { }
- static inline pte_t arch_make_huge_pte(pte_t entry, unsigned int shift,
- 				       vm_flags_t flags)
+diff --git a/fs/hugetlbfs/inode.c b/fs/hugetlbfs/inode.c
+index cfd09f95551b..c0ee69f0418e 100644
+--- a/fs/hugetlbfs/inode.c
++++ b/fs/hugetlbfs/inode.c
+@@ -386,17 +386,24 @@ static void hugetlb_delete_from_page_cache(struct folio *folio)
+ static bool hugetlb_vma_maps_page(struct vm_area_struct *vma,
+ 				unsigned long addr, struct page *page)
  {
--	return pte_mkhuge(entry);
-+	return shift > PAGE_SHIFT ? pte_mkhuge(entry) : entry;
- }
- #endif
+-	pte_t *ptep, pte;
++	pte_t pte;
++	struct hugetlb_pte hpte;
  
+-	ptep = hugetlb_walk(vma, addr, huge_page_size(hstate_vma(vma)));
+-	if (!ptep)
++	if (hugetlb_full_walk(&hpte, vma, addr))
+ 		return false;
+ 
+-	pte = huge_ptep_get(ptep);
++	pte = huge_ptep_get(hpte.ptep);
+ 	if (huge_pte_none(pte) || !pte_present(pte))
+ 		return false;
+ 
+-	if (pte_page(pte) == page)
++	if (unlikely(!hugetlb_pte_present_leaf(&hpte, pte)))
++		/*
++		 * We raced with someone splitting us, and the only case
++		 * where this is impossible is when the pte was none.
++		 */
++		return false;
++
++	if (compound_head(pte_page(pte)) == page)
+ 		return true;
+ 
+ 	return false;
 -- 
 2.39.2.637.g21b0678d19-goog
 
