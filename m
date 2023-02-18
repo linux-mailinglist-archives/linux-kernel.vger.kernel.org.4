@@ -2,135 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5AAEB69B8BD
-	for <lists+linux-kernel@lfdr.de>; Sat, 18 Feb 2023 09:31:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4455469B8BE
+	for <lists+linux-kernel@lfdr.de>; Sat, 18 Feb 2023 09:33:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229758AbjBRIbz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 18 Feb 2023 03:31:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60150 "EHLO
+        id S229772AbjBRIc7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 18 Feb 2023 03:32:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60998 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229460AbjBRIbx (ORCPT
+        with ESMTP id S229563AbjBRIc6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 18 Feb 2023 03:31:53 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A41A23B218;
-        Sat, 18 Feb 2023 00:31:52 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3E370603E0;
-        Sat, 18 Feb 2023 08:31:52 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1D540C433D2;
-        Sat, 18 Feb 2023 08:31:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1676709111;
-        bh=3AgEsRwqOhnYNVK4GZK8NiR959oQKGSIb55BgkzTMRI=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=gF8IClealACvbZrZ0F8E2Tp7ykiPDSeey6LbPr3fEqRZ6yt5F+KBBZYGbGO+Zt17V
-         EvQp+wf6UojmyMX+Gly14WmtzXTcwaknjI6HZVK2QprnbhwiDtdM5ZhA7F+T8WDX7q
-         UZS4Eo0gzlyGs0x9uWzlceKylorM/0rfhOVe+2TM=
-Date:   Sat, 18 Feb 2023 09:31:48 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     John Moon <quic_johmoo@quicinc.com>,
-        Randy Dunlap <rdunlap@infradead.org>
-Cc:     Masahiro Yamada <masahiroy@kernel.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Nicolas Schier <nicolas@fjasle.eu>,
-        linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        Trilok Soni <quic_tsoni@quicinc.com>,
+        Sat, 18 Feb 2023 03:32:58 -0500
+Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E60B51ABE5
+        for <linux-kernel@vger.kernel.org>; Sat, 18 Feb 2023 00:32:56 -0800 (PST)
+Received: by mail-yb1-xb49.google.com with SMTP id t2-20020a254602000000b007eba3f8e3baso189013yba.4
+        for <linux-kernel@vger.kernel.org>; Sat, 18 Feb 2023 00:32:56 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:from:subject:mime-version:message-id:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=0Y2Iaizw/ZWNWr/ZhbETsVsFt94AT5JM61rija8D/4E=;
+        b=W1qJd8BM9PSNreJlRFPyaMEeYkajehRaPtUPUUDkegR0SXoNzC6QaddCiA/uy5vG2E
+         WW5gCsd/FD/26qb6Lip7S2rPYwIAok0pYTltLvj1C9qFKW9lBkqwzRtgqcyl0H/c1+Ax
+         dH+w7rtH0MvFswPfer4OBjfUVXdrs45OKn7h9Q2ZIlT4pBk4s2LVF78QWTx2A1PcnUse
+         uuVhHpUaUgHP+eIhdtDf9gduWXr6AqW6K0Q01u+IOj7UlOl9zmlJ3HJ1Td3s/Q0hggE1
+         PmiD7slexf+tyLHBvTGhJBG9RtU0IgSKse5XOck/BQI/Vowo8jZSlQ3vwy2jcYYRu//Q
+         JyfQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:from:subject:mime-version:message-id:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=0Y2Iaizw/ZWNWr/ZhbETsVsFt94AT5JM61rija8D/4E=;
+        b=F3oKSArwiZhiP4zKiYOWG0KOgns1WOA+3BuM1ACuOC71y/AiL15OnXcXR5JEJ6Ayzj
+         LzoyCY6Ke2Q1XMWw1Cyc+RXGyJhd5tImxRwzMlC3upnrGlEHzSvrRzAyBp0lE8sR2lbC
+         +i4GKSNDeXZi7aGVxxXTuCtmp3qAz7BCLwvG7uMWmWwvMyDVJQWhWA/tAKs/9Gc3Q/rp
+         pWkF1xjoWKCdMclHnevqsKM2i9HeSna/FXkhD4XIuARPiuu4iI1xiE4pa58hw9r9dp5P
+         i4idBlhM8Pg5B88AD75skanSTK/X+4JNE4zeqaeOomKrOno8MSVZ3YkixE4LKkMYEuqG
+         yn/g==
+X-Gm-Message-State: AO0yUKUvdrACV6EjCPj3v71oGhExU6y3MBp73oyru/WxHqtgPxArmuyJ
+        fo93YmfEh9PZw/On2B/j8TAi8TjE4IEBfog=
+X-Google-Smtp-Source: AK7set+TaqT6S/rZ7sj29z0zsyibXnF0XJtjsbWr8FVW00BxTtBfWuwqurzi4bvbGz5vLbd3CwzE9oY8Ewfwk3k=
+X-Received: from saravanak.san.corp.google.com ([2620:15c:2d:3:382:7632:f7fc:4737])
+ (user=saravanak job=sendgmr) by 2002:a25:f905:0:b0:86d:e2b9:a2bd with SMTP id
+ q5-20020a25f905000000b0086de2b9a2bdmr1064578ybe.421.1676709176122; Sat, 18
+ Feb 2023 00:32:56 -0800 (PST)
+Date:   Sat, 18 Feb 2023 00:32:47 -0800
+Message-Id: <20230218083252.2044423-1-saravanak@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.39.2.637.g21b0678d19-goog
+Subject: [RFC v1 0/4] Simplify regulator supply resolution code by offloading
+ to driver core
+From:   Saravana Kannan <saravanak@google.com>
+To:     Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>
+Cc:     Saravana Kannan <saravanak@google.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
         Bjorn Andersson <andersson@kernel.org>,
-        Todd Kjos <tkjos@google.com>,
-        Matthias Maennich <maennich@google.com>,
-        Giuliano Procida <gprocida@google.com>,
-        kernel-team@android.com, Jordan Crouse <jorcrous@amazon.com>
-Subject: Re: [PATCH RESEND 1/1] check-uapi: Introduce check-uapi.sh
-Message-ID: <Y/CM9JtK0914YUE0@kroah.com>
-References: <20230217202234.32260-1-quic_johmoo@quicinc.com>
- <20230217202234.32260-2-quic_johmoo@quicinc.com>
- <Y/CJhzSJ5YKvD7my@kroah.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y/CJhzSJ5YKvD7my@kroah.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Tony Lindgren <tony@atomide.com>,
+        Doug Anderson <dianders@chromium.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Luca Weiss <luca.weiss@fairphone.com>, kernel-team@android.com,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Feb 18, 2023 at 09:17:12AM +0100, Greg Kroah-Hartman wrote:
-> On Fri, Feb 17, 2023 at 12:22:34PM -0800, John Moon wrote:
-> > While the kernel community has been good at maintaining backwards
-> > compatibility with kernel UAPIs, it would be helpful to have a tool
-> > to check if a patch introduces changes that break backwards
-> > compatibility.
-> > 
-> > To that end, introduce check-uapi.sh: a simple shell script that
-> > checks for changes to UAPI headers using libabigail.
-> > 
-> > libabigail is "a framework which aims at helping developers and
-> > software distributors to spot some ABI-related issues like interface
-> > incompatibility in ELF shared libraries by performing a static
-> > analysis of the ELF binaries at hand."
-> > 
-> > The script uses one of libabigail's tools, "abidiff", to compile the
-> > changed header before and after the patch to detect any changes.
-> > 
-> > abidiff "compares the ABI of two shared libraries in ELF format. It
-> > emits a meaningful report describing the differences between the two
-> > ABIs."
-> > 
-> > Signed-off-by: John Moon <quic_johmoo@quicinc.com>
-> > ---
-> >  scripts/check-uapi.sh | 245 ++++++++++++++++++++++++++++++++++++++++++
-> >  1 file changed, 245 insertions(+)
-> >  create mode 100755 scripts/check-uapi.sh
-> 
-> Ok, this is very cool, thank you so much for doing this.
-> 
-> I know Randy Dunlap was also looking into this previously, so I've cc:ed
-> him and bounced him the original.
-> 
-> I tried this out, and at first glance, this felt like it was just "too
-> fast" in that nothing actually was being tested.  So I manually added a
-> field to a structure I know would break the abi, and:
-> 
-> 	$ ./scripts/check-uapi.sh
-> 	!!! ABI differences detected in include/uapi/linux/usb/ch9.h (compared to file at HEAD^1) !!!
-> 
-> 	    [C] 'struct usb_ctrlrequest' changed:
-> 	      type size changed from 64 to 72 (in bits)
-> 	      1 data member insertion:
-> 		'__u8 abi_break', at offset 16 (in bits) at ch9.h:216:1
-> 	      3 data member changes:
-> 		'__le16 wValue' offset changed from 16 to 24 (in bits) (by +8 bits)
-> 		'__le16 wIndex' offset changed from 32 to 40 (in bits) (by +8 bits)
-> 		'__le16 wLength' offset changed from 48 to 56 (in bits) (by +8 bits)
-> 
-> 	0/1 UAPI header file changes are backwards compatible
-> 	UAPI header ABI check failed
-> 
-> So it worked!
+Hi Mark/Liam,
 
-Ok, I take it back, it doesn't seem to work :(
+This series is just an RFC to see if you agree with where this is going.
+Please point out bugs, but don't bother with a proper code review.
 
-It only "catches" a change from the last commit, but if you have an
-intermediate commit (i.e change something in HEAD^ but not HEAD), it
-does not detect it at all.
+The high level idea is to not reimplement what driver core can already
+handle for us and use it to do some of the work. Instead of trying to
+resolve supplies from all different code paths and bits and pieces of
+the tree, we just build it from the root to the leaves by using deferred
+probing to sequence things in the right order.
 
-And if you give it an old version, it doesn't check that either (hint,
-try passing in a very old kernel version, that returns instantly and
-doesn't actually build anything).
+The last patch is the main one. Rest of them are just setting up for it.
 
-So it's a good first cut as an example, but as it doesn't really work
-correctly yet, we can't take it.  Care to fix it up to work so that it
-can be usable?
+I believe there's room for further simplification but this is what I
+could whip up as a quick first draft that shows the high level idea.
+I'll probably need some help with getting a better understanding of why
+things are done in a specific order in regulator_register() before I
+could attempt simplifying things further.
 
-thanks,
+Ideally, regulator_register() would just have DT parsing, init data
+struct sanity checks and adding the regulator device and then we move
+everything else to into the probe function that's guaranteed to run only
+after the supply has been resolved/ready to resolve.
 
-greg k-h
+fw_devlink/device links should further optimize the flow and also allow
+us to simplify some of the guarantees and address some of the existing
+FIXMEs. But this patch series is NOT dependent on fw_devlink or device
+links.
+
+Any thoughts on where this is going?
+
+I've tested this on one hardware I have and it works and nothing is
+broken. But the regulator tree in my hardware isn't that complicated or
+deep. The regulators are also added mostly in the right order (due to
+existing fw_devlink). So if you agree with the idea, the next step is to
+ask people to give it a test.
+
+Also, it's based on driver-core-next since that's what I had synced up
+and had a working baseline. I'll rebase it on the regulator tree when I
+go from RFC -> PATCH.
+
+Thanks,
+Saravana
+
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: Geert Uytterhoeven <geert@linux-m68k.org>
+Cc: Marek Szyprowski <m.szyprowski@samsung.com>
+Cc: Bjorn Andersson <andersson@kernel.org>
+Cc: Sudeep Holla <sudeep.holla@arm.com>
+Cc: Tony Lindgren <tony@atomide.com>
+Cc: Doug Anderson <dianders@chromium.org>
+Cc: Guenter Roeck <linux@roeck-us.net>
+Cc: Luca Weiss <luca.weiss@fairphone.com>
+
+Saravana Kannan (4):
+  regulator: core: Add regulator devices to bus instead of class
+  regulator: core: Add sysfs class backward compatibility
+  regulator: core: Probe regulator devices
+  regulator: core: Move regulator supply resolving to the probe function
+
+ drivers/regulator/core.c         | 102 +++++++++++++++++++------------
+ drivers/regulator/internal.h     |   2 +-
+ drivers/regulator/of_regulator.c |   2 +-
+ 3 files changed, 64 insertions(+), 42 deletions(-)
+
+-- 
+2.39.2.637.g21b0678d19-goog
+
