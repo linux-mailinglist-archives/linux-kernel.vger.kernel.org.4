@@ -2,43 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C9A969BA8C
-	for <lists+linux-kernel@lfdr.de>; Sat, 18 Feb 2023 16:00:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EC46569BB1D
+	for <lists+linux-kernel@lfdr.de>; Sat, 18 Feb 2023 18:00:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229672AbjBRO77 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 18 Feb 2023 09:59:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47456 "EHLO
+        id S229716AbjBRRAo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 18 Feb 2023 12:00:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37784 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229461AbjBRO76 (ORCPT
+        with ESMTP id S229478AbjBRRAn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 18 Feb 2023 09:59:58 -0500
-Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F7EB17143;
-        Sat, 18 Feb 2023 06:59:56 -0800 (PST)
-Received: from zn.tnic (p5de8e9fe.dip0.t-ipconnect.de [93.232.233.254])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 926221EC0441;
-        Sat, 18 Feb 2023 15:59:54 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1676732394;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:references;
-        bh=2C3jRRp9ayMNM+6Ergo2xeSP37WKJLkL8aS+1RjwZRM=;
-        b=OM1wQ4RxJcXgpUGs27g9av768jb4hj0ppqkKdlk8RNXxBx1xG5R/wZMKKfE0R8lWZ5vRvx
-        ZK9jNPboFcoKoEG7C4jR16G71iRbgKZDcgKmm+WdMWXoOscGOA6IjmUQX1F1QX0jmhq2h/
-        YdadT/tQqtjJUgc94Coe1jaxJiYHMok=
-Date:   Sat, 18 Feb 2023 15:59:49 +0100
-From:   Borislav Petkov <bp@alien8.de>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     linux-edac <linux-edac@vger.kernel.org>,
-        lkml <linux-kernel@vger.kernel.org>
-Subject: [GIT PULL] EDAC updates for 6.3
-Message-ID: <Y/Dn5bXwGxiDh8RI@zn.tnic>
+        Sat, 18 Feb 2023 12:00:43 -0500
+X-Greylist: delayed 594 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sat, 18 Feb 2023 09:00:40 PST
+Received: from www.linux-watchdog.org (www.linux-watchdog.org [185.87.125.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8949217155;
+        Sat, 18 Feb 2023 09:00:40 -0800 (PST)
+Received: by www.linux-watchdog.org (Postfix, from userid 500)
+        id 00136409E9; Sat, 18 Feb 2023 16:00:05 +0100 (CET)
+DKIM-Filter: OpenDKIM Filter v2.11.0 www.linux-watchdog.org 00136409E9
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-watchdog.org;
+        s=odk20180602; t=1676732406;
+        bh=mmrzvLbJt44h+Sq+aFCdJK1Dkf8hdq69aQcSosm2/hw=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=SMI46vBIMOYhEAux/gfW3FNlGhqhgsf8pQXggsAGD9CyO48K+gmfh3SVeFB3Q5POU
+         tHaEnWEqB3p2hxaeD9r8BcnTt/7zT4WeWje89J5P+NbKj6MeLdlkdBQ+RZUM7giV2q
+         fASL9HQCNXkTbB9xfyqoXM6jvRYbcBllwvDlii9Y=
+Date:   Sat, 18 Feb 2023 16:00:05 +0100
+From:   Wim Van Sebroeck <wim@linux-watchdog.org>
+To:     Konrad Dybcio <konrad.dybcio@linaro.org>
+Cc:     linux-arm-msm@vger.kernel.org, andersson@kernel.org,
+        agross@kernel.org, krzysztof.kozlowski@linaro.org,
+        patches@linaro.org, Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Prakash Ranjan <saiprakash.ranjan@codeaurora.org>,
+        linux-watchdog@vger.kernel.org
+Subject: Re: [PATCH 2/2] dt-bindings: watchdog: Add MSM8994 watchdog timer
+Message-ID: <20230218150005.GA30362@www.linux-watchdog.org>
+References: <20221117105845.13644-1-konrad.dybcio@linaro.org>
+ <20221117105845.13644-2-konrad.dybcio@linaro.org>
+ <07defd1c-2cbd-f25b-d1f4-824023d27135@linaro.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <07defd1c-2cbd-f25b-d1f4-824023d27135@linaro.org>
+User-Agent: Mutt/1.5.20 (2009-12-10)
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
         autolearn=ham autolearn_force=no version=3.4.6
@@ -48,87 +58,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Linus,
+Hi Konrad,
 
-please pull the pile of EDAC updates for 6.3. I'm sending a bit early
-but I know you prefer that.
+> On 17.11.2022 11:58, Konrad Dybcio wrote:
+> > Document the MSM8994 watchdog timer which is already used in DT.
+> > 
+> > Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+> > ---
+> Looks like this never got applied?
 
-Thx.
+Patience is a beautiful virtue.
+Since Guenter reviewed it and since it is in Guenter's tree, I picked it up.
 
----
+> Konrad
+> >  Documentation/devicetree/bindings/watchdog/qcom-wdt.yaml | 1 +
+> >  1 file changed, 1 insertion(+)
+> > 
+> > diff --git a/Documentation/devicetree/bindings/watchdog/qcom-wdt.yaml b/Documentation/devicetree/bindings/watchdog/qcom-wdt.yaml
+> > index d8ac0be36e6c..a1f17c9e02db 100644
+> > --- a/Documentation/devicetree/bindings/watchdog/qcom-wdt.yaml
+> > +++ b/Documentation/devicetree/bindings/watchdog/qcom-wdt.yaml
+> > @@ -17,6 +17,7 @@ properties:
+> >      oneOf:
+> >        - items:
+> >            - enum:
+> > +              - qcom,apss-wdt-msm8994
+> >                - qcom,apss-wdt-qcs404
+> >                - qcom,apss-wdt-sc7180
+> >                - qcom,apss-wdt-sc7280
 
-The following changes since commit b7bfaa761d760e72a969d116517eaa12e404c262:
+Kind regards,
+Wim.
 
-  Linux 6.2-rc3 (2023-01-08 11:49:43 -0600)
-
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/ras/ras.git tags/edac_updates_for_v6.3
-
-for you to fetch changes up to 28980db94742f9f2fb0f68ea35f2171b38007bae:
-
-  EDAC/amd64: Shut up an -Werror,-Wsometimes-uninitialized clang false positive (2023-02-14 17:56:14 +0100)
-
-----------------------------------------------------------------
-- Add a driver for the RAS functionality on Xilinx's on chip memory
-  controller
-
-- Add support for decoding errors from the first and second level memory
-  on SKL-based hardware
-
-- Add support for the memory controllers in Intel Granite Rapids and
-  Emerald Rapids machines
-
-- First round of amd64_edac driver simplification and removal of
-  unneeded functionality
-
-- The usual cleanups and fixes
-
-----------------------------------------------------------------
-Manivannan Sadhasivam (1):
-      EDAC/qcom: Add platform_device_id table for module autoloading
-
-Qiuxu Zhuo (5):
-      EDAC/skx_common: Enable EDAC support for the "near" memory
-      EDAC/skx_common: Delete duplicated and unreachable code
-      EDAC/i10nm: Add Intel Emerald Rapids server support
-      EDAC/i10nm: Make more configurations CPU model specific
-      EDAC/i10nm: Add Intel Granite Rapids server support
-
-Sai Krishna Potthuri (1):
-      EDAC/zynqmp: Add EDAC support for Xilinx ZynqMP OCM
-
-Shubhrajyoti Datta (1):
-      dt-bindings: edac: Add bindings for Xilinx ZynqMP OCM
-
-Yazen Ghannam (6):
-      EDAC/amd64: Don't set up EDAC PCI control on Family 17h+
-      EDAC/amd64: Remove scrub rate control for Family 17h and later
-      EDAC/amd64: Remove PCI Function 6
-      EDAC/amd64: Remove PCI Function 0
-      EDAC/amd64: Remove early_channel_count()
-      EDAC/amd64: Shut up an -Werror,-Wsometimes-uninitialized clang false positive
-
-Youquan Song (1):
-      EDAC/i10nm: Add driver decoder for Sapphire Rapids server
-
- .../memory-controllers/xlnx,zynqmp-ocmc-1.0.yaml   |  45 ++
- MAINTAINERS                                        |   7 +
- drivers/edac/Kconfig                               |   8 +
- drivers/edac/Makefile                              |   1 +
- drivers/edac/amd64_edac.c                          | 217 +---------
- drivers/edac/amd64_edac.h                          |  24 +-
- drivers/edac/i10nm_base.c                          | 459 ++++++++++++++++----
- drivers/edac/qcom_edac.c                           |   7 +
- drivers/edac/skx_common.c                          |  76 ++--
- drivers/edac/skx_common.h                          |  61 ++-
- drivers/edac/zynqmp_edac.c                         | 467 +++++++++++++++++++++
- 11 files changed, 1013 insertions(+), 359 deletions(-)
- create mode 100644 Documentation/devicetree/bindings/memory-controllers/xlnx,zynqmp-ocmc-1.0.yaml
- create mode 100644 drivers/edac/zynqmp_edac.c
-
--- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette
