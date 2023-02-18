@@ -2,147 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0401F69B9A0
-	for <lists+linux-kernel@lfdr.de>; Sat, 18 Feb 2023 12:17:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 75D8269B9A7
+	for <lists+linux-kernel@lfdr.de>; Sat, 18 Feb 2023 12:17:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229508AbjBRLRR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 18 Feb 2023 06:17:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52756 "EHLO
+        id S229541AbjBRLRi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 18 Feb 2023 06:17:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53398 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229436AbjBRLRP (ORCPT
+        with ESMTP id S229481AbjBRLRg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 18 Feb 2023 06:17:15 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C19ED1B334;
-        Sat, 18 Feb 2023 03:17:14 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4E72060A05;
-        Sat, 18 Feb 2023 11:17:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DBC75C433EF;
-        Sat, 18 Feb 2023 11:17:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1676719033;
-        bh=MBpW+wS6kJjM9nw/RX4T/6lVEQz7JAtQyjKM0xZ3B+g=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=RbCF8rxLVhB+zqGRt9Y85P0PTJ2aOqfqKaNuekrrAE8pdZY1DEN6tfgBbSozPG08i
-         uLE/Z4IlY8Xm89vjqDdVvdAeigbQGvCKq1bzTbxy+vQ1KvJ4cDbUY843nJd9yOKBLa
-         aCAMgekEnGtWT+s5V2eR0/VUKcnRNfJxs905kkDVTJwvncsCu10mxEBRa8puviTSrT
-         +XvUrr7SCjxlsPvL2iYkfGqbNq8TULVBOlD+1ZjWvLoyTBuCndbogYtwXKRU2n2qXM
-         0eJqB9JeLzVMGD104WB0SvLA8b7i65q2NU5CR5rXD13YUWMfqnb7LgeHb9T8Wq/n0W
-         /ZbIfRiDiOnbw==
-Date:   Sat, 18 Feb 2023 11:17:08 +0000
-From:   Conor Dooley <conor@kernel.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Conor Dooley <conor.dooley@microchip.com>,
-        Hal Feng <hal.feng@starfivetech.com>,
-        linux-riscv@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-clk@vger.kernel.org, Palmer Dabbelt <palmer@dabbelt.com>,
+        Sat, 18 Feb 2023 06:17:36 -0500
+Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F9181CACB
+        for <linux-kernel@vger.kernel.org>; Sat, 18 Feb 2023 03:17:30 -0800 (PST)
+Received: by mail-pj1-x102d.google.com with SMTP id b3-20020a17090ae38300b002341fadc370so442156pjz.1
+        for <linux-kernel@vger.kernel.org>; Sat, 18 Feb 2023 03:17:30 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=tRUarQyWTXy/UaQ+aTCiS9aEshqx6SrntwaJME4vnY0=;
+        b=FhaH7iwlgirzBhkctvbPIaE33nUBelcGHAF8fq0lsjOkQ+cusRFz/4cccjVw6NEftK
+         PpoX0TZ8w3vqQVGe5P/lYxblKHcsFlSVpBKNCV54TFjvgawSpSzJc1EE02sPm2cIp82b
+         392DVfxuznUnL2wiI4prL2FfCxja2ElN7chAA=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=tRUarQyWTXy/UaQ+aTCiS9aEshqx6SrntwaJME4vnY0=;
+        b=NRHfTP8ltXkVl0e1ZKrlJjV5oncRdHtFvWg3vXPCAL1wxHQ32lgvOgqnsbzvREK6Bo
+         z/zF/64Q8YRU/CvVIEGOoYBHiIj7FmA2tYEpCduHoCOExBhF7Mc3rNF3l3TT6wBOdkCw
+         wyYhz8F5G6x6BYvsoDwUkD6eo8jN8zMzct+e3xVWXJM+dIImNMn3Ox+lm85w6eJ+F2xu
+         rckv22QwxUB4O/PIJ+iMDxNZwg9j59+xGIDvGaI/cFhMyQh2HIWWs4TvKiOrk2V0dEpo
+         od/gWNVL0HPfjwcp09bfd3g8HATaNPG5pxNFhuuy90yEGlmC3laWL9wTYPKcBhWymueO
+         hxZQ==
+X-Gm-Message-State: AO0yUKVViIEZKoI1RcjkiQ2X8i7JOuVxmHi+a/XsAJdyGcMd5pTfVVu6
+        dpUJj6ovIPJTbzPUX2Vt8GLjHw==
+X-Google-Smtp-Source: AK7set+FohWYixBOFWTvodfYG9ONEn4rCbUp2cY1CE91qYHZ6E0/D4C1ES2aYaY6oImj8VUL+8mG8A==
+X-Received: by 2002:a05:6a20:1610:b0:c7:5983:7a82 with SMTP id l16-20020a056a20161000b000c759837a82mr7002881pzj.27.1676719049830;
+        Sat, 18 Feb 2023 03:17:29 -0800 (PST)
+Received: from treapking.tpe.corp.google.com ([2401:fa00:1:10:88dd:be84:8f65:fec2])
+        by smtp.gmail.com with ESMTPSA id 23-20020aa79157000000b005a8686b72fcsm4457829pfi.75.2023.02.18.03.17.26
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 18 Feb 2023 03:17:29 -0800 (PST)
+From:   Pin-yen Lin <treapking@chromium.org>
+To:     Andrzej Hajda <andrzej.hajda@intel.com>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Robert Foss <rfoss@kernel.org>,
+        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
+        Jonas Karlman <jonas@kwiboo.se>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
+        Benson Leung <bleung@chromium.org>
+Cc:     Chun-Kuang Hu <chunkuang.hu@kernel.org>,
+        devicetree@vger.kernel.org,
+        Nicolas Boichat <drinkcat@chromium.org>,
+        chrome-platform@lists.linux.dev, linux-kernel@vger.kernel.org,
+        Guenter Roeck <groeck@chromium.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        dri-devel@lists.freedesktop.org,
+        linux-mediatek@lists.infradead.org,
         Philipp Zabel <p.zabel@pengutronix.de>,
-        Emil Renner Berthing <emil.renner.berthing@canonical.com>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 07/11] dt-bindings: clock: Add StarFive JH7110 system
- clock and reset generator
-Message-ID: <Y/CztNs6laTzttrI@spud>
-References: <Y6tSWB2+98a8k9Qw@spud>
- <5cf0fe71-fd17-fb28-c01e-28356081ba76@starfivetech.com>
- <Y+5z8skN2DuvxDEL@spud>
- <68e61f28-daec-ce72-726a-1fffe8e94829@starfivetech.com>
- <Y+8x/KSujhgNLAd6@wendy>
- <d3b06d0b-ff17-ebab-bae5-e1ec836fe667@starfivetech.com>
- <Y++B43uCnPQlRYFi@wendy>
- <dcba75b5-7b62-35aa-6836-5d5edd785002@linaro.org>
- <Y++q9ln8P3XegqfN@spud>
- <41e4f293-99eb-f157-b4a9-3d00b15f4652@linaro.org>
+        linux-arm-kernel@lists.infradead.org,
+        Pin-yen Lin <treapking@chromium.org>
+Subject: [PATCH v3 1/5] dt-bindings: display: bridge: Add ddc-i2c-bus for anx7688
+Date:   Sat, 18 Feb 2023 19:17:08 +0800
+Message-Id: <20230218111712.2380225-2-treapking@chromium.org>
+X-Mailer: git-send-email 2.39.2.637.g21b0678d19-goog
+In-Reply-To: <20230218111712.2380225-1-treapking@chromium.org>
+References: <20230218111712.2380225-1-treapking@chromium.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="PuWXwRc8It3YJ8xy"
-Content-Disposition: inline
-In-Reply-To: <41e4f293-99eb-f157-b4a9-3d00b15f4652@linaro.org>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Introduce a optional "ddc-i2c-bus" property for anx7688 bridge. This
+allows the bridge to register a .get_edid callback.
 
---PuWXwRc8It3YJ8xy
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Signed-off-by: Pin-yen Lin <treapking@chromium.org>
+---
 
-Hey Krzysztof,
+Changes in v3:
+- New in v3
 
-On Sat, Feb 18, 2023 at 11:20:30AM +0100, Krzysztof Kozlowski wrote:
-> On 17/02/2023 17:27, Conor Dooley wrote:
-> > On Fri, Feb 17, 2023 at 04:47:48PM +0100, Krzysztof Kozlowski wrote:
-> >> On 17/02/2023 14:32, Conor Dooley wrote:
-> >>>>>> Yes, it is.
-> >>>>>
-> >>>>> Which would then make GMAC1 RGMII RX optional, rather than required?
-> >>>>
-> >>>> If thinking in this way, I must say yes, it is optional. But actually
-> >>>> GMAC1 RGMII RX feeds gmac1_rx by default.=20
-> >>>> For a mux, it usually works if you populate only one input to it.
-> >>>> Does it mean all the other inputs are optional? And how can we define
-> >>>> which input is required?
-> >>>
-> >>> I'm not sure, that is a question for Krzysztof and/or Rob.
-> >>
-> >> That's a long thread, please summarize what you ask. Otherwise I have =
-no
-> >> clue what is the question.
-> >=20
-> > Sorry. I tried to preserve the context of the conversation the last time
-> > I cropped it so that things would be contained on one email.
-> >=20
-> > For me at least, I am wondering how you convey that out of a list of
-> > clock inputs (for example a, b, c, d) that two of the clocks are inputs
-> > to a mux and it is only required to provide one of the two (say b & c).
+ .../bindings/display/bridge/google,cros-ec-anx7688.yaml      | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-You skipped this part which was what I was trying to ask you about.
-Do you know how to convey this situation, or is it even possible to
-express those rules?
+diff --git a/Documentation/devicetree/bindings/display/bridge/google,cros-ec-anx7688.yaml b/Documentation/devicetree/bindings/display/bridge/google,cros-ec-anx7688.yaml
+index a44d025d33bd..9d5ce8172e88 100644
+--- a/Documentation/devicetree/bindings/display/bridge/google,cros-ec-anx7688.yaml
++++ b/Documentation/devicetree/bindings/display/bridge/google,cros-ec-anx7688.yaml
+@@ -25,6 +25,10 @@ properties:
+     maxItems: 1
+     description: I2C address of the device.
+ 
++  ddc-i2c-bus:
++    description: phandle link to the I2C controller used for DDC EDID probing
++    $ref: /schemas/types.yaml#/definitions/phandle
++
+   ports:
+     $ref: /schemas/graph.yaml#/properties/ports
+ 
+@@ -59,6 +63,7 @@ examples:
+         anx7688: anx7688@2c {
+             compatible = "google,cros-ec-anx7688";
+             reg = <0x2c>;
++            ddc-i2c-bus = <&hdmiddc0>;
+ 
+             ports {
+                 #address-cells = <1>;
+-- 
+2.39.2.637.g21b0678d19-goog
 
-> >> Does the mux works correctly if clock input is not connected? I mean,
-> >> are you now talking about real hardware or some simplification from SW
-> >> point of view?
-> >=20
-> > I'm coming at this from an angle of "is a StarFive customer going to sh=
-ow
-> > up with a devicetree containing dummy fixed-clocks to satisfy dtbs_check
-> > because they opted to only populate one input to the mux".
-> > I don't really care about implications for the driver, just about
-> > whether the hardware allows for inputs to the mux to be left
-> > un-populated.
->=20
-> Whether hardware allows - not a question to me.
-
-> BTW, this is rather question coming from me...
-
-I don't understand what you mean by this, sorry.
-
-Thanks,
-Conor.
-
-
---PuWXwRc8It3YJ8xy
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCY/CztAAKCRB4tDGHoIJi
-0jg/AP4wInRGlkOUh1Al9iKc09rdNcx7Y9+jOgeM4wKt33DlgQEA+4tSZw88zO0/
-a6YhAFGSsTVeN3Rx2Dki8r642zgv0wk=
-=XpKK
------END PGP SIGNATURE-----
-
---PuWXwRc8It3YJ8xy--
