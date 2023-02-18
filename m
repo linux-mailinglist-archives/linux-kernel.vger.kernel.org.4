@@ -2,45 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A0F369BBC3
-	for <lists+linux-kernel@lfdr.de>; Sat, 18 Feb 2023 21:19:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6328069BBC6
+	for <lists+linux-kernel@lfdr.de>; Sat, 18 Feb 2023 21:19:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229702AbjBRUTo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 18 Feb 2023 15:19:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45770 "EHLO
+        id S229708AbjBRUTq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 18 Feb 2023 15:19:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45772 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229636AbjBRUTi (ORCPT
+        with ESMTP id S229632AbjBRUTi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Sat, 18 Feb 2023 15:19:38 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45FF114989
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80F161498F
         for <linux-kernel@vger.kernel.org>; Sat, 18 Feb 2023 12:19:36 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id DB33DB808BE
-        for <linux-kernel@vger.kernel.org>; Sat, 18 Feb 2023 20:19:34 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 63E18C433D2;
+        by ams.source.kernel.org (Postfix) with ESMTPS id 1FF81B80935
+        for <linux-kernel@vger.kernel.org>; Sat, 18 Feb 2023 20:19:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8FE6BC433A4;
         Sat, 18 Feb 2023 20:19:33 +0000 (UTC)
 Received: from rostedt by gandalf.local.home with local (Exim 4.96)
         (envelope-from <rostedt@goodmis.org>)
-        id 1pTTgC-000xsF-0Z;
+        id 1pTTgC-000xso-1E;
         Sat, 18 Feb 2023 15:19:32 -0500
-Message-ID: <20230218201931.992043332@goodmis.org>
+Message-ID: <20230218201932.196676123@goodmis.org>
 User-Agent: quilt/0.66
-Date:   Sat, 18 Feb 2023 15:18:22 -0500
+Date:   Sat, 18 Feb 2023 15:18:23 -0500
 From:   Steven Rostedt <rostedt@goodmis.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Masami Hiramatsu <mhiramat@kernel.org>,
         Andrew Morton <akpm@linux-foundation.org>,
-        zhang songyi <zhang.songyi@zte.com.cn>,
+        Andreas Ziegler <br015@umbiko.net>,
         Daniel Bristot de Oliveira <bristot@kernel.org>
-Subject: [for-next][PATCH 1/8] tools/rv: Remove unneeded semicolon
+Subject: [for-next][PATCH 2/8] tools/tracing/rtla: osnoise_hist: use total duration for average
+ calculation
 References: <20230218201821.938318263@goodmis.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -48,31 +49,49 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: zhang songyi <zhang.songyi@zte.com.cn>
+From: Andreas Ziegler <br015@umbiko.net>
 
-The semicolon after the "}" is unneeded.
+Sampled durations must be weighted by observed quantity, to arrive at a correct
+average duration value.
 
-Link: https://lore.kernel.org/linux-trace-devel/202212191431057948891@zte.com.cn
+Perform calculation of total duration by summing (duration * count).
 
-Signed-off-by: zhang songyi <zhang.songyi@zte.com.cn>
+Link: https://lkml.kernel.org/r/20230103103400.275566-2-br015@umbiko.net
+
+Fixes: 829a6c0b5698 ("rtla/osnoise: Add the hist mode")
+
+Signed-off-by: Andreas Ziegler <br015@umbiko.net>
 Acked-by: Daniel Bristot de Oliveira <bristot@kernel.org>
 Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
 ---
- tools/verification/rv/src/in_kernel.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ tools/tracing/rtla/src/osnoise_hist.c | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
-diff --git a/tools/verification/rv/src/in_kernel.c b/tools/verification/rv/src/in_kernel.c
-index 50848d79b38b..ad28582bcf2b 100644
---- a/tools/verification/rv/src/in_kernel.c
-+++ b/tools/verification/rv/src/in_kernel.c
-@@ -519,7 +519,7 @@ static void ikm_usage_print_reactors(void)
+diff --git a/tools/tracing/rtla/src/osnoise_hist.c b/tools/tracing/rtla/src/osnoise_hist.c
+index 5d7ea479ac89..fe34452fc4ec 100644
+--- a/tools/tracing/rtla/src/osnoise_hist.c
++++ b/tools/tracing/rtla/src/osnoise_hist.c
+@@ -121,6 +121,7 @@ static void osnoise_hist_update_multiple(struct osnoise_tool *tool, int cpu,
+ {
+ 	struct osnoise_hist_params *params = tool->params;
+ 	struct osnoise_hist_data *data = tool->data;
++	unsigned long long total_duration;
+ 	int entries = data->entries;
+ 	int bucket;
+ 	int *hist;
+@@ -131,10 +132,12 @@ static void osnoise_hist_update_multiple(struct osnoise_tool *tool, int cpu,
+ 	if (data->bucket_size)
+ 		bucket = duration / data->bucket_size;
  
- 		start = ++end;
- 		end = strstr(start, "\n");
--	};
-+	}
++	total_duration = duration * count;
++
+ 	hist = data->hist[cpu].samples;
+ 	data->hist[cpu].count += count;
+ 	update_min(&data->hist[cpu].min_sample, &duration);
+-	update_sum(&data->hist[cpu].sum_sample, &duration);
++	update_sum(&data->hist[cpu].sum_sample, &total_duration);
+ 	update_max(&data->hist[cpu].max_sample, &duration);
  
- 	fprintf(stderr, "\n");
- }
+ 	if (bucket < entries)
 -- 
 2.39.1
