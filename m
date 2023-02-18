@@ -2,106 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F208269B8D2
-	for <lists+linux-kernel@lfdr.de>; Sat, 18 Feb 2023 09:54:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1D8E669B8D4
+	for <lists+linux-kernel@lfdr.de>; Sat, 18 Feb 2023 09:55:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229561AbjBRIyU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 18 Feb 2023 03:54:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44410 "EHLO
+        id S229731AbjBRIzn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 18 Feb 2023 03:55:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44872 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229461AbjBRIyR (ORCPT
+        with ESMTP id S229461AbjBRIzm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 18 Feb 2023 03:54:17 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A0803C792
-        for <linux-kernel@vger.kernel.org>; Sat, 18 Feb 2023 00:54:16 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 19B4860909
-        for <linux-kernel@vger.kernel.org>; Sat, 18 Feb 2023 08:54:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E9C63C433EF;
-        Sat, 18 Feb 2023 08:54:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1676710455;
-        bh=M0KZIpvZENwj1uzIM0ne/gt/L6cq4cB4mbBHSeUv2Ms=;
+        Sat, 18 Feb 2023 03:55:42 -0500
+Received: from nautica.notk.org (nautica.notk.org [91.121.71.147])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E7483C792;
+        Sat, 18 Feb 2023 00:55:41 -0800 (PST)
+Received: by nautica.notk.org (Postfix, from userid 108)
+        id BD4A6C01A; Sat, 18 Feb 2023 09:56:03 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=codewreck.org; s=2;
+        t=1676710563; bh=rmDypawu+51PJyFLO+R0QGTEt+vCIzj5+qIOxEvcCX0=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=a1C5y0o5k97dqezI6+zyiyzEvFPLALtXHS9ehludc8HdYfdRK1ciiU4ALNThqg60F
-         p3KWAvS3JYdgCgiQORleU63BK6ATvDhG7ZgkI/sGnwG0x3muCKJvsPEryTvrII/+bw
-         wmLz9moU6xG0fDwDte9zOUvd8XP6B77yqpCExmcU=
-Date:   Sat, 18 Feb 2023 09:54:12 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Saravana Kannan <saravanak@google.com>
-Cc:     Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Tony Lindgren <tony@atomide.com>,
-        Doug Anderson <dianders@chromium.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Luca Weiss <luca.weiss@fairphone.com>, kernel-team@android.com,
-        linux-kernel@vger.kernel.org
-Subject: Re: [RFC v1 0/4] Simplify regulator supply resolution code by
- offloading to driver core
-Message-ID: <Y/CSNLm9iihwRa72@kroah.com>
-References: <20230218083252.2044423-1-saravanak@google.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230218083252.2044423-1-saravanak@google.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        b=ROEtQMleKCNI9GkdeyWu/+8EX3Ujw/BkNBRyFE6GK//56etGh/icAKrjn961k2Nyd
+         MhpEmyWbZL3ULYCnhwKPQC9ZMSrUmma2vVWymGo4G9kq4Eii96Rj7e52MACtJQbUxt
+         Rcg/u1WSVxjEuE0+ZmFhSz1GwClnwU7ErhDw+lRAhkqta8uKyKTNgId3oaFXEeq5FC
+         6/Ih+RJp7+4/Ir1hAN173co00GQjfq0XD5B9gBV8q+1yBtMA/5iaFcxdZ9AO+b5Pyd
+         T2wKZNvIzDIcmKjUDqdJHAT251jtJoFoOzIYt2UEZny8WDttOxKhE2W+pWjt919Qmr
+         S/K2RYPcKMSCw==
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+X-Spam-Level: 
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
+Received: from odin.codewreck.org (localhost [127.0.0.1])
+        by nautica.notk.org (Postfix) with ESMTPS id A1C80C009;
+        Sat, 18 Feb 2023 09:56:00 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=codewreck.org; s=2;
+        t=1676710562; bh=rmDypawu+51PJyFLO+R0QGTEt+vCIzj5+qIOxEvcCX0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=hbWNlrezX4KzLObMiKvKPYPks6rFHMwAQOzMjigQfxPQzePwn0+ryk3GxPdFQJ1qB
+         K/Czcu+KZmn5KMHFQDrASzDXZXX7+no1FU08cUJKq59glD3JHVid23hxVTHFubiZSH
+         6PBbaNRklnxqTzVBCpWKqBatSiyNJIYLt4PKjD3JYQmSihN8Bru50QRtJRo4sG4t68
+         xAu2n171LPHGsplsuJeK66WL/cvx/gMIMQqNy8a4nuSwFfqlPUUNfUa+GWCy5/NN/P
+         eSkW4xvT9m251N5BoAzYQyb4+yEU5ZJRmDmiIz01MM2n6SgpPHXTQXyWkH1/OE7J2T
+         ACd8DGtWvekdQ==
+Received: from localhost (odin.codewreck.org [local])
+        by odin.codewreck.org (OpenSMTPD) with ESMTPA id 744eb814;
+        Sat, 18 Feb 2023 08:55:34 +0000 (UTC)
+Date:   Sat, 18 Feb 2023 17:55:19 +0900
+From:   asmadeus@codewreck.org
+To:     Eric Van Hensbergen <ericvh@kernel.org>
+Cc:     v9fs-developer@lists.sourceforge.net, rminnich@gmail.com,
+        lucho@ionkov.net, linux-kernel@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux_oss@crudebyte.com
+Subject: Re: [PATCH v4 11/11] fs/9p: Fix revalidate
+Message-ID: <Y/CSd2oYO9dBbVUH@codewreck.org>
+References: <20230124023834.106339-1-ericvh@kernel.org>
+ <20230218003323.2322580-1-ericvh@kernel.org>
+ <20230218003323.2322580-12-ericvh@kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20230218003323.2322580-12-ericvh@kernel.org>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Feb 18, 2023 at 12:32:47AM -0800, Saravana Kannan wrote:
-> Hi Mark/Liam,
-> 
-> This series is just an RFC to see if you agree with where this is going.
-> Please point out bugs, but don't bother with a proper code review.
-> 
-> The high level idea is to not reimplement what driver core can already
-> handle for us and use it to do some of the work. Instead of trying to
-> resolve supplies from all different code paths and bits and pieces of
-> the tree, we just build it from the root to the leaves by using deferred
-> probing to sequence things in the right order.
-> 
-> The last patch is the main one. Rest of them are just setting up for it.
-> 
-> I believe there's room for further simplification but this is what I
-> could whip up as a quick first draft that shows the high level idea.
-> I'll probably need some help with getting a better understanding of why
-> things are done in a specific order in regulator_register() before I
-> could attempt simplifying things further.
-> 
-> Ideally, regulator_register() would just have DT parsing, init data
-> struct sanity checks and adding the regulator device and then we move
-> everything else to into the probe function that's guaranteed to run only
-> after the supply has been resolved/ready to resolve.
-> 
-> fw_devlink/device links should further optimize the flow and also allow
-> us to simplify some of the guarantees and address some of the existing
-> FIXMEs. But this patch series is NOT dependent on fw_devlink or device
-> links.
-> 
-> Any thoughts on where this is going?
-> 
-> I've tested this on one hardware I have and it works and nothing is
-> broken. But the regulator tree in my hardware isn't that complicated or
-> deep. The regulators are also added mostly in the right order (due to
-> existing fw_devlink). So if you agree with the idea, the next step is to
-> ask people to give it a test.
-> 
-> Also, it's based on driver-core-next since that's what I had synced up
-> and had a working baseline. I'll rebase it on the regulator tree when I
-> go from RFC -> PATCH.
+Eric Van Hensbergen wrote on Sat, Feb 18, 2023 at 12:33:23AM +0000:
+> Unclear if this case ever happens, but if no inode in dentry, then
+> the dentry is definitely invalid.  Seemed to be the opposite in the
+> existing code.
 
-At first glance, this looks sane to me, thanks for doing this work!
+Looking at other implementations of d_revalidate (ecryptfs, cifs, vfat)
+it seems to be assumed that the inode is always valid.
 
-greg k-h
+I'd just remove the if, or if we keep it add a WARN or something for a
+while so we can remove it in a few releases?
+
+(That said, it's better to return 0 than 1 here, so don't take this for
+a no -- progress is progress)
+-- 
+Dominique
