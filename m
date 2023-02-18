@@ -2,199 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E8A0369BD20
-	for <lists+linux-kernel@lfdr.de>; Sat, 18 Feb 2023 22:41:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AAF0D69BD22
+	for <lists+linux-kernel@lfdr.de>; Sat, 18 Feb 2023 22:45:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229838AbjBRVlE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 18 Feb 2023 16:41:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42952 "EHLO
+        id S229889AbjBRVmd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 18 Feb 2023 16:42:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43844 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229751AbjBRVlD (ORCPT
+        with ESMTP id S229751AbjBRVmc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 18 Feb 2023 16:41:03 -0500
-Received: from lithops.sigma-star.at (lithops.sigma-star.at [195.201.40.130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACA1F13527;
-        Sat, 18 Feb 2023 13:40:59 -0800 (PST)
-Received: from localhost (localhost [127.0.0.1])
-        by lithops.sigma-star.at (Postfix) with ESMTP id 2ECB7642ECBC;
-        Sat, 18 Feb 2023 22:40:57 +0100 (CET)
-Received: from lithops.sigma-star.at ([127.0.0.1])
-        by localhost (lithops.sigma-star.at [127.0.0.1]) (amavisd-new, port 10032)
-        with ESMTP id ZvwjiXo10fMe; Sat, 18 Feb 2023 22:40:56 +0100 (CET)
-Received: from localhost (localhost [127.0.0.1])
-        by lithops.sigma-star.at (Postfix) with ESMTP id AA05B642ECD2;
-        Sat, 18 Feb 2023 22:40:56 +0100 (CET)
-Received: from lithops.sigma-star.at ([127.0.0.1])
-        by localhost (lithops.sigma-star.at [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id qQfG2d5tGiuW; Sat, 18 Feb 2023 22:40:56 +0100 (CET)
-Received: from blindfold.corp.sigma-star.at (213-47-184-186.cable.dynamic.surfer.at [213.47.184.186])
-        by lithops.sigma-star.at (Postfix) with ESMTPSA id 2F584642ECBC;
-        Sat, 18 Feb 2023 22:40:56 +0100 (CET)
-From:   Richard Weinberger <richard@nod.at>
-To:     netdev@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, pabeni@redhat.com, kuba@kernel.org,
-        edumazet@google.com, davem@davemloft.net, linux-imx@nxp.com,
-        xiaoning.wang@nxp.com, shenwei.wang@nxp.com, wei.fang@nxp.com,
-        Richard Weinberger <richard@nod.at>
-Subject: [PATCH] [RFC] net: fec: Allow turning off IRQ coalescing
-Date:   Sat, 18 Feb 2023 22:40:37 +0100
-Message-Id: <20230218214037.16977-1-richard@nod.at>
-X-Mailer: git-send-email 2.26.2
+        Sat, 18 Feb 2023 16:42:32 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9698E13D7D
+        for <linux-kernel@vger.kernel.org>; Sat, 18 Feb 2023 13:42:31 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 066F960BC5
+        for <linux-kernel@vger.kernel.org>; Sat, 18 Feb 2023 21:42:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 5B125C4339B;
+        Sat, 18 Feb 2023 21:42:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1676756550;
+        bh=inKpTNdeTXJQXc2kCE2ygH8R+rkjnBMFxu5iAD5Thhc=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=YoETc/4lf2iWwhemc7pZhBdWs4vOKxeaEzVQa4XFrgFn4RXny6giIeAYJ4DVFC7DX
+         QvkHisTrLxOtSACIHGyYZqpd18nBzUYqhM2vZrkHNYnmfnK1if7rLmFXZ8/UWrNddq
+         72GbrXvqhINAOP0FHDYNryxwfwlwRVK5ybQhz8kc6k+WUdiWSDyxQgRu2paonOMcz1
+         E6sMh+SZZmJDSuZhZjRYkrE31CvQOo4VQl/QYlrIu9neStQQcT40sCZGUlrzbgUQYL
+         N2bRpQNVOX8MsGcZ4KZdebPo4+1rXxDBVc15aWD4lkBaTOuhn7Iuz5Bs4Cl+YteUGj
+         md1dZxKhhVjhw==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 3B7D8E68D2F;
+        Sat, 18 Feb 2023 21:42:30 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        T_SPF_PERMERROR autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH -next V7 0/7] riscv: Optimize function trace
+From:   patchwork-bot+linux-riscv@kernel.org
+Message-Id: <167675655023.26920.11250197941763068411.git-patchwork-notify@kernel.org>
+Date:   Sat, 18 Feb 2023 21:42:30 +0000
+References: <20230112090603.1295340-1-guoren@kernel.org>
+In-Reply-To: <20230112090603.1295340-1-guoren@kernel.org>
+To:     Guo Ren <guoren@kernel.org>
+Cc:     linux-riscv@lists.infradead.org, anup@brainfault.org,
+        paul.walmsley@sifive.com, palmer@dabbelt.com,
+        conor.dooley@microchip.com, heiko@sntech.de, rostedt@goodmis.org,
+        mhiramat@kernel.org, jolsa@redhat.com, bp@suse.de,
+        jpoimboe@kernel.org, suagrfillet@gmail.com, andy.chiu@sifive.com,
+        e.shatokhin@yadro.com, linux-kernel@vger.kernel.org,
+        guoren@linux.alibaba.com
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Setting tx/rx-frames or tx/rx-usecs to zero is currently possible but
-has no effect.
-Also IRQ coalescing is always enabled on supported hardware.
+Hello:
 
-This is confusing and causes users to believe that they have successfully
-disabled IRQ coalescing by setting tx/rx-frames and tx/rx-usecs to zero.
+This series was applied to riscv/linux.git (for-next)
+by Palmer Dabbelt <palmer@rivosinc.com>:
 
-With this change applied it is possible to disable IRQ coalescing by
-configuring both tx/rx-frames and tx/rx-usecs to zero.
+On Thu, 12 Jan 2023 04:05:56 -0500 you wrote:
+> From: Guo Ren <guoren@linux.alibaba.com>
+> 
+> The previous ftrace detour implementation fc76b8b8011 ("riscv: Using
+> PATCHABLE_FUNCTION_ENTRY instead of MCOUNT") contain three problems.
+> 
+>  - The most horrible bug is preemption panic which found by Andy [1].
+>    Let's disable preemption for ftrace first, and Andy could continue
+>    the ftrace preemption work.
+>  - The "-fpatchable-function-entry= CFLAG" wasted code size
+>    !RISCV_ISA_C.
+>  - The ftrace detour implementation wasted code size.
+>  - When livepatching, the trampoline (ftrace_regs_caller) would not
+>    return to <func_prolog+12> but would rather jump to the new function.
+>    So, "REG_L ra, -SZREG(sp)" would not run and the original return
+>    address would not be restored. The kernel is likely to hang or crash
+>    as a result. (Found by Evgenii Shatokhin [4])
+> 
+> [...]
 
-Setting only one value to zero is still not possible as the hardware
-does not support it.
-In this case ethtool will face -EINVAL.
+Here is the summary with links:
+  - [-next,V7,1/7] riscv: ftrace: Fixup panic by disabling preemption
+    https://git.kernel.org/riscv/c/8547649981e6
+  - [-next,V7,2/7] riscv: ftrace: Remove wasted nops for !RISCV_ISA_C
+    https://git.kernel.org/riscv/c/409c8fb20c66
+  - [-next,V7,3/7] riscv: ftrace: Reduce the detour code size to half
+    https://git.kernel.org/riscv/c/6724a76cff85
+  - [-next,V7,4/7] riscv: ftrace: Add ftrace_graph_func
+    (no matching commit)
+  - [-next,V7,5/7] riscv: ftrace: Add DYNAMIC_FTRACE_WITH_DIRECT_CALLS support
+    (no matching commit)
+  - [-next,V7,6/7] samples: ftrace: Add riscv support for SAMPLE_FTRACE_DIRECT[_MULTI]
+    (no matching commit)
+  - [-next,V7,7/7] riscv : select FTRACE_MCOUNT_USE_PATCHABLE_FUNCTION_ENTRY
+    (no matching commit)
 
-Signed-off-by: Richard Weinberger <richard@nod.at>
----
- drivers/net/ethernet/freescale/fec_main.c | 73 ++++++++++++++++-------
- 1 file changed, 50 insertions(+), 23 deletions(-)
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
-diff --git a/drivers/net/ethernet/freescale/fec_main.c b/drivers/net/ethe=
-rnet/freescale/fec_main.c
-index 2341597408d1..cc3c5e09e02f 100644
---- a/drivers/net/ethernet/freescale/fec_main.c
-+++ b/drivers/net/ethernet/freescale/fec_main.c
-@@ -74,7 +74,7 @@
- #include "fec.h"
-=20
- static void set_multicast_list(struct net_device *ndev);
--static void fec_enet_itr_coal_set(struct net_device *ndev);
-+static int fec_enet_itr_coal_set(struct net_device *ndev);
-=20
- #define DRIVER_NAME	"fec"
-=20
-@@ -1217,7 +1217,7 @@ fec_restart(struct net_device *ndev)
-=20
- 	/* Init the interrupt coalescing */
- 	if (fep->quirks & FEC_QUIRK_HAS_COALESCE)
--		fec_enet_itr_coal_set(ndev);
-+		WARN_ON_ONCE(fec_enet_itr_coal_set(ndev));
- }
-=20
- static int fec_enet_ipc_handle_init(struct fec_enet_private *fep)
-@@ -2867,30 +2867,57 @@ static int fec_enet_us_to_itr_clock(struct net_de=
-vice *ndev, int us)
- }
-=20
- /* Set threshold for interrupt coalescing */
--static void fec_enet_itr_coal_set(struct net_device *ndev)
-+static int fec_enet_itr_coal_set(struct net_device *ndev)
- {
-+	bool disable_rx_itr =3D false, disable_tx_itr =3D false;
- 	struct fec_enet_private *fep =3D netdev_priv(ndev);
--	int rx_itr, tx_itr;
-+	struct device *dev =3D &fep->pdev->dev;
-+	int rx_itr =3D 0, tx_itr =3D 0;
-=20
--	/* Must be greater than zero to avoid unpredictable behavior */
--	if (!fep->rx_time_itr || !fep->rx_pkts_itr ||
--	    !fep->tx_time_itr || !fep->tx_pkts_itr)
--		return;
-+	if (!fep->rx_time_itr || !fep->rx_pkts_itr) {
-+		if (fep->rx_time_itr || fep->rx_pkts_itr) {
-+			dev_warn(dev, "Rx coalesced frames and usec have to be "
-+				      "both positive or both zero to disable Rx "
-+				      "coalescence completely\n");
-+			return -EINVAL;
-+		}
-=20
--	/* Select enet system clock as Interrupt Coalescing
--	 * timer Clock Source
--	 */
--	rx_itr =3D FEC_ITR_CLK_SEL;
--	tx_itr =3D FEC_ITR_CLK_SEL;
-+		disable_rx_itr =3D true;
-+	}
-=20
--	/* set ICFT and ICTT */
--	rx_itr |=3D FEC_ITR_ICFT(fep->rx_pkts_itr);
--	rx_itr |=3D FEC_ITR_ICTT(fec_enet_us_to_itr_clock(ndev, fep->rx_time_it=
-r));
--	tx_itr |=3D FEC_ITR_ICFT(fep->tx_pkts_itr);
--	tx_itr |=3D FEC_ITR_ICTT(fec_enet_us_to_itr_clock(ndev, fep->tx_time_it=
-r));
-+	if (!fep->tx_time_itr || !fep->tx_pkts_itr) {
-+		if (fep->tx_time_itr || fep->tx_pkts_itr) {
-+			dev_warn(dev, "Tx coalesced frames and usec have to be "
-+				      "both positive or both zero to disable Tx "
-+				      "coalescence completely\n");
-+			return -EINVAL;
-+		}
-+
-+		disable_tx_itr =3D true;
-+	}
-+
-+	if (!disable_rx_itr) {
-+		/* Select enet system clock as Interrupt Coalescing
-+		 * timer Clock Source
-+		 */
-+		rx_itr =3D FEC_ITR_CLK_SEL;
-+
-+		/* set ICFT and ICTT */
-+		rx_itr |=3D FEC_ITR_ICFT(fep->rx_pkts_itr);
-+		rx_itr |=3D FEC_ITR_ICTT(fec_enet_us_to_itr_clock(ndev, fep->rx_time_i=
-tr));
-+
-+		rx_itr |=3D FEC_ITR_EN;
-+	}
-+
-+	if (!disable_tx_itr) {
-+		tx_itr =3D FEC_ITR_CLK_SEL;
-+
-+		tx_itr |=3D FEC_ITR_ICFT(fep->tx_pkts_itr);
-+		tx_itr |=3D FEC_ITR_ICTT(fec_enet_us_to_itr_clock(ndev, fep->tx_time_i=
-tr));
-+
-+		tx_itr |=3D FEC_ITR_EN;
-+	}
-=20
--	rx_itr |=3D FEC_ITR_EN;
--	tx_itr |=3D FEC_ITR_EN;
-=20
- 	writel(tx_itr, fep->hwp + FEC_TXIC0);
- 	writel(rx_itr, fep->hwp + FEC_RXIC0);
-@@ -2900,6 +2927,8 @@ static void fec_enet_itr_coal_set(struct net_device=
- *ndev)
- 		writel(tx_itr, fep->hwp + FEC_TXIC2);
- 		writel(rx_itr, fep->hwp + FEC_RXIC2);
- 	}
-+
-+	return 0;
- }
-=20
- static int fec_enet_get_coalesce(struct net_device *ndev,
-@@ -2961,9 +2990,7 @@ static int fec_enet_set_coalesce(struct net_device =
-*ndev,
- 	fep->tx_time_itr =3D ec->tx_coalesce_usecs;
- 	fep->tx_pkts_itr =3D ec->tx_max_coalesced_frames;
-=20
--	fec_enet_itr_coal_set(ndev);
--
--	return 0;
-+	return fec_enet_itr_coal_set(ndev);
- }
-=20
- static int fec_enet_get_tunable(struct net_device *netdev,
---=20
-2.26.2
 
