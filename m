@@ -2,111 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E53369B92A
-	for <lists+linux-kernel@lfdr.de>; Sat, 18 Feb 2023 10:47:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ED69E69B92E
+	for <lists+linux-kernel@lfdr.de>; Sat, 18 Feb 2023 10:50:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229629AbjBRJrx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 18 Feb 2023 04:47:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43586 "EHLO
+        id S229759AbjBRJuv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 18 Feb 2023 04:50:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45774 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229591AbjBRJrv (ORCPT
+        with ESMTP id S229591AbjBRJuu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 18 Feb 2023 04:47:51 -0500
-Received: from trent.utfs.org (trent.utfs.org [94.185.90.103])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD512E6
-        for <linux-kernel@vger.kernel.org>; Sat, 18 Feb 2023 01:47:48 -0800 (PST)
-Received: from localhost (localhost [IPv6:::1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by trent.utfs.org (Postfix) with ESMTPS id 2FE835F781;
-        Sat, 18 Feb 2023 10:47:46 +0100 (CET)
-Date:   Sat, 18 Feb 2023 10:47:46 +0100 (CET)
-From:   Christian Kujau <lists@nerdbynature.de>
-To:     linux-kernel@vger.kernel.org
-cc:     Juergen Gross <jgross@suse.com>,
-        "Borislav Petkov (AMD)" <bp@alien8.de>,
-        Linus Torvalds <torvalds@linux-foundation.org>
-Subject: Re: [tip: x86/urgent] x86/mtrr: Revert 90b926e68f50 ("x86/pat: Fix
- pat_x_mtrr_type() for MTRR disabled case")
-In-Reply-To: <167636735608.4906.4788207020350311572.tip-bot2@tip-bot2>
-Message-ID: <8a1fd8b7-9fe3-b2b5-406e-fa6f5e03e7c0@nerdbynature.de>
-References: <4fe9541e-4d4c-2b2a-f8c8-2d34a7284930@nerdbynature.de> <167636735608.4906.4788207020350311572.tip-bot2@tip-bot2>
+        Sat, 18 Feb 2023 04:50:50 -0500
+Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B45727D79;
+        Sat, 18 Feb 2023 01:50:49 -0800 (PST)
+Received: by mail-lf1-x132.google.com with SMTP id a27so593042lfk.9;
+        Sat, 18 Feb 2023 01:50:49 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=JIrnvpX1nY0h4eC0Pi2vBEJRVCNqCIABCuqr3MNdQ4c=;
+        b=qgWAtXhnlg5FnUBogvNrMkeo03Sa+sbzB5bKNWtnsfNRJGF7vPGisc2PYCIGwOz3MX
+         tfdrlf5asopocZCXWNj0fxpZVrqO11yK62wzzi/p9/l4R+guIABvnTm/sPu+TH0a9EIu
+         ZVL4/bhiOmSzmSo9K9pHyePKqrhfNBmH8frqm7D10sElmIuFdMX/KH6E2Vqt2DjX/heP
+         U4Y7sEm3T6gS1c+7FeDnpmG5XI6wkLmtYCLNm8tBOn/jss0rNu3IW728A4LC5iN7pKs6
+         IiBu8X2/W15QUACWwW6IVxVAdzz0fqRrvsTZ+09UtT9jwGL+Wdz+H3EqClEC1oMsCWrp
+         foGw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=JIrnvpX1nY0h4eC0Pi2vBEJRVCNqCIABCuqr3MNdQ4c=;
+        b=EFuMlS8LGcky+kDlC1s29vR0A5hmdzggZj+MzdKmuKQkYNexcMLHtOyw+dtvlg1Lbq
+         lSMW2q9XnC5Vp0lLTbJg3rfgGfBg4+CI/VdlOtuEjydi2wwTGNjZAHbSV9tOAVWR+iek
+         j+vDQ9UFx5UcOrVUOkJuUiL/cI2Pr1rPhunJUnpqhaSoRE+Pym6S1jL9iPGPUxCiMJG0
+         sb8n8nKAr2CxFn0mQxk8yGfUw8XvKcXcvPP1nQ4mYpKjnaFe5Om/qq59odqXmnizkObE
+         LdeD1fbRoL3Hleq7IzvKGQ7iPalglcesFbXaJtPCjFGHm2BO51gPDCbZN0luZ3RmqQb6
+         2mKg==
+X-Gm-Message-State: AO0yUKXjYEef1igHYlLzrL8OkOLCbmT7g/7KJ8Jqpm6EIvR7UZbSeRKX
+        x2VrWfjLCPspPdV2RGU0maA=
+X-Google-Smtp-Source: AK7set86QJtV6xdp2HAMzDJSu2QzMeMkFhIVaa3qxPqkFqVvFtZY+emBG2gE3lOVvlToTBh42Sp13A==
+X-Received: by 2002:ac2:528f:0:b0:4db:398e:699 with SMTP id q15-20020ac2528f000000b004db398e0699mr1343120lfm.12.1676713847750;
+        Sat, 18 Feb 2023 01:50:47 -0800 (PST)
+Received: from mkor.. (89-109-49-189.dynamic.mts-nn.ru. [89.109.49.189])
+        by smtp.gmail.com with ESMTPSA id o5-20020ac24345000000b004cb139616a2sm927789lfl.186.2023.02.18.01.50.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 18 Feb 2023 01:50:47 -0800 (PST)
+From:   Maxim Korotkov <korotkov.maxim.s@gmail.com>
+To:     Michael Chan <michael.chan@broadcom.com>
+Cc:     Maxim Korotkov <korotkov.maxim.s@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, lvc-project@linuxtesting.org
+Subject: [PATCH] bnxt: avoid overflow in bnxt_get_nvram_directory()
+Date:   Sat, 18 Feb 2023 12:50:24 +0300
+Message-Id: <20230218095024.23193-1-korotkov.maxim.s@gmail.com>
+X-Mailer: git-send-email 2.37.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 14 Feb 2023, tip-bot2 for Juergen Gross wrote:
-> The following commit has been merged into the x86/urgent branch of tip:
+The value of an arithmetic expression is subject
+of possible overflow due to a failure to cast operands to a larger data
+type before performing arithmetic. Used macro for multiplication instead
+operator for avoiding overflow.
 
-Sorry for being dense but I couldn't figure this out from the tip tree 
-handbook[0]: will this be included in 6.2 or has this ship sailed? If so, 
-I'll start bugging the Alpine folks to maybe carry this around until the 
-next release.
+Found by Security Code and Linux Verification
+Center (linuxtesting.org) with SVACE.
 
-Thanks,
-Christian.
+Signed-off-by: Maxim Korotkov <korotkov.maxim.s@gmail.com>
+---
+ drivers/net/ethernet/broadcom/bnxt/bnxt_ethtool.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-[0] https://www.kernel.org/doc/html/latest/process/maintainer-tip.html
-
-> 
-> Commit-ID:     f9f57da2c2d119dbf109e3f6e1ceab7659294046
-> Gitweb:        https://git.kernel.org/tip/f9f57da2c2d119dbf109e3f6e1ceab7659294046
-> Author:        Juergen Gross <jgross@suse.com>
-> AuthorDate:    Thu, 09 Feb 2023 08:22:17 +01:00
-> Committer:     Borislav Petkov (AMD) <bp@alien8.de>
-> CommitterDate: Tue, 14 Feb 2023 10:16:34 +01:00
-> 
-> x86/mtrr: Revert 90b926e68f50 ("x86/pat: Fix pat_x_mtrr_type() for MTRR disabled case")
-> 
-> Commit
-> 
->   90b926e68f50 ("x86/pat: Fix pat_x_mtrr_type() for MTRR disabled case")
-> 
-> broke the use case of running Xen dom0 kernels on machines with an
-> external disk enclosure attached via USB, see Link tag.
-> 
-> What this commit was originally fixing - SEV-SNP guests on Hyper-V - is
-> a more specialized situation which has other issues at the moment anyway
-> so reverting this now and addressing the issue properly later is the
-> prudent thing to do.
-> 
-> So revert it in time for the 6.2 proper release.
-> 
->   [ bp: Rewrite commit message. ]
-> 
-> Reported-by: Christian Kujau <lists@nerdbynature.de>
-> Tested-by: Christian Kujau <lists@nerdbynature.de>
-> Signed-off-by: Juergen Gross <jgross@suse.com>
-> Signed-off-by: Borislav Petkov (AMD) <bp@alien8.de>
-> Link: https://lore.kernel.org/r/4fe9541e-4d4c-2b2a-f8c8-2d34a7284930@nerdbynature.de
-> ---
->  arch/x86/mm/pat/memtype.c | 3 +--
->  1 file changed, 1 insertion(+), 2 deletions(-)
-> 
-> diff --git a/arch/x86/mm/pat/memtype.c b/arch/x86/mm/pat/memtype.c
-> index fb4b1b5..46de9cf 100644
-> --- a/arch/x86/mm/pat/memtype.c
-> +++ b/arch/x86/mm/pat/memtype.c
-> @@ -387,8 +387,7 @@ static unsigned long pat_x_mtrr_type(u64 start, u64 end,
->  		u8 mtrr_type, uniform;
->  
->  		mtrr_type = mtrr_type_lookup(start, end, &uniform);
-> -		if (mtrr_type != MTRR_TYPE_WRBACK &&
-> -		    mtrr_type != MTRR_TYPE_INVALID)
-> +		if (mtrr_type != MTRR_TYPE_WRBACK)
->  			return _PAGE_CACHE_MODE_UC_MINUS;
->  
->  		return _PAGE_CACHE_MODE_WB;
-> 
-
+diff --git a/drivers/net/ethernet/broadcom/bnxt/bnxt_ethtool.c b/drivers/net/ethernet/broadcom/bnxt/bnxt_ethtool.c
+index ec573127b707..696f32dfe41f 100644
+--- a/drivers/net/ethernet/broadcom/bnxt/bnxt_ethtool.c
++++ b/drivers/net/ethernet/broadcom/bnxt/bnxt_ethtool.c
+@@ -2862,7 +2862,7 @@ static int bnxt_get_nvram_directory(struct net_device *dev, u32 len, u8 *data)
+ 	if (rc)
+ 		return rc;
+ 
+-	buflen = dir_entries * entry_length;
++	buflen = mul_u32_u32(dir_entries, entry_length);
+ 	buf = hwrm_req_dma_slice(bp, req, buflen, &dma_handle);
+ 	if (!buf) {
+ 		hwrm_req_drop(bp, req);
 -- 
-BOFH excuse #155:
+2.37.2
 
-Dumb terminal
