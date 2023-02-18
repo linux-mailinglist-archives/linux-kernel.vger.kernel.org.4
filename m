@@ -2,57 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 05D2E69B6BC
-	for <lists+linux-kernel@lfdr.de>; Sat, 18 Feb 2023 01:29:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B065A69B6B5
+	for <lists+linux-kernel@lfdr.de>; Sat, 18 Feb 2023 01:29:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229613AbjBRA3X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Feb 2023 19:29:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42972 "EHLO
+        id S229676AbjBRA30 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Feb 2023 19:29:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41792 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229570AbjBRA3P (ORCPT
+        with ESMTP id S229884AbjBRA3Q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Feb 2023 19:29:15 -0500
-Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 517526A050
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Feb 2023 16:28:53 -0800 (PST)
-Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-5366c11a9e2so12373607b3.17
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Feb 2023 16:28:53 -0800 (PST)
+        Fri, 17 Feb 2023 19:29:16 -0500
+Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9149A5BDB0
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Feb 2023 16:28:54 -0800 (PST)
+Received: by mail-yb1-xb49.google.com with SMTP id 64-20020a250243000000b007eba3f8e3baso2483973ybc.4
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Feb 2023 16:28:54 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=Gzu9Oqr9H8Fn0tUeHEDWXYAlOB8OWdsieehz/zpOW6k=;
-        b=tYpmmFQzEgrObj/2FMcbtdaJQm3sazU5VnbVoR+zz6vUh7rASk45yjIKn2FedC7eo+
-         64TFERWH3kAocQ35djKIpY0U7uy4JBvt4LsnfsaNiT08MQoKwPApF8bVx1iphGbWHeEc
-         IMInRpDhVgnidOgxuvPZq1H7/CcXyiRAgK7ISL6kaB1IUSOqgvGwY430h2xrB2v8neVQ
-         8AN2tGoltRJlPrCZJ1MuICMziVOgA+TSNCC1pOgqumOa93V1to2Sec2gOzLTecmc35fN
-         74QeAtnqV0HzcQ4DlaDW3Lxjmfem+TFSMTYeknGNL3g2HO+TM9ub4VO/dStuPqoBrn6U
-         ZpmA==
+        bh=5Xd63Fapv1zuFib4b0fw8zL6DTisPv2GzpUTcimolMg=;
+        b=G9OKNC7MB5QZ1WtbCVd/b4GGEEQxFMkkCyh9YPN/SaI+Iv0UY6xpXV4C/bjLuR5GX/
+         xT5jqUIS0kJvgcXBGXG6eGMOl41EQ+9+EPXqDEN8/E+QrPDYAERgHP5tENbu09gPxEEE
+         J2plHmBfhFP7cLD9TJAsfNCeQfwyLgPfEiNyKU7bNFt6UToPyOfI/Tv35qpqCPqZOx+3
+         BkeCahUvSvDUjoiOquOpSnIGEQ48uVtj2zGVrhp8k95YXggqw2b91kgnZMkucKn+Y1SW
+         QrvcwU7NPBdC0gLOUvUCZFlWQklPf0wCQDXXAGua2AKBXeE+nHdPEk2ToJ76Lq1odat1
+         0YNw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Gzu9Oqr9H8Fn0tUeHEDWXYAlOB8OWdsieehz/zpOW6k=;
-        b=a93MA8VZ8t8TtJv26HE1lm7513AIX+3ERm69v5wHfx0caROyNWexI4Su/Smm67Stn2
-         hLfwxFfpAdFCYcn44wxSf54p9FY4ny+dc3ZDoJqrZmo0n+ymWXgjxAHgQRY7qRAQbbAQ
-         sr03ioIzCOW78Hlah5Fe83OlccLcqA+AiNL4viGCf4vbySsyhDSEzg6hJMeyriCn4r1y
-         5Q6MmO1gsxIRJ+CBwNUEsatMZH3OH2GeyOwgyScPCqrKPAumX6/8vWkdGRsXOo0RyNLW
-         iuDozqu8CHUfmMbR5Hm4cqcmlFJtlPBjXv04ejWmrg+irsoX1mRrBR3jYNLsoQssT87D
-         E8oA==
-X-Gm-Message-State: AO0yUKUWztCEyXAzbrZ79lUKD8st0Ht7yksB7/OB+w7kE7VMlZhm4XBZ
-        R1eI4w64b8NZk642KCmGfZ+uPvy56wDpKP9G
-X-Google-Smtp-Source: AK7set9Ig32WWEUYTKzsQPjrHFiRL8Rvh2WamhJ5X+omJqqagrRjDEce35WMrY5ZjwX5thzjLfDORxzKFgGHjUzE
+        bh=5Xd63Fapv1zuFib4b0fw8zL6DTisPv2GzpUTcimolMg=;
+        b=7Y0mktldTTNqhkx9PjBuw4/RXIRzAz0HFpcWlWOETlIMoi+/HPZv9MAiqlXzyoitcX
+         LJBiy8pnWi6I4yyKq03SvrwibNymU1jdYjA1zjy82gLlLs2zQs41FMVj+hmZgFQU0laC
+         1VoZ/wHL9T99Jg1Qlnyh4/nGW6B7tLWhISLXohsy+097XllhkUIvQ1CefkzO7y5ufWGC
+         OpPEEmkYq979LXoKrKgblCDSEdulYqnh8uROkrtPYpo8YTXl+rEKQxUWx9IxY2DSsoDu
+         lOFxMsXanWtqzYfe3jNsv2G8ROpnAmHU1FMtwbdU42+I+smlVrv9G/eM9bAzrlfWblPJ
+         EKPA==
+X-Gm-Message-State: AO0yUKXLbnQJsWPrxZtLUhRSFIY4Bjh2Gu6EGoYvJ4H8kGV653+9FyYe
+        ItmULVBeE+0AIQRGgSda5aSyEACxgMMUeZe2
+X-Google-Smtp-Source: AK7set8eABNjJa8kuKJfW7WVM4L/kIrgHT4nRE22RZ7aTpjJYSh+BZra+YA1xFFUMi8kyRc4Y+q2EPk2y7TmuTgs
 X-Received: from jthoughton.c.googlers.com ([fda3:e722:ac3:cc00:14:4d90:c0a8:2a4f])
- (user=jthoughton job=sendgmr) by 2002:a05:6902:1024:b0:8fc:686c:cf87 with
- SMTP id x4-20020a056902102400b008fc686ccf87mr53474ybt.4.1676680132546; Fri,
- 17 Feb 2023 16:28:52 -0800 (PST)
-Date:   Sat, 18 Feb 2023 00:27:42 +0000
+ (user=jthoughton job=sendgmr) by 2002:a81:b60f:0:b0:52a:92e9:27c1 with SMTP
+ id u15-20020a81b60f000000b0052a92e927c1mr279953ywh.10.1676680133715; Fri, 17
+ Feb 2023 16:28:53 -0800 (PST)
+Date:   Sat, 18 Feb 2023 00:27:43 +0000
 In-Reply-To: <20230218002819.1486479-1-jthoughton@google.com>
 Mime-Version: 1.0
 References: <20230218002819.1486479-1-jthoughton@google.com>
 X-Mailer: git-send-email 2.39.2.637.g21b0678d19-goog
-Message-ID: <20230218002819.1486479-10-jthoughton@google.com>
-Subject: [PATCH v2 09/46] mm: add MADV_SPLIT to enable HugeTLB HGM
+Message-ID: <20230218002819.1486479-11-jthoughton@google.com>
+Subject: [PATCH v2 10/46] hugetlb: make huge_pte_lockptr take an explicit
+ shift argument
 From:   James Houghton <jthoughton@google.com>
 To:     Mike Kravetz <mike.kravetz@oracle.com>,
         Muchun Song <songmuchun@bytedance.com>,
@@ -86,165 +87,112 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Issuing ioctl(MADV_SPLIT) on a HugeTLB address range will enable
-HugeTLB HGM. MADV_SPLIT was chosen for the name so that this API can be
-applied to non-HugeTLB memory in the future, if such an application is
-to arise.
+This is needed to handle PTL locking with high-granularity mapping. We
+won't always be using the PMD-level PTL even if we're using the 2M
+hugepage hstate. It's possible that we're dealing with 4K PTEs, in which
+case, we need to lock the PTL for the 4K PTE.
 
-MADV_SPLIT provides several API changes for some syscalls on HugeTLB
-address ranges:
-1. UFFDIO_CONTINUE is allowed for MAP_SHARED VMAs at PAGE_SIZE
-   alignment.
-2. read()ing a page fault event from a userfaultfd will yield a
-   PAGE_SIZE-rounded address, instead of a huge-page-size-rounded
-   address (unless UFFD_FEATURE_EXACT_ADDRESS is used).
-
-There is no way to disable the API changes that come with issuing
-MADV_SPLIT. MADV_COLLAPSE can be used to collapse high-granularity page
-table mappings that come from the extended functionality that comes with
-using MADV_SPLIT.
-
-For post-copy live migration, the expected use-case is:
-1. mmap(MAP_SHARED, some_fd) primary mapping
-2. mmap(MAP_SHARED, some_fd) alias mapping
-3. MADV_SPLIT the primary mapping
-4. UFFDIO_REGISTER/etc. the primary mapping
-5. Copy memory contents into alias mapping and UFFDIO_CONTINUE the
-   corresponding PAGE_SIZE sections in the primary mapping.
-
-More API changes may be added in the future.
-
+Reviewed-by: Mina Almasry <almasrymina@google.com>
+Acked-by: Mike Kravetz <mike.kravetz@oracle.com>
 Signed-off-by: James Houghton <jthoughton@google.com>
 
-diff --git a/arch/alpha/include/uapi/asm/mman.h b/arch/alpha/include/uapi/asm/mman.h
-index 763929e814e9..7a26f3648b90 100644
---- a/arch/alpha/include/uapi/asm/mman.h
-+++ b/arch/alpha/include/uapi/asm/mman.h
-@@ -78,6 +78,8 @@
+diff --git a/arch/powerpc/mm/pgtable.c b/arch/powerpc/mm/pgtable.c
+index cb2dcdb18f8e..035a0df47af0 100644
+--- a/arch/powerpc/mm/pgtable.c
++++ b/arch/powerpc/mm/pgtable.c
+@@ -261,7 +261,8 @@ int huge_ptep_set_access_flags(struct vm_area_struct *vma,
  
- #define MADV_COLLAPSE	25		/* Synchronous hugepage collapse */
+ 		psize = hstate_get_psize(h);
+ #ifdef CONFIG_DEBUG_VM
+-		assert_spin_locked(huge_pte_lockptr(h, vma->vm_mm, ptep));
++		assert_spin_locked(huge_pte_lockptr(huge_page_shift(h),
++						    vma->vm_mm, ptep));
+ #endif
  
-+#define MADV_SPLIT	26		/* Enable hugepage high-granularity APIs */
-+
- /* compatibility flags */
- #define MAP_FILE	0
- 
-diff --git a/arch/mips/include/uapi/asm/mman.h b/arch/mips/include/uapi/asm/mman.h
-index c6e1fc77c996..f8a74a3a0928 100644
---- a/arch/mips/include/uapi/asm/mman.h
-+++ b/arch/mips/include/uapi/asm/mman.h
-@@ -105,6 +105,8 @@
- 
- #define MADV_COLLAPSE	25		/* Synchronous hugepage collapse */
- 
-+#define MADV_SPLIT	26		/* Enable hugepage high-granularity APIs */
-+
- /* compatibility flags */
- #define MAP_FILE	0
- 
-diff --git a/arch/parisc/include/uapi/asm/mman.h b/arch/parisc/include/uapi/asm/mman.h
-index 68c44f99bc93..a6dc6a56c941 100644
---- a/arch/parisc/include/uapi/asm/mman.h
-+++ b/arch/parisc/include/uapi/asm/mman.h
-@@ -72,6 +72,8 @@
- 
- #define MADV_COLLAPSE	25		/* Synchronous hugepage collapse */
- 
-+#define MADV_SPLIT	74		/* Enable hugepage high-granularity APIs */
-+
- #define MADV_HWPOISON     100		/* poison a page for testing */
- #define MADV_SOFT_OFFLINE 101		/* soft offline page for testing */
- 
-diff --git a/arch/xtensa/include/uapi/asm/mman.h b/arch/xtensa/include/uapi/asm/mman.h
-index 1ff0c858544f..f98a77c430a9 100644
---- a/arch/xtensa/include/uapi/asm/mman.h
-+++ b/arch/xtensa/include/uapi/asm/mman.h
-@@ -113,6 +113,8 @@
- 
- #define MADV_COLLAPSE	25		/* Synchronous hugepage collapse */
- 
-+#define MADV_SPLIT	26		/* Enable hugepage high-granularity APIs */
-+
- /* compatibility flags */
- #define MAP_FILE	0
- 
-diff --git a/include/uapi/asm-generic/mman-common.h b/include/uapi/asm-generic/mman-common.h
-index 6ce1f1ceb432..996e8ded092f 100644
---- a/include/uapi/asm-generic/mman-common.h
-+++ b/include/uapi/asm-generic/mman-common.h
-@@ -79,6 +79,8 @@
- 
- #define MADV_COLLAPSE	25		/* Synchronous hugepage collapse */
- 
-+#define MADV_SPLIT	26		/* Enable hugepage high-granularity APIs */
-+
- /* compatibility flags */
- #define MAP_FILE	0
- 
-diff --git a/mm/madvise.c b/mm/madvise.c
-index c2202f51e9dd..8c004c678262 100644
---- a/mm/madvise.c
-+++ b/mm/madvise.c
-@@ -1006,6 +1006,28 @@ static long madvise_remove(struct vm_area_struct *vma,
- 	return error;
+ #else
+diff --git a/include/linux/hugetlb.h b/include/linux/hugetlb.h
+index efd2635a87f5..a1ceb9417f01 100644
+--- a/include/linux/hugetlb.h
++++ b/include/linux/hugetlb.h
+@@ -958,12 +958,11 @@ static inline gfp_t htlb_modify_alloc_mask(struct hstate *h, gfp_t gfp_mask)
+ 	return modified_mask;
  }
  
-+static int madvise_split(struct vm_area_struct *vma,
-+			 unsigned long *new_flags)
-+{
-+#ifdef CONFIG_HUGETLB_HIGH_GRANULARITY_MAPPING
-+	if (!is_vm_hugetlb_page(vma) || !hugetlb_hgm_eligible(vma))
-+		return -EINVAL;
-+
-+	/*
-+	 * PMD sharing doesn't work with HGM. If this MADV_SPLIT is on part
-+	 * of a VMA, then we will split the VMA. Here, we're unsharing before
-+	 * splitting because it's simpler, although we may be unsharing more
-+	 * than we need.
-+	 */
-+	hugetlb_unshare_all_pmds(vma);
-+
-+	*new_flags |= VM_HUGETLB_HGM;
-+	return 0;
-+#else
-+	return -EINVAL;
-+#endif
-+}
-+
- /*
-  * Apply an madvise behavior to a region of a vma.  madvise_update_vma
-  * will handle splitting a vm area into separate areas, each area with its own
-@@ -1084,6 +1106,11 @@ static int madvise_vma_behavior(struct vm_area_struct *vma,
- 		break;
- 	case MADV_COLLAPSE:
- 		return madvise_collapse(vma, prev, start, end);
-+	case MADV_SPLIT:
-+		error = madvise_split(vma, &new_flags);
-+		if (error)
-+			goto out;
-+		break;
- 	}
+-static inline spinlock_t *huge_pte_lockptr(struct hstate *h,
++static inline spinlock_t *huge_pte_lockptr(unsigned int shift,
+ 					   struct mm_struct *mm, pte_t *pte)
+ {
+-	if (huge_page_size(h) == PMD_SIZE)
++	if (shift == PMD_SHIFT)
+ 		return pmd_lockptr(mm, (pmd_t *) pte);
+-	VM_BUG_ON(huge_page_size(h) == PAGE_SIZE);
+ 	return &mm->page_table_lock;
+ }
  
- 	anon_name = anon_vma_name(vma);
-@@ -1178,6 +1205,9 @@ madvise_behavior_valid(int behavior)
- 	case MADV_HUGEPAGE:
- 	case MADV_NOHUGEPAGE:
- 	case MADV_COLLAPSE:
-+#endif
-+#ifdef CONFIG_HUGETLB_HIGH_GRANULARITY_MAPPING
-+	case MADV_SPLIT:
- #endif
- 	case MADV_DONTDUMP:
- 	case MADV_DODUMP:
-@@ -1368,6 +1398,8 @@ int madvise_set_anon_name(struct mm_struct *mm, unsigned long start,
-  *		transparent huge pages so the existing pages will not be
-  *		coalesced into THP and new pages will not be allocated as THP.
-  *  MADV_COLLAPSE - synchronously coalesce pages into new THP.
-+ *  MADV_SPLIT - allow HugeTLB pages to be mapped at PAGE_SIZE. This allows
-+ *		UFFDIO_CONTINUE to accept PAGE_SIZE-aligned regions.
-  *  MADV_DONTDUMP - the application wants to prevent pages in the given range
-  *		from being included in its core dump.
-  *  MADV_DODUMP - cancel MADV_DONTDUMP: no longer exclude from core dump.
+@@ -1173,7 +1172,7 @@ static inline gfp_t htlb_modify_alloc_mask(struct hstate *h, gfp_t gfp_mask)
+ 	return 0;
+ }
+ 
+-static inline spinlock_t *huge_pte_lockptr(struct hstate *h,
++static inline spinlock_t *huge_pte_lockptr(unsigned int shift,
+ 					   struct mm_struct *mm, pte_t *pte)
+ {
+ 	return &mm->page_table_lock;
+@@ -1230,7 +1229,7 @@ static inline spinlock_t *huge_pte_lock(struct hstate *h,
+ {
+ 	spinlock_t *ptl;
+ 
+-	ptl = huge_pte_lockptr(h, mm, pte);
++	ptl = huge_pte_lockptr(huge_page_shift(h), mm, pte);
+ 	spin_lock(ptl);
+ 	return ptl;
+ }
+diff --git a/mm/hugetlb.c b/mm/hugetlb.c
+index 0576dcc98044..5ca9eae0ac42 100644
+--- a/mm/hugetlb.c
++++ b/mm/hugetlb.c
+@@ -5017,7 +5017,7 @@ int copy_hugetlb_page_range(struct mm_struct *dst, struct mm_struct *src,
+ 		}
+ 
+ 		dst_ptl = huge_pte_lock(h, dst, dst_pte);
+-		src_ptl = huge_pte_lockptr(h, src, src_pte);
++		src_ptl = huge_pte_lockptr(huge_page_shift(h), src, src_pte);
+ 		spin_lock_nested(src_ptl, SINGLE_DEPTH_NESTING);
+ 		entry = huge_ptep_get(src_pte);
+ again:
+@@ -5098,7 +5098,8 @@ int copy_hugetlb_page_range(struct mm_struct *dst, struct mm_struct *src,
+ 
+ 				/* Install the new hugetlb folio if src pte stable */
+ 				dst_ptl = huge_pte_lock(h, dst, dst_pte);
+-				src_ptl = huge_pte_lockptr(h, src, src_pte);
++				src_ptl = huge_pte_lockptr(huge_page_shift(h),
++							   src, src_pte);
+ 				spin_lock_nested(src_ptl, SINGLE_DEPTH_NESTING);
+ 				entry = huge_ptep_get(src_pte);
+ 				if (!pte_same(src_pte_old, entry)) {
+@@ -5152,7 +5153,7 @@ static void move_huge_pte(struct vm_area_struct *vma, unsigned long old_addr,
+ 	pte_t pte;
+ 
+ 	dst_ptl = huge_pte_lock(h, mm, dst_pte);
+-	src_ptl = huge_pte_lockptr(h, mm, src_pte);
++	src_ptl = huge_pte_lockptr(huge_page_shift(h), mm, src_pte);
+ 
+ 	/*
+ 	 * We don't have to worry about the ordering of src and dst ptlocks
+diff --git a/mm/migrate.c b/mm/migrate.c
+index b0f87f19b536..9b4a7e75f6e6 100644
+--- a/mm/migrate.c
++++ b/mm/migrate.c
+@@ -363,7 +363,8 @@ void __migration_entry_wait_huge(struct vm_area_struct *vma,
+ 
+ void migration_entry_wait_huge(struct vm_area_struct *vma, pte_t *pte)
+ {
+-	spinlock_t *ptl = huge_pte_lockptr(hstate_vma(vma), vma->vm_mm, pte);
++	spinlock_t *ptl = huge_pte_lockptr(huge_page_shift(hstate_vma(vma)),
++					   vma->vm_mm, pte);
+ 
+ 	__migration_entry_wait_huge(vma, pte, ptl);
+ }
 -- 
 2.39.2.637.g21b0678d19-goog
 
