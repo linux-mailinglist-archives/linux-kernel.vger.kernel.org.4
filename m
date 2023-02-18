@@ -2,57 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AA8EB69B6B8
-	for <lists+linux-kernel@lfdr.de>; Sat, 18 Feb 2023 01:29:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A3DD069B6BB
+	for <lists+linux-kernel@lfdr.de>; Sat, 18 Feb 2023 01:29:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230050AbjBRA3F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Feb 2023 19:29:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41792 "EHLO
+        id S230053AbjBRA3I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Feb 2023 19:29:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41834 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229885AbjBRA2v (ORCPT
+        with ESMTP id S229903AbjBRA2v (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Fri, 17 Feb 2023 19:28:51 -0500
-Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 113A15F252
+Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6C6D68AD1
         for <linux-kernel@vger.kernel.org>; Fri, 17 Feb 2023 16:28:50 -0800 (PST)
-Received: by mail-yb1-xb49.google.com with SMTP id 188-20020a2503c5000000b008e1de4c1e7dso2280796ybd.17
+Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-536582abb72so22511017b3.5
         for <linux-kernel@vger.kernel.org>; Fri, 17 Feb 2023 16:28:50 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=8nfyEWndKsa3tyc1KlPsVZDyN8xlZ4zW0vpf47Ary0I=;
-        b=ghgOaEONmk3TxY7Vbd4llR8C6ZhiH535rAEn2mRoH4sgelGi+DzvBNDNzGInJZzqfs
-         MEErbyZH29/h7FEPNCh9VZcW/Bm4YgRch9ir0kS2NDXVsbFg5l6v2m5+GdPoQ68p73Au
-         kx7/25Br5F6Yw90cWFqLg3eViGqsOMcWI58kCeCLrtLPN7KaOw1BIGgyIswJlZykM+9O
-         0y4w9vz06OJ9NLQ+jIbxIwJsCdh/V36xONqd3gjqH80qszv271zhh3nf8DhiYiNLA2qQ
-         k8oLBo0ZQMuPQXPM4GYcllmYMP6s7dZX1ehwhZA1pOfZpnWcQPV0VVxxICdxJelUUbzk
-         U9lw==
+        bh=Wk7vTpC+014vSbmA7BXLNrcppJOJiIEYznqCa6jfXqI=;
+        b=L4T7D1Q77q9QoOsnz1tm6Qf6BnOnAK2ZGTzjyBq232kdcaHnTPLu0KkbIFKg2iqZGi
+         ur2eS2TG9FID8wSfSSNIUDRAH4/hc4cg6N78xCCSSvyxSCrRt7XxD8Kq9J+3/utwUlNa
+         XwiHxLMwsKt54AmsMKUm23cdHK0jjFppi4B8oAiG6cdvRInp32jKLbSvstKyMXiqo8UK
+         07XHP/2+lJH0n/T1p+F0gJBrThd4SgIk1odXs4Xk0ZR7hodPP4o/xUlKaYBCidUzDuQ8
+         b+jdsTQykyqbj5MGq0jpb+xO5JrvhEf0KZUw8P19p8z3GR5sTSonXH6Em23ytW9e2DzL
+         g/dQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=8nfyEWndKsa3tyc1KlPsVZDyN8xlZ4zW0vpf47Ary0I=;
-        b=s8B0tOqgX8vcKTYrHBQBdT1oUZ3EGwnGoCLmybxnIwa4n7Zhb0wnkPWZs4vVe2B0gJ
-         kdbiuQsNZfeMSJ0ArfCD+JueRq8yUBD8u9NMlLwcWNT0eIisXBIgBmES3kpN2esXL+YA
-         6SrUOZjl5lpC8YJnSSx1bZFFIZF+W2ShwhsEDKijLNncYbPwGoNbJFDspUmj/SAyWA3M
-         yNTg/5EB7z0+P8kLpx43cd4rNWABw+N75mbKDjtmuBtHxvdEQ71P2ZPsHn8Z3hy2HzA3
-         hdk97J1ft/C4wixEyelLJoNx08YOxXYh/6pd3QIm1VeanwuXsH9S93NzmdkdD9g3KTaI
-         8FGg==
-X-Gm-Message-State: AO0yUKV/ys6LJDzMLR91QYaHn8uzP+tXTKQzI0htQMvqoKsdcwlpkRZo
-        QkBnMaFhQTFqRAJc+OOcNK7EAYOfWwsvhVWH
-X-Google-Smtp-Source: AK7set+i/pEV+wA/Uyq68EOFTB/N9gXVBIKZiQfbLrFGkhuKCKH/yF+5J8fuZrkmB0Jrum8skN72smbY4sjy/+UA
+        bh=Wk7vTpC+014vSbmA7BXLNrcppJOJiIEYznqCa6jfXqI=;
+        b=VU/kYh2YLkc4Pgq3AXqOM48MzXWsWoCVL3Y4iPPyZDykghSyXb4IQO7TH5X7u+jom6
+         jurRhl+ucqR7oxsZAASoea47zGOuBU+D7WfNJf4nrF1H2pKxpFvT2LUlY97y1arTJsMG
+         uvObI/VHKzvHKpavYhRsZwVl4gSicaalsiUyVayp7lfJQuRzdHpqnwjKleU7MMyAyY5l
+         AL2YI2vX1/jNC1JZl5BJQ9MFh6Vn1Ez5FgaxR9mOPyDUCXuRu7kAtghKJKAJq6HSCLfT
+         BP6xNO9/fX17eVby/mntmUwOaqxze+6ik94m2KrKbNxJdt5+GDIoCMt7nU4G8uAr5KXo
+         INRA==
+X-Gm-Message-State: AO0yUKVhn3hRpRdPGX6T/iskMO6hWI340N9wrX1HaFYN8U74nQYY4tsz
+        f+zEWSL+WUQnTA2WSGwWUGZNQ5egBYE3Nb3G
+X-Google-Smtp-Source: AK7set9Co62mLp/e8p6CW/1K+ZyZaQWY5gSTbmZ9xHWOnSJaaxinPhJ3ofPuLxwknQEtxTaVNR5J+AVeIdAiLUtz
 X-Received: from jthoughton.c.googlers.com ([fda3:e722:ac3:cc00:14:4d90:c0a8:2a4f])
- (user=jthoughton job=sendgmr) by 2002:a05:6902:241:b0:8db:41c9:aa6f with SMTP
- id k1-20020a056902024100b008db41c9aa6fmr200113ybs.2.1676680129319; Fri, 17
- Feb 2023 16:28:49 -0800 (PST)
-Date:   Sat, 18 Feb 2023 00:27:39 +0000
+ (user=jthoughton job=sendgmr) by 2002:a5b:4c3:0:b0:904:2aa2:c26c with SMTP id
+ u3-20020a5b04c3000000b009042aa2c26cmr196573ybp.5.1676680130224; Fri, 17 Feb
+ 2023 16:28:50 -0800 (PST)
+Date:   Sat, 18 Feb 2023 00:27:40 +0000
 In-Reply-To: <20230218002819.1486479-1-jthoughton@google.com>
 Mime-Version: 1.0
 References: <20230218002819.1486479-1-jthoughton@google.com>
 X-Mailer: git-send-email 2.39.2.637.g21b0678d19-goog
-Message-ID: <20230218002819.1486479-7-jthoughton@google.com>
-Subject: [PATCH v2 06/46] hugetlb: add CONFIG_HUGETLB_HIGH_GRANULARITY_MAPPING
+Message-ID: <20230218002819.1486479-8-jthoughton@google.com>
+Subject: [PATCH v2 07/46] mm: add VM_HUGETLB_HGM VMA flag
 From:   James Houghton <jthoughton@google.com>
 To:     Mike Kravetz <mike.kravetz@oracle.com>,
         Muchun Song <songmuchun@bytedance.com>,
@@ -86,44 +86,68 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This adds the Kconfig to enable or disable high-granularity mapping.
-Each architecture must explicitly opt-in to it (via
-ARCH_WANT_HUGETLB_HIGH_GRANULARITY_MAPPING), but when opted in, HGM will
-be enabled by default if HUGETLB_PAGE is enabled.
+VM_HUGETLB_HGM indicates that a HugeTLB VMA may contain high-granularity
+mappings. Its VmFlags string is "hm".
 
 Signed-off-by: James Houghton <jthoughton@google.com>
 
-diff --git a/fs/Kconfig b/fs/Kconfig
-index 2685a4d0d353..a072bbe3439a 100644
---- a/fs/Kconfig
-+++ b/fs/Kconfig
-@@ -246,6 +246,18 @@ config HUGETLBFS
- config HUGETLB_PAGE
- 	def_bool HUGETLBFS
+diff --git a/fs/proc/task_mmu.c b/fs/proc/task_mmu.c
+index 6a96e1713fd5..77b72f42556a 100644
+--- a/fs/proc/task_mmu.c
++++ b/fs/proc/task_mmu.c
+@@ -711,6 +711,9 @@ static void show_smap_vma_flags(struct seq_file *m, struct vm_area_struct *vma)
+ #ifdef CONFIG_HAVE_ARCH_USERFAULTFD_MINOR
+ 		[ilog2(VM_UFFD_MINOR)]	= "ui",
+ #endif /* CONFIG_HAVE_ARCH_USERFAULTFD_MINOR */
++#ifdef CONFIG_HUGETLB_HIGH_GRANULARITY_MAPPING
++		[ilog2(VM_HUGETLB_HGM)]	= "hm",
++#endif /* CONFIG_HUGETLB_HIGH_GRANULARITY_MAPPING */
+ 	};
+ 	size_t i;
  
-+config ARCH_WANT_HUGETLB_HIGH_GRANULARITY_MAPPING
-+	bool
-+
-+config HUGETLB_HIGH_GRANULARITY_MAPPING
-+	bool "HugeTLB high-granularity mapping support"
-+	default n
-+	depends on ARCH_WANT_HUGETLB_HIGH_GRANULARITY_MAPPING
-+	help
-+	  HugeTLB high-granularity mapping (HGM) allows userspace to issue
-+	  UFFDIO_CONTINUE on HugeTLB mappings in PAGE_SIZE chunks.
-+	  HGM is incompatible with the HugeTLB Vmemmap Optimization (HVO).
-+
- #
- # Select this config option from the architecture Kconfig, if it is preferred
- # to enable the feature of HugeTLB Vmemmap Optimization (HVO).
-@@ -257,6 +269,7 @@ config HUGETLB_PAGE_OPTIMIZE_VMEMMAP
- 	def_bool HUGETLB_PAGE
- 	depends on ARCH_WANT_HUGETLB_PAGE_OPTIMIZE_VMEMMAP
- 	depends on SPARSEMEM_VMEMMAP
-+	depends on !HUGETLB_HIGH_GRANULARITY_MAPPING
+diff --git a/include/linux/mm.h b/include/linux/mm.h
+index 2992a2d55aee..9d3216b4284a 100644
+--- a/include/linux/mm.h
++++ b/include/linux/mm.h
+@@ -383,6 +383,13 @@ extern unsigned int kobjsize(const void *objp);
+ # define VM_UFFD_MINOR		VM_NONE
+ #endif /* CONFIG_HAVE_ARCH_USERFAULTFD_MINOR */
  
- config HUGETLB_PAGE_OPTIMIZE_VMEMMAP_DEFAULT_ON
- 	bool "HugeTLB Vmemmap Optimization (HVO) defaults to on"
++#ifdef CONFIG_HUGETLB_HIGH_GRANULARITY_MAPPING
++# define VM_HUGETLB_HGM_BIT	38
++# define VM_HUGETLB_HGM		BIT(VM_HUGETLB_HGM_BIT)	/* HugeTLB high-granularity mapping */
++#else /* !CONFIG_HUGETLB_HIGH_GRANULARITY_MAPPING */
++# define VM_HUGETLB_HGM		VM_NONE
++#endif /* CONFIG_HUGETLB_HIGH_GRANULARITY_MAPPING */
++
+ /* Bits set in the VMA until the stack is in its final location */
+ #define VM_STACK_INCOMPLETE_SETUP	(VM_RAND_READ | VM_SEQ_READ)
+ 
+diff --git a/include/trace/events/mmflags.h b/include/trace/events/mmflags.h
+index 9db52bc4ce19..bceb960dbada 100644
+--- a/include/trace/events/mmflags.h
++++ b/include/trace/events/mmflags.h
+@@ -162,6 +162,12 @@ IF_HAVE_PG_SKIP_KASAN_POISON(PG_skip_kasan_poison, "skip_kasan_poison")
+ # define IF_HAVE_UFFD_MINOR(flag, name)
+ #endif
+ 
++#ifdef CONFIG_HUGETLB_HIGH_GRANULARITY_MAPPING
++# define IF_HAVE_HUGETLB_HGM(flag, name) {flag, name},
++#else
++# define IF_HAVE_HUGETLB_HGM(flag, name)
++#endif
++
+ #define __def_vmaflag_names						\
+ 	{VM_READ,			"read"		},		\
+ 	{VM_WRITE,			"write"		},		\
+@@ -186,6 +192,7 @@ IF_HAVE_UFFD_MINOR(VM_UFFD_MINOR,	"uffd_minor"	)		\
+ 	{VM_ACCOUNT,			"account"	},		\
+ 	{VM_NORESERVE,			"noreserve"	},		\
+ 	{VM_HUGETLB,			"hugetlb"	},		\
++IF_HAVE_HUGETLB_HGM(VM_HUGETLB_HGM,	"hugetlb_hgm"	)		\
+ 	{VM_SYNC,			"sync"		},		\
+ 	__VM_ARCH_SPECIFIC_1				,		\
+ 	{VM_WIPEONFORK,			"wipeonfork"	},		\
 -- 
 2.39.2.637.g21b0678d19-goog
 
