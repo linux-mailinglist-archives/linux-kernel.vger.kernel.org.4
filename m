@@ -2,23 +2,23 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F269469BADA
-	for <lists+linux-kernel@lfdr.de>; Sat, 18 Feb 2023 17:08:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 81FAF69BADD
+	for <lists+linux-kernel@lfdr.de>; Sat, 18 Feb 2023 17:08:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229481AbjBRQHc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 18 Feb 2023 11:07:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44376 "EHLO
+        id S229752AbjBRQIG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 18 Feb 2023 11:08:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44610 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229441AbjBRQHa (ORCPT
+        with ESMTP id S229821AbjBRQHo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 18 Feb 2023 11:07:30 -0500
+        Sat, 18 Feb 2023 11:07:44 -0500
 Received: from mx01.omp.ru (mx01.omp.ru [90.154.21.10])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4AB2512BF9;
-        Sat, 18 Feb 2023 08:07:29 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77FCF17CC8;
+        Sat, 18 Feb 2023 08:07:40 -0800 (PST)
 Received: from [192.168.1.103] (31.173.84.74) by msexch01.omp.ru (10.188.4.12)
  with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.986.14; Sat, 18 Feb
- 2023 19:07:21 +0300
+ 2023 19:07:33 +0300
 Subject: Re: [PATCH 05/18] pata_parport: Introduce module_pata_parport_driver
  macro
 To:     Ondrej Zary <linux@zary.sk>,
@@ -31,8 +31,8 @@ References: <20230215194554.25632-1-linux@zary.sk>
  <20230215194554.25632-6-linux@zary.sk>
 From:   Sergey Shtylyov <s.shtylyov@omp.ru>
 Organization: Open Mobile Platform
-Message-ID: <6f9790e0-5078-beac-8b78-d22a697a42f6@omp.ru>
-Date:   Sat, 18 Feb 2023 19:07:21 +0300
+Message-ID: <384f15ab-c697-6f7f-cd95-b3c82235b9d1@omp.ru>
+Date:   Sat, 18 Feb 2023 19:07:32 +0300
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
  Thunderbird/78.10.1
 MIME-Version: 1.0
@@ -91,7 +91,6 @@ On 2/15/23 10:45 PM, Ondrej Zary wrote:
 > compatibility defines.
 > 
 > Signed-off-by: Ondrej Zary <linux@zary.sk>
-[...]
 
 Reviewed-by: Sergey Shtylyov <s.shtylyov@omp.ru>
 
