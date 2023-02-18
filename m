@@ -2,166 +2,160 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6DB2A69BB61
-	for <lists+linux-kernel@lfdr.de>; Sat, 18 Feb 2023 19:22:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B2B2F69BB6C
+	for <lists+linux-kernel@lfdr.de>; Sat, 18 Feb 2023 19:33:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229577AbjBRSWc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 18 Feb 2023 13:22:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36368 "EHLO
+        id S229648AbjBRSdj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 18 Feb 2023 13:33:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39944 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229436AbjBRSWa (ORCPT
+        with ESMTP id S229605AbjBRSdh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 18 Feb 2023 13:22:30 -0500
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1750116ADA;
-        Sat, 18 Feb 2023 10:22:29 -0800 (PST)
-Received: from pps.filterd (m0279866.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 31II99We026414;
-        Sat, 18 Feb 2023 18:22:12 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=mg5gbA9rOktRLelram4R8AvwoNWEaVjJD5Rdl+HzMKg=;
- b=gHoy8l7WD4tEUaCpFRgKX/rQk2tOSQdUmDObcuByfUbe/+prfqnZpLDagOlCr76CFf7x
- WgUy3Y9LENDTREoxxVcJ/d13qrhmVFdFR6Lmm2gwjceshmT0CxPWA3phIfkYpsFwRiU9
- WSDBCc+Vg/eIOjai2wNzBMadZqsPBol7cWrqDmQX8SdsWgKvXcfnvRn3FpvHVdIVBnim
- eI9946ag2FvBaD9YsZJo5zlfPokDs6LWiu98My6u3+2WcFEir4dTOFV83zxhb8zLTw9i
- zbaqS7NnDKrqAXBwsHuv+yGlJgM2es+8gpy4V44MxtMtRoGLjhdyaBUCd4Nspgmb1YGO QQ== 
-Received: from nasanppmta01.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3ntqygs40p-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Sat, 18 Feb 2023 18:22:11 +0000
-Received: from nasanex01a.na.qualcomm.com ([10.52.223.231])
-        by NASANPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 31IIMA6I003817
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Sat, 18 Feb 2023 18:22:11 GMT
-Received: from [10.110.56.158] (10.80.80.8) by nasanex01a.na.qualcomm.com
- (10.52.223.231) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.41; Sat, 18 Feb
- 2023 10:22:09 -0800
-Message-ID: <ca30cded-4ea4-8c70-61ad-5d0d99b123d3@quicinc.com>
-Date:   Sat, 18 Feb 2023 10:22:09 -0800
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH RESEND 1/1] check-uapi: Introduce check-uapi.sh
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        John Moon <quic_johmoo@quicinc.com>,
-        Randy Dunlap <rdunlap@infradead.org>
-CC:     Masahiro Yamada <masahiroy@kernel.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        "Nicolas Schier" <nicolas@fjasle.eu>,
-        <linux-kbuild@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@vger.kernel.org>,
-        <linux-arm-msm@vger.kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        "Todd Kjos" <tkjos@google.com>,
-        Matthias Maennich <maennich@google.com>,
-        "Giuliano Procida" <gprocida@google.com>,
-        <kernel-team@android.com>, Jordan Crouse <jorcrous@amazon.com>
-References: <20230217202234.32260-1-quic_johmoo@quicinc.com>
- <20230217202234.32260-2-quic_johmoo@quicinc.com> <Y/CJhzSJ5YKvD7my@kroah.com>
- <Y/CM9JtK0914YUE0@kroah.com>
-Content-Language: en-US
-From:   Trilok Soni <quic_tsoni@quicinc.com>
-In-Reply-To: <Y/CM9JtK0914YUE0@kroah.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nasanex01a.na.qualcomm.com (10.52.223.231)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: 2tzCzwN1XpuVqFXBoZh8jrY-4EbeM-iI
-X-Proofpoint-ORIG-GUID: 2tzCzwN1XpuVqFXBoZh8jrY-4EbeM-iI
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.170.22
- definitions=2023-02-18_13,2023-02-17_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
- impostorscore=0 mlxlogscore=637 spamscore=0 priorityscore=1501
- phishscore=0 malwarescore=0 clxscore=1011 mlxscore=0 adultscore=0
- suspectscore=0 bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2302180168
-X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Sat, 18 Feb 2023 13:33:37 -0500
+Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BEC10CDCC
+        for <linux-kernel@vger.kernel.org>; Sat, 18 Feb 2023 10:33:35 -0800 (PST)
+Received: by mail-pj1-x1033.google.com with SMTP id qb8-20020a17090b280800b002341a2656e5so1118007pjb.1
+        for <linux-kernel@vger.kernel.org>; Sat, 18 Feb 2023 10:33:35 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=dabbelt-com.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:to:from:cc
+         :in-reply-to:subject:date:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=tdSlOABUXDOnyk+meHLPkKnSRDvSQB5azUWlVg5K0Ws=;
+        b=WR4G9LwTNYw3FsVROmx2f2szhqt+aMI/Fh0pXJqQjv95Cg9jGxtYHlWhp1CYy2rS3O
+         S++5vWov8xo0SYE1crAyxDqHnolbaCMzpWTVH9JIE/b0jkC7U73XIsWrzedZp43x8kLu
+         Y8Tho4N0wwsSRVAl3b+ejPhqzUDMYRAI7hVrDSHr8HGSIXQjH1m5/0iy3L5dWT1JcBqq
+         ypQQpO0zdqMOc1YDmP6qjFphv8031UpYLwBQAry59Oms6Xn6SYF5VFbwx+lk/p+Ag93P
+         W4Myo/pt8q8LFBMTIXGHgRIzCCi384i19yboiyWhCBJhg4LbCRTa7iK9v281/DfDX18A
+         3Ndg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:to:from:cc
+         :in-reply-to:subject:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=tdSlOABUXDOnyk+meHLPkKnSRDvSQB5azUWlVg5K0Ws=;
+        b=Qdn3hbukE3hFpHhj0gwx+xOcTBJIf+ckWmijRhXzryDPQz3iLFRE+ZdwjHqgdZ7XcL
+         BRdSY3Cn1l8rgdvozskMO+6++WG+EUxPoKA+vYMsM6p7aOcGwvnWV6SsTqqWJ3Y2C0EN
+         omr0edDg+atqlQnNMHGYoEc8/dWynxES5qcSTfQwksSkWE8hbtbXSHWpdKpaCV/X4tHM
+         Z418i+rkFeWLcBNkZQKloEU8fiZmoruZ4fLhYRrJqs+oop7d4z8nw6wiCdH9dRUsuHYL
+         MdnZLjsJadr75ED8ckH/uusuxQtLEXKF2ULSAUlUtRr5LmnfIvSQdVWfa1qdZTe/inqR
+         9EJA==
+X-Gm-Message-State: AO0yUKWBp/khHIUGuVFCCJVq1Os3k/jhY+iY5FwMVlD47M2FzJ8uPxC5
+        XdWTZHe8xROVGa/QRvFz59S/gA==
+X-Google-Smtp-Source: AK7set8mks9ATRjJPpov69mSHOUoLOQ6En2xElAg1qfskRkaUzRjvcvpky66JqrPGHFAvJ/KAvpztg==
+X-Received: by 2002:a17:902:f544:b0:196:6577:5a96 with SMTP id h4-20020a170902f54400b0019665775a96mr470313plf.30.1676745215107;
+        Sat, 18 Feb 2023 10:33:35 -0800 (PST)
+Received: from localhost ([50.221.140.188])
+        by smtp.gmail.com with ESMTPSA id u4-20020a170902b28400b00199481ac72fsm4939269plr.225.2023.02.18.10.33.34
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 18 Feb 2023 10:33:34 -0800 (PST)
+Date:   Sat, 18 Feb 2023 10:33:34 -0800 (PST)
+X-Google-Original-Date: Sat, 18 Feb 2023 10:32:53 PST (-0800)
+Subject:     Re: [PATCH] dt-bindings: drop Sagar Kadam from SiFive binding maintainership
+In-Reply-To: <20230217180035.39658-1-conor@kernel.org>
+CC:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Conor Dooley <conor@kernel.org>, mturquette@baylibre.com,
+        sboyd@kernel.org, tglx@linutronix.de,
+        Marc Zyngier <maz@kernel.org>, thierry.reding@gmail.com,
+        u.kleine-koenig@pengutronix.de, aou@eecs.berkeley.edu,
+        linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-pwm@vger.kernel.org,
+        Conor Dooley <conor.dooley@microchip.com>,
+        sagar.kadam@openfive.com, sagar.kadam@sifive.com
+From:   Palmer Dabbelt <palmer@dabbelt.com>
+To:     Conor Dooley <conor@kernel.org>
+Message-ID: <mhng-5af14e38-3a1b-480b-be9f-922acbcad914@palmer-ri-x1c9a>
+Mime-Version: 1.0 (MHng)
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/18/2023 12:31 AM, Greg Kroah-Hartman wrote:
-> On Sat, Feb 18, 2023 at 09:17:12AM +0100, Greg Kroah-Hartman wrote:
->> On Fri, Feb 17, 2023 at 12:22:34PM -0800, John Moon wrote:
->>> While the kernel community has been good at maintaining backwards
->>> compatibility with kernel UAPIs, it would be helpful to have a tool
->>> to check if a patch introduces changes that break backwards
->>> compatibility.
->>>
->>> To that end, introduce check-uapi.sh: a simple shell script that
->>> checks for changes to UAPI headers using libabigail.
->>>
->>> libabigail is "a framework which aims at helping developers and
->>> software distributors to spot some ABI-related issues like interface
->>> incompatibility in ELF shared libraries by performing a static
->>> analysis of the ELF binaries at hand."
->>>
->>> The script uses one of libabigail's tools, "abidiff", to compile the
->>> changed header before and after the patch to detect any changes.
->>>
->>> abidiff "compares the ABI of two shared libraries in ELF format. It
->>> emits a meaningful report describing the differences between the two
->>> ABIs."
->>>
->>> Signed-off-by: John Moon <quic_johmoo@quicinc.com>
->>> ---
->>>   scripts/check-uapi.sh | 245 ++++++++++++++++++++++++++++++++++++++++++
->>>   1 file changed, 245 insertions(+)
->>>   create mode 100755 scripts/check-uapi.sh
->>
->> Ok, this is very cool, thank you so much for doing this.
->>
->> I know Randy Dunlap was also looking into this previously, so I've cc:ed
->> him and bounced him the original.
->>
->> I tried this out, and at first glance, this felt like it was just "too
->> fast" in that nothing actually was being tested.  So I manually added a
->> field to a structure I know would break the abi, and:
->>
->> 	$ ./scripts/check-uapi.sh
->> 	!!! ABI differences detected in include/uapi/linux/usb/ch9.h (compared to file at HEAD^1) !!!
->>
->> 	    [C] 'struct usb_ctrlrequest' changed:
->> 	      type size changed from 64 to 72 (in bits)
->> 	      1 data member insertion:
->> 		'__u8 abi_break', at offset 16 (in bits) at ch9.h:216:1
->> 	      3 data member changes:
->> 		'__le16 wValue' offset changed from 16 to 24 (in bits) (by +8 bits)
->> 		'__le16 wIndex' offset changed from 32 to 40 (in bits) (by +8 bits)
->> 		'__le16 wLength' offset changed from 48 to 56 (in bits) (by +8 bits)
->>
->> 	0/1 UAPI header file changes are backwards compatible
->> 	UAPI header ABI check failed
->>
->> So it worked!
-> 
-> Ok, I take it back, it doesn't seem to work :(
-> 
-> It only "catches" a change from the last commit, but if you have an
-> intermediate commit (i.e change something in HEAD^ but not HEAD), it
-> does not detect it at all.
-> 
-> And if you give it an old version, it doesn't check that either (hint,
-> try passing in a very old kernel version, that returns instantly and
-> doesn't actually build anything).
-> 
-> So it's a good first cut as an example, but as it doesn't really work
-> correctly yet, we can't take it.  Care to fix it up to work so that it
-> can be usable?
+On Fri, 17 Feb 2023 10:00:36 PST (-0800), Conor Dooley wrote:
+> From: Conor Dooley <conor.dooley@microchip.com>
+>
+> Sagar's email listed in maintainers is bouncing as his division was sold
+> off by the company. I attempted to contact him some days ago on what the
+> bounce email told me was his new contact information, but am yet to
+> receive a response.
+>
+> Paul and Palmer are listed on each of the bindings, both of whom were
+> alive & well as of Wednesday so the bindings remain maintained.
+>
+> CC: Sagar Kadam <sagar.kadam@openfive.com>
+> CC: Sagar Kadam <sagar.kadam@sifive.com>
+> Link: https://lore.kernel.org/all/785425ca-4000-a7e4-16d6-4d68c91b158d@kernel.org/
+> Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
+> ---
+> Palmer/Paul, as mentioned Wednesday, here you go!
 
-These first patches were to introduce the tool w/ the one scenario only, 
-and thanks for trying it out. We can fix it and add your suggestions.
+Acked-by: Palmer Dabbelt <palmer@rivosinc.com>
 
----Trilok Soni
+Thanks!
+
+> ---
+>  Documentation/devicetree/bindings/clock/sifive/fu540-prci.yaml | 1 -
+>  .../bindings/interrupt-controller/sifive,plic-1.0.0.yaml       | 1 -
+>  Documentation/devicetree/bindings/pwm/pwm-sifive.yaml          | 1 -
+>  Documentation/devicetree/bindings/riscv/sifive,ccache0.yaml    | 3 +--
+>  4 files changed, 1 insertion(+), 5 deletions(-)
+>
+> diff --git a/Documentation/devicetree/bindings/clock/sifive/fu540-prci.yaml b/Documentation/devicetree/bindings/clock/sifive/fu540-prci.yaml
+> index c3be1b600007..c79e752283aa 100644
+> --- a/Documentation/devicetree/bindings/clock/sifive/fu540-prci.yaml
+> +++ b/Documentation/devicetree/bindings/clock/sifive/fu540-prci.yaml
+> @@ -8,7 +8,6 @@ $schema: http://devicetree.org/meta-schemas/core.yaml#
+>  title: SiFive FU540 Power Reset Clock Interrupt Controller (PRCI)
+>
+>  maintainers:
+> -  - Sagar Kadam <sagar.kadam@sifive.com>
+>    - Paul Walmsley  <paul.walmsley@sifive.com>
+>
+>  description:
+> diff --git a/Documentation/devicetree/bindings/interrupt-controller/sifive,plic-1.0.0.yaml b/Documentation/devicetree/bindings/interrupt-controller/sifive,plic-1.0.0.yaml
+> index 99e01f4d0a69..63bc89e13480 100644
+> --- a/Documentation/devicetree/bindings/interrupt-controller/sifive,plic-1.0.0.yaml
+> +++ b/Documentation/devicetree/bindings/interrupt-controller/sifive,plic-1.0.0.yaml
+> @@ -45,7 +45,6 @@ description:
+>    from S-mode. So add thead,c900-plic to distinguish them.
+>
+>  maintainers:
+> -  - Sagar Kadam <sagar.kadam@sifive.com>
+>    - Paul Walmsley  <paul.walmsley@sifive.com>
+>    - Palmer Dabbelt <palmer@dabbelt.com>
+>
+> diff --git a/Documentation/devicetree/bindings/pwm/pwm-sifive.yaml b/Documentation/devicetree/bindings/pwm/pwm-sifive.yaml
+> index 605c1766dba8..bae993128981 100644
+> --- a/Documentation/devicetree/bindings/pwm/pwm-sifive.yaml
+> +++ b/Documentation/devicetree/bindings/pwm/pwm-sifive.yaml
+> @@ -8,7 +8,6 @@ $schema: http://devicetree.org/meta-schemas/core.yaml#
+>  title: SiFive PWM controller
+>
+>  maintainers:
+> -  - Sagar Kadam <sagar.kadam@sifive.com>
+>    - Paul Walmsley <paul.walmsley@sifive.com>
+>
+>  description:
+> diff --git a/Documentation/devicetree/bindings/riscv/sifive,ccache0.yaml b/Documentation/devicetree/bindings/riscv/sifive,ccache0.yaml
+> index bf3f07421f7e..0551a0d1b3df 100644
+> --- a/Documentation/devicetree/bindings/riscv/sifive,ccache0.yaml
+> +++ b/Documentation/devicetree/bindings/riscv/sifive,ccache0.yaml
+> @@ -8,8 +8,7 @@ $schema: http://devicetree.org/meta-schemas/core.yaml#
+>  title: SiFive Composable Cache Controller
+>
+>  maintainers:
+> -  - Sagar Kadam <sagar.kadam@sifive.com>
+> -  - Paul Walmsley  <paul.walmsley@sifive.com>
+> +  - Paul Walmsley <paul.walmsley@sifive.com>
+>
+>  description:
+>    The SiFive Composable Cache Controller is used to provide access to fast copies
