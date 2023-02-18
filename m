@@ -2,57 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 752EB69B6C1
-	for <lists+linux-kernel@lfdr.de>; Sat, 18 Feb 2023 01:31:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9DB9B69B6CA
+	for <lists+linux-kernel@lfdr.de>; Sat, 18 Feb 2023 01:31:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230138AbjBRA3k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Feb 2023 19:29:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43004 "EHLO
+        id S229674AbjBRA3s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Feb 2023 19:29:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43020 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230009AbjBRA3S (ORCPT
+        with ESMTP id S229903AbjBRA3T (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Feb 2023 19:29:18 -0500
-Received: from mail-ua1-x94a.google.com (mail-ua1-x94a.google.com [IPv6:2607:f8b0:4864:20::94a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BA966ABE3
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Feb 2023 16:28:57 -0800 (PST)
-Received: by mail-ua1-x94a.google.com with SMTP id j4-20020ab06004000000b0068b93413c63so812928ual.18
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Feb 2023 16:28:57 -0800 (PST)
+        Fri, 17 Feb 2023 19:29:19 -0500
+Received: from mail-ua1-x949.google.com (mail-ua1-x949.google.com [IPv6:2607:f8b0:4864:20::949])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38F3D6B303
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Feb 2023 16:28:58 -0800 (PST)
+Received: by mail-ua1-x949.google.com with SMTP id f9-20020ab049c9000000b00419afefbe3eso547186uad.4
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Feb 2023 16:28:58 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1676680136;
+        d=google.com; s=20210112;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=uRKYla0TQmxQv6jLt3zA0HnNAsQhQcQxeVgRZIxAfD0=;
-        b=aY3F+EdXtCUshFPXDCNcttdzNX+c4LbhQi1SlJKFNgfqHWfMJ9vDmVr9sTpieHk05X
-         o4uR5QadzoXUGRF67oJyJbtK2h79UlcD3xZm62j78SP9Oa4ap24kfVkt0+OF4A/n+edW
-         7IAq9oxJqPxznoi+TtMM93uAoNkDnONQ+ts18nLlvOqmoYn3iH/qQKh7/ZFGrihwcuj9
-         1V4KX6t2Pwg0FKhmdUmpWWjWMENeKOVdjc9494RWzzvR00UMehx3hUstaQ0j8uMeOex4
-         5VuSVQoGMANGWUUusrSYOeAZy9IVSY0n/qOvAGec/mTz8lN3nGuzMNi0BmdrRxSyqNfw
-         Sbbg==
+        bh=6oe0JKndOCFJAJQ6FnTw91/ULLeb3XwnLhf6Mjl8ksE=;
+        b=ZXgI9bmT7U5wLokZ0C4oNJ6Gk9RcbKcaK8gcoGLiwH9auXPSDVM0Ol5I8tJdiHkQBm
+         cqJXsvHhpPo95w78Rkbk3SLZVdtOTUOQ5nztMCmY5/Ud5mRj3hFPJhvSI6benmg8rsXE
+         zUOmpa69V6q/M9cjYkffaZNIdg3JvQ6rKjZMp6Dj0DYTIaXY+Lg7BLYbHF6CKnajEaK+
+         wl2mnnELaLd/60dmFNDm2ghVntcF83+VBQ5Wv+xyP+zua7DC9xkWhlP06ETH3LjJnFLh
+         bf40rMtbYVk0AxD73EzwULPcAUGoIp7bBDuosmnG4aaaqWZsAeWgTL7c1Q5nHavHsXWV
+         bZFQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1676680136;
+        d=1e100.net; s=20210112;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=uRKYla0TQmxQv6jLt3zA0HnNAsQhQcQxeVgRZIxAfD0=;
-        b=sPrLLK6vsihjMt6o+NwR2KqE6PQrEr644HtbFMBmmTBWpgWrDhW25qcndTV3emU9JK
-         fTZgdnrr9wnFkytlrXY5NDmrELsG40qIXingdbA3uLTDCuIKZ2ROh2qo3ytj1OsQ0zKU
-         KMYBrd49zPEPqXfGbNKOcTpAk9DLSqv82itM/orswCTERqs63h5HRyVpkRvtZgBk2Rxb
-         Fly7ZLSqB48BpyMqE2ZwJzShyEehR33yiVOOPz5gy7FGxNF/eLdUaOz+UomMb5JD5GYv
-         X2WuBJl9UkQGTAFcOMyPvTh3GbP1soH40SW7tF9yVHf0DvtCXjjypYQgDXDVdenrL5tc
-         7XRQ==
-X-Gm-Message-State: AO0yUKVPN32B/j2XVD4urBD9a5+99ggPeEZaZV2OD85tFL1GO/QO388P
-        jrJ+fBmPdoEjJp0TlGM4J04NarKq3QHGkoTv
-X-Google-Smtp-Source: AK7set/GEorAyYMaCd0jNzqquEaNj7jwa1sYuJrs5tjMlDyYAqUGDdv0CU5O6YV9UsW4yKpSO/jg62VpebURY2U0
+        bh=6oe0JKndOCFJAJQ6FnTw91/ULLeb3XwnLhf6Mjl8ksE=;
+        b=xBdmixG4X0rO4cr/lK7de3N0pw0oRTCqyX1b98hzmfShRwMC5lWjNEO3xbkrtJ4vot
+         FQdvFBd4WG77Sn23vFNkcbISjzmrIgZ1pYEmtz4EBNvVGXhqNi6aIMd07IinHm8a+T9z
+         1c7BBbkid2J1JHxFNm48VCN+ZJRHtrF8M9WWVoDrvu5DSBVcnCAJ3kj/yQQQBZDnCUDk
+         BQs4eA7CtEThoH5MSbeXaBz7k6Ko24mvi9XG7BnDSktQfsHxJgDzMOATZZp3v35jFZE0
+         w/FDWFpAlECEKQocxVhKOKLiP7diNL8kKbScQxD9okSzuZ2zpUJ6Z4ARlDO71cEbLzgP
+         Vhaw==
+X-Gm-Message-State: AO0yUKXgbmeLzP5jgwVKl1N7fkjfS7rOGjMyj+OH3tmnX1Lofcj4eHPi
+        NLdukANXts9C5m3yRHqKp4mFl3HBa9GwXPFA
+X-Google-Smtp-Source: AK7set8EIO6lV9DKEYEv7Gocq2q4pnYUxsgcQQWqM5Ogw0BQTVEawiIrDCY/tG3VwGpwjeKgD8+npdD3lNuWqFdx
 X-Received: from jthoughton.c.googlers.com ([fda3:e722:ac3:cc00:14:4d90:c0a8:2a4f])
- (user=jthoughton job=sendgmr) by 2002:a05:6102:153:b0:417:159c:218b with SMTP
- id a19-20020a056102015300b00417159c218bmr652647vsr.13.1676680136399; Fri, 17
- Feb 2023 16:28:56 -0800 (PST)
-Date:   Sat, 18 Feb 2023 00:27:46 +0000
+ (user=jthoughton job=sendgmr) by 2002:a1f:9111:0:b0:409:92de:63bd with SMTP
+ id t17-20020a1f9111000000b0040992de63bdmr110245vkd.12.1676680137159; Fri, 17
+ Feb 2023 16:28:57 -0800 (PST)
+Date:   Sat, 18 Feb 2023 00:27:47 +0000
 In-Reply-To: <20230218002819.1486479-1-jthoughton@google.com>
 Mime-Version: 1.0
 References: <20230218002819.1486479-1-jthoughton@google.com>
 X-Mailer: git-send-email 2.39.2.637.g21b0678d19-goog
-Message-ID: <20230218002819.1486479-14-jthoughton@google.com>
-Subject: [PATCH v2 13/46] hugetlb: add hugetlb_hgm_walk and hugetlb_walk_step
+Message-ID: <20230218002819.1486479-15-jthoughton@google.com>
+Subject: [PATCH v2 14/46] hugetlb: split PTE markers when doing HGM walks
 From:   James Houghton <jthoughton@google.com>
 To:     Mike Kravetz <mike.kravetz@oracle.com>,
         Muchun Song <songmuchun@bytedance.com>,
@@ -86,306 +86,165 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-hugetlb_hgm_walk implements high-granularity page table walks for
-HugeTLB. It is safe to call on non-HGM enabled VMAs; it will return
-immediately.
+Fix how UFFDIO_CONTINUE and UFFDIO_WRITEPROTECT interact in these two
+ways:
+ - UFFDIO_WRITEPROTECT no longer prevents a high-granularity
+   UFFDIO_CONTINUE.
+ - UFFD-WP PTE markers installed with UFFDIO_WRITEPROTECT will be
+   properly propagated when high-granularily UFFDIO_CONTINUEs are
+   performed.
 
-hugetlb_walk_step implements how we step forwards in the walk. For
-architectures that don't use GENERAL_HUGETLB, they will need to provide
-their own implementation.
-
-The broader API that should be used is
-hugetlb_full_walk[,alloc|,continue].
+Note: UFFDIO_WRITEPROTECT is not yet permitted at PAGE_SIZE granularity.
 
 Signed-off-by: James Houghton <jthoughton@google.com>
 
-diff --git a/include/linux/hugetlb.h b/include/linux/hugetlb.h
-index 9d839519c875..726d581158b1 100644
---- a/include/linux/hugetlb.h
-+++ b/include/linux/hugetlb.h
-@@ -223,6 +223,14 @@ u32 hugetlb_fault_mutex_hash(struct address_space *mapping, pgoff_t idx);
- pte_t *huge_pmd_share(struct mm_struct *mm, struct vm_area_struct *vma,
- 		      unsigned long addr, pud_t *pud);
- 
-+int hugetlb_full_walk(struct hugetlb_pte *hpte, struct vm_area_struct *vma,
-+		      unsigned long addr);
-+void hugetlb_full_walk_continue(struct hugetlb_pte *hpte,
-+				struct vm_area_struct *vma, unsigned long addr);
-+int hugetlb_full_walk_alloc(struct hugetlb_pte *hpte,
-+			    struct vm_area_struct *vma, unsigned long addr,
-+			    unsigned long target_sz);
-+
- struct address_space *hugetlb_page_mapping_lock_write(struct page *hpage);
- 
- extern int sysctl_hugetlb_shm_group;
-@@ -272,6 +280,8 @@ pte_t *huge_pte_alloc(struct mm_struct *mm, struct vm_area_struct *vma,
- pte_t *huge_pte_offset(struct mm_struct *mm,
- 		       unsigned long addr, unsigned long sz);
- unsigned long hugetlb_mask_last_page(struct hstate *h);
-+int hugetlb_walk_step(struct mm_struct *mm, struct hugetlb_pte *hpte,
-+		      unsigned long addr, unsigned long sz);
- int huge_pmd_unshare(struct mm_struct *mm, struct vm_area_struct *vma,
- 				unsigned long addr, pte_t *ptep);
- void adjust_range_if_pmd_sharing_possible(struct vm_area_struct *vma,
-@@ -1054,6 +1064,8 @@ void hugetlb_register_node(struct node *node);
- void hugetlb_unregister_node(struct node *node);
- #endif
- 
-+enum hugetlb_level hpage_size_to_level(unsigned long sz);
-+
- #else	/* CONFIG_HUGETLB_PAGE */
- struct hstate {};
- 
-@@ -1246,6 +1258,11 @@ static inline void hugetlb_register_node(struct node *node)
- static inline void hugetlb_unregister_node(struct node *node)
- {
- }
-+
-+static inline enum hugetlb_level hpage_size_to_level(unsigned long sz)
-+{
-+	return HUGETLB_LEVEL_PTE;
-+}
- #endif	/* CONFIG_HUGETLB_PAGE */
- 
- #ifdef CONFIG_HUGETLB_HIGH_GRANULARITY_MAPPING
 diff --git a/mm/hugetlb.c b/mm/hugetlb.c
-index bb424cdf79e4..810c05feb41f 100644
+index 810c05feb41f..f74183acc521 100644
 --- a/mm/hugetlb.c
 +++ b/mm/hugetlb.c
-@@ -97,6 +97,29 @@ static void __hugetlb_vma_unlock_write_free(struct vm_area_struct *vma);
- static void hugetlb_unshare_pmds(struct vm_area_struct *vma,
- 		unsigned long start, unsigned long end);
- 
-+/*
-+ * hpage_size_to_level() - convert @sz to the corresponding page table level
-+ *
-+ * @sz must be less than or equal to a valid hugepage size.
-+ */
-+enum hugetlb_level hpage_size_to_level(unsigned long sz)
-+{
-+	/*
-+	 * We order the conditionals from smallest to largest to pick the
-+	 * smallest level when multiple levels have the same size (i.e.,
-+	 * when levels are folded).
-+	 */
-+	if (sz < PMD_SIZE)
-+		return HUGETLB_LEVEL_PTE;
-+	if (sz < PUD_SIZE)
-+		return HUGETLB_LEVEL_PMD;
-+	if (sz < P4D_SIZE)
-+		return HUGETLB_LEVEL_PUD;
-+	if (sz < PGDIR_SIZE)
-+		return HUGETLB_LEVEL_P4D;
-+	return HUGETLB_LEVEL_PGD;
-+}
-+
- static inline bool subpool_is_free(struct hugepage_subpool *spool)
- {
- 	if (spool->count)
-@@ -7315,6 +7338,154 @@ bool want_pmd_share(struct vm_area_struct *vma, unsigned long addr)
- }
- #endif /* CONFIG_ARCH_WANT_HUGE_PMD_SHARE */
- 
-+/* __hugetlb_hgm_walk - walks a high-granularity HugeTLB page table to resolve
-+ * the page table entry for @addr. We might allocate new PTEs.
-+ *
-+ * @hpte must always be pointing at an hstate-level PTE or deeper.
-+ *
-+ * This function will never walk further if it encounters a PTE of a size
-+ * less than or equal to @sz.
-+ *
-+ * @alloc determines what we do when we encounter an empty PTE. If false,
-+ * we stop walking. If true and @sz is less than the current PTE's size,
-+ * we make that PTE point to the next level down, going until @sz is the same
-+ * as our current PTE.
-+ *
-+ * If @alloc is false and @sz is PAGE_SIZE, this function will always
-+ * succeed, but that does not guarantee that hugetlb_pte_size(hpte) is @sz.
-+ *
-+ * Return:
-+ *	-ENOMEM if we couldn't allocate new PTEs.
-+ *	-EEXIST if the caller wanted to walk further than a migration PTE,
-+ *		poison PTE, or a PTE marker. The caller needs to manually deal
-+ *		with this scenario.
-+ *	-EINVAL if called with invalid arguments (@sz invalid, @hpte not
-+ *		initialized).
-+ *	0 otherwise.
-+ *
-+ *	Even if this function fails, @hpte is guaranteed to always remain
-+ *	valid.
-+ */
-+static int __hugetlb_hgm_walk(struct mm_struct *mm, struct vm_area_struct *vma,
-+			      struct hugetlb_pte *hpte, unsigned long addr,
-+			      unsigned long sz, bool alloc)
-+{
-+	int ret = 0;
-+	pte_t pte;
-+
-+	if (WARN_ON_ONCE(sz < PAGE_SIZE))
-+		return -EINVAL;
-+
-+	if (WARN_ON_ONCE(!hpte->ptep))
-+		return -EINVAL;
-+
-+	while (hugetlb_pte_size(hpte) > sz && !ret) {
-+		pte = huge_ptep_get(hpte->ptep);
-+		if (!pte_present(pte)) {
-+			if (!alloc)
-+				return 0;
-+			if (unlikely(!huge_pte_none(pte)))
-+				return -EEXIST;
-+		} else if (hugetlb_pte_present_leaf(hpte, pte))
-+			return 0;
-+		ret = hugetlb_walk_step(mm, hpte, addr, sz);
-+	}
-+
-+	return ret;
-+}
-+
-+/*
-+ * hugetlb_hgm_walk - Has the same behavior as __hugetlb_hgm_walk but will
-+ * initialize @hpte with hstate-level PTE pointer @ptep.
-+ */
-+static int hugetlb_hgm_walk(struct hugetlb_pte *hpte,
-+			    pte_t *ptep,
-+			    struct vm_area_struct *vma,
-+			    unsigned long addr,
-+			    unsigned long target_sz,
-+			    bool alloc)
-+{
-+	struct hstate *h = hstate_vma(vma);
-+
-+	hugetlb_pte_init(vma->vm_mm, hpte, ptep, huge_page_shift(h),
-+			 hpage_size_to_level(huge_page_size(h)));
-+	return __hugetlb_hgm_walk(vma->vm_mm, vma, hpte, addr, target_sz,
-+				  alloc);
-+}
-+
-+/*
-+ * hugetlb_full_walk_continue - continue a high-granularity page-table walk.
-+ *
-+ * If a user has a valid @hpte but knows that @hpte is not a leaf, they can
-+ * attempt to continue walking by calling this function.
-+ *
-+ * This function will never fail, but @hpte might not change.
-+ *
-+ * If @hpte hasn't been initialized, then this function's behavior is
-+ * undefined.
-+ */
-+void hugetlb_full_walk_continue(struct hugetlb_pte *hpte,
-+				struct vm_area_struct *vma,
-+				unsigned long addr)
-+{
-+	/* __hugetlb_hgm_walk will never fail with these arguments. */
-+	WARN_ON_ONCE(__hugetlb_hgm_walk(vma->vm_mm, vma, hpte, addr,
-+					PAGE_SIZE, false));
-+}
-+
-+/*
-+ * hugetlb_full_walk - do a high-granularity page-table walk; never allocate.
-+ *
-+ * This function can only fail if we find that the hstate-level PTE is not
-+ * allocated. Callers can take advantage of this fact to skip address regions
-+ * that cannot be mapped in that case.
-+ *
-+ * If this function succeeds, @hpte is guaranteed to be valid.
-+ */
-+int hugetlb_full_walk(struct hugetlb_pte *hpte,
-+		      struct vm_area_struct *vma,
-+		      unsigned long addr)
-+{
-+	struct hstate *h = hstate_vma(vma);
-+	unsigned long sz = huge_page_size(h);
-+	/*
-+	 * We must mask the address appropriately so that we pick up the first
-+	 * PTE in a contiguous group.
-+	 */
-+	pte_t *ptep = hugetlb_walk(vma, addr & huge_page_mask(h), sz);
-+
-+	if (!ptep)
-+		return -ENOMEM;
-+
-+	/* hugetlb_hgm_walk will never fail with these arguments. */
-+	WARN_ON_ONCE(hugetlb_hgm_walk(hpte, ptep, vma, addr, PAGE_SIZE, false));
-+	return 0;
-+}
-+
-+/*
-+ * hugetlb_full_walk_alloc - do a high-granularity walk, potentially allocate
-+ *	new PTEs.
-+ */
-+int hugetlb_full_walk_alloc(struct hugetlb_pte *hpte,
-+				   struct vm_area_struct *vma,
-+				   unsigned long addr,
-+				   unsigned long target_sz)
-+{
-+	struct hstate *h = hstate_vma(vma);
-+	unsigned long sz = huge_page_size(h);
-+	/*
-+	 * We must mask the address appropriately so that we pick up the first
-+	 * PTE in a contiguous group.
-+	 */
-+	pte_t *ptep = huge_pte_alloc(vma->vm_mm, vma, addr & huge_page_mask(h),
-+				     sz);
-+
-+	if (!ptep)
-+		return -ENOMEM;
-+
-+	return hugetlb_hgm_walk(hpte, ptep, vma, addr, target_sz, true);
-+}
-+
- #ifdef CONFIG_ARCH_WANT_GENERAL_HUGETLB
- pte_t *huge_pte_alloc(struct mm_struct *mm, struct vm_area_struct *vma,
- 			unsigned long addr, unsigned long sz)
-@@ -7382,6 +7553,48 @@ pte_t *huge_pte_offset(struct mm_struct *mm,
- 	return (pte_t *)pmd;
+@@ -506,6 +506,30 @@ static bool has_same_uncharge_info(struct file_region *rg,
+ #endif
  }
  
-+/*
-+ * hugetlb_walk_step() - Walk the page table one step to resolve the page
-+ * (hugepage or subpage) entry at address @addr.
-+ *
-+ * @sz always points at the final target PTE size (e.g. PAGE_SIZE for the
-+ * lowest level PTE).
-+ *
-+ * @hpte will always remain valid, even if this function fails.
-+ *
-+ * Architectures that implement this function must ensure that if @hpte does
-+ * not change levels, then its PTL must also stay the same.
-+ */
-+int hugetlb_walk_step(struct mm_struct *mm, struct hugetlb_pte *hpte,
-+		      unsigned long addr, unsigned long sz)
++static void hugetlb_install_markers_pmd(pmd_t *pmdp, pte_marker marker)
 +{
-+	pte_t *ptep;
-+	spinlock_t *ptl;
++	int i;
 +
-+	switch (hpte->level) {
-+	case HUGETLB_LEVEL_PUD:
-+		ptep = (pte_t *)hugetlb_alloc_pmd(mm, hpte, addr);
-+		if (IS_ERR(ptep))
-+			return PTR_ERR(ptep);
-+		hugetlb_pte_init(mm, hpte, ptep, PMD_SHIFT,
-+				 HUGETLB_LEVEL_PMD);
-+		break;
-+	case HUGETLB_LEVEL_PMD:
-+		ptep = hugetlb_alloc_pte(mm, hpte, addr);
-+		if (IS_ERR(ptep))
-+			return PTR_ERR(ptep);
-+		ptl = pte_lockptr(mm, (pmd_t *)hpte->ptep);
-+		__hugetlb_pte_init(hpte, ptep, PAGE_SHIFT,
-+				   HUGETLB_LEVEL_PTE, ptl);
-+		break;
-+	default:
-+		WARN_ONCE(1, "%s: got invalid level: %d (shift: %d)\n",
-+				__func__, hpte->level, hpte->shift);
-+		return -EINVAL;
-+	}
-+	return 0;
++	for (i = 0; i < PTRS_PER_PMD; ++i)
++		/*
++		 * WRITE_ONCE not needed because the pud hasn't been
++		 * installed yet.
++		 */
++		pmdp[i] = __pmd(pte_val(make_pte_marker(marker)));
++}
++
++static void hugetlb_install_markers_pte(pte_t *ptep, pte_marker marker)
++{
++	int i;
++
++	for (i = 0; i < PTRS_PER_PTE; ++i)
++		/*
++		 * WRITE_ONCE not needed because the pmd hasn't been
++		 * installed yet.
++		 */
++		ptep[i] = make_pte_marker(marker);
 +}
 +
  /*
-  * Return a mask that can be used to update an address to the last huge
-  * page in a page table page mapping size.  Used to skip non-present
+  * hugetlb_alloc_pmd -- Allocate or find a PMD beneath a PUD-level hpte.
+  *
+@@ -528,23 +552,32 @@ pmd_t *hugetlb_alloc_pmd(struct mm_struct *mm, struct hugetlb_pte *hpte,
+ 	pmd_t *new;
+ 	pud_t *pudp;
+ 	pud_t pud;
++	bool is_marker;
++	pte_marker marker;
+ 
+ 	if (hpte->level != HUGETLB_LEVEL_PUD)
+ 		return ERR_PTR(-EINVAL);
+ 
+ 	pudp = (pud_t *)hpte->ptep;
+ retry:
++	is_marker = false;
+ 	pud = READ_ONCE(*pudp);
+ 	if (likely(pud_present(pud)))
+ 		return unlikely(pud_leaf(pud))
+ 			? ERR_PTR(-EEXIST)
+ 			: pmd_offset(pudp, addr);
+-	else if (!pud_none(pud))
++	else if (!pud_none(pud)) {
+ 		/*
+-		 * Not present and not none means that a swap entry lives here,
+-		 * and we can't get rid of it.
++		 * Not present and not none means that a swap entry lives here.
++		 * If it's a PTE marker, we can deal with it. If it's another
++		 * swap entry, we don't attempt to split it.
+ 		 */
+-		return ERR_PTR(-EEXIST);
++		is_marker = is_pte_marker(__pte(pud_val(pud)));
++		if (!is_marker)
++			return ERR_PTR(-EEXIST);
++
++		marker = pte_marker_get(pte_to_swp_entry(__pte(pud_val(pud))));
++	}
+ 
+ 	new = pmd_alloc_one(mm, addr);
+ 	if (!new)
+@@ -557,6 +590,13 @@ pmd_t *hugetlb_alloc_pmd(struct mm_struct *mm, struct hugetlb_pte *hpte,
+ 		goto retry;
+ 	}
+ 
++	/*
++	 * Install markers before PUD to avoid races with other
++	 * page tables walks.
++	 */
++	if (is_marker)
++		hugetlb_install_markers_pmd(new, marker);
++
+ 	mm_inc_nr_pmds(mm);
+ 	smp_wmb(); /* See comment in pmd_install() */
+ 	pud_populate(mm, pudp, new);
+@@ -576,23 +616,32 @@ pte_t *hugetlb_alloc_pte(struct mm_struct *mm, struct hugetlb_pte *hpte,
+ 	pgtable_t new;
+ 	pmd_t *pmdp;
+ 	pmd_t pmd;
++	bool is_marker;
++	pte_marker marker;
+ 
+ 	if (hpte->level != HUGETLB_LEVEL_PMD)
+ 		return ERR_PTR(-EINVAL);
+ 
+ 	pmdp = (pmd_t *)hpte->ptep;
+ retry:
++	is_marker = false;
+ 	pmd = READ_ONCE(*pmdp);
+ 	if (likely(pmd_present(pmd)))
+ 		return unlikely(pmd_leaf(pmd))
+ 			? ERR_PTR(-EEXIST)
+ 			: pte_offset_kernel(pmdp, addr);
+-	else if (!pmd_none(pmd))
++	else if (!pmd_none(pmd)) {
+ 		/*
+-		 * Not present and not none means that a swap entry lives here,
+-		 * and we can't get rid of it.
++		 * Not present and not none means that a swap entry lives here.
++		 * If it's a PTE marker, we can deal with it. If it's another
++		 * swap entry, we don't attempt to split it.
+ 		 */
+-		return ERR_PTR(-EEXIST);
++		is_marker = is_pte_marker(__pte(pmd_val(pmd)));
++		if (!is_marker)
++			return ERR_PTR(-EEXIST);
++
++		marker = pte_marker_get(pte_to_swp_entry(__pte(pmd_val(pmd))));
++	}
+ 
+ 	/*
+ 	 * With CONFIG_HIGHPTE, calling `pte_alloc_one` directly may result
+@@ -613,6 +662,9 @@ pte_t *hugetlb_alloc_pte(struct mm_struct *mm, struct hugetlb_pte *hpte,
+ 		goto retry;
+ 	}
+ 
++	if (is_marker)
++		hugetlb_install_markers_pte(page_address(new), marker);
++
+ 	mm_inc_nr_ptes(mm);
+ 	smp_wmb(); /* See comment in pmd_install() */
+ 	pmd_populate(mm, pmdp, new);
+@@ -7384,7 +7436,12 @@ static int __hugetlb_hgm_walk(struct mm_struct *mm, struct vm_area_struct *vma,
+ 		if (!pte_present(pte)) {
+ 			if (!alloc)
+ 				return 0;
+-			if (unlikely(!huge_pte_none(pte)))
++			/*
++			 * In hugetlb_alloc_pmd and hugetlb_alloc_pte,
++			 * we split PTE markers, so we can tolerate
++			 * PTE markers here.
++			 */
++			if (unlikely(!huge_pte_none_mostly(pte)))
+ 				return -EEXIST;
+ 		} else if (hugetlb_pte_present_leaf(hpte, pte))
+ 			return 0;
 -- 
 2.39.2.637.g21b0678d19-goog
 
