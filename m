@@ -2,41 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 36A7369BA97
-	for <lists+linux-kernel@lfdr.de>; Sat, 18 Feb 2023 16:18:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EDCAD69BA98
+	for <lists+linux-kernel@lfdr.de>; Sat, 18 Feb 2023 16:19:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229533AbjBRPQ2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 18 Feb 2023 10:16:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51016 "EHLO
+        id S229698AbjBRPTm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 18 Feb 2023 10:19:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52610 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229445AbjBRPQ0 (ORCPT
+        with ESMTP id S229445AbjBRPTk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 18 Feb 2023 10:16:26 -0500
-Received: from out30-112.freemail.mail.aliyun.com (out30-112.freemail.mail.aliyun.com [115.124.30.112])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5BFA14E99
-        for <linux-kernel@vger.kernel.org>; Sat, 18 Feb 2023 07:16:24 -0800 (PST)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R771e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045176;MF=renyu.zj@linux.alibaba.com;NM=1;PH=DS;RN=6;SR=0;TI=SMTPD_---0Vbw4f5G_1676733378;
-Received: from 30.236.26.42(mailfrom:renyu.zj@linux.alibaba.com fp:SMTPD_---0Vbw4f5G_1676733378)
-          by smtp.aliyun-inc.com;
-          Sat, 18 Feb 2023 23:16:19 +0800
-Message-ID: <fffbd8d2-11ad-1c09-6174-76cb13fa5e59@linux.alibaba.com>
-Date:   Sat, 18 Feb 2023 23:16:17 +0800
+        Sat, 18 Feb 2023 10:19:40 -0500
+Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81C3715546;
+        Sat, 18 Feb 2023 07:19:39 -0800 (PST)
+Received: by mail-lf1-x129.google.com with SMTP id b22so1367224lfv.5;
+        Sat, 18 Feb 2023 07:19:39 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=7q2Wg8S1rsfm30D7lgChP+RGLUmdPuKtGfy28d6nd2c=;
+        b=Q+twZu/73PHUCZPn32nq0NgKH/rksz15uwZZFZqEIxVuq7cBUyB91DH9OFAkMhBZOZ
+         25h4g1NLayShc27rvbNVkiohaUxWtzE8Ggc//EMsxd0HqhYXAftPtFojX5+lMfYHVmZP
+         PXwIF10DE36X0lJNd/UsoMy2vlQlsUWT723LH09UTQtZIZ5aY8aqRnWSOc8UiAPiTTHL
+         6fIoa9Gu54FZZWDRIEkiZg9RjNn0g++x8pTqJQIWfc0noFCtrvbfU715AePLjKoxCX/E
+         If9AQx/7mZzIXoR9JgsZxE6WL3X9vbb3g5vMu2bVZDVCz12eYAHutrUL1o0GgMiFB4sZ
+         LJgQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=7q2Wg8S1rsfm30D7lgChP+RGLUmdPuKtGfy28d6nd2c=;
+        b=MR5cPGrk3ycy9gZudMWBmZEpeiMS6ckbbna4uvnRwQrPqf36dMa4hC/ZvUEvpQPKwo
+         o65TuVGzs4vrk57pi8mHY77wsKkSLPW4gy6MA4TYXKQG9NP816JB3bL3c86gni0B5UNd
+         4BsF/jcpH/hwAH4uxNVtLUpVrhCayvGRayqon0/4r7H7FcHzeCKKY1+7TvCR7egxe37T
+         X+OWjOtp8zfQGS4OzJFiAST2/gGTfGS8JdGwxNMjL/hP/HggBGEg70Mq10oQVDw4XCRd
+         WjXb0kwoyjvxHtsA+u6XKOTHxLf4yWfzRkgqJzFWnas5wcNLK6mgyAhqF6L2MMhFKBY4
+         UxsA==
+X-Gm-Message-State: AO0yUKU6aT8dTP7DIfV/S44m6WoHAI09YJMXDFfzZLJmzvMlbI/VLdH/
+        1fG4NCscwiOKCaMGty8m+ohNDiXVbXzrLFm/LZhZRaON
+X-Google-Smtp-Source: AK7set9O89dNDCkMb+Ei/ZIH686OBETFP2ZLwTaSTkzyJBNq3dib4fxm87Hu9j1qs5CFBv5i1vz4rqvnBjNPBHRTCvQ=
+X-Received: by 2002:a05:6512:501:b0:4d5:ca32:7bc3 with SMTP id
+ o1-20020a056512050100b004d5ca327bc3mr1349945lfb.10.1676733577507; Sat, 18 Feb
+ 2023 07:19:37 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.6.1
-Subject: Re: [PATCH] perf/arm-cmn: Fix and refactor device mapping resource
-To:     Will Deacon <will@kernel.org>, Mark Rutland <mark.rutland@arm.com>
-Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Shuai Xue <xueshuai@linux.alibaba.com>,
-        Zhuo Song <zhuo.song@linux.alibaba.com>
-References: <1676535470-120560-1-git-send-email-renyu.zj@linux.alibaba.com>
-From:   Jing Zhang <renyu.zj@linux.alibaba.com>
-In-Reply-To: <1676535470-120560-1-git-send-email-renyu.zj@linux.alibaba.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-10.2 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=ham
+References: <20230218002436.give.204-kees@kernel.org> <CAKYAXd9Y+wCbAy3a_W55fgb2Sy7M9UQUhR+XujaTKZ255YCjGg@mail.gmail.com>
+In-Reply-To: <CAKYAXd9Y+wCbAy3a_W55fgb2Sy7M9UQUhR+XujaTKZ255YCjGg@mail.gmail.com>
+From:   Steve French <smfrench@gmail.com>
+Date:   Sat, 18 Feb 2023 09:19:26 -0600
+Message-ID: <CAH2r5msJ1ZogypaiiLQ=STiroEXULwJr71_ta_+ZamXSqzxgpA@mail.gmail.com>
+Subject: Re: [PATCH v3] smb3: Replace smb2pdu 1-element arrays with flex-arrays
+To:     Namjae Jeon <linkinjeon@kernel.org>
+Cc:     Kees Cook <keescook@chromium.org>,
+        Steve French <sfrench@samba.org>, Paulo Alcantara <pc@cjr.nz>,
+        Ronnie Sahlberg <lsahlber@redhat.com>,
+        Shyam Prasad N <sprasad@microsoft.com>,
+        Tom Talpey <tom@talpey.com>,
+        Sergey Senozhatsky <senozhatsky@chromium.org>,
+        linux-cifs@vger.kernel.org, samba-technical@lists.samba.org,
+        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -44,125 +73,68 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi all,
+merged into cifs-2.6.git for-next pending testing
 
-Do you have any comments on this?:)
+On Fri, Feb 17, 2023 at 9:24 PM Namjae Jeon <linkinjeon@kernel.org> wrote:
+>
+> 2023-02-18 9:24 GMT+09:00, Kees Cook <keescook@chromium.org>:
+> > The kernel is globally removing the ambiguous 0-length and 1-element
+> > arrays in favor of flexible arrays, so that we can gain both compile-time
+> > and run-time array bounds checking[1].
+> >
+> > Replace the trailing 1-element array with a flexible array in the
+> > following structures:
+> >
+> >       struct smb2_err_rsp
+> >       struct smb2_tree_connect_req
+> >       struct smb2_negotiate_rsp
+> >       struct smb2_sess_setup_req
+> >       struct smb2_sess_setup_rsp
+> >       struct smb2_read_req
+> >       struct smb2_read_rsp
+> >       struct smb2_write_req
+> >       struct smb2_write_rsp
+> >       struct smb2_query_directory_req
+> >       struct smb2_query_directory_rsp
+> >       struct smb2_set_info_req
+> >       struct smb2_change_notify_rsp
+> >       struct smb2_create_rsp
+> >       struct smb2_query_info_req
+> >       struct smb2_query_info_rsp
+> >
+> > Replace the trailing 1-element array with a flexible array, but leave
+> > the existing structure padding:
+> >
+> >       struct smb2_file_all_info
+> >       struct smb2_lock_req
+> >
+> > Adjust all related size calculations to match the changes to sizeof().
+> >
+> > No machine code output or .data section differences are produced after
+> > these changes.
+> >
+> > [1] For lots of details, see both:
+> >
+> > https://docs.kernel.org/process/deprecated.html#zero-length-and-one-element-arrays
+> >     https://people.kernel.org/kees/bounded-flexible-arrays-in-c
+> >
+> > Cc: Steve French <sfrench@samba.org>
+> > Cc: Paulo Alcantara <pc@cjr.nz>
+> > Cc: Ronnie Sahlberg <lsahlber@redhat.com>
+> > Cc: Shyam Prasad N <sprasad@microsoft.com>
+> > Cc: Tom Talpey <tom@talpey.com>
+> > Cc: Namjae Jeon <linkinjeon@kernel.org>
+> > Cc: Sergey Senozhatsky <senozhatsky@chromium.org>
+> > Cc: linux-cifs@vger.kernel.org
+> > Cc: samba-technical@lists.samba.org
+> > Signed-off-by: Kees Cook <keescook@chromium.org>
+> Reviewed-by: Namjae Jeon <linkinjeon@kernel.org>
+>
+> Thanks!
 
+
+
+-- 
 Thanks,
-Jing
 
-在 2023/2/16 下午4:17, Jing Zhang 写道:
-> The devm_platform_ioremap_resource() won't let the platform device
-> claim resource when the ACPI companion device has already claimed it.
-> If CMN-ANY except CMN600 is ACPI companion device, it will return
-> -EBUSY in devm_platform_ioremap_resource(), and the driver cannot be
-> successfully installed.
-> 
-> So let ACPI companion device call arm_cmn_acpi_probe and not claim
-> resource again. In addition, the arm_cmn_acpi_probe() and
-> arm_cmn_of_probe() functions are refactored to make them compatible
-> with both CMN600 and CMN-ANY.
-> 
-> Fixes: 61ec1d875812 ("perf/arm-cmn: Demarcate CMN-600 specifics")
-> Signed-off-by: Jing Zhang <renyu.zj@linux.alibaba.com>
-> ---
->  drivers/perf/arm-cmn.c | 57 ++++++++++++++++++++++++++++++++------------------
->  1 file changed, 37 insertions(+), 20 deletions(-)
-> 
-> diff --git a/drivers/perf/arm-cmn.c b/drivers/perf/arm-cmn.c
-> index 1deb61b..beb3b37 100644
-> --- a/drivers/perf/arm-cmn.c
-> +++ b/drivers/perf/arm-cmn.c
-> @@ -2206,7 +2206,7 @@ static int arm_cmn_discover(struct arm_cmn *cmn, unsigned int rgn_offset)
->  	return 0;
->  }
->  
-> -static int arm_cmn600_acpi_probe(struct platform_device *pdev, struct arm_cmn *cmn)
-> +static int arm_cmn_acpi_probe(struct platform_device *pdev, struct arm_cmn *cmn)
->  {
->  	struct resource *cfg, *root;
->  
-> @@ -2214,12 +2214,21 @@ static int arm_cmn600_acpi_probe(struct platform_device *pdev, struct arm_cmn *c
->  	if (!cfg)
->  		return -EINVAL;
->  
-> -	root = platform_get_resource(pdev, IORESOURCE_MEM, 1);
-> -	if (!root)
-> -		return -EINVAL;
-> +	/* If ACPI defines more than one resource, such as cmn-600, then there may be
-> +	 * a deviation between ROOTNODEBASE and PERIPHBASE, and ROOTNODEBASE can
-> +	 * be obtained from the second resource. Otherwise, it can be considered that
-> +	 * ROOT NODE BASE is PERIPHBASE. This is compatible with cmn-600 and cmn-any.
-> +	 */
-> +	if (pdev->num_resources > 1) {
-> +		root = platform_get_resource(pdev, IORESOURCE_MEM, 1);
-> +		if (!root)
-> +			return -EINVAL;
->  
-> -	if (!resource_contains(cfg, root))
-> -		swap(cfg, root);
-> +		if (!resource_contains(cfg, root))
-> +			swap(cfg, root);
-> +	} else {
-> +		root = cfg;
-> +	}
->  	/*
->  	 * Note that devm_ioremap_resource() is dumb and won't let the platform
->  	 * device claim cfg when the ACPI companion device has already claimed
-> @@ -2227,17 +2236,30 @@ static int arm_cmn600_acpi_probe(struct platform_device *pdev, struct arm_cmn *c
->  	 * appropriate name, we don't really need to do it again here anyway.
->  	 */
->  	cmn->base = devm_ioremap(cmn->dev, cfg->start, resource_size(cfg));
-> -	if (!cmn->base)
-> -		return -ENOMEM;
-> +	if (IS_ERR(cmn->base))
-> +		return PTR_ERR(cmn->base);
->  
->  	return root->start - cfg->start;
->  }
->  
-> -static int arm_cmn600_of_probe(struct device_node *np)
-> +static int arm_cmn_of_probe(struct platform_device *pdev, struct arm_cmn *cmn)
->  {
->  	u32 rootnode;
-> +	int ret;
-> +
-> +	cmn->base = devm_platform_ioremap_resource(pdev, 0);
-> +	if (IS_ERR(cmn->base))
-> +		return PTR_ERR(cmn->base);
->  
-> -	return of_property_read_u32(np, "arm,root-node", &rootnode) ?: rootnode;
-> +	/* If of_property_read_u32() return EINVAL, it means that device tree has
-> +	 * not define root-node, and root-node will return 0, which is compatible
-> +	 * with cmn-600 and cmn-any.
-> +	 */
-> +	ret = of_property_read_u32(pdev->dev.of_node, "arm,root-node", &rootnode);
-> +	if (ret == -EINVAL)
-> +		return 0;
-> +
-> +	return rootnode;
->  }
->  
->  static int arm_cmn_probe(struct platform_device *pdev)
-> @@ -2255,16 +2277,11 @@ static int arm_cmn_probe(struct platform_device *pdev)
->  	cmn->model = (unsigned long)device_get_match_data(cmn->dev);
->  	platform_set_drvdata(pdev, cmn);
->  
-> -	if (cmn->model == CMN600 && has_acpi_companion(cmn->dev)) {
-> -		rootnode = arm_cmn600_acpi_probe(pdev, cmn);
-> -	} else {
-> -		rootnode = 0;
-> -		cmn->base = devm_platform_ioremap_resource(pdev, 0);
-> -		if (IS_ERR(cmn->base))
-> -			return PTR_ERR(cmn->base);
-> -		if (cmn->model == CMN600)
-> -			rootnode = arm_cmn600_of_probe(pdev->dev.of_node);
-> -	}
-> +	if (has_acpi_companion(cmn->dev))
-> +		rootnode = arm_cmn_acpi_probe(pdev, cmn);
-> +	else
-> +		rootnode = arm_cmn_of_probe(pdev, cmn);
-> +
->  	if (rootnode < 0)
->  		return rootnode;
->  
+Steve
