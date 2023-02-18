@@ -2,60 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CA15F69B737
-	for <lists+linux-kernel@lfdr.de>; Sat, 18 Feb 2023 01:55:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E798769B73F
+	for <lists+linux-kernel@lfdr.de>; Sat, 18 Feb 2023 01:57:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229667AbjBRAz3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Feb 2023 19:55:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49058 "EHLO
+        id S229752AbjBRA5p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Feb 2023 19:57:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50264 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229636AbjBRAz1 (ORCPT
+        with ESMTP id S229477AbjBRA5n (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Feb 2023 19:55:27 -0500
-Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8F295F263;
-        Fri, 17 Feb 2023 16:55:26 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-        bh=tUjRxf87+ZZjnZ/gxtcCDyxRBwBJu21IacdG/o5+D1M=; b=5SCbU/h+mIg9w6LIHWRZsC8KCP
-        Wfay/z92sUbsQpHQldey5isMPzMK09lV5ZbQce3ZvQCkIlFKLOy9gyAP0k5J6PA262AuaYf4vcBtE
-        CyVBwzb4k0z3cb7Yrp69TgIoFvNtv19ZgkTLBMyVF+mJSThzZ/Ic28NYa4PR3G4F+NCA=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-        (envelope-from <andrew@lunn.ch>)
-        id 1pTBVc-005M45-Gz; Sat, 18 Feb 2023 01:55:24 +0100
-Date:   Sat, 18 Feb 2023 01:55:24 +0100
-From:   Andrew Lunn <andrew@lunn.ch>
-To:     Horatiu Vultur <horatiu.vultur@microchip.com>
-Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        hkallweit1@gmail.com, linux@armlinux.org.uk, davem@davemloft.net,
-        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
-        richardcochran@gmail.com
-Subject: Re: [PATCH net-next] net: phy: micrel: Add support for PTP_PF_PEROUT
- for lan8841
-Message-ID: <Y/Ah/MRYKdohtXZH@lunn.ch>
-References: <20230217075213.2366042-1-horatiu.vultur@microchip.com>
+        Fri, 17 Feb 2023 19:57:43 -0500
+Received: from mail-pg1-x536.google.com (mail-pg1-x536.google.com [IPv6:2607:f8b0:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C6C35F270
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Feb 2023 16:57:42 -0800 (PST)
+Received: by mail-pg1-x536.google.com with SMTP id v10so1525394pgh.0
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Feb 2023 16:57:42 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=0usceKggNKCGc1nrj8ml4jt1oiNoxfaCBZe8A/bFNJE=;
+        b=a3YUzlbPFk6TdZwQ3LJJCtJ9Cg3GMFX2Wu/wOR/8mPXmDZuUH+tPej/7kvCa9/2l+y
+         BEemwWr1jsgvcoxsBcDVl3+p2z0KY3giNpGmvJcVlU3h9IJczoEv1Ijv+r5RAbasuNCI
+         mUzeD149j9+TCqEfjDzU52A69nKfwtJ8Paj9uJW20ghePk+29UdghGXmKkSiOg7g+tIF
+         iO6yxTCT56fADdP2gBorhs9TvtLPy0B/eqzjW6L4xRbcAEXLjWOGnenqcKaPqvu0z5FJ
+         uj/DQdIdU8fwSR/mnq3v2kZSl/nZjMUgPZf4nJ0qlVKMjXNTsUVNaxfDpiR9n2wY+8iA
+         Ei3Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=0usceKggNKCGc1nrj8ml4jt1oiNoxfaCBZe8A/bFNJE=;
+        b=f7LiIUqDD30jlhW1hMHUBFov5DocK4OFFP7DB99p6NuwOojLugqiokk/IR4lr8W4Ld
+         CTlFI2NWsgZ8s/TKXNpLALC/+fGvX3q15m7OtVq9Lx8HNMGW5YSxuNEZ9DWYSv+0n0tq
+         gZXh7gqrUJ/KNTXZa8nY9KbJ/eJymLoiN4+9BMjdqmUo8dt/DaHvR+qEXDCLju+L7PQZ
+         bYFy6qIfmi5gAbQuwsYKnTHEPF8ypBip2yC34Z+xpB4c+aZGYSooVP+g5ENqYXeHPfog
+         HWXUzr37z3MWbBPchsm8IW33SNCxXDci4ef69h+v1jqpbUyJOkgd2N2T9NXX426d9DDr
+         0ZcA==
+X-Gm-Message-State: AO0yUKUuBKk1dXtTI5iUcplbBcePqd00TCDmH9QtNJwAoyhQ6/5UfawI
+        s37hLU8qT6jvu5pjWl07tR0ofA==
+X-Google-Smtp-Source: AK7set/LXZrK5+seQgidJp1G/DYMPwiRrF7zemmtKS2OaKJrTRzgkApTRwKGRRfLGDWD9/z3fxrNFQ==
+X-Received: by 2002:a05:6a00:4305:b0:5a8:51a3:7f69 with SMTP id cb5-20020a056a00430500b005a851a37f69mr6923585pfb.2.1676681861601;
+        Fri, 17 Feb 2023 16:57:41 -0800 (PST)
+Received: from google.com (77.62.105.34.bc.googleusercontent.com. [34.105.62.77])
+        by smtp.gmail.com with ESMTPSA id g23-20020aa78757000000b005a8beb26794sm3602449pfo.132.2023.02.17.16.57.41
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 17 Feb 2023 16:57:41 -0800 (PST)
+Date:   Sat, 18 Feb 2023 00:57:37 +0000
+From:   Mingwei Zhang <mizhang@google.com>
+To:     Aaron Lewis <aaronlewis@google.com>
+Cc:     Sean Christopherson <seanjc@google.com>,
+        Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Jim Mattson <jmattson@google.com>,
+        Venkatesh Srinivas <venkateshs@google.com>,
+        "Chang S. Bae" <chang.seok.bae@intel.com>
+Subject: Re: [PATCH v2 3/7] KVM: selftests: x86: Add check of CR0.TS in the
+ #NM handler in amx_test
+Message-ID: <Y/Aigdf8rV0b9LJQ@google.com>
+References: <20230214184606.510551-1-mizhang@google.com>
+ <20230214184606.510551-4-mizhang@google.com>
+ <CAAAPnDFG+9x5A24cDs8344k9W6zddpJ7cKBFOXmzaLhMhvmR=g@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230217075213.2366042-1-horatiu.vultur@microchip.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <CAAAPnDFG+9x5A24cDs8344k9W6zddpJ7cKBFOXmzaLhMhvmR=g@mail.gmail.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> +static void lan8841_ptp_update_target(struct kszphy_ptp_priv *ptp_priv,
-> +				      const struct timespec64 *ts);
-> +
+On Fri, Feb 17, 2023, Aaron Lewis wrote:
+> On Tue, Feb 14, 2023 at 6:46 PM Mingwei Zhang <mizhang@google.com> wrote:
+> >
+> > Add check of CR0.TS[bit 3] before the check of IA32_XFD_ERR in the #NM
+> > handler in amx_test. This is because XFD may not be the only reason of
+> > the IA32_XFD MSR and the bitmap corresponding to the state components
+> > required by the faulting instruction." (Intel SDM vol 1. Section 13.14)
+> >
+> > Add the missing check of CR0.TS.
+> >
+> > Signed-off-by: Mingwei Zhang <mizhang@google.com>
+> > ---
+> >  tools/testing/selftests/kvm/x86_64/amx_test.c | 1 +
+> >  1 file changed, 1 insertion(+)
+> >
+> > diff --git a/tools/testing/selftests/kvm/x86_64/amx_test.c b/tools/testing/selftests/kvm/x86_64/amx_test.c
+> > index aac727ff7cf8..847752998660 100644
+> > --- a/tools/testing/selftests/kvm/x86_64/amx_test.c
+> > +++ b/tools/testing/selftests/kvm/x86_64/amx_test.c
+> > @@ -215,6 +215,7 @@ void guest_nm_handler(struct ex_regs *regs)
+> >  {
+> >         /* Check if #NM is triggered by XFEATURE_MASK_XTILEDATA */
+> >         GUEST_SYNC(7);
+> > +       GUEST_ASSERT((get_cr0() & X86_CR0_TS) == 0);
+> 
+> Can't we infer that the #NM is the result of an XFD error due to the fact
+> that IA32_XFD_ERR is set?  Is this check needed?
+> SDM vol 1, 13.14, EXTENDED FEATURE DISABLE (XFD)
+>  - Device-not-available exceptions that are not due to XFD - those
+>    resulting from setting CR0.TS to 1 - do not modify the IA32_XFD_ERR
+>    MSR.
+> 
+We don't infer from the reasons of #NM and that is the purpose of this
+selftest. Yes, this looks a little bit pedantic. But still, it is worth
+adding the check since violation of that indicates either 1) the
+selftest mistakenly did not clear XFD_ERR prior to #NM or 2) hardware is
+broken.
 
-Please avoid this. Move the code around so everything is in
-order. Generally, i do such moves in an initial patch which only moves
-code, making it easy to review.
-
-      Andrew
+> >         GUEST_ASSERT(rdmsr(MSR_IA32_XFD_ERR) == XFEATURE_MASK_XTILEDATA);
+> >         GUEST_SYNC(8);
+> >         GUEST_ASSERT(rdmsr(MSR_IA32_XFD_ERR) == XFEATURE_MASK_XTILEDATA);
+> > --
+> > 2.39.1.581.gbfd45094c4-goog
+> >
