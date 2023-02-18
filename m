@@ -2,58 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C7CDD69B6D9
-	for <lists+linux-kernel@lfdr.de>; Sat, 18 Feb 2023 01:32:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 743D769B6DB
+	for <lists+linux-kernel@lfdr.de>; Sat, 18 Feb 2023 01:32:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230344AbjBRAcX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Feb 2023 19:32:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42016 "EHLO
+        id S230317AbjBRAc0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Feb 2023 19:32:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43148 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230306AbjBRAb7 (ORCPT
+        with ESMTP id S230340AbjBRAcA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Feb 2023 19:31:59 -0500
-Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 038CB6EBA3
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Feb 2023 16:30:26 -0800 (PST)
-Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-53659b9818dso20142317b3.18
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Feb 2023 16:30:25 -0800 (PST)
+        Fri, 17 Feb 2023 19:32:00 -0500
+Received: from mail-ua1-x94a.google.com (mail-ua1-x94a.google.com [IPv6:2607:f8b0:4864:20::94a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6268A6E677
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Feb 2023 16:30:28 -0800 (PST)
+Received: by mail-ua1-x94a.google.com with SMTP id x2-20020ab03802000000b0060d5bfd73b5so940115uav.16
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Feb 2023 16:30:28 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=hyOLv1FsgINJ0DL+GVviZenHuSxZX0xiNJERAdFTwJY=;
-        b=CawVGssLxbR/eBsnpR76uSOwVJlkmsmCv0a5oroE0FUoq5CLC5qHPXGXefy+nfOAyq
-         vHPyCbLQuykbScgNRy8G6ArFuhS2PA24tAoAR0gKyBhUDTykhHwShI6arftzkplVbyyk
-         b4WDZ3892nTCDc681eGtskse+KIsH+dqtfTG2Vne6aDgRhNRdxfjHtbN/sR4SQs6gHc0
-         qUEwaDcngWDaQt95+PjWHSmLfyKw65IbdY5tMd2l4nt3+4TnGgT5wI1VLYvFO5GyJcwD
-         HDiIQ3YFBSVkmnMVLHQ4cyRGkHdEevZ48y3mNmJQPrsPUHrSdwcp+QpVtufpdBI9D2OH
-         id0A==
+        bh=IfKq0bBaVq4CjPIDar2fHBWF2wKUUWJpsDr5c4wwSS8=;
+        b=FNS8OXzQNbEkpLDpjB3nAEwYdiqjzDyLdWfy2qMCsFYgDJSKBhPFK3yDxyIWpeySgl
+         maQUSikgn8RHfHnveHKP4KewomfuBHkrzkOdNxKAEwOz4ERjMdSgdS+IkmHhDevj0Dlo
+         8SYMrUU5w0fXhm10675DXBEz1qa82TExwLIbs6xG0LABcq+O89FT45Z9grk1Qq9uWQnL
+         VEl/w45AklX6i6AYyOmin2NKbHJDvd0cIf5fk1zu+qjIn8o5y4g9O4lMFPFSQVgZ0QZ9
+         4eExXJ6WU1Q2oLrhiuNiGB+aLlTM+fJuXr+noURddq0gbHVbzoVDxDtmh6wk9zHk9oKN
+         9jig==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=hyOLv1FsgINJ0DL+GVviZenHuSxZX0xiNJERAdFTwJY=;
-        b=xw41vqJJWN4lrBYOs2cIIcNvUKe2MA7KDvGo6Mm1y1ACe+TrkjuiBC7v4CX6nQdmVC
-         UrIj+dKaHseR6QC141WSiVoaYFnRTJgmVX/Zs6pQTkglq6PEDuf5Q1emoxMIeC6k7/q6
-         EZaQqSi7UqqR5p+bNU5xYqN9IM06UIv90HpOqNcV+HKkD5wQOZ18HLmDgJs6Jr1hcjt/
-         BGKOpAx4GReqAmvXjh5oRcqfFJm0OreUo8P3T9u3RyBvmfg8lQimSBvjiLprY39PM0jh
-         +kELcCExAybInH2/CEtW4mWOoSMXEkyEdwLnftFzCw7pP2yabL5UmhyaFScYz8BIHmAQ
-         3RBg==
-X-Gm-Message-State: AO0yUKXaak9bUALie6YOEEGSZt4pWJFBbP5WN1RHpJmGhYAkHx9kWX/N
-        DkqagcKkL0rFSTIGBPgnh1AT8+3aPym9J6EB
-X-Google-Smtp-Source: AK7set+1gp+3xzyRWa+pkBelE3wO17FQrBJLukvYGoDbOlAPndL6HG5Z6zOqFqMyhLaMuLWmUDnySY104VSUsagh
+        bh=IfKq0bBaVq4CjPIDar2fHBWF2wKUUWJpsDr5c4wwSS8=;
+        b=nCHjl62P6gsOcOxCvrHUS+VwgswZKQgJ6ToSISvaiipVQfhzbRl9htdiUC429QSy+5
+         akicXhbT5kpmJOYn+Yy9Eq99aso618WeMF63JggG5+PuU8lHXc1SHm6JX86bbPhGGH1A
+         0EVuK8LvE514eKFjeG4y2rCG6q4pK4xyq1884JZuq0M4okr1S7OLkM6+8E3l0K32bB9o
+         IApRjc43eXVdRdmhT13p1YVOhb+iK+ZS9aG6TFlGoibGUi/BuLjvZx4gN1vgwm4PSFkQ
+         0Ouuf/DZ2n/1duFbGn7MpbaYz3cniV9Qr7gx/3tRmkyXrUViWTKJNKanbfQ/Vj/pRvdz
+         6fYw==
+X-Gm-Message-State: AO0yUKUJb+Lwy3SWhRwZlGWhdZF9VAn0z70ML3OmjRYawFuoOGTlDtfw
+        APBSdSXDeZbIFEQe8T5qbsz17zsT0KALwpno
+X-Google-Smtp-Source: AK7set+/8h4Ti6SaOCrSw2JWCwa+A4XjEDrEdPurb5cORBytv6OxLdCN0/KOEI5ep27FSzg7p5WKdfqWfRYxseKZ
 X-Received: from jthoughton.c.googlers.com ([fda3:e722:ac3:cc00:14:4d90:c0a8:2a4f])
- (user=jthoughton job=sendgmr) by 2002:a05:6902:4f0:b0:98e:6280:74ca with SMTP
- id w16-20020a05690204f000b0098e628074camr174263ybs.1.1676680184745; Fri, 17
- Feb 2023 16:29:44 -0800 (PST)
-Date:   Sat, 18 Feb 2023 00:28:17 +0000
+ (user=jthoughton job=sendgmr) by 2002:ab0:53d2:0:b0:68b:923a:d6f4 with SMTP
+ id l18-20020ab053d2000000b0068b923ad6f4mr47364uaa.2.1676680186208; Fri, 17
+ Feb 2023 16:29:46 -0800 (PST)
+Date:   Sat, 18 Feb 2023 00:28:18 +0000
 In-Reply-To: <20230218002819.1486479-1-jthoughton@google.com>
 Mime-Version: 1.0
 References: <20230218002819.1486479-1-jthoughton@google.com>
 X-Mailer: git-send-email 2.39.2.637.g21b0678d19-goog
-Message-ID: <20230218002819.1486479-45-jthoughton@google.com>
-Subject: [PATCH v2 44/46] selftests/mm: add anon and shared hugetlb to
- migration test
+Message-ID: <20230218002819.1486479-46-jthoughton@google.com>
+Subject: [PATCH v2 45/46] selftests/mm: add hugetlb HGM test to migration selftest
 From:   James Houghton <jthoughton@google.com>
 To:     Mike Kravetz <mike.kravetz@oracle.com>,
         Muchun Song <songmuchun@bytedance.com>,
@@ -87,114 +86,118 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Shared HugeTLB mappings are migrated best-effort. Sometimes, due to
-being unable to grab the VMA lock for writing, migration may just
-randomly fail. To allow for that, we allow retries.
+This is mostly the same as the shared HugeTLB case, but instead of
+mapping the page with a regular page fault, we map it with lots of
+UFFDIO_CONTINUE operations. We also verify that the contents haven't
+changed after the migration, which would be the case if the
+post-migration PTEs pointed to the wrong page.
 
 Signed-off-by: James Houghton <jthoughton@google.com>
 
 diff --git a/tools/testing/selftests/mm/migration.c b/tools/testing/selftests/mm/migration.c
-index 1cec8425e3ca..21577a84d7e4 100644
+index 21577a84d7e4..1fb3607accab 100644
 --- a/tools/testing/selftests/mm/migration.c
 +++ b/tools/testing/selftests/mm/migration.c
-@@ -13,6 +13,7 @@
- #include <sys/types.h>
+@@ -14,12 +14,21 @@
  #include <signal.h>
  #include <time.h>
-+#include <sys/statfs.h>
+ #include <sys/statfs.h>
++#include <unistd.h>
++#include <sys/ioctl.h>
++#include <linux/userfaultfd.h>
++#include <sys/syscall.h>
++#include <fcntl.h>
  
  #define TWOMEG (2<<20)
  #define RUNTIME (60)
-@@ -59,11 +60,12 @@ FIXTURE_TEARDOWN(migration)
- 	free(self->pids);
- }
  
--int migrate(uint64_t *ptr, int n1, int n2)
-+int migrate(uint64_t *ptr, int n1, int n2, int retries)
+ #define ALIGN(x, a) (((x) + (a - 1)) & (~((a) - 1)))
+ 
++#ifndef MADV_SPLIT
++#define MADV_SPLIT 26
++#endif
++
+ FIXTURE(migration)
  {
- 	int ret, tmp;
- 	int status = 0;
- 	struct timespec ts1, ts2;
-+	int failed = 0;
- 
- 	if (clock_gettime(CLOCK_MONOTONIC, &ts1))
- 		return -1;
-@@ -78,6 +80,9 @@ int migrate(uint64_t *ptr, int n1, int n2)
- 		ret = move_pages(0, 1, (void **) &ptr, &n2, &status,
- 				MPOL_MF_MOVE_ALL);
- 		if (ret) {
-+			if (++failed < retries)
-+				continue;
-+
- 			if (ret > 0)
- 				printf("Didn't migrate %d pages\n", ret);
- 			else
-@@ -88,6 +93,7 @@ int migrate(uint64_t *ptr, int n1, int n2)
- 		tmp = n2;
- 		n2 = n1;
- 		n1 = tmp;
-+		failed = 0;
- 	}
- 
- 	return 0;
-@@ -128,7 +134,7 @@ TEST_F_TIMEOUT(migration, private_anon, 2*RUNTIME)
- 		if (pthread_create(&self->threads[i], NULL, access_mem, ptr))
- 			perror("Couldn't create thread");
- 
--	ASSERT_EQ(migrate(ptr, self->n1, self->n2), 0);
-+	ASSERT_EQ(migrate(ptr, self->n1, self->n2, 1), 0);
- 	for (i = 0; i < self->nthreads - 1; i++)
- 		ASSERT_EQ(pthread_cancel(self->threads[i]), 0);
+ 	pthread_t *threads;
+@@ -265,4 +274,141 @@ TEST_F_TIMEOUT(migration, shared_hugetlb, 2*RUNTIME)
+ 	close(fd);
  }
-@@ -158,7 +164,7 @@ TEST_F_TIMEOUT(migration, shared_anon, 2*RUNTIME)
- 			self->pids[i] = pid;
- 	}
  
--	ASSERT_EQ(migrate(ptr, self->n1, self->n2), 0);
-+	ASSERT_EQ(migrate(ptr, self->n1, self->n2, 1), 0);
- 	for (i = 0; i < self->nthreads - 1; i++)
- 		ASSERT_EQ(kill(self->pids[i], SIGTERM), 0);
- }
-@@ -185,9 +191,78 @@ TEST_F_TIMEOUT(migration, private_anon_thp, 2*RUNTIME)
- 		if (pthread_create(&self->threads[i], NULL, access_mem, ptr))
- 			perror("Couldn't create thread");
- 
--	ASSERT_EQ(migrate(ptr, self->n1, self->n2), 0);
-+	ASSERT_EQ(migrate(ptr, self->n1, self->n2, 1), 0);
-+	for (i = 0; i < self->nthreads - 1; i++)
-+		ASSERT_EQ(pthread_cancel(self->threads[i]), 0);
-+}
-+
-+/*
-+ * Tests the anon hugetlb migration entry paths.
-+ */
-+TEST_F_TIMEOUT(migration, private_anon_hugetlb, 2*RUNTIME)
++#ifdef __NR_userfaultfd
++static int map_at_high_granularity(char *mem, size_t length)
 +{
-+	uint64_t *ptr;
 +	int i;
++	int ret;
++	int uffd = syscall(__NR_userfaultfd, 0);
++	struct uffdio_api api;
++	struct uffdio_register reg;
++	int pagesize = getpagesize();
 +
-+	if (self->nthreads < 2 || self->n1 < 0 || self->n2 < 0)
-+		SKIP(return, "Not enough threads or NUMA nodes available");
++	if (uffd < 0) {
++		perror("couldn't create uffd");
++		return uffd;
++	}
 +
-+	ptr = mmap(NULL, TWOMEG, PROT_READ | PROT_WRITE,
-+		MAP_PRIVATE | MAP_ANONYMOUS | MAP_HUGETLB, -1, 0);
-+	if (ptr == MAP_FAILED)
-+		SKIP(return, "Could not allocate hugetlb pages");
++	api.api = UFFD_API;
++	api.features = 0;
 +
-+	memset(ptr, 0xde, TWOMEG);
-+	for (i = 0; i < self->nthreads - 1; i++)
-+		if (pthread_create(&self->threads[i], NULL, access_mem, ptr))
-+			perror("Couldn't create thread");
++	ret = ioctl(uffd, UFFDIO_API, &api);
++	if (ret || api.api != UFFD_API) {
++		perror("UFFDIO_API failed");
++		goto out;
++	}
 +
-+	ASSERT_EQ(migrate(ptr, self->n1, self->n2, 1), 0);
- 	for (i = 0; i < self->nthreads - 1; i++)
- 		ASSERT_EQ(pthread_cancel(self->threads[i]), 0);
- }
- 
++	if (madvise(mem, length, MADV_SPLIT) == -1) {
++		perror("MADV_SPLIT failed");
++		goto out;
++	}
++
++	reg.range.start = (unsigned long)mem;
++	reg.range.len = length;
++
++	reg.mode = UFFDIO_REGISTER_MODE_MISSING | UFFDIO_REGISTER_MODE_MINOR;
++
++	ret = ioctl(uffd, UFFDIO_REGISTER, &reg);
++	if (ret) {
++		perror("UFFDIO_REGISTER failed");
++		goto out;
++	}
++
++	/* UFFDIO_CONTINUE each 4K segment of the 2M page. */
++	for (i = 0; i < length/pagesize; ++i) {
++		struct uffdio_continue cont;
++
++		cont.range.start = (unsigned long long)mem + i * pagesize;
++		cont.range.len = pagesize;
++		cont.mode = 0;
++		ret = ioctl(uffd, UFFDIO_CONTINUE, &cont);
++		if (ret) {
++			fprintf(stderr, "UFFDIO_CONTINUE failed "
++					"for %llx -> %llx: %d\n",
++					cont.range.start,
++					cont.range.start + cont.range.len,
++					errno);
++			goto out;
++		}
++	}
++	ret = 0;
++out:
++	close(uffd);
++	return ret;
++}
++#else
++static int map_at_high_granularity(char *mem, size_t length)
++{
++	fprintf(stderr, "Userfaultfd missing\n");
++	return -1;
++}
++#endif /* __NR_userfaultfd */
++
 +/*
-+ * Tests the shared hugetlb migration entry paths.
++ * Tests the high-granularity hugetlb migration entry paths.
 + */
-+TEST_F_TIMEOUT(migration, shared_hugetlb, 2*RUNTIME)
++TEST_F_TIMEOUT(migration, shared_hugetlb_hgm, 2*RUNTIME)
 +{
 +	uint64_t *ptr;
 +	int i;
@@ -216,11 +219,27 @@ index 1cec8425e3ca..21577a84d7e4 100644
 +
 +	if (ftruncate(fd, sz))
 +		SKIP(return, "Couldn't allocate hugetlb pages");
++
++	if (fallocate(fd, 0, 0, sz) < 0) {
++		perror("fallocate failed");
++		SKIP(return, "fallocate failed");
++	}
++
 +	ptr = mmap(NULL, sz, PROT_READ | PROT_WRITE, MAP_SHARED, fd, 0);
 +	if (ptr == MAP_FAILED)
-+		SKIP(return, "Could not map hugetlb pages");
++		SKIP(return, "Could not allocate hugetlb pages");
 +
-+	memset(ptr, 0xde, sz);
++	/*
++	 * We have to map_at_high_granularity before we memset, otherwise
++	 * memset will map everything at the hugepage size.
++	 */
++	if (map_at_high_granularity((char *)ptr, sz) < 0)
++		SKIP(return, "Could not map HugeTLB range at high granularity");
++
++	/* Populate the page we're migrating. */
++	for (i = 0; i < sz/sizeof(*ptr); ++i)
++		ptr[i] = i;
++
 +	for (i = 0; i < self->nthreads - 1; i++)
 +		if (pthread_create(&self->threads[i], NULL, access_mem, ptr))
 +			perror("Couldn't create thread");
@@ -230,6 +249,14 @@ index 1cec8425e3ca..21577a84d7e4 100644
 +		ASSERT_EQ(pthread_cancel(self->threads[i]), 0);
 +		pthread_join(self->threads[i], NULL);
 +	}
++
++	/* Check that the contents didnt' change. */
++	for (i = 0; i < sz/sizeof(*ptr); ++i) {
++		ASSERT_EQ(ptr[i], i);
++		if (ptr[i] != i)
++			break;
++	}
++
 +	ftruncate(fd, 0);
 +	close(fd);
 +}
