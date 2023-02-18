@@ -2,57 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9EC6E69B6BE
-	for <lists+linux-kernel@lfdr.de>; Sat, 18 Feb 2023 01:29:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1EE2469B6C3
+	for <lists+linux-kernel@lfdr.de>; Sat, 18 Feb 2023 01:31:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230113AbjBRA33 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Feb 2023 19:29:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41804 "EHLO
+        id S230118AbjBRA3d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Feb 2023 19:29:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43048 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229951AbjBRA3Q (ORCPT
+        with ESMTP id S229694AbjBRA3R (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Feb 2023 19:29:16 -0500
-Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18D716ABC9
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Feb 2023 16:28:55 -0800 (PST)
-Received: by mail-yb1-xb49.google.com with SMTP id l206-20020a25ccd7000000b006fdc6aaec4fso2656724ybf.20
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Feb 2023 16:28:54 -0800 (PST)
+        Fri, 17 Feb 2023 19:29:17 -0500
+Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 118F16ABF3
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Feb 2023 16:28:56 -0800 (PST)
+Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-5365a2b9e4fso19053897b3.15
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Feb 2023 16:28:56 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=Pz2nYroaVRrGSVy94qGG4nZ9E30MSqR5I0rmAzuTvq0=;
-        b=V1UHwis97dacsHy0l1b3lzUp4aEffElgkQqFRGAP4R9Hw6zzh9pL3pU8TQ6LeCkOOO
-         LAnGR0E6fLjGxKpr6E0yb8yofQJ3Yplq8n0cLT/bshgkpsM/hMNaBPY6WVg4rCJqcfel
-         PmhHCvaQjRLpj3PZA4l3c17dZhuSlGVknfSXIUsszWjHRSH2g8HHkboEveCGaLYpHpYI
-         huKFnLPcITV45hT7FdZX9JtRZdP0XFlN1WbgnsZXqSux2N7F1a5KMCJ3UlJJdxC6K6rW
-         3mwyAccoa5IIH5iiNCO6YwhAkDP3JU0L27dI4gD0cC8hs7RdC32Vnk5NUwnl613BgcAj
-         bg0A==
+        bh=Coc3VejVpx2o70gw2F1FMLmVPB7+pJmCD4QBd1TWaEQ=;
+        b=b9QeURwuMOHoR6oMuvaNhmrHn5fZGAuH6iVnLRa9UH1kSasBCwgdba6QJPd+K6jzHb
+         xz6s/6q+eVA72+3bOi37v4IpLi+gt+dDSU4ZiqKrbXd+tRUGRvRJ1mGjZ02I2XMyurj4
+         SsSE1g1trZVfhuYlrhfBM4w2eQv5qoEpUPlr5CJMDFyaM52fzsGSeRGzxi0rFH4dVLC6
+         IFd4sxykmk7qNUAT62W1oRvfIgHfE5E1BizMsR8G5eNcCZgGLkwZhgNod0TNXPX+Z62j
+         6Y1IxEaN7fiBpSKCe960CuuSJGub6psv+J5ih1KSgDonLBFQ4O9QsMNnykmF5WR/o4UG
+         3CMg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Pz2nYroaVRrGSVy94qGG4nZ9E30MSqR5I0rmAzuTvq0=;
-        b=BtJwc+hq0KUweiaaK/OSQmOHE0bMaoAE+zp5RUzUHkGJ6wG049gVstSMxE0CrFL7sX
-         LBwy5kaIXShajNOvYM5TNWqlh21yneKwgmdPGB0oNaqg9M7iCfFHtnb8ff3RSWhLCpoA
-         d2WgR6Un3UnobYhlWBimcuvNt5/MExVniq9VYx3ARJGkGJvX8w0oEDf3KuBOApvMWRW2
-         8aXacgWb10H+qwzflludmfyR8GBCCLb5LiI36lGDT1f5HBP6MWPjXRY1Yhd1AwEpY2Mv
-         sCiYmpiX4V99MmRz+uwAFi5pneqtszFc6u+0VLOsj31RsYpdWDgZvCEBxYfmPZahnIx6
-         8pcQ==
-X-Gm-Message-State: AO0yUKU2PaKJSL8/EfMtDX9UlcHi62l3kDx1ODq92P3qZhSPYxMNzli8
-        Xk7w44/o6p5ZO39LZs6wcgCEdE+IMIzCKWuV
-X-Google-Smtp-Source: AK7set+zcld/vdofwpUCcvIXOcKa++WCtmqUm8NMGDjM4RjhBKN3Re9Z99sY+8b3ruIVEFKeHpX84TBdzsYueQO8
+        bh=Coc3VejVpx2o70gw2F1FMLmVPB7+pJmCD4QBd1TWaEQ=;
+        b=klwZ9okWf7daMKyeDQ0qFM8L7FDsN5pOwsL7CRHRgZ3SM5JhPzz8QOzOydPwjoACUj
+         7VXFCi3kyGhJ/jRrOZWSw6ogAjQdaktugZf/lpSroB8MctgELZQvGyiL7jNbYp2emez5
+         10KCnYsM+OEL+oVtyRjRjZnDc1YxPuHnkjQUgOhsZ13E+ppVw97ZCuFFqrtO9YltPny/
+         rtxU+99k/BnlmDBAaHpvY4wf7hmkeSRQ3GvPIl6fQWXFsSowC2dJH6x3p2An5L9yALLe
+         N7RuUwpGn3UDSLYPU3UPdaivWXw/GeGnesY12IhtIN17lrJrQhTJf+6fSBr+80UmIlf3
+         ziPQ==
+X-Gm-Message-State: AO0yUKXOH+ifzjGYDFbF9mVdSLaY0CypMaP58GQQo72c/iJJTcrXjhom
+        h4kxniod5CGCa2R7DnPUSoThV53CdGmIAxcB
+X-Google-Smtp-Source: AK7set9ALTOiMY3O/c14DOIxwwoyqi8AmUxl79K9DJLNuYtBmR+KN/t3Tjueou+iosR6XToAl+9j+ymfqMf1UvES
 X-Received: from jthoughton.c.googlers.com ([fda3:e722:ac3:cc00:14:4d90:c0a8:2a4f])
- (user=jthoughton job=sendgmr) by 2002:a05:6902:10c:b0:997:c919:4484 with SMTP
- id o12-20020a056902010c00b00997c9194484mr28393ybh.6.1676680134689; Fri, 17
- Feb 2023 16:28:54 -0800 (PST)
-Date:   Sat, 18 Feb 2023 00:27:44 +0000
+ (user=jthoughton job=sendgmr) by 2002:a81:b705:0:b0:534:d71f:14e6 with SMTP
+ id v5-20020a81b705000000b00534d71f14e6mr53501ywh.9.1676680135521; Fri, 17 Feb
+ 2023 16:28:55 -0800 (PST)
+Date:   Sat, 18 Feb 2023 00:27:45 +0000
 In-Reply-To: <20230218002819.1486479-1-jthoughton@google.com>
 Mime-Version: 1.0
 References: <20230218002819.1486479-1-jthoughton@google.com>
 X-Mailer: git-send-email 2.39.2.637.g21b0678d19-goog
-Message-ID: <20230218002819.1486479-12-jthoughton@google.com>
-Subject: [PATCH v2 11/46] hugetlb: add hugetlb_pte to track HugeTLB page table entries
+Message-ID: <20230218002819.1486479-13-jthoughton@google.com>
+Subject: [PATCH v2 12/46] hugetlb: add hugetlb_alloc_pmd and hugetlb_alloc_pte
 From:   James Houghton <jthoughton@google.com>
 To:     Mike Kravetz <mike.kravetz@oracle.com>,
         Muchun Song <songmuchun@bytedance.com>,
@@ -86,157 +86,168 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-After high-granularity mapping, page table entries for HugeTLB pages can
-be of any size/type. (For example, we can have a 1G page mapped with a
-mix of PMDs and PTEs.) This struct is to help keep track of a HugeTLB
-PTE after we have done a page table walk.
+These functions are used to allocate new PTEs below the hstate PTE. This
+will be used by hugetlb_walk_step, which implements stepping forwards in
+a HugeTLB high-granularity page table walk.
 
-Without this, we'd have to pass around the "size" of the PTE everywhere.
-We effectively did this before; it could be fetched from the hstate,
-which we pass around pretty much everywhere.
+The reasons that we don't use the standard pmd_alloc/pte_alloc*
+functions are:
+ 1) This prevents us from accidentally overwriting swap entries or
+    attempting to use swap entries as present non-leaf PTEs (see
+    pmd_alloc(); we assume that !pte_none means pte_present and
+    non-leaf).
+ 2) Locking hugetlb PTEs can different than regular PTEs. (Although, as
+    implemented right now, locking is the same.)
+ 3) We can maintain compatibility with CONFIG_HIGHPTE. That is, HugeTLB
+    HGM won't use HIGHPTE, but the kernel can still be built with it,
+    and other mm code will use it.
 
-hugetlb_pte_present_leaf is included here as a helper function that will
-be used frequently later on.
+When GENERAL_HUGETLB supports P4D-based hugepages, we will need to
+implement hugetlb_pud_alloc to implement hugetlb_walk_step.
 
 Signed-off-by: James Houghton <jthoughton@google.com>
 
 diff --git a/include/linux/hugetlb.h b/include/linux/hugetlb.h
-index a1ceb9417f01..eeacadf3272b 100644
+index eeacadf3272b..9d839519c875 100644
 --- a/include/linux/hugetlb.h
 +++ b/include/linux/hugetlb.h
-@@ -26,6 +26,25 @@ typedef struct { unsigned long pd; } hugepd_t;
- #define __hugepd(x) ((hugepd_t) { (x) })
- #endif
+@@ -72,6 +72,11 @@ unsigned long hugetlb_pte_mask(const struct hugetlb_pte *hpte)
  
-+enum hugetlb_level {
-+	HUGETLB_LEVEL_PTE = 1,
-+	/*
-+	 * We always include PMD, PUD, and P4D in this enum definition so that,
-+	 * when logged as an integer, we can easily tell which level it is.
-+	 */
-+	HUGETLB_LEVEL_PMD,
-+	HUGETLB_LEVEL_PUD,
-+	HUGETLB_LEVEL_P4D,
-+	HUGETLB_LEVEL_PGD,
-+};
-+
-+struct hugetlb_pte {
-+	pte_t *ptep;
-+	unsigned int shift;
-+	enum hugetlb_level level;
-+	spinlock_t *ptl;
-+};
-+
- #ifdef CONFIG_HUGETLB_PAGE
+ bool hugetlb_pte_present_leaf(const struct hugetlb_pte *hpte, pte_t pte);
  
- #include <linux/mempolicy.h>
-@@ -39,6 +58,20 @@ typedef struct { unsigned long pd; } hugepd_t;
-  */
- #define __NR_USED_SUBPAGE 3
- 
-+static inline
-+unsigned long hugetlb_pte_size(const struct hugetlb_pte *hpte)
-+{
-+	return 1UL << hpte->shift;
-+}
-+
-+static inline
-+unsigned long hugetlb_pte_mask(const struct hugetlb_pte *hpte)
-+{
-+	return ~(hugetlb_pte_size(hpte) - 1);
-+}
-+
-+bool hugetlb_pte_present_leaf(const struct hugetlb_pte *hpte, pte_t pte);
++pmd_t *hugetlb_alloc_pmd(struct mm_struct *mm, struct hugetlb_pte *hpte,
++		unsigned long addr);
++pte_t *hugetlb_alloc_pte(struct mm_struct *mm, struct hugetlb_pte *hpte,
++		unsigned long addr);
 +
  struct hugepage_subpool {
  	spinlock_t lock;
  	long count;
-@@ -1234,6 +1267,45 @@ static inline spinlock_t *huge_pte_lock(struct hstate *h,
- 	return ptl;
- }
- 
-+static inline
-+spinlock_t *hugetlb_pte_lockptr(struct hugetlb_pte *hpte)
-+{
-+	return hpte->ptl;
-+}
-+
-+static inline
-+spinlock_t *hugetlb_pte_lock(struct hugetlb_pte *hpte)
-+{
-+	spinlock_t *ptl = hugetlb_pte_lockptr(hpte);
-+
-+	spin_lock(ptl);
-+	return ptl;
-+}
-+
-+static inline
-+void __hugetlb_pte_init(struct hugetlb_pte *hpte, pte_t *ptep,
-+			unsigned int shift, enum hugetlb_level level,
-+			spinlock_t *ptl)
-+{
-+	/*
-+	 * If 'shift' indicates that this PTE is contiguous, then @ptep must
-+	 * be the first pte of the contiguous bunch.
-+	 */
-+	hpte->ptl = ptl;
-+	hpte->ptep = ptep;
-+	hpte->shift = shift;
-+	hpte->level = level;
-+}
-+
-+static inline
-+void hugetlb_pte_init(struct mm_struct *mm, struct hugetlb_pte *hpte,
-+		      pte_t *ptep, unsigned int shift,
-+		      enum hugetlb_level level)
-+{
-+	__hugetlb_pte_init(hpte, ptep, shift, level,
-+			   huge_pte_lockptr(shift, mm, ptep));
-+}
-+
- #if defined(CONFIG_HUGETLB_PAGE) && defined(CONFIG_CMA)
- extern void __init hugetlb_cma_reserve(int order);
- #else
 diff --git a/mm/hugetlb.c b/mm/hugetlb.c
-index 5ca9eae0ac42..6c74adff43b6 100644
+index 6c74adff43b6..bb424cdf79e4 100644
 --- a/mm/hugetlb.c
 +++ b/mm/hugetlb.c
-@@ -1269,6 +1269,35 @@ static bool vma_has_reserves(struct vm_area_struct *vma, long chg)
- 	return false;
+@@ -483,6 +483,120 @@ static bool has_same_uncharge_info(struct file_region *rg,
+ #endif
  }
  
-+bool hugetlb_pte_present_leaf(const struct hugetlb_pte *hpte, pte_t pte)
++/*
++ * hugetlb_alloc_pmd -- Allocate or find a PMD beneath a PUD-level hpte.
++ *
++ * This is meant to be used to implement hugetlb_walk_step when one must go to
++ * step down to a PMD. Different architectures may implement hugetlb_walk_step
++ * differently, but hugetlb_alloc_pmd and hugetlb_alloc_pte are architecture-
++ * independent.
++ *
++ * Returns:
++ *	On success: the pointer to the PMD. This should be placed into a
++ *		    hugetlb_pte. @hpte is not changed.
++ *	ERR_PTR(-EINVAL): hpte is not PUD-level
++ *	ERR_PTR(-EEXIST): there is a non-leaf and non-empty PUD in @hpte
++ *	ERR_PTR(-ENOMEM): could not allocate the new PMD
++ */
++pmd_t *hugetlb_alloc_pmd(struct mm_struct *mm, struct hugetlb_pte *hpte,
++		unsigned long addr)
 +{
-+	pgd_t pgd;
-+	p4d_t p4d;
++	spinlock_t *ptl = hugetlb_pte_lockptr(hpte);
++	pmd_t *new;
++	pud_t *pudp;
 +	pud_t pud;
-+	pmd_t pmd;
 +
-+	switch (hpte->level) {
-+	case HUGETLB_LEVEL_PGD:
-+		pgd = __pgd(pte_val(pte));
-+		return pgd_present(pgd) && pgd_leaf(pgd);
-+	case HUGETLB_LEVEL_P4D:
-+		p4d = __p4d(pte_val(pte));
-+		return p4d_present(p4d) && p4d_leaf(p4d);
-+	case HUGETLB_LEVEL_PUD:
-+		pud = __pud(pte_val(pte));
-+		return pud_present(pud) && pud_leaf(pud);
-+	case HUGETLB_LEVEL_PMD:
-+		pmd = __pmd(pte_val(pte));
-+		return pmd_present(pmd) && pmd_leaf(pmd);
-+	case HUGETLB_LEVEL_PTE:
-+		return pte_present(pte);
-+	default:
-+		WARN_ON_ONCE(1);
-+		return false;
++	if (hpte->level != HUGETLB_LEVEL_PUD)
++		return ERR_PTR(-EINVAL);
++
++	pudp = (pud_t *)hpte->ptep;
++retry:
++	pud = READ_ONCE(*pudp);
++	if (likely(pud_present(pud)))
++		return unlikely(pud_leaf(pud))
++			? ERR_PTR(-EEXIST)
++			: pmd_offset(pudp, addr);
++	else if (!pud_none(pud))
++		/*
++		 * Not present and not none means that a swap entry lives here,
++		 * and we can't get rid of it.
++		 */
++		return ERR_PTR(-EEXIST);
++
++	new = pmd_alloc_one(mm, addr);
++	if (!new)
++		return ERR_PTR(-ENOMEM);
++
++	spin_lock(ptl);
++	if (!pud_same(pud, *pudp)) {
++		spin_unlock(ptl);
++		pmd_free(mm, new);
++		goto retry;
 +	}
++
++	mm_inc_nr_pmds(mm);
++	smp_wmb(); /* See comment in pmd_install() */
++	pud_populate(mm, pudp, new);
++	spin_unlock(ptl);
++	return pmd_offset(pudp, addr);
 +}
 +
++/*
++ * hugetlb_alloc_pte -- Allocate a PTE beneath a pmd_none PMD-level hpte.
++ *
++ * See the comment above hugetlb_alloc_pmd.
++ */
++pte_t *hugetlb_alloc_pte(struct mm_struct *mm, struct hugetlb_pte *hpte,
++		unsigned long addr)
++{
++	spinlock_t *ptl = hugetlb_pte_lockptr(hpte);
++	pgtable_t new;
++	pmd_t *pmdp;
++	pmd_t pmd;
 +
- static void enqueue_hugetlb_folio(struct hstate *h, struct folio *folio)
++	if (hpte->level != HUGETLB_LEVEL_PMD)
++		return ERR_PTR(-EINVAL);
++
++	pmdp = (pmd_t *)hpte->ptep;
++retry:
++	pmd = READ_ONCE(*pmdp);
++	if (likely(pmd_present(pmd)))
++		return unlikely(pmd_leaf(pmd))
++			? ERR_PTR(-EEXIST)
++			: pte_offset_kernel(pmdp, addr);
++	else if (!pmd_none(pmd))
++		/*
++		 * Not present and not none means that a swap entry lives here,
++		 * and we can't get rid of it.
++		 */
++		return ERR_PTR(-EEXIST);
++
++	/*
++	 * With CONFIG_HIGHPTE, calling `pte_alloc_one` directly may result
++	 * in page tables being allocated in high memory, needing a kmap to
++	 * access. Instead, we call __pte_alloc_one directly with
++	 * GFP_PGTABLE_USER to prevent these PTEs being allocated in high
++	 * memory.
++	 */
++	new = __pte_alloc_one(mm, GFP_PGTABLE_USER);
++	if (!new)
++		return ERR_PTR(-ENOMEM);
++
++	spin_lock(ptl);
++	if (!pmd_same(pmd, *pmdp)) {
++		spin_unlock(ptl);
++		pgtable_pte_page_dtor(new);
++		__free_page(new);
++		goto retry;
++	}
++
++	mm_inc_nr_ptes(mm);
++	smp_wmb(); /* See comment in pmd_install() */
++	pmd_populate(mm, pmdp, new);
++	spin_unlock(ptl);
++	return pte_offset_kernel(pmdp, addr);
++}
++
+ static void coalesce_file_region(struct resv_map *resv, struct file_region *rg)
  {
- 	int nid = folio_nid(folio);
+ 	struct file_region *nrg, *prg;
 -- 
 2.39.2.637.g21b0678d19-goog
 
