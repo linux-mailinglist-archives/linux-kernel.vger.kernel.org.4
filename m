@@ -2,181 +2,175 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 826BF69BA84
-	for <lists+linux-kernel@lfdr.de>; Sat, 18 Feb 2023 15:55:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E6DC569BA86
+	for <lists+linux-kernel@lfdr.de>; Sat, 18 Feb 2023 15:55:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229597AbjBROzf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 18 Feb 2023 09:55:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44860 "EHLO
+        id S229540AbjBROzt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 18 Feb 2023 09:55:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45180 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229570AbjBROzb (ORCPT
+        with ESMTP id S229570AbjBROzr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 18 Feb 2023 09:55:31 -0500
-Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DEA1A18B2C
-        for <linux-kernel@vger.kernel.org>; Sat, 18 Feb 2023 06:55:29 -0800 (PST)
-Received: by mail-ed1-x531.google.com with SMTP id ec30so3336548edb.10
-        for <linux-kernel@vger.kernel.org>; Sat, 18 Feb 2023 06:55:29 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=iVLRzXREQ+19fFs4Pc7mcjHjxtT7x8ggG7HENOjDxNg=;
-        b=J/tvudzLLml7HurgL4Skxujt0BfWSAZikHpxyEzg/oLlKbA/7VrefQN0zhtzRtDRjM
-         s7waRZc5aqFiLJ8X+8vN9JYZdYJDGPjP6SlsDwK9F5f67RZsbA52Ro6sG/vaFZmDND86
-         j12TsRgfN6rcd6YqkzsmjT5m33l22siYXjYlEPzQ8QtfXA5kZdOnlirO0toGRTts/s6D
-         EpWSa1EaOm0h4bbjf8qu6fIitg4maKVxmj2NGyTKVs/LIT6GgFRlWefbRq8p0X68Hv78
-         XZ+4Uo4yDbuYYtrtEVmwywWtZKsXT2OYPyc+GkJAUI3YEWxQxr85H5oY89BGRCtRyAMU
-         M3Sw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=iVLRzXREQ+19fFs4Pc7mcjHjxtT7x8ggG7HENOjDxNg=;
-        b=H5QjF7Fk2HUdYB+Io4Vmd5p8w+r+6q6Oir/SU2SMXAr5aY0i2rGudihCH0jDJ8v8z9
-         xhBrH9f7me/RP/PoVJOI8KuD4e/LU+AXZ7tW0kLmh5mp4ZnfD7JFZOBby9kMasktJrMk
-         SlO7yvzZyLtOB/Y8O8leHh1GLEhjJlGkapQF4K9/xKBchJ8+lAL7T/+mQJpywCKDFMfY
-         rc/TmRDYM8valcir4sALsNphLYUbacp8Hun5yOVN+s3SVcfb7dJ7nxduf10KgnM1Jp3H
-         OO9PJGvYVbGMXcsJVqOyEkS1LCgDbor9aw8QNJyAIeP/t8CXhIcya451quCyo8rWOC59
-         yi/Q==
-X-Gm-Message-State: AO0yUKVs7OqYKLyON6QveeAFbrnTdM2Xgqu0715q71xRaiHAExZDXoWe
-        Wk7VKMvrr0YtyYOSr4OyAXf4YQ==
-X-Google-Smtp-Source: AK7set+o+3+5itFIzexy/ZcNCze7tMCBX9222/c9vkPLuQ7XzbbxCzFEcxKBDAOO5XZYry+Sq1kOWw==
-X-Received: by 2002:a17:907:98d2:b0:8b2:3eb6:8661 with SMTP id kd18-20020a17090798d200b008b23eb68661mr5633482ejc.8.1676732128340;
-        Sat, 18 Feb 2023 06:55:28 -0800 (PST)
-Received: from [192.168.1.109] ([178.197.216.144])
-        by smtp.gmail.com with ESMTPSA id lo10-20020a170906fa0a00b008b1550a289fsm3461187ejb.34.2023.02.18.06.55.26
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 18 Feb 2023 06:55:27 -0800 (PST)
-Message-ID: <a3217699-7b23-35e6-84b2-fe9e52158481@linaro.org>
-Date:   Sat, 18 Feb 2023 15:55:25 +0100
-MIME-Version: 1.0
+        Sat, 18 Feb 2023 09:55:47 -0500
+Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2085.outbound.protection.outlook.com [40.107.93.85])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8BB2193DE;
+        Sat, 18 Feb 2023 06:55:42 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Ps/ldELC0PvixDC4lDZ4BgUqXm4XeGW9oCyzvlUjVPx6Sz0QuKOxOoL1k61q5vVjgmRNqEcZ2wk6rByKSthCy8bnEQYaXSM37lsadV1bdEFMnaYaVvQM1/wRCelCDTwTS0jcQ19DUMhS1dv68OmNMAsd4yjzHLb1PZMFEty0XNzelF2CppCNzLU2Lu0Ek5Rd712EHsxocEwnStr1VF9nqfgy4u5Y8dFh4Ab3QfW6RxRB9jDumz9vUhHgZstx9bhfZHaqMqk3HLyvmlgHvhhw2plLrmUsoCtInIOzXPR1V6keEmqsHlGIr23l3YfhZ5hIc7RaxuXVOhBld1GpiHwz8w==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=cN4U2dPRmsrmfL0FCdfETMPyvPc2PVxnwB8419YiRTU=;
+ b=gvAQLgihqiNcCDgMshz6/V4fn9FXxE66FUa8fS0rMHI+F7Z452g+D3AnUpAcmqr+oh+XfkI9uwJPrXR1zxZXY9sG2HcjNUrgJ+eyF5A28SYEv7+ctU8hfc1FVQkNNdF1fBTXBugtskzHoocEofeb42C8fSthNDrfzNBHxuIsegtToji0DgbTEQtZwSxLFRTSzFr/m1ckBl3ffSgSHf+yCgrLbLWyr6MyfzR+UUHnDa2C1GdnYRmUoQp4is4M3Y8RRzaw5uhgXLifNbkqCtnBUJjgNjYfGxXDKDriOTYUERTzRZWHu4YnjFqMWnnVzqGGmt1+eWK8edz8poMmOz6fJA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=cN4U2dPRmsrmfL0FCdfETMPyvPc2PVxnwB8419YiRTU=;
+ b=wRjouS8oQdRcXmTaI47XS/KMmkGlYoi63ZvWOpBvEf4AyC2t4isx/veo6kt4vTVu8wy4Hll6rVpQkmFg1JpsQ/ok5frkGNO/7IY1EtR78ORgQ6QRGfPIBRVBIt283Dbj68xbXb3rxZlyCPfkzhlrO59nDmz9XJPTSzciX3tW9Js=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from DM4PR12MB5229.namprd12.prod.outlook.com (2603:10b6:5:398::12)
+ by CH0PR12MB5076.namprd12.prod.outlook.com (2603:10b6:610:e3::17) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6111.18; Sat, 18 Feb
+ 2023 14:55:41 +0000
+Received: from DM4PR12MB5229.namprd12.prod.outlook.com
+ ([fe80::6cc0:9c7a:bd00:441c]) by DM4PR12MB5229.namprd12.prod.outlook.com
+ ([fe80::6cc0:9c7a:bd00:441c%5]) with mapi id 15.20.6111.018; Sat, 18 Feb 2023
+ 14:55:40 +0000
+Message-ID: <f4a1531d-954b-ae68-a202-8ae4e7e78485@amd.com>
+Date:   Sat, 18 Feb 2023 08:55:38 -0600
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.7.1
-Subject: Re: [PATCH v3 07/11] dt-bindings: clock: Add StarFive JH7110 system
- clock and reset generator
+Subject: Re: [PATCH 2/5] KVM: x86: Shrink struct kvm_queued_exception
 Content-Language: en-US
-To:     Conor Dooley <conor@kernel.org>
-Cc:     Conor Dooley <conor.dooley@microchip.com>,
-        Hal Feng <hal.feng@starfivetech.com>,
-        linux-riscv@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-clk@vger.kernel.org, Palmer Dabbelt <palmer@dabbelt.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Emil Renner Berthing <emil.renner.berthing@canonical.com>,
-        linux-kernel@vger.kernel.org
-References: <Y6tSWB2+98a8k9Qw@spud>
- <5cf0fe71-fd17-fb28-c01e-28356081ba76@starfivetech.com>
- <Y+5z8skN2DuvxDEL@spud>
- <68e61f28-daec-ce72-726a-1fffe8e94829@starfivetech.com>
- <Y+8x/KSujhgNLAd6@wendy>
- <d3b06d0b-ff17-ebab-bae5-e1ec836fe667@starfivetech.com>
- <Y++B43uCnPQlRYFi@wendy> <dcba75b5-7b62-35aa-6836-5d5edd785002@linaro.org>
- <Y++q9ln8P3XegqfN@spud> <41e4f293-99eb-f157-b4a9-3d00b15f4652@linaro.org>
- <Y/CztNs6laTzttrI@spud>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <Y/CztNs6laTzttrI@spud>
-Content-Type: text/plain; charset=UTF-8
+To:     Mathias Krause <minipli@grsecurity.net>, kvm@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org,
+        Sean Christopherson <seanjc@google.com>,
+        Paolo Bonzini <pbonzini@redhat.com>
+References: <20230213163351.30704-1-minipli@grsecurity.net>
+ <20230213163351.30704-3-minipli@grsecurity.net>
+From:   Tom Lendacky <thomas.lendacky@amd.com>
+In-Reply-To: <20230213163351.30704-3-minipli@grsecurity.net>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-ClientProxiedBy: SN7PR04CA0065.namprd04.prod.outlook.com
+ (2603:10b6:806:121::10) To DM4PR12MB5229.namprd12.prod.outlook.com
+ (2603:10b6:5:398::12)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DM4PR12MB5229:EE_|CH0PR12MB5076:EE_
+X-MS-Office365-Filtering-Correlation-Id: a48763bf-6b8e-4ef7-cf2b-08db11c033bc
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: J6Pue0BRJIan/Oa4vAQwlqqDXrWkri61mahdQVvXQyBkf9GMs/6a/XUe945yUnxn9ET6WfzcrWCRx0UNWQ8+K1k1CKA+/T8tHhBwnMD96EeKp41YneIvtAuNdx9HASjY6XmN2A/Z7Znl6TBXYIW/V4ibii8KIwc1fvexDHRAKJ8SH65QmaK2Z97zjK/NTxeo9+5H1PcDKsiT2j/GjVzc82guQ27HVLyTE35LrK9g24Gv5NbcUQEbtKG4nwLAbd9GVo0WgJmxaqoc0Fat6hEJTL6ShYP56OB78fMcORKtrJMXINk2wo3AZFVUtGPGakVpwmTtbDnUvgt1/vTIaJDMt/LfnI/cwl03JEH//vf0rrApMYQ6Xw18+/w9gdjVCYBS7GBvel9uNmIbGyk0RWKBx1bXhLUE97EQvcBAWeCcjS4C2i5Hq40QEf/F685KkFgVuqvK8BIbvCKUuSXSJyxNjrJ7RRnb4pjr7LbjxD4+YaHBGlERuvvhdYq1pwwG28WenQEaXtbuxiqbkPj1Qon7qlBUfzCRDOSk9g7/rOx+V3UjONTwHLm13XLomZT+2m+uFTvX2z8ouTrhhyxHsbRmGTbxvUJAWH+fyfrlHVXDGt/xsKKViOElCIJ2+l6XvWHuEycI/zQcDgV+/rDE48q08Jj8G+Dq+jgPU0LYCEMTh2xzFs4PxjDUsoeEOy0rec4bGTMsQHJljpjLKym3GvfLNn5CZcENfY/wF5NPCCXZXe0=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM4PR12MB5229.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(376002)(366004)(39860400002)(396003)(136003)(346002)(451199018)(186003)(26005)(53546011)(6512007)(2616005)(31686004)(6486002)(478600001)(54906003)(6506007)(316002)(83380400001)(38100700002)(41300700001)(2906002)(8936002)(66946007)(66556008)(66476007)(8676002)(4326008)(5660300002)(36756003)(31696002)(86362001)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?TUVsRy81b04vQnN3dVRiUVI2VUp0czVkVGJmUmJpRG9TNEdTWFhtOHZMdDlz?=
+ =?utf-8?B?VnBGZWNPaG96alFndDUzMU82YWo1b1hzRHc3emw4a3hlejd4am14Ykk4aWM0?=
+ =?utf-8?B?Z3FaZmFrOTRkQ09YcFYxMnF3QmJPQXlpNG9oL0FWY2lpc01UdFlIODhPbitI?=
+ =?utf-8?B?dzNMaTdOODRpdGozRXZmL1ZvZldnNVNvUENoWVNHanVZZnovSC9lYVJkMzg0?=
+ =?utf-8?B?SUE4VlhVM1Q0VDRtL05zUG9CQ2RlUFBIYnFhQ3JDWVovb0w1OXF5em53dENL?=
+ =?utf-8?B?cmhYVmpyTGJteGE1UnB0MGZNanc0TVdVMm1TMDUxNGJMUUZsK2U2aGdkM0pD?=
+ =?utf-8?B?bWlWbnZ6a2tpc2dMdHhiZ0lHb3RsTWhSb2VrODBxbzl2cVc4VVZRSFI1QVN3?=
+ =?utf-8?B?azUwV2xKWHVVTnJoS212OE1Ub0wwQUZ4SERqc2JROXd0S1lYWjlKdm9rRmxO?=
+ =?utf-8?B?dXdURnpJUWh0SjQ3cjBWTlo1SmxCZEtrT21RSVB3Wm02L0d2Nng4ckdUNmRB?=
+ =?utf-8?B?dnVSNU5mWWRoZXd3ZVJmYUdEVkdQc0FKMmptd0lWU053L2RxQnJiTjg3VSs1?=
+ =?utf-8?B?WTVvK0NrbmZ1T2lsdUlnRUVFZTR6NWNZdFRCOXN5S1YyVWFXMzZhbWVnRm5D?=
+ =?utf-8?B?THNvUWFNR2cyYmhxRlNKaTc5Q1hEdElycCtlbXovRlREYnI3VkM4QVJoNmc1?=
+ =?utf-8?B?S2RMamJ4c3djQzF4MlE5TjNUbDY0aWJ5M2pzc2FJTkhhcENnYmNXR28rQlF6?=
+ =?utf-8?B?T090NFNZbHJIejk0YUFFM2R4QVFUeEVmQmtNejNSWko0Z0pldkFOaWZJL3hS?=
+ =?utf-8?B?THd5bUs0bmlGZUtaTGVKVXFXeFUwVWpwTWduWEU1SUhlblloSzl2MDFwdVoy?=
+ =?utf-8?B?akRzMEpNalJCMDJhaGREb3pJeUlpNFdyd2xGVWpSS1dPa1pMU3Yzd2lzM1VI?=
+ =?utf-8?B?MHJyWFNQd2Q5ektZZjRFRGoyTFczM0YwMm5mL0s0OFlNejBSVkV6RlNmbXcw?=
+ =?utf-8?B?MTFaSXZZU0pBZUJKTCtRSFkvWTZpS0JXdVVObEcxWHYzWk82M052YzI2cmJY?=
+ =?utf-8?B?b1BiOHUyc2NaNkY3SUpQOUdCNExQN242aHZLaDhkRFZraUdZSWpPdFYxV2Vk?=
+ =?utf-8?B?bCs3QW56M0hnaU5OY081eG10OU9PVFlIRzRvK2gwVmg0ZFQzNXhranNNdUpv?=
+ =?utf-8?B?MVZEbC9uMG5Sc05GT25XWnZTSC9ycFJUWEFRVXJOQzdZUzFGMG9UTFZYMVRM?=
+ =?utf-8?B?YnNiTXUwVUVuWDBVUEErZ2o1bHhqakliRUI0bXkvZHFyK2V5WGNUcnNTTFVL?=
+ =?utf-8?B?T0VMZXl3dFo2YkRrdTZlMkdsQkVLMmpKQlhpK0VTQ2VNclpaaWtoQjlCVk0w?=
+ =?utf-8?B?TlBBRHRKMlF2cVpEODVDS2EyV1kwS0JDT1lkYUJwWitLa1R5S0FZcjhPS2da?=
+ =?utf-8?B?YzJLQUVWd1dmTXpyS1hhTldxZ2IwcmljN0Z0VHpiajQ2QTFvS1RmR1hkR25G?=
+ =?utf-8?B?aUxOZlNiTitKcHFKMVhxYmpBR1ZFSm15QVN6Z0QwWnZyUHEzZE1zSWxrTjI5?=
+ =?utf-8?B?eW9sZks0QmZJUVJOdEFsVm05d2tkQlU0VmFVM2FPM1RNNll5RG1VU1RXSG9Q?=
+ =?utf-8?B?N1lXSEVpZk9ySUROSVl5SmxVcmVDSExPVFU0cnZpemErb0FSc2QzeVdDZGoz?=
+ =?utf-8?B?STNDc3VMeTBvUVhtRHJUSmlINlBlaDNaRjZGb1owcDd0QUVweEh0MjIrV2t0?=
+ =?utf-8?B?WU56VUtUME5SQWZSY2hHU01EeGdSQ0J1Zzl3eklvSTd0UXJBd2lOQ2dLa3Ni?=
+ =?utf-8?B?SHBLRFZsZVhMVFhKcFF3NXZuQTdwaVJ0b29kSzc2bnRrZXdscE82UUh2UDNW?=
+ =?utf-8?B?RUJoNjFHdjNFeWRCQ0djcDQ4eGwvdDZtREYvNHZpZzlrd0wrYkk2c0N4dlM5?=
+ =?utf-8?B?YTM1RExoNisrbmlPaWxzNjFQdUJwaTFsWkk2cEROVE4wK2VGcUNxVDN6NGUr?=
+ =?utf-8?B?dUNYVFBpeDFpTXBQR09DUjhsU3JWTHMyVHVMNU1vVkk0WlArR0JuTzVlOXM5?=
+ =?utf-8?B?cjVqejhHRExQaktRS1RPeGVzYmU1ZFovQTRQWE8wbVpKank0VUNRSlBBSVBF?=
+ =?utf-8?Q?NnBsJFgY3b7AecDL4flBcfER0?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: a48763bf-6b8e-4ef7-cf2b-08db11c033bc
+X-MS-Exchange-CrossTenant-AuthSource: DM4PR12MB5229.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 Feb 2023 14:55:40.4806
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: OsPMrmaH6ZyEybkfdS9MwcgPOX+iicCcFbLFn6bIr93RVlntovv0W04eQ5NkTHfw/X1kQzxFJ/gWeSLPLK2qAA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH0PR12MB5076
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 18/02/2023 12:17, Conor Dooley wrote:
-> Hey Krzysztof,
+On 2/13/23 10:33, Mathias Krause wrote:
+> Reshuffle the boolean members of struct kvm_queued_exception and make
+> them individual bits, allowing denser packing.
 > 
-> On Sat, Feb 18, 2023 at 11:20:30AM +0100, Krzysztof Kozlowski wrote:
->> On 17/02/2023 17:27, Conor Dooley wrote:
->>> On Fri, Feb 17, 2023 at 04:47:48PM +0100, Krzysztof Kozlowski wrote:
->>>> On 17/02/2023 14:32, Conor Dooley wrote:
->>>>>>>> Yes, it is.
->>>>>>>
->>>>>>> Which would then make GMAC1 RGMII RX optional, rather than required?
->>>>>>
->>>>>> If thinking in this way, I must say yes, it is optional. But actually
->>>>>> GMAC1 RGMII RX feeds gmac1_rx by default. 
->>>>>> For a mux, it usually works if you populate only one input to it.
->>>>>> Does it mean all the other inputs are optional? And how can we define
->>>>>> which input is required?
->>>>>
->>>>> I'm not sure, that is a question for Krzysztof and/or Rob.
->>>>
->>>> That's a long thread, please summarize what you ask. Otherwise I have no
->>>> clue what is the question.
->>>
->>> Sorry. I tried to preserve the context of the conversation the last time
->>> I cropped it so that things would be contained on one email.
->>>
->>> For me at least, I am wondering how you convey that out of a list of
->>> clock inputs (for example a, b, c, d) that two of the clocks are inputs
->>> to a mux and it is only required to provide one of the two (say b & c).
+> This allows us to shrink the object size from 24 to 16 bytes for 64 bit
+> builds.
 > 
-> You skipped this part which was what I was trying to ask you about.
-
-Yeah, I skipped a lot because there was one big thread with a question:
-what do you think? Sorry, I will not dig 8 emails thread to figure out
-which question is to me and which is not...
-
-> Do you know how to convey this situation, or is it even possible to
-> express those rules?
-
-oneOf:
- - clock-names:
-     minItems: 3
-     items:
-       - a
-       - b
-       - c
-       - d
- - clock-names:
-     items:
-       - a
-       - b
-       - d
-
-or maybe:
- - clock-names:
-     minItems: 3
-     items:
-       - a
-       - b
-       - enum: [c, d]
-       - d
-
-
+> Signed-off-by: Mathias Krause <minipli@grsecurity.net>
+> ---
+>   arch/x86/include/asm/kvm_host.h | 8 ++++----
+>   1 file changed, 4 insertions(+), 4 deletions(-)
 > 
->>>> Does the mux works correctly if clock input is not connected? I mean,
->>>> are you now talking about real hardware or some simplification from SW
->>>> point of view?
->>>
->>> I'm coming at this from an angle of "is a StarFive customer going to show
->>> up with a devicetree containing dummy fixed-clocks to satisfy dtbs_check
->>> because they opted to only populate one input to the mux".
->>> I don't really care about implications for the driver, just about
->>> whether the hardware allows for inputs to the mux to be left
->>> un-populated.
->>
->> Whether hardware allows - not a question to me.
-> 
->> BTW, this is rather question coming from me...
-> 
-> I don't understand what you mean by this, sorry.
+> diff --git a/arch/x86/include/asm/kvm_host.h b/arch/x86/include/asm/kvm_host.h
+> index 43329c60a6b5..040eee3e9583 100644
+> --- a/arch/x86/include/asm/kvm_host.h
+> +++ b/arch/x86/include/asm/kvm_host.h
+> @@ -701,13 +701,13 @@ struct kvm_vcpu_xen {
+>   };
+>   
+>   struct kvm_queued_exception {
+> -	bool pending;
+> -	bool injected;
+> -	bool has_error_code;
+> +	u8 pending : 1;
+> +	u8 injected : 1;
+> +	u8 has_error_code : 1;
+> +	u8 has_payload : 1;
 
-You said to a letter addressed to me "whether the hardware allows for
-...". Why would you ask me about hardware I know nothing about? That was
-my question - I am asking - whether hardware allows it or not. Then
-write bindings depending on that.
+I find doing something like this is clearer and easier to read:
 
-Best regards,
-Krzysztof
+	u8 pending		: 1,
+	   injected		: 1,
+	   has_error_code	: 1,
+	   has_payload		: 1,
+	   __reserved		: 4;
 
+(you don't have to have the __reserved, though). Just throwing it out there.
+
+Thanks,
+Tom
+
+>   	u8 vector;
+>   	u32 error_code;
+>   	unsigned long payload;
+> -	bool has_payload;
+>   };
+>   
+>   struct kvm_vcpu_arch {
