@@ -2,191 +2,174 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F2CF69BDED
-	for <lists+linux-kernel@lfdr.de>; Sun, 19 Feb 2023 00:20:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1131969BDF3
+	for <lists+linux-kernel@lfdr.de>; Sun, 19 Feb 2023 00:30:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229670AbjBRXUi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 18 Feb 2023 18:20:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51672 "EHLO
+        id S229659AbjBRXaA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 18 Feb 2023 18:30:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53694 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229436AbjBRXUf (ORCPT
+        with ESMTP id S229638AbjBRX37 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 18 Feb 2023 18:20:35 -0500
-Received: from out3-smtp.messagingengine.com (out3-smtp.messagingengine.com [66.111.4.27])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A646126D6
-        for <linux-kernel@vger.kernel.org>; Sat, 18 Feb 2023 15:20:34 -0800 (PST)
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-        by mailout.nyi.internal (Postfix) with ESMTP id BA9ED5C00E5;
-        Sat, 18 Feb 2023 18:20:31 -0500 (EST)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute5.internal (MEProxy); Sat, 18 Feb 2023 18:20:31 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sholland.org; h=
-        cc:cc:content-transfer-encoding:content-type:date:date:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to; s=fm2; t=1676762431; x=
-        1676848831; bh=tjtgdd+H5NnT69NzUOb8A7efXFAPqfaIKfbXt/lcGPE=; b=Y
-        Rrod/xhp4OoYLBbuCCFWk3t3IOargZWAZ/ij0HLCSgPjKOkmQTxI+pfCKYyurQhN
-        O6VN+jSwAq+UL1tij5OiXeW+kwFMblWXheuw0b3Ma3PoLLfaeN9YOEVilXUrAnfJ
-        1PpUtNgWTg3H20MmRfe7WDTPhQhpTVMH1ERF3dBVvrG6IQNl8dD41wC83Jtn/AgC
-        8K8LJRQjkktyyjShYQnqIlT/l7ZFyyvZCT/7lC/OCjhZHdnptUCcIAOHYLTFX2aB
-        vKNpV4RjsJil86b/weY/pUUaanL8O9UqZ/eSP9Z89V1px88mSJFnY3QuT6+9Gutz
-        nql4euIA0AW/U58c3qBsQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding
-        :content-type:date:date:feedback-id:feedback-id:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
-        :x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1676762431; x=
-        1676848831; bh=tjtgdd+H5NnT69NzUOb8A7efXFAPqfaIKfbXt/lcGPE=; b=V
-        uPX8jLqqAiJqFf2BrTrx3H1dQNmFG1a4CIiqBsHp1AFoWib/ik5Od8dVYoAP4ri8
-        lPsTQDT6BxraxwWLa00mHdIxLwp91ScKjOI37PAR03tZI6p3naPfckjw2Y4HKvHq
-        gTROygTxdgxk5Vp80ARl+99xlO/FxHXCR3ntw5CnRX4rKslyg9uV0ieJcUgWMYeD
-        mb8uIPSrMp62tKtSUZC+6AEC6H9+Preqnasiy4SpF+bV9lmEAnrnSAx1I5O80awS
-        oxTk+9z1UDnn3lWKuIQWlNUZMJa3cqBYrqfhWYkUkKgBgmZmJDdC5wRn2Ql/V9L3
-        8+tF1OiLP36TjzjixDmHA==
-X-ME-Sender: <xms:Pl3xY-9itOHN6oZiK113Wf1jGEIU222-TOnSCpjAE4dBrB-gSxAioA>
-    <xme:Pl3xY-v1-uikDKQWyKTZJ8rmH9UwAQlr4Aqr4TqlUNRmVisr31zRMqTuiH6ddEDhb
-    iVwKUCLq-YFPaCy-A>
-X-ME-Received: <xmr:Pl3xY0Av0CFDwPx485PrvEJclTWkAYlFOiyBmLUmpfkuf7-aOgWRO1EN3wBetAhgfdMdTHCVFJBWuFjz2vBIWE4PVW3TwFNaO836urvZ25hbVG_4I1QBgUwFPg>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrudejvddgtdeiucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepkfffgggfvfevfhfhufgjtgfgsehtkeertddtfeejnecuhfhrohhmpefurghm
-    uhgvlhcujfholhhlrghnugcuoehsrghmuhgvlhesshhhohhllhgrnhgurdhorhhgqeenuc
-    ggtffrrghtthgvrhhnpeeikefgheduvdfhheelkedvffelueehgeejtdeuieduieejhedv
-    vddtfeevleeihfenucffohhmrghinhepkhgvrhhnvghlrdhorhhgnecuvehluhhsthgvrh
-    fuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepshgrmhhuvghlsehshhholhhl
-    rghnugdrohhrgh
-X-ME-Proxy: <xmx:Pl3xY2cK-8Nky_EsS8dIInZ8tIUE_bqp-fsy_eUa19FKNW0UxmvRZA>
-    <xmx:Pl3xYzO8cyJ5VLJSe4GcIRoe6G3DP9t42MvjMWtqTAKmMxnviSVmag>
-    <xmx:Pl3xYwmQR-C_HMa12UxSRSI8FgzstEne8viOfsC3wT8nb3RwcysH4A>
-    <xmx:P13xY8tyxLq8alLpvpHX7WkYsTPUyF9yipiOPj_m1JA5Y2UGThyPpA>
-Feedback-ID: i0ad843c9:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sat,
- 18 Feb 2023 18:20:29 -0500 (EST)
-Message-ID: <8bba0d3c-bf10-97df-80a5-ad98d5a417c8@sholland.org>
-Date:   Sat, 18 Feb 2023 17:20:28 -0600
+        Sat, 18 Feb 2023 18:29:59 -0500
+Received: from mail-yw1-x112f.google.com (mail-yw1-x112f.google.com [IPv6:2607:f8b0:4864:20::112f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B4E11206F
+        for <linux-kernel@vger.kernel.org>; Sat, 18 Feb 2023 15:29:57 -0800 (PST)
+Received: by mail-yw1-x112f.google.com with SMTP id 00721157ae682-53681cc6156so21701967b3.9
+        for <linux-kernel@vger.kernel.org>; Sat, 18 Feb 2023 15:29:57 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=Vz5DzYr/Opa8OtY4Tzu39Y9aDuWD1hSn8O8cPqW8lso=;
+        b=omb2A12qU7J8gN8cUyq0r2MdWs6Zk0tq96wdGCDEd/pf1ia4HVnj01jxwsB7Ktaf6t
+         ch17n2ssXiWutDHJG1MGrT0NjO8sMVa5u0D93JgJhyyWuJCXHlioCCUnCcopD2gB0Kax
+         FY/nAr2jFoFbaXNYj9SAa6wyDlTDcio1/bARURQ+FmM+1rEi6HjQ1j186Bp2qhNE2NX2
+         DEB49y2qVLbEaKv9ZmuQlllVQpI9GXjgWJYWWspsWMQCgGw6F/TYscrXtHT2zRjNRBie
+         VTrcDdh/sRPeRzh6d1Vroz4ih0SFwpMOcEHwgTc0LVcsVF0j2jNu9845BOv5bIfYEtMS
+         nCAQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Vz5DzYr/Opa8OtY4Tzu39Y9aDuWD1hSn8O8cPqW8lso=;
+        b=MuxhW96kFoNVgaAYQq2DUkovuGHl3/YjgOBAGw7seCuTOxnp3Rytw0atlJ/wOrOFHn
+         stD4LIeeS9sec9YG2BjviBjRbj7q6pnWTPul9xWeepG53rqVx9gB5olSLi6pT/2R4/3/
+         HBURwdFWMOR89JhQlTRt/evUI2GXEgmr+lxY5MHVBEh9auAm+vr6o+zd6kTmcm0RHFYU
+         wJAjL3MgJvSKN3bAdw1j9JOzPuzZGBedkAPR9lXCddse+U+N2yFS7R+vOq5rrY6vExeB
+         9kkp3BnJZcRTGXEjpLxZ6gz7uO2+dJyMNkswpt85R+yC1ucIAYr5GGj+DezYlxuGuoo+
+         IZJQ==
+X-Gm-Message-State: AO0yUKWqysNa8QmQcWpg40ARwQ8vCu+bTlAHgquZ77xGp5T/UAWVqLVO
+        6dP3fiHqnoFeWU+tXNXDXUIk2j3WlV+ZwEBv6bm8HA==
+X-Google-Smtp-Source: AK7set/olNwKNK7HfjBrvB6nqfSSaLih+5uqgsaTvGCT3Mx5SRBygrVNZ9jBq1XWy8aWrrVifm4XLTxRGdk/YB3HlUs=
+X-Received: by 2002:a0d:dfc1:0:b0:52e:d00a:263b with SMTP id
+ i184-20020a0ddfc1000000b0052ed00a263bmr2152556ywe.35.1676762995905; Sat, 18
+ Feb 2023 15:29:55 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux ppc64le; rv:102.0) Gecko/20100101
- Thunderbird/102.3.3
-Content-Language: en-US
-To:     Palmer Dabbelt <palmer@dabbelt.com>, rafael.j.wysocki@intel.com
-Cc:     dmitry.osipenko@collabora.com, aou@eecs.berkeley.edu,
-        apatel@ventanamicro.com, Atish Patra <atishp@rivosinc.com>,
-        geert@linux-m68k.org, heiko@sntech.de, kai.heng.feng@canonical.com,
-        mcgrof@kernel.org, paulmck@kernel.org,
-        Paul Walmsley <paul.walmsley@sifive.com>, pmladek@suse.com,
-        yuehaibing@huawei.com, linux-kernel@vger.kernel.org,
-        linux-riscv@lists.infradead.org, tangmeng@uniontech.com
-References: <mhng-fbf5d10c-239d-4e47-bf52-3e1255cbe5e0@palmer-ri-x1c9>
-From:   Samuel Holland <samuel@sholland.org>
-Subject: Re: [PATCH 1/3] kernel/reboot: Use the static sys-off handler for any
- priority
-In-Reply-To: <mhng-fbf5d10c-239d-4e47-bf52-3e1255cbe5e0@palmer-ri-x1c9>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <b151531d-c9fc-cafa-4e46-e213a9892247@microchip.com>
+ <CACRpkdbK8A9X4nCZEc53-wXU0Vgkc53j_r5rLQiSeoNbmvm8sg@mail.gmail.com>
+ <961a2164-640a-86b5-980f-73668eb161e4@microchip.com> <CACRpkdaKYN9eRtuOhBBp_50sR71AQvNSKtjAR1RZPhaKYhfJVw@mail.gmail.com>
+ <46dd4d9a-7dc8-48f9-69d4-d18ca6433acc@microchip.com>
+In-Reply-To: <46dd4d9a-7dc8-48f9-69d4-d18ca6433acc@microchip.com>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Sun, 19 Feb 2023 00:29:43 +0100
+Message-ID: <CACRpkdZg4t=0YUiwk4ik6VKXH1KCo_RLXoyL30yrxM+e9QqH-w@mail.gmail.com>
+Subject: Re: I2c GPIO Recovery with pinctrl strict mode
+To:     Ryan.Wanner@microchip.com
+Cc:     linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-gpio@vger.kernel.org, alexandre.belloni@bootlin.com,
+        Ludovic.Desroches@microchip.com, Nicolas.Ferre@microchip.com,
+        Claudiu.Beznea@microchip.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/14/23 18:17, Palmer Dabbelt wrote:
-> On Wed, 28 Dec 2022 08:19:13 PST (-0800), samuel@sholland.org wrote:
->> commit 587b9bfe0668 ("kernel/reboot: Use static handler for
->> register_platform_power_off()") addded a statically-allocated handler
->> so register_sys_off_handler() could be called before the slab allocator
->> is available.
->>
->> That behavior was limited to the SYS_OFF_PRIO_PLATFORM priority.
->> However, it is also required for handlers such as PSCI on ARM and SBI on
->> RISC-V, which should be registered at SYS_OFF_PRIO_FIRMWARE. Currently,
->> this call stack crashes:
->>
->>   start_kernel()
->>     setup_arch()
->>       psci_dt_init()
->>         psci_0_2_init()
->>           register_sys_off_handler()
->>             kmem_cache_alloc()
->>
->> Generalize the code to use the statically-allocated handler for the
->> first registration, regardless of priority. Check .sys_off_cb for
->> conflicts instead of .cb_data; some callbacks (e.g. firmware drivers)
->> do not need any per-instance data, so .cb_data could be NULL.
->>
->> Reviewed-by: Dmitry Osipenko <dmitry.osipenko@collabora.com>
->> Signed-off-by: Samuel Holland <samuel@sholland.org>
->> ---
->>
->>  kernel/reboot.c | 10 ++++------
->>  1 file changed, 4 insertions(+), 6 deletions(-)
->>
->> diff --git a/kernel/reboot.c b/kernel/reboot.c
->> index 3bba88c7ffc6..38c18d4f0a36 100644
->> --- a/kernel/reboot.c
->> +++ b/kernel/reboot.c
->> @@ -327,7 +327,7 @@ static int sys_off_notify(struct notifier_block *nb,
->>      return handler->sys_off_cb(&data);
->>  }
->>
->> -static struct sys_off_handler platform_sys_off_handler;
->> +static struct sys_off_handler early_sys_off_handler;
->>
->>  static struct sys_off_handler *alloc_sys_off_handler(int priority)
->>  {
->> @@ -338,10 +338,8 @@ static struct sys_off_handler
->> *alloc_sys_off_handler(int priority)
->>       * Platforms like m68k can't allocate sys_off handler dynamically
->>       * at the early boot time because memory allocator isn't
->> available yet.
->>       */
->> -    if (priority == SYS_OFF_PRIO_PLATFORM) {
->> -        handler = &platform_sys_off_handler;
->> -        if (handler->cb_data)
->> -            return ERR_PTR(-EBUSY);
->> +    if (!early_sys_off_handler.sys_off_cb) {
->> +        handler = &early_sys_off_handler;
->>      } else {
->>          if (system_state > SYSTEM_RUNNING)
->>              flags = GFP_ATOMIC;
->> @@ -358,7 +356,7 @@ static struct sys_off_handler
->> *alloc_sys_off_handler(int priority)
->>
->>  static void free_sys_off_handler(struct sys_off_handler *handler)
->>  {
->> -    if (handler == &platform_sys_off_handler)
->> +    if (handler == &early_sys_off_handler)
->>          memset(handler, 0, sizeof(*handler));
->>      else
->>          kfree(handler);
-> 
-> Sorry for being slow here, I'd been assuming someone would Ack this but
-> it looks like maybe there's nobody in the maintainers file for
-> kernel/reboot.c?  I'm fine taking this via the RISC-V tree if that's OK
-> with people, but the cover letter suggests the patch is necessary for
-> multiple patch sets.
+On Fri, Feb 17, 2023 at 6:36 PM <Ryan.Wanner@microchip.com> wrote:
+> On 2/13/23 02:29, Linus Walleij wrote:
+> > EXTERNAL EMAIL: Do not click links or open attachments unless you know the content is safe
+> >
+> > On Fri, Feb 10, 2023 at 4:21 PM <Ryan.Wanner@microchip.com> wrote:
+> >
+> >> I am trying to enable .strict in the Atmel pinctrl driver, and that is
+> >> what is causing my issues.
+> >
+> > Strictly speaking (ha!) that flag is for when you *cannot* use a pin
+> > in GPIO mode at the same time as another mode.
+> >
+> > Example: if you use the pin in I2C mode, then reading the GPIO
+> > input register will *not* reflect the value on the electrical line,
+> > because it has been decoupled physically. Then .strict should
+> > be true.
+> >
+> > The strict mode was not intended for policy, i.e. stopping kernel
+> > developers from doing wrong things. They have enough tools to
+> > do wrong things anyway, one more or less doesn't matter.
+>
+> I understand, so .strict keeps the pins mapped to one ownership,
+> so if I2C has those pins GPIO could not have access to them.
+>
+> When it comes to I2c recovery, looking at the I2C generic recovery,
+> the pins are both being used by the I2C and the GPIO at the same time.
+> This cannot happen with strict mode. So since I am enabling strict mode
+> for pinctrl-atmel-pio4.c I2C recovery cannot work?
 
-See also Dmitry's reply[0] to the PSCI thread. (Maybe I should have sent
-both conversions as one series?)
+I think it can, you just have to be more careful.
 
-I am happy with the patches going through any tree. The kernel/reboot.c
-patch is exactly the same between the two series, so it should not hurt
-if it gets merged twice. Though if you take this series through the
-RISC-V tree, maybe you want to create a tag for it?
+You can move the pins between different states. E.g. state
+"A" and "B", so these states can be "GPIO mode" and "I2C mode".
+In "GPIO mode" the pins are muxed to the GPIO block, and in
+the "I2C mode" the pins are muxed to the I2C block.
 
-I am not sure exactly what needs to be done here; I am happy to do
-anything that would assist getting both series merged for v6.3, to avoid
-a regression with axp20x[1].
+Whether one or other of these modes in practice has an opaque
+name like "default" or "init" (etc) is just confusing, the only reason
+these named states exist is for convenience. It is perfectly legal
+for a pin controller and driver to use states named "foo"
+or "bar" and never use any state called "default".
+(See further include/linux/pinctrl/pinctrl-state.h)
 
-Regards,
-Samuel
+So what you want in your driver is something like:
 
-[0]:
-https://lore.kernel.org/lkml/0a180849-ba1b-2a82-ab06-ed1b8155d5ca@collabora.com/
-[1]:
-https://lore.kernel.org/lkml/e38d29f5-cd3c-4a2b-b355-2bcfad00a24b@sholland.org/
+struct pinctrl_state *gpio_state;
+struct pinctrl_state *i2c_state;
+
+(possibly more)
+
+And before normal operations you issue:
+
+pinctrl_select_state(p, i2c_state);
+
+And before recovery you issue:
+
+pinctrl_select_state(p, gpio_state);
+
+... then you use GPIO abstractions to do the recovery
+followed by
+
+pinctrl_select_state(p, i2c_state);
+
+To get back to normal operations.
+
+This is the gist of it. The problem with using GPIO at the
+same time as pin control is that some pin controllers
+implement a "shortcut" which is the
+struct pinmux_ops callbacks
+.gpio_request_enable()
+.gpio_disable_free()
+.gpio_set_direction()
+
+These callbacks will bypass the state selection and mux
+pins directly as a byproduct of using gpiod_*() operations.
+
+For example qualcomm does not implement these callbacks,
+and all GPIO state setup is done explicitly for every single
+GPIO pin. This is quite good, but also a bit tedious for the
+common cases which is why the shortcuts exist.
+
+If the pin controller has implemented these operations
+you get a problem with recovery because the GPIO
+calls may start to conflict with the state-selected muxing.
+
+It can however be made to work also in that case as long
+as you think things over, but order of semantics will come
+into play: you probably need to get the GPIO *before*
+doing pinctrl_select_state(p, i2c_state); the first time,
+lest the gpio initialization will unselect the I2C state.
+
+You probably also shouldn't mess with calling any
+gpiod_direction_input/output in the recovery code.
+Hopefully that can be avoided or replaced by more
+explicit pin control states in that case.
+
+This becomes a bit complex, but recovery is a bit
+complex and out of the ordinary, so...
+
+Yours,
+Linus Walleij
