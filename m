@@ -2,118 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 85F3569B743
-	for <lists+linux-kernel@lfdr.de>; Sat, 18 Feb 2023 01:58:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F3BB469B74E
+	for <lists+linux-kernel@lfdr.de>; Sat, 18 Feb 2023 02:06:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229794AbjBRA6S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Feb 2023 19:58:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51920 "EHLO
+        id S229800AbjBRBGq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Feb 2023 20:06:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55424 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229779AbjBRA6P (ORCPT
+        with ESMTP id S229498AbjBRBGo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Feb 2023 19:58:15 -0500
-Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AFEF9EF92
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Feb 2023 16:58:13 -0800 (PST)
-Received: by mail-pl1-x62f.google.com with SMTP id p8so3233356plr.4
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Feb 2023 16:58:13 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=NjXQxU0MTNlezU2eGAKfedmw+7iHhF9c4Ur7D8yHd+o=;
-        b=KHqIhrEDQSsz66Prz1EANNc1398H2HOk82HkHJPGXy4CaKATL7pajs8GcY/bMqSLId
-         +s2i6sGBOZb/zbZFAJNB1/UPdX76Y2B/cOiEtsCqhvGQuiz/rVOVCmj/OrqIxHEHaDki
-         Uz9+uEMCed9ZkphZ5xU//eQd8rZJQa/i3GVUoMZeQC0HpoXqwr/GWPZ4iiOUrq1+MmAH
-         HeX4p2f1PTr/W4jPO0PrFnrXlw8OXpilSG182D6WPwPhBVBh0oMuF2zWRaTYUDERQJ16
-         Cwaka4JpbHg81gpRmfesX/hlbI+jGPhAE2tTL7b31Sx+ywDHiP+1d6PRrv1eIOrZHoUr
-         9LRA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=NjXQxU0MTNlezU2eGAKfedmw+7iHhF9c4Ur7D8yHd+o=;
-        b=sx4idN0xu6feQXD3fwUE5bSd9xJ8H2BW7jLP+3I9tu1pWXFxj7P1pTOrsN1QvNSfVw
-         xCpIOnaOzXRhI42m9S9pXKj76rjX2nOZG9arU9yZ7g6kWgkONaOBPomUs4WvHMY6Puwo
-         89e21XhCOia/DebvTw3qjyVJlmzIRd8Rgj8hZ5DD1UbBKByXYpNWNILQ8SwTyGZcGIhD
-         HCgXI/C0Vowq+Kg1+QEg25TsE35sKR4qXfj+ePqCpdxEikJaSI2FDdURTJEd6SXvdgFg
-         E8zlDNq9j7fFF/1SUWB80Wti7VY7h7X5sIvRSeCSky4VCzum/GOsOT4SXqnNaL8O/PQk
-         NCTQ==
-X-Gm-Message-State: AO0yUKX7LTGZdifeEnRmszCKiom8+xttBJqB7mi2YwfaQyayesr7zNGZ
-        EKTPIw3+1q8TnLkKn/cWqiyGhg==
-X-Google-Smtp-Source: AK7set8E+2CThG5C4mr5NX+XGSjdAd+deenCdQbsgIaZS18SAZATQEGrR/qt5BA3BWpBzJoSiyfgPw==
-X-Received: by 2002:a17:902:ce84:b0:19a:9880:1764 with SMTP id f4-20020a170902ce8400b0019a98801764mr2588533plg.59.1676681892880;
-        Fri, 17 Feb 2023 16:58:12 -0800 (PST)
-Received: from google.com (77.62.105.34.bc.googleusercontent.com. [34.105.62.77])
-        by smtp.gmail.com with ESMTPSA id h22-20020a170902ac9600b001963a178dfcsm3697533plr.244.2023.02.17.16.58.12
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 17 Feb 2023 16:58:12 -0800 (PST)
-Date:   Sat, 18 Feb 2023 00:58:08 +0000
-From:   Mingwei Zhang <mizhang@google.com>
-To:     Aaron Lewis <aaronlewis@google.com>
-Cc:     Sean Christopherson <seanjc@google.com>,
-        Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Jim Mattson <jmattson@google.com>,
-        Venkatesh Srinivas <venkateshs@google.com>,
-        "Chang S. Bae" <chang.seok.bae@intel.com>
-Subject: Re: [PATCH v2 0/7] Overhauling amx_test
-Message-ID: <Y/AioE5iY4clmUIB@google.com>
-References: <20230214184606.510551-1-mizhang@google.com>
- <CAAAPnDF9qKq5+PpqjN+1g8=zn0tkQ=aPQupwM+gJiuSE12zb4Q@mail.gmail.com>
+        Fri, 17 Feb 2023 20:06:44 -0500
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0DE87457E9;
+        Fri, 17 Feb 2023 17:06:43 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1676682403; x=1708218403;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=r+eTrMw1FB+iDg1fr6ANtkvS4OBgRd5cOlW+TWhGpkc=;
+  b=Zgm/EdLqHV9z3afhAaGWqqLhsj0G1ooVCRt/qWrqqkvvHiabBQ5Aw2op
+   TnBOGw0lME0RZMEhJ/TuU/6i+V9DcJoMDDUBfo7d0fZibAYh9i53SLp3g
+   0V9I6lPGNunZf2aGDoYpyRYB5pO+IeL8hvMD8v2bDjP6LXl5nesWYwt9M
+   q4pFadChFZ8VEvDY19dBOn+UcExAz1az+VrLqimtc6Q+a5fIgGsgb2xDI
+   ZS1ha9j5uZwou5YM7HKm8sDd9m5rTQV5Svb7lEVZJIUjQcT8Sw7GHsOq/
+   ym9YrhZiD8f3GiRC7JzZ3MAIuLPNzE4bcgb3Bf2xGy3IN+Gl13T6bd8Il
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10624"; a="394611756"
+X-IronPort-AV: E=Sophos;i="5.97,306,1669104000"; 
+   d="scan'208";a="394611756"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Feb 2023 17:06:42 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10624"; a="734496291"
+X-IronPort-AV: E=Sophos;i="5.97,306,1669104000"; 
+   d="scan'208";a="734496291"
+Received: from lkp-server01.sh.intel.com (HELO 4455601a8d94) ([10.239.97.150])
+  by fmsmga008.fm.intel.com with ESMTP; 17 Feb 2023 17:06:40 -0800
+Received: from kbuild by 4455601a8d94 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pTBgV-000BxP-27;
+        Sat, 18 Feb 2023 01:06:39 +0000
+Date:   Sat, 18 Feb 2023 09:05:54 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Asmaa Mnebhi <asmaa@nvidia.com>, andy.shevchenko@gmail.com,
+        linus.walleij@linaro.org, bgolaszewski@baylibre.com,
+        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-acpi@vger.kernel.org
+Cc:     oe-kbuild-all@lists.linux.dev, Asmaa Mnebhi <asmaa@nvidia.com>
+Subject: Re: [PATCH v4 1/2] gpio: gpio-mlxbf3: Add gpio driver support
+Message-ID: <202302180821.a8TRkiIS-lkp@intel.com>
+References: <28f0d670407c127614b64d9c382b11c795f5077d.1676668853.git.asmaa@nvidia.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAAAPnDF9qKq5+PpqjN+1g8=zn0tkQ=aPQupwM+gJiuSE12zb4Q@mail.gmail.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+In-Reply-To: <28f0d670407c127614b64d9c382b11c795f5077d.1676668853.git.asmaa@nvidia.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Feb 17, 2023, Aaron Lewis wrote:
-> On Tue, Feb 14, 2023 at 6:46 PM Mingwei Zhang <mizhang@google.com> wrote:
-> >
-> > AMX architecture involves several entities such as xstate, XCR0,
-> > IA32_XFD. This series add several missing checks on top of the existing
-> > amx_test.
-> >
-> > v1 -> v2:
-> >  - Add a working xstate data structure suggested by seanjc.
-> >  - Split the checking of CR0.TS from the checking of XFD.
-> >  - Fix all the issues pointed by in review.
-> >
-> > v1:
-> > https://lore.kernel.org/all/20230110185823.1856951-1-mizhang@google.com/
-> >
-> > Mingwei Zhang (7):
-> >   KVM: selftests: x86: Fix an error in comment of amx_test
-> >   KVM: selftests: x86: Add a working xstate data structure
-> >   KVM: selftests: x86: Add check of CR0.TS in the #NM handler in
-> >     amx_test
-> >   KVM: selftests: Add the XFD check to IA32_XFD in #NM handler
-> >   KVM: selftests: Fix the checks to XFD_ERR using and operation
-> >   KVM: selftests: x86: Enable checking on xcomp_bv in amx_test
-> >   KVM: selftests: x86: Repeat the checking of xheader when
-> >     IA32_XFD[XTILEDATA] is set in amx_test
-> >
-> >  .../selftests/kvm/include/x86_64/processor.h  | 12 ++++
-> >  tools/testing/selftests/kvm/x86_64/amx_test.c | 59 ++++++++++---------
-> >  2 files changed, 43 insertions(+), 28 deletions(-)
-> >
-> > --
-> > 2.39.1.581.gbfd45094c4-goog
-> >
-> 
-> Would you be open to adding my series to the end of this one?  That
-> way we have one series that's overhauling amx_test.
-> 
-> https://lore.kernel.org/kvm/20230217215959.1569092-1-aaronlewis@google.com/
+Hi Asmaa,
 
-Sure, I will integrate your changes into this series.
+I love your patch! Perhaps something to improve:
+
+[auto build test WARNING on linusw-pinctrl/devel]
+[also build test WARNING on linusw-pinctrl/for-next brgl/gpio/for-next linus/master v6.2-rc8 next-20230217]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Asmaa-Mnebhi/pinctrl-pinctrl-mlxbf-Add-pinctrl-driver-support/20230218-062744
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/linusw/linux-pinctrl.git devel
+patch link:    https://lore.kernel.org/r/28f0d670407c127614b64d9c382b11c795f5077d.1676668853.git.asmaa%40nvidia.com
+patch subject: [PATCH v4 1/2] gpio: gpio-mlxbf3: Add gpio driver support
+reproduce:
+        make versioncheck
+
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202302180821.a8TRkiIS-lkp@intel.com/
+
+versioncheck warnings: (new ones prefixed by >>)
+   INFO PATH=/opt/cross/clang/bin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+   /usr/bin/timeout -k 100 3h /usr/bin/make W=1 --keep-going HOSTCC=gcc-11 CC=gcc-11 -j32 ARCH=x86_64 versioncheck
+   find ./* \( -name SCCS -o -name BitKeeper -o -name .svn -o -name CVS -o -name .pc -o -name .hg -o -name .git \) -prune -o \
+   	-name '*.[hcS]' -type f -print | sort \
+   	| xargs perl -w ./scripts/checkversion.pl
+   ./drivers/accessibility/speakup/genmap.c: 13 linux/version.h not needed.
+   ./drivers/accessibility/speakup/makemapdata.c: 13 linux/version.h not needed.
+>> ./drivers/gpio/gpio-mlxbf3.c: 14 linux/version.h not needed.
+   ./drivers/net/ethernet/qlogic/qede/qede.h: 10 linux/version.h not needed.
+   ./drivers/net/ethernet/qlogic/qede/qede_ethtool.c: 7 linux/version.h not needed.
+   ./drivers/scsi/cxgbi/libcxgbi.h: 27 linux/version.h not needed.
+   ./drivers/scsi/mpi3mr/mpi3mr.h: 32 linux/version.h not needed.
+   ./drivers/scsi/qedi/qedi_dbg.h: 14 linux/version.h not needed.
+   ./drivers/soc/tegra/cbb/tegra-cbb.c: 19 linux/version.h not needed.
+   ./drivers/soc/tegra/cbb/tegra194-cbb.c: 26 linux/version.h not needed.
+   ./drivers/soc/tegra/cbb/tegra234-cbb.c: 27 linux/version.h not needed.
+   ./drivers/staging/media/atomisp/include/linux/atomisp.h: 23 linux/version.h not needed.
+   ./init/version-timestamp.c: 5 linux/version.h not needed.
+   ./samples/trace_events/trace_custom_sched.c: 11 linux/version.h not needed.
+   ./sound/soc/codecs/cs42l42.c: 14 linux/version.h not needed.
+   ./tools/lib/bpf/bpf_helpers.h: 289: need linux/version.h
+   ./tools/perf/tests/bpf-script-example.c: 60: need linux/version.h
+   ./tools/perf/tests/bpf-script-test-kbuild.c: 21: need linux/version.h
+   ./tools/perf/tests/bpf-script-test-prologue.c: 47: need linux/version.h
+   ./tools/perf/tests/bpf-script-test-relocation.c: 51: need linux/version.h
+   ./tools/testing/selftests/bpf/progs/dev_cgroup.c: 9 linux/version.h not needed.
+   ./tools/testing/selftests/bpf/progs/netcnt_prog.c: 3 linux/version.h not needed.
+   ./tools/testing/selftests/bpf/progs/test_map_lock.c: 4 linux/version.h not needed.
+   ./tools/testing/selftests/bpf/progs/test_send_signal_kern.c: 4 linux/version.h not needed.
+   ./tools/testing/selftests/bpf/progs/test_spin_lock.c: 4 linux/version.h not needed.
+   ./tools/testing/selftests/bpf/progs/test_tcp_estats.c: 37 linux/version.h not needed.
+   ./tools/testing/selftests/wireguard/qemu/init.c: 27 linux/version.h not needed.
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
