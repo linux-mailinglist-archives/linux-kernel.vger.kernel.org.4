@@ -2,38 +2,38 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D819669B9C2
-	for <lists+linux-kernel@lfdr.de>; Sat, 18 Feb 2023 12:27:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 612FC69B9BF
+	for <lists+linux-kernel@lfdr.de>; Sat, 18 Feb 2023 12:26:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229796AbjBRL1B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 18 Feb 2023 06:27:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59476 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229687AbjBRL0y (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
+        id S229690AbjBRL0y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
         Sat, 18 Feb 2023 06:26:54 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE19D1420D
-        for <linux-kernel@vger.kernel.org>; Sat, 18 Feb 2023 03:26:53 -0800 (PST)
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59458 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229622AbjBRL0x (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Sat, 18 Feb 2023 06:26:53 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77ACA1420D
+        for <linux-kernel@vger.kernel.org>; Sat, 18 Feb 2023 03:26:52 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id A24B4B822A9
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 107D960B75
         for <linux-kernel@vger.kernel.org>; Sat, 18 Feb 2023 11:26:52 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 48C78C433EF;
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4966EC433D2;
         Sat, 18 Feb 2023 11:26:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1676719611;
-        bh=JVTiq+B7EgZuFlDHHXZ/E5jLhXy+PnF55RTV4RUP3v8=;
-        h=From:To:Cc:Subject:Date:From;
-        b=tanSx/9GIYeOkjwWxWqRA+w5iY++qN6UfgcwDjlM5t8wrhMv9LXNPHW265Bcq/b0f
-         yAMtC3vh0/qPWJF6YpCXwqz/wucM9qPc8QvzQKaSR6wiQ2IefR8/2W6UbTLWftMHDo
-         fsSNM5my3T/BSJ/nrZIGKZJko4cZmZpCtCxVsYk1lMwv+b5J4K3G/sG3CWZxkv/GyC
-         mogB1sm1zBoyadOG548rnxtQDRmmFeGgp21gVqr6dElcVWOmefsBauG5WKT0Qf+FfA
-         KPdswLDWakc5ZjXN1Ca8HUCKcCqQYkqV4q2yoasQ88XHRBFdj/qSRm4SyyVop4Q8Q4
-         P1gM/H8dR2CiA==
+        bh=UD5jorQCVmKiXH0v3VkIP3iO7pPTI+aaxJhMgfUmopA=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=XcCh4sLrBNX6YqrkGegjUggS6HIQUmPJKLArq70/WAkXK9NkXZ5fibNjlX0MC9Ryf
+         3TjrQDOcOZj7BDgifP94+50+DKM8eXnIGBVdyOeVAYmqVFt/EBtkOAqsaEERgI2ReP
+         8Gb+aCxlvhlLecCuvxgVO5bYV9CU88UPXKMNU1wILqzkPntFzyv2Ipr0FMbbVphWaX
+         +DIwe1Hy32yAC/cSjZawR9iZJlynJYQEJ4JAcMNadm3t8P6W7mMBfwgZk0oY/2ZCgp
+         bXQSDSJDt69eU+yz4TvPoPeLOprQ7uN1SxBXnmLi+v1JHEM7jP1RyQBQjIJa3Y+roS
+         YPET6OORyZ7UQ==
 Received: by pali.im (Postfix)
-        id 7B9E371F; Sat, 18 Feb 2023 12:26:48 +0100 (CET)
+        id A4DF5CB0; Sat, 18 Feb 2023 12:26:48 +0100 (CET)
 From:   =?UTF-8?q?Pali=20Roh=C3=A1r?= <pali@kernel.org>
 To:     Michael Ellerman <mpe@ellerman.id.au>,
         Nicholas Piggin <npiggin@gmail.com>,
@@ -41,10 +41,12 @@ To:     Michael Ellerman <mpe@ellerman.id.au>,
         Scott Wood <oss@buserror.net>, Sinan Akman <sinan@writeme.com>,
         Martin Kennedy <hurricos@gmail.com>
 Cc:     linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v3 0/8] powerpc/85xx: p2020: Create one unified machine description
-Date:   Sat, 18 Feb 2023 12:13:57 +0100
-Message-Id: <20230218111405.27688-1-pali@kernel.org>
+Subject: [PATCH v3 1/8] powerpc/85xx: Mark mpc85xx_rdb_pic_init() as static
+Date:   Sat, 18 Feb 2023 12:13:58 +0100
+Message-Id: <20230218111405.27688-2-pali@kernel.org>
 X-Mailer: git-send-email 2.20.1
+In-Reply-To: <20230218111405.27688-1-pali@kernel.org>
+References: <20230218111405.27688-1-pali@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
@@ -57,49 +59,26 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This patch series unifies all P2020 boards and machine descriptions into
-one generic unified P2020 machine description. With this generic machine
-description, kernel can boot on any P2020-based board with correct DTS
-file.
+Function mpc85xx_rdb_pic_init() is not used out of the mpc85xx_rdb.c file.
 
-Tested on CZ.NIC Turris 1.1 board with has Freescale P2020 processor.
-Kernel during booting correctly detects P2020 and prints:
-[    0.000000] Using Freescale P2020 machine description
+Signed-off-by: Pali Rohár <pali@kernel.org>
+---
+ arch/powerpc/platforms/85xx/mpc85xx_rdb.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Changes in v3:
-* Use 'if (IS_ENABLED(CONFIG_PPC_I8259))' instead of '#ifdef CONFIG_PPC_I8259'
-* Simplify p2020_probe()
-* Patches generated by -M and -C git options
-
-Link to v2: https://lore.kernel.org/linuxppc-dev/20221224211425.14983-1-pali@kernel.org/
-
-Changes in v2:
-* Added patch "p2020: Move i8259 code into own function" (separated from the next one)
-* Renamed CONFIG_P2020 to CONFIG_PPC_P2020
-* Fixed descriptions
-
-Link to v1: https://lore.kernel.org/linuxppc-dev/20220819191557.28116-1-pali@kernel.org/
-
-Pali Rohár (8):
-  powerpc/85xx: Mark mpc85xx_rdb_pic_init() as static
-  powerpc/85xx: Mark mpc85xx_ds_pic_init() as static
-  powerpc/85xx: p2020: Move all P2020 machine descriptions to p2020.c
-  powerpc/85xx: p2020: Move i8259 code into own function
-  powerpc/85xx: p2020: Unify .setup_arch and .init_IRQ callbacks
-  powerpc/85xx: p2020: Define just one machine description
-  powerpc/85xx: p2020: Enable boards by new config option
-    CONFIG_PPC_P2020
-  powerpc: dts: turris1x.dts: Remove "fsl,P2020RDB-PC" compatible string
-
- arch/powerpc/boot/dts/turris1x.dts            |   2 +-
- arch/powerpc/platforms/85xx/Kconfig           |  22 ++-
- arch/powerpc/platforms/85xx/Makefile          |   1 +
- arch/powerpc/platforms/85xx/mpc85xx_ds.c      |  25 +---
- arch/powerpc/platforms/85xx/mpc85xx_rdb.c     |  46 +-----
- .../platforms/85xx/{mpc85xx_ds.c => p2020.c}  | 135 ++++++------------
- 6 files changed, 68 insertions(+), 163 deletions(-)
- copy arch/powerpc/platforms/85xx/{mpc85xx_ds.c => p2020.c} (52%)
-
+diff --git a/arch/powerpc/platforms/85xx/mpc85xx_rdb.c b/arch/powerpc/platforms/85xx/mpc85xx_rdb.c
+index d99aba158235..b6129c148fea 100644
+--- a/arch/powerpc/platforms/85xx/mpc85xx_rdb.c
++++ b/arch/powerpc/platforms/85xx/mpc85xx_rdb.c
+@@ -38,7 +38,7 @@
+ #endif
+ 
+ 
+-void __init mpc85xx_rdb_pic_init(void)
++static void __init mpc85xx_rdb_pic_init(void)
+ {
+ 	struct mpic *mpic;
+ 
 -- 
 2.20.1
 
