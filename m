@@ -2,58 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0CFD569B717
+	by mail.lfdr.de (Postfix) with ESMTP id 62F5469B718
 	for <lists+linux-kernel@lfdr.de>; Sat, 18 Feb 2023 01:45:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229929AbjBRAo7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Feb 2023 19:44:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36518 "EHLO
+        id S230159AbjBRApN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Feb 2023 19:45:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36536 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230045AbjBRAoz (ORCPT
+        with ESMTP id S230145AbjBRApI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Feb 2023 19:44:55 -0500
-Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CE4F6D240
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Feb 2023 16:44:27 -0800 (PST)
-Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-5365663d982so27034727b3.3
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Feb 2023 16:44:27 -0800 (PST)
+        Fri, 17 Feb 2023 19:45:08 -0500
+Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 034A068E50
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Feb 2023 16:44:33 -0800 (PST)
+Received: by mail-yb1-xb4a.google.com with SMTP id q8-20020a25f408000000b00944353b6a81so2529933ybd.7
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Feb 2023 16:44:32 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=a9HoC/OaMmMmyFwGFTweDzsomxpTI5zBveAVKH/mxUs=;
-        b=p4J50SCYcCeG3qGRpHChFsOtrnkHXhTK4OUQeA7csD+WhBd4bepBHtG/cyOfbbTSC+
-         lCFAqzmMUFKlMigeUVQiWbej8Gu0AWjDX2DuN4h3rP0oUlDEosc+NJ4U87QAa5/PzCNE
-         CCI6mGg0jUZFutFG4yOh79Uont3On7YTn2CT4elMJDE1FfadxmUYwEME2piTlq5az1Mq
-         9aZyrgkj9RfvKY2E3TqhjPL810vpjoE3FXu/K+4aGPj7XXrOfXVxw+yab5AlL0F/7lnv
-         mwMmGTIisoVBNs8uCuNHuCp5dmw5ILOZjOHaFdx58TbpMJJ+4truEcCA49DA7ssvncOM
-         ZPVA==
+        bh=9mwmDPnm22mSNSwTn0VodViIvXaPz9XlM8QDWYhbyM8=;
+        b=eMm01hnumElMl3UotGf8lJtLmKUjjLEmp4ZHK0o1H0LRyNA5w7x33BZeE7ifCfM7pg
+         Cd3CBejXIUZT0dDASkiYet2Q11r1oqaxT2jWL7729gQTvNyIV+Z3A265SCXl8KKZFvM6
+         J2aSWma9rqTSDwyH7vONqfORZObAwWA+6hRLW5QjldLuMtFrDr6CiZLUw313wtVBTkEY
+         Uql860ZaIf2fzbiPBXmxv8De94uhU4jaykP5woFVxM5M2xVs65vFvbC27a8oelqLROik
+         ucodFnqa/c0QR5Ark7refIrmAYAsOKE19K26vuVEVEq0bwodrw1HGi4stiNrcoXlrrSh
+         sdyA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=a9HoC/OaMmMmyFwGFTweDzsomxpTI5zBveAVKH/mxUs=;
-        b=DViT1ItbF5OfK+XayAv0r9EWWSoDJkdZA41vd8UCL7pwFyP7wnTcGkwj482x/Ne14/
-         ScuHAhESnrNTpKFghqYBo6EjJDpO5nSbFWzF/jkzu/q52NF4C5L3FtZVdooC/F2JBQxb
-         YsyCdDNK3udnGwu8TdAPMGAJm0uuItWZLDqbPsGD8vnDfHDp1UDqM/4O17kX4Uw6+RrI
-         dozfS2nKFWc08H5XSFdilYOsiFvFpcv3KOxtOZcQwEgr2WIOl9T0881HE5ngLqWPI9Pd
-         Vcy1uFr4BWUshlo9bC1+rL4NlagQVBILRznDctOYz6e39GEouRvEozLPifOS2bKV00n7
-         fP6w==
-X-Gm-Message-State: AO0yUKWpAuUxfJDWypyHTrRD8+ZPftEW2d3PlQLwLGeKgws4ZkJ+Y3v0
-        P0cHGjxhiPZphBuB+Og9Rtv1f3oaqfbFT9PNig==
-X-Google-Smtp-Source: AK7set/gCiyNU2zsSUQcnpfweO59d4+LMWomYJ6sq6DKFLDhVfbtMpiT7MZoq2d4nExGworQhG3UEyTFbFT8aAYUHA==
+        bh=9mwmDPnm22mSNSwTn0VodViIvXaPz9XlM8QDWYhbyM8=;
+        b=3R3S0hct3/LwBoQv0Qo1C67Y6QLgHjixC7uT53i8Crhe74UuXCakNVvo405mcKy9H8
+         vm/MWMZBVQ9Hz69kRU9tshKhI0gugR63KbdeQ4KWJfnxSpU5obbsqTnNSlEUhpHYguBp
+         IOTLxnBjFuNF3D5ytEqs+7F9I3ZMNPvVQ8yWF/rA7DLea6WO0pE025YMrKn8rC2naqiz
+         kk5JD0mw5EaCxnzWY94/Sh5kiJDkuiGHxqu0+d1OtPTztPAD6lwTEyFf7a2GfT6xo1Rb
+         wx90HThETUjxCNfGg1PEGUmdcghO8oGxKoJ9IO1u/f4JFHZ0dbnaQDcNFTS3SeUQQYKb
+         kDhw==
+X-Gm-Message-State: AO0yUKVK4EeGQwGGZLtLSAo6rQ3e4N3fVnUPtM0uOjazqp7xombfex0J
+        EOmKMidvXUj80NO47mEbIHgCMnUSE14PlLfIqQ==
+X-Google-Smtp-Source: AK7set8GCw+l6Q5gppx0SI7xgHF70UCy3j05OUIa+XJfbCoB3vIVoiRjffivwnfUze8k0uHuDZvSsWzxIhc/w0Mo2w==
 X-Received: from ackerleytng-cloudtop.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:1f5f])
- (user=ackerleytng job=sendgmr) by 2002:a05:6902:1024:b0:8fc:686c:cf87 with
- SMTP id x4-20020a056902102400b008fc686ccf87mr57267ybt.4.1676680995496; Fri,
- 17 Feb 2023 16:43:15 -0800 (PST)
-Date:   Sat, 18 Feb 2023 00:43:01 +0000
+ (user=ackerleytng job=sendgmr) by 2002:a05:6902:10e:b0:95d:6b4f:a73a with
+ SMTP id o14-20020a056902010e00b0095d6b4fa73amr5895ybh.8.1676681001601; Fri,
+ 17 Feb 2023 16:43:21 -0800 (PST)
+Date:   Sat, 18 Feb 2023 00:43:02 +0000
 In-Reply-To: <cover.1676680548.git.ackerleytng@google.com>
 Mime-Version: 1.0
 References: <cover.1676680548.git.ackerleytng@google.com>
 X-Mailer: git-send-email 2.39.2.637.g21b0678d19-goog
-Message-ID: <4ea08e03d57152d505b747a6a570752dd698e315.1676680548.git.ackerleytng@google.com>
-Subject: [RFC PATCH 1/2] mm: restrictedmem: Add flag as THP allocation hint
- for memfd_restricted() syscall
+Message-ID: <67956539824ea9dd66a94d67b046b2f4bb0aa6f2.1676680548.git.ackerleytng@google.com>
+Subject: [RFC PATCH 2/2] selftests: restrictedmem: Add selftest for RMFD_HUGEPAGE
 From:   Ackerley Tng <ackerleytng@google.com>
 To:     kvm@vger.kernel.org, linux-api@vger.kernel.org,
         linux-arch@vger.kernel.org, linux-doc@vger.kernel.org,
@@ -85,100 +84,50 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Allow userspace to hint the kernel to use Transparent HugePages to
-back restricted memory on a per-file basis.
+Tests that when RMFD_HUGEPAGE is specified, restrictedmem will be
+backed by Transparent HugePages.
 
 Signed-off-by: Ackerley Tng <ackerleytng@google.com>
 ---
- include/uapi/linux/restrictedmem.h |  1 +
- mm/restrictedmem.c                 | 27 +++++++++++++++++----------
- 2 files changed, 18 insertions(+), 10 deletions(-)
+ .../restrictedmem_hugepage_test.c             | 25 +++++++++++++++++++
+ 1 file changed, 25 insertions(+)
 
-diff --git a/include/uapi/linux/restrictedmem.h b/include/uapi/linux/restrictedmem.h
-index 9f108dd1ac4c..f671ccbb43bc 100644
---- a/include/uapi/linux/restrictedmem.h
-+++ b/include/uapi/linux/restrictedmem.h
-@@ -4,5 +4,6 @@
- 
- /* flags for memfd_restricted */
- #define RMFD_TMPFILE		0x0001U
-+#define RMFD_HUGEPAGE		0x0002U
- 
- #endif /* _UAPI_LINUX_RESTRICTEDMEM_H */
-diff --git a/mm/restrictedmem.c b/mm/restrictedmem.c
-index 97f3e2159e8b..87c829960b31 100644
---- a/mm/restrictedmem.c
-+++ b/mm/restrictedmem.c
-@@ -190,19 +190,25 @@ static struct file *restrictedmem_file_create(struct file *memfd)
- 	return file;
+diff --git a/tools/testing/selftests/restrictedmem/restrictedmem_hugepage_test.c b/tools/testing/selftests/restrictedmem/restrictedmem_hugepage_test.c
+index 0d9cf2ced754..75283d68696f 100644
+--- a/tools/testing/selftests/restrictedmem/restrictedmem_hugepage_test.c
++++ b/tools/testing/selftests/restrictedmem/restrictedmem_hugepage_test.c
+@@ -180,6 +180,31 @@ TEST_F(reset_shmem_enabled, restrictedmem_fstat_shmem_enabled_always)
+ 	close(mfd);
  }
  
--static int restrictedmem_create(struct vfsmount *mount)
-+static int restrictedmem_create(unsigned int flags, struct vfsmount *mount)
- {
- 	struct file *file, *restricted_file;
- 	int fd, err;
-+	unsigned long shmem_setup_flags = VM_NORESERVE;
- 
- 	fd = get_unused_fd_flags(0);
- 	if (fd < 0)
- 		return fd;
- 
--	if (mount)
--		file = shmem_file_setup_with_mnt(mount, "memfd:restrictedmem", 0, VM_NORESERVE);
--	else
--		file = shmem_file_setup("memfd:restrictedmem", 0, VM_NORESERVE);
-+	if (flags & RMFD_HUGEPAGE)
-+		shmem_setup_flags |= VM_HUGEPAGE;
++TEST(restrictedmem_invalid_flags)
++{
++	int mfd = memfd_restricted(99, NULL);
 +
-+	if (mount) {
-+		file = shmem_file_setup_with_mnt(mount, "memfd:restrictedmem",
-+						 0, shmem_setup_flags);
-+	} else {
-+		file = shmem_file_setup("memfd:restrictedmem", 0, shmem_setup_flags);
-+	}
- 
- 	if (IS_ERR(file)) {
- 		err = PTR_ERR(file);
-@@ -230,7 +236,8 @@ static bool is_shmem_mount(struct vfsmount *mnt)
- 	return mnt->mnt_sb->s_magic == TMPFS_MAGIC;
- }
- 
--static int restrictedmem_create_from_path(const char __user *mount_path)
-+static int restrictedmem_create_from_path(unsigned int flags,
-+					  const char __user *mount_path)
++	ASSERT_EQ(-1, mfd);
++	ASSERT_EQ(EINVAL, errno);
++}
++
++TEST_F(reset_shmem_enabled, restrictedmem_rmfd_hugepage)
++{
++	int mfd = -1;
++	struct stat stat;
++
++	ASSERT_EQ(0, set_shmem_thp_policy("never"));
++
++	mfd = memfd_restricted(RMFD_HUGEPAGE, NULL);
++	ASSERT_NE(-1, mfd);
++
++	ASSERT_EQ(0, fstat(mfd, &stat));
++
++	ASSERT_EQ(stat.st_blksize, get_hpage_pmd_size());
++
++	close(mfd);
++}
++
+ TEST(restrictedmem_tmpfile_no_mount_path)
  {
- 	int ret;
- 	struct path path;
-@@ -250,7 +257,7 @@ static int restrictedmem_create_from_path(const char __user *mount_path)
- 	if (unlikely(ret))
- 		goto out;
- 
--	ret = restrictedmem_create(path.mnt);
-+	ret = restrictedmem_create(flags, path.mnt);
- 
- 	mnt_drop_write(path.mnt);
- out:
-@@ -261,16 +268,16 @@ static int restrictedmem_create_from_path(const char __user *mount_path)
- 
- SYSCALL_DEFINE2(memfd_restricted, unsigned int, flags, const char __user *, mount_path)
- {
--	if (flags & ~RMFD_TMPFILE)
-+	if (flags & ~(RMFD_TMPFILE | RMFD_HUGEPAGE))
- 		return -EINVAL;
- 
- 	if (flags == RMFD_TMPFILE) {
- 		if (!mount_path)
- 			return -EINVAL;
- 
--		return restrictedmem_create_from_path(mount_path);
-+		return restrictedmem_create_from_path(flags, mount_path);
- 	} else {
--		return restrictedmem_create(NULL);
-+		return restrictedmem_create(flags, NULL);
- 	}
- }
- 
+ 	int mfd = memfd_restricted(RMFD_TMPFILE, NULL);
 -- 
 2.39.2.637.g21b0678d19-goog
 
