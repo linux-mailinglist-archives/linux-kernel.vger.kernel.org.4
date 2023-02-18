@@ -2,109 +2,205 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C0A3E69B69E
-	for <lists+linux-kernel@lfdr.de>; Sat, 18 Feb 2023 01:13:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3CEA869B6A2
+	for <lists+linux-kernel@lfdr.de>; Sat, 18 Feb 2023 01:16:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229869AbjBRANI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Feb 2023 19:13:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34522 "EHLO
+        id S229931AbjBRAQQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Feb 2023 19:16:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35694 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229577AbjBRANH (ORCPT
+        with ESMTP id S229577AbjBRAQO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Feb 2023 19:13:07 -0500
-Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A6D93B0EE
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Feb 2023 16:13:06 -0800 (PST)
-Received: by mail-pl1-x62d.google.com with SMTP id jw12so1170666plb.1
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Feb 2023 16:13:06 -0800 (PST)
+        Fri, 17 Feb 2023 19:16:14 -0500
+Received: from mail-lj1-x232.google.com (mail-lj1-x232.google.com [IPv6:2a00:1450:4864:20::232])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 902FE67445
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Feb 2023 16:16:12 -0800 (PST)
+Received: by mail-lj1-x232.google.com with SMTP id e30so2674839ljb.8
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Feb 2023 16:16:12 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:subject:cc
-         :to:from:date:message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=QMelb1MnDD6swE/8CM85xQAKKs5hVr859DAyzVGp7Mc=;
-        b=DKnkY30Bpzy7biEAGQieBHufMzJSRVjgkN4WiZk2hYeL446IpnrkMUUcor3l4aQ3sy
-         S1mAuAwCqfNb+dqo7hy7udepJak1w8xXcuKJ8gaJ8OU5d4kIqSluJK3LpeQfhDvdBH4b
-         go0lmvq7wNql5rT1G4PjgkSylcD2KS93eYoHY=
+        d=rivosinc-com.20210112.gappssmtp.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=UgiLBWRR4q3c/Vqxkdr34/6qKJIWPn3ovu3vsEAFwgI=;
+        b=spsnR+F8ht7zIYsSLPJopwZqzc4RBkhzXq/YvtGakMzkvwBI6CVCG6HZp8fpUa0fIV
+         KSvCDoCunWQoXv4huLPwjHmjv+8j+4Za5SUpFKhlT2yOsnNYBbM7nVJKYWnW8MgWgKZV
+         hjBtACgoUEkW1M8otLuijxlLKd/te8MTXFsKuWSWAb+WiXj/3AHuPD/d5kWgsZJvvkC8
+         79llnEKU/4WfPoWSPMLopJDOnJXtr9Swax6OJEsQf3ftMyzYF6jhlnlAbIny358tig1d
+         7XhVtw5bpsFb8Zz4Iz4yyDFz1hZCJISQjoY4jCGRaUcCIbQVDMHscKZIYIinXU78mEbK
+         GmNQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:subject:cc
-         :to:from:date:message-id:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=QMelb1MnDD6swE/8CM85xQAKKs5hVr859DAyzVGp7Mc=;
-        b=5lZ37tYUK1m8XB0BQZaDgbtfvuhpWBv0Qrw1bCutt+X1N0A4d1Z4Lx4XIqPyXhTxkM
-         9tcC/DDbKU3ZtcXBiGfyFZsm3/yzuPJWFGbyRKG7JvLYF/RzSoVnHJtJKGfJ2+61ZEE/
-         wcyB46R14st6DRJ5ftH/U3zSVibsn3cNdtpOAFW6NbQwWC2DsVjAjuCgR40YE8GPF7uZ
-         igTifD9ULTRiiUBaV9GckX+QWM98ObuGlJ+RC2UP1kxAZ0cXCxVZxOUTSHu1lsnQBCyg
-         T0czy+jo7D02uaiJurlLwqGJlIrlyRN0U5OLA9eB5o64y6ecPpH8OgxM614UB3nuNV3V
-         BNvw==
-X-Gm-Message-State: AO0yUKXNHsD0p9u06rKhmyiWtS5u09x/r69dM7lPDanwWoo/QAg751Ef
-        PBusD86iFXteLf1eybl1RReP6A==
-X-Google-Smtp-Source: AK7set/h4bG49uL8qy+abJ0R63Qu7+miyWPJjJW+xK6sdj1ETCTFul1V16PMsEoEoieJb+H0rwRDHQ==
-X-Received: by 2002:a17:902:cf0c:b0:199:5111:9987 with SMTP id i12-20020a170902cf0c00b0019951119987mr6501283plg.32.1676679185524;
-        Fri, 17 Feb 2023 16:13:05 -0800 (PST)
-Received: from www.outflux.net (198-0-35-241-static.hfc.comcastbusiness.net. [198.0.35.241])
-        by smtp.gmail.com with ESMTPSA id a23-20020a170902b59700b0019a82ff8c38sm3661564pls.29.2023.02.17.16.13.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 17 Feb 2023 16:13:04 -0800 (PST)
-Message-ID: <63f01810.170a0220.110a8.6fe1@mx.google.com>
-X-Google-Original-Message-ID: <202302171554.@keescook>
-Date:   Fri, 17 Feb 2023 16:13:03 -0800
-From:   Kees Cook <keescook@chromium.org>
-To:     Namjae Jeon <linkinjeon@kernel.org>
-Cc:     Steve French <sfrench@samba.org>, Paulo Alcantara <pc@cjr.nz>,
-        Ronnie Sahlberg <lsahlber@redhat.com>,
-        Shyam Prasad N <sprasad@microsoft.com>,
-        Tom Talpey <tom@talpey.com>,
-        Sergey Senozhatsky <senozhatsky@chromium.org>,
-        linux-cifs@vger.kernel.org, linux-kernel@vger.kernel.org,
-        samba-technical@lists.samba.org, linux-hardening@vger.kernel.org
-Subject: Re: [PATCH v2] smb3: Replace smb2pdu 1-element arrays with
- flex-arrays
-References: <20230214232928.gonna.714-kees@kernel.org>
- <CAKYAXd-fcukmXfdwiAxOxe+5c+Y6vvaoQ3ff-5sK+Zis0HgC5A@mail.gmail.com>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=UgiLBWRR4q3c/Vqxkdr34/6qKJIWPn3ovu3vsEAFwgI=;
+        b=21WCzVwMTVBA0NhHneZg/igTdkUO5C6Eg0ByhekAHhdtUJUf/zy657yvDrGQv26g3b
+         IZkHRJDL1dF/zD4WXEaXahc3IYBL6/XLEi0NRzAcIHKHdC9envutVmHF70oZC0joS5SG
+         TkQvJ7b69rqZGx2y+xisev5EkhDyjTwKlDXRb0iwe3ZgWIm2sN4Zi/R4UXFX5BeAGoL9
+         ySFFL3dp0T2aRwZOG4J4/tAcNkjtzYx4o+aN103f5PWzM9VRvTUEcgGgywOzuyRIOCPr
+         KY8ejES+HEsJpSIHCTw1K3cya0Zb57vgBKXaDZYalTd7KOUyL4b8bbBkYTn3pT21Qub7
+         GkGw==
+X-Gm-Message-State: AO0yUKVUQVw+htikokD9HMQm5yBTYdfh/NCaVmdnCNQ10hwM/jXBYaXI
+        mCP2En+i1shbuk887Yg1XwL55GzSLOIlumifdn9TLQ==
+X-Google-Smtp-Source: AK7set9u+Dnr3cyx6/5FKy/AyoYlJWNwaQt2hc013b1XXlBuGKz5LO1/SdxAtDvcKpDMxiNBRWeEV/6pwGMvkM5iijc=
+X-Received: by 2002:a2e:b5dc:0:b0:293:531b:90ce with SMTP id
+ g28-20020a2eb5dc000000b00293531b90cemr901827ljn.4.1676679370770; Fri, 17 Feb
+ 2023 16:16:10 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAKYAXd-fcukmXfdwiAxOxe+5c+Y6vvaoQ3ff-5sK+Zis0HgC5A@mail.gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20230206201455.1790329-1-evan@rivosinc.com> <20230206201455.1790329-6-evan@rivosinc.com>
+ <Y+1VOXyKDDHEuejJ@spud>
+In-Reply-To: <Y+1VOXyKDDHEuejJ@spud>
+From:   Evan Green <evan@rivosinc.com>
+Date:   Fri, 17 Feb 2023 16:15:34 -0800
+Message-ID: <CALs-HsvZaKC5R-rAvkjBDNQGTUJ_LWn-O=KzpFwGtpac32_Xxw@mail.gmail.com>
+Subject: Re: [PATCH v2 5/6] RISC-V: hwprobe: Support probing of misaligned
+ access performance
+To:     Conor Dooley <conor@kernel.org>
+Cc:     Palmer Dabbelt <palmer@rivosinc.com>, vineetg@rivosinc.com,
+        heiko@sntech.de, slewis@rivosinc.com,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Andrew Bresticker <abrestic@rivosinc.com>,
+        Andrew Jones <ajones@ventanamicro.com>,
+        Anup Patel <apatel@ventanamicro.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Atish Patra <atishp@rivosinc.com>,
+        Celeste Liu <coelacanthus@outlook.com>,
+        Guo Ren <guoren@kernel.org>,
+        Heinrich Schuchardt <heinrich.schuchardt@canonical.com>,
+        Jisheng Zhang <jszhang@kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Sunil V L <sunilvl@ventanamicro.com>,
+        Tsukasa OI <research_trasio@irq.a4lg.com>,
+        Xianting Tian <xianting.tian@linux.alibaba.com>,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-riscv@lists.infradead.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 16, 2023 at 11:25:01PM +0900, Namjae Jeon wrote:
-> Hi Kees,
-> 
-> >  /* Read flags */
-> > @@ -730,7 +730,7 @@ struct smb2_read_rsp {
-> >  	__le32 DataLength;
-> >  	__le32 DataRemaining;
-> >  	__le32 Flags;
-> > -	__u8   Buffer[1];
-> > +	__u8   Buffer[];
-> >  } __packed;
+On Wed, Feb 15, 2023 at 1:57 PM Conor Dooley <conor@kernel.org> wrote:
+>
+> On Mon, Feb 06, 2023 at 12:14:54PM -0800, Evan Green wrote:
+> > This allows userspace to select various routines to use based on the
+> > performance of misaligned access on the target hardware.
 > >
-> 
-> You seem to have missed -1 removal in the code below.
+> > Co-developed-by: Palmer Dabbelt <palmer@rivosinc.com>
+> > Signed-off-by: Palmer Dabbelt <palmer@rivosinc.com>
+> > Signed-off-by: Evan Green <evan@rivosinc.com>
+> >
+> > ---
+> >
+> > Changes in v2:
+> >  - Fixed logic error in if(of_property_read_string...) that caused crash
+> >  - Include cpufeature.h in cpufeature.h to avoid undeclared variable
+> >    warning.
+> >  - Added a _MASK define
+> >  - Fix random checkpatch complaints
+> >
+> >  Documentation/riscv/hwprobe.rst       | 13 +++++++++++
+> >  arch/riscv/include/asm/cpufeature.h   |  2 ++
+> >  arch/riscv/include/asm/hwprobe.h      |  2 +-
+> >  arch/riscv/include/asm/smp.h          |  9 ++++++++
+> >  arch/riscv/include/uapi/asm/hwprobe.h |  6 ++++++
+> >  arch/riscv/kernel/cpufeature.c        | 31 +++++++++++++++++++++++++--
+> >  arch/riscv/kernel/sys_riscv.c         | 23 ++++++++++++++++++++
+> >  7 files changed, 83 insertions(+), 3 deletions(-)
+> >
+> > diff --git a/Documentation/riscv/hwprobe.rst b/Documentation/riscv/hwprobe.rst
+> > index ce186967861f..0dc75e83e127 100644
+> > --- a/Documentation/riscv/hwprobe.rst
+> > +++ b/Documentation/riscv/hwprobe.rst
+> > @@ -51,3 +51,16 @@ The following keys are defined:
+> >        not minNum/maxNum") of the RISC-V ISA manual.
+> >      * :RISCV_HWPROBE_IMA_C:: The C extension is supported, as defined by
+> >        version 2.2 of the RISC-V ISA manual.
+> > +* :RISCV_HWPROBE_KEY_PERF_0:: A bitmask that contains performance information
+>
+> This doesn't match what's defined?
+>
+> > +  about the selected set of processors.
+> > +    * :RISCV_HWPROBE_MISALIGNED_UNKNOWN:: The performance of misaligned
+> > +      accesses is unknown.
+> > +    * :RISCV_HWPROBE_MISALIGNED_EMULATED:: Misaligned accesses are emulated via
+> > +      software, either in or below the kernel.  These accesses are always
+> > +      extremely slow.
+> > +    * :RISCV_HWPROBE_MISALIGNED_SLOW:: Misaligned accesses are supported in
+> > +      hardware, but are slower than the cooresponding aligned accesses
+> > +      sequences.
+> > +    * :RISCV_HWPROBE_MISALIGNED_FAST:: Misaligned accesses are supported in
+> > +      hardware and are faster than the cooresponding aligned accesses
+> > +      sequences.
+>
+> > diff --git a/arch/riscv/include/asm/smp.h b/arch/riscv/include/asm/smp.h
+> > index 3831b638ecab..6c1759091e44 100644
+> > --- a/arch/riscv/include/asm/smp.h
+> > +++ b/arch/riscv/include/asm/smp.h
+> > @@ -26,6 +26,15 @@ struct riscv_ipi_ops {
+> >   */
+> >  extern unsigned long __cpuid_to_hartid_map[NR_CPUS];
+> >  #define cpuid_to_hartid_map(cpu)    __cpuid_to_hartid_map[cpu]
+> > +static inline long hartid_to_cpuid_map(unsigned long hartid)
+> > +{
+> > +     long i;
+> > +
+> > +     for (i = 0; i < NR_CPUS; ++i)
+>
+> I'm never (or not yet?) sure about these things.
+> Should this be for_each_possible_cpu()?
 
-Ah; thanks for this heads-up. I will need a v3.
+Me neither. I believe it's the same, as for_each_possible_cpu()
+iterates over a CPU mask of all 1s, and the size of struct cpumask is
+set by NR_CPUS. Some architectures appear to have an
+init_cpu_possible() function to further restrict the set, though riscv
+does not. It's probably better to use for_each_possible_cpu() though
+in case a call to init_cpu_possible() ever does get added.
 
-> ./fs/cifs/smb2ops.c:5632:       .read_rsp_size = sizeof(struct
-> smb2_read_rsp) - 1,
-> ./fs/cifs/smb2ops.c:5654:       .read_rsp_size = sizeof(struct
-> smb2_read_rsp) - 1,
-...
+>
+> > +             if (cpuid_to_hartid_map(i) == hartid)
+> > +                     return i;
+> > +     return -1;
+> > +}
+> >
+> >  /* print IPI stats */
+> >  void show_ipi_stats(struct seq_file *p, int prec);
+> > diff --git a/arch/riscv/include/uapi/asm/hwprobe.h b/arch/riscv/include/uapi/asm/hwprobe.h
+> > index ce39d6e74103..5d55e2da2b1f 100644
+> > --- a/arch/riscv/include/uapi/asm/hwprobe.h
+> > +++ b/arch/riscv/include/uapi/asm/hwprobe.h
+> > @@ -25,5 +25,11 @@ struct riscv_hwprobe {
+> >  #define RISCV_HWPROBE_KEY_IMA_EXT_0  4
+> >  #define              RISCV_HWPROBE_IMA_FD            (1 << 0)
+> >  #define              RISCV_HWPROBE_IMA_C             (1 << 1)
+> > +#define RISCV_HWPROBE_KEY_CPUPERF_0  5
+> > +#define              RISCV_HWPROBE_MISALIGNED_UNKNOWN        (0 << 0)
+> > +#define              RISCV_HWPROBE_MISALIGNED_EMULATED       (1 << 0)
+> > +#define              RISCV_HWPROBE_MISALIGNED_SLOW           (2 << 0)
+> > +#define              RISCV_HWPROBE_MISALIGNED_FAST           (3 << 0)
+> > +#define              RISCV_HWPROBE_MISALIGNED_MASK           (3 << 0)
+>
+> Why is it UNKNOWN rather than UNSUPPORTED?
+> I thought I saw Palmer saying that there is no requirement to support
+> misaligned accesses any more.
+> Plenty of old DTs are going to lack this property so would be UNKNOWN,
+> and I *assume* that the user of the syscall is gonna conflate the two,
+> but the rationale interests me.
 
-These are interesting -- they don't show up at all in the code. What I
-mean is that they're data-only changes. I'll add that to my before/after
-build sanity checks.
+Palmer had mentioned on the DT bindings patch that historically it was
+required but emulated. So because old binaries assumed it was there,
+the default values for DTs without this needs to imply "supported, but
+no idea how fast it is".
 
-Thanks!
+But you bring up an interesting point: should the bindings and these
+defines have a value that indicates no support at all for unaligned
+accesses? We could always add the value to the bindings later, but
+maybe we should leave space in this field now.
 
--Kees
-
--- 
-Kees Cook
+-Evan
