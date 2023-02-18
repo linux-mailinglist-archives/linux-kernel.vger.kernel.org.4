@@ -2,180 +2,189 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A00B69BA2C
-	for <lists+linux-kernel@lfdr.de>; Sat, 18 Feb 2023 14:17:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 63E3169BA2E
+	for <lists+linux-kernel@lfdr.de>; Sat, 18 Feb 2023 14:20:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229776AbjBRNQt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 18 Feb 2023 08:16:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42444 "EHLO
+        id S229790AbjBRNUp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 18 Feb 2023 08:20:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44414 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229770AbjBRNQo (ORCPT
+        with ESMTP id S229770AbjBRNUn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 18 Feb 2023 08:16:44 -0500
-Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FF8518140
-        for <linux-kernel@vger.kernel.org>; Sat, 18 Feb 2023 05:16:42 -0800 (PST)
-Received: by mail-lf1-x136.google.com with SMTP id s8so1025583lfr.13
-        for <linux-kernel@vger.kernel.org>; Sat, 18 Feb 2023 05:16:42 -0800 (PST)
+        Sat, 18 Feb 2023 08:20:43 -0500
+Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com [IPv6:2607:f8b0:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CBC8F18AA7;
+        Sat, 18 Feb 2023 05:20:42 -0800 (PST)
+Received: by mail-pf1-x436.google.com with SMTP id bd10so400029pfb.3;
+        Sat, 18 Feb 2023 05:20:42 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=vanguardiasur-com-ar.20210112.gappssmtp.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=fOW41YE6NIXhaJNnU4hCx+sLkzhMt2pO1lzbuk6y4I0=;
-        b=XBHOhHHJ50N6f0pTI+SyxJ6bOnVH+Pl4f3M5WGB8OwQlh2776GpleUi7V1bGpEhALC
-         MrWwGYt1yyg3UgNKTv6KjONmFC/Rjb8TI9+cZ1jWJxu+MERgbIVOWQGojInh1vf6V+NP
-         ZQ53LWGMff8hiPDjfdatEW/+aQCXY+/ogBLeCz9DRAr0nCZ9unjR4kZtwuD7c3v19JRs
-         Gf/UjmPW/kNzlmBhpv7lFzo+XenSQwGkro8F3H42SbL+BsQwt7z50e/1QVKPItlhInzi
-         8Vz87cNgwtJFB4ydKkOHuIwChNlVvJjAqEwlLKlwoXxljExnJUkc40FZO0sxIQ6FRt52
-         SPXQ==
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=rn86ibAcj0MP34P9tfsJbMqy1bIVlwSzMFz1qF4qaOM=;
+        b=n3q2lr0PmU1uuemyajDPLfCzgGNiSaL+y2BlLLJ+SjQV1YXr0737F00y2tr9Iv13Tg
+         CbwWUOFwJzs8qB34YPYbE3/i+xcAn0YvIzhMDE4mUku6lq9pbRyOSvz+vc6TjLbLK+r9
+         0YIK4g4ctBer32qbYK7jZJV3mjxsbBVwshYd8luY9qBVfsZh1b2DKJYVfEif5BsyJdTI
+         8YS2i/GIHQzV5hu8JwPxg0y124dz9AUd4C/rD5HzlWUn8WXlkYrCSAN2tuI5obPlC6B9
+         KLG0ZuaZdMju8nEvhhblotvpVdyfYQ5zkKEjV42TX0VVnaOQXHfeNF6eL/ExMHNjwv4x
+         gkdQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=fOW41YE6NIXhaJNnU4hCx+sLkzhMt2pO1lzbuk6y4I0=;
-        b=eSUu5jqjvRE+D+Bbf+opPwgDD5t2hV+MZkOtbP4y/OCQY5qYBElD7iPTHnpmue5rxN
-         9uNWuTNrZyaEb7Dj3YccIuq+/1tuqiH8ybC3zaL5f4PrqNDjV58gD+rRJa5/deVpUYT8
-         wDKTNDFDJejh/xOIjF1Jkw5hNMNzvdRIuH54ujWl6DrKfNkILfWgxlo+cXN1b0/TIhk3
-         Q3Jb/dnLMUaVappM55RTfS5fwfWtD9zaA+a41bp0+e+y5hVgJfh4OUt6S577X38VjmoO
-         ljNLTBU+TbsOmTMmXsHj3QsXq3gc+v7PFjKxq1cYLKEisfcFYd1XinYNMKwO5uTkeScp
-         0rKA==
-X-Gm-Message-State: AO0yUKXjxTSwGOPSVe7+wujuIJauj9ZRs8ke2ph0+Ktz0x4zBaMFjVmk
-        INmh7/xchDE2Bc4lkps4x79Ncg7qwtCyoVf2CQ19uw==
-X-Google-Smtp-Source: AK7set80r3Y6bYSLFSBI0xknUuO9S2Q/YhyJkMLayF/FUlbtLXYQYgq5HM5Hu8zpF8myoFBSziIJrlieuTkqWcZCLSw=
-X-Received: by 2002:ac2:4439:0:b0:4d5:ca43:703e with SMTP id
- w25-20020ac24439000000b004d5ca43703emr1313928lfl.1.1676726200392; Sat, 18 Feb
- 2023 05:16:40 -0800 (PST)
+        bh=rn86ibAcj0MP34P9tfsJbMqy1bIVlwSzMFz1qF4qaOM=;
+        b=utRYp9Rba///UQn8QVJO+8S3hMWFqwpIXbgAPJE6DAN2chINKWXYwmO45Yg+8M2PCx
+         7CIcKQ5VqA+4Cl7n+MsLmjLQj4Mb8JpAfyBfqaGn8+NBfjx6fijarmN4Isn5EhnnN4tH
+         ZNk0pwf5RWb2SIfgKD4gOJS09G6XGcyT6CDYMtk+Ym2sffEVupzaKcB7H4wLM9KwJV8L
+         fRz1hQUzMA+czn13qGPdTz7ghvdPbrQGPZHlCbdgsNySUVDIY8+9aoAhtJgTaekaTGiW
+         xJHS8VAD4ZSKFdV71foN4O3+MKtkdENstckSOAxilN5puE3ZSoni8c51fhZxFjMGX2YS
+         +Ebw==
+X-Gm-Message-State: AO0yUKVH8RjFU0FjjbD476/7k7Di9v4rvoraCV4cECF9Jdtsq3k1IYJv
+        N+INEK3NES4wbOOErDykums=
+X-Google-Smtp-Source: AK7set8LTp1t9LS2JspNJY014XScQlN1avsKoe1Y2yRiAdyxXZUdPDp+R16s/WyRzFCpwbavKgxmUw==
+X-Received: by 2002:a62:3841:0:b0:5a8:4e9c:32a9 with SMTP id f62-20020a623841000000b005a84e9c32a9mr4452051pfa.32.1676726442290;
+        Sat, 18 Feb 2023 05:20:42 -0800 (PST)
+Received: from localhost.localdomain ([202.53.32.211])
+        by smtp.gmail.com with ESMTPSA id v19-20020aa78093000000b0058e24050648sm4769448pff.12.2023.02.18.05.20.38
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 18 Feb 2023 05:20:41 -0800 (PST)
+From:   Orlando Chamberlain <orlandoch.dev@gmail.com>
+To:     Hans de Goede <hdegoede@redhat.com>
+Cc:     Mark Gross <markgross@kernel.org>,
+        platform-driver-x86@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Lukas Wunner <lukas@wunner.de>,
+        Seth Forshee <sforshee@kernel.org>,
+        Aditya Garg <gargaditya08@live.com>,
+        Aun-Ali Zaidi <admin@kodeit.net>,
+        Kerem Karabay <kekrby@gmail.com>,
+        Orlando Chamberlain <orlandoch.dev@gmail.com>
+Subject: [PATCH v3 0/5] apple-gmux: support MMIO gmux type on T2 Macs
+Date:   Sun, 19 Feb 2023 00:20:02 +1100
+Message-Id: <20230218132007.3350-1-orlandoch.dev@gmail.com>
+X-Mailer: git-send-email 2.39.1
 MIME-Version: 1.0
-References: <20230214140557.537984-1-benjamin.gaignard@collabora.com>
-In-Reply-To: <20230214140557.537984-1-benjamin.gaignard@collabora.com>
-From:   Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
-Date:   Sat, 18 Feb 2023 10:16:28 -0300
-Message-ID: <CAAEAJfCeZSqE0GhHMM8wNFjzF7ktJje_mOnBhcq_qc76WtaJWQ@mail.gmail.com>
-Subject: Re: [PATCH v4 00/12] AV1 stateless decoder for RK3588
-To:     Benjamin Gaignard <benjamin.gaignard@collabora.com>
-Cc:     p.zabel@pengutronix.de, mchehab@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, heiko@sntech.de,
-        hverkuil@xs4all.nl, nicolas.dufresne@collabora.com,
-        jernej.skrabec@gmail.com, linux-media@vger.kernel.org,
-        linux-rockchip@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        kernel@collabora.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Nicolas, Benjamin,
+Hi All,
 
-On Tue, Feb 14, 2023 at 11:06 AM Benjamin Gaignard
-<benjamin.gaignard@collabora.com> wrote:
->
-> This series implement AV1 stateless decoder for RK3588 SoC.
-> The hardware support 8 and 10 bits bitstreams up to 7680x4320.
-> AV1 feature like film grain or scaling are done by the postprocessor.
-> The driver can produce NV12_4L4, NV12_10LE40_4L4, NV12 and P010 pixels formats.
-> Even if Rockchip have named the hardware VPU981 it looks like a VC9000 but
-> with a different registers mapping.
->
-> It is based on Daniel's "[PATCH v6] media: Add AV1 uAPI" patches [1] and my
-> own series to fix 10 bits handling in verisilicon driver "[PATCH v8 0/6]
-> media: verisilicon: HEVC: fix 10bits handling" [2].
->
-> The full branch can be found here:
-> https://gitlab.collabora.com/linux/for-upstream/-/commits/rk3588_av1_decoder_v4
->
-> Fluster score is: 200/239 while testing AV1-TEST-VECTORS with GStreamer-AV1-V4L2SL-Gst1.0.
-> The failing tests are:
-> - the 2 tests with 2 spatial layers: few errors in luma/chroma values
-> - tests with resolution < hardware limit (64x64)
-> - 10bits film grain test: bad macroblocks while decoding, the same 8bits
->   test is working fine.
->
+This patch series adds support for the MMIO based gmux present on these
+Dual GPU Apple T2 Macs: MacBookPro15,1, MacBookPro15,3, MacBookPro16,1,
+MacBookPro16,4 (although amdgpu isn't working on MacBookPro16,4 [1]).
 
-I did some review of the commits that affect the generic Hantro driver,
-it looks quite clean!
+Changes from v2[2]:
 
-I'll send some R-b soon.
+- Add "," to last item in apple_gmux_type enum
+- Don't not clear interrupts when status is 0
+- Don't check if we failed to make debugfs folder
+- Check for fake mmio gmux
 
-Thanks,
-Ezequiel
+# 1:
 
-> Changes in v4:
-> - Squash "Save bit depth for AV1 decoder" and "Check AV1 bitstreams bit
->   depth" patches.
-> - Double motion vectors buffer size.
-> - Fix the various errors reported by Hans.
->
-> Changes in v3:
-> - Fix arrays loops limites.
-> - Remove unused field.
-> - Reset raw pixel formats list when bit depth or film grain feature
->   values change.
-> - Enable post-processor P010 support
->
-> Changes in v2:
-> - Remove useless +1 in sbs computation.
-> - Describe NV12_10LE40_4L4 pixels format.
-> - Post-processor could generate P010.
-> - Fix comments done on v1.
-> - The last patch make sure that only post-processed formats are used when film
->   grain feature is enabled.
->
-> Benjamin
->
-> [1] https://patchwork.kernel.org/project/linux-media/patch/20230214124254.13356-1-daniel.almeida@collabora.com/
-> [2] https://www.spinics.net/lists/linux-media/msg226954.html
->
-> Benjamin Gaignard (11):
->   dt-bindings: media: rockchip-vpu: Add rk3588 vpu compatible
->   media: Add NV12_10LE40_4L4 pixel format
->   media: verisilicon: Get bit depth for V4L2_PIX_FMT_NV12_10LE40_4L4
->   media: verisilicon: Add AV1 decoder mode and controls
->   media: verisilicon: Check AV1 bitstreams bit depth
->   media: verisilicon: Compute motion vectors size for AV1 frames
->   media: verisilicon: Add AV1 entropy helpers
->   media: verisilicon: Add Rockchip AV1 decoder
->   media: verisilicon: Add film grain feature to AV1 driver
->   media: verisilicon: Enable AV1 decoder on rk3588
->   media: verisilicon: Conditionally ignore native formats
->
-> Nicolas Dufresne (1):
->   v4l2-common: Add support for fractional bpp
->
->  .../bindings/media/rockchip-vpu.yaml          |    1 +
->  .../media/v4l/pixfmt-yuv-planar.rst           |    4 +
->  drivers/media/platform/verisilicon/Makefile   |    3 +
->  drivers/media/platform/verisilicon/hantro.h   |    8 +
->  .../media/platform/verisilicon/hantro_drv.c   |   68 +-
->  .../media/platform/verisilicon/hantro_hw.h    |  102 +
->  .../platform/verisilicon/hantro_postproc.c    |    9 +-
->  .../media/platform/verisilicon/hantro_v4l2.c  |   67 +-
->  .../media/platform/verisilicon/hantro_v4l2.h  |    5 +-
->  .../verisilicon/rockchip_av1_entropymode.c    | 4424 +++++++++++++++++
->  .../verisilicon/rockchip_av1_entropymode.h    |  272 +
->  .../verisilicon/rockchip_av1_filmgrain.c      |  401 ++
->  .../verisilicon/rockchip_av1_filmgrain.h      |   36 +
->  .../verisilicon/rockchip_vpu981_hw_av1_dec.c  | 2234 +++++++++
->  .../verisilicon/rockchip_vpu981_regs.h        |  477 ++
->  .../platform/verisilicon/rockchip_vpu_hw.c    |  134 +
->  drivers/media/v4l2-core/v4l2-common.c         |  149 +-
->  drivers/media/v4l2-core/v4l2-ioctl.c          |    1 +
->  include/media/v4l2-common.h                   |    2 +
->  include/uapi/linux/videodev2.h                |    1 +
->  20 files changed, 8301 insertions(+), 97 deletions(-)
->  create mode 100644 drivers/media/platform/verisilicon/rockchip_av1_entropymode.c
->  create mode 100644 drivers/media/platform/verisilicon/rockchip_av1_entropymode.h
->  create mode 100644 drivers/media/platform/verisilicon/rockchip_av1_filmgrain.c
->  create mode 100644 drivers/media/platform/verisilicon/rockchip_av1_filmgrain.h
->  create mode 100644 drivers/media/platform/verisilicon/rockchip_vpu981_hw_av1_dec.c
->  create mode 100644 drivers/media/platform/verisilicon/rockchip_vpu981_regs.h
->
-> --
-> 2.34.1
->
+has a slight change in how the switch state is read: instead of checking
+for x == 2, check !(x & 1)
+
+# 2:
+
+implements a system to support more than 2 gmux types
+
+# 3:
+
+start using the gmux's GMSP acpi method when handling interrupts on MMIO
+gmux's. This is needed for the MMIO gmux's to clear interrupts.
+
+# 4:
+
+Adds support for the MMIO based gmux on T2 macs.
+
+# 5:
+
+Add a debugfs interface to apple-gmux so data from ports can be read
+and written to from userspace.
+
+This can be used for more easily researching what unknown ports do,
+and switching gpus when vga_switcheroo isn't ready (e.g. when one gpu
+is bound to vfio-pci and in use by a Windows VM, I can use this to
+switch my internal display between Linux and Windows easily).
+
+# Issues:
+
+1. Switching gpus at runtime has the same issue as indexed gmux's: the
+inactive gpu can't probe the DDC lines for eDP [3]
+
+2. iMacPro1,1, iMac20,1 and iMac20,2 all seem to have a gmux in their
+acpi tables, but they shouldn't. A check that hopefully will detect this
+is used, but it's untested as I don't have any of those computers.
+
+3. Powering on the amdgpu with vga_switcheroo doesn't work well. I'm
+told on the MacBookPro15,1 it works sometimes, and adding delays helps,
+but on my MacBookPro16,1 I haven't been able to get it to work at all:
+
+amdgpu: switched off
+amdgpu: switched on
+amdgpu 0000:03:00.0:
+    Unable to change power state from D3hot to D0, device inaccessible
+amdgpu 0000:03:00.0:
+    Unable to change power state from D3cold to D0, device inaccessible
+[drm] PCIE GART of 512M enabled (table at 0x00000080FEE00000).
+[drm] PSP is resuming...
+[drm:psp_hw_start [amdgpu]] *ERROR* PSP create ring failed!
+[drm:psp_resume [amdgpu]] *ERROR* PSP resume failed
+[drm:amdgpu_device_fw_loading [amdgpu]]
+    *ERROR* resume of IP block <psp> failed -62
+amdgpu 0000:03:00.0: amdgpu: amdgpu_device_ip_resume failed (-62).
+snd_hda_intel 0000:03:00.1: Enabling via vga_switcheroo
+snd_hda_intel 0000:03:00.1:
+    Unable to change power state from D3cold to D0, device inaccessible
+snd_hda_intel 0000:03:00.1: CORB reset timeout#2, CORBRP = 65535
+snd_hda_codec_hdmi hdaudioC0D0: Unable to sync register 0x2f0d00. -5
+
+There are some acpi methods (PWRD, PWG1 [4, 5]) that macOS calls when
+changing the amdgpu's power state, but we don't use them and that could be
+a cause. Additionally unlike previous generation Macbooks which work
+better, on MacBookPro16,1 the gpu is located behind 2 pci bridges:
+
+01:00.0 PCI bridge: Advanced Micro Devices, Inc. [AMD/ATI]
+    Navi 10 XL Upstream Port of PCI Express Switch (rev 43)
+02:00.0 PCI bridge: Advanced Micro Devices, Inc. [AMD/ATI]
+    Navi 10 XL Downstream Port of PCI Express Switch
+03:00.0 VGA compatible controller: Advanced Micro Devices, Inc. [AMD/ATI]
+    Navi 14 [Radeon RX 5500/5500M / Pro 5500M] (rev 43)
+03:00.1 Audio device: Advanced Micro Devices, Inc. [AMD/ATI]
+    Navi 10 HDMI Audio
+
+Upon attempting to power on the gpu with vga_switcheroo, all these
+devices except 01:00.0 have their config space filled with 1s.
+Rescanning pci makes the config space of all the devices go back to
+normal, however amdgpu still fails to resume with the same logs as
+above.
+
+[1]: https://lore.kernel.org/all/3AFB9142-2BD0-46F9-AEA9-C9C5D13E68E6@live.com/
+[2]: https://lore.kernel.org/platform-driver-x86/20230216122342.5918-1-orlandoch.dev@gmail.com/
+[3]: https://lore.kernel.org/all/9eed8ede6f15a254ad578e783b050e1c585d5a15.1439288957.git.lukas@wunner.de/
+[4]: https://gist.github.com/Redecorating/6c7136b7a4ac7ce3b77d8e41740dd87b
+[5]: https://lore.kernel.org/all/20120710160555.GA31562@srcf.ucam.org/
+
+Orlando Chamberlain (5):
+  apple-gmux: use first bit to check switch state
+  apple-gmux: refactor gmux types
+  apple-gmux: Use GMSP acpi method for interrupt clear
+  apple-gmux: support MMIO gmux on T2 Macs
+  apple-gmux: add debugfs interface
+
+ drivers/platform/x86/apple-gmux.c | 349 ++++++++++++++++++++++++++----
+ include/linux/apple-gmux.h        |  70 ++++--
+ 2 files changed, 357 insertions(+), 62 deletions(-)
+
+-- 
+2.39.1
+
