@@ -2,165 +2,204 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E35669B9F2
-	for <lists+linux-kernel@lfdr.de>; Sat, 18 Feb 2023 13:18:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D32A69B9F3
+	for <lists+linux-kernel@lfdr.de>; Sat, 18 Feb 2023 13:22:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229586AbjBRMSy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 18 Feb 2023 07:18:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51566 "EHLO
+        id S229608AbjBRMWd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 18 Feb 2023 07:22:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52210 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229441AbjBRMSw (ORCPT
+        with ESMTP id S229441AbjBRMWb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 18 Feb 2023 07:18:52 -0500
-Received: from mout.gmx.net (mout.gmx.net [212.227.17.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7C8818151;
-        Sat, 18 Feb 2023 04:18:50 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=public-files.de;
-        s=s31663417; t=1676722706; i=frank-w@public-files.de;
-        bh=OP3X0Px61zMcqd95TfNq9/R7u4UHsIlHqoTH3i/TdQQ=;
-        h=X-UI-Sender-Class:From:To:Cc:Subject:Date:In-Reply-To:References;
-        b=KQRJu0DQuXUY6MhyMywcwbwVVVnh93d+Qk4nG3A0J0BdpxX0zS1k/4YMLQ1jVI4iH
-         DylkaUjRJ7ql9gavffrcws+s4sHGg84KYcZ2MyzOP0PUV9ETqm6sz8baINzTgLoqdV
-         F50SedxLHOvVsJaU+5N7dDVLnBbiLetgEFIxkMiWxca9UutoOtemX5hAYQsUDS23Av
-         yJCUTwS+sanp+Ws7Byk70BaTmggOHXbdE0rMqYppISwMNLoNQy5wAshTJtrJgRz1sc
-         l8Iy1FLmSxYT35OvVcrtTRtLH45RrJ7QqfA3mMPy/ZXr9XG5YT7A0JS96e1P7buh5H
-         FTeIfRDEBonPg==
-X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from [217.61.153.5] ([217.61.153.5]) by web-mail.gmx.net
- (3c-app-gmx-bap53.server.lan [172.19.172.123]) (via HTTP); Sat, 18 Feb 2023
- 13:18:25 +0100
+        Sat, 18 Feb 2023 07:22:31 -0500
+Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD00218A8A
+        for <linux-kernel@vger.kernel.org>; Sat, 18 Feb 2023 04:22:29 -0800 (PST)
+Received: by mail-ed1-x533.google.com with SMTP id t19so1834551edi.13
+        for <linux-kernel@vger.kernel.org>; Sat, 18 Feb 2023 04:22:29 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=googlemail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=vSFhK0gX7xLAjDvAdw5Ub/even+FiWfI7Dc8rnupOLE=;
+        b=CnBvEplv2WTtQW0d4GTeBfKkksECcd8nz6dItfyfYbVPba/xmypBoSCaAWqIggDqJW
+         CEKF9sMAtqIXLzQUDJcoJy883Exs+OIb7jD7nT3LzDetwrxCeIyCo3IL2dx4Fgkb2nnW
+         2615xl5Q70pYsjrmgYgcXifBgSEkFDfmpYExVKT09qxGHxMOFHpxoE/8zQgxdQ37+Z9Z
+         uEjLi4NYS3AkdWjW5OBf+738yCyTeagFydqcgyd3p5VaiSsg4TzkdrzHJfuYI9DXbTXw
+         O0jal2afwN3LQ/lCkNzNVsh77JZDVHPsgCG8C09T7Wa0Qpva49+67fOXcFCBM9WHBSoi
+         aerQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=vSFhK0gX7xLAjDvAdw5Ub/even+FiWfI7Dc8rnupOLE=;
+        b=5InzNvwexn4q5v0Ij208kDdvvR02tV0gm/EQQxlYr9hJa89hnI8fuvYr4rhKxWMc2P
+         TkeZCOsVR3YmjNLMMWrlKqWqmE+xrvjd8/1rwjQtn5PswS2R1UAIiDXOg0glOH1QcwoE
+         559Q9u1STtS6Eo3A9lAck0UZaqu77gwa7CgpooJ4uWp7yKknl8BQIir1IvZZoqj9K1dK
+         Tu8iKJNvdyOMC0hxJibr5A24PwTmeIl++idinJBr3cRwr902dqBYY2SRBnSoMVf59Pjf
+         PXYWe/5TsYFI6o4hM9TkhKN0zd3tDiYKL9W6RBI8GZew/1Cn4+6N61eDMPlHFpTTORo1
+         ZUHA==
+X-Gm-Message-State: AO0yUKVaYIldwp1HITDemeAI+rxgcAxMheABJJ4dWBNxcvhi1W6Cm2z8
+        qLHP4lXON6G/zpP7/sKabXw=
+X-Google-Smtp-Source: AK7set8joj7Ao/gmx+ebDbKwbsXBNeMBvonzeqxp071jClpYHAKYIdLsR2ZYh7d/QxWXD4DACj03pA==
+X-Received: by 2002:a17:906:8258:b0:8ae:b008:9b5a with SMTP id f24-20020a170906825800b008aeb0089b5amr2139465ejx.69.1676722948146;
+        Sat, 18 Feb 2023 04:22:28 -0800 (PST)
+Received: from [192.168.1.10] (97e09f27.skybroadband.com. [151.224.159.39])
+        by smtp.googlemail.com with ESMTPSA id ha13-20020a170906a88d00b008b12823f0f7sm3311971ejb.88.2023.02.18.04.22.27
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 18 Feb 2023 04:22:27 -0800 (PST)
+Message-ID: <181bea6a-e501-f5bd-b002-de7a244a921a@googlemail.com>
+Date:   Sat, 18 Feb 2023 12:22:25 +0000
 MIME-Version: 1.0
-Message-ID: <trinity-dd260791-3637-4193-8f93-a9fcdb013dcb-1676722705920@3c-app-gmx-bap53>
-From:   Frank Wunderlich <frank-w@public-files.de>
-To:     =?UTF-8?Q?Ar=C4=B1n=C3=A7_=C3=9CNAL?= <arinc.unal@arinc9.com>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, erkin.bozoglu@xeront.com
-Subject: Aw: Re:  Re: [PATCH v3 0/5] arm: dts: mt7623: relocate gmacs,
- mt7530 switch, and add port@5
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: linux-6.2-rc4+ hangs on poweroff/reboot: Bisected
+To:     Karol Herbst <kherbst@redhat.com>,
+        Linux regressions mailing list <regressions@lists.linux.dev>
+Cc:     Dave Airlie <airlied@gmail.com>, Ben Skeggs <skeggsb@gmail.com>,
+        bskeggs@redhat.com, Lyude Paul <lyude@redhat.com>,
+        ML nouveau <nouveau@lists.freedesktop.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        ML dri-devel <dri-devel@lists.freedesktop.org>
+References: <b64705e3-2e63-a466-f829-f9568b06766a@googlemail.com>
+ <CACAvsv4sOtPjCVnEcKd2RCUqYWxSn5XKyksbS-Bds2qCqyusVw@mail.gmail.com>
+ <1cdb84ac-f7a8-66ba-98fc-3db302b49a5a@googlemail.com>
+ <dab6eb81-db3f-8fa1-84ad-9b40e209514b@googlemail.com>
+ <CACAvsv5iYdF3P8AbyrbYo3zGmYRYhxDWn7WbAR5V9qHpbgBXRA@mail.gmail.com>
+ <1632a9ef-2954-c8f0-cdc9-03157c9d8547@googlemail.com>
+ <5abbee70-cc84-1528-c3d8-9befd9edd611@googlemail.com>
+ <5cf46df8-0fa2-e9f5-aa8e-7f7f703d96dd@googlemail.com>
+ <f72fe15b-db1d-56dd-aaf6-3cba68a8bf0a@leemhuis.info>
+ <CACO55tvR4ydDOXt=9nbR3n2aFLKrj8zeuGRR_xpezVQBBLrjqg@mail.gmail.com>
+ <a6188878-f84c-0fcc-9509-b9d7ab797f4c@leemhuis.info>
+ <d031f0a5-8d5e-af51-6db6-11844de3eeba@googlemail.com>
+ <CAPM=9tz+wksJTvMi_4Ef7XWezfH0ReN2se189s8Q=obJjHC+Fw@mail.gmail.com>
+ <4e786e22-f17a-da76-5129-8fef0c7c825a@googlemail.com>
+ <b829633e-ccc4-7a54-1cad-f29254de1251@leemhuis.info>
+ <CACO55tsvM07_6mGU3dCgeji0a6B4JJKSDOOBuCHv2Mw3rYbCHg@mail.gmail.com>
+Content-Language: en-GB
+From:   Chris Clayton <chris2553@googlemail.com>
+In-Reply-To: <CACO55tsvM07_6mGU3dCgeji0a6B4JJKSDOOBuCHv2Mw3rYbCHg@mail.gmail.com>
 Content-Type: text/plain; charset=UTF-8
-Date:   Sat, 18 Feb 2023 13:18:25 +0100
-Importance: normal
-Sensitivity: Normal
-In-Reply-To: <27a26da8-8297-5327-7493-54d8359b6970@arinc9.com>
-References: <20230210182505.24597-1-arinc.unal@arinc9.com>
- <c3ab9a9b-3eb2-8fb0-d5d7-c0b7c684d3a7@arinc9.com>
- <trinity-dab715b9-3953-40da-bc25-c4c2a5e9b7c3-1676715866453@3c-app-gmx-bap53>
- <27a26da8-8297-5327-7493-54d8359b6970@arinc9.com>
-Content-Transfer-Encoding: quoted-printable
-X-UI-Message-Type: mail
-X-Priority: 3
-X-Provags-ID: V03:K1:v1DPPWM6A9oy60/IsAqYGoZGjhlhPcE08EPlTUQ7a9wHeBrXGvS7GB2Y1anKzv/dSghU8
- Q8g0r6DYi4VxL6MFqP0JSqYMC7v/f5utL4W4CO41vRcaabsvBGCd360RQh5Mu0DPSp6+DIE9RLuf
- 1mquoXx3bvRPzdGhvbMx9JKyF9OEMFQ7pD+LQDieF1dnrQCqTMjPP3EJQvkl6e/ftYnJ36cI3DOG
- 5K4/9eQxYMUlyafuIaF6/HvP2E9olsJtfEDi1TwwbKRRV0Oc5DAvh+cAybTZ2bnAMTCgsAyLtT03
- BE=
-UI-OutboundReport: notjunk:1;M01:P0:VZV6dh1A5Ag=;Buw383pPwakwuXb/1j7tqGijIUR
- 3iem6oEThCQ7VPv417sYU4cqM8eTKTxf9CiPBWZj0UVIEx5YqUC6qyjWfwzTKiFG9DV6fsCyW
- 1L08OdWZk/WFkwhx+Yzszcl4xykEjrxGIe9VEaLQjGrSvQwvipUtUGKrLdz5zvz7RLpui7KEZ
- hZnyJoOlgB2HZPMz64EMhCfSHtraXEtk2yWOYPlaGFs+eN4BpBfsv6zpW+xJoN/dG3dAiagpK
- XeNygMNdfrW/l6umEVQpTfo2TKRkWsnnHbX9EVLLS4/7WfMsrh29cuG992KgIv0FS+BuNmnih
- cP3U/caOvlESKH1WGzpRzgavmcshBpvwPpNnjAepRmcg0iV28gm2yNefK/e5qVb4JbywWffsQ
- HD7xWCYpEl3gadxP8CeL3z0mdS0HlTFtjFEel0m4M2czy0XfrMNRFSSQ2gGafpbb11hHFaN1j
- g+eYQ1nep7Azz9tLxOzbjqPVZYCoEL4zrNU8lQ2MMl2gNJt9iOam7b55cwWcw4dob6OywGJwn
- 6NS7i67/Xxmo7Jc46EfAUfXknUUZ8Pi27MFTruBIJnJNXr6kuG8Filbkqx8GZ3Sx5h6gWm8m5
- Pv2+qw9lTrqAksnDCEdeiYPqf2xekLAy7qpASheFkUDT65rPp+0wgeMqzkyNnaLXVPK6TY0AJ
- 1eXEIIuRuW8O+KX3RbZm1XYUFWXD6w54jjw3hE4aRUr8pphpjd4PUKe3ofQ4ZwFe+yiyblyZa
- aLIMOsTfgmS7DeEwmowaJLIe+FPwC17LO5SS3OHxkYjh3G9mHGW8jhApjrtQU+/FCI0r1Jqij
- yf1y7MbtJcYwQvuRzjjL4J1wNpgKglbhp6PlrKMdzew3M=
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
 
-> Gesendet: Samstag, 18=2E Februar 2023 um 11:49 Uhr
-> Von: "Ar=C4=B1n=C3=A7 =C3=9CNAL" <arinc=2Eunal@arinc9=2Ecom>
-> An: "Frank Wunderlich" <frank-w@public-files=2Ede>
 
-> On 18=2E02=2E2023 13:24, Frank Wunderlich wrote:
-> > Hi,
-> >=20
-> > finally get some time to bootup with this series on my r2=2E
-> >=20
-> > I see that inserting the port@5 as cpu-port maps this as default-cpu b=
-ecause dsa-core uses first found cpu-port as
-> > default (dsa_tree_setup_cpu_ports in dsa=2Ec) and because of lower ban=
-dwidth (rgmii instead of trgmii) not the best choice=2E
-> >=20
-> > But it look worse=2E=2E=2Enetwork is currently broken (set both gmacs =
-up)=2E
-> > I see arp-packets reaching remote side, but reponse is not received by=
- r2
-> >=20
-> > I have tested it on 6=2E2-rc8 (wan-port), maybe additional patches are=
- needed?=2E=2E=2Euserspace setup should be right=2E
-> >=20
-> > so i added series on top of net-next (no additional patches except som=
-e basic like build-script,defconfig and such)=2E=2E=2Esame result=2E=2E=2E
-> >=20
-> > i'm not sure if i change the mapping from userspace back to eth0, so d=
-isabled port@5 in switch, now port6 is
-> > cpu-port again and it works=2E=2E=2Eso something is wrong with port5 o=
-f switch or gmac1=2E
->=20
-> That's a driver issue and will be fixed once an accepted version of=20
-> these patches [0] [1] [2] are applied to net-next=2E You should have the=
-m=20
-> on your inbox, I specifically told Richard to CC you=2E
+On 15/02/2023 11:09, Karol Herbst wrote:
+> On Wed, Feb 15, 2023 at 11:36 AM Linux regression tracking #update
+> (Thorsten Leemhuis) <regressions@leemhuis.info> wrote:
+>>
+>> On 13.02.23 10:14, Chris Clayton wrote:
+>>> On 13/02/2023 02:57, Dave Airlie wrote:
+>>>> On Sun, 12 Feb 2023 at 00:43, Chris Clayton <chris2553@googlemail.com> wrote:
+>>>>>
+>>>>>
+>>>>>
+>>>>> On 10/02/2023 19:33, Linux regression tracking (Thorsten Leemhuis) wrote:
+>>>>>> On 10.02.23 20:01, Karol Herbst wrote:
+>>>>>>> On Fri, Feb 10, 2023 at 7:35 PM Linux regression tracking (Thorsten
+>>>>>>> Leemhuis) <regressions@leemhuis.info> wrote:
+>>>>>>>>
+>>>>>>>> On 08.02.23 09:48, Chris Clayton wrote:
+>>>>>>>>>
+>>>>>>>>> I'm assuming  that we are not going to see a fix for this regression before 6.2 is released.
+>>>>>>>>
+>>>>>>>> Yeah, looks like it. That's unfortunate, but happens. But there is still
+>>>>>>>> time to fix it and there is one thing I wonder:
+>>>>>>>>
+>>>>>>>> Did any of the nouveau developers look at the netconsole captures Chris
+>>>>>>>> posted more than a week ago to check if they somehow help to track down
+>>>>>>>> the root of this problem?
+>>>>>>>
+>>>>>>> I did now and I can't spot anything. I think at this point it would
+>>>>>>> make sense to dump the active tasks/threads via sqsrq keys to see if
+>>>>>>> any is in a weird state preventing the machine from shutting down.
+>>>>>>
+>>>>>> Many thx for looking into it!
+>>>>>
+>>>>> Yes, thanks Karol.
+>>>>>
+>>>>> Attached is the output from dmesg when this block of code:
+>>>>>
+>>>>>         /bin/mount /dev/sda7 /mnt/sda7
+>>>>>         /bin/mountpoint /proc || /bin/mount /proc
+>>>>>         /bin/dmesg -w > /mnt/sda7/sysrq.dmesg.log &
+>>>>>         /bin/echo t > /proc/sysrq-trigger
+>>>>>         /bin/sleep 1
+>>>>>         /bin/sync
+>>>>>         /bin/sleep 1
+>>>>>         kill $(pidof dmesg)
+>>>>>         /bin/umount /mnt/sda7
+>>>>>
+>>>>> is executed immediately before /sbin/reboot is called as the final step of rebooting my system.
+>>>>>
+>>>>> I hope this is what you were looking for, but if not, please let me know what you need
+>>>
+>>> Thanks Dave. [...]
+>> FWIW, in case anyone strands here in the archives: the msg was
+>> truncated. The full post can be found in a new thread:
+>>
+>> https://lore.kernel.org/lkml/e0b80506-b3cf-315b-4327-1b988d86031e@googlemail.com/
+>>
+>> Sadly it seems the info "With runpm=0, both reboot and poweroff work on
+>> my laptop." didn't bring us much further to a solution. :-/ I don't
+>> really like it, but for regression tracking I'm now putting this on the
+>> back-burner, as a fix is not in sight.
+>>
+>> #regzbot monitor:
+>> https://lore.kernel.org/lkml/e0b80506-b3cf-315b-4327-1b988d86031e@googlemail.com/
+>> #regzbot backburner: hard to debug and apparently rare
+>> #regzbot ignore-activity
+>>
+> 
+> yeah.. this bug looks a little annoying. Sadly the only Turing based
+> laptop I got doesn't work on Nouveau because of firmware related
+> issues and we probably need to get updated ones from Nvidia here :(
+> 
+> But it's a bit weird that the kernel doesn't shutdown, because I don't
+> see anything in the logs which would prevent that from happening.
+> Unless it's waiting on one of the tasks to complete, but none of them
+> looked in any way nouveau related.
+> 
+> If somebody else has any fancy kernel debugging tips here to figure
+> out why it hangs, that would be very helpful...
+> 
 
-yes, i've got them, but not applied when starting these tests=2E Not thoug=
-ht, that this change is necessary=20
-as we use both gmac on mt7531/bpi-r3 with out problems=2E
+I think I've figured this out. It's to do with how my system is configured. I do have an initrd, but the only thing on
+it is the cpu microcode which, it is recommended, should be loaded early. The absence of the NVidia firmare from an
+initrd doesn't matter because the drivers for the hardware that need to load firmware are all built as modules, So, by
+the time the devices are configured via udev, the root partition is mounted and the drivers can get at the firmware.
 
-with these 3 Patches network-connection works, but only at ~624 Mbit/s in =
-TX-Mode (started iperf3-client on r2 without -R) and massive retransmitts o=
-n first run, other direction is clean=2E
+I've found, by turning on nouveau debug and taking a video of the screen as the system shuts down, that nouveau seems to
+be trying to run the scrubber very very late in the shutdown process. The problem is that by this time, I think the root
+partition, and thus the scrubber binary, have become inaccessible.
 
-and these Patches need to be applied first (when fixed up) else network is=
- broken=2E
+I seem to have two choices - either make the firmware accessible on an initrd or unload the module in a shutdown script
+before the scrubber binary becomes inaccessible. The latter of these is the workaround I have implemented whilst the
+problem I reported has been under investigation. For simplicity, I think I'll promote my workaround to being the
+permanent solution.
 
-> This is devicetree bindings=2E We're here to describe the hardware=2E Th=
-e=20
-> way a driver works should not affect describing the hardware=2E
+So, apologies (and thanks) to everyone whose time I have taken up with this non-bug.
 
-thats right, but it should not break/change behaviour like now all ports h=
-ave only ~600Mbit because of
-moving them all to the other gmac which has obvious issues=2E
+Chris
 
-> To address the lower bandwidth situation you mentioned, a devicetree=20
-> property to designate a CPU port as the default CPU port could be=20
-> introduced=2E I'm not aware of a similar conversation so I'll send a mai=
-l=20
-> to netdev to discuss this=2E Will CC you=2E
-
-isn't there a way to leave ports by default on the the better gmac (gmac0=
-=3Dtrgmii)?
-maybe moving port5 below port6=2E=2E=2Enot nice, but then port6 is the fir=
-st cpu found=2E
-or maybe defined the default cpu in driver which gets picked up by core (d=
-efine port6 if available as default)=2E
-Imho additional dts-propperty is wrong approch=2E=2E=2Eit should be handle=
-d by driver=2E But cpu-port-selection is=20
-currently done in dsa-core which makes it a bit difficult=2E
-
-I'm not sure how the multi-cpu support in dsa-core ended and how you use t=
-he other gmac not used by dsa-core
-
-set master in userspace-config? i remember you've sent a patch adding call=
-back for it=2E
-
-imho dts change should be applied if these points are cleared=2E=2E=2E
-
-regards Frank
+>> Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
+>> --
+>> Everything you wanna know about Linux kernel regression tracking:
+>> https://linux-regtracking.leemhuis.info/about/#tldr
+>> That page also explains what to do if mails like this annoy you.
+>>
+>> #regzbot ignore-activity
+>>
+> 
