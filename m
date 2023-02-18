@@ -2,471 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B60E969B855
-	for <lists+linux-kernel@lfdr.de>; Sat, 18 Feb 2023 07:39:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4F7C469B856
+	for <lists+linux-kernel@lfdr.de>; Sat, 18 Feb 2023 07:39:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229667AbjBRGjE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 18 Feb 2023 01:39:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42892 "EHLO
+        id S229682AbjBRGjc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 18 Feb 2023 01:39:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43332 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229586AbjBRGjC (ORCPT
+        with ESMTP id S229674AbjBRGj1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 18 Feb 2023 01:39:02 -0500
+        Sat, 18 Feb 2023 01:39:27 -0500
 Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A560C460BD
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Feb 2023 22:38:59 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4B3894AFC5
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Feb 2023 22:39:22 -0800 (PST)
 Received: from loongson.cn (unknown [113.200.148.30])
-        by gateway (Coremail) with SMTP id _____8AxKNmBcvBjtSQCAA--.4823S3;
-        Sat, 18 Feb 2023 14:38:57 +0800 (CST)
-Received: from [10.130.0.102] (unknown [113.200.148.30])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8CxG75_cvBjFO41AA--.33025S3;
-        Sat, 18 Feb 2023 14:38:55 +0800 (CST)
-Subject: Re: [PATCH v4 2/3] LoongArch: Add ptrace single step support
-To:     Jinyang He <hejinyang@loongson.cn>,
-        Youling Tang <tangyouling@loongson.cn>,
-        WANG Xuerui <kernel@xen0n.name>
-Cc:     Huacai Chen <chenhuacai@kernel.org>,
-        Oleg Nesterov <oleg@redhat.com>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        loongarch@lists.linux.dev, linux-kernel@vger.kernel.org
-References: <20230217023745.20800-1-zhangqing@loongson.cn>
- <20230217023745.20800-3-zhangqing@loongson.cn>
- <f9d21b99-a9a4-1d5a-86cf-314cac461e16@loongson.cn>
- <b3933fcf-799c-0da3-43db-c9c89995166b@loongson.cn>
- <a81e8e6f-01a5-6325-e9be-48e53f47b7a4@loongson.cn>
+        by gateway (Coremail) with SMTP id _____8DxndqZcvBj0yQCAA--.5010S3;
+        Sat, 18 Feb 2023 14:39:21 +0800 (CST)
+Received: from localhost.localdomain (unknown [113.200.148.30])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8Bxb+SXcvBjN+41AA--.63946S2;
+        Sat, 18 Feb 2023 14:39:20 +0800 (CST)
 From:   Qing Zhang <zhangqing@loongson.cn>
-Message-ID: <c79b5640-5afb-01cb-fafa-d6df057a138e@loongson.cn>
-Date:   Sat, 18 Feb 2023 14:38:55 +0800
-User-Agent: Mozilla/5.0 (X11; Linux mips64; rv:68.0) Gecko/20100101
- Thunderbird/68.7.0
+To:     Huacai Chen <chenhuacai@kernel.org>,
+        Oleg Nesterov <oleg@redhat.com>,
+        WANG Xuerui <kernel@xen0n.name>
+Cc:     Jiaxun Yang <jiaxun.yang@flygoat.com>, loongarch@lists.linux.dev,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v5 0/3] LoongArch: Add hardware breakpoints/watchpoints support
+Date:   Sat, 18 Feb 2023 14:39:16 +0800
+Message-Id: <20230218063919.5639-1-zhangqing@loongson.cn>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-In-Reply-To: <a81e8e6f-01a5-6325-e9be-48e53f47b7a4@loongson.cn>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf8CxG75_cvBjFO41AA--.33025S3
+X-CM-TRANSID: AQAAf8Bxb+SXcvBjN+41AA--.63946S2
 X-CM-SenderInfo: x2kd0wptlqwqxorr0wxvrqhubq/
-X-Coremail-Antispam: 1Uk129KBjvAXoWfGr4kGFy8KrWDZFyUur4UArb_yoW8Xw1kCo
-        WUKF1ftr4rXr4jgr1UJ3yDJFyayw1UGrsFyryUGr9rJr10yw1UZ3yUJrW5tay7Gr1kGr1U
-        G34UXry0vFW7Zr15n29KB7ZKAUJUUUU7529EdanIXcx71UUUUU7KY7ZEXasCq-sGcSsGvf
-        J3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU0xBIdaVrnRJU
-        UUB2b4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2IYs7xG6rWj6s
-        0DM7CIcVAFz4kK6r1Y6r17M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8wA2z4x0
-        Y4vE2Ix0cI8IcVAFwI0_Gr0_Xr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1l84
-        ACjcxK6I8E87Iv67AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVCY1x0267AKxVW8Jr0_Cr1U
-        M2kKe7AKxVWUXVWUAwAS0I0E0xvYzxvE52x082IY62kv0487Mc804VCY07AIYIkI8VC2zV
-        CFFI0UMc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUtVWrXwAv7VC2
-        z280aVAFwI0_Gr0_Cr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcVAKI48JMxk0xIA0c2
-        IEe2xFo4CEbIxvr21l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1l4IxY
-        O2xFxVAFwI0_Jw0_GFylx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGV
-        WUWwC2zVAF1VAY17CE14v26r1q6r43MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_
-        Gr0_Xr1lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE42xK8VAvwI8IcIk0rV
-        WUJVWUCwCI42IY6I8E87Iv67AKxVW8JVWxJwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4U
-        JbIYCTnIWIevJa73UjIFyTuYvjxU4AhLUUUUU
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Coremail-Antispam: 1Uk129KBjvJXoWxZry8uw1DKF1fKF4fAr13urg_yoW5tF4kpF
+        ZFkrn5Kr4DGrWfZwsxtw4xur1fGF18GrW2qa12y34ay3sFgr1F9r4vkryqqa45Jw1rJ340
+        qr1rWr4Fga4UAaUanT9S1TB71UUUUjUqnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
+        qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
+        b3AYFVCjjxCrM7AC8VAFwI0_Jr0_Gr1l1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s
+        1l1IIY67AEw4v_Jrv_JF1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xv
+        wVC0I7IYx2IY67AKxVW8JVW5JwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwA2z4
+        x0Y4vEx4A2jsIE14v26r4UJVWxJr1l84ACjcxK6I8E87Iv6xkF7I0E14v26r4UJVWxJr1l
+        n4kS14v26r1Y6r17M2AIxVAIcxkEcVAq07x20xvEncxIr21l57IF6xkI12xvs2x26I8E6x
+        ACxx1l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r1q6rW5McIj6I8E
+        87Iv67AKxVW8JVWxJwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41l42xK82
+        IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1l4IxYO2xFxVAFwI0_Jrv_JF1lx2Iq
+        xVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r
+        126r1DMIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Gr0_Xr1lIxAIcVC0I7IYx2IY
+        6xkF7I0E14v26r4j6F4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67
+        AKxVW8JVWxJwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuY
+        vjxU4AhLUUUUU
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, Jinyang
+Use perf framework to manage hardware instruction and data breakpoints.
+LoongArch defines hardware watchpoint functions for instruction fetch
+and load/store operations, after the software configures hardware watchpoints
+for instruction fetch and load/store operations. The processor hardware will
+monitor the access address of the instruction fetch and load/store operation,
+and will trigger the exception of the watchpoint when it meets the conditions
+set by the watchpoint.
 
-On 2023/2/18 上午9:21, Jinyang He wrote:
-> 
-> On 2023-02-17 18:00, Qing Zhang wrote:
->> Hi, Youling
->>
->> On 2023/2/17 下午5:50, Youling Tang wrote:
->>> Hi, Qing
->>>
->>> On 02/17/2023 10:37 AM, Qing Zhang wrote:
->>>> Use the generic ptrace_resume code for PTRACE_SYSCALL, PTRACE_CONT,
->>>> PTRACE_KILL and PTRACE_SINGLESTEP. This implies defining
->>>> arch_has_single_step in  and implementing the
->>>> user_enable_single_step and user_disable_single_step functions.
->>>>
->>>> LongArch has no hardware single-step register. the hardware single-step
->>>> function multiplex fetch instruction watchpoint(FWPS) and specifies 
->>>> that
->>>> the next instruction must trigger the watch exception by setting the 
->>>> mask bit.
->>>> Some scenarios use CSR.FWPS.Skip to ignore the next hit result, not 
->>>> to trigger
->>>> the watchpoint exception, and proceed to the next instruction.
->>>>
->>>> Signed-off-by: Qing Zhang <zhangqing@loongson.cn>
->>>> ---
->>>>  arch/loongarch/include/asm/inst.h      | 39 +++++++++++++++
->>>>  arch/loongarch/include/asm/loongarch.h |  3 ++
->>>>  arch/loongarch/include/asm/processor.h |  3 ++
->>>>  arch/loongarch/include/asm/ptrace.h    |  2 +
->>>>  arch/loongarch/kernel/hw_breakpoint.c  | 35 +++++++++++--
->>>>  arch/loongarch/kernel/ptrace.c         | 68 ++++++++++++++++++++++++++
->>>>  arch/loongarch/kernel/traps.c          | 34 +++++++++++--
->>>>  7 files changed, 176 insertions(+), 8 deletions(-)
->>>>
->>>> diff --git a/arch/loongarch/include/asm/inst.h 
->>>> b/arch/loongarch/include/asm/inst.h
->>>> index ba18ce8fbdf2..00c6f261d9a2 100644
->>>> --- a/arch/loongarch/include/asm/inst.h
->>>> +++ b/arch/loongarch/include/asm/inst.h
->>>> @@ -368,6 +368,45 @@ static inline bool is_stack_alloc_ins(union 
->>>> loongarch_instruction *ip)
->>>>          is_imm12_negative(ip->reg2i12_format.immediate);
->>>>  }
->>>>
->>>> +static inline bool branch_ins_target_pc(union loongarch_instruction 
->>>> *ip)
->>>> +{
->>>> +    switch (ip->reg0i26_format.opcode) {
->>>> +    case b_op:
->>>> +    case bl_op:
->>>> +        if (ip->reg0i26_format.immediate_l == 0
->>>> +           && ip->reg0i26_format.immediate_h == 0)
->>>> +            return false;
->>>> +    }
->>>> +
->>>> +    switch (ip->reg1i21_format.opcode) {
->>>> +    case beqz_op:
->>>> +    case bnez_op:
->>>> +    case bceqz_op:
->>>> +        if (ip->reg1i21_format.immediate_l == 0
->>>> +           && ip->reg1i21_format.immediate_h == 0)
->>>> +            return false;
->>>> +    }
->>>> +
->>>> +    switch (ip->reg2i16_format.opcode) {
->>>> +    case jirl_op:
->>>> +        if (ip->reg2i16_format.rj == 0x1
->>>> +           && ip->reg2i16_format.rd == 0x1
->>> LOONGARCH_GPR_RA can be used instead of 0x1.
->>>
->>>> +           && ip->reg2i16_format.immediate == 0)
->>>> +            return false;
->>>> +        break;
->>>> +    case beq_op:
->>>> +    case bne_op:
->>>> +    case blt_op:
->>>> +    case bge_op:
->>>> +    case bltu_op:
->>>> +    case bgeu_op:
->>>> +        if (ip->reg2i16_format.immediate == 0)
->>>> +            return false;
->>>> +    }
->>>> +
->>>> +    return true;
->>>> +}
->>>> +
->>>>  void simu_pc(struct pt_regs *regs, union loongarch_instruction insn);
->>>>  void simu_branch(struct pt_regs *regs, union loongarch_instruction 
->>>> insn);
->>>>
->>>> diff --git a/arch/loongarch/include/asm/loongarch.h 
->>>> b/arch/loongarch/include/asm/loongarch.h
->>>> index e9aed583a064..65b7dcdea16d 100644
->>>> --- a/arch/loongarch/include/asm/loongarch.h
->>>> +++ b/arch/loongarch/include/asm/loongarch.h
->>>> @@ -1055,6 +1055,9 @@ static __always_inline void iocsr_write64(u64 
->>>> val, u32 reg)
->>>>  #define LOONGARCH_CSR_DERA        0x501    /* debug era */
->>>>  #define LOONGARCH_CSR_DESAVE        0x502    /* debug save */
->>>>
->>>> +#define CSR_FWPC_SKIP_SHIFT        16
->>>> +#define CSR_FWPC_SKIP            (_ULCAST_(1) << CSR_FWPC_SKIP_SHIFT)
->>>> +
->>>>  /*
->>>>   * CSR_ECFG IM
->>>>   */
->>>> diff --git a/arch/loongarch/include/asm/processor.h 
->>>> b/arch/loongarch/include/asm/processor.h
->>>> index db060c5a976f..3ea0f1910c23 100644
->>>> --- a/arch/loongarch/include/asm/processor.h
->>>> +++ b/arch/loongarch/include/asm/processor.h
->>>> @@ -131,6 +131,9 @@ struct thread_struct {
->>>>      struct perf_event    *hbp_break[LOONGARCH_MAX_BRP];
->>>>      struct perf_event    *hbp_watch[LOONGARCH_MAX_WRP];
->>>>
->>>> +    /* Used by ptrace single_step */
->>>> +    unsigned long single_step;
->>>> +
->>>>      /*
->>>>       * FPU & vector registers, must be at last because
->>>>       * they are conditionally copied at fork().
->>>> diff --git a/arch/loongarch/include/asm/ptrace.h 
->>>> b/arch/loongarch/include/asm/ptrace.h
->>>> index 58596c4f8a0f..66a0e6c480a3 100644
->>>> --- a/arch/loongarch/include/asm/ptrace.h
->>>> +++ b/arch/loongarch/include/asm/ptrace.h
->>>> @@ -150,4 +150,6 @@ static inline void user_stack_pointer_set(struct 
->>>> pt_regs *regs,
->>>>      regs->regs[3] = val;
->>>>  }
->>>>
->>>> +#define arch_has_single_step()        (1)
->>>> +
->>>>  #endif /* _ASM_PTRACE_H */
->>>> diff --git a/arch/loongarch/kernel/hw_breakpoint.c 
->>>> b/arch/loongarch/kernel/hw_breakpoint.c
->>>> index 6431cd319c32..75d3652fbe00 100644
->>>> --- a/arch/loongarch/kernel/hw_breakpoint.c
->>>> +++ b/arch/loongarch/kernel/hw_breakpoint.c
->>>> @@ -153,6 +153,22 @@ static int hw_breakpoint_slot_setup(struct 
->>>> perf_event **slots, int max_slots,
->>>>   */
->>>>  void flush_ptrace_hw_breakpoint(struct task_struct *tsk)
->>>>  {
->>>> +    int i;
->>>> +    struct thread_struct *t = &tsk->thread;
->>>> +
->>>> +    for (i = 0; i < LOONGARCH_MAX_BRP; i++) {
->>>> +        if (t->hbp_break[i]) {
->>>> +            unregister_hw_breakpoint(t->hbp_break[i]);
->>>> +            t->hbp_break[i] = NULL;
->>>> +        }
->>>> +    }
->>>> +
->>>> +    for (i = 0; i < LOONGARCH_MAX_WRP; i++) {
->>>> +        if (t->hbp_watch[i]) {
->>>> +            unregister_hw_breakpoint(t->hbp_watch[i]);
->>>> +            t->hbp_watch[i] = NULL;
->>>> +        }
->>>> +    }
->>>>  }
->>>>
->>>>  void ptrace_hw_copy_thread(struct task_struct *tsk)
->>>> @@ -498,11 +514,20 @@ arch_initcall(arch_hw_breakpoint_init);
->>>>  void hw_breakpoint_thread_switch(struct task_struct *next)
->>>>  {
->>>>      struct pt_regs *regs = task_pt_regs(next);
->>>> -
->>>> -    /* Update breakpoints */
->>>> -    update_bp_registers(regs, 1, 0);
->>>> -    /* Update watchpoints */
->>>> -    update_bp_registers(regs, 1, 1);
->>>> +    u64 addr, mask;
->>>> +
->>>> +    if (test_bit(TIF_SINGLESTEP, &task_thread_info(next)->flags)) {
->>>> +        addr = read_wb_reg(CSR_CFG_ADDR, 0, 0);
->>>> +        mask = read_wb_reg(CSR_CFG_MASK, 0, 0);
->>>> +        if ((task_pt_regs(next)->csr_era & ~mask) == (addr & ~mask))
->>>> +            csr_write32(CSR_FWPC_SKIP, LOONGARCH_CSR_FWPS);
->>>> +        regs->csr_prmd |= CSR_PRMD_PWE;
->>>> +    } else {
->>>> +        /* Update breakpoints */
->>>> +        update_bp_registers(regs, 1, 0);
->>>> +        /* Update watchpoints */
->>>> +        update_bp_registers(regs, 1, 1);
->>>> +    }
->>>>  }
->>>>
->>>>  void hw_breakpoint_pmu_read(struct perf_event *bp)
->>>> diff --git a/arch/loongarch/kernel/ptrace.c 
->>>> b/arch/loongarch/kernel/ptrace.c
->>>> index bee4194177fd..52a3ee4366f4 100644
->>>> --- a/arch/loongarch/kernel/ptrace.c
->>>> +++ b/arch/loongarch/kernel/ptrace.c
->>>> @@ -20,6 +20,7 @@
->>>>  #include <linux/context_tracking.h>
->>>>  #include <linux/elf.h>
->>>>  #include <linux/errno.h>
->>>> +#include <linux/hw_breakpoint.h>
->>>>  #include <linux/mm.h>
->>>>  #include <linux/ptrace.h>
->>>>  #include <linux/regset.h>
->>>> @@ -30,6 +31,7 @@
->>>>  #include <linux/stddef.h>
->>>>  #include <linux/seccomp.h>
->>>>  #include <linux/uaccess.h>
->>>> +#include <linux/thread_info.h>
->>>>
->>>>  #include <asm/byteorder.h>
->>>>  #include <asm/cpu.h>
->>>> @@ -39,6 +41,7 @@
->>>>  #include <asm/page.h>
->>>>  #include <asm/pgtable.h>
->>>>  #include <asm/processor.h>
->>>> +#include <asm/ptrace.h>
->>>>  #include <asm/reg.h>
->>>>  #include <asm/syscall.h>
->>>>
->>>> @@ -541,3 +544,68 @@ long arch_ptrace(struct task_struct *child, 
->>>> long request,
->>>>
->>>>      return ret;
->>>>  }
->>>> +
->>>> +void ptrace_triggered(struct perf_event *bp,
->>>> +              struct perf_sample_data *data, struct pt_regs *regs)
->>>> +{
->>>> +    struct perf_event_attr attr;
->>>> +
->>>> +    attr = bp->attr;
->>>> +    attr.disabled = true;
->>>> +    modify_user_hw_breakpoint(bp, &attr);
->>>> +}
->>>> +
->>>> +static int set_single_step(struct task_struct *tsk, unsigned long 
->>>> addr)
->>>> +{
->>>> +    struct thread_struct *thread = &tsk->thread;
->>>> +    struct perf_event *bp;
->>>> +    struct perf_event_attr attr;
->>>> +    struct arch_hw_breakpoint *info;
->>>> +
->>>> +    bp = thread->hbp_break[0];
->>>> +    if (!bp) {
->>>> +        ptrace_breakpoint_init(&attr);
->>>> +
->>>> +        attr.bp_addr = addr;
->>>> +        attr.bp_len = HW_BREAKPOINT_LEN_8;
->>>> +        attr.bp_type = HW_BREAKPOINT_X;
->>>> +
->>>> +        bp = register_user_hw_breakpoint(&attr, ptrace_triggered,
->>>> +                         NULL, tsk);
->>>> +        if (IS_ERR(bp))
->>>> +            return PTR_ERR(bp);
->>>> +
->>>> +        thread->hbp_break[0] = bp;
->>>> +    } else {
->>>> +        int err;
->>>> +
->>>> +        attr = bp->attr;
->>>> +        attr.bp_addr = addr;
->>>> +        /* reenable breakpoint */
->>>> +        attr.disabled = false;
->>>> +        err = modify_user_hw_breakpoint(bp, &attr);
->>>> +        if (unlikely(err))
->>>> +            return err;
->>>> +
->>>> +        csr_write64(attr.bp_addr, LOONGARCH_CSR_IB0ADDR);
->>>> +    }
->>>> +    info = counter_arch_bp(bp);
->>>> +    info->mask = 0xffffffffffff;
->>> If `mask` is only used for user space address mask, it should not be
->>> fixed to 0xffffffffffff, the user space address size may have many
->>> situations, which can be defined according to TASK_SIZE.
->>>
->>> Use (TASK_SIZE - 1) instead.
->>>
->> ok, got it.
-> 
-> But according to to [1], the priority of watchpoint exception is highest
-> in the priority of exception which all fetching stage. Thus, we may get
-> the exception unexpected if set MASK to (TASK_SIZE - 1).
-> 
-> e.g.
->      0x1000: addi.d $rd, $zero, -1 # a way to set a kernel address in rd
->      0x1004: jr $rd
-> 
-> If singlestep is set at 0x1004, it will fetch insn in kernel address and
-> and get operation address error exception if we set MASK to (TASK_SIZE - 
-> 1).
-> 
-> 
-> [1] 
-> https://loongson.github.io/LoongArch-Documentation/LoongArch-Vol1-EN.html#exception-priority 
-> 
-> 
-In the future, breakpoints at kernel_enable_single_step will be added, 
-possibly with mask set to -1.
-Now, because FWPS CTRL is set to 1 for PLV0-3, mask is set to 
-0xffffffffffff at user_enable_single_step.
-As discussed below, user_code will be added to the breakpoint framework.
+The hardware monitoring points for instruction fetching and load/store operations
+each have a register for the overall configuration of all monitoring points,
+a register for recording the status of all monitoring points, and four registers
+required for configuration of each watchpoint individually.
 
-Thanks,
--Qing
-> 
-> Thanks,
-> 
-> Jinyang
-> 
-> 
->>>> +
->>>> +    return 0;
->>>> +}
->>>> +
->>>> +/* ptrace API */
->>>> +void user_enable_single_step(struct task_struct *task)
->>>> +{
->>>> +    struct thread_info *ti = task_thread_info(task);
->>>> +
->>>> +    set_single_step(task, task_pt_regs(task)->csr_era);
->>>> +    task->thread.single_step = task_pt_regs(task)->csr_era;
->>>> +    set_ti_thread_flag(ti, TIF_SINGLESTEP);
->>>> +}
->>>> +
->>>> +void user_disable_single_step(struct task_struct *task)
->>>> +{
->>>> +    clear_tsk_thread_flag(task, TIF_SINGLESTEP);
->>>> +}
->>>> diff --git a/arch/loongarch/kernel/traps.c 
->>>> b/arch/loongarch/kernel/traps.c
->>>> index 2b133079e0f3..a59275a43bd1 100644
->>>> --- a/arch/loongarch/kernel/traps.c
->>>> +++ b/arch/loongarch/kernel/traps.c
->>>> @@ -511,9 +511,37 @@ asmlinkage void noinstr do_watch(struct pt_regs 
->>>> *regs)
->>>>  #ifdef CONFIG_HAVE_HW_BREAKPOINT
->>>>      irqentry_state_t state = irqentry_enter(regs);
->>>>
->>>> -    breakpoint_handler(regs);
->>>> -    watchpoint_handler(regs);
->>>> -    force_sig(SIGTRAP);
->>>> +    if (test_tsk_thread_flag(current, TIF_SINGLESTEP)) {
->>>> +        int llbit = (csr_read32(LOONGARCH_CSR_LLBCTL) & 0x1);
->>>> +        unsigned long pc = regs->csr_era;
->>>> +        union loongarch_instruction *ip = (union 
->>>> loongarch_instruction *)pc;
->>>> +
->>>> +        if (llbit) {
->>>> +        /*
->>>> +         * When the ll-sc combo is encountered, it is regarded as 
->>>> an single
->>>> +         * instruction. So don't clear llbit and reset 
->>>> CSR.FWPS.Skip until
->>>> +         * the llsc execution is completed.
->>>> +         */
->>> Comments should be aligned with code, similar modifications in other
->>> places.
->>>
->>>> +            csr_write32(CSR_FWPC_SKIP, LOONGARCH_CSR_FWPS);
->>>> +            csr_write32(CSR_LLBCTL_KLO, LOONGARCH_CSR_LLBCTL);
->>>> +        } else if (pc == current->thread.single_step) {
->>>> +        /*
->>>> +         * Maybe some hardware Bug caused that certain insns are 
->>>> occasionally
->>>> +         * not skipped when CSR.FWPS.Skip is set, such as 
->>>> fld.d/fst.d. So Singlestep
->>>> +         * needs to compare whether the csr_era is equal to the 
->>>> value of singlestep
->>>> +         * which last time set.
->>>> +         */
->>>> +            if (branch_ins_target_pc(ip))
->>>> +            /* Prevent rd == pc from causing single step to fail to 
->>>> stop */
->>> IMO, that comment description is not accurate enough.ok, I'll add 
->>> more comments.
->>
->> Thanks,
->> -Qing
->>> Youling.
->>>
->>>> + csr_write32(CSR_FWPC_SKIP, LOONGARCH_CSR_FWPS);
->>>> +        } else {
->>>> +            force_sig(SIGTRAP);
->>>> +        }
->>>> +    } else {
->>>> +        breakpoint_handler(regs);
->>>> +        watchpoint_handler(regs);
->>>> +        force_sig(SIGTRAP);
->>>> +    }
->>>>
->>>>      irqentry_exit(regs, state);
->>>>  #endif
->>>>
->>>
->>
-> 
+Watchpoint related control status register chapters:
+https://github.com/loongson/LoongArch-Documentation/releases/download/2022.08.12/
+LoongArch-Vol1-v1.02-CN.pdf
+
+Initial version has the following limitations:
+- no support for virtualization
+
+Can be tested: e.g.
+1. see samples/hw_breakpoint and register_wide_hw_breakpoint.
+2. ptrace(PTRACE_SINGLESTEP/..., pid, NULL, NULL)
+3. ptrace (PTRACE_SETREGSET, tid, ... , ...)
+
+TODO:
+- Add hardware breakpoints/watchpoints for gdb, kgdb
+
+Changes v1 -> v2:
+Suggested by Huacai:
+- Use irqentry_enter()/irqentry_exit() instead of
+  exception_enter()/exception_exit().
+- Add ptrace interface to expose hw-breakpoints to debuggers.
+- Use 2022-2023.
+- Some other changes.
+
+Changes v2 -> v3:
+Suggested by Jinyang:
+- get_num_brps/wrps, decode/encode_ctrl_reg which the function
+  returns directly.
+- Remove irrelevant content from the first patch.
+- Use macros to avoid using magic values directly.
+- Add new arg to indicate it is breakpoint or watchpoint
+  to avoid function coupling.
+- Remove redundant tab.
+- Modify the breakpoint/watchpoint_handler function type to void.
+- Some other changes.
+
+Changes v3 -> v4:
+Suggested by Jinyang:
+- Add judgment prevent rd == pc from causing single step to fail to stop.
+- Add code comments to improve readability.
+- Use macros in csr_write32.
+
+Changes v4 -> v5:
+Suggested by Xuerui and Youling:
+- add better comments
+- Use TASK_SIZE to adapt to different address lengths in user mode
+- Modify the jirl judgment condition
+- Modify commit information
+
+Qing Zhang (3):
+  LoongArch: Add hardware breakpoints/watchpoints support
+  LoongArch: Add ptrace single step support
+  LoongArch: ptrace: expose hardware breakpoints to debuggers
+
+ arch/loongarch/Kconfig                     |   1 +
+ arch/loongarch/include/asm/hw_breakpoint.h | 145 ++++++
+ arch/loongarch/include/asm/inst.h          |  38 ++
+ arch/loongarch/include/asm/loongarch.h     |  35 +-
+ arch/loongarch/include/asm/processor.h     |  14 +-
+ arch/loongarch/include/asm/ptrace.h        |   2 +
+ arch/loongarch/include/asm/switch_to.h     |   1 +
+ arch/loongarch/include/uapi/asm/ptrace.h   |   9 +
+ arch/loongarch/kernel/Makefile             |   1 +
+ arch/loongarch/kernel/hw_breakpoint.c      | 544 +++++++++++++++++++++
+ arch/loongarch/kernel/process.c            |   7 +
+ arch/loongarch/kernel/ptrace.c             | 484 ++++++++++++++++++
+ arch/loongarch/kernel/traps.c              |  41 +-
+ include/uapi/linux/elf.h                   |   2 +
+ 14 files changed, 1303 insertions(+), 21 deletions(-)
+ create mode 100644 arch/loongarch/include/asm/hw_breakpoint.h
+ create mode 100644 arch/loongarch/kernel/hw_breakpoint.c
+
+-- 
+2.36.0
 
