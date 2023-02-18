@@ -2,160 +2,189 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B2B2F69BB6C
-	for <lists+linux-kernel@lfdr.de>; Sat, 18 Feb 2023 19:33:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6AB5069BB6F
+	for <lists+linux-kernel@lfdr.de>; Sat, 18 Feb 2023 19:39:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229648AbjBRSdj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 18 Feb 2023 13:33:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39944 "EHLO
+        id S229605AbjBRSi6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 18 Feb 2023 13:38:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41786 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229605AbjBRSdh (ORCPT
+        with ESMTP id S229472AbjBRSi4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 18 Feb 2023 13:33:37 -0500
-Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BEC10CDCC
-        for <linux-kernel@vger.kernel.org>; Sat, 18 Feb 2023 10:33:35 -0800 (PST)
-Received: by mail-pj1-x1033.google.com with SMTP id qb8-20020a17090b280800b002341a2656e5so1118007pjb.1
-        for <linux-kernel@vger.kernel.org>; Sat, 18 Feb 2023 10:33:35 -0800 (PST)
+        Sat, 18 Feb 2023 13:38:56 -0500
+Received: from mail-pg1-x52c.google.com (mail-pg1-x52c.google.com [IPv6:2607:f8b0:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D1EF12BE5
+        for <linux-kernel@vger.kernel.org>; Sat, 18 Feb 2023 10:38:54 -0800 (PST)
+Received: by mail-pg1-x52c.google.com with SMTP id 8so252548pge.10
+        for <linux-kernel@vger.kernel.org>; Sat, 18 Feb 2023 10:38:54 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=dabbelt-com.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:to:from:cc
-         :in-reply-to:subject:date:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=tdSlOABUXDOnyk+meHLPkKnSRDvSQB5azUWlVg5K0Ws=;
-        b=WR4G9LwTNYw3FsVROmx2f2szhqt+aMI/Fh0pXJqQjv95Cg9jGxtYHlWhp1CYy2rS3O
-         S++5vWov8xo0SYE1crAyxDqHnolbaCMzpWTVH9JIE/b0jkC7U73XIsWrzedZp43x8kLu
-         Y8Tho4N0wwsSRVAl3b+ejPhqzUDMYRAI7hVrDSHr8HGSIXQjH1m5/0iy3L5dWT1JcBqq
-         ypQQpO0zdqMOc1YDmP6qjFphv8031UpYLwBQAry59Oms6Xn6SYF5VFbwx+lk/p+Ag93P
-         W4Myo/pt8q8LFBMTIXGHgRIzCCi384i19yboiyWhCBJhg4LbCRTa7iK9v281/DfDX18A
-         3Ndg==
+        d=chromium.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=iTKepua2kscIuNx6W8BDWIkKKvbZQVVeOdAhbCfO3SE=;
+        b=Qr1HSZdE5f37YaHkVPA3tyWNxnLYtwoHRGIrYCxG0ZpB9c/gk2gOp4/kWGR2xhedzD
+         o3h/1htLKKVe6YmdGl9eXPNgzXTr6WsV9jYr4L6koLUCC3TpOmTYQwYhfGrQB5dZmN+J
+         S/cmEbce17loFmkRuhZSKRwSV44Kee71UcC54=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:to:from:cc
-         :in-reply-to:subject:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=tdSlOABUXDOnyk+meHLPkKnSRDvSQB5azUWlVg5K0Ws=;
-        b=Qdn3hbukE3hFpHhj0gwx+xOcTBJIf+ckWmijRhXzryDPQz3iLFRE+ZdwjHqgdZ7XcL
-         BRdSY3Cn1l8rgdvozskMO+6++WG+EUxPoKA+vYMsM6p7aOcGwvnWV6SsTqqWJ3Y2C0EN
-         omr0edDg+atqlQnNMHGYoEc8/dWynxES5qcSTfQwksSkWE8hbtbXSHWpdKpaCV/X4tHM
-         Z418i+rkFeWLcBNkZQKloEU8fiZmoruZ4fLhYRrJqs+oop7d4z8nw6wiCdH9dRUsuHYL
-         MdnZLjsJadr75ED8ckH/uusuxQtLEXKF2ULSAUlUtRr5LmnfIvSQdVWfa1qdZTe/inqR
-         9EJA==
-X-Gm-Message-State: AO0yUKWBp/khHIUGuVFCCJVq1Os3k/jhY+iY5FwMVlD47M2FzJ8uPxC5
-        XdWTZHe8xROVGa/QRvFz59S/gA==
-X-Google-Smtp-Source: AK7set8mks9ATRjJPpov69mSHOUoLOQ6En2xElAg1qfskRkaUzRjvcvpky66JqrPGHFAvJ/KAvpztg==
-X-Received: by 2002:a17:902:f544:b0:196:6577:5a96 with SMTP id h4-20020a170902f54400b0019665775a96mr470313plf.30.1676745215107;
-        Sat, 18 Feb 2023 10:33:35 -0800 (PST)
-Received: from localhost ([50.221.140.188])
-        by smtp.gmail.com with ESMTPSA id u4-20020a170902b28400b00199481ac72fsm4939269plr.225.2023.02.18.10.33.34
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=iTKepua2kscIuNx6W8BDWIkKKvbZQVVeOdAhbCfO3SE=;
+        b=jLXqL58HzelJuvZIMCjdji5XJwHyn4hrrw3LIMJ7mMne4WqDgesZFnH0BF+NDfSOrg
+         ybnuVWSuGnwP2NAqe0eEQ9TfWiJ2qw0X/6JlZCoc5VrKbYyOSOjQXLvjX8CsLUA2OtKX
+         s0I+IMByZPUjHCzExy6GH67F5VnDThDqNt+3ANs+Gf8bjc+0/SXQjurdXiUEEaTEHU1p
+         6LEqX2YAt3Wfyc//qaPGnXRlfnyecNv770+fDjfSom1liPVYDGV3AK6XAkinVXT0vnyR
+         q/xLWM3k8ONOE+Pan9gi8cs0bsbk9UQpQK4U5RAvHGpdgfH/hulbD0Ei0arm1WedYLQ9
+         eNww==
+X-Gm-Message-State: AO0yUKUYgWAH/K/5jqWpQtxFZSdTvmK3Sl0ezWY/5JYEmBxqXOks35Kc
+        jemmwivDkBNy/izFYd991NtvqzesT88vtKKt
+X-Google-Smtp-Source: AK7set+Gcx6ssrL1CUCt4P4+IZA7KQVyN/WF/pbSuKZGBRUq406XL4EeLCrbyHjWeAeUhK45htmQXg==
+X-Received: by 2002:a62:1753:0:b0:5a8:d364:62ab with SMTP id 80-20020a621753000000b005a8d36462abmr4793539pfx.17.1676745534045;
+        Sat, 18 Feb 2023 10:38:54 -0800 (PST)
+Received: from www.outflux.net (198-0-35-241-static.hfc.comcastbusiness.net. [198.0.35.241])
+        by smtp.gmail.com with ESMTPSA id h5-20020a62b405000000b005ae8e94b0d5sm1402624pfn.107.2023.02.18.10.38.52
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 18 Feb 2023 10:33:34 -0800 (PST)
-Date:   Sat, 18 Feb 2023 10:33:34 -0800 (PST)
-X-Google-Original-Date: Sat, 18 Feb 2023 10:32:53 PST (-0800)
-Subject:     Re: [PATCH] dt-bindings: drop Sagar Kadam from SiFive binding maintainership
-In-Reply-To: <20230217180035.39658-1-conor@kernel.org>
-CC:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Conor Dooley <conor@kernel.org>, mturquette@baylibre.com,
-        sboyd@kernel.org, tglx@linutronix.de,
-        Marc Zyngier <maz@kernel.org>, thierry.reding@gmail.com,
-        u.kleine-koenig@pengutronix.de, aou@eecs.berkeley.edu,
-        linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-pwm@vger.kernel.org,
-        Conor Dooley <conor.dooley@microchip.com>,
-        sagar.kadam@openfive.com, sagar.kadam@sifive.com
-From:   Palmer Dabbelt <palmer@dabbelt.com>
-To:     Conor Dooley <conor@kernel.org>
-Message-ID: <mhng-5af14e38-3a1b-480b-be9f-922acbcad914@palmer-ri-x1c9a>
-Mime-Version: 1.0 (MHng)
-Content-Type: text/plain; charset=utf-8; format=flowed
+        Sat, 18 Feb 2023 10:38:53 -0800 (PST)
+From:   Kees Cook <keescook@chromium.org>
+To:     Tariq Toukan <tariqt@nvidia.com>
+Cc:     Kees Cook <keescook@chromium.org>,
+        Josef Oskera <joskera@redhat.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Yishai Hadas <yishaih@nvidia.com>, netdev@vger.kernel.org,
+        linux-rdma@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-hardening@vger.kernel.org
+Subject: [PATCH] net/mlx4_en: Introduce flexible array to silence overflow warning
+Date:   Sat, 18 Feb 2023 10:38:50 -0800
+Message-Id: <20230218183842.never.954-kees@kernel.org>
+X-Mailer: git-send-email 2.34.1
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+X-Developer-Signature: v=1; a=openpgp-sha256; l=4923; h=from:subject:message-id; bh=L+7mU/t7sXYwZ0oG57R81et2rDvNWl61qF2TMIxSz1g=; b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBj8Rs6xlqKlp/Ege1Wry6d43MG23RfmhUBBkucpD8j FHxqogeJAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCY/EbOgAKCRCJcvTf3G3AJk/bD/ 4zEc1/cSH6OhQfMpSJnszACML9ZMpDTAHpqhLxshfcauGOHxH8Mbbny9Hfk1GbiSs3VNuiLLibJ9Ea MNQMf03saSs6SUHdtpKnjT9pBQe0Mn346nS1bH7/JCPjFDgmG/0sgf7eEN/v8Idpbj7bji81Jnguae jSUGZbNky0J43bqynylqQ4z/GOrYx/RWtyTRPQw7MKc+sHM+rYELvYs33Z8c/19OZpFzs5BfJXnPaB pHgNkYlYc1mYktPxe8SYFw4c3kadZ3cwx8WohmAffJ1gcTSipH2xA0Qcz11+ij1m2kbfQPw2NzJXt3 cOvOHe4CVgwLR4s0OxyRf6L9A+eDqsuzMJFPbxJcokgaJV580FBIQxz8Al8AGV4kvDVD5KbxgXmgui 8lMrCSq704uA4vzlZRc1rizoAb72tZlVSBnvkbLgYHp20p3Q/9oLuMEzu3rUKFf4koq23WKlSsdrQ+ XwTxMuY9mRzwKSn+ja0wgoNsiP7vBGEx7ZGmVLnfJqodpRJ8T8qlW4FtvWLPoGylzWu5OhbUgNWVIT ZZTgGovPPx19taMVvE/LNSlf/IhL45K5IpQT3nUvouQ97ikCHni/2VJ2zm60Fg7PPD6OxkdzLoJORP TqLU9ifrO+z7nnoT31HBKCmgw7hnlnETPzunGXGBsOZC120Z4xIudTk/A3mA==
+X-Developer-Key: i=keescook@chromium.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 17 Feb 2023 10:00:36 PST (-0800), Conor Dooley wrote:
-> From: Conor Dooley <conor.dooley@microchip.com>
->
-> Sagar's email listed in maintainers is bouncing as his division was sold
-> off by the company. I attempted to contact him some days ago on what the
-> bounce email told me was his new contact information, but am yet to
-> receive a response.
->
-> Paul and Palmer are listed on each of the bindings, both of whom were
-> alive & well as of Wednesday so the bindings remain maintained.
->
-> CC: Sagar Kadam <sagar.kadam@openfive.com>
-> CC: Sagar Kadam <sagar.kadam@sifive.com>
-> Link: https://lore.kernel.org/all/785425ca-4000-a7e4-16d6-4d68c91b158d@kernel.org/
-> Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
-> ---
-> Palmer/Paul, as mentioned Wednesday, here you go!
+The call "skb_copy_from_linear_data(skb, inl + 1, spc)" triggers a FORTIFY
+memcpy() warning on ppc64 platform:
 
-Acked-by: Palmer Dabbelt <palmer@rivosinc.com>
+In function ‘fortify_memcpy_chk’,
+    inlined from ‘skb_copy_from_linear_data’ at ./include/linux/skbuff.h:4029:2,
+    inlined from ‘build_inline_wqe’ at drivers/net/ethernet/mellanox/mlx4/en_tx.c:722:4,
+    inlined from ‘mlx4_en_xmit’ at drivers/net/ethernet/mellanox/mlx4/en_tx.c:1066:3:
+./include/linux/fortify-string.h:513:25: error: call to ‘__write_overflow_field’ declared with
+attribute warning: detected write beyond size of field (1st parameter); maybe use struct_group()?
+[-Werror=attribute-warning]
+  513 |                         __write_overflow_field(p_size_field, size);
+      |                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Thanks!
+Same behaviour on x86 you can get if you use "__always_inline" instead of
+"inline" for skb_copy_from_linear_data() in skbuff.h
 
-> ---
->  Documentation/devicetree/bindings/clock/sifive/fu540-prci.yaml | 1 -
->  .../bindings/interrupt-controller/sifive,plic-1.0.0.yaml       | 1 -
->  Documentation/devicetree/bindings/pwm/pwm-sifive.yaml          | 1 -
->  Documentation/devicetree/bindings/riscv/sifive,ccache0.yaml    | 3 +--
->  4 files changed, 1 insertion(+), 5 deletions(-)
->
-> diff --git a/Documentation/devicetree/bindings/clock/sifive/fu540-prci.yaml b/Documentation/devicetree/bindings/clock/sifive/fu540-prci.yaml
-> index c3be1b600007..c79e752283aa 100644
-> --- a/Documentation/devicetree/bindings/clock/sifive/fu540-prci.yaml
-> +++ b/Documentation/devicetree/bindings/clock/sifive/fu540-prci.yaml
-> @@ -8,7 +8,6 @@ $schema: http://devicetree.org/meta-schemas/core.yaml#
->  title: SiFive FU540 Power Reset Clock Interrupt Controller (PRCI)
->
->  maintainers:
-> -  - Sagar Kadam <sagar.kadam@sifive.com>
->    - Paul Walmsley  <paul.walmsley@sifive.com>
->
->  description:
-> diff --git a/Documentation/devicetree/bindings/interrupt-controller/sifive,plic-1.0.0.yaml b/Documentation/devicetree/bindings/interrupt-controller/sifive,plic-1.0.0.yaml
-> index 99e01f4d0a69..63bc89e13480 100644
-> --- a/Documentation/devicetree/bindings/interrupt-controller/sifive,plic-1.0.0.yaml
-> +++ b/Documentation/devicetree/bindings/interrupt-controller/sifive,plic-1.0.0.yaml
-> @@ -45,7 +45,6 @@ description:
->    from S-mode. So add thead,c900-plic to distinguish them.
->
->  maintainers:
-> -  - Sagar Kadam <sagar.kadam@sifive.com>
->    - Paul Walmsley  <paul.walmsley@sifive.com>
->    - Palmer Dabbelt <palmer@dabbelt.com>
->
-> diff --git a/Documentation/devicetree/bindings/pwm/pwm-sifive.yaml b/Documentation/devicetree/bindings/pwm/pwm-sifive.yaml
-> index 605c1766dba8..bae993128981 100644
-> --- a/Documentation/devicetree/bindings/pwm/pwm-sifive.yaml
-> +++ b/Documentation/devicetree/bindings/pwm/pwm-sifive.yaml
-> @@ -8,7 +8,6 @@ $schema: http://devicetree.org/meta-schemas/core.yaml#
->  title: SiFive PWM controller
->
->  maintainers:
-> -  - Sagar Kadam <sagar.kadam@sifive.com>
->    - Paul Walmsley <paul.walmsley@sifive.com>
->
->  description:
-> diff --git a/Documentation/devicetree/bindings/riscv/sifive,ccache0.yaml b/Documentation/devicetree/bindings/riscv/sifive,ccache0.yaml
-> index bf3f07421f7e..0551a0d1b3df 100644
-> --- a/Documentation/devicetree/bindings/riscv/sifive,ccache0.yaml
-> +++ b/Documentation/devicetree/bindings/riscv/sifive,ccache0.yaml
-> @@ -8,8 +8,7 @@ $schema: http://devicetree.org/meta-schemas/core.yaml#
->  title: SiFive Composable Cache Controller
->
->  maintainers:
-> -  - Sagar Kadam <sagar.kadam@sifive.com>
-> -  - Paul Walmsley  <paul.walmsley@sifive.com>
-> +  - Paul Walmsley <paul.walmsley@sifive.com>
->
->  description:
->    The SiFive Composable Cache Controller is used to provide access to fast copies
+The call here copies data into inlined tx destricptor, which has 104
+bytes (MAX_INLINE) space for data payload. In this case "spc" is known
+in compile-time but the destination is used with hidden knowledge
+(real structure of destination is different from that the compiler
+can see). That cause the fortify warning because compiler can check
+bounds, but the real bounds are different.  "spc" can't be bigger than
+64 bytes (MLX4_INLINE_ALIGN), so the data can always fit into inlined
+tx descriptor. The fact that "inl" points into inlined tx descriptor is
+determined earlier in mlx4_en_xmit().
+
+Avoid confusing the compiler with "inl + 1" constructions to get to past
+the inl header by introducing a flexible array "data" to the struct so
+that the compiler can see that we are not dealing with an array of inl
+structs, but rather, arbitrary data following the structure. There are
+no changes to the structure layout reported by pahole, and the resulting
+machine code is actually smaller.
+
+Reported-by: Josef Oskera <joskera@redhat.com>
+Link: https://lore.kernel.org/lkml/20230217094541.2362873-1-joskera@redhat.com
+Fixes: f68f2ff91512 ("fortify: Detect struct member overflows in memcpy() at compile-time")
+Cc: Tariq Toukan <tariqt@nvidia.com>
+Cc: "David S. Miller" <davem@davemloft.net>
+Cc: Eric Dumazet <edumazet@google.com>
+Cc: Jakub Kicinski <kuba@kernel.org>
+Cc: Paolo Abeni <pabeni@redhat.com>
+Cc: Yishai Hadas <yishaih@nvidia.com>
+Cc: netdev@vger.kernel.org
+Cc: linux-rdma@vger.kernel.org
+Signed-off-by: Kees Cook <keescook@chromium.org>
+---
+ drivers/net/ethernet/mellanox/mlx4/en_tx.c | 22 +++++++++++-----------
+ include/linux/mlx4/qp.h                    |  1 +
+ 2 files changed, 12 insertions(+), 11 deletions(-)
+
+diff --git a/drivers/net/ethernet/mellanox/mlx4/en_tx.c b/drivers/net/ethernet/mellanox/mlx4/en_tx.c
+index c5758637b7be..2f79378fbf6e 100644
+--- a/drivers/net/ethernet/mellanox/mlx4/en_tx.c
++++ b/drivers/net/ethernet/mellanox/mlx4/en_tx.c
+@@ -699,32 +699,32 @@ static void build_inline_wqe(struct mlx4_en_tx_desc *tx_desc,
+ 			inl->byte_count = cpu_to_be32(1 << 31 | skb->len);
+ 		} else {
+ 			inl->byte_count = cpu_to_be32(1 << 31 | MIN_PKT_LEN);
+-			memset(((void *)(inl + 1)) + skb->len, 0,
++			memset(inl->data + skb->len, 0,
+ 			       MIN_PKT_LEN - skb->len);
+ 		}
+-		skb_copy_from_linear_data(skb, inl + 1, hlen);
++		skb_copy_from_linear_data(skb, inl->data, hlen);
+ 		if (shinfo->nr_frags)
+-			memcpy(((void *)(inl + 1)) + hlen, fragptr,
++			memcpy(inl->data + hlen, fragptr,
+ 			       skb_frag_size(&shinfo->frags[0]));
+ 
+ 	} else {
+ 		inl->byte_count = cpu_to_be32(1 << 31 | spc);
+ 		if (hlen <= spc) {
+-			skb_copy_from_linear_data(skb, inl + 1, hlen);
++			skb_copy_from_linear_data(skb, inl->data, hlen);
+ 			if (hlen < spc) {
+-				memcpy(((void *)(inl + 1)) + hlen,
++				memcpy(inl->data + hlen,
+ 				       fragptr, spc - hlen);
+ 				fragptr +=  spc - hlen;
+ 			}
+-			inl = (void *) (inl + 1) + spc;
+-			memcpy(((void *)(inl + 1)), fragptr, skb->len - spc);
++			inl = (void *)inl->data + spc;
++			memcpy(inl->data, fragptr, skb->len - spc);
+ 		} else {
+-			skb_copy_from_linear_data(skb, inl + 1, spc);
+-			inl = (void *) (inl + 1) + spc;
+-			skb_copy_from_linear_data_offset(skb, spc, inl + 1,
++			skb_copy_from_linear_data(skb, inl->data, spc);
++			inl = (void *)inl->data + spc;
++			skb_copy_from_linear_data_offset(skb, spc, inl->data,
+ 							 hlen - spc);
+ 			if (shinfo->nr_frags)
+-				memcpy(((void *)(inl + 1)) + hlen - spc,
++				memcpy(inl->data + hlen - spc,
+ 				       fragptr,
+ 				       skb_frag_size(&shinfo->frags[0]));
+ 		}
+diff --git a/include/linux/mlx4/qp.h b/include/linux/mlx4/qp.h
+index c78b90f2e9a1..b9a7b1319f5d 100644
+--- a/include/linux/mlx4/qp.h
++++ b/include/linux/mlx4/qp.h
+@@ -446,6 +446,7 @@ enum {
+ 
+ struct mlx4_wqe_inline_seg {
+ 	__be32			byte_count;
++	__u8			data[];
+ };
+ 
+ enum mlx4_update_qp_attr {
+-- 
+2.34.1
+
