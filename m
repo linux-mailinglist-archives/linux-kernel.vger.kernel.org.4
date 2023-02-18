@@ -2,154 +2,180 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 472EF69B84B
-	for <lists+linux-kernel@lfdr.de>; Sat, 18 Feb 2023 07:14:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EEF9B69B852
+	for <lists+linux-kernel@lfdr.de>; Sat, 18 Feb 2023 07:21:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229614AbjBRGOP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 18 Feb 2023 01:14:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33666 "EHLO
+        id S229629AbjBRGV4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 18 Feb 2023 01:21:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36248 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229520AbjBRGOO (ORCPT
+        with ESMTP id S229445AbjBRGVy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 18 Feb 2023 01:14:14 -0500
-Received: from mail-lj1-x236.google.com (mail-lj1-x236.google.com [IPv6:2a00:1450:4864:20::236])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99F925454E
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Feb 2023 22:14:12 -0800 (PST)
-Received: by mail-lj1-x236.google.com with SMTP id n4so64235ljq.3
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Feb 2023 22:14:12 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=joelfernandes.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=M9meo/2HsyQjWTOLBePu8gQ8aMOImbRjLtTEkBnxFWA=;
-        b=rNW4pWyLBgZAXvqJjvCoQS8lk2lmt0bpvLoQdrZ4JtZt7F/xLQANfMR03xhYfnh+h2
-         rmKCOP/qyMs+J36NL88QnT7nLTcqAAMfUbpj9E0xe3jdJKKjcCQ++dD7IBc/gnmYd8Ln
-         WROBH3wQ8mnvc2t6fvC/87NGLDoo+sxFiJiaE=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=M9meo/2HsyQjWTOLBePu8gQ8aMOImbRjLtTEkBnxFWA=;
-        b=oSbaFhT+z9md4TUOHRqMoOumdY5IXGRvQirGJVyUXIEKADgcWUEE9HwXq6x+coZ6D0
-         jqF38r00g13Ti71zQDGzI1lm99sEqLB+OnLUsA7c7x066MxF3tzCeOVBVuS3lmfR70FI
-         TVfofFqnaSzIQO2fmp8OxoBKKVI7xv83/ESeDgHUNFGY/BvguvJjQIGO+IMNR61ja/3c
-         zJHDW7QAglgcDjgDa96MlO8n/zFC2UMwivJqB+G+vdae/ugPzRd/yi2mGh6+vYuLWHO7
-         AHzZOIdIl4jmF94kPdDXAHCyKcpXVCezbb5hCRLts8XjEvzrUXK4eLtVvFethABnxNfC
-         ZS6w==
-X-Gm-Message-State: AO0yUKU7x6osYhueyscc0aUDIiOZnzjw7uKrkR6eFFqgflXvGGQh6bpn
-        jhoJJ7BOfuT8FjuQ1sY+NdBnrOj7tnAJardkb0eWQGS0JfA42sNb
-X-Google-Smtp-Source: AK7set/q4K2z6T8tTM3H+wXeDE+gFiACy9O/yEXPJeOfHZ8S48WmuHxW5F7bIDV9xIb0GRZIxHoXzwQbijx97x4nEzs=
-X-Received: by 2002:a05:651c:1688:b0:293:4647:364a with SMTP id
- bd8-20020a05651c168800b002934647364amr1066205ljb.3.1676700850733; Fri, 17 Feb
- 2023 22:14:10 -0800 (PST)
+        Sat, 18 Feb 2023 01:21:54 -0500
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B0874FA9D
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Feb 2023 22:21:53 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1676701313; x=1708237313;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=wNb2PRAmHyDUNd3CJthc3fNM0QVLggOiq2Rkm3fz+XU=;
+  b=Z7k08/UP1ZVtONThpiU8lDGfbCRNbLjnTy5qIxRusNS9WH8uQHIU9kMC
+   Bo++RrgTry18rQx3FhlxBI94Fn1LVZ+yrRRvO1AqFTCz2zbQohbXuBPMG
+   d7rkrd61cNHyRpvkvFEGJA22xck0uVL5zx0AexIrkTz/HiaM1Dqinrh/C
+   SqK/l0wmRPZpi5nUAPAtSTvtmp2bzWULUYnOBMoVQ5gFuc54SQ1boKle+
+   FDA/EuA6eZUdy7R6ArzjlA+6Z4Mv+0Up0CIYlIzy6naG0lKBDQhB8pYAu
+   plzsB9mOGA5Gmo+ascWv8HP8blOb9xnNz+XF5fZu3Nw8/oDLGEQblEqPD
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10624"; a="334348583"
+X-IronPort-AV: E=Sophos;i="5.97,306,1669104000"; 
+   d="scan'208";a="334348583"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Feb 2023 22:21:52 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10624"; a="844800503"
+X-IronPort-AV: E=Sophos;i="5.97,306,1669104000"; 
+   d="scan'208";a="844800503"
+Received: from lkp-server01.sh.intel.com (HELO 4455601a8d94) ([10.239.97.150])
+  by orsmga005.jf.intel.com with ESMTP; 17 Feb 2023 22:21:50 -0800
+Received: from kbuild by 4455601a8d94 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pTGbV-000CBB-2I;
+        Sat, 18 Feb 2023 06:21:49 +0000
+Date:   Sat, 18 Feb 2023 14:21:44 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Arnd Bergmann <arnd@arndb.de>
+Cc:     llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+        linux-kernel@vger.kernel.org,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Alex Shi <alexs@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Miguel Ojeda <ojeda@kernel.org>,
+        Nathan Chancellor <nathan@kernel.org>
+Subject: arch/powerpc/platforms/83xx/suspend.c:210:3: error: call to
+ undeclared function 'enable_kernel_fp'; ISO C99 and later do not support
+ implicit function declarations
+Message-ID: <202302181414.nAdxC08J-lkp@intel.com>
 MIME-Version: 1.0
-References: <20230204004843.GA2677518@paulmck-ThinkPad-P17-Gen-1>
- <Y920w4QRLtC6kd+x@rowland.harvard.edu> <20230204014941.GS2948950@paulmck-ThinkPad-P17-Gen-1>
- <Y95yhJgNq8lMXPdF@rowland.harvard.edu> <20230204222411.GC2948950@paulmck-ThinkPad-P17-Gen-1>
- <Y9+41ctA54pjm/KG@google.com> <Y+FJSzUoGTgReLPB@rowland.harvard.edu>
- <Y+fN2fvUjGDWBYrv@google.com> <Y+f4TYZ9BPlt8y8B@rowland.harvard.edu>
- <CAEXW_YRuTfjc=5OAskTV0Qt_zSJTPP3-01=Y=SypMdPsF_weAQ@mail.gmail.com> <Y+hWAksfk4C0M2gB@rowland.harvard.edu>
-In-Reply-To: <Y+hWAksfk4C0M2gB@rowland.harvard.edu>
-From:   Joel Fernandes <joel@joelfernandes.org>
-Date:   Sat, 18 Feb 2023 01:13:59 -0500
-Message-ID: <CAEXW_YQ3fvFDNi9wG5w4Zqkbda8SUByOnM6y6MXQpxT9oQw8xQ@mail.gmail.com>
-Subject: Re: Current LKMM patch disposition
-To:     Alan Stern <stern@rowland.harvard.edu>
-Cc:     "Paul E. McKenney" <paulmck@kernel.org>,
-        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
-        kernel-team@meta.com, mingo@kernel.org, parri.andrea@gmail.com,
-        will@kernel.org, peterz@infradead.org, boqun.feng@gmail.com,
-        npiggin@gmail.com, dhowells@redhat.com, j.alglave@ucl.ac.uk,
-        luc.maranget@inria.fr, akiyks@gmail.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEXHASH_WORD,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Alan,
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   38f8ccde04a3fa317b51b05e63c3cb57e1641931
+commit: e8c07082a810fbb9db303a2b66b66b8d7e588b53 Kbuild: move to -std=gnu11
+date:   11 months ago
+config: powerpc-randconfig-r013-20230218 (https://download.01.org/0day-ci/archive/20230218/202302181414.nAdxC08J-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project db89896bbbd2251fff457699635acbbedeead27f)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install powerpc cross compiling tool for clang build
+        # apt-get install binutils-powerpc-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=e8c07082a810fbb9db303a2b66b66b8d7e588b53
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout e8c07082a810fbb9db303a2b66b66b8d7e588b53
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=powerpc olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=powerpc SHELL=/bin/bash arch/powerpc/platforms/83xx/ drivers/android/
 
-On Sat, Feb 11, 2023 at 9:59 PM Alan Stern <stern@rowland.harvard.edu> wrote:
->
-[...]
->
-> Would you like to post a few examples showing some of the most difficult
-> points you encountered?  Maybe explanation.txt can be improved.
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202302181414.nAdxC08J-lkp@intel.com/
 
-One additional feedback I wanted to mention, regarding this paragraph
-under "WARNING":
-===========
-The protections provided by READ_ONCE(), WRITE_ONCE(), and others are
-not perfect; and under some circumstances it is possible for the
-compiler to undermine the memory model. Here is an example. Suppose
-both branches of an "if" statement store the same value to the same
-location:
-r1 = READ_ONCE(x);
-if (r1) {
-WRITE_ONCE(y, 2);
-... /* do something */
-} else {
-WRITE_ONCE(y, 2);
-... /* do something else */
-}
-===========
+All errors (new ones prefixed by >>):
 
-I tried lots of different compilers with varying degrees of
-optimization, in all cases I find that the conditional instruction
-always appears in program order before the stores inside the body of
-the conditional. So I am not sure if this is really a valid concern on
-current compilers, if not - could you provide an example of a compiler
-and options that cause it?
-
-In any case, if it is a theoretical concern, it could be clarified
-that this is a theoretical possibility in the text.  And if it is a
-real/practical concern, then it could be mentioned the specific
-compiler/arch this was seen in.
-
-Thanks!
-
- - Joel
+>> arch/powerpc/platforms/83xx/suspend.c:210:3: error: call to undeclared function 'enable_kernel_fp'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+                   enable_kernel_fp();
+                   ^
+   arch/powerpc/platforms/83xx/suspend.c:210:3: note: did you mean 'enable_kernel_vsx'?
+   arch/powerpc/include/asm/switch_to.h:75:20: note: 'enable_kernel_vsx' declared here
+   static inline void enable_kernel_vsx(void)
+                      ^
+   1 error generated.
 
 
+vim +/enable_kernel_fp +210 arch/powerpc/platforms/83xx/suspend.c
 
->
-> > > I'm not sure that breaking this relation up into pieces will make it any
-> > > easier to understand.
-> >
-> > Yes, but I tried. I will keep trying to understand your last patch
-> > more. Especially I am still not sure, why in the case of an SRCU
-> > reader on a single CPU, the following does not work:
-> > let srcu-rscs = ([Srcu-lock]; data; [Srcu-unlock]).
->
-> You have to understand that herd7 does not track dependencies through
-> stores and subsequent loads.  That is, if you have something like:
->
->         r1 = READ_ONCE(*x);
->         WRITE_ONCE(*y, r1);
->         r2 = READ_ONCE(*y);
->         WRITE_ONCE(*z, r2);
->
-> then herd7 will realize that the write to y depends on the value read
-> from x, and it will realize that the write to z depends on the value
-> read from y.  But it will not realize that the write to z depends on the
-> value read from x; it loses track of that dependency because of the
-> intervening store/load from y.
->
-> More to the point, if you have:
->
->         r1 = srcu_read_lock(lock);
->         WRITE_ONCE(*y, r1);
->         r2 = READ_ONCE(*y);
->         srcu_read_unlock(lock, r2);
->
-> then herd7 will not realize that the value of r2 depends on the value of
-> r1.  So there will be no data dependency from the srcu_read_lock() to
-> the srcu_read_unlock().
->
-> Alan
+87faaabb09d080 Anton Vorontsov 2009-12-10  173  
+d49747bdfb2dde Scott Wood      2007-10-09  174  static int mpc83xx_suspend_enter(suspend_state_t state)
+d49747bdfb2dde Scott Wood      2007-10-09  175  {
+d49747bdfb2dde Scott Wood      2007-10-09  176  	int ret = -EAGAIN;
+d49747bdfb2dde Scott Wood      2007-10-09  177  
+d49747bdfb2dde Scott Wood      2007-10-09  178  	/* Don't go to sleep if there's a race where pci_pm_state changes
+d49747bdfb2dde Scott Wood      2007-10-09  179  	 * between the agent thread checking it and the PM code disabling
+d49747bdfb2dde Scott Wood      2007-10-09  180  	 * interrupts.
+d49747bdfb2dde Scott Wood      2007-10-09  181  	 */
+d49747bdfb2dde Scott Wood      2007-10-09  182  	if (wake_from_pci) {
+d49747bdfb2dde Scott Wood      2007-10-09  183  		if (pci_pm_state != (deep_sleeping ? 3 : 2))
+d49747bdfb2dde Scott Wood      2007-10-09  184  			goto out;
+d49747bdfb2dde Scott Wood      2007-10-09  185  
+d49747bdfb2dde Scott Wood      2007-10-09  186  		out_be32(&pmc_regs->config1,
+d49747bdfb2dde Scott Wood      2007-10-09  187  		         in_be32(&pmc_regs->config1) | PMCCR1_PME_EN);
+d49747bdfb2dde Scott Wood      2007-10-09  188  	}
+d49747bdfb2dde Scott Wood      2007-10-09  189  
+d49747bdfb2dde Scott Wood      2007-10-09  190  	/* Put the system into low-power mode and the RAM
+d49747bdfb2dde Scott Wood      2007-10-09  191  	 * into self-refresh mode once the core goes to
+d49747bdfb2dde Scott Wood      2007-10-09  192  	 * sleep.
+d49747bdfb2dde Scott Wood      2007-10-09  193  	 */
+d49747bdfb2dde Scott Wood      2007-10-09  194  
+d49747bdfb2dde Scott Wood      2007-10-09  195  	out_be32(&pmc_regs->config, PMCCR_SLPEN | PMCCR_DLPEN);
+d49747bdfb2dde Scott Wood      2007-10-09  196  
+d49747bdfb2dde Scott Wood      2007-10-09  197  	/* If it has deep sleep (i.e. it's an 831x or compatible),
+d49747bdfb2dde Scott Wood      2007-10-09  198  	 * disable power to the core upon entering sleep mode.  This will
+d49747bdfb2dde Scott Wood      2007-10-09  199  	 * require going through the boot firmware upon a wakeup event.
+d49747bdfb2dde Scott Wood      2007-10-09  200  	 */
+d49747bdfb2dde Scott Wood      2007-10-09  201  
+d49747bdfb2dde Scott Wood      2007-10-09  202  	if (deep_sleeping) {
+87faaabb09d080 Anton Vorontsov 2009-12-10  203  		mpc83xx_suspend_save_regs();
+87faaabb09d080 Anton Vorontsov 2009-12-10  204  
+d49747bdfb2dde Scott Wood      2007-10-09  205  		out_be32(&pmc_regs->mask, PMCER_ALL);
+d49747bdfb2dde Scott Wood      2007-10-09  206  
+d49747bdfb2dde Scott Wood      2007-10-09  207  		out_be32(&pmc_regs->config1,
+d49747bdfb2dde Scott Wood      2007-10-09  208  		         in_be32(&pmc_regs->config1) | PMCCR1_POWER_OFF);
+d49747bdfb2dde Scott Wood      2007-10-09  209  
+d49747bdfb2dde Scott Wood      2007-10-09 @210  		enable_kernel_fp();
+d49747bdfb2dde Scott Wood      2007-10-09  211  
+d49747bdfb2dde Scott Wood      2007-10-09  212  		mpc83xx_enter_deep_sleep(immrbase);
+d49747bdfb2dde Scott Wood      2007-10-09  213  
+d49747bdfb2dde Scott Wood      2007-10-09  214  		out_be32(&pmc_regs->config1,
+d49747bdfb2dde Scott Wood      2007-10-09  215  		         in_be32(&pmc_regs->config1) & ~PMCCR1_POWER_OFF);
+d49747bdfb2dde Scott Wood      2007-10-09  216  
+d49747bdfb2dde Scott Wood      2007-10-09  217  		out_be32(&pmc_regs->mask, PMCER_PMCI);
+87faaabb09d080 Anton Vorontsov 2009-12-10  218  
+87faaabb09d080 Anton Vorontsov 2009-12-10  219  		mpc83xx_suspend_restore_regs();
+d49747bdfb2dde Scott Wood      2007-10-09  220  	} else {
+d49747bdfb2dde Scott Wood      2007-10-09  221  		out_be32(&pmc_regs->mask, PMCER_PMCI);
+d49747bdfb2dde Scott Wood      2007-10-09  222  
+d49747bdfb2dde Scott Wood      2007-10-09  223  		mpc6xx_enter_standby();
+d49747bdfb2dde Scott Wood      2007-10-09  224  	}
+d49747bdfb2dde Scott Wood      2007-10-09  225  
+d49747bdfb2dde Scott Wood      2007-10-09  226  	ret = 0;
+d49747bdfb2dde Scott Wood      2007-10-09  227  
+d49747bdfb2dde Scott Wood      2007-10-09  228  out:
+d49747bdfb2dde Scott Wood      2007-10-09  229  	out_be32(&pmc_regs->config1,
+d49747bdfb2dde Scott Wood      2007-10-09  230  	         in_be32(&pmc_regs->config1) & ~PMCCR1_PME_EN);
+d49747bdfb2dde Scott Wood      2007-10-09  231  
+d49747bdfb2dde Scott Wood      2007-10-09  232  	return ret;
+d49747bdfb2dde Scott Wood      2007-10-09  233  }
+d49747bdfb2dde Scott Wood      2007-10-09  234  
+
+:::::: The code at line 210 was first introduced by commit
+:::::: d49747bdfb2ddebea24d1580da55b79d093d48a9 powerpc/mpc83xx: Power Management support
+
+:::::: TO: Scott Wood <scottwood@freescale.com>
+:::::: CC: Kumar Gala <galak@kernel.crashing.org>
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
