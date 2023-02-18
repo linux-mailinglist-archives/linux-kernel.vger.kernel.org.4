@@ -2,105 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EA6EE69B823
-	for <lists+linux-kernel@lfdr.de>; Sat, 18 Feb 2023 06:28:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E0A8369B832
+	for <lists+linux-kernel@lfdr.de>; Sat, 18 Feb 2023 06:38:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229619AbjBRF2a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 18 Feb 2023 00:28:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44882 "EHLO
+        id S229674AbjBRFin (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 18 Feb 2023 00:38:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48282 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229436AbjBRF21 (ORCPT
+        with ESMTP id S229436AbjBRFik (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 18 Feb 2023 00:28:27 -0500
-Received: from mail-io1-f72.google.com (mail-io1-f72.google.com [209.85.166.72])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C95E242DC1
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Feb 2023 21:28:26 -0800 (PST)
-Received: by mail-io1-f72.google.com with SMTP id f5-20020a056602070500b007407df88db0so1670214iox.23
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Feb 2023 21:28:26 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:in-reply-to:date:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=QiQ2iFuiOIlVOCV/RHCHymN7CiC9w44gVNhD484zSfE=;
-        b=L65P6JZcRizsHt8zTTrs81XJevZG4MpxWBNYaEKpEDWFdDOrU15xqZVIVr4v9DJQwn
-         D5cgpQ7oqCE4+liA/2uuXMB5c1Z34ldmaJuM46L/zzTFUDFlGjQ8XoYjB8jHh++majbL
-         qnzWJdHFDJq7lfB9BTdzqe/JiHgMdAI3ZyaBpwhykVmT0q+oX+waZGaUHdZm//Bap8oP
-         aDT/uiOoo6yHq3E1k2yqlmpbK6TpvLR0Tx8EERfRyM+8Lty/M/yM4jgzS/6Xlvv/xek6
-         GuIE5I9CZI84IkHGx6IkV5mgRMcSRIdsvFFZuJ6/LdWUv19E87fQPN7vSHT01+zuB5Vd
-         UhRQ==
-X-Gm-Message-State: AO0yUKWeD54PKjnk587csmOdxk6ify1hc72Sh4oaNVJAsNIYgawoT6Jg
-        qs0F6tnhGU9uEBitx02BjA0hJycR2P1Bo3U7yCrSErW5b66e
-X-Google-Smtp-Source: AK7set/HmxhHMrvBP42tQziKXRfzwr03JaDcP3zBEK8e0Q2VBL4Aae4LHHl4y6bzMe1RtS74jJroG9Ova+w1iU74qOgy0XxjS9G2
+        Sat, 18 Feb 2023 00:38:40 -0500
+Received: from NAM02-SN1-obe.outbound.protection.outlook.com (mail-sn1nam02on2055.outbound.protection.outlook.com [40.107.96.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 301E75CF1A;
+        Fri, 17 Feb 2023 21:38:39 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=JR7g3RfeqRnEm6+WiAPtwj2/FzibXYkH9ECxMbPASA5DGH2ln9vqkd7PEBdncfe9wcfCrdMIHG2FuCZShxWDARZhP2nokKJ4WNzU/CZ5pjnRr9iyO5aleBoVgYCQLetekQeJ5I68cnNRbFmtOoHhxa+C8Ab2IXBgGKJwGoUUDBq2F5SPA+OCuM5ExSqHaa8iBMKL0NE0SfjU4taNlsJOsnxrOk7OhzvWYa4EQ1EgI0jzzv1JeMhKPm3uCxSN+9k+EGAluLly7cN4ybLJHzpdgxy5y2ONbn4u8elnXqWPln/lEaHwRqm2+zPy0ZHlctjxMyWsnrZKuZJELrJADaYKNQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=jj5SHFDulF6gxWkCEuxIU7+ZPeHjzo76uZ2/FrC+NKQ=;
+ b=gGn9tUNJpSdJ8CJQLHtXFocRhHy6hrSLp9ve4uG1ASYArZ48bS9QokkmbYzwvScbn7HcpZdZQEw8Ce0R7aKUBiig94bmjZtEZcoW8/x6VdSrEKffS27W5TJDhSJ6TqItyd5Vy/nhxVpCn3jNvbG0mwX0qXvExWafRq55oW25J6q+9TSUnQVMp5g/OMff/ZZgKiBmouSgd27el4Ny90ai+1HW2lTHStW1xRbgfLYWwLWwalNose7nfrc76ankrHiWpPViAQlRwa2Psgg2qX7u8ufThiHj1a7EKVWi/bSsVE2FM8P2e5g/OsuRWg0GEusG36NPN33w5MNVPJzcK92xBg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=gondor.apana.org.au smtp.mailfrom=amd.com;
+ dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
+ header.from=amd.com; dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=jj5SHFDulF6gxWkCEuxIU7+ZPeHjzo76uZ2/FrC+NKQ=;
+ b=fD61eynzvJxaRtSx5qZ1I/6+04Scjpu1GNcIKf6h+u3PfQwsIM7SMJ1ys67EkaiLqhvBR2KhCZHopZ2aORqa7Xsmx15We6rQcy88H3L4nA8zyqgmmNVG53td+2SdcNWAhx1Z8Vz4Ewxnj9kgzbMGpCpBlQQ9/Fbkpd3DEVTLAvI=
+Received: from BN9PR03CA0924.namprd03.prod.outlook.com (2603:10b6:408:107::29)
+ by CY8PR12MB7636.namprd12.prod.outlook.com (2603:10b6:930:9f::15) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6111.12; Sat, 18 Feb
+ 2023 05:38:36 +0000
+Received: from BN8NAM11FT028.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:408:107:cafe::a3) by BN9PR03CA0924.outlook.office365.com
+ (2603:10b6:408:107::29) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6111.17 via Frontend
+ Transport; Sat, 18 Feb 2023 05:38:35 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ BN8NAM11FT028.mail.protection.outlook.com (10.13.176.225) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.6111.18 via Frontend Transport; Sat, 18 Feb 2023 05:38:34 +0000
+Received: from SATLEXMB08.amd.com (10.181.40.132) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Fri, 17 Feb
+ 2023 23:38:34 -0600
+Received: from SATLEXMB03.amd.com (10.181.40.144) by SATLEXMB08.amd.com
+ (10.181.40.132) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Fri, 17 Feb
+ 2023 21:38:33 -0800
+Received: from xhdharshah40.xilinx.com (10.180.168.240) by SATLEXMB03.amd.com
+ (10.181.40.144) with Microsoft SMTP Server id 15.1.2375.34 via Frontend
+ Transport; Fri, 17 Feb 2023 23:38:31 -0600
+From:   Harsha Harsha <harsha.harsha@amd.com>
+To:     <herbert@gondor.apana.org.au>, <davem@davemloft.net>,
+        <linux-crypto@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>, <michals@xilinx.com>
+CC:     <saratcha@xilinx.com>, <git@amd.com>,
+        Harsha Harsha <harsha.harsha@amd.com>
+Subject: [PATCH 0/4] crypto: Add Xilinx ZynqMP RSA driver support
+Date:   Sat, 18 Feb 2023 11:08:05 +0530
+Message-ID: <20230218053809.1780-1-harsha.harsha@amd.com>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
-X-Received: by 2002:a6b:c419:0:b0:71c:1bd4:b768 with SMTP id
- y25-20020a6bc419000000b0071c1bd4b768mr178944ioa.84.1676698106230; Fri, 17 Feb
- 2023 21:28:26 -0800 (PST)
-Date:   Fri, 17 Feb 2023 21:28:26 -0800
-In-Reply-To: <20230218015238.1838-1-hdanton@sina.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000047b7c05f4f2b345@google.com>
-Subject: Re: [syzbot] [bridge?] [coreteam?] KASAN: vmalloc-out-of-bounds Read
- in __ebt_unregister_table
-From:   syzbot <syzbot+f61594de72d6705aea03@syzkaller.appspotmail.com>
-To:     hdanton@sina.com, linux-kernel@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BN8NAM11FT028:EE_|CY8PR12MB7636:EE_
+X-MS-Office365-Filtering-Correlation-Id: f2001188-8352-4da3-b9c4-08db11726082
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: r+U3ymawVBmdRGKPdXZdVEKmpjviLSaYP2rQdCvvOYQVFsAYYCHVO3Xwn++aEFX5GYW5GB4Hlw6BngQq/jepJ7kNWId6UplmPpuQZrwPpPFfWXaS/y8mzmBtGk1pUraFBIoIa/VszRslSi0vV2pip4maKBHXD/lOq+XczB1DYJ4voztPEOzngry8D2zRLzusxp5/XeFYsFg0bBNGvpvIHl/hcnRFMU8fGHJwDl1xbepXjb/W1MHT7Y7MMjm5kfrhyXOZ8o0Ovb39ce1ntMeymdXd9CxyNUtG8KMeQk/ebLtw9fXo9QdIDNIqTGm7nVCYM9EfmPEzeyqmVwz83eblLK6MoMe6XSipFDDplB9/nU9Vsz7pYMzZ2tWkYoa0MrvihgS9Z4vcXpONYEIs7B3Unhh8jb4qofTqcjVOUchaxHW4BFb+MjZk2ffywujFcFog274481nYZVz3n+DfTdCFhGcIzHKe/uNMYdSH2bS39mYfMgLMmOJQqJmoApehNRswaCxyCcXs3/4OCX07Tui0kKDSyhSqVANGIH8IZOgjAQ5C0wKSwXImtF+HhEIi8gqM/WrJu5DGnOUqjuqZKWZvXEc9p+UqSKndtl7CjlWqYW21e4zAXR0vPvaAkQlEn9XQXTFnu6SJUFj3zL3kw24otAr/6kn3HbEQJCa1ePtL+66L2vJ4EgJ2BnFFg6Ak8Lh3r4sotzmEPor8MqGm5y3FP3hFy/M8Ndj/+yQs1+bnH5hueKF8JEBgkpJJyRtYN+lC
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230025)(4636009)(136003)(346002)(396003)(376002)(39860400002)(451199018)(40470700004)(36840700001)(46966006)(478600001)(83380400001)(47076005)(426003)(316002)(36756003)(54906003)(81166007)(356005)(36860700001)(110136005)(2906002)(82740400003)(86362001)(82310400005)(40460700003)(70586007)(8676002)(70206006)(4326008)(5660300002)(8936002)(40480700001)(4744005)(41300700001)(26005)(2616005)(1076003)(44832011)(6666004)(186003)(336012)(36900700001)(2101003);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 Feb 2023 05:38:34.5712
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: f2001188-8352-4da3-b9c4-08db11726082
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT028.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY8PR12MB7636
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+This patch set does the following:
+  - Get the SoC family specific data for crypto operation
+  - Adds communication layer support for zynqmp_pm_rsa in zynqmp.c
+  - Adds Xilinx driver for RSA Algorithm
+  - Updates the list of MAINTAINERS
 
-syzbot has tested the proposed patch but the reproducer is still triggering an issue:
-KASAN: vmalloc-out-of-bounds Read in __ebt_unregister_table
+Harsha Harsha (4):
+  firmware: xilinx: Get the SoC family specific data for crypto
+    operation
+  firmware: xilinx: Add ZynqMP RSA API for RSA encrypt/decrypt operation
+  crypto: xilinx: Add ZynqMP RSA driver
+  MAINTAINERS: Add maintainer for Xilinx ZynqMP RSA driver
 
-==================================================================
-BUG: KASAN: vmalloc-out-of-bounds in __ebt_unregister_table+0xc0d/0xd00 net/bridge/netfilter/ebtables.c:1169
-Read of size 4 at addr ffffc9000309c000 by task kworker/u4:5/1164
+ MAINTAINERS                          |   5 +
+ drivers/crypto/Kconfig               |  10 +
+ drivers/crypto/xilinx/Makefile       |   1 +
+ drivers/crypto/xilinx/xilinx-rsa.c   | 489 +++++++++++++++++++++++++++
+ drivers/firmware/xilinx/zynqmp.c     | 100 ++++++
+ include/linux/firmware/xlnx-zynqmp.h |  42 +++
+ 6 files changed, 647 insertions(+)
+ create mode 100644 drivers/crypto/xilinx/xilinx-rsa.c
 
-CPU: 0 PID: 1164 Comm: kworker/u4:5 Not tainted 6.2.0-rc8-syzkaller-00083-g3ac88fa4605e-dirty #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/21/2023
-Workqueue: netns cleanup_net
-Call Trace:
- <TASK>
- __dump_stack lib/dump_stack.c:88 [inline]
- dump_stack_lvl+0xd1/0x138 lib/dump_stack.c:106
- print_address_description mm/kasan/report.c:306 [inline]
- print_report+0x15e/0x45d mm/kasan/report.c:417
- kasan_report+0xbf/0x1f0 mm/kasan/report.c:517
- __ebt_unregister_table+0xc0d/0xd00 net/bridge/netfilter/ebtables.c:1169
- ebt_unregister_table+0x3a/0x50 net/bridge/netfilter/ebtables.c:1375
- ops_exit_list+0xb0/0x170 net/core/net_namespace.c:169
- cleanup_net+0x4ee/0xb10 net/core/net_namespace.c:613
- process_one_work+0x9bf/0x1710 kernel/workqueue.c:2289
- worker_thread+0x669/0x1090 kernel/workqueue.c:2436
- kthread+0x2e8/0x3a0 kernel/kthread.c:376
- ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:308
- </TASK>
-
-Memory state around the buggy address:
- ffffc9000309bf00: f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8
- ffffc9000309bf80: f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8
->ffffc9000309c000: f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8
-                   ^
- ffffc9000309c080: f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8
- ffffc9000309c100: f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8
-==================================================================
-
-
-Tested on:
-
-commit:         3ac88fa4 Merge tag 'net-6.2-final' of git://git.kernel..
-git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-console output: https://syzkaller.appspot.com/x/log.txt?x=1126d8f7480000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=fe56f7d193926860
-dashboard link: https://syzkaller.appspot.com/bug?extid=f61594de72d6705aea03
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-patch:          https://syzkaller.appspot.com/x/patch.diff?x=1274f127480000
+-- 
+2.36.1
 
