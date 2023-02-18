@@ -2,199 +2,173 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D464369BBCA
-	for <lists+linux-kernel@lfdr.de>; Sat, 18 Feb 2023 21:19:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4915869BBCE
+	for <lists+linux-kernel@lfdr.de>; Sat, 18 Feb 2023 21:21:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229776AbjBRUTz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 18 Feb 2023 15:19:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45780 "EHLO
+        id S229615AbjBRUVt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 18 Feb 2023 15:21:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48972 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229660AbjBRUTj (ORCPT
+        with ESMTP id S229436AbjBRUVr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 18 Feb 2023 15:19:39 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 471821498B
-        for <linux-kernel@vger.kernel.org>; Sat, 18 Feb 2023 12:19:36 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C1FE660BEA
-        for <linux-kernel@vger.kernel.org>; Sat, 18 Feb 2023 20:19:35 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 90D30C43446;
-        Sat, 18 Feb 2023 20:19:34 +0000 (UTC)
-Received: from rostedt by gandalf.local.home with local (Exim 4.96)
-        (envelope-from <rostedt@goodmis.org>)
-        id 1pTTgD-000xw7-1z;
-        Sat, 18 Feb 2023 15:19:33 -0500
-Message-ID: <20230218201933.431917261@goodmis.org>
-User-Agent: quilt/0.66
-Date:   Sat, 18 Feb 2023 15:18:29 -0500
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     Masami Hiramatsu <mhiramat@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Daniel Bristot de Oliveira <bristot@kernel.org>,
-        Bagas Sanjaya <bagasdotme@gmail.com>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Clark Williams <williams@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>
-Subject: [for-next][PATCH 8/8] Documentation/rtla: Add hwnoise man page
-References: <20230218201821.938318263@goodmis.org>
+        Sat, 18 Feb 2023 15:21:47 -0500
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1311A149B4;
+        Sat, 18 Feb 2023 12:21:11 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1676751672; x=1708287672;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=m3g9HARJDWSQCFbwk3Iio0QGai5OhbW12/y2dD16p5M=;
+  b=IUfsBixqMpAnrYj3iPRN1IIafYz/ZuVmCTZeGYYUb9YbQk0pFTu8gU86
+   LN24sbzd3pK9vxkva6pjlr9butU58V+EVwTox4Q6+seLN2qGgQSUvignj
+   A66O7P23N/WANBmfC0VZycuvAmzFIPkY0pYFR0kAH2+/YyRiAN99WxHTt
+   az0BdjhW55ilmjk0+2RsA1BEcFJLJ2PXR7mYgLHmLdQCHeAuThAxY/XyQ
+   gepAXIJo8B/nMbvHtYiIEvkk9+kcjjVRmD2dRg4itrs9dWDTGl+sXeZY3
+   XPvwQ/kPTIjQh92KmuIAKgn2poknIcQOeOoeTmBJk7FPTyfXeNKBveOQF
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10625"; a="311830881"
+X-IronPort-AV: E=Sophos;i="5.97,309,1669104000"; 
+   d="scan'208";a="311830881"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Feb 2023 12:20:16 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10625"; a="794779148"
+X-IronPort-AV: E=Sophos;i="5.97,309,1669104000"; 
+   d="scan'208";a="794779148"
+Received: from lkp-server01.sh.intel.com (HELO 4455601a8d94) ([10.239.97.150])
+  by orsmga004.jf.intel.com with ESMTP; 18 Feb 2023 12:20:13 -0800
+Received: from kbuild by 4455601a8d94 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pTTgq-000Chd-02;
+        Sat, 18 Feb 2023 20:20:12 +0000
+Date:   Sun, 19 Feb 2023 04:19:40 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Pawel Laszczak <pawell@cadence.com>, gregkh@linuxfoundation.org
+Cc:     oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org, Daisy.Barrera@siriusxm.com,
+        Cliff.Holden@siriusxm.com, arnd@arndb.de, tony@atomide.com,
+        jdelvare@suse.de, neal_liu@aspeedtech.com,
+        linus.walleij@linaro.org, egtvedt@samfundet.no,
+        biju.das.jz@bp.renesas.com, herve.codina@bootlin.com,
+        Pawel Laszczak <pawell@cadence.com>
+Subject: Re: [PATCH 3/4] usb: cdns2: Add tracepoints for CDNS2 driver
+Message-ID: <202302190436.AU6zwie0-lkp@intel.com>
+References: <20230216105411.364157-4-pawell@cadence.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230216105411.364157-4-pawell@cadence.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Daniel Bristot de Oliveira <bristot@kernel.org>
+Hi Pawel,
 
-Add a man page for the new rtla hwnoise tool, mostly based in the
-rtla osnoise top.
+I love your patch! Perhaps something to improve:
 
-Link: https://lkml.kernel.org/r/27088e0f42a6129e9b75f789d78adff4171f2e79.1675805361.git.bristot@kernel.org
+[auto build test WARNING on usb/usb-testing]
+[also build test WARNING on usb/usb-next usb/usb-linus westeri-thunderbolt/next soc/for-next linus/master v6.2-rc8 next-20230217]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-Signed-off-by: Daniel Bristot de Oliveira <bristot@kernel.org>
-Reviewed-by: Bagas Sanjaya <bagasdotme@gmail.com>
-Cc: Daniel Bristot de Oliveira <bristot@kernel.org>
-Cc: Juri Lelli <juri.lelli@redhat.com>
-Cc: Clark Williams <williams@redhat.com>
-Cc: Jonathan Corbet <corbet@lwn.net>
-Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
----
- Documentation/tools/rtla/index.rst        |   1 +
- Documentation/tools/rtla/rtla-hwnoise.rst | 107 ++++++++++++++++++++++
- 2 files changed, 108 insertions(+)
- create mode 100644 Documentation/tools/rtla/rtla-hwnoise.rst
+url:    https://github.com/intel-lab-lkp/linux/commits/Pawel-Laszczak/usb-cdns2-Device-side-header-file-for-CDNS2-driver/20230216-195428
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
+patch link:    https://lore.kernel.org/r/20230216105411.364157-4-pawell%40cadence.com
+patch subject: [PATCH 3/4] usb: cdns2: Add tracepoints for CDNS2 driver
+config: ia64-allmodconfig (https://download.01.org/0day-ci/archive/20230219/202302190436.AU6zwie0-lkp@intel.com/config)
+compiler: ia64-linux-gcc (GCC) 12.1.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/edb55f1c0a0ffe341211e08b1ebf162f48dd5b83
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Pawel-Laszczak/usb-cdns2-Device-side-header-file-for-CDNS2-driver/20230216-195428
+        git checkout edb55f1c0a0ffe341211e08b1ebf162f48dd5b83
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=ia64 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=ia64 SHELL=/bin/bash drivers/usb/
 
-diff --git a/Documentation/tools/rtla/index.rst b/Documentation/tools/rtla/index.rst
-index 840f0bf3e803..05d2652e4072 100644
---- a/Documentation/tools/rtla/index.rst
-+++ b/Documentation/tools/rtla/index.rst
-@@ -17,6 +17,7 @@ behavior on specific hardware.
-    rtla-timerlat
-    rtla-timerlat-hist
-    rtla-timerlat-top
-+   rtla-hwnoise
- 
- .. only::  subproject and html
- 
-diff --git a/Documentation/tools/rtla/rtla-hwnoise.rst b/Documentation/tools/rtla/rtla-hwnoise.rst
-new file mode 100644
-index 000000000000..fb1c52bbc00b
---- /dev/null
-+++ b/Documentation/tools/rtla/rtla-hwnoise.rst
-@@ -0,0 +1,107 @@
-+.. SPDX-License-Identifier: GPL-2.0
-+
-+============
-+rtla-hwnoise
-+============
-+------------------------------------------
-+Detect and quantify hardware-related noise
-+------------------------------------------
-+
-+:Manual section: 1
-+
-+SYNOPSIS
-+========
-+
-+**rtla hwnoise** [*OPTIONS*]
-+
-+DESCRIPTION
-+===========
-+
-+**rtla hwnoise** collects the periodic summary from the *osnoise* tracer
-+running with *interrupts disabled*. By disabling interrupts, and the scheduling
-+of threads as a consequence, only non-maskable interrupts and hardware-related
-+noise is allowed.
-+
-+The tool also allows the configurations of the *osnoise* tracer and the
-+collection of the tracer output.
-+
-+OPTIONS
-+=======
-+.. include:: common_osnoise_options.rst
-+
-+.. include:: common_top_options.rst
-+
-+.. include:: common_options.rst
-+
-+EXAMPLE
-+=======
-+In the example below, the **rtla hwnoise** tool is set to run on CPUs *1-7*
-+on a system with 8 cores/16 threads with hyper-threading enabled.
-+
-+The tool is set to detect any noise higher than *one microsecond*,
-+to run for *ten minutes*, displaying a summary of the report at the
-+end of the session::
-+
-+  # rtla hwnoise -c 1-7 -T 1 -d 10m -q
-+                                          Hardware-related Noise
-+  duration:   0 00:10:00 | time is in us
-+  CPU Period       Runtime        Noise  % CPU Aval   Max Noise   Max Single          HW          NMI
-+    1 #599       599000000          138    99.99997           3            3           4           74
-+    2 #599       599000000           85    99.99998           3            3           4           75
-+    3 #599       599000000           86    99.99998           4            3           6           75
-+    4 #599       599000000           81    99.99998           4            4           2           75
-+    5 #599       599000000           85    99.99998           2            2           2           75
-+    6 #599       599000000           76    99.99998           2            2           0           75
-+    7 #599       599000000           77    99.99998           3            3           0           75
-+
-+
-+The first column shows the *CPU*, and the second column shows how many
-+*Periods* the tool ran during the session. The *Runtime* is the time
-+the tool effectively runs on the CPU. The *Noise* column is the sum of
-+all noise that the tool observed, and the *% CPU Aval* is the relation
-+between the *Runtime* and *Noise*.
-+
-+The *Max Noise* column is the maximum hardware noise the tool detected in a
-+single period, and the *Max Single* is the maximum single noise seen.
-+
-+The *HW* and *NMI* columns show the total number of *hardware* and *NMI* noise
-+occurrence observed by the tool.
-+
-+For example, *CPU 3* ran *599* periods of *1 second Runtime*. The CPU received
-+*86 us* of noise during the entire execution, leaving *99.99997 %* of CPU time
-+for the application. In the worst single period, the CPU caused *4 us* of
-+noise to the application, but it was certainly caused by more than one single
-+noise, as the *Max Single* noise was of *3 us*. The CPU has *HW noise,* at a
-+rate of *six occurrences*/*ten minutes*. The CPU also has *NMIs*, at a higher
-+frequency: around *seven per second*.
-+
-+The tool should report *0* hardware-related noise in the ideal situation.
-+For example, by disabling hyper-threading to remove the hardware noise,
-+and disabling the TSC watchdog to remove the NMI (it is possible to identify
-+this using tracing options of **rtla hwnoise**), it was possible to reach
-+the ideal situation in the same hardware::
-+
-+  # rtla hwnoise -c 1-7 -T 1 -d 10m -q
-+                                          Hardware-related Noise
-+  duration:   0 00:10:00 | time is in us
-+  CPU Period       Runtime        Noise  % CPU Aval   Max Noise   Max Single          HW          NMI
-+    1 #599       599000000            0   100.00000           0            0           0            0
-+    2 #599       599000000            0   100.00000           0            0           0            0
-+    3 #599       599000000            0   100.00000           0            0           0            0
-+    4 #599       599000000            0   100.00000           0            0           0            0
-+    5 #599       599000000            0   100.00000           0            0           0            0
-+    6 #599       599000000            0   100.00000           0            0           0            0
-+    7 #599       599000000            0   100.00000           0            0           0            0
-+
-+SEE ALSO
-+========
-+
-+**rtla-osnoise**\(1)
-+
-+Osnoise tracer documentation: <https://www.kernel.org/doc/html/latest/trace/osnoise-tracer.html>
-+
-+AUTHOR
-+======
-+Written by Daniel Bristot de Oliveira <bristot@kernel.org>
-+
-+.. include:: common_appendix.rst
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202302190436.AU6zwie0-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+   In file included from drivers/usb/gadget/udc/cdns2/cdns2-trace.h:29,
+                    from drivers/usb/gadget/udc/cdns2/cdns2-gadget.c:36:
+   drivers/usb/gadget/udc/cdns2/cdns2-debug.h: In function 'cdns2_decode_trb':
+>> drivers/usb/gadget/udc/cdns2/cdns2-debug.h:165:13: warning: variable 'ret' set but not used [-Wunused-but-set-variable]
+     165 |         int ret;
+         |             ^~~
+   drivers/usb/gadget/udc/cdns2/cdns2-gadget.c: In function 'cdns2_gadget_ep_enable':
+   drivers/usb/gadget/udc/cdns2/cdns2-gadget.c:1408:49: warning: variable 'comp_desc' set but not used [-Wunused-but-set-variable]
+    1408 |         const struct usb_ss_ep_comp_descriptor *comp_desc;
+         |                                                 ^~~~~~~~~
+--
+   In file included from drivers/usb/gadget/udc/cdns2/cdns2-trace.h:29,
+                    from drivers/usb/gadget/udc/cdns2/cdns2-ep0.c:13:
+   drivers/usb/gadget/udc/cdns2/cdns2-debug.h: In function 'cdns2_decode_trb':
+>> drivers/usb/gadget/udc/cdns2/cdns2-debug.h:165:13: warning: variable 'ret' set but not used [-Wunused-but-set-variable]
+     165 |         int ret;
+         |             ^~~
+   drivers/usb/gadget/udc/cdns2/cdns2-ep0.c: In function 'cdns2_ep0_stall':
+   drivers/usb/gadget/udc/cdns2/cdns2-ep0.c:93:12: warning: variable 'reg' set but not used [-Wunused-but-set-variable]
+      93 |         u8 reg;
+         |            ^~~
+
+
+vim +/ret +165 drivers/usb/gadget/udc/cdns2/cdns2-debug.h
+
+   160	
+   161	static inline const char *cdns2_decode_trb(char *str, size_t size, u32 flags,
+   162						   u32 length, u32 buffer)
+   163	{
+   164		int type = TRB_FIELD_TO_TYPE(flags);
+ > 165		int ret;
+   166	
+   167		switch (type) {
+   168		case TRB_LINK:
+   169			ret = snprintf(str, size,
+   170				       "LINK %08x type '%s' flags %c:%c:%c%c:%c",
+   171				       buffer, cdns2_trb_type_string(type),
+   172				       flags & TRB_CYCLE ? 'C' : 'c',
+   173				       flags & TRB_TOGGLE ? 'T' : 't',
+   174				       flags & TRB_CHAIN ? 'C' : 'c',
+   175				       flags & TRB_CHAIN ? 'H' : 'h',
+   176				       flags & TRB_IOC ? 'I' : 'i');
+   177			break;
+   178		case TRB_NORMAL:
+   179			ret = snprintf(str, size,
+   180				       "type: '%s', Buffer: %08x, length: %ld, burst len: %ld, "
+   181				       "flags %c:%c:%c%c:%c",
+   182				       cdns2_trb_type_string(type),
+   183				       buffer, TRB_LEN(length),
+   184				       TRB_FIELD_TO_BURST(length),
+   185				       flags & TRB_CYCLE ? 'C' : 'c',
+   186				       flags & TRB_ISP ? 'I' : 'i',
+   187				       flags & TRB_CHAIN ? 'C' : 'c',
+   188				       flags & TRB_CHAIN ? 'H' : 'h',
+   189				       flags & TRB_IOC ? 'I' : 'i');
+   190			break;
+   191		default:
+   192			ret = snprintf(str, size, "type '%s' -> raw %08x %08x %08x",
+   193				       cdns2_trb_type_string(type),
+   194				       buffer, length, flags);
+   195		}
+   196	
+   197		return str;
+   198	}
+   199	
+
 -- 
-2.39.1
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
