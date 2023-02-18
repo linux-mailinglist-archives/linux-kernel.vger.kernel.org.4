@@ -2,175 +2,238 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E6DC569BA86
-	for <lists+linux-kernel@lfdr.de>; Sat, 18 Feb 2023 15:55:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 77EDC69BA89
+	for <lists+linux-kernel@lfdr.de>; Sat, 18 Feb 2023 15:57:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229540AbjBROzt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 18 Feb 2023 09:55:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45180 "EHLO
+        id S229633AbjBRO5L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 18 Feb 2023 09:57:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45928 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229570AbjBROzr (ORCPT
+        with ESMTP id S229522AbjBRO5J (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 18 Feb 2023 09:55:47 -0500
-Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2085.outbound.protection.outlook.com [40.107.93.85])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8BB2193DE;
-        Sat, 18 Feb 2023 06:55:42 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Ps/ldELC0PvixDC4lDZ4BgUqXm4XeGW9oCyzvlUjVPx6Sz0QuKOxOoL1k61q5vVjgmRNqEcZ2wk6rByKSthCy8bnEQYaXSM37lsadV1bdEFMnaYaVvQM1/wRCelCDTwTS0jcQ19DUMhS1dv68OmNMAsd4yjzHLb1PZMFEty0XNzelF2CppCNzLU2Lu0Ek5Rd712EHsxocEwnStr1VF9nqfgy4u5Y8dFh4Ab3QfW6RxRB9jDumz9vUhHgZstx9bhfZHaqMqk3HLyvmlgHvhhw2plLrmUsoCtInIOzXPR1V6keEmqsHlGIr23l3YfhZ5hIc7RaxuXVOhBld1GpiHwz8w==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=cN4U2dPRmsrmfL0FCdfETMPyvPc2PVxnwB8419YiRTU=;
- b=gvAQLgihqiNcCDgMshz6/V4fn9FXxE66FUa8fS0rMHI+F7Z452g+D3AnUpAcmqr+oh+XfkI9uwJPrXR1zxZXY9sG2HcjNUrgJ+eyF5A28SYEv7+ctU8hfc1FVQkNNdF1fBTXBugtskzHoocEofeb42C8fSthNDrfzNBHxuIsegtToji0DgbTEQtZwSxLFRTSzFr/m1ckBl3ffSgSHf+yCgrLbLWyr6MyfzR+UUHnDa2C1GdnYRmUoQp4is4M3Y8RRzaw5uhgXLifNbkqCtnBUJjgNjYfGxXDKDriOTYUERTzRZWHu4YnjFqMWnnVzqGGmt1+eWK8edz8poMmOz6fJA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=cN4U2dPRmsrmfL0FCdfETMPyvPc2PVxnwB8419YiRTU=;
- b=wRjouS8oQdRcXmTaI47XS/KMmkGlYoi63ZvWOpBvEf4AyC2t4isx/veo6kt4vTVu8wy4Hll6rVpQkmFg1JpsQ/ok5frkGNO/7IY1EtR78ORgQ6QRGfPIBRVBIt283Dbj68xbXb3rxZlyCPfkzhlrO59nDmz9XJPTSzciX3tW9Js=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from DM4PR12MB5229.namprd12.prod.outlook.com (2603:10b6:5:398::12)
- by CH0PR12MB5076.namprd12.prod.outlook.com (2603:10b6:610:e3::17) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6111.18; Sat, 18 Feb
- 2023 14:55:41 +0000
-Received: from DM4PR12MB5229.namprd12.prod.outlook.com
- ([fe80::6cc0:9c7a:bd00:441c]) by DM4PR12MB5229.namprd12.prod.outlook.com
- ([fe80::6cc0:9c7a:bd00:441c%5]) with mapi id 15.20.6111.018; Sat, 18 Feb 2023
- 14:55:40 +0000
-Message-ID: <f4a1531d-954b-ae68-a202-8ae4e7e78485@amd.com>
-Date:   Sat, 18 Feb 2023 08:55:38 -0600
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH 2/5] KVM: x86: Shrink struct kvm_queued_exception
-Content-Language: en-US
-To:     Mathias Krause <minipli@grsecurity.net>, kvm@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org,
-        Sean Christopherson <seanjc@google.com>,
-        Paolo Bonzini <pbonzini@redhat.com>
-References: <20230213163351.30704-1-minipli@grsecurity.net>
- <20230213163351.30704-3-minipli@grsecurity.net>
-From:   Tom Lendacky <thomas.lendacky@amd.com>
-In-Reply-To: <20230213163351.30704-3-minipli@grsecurity.net>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: SN7PR04CA0065.namprd04.prod.outlook.com
- (2603:10b6:806:121::10) To DM4PR12MB5229.namprd12.prod.outlook.com
- (2603:10b6:5:398::12)
+        Sat, 18 Feb 2023 09:57:09 -0500
+Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F262193C4
+        for <linux-kernel@vger.kernel.org>; Sat, 18 Feb 2023 06:57:08 -0800 (PST)
+Received: by mail-ed1-x52f.google.com with SMTP id ee44so171908edb.5
+        for <linux-kernel@vger.kernel.org>; Sat, 18 Feb 2023 06:57:08 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=amarulasolutions.com; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=wuUX11iGDln05bGMWVMxB0dWuTwObLjcPQ1PL8HVstE=;
+        b=TO1sqPVUyJGIb+lcWOqRLCmRL53S3p7PYEuwcJqBjxy2hOUPbizuqLSLkr/7Fe74u1
+         THZw63sEruHlNMfhdFLCqLIge3Ho68shBZDWaFJFss7FxgyIJjECOzbkZs80m2TC1cnl
+         7RMgcuPSiDugw4WDWAEjTnvxwusnqSGoce3DM=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=wuUX11iGDln05bGMWVMxB0dWuTwObLjcPQ1PL8HVstE=;
+        b=RcExYSdQl5HOfD4rAgZO3T1wITYBJUKu4lRs63SlzXzGz43Z/jKgaHFuiAMCwQHPhv
+         KOLYIb6kIH8pSNlUE2J6TUxlLQtEEtURCUBSNyIq3aU5HusUd8zlRvn+fa7pBWn4L9/a
+         Qrg8cdMZ5vjCNs7uq8A9+LFfLOUc1r92XsxDcK7hrg7uHovE9VUHRrSJKNferGMGRDDA
+         MQ4+oRRWO+upDvaHhiwe7p1uhJF5FpFsg3CKW3GAyTi/OpjbhkxMYnhMXrAREmQLKFRX
+         nFiFDVmYTt2W5qqRgBamZZnwDlSSYyYLVm+PTaJuQE8JXMrNPtbIJclADcOnMpG+oSC1
+         OImQ==
+X-Gm-Message-State: AO0yUKUF/O/wf4nk3oDFRZUh5z/ElTBXmJotJWGNOqJH16A5OWn99D8p
+        YjK+7HhK3Z+rp0FZWz+dvArwxZZnxC61LvbhnwJGhA==
+X-Google-Smtp-Source: AK7set+g69qne69Z1Rg+H7pU25a2Zh+cUUv2WW+rcITTYgqdOvren38Zfqax5xPGWOq0fM2E76StfT16/tPrw4UnnuA=
+X-Received: by 2002:a50:bac7:0:b0:4ad:7482:cd3b with SMTP id
+ x65-20020a50bac7000000b004ad7482cd3bmr59075ede.6.1676732227744; Sat, 18 Feb
+ 2023 06:57:07 -0800 (PST)
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DM4PR12MB5229:EE_|CH0PR12MB5076:EE_
-X-MS-Office365-Filtering-Correlation-Id: a48763bf-6b8e-4ef7-cf2b-08db11c033bc
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: J6Pue0BRJIan/Oa4vAQwlqqDXrWkri61mahdQVvXQyBkf9GMs/6a/XUe945yUnxn9ET6WfzcrWCRx0UNWQ8+K1k1CKA+/T8tHhBwnMD96EeKp41YneIvtAuNdx9HASjY6XmN2A/Z7Znl6TBXYIW/V4ibii8KIwc1fvexDHRAKJ8SH65QmaK2Z97zjK/NTxeo9+5H1PcDKsiT2j/GjVzc82guQ27HVLyTE35LrK9g24Gv5NbcUQEbtKG4nwLAbd9GVo0WgJmxaqoc0Fat6hEJTL6ShYP56OB78fMcORKtrJMXINk2wo3AZFVUtGPGakVpwmTtbDnUvgt1/vTIaJDMt/LfnI/cwl03JEH//vf0rrApMYQ6Xw18+/w9gdjVCYBS7GBvel9uNmIbGyk0RWKBx1bXhLUE97EQvcBAWeCcjS4C2i5Hq40QEf/F685KkFgVuqvK8BIbvCKUuSXSJyxNjrJ7RRnb4pjr7LbjxD4+YaHBGlERuvvhdYq1pwwG28WenQEaXtbuxiqbkPj1Qon7qlBUfzCRDOSk9g7/rOx+V3UjONTwHLm13XLomZT+2m+uFTvX2z8ouTrhhyxHsbRmGTbxvUJAWH+fyfrlHVXDGt/xsKKViOElCIJ2+l6XvWHuEycI/zQcDgV+/rDE48q08Jj8G+Dq+jgPU0LYCEMTh2xzFs4PxjDUsoeEOy0rec4bGTMsQHJljpjLKym3GvfLNn5CZcENfY/wF5NPCCXZXe0=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM4PR12MB5229.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(376002)(366004)(39860400002)(396003)(136003)(346002)(451199018)(186003)(26005)(53546011)(6512007)(2616005)(31686004)(6486002)(478600001)(54906003)(6506007)(316002)(83380400001)(38100700002)(41300700001)(2906002)(8936002)(66946007)(66556008)(66476007)(8676002)(4326008)(5660300002)(36756003)(31696002)(86362001)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?TUVsRy81b04vQnN3dVRiUVI2VUp0czVkVGJmUmJpRG9TNEdTWFhtOHZMdDlz?=
- =?utf-8?B?VnBGZWNPaG96alFndDUzMU82YWo1b1hzRHc3emw4a3hlejd4am14Ykk4aWM0?=
- =?utf-8?B?Z3FaZmFrOTRkQ09YcFYxMnF3QmJPQXlpNG9oL0FWY2lpc01UdFlIODhPbitI?=
- =?utf-8?B?dzNMaTdOODRpdGozRXZmL1ZvZldnNVNvUENoWVNHanVZZnovSC9lYVJkMzg0?=
- =?utf-8?B?SUE4VlhVM1Q0VDRtL05zUG9CQ2RlUFBIYnFhQ3JDWVovb0w1OXF5em53dENL?=
- =?utf-8?B?cmhYVmpyTGJteGE1UnB0MGZNanc0TVdVMm1TMDUxNGJMUUZsK2U2aGdkM0pD?=
- =?utf-8?B?bWlWbnZ6a2tpc2dMdHhiZ0lHb3RsTWhSb2VrODBxbzl2cVc4VVZRSFI1QVN3?=
- =?utf-8?B?azUwV2xKWHVVTnJoS212OE1Ub0wwQUZ4SERqc2JROXd0S1lYWjlKdm9rRmxO?=
- =?utf-8?B?dXdURnpJUWh0SjQ3cjBWTlo1SmxCZEtrT21RSVB3Wm02L0d2Nng4ckdUNmRB?=
- =?utf-8?B?dnVSNU5mWWRoZXd3ZVJmYUdEVkdQc0FKMmptd0lWU053L2RxQnJiTjg3VSs1?=
- =?utf-8?B?WTVvK0NrbmZ1T2lsdUlnRUVFZTR6NWNZdFRCOXN5S1YyVWFXMzZhbWVnRm5D?=
- =?utf-8?B?THNvUWFNR2cyYmhxRlNKaTc5Q1hEdElycCtlbXovRlREYnI3VkM4QVJoNmc1?=
- =?utf-8?B?S2RMamJ4c3djQzF4MlE5TjNUbDY0aWJ5M2pzc2FJTkhhcENnYmNXR28rQlF6?=
- =?utf-8?B?T090NFNZbHJIejk0YUFFM2R4QVFUeEVmQmtNejNSWko0Z0pldkFOaWZJL3hS?=
- =?utf-8?B?THd5bUs0bmlGZUtaTGVKVXFXeFUwVWpwTWduWEU1SUhlblloSzl2MDFwdVoy?=
- =?utf-8?B?akRzMEpNalJCMDJhaGREb3pJeUlpNFdyd2xGVWpSS1dPa1pMU3Yzd2lzM1VI?=
- =?utf-8?B?MHJyWFNQd2Q5ektZZjRFRGoyTFczM0YwMm5mL0s0OFlNejBSVkV6RlNmbXcw?=
- =?utf-8?B?MTFaSXZZU0pBZUJKTCtRSFkvWTZpS0JXdVVObEcxWHYzWk82M052YzI2cmJY?=
- =?utf-8?B?b1BiOHUyc2NaNkY3SUpQOUdCNExQN242aHZLaDhkRFZraUdZSWpPdFYxV2Vk?=
- =?utf-8?B?bCs3QW56M0hnaU5OY081eG10OU9PVFlIRzRvK2gwVmg0ZFQzNXhranNNdUpv?=
- =?utf-8?B?MVZEbC9uMG5Sc05GT25XWnZTSC9ycFJUWEFRVXJOQzdZUzFGMG9UTFZYMVRM?=
- =?utf-8?B?YnNiTXUwVUVuWDBVUEErZ2o1bHhqakliRUI0bXkvZHFyK2V5WGNUcnNTTFVL?=
- =?utf-8?B?T0VMZXl3dFo2YkRrdTZlMkdsQkVLMmpKQlhpK0VTQ2VNclpaaWtoQjlCVk0w?=
- =?utf-8?B?TlBBRHRKMlF2cVpEODVDS2EyV1kwS0JDT1lkYUJwWitLa1R5S0FZcjhPS2da?=
- =?utf-8?B?YzJLQUVWd1dmTXpyS1hhTldxZ2IwcmljN0Z0VHpiajQ2QTFvS1RmR1hkR25G?=
- =?utf-8?B?aUxOZlNiTitKcHFKMVhxYmpBR1ZFSm15QVN6Z0QwWnZyUHEzZE1zSWxrTjI5?=
- =?utf-8?B?eW9sZks0QmZJUVJOdEFsVm05d2tkQlU0VmFVM2FPM1RNNll5RG1VU1RXSG9Q?=
- =?utf-8?B?N1lXSEVpZk9ySUROSVl5SmxVcmVDSExPVFU0cnZpemErb0FSc2QzeVdDZGoz?=
- =?utf-8?B?STNDc3VMeTBvUVhtRHJUSmlINlBlaDNaRjZGb1owcDd0QUVweEh0MjIrV2t0?=
- =?utf-8?B?WU56VUtUME5SQWZSY2hHU01EeGdSQ0J1Zzl3eklvSTd0UXJBd2lOQ2dLa3Ni?=
- =?utf-8?B?SHBLRFZsZVhMVFhKcFF3NXZuQTdwaVJ0b29kSzc2bnRrZXdscE82UUh2UDNW?=
- =?utf-8?B?RUJoNjFHdjNFeWRCQ0djcDQ4eGwvdDZtREYvNHZpZzlrd0wrYkk2c0N4dlM5?=
- =?utf-8?B?YTM1RExoNisrbmlPaWxzNjFQdUJwaTFsWkk2cEROVE4wK2VGcUNxVDN6NGUr?=
- =?utf-8?B?dUNYVFBpeDFpTXBQR09DUjhsU3JWTHMyVHVMNU1vVkk0WlArR0JuTzVlOXM5?=
- =?utf-8?B?cjVqejhHRExQaktRS1RPeGVzYmU1ZFovQTRQWE8wbVpKank0VUNRSlBBSVBF?=
- =?utf-8?Q?NnBsJFgY3b7AecDL4flBcfER0?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: a48763bf-6b8e-4ef7-cf2b-08db11c033bc
-X-MS-Exchange-CrossTenant-AuthSource: DM4PR12MB5229.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 Feb 2023 14:55:40.4806
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: OsPMrmaH6ZyEybkfdS9MwcgPOX+iicCcFbLFn6bIr93RVlntovv0W04eQ5NkTHfw/X1kQzxFJ/gWeSLPLK2qAA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH0PR12MB5076
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
-        autolearn=no autolearn_force=no version=3.4.6
+References: <20230211064527.3481754-1-jstultz@google.com> <20230211064527.3481754-2-jstultz@google.com>
+In-Reply-To: <20230211064527.3481754-2-jstultz@google.com>
+From:   Michael Nazzareno Trimarchi <michael@amarulasolutions.com>
+Date:   Sat, 18 Feb 2023 15:56:56 +0100
+Message-ID: <CAOf5uwnW1u=nfFnj3C8kCVmhgwRaVh6sHZR1RGnXdbrCNpkGVg@mail.gmail.com>
+Subject: Re: [RFC][PATCH 2/2] time: alarmtimer: Use TASK_FREEZABLE to cleanup
+ freezer handling
+To:     John Stultz <jstultz@google.com>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Stephen Boyd <sboyd@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+        Michael <michael@mipisi.de>, kernel-team@android.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/13/23 10:33, Mathias Krause wrote:
-> Reshuffle the boolean members of struct kvm_queued_exception and make
-> them individual bits, allowing denser packing.
-> 
-> This allows us to shrink the object size from 24 to 16 bytes for 64 bit
-> builds.
-> 
-> Signed-off-by: Mathias Krause <minipli@grsecurity.net>
+Hi John
+
+On Sat, Feb 11, 2023 at 7:45 AM John Stultz <jstultz@google.com> wrote:
+>
+> Instead of trying to handle the freezer waking up tasks from
+> schedule() in nanosleep on alarmtimers explicitly, use
+> TASK_FREEZABLE which marks the task freezable when it goes
+> to schedule, which prevents the signal wakeup.
+>
+> This allows for the freezer handling to be removed, simplifying
+> the code.
+>
+> Cc: Thomas Gleixner <tglx@linutronix.de>
+> Cc: Stephen Boyd <sboyd@kernel.org>
+> Cc: Arnd Bergmann <arnd@arndb.de>
+> Cc: Michael <michael@mipisi.de>
+> Cc: Michael Trimarchi <michael@amarulasolutions.com>
+> Cc: kernel-team@android.com
+> Originally-by: Thomas Gleixner <tglx@linutronix.de>
+> Link: https://lore.kernel.org/lkml/alpine.DEB.2.21.1909021247250.3955@nanos.tec.linutronix.de/
+> [jstultz: Forward ported to 6.2-rc and split out from a separate
+>           fix.]
+> Signed-off-by: John Stultz <jstultz@google.com>
 > ---
->   arch/x86/include/asm/kvm_host.h | 8 ++++----
->   1 file changed, 4 insertions(+), 4 deletions(-)
-> 
-> diff --git a/arch/x86/include/asm/kvm_host.h b/arch/x86/include/asm/kvm_host.h
-> index 43329c60a6b5..040eee3e9583 100644
-> --- a/arch/x86/include/asm/kvm_host.h
-> +++ b/arch/x86/include/asm/kvm_host.h
-> @@ -701,13 +701,13 @@ struct kvm_vcpu_xen {
->   };
->   
->   struct kvm_queued_exception {
-> -	bool pending;
-> -	bool injected;
-> -	bool has_error_code;
-> +	u8 pending : 1;
-> +	u8 injected : 1;
-> +	u8 has_error_code : 1;
-> +	u8 has_payload : 1;
+>  kernel/time/alarmtimer.c | 53 ++--------------------------------------
+>  1 file changed, 2 insertions(+), 51 deletions(-)
+>
+> diff --git a/kernel/time/alarmtimer.c b/kernel/time/alarmtimer.c
+> index f7b2128f64e2..15ecde8fcc1b 100644
+> --- a/kernel/time/alarmtimer.c
+> +++ b/kernel/time/alarmtimer.c
+> @@ -49,14 +49,6 @@ static struct alarm_base {
+>         clockid_t               base_clockid;
+>  } alarm_bases[ALARM_NUMTYPE];
+>
+> -#if defined(CONFIG_POSIX_TIMERS) || defined(CONFIG_RTC_CLASS)
+> -/* freezer information to handle clock_nanosleep triggered wakeups */
+> -static enum alarmtimer_type freezer_alarmtype;
+> -static ktime_t freezer_expires;
+> -static ktime_t freezer_delta;
+> -static DEFINE_SPINLOCK(freezer_delta_lock);
+> -#endif
+> -
+>  #ifdef CONFIG_RTC_CLASS
+>  /* rtc timer and device for setting alarm wakeups at suspend */
+>  static struct rtc_timer                rtctimer;
+> @@ -241,19 +233,12 @@ EXPORT_SYMBOL_GPL(alarm_expires_remaining);
+>   */
+>  static int alarmtimer_suspend(struct device *dev)
+>  {
+> -       ktime_t min, now, expires;
+> +       ktime_t now, expires, min = KTIME_MAX;
+>         int i, ret, type;
+>         struct rtc_device *rtc;
+>         unsigned long flags;
+>         struct rtc_time tm;
+>
+> -       spin_lock_irqsave(&freezer_delta_lock, flags);
+> -       min = freezer_delta;
+> -       expires = freezer_expires;
+> -       type = freezer_alarmtype;
+> -       freezer_delta = KTIME_MAX;
+> -       spin_unlock_irqrestore(&freezer_delta_lock, flags);
+> -
+>         rtc = alarmtimer_get_rtcdev();
+>         /* If we have no rtcdev, just return */
+>         if (!rtc)
+> @@ -480,38 +465,6 @@ u64 alarm_forward_now(struct alarm *alarm, ktime_t interval)
+>  EXPORT_SYMBOL_GPL(alarm_forward_now);
+>
+>  #ifdef CONFIG_POSIX_TIMERS
+> -
+> -static void alarmtimer_freezerset(ktime_t absexp, enum alarmtimer_type type)
+> -{
+> -       struct alarm_base *base;
+> -       unsigned long flags;
+> -       ktime_t delta;
+> -
+> -       switch(type) {
+> -       case ALARM_REALTIME:
+> -               base = &alarm_bases[ALARM_REALTIME];
+> -               type = ALARM_REALTIME_FREEZER;
+> -               break;
+> -       case ALARM_BOOTTIME:
+> -               base = &alarm_bases[ALARM_BOOTTIME];
+> -               type = ALARM_BOOTTIME_FREEZER;
+> -               break;
+> -       default:
+> -               WARN_ONCE(1, "Invalid alarm type: %d\n", type);
+> -               return;
+> -       }
+> -
+> -       delta = ktime_sub(absexp, base->get_ktime());
+> -
+> -       spin_lock_irqsave(&freezer_delta_lock, flags);
+> -       if (delta < freezer_delta) {
+> -               freezer_delta = delta;
+> -               freezer_expires = absexp;
+> -               freezer_alarmtype = type;
+> -       }
+> -       spin_unlock_irqrestore(&freezer_delta_lock, flags);
+> -}
+> -
+>  /**
+>   * clock2alarm - helper that converts from clockid to alarmtypes
+>   * @clockid: clockid.
+> @@ -750,7 +703,7 @@ static int alarmtimer_do_nsleep(struct alarm *alarm, ktime_t absexp,
+>         struct restart_block *restart;
+>         alarm->data = (void *)current;
+>         do {
+> -               set_current_state(TASK_INTERRUPTIBLE);
+> +               set_current_state(TASK_INTERRUPTIBLE | TASK_FREEZABLE);
+>                 alarm_start(alarm, absexp);
+>                 if (likely(alarm->data))
+>                         schedule();
+> @@ -765,8 +718,6 @@ static int alarmtimer_do_nsleep(struct alarm *alarm, ktime_t absexp,
+>         if (!alarm->data)
+>                 return 0;
+>
+> -       if (freezing(current))
+> -               alarmtimer_freezerset(absexp, type);
+>         restart = &current->restart_block;
+>         if (restart->nanosleep.type != TT_NONE) {
+>                 struct timespec64 rmt;
+> --
+> 2.39.1.581.gbfd45094c4-goog
+>
 
-I find doing something like this is clearer and easier to read:
+I have changed the alarm test to check some corner case
 
-	u8 pending		: 1,
-	   injected		: 1,
-	   has_error_code	: 1,
-	   has_payload		: 1,
-	   __reserved		: 4;
+periodic_alarm
+Start time (CLOCK_REALTIME_ALARM)[   85.624819] alarmtimer_enqueue: called
+: 94:865096467
+Setting alarm for every 4 seconds
+Starting suspend loops
+[   89.674127] PM: suspend entry (deep)
+[   89.714916] Filesystems sync: 0.037 seconds
+[   89.733594] Freezing user space processes
+[   89.740680] Freezing user space processes completed (elapsed 0.002 seconds)
+[   89.748593] OOM killer disabled.
+[   89.752257] Freezing remaining freezable tasks
+[   89.756807] alarmtimer_fired: called
+[   89.756831] alarmtimer_dequeue: called <---- HERE
 
-(you don't have to have the __reserved, though). Just throwing it out there.
+I have the dequeue but not an enquee of the periodic alarm. I was
+thinking that create a periodic time of 4 seconds
+and have the first alarm on suspend will always guarantee the re-arm
+it but it's not working as I expect
 
-Thanks,
-Tom
+Michael
 
->   	u8 vector;
->   	u32 error_code;
->   	unsigned long payload;
-> -	bool has_payload;
->   };
->   
->   struct kvm_vcpu_arch {
+
+
+
+[   89.767735] Freezing remaining freezable tasks completed (elapsed
+0.003 seconds)
+[   89.775626] printk: Suspending console(s) (use no_console_suspend to debug)
+
+
+-- 
+Michael Nazzareno Trimarchi
+Co-Founder & Chief Executive Officer
+M. +39 347 913 2170
+michael@amarulasolutions.com
+__________________________________
+
+Amarula Solutions BV
+Joop Geesinkweg 125, 1114 AB, Amsterdam, NL
+T. +31 (0)85 111 9172
+info@amarulasolutions.com
+www.amarulasolutions.com
