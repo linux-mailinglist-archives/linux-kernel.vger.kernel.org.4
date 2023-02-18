@@ -2,84 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 119F969B8CF
-	for <lists+linux-kernel@lfdr.de>; Sat, 18 Feb 2023 09:50:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F208269B8D2
+	for <lists+linux-kernel@lfdr.de>; Sat, 18 Feb 2023 09:54:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229758AbjBRIuQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 18 Feb 2023 03:50:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42812 "EHLO
+        id S229561AbjBRIyU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 18 Feb 2023 03:54:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44410 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229463AbjBRIuO (ORCPT
+        with ESMTP id S229461AbjBRIyR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 18 Feb 2023 03:50:14 -0500
-Received: from nautica.notk.org (nautica.notk.org [91.121.71.147])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1008F4BE8E;
-        Sat, 18 Feb 2023 00:50:13 -0800 (PST)
-Received: by nautica.notk.org (Postfix, from userid 108)
-        id 997A6C01F; Sat, 18 Feb 2023 09:50:35 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=codewreck.org; s=2;
-        t=1676710235; bh=sXdImI4nkNQNTEPrwVQoa5Yw0dY8HCwd1vHRxqYPKJY=;
+        Sat, 18 Feb 2023 03:54:17 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A0803C792
+        for <linux-kernel@vger.kernel.org>; Sat, 18 Feb 2023 00:54:16 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 19B4860909
+        for <linux-kernel@vger.kernel.org>; Sat, 18 Feb 2023 08:54:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E9C63C433EF;
+        Sat, 18 Feb 2023 08:54:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1676710455;
+        bh=M0KZIpvZENwj1uzIM0ne/gt/L6cq4cB4mbBHSeUv2Ms=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=QL+JBVm61ZHbZfpzS0z30/QJHPq2fa/YzotMPK8iFUJLStoBdU3CvTEX2jzEnYuyw
-         6z+Y096nExUAvDDhRe/fdtFaQJYXFvpllyfTWLbL2Yr97I3VlnxjKukaYrL6YwCr3l
-         yN7PWCPPBryhmUlfmN/dFxmI+JfDwDgj5yvTd096tuMOtF0hz092kED9hdixeyWaip
-         dgGQ+WsT4LMzOERnG3ibRkMKZDnhBNe02YYZGhNCLlrPm4wzqxOXXCf9gw3RRCTkap
-         H8IUTwS1+E4v+Wrjhc4+T/cN5lREMVLiBZC+XotGEfNUbbPPgkyEF2Zti42MqvzLzu
-         rozfzpcr/sK6w==
+        b=a1C5y0o5k97dqezI6+zyiyzEvFPLALtXHS9ehludc8HdYfdRK1ciiU4ALNThqg60F
+         p3KWAvS3JYdgCgiQORleU63BK6ATvDhG7ZgkI/sGnwG0x3muCKJvsPEryTvrII/+bw
+         wmLz9moU6xG0fDwDte9zOUvd8XP6B77yqpCExmcU=
+Date:   Sat, 18 Feb 2023 09:54:12 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Saravana Kannan <saravanak@google.com>
+Cc:     Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Tony Lindgren <tony@atomide.com>,
+        Doug Anderson <dianders@chromium.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Luca Weiss <luca.weiss@fairphone.com>, kernel-team@android.com,
+        linux-kernel@vger.kernel.org
+Subject: Re: [RFC v1 0/4] Simplify regulator supply resolution code by
+ offloading to driver core
+Message-ID: <Y/CSNLm9iihwRa72@kroah.com>
+References: <20230218083252.2044423-1-saravanak@google.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230218083252.2044423-1-saravanak@google.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-X-Spam-Level: 
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
-Received: from odin.codewreck.org (localhost [127.0.0.1])
-        by nautica.notk.org (Postfix) with ESMTPS id 14017C009;
-        Sat, 18 Feb 2023 09:50:31 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=codewreck.org; s=2;
-        t=1676710234; bh=sXdImI4nkNQNTEPrwVQoa5Yw0dY8HCwd1vHRxqYPKJY=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=bzl1CnpZNMJWsCQVMYsRbq3nj3xhcmrEDd46AQZjNYKstgvhUqU5mnLsB09u/5Kr1
-         Bs9JG8rQBU/IOlCHxv6LLcWyK0HfNk/1lEG1su3KzncFwiIBRHsAzHbkCUOMChK6wV
-         xW9CpXh09lGoDMnXmGr8TcXy9bFxgw0uENfHiwFxYGKBPOacHo10AXGnYEkAykR9xy
-         IeuibZbKtpopP7VE05IsStciz+JQqmbxalu6Vf3Ris23cezj7Jbrc34bYBiqmE2QPX
-         c+WzICD5d7zcnPOTWBb5opd8D4ctI5VNpv1Rm5CSa8sXXXuYl6vexboUGwa4UA33Xo
-         cRAycGsYP0ojQ==
-Received: from localhost (odin.codewreck.org [local])
-        by odin.codewreck.org (OpenSMTPD) with ESMTPA id 271fab5c;
-        Sat, 18 Feb 2023 08:50:05 +0000 (UTC)
-Date:   Sat, 18 Feb 2023 17:49:50 +0900
-From:   asmadeus@codewreck.org
-To:     Eric Van Hensbergen <ericvh@kernel.org>
-Cc:     v9fs-developer@lists.sourceforge.net, rminnich@gmail.com,
-        lucho@ionkov.net, linux-kernel@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux_oss@crudebyte.com
-Subject: Re: [PATCH v4 09/11] fs/9p: fix error reporting in v9fs_dir_release
-Message-ID: <Y/CRLskZ7QOROVWk@codewreck.org>
-References: <20230124023834.106339-1-ericvh@kernel.org>
- <20230218003323.2322580-1-ericvh@kernel.org>
- <20230218003323.2322580-10-ericvh@kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20230218003323.2322580-10-ericvh@kernel.org>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Eric Van Hensbergen wrote on Sat, Feb 18, 2023 at 12:33:21AM +0000:
-> Checking the p9_fid_put value allows us to pass back errors
-> involved if we end up clunking the fid as part of dir_release.
+On Sat, Feb 18, 2023 at 12:32:47AM -0800, Saravana Kannan wrote:
+> Hi Mark/Liam,
 > 
-> This can help with more graceful response to errors in writeback
-> among other things.
+> This series is just an RFC to see if you agree with where this is going.
+> Please point out bugs, but don't bother with a proper code review.
+> 
+> The high level idea is to not reimplement what driver core can already
+> handle for us and use it to do some of the work. Instead of trying to
+> resolve supplies from all different code paths and bits and pieces of
+> the tree, we just build it from the root to the leaves by using deferred
+> probing to sequence things in the right order.
+> 
+> The last patch is the main one. Rest of them are just setting up for it.
+> 
+> I believe there's room for further simplification but this is what I
+> could whip up as a quick first draft that shows the high level idea.
+> I'll probably need some help with getting a better understanding of why
+> things are done in a specific order in regulator_register() before I
+> could attempt simplifying things further.
+> 
+> Ideally, regulator_register() would just have DT parsing, init data
+> struct sanity checks and adding the regulator device and then we move
+> everything else to into the probe function that's guaranteed to run only
+> after the supply has been resolved/ready to resolve.
+> 
+> fw_devlink/device links should further optimize the flow and also allow
+> us to simplify some of the guarantees and address some of the existing
+> FIXMEs. But this patch series is NOT dependent on fw_devlink or device
+> links.
+> 
+> Any thoughts on where this is going?
+> 
+> I've tested this on one hardware I have and it works and nothing is
+> broken. But the regulator tree in my hardware isn't that complicated or
+> deep. The regulators are also added mostly in the right order (due to
+> existing fw_devlink). So if you agree with the idea, the next step is to
+> ask people to give it a test.
+> 
+> Also, it's based on driver-core-next since that's what I had synced up
+> and had a working baseline. I'll rebase it on the regulator tree when I
+> go from RFC -> PATCH.
 
-That is good!
+At first glance, this looks sane to me, thanks for doing this work!
 
-Note if there are other refs we won't see any error :/ But I think we
-should check p9_fid_put return value way more often, even if all we do
-with it is print a warning at some debug level for context.
-
-Reviewed-by: Dominique Martinet <asmadeus@codewreck.org>
-
---
-Dominique
+greg k-h
