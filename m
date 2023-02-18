@@ -2,106 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B826C69B919
-	for <lists+linux-kernel@lfdr.de>; Sat, 18 Feb 2023 10:28:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D10CB69B91B
+	for <lists+linux-kernel@lfdr.de>; Sat, 18 Feb 2023 10:29:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229678AbjBRJ2Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 18 Feb 2023 04:28:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35432 "EHLO
+        id S229765AbjBRJ3G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 18 Feb 2023 04:29:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36122 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229460AbjBRJ2W (ORCPT
+        with ESMTP id S229460AbjBRJ3D (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 18 Feb 2023 04:28:22 -0500
-Received: from mail-il1-f200.google.com (mail-il1-f200.google.com [209.85.166.200])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDF00211EF
-        for <linux-kernel@vger.kernel.org>; Sat, 18 Feb 2023 01:28:21 -0800 (PST)
-Received: by mail-il1-f200.google.com with SMTP id v13-20020a92c80d000000b003159a0109ceso881911iln.12
-        for <linux-kernel@vger.kernel.org>; Sat, 18 Feb 2023 01:28:21 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:in-reply-to:date:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=co8hJ/WZbt1XO0idDjgfJacuecOeH77n3T8P38Z042c=;
-        b=UZVtjwrberzLh00T0xpC1VrgkF8+s8EaijJoIaFoi2gsFlIw2bmW7Mbb7gwljbDIiQ
-         s/UCSa0zj6LrYBqTbONwZuu2or675+iDglv7kq3myrX+f7k46Qz7q2JfZuB7d1KlAW/8
-         RD3f6iQRwtDWBUMq+i5hjaI7Gu/a+XXhHQwkQ0xXmd563UqIcFkw7aT8FfW569ZG7UCK
-         8w14iXz7KWhKKy8202Qgj1/K7B0so8EYQwbnWbeha/cWYOmOxnxc7aKge4Rq0avZtyIh
-         ga7u/xlRKJX/w5ec/wFt3sznUyHdiYoBY92xTfqpyzvDV6tJ4UlXQhQLbsiiLGR81lOc
-         x6Ug==
-X-Gm-Message-State: AO0yUKXmUBXIVTe/UrbZ3foTjR6U10DCYNTWUkIZdBgYE+GV4DvI/f4d
-        ihoIOOtfmM+wcRZcLUto7Kn3gaLqqLPB/JrLO7CP+qzvlHwH
-X-Google-Smtp-Source: AK7set8PPMM55SLG4o7QIQ7Ec6ZOFrLdL9L8APOOp6KPOjD/Eb71fjtmUCbpZvjxwBVwfItTMG51yIhu1iXg3rbcGRTKSuljDo8/
+        Sat, 18 Feb 2023 04:29:03 -0500
+Received: from pegase2.c-s.fr (pegase2.c-s.fr [93.17.235.10])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9A5829E26
+        for <linux-kernel@vger.kernel.org>; Sat, 18 Feb 2023 01:29:02 -0800 (PST)
+Received: from localhost (mailhub3.si.c-s.fr [172.26.127.67])
+        by localhost (Postfix) with ESMTP id 4PJjzx3JR0z9sbd;
+        Sat, 18 Feb 2023 10:29:01 +0100 (CET)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from pegase2.c-s.fr ([172.26.127.65])
+        by localhost (pegase2.c-s.fr [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id 1yBzKFv13ba2; Sat, 18 Feb 2023 10:29:01 +0100 (CET)
+Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
+        by pegase2.c-s.fr (Postfix) with ESMTP id 4PJjzx2ZJ4z9sWY;
+        Sat, 18 Feb 2023 10:29:01 +0100 (CET)
+Received: from localhost (localhost [127.0.0.1])
+        by messagerie.si.c-s.fr (Postfix) with ESMTP id 451668B768;
+        Sat, 18 Feb 2023 10:29:01 +0100 (CET)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from messagerie.si.c-s.fr ([127.0.0.1])
+        by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
+        with ESMTP id O_BMGtLZa0IN; Sat, 18 Feb 2023 10:29:01 +0100 (CET)
+Received: from PO20335.IDSI0.si.c-s.fr (unknown [192.168.7.180])
+        by messagerie.si.c-s.fr (Postfix) with ESMTP id 0E1C48B764;
+        Sat, 18 Feb 2023 10:29:01 +0100 (CET)
+Received: from PO20335.IDSI0.si.c-s.fr (localhost [127.0.0.1])
+        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.16.1) with ESMTPS id 31I9Sq3d644371
+        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
+        Sat, 18 Feb 2023 10:28:53 +0100
+Received: (from chleroy@localhost)
+        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.17.1/Submit) id 31I9SpLa644369;
+        Sat, 18 Feb 2023 10:28:51 +0100
+X-Authentication-Warning: PO20335.IDSI0.si.c-s.fr: chleroy set sender to christophe.leroy@csgroup.eu using -f
+From:   Christophe Leroy <christophe.leroy@csgroup.eu>
+To:     =?UTF-8?q?Pali=20Roh=C3=A1r?= <pali@kernel.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Nicholas Piggin <npiggin@gmail.com>
+Cc:     Christophe Leroy <christophe.leroy@csgroup.eu>,
+        linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        kernel test robot <lkp@intel.com>
+Subject: [PATCH] powerpc/e500: Add missing prototype for 'relocate_init'
+Date:   Sat, 18 Feb 2023 10:28:50 +0100
+Message-Id: <ac9107acf24135e1a07e8f84d2090572d43e3fe4.1676712510.git.christophe.leroy@csgroup.eu>
+X-Mailer: git-send-email 2.39.1
 MIME-Version: 1.0
-X-Received: by 2002:a6b:4419:0:b0:721:ff34:9ab8 with SMTP id
- r25-20020a6b4419000000b00721ff349ab8mr174179ioa.26.1676712501108; Sat, 18 Feb
- 2023 01:28:21 -0800 (PST)
-Date:   Sat, 18 Feb 2023 01:28:21 -0800
-In-Reply-To: <20230218091350.1928-1-hdanton@sina.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <00000000000004e79305f4f60dda@google.com>
-Subject: Re: [syzbot] [bridge?] [coreteam?] KASAN: vmalloc-out-of-bounds Read
- in __ebt_unregister_table
-From:   syzbot <syzbot+f61594de72d6705aea03@syzkaller.appspotmail.com>
-To:     hdanton@sina.com, linux-kernel@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1676712516; l=1217; s=20211009; h=from:subject:message-id; bh=pfVj+fGo1djC+tVecmlDArzordscRtCM4E2ms3R4K3U=; b=6OT4l93tyj8545rUYFu1CCuXDkDFOIwBCZTCy572l5zArzVPKJ6mFf5Lqe9Re/2q/QrmdRsKj5FV vPDMZSG/Af+/o+whdbcQrRI3MfiBcIWFAJsTfLU7EYX/2EJy9hn4
+X-Developer-Key: i=christophe.leroy@csgroup.eu; a=ed25519; pk=HIzTzUj91asvincQGOFx6+ZF5AoUuP9GdOtQChs7Mm0=
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+Kernel test robot reports:
 
-syzbot has tested the proposed patch but the reproducer is still triggering an issue:
-KASAN: vmalloc-out-of-bounds Read in ebt_unregister_table
+ arch/powerpc/mm/nohash/e500.c:314:21: warning: no previous prototype for 'relocate_init' [-Wmissing-prototypes]
+     314 | notrace void __init relocate_init(u64 dt_ptr, phys_addr_t start)
+         |                     ^~~~~~~~~~~~~
 
-==================================================================
-BUG: KASAN: vmalloc-out-of-bounds in __ebt_unregister_table net/bridge/netfilter/ebtables.c:1168 [inline]
-BUG: KASAN: vmalloc-out-of-bounds in ebt_unregister_table+0xc08/0xcf0 net/bridge/netfilter/ebtables.c:1370
-Read of size 4 at addr ffffc90003173000 by task kworker/u4:0/9
+Add it in mm/mmu_decl.h, close to associated is_second_reloc
+variable declaration.
 
-CPU: 1 PID: 9 Comm: kworker/u4:0 Not tainted 6.2.0-rc8-syzkaller-00083-g3ac88fa4605e-dirty #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/21/2023
-Workqueue: netns cleanup_net
-Call Trace:
- <TASK>
- __dump_stack lib/dump_stack.c:88 [inline]
- dump_stack_lvl+0xd1/0x138 lib/dump_stack.c:106
- print_address_description mm/kasan/report.c:306 [inline]
- print_report+0x15e/0x45d mm/kasan/report.c:417
- kasan_report+0xbf/0x1f0 mm/kasan/report.c:517
- __ebt_unregister_table net/bridge/netfilter/ebtables.c:1168 [inline]
- ebt_unregister_table+0xc08/0xcf0 net/bridge/netfilter/ebtables.c:1370
- ops_exit_list+0xb0/0x170 net/core/net_namespace.c:169
- cleanup_net+0x4ee/0xb10 net/core/net_namespace.c:613
- process_one_work+0x9bf/0x1710 kernel/workqueue.c:2289
- worker_thread+0x669/0x1090 kernel/workqueue.c:2436
- kthread+0x2e8/0x3a0 kernel/kthread.c:376
- ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:308
- </TASK>
+Reported-by: kernel test robot <lkp@intel.com>
+Link: https://lore.kernel.org/oe-kbuild-all/202302181136.wgyCKUcs-lkp@intel.com/
+Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
+---
+ arch/powerpc/mm/mmu_decl.h | 1 +
+ 1 file changed, 1 insertion(+)
 
-Memory state around the buggy address:
- ffffc90003172f00: f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8
- ffffc90003172f80: f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8
->ffffc90003173000: f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8
-                   ^
- ffffc90003173080: f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8
- ffffc90003173100: f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8
-==================================================================
-
-
-Tested on:
-
-commit:         3ac88fa4 Merge tag 'net-6.2-final' of git://git.kernel..
-git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-console output: https://syzkaller.appspot.com/x/log.txt?x=11ebf6cf480000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=fe56f7d193926860
-dashboard link: https://syzkaller.appspot.com/bug?extid=f61594de72d6705aea03
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-patch:          https://syzkaller.appspot.com/x/patch.diff?x=139e35d7480000
+diff --git a/arch/powerpc/mm/mmu_decl.h b/arch/powerpc/mm/mmu_decl.h
+index bd9784f77f2e..c6dccb4f06dc 100644
+--- a/arch/powerpc/mm/mmu_decl.h
++++ b/arch/powerpc/mm/mmu_decl.h
+@@ -120,6 +120,7 @@ extern int switch_to_as1(void);
+ extern void restore_to_as0(int esel, int offset, void *dt_ptr, int bootcpu);
+ void create_kaslr_tlb_entry(int entry, unsigned long virt, phys_addr_t phys);
+ void reloc_kernel_entry(void *fdt, int addr);
++void relocate_init(u64 dt_ptr, phys_addr_t start);
+ extern int is_second_reloc;
+ #endif
+ extern void loadcam_entry(unsigned int index);
+-- 
+2.39.1
 
