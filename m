@@ -2,121 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C320669BAE8
-	for <lists+linux-kernel@lfdr.de>; Sat, 18 Feb 2023 17:16:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4FC5E69BAEC
+	for <lists+linux-kernel@lfdr.de>; Sat, 18 Feb 2023 17:17:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229795AbjBRQQP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 18 Feb 2023 11:16:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49158 "EHLO
+        id S229523AbjBRQRf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 18 Feb 2023 11:17:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49724 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229436AbjBRQQN (ORCPT
+        with ESMTP id S229436AbjBRQRe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 18 Feb 2023 11:16:13 -0500
-Received: from mx01.omp.ru (mx01.omp.ru [90.154.21.10])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF04DEFAB;
-        Sat, 18 Feb 2023 08:16:10 -0800 (PST)
-Received: from [192.168.1.103] (31.173.84.74) by msexch01.omp.ru (10.188.4.12)
- with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.986.14; Sat, 18 Feb
- 2023 19:16:03 +0300
-Subject: Re: [PATCH 06/18] pata_parport: remove devtype from struct pi_adapter
-To:     Ondrej Zary <linux@zary.sk>,
-        Damien Le Moal <damien.lemoal@opensource.wdc.com>
-CC:     Christoph Hellwig <hch@lst.de>, Jens Axboe <axboe@kernel.dk>,
-        Tim Waugh <tim@cyberelk.net>, <linux-block@vger.kernel.org>,
-        <linux-parport@lists.infradead.org>, <linux-ide@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-References: <20230215194554.25632-1-linux@zary.sk>
- <20230215194554.25632-7-linux@zary.sk>
-From:   Sergey Shtylyov <s.shtylyov@omp.ru>
-Organization: Open Mobile Platform
-Message-ID: <e965c234-517f-007d-6839-a6afa5f054ad@omp.ru>
-Date:   Sat, 18 Feb 2023 19:16:03 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.10.1
+        Sat, 18 Feb 2023 11:17:34 -0500
+Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1833AEFAB;
+        Sat, 18 Feb 2023 08:17:33 -0800 (PST)
+Received: by mail-wr1-x42f.google.com with SMTP id u2so557999wrs.0;
+        Sat, 18 Feb 2023 08:17:33 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=ODMjy3oV9OZ/2U+MMAAOaloOxW1K2itgRE7CXAwpOc8=;
+        b=Nnhs0/hK0A3+OPTXxMjdmyN98e1ZbXPrBEjfseIKiqIWGBjc7jheWbxJlGbVjEYbod
+         zFPVaivM85keniIty8gLrcspQPQZIJPqDaNpTVK/yOVDIvxfOgm7P1tIuyhfz8vBZ0l0
+         21DVOEWd4NyT603rrd3cL2YY0pGV2fdbDe3IeU4vjGqLcC/Ac9aT7iggbLk/2S2kD8Td
+         F1HprfuFrfx43paeUwnPbeMQBamHWwb9U/gaFvdg7GHPpJ8D642Y9NlRxhIsvOq2K/j/
+         13J6jE3rmGP0T0gXrtTsQT4RUbwfZdWXEpaofYvy5F2owm0t9fj057k4jqVvI1qm9i6T
+         LPJw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=ODMjy3oV9OZ/2U+MMAAOaloOxW1K2itgRE7CXAwpOc8=;
+        b=ID8x4tVYp5z23oBNdEiCBiexDM1qmJw4mZ0Q90NmRaP2hJ6aR8akyCEOQU1ZRc033m
+         GjONnlgJ+CNAKvez++WIJ6ktnSg/6EBzr+vW6HuSHOum9sGV+uwCwjgSJOQZIkc1o+k2
+         JvVsotcQJjc5DdTp46tBlS4OSOUJ/wGWmG7WTP+S2RDyz4vAQJGPOSirktsGLmgaEfBb
+         lQkDUHHcc4JGB2Ql9mq7PyFY970FnnMlvrhFLbzLQGwblC40a6J2Su4RuslAflyG9WbX
+         v8Cozn4UgnNRr+Yf0rO/OLowNSuiItWWz/sNwI7PaawytsFddpaqhzkwJYh1oTR+ZPFV
+         /fAg==
+X-Gm-Message-State: AO0yUKVH2dzWso6XMGzJVCBff4ZDIfJc8X0KREgXX0s5Zg70imXYeD8h
+        QSowMf/STKy269mMK1baiD2iK2wSTp1Rb3OVUagbTixdW/M=
+X-Google-Smtp-Source: AK7set9bLtwj6pLsp/K0b4D/XzEyMENUQgbNSP0tbGJVqvK6gAzFWXlAUobUZ87VgUOnSeKptFHW9QoFHdpz11toR6I=
+X-Received: by 2002:a5d:59a9:0:b0:2c5:642f:1559 with SMTP id
+ p9-20020a5d59a9000000b002c5642f1559mr56092wrr.4.1676737051177; Sat, 18 Feb
+ 2023 08:17:31 -0800 (PST)
 MIME-Version: 1.0
-In-Reply-To: <20230215194554.25632-7-linux@zary.sk>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [31.173.84.74]
-X-ClientProxiedBy: msexch01.omp.ru (10.188.4.12) To msexch01.omp.ru
- (10.188.4.12)
-X-KSE-ServerInfo: msexch01.omp.ru, 9
-X-KSE-AntiSpam-Interceptor-Info: scan successful
-X-KSE-AntiSpam-Version: 5.9.59, Database issued on: 02/18/2023 15:54:12
-X-KSE-AntiSpam-Status: KAS_STATUS_NOT_DETECTED
-X-KSE-AntiSpam-Method: none
-X-KSE-AntiSpam-Rate: 59
-X-KSE-AntiSpam-Info: Lua profiles 175606 [Feb 17 2023]
-X-KSE-AntiSpam-Info: Version: 5.9.59.0
-X-KSE-AntiSpam-Info: Envelope from: s.shtylyov@omp.ru
-X-KSE-AntiSpam-Info: LuaCore: 504 504 dc137e1f9c062eb6c0671e7d509ab442ae395562
-X-KSE-AntiSpam-Info: {rep_avail}
-X-KSE-AntiSpam-Info: {Tracking_from_domain_doesnt_match_to}
-X-KSE-AntiSpam-Info: {relay has no DNS name}
-X-KSE-AntiSpam-Info: {SMTP from is not routable}
-X-KSE-AntiSpam-Info: {Found in DNSBL: 31.173.84.74 in (user)
- b.barracudacentral.org}
-X-KSE-AntiSpam-Info: {Found in DNSBL: 31.173.84.74 in (user) dbl.spamhaus.org}
-X-KSE-AntiSpam-Info: 127.0.0.199:7.1.2;d41d8cd98f00b204e9800998ecf8427e.com:7.1.1;omp.ru:7.1.1
-X-KSE-AntiSpam-Info: ApMailHostAddress: 31.173.84.74
-X-KSE-AntiSpam-Info: {DNS response errors}
-X-KSE-AntiSpam-Info: Rate: 59
-X-KSE-AntiSpam-Info: Status: not_detected
-X-KSE-AntiSpam-Info: Method: none
-X-KSE-AntiSpam-Info: Auth:dmarc=temperror header.from=omp.ru;spf=temperror
- smtp.mailfrom=omp.ru;dkim=none
-X-KSE-Antiphishing-Info: Clean
-X-KSE-Antiphishing-ScanningType: Heuristic
-X-KSE-Antiphishing-Method: None
-X-KSE-Antiphishing-Bases: 02/18/2023 15:56:00
-X-KSE-AttachmentFiltering-Interceptor-Info: protection disabled
-X-KSE-Antivirus-Interceptor-Info: scan successful
-X-KSE-Antivirus-Info: Clean, bases: 2/18/2023 2:00:00 PM
-X-KSE-BulkMessagesFiltering-Scan-Result: InTheLimit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20230124023834.106339-1-ericvh@kernel.org> <20230218003323.2322580-1-ericvh@kernel.org>
+ <20230218003323.2322580-4-ericvh@kernel.org> <Y/CZVEQPFFo0zMjo@codewreck.org>
+In-Reply-To: <Y/CZVEQPFFo0zMjo@codewreck.org>
+From:   Eric Van Hensbergen <ericvh@gmail.com>
+Date:   Sat, 18 Feb 2023 10:17:20 -0600
+Message-ID: <CAFkjPTm909jFaEnpmSMBu-6uZnPBVyU_KqMFzWCwbDopT4jCAA@mail.gmail.com>
+Subject: Re: [PATCH v4 03/11] fs/9p: Consolidate file operations and add
+ readahead and writeback
+To:     asmadeus@codewreck.org
+Cc:     Eric Van Hensbergen <ericvh@kernel.org>,
+        v9fs-developer@lists.sourceforge.net, rminnich@gmail.com,
+        lucho@ionkov.net, linux-kernel@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux_oss@crudebyte.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/15/23 10:45 PM, Ondrej Zary wrote:
+On Sat, Feb 18, 2023 at 3:25 AM <asmadeus@codewreck.org> wrote:
+>
+> Ok so this bugged me to no end; that seems to be because we use the same
+> v9fs_dir_release for v9fs_file_operations's .release and not just
+> v9fs_dir_operations... So it's to be expected we'll get files here.
+>
+> At this point I'd suggest to use two functions, but that's probably
+> overdoing it.
+> Let's check S_ISREG(inode->i_mode) instead of fid->qid though; it
+> shouldn't make any difference but that's what you use in other parts of
+> the code and it will be easier to understand for people familiar with
+> the vfs.
+>
 
-> Only bpck driver uses devtype but it never gets set in pata_parport.
-> Remove it.
-> As most bpck devices are CD-ROMs, always run the code that depends
-> on devtype == PI_PCD.
-> 
-> Signed-off-by: Ondrej Zary <linux@zary.sk>
+I can rename the function as part of the patch since it would be a bit
+more accurate,
+but then it is still in vfs_dir.  I think there did used to be two
+functions but there
+was so much overlap we collapsed into one.
 
-Reviewed-by: Sergey Shtylyov <s.shtylyov@omp.ru>
+>
+> > diff --git a/fs/9p/vfs_inode.c b/fs/9p/vfs_inode.c
+> > index 33e521c60e2c..8ffa6631b1fd 100644
+> > --- a/fs/9p/vfs_inode.c
+> > +++ b/fs/9p/vfs_inode.c
+> > @@ -219,6 +219,35 @@ v9fs_blank_wstat(struct p9_wstat *wstat)
+> >       wstat->extension = NULL;
+> >  }
+> >
+> > +/**
+> > + * v9fs_flush_inode_writeback - writeback any data associated with inode
+> > + * @inode: inode to writeback
+> > + *
+> > + * This is used to make sure anything that needs to be written
+> > + * to server gets flushed before we do certain operations (setattr, getattr, close)
+> > + *
+> > + */
+> > +
+> > +int v9fs_flush_inode_writeback(struct inode *inode)
+> > +{
+> > +     struct writeback_control wbc = {
+> > +             .nr_to_write = LONG_MAX,
+> > +             .sync_mode = WB_SYNC_ALL,
+> > +             .range_start = 0,
+> > +             .range_end = -1,
+> > +     };
+> > +
+> > +     int retval = filemap_fdatawrite_wbc(inode->i_mapping, &wbc);
+>
+> Hmm, that function only starts the writeback, but doesn't wait for it.
+>
+> Wasn't the point to replace 'filemap_write_and_wait' with
+> v9fs_flush_inode_writeback?
+> I don't think it's a good idea to remove the wait before setattrs and
+> the like; if you don't want to wait on close()'s release (but we
+> probably should too) perhaps split this in two?
+>
 
-[...]
+I had thought that this is what it does, of course I could just be getting
+lucky.  The filemap_fdatawrite_wbc doesn't say anything about whether
+WBC_SYNC_ALL forces a wait, but the next function (__filemap_fdatawrite_range)
+does: (it it calls filemap_fdatawrite_wbc)
 
-> diff --git a/drivers/ata/pata_parport/bpck.c b/drivers/ata/pata_parport/bpck.c
-> index b9174cf8863c..96386a10c22f 100644
-> --- a/drivers/ata/pata_parport/bpck.c
-> +++ b/drivers/ata/pata_parport/bpck.c
-> @@ -241,14 +241,14 @@ static void bpck_connect ( PIA *pi  )
->  
->  	WR(5,8);
->  
-> -	if (pi->devtype == PI_PCD) {
-> +/*	if (pi->devtype == PI_PCD) {	possibly wrong, purpose unknown */
->  		WR(0x46,0x10);		/* fiddle with ESS logic ??? */
->  		WR(0x4c,0x38);
->  		WR(0x4d,0x88);
->  		WR(0x46,0xa0);
->  		WR(0x41,0);
->  		WR(0x4e,8);
-> -		}
-> +/*	}*/
+* If sync_mode is WB_SYNC_ALL then this is a "data integrity" operation, as
+* opposed to a regular memory cleansing writeback. The difference between
+* these two operations is that if a dirty page/buffer is encountered, it must
+* be waited upon, and not just skipped over.
 
-   You could have used // here, scripts/checkpatch.pl has nothing against it now...
+So I think we are good?  Happy to use a different function if it makes sense,
+but this was the one that seemed to trigger the correct behavior.
 
-[...]
-
-MBR, Sergey
+       -eric
