@@ -2,138 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7777E69B693
-	for <lists+linux-kernel@lfdr.de>; Sat, 18 Feb 2023 01:06:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C0A3E69B69E
+	for <lists+linux-kernel@lfdr.de>; Sat, 18 Feb 2023 01:13:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229793AbjBRAGb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Feb 2023 19:06:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59796 "EHLO
+        id S229869AbjBRANI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Feb 2023 19:13:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34522 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229577AbjBRAGa (ORCPT
+        with ESMTP id S229577AbjBRANH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Feb 2023 19:06:30 -0500
-Received: from mail-pg1-x536.google.com (mail-pg1-x536.google.com [IPv6:2607:f8b0:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A6EC47432
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Feb 2023 16:06:29 -0800 (PST)
-Received: by mail-pg1-x536.google.com with SMTP id n6so1411495pgk.11
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Feb 2023 16:06:29 -0800 (PST)
+        Fri, 17 Feb 2023 19:13:07 -0500
+Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A6D93B0EE
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Feb 2023 16:13:06 -0800 (PST)
+Received: by mail-pl1-x62d.google.com with SMTP id jw12so1170666plb.1
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Feb 2023 16:13:06 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=lvX+1aCGeXmThaAv0HPXava3Nq97NGfPprIlYrZXPc0=;
-        b=oa01nWCg8WRSIAOF4SxvXx80cK5iWqHD909oZptALrrrH9SSm9GbPDBbTBPRNGt2Kr
-         WE3imOrFURj/HP2Xqpd9IAeotlG92HflpVdn+xQk5+avZcJhxDmFf1S/i5QVUbUVEZ40
-         eDVdSwml+asH+kpSNHckj1LeD4XGU1juqm2+NGO8ruuE81500lj2qbvTm3UJ1iW/h2hM
-         vu/m0ZOKhUgZxvoB0SI3wXiZSUTJ3G8iPtuznDQMoLKm0UNkVuU/XQBIoJq4+jmlhyFE
-         U/8pgizlMAJQgoz7nJoMpAG0RtEds84GQkGpWf5oG1XRWxoQsTsih0RyJqCYVznrRuYV
-         6HQA==
+        d=chromium.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:subject:cc
+         :to:from:date:message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=QMelb1MnDD6swE/8CM85xQAKKs5hVr859DAyzVGp7Mc=;
+        b=DKnkY30Bpzy7biEAGQieBHufMzJSRVjgkN4WiZk2hYeL446IpnrkMUUcor3l4aQ3sy
+         S1mAuAwCqfNb+dqo7hy7udepJak1w8xXcuKJ8gaJ8OU5d4kIqSluJK3LpeQfhDvdBH4b
+         go0lmvq7wNql5rT1G4PjgkSylcD2KS93eYoHY=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=lvX+1aCGeXmThaAv0HPXava3Nq97NGfPprIlYrZXPc0=;
-        b=B1AaUJcIhV4VwIP1y28hQS+ZOVRS64jjXwwQ/S45pkTNUGswEpVNHOPX6fJDSnmP71
-         mVChDL5VnwtYeeiji7WvofVBfUepBKFoZvAndV3AzcXMUk24zttk5a4stOXZqjAhfX21
-         D3KXEL3PKwL7RKZeNWxeQClRL8cQiCQeqEeWSLPNjiFx6A7kZZIOsRgsART1Sjz4W3/V
-         rpTXz0yeKwkuSWew6J5Uq10wK83Tbqsvj5cuux0Zds4JPRVylUkG1Mp4CqX3Sw0MhzK6
-         wYqpwvJVIuRVV/uEeU//W6bAu3ncGmYVHxK8xZW3dWw0x/aOY+7QJp+/rdc5RA1dAf86
-         4cZA==
-X-Gm-Message-State: AO0yUKW77DBoJoyKMZU0tvhd7y/1zH6auY5u7c4nMaRoWpAJcJ3LJWNS
-        4zmRhZJMyWCVkoK8K5lBs82jbyFT1w0822TpY2xqHQ==
-X-Google-Smtp-Source: AK7set9WNLiMSIfMK/eaD1L/sZEjT4QbzX7DFSsiQya3t3NWvVFnzves2sJvzG6q4ThXNZJ4aMs5ZKv0ReEnOqvysR8=
-X-Received: by 2002:a63:6e47:0:b0:4fb:b3d4:8649 with SMTP id
- j68-20020a636e47000000b004fbb3d48649mr355829pgc.7.1676678788412; Fri, 17 Feb
- 2023 16:06:28 -0800 (PST)
+        h=in-reply-to:content-disposition:mime-version:references:subject:cc
+         :to:from:date:message-id:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=QMelb1MnDD6swE/8CM85xQAKKs5hVr859DAyzVGp7Mc=;
+        b=5lZ37tYUK1m8XB0BQZaDgbtfvuhpWBv0Qrw1bCutt+X1N0A4d1Z4Lx4XIqPyXhTxkM
+         9tcC/DDbKU3ZtcXBiGfyFZsm3/yzuPJWFGbyRKG7JvLYF/RzSoVnHJtJKGfJ2+61ZEE/
+         wcyB46R14st6DRJ5ftH/U3zSVibsn3cNdtpOAFW6NbQwWC2DsVjAjuCgR40YE8GPF7uZ
+         igTifD9ULTRiiUBaV9GckX+QWM98ObuGlJ+RC2UP1kxAZ0cXCxVZxOUTSHu1lsnQBCyg
+         T0czy+jo7D02uaiJurlLwqGJlIrlyRN0U5OLA9eB5o64y6ecPpH8OgxM614UB3nuNV3V
+         BNvw==
+X-Gm-Message-State: AO0yUKXNHsD0p9u06rKhmyiWtS5u09x/r69dM7lPDanwWoo/QAg751Ef
+        PBusD86iFXteLf1eybl1RReP6A==
+X-Google-Smtp-Source: AK7set/h4bG49uL8qy+abJ0R63Qu7+miyWPJjJW+xK6sdj1ETCTFul1V16PMsEoEoieJb+H0rwRDHQ==
+X-Received: by 2002:a17:902:cf0c:b0:199:5111:9987 with SMTP id i12-20020a170902cf0c00b0019951119987mr6501283plg.32.1676679185524;
+        Fri, 17 Feb 2023 16:13:05 -0800 (PST)
+Received: from www.outflux.net (198-0-35-241-static.hfc.comcastbusiness.net. [198.0.35.241])
+        by smtp.gmail.com with ESMTPSA id a23-20020a170902b59700b0019a82ff8c38sm3661564pls.29.2023.02.17.16.13.04
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 17 Feb 2023 16:13:04 -0800 (PST)
+Message-ID: <63f01810.170a0220.110a8.6fe1@mx.google.com>
+X-Google-Original-Message-ID: <202302171554.@keescook>
+Date:   Fri, 17 Feb 2023 16:13:03 -0800
+From:   Kees Cook <keescook@chromium.org>
+To:     Namjae Jeon <linkinjeon@kernel.org>
+Cc:     Steve French <sfrench@samba.org>, Paulo Alcantara <pc@cjr.nz>,
+        Ronnie Sahlberg <lsahlber@redhat.com>,
+        Shyam Prasad N <sprasad@microsoft.com>,
+        Tom Talpey <tom@talpey.com>,
+        Sergey Senozhatsky <senozhatsky@chromium.org>,
+        linux-cifs@vger.kernel.org, linux-kernel@vger.kernel.org,
+        samba-technical@lists.samba.org, linux-hardening@vger.kernel.org
+Subject: Re: [PATCH v2] smb3: Replace smb2pdu 1-element arrays with
+ flex-arrays
+References: <20230214232928.gonna.714-kees@kernel.org>
+ <CAKYAXd-fcukmXfdwiAxOxe+5c+Y6vvaoQ3ff-5sK+Zis0HgC5A@mail.gmail.com>
 MIME-Version: 1.0
-References: <932DEB17-70FB-4416-80B3-C48A7C31848F@kohlschutter.com>
- <20220825212842.7176-1-christian@kohlschutter.com> <CAGETcx__Ez8i9O2O30-Q1R00xOqBjkKMCwt37_AGAQjNvZqpdg@mail.gmail.com>
- <B6E001E2-9BCD-420A-B0F6-1495DE46955E@kohlschutter.com> <CAGETcx_OKA+MkExc98337kZYKsoJtV0ZdfYJE7Tk00CFvCt2bA@mail.gmail.com>
- <F6AC6A52-49BA-4F80-91A8-271E11CD17E4@kohlschutter.com>
-In-Reply-To: <F6AC6A52-49BA-4F80-91A8-271E11CD17E4@kohlschutter.com>
-From:   Saravana Kannan <saravanak@google.com>
-Date:   Fri, 17 Feb 2023 16:05:52 -0800
-Message-ID: <CAGETcx839=FSj-njD03bqaEFKPfhEY7DXnjQ5V1+s0G2vn86Eg@mail.gmail.com>
-Subject: Re: [PATCH v5] regulator: core: Resolve supply name earlier to
- prevent double-init
-To:     =?UTF-8?Q?Christian_Kohlsch=C3=BCtter?= 
-        <christian@kohlschutter.com>
-Cc:     Mark Brown <broonie@kernel.org>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        =?UTF-8?Q?Heiko_St=C3=BCbner?= <heiko@sntech.de>,
-        lgirdwood@gmail.com, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-mmc@vger.kernel.org,
-        linux-rockchip@lists.infradead.org, m.reichl@fivetechno.de,
-        robin.murphy@arm.com, vincent.legoll@gmail.com, wens@kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAKYAXd-fcukmXfdwiAxOxe+5c+Y6vvaoQ3ff-5sK+Zis0HgC5A@mail.gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Feb 17, 2023 at 4:01 PM Christian Kohlsch=C3=BCtter
-<christian@kohlschutter.com> wrote:
->
-> On 18. Feb 2023, at 00:46, Saravana Kannan <saravanak@google.com> wrote:
+On Thu, Feb 16, 2023 at 11:25:01PM +0900, Namjae Jeon wrote:
+> Hi Kees,
+> 
+> >  /* Read flags */
+> > @@ -730,7 +730,7 @@ struct smb2_read_rsp {
+> >  	__le32 DataLength;
+> >  	__le32 DataRemaining;
+> >  	__le32 Flags;
+> > -	__u8   Buffer[1];
+> > +	__u8   Buffer[];
+> >  } __packed;
 > >
-> > On Fri, Feb 17, 2023 at 3:33 PM Christian Kohlsch=C3=BCtter
-> > <christian@kohlschutter.com> wrote:
-> >>
-> >> On 18. Feb 2023, at 00:22, Saravana Kannan <saravanak@google.com> wrot=
-e:
-> >>>
-> >>> On Thu, Aug 25, 2022 at 2:28 PM Christian Kohlsch=C3=BCtter
-> >>> <christian@kohlschutter.com> wrote:
-> >>>>
-> >>>> Previously, an unresolved regulator supply reference upon calling
-> >>>> regulator_register on an always-on or boot-on regulator caused
-> >>>> set_machine_constraints to be called twice.
-> >>>>
-> >>>> This in turn may initialize the regulator twice, leading to voltage
-> >>>> glitches that are timing-dependent. A simple, unrelated configuratio=
-n
-> >>>> change may be enough to hide this problem, only to be surfaced by
-> >>>> chance.
-> >>>
-> >>> In your case, can you elaborate which part of the constraints/init
-> >>> twice caused the issue?
-> >>>
-> >>> I'm trying to simplify some of the supply resolving code and I'm
-> >>> trying to not break your use case.
-> >>>
-> >>> -Saravana
-> >>
-> >> Here's a write-up of my use case, and how we got to the solution:
-> >> https://kohlschuetter.github.io/blog/posts/2022/10/28/linux-nanopi-r4s=
-/
-> >
-> > I did read the write up before I sent my request. I'm asking for
-> > specifics on which functions in the set_machine_constraints() was
-> > causing the issue. And it's also a bit unclear to me if the issue was
-> > with having stuff called twice on the alway-on regulator or the
-> > supply.
-> >
-> > -Saravana
->
-> I'm afraid I cannot give a more detailed answer than what's in the write =
-up and the previous discussion on this mailing list; I thought it's pretty =
-detailed already.
+> 
+> You seem to have missed -1 removal in the code below.
 
-Well, I do my best not to break your use case with whatever info you
-are willing to provide. We'll figure it out one way or another I
-suppose.
+Ah; thanks for this heads-up. I will need a v3.
 
-> However, it should be relatively straightforward to reproduce the issue.
+> ./fs/cifs/smb2ops.c:5632:       .read_rsp_size = sizeof(struct
+> smb2_read_rsp) - 1,
+> ./fs/cifs/smb2ops.c:5654:       .read_rsp_size = sizeof(struct
+> smb2_read_rsp) - 1,
+...
 
-If one has the hardware. Which I don't.
+These are interesting -- they don't show up at all in the code. What I
+mean is that they're data-only changes. I'll add that to my before/after
+build sanity checks.
 
--Saravana
+Thanks!
+
+-Kees
+
+-- 
+Kees Cook
