@@ -2,80 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8CB9369BA0E
-	for <lists+linux-kernel@lfdr.de>; Sat, 18 Feb 2023 13:52:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6729969BA13
+	for <lists+linux-kernel@lfdr.de>; Sat, 18 Feb 2023 13:54:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229704AbjBRMwh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 18 Feb 2023 07:52:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33532 "EHLO
+        id S229710AbjBRMyh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 18 Feb 2023 07:54:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34700 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229441AbjBRMwf (ORCPT
+        with ESMTP id S229441AbjBRMyg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 18 Feb 2023 07:52:35 -0500
-Received: from mail-pg1-x532.google.com (mail-pg1-x532.google.com [IPv6:2607:f8b0:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A079617CE9;
-        Sat, 18 Feb 2023 04:52:32 -0800 (PST)
-Received: by mail-pg1-x532.google.com with SMTP id y1so417144pgr.7;
-        Sat, 18 Feb 2023 04:52:32 -0800 (PST)
+        Sat, 18 Feb 2023 07:54:36 -0500
+Received: from mail-oi1-x22f.google.com (mail-oi1-x22f.google.com [IPv6:2607:f8b0:4864:20::22f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B25310D7
+        for <linux-kernel@vger.kernel.org>; Sat, 18 Feb 2023 04:54:33 -0800 (PST)
+Received: by mail-oi1-x22f.google.com with SMTP id 16so791585oiy.0
+        for <linux-kernel@vger.kernel.org>; Sat, 18 Feb 2023 04:54:33 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=r/IEWKH4bEBLVMFJRg9tQoFnfuVGCDKYj1urXec8x4s=;
-        b=jAHoFspDuM8jhz+XurwOsdzsol5+zqQjTjreraIoEQp5kOLW/PB31Tzu1yxlWHmbVN
-         pCzEndxZTkI+Fs/fmrwvhCYfIVppplU5jo1kObTuzXkdelqUQ6phraaJbIEw+c6NOxFX
-         GwhIqLuAwV02m1W/jf06YpiNZncl6irXflBydz8yw1mb2TFvUIOF3h2IL8ovea8FOUcg
-         CO1ubGkcomSdDMnSQ3ekbIWCmfCcMV2CX2i/OxWYRjzD0kUsCw2nL1rBllnzLLyUg4jU
-         a0qYLylHIbnEKB5ot3FVDPTSBQ6jQoTOTURlxzp4z0qRivgEA4VEpQjGM3bX3Dk2b/OE
-         yY7w==
+        d=vanguardiasur-com-ar.20210112.gappssmtp.com; s=20210112; t=1676724872;
+        h=mime-version:references:in-reply-to:message-id:cc:to:subject:from
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=//sb/NYNvOOxKrp04fWS+VMUo3F1GFZIyJCs1w1+uek=;
+        b=I7P7JsNGzgkMCPgCrqRXdA9ZpA9DOa2tP8KSY8Oy5dWp3x2KJ4cANa9ZYZ+uhdtv58
+         wKz1ZkawqpIBakGgBvuy9Idg+QjE+JGuiG9uHqzZjFFqbjjt+C217c/Ce+UuCMAWMmAm
+         oHY2nZOtM86GH0FJExXKnPgRP2nbL0/LXrX186H4WcFk+43wXGFVLMPLrOkjw04KJJTg
+         1ScetLzsQ7qy7EILdSksGllAL+nqO7DNZycJ25QY7+IWBlQYWEJwZiPyB45M/ZnCVlBW
+         ajx6M9qAjtLPy3YN/3om3eRPyv23USb/4PR9j+GCAaSRwV7y63Z5v2faAKGAF2YSH62N
+         y1KA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=r/IEWKH4bEBLVMFJRg9tQoFnfuVGCDKYj1urXec8x4s=;
-        b=bhA81bU+bpCKJHRAc4md18xR7PjAmW/zj3boRx9Ar09U+JDKrYKmrR2cOxALhYox0G
-         gBE8v5lmLcvsAmlugGfpaQ7oGD4p9X0gVZ48VRVcGfMu4lg7u4zWZhcmtGI/SiqHNtJw
-         5EYq1LQh0aguChiqo/lWeG5UH5CgrCronevS9CHUhcrRFoJ55trhgljAX9I1ZacmVIIm
-         oACt/QPw9wZybyDAGAIQG9ATcaCEl1Q2CbczRPqrFafIqtjQCfNd4Vvs7nmOCBvYsZVx
-         878Z8d39y3pb9bmULwt+bFrplio1V9zZASHQm5+EiFrXtCeHJoFiR6ji2pUI1ZLd2uqz
-         3c6g==
-X-Gm-Message-State: AO0yUKVsL8pvHpBC2OlyyaP7+9qPCH0znlR5z6Mpifo71QBWQKUIP1UP
-        hW/tB7iarCZ9/apOEXyC0so=
-X-Google-Smtp-Source: AK7set88chkLmx+kb2X5OykVJGsUBfY/nQJggqzBfMt5yyhhh6A0gSKybB+Q2Xugr3DLYEw97MhIXg==
-X-Received: by 2002:aa7:978a:0:b0:5a8:8535:18b with SMTP id o10-20020aa7978a000000b005a88535018bmr4143296pfp.11.1676724752048;
-        Sat, 18 Feb 2023 04:52:32 -0800 (PST)
-Received: from redecorated-mbp ([202.53.32.211])
-        by smtp.gmail.com with ESMTPSA id y12-20020aa7804c000000b00590ede84b1csm4748819pfm.147.2023.02.18.04.52.28
+        d=1e100.net; s=20210112; t=1676724872;
+        h=mime-version:references:in-reply-to:message-id:cc:to:subject:from
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=//sb/NYNvOOxKrp04fWS+VMUo3F1GFZIyJCs1w1+uek=;
+        b=50MXEIk2ne7nWFyBQV4Ddl4wrwupTw2DIMDDZ9zcuqE3+MstlzqodvPyZjJzp3SZb7
+         7CpMIEZ2Da2YxwIlXns/0nlwcH/jk2ytyVyBYyiJJN4FXLoU+VJuoqgYKsfm/CeubDG1
+         NWY3d+6Fp8gZ2S3B8ZfM1HVQP2sT4+TQeGY1bj9xrOhBg30GE1iOJTUiTYdBNUH9abWa
+         JMiTmgZvnz9gby3JcNh8aqcJgAjuHiPRVgDYdNTRGI07u8CiiLEWC69H32lTMKtNcJ9U
+         VC8dRKJQPWtS++pWj9bRBzh8WDKgAuU50dsNalSf+ros/USa1zB+h0SL3OK54zeygkP8
+         6/aQ==
+X-Gm-Message-State: AO0yUKXlbN/tlLgLj9Mj7TuRgDl0Y7oFqhfueFty/2KUIaQndwWu/19y
+        iEqofLW0zDdJX3VqqAFTmHP+nA==
+X-Google-Smtp-Source: AK7set8hgUotSkKUQWpkFmsCbsIrZ1DR8W4XyJ/l7M9d1e2GFLgZ0l2Xw76LWIUq6qL4UMbVzzM/jQ==
+X-Received: by 2002:a05:6808:1a1e:b0:367:163e:a0e with SMTP id bk30-20020a0568081a1e00b00367163e0a0emr2039035oib.4.1676724872484;
+        Sat, 18 Feb 2023 04:54:32 -0800 (PST)
+Received: from [192.168.10.175] ([190.11.59.127])
+        by smtp.gmail.com with ESMTPSA id q132-20020acac08a000000b0037d813cd612sm2868122oif.43.2023.02.18.04.54.27
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 18 Feb 2023 04:52:31 -0800 (PST)
-Date:   Sat, 18 Feb 2023 23:52:22 +1100
-From:   Orlando Chamberlain <orlandoch.dev@gmail.com>
-To:     Hans de Goede <hdegoede@redhat.com>
-Cc:     Mark Gross <markgross@kernel.org>,
-        platform-driver-x86@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Lukas Wunner <lukas@wunner.de>,
-        Seth Forshee <sforshee@kernel.org>,
-        Aditya Garg <gargaditya08@live.com>,
-        Aun-Ali Zaidi <admin@kodeit.net>,
-        Kerem Karabay <kekrby@gmail.com>
-Subject: Re: [PATCH v2 4/5] apple-gmux: support MMIO gmux on T2 Macs
-Message-ID: <20230218235222.17983234@redecorated-mbp>
-In-Reply-To: <9be4b45a-83cb-b671-e7df-c4c8812b5506@redhat.com>
-References: <20230216122342.5918-1-orlandoch.dev@gmail.com>
-        <20230216122342.5918-5-orlandoch.dev@gmail.com>
-        <cd6beabe-3026-d84e-63fd-3833948ecc1f@redhat.com>
-        <20230217110531.6d3c07a1@redecorated-mbp>
-        <20230217230246.53e3d013@redecorated-mbp>
-        <9be4b45a-83cb-b671-e7df-c4c8812b5506@redhat.com>
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.35; x86_64-pc-linux-gnu)
+        Sat, 18 Feb 2023 04:54:31 -0800 (PST)
+Date:   Sat, 18 Feb 2023 09:54:20 -0300
+From:   Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
+Subject: Re: [PATCH v8 0/6] media: verisilicon: HEVC: fix 10bits handling
+To:     Benjamin Gaignard <benjamin.gaignard@collabora.com>
+Cc:     robert.mader@collabora.com, p.zabel@pengutronix.de,
+        mchehab@kernel.org, shawnguo@kernel.org, s.hauer@pengutronix.de,
+        kernel@pengutronix.de, festevam@gmail.com, linux-imx@nxp.com,
+        hverkuil-cisco@xs4all.nl, nicolas.dufresne@collabora.co.uk,
+        linux-media@vger.kernel.org, linux-rockchip@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        kernel@collabora.com
+Message-Id: <K61AQR.89JE1N9UODFT2@vanguardiasur.com.ar>
+In-Reply-To: <20230203091622.127279-1-benjamin.gaignard@collabora.com>
+References: <20230203091622.127279-1-benjamin.gaignard@collabora.com>
+X-Mailer: geary/43.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-0.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,URIBL_BLACK autolearn=no
+Content-Type: text/plain; charset=us-ascii; format=flowed
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -83,111 +74,82 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, 18 Feb 2023 11:49:52 +0100
-Hans de Goede <hdegoede@redhat.com> wrote:
+Hi Benjamin,
 
-> Hi,
-> 
-> On 2/17/23 13:02, Orlando Chamberlain wrote:
-> > On Fri, 17 Feb 2023 11:05:31 +1100
-> > Orlando Chamberlain <orlandoch.dev@gmail.com> wrote:  
-> >>>
-> >>> Question are we not worried about MacBooks with an "APP000B"
-> >>> ACPI device (with a value IORSOURCE_MEM entry) but which do not
-> >>> actually have a gmux, because they are iGPU only ?    
-> >>
-> >> It looks like iMac20,1, iMac20,2, and iMacPro1,1 have APP000B:
-> >>
-> >> apple_gmux: Failed to find gmux I/O resource
-> >>
-> >> iMac20,2: https://linux-hardware.org/?probe=ec2af584b3&log=dmesg
-> >> iMac20,1: https://linux-hardware.org/?probe=fee7644b9c&log=dmesg
-> >> iMacPro1,1: https://linux-hardware.org/?probe=6c26c9ff8c&log=dmesg
-> >>
-> >> But I'm not sure if they actually have it or not. I'll see if I can
-> >> get people with those models to test if it's a real gmux. There
-> >> does seem to be a pattern in that those three all have AMD GPU's.  
-> > 
-> > Kerem Karabay managed to find the acpi tables and macOS's ioreg
-> > from and iMacPro1,1:
-> > 
-> > https://github.com/khronokernel/DarwinDumped/blob/master/iMacPro/iMacPro1%2C1/Darwin%20Dumper/DarwinDumper_3.0.4_30.12_15.30.40_iMacPro1%2C1_Apple_X64_High%20Sierra_17C2120_apple/ACPI%20Tables/DSL/DSDT.dsl#L10423
-> > https://github.com/khronokernel/DarwinDumped/blob/master/iMacPro/iMacPro1%2C1/Darwin%20Dumper/DarwinDumper_3.0.4_30.12_15.30.40_iMacPro1%2C1_Apple_X64_High%20Sierra_17C2120_apple/IORegistry/IOReg.txt#L5096
-> > 
-> > The DSDT table has the same APP000B device as MacBooks with actual
-> > gmux, while the ioreg has no mention of Apple's driver
-> > AppleMuxControl2 being used for that device.
-> > 
-> > I think that confirms Apple has not fixed the issue of putting
-> > APP000B's where they don't need to.
-> > 
-> > Solutions to this I can think of are:
-> > 
-> > - Use DMI matching to ignore product_names "iMacPro1,1" "iMac20,1",
-> >   "iMac20,2"
-> > - Maybe check if the MMIO region for gmux is filled with 0xff*
-> > 
-> > *I don't know if this would work or not as I don't have a machine to
-> > check with. On my machine everything surrounding the 16 bytes used
-> > for gmux is 0xff:
-> > 
-> > # hexdump -n48 -C -s 0xfe0b01f0 /dev/mem
-> > fe0b01f0  ff ff ff ff ff ff ff ff  ff ff ff ff ff ff ff ff
-> > |................| fe0b0200  00 00 3e 4f 00 00 00 00  00 00 00 00
-> > 00 00 14 00  |..>O............| fe0b0210  ff ff ff ff ff ff ff ff
-> > ff ff ff ff ff ff ff ff  |................|
-> > 
-> > so maybe on the iMacPro and iMac's, this would all be 0xff.  
-> 
-> Yes checking for a regular ioread32 returning 0xffffffff sounds
-> like it should work. Can you add a check for that in the next version
-> please ?  Note this means we still need to do an iomap + unmap as
-> you pointed out in another email, but I see no way around that.
+We are almost there, just some minor comments.
 
-I'll check that GMUX_MMIO_COMMAND_SEND (16th byte) is not 0xff, as if
-the gmux is present it will reset that to 0x00, unless a command isn't
-finished yet, in which case it will be one of 0x1, 0x4, 0x41, or 0x44.
+On Fri, Feb 3 2023 at 10:16:16 AM +0100, Benjamin Gaignard 
+<benjamin.gaignard@collabora.com> wrote:
+> When decoding a 10bits bitstreams HEVC driver should only expose 
+> 10bits pixel formats.
+> To fulfill this requirement it is needed to call 
+> hantro_reset_raw_fmt()
+> and to only change driver internal state in case of success.
+> 
+> Fluster score for HEVC (140/147) doesn't change after this series.
+> Fluster score for VP9 is 146/303.
+> 
 
+Given the series is changing the format negotation which affects
+all codecs, can you test MPEG-2, VP8, H.264 and JPEG encoding?
+
+Can you also run v4l2-compliance on all the /dev/videoX devices?
+
+(Adding Robert Mader, who recently helped test the JPEG encoder).
+
+Thanks,
+Ezequiel
+
+> version 8:
+> - Correct patch 4.
+> - Add a patch for VP9.
 > 
-> Regards,
+> version 7:
+> - Remove unused ctx variable in hantro_try_ctrl().
+> - Change HANTRO_DEFAULT_BIT_DEPTH value to 8.
+> - Simplify hantro_check_depth_match logic.
+> - Keep ctx->bit_depth as integer value because it is use
+>   to compute buffers size for hevc.
 > 
-> Hans
+> version 6:
+> - Split the patches in multiple sub-patches.
+> - Rework hantro_reset_encoded_fmt() usage.
 > 
+> version 5:
+> - Add Nicolas's review tags
+> - Add Fixes tags
 > 
+> version 4:
+> - Split the change in 2 patches.
+> - Change hantro_check_depth_match() prototype to avoid using
+>   ctx->bit_depth
+> - Return the result of hantro_reset_raw_fmt() to the caller.
+> - Only set ctx->bit_depth when hantro_reset_raw_fmt() returns is ok.
 > 
+> Benjamin Gaignard (6):
+>   media: verisilicon: Do not set context src/dst formats in reset
+>     functions
+>   media: verisilicon: Do not use ctx fields as format storage when
+>     resetting
+>   media: verisilicon: Do not set ctx->bit_depth in hantro_try_ctrl()
+>   media: verisilicon: Do not change context bit depth before 
+> validating
+>     the format
+>   media: verisilicon: HEVC: Only propose 10 bits compatible pixels
+>     formats
+>   media: verisilicon: VP9: Only propose 10 bits compatible pixels
+>     formats
 > 
-> >   
-> >>
-> >> I've looked at dmesg or at least lsmod on all the models with the
-> >> T2 chip and there wasn't evidence of any other models having that
-> >> error or having apple-gmux loaded on any models that shouldn't
-> >> have a gmux, other than the three mentioned above. Of course I
-> >> don't know if its possible for there to be firmware versions where
-> >> this isn't the case. 
-> >>>
-> >>> I have learned the hard way (through backlight control regressions
-> >>> in 6.1) that at least some older model MacBooks with an IO
-> >>> resource have an APP000B ACPI device without them actually having
-> >>> a gmux, these get caught by the version check and then do not
-> >>> pass the indexed check so that apple_gmux_detect() properly
-> >>> returns false.
-> >>>
-> >>> Maybe make gmux_mmio_read32() a static inline inside
-> >>> include/linux/apple-gmux.h and try to read the version here ?    
-> >>
-> >> For that would we need to ioremap() and iounmap()?  
-> >>>
-> >>> Has this been tested on iGPU only T2 Macs?    
-> >>
-> >> I don't think so. 
-> >>  
-> >>>
-> >>> Regards,
-> >>>
-> >>> Hans
-> >>>
-> >>>     
-> >>  
-> >   
+>  .../media/platform/verisilicon/hantro_drv.c   | 49 +++++++---
+>  .../platform/verisilicon/hantro_postproc.c    |  2 +-
+>  .../media/platform/verisilicon/hantro_v4l2.c  | 90 
+> +++++++++----------
+>  .../media/platform/verisilicon/hantro_v4l2.h  |  3 +-
+>  .../media/platform/verisilicon/imx8m_vpu_hw.c |  2 +
+>  5 files changed, 86 insertions(+), 60 deletions(-)
 > 
+> --
+> 2.34.1
+> 
+
 
