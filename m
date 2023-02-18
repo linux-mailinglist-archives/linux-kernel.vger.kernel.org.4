@@ -2,229 +2,165 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1887969B9EE
-	for <lists+linux-kernel@lfdr.de>; Sat, 18 Feb 2023 13:16:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E35669B9F2
+	for <lists+linux-kernel@lfdr.de>; Sat, 18 Feb 2023 13:18:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229599AbjBRMP7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 18 Feb 2023 07:15:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50140 "EHLO
+        id S229586AbjBRMSy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 18 Feb 2023 07:18:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51566 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229441AbjBRMP6 (ORCPT
+        with ESMTP id S229441AbjBRMSw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 18 Feb 2023 07:15:58 -0500
-Received: from nautica.notk.org (nautica.notk.org [91.121.71.147])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0035199DE;
-        Sat, 18 Feb 2023 04:15:55 -0800 (PST)
-Received: by nautica.notk.org (Postfix, from userid 108)
-        id 18211C01C; Sat, 18 Feb 2023 13:16:18 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=codewreck.org; s=2;
-        t=1676722578; bh=FoF2Zm7d8YAbphcyvCEaxyy43ITxYOKPUDd4jdI+Ous=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=1WUE4Ghb8VHhzD+OzBIf6tnqYqIY7SlE97UL62o5CVtWSdqh3BM2CRPecwYCiS2ny
-         s9Jn8sogRV1Dlp19HCEFLK4uIA+xW2p3RugRqVlIEhJFSwy6cNjZIQUJ6soHQ1+tJL
-         tszF18/ePbS767DVuWM1iO+/H5VvTp2nHolA2qnFgDqW4eRDJgf/1h5q2jnEP4Nabn
-         y0tnfwJHyDHKIUe/7/jP21ulYbPBrYvVaq7UITi73CzC0nM955TLavTD046fmZxg5Y
-         LtWi/lbtwAWAS+fQ9/h9x8bjQPYZDPUtuOHzvU47HeFO/XCU/WyhN3TacaZBfVaguM
-         A+TC6rDIsrexw==
+        Sat, 18 Feb 2023 07:18:52 -0500
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7C8818151;
+        Sat, 18 Feb 2023 04:18:50 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=public-files.de;
+        s=s31663417; t=1676722706; i=frank-w@public-files.de;
+        bh=OP3X0Px61zMcqd95TfNq9/R7u4UHsIlHqoTH3i/TdQQ=;
+        h=X-UI-Sender-Class:From:To:Cc:Subject:Date:In-Reply-To:References;
+        b=KQRJu0DQuXUY6MhyMywcwbwVVVnh93d+Qk4nG3A0J0BdpxX0zS1k/4YMLQ1jVI4iH
+         DylkaUjRJ7ql9gavffrcws+s4sHGg84KYcZ2MyzOP0PUV9ETqm6sz8baINzTgLoqdV
+         F50SedxLHOvVsJaU+5N7dDVLnBbiLetgEFIxkMiWxca9UutoOtemX5hAYQsUDS23Av
+         yJCUTwS+sanp+Ws7Byk70BaTmggOHXbdE0rMqYppISwMNLoNQy5wAshTJtrJgRz1sc
+         l8Iy1FLmSxYT35OvVcrtTRtLH45RrJ7QqfA3mMPy/ZXr9XG5YT7A0JS96e1P7buh5H
+         FTeIfRDEBonPg==
+X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
+Received: from [217.61.153.5] ([217.61.153.5]) by web-mail.gmx.net
+ (3c-app-gmx-bap53.server.lan [172.19.172.123]) (via HTTP); Sat, 18 Feb 2023
+ 13:18:25 +0100
+MIME-Version: 1.0
+Message-ID: <trinity-dd260791-3637-4193-8f93-a9fcdb013dcb-1676722705920@3c-app-gmx-bap53>
+From:   Frank Wunderlich <frank-w@public-files.de>
+To:     =?UTF-8?Q?Ar=C4=B1n=C3=A7_=C3=9CNAL?= <arinc.unal@arinc9.com>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, erkin.bozoglu@xeront.com
+Subject: Aw: Re:  Re: [PATCH v3 0/5] arm: dts: mt7623: relocate gmacs,
+ mt7530 switch, and add port@5
+Content-Type: text/plain; charset=UTF-8
+Date:   Sat, 18 Feb 2023 13:18:25 +0100
+Importance: normal
+Sensitivity: Normal
+In-Reply-To: <27a26da8-8297-5327-7493-54d8359b6970@arinc9.com>
+References: <20230210182505.24597-1-arinc.unal@arinc9.com>
+ <c3ab9a9b-3eb2-8fb0-d5d7-c0b7c684d3a7@arinc9.com>
+ <trinity-dab715b9-3953-40da-bc25-c4c2a5e9b7c3-1676715866453@3c-app-gmx-bap53>
+ <27a26da8-8297-5327-7493-54d8359b6970@arinc9.com>
+Content-Transfer-Encoding: quoted-printable
+X-UI-Message-Type: mail
+X-Priority: 3
+X-Provags-ID: V03:K1:v1DPPWM6A9oy60/IsAqYGoZGjhlhPcE08EPlTUQ7a9wHeBrXGvS7GB2Y1anKzv/dSghU8
+ Q8g0r6DYi4VxL6MFqP0JSqYMC7v/f5utL4W4CO41vRcaabsvBGCd360RQh5Mu0DPSp6+DIE9RLuf
+ 1mquoXx3bvRPzdGhvbMx9JKyF9OEMFQ7pD+LQDieF1dnrQCqTMjPP3EJQvkl6e/ftYnJ36cI3DOG
+ 5K4/9eQxYMUlyafuIaF6/HvP2E9olsJtfEDi1TwwbKRRV0Oc5DAvh+cAybTZ2bnAMTCgsAyLtT03
+ BE=
+UI-OutboundReport: notjunk:1;M01:P0:VZV6dh1A5Ag=;Buw383pPwakwuXb/1j7tqGijIUR
+ 3iem6oEThCQ7VPv417sYU4cqM8eTKTxf9CiPBWZj0UVIEx5YqUC6qyjWfwzTKiFG9DV6fsCyW
+ 1L08OdWZk/WFkwhx+Yzszcl4xykEjrxGIe9VEaLQjGrSvQwvipUtUGKrLdz5zvz7RLpui7KEZ
+ hZnyJoOlgB2HZPMz64EMhCfSHtraXEtk2yWOYPlaGFs+eN4BpBfsv6zpW+xJoN/dG3dAiagpK
+ XeNygMNdfrW/l6umEVQpTfo2TKRkWsnnHbX9EVLLS4/7WfMsrh29cuG992KgIv0FS+BuNmnih
+ cP3U/caOvlESKH1WGzpRzgavmcshBpvwPpNnjAepRmcg0iV28gm2yNefK/e5qVb4JbywWffsQ
+ HD7xWCYpEl3gadxP8CeL3z0mdS0HlTFtjFEel0m4M2czy0XfrMNRFSSQ2gGafpbb11hHFaN1j
+ g+eYQ1nep7Azz9tLxOzbjqPVZYCoEL4zrNU8lQ2MMl2gNJt9iOam7b55cwWcw4dob6OywGJwn
+ 6NS7i67/Xxmo7Jc46EfAUfXknUUZ8Pi27MFTruBIJnJNXr6kuG8Filbkqx8GZ3Sx5h6gWm8m5
+ Pv2+qw9lTrqAksnDCEdeiYPqf2xekLAy7qpASheFkUDT65rPp+0wgeMqzkyNnaLXVPK6TY0AJ
+ 1eXEIIuRuW8O+KX3RbZm1XYUFWXD6w54jjw3hE4aRUr8pphpjd4PUKe3ofQ4ZwFe+yiyblyZa
+ aLIMOsTfgmS7DeEwmowaJLIe+FPwC17LO5SS3OHxkYjh3G9mHGW8jhApjrtQU+/FCI0r1Jqij
+ yf1y7MbtJcYwQvuRzjjL4J1wNpgKglbhp6PlrKMdzew3M=
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-X-Spam-Level: 
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
-Received: from odin.codewreck.org (localhost [127.0.0.1])
-        by nautica.notk.org (Postfix) with ESMTPS id E79D1C009;
-        Sat, 18 Feb 2023 13:16:14 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=codewreck.org; s=2;
-        t=1676722577; bh=FoF2Zm7d8YAbphcyvCEaxyy43ITxYOKPUDd4jdI+Ous=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=27D/Ar/TqbcZIrQLmLJtnv09JF/TpTo8n+cPcv/ZqKW2Th86k3Fz0niScQgp9PxG1
-         EsBaQIgmp4JHfSe/vkDWiLnHKP3iPtrSdJPsEcv+WG/se19YLrS/ATvjY+dhHJD/cI
-         UOFSIY4s4gL6R6RaMniNcOnLls+xBdqL9pWh4y5cy2cJhPAz348YXwQgZbLHDqUiBO
-         82hzrsD64YkB9LJ9aRJ6m0k/lanI323MzHE1jZ5JPjw2WXdNWnbzVkb3uYMcNUC2Il
-         aCW8CMXx8L9P8vnsWEiFPLu/FDxHkCrlWio8b9J8gJ2zLK17DBN4UTejleiPa0M0td
-         JT0jtW94aa//w==
-Received: from localhost (odin.codewreck.org [local])
-        by odin.codewreck.org (OpenSMTPD) with ESMTPA id 1e5767f3;
-        Sat, 18 Feb 2023 12:15:48 +0000 (UTC)
-Date:   Sat, 18 Feb 2023 21:15:33 +0900
-From:   asmadeus@codewreck.org
-To:     Eric Van Hensbergen <ericvh@kernel.org>
-Cc:     v9fs-developer@lists.sourceforge.net, rminnich@gmail.com,
-        lucho@ionkov.net, linux-kernel@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux_oss@crudebyte.com
-Subject: Re: [PATCH v4 10/11] fs/9p: writeback mode fixes
-Message-ID: <Y/DBZSaAsRiNR2WV@codewreck.org>
-References: <20230124023834.106339-1-ericvh@kernel.org>
- <20230218003323.2322580-1-ericvh@kernel.org>
- <20230218003323.2322580-11-ericvh@kernel.org>
- <Y/Ch8o/6HVS8Iyeh@codewreck.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <Y/Ch8o/6HVS8Iyeh@codewreck.org>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-asmadeus@codewreck.org wrote on Sat, Feb 18, 2023 at 07:01:22PM +0900:
-> > diff --git a/fs/9p/vfs_super.c b/fs/9p/vfs_super.c
-> > index 5fc6a945bfff..797f717e1a91 100644
-> > --- a/fs/9p/vfs_super.c
-> > +++ b/fs/9p/vfs_super.c
-> 
-> > @@ -323,16 +327,17 @@ static int v9fs_write_inode_dotl(struct inode *inode,
-> >  	 */
-> >  	v9inode = V9FS_I(inode);
-> >  	p9_debug(P9_DEBUG_VFS, "%s: inode %p, writeback_fid %p\n",
-> > -		 __func__, inode, v9inode->writeback_fid);
-> > -	if (!v9inode->writeback_fid)
-> > -		return 0;
-> > +		 __func__, inode, fid);
-> > +	if (!fid)
-> > +		return -EINVAL;
-> 
-> Hmm, what happens if we return EINVAL here?
-> Might want a WARN_ONCE or something?
+Hi,
 
-Answering myself on this: No idea what happens, but it's fairly
-common...
-(I saw it from wb_writeback which considers any non-zero return value as
-'progress', so the error is progress as well... Might make more sense to
-return 0 here actually? need more thorough checking, didn't take time to
-dig through this either...)
+> Gesendet: Samstag, 18=2E Februar 2023 um 11:49 Uhr
+> Von: "Ar=C4=B1n=C3=A7 =C3=9CNAL" <arinc=2Eunal@arinc9=2Ecom>
+> An: "Frank Wunderlich" <frank-w@public-files=2Ede>
 
-That aside I ran with my comments addressed and cache=fscache, and
-things blew up during ./configure of coreutils-9.1 in qemu:
-(I ran it as root without setting the env var so it failed, that much is
-expected -- the evict_inode blowing up isn't)
--------
-checking whether mknod can create fifo without root privileges... configure: error: in `/mnt/coreutils-9.1':
-configure: error: you should not run configure as root (set FORCE_UNSAFE_CONFIGURE=1 in environment to bypass this check)
-See `config.log' for more details
-FS-Cache:
-FS-Cache: Assertion failed
-FS-Cache: 2 == 0 is false
-------------[ cut here ]------------
-kernel BUG at fs/fscache/cookie.c:985!
-invalid opcode: 0000 [#3] SMP PTI
-CPU: 0 PID: 9707 Comm: rm Tainted: G      D            6.2.0-rc2+ #37
-Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.16.0-debian-1.16.0-5 04/01/2014
-RIP: 0010:__fscache_relinquish_cookie.cold+0x5a/0x8f
-Code: 48 c7 c7 21 5e b8 81 e8 34 87 ff ff 48 c7 c7 2f 5e b8 81 e8 28 87 ff ff 48 63 73 04 31 d2 48 c7 c7 00 61 b8 81 e8 16 87 ff ff <0f> 0b 44 8b 47 04 8b 4f 0c 45 0f b8
-RSP: 0018:ffffc90002697e08 EFLAGS: 00010286
-RAX: 0000000000000019 RBX: ffff8880077de210 RCX: 00000000ffffefff
-RDX: 00000000ffffffea RSI: 00000000ffffefff RDI: 0000000000000001
-RBP: ffffc90002697e18 R08: 0000000000004ffb R09: 00000000ffffefff
-R10: ffffffff8264ea20 R11: ffffffff8264ea20 R12: 0000000000000000
-R13: ffffffffc00870e0 R14: ffff88800308cd20 R15: ffff8880046a0020
-FS:  00007fec5aa33000(0000) GS:ffff88807cc00000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00000000009af4d8 CR3: 0000000007490000 CR4: 00000000000006b0
-Call Trace:
- <TASK>
- v9fs_evict_inode+0x78/0x90 [9p]
- evict+0xc0/0x160
- iput+0x171/0x220
- do_unlinkat+0x197/0x280
- __x64_sys_unlinkat+0x37/0x60
- do_syscall_64+0x3c/0x80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-RIP: 0033:0x7fec5ab33fdb
-Code: 73 01 c3 48 8b 0d 55 9e 0f 00 f7 d8 64 89 01 48 83 c8 ff c3 66 2e 0f 1f 84 00 00 00 00 00 90 f3 0f 1e fa b8 07 01 00 00 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 8b 08
-RSP: 002b:00007ffd460b1858 EFLAGS: 00000246 ORIG_RAX: 0000000000000107
-RAX: ffffffffffffffda RBX: 00000000009af830 RCX: 00007fec5ab33fdb
-RDX: 0000000000000000 RSI: 00000000009ae3d0 RDI: 00000000ffffff9c
-RBP: 00000000009ae340 R08: 0000000000000003 R09: 0000000000000000
-R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000000
-R13: 00007ffd460b1a40 R14: 0000000000000000 R15: 00000000009af830
- </TASK>
-Modules linked in: 9pnet_virtio 9p 9pnet siw ib_core
----[ end trace 0000000000000000 ]---
-RIP: 0010:__fscache_relinquish_cookie.cold+0x5a/0x8f
-Code: 48 c7 c7 21 5e b8 81 e8 34 87 ff ff 48 c7 c7 2f 5e b8 81 e8 28 87 ff ff 48 63 73 04 31 d2 48 c7 c7 00 61 b8 81 e8 16 87 ff ff <0f> 0b 44 8b 47 04 8b 4f 0c 45 0f b8
-RSP: 0018:ffffc90002237e08 EFLAGS: 00010286
-RAX: 0000000000000019 RBX: ffff8880077de9a0 RCX: 00000000ffffefff
-RDX: 00000000ffffffea RSI: 00000000ffffefff RDI: 0000000000000001
-RBP: ffffc90002237e18 R08: 0000000000004ffb R09: 00000000ffffefff
-R10: ffffffff8264ea20 R11: ffffffff8264ea20 R12: 0000000000000000
-R13: ffffffffc00870e0 R14: ffff888003a6b500 R15: ffff8880046a0020
-FS:  00007fec5aa33000(0000) GS:ffff88807cc00000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00000000009af4d8 CR3: 0000000007490000 CR4: 00000000000006b0
-./configure: line 88:  9707 Segmentation fault      exit $1
------------
+> On 18=2E02=2E2023 13:24, Frank Wunderlich wrote:
+> > Hi,
+> >=20
+> > finally get some time to bootup with this series on my r2=2E
+> >=20
+> > I see that inserting the port@5 as cpu-port maps this as default-cpu b=
+ecause dsa-core uses first found cpu-port as
+> > default (dsa_tree_setup_cpu_ports in dsa=2Ec) and because of lower ban=
+dwidth (rgmii instead of trgmii) not the best choice=2E
+> >=20
+> > But it look worse=2E=2E=2Enetwork is currently broken (set both gmacs =
+up)=2E
+> > I see arp-packets reaching remote side, but reponse is not received by=
+ r2
+> >=20
+> > I have tested it on 6=2E2-rc8 (wan-port), maybe additional patches are=
+ needed?=2E=2E=2Euserspace setup should be right=2E
+> >=20
+> > so i added series on top of net-next (no additional patches except som=
+e basic like build-script,defconfig and such)=2E=2E=2Esame result=2E=2E=2E
+> >=20
+> > i'm not sure if i change the mapping from userspace back to eth0, so d=
+isabled port@5 in switch, now port6 is
+> > cpu-port again and it works=2E=2E=2Eso something is wrong with port5 o=
+f switch or gmac1=2E
+>=20
+> That's a driver issue and will be fixed once an accepted version of=20
+> these patches [0] [1] [2] are applied to net-next=2E You should have the=
+m=20
+> on your inbox, I specifically told Richard to CC you=2E
 
-I don't have time to investigate but I'm afraid this needs a bit more
-time as well, sorry :/
+yes, i've got them, but not applied when starting these tests=2E Not thoug=
+ht, that this change is necessary=20
+as we use both gmac on mt7531/bpi-r3 with out problems=2E
 
+with these 3 Patches network-connection works, but only at ~624 Mbit/s in =
+TX-Mode (started iperf3-client on r2 without -R) and massive retransmitts o=
+n first run, other direction is clean=2E
 
+and these Patches need to be applied first (when fixed up) else network is=
+ broken=2E
 
+> This is devicetree bindings=2E We're here to describe the hardware=2E Th=
+e=20
+> way a driver works should not affect describing the hardware=2E
 
+thats right, but it should not break/change behaviour like now all ports h=
+ave only ~600Mbit because of
+moving them all to the other gmac which has obvious issues=2E
 
+> To address the lower bandwidth situation you mentioned, a devicetree=20
+> property to designate a CPU port as the default CPU port could be=20
+> introduced=2E I'm not aware of a similar conversation so I'll send a mai=
+l=20
+> to netdev to discuss this=2E Will CC you=2E
 
+isn't there a way to leave ports by default on the the better gmac (gmac0=
+=3Dtrgmii)?
+maybe moving port5 below port6=2E=2E=2Enot nice, but then port6 is the fir=
+st cpu found=2E
+or maybe defined the default cpu in driver which gets picked up by core (d=
+efine port6 if available as default)=2E
+Imho additional dts-propperty is wrong approch=2E=2E=2Eit should be handle=
+d by driver=2E But cpu-port-selection is=20
+currently done in dsa-core which makes it a bit difficult=2E
 
+I'm not sure how the multi-cpu support in dsa-core ended and how you use t=
+he other gmac not used by dsa-core
 
+set master in userspace-config? i remember you've sent a patch adding call=
+back for it=2E
 
+imho dts change should be applied if these points are cleared=2E=2E=2E
 
-For reference, here's how I addressed my comments. I don't think that's
-related to the problem at hand but can retry later without it if you
-think something's fishy:
----------
-diff --git a/fs/9p/vfs_dir.c b/fs/9p/vfs_dir.c
-index 44918c60357f..c16c39ba55d6 100644
---- a/fs/9p/vfs_dir.c
-+++ b/fs/9p/vfs_dir.c
-@@ -215,7 +215,7 @@ int v9fs_dir_release(struct inode *inode, struct file *filp)
- 	p9_debug(P9_DEBUG_VFS, "inode: %p filp: %p fid: %d\n",
- 		 inode, filp, fid ? fid->fid : -1);
- 	if (fid) {
--		if ((fid->qid.type == P9_QTFILE) && (filp->f_mode & FMODE_WRITE))
-+		if ((S_ISREG(inode->i_mode)) && (filp->f_mode & FMODE_WRITE))
- 			v9fs_flush_inode_writeback(inode);
- 
- 		spin_lock(&inode->i_lock);
-diff --git a/fs/9p/vfs_file.c b/fs/9p/vfs_file.c
-index 936daff9f948..e322d4196be6 100644
---- a/fs/9p/vfs_file.c
-+++ b/fs/9p/vfs_file.c
-@@ -60,7 +60,7 @@ int v9fs_file_open(struct inode *inode, struct file *file)
- 			return PTR_ERR(fid);
- 
- 		if ((v9ses->cache >= CACHE_WRITEBACK) && (omode & P9_OWRITE)) {
--			int writeback_omode = (omode & !P9_OWRITE) | P9_ORDWR;
-+			int writeback_omode = (omode & ~P9_OWRITE) | P9_ORDWR;
- 
- 			p9_debug(P9_DEBUG_CACHE, "write-only file with writeback enabled, try opening O_RDWR\n");
- 			err = p9_client_open(fid, writeback_omode);
-diff --git a/fs/9p/vfs_inode.c b/fs/9p/vfs_inode.c
-index d53475e1ba27..062c34524b1f 100644
---- a/fs/9p/vfs_inode.c
-+++ b/fs/9p/vfs_inode.c
-@@ -230,22 +230,7 @@ v9fs_blank_wstat(struct p9_wstat *wstat)
- 
- int v9fs_flush_inode_writeback(struct inode *inode)
- {
--	struct writeback_control wbc = {
--		.nr_to_write = LONG_MAX,
--		.sync_mode = WB_SYNC_ALL,
--		.range_start = 0,
--		.range_end = -1,
--	};
--
--	int retval = filemap_fdatawrite_wbc(inode->i_mapping, &wbc);
--
--	if (retval != 0) {
--		p9_debug(P9_DEBUG_ERROR,
--			"trying to flush inode %p failed with error code %d\n",
--			inode, retval);
--	}
--
--	return retval;
-+	return filemap_write_and_wait(inode->i_mapping);
- }
- 
- /**
-------
--- 
-Dominique
+regards Frank
