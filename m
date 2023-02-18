@@ -2,558 +2,316 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4739E69B859
-	for <lists+linux-kernel@lfdr.de>; Sat, 18 Feb 2023 07:39:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F34BA69B85D
+	for <lists+linux-kernel@lfdr.de>; Sat, 18 Feb 2023 07:44:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229648AbjBRGjl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 18 Feb 2023 01:39:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43384 "EHLO
+        id S229606AbjBRGoR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 18 Feb 2023 01:44:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46614 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229687AbjBRGjc (ORCPT
+        with ESMTP id S229475AbjBRGoP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 18 Feb 2023 01:39:32 -0500
-Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 70A5348E04
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Feb 2023 22:39:24 -0800 (PST)
-Received: from loongson.cn (unknown [113.200.148.30])
-        by gateway (Coremail) with SMTP id _____8DxXNqacvBj5iQCAA--.4974S3;
-        Sat, 18 Feb 2023 14:39:22 +0800 (CST)
-Received: from localhost.localdomain (unknown [113.200.148.30])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8Bxb+SXcvBjN+41AA--.63946S5;
-        Sat, 18 Feb 2023 14:39:22 +0800 (CST)
-From:   Qing Zhang <zhangqing@loongson.cn>
-To:     Huacai Chen <chenhuacai@kernel.org>,
-        Oleg Nesterov <oleg@redhat.com>,
-        WANG Xuerui <kernel@xen0n.name>
-Cc:     Jiaxun Yang <jiaxun.yang@flygoat.com>, loongarch@lists.linux.dev,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v5 3/3] LoongArch: ptrace: expose hardware breakpoints to debuggers
-Date:   Sat, 18 Feb 2023 14:39:19 +0800
-Message-Id: <20230218063919.5639-4-zhangqing@loongson.cn>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20230218063919.5639-1-zhangqing@loongson.cn>
-References: <20230218063919.5639-1-zhangqing@loongson.cn>
+        Sat, 18 Feb 2023 01:44:15 -0500
+Received: from mail-oa1-x31.google.com (mail-oa1-x31.google.com [IPv6:2001:4860:4864:20::31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E197B4DE04;
+        Fri, 17 Feb 2023 22:44:13 -0800 (PST)
+Received: by mail-oa1-x31.google.com with SMTP id 586e51a60fabf-1718822c152so3671824fac.7;
+        Fri, 17 Feb 2023 22:44:13 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=NB3pQSuONgFS77gcKDututtFmRG8oCAgBcmXE6iuXOA=;
+        b=HpTbn7Qq0SVKsT7dpwgP4HxMWkfAWzkhjJpWy5/wJ0wQmoGTHfD5DMfQQC4wpwMSYs
+         Ap1QQE6r/BWHvUW6gKVLxadnI1BuoRbjs6yV3NTNrLrsoH8y2lg5COChTJbYaP/YWwzq
+         oxFZSyVpjz1qjjW1GtYOKT4hYm7TGZJEgy+3ROYIjWnjvNCHxP0KpDA1tF3pIp5+sW8N
+         oy5Yh5ExgN9NEypds6h1bLmG5UtXY82ccne2p/DV6KJJ3nF6TQ2zCERK35pIMUlsaNjY
+         KK6Rbsmi6xx3xan7GttWrlgvK6B570SIF/NWQn1uYMyl/4R/l44MpzU+gDN5vXWlEEDZ
+         soGQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=NB3pQSuONgFS77gcKDututtFmRG8oCAgBcmXE6iuXOA=;
+        b=G5ErleZsLGXehaFQPBGvEMe3ZRz3+0vZf0bOVcYA3B1rUvGQ0HlF7dj9wdN3C0t0a2
+         GrmW8y/pXNH0P1mRw9aSevnme87TFdTWdoh7Vd32CTUdEEuRvMm0zLRva85205T65xrU
+         4jq6fIJEQeL8WfrSkX7yQheRiXMQY1Kz3msJFafKumFbnKAD7osCB905nc1DAwdMlI+5
+         LlpOBdvXqInK+qlXWO8Qgb8evkqsUJBNeCIns/CIBt8sTwB7v9oHOxDmrMmmnfXJpWQG
+         53MkoWqvHB29JihDBBiDrzdNw7V9FbVeWCx5seB5FFAFR4OQuwMfPQiG/9p2EM8nnGzY
+         E1qw==
+X-Gm-Message-State: AO0yUKXOd8SokGHawmOq4mP7aBU1GUc67GJiNVp+jKuZ9hFa2gm2a8dC
+        W7uNiz/10ptIuo10YW2TBbroRn4LkB2098UEEHM=
+X-Google-Smtp-Source: AK7set+rXUmLvo/fIjtDr4aASGB6EwCQSP/Mg4pq1MxcG77V/rxm3QtqpvxR1QeT/HCEgDdUL5xzrTcgbwnHJSDDfAg=
+X-Received: by 2002:a05:6870:fba9:b0:16e:7da2:1a03 with SMTP id
+ kv41-20020a056870fba900b0016e7da21a03mr773728oab.90.1676702652427; Fri, 17
+ Feb 2023 22:44:12 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf8Bxb+SXcvBjN+41AA--.63946S5
-X-CM-SenderInfo: x2kd0wptlqwqxorr0wxvrqhubq/
-X-Coremail-Antispam: 1Uk129KBjvJXoW3KryfWr1fZF48XryDJrykAFb_yoWktry3pF
-        47C3yUtrWUtrZ2kr4ftws8Ar15Gw4IvrWxGrWfuw1Sya4jqrZ8K3W8Kr90vr4fC348ua4f
-        Aa909w4Y9ayUX3DanT9S1TB71UUUUjUqnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
-        qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
-        b3AYFVCjjxCrM7AC8VAFwI0_Jr0_Gr1l1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s
-        1l1IIY67AEw4v_Jrv_JF1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xv
-        wVC0I7IYx2IY67AKxVW5JVW7JwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwA2z4
-        x0Y4vEx4A2jsIE14v26r4UJVWxJr1l84ACjcxK6I8E87Iv6xkF7I0E14v26r4UJVWxJr1l
-        n4kS14v26r1Y6r17M2AIxVAIcxkEcVAq07x20xvEncxIr21l57IF6xkI12xvs2x26I8E6x
-        ACxx1l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26rWY6Fy7McIj6I8E
-        87Iv67AKxVW8JVWxJwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41l42xK82
-        IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1l4IxYO2xFxVAFwI0_Jrv_JF1lx2Iq
-        xVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r
-        126r1DMIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Xr0_Ar1lIxAIcVC0I7IYx2IY
-        6xkF7I0E14v26r4j6F4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67
-        AKxVW8JVWxJwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuY
-        vjxUVCD7UUUUU
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+From:   Dipanjan Das <mail.dipanjan.das@gmail.com>
+Date:   Fri, 17 Feb 2023 22:44:01 -0800
+Message-ID: <CANX2M5azXhxrSV2YfrDVfZb7w26ugygC61vfUbBxxVHOgNOwFg@mail.gmail.com>
+Subject: KMSAN: uninit-value in __dma_map_sg_attrs
+To:     hch@lst.de, m.szyprowski@samsung.com, robin.murphy@arm.com,
+        sumit.semwal@linaro.org, christian.koenig@amd.com,
+        iommu@lists.linux.dev, linux-media@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, linaro-mm-sig@lists.linaro.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Cc:     syzkaller <syzkaller@googlegroups.com>,
+        Marius Fleischer <fleischermarius@googlemail.com>,
+        Priyanka Bose <its.priyanka.bose@gmail.com>
+Content-Type: multipart/mixed; boundary="000000000000fe2c9305f4f3c184"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Implement regset-based ptrace interface that exposes hardware
-breakpoints to user-space debuggers to query and set instruction
-and data breakpoints.
+--000000000000fe2c9305f4f3c184
+Content-Type: text/plain; charset="UTF-8"
 
-Signed-off-by: Qing Zhang <zhangqing@loongson.cn>
----
- arch/loongarch/include/uapi/asm/ptrace.h |   9 +
- arch/loongarch/kernel/ptrace.c           | 416 +++++++++++++++++++++++
- include/uapi/linux/elf.h                 |   2 +
- 3 files changed, 427 insertions(+)
+Hi,
 
-diff --git a/arch/loongarch/include/uapi/asm/ptrace.h b/arch/loongarch/include/uapi/asm/ptrace.h
-index 46eb40932bb1..7ac4a0e44570 100644
---- a/arch/loongarch/include/uapi/asm/ptrace.h
-+++ b/arch/loongarch/include/uapi/asm/ptrace.h
-@@ -56,6 +56,15 @@ struct user_lasx_state {
- 	uint64_t vregs[32*4];
- };
- 
-+struct user_watch_state {
-+	uint16_t dbg_info;
-+	struct {
-+		uint64_t    addr;
-+		uint64_t    mask;
-+		uint32_t    ctrl;
-+	}		dbg_regs[8];
-+};
-+
- #define PTRACE_SYSEMU			0x1f
- #define PTRACE_SYSEMU_SINGLESTEP	0x20
- 
-diff --git a/arch/loongarch/kernel/ptrace.c b/arch/loongarch/kernel/ptrace.c
-index 2a057b66abe1..918d5afb0c3b 100644
---- a/arch/loongarch/kernel/ptrace.c
-+++ b/arch/loongarch/kernel/ptrace.c
-@@ -22,6 +22,7 @@
- #include <linux/errno.h>
- #include <linux/hw_breakpoint.h>
- #include <linux/mm.h>
-+#include <linux/nospec.h>
- #include <linux/ptrace.h>
- #include <linux/regset.h>
- #include <linux/sched.h>
-@@ -333,6 +334,399 @@ static int simd_set(struct task_struct *target,
- 
- #endif /* CONFIG_CPU_HAS_LSX */
- 
-+#ifdef CONFIG_HAVE_HW_BREAKPOINT
-+
-+/*
-+ * Handle hitting a HW-breakpoint.
-+ */
-+static void ptrace_hbptriggered(struct perf_event *bp,
-+				struct perf_sample_data *data,
-+				struct pt_regs *regs)
-+{
-+	int i;
-+	struct arch_hw_breakpoint *bkpt = counter_arch_bp(bp);
-+
-+	for (i = 0; i < LOONGARCH_MAX_BRP; ++i)
-+		if (current->thread.hbp_break[i] == bp)
-+			break;
-+
-+	for (i = 0; i < LOONGARCH_MAX_WRP; ++i)
-+		if (current->thread.hbp_watch[i] == bp)
-+			break;
-+
-+	force_sig_ptrace_errno_trap(i, (void __user *)bkpt->address);
-+}
-+
-+static struct perf_event *ptrace_hbp_get_event(unsigned int note_type,
-+					       struct task_struct *tsk,
-+					       unsigned long idx)
-+{
-+	struct perf_event *bp = ERR_PTR(-EINVAL);
-+
-+	switch (note_type) {
-+	case NT_LOONGARCH_HW_BREAK:
-+		if (idx >= LOONGARCH_MAX_BRP)
-+			goto out;
-+		idx = array_index_nospec(idx, LOONGARCH_MAX_BRP);
-+		bp = tsk->thread.hbp_break[idx];
-+		break;
-+	case NT_LOONGARCH_HW_WATCH:
-+		if (idx >= LOONGARCH_MAX_WRP)
-+			goto out;
-+		idx = array_index_nospec(idx, LOONGARCH_MAX_WRP);
-+		bp = tsk->thread.hbp_watch[idx];
-+		break;
-+	}
-+
-+out:
-+	return bp;
-+}
-+
-+static int ptrace_hbp_set_event(unsigned int note_type,
-+				struct task_struct *tsk,
-+				unsigned long idx,
-+				struct perf_event *bp)
-+{
-+	int err = -EINVAL;
-+
-+	switch (note_type) {
-+	case NT_LOONGARCH_HW_BREAK:
-+		if (idx >= LOONGARCH_MAX_BRP)
-+			goto out;
-+		idx = array_index_nospec(idx, LOONGARCH_MAX_BRP);
-+		tsk->thread.hbp_break[idx] = bp;
-+		err = 0;
-+		break;
-+	case NT_LOONGARCH_HW_WATCH:
-+		if (idx >= LOONGARCH_MAX_WRP)
-+			goto out;
-+		idx = array_index_nospec(idx, LOONGARCH_MAX_WRP);
-+		tsk->thread.hbp_watch[idx] = bp;
-+		err = 0;
-+		break;
-+	}
-+
-+out:
-+	return err;
-+}
-+
-+static struct perf_event *ptrace_hbp_create(unsigned int note_type,
-+					    struct task_struct *tsk,
-+					    unsigned long idx)
-+{
-+	struct perf_event *bp;
-+	struct perf_event_attr attr;
-+	int err, type;
-+
-+	switch (note_type) {
-+	case NT_LOONGARCH_HW_BREAK:
-+		type = HW_BREAKPOINT_X;
-+		break;
-+	case NT_LOONGARCH_HW_WATCH:
-+		type = HW_BREAKPOINT_RW;
-+		break;
-+	default:
-+		return ERR_PTR(-EINVAL);
-+	}
-+
-+	ptrace_breakpoint_init(&attr);
-+
-+	/*
-+	 * Initialise fields to sane defaults
-+	 * (i.e. values that will pass validation).
-+	 */
-+	attr.bp_addr	= 0;
-+	attr.bp_len	= HW_BREAKPOINT_LEN_4;
-+	attr.bp_type	= type;
-+	attr.disabled	= 1;
-+
-+	bp = register_user_hw_breakpoint(&attr, ptrace_hbptriggered, NULL, tsk);
-+	if (IS_ERR(bp))
-+		return bp;
-+
-+	err = ptrace_hbp_set_event(note_type, tsk, idx, bp);
-+	if (err)
-+		return ERR_PTR(err);
-+
-+	return bp;
-+}
-+
-+static int ptrace_hbp_fill_attr_ctrl(unsigned int note_type,
-+				     struct arch_hw_breakpoint_ctrl ctrl,
-+				     struct perf_event_attr *attr)
-+{
-+	int err, len, type, offset;
-+
-+	err = arch_bp_generic_fields(ctrl, &len, &type, &offset);
-+	if (err)
-+		return err;
-+
-+	switch (note_type) {
-+	case NT_LOONGARCH_HW_BREAK:
-+		if ((type & HW_BREAKPOINT_X) != type)
-+			return -EINVAL;
-+		break;
-+	case NT_LOONGARCH_HW_WATCH:
-+		if ((type & HW_BREAKPOINT_RW) != type)
-+			return -EINVAL;
-+		break;
-+	default:
-+		return -EINVAL;
-+	}
-+
-+	attr->bp_len	= len;
-+	attr->bp_type	= type;
-+	attr->bp_addr	+= offset;
-+
-+	return 0;
-+}
-+
-+static int ptrace_hbp_get_resource_info(unsigned int note_type, u16 *info)
-+{
-+	u8 num;
-+	u16 reg = 0;
-+
-+	switch (note_type) {
-+	case NT_LOONGARCH_HW_BREAK:
-+		num = hw_breakpoint_slots(TYPE_INST);
-+		break;
-+	case NT_LOONGARCH_HW_WATCH:
-+		num = hw_breakpoint_slots(TYPE_DATA);
-+		break;
-+	default:
-+		return -EINVAL;
-+	}
-+
-+	reg |= num;
-+
-+	*info = reg;
-+	return 0;
-+}
-+
-+static int ptrace_hbp_get_ctrl(unsigned int note_type,
-+			       struct task_struct *tsk,
-+			       unsigned long idx,
-+			       u32 *ctrl)
-+{
-+	struct perf_event *bp = ptrace_hbp_get_event(note_type, tsk, idx);
-+
-+	if (IS_ERR(bp))
-+		return PTR_ERR(bp);
-+
-+	*ctrl = bp ? encode_ctrl_reg(counter_arch_bp(bp)->ctrl) : 0;
-+	return 0;
-+}
-+
-+static int ptrace_hbp_get_mask(unsigned int note_type,
-+			       struct task_struct *tsk,
-+			       unsigned long idx,
-+			       u64 *mask)
-+{
-+	struct perf_event *bp = ptrace_hbp_get_event(note_type, tsk, idx);
-+
-+	if (IS_ERR(bp))
-+		return PTR_ERR(bp);
-+
-+	*mask = bp ? counter_arch_bp(bp)->mask : 0;
-+	return 0;
-+}
-+
-+static int ptrace_hbp_get_addr(unsigned int note_type,
-+			       struct task_struct *tsk,
-+			       unsigned long idx,
-+			       u64 *addr)
-+{
-+	struct perf_event *bp = ptrace_hbp_get_event(note_type, tsk, idx);
-+
-+	if (IS_ERR(bp))
-+		return PTR_ERR(bp);
-+
-+	*addr = bp ? counter_arch_bp(bp)->address : 0;
-+	return 0;
-+}
-+
-+static struct perf_event *ptrace_hbp_get_initialised_bp(unsigned int note_type,
-+							struct task_struct *tsk,
-+							unsigned long idx)
-+{
-+	struct perf_event *bp = ptrace_hbp_get_event(note_type, tsk, idx);
-+
-+	if (!bp)
-+		bp = ptrace_hbp_create(note_type, tsk, idx);
-+
-+	return bp;
-+}
-+
-+static int ptrace_hbp_set_ctrl(unsigned int note_type,
-+			       struct task_struct *tsk,
-+			       unsigned long idx,
-+			       u32 uctrl)
-+{
-+	int err;
-+	struct perf_event *bp;
-+	struct perf_event_attr attr;
-+	struct arch_hw_breakpoint_ctrl ctrl;
-+
-+	bp = ptrace_hbp_get_initialised_bp(note_type, tsk, idx);
-+	if (IS_ERR(bp)) {
-+		err = PTR_ERR(bp);
-+		return err;
-+	}
-+
-+	attr = bp->attr;
-+	decode_ctrl_reg(uctrl, &ctrl);
-+	err = ptrace_hbp_fill_attr_ctrl(note_type, ctrl, &attr);
-+	if (err)
-+		return err;
-+
-+	return modify_user_hw_breakpoint(bp, &attr);
-+}
-+
-+static int ptrace_hbp_set_mask(unsigned int note_type,
-+			       struct task_struct *tsk,
-+			       unsigned long idx,
-+			       u64 mask)
-+{
-+	int err;
-+	struct perf_event *bp;
-+	struct perf_event_attr attr;
-+	struct arch_hw_breakpoint *info;
-+
-+	bp = ptrace_hbp_get_initialised_bp(note_type, tsk, idx);
-+	if (IS_ERR(bp)) {
-+		err = PTR_ERR(bp);
-+		return err;
-+	}
-+
-+	attr = bp->attr;
-+	info = counter_arch_bp(bp);
-+	info->mask = mask;
-+	err = modify_user_hw_breakpoint(bp, &attr);
-+	return err;
-+}
-+
-+static int ptrace_hbp_set_addr(unsigned int note_type,
-+			       struct task_struct *tsk,
-+			       unsigned long idx,
-+			       u64 addr)
-+{
-+	int err;
-+	struct perf_event *bp;
-+	struct perf_event_attr attr;
-+
-+	bp = ptrace_hbp_get_initialised_bp(note_type, tsk, idx);
-+	if (IS_ERR(bp)) {
-+		err = PTR_ERR(bp);
-+		return err;
-+	}
-+
-+	attr = bp->attr;
-+	attr.bp_addr = addr;
-+	err = modify_user_hw_breakpoint(bp, &attr);
-+	return err;
-+}
-+
-+#define PTRACE_HBP_ADDR_SZ	sizeof(u64)
-+#define PTRACE_HBP_MASK_SZ	sizeof(u64)
-+#define PTRACE_HBP_CTRL_SZ	sizeof(u32)
-+
-+static int hw_break_get(struct task_struct *target,
-+			const struct user_regset *regset,
-+			struct membuf to)
-+{
-+	unsigned int note_type = regset->core_note_type;
-+	int ret, idx = 0;
-+	u16 info;
-+	u32 ctrl;
-+	u64 addr, mask;
-+
-+	/* Resource info */
-+	ret = ptrace_hbp_get_resource_info(note_type, &info);
-+	if (ret)
-+		return ret;
-+
-+	membuf_write(&to, &info, sizeof(info));
-+	/* (address, ctrl) registers */
-+	while (to.left) {
-+		ret = ptrace_hbp_get_addr(note_type, target, idx, &addr);
-+		if (ret)
-+			return ret;
-+
-+		ret = ptrace_hbp_get_mask(note_type, target, idx, &mask);
-+		if (ret)
-+			return ret;
-+
-+		ret = ptrace_hbp_get_ctrl(note_type, target, idx, &ctrl);
-+		if (ret)
-+			return ret;
-+
-+		membuf_store(&to, addr);
-+		membuf_store(&to, mask);
-+		membuf_store(&to, ctrl);
-+		idx++;
-+	}
-+	return 0;
-+}
-+
-+static int hw_break_set(struct task_struct *target,
-+			const struct user_regset *regset,
-+			unsigned int pos, unsigned int count,
-+			const void *kbuf, const void __user *ubuf)
-+{
-+	unsigned int note_type = regset->core_note_type;
-+	int ret, idx = 0, offset, limit;
-+	u32 ctrl;
-+	u64 addr, mask;
-+
-+	/* Resource info */
-+	offset = offsetof(struct user_watch_state, dbg_regs);
-+	user_regset_copyin_ignore(&pos, &count, &kbuf, &ubuf, 0, offset);
-+
-+	/* (address, ctrl) registers */
-+	limit = regset->n * regset->size;
-+	while (count && offset < limit) {
-+		if (count < PTRACE_HBP_ADDR_SZ)
-+			return -EINVAL;
-+
-+		ret = user_regset_copyin(&pos, &count, &kbuf, &ubuf, &addr,
-+					 offset, offset + PTRACE_HBP_ADDR_SZ);
-+		if (ret)
-+			return ret;
-+
-+		ret = ptrace_hbp_set_addr(note_type, target, idx, addr);
-+		if (ret)
-+			return ret;
-+		offset += PTRACE_HBP_ADDR_SZ;
-+
-+		if (!count)
-+			break;
-+
-+		ret = user_regset_copyin(&pos, &count, &kbuf, &ubuf, &mask,
-+					 offset, offset + PTRACE_HBP_ADDR_SZ);
-+		if (ret)
-+			return ret;
-+
-+		ret = ptrace_hbp_set_mask(note_type, target, idx, mask);
-+		if (ret)
-+			return ret;
-+		offset += PTRACE_HBP_MASK_SZ;
-+
-+		ret = user_regset_copyin(&pos, &count, &kbuf, &ubuf, &mask,
-+					 offset, offset + PTRACE_HBP_MASK_SZ);
-+		if (ret)
-+			return ret;
-+
-+		ret = ptrace_hbp_set_ctrl(note_type, target, idx, ctrl);
-+		if (ret)
-+			return ret;
-+		offset += PTRACE_HBP_CTRL_SZ;
-+		idx++;
-+	}
-+
-+	return 0;
-+}
-+#endif
-+
- struct pt_regs_offset {
- 	const char *name;
- 	int offset;
-@@ -412,6 +806,10 @@ enum loongarch_regset {
- #ifdef CONFIG_CPU_HAS_LASX
- 	REGSET_LASX,
- #endif
-+#ifdef CONFIG_HAVE_HW_BREAKPOINT
-+	REGSET_HW_BREAK,
-+	REGSET_HW_WATCH,
-+#endif
- };
- 
- static const struct user_regset loongarch64_regsets[] = {
-@@ -459,6 +857,24 @@ static const struct user_regset loongarch64_regsets[] = {
- 		.set		= simd_set,
- 	},
- #endif
-+#ifdef CONFIG_HAVE_HW_BREAKPOINT
-+	[REGSET_HW_BREAK] = {
-+		.core_note_type = NT_LOONGARCH_HW_BREAK,
-+		.n = sizeof(struct user_watch_state) / sizeof(u32),
-+		.size = sizeof(u32),
-+		.align = sizeof(u32),
-+		.regset_get = hw_break_get,
-+		.set = hw_break_set,
-+	},
-+	[REGSET_HW_WATCH] = {
-+		.core_note_type = NT_LOONGARCH_HW_WATCH,
-+		.n = sizeof(struct user_watch_state) / sizeof(u32),
-+		.size = sizeof(u32),
-+		.align = sizeof(u32),
-+		.regset_get = hw_break_get,
-+		.set = hw_break_set,
-+	},
-+#endif
- };
- 
- static const struct user_regset_view user_loongarch64_view = {
-diff --git a/include/uapi/linux/elf.h b/include/uapi/linux/elf.h
-index 4c6a8fa5e7ed..3cf66946a0bb 100644
---- a/include/uapi/linux/elf.h
-+++ b/include/uapi/linux/elf.h
-@@ -444,6 +444,8 @@ typedef struct elf64_shdr {
- #define NT_LOONGARCH_LSX	0xa02	/* LoongArch Loongson SIMD Extension registers */
- #define NT_LOONGARCH_LASX	0xa03	/* LoongArch Loongson Advanced SIMD Extension registers */
- #define NT_LOONGARCH_LBT	0xa04	/* LoongArch Loongson Binary Translation registers */
-+#define NT_LOONGARCH_HW_BREAK   0xa05   /* LoongArch hardware breakpoint registers */
-+#define NT_LOONGARCH_HW_WATCH   0xa06   /* LoongArch hardware watchpoint registers */
- 
- /* Note types with note name "GNU" */
- #define NT_GNU_PROPERTY_TYPE_0	5
+We would like to report the following bug which has been found by our
+modified version of syzkaller.
+
+======================================================
+description: KMSAN: uninit-value in __dma_map_sg_attrs
+affected file: kernel/dma/mapping.c
+kernel version: 6.2.0-rc5
+kernel commit: 41c66f47061608dc1fd493eebce198f0e74cc2d7
+git tree: kmsan
+kernel config: https://syzkaller.appspot.com/text?tag=KernelConfig&x=a9a22da1efde3af6
+crash reproducer: attached
+======================================================
+Crash log:
+======================================================
+BUG: KMSAN: uninit-value in __dma_map_sg_attrs+0x1f3/0x2e0
+kernel/dma/mapping.c:200
+ __dma_map_sg_attrs+0x1f3/0x2e0 kernel/dma/mapping.c:200
+ dma_map_sg_attrs+0x4a/0x60 kernel/dma/mapping.c:232
+ ata_sg_setup drivers/ata/libata-core.c:4544 [inline]
+ ata_qc_issue+0x958/0x1480 drivers/ata/libata-core.c:4845
+ ata_scsi_translate drivers/ata/libata-scsi.c:1745 [inline]
+ __ata_scsi_queuecmd+0x161c/0x16c0 drivers/ata/libata-scsi.c:4023
+ ata_scsi_queuecmd+0x86d/0x970 drivers/ata/libata-scsi.c:4068
+ scsi_dispatch_cmd drivers/scsi/scsi_lib.c:1517 [inline]
+ scsi_queue_rq+0x478f/0x55c0 drivers/scsi/scsi_lib.c:1758
+ blk_mq_dispatch_rq_list+0x13e9/0x40f0 block/blk-mq.c:2056
+ __blk_mq_do_dispatch_sched block/blk-mq-sched.c:173 [inline]
+ blk_mq_do_dispatch_sched+0xd97/0x1630 block/blk-mq-sched.c:187
+ __blk_mq_sched_dispatch_requests+0x495/0x620
+ blk_mq_sched_dispatch_requests+0x146/0x2b0 block/blk-mq-sched.c:339
+ __blk_mq_run_hw_queue+0xf7/0x310 block/blk-mq.c:2174
+ __blk_mq_delay_run_hw_queue+0x13c/0x6b0 block/blk-mq.c:2250
+ blk_mq_run_hw_queue+0x527/0x850 block/blk-mq.c:2298
+ blk_mq_sched_insert_requests+0x50f/0x7d0 block/blk-mq-sched.c:493
+ blk_mq_dispatch_plug_list block/blk-mq.c:2758 [inline]
+ blk_mq_flush_plug_list+0x752/0x1300 block/blk-mq.c:2800
+ __blk_flush_plug+0x600/0x680 block/blk-core.c:1137
+ blk_finish_plug+0x71/0x90 block/blk-core.c:1161
+ ext4_do_writepages+0x5c84/0x6e40 fs/ext4/inode.c:2928
+ ext4_writepages+0x2bc/0x660 fs/ext4/inode.c:2965
+ do_writepages+0x475/0x930 mm/page-writeback.c:2581
+ filemap_fdatawrite_wbc+0x1c4/0x260 mm/filemap.c:388
+ __filemap_fdatawrite_range mm/filemap.c:421 [inline]
+ file_write_and_wait_range+0x22f/0x410 mm/filemap.c:777
+ ext4_sync_file+0x1ef/0x15b0 fs/ext4/fsync.c:151
+ vfs_fsync_range+0x1ee/0x240 fs/sync.c:188
+ generic_write_sync include/linux/fs.h:2885 [inline]
+ ext4_buffered_write_iter+0xaa3/0xb90 fs/ext4/file.c:292
+ ext4_file_write_iter+0xc9c/0x3350
+ do_iter_write+0x645/0x12e0 fs/read_write.c:861
+ vfs_writev+0x307/0x750 fs/read_write.c:934
+ do_pwritev fs/read_write.c:1031 [inline]
+ __do_sys_pwritev2 fs/read_write.c:1090 [inline]
+ __se_sys_pwritev2+0x275/0x480 fs/read_write.c:1081
+ __x64_sys_pwritev2+0xe0/0x140 fs/read_write.c:1081
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x3d/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+
+Uninit was created at:
+ __alloc_pages+0x767/0xee0 mm/page_alloc.c:5572
+ alloc_pages+0xa9a/0xd90 mm/mempolicy.c:2286
+ folio_alloc+0x41/0x100 mm/mempolicy.c:2296
+ filemap_alloc_folio+0xa5/0x450 mm/filemap.c:972
+ __filemap_get_folio+0xe7c/0x1960 mm/filemap.c:1966
+ pagecache_get_page+0x46/0x270 mm/folio-compat.c:98
+ grab_cache_page_write_begin+0x51/0x70 mm/folio-compat.c:110
+ ext4_write_begin+0x3d8/0x31d0 fs/ext4/inode.c:1194
+ ext4_da_write_begin+0x5f4/0x11c0 fs/ext4/inode.c:3058
+ generic_perform_write+0x376/0xc50 mm/filemap.c:3772
+ ext4_buffered_write_iter+0x583/0xb90 fs/ext4/file.c:285
+ ext4_file_write_iter+0xc9c/0x3350
+ do_iter_write+0x645/0x12e0 fs/read_write.c:861
+ vfs_writev+0x307/0x750 fs/read_write.c:934
+ do_pwritev fs/read_write.c:1031 [inline]
+ __do_sys_pwritev2 fs/read_write.c:1090 [inline]
+ __se_sys_pwritev2+0x275/0x480 fs/read_write.c:1081
+ __x64_sys_pwritev2+0xe0/0x140 fs/read_write.c:1081
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x3d/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+
+Bytes 0-1279 of 4096 are uninitialized
+Memory access of size 4096 starts at ffff8880324c6000
+
+CPU: 0 PID: 24178 Comm: syz-executor.4 Not tainted
+6.2.0-rc5-00010-g41c66f470616 #8
+Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS
+1.13.0-1ubuntu1.1 04/01/2014
+
 -- 
-2.36.0
+Thanks and Regards,
 
+Dipanjan
+
+--000000000000fe2c9305f4f3c184
+Content-Type: application/octet-stream; name="repro.syz"
+Content-Disposition: attachment; filename="repro.syz"
+Content-Transfer-Encoding: base64
+Content-ID: <f_le9ldcfr1>
+X-Attachment-Id: f_le9ldcfr1
+
+cjAgPSBjcmVhdCgmKDB4N2YwMDAwMDAwMDAwKT0nLi9maWxlMFx4MDAnLCAweDApCmlvY3RsJEZT
+X0lPQ19SRVNWU1AocjAsIDB4NDAzMDU4MjgsICYoMHg3ZjAwMDAwMDAwODApPXsweDAsIDB4MCwg
+MHgwLCAweDh9KQpwd3JpdGV2MihyMCwgJigweDdmMDAwMDAwMTU0MCk9W3smKDB4N2YwMDAwMDAw
+MGMwKT0iOGFjYTRkMjgwYzg5OGVkOWE4OTcxMTA3ZTkyYmM2M2NiNjljOTAwZDJkMjBjODA1NDU2
+NWEyOWU4M2IwMWJhNTBmNWJkZGFiOWIxMTg1YzQxYjg4Yjg0MGUxMDI1MDlmOTY0MmE4MWZiNGE1
+NDU0NTQ4Yjk1ODA2MzVlMDEzZDI5MmI0YzE3OGMzMWEwMDRkZDA2OGVkYTIyMDA0MTQzMDgxMDA4
+ZTdhOGVjMGJkZjk1NzIzMWQ2MzE0NWIxNGI4NzllNDJmNjNhZDc1ZDNjMDlmNzIiLCAweDZhfSwg
+ezB4MH0sIHsweDB9LCB7MHgwfSwgezB4MH1dLCAweDUsIDB4NTAyLCAweDksIDB4MikKcjEgPSBj
+cmVhdCgmKDB4N2YwMDAwMDAwMDAwKT0nLi9maWxlMFx4MDAnLCAweDApCmlvY3RsJEZTX0lPQ19S
+RVNWU1AocjEsIDB4NDAzMDU4MjgsICYoMHg3ZjAwMDAwMDAwODApPXsweDAsIDB4MiwgMHgwLCAw
+eDFmZmUwMDAwMH0pCg==
+--000000000000fe2c9305f4f3c184
+Content-Type: text/x-csrc; charset="US-ASCII"; name="repro.c"
+Content-Disposition: attachment; filename="repro.c"
+Content-Transfer-Encoding: base64
+Content-ID: <f_le9ldcff0>
+X-Attachment-Id: f_le9ldcff0
+
+Ly8gYXV0b2dlbmVyYXRlZCBieSBzeXprYWxsZXIgKGh0dHBzOi8vZ2l0aHViLmNvbS9nb29nbGUv
+c3l6a2FsbGVyKQoKI2RlZmluZSBfR05VX1NPVVJDRSAKCiNpbmNsdWRlIDxkaXJlbnQuaD4KI2lu
+Y2x1ZGUgPGVuZGlhbi5oPgojaW5jbHVkZSA8ZXJybm8uaD4KI2luY2x1ZGUgPGZjbnRsLmg+CiNp
+bmNsdWRlIDxzaWduYWwuaD4KI2luY2x1ZGUgPHN0ZGFyZy5oPgojaW5jbHVkZSA8c3RkYm9vbC5o
+PgojaW5jbHVkZSA8c3RkaW50Lmg+CiNpbmNsdWRlIDxzdGRpby5oPgojaW5jbHVkZSA8c3RkbGli
+Lmg+CiNpbmNsdWRlIDxzdHJpbmcuaD4KI2luY2x1ZGUgPHN5cy9pb2N0bC5oPgojaW5jbHVkZSA8
+c3lzL21vdW50Lmg+CiNpbmNsdWRlIDxzeXMvcHJjdGwuaD4KI2luY2x1ZGUgPHN5cy9zdGF0Lmg+
+CiNpbmNsdWRlIDxzeXMvc3lzY2FsbC5oPgojaW5jbHVkZSA8c3lzL3R5cGVzLmg+CiNpbmNsdWRl
+IDxzeXMvd2FpdC5oPgojaW5jbHVkZSA8dGltZS5oPgojaW5jbHVkZSA8dW5pc3RkLmg+CgojaWZu
+ZGVmIF9fTlJfcHdyaXRldjIKI2RlZmluZSBfX05SX3B3cml0ZXYyIDMyOAojZW5kaWYKCnN0YXRp
+YyB1bnNpZ25lZCBsb25nIGxvbmcgcHJvY2lkOwoKc3RhdGljIHZvaWQgc2xlZXBfbXModWludDY0
+X3QgbXMpCnsKCXVzbGVlcChtcyAqIDEwMDApOwp9CgpzdGF0aWMgdWludDY0X3QgY3VycmVudF90
+aW1lX21zKHZvaWQpCnsKCXN0cnVjdCB0aW1lc3BlYyB0czsKCWlmIChjbG9ja19nZXR0aW1lKENM
+T0NLX01PTk9UT05JQywgJnRzKSkKCWV4aXQoMSk7CglyZXR1cm4gKHVpbnQ2NF90KXRzLnR2X3Nl
+YyAqIDEwMDAgKyAodWludDY0X3QpdHMudHZfbnNlYyAvIDEwMDAwMDA7Cn0KCnN0YXRpYyB2b2lk
+IHVzZV90ZW1wb3JhcnlfZGlyKHZvaWQpCnsKCWNoYXIgdG1wZGlyX3RlbXBsYXRlW10gPSAiLi9z
+eXprYWxsZXIuWFhYWFhYIjsKCWNoYXIqIHRtcGRpciA9IG1rZHRlbXAodG1wZGlyX3RlbXBsYXRl
+KTsKCWlmICghdG1wZGlyKQoJZXhpdCgxKTsKCWlmIChjaG1vZCh0bXBkaXIsIDA3NzcpKQoJZXhp
+dCgxKTsKCWlmIChjaGRpcih0bXBkaXIpKQoJZXhpdCgxKTsKfQoKc3RhdGljIGJvb2wgd3JpdGVf
+ZmlsZShjb25zdCBjaGFyKiBmaWxlLCBjb25zdCBjaGFyKiB3aGF0LCAuLi4pCnsKCWNoYXIgYnVm
+WzEwMjRdOwoJdmFfbGlzdCBhcmdzOwoJdmFfc3RhcnQoYXJncywgd2hhdCk7Cgl2c25wcmludGYo
+YnVmLCBzaXplb2YoYnVmKSwgd2hhdCwgYXJncyk7Cgl2YV9lbmQoYXJncyk7CglidWZbc2l6ZW9m
+KGJ1ZikgLSAxXSA9IDA7CglpbnQgbGVuID0gc3RybGVuKGJ1Zik7CglpbnQgZmQgPSBvcGVuKGZp
+bGUsIE9fV1JPTkxZIHwgT19DTE9FWEVDKTsKCWlmIChmZCA9PSAtMSkKCQlyZXR1cm4gZmFsc2U7
+CglpZiAod3JpdGUoZmQsIGJ1ZiwgbGVuKSAhPSBsZW4pIHsKCQlpbnQgZXJyID0gZXJybm87CgkJ
+Y2xvc2UoZmQpOwoJCWVycm5vID0gZXJyOwoJCXJldHVybiBmYWxzZTsKCX0KCWNsb3NlKGZkKTsK
+CXJldHVybiB0cnVlOwp9CgojZGVmaW5lIEZTX0lPQ19TRVRGTEFHUyBfSU9XKCdmJywgMiwgbG9u
+ZykKc3RhdGljIHZvaWQgcmVtb3ZlX2Rpcihjb25zdCBjaGFyKiBkaXIpCnsKCWludCBpdGVyID0g
+MDsKCURJUiogZHAgPSAwOwpyZXRyeToKCQl3aGlsZSAodW1vdW50MihkaXIsIE1OVF9ERVRBQ0gg
+fCBVTU9VTlRfTk9GT0xMT1cpID09IDApIHsKCQl9CglkcCA9IG9wZW5kaXIoZGlyKTsKCWlmIChk
+cCA9PSBOVUxMKSB7CgkJaWYgKGVycm5vID09IEVNRklMRSkgewoJZXhpdCgxKTsKCQl9CglleGl0
+KDEpOwoJfQoJc3RydWN0IGRpcmVudCogZXAgPSAwOwoJd2hpbGUgKChlcCA9IHJlYWRkaXIoZHAp
+KSkgewoJCWlmIChzdHJjbXAoZXAtPmRfbmFtZSwgIi4iKSA9PSAwIHx8IHN0cmNtcChlcC0+ZF9u
+YW1lLCAiLi4iKSA9PSAwKQoJCQljb250aW51ZTsKCQljaGFyIGZpbGVuYW1lW0ZJTEVOQU1FX01B
+WF07CgkJc25wcmludGYoZmlsZW5hbWUsIHNpemVvZihmaWxlbmFtZSksICIlcy8lcyIsIGRpciwg
+ZXAtPmRfbmFtZSk7CgkJCXdoaWxlICh1bW91bnQyKGZpbGVuYW1lLCBNTlRfREVUQUNIIHwgVU1P
+VU5UX05PRk9MTE9XKSA9PSAwKSB7CgkJCX0KCQlzdHJ1Y3Qgc3RhdCBzdDsKCQlpZiAobHN0YXQo
+ZmlsZW5hbWUsICZzdCkpCglleGl0KDEpOwoJCWlmIChTX0lTRElSKHN0LnN0X21vZGUpKSB7CgkJ
+CXJlbW92ZV9kaXIoZmlsZW5hbWUpOwoJCQljb250aW51ZTsKCQl9CgkJaW50IGk7CgkJZm9yIChp
+ID0gMDs7IGkrKykgewoJCQlpZiAodW5saW5rKGZpbGVuYW1lKSA9PSAwKQoJCQkJYnJlYWs7CgkJ
+CWlmIChlcnJubyA9PSBFUEVSTSkgewoJCQkJaW50IGZkID0gb3BlbihmaWxlbmFtZSwgT19SRE9O
+TFkpOwoJCQkJaWYgKGZkICE9IC0xKSB7CgkJCQkJbG9uZyBmbGFncyA9IDA7CgkJCQkJaWYgKGlv
+Y3RsKGZkLCBGU19JT0NfU0VURkxBR1MsICZmbGFncykgPT0gMCkgewoJCQkJCX0KCQkJCQljbG9z
+ZShmZCk7CgkJCQkJY29udGludWU7CgkJCQl9CgkJCX0KCQkJaWYgKGVycm5vID09IEVST0ZTKSB7
+CgkJCQlicmVhazsKCQkJfQoJCQlpZiAoZXJybm8gIT0gRUJVU1kgfHwgaSA+IDEwMCkKCWV4aXQo
+MSk7CgkJCQlpZiAodW1vdW50MihmaWxlbmFtZSwgTU5UX0RFVEFDSCB8IFVNT1VOVF9OT0ZPTExP
+VykpCglleGl0KDEpOwoJCX0KCX0KCWNsb3NlZGlyKGRwKTsKCWZvciAoaW50IGkgPSAwOzsgaSsr
+KSB7CgkJaWYgKHJtZGlyKGRpcikgPT0gMCkKCQkJYnJlYWs7CgkJaWYgKGkgPCAxMDApIHsKCQkJ
+aWYgKGVycm5vID09IEVQRVJNKSB7CgkJCQlpbnQgZmQgPSBvcGVuKGRpciwgT19SRE9OTFkpOwoJ
+CQkJaWYgKGZkICE9IC0xKSB7CgkJCQkJbG9uZyBmbGFncyA9IDA7CgkJCQkJaWYgKGlvY3RsKGZk
+LCBGU19JT0NfU0VURkxBR1MsICZmbGFncykgPT0gMCkgewoJCQkJCX0KCQkJCQljbG9zZShmZCk7
+CgkJCQkJY29udGludWU7CgkJCQl9CgkJCX0KCQkJaWYgKGVycm5vID09IEVST0ZTKSB7CgkJCQli
+cmVhazsKCQkJfQoJCQlpZiAoZXJybm8gPT0gRUJVU1kpIHsKCQkJCQlpZiAodW1vdW50MihkaXIs
+IE1OVF9ERVRBQ0ggfCBVTU9VTlRfTk9GT0xMT1cpKQoJZXhpdCgxKTsKCQkJCWNvbnRpbnVlOwoJ
+CQl9CgkJCWlmIChlcnJubyA9PSBFTk9URU1QVFkpIHsKCQkJCWlmIChpdGVyIDwgMTAwKSB7CgkJ
+CQkJaXRlcisrOwoJCQkJCWdvdG8gcmV0cnk7CgkJCQl9CgkJCX0KCQl9CglleGl0KDEpOwoJfQp9
+CgpzdGF0aWMgdm9pZCBraWxsX2FuZF93YWl0KGludCBwaWQsIGludCogc3RhdHVzKQp7CglraWxs
+KC1waWQsIFNJR0tJTEwpOwoJa2lsbChwaWQsIFNJR0tJTEwpOwoJZm9yIChpbnQgaSA9IDA7IGkg
+PCAxMDA7IGkrKykgewoJCWlmICh3YWl0cGlkKC0xLCBzdGF0dXMsIFdOT0hBTkcgfCBfX1dBTEwp
+ID09IHBpZCkKCQkJcmV0dXJuOwoJCXVzbGVlcCgxMDAwKTsKCX0KCURJUiogZGlyID0gb3BlbmRp
+cigiL3N5cy9mcy9mdXNlL2Nvbm5lY3Rpb25zIik7CglpZiAoZGlyKSB7CgkJZm9yICg7OykgewoJ
+CQlzdHJ1Y3QgZGlyZW50KiBlbnQgPSByZWFkZGlyKGRpcik7CgkJCWlmICghZW50KQoJCQkJYnJl
+YWs7CgkJCWlmIChzdHJjbXAoZW50LT5kX25hbWUsICIuIikgPT0gMCB8fCBzdHJjbXAoZW50LT5k
+X25hbWUsICIuLiIpID09IDApCgkJCQljb250aW51ZTsKCQkJY2hhciBhYm9ydFszMDBdOwoJCQlz
+bnByaW50ZihhYm9ydCwgc2l6ZW9mKGFib3J0KSwgIi9zeXMvZnMvZnVzZS9jb25uZWN0aW9ucy8l
+cy9hYm9ydCIsIGVudC0+ZF9uYW1lKTsKCQkJaW50IGZkID0gb3BlbihhYm9ydCwgT19XUk9OTFkp
+OwoJCQlpZiAoZmQgPT0gLTEpIHsKCQkJCWNvbnRpbnVlOwoJCQl9CgkJCWlmICh3cml0ZShmZCwg
+YWJvcnQsIDEpIDwgMCkgewoJCQl9CgkJCWNsb3NlKGZkKTsKCQl9CgkJY2xvc2VkaXIoZGlyKTsK
+CX0gZWxzZSB7Cgl9Cgl3aGlsZSAod2FpdHBpZCgtMSwgc3RhdHVzLCBfX1dBTEwpICE9IHBpZCkg
+ewoJfQp9CgpzdGF0aWMgdm9pZCBzZXR1cF90ZXN0KCkKewoJcHJjdGwoUFJfU0VUX1BERUFUSFNJ
+RywgU0lHS0lMTCwgMCwgMCwgMCk7CglzZXRwZ3JwKCk7Cgl3cml0ZV9maWxlKCIvcHJvYy9zZWxm
+L29vbV9zY29yZV9hZGoiLCAiMTAwMCIpOwoJaWYgKHN5bWxpbmsoIi9kZXYvYmluZGVyZnMiLCAi
+Li9iaW5kZXJmcyIpKSB7Cgl9Cn0KCnN0YXRpYyB2b2lkIGV4ZWN1dGVfb25lKHZvaWQpOwoKI2Rl
+ZmluZSBXQUlUX0ZMQUdTIF9fV0FMTAoKc3RhdGljIHZvaWQgbG9vcCh2b2lkKQp7CglpbnQgaXRl
+ciA9IDA7Cglmb3IgKDs7IGl0ZXIrKykgewoJCWNoYXIgY3dkYnVmWzMyXTsKCQlzcHJpbnRmKGN3
+ZGJ1ZiwgIi4vJWQiLCBpdGVyKTsKCQlpZiAobWtkaXIoY3dkYnVmLCAwNzc3KSkKCWV4aXQoMSk7
+CgkJaW50IHBpZCA9IGZvcmsoKTsKCQlpZiAocGlkIDwgMCkKCWV4aXQoMSk7CgkJaWYgKHBpZCA9
+PSAwKSB7CgkJCWlmIChjaGRpcihjd2RidWYpKQoJZXhpdCgxKTsKCQkJc2V0dXBfdGVzdCgpOwoJ
+CQlleGVjdXRlX29uZSgpOwoJCQlleGl0KDApOwoJCX0KCQlpbnQgc3RhdHVzID0gMDsKCQl1aW50
+NjRfdCBzdGFydCA9IGN1cnJlbnRfdGltZV9tcygpOwoJCWZvciAoOzspIHsKCQkJaWYgKHdhaXRw
+aWQoLTEsICZzdGF0dXMsIFdOT0hBTkcgfCBXQUlUX0ZMQUdTKSA9PSBwaWQpCgkJCQlicmVhazsK
+CQkJc2xlZXBfbXMoMSk7CgkJCWlmIChjdXJyZW50X3RpbWVfbXMoKSAtIHN0YXJ0IDwgNTAwMCkK
+CQkJCWNvbnRpbnVlOwoJCQlraWxsX2FuZF93YWl0KHBpZCwgJnN0YXR1cyk7CgkJCWJyZWFrOwoJ
+CX0KCQlyZW1vdmVfZGlyKGN3ZGJ1Zik7Cgl9Cn0KCnVpbnQ2NF90IHJbMl0gPSB7MHhmZmZmZmZm
+ZmZmZmZmZmZmLCAweGZmZmZmZmZmZmZmZmZmZmZ9OwoKdm9pZCBleGVjdXRlX29uZSh2b2lkKQp7
+CgkJaW50cHRyX3QgcmVzID0gMDsKbWVtY3B5KCh2b2lkKikweDIwMDAwMDAwLCAiLi9maWxlMFww
+MDAiLCA4KTsKCXJlcyA9IHN5c2NhbGwoX19OUl9jcmVhdCwgMHgyMDAwMDAwMHVsLCAwdWwpOwoJ
+aWYgKHJlcyAhPSAtMSkKCQlyWzBdID0gcmVzOwoqKHVpbnQxNl90KikweDIwMDAwMDgwID0gMDsK
+Kih1aW50MTZfdCopMHgyMDAwMDA4MiA9IDA7CioodWludDY0X3QqKTB4MjAwMDAwODggPSAwOwoq
+KHVpbnQ2NF90KikweDIwMDAwMDkwID0gODsKKih1aW50MzJfdCopMHgyMDAwMDA5OCA9IDA7Cioo
+dWludDMyX3QqKTB4MjAwMDAwOWMgPSAwOwptZW1zZXQoKHZvaWQqKTB4MjAwMDAwYTAsIDAsIDE2
+KTsKCXN5c2NhbGwoX19OUl9pb2N0bCwgclswXSwgMHg0MDMwNTgyOCwgMHgyMDAwMDA4MHVsKTsK
+Kih1aW50NjRfdCopMHgyMDAwMTU0MCA9IDB4MjAwMDAwYzA7Cm1lbWNweSgodm9pZCopMHgyMDAw
+MDBjMCwgIlx4OGFceGNhXHg0ZFx4MjhceDBjXHg4OVx4OGVceGQ5XHhhOFx4OTdceDExXHgwN1x4
+ZTlceDJiXHhjNlx4M2NceGI2XHg5Y1x4OTBceDBkXHgyZFx4MjBceGM4XHgwNVx4NDVceDY1XHhh
+Mlx4OWVceDgzXHhiMFx4MWJceGE1XHgwZlx4NWJceGRkXHhhYlx4OWJceDExXHg4NVx4YzRceDFi
+XHg4OFx4YjhceDQwXHhlMVx4MDJceDUwXHg5Zlx4OTZceDQyXHhhOFx4MWZceGI0XHhhNVx4NDVc
+eDQ1XHg0OFx4YjlceDU4XHgwNlx4MzVceGUwXHgxM1x4ZDJceDkyXHhiNFx4YzFceDc4XHhjM1x4
+MWFceDAwXHg0ZFx4ZDBceDY4XHhlZFx4YTJceDIwXHgwNFx4MTRceDMwXHg4MVx4MDBceDhlXHg3
+YVx4OGVceGMwXHhiZFx4ZjlceDU3XHgyM1x4MWRceDYzXHgxNFx4NWJceDE0XHhiOFx4NzlceGU0
+XHgyZlx4NjNceGFkXHg3NVx4ZDNceGMwXHg5Zlx4NzIiLCAxMDYpOwoqKHVpbnQ2NF90KikweDIw
+MDAxNTQ4ID0gMHg2YTsKKih1aW50NjRfdCopMHgyMDAwMTU1MCA9IDA7CioodWludDY0X3QqKTB4
+MjAwMDE1NTggPSAwOwoqKHVpbnQ2NF90KikweDIwMDAxNTYwID0gMDsKKih1aW50NjRfdCopMHgy
+MDAwMTU2OCA9IDA7CioodWludDY0X3QqKTB4MjAwMDE1NzAgPSAwOwoqKHVpbnQ2NF90KikweDIw
+MDAxNTc4ID0gMDsKKih1aW50NjRfdCopMHgyMDAwMTU4MCA9IDA7CioodWludDY0X3QqKTB4MjAw
+MDE1ODggPSAwOwoJc3lzY2FsbChfX05SX3B3cml0ZXYyLCByWzBdLCAweDIwMDAxNTQwdWwsIDV1
+bCwgMHg1MDIsIDksIDJ1bCk7Cm1lbWNweSgodm9pZCopMHgyMDAwMDAwMCwgIi4vZmlsZTBcMDAw
+IiwgOCk7CglyZXMgPSBzeXNjYWxsKF9fTlJfY3JlYXQsIDB4MjAwMDAwMDB1bCwgMHVsKTsKCWlm
+IChyZXMgIT0gLTEpCgkJclsxXSA9IHJlczsKKih1aW50MTZfdCopMHgyMDAwMDA4MCA9IDA7Cioo
+dWludDE2X3QqKTB4MjAwMDAwODIgPSAyOwoqKHVpbnQ2NF90KikweDIwMDAwMDg4ID0gMDsKKih1
+aW50NjRfdCopMHgyMDAwMDA5MCA9IDB4MWZmZTAwMDAwOwoqKHVpbnQzMl90KikweDIwMDAwMDk4
+ID0gMDsKKih1aW50MzJfdCopMHgyMDAwMDA5YyA9IDA7Cm1lbXNldCgodm9pZCopMHgyMDAwMDBh
+MCwgMCwgMTYpOwoJc3lzY2FsbChfX05SX2lvY3RsLCByWzFdLCAweDQwMzA1ODI4LCAweDIwMDAw
+MDgwdWwpOwoKfQppbnQgbWFpbih2b2lkKQp7CgkJc3lzY2FsbChfX05SX21tYXAsIDB4MWZmZmYw
+MDB1bCwgMHgxMDAwdWwsIDB1bCwgMHgzMnVsLCAtMSwgMHVsKTsKCXN5c2NhbGwoX19OUl9tbWFw
+LCAweDIwMDAwMDAwdWwsIDB4MTAwMDAwMHVsLCA3dWwsIDB4MzJ1bCwgLTEsIDB1bCk7CglzeXNj
+YWxsKF9fTlJfbW1hcCwgMHgyMTAwMDAwMHVsLCAweDEwMDB1bCwgMHVsLCAweDMydWwsIC0xLCAw
+dWwpOwoJZm9yIChwcm9jaWQgPSAwOyBwcm9jaWQgPCA4OyBwcm9jaWQrKykgewoJCWlmIChmb3Jr
+KCkgPT0gMCkgewoJCQl1c2VfdGVtcG9yYXJ5X2RpcigpOwoJCQlsb29wKCk7CgkJfQoJfQoJc2xl
+ZXAoMTAwMDAwMCk7CglyZXR1cm4gMDsKfQo=
+--000000000000fe2c9305f4f3c184--
