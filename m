@@ -2,57 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ECD6F69B6B1
-	for <lists+linux-kernel@lfdr.de>; Sat, 18 Feb 2023 01:28:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5816F69B6BA
+	for <lists+linux-kernel@lfdr.de>; Sat, 18 Feb 2023 01:29:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229813AbjBRA2s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Feb 2023 19:28:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41652 "EHLO
+        id S229953AbjBRA2x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Feb 2023 19:28:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41670 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229510AbjBRA2q (ORCPT
+        with ESMTP id S229694AbjBRA2r (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Feb 2023 19:28:46 -0500
-Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3CB2459B49
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Feb 2023 16:28:45 -0800 (PST)
-Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-536582abb72so22509327b3.5
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Feb 2023 16:28:45 -0800 (PST)
+        Fri, 17 Feb 2023 19:28:47 -0500
+Received: from mail-ua1-x949.google.com (mail-ua1-x949.google.com [IPv6:2607:f8b0:4864:20::949])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 421555A3A3
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Feb 2023 16:28:46 -0800 (PST)
+Received: by mail-ua1-x949.google.com with SMTP id j26-20020ab06cba000000b0066119a9d3bbso855914uaa.21
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Feb 2023 16:28:46 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=WRJSWRU8dQHXXhdXAbgeFtewLtYoHueyg1zV/lollrc=;
-        b=JUkI+uUZUGikStVOrWOWfUFvkifZQjdvysrYVMcxjv1b2yQplxM71vw1fjhTzhEkxI
-         BEohrL6MRF518g9B3YG2ljl8T7G93FwY6nToc+IVWoDTzVPkWMKdK99Fw+Y/07yhJ3P2
-         Pt0n2XoDP+p37aLwSJxXkZR/Jyh8LDLuXTOP46PclH0WaRZarQPsfJWYdmcsYTgivcxA
-         V29rcePGsSV2Bm8JBI3cnvgY6VYwZ38Vy23D8uxt/hblg5U5P6fb6PnTeEwjCMXWB3jt
-         Xt02v+X21m74LuwV377B2oYbsfLR/FpkRSgMkEe4zOTBZt33XomrJuA07ToJPeOqmC5B
-         2qvw==
+        bh=LnKhelmr0oBezYImc/CiFkR5B91EfUKvE0Rbw9pLRe4=;
+        b=lQipQIAGaSVcFBsRExtQaFLnPm6HAzNz2+VJbpondpycb1x3PDuXTd+i0o++TSF9er
+         gxut9YhAnGbep2SPcG0jDIMVR2mq6NQ41EE/6bkL3ZaN7Gb6kf8EWJR5CwB22gEUYwsb
+         dux6/8aAmRzRNX/2PmjME6f1c/ZNU7ZaQroNOMlaJyZVlnL1oAKwRpxb7/HYgt7/PydP
+         lxdcZ2uDPD9axodhgg/osne68KRXEtgsS6fa3iXBXgLQZ3W+b4wOBh19dwO8qERvglmh
+         y56jvQy6e2CUxUzTLyorFkYxBNBmTKZfxgrrDzoZSssQ0cO8QYft6CecYtHZ5imrv86K
+         Ha7g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=WRJSWRU8dQHXXhdXAbgeFtewLtYoHueyg1zV/lollrc=;
-        b=EFhDPtIx+Qrf0TIl/4WzadxlbNvCFb/DC0O4nJH6L5mqgMMaPMCn21myVcAXUcXeEh
-         RfTkfQ4w7ZrSo/ssU1dGh9y1kn8UnUJPO1DHqQeVswx94rABzuihVLJGlinpHrXcNPQC
-         PeCpgxQHiAT8W9gvJDNzTuEr/5R2ICjDzaRtIv6gBH7x0W9r+kQbAvw8SV98nWtx1jWu
-         qsdSJgUQAgoJDcWIxAlOvNcDUOD4uCDa5D6iPiNVwz2WB1EWm1JsxsDfWRc8za4CD/wQ
-         tBvokvaP006rcr7iYsbKHDSd72up7gagteZt3Lclwwx9S2DRWB5lLgMhpe9VLQUYvTBU
-         R9WA==
-X-Gm-Message-State: AO0yUKXItu4v/sEEHBs8svAlKqTmYGHRsTmwIDH6YikvS8OTk9Cyvmmd
-        usz/rZVcHt6xu/rt2Efoj330AKZlzMcJg5fS
-X-Google-Smtp-Source: AK7set/WjcZL+XrN64oa4iFWZNoLag2qFEizB65Q47paRVpixNGKzuLMD0K/0D4ZsPotwj/bHVSjyMfKhh7AGtfF
+        bh=LnKhelmr0oBezYImc/CiFkR5B91EfUKvE0Rbw9pLRe4=;
+        b=t3k1eNGmgIllVmMfGbkxM2JeaQUux2IfPFoHtU9ouXRB556HeRdp57gENK4S6UlN7t
+         PF3knzrOn5VEHUROtLBpUswa+freXkrJp6OjOEScCh/NMVbpvQ4yCA7idCGPijP59C6R
+         UegqopOA6ECSmPol+tVNP6/sSceokL29/RMAkr8EzFzLh85CWJZJVlJiyNisWJKniHPE
+         7seYOgyunXLrt3Eb4nEnziC1riril+RSQQ0o0Fl2cyXIclLseIrQsJB3KUAvB00BeYaF
+         KIq+xnTPy2xd6KTDsDmLdPPNFg/HAbnuliTan9RkOftLJjcy3Wbewa39aY2+hXpk8rjQ
+         6k3Q==
+X-Gm-Message-State: AO0yUKUvPMPstaS5OamcopfNnBOyh/4eESrLiDHWlgfMCxwoq/jONArJ
+        VbXJ70oXeHweKh1tfCcxwyLH4QRDu3K7u413
+X-Google-Smtp-Source: AK7set9cfmc3rDPTjjWrEWA1g/aV5e0+YQFlWRnOBBxS/xzEKz7fRzIC1V+FfmOXZMHdILJkQVdHqDoADwXiTyis
 X-Received: from jthoughton.c.googlers.com ([fda3:e722:ac3:cc00:14:4d90:c0a8:2a4f])
- (user=jthoughton job=sendgmr) by 2002:a81:4981:0:b0:527:adb4:3297 with SMTP
- id w123-20020a814981000000b00527adb43297mr1507453ywa.161.1676680124408; Fri,
- 17 Feb 2023 16:28:44 -0800 (PST)
-Date:   Sat, 18 Feb 2023 00:27:34 +0000
+ (user=jthoughton job=sendgmr) by 2002:a05:6130:a0a:b0:67a:2833:5ceb with SMTP
+ id bx10-20020a0561300a0a00b0067a28335cebmr54247uab.0.1676680125416; Fri, 17
+ Feb 2023 16:28:45 -0800 (PST)
+Date:   Sat, 18 Feb 2023 00:27:35 +0000
 In-Reply-To: <20230218002819.1486479-1-jthoughton@google.com>
 Mime-Version: 1.0
 References: <20230218002819.1486479-1-jthoughton@google.com>
 X-Mailer: git-send-email 2.39.2.637.g21b0678d19-goog
-Message-ID: <20230218002819.1486479-2-jthoughton@google.com>
-Subject: [PATCH v2 01/46] hugetlb: don't set PageUptodate for UFFDIO_CONTINUE
+Message-ID: <20230218002819.1486479-3-jthoughton@google.com>
+Subject: [PATCH v2 02/46] hugetlb: remove mk_huge_pte; it is unused
 From:   James Houghton <jthoughton@google.com>
 To:     Mike Kravetz <mike.kravetz@oracle.com>,
         Muchun Song <songmuchun@bytedance.com>,
@@ -86,37 +86,82 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-If would be bad if we actually set PageUptodate with UFFDIO_CONTINUE;
-PageUptodate indicates that the page has been zeroed, and we don't want
-to give a non-zeroed page to the user.
+mk_huge_pte is unused and not necessary. pte_mkhuge is the appropriate
+function to call to create a HugeTLB PTE (see
+Documentation/mm/arch_pgtable_helpers.rst).
 
-The reason this change is being made now is because UFFDIO_CONTINUEs on
-subpages definitely shouldn't set this page flag on the head page.
+It is being removed now to avoid complicating the implementation of
+HugeTLB high-granularity mapping.
 
+Acked-by: Peter Xu <peterx@redhat.com>
+Acked-by: Mina Almasry <almasrymina@google.com>
+Reviewed-by: Mike Kravetz <mike.kravetz@oracle.com>
 Signed-off-by: James Houghton <jthoughton@google.com>
 
+diff --git a/arch/s390/include/asm/hugetlb.h b/arch/s390/include/asm/hugetlb.h
+index ccdbccfde148..c34893719715 100644
+--- a/arch/s390/include/asm/hugetlb.h
++++ b/arch/s390/include/asm/hugetlb.h
+@@ -77,11 +77,6 @@ static inline void huge_ptep_set_wrprotect(struct mm_struct *mm,
+ 	set_huge_pte_at(mm, addr, ptep, pte_wrprotect(pte));
+ }
+ 
+-static inline pte_t mk_huge_pte(struct page *page, pgprot_t pgprot)
+-{
+-	return mk_pte(page, pgprot);
+-}
+-
+ static inline int huge_pte_none(pte_t pte)
+ {
+ 	return pte_none(pte);
+diff --git a/include/asm-generic/hugetlb.h b/include/asm-generic/hugetlb.h
+index d7f6335d3999..be2e763e956f 100644
+--- a/include/asm-generic/hugetlb.h
++++ b/include/asm-generic/hugetlb.h
+@@ -5,11 +5,6 @@
+ #include <linux/swap.h>
+ #include <linux/swapops.h>
+ 
+-static inline pte_t mk_huge_pte(struct page *page, pgprot_t pgprot)
+-{
+-	return mk_pte(page, pgprot);
+-}
+-
+ static inline unsigned long huge_pte_write(pte_t pte)
+ {
+ 	return pte_write(pte);
+diff --git a/mm/debug_vm_pgtable.c b/mm/debug_vm_pgtable.c
+index af59cc7bd307..fbbc53113473 100644
+--- a/mm/debug_vm_pgtable.c
++++ b/mm/debug_vm_pgtable.c
+@@ -925,7 +925,7 @@ static void __init hugetlb_basic_tests(struct pgtable_debug_args *args)
+ 	 * as it was previously derived from a real kernel symbol.
+ 	 */
+ 	page = pfn_to_page(args->fixed_pmd_pfn);
+-	pte = mk_huge_pte(page, args->page_prot);
++	pte = mk_pte(page, args->page_prot);
+ 
+ 	WARN_ON(!huge_pte_dirty(huge_pte_mkdirty(pte)));
+ 	WARN_ON(!huge_pte_write(huge_pte_mkwrite(huge_pte_wrprotect(pte))));
 diff --git a/mm/hugetlb.c b/mm/hugetlb.c
-index 07abcb6eb203..792cb2e67ce5 100644
+index 792cb2e67ce5..540cdf9570d3 100644
 --- a/mm/hugetlb.c
 +++ b/mm/hugetlb.c
-@@ -6256,7 +6256,16 @@ int hugetlb_mcopy_atomic_pte(struct mm_struct *dst_mm,
- 	 * preceding stores to the page contents become visible before
- 	 * the set_pte_at() write.
- 	 */
--	__folio_mark_uptodate(folio);
-+	if (!is_continue)
-+		__folio_mark_uptodate(folio);
-+	else if (!folio_test_uptodate(folio)) {
-+		/*
-+		 * This should never happen; HugeTLB pages are always Uptodate
-+		 * as soon as they are allocated.
-+		 */
-+		ret = -EFAULT;
-+		goto out_release_nounlock;
-+	}
+@@ -4899,11 +4899,10 @@ static pte_t make_huge_pte(struct vm_area_struct *vma, struct page *page,
+ 	unsigned int shift = huge_page_shift(hstate_vma(vma));
  
- 	/* Add shared, newly allocated pages to the page cache. */
- 	if (vm_shared && !is_continue) {
+ 	if (writable) {
+-		entry = huge_pte_mkwrite(huge_pte_mkdirty(mk_huge_pte(page,
+-					 vma->vm_page_prot)));
++		entry = huge_pte_mkwrite(huge_pte_mkdirty(mk_pte(page,
++						vma->vm_page_prot)));
+ 	} else {
+-		entry = huge_pte_wrprotect(mk_huge_pte(page,
+-					   vma->vm_page_prot));
++		entry = huge_pte_wrprotect(mk_pte(page, vma->vm_page_prot));
+ 	}
+ 	entry = pte_mkyoung(entry);
+ 	entry = arch_make_huge_pte(entry, shift, vma->vm_flags);
 -- 
 2.39.2.637.g21b0678d19-goog
 
