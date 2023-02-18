@@ -2,168 +2,191 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D8DC469BA20
-	for <lists+linux-kernel@lfdr.de>; Sat, 18 Feb 2023 14:04:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E40CC69BA27
+	for <lists+linux-kernel@lfdr.de>; Sat, 18 Feb 2023 14:12:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229758AbjBRNEM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 18 Feb 2023 08:04:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38576 "EHLO
+        id S229763AbjBRNMA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 18 Feb 2023 08:12:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41202 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229541AbjBRNEI (ORCPT
+        with ESMTP id S229704AbjBRNL7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 18 Feb 2023 08:04:08 -0500
-Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9600113D7A
-        for <linux-kernel@vger.kernel.org>; Sat, 18 Feb 2023 05:04:07 -0800 (PST)
-Received: by mail-lf1-x130.google.com with SMTP id b1so955255lfs.8
-        for <linux-kernel@vger.kernel.org>; Sat, 18 Feb 2023 05:04:07 -0800 (PST)
+        Sat, 18 Feb 2023 08:11:59 -0500
+Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4C3C16AEA
+        for <linux-kernel@vger.kernel.org>; Sat, 18 Feb 2023 05:11:55 -0800 (PST)
+Received: by mail-lf1-x12b.google.com with SMTP id b22so1121073lfv.5
+        for <linux-kernel@vger.kernel.org>; Sat, 18 Feb 2023 05:11:55 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=3N5WAzbRFEo6T4gVmAxjSh/Vc/Ea58u6XaJqPwHeVh4=;
-        b=U4IXj5fZbsqDGnnIHvFZjApawI7qJL91IjBv5k4Klvpgh7GQl6AdaUil67EYPWWXgo
-         5qzdpVEqeRX4xOzpvzc4pKf7InKG6AWHme+BkdAoMHe8B+nmo461rqY3zraL5on846DP
-         gJOMYCVgu7xeuo1EPhlyvmP1+X4/D3pcaHvH0jr0X9A81wjmOXkFd2G3Hau5sbrLcsCY
-         r09p4VrVglNWHtBAm4Mzs/dKh8VpV43bBvYLS9ymwCkaq0ZyLAdQTHOzrp0OnTUIFARl
-         rrlN8H7+vUDN+jdo/2gUYb5KHNcW2oOCccSmZkDFRJ+QUwY82MuWqnjAJJtHH+BypEtW
-         Nylw==
+        d=vanguardiasur-com-ar.20210112.gappssmtp.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=sFZb+KyGAfqdWcVh2QTgnXaoGg7pVVta8DL5jcjkaHA=;
+        b=CD+nZ/SzGoNOMg8Mk2mopOlJfDYIRF3XlRUaULLdQYrYb0b/mc9ZIUbVbcb4QCrILP
+         Ji7C1kzakqozOxnD+TQo2pwU9X4rm/BOxVQzd7zhTKjTdPjMswvaEDCjTNOua2xxV/EZ
+         usY0cN5OWy+Q0XdeVmpy7+K+L1rtwbeG6W/jzd1IcqCnbVjgtdgz6Ctj0D20Us3acuWS
+         1IkuJskkTpghq7CVu83wKyHAw5zcmCxvRu/QNKVWxdZS7zj5rYXOURQcVB8zzlMAxW8I
+         YLj2ZMnLSTh5jJZdLd85/H3weSF9OZ0Tr6SngDt4oarVlcd7W7U+kAuZER3VSfNF3yeH
+         xYtQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=3N5WAzbRFEo6T4gVmAxjSh/Vc/Ea58u6XaJqPwHeVh4=;
-        b=fQWAA0CQDE4HF6jl1dfy0EaRhNXmccu/ZJpdEJbVLwrUHqdjQJALnX/DPPBd/1JhvH
-         s/JCxR6nXVPYpaeP4D+gRak2gOSef0tSLDneUk1Mw+t6gW8u3x822KcAenlHW+ZSL/PW
-         OS6J4YfSKZlkWGqusIheM3JaUug04pFuHWucLl8v2CBZU8W8sN0pXgla0X6VQlPp7Fxa
-         PN0IkhS8pbZUmBHb0/FpqJjWNvtnnpqK+ph1FJk4TbOCadJwLxDguqPWayOiSCVL19vm
-         zlds37RZSvyxjuAI3xVQ117KENTITBnjpQ6q78irRrUeIZ1w7qklyAMGi3IOGPh5QVIL
-         24gw==
-X-Gm-Message-State: AO0yUKX2rn3V+9FqGpQRCRgwS65ALBGERFSvgxcBZCPukCdWVrbGawJs
-        oY16jZ9XzYO+pyOZuvkxK/Cz6w==
-X-Google-Smtp-Source: AK7set/gnKvtFmRzdwyC6P2wMI81d4vWwm6HjdeC7KtCbMNjaI4FGSQJ3mv5xfpjdnNPaUNiKYztuA==
-X-Received: by 2002:ac2:561b:0:b0:4b5:7096:23ff with SMTP id v27-20020ac2561b000000b004b5709623ffmr1010457lfd.66.1676725445833;
-        Sat, 18 Feb 2023 05:04:05 -0800 (PST)
-Received: from ?IPV6:2001:14ba:a085:4d00::8a5? (dzccz6yyyyyyyyyyybcwt-3.rev.dnainternet.fi. [2001:14ba:a085:4d00::8a5])
-        by smtp.gmail.com with ESMTPSA id h18-20020ac250d2000000b004d865c781eesm980042lfm.24.2023.02.18.05.04.04
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 18 Feb 2023 05:04:05 -0800 (PST)
-Message-ID: <417fe51e-1f35-53d4-0dd7-bbb01d5bd164@linaro.org>
-Date:   Sat, 18 Feb 2023 15:04:04 +0200
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=sFZb+KyGAfqdWcVh2QTgnXaoGg7pVVta8DL5jcjkaHA=;
+        b=Ejf5DkgOUKYN1CPPRkyGFwFoyQisgefWtXNMNnOubRA/GUABJjZHurQOUHnE0xP+Nb
+         UvkmvH0O8Bx9Q0a8qkwssHND2vD60C9lc5MKVzo7IY/JaCqPOdH4qCcrLru3S93sOQDF
+         9xVZYqLm5IyXAa6VgVzNuzAU8P7o/ekTFid92VzybXGW0vcZnfNldS7t+pguM7FuOoZx
+         PvDl5dN4Tgd0ah9ahj1jicmv1LnJtppDzELi0wx1kE3nHAi2F+xs+fySba+QR6/W2Mq5
+         MOUZJDtA/yJqbi6IBokBICHtyIO764o44NiK10cZsXu7kw3bROsOHLCmItxHPIkkPfxZ
+         MkdA==
+X-Gm-Message-State: AO0yUKUK0O0VMWZr2R+kKY9RbNL2RVVhnXOF7N9xaFfTYAqhsjVzUnz/
+        qk0U9upASi9Qw+JWc+HgA2/IrX+HZd2sNaHic7jyUA==
+X-Google-Smtp-Source: AK7set+eHOfizBIwI1T3DsyV1863LifcB+yOBYdN4HyMZXw04IZPDsu/+QgX/HoCnpfPWQYxjvnFFjkbay+ekbeNW8E=
+X-Received: by 2002:ac2:4439:0:b0:4d5:ca43:703e with SMTP id
+ w25-20020ac24439000000b004d5ca43703emr1311163lfl.1.1676725913903; Sat, 18 Feb
+ 2023 05:11:53 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.2
-Subject: Re: [PATCH v2 07/14] drm/msm/a6xx: Add support for A619_holi
-Content-Language: en-GB
-To:     Konrad Dybcio <konrad.dybcio@linaro.org>,
-        linux-arm-msm@vger.kernel.org, andersson@kernel.org,
-        agross@kernel.org
-Cc:     marijn.suijten@somainline.org, Rob Clark <robdclark@gmail.com>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Akhil P Oommen <quic_akhilpo@quicinc.com>,
-        Chia-I Wu <olvaffe@gmail.com>,
-        Douglas Anderson <dianders@chromium.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        "Joel Fernandes (Google)" <joel@joelfernandes.org>,
-        dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org
-References: <20230214173145.2482651-1-konrad.dybcio@linaro.org>
- <20230214173145.2482651-8-konrad.dybcio@linaro.org>
- <8268b4c9-ca5e-4ff3-628c-7e9daaeb16b0@linaro.org>
- <9269c5dd-d97c-e29a-98a9-b42c598ebfc6@linaro.org>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-In-Reply-To: <9269c5dd-d97c-e29a-98a9-b42c598ebfc6@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20230214140557.537984-1-benjamin.gaignard@collabora.com> <20230214140557.537984-7-benjamin.gaignard@collabora.com>
+In-Reply-To: <20230214140557.537984-7-benjamin.gaignard@collabora.com>
+From:   Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
+Date:   Sat, 18 Feb 2023 10:11:41 -0300
+Message-ID: <CAAEAJfDihZND+1FSzFxT86j9u6h-wH6uMMNh7BiaEWQWtSpk=Q@mail.gmail.com>
+Subject: Re: [PATCH v4 06/12] media: verisilicon: Check AV1 bitstreams bit depth
+To:     Benjamin Gaignard <benjamin.gaignard@collabora.com>
+Cc:     p.zabel@pengutronix.de, mchehab@kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, heiko@sntech.de,
+        hverkuil@xs4all.nl, nicolas.dufresne@collabora.com,
+        jernej.skrabec@gmail.com, linux-media@vger.kernel.org,
+        linux-rockchip@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        kernel@collabora.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 17/02/2023 23:21, Konrad Dybcio wrote:
-> 
-> 
-> On 17.02.2023 22:19, Dmitry Baryshkov wrote:
->> On 14/02/2023 19:31, Konrad Dybcio wrote:
->>> A619_holi is a GMU-less variant of the already-supported A619 GPU.
->>> It's present on at least SM4350 (holi) and SM6375 (blair). No mesa
->>> changes are required. Add the required kernel-side support for it.
->>>
->>> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
->>> ---
->>>    drivers/gpu/drm/msm/adreno/a6xx_gpu.c      | 37 +++++++++++++++++-----
->>>    drivers/gpu/drm/msm/adreno/adreno_device.c | 13 ++++++++
->>>    drivers/gpu/drm/msm/adreno/adreno_gpu.h    |  5 +++
->>>    3 files changed, 47 insertions(+), 8 deletions(-)
+On Tue, Feb 14, 2023 at 11:06 AM Benjamin Gaignard
+<benjamin.gaignard@collabora.com> wrote:
+>
+> The driver supports 8 and 10 bits bitstreams, make sure to discard
+> other cases.
+> It could happens that userland test if V4L2_CID_STATELESS_AV1_SEQUENCE
+> exists without setting bit_depth field in this case use
+> HANTRO_DEFAULT_BIT_DEPTH value.
+>
 
-[...]
+This shouldn't happen.
 
+If the bit_depth argument in hantro_check_depth_match()
+can be set unchecked by userspace, we have done something wrong!!
 
->>> diff --git a/drivers/gpu/drm/msm/adreno/adreno_device.c b/drivers/gpu/drm/msm/adreno/adreno_device.c
->>> index 82757f005a1a..71faeb3fd466 100644
->>> --- a/drivers/gpu/drm/msm/adreno/adreno_device.c
->>> +++ b/drivers/gpu/drm/msm/adreno/adreno_device.c
->>> @@ -264,6 +264,19 @@ static const struct adreno_info gpulist[] = {
->>>            .gmem = SZ_512K,
->>>            .inactive_period = DRM_MSM_INACTIVE_PERIOD,
->>>            .init = a6xx_gpu_init,
->>> +    }, {
->>> +        .rev = ADRENO_REV(6, 1, 9, 1),
->>
->> I think this deserves a comment that GMU-enabled sm6350 has patch_id 0 (if I interpreted the vendor dtsi correctly).
->>
->> Another option might be to actually check for the qcom,gmu presense and add that to the selection conditional.
-> We pass the GMU wrapper in qcom,gmu = <>, though perhaps setting
-> the holi-ness based on whether it's "qcom,gmu-x.y.z.a" or
-> "qcom,gmu-wrapper" would be wiser.. The patch ID is indeterminate
-> and I *think* one GMU-wrapper A619 has patch id 0..
+Are you sure that userspace can do a S_CTRL with an invalid bit-depth?
+The try_or_set_cluster() function seems to always call try_ctrl before s_ctrl.
 
-I was not aware that GMU-wrapper also adds a GMU device. In this case, 
-checking the GMU's compatible strings sounds like a logical approach to me.
+Thanks,
+Ezequiel
 
-> 
-> Konrad
->>
->>> +        .revn = 619,
->>> +        .name = "A619_holi",
->>> +        .fw = {
->>> +            [ADRENO_FW_SQE] = "a630_sqe.fw",
->>> +        },
->>> +        .gmem = SZ_512K,
->>> +        .inactive_period = DRM_MSM_INACTIVE_PERIOD,
->>> +        .quirks = ADRENO_QUIRK_GMU_WRAPPER,
->>> +        .init = a6xx_gpu_init,
->>> +        .zapfw = "a615_zap.mdt",
->>> +        .hwcg = a615_hwcg,
->>>        }, {
->>>            .rev = ADRENO_REV(6, 1, 9, ANY_ID),
->>>            .revn = 619,
->>> diff --git a/drivers/gpu/drm/msm/adreno/adreno_gpu.h b/drivers/gpu/drm/msm/adreno/adreno_gpu.h
->>> index 7c5e0a90b5fb..16241368c2e4 100644
->>> --- a/drivers/gpu/drm/msm/adreno/adreno_gpu.h
->>> +++ b/drivers/gpu/drm/msm/adreno/adreno_gpu.h
->>> @@ -252,6 +252,11 @@ static inline int adreno_is_a619(struct adreno_gpu *gpu)
->>>        return gpu->revn == 619;
->>>    }
->>>    +static inline int adreno_is_a619_holi(struct adreno_gpu *gpu)
->>> +{
->>> +    return adreno_is_a619(gpu) && adreno_has_gmu_wrapper(gpu);
->>> +}
->>> +
->>>    static inline int adreno_is_a630(struct adreno_gpu *gpu)
->>>    {
->>>        return gpu->revn == 630;
->>
-
--- 
-With best wishes
-Dmitry
-
+> Signed-off-by: Benjamin Gaignard <benjamin.gaignard@collabora.com>
+> ---
+> version 4:
+> - This patch is the result of squashing "Save bit depth for AV1 decoder"
+>   and "Check AV1 bitstreams bit depth" of version 3 + adapation to
+>   "[PATCH v8 0/6] media: verisilicon: HEVC: fix 10bits handling" series.
+>
+>  .../media/platform/verisilicon/hantro_drv.c   | 36 +++++++++++++++++++
+>  .../media/platform/verisilicon/hantro_v4l2.c  |  4 +++
+>  2 files changed, 40 insertions(+)
+>
+> diff --git a/drivers/media/platform/verisilicon/hantro_drv.c b/drivers/media/platform/verisilicon/hantro_drv.c
+> index bc1a85456142..666cd46902da 100644
+> --- a/drivers/media/platform/verisilicon/hantro_drv.c
+> +++ b/drivers/media/platform/verisilicon/hantro_drv.c
+> @@ -275,7 +275,13 @@ static int hantro_try_ctrl(struct v4l2_ctrl *ctrl)
+>                 /* We only support profile 0 */
+>                 if (dec_params->profile != 0)
+>                         return -EINVAL;
+> +       } else if (ctrl->id == V4L2_CID_STATELESS_AV1_SEQUENCE) {
+> +               const struct v4l2_ctrl_av1_sequence *sequence = ctrl->p_new.p_av1_sequence;
+> +
+> +               if (sequence->bit_depth != 8 && sequence->bit_depth != 10)
+> +                       return -EINVAL;
+>         }
+> +
+>         return 0;
+>  }
+>
+> @@ -348,6 +354,30 @@ static int hantro_hevc_s_ctrl(struct v4l2_ctrl *ctrl)
+>         return 0;
+>  }
+>
+> +static int hantro_av1_s_ctrl(struct v4l2_ctrl *ctrl)
+> +{
+> +       struct hantro_ctx *ctx;
+> +
+> +       ctx = container_of(ctrl->handler,
+> +                          struct hantro_ctx, ctrl_handler);
+> +
+> +       switch (ctrl->id) {
+> +       case V4L2_CID_STATELESS_AV1_SEQUENCE:
+> +       {
+> +               int bit_depth = ctrl->p_new.p_av1_sequence->bit_depth;
+> +
+> +               if (ctx->bit_depth == bit_depth)
+> +                       return 0;
+> +
+> +               return hantro_reset_raw_fmt(ctx, bit_depth);
+> +       }
+> +       default:
+> +               return -EINVAL;
+> +       }
+> +
+> +       return 0;
+> +}
+> +
+>  static const struct v4l2_ctrl_ops hantro_ctrl_ops = {
+>         .try_ctrl = hantro_try_ctrl,
+>  };
+> @@ -365,6 +395,11 @@ static const struct v4l2_ctrl_ops hantro_hevc_ctrl_ops = {
+>         .s_ctrl = hantro_hevc_s_ctrl,
+>  };
+>
+> +static const struct v4l2_ctrl_ops hantro_av1_ctrl_ops = {
+> +       .try_ctrl = hantro_try_ctrl,
+> +       .s_ctrl = hantro_av1_s_ctrl,
+> +};
+> +
+>  #define HANTRO_JPEG_ACTIVE_MARKERS     (V4L2_JPEG_ACTIVE_MARKER_APP0 | \
+>                                          V4L2_JPEG_ACTIVE_MARKER_COM | \
+>                                          V4L2_JPEG_ACTIVE_MARKER_DQT | \
+> @@ -542,6 +577,7 @@ static const struct hantro_ctrl controls[] = {
+>                 .codec = HANTRO_AV1_DECODER,
+>                 .cfg = {
+>                         .id = V4L2_CID_STATELESS_AV1_SEQUENCE,
+> +                       .ops = &hantro_av1_ctrl_ops,
+>                 },
+>         }, {
+>                 .codec = HANTRO_AV1_DECODER,
+> diff --git a/drivers/media/platform/verisilicon/hantro_v4l2.c b/drivers/media/platform/verisilicon/hantro_v4l2.c
+> index 992c5baa929f..7e74e47c9a89 100644
+> --- a/drivers/media/platform/verisilicon/hantro_v4l2.c
+> +++ b/drivers/media/platform/verisilicon/hantro_v4l2.c
+> @@ -86,6 +86,10 @@ hantro_check_depth_match(const struct hantro_fmt *fmt, int bit_depth)
+>         if (!fmt->match_depth && !fmt->postprocessed)
+>                 return true;
+>
+> +       /* 0 means default depth, which is 8 */
+> +       if (!bit_depth)
+> +               bit_depth = HANTRO_DEFAULT_BIT_DEPTH;
+> +
+>         fmt_depth = hantro_get_format_depth(fmt->fourcc);
+>
+>         /*
+> --
+> 2.34.1
+>
