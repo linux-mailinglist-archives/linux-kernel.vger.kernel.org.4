@@ -2,102 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7FF5D69BDF4
-	for <lists+linux-kernel@lfdr.de>; Sun, 19 Feb 2023 00:32:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 72AEE69BDF9
+	for <lists+linux-kernel@lfdr.de>; Sun, 19 Feb 2023 00:41:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229681AbjBRXcP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 18 Feb 2023 18:32:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54270 "EHLO
+        id S229683AbjBRXlS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 18 Feb 2023 18:41:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57222 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229543AbjBRXcO (ORCPT
+        with ESMTP id S229506AbjBRXlR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 18 Feb 2023 18:32:14 -0500
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2BF351206F
-        for <linux-kernel@vger.kernel.org>; Sat, 18 Feb 2023 15:32:13 -0800 (PST)
-Received: from [192.168.2.109] (unknown [109.252.117.89])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: dmitry.osipenko)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id DC4D26602097;
-        Sat, 18 Feb 2023 23:32:09 +0000 (GMT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1676763131;
-        bh=yVDkAb8rgaOCrNdaY3hB3QoJUrg+SNQndQVrEq0Uk3E=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=kCwa7btluaTiY/1x+TuHbmwWI/J65a1y2Ztuw27XhUnjfwchk6kxLYRMHJpZeSpB9
-         lxDW930sKapT9uWf3mmJJnWQ6PH7gv4UP6cKW6gOKM/dhyj30m2kshehA6CXXQQlOc
-         6bECZ0NQdvYHPsH9m5V7e8CN2e4nMWIBCb+Votb7feXDVwWzLhuDFfNOnCJkCZ/26Q
-         lFwerPXhqcTV08CmylyFe5nnp4qqHmOHoEXytIn33LP5umz6PnRO4MQZRPyAYnOZhs
-         lkbU4LsmLvYt1HGxo/m4l6tRFdozfjXhiGM0HmitZ/XBqKz7RXwDMoTmtS0TDRPp8f
-         8oYnO8wvERaVA==
-Message-ID: <0a8358cd-4c2e-ed70-2cc5-1cff27b7594d@collabora.com>
-Date:   Sun, 19 Feb 2023 02:32:06 +0300
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH 1/3] kernel/reboot: Use the static sys-off handler for any
- priority
-Content-Language: en-US
-To:     Samuel Holland <samuel@sholland.org>,
-        Palmer Dabbelt <palmer@dabbelt.com>, rafael.j.wysocki@intel.com
-Cc:     aou@eecs.berkeley.edu, apatel@ventanamicro.com,
-        Atish Patra <atishp@rivosinc.com>, geert@linux-m68k.org,
-        heiko@sntech.de, kai.heng.feng@canonical.com, mcgrof@kernel.org,
-        paulmck@kernel.org, Paul Walmsley <paul.walmsley@sifive.com>,
-        pmladek@suse.com, yuehaibing@huawei.com,
-        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
-        tangmeng@uniontech.com
-References: <mhng-fbf5d10c-239d-4e47-bf52-3e1255cbe5e0@palmer-ri-x1c9>
- <8bba0d3c-bf10-97df-80a5-ad98d5a417c8@sholland.org>
-From:   Dmitry Osipenko <dmitry.osipenko@collabora.com>
-In-Reply-To: <8bba0d3c-bf10-97df-80a5-ad98d5a417c8@sholland.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Sat, 18 Feb 2023 18:41:17 -0500
+Received: from nautica.notk.org (nautica.notk.org [91.121.71.147])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A44813D66;
+        Sat, 18 Feb 2023 15:41:16 -0800 (PST)
+Received: by nautica.notk.org (Postfix, from userid 108)
+        id 0C39FC01D; Sun, 19 Feb 2023 00:41:38 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=codewreck.org; s=2;
+        t=1676763698; bh=HAUEnvBlrX3pgMjJsHk6fkvC7qMVL5+b0htLmoE8se0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=eQDdPq4QR9bi2ivS7nZhHaesdDfafQwgzmQ1aPKsFISaOb7micdmz3nYNzbWzH9Yl
+         DbXrEAjefJnA1W2TtpNwlCZ+VYt1Tg8o2VeHXuW9CJVA1I5wObU/ylp3f32CIP87w9
+         n/8AyA8zZsuBh+J1ZUCmYwRxKtREvUrpFWEuvNzk/mq7szdw5TrdYd3cN5YofvZTdX
+         IFbvycvf1F9hjtoY0zv+6EktInLiffn20Vs6fm1s8FzivZ+gmX0M8kTaeI9VzMvIWC
+         FaeQnnOiuME5peJKKhvRUNmi1+dNCV8/ItAQxqDoj891VWV5Mm5+X2w+DwPoem0Qfo
+         OrG8DqNvTEVnw==
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+X-Spam-Level: 
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
+Received: from odin.codewreck.org (localhost [127.0.0.1])
+        by nautica.notk.org (Postfix) with ESMTPS id EAAB3C009;
+        Sun, 19 Feb 2023 00:41:34 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=codewreck.org; s=2;
+        t=1676763697; bh=HAUEnvBlrX3pgMjJsHk6fkvC7qMVL5+b0htLmoE8se0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=WsyLK2w/1io4fNdrRIb2eNuiOejlLmWvTCUDsmODdYcRObVGmmABkQzDih+L6cwVn
+         Kg0bt94PdK+O/a70+ETjouq30gCWEHI36WS5MGLntu0FERiEgo9SXV2SovEka4KArn
+         Qv6kavd6IQYp+ph695I8GJUQYMb0GeBN3zwGtLgs4tnNfmv7f1t53r6mgVOlv7+xw+
+         Q4hl3UZbQdoDkGF71MBoqlul/4WZIGgOQwCAbzhCpoCZTetkGqqEcryncjZ0lzgMtm
+         Ia7rIF3lf0LmPa0qhOynhlAxEf5Cw7s//U3vatrV+MjxkrJtcUpzKhCM2D26OY3zib
+         4G6rzn2gWyZLA==
+Received: from localhost (odin.codewreck.org [local])
+        by odin.codewreck.org (OpenSMTPD) with ESMTPA id 03fa2c52;
+        Sat, 18 Feb 2023 23:41:08 +0000 (UTC)
+Date:   Sun, 19 Feb 2023 08:40:53 +0900
+From:   asmadeus@codewreck.org
+To:     Eric Van Hensbergen <ericvh@gmail.com>
+Cc:     Christian Schoenebeck <linux_oss@crudebyte.com>,
+        Eric Van Hensbergen <ericvh@kernel.org>,
+        v9fs-developer@lists.sourceforge.net, rminnich@gmail.com,
+        lucho@ionkov.net, linux-kernel@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org
+Subject: Re: [PATCH v4 10/11] fs/9p: writeback mode fixes
+Message-ID: <Y/FiBbMQcEblQ/XR@codewreck.org>
+References: <20230124023834.106339-1-ericvh@kernel.org>
+ <20230218003323.2322580-11-ericvh@kernel.org>
+ <Y/Ch8o/6HVS8Iyeh@codewreck.org>
+ <1983433.kCcYWV5373@silver>
+ <CAFkjPT=xhEEedeYcyn1FFcngqOJf_+8ynz4zeLbsXPOGoY6aqw@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <CAFkjPT=xhEEedeYcyn1FFcngqOJf_+8ynz4zeLbsXPOGoY6aqw@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/19/23 02:20, Samuel Holland wrote:
-> On 2/14/23 18:17, Palmer Dabbelt wrote:
-...
->> Sorry for being slow here, I'd been assuming someone would Ack this but
->> it looks like maybe there's nobody in the maintainers file for
->> kernel/reboot.c?  I'm fine taking this via the RISC-V tree if that's OK
->> with people, but the cover letter suggests the patch is necessary for
->> multiple patch sets.
-> 
-> See also Dmitry's reply[0] to the PSCI thread. (Maybe I should have sent
-> both conversions as one series?)
-> 
-> I am happy with the patches going through any tree. The kernel/reboot.c
-> patch is exactly the same between the two series, so it should not hurt
-> if it gets merged twice. Though if you take this series through the
-> RISC-V tree, maybe you want to create a tag for it?
-> 
-> I am not sure exactly what needs to be done here; I am happy to do
-> anything that would assist getting both series merged for v6.3, to avoid
-> a regression with axp20x[1].
-> 
-> Regards,
-> Samuel
-> 
-> [0]:
-> https://lore.kernel.org/lkml/0a180849-ba1b-2a82-ab06-ed1b8155d5ca@collabora.com/
-> [1]:
-> https://lore.kernel.org/lkml/e38d29f5-cd3c-4a2b-b355-2bcfad00a24b@sholland.org/
+Eric Van Hensbergen wrote on Sat, Feb 18, 2023 at 04:24:08PM -0600:
+> Yeah, I guess it depends on what options we want to separate,
+> writeback == mmap so we can eliminate one option and just use mmap I
+> suppose.
 
-The reboot.c changes should be acked/applied by Rafael.
-I noticed that you haven't CC'd the linux-pm ML, maybe that's why it
-hasn't got the attention.
+For history (since I implemented it for CEA back then), mmap was added
+because we had applications relying on mmap (so wanted that to somehow
+work) without turning to cache=loose as that doesn't behave well with
+nfs-ganesha (in particular, fids not closed until memory pressure comes
+reclaiming them, which can be very late or never come, doesn't work well
+with ganesha that used to (and probably still does, didn't check) cap
+the maximum number of fid active per client.
+
+I think writeback would be acceptable for this usecase, especially since
+with your patches we now flush on close.
+
+For clarity though I'd use writeback in the documentation, and keep mmap
+as a legacy mapping just for mount opts parsing; the behaviour is
+slightly different than it used to be (normal read/writes were sync) so
+it's good to be clear about that.
+
+> I feel like readahead has value as it maintains the most
+> consistency on the host file system since it shouldn't be doing any
+> writeback buffering.  readahead and mmap are different than loose in
+> that they don't do any do any dir cache.  To your earlier comments (in
+> a different thread) it very well may be that eventually we separate
+> these into file_cache=[ readahead | mmap | loose ] and dir_cache = [
+> tight | temporal | loose ] and fscache is its own beast.
+
+Separating the two makes sense implementation-wise as well, I like this
+idea.
+What would the difference be between file_cache=writeback and loose?
+Do you plan some form of revalidation with writeback, e.g. using qid
+version that loose wouldn't do? (sorry if it's already done, I don't
+recall seeing that)
+
+fscache is currently a cache option but it's pretty much unrelated, we
+can have it as a separate option and alias cache=fscache to
+`file_cache=writeback(loose),dir_cache=loose,fscache=on`
+but on its own it ought to work with any level of file_cache and no
+dir_cache...
+The test matrix will be fun, though :|
+
+> It struck me as well with xattr enabled we may want to have separate
+> caches for xattr caching since it generates a load of traffic with
+> security on.
+
+xattr caching currently isn't done at all afaik, and it'd definitely
+make sense with any kind of dir_cache... That'd likely halve the
+requests for some find-like workloads.
+Probably another new option as well..
 
 -- 
-Best regards,
-Dmitry
-
+Dominique
