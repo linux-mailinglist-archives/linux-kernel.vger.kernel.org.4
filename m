@@ -2,134 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0386869B9A3
-	for <lists+linux-kernel@lfdr.de>; Sat, 18 Feb 2023 12:17:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0401F69B9A0
+	for <lists+linux-kernel@lfdr.de>; Sat, 18 Feb 2023 12:17:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229580AbjBRLRZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 18 Feb 2023 06:17:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52948 "EHLO
+        id S229508AbjBRLRR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 18 Feb 2023 06:17:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52756 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229525AbjBRLRX (ORCPT
+        with ESMTP id S229436AbjBRLRP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 18 Feb 2023 06:17:23 -0500
-Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com [IPv6:2607:f8b0:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C4801C5AD
-        for <linux-kernel@vger.kernel.org>; Sat, 18 Feb 2023 03:17:22 -0800 (PST)
-Received: by mail-pf1-x42b.google.com with SMTP id cp14so214945pfb.0
-        for <linux-kernel@vger.kernel.org>; Sat, 18 Feb 2023 03:17:22 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=gEF8FEuNLVayQdE5QI9MaMd8Q/7gQJSqUO9M+81Oa5M=;
-        b=IaruHdGy8cyFLDUGIOX5pZOCfDLvKQZpLOUwXva2yFbitViwuTKQidiLFpOtPWhzcu
-         suiJ6uJgAz2TngEijk5zQdejLa23H2xeo9jIswDVjTdRDMV/LGUV9eYlX3+ou4kJqg+8
-         Pi9/8dmPnYdds+GD+VqOdlM6LCxjqZ45E1Hbo=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=gEF8FEuNLVayQdE5QI9MaMd8Q/7gQJSqUO9M+81Oa5M=;
-        b=usmQ4tgWXKA+bdTY/07xzNgq+ZIlkNQwYeCqGQCPjW77yQVUCOGweRR2eSaJi2k8rM
-         7LVM0auZZUt3fjS+VwTZSwdobcW+ACHMcjuZSvROGYpk3lh49I/jVkgZvUEP7xwBL4eb
-         CiT1O9RBcNLrybCfkKr1FetbBRF/HmH8pvlb7ixsVvlKhIpFTVxA7kkVfMSXdvDHlykD
-         8+pHAXVRdAO8UCq4Bm8fU2eCypQNjXBDaVqmWOZE3ys8+XDYxY615QvA0kmGmWUWFNle
-         vxwAWit5BsrP3o0x6J+1WNgI4asjP0QJZ+q/i81odHZYXmN1wwv82lCDe6a7zhqIFIA4
-         x6nw==
-X-Gm-Message-State: AO0yUKWSDM7AyCt29FzC+cHOV8pQDCpdp5z5HXvm3nTx+V40OlUSsHm8
-        phQUW5tVvS42lUiGifYgy5OH1A==
-X-Google-Smtp-Source: AK7set+WyXQ3bNUcWSBc3Z7xIjr8Et8u/2+vAwZMWp1xbM5SWXK9wjjgnemRxkn9IVSvnVIBAgswew==
-X-Received: by 2002:a62:1b48:0:b0:5ab:bf5d:a0d1 with SMTP id b69-20020a621b48000000b005abbf5da0d1mr2435384pfb.7.1676719041279;
-        Sat, 18 Feb 2023 03:17:21 -0800 (PST)
-Received: from treapking.tpe.corp.google.com ([2401:fa00:1:10:88dd:be84:8f65:fec2])
-        by smtp.gmail.com with ESMTPSA id 23-20020aa79157000000b005a8686b72fcsm4457829pfi.75.2023.02.18.03.17.17
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 18 Feb 2023 03:17:20 -0800 (PST)
-From:   Pin-yen Lin <treapking@chromium.org>
-To:     Andrzej Hajda <andrzej.hajda@intel.com>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Robert Foss <rfoss@kernel.org>,
-        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
-        Jonas Karlman <jonas@kwiboo.se>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
+        Sat, 18 Feb 2023 06:17:15 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C19ED1B334;
+        Sat, 18 Feb 2023 03:17:14 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4E72060A05;
+        Sat, 18 Feb 2023 11:17:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DBC75C433EF;
+        Sat, 18 Feb 2023 11:17:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1676719033;
+        bh=MBpW+wS6kJjM9nw/RX4T/6lVEQz7JAtQyjKM0xZ3B+g=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=RbCF8rxLVhB+zqGRt9Y85P0PTJ2aOqfqKaNuekrrAE8pdZY1DEN6tfgBbSozPG08i
+         uLE/Z4IlY8Xm89vjqDdVvdAeigbQGvCKq1bzTbxy+vQ1KvJ4cDbUY843nJd9yOKBLa
+         aCAMgekEnGtWT+s5V2eR0/VUKcnRNfJxs905kkDVTJwvncsCu10mxEBRa8puviTSrT
+         +XvUrr7SCjxlsPvL2iYkfGqbNq8TULVBOlD+1ZjWvLoyTBuCndbogYtwXKRU2n2qXM
+         0eJqB9JeLzVMGD104WB0SvLA8b7i65q2NU5CR5rXD13YUWMfqnb7LgeHb9T8Wq/n0W
+         /ZbIfRiDiOnbw==
+Date:   Sat, 18 Feb 2023 11:17:08 +0000
+From:   Conor Dooley <conor@kernel.org>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Conor Dooley <conor.dooley@microchip.com>,
+        Hal Feng <hal.feng@starfivetech.com>,
+        linux-riscv@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-clk@vger.kernel.org, Palmer Dabbelt <palmer@dabbelt.com>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Benson Leung <bleung@chromium.org>
-Cc:     Chun-Kuang Hu <chunkuang.hu@kernel.org>,
-        devicetree@vger.kernel.org,
-        Nicolas Boichat <drinkcat@chromium.org>,
-        chrome-platform@lists.linux.dev, linux-kernel@vger.kernel.org,
-        Guenter Roeck <groeck@chromium.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        dri-devel@lists.freedesktop.org,
-        linux-mediatek@lists.infradead.org,
+        Stephen Boyd <sboyd@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
         Philipp Zabel <p.zabel@pengutronix.de>,
-        linux-arm-kernel@lists.infradead.org,
-        Pin-yen Lin <treapking@chromium.org>
-Subject: [PATCH v3 0/5] Add generic-display-mux driver and bindings
-Date:   Sat, 18 Feb 2023 19:17:07 +0800
-Message-Id: <20230218111712.2380225-1-treapking@chromium.org>
-X-Mailer: git-send-email 2.39.2.637.g21b0678d19-goog
+        Emil Renner Berthing <emil.renner.berthing@canonical.com>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 07/11] dt-bindings: clock: Add StarFive JH7110 system
+ clock and reset generator
+Message-ID: <Y/CztNs6laTzttrI@spud>
+References: <Y6tSWB2+98a8k9Qw@spud>
+ <5cf0fe71-fd17-fb28-c01e-28356081ba76@starfivetech.com>
+ <Y+5z8skN2DuvxDEL@spud>
+ <68e61f28-daec-ce72-726a-1fffe8e94829@starfivetech.com>
+ <Y+8x/KSujhgNLAd6@wendy>
+ <d3b06d0b-ff17-ebab-bae5-e1ec836fe667@starfivetech.com>
+ <Y++B43uCnPQlRYFi@wendy>
+ <dcba75b5-7b62-35aa-6836-5d5edd785002@linaro.org>
+ <Y++q9ln8P3XegqfN@spud>
+ <41e4f293-99eb-f157-b4a9-3d00b15f4652@linaro.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="PuWXwRc8It3YJ8xy"
+Content-Disposition: inline
+In-Reply-To: <41e4f293-99eb-f157-b4a9-3d00b15f4652@linaro.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This series is developed for and tested on MT8173 board, and the layout is:
 
-                                  /-- anx7688
--- MT8173 HDMI bridge -- GPIO mux
-                                  \-- native HDMI
+--PuWXwRc8It3YJ8xy
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-v2: https://lore.kernel.org/all/20230116110820.2615650-1-treapking@chromium.org/
-v1: https://patchwork.kernel.org/project/dri-devel/cover/20191211061911.238393-1-hsinyi@chromium.org/
+Hey Krzysztof,
 
-Changes in v3:
-- Removed ddc-i2c-bus in the gpio-mux bridge bindings
-- Added .get_edid callback in generic-gpio-mux driver
-- Removed .get_edid callback in mtk_hdmi.c
-- Modified anx7688 driver and binding to add a .get_edid callback
+On Sat, Feb 18, 2023 at 11:20:30AM +0100, Krzysztof Kozlowski wrote:
+> On 17/02/2023 17:27, Conor Dooley wrote:
+> > On Fri, Feb 17, 2023 at 04:47:48PM +0100, Krzysztof Kozlowski wrote:
+> >> On 17/02/2023 14:32, Conor Dooley wrote:
+> >>>>>> Yes, it is.
+> >>>>>
+> >>>>> Which would then make GMAC1 RGMII RX optional, rather than required?
+> >>>>
+> >>>> If thinking in this way, I must say yes, it is optional. But actually
+> >>>> GMAC1 RGMII RX feeds gmac1_rx by default.=20
+> >>>> For a mux, it usually works if you populate only one input to it.
+> >>>> Does it mean all the other inputs are optional? And how can we define
+> >>>> which input is required?
+> >>>
+> >>> I'm not sure, that is a question for Krzysztof and/or Rob.
+> >>
+> >> That's a long thread, please summarize what you ask. Otherwise I have =
+no
+> >> clue what is the question.
+> >=20
+> > Sorry. I tried to preserve the context of the conversation the last time
+> > I cropped it so that things would be contained on one email.
+> >=20
+> > For me at least, I am wondering how you convey that out of a list of
+> > clock inputs (for example a, b, c, d) that two of the clocks are inputs
+> > to a mux and it is only required to provide one of the two (say b & c).
 
-Changes in v2:
-- Referenced existing dt-binding schemas from graph.yaml
-- Added ddc-i2c-bus into the bindings
-- Dropped attach/mode_set/enable/disable callbacks
-- Fixed style issues
-- Removed the special case for the HDMI connector
-- Made the driver only read the GPIO status in IRQ handler
-- Rebased to drm-misc-next
-- Update the license: "GPL v2" --> "GPL"
+You skipped this part which was what I was trying to ask you about.
+Do you know how to convey this situation, or is it even possible to
+express those rules?
 
-Nicolas Boichat (2):
-  dt-bindings: display: bridge: Add GPIO display mux binding
-  drm: bridge: Generic GPIO mux driver
+> >> Does the mux works correctly if clock input is not connected? I mean,
+> >> are you now talking about real hardware or some simplification from SW
+> >> point of view?
+> >=20
+> > I'm coming at this from an angle of "is a StarFive customer going to sh=
+ow
+> > up with a devicetree containing dummy fixed-clocks to satisfy dtbs_check
+> > because they opted to only populate one input to the mux".
+> > I don't really care about implications for the driver, just about
+> > whether the hardware allows for inputs to the mux to be left
+> > un-populated.
+>=20
+> Whether hardware allows - not a question to me.
 
-Pin-yen Lin (3):
-  dt-bindings: display: bridge: Add ddc-i2c-bus for anx7688
-  drm/bridge: Add .get_edid callback for anx7688 driver
-  drm/mediatek: Remove .get_edid callback
+> BTW, this is rather question coming from me...
 
- .../bridge/google,cros-ec-anx7688.yaml        |   5 +
- .../bindings/display/bridge/gpio-mux.yaml     |  90 +++++++
- drivers/gpu/drm/bridge/Kconfig                |  10 +
- drivers/gpu/drm/bridge/Makefile               |   1 +
- drivers/gpu/drm/bridge/cros-ec-anx7688.c      |  24 ++
- drivers/gpu/drm/bridge/generic-gpio-mux.c     | 222 ++++++++++++++++++
- drivers/gpu/drm/mediatek/mtk_hdmi.c           |  53 +----
- 7 files changed, 365 insertions(+), 40 deletions(-)
- create mode 100644 Documentation/devicetree/bindings/display/bridge/gpio-mux.yaml
- create mode 100644 drivers/gpu/drm/bridge/generic-gpio-mux.c
+I don't understand what you mean by this, sorry.
 
--- 
-2.39.2.637.g21b0678d19-goog
+Thanks,
+Conor.
 
+
+--PuWXwRc8It3YJ8xy
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCY/CztAAKCRB4tDGHoIJi
+0jg/AP4wInRGlkOUh1Al9iKc09rdNcx7Y9+jOgeM4wKt33DlgQEA+4tSZw88zO0/
+a6YhAFGSsTVeN3Rx2Dki8r642zgv0wk=
+=XpKK
+-----END PGP SIGNATURE-----
+
+--PuWXwRc8It3YJ8xy--
