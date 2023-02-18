@@ -2,49 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 960EF69B999
-	for <lists+linux-kernel@lfdr.de>; Sat, 18 Feb 2023 12:11:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D819669B9C2
+	for <lists+linux-kernel@lfdr.de>; Sat, 18 Feb 2023 12:27:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229507AbjBRLLa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 18 Feb 2023 06:11:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50818 "EHLO
+        id S229796AbjBRL1B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 18 Feb 2023 06:27:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59476 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229436AbjBRLL2 (ORCPT
+        with ESMTP id S229687AbjBRL0y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 18 Feb 2023 06:11:28 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C93A7193C4
-        for <linux-kernel@vger.kernel.org>; Sat, 18 Feb 2023 03:11:27 -0800 (PST)
+        Sat, 18 Feb 2023 06:26:54 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE19D1420D
+        for <linux-kernel@vger.kernel.org>; Sat, 18 Feb 2023 03:26:53 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6705D60B5C
-        for <linux-kernel@vger.kernel.org>; Sat, 18 Feb 2023 11:11:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C6E83C433EF;
-        Sat, 18 Feb 2023 11:11:25 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id A24B4B822A9
+        for <linux-kernel@vger.kernel.org>; Sat, 18 Feb 2023 11:26:52 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 48C78C433EF;
+        Sat, 18 Feb 2023 11:26:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1676718686;
-        bh=TYpBl7Pv8a8OgRVX8tmlNgi4Jw3ee7WV6w+cG8t3Tk0=;
-        h=Date:From:To:Cc:Subject:From;
-        b=AuO8JsA1EY1vEUAClCXt7jBmtw+zvrpTmXOIzLWQ+deJZKGQbJyHM9qpjNby+66kD
-         PKzesJ32v1pbKFABOwwjlaZ/b5V/w3yqMClAyW6z81dRx1koeFlEEEqDLjnhKbdhu2
-         9rt2L3csQ1rlNoPyFStWjhX/UNGRsp3jOmYg19VW3fHC8s8KloEYOkebmvRye0PgQs
-         bDWJD8bNzxmH3QhlJPCj5eMLvmTPD6RhswemLSjybAJm/RrSa9jyIIPQAM0YPC9Tye
-         NsfvkmJHapnWGfroB3oNbVsk4ASs4RzKLiFZnRSSlVSsb/1NL+okNQQ7pTmae5QGPz
-         CAZDdRncIujkw==
-Date:   Sat, 18 Feb 2023 11:11:22 +0000
-From:   Will Deacon <will@kernel.org>
-To:     torvalds@linux-foundation.org
-Cc:     catalin.marinas@arm.com, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, kernel-team@android.com
-Subject: [GIT PULL] arm64 perf/PMU regression fixes for 6.2
-Message-ID: <20230218111100.GA23413@willie-the-truck>
+        s=k20201202; t=1676719611;
+        bh=JVTiq+B7EgZuFlDHHXZ/E5jLhXy+PnF55RTV4RUP3v8=;
+        h=From:To:Cc:Subject:Date:From;
+        b=tanSx/9GIYeOkjwWxWqRA+w5iY++qN6UfgcwDjlM5t8wrhMv9LXNPHW265Bcq/b0f
+         yAMtC3vh0/qPWJF6YpCXwqz/wucM9qPc8QvzQKaSR6wiQ2IefR8/2W6UbTLWftMHDo
+         fsSNM5my3T/BSJ/nrZIGKZJko4cZmZpCtCxVsYk1lMwv+b5J4K3G/sG3CWZxkv/GyC
+         mogB1sm1zBoyadOG548rnxtQDRmmFeGgp21gVqr6dElcVWOmefsBauG5WKT0Qf+FfA
+         KPdswLDWakc5ZjXN1Ca8HUCKcCqQYkqV4q2yoasQ88XHRBFdj/qSRm4SyyVop4Q8Q4
+         P1gM/H8dR2CiA==
+Received: by pali.im (Postfix)
+        id 7B9E371F; Sat, 18 Feb 2023 12:26:48 +0100 (CET)
+From:   =?UTF-8?q?Pali=20Roh=C3=A1r?= <pali@kernel.org>
+To:     Michael Ellerman <mpe@ellerman.id.au>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Scott Wood <oss@buserror.net>, Sinan Akman <sinan@writeme.com>,
+        Martin Kennedy <hurricos@gmail.com>
+Cc:     linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v3 0/8] powerpc/85xx: p2020: Create one unified machine description
+Date:   Sat, 18 Feb 2023 12:13:57 +0100
+Message-Id: <20230218111405.27688-1-pali@kernel.org>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -52,57 +57,49 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Linus,
+This patch series unifies all P2020 boards and machine descriptions into
+one generic unified P2020 machine description. With this generic machine
+description, kernel can boot on any P2020-based board with correct DTS
+file.
 
-Apologies for the _extremely_ late pull request here, but we had a 'perf'
-(i.e. CPU PMU) regression on the Apple M1 reported on Wednesday [1] which
-was introduced by bd2756811766 ("perf: Rewrite core context handling")
-during the merge window.
+Tested on CZ.NIC Turris 1.1 board with has Freescale P2020 processor.
+Kernel during booting correctly detects P2020 and prints:
+[    0.000000] Using Freescale P2020 machine description
 
-Mark and I looked into this and noticed an additional problem caused by
-the same patch, where the 'CHAIN' event (used to combine two adjacent
-32-bit counters into a single 64-bit counter) was not being filtered
-correctly. Mark posted a series on Thursday [2] which addresses both of
-these regressions and I queued it the same day.
+Changes in v3:
+* Use 'if (IS_ENABLED(CONFIG_PPC_I8259))' instead of '#ifdef CONFIG_PPC_I8259'
+* Simplify p2020_probe()
+* Patches generated by -M and -C git options
 
-Unfortunately, the timing has meant that these two patches are yet to
-land in linux-next. We narrowly missed the 20230217 release and now
-we're into the weekend. The changes are small, self-contained and have
-been confirmed to fix the original regression, so I'd really appreciate
-it if you could please pull them in for 6.2 despite the caveat above.
+Link to v2: https://lore.kernel.org/linuxppc-dev/20221224211425.14983-1-pali@kernel.org/
 
-Thanks, and sorry again for the unfortunate timing.
+Changes in v2:
+* Added patch "p2020: Move i8259 code into own function" (separated from the next one)
+* Renamed CONFIG_P2020 to CONFIG_PPC_P2020
+* Fixed descriptions
 
-Will
+Link to v1: https://lore.kernel.org/linuxppc-dev/20220819191557.28116-1-pali@kernel.org/
 
-[1] https://lore.kernel.org/asahi/20230215-arm_pmu_m1_regression-v1-1-f5a266577c8d@jannau.net/
-[2] https://lore.kernel.org/linux-arm-kernel/20230216141240.3833272-1-mark.rutland@arm.com/
+Pali Rohár (8):
+  powerpc/85xx: Mark mpc85xx_rdb_pic_init() as static
+  powerpc/85xx: Mark mpc85xx_ds_pic_init() as static
+  powerpc/85xx: p2020: Move all P2020 machine descriptions to p2020.c
+  powerpc/85xx: p2020: Move i8259 code into own function
+  powerpc/85xx: p2020: Unify .setup_arch and .init_IRQ callbacks
+  powerpc/85xx: p2020: Define just one machine description
+  powerpc/85xx: p2020: Enable boards by new config option
+    CONFIG_PPC_P2020
+  powerpc: dts: turris1x.dts: Remove "fsl,P2020RDB-PC" compatible string
 
---->8
+ arch/powerpc/boot/dts/turris1x.dts            |   2 +-
+ arch/powerpc/platforms/85xx/Kconfig           |  22 ++-
+ arch/powerpc/platforms/85xx/Makefile          |   1 +
+ arch/powerpc/platforms/85xx/mpc85xx_ds.c      |  25 +---
+ arch/powerpc/platforms/85xx/mpc85xx_rdb.c     |  46 +-----
+ .../platforms/85xx/{mpc85xx_ds.c => p2020.c}  | 135 ++++++------------
+ 6 files changed, 68 insertions(+), 163 deletions(-)
+ copy arch/powerpc/platforms/85xx/{mpc85xx_ds.c => p2020.c} (52%)
 
-The following changes since commit a428eb4b99ab80454f06ad256b25e930fe8a4954:
+-- 
+2.20.1
 
-  Partially revert "perf/arm-cmn: Optimise DTC counter accesses" (2023-01-26 13:55:38 +0000)
-
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git tags/arm64-fixes
-
-for you to fetch changes up to 853e2dac25c15f7431dfe59805de1bada34c96e9:
-
-  arm64: perf: reject CHAIN events at creation time (2023-02-16 21:23:52 +0000)
-
-----------------------------------------------------------------
-arm64 regression fix for 6.2
-
-- Fix 'perf' regression for non-standard CPU PMU hardware (i.e. Apple M1)
-
-----------------------------------------------------------------
-Mark Rutland (2):
-      arm_pmu: fix event CPU filtering
-      arm64: perf: reject CHAIN events at creation time
-
- arch/arm64/kernel/perf_event.c | 15 ++++++++-------
- drivers/perf/arm_pmu.c         |  8 +-------
- include/linux/perf/arm_pmu.h   |  1 -
- 3 files changed, 9 insertions(+), 15 deletions(-)
