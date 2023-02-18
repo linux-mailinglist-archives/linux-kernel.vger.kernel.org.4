@@ -2,143 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C27C569BD92
-	for <lists+linux-kernel@lfdr.de>; Sat, 18 Feb 2023 23:59:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 799E269BDEB
+	for <lists+linux-kernel@lfdr.de>; Sun, 19 Feb 2023 00:16:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229635AbjBRW4V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 18 Feb 2023 17:56:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45494 "EHLO
+        id S229667AbjBRXQR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 18 Feb 2023 18:16:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50522 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229489AbjBRW4U (ORCPT
+        with ESMTP id S229436AbjBRXQQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 18 Feb 2023 17:56:20 -0500
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F13861287B
-        for <linux-kernel@vger.kernel.org>; Sat, 18 Feb 2023 14:56:18 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1676760978; x=1708296978;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=+CBYHS47QPvmXzHptEyQdFVK20rxMIFd/c2zsTfFKjk=;
-  b=nj7Vz2M+MDZiPZWXqmPsAXQCfHKHiYPGWOfW2T7voKdQH3dL5q1FdQFj
-   Hjmno1mWbj1ELVj4UlS/ojAtN0PHhJ+RDqlkSDGAFqmWHFOKHuJUI2fr+
-   XTECyHoatOCNkzYE0M++wJMOxYh/VtHZ3s9fng7S/T2sVA1aig+PL2gRs
-   REDHgv94pafh965CR3odtQQLAjjy3j4mkDTxNwTEQqefg8UgSnmjjm8bb
-   K1yRxIILJUyO1VLiMA8OeVGonR8ZCwF0FMYsG8CClJor/ALFF3AH/ORaB
-   Vss4cow38wmKj0DA71LEibpUz+SdUsuLVsypjke8ZksJ+gA5W4GNvjGR0
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10625"; a="332214161"
-X-IronPort-AV: E=Sophos;i="5.97,309,1669104000"; 
-   d="scan'208";a="332214161"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Feb 2023 14:56:18 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10625"; a="780203573"
-X-IronPort-AV: E=Sophos;i="5.97,309,1669104000"; 
-   d="scan'208";a="780203573"
-Received: from lkp-server01.sh.intel.com (HELO 4455601a8d94) ([10.239.97.150])
-  by fmsmga002.fm.intel.com with ESMTP; 18 Feb 2023 14:56:17 -0800
-Received: from kbuild by 4455601a8d94 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pTW7s-000CpT-1V;
-        Sat, 18 Feb 2023 22:56:16 +0000
-Date:   Sun, 19 Feb 2023 06:55:56 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Aaron Tomlin <atomlin@redhat.com>
-Cc:     oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>
-Subject: kernel/module/main.c:4169:1: sparse: sparse: Using plain integer as
- NULL pointer
-Message-ID: <202302190638.fKs1ga5r-lkp@intel.com>
+        Sat, 18 Feb 2023 18:16:16 -0500
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C300F14E9D;
+        Sat, 18 Feb 2023 15:16:14 -0800 (PST)
+Date:   Sat, 18 Feb 2023 23:16:09 -0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1676762171;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=n8g43V4MCQR3o/SfYMnKdsdISnPMf7MbBo2vGHoXKMc=;
+        b=p+X8khiLNZ+56Li0kR0e1pv9C/711fsQ2LhUgyD7zZ6pPgfKC/ojjYnmuFcv3jPaPQpUaE
+        10ckiYmd7NNLxru8uJjmIHNvxTzffDuxE+TlxU6Yr+ThrVK1lLyyAciDSxSTmuafEVTWTH
+        Y14w0K3oIKdKZTlXfOKHsURPykhJPYbw0tgpUBKA5sK4NohShIaDHk+mM9baoy9BBw6au4
+        nFoxUgJQ9NbAfX6NA7FWKzKMCTidgCENphodcapuwb6eKRI0ut/W1x0SutxR8pCvEI0ZM5
+        J1E1F4bmiPGnUvEWSI1yLoEEcKAYzfCuaky+2/T872cMmn+iAAH0X2dvnNwIOQ==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1676762171;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=n8g43V4MCQR3o/SfYMnKdsdISnPMf7MbBo2vGHoXKMc=;
+        b=nPdkwNy1V2sjSKOMo5iNscmlz3R/oWaWWXbovVQnHlHKyFaOmSFi3pObDN1lFN91x3vsNZ
+        ossEvBWBSEN5LYBQ==
+From:   "tip-bot2 for Thomas Gleixner" <tip-bot2@linutronix.de>
+Sender: tip-bot2@linutronix.de
+Reply-to: linux-kernel@vger.kernel.org
+To:     linux-tip-commits@vger.kernel.org
+Subject: [tip: irq/core] Merge tag 'irqchip-6.3' of
+ git://git.kernel.org/pub/scm/linux/kernel/git/maz/arm-platforms into irq/core
+Cc:     x86@kernel.org, linux-kernel@vger.kernel.org, maz@kernel.org
+In-Reply-To: <20230218143452.3817627-1-maz@kernel.org>
+References: <20230218143452.3817627-1-maz@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Message-ID: <167676216961.4906.9294968695532135789.tip-bot2@tip-bot2>
+Robot-ID: <tip-bot2@linutronix.de>
+Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Aaron,
+The following commit has been merged into the irq/core branch of tip:
 
-First bad commit (maybe != root cause):
+Commit-ID:     6f3ee0e22b4c62f44b8fa3c8de6e369a4d112a75
+Gitweb:        https://git.kernel.org/tip/6f3ee0e22b4c62f44b8fa3c8de6e369a4d112a75
+Author:        Thomas Gleixner <tglx@linutronix.de>
+AuthorDate:    Sun, 19 Feb 2023 00:07:56 +01:00
+Committer:     Thomas Gleixner <tglx@linutronix.de>
+CommitterDate: Sun, 19 Feb 2023 00:07:56 +01:00
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   5e725d112e1a54c2611d5dffd124a79415d0f0de
-commit: cfc1d277891eb499b3b5354df33b30f598683e90 module: Move all into module/
-date:   11 months ago
-config: s390-randconfig-s052-20230219 (https://download.01.org/0day-ci/archive/20230219/202302190638.fKs1ga5r-lkp@intel.com/config)
-compiler: s390-linux-gcc (GCC) 12.1.0
-reproduce:
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # apt-get install sparse
-        # sparse version: v0.6.4-39-gce1a6720-dirty
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=cfc1d277891eb499b3b5354df33b30f598683e90
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout cfc1d277891eb499b3b5354df33b30f598683e90
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=s390 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=s390 SHELL=/bin/bash
+Merge tag 'irqchip-6.3' of git://git.kernel.org/pub/scm/linux/kernel/git/maz/arm-platforms into irq/core
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202302190638.fKs1ga5r-lkp@intel.com/
+Pull irqchip updates from Marc Zyngier:
 
-sparse warnings: (new ones prefixed by >>)
-   kernel/module/main.c:2761:23: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected struct mod_kallsyms [noderef] __rcu *kallsyms @@     got void * @@
-   kernel/module/main.c:2761:23: sparse:     expected struct mod_kallsyms [noderef] __rcu *kallsyms
-   kernel/module/main.c:2761:23: sparse:     got void *
->> kernel/module/main.c:4169:1: sparse: sparse: Using plain integer as NULL pointer
->> kernel/module/main.c:4169:1: sparse: sparse: Using plain integer as NULL pointer
->> kernel/module/main.c:4169:1: sparse: sparse: Using plain integer as NULL pointer
->> kernel/module/main.c:4169:1: sparse: sparse: Using plain integer as NULL pointer
-   kernel/module/main.c:4189:1: sparse: sparse: Using plain integer as NULL pointer
-   kernel/module/main.c:4189:1: sparse: sparse: Using plain integer as NULL pointer
-   kernel/module/main.c: note: in included file (through include/linux/mm_types.h, include/linux/buildid.h, include/linux/module.h, ...):
-   include/linux/rbtree.h:74:9: sparse: sparse: incompatible types in comparison expression (different address spaces):
-   include/linux/rbtree.h:74:9: sparse:    struct rb_node [noderef] __rcu *
-   include/linux/rbtree.h:74:9: sparse:    struct rb_node *
-   include/linux/rbtree.h:74:9: sparse: sparse: incompatible types in comparison expression (different address spaces):
-   include/linux/rbtree.h:74:9: sparse:    struct rb_node [noderef] __rcu *
-   include/linux/rbtree.h:74:9: sparse:    struct rb_node *
+   - New and improved irqdomain locking, closing a number of races that
+     became apparent now that we are able to probe drivers in parallel
 
-vim +4169 kernel/module/main.c
+   - A bunch of OF node refcounting bugs have been fixed
 
-b99b87f70c7785 kernel/module.c Peter Oberparleiter 2009-06-17  4168  
-17da2bd90abf42 kernel/module.c Heiko Carstens      2009-01-14 @4169  SYSCALL_DEFINE3(init_module, void __user *, umod,
-17da2bd90abf42 kernel/module.c Heiko Carstens      2009-01-14  4170  		unsigned long, len, const char __user *, uargs)
-^1da177e4c3f41 kernel/module.c Linus Torvalds      2005-04-16  4171  {
-34e1169d996ab1 kernel/module.c Kees Cook           2012-10-16  4172  	int err;
-34e1169d996ab1 kernel/module.c Kees Cook           2012-10-16  4173  	struct load_info info = { };
-^1da177e4c3f41 kernel/module.c Linus Torvalds      2005-04-16  4174  
-34e1169d996ab1 kernel/module.c Kees Cook           2012-10-16  4175  	err = may_init_module();
-34e1169d996ab1 kernel/module.c Kees Cook           2012-10-16  4176  	if (err)
-34e1169d996ab1 kernel/module.c Kees Cook           2012-10-16  4177  		return err;
-^1da177e4c3f41 kernel/module.c Linus Torvalds      2005-04-16  4178  
-34e1169d996ab1 kernel/module.c Kees Cook           2012-10-16  4179  	pr_debug("init_module: umod=%p, len=%lu, uargs=%p\n",
-34e1169d996ab1 kernel/module.c Kees Cook           2012-10-16  4180  	       umod, len, uargs);
-^1da177e4c3f41 kernel/module.c Linus Torvalds      2005-04-16  4181  
-34e1169d996ab1 kernel/module.c Kees Cook           2012-10-16  4182  	err = copy_module_from_user(umod, len, &info);
-34e1169d996ab1 kernel/module.c Kees Cook           2012-10-16  4183  	if (err)
-34e1169d996ab1 kernel/module.c Kees Cook           2012-10-16  4184  		return err;
-^1da177e4c3f41 kernel/module.c Linus Torvalds      2005-04-16  4185  
-2f3238aebedb24 kernel/module.c Rusty Russell       2012-10-22  4186  	return load_module(&info, uargs, 0);
-e24e2e64c468c8 kernel/module.c Alexey Dobriyan     2008-03-10  4187  }
-94462ad3b14739 kernel/module.c Steven Rostedt      2010-11-29  4188  
+   - We now have a new IPI mux, lifted from the Apple AIC code and
+     made common. It is expected that riscv will eventually benefit
+     from it
 
-:::::: The code at line 4169 was first introduced by commit
-:::::: 17da2bd90abf428523de0fb98f7075e00e3ed42e [CVE-2009-0029] System call wrappers part 08
+   - Two small fixes for the Broadcom L2 drivers
 
-:::::: TO: Heiko Carstens <heiko.carstens@de.ibm.com>
-:::::: CC: Heiko Carstens <heiko.carstens@de.ibm.com>
+   - Various cleanups and minor bug fixes
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+Link: https://lore.kernel.org/r/20230218143452.3817627-1-maz@kernel.org
+---
