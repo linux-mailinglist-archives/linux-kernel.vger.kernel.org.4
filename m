@@ -2,128 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A220E69BA5A
-	for <lists+linux-kernel@lfdr.de>; Sat, 18 Feb 2023 15:06:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B7D5169BA57
+	for <lists+linux-kernel@lfdr.de>; Sat, 18 Feb 2023 15:06:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229634AbjBROGs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 18 Feb 2023 09:06:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57878 "EHLO
+        id S229506AbjBROG0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 18 Feb 2023 09:06:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57552 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229585AbjBROGq (ORCPT
+        with ESMTP id S229436AbjBROGY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 18 Feb 2023 09:06:46 -0500
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5360193D4;
-        Sat, 18 Feb 2023 06:06:44 -0800 (PST)
-Received: from pps.filterd (m0279872.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 31IDuvu2004864;
-        Sat, 18 Feb 2023 14:06:40 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id : mime-version : content-type; s=qcppdkim1;
- bh=jC4N8DP1fiZQLySy8c6oooFUZP1aOqQYl+cwIghFCVE=;
- b=hQrQYcM+Pi0kqO2pu3i7+qJiPNTKXidTUK8wQsbC8oMpENWrfXSJ8v6snhEm7a4GGgrl
- F5/k3qSNjU+myj7SY/PaSRYxQPTUbmsRdgBGE9BTdvm0WQ+2za1MCDORUBpiR+/47XZv
- oG3bgfHYHgQc2AHXNcNedRz0Asne4ik67mGZUG1xLTIGOADrLgr/dUzTfGl0w0MNWUeY
- 890FfOY2R0GBjSKnqaShQMvS00UfxLz3jUNOye9FkNcOh9mmlSjmMZt4Gumy9WryNCZ/
- YwWEFBlZJizuv1YHGx5vr2UA8js3W0HlzDDFWvsSgpl9XHQ8Se7hcEpAxYM7Z1FCKwpS tQ== 
-Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3ntq2egvyu-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Sat, 18 Feb 2023 14:06:40 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 31IE6dbs003628
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Sat, 18 Feb 2023 14:06:39 GMT
-Received: from kathirav-linux.qualcomm.com (10.80.80.8) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.41; Sat, 18 Feb 2023 06:06:35 -0800
-From:   Kathiravan T <quic_kathirav@quicinc.com>
-To:     <andersson@kernel.org>, <agross@kernel.org>,
-        <konrad.dybcio@linaro.org>, <mturquette@baylibre.com>,
-        <sboyd@kernel.org>, <linux-arm-msm@vger.kernel.org>,
-        <linux-clk@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-CC:     <quic_varada@quicinc.com>, <quic_srichara@quicinc.com>,
-        Kathiravan T <quic_kathirav@quicinc.com>
-Subject: [PATCH V4] clk: qcom: ipq5332: mark GPLL4 as critical temporarily
-Date:   Sat, 18 Feb 2023 19:36:22 +0530
-Message-ID: <20230218140622.14705-1-quic_kathirav@quicinc.com>
-X-Mailer: git-send-email 2.17.1
+        Sat, 18 Feb 2023 09:06:24 -0500
+Received: from mail-io1-f69.google.com (mail-io1-f69.google.com [209.85.166.69])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCCBB8A6C
+        for <linux-kernel@vger.kernel.org>; Sat, 18 Feb 2023 06:06:23 -0800 (PST)
+Received: by mail-io1-f69.google.com with SMTP id z17-20020a056602123100b007447572f3f8so290938iot.3
+        for <linux-kernel@vger.kernel.org>; Sat, 18 Feb 2023 06:06:23 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:from:subject:message-id:in-reply-to:date:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=brnSa+0cpBeyuIS4U9CqkArAtbQGDNWTJue8yTH9UQs=;
+        b=lvvUn4AN8tDqvMbqAlln7eWCA1NuoAZ0xaqTRKSxpUKn5VkaKjQNZkkwS4wKHcYfVx
+         Be6LsGeMMmHIM5gjNGg57erJjum8iL4o9WCbp7ZApFzVUX9hSRu2upksIon7p0S6jHcV
+         OB7EZ6HkeK6GIzm9ZlmByUDo1Q/7EcAZv6JIpacumurM+A17O6vydaluUwu9JKwHsMjn
+         mlpQwTioM+nqd3qbhq/pnnBJn32DSqjMWCL3ITLLR2cXAcMHjQP0fO82OeqZ2fSO+WVJ
+         ZOTDvx5XTVdAlJJYqlI8QnN4ySSG+gKIVYF5GQ6aJ+DSb7SP+FF2R2omIwYyKNpe6Y2S
+         r17Q==
+X-Gm-Message-State: AO0yUKW+kBLoyCDXXVGWM6aXswq85RtxJsUOpsRdRMzj/WzvWTQ134Wi
+        4beiIf5+dgc7rie+hedD/lbarXb1k+FQbucnQowAyLSB6TEw
+X-Google-Smtp-Source: AK7set/o4S0Dgau2VHe35LWm98cDlS6M+vV4ywpYPXD8JBXgkXvI1u1SkDMNqqEkctIPwyww2Lfok5gaGRaA4ruh21mAz/Wt9APN
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: PPxeCNyYb_XYE3GiTxz-h9pWmO2lLEEl
-X-Proofpoint-GUID: PPxeCNyYb_XYE3GiTxz-h9pWmO2lLEEl
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.170.22
- definitions=2023-02-18_09,2023-02-17_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0
- priorityscore=1501 clxscore=1015 suspectscore=0 impostorscore=0
- spamscore=0 mlxscore=0 mlxlogscore=823 malwarescore=0 bulkscore=0
- lowpriorityscore=0 adultscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2212070000 definitions=main-2302180126
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Received: by 2002:a6b:6f0f:0:b0:73b:1230:331b with SMTP id
+ k15-20020a6b6f0f000000b0073b1230331bmr1384630ioc.97.1676729183287; Sat, 18
+ Feb 2023 06:06:23 -0800 (PST)
+Date:   Sat, 18 Feb 2023 06:06:23 -0800
+In-Reply-To: <20230218135137.2025-1-hdanton@sina.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <0000000000005ac21205f4f9ef6f@google.com>
+Subject: Re: [syzbot] [bridge?] [netfilter?] KASAN: vmalloc-out-of-bounds Read
+ in __ebt_unregister_table
+From:   syzbot <syzbot+f61594de72d6705aea03@syzkaller.appspotmail.com>
+To:     hdanton@sina.com, linux-kernel@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Clock framework disables the GPLL4 source since there are no active users
-for this source currently. Some of the clocks initialized by the
-bootloaders uses the GPLL4 as the source. Due to this, when the GPLL4 is
-disabled by the clock framework, system is going for the reboot.
+Hello,
 
-To avoid this, mark the GPLL4 as ignore unused so that clock framework
-doesn't disable it. Once the users of this source is enabled, we can get
-rid of this flag.
+syzbot has tested the proposed patch but the reproducer is still triggering an issue:
+KASAN: vmalloc-out-of-bounds Read in __ebt_unregister_table
 
-Signed-off-by: Kathiravan T <quic_kathirav@quicinc.com>
----
-Changes in V4:
-	- Updated the commit message and comment in driver that
-	  CLK_IGNORE_UNUSED is used
-	- This patch depends on the IPQ5332 baseport patches
-	  https://lore.kernel.org/linux-arm-msm/20230217075835.460-1-quic_kathirav@quicinc.com/
+==================================================================
+BUG: KASAN: vmalloc-out-of-bounds in __ebt_unregister_table+0xf43/0xfc0 net/bridge/netfilter/ebtables.c:1178
+Read of size 4 at addr ffffc90003263000 by task kworker/u4:6/3167
 
-Changes in V3:
-	- Fixed the typo in the comment
-	- Used CLK_IGNORE_UNUSED instead of CLK_IS_CRITICAL
+CPU: 0 PID: 3167 Comm: kworker/u4:6 Not tainted 6.2.0-rc8-syzkaller-00083-g3ac88fa4605e-dirty #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/21/2023
+Workqueue: netns cleanup_net
+Call Trace:
+ <TASK>
+ __dump_stack lib/dump_stack.c:88 [inline]
+ dump_stack_lvl+0xd1/0x138 lib/dump_stack.c:106
+ print_address_description mm/kasan/report.c:306 [inline]
+ print_report+0x15e/0x45d mm/kasan/report.c:417
+ kasan_report+0xbf/0x1f0 mm/kasan/report.c:517
+ __ebt_unregister_table+0xf43/0xfc0 net/bridge/netfilter/ebtables.c:1178
+ ebt_unregister_table+0x35/0x40 net/bridge/netfilter/ebtables.c:1382
+ ops_exit_list+0xb0/0x170 net/core/net_namespace.c:169
+ cleanup_net+0x4ee/0xb10 net/core/net_namespace.c:613
+ process_one_work+0x9bf/0x1710 kernel/workqueue.c:2289
+ worker_thread+0x669/0x1090 kernel/workqueue.c:2436
+ kthread+0x2e8/0x3a0 kernel/kthread.c:376
+ ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:308
+ </TASK>
 
-Changes in V2:
-	- Added a comment in driver explaining the need of the flag
+Memory state around the buggy address:
+ ffffc90003262f00: f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8
+ ffffc90003262f80: f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8
+>ffffc90003263000: f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8
+                   ^
+ ffffc90003263080: f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8
+ ffffc90003263100: f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8
+==================================================================
 
- drivers/clk/qcom/gcc-ipq5332.c | 11 +++++++++++
- 1 file changed, 11 insertions(+)
 
-diff --git a/drivers/clk/qcom/gcc-ipq5332.c b/drivers/clk/qcom/gcc-ipq5332.c
-index 9e4baea33937..bdb4a0a11d07 100644
---- a/drivers/clk/qcom/gcc-ipq5332.c
-+++ b/drivers/clk/qcom/gcc-ipq5332.c
-@@ -128,6 +128,17 @@ static struct clk_alpha_pll gpll4_main = {
- 			.parent_data = &gcc_parent_data_xo,
- 			.num_parents = 1,
- 			.ops = &clk_alpha_pll_stromer_ops,
-+			/*
-+			 * There are no consumers for this GPLL in kernel yet,
-+			 * (will be added soon), so the clock framework
-+			 * disables this source. But some of the clocks
-+			 * initialized by boot loaders uses this source. So we
-+			 * need to keep this clock ON. Add the
-+			 * CLK_IGNORE_UNUSED flag so the clock will not be
-+			 * disabled. Once the consumer in kernel is added, we
-+			 * can get rid of this flag.
-+			 */
-+			.flags = CLK_IGNORE_UNUSED,
- 		},
- 	},
- };
--- 
-2.17.1
+Tested on:
+
+commit:         3ac88fa4 Merge tag 'net-6.2-final' of git://git.kernel..
+git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+console output: https://syzkaller.appspot.com/x/log.txt?x=12fc4f6f480000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=fe56f7d193926860
+dashboard link: https://syzkaller.appspot.com/bug?extid=f61594de72d6705aea03
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+patch:          https://syzkaller.appspot.com/x/patch.diff?x=173470f0c80000
 
