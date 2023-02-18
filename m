@@ -2,148 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F19669BB88
-	for <lists+linux-kernel@lfdr.de>; Sat, 18 Feb 2023 20:11:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6DEC269BB87
+	for <lists+linux-kernel@lfdr.de>; Sat, 18 Feb 2023 20:11:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229723AbjBRTLO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 18 Feb 2023 14:11:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51548 "EHLO
+        id S229716AbjBRTLM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 18 Feb 2023 14:11:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51510 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229522AbjBRTLK (ORCPT
+        with ESMTP id S229499AbjBRTLI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 18 Feb 2023 14:11:10 -0500
-Received: from mail-pg1-x532.google.com (mail-pg1-x532.google.com [IPv6:2607:f8b0:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B935915557
-        for <linux-kernel@vger.kernel.org>; Sat, 18 Feb 2023 11:11:02 -0800 (PST)
-Received: by mail-pg1-x532.google.com with SMTP id y12so576708pgu.2
-        for <linux-kernel@vger.kernel.org>; Sat, 18 Feb 2023 11:11:02 -0800 (PST)
+        Sat, 18 Feb 2023 14:11:08 -0500
+Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA2B71555A
+        for <linux-kernel@vger.kernel.org>; Sat, 18 Feb 2023 11:11:05 -0800 (PST)
+Received: by mail-ed1-x532.google.com with SMTP id z7so2441113edb.12
+        for <linux-kernel@vger.kernel.org>; Sat, 18 Feb 2023 11:11:05 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=zf7rG+fsrika4LatxPpr29R818vMyi25upFsjiFQJTc=;
-        b=ctH6tO0PO9+X0z8t2xtsfOvZcQXeTlzJ7NRXDmELZRHe+Ec46ycsz+chjFuq2v13kG
-         7Cm8TeygFCjPFMXhvPZ7IxPBDuhdFuD6OFb7Yzmn9lTKNPT3j0hm/ima2fpt7euvm1MY
-         lSQM+5DnQ9g4jgXCllSbpa7usFJ0vlwGRTHDU=
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=wGzk4u2LaXho6Aee+OsMi1UnXx5jEaEJVgW+Rl2vmw4=;
+        b=Dt320SEZ8fQgLJL4IXIzora99cbuv9QlQdJnmpooVINwirf+jvE3zrfWpVucw3MK5j
+         sC0219XnPgRKu8gisjn9a1vt8nObnT2HzOg8M6oVhODEdjxy1nAG9PP2VC8gvzWc2G6s
+         +SnHP9AGfzhYkf5tBHBxc6+HANWMbP+KlSfcuLDW7Yit4CjPwrXUWLeHoKGjZoG6GOQP
+         ilWXtVfUPqC7P+bN7+7IRKfqcIp5B1Keg+3at9kPP84fl6T8pIUAb3Qjh5EC3Ti6B2xq
+         buh+OotRiEczU6d+sviHYVvAaWlRt2m8arOAidCBGEOst74BZfvA7nS4J++VsJwVTqCc
+         bIhQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=zf7rG+fsrika4LatxPpr29R818vMyi25upFsjiFQJTc=;
-        b=gX+1wYgr86mBNLtRIEljtUX7sI0izQ7XNbvGZoQfABg8MKA0SPKlGBA18VoBqIv/zN
-         EpV7+OoqgrlboK6o0lpMDXpDcxZo2xRGdhAliVvH4113A5IHg2gmb+sHT8okRHG6iQbI
-         Dnpf2IBvVMThk7/tI3KYXQC8eMWLQbIMycArhDeA9JGTp/OfkYk8D3NiU+BgQz99SaA/
-         8TJUkQzJFVIIENmmneS12zCbLAoVSmNx5E2+eIIBZHx56LLca7VAMnW1UZ/HQZL9Y0nn
-         6hzP5ujjHqjrH8tYp3s8Yn3/rREG71GXLEKYal4T6MGaMfHQTRgsZpuG6cG8HyRBci8t
-         dq7w==
-X-Gm-Message-State: AO0yUKUyW5BaPm2BwNgt7OEXSeZT1ah/gj3Z+oz8rWVFp/jKy6wgyvEz
-        +duGLCu6R0rcNhKe9goH1sNDNw==
-X-Google-Smtp-Source: AK7set8K28w3uKPotk+c9h8F2CTsRMf6Mt14uP3+vjktHG27okpeTcXywcuKRUrZToP+0eRq9oHiNg==
-X-Received: by 2002:aa7:9506:0:b0:5a8:aa77:1835 with SMTP id b6-20020aa79506000000b005a8aa771835mr4963220pfp.33.1676747462224;
-        Sat, 18 Feb 2023 11:11:02 -0800 (PST)
-Received: from www.outflux.net (198-0-35-241-static.hfc.comcastbusiness.net. [198.0.35.241])
-        by smtp.gmail.com with ESMTPSA id k18-20020aa792d2000000b005a8b28c644esm4925819pfa.4.2023.02.18.11.11.01
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 18 Feb 2023 11:11:01 -0800 (PST)
-From:   Kees Cook <keescook@chromium.org>
-To:     Gregory Greenman <gregory.greenman@intel.com>
-Cc:     Kees Cook <keescook@chromium.org>, Kalle Valo <kvalo@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Johannes Berg <johannes.berg@intel.com>,
-        Benjamin Berg <benjamin.berg@intel.com>,
-        Sriram R <quic_srirrama@quicinc.com>,
-        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
-Subject: [PATCH] wifi: iwlwifi: dvm: Add struct_group for struct iwl_keyinfo keys
-Date:   Sat, 18 Feb 2023 11:11:00 -0800
-Message-Id: <20230218191056.never.374-kees@kernel.org>
-X-Mailer: git-send-email 2.34.1
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=wGzk4u2LaXho6Aee+OsMi1UnXx5jEaEJVgW+Rl2vmw4=;
+        b=sYrkLB1/vyxt24u4fktQFpWa4mo268JdnxSSsJsesMSl3Kk5gxr/i5FjPRUfwXluX3
+         R/q/kiWF+ZT9YxZl4TfErbnNxN+EN0B8ePn4wdJr5NMt9xm8YlPsEH0UvnZHGgeyAJUB
+         HbLKrfXEr9wfxpxMiITONpjtWs3/PAEr9brOvHv3JtuUekFTr3/AHuB5Eh+5k7CWVy1P
+         gaPXsihH7udgkiU5h2E4ubPjbdigUt80bmYc7HheUl+yhrq5Clg1uIHdFgdbxwG+4Rb6
+         9f4CyNPj28r/tMbEGxD44YfKTqciw3AbPbYPx2szG7FOqfo3gCssJurAkcZRZWSRzcUR
+         KGSw==
+X-Gm-Message-State: AO0yUKVJACxXLdshpsVqcjQXb5KKgI0OA+ymmlMOPve2OPkDJD1QMoEc
+        wHExY2ukmyvSihewJy3SgNo=
+X-Google-Smtp-Source: AK7set+19pqr8/y9ubNSplyC7cf7XHx6hU2Vu2cNjGAXjaba5cU+//XkQwnFU53KyDoTDs9e/vKLzw==
+X-Received: by 2002:a05:6402:34d5:b0:4ab:dde:dea7 with SMTP id w21-20020a05640234d500b004ab0ddedea7mr1028667edc.2.1676747464376;
+        Sat, 18 Feb 2023 11:11:04 -0800 (PST)
+Received: from [192.168.0.102] (p57935146.dip0.t-ipconnect.de. [87.147.81.70])
+        by smtp.gmail.com with ESMTPSA id y102-20020a50bb6f000000b004acb3026af2sm3960958ede.59.2023.02.18.11.11.03
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 18 Feb 2023 11:11:03 -0800 (PST)
+Message-ID: <5de7b776-4fbe-f6f8-ffa9-fdef337c9c20@gmail.com>
+Date:   Sat, 18 Feb 2023 20:11:01 +0100
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2903; h=from:subject:message-id; bh=6ocLfuLUjbHMLL3EssbDtFFXg555hqCuVMArd3yFm64=; b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBj8SLD0yPX6FR7+Ky4Sm+eLKdlJc0JVCY7rZy1tsxd CLQhp2WJAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCY/EiwwAKCRCJcvTf3G3AJiymD/ 9g1362ck2iM1XQp/7+Yumk1DkPuUGDlhNkg07IPRr/Kp88Q7ZdiOrZLW4SrMunolnRZhKstjflj+GW z3rEomGJjTeZ0aTviKU8bPHectrVXlnbYG87hAeV5hneIcB+GgMzUecLsRBQc5rTZQ6u+qTQeEJcdk L2AEaxSeglKM+ADCDtBwYLzpNivNBOPKeiugRsLDCDEOTHI6khqu6z2+7XV5aEe+lqtMMMlhNq+iyG H79XSkCx/6rfeIgzEjNCUluknMczJ6XicYCEKf5mBI+nnKDe+eTqx/HtQKgrJaEeYoIa6wz/h6v7gN 3BpCsgJbP/HJCMD622gBgzNYJ6w1lpwH93K4HEmTGbkWAigbbcpaGOQSuEoa0tKaUGAymi+ClNK4g8 Mc/I3OhcP42LiR8Wxk01c7FgXCwtHQxJVEcSKdI1aPsieYXzE8HWy5GeNvVCdKYWosB9G/tFKR5MdU SK8x9l1EyyYPX54Wxn6+87HeTxf6UdddjKRcVVtAUuaJPhBDb31jyV9JnpCoX1yfNPzhUpMt3a6UOI B8boiLn5Eu/e0+Qxuj3nN4SG+Af16pN7RIXu0RIvVUR2mLlO7enI0b8GIy+lBPGmFzOhgBw2lK9Q6g Cj2FJzTbsq1AivdRNhSK4OcnTL87RcezT3i5MQD7N8nUeesuvUK6DdynRkoA==
-X-Developer-Key: i=keescook@chromium.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH] Staging: r8188eu: Fixed block comment
+Content-Language: en-US
+To:     Khadija Kamran <kamrankhadijadj@gmail.com>,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
+Cc:     Larry.Finger@lwfinger.net, phil@philpotter.co.uk,
+        paskripkin@gmail.com, gregkh@linuxfoundation.org
+References: <Y+8p7Hyaf4LhO/Sw@khadija-virtual-machine>
+From:   Philipp Hortmann <philipp.g.hortmann@gmail.com>
+In-Reply-To: <Y+8p7Hyaf4LhO/Sw@khadija-virtual-machine>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Function iwlagn_send_sta_key() was trying to write across multiple
-structure members in a single memcpy(). Add a struct group "keys" to
-let the compiler see the intended bounds of the memcpy, which includes
-the tkip keys as well. Silences false positive memcpy() run-time
-warning:
+On 2/17/23 08:17, Khadija Kamran wrote:
+> Fixed block comment by adding '*' in each line. The Check message was
+> shown by using checkpatch.pl script.
+> 
+> Signed-off-by: Khadija Kamran <kamrankhadijadj@gmail.com>
+> ---
+>   drivers/staging/r8188eu/core/rtw_br_ext.c | 19 ++++++++++---------
+>   1 file changed, 10 insertions(+), 9 deletions(-)
+> 
+> diff --git a/drivers/staging/r8188eu/core/rtw_br_ext.c b/drivers/staging/r8188eu/core/rtw_br_ext.c
+> index a7c67014dde0..03025dc89533 100644
+> --- a/drivers/staging/r8188eu/core/rtw_br_ext.c
+> +++ b/drivers/staging/r8188eu/core/rtw_br_ext.c
+> @@ -36,15 +36,16 @@
+>   #define WAIT_TIME_PPPOE	5	/*  waiting time for pppoe server in sec */
+>   
+>   /*-----------------------------------------------------------------
+> -  How database records network address:
+> -	   0    1    2    3    4    5    6    7    8    9   10
+> -	|----|----|----|----|----|----|----|----|----|----|----|
+> -  IPv4  |type|                             |      IP addr      |
+> -  IPX   |type|      Net addr     |          Node addr          |
+> -  IPX   |type|      Net addr     |Sckt addr|
+> -  Apple |type| Network |node|
+> -  PPPoE |type|   SID   |           AC MAC            |
+> ------------------------------------------------------------------*/
+> + * How database records network address:
+> + *	    0    1    2    3    4    5    6    7    8    9   10
+> + *	 |----|----|----|----|----|----|----|----|----|----|----|
+> + * IPv4  |type|                             |      IP addr      |
+> + * IPX   |type|      Net addr     |          Node addr          |
+> + * IPX   |type|      Net addr     |Sckt addr|
+> + * Apple |type| Network |node|
+> + * PPPoE |type|   SID   |           AC MAC            |
+> + * ----------------------------------------------------------------
+> + */
+>   
+>   /* Find a tag in pppoe frame and return the pointer */
+>   static unsigned char *__nat25_find_pppoe_tag(struct pppoe_hdr *ph, unsigned short type)
 
-  memcpy: detected field-spanning write (size 32) of single field "sta_cmd.key.key" at drivers/net/wireless/intel/iwlwifi/dvm/sta.c:1103 (size 16)
-
-Link: https://www.alionet.org/index.php?topic=1469.0
-Cc: Gregory Greenman <gregory.greenman@intel.com>
-Cc: Kalle Valo <kvalo@kernel.org>
-Cc: "David S. Miller" <davem@davemloft.net>
-Cc: Eric Dumazet <edumazet@google.com>
-Cc: Jakub Kicinski <kuba@kernel.org>
-Cc: Paolo Abeni <pabeni@redhat.com>
-Cc: Johannes Berg <johannes.berg@intel.com>
-Cc: Benjamin Berg <benjamin.berg@intel.com>
-Cc: Sriram R <quic_srirrama@quicinc.com>
-Cc: linux-wireless@vger.kernel.org
-Cc: netdev@vger.kernel.org
-Signed-off-by: Kees Cook <keescook@chromium.org>
----
- drivers/net/wireless/intel/iwlwifi/dvm/commands.h | 10 ++++++----
- drivers/net/wireless/intel/iwlwifi/dvm/sta.c      |  4 ++--
- 2 files changed, 8 insertions(+), 6 deletions(-)
-
-diff --git a/drivers/net/wireless/intel/iwlwifi/dvm/commands.h b/drivers/net/wireless/intel/iwlwifi/dvm/commands.h
-index 75a4b8e26232..0eceac4b9131 100644
---- a/drivers/net/wireless/intel/iwlwifi/dvm/commands.h
-+++ b/drivers/net/wireless/intel/iwlwifi/dvm/commands.h
-@@ -783,10 +783,12 @@ struct iwl_keyinfo {
- 	__le16 tkip_rx_ttak[5];	/* 10-byte unicast TKIP TTAK */
- 	u8 key_offset;
- 	u8 reserved2;
--	u8 key[16];		/* 16-byte unicast decryption key */
--	__le64 tx_secur_seq_cnt;
--	__le64 hw_tkip_mic_rx_key;
--	__le64 hw_tkip_mic_tx_key;
-+	struct_group(keys,
-+		u8 key[16];	/* 16-byte unicast decryption key */
-+		__le64 tx_secur_seq_cnt;
-+		__le64 hw_tkip_mic_rx_key;
-+		__le64 hw_tkip_mic_tx_key;
-+	);
- } __packed;
- 
- /**
-diff --git a/drivers/net/wireless/intel/iwlwifi/dvm/sta.c b/drivers/net/wireless/intel/iwlwifi/dvm/sta.c
-index cef43cf80620..a1c9e201b058 100644
---- a/drivers/net/wireless/intel/iwlwifi/dvm/sta.c
-+++ b/drivers/net/wireless/intel/iwlwifi/dvm/sta.c
-@@ -1093,14 +1093,14 @@ static int iwlagn_send_sta_key(struct iwl_priv *priv,
- 	switch (keyconf->cipher) {
- 	case WLAN_CIPHER_SUITE_CCMP:
- 		key_flags |= STA_KEY_FLG_CCMP;
--		memcpy(sta_cmd.key.key, keyconf->key, keyconf->keylen);
-+		memcpy(&sta_cmd.key.keys, keyconf->key, keyconf->keylen);
- 		break;
- 	case WLAN_CIPHER_SUITE_TKIP:
- 		key_flags |= STA_KEY_FLG_TKIP;
- 		sta_cmd.key.tkip_rx_tsc_byte2 = tkip_iv32;
- 		for (i = 0; i < 5; i++)
- 			sta_cmd.key.tkip_rx_ttak[i] = cpu_to_le16(tkip_p1k[i]);
--		memcpy(sta_cmd.key.key, keyconf->key, keyconf->keylen);
-+		memcpy(&sta_cmd.key.keys, keyconf->key, keyconf->keylen);
- 		break;
- 	case WLAN_CIPHER_SUITE_WEP104:
- 		key_flags |= STA_KEY_FLG_KEY_SIZE_MSK;
--- 
-2.34.1
-
+Reviewed-by: Philipp Hortmann <philipp.g.hortmann@gmail.com>
