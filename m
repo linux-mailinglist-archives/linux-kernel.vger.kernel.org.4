@@ -2,189 +2,245 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6AB5069BB6F
-	for <lists+linux-kernel@lfdr.de>; Sat, 18 Feb 2023 19:39:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E204A69BB7D
+	for <lists+linux-kernel@lfdr.de>; Sat, 18 Feb 2023 19:57:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229605AbjBRSi6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 18 Feb 2023 13:38:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41786 "EHLO
+        id S229651AbjBRSzv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 18 Feb 2023 13:55:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46486 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229472AbjBRSi4 (ORCPT
+        with ESMTP id S229472AbjBRSzu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 18 Feb 2023 13:38:56 -0500
-Received: from mail-pg1-x52c.google.com (mail-pg1-x52c.google.com [IPv6:2607:f8b0:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D1EF12BE5
-        for <linux-kernel@vger.kernel.org>; Sat, 18 Feb 2023 10:38:54 -0800 (PST)
-Received: by mail-pg1-x52c.google.com with SMTP id 8so252548pge.10
-        for <linux-kernel@vger.kernel.org>; Sat, 18 Feb 2023 10:38:54 -0800 (PST)
+        Sat, 18 Feb 2023 13:55:50 -0500
+Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC6D81423D
+        for <linux-kernel@vger.kernel.org>; Sat, 18 Feb 2023 10:55:48 -0800 (PST)
+Received: by mail-ed1-x52c.google.com with SMTP id ee44so1533048edb.5
+        for <linux-kernel@vger.kernel.org>; Sat, 18 Feb 2023 10:55:48 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=iTKepua2kscIuNx6W8BDWIkKKvbZQVVeOdAhbCfO3SE=;
-        b=Qr1HSZdE5f37YaHkVPA3tyWNxnLYtwoHRGIrYCxG0ZpB9c/gk2gOp4/kWGR2xhedzD
-         o3h/1htLKKVe6YmdGl9eXPNgzXTr6WsV9jYr4L6koLUCC3TpOmTYQwYhfGrQB5dZmN+J
-         S/cmEbce17loFmkRuhZSKRwSV44Kee71UcC54=
+        d=googlemail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:content-language:references
+         :cc:to:from:subject:user-agent:mime-version:date:message-id:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=stB38V3fdBlcd6D0cBa/2Lgks2xX7xVFDJ6BHXxoksE=;
+        b=SoAYDh8SnuZb8Gu4r2FwfYCw0QJtRY3AfujYJ/7viSKDIdxnLUVDbPtITB9EaJHVX+
+         RVIZZNYSGSALLsukfpvmCvs/+l3+Va+FHJ4Z31hrY/HKaHta3HRqPt8DYoIUS6F1FQ+e
+         ljkSWRig2kLXGnhw3P6ZPPz6Vf6UIX0fl9ql6j6JwbKkM/eXNbOBi/W5ACxDhGjxsnci
+         SGaQpcp9nKH9rJXVMljVOPEQfek36g2CPqpQTwfWuMehFCi2ypMsU+X8kqndCTeRwpWm
+         zuV5aYuYoVb/oJdye1YBmKfPPH4NW3Cr5PLC3awVMeK8R4bDDIpOI7LfDbh+Cl8dMRU1
+         Fo3A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=iTKepua2kscIuNx6W8BDWIkKKvbZQVVeOdAhbCfO3SE=;
-        b=jLXqL58HzelJuvZIMCjdji5XJwHyn4hrrw3LIMJ7mMne4WqDgesZFnH0BF+NDfSOrg
-         ybnuVWSuGnwP2NAqe0eEQ9TfWiJ2qw0X/6JlZCoc5VrKbYyOSOjQXLvjX8CsLUA2OtKX
-         s0I+IMByZPUjHCzExy6GH67F5VnDThDqNt+3ANs+Gf8bjc+0/SXQjurdXiUEEaTEHU1p
-         6LEqX2YAt3Wfyc//qaPGnXRlfnyecNv770+fDjfSom1liPVYDGV3AK6XAkinVXT0vnyR
-         q/xLWM3k8ONOE+Pan9gi8cs0bsbk9UQpQK4U5RAvHGpdgfH/hulbD0Ei0arm1WedYLQ9
-         eNww==
-X-Gm-Message-State: AO0yUKUYgWAH/K/5jqWpQtxFZSdTvmK3Sl0ezWY/5JYEmBxqXOks35Kc
-        jemmwivDkBNy/izFYd991NtvqzesT88vtKKt
-X-Google-Smtp-Source: AK7set+Gcx6ssrL1CUCt4P4+IZA7KQVyN/WF/pbSuKZGBRUq406XL4EeLCrbyHjWeAeUhK45htmQXg==
-X-Received: by 2002:a62:1753:0:b0:5a8:d364:62ab with SMTP id 80-20020a621753000000b005a8d36462abmr4793539pfx.17.1676745534045;
-        Sat, 18 Feb 2023 10:38:54 -0800 (PST)
-Received: from www.outflux.net (198-0-35-241-static.hfc.comcastbusiness.net. [198.0.35.241])
-        by smtp.gmail.com with ESMTPSA id h5-20020a62b405000000b005ae8e94b0d5sm1402624pfn.107.2023.02.18.10.38.52
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 18 Feb 2023 10:38:53 -0800 (PST)
-From:   Kees Cook <keescook@chromium.org>
-To:     Tariq Toukan <tariqt@nvidia.com>
-Cc:     Kees Cook <keescook@chromium.org>,
-        Josef Oskera <joskera@redhat.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Yishai Hadas <yishaih@nvidia.com>, netdev@vger.kernel.org,
-        linux-rdma@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-hardening@vger.kernel.org
-Subject: [PATCH] net/mlx4_en: Introduce flexible array to silence overflow warning
-Date:   Sat, 18 Feb 2023 10:38:50 -0800
-Message-Id: <20230218183842.never.954-kees@kernel.org>
-X-Mailer: git-send-email 2.34.1
+        h=content-transfer-encoding:in-reply-to:content-language:references
+         :cc:to:from:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=stB38V3fdBlcd6D0cBa/2Lgks2xX7xVFDJ6BHXxoksE=;
+        b=Uim8RQlQcva4xnEXakLNgOJK9ALFpoyoIx4o/x96BdFU8OZh7OCw3LJyCR8h/QSR4j
+         FZJoWpI4SKBpNagfkBIuJlZsQuh3wA04zhbOzSCbl6q7noBYRqFEp4erJmi72bCbGPlT
+         gnzOMtpfEvlLc+9iSJfA6NFXkoqYkJqH89MgIpihys+xUAVtvCsTSFKoA1mLOkPD/Z5O
+         jXf5l1o9vnx1NfBtbwtuZmvmupItOdQN/Ym7TYwZVyQWrE9ci5CesjbnkPf/ZT7BiO20
+         eMZcGKUmxVsQJiD2nxF0Ii5QPEWQSCy5uYmMSeOYhS3K5AatwaYp25z1UtiQLPJEvi0F
+         fKWQ==
+X-Gm-Message-State: AO0yUKVvOoziaBkv5ew6PfPutgozURbC52aTJvDC9x/lLuLUOGDu1pRu
+        j1Zy+YOM8Wtyo+UJv4nzBZY=
+X-Google-Smtp-Source: AK7set+QftzU/ZbqTZ1haMAMnd1BnHKFmoA2oiAhrtjAqxMxs9LfYRgveg1CfLTpJBhLO2CbZln4pg==
+X-Received: by 2002:aa7:c9c2:0:b0:4ac:c6ca:b1f8 with SMTP id i2-20020aa7c9c2000000b004acc6cab1f8mr4281544edt.12.1676746547156;
+        Sat, 18 Feb 2023 10:55:47 -0800 (PST)
+Received: from [192.168.1.10] (97e09f27.skybroadband.com. [151.224.159.39])
+        by smtp.googlemail.com with ESMTPSA id x29-20020a50d61d000000b0049e1f167956sm3952361edi.9.2023.02.18.10.55.45
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 18 Feb 2023 10:55:46 -0800 (PST)
+Message-ID: <7f6ec5b3-b5c7-f564-003e-132f112b7cf4@googlemail.com>
+Date:   Sat, 18 Feb 2023 18:55:44 +0000
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: linux-6.2-rc4+ hangs on poweroff/reboot: Bisected
+From:   Chris Clayton <chris2553@googlemail.com>
+To:     Karol Herbst <kherbst@redhat.com>
+Cc:     Linux regressions mailing list <regressions@lists.linux.dev>,
+        Dave Airlie <airlied@gmail.com>,
+        Ben Skeggs <skeggsb@gmail.com>, bskeggs@redhat.com,
+        Lyude Paul <lyude@redhat.com>,
+        ML nouveau <nouveau@lists.freedesktop.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        ML dri-devel <dri-devel@lists.freedesktop.org>
+References: <b64705e3-2e63-a466-f829-f9568b06766a@googlemail.com>
+ <CACAvsv5iYdF3P8AbyrbYo3zGmYRYhxDWn7WbAR5V9qHpbgBXRA@mail.gmail.com>
+ <1632a9ef-2954-c8f0-cdc9-03157c9d8547@googlemail.com>
+ <5abbee70-cc84-1528-c3d8-9befd9edd611@googlemail.com>
+ <5cf46df8-0fa2-e9f5-aa8e-7f7f703d96dd@googlemail.com>
+ <f72fe15b-db1d-56dd-aaf6-3cba68a8bf0a@leemhuis.info>
+ <CACO55tvR4ydDOXt=9nbR3n2aFLKrj8zeuGRR_xpezVQBBLrjqg@mail.gmail.com>
+ <a6188878-f84c-0fcc-9509-b9d7ab797f4c@leemhuis.info>
+ <d031f0a5-8d5e-af51-6db6-11844de3eeba@googlemail.com>
+ <CAPM=9tz+wksJTvMi_4Ef7XWezfH0ReN2se189s8Q=obJjHC+Fw@mail.gmail.com>
+ <4e786e22-f17a-da76-5129-8fef0c7c825a@googlemail.com>
+ <b829633e-ccc4-7a54-1cad-f29254de1251@leemhuis.info>
+ <CACO55tsvM07_6mGU3dCgeji0a6B4JJKSDOOBuCHv2Mw3rYbCHg@mail.gmail.com>
+ <181bea6a-e501-f5bd-b002-de7a244a921a@googlemail.com>
+ <CACO55tsGXfy9-a-nexvcn7pnDGoEWXMqhiQEBwCDkGyOeT1sXQ@mail.gmail.com>
+ <dbfc1f77-29f3-7690-c231-55f906a4e7e5@googlemail.com>
+Content-Language: en-GB
+In-Reply-To: <dbfc1f77-29f3-7690-c231-55f906a4e7e5@googlemail.com>
 Content-Type: text/plain; charset=UTF-8
-X-Developer-Signature: v=1; a=openpgp-sha256; l=4923; h=from:subject:message-id; bh=L+7mU/t7sXYwZ0oG57R81et2rDvNWl61qF2TMIxSz1g=; b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBj8Rs6xlqKlp/Ege1Wry6d43MG23RfmhUBBkucpD8j FHxqogeJAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCY/EbOgAKCRCJcvTf3G3AJk/bD/ 4zEc1/cSH6OhQfMpSJnszACML9ZMpDTAHpqhLxshfcauGOHxH8Mbbny9Hfk1GbiSs3VNuiLLibJ9Ea MNQMf03saSs6SUHdtpKnjT9pBQe0Mn346nS1bH7/JCPjFDgmG/0sgf7eEN/v8Idpbj7bji81Jnguae jSUGZbNky0J43bqynylqQ4z/GOrYx/RWtyTRPQw7MKc+sHM+rYELvYs33Z8c/19OZpFzs5BfJXnPaB pHgNkYlYc1mYktPxe8SYFw4c3kadZ3cwx8WohmAffJ1gcTSipH2xA0Qcz11+ij1m2kbfQPw2NzJXt3 cOvOHe4CVgwLR4s0OxyRf6L9A+eDqsuzMJFPbxJcokgaJV580FBIQxz8Al8AGV4kvDVD5KbxgXmgui 8lMrCSq704uA4vzlZRc1rizoAb72tZlVSBnvkbLgYHp20p3Q/9oLuMEzu3rUKFf4koq23WKlSsdrQ+ XwTxMuY9mRzwKSn+ja0wgoNsiP7vBGEx7ZGmVLnfJqodpRJ8T8qlW4FtvWLPoGylzWu5OhbUgNWVIT ZZTgGovPPx19taMVvE/LNSlf/IhL45K5IpQT3nUvouQ97ikCHni/2VJ2zm60Fg7PPD6OxkdzLoJORP TqLU9ifrO+z7nnoT31HBKCmgw7hnlnETPzunGXGBsOZC120Z4xIudTk/A3mA==
-X-Developer-Key: i=keescook@chromium.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The call "skb_copy_from_linear_data(skb, inl + 1, spc)" triggers a FORTIFY
-memcpy() warning on ppc64 platform:
 
-In function ‘fortify_memcpy_chk’,
-    inlined from ‘skb_copy_from_linear_data’ at ./include/linux/skbuff.h:4029:2,
-    inlined from ‘build_inline_wqe’ at drivers/net/ethernet/mellanox/mlx4/en_tx.c:722:4,
-    inlined from ‘mlx4_en_xmit’ at drivers/net/ethernet/mellanox/mlx4/en_tx.c:1066:3:
-./include/linux/fortify-string.h:513:25: error: call to ‘__write_overflow_field’ declared with
-attribute warning: detected write beyond size of field (1st parameter); maybe use struct_group()?
-[-Werror=attribute-warning]
-  513 |                         __write_overflow_field(p_size_field, size);
-      |                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Same behaviour on x86 you can get if you use "__always_inline" instead of
-"inline" for skb_copy_from_linear_data() in skbuff.h
+On 18/02/2023 15:19, Chris Clayton wrote:
+> 
+> 
+> On 18/02/2023 12:25, Karol Herbst wrote:
+>> On Sat, Feb 18, 2023 at 1:22 PM Chris Clayton <chris2553@googlemail.com> wrote:
+>>>
+>>>
+>>>
+>>> On 15/02/2023 11:09, Karol Herbst wrote:
+>>>> On Wed, Feb 15, 2023 at 11:36 AM Linux regression tracking #update
+>>>> (Thorsten Leemhuis) <regressions@leemhuis.info> wrote:
+>>>>>
+>>>>> On 13.02.23 10:14, Chris Clayton wrote:
+>>>>>> On 13/02/2023 02:57, Dave Airlie wrote:
+>>>>>>> On Sun, 12 Feb 2023 at 00:43, Chris Clayton <chris2553@googlemail.com> wrote:
+>>>>>>>>
+>>>>>>>>
+>>>>>>>>
+>>>>>>>> On 10/02/2023 19:33, Linux regression tracking (Thorsten Leemhuis) wrote:
+>>>>>>>>> On 10.02.23 20:01, Karol Herbst wrote:
+>>>>>>>>>> On Fri, Feb 10, 2023 at 7:35 PM Linux regression tracking (Thorsten
+>>>>>>>>>> Leemhuis) <regressions@leemhuis.info> wrote:
+>>>>>>>>>>>
+>>>>>>>>>>> On 08.02.23 09:48, Chris Clayton wrote:
+>>>>>>>>>>>>
+>>>>>>>>>>>> I'm assuming  that we are not going to see a fix for this regression before 6.2 is released.
+>>>>>>>>>>>
+>>>>>>>>>>> Yeah, looks like it. That's unfortunate, but happens. But there is still
+>>>>>>>>>>> time to fix it and there is one thing I wonder:
+>>>>>>>>>>>
+>>>>>>>>>>> Did any of the nouveau developers look at the netconsole captures Chris
+>>>>>>>>>>> posted more than a week ago to check if they somehow help to track down
+>>>>>>>>>>> the root of this problem?
+>>>>>>>>>>
+>>>>>>>>>> I did now and I can't spot anything. I think at this point it would
+>>>>>>>>>> make sense to dump the active tasks/threads via sqsrq keys to see if
+>>>>>>>>>> any is in a weird state preventing the machine from shutting down.
+>>>>>>>>>
+>>>>>>>>> Many thx for looking into it!
+>>>>>>>>
+>>>>>>>> Yes, thanks Karol.
+>>>>>>>>
+>>>>>>>> Attached is the output from dmesg when this block of code:
+>>>>>>>>
+>>>>>>>>         /bin/mount /dev/sda7 /mnt/sda7
+>>>>>>>>         /bin/mountpoint /proc || /bin/mount /proc
+>>>>>>>>         /bin/dmesg -w > /mnt/sda7/sysrq.dmesg.log &
+>>>>>>>>         /bin/echo t > /proc/sysrq-trigger
+>>>>>>>>         /bin/sleep 1
+>>>>>>>>         /bin/sync
+>>>>>>>>         /bin/sleep 1
+>>>>>>>>         kill $(pidof dmesg)
+>>>>>>>>         /bin/umount /mnt/sda7
+>>>>>>>>
+>>>>>>>> is executed immediately before /sbin/reboot is called as the final step of rebooting my system.
+>>>>>>>>
+>>>>>>>> I hope this is what you were looking for, but if not, please let me know what you need
+>>>>>>
+>>>>>> Thanks Dave. [...]
+>>>>> FWIW, in case anyone strands here in the archives: the msg was
+>>>>> truncated. The full post can be found in a new thread:
+>>>>>
+>>>>> https://lore.kernel.org/lkml/e0b80506-b3cf-315b-4327-1b988d86031e@googlemail.com/
+>>>>>
+>>>>> Sadly it seems the info "With runpm=0, both reboot and poweroff work on
+>>>>> my laptop." didn't bring us much further to a solution. :-/ I don't
+>>>>> really like it, but for regression tracking I'm now putting this on the
+>>>>> back-burner, as a fix is not in sight.
+>>>>>
+>>>>> #regzbot monitor:
+>>>>> https://lore.kernel.org/lkml/e0b80506-b3cf-315b-4327-1b988d86031e@googlemail.com/
+>>>>> #regzbot backburner: hard to debug and apparently rare
+>>>>> #regzbot ignore-activity
+>>>>>
+>>>>
+>>>> yeah.. this bug looks a little annoying. Sadly the only Turing based
+>>>> laptop I got doesn't work on Nouveau because of firmware related
+>>>> issues and we probably need to get updated ones from Nvidia here :(
+>>>>
+>>>> But it's a bit weird that the kernel doesn't shutdown, because I don't
+>>>> see anything in the logs which would prevent that from happening.
+>>>> Unless it's waiting on one of the tasks to complete, but none of them
+>>>> looked in any way nouveau related.
+>>>>
+>>>> If somebody else has any fancy kernel debugging tips here to figure
+>>>> out why it hangs, that would be very helpful...
+>>>>
+>>>
+>>> I think I've figured this out. It's to do with how my system is configured. I do have an initrd, but the only thing on
+>>> it is the cpu microcode which, it is recommended, should be loaded early. The absence of the NVidia firmare from an
+>>> initrd doesn't matter because the drivers for the hardware that need to load firmware are all built as modules, So, by
+>>> the time the devices are configured via udev, the root partition is mounted and the drivers can get at the firmware.
+>>>
+>>> I've found, by turning on nouveau debug and taking a video of the screen as the system shuts down, that nouveau seems to
+>>> be trying to run the scrubber very very late in the shutdown process. The problem is that by this time, I think the root
+>>> partition, and thus the scrubber binary, have become inaccessible.
+>>>
+>>> I seem to have two choices - either make the firmware accessible on an initrd or unload the module in a shutdown script
+>>> before the scrubber binary becomes inaccessible. The latter of these is the workaround I have implemented whilst the
+>>> problem I reported has been under investigation. For simplicity, I think I'll promote my workaround to being the
+>>> permanent solution.
+>>>
+>>> So, apologies (and thanks) to everyone whose time I have taken up with this non-bug.
+>>>
+>>
+>> Well.. nouveau shouldn't prevent the system from shutting down if the
+>> firmware file isn't available. Or at least it should print a
+>> warning/error. Mind messing with the code a little to see if skipping
+>> it kind of works? I probably can also come up with a patch by next
+>> week.
+>>
+> Well, I'd love to but a quick glance at the code caused me to bump into this obscenity:
+> 
+> int
+> gm200_flcn_reset_wait_mem_scrubbing(struct nvkm_falcon *falcon)
+> {
+>         nvkm_falcon_mask(falcon, 0x040, 0x00000000, 0x00000000);
+> 
+>         if (nvkm_msec(falcon->owner->device, 10,
+>                 if (!(nvkm_falcon_rd32(falcon, 0x10c) & 0x00000006))
+>                         break;
+>         ) < 0)
+>                 return -ETIMEDOUT;
+> 
+>         return 0;
+> }
+> 
+> nvkm_msec is #defined to nvkm_usec which in turn is #defined to nvkm_nsec where the loop that the break is related to
+> appears
 
-The call here copies data into inlined tx destricptor, which has 104
-bytes (MAX_INLINE) space for data payload. In this case "spc" is known
-in compile-time but the destination is used with hidden knowledge
-(real structure of destination is different from that the compiler
-can see). That cause the fortify warning because compiler can check
-bounds, but the real bounds are different.  "spc" can't be bigger than
-64 bytes (MLX4_INLINE_ALIGN), so the data can always fit into inlined
-tx descriptor. The fact that "inl" points into inlined tx descriptor is
-determined earlier in mlx4_en_xmit().
+I think someone who knows the code needs to look at this. What I can confirm is that after a freeze, I waited for 90
+seconds for a timeout to occur, but it didn't.
 
-Avoid confusing the compiler with "inl + 1" constructions to get to past
-the inl header by introducing a flexible array "data" to the struct so
-that the compiler can see that we are not dealing with an array of inl
-structs, but rather, arbitrary data following the structure. There are
-no changes to the structure layout reported by pahole, and the resulting
-machine code is actually smaller.
 
-Reported-by: Josef Oskera <joskera@redhat.com>
-Link: https://lore.kernel.org/lkml/20230217094541.2362873-1-joskera@redhat.com
-Fixes: f68f2ff91512 ("fortify: Detect struct member overflows in memcpy() at compile-time")
-Cc: Tariq Toukan <tariqt@nvidia.com>
-Cc: "David S. Miller" <davem@davemloft.net>
-Cc: Eric Dumazet <edumazet@google.com>
-Cc: Jakub Kicinski <kuba@kernel.org>
-Cc: Paolo Abeni <pabeni@redhat.com>
-Cc: Yishai Hadas <yishaih@nvidia.com>
-Cc: netdev@vger.kernel.org
-Cc: linux-rdma@vger.kernel.org
-Signed-off-by: Kees Cook <keescook@chromium.org>
----
- drivers/net/ethernet/mellanox/mlx4/en_tx.c | 22 +++++++++++-----------
- include/linux/mlx4/qp.h                    |  1 +
- 2 files changed, 12 insertions(+), 11 deletions(-)
-
-diff --git a/drivers/net/ethernet/mellanox/mlx4/en_tx.c b/drivers/net/ethernet/mellanox/mlx4/en_tx.c
-index c5758637b7be..2f79378fbf6e 100644
---- a/drivers/net/ethernet/mellanox/mlx4/en_tx.c
-+++ b/drivers/net/ethernet/mellanox/mlx4/en_tx.c
-@@ -699,32 +699,32 @@ static void build_inline_wqe(struct mlx4_en_tx_desc *tx_desc,
- 			inl->byte_count = cpu_to_be32(1 << 31 | skb->len);
- 		} else {
- 			inl->byte_count = cpu_to_be32(1 << 31 | MIN_PKT_LEN);
--			memset(((void *)(inl + 1)) + skb->len, 0,
-+			memset(inl->data + skb->len, 0,
- 			       MIN_PKT_LEN - skb->len);
- 		}
--		skb_copy_from_linear_data(skb, inl + 1, hlen);
-+		skb_copy_from_linear_data(skb, inl->data, hlen);
- 		if (shinfo->nr_frags)
--			memcpy(((void *)(inl + 1)) + hlen, fragptr,
-+			memcpy(inl->data + hlen, fragptr,
- 			       skb_frag_size(&shinfo->frags[0]));
- 
- 	} else {
- 		inl->byte_count = cpu_to_be32(1 << 31 | spc);
- 		if (hlen <= spc) {
--			skb_copy_from_linear_data(skb, inl + 1, hlen);
-+			skb_copy_from_linear_data(skb, inl->data, hlen);
- 			if (hlen < spc) {
--				memcpy(((void *)(inl + 1)) + hlen,
-+				memcpy(inl->data + hlen,
- 				       fragptr, spc - hlen);
- 				fragptr +=  spc - hlen;
- 			}
--			inl = (void *) (inl + 1) + spc;
--			memcpy(((void *)(inl + 1)), fragptr, skb->len - spc);
-+			inl = (void *)inl->data + spc;
-+			memcpy(inl->data, fragptr, skb->len - spc);
- 		} else {
--			skb_copy_from_linear_data(skb, inl + 1, spc);
--			inl = (void *) (inl + 1) + spc;
--			skb_copy_from_linear_data_offset(skb, spc, inl + 1,
-+			skb_copy_from_linear_data(skb, inl->data, spc);
-+			inl = (void *)inl->data + spc;
-+			skb_copy_from_linear_data_offset(skb, spc, inl->data,
- 							 hlen - spc);
- 			if (shinfo->nr_frags)
--				memcpy(((void *)(inl + 1)) + hlen - spc,
-+				memcpy(inl->data + hlen - spc,
- 				       fragptr,
- 				       skb_frag_size(&shinfo->frags[0]));
- 		}
-diff --git a/include/linux/mlx4/qp.h b/include/linux/mlx4/qp.h
-index c78b90f2e9a1..b9a7b1319f5d 100644
---- a/include/linux/mlx4/qp.h
-+++ b/include/linux/mlx4/qp.h
-@@ -446,6 +446,7 @@ enum {
- 
- struct mlx4_wqe_inline_seg {
- 	__be32			byte_count;
-+	__u8			data[];
- };
- 
- enum mlx4_update_qp_attr {
--- 
-2.34.1
-
+.> Chris
+>>>
+>>>>> Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
+>>>>> --
+>>>>> Everything you wanna know about Linux kernel regression tracking:
+>>>>> https://linux-regtracking.leemhuis.info/about/#tldr
+>>>>> That page also explains what to do if mails like this annoy you.
+>>>>>
+>>>>> #regzbot ignore-activity
+>>>>>
+>>>>
+>>>
+>>
