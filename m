@@ -2,107 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2283969BD8D
-	for <lists+linux-kernel@lfdr.de>; Sat, 18 Feb 2023 23:44:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C27C569BD92
+	for <lists+linux-kernel@lfdr.de>; Sat, 18 Feb 2023 23:59:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229625AbjBRWoI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 18 Feb 2023 17:44:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42980 "EHLO
+        id S229635AbjBRW4V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 18 Feb 2023 17:56:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45494 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229489AbjBRWoG (ORCPT
+        with ESMTP id S229489AbjBRW4U (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 18 Feb 2023 17:44:06 -0500
-Received: from mail-lj1-x22f.google.com (mail-lj1-x22f.google.com [IPv6:2a00:1450:4864:20::22f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8710B125AD;
-        Sat, 18 Feb 2023 14:44:05 -0800 (PST)
-Received: by mail-lj1-x22f.google.com with SMTP id y41so510070ljq.5;
-        Sat, 18 Feb 2023 14:44:05 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:subject:cc:to
-         :from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=OszOCijG/p5iaPYxbmUtU8TwmY3BccM9/PpC7rZG5O4=;
-        b=o8fEem/p5ufwZZIjf6O4/1NQ7ayrOwvqaQTBifuRM3Anp5hxVO9xDPgLaTezsKNZDx
-         UGIU4nQu/v6un+RqEGw1P79HZOR2ZIQGShZbNS7WXb1VcYU+ZfbQNZ0UimCsbd6tjfg5
-         rtp0a2FifSckSUGCXqsMy6wkXamFYug+oaXYrSPgwQP+2n26IdOp2RGkTdmTcm5Q4Cmf
-         M+CWpo8h/oDvo82hDJzvbUYI5KOUPRAFaHKRj1VWR39FnBa9ErQW8miF2ph+HXwPdFm8
-         xhTA+zuSg9n4h5z/GtanrfrjTHJjDf/4+g5lJdeKzy2Lmo9ZLlBt5EJ0u7fXYFqSU1YH
-         UWwg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:subject:cc:to
-         :from:date:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=OszOCijG/p5iaPYxbmUtU8TwmY3BccM9/PpC7rZG5O4=;
-        b=7sWdZX7vg7+rGxfKZ3jFg+0hgepEUGdY1WuLlboDBzYBvy6TLog3H/ZQ03LABHwC9/
-         GLhLj+5u2froKtYDelHdmEpQPrl7ToxTuwRAxRsQjTX3CC8+W2Gio3QTF3O+9ph/rGao
-         BS7zt0UUbnfeNtQj9C3vEAoezy9IuxfNQTZzG5xErTsi6DarBZkKu4KKmAuXdhOiq0Vk
-         Vjo2Z8ZWqWdoYW0MFNW6NWFpPHZ1Dfx73vc0dRON6FZSBc15IxtRCaoT1g5fPeUnqijX
-         pnhZUdQRFZSsEJr2joEWNxBobharDNmDbMbrk32RhfyOTu0/TuPvy+/QLOKqMNpuASr6
-         nQ9Q==
-X-Gm-Message-State: AO0yUKVeO2JdN8wwSbGeM+Zj1FtvW/QPdkWEVG1DxwvM/wfhxPGjW2xI
-        IbblvphYEJ77QETs4K4TQSxdZpbHNndU0w==
-X-Google-Smtp-Source: AK7set8EcE06V+CX/t1geSQACNxysUOqGl+9Xd3S1u2sF+rTGZl8VNIOlD4WG404w6HT1tAw2GFCaA==
-X-Received: by 2002:a2e:978f:0:b0:293:4fed:737 with SMTP id y15-20020a2e978f000000b002934fed0737mr1474393lji.18.1676760243732;
-        Sat, 18 Feb 2023 14:44:03 -0800 (PST)
-Received: from akathisia (c-276fe655.022-307-6762674.bbcust.telenor.se. [85.230.111.39])
-        by smtp.gmail.com with ESMTPSA id u12-20020a2e844c000000b002935d75761dsm1027401ljh.4.2023.02.18.14.44.02
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 18 Feb 2023 14:44:03 -0800 (PST)
-Date:   Sat, 18 Feb 2023 23:43:59 +0100
-From:   Elvira Khabirova <lineprinter0@gmail.com>
-To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc:     "Dmitry V. Levin" <ldv@strace.io>, linux-mips@vger.kernel.org,
-        linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        Ralf Baechle <ralf@linux-mips.org>,
-        Paul Burton <paul.burton@mips.com>,
-        James Hogan <jhogan@kernel.org>,
-        Andreas Henriksson <ah@debian.org>
-Subject: [PATCH] mips: fix syscall_get_nr
-Message-ID: <20230218233212.1fed456b@akathisia>
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.33; x86_64-pc-linux-gnu)
+        Sat, 18 Feb 2023 17:56:20 -0500
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F13861287B
+        for <linux-kernel@vger.kernel.org>; Sat, 18 Feb 2023 14:56:18 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1676760978; x=1708296978;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=+CBYHS47QPvmXzHptEyQdFVK20rxMIFd/c2zsTfFKjk=;
+  b=nj7Vz2M+MDZiPZWXqmPsAXQCfHKHiYPGWOfW2T7voKdQH3dL5q1FdQFj
+   Hjmno1mWbj1ELVj4UlS/ojAtN0PHhJ+RDqlkSDGAFqmWHFOKHuJUI2fr+
+   XTECyHoatOCNkzYE0M++wJMOxYh/VtHZ3s9fng7S/T2sVA1aig+PL2gRs
+   REDHgv94pafh965CR3odtQQLAjjy3j4mkDTxNwTEQqefg8UgSnmjjm8bb
+   K1yRxIILJUyO1VLiMA8OeVGonR8ZCwF0FMYsG8CClJor/ALFF3AH/ORaB
+   Vss4cow38wmKj0DA71LEibpUz+SdUsuLVsypjke8ZksJ+gA5W4GNvjGR0
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10625"; a="332214161"
+X-IronPort-AV: E=Sophos;i="5.97,309,1669104000"; 
+   d="scan'208";a="332214161"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Feb 2023 14:56:18 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10625"; a="780203573"
+X-IronPort-AV: E=Sophos;i="5.97,309,1669104000"; 
+   d="scan'208";a="780203573"
+Received: from lkp-server01.sh.intel.com (HELO 4455601a8d94) ([10.239.97.150])
+  by fmsmga002.fm.intel.com with ESMTP; 18 Feb 2023 14:56:17 -0800
+Received: from kbuild by 4455601a8d94 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pTW7s-000CpT-1V;
+        Sat, 18 Feb 2023 22:56:16 +0000
+Date:   Sun, 19 Feb 2023 06:55:56 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Aaron Tomlin <atomlin@redhat.com>
+Cc:     oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>
+Subject: kernel/module/main.c:4169:1: sparse: sparse: Using plain integer as
+ NULL pointer
+Message-ID: <202302190638.fKs1ga5r-lkp@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The implementation of syscall_get_nr on mips used to ignore the task
-argument and return the syscall number of the calling thread instead of
-the target thread.
+Hi Aaron,
 
-The bug was exposed to user space by commit 201766a20e30f ("ptrace: add
-PTRACE_GET_SYSCALL_INFO request") and detected by strace test suite.
+First bad commit (maybe != root cause):
 
-Link: https://github.com/strace/strace/issues/235
-Fixes: c2d9f1775731 ("MIPS: Fix syscall_get_nr for the syscall exit tracing.")
-Cc: <stable@vger.kernel.org> # v3.19+
-Co-developed-by: Dmitry V. Levin <ldv@strace.io>
-Signed-off-by: Dmitry V. Levin <ldv@strace.io>
-Signed-off-by: Elvira Khabirova <lineprinter0@gmail.com>
----
- arch/mips/include/asm/syscall.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   5e725d112e1a54c2611d5dffd124a79415d0f0de
+commit: cfc1d277891eb499b3b5354df33b30f598683e90 module: Move all into module/
+date:   11 months ago
+config: s390-randconfig-s052-20230219 (https://download.01.org/0day-ci/archive/20230219/202302190638.fKs1ga5r-lkp@intel.com/config)
+compiler: s390-linux-gcc (GCC) 12.1.0
+reproduce:
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # apt-get install sparse
+        # sparse version: v0.6.4-39-gce1a6720-dirty
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=cfc1d277891eb499b3b5354df33b30f598683e90
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout cfc1d277891eb499b3b5354df33b30f598683e90
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=s390 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=s390 SHELL=/bin/bash
 
-diff --git a/arch/mips/include/asm/syscall.h b/arch/mips/include/asm/syscall.h
-index 25fa651c937d..ebdf4d910af2 100644
---- a/arch/mips/include/asm/syscall.h
-+++ b/arch/mips/include/asm/syscall.h
-@@ -38,7 +38,7 @@ static inline bool mips_syscall_is_indirect(struct task_struct *task,
- static inline long syscall_get_nr(struct task_struct *task,
- 				  struct pt_regs *regs)
- {
--	return current_thread_info()->syscall;
-+	return task_thread_info(task)->syscall;
- }
- 
- static inline void mips_syscall_update_nr(struct task_struct *task,
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202302190638.fKs1ga5r-lkp@intel.com/
+
+sparse warnings: (new ones prefixed by >>)
+   kernel/module/main.c:2761:23: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected struct mod_kallsyms [noderef] __rcu *kallsyms @@     got void * @@
+   kernel/module/main.c:2761:23: sparse:     expected struct mod_kallsyms [noderef] __rcu *kallsyms
+   kernel/module/main.c:2761:23: sparse:     got void *
+>> kernel/module/main.c:4169:1: sparse: sparse: Using plain integer as NULL pointer
+>> kernel/module/main.c:4169:1: sparse: sparse: Using plain integer as NULL pointer
+>> kernel/module/main.c:4169:1: sparse: sparse: Using plain integer as NULL pointer
+>> kernel/module/main.c:4169:1: sparse: sparse: Using plain integer as NULL pointer
+   kernel/module/main.c:4189:1: sparse: sparse: Using plain integer as NULL pointer
+   kernel/module/main.c:4189:1: sparse: sparse: Using plain integer as NULL pointer
+   kernel/module/main.c: note: in included file (through include/linux/mm_types.h, include/linux/buildid.h, include/linux/module.h, ...):
+   include/linux/rbtree.h:74:9: sparse: sparse: incompatible types in comparison expression (different address spaces):
+   include/linux/rbtree.h:74:9: sparse:    struct rb_node [noderef] __rcu *
+   include/linux/rbtree.h:74:9: sparse:    struct rb_node *
+   include/linux/rbtree.h:74:9: sparse: sparse: incompatible types in comparison expression (different address spaces):
+   include/linux/rbtree.h:74:9: sparse:    struct rb_node [noderef] __rcu *
+   include/linux/rbtree.h:74:9: sparse:    struct rb_node *
+
+vim +4169 kernel/module/main.c
+
+b99b87f70c7785 kernel/module.c Peter Oberparleiter 2009-06-17  4168  
+17da2bd90abf42 kernel/module.c Heiko Carstens      2009-01-14 @4169  SYSCALL_DEFINE3(init_module, void __user *, umod,
+17da2bd90abf42 kernel/module.c Heiko Carstens      2009-01-14  4170  		unsigned long, len, const char __user *, uargs)
+^1da177e4c3f41 kernel/module.c Linus Torvalds      2005-04-16  4171  {
+34e1169d996ab1 kernel/module.c Kees Cook           2012-10-16  4172  	int err;
+34e1169d996ab1 kernel/module.c Kees Cook           2012-10-16  4173  	struct load_info info = { };
+^1da177e4c3f41 kernel/module.c Linus Torvalds      2005-04-16  4174  
+34e1169d996ab1 kernel/module.c Kees Cook           2012-10-16  4175  	err = may_init_module();
+34e1169d996ab1 kernel/module.c Kees Cook           2012-10-16  4176  	if (err)
+34e1169d996ab1 kernel/module.c Kees Cook           2012-10-16  4177  		return err;
+^1da177e4c3f41 kernel/module.c Linus Torvalds      2005-04-16  4178  
+34e1169d996ab1 kernel/module.c Kees Cook           2012-10-16  4179  	pr_debug("init_module: umod=%p, len=%lu, uargs=%p\n",
+34e1169d996ab1 kernel/module.c Kees Cook           2012-10-16  4180  	       umod, len, uargs);
+^1da177e4c3f41 kernel/module.c Linus Torvalds      2005-04-16  4181  
+34e1169d996ab1 kernel/module.c Kees Cook           2012-10-16  4182  	err = copy_module_from_user(umod, len, &info);
+34e1169d996ab1 kernel/module.c Kees Cook           2012-10-16  4183  	if (err)
+34e1169d996ab1 kernel/module.c Kees Cook           2012-10-16  4184  		return err;
+^1da177e4c3f41 kernel/module.c Linus Torvalds      2005-04-16  4185  
+2f3238aebedb24 kernel/module.c Rusty Russell       2012-10-22  4186  	return load_module(&info, uargs, 0);
+e24e2e64c468c8 kernel/module.c Alexey Dobriyan     2008-03-10  4187  }
+94462ad3b14739 kernel/module.c Steven Rostedt      2010-11-29  4188  
+
+:::::: The code at line 4169 was first introduced by commit
+:::::: 17da2bd90abf428523de0fb98f7075e00e3ed42e [CVE-2009-0029] System call wrappers part 08
+
+:::::: TO: Heiko Carstens <heiko.carstens@de.ibm.com>
+:::::: CC: Heiko Carstens <heiko.carstens@de.ibm.com>
+
 -- 
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
