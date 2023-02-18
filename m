@@ -2,90 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B697669BB33
-	for <lists+linux-kernel@lfdr.de>; Sat, 18 Feb 2023 18:20:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7738169BB37
+	for <lists+linux-kernel@lfdr.de>; Sat, 18 Feb 2023 18:21:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229762AbjBRRUC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 18 Feb 2023 12:20:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44868 "EHLO
+        id S229773AbjBRRVd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 18 Feb 2023 12:21:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45564 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229632AbjBRRUA (ORCPT
+        with ESMTP id S229475AbjBRRVc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 18 Feb 2023 12:20:00 -0500
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 514301557A
-        for <linux-kernel@vger.kernel.org>; Sat, 18 Feb 2023 09:20:00 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1676740800; x=1708276800;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=qt1RHbN1OsrxFRpfecZ66WOgjqfzrX66OcKRGGC/V6o=;
-  b=A3Th6DTe6cXGtOPLDqBUkV4IVgrt4ClhJYs2vurRkwz/YFtSJjnz/eDt
-   UPr6CLdZZHIy6MnaTjw2NQASAJ8GVTZg6AdTvnKjEni+3Tn51XJdaAwho
-   5dGR9+9BpPCcnbOfkC9iKOa5BeKBEJKkhSDlxfrloYF1RfKdL1HdXowQ6
-   2ut/CfnjqKPGcDpXbSz25uzgVGJ99RblJlerMLcj27LcPUNpu1nYg79j4
-   ftnZu0zh1nLS8Qc3cXDqs8ujWnToEB8bwn2CsIeOq60eYjzNDFDkm5Pgk
-   O8zGIHQhqYrSORzm1b0bYwmyce4pvDUWpcWsgPeIxBzY8LdcNdXoCFh08
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10625"; a="333547899"
-X-IronPort-AV: E=Sophos;i="5.97,307,1669104000"; 
-   d="scan'208";a="333547899"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Feb 2023 09:19:59 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10625"; a="759751696"
-X-IronPort-AV: E=Sophos;i="5.97,307,1669104000"; 
-   d="scan'208";a="759751696"
-Received: from jmakhij-mobl.gar.corp.intel.com (HELO [10.252.133.10]) ([10.252.133.10])
-  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Feb 2023 09:19:58 -0800
-Message-ID: <5c98c586-680c-29de-2bd8-f95a7fc7e432@intel.com>
-Date:   Sat, 18 Feb 2023 09:19:58 -0800
+        Sat, 18 Feb 2023 12:21:32 -0500
+Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9FB2615C9B;
+        Sat, 18 Feb 2023 09:21:29 -0800 (PST)
+From:   =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=weissschuh.net;
+        s=mail; t=1676740887;
+        bh=YtT+lMTprYjd+HAo5VfFtrPuqbrUQqfuKSGmUVN8Llw=;
+        h=From:Date:Subject:To:Cc:From;
+        b=UgJ8QKg6u3AFxZSoFgjtSWEO9UGGA422hnwTMHeQm484cu4MT3yKV40wery0LKgIQ
+         u9G9twcGI8w2hF9v+2+DHlaHctZ4zMzwZA2KY6K7jMRs0bTQBRyRLCRV41xN9/y3Yy
+         UNZ4+YOGWTbxOyFB7e7MUSc5CE0rmZZSWeipEJOs=
+Date:   Sat, 18 Feb 2023 17:21:21 +0000
+Subject: [PATCH] leds: Fix reference to led_set_brightness() in doc
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH 1/1] x86/topology: fix erroneous smp_num_siblings on Intel
- Hybrid platform
-Content-Language: en-US
-To:     "Zhang, Rui" <rui.zhang@intel.com>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "hpa@zytor.com" <hpa@zytor.com>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "bp@alien8.de" <bp@alien8.de>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>
-Cc:     "Brown, Len" <len.brown@intel.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "zhang.jia@linux.alibaba.com" <zhang.jia@linux.alibaba.com>,
-        "x86@kernel.org" <x86@kernel.org>
-References: <20230217163724.581513-1-rui.zhang@intel.com>
- <20230217163724.581513-2-rui.zhang@intel.com>
- <fcd46e9d-c6d0-4a01-141b-11173602475e@intel.com>
- <a0242c82631b19f3de7a223d8dd38f21308cd3cc.camel@intel.com>
-From:   Dave Hansen <dave.hansen@intel.com>
-In-Reply-To: <a0242c82631b19f3de7a223d8dd38f21308cd3cc.camel@intel.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+Message-Id: <20230218-typo-led-set-v1-1-3c35362a2f2d@weissschuh.net>
+X-B4-Tracking: v=1; b=H4sIABEJ8WMC/x2NwQqDMBAFf0X23IUkQrH9ldJDoi+6EKJkbWkR/
+ 71LjzMwzEGKJlC6dwc1vEVlrQb+0tG4xDqDZTKm4ELvgh94/24rF0ys2Nn1yLfs0zX7SJakqOD
+ UYh0Xi+qrFJNbQ5bP//F4nucPX5FG+3MAAAA=
+To:     Pavel Machek <pavel@ucw.cz>, Lee Jones <lee@kernel.org>,
+        Johannes Berg <johannes.berg@intel.com>,
+        Richard Purdie <rpurdie@linux.intel.com>,
+        Andrew Morton <akpm@linux-foundation.org>
+Cc:     linux-leds@vger.kernel.org, linux-kernel@vger.kernel.org,
+        =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
+X-Mailer: b4 0.12.1
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1676740883; l=1026;
+ i=linux@weissschuh.net; s=20221212; h=from:subject:message-id;
+ bh=YtT+lMTprYjd+HAo5VfFtrPuqbrUQqfuKSGmUVN8Llw=;
+ b=eVROg0imnbioVb9UiQzTtHu5jFZlB+qu/YHlR/xuvi4TUdXUAuaQjWVcDTWMzQ2VPOPJFxvDe
+ PoyFKDTp/YTBktSEix5HNFImgBTDUmrJjhiRlw5b/S4qTzIEK29MdqY
+X-Developer-Key: i=linux@weissschuh.net; a=ed25519;
+ pk=KcycQgFPX2wGR5azS7RhpBqedglOZVgRPfdFSPB1LNw=
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/18/23 08:11, Zhang, Rui wrote:
-> yes. I totally agree with this.
-> 
-> But when showing the (cpu topology info and lscpu) problem below, I
-> want to deliver a clear message that
-> 1. there are two bugs and *both* of them are required in order to
->    trigger the problem
-> 2. this patch just fixes one of the bugs
+The referenced function led_classdev_brightness_set() never existed.
 
-That's fine, but please deliver that message in the cover letter, not
-the patch changelog.
+Fixes: 5ada28bf7675 ("led-class: always implement blinking")
+Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
+---
+ include/linux/leds.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-> Do you mean that I don't need to mention the x86_max_cores issue here?
+diff --git a/include/linux/leds.h b/include/linux/leds.h
+index ba4861ec73d3..228acdb52fe2 100644
+--- a/include/linux/leds.h
++++ b/include/linux/leds.h
+@@ -229,7 +229,7 @@ struct led_classdev *__must_check devm_of_led_get(struct device *dev,
+  *
+  * Note that if software blinking is active, simply calling
+  * led_cdev->brightness_set() will not stop the blinking,
+- * use led_classdev_brightness_set() instead.
++ * use led_set_brightness() instead.
+  */
+ void led_blink_set(struct led_classdev *led_cdev, unsigned long *delay_on,
+ 		   unsigned long *delay_off);
 
-Yes.
+---
+base-commit: 38f8ccde04a3fa317b51b05e63c3cb57e1641931
+change-id: 20230218-typo-led-set-03ef9f1b6f1a
+
+Best regards,
+-- 
+Thomas Weißschuh <linux@weissschuh.net>
+
