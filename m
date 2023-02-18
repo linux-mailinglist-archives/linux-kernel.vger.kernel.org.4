@@ -2,206 +2,173 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C774869B7C1
-	for <lists+linux-kernel@lfdr.de>; Sat, 18 Feb 2023 03:43:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4CEE069B7C7
+	for <lists+linux-kernel@lfdr.de>; Sat, 18 Feb 2023 03:50:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229629AbjBRCnB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Feb 2023 21:43:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43876 "EHLO
+        id S229683AbjBRCuX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Feb 2023 21:50:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47632 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229496AbjBRCnA (ORCPT
+        with ESMTP id S229489AbjBRCuV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Feb 2023 21:43:00 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8F885F253
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Feb 2023 18:42:12 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1676688131;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=PWOvznM2L9QyDWoJX6erFzsz89hT+rHvd14btB9G+Ac=;
-        b=UJ1lp4m9UOU31wAWh/6IGrM8h1y/OobbBTCAwGB51yxtu63875Nrgutv7jhUMf7sPoZ8OU
-        xj1LKM+ez424HO8ZFVsCh/FDtzY5Qu3S/z2w9ZzkK9xtSgo5h11QuVLNmajUTfJhAxkMsr
-        0kQ2D8jcu+mTnRT7gW8qqoB2nfun+xA=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-124-9bYswzT2PVWZCNa2oCU2DA-1; Fri, 17 Feb 2023 21:42:06 -0500
-X-MC-Unique: 9bYswzT2PVWZCNa2oCU2DA-1
-Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.rdu2.redhat.com [10.11.54.4])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 61C4129AA38E;
-        Sat, 18 Feb 2023 02:42:05 +0000 (UTC)
-Received: from T590 (ovpn-8-16.pek2.redhat.com [10.72.8.16])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 618CD2026D4B;
-        Sat, 18 Feb 2023 02:41:54 +0000 (UTC)
-Date:   Sat, 18 Feb 2023 10:41:49 +0800
-From:   Ming Lei <ming.lei@redhat.com>
-To:     David Howells <dhowells@redhat.com>
-Cc:     Jens Axboe <axboe@kernel.dk>, Al Viro <viro@zeniv.linux.org.uk>,
-        Christoph Hellwig <hch@infradead.org>,
-        Matthew Wilcox <willy@infradead.org>, Jan Kara <jack@suse.cz>,
-        Jeff Layton <jlayton@kernel.org>,
-        David Hildenbrand <david@redhat.com>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        Logan Gunthorpe <logang@deltatee.com>,
-        Hillf Danton <hdanton@sina.com>, linux-fsdevel@vger.kernel.org,
-        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, Christoph Hellwig <hch@lst.de>,
-        John Hubbard <jhubbard@nvidia.com>, ming.lei@redhat.com
-Subject: Re: [PATCH v14 02/17] splice: Add a func to do a splice from a
- buffered file without ITER_PIPE
-Message-ID: <Y/A67a6LovSYHhHz@T590>
-References: <20230214171330.2722188-1-dhowells@redhat.com>
- <20230214171330.2722188-3-dhowells@redhat.com>
+        Fri, 17 Feb 2023 21:50:21 -0500
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E15465364;
+        Fri, 17 Feb 2023 18:50:20 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1676688620; x=1708224620;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=mCwCBFKM5W10vvViKqJohx198JYrfGaLCfjvdwLgaxo=;
+  b=hhAU2dPxf2hFb7Im6PKHb0WdeZhg3Km5fMdEnVayHl4qt4nsPPorE8nK
+   AH6KitJAyei179/D1rygMNnfrBpTxuJYnraBo4TblDkTVK3QW3au9Ii8U
+   UDegcwlgsH8eEtW6IRQMS4ezFwuaNHrICGEo9hCruSOLMmkK6HKWrpAId
+   Pp0uFTeXL+wJzqqBiLSlJB1U1I9WoUnwY2JQh2nvrstlaE+IymEithsmd
+   6EJwD7FrL80Hu1SXXmHPjd++TkABM0cyW/bA+kKcZHA1pcOVoG5yNQA0r
+   Lpcu+FqRcH6ofeHcNG3uxSzRwk4nunxksGsCop7tWlOXfo0hH2bkyRkhM
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10624"; a="329853826"
+X-IronPort-AV: E=Sophos;i="5.97,306,1669104000"; 
+   d="scan'208";a="329853826"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Feb 2023 18:50:19 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10624"; a="759600407"
+X-IronPort-AV: E=Sophos;i="5.97,306,1669104000"; 
+   d="scan'208";a="759600407"
+Received: from lkp-server01.sh.intel.com (HELO 4455601a8d94) ([10.239.97.150])
+  by FMSMGA003.fm.intel.com with ESMTP; 17 Feb 2023 18:48:48 -0800
+Received: from kbuild by 4455601a8d94 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pTDHI-000C2l-1q;
+        Sat, 18 Feb 2023 02:48:44 +0000
+Date:   Sat, 18 Feb 2023 10:47:59 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Danilo Krummrich <dakr@redhat.com>, airlied@gmail.com,
+        daniel@ffwll.ch, tzimmermann@suse.de, mripard@kernel.org,
+        corbet@lwn.net, christian.koenig@amd.com, bskeggs@redhat.com,
+        Liam.Howlett@oracle.com, matthew.brost@intel.com,
+        boris.brezillon@collabora.com, alexdeucher@gmail.com,
+        ogabbay@kernel.org, bagasdotme@gmail.com, willy@infradead.org,
+        jason@jlekstrand.net
+Cc:     oe-kbuild-all@lists.linux.dev, dri-devel@lists.freedesktop.org,
+        nouveau@lists.freedesktop.org, linux-doc@vger.kernel.org,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        Danilo Krummrich <dakr@redhat.com>
+Subject: Re: [PATCH drm-next v2 06/16] drm: debugfs: provide infrastructure
+ to dump a DRM GPU VA space
+Message-ID: <202302181014.L0SHo3S1-lkp@intel.com>
+References: <20230217134820.14672-1-dakr@redhat.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230214171330.2722188-3-dhowells@redhat.com>
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.4
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20230217134820.14672-1-dakr@redhat.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 14, 2023 at 05:13:15PM +0000, David Howells wrote:
-> Provide a function to do splice read from a buffered file, pulling the
-> folios out of the pagecache directly by calling filemap_get_pages() to do
-> any required reading and then pasting the returned folios into the pipe.
-> 
-> A helper function is provided to do the actual folio pasting and will
-> handle multipage folios by splicing as many of the relevant subpages as
-> will fit into the pipe.
-> 
-> The code is loosely based on filemap_read() and might belong in
-> mm/filemap.c with that as it needs to use filemap_get_pages().
-> 
-> Signed-off-by: David Howells <dhowells@redhat.com>
-> cc: Jens Axboe <axboe@kernel.dk>
-> cc: Christoph Hellwig <hch@lst.de>
-> cc: Al Viro <viro@zeniv.linux.org.uk>
-> cc: David Hildenbrand <david@redhat.com>
-> cc: John Hubbard <jhubbard@nvidia.com>
-> cc: linux-mm@kvack.org
-> cc: linux-block@vger.kernel.org
-> cc: linux-fsdevel@vger.kernel.org
-> ---
-> 
-> Notes:
->     ver #14)
->      - Rename to filemap_splice_read().
->      - Create a helper, pipe_head_buf(), to get the head buffer.
->      - Use init_sync_kiocb().
->      - Move to mm/filemap.c.
->      - Split the implementation of filemap_splice_read() from the patch to
->        make generic_file_splice_read() use it and direct_splice_read().
-> 
->  include/linux/fs.h |   3 ++
->  mm/filemap.c       | 128 +++++++++++++++++++++++++++++++++++++++++++++
->  mm/internal.h      |   6 +++
->  3 files changed, 137 insertions(+)
-> 
-> diff --git a/include/linux/fs.h b/include/linux/fs.h
-> index c1769a2c5d70..28743e38df91 100644
-> --- a/include/linux/fs.h
-> +++ b/include/linux/fs.h
-> @@ -3163,6 +3163,9 @@ ssize_t vfs_iocb_iter_write(struct file *file, struct kiocb *iocb,
->  			    struct iov_iter *iter);
->  
->  /* fs/splice.c */
-> +ssize_t filemap_splice_read(struct file *in, loff_t *ppos,
-> +			    struct pipe_inode_info *pipe,
-> +			    size_t len, unsigned int flags);
->  extern ssize_t generic_file_splice_read(struct file *, loff_t *,
->  		struct pipe_inode_info *, size_t, unsigned int);
->  extern ssize_t iter_file_splice_write(struct pipe_inode_info *,
-> diff --git a/mm/filemap.c b/mm/filemap.c
-> index 876e77278d2a..8c7b135c8e23 100644
-> --- a/mm/filemap.c
-> +++ b/mm/filemap.c
-> @@ -42,6 +42,8 @@
->  #include <linux/ramfs.h>
->  #include <linux/page_idle.h>
->  #include <linux/migrate.h>
-> +#include <linux/pipe_fs_i.h>
-> +#include <linux/splice.h>
->  #include <asm/pgalloc.h>
->  #include <asm/tlbflush.h>
->  #include "internal.h"
-> @@ -2842,6 +2844,132 @@ generic_file_read_iter(struct kiocb *iocb, struct iov_iter *iter)
->  }
->  EXPORT_SYMBOL(generic_file_read_iter);
->  
-> +/*
-> + * Splice subpages from a folio into a pipe.
-> + */
-> +size_t splice_folio_into_pipe(struct pipe_inode_info *pipe,
-> +			      struct folio *folio, loff_t fpos, size_t size)
-> +{
-> +	struct page *page;
-> +	size_t spliced = 0, offset = offset_in_folio(folio, fpos);
-> +
-> +	page = folio_page(folio, offset / PAGE_SIZE);
-> +	size = min(size, folio_size(folio) - offset);
-> +	offset %= PAGE_SIZE;
-> +
-> +	while (spliced < size &&
-> +	       !pipe_full(pipe->head, pipe->tail, pipe->max_usage)) {
-> +		struct pipe_buffer *buf = pipe_head_buf(pipe);
-> +		size_t part = min_t(size_t, PAGE_SIZE - offset, size - spliced);
-> +
-> +		*buf = (struct pipe_buffer) {
-> +			.ops	= &page_cache_pipe_buf_ops,
-> +			.page	= page,
-> +			.offset	= offset,
-> +			.len	= part,
-> +		};
-> +		folio_get(folio);
-> +		pipe->head++;
-> +		page++;
-> +		spliced += part;
-> +		offset = 0;
+Hi Danilo,
 
-It should be better to replace above with add_to_pipe().
+Thank you for the patch! Perhaps something to improve:
 
-> +	}
-> +
-> +	return spliced;
-> +}
-> +
-> +/*
-> + * Splice folios from the pagecache of a buffered (ie. non-O_DIRECT) file into
-> + * a pipe.
-> + */
-> +ssize_t filemap_splice_read(struct file *in, loff_t *ppos,
-> +			    struct pipe_inode_info *pipe,
-> +			    size_t len, unsigned int flags)
-> +{
-> +	struct folio_batch fbatch;
-> +	struct kiocb iocb;
-> +	size_t total_spliced = 0, used, npages;
-> +	loff_t isize, end_offset;
-> +	bool writably_mapped;
-> +	int i, error = 0;
-> +
-> +	init_sync_kiocb(&iocb, in);
-> +	iocb.ki_pos = *ppos;
-> +
-> +	/* Work out how much data we can actually add into the pipe */
-> +	used = pipe_occupancy(pipe->head, pipe->tail);
-> +	npages = max_t(ssize_t, pipe->max_usage - used, 0);
-> +	len = min_t(size_t, len, npages * PAGE_SIZE);
+[auto build test WARNING on 48075a66fca613477ac1969b576a93ef5db0164f]
 
-Do we need to consider offset in 1st page here?
+url:    https://github.com/intel-lab-lkp/linux/commits/Danilo-Krummrich/drm-execution-context-for-GEM-buffers/20230217-215101
+base:   48075a66fca613477ac1969b576a93ef5db0164f
+patch link:    https://lore.kernel.org/r/20230217134820.14672-1-dakr%40redhat.com
+patch subject: [PATCH drm-next v2 06/16] drm: debugfs: provide infrastructure to dump a DRM GPU VA space
+config: mips-allyesconfig (https://download.01.org/0day-ci/archive/20230218/202302181014.L0SHo3S1-lkp@intel.com/config)
+compiler: mips-linux-gcc (GCC) 12.1.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/e1a1c9659baee305780e1ce50c05e53e1d14b245
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Danilo-Krummrich/drm-execution-context-for-GEM-buffers/20230217-215101
+        git checkout e1a1c9659baee305780e1ce50c05e53e1d14b245
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=mips olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash drivers/gpu/drm/
+
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202302181014.L0SHo3S1-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+   drivers/gpu/drm/drm_debugfs.c: In function 'drm_debugfs_gpuva_info':
+>> drivers/gpu/drm/drm_debugfs.c:228:28: warning: cast from pointer to integer of different size [-Wpointer-to-int-cast]
+     228 |                            (u64)va->gem.obj, va->gem.offset);
+         |                            ^
 
 
-thanks, 
-Ming
+vim +228 drivers/gpu/drm/drm_debugfs.c
 
+   178	
+   179	/**
+   180	 * drm_debugfs_gpuva_info - dump the given DRM GPU VA space
+   181	 * @m: pointer to the &seq_file to write
+   182	 * @mgr: the &drm_gpuva_manager representing the GPU VA space
+   183	 *
+   184	 * Dumps the GPU VA regions and mappings of a given DRM GPU VA manager.
+   185	 *
+   186	 * For each DRM GPU VA space drivers should call this function from their
+   187	 * &drm_info_list's show callback.
+   188	 *
+   189	 * Returns: 0 on success, -ENODEV if the &mgr is not initialized
+   190	 */
+   191	int drm_debugfs_gpuva_info(struct seq_file *m,
+   192				   struct drm_gpuva_manager *mgr)
+   193	{
+   194		DRM_GPUVA_ITER(it, mgr);
+   195		DRM_GPUVA_REGION_ITER(__it, mgr);
+   196	
+   197		if (!mgr->name)
+   198			return -ENODEV;
+   199	
+   200		seq_printf(m, "DRM GPU VA space (%s)\n", mgr->name);
+   201		seq_puts  (m, "\n");
+   202		seq_puts  (m, " VA regions  | start              | range              | end                | sparse\n");
+   203		seq_puts  (m, "------------------------------------------------------------------------------------\n");
+   204		seq_printf(m, " VA space    | 0x%016llx | 0x%016llx | 0x%016llx |   -\n",
+   205			   mgr->mm_start, mgr->mm_range, mgr->mm_start + mgr->mm_range);
+   206		seq_puts  (m, "-----------------------------------------------------------------------------------\n");
+   207		drm_gpuva_iter_for_each(__it) {
+   208			struct drm_gpuva_region *reg = __it.reg;
+   209	
+   210			if (reg == &mgr->kernel_alloc_region) {
+   211				seq_printf(m, " kernel node | 0x%016llx | 0x%016llx | 0x%016llx |   -\n",
+   212					   reg->va.addr, reg->va.range, reg->va.addr + reg->va.range);
+   213				continue;
+   214			}
+   215	
+   216			seq_printf(m, "             | 0x%016llx | 0x%016llx | 0x%016llx | %s\n",
+   217				   reg->va.addr, reg->va.range, reg->va.addr + reg->va.range,
+   218				   reg->sparse ? "true" : "false");
+   219		}
+   220		seq_puts(m, "\n");
+   221		seq_puts(m, " VAs | start              | range              | end                | object             | object offset\n");
+   222		seq_puts(m, "-------------------------------------------------------------------------------------------------------------\n");
+   223		drm_gpuva_iter_for_each(it) {
+   224			struct drm_gpuva *va = it.va;
+   225	
+   226			seq_printf(m, "     | 0x%016llx | 0x%016llx | 0x%016llx | 0x%016llx | 0x%016llx\n",
+   227				   va->va.addr, va->va.range, va->va.addr + va->va.range,
+ > 228				   (u64)va->gem.obj, va->gem.offset);
+   229		}
+   230	
+   231		return 0;
+   232	}
+   233	EXPORT_SYMBOL(drm_debugfs_gpuva_info);
+   234	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
