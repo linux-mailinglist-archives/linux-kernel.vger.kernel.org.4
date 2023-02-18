@@ -2,57 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4279A69B8BF
-	for <lists+linux-kernel@lfdr.de>; Sat, 18 Feb 2023 09:33:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CEC3269B8C0
+	for <lists+linux-kernel@lfdr.de>; Sat, 18 Feb 2023 09:33:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229788AbjBRIdG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 18 Feb 2023 03:33:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32958 "EHLO
+        id S229629AbjBRIdI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 18 Feb 2023 03:33:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33114 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229563AbjBRIdB (ORCPT
+        with ESMTP id S229780AbjBRIdD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 18 Feb 2023 03:33:01 -0500
-Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C683C3B672
-        for <linux-kernel@vger.kernel.org>; Sat, 18 Feb 2023 00:32:59 -0800 (PST)
-Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-536629fa4ceso25129197b3.16
-        for <linux-kernel@vger.kernel.org>; Sat, 18 Feb 2023 00:32:59 -0800 (PST)
+        Sat, 18 Feb 2023 03:33:03 -0500
+Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43D5D42BE1
+        for <linux-kernel@vger.kernel.org>; Sat, 18 Feb 2023 00:33:02 -0800 (PST)
+Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-5365a8dd33aso26531997b3.22
+        for <linux-kernel@vger.kernel.org>; Sat, 18 Feb 2023 00:33:02 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=cc:to:from:subject:references:mime-version:message-id:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=Kp1QbPjY6w8y+NO/uU7s1tByY9HWUIkH8CY141/p1Bw=;
-        b=rTZzHduXbHELGzBYp2cxb7eG1N/9akFJXJjXnGRACIXOuguCjzoX9z0hXDTI96wh+I
-         JFzx+h++S/vEheLmbd9a1WHdaawwRSNzK+p8nZuK/E+A4VPcqspje6CYkI5ORiQVpKxK
-         vWV8ljEeB6aJJbQNEDj+6l/ynEqsPtLZ4YZVQeaRaHkj+coBPO2V+Djgh47VH19ztR2L
-         i/X4AcxYu2IzRmbvQUdTZMtfL4UyfS20FXeH2K0j7ji524mBNUnu8sEXBN1jo2n1Nkdl
-         qtfNPJiBJP0hgXaF/LvbUraJFt0Il/nttBByjo3HROfGG+/UvQk9pvBgXPqZ6gMHrgYb
-         G7/g==
+        bh=Qjy8cu1Mo/UjSfKWZ07U2cuwjaexJWXy+SB7TrdOfOk=;
+        b=f53tiO60I7XJ6TYtB0DYyxwXSpcAe/3+SEcd0gpn65PwjUBmVPmeN9N9fDUOBYx5B4
+         +X7KrrUprexujhvtlkEgvIfjbcMWCznLWm9Q2HYqghq4BXq9y2mFTVxVx9jn5Y7y1eaZ
+         ffgr0uY71tCr9u2eDrFwAts+aRI1E/vJIOLkcQ91jVmvN1VQrZjcdFFzvqqHIslrdbWF
+         zE0iNSA99G7liBZMABYJlwRR+RuoBa0pi01AOq5G9xUZwbkpk56WZEVQz5Dhs1UiItM7
+         ns4h02cjsUESNq7Mu34jCsSe1nJzft00ohzoO6r6GKzCXjmwM8yYdk/4KBW9yf2aOPnQ
+         Edxg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:from:subject:references:mime-version:message-id:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Kp1QbPjY6w8y+NO/uU7s1tByY9HWUIkH8CY141/p1Bw=;
-        b=YpgDyftNL7DROQzNy6icd/pXWjgAXusJBUeboZvmbU7UgxrRGsXfaUkBs7BIXhtv/y
-         9BxyJJdOAroUaEpnsdFGecY3+hIiumr5Agd/FfXDqASPet8Tg1tx0dleFx3+Vtj2l1tQ
-         dKU7moKZY8gp8QdJJjck7nm+kJ05ptoUCHWqIae4IaQCbtaXDVSJ0djw2jSBaeqPtMxr
-         T406V9v4RUEeRHbcAmHso8iwSn2KZPubv0kvRNRBCb0bfmLzfeEKkyUX0WgyheM9cdIB
-         LYtOci0zlwwz2NZuMj8euZpKiTibJ9/o4oHRyIBXyTrxvUg21o1hpJZgOX/a3ArAbT4A
-         gvOQ==
-X-Gm-Message-State: AO0yUKVDtF5sdG4CSzzu9j/02HxRrl/5wptgEAOJonxIVu7ttV8hWpM+
-        oPfktRdP6Mgt0t4LhED5+1OIiXAjwxGykiE=
-X-Google-Smtp-Source: AK7set8RfNZQIJa7rBKYqnPS1tC4ip0mPfPQINLGkRurPv1uWqBScGpYrPt9r4A/IMbwUqlqMTH/2YJbs7qhaec=
+        bh=Qjy8cu1Mo/UjSfKWZ07U2cuwjaexJWXy+SB7TrdOfOk=;
+        b=Dz/LjpEo0lpa62nAwfMfQ3COzt+XGNLzmHodpi/utgV44vPTSjrVk/ovJywE2zwFuy
+         CtOui4jb+Z0FYmt1sEb8PWgK24VDsFiD004pG6ekTzQWL5fBtXw/QHYIWZLx3TWE9Iqv
+         ccaBCZijN+Scj3lsi41r1sIcF9pDnlkH+lvxWjkUhshaOriiJV32mH2+dvp0gI1AZLYg
+         93eiNlX55TSOAwYn21GedpXxZPhJha8VOo/QvOMYR74SIYzS46f8JcYkcLKsmbbYwy63
+         XBWP56Wa/TurR5ruwa9dRvKUSLXKtLtGOqdB51QprHKb7sVZkZrPdTwMVqNj2+SSd8AA
+         HhXQ==
+X-Gm-Message-State: AO0yUKVGB80veUV+39yJqMbBuT699ob+JR1Z9CYs9WlndtZxAQKdtmD8
+        6ESe1+0lAUXPpFvMf4PAHj5iFKgfi7LqkmY=
+X-Google-Smtp-Source: AK7set+48hgPOTFKTqBSI90PC+RvCcTohAUN+b4zsz5OY4rILu8FJ6rmwMaDGyWWzun7reT7l5xJktc/c1ZgOb4=
 X-Received: from saravanak.san.corp.google.com ([2620:15c:2d:3:382:7632:f7fc:4737])
- (user=saravanak job=sendgmr) by 2002:a5b:ec1:0:b0:905:372:12ad with SMTP id
- a1-20020a5b0ec1000000b00905037212admr1825699ybs.539.1676709179075; Sat, 18
- Feb 2023 00:32:59 -0800 (PST)
-Date:   Sat, 18 Feb 2023 00:32:48 -0800
+ (user=saravanak job=sendgmr) by 2002:a5b:688:0:b0:931:2b11:6584 with SMTP id
+ j8-20020a5b0688000000b009312b116584mr1169840ybq.591.1676709181337; Sat, 18
+ Feb 2023 00:33:01 -0800 (PST)
+Date:   Sat, 18 Feb 2023 00:32:49 -0800
 In-Reply-To: <20230218083252.2044423-1-saravanak@google.com>
-Message-Id: <20230218083252.2044423-2-saravanak@google.com>
+Message-Id: <20230218083252.2044423-3-saravanak@google.com>
 Mime-Version: 1.0
 References: <20230218083252.2044423-1-saravanak@google.com>
 X-Mailer: git-send-email 2.39.2.637.g21b0678d19-goog
-Subject: [RFC v1 1/4] regulator: core: Add regulator devices to bus instead of class
+Subject: [RFC v1 2/4] regulator: core: Add sysfs class backward compatibility
 From:   Saravana Kannan <saravanak@google.com>
 To:     Liam Girdwood <lgirdwood@gmail.com>,
         Mark Brown <broonie@kernel.org>
@@ -78,181 +78,80 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add regulator devices to a bus instead of a class. This allows us to
-probe these devices in later patches.
+A regulator device's sysfs directory used to be created under
+/sys/class/regulator when it is added to a class. Since the device is
+now moved to be under a bus, add symlinks from /sys/class/regulator to
+the real device sysfs directory.
 
 Signed-off-by: Saravana Kannan <saravanak@google.com>
 ---
- drivers/regulator/core.c         | 45 ++++++++++++++++----------------
- drivers/regulator/internal.h     |  2 +-
- drivers/regulator/of_regulator.c |  2 +-
- 3 files changed, 25 insertions(+), 24 deletions(-)
+ drivers/regulator/core.c | 19 +++++++++++++++++++
+ 1 file changed, 19 insertions(+)
 
 diff --git a/drivers/regulator/core.c b/drivers/regulator/core.c
-index ae69e493913d..1a212edcf216 100644
+index 1a212edcf216..b6700d50d230 100644
 --- a/drivers/regulator/core.c
 +++ b/drivers/regulator/core.c
-@@ -1918,7 +1918,7 @@ static struct regulator_dev *regulator_lookup_by_name(const char *name)
- {
- 	struct device *dev;
+@@ -43,6 +43,7 @@ static LIST_HEAD(regulator_coupler_list);
+ static bool has_full_constraints;
  
--	dev = class_find_device(&regulator_class, NULL, name, regulator_match);
-+	dev = bus_find_device(&regulator_bus, NULL, name, regulator_match);
+ static struct dentry *debugfs_root;
++static struct class_compat *regulator_compat_class;
  
- 	return dev ? dev_to_rdev(dev) : NULL;
- }
-@@ -5539,7 +5539,7 @@ regulator_register(struct device *dev,
- 		rdev->supply_name = regulator_desc->supply_name;
+ /*
+  * struct regulator_map
+@@ -5636,6 +5637,11 @@ regulator_register(struct device *dev,
+ 	if (ret != 0)
+ 		goto unset_supplies;
  
- 	/* register with sysfs */
--	rdev->dev.class = &regulator_class;
-+	rdev->dev.bus = &regulator_bus;
- 	rdev->dev.parent = config->dev;
- 	dev_set_name(&rdev->dev, "regulator.%lu",
- 		    (unsigned long) atomic_inc_return(&regulator_no));
-@@ -5644,8 +5644,8 @@ regulator_register(struct device *dev,
- 	mutex_unlock(&regulator_list_mutex);
- 
- 	/* try to resolve regulators supply since a new one was registered */
--	class_for_each_device(&regulator_class, NULL, NULL,
--			      regulator_register_resolve_supply);
-+	bus_for_each_dev(&regulator_bus, NULL, NULL,
-+			 regulator_register_resolve_supply);
- 	kfree(config);
- 	return rdev;
- 
-@@ -5772,14 +5772,15 @@ static const struct dev_pm_ops __maybe_unused regulator_pm_ops = {
- };
- #endif
- 
--struct class regulator_class = {
-+struct bus_type regulator_bus = {
- 	.name = "regulator",
--	.dev_release = regulator_dev_release,
-+	.remove = regulator_dev_release,
- 	.dev_groups = regulator_dev_groups,
- #ifdef CONFIG_PM
- 	.pm = &regulator_pm_ops,
- #endif
- };
++	if (class_compat_create_link(regulator_compat_class, &rdev->dev,
++				     rdev->dev.parent))
++		dev_warn(&rdev->dev,
++			 "Failed to create compatibility class link\n");
 +
- /**
-  * regulator_has_full_constraints - the system has fully specified constraints
-  *
-@@ -5939,7 +5940,7 @@ static void regulator_summary_show_subtree(struct seq_file *s,
- 	seq_puts(s, "\n");
+ 	rdev_init_debugfs(rdev);
  
- 	list_for_each_entry(consumer, &rdev->consumer_list, list) {
--		if (consumer->dev && consumer->dev->class == &regulator_class)
-+		if (consumer->dev && consumer->dev->bus == &regulator_bus)
- 			continue;
- 
- 		seq_printf(s, "%*s%-*s ",
-@@ -5969,8 +5970,8 @@ static void regulator_summary_show_subtree(struct seq_file *s,
- 	summary_data.level = level;
- 	summary_data.parent = rdev;
- 
--	class_for_each_device(&regulator_class, NULL, &summary_data,
--			      regulator_summary_show_children);
-+	bus_for_each_dev(&regulator_bus, NULL, &summary_data,
-+			 regulator_summary_show_children);
- }
- 
- struct summary_lock_data {
-@@ -6025,11 +6026,11 @@ static int regulator_summary_lock_all(struct ww_acquire_ctx *ww_ctx,
- 	lock_data.new_contended_rdev = new_contended_rdev;
- 	lock_data.old_contended_rdev = old_contended_rdev;
- 
--	ret = class_for_each_device(&regulator_class, NULL, &lock_data,
--				    regulator_summary_lock_one);
-+	ret = bus_for_each_dev(&regulator_bus, NULL, &lock_data,
-+			       regulator_summary_lock_one);
- 	if (ret)
--		class_for_each_device(&regulator_class, NULL, &lock_data,
--				      regulator_summary_unlock_one);
-+		bus_for_each_dev(&regulator_bus, NULL, &lock_data,
-+				 regulator_summary_unlock_one);
- 
- 	return ret;
- }
-@@ -6065,8 +6066,8 @@ static void regulator_summary_lock(struct ww_acquire_ctx *ww_ctx)
- 
- static void regulator_summary_unlock(struct ww_acquire_ctx *ww_ctx)
- {
--	class_for_each_device(&regulator_class, NULL, NULL,
--			      regulator_summary_unlock_one);
-+	bus_for_each_dev(&regulator_bus, NULL, NULL,
-+			 regulator_summary_unlock_one);
- 	ww_acquire_fini(ww_ctx);
+ 	/* try to resolve regulators coupling since a new one was registered */
+@@ -5702,6 +5708,8 @@ void regulator_unregister(struct regulator_dev *rdev)
+ 	unset_regulator_supplies(rdev);
+ 	list_del(&rdev->list);
+ 	regulator_ena_gpio_free(rdev);
++	class_compat_remove_link(regulator_compat_class, &rdev->dev,
++				 rdev->dev.parent);
+ 	device_unregister(&rdev->dev);
  
  	mutex_unlock(&regulator_list_mutex);
-@@ -6092,8 +6093,8 @@ static int regulator_summary_show(struct seq_file *s, void *data)
- 
- 	regulator_summary_lock(&ww_ctx);
- 
--	class_for_each_device(&regulator_class, NULL, s,
--			      regulator_summary_show_roots);
-+	bus_for_each_dev(&regulator_bus, NULL, s,
-+			 regulator_summary_show_roots);
- 
- 	regulator_summary_unlock(&ww_ctx);
- 
-@@ -6106,7 +6107,7 @@ static int __init regulator_init(void)
+@@ -6107,7 +6115,13 @@ static int __init regulator_init(void)
  {
  	int ret;
  
--	ret = class_register(&regulator_class);
-+	ret = bus_register(&regulator_bus);
++	regulator_compat_class = class_compat_register("regulator");
++	if (!regulator_compat_class)
++		return -ENOMEM;
++
+ 	ret = bus_register(&regulator_bus);
++	if (ret)
++		goto unreg_compat;
  
  	debugfs_root = debugfs_create_dir("regulator", NULL);
  	if (!debugfs_root)
-@@ -6182,16 +6183,16 @@ static void regulator_init_complete_work_function(struct work_struct *work)
- 	 * bound yet. So attempt to resolve the input supplies for
- 	 * pending regulators before trying to disable unused ones.
- 	 */
--	class_for_each_device(&regulator_class, NULL, NULL,
--			      regulator_register_resolve_supply);
-+	bus_for_each_dev(&regulator_bus, NULL, NULL,
-+			 regulator_register_resolve_supply);
+@@ -6120,11 +6134,16 @@ static int __init regulator_init(void)
+ 	debugfs_create_file("regulator_summary", 0444, debugfs_root,
+ 			    NULL, &regulator_summary_fops);
+ #endif
++
+ 	regulator_dummy_init();
  
- 	/* If we have a full configuration then disable any regulators
- 	 * we have permission to change the status for and which are
- 	 * not in use or always_on.  This is effectively the default
- 	 * for DT and ACPI as they have full constraints.
- 	 */
--	class_for_each_device(&regulator_class, NULL, NULL,
--			      regulator_late_cleanup);
-+	bus_for_each_dev(&regulator_bus, NULL, NULL,
-+			 regulator_late_cleanup);
+ 	regulator_coupler_register(&generic_regulator_coupler);
+ 
+ 	return ret;
++
++unreg_compat:
++	class_compat_unregister(regulator_compat_class);
++	return ret;
  }
  
- static DECLARE_DELAYED_WORK(regulator_init_complete_work,
-diff --git a/drivers/regulator/internal.h b/drivers/regulator/internal.h
-index fb4433068d29..6e489b3cffad 100644
---- a/drivers/regulator/internal.h
-+++ b/drivers/regulator/internal.h
-@@ -58,7 +58,7 @@ struct regulator {
- 	struct dentry *debugfs;
- };
- 
--extern struct class regulator_class;
-+extern struct bus_type regulator_bus;
- 
- static inline struct regulator_dev *dev_to_rdev(struct device *dev)
- {
-diff --git a/drivers/regulator/of_regulator.c b/drivers/regulator/of_regulator.c
-index 1b65e5e4e40f..f0590e68f31d 100644
---- a/drivers/regulator/of_regulator.c
-+++ b/drivers/regulator/of_regulator.c
-@@ -545,7 +545,7 @@ struct regulator_dev *of_find_regulator_by_node(struct device_node *np)
- {
- 	struct device *dev;
- 
--	dev = class_find_device_by_of_node(&regulator_class, np);
-+	dev = bus_find_device_by_of_node(&regulator_bus, np);
- 
- 	return dev ? dev_to_rdev(dev) : NULL;
- }
+ /* init early to allow our consumers to complete system booting */
 -- 
 2.39.2.637.g21b0678d19-goog
 
