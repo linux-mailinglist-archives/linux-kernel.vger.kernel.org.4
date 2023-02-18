@@ -2,537 +2,196 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3357A69BA01
-	for <lists+linux-kernel@lfdr.de>; Sat, 18 Feb 2023 13:31:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C4F269BA04
+	for <lists+linux-kernel@lfdr.de>; Sat, 18 Feb 2023 13:38:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229629AbjBRMbl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 18 Feb 2023 07:31:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55936 "EHLO
+        id S229636AbjBRMiz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 18 Feb 2023 07:38:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58450 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229441AbjBRMbj (ORCPT
+        with ESMTP id S229441AbjBRMix (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 18 Feb 2023 07:31:39 -0500
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC20F1A49D;
-        Sat, 18 Feb 2023 04:31:35 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1676723495; x=1708259495;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=S028D5c6UYWqGo48un+I7652dIORVPsRCodlwNhSyzM=;
-  b=hSwCFNENAv9U2uj6O++FpluDyBsWcAGce82IEZ7uAg7HSfOeMQDU77BM
-   WUMoiEb8BxrFxtLOrMlrBjWCRrb5mmdlplymTd2clofdf8gg/CzvQv8xR
-   DY4DF6yMAulfiJiHiT4TBxL6wALRku6t+ahlP5+uRUjWz+NPZSEuyWfzu
-   GUhS6jcz5452VGT+etifttCc2ns2QyPNSn76fE8h7NtgsPyWlr2rf6HB+
-   k0ou82pC/DKZn7RBW4MY4J38dw77zNWrD1NdpDZ++vMHwAJ3L13AoZfjg
-   64xth+fsbiRKAYMq0DxJgX/EeUNcpdBFSdem1kQsa4xHJmejAHaQBMkNF
-   Q==;
-X-IronPort-AV: E=Sophos;i="5.97,307,1669100400"; 
-   d="scan'208";a="212615206"
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa1.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 18 Feb 2023 05:31:35 -0700
-Received: from chn-vm-ex02.mchp-main.com (10.10.85.144) by
- chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.16; Sat, 18 Feb 2023 05:31:35 -0700
-Received: from soft-dev3-1.microsemi.net (10.10.115.15) by
- chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server id
- 15.1.2507.16 via Frontend Transport; Sat, 18 Feb 2023 05:31:32 -0700
-From:   Horatiu Vultur <horatiu.vultur@microchip.com>
-To:     <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-CC:     <andrew@lunn.ch>, <hkallweit1@gmail.com>, <linux@armlinux.org.uk>,
-        <davem@davemloft.net>, <edumazet@google.com>, <kuba@kernel.org>,
-        <pabeni@redhat.com>, <richardcochran@gmail.com>,
-        Horatiu Vultur <horatiu.vultur@microchip.com>
-Subject: [PATCH net-next v2] net: phy: micrel: Add support for PTP_PF_PEROUT for lan8841
-Date:   Sat, 18 Feb 2023 13:30:38 +0100
-Message-ID: <20230218123038.2761383-1-horatiu.vultur@microchip.com>
-X-Mailer: git-send-email 2.38.0
+        Sat, 18 Feb 2023 07:38:53 -0500
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2288417174;
+        Sat, 18 Feb 2023 04:38:52 -0800 (PST)
+Received: from pps.filterd (m0279870.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 31ICD8PE002280;
+        Sat, 18 Feb 2023 12:38:42 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=g3kOTMIXEvGqXsDw9ykYi5ROfsHk1clT6WdQXaM+IkA=;
+ b=EIJdGhKM3eESaZKjKcM4pvjrqhAGQY2FCZbinaQwpnt/Hxp3SoWwgKasfGQp3+9ZUJhQ
+ fj82t9qQwxwLIeWBTLlx5ojXB2N9vrmEUahUH42GAhLQw6ZNisY6CxW099QuzhhNK8VY
+ FnzYapHyg60/dEJMyw7TQ7GJ5ynL9amwhSbaTahbYhyvvMq9ic/a1t4JscSiYJyGE08V
+ Ivu0RUtptL++BkfMg1yMzHyZIsMd3/G2pER0EMrDAihPVRzMBAh82AB47oIdkT6Jr+HR
+ K6swoQ4CnxOTvxfWKPe8DBLg/q3xunAdscNT39vw0bLUFzCb28hSvONWK9Tvk0JoHXbs +g== 
+Received: from nasanppmta03.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3ntps18swd-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Sat, 18 Feb 2023 12:38:42 +0000
+Received: from nasanex01c.na.qualcomm.com (nasanex01c.na.qualcomm.com [10.45.79.139])
+        by NASANPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 31ICcfLd010907
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Sat, 18 Feb 2023 12:38:41 GMT
+Received: from [10.216.19.78] (10.80.80.8) by nasanex01c.na.qualcomm.com
+ (10.45.79.139) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.41; Sat, 18 Feb
+ 2023 04:38:39 -0800
+Message-ID: <3fe19c46-7013-5f93-8645-e294cf84940c@quicinc.com>
+Date:   Sat, 18 Feb 2023 18:08:36 +0530
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [PATCH v2] firmware: qcom_scm: modify
+ qcom_scm_set_download_mode()
+Content-Language: en-US
+To:     Bjorn Andersson <andersson@kernel.org>
+CC:     <agross@kernel.org>, <konrad.dybcio@linaro.org>,
+        <linux-arm-msm@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+References: <1675419435-30726-1-git-send-email-quic_mojha@quicinc.com>
+ <20230203190248.ywmb54gmdd4blv46@ripper>
+From:   Mukesh Ojha <quic_mojha@quicinc.com>
+In-Reply-To: <20230203190248.ywmb54gmdd4blv46@ripper>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nasanex01c.na.qualcomm.com (10.45.79.139)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: UTKHes_NnYsK3p4_aCYVwHa8_uqPAMyx
+X-Proofpoint-ORIG-GUID: UTKHes_NnYsK3p4_aCYVwHa8_uqPAMyx
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.170.22
+ definitions=2023-02-18_07,2023-02-17_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 clxscore=1015
+ lowpriorityscore=0 suspectscore=0 priorityscore=1501 malwarescore=0
+ adultscore=0 impostorscore=0 phishscore=0 spamscore=0 mlxlogscore=999
+ mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2302180111
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Lan8841 has 10 GPIOs and it has 2 events(EVENT_A and EVENT_B). It is
-possible to assigned the 2 events to any of the GPIOs, but a GPIO can
-have only 1 event at a time.
-These events are used to generate periodic signals. It is possible to
-configure the length, the start time and the period of the signal by
-configuring the event.
-Currently the SW uses only EVENT_A to generate the perout.
 
-These events are generated by comparing the target time with the PHC
-time. In case the PHC time is changed to a value bigger than the target
-time + reload time, then it would generate only 1 event and then it
-would stop because target time + reload time is small than PHC time.
-Therefore it is required to change also the target time every time when
-the PHC is changed. The same will apply also when the PHC time is
-changed to a smaller value.
 
-This was tested using:
-testptp -L 6,2
-testptp -p 1000000000 -w 200000000
+On 2/4/2023 12:32 AM, Bjorn Andersson wrote:
+> On Fri, Feb 03, 2023 at 03:47:15PM +0530, Mukesh Ojha wrote:
+>> Modify qcom_scm_set_download_mode() such that it can support
+>> multiple modes. There is no functional change with this change.
+>>
+> 
+> As Dmitry said, you argue for added flexibility, but doesn't provide a
+> user of that flexibility. I will drop this patch from the queue for now.
+> 
+> Please include this together with the patch(es) that benefit from such
+> flexibility.
 
-Signed-off-by: Horatiu Vultur <horatiu.vultur@microchip.com>
----
-v1->v2:
-- simplify code using phy_set/clear_bits_mmd and phy_modify_mmd
-- check the return value of phy_*_mmd functions and act upon it
-- use pr_warn_ratelimited instead of phydev_warn
-- use devm_kcalloc instead of devm_kmalloc_array
-- move code around to not have forward declarations
----
- drivers/net/phy/micrel.c | 369 ++++++++++++++++++++++++++++++++++++++-
- 1 file changed, 367 insertions(+), 2 deletions(-)
+Sure, will add this along with patches which benefit from this change.
 
-diff --git a/drivers/net/phy/micrel.c b/drivers/net/phy/micrel.c
-index 2c84fccef4f64..373e0dfe33444 100644
---- a/drivers/net/phy/micrel.c
-+++ b/drivers/net/phy/micrel.c
-@@ -318,6 +318,7 @@ struct kszphy_ptp_priv {
- 	struct ptp_clock_info ptp_clock_info;
- 	/* Lock for ptp_clock */
- 	struct mutex ptp_lock;
-+	struct ptp_pin_desc *pin_config;
- };
- 
- struct kszphy_priv {
-@@ -3658,6 +3659,63 @@ static int lan8841_hwtstamp(struct mii_timestamper *mii_ts, struct ifreq *ifr)
- 	return copy_to_user(ifr->ifr_data, &config, sizeof(config)) ? -EFAULT : 0;
- }
- 
-+#define LAN8841_EVENT_A		0
-+#define LAN8841_EVENT_B		1
-+#define LAN8841_PTP_LTC_TARGET_SEC_HI(event)	((event) == LAN8841_EVENT_A ? 278 : 288)
-+#define LAN8841_PTP_LTC_TARGET_SEC_LO(event)	((event) == LAN8841_EVENT_A ? 279 : 289)
-+#define LAN8841_PTP_LTC_TARGET_NS_HI(event)	((event) == LAN8841_EVENT_A ? 280 : 290)
-+#define LAN8841_PTP_LTC_TARGET_NS_LO(event)	((event) == LAN8841_EVENT_A ? 281 : 291)
-+
-+static int lan8841_ptp_set_target(struct kszphy_ptp_priv *ptp_priv, u8 event,
-+				  s64 sec, u32 nsec)
-+{
-+	struct phy_device *phydev = ptp_priv->phydev;
-+	int ret;
-+
-+	ret = phy_write_mmd(phydev, 2, LAN8841_PTP_LTC_TARGET_SEC_HI(event),
-+			    upper_16_bits(sec));
-+	ret |= phy_write_mmd(phydev, 2, LAN8841_PTP_LTC_TARGET_SEC_LO(event),
-+			     lower_16_bits(sec));
-+	ret |= phy_write_mmd(phydev, 2, LAN8841_PTP_LTC_TARGET_NS_HI(event) & 0x3fff,
-+			     upper_16_bits(nsec));
-+	ret |= phy_write_mmd(phydev, 2, LAN8841_PTP_LTC_TARGET_NS_LO(event),
-+			     lower_16_bits(nsec));
-+
-+	return ret;
-+}
-+
-+#define LAN8841_BUFFER_TIME	2
-+
-+static int lan8841_ptp_update_target(struct kszphy_ptp_priv *ptp_priv,
-+				     const struct timespec64 *ts)
-+{
-+	return lan8841_ptp_set_target(ptp_priv, LAN8841_EVENT_A,
-+				      ts->tv_sec + LAN8841_BUFFER_TIME, ts->tv_nsec);
-+}
-+
-+#define LAN8841_PTP_LTC_TARGET_RELOAD_SEC_HI(event)	((event) == LAN8841_EVENT_A ? 282 : 292)
-+#define LAN8841_PTP_LTC_TARGET_RELOAD_SEC_LO(event)	((event) == LAN8841_EVENT_A ? 283 : 293)
-+#define LAN8841_PTP_LTC_TARGET_RELOAD_NS_HI(event)	((event) == LAN8841_EVENT_A ? 284 : 294)
-+#define LAN8841_PTP_LTC_TARGET_RELOAD_NS_LO(event)	((event) == LAN8841_EVENT_A ? 285 : 295)
-+
-+static int lan8841_ptp_set_reload(struct kszphy_ptp_priv *ptp_priv, u8 event,
-+				  s64 sec, u32 nsec)
-+{
-+	struct phy_device *phydev = ptp_priv->phydev;
-+	int ret;
-+
-+	ret = phy_write_mmd(phydev, 2, LAN8841_PTP_LTC_TARGET_RELOAD_SEC_HI(event),
-+			    upper_16_bits(sec));
-+	ret |= phy_write_mmd(phydev, 2, LAN8841_PTP_LTC_TARGET_RELOAD_SEC_LO(event),
-+			     lower_16_bits(sec));
-+	ret |= phy_write_mmd(phydev, 2, LAN8841_PTP_LTC_TARGET_RELOAD_NS_HI(event) & 0x3fff,
-+			     upper_16_bits(nsec));
-+	ret |= phy_write_mmd(phydev, 2, LAN8841_PTP_LTC_TARGET_RELOAD_NS_LO(event),
-+			     lower_16_bits(nsec));
-+
-+	return ret;
-+}
-+
- #define LAN8841_PTP_LTC_SET_SEC_HI	262
- #define LAN8841_PTP_LTC_SET_SEC_MID	263
- #define LAN8841_PTP_LTC_SET_SEC_LO	264
-@@ -3671,6 +3729,7 @@ static int lan8841_ptp_settime64(struct ptp_clock_info *ptp,
- 	struct kszphy_ptp_priv *ptp_priv = container_of(ptp, struct kszphy_ptp_priv,
- 							ptp_clock_info);
- 	struct phy_device *phydev = ptp_priv->phydev;
-+	int ret;
- 
- 	/* Set the value to be stored */
- 	mutex_lock(&ptp_priv->ptp_lock);
-@@ -3683,9 +3742,10 @@ static int lan8841_ptp_settime64(struct ptp_clock_info *ptp,
- 	/* Set the command to load the LTC */
- 	phy_write_mmd(phydev, 2, LAN8841_PTP_CMD_CTL,
- 		      LAN8841_PTP_CMD_CTL_PTP_LTC_LOAD);
-+	ret = lan8841_ptp_update_target(ptp_priv, ts);
- 	mutex_unlock(&ptp_priv->ptp_lock);
- 
--	return 0;
-+	return ret;
- }
- 
- #define LAN8841_PTP_LTC_RD_SEC_HI	358
-@@ -3740,6 +3800,7 @@ static int lan8841_ptp_adjtime(struct ptp_clock_info *ptp, s64 delta)
- 	bool add = true;
- 	u32 nsec;
- 	s32 sec;
-+	int ret;
- 
- 	/* The HW allows up to 15 sec to adjust the time, but here we limit to
- 	 * 10 sec the adjustment. The reason is, in case the adjustment is 14
-@@ -3803,7 +3864,13 @@ static int lan8841_ptp_adjtime(struct ptp_clock_info *ptp, s64 delta)
- 	}
- 	mutex_unlock(&ptp_priv->ptp_lock);
- 
--	return 0;
-+	/* Update the target clock */
-+	ptp->gettime64(ptp, &ts);
-+	mutex_lock(&ptp_priv->ptp_lock);
-+	ret = lan8841_ptp_update_target(ptp_priv, &ts);
-+	mutex_unlock(&ptp_priv->ptp_lock);
-+
-+	return ret;
- }
- 
- #define LAN8841_PTP_LTC_RATE_ADJ_HI		269
-@@ -3839,6 +3906,284 @@ static int lan8841_ptp_adjfine(struct ptp_clock_info *ptp, long scaled_ppm)
- 	return 0;
- }
- 
-+static int lan8841_ptp_verify(struct ptp_clock_info *ptp, unsigned int pin,
-+			      enum ptp_pin_function func, unsigned int chan)
-+{
-+	switch (func) {
-+	case PTP_PF_NONE:
-+	case PTP_PF_PEROUT:
-+		break;
-+	default:
-+		return -1;
-+	}
-+
-+	return 0;
-+}
-+
-+#define LAN8841_PTP_GPIO_NUM	10
-+#define LAN8841_GPIO_EN		128
-+#define LAN8841_GPIO_DIR	129
-+#define LAN8841_GPIO_BUF	130
-+
-+static int lan8841_ptp_perout_off(struct kszphy_ptp_priv *ptp_priv, int pin)
-+{
-+	struct phy_device *phydev = ptp_priv->phydev;
-+	int ret;
-+
-+	ret = phy_clear_bits_mmd(phydev, 2, LAN8841_GPIO_EN, BIT(pin));
-+	ret |= phy_clear_bits_mmd(phydev, 2, LAN8841_GPIO_DIR, BIT(pin));
-+	ret |= phy_clear_bits_mmd(phydev, 2, LAN8841_GPIO_BUF, BIT(pin));
-+
-+	return ret;
-+}
-+
-+static int lan8841_ptp_perout_on(struct kszphy_ptp_priv *ptp_priv, int pin)
-+{
-+	struct phy_device *phydev = ptp_priv->phydev;
-+	int ret;
-+
-+	ret = phy_set_bits_mmd(phydev, 2, LAN8841_GPIO_EN, BIT(pin));
-+	ret |= phy_set_bits_mmd(phydev, 2, LAN8841_GPIO_DIR, BIT(pin));
-+	ret |= phy_set_bits_mmd(phydev, 2, LAN8841_GPIO_BUF, BIT(pin));
-+
-+	return ret;
-+}
-+
-+#define LAN8841_GPIO_DATA_SEL1				131
-+#define LAN8841_GPIO_DATA_SEL2				132
-+#define LAN8841_GPIO_DATA_SEL_GPIO_DATA_SEL_EVENT_MASK	GENMASK(2, 0)
-+#define LAN8841_GPIO_DATA_SEL_GPIO_DATA_SEL_EVENT_A	1
-+#define LAN8841_GPIO_DATA_SEL_GPIO_DATA_SEL_EVENT_B	2
-+#define LAN8841_PTP_GENERAL_CONFIG			257
-+#define LAN8841_PTP_GENERAL_CONFIG_LTC_EVENT_POL_A	BIT(1)
-+#define LAN8841_PTP_GENERAL_CONFIG_LTC_EVENT_POL_B	BIT(3)
-+#define LAN8841_PTP_GENERAL_CONFIG_LTC_EVENT_A_MASK	GENMASK(7, 4)
-+#define LAN8841_PTP_GENERAL_CONFIG_LTC_EVENT_B_MASK	GENMASK(11, 8)
-+#define LAN8841_PTP_GENERAL_CONFIG_LTC_EVENT_A		4
-+#define LAN8841_PTP_GENERAL_CONFIG_LTC_EVENT_B		7
-+
-+static int lan8841_ptp_remove_event(struct kszphy_ptp_priv *ptp_priv, int pin,
-+				    u8 event)
-+{
-+	struct phy_device *phydev = ptp_priv->phydev;
-+	u16 tmp;
-+	int ret;
-+
-+	/* Now remove pin from the event. GPIO_DATA_SEL1 contains the GPIO
-+	 * pins 0-4 while GPIO_DATA_SEL2 contains GPIO pins 5-9, therefore
-+	 * depending on the pin, it requires to read a different register
-+	 */
-+	if (pin < 5) {
-+		tmp = LAN8841_GPIO_DATA_SEL_GPIO_DATA_SEL_EVENT_MASK << (3 * pin);
-+		ret = phy_clear_bits_mmd(phydev, 2, LAN8841_GPIO_DATA_SEL1, tmp);
-+	} else {
-+		tmp = LAN8841_GPIO_DATA_SEL_GPIO_DATA_SEL_EVENT_MASK << (3 * (pin - 5));
-+		ret = phy_clear_bits_mmd(phydev, 2, LAN8841_GPIO_DATA_SEL2, tmp);
-+	}
-+	if (ret)
-+		return ret;
-+
-+	/* Disable the event */
-+	if (event == LAN8841_EVENT_A)
-+		tmp = LAN8841_PTP_GENERAL_CONFIG_LTC_EVENT_POL_A |
-+		      LAN8841_PTP_GENERAL_CONFIG_LTC_EVENT_A_MASK;
-+	else
-+		tmp = LAN8841_PTP_GENERAL_CONFIG_LTC_EVENT_POL_B |
-+		      LAN8841_PTP_GENERAL_CONFIG_LTC_EVENT_B_MASK;
-+	return phy_clear_bits_mmd(phydev, 2, LAN8841_GPIO_EN, tmp);
-+}
-+
-+static int lan8841_ptp_enable_event(struct kszphy_ptp_priv *ptp_priv, int pin,
-+				    u8 event, int pulse_width)
-+{
-+	struct phy_device *phydev = ptp_priv->phydev;
-+	u16 tmp;
-+	int ret;
-+
-+	/* Enable the event */
-+	if (event == LAN8841_EVENT_A)
-+		ret = phy_modify_mmd(phydev, 2, LAN8841_PTP_GENERAL_CONFIG,
-+				     LAN8841_PTP_GENERAL_CONFIG_LTC_EVENT_POL_A |
-+				     LAN8841_PTP_GENERAL_CONFIG_LTC_EVENT_A_MASK,
-+				     LAN8841_PTP_GENERAL_CONFIG_LTC_EVENT_POL_A |
-+				     pulse_width << LAN8841_PTP_GENERAL_CONFIG_LTC_EVENT_A);
-+	else
-+		ret = phy_modify_mmd(phydev, 2, LAN8841_PTP_GENERAL_CONFIG,
-+				     LAN8841_PTP_GENERAL_CONFIG_LTC_EVENT_POL_B |
-+				     LAN8841_PTP_GENERAL_CONFIG_LTC_EVENT_B_MASK,
-+				     LAN8841_PTP_GENERAL_CONFIG_LTC_EVENT_POL_B |
-+				     pulse_width << LAN8841_PTP_GENERAL_CONFIG_LTC_EVENT_B);
-+	if (ret)
-+		return ret;
-+
-+	/* Now connect the pin to the event. GPIO_DATA_SEL1 contains the GPIO
-+	 * pins 0-4 while GPIO_DATA_SEL2 contains GPIO pins 5-9, therefore
-+	 * depending on the pin, it requires to read a different register
-+	 */
-+	if (event == LAN8841_EVENT_A)
-+		tmp = LAN8841_GPIO_DATA_SEL_GPIO_DATA_SEL_EVENT_A;
-+	else
-+		tmp = LAN8841_GPIO_DATA_SEL_GPIO_DATA_SEL_EVENT_B;
-+
-+	if (pin < 5)
-+		ret = phy_set_bits_mmd(phydev, 2, LAN8841_GPIO_DATA_SEL1,
-+				       tmp << (3 * pin));
-+	else
-+		ret = phy_set_bits_mmd(phydev, 2, LAN8841_GPIO_DATA_SEL2,
-+				       tmp << (3 * (pin - 5)));
-+
-+	return ret;
-+}
-+
-+#define LAN8841_PTP_GENERAL_CONFIG_LTC_EVENT_200MS	13
-+#define LAN8841_PTP_GENERAL_CONFIG_LTC_EVENT_100MS	12
-+#define LAN8841_PTP_GENERAL_CONFIG_LTC_EVENT_50MS	11
-+#define LAN8841_PTP_GENERAL_CONFIG_LTC_EVENT_10MS	10
-+#define LAN8841_PTP_GENERAL_CONFIG_LTC_EVENT_5MS	9
-+#define LAN8841_PTP_GENERAL_CONFIG_LTC_EVENT_1MS	8
-+#define LAN8841_PTP_GENERAL_CONFIG_LTC_EVENT_500US	7
-+#define LAN8841_PTP_GENERAL_CONFIG_LTC_EVENT_100US	6
-+#define LAN8841_PTP_GENERAL_CONFIG_LTC_EVENT_50US	5
-+#define LAN8841_PTP_GENERAL_CONFIG_LTC_EVENT_10US	4
-+#define LAN8841_PTP_GENERAL_CONFIG_LTC_EVENT_5US	3
-+#define LAN8841_PTP_GENERAL_CONFIG_LTC_EVENT_1US	2
-+#define LAN8841_PTP_GENERAL_CONFIG_LTC_EVENT_500NS	1
-+#define LAN8841_PTP_GENERAL_CONFIG_LTC_EVENT_100NS	0
-+
-+static int lan8841_ptp_perout(struct ptp_clock_info *ptp,
-+			      struct ptp_clock_request *rq, int on)
-+{
-+	struct kszphy_ptp_priv *ptp_priv = container_of(ptp, struct kszphy_ptp_priv,
-+							ptp_clock_info);
-+	struct phy_device *phydev = ptp_priv->phydev;
-+	struct timespec64 ts_on, ts_period;
-+	s64 on_nsec, period_nsec;
-+	int pulse_width;
-+	int pin;
-+	int ret;
-+
-+	if (rq->perout.flags & ~PTP_PEROUT_DUTY_CYCLE)
-+		return -EOPNOTSUPP;
-+
-+	pin = ptp_find_pin(ptp_priv->ptp_clock, PTP_PF_PEROUT, rq->perout.index);
-+	if (pin == -1 || pin >= LAN8841_PTP_GPIO_NUM)
-+		return -EINVAL;
-+
-+	if (!on) {
-+		ret = lan8841_ptp_perout_off(ptp_priv, pin);
-+		if (ret)
-+			return ret;
-+
-+		return lan8841_ptp_remove_event(ptp_priv, LAN8841_EVENT_A, pin);
-+	}
-+
-+	ts_on.tv_sec = rq->perout.on.sec;
-+	ts_on.tv_nsec = rq->perout.on.nsec;
-+	on_nsec = timespec64_to_ns(&ts_on);
-+
-+	ts_period.tv_sec = rq->perout.period.sec;
-+	ts_period.tv_nsec = rq->perout.period.nsec;
-+	period_nsec = timespec64_to_ns(&ts_period);
-+
-+	if (period_nsec < 200) {
-+		pr_warn_ratelimited("%s: perout period too small, minimim is 200 nsec\n",
-+				    phydev_name(phydev));
-+		return -EOPNOTSUPP;
-+	}
-+
-+	if (on_nsec >= period_nsec) {
-+		pr_warn_ratelimited("%s: pulse width must be smaller than period\n",
-+				    phydev_name(phydev));
-+		return -EINVAL;
-+	}
-+
-+	switch (on_nsec) {
-+	case 200000000:
-+		pulse_width = LAN8841_PTP_GENERAL_CONFIG_LTC_EVENT_200MS;
-+		break;
-+	case 100000000:
-+		pulse_width = LAN8841_PTP_GENERAL_CONFIG_LTC_EVENT_100MS;
-+		break;
-+	case 50000000:
-+		pulse_width = LAN8841_PTP_GENERAL_CONFIG_LTC_EVENT_50MS;
-+		break;
-+	case 10000000:
-+		pulse_width = LAN8841_PTP_GENERAL_CONFIG_LTC_EVENT_10MS;
-+		break;
-+	case 5000000:
-+		pulse_width = LAN8841_PTP_GENERAL_CONFIG_LTC_EVENT_5MS;
-+		break;
-+	case 1000000:
-+		pulse_width = LAN8841_PTP_GENERAL_CONFIG_LTC_EVENT_1MS;
-+		break;
-+	case 500000:
-+		pulse_width = LAN8841_PTP_GENERAL_CONFIG_LTC_EVENT_500US;
-+		break;
-+	case 100000:
-+		pulse_width = LAN8841_PTP_GENERAL_CONFIG_LTC_EVENT_100US;
-+		break;
-+	case 50000:
-+		pulse_width = LAN8841_PTP_GENERAL_CONFIG_LTC_EVENT_50US;
-+		break;
-+	case 10000:
-+		pulse_width = LAN8841_PTP_GENERAL_CONFIG_LTC_EVENT_10US;
-+		break;
-+	case 5000:
-+		pulse_width = LAN8841_PTP_GENERAL_CONFIG_LTC_EVENT_5US;
-+		break;
-+	case 1000:
-+		pulse_width = LAN8841_PTP_GENERAL_CONFIG_LTC_EVENT_1US;
-+		break;
-+	case 500:
-+		pulse_width = LAN8841_PTP_GENERAL_CONFIG_LTC_EVENT_500NS;
-+		break;
-+	case 100:
-+		pulse_width = LAN8841_PTP_GENERAL_CONFIG_LTC_EVENT_100NS;
-+		break;
-+	default:
-+		pr_warn_ratelimited("%s: Use default duty cycle of 100ns\n",
-+				    phydev_name(phydev));
-+		pulse_width = LAN8841_PTP_GENERAL_CONFIG_LTC_EVENT_100NS;
-+		break;
-+	}
-+
-+	mutex_lock(&ptp_priv->ptp_lock);
-+	ret = lan8841_ptp_set_target(ptp_priv, LAN8841_EVENT_A, rq->perout.start.sec,
-+				     rq->perout.start.nsec);
-+	mutex_unlock(&ptp_priv->ptp_lock);
-+	if (ret)
-+		return ret;
-+
-+	ret = lan8841_ptp_set_reload(ptp_priv, LAN8841_EVENT_A, rq->perout.period.sec,
-+				     rq->perout.period.nsec);
-+	if (ret)
-+		return ret;
-+
-+	ret = lan8841_ptp_enable_event(ptp_priv, pin, LAN8841_EVENT_A,
-+				       pulse_width);
-+	if (ret)
-+		return ret;
-+
-+	ret = lan8841_ptp_perout_on(ptp_priv, pin);
-+	if (ret)
-+		lan8841_ptp_remove_event(ptp_priv, pin, LAN8841_EVENT_A);
-+
-+	return ret;
-+}
-+
-+static int lan8841_ptp_enable(struct ptp_clock_info *ptp,
-+			      struct ptp_clock_request *rq, int on)
-+{
-+	switch (rq->type) {
-+	case PTP_CLK_REQ_PEROUT:
-+		return lan8841_ptp_perout(ptp, rq, on);
-+	default:
-+		return -EOPNOTSUPP;
-+	}
-+
-+	return 0;
-+}
-+
- static struct ptp_clock_info lan8841_ptp_clock_info = {
- 	.owner		= THIS_MODULE,
- 	.name		= "lan8841 ptp",
-@@ -3847,6 +4192,10 @@ static struct ptp_clock_info lan8841_ptp_clock_info = {
- 	.settime64	= lan8841_ptp_settime64,
- 	.adjtime	= lan8841_ptp_adjtime,
- 	.adjfine	= lan8841_ptp_adjfine,
-+	.verify         = lan8841_ptp_verify,
-+	.enable         = lan8841_ptp_enable,
-+	.n_per_out      = LAN8841_PTP_GPIO_NUM,
-+	.n_pins         = LAN8841_PTP_GPIO_NUM,
- };
- 
- #define LAN8841_OPERATION_MODE_STRAP_LOW_REGISTER 3
-@@ -3874,7 +4223,23 @@ static int lan8841_probe(struct phy_device *phydev)
- 	priv = phydev->priv;
- 	ptp_priv = &priv->ptp_priv;
- 
-+	ptp_priv->pin_config = devm_kcalloc(&phydev->mdio.dev,
-+					    LAN8841_PTP_GPIO_NUM,
-+					    sizeof(*ptp_priv->pin_config),
-+					    GFP_KERNEL);
-+	if (!ptp_priv->pin_config)
-+		return -ENOMEM;
-+
-+	for (int i = 0; i < LAN8841_PTP_GPIO_NUM; ++i) {
-+		struct ptp_pin_desc *p = &ptp_priv->pin_config[i];
-+
-+		snprintf(p->name, sizeof(p->name), "pin%d", i);
-+		p->index = i;
-+		p->func = PTP_PF_NONE;
-+	}
-+
- 	ptp_priv->ptp_clock_info = lan8841_ptp_clock_info;
-+	ptp_priv->ptp_clock_info.pin_config = ptp_priv->pin_config;
- 	ptp_priv->ptp_clock = ptp_clock_register(&ptp_priv->ptp_clock_info,
- 						 &phydev->mdio.dev);
- 	if (IS_ERR(ptp_priv->ptp_clock)) {
--- 
-2.38.0
+> 
+>> Signed-off-by: Mukesh Ojha <quic_mojha@quicinc.com>
+>> ---
+>> Changes in v2:
+>>    - Stop changing legacy scm id for dload mode.
+>>
+>>   drivers/firmware/qcom_scm.c | 15 +++++++--------
+>>   include/linux/qcom_scm.h    |  5 +++++
+>>   2 files changed, 12 insertions(+), 8 deletions(-)
+>>
+>> diff --git a/drivers/firmware/qcom_scm.c b/drivers/firmware/qcom_scm.c
+>> index cdbfe54..6245b97 100644
+>> --- a/drivers/firmware/qcom_scm.c
+>> +++ b/drivers/firmware/qcom_scm.c
+>> @@ -400,7 +400,7 @@ int qcom_scm_set_remote_state(u32 state, u32 id)
+>>   }
+>>   EXPORT_SYMBOL(qcom_scm_set_remote_state);
+>>   
+>> -static int __qcom_scm_set_dload_mode(struct device *dev, bool enable)
+>> +static int __qcom_scm_set_dload_mode(struct device *dev, enum qcom_download_mode mode)
+>>   {
+>>   	struct qcom_scm_desc desc = {
+>>   		.svc = QCOM_SCM_SVC_BOOT,
+>> @@ -410,12 +410,12 @@ static int __qcom_scm_set_dload_mode(struct device *dev, bool enable)
+>>   		.owner = ARM_SMCCC_OWNER_SIP,
+>>   	};
+>>   
+>> -	desc.args[1] = enable ? QCOM_SCM_BOOT_SET_DLOAD_MODE : 0;
+>> +	desc.args[1] = mode ? QCOM_SCM_BOOT_SET_DLOAD_MODE : 0;
+>>   
+>>   	return qcom_scm_call_atomic(__scm->dev, &desc, NULL);
+>>   }
+>>   
+>> -static void qcom_scm_set_download_mode(bool enable)
+>> +static void qcom_scm_set_download_mode(enum qcom_download_mode mode)
+>>   {
+>>   	bool avail;
+>>   	int ret = 0;
+>> @@ -424,10 +424,9 @@ static void qcom_scm_set_download_mode(bool enable)
+>>   					     QCOM_SCM_SVC_BOOT,
+>>   					     QCOM_SCM_BOOT_SET_DLOAD_MODE);
+>>   	if (avail) {
+>> -		ret = __qcom_scm_set_dload_mode(__scm->dev, enable);
+>> +		ret = __qcom_scm_set_dload_mode(__scm->dev, mode);
+>>   	} else if (__scm->dload_mode_addr) {
+>> -		ret = qcom_scm_io_writel(__scm->dload_mode_addr,
+>> -				enable ? QCOM_SCM_BOOT_SET_DLOAD_MODE : 0);
+>> +		ret = qcom_scm_io_writel(__scm->dload_mode_addr, mode);
+>>   	} else {
+>>   		dev_err(__scm->dev,
+>>   			"No available mechanism for setting download mode\n");
+>> @@ -1410,7 +1409,7 @@ static int qcom_scm_probe(struct platform_device *pdev)
+>>   	 * disabled below by a clean shutdown/reboot.
+>>   	 */
+>>   	if (download_mode)
+>> -		qcom_scm_set_download_mode(true);
+>> +		qcom_scm_set_download_mode(QCOM_DOWNLOAD_FULLDUMP);
+>>   
+>>   	return 0;
+>>   }
+>> @@ -1419,7 +1418,7 @@ static void qcom_scm_shutdown(struct platform_device *pdev)
+>>   {
+>>   	/* Clean shutdown, disable download mode to allow normal restart */
+>>   	if (download_mode)
+> 
+> PS. Wouldn't it make sense, if !download_mode to set NODUMP?
 
+IMO, it does not need even a check, since our intention is to disable
+download mode during reboot/restart.
+
+-Mukesh
+> 
+> Regards,
+> Bjorn
+> 
+>> -		qcom_scm_set_download_mode(false);
+>> +		qcom_scm_set_download_mode(QCOM_DOWNLOAD_NODUMP);
+>>   }
+>>   
+>>   static const struct of_device_id qcom_scm_dt_match[] = {
+>> diff --git a/include/linux/qcom_scm.h b/include/linux/qcom_scm.h
+>> index f833564..f9bc84e 100644
+>> --- a/include/linux/qcom_scm.h
+>> +++ b/include/linux/qcom_scm.h
+>> @@ -14,6 +14,11 @@
+>>   #define QCOM_SCM_CPU_PWR_DOWN_L2_OFF	0x1
+>>   #define QCOM_SCM_HDCP_MAX_REQ_CNT	5
+>>   
+>> +enum qcom_download_mode {
+>> +	QCOM_DOWNLOAD_NODUMP    = 0x00,
+>> +	QCOM_DOWNLOAD_FULLDUMP  = 0x10,
+>> +};
+>> +
+>>   struct qcom_scm_hdcp_req {
+>>   	u32 addr;
+>>   	u32 val;
+>> -- 
+>> 2.7.4
+>>
