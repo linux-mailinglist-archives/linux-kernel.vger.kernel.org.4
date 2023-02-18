@@ -2,20 +2,20 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5DE8169BA6E
+	by mail.lfdr.de (Postfix) with ESMTP id 120BF69BA6D
 	for <lists+linux-kernel@lfdr.de>; Sat, 18 Feb 2023 15:28:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229716AbjBRO2l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 18 Feb 2023 09:28:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35766 "EHLO
+        id S229683AbjBRO2i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 18 Feb 2023 09:28:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35754 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229566AbjBRO2h (ORCPT
+        with ESMTP id S229496AbjBRO2h (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Sat, 18 Feb 2023 09:28:37 -0500
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3241315CBD
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16C1315CBA
         for <linux-kernel@vger.kernel.org>; Sat, 18 Feb 2023 06:28:36 -0800 (PST)
-Date:   Sat, 18 Feb 2023 14:28:32 -0000
+Date:   Sat, 18 Feb 2023 14:28:33 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
         s=2020; t=1676730513;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
@@ -23,12 +23,12 @@ DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=vl6n7PSDf8dH46gyX7pAqYpLt9UJYFedNkQQ0eBRhEU=;
-        b=gnsmQQdfNYA8G/+Rq89gSRO09u+KcGL/04uUNPc4Px1cPzd1xBQy2gyDGIrFV846SHjsLe
-        kRONRsa/1+fmw5tdhgsf8LWMDqft3eh5yBsYTxkUH4qyi+Pp48btR/6hQ2YCtHKCMMQxpC
-        tGPfh5OlpSfOJvJYdCnSWa585jHmin8dSOuAV7uDR7nZzhXE9Dla7NrQWTfpbl6+tMItRX
-        xEIYxijSVDIBrUXNgLgQRsQWDAlx9nBRtzTgcoDcXBsXZK7nurNScFf5KmWXvG6C27pmQD
-        KiBOknVBnqUhJ51vGa5DLcCwWHpnEQhNHYg/W43WQ5mFCC9fGI4DDVtcwThyRQ==
+        bh=YYf8cdQX1+qWLhAT0OWbBu0XyR2VvktlZhwh5Ldum5I=;
+        b=cZcwsny+fQZgJoMJ4M3Ps4x1/u/Fki14JvAiARAyJ7vB7fkasRfqhtEVol3mO9W6xPnePn
+        3Gpl2XYGZPCpztbTrUHI/4WSq8mUpsHINFDiQdcC+edmKOzuvrNOSQ4n642nu85vkHAPtp
+        VpEWt4Na+dpxDtcFkrFvsQxZAoVGo6PbEKJ/sGLnmTG//bAilL1EFyT6KyhV5p+yOUzcng
+        QYMUh+HE6sQPqY9Zeq125XQ2dDpo9Mf7ZYKfjiLdxVamG/kCgKwrbmQSJqezeEwNkX2tbP
+        PX9ySlMZWE3Srx9GJnZ4XiftBDKa6mOpLOBpet6kKS25xeIFLRkMZDAGk1IonQ==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
         s=2020e; t=1676730513;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
@@ -36,21 +36,21 @@ DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=vl6n7PSDf8dH46gyX7pAqYpLt9UJYFedNkQQ0eBRhEU=;
-        b=+n64HUILg6xmzUfembODqvkXUeBk8yWEo9XUaORQaOiXGAzH306d+NCm8NvLm5YNKwlRdA
-        ndqyqbE2ANvnnhCw==
+        bh=YYf8cdQX1+qWLhAT0OWbBu0XyR2VvktlZhwh5Ldum5I=;
+        b=LQK6ToFdPcEwQ/Hje+PZDkWeSuPReN23GQkeHcvIsFAjk/sBc9JW3g973uBKbLMDr7Bjqi
+        vHxAtuekm5kgWHDg==
 From:   "irqchip-bot for Florian Fainelli" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-kernel@vger.kernel.org
 To:     linux-kernel@vger.kernel.org
-Subject: [irqchip: irq/irqchip-next] irqchip/irq-bcm7120-l2: Set IRQ_LEVEL for
+Subject: [irqchip: irq/irqchip-next] irqchip/irq-brcmstb-l2: Set IRQ_LEVEL for
  level triggered interrupts
 Cc:     Florian Fainelli <f.fainelli@gmail.com>, philmd@linaro.org,
         Marc Zyngier <maz@kernel.org>, tglx@linutronix.de
-In-Reply-To: <20221216230934.2478345-3-f.fainelli@gmail.com>
-References: <20221216230934.2478345-3-f.fainelli@gmail.com>
+In-Reply-To: <20221216230934.2478345-2-f.fainelli@gmail.com>
+References: <20221216230934.2478345-2-f.fainelli@gmail.com>
 MIME-Version: 1.0
-Message-ID: <167673051273.4906.12544908266625513650.tip-bot2@tip-bot2>
+Message-ID: <167673051321.4906.7043097380956478723.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -67,44 +67,58 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 The following commit has been merged into the irq/irqchip-next branch of irqc=
 hip:
 
-Commit-ID:     13a157b38ca5b4f9eed81442b8821db293755961
+Commit-ID:     94debe03e8afa1267f95a9001786a6aa506b9ff3
 Gitweb:        https://git.kernel.org/pub/scm/linux/kernel/git/maz/arm-platfo=
-rms/13a157b38ca5b4f9eed81442b8821db293755961
+rms/94debe03e8afa1267f95a9001786a6aa506b9ff3
 Author:        Florian Fainelli <f.fainelli@gmail.com>
-AuthorDate:    Fri, 16 Dec 2022 15:09:34 -08:00
+AuthorDate:    Fri, 16 Dec 2022 15:09:33 -08:00
 Committer:     Marc Zyngier <maz@kernel.org>
 CommitterDate: Sat, 18 Feb 2023 14:23:41=20
 
-irqchip/irq-bcm7120-l2: Set IRQ_LEVEL for level triggered interrupts
+irqchip/irq-brcmstb-l2: Set IRQ_LEVEL for level triggered interrupts
 
-When support for the interrupt controller was added with a5042de2688d,
-we forgot to update the flags to be set to contain IRQ_LEVEL. While the
-flow handler is correct, the output from /proc/interrupts does not show
-such interrupts as being level triggered when they are, correct that.
+When support for the level triggered interrupt controller flavor was
+added with c0ca7262088e, we forgot to update the flags to be set to
+contain IRQ_LEVEL. While the flow handler is correct, the output from
+/proc/interrupts does not show such interrupts as being level triggered
+when they are, correct that.
 
-Fixes: a5042de2688d ("irqchip: bcm7120-l2: Add Broadcom BCM7120-style Level 2=
- interrupt controller")
+Fixes: c0ca7262088e ("irqchip/brcmstb-l2: Add support for the BCM7271 L2 cont=
+roller")
 Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
 Reviewed-by: Philippe Mathieu-Daud=C3=A9 <philmd@linaro.org>
 Signed-off-by: Marc Zyngier <maz@kernel.org>
-Link: https://lore.kernel.org/r/20221216230934.2478345-3-f.fainelli@gmail.com
+Link: https://lore.kernel.org/r/20221216230934.2478345-2-f.fainelli@gmail.com
 ---
- drivers/irqchip/irq-bcm7120-l2.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ drivers/irqchip/irq-brcmstb-l2.c | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/irqchip/irq-bcm7120-l2.c b/drivers/irqchip/irq-bcm7120-l=
+diff --git a/drivers/irqchip/irq-brcmstb-l2.c b/drivers/irqchip/irq-brcmstb-l=
 2.c
-index bb6609c..1e9dab6 100644
---- a/drivers/irqchip/irq-bcm7120-l2.c
-+++ b/drivers/irqchip/irq-bcm7120-l2.c
-@@ -279,7 +279,8 @@ static int __init bcm7120_l2_intc_probe(struct device_nod=
-e *dn,
+index e4efc08..091b0fe 100644
+--- a/drivers/irqchip/irq-brcmstb-l2.c
++++ b/drivers/irqchip/irq-brcmstb-l2.c
+@@ -161,6 +161,7 @@ static int __init brcmstb_l2_intc_of_init(struct device_n=
+ode *np,
+ 					  *init_params)
+ {
+ 	unsigned int clr =3D IRQ_NOREQUEST | IRQ_NOPROBE | IRQ_NOAUTOEN;
++	unsigned int set =3D 0;
+ 	struct brcmstb_l2_intc_data *data;
+ 	struct irq_chip_type *ct;
+ 	int ret;
+@@ -208,9 +209,12 @@ static int __init brcmstb_l2_intc_of_init(struct device_=
+node *np,
+ 	if (IS_ENABLED(CONFIG_MIPS) && IS_ENABLED(CONFIG_CPU_BIG_ENDIAN))
  		flags |=3D IRQ_GC_BE_IO;
 =20
- 	ret =3D irq_alloc_domain_generic_chips(data->domain, IRQS_PER_WORD, 1,
--				dn->full_name, handle_level_irq, clr, 0, flags);
-+				dn->full_name, handle_level_irq, clr,
-+				IRQ_LEVEL, flags);
++	if (init_params->handler =3D=3D handle_level_irq)
++		set |=3D IRQ_LEVEL;
++
+ 	/* Allocate a single Generic IRQ chip for this node */
+ 	ret =3D irq_alloc_domain_generic_chips(data->domain, 32, 1,
+-			np->full_name, init_params->handler, clr, 0, flags);
++			np->full_name, init_params->handler, clr, set, flags);
  	if (ret) {
  		pr_err("failed to allocate generic irq chip\n");
  		goto out_free_domain;
