@@ -2,67 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 59EDB69B887
-	for <lists+linux-kernel@lfdr.de>; Sat, 18 Feb 2023 08:40:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B3A4069B888
+	for <lists+linux-kernel@lfdr.de>; Sat, 18 Feb 2023 08:44:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229787AbjBRHkS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 18 Feb 2023 02:40:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39364 "EHLO
+        id S229795AbjBRHo1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 18 Feb 2023 02:44:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41028 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229607AbjBRHkQ (ORCPT
+        with ESMTP id S229607AbjBRHoY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 18 Feb 2023 02:40:16 -0500
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 286D453EFA
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Feb 2023 23:40:16 -0800 (PST)
+        Sat, 18 Feb 2023 02:44:24 -0500
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE7F741086
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Feb 2023 23:44:23 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1676706016; x=1708242016;
-  h=message-id:date:mime-version:cc:subject:to:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=0lqf4J+VI4yq86gG+IpxFE/VI8GvARVOsFnagP1Homs=;
-  b=BPBreerEE5aqlvAN37x/NWL27xFY0aTTRNlPzhqAzPOIJ/kcsrX/0OMr
-   DA2GLUsLgbNADb8LNkUTR06JcOhphZmfRBTpBCxOXJ2SiuIVUS9ny3TMv
-   Hgg7uptu/ir5brrjR83W+PKh7bcyUdD3ocuwQ9rs/3Z8o90t263CXSOdi
-   ip5yKE+aSAycXXua7ADfRvfkgc+IQN1TL9g4tOgN+7yaTMr0syH3RBXBH
-   Zi6rTi1yS9X4fR5/1LvruUSHDqe6Eauhi1BuSWPNelB9MKCM9sqZbAahr
-   5vDSG3IOIYX28HdK4Jv0U5n+kD/cjGxGg/j4aFAnYs3n+pnLlgM1RhWP3
+  t=1676706263; x=1708242263;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=B3vrgcjxXzgxJ+QYmug2afsscYcxMQZmU6I8HqEn5K8=;
+  b=kyM1qdSiaZEChCWrskME5zfO5PxILFAzdnheMZAj9ngV5FYyo7HZaSTx
+   dbE69PD+9IUdYBZdjoWAziKLwtKqWILAN5KHV2u5y7n1HS4aDdtGyOyOF
+   iJDCLjwfp4Ej/H9poD2RmLla+/wSI8Ssnlx4FdDiD4MGcGPhW/o0ikCLt
+   2mtw/Z6ylhTr9hLgSdgWWjW+DpNZSqzQVlUKxNMRPtZ6TUTSaoHNf58Pw
+   Ng0AuxmeZv/3C3EThmkziC+mlZAyjwo/CMytuhML6JmYOYKET3PHQgShU
+   NMqa3SbBj9T9qIyZH2HZrzYVefX++ZstLYKAzY8JG26cNzWZcxF2+0TlN
    Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10624"; a="320264162"
+X-IronPort-AV: E=McAfee;i="6500,9779,10624"; a="359609651"
 X-IronPort-AV: E=Sophos;i="5.97,306,1669104000"; 
-   d="scan'208";a="320264162"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Feb 2023 23:40:15 -0800
+   d="scan'208";a="359609651"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Feb 2023 23:44:22 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10624"; a="648318768"
+X-IronPort-AV: E=McAfee;i="6500,9779,10624"; a="780044153"
 X-IronPort-AV: E=Sophos;i="5.97,306,1669104000"; 
-   d="scan'208";a="648318768"
-Received: from allen-box.sh.intel.com (HELO [10.239.159.48]) ([10.239.159.48])
-  by orsmga006.jf.intel.com with ESMTP; 17 Feb 2023 23:40:13 -0800
-Message-ID: <4406e741-2706-b554-a728-36286ec3e507@linux.intel.com>
-Date:   Sat, 18 Feb 2023 15:31:47 +0800
+   d="scan'208";a="780044153"
+Received: from lkp-server01.sh.intel.com (HELO 4455601a8d94) ([10.239.97.150])
+  by fmsmga002.fm.intel.com with ESMTP; 17 Feb 2023 23:43:51 -0800
+Received: from kbuild by 4455601a8d94 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pTHst-000CDN-11;
+        Sat, 18 Feb 2023 07:43:51 +0000
+Date:   Sat, 18 Feb 2023 15:43:08 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     James Houghton <jthoughton@google.com>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Muchun Song <songmuchun@bytedance.com>,
+        Peter Xu <peterx@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>
+Cc:     oe-kbuild-all@lists.linux.dev,
+        Linux Memory Management List <linux-mm@kvack.org>,
+        David Hildenbrand <david@redhat.com>,
+        David Rientjes <rientjes@google.com>,
+        Axel Rasmussen <axelrasmussen@google.com>,
+        Mina Almasry <almasrymina@google.com>,
+        Zach O'Keefe <zokeefe@google.com>,
+        Manish Mishra <manish.mishra@nutanix.com>,
+        Naoya Horiguchi <naoya.horiguchi@nec.com>,
+        "Dr . David Alan Gilbert" <dgilbert@redhat.com>,
+        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Baolin Wang <baolin.wang@linux.alibaba.com>,
+        Miaohe Lin <linmiaohe@huawei.com>,
+        Yang Shi <shy828301@gmail.com>,
+        Frank van der Linden <fvdl@google.com>,
+        Jiaqi Yan <jiaqiyan@google.com>, linux-kernel@vger.kernel.org,
+        James Houghton <jthoughton@google.com>
+Subject: Re: [PATCH v2 13/46] hugetlb: add hugetlb_hgm_walk and
+ hugetlb_walk_step
+Message-ID: <202302181558.6o0zw4Cl-lkp@intel.com>
+References: <20230218002819.1486479-14-jthoughton@google.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Cc:     baolu.lu@linux.intel.com, iommu@lists.linux.dev,
-        Joerg Roedel <joro@8bytes.org>,
-        Christoph Hellwig <hch@infradead.org>,
-        Kevin Tian <kevin.tian@intel.com>,
-        Will Deacon <will@kernel.org>,
-        Robin Murphy <robin.murphy@arm.com>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 0/6] iommu: Extend changing default domain to normal
- group
-Content-Language: en-US
-To:     Jason Gunthorpe <jgg@nvidia.com>
-References: <20230217094736.159005-1-baolu.lu@linux.intel.com>
- <Y++hqGY3qg7EKZLY@nvidia.com>
-From:   Baolu Lu <baolu.lu@linux.intel.com>
-In-Reply-To: <Y++hqGY3qg7EKZLY@nvidia.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230218002819.1486479-14-jthoughton@google.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -71,34 +86,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/17/23 11:47 PM, Jason Gunthorpe wrote:
-> On Fri, Feb 17, 2023 at 05:47:30PM +0800, Lu Baolu wrote:
->> The IOMMU group sysfs interface allows users to change the default
->> domain of a group. The current implementation uses device_lock() to make
->> sure that the devices in the group are not bound to any driver and won't
->> be bound during the process of changing the default domain. In order to
->> avoid a possible deadlock caused by lock order of device_lock and
->> group->mutex, it limits the functionality to singleton groups only.
->>
->> The recently implemented DMA ownership framework can be applied here to
->> replace device_lock(). In addition, use group->mutex to ensure that the
->> iommu ops of the devices is always valid during the process of changing
->> default domain.
->>
->> With above replacement and enhancement, the device_lock() could be
->> removed and the singleton-group-only limitation could be removed.
->>
->> The whole series is also available on github:
->> https://github.com/LuBaolu/intel-iommu/commits/iommu-sysfs-default-domain-extension-v2
->>
->> This series is on top of below series from Robin,
->> https://lore.kernel.org/linux-iommu/cover.1674753627.git.robin.murphy@arm.com/
->>
->> Please help to review and suggest.
-> Given the overall situation, I think my suggestion to use
-> arm_iommu_release_device() might be more short term practical.
+Hi James,
 
-Yes. Fair enough.
+Thank you for the patch! Yet something to improve:
 
-Best regards,
-baolu
+[auto build test ERROR on next-20230217]
+[cannot apply to kvm/queue shuah-kselftest/next shuah-kselftest/fixes arnd-asm-generic/master linus/master kvm/linux-next v6.2-rc8 v6.2-rc7 v6.2-rc6 v6.2-rc8]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/James-Houghton/hugetlb-don-t-set-PageUptodate-for-UFFDIO_CONTINUE/20230218-083216
+patch link:    https://lore.kernel.org/r/20230218002819.1486479-14-jthoughton%40google.com
+patch subject: [PATCH v2 13/46] hugetlb: add hugetlb_hgm_walk and hugetlb_walk_step
+config: loongarch-allyesconfig (https://download.01.org/0day-ci/archive/20230218/202302181558.6o0zw4Cl-lkp@intel.com/config)
+compiler: loongarch64-linux-gcc (GCC) 12.1.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/7e55fe945a1b5f042746277050390bdeba9e22d2
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review James-Houghton/hugetlb-don-t-set-PageUptodate-for-UFFDIO_CONTINUE/20230218-083216
+        git checkout 7e55fe945a1b5f042746277050390bdeba9e22d2
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=loongarch olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=loongarch SHELL=/bin/bash
+
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202302181558.6o0zw4Cl-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+   loongarch64-linux-ld: mm/hugetlb.o: in function `.L142':
+>> hugetlb.c:(.text+0x9ec): undefined reference to `hugetlb_walk_step'
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
