@@ -2,85 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 08CF269B755
-	for <lists+linux-kernel@lfdr.de>; Sat, 18 Feb 2023 02:10:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E328D69B759
+	for <lists+linux-kernel@lfdr.de>; Sat, 18 Feb 2023 02:13:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229759AbjBRBKs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Feb 2023 20:10:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57788 "EHLO
+        id S229585AbjBRBNG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Feb 2023 20:13:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59262 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229725AbjBRBKq (ORCPT
+        with ESMTP id S229531AbjBRBNF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Feb 2023 20:10:46 -0500
-Received: from mail-il1-x136.google.com (mail-il1-x136.google.com [IPv6:2607:f8b0:4864:20::136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA1A14CCBA
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Feb 2023 17:10:43 -0800 (PST)
-Received: by mail-il1-x136.google.com with SMTP id q20so963509ilc.9
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Feb 2023 17:10:43 -0800 (PST)
+        Fri, 17 Feb 2023 20:13:05 -0500
+Received: from mail-qt1-x830.google.com (mail-qt1-x830.google.com [IPv6:2607:f8b0:4864:20::830])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41EBD30B04
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Feb 2023 17:13:04 -0800 (PST)
+Received: by mail-qt1-x830.google.com with SMTP id d10so2464964qtr.12
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Feb 2023 17:13:04 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=3Ue1lMsoprr2ErBJHCanJ4kxr4Tbf1Q6clHNnM5+twY=;
-        b=MaPE7eNCeDtjj7lvxv5iY8sHQkz3Dg9eePVjJhYmFLnVftdXTHUVMmm9jQUfZ9C8UL
-         Eqj5bVqaYiiSnzz++oxqRtMAGkcOHem2Qtd/MIOXL6WeAWL1AvR93ZCAFsXfMtkMbj8+
-         FH4qBJFQQNJeiaD7mLy6R04FXG37cok9VQmrSU4rgPjFzewQMKdgplJm7wbzcKfrfj5V
-         sTIcjSuJT8wi4vZpnSI5twWE6hQFMdDT45x3lcOM4IOY82dz2Zj6lcrsqw+/rD7EHe8M
-         SGxjvc4Wk7es9Oo7dqaeW0ms2nhKftVI+WMrO+/OI1dY9f/azJPhklH+m98k6hmEdYh/
-         2NeA==
+        d=efficientek-com.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=wr2zCQ1Tc928nsK2G1LdnDMg6afLnDzp3aXmHYm4R0Y=;
+        b=3LZZJ8PIaPV1i8wlos2B1/poAFMGi8fZ5Nof9/vczbtCLkM78UqClyya28OBzzaKR7
+         z6IpNmM6nhEJwHO4tWqMkZO9VOZVisZDUg6G2R0fcC9TkXazH2qgLTDhoF6sv0JDM78u
+         P1IcNb7mqTdQ38p2BTPXMtG8U41IFXxbAQzUS6YEFYE0pvvKqv+ZgqipbauUoSs3lzQ2
+         mZ5drufEBeosri5ekoMf04z7BUkyVKIa8oRmP0mUajiyPQtNEaRbfkonpqU3+blb8FyB
+         sZek0wP/j/23QFy3v8YA3MePixw01UdK+9L3koCFM4afKjiF7ELGfqJxUrdbUxh/grrs
+         GOfg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=3Ue1lMsoprr2ErBJHCanJ4kxr4Tbf1Q6clHNnM5+twY=;
-        b=UoGUz2rRRxMUhxyQQRGdg0WztacvwSbq/Uxp0mbd/fHUwoW+nQ9u4q8ElxaDf4BgdE
-         qytwXkv4RmvqWVyk48oYJGDOt0EOWKgPP9Fxk10fGaLUNeqrnkWoRGbIH7kVHLCrCobh
-         esGWJYTUPlVsUPnOlGebQEsW1fLE2MVpeDHCBJNIdnCqiQcShiyQm4Khbp3ErYQQa35a
-         JCCHsQcxc2WKmR46pX/9Ej633ZAik03+6W9UdKr9eM4bkutyZeI0Sjc2lLeyLAW7lwn/
-         22GXynSiEyNiOx/S7YlKRgn2ZWlu99+eRTVywSueTkEnjGErgs4szHVTd0udKpDXpbIq
-         5Uqw==
-X-Gm-Message-State: AO0yUKW6qNZ4yIC3RMqFLcYVE97e+3QSwIl3LU+DY6eAFYuLyNmQwoYZ
-        NppEy5KK7TQbKBSNCJG3kPMqee9mba++dVyb5pq5rw==
-X-Google-Smtp-Source: AK7set/xG/fW0zYQg+pZoFZLwPiwJfXn0Br3o2PaJdcb7CRH0wHWdqz4zPq6AEPXf0UwzKpx5lRtJfSn22TcQpLtUMc=
-X-Received: by 2002:a05:6e02:130e:b0:315:3bc0:354 with SMTP id
- g14-20020a056e02130e00b003153bc00354mr740021ilr.1.1676682643043; Fri, 17 Feb
- 2023 17:10:43 -0800 (PST)
-MIME-Version: 1.0
-References: <20230218002819.1486479-1-jthoughton@google.com> <20230218002819.1486479-5-jthoughton@google.com>
-In-Reply-To: <20230218002819.1486479-5-jthoughton@google.com>
-From:   Mina Almasry <almasrymina@google.com>
-Date:   Fri, 17 Feb 2023 17:10:31 -0800
-Message-ID: <CAHS8izOoc=XPGiDZ0DgAcFPcnjZeZTiXXyZ5aNT=hgNhH0phRg@mail.gmail.com>
-Subject: Re: [PATCH v2 04/46] hugetlb: only adjust address ranges when VMAs
- want PMD sharing
-To:     James Houghton <jthoughton@google.com>
-Cc:     Mike Kravetz <mike.kravetz@oracle.com>,
-        Muchun Song <songmuchun@bytedance.com>,
-        Peter Xu <peterx@redhat.com>,
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=wr2zCQ1Tc928nsK2G1LdnDMg6afLnDzp3aXmHYm4R0Y=;
+        b=5nNheGrDnbofOj/EA5pyXQam0gyZRLQ9VfT4H4yBTzjjgtW4zijdZYWkOxi8LAw3oa
+         bkjtnz7m5HZ1Ri4FAfH3rhpXkX6VfvRyPsDI36OaaA8/3QeBBp405QiPS6mc+sZFxdqu
+         0U9GCY1r1qJo5OQjfryF2ydfLzlgDg8se6G/PanNIS+YBLsffQUIqpoEhXdBKKs0mLFs
+         mcks3yeUZU2HDJfbLEpmUTA0KjPVSvCDr8iiueiyJUtCj4vlIxHYNGc+cICOwgpnRYh0
+         n15qhPQeKmWDiOT3s9Q4Oot7/CyhP7J1TmvLp9UuTzLLTeBG5aMaIu0wp7kv67TEOCsk
+         TdbQ==
+X-Gm-Message-State: AO0yUKV1rZ2X+W5fnsMLgN38TuVikegW4Fz810bUeTwWPEB/VjsieHOo
+        t1c0WOMn+dx4JOJuPRi9hdDwUgE/VS2qa9D9
+X-Google-Smtp-Source: AK7set9mecnmhN9lQs+1mh2KjpWEkvGt+HvEwPAWLjRIdx2QXia4RXM4X8Haemgi+/3jWKRyYbSkRg==
+X-Received: by 2002:ac8:5a41:0:b0:3b9:b450:61f6 with SMTP id o1-20020ac85a41000000b003b9b45061f6mr5934166qta.62.1676682783430;
+        Fri, 17 Feb 2023 17:13:03 -0800 (PST)
+Received: from localhost.localdomain ([37.218.244.251])
+        by smtp.gmail.com with ESMTPSA id q13-20020a05620a024d00b006f9ddaaf01esm4268119qkn.102.2023.02.17.17.13.01
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 17 Feb 2023 17:13:02 -0800 (PST)
+From:   Glenn Washburn <development@efficientek.com>
+To:     Jan Kiszka <jan.kiszka@siemens.com>,
+        Kieran Bingham <kbingham@kernel.org>
+Cc:     linux-kernel@vger.kernel.org,
         Andrew Morton <akpm@linux-foundation.org>,
-        David Hildenbrand <david@redhat.com>,
-        David Rientjes <rientjes@google.com>,
-        Axel Rasmussen <axelrasmussen@google.com>,
-        "Zach O'Keefe" <zokeefe@google.com>,
-        Manish Mishra <manish.mishra@nutanix.com>,
-        Naoya Horiguchi <naoya.horiguchi@nec.com>,
-        "Dr . David Alan Gilbert" <dgilbert@redhat.com>,
-        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Baolin Wang <baolin.wang@linux.alibaba.com>,
-        Miaohe Lin <linmiaohe@huawei.com>,
-        Yang Shi <shy828301@gmail.com>,
-        Frank van der Linden <fvdl@google.com>,
-        Jiaqi Yan <jiaqiyan@google.com>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        Glenn Washburn <development@efficientek.com>,
+        linux-um <linux-um@lists.infradead.org>,
+        Richard Weinberger <richard@nod.at>,
+        Johannes Berg <johannes@sipsolutions.net>,
+        Anton Ivanov <anton.ivanov@kot-begemot.co.uk>
+Subject: [PATCH v2 0/2] GDB: Support getting current task struct in UML
+Date:   Fri, 17 Feb 2023 19:11:52 -0600
+Message-Id: <cover.1676532759.git.development@efficientek.com>
+X-Mailer: git-send-email 2.34.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -88,78 +74,67 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Feb 17, 2023 at 4:28=E2=80=AFPM James Houghton <jthoughton@google.c=
-om> wrote:
->
-> Currently this check is overly aggressive. For some userfaultfd VMAs,
-> VMA sharing is disabled, yet we still widen the address range, which is
-> used for flushing TLBs and sending MMU notifiers.
->
-> This is done now, as HGM VMAs also have sharing disabled, yet would
-> still have flush ranges adjusted. Overaggressively flushing TLBs and
-> triggering MMU notifiers is particularly harmful with lots of
-> high-granularity operations.
->
-> Acked-by: Peter Xu <peterx@redhat.com>
-> Reviewed-by: Mike Kravetz <mike.kravetz@oracle.com>
-> Signed-off-by: James Houghton <jthoughton@google.com>
+Added suggestions from Jan.
 
-Acked-by: Mina Almasry <almasrymina@google.com>
+Glenn
 
->
-> diff --git a/mm/hugetlb.c b/mm/hugetlb.c
-> index 540cdf9570d3..08004371cfed 100644
-> --- a/mm/hugetlb.c
-> +++ b/mm/hugetlb.c
-> @@ -6999,22 +6999,31 @@ static unsigned long page_table_shareable(struct =
-vm_area_struct *svma,
->         return saddr;
->  }
->
-> -bool want_pmd_share(struct vm_area_struct *vma, unsigned long addr)
-> +static bool pmd_sharing_possible(struct vm_area_struct *vma)
->  {
-> -       unsigned long start =3D addr & PUD_MASK;
-> -       unsigned long end =3D start + PUD_SIZE;
-> -
->  #ifdef CONFIG_USERFAULTFD
->         if (uffd_disable_huge_pmd_share(vma))
->                 return false;
->  #endif
->         /*
-> -        * check on proper vm_flags and page table alignment
-> +        * Only shared VMAs can share PMDs.
->          */
->         if (!(vma->vm_flags & VM_MAYSHARE))
->                 return false;
->         if (!vma->vm_private_data)      /* vma lock required for sharing =
-*/
->                 return false;
-> +       return true;
-> +}
-> +
-> +bool want_pmd_share(struct vm_area_struct *vma, unsigned long addr)
-> +{
-> +       unsigned long start =3D addr & PUD_MASK;
-> +       unsigned long end =3D start + PUD_SIZE;
-> +       /*
-> +        * check on proper vm_flags and page table alignment
-> +        */
-> +       if (!pmd_sharing_possible(vma))
-> +               return false;
->         if (!range_in_vma(vma, start, end))
->                 return false;
->         return true;
-> @@ -7035,7 +7044,7 @@ void adjust_range_if_pmd_sharing_possible(struct vm=
-_area_struct *vma,
->          * vma needs to span at least one aligned PUD size, and the range
->          * must be at least partially within in.
->          */
-> -       if (!(vma->vm_flags & VM_MAYSHARE) || !(v_end > v_start) ||
-> +       if (!pmd_sharing_possible(vma) || !(v_end > v_start) ||
->                 (*end <=3D v_start) || (*start >=3D v_end))
->                 return;
->
-> --
-> 2.39.2.637.g21b0678d19-goog
->
+Glenn Washburn (2):
+  scripts/gdb: Correct indentation in get_current_task
+  scripts/gdb: Support getting current task struct in UML
+
+ scripts/gdb/linux/cpus.py | 24 +++++++++++++++---------
+ 1 file changed, 15 insertions(+), 9 deletions(-)
+
+Range-diff against v1:
+1:  f33ebe524590 ! 1:  c5a916e094d9 scripts/gdb: Correct indentation in get_current_task
+    @@ Commit message
+     
+         There is an extra space in a couple blocks in get_current_task.
+         Though python does not care, let's make the spacing consistent.
+    +    Also, format better an if expression, removing unneeded parenthesis.
+     
+      ## scripts/gdb/linux/cpus.py ##
+     @@ scripts/gdb/linux/cpus.py: def get_current_task(cpu):
+    @@ scripts/gdb/linux/cpus.py: def get_current_task(cpu):
+     -             raise gdb.GdbError("Sorry, obtaining the current task is not allowed "
+     -                                "while running in userspace(EL0)")
+     +        current_task_addr = gdb.parse_and_eval("$SP_EL0")
+    -+        if((current_task_addr >> 63) != 0):
+    ++        if (current_task_addr >> 63) != 0:
+     +            current_task = current_task_addr.cast(task_ptr_type)
+     +            return current_task.dereference()
+     +        else:
+2:  8c3db2291f58 ! 2:  683d10e752cd scripts/gdb: Support getting current task struct in UML
+    @@ Commit message
+         A running x86 UML kernel reports with architecture "i386:x86-64" as
+         it is a sub-architecture. However, a difference with bare-metal x86
+         kernels is in how it manages tasks and the current task struct. To
+    -    identify that the inferior is a UML kernel and not bare-metal, the
+    -    symbol "uml_kmalloc" is checked for. If it exists, then do the UML
+    -    specific way of getting the current task struct.
+    +    identify that the inferior is a UML kernel and not bare-metal, check
+    +    for the existence of the UML specific symbol "cpu_tasks" which
+    +    contains the current task struct.
+     
+      ## scripts/gdb/linux/cpus.py ##
+     @@ scripts/gdb/linux/cpus.py: def get_current_task(cpu):
+    @@ scripts/gdb/linux/cpus.py: def get_current_task(cpu):
+          if utils.is_target_arch("x86"):
+     -        var_ptr = gdb.parse_and_eval("&current_task")
+     -        return per_cpu(var_ptr, cpu).dereference()
+    -+        if gdb.lookup_global_symbol("uml_kmalloc"):
+    ++        if gdb.lookup_global_symbol("cpu_tasks"):
+    ++            # This is a UML kernel, which stores the current task
+    ++            # differently than other x86 sub architectures
+     +            var_ptr = gdb.parse_and_eval("(struct task_struct *)cpu_tasks[0].task")
+     +            return var_ptr.dereference()
+     +        else:
+    @@ scripts/gdb/linux/cpus.py: def get_current_task(cpu):
+     +            return per_cpu(var_ptr, cpu).dereference()
+          elif utils.is_target_arch("aarch64"):
+              current_task_addr = gdb.parse_and_eval("$SP_EL0")
+    -         if((current_task_addr >> 63) != 0):
+    +         if (current_task_addr >> 63) != 0:
+-- 
+2.30.2
+
