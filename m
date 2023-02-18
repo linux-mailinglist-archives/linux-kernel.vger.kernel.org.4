@@ -2,114 +2,163 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 11E4769B967
-	for <lists+linux-kernel@lfdr.de>; Sat, 18 Feb 2023 11:29:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 11E2C69B979
+	for <lists+linux-kernel@lfdr.de>; Sat, 18 Feb 2023 11:44:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229541AbjBRK3d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 18 Feb 2023 05:29:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36542 "EHLO
+        id S229907AbjBRKoH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 18 Feb 2023 05:44:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40062 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229476AbjBRK3b (ORCPT
+        with ESMTP id S229795AbjBRKoD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 18 Feb 2023 05:29:31 -0500
-Received: from out1-smtp.messagingengine.com (out1-smtp.messagingengine.com [66.111.4.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A12491ADFA;
-        Sat, 18 Feb 2023 02:29:30 -0800 (PST)
-Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
-        by mailout.nyi.internal (Postfix) with ESMTP id 9955F5C00DE;
-        Sat, 18 Feb 2023 05:29:27 -0500 (EST)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute2.internal (MEProxy); Sat, 18 Feb 2023 05:29:27 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kroah.com; h=cc
-        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm1; t=1676716167; x=1676802567; bh=z7pNc7FSy/
-        sM7V64UiBjw0RNRZzP3TFT4yJbRpLVQck=; b=ao4LI3p2TocAOyfJ+ZzxJbHYkM
-        ldqO3P9ax0qEUturXm+56E5YhpddYVN0EP6amx0ZbTJeRJsg2DK+EE7YY1hpXxyf
-        4UQdB+RPW8+Xpw8KJuQbqWKm2NAHJtmLarm4V0sZVXtZudY7omz+tjumusV8bC3C
-        Qfu6aEo8Q/Tzl2b8QjsfljkrpiIXn3oYSh2E5D6Kk8qxBmajSWu+g//ZWgdnPi9K
-        o82uarqfFFnJvQiaBFnBpNI1BWw6tzM5B5Df1BMperySMK49F0cfs44ab3tg80VO
-        AprBWCo88VC4IfU8ltGAoWenc8pM1rIiplMFP3xO9a66Xt+81FADCHK7UWuQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm1; t=1676716167; x=1676802567; bh=z7pNc7FSy/sM7V64UiBjw0RNRZzP
-        3TFT4yJbRpLVQck=; b=cXuL0PJ5MID+F9HeeTemXNzUdzOIEIfJbB7hCGAOH0XP
-        tKiqpHlU+3lpb7ZvzhS/9CVlNEKsAk0w1WmwbBm5h1sdSLUd8USBaw1BimnJ+2Ip
-        hjqndKWPlRUr3DypLt6zgRlXSrvQYaUWuDqZ5NkgXMowTC1rO+Q/dRCifpGgGOQH
-        UI0Q6MnIelED/7hj06uVk5bYN0rmKl51sZYFEx4PRwsiGkkKrFpWlavvfAx7yQGz
-        lde27GUVXdPlEJYgqVEvVvq6VWWDzgcTaIWhHJ9iHXIE/waCelwzcX0wHcEb+PC5
-        e6ansvlaPgly7VfIhogOjsEl8v21GWezlLnsR0Opmw==
-X-ME-Sender: <xms:h6jwY2LR2APb2A-9U6wmfw5-16s1TQI80iXFjFiDTY-P4GzhQ_hKUA>
-    <xme:h6jwY-JOvbmDRPtOyWCCeRZ7hCW-uHUIr_N-nQUR_Xae9zLosSjWIdYSywcEj6n0W
-    ZO3LFzK9uoqNg>
-X-ME-Received: <xmr:h6jwY2v6Mdb1j5kKMeKqGE5vqTQIPlT5O-jYmHmTX8dSF3-mN5QToJIu-IAWk3TgkhOaVmL4dklmOP50Pr57CxXfdCDKs8Lnhzci-w>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrudejuddgudehucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucenucfjughrpeffhffvvefukfhfgggtuggjsehttd
-    ertddttddvnecuhfhrohhmpefirhgvghcumffjuceoghhrvghgsehkrhhorghhrdgtohhm
-    qeenucggtffrrghtthgvrhhnpeegheeuhefgtdeluddtleekfeegjeetgeeikeehfeduie
-    ffvddufeefleevtddtvdenucffohhmrghinhepkhgvrhhnvghlrdhorhhgnecuvehluhhs
-    thgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepghhrvghgsehkrhhorg
-    hhrdgtohhm
-X-ME-Proxy: <xmx:h6jwY7YtywMIk9wIII4a3QS8l499Dwrwfj0WUOk9AsC7pCSGG7aOHA>
-    <xmx:h6jwY9a-n1yxCweiBxs8tasIwThIU9_rvoqT31u0iUmqfR0xuYQNUg>
-    <xmx:h6jwY3Ahp_eyBxmw0cKjMkU5RklBvyozwpG1Jk90eOSu5F6-JLFK5A>
-    <xmx:h6jwYxRobf6pQx3gx4e7KouGuwRfT7EOmh04-QvgI0LhdB77IrhL5g>
-Feedback-ID: i787e41f1:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sat,
- 18 Feb 2023 05:29:26 -0500 (EST)
-Date:   Sat, 18 Feb 2023 11:29:24 +0100
-From:   Greg KH <greg@kroah.com>
-To:     Andrew Paniakin <apanyaki@amazon.com>
-Cc:     stable@vger.kernel.org, luizcap@amazon.com, keescook@chromium.org,
-        shuah@kernel.org, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [5.15] Please apply 'selftest/lkdtm: Skip stack-entropy test if
- lkdtm is not available'
-Message-ID: <Y/CohO02rXPY4hzD@kroah.com>
-References: <20230217221705.2525177-1-apanyaki@amazon.com>
+        Sat, 18 Feb 2023 05:44:03 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 097A013DC7
+        for <linux-kernel@vger.kernel.org>; Sat, 18 Feb 2023 02:43:16 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1676716996;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=LQPC+W/GGOaiPhupQkL+fioSZnAdQgjaIafObYt5jdo=;
+        b=Q9GxZReFRAUbv5BnjhfvczSmWJZtwGKHzsoH1jB7u+pj5dNc/8fmKzzQNSHojhzIed23Ot
+        iEuYOJMMwfKyZNASEm+rGvLsHDgZHO/GjhG/mLU/I5rnMPkXusCaMB+gQQy7woB2SIiUYT
+        SIKTHaqtsKmB+QhT+0cwtnIeSoOVpJM=
+Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com
+ [209.85.208.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-215-bBmKl5fnPYKqwhtpJNiElQ-1; Sat, 18 Feb 2023 05:43:13 -0500
+X-MC-Unique: bBmKl5fnPYKqwhtpJNiElQ-1
+Received: by mail-ed1-f71.google.com with SMTP id g19-20020a056402091300b004acbf564d75so271347edz.5
+        for <linux-kernel@vger.kernel.org>; Sat, 18 Feb 2023 02:43:13 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=LQPC+W/GGOaiPhupQkL+fioSZnAdQgjaIafObYt5jdo=;
+        b=GHyi98qUFsD2vAJCtCRKdNDXrGPDAlZ5Xj5VMp3xDSybMwIycTYm6PW2qcNj/b2ks/
+         2vkY+EmnJTsHFxyqS1gGx7xiXx/EjS+hZ9gDy+/Umulmx/PslKcm+5v3ac0Ll7WWXyfA
+         Xztztn7uvEs64hi76EHhMZr0km9P67ICVE3AcgNX391U130pXjHYdva8OuHlyDinqeCz
+         jxX7Mympd91Puvcmb+aXF3AVLtgG5/c0wxDWttLAjJD6DoN+8UfCAXxFNEzXYCpmHOt4
+         7GofYHMYAny9YvJbvfSYYndmM6rdwtJu/RBbapzQ6UQ7ymxd2UdLkmU+Q8XWmvbX9Ypu
+         fHwQ==
+X-Gm-Message-State: AO0yUKWUDchIS87MdARpzodFfLdCDP9GIDz+fWI3mpj2vh7QZREl3WgA
+        0haiTq7h+YZwCniBEetqG1iOHMf5KlQC4umKYM8jWVmikv2YkQJ+VzuVKixlRXbZEhBCWYoF7BJ
+        xDTRVml4iBwn4nJV6jVc0vj8M
+X-Received: by 2002:a17:906:9f25:b0:8b1:2eef:154c with SMTP id fy37-20020a1709069f2500b008b12eef154cmr7620894ejc.0.1676716992929;
+        Sat, 18 Feb 2023 02:43:12 -0800 (PST)
+X-Google-Smtp-Source: AK7set+hLeFT07Usv4u1EkM1gYgFZeoXCyWmGNpNmdKLWF/8jBaMBmtOx0UaGDU283iz13s90G3Q/w==
+X-Received: by 2002:a17:906:9f25:b0:8b1:2eef:154c with SMTP id fy37-20020a1709069f2500b008b12eef154cmr7620882ejc.0.1676716992636;
+        Sat, 18 Feb 2023 02:43:12 -0800 (PST)
+Received: from ?IPV6:2001:1c00:c32:7800:5bfa:a036:83f0:f9ec? (2001-1c00-0c32-7800-5bfa-a036-83f0-f9ec.cable.dynamic.v6.ziggo.nl. [2001:1c00:c32:7800:5bfa:a036:83f0:f9ec])
+        by smtp.gmail.com with ESMTPSA id z7-20020a170906714700b008b17b0f5d07sm2390553ejj.217.2023.02.18.02.43.11
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 18 Feb 2023 02:43:11 -0800 (PST)
+Message-ID: <eee025e7-be05-92cb-854c-ece82eb23552@redhat.com>
+Date:   Sat, 18 Feb 2023 11:43:11 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230217221705.2525177-1-apanyaki@amazon.com>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH 1/2] platform/x86: dell-ddv: Fix cache invalidation on
+ resume
+To:     Armin Wolf <W_Armin@gmx.de>, markgross@kernel.org
+Cc:     jdelvare@suse.com, linux@roeck-us.net,
+        platform-driver-x86@vger.kernel.org, linux-hwmon@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20230213182215.53703-1-W_Armin@gmx.de>
+Content-Language: en-US, nl
+From:   Hans de Goede <hdegoede@redhat.com>
+In-Reply-To: <20230213182215.53703-1-W_Armin@gmx.de>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Feb 17, 2023 at 02:17:05PM -0800, Andrew Paniakin wrote:
-> commit 90091c367e74d5b58d9ebe979cc363f7468f58d3 upstream.
-> 
-> This patch fixes the stack-entropy.sh test to exit gracefully when the LKDTM is
-> not available. Test will hang otherwise as reported in [1].
-> 
-> Applicability of this fix to other LTS kernels:
-> - 4.14: No lkdtm selftest
-> - 4.19: No lkdtm selftest
-> - 5.4:  No lkdtm selftests
-> - 5.10: Inital selftest version introduced in 46d1a0f03d661 ("selftests/lkdtm:
->   Add tests for LKDTM targets") is a single script which has the LKDTM
->   availability check
-> - 6.1: Fix applied
-> 
-> This patch applies cleanly to stable-5.15 tree. Updated test was executed in
-> Qemu VM with different kernels:
-> - CONFIG_LKDTM not enabled. Test finished with status SKIP.
-> - CONFIG_LKDTM enabled. Test failed (but not hanged) with error 'Stack entropy
->   is low'.
-> - CONFIG_LKDTM enabled and randomize_kstack_offset=on boot argument provided.
->   Test succeed.
-> 
-> [1] https://lore.kernel.org/lkml/2836f48a-d4e2-7f00-f06c-9f556fbd6332@linuxfoundation.org
+Hi Armin,
 
-Now queued up, thanks.
+On 2/13/23 19:22, Armin Wolf wrote:
+> If one or both sensor buffers could not be initialized, either
+> due to missing hardware support or due to some error during probing,
+> the resume handler will encounter undefined behaviour when
+> attempting to lock buffers then protected by an uninitialized or
+> destroyed mutex.
+> Fix this by introducing a "active" flag which is set during probe,
+> and only invalidate buffers which where flaged as "active".
+> 
+> Tested on a Dell Inspiron 3505.
+> 
+> Fixes: 3b7eeff93d29 ("platform/x86: dell-ddv: Add hwmon support")
+> Signed-off-by: Armin Wolf <W_Armin@gmx.de>
 
-greg k-h
+Can you move the "if (...active)" check to inside
+dell_wmi_ddv_hwmon_cache_invalidate() please ?
+
+Otherwise this patch as well as patch 2/2 look good to me.
+
+Regards,
+
+Hans
+
+
+
+> ---
+>  drivers/platform/x86/dell/dell-wmi-ddv.c | 12 +++++++++---
+>  1 file changed, 9 insertions(+), 3 deletions(-)
+> 
+> diff --git a/drivers/platform/x86/dell/dell-wmi-ddv.c b/drivers/platform/x86/dell/dell-wmi-ddv.c
+> index d547c9d09725..58f996b3b374 100644
+> --- a/drivers/platform/x86/dell/dell-wmi-ddv.c
+> +++ b/drivers/platform/x86/dell/dell-wmi-ddv.c
+> @@ -96,6 +96,7 @@ struct combined_chip_info {
+>  };
+> 
+>  struct dell_wmi_ddv_sensors {
+> +	bool active;
+>  	struct mutex lock;	/* protect caching */
+>  	unsigned long timestamp;
+>  	union acpi_object *obj;
+> @@ -530,6 +531,7 @@ static void dell_wmi_ddv_hwmon_cache_destroy(void *data)
+>  {
+>  	struct dell_wmi_ddv_sensors *sensors = data;
+> 
+> +	sensors->active = false;
+>  	mutex_destroy(&sensors->lock);
+>  	kfree(sensors->obj);
+>  }
+> @@ -549,6 +551,7 @@ static struct hwmon_channel_info *dell_wmi_ddv_channel_init(struct wmi_device *w
+>  		return ERR_PTR(ret);
+> 
+>  	mutex_init(&sensors->lock);
+> +	sensors->active = true;
+> 
+>  	ret = devm_add_action_or_reset(&wdev->dev, dell_wmi_ddv_hwmon_cache_destroy, sensors);
+>  	if (ret < 0)
+> @@ -852,9 +855,12 @@ static int dell_wmi_ddv_resume(struct device *dev)
+>  {
+>  	struct dell_wmi_ddv_data *data = dev_get_drvdata(dev);
+> 
+> -	/* Force re-reading of all sensors */
+> -	dell_wmi_ddv_hwmon_cache_invalidate(&data->fans);
+> -	dell_wmi_ddv_hwmon_cache_invalidate(&data->temps);
+> +	/* Force re-reading of all active sensors */
+> +	if (data->fans.active)
+> +		dell_wmi_ddv_hwmon_cache_invalidate(&data->fans);
+> +
+> +	if (data->temps.active)
+> +		dell_wmi_ddv_hwmon_cache_invalidate(&data->temps);
+> 
+>  	return 0;
+>  }
+> --
+> 2.30.2
+> 
+
