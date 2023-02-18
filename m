@@ -2,142 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 471F369BBE9
-	for <lists+linux-kernel@lfdr.de>; Sat, 18 Feb 2023 21:40:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0417369BBEC
+	for <lists+linux-kernel@lfdr.de>; Sat, 18 Feb 2023 21:50:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229641AbjBRUkx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 18 Feb 2023 15:40:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57240 "EHLO
+        id S229676AbjBRUt4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 18 Feb 2023 15:49:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59730 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229660AbjBRUku (ORCPT
+        with ESMTP id S229553AbjBRUty (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 18 Feb 2023 15:40:50 -0500
-Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 233D015552
-        for <linux-kernel@vger.kernel.org>; Sat, 18 Feb 2023 12:40:47 -0800 (PST)
-Received: by mail-lf1-x12b.google.com with SMTP id f6so1646492lfs.2
-        for <linux-kernel@vger.kernel.org>; Sat, 18 Feb 2023 12:40:47 -0800 (PST)
+        Sat, 18 Feb 2023 15:49:54 -0500
+Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5256C14200;
+        Sat, 18 Feb 2023 12:49:53 -0800 (PST)
+Received: by mail-wm1-x32f.google.com with SMTP id o28-20020a05600c511c00b003dc4050c94aso1020890wms.4;
+        Sat, 18 Feb 2023 12:49:53 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=/9yjE3QCCJiFeu3KJrY/us9LWq5B0xDXPEFfZAbBjes=;
-        b=KHJZO0rnrAUZZS6r1uhqxXpozu3AvCyL7ufaN1/xRERjundfnIwRvtcbKwZmm9nGd3
-         w/kcXKCW1tlRE6l3P4+LOLyVhZSJJGWVtKqDp0G5I3zlzrzX0SKQD93nn0oMh6265vTC
-         sqUafVt2ypBqWrY4wtPE30sjF4Rj0yLtHS6ryTrsDVe9otxcIlsV9PW2IS+//eAVnv54
-         ITBBXA2ZZy/BiRQ1JPV50h4a8/DQ9kfynKbXQj3spsSnEOw067BIbYfGXcNzWXupCf3K
-         eF5otShLJIMlI4wjTsTm6ZkFMWpgDsy29gYUZ1DHehrZgfv4WlQuTFidvNi9329BH86z
-         5N8w==
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=VQu4KERsOXR2QRxIcOaaW/fj82rXSW/v9N9/yRjlFqM=;
+        b=USzv0g1pjUOFzXXkMOK1jOkcff0+ryQNvrLN8CLjUKBypzFK5nkJVUMgedgUCxRqvo
+         fMcDr5Ej0GNyP3N8DKmPNDVwHWE7f4s0JZ0PRYLB9bVvJvIgczvL9Lx+o3FImvcJR4Pg
+         9HahUDTOKk3zwhLC8EAyJCwwMD/ynPEkjSZPfcaCxyY207eEY6t1HdUmIvf3uYFRl8lI
+         X1o0Ovred3tMhKptrQu3mfqxyAgk7MZYtrRBjQ7b+YzhUQog1Q3DVbbQBh+c8Q3Gt+st
+         4WpjrAlgHY4l9uRVZT027Mk265yCNXnJ+7QS5zuZTmztfRm9chXzRksYVB2yJU9EX65W
+         eRpw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=/9yjE3QCCJiFeu3KJrY/us9LWq5B0xDXPEFfZAbBjes=;
-        b=Z4po3yGYNUDDTfH+EtlxfdPLGUNtqr6y9NLCmEg1zqCMWJ6bKWQO/t+9wxniyj4Ixo
-         sQzRlqzGYyywFy+83NugxkfZVmL+KorpCaHFzZzMXo+gf4aDiNM8QUsciRoCByrgb98y
-         KiP1MHMpQaHRuuT5kn4TTll6wmWVK7btlPKgpnv3BojYfyvSuuh07I/14aSmda8xZXHK
-         PDzGWY6CVIhfD3V0yE70t5wps94i2o3h/zCDcU89Vh6uhfZf0BRr0USW2QHXDYhcg6vV
-         pyNxI3GDJE5xfYSf31kM8oBOD7MMOFvIs78Rk6OH4qjKfICmpi4UcK15P1adB/Fs6kHJ
-         zlOQ==
-X-Gm-Message-State: AO0yUKVFaoMzlIvUboUklMod8nvE3H7Tp0j97AucWsUqGcJlP54MjXJL
-        2HVvquUECyFxX1eWhoocCbGbCA==
-X-Google-Smtp-Source: AK7set9sgSvx1S75m5oSL7RJvWAtaTcMk+G9MF08BmwzRwqYneDqLgU3tw/H270GjDJi8A6BrbUA5A==
-X-Received: by 2002:ac2:5305:0:b0:4dc:807a:d13e with SMTP id c5-20020ac25305000000b004dc807ad13emr61998lfh.55.1676752845336;
-        Sat, 18 Feb 2023 12:40:45 -0800 (PST)
-Received: from [192.168.1.101] (abxh184.neoplus.adsl.tpnet.pl. [83.9.1.184])
-        by smtp.gmail.com with ESMTPSA id c25-20020ac244b9000000b004d85789cef1sm1067946lfm.49.2023.02.18.12.40.44
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 18 Feb 2023 12:40:44 -0800 (PST)
-Message-ID: <2a7a43f1-a13d-f094-5167-de74d5092d91@linaro.org>
-Date:   Sat, 18 Feb 2023 21:40:43 +0100
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=VQu4KERsOXR2QRxIcOaaW/fj82rXSW/v9N9/yRjlFqM=;
+        b=EqYOtYa8chZJDlRqBAkBcggCcKNQvBivysGMq3L4OrdJe0yzA04KPE7iO1LnCyV+90
+         F6CHhT6bNzx/UXDiU30ZmYMFuoSCzTXi0uJ9Cs6QwG7gYUvp9zWlLOer6+6fM/3Jd6CR
+         nllXCbPT2XhzLi5hy9z4uPOxSnNUDO9r3MDsJ1A4CmegFaLVzC18F+B71WgKwL+G3IwI
+         hs+iW/mA1cF65cRr3dIYispzLQGc4SrhZZTz2A16j7bvCNb4KNQelWx1a2sH5Pp3YlOA
+         QdyPfgIohd3gQpAuUzPWu1ZqBDfZ5WSJm9PtXk06BjGRoWIFKP2w8FFK9WZIq4pqwTaF
+         eOUA==
+X-Gm-Message-State: AO0yUKXDF4b4TFRdzLK03guD62JcD/qR9d7TYmHtcfJrBbDPW/jL4xmA
+        dCk7LQI19gJGunn42VvcJNH41S0Y/9k=
+X-Google-Smtp-Source: AK7set+jFlwMImrrgKk+XmaHhYffzfbTL0fFauxmwVeEwtuQeWUCaVF+QVHhoMWrYD5E8UbF/XfGhQ==
+X-Received: by 2002:a05:600c:4aa8:b0:3e2:a9e:4eaa with SMTP id b40-20020a05600c4aa800b003e20a9e4eaamr7663973wmp.35.1676753391687;
+        Sat, 18 Feb 2023 12:49:51 -0800 (PST)
+Received: from localhost (94.197.47.81.threembb.co.uk. [94.197.47.81])
+        by smtp.gmail.com with ESMTPSA id az17-20020a05600c601100b003dd1bd0b915sm6075114wmb.22.2023.02.18.12.49.51
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 18 Feb 2023 12:49:51 -0800 (PST)
+From:   Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
+To:     sre@kernel.org, wens@csie.org
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v1 0/5] AXP20x USB power supply remove use of variant IDs
+Date:   Sat, 18 Feb 2023 20:49:41 +0000
+Message-Id: <20230218204946.106316-1-aidanmacdonald.0x0@gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH 4/4] cpufreq: qcom-nvmem: make qcom_cpufreq_get_msm_id()
- return the SoC ID
-To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Cc:     Robert Marko <robimarko@gmail.com>, ilia.lin@kernel.org,
-        agross@kernel.org, andersson@kernel.org, rafael@kernel.org,
-        viresh.kumar@linaro.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-arm-msm@vger.kernel.org
-References: <20230121112947.53433-1-robimarko@gmail.com>
- <20230121112947.53433-4-robimarko@gmail.com>
- <d71e8a18-8a09-c722-d9dd-b2d48615828f@linaro.org>
- <CAA8EJppwNVtUjB7fUZSCrZ88Ssbhmc4HD6oA2nV0uEx+vHBXUw@mail.gmail.com>
-Content-Language: en-US
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <CAA8EJppwNVtUjB7fUZSCrZ88Ssbhmc4HD6oA2nV0uEx+vHBXUw@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+The goal of this series is to remove the driver's dependence on
+variant IDs, because they are hard to maintain and make it more
+difficult to add support for new chip variants.
 
+Regmap fields are used to replace ID checks and handle bits/fields
+that may differ (or not exist at all) on certain variants.
 
-On 18.02.2023 21:36, Dmitry Baryshkov wrote:
-> On Sat, 18 Feb 2023 at 16:43, Konrad Dybcio <konrad.dybcio@linaro.org> wrote:
->>
->>
->>
->> On 21.01.2023 12:29, Robert Marko wrote:
->>> Currently, qcom_cpufreq_get_msm_id() does not simply return the SoC ID
->>> after getting it via SMEM call but instead uses an enum to encode the
->>> matched SMEM ID to 2 variants of MSM8996 which are then used in
->>> qcom_cpufreq_kryo_name_version() to set the supported version.
->>>
->>> This prevents qcom_cpufreq_get_msm_id() from being universal and its doing
->>> more than its name suggests, so lets make it just return the SoC ID
->>> directly which allows matching directly on the SoC ID and removes the need
->>> for msm8996_version enum which simplifies the driver.
->>> It also allows reusing the qcom_cpufreq_get_msm_id() for new SoC-s.
->>>
->>> Signed-off-by: Robert Marko <robimarko@gmail.com>
->>> ---
->>>  drivers/cpufreq/qcom-cpufreq-nvmem.c | 44 ++++++++--------------------
->>>  1 file changed, 12 insertions(+), 32 deletions(-)
->>>
->>> diff --git a/drivers/cpufreq/qcom-cpufreq-nvmem.c b/drivers/cpufreq/qcom-cpufreq-nvmem.c
->>> index da55d2e1925a..9deaf9521d6d 100644
->>> --- a/drivers/cpufreq/qcom-cpufreq-nvmem.c
->>> +++ b/drivers/cpufreq/qcom-cpufreq-nvmem.c
->>> @@ -32,12 +32,6 @@
->>>
->>>  #include <dt-bindings/arm/qcom,ids.h>
->>>
->>> -enum _msm8996_version {
->>> -     MSM8996_V3,
->>> -     MSM8996_SG,
->>> -     NUM_OF_MSM8996_VERSIONS,
->>> -};
->>> -
->>>  struct qcom_cpufreq_drv;
->>>
->>>  struct qcom_cpufreq_match_data {
->>> @@ -134,30 +128,16 @@ static void get_krait_bin_format_b(struct device *cpu_dev,
->>>       dev_dbg(cpu_dev, "PVS version: %d\n", *pvs_ver);
->>>  }
->>>
->>> -static enum _msm8996_version qcom_cpufreq_get_msm_id(void)
->>> +static int qcom_cpufreq_get_msm_id(void)
->> This should be u32 as info->id is __le32
->>
->> And please export this function from socinfo, it'll come in
->> useful for other drivers!
-> 
-> How? In my opinion newer drivers should use compat strings rather than
-> depending on the SoC ID. If we were not bound with the compatibility
-> for msm8996pro device trees already using higher bits, we could have
-> dropped this part too.
-Adreno speedbin-to-fuse mapping could use SoC detection..
+Aidan MacDonald (5):
+  power: supply: axp20x_usb_power: Simplify USB current limit handling
+  power: supply: axp20x_usb_power: Use regmap fields for VBUS monitor
+    feature
+  power: supply: axp20x_usb_power: Use regmap fields for USB BC feature
+  power: supply: axp20x_usb_power: Use regmap field for VBUS disabling
+  power: supply: axp20x_usb_power: Remove variant IDs from VBUS polling
+    check
 
-Konrad
-> 
+ drivers/power/supply/axp20x_usb_power.c | 285 +++++++++++-------------
+ 1 file changed, 130 insertions(+), 155 deletions(-)
+
+-- 
+2.39.2
+
