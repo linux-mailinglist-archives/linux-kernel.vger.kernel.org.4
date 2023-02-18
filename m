@@ -2,126 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1455369B9E8
-	for <lists+linux-kernel@lfdr.de>; Sat, 18 Feb 2023 13:05:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F7BE69B9EC
+	for <lists+linux-kernel@lfdr.de>; Sat, 18 Feb 2023 13:10:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229521AbjBRMFb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 18 Feb 2023 07:05:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46866 "EHLO
+        id S229580AbjBRMKp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 18 Feb 2023 07:10:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48804 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229441AbjBRMFa (ORCPT
+        with ESMTP id S229441AbjBRMKo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 18 Feb 2023 07:05:30 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7729319690;
-        Sat, 18 Feb 2023 04:05:29 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0FE7F60B8B;
-        Sat, 18 Feb 2023 12:05:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3F4E8C433EF;
-        Sat, 18 Feb 2023 12:05:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1676721928;
-        bh=TmAb1GafN4gpzoQhxhlwDTfphssUg/5r9Sqy94z7ifo=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=unQDxG2swsiziDdZOR3cHzU1vK66DWAJWytXvML35cY72loxGCGXTOS6lBPpYXUm9
-         UgK1Auf5GxywMv1xtdvTkYR9/w3q6M4hhl5PY8iJLVn7pOOQd8ABW4y2YBnkCvaAu0
-         i3LQkLkwR5K5jn8JyETMX5tqfx7K7+Cbhkfi/yrTimB66aR5OHUxbd9WJde8ki0ubj
-         05Wch5vEKcCOm6VxoL/6msH8MdYvRiJJMRRLE4Y06Os2yY+O37KEsksZL4x4c6U5yh
-         b1sUvuRu0XX8X3D9oJzjBaWrYmGpdMr5JrvwtQvA5eGY52dvf09PdxCZ6wtW19Qw0x
-         iv9ga7MWTUyIw==
-Received: by pali.im (Postfix)
-        id 8754D71F; Sat, 18 Feb 2023 13:05:25 +0100 (CET)
-Date:   Sat, 18 Feb 2023 13:05:25 +0100
-From:   Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>
-To:     Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Sebastian Reichel <sre@kernel.org>
-Cc:     linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org
-Subject: Re: [PATCH v4 3/3] powerpc: dts: turris1x.dts: Set lower priority
- for CPLD syscon-reboot
-Message-ID: <20230218120525.7zplk5zdg5qmkmaz@pali>
-References: <20220820102925.29476-1-pali@kernel.org>
- <20221226114513.4569-1-pali@kernel.org>
- <20221226114513.4569-3-pali@kernel.org>
- <20230209001021.oitnv6x7ilwvy4it@pali>
+        Sat, 18 Feb 2023 07:10:44 -0500
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D852B196AA;
+        Sat, 18 Feb 2023 04:10:41 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1676722241; x=1708258241;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=XgK8JESFaNh4bVZiSwCnZwjVSOv0FE9HQgF5rfAuGLI=;
+  b=IiN70xBb1c/3aqZlXubu84iKn9tVKF7Ki/QJwpo2tdsRAWkjccaRbWTb
+   utP5i6hwMW9Mcsam5sx67OUzQboIctwhvPcsw+luhCJC4ai99tA6HzAmg
+   /GDvaFpSImpIcvuM+M1jv51xdSit97UFnvxj7bLdLn2MkbU/YE/2eQqXy
+   ESVp+AvY9CbTwITZUGOBHqzaxvwDDaxYVRWAJJDNEJME5WFfvLkvU+dRX
+   joJn2iBNKsQGlprgoQjoeHJmU3RA3Cpn5wRUjZONS1eiLhQi04sZk2sfS
+   MkP6RmPZut3/7utO4e64MYoI2TDaX3hqnEgCfW4SYnOMOLaffieT1RL4E
+   Q==;
+X-IronPort-AV: E=Sophos;i="5.97,307,1669100400"; 
+   d="scan'208";a="201248346"
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa3.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 18 Feb 2023 05:10:40 -0700
+Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
+ chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.16; Sat, 18 Feb 2023 05:10:40 -0700
+Received: from localhost (10.10.115.15) by chn-vm-ex01.mchp-main.com
+ (10.10.85.143) with Microsoft SMTP Server id 15.1.2507.16 via Frontend
+ Transport; Sat, 18 Feb 2023 05:10:40 -0700
+Date:   Sat, 18 Feb 2023 13:10:39 +0100
+From:   Horatiu Vultur <horatiu.vultur@microchip.com>
+To:     Andrew Lunn <andrew@lunn.ch>
+CC:     <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <hkallweit1@gmail.com>, <linux@armlinux.org.uk>,
+        <davem@davemloft.net>, <edumazet@google.com>, <kuba@kernel.org>,
+        <pabeni@redhat.com>, <richardcochran@gmail.com>
+Subject: Re: [PATCH net-next] net: phy: micrel: Add support for PTP_PF_PEROUT
+ for lan8841
+Message-ID: <20230218121039.4kgejvhbi4ppkij6@soft-dev3-1>
+References: <20230217075213.2366042-1-horatiu.vultur@microchip.com>
+ <Y/Ah/MRYKdohtXZH@lunn.ch>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset="utf-8"
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230209001021.oitnv6x7ilwvy4it@pali>
-User-Agent: NeoMutt/20180716
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <Y/Ah/MRYKdohtXZH@lunn.ch>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thursday 09 February 2023 01:10:21 Pali Rohár wrote:
-> On Monday 26 December 2022 12:45:13 Pali Rohár wrote:
-> > Due to CPLD firmware bugs, set CPLD syscon-reboot priority level to 64
-> > (between rstcr and watchdog) to ensure that rstcr's global-utilities reset
-> > method which is preferred stay as default one, and to ensure that CPLD
-> > syscon-reboot is more preferred than watchdog reset method.
-> > 
-> > Fixes: 0531a4abd1c6 ("powerpc: dts: turris1x.dts: Add CPLD reboot node")
-> > Signed-off-by: Pali Rohár <pali@kernel.org>
+The 02/18/2023 01:55, Andrew Lunn wrote:
 > 
-> May I ask who can take this 3/3 patch? powersupply or powerpc tree?
+> > +static void lan8841_ptp_update_target(struct kszphy_ptp_priv *ptp_priv,
+> > +                                   const struct timespec64 *ts);
+> > +
+> 
+> Please avoid this. Move the code around so everything is in
+> order. Generally, i do such moves in an initial patch which only moves
+> code, making it easy to review.
 
-+ Christophe
+Thanks for the suggestion. I will update this in the next version.
 
-> > ---
-> >  arch/powerpc/boot/dts/turris1x.dts | 23 +++++++++++++++++++++++
-> >  1 file changed, 23 insertions(+)
-> > 
-> > diff --git a/arch/powerpc/boot/dts/turris1x.dts b/arch/powerpc/boot/dts/turris1x.dts
-> > index e9cda34a140e..c9b619f6ed5c 100644
-> > --- a/arch/powerpc/boot/dts/turris1x.dts
-> > +++ b/arch/powerpc/boot/dts/turris1x.dts
-> > @@ -367,11 +367,34 @@
-> >  			};
-> >  
-> >  			reboot@d {
-> > +				/*
-> > +				 * CPLD firmware which manages system reset and
-> > +				 * watchdog registers has bugs. It does not
-> > +				 * autoclear system reset register after change
-> > +				 * and watchdog ignores reset line on immediate
-> > +				 * succeeding reset cycle triggered by watchdog.
-> > +				 * These bugs have to be workarounded in U-Boot
-> > +				 * bootloader. So use system reset via syscon as
-> > +				 * a last resort because older U-Boot versions
-> > +				 * do not have workaround for watchdog.
-> > +				 *
-> > +				 * Reset method via rstcr's global-utilities
-> > +				 * (the preferred one) has priority level 128,
-> > +				 * watchdog has priority level 0 and default
-> > +				 * syscon-reboot priority level is 192.
-> > +				 *
-> > +				 * So define syscon-reboot with custom priority
-> > +				 * level 64 (between rstcr and watchdog) because
-> > +				 * rstcr should stay as default preferred reset
-> > +				 * method and reset via watchdog is more broken
-> > +				 * than system reset via syscon.
-> > +				 */
-> >  				compatible = "syscon-reboot";
-> >  				reg = <0x0d 0x01>;
-> >  				offset = <0x0d>;
-> >  				mask = <0x01>;
-> >  				value = <0x01>;
-> > +				priority = <64>;
-> >  			};
-> >  
-> >  			led-controller@13 {
-> > -- 
-> > 2.20.1
-> > 
+> 
+>       Andrew
+
+-- 
+/Horatiu
