@@ -2,57 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D5F869B8C1
-	for <lists+linux-kernel@lfdr.de>; Sat, 18 Feb 2023 09:33:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F5F169B8C2
+	for <lists+linux-kernel@lfdr.de>; Sat, 18 Feb 2023 09:33:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229820AbjBRIdL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 18 Feb 2023 03:33:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33182 "EHLO
+        id S229683AbjBRIdT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 18 Feb 2023 03:33:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33482 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229799AbjBRIdF (ORCPT
+        with ESMTP id S229536AbjBRIdJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 18 Feb 2023 03:33:05 -0500
-Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E061547432
-        for <linux-kernel@vger.kernel.org>; Sat, 18 Feb 2023 00:33:04 -0800 (PST)
-Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-5367836c7e1so5418237b3.13
-        for <linux-kernel@vger.kernel.org>; Sat, 18 Feb 2023 00:33:04 -0800 (PST)
+        Sat, 18 Feb 2023 03:33:09 -0500
+Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 832A1498A4
+        for <linux-kernel@vger.kernel.org>; Sat, 18 Feb 2023 00:33:07 -0800 (PST)
+Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-5365936facfso28247027b3.4
+        for <linux-kernel@vger.kernel.org>; Sat, 18 Feb 2023 00:33:07 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=cc:to:from:subject:references:mime-version:message-id:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=+eMvh/5RpB1yBDTApxHgHfIOTnGW3OoKdzhdswhPdc8=;
-        b=IBwqlFD+FCaDqWg/idHuaAxR0CYrFVJMbtxMjDSvmEkNhayk8QbmlvNJQNqxg+alsM
-         ZvC/mNmTjTx1Rbw1rctbABzwis4tAMyEDJwLoZrHPxngikDinW09R+TTuLG/2vWGLYQg
-         9T67C6HKuhhJHJQ0szi2JKR1/BxRvaw5zELhdmSWxcTbM846z2AHMpjIBLEKBqiQF1ns
-         tQzQ5EBuAClKshZu3NT4MOAPtPQiEKgCwXBlT0OGTqyX0FoIWqHVUGy9lUN0Mf40iWcO
-         UVhio5dw3Jr3hrTFlgm26scaAUGjdEGwTps4agz0k6HbkE47VOdhQFyCO+srFRnt/E6v
-         45ug==
+        bh=wf3aa1fibAc7MkDg7PORyU7RaVXEoouFWua6YI0T5Hw=;
+        b=r/CAEVeZKaF7JFTzJGZPssmJ2DIsZyZc9v5lclCdMbxrxNh2Q3QLMVp4pLNRuC/Q5o
+         s27Bkv2TMKwmgM8oUoVvMvQEDvRGwftjSDp/ve6slRHgGsw5Ms0v43lU1FgwAhrBbFUe
+         35o2FkSyM0x9/CMG8wr9G7/tyB/xKWzUmAI6tpiI86269U3STCkvIy4CWA8W6S2SdtXS
+         95eDXAunOWuxhtEP+diSImXUFuEa0VFXp1IRPtl0LmzghMSuArwHNw5gdcwOcP5ghRmt
+         Jtm9ur/C7VTni40wqDN76966yegfo02FQ3vpbSwRhwDhCS/71+WQUH1e/qqxm6JVCgxQ
+         FjGQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:from:subject:references:mime-version:message-id:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=+eMvh/5RpB1yBDTApxHgHfIOTnGW3OoKdzhdswhPdc8=;
-        b=A2uvypY4LhLBSQUFfd2j/p1WfL2xeLZpYJv4goWYtQI0madhyzgD0+Te2k4Z/WOpcO
-         4Su/BegTiC+z7FBsJVmtoRBi0la5i12AvB8MRomQy6PPnkP3OBvz9/S6KZzKevB0xw71
-         msUfGgdb5YgEgGFVqudXklXR172COMuujLi4pAaGwNKP6rJw8Fe+W8Lg6mx9n7g1Ca9d
-         zZcipQgDRmVs8M/J5OR7Hv+xqIN+V3lYQiwMNUCIxhMN3nci9gjb5wYxAk8M3Xh1iDrI
-         T/pt40OENXhQkiIbrJ4VU3hzeyaQeI8b62K+bHNqDhObapzFZ0CWKkygYyxFXgkh/l9n
-         Cl6g==
-X-Gm-Message-State: AO0yUKXK5hAPyIh7WkekOC+AfaamkOocB8sNouQk89w9/mkTKaSkDt8j
-        gCgZ9NuTDbEA1MceJl3BOlQoJWrOzU8sLaQ=
-X-Google-Smtp-Source: AK7set9hRgiEvFBiFppHL8eT54ybwc2hZv7z3Blb0CFN5CcOP1YQbX8QCulFE4e/SFDWs0v35PqiJF0QK13gDmk=
+        bh=wf3aa1fibAc7MkDg7PORyU7RaVXEoouFWua6YI0T5Hw=;
+        b=0ZaTWhUKZvAjtJ4OnYtDA3bE5SkbyYSfzl5xRXzXvlwtuyvPgY3FTvrdMPsOpybPTO
+         lkyFSkBglA/b1nEeKt8H9z/R49H3IPYkplqG5IbxQY3++r2NGIjF9z/2Yb2f+Ki3W7Ls
+         K5F4d7bnMuGqjNxSuRh2hLLJQx6DhHpTfFhdzRaNmM2/7Y0o3LwFgrdPelL3GCwEcVV7
+         /fgM5z4dti0CgckkLJlxvSq8uSGj3WnoOi0K5sxPY1mqzaBV0HogNQY/1PqhZzcM9f8T
+         WuYu/uRACygDV4XAJdtoahml0hpjbkq0YH14CRvqg8luaMAu8gDz/DnmHs9UHPr5qkR1
+         Pkqw==
+X-Gm-Message-State: AO0yUKXyIaoRxJahLPDh4GRiZZ8RPD6PMh906B+8k00X4Ubr04xjcwSN
+        ZbWOETL8BL9unDpzPzso9sU378wX0jcpzkc=
+X-Google-Smtp-Source: AK7set8PFya149sfYHXrlUe84h6TnpJuUyTxV/h5YVz8ypiqAHXvBdWcZs8G6zaahZ/K/pJIAwRpMfD2P80zE3A=
 X-Received: from saravanak.san.corp.google.com ([2620:15c:2d:3:382:7632:f7fc:4737])
- (user=saravanak job=sendgmr) by 2002:a81:ca03:0:b0:52e:fb7a:94b7 with SMTP id
- p3-20020a81ca03000000b0052efb7a94b7mr349890ywi.7.1676709184201; Sat, 18 Feb
- 2023 00:33:04 -0800 (PST)
-Date:   Sat, 18 Feb 2023 00:32:50 -0800
+ (user=saravanak job=sendgmr) by 2002:a81:6a41:0:b0:534:3fd:8403 with SMTP id
+ f62-20020a816a41000000b0053403fd8403mr652502ywc.89.1676709186748; Sat, 18 Feb
+ 2023 00:33:06 -0800 (PST)
+Date:   Sat, 18 Feb 2023 00:32:51 -0800
 In-Reply-To: <20230218083252.2044423-1-saravanak@google.com>
-Message-Id: <20230218083252.2044423-4-saravanak@google.com>
+Message-Id: <20230218083252.2044423-5-saravanak@google.com>
 Mime-Version: 1.0
 References: <20230218083252.2044423-1-saravanak@google.com>
 X-Mailer: git-send-email 2.39.2.637.g21b0678d19-goog
-Subject: [RFC v1 3/4] regulator: core: Probe regulator devices
+Subject: [RFC v1 4/4] regulator: core: Move regulator supply resolving to the
+ probe function
 From:   Saravana Kannan <saravanak@google.com>
 To:     Liam Girdwood <lgirdwood@gmail.com>,
         Mark Brown <broonie@kernel.org>
@@ -78,56 +79,101 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Since devices added to a bus can be probed, add a stub probe function
-for regulator devices.
+We can simplify the regulator's supply resolving code if we resolve the
+supply in the regulator's probe function. This allows us to:
+
+- Consolidate the supply resolution code to one place.
+- Avoid the need for recursion by allow driver core to take care of
+  handling dependencies.
+- Avoid races and simplify locking by reusing the guarantees provided by
+  driver core.
+- Avoid last minute/lazy resolving during regulator_get().
+- Simplify error handling because we can assume the supply has been
+  resolved once a regulator is probed.
+- Allow driver core to use device links/fw_devlink, where available, to
+  resolve the regulator supplies in the optimal order.
 
 Signed-off-by: Saravana Kannan <saravanak@google.com>
 ---
- drivers/regulator/core.c | 17 +++++++++++++++++
- 1 file changed, 17 insertions(+)
+ drivers/regulator/core.c | 27 ++++++---------------------
+ 1 file changed, 6 insertions(+), 21 deletions(-)
 
 diff --git a/drivers/regulator/core.c b/drivers/regulator/core.c
-index b6700d50d230..d5f9fdd79c14 100644
+index d5f9fdd79c14..f3bf74d1a81d 100644
 --- a/drivers/regulator/core.c
 +++ b/drivers/regulator/core.c
-@@ -5780,6 +5780,17 @@ static const struct dev_pm_ops __maybe_unused regulator_pm_ops = {
- };
- #endif
+@@ -1952,7 +1952,7 @@ static struct regulator_dev *regulator_dev_lookup(struct device *dev,
+ 		if (node) {
+ 			r = of_find_regulator_by_node(node);
+ 			of_node_put(node);
+-			if (r)
++			if (r && r->dev.links.status == DL_DEV_DRIVER_BOUND)
+ 				return r;
  
-+static int regulator_drv_probe(struct device *dev)
-+{
-+	return 0;
-+}
+ 			/*
+@@ -1982,11 +1982,11 @@ static struct regulator_dev *regulator_dev_lookup(struct device *dev,
+ 	}
+ 	mutex_unlock(&regulator_list_mutex);
+ 
+-	if (r)
++	if (r && r->dev.links.status == DL_DEV_DRIVER_BOUND)
+ 		return r;
+ 
+ 	r = regulator_lookup_by_name(supply);
+-	if (r)
++	if (r && r->dev.links.status == DL_DEV_DRIVER_BOUND)
+ 		return r;
+ 
+ 	return ERR_PTR(-ENODEV);
+@@ -2050,13 +2050,6 @@ static int regulator_resolve_supply(struct regulator_dev *rdev)
+ 		}
+ 	}
+ 
+-	/* Recursively resolve the supply of the supply */
+-	ret = regulator_resolve_supply(r);
+-	if (ret < 0) {
+-		put_device(&r->dev);
+-		goto out;
+-	}
+-
+ 	/*
+ 	 * Recheck rdev->supply with rdev->mutex lock held to avoid a race
+ 	 * between rdev->supply null check and setting rdev->supply in
+@@ -2178,13 +2171,6 @@ struct regulator *_regulator_get(struct device *dev, const char *id,
+ 		return regulator;
+ 	}
+ 
+-	ret = regulator_resolve_supply(rdev);
+-	if (ret < 0) {
+-		regulator = ERR_PTR(ret);
+-		put_device(&rdev->dev);
+-		return regulator;
+-	}
+-
+ 	if (!try_module_get(rdev->owner)) {
+ 		regulator = ERR_PTR(-EPROBE_DEFER);
+ 		put_device(&rdev->dev);
+@@ -5649,9 +5635,6 @@ regulator_register(struct device *dev,
+ 	regulator_resolve_coupling(rdev);
+ 	mutex_unlock(&regulator_list_mutex);
+ 
+-	/* try to resolve regulators supply since a new one was registered */
+-	bus_for_each_dev(&regulator_bus, NULL, NULL,
+-			 regulator_register_resolve_supply);
+ 	kfree(config);
+ 	return rdev;
+ 
+@@ -5782,7 +5765,9 @@ static const struct dev_pm_ops __maybe_unused regulator_pm_ops = {
+ 
+ static int regulator_drv_probe(struct device *dev)
+ {
+-	return 0;
++	struct regulator_dev *rdev = dev_to_rdev(dev);
 +
-+static struct device_driver regulator_drv = {
-+	.name = "regulator_drv",
-+	.bus = &regulator_bus,
-+	.probe = regulator_drv_probe,
-+};
-+
- struct bus_type regulator_bus = {
- 	.name = "regulator",
- 	.remove = regulator_dev_release,
-@@ -6123,6 +6134,10 @@ static int __init regulator_init(void)
- 	if (ret)
- 		goto unreg_compat;
++	return regulator_resolve_supply(rdev);
+ }
  
-+	ret = driver_register(&regulator_drv);
-+	if (ret)
-+		goto unreg_bus;
-+
- 	debugfs_root = debugfs_create_dir("regulator", NULL);
- 	if (!debugfs_root)
- 		pr_warn("regulator: Failed to create debugfs directory\n");
-@@ -6141,6 +6156,8 @@ static int __init regulator_init(void)
- 
- 	return ret;
- 
-+unreg_bus:
-+	bus_unregister(&regulator_bus);
- unreg_compat:
- 	class_compat_unregister(regulator_compat_class);
- 	return ret;
+ static struct device_driver regulator_drv = {
 -- 
 2.39.2.637.g21b0678d19-goog
 
