@@ -2,41 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2523769BE3C
-	for <lists+linux-kernel@lfdr.de>; Sun, 19 Feb 2023 03:41:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CC7F869BE3F
+	for <lists+linux-kernel@lfdr.de>; Sun, 19 Feb 2023 03:41:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229737AbjBSCll (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 18 Feb 2023 21:41:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42286 "EHLO
+        id S229776AbjBSCls (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 18 Feb 2023 21:41:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42290 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229593AbjBSCl2 (ORCPT
+        with ESMTP id S229599AbjBSCl2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Sat, 18 Feb 2023 21:41:28 -0500
 Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C9EB12849;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F95512863;
         Sat, 18 Feb 2023 18:41:27 -0800 (PST)
 Received: from mail02.huawei.com (unknown [172.30.67.143])
-        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4PK8v65Q1jz4f3pFW;
-        Sun, 19 Feb 2023 10:41:22 +0800 (CST)
+        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4PK8v70DGSz4f3pBv;
+        Sun, 19 Feb 2023 10:41:23 +0800 (CST)
 Received: from huaweicloud.com (unknown [10.175.124.27])
-        by APP2 (Coremail) with SMTP id Syh0CgBH7utQjPFjPmleDw--.7604S10;
-        Sun, 19 Feb 2023 10:41:24 +0800 (CST)
+        by APP2 (Coremail) with SMTP id Syh0CgBH7utQjPFjPmleDw--.7604S11;
+        Sun, 19 Feb 2023 10:41:25 +0800 (CST)
 From:   Kemeng Shi <shikemeng@huaweicloud.com>
 To:     paolo.valente@linaro.org, axboe@kernel.dk, jack@suse.cz
 Cc:     linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
         shikemeng@huaweicloud.com
-Subject: [PATCH 08/17] block, bfq: start service_from_wr accumulating of async queues correctly
-Date:   Sun, 19 Feb 2023 18:43:00 +0800
-Message-Id: <20230219104309.1511562-9-shikemeng@huaweicloud.com>
+Subject: [PATCH 09/17] block, bfq: stop to detect queue as waker queue if it already is now
+Date:   Sun, 19 Feb 2023 18:43:01 +0800
+Message-Id: <20230219104309.1511562-10-shikemeng@huaweicloud.com>
 X-Mailer: git-send-email 2.30.0
 In-Reply-To: <20230219104309.1511562-1-shikemeng@huaweicloud.com>
 References: <20230219104309.1511562-1-shikemeng@huaweicloud.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: Syh0CgBH7utQjPFjPmleDw--.7604S10
-X-Coremail-Antispam: 1UD129KBjvdXoW7Wr1fXw13uF17Ar43Xw47Arb_yoWftFX_Gw
-        s5Gr1DCFWkGr4rCrsayFW5XFZ5KayrZF1qyFnxKr1UXF1Sq3ZakFyqqFWDtFZrAa17GFnx
-        twnYv345tr40gjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+X-CM-TRANSID: Syh0CgBH7utQjPFjPmleDw--.7604S11
+X-Coremail-Antispam: 1UD129KBjvdXoW7Xry5Ar18Gw13Cr1fJF4kXrb_yoWfXrbEya
+        yFgr18Aan8Jay5Cr1YvryUtwnrua18Xw1kJFs8tFnrWFn8J3Z5C3sFqrW3AFs8WayxWFya
+        yrsaq3Z8tr4IyjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
         9fnUUIcSsGvfJTRUUUbDAFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k26cxKx2IYs7xG
         6rWj6s0DM7CIcVAFz4kK6r1j6r18M280x2IEY4vEnII2IxkI6r1a6r45M28IrcIa0xkI8V
         A2jI8067AKxVWUAVCq3wA2048vs2IY020Ec7CjxVAFwI0_Xr0E3s1l8cAvFVAK0II2c7xJ
@@ -61,29 +61,29 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Start accumulating service_from_wr when async queues are weight raised.
-The service_from_wr for async queues is accumulated and checked to finish
-weight-raise as sync queues. We need charge service_from_wr for async
-queues or service_from_wr will keep accumulating and async queues will
-finish weight-raise soon after weight-raise starts.
+If last_completed_rq_bfqq is the current waker queue of bfqq, it's no
+meaning to execute the detection logic as nothing will change whether
+detection successes or fails.
 
 Signed-off-by: Kemeng Shi <shikemeng@huaweicloud.com>
 ---
- block/bfq-iosched.c | 1 +
- 1 file changed, 1 insertion(+)
+ block/bfq-iosched.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
 diff --git a/block/bfq-iosched.c b/block/bfq-iosched.c
-index 5610a7dcacdf..7a0283f08aed 100644
+index 7a0283f08aed..0a11a381ee7d 100644
 --- a/block/bfq-iosched.c
 +++ b/block/bfq-iosched.c
-@@ -2323,6 +2323,7 @@ static void bfq_add_request(struct request *rq)
- 		    time_is_before_jiffies(
- 				bfqq->last_wr_start_finish +
- 				bfqd->bfq_wr_min_inter_arr_async)) {
-+			bfqq->service_from_wr = 0;
- 			bfqq->wr_coeff = bfqd->bfq_wr_coeff;
- 			bfqq->wr_cur_max_time = bfq_wr_duration(bfqd);
+@@ -2147,7 +2147,8 @@ static void bfq_check_waker(struct bfq_data *bfqd, struct bfq_queue *bfqq,
+ 	    bfq_bfqq_has_short_ttime(bfqq) ||
+ 	    now_ns - bfqd->last_completion >= 4 * NSEC_PER_MSEC ||
+ 	    bfqd->last_completed_rq_bfqq == &bfqd->oom_bfqq ||
+-	    bfqq == &bfqd->oom_bfqq)
++	    bfqq == &bfqd->oom_bfqq ||
++	    bfqd->last_completed_rq_bfqq == bfqq->waker_bfqq)
+ 		return;
  
+ 	/*
 -- 
 2.30.0
 
