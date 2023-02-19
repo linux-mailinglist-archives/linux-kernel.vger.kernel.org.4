@@ -2,175 +2,178 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7638369BFE2
-	for <lists+linux-kernel@lfdr.de>; Sun, 19 Feb 2023 10:50:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2647D69BFEA
+	for <lists+linux-kernel@lfdr.de>; Sun, 19 Feb 2023 10:58:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230192AbjBSJu0 convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Sun, 19 Feb 2023 04:50:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46030 "EHLO
+        id S229699AbjBSJ6n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 19 Feb 2023 04:58:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53942 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230198AbjBSJuY (ORCPT
+        with ESMTP id S229506AbjBSJ6l (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 19 Feb 2023 04:50:24 -0500
-Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 717A326B2;
-        Sun, 19 Feb 2023 01:49:44 -0800 (PST)
-Received: by mail-wm1-x32b.google.com with SMTP id bg25-20020a05600c3c9900b003e21af96703so1258012wmb.2;
-        Sun, 19 Feb 2023 01:49:44 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=/rPhwQ3nrkS0jghgazOf4raJ/t34wjX5r29z/0Bns5o=;
-        b=AhU/kF4OFQgF5JIQ+g76Le9tXV8Zq8FvFg6XlZfaTNg1WXBtYtZ1ptLuhbHy3Hcus7
-         QX/YsYQTuRAoD7iIySpHGQ1I0qsGCU3/VNNaigciO6s3UiDLSe6CHqk9bNhZ7IiyPDb9
-         /px1kU08XKYkQGD6792P9DBS1ZSbksi5WlvXKF6Jhw8cpocPQt8MnoSyd2QgCWCIxXP5
-         98MmJJuKNiEbyJfr5BLwqzZrhyVfDAc8kfbirQZEFHc2gyN/m2azxjrPQLYTEJO1un6N
-         qkzGBJK9pjM+ojY3S+TSPDYpNuxmDzxO+qq9yxoOKhhlLEgdEO2381aZPoAzlMzhBXVH
-         tvaw==
-X-Gm-Message-State: AO0yUKU01Zc9lYfrNF5gTWVatBhWMQf1EMOHfx5J3e+69csJ1SmiRjVQ
-        x6HqTkQ+iZsuGiWP10roFvg=
-X-Google-Smtp-Source: AK7set+AESYU6fpRh40OZrZiAA9gfqeBNNbge1x7fNWb06r3zU88uU9evL6tZuP/nX7l1jAeqnGOKQ==
-X-Received: by 2002:a05:600c:43c9:b0:3e2:1d1e:78d6 with SMTP id f9-20020a05600c43c900b003e21d1e78d6mr6702834wmn.7.1676800053518;
-        Sun, 19 Feb 2023 01:47:33 -0800 (PST)
-Received: from [10.148.80.132] ([195.228.69.10])
-        by smtp.gmail.com with ESMTPSA id k2-20020adfe8c2000000b002c53cc7504csm9174351wrn.78.2023.02.19.01.47.32
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 19 Feb 2023 01:47:32 -0800 (PST)
-Message-ID: <dd782435586a73ada32c099150c274c79e1c3003.camel@inf.elte.hu>
-Subject: Re: [PATCH net-next 00/12] Add tc-mqprio and tc-taprio support for
- preemptible traffic classes
-From:   Ferenc Fejes <fejes@inf.elte.hu>
-To:     Vladimir Oltean <vladimir.oltean@nxp.com>, netdev@vger.kernel.org
-Cc:     "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Jamal Hadi Salim <jhs@mojatatu.com>,
-        Cong Wang <xiyou.wangcong@gmail.com>,
-        Jiri Pirko <jiri@resnulli.us>,
-        Vinicius Costa Gomes <vinicius.gomes@intel.com>,
-        Kurt Kanzenbach <kurt@linutronix.de>,
-        Gerhard Engleder <gerhard@engleder-embedded.com>,
-        Amritha Nambiar <amritha.nambiar@intel.com>,
-        Claudiu Manoil <claudiu.manoil@nxp.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        UNGLinuxDriver@microchip.com, Andrew Lunn <andrew@lunn.ch>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Xiaoliang Yang <xiaoliang.yang_1@nxp.com>,
-        linux-kernel@vger.kernel.org,
-        Pranavi Somisetty <pranavi.somisetty@amd.com>,
-        Harini Katakam <harini.katakam@amd.com>
-Date:   Sun, 19 Feb 2023 10:47:31 +0100
-In-Reply-To: <20230218152021.puhz7m26uu2lzved@skbuf>
-References: <20230216232126.3402975-1-vladimir.oltean@nxp.com>
-         <20230218152021.puhz7m26uu2lzved@skbuf>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-User-Agent: Evolution 3.46.4-1 
+        Sun, 19 Feb 2023 04:58:41 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E7AEDBE2;
+        Sun, 19 Feb 2023 01:58:38 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 778DEB8095A;
+        Sun, 19 Feb 2023 09:48:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2216AC433D2;
+        Sun, 19 Feb 2023 09:48:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1676800101;
+        bh=z9cSiSOXGaPdxie5ep3YBFQbolXD2v1I5QU9+yqyPCo=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=OEQL6VBDRnVguQ4suP6veS2kHVfG0QW/tJuAg6OGCkuJ2dGTts+0phoazysI7u/fI
+         zy+rP2zOzLW6wvRgmfAzt4vl5wsCDSZ1jpT/bRj20PNU8aQo+OgsFwWM6cplXxpUm7
+         Ew0fEvrCkKTX7tjEvmboAGe17Toth7Iu/S3TcOJxU35qiJonTIbiM9QUxHvxXJtzYo
+         jN7uT1UBGhY+MUZtLKyKwRx/XiJtwfN+y/mvJiO1bL5xx34Ed0Q4GaJRiIPJxIx1Yi
+         lQq5/sD9ovAaHEIrNmr+4zgQUPOeULveufqdvyqN8NL0Fv3OKGRzV1o4SCyOXux9tp
+         DlP/0tEYl5haw==
+Received: by mail-oa1-f41.google.com with SMTP id 586e51a60fabf-171dc352442so209919fac.7;
+        Sun, 19 Feb 2023 01:48:21 -0800 (PST)
+X-Gm-Message-State: AO0yUKUCSbxrKIM+tNr96hz1hI38K3CjtZVglowsdfSjTkFHmyBWYqap
+        zohb69iMCcxKhPJeiqWCiawPPbilyaP7PnVMV/8=
+X-Google-Smtp-Source: AK7set/ROx1Z0/HbxofW3EgBKaW957avBtR8LJ5rn3tOFlQN4n7jmg/XN2s8awVrOcI+haII5/iltq648CW/63vCeS0=
+X-Received: by 2002:a05:6870:c1ce:b0:16e:9431:5c2e with SMTP id
+ i14-20020a056870c1ce00b0016e94315c2emr441406oad.56.1676800100244; Sun, 19 Feb
+ 2023 01:48:20 -0800 (PST)
 MIME-Version: 1.0
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+References: <20230217202234.32260-1-quic_johmoo@quicinc.com>
+In-Reply-To: <20230217202234.32260-1-quic_johmoo@quicinc.com>
+From:   Masahiro Yamada <masahiroy@kernel.org>
+Date:   Sun, 19 Feb 2023 18:47:44 +0900
+X-Gmail-Original-Message-ID: <CAK7LNASwzvsGPLWJ_QJFw+KjHQM9ZpaWqZFQNS60K9Kb9TU8Rw@mail.gmail.com>
+Message-ID: <CAK7LNASwzvsGPLWJ_QJFw+KjHQM9ZpaWqZFQNS60K9Kb9TU8Rw@mail.gmail.com>
+Subject: Re: [PATCH RESEND 0/1] Validating UAPI backwards compatibility
+To:     John Moon <quic_johmoo@quicinc.com>
+Cc:     Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Nicolas Schier <nicolas@fjasle.eu>,
+        linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        Trilok Soni <quic_tsoni@quicinc.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Todd Kjos <tkjos@google.com>,
+        Matthias Maennich <maennich@google.com>,
+        Giuliano Procida <gprocida@google.com>,
+        kernel-team@android.com, Jordan Crouse <jorcrous@amazon.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Vladimir!
+On Sat, Feb 18, 2023 at 5:23 AM John Moon <quic_johmoo@quicinc.com> wrote:
+>
+> + linux-arm-kernel and Greg KH
+>
+> Hi all,
+>
+> The kernel community has rigorously enforced a policy of backwards
+> compatibility in its UAPI headers for a long time. This has allowed user
+> applications to enjoy stability across kernel upgrades without
+> recompiling.
+>
+> In the vendor driver community (out-of-tree modules), there's been a
+> lack of discipline when it comes to maintaining UAPI backwards
+> compatibility. This has been a maintenance burden and limits our options
+> for long-term support of older devices.
+>
+> Our goal is to add tooling for vendor driver developers because the
+> upstream model of expert maintainer code review can be difficult to
+> replicate in-house. Tools may help developers catch simple UAPI
+> incompatibilities that could be easily overlooked by in-house review.
+>
+> We see in the kernel documentation:
+> "Kernel headers are backwards compatible, but not forwards compatible.
+> This means that a program built against a C library using older kernel
+> headers should run on a newer kernel (although it may not have access
+> to new features), but a program built against newer kernel headers may
+> not work on an older kernel."[1]
+>
+> How does the kernel enforce this guarantee? We would be interested to
+> learn about any tools or methods used by kernel developers to make sure
+> the above statement remains true.
+>
+> Could the documentation on UAPI maintenance (from a developer's point of
+> view) be expanded? Internally, we have a set of guidelines for our kernel
+> developers regarding UAPI compatibility techniques. If there's interest
+> in supplying a document on this topic with the kernel, we'd be happy to
+> submit a draft detailing what we have so far as a jumping off point.
+>
+> Additionally, I've attached a shell script we've been using internally
+> to validate changes to our UAPI headers are backwards compatible. The
+> script uses libabigail's[2] tool abidiff[3] to compare a modified
+> header's ABI before and after a patch is applied. If an existing UAPI is
+> modified, the script exits non-zero. We use this script in our CI system
+> to block changes that fail the check.
+>
+> Currently, the script works with gcc. It generates output like this when
+> a backwards-incompatible change is made to a UAPI header:
+>
+>  !!! ABI differences detected in include/uapi/linux/acct.h (compared to
+>  file at HEAD^1) !!!
+>
+>      [C] 'struct acct' changed:
+>        type size changed from 512 to 544 (in bits)
+>        1 data member insertion:
+>          '__u32 new_val', at offset 512 (in bits) at acct.h:71:1
+>
+>  0/1 UAPI header file changes are backwards compatible
+>  UAPI header ABI check failed
+>
+> However, we have not had success with clang. It seems clang is more
+> aggressive in optimizing dead code away (no matter which options we
+> pass). Therefore, no ABI differences are found.
+>
+> We wanted to share with the community to receive feedback and any advice
+> when it comes to tooling/policy surrounding this issue. Our hope is that
+> the script will help all kernel UAPI authors (even those that haven't
+> upstreamed yet) maintain good discipline and avoid breaking userspace.
+>
+> [1] Documentation/kbuild/headers_install.rst
+> [2] https://sourceware.org/libabigail/manual/libabigail-overview.html
+> [3] https://sourceware.org/libabigail/manual/abidiff.html
+>
+> P.S. While at Qualcomm, Jordan Crouse <jorcrous@amazon.com> authored the
+> original version of the UAPI checker script. Thanks Jordan!
 
-On Sat, 2023-02-18 at 17:20 +0200, Vladimir Oltean wrote:
-> On Fri, Feb 17, 2023 at 01:21:14AM +0200, Vladimir Oltean wrote:
-> > The last RFC in August 2022 contained a proposal for the UAPI of
-> > both
-> > TSN standards which together form Frame Preemption (802.1Q and
-> > 802.3):
-> > https://patchwork.kernel.org/project/netdevbpf/cover/20220816222920.1952936-1-vladimir.oltean@nxp.com/
-> > 
-> > It wasn't clear at the time whether the 802.1Q portion of Frame
-> > Preemption
-> > should be exposed via the tc qdisc (mqprio, taprio) or via some
-> > other
-> > layer (perhaps also ethtool like the 802.3 portion).
-> > 
-> > So the 802.3 portion got submitted separately and finally was
-> > accepted:
-> > https://patchwork.kernel.org/project/netdevbpf/cover/20230119122705.73054-1-vladimir.oltean@nxp.com/
-> > 
-> > leaving the only remaining question: how do we expose the 802.1Q
-> > bits?
-> > 
-> > This series proposes that we use the Qdisc layer, through separate
-> > (albeit very similar) UAPI in mqprio and taprio, and that both
-> > these
-> > Qdiscs pass the information down to the offloading device driver
-> > through
-> > the common mqprio offload structure (which taprio also passes).
-> > 
-> > Implementations are provided for the NXP LS1028A on-board Ethernet
-> > (enetc, felix).
-> > 
-> > Some patches should have maybe belonged to separate series, leaving
-> > here
-> > only patches 09/12 - 12/12, for ease of review. That may be true,
-> > however due to a perceived lack of time to wait for the
-> > prerequisite
-> > cleanup to be merged, here they are all together.
-> > 
-> > Vladimir Oltean (12):
-> >   net: enetc: rename "mqprio" to "qopt"
-> >   net: mscc: ocelot: add support for mqprio offload
-> >   net: dsa: felix: act upon the mqprio qopt in taprio offload
-> >   net: ethtool: fix __ethtool_dev_mm_supported() implementation
-> >   net: ethtool: create and export ethtool_dev_mm_supported()
-> >   net/sched: mqprio: simplify handling of nlattr portion of
-> > TCA_OPTIONS
-> >   net/sched: mqprio: add extack to mqprio_parse_nlattr()
-> >   net/sched: mqprio: add an extack message to mqprio_parse_opt()
-> >   net/sched: mqprio: allow per-TC user input of FP adminStatus
-> >   net/sched: taprio: allow per-TC user input of FP adminStatus
-> >   net: mscc: ocelot: add support for preemptible traffic classes
-> >   net: enetc: add support for preemptible traffic classes
-> > 
-> >  drivers/net/dsa/ocelot/felix_vsc9959.c        |  44 ++++-
-> >  drivers/net/ethernet/freescale/enetc/enetc.c  |  31 ++-
-> >  drivers/net/ethernet/freescale/enetc/enetc.h  |   1 +
-> >  .../net/ethernet/freescale/enetc/enetc_hw.h   |   4 +
-> >  drivers/net/ethernet/mscc/ocelot.c            |  51 +++++
-> >  drivers/net/ethernet/mscc/ocelot.h            |   2 +
-> >  drivers/net/ethernet/mscc/ocelot_mm.c         |  56 ++++++
-> >  include/linux/ethtool_netlink.h               |   6 +
-> >  include/net/pkt_sched.h                       |   1 +
-> >  include/soc/mscc/ocelot.h                     |   6 +
-> >  include/uapi/linux/pkt_sched.h                |  17 ++
-> >  net/ethtool/mm.c                              |  24 ++-
-> >  net/sched/sch_mqprio.c                        | 182
-> > +++++++++++++++---
-> >  net/sched/sch_mqprio_lib.c                    |  14 ++
-> >  net/sched/sch_mqprio_lib.h                    |   2 +
-> >  net/sched/sch_taprio.c                        |  65 +++++--
-> >  16 files changed, 459 insertions(+), 47 deletions(-)
-> > 
-> > -- 
-> > 2.34.1
-> > 
-> 
-> Seeing that there is no feedback on the proposed UAPI, I'd be tempted
-> to resend this, with just the modular build fixed (export the
-> ethtool_dev_mm_supported() symbol).
-> 
-> Would anyone hate me for doing this, considering that the merge
-> window
-> is close? Does anyone need some time to take a closer look at this,
-> or
-> think about a better alternative?
 
-Do you have the iproute2 part? Sorry if I missed it, but it would be
-nice to see how is that UAPI exposed for the config tools. Is there any
-new parameter for mqprio/taprio?
+If you want to express the authorship of the original,
+it is possible to add the "Co-developed-by" tag,
+which is mentioned in
+Documentation/translations/sp_SP/process/submitting-patches.rst
 
-Best,
-Ferenc
+
+It depends on how much code you rewrote, though.
+
+
+
+
+
+>
+> John Moon (1):
+>   check-uapi: Introduce check-uapi.sh
+>
+>  scripts/check-uapi.sh | 245 ++++++++++++++++++++++++++++++++++++++++++
+>  1 file changed, 245 insertions(+)
+>  create mode 100755 scripts/check-uapi.sh
+>
+>
+> base-commit: 033c40a89f55525139fd5b6342281b09b97d05bf
+> --
+> 2.17.1
+>
+
+
+--
+Best Regards
+Masahiro Yamada
