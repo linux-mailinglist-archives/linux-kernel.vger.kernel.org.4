@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BFEAB69C0F5
-	for <lists+linux-kernel@lfdr.de>; Sun, 19 Feb 2023 15:40:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 17F0B69C0F6
+	for <lists+linux-kernel@lfdr.de>; Sun, 19 Feb 2023 15:40:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230316AbjBSOjn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 19 Feb 2023 09:39:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38380 "EHLO
+        id S230218AbjBSOjj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 19 Feb 2023 09:39:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38398 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230267AbjBSOij (ORCPT
+        with ESMTP id S230272AbjBSOik (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 19 Feb 2023 09:38:39 -0500
-Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12D6946A5
+        Sun, 19 Feb 2023 09:38:40 -0500
+Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C9BD4C1C
+        for <linux-kernel@vger.kernel.org>; Sun, 19 Feb 2023 06:38:19 -0800 (PST)
+Received: by mail-wr1-x42d.google.com with SMTP id g7so387411wrd.3
         for <linux-kernel@vger.kernel.org>; Sun, 19 Feb 2023 06:38:18 -0800 (PST)
-Received: by mail-wr1-x42f.google.com with SMTP id o18so573654wrw.1
-        for <linux-kernel@vger.kernel.org>; Sun, 19 Feb 2023 06:38:17 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=hT0OFrc5BzA/EvvKaTBdDeJt/aCTGhUdeg6ktzHv2us=;
-        b=sfwr9FAw99JPs2jgsRVuLndpE8yao9Kl+E/z7U0mtt0pP2wD2IO88tvDM316wqGWhU
-         bOtdbmo6FuZElTFCkVycRnwUmdf4ah20jq0eL1sf/3WBmvAFbi2/ShUdbPUPupKNwlH7
-         DtQV0DPhDXMxxhggpMeDdWPhTaWIjd7+vtd/a5ko8mGoFoZ1GDgtQSozSm3RpQyPFhMD
-         DuUmE3eZX4nzx1bu3urwLB8LPnbclLMZNDMlpdEJLtabwYjR2FNOfQGWKOlK4oF5mHWd
-         U46QiQUoGN1d9JMBk+FmgjQY9n9uqv84+h9mvy6RR7cjaYif91wVlSrCddz1YUdlDHX8
-         zVgw==
+        bh=6cznqdx01/faUtAoqSoejbDua4FcHXQ+/pRuK304PkQ=;
+        b=cBxhQu1MiOuL3c2L69272RQU7uQ6pCjBn1d6SnryOcPwzupn7ueF8v5MEdeVNvBhYS
+         h4/TwVhfcN/MN9hlwB8QyTpNx+kdobugSn0/OhyFNEDgT7L7qRjm7Cd4yrhANU2OyGFV
+         H1Qr5jUOIf0mZbTCAggAc4iJl9V8emZbfsBOze00UrhXGJ08aOO5AGUd+PT7QEfvz79i
+         gjL7hSex7iEmPfKugolaqZ8XvolQH32Po+izM+zymyRhbarpF73Z//ViWIr/peUf/x9o
+         JmHUGmsJT3ZvAFbajR3+xKxLS2GpaGjNTHYlrrha9gLDylB2mlXJOMZaHZIIyaTczr82
+         jyAA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=hT0OFrc5BzA/EvvKaTBdDeJt/aCTGhUdeg6ktzHv2us=;
-        b=X5axPQytaoNVlFrxyF5T/IYKRa8mIoUzgW4f0Xe+aEYM0vPx7KAaIMtrBhZpQgloRS
-         fm8yJNz46izLN1EOi2VEbxxV1tTEexppJtVkxTpjDt1f9uH7IeVq8tZtIxY999sMMInp
-         atPmMGBdV0bE2dI/JDya7p7/3TNMZdWAFhMvsmVjsjjCSAgh3kHItCvsfh1Klhljxv8E
-         YUVioUTXUlJVyDO8GP1li/UpYjLBHjDs4zj2Wc9gzqGR0oe/fq5zGJPe8ND34XlBoQgr
-         S8YgztShuFGqDltUa7p3yj2Ya7ISPu3nhfZeZgVzIXaZheD+MVsLBi3RfCGecQ+mch1Q
-         YvIA==
-X-Gm-Message-State: AO0yUKWIcjyWlgkpguK/oYNFOvJqQhWfmPXhKSSgDJK9deN1ess4GjWp
-        x29AttaaOPwSGIoBTwVAbwvwHw==
-X-Google-Smtp-Source: AK7set9g+Xv8475Uge2nzGCrlGdlaMCAyOgNN15o6NiNULAV3ygGhrWV1qTQ1r30QtA0D7O9N+C6iQ==
-X-Received: by 2002:a05:6000:1789:b0:2c6:825d:ed13 with SMTP id e9-20020a056000178900b002c6825ded13mr368030wrg.25.1676817496530;
-        Sun, 19 Feb 2023 06:38:16 -0800 (PST)
+        bh=6cznqdx01/faUtAoqSoejbDua4FcHXQ+/pRuK304PkQ=;
+        b=Mjhay5pw0cU87svCi1HAHGpRNXy0iu1fgL8BFvvq1KYBuW6NCp7lfTVG9zoVpi009T
+         7ihiN6JVuakcc58pJOdAZDvXNfyVfGn7U7x+QdbaVBKlW8zHoDYwxvZFDGYf5HaX0NDA
+         Xc3uAb9tR80S7tOOLUmcL0IJRQ2ffgepUg/gvpxc7mkdOI5m0JasauWWwQVuHrg5/oaM
+         u9qhJrQXv3X8s+gE7KnBem1zE6vaLXh1JqfS0vCSttm+G6Yu5LXycYo3q6kLPC+Jr6tD
+         XFYBqPNHDDTCAwNeJGZGtnLI7Qvx5FwR9ApoB/8XuKltGF29txgvVOH+qjgZVUc6eaSw
+         Xk2A==
+X-Gm-Message-State: AO0yUKUbGTX0xmNFV5fYmVkB2cqEOq6Sde59+sFAWcViE/KHgK/ecQyS
+        +V7ucP8WO+kGtBwe6qBeDbs9aw==
+X-Google-Smtp-Source: AK7set+LnJkrxCtM/Mt4QXFkrHuNKO4fIAzFAlp1XOjSJ6bYXltoBh/a3YeqKMC6XlgtTD7NaFAy2g==
+X-Received: by 2002:a05:6000:1866:b0:2c4:669:fda4 with SMTP id d6-20020a056000186600b002c40669fda4mr642159wri.0.1676817497552;
+        Sun, 19 Feb 2023 06:38:17 -0800 (PST)
 Received: from mai.box.freepro.com ([2a05:6e02:1041:c10:6f43:b92:7670:463])
-        by smtp.gmail.com with ESMTPSA id a18-20020adfe5d2000000b002be505ab59asm86176wrn.97.2023.02.19.06.38.15
+        by smtp.gmail.com with ESMTPSA id a18-20020adfe5d2000000b002be505ab59asm86176wrn.97.2023.02.19.06.38.16
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 19 Feb 2023 06:38:16 -0800 (PST)
+        Sun, 19 Feb 2023 06:38:17 -0800 (PST)
 From:   Daniel Lezcano <daniel.lezcano@linaro.org>
 To:     rafael@kernel.org, daniel.lezcano@linaro.org
 Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
@@ -58,9 +58,9 @@ Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
         Mark Gross <markgross@kernel.org>,
         platform-driver-x86@vger.kernel.org (open list:ACER ASPIRE ONE
         TEMPERATURE AND FAN DRIVER)
-Subject: [PATCH v1 15/17] thermal/drivers/acerhdf: Make interval setting only at module load time
-Date:   Sun, 19 Feb 2023 15:36:55 +0100
-Message-Id: <20230219143657.241542-16-daniel.lezcano@linaro.org>
+Subject: [PATCH v1 16/17] thermal/drivers/acerhdf: Remove pointless governor test
+Date:   Sun, 19 Feb 2023 15:36:56 +0100
+Message-Id: <20230219143657.241542-17-daniel.lezcano@linaro.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230219143657.241542-1-daniel.lezcano@linaro.org>
 References: <20230219143657.241542-1-daniel.lezcano@linaro.org>
@@ -76,64 +76,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The thermal zone device structure is in the process of being private
-to the thermal framework core code. This driver is directly accessing
-and changing the monitoring polling rate.
+The thermal zone parameter specifies the bang-bang governor.
 
-After discussing with the maintainers of this driver, having the
-polling interval at module loading time is enough for their purpose.
+The Kconfig selects the bang-bang governor. So it is pointless to test
+if the governor was set for the thermal zone assuming it may not have
+been compiled-in.
 
-Change the code to take into account the interval when the module is
-loaded but restrict the permissions so the value can not be changed
-afterwards.
+Remove the test and prevent another access into the thermal internals.
 
 Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
 ---
- drivers/platform/x86/acerhdf.c | 12 +++---------
- 1 file changed, 3 insertions(+), 9 deletions(-)
+ drivers/platform/x86/acerhdf.c | 7 -------
+ 1 file changed, 7 deletions(-)
 
 diff --git a/drivers/platform/x86/acerhdf.c b/drivers/platform/x86/acerhdf.c
-index 1956469c3457..61f1c3090867 100644
+index 61f1c3090867..71b9c1f922d9 100644
 --- a/drivers/platform/x86/acerhdf.c
 +++ b/drivers/platform/x86/acerhdf.c
-@@ -79,7 +79,6 @@ static unsigned int list_supported;
- static unsigned int fanstate = ACERHDF_FAN_AUTO;
- static char force_bios[16];
- static char force_product[16];
--static unsigned int prev_interval;
- static struct thermal_zone_device *thz_dev;
- static struct thermal_cooling_device *cl_dev;
- static struct platform_device *acerhdf_dev;
-@@ -346,20 +345,15 @@ static void acerhdf_check_param(struct thermal_zone_device *thermal)
- 	trips[0].temperature = fanon;
- 	trips[0].hysteresis  = fanon - fanoff;
+@@ -697,13 +697,6 @@ static int __init acerhdf_register_thermal(void)
+ 	if (ret)
+ 		return ret;
  
--	if (kernelmode && prev_interval != interval) {
-+	if (kernelmode) {
- 		if (interval > ACERHDF_MAX_INTERVAL) {
- 			pr_err("interval too high, set to %d\n",
- 			       ACERHDF_MAX_INTERVAL);
- 			interval = ACERHDF_MAX_INTERVAL;
- 		}
-+
- 		if (verbose)
- 			pr_notice("interval changed to: %d\n", interval);
+-	if (strcmp(thz_dev->governor->name,
+-				acerhdf_zone_params.governor_name)) {
+-		pr_err("Didn't get thermal governor %s, perhaps not compiled into thermal subsystem.\n",
+-				acerhdf_zone_params.governor_name);
+-		return -EINVAL;
+-	}
 -
--		if (thermal)
--			thermal->polling_delay_jiffies =
--				round_jiffies(msecs_to_jiffies(interval * 1000));
--
--		prev_interval = interval;
- 	}
+ 	return 0;
  }
  
-@@ -807,5 +801,5 @@ static const struct kernel_param_ops interval_ops = {
- 	.get = param_get_uint,
- };
- 
--module_param_cb(interval, &interval_ops, &interval, 0600);
-+module_param_cb(interval, &interval_ops, &interval, 0000);
- MODULE_PARM_DESC(interval, "Polling interval of temperature check");
 -- 
 2.34.1
 
