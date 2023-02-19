@@ -2,71 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 41CFC69BEEC
-	for <lists+linux-kernel@lfdr.de>; Sun, 19 Feb 2023 08:34:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2801469BF13
+	for <lists+linux-kernel@lfdr.de>; Sun, 19 Feb 2023 08:54:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229664AbjBSHeO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 19 Feb 2023 02:34:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41508 "EHLO
+        id S229640AbjBSHy1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 19 Feb 2023 02:54:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47752 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229711AbjBSHeI (ORCPT
+        with ESMTP id S229478AbjBSHyZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 19 Feb 2023 02:34:08 -0500
-Received: from mail-oa1-x36.google.com (mail-oa1-x36.google.com [IPv6:2001:4860:4864:20::36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CDB112BF2;
-        Sat, 18 Feb 2023 23:33:46 -0800 (PST)
-Received: by mail-oa1-x36.google.com with SMTP id 586e51a60fabf-171dc4abbf8so17393fac.4;
-        Sat, 18 Feb 2023 23:33:46 -0800 (PST)
+        Sun, 19 Feb 2023 02:54:25 -0500
+Received: from mail-ed1-x544.google.com (mail-ed1-x544.google.com [IPv6:2a00:1450:4864:20::544])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 017EC126F3
+        for <linux-kernel@vger.kernel.org>; Sat, 18 Feb 2023 23:54:23 -0800 (PST)
+Received: by mail-ed1-x544.google.com with SMTP id x22so796864edd.10
+        for <linux-kernel@vger.kernel.org>; Sat, 18 Feb 2023 23:54:23 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=A6ekRPQWIOO9h97zjQvvrZJ6rFQp5B1ODkwvrN46IL8=;
-        b=VIXw+j/9K0ueRJ3XZk56qe8QOL0Cmpp7GG1nfaoqd3mrwXvQjCOiuvqI3MWGdIsqPh
-         NaQSgSHqheGO1jZax3FsreUoTTAOxducCXCHLU9jQ1cnIjpNfQxt3HsFKsigcuIdyN3Y
-         +9YWSZPcHl0mF+YL7hl2tQ35jopvi/ziMoQxKbIO7pHLy9syY3n4EDs0LsO2UAUkDTwN
-         uG7VPb4moTRdlVk93TwqFHZU1f9QlzzuW2Y+BjvqunA5mn3GKnxB3ishhVrg4z1YNkFD
-         /T8V5EU+PYcLGlt8OQeA+DQDK9MxHrY5tRy4KkGmItFO0ftXjFIOeHG2GLQdWaSb9onW
-         oxKA==
+        h=to:subject:message-id:date:from:mime-version:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=ARjx7c9m7vG+q/SN6iGU/UqUFITeG/nn+7TUwXaK0N0=;
+        b=TOAm+GkJyV44mBB8nCF6C1lvWOtjAChasTzBztBB/BcVt1DbTWoTKKgqZ0/VURsrdL
+         23PHPiDIapp4m4kK8H5+QFBEYBL7+QxdjLMtoXYhMUFPSmyxIKD6O+ZjZ/Q8vkFsTL73
+         h1+rz4T65HLVITInybqxMDS1NiaAoJV31hUFqIq0G0JKRQ2sbPz7v/Bw738K8bfTv7z2
+         cYiWy+LihCcDqnFYFqVOdTrK8mLfWnDt3uGOGcM0fPGaT/UrZlCzGfwNd++bE2vcMwgH
+         V/v6WqVsMhltZM02dNJZ/dbM29E5jrgzEwOCNbFitTqdLPxYH/PJKNpWy9FnTiU234Xy
+         RquQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=A6ekRPQWIOO9h97zjQvvrZJ6rFQp5B1ODkwvrN46IL8=;
-        b=v0TwhSFUWY9WbDk1ZYebh2X29JrgjD1U4xmzUb3wcHfwedWMgjmcBbdxIqymW6p2aE
-         iCYNlyEZ7JcRX8XjbHXtZvtM0Vy1yCris8Z9wtZ6jSZrOpYMMReIA+p66lvhMuYiUe6d
-         s4Kk8D7k6RK0Usr+xGxJ8iKUVfVAMDGiILtG/sqYfrwgF7x7jZSoExVjBnAuQzqSrddL
-         n9PLaxwskGr9BjtroH85WVToZbc/pcUbh7WyzuUKsZnNRT79fF7CBrwgb8hDAO3n8JRp
-         UIBS9oLnTXBwyA2hl7DNLxamHOVgaO9pDLDDjA0Jdv7sCWhRpyf9FLStbf0Hog/jVgih
-         Ueqw==
-X-Gm-Message-State: AO0yUKVk04AAOqPGHK2qQdWUpW2mjMtM1zq7dtNJrfTTp1ug8wM0w/bj
-        shchG1EIF3cdxYHhlzdXjQg=
-X-Google-Smtp-Source: AK7set/euVT54/mP9eiDg5UqVSwppotAHlDPyulAeUH1zq9S122GwNodRLkwuxHh1XZXG6+8OX1bNA==
-X-Received: by 2002:a05:6870:a693:b0:16e:8556:41e4 with SMTP id i19-20020a056870a69300b0016e855641e4mr6822908oam.3.1676792025333;
-        Sat, 18 Feb 2023 23:33:45 -0800 (PST)
-Received: from localhost (227.sub-174-197-65.myvzw.com. [174.197.65.227])
-        by smtp.gmail.com with ESMTPSA id r8-20020a056870624800b0016b7fe3be05sm3412107oak.39.2023.02.18.23.33.43
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 18 Feb 2023 23:33:45 -0800 (PST)
-From:   Nhat Pham <nphamcs@gmail.com>
-To:     akpm@linux-foundation.org
-Cc:     hannes@cmpxchg.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, bfoster@redhat.com,
-        willy@infradead.org, arnd@arndb.de, linux-api@vger.kernel.org,
-        kernel-team@meta.com
-Subject: [PATCH v10 3/3] selftests: Add selftests for cachestat
-Date:   Sat, 18 Feb 2023 23:33:18 -0800
-Message-Id: <20230219073318.366189-4-nphamcs@gmail.com>
-X-Mailer: git-send-email 2.39.1
-In-Reply-To: <20230219073318.366189-1-nphamcs@gmail.com>
-References: <20230219073318.366189-1-nphamcs@gmail.com>
+        h=to:subject:message-id:date:from:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=ARjx7c9m7vG+q/SN6iGU/UqUFITeG/nn+7TUwXaK0N0=;
+        b=0c1BdnzkvLdzVx5oxcH8dBdI1447rB6jFEtHKJ321dumlumpPY9GUGosVlb/lXsIDh
+         s4fv0jzTEhrOuAEASGy9Z4RT1asI6wvk5t1Qh9dUMQ+gznHnxAWqgZZuGxoY2bo11Ie0
+         ta/+wRbbuqCzKys7otHB51Q1OOMjjvQfblgf9w6rmEDCX08TDGYNI0L2RJFkmvMdJOMH
+         Qo4hH0raoCD7qj4xyDtkwgGlX6gjKUZVkFnMOlc+Rc1i1tafjFSx2ErEjsyb8Us/Y5JO
+         bWtZ3jPJRRL0aPvDIrd8iApFwh+hBG0bq2t4SpWHRXYLFxArWOA6ntXhfjezqujRxFsg
+         UKXA==
+X-Gm-Message-State: AO0yUKUl1w+Tsb3oW8vQ1mdzXxZ8tXPi8OZN4ClsohQvZ5NcOKkUJTcx
+        57ZHmljkBH2aBZSFwiYTs4ado5TdAQZa5HInAcmtZBLUU+yz8g==
+X-Google-Smtp-Source: AK7set+RxUQGgNJCFIlV/cgv3JLwt1LiYwN8yOLGFimrjv9LPqkR6bAlV9JTVoQXinrJqGLk/os8UgeeDAC7J27rf6w=
+X-Received: by 2002:a17:906:9499:b0:8b1:79ef:6923 with SMTP id
+ t25-20020a170906949900b008b179ef6923mr3753219ejx.15.1676793262034; Sat, 18
+ Feb 2023 23:54:22 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+From:   Amit <amitchoudhary0523@gmail.com>
+Date:   Sun, 19 Feb 2023 13:24:12 +0530
+Message-ID: <CAFf+5zg=dsD29RfTydWJWsmOcvcw+aLszaPokV=SM8hPLtC4YA@mail.gmail.com>
+Subject: Generic Unordered Set Library (similar to C++ STL unordered_set).
+To:     linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,335 +62,490 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Test cachestat on a newly created file, /dev/ files, and /proc/ files.
-Also test on a shmem file (which can also be tested with huge pages
-since tmpfs supports huge pages).
+Generic Unordered Set Library (similar to C++ STL unordered_set).
 
-Signed-off-by: Nhat Pham <nphamcs@gmail.com>
----
- MAINTAINERS                                   |   7 +
- tools/testing/selftests/Makefile              |   1 +
- tools/testing/selftests/cachestat/.gitignore  |   2 +
- tools/testing/selftests/cachestat/Makefile    |   8 +
- .../selftests/cachestat/test_cachestat.c      | 256 ++++++++++++++++++
- 5 files changed, 274 insertions(+)
- create mode 100644 tools/testing/selftests/cachestat/.gitignore
- create mode 100644 tools/testing/selftests/cachestat/Makefile
- create mode 100644 tools/testing/selftests/cachestat/test_cachestat.c
+The code is below:
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index a198da986146..792a866353ec 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -4552,6 +4552,13 @@ S:	Supported
- F:	Documentation/filesystems/caching/cachefiles.rst
- F:	fs/cachefiles/
+-------------------------------------------
+generic_unordered_set_library.c
+-------------------------------------------
 
-+CACHESTAT: PAGE CACHE STATS FOR A FILE
-+M:	Nhat Pham <nphamcs@gmail.com>
-+M:	Johannes Weiner <hannes@cmpxchg.org>
-+L:	linux-mm@kvack.org
-+S:	Maintained
-+F:	tools/testing/selftests/cachestat/test_cachestat.c
-+
- CADENCE MIPI-CSI2 BRIDGES
- M:	Maxime Ripard <mripard@kernel.org>
- L:	linux-media@vger.kernel.org
-diff --git a/tools/testing/selftests/Makefile b/tools/testing/selftests/Makefile
-index 0464b2c6c1e4..3cad0b38c5c2 100644
---- a/tools/testing/selftests/Makefile
-+++ b/tools/testing/selftests/Makefile
-@@ -4,6 +4,7 @@ TARGETS += amd-pstate
- TARGETS += arm64
- TARGETS += bpf
- TARGETS += breakpoints
-+TARGETS += cachestat
- TARGETS += capabilities
- TARGETS += cgroup
- TARGETS += clone3
-diff --git a/tools/testing/selftests/cachestat/.gitignore b/tools/testing/selftests/cachestat/.gitignore
-new file mode 100644
-index 000000000000..d6c30b43a4bb
---- /dev/null
-+++ b/tools/testing/selftests/cachestat/.gitignore
-@@ -0,0 +1,2 @@
-+# SPDX-License-Identifier: GPL-2.0-only
-+test_cachestat
-diff --git a/tools/testing/selftests/cachestat/Makefile b/tools/testing/selftests/cachestat/Makefile
-new file mode 100644
-index 000000000000..fca73aaa7d14
---- /dev/null
-+++ b/tools/testing/selftests/cachestat/Makefile
-@@ -0,0 +1,8 @@
-+# SPDX-License-Identifier: GPL-2.0
-+TEST_GEN_PROGS := test_cachestat
-+
-+CFLAGS += $(KHDR_INCLUDES)
-+CFLAGS += -Wall
-+CFLAGS += -lrt
-+
-+include ../lib.mk
-diff --git a/tools/testing/selftests/cachestat/test_cachestat.c b/tools/testing/selftests/cachestat/test_cachestat.c
-new file mode 100644
-index 000000000000..5d0fe5ae62f1
---- /dev/null
-+++ b/tools/testing/selftests/cachestat/test_cachestat.c
-@@ -0,0 +1,256 @@
-+// SPDX-License-Identifier: GPL-2.0
-+#define _GNU_SOURCE
-+
-+#include <stdio.h>
-+#include <stdbool.h>
-+#include <linux/kernel.h>
-+#include <linux/mman.h>
-+#include <sys/mman.h>
-+#include <sys/shm.h>
-+#include <sys/syscall.h>
-+#include <unistd.h>
-+#include <string.h>
-+#include <fcntl.h>
-+#include <errno.h>
-+
-+#include "../kselftest.h"
-+
-+static const char * const dev_files[] = {
-+	"/dev/zero", "/dev/null", "/dev/urandom",
-+	"/proc/version", "/proc"
-+};
-+static const int cachestat_nr = 451;
-+
-+void print_cachestat(struct cachestat *cs)
-+{
-+	ksft_print_msg(
-+	"Using cachestat: Cached: %lu, Dirty: %lu, Writeback: %lu, Evicted: %lu, Recently Evicted: %lu\n",
-+	cs->nr_cache, cs->nr_dirty, cs->nr_writeback,
-+	cs->nr_evicted, cs->nr_recently_evicted);
-+}
-+
-+bool write_exactly(int fd, size_t filesize)
-+{
-+	char data[filesize];
-+	bool ret = true;
-+	int random_fd = open("/dev/urandom", O_RDONLY);
-+
-+	if (random_fd < 0) {
-+		ksft_print_msg("Unable to access urandom.\n");
-+		ret = false;
-+		goto out;
-+	} else {
-+		int remained = filesize;
-+		char *cursor = data;
-+
-+		while (remained) {
-+			ssize_t read_len = read(random_fd, cursor, remained);
-+
-+			if (read_len <= 0) {
-+				ksft_print_msg("Unable to read from urandom.\n");
-+				ret = false;
-+				goto close_random_fd;
-+			}
-+
-+			remained -= read_len;
-+			cursor += read_len;
-+		}
-+
-+		/* write random data to fd */
-+		remained = filesize;
-+		cursor = data;
-+		while (remained) {
-+			ssize_t write_len = write(fd, cursor, remained);
-+
-+			if (write_len <= 0) {
-+				ksft_print_msg("Unable write random data to file.\n");
-+				ret = false;
-+				goto close_random_fd;
-+			}
-+
-+			remained -= write_len;
-+			cursor += write_len;
-+		}
-+	}
-+
-+close_random_fd:
-+	close(random_fd);
-+out:
-+	return ret;
-+}
-+
-+/*
-+ * Open/create the file at filename, (optionally) write random data to it
-+ * (exactly num_pages), then test the cachestat syscall on this file.
-+ *
-+ * If test_fsync == true, fsync the file, then check the number of dirty
-+ * pages.
-+ */
-+bool test_cachestat(const char *filename, bool write_random, bool create,
-+		bool test_fsync, unsigned long num_pages, int open_flags,
-+		mode_t open_mode)
-+{
-+	size_t PS = sysconf(_SC_PAGESIZE);
-+	int filesize = num_pages * PS;
-+	bool ret = true;
-+	long syscall_ret;
-+	struct cachestat cs;
-+
-+	int fd = open(filename, open_flags, open_mode);
-+
-+	if (fd == -1) {
-+		ksft_print_msg("Unable to create/open file.\n");
-+		goto out;
-+	} else {
-+		ksft_print_msg("Create/open %s\n", filename);
-+	}
-+
-+	if (write_random) {
-+		if (!write_exactly(fd, filesize)) {
-+			ksft_print_msg("Unable to access urandom.\n");
-+			ret = false;
-+			goto out1;
-+		}
-+	}
-+
-+	syscall_ret = syscall(cachestat_nr, fd, filesize, 0, &cs, 0);
-+
-+	ksft_print_msg("Cachestat call returned %ld\n", syscall_ret);
-+
-+	if (syscall_ret) {
-+		ksft_print_msg("Cachestat returned non-zero.\n");
-+		ret = false;
-+		goto out1;
-+
-+	} else {
-+		print_cachestat(&cs);
-+
-+		if (write_random) {
-+			if (cs.nr_cache + cs.nr_evicted != num_pages) {
-+				ksft_print_msg(
-+					"Total number of cached and evicted pages is off.\n");
-+				ret = false;
-+			}
-+		}
-+	}
-+
-+	if (test_fsync) {
-+		if (fsync(fd)) {
-+			ksft_print_msg("fsync fails.\n");
-+			ret = false;
-+		} else {
-+			syscall_ret = syscall(cachestat_nr, fd, filesize, 0, &cs, 0);
-+
-+			ksft_print_msg("Cachestat call (after fsync) returned %ld\n",
-+				syscall_ret);
-+
-+			if (!syscall_ret) {
-+				print_cachestat(&cs);
-+
-+				if (cs.nr_dirty) {
-+					ret = false;
-+					ksft_print_msg(
-+						"Number of dirty should be zero after fsync.\n");
-+				}
-+			} else {
-+				ksft_print_msg("Cachestat (after fsync) returned non-zero.\n");
-+				ret = false;
-+				goto out1;
-+			}
-+		}
-+	}
-+
-+out1:
-+	close(fd);
-+
-+	if (create)
-+		remove(filename);
-+out:
-+	return ret;
-+}
-+
-+bool test_cachestat_shmem(void)
-+{
-+	size_t PS = sysconf(_SC_PAGESIZE);
-+	size_t filesize = PS * 512 * 2; /* 2 2MB huge pages */
-+	int syscall_ret;
-+	off_t off = PS;
-+	size_t compute_len = PS * 512;
-+	char *filename = "tmpshmcstat";
-+	struct cachestat cs;
-+	bool ret = true;
-+	unsigned long num_pages = compute_len / PS;
-+	int fd = shm_open(filename, O_CREAT | O_RDWR, 0600);
-+
-+	if (fd < 0) {
-+		ksft_print_msg("Unable to create shmem file.\n");
-+		ret = false;
-+		goto out;
-+	}
-+
-+	if (ftruncate(fd, filesize)) {
-+		ksft_print_msg("Unable to trucate shmem file.\n");
-+		ret = false;
-+		goto close_fd;
-+	}
-+
-+	if (!write_exactly(fd, filesize)) {
-+		ksft_print_msg("Unable to write to shmem file.\n");
-+		ret = false;
-+		goto close_fd;
-+	}
-+
-+	syscall_ret = syscall(cachestat_nr, fd, compute_len, off, &cs, 0);
-+
-+	if (syscall_ret) {
-+		ksft_print_msg("Cachestat returned non-zero.\n");
-+		ret = false;
-+		goto close_fd;
-+	} else {
-+		print_cachestat(&cs);
-+		if (cs.nr_cache + cs.nr_evicted != num_pages) {
-+			ksft_print_msg(
-+				"Total number of cached and evicted pages is off.\n");
-+			ret = false;
-+		}
-+	}
-+
-+close_fd:
-+	shm_unlink(filename);
-+out:
-+	return ret;
-+}
-+
-+int main(void)
-+{
-+	int ret = 0;
-+
-+	for (int i = 0; i < 5; i++) {
-+		const char *dev_filename = dev_files[i];
-+
-+		if (test_cachestat(dev_filename, false, false, false,
-+			4, O_RDONLY, 0400))
-+			ksft_test_result_pass("cachestat works with %s\n", dev_filename);
-+		else {
-+			ksft_test_result_fail("cachestat fails with %s\n", dev_filename);
-+			ret = 1;
-+		}
-+	}
-+
-+	if (test_cachestat("tmpfilecachestat", true, true,
-+		true, 4, O_CREAT | O_RDWR, 0400 | 0600))
-+		ksft_test_result_pass("cachestat works with a normal file\n");
-+	else {
-+		ksft_test_result_fail("cachestat fails with normal file\n");
-+		ret = 1;
-+	}
-+
-+	if (test_cachestat_shmem())
-+		ksft_test_result_pass("cachestat works with a shmem file\n");
-+	else {
-+		ksft_test_result_fail("cachestat fails with a shmem file\n");
-+		ret = 1;
-+	}
-+
-+	return ret;
-+}
---
-2.39.1
+/*
+ * License: This file has been released under APACHE LICENSE, VERSION 2.0.
+ * The license details can be found here:
+ *                            https://www.apache.org/licenses/LICENSE-2.0
+ */
+
+#include "generic_unordered_set_library.h"
+
+#include <stdlib.h>
+#include <string.h>
+#include <stddef.h>
+
+static void us_get_matching_and_prev_elements(
+                             struct generic_unordered_set_container *gusc_ptr,
+                             void *data, long data_size,
+                             struct element **pmatch, struct element **pprev)
+{
+
+    struct element *temp = NULL;
+    struct element *prev = NULL;
+
+    *pmatch = NULL;
+    if (pprev) {
+        *pprev = NULL;
+    }
+
+    for (prev = NULL, temp = gusc_ptr->first;
+         temp != NULL;
+         prev = temp, temp = temp->next) {
+
+        if (temp->data_size != data_size) {
+            continue;
+        }
+
+        if (memcmp(temp->data, data, (size_t)(data_size)) == 0) { //
+element matched
+            *pmatch = temp;
+            if (pprev) {
+                *pprev = prev;
+            }
+            break;
+        }
+
+    } // end of for loop
+
+    return;
+
+} // end of us_get_matching_and_prev_elements
+
+struct generic_unordered_set_container *us_init_generic_unordered_set_container(
+                   call_function_before_deleting_data cfbdd_callback_function)
+{
+
+    struct generic_unordered_set_container *gusc_ptr = NULL;
+
+    gusc_ptr = malloc(sizeof(*gusc_ptr));
+
+    if (!gusc_ptr) {
+        return NULL;
+    }
+
+    gusc_ptr->first = NULL;
+    gusc_ptr->fi = NULL;
+    gusc_ptr->total_number_of_elements = 0;
+    gusc_ptr->cfbdd_callback_function = cfbdd_callback_function;
+
+    return gusc_ptr;
+
+} // end of us_init_generic_unordered_set_container
+
+long us_get_total_number_of_elements(
+                             struct generic_unordered_set_container *gusc_ptr)
+{
+
+    long num_elems = 0;
+
+    num_elems = gusc_ptr->total_number_of_elements;
+
+    return num_elems;
+
+} // end of us_get_total_number_of_elements
+
+int us_add_new_element(struct generic_unordered_set_container *gusc_ptr,
+                       void *data, long data_size)
+{
+
+    struct element *matched_elem = NULL;
+    struct element *prev_elem = NULL;
+    struct element *new_elem = NULL;
+
+    if (!data) {
+        return GUSL_AT_LEAST_ONE_ARG_IS_INVALID;
+    }
+
+    if (data_size <= 0) {
+        return GUSL_AT_LEAST_ONE_ARG_IS_INVALID;
+    }
+
+    us_get_matching_and_prev_elements(gusc_ptr, data, data_size, &matched_elem,
+                                      &prev_elem);
+
+    if (matched_elem) {
+        return GUSL_ELEMENT_EXISTS;
+    }
+
+    new_elem = malloc(sizeof(*new_elem));
+    if (!new_elem) {
+        return GUSL_NO_MEMORY;
+    }
+
+    new_elem->data = malloc((size_t)(data_size));
+    if (!new_elem->data) {
+        free(new_elem);
+        return GUSL_NO_MEMORY;
+    }
+
+    new_elem->data_size = data_size;
+    memmove(new_elem->data, data, (size_t)(new_elem->data_size));
+
+    new_elem->next = NULL;
+
+    if (!prev_elem) { // no elements in the set
+        gusc_ptr->first = new_elem;
+    } else {
+        prev_elem->next = new_elem;
+    }
+
+    gusc_ptr->total_number_of_elements = gusc_ptr->total_number_of_elements + 1;
+
+    return GUSL_SUCCESS;
+
+} // end of us_add_new_element
+
+// The user is responsible for freeing the data pointer that is returned in
+// *pdata.
+int us_get_data_from_front_element_and_delete_front_element(
+                             struct generic_unordered_set_container *gusc_ptr,
+                             void **pdata, long *pdata_size)
+{
+
+    struct element *temp = NULL;
+
+    if ((!pdata) || (!pdata_size)) {
+        return GUSL_AT_LEAST_ONE_ARG_IS_INVALID;
+    }
+
+    *pdata = NULL;
+    *pdata_size = 0;
+
+    if (gusc_ptr->total_number_of_elements == 0) {
+        return GUSL_SET_IS_EMPTY;
+    }
+
+    *pdata = gusc_ptr->first->data;
+    *pdata_size = gusc_ptr->first->data_size;
+
+    temp = gusc_ptr->first;
+    gusc_ptr->first = gusc_ptr->first->next;
+
+    temp->next = NULL;
+    free(temp);
+
+    gusc_ptr->total_number_of_elements = gusc_ptr->total_number_of_elements - 1;
+
+    return GUSL_SUCCESS;
+
+} // end of us_get_data_from_front_element_and_delete_front_element
+
+int us_is_element_present(struct generic_unordered_set_container *gusc_ptr,
+                          void *data, long data_size)
+{
+
+    struct element *matched_elem = NULL;
+
+    if (!data) {
+        return GUSL_AT_LEAST_ONE_ARG_IS_INVALID;
+    }
+
+    if (data_size <= 0) {
+        return GUSL_AT_LEAST_ONE_ARG_IS_INVALID;
+    }
+
+    if (gusc_ptr->total_number_of_elements == 0) {
+        return GUSL_FALSE;
+    }
+
+    us_get_matching_and_prev_elements(gusc_ptr, data, data_size, &matched_elem,
+                                      NULL);
+
+    if (matched_elem) {
+        return GUSL_TRUE;
+    }
+
+    return GUSL_FALSE;
+
+} // end of us_is_element_present
+
+int us_replace_data_and_size_in_matching_element(
+                             struct generic_unordered_set_container *gusc_ptr,
+                             void *old_data, long old_data_size,
+                             void *new_data, long new_data_size)
+{
+
+    struct element *matched_elem = NULL;
+    void *data = NULL;
+
+    if ((!old_data) || (!new_data)) {
+        return GUSL_AT_LEAST_ONE_ARG_IS_INVALID;
+    }
+
+    if ((old_data_size <= 0) || (new_data_size <= 0)) {
+        return GUSL_AT_LEAST_ONE_ARG_IS_INVALID;
+    }
+
+    if (gusc_ptr->total_number_of_elements == 0) {
+        return GUSL_SET_IS_EMPTY;
+    }
+
+    us_get_matching_and_prev_elements(gusc_ptr, old_data, old_data_size,
+                                      &matched_elem, NULL);
+
+    if (!matched_elem) {
+        return GUSL_ELEMENT_NOT_FOUND;
+    }
+
+    // We will allocate memory for contents of new_data and copy contents of
+    // new_data into this newly allocated memory. Then we will free old_data
+    // and populate the data member of the matched_elem with the address of the
+    // newly allocated memory. We will also populate the data_size member of
+    // the matched_elem with the value in new_data_size.
+    data = malloc((size_t)(new_data_size));
+    if (!data) {
+        return GUSL_NO_MEMORY;
+    }
+
+    memmove(data, new_data, (size_t)(new_data_size));
+
+    if (gusc_ptr->cfbdd_callback_function) {
+        gusc_ptr->cfbdd_callback_function(gusc_ptr, matched_elem->data);
+    }
+
+    free(matched_elem->data);
+
+    matched_elem->data = data;
+    matched_elem->data_size = new_data_size;
+
+    return GUSL_SUCCESS;
+
+} // end of us_replace_data_and_size_in_matching_element
+
+int us_delete_matching_element(
+                             struct generic_unordered_set_container *gusc_ptr,
+                             void *data, long data_size)
+{
+
+    struct element *matched_elem = NULL;
+    struct element *prev_elem = NULL;
+
+    if (!data) {
+        return GUSL_AT_LEAST_ONE_ARG_IS_INVALID;
+    }
+
+    if (data_size <= 0) {
+        return GUSL_AT_LEAST_ONE_ARG_IS_INVALID;
+    }
+
+    if (gusc_ptr->total_number_of_elements == 0) {
+        return GUSL_SET_IS_EMPTY;
+    }
+
+    us_get_matching_and_prev_elements(gusc_ptr, data, data_size, &matched_elem,
+                                      &prev_elem);
+
+    if (!matched_elem) {
+        return GUSL_ELEMENT_NOT_FOUND;
+    }
+
+    if (!prev_elem) { // first element matched
+        gusc_ptr->first = gusc_ptr->first->next;
+    } else {
+        prev_elem->next = matched_elem->next;
+    }
+
+    matched_elem->next = NULL;
+
+    if (gusc_ptr->cfbdd_callback_function) {
+        gusc_ptr->cfbdd_callback_function(gusc_ptr, matched_elem->data);
+    }
+
+    gusc_ptr->total_number_of_elements = gusc_ptr->total_number_of_elements - 1;
+
+    free(matched_elem->data);
+    free(matched_elem);
+
+    return GUSL_SUCCESS;
+
+} // end of us_delete_matching_element
+
+void us_init_fi(struct generic_unordered_set_container *gusc_ptr)
+{
+
+    gusc_ptr->fi = gusc_ptr->first;
+
+    return;
+
+} // end of us_init_fi
+
+int us_fi_has_next_element(struct generic_unordered_set_container *gusc_ptr)
+{
+
+    int has_next = GUSL_FALSE;
+
+    if (gusc_ptr->fi) {
+        has_next = GUSL_TRUE;
+    }
+
+    return has_next;
+
+} // end of us_fi_has_next_element
+
+// The user should not free the data pointer that is returned in *pdata because
+// the element that contains the data is still part of the set. However, the
+// user can modify the data and then modify data_size if the size of data has
+// changed.
+int us_fi_get_data_from_next_element(
+                             struct generic_unordered_set_container *gusc_ptr,
+                             void **pdata, long **ppdata_size)
+{
+
+    if ((!pdata) || (!ppdata_size)) {
+        return GUSL_AT_LEAST_ONE_ARG_IS_INVALID;
+    }
+
+    *pdata = NULL;
+    *ppdata_size = 0;
+
+    *pdata = gusc_ptr->fi->data;
+    *ppdata_size = &(gusc_ptr->fi->data_size);
+
+    gusc_ptr->fi = gusc_ptr->fi->next;
+
+    return GUSL_SUCCESS;
+
+} // end of us_fi_get_data_from_next_element
+
+void us_delete_all_elements(struct generic_unordered_set_container *gusc_ptr)
+{
+
+    struct element *temp = NULL;
+
+    while ((temp = gusc_ptr->first)) {
+
+        gusc_ptr->first = gusc_ptr->first->next;
+        temp->next = NULL;
+
+        if (gusc_ptr->cfbdd_callback_function) {
+            gusc_ptr->cfbdd_callback_function(gusc_ptr, temp->data);
+        }
+
+        free(temp->data);
+        free(temp);
+
+        gusc_ptr->total_number_of_elements =
+                                       gusc_ptr->total_number_of_elements - 1;
+    }
+
+    // crash the program if total_number_of_elements is not zero
+    if (gusc_ptr->total_number_of_elements != 0) {
+        *((unsigned long *)(-1)) = 123;
+    }
+
+    return;
+
+} // end of us_delete_all_elements
+
+void us_delete_container(struct generic_unordered_set_container *gusc_ptr)
+{
+
+    us_delete_all_elements(gusc_ptr);
+
+    free(gusc_ptr);
+
+    return;
+
+} // end of us_delete_container
+
+-------------------------------------------
+generic_unordered_set_library.h
+-------------------------------------------
+
+/*
+ * License: This file has been released under APACHE LICENSE, VERSION 2.0.
+ * The license details can be found here:
+ *                            https://www.apache.org/licenses/LICENSE-2.0
+ */
+
+#ifndef _GENERIC_UNORDERED_SET_LIBRARY_H_
+#define _GENERIC_UNORDERED_SET_LIBRARY_H_
+
+#define GUSL_SUCCESS 2 // everything happened successfully
+#define GUSL_TRUE 1 // true
+#define GUSL_FALSE 0 // false
+#define GUSL_AT_LEAST_ONE_ARG_IS_INVALID -1 // at least one argument is invalid
+#define GUSL_NO_MEMORY -2 // no memory available
+#define GUSL_ELEMENT_EXISTS -3 // element already exists in the set
+#define GUSL_SET_IS_EMPTY -4 // there are no elements in the set
+#define GUSL_ELEMENT_NOT_FOUND -5 // element not found in the set
+
+struct generic_unordered_set_container;
+
+struct element
+{
+    void *data;
+    long data_size;
+    struct element *next;
+};
+
+// gusc_ptr needs to be sent because in case the user has created more than
+// one container and the user stores different 'data' in each container, then
+// the user will be able to identify that the 'data' belongs to which container.
+// Otherwise, the user won't be able to identify that the 'data' belongs to
+// which container and then things won't happen correctly.
+typedef void (*call_function_before_deleting_data)(
+                             struct generic_unordered_set_container *gusc_ptr,
+                             void *data);
+
+struct generic_unordered_set_container
+{
+    struct element *first;
+    struct element *fi; // fi stands for forward iterator
+    long total_number_of_elements;
+    // callback function
+    call_function_before_deleting_data cfbdd_callback_function;
+};
+
+/*
+ * Names of functions start with the prefix us_. us_ stands for unordered set.
+ *
+ * In this software, delete and free mean the same thing.
+ */
+
+struct generic_unordered_set_container *us_init_generic_unordered_set_container(
+                   call_function_before_deleting_data cfbdd_callback_function);
+
+long us_get_total_number_of_elements(
+                             struct generic_unordered_set_container *gusc_ptr);
+
+int us_add_new_element(struct generic_unordered_set_container *gusc_ptr,
+                       void *data, long data_size);
+
+int us_get_data_from_front_element_and_delete_front_element(
+                             struct generic_unordered_set_container *gusc_ptr,
+                             void **pdata, long *pdata_size);
+
+int us_is_element_present(struct generic_unordered_set_container *gusc_ptr,
+                          void *data, long data_size);
+
+int us_replace_data_and_size_in_matching_element(
+                             struct generic_unordered_set_container *gusc_ptr,
+                             void *old_data, long old_data_size,
+                             void *new_data, long new_data_size);
+
+int us_delete_matching_element(
+                             struct generic_unordered_set_container *gusc_ptr,
+                             void *data, long data_size);
+
+void us_init_fi(struct generic_unordered_set_container *gusc_ptr);
+
+int us_fi_has_next_element(struct generic_unordered_set_container *gusc_ptr);
+
+int us_fi_get_data_from_next_element(
+                             struct generic_unordered_set_container *gusc_ptr,
+                             void **pdata, long **ppdata_size);
+
+void us_delete_all_elements(struct generic_unordered_set_container *gusc_ptr);
+
+void us_delete_container(struct generic_unordered_set_container *gusc_ptr);
+
+#endif
