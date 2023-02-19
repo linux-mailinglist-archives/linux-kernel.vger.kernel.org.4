@@ -2,163 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9260C69BE1A
-	for <lists+linux-kernel@lfdr.de>; Sun, 19 Feb 2023 03:05:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 03AD369BE1B
+	for <lists+linux-kernel@lfdr.de>; Sun, 19 Feb 2023 03:08:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229488AbjBSCFM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 18 Feb 2023 21:05:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33082 "EHLO
+        id S229525AbjBSCIB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 18 Feb 2023 21:08:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33956 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229436AbjBSCFK (ORCPT
+        with ESMTP id S229436AbjBSCH7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 18 Feb 2023 21:05:10 -0500
-Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17F1D13DE9;
-        Sat, 18 Feb 2023 18:05:09 -0800 (PST)
-Received: by mail-ed1-x52e.google.com with SMTP id d14so6530786eda.4;
-        Sat, 18 Feb 2023 18:05:09 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=oAG0HrBT+nsRDBk5CT3fX4o0S+udyVyKE7ZqJ4H9AH4=;
-        b=qIN//xl1ZDXS0szWN3S/OOut7PPst+N6uWkUJ+hRLujRtmZaNjPYfs6nIi8eeJWtbk
-         QspmpY8l8W2lcbPLkGlUqf63Lf59A4DDJwVS0Jd8WyK78SAdA5lHEZ0SM2r/7nfYqhzd
-         fH8mLurYIDs3iEbM242ESx+Rdt7/Y31FVNCrgV35bjAiKhiuiyggcKoFTvYSI4T/ePly
-         ibRao3K3RfNMdSjdFaw0QKbOloQlRRHI9eIb77d4Gtqp+htHCj8etHEh8gk/kzsDeByP
-         rp6K3fefWLCwEvuA9V4tXrQxs5bQAMzDr5dzw1Ppnw9LeMJgNRrmv0hU5KAxCYxnlozR
-         S0DA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=oAG0HrBT+nsRDBk5CT3fX4o0S+udyVyKE7ZqJ4H9AH4=;
-        b=FgahnurGZPA60o289q7uiSXbb7FEj5OlY4pPauJBlRb2/3DqJc8t2TnZkzG0IGZNNX
-         5ypXNeKf7wY34U6AIBdolYBw5jhkw2Gd9snTo7f+o/UFkCGRHga37sCXamXzJb7oE0ZK
-         2ql0JRzgBbws/a03ZRhcmrn9quyrtwv+Y2Es0CcGasuO919lvPY26sV53bsta7Tljy0j
-         3I0y2r3/MnVxiJu+8kByLAHgIVCJW+9e35E4xGl7FwLiqQZKoG04rWTFF0U5gAwVwzAy
-         X6offRzAUBRiQSm/2JrunsWav65ku/I8Kb9NKlGH1J3iYZ6T3M+FiDWPJLIGhHtzXGNc
-         cHAA==
-X-Gm-Message-State: AO0yUKUJg7tAK2Jv0o/4ZqV3YXKp3o0fhgNWl/IZ+7KT4tRMyh7TLY38
-        YM1pzyLqTrZYzyvPSA1lG3BBWrWmFq/vJRGG
-X-Google-Smtp-Source: AK7set9yQauCBQB3u2AjNtHRFyKL21MFwQclHD9/bSMJrhyR99YO2MkRzvDQ/1YUj+WcoVwN6wIMBw==
-X-Received: by 2002:a17:906:c44a:b0:8b1:fc:d737 with SMTP id ck10-20020a170906c44a00b008b100fcd737mr3887401ejb.19.1676772307408;
-        Sat, 18 Feb 2023 18:05:07 -0800 (PST)
-Received: from andrea (host-79-32-69-136.retail.telecomitalia.it. [79.32.69.136])
-        by smtp.gmail.com with ESMTPSA id lg17-20020a170906f89100b008b1797a53b4sm3263873ejb.215.2023.02.18.18.05.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 18 Feb 2023 18:05:06 -0800 (PST)
-Date:   Sun, 19 Feb 2023 03:05:01 +0100
-From:   Andrea Parri <parri.andrea@gmail.com>
-To:     Joel Fernandes <joel@joelfernandes.org>
-Cc:     Alan Stern <stern@rowland.harvard.edu>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
-        kernel-team@meta.com, mingo@kernel.org, will@kernel.org,
-        peterz@infradead.org, boqun.feng@gmail.com, npiggin@gmail.com,
-        dhowells@redhat.com, j.alglave@ucl.ac.uk, luc.maranget@inria.fr,
-        akiyks@gmail.com
-Subject: Re: Current LKMM patch disposition
-Message-ID: <Y/GDzXkJzjxbP6I4@andrea>
-References: <20230204014941.GS2948950@paulmck-ThinkPad-P17-Gen-1>
- <Y95yhJgNq8lMXPdF@rowland.harvard.edu>
- <20230204222411.GC2948950@paulmck-ThinkPad-P17-Gen-1>
- <Y9+41ctA54pjm/KG@google.com>
- <Y+FJSzUoGTgReLPB@rowland.harvard.edu>
- <Y+fN2fvUjGDWBYrv@google.com>
- <Y+f4TYZ9BPlt8y8B@rowland.harvard.edu>
- <CAEXW_YRuTfjc=5OAskTV0Qt_zSJTPP3-01=Y=SypMdPsF_weAQ@mail.gmail.com>
- <Y+hWAksfk4C0M2gB@rowland.harvard.edu>
- <CAEXW_YQ3fvFDNi9wG5w4Zqkbda8SUByOnM6y6MXQpxT9oQw8xQ@mail.gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAEXW_YQ3fvFDNi9wG5w4Zqkbda8SUByOnM6y6MXQpxT9oQw8xQ@mail.gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        Sat, 18 Feb 2023 21:07:59 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C41EDEB56
+        for <linux-kernel@vger.kernel.org>; Sat, 18 Feb 2023 18:07:58 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 333BF60B72
+        for <linux-kernel@vger.kernel.org>; Sun, 19 Feb 2023 02:07:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 98952C433D2;
+        Sun, 19 Feb 2023 02:07:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1676772477;
+        bh=DxlTIjIjI2Stqt/dwKaz6un7G99O55KZhP8JxTILwJs=;
+        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+        b=q/wARCQrGvMgq08VhcPxRVkmthQ1IHZlxk+/Qc/49bEXBHhK9VnGXid5QZSyJ8NR7
+         ijj2U9NOrSZgHPDk/M7ozdV44hUcgcJ4KHSIAo/IZQ2rXJ5TOIIzcC/rXja/+ABJ3/
+         WM39IKjHmvnFZm5LAiPh+fkcy6cxg62KqkDyirf11B6orACqyhoeBd+ut5DGj59vN/
+         EU/bdwhERt/GuG/NTeKV/at5AF/a4PFKydGafZ8/gH8H59e8qc3lMKCMAOO1RpmJNF
+         GrZwSkOUMzubResWy9/0Wxkiiuvnc8EkLXT2SFgNYUG/C+82LVyJqveuNRZSonQogL
+         zyfxu+XLpFNmQ==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 7AD01E68D2F;
+        Sun, 19 Feb 2023 02:07:57 +0000 (UTC)
+Subject: Re: [GIT pull] irq/urgent for v6.2
+From:   pr-tracker-bot@kernel.org
+In-Reply-To: <167676366161.269954.1941292974323519398.tglx@xen13>
+References: <167676366161.269954.1941292974323519398.tglx@xen13>
+X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
+X-PR-Tracked-Message-Id: <167676366161.269954.1941292974323519398.tglx@xen13>
+X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git irq-urgent-2023-02-19
+X-PR-Tracked-Commit-Id: 2b129f0b24ab578b02901b4a1744b7f97399faa0
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: a33d946cbb8709339a856d7da406a7a670e86a60
+Message-Id: <167677247744.889.17612258757798407785.pr-tracker-bot@kernel.org>
+Date:   Sun, 19 Feb 2023 02:07:57 +0000
+To:     Thomas Gleixner <tglx@linutronix.de>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-kernel@vger.kernel.org, x86@kernel.org
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> One additional feedback I wanted to mention, regarding this paragraph
-> under "WARNING":
-> ===========
-> The protections provided by READ_ONCE(), WRITE_ONCE(), and others are
-> not perfect; and under some circumstances it is possible for the
-> compiler to undermine the memory model. Here is an example. Suppose
-> both branches of an "if" statement store the same value to the same
-> location:
-> r1 = READ_ONCE(x);
-> if (r1) {
-> WRITE_ONCE(y, 2);
-> ... /* do something */
-> } else {
-> WRITE_ONCE(y, 2);
-> ... /* do something else */
-> }
-> ===========
-> 
-> I tried lots of different compilers with varying degrees of
-> optimization, in all cases I find that the conditional instruction
-> always appears in program order before the stores inside the body of
-> the conditional. So I am not sure if this is really a valid concern on
-> current compilers, if not - could you provide an example of a compiler
-> and options that cause it?
+The pull request you sent on Sun, 19 Feb 2023 00:42:23 +0100 (CET):
 
-The compiler cannot change the order in which the load and the store
-appear in the program (these are "volatile accesses"); the concern is
-that (quoting from the .txt) it "could list the stores out of the
-conditional", thus effectively destroying the control dependency between
-the load and the store (the load-store "reordering" could then be
-performed by the uarch, under certain archs).  For example, compare:
+> git://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git irq-urgent-2023-02-19
 
-(for the C snippet)
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/a33d946cbb8709339a856d7da406a7a670e86a60
 
-void func(int *x, int *y)
-{
-	int r1 = *(const volatile int *)x;
+Thank you!
 
-	if (r1)
-		*(volatile int *)y = 2;
-	else
-		*(volatile int *)y = 2;
-}
-
-- arm64 gcc 11.3 -O1 gives:
-
-func:
-	ldr     w0, [x0]
-	cbz     w0, .L2
-	mov     w0, 2
-	str     w0, [x1]
-.L1:
-	ret
-.L2:
-	mov     w0, 2
-	str     w0, [x1]
-	b       .L1
-
-- OTOH, arm64 gcc 11.3 -O2 gives:
-
-func:
-	ldr     w0, [x0]
-	mov     w0, 2
-	str     w0, [x1]
-	ret
-
-- similarly, using arm64 clang 14.0.0 -O2,
-
-func:                                   // @func
-	mov     w8, #2
-	ldr     wzr, [x0]
-	str     w8, [x1]
-	ret
-
-I saw similar results using riscv, powerpc, x86 gcc & clang.
-
-  Andrea
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html
