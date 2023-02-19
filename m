@@ -2,55 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F397669BFE4
-	for <lists+linux-kernel@lfdr.de>; Sun, 19 Feb 2023 10:53:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 083F969BFEF
+	for <lists+linux-kernel@lfdr.de>; Sun, 19 Feb 2023 11:15:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230198AbjBSJxg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 19 Feb 2023 04:53:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50094 "EHLO
+        id S229674AbjBSKOz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 19 Feb 2023 05:14:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60564 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230028AbjBSJxc (ORCPT
+        with ESMTP id S229506AbjBSKOy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 19 Feb 2023 04:53:32 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B626F171A;
-        Sun, 19 Feb 2023 01:53:24 -0800 (PST)
+        Sun, 19 Feb 2023 05:14:54 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EAA7A10A95;
+        Sun, 19 Feb 2023 02:14:52 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 48079B803F1;
-        Sun, 19 Feb 2023 09:48:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5B968C433A1;
-        Sun, 19 Feb 2023 09:48:21 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 82A8A60C11;
+        Sun, 19 Feb 2023 10:14:52 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D4710C4339B;
+        Sun, 19 Feb 2023 10:14:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1676800101;
-        bh=RdGXKg9ll+t6+jvhug7bC+8oJTVfF6ScFK4r5+vlmPw=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=cI6eTRfi9PI61AKC6aJER6BdSPAri3DLYpaGAxJ0KhOzZDLjOvMfzgI0Q86XCMzuB
-         iqysAoXR8K9mmIoeKvaAPvNnYxSBM2hpYxpQUTeoEV+deM7eEi63lWd3BjABXLG7b7
-         ecsuyPmWhOt/IRiMe3eUqd4KgWt7qzeuDUrdzhpSgRT50pXKGDaQ2gQn/b7lGMiLnH
-         x/KaETvPD0SDorZgr2NfxI4zaR4SMfPHoiFJG3ZaaJgaaGa3sknXh4/zHdvYPzbIIm
-         aXaIghsCboGzQga7cTAodgpQoYar2L9r6gRRlalnSPgzHFVV7bxGZ6HStT8vdNopc6
-         U8kfWoGdsOLAA==
-Date:   Sun, 19 Feb 2023 11:48:17 +0200
-From:   Leon Romanovsky <leon@kernel.org>
-To:     Maxim Korotkov <korotkov.maxim.s@gmail.com>
-Cc:     Rasesh Mody <rmody@marvell.com>, GR-Linux-NIC-Dev@marvell.com,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Michael Chan <mchan@broadcom.com>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, lvc-project@linuxtesting.org
-Subject: Re: [PATCH] bnx2: remove deadcode in bnx2_init_cpus()
-Message-ID: <Y/HwYZFblWkUD2+n@unreal>
-References: <20230218130016.42856-1-korotkov.maxim.s@gmail.com>
+        s=k20201202; t=1676801691;
+        bh=sNN8c94qA1yZlc1KlOz29fi1nBuqPs8632wXKj46328=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=FfJrHOHfOvghJdnBIVi7Gv5Kc3EfdZScmpsLIdZzWpMEyASmseEaBmseo+jBmi9jJ
+         YAtaOnumjPIGafXsq9KNDOttsyzvX1CgryuHjxsNH8eyLWECliB21Z3upGRol+QNm0
+         KiyFp+6pHY13mCMe8sRSmPsJFR4CTDn//elx9KuuuS6Nk2waKUMtTDLutbwIS+JlDI
+         oSUQ8M2pKUWG41CDlPsh7FY0iIgr49eA1W3Lr5zfbpVXBAVvLx246KucZxLdZJWmQf
+         yX5jeDQ4p6N9uwn6Oxs3FTHiIL4xCHhvfiJw/TPvc2jI/cuDRCLktjk13l4Ncq6MOO
+         c9lK23AX2iVjw==
+Received: by mail-oa1-f47.google.com with SMTP id 586e51a60fabf-171d57fcba3so634595fac.11;
+        Sun, 19 Feb 2023 02:14:51 -0800 (PST)
+X-Gm-Message-State: AO0yUKW78xCFfczao6dc5i5ehWVgq14kLnJxNrH8G+GKEIXMKtReqelm
+        ghoKeEsaSQHQ7cFKNI79rbS5TOmpr8ZZ6c/qSpY=
+X-Google-Smtp-Source: AK7set+zyV+dD80XZnkrT+/dXopUSPLMEroAOP2bmUZGlzQqg5q2AvNWCeKql6sz5q5oOygGHV4gggGRiFn7s2R1sIE=
+X-Received: by 2002:a05:6870:c1ce:b0:16e:9431:5c2e with SMTP id
+ i14-20020a056870c1ce00b0016e94315c2emr443762oad.56.1676801690999; Sun, 19 Feb
+ 2023 02:14:50 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230218130016.42856-1-korotkov.maxim.s@gmail.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+References: <20230217065246.31641-1-rdunlap@infradead.org>
+In-Reply-To: <20230217065246.31641-1-rdunlap@infradead.org>
+From:   Masahiro Yamada <masahiroy@kernel.org>
+Date:   Sun, 19 Feb 2023 19:14:14 +0900
+X-Gmail-Original-Message-ID: <CAK7LNAT4KW=SiWSYyC7fZYcpX5-6FFsPsHCVNbTvvgdKCXSctw@mail.gmail.com>
+Message-ID: <CAK7LNAT4KW=SiWSYyC7fZYcpX5-6FFsPsHCVNbTvvgdKCXSctw@mail.gmail.com>
+Subject: Re: [PATCH] kconfig: save the KCONFIG_SEED value in the config file
+To:     Randy Dunlap <rdunlap@infradead.org>
+Cc:     linux-kernel@vger.kernel.org, linux-kbuild@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -58,41 +60,121 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Feb 18, 2023 at 04:00:16PM +0300, Maxim Korotkov wrote:
-> The load_cpu_fw function has no error return code
-> and always returns zero. Checking the value returned by
-> this function does not make sense.
-> As a result, bnx2_init_cpus will also return only zero
-> 
-> Found by Security Code and Linux Verification
-> Center (linuxtesting.org) with SVACE
-> 
-> Fixes: 57579f7629a3 ("bnx2: Use request_firmware()")
-> Signed-off-by: Maxim Korotkov <korotkov.maxim.s@gmail.com>
+On Fri, Feb 17, 2023 at 3:52 PM Randy Dunlap <rdunlap@infradead.org> wrote:
+>
+> Save (print) the randconfig seed value in the kernel .config file.
+> This enables someone to see easily that the .config file is a
+> randconfig file.
+
+
+I still do not understand why this is useful.
+
+Who cares if it was generated by randconfig or menuconfig?
+They are the same.
+
+
+
+
+If I run "make randconfig" followed by "make olddefconfig",
+I get the same .config file, except that "KCONFIG_SEED=..."
+has disappeared.
+
+So, you cannot carry this kind of information, anyway.
+
+
+
+$ make  randconfig
+KCONFIG_SEED=0x69256B40
+#
+# configuration written to .config
+#
+
+$ make olddefconfig
+#
+# configuration written to .config
+#
+
+$ diff -u .config.old .config
+--- .config.old 2023-02-19 19:03:16.831931359 +0900
++++ .config 2023-02-19 19:03:37.147477826 +0900
+@@ -1,7 +1,6 @@
+ #
+ # Automatically generated file; DO NOT EDIT.
+ # Linux/x86 6.2.0-rc5 Kernel Configuration
+-# KCONFIG_SEED=0x69256B40
+ #
+ CONFIG_CC_VERSION_TEXT="gcc (Ubuntu 11.3.0-1ubuntu1~22.04) 11.3.0"
+ CONFIG_CC_IS_GCC=y
+
+
+
+
+
+
+
+>
+> It also allows the randconfig file to be recreated by using the
+> KCONFIG_SEED environment variable, as long as KCONFIG_PROBABILITY
+> was not specified (the default probability values were used) and
+> as long as the file was not edited.
+>
+> Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+> Cc: Masahiro Yamada <masahiroy@kernel.org>
+> Cc: linux-kbuild@vger.kernel.org
 > ---
->  drivers/net/ethernet/broadcom/bnx2.c | 22 ++++++----------------
->  1 file changed, 6 insertions(+), 16 deletions(-)
-> 
-> diff --git a/drivers/net/ethernet/broadcom/bnx2.c b/drivers/net/ethernet/broadcom/bnx2.c
-> index 9f473854b0f4..4dacb65a7348 100644
-> --- a/drivers/net/ethernet/broadcom/bnx2.c
-> +++ b/drivers/net/ethernet/broadcom/bnx2.c
-> @@ -3908,37 +3908,27 @@ bnx2_init_cpus(struct bnx2 *bp)
->  		(const struct bnx2_mips_fw_file *) bp->mips_firmware->data;
->  	const struct bnx2_rv2p_fw_file *rv2p_fw =
->  		(const struct bnx2_rv2p_fw_file *) bp->rv2p_firmware->data;
-> -	int rc;
->  
->  	/* Initialize the RV2P processor. */
->  	load_rv2p_fw(bp, RV2P_PROC1, &rv2p_fw->proc1);
->  	load_rv2p_fw(bp, RV2P_PROC2, &rv2p_fw->proc2);
->  
->  	/* Initialize the RX Processor. */
-> -	rc = load_cpu_fw(bp, &cpu_reg_rxp, &mips_fw->rxp);
-> -	if (rc)
-> -		goto init_cpu_err;
-> +	(void)load_cpu_fw(bp, &cpu_reg_rxp, &mips_fw->rxp);
+>  scripts/kconfig/conf.c     |    3 +++
+>  scripts/kconfig/confdata.c |    2 ++
+>  scripts/kconfig/lkc.h      |    2 ++
+>  3 files changed, 7 insertions(+)
+>
+> diff -- a/scripts/kconfig/conf.c b/scripts/kconfig/conf.c
+> --- a/scripts/kconfig/conf.c
+> +++ b/scripts/kconfig/conf.c
+> @@ -83,6 +83,8 @@ static void xfgets(char *str, int size,
+>                 printf("%s", str);
+>  }
+>
+> +unsigned int rand_seed;
+> +
+>  static void set_randconfig_seed(void)
+>  {
+>         unsigned int seed;
+> @@ -109,6 +111,7 @@ static void set_randconfig_seed(void)
+>                 seed = (now.tv_sec + 1) * (now.tv_usec + 1);
+>         }
+>
+> +       rand_seed = seed;
+>         printf("KCONFIG_SEED=0x%X\n", seed);
+>         srand(seed);
+>  }
+> diff -- a/scripts/kconfig/confdata.c b/scripts/kconfig/confdata.c
+> --- a/scripts/kconfig/confdata.c
+> +++ b/scripts/kconfig/confdata.c
+> @@ -621,6 +621,8 @@ static void conf_write_heading(FILE *fp,
+>                 cs->decoration);
+>
+>         fprintf(fp, "%s %s\n", cs->decoration, rootmenu.prompt->text);
+> +       if (rand_seed)
+> +               fprintf(fp, "%s KCONFIG_SEED=0x%X\n", cs->decoration, rand_seed);
 
-Please don't cast return types to void. It is useless.
 
-Thanks
+If 'rand_seed' just happens to become zero,
+this does not print it, which is weird.
+
+
+The seed is generated by:
+
+     seed = (now.tv_sec + 1) * (now.tv_usec + 1);
+
+
+This is very rare, but it may become zero.
+
+
+
+
+
+
+
+-- 
+Best Regards
+Masahiro Yamada
