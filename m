@@ -2,41 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 09F7069BE32
-	for <lists+linux-kernel@lfdr.de>; Sun, 19 Feb 2023 03:41:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4BB8369BE36
+	for <lists+linux-kernel@lfdr.de>; Sun, 19 Feb 2023 03:41:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229684AbjBSCle (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 18 Feb 2023 21:41:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42282 "EHLO
+        id S229715AbjBSClg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 18 Feb 2023 21:41:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42284 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229582AbjBSCl2 (ORCPT
+        with ESMTP id S229586AbjBSCl2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Sat, 18 Feb 2023 21:41:28 -0500
-Received: from dggsgout12.his.huawei.com (dggsgout12.his.huawei.com [45.249.212.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2A5B1204D;
+Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA67112051;
         Sat, 18 Feb 2023 18:41:26 -0800 (PST)
 Received: from mail02.huawei.com (unknown [172.30.67.143])
-        by dggsgout12.his.huawei.com (SkyGuard) with ESMTP id 4PK8v54774z4f3npn;
-        Sun, 19 Feb 2023 10:41:21 +0800 (CST)
+        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4PK8v60GP2z4f3pBy;
+        Sun, 19 Feb 2023 10:41:22 +0800 (CST)
 Received: from huaweicloud.com (unknown [10.175.124.27])
-        by APP2 (Coremail) with SMTP id Syh0CgBH7utQjPFjPmleDw--.7604S7;
-        Sun, 19 Feb 2023 10:41:23 +0800 (CST)
+        by APP2 (Coremail) with SMTP id Syh0CgBH7utQjPFjPmleDw--.7604S8;
+        Sun, 19 Feb 2023 10:41:24 +0800 (CST)
 From:   Kemeng Shi <shikemeng@huaweicloud.com>
 To:     paolo.valente@linaro.org, axboe@kernel.dk, jack@suse.cz
 Cc:     linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
         shikemeng@huaweicloud.com
-Subject: [PATCH 05/17] block, bfq: Update bfqd->max_budget with bfqd->lock held
-Date:   Sun, 19 Feb 2023 18:42:57 +0800
-Message-Id: <20230219104309.1511562-6-shikemeng@huaweicloud.com>
+Subject: [PATCH 06/17] block, bfq: correct bfq_max_budget and bfq_min_budget
+Date:   Sun, 19 Feb 2023 18:42:58 +0800
+Message-Id: <20230219104309.1511562-7-shikemeng@huaweicloud.com>
 X-Mailer: git-send-email 2.30.0
 In-Reply-To: <20230219104309.1511562-1-shikemeng@huaweicloud.com>
 References: <20230219104309.1511562-1-shikemeng@huaweicloud.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: Syh0CgBH7utQjPFjPmleDw--.7604S7
-X-Coremail-Antispam: 1UD129KBjvJXoW7WF17Gr47JFy8XF1rurW5Awb_yoW8AF18pa
-        sFq34Sqr1UJ39aqrsrGa18X3WagwsxWrZrKw4Fqw17JF92yF1Iy3Wjq3WagF4rJF4fAwsr
-        Z3Wvga9Yqa42yrJanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+X-CM-TRANSID: Syh0CgBH7utQjPFjPmleDw--.7604S8
+X-Coremail-Antispam: 1UD129KBjvJXoW7Jry5Zw15WF1UWrW3tr47Jwb_yoW8JrW5pa
+        4qqw10gF17JrZxXrs7K3WUX3W5twsxZF4kKr1YqrWjyF4IyF1ayF18Zw18X3WfKrWIyry5
+        X3sru34DXa12kaDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
         9KBjDU0xBIdaVrnRJUUUPY14x267AKxVWrJVCq3wAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
         rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2jI8I6cxK62vIxIIY0VWUZVW8XwA2048vs2IY02
         0E87I2jVAFwI0_JF0E3s1l82xGYIkIc2x26xkF7I0E14v26ryj6s0DM28lY4IEw2IIxxk0
@@ -61,62 +61,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-bfq_max_budget and bfq_user_max_budget maybe be in inconsisten state if
-bfq_max_budget configuration and bfq_max_budget auto-update happen
-concurrently.
-Example sequence:
-config                          auto-update
-bfqd->bfq_max_budget =
-  __data
-                                if (bfqd->bfq_user_max_budget == 0)
-                                  bfqd->bfq_max_budget =
-                                    bfq_calc_max_budget(bfqd);
-bfqd->bfq_user_max_budget =
-  __data;
-
-Users may set bfq_max_budget successfully while read a different value
-from they set.
-bfq_max_budget is only update in update_thr_responsiveness_params and
-configuration code. As update_thr_responsiveness_params is always called
-under bfqd->lock, fix this by holding lock in configuration code.
+For case that user set a max_budget, we should use bfq_max_budget
+set by user instead of bfq_default_max_budget when budgets_assigned
+is not enough to compulte auto-tuning max_budget.
 
 Signed-off-by: Kemeng Shi <shikemeng@huaweicloud.com>
 ---
- block/bfq-iosched.c | 5 +++++
- 1 file changed, 5 insertions(+)
+ block/bfq-iosched.c | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
 diff --git a/block/bfq-iosched.c b/block/bfq-iosched.c
-index edbf5c9aeb47..5b08711cbaf6 100644
+index 5b08711cbaf6..b32bae5259d5 100644
 --- a/block/bfq-iosched.c
 +++ b/block/bfq-iosched.c
-@@ -7489,6 +7489,7 @@ static ssize_t bfq_max_budget_store(struct elevator_queue *e,
- 	if (ret)
- 		return ret;
- 
-+	spin_lock_irq(&bfqd->lock);
- 	if (__data == 0)
- 		bfqd->bfq_max_budget = bfq_calc_max_budget(bfqd);
- 	else {
-@@ -7498,6 +7499,7 @@ static ssize_t bfq_max_budget_store(struct elevator_queue *e,
- 	}
- 
- 	bfqd->bfq_user_max_budget = __data;
-+	spin_unlock_irq(&bfqd->lock);
- 
- 	return count;
- }
-@@ -7523,8 +7525,11 @@ static ssize_t bfq_timeout_sync_store(struct elevator_queue *e,
- 		__data = INT_MAX;
- 
- 	bfqd->bfq_timeout = msecs_to_jiffies(__data);
-+
-+	spin_lock_irq(&bfqd->lock);
- 	if (bfqd->bfq_user_max_budget == 0)
- 		bfqd->bfq_max_budget = bfq_calc_max_budget(bfqd);
-+	spin_unlock_irq(&bfqd->lock);
- 
- 	return count;
- }
+@@ -1458,7 +1458,8 @@ static int bfq_bfqq_budget_left(struct bfq_queue *bfqq)
+  */
+ static int bfq_max_budget(struct bfq_data *bfqd)
+ {
+-	if (bfqd->budgets_assigned < bfq_stats_min_budgets)
++	if (bfqd->budgets_assigned < bfq_stats_min_budgets &&
++			bfqd->bfq_user_max_budget == 0)
+ 		return bfq_default_max_budget;
+ 	else
+ 		return bfqd->bfq_max_budget;
+@@ -1470,7 +1471,8 @@ static int bfq_max_budget(struct bfq_data *bfqd)
+  */
+ static int bfq_min_budget(struct bfq_data *bfqd)
+ {
+-	if (bfqd->budgets_assigned < bfq_stats_min_budgets)
++	if (bfqd->budgets_assigned < bfq_stats_min_budgets &&
++			bfqd->bfq_user_max_budget == 0)
+ 		return bfq_default_max_budget / 32;
+ 	else
+ 		return bfqd->bfq_max_budget / 32;
 -- 
 2.30.0
 
