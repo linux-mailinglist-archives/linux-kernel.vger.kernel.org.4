@@ -2,330 +2,162 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3847C69C14F
-	for <lists+linux-kernel@lfdr.de>; Sun, 19 Feb 2023 17:09:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D402C69C154
+	for <lists+linux-kernel@lfdr.de>; Sun, 19 Feb 2023 17:24:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230261AbjBSQJ2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 19 Feb 2023 11:09:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49480 "EHLO
+        id S230271AbjBSQYu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 19 Feb 2023 11:24:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53920 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230221AbjBSQJ0 (ORCPT
+        with ESMTP id S229898AbjBSQYr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 19 Feb 2023 11:09:26 -0500
-Received: from mail-oa1-x32.google.com (mail-oa1-x32.google.com [IPv6:2001:4860:4864:20::32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82C8BFF08
-        for <linux-kernel@vger.kernel.org>; Sun, 19 Feb 2023 08:09:24 -0800 (PST)
-Received: by mail-oa1-x32.google.com with SMTP id 586e51a60fabf-171dfaa208aso642092fac.0
-        for <linux-kernel@vger.kernel.org>; Sun, 19 Feb 2023 08:09:24 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=U8DH84LKaD917hUBncqWw/XridwiC/MLhQgA5LA3yEY=;
-        b=cABMhkh9tj5IpY0BR82LmpJKi2ceNeL/U0Tzim/EVfbn2ldVTEoq5/s8z1WdYrztQ4
-         WYDyPxggzoJiVIEL6L0U4nLJpnmZ6rmF2FoyDX1c5vtu2QybGAi+xDh7IjNRxdlXD86p
-         oEujXZPbzUeLnO7U63MvAgJUVWOUCrXYKMr56o3aH8C0zrsweMeddRBMyJa66Q+GNrC4
-         sn0zGAUSIKW7ZSAdnuV0a9Oejw+UCbEUjr/typkJD1XvVEdD3FQKJKHjNeX4z/CcCRLT
-         6PkNrPGMAu0JuKFA7jl7pHyUwNn9eJi8ROnWYR9wgJYtyV3BLNM6xuY68wSQBgM+ME4t
-         jguA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=U8DH84LKaD917hUBncqWw/XridwiC/MLhQgA5LA3yEY=;
-        b=M/z+oczF9n4gRdX6PER/mjwffCmhOV7+KV8RxJCacnPAbKvWC4s/wCBxuIKo99dPxV
-         JOiUakVF48L/hXTSUBSsk8jHuXCjJNn0hWKlKoYnacqSKKG6m5pTUQoQt/SfZHt69kgi
-         5aL8i96ACMSZ6KB/ompYmMiYFuRBtyapEp56s7RCeTWm2on3x0NBC91rg96y9D4Tv5Wa
-         /i/RnFhA+Tjyrq50q0KwguUdN+L8B1MSVOgEm8P3Zft6dLubaxPdLeW18vE5r3/hrr8l
-         99tvfOPg7JA6ccbEBgWsDImmFcroRnDSQcou0K9WEnm9v0IXSq9izZ2KPSLBfhUfKWS6
-         Whmg==
-X-Gm-Message-State: AO0yUKVA+rHHDsBZMD3dY/NyJmSiCDKp0sWVcwYTcLlPe2yTN5FLUm92
-        btGLgbSxhPdtDXPdEraXwjHy+ZmvBJ6HfuckIG4=
-X-Google-Smtp-Source: AK7set9LQvl/SiM6LgHO2wfkGc0m3ae20+NmBQLzB2//7NZwqE+WdO5q6dkMgnqoQVA3B0+jvn/iUMo6HLlWlbxJPN4=
-X-Received: by 2002:a05:6870:32d4:b0:16e:5e5a:49da with SMTP id
- r20-20020a05687032d400b0016e5e5a49damr953721oac.58.1676822962981; Sun, 19 Feb
- 2023 08:09:22 -0800 (PST)
+        Sun, 19 Feb 2023 11:24:47 -0500
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6118B10422;
+        Sun, 19 Feb 2023 08:24:46 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1676823886; x=1708359886;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=feAPOL1N++/UethRnvUXw50DQ6+CpkyqCffcMo7/488=;
+  b=aIVy/HaFOB5ZkBPRVj1zYau8AI5xgd5egsPcxoyoXKTI+dPyzzoB6/yy
+   tpUBvx/aEC+15r/of44AP+fAM4CYfxbVBTEp1ok7RQrfe9GNvJ+upG/qz
+   9xZSAJQ4zAna0qV2tYKqmLy7v+Tkbhe4if27mCzJVQrj1NkdsbAWrzgyl
+   /EUU8trRHPaMwxZZTBMOPtDCd2XYDOi4/8lVkLXMHnIYQyUYuZCIoFFWu
+   JzWB0nFdRWU7iosohf7yNYap6kBW/k2cNL/pHNc+IWSkN11rROn+If6SM
+   hN1hye/qY3fuIdlGqxiSUZYlQ+BIA9aw744UxES6YivzLJ5u1+dM3tiFb
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10626"; a="332266281"
+X-IronPort-AV: E=Sophos;i="5.97,310,1669104000"; 
+   d="scan'208";a="332266281"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Feb 2023 08:24:45 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10626"; a="673122428"
+X-IronPort-AV: E=Sophos;i="5.97,310,1669104000"; 
+   d="scan'208";a="673122428"
+Received: from lkp-server01.sh.intel.com (HELO 4455601a8d94) ([10.239.97.150])
+  by fmsmga007.fm.intel.com with ESMTP; 19 Feb 2023 08:24:39 -0800
+Received: from kbuild by 4455601a8d94 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pTmUQ-000DMT-31;
+        Sun, 19 Feb 2023 16:24:38 +0000
+Date:   Mon, 20 Feb 2023 00:23:59 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>, rafael@kernel.org
+Cc:     oe-kbuild-all@lists.linux.dev, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Zhang Rui <rui.zhang@intel.com>,
+        Len Brown <lenb@kernel.org>,
+        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Samuel Holland <samuel@sholland.org>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Raju Rangoju <rajur@chelsio.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Ido Schimmel <idosch@nvidia.com>,
+        Petr Machata <petrm@nvidia.com>,
+        Gregory Greenman <gregory.greenman@intel.com>,
+        Kalle Valo <kvalo@kernel.org>,
+        Sebastian Reichel <sre@kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>
+Subject: Re: [PATCH v1 01/17] thermal/core: Add a thermal zone 'devdata'
+ accessor
+Message-ID: <202302200054.npcAWO2a-lkp@intel.com>
+References: <20230219143657.241542-2-daniel.lezcano@linaro.org>
 MIME-Version: 1.0
-References: <20230218211608.1630586-1-robdclark@gmail.com> <20230218211608.1630586-10-robdclark@gmail.com>
-In-Reply-To: <20230218211608.1630586-10-robdclark@gmail.com>
-From:   Rob Clark <robdclark@gmail.com>
-Date:   Sun, 19 Feb 2023 08:09:43 -0800
-Message-ID: <CAF6AEGtr8NmCkyX5qVEjZ21TNqUMdKQmXkK8Y73-K757L9=GOw@mail.gmail.com>
-Subject: Re: [PATCH v4 09/14] drm/syncobj: Add deadline support for syncobj waits
-To:     dri-devel@lists.freedesktop.org
-Cc:     freedreno@lists.freedesktop.org, Daniel Vetter <daniel@ffwll.ch>,
-        =?UTF-8?Q?Christian_K=C3=B6nig?= <ckoenig.leichtzumerken@gmail.com>,
-        =?UTF-8?Q?Michel_D=C3=A4nzer?= <michel@daenzer.net>,
-        Tvrtko Ursulin <tvrtko.ursulin@intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        Pekka Paalanen <ppaalanen@gmail.com>,
-        Simon Ser <contact@emersion.fr>,
-        Rob Clark <robdclark@chromium.org>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        David Airlie <airlied@gmail.com>,
-        open list <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230219143657.241542-2-daniel.lezcano@linaro.org>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Feb 18, 2023 at 1:16 PM Rob Clark <robdclark@gmail.com> wrote:
->
-> From: Rob Clark <robdclark@chromium.org>
->
-> Add a new flag to let userspace provide a deadline as a hint for syncobj
-> and timeline waits.  This gives a hint to the driver signaling the
-> backing fences about how soon userspace needs it to compete work, so it
-> can addjust GPU frequency accordingly.  An immediate deadline can be
-> given to provide something equivalent to i915 "wait boost".
->
-> Signed-off-by: Rob Clark <robdclark@chromium.org>
-> ---
->
-> I'm a bit on the fence about the addition of the DRM_CAP, but it seems
-> useful to give userspace a way to probe whether the kernel and driver
-> supports the new wait flag, especially since we have vk-common code
-> dealing with syncobjs.  But open to suggestions.
+Hi Daniel,
 
-I guess an alternative would be to allow count_handles as a way to
-probe the supported flags
+I love your patch! Yet something to improve:
 
-BR,
--R
+[auto build test ERROR on rafael-pm/thermal]
+[also build test ERROR on next-20230217]
+[cannot apply to groeck-staging/hwmon-next tegra/for-next linus/master v6.2-rc8]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
->  drivers/gpu/drm/drm_ioctl.c   |  3 ++
->  drivers/gpu/drm/drm_syncobj.c | 59 ++++++++++++++++++++++++++++-------
->  include/drm/drm_drv.h         |  6 ++++
->  include/uapi/drm/drm.h        | 16 ++++++++--
->  4 files changed, 71 insertions(+), 13 deletions(-)
->
-> diff --git a/drivers/gpu/drm/drm_ioctl.c b/drivers/gpu/drm/drm_ioctl.c
-> index 7c9d66ee917d..1c5c942cf0f9 100644
-> --- a/drivers/gpu/drm/drm_ioctl.c
-> +++ b/drivers/gpu/drm/drm_ioctl.c
-> @@ -254,6 +254,9 @@ static int drm_getcap(struct drm_device *dev, void *data, struct drm_file *file_
->         case DRM_CAP_SYNCOBJ_TIMELINE:
->                 req->value = drm_core_check_feature(dev, DRIVER_SYNCOBJ_TIMELINE);
->                 return 0;
-> +       case DRM_CAP_SYNCOBJ_DEADLINE:
-> +               req->value = drm_core_check_feature(dev, DRIVER_SYNCOBJ_TIMELINE);
-> +               return 0;
->         }
->
->         /* Other caps only work with KMS drivers */
-> diff --git a/drivers/gpu/drm/drm_syncobj.c b/drivers/gpu/drm/drm_syncobj.c
-> index 0c2be8360525..61cf97972a60 100644
-> --- a/drivers/gpu/drm/drm_syncobj.c
-> +++ b/drivers/gpu/drm/drm_syncobj.c
-> @@ -973,7 +973,8 @@ static signed long drm_syncobj_array_wait_timeout(struct drm_syncobj **syncobjs,
->                                                   uint32_t count,
->                                                   uint32_t flags,
->                                                   signed long timeout,
-> -                                                 uint32_t *idx)
-> +                                                 uint32_t *idx,
-> +                                                 ktime_t *deadline)
->  {
->         struct syncobj_wait_entry *entries;
->         struct dma_fence *fence;
-> @@ -1053,6 +1054,15 @@ static signed long drm_syncobj_array_wait_timeout(struct drm_syncobj **syncobjs,
->                         drm_syncobj_fence_add_wait(syncobjs[i], &entries[i]);
->         }
->
-> +       if (deadline) {
-> +               for (i = 0; i < count; ++i) {
-> +                       fence = entries[i].fence;
-> +                       if (!fence)
-> +                               continue;
-> +                       dma_fence_set_deadline(fence, *deadline);
-> +               }
-> +       }
-> +
->         do {
->                 set_current_state(TASK_INTERRUPTIBLE);
->
-> @@ -1151,7 +1161,8 @@ static int drm_syncobj_array_wait(struct drm_device *dev,
->                                   struct drm_file *file_private,
->                                   struct drm_syncobj_wait *wait,
->                                   struct drm_syncobj_timeline_wait *timeline_wait,
-> -                                 struct drm_syncobj **syncobjs, bool timeline)
-> +                                 struct drm_syncobj **syncobjs, bool timeline,
-> +                                 ktime_t *deadline)
->  {
->         signed long timeout = 0;
->         uint32_t first = ~0;
-> @@ -1162,7 +1173,8 @@ static int drm_syncobj_array_wait(struct drm_device *dev,
->                                                          NULL,
->                                                          wait->count_handles,
->                                                          wait->flags,
-> -                                                        timeout, &first);
-> +                                                        timeout, &first,
-> +                                                        deadline);
->                 if (timeout < 0)
->                         return timeout;
->                 wait->first_signaled = first;
-> @@ -1172,7 +1184,8 @@ static int drm_syncobj_array_wait(struct drm_device *dev,
->                                                          u64_to_user_ptr(timeline_wait->points),
->                                                          timeline_wait->count_handles,
->                                                          timeline_wait->flags,
-> -                                                        timeout, &first);
-> +                                                        timeout, &first,
-> +                                                        deadline);
->                 if (timeout < 0)
->                         return timeout;
->                 timeline_wait->first_signaled = first;
-> @@ -1243,13 +1256,20 @@ drm_syncobj_wait_ioctl(struct drm_device *dev, void *data,
->  {
->         struct drm_syncobj_wait *args = data;
->         struct drm_syncobj **syncobjs;
-> +       unsigned possible_flags;
-> +       ktime_t t, *tp = NULL;
->         int ret = 0;
->
->         if (!drm_core_check_feature(dev, DRIVER_SYNCOBJ))
->                 return -EOPNOTSUPP;
->
-> -       if (args->flags & ~(DRM_SYNCOBJ_WAIT_FLAGS_WAIT_ALL |
-> -                           DRM_SYNCOBJ_WAIT_FLAGS_WAIT_FOR_SUBMIT))
-> +       possible_flags = DRM_SYNCOBJ_WAIT_FLAGS_WAIT_ALL |
-> +                        DRM_SYNCOBJ_WAIT_FLAGS_WAIT_FOR_SUBMIT;
-> +
-> +       if (drm_core_check_feature(dev, DRIVER_SYNCOBJ_DEADLINE))
-> +               possible_flags |= DRM_SYNCOBJ_WAIT_FLAGS_WAIT_DEADLINE;
-> +
-> +       if (args->flags & ~possible_flags)
->                 return -EINVAL;
->
->         if (args->count_handles == 0)
-> @@ -1262,8 +1282,13 @@ drm_syncobj_wait_ioctl(struct drm_device *dev, void *data,
->         if (ret < 0)
->                 return ret;
->
-> +       if (args->flags & DRM_SYNCOBJ_WAIT_FLAGS_WAIT_DEADLINE) {
-> +               t = ktime_set(args->deadline_sec, args->deadline_nsec);
-> +               tp = &t;
-> +       }
-> +
->         ret = drm_syncobj_array_wait(dev, file_private,
-> -                                    args, NULL, syncobjs, false);
-> +                                    args, NULL, syncobjs, false, tp);
->
->         drm_syncobj_array_free(syncobjs, args->count_handles);
->
-> @@ -1276,14 +1301,21 @@ drm_syncobj_timeline_wait_ioctl(struct drm_device *dev, void *data,
->  {
->         struct drm_syncobj_timeline_wait *args = data;
->         struct drm_syncobj **syncobjs;
-> +       unsigned possible_flags;
-> +       ktime_t t, *tp = NULL;
->         int ret = 0;
->
->         if (!drm_core_check_feature(dev, DRIVER_SYNCOBJ_TIMELINE))
->                 return -EOPNOTSUPP;
->
-> -       if (args->flags & ~(DRM_SYNCOBJ_WAIT_FLAGS_WAIT_ALL |
-> -                           DRM_SYNCOBJ_WAIT_FLAGS_WAIT_FOR_SUBMIT |
-> -                           DRM_SYNCOBJ_WAIT_FLAGS_WAIT_AVAILABLE))
-> +       possible_flags = DRM_SYNCOBJ_WAIT_FLAGS_WAIT_ALL |
-> +                        DRM_SYNCOBJ_WAIT_FLAGS_WAIT_FOR_SUBMIT |
-> +                        DRM_SYNCOBJ_WAIT_FLAGS_WAIT_AVAILABLE;
-> +
-> +       if (drm_core_check_feature(dev, DRIVER_SYNCOBJ_DEADLINE))
-> +               possible_flags |= DRM_SYNCOBJ_WAIT_FLAGS_WAIT_DEADLINE;
-> +
-> +       if (args->flags & ~possible_flags)
->                 return -EINVAL;
->
->         if (args->count_handles == 0)
-> @@ -1296,8 +1328,13 @@ drm_syncobj_timeline_wait_ioctl(struct drm_device *dev, void *data,
->         if (ret < 0)
->                 return ret;
->
-> +       if (args->flags & DRM_SYNCOBJ_WAIT_FLAGS_WAIT_DEADLINE) {
-> +               t = ktime_set(args->deadline_sec, args->deadline_nsec);
-> +               tp = &t;
-> +       }
-> +
->         ret = drm_syncobj_array_wait(dev, file_private,
-> -                                    NULL, args, syncobjs, true);
-> +                                    NULL, args, syncobjs, true, tp);
->
->         drm_syncobj_array_free(syncobjs, args->count_handles);
->
-> diff --git a/include/drm/drm_drv.h b/include/drm/drm_drv.h
-> index 1d76d0686b03..9aa24f097e22 100644
-> --- a/include/drm/drm_drv.h
-> +++ b/include/drm/drm_drv.h
-> @@ -104,6 +104,12 @@ enum drm_driver_feature {
->          * acceleration should be handled by two drivers that are connected using auxiliary bus.
->          */
->         DRIVER_COMPUTE_ACCEL            = BIT(7),
-> +       /**
-> +        * @DRIVER_SYNCOBJ_DEADLINE:
-> +        *
-> +        * Driver supports &dma_fence_ops.set_deadline
-> +        */
-> +       DRIVER_SYNCOBJ_DEADLINE         = BIT(8),
->
->         /* IMPORTANT: Below are all the legacy flags, add new ones above. */
->
-> diff --git a/include/uapi/drm/drm.h b/include/uapi/drm/drm.h
-> index 642808520d92..c6b85bb13810 100644
-> --- a/include/uapi/drm/drm.h
-> +++ b/include/uapi/drm/drm.h
-> @@ -767,6 +767,13 @@ struct drm_gem_open {
->   * Documentation/gpu/drm-mm.rst, section "DRM Sync Objects".
->   */
->  #define DRM_CAP_SYNCOBJ_TIMELINE       0x14
-> +/**
-> + * DRM_CAP_SYNCOBJ_DEADLINE
-> + *
-> + * If set to 1, the driver supports DRM_SYNCOBJ_WAIT_FLAGS_WAIT_DEADLINE flag
-> + * on the SYNCOBJ_TIMELINE_WAIT/SYNCOBJ_WAIT ioctls.
-> + */
-> +#define DRM_CAP_SYNCOBJ_DEADLINE       0x15
->
->  /* DRM_IOCTL_GET_CAP ioctl argument type */
->  struct drm_get_cap {
-> @@ -887,6 +894,7 @@ struct drm_syncobj_transfer {
->  #define DRM_SYNCOBJ_WAIT_FLAGS_WAIT_ALL (1 << 0)
->  #define DRM_SYNCOBJ_WAIT_FLAGS_WAIT_FOR_SUBMIT (1 << 1)
->  #define DRM_SYNCOBJ_WAIT_FLAGS_WAIT_AVAILABLE (1 << 2) /* wait for time point to become available */
-> +#define DRM_SYNCOBJ_WAIT_FLAGS_WAIT_DEADLINE (1 << 3) /* set fence deadline based to deadline_nsec/sec */
->  struct drm_syncobj_wait {
->         __u64 handles;
->         /* absolute timeout */
-> @@ -894,7 +902,9 @@ struct drm_syncobj_wait {
->         __u32 count_handles;
->         __u32 flags;
->         __u32 first_signaled; /* only valid when not waiting all */
-> -       __u32 pad;
-> +       /* Deadline to set on backing fence(s) in CLOCK_MONOTONIC: */
-> +       __u32 deadline_nsec;
-> +       __u64 deadline_sec;
->  };
->
->  struct drm_syncobj_timeline_wait {
-> @@ -906,7 +916,9 @@ struct drm_syncobj_timeline_wait {
->         __u32 count_handles;
->         __u32 flags;
->         __u32 first_signaled; /* only valid when not waiting all */
-> -       __u32 pad;
-> +       /* Deadline to set on backing fence(s) in CLOCK_MONOTONIC: */
-> +       __u32 deadline_nsec;
-> +       __u64 deadline_sec;
->  };
->
->
-> --
-> 2.39.1
->
+url:    https://github.com/intel-lab-lkp/linux/commits/Daniel-Lezcano/thermal-core-Add-a-thermal-zone-devdata-accessor/20230219-224155
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git thermal
+patch link:    https://lore.kernel.org/r/20230219143657.241542-2-daniel.lezcano%40linaro.org
+patch subject: [PATCH v1 01/17] thermal/core: Add a thermal zone 'devdata' accessor
+config: sparc64-randconfig-r015-20230219 (https://download.01.org/0day-ci/archive/20230220/202302200054.npcAWO2a-lkp@intel.com/config)
+compiler: sparc64-linux-gcc (GCC) 12.1.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/4ae519499a90b8b0388e5e80c5d85c6dbf292242
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Daniel-Lezcano/thermal-core-Add-a-thermal-zone-devdata-accessor/20230219-224155
+        git checkout 4ae519499a90b8b0388e5e80c5d85c6dbf292242
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=sparc64 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=sparc64 SHELL=/bin/bash drivers/ata/ drivers/hwmon/pmbus/
+
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202302200054.npcAWO2a-lkp@intel.com/
+
+All error/warnings (new ones prefixed by >>):
+
+   drivers/ata/ahci_imx.c: In function 'sata_ahci_read_temperature':
+>> drivers/ata/ahci_imx.c:421:45: error: implicit declaration of function 'thermal_zone_device_get_data'; did you mean 'thermal_zone_device_enable'? [-Werror=implicit-function-declaration]
+     421 |         return __sata_ahci_read_temperature(thermal_zone_device_get_data(tz), temp);
+         |                                             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+         |                                             thermal_zone_device_enable
+>> drivers/ata/ahci_imx.c:421:45: warning: passing argument 1 of '__sata_ahci_read_temperature' makes pointer from integer without a cast [-Wint-conversion]
+     421 |         return __sata_ahci_read_temperature(thermal_zone_device_get_data(tz), temp);
+         |                                             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+         |                                             |
+         |                                             int
+   drivers/ata/ahci_imx.c:330:47: note: expected 'void *' but argument is of type 'int'
+     330 | static int __sata_ahci_read_temperature(void *dev, int *temp)
+         |                                         ~~~~~~^~~
+   cc1: some warnings being treated as errors
+--
+   drivers/hwmon/pmbus/pmbus_core.c: In function 'pmbus_thermal_get_temp':
+>> drivers/hwmon/pmbus/pmbus_core.c:1275:44: error: implicit declaration of function 'thermal_zone_device_get_data'; did you mean 'thermal_zone_device_enable'? [-Werror=implicit-function-declaration]
+    1275 |         struct pmbus_thermal_data *tdata = thermal_zone_device_get_data(tz);
+         |                                            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+         |                                            thermal_zone_device_enable
+>> drivers/hwmon/pmbus/pmbus_core.c:1275:44: warning: initialization of 'struct pmbus_thermal_data *' from 'int' makes pointer from integer without a cast [-Wint-conversion]
+   cc1: some warnings being treated as errors
+
+
+vim +421 drivers/ata/ahci_imx.c
+
+   418	
+   419	static int sata_ahci_read_temperature(struct thermal_zone_device *tz, int *temp)
+   420	{
+ > 421		return __sata_ahci_read_temperature(thermal_zone_device_get_data(tz), temp);
+   422	}
+   423	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
