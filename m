@@ -2,97 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 650DB69C01E
-	for <lists+linux-kernel@lfdr.de>; Sun, 19 Feb 2023 13:00:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 28DC569C020
+	for <lists+linux-kernel@lfdr.de>; Sun, 19 Feb 2023 13:06:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229823AbjBSMAS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 19 Feb 2023 07:00:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35594 "EHLO
+        id S229832AbjBSMFy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 19 Feb 2023 07:05:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37032 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229506AbjBSMAP (ORCPT
+        with ESMTP id S229506AbjBSMFw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 19 Feb 2023 07:00:15 -0500
-Received: from honk.sigxcpu.org (honk.sigxcpu.org [24.134.29.49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 458EA10A97
-        for <linux-kernel@vger.kernel.org>; Sun, 19 Feb 2023 04:00:14 -0800 (PST)
-Received: from localhost (localhost [127.0.0.1])
-        by honk.sigxcpu.org (Postfix) with ESMTP id 293C6FB03;
-        Sun, 19 Feb 2023 13:00:10 +0100 (CET)
-Received: from honk.sigxcpu.org ([127.0.0.1])
-        by localhost (honk.sigxcpu.org [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id KkTfTTsqszTv; Sun, 19 Feb 2023 13:00:09 +0100 (CET)
-Date:   Sun, 19 Feb 2023 13:00:08 +0100
-From:   Guido =?iso-8859-1?Q?G=FCnther?= <guido.gunther@puri.sm>
-To:     Frank Oltmanns <frank@oltmanns.dev>
-Cc:     Purism Kernel Team <kernel@puri.sm>,
-        Ondrej Jirman <megous@megous.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        "open list:DRM PANEL DRIVERS" <dri-devel@lists.freedesktop.org>,
-        open list <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 1/1] drm/panel: st7703: Fix vertical refresh rate of
- XBD599
-Message-ID: <Y/IPSCeJVyS/sSQT@qwark.sigxcpu.org>
-References: <20230219114553.288057-1-frank@oltmanns.dev>
- <20230219114553.288057-2-frank@oltmanns.dev>
+        Sun, 19 Feb 2023 07:05:52 -0500
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B37E10ABA;
+        Sun, 19 Feb 2023 04:05:50 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=gBSgmlok4yCxRuK+9Ez4kHo78avKwS+vMROQc68Os1E=; b=gu+lkdTl6i3jBnp2T+WS1qBpBP
+        tiU0lKXykEcp1b/56CNTJl9x3GBg3QZP8uuvsqvl9yYHdD3Mk57T//M1M2gdqbCSyJ+cZADrjFjif
+        YAJKnD0uD2j8Ol8bDa7vKM1RI6gt950wjZwtvsQkd8lkDnoT1jSLDqi27IVokAd+vllUJgeTvYVpK
+        6V9rqF1sdxdr0ymWbCkAWSgg32MTv8vpmkZG26WoXM86WSEZBq/0wfJQvmXOLGU6Tho9LVYbprzJZ
+        EkRoNXCDlmrEGytQvf7hI8Xa31RxQYkBiXZqf2pe8/6+VhnArV8RfKtZJuAEE/yHaYqHm61lSEpRa
+        u7Fn9Gow==;
+Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1pTiRp-00AuBi-65; Sun, 19 Feb 2023 12:05:41 +0000
+Date:   Sun, 19 Feb 2023 12:05:41 +0000
+From:   Matthew Wilcox <willy@infradead.org>
+To:     Nhat Pham <nphamcs@gmail.com>
+Cc:     akpm@linux-foundation.org, hannes@cmpxchg.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, bfoster@redhat.com, arnd@arndb.de,
+        linux-api@vger.kernel.org, kernel-team@meta.com
+Subject: Re: [PATCH v10 1/3] workingset: refactor LRU refault to expose
+ refault recency check
+Message-ID: <Y/IQlWdD1NvcUROv@casper.infradead.org>
+References: <20230219073318.366189-1-nphamcs@gmail.com>
+ <20230219073318.366189-2-nphamcs@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230219114553.288057-2-frank@oltmanns.dev>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_FAIL,
-        SPF_HELO_NONE autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <20230219073318.366189-2-nphamcs@gmail.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
-On Sun, Feb 19, 2023 at 12:45:53PM +0100, Frank Oltmanns wrote:
-> Fix the XBD599 panel's slight visual stutter by correcting the pixel
-> clock speed so that the panel's 60Hz vertical refresh rate is met.
+On Sat, Feb 18, 2023 at 11:33:16PM -0800, Nhat Pham wrote:
+> +++ b/mm/workingset.c
+> @@ -244,6 +244,30 @@ static void *lru_gen_eviction(struct folio *folio)
+>  	return pack_shadow(mem_cgroup_id(memcg), pgdat, token, refs);
+>  }
 > 
-> Set the clock speed using the underlying formula instead of a magic
-> number. To have a consistent procedure for both panels, set the JH057N
-> panel's clock also as a formula.
-> ---
->  drivers/gpu/drm/panel/panel-sitronix-st7703.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/gpu/drm/panel/panel-sitronix-st7703.c b/drivers/gpu/drm/panel/panel-sitronix-st7703.c
-> index 6747ca237ced..cd7d631f7573 100644
-> --- a/drivers/gpu/drm/panel/panel-sitronix-st7703.c
-> +++ b/drivers/gpu/drm/panel/panel-sitronix-st7703.c
-> @@ -139,7 +139,7 @@ static const struct drm_display_mode jh057n00900_mode = {
->  	.vsync_start = 1440 + 20,
->  	.vsync_end   = 1440 + 20 + 4,
->  	.vtotal	     = 1440 + 20 + 4 + 12,
-> -	.clock	     = 75276,
-> +	.clock	     = (720 + 90 + 20 + 20) * (1440 + 20 + 4 + 12) * 60 / 1000,
->  	.flags	     = DRM_MODE_FLAG_NHSYNC | DRM_MODE_FLAG_NVSYNC,
->  	.width_mm    = 65,
->  	.height_mm   = 130,
-> @@ -324,7 +324,7 @@ static const struct drm_display_mode xbd599_mode = {
->  	.vsync_start = 1440 + 18,
->  	.vsync_end   = 1440 + 18 + 10,
->  	.vtotal	     = 1440 + 18 + 10 + 17,
-> -	.clock	     = 69000,
-> +	.clock	     = (720 + 40 + 40 + 40) * (1440 + 18 + 10 + 17) * 60 / 1000,
->  	.flags	     = DRM_MODE_FLAG_NHSYNC | DRM_MODE_FLAG_NVSYNC,
->  	.width_mm    = 68,
->  	.height_mm   = 136,
+> +/*
+> + * Test if the folio is recently evicted.
+> + *
+> + * As a side effect, also populates the references with
+> + * values unpacked from the shadow of the evicted folio.
+> + */
 
-Reviewed-by: Guido Günther <agx@sigxcpu.org>
+I find this comment hard to understand.  First it talks about "the
+folio", but it doesn't pass a folio.  Then it talks about "the
+references", but I don't have any idea what those are either.
 
-(I've seen your other patches but it will be some days until I can test
-the jh057n00900 panel).
+I think what you mean is,
 
-Cheers,
- -- Guido
+ * Test if the shadow entry is for a folio which was recently evicted.
+ * Fills in @memcgid, @pgdat, @token and @workingset with values
+ * extracted from the shadow entry.
 
-> -- 
-> 2.39.1
-> 
+> +static bool lru_gen_test_recent(void *shadow, bool file, int *memcgid,
+> +		struct pglist_data **pgdat, unsigned long *token, bool *workingset)
+> +{
+> +	struct mem_cgroup *eviction_memcg;
+> +	struct lruvec *lruvec;
+> +	struct lru_gen_struct *lrugen;
+> +	unsigned long min_seq;
+> +
+> +	unpack_shadow(shadow, memcgid, pgdat, token, workingset);
+> +	eviction_memcg = mem_cgroup_from_id(*memcgid);
+> +
+> +	lruvec = mem_cgroup_lruvec(eviction_memcg, *pgdat);
+> +	lrugen = &lruvec->lrugen;
+> +
+> +	min_seq = READ_ONCE(lrugen->min_seq[file]);
+> +	return (*token >> LRU_REFS_WIDTH) == (min_seq & (EVICTION_MASK >> LRU_REFS_WIDTH));
+> +}
+
+[...]
+
+> +/*
+> + * Test if the folio is recently evicted by checking if
+> + * refault distance of shadow exceeds workingset size.
+>   *
+> - * Calculates and evaluates the refault distance of the previously
+> - * evicted folio in the context of the node and the memcg whose memory
+> - * pressure caused the eviction.
+> + * As a side effect, populate workingset with the value
+> + * unpacked from shadow.
+>   */
+
+1. Shouldn't this be kernel-doc?
+2. Again, don't use the term "side effect" here.  It's just one of
+the things that the function _does_.
+
