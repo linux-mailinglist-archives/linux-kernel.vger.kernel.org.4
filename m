@@ -2,57 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A29469BF75
-	for <lists+linux-kernel@lfdr.de>; Sun, 19 Feb 2023 10:30:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BA92269BF77
+	for <lists+linux-kernel@lfdr.de>; Sun, 19 Feb 2023 10:30:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229861AbjBSJae (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 19 Feb 2023 04:30:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52434 "EHLO
+        id S229863AbjBSJap (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 19 Feb 2023 04:30:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52670 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229840AbjBSJa2 (ORCPT
+        with ESMTP id S229881AbjBSJah (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 19 Feb 2023 04:30:28 -0500
+        Sun, 19 Feb 2023 04:30:37 -0500
 Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98C7CEB75
-        for <linux-kernel@vger.kernel.org>; Sun, 19 Feb 2023 01:30:00 -0800 (PST)
-Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-53687f6de13so18395537b3.9
-        for <linux-kernel@vger.kernel.org>; Sun, 19 Feb 2023 01:30:00 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD3EC1207F
+        for <linux-kernel@vger.kernel.org>; Sun, 19 Feb 2023 01:30:10 -0800 (PST)
+Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-53686d8ce27so20518817b3.5
+        for <linux-kernel@vger.kernel.org>; Sun, 19 Feb 2023 01:30:10 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=cc:to:from:subject:references:mime-version:message-id:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=McpPUh9UUbr+SfZnc3Yy3m0883o69CMJ9U4yySTvUIw=;
-        b=nr+0lt5VymGETH/u61CNycPQbXKy2g0gRYNfkLIoR9cI2Xz1zqqpvRQB4b+fwUG7ST
-         vok5Jj6oAiPiqTpK2qYsd0OSEZ1HtpmVkbitSOvgfeo2SX11R5cqjvdJj+7o4l3pP2Cd
-         M9yIKk4dJBKlIyffdAsE5VM7TQMCqt40bg09sqWDvbX5oSWMR+QbG+cvSpUeLzk5gQ5p
-         UBn4OhTfgAaRWfGzVdnvzS/ChmcUbPyAEprZQDL9beqiWSFPi01G1bQDim0d6bj9rTn3
-         IfeKuaPWVMI8DkuGAhsnoD79dvPT0XMD6WCXnyrM/WWfO+5k2nksBylj3NgndWilb/m6
-         cCOA==
+        bh=fuS1q84R0xcAiENu72F9xaB/dldCNXgOZrtbWFpv52E=;
+        b=cI8dh0bWWKZeW1y5k5GPM8AzvnkbIA5dJQUUoDzOXJvWxVyShYBYx60369eQUy4OzL
+         E6SVtCAQM+IaKz1bV0Rn3Uuqp+jyypxxArizXArFcTzgMndVSzmzut43pU+fIivj5gSC
+         XKTj5fMpGYRtuDMkea81itweVHTeFMS37/+yA2iSPh75iDbyZ+kgaX2m5UodziZr1WHu
+         sKBH5KHPK9zik8QbzJ6V3vRrwymvXNniazfNki04nQD+n1XXTKZW1LPzmzv18NmS4/2T
+         4FkiuO6YzbUl/HqF+S/0btFco6XOhO2Bs0WDcFHWpQ5VE+9asDN4xuYeYZaRTGDc6yIO
+         VGLw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:from:subject:references:mime-version:message-id:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=McpPUh9UUbr+SfZnc3Yy3m0883o69CMJ9U4yySTvUIw=;
-        b=QrO8Nksi1/T5Aih5lWlcF5dMv4gP4Vndngi2MGEw3rYbRj/R0EhmK31K4hQ2Gv1NkS
-         7Nsxg4SStuPfefUDcPaGbYs1DzMJtmgEY/omURFbXfwC1CVqgQTcNd2sqJp640jF1vZ1
-         qAampn3PzYKWYhPlpnie9IXgbdnsRR1UBOTZCK4sYUA5WrelRkA1m3ljuXJs1ARQyvnj
-         r/XCiZYG2tHixMb9YvxhHmS7yBCWdLmWiVJHCB235I5qSaDfF2O6HhrIHwSB7DNmZbOL
-         3RnRQneiOPnSvbHtAdMPWAkc895i/Z85txJungU0plXBkr0YqC98j3eb8MUdFfHjYe7g
-         38VA==
-X-Gm-Message-State: AO0yUKW400IArChcxvPY3oUNnWT/z/E+TE+fDP65EysIbVGCGJGrS+fz
-        P/LypTDoOYbQVvvyXfCZnFpRk04Zjh5A
-X-Google-Smtp-Source: AK7set/tYHCebNI8ZlW9vI/je+pg1JQ3IaTCJTwemTnxp8GWFHKNPaDgKuhJe4F8qrfLAcGYZUNSXbeBpGXk
+        bh=fuS1q84R0xcAiENu72F9xaB/dldCNXgOZrtbWFpv52E=;
+        b=u8q07jSD/7KZrJgC/nzMHUEVKwihYCZHeJo97FXilnoLuAduI1fVB8hdBDIMjj82go
+         jiMrx+PqNFKBiUisKUaRvcqmujq8rbMDwW4dlNem+eHw4WDFTGZkLhkYMNDmjT3t+DKb
+         ZS2h7k0mc1Cokx0E0Twis2Fpjy13zeLECKVYNsdKeGMRaByVadjr/f186pfL2fJPB9O2
+         Lp/7TLZ7Ny3EqNestCtvZrJT2ttxsFCQji9DPIQyK+iqben/YmgysFiXjmmTWCbZbqyy
+         AAAF8m9ZLOKZVCSRDLY90t0gA7tV6hDaGY+PSwtqUDVTmfbNIq7hsFNVRdb10EEVnvvA
+         OGww==
+X-Gm-Message-State: AO0yUKXVfXURObbT0XdN52dbkQ+hujW3qF4fmJClonvcy4QFkBgr/CST
+        /GmnGqEjs3yfmeogeXDMuzLAQU0EoCiT
+X-Google-Smtp-Source: AK7set93SE5NbWPGLqx8+0V5OQ1Zd7PwyZiB6jBWIqTaGMZiQIyzx9cn7NuqKPF1uean13HLVminRfyvDmVj
 X-Received: from irogers.svl.corp.google.com ([2620:15c:2d4:203:cde9:3fbc:e1f1:6e3b])
- (user=irogers job=sendgmr) by 2002:a05:6902:45:b0:995:ccb:1aae with SMTP id
- m5-20020a056902004500b009950ccb1aaemr109787ybh.13.1676799000276; Sun, 19 Feb
- 2023 01:30:00 -0800 (PST)
-Date:   Sun, 19 Feb 2023 01:28:04 -0800
+ (user=irogers job=sendgmr) by 2002:a0d:dc85:0:b0:530:a183:aa0 with SMTP id
+ f127-20020a0ddc85000000b00530a1830aa0mr1619527ywe.384.1676799008532; Sun, 19
+ Feb 2023 01:30:08 -0800 (PST)
+Date:   Sun, 19 Feb 2023 01:28:05 -0800
 In-Reply-To: <20230219092848.639226-1-irogers@google.com>
-Message-Id: <20230219092848.639226-8-irogers@google.com>
+Message-Id: <20230219092848.639226-9-irogers@google.com>
 Mime-Version: 1.0
 References: <20230219092848.639226-1-irogers@google.com>
 X-Mailer: git-send-email 2.39.2.637.g21b0678d19-goog
-Subject: [PATCH v1 07/51] perf expr: Make the online topology accessible globally
+Subject: [PATCH v1 08/51] perf pmu-events: Make the metric_constraint an enum
 From:   Ian Rogers <irogers@google.com>
 To:     Peter Zijlstra <peterz@infradead.org>,
         Ingo Molnar <mingo@redhat.com>,
@@ -89,7 +89,7 @@ Cc:     Stephane Eranian <eranian@google.com>,
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -97,199 +97,158 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Knowing the topology of online CPUs is useful for more than just expr
-literals. Move to a global function that caches the value. An
-additional upside is that this may also avoid computing the CPU
-topology in some situations.
+Rename metric_constraint to event_grouping to better explain what the
+variable is used for. Switch to use an enum for encoding instead of a
+string. Rather than just no constraint/grouping information or
+"NO_NMI_WATCHDOG", have 4 enum values. The values encode whether to
+group or not, and two cases where the behavior is dependent on either
+the NMI watchdog being enabled or SMT being enabled.
 
 Signed-off-by: Ian Rogers <irogers@google.com>
 ---
- tools/perf/tests/expr.c   |  7 ++-----
- tools/perf/util/cputopo.c | 14 ++++++++++++++
- tools/perf/util/cputopo.h |  5 +++++
- tools/perf/util/expr.c    | 16 ++++++----------
- tools/perf/util/smt.c     | 11 +++++------
- tools/perf/util/smt.h     | 12 ++++++------
- 6 files changed, 38 insertions(+), 27 deletions(-)
+ tools/perf/pmu-events/jevents.py   | 20 ++++++++++++++++----
+ tools/perf/pmu-events/pmu-events.h | 25 ++++++++++++++++++++++++-
+ tools/perf/util/metricgroup.c      | 19 ++++++++++++-------
+ 3 files changed, 52 insertions(+), 12 deletions(-)
 
-diff --git a/tools/perf/tests/expr.c b/tools/perf/tests/expr.c
-index a9eb1ed6bd63..cbf0e0c74906 100644
---- a/tools/perf/tests/expr.c
-+++ b/tools/perf/tests/expr.c
-@@ -154,13 +154,10 @@ static int test__expr(struct test_suite *t __maybe_unused, int subtest __maybe_u
+diff --git a/tools/perf/pmu-events/jevents.py b/tools/perf/pmu-events/jevents.py
+index 2da55408398f..dc0c56dccb5e 100755
+--- a/tools/perf/pmu-events/jevents.py
++++ b/tools/perf/pmu-events/jevents.py
+@@ -51,8 +51,8 @@ _json_event_attributes = [
  
- 	/* Only EVENT1 or EVENT2 need be measured depending on the value of smt_on. */
- 	{
--		struct cpu_topology *topology = cpu_topology__new();
--		bool smton = smt_on(topology);
-+		bool smton = smt_on();
- 		bool corewide = core_wide(/*system_wide=*/false,
--					  /*user_requested_cpus=*/false,
--					  topology);
-+					  /*user_requested_cpus=*/false);
+ # Attributes that are in pmu_metric rather than pmu_event.
+ _json_metric_attributes = [
+-    'metric_name', 'metric_group', 'metric_constraint', 'metric_expr', 'desc',
+-    'long_desc', 'unit', 'compat', 'aggr_mode'
++    'metric_name', 'metric_group', 'metric_expr', 'desc',
++    'long_desc', 'unit', 'compat', 'aggr_mode', 'event_grouping'
+ ]
  
--		cpu_topology__delete(topology);
- 		expr__ctx_clear(ctx);
- 		TEST_ASSERT_VAL("find ids",
- 				expr__find_ids("EVENT1 if #smt_on else EVENT2",
-diff --git a/tools/perf/util/cputopo.c b/tools/perf/util/cputopo.c
-index e08797c3cdbc..ca1d833a0c26 100644
---- a/tools/perf/util/cputopo.c
-+++ b/tools/perf/util/cputopo.c
-@@ -238,6 +238,20 @@ static bool has_die_topology(void)
- 	return true;
- }
+ def removesuffix(s: str, suffix: str) -> str:
+@@ -204,6 +204,18 @@ class JsonEvent:
+       }
+       return aggr_mode_to_enum[aggr_mode]
  
-+const struct cpu_topology *online_topology(void)
-+{
-+	static const struct cpu_topology *topology;
++    def convert_metric_constraint(metric_constraint: str) -> Optional[str]:
++      """Returns the metric_event_groups enum value associated with the JSON string."""
++      if not metric_constraint:
++        return None
++      metric_constraint_to_enum = {
++          'NO_GROUP_EVENTS': '1',
++          'NO_GROUP_EVENTS_NMI': '2',
++          'NO_NMI_WATCHDOG': '2',
++          'NO_GROUP_EVENTS_SMT': '3',
++      }
++      return metric_constraint_to_enum[metric_constraint]
 +
-+	if (!topology) {
-+		topology = cpu_topology__new();
-+		if (!topology) {
-+			pr_err("Error creating CPU topology");
-+			abort();
-+		}
-+	}
-+	return topology;
-+}
-+
- struct cpu_topology *cpu_topology__new(void)
+     def lookup_msr(num: str) -> Optional[str]:
+       """Converts the msr number, or first in a list to the appropriate event field."""
+       if not num:
+@@ -288,7 +300,7 @@ class JsonEvent:
+     self.deprecated = jd.get('Deprecated')
+     self.metric_name = jd.get('MetricName')
+     self.metric_group = jd.get('MetricGroup')
+-    self.metric_constraint = jd.get('MetricConstraint')
++    self.event_grouping = convert_metric_constraint(jd.get('MetricConstraint'))
+     self.metric_expr = None
+     if 'MetricExpr' in jd:
+       self.metric_expr = metric.ParsePerfJson(jd['MetricExpr']).Simplify()
+@@ -678,7 +690,7 @@ static void decompress_event(int offset, struct pmu_event *pe)
  {
- 	struct cpu_topology *tp = NULL;
-diff --git a/tools/perf/util/cputopo.h b/tools/perf/util/cputopo.h
-index 969e5920a00e..8d42f6102954 100644
---- a/tools/perf/util/cputopo.h
-+++ b/tools/perf/util/cputopo.h
-@@ -56,6 +56,11 @@ struct hybrid_topology {
- 	struct hybrid_topology_node	nodes[];
+ \tconst char *p = &big_c_string[offset];
+ """)
+-  enum_attributes = ['aggr_mode', 'deprecated', 'perpkg']
++  enum_attributes = ['aggr_mode', 'deprecated', 'event_grouping', 'perpkg']
+   for attr in _json_event_attributes:
+     _args.output_file.write(f'\n\tpe->{attr} = ')
+     if attr in enum_attributes:
+diff --git a/tools/perf/pmu-events/pmu-events.h b/tools/perf/pmu-events/pmu-events.h
+index 4d236bb32fd3..57a38e3e5c32 100644
+--- a/tools/perf/pmu-events/pmu-events.h
++++ b/tools/perf/pmu-events/pmu-events.h
+@@ -11,6 +11,29 @@ enum aggr_mode_class {
+ 	PerCore
  };
  
-+/*
-+ * The topology for online CPUs, lazily created.
++/**
++ * enum metric_event_groups - How events within a pmu_metric should be grouped.
 + */
-+const struct cpu_topology *online_topology(void);
-+
- struct cpu_topology *cpu_topology__new(void);
- void cpu_topology__delete(struct cpu_topology *tp);
- /* Determine from the core list whether SMT was enabled. */
-diff --git a/tools/perf/util/expr.c b/tools/perf/util/expr.c
-index c1da20b868db..d46a1878bc9e 100644
---- a/tools/perf/util/expr.c
-+++ b/tools/perf/util/expr.c
-@@ -402,7 +402,7 @@ double arch_get_tsc_freq(void)
- 
- double expr__get_literal(const char *literal, const struct expr_scanner_ctx *ctx)
- {
--	static struct cpu_topology *topology;
-+	const struct cpu_topology *topology;
- 	double result = NAN;
- 
- 	if (!strcmp("#num_cpus", literal)) {
-@@ -421,31 +421,27 @@ double expr__get_literal(const char *literal, const struct expr_scanner_ctx *ctx
- 	 * these strings gives an indication of the number of packages, dies,
- 	 * etc.
- 	 */
--	if (!topology) {
--		topology = cpu_topology__new();
--		if (!topology) {
--			pr_err("Error creating CPU topology");
--			goto out;
--		}
--	}
- 	if (!strcasecmp("#smt_on", literal)) {
--		result = smt_on(topology) ? 1.0 : 0.0;
-+		result = smt_on() ? 1.0 : 0.0;
- 		goto out;
- 	}
- 	if (!strcmp("#core_wide", literal)) {
--		result = core_wide(ctx->system_wide, ctx->user_requested_cpu_list, topology)
-+		result = core_wide(ctx->system_wide, ctx->user_requested_cpu_list)
- 			? 1.0 : 0.0;
- 		goto out;
- 	}
- 	if (!strcmp("#num_packages", literal)) {
-+		topology = online_topology();
- 		result = topology->package_cpus_lists;
- 		goto out;
- 	}
- 	if (!strcmp("#num_dies", literal)) {
-+		topology = online_topology();
- 		result = topology->die_cpus_lists;
- 		goto out;
- 	}
- 	if (!strcmp("#num_cores", literal)) {
-+		topology = online_topology();
- 		result = topology->core_cpus_lists;
- 		goto out;
- 	}
-diff --git a/tools/perf/util/smt.c b/tools/perf/util/smt.c
-index 994e9e418227..650e804d0adc 100644
---- a/tools/perf/util/smt.c
-+++ b/tools/perf/util/smt.c
-@@ -4,7 +4,7 @@
- #include "cputopo.h"
- #include "smt.h"
- 
--bool smt_on(const struct cpu_topology *topology)
-+bool smt_on(void)
- {
- 	static bool cached;
- 	static bool cached_result;
-@@ -16,22 +16,21 @@ bool smt_on(const struct cpu_topology *topology)
- 	if (sysfs__read_int("devices/system/cpu/smt/active", &fs_value) >= 0)
- 		cached_result = (fs_value == 1);
- 	else
--		cached_result = cpu_topology__smt_on(topology);
-+		cached_result = cpu_topology__smt_on(online_topology());
- 
- 	cached = true;
- 	return cached_result;
- }
- 
--bool core_wide(bool system_wide, const char *user_requested_cpu_list,
--	       const struct cpu_topology *topology)
-+bool core_wide(bool system_wide, const char *user_requested_cpu_list)
- {
- 	/* If not everything running on a core is being recorded then we can't use core_wide. */
- 	if (!system_wide)
- 		return false;
- 
- 	/* Cheap case that SMT is disabled and therefore we're inherently core_wide. */
--	if (!smt_on(topology))
-+	if (!smt_on())
- 		return true;
- 
--	return cpu_topology__core_wide(topology, user_requested_cpu_list);
-+	return cpu_topology__core_wide(online_topology(), user_requested_cpu_list);
- }
-diff --git a/tools/perf/util/smt.h b/tools/perf/util/smt.h
-index ae9095f2c38c..01441fd2c0a2 100644
---- a/tools/perf/util/smt.h
-+++ b/tools/perf/util/smt.h
-@@ -2,16 +2,16 @@
- #ifndef __SMT_H
- #define __SMT_H 1
- 
--struct cpu_topology;
--
--/* Returns true if SMT (aka hyperthreading) is enabled. */
--bool smt_on(const struct cpu_topology *topology);
-+/*
-+ * Returns true if SMT (aka hyperthreading) is enabled. Determined via sysfs or
-+ * the online topology.
-+ */
-+bool smt_on(void);
- 
++enum metric_event_groups {
++	/**
++	 * @MetricGroupEvents: Default, group events within the metric.
++	 */
++	MetricGroupEvents = 0,
++	/**
++	 * @MetricNoGroupEvents: Don't group events for the metric.
++	 */
++	MetricNoGroupEvents = 1,
++	/**
++	 * @MetricNoGroupEventsNmi: Don't group events for the metric if the NMI
++	 *                          watchdog is enabled.
++	 */
++	MetricNoGroupEventsNmi = 2,
++	/**
++	 * @MetricNoGroupEventsSmt: Don't group events for the metric if SMT is
++	 *                          enabled.
++	 */
++	MetricNoGroupEventsSmt = 3,
++};
  /*
-  * Returns true when system wide and all SMT threads for a core are in the
-  * user_requested_cpus map.
+  * Describe each PMU event. Each CPU has a table of PMU events.
   */
--bool core_wide(bool system_wide, const char *user_requested_cpu_list,
--	       const struct cpu_topology *topology);
-+bool core_wide(bool system_wide, const char *user_requested_cpu_list);
+@@ -33,10 +56,10 @@ struct pmu_metric {
+ 	const char *metric_expr;
+ 	const char *unit;
+ 	const char *compat;
+-	const char *metric_constraint;
+ 	const char *desc;
+ 	const char *long_desc;
+ 	enum aggr_mode_class aggr_mode;
++	enum metric_event_groups event_grouping;
+ };
  
- #endif /* __SMT_H */
+ struct pmu_events_table;
+diff --git a/tools/perf/util/metricgroup.c b/tools/perf/util/metricgroup.c
+index b2aa6e049804..868fc9c35606 100644
+--- a/tools/perf/util/metricgroup.c
++++ b/tools/perf/util/metricgroup.c
+@@ -13,6 +13,7 @@
+ #include "pmu.h"
+ #include "pmu-hybrid.h"
+ #include "print-events.h"
++#include "smt.h"
+ #include "expr.h"
+ #include "rblist.h"
+ #include <string.h>
+@@ -168,16 +169,20 @@ static void metric__watchdog_constraint_hint(const char *name, bool foot)
+ 
+ static bool metric__group_events(const struct pmu_metric *pm)
+ {
+-	if (!pm->metric_constraint)
+-		return true;
+-
+-	if (!strcmp(pm->metric_constraint, "NO_NMI_WATCHDOG") &&
+-	    sysctl__nmi_watchdog_enabled()) {
++	switch (pm->event_grouping) {
++	case MetricNoGroupEvents:
++		return false;
++	case MetricNoGroupEventsNmi:
++		if (!sysctl__nmi_watchdog_enabled())
++			return true;
+ 		metric__watchdog_constraint_hint(pm->metric_name, /*foot=*/false);
+ 		return false;
++	case MetricNoGroupEventsSmt:
++		return !smt_on();
++	case MetricGroupEvents:
++	default:
++		return true;
+ 	}
+-
+-	return true;
+ }
+ 
+ static void metric__free(struct metric *m)
 -- 
 2.39.2.637.g21b0678d19-goog
 
