@@ -2,550 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2801469BF13
-	for <lists+linux-kernel@lfdr.de>; Sun, 19 Feb 2023 08:54:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E50CC69BF18
+	for <lists+linux-kernel@lfdr.de>; Sun, 19 Feb 2023 09:09:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229640AbjBSHy1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 19 Feb 2023 02:54:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47752 "EHLO
+        id S229674AbjBSIJ3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 19 Feb 2023 03:09:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51380 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229478AbjBSHyZ (ORCPT
+        with ESMTP id S229489AbjBSIJ1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 19 Feb 2023 02:54:25 -0500
-Received: from mail-ed1-x544.google.com (mail-ed1-x544.google.com [IPv6:2a00:1450:4864:20::544])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 017EC126F3
-        for <linux-kernel@vger.kernel.org>; Sat, 18 Feb 2023 23:54:23 -0800 (PST)
-Received: by mail-ed1-x544.google.com with SMTP id x22so796864edd.10
-        for <linux-kernel@vger.kernel.org>; Sat, 18 Feb 2023 23:54:23 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=to:subject:message-id:date:from:mime-version:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=ARjx7c9m7vG+q/SN6iGU/UqUFITeG/nn+7TUwXaK0N0=;
-        b=TOAm+GkJyV44mBB8nCF6C1lvWOtjAChasTzBztBB/BcVt1DbTWoTKKgqZ0/VURsrdL
-         23PHPiDIapp4m4kK8H5+QFBEYBL7+QxdjLMtoXYhMUFPSmyxIKD6O+ZjZ/Q8vkFsTL73
-         h1+rz4T65HLVITInybqxMDS1NiaAoJV31hUFqIq0G0JKRQ2sbPz7v/Bw738K8bfTv7z2
-         cYiWy+LihCcDqnFYFqVOdTrK8mLfWnDt3uGOGcM0fPGaT/UrZlCzGfwNd++bE2vcMwgH
-         V/v6WqVsMhltZM02dNJZ/dbM29E5jrgzEwOCNbFitTqdLPxYH/PJKNpWy9FnTiU234Xy
-         RquQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:subject:message-id:date:from:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=ARjx7c9m7vG+q/SN6iGU/UqUFITeG/nn+7TUwXaK0N0=;
-        b=0c1BdnzkvLdzVx5oxcH8dBdI1447rB6jFEtHKJ321dumlumpPY9GUGosVlb/lXsIDh
-         s4fv0jzTEhrOuAEASGy9Z4RT1asI6wvk5t1Qh9dUMQ+gznHnxAWqgZZuGxoY2bo11Ie0
-         ta/+wRbbuqCzKys7otHB51Q1OOMjjvQfblgf9w6rmEDCX08TDGYNI0L2RJFkmvMdJOMH
-         Qo4hH0raoCD7qj4xyDtkwgGlX6gjKUZVkFnMOlc+Rc1i1tafjFSx2ErEjsyb8Us/Y5JO
-         bWtZ3jPJRRL0aPvDIrd8iApFwh+hBG0bq2t4SpWHRXYLFxArWOA6ntXhfjezqujRxFsg
-         UKXA==
-X-Gm-Message-State: AO0yUKUl1w+Tsb3oW8vQ1mdzXxZ8tXPi8OZN4ClsohQvZ5NcOKkUJTcx
-        57ZHmljkBH2aBZSFwiYTs4ado5TdAQZa5HInAcmtZBLUU+yz8g==
-X-Google-Smtp-Source: AK7set+RxUQGgNJCFIlV/cgv3JLwt1LiYwN8yOLGFimrjv9LPqkR6bAlV9JTVoQXinrJqGLk/os8UgeeDAC7J27rf6w=
-X-Received: by 2002:a17:906:9499:b0:8b1:79ef:6923 with SMTP id
- t25-20020a170906949900b008b179ef6923mr3753219ejx.15.1676793262034; Sat, 18
- Feb 2023 23:54:22 -0800 (PST)
+        Sun, 19 Feb 2023 03:09:27 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9346113D0;
+        Sun, 19 Feb 2023 00:09:25 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id CE5D160BB9;
+        Sun, 19 Feb 2023 08:09:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0F8B9C433D2;
+        Sun, 19 Feb 2023 08:09:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1676794164;
+        bh=4eziLVCcDlde0H0XGo8q3JtUuswdaThfLP8DQgsvEDc=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=X0RfJR4tjukJvhSLo1OzPcqaCx3EDz6GUrs1aHah353dIQCBqSXVjOC3KCUzVq4Hr
+         MQ3z7JQB10rD3VeZHr/Nq89jtErCENWTTrUTlWZ3eD528UZLX5yQ1pECwypaZA7UIX
+         AtyUq3lx4GWz3lE5i+6io0ojVmV0/QTT6CIeUSS2MIdetNur3cGMOmfUYeHJcNpzEU
+         P1nGu52d7huP7KJ/LS3CoJF2YjKh0DGwLR5kOFuXHxzeiQq1BZu1gKnmDgFjWd6czR
+         eW4AK34E9AdRjquGGVMjV/Z2oM/xZ0A3X57CCKFLciYhMe+etsG4vDab+PNnoOnc00
+         hxHbVpS3gKBxg==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id C025F5C0A1A; Sun, 19 Feb 2023 00:09:21 -0800 (PST)
+Date:   Sun, 19 Feb 2023 00:09:21 -0800
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     Joel Fernandes <joel@joelfernandes.org>
+Cc:     Alan Stern <stern@rowland.harvard.edu>,
+        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+        kernel-team@meta.com, mingo@kernel.org, parri.andrea@gmail.com,
+        will@kernel.org, peterz@infradead.org, boqun.feng@gmail.com,
+        npiggin@gmail.com, dhowells@redhat.com, j.alglave@ucl.ac.uk,
+        luc.maranget@inria.fr, akiyks@gmail.com
+Subject: Re: Current LKMM patch disposition
+Message-ID: <20230219080921.GG2948950@paulmck-ThinkPad-P17-Gen-1>
+Reply-To: paulmck@kernel.org
+References: <20230204222411.GC2948950@paulmck-ThinkPad-P17-Gen-1>
+ <Y9+41ctA54pjm/KG@google.com>
+ <Y+FJSzUoGTgReLPB@rowland.harvard.edu>
+ <Y+fN2fvUjGDWBYrv@google.com>
+ <Y+f4TYZ9BPlt8y8B@rowland.harvard.edu>
+ <CAEXW_YRuTfjc=5OAskTV0Qt_zSJTPP3-01=Y=SypMdPsF_weAQ@mail.gmail.com>
+ <Y+hWAksfk4C0M2gB@rowland.harvard.edu>
+ <CAEXW_YQ3fvFDNi9wG5w4Zqkbda8SUByOnM6y6MXQpxT9oQw8xQ@mail.gmail.com>
+ <20230218192123.GC2948950@paulmck-ThinkPad-P17-Gen-1>
+ <CAEXW_YT-wMxQUXzB0hinCf-f7d7+cG3cALF55ehDe1b4aYob3Q@mail.gmail.com>
 MIME-Version: 1.0
-From:   Amit <amitchoudhary0523@gmail.com>
-Date:   Sun, 19 Feb 2023 13:24:12 +0530
-Message-ID: <CAFf+5zg=dsD29RfTydWJWsmOcvcw+aLszaPokV=SM8hPLtC4YA@mail.gmail.com>
-Subject: Generic Unordered Set Library (similar to C++ STL unordered_set).
-To:     linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAEXW_YT-wMxQUXzB0hinCf-f7d7+cG3cALF55ehDe1b4aYob3Q@mail.gmail.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Generic Unordered Set Library (similar to C++ STL unordered_set).
-
-The code is below:
-
--------------------------------------------
-generic_unordered_set_library.c
--------------------------------------------
-
-/*
- * License: This file has been released under APACHE LICENSE, VERSION 2.0.
- * The license details can be found here:
- *                            https://www.apache.org/licenses/LICENSE-2.0
- */
-
-#include "generic_unordered_set_library.h"
-
-#include <stdlib.h>
-#include <string.h>
-#include <stddef.h>
-
-static void us_get_matching_and_prev_elements(
-                             struct generic_unordered_set_container *gusc_ptr,
-                             void *data, long data_size,
-                             struct element **pmatch, struct element **pprev)
-{
-
-    struct element *temp = NULL;
-    struct element *prev = NULL;
-
-    *pmatch = NULL;
-    if (pprev) {
-        *pprev = NULL;
-    }
-
-    for (prev = NULL, temp = gusc_ptr->first;
-         temp != NULL;
-         prev = temp, temp = temp->next) {
-
-        if (temp->data_size != data_size) {
-            continue;
-        }
-
-        if (memcmp(temp->data, data, (size_t)(data_size)) == 0) { //
-element matched
-            *pmatch = temp;
-            if (pprev) {
-                *pprev = prev;
-            }
-            break;
-        }
-
-    } // end of for loop
-
-    return;
-
-} // end of us_get_matching_and_prev_elements
-
-struct generic_unordered_set_container *us_init_generic_unordered_set_container(
-                   call_function_before_deleting_data cfbdd_callback_function)
-{
-
-    struct generic_unordered_set_container *gusc_ptr = NULL;
-
-    gusc_ptr = malloc(sizeof(*gusc_ptr));
-
-    if (!gusc_ptr) {
-        return NULL;
-    }
-
-    gusc_ptr->first = NULL;
-    gusc_ptr->fi = NULL;
-    gusc_ptr->total_number_of_elements = 0;
-    gusc_ptr->cfbdd_callback_function = cfbdd_callback_function;
-
-    return gusc_ptr;
-
-} // end of us_init_generic_unordered_set_container
-
-long us_get_total_number_of_elements(
-                             struct generic_unordered_set_container *gusc_ptr)
-{
-
-    long num_elems = 0;
-
-    num_elems = gusc_ptr->total_number_of_elements;
-
-    return num_elems;
-
-} // end of us_get_total_number_of_elements
-
-int us_add_new_element(struct generic_unordered_set_container *gusc_ptr,
-                       void *data, long data_size)
-{
-
-    struct element *matched_elem = NULL;
-    struct element *prev_elem = NULL;
-    struct element *new_elem = NULL;
-
-    if (!data) {
-        return GUSL_AT_LEAST_ONE_ARG_IS_INVALID;
-    }
-
-    if (data_size <= 0) {
-        return GUSL_AT_LEAST_ONE_ARG_IS_INVALID;
-    }
-
-    us_get_matching_and_prev_elements(gusc_ptr, data, data_size, &matched_elem,
-                                      &prev_elem);
-
-    if (matched_elem) {
-        return GUSL_ELEMENT_EXISTS;
-    }
-
-    new_elem = malloc(sizeof(*new_elem));
-    if (!new_elem) {
-        return GUSL_NO_MEMORY;
-    }
-
-    new_elem->data = malloc((size_t)(data_size));
-    if (!new_elem->data) {
-        free(new_elem);
-        return GUSL_NO_MEMORY;
-    }
-
-    new_elem->data_size = data_size;
-    memmove(new_elem->data, data, (size_t)(new_elem->data_size));
-
-    new_elem->next = NULL;
-
-    if (!prev_elem) { // no elements in the set
-        gusc_ptr->first = new_elem;
-    } else {
-        prev_elem->next = new_elem;
-    }
-
-    gusc_ptr->total_number_of_elements = gusc_ptr->total_number_of_elements + 1;
-
-    return GUSL_SUCCESS;
-
-} // end of us_add_new_element
-
-// The user is responsible for freeing the data pointer that is returned in
-// *pdata.
-int us_get_data_from_front_element_and_delete_front_element(
-                             struct generic_unordered_set_container *gusc_ptr,
-                             void **pdata, long *pdata_size)
-{
-
-    struct element *temp = NULL;
-
-    if ((!pdata) || (!pdata_size)) {
-        return GUSL_AT_LEAST_ONE_ARG_IS_INVALID;
-    }
-
-    *pdata = NULL;
-    *pdata_size = 0;
-
-    if (gusc_ptr->total_number_of_elements == 0) {
-        return GUSL_SET_IS_EMPTY;
-    }
-
-    *pdata = gusc_ptr->first->data;
-    *pdata_size = gusc_ptr->first->data_size;
-
-    temp = gusc_ptr->first;
-    gusc_ptr->first = gusc_ptr->first->next;
-
-    temp->next = NULL;
-    free(temp);
-
-    gusc_ptr->total_number_of_elements = gusc_ptr->total_number_of_elements - 1;
-
-    return GUSL_SUCCESS;
-
-} // end of us_get_data_from_front_element_and_delete_front_element
-
-int us_is_element_present(struct generic_unordered_set_container *gusc_ptr,
-                          void *data, long data_size)
-{
-
-    struct element *matched_elem = NULL;
-
-    if (!data) {
-        return GUSL_AT_LEAST_ONE_ARG_IS_INVALID;
-    }
-
-    if (data_size <= 0) {
-        return GUSL_AT_LEAST_ONE_ARG_IS_INVALID;
-    }
-
-    if (gusc_ptr->total_number_of_elements == 0) {
-        return GUSL_FALSE;
-    }
-
-    us_get_matching_and_prev_elements(gusc_ptr, data, data_size, &matched_elem,
-                                      NULL);
-
-    if (matched_elem) {
-        return GUSL_TRUE;
-    }
-
-    return GUSL_FALSE;
-
-} // end of us_is_element_present
-
-int us_replace_data_and_size_in_matching_element(
-                             struct generic_unordered_set_container *gusc_ptr,
-                             void *old_data, long old_data_size,
-                             void *new_data, long new_data_size)
-{
-
-    struct element *matched_elem = NULL;
-    void *data = NULL;
-
-    if ((!old_data) || (!new_data)) {
-        return GUSL_AT_LEAST_ONE_ARG_IS_INVALID;
-    }
-
-    if ((old_data_size <= 0) || (new_data_size <= 0)) {
-        return GUSL_AT_LEAST_ONE_ARG_IS_INVALID;
-    }
-
-    if (gusc_ptr->total_number_of_elements == 0) {
-        return GUSL_SET_IS_EMPTY;
-    }
-
-    us_get_matching_and_prev_elements(gusc_ptr, old_data, old_data_size,
-                                      &matched_elem, NULL);
-
-    if (!matched_elem) {
-        return GUSL_ELEMENT_NOT_FOUND;
-    }
-
-    // We will allocate memory for contents of new_data and copy contents of
-    // new_data into this newly allocated memory. Then we will free old_data
-    // and populate the data member of the matched_elem with the address of the
-    // newly allocated memory. We will also populate the data_size member of
-    // the matched_elem with the value in new_data_size.
-    data = malloc((size_t)(new_data_size));
-    if (!data) {
-        return GUSL_NO_MEMORY;
-    }
-
-    memmove(data, new_data, (size_t)(new_data_size));
-
-    if (gusc_ptr->cfbdd_callback_function) {
-        gusc_ptr->cfbdd_callback_function(gusc_ptr, matched_elem->data);
-    }
-
-    free(matched_elem->data);
-
-    matched_elem->data = data;
-    matched_elem->data_size = new_data_size;
-
-    return GUSL_SUCCESS;
-
-} // end of us_replace_data_and_size_in_matching_element
-
-int us_delete_matching_element(
-                             struct generic_unordered_set_container *gusc_ptr,
-                             void *data, long data_size)
-{
-
-    struct element *matched_elem = NULL;
-    struct element *prev_elem = NULL;
-
-    if (!data) {
-        return GUSL_AT_LEAST_ONE_ARG_IS_INVALID;
-    }
-
-    if (data_size <= 0) {
-        return GUSL_AT_LEAST_ONE_ARG_IS_INVALID;
-    }
-
-    if (gusc_ptr->total_number_of_elements == 0) {
-        return GUSL_SET_IS_EMPTY;
-    }
-
-    us_get_matching_and_prev_elements(gusc_ptr, data, data_size, &matched_elem,
-                                      &prev_elem);
-
-    if (!matched_elem) {
-        return GUSL_ELEMENT_NOT_FOUND;
-    }
-
-    if (!prev_elem) { // first element matched
-        gusc_ptr->first = gusc_ptr->first->next;
-    } else {
-        prev_elem->next = matched_elem->next;
-    }
-
-    matched_elem->next = NULL;
-
-    if (gusc_ptr->cfbdd_callback_function) {
-        gusc_ptr->cfbdd_callback_function(gusc_ptr, matched_elem->data);
-    }
-
-    gusc_ptr->total_number_of_elements = gusc_ptr->total_number_of_elements - 1;
-
-    free(matched_elem->data);
-    free(matched_elem);
-
-    return GUSL_SUCCESS;
-
-} // end of us_delete_matching_element
-
-void us_init_fi(struct generic_unordered_set_container *gusc_ptr)
-{
-
-    gusc_ptr->fi = gusc_ptr->first;
-
-    return;
-
-} // end of us_init_fi
-
-int us_fi_has_next_element(struct generic_unordered_set_container *gusc_ptr)
-{
-
-    int has_next = GUSL_FALSE;
-
-    if (gusc_ptr->fi) {
-        has_next = GUSL_TRUE;
-    }
-
-    return has_next;
-
-} // end of us_fi_has_next_element
-
-// The user should not free the data pointer that is returned in *pdata because
-// the element that contains the data is still part of the set. However, the
-// user can modify the data and then modify data_size if the size of data has
-// changed.
-int us_fi_get_data_from_next_element(
-                             struct generic_unordered_set_container *gusc_ptr,
-                             void **pdata, long **ppdata_size)
-{
-
-    if ((!pdata) || (!ppdata_size)) {
-        return GUSL_AT_LEAST_ONE_ARG_IS_INVALID;
-    }
-
-    *pdata = NULL;
-    *ppdata_size = 0;
-
-    *pdata = gusc_ptr->fi->data;
-    *ppdata_size = &(gusc_ptr->fi->data_size);
-
-    gusc_ptr->fi = gusc_ptr->fi->next;
-
-    return GUSL_SUCCESS;
-
-} // end of us_fi_get_data_from_next_element
-
-void us_delete_all_elements(struct generic_unordered_set_container *gusc_ptr)
-{
-
-    struct element *temp = NULL;
-
-    while ((temp = gusc_ptr->first)) {
-
-        gusc_ptr->first = gusc_ptr->first->next;
-        temp->next = NULL;
-
-        if (gusc_ptr->cfbdd_callback_function) {
-            gusc_ptr->cfbdd_callback_function(gusc_ptr, temp->data);
-        }
-
-        free(temp->data);
-        free(temp);
-
-        gusc_ptr->total_number_of_elements =
-                                       gusc_ptr->total_number_of_elements - 1;
-    }
-
-    // crash the program if total_number_of_elements is not zero
-    if (gusc_ptr->total_number_of_elements != 0) {
-        *((unsigned long *)(-1)) = 123;
-    }
-
-    return;
-
-} // end of us_delete_all_elements
-
-void us_delete_container(struct generic_unordered_set_container *gusc_ptr)
-{
-
-    us_delete_all_elements(gusc_ptr);
-
-    free(gusc_ptr);
-
-    return;
-
-} // end of us_delete_container
-
--------------------------------------------
-generic_unordered_set_library.h
--------------------------------------------
-
-/*
- * License: This file has been released under APACHE LICENSE, VERSION 2.0.
- * The license details can be found here:
- *                            https://www.apache.org/licenses/LICENSE-2.0
- */
-
-#ifndef _GENERIC_UNORDERED_SET_LIBRARY_H_
-#define _GENERIC_UNORDERED_SET_LIBRARY_H_
-
-#define GUSL_SUCCESS 2 // everything happened successfully
-#define GUSL_TRUE 1 // true
-#define GUSL_FALSE 0 // false
-#define GUSL_AT_LEAST_ONE_ARG_IS_INVALID -1 // at least one argument is invalid
-#define GUSL_NO_MEMORY -2 // no memory available
-#define GUSL_ELEMENT_EXISTS -3 // element already exists in the set
-#define GUSL_SET_IS_EMPTY -4 // there are no elements in the set
-#define GUSL_ELEMENT_NOT_FOUND -5 // element not found in the set
-
-struct generic_unordered_set_container;
-
-struct element
-{
-    void *data;
-    long data_size;
-    struct element *next;
-};
-
-// gusc_ptr needs to be sent because in case the user has created more than
-// one container and the user stores different 'data' in each container, then
-// the user will be able to identify that the 'data' belongs to which container.
-// Otherwise, the user won't be able to identify that the 'data' belongs to
-// which container and then things won't happen correctly.
-typedef void (*call_function_before_deleting_data)(
-                             struct generic_unordered_set_container *gusc_ptr,
-                             void *data);
-
-struct generic_unordered_set_container
-{
-    struct element *first;
-    struct element *fi; // fi stands for forward iterator
-    long total_number_of_elements;
-    // callback function
-    call_function_before_deleting_data cfbdd_callback_function;
-};
-
-/*
- * Names of functions start with the prefix us_. us_ stands for unordered set.
- *
- * In this software, delete and free mean the same thing.
- */
-
-struct generic_unordered_set_container *us_init_generic_unordered_set_container(
-                   call_function_before_deleting_data cfbdd_callback_function);
-
-long us_get_total_number_of_elements(
-                             struct generic_unordered_set_container *gusc_ptr);
-
-int us_add_new_element(struct generic_unordered_set_container *gusc_ptr,
-                       void *data, long data_size);
-
-int us_get_data_from_front_element_and_delete_front_element(
-                             struct generic_unordered_set_container *gusc_ptr,
-                             void **pdata, long *pdata_size);
-
-int us_is_element_present(struct generic_unordered_set_container *gusc_ptr,
-                          void *data, long data_size);
-
-int us_replace_data_and_size_in_matching_element(
-                             struct generic_unordered_set_container *gusc_ptr,
-                             void *old_data, long old_data_size,
-                             void *new_data, long new_data_size);
-
-int us_delete_matching_element(
-                             struct generic_unordered_set_container *gusc_ptr,
-                             void *data, long data_size);
-
-void us_init_fi(struct generic_unordered_set_container *gusc_ptr);
-
-int us_fi_has_next_element(struct generic_unordered_set_container *gusc_ptr);
-
-int us_fi_get_data_from_next_element(
-                             struct generic_unordered_set_container *gusc_ptr,
-                             void **pdata, long **ppdata_size);
-
-void us_delete_all_elements(struct generic_unordered_set_container *gusc_ptr);
-
-void us_delete_container(struct generic_unordered_set_container *gusc_ptr);
-
-#endif
+On Sat, Feb 18, 2023 at 10:20:39PM -0500, Joel Fernandes wrote:
+> On Sat, Feb 18, 2023 at 2:21 PM Paul E. McKenney <paulmck@kernel.org> wrote:
+> >
+> > On Sat, Feb 18, 2023 at 01:13:59AM -0500, Joel Fernandes wrote:
+> > > Hi Alan,
+> > >
+> > > On Sat, Feb 11, 2023 at 9:59 PM Alan Stern <stern@rowland.harvard.edu> wrote:
+> > > >
+> > > [...]
+> > > >
+> > > > Would you like to post a few examples showing some of the most difficult
+> > > > points you encountered?  Maybe explanation.txt can be improved.
+> > >
+> > > One additional feedback I wanted to mention, regarding this paragraph
+> > > under "WARNING":
+> > > ===========
+> > > The protections provided by READ_ONCE(), WRITE_ONCE(), and others are
+> > > not perfect; and under some circumstances it is possible for the
+> > > compiler to undermine the memory model. Here is an example. Suppose
+> > > both branches of an "if" statement store the same value to the same
+> > > location:
+> > > r1 = READ_ONCE(x);
+> > > if (r1) {
+> > > WRITE_ONCE(y, 2);
+> > > ... /* do something */
+> > > } else {
+> > > WRITE_ONCE(y, 2);
+> > > ... /* do something else */
+> > > }
+> > > ===========
+> > >
+> > > I tried lots of different compilers with varying degrees of
+> > > optimization, in all cases I find that the conditional instruction
+> > > always appears in program order before the stores inside the body of
+> > > the conditional. So I am not sure if this is really a valid concern on
+> > > current compilers, if not - could you provide an example of a compiler
+> > > and options that cause it?
+> > >
+> > > In any case, if it is a theoretical concern, it could be clarified
+> > > that this is a theoretical possibility in the text.  And if it is a
+> > > real/practical concern, then it could be mentioned the specific
+> > > compiler/arch this was seen in.
+> >
+> > I could be misremembering, but I believe that this reordering has been
+> > seen in the past.
+> >
+> 
+> Thank you! And I also confirmed putting a barrier() in the branch
+> body, also "cures" the optimization... I did not know compilers
+> optimize so aggressively..
+
+And the compilers are just getting started...  :-/
+
+							Thanx, Paul
