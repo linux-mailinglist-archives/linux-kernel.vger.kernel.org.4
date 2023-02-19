@@ -2,57 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 083F969BFEF
-	for <lists+linux-kernel@lfdr.de>; Sun, 19 Feb 2023 11:15:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E7DE569BFF1
+	for <lists+linux-kernel@lfdr.de>; Sun, 19 Feb 2023 11:20:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229674AbjBSKOz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 19 Feb 2023 05:14:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60564 "EHLO
+        id S230037AbjBSKUg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 19 Feb 2023 05:20:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34640 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229506AbjBSKOy (ORCPT
+        with ESMTP id S229506AbjBSKUd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 19 Feb 2023 05:14:54 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EAA7A10A95;
-        Sun, 19 Feb 2023 02:14:52 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 82A8A60C11;
-        Sun, 19 Feb 2023 10:14:52 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D4710C4339B;
-        Sun, 19 Feb 2023 10:14:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1676801691;
-        bh=sNN8c94qA1yZlc1KlOz29fi1nBuqPs8632wXKj46328=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=FfJrHOHfOvghJdnBIVi7Gv5Kc3EfdZScmpsLIdZzWpMEyASmseEaBmseo+jBmi9jJ
-         YAtaOnumjPIGafXsq9KNDOttsyzvX1CgryuHjxsNH8eyLWECliB21Z3upGRol+QNm0
-         KiyFp+6pHY13mCMe8sRSmPsJFR4CTDn//elx9KuuuS6Nk2waKUMtTDLutbwIS+JlDI
-         oSUQ8M2pKUWG41CDlPsh7FY0iIgr49eA1W3Lr5zfbpVXBAVvLx246KucZxLdZJWmQf
-         yX5jeDQ4p6N9uwn6Oxs3FTHiIL4xCHhvfiJw/TPvc2jI/cuDRCLktjk13l4Ncq6MOO
-         c9lK23AX2iVjw==
-Received: by mail-oa1-f47.google.com with SMTP id 586e51a60fabf-171d57fcba3so634595fac.11;
-        Sun, 19 Feb 2023 02:14:51 -0800 (PST)
-X-Gm-Message-State: AO0yUKW78xCFfczao6dc5i5ehWVgq14kLnJxNrH8G+GKEIXMKtReqelm
-        ghoKeEsaSQHQ7cFKNI79rbS5TOmpr8ZZ6c/qSpY=
-X-Google-Smtp-Source: AK7set+zyV+dD80XZnkrT+/dXopUSPLMEroAOP2bmUZGlzQqg5q2AvNWCeKql6sz5q5oOygGHV4gggGRiFn7s2R1sIE=
-X-Received: by 2002:a05:6870:c1ce:b0:16e:9431:5c2e with SMTP id
- i14-20020a056870c1ce00b0016e94315c2emr443762oad.56.1676801690999; Sun, 19 Feb
- 2023 02:14:50 -0800 (PST)
+        Sun, 19 Feb 2023 05:20:33 -0500
+Received: from mx01.omp.ru (mx01.omp.ru [90.154.21.10])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBDA911147
+        for <linux-kernel@vger.kernel.org>; Sun, 19 Feb 2023 02:20:31 -0800 (PST)
+Received: from [192.168.1.103] (31.173.84.108) by msexch01.omp.ru
+ (10.188.4.12) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.986.14; Sun, 19 Feb
+ 2023 13:20:22 +0300
+Subject: Re: [PATCH] irq: ipi: fix NULL pointer deref in
+ irq_data_get_affinity_mask()
+To:     Thomas Gleixner <tglx@linutronix.de>,
+        <linux-kernel@vger.kernel.org>
+References: <b541232d-c2b6-1fe9-79b4-a7129459e4d0@omp.ru>
+ <774e2812-2856-f146-b8b3-e4f772c5e38a@omp.ru> <875ycb2jwe.ffs@tglx>
+From:   Sergey Shtylyov <s.shtylyov@omp.ru>
+Organization: Open Mobile Platform
+Message-ID: <028ccd43-1474-1f90-653e-044641cc533f@omp.ru>
+Date:   Sun, 19 Feb 2023 13:20:22 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.10.1
 MIME-Version: 1.0
-References: <20230217065246.31641-1-rdunlap@infradead.org>
-In-Reply-To: <20230217065246.31641-1-rdunlap@infradead.org>
-From:   Masahiro Yamada <masahiroy@kernel.org>
-Date:   Sun, 19 Feb 2023 19:14:14 +0900
-X-Gmail-Original-Message-ID: <CAK7LNAT4KW=SiWSYyC7fZYcpX5-6FFsPsHCVNbTvvgdKCXSctw@mail.gmail.com>
-Message-ID: <CAK7LNAT4KW=SiWSYyC7fZYcpX5-6FFsPsHCVNbTvvgdKCXSctw@mail.gmail.com>
-Subject: Re: [PATCH] kconfig: save the KCONFIG_SEED value in the config file
-To:     Randy Dunlap <rdunlap@infradead.org>
-Cc:     linux-kernel@vger.kernel.org, linux-kbuild@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+In-Reply-To: <875ycb2jwe.ffs@tglx>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [31.173.84.108]
+X-ClientProxiedBy: msexch01.omp.ru (10.188.4.12) To msexch01.omp.ru
+ (10.188.4.12)
+X-KSE-ServerInfo: msexch01.omp.ru, 9
+X-KSE-AntiSpam-Interceptor-Info: scan successful
+X-KSE-AntiSpam-Version: 5.9.59, Database issued on: 02/19/2023 09:59:14
+X-KSE-AntiSpam-Status: KAS_STATUS_NOT_DETECTED
+X-KSE-AntiSpam-Method: none
+X-KSE-AntiSpam-Rate: 59
+X-KSE-AntiSpam-Info: Lua profiles 175607 [Feb 19 2023]
+X-KSE-AntiSpam-Info: Version: 5.9.59.0
+X-KSE-AntiSpam-Info: Envelope from: s.shtylyov@omp.ru
+X-KSE-AntiSpam-Info: LuaCore: 504 504 dc137e1f9c062eb6c0671e7d509ab442ae395562
+X-KSE-AntiSpam-Info: {rep_avail}
+X-KSE-AntiSpam-Info: {Tracking_phishing_log_reg_50_60}
+X-KSE-AntiSpam-Info: {Tracking_arrow_text}
+X-KSE-AntiSpam-Info: {Tracking_from_domain_doesnt_match_to}
+X-KSE-AntiSpam-Info: {relay has no DNS name}
+X-KSE-AntiSpam-Info: {SMTP from is not routable}
+X-KSE-AntiSpam-Info: {Found in DNSBL: 31.173.84.108 in (user)
+ b.barracudacentral.org}
+X-KSE-AntiSpam-Info: 31.173.84.108:7.1.2;127.0.0.199:7.1.2;omp.ru:7.1.1;d41d8cd98f00b204e9800998ecf8427e.com:7.1.1
+X-KSE-AntiSpam-Info: ApMailHostAddress: 31.173.84.108
+X-KSE-AntiSpam-Info: {DNS response errors}
+X-KSE-AntiSpam-Info: Rate: 59
+X-KSE-AntiSpam-Info: Status: not_detected
+X-KSE-AntiSpam-Info: Method: none
+X-KSE-AntiSpam-Info: Auth:dmarc=temperror header.from=omp.ru;spf=temperror
+ smtp.mailfrom=omp.ru;dkim=none
+X-KSE-Antiphishing-Info: Clean
+X-KSE-Antiphishing-ScanningType: Heuristic
+X-KSE-Antiphishing-Method: None
+X-KSE-Antiphishing-Bases: 02/19/2023 10:01:00
+X-KSE-AttachmentFiltering-Interceptor-Info: protection disabled
+X-KSE-Antivirus-Interceptor-Info: scan successful
+X-KSE-Antivirus-Info: Clean, bases: 2/19/2023 9:03:00 AM
+X-KSE-BulkMessagesFiltering-Scan-Result: InTheLimit
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -60,121 +81,27 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Feb 17, 2023 at 3:52 PM Randy Dunlap <rdunlap@infradead.org> wrote:
->
-> Save (print) the randconfig seed value in the kernel .config file.
-> This enables someone to see easily that the .config file is a
-> randconfig file.
+On 2/9/23 1:49 PM, Thomas Gleixner wrote:
+[...]
 
+>>> Iff ipi_send_{mask|single}() get called with e.g. an invalid IRQ #, all the
+>>> local variables there will be NULL -- the problem is that ipi_send_verify()
+>>> (that's called first thing) doesn't verify its 'data' parameter, resulting
+>>> in a kernel oops in irq_data_get_affinity_mask() as the passed NULL pointer
+>>> gets dereferenced.  Add a missing NULL check in ipi_send_verify()...
+>>>
+>>> Found by Linux Verification Center (linuxtesting.org) with the SVACE static
+>>> analysis tool.
+>>>
+>>> Fixes: 3b8e29a82dd1 ("genirq: Implement ipi_send_mask/single()")
+>>> Signed-off-by: Sergey Shtylyov <s.shtylyov@omp.ru>
+>>
+>>    Patch fell thru the cracks? :-/
+> 
+> Obviously :)
+> 
+> /me goes to find trash tongs to pick it up
 
-I still do not understand why this is useful.
+   Need help? :-)
 
-Who cares if it was generated by randconfig or menuconfig?
-They are the same.
-
-
-
-
-If I run "make randconfig" followed by "make olddefconfig",
-I get the same .config file, except that "KCONFIG_SEED=..."
-has disappeared.
-
-So, you cannot carry this kind of information, anyway.
-
-
-
-$ make  randconfig
-KCONFIG_SEED=0x69256B40
-#
-# configuration written to .config
-#
-
-$ make olddefconfig
-#
-# configuration written to .config
-#
-
-$ diff -u .config.old .config
---- .config.old 2023-02-19 19:03:16.831931359 +0900
-+++ .config 2023-02-19 19:03:37.147477826 +0900
-@@ -1,7 +1,6 @@
- #
- # Automatically generated file; DO NOT EDIT.
- # Linux/x86 6.2.0-rc5 Kernel Configuration
--# KCONFIG_SEED=0x69256B40
- #
- CONFIG_CC_VERSION_TEXT="gcc (Ubuntu 11.3.0-1ubuntu1~22.04) 11.3.0"
- CONFIG_CC_IS_GCC=y
-
-
-
-
-
-
-
->
-> It also allows the randconfig file to be recreated by using the
-> KCONFIG_SEED environment variable, as long as KCONFIG_PROBABILITY
-> was not specified (the default probability values were used) and
-> as long as the file was not edited.
->
-> Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
-> Cc: Masahiro Yamada <masahiroy@kernel.org>
-> Cc: linux-kbuild@vger.kernel.org
-> ---
->  scripts/kconfig/conf.c     |    3 +++
->  scripts/kconfig/confdata.c |    2 ++
->  scripts/kconfig/lkc.h      |    2 ++
->  3 files changed, 7 insertions(+)
->
-> diff -- a/scripts/kconfig/conf.c b/scripts/kconfig/conf.c
-> --- a/scripts/kconfig/conf.c
-> +++ b/scripts/kconfig/conf.c
-> @@ -83,6 +83,8 @@ static void xfgets(char *str, int size,
->                 printf("%s", str);
->  }
->
-> +unsigned int rand_seed;
-> +
->  static void set_randconfig_seed(void)
->  {
->         unsigned int seed;
-> @@ -109,6 +111,7 @@ static void set_randconfig_seed(void)
->                 seed = (now.tv_sec + 1) * (now.tv_usec + 1);
->         }
->
-> +       rand_seed = seed;
->         printf("KCONFIG_SEED=0x%X\n", seed);
->         srand(seed);
->  }
-> diff -- a/scripts/kconfig/confdata.c b/scripts/kconfig/confdata.c
-> --- a/scripts/kconfig/confdata.c
-> +++ b/scripts/kconfig/confdata.c
-> @@ -621,6 +621,8 @@ static void conf_write_heading(FILE *fp,
->                 cs->decoration);
->
->         fprintf(fp, "%s %s\n", cs->decoration, rootmenu.prompt->text);
-> +       if (rand_seed)
-> +               fprintf(fp, "%s KCONFIG_SEED=0x%X\n", cs->decoration, rand_seed);
-
-
-If 'rand_seed' just happens to become zero,
-this does not print it, which is weird.
-
-
-The seed is generated by:
-
-     seed = (now.tv_sec + 1) * (now.tv_usec + 1);
-
-
-This is very rare, but it may become zero.
-
-
-
-
-
-
-
--- 
-Best Regards
-Masahiro Yamada
+MBR, Sergey
