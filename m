@@ -2,28 +2,28 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1975F69C1FD
-	for <lists+linux-kernel@lfdr.de>; Sun, 19 Feb 2023 19:51:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 98C6369C1FB
+	for <lists+linux-kernel@lfdr.de>; Sun, 19 Feb 2023 19:51:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231277AbjBSSv4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 19 Feb 2023 13:51:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53618 "EHLO
+        id S231267AbjBSSvx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 19 Feb 2023 13:51:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53610 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230428AbjBSSvv (ORCPT
+        with ESMTP id S230230AbjBSSvv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Sun, 19 Feb 2023 13:51:51 -0500
 Received: from 1wt.eu (wtarreau.pck.nerim.net [62.212.114.60])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9C9D21449C
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8BCF11448C
         for <linux-kernel@vger.kernel.org>; Sun, 19 Feb 2023 10:51:49 -0800 (PST)
 Received: (from willy@localhost)
-        by pcw.home.local (8.15.2/8.15.2/Submit) id 31JIpiRe014622;
+        by pcw.home.local (8.15.2/8.15.2/Submit) id 31JIpiMG014623;
         Sun, 19 Feb 2023 19:51:44 +0100
 From:   Willy Tarreau <w@1wt.eu>
 To:     Vincent Dagonneau <v@vda.io>
 Cc:     linux-kernel@vger.kernel.org
-Subject: [RFC PATCH 1/4] tools/nolibc: add stdint.h
-Date:   Sun, 19 Feb 2023 19:51:30 +0100
-Message-Id: <20230219185133.14576-2-w@1wt.eu>
+Subject: [RFC PATCH 2/4] tools/nolibc: add integer types and integer limit macros
+Date:   Sun, 19 Feb 2023 19:51:31 +0100
+Message-Id: <20230219185133.14576-3-w@1wt.eu>
 X-Mailer: git-send-email 2.17.5
 In-Reply-To: <20230219185133.14576-1-w@1wt.eu>
 References: <20230219185133.14576-1-w@1wt.eu>
@@ -37,92 +37,86 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Vincent Dagonneau <v@vda.io>
 
-Nolibc works fine for small and limited program however most program
-expect integer types to be defined in stdint.h rather than std.h.
+This commit adds some of the missing integer types to stdint.h and adds
+limit macros (e.g. INTN_{MIN,MAX}).
 
-This is a quick fix that moves the existing integer definitions in std.h
-to stdint.h.
+The reference used for adding these types is
+https://pubs.opengroup.org/onlinepubs/009695399/basedefs/stdint.h.html.
+
+Note that the maximum size of size_t is implementation-defined (>65535),
+in this case I chose to stick with what the kernel uses in
+linux/include/uapi/asm-generic/posix_types.h: unsigned int on 32bits and
+unsigned long on 64bits.
 
 Signed-off-by: Vincent Dagonneau <v@vda.io>
+[wt: size_t is always ulong since it matches the word size on all archs
+ we care for; calculate the SIZE_MAX, INTPTR_MIN and INTPTR_MAX based on
+ the compiler-provided __LONG_MAX__]
 Signed-off-by: Willy Tarreau <w@1wt.eu>
 ---
- tools/include/nolibc/Makefile |  4 ++--
- tools/include/nolibc/std.h    | 15 +--------------
- tools/include/nolibc/stdint.h | 24 ++++++++++++++++++++++++
- 3 files changed, 27 insertions(+), 16 deletions(-)
- create mode 100644 tools/include/nolibc/stdint.h
+ tools/include/nolibc/stdint.h | 51 +++++++++++++++++++++++++++++++++++
+ 1 file changed, 51 insertions(+)
 
-diff --git a/tools/include/nolibc/Makefile b/tools/include/nolibc/Makefile
-index cfd06764b5ae..ec57d3932506 100644
---- a/tools/include/nolibc/Makefile
-+++ b/tools/include/nolibc/Makefile
-@@ -25,8 +25,8 @@ endif
- 
- nolibc_arch := $(patsubst arm64,aarch64,$(ARCH))
- arch_file := arch-$(nolibc_arch).h
--all_files := ctype.h errno.h nolibc.h signal.h std.h stdio.h stdlib.h string.h \
--             sys.h time.h types.h unistd.h
-+all_files := ctype.h errno.h nolibc.h signal.h std.h stdint.h stdio.h stdlib.h \
-+             string.h sys.h time.h types.h unistd.h
- 
- # install all headers needed to support a bare-metal compiler
- all: headers
-diff --git a/tools/include/nolibc/std.h b/tools/include/nolibc/std.h
-index 1747ae125392..933bc0be7e1c 100644
---- a/tools/include/nolibc/std.h
-+++ b/tools/include/nolibc/std.h
-@@ -18,20 +18,7 @@
- #define NULL ((void *)0)
- #endif
- 
--/* stdint types */
--typedef unsigned char       uint8_t;
--typedef   signed char        int8_t;
--typedef unsigned short     uint16_t;
--typedef   signed short      int16_t;
--typedef unsigned int       uint32_t;
--typedef   signed int        int32_t;
--typedef unsigned long long uint64_t;
--typedef   signed long long  int64_t;
--typedef unsigned long        size_t;
--typedef   signed long       ssize_t;
--typedef unsigned long     uintptr_t;
--typedef   signed long      intptr_t;
--typedef   signed long     ptrdiff_t;
-+#include "stdint.h"
- 
- /* those are commonly provided by sys/types.h */
- typedef unsigned int          dev_t;
 diff --git a/tools/include/nolibc/stdint.h b/tools/include/nolibc/stdint.h
-new file mode 100644
-index 000000000000..4ba264031df9
---- /dev/null
+index 4ba264031df9..5f1adf9316ca 100644
+--- a/tools/include/nolibc/stdint.h
 +++ b/tools/include/nolibc/stdint.h
-@@ -0,0 +1,24 @@
-+/* SPDX-License-Identifier: LGPL-2.1 OR MIT */
-+/*
-+ * Standard definitions and types for NOLIBC
-+ * Copyright (C) 2023 Vincent Dagonneau <v@vda.io>
-+ */
+@@ -21,4 +21,55 @@ typedef unsigned long     uintptr_t;
+ typedef   signed long      intptr_t;
+ typedef   signed long     ptrdiff_t;
+ 
++typedef   int8_t       int_least8_t;
++typedef  uint8_t      uint_least8_t;
++typedef  int16_t      int_least16_t;
++typedef uint16_t     uint_least16_t;
++typedef  int32_t      int_least32_t;
++typedef uint32_t     uint_least32_t;
++typedef  int64_t      int_least64_t;
++typedef uint64_t     uint_least64_t;
 +
-+#ifndef _NOLIBC_STDINT_H
-+#define _NOLIBC_STDINT_H
++typedef  int64_t           intmax_t;
++typedef uint64_t          uintmax_t;
 +
-+typedef unsigned char       uint8_t;
-+typedef   signed char        int8_t;
-+typedef unsigned short     uint16_t;
-+typedef   signed short      int16_t;
-+typedef unsigned int       uint32_t;
-+typedef   signed int        int32_t;
-+typedef unsigned long long uint64_t;
-+typedef   signed long long  int64_t;
-+typedef unsigned long        size_t;
-+typedef   signed long       ssize_t;
-+typedef unsigned long     uintptr_t;
-+typedef   signed long      intptr_t;
-+typedef   signed long     ptrdiff_t;
++/* limits of integral types */
 +
-+#endif /* _NOLIBC_STDINT_H */
++#define        INT8_MIN  (-128)
++#define       INT16_MIN  (-32767-1)
++#define       INT32_MIN  (-2147483647-1)
++#define       INT64_MIN  (-9223372036854775807LL-1)
++
++#define        INT8_MAX  (127)
++#define       INT16_MAX  (32767)
++#define       INT32_MAX  (2147483647)
++#define       INT64_MAX  (9223372036854775807LL)
++
++#define       UINT8_MAX  (255)
++#define      UINT16_MAX  (65535)
++#define      UINT32_MAX  (4294967295U)
++#define      UINT64_MAX  (18446744073709551615ULL)
++
++#define  INT_LEAST8_MIN  INT8_MIN
++#define INT_LEAST16_MIN  INT16_MIN
++#define INT_LEAST32_MIN  INT32_MIN
++#define INT_LEAST64_MIN  INT64_MIN
++
++#define  INT_LEAST8_MAX  INT8_MAX
++#define INT_LEAST16_MAX  INT16_MAX
++#define INT_LEAST32_MAX  INT32_MAX
++#define INT_LEAST64_MAX  INT64_MAX
++
++#define  UINT_LEAST8_MAX UINT8_MAX
++#define UINT_LEAST16_MAX UINT16_MAX
++#define UINT_LEAST32_MAX UINT32_MAX
++#define UINT_LEAST64_MAX UINT64_MAX
++
++#define SIZE_MAX         ((__SIZE_TYPE__)(__LONG_MAX__) * 2 + 1)
++#define INTPTR_MIN       (-__LONG_MAX__ - 1)
++#define INTPTR_MAX       __LONG_MAX__
++#define UINTPTR_MAX      (SIZE_MAX)
++#define PTRDIFF_MIN      INTPTR_MIN
++#define PTRDIFF_MAX      INTPTR_MAX
++
+ #endif /* _NOLIBC_STDINT_H */
 -- 
 2.35.3
 
