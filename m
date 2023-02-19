@@ -2,60 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F264C69C2A3
-	for <lists+linux-kernel@lfdr.de>; Sun, 19 Feb 2023 22:16:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ABBD469C2A4
+	for <lists+linux-kernel@lfdr.de>; Sun, 19 Feb 2023 22:16:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231661AbjBSVP7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 19 Feb 2023 16:15:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57834 "EHLO
+        id S231663AbjBSVQM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 19 Feb 2023 16:16:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58232 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231652AbjBSVP6 (ORCPT
+        with ESMTP id S231670AbjBSVQJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 19 Feb 2023 16:15:58 -0500
-Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6ECA0196AB
-        for <linux-kernel@vger.kernel.org>; Sun, 19 Feb 2023 13:15:50 -0800 (PST)
-Received: by mail-ed1-x530.google.com with SMTP id eg19so5691730edb.0
-        for <linux-kernel@vger.kernel.org>; Sun, 19 Feb 2023 13:15:50 -0800 (PST)
+        Sun, 19 Feb 2023 16:16:09 -0500
+Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0433199E0
+        for <linux-kernel@vger.kernel.org>; Sun, 19 Feb 2023 13:15:56 -0800 (PST)
+Received: by mail-ed1-x52d.google.com with SMTP id fd2so4399351edb.8
+        for <linux-kernel@vger.kernel.org>; Sun, 19 Feb 2023 13:15:56 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1676841349;
+        d=gmail.com; s=20210112; t=1676841355;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=SkbsuJIz6VwsIVSfK2JskzxbP3ShTN1QUSOlCSaSNH0=;
-        b=XOtDzQAq3ERBqYgJBscibnLrqjW93b4cRvR2aRUdzauL+vCexicJb0FcjUWsii4kDu
-         g13QeT1J1aZvoA74xIZpIHXCWedKRb6fujCCQOsdPKYxN8qYir1Lrj6/rnfAVQlb2Xor
-         aXAryvA+8Ei16j8NaQwiPR2JbuUu/hzDw3AIJqUG32E5ZkZCcyKYSopHWShMjg7x+Ea9
-         Gv/9j7Yclol1nDWtW0cZHC7yj/TzyKCLpL8djkDUTn+Odcugc2ZMQZODiYwYyFcwO4lD
-         7Q07ECXJe66qkrfc21PMQBoKcWA9FGr9R1UYGj7B1LQIpy2G/omF9Fjal57VdrgqrEqH
-         iMJA==
+        bh=KjjWJfxbsqn6gyfLTHs1w3kGrQ+J6hwOQ7AqbciTCCg=;
+        b=XyNxU/u1C28TR7N2u8CLt4P3JlztWLoYHs2eQZG2zcwlNAfYebV+Sw7ji8BxliZ/Xj
+         yB9ZsktPVh/pR3BMXxDjuBmz3BlMClDdiPfW3eMLZlQyoKXMTQWbfyj4KPbWSZw7vnrt
+         T/FXvyuT4meqWUnPJapFvOWTtFvrGlu2iUHLW+TSlqPnmvOf3S0nQy5+69cyFqF8w6Us
+         nMPOpdMWT8UxZEqtT0gKOt1L5O0TBpFwgd14kF+a8nrxDhHZ7aFK7AveH/DEgQ/TK0k+
+         2rWSaQyYfGgL78qA+e52VkZ4d77fi1qELdO6RX0Vuz3ir4EOv+z7wTkw025EqYgeFVVV
+         IvPw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1676841349;
+        d=1e100.net; s=20210112; t=1676841355;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=SkbsuJIz6VwsIVSfK2JskzxbP3ShTN1QUSOlCSaSNH0=;
-        b=Jn4853byPgEqJmXIjgOnouCdvSq/roLfcONV3Mc1m66F5v8gkKPIsRh8kub+HnslPa
-         i+S+WAzULugIoHg10nS4zv4sK57P0uX457Cij0E9JQGJoPTdAtNcRbYP7GPA5iy0YaHZ
-         pt2S3s8d79eWCCzc4kebUhPSBVLTgcY4r8jtVVwrelRE2h+NtukmwZej14xTDhSlXWQp
-         l7d2fhvBSfhjEueN+BrJCVxpKHa5DW8POAOr9aYRQYjTyfvNQeQycZ1v56wZV0K9dh8p
-         sYWYv6kbfNTVGdIRFQYMgaLhc3cd32OlMa4Ih4pUpJHaQjlcxLNfbKtNQM11Z+rYj9y4
-         OQxQ==
-X-Gm-Message-State: AO0yUKVyfY/H3P1rYLBuDVjItlgalo+VUiuR3qmjRy+SJyZmcen4GjxW
-        HY8Y9abdAJahqpz85QgQ4IqmcgqE7o0=
-X-Google-Smtp-Source: AK7set8n1jHI8It8rj+KFupevoL6E0xhX6yGnLNLXW2Fw8kgna1z3qeRRsQmbWmCN4j0kO1h8CT8IQ==
-X-Received: by 2002:a17:906:256:b0:882:bffc:f2d2 with SMTP id 22-20020a170906025600b00882bffcf2d2mr7958249ejl.2.1676841349029;
-        Sun, 19 Feb 2023 13:15:49 -0800 (PST)
+        bh=KjjWJfxbsqn6gyfLTHs1w3kGrQ+J6hwOQ7AqbciTCCg=;
+        b=z/DOIkfX6L2jp04k9HMutTC1klo1AU8ohFgPvf8k6BHxnO84WvzghuVd86+rOPfwNI
+         QuzEnQKtYks2eh9jS6KDSEM9WZdAnKyiZpkpVF2JvTd8CzIt1WDbK5k32XPWWaCwFNez
+         yryi4TkXQ4gYXCNWVKTA7C5CZrkBq7rFPjb9Kh+9++UyWvHmOWg/GfDZmUNzZ4d9NpLR
+         kPmOAzQpecEO3xKvw5VsQ+pgoOusHwwpICTPnGhn7lIgVegWTiVbzjQXakwnsr1d0tKo
+         awb2Jc9J/P8z9QBH4e263REQ4o8V8iC1/WA6VxD58017JO/frXy6Gg6MUqixNjtJ8a4G
+         X8/g==
+X-Gm-Message-State: AO0yUKVapfjRmTZHZ2CGaJm5n04Pa36//hiIM929MxyPyjUyB/wZoOqM
+        w0+9sF7MRUOmyJhCtSBzetg=
+X-Google-Smtp-Source: AK7set9SvehXBcrEpoyGfQKTNjPGQESa91OB0Y+u65s42bvmW77t1O35tpE28ZZjQ35AtBRD5KKezA==
+X-Received: by 2002:a17:906:51d8:b0:8ae:cd8e:3957 with SMTP id v24-20020a17090651d800b008aecd8e3957mr5745457ejk.4.1676841355330;
+        Sun, 19 Feb 2023 13:15:55 -0800 (PST)
 Received: from matrix-ESPRIMO-P710 (p57935146.dip0.t-ipconnect.de. [87.147.81.70])
-        by smtp.gmail.com with ESMTPSA id u21-20020a17090657d500b007c11e5ac250sm4853849ejr.91.2023.02.19.13.15.47
+        by smtp.gmail.com with ESMTPSA id o23-20020a17090637d700b008c5075f5331sm1801552ejc.165.2023.02.19.13.15.54
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 19 Feb 2023 13:15:47 -0800 (PST)
-Date:   Sun, 19 Feb 2023 22:15:46 +0100
+        Sun, 19 Feb 2023 13:15:54 -0800 (PST)
+Date:   Sun, 19 Feb 2023 22:15:52 +0100
 From:   Philipp Hortmann <philipp.g.hortmann@gmail.com>
 To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: [PATCH 03/11] staging: rtl8192e: Remove entry .initialize_ad.. from
+Subject: [PATCH 04/11] staging: rtl8192e: Remove entry .tx_fill_descr.. from
  struct rtl819x_ops
-Message-ID: <7457e18ea9f3b2415bf41fca8ac2b22349d2edd1.1676840647.git.philipp.g.hortmann@gmail.com>
+Message-ID: <1ae7d44ef74dc6cb61ff43f670b21d702403d7fb.1676840647.git.philipp.g.hortmann@gmail.com>
 References: <cover.1676840647.git.philipp.g.hortmann@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
@@ -71,57 +71,60 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Remove entry .initialize_adapter and replace it with function name
-rtl92e_start_adapter. This increases readability of the code.
+Remove entry .tx_fill_descriptor and replace it with function name
+rtl92e_fill_tx_desc. This increases readability of the code.
 
 Signed-off-by: Philipp Hortmann <philipp.g.hortmann@gmail.com>
 ---
  drivers/staging/rtl8192e/rtl8192e/rtl_core.c | 5 ++---
- drivers/staging/rtl8192e/rtl8192e/rtl_core.h | 1 -
- 2 files changed, 2 insertions(+), 4 deletions(-)
+ drivers/staging/rtl8192e/rtl8192e/rtl_core.h | 4 ----
+ 2 files changed, 2 insertions(+), 7 deletions(-)
 
 diff --git a/drivers/staging/rtl8192e/rtl8192e/rtl_core.c b/drivers/staging/rtl8192e/rtl8192e/rtl_core.c
-index 7b8683a9bdb1..3bebc1153572 100644
+index 3bebc1153572..dd1f4a3c4bf9 100644
 --- a/drivers/staging/rtl8192e/rtl8192e/rtl_core.c
 +++ b/drivers/staging/rtl8192e/rtl8192e/rtl_core.c
-@@ -27,7 +27,6 @@ static char *ifname = "wlan%d";
- 
+@@ -28,7 +28,6 @@ static char *ifname = "wlan%d";
  static const struct rtl819x_ops rtl819xp_ops = {
  	.nic_type			= NIC_8192E,
--	.initialize_adapter		= rtl92e_start_adapter,
  	.link_change			= rtl92e_link_change,
- 	.tx_fill_descriptor		= rtl92e_fill_tx_desc,
+-	.tx_fill_descriptor		= rtl92e_fill_tx_desc,
  	.tx_fill_cmd_descriptor		= rtl92e_fill_tx_cmd_desc,
-@@ -690,7 +689,7 @@ static int _rtl92e_sta_up(struct net_device *dev, bool is_silent_reset)
- 	priv->rtllib->ieee_up = 1;
+ 	.rx_query_status_descriptor	= rtl92e_get_rx_stats,
+ 	.rx_command_packet_handler = NULL,
+@@ -496,7 +495,7 @@ static void _rtl92e_prepare_beacon(struct tasklet_struct *t)
+ 	skb_push(pnewskb, priv->rtllib->tx_headroom);
  
- 	priv->up_first_time = 0;
--	init_status = priv->ops->initialize_adapter(dev);
-+	init_status = rtl92e_start_adapter(dev);
- 	if (!init_status) {
- 		netdev_err(dev, "%s(): Initialization failed!\n", __func__);
- 		return -1;
-@@ -2381,7 +2380,7 @@ bool rtl92e_enable_nic(struct net_device *dev)
- 		return false;
+ 	pdesc = &ring->desc[0];
+-	priv->ops->tx_fill_descriptor(dev, pdesc, tcb_desc, pnewskb);
++	rtl92e_fill_tx_desc(dev, pdesc, tcb_desc, pnewskb);
+ 	__skb_queue_tail(&ring->queue, pnewskb);
+ 	pdesc->OWN = 1;
+ }
+@@ -1637,7 +1636,7 @@ static short _rtl92e_tx(struct net_device *dev, struct sk_buff *skb)
+ 		if (priv->rtllib->LedControlHandler)
+ 			priv->rtllib->LedControlHandler(dev, LED_CTL_TX);
  	}
- 
--	init_status = priv->ops->initialize_adapter(dev);
-+	init_status = rtl92e_start_adapter(dev);
- 	if (!init_status) {
- 		netdev_warn(dev, "%s(): Initialization failed!\n", __func__);
- 		priv->bdisable_nic = false;
+-	priv->ops->tx_fill_descriptor(dev, pdesc, tcb_desc, skb);
++	rtl92e_fill_tx_desc(dev, pdesc, tcb_desc, skb);
+ 	__skb_queue_tail(&ring->queue, skb);
+ 	pdesc->OWN = 1;
+ 	spin_unlock_irqrestore(&priv->irq_th_lock, flags);
 diff --git a/drivers/staging/rtl8192e/rtl8192e/rtl_core.h b/drivers/staging/rtl8192e/rtl8192e/rtl_core.h
-index 541b7aa366a5..9edadc62faa9 100644
+index 9edadc62faa9..0d4ae3a310da 100644
 --- a/drivers/staging/rtl8192e/rtl8192e/rtl_core.h
 +++ b/drivers/staging/rtl8192e/rtl8192e/rtl_core.h
-@@ -206,7 +206,6 @@ struct rtl8192_tx_ring {
- struct rtl819x_ops {
+@@ -207,10 +207,6 @@ struct rtl819x_ops {
  	enum nic_t nic_type;
  	void (*init_before_adapter_start)(struct net_device *dev);
--	bool (*initialize_adapter)(struct net_device *dev);
  	void (*link_change)(struct net_device *dev);
- 	void (*tx_fill_descriptor)(struct net_device *dev,
- 				   struct tx_desc *tx_desc,
+-	void (*tx_fill_descriptor)(struct net_device *dev,
+-				   struct tx_desc *tx_desc,
+-				   struct cb_desc *cb_desc,
+-				   struct sk_buff *skb);
+ 	void (*tx_fill_cmd_descriptor)(struct net_device *dev,
+ 				       struct tx_desc_cmd *entry,
+ 				       struct cb_desc *cb_desc,
 -- 
 2.39.2
 
