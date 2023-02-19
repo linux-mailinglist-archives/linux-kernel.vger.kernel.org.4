@@ -2,160 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A506269C01C
-	for <lists+linux-kernel@lfdr.de>; Sun, 19 Feb 2023 12:52:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 650DB69C01E
+	for <lists+linux-kernel@lfdr.de>; Sun, 19 Feb 2023 13:00:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229854AbjBSLw4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 19 Feb 2023 06:52:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33418 "EHLO
+        id S229823AbjBSMAS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 19 Feb 2023 07:00:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35594 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229668AbjBSLwv (ORCPT
+        with ESMTP id S229506AbjBSMAP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 19 Feb 2023 06:52:51 -0500
-Received: from vulcan.natalenko.name (vulcan.natalenko.name [IPv6:2001:19f0:6c00:8846:5400:ff:fe0c:dfa0])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7FCFE2
-        for <linux-kernel@vger.kernel.org>; Sun, 19 Feb 2023 03:52:48 -0800 (PST)
-Received: from spock.localnet (unknown [83.148.33.151])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by vulcan.natalenko.name (Postfix) with ESMTPSA id 4564A1236E7C;
-        Sun, 19 Feb 2023 12:52:44 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=natalenko.name;
-        s=dkim-20170712; t=1676807564;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=LlM/jmDxuMpikTFQLI7Ipru8I8W1UZUK0W6ugJVYzIg=;
-        b=Du2to3A8IVx/+YQJsJhrR15PFz81aW47bkBKCFbWyZofxmFsMR9m+j6eAkU7XJBv5voM66
-        TP4X/YFbksBWA1fZj0+cngPt3XFXkt1qyFklHFuWip4LKs8hAm/w5gQTXljBE7vPosnW5Y
-        nAfbQKAXm+eatr/48j8GjEruY/DBX9c=
-From:   Oleksandr Natalenko <oleksandr@natalenko.name>
-To:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, hpa@zytor.com,
-        Wyes Karny <wyes.karny@amd.com>
-Cc:     x86@kernel.org, linux-perf-users@vger.kernel.org,
-        linux-kernel@vger.kernel.org, gautham.shenoy@amd.com,
-        ananth.narayan@amd.com, Wyes Karny <wyes.karny@amd.com>
-Subject: Re: [PATCH] perf/x86/rapl: Enable Core RAPL for AMD
-Date:   Sun, 19 Feb 2023 12:52:42 +0100
-Message-ID: <12153455.O9o76ZdvQC@natalenko.name>
-In-Reply-To: <20230217161354.129442-1-wyes.karny@amd.com>
-References: <20230217161354.129442-1-wyes.karny@amd.com>
+        Sun, 19 Feb 2023 07:00:15 -0500
+Received: from honk.sigxcpu.org (honk.sigxcpu.org [24.134.29.49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 458EA10A97
+        for <linux-kernel@vger.kernel.org>; Sun, 19 Feb 2023 04:00:14 -0800 (PST)
+Received: from localhost (localhost [127.0.0.1])
+        by honk.sigxcpu.org (Postfix) with ESMTP id 293C6FB03;
+        Sun, 19 Feb 2023 13:00:10 +0100 (CET)
+Received: from honk.sigxcpu.org ([127.0.0.1])
+        by localhost (honk.sigxcpu.org [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id KkTfTTsqszTv; Sun, 19 Feb 2023 13:00:09 +0100 (CET)
+Date:   Sun, 19 Feb 2023 13:00:08 +0100
+From:   Guido =?iso-8859-1?Q?G=FCnther?= <guido.gunther@puri.sm>
+To:     Frank Oltmanns <frank@oltmanns.dev>
+Cc:     Purism Kernel Team <kernel@puri.sm>,
+        Ondrej Jirman <megous@megous.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        "open list:DRM PANEL DRIVERS" <dri-devel@lists.freedesktop.org>,
+        open list <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH 1/1] drm/panel: st7703: Fix vertical refresh rate of
+ XBD599
+Message-ID: <Y/IPSCeJVyS/sSQT@qwark.sigxcpu.org>
+References: <20230219114553.288057-1-frank@oltmanns.dev>
+ <20230219114553.288057-2-frank@oltmanns.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset="iso-8859-1"
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20230219114553.288057-2-frank@oltmanns.dev>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_FAIL,
+        SPF_HELO_NONE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello.
-
-On p=E1tek 17. =FAnora 2023 17:13:54 CET Wyes Karny wrote:
-> AMD processors support per-package and per-core energy monitoring
-> through RAPL counters which can be accessed by users running in
-> supervisor mode.
->=20
-> Core RAPL counters gives power consumption information per core.  For
-> AMD processors the package level RAPL counter are already exposed to
-> perf. Expose the core level RAPL counters also.
->=20
-> sudo perf stat -a --per-core -C 0-127 -e power/energy-cores/
->=20
-> Output:
-> S0-D0-C0           2               8.73 Joules power/energy-cores/
-> S0-D0-C1           2               8.73 Joules power/energy-cores/
-> S0-D0-C2           2               8.73 Joules power/energy-cores/
-> S0-D0-C3           2               8.73 Joules power/energy-cores/
-> S0-D0-C4           2               8.73 Joules power/energy-cores/
->=20
-> Signed-off-by: Wyes Karny <wyes.karny@amd.com>
+Hi,
+On Sun, Feb 19, 2023 at 12:45:53PM +0100, Frank Oltmanns wrote:
+> Fix the XBD599 panel's slight visual stutter by correcting the pixel
+> clock speed so that the panel's 60Hz vertical refresh rate is met.
+> 
+> Set the clock speed using the underlying formula instead of a magic
+> number. To have a consistent procedure for both panels, set the JH057N
+> panel's clock also as a formula.
 > ---
->  arch/x86/events/rapl.c | 5 +++--
->  1 file changed, 3 insertions(+), 2 deletions(-)
->=20
-> diff --git a/arch/x86/events/rapl.c b/arch/x86/events/rapl.c
-> index 52e6e7ed4f78..d301bbbc3b93 100644
-> --- a/arch/x86/events/rapl.c
-> +++ b/arch/x86/events/rapl.c
-> @@ -537,7 +537,7 @@ static struct perf_msr intel_rapl_spr_msrs[] =3D {
->   * - want to use same event codes across both architectures
->   */
->  static struct perf_msr amd_rapl_msrs[] =3D {
-> -	[PERF_RAPL_PP0]  =3D { 0, &rapl_events_cores_group, 0, false, 0 },
-> +	[PERF_RAPL_PP0]  =3D { MSR_AMD_CORE_ENERGY_STATUS, &rapl_events_cores_g=
-roup, test_msr, false, RAPL_MSR_MASK },
->  	[PERF_RAPL_PKG]  =3D { MSR_AMD_PKG_ENERGY_STATUS,  &rapl_events_pkg_gro=
-up,   test_msr, false, RAPL_MSR_MASK },
->  	[PERF_RAPL_RAM]  =3D { 0, &rapl_events_ram_group,   0, false, 0 },
->  	[PERF_RAPL_PP1]  =3D { 0, &rapl_events_gpu_group,   0, false, 0 },
-> @@ -764,7 +764,8 @@ static struct rapl_model model_spr =3D {
->  };
-> =20
->  static struct rapl_model model_amd_hygon =3D {
-> -	.events		=3D BIT(PERF_RAPL_PKG),
-> +	.events		=3D BIT(PERF_RAPL_PP0) |
-> +			  BIT(PERF_RAPL_PKG),
->  	.msr_power_unit =3D MSR_AMD_RAPL_POWER_UNIT,
->  	.rapl_msrs      =3D amd_rapl_msrs,
->  };
->=20
+>  drivers/gpu/drm/panel/panel-sitronix-st7703.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/gpu/drm/panel/panel-sitronix-st7703.c b/drivers/gpu/drm/panel/panel-sitronix-st7703.c
+> index 6747ca237ced..cd7d631f7573 100644
+> --- a/drivers/gpu/drm/panel/panel-sitronix-st7703.c
+> +++ b/drivers/gpu/drm/panel/panel-sitronix-st7703.c
+> @@ -139,7 +139,7 @@ static const struct drm_display_mode jh057n00900_mode = {
+>  	.vsync_start = 1440 + 20,
+>  	.vsync_end   = 1440 + 20 + 4,
+>  	.vtotal	     = 1440 + 20 + 4 + 12,
+> -	.clock	     = 75276,
+> +	.clock	     = (720 + 90 + 20 + 20) * (1440 + 20 + 4 + 12) * 60 / 1000,
+>  	.flags	     = DRM_MODE_FLAG_NHSYNC | DRM_MODE_FLAG_NVSYNC,
+>  	.width_mm    = 65,
+>  	.height_mm   = 130,
+> @@ -324,7 +324,7 @@ static const struct drm_display_mode xbd599_mode = {
+>  	.vsync_start = 1440 + 18,
+>  	.vsync_end   = 1440 + 18 + 10,
+>  	.vtotal	     = 1440 + 18 + 10 + 17,
+> -	.clock	     = 69000,
+> +	.clock	     = (720 + 40 + 40 + 40) * (1440 + 18 + 10 + 17) * 60 / 1000,
+>  	.flags	     = DRM_MODE_FLAG_NHSYNC | DRM_MODE_FLAG_NVSYNC,
+>  	.width_mm    = 68,
+>  	.height_mm   = 136,
 
-With this patch:
+Reviewed-by: Guido Günther <agx@sigxcpu.org>
 
-```
-$ lscpu | grep 'Model name'
-Model name:                      AMD Ryzen 9 5950X 16-Core Processor
+(I've seen your other patches but it will be some days until I can test
+the jh057n00900 panel).
 
-$ sudo perf stat -a --per-core -C 0-15 -e power/energy-cores/ -- dd if=3D/d=
-ev/zero of=3D/dev/null bs=3D1M count=3D100000
-100000+0 records in
-100000+0 records out
-104857600000 bytes (105 GB, 98 GiB) copied, 1,59252 s, 65,8 GB/s
+Cheers,
+ -- Guido
 
-Performance counter stats for 'system wide':
-
-S0-D0-C0           1               1,56 Joules power/energy-cores/
-S0-D0-C1           1               1,56 Joules power/energy-cores/
-S0-D0-C2           1               1,56 Joules power/energy-cores/
-S0-D0-C3           1               1,56 Joules power/energy-cores/
-S0-D0-C4           1               1,56 Joules power/energy-cores/
-S0-D0-C5           1               1,56 Joules power/energy-cores/
-S0-D0-C6           1               1,56 Joules power/energy-cores/
-S0-D0-C7           1               1,56 Joules power/energy-cores/
-S0-D0-C8           1               1,56 Joules power/energy-cores/
-S0-D0-C9           1               1,56 Joules power/energy-cores/
-S0-D0-C10          1               1,56 Joules power/energy-cores/
-S0-D0-C11          1               1,56 Joules power/energy-cores/
-S0-D0-C12          1               1,56 Joules power/energy-cores/
-S0-D0-C13          1               1,56 Joules power/energy-cores/
-S0-D0-C14          1               1,56 Joules power/energy-cores/
-S0-D0-C15          1               1,56 Joules power/energy-cores/
-
-1,593982452 seconds time elapsed
-```
-
-Hence,
-
-Tested-by: Oleksandr Natalenko <oleksandr@natalenko.name>
-
-Thank you.
-
-=2D-=20
-Oleksandr Natalenko (post-factum)
-
-
+> -- 
+> 2.39.1
+> 
