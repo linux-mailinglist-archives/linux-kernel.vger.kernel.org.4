@@ -2,83 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 271F669C06B
-	for <lists+linux-kernel@lfdr.de>; Sun, 19 Feb 2023 14:53:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3396B69C06D
+	for <lists+linux-kernel@lfdr.de>; Sun, 19 Feb 2023 14:53:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229975AbjBSNwq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 19 Feb 2023 08:52:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42820 "EHLO
+        id S229991AbjBSNxo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 19 Feb 2023 08:53:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43964 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229737AbjBSNwo (ORCPT
+        with ESMTP id S229665AbjBSNxm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 19 Feb 2023 08:52:44 -0500
-Received: from mout.gmx.net (mout.gmx.net [212.227.15.19])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CC881040A;
-        Sun, 19 Feb 2023 05:52:43 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=public-files.de;
-        s=s31663417; t=1676814735; i=frank-w@public-files.de;
-        bh=gmvlcFd/smi3ohVhvpOwg6d8LqAat/B8RQwKwD+wxnk=;
-        h=X-UI-Sender-Class:From:To:Cc:Subject:Date:In-Reply-To:References;
-        b=hrTYUT5Eu2eVGwfeMs3ZDh4usgGG557Qun1nIumUaxmzkt8djDKUoYgaJstqk3haR
-         yC4gTC+IX2WfsSPI2T5ECDdH7z4wpguBiWqNRO+L8o8fWlKWBFuVLC9oyUJhmpIZ23
-         Nb20cp25LwPBgVdx0Ez1DqqS7i+bjPqCGVVY+5znr/gcuQMRXLmpwb24pxsprdu49K
-         6U4YSwuu61z6kuX+VSMqj6GSpx71FEq6Pe/1E85OHIxwxBMQRw7gJcJxsd5i21FGug
-         pwbEwFloOc4KVrJBbNZY0T6kGID1UhlVXKve4ddsqBR90eAWxZSCQoQeBcu8c2W+gR
-         oGVKZTalLf3bw==
-X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from [217.61.154.15] ([217.61.154.15]) by web-mail.gmx.net
- (3c-app-gmx-bs35.server.lan [172.19.170.87]) (via HTTP); Sun, 19 Feb 2023
- 14:52:14 +0100
+        Sun, 19 Feb 2023 08:53:42 -0500
+Received: from EUR03-DBA-obe.outbound.protection.outlook.com (mail-dbaeur03on2052.outbound.protection.outlook.com [40.107.104.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6C7710F0;
+        Sun, 19 Feb 2023 05:53:40 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=nyxKJU63dDQNaIXgdPl7LuFIQgQIRadAqIeojiMQ6JpRSFILUNLJbpDnoy6JV5Un16l+AlP4oIdH+nbXnjqsMNEjNqRQ2IazM+m55TnmqZvXv1aApMKWpGk/6UO35xkMBAbURFthiLbyWf7TkZJ+H9F7m69pmlSMt3BZJK9mnyFcwM77e4uLOX4XefuJb2bgaHyM3kf0+o9OD0YxASturG6HAfNKNomNbkxwD5zFFy5tP5WzhFxQCABSieO+Iyq22l69XvyEXMu/28T5VxpIrvPAosgx9eZVxunO/BOFIRueRsWrFoAqd9gpaxaEFynaXpJlP7SyyMVka+2abikSkw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=Jtxnas3KHImqZ8MLI7OEj8KWz7WqZ59N7RTfcukvf2w=;
+ b=iQMo1HJWf5dNkaXPLDV+S94BGNjDnEJY3Hsk72y75igNCSdfMOA39I+mCMbzmkmDbCWYClnUn7UdxPWoK6bT/qOOTmBsJSl0TauyjGOj2oC3LEwh+9V6mUjo5YAHb1VoPcMU8uzWWSuVPj3JBvtp/wJwlN16H3Gt7CizKrlpkOb4AjcrmTiakOlu+gUywpFxH/d3xvZ2n21lB0dMfLK3YbvB9YNbMuqVAyj6d70KGue2DS+qw84qbpf2qLSayK0bQV9+l+qyt7PqQjqEetJeO7wKTJeiFX0ChbzBUEX27LkwUgRYXBPd8pYKdoTk7iEkg1Wdkyn8QHCl0ggF1iuOAg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=Jtxnas3KHImqZ8MLI7OEj8KWz7WqZ59N7RTfcukvf2w=;
+ b=W1WMOqT9vc9WBraTCLI5hH2MAWggEtnQGu3WO9K7b4euEEDsgpREZdWJBSwL1MBdBGW5ryborLO3DrNzfgXtWAoYL6RwGemnhCT8l7G+bmPqmzv3O081CLS3ExxrrVVmis75VyXIEY6KBXil1ysOyhVeMtKN2QPjRWjN3pZcInM=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nxp.com;
+Received: from VI1PR04MB5136.eurprd04.prod.outlook.com (2603:10a6:803:55::19)
+ by PAXPR04MB8238.eurprd04.prod.outlook.com (2603:10a6:102:1bc::22) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6111.17; Sun, 19 Feb
+ 2023 13:53:37 +0000
+Received: from VI1PR04MB5136.eurprd04.prod.outlook.com
+ ([fe80::3cfb:3ae7:1686:a68b]) by VI1PR04MB5136.eurprd04.prod.outlook.com
+ ([fe80::3cfb:3ae7:1686:a68b%7]) with mapi id 15.20.6111.018; Sun, 19 Feb 2023
+ 13:53:37 +0000
+From:   Vladimir Oltean <vladimir.oltean@nxp.com>
+To:     netdev@vger.kernel.org
+Cc:     "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Jamal Hadi Salim <jhs@mojatatu.com>,
+        Cong Wang <xiyou.wangcong@gmail.com>,
+        Jiri Pirko <jiri@resnulli.us>,
+        Vinicius Costa Gomes <vinicius.gomes@intel.com>,
+        Kurt Kanzenbach <kurt@linutronix.de>,
+        Gerhard Engleder <gerhard@engleder-embedded.com>,
+        Amritha Nambiar <amritha.nambiar@intel.com>,
+        Claudiu Manoil <claudiu.manoil@nxp.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        UNGLinuxDriver@microchip.com, Andrew Lunn <andrew@lunn.ch>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Ferenc Fejes <ferenc.fejes@ericsson.com>,
+        Xiaoliang Yang <xiaoliang.yang_1@nxp.com>,
+        Roger Quadros <rogerq@kernel.org>,
+        Pranavi Somisetty <pranavi.somisetty@amd.com>,
+        Harini Katakam <harini.katakam@amd.com>,
+        linux-kernel@vger.kernel.org,
+        Giuseppe Cavallaro <peppe.cavallaro@st.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Jose Abreu <joabreu@synopsys.com>,
+        Wong Vee Khee <vee.khee.wong@linux.intel.com>,
+        Michael Sit Wei Hong <michael.wei.hong.sit@intel.com>,
+        Jacob Keller <jacob.e.keller@intel.com>
+Subject: [PATCH v2 net-next 00/12] Add tc-mqprio and tc-taprio support for preemptible traffic classes
+Date:   Sun, 19 Feb 2023 15:52:56 +0200
+Message-Id: <20230219135309.594188-1-vladimir.oltean@nxp.com>
+X-Mailer: git-send-email 2.34.1
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: BE1P281CA0136.DEUP281.PROD.OUTLOOK.COM
+ (2603:10a6:b10:7c::6) To VI1PR04MB5136.eurprd04.prod.outlook.com
+ (2603:10a6:803:55::19)
 MIME-Version: 1.0
-Message-ID: <trinity-899c01a6-0fc5-4900-aea8-2b43802c8329-1676814734826@3c-app-gmx-bs35>
-From:   Frank Wunderlich <frank-w@public-files.de>
-To:     =?UTF-8?Q?Ar=C4=B1n=C3=A7_=C3=9CNAL?= <arinc.unal@arinc9.com>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, erkin.bozoglu@xeront.com
-Subject: Aw: Re:  Re: Re: [PATCH v3 0/5] arm: dts: mt7623: relocate gmacs,
- mt7530 switch, and add port@5
-Content-Type: text/plain; charset=UTF-8
-Date:   Sun, 19 Feb 2023 14:52:14 +0100
-Importance: normal
-Sensitivity: Normal
-In-Reply-To: <fb96d8eb-2eb7-db19-1135-1a833294dd67@arinc9.com>
-References: <20230210182505.24597-1-arinc.unal@arinc9.com>
- <c3ab9a9b-3eb2-8fb0-d5d7-c0b7c684d3a7@arinc9.com>
- <trinity-dab715b9-3953-40da-bc25-c4c2a5e9b7c3-1676715866453@3c-app-gmx-bap53>
- <27a26da8-8297-5327-7493-54d8359b6970@arinc9.com>
- <trinity-dd260791-3637-4193-8f93-a9fcdb013dcb-1676722705920@3c-app-gmx-bap53>
- <2dc2fc39-b0d5-c872-36bf-fde851debe4b@arinc9.com>
- <A329B2DF-04B7-40FA-BBCE-1F1012A6DBBD@public-files.de>
- <fb96d8eb-2eb7-db19-1135-1a833294dd67@arinc9.com>
-Content-Transfer-Encoding: quoted-printable
-X-UI-Message-Type: mail
-X-Priority: 3
-X-Provags-ID: V03:K1:H8JYLvvEoF162SefwPsSsiN8Aap9QmINpwaEqytkapWmuK4d0GPFziw2QktTM0gGK0HN7
- i1QLFWMQxHj4lg5tjMB3ECYjti/ltonQmox4TQHYxaJPaO+MbUaAifCi6uk7fG10KZb/2gYtnILo
- nAJJEB6+Li9mekl7Y9UaHnBnS59maFhBNCNL3baeaSouPmP2ADrX0Q4a0DufpqbVucvWPdzDizN5
- AcPcKnqWqTEUcPUdIGGPlJTC8Tcn+wtwebQbh00sO9zeDSDfauKkxaweaJEg8ND8GwKGA+Yq3Tzl
- Kk=
-UI-OutboundReport: notjunk:1;M01:P0:hi5o1IiP/qA=;6XlLuYPPfufbmPU18XKOO8DkJWF
- lR+B/5CNDwV4bjvwrkxEHaO+Hio6hM9UGqE/i9E6/G705WFtguKNdegLkH9TbCfvFG2vIpInm
- pfEtEUewrPWhJZIVtlN6HFx5SwCg6baXhrJOUuysy83l1hJBtxwKqkCaThqMN3KK95VyfbpLU
- O2TBBEmqyB2BaeeB0i3qt+8HMTGIHNyRMEqTlwx1gZNI+/SXgT/CzvmlAxCqHtbrpWps1blLV
- eqtqB1oG/qNVrT1bvy9iXpZ59I36T/mEBljAFD3hrxfyw87xk2VyGv3/b2xEVaz4EFrj8xJsZ
- Mmko3qGfxBR+IY9J2knN1VHYVWeSgvz8LOr6FwEWMvt5IuniiAWG3HBguVkCxc4U+U/L9PgQN
- pOahQAj33W4flgCHi4ygbcWKvg565VNazKX30vR2Uc6q9cxHEdJV2TgBmKudaZcJDCZH6tsmR
- 0899hx0uniLEYRsfUGt2v9R4/ouqgQeFE+wLo6XjebMo+WNKpb5z4vVBPeWlx0Ij+SHHDTD7k
- ncZ4MRVxrXf6xWOwIfBRCTG2Iv6Qg72DJw0FbFTFs7AqbJ25NHfWVKZ2Nx0E2DBA6GQAglLzk
- LaDDPx39nzK6sxhuyYgF63Ga6ojSSaKr7j81YhwHM5Pc5C3t+oWZM8+sPQLlRnDuyghawGlN+
- yOls0iMeFIe711GM3w1pNpWs1WWF6OMjGHh1nAKjyvqqqe5b01A2Yp6mzRhIkGNBoCmDGFB3b
- Kt0sC63x2POGFPkWgkG1lzKTHOzMv+dZ/PxOV+YDZsib5cMmrxYmlVGKJrWmxzpLZptdW0YZs
- nDCsLjVjYA0A1l7LaHJIqo5GEkPqw/KyCPZJK3b4HnwmQ=
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: VI1PR04MB5136:EE_|PAXPR04MB8238:EE_
+X-MS-Office365-Filtering-Correlation-Id: cdb70a43-3242-4d42-6c01-08db1280b2d5
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: XDlg0iWCiH4xc5c5esALfPRJAKzicfQF3K8Fb/euHGY802rs+Z5W6vQFCtIr0xnpVdlkZPfR8B8722tnA8gUZE2mFvZJhs9qNsGG9zWT3Pj5a9m/AveJAzzQhHId/LXmp39kVJ0pBcK6/ke5tdtnEo7XeLyoHagFMaF4fqhLn2gEPHURwSUS4Gm9KhmMXKibrmeb8UbTUmDBd70hOljZI+GzZxeAcrD8zVNeTQ3+QOahq+Y69/ojLnHeF/zvKOzMkmzzp/OTT8KeZafCjlOQdn+XjCCzIgMrqzlh+8AClgjPGBq7JYEmcgxOhTHFp5aldIxgTTxiPJ2JBaT7/8zYICcaH7ryXUQKMNlVy1AyQwFVZWk2vPNzrwJvJbDUDJZwmXkvrwPEJGZ1BLqnIs0f0OxpSrb/X7I+vF0OpNWs6bQDfvWYrIKHjQnWs4qfX5X/PNX+ZRy+w77hZbFk6f272WdoP90l588EuIuAMrVT6HM5BvWFLk16yZ0iCiKErEDGSis9UdZzHEVba9dCpgznY97FXvnoc9opA0jbKRq2Cfzw9P4B4l4Uul7jL8Zu+fGix1sFl41EK4cVFhlRrqmPJTFL7XHDkpX4WVM8vSOLRa3d/VZSq7cd/31XAcIqBh5ohFDVHqMtN41mRL2Sjx2TnaAjXdzdjEkP81ITtkVpNKvcaWgEvD9q24TP/ZycUq9zsmc0dDcwPL6Ns2jrGbyLZm21rISy1I6kLczRNb8gQ2E=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VI1PR04MB5136.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(396003)(346002)(136003)(39860400002)(366004)(376002)(451199018)(8676002)(66556008)(66946007)(66476007)(5660300002)(7416002)(4326008)(8936002)(41300700001)(6916009)(44832011)(86362001)(38100700002)(38350700002)(6512007)(6666004)(6506007)(186003)(26005)(2616005)(83380400001)(52116002)(6486002)(478600001)(966005)(1076003)(36756003)(316002)(54906003)(2906002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?E5dlTQ4i1BozqL6dV6zi1jXn7z4S6u9D4VtW8v1pJSi1wfMaxmXCJBUmHx5F?=
+ =?us-ascii?Q?yA1vg6zy7Nf4Xpy7ZXaQNIhlarv+UpgcXNM2hbtTzHLty9+daLw6/FqJszj5?=
+ =?us-ascii?Q?mw/ekg7Wj8i+9Pjyt59Fcxh9qaT/8mvoXX1OK9G9eSdK5ik7+iZ2lPYYMUQG?=
+ =?us-ascii?Q?kTocXeHgODnNNXnf8C2Omw/ETvZa/aLbbALap4ZqhMQg/jL43d33kLZRzxbo?=
+ =?us-ascii?Q?+SYA6krNXDh16j68NJaFy6vw9x15YAjX2JihEFLMelCG+qVd3s5PGtUPwsr2?=
+ =?us-ascii?Q?1FhSw2Hvp6eWHfKYh3uETKQXZY3iZ6U7OxUkAabHXiB8TznpwoaxnyACKO36?=
+ =?us-ascii?Q?zcDuF69DwE+vTid/NR1llgy27srrZissuzB6Me0n05ab145r9KZ3AwQAJcv0?=
+ =?us-ascii?Q?46zIaYZ1OAz5T1ziG4ttlVfzd+y8xI9HW8/R23CKKgfL+z+mgacxklabbw2b?=
+ =?us-ascii?Q?3FmseAHqXgHOKxTIf7N43265wtiO0b7GSxct1eQGl27hCJ2TYZTDr07sHm4X?=
+ =?us-ascii?Q?+pva6kcRgOkSY5P/wfIQX2i6AVzHiwDEuxrAtcsHHJ18TGHVMMPXk6v5r94G?=
+ =?us-ascii?Q?ra1Z5ZYM0bV+oa/HzyUZPZqIZhpCiQBgBChzKIIkVx79YW0WWsScgM4U/eHO?=
+ =?us-ascii?Q?+lMy+nj7DTl9jMOaMG4aBtiM7nYVX3F2E17XPGtAG4cCLfTsQ8nNYpRKDB5z?=
+ =?us-ascii?Q?4aYYIUfZBtsmePTe7MoJsZILFJLGTAon50NCUdI6wyDwnRhPiuXVT/z0YL+K?=
+ =?us-ascii?Q?zXEMPExRHurmxG2TsJTlNgMyZjFm1njpQxTdEOaPrDac9GygkeyJeb97wE1n?=
+ =?us-ascii?Q?VZdTdO77KgPUkpiuPrqbwlUb5uSVazLbucfxInQ+3usaylgYXg/GJHpvc1hA?=
+ =?us-ascii?Q?jyqO8Nhh2SOpukklpM6d8MVSijw5Az48E8xC79kT6UqgEausAkGc07M0lqev?=
+ =?us-ascii?Q?RSxe2s34z1iWcX3k9I27Is8bWd7F1eFDWY3n1Rrk5A4Xf1aCPjBmyjfChBg0?=
+ =?us-ascii?Q?/QPJaOHYh0sJgE7PL203gdsyrs1L2XX/gPXB4HlxyAR1x2htujGIVWyzreaR?=
+ =?us-ascii?Q?gJBKf3Y2DzZ4MHFq8Xjy3p2+GnuVAlxhVBrE/m42T9HxXXBOZCW/pB3+3nOw?=
+ =?us-ascii?Q?ZOeZ4mFt3ysaqkMOSIEnnfP2hfqBkeY+nF35j+bbX3resOT9McDXT7oWTJmR?=
+ =?us-ascii?Q?bgxrq8gkPcQvcT/BRAIajhmtiwh/zjTzWw3V5UUkDcw+LQ+TU6/jQPGhF7Eo?=
+ =?us-ascii?Q?QDIssr/pBDbJQApONfQUFCFIDLkdS8dcLbjlSfsaUuFNopMrsHrJNhH0QC2H?=
+ =?us-ascii?Q?r1V1Xb0aQsazeSow48mBTcxU9dwBlx4A3b9vmzlIaUZcKqzAl/jFmCav9plz?=
+ =?us-ascii?Q?Esb1NyovZXL+gDAZPm3YuzAVMtxEjzr8l+db1G3wUm3XV4exzKoGk/QnXFbk?=
+ =?us-ascii?Q?V7yWUoaDPCLKIJrpod1N82ZZzLYqGgwXWVYweBfVL2BYR5FN5DkoTnKdvXJo?=
+ =?us-ascii?Q?taovmlglbzmO2kpoHQFUU34+BOsEl9vBMM/VBTm871OpXEdhb5UKylOXFAf5?=
+ =?us-ascii?Q?d2vnCTlPmf3q6qyLkqkWX2pdR3XyeP1oMjNYWVJjadJd7dc8HvJdb22kr+lN?=
+ =?us-ascii?Q?FQ=3D=3D?=
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: cdb70a43-3242-4d42-6c01-08db1280b2d5
+X-MS-Exchange-CrossTenant-AuthSource: VI1PR04MB5136.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 Feb 2023 13:53:37.1002
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: DeqdFU4fOD184QXRjPNZZotLBEEfk1faK6myhVOt9YgmBhXgSQbsKxwqr87V1dllU5CNsuHxEbuNJg13dbMxxw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PAXPR04MB8238
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -87,28 +137,76 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> Gesendet: Samstag, 18=2E Februar 2023 um 20:34 Uhr
-> Von: "Ar=C4=B1n=C3=A7 =C3=9CNAL" <arinc=2Eunal@arinc9=2Ecom>
-> An: frank-w@public-files=2Ede
-> On 18=2E02=2E2023 22:11, Frank Wunderlich wrote:
-> > Am 18=2E Februar 2023 18:02:11 MEZ schrieb "Ar=C4=B1n=C3=A7 =C3=9CNAL"=
- <arinc=2Eunal@arinc9=2Ecom>:
-> >> On 18=2E02=2E2023 15:18, Frank Wunderlich wrote:
-> Can you also remove this from mt7530=2Ec and do the test again? See if t=
-he=20
-> performance changes at all=2E
->=20
->          /* Set core clock into 500Mhz */
->          core_write(priv, CORE_GSWPLL_GRP2,
->                     RG_GSWPLL_POSDIV_500M(1) |
->                     RG_GSWPLL_FBKDIV_500M(25));
->=20
+The last RFC in August 2022 contained a proposal for the UAPI of both
+TSN standards which together form Frame Preemption (802.1Q and 802.3):
+https://patchwork.kernel.org/project/netdevbpf/cover/20220816222920.1952936-1-vladimir.oltean@nxp.com/
 
-with these disabled i have a bit better performance (625 Mbits/sec instead=
- of 600) and no retransmitts on first iperf3-run=2E
+It wasn't clear at the time whether the 802.1Q portion of Frame Preemption
+should be exposed via the tc qdisc (mqprio, taprio) or via some other
+layer (perhaps also ethtool like the 802.3 portion, or dcbnl), even
+though the options were discussed extensively, with pros and cons:
+https://patchwork.kernel.org/project/netdevbpf/patch/20220816222920.1952936-3-vladimir.oltean@nxp.com/
 
-not yet tried any rgmii-delay option (have no idea which is the right one =
-on which position), but yes, mostly it does not improve performance=2E=2E=
-=2Eit simply does work or does not work=2E
+So the 802.3 portion got submitted separately and finally was accepted:
+https://patchwork.kernel.org/project/netdevbpf/cover/20230119122705.73054-1-vladimir.oltean@nxp.com/
 
-regards Frank
+leaving the only remaining question: how do we expose the 802.1Q bits?
+
+This series proposes that we use the Qdisc layer, through separate
+(albeit very similar) UAPI in mqprio and taprio, and that both these
+Qdiscs pass the information down to the offloading device driver through
+the common mqprio offload structure (which taprio also passes).
+
+Implementations are provided for the NXP LS1028A on-board Ethernet
+(enetc, felix).
+
+Some patches should have maybe belonged to separate series, leaving here
+only patches 09/12 - 12/12, for ease of review. That may be true,
+however due to a perceived lack of time to wait for the prerequisite
+cleanup to be merged, here they are all together.
+
+Changes in v2:
+- add missing EXPORT_SYMBOL_GPL(ethtool_dev_mm_supported)
+- slightly reword some commit messages
+- move #include <linux/ethtool_netlink.h> to the respective patch in
+  mqprio
+- remove self-evident comment "only for dump and offloading" in mqprio
+
+v1 at:
+https://patchwork.kernel.org/project/netdevbpf/cover/20230216232126.3402975-1-vladimir.oltean@nxp.com/
+
+Vladimir Oltean (12):
+  net: enetc: rename "mqprio" to "qopt"
+  net: mscc: ocelot: add support for mqprio offload
+  net: dsa: felix: act upon the mqprio qopt in taprio offload
+  net: ethtool: fix __ethtool_dev_mm_supported() implementation
+  net: ethtool: create and export ethtool_dev_mm_supported()
+  net/sched: mqprio: simplify handling of nlattr portion of TCA_OPTIONS
+  net/sched: mqprio: add extack to mqprio_parse_nlattr()
+  net/sched: mqprio: add an extack message to mqprio_parse_opt()
+  net/sched: mqprio: allow per-TC user input of FP adminStatus
+  net/sched: taprio: allow per-TC user input of FP adminStatus
+  net: mscc: ocelot: add support for preemptible traffic classes
+  net: enetc: add support for preemptible traffic classes
+
+ drivers/net/dsa/ocelot/felix_vsc9959.c        |  44 ++++-
+ drivers/net/ethernet/freescale/enetc/enetc.c  |  31 ++-
+ drivers/net/ethernet/freescale/enetc/enetc.h  |   1 +
+ .../net/ethernet/freescale/enetc/enetc_hw.h   |   4 +
+ drivers/net/ethernet/mscc/ocelot.c            |  51 +++++
+ drivers/net/ethernet/mscc/ocelot.h            |   2 +
+ drivers/net/ethernet/mscc/ocelot_mm.c         |  56 ++++++
+ include/linux/ethtool_netlink.h               |   6 +
+ include/net/pkt_sched.h                       |   1 +
+ include/soc/mscc/ocelot.h                     |   6 +
+ include/uapi/linux/pkt_sched.h                |  17 ++
+ net/ethtool/mm.c                              |  25 ++-
+ net/sched/sch_mqprio.c                        | 182 +++++++++++++++---
+ net/sched/sch_mqprio_lib.c                    |  14 ++
+ net/sched/sch_mqprio_lib.h                    |   2 +
+ net/sched/sch_taprio.c                        |  65 +++++--
+ 16 files changed, 460 insertions(+), 47 deletions(-)
+
+-- 
+2.34.1
+
