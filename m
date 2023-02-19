@@ -2,57 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E8B1369BFD5
-	for <lists+linux-kernel@lfdr.de>; Sun, 19 Feb 2023 10:46:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9ADD469BFBE
+	for <lists+linux-kernel@lfdr.de>; Sun, 19 Feb 2023 10:38:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230139AbjBSJqw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 19 Feb 2023 04:46:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41710 "EHLO
+        id S230057AbjBSJia (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 19 Feb 2023 04:38:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33126 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230125AbjBSJqu (ORCPT
+        with ESMTP id S230051AbjBSJi1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 19 Feb 2023 04:46:50 -0500
-Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CFA02117
-        for <linux-kernel@vger.kernel.org>; Sun, 19 Feb 2023 01:46:10 -0800 (PST)
-Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-5368a7c71e3so14518577b3.17
-        for <linux-kernel@vger.kernel.org>; Sun, 19 Feb 2023 01:46:10 -0800 (PST)
+        Sun, 19 Feb 2023 04:38:27 -0500
+Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8969740D6
+        for <linux-kernel@vger.kernel.org>; Sun, 19 Feb 2023 01:37:30 -0800 (PST)
+Received: by mail-yb1-xb4a.google.com with SMTP id h204-20020a256cd5000000b00953ffdfbe1aso2267589ybc.23
+        for <linux-kernel@vger.kernel.org>; Sun, 19 Feb 2023 01:37:30 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=cc:to:from:subject:references:mime-version:message-id:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=V1c75G2QRp2XfNcd0fyJt7z2QBiUcClmUEJnZutpl3U=;
-        b=lQc7DLqjY+G0h68iUyNnQt0s8JbFjdLvt6vUD0X3O7LQXsct1au6ugX7YKcPBS3UPJ
-         AsAznm2proFWTuMGysZno/FG9nfkQj2SekacMWMc3JcdaBlyiBSXOGz0lhlEgLdgGAxp
-         WDR9gSMRJuJm8sfYf4Js7MhM80qTW0YRs+7lkwr6P601fxAf4quXfIGXkK94Dp9yf7NJ
-         VG/TQ0DMh2RX36SsfyliyUni4YrostDu/WgZ0dbrvUcDxYX103Xt5iUnMSJxA78X1q/J
-         xUWr1XsXdm9DAOmntwU2JGUE0TJhIpozeTXHwgCbdlqWpR3m96Aghhr+kQKjI1/QS/RH
-         /euQ==
+        bh=6ApboYwC5HDpqa4KgO9vE7lItPOtxh0INRVt9hDTELA=;
+        b=eKrS9YbE5MvFZdViv4py+wujaC6AoA78JFYCdWX32lF9PoiXUgE3idq0OBKkFhvJ8L
+         8iy6lGZX2pkmRRG5L9VoyF4JMYhESKqhxg1bQRw3cbXu9cp0CTVAsnfEx7iX0m8WcHmJ
+         0khwL4pKRPFny0ZCfaK1RnTWEWhb3jRklhCcxexJ/lPXaF39kJkIOOWW9PvDQfhH3qw8
+         i6SXakOmGvzYKxm+6U79/2sZgCBcFrdbqgmoGs3Zp43La0bVDCky0ubQmF3HRG8l/moZ
+         Or4Qbi5jk1XP9gTTmxi3oHJe1J1/5t4dUvhGzSs/SXr7RmRzmHYiWa0KAaYnoxYzSygO
+         fbNw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:from:subject:references:mime-version:message-id:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=V1c75G2QRp2XfNcd0fyJt7z2QBiUcClmUEJnZutpl3U=;
-        b=llgK7Nw4Pphw43ybly1oN1M1N4Cb55k/5qGhN4zZUchu+hwOLHYvWK58jAil6yKJVm
-         DW5IqOIRn6FwRgnU28k8KEQ5xNQlHXHx8vHo3rvaDWYWrgz5WOEHcsW75wdyoH8xTKux
-         u8tyme7y2TMMjZmok5fTlOxrKJlXdo3za7FfyrFRh4oqzc4EtIITxUJEInK103BHijSF
-         f/CnsLy7ieAvOJE/T9yvB+th76RrDRJtyOUijZgsRgt14lqiFgP2myJAz9CBe9XNjnXh
-         1j7tZUEq95n3IprW+ut+IUkS0KcOXJZRyZmUHqhLSHdnssNo8mQQl6IaD9HE0QSWnszF
-         IyfQ==
-X-Gm-Message-State: AO0yUKVeuL3hHObA3WAm0zg0UhE8Y3V/HIutTME3mrUk1ozs4LZlxWJI
-        khpbRslGiDoa06I0PIUoOlrFo2FEkEPb
-X-Google-Smtp-Source: AK7set+0phLS9+KCkYB1hD6t9OHjqMNjyrH3Ll05ZAB31Ht5Vz9xAKErSbBOtdwOA5pdD6xB9HPX23EwfbRP
+        bh=6ApboYwC5HDpqa4KgO9vE7lItPOtxh0INRVt9hDTELA=;
+        b=BNixwsjfXHEcPz1iFVz3cp/TAnJUNz1d+zWvKUnI6oHklHpTWfaFA9OOYbWfH5Rjmw
+         VR0AZtoeu0bka7P2ML8Af6IhMWCtp9EXaxkPzwxTJIOM98NHrsVZHAeE2jE//gAHNoPF
+         yPHPXqgpST8mqguYQcTneS8vpcq74Oox2DaMkZe942jlBDPu6HDIQ+fAWAcm5y6mtSGH
+         K1roptYPssbUCUYAAL+mCm30z6f1+VzXSQjOfeVffVmbvPwf6nMg8ZaApOZxsW1nxd7T
+         Z4sa26aUae4N9RRx7MnExm76mMvkae1SOyArXWfIIBU3mstq1AXE5W70XXLnLsvKCOKL
+         Z6Sg==
+X-Gm-Message-State: AO0yUKVMNWPce3WfhRy1hBY0ScrRrlakv/QggtAv2z/eVxZNGFWq0CYA
+        qo01AvL84nX/CFjfIrKDO54PTLJxvRJ8
+X-Google-Smtp-Source: AK7set9l7EzTRgvXB15GxGWCICFKm8udU74GJTOUVF1jH0sNKtgIcL7PqS/JykUEiXuu54Ngmu99y9XTMRbT
 X-Received: from irogers.svl.corp.google.com ([2620:15c:2d4:203:cde9:3fbc:e1f1:6e3b])
- (user=irogers job=sendgmr) by 2002:a0d:d6c1:0:b0:514:dae0:21ef with SMTP id
- y184-20020a0dd6c1000000b00514dae021efmr2065215ywd.133.1676799319684; Sun, 19
- Feb 2023 01:35:19 -0800 (PST)
-Date:   Sun, 19 Feb 2023 01:28:42 -0800
+ (user=irogers job=sendgmr) by 2002:a81:e94c:0:b0:507:68eb:1b20 with SMTP id
+ e12-20020a81e94c000000b0050768eb1b20mr311210ywm.236.1676799327857; Sun, 19
+ Feb 2023 01:35:27 -0800 (PST)
+Date:   Sun, 19 Feb 2023 01:28:43 -0800
 In-Reply-To: <20230219092848.639226-1-irogers@google.com>
-Message-Id: <20230219092848.639226-46-irogers@google.com>
+Message-Id: <20230219092848.639226-47-irogers@google.com>
 Mime-Version: 1.0
 References: <20230219092848.639226-1-irogers@google.com>
 X-Mailer: git-send-email 2.39.2.637.g21b0678d19-goog
-Subject: [PATCH v1 45/51] perf stat: Remove perf_stat_evsel_id
+Subject: [PATCH v1 46/51] perf stat: Move enums from header
 From:   Ian Rogers <irogers@google.com>
 To:     Peter Zijlstra <peterz@infradead.org>,
         Ingo Molnar <mingo@redhat.com>,
@@ -89,7 +89,7 @@ Cc:     Stephane Eranian <eranian@google.com>,
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -97,101 +97,89 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-perf_stat_evsel_id was used for hard coded metrics. These have now
-migrated to json metrics and so the id values are no longer necessary.
+The enums are only used in stat-shadow.c, so narrow their scope by
+moving to the C file.
 
 Signed-off-by: Ian Rogers <irogers@google.com>
 ---
- tools/perf/util/stat.c | 31 -------------------------------
- tools/perf/util/stat.h | 12 ------------
- 2 files changed, 43 deletions(-)
+ tools/perf/util/stat-shadow.c | 25 +++++++++++++++++++++++++
+ tools/perf/util/stat.h        | 27 ---------------------------
+ 2 files changed, 25 insertions(+), 27 deletions(-)
 
-diff --git a/tools/perf/util/stat.c b/tools/perf/util/stat.c
-index d51d7457f12d..8d83d2f4a082 100644
---- a/tools/perf/util/stat.c
-+++ b/tools/perf/util/stat.c
-@@ -77,36 +77,6 @@ double rel_stddev_stats(double stddev, double avg)
- 	return pct;
- }
+diff --git a/tools/perf/util/stat-shadow.c b/tools/perf/util/stat-shadow.c
+index d14fa531ee27..fc948a7e83b7 100644
+--- a/tools/perf/util/stat-shadow.c
++++ b/tools/perf/util/stat-shadow.c
+@@ -29,6 +29,31 @@ struct runtime_stat rt_stat;
+ struct stats walltime_nsecs_stats;
+ struct rusage_stats ru_stats;
  
--bool __perf_stat_evsel__is(struct evsel *evsel, enum perf_stat_evsel_id id)
--{
--	struct perf_stat_evsel *ps = evsel->stats;
--
--	return ps->id == id;
--}
--
--#define ID(id, name) [PERF_STAT_EVSEL_ID__##id] = #name
--static const char *id_str[PERF_STAT_EVSEL_ID__MAX] = {
--	ID(NONE,		x),
--};
--#undef ID
--
--static void perf_stat_evsel_id_init(struct evsel *evsel)
--{
--	struct perf_stat_evsel *ps = evsel->stats;
--	int i;
--
--	/* ps->id is 0 hence PERF_STAT_EVSEL_ID__NONE by default */
--
--	for (i = 0; i < PERF_STAT_EVSEL_ID__MAX; i++) {
--		if (!strcmp(evsel__name(evsel), id_str[i]) ||
--		    (strstr(evsel__name(evsel), id_str[i]) && evsel->pmu_name
--		     && strstr(evsel__name(evsel), evsel->pmu_name))) {
--			ps->id = i;
--			break;
--		}
--	}
--}
--
- static void evsel__reset_aggr_stats(struct evsel *evsel)
- {
- 	struct perf_stat_evsel *ps = evsel->stats;
-@@ -166,7 +136,6 @@ static int evsel__alloc_stat_priv(struct evsel *evsel, int nr_aggr)
- 		return -ENOMEM;
- 	}
- 
--	perf_stat_evsel_id_init(evsel);
- 	evsel__reset_stat_priv(evsel);
- 	return 0;
- }
++enum {
++	CTX_BIT_USER	= 1 << 0,
++	CTX_BIT_KERNEL	= 1 << 1,
++	CTX_BIT_HV	= 1 << 2,
++	CTX_BIT_HOST	= 1 << 3,
++	CTX_BIT_IDLE	= 1 << 4,
++	CTX_BIT_MAX	= 1 << 5,
++};
++
++enum stat_type {
++	STAT_NONE = 0,
++	STAT_NSECS,
++	STAT_CYCLES,
++	STAT_STALLED_CYCLES_FRONT,
++	STAT_STALLED_CYCLES_BACK,
++	STAT_BRANCHES,
++	STAT_CACHEREFS,
++	STAT_L1_DCACHE,
++	STAT_L1_ICACHE,
++	STAT_LL_CACHE,
++	STAT_ITLB_CACHE,
++	STAT_DTLB_CACHE,
++	STAT_MAX
++};
++
+ struct saved_value {
+ 	struct rb_node rb_node;
+ 	struct evsel *evsel;
 diff --git a/tools/perf/util/stat.h b/tools/perf/util/stat.h
-index 9af4af3bc3f2..df6068a3f7bb 100644
+index df6068a3f7bb..215c0f5c4db7 100644
 --- a/tools/perf/util/stat.h
 +++ b/tools/perf/util/stat.h
-@@ -19,11 +19,6 @@ struct stats {
- 	u64 max, min;
+@@ -55,33 +55,6 @@ enum aggr_mode {
+ 	AGGR_MAX
  };
  
--enum perf_stat_evsel_id {
--	PERF_STAT_EVSEL_ID__NONE = 0,
--	PERF_STAT_EVSEL_ID__MAX,
+-enum {
+-	CTX_BIT_USER	= 1 << 0,
+-	CTX_BIT_KERNEL	= 1 << 1,
+-	CTX_BIT_HV	= 1 << 2,
+-	CTX_BIT_HOST	= 1 << 3,
+-	CTX_BIT_IDLE	= 1 << 4,
+-	CTX_BIT_MAX	= 1 << 5,
 -};
 -
- /* hold aggregated event info */
- struct perf_stat_aggr {
- 	/* aggregated values */
-@@ -40,8 +35,6 @@ struct perf_stat_aggr {
- struct perf_stat_evsel {
- 	/* used for repeated runs */
- 	struct stats		 res_stats;
--	/* evsel id for quick check */
--	enum perf_stat_evsel_id	 id;
- 	/* number of allocated 'aggr' */
- 	int			 nr_aggr;
- 	/* aggregated event values */
-@@ -187,11 +180,6 @@ static inline void update_rusage_stats(struct rusage_stats *ru_stats, struct rus
- struct evsel;
- struct evlist;
- 
--bool __perf_stat_evsel__is(struct evsel *evsel, enum perf_stat_evsel_id id);
+-#define NUM_CTX CTX_BIT_MAX
 -
--#define perf_stat_evsel__is(evsel, id) \
--	__perf_stat_evsel__is(evsel, PERF_STAT_EVSEL_ID__ ## id)
+-enum stat_type {
+-	STAT_NONE = 0,
+-	STAT_NSECS,
+-	STAT_CYCLES,
+-	STAT_STALLED_CYCLES_FRONT,
+-	STAT_STALLED_CYCLES_BACK,
+-	STAT_BRANCHES,
+-	STAT_CACHEREFS,
+-	STAT_L1_DCACHE,
+-	STAT_L1_ICACHE,
+-	STAT_LL_CACHE,
+-	STAT_ITLB_CACHE,
+-	STAT_DTLB_CACHE,
+-	STAT_MAX
+-};
 -
- extern struct runtime_stat rt_stat;
- extern struct stats walltime_nsecs_stats;
- extern struct rusage_stats ru_stats;
+ struct runtime_stat {
+ 	struct rblist value_list;
+ };
 -- 
 2.39.2.637.g21b0678d19-goog
 
