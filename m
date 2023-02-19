@@ -2,71 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 02B4C69C017
-	for <lists+linux-kernel@lfdr.de>; Sun, 19 Feb 2023 12:46:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A69569C01A
+	for <lists+linux-kernel@lfdr.de>; Sun, 19 Feb 2023 12:48:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229882AbjBSLq1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 19 Feb 2023 06:46:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58516 "EHLO
+        id S229823AbjBSLsq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 19 Feb 2023 06:48:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60406 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229640AbjBSLqY (ORCPT
+        with ESMTP id S229676AbjBSLsm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 19 Feb 2023 06:46:24 -0500
-Received: from mail-il1-f200.google.com (mail-il1-f200.google.com [209.85.166.200])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E781ACA0C
-        for <linux-kernel@vger.kernel.org>; Sun, 19 Feb 2023 03:46:19 -0800 (PST)
-Received: by mail-il1-f200.google.com with SMTP id f2-20020a926a02000000b003152ca1c48aso101609ilc.21
-        for <linux-kernel@vger.kernel.org>; Sun, 19 Feb 2023 03:46:19 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:in-reply-to:date:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Zlr5WDVYSCJNG2/QD15o1eE035gzrC0DW5830kTwOlc=;
-        b=s2gOMUqCI5yNnb4Uw7AlxjyGhmmR2XuP15MlLZqrYKg+ANptZ0hwDA7Djx43LEb59u
-         KfSVKPj3sQb5UCZQLnXr1lXrA89FdYor/Cii9jTVWjGHRkRlQjf44JUBGhgl9gsXk+EA
-         VANXqtd62bzx1E3J8uRCJQAC7BnsjBJFiWhujQnGm1YXpk7GaPTDoNgX+FVPbV6108tK
-         x/MquswwOVJo5uBB0kSUH2uDozLchTKza9SI/mjvjgHx0wGu6pjzYup8lcMxSpfXFav+
-         l5um+AM4bN1EThzVUvo4qI7jV8T7IlWpQqRsFwjblp0u2U2B/Jt2qHbE8a9QH5YYomN5
-         lm+Q==
-X-Gm-Message-State: AO0yUKWJO2StJR5FUeEwdEsp5P4LD/3vNqurMqYh8VRALjqxtpVeBz2j
-        74kjSlEGXH8kCaz/lhPRap8Ty7N1Jk276S3ByaRrxnQodfEQ
-X-Google-Smtp-Source: AK7set+VFvL84svGepNuAsLXIrFrPy2CbjziZW+K1F36LbEQ5iGHi54c51+3wBsEKq3QsZ1lQU6Xm7ptwrPf/Dq2vtbvXdNVvMgg
+        Sun, 19 Feb 2023 06:48:42 -0500
+Received: from kuriko.dram.page (kuriko.dram.page [65.108.252.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BAFDCC1C;
+        Sun, 19 Feb 2023 03:48:41 -0800 (PST)
+Message-ID: <4bd8c6da-6ad4-5e1a-169c-48f48560b36b@dram.page>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=dram.page; s=mail;
+        t=1676807318; bh=IJFps8QiPqsxtkm8bbGRrhgiLRq/rPGQKvISbNPd8i4=;
+        h=Date:To:Cc:References:From:Subject:In-Reply-To;
+        b=NNRikU8qtdtoR2Z2vRLJNpcLFZ/r1A7KpOQc5C8tuONVpqWi/KjOoNX1+hlr8RbnT
+         6642eA05ALzSAjOkzbgUGXqGWhgVEmMG+nVesVABXBhD0jnQTLD95EitxuRhb+aIvw
+         w0o2R1e3c7QtmPO6DeL4jpv3gR5cBwNb3Y2rqsAw=
+Date:   Sun, 19 Feb 2023 19:48:27 +0800
 MIME-Version: 1.0
-X-Received: by 2002:a05:6e02:ee1:b0:315:50a4:c5e5 with SMTP id
- j1-20020a056e020ee100b0031550a4c5e5mr7196ilk.2.1676807178943; Sun, 19 Feb
- 2023 03:46:18 -0800 (PST)
-Date:   Sun, 19 Feb 2023 03:46:18 -0800
-In-Reply-To: <20230219114014.2224-1-hdanton@sina.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <00000000000042069905f50c18ee@google.com>
-Subject: Re: [syzbot] [bridge?] [netfilter?] KASAN: vmalloc-out-of-bounds Read
- in __ebt_unregister_table
-From:   syzbot <syzbot+f61594de72d6705aea03@syzkaller.appspotmail.com>
-To:     hdanton@sina.com, linux-kernel@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Language: en-US
+To:     Anup Patel <apatel@ventanamicro.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Marc Zyngier <maz@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     Atish Patra <atishp@atishpatra.org>,
+        Alistair Francis <Alistair.Francis@wdc.com>,
+        Anup Patel <anup@brainfault.org>,
+        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org
+References: <20230103141409.772298-1-apatel@ventanamicro.com>
+ <20230103141409.772298-7-apatel@ventanamicro.com>
+From:   Vivian Wang <uwu@dram.page>
+Subject: Re: [PATCH v2 6/9] dt-bindings: interrupt-controller: Add RISC-V
+ advanced PLIC
+In-Reply-To: <20230103141409.772298-7-apatel@ventanamicro.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On 1/3/23 22:14, Anup Patel wrote:
+> We add DT bindings document for RISC-V advanced platform level
+> interrupt controller (APLIC) defined by the RISC-V advanced
+> interrupt architecture (AIA) specification.
+>
+> Signed-off-by: Anup Patel <apatel@ventanamicro.com>
+> ---
+>  .../interrupt-controller/riscv,aplic.yaml     | 159 ++++++++++++++++++
+>  1 file changed, 159 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/interrupt-controller/riscv,aplic.yaml
+>
+> diff --git a/Documentation/devicetree/bindings/interrupt-controller/riscv,aplic.yaml b/Documentation/devicetree/bindings/interrupt-controller/riscv,aplic.yaml
+> new file mode 100644
+> index 000000000000..b7f20aad72c2
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/interrupt-controller/riscv,aplic.yaml
+> @@ -0,0 +1,159 @@
+>
+> <snip>
+>
+> +  riscv,children:
+> +    $ref: /schemas/types.yaml#/definitions/phandle-array
+> +    minItems: 1
+> +    maxItems: 1024
+> +    items:
+> +      maxItems: 1
+> +    description:
+> +      A list of child APLIC domains for the given APLIC domain. Each child
+> +      APLIC domain is assigned child index in increasing order with the
+> +      first child APLIC domain assigned child index 0. The APLIC domain
+> +      child index is used by firmware to delegate interrupts from the
+> +      given APLIC domain to a particular child APLIC domain.
+> +
+> +  riscv,delegate:
+> +    $ref: /schemas/types.yaml#/definitions/phandle-array
+> +    minItems: 1
+> +    maxItems: 1024
+> +    items:
+> +      items:
+> +        - description: child APLIC domain phandle
+> +        - description: first interrupt number (inclusive)
+> +        - description: last interrupt number (inclusive)
+> +    description:
+> +      A interrupt delegation list where each entry is a triple consisting
+> +      of child APLIC domain phandle, first interrupt number, and last
+> +      interrupt number. The firmware will configure interrupt delegation
+> +      registers based on interrupt delegation list.
+> +
 
-syzbot tried to test the proposed patch but the build/boot failed:
+I'm not sure if this is the right place to ask, since it could be more
+of a OpenSBI/QEMU problem, but I think a more detailed description about
+what 'the firmware' does is appropriate here.
 
-net/bridge/netfilter/ebtables.c:1215:28: error: passing argument 1 of 'ebt_verify_pointers' from incompatible pointer type [-Werror=incompatible-pointer-types]
+My main confusion is how to describe wired interrupts connected to
+APLICs. Say we have two APLIC nodes with labels aplic_m and aplic_s that
+are the APLIC domains for M-mode and S-mode respectively. IIUC, wired
+interrupts are connected directly to aplic_m. So how do I refer to it in
+the device nodes?
 
+ 1. <&aplic_s num IRQ_TYPE_foo>, but it would be a lie to M-mode
+    software, which could be a problem. QEMU 7.2.0 seems to take this
+    approach. (I could also be misunderstanding QEMU and it actually
+    does connect wired interrupts to the S-mode APLIC, but then
+    riscv,children and riscv,delegate would be lies.)
+ 2. <&aplic_m ...>, and when M-mode software gives S-mode software
+    access to devices, it delegates relevant interrupts and patches it
+    into <&aplic_s num IRQ_TYPE_foo>. Seems to be the 'correct'
+    approach, but pretty complicated.
+ 3. <&aplic_m ...>, S-mode software sees this, and sees that aplic_m has
+    num in riscv,delegate, so goes to find the child it's been delegated
+    to, which is (should be) aplic_s. A bit annoyingly abstraction
+    breaking, since S-mode shouldn't even need to know about aplic_m.
 
-Tested on:
+I see that others are also confused by riscv,delegate and riscv,children
+properties. It would be great if we could clarify the expected behavior
+here rather than just saying 'the firmware will do the thing'.
 
-commit:         3ac88fa4 Merge tag 'net-6.2-final' of git://git.kernel..
-git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-dashboard link: https://syzkaller.appspot.com/bug?extid=f61594de72d6705aea03
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-patch:          https://syzkaller.appspot.com/x/patch.diff?x=170d73d7480000
-
+> <snip>
+> +...
+Thanks,
+Vivian
