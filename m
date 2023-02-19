@@ -2,224 +2,196 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4C51369BFCE
-	for <lists+linux-kernel@lfdr.de>; Sun, 19 Feb 2023 10:45:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 50CA969BFDE
+	for <lists+linux-kernel@lfdr.de>; Sun, 19 Feb 2023 10:48:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230128AbjBSJpZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 19 Feb 2023 04:45:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40230 "EHLO
+        id S230176AbjBSJsN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 19 Feb 2023 04:48:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43422 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230109AbjBSJpV (ORCPT
+        with ESMTP id S230162AbjBSJsH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 19 Feb 2023 04:45:21 -0500
-Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C31BB1043B;
-        Sun, 19 Feb 2023 01:44:35 -0800 (PST)
-Received: by mail-wm1-x336.google.com with SMTP id i5-20020a05600c354500b003e1f5f2a29cso285823wmq.4;
-        Sun, 19 Feb 2023 01:44:35 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=sMPdCMdS3VcScxunnSP7BsButuKXwgs+onI25X5O9Wc=;
-        b=XumHyq0Cel+dqLclnreHmI24z4esM8bQ4QTXjRvnlukF87pE4zpQVADGHFMsOkwnvI
-         +kRoyXBCMhN2n7Wk3f7YaVuguFfGb11LPoL56skE4G6TtIwU+Xt+RaKpA2aQR2TnAWv0
-         G6l/edmC4Bzuxa1F3QV2QBDgnW4+tntG6InSHaRJ+kNbAZis7czCOaAmw43A+JZI1ZFf
-         oMWw6bAayDEQroQsx3o4u/KUZcJs2DatuvYp9rPRcee91/Sq9nBB7I4ptgPtGtPQu4ES
-         4pXVWMKAMybmyHn/n93UvLuiDQTItMIpf1qpKZygxgSwJrxiL5iPRvZdEVYMPoTBeNxj
-         IjnQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=sMPdCMdS3VcScxunnSP7BsButuKXwgs+onI25X5O9Wc=;
-        b=nJTU3xf7k6K/vnhTIlpqG5wpt1xgJdqsY9i6tymZyIJVFyrzTFCrGf7Y2xIY40RUsT
-         NoNEzdxjZbWt3i8QmoiqWIdYEN2z7uFOsYG3eLefftzs1otWWD/uIrs0zRQ/x1NZ9jJN
-         Pjrzo27mu4/JEoL68PBuMiNVW4gOwELVo/1FhGgJL6h6Pr3uFT0zJqsUPZYkEMUqQXs4
-         1PJxDfclRz0/0dNxwespg8z2ZXmvh9Ngt9+urzo3ZH7XGDjLx8occI31EeVvQhAWUsBV
-         2/nyq0LHvW3NZ6KadD4r0oroqjoGUQAcKMoFEFwxs7Y0qbnbVha8FU46hO/oUOhgyuNZ
-         AVxQ==
-X-Gm-Message-State: AO0yUKVlwTqkSs2UVxqxpNgJ+ZwwAI4fqXV9Vmx6TUXpioU1V/Cnlirn
-        r2D4D2Kt/i6LzSHwJ1N+tPs=
-X-Google-Smtp-Source: AK7set8atZ/0JasJukEMru+9LylLz33ZwjogL+rdHQbeUs6uRBoAyZ26dM6gZyx+5AdgFnEZFXIpig==
-X-Received: by 2002:a05:600c:1895:b0:3e2:589:2512 with SMTP id x21-20020a05600c189500b003e205892512mr4627494wmp.21.1676799789000;
-        Sun, 19 Feb 2023 01:43:09 -0800 (PST)
-Received: from [192.168.0.106] ([77.126.33.94])
-        by smtp.gmail.com with ESMTPSA id u10-20020a05600c00ca00b003ddf2865aeasm5557673wmm.41.2023.02.19.01.43.07
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 19 Feb 2023 01:43:08 -0800 (PST)
-Message-ID: <07b5c523-7174-ac30-65cb-182e07db08dc@gmail.com>
-Date:   Sun, 19 Feb 2023 11:43:06 +0200
+        Sun, 19 Feb 2023 04:48:07 -0500
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40A7012F24;
+        Sun, 19 Feb 2023 01:47:31 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1676800051; x=1708336051;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=xhcCnf0cNcsotIr4PN51gmS8bzJYzvKjq4kiT2RhNfs=;
+  b=nBAd4fUX0OXafPILtHDzCYboWaCHqkNSDHqBs1oYdbs0/y1NfH2QQd+l
+   27HXK+kz6jYF8erBka3rzVnb1Djtyjqgc166nyeire+ucFeLJHmTR0cNX
+   0Ze3ZhiEV80g8wOinfCajApjL2LJ3VPgbri6D5SopkoP/AjEriOZftU+m
+   /8d4zasu+sOyQRodgy2K3OSrGU+ZtNwD+GvUAB3IWP+lqTewc696sincw
+   CS/9K08zWrZVJOFA2Kae1kpUowl79UU/n1b0LEHlnKryktVaVYDxCfu5X
+   aomO2choHU0H6BZXMtuMQ+8dvfmFS8CH6bRjHMiZS8MK4MDIt7ANXvdCu
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10625"; a="311867310"
+X-IronPort-AV: E=Sophos;i="5.97,310,1669104000"; 
+   d="scan'208";a="311867310"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Feb 2023 01:45:37 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10625"; a="759872251"
+X-IronPort-AV: E=Sophos;i="5.97,310,1669104000"; 
+   d="scan'208";a="759872251"
+Received: from lkp-server01.sh.intel.com (HELO 4455601a8d94) ([10.239.97.150])
+  by FMSMGA003.fm.intel.com with ESMTP; 19 Feb 2023 01:45:34 -0800
+Received: from kbuild by 4455601a8d94 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pTgGD-000DEd-0n;
+        Sun, 19 Feb 2023 09:45:33 +0000
+Date:   Sun, 19 Feb 2023 17:44:59 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Nhat Pham <nphamcs@gmail.com>, akpm@linux-foundation.org
+Cc:     llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+        hannes@cmpxchg.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, bfoster@redhat.com,
+        willy@infradead.org, arnd@arndb.de, linux-api@vger.kernel.org,
+        kernel-team@meta.com
+Subject: Re: [PATCH v10 2/3] cachestat: implement cachestat syscall
+Message-ID: <202302191728.rXGLcydi-lkp@intel.com>
+References: <20230219073318.366189-3-nphamcs@gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.2
-Subject: Re: [PATCH] net/mlx4_en: Introduce flexible array to silence overflow
- warning
-Content-Language: en-US
-To:     Kees Cook <keescook@chromium.org>, Tariq Toukan <tariqt@nvidia.com>
-Cc:     Josef Oskera <joskera@redhat.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Yishai Hadas <yishaih@nvidia.com>, netdev@vger.kernel.org,
-        linux-rdma@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-hardening@vger.kernel.org
-References: <20230218183842.never.954-kees@kernel.org>
-From:   Tariq Toukan <ttoukan.linux@gmail.com>
-In-Reply-To: <20230218183842.never.954-kees@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230219073318.366189-3-nphamcs@gmail.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Nhat,
+
+Thank you for the patch! Perhaps something to improve:
+
+[auto build test WARNING on 1440f576022887004f719883acb094e7e0dd4944]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Nhat-Pham/workingset-refactor-LRU-refault-to-expose-refault-recency-check/20230219-153500
+base:   1440f576022887004f719883acb094e7e0dd4944
+patch link:    https://lore.kernel.org/r/20230219073318.366189-3-nphamcs%40gmail.com
+patch subject: [PATCH v10 2/3] cachestat: implement cachestat syscall
+config: hexagon-randconfig-r014-20230219 (https://download.01.org/0day-ci/archive/20230219/202302191728.rXGLcydi-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project db89896bbbd2251fff457699635acbbedeead27f)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/d691a3b4a696ab20c9c5fe86c624e9e36814523c
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Nhat-Pham/workingset-refactor-LRU-refault-to-expose-refault-recency-check/20230219-153500
+        git checkout d691a3b4a696ab20c9c5fe86c624e9e36814523c
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash
+
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202302191728.rXGLcydi-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+   In file included from mm/filemap.c:20:
+   In file included from include/linux/kernel_stat.h:9:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/hexagon/include/asm/io.h:334:
+   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __raw_readb(PCI_IOBASE + addr);
+                             ~~~~~~~~~~ ^
+   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
+                                                           ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
+   #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
+                                                     ^
+   In file included from mm/filemap.c:20:
+   In file included from include/linux/kernel_stat.h:9:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/hexagon/include/asm/io.h:334:
+   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+                                                           ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
+   #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
+                                                     ^
+   In file included from mm/filemap.c:20:
+   In file included from include/linux/kernel_stat.h:9:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/hexagon/include/asm/io.h:334:
+   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writeb(value, PCI_IOBASE + addr);
+                               ~~~~~~~~~~ ^
+   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
+                                                         ~~~~~~~~~~ ^
+   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
+                                                         ~~~~~~~~~~ ^
+>> mm/filemap.c:4035:6: warning: no previous prototype for function 'ksys_cachestat' [-Wmissing-prototypes]
+   long ksys_cachestat(unsigned int fd, size_t len, loff_t off,
+        ^
+   mm/filemap.c:4035:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   long ksys_cachestat(unsigned int fd, size_t len, loff_t off,
+   ^
+   static 
+   7 warnings generated.
 
 
-On 18/02/2023 20:38, Kees Cook wrote:
-> The call "skb_copy_from_linear_data(skb, inl + 1, spc)" triggers a FORTIFY
-> memcpy() warning on ppc64 platform:
-> 
-> In function ‘fortify_memcpy_chk’,
->      inlined from ‘skb_copy_from_linear_data’ at ./include/linux/skbuff.h:4029:2,
->      inlined from ‘build_inline_wqe’ at drivers/net/ethernet/mellanox/mlx4/en_tx.c:722:4,
->      inlined from ‘mlx4_en_xmit’ at drivers/net/ethernet/mellanox/mlx4/en_tx.c:1066:3:
-> ./include/linux/fortify-string.h:513:25: error: call to ‘__write_overflow_field’ declared with
-> attribute warning: detected write beyond size of field (1st parameter); maybe use struct_group()?
-> [-Werror=attribute-warning]
->    513 |                         __write_overflow_field(p_size_field, size);
->        |                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> 
-> Same behaviour on x86 you can get if you use "__always_inline" instead of
-> "inline" for skb_copy_from_linear_data() in skbuff.h
-> 
-> The call here copies data into inlined tx destricptor, which has 104
-> bytes (MAX_INLINE) space for data payload. In this case "spc" is known
-> in compile-time but the destination is used with hidden knowledge
-> (real structure of destination is different from that the compiler
-> can see). That cause the fortify warning because compiler can check
-> bounds, but the real bounds are different.  "spc" can't be bigger than
-> 64 bytes (MLX4_INLINE_ALIGN), so the data can always fit into inlined
-> tx descriptor. The fact that "inl" points into inlined tx descriptor is
-> determined earlier in mlx4_en_xmit().
-> 
-> Avoid confusing the compiler with "inl + 1" constructions to get to past
-> the inl header by introducing a flexible array "data" to the struct so
-> that the compiler can see that we are not dealing with an array of inl
-> structs, but rather, arbitrary data following the structure. There are
-> no changes to the structure layout reported by pahole, and the resulting
-> machine code is actually smaller.
-> 
-> Reported-by: Josef Oskera <joskera@redhat.com>
-> Link: https://lore.kernel.org/lkml/20230217094541.2362873-1-joskera@redhat.com
-> Fixes: f68f2ff91512 ("fortify: Detect struct member overflows in memcpy() at compile-time")
-> Cc: Tariq Toukan <tariqt@nvidia.com>
-> Cc: "David S. Miller" <davem@davemloft.net>
-> Cc: Eric Dumazet <edumazet@google.com>
-> Cc: Jakub Kicinski <kuba@kernel.org>
-> Cc: Paolo Abeni <pabeni@redhat.com>
-> Cc: Yishai Hadas <yishaih@nvidia.com>
-> Cc: netdev@vger.kernel.org
-> Cc: linux-rdma@vger.kernel.org
-> Signed-off-by: Kees Cook <keescook@chromium.org>
-> ---
->   drivers/net/ethernet/mellanox/mlx4/en_tx.c | 22 +++++++++++-----------
->   include/linux/mlx4/qp.h                    |  1 +
->   2 files changed, 12 insertions(+), 11 deletions(-)
-> 
+vim +/ksys_cachestat +4035 mm/filemap.c
 
-Just saw your patch now, after commenting on the other thread. :)
+  4033	
+  4034	#ifdef CONFIG_CACHESTAT_SYSCALL
+> 4035	long ksys_cachestat(unsigned int fd, size_t len, loff_t off,
+  4036			struct cachestat __user *cstat, unsigned int flags)
+  4037	{
+  4038		struct fd f = fdget(fd);
+  4039		struct address_space *mapping;
+  4040		struct cachestat cs;
+  4041		pgoff_t first_index = off >> PAGE_SHIFT;
+  4042		pgoff_t last_index =
+  4043			len == 0 ? ULONG_MAX : (off + len - 1) >> PAGE_SHIFT;
+  4044	
+  4045		if (!f.file)
+  4046			return -EBADF;
+  4047	
+  4048		if (off < 0 || flags != 0) {
+  4049			fdput(f);
+  4050			return -EINVAL;
+  4051		}
+  4052	
+  4053		memset(&cs, 0, sizeof(struct cachestat));
+  4054		mapping = f.file->f_mapping;
+  4055		filemap_cachestat(mapping, first_index, last_index, &cs);
+  4056		fdput(f);
+  4057	
+  4058		if (copy_to_user(cstat, &cs, sizeof(struct cachestat)))
+  4059			return -EFAULT;
+  4060	
+  4061		return 0;
+  4062	}
+  4063	
 
-So you choose not to fix similar usages in RDMA driver 
-drivers/infiniband/hw/mlx4/qp.c, like:
-
-3204         spc = MLX4_INLINE_ALIGN -
-3205                 ((unsigned long) (inl + 1) & (MLX4_INLINE_ALIGN - 1));
-3206         if (header_size <= spc) {
-3207                 inl->byte_count = cpu_to_be32(1 << 31 | header_size);
-3208                 memcpy(inl + 1, sqp->header_buf, header_size);
-3209                 i = 1;
-3210         } else {
-3211                 inl->byte_count = cpu_to_be32(1 << 31 | spc);
-3212                 memcpy(inl + 1, sqp->header_buf, spc);
-3213
-3214                 inl = (void *) (inl + 1) + spc;
-3215                 memcpy(inl + 1, sqp->header_buf + spc, header_size 
-- spc);
-
-This keeps the patch minimal indeed.
-
-Did you repro the issue and test this solution?
-Maybe Josef can also verify it works for him?
-
-> diff --git a/drivers/net/ethernet/mellanox/mlx4/en_tx.c b/drivers/net/ethernet/mellanox/mlx4/en_tx.c
-> index c5758637b7be..2f79378fbf6e 100644
-> --- a/drivers/net/ethernet/mellanox/mlx4/en_tx.c
-> +++ b/drivers/net/ethernet/mellanox/mlx4/en_tx.c
-> @@ -699,32 +699,32 @@ static void build_inline_wqe(struct mlx4_en_tx_desc *tx_desc,
->   			inl->byte_count = cpu_to_be32(1 << 31 | skb->len);
->   		} else {
->   			inl->byte_count = cpu_to_be32(1 << 31 | MIN_PKT_LEN);
-> -			memset(((void *)(inl + 1)) + skb->len, 0,
-> +			memset(inl->data + skb->len, 0,
->   			       MIN_PKT_LEN - skb->len);
->   		}
-> -		skb_copy_from_linear_data(skb, inl + 1, hlen);
-> +		skb_copy_from_linear_data(skb, inl->data, hlen);
->   		if (shinfo->nr_frags)
-> -			memcpy(((void *)(inl + 1)) + hlen, fragptr,
-> +			memcpy(inl->data + hlen, fragptr,
->   			       skb_frag_size(&shinfo->frags[0]));
->   
->   	} else {
->   		inl->byte_count = cpu_to_be32(1 << 31 | spc);
->   		if (hlen <= spc) {
-> -			skb_copy_from_linear_data(skb, inl + 1, hlen);
-> +			skb_copy_from_linear_data(skb, inl->data, hlen);
->   			if (hlen < spc) {
-> -				memcpy(((void *)(inl + 1)) + hlen,
-> +				memcpy(inl->data + hlen,
->   				       fragptr, spc - hlen);
->   				fragptr +=  spc - hlen;
->   			}
-> -			inl = (void *) (inl + 1) + spc;
-> -			memcpy(((void *)(inl + 1)), fragptr, skb->len - spc);
-> +			inl = (void *)inl->data + spc;
-> +			memcpy(inl->data, fragptr, skb->len - spc);
->   		} else {
-> -			skb_copy_from_linear_data(skb, inl + 1, spc);
-> -			inl = (void *) (inl + 1) + spc;
-> -			skb_copy_from_linear_data_offset(skb, spc, inl + 1,
-> +			skb_copy_from_linear_data(skb, inl->data, spc);
-> +			inl = (void *)inl->data + spc;
-
-No need now for all these (void *) castings.
-
-> +			skb_copy_from_linear_data_offset(skb, spc, inl->data,
->   							 hlen - spc);
->   			if (shinfo->nr_frags)
-> -				memcpy(((void *)(inl + 1)) + hlen - spc,
-> +				memcpy(inl->data + hlen - spc,
->   				       fragptr,
->   				       skb_frag_size(&shinfo->frags[0]));
->   		}
-> diff --git a/include/linux/mlx4/qp.h b/include/linux/mlx4/qp.h
-> index c78b90f2e9a1..b9a7b1319f5d 100644
-> --- a/include/linux/mlx4/qp.h
-> +++ b/include/linux/mlx4/qp.h
-> @@ -446,6 +446,7 @@ enum {
->   
->   struct mlx4_wqe_inline_seg {
->   	__be32			byte_count;
-> +	__u8			data[];
->   };
->   
->   enum mlx4_update_qp_attr {
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
