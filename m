@@ -2,193 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 67B6B69BE4F
-	for <lists+linux-kernel@lfdr.de>; Sun, 19 Feb 2023 03:59:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EACE469BE2F
+	for <lists+linux-kernel@lfdr.de>; Sun, 19 Feb 2023 03:41:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229687AbjBSC66 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 18 Feb 2023 21:58:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54220 "EHLO
+        id S229642AbjBSCla (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 18 Feb 2023 21:41:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42250 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229541AbjBSC64 (ORCPT
+        with ESMTP id S229557AbjBSCl2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 18 Feb 2023 21:58:56 -0500
-Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56B66F77A
-        for <linux-kernel@vger.kernel.org>; Sat, 18 Feb 2023 18:58:55 -0800 (PST)
-Received: by mail-lf1-x12b.google.com with SMTP id f25so81380lfa.5
-        for <linux-kernel@vger.kernel.org>; Sat, 18 Feb 2023 18:58:55 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=joelfernandes.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=VYJq+vBBeNeErQR3SsU+Z5tbRMfJKp6MAmS8Q+mAUrQ=;
-        b=ttBg72UaLFrrgdS9DVmdxUhsO3y8oXSKPE1s0ONUw8+UPPiqWMWnsigR+toge9n9oG
-         nDiD5Xlm/0C0+A9JX25LFO+pSOMsCuiH+hvy/IBKtX12GTkCC0IiO7K32PwOL4clcKpj
-         gdOBIg2XmbkYxINf/mZye4WIYzeOyngCp1GAI=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=VYJq+vBBeNeErQR3SsU+Z5tbRMfJKp6MAmS8Q+mAUrQ=;
-        b=k4eJa1e6j+F3Os+3DNcCqJbXmNNT1aPS69S6JFIAQ4QiGz3c7hblo/19CY4LEhtxEW
-         Tgt3mH+nc0P9hNwj90M+X40pPTJhtlK5kYg59oC1PvvAgJDgJq7VpF4QeUOEZMODo/Sy
-         N9fP4SdjgOE7Q7UM/z7ru4eYgj1bw3oXNh3XT+LCgd0lrUr2EIMVmk5cSIXcG58I5XI5
-         wHRn9qpfcjEyp926xojmAHkdq8H5aKs62bTpuwinULe5lmxyQs6QMxfvi1YXs1YqQPm0
-         ooesOgdswCVovR0brOik9ft87fJTk/TsjNCqPQV3FXOh1kf2K46BaK3yi8FTLf7hSkdi
-         YmXA==
-X-Gm-Message-State: AO0yUKWr9/KdTtKyKT8hun6XrvQr9+Rxp8Ct5J4qlBin3lxiyUEnGllC
-        sojS14u9e5qASzX7iI+4BvUkbg2NiWMUYoaq9ajRsQ==
-X-Google-Smtp-Source: AK7set8A9WSSbHjaC5JpHx5wvGpj22uxo9T/zGND11dnt9Ynf9xDHgqGT+MotDp+eriLenXKPJgIc+hmsHlUxAsQXxs=
-X-Received: by 2002:a19:f60f:0:b0:4db:4604:6328 with SMTP id
- x15-20020a19f60f000000b004db46046328mr287777lfe.11.1676775533567; Sat, 18 Feb
- 2023 18:58:53 -0800 (PST)
+        Sat, 18 Feb 2023 21:41:28 -0500
+Received: from dggsgout12.his.huawei.com (dggsgout12.his.huawei.com [45.249.212.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28E7611EA6;
+        Sat, 18 Feb 2023 18:41:26 -0800 (PST)
+Received: from mail02.huawei.com (unknown [172.30.67.143])
+        by dggsgout12.his.huawei.com (SkyGuard) with ESMTP id 4PK8v40QfRz4f3jHn;
+        Sun, 19 Feb 2023 10:41:20 +0800 (CST)
+Received: from huaweicloud.com (unknown [10.175.124.27])
+        by APP2 (Coremail) with SMTP id Syh0CgBH7utQjPFjPmleDw--.7604S2;
+        Sun, 19 Feb 2023 10:41:22 +0800 (CST)
+From:   Kemeng Shi <shikemeng@huaweicloud.com>
+To:     paolo.valente@linaro.org, axboe@kernel.dk, jack@suse.cz
+Cc:     linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
+        shikemeng@huaweicloud.com
+Subject: [PATCH 00/17] Some bugfix and cleanup patches for bfq
+Date:   Sun, 19 Feb 2023 18:42:52 +0800
+Message-Id: <20230219104309.1511562-1-shikemeng@huaweicloud.com>
+X-Mailer: git-send-email 2.30.0
 MIME-Version: 1.0
-References: <20230204014941.GS2948950@paulmck-ThinkPad-P17-Gen-1>
- <Y95yhJgNq8lMXPdF@rowland.harvard.edu> <20230204222411.GC2948950@paulmck-ThinkPad-P17-Gen-1>
- <Y9+41ctA54pjm/KG@google.com> <Y+FJSzUoGTgReLPB@rowland.harvard.edu>
- <Y+fN2fvUjGDWBYrv@google.com> <Y+f4TYZ9BPlt8y8B@rowland.harvard.edu>
- <CAEXW_YRuTfjc=5OAskTV0Qt_zSJTPP3-01=Y=SypMdPsF_weAQ@mail.gmail.com>
- <Y+hWAksfk4C0M2gB@rowland.harvard.edu> <CAEXW_YQ3fvFDNi9wG5w4Zqkbda8SUByOnM6y6MXQpxT9oQw8xQ@mail.gmail.com>
- <Y/GDzXkJzjxbP6I4@andrea>
-In-Reply-To: <Y/GDzXkJzjxbP6I4@andrea>
-From:   Joel Fernandes <joel@joelfernandes.org>
-Date:   Sat, 18 Feb 2023 21:58:41 -0500
-Message-ID: <CAEXW_YQYJP8khRtK+j=djrY9dGYH3vHw+Ujd8_Zwu7xoLxE_AA@mail.gmail.com>
-Subject: Re: Current LKMM patch disposition
-To:     Andrea Parri <parri.andrea@gmail.com>
-Cc:     Alan Stern <stern@rowland.harvard.edu>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
-        kernel-team@meta.com, mingo@kernel.org, will@kernel.org,
-        peterz@infradead.org, boqun.feng@gmail.com, npiggin@gmail.com,
-        dhowells@redhat.com, j.alglave@ucl.ac.uk, luc.maranget@inria.fr,
-        akiyks@gmail.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: Syh0CgBH7utQjPFjPmleDw--.7604S2
+X-Coremail-Antispam: 1UD129KBjvJXoW7ur1xJF43JryDtF1xZw1xuFg_yoW8Wr4Dpr
+        ySgr1S9r17GrW7XF1ftF4UXFnIq348JF4DJw4agry0qryUAw17ZF1qyr1rGFyIqF92krn2
+        qFyDW398W3WDCFJanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUvj14x267AKxVWUJVW8JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2jI8I6cxK62vIxIIY0VWUZVW8XwA2ocxC64kIII
+        0Yj41l84x0c7CEw4AK67xGY2AK021l84ACjcxK6xIIjxv20xvE14v26F1j6w1UM28EF7xv
+        wVC0I7IYx2IY6xkF7I0E14v26F4j6r4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7
+        xvwVC2z280aVCY1x0267AKxVW0oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40E
+        FcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr
+        0_Gr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcxkI7VAKI48JM4x0x7Aq67IIx4CEVc8v
+        x2IErcIFxwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F4
+        0E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_JF0_Jw1l
+        IxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxV
+        AFwI0_Jr0_Gr1lIxAIcVCF04k26cxKx2IYs7xG6rW3Jr0E3s1lIxAIcVC2z280aVAFwI0_
+        Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVWUJVW8JbIYCTnIWIevJa73UjIFyTuYvjTRCA
+        pnUUUUU
+X-CM-SenderInfo: 5vklyvpphqwq5kxd4v5lfo033gof0z/
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=0.0 required=5.0 tests=BAYES_00,DATE_IN_FUTURE_06_12,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Feb 18, 2023 at 9:05 PM Andrea Parri <parri.andrea@gmail.com> wrote:
->
-> > One additional feedback I wanted to mention, regarding this paragraph
-> > under "WARNING":
-> > ===========
-> > The protections provided by READ_ONCE(), WRITE_ONCE(), and others are
-> > not perfect; and under some circumstances it is possible for the
-> > compiler to undermine the memory model. Here is an example. Suppose
-> > both branches of an "if" statement store the same value to the same
-> > location:
-> > r1 = READ_ONCE(x);
-> > if (r1) {
-> > WRITE_ONCE(y, 2);
-> > ... /* do something */
-> > } else {
-> > WRITE_ONCE(y, 2);
-> > ... /* do something else */
-> > }
-> > ===========
-> >
-> > I tried lots of different compilers with varying degrees of
-> > optimization, in all cases I find that the conditional instruction
-> > always appears in program order before the stores inside the body of
-> > the conditional. So I am not sure if this is really a valid concern on
-> > current compilers, if not - could you provide an example of a compiler
-> > and options that cause it?
->
-> The compiler cannot change the order in which the load and the store
-> appear in the program (these are "volatile accesses"); the concern is
-> that (quoting from the .txt) it "could list the stores out of the
-> conditional", thus effectively destroying the control dependency between
-> the load and the store (the load-store "reordering" could then be
-> performed by the uarch, under certain archs).  For example, compare:
->
-> (for the C snippet)
->
-> void func(int *x, int *y)
-> {
->         int r1 = *(const volatile int *)x;
->
->         if (r1)
->                 *(volatile int *)y = 2;
->         else
->                 *(volatile int *)y = 2;
-> }
->
-> - arm64 gcc 11.3 -O1 gives:
->
-> func:
->         ldr     w0, [x0]
->         cbz     w0, .L2
->         mov     w0, 2
->         str     w0, [x1]
-> .L1:
->         ret
-> .L2:
->         mov     w0, 2
->         str     w0, [x1]
->         b       .L1
->
-> - OTOH, arm64 gcc 11.3 -O2 gives:
->
-> func:
->         ldr     w0, [x0]
->         mov     w0, 2
->         str     w0, [x1]
->         ret
->
-> - similarly, using arm64 clang 14.0.0 -O2,
->
-> func:                                   // @func
->         mov     w8, #2
->         ldr     wzr, [x0]
->         str     w8, [x1]
->         ret
->
-> I saw similar results using riscv, powerpc, x86 gcc & clang.
+Hi, this series contain some patches to improve in-service queue
+preemption, protect max_budget updating race between configuration
+and auto-tuning and so on. More details can be found in respective
+log message. Thanks!
 
-*Sigh*, yeah and even if the conditional logic is not fully stripped
-out as in your example, I still see arm64 perform stores in
-program-order before ever checking the branch condition:
+Kemeng Shi (17):
+  block, bfq: properly mark bfqq remained idle
+  block, bfq: try preemption if bfqq has higher weight and the same
+    priority class
+  block, bfq: only preempt plugged in_service_queue if
+    bfq_better_to_idle say no
+  block, bfq: recover the "service hole" if enough budget is left
+  block, bfq: Update bfqd->max_budget with bfqd->lock held
+  block, bfq: correct bfq_max_budget and bfq_min_budget
+  block, bfq: correct interactive weight-raise check in
+    bfq_set_budget_timeout
+  block, bfq: start service_from_wr accumulating of async queues
+    correctly
+  block, bfq: stop to detect queue as waker queue if it already is now
+  block, bfq: fix typo in comment
+  block, bfq: simpfy computation of bfqd->budgets_assigned
+  block, bfq: define and use soft_rt, in_burst and wr_or_deserves_wr
+    only low_latency is enable
+  block, bfq: remove unnecessary "wr" part of wr_or_deserves_wr
+  block, bfq: remove redundant oom_bfqq check for bfqq from
+    bfq_find_close_cooperator
+  block, bfq: some cleanups for function bfq_pos_tree_add_move
+  block, bfq: remove unnecessary goto tag in __bfq_weights_tree_remove
+  block, bfq: remove unnecessary local variable __bfqq in
+    bfq_setup_merge
 
-int prog(void)
-{
-  int r1 = *(const volatile int *)x;
-  if (r1) {
-    *(volatile int *)y = 1;
-  } else {
-    *(volatile int *)y = 1;
-    *(volatile int *)z = 2;
-  }
-}
+ block/bfq-iosched.c | 176 +++++++++++++++++++++++---------------------
+ block/bfq-wf2q.c    |   2 +-
+ 2 files changed, 95 insertions(+), 83 deletions(-)
 
-becomes with armv8 clang and -Os:
+-- 
+2.30.0
 
-prog:
-  adrp x8, x
-  ldrsw x8, [x8, :lo12:x]
-  adrp x9, y
-  mov w10, #1
-  ldr w8, [x8]
-  ldrsw x9, [x9, :lo12:y]
-  str w10, [x9]
-  cbz w8, .LBB0_2   // LOL
-  ret
-  .LBB0_2:
-  adrp x8, z
-  ldrsw x8, [x8, :lo12:z]
-  mov w9, #2
-  str w9, [x8]
-  ret
-
-Anyway sorry for the noise... I believe I did not have the right set
-of compiler options yesterday..
-
-Thanks!
-
- - Joel
