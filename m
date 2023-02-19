@@ -2,269 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 735A469C1D8
-	for <lists+linux-kernel@lfdr.de>; Sun, 19 Feb 2023 19:23:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 839E969C1DF
+	for <lists+linux-kernel@lfdr.de>; Sun, 19 Feb 2023 19:31:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230440AbjBSSXh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 19 Feb 2023 13:23:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41068 "EHLO
+        id S230256AbjBSSbH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 19 Feb 2023 13:31:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44056 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231229AbjBSSXb (ORCPT
+        with ESMTP id S231248AbjBSSbF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 19 Feb 2023 13:23:31 -0500
-Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D860BEB7C
-        for <linux-kernel@vger.kernel.org>; Sun, 19 Feb 2023 10:23:24 -0800 (PST)
-Received: by mail-lf1-x12c.google.com with SMTP id c2so1265764lfp.6
-        for <linux-kernel@vger.kernel.org>; Sun, 19 Feb 2023 10:23:24 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ragnatech-se.20210112.gappssmtp.com; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=ofJSqx7zRI6EorpfBbQAKk970rJXU8Lshyo67tpjsLQ=;
-        b=xeLeOsLmY3pe81rt3ga3i6n8lIyX45qvBgDtiyY75SxtAK1EKPLEQqXyq1T1gn61Wl
-         SJ+jJyXEslG9XZjq5SVgthjWH+AkiKzov8phzcdx8q8u1wRZD2dSS62mDgcNoDTrJRRD
-         BGXSBGZw4wh0B5bjOFtjGs/lNfSujOK7nRSeBI4eM8qRDyPK0u0ttERgJvfd64NhAQOL
-         +GauQSBtxQusXIDfvDLOsegFBY0WgTEt2z+DzKpl1W3Bv4DRhTSQjKczNAPttxdfVqBM
-         dTEYKt9a7qM1Hh42++i5n3Yf5pFVYUGxLDKZ4ol99hiPHSnPg3ZKrbHR9P3kkfouE6yn
-         kpWQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ofJSqx7zRI6EorpfBbQAKk970rJXU8Lshyo67tpjsLQ=;
-        b=UEECCsxUuGASwlxE+sEcDhPbxIWQWiKEKn7kX/kvHN0jON8yDE5W7e2fxuXkOpvoNb
-         tM7acs6haz04pJlx7LMEZGgj2yZuZYbfn6nTcasfT5RExxlKIfPlT0cV0X79JQ0UPRki
-         HeGv0B5tF0PXi70gqBbnSidq0rqn6DSN83ZHM2tHsnHgmH84jVYMZtrmhF6hQbroZn1f
-         qdslSZaY7oe6Uamp89sQ9XxwuE13P4zKoIGl8cifx9Cm2PNKfUcMNHj2Nn/aTr/xSs1E
-         9IqsNSHSSTfGU+oyxq0HnOjRizgmI/Jkz0GR5x0t8sse7swg4/zYYCGfQgE4jWJZ8YKS
-         nHPg==
-X-Gm-Message-State: AO0yUKXF3oS4aOlHo3wnWzqxbByKI0cXOFmrH8oD4d8EUDBvslq0ojat
-        EWMfgyRB8pnbZYs288B8j7zo/g==
-X-Google-Smtp-Source: AK7set+YZZSclvxF42ryv90+XULHABPVIVIEdoKcZJbE3Ao4Z3FCGIUuBB+mT3TOxDnV55f/X2PI5w==
-X-Received: by 2002:ac2:4c21:0:b0:4dc:4c1d:eec1 with SMTP id u1-20020ac24c21000000b004dc4c1deec1mr483829lfq.46.1676831003077;
-        Sun, 19 Feb 2023 10:23:23 -0800 (PST)
-Received: from localhost (h-46-59-89-207.A463.priv.bahnhof.se. [46.59.89.207])
-        by smtp.gmail.com with ESMTPSA id b26-20020ac2563a000000b004db51852e6csm56694lff.246.2023.02.19.10.23.22
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 19 Feb 2023 10:23:22 -0800 (PST)
-Date:   Sun, 19 Feb 2023 19:23:21 +0100
-From:   Niklas =?utf-8?Q?S=C3=B6derlund?= <niklas.soderlund@ragnatech.se>
-To:     Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc:     rafael@kernel.org, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Zhang Rui <rui.zhang@intel.com>,
-        Len Brown <lenb@kernel.org>,
-        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Samuel Holland <samuel@sholland.org>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Raju Rangoju <rajur@chelsio.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Ido Schimmel <idosch@nvidia.com>,
-        Petr Machata <petrm@nvidia.com>,
-        Gregory Greenman <gregory.greenman@intel.com>,
-        Kalle Valo <kvalo@kernel.org>,
-        Sebastian Reichel <sre@kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
+        Sun, 19 Feb 2023 13:31:05 -0500
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16F6D12060;
+        Sun, 19 Feb 2023 10:31:04 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1676831464; x=1708367464;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=rxO9Sfhn2wj9n4LS9X8ZK7gT0EqU8TJ1InY3k6whKXs=;
+  b=l7WsVR1LayXxMgnukUnWOROd5qoTPucRkmWtvbhPnKA9YY2I4gXj4gd7
+   uZOpJJLSLY8+n++eY7TYQo+eeBK7v1QGcW26Te/uUOCc8l7J34lvZAj19
+   5FCbpxX/SU08CspaLIsTOkfuJP2gWE65j5EJkdTx8QzzvaGk0cnEl2/Sh
+   hhmDeXK7bu4oeE18YB6KWIPYaGZSy/u8UytHIuUDS7Bdi2JzrjEkT2lPM
+   dN3FclftfGAHK6R+lVVVQuUEoPihdOuO8sTjA21wbmVkT+iidCRvoE77/
+   7IP7tyZDLYFKWU62iS0vHhGtzo77n3CnXmEBfKH3Bjiz9ouXaF4oiOB7P
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10626"; a="333634347"
+X-IronPort-AV: E=Sophos;i="5.97,310,1669104000"; 
+   d="scan'208";a="333634347"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Feb 2023 10:31:03 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10626"; a="845107088"
+X-IronPort-AV: E=Sophos;i="5.97,310,1669104000"; 
+   d="scan'208";a="845107088"
+Received: from ye-nuc7i7dnhe.sh.intel.com ([10.239.154.52])
+  by orsmga005.jf.intel.com with ESMTP; 19 Feb 2023 10:30:57 -0800
+From:   Ye Xiang <xiang.ye@intel.com>
+To:     Lee Jones <lee@kernel.org>, Wolfram Sang <wsa@kernel.org>,
+        Tyrone Ting <kfting@nuvoton.com>,
         Mark Brown <broonie@kernel.org>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Amit Kucheria <amitk@kernel.org>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Broadcom internal kernel review list 
-        <bcm-kernel-feedback-list@broadcom.com>,
-        Ray Jui <rjui@broadcom.com>,
-        Scott Branden <sbranden@broadcom.com>,
-        Markus Mayer <mmayer@broadcom.com>,
-        Support Opensource <support.opensource@diasemi.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Thara Gopinath <thara.gopinath@gmail.com>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Bartlomiej Zolnierkiewicz <bzolnier@gmail.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Orson Zhai <orsonzhai@gmail.com>,
-        Baolin Wang <baolin.wang@linux.alibaba.com>,
-        Chunyan Zhang <zhang.lyra@gmail.com>,
-        Vasily Khoruzhick <anarsoul@gmail.com>,
-        Yangtao Li <tiny.windzz@gmail.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Talel Shenhar <talel@amazon.com>,
-        Eduardo Valentin <edubezval@gmail.com>,
-        Keerthy <j-keerthy@ti.com>,
-        Kunihiko Hayashi <hayashi.kunihiko@socionext.com>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Stefan Wahren <stefan.wahren@i2se.com>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        ye xingchen <ye.xingchen@zte.com.cn>,
-        Zheng Yongjun <zhengyongjun3@huawei.com>,
-        Tim Zimmermann <tim@linux4.de>,
-        Yang Li <yang.lee@linux.alibaba.com>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        Ricardo Neri <ricardo.neri-calderon@linux.intel.com>,
-        Jiang Jian <jiangjian@cdjrlc.com>,
-        Daniel Golle <daniel@makrotopia.org>,
-        Balsam CHIHI <bchihi@baylibre.com>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Mikko Perttunen <mperttunen@nvidia.com>,
-        "open list:ACPI THERMAL DRIVER" <linux-acpi@vger.kernel.org>,
-        "open list:LIBATA SUBSYSTEM (Serial and Parallel ATA drivers)" 
-        <linux-ide@vger.kernel.org>,
-        "moderated list:ARM/FREESCALE IMX / MXC ARM ARCHITECTURE" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "open list:HARDWARE MONITORING" <linux-hwmon@vger.kernel.org>,
-        "open list:IIO SUBSYSTEM AND DRIVERS" <linux-iio@vger.kernel.org>,
-        "open list:ARM/Allwinner sunXi SoC support" 
-        <linux-sunxi@lists.linux.dev>,
-        "open list:INPUT (KEYBOARD, MOUSE, JOYSTICK, TOUCHSCREEN)..." 
-        <linux-input@vger.kernel.org>,
-        "open list:CXGB4 ETHERNET DRIVER (CXGB4)" <netdev@vger.kernel.org>,
-        "open list:INTEL WIRELESS WIFI LINK (iwlwifi)" 
-        <linux-wireless@vger.kernel.org>,
-        "moderated list:BROADCOM BCM2711/BCM2835 ARM ARCHITECTURE" 
-        <linux-rpi-kernel@lists.infradead.org>,
-        "open list:ARM/QUALCOMM SUPPORT" <linux-arm-msm@vger.kernel.org>,
-        "open list:RENESAS R-CAR THERMAL DRIVERS" 
-        <linux-renesas-soc@vger.kernel.org>,
-        "open list:ARM/Rockchip SoC support" 
-        <linux-rockchip@lists.infradead.org>,
-        "open list:SAMSUNG THERMAL DRIVER" 
-        <linux-samsung-soc@vger.kernel.org>,
-        "open list:TEGRA ARCHITECTURE SUPPORT" <linux-tegra@vger.kernel.org>,
-        "open list:TI BANDGAP AND THERMAL DRIVER" 
-        <linux-omap@vger.kernel.org>,
-        "moderated list:ARM/Mediatek SoC support" 
-        <linux-mediatek@lists.infradead.org>
-Subject: Re: [PATCH v1 01/17] thermal/core: Add a thermal zone 'devdata'
- accessor
-Message-ID: <Y/JpGT206/0r/jF5@oden.dyn.berto.se>
-References: <20230219143657.241542-1-daniel.lezcano@linaro.org>
- <20230219143657.241542-2-daniel.lezcano@linaro.org>
- <Y/I7KA2Uqqk7ib6L@oden.dyn.berto.se>
- <4d8f1e68-8d2c-b70f-69c7-a1137ac4b05f@linaro.org>
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>, linux-i2c@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-spi@vger.kernel.org,
+        linux-gpio@vger.kernel.org
+Cc:     srinivas.pandruvada@intel.com, heikki.krogerus@linux.intel.com,
+        andriy.shevchenko@linux.intel.com, sakari.ailus@linux.intel.com,
+        zhifeng.wang@intel.com, wentong.wu@intel.com, lixu.zhang@intel.com,
+        Ye Xiang <xiang.ye@intel.com>
+Subject: [PATCH 0/5] Add Intel LJCA device driver
+Date:   Mon, 20 Feb 2023 02:30:54 +0800
+Message-Id: <20230219183059.1029525-1-xiang.ye@intel.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <4d8f1e68-8d2c-b70f-69c7-a1137ac4b05f@linaro.org>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023-02-19 18:07:36 +0100, Daniel Lezcano wrote:
-> On 19/02/2023 16:07, Niklas Söderlund wrote:
-> > Hi Daniel,
-> > 
-> > Thanks for your work.
-> > 
-> > On 2023-02-19 15:36:41 +0100, Daniel Lezcano wrote:
-> > > The thermal zone device structure is exposed to the different drivers
-> > > and obviously they access the internals while that should be
-> > > restricted to the core thermal code.
-> > > 
-> > > In order to self-encapsulate the thermal core code, we need to prevent
-> > > the drivers accessing directly the thermal zone structure and provide
-> > > accessor functions to deal with.
-> > > 
-> > > Provide an accessor to the 'devdata' structure and make use of it in
-> > > the different drivers.
-> > > 
-> > > No functional changes intended.
-> > > 
-> > > Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
-> > > ---
-> > 
-> > ...
-> > 
-> > >   drivers/thermal/rcar_gen3_thermal.c              |  4 ++--
-> > >   drivers/thermal/rcar_thermal.c                   |  3 +--
-> > 
-> > For R-Car,
-> > 
-> > Reviewed-by: Niklas Söderlund <niklas.soderlund+renesas@ragnatech.se>
-> > 
-> > ...
-> > 
-> > 
-> > > diff --git a/include/linux/thermal.h b/include/linux/thermal.h
-> > > index 2bb4bf33f4f3..724b95662da9 100644
-> > > --- a/include/linux/thermal.h
-> > > +++ b/include/linux/thermal.h
-> > > @@ -365,6 +365,8 @@ thermal_zone_device_register_with_trips(const char *, struct thermal_trip *, int
-> > >   					void *, struct thermal_zone_device_ops *,
-> > >   					struct thermal_zone_params *, int, int);
-> > > +void *thermal_zone_device_get_data(struct thermal_zone_device *tzd);
-> > > +
-> > 
-> > bikeshedding:
-> > 
-> > Would it make sens to name this thermal_zone_device_get_priv_data(),
-> > thermal_zone_device_get_priv() or something like that? To make it more
-> > explicitly when reading the driver code this fetches the drivers private
-> > data, and not some data belonging to the zone itself.
-> 
-> In the headers files, there are more occurrences with _name_priv():
-> 
-> # _name_priv()
-> git grep priv include/linux/ | grep "priv(" | grep -v get | wc -l
-> 52
-> 
-> # _name_private()
-> git grep priv include/linux/ | grep "private(" | grep -v get | wc -l
-> 33
-> 
-> # _name_get_private()
-> git grep priv include/linux/ | grep "private(" | grep get | wc -l
-> 12
-> 
-> # _name_get_priv()
-> git grep priv include/linux/ | grep "priv(" | grep get | wc -l
-> 4
-> 
-> 
-> What about thermal_zone_device_priv() ?
+Add driver for Intel La Jolla Cove Adapter (LJCA) device.
+This is a USB-GPIO, USB-I2C and USB-SPI device. We add 4
+drivers to support this device: a USB driver, a GPIO chip
+driver, a I2C controller driver and a SPI controller driver.
 
-Looks good to me.
+Ye Xiang (5):
+  mfd: Add support for Intel LJCA device
+  gpio: Add support for Intel LJCA USB GPIO driver
+  i2c: Add support for Intel LJCA USB I2C driver
+  spi: Add support for Intel LJCA USB SPI driver
+  Documentation: Add ABI doc for attributes of LJCA device
 
-> 
-> 
-> 
-> 
-> 
-> 
-> -- 
-> <http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
-> 
-> Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-> <http://twitter.com/#!/linaroorg> Twitter |
-> <http://www.linaro.org/linaro-blog/> Blog
-> 
+ .../ABI/testing/sysfs-bus-usb-devices-ljca    |  22 +
+ drivers/gpio/Kconfig                          |  10 +
+ drivers/gpio/Makefile                         |   1 +
+ drivers/gpio/gpio-ljca.c                      | 454 ++++++++
+ drivers/i2c/busses/Kconfig                    |  10 +
+ drivers/i2c/busses/Makefile                   |   1 +
+ drivers/i2c/busses/i2c-ljca.c                 | 357 +++++++
+ drivers/mfd/Kconfig                           |  13 +
+ drivers/mfd/Makefile                          |   1 +
+ drivers/mfd/ljca.c                            | 977 ++++++++++++++++++
+ drivers/spi/Kconfig                           |  10 +
+ drivers/spi/Makefile                          |   1 +
+ drivers/spi/spi-ljca.c                        | 291 ++++++
+ include/linux/mfd/ljca.h                      |  95 ++
+ 14 files changed, 2243 insertions(+)
+ create mode 100644 Documentation/ABI/testing/sysfs-bus-usb-devices-ljca
+ create mode 100644 drivers/gpio/gpio-ljca.c
+ create mode 100644 drivers/i2c/busses/i2c-ljca.c
+ create mode 100644 drivers/mfd/ljca.c
+ create mode 100644 drivers/spi/spi-ljca.c
+ create mode 100644 include/linux/mfd/ljca.h
 
 -- 
-Kind Regards,
-Niklas Söderlund
+2.34.1
+
