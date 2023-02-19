@@ -2,53 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 739AE69C273
-	for <lists+linux-kernel@lfdr.de>; Sun, 19 Feb 2023 21:42:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3ECD869C278
+	for <lists+linux-kernel@lfdr.de>; Sun, 19 Feb 2023 21:44:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231476AbjBSUmD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 19 Feb 2023 15:42:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42104 "EHLO
+        id S231346AbjBSUoC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 19 Feb 2023 15:44:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43784 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231252AbjBSUl7 (ORCPT
+        with ESMTP id S231156AbjBSUoA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 19 Feb 2023 15:41:59 -0500
-Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5071818B1B
-        for <linux-kernel@vger.kernel.org>; Sun, 19 Feb 2023 12:41:57 -0800 (PST)
-Received: by mail-pj1-x102c.google.com with SMTP id l4-20020a17090a49c400b002341fadc370so1179943pjm.1
-        for <linux-kernel@vger.kernel.org>; Sun, 19 Feb 2023 12:41:57 -0800 (PST)
+        Sun, 19 Feb 2023 15:44:00 -0500
+Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57E1014489
+        for <linux-kernel@vger.kernel.org>; Sun, 19 Feb 2023 12:43:58 -0800 (PST)
+Received: by mail-pl1-x62c.google.com with SMTP id l15so389208pls.1
+        for <linux-kernel@vger.kernel.org>; Sun, 19 Feb 2023 12:43:58 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=in-reply-to:content-disposition:mime-version:references:subject:cc
          :to:from:date:message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=+n51xriYqbsbmvYxxt4ftJ/ywsWPB5yxY3XzOVKdQok=;
-        b=HRzIL01EiKj/B1V4WeH7nE3SXQQTw+bANhZZ8/P4v4m9JiU3rQDUDjq7P6TKtP1rny
-         vCDVBdBy2yNcsh7+DwfKoYd/3bLIxn7mf2cOxU2YAI1Df8480mfwgGzhWANf1AJ1vmBE
-         iifkkTIsXn3XmVPq4cxEpzRJEyv/l4CEuJZOk=
+        bh=fKpHzd6Tbyr33yS2bO12JJwJSKx89ozdMUK74ZvMWQY=;
+        b=lyB+LBtwPWQHHdKAlNRydMkf2elDFztWlBg6fmvpqXPnZh65qZQww0NMO+8xbYqZB7
+         U9nfNbftnOH17cvV3hB7fmXC1rwq6ayNMO0P2Oq/eSedQ5vAmiJMfXKM02tjgGZ1jGsy
+         tWqFbd/xVeuocI///kXq5zK9U+wa6hiXFpVGk=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:subject:cc
          :to:from:date:message-id:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=+n51xriYqbsbmvYxxt4ftJ/ywsWPB5yxY3XzOVKdQok=;
-        b=z0Q4HkyKpk2RvquSrY2WNvIoRKUyLDSwysDbJ8UzK5bI7eRtRymNoKICWpv0L4v23l
-         mJwMvgIP22HJ6pVqCnOT1FzzZVTtk+BSSi7Squ6EgE2fBGrQ79uqF/tfqm16YFzurG2c
-         RpdLVkRtm/CWmjxTez6GQjoVITKRMoaYpfVnl2cA9Pdasww8u0PjpaVfIVXj0ADllJOJ
-         BoASBH5HHJsLEf+IKj2w87kDmCk1YLFCsM+kUSnd0YRZFr5dvafkvgg0G6QaAOv+oYFi
-         gqQ76DBAggv5uJUi5QcBITo8M7q3lIaWk77jJE+9+pQYo6a69sz/rxq0QDidsdiu88JE
-         7IhA==
-X-Gm-Message-State: AO0yUKX85JNlzv8ZJoGGFUkW5lBvWx5v1WWBYByOkP+bbA1o7DG9bxa4
-        Gucjq44rXPEKEOZbuNhChXCpyg==
-X-Google-Smtp-Source: AK7set/hmfWCZDm8xxBH1RGSdTrSPtAkyiRqs8cvWgzZE55+0av+de2ucJ0TWqIBTxeOu8W9SRaPTg==
-X-Received: by 2002:a17:902:d502:b0:196:8292:e879 with SMTP id b2-20020a170902d50200b001968292e879mr3763331plg.1.1676839316745;
-        Sun, 19 Feb 2023 12:41:56 -0800 (PST)
+        bh=fKpHzd6Tbyr33yS2bO12JJwJSKx89ozdMUK74ZvMWQY=;
+        b=yU+qaADdD+cBOKnQmzV3rnbi2SSoXlkvT3yfBs8EIWpUR366cBKjO++0tdtmzRYRYe
+         LNaQhJPSGXJJaA8pw/5asyBhfkpu0fImF2HtLW7rjOxqxpZoPpf93D6TrneVm8YnjP7w
+         szAtk7q/5WCFprYgofGXQek78NiPLcbh8j48DTV9/P/LTBzgqOu2kdK1kt4uMuYGmniL
+         Bj7KkE1UBnJTrwJmQSR/Ca0IzaHDbPay+4JyPuv8Ji5e+7HBemlRJcLqt9PBodJ5b7cB
+         dyCuuozb5xOGezutIKa66OYjPrNnnJWlxliMy0or9DZmmf+RnWn28egK94YRb30dhxpg
+         jwwg==
+X-Gm-Message-State: AO0yUKWA9aYQ1d3XKRjyTHCEuH35TtUrxopsy4oB5kWOdkLltBNK+FjK
+        PRFfHe8m8zcUgmUHmEKXDuikvA==
+X-Google-Smtp-Source: AK7set+kcWCM2o49kDDpOvmw8Xuw/R9fB8lqTkZ5n1j58QZPck4H7MjP6asqe7McnmMIWyDzXFGOcw==
+X-Received: by 2002:a17:903:2305:b0:19a:a4fc:7f80 with SMTP id d5-20020a170903230500b0019aa4fc7f80mr1247862plh.26.1676839437793;
+        Sun, 19 Feb 2023 12:43:57 -0800 (PST)
 Received: from www.outflux.net (198-0-35-241-static.hfc.comcastbusiness.net. [198.0.35.241])
-        by smtp.gmail.com with ESMTPSA id a8-20020a1709027e4800b0019a8597788csm829072pln.0.2023.02.19.12.41.56
+        by smtp.gmail.com with ESMTPSA id k3-20020a170902e90300b0019a837be977sm6312881pld.271.2023.02.19.12.43.57
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 19 Feb 2023 12:41:56 -0800 (PST)
-Message-ID: <63f28994.170a0220.e86dc.1134@mx.google.com>
-X-Google-Original-Message-ID: <202302191241.@keescook>
-Date:   Sun, 19 Feb 2023 12:41:55 -0800
+        Sun, 19 Feb 2023 12:43:57 -0800 (PST)
+Message-ID: <63f28a0d.170a0220.21bf7.b03c@mx.google.com>
+X-Google-Original-Message-ID: <202302191243.@keescook>
+Date:   Sun, 19 Feb 2023 12:43:56 -0800
 From:   Kees Cook <keescook@chromium.org>
 To:     Rick Edgecombe <rick.p.edgecombe@intel.com>
 Cc:     x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
@@ -78,13 +78,13 @@ Cc:     x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
         dethoma@microsoft.com, akpm@linux-foundation.org,
         Andrew.Cooper3@citrix.com, christina.schimpe@intel.com,
         david@redhat.com, debug@rivosinc.com
-Subject: Re: [PATCH v6 20/41] x86/mm: Teach pte_mkwrite() about stack memory
+Subject: Re: [PATCH v6 25/41] x86/mm: Introduce MAP_ABOVE4G
 References: <20230218211433.26859-1-rick.p.edgecombe@intel.com>
- <20230218211433.26859-21-rick.p.edgecombe@intel.com>
+ <20230218211433.26859-26-rick.p.edgecombe@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230218211433.26859-21-rick.p.edgecombe@intel.com>
+In-Reply-To: <20230218211433.26859-26-rick.p.edgecombe@intel.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
@@ -95,27 +95,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Feb 18, 2023 at 01:14:12PM -0800, Rick Edgecombe wrote:
-> If a VMA has the VM_SHADOW_STACK flag, it is shadow stack memory. So
-> when it is made writable with pte_mkwrite(), it should create shadow
-> stack memory, not conventionally writable memory. Now that pte_mkwrite()
-> takes a VMA, and places where shadow stack memory might be created pass
-> one, pte_mkwrite() can know when it should do this.
+On Sat, Feb 18, 2023 at 01:14:17PM -0800, Rick Edgecombe wrote:
+> The x86 Control-flow Enforcement Technology (CET) feature includes a new
+> type of memory called shadow stack. This shadow stack memory has some
+> unusual properties, which require some core mm changes to function
+> properly.
 > 
-> So make pte_mkwrite() create shadow stack memory when the VMA has the
-> VM_SHADOW_STACK flag. Do the same thing for pmd_mkwrite().
+> One of the properties is that the shadow stack pointer (SSP), which is a
+> CPU register that points to the shadow stack like the stack pointer points
+> to the stack, can't be pointing outside of the 32 bit address space when
+> the CPU is executing in 32 bit mode. It is desirable to prevent executing
+> in 32 bit mode when shadow stack is enabled because the kernel can't easily
+> support 32 bit signals.
 > 
-> This requires referencing VM_SHADOW_STACK in these functions, which are
-> currently defined in pgtable.h, however mm.h (where VM_SHADOW_STACK is
-> located) can't be pulled in without causing problems for files that
-> reference pgtable.h. So also move pte/pmd_mkwrite() into pgtable.c, where
-> they can safely reference VM_SHADOW_STACK.
+> On x86 it is possible to transition to 32 bit mode without any special
+> interaction with the kernel, by doing a "far call" to a 32 bit segment.
+> So the shadow stack implementation can use this address space behavior
+> as a feature, by enforcing that shadow stack memory is always crated
+> outside of the 32 bit address space. This way userspace will trigger a
+> general protection fault which will in turn trigger a segfault if it
+> tries to transition to 32 bit mode with shadow stack enabled.
 > 
-> Tested-by: Pengfei Xu <pengfei.xu@intel.com>
-> Signed-off-by: Rick Edgecombe <rick.p.edgecombe@intel.com>
+> This provides a clean error generating border for the user if they try
+> attempt to do 32 bit mode shadow stack, rather than leave the kernel in a
+> half working state for userspace to be surprised by.
+> 
+> So to allow future shadow stack enabling patches to map shadow stacks
+> out of the 32 bit address space, introduce MAP_ABOVE4G. The behavior
+> is pretty much like MAP_32BIT, except that it has the opposite address
+> range. The are a few differences though.
+> 
+> If both MAP_32BIT and MAP_ABOVE4G are provided, the kernel will use the
+> MAP_ABOVE4G behavior. Like MAP_32BIT, MAP_ABOVE4G is ignored in a 32 bit
+> syscall.
 
-Is there any realistic performance impact from making these not inline
-now?
+Should the interface refuse to accept both set instead?
 
 Reviewed-by: Kees Cook <keescook@chromium.org>
 
