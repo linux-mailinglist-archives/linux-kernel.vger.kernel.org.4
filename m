@@ -2,109 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A3EE69C1F3
-	for <lists+linux-kernel@lfdr.de>; Sun, 19 Feb 2023 19:32:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 45CD469C1F5
+	for <lists+linux-kernel@lfdr.de>; Sun, 19 Feb 2023 19:38:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231196AbjBSScI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 19 Feb 2023 13:32:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45434 "EHLO
+        id S230527AbjBSSiS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 19 Feb 2023 13:38:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49212 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230457AbjBSScG (ORCPT
+        with ESMTP id S230254AbjBSSiQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 19 Feb 2023 13:32:06 -0500
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B12C7144AA;
-        Sun, 19 Feb 2023 10:31:39 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1676831499; x=1708367499;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=MuDWHktXuMQtl9tyba8PkydXGCwKdCqnQHi2l1LrgwM=;
-  b=Wr8VR3jlpxxDKpGYeoPOKHd4fkhh3LgwGt9UIshndFJrqY/z/Nm1O66B
-   URU6W5g/n62/r51qvYfv7Hb87YJ8eb5IP03kfaY2APuWqQkpHorp/uqi4
-   YvvNkYoWCTWuGgjMJu6BAYK9H/DDItloQz6S33hcijmovvefTB28U6iU+
-   tkeg6ssJs3Bej0utKk8eK1T4YOCZjHXAz4oFV3m8Pr7fnVBQJcTH66eKX
-   R+rCqukPVaVs9DseXNBfydZAiPdy4OtETBZn6SOoJNS6mrJZ+gf8a+Whu
-   2uAOvGz8m9P2fb1SfMtlg6bYYbeZCo7d2Fs6T1wB5HDBknpICyUxFIbXW
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10626"; a="333634482"
-X-IronPort-AV: E=Sophos;i="5.97,310,1669104000"; 
-   d="scan'208";a="333634482"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Feb 2023 10:31:39 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10626"; a="845107206"
-X-IronPort-AV: E=Sophos;i="5.97,310,1669104000"; 
-   d="scan'208";a="845107206"
-Received: from ye-nuc7i7dnhe.sh.intel.com ([10.239.154.52])
-  by orsmga005.jf.intel.com with ESMTP; 19 Feb 2023 10:31:35 -0800
-From:   Ye Xiang <xiang.ye@intel.com>
-To:     Lee Jones <lee@kernel.org>, Wolfram Sang <wsa@kernel.org>,
-        Tyrone Ting <kfting@nuvoton.com>,
-        Mark Brown <broonie@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>, linux-i2c@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-spi@vger.kernel.org,
-        linux-gpio@vger.kernel.org
-Cc:     srinivas.pandruvada@intel.com, heikki.krogerus@linux.intel.com,
-        andriy.shevchenko@linux.intel.com, sakari.ailus@linux.intel.com,
-        zhifeng.wang@intel.com, wentong.wu@intel.com, lixu.zhang@intel.com,
-        Ye Xiang <xiang.ye@intel.com>
-Subject: [PATCH 5/5] Documentation: Add ABI doc for attributes of LJCA device
-Date:   Mon, 20 Feb 2023 02:30:59 +0800
-Message-Id: <20230219183059.1029525-6-xiang.ye@intel.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230219183059.1029525-1-xiang.ye@intel.com>
-References: <20230219183059.1029525-1-xiang.ye@intel.com>
+        Sun, 19 Feb 2023 13:38:16 -0500
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29768BDE6;
+        Sun, 19 Feb 2023 10:38:15 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+        Content-Type:Subject:Cc:From:To:MIME-Version:Date:Message-ID:Sender:Reply-To:
+        Content-ID:Content-Description:In-Reply-To:References;
+        bh=Z4sHEtYwmB+05SPntW4cUksZ5pR/+iUuongj1UotVXU=; b=Oa0DRbSRWD9RCCf8ksPqEk3deS
+        kfGvoifqiN5BsztSgTprF9cv6UTQ+/Xxg4a8OlkBlqAGGJa83vvcuADrL1t6LBdP52oUm1/hguQO6
+        B0XInu1fUnPUgOqpvhOcnV8wb6DFwwxlG+f2YeWJFutbapTZa807Sl+qO+Se8/NCEsVg4Mx/h0DBQ
+        XLrcuGmUiIuX9YHg3NvykhZttbx6hl+4Zb2Cmc2YcPRJsn8p3SbRsnM2udPqOLffpSwjmhrk15FKZ
+        Gb+Dd6M0hvSAjBrbwTlpRTi9C6ghfzDjKr3Eh0DQ3/u604sXDUVfuXDmscW0Pkofoe4BmySy0ESv9
+        RW9eaSkQ==;
+Received: from [2601:1c2:980:9ec0::df2f]
+        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1pToZf-0027ns-UV; Sun, 19 Feb 2023 18:38:12 +0000
+Message-ID: <0ddf5cc8-8f16-ba7e-7587-3fa37b2a82b8@infradead.org>
+Date:   Sun, 19 Feb 2023 10:38:09 -0800
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.2
+Content-Language: en-US
+To:     Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Bjorn Andersson <quic_bjorande@quicinc.com>,
+        Bjorn Andersson <andersson@kernel.org>
+From:   Randy Dunlap <rdunlap@infradead.org>
+Cc:     Sebastian Reichel <sre@kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: build warning in power: supply: Qualcomm PMIC GLINK power supply
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add sysfs attributes Documentation entries for LJCA device
+Hi Bjorn,
 
-Signed-off-by: Ye Xiang <xiang.ye@intel.com>
----
- .../ABI/testing/sysfs-bus-usb-devices-ljca    | 22 +++++++++++++++++++
- 1 file changed, 22 insertions(+)
- create mode 100644 Documentation/ABI/testing/sysfs-bus-usb-devices-ljca
+FYI: (seen in passing, I wasn't looking for this.)
 
-diff --git a/Documentation/ABI/testing/sysfs-bus-usb-devices-ljca b/Documentation/ABI/testing/sysfs-bus-usb-devices-ljca
-new file mode 100644
-index 000000000000..ae270c02b66c
---- /dev/null
-+++ b/Documentation/ABI/testing/sysfs-bus-usb-devices-ljca
-@@ -0,0 +1,22 @@
-+What:		/sys/bus/usb/.../version
-+Date:		July 2023
-+KernelVersion:	6.4
-+Contact:	Ye Xiang <xiang.ye@intel.com>
-+Description:
-+		Provides the current firmware version of LJCA device.
-+		The format is Major.Minor.Patch.Build, where
-+		Major, Minor, Patch, and Build are decimal numbers.
-+		For example: 1.0.0.256
-+
-+What:		/sys/bus/usb/.../cmd
-+Date:		July 2023
-+KernelVersion:	6.4
-+Contact:	Ye Xiang <xiang.ye@intel.com>
-+Description:
-+		Commands supported by LJCA device.
-+		When read, it will return valid commands.
-+		When write with a command, it will execute the command.
-+		Valid commands are [dfu, reset, debug]
-+		dfu:	Force LJCA device to enter DFU mode.
-+		reset:	Trigger soft reset for LJCA device.
-+		debug:	Enable debug logging.
+When doing compile tests on MIPS (32-bit):
+
+In file included from ../arch/mips/include/asm/div64.h:89,
+                 from ../include/linux/math.h:6,
+                 from ../include/linux/math64.h:6,
+                 from ../include/linux/time64.h:5,
+                 from ../include/linux/restart_block.h:10,
+                 from ../include/linux/thread_info.h:14,
+                 from ../include/asm-generic/current.h:5,
+                 from ./arch/mips/include/generated/asm/current.h:1,
+                 from ../include/linux/sched.h:12,
+                 from ../include/linux/ratelimit.h:6,
+                 from ../include/linux/dev_printk.h:16,
+                 from ../include/linux/device.h:15,
+                 from ../include/linux/auxiliary_bus.h:11,
+                 from ../drivers/power/supply/qcom_battmgr.c:6:
+../drivers/power/supply/qcom_battmgr.c: In function 'qcom_battmgr_sm8350_callback':
+../include/asm-generic/div64.h:222:35: warning: comparison of distinct pointer types lacks a cast
+  222 |         (void)(((typeof((n)) *)0) == ((uint64_t *)0));  \
+      |                                   ^~
+../drivers/power/supply/qcom_battmgr.c:1130:25: note: in expansion of macro 'do_div'
+ 1130 |                         do_div(battmgr->status.percent, 100);
+      |                         ^~~~~~
+In file included from ../include/linux/dev_printk.h:14:
+../include/asm-generic/div64.h:234:32: warning: right shift count >= width of type [-Wshift-count-overflow]
+  234 |         } else if (likely(((n) >> 32) == 0)) {          \
+      |                                ^~
+../include/linux/compiler.h:77:45: note: in definition of macro 'likely'
+   77 | # define likely(x)      __builtin_expect(!!(x), 1)
+      |                                             ^
+../drivers/power/supply/qcom_battmgr.c:1130:25: note: in expansion of macro 'do_div'
+ 1130 |                         do_div(battmgr->status.percent, 100);
+      |                         ^~~~~~
+
+
+The first argument must be 64-bit. qcom_battmgr_status.percent is 'unsigned int',
+which is not 64-bit (AFAIK; and according to LDD3).
+
 -- 
-2.34.1
-
+~Randy
