@@ -2,131 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7805D69C28B
-	for <lists+linux-kernel@lfdr.de>; Sun, 19 Feb 2023 21:48:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 99D2769C28F
+	for <lists+linux-kernel@lfdr.de>; Sun, 19 Feb 2023 21:54:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231580AbjBSUsh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 19 Feb 2023 15:48:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47312 "EHLO
+        id S231407AbjBSUyN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 19 Feb 2023 15:54:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50194 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231562AbjBSUsg (ORCPT
+        with ESMTP id S231578AbjBSUyL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 19 Feb 2023 15:48:36 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26C26CDE3;
-        Sun, 19 Feb 2023 12:48:32 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8779A60C5F;
-        Sun, 19 Feb 2023 20:48:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A891DC433D2;
-        Sun, 19 Feb 2023 20:48:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1676839711;
-        bh=pPKAZ01/fvm24mHTwEi4mThE8LjTnMIHE3uOq5HgJ2A=;
-        h=Date:From:To:Cc:Subject:From;
-        b=oSlao0JM5OYo6ACCVQAkZY5Q93HpYAmJpHW43ds1Q+OotpwLMAC3C9/0HAr7TFg3j
-         6iIScv4Z4TH0wEmaVQkCJdPjTX6g/FquCqjZVYcGvxDH07+RM8m6LDrUySsLDBPuqi
-         kx6b261+A/6sLtqlXctM6FSJAAIPJJv77aUq42aj0pCr5WDIc1kyWj5lhvOVYLkn0r
-         cUh/UmZQFRoSM6xwvOh9KAflYXuOznidceBSBU+f2ggZiirn5X6fhwfMXGWTtNFT8S
-         6TdKb8FV8xBjDKCf2hVWu6N3Wia/s6Wev2JmhPmVMgbPD47DmxWaULT29NvK4TcFeJ
-         G9byS+5xJ9d0A==
-Date:   Sun, 19 Feb 2023 12:48:29 -0800
-From:   Eric Biggers <ebiggers@kernel.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     fsverity@lists.linux.dev, linux-fsdevel@vger.kernel.org,
-        linux-ext4@vger.kernel.org, linux-f2fs-devel@lists.sourceforge.net,
-        linux-btrfs@vger.kernel.org, linux-fscrypt@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Theodore Ts'o <tytso@mit.edu>
-Subject: [GIT PULL] fsverity updates for 6.3
-Message-ID: <Y/KLHT3zaA0QFhVJ@sol.localdomain>
+        Sun, 19 Feb 2023 15:54:11 -0500
+Received: from mail-il1-x12c.google.com (mail-il1-x12c.google.com [IPv6:2607:f8b0:4864:20::12c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07D321815B;
+        Sun, 19 Feb 2023 12:54:11 -0800 (PST)
+Received: by mail-il1-x12c.google.com with SMTP id m18so416571ild.0;
+        Sun, 19 Feb 2023 12:54:11 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=KYu3XNuTwS0jlSFZX19fhfeoSUZg41Uo8IwgBlc1qCo=;
+        b=pY20O+nYakJEzqa78dbNrx3+5Wv9ARX/dMPHSCLYRLAhdg9UA3EMrKIWCpMVPXnH6C
+         VcO+qcYjw+6caXt+ajoqmam42Otx3BFoAeUUMKrszkLnCzCCi4fioDxpffHvTMZ4eSyd
+         CvCxmq3mzIrJLnqJV1pQFhMipabBkPHYy0M0prrwTYkJq/QCajDRCEnBy6PUF+96fkdd
+         2zwmCHKDS9PuZaNCpeqLbnwCHzWva9ddOJDNNWso7s9Zf/moIaionm2chiShuRmK1Hhb
+         2uYkuZIN4NupMZ2tl5h+NlcTktMKwDOBl9BnYsrvDsJ+MEKYLPQaxPv26qrs2Jvk+zsI
+         j0kA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=KYu3XNuTwS0jlSFZX19fhfeoSUZg41Uo8IwgBlc1qCo=;
+        b=eaZYiY1HS7vBcfS9rzR7CgOCEYq4GbBTW7E0WBzF8kEzDqjYH5FFtGeHXakWRc8lAX
+         STYIjKeHdUbUhm7RylbfkVbaw51lLXrVvk+PK7A701VfrnZPczbuGZFcNvmWY+qvUo51
+         bm6ch1kJPOkvWYmW/5JnozYTp9Rkz/5xKo2332tDdJ6YH6R+76s/SZmmq69rTqhqep5g
+         5/b00eVPc0ChiDTEWyXhBcPXJDtzbT6rWzebB/spq4eiPHrD5kLWAQMairFS5TrFHxNc
+         iVhNbbw2QtDrFHmmbOfqZEd1kY2PnSnv0KKEnv00AW+1+rC3nO/GFzVK4dptN3L/muQk
+         e9YA==
+X-Gm-Message-State: AO0yUKUiYgEcHkPqopjlH4NV2QVUnubMSmgXnlIO8U+uj8SI1yWzwJMc
+        shp+knmezKHTzFhnSBgcVhZZVkrEW4A/Wg==
+X-Google-Smtp-Source: AK7set8zCxo6BcCM+omE1aMry+pa+DhlU9QvQl6qKollNHoBf0LNiqDOQfH1ziKEC5QhS0GCU2QJTw==
+X-Received: by 2002:a92:260a:0:b0:315:7a34:227 with SMTP id n10-20020a92260a000000b003157a340227mr149839ile.32.1676840049940;
+        Sun, 19 Feb 2023 12:54:09 -0800 (PST)
+Received: from localhost.localdomain ([76.71.25.91])
+        by smtp.gmail.com with ESMTPSA id g13-20020a05663811cd00b003a7c47efde0sm3540372jas.11.2023.02.19.12.54.08
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 19 Feb 2023 12:54:09 -0800 (PST)
+From:   Mohammad Mahfooz <mohammadmahfoozpersonal@gmail.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     Mohammad Mahfooz <mohammadmahfoozpersonal@gmail.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
+        Johan Hovold <johan@kernel.org>,
+        Alexander Vorwerk <alexander.vorwerk@stud.uni-goettingen.de>,
+        linux-serial@vger.kernel.org
+Subject: [PATCH] serial: jsm: Use min_t instead of min
+Date:   Sun, 19 Feb 2023 15:53:14 -0500
+Message-Id: <20230219205316.3499-1-mohammadmahfoozpersonal@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following changes since commit 88603b6dc419445847923fcb7fe5080067a30f98:
+Use min_t instead of min to cut down n further if needed.
 
-  Linux 6.2-rc2 (2023-01-01 13:53:16 -0800)
+Signed-off-by: Mohammad Mahfooz <mohammadmahfoozpersonal@gmail.com>
+---
+ drivers/tty/serial/jsm/jsm_neo.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-are available in the Git repository at:
+diff --git a/drivers/tty/serial/jsm/jsm_neo.c b/drivers/tty/serial/jsm/jsm_neo.c
+index 0c78f66276cd..4cce1e423b06 100644
+--- a/drivers/tty/serial/jsm/jsm_neo.c
++++ b/drivers/tty/serial/jsm/jsm_neo.c
+@@ -350,7 +350,7 @@ static void neo_copy_data_from_uart_to_queue(struct jsm_channel *ch)
+ 		 * IBM pSeries platform.
+ 		 * 15 bytes max appears to be the magic number.
+ 		 */
+-		n = min((u32) n, (u32) 12);
++		n = min_t(u32, n, 12);
+ 
+ 		/*
+ 		 * Since we are grabbing the linestatus register, which
+-- 
+2.34.1
 
-  https://git.kernel.org/pub/scm/fs/fsverity/linux.git tags/fsverity-for-linus
-
-for you to fetch changes up to 51e4e3153ebc32d3280d5d17418ae6f1a44f1ec1:
-
-  fscrypt: support decrypting data from large folios (2023-01-28 15:10:12 -0800)
-
-----------------------------------------------------------------
-
-Fix the longstanding implementation limitation that fsverity was only
-supported when the Merkle tree block size, filesystem block size, and
-PAGE_SIZE were all equal.  Specifically, add support for Merkle tree
-block sizes less than PAGE_SIZE, and make ext4 support fsverity on
-filesystems where the filesystem block size is less than PAGE_SIZE.
-
-Effectively, this means that fsverity can now be used on systems with
-non-4K pages, at least on ext4.  These changes have been tested using
-the verity group of xfstests, newly updated to cover the new code paths.
-
-Also update fs/verity/ to support verifying data from large folios.
-There's also a similar patch for fs/crypto/, to support decrypting data
-from large folios, which I'm including in this pull request to avoid a
-merge conflict between the fscrypt and fsverity branches.
-
-There will be a merge conflict in fs/buffer.c with some of the foliation
-work in the mm tree.  Please use the merge resolution from linux-next.
-
-----------------------------------------------------------------
-Eric Biggers (19):
-      fsverity: optimize fsverity_file_open() on non-verity files
-      fsverity: optimize fsverity_prepare_setattr() on non-verity files
-      fsverity: optimize fsverity_cleanup_inode() on non-verity files
-      fsverity: pass pos and size to ->write_merkle_tree_block
-      fsverity: remove debug messages and CONFIG_FS_VERITY_DEBUG
-      fsverity: use unsigned long for level_start
-      fsverity: simplify Merkle tree readahead size calculation
-      fsverity: store log2(digest_size) precomputed
-      fsverity: use EFBIG for file too large to enable verity
-      fsverity: replace fsverity_hash_page() with fsverity_hash_block()
-      fsverity: support verification with tree block size < PAGE_SIZE
-      fsverity: support enabling with tree block size < PAGE_SIZE
-      ext4: simplify ext4_readpage_limit()
-      f2fs: simplify f2fs_readpage_limit()
-      fs/buffer.c: support fsverity in block_read_full_folio()
-      ext4: allow verity with fs block size < PAGE_SIZE
-      fsverity.rst: update git repo URL for fsverity-utils
-      fsverity: support verifying data from large folios
-      fscrypt: support decrypting data from large folios
-
- Documentation/filesystems/fscrypt.rst  |   4 +-
- Documentation/filesystems/fsverity.rst |  96 +++++----
- fs/btrfs/verity.c                      |  19 +-
- fs/buffer.c                            |  72 +++++--
- fs/crypto/bio.c                        |  10 +-
- fs/crypto/crypto.c                     |  28 +--
- fs/ext4/inode.c                        |   6 +-
- fs/ext4/readpage.c                     |   3 +-
- fs/ext4/super.c                        |   5 -
- fs/ext4/verity.c                       |   6 +-
- fs/f2fs/data.c                         |   3 +-
- fs/f2fs/verity.c                       |   6 +-
- fs/verity/Kconfig                      |   8 -
- fs/verity/enable.c                     | 271 ++++++++++++--------------
- fs/verity/fsverity_private.h           |  24 +--
- fs/verity/hash_algs.c                  |  24 ++-
- fs/verity/init.c                       |   1 -
- fs/verity/open.c                       | 163 +++++++++-------
- fs/verity/signature.c                  |   2 -
- fs/verity/verify.c                     | 346 ++++++++++++++++++++++-----------
- include/linux/fscrypt.h                |   9 +-
- include/linux/fsverity.h               |  93 +++++++--
- 22 files changed, 699 insertions(+), 500 deletions(-)
