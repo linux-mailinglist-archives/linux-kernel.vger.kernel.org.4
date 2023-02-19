@@ -2,69 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A02BB69C0DB
-	for <lists+linux-kernel@lfdr.de>; Sun, 19 Feb 2023 15:39:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BFEAB69C0F5
+	for <lists+linux-kernel@lfdr.de>; Sun, 19 Feb 2023 15:40:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230321AbjBSOjc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 19 Feb 2023 09:39:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38412 "EHLO
+        id S230316AbjBSOjn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 19 Feb 2023 09:39:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38380 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230257AbjBSOii (ORCPT
+        with ESMTP id S230267AbjBSOij (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 19 Feb 2023 09:38:38 -0500
-Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 076CD40EF
+        Sun, 19 Feb 2023 09:38:39 -0500
+Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12D6946A5
+        for <linux-kernel@vger.kernel.org>; Sun, 19 Feb 2023 06:38:18 -0800 (PST)
+Received: by mail-wr1-x42f.google.com with SMTP id o18so573654wrw.1
         for <linux-kernel@vger.kernel.org>; Sun, 19 Feb 2023 06:38:17 -0800 (PST)
-Received: by mail-wr1-x430.google.com with SMTP id b11so1186947wrw.5
-        for <linux-kernel@vger.kernel.org>; Sun, 19 Feb 2023 06:38:16 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=xv3bh2zC0J+7vpmzMRFSxk7m0hcCBp2b/iLCrIz7G/o=;
-        b=XC5Wo9srbZi3yY8KorNxezRLSEpXC4giMo2mU6HA4cWHQzmU6Mu/pX2nRlaXvY32rI
-         r262bNFNaJYMMTJWIsgu0+/LztOlolOYgAiazTl5Q//M15SR+cPxWdmBApPItFsDn5gE
-         tfYp69rY5dF1gpHndpWm9vM7TJWEk0tc53FpDiS/NNuEfI5UJtHyXBZCHj8QZkChaMQm
-         6IOtva1EZTEAR2fenKoTKdoA8Vi2IAUnGdVc4Fdho3GzfcCQX2TKOA4dkkXuZvLtDBEl
-         hdovEk8gFtd9x6eUR3Kf37LbjWs25nhk6pjj09W2LDpLUoYa+VCycduqo/4vmzrJHSiN
-         fxoA==
+        bh=hT0OFrc5BzA/EvvKaTBdDeJt/aCTGhUdeg6ktzHv2us=;
+        b=sfwr9FAw99JPs2jgsRVuLndpE8yao9Kl+E/z7U0mtt0pP2wD2IO88tvDM316wqGWhU
+         bOtdbmo6FuZElTFCkVycRnwUmdf4ah20jq0eL1sf/3WBmvAFbi2/ShUdbPUPupKNwlH7
+         DtQV0DPhDXMxxhggpMeDdWPhTaWIjd7+vtd/a5ko8mGoFoZ1GDgtQSozSm3RpQyPFhMD
+         DuUmE3eZX4nzx1bu3urwLB8LPnbclLMZNDMlpdEJLtabwYjR2FNOfQGWKOlK4oF5mHWd
+         U46QiQUoGN1d9JMBk+FmgjQY9n9uqv84+h9mvy6RR7cjaYif91wVlSrCddz1YUdlDHX8
+         zVgw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=xv3bh2zC0J+7vpmzMRFSxk7m0hcCBp2b/iLCrIz7G/o=;
-        b=LouE0vXA2w4XrR6u/LKn3k95bH+r056s9hud9QI+zAWjI3zo734M+j6konZaJsKd03
-         wMcPYLO+/g8Y5fzOvyi4kBCw73HJGLskSd+WC2FI9B8P0c6i5CD+dwV/1KmcdnIjRhtl
-         XrP7JLKxoxug0c7+Hu0wCN9R6AHdidKv6v0jadrguA5m6fIUCWkz85f4ikgAfJN9pdoh
-         f5sJnarDxeZWBLn5GecObpX2QH+FfXfoN87I9Uk+GKBA7Wk9YpXfjgSghELfsyYYDaML
-         y6P5chfJehCpCeSPyD4d354NVzasq8MoHvgnced+gUHIcwsrJHe+misGfVQlYtCjIya4
-         wPPA==
-X-Gm-Message-State: AO0yUKXgInDX1J4eqeNitCmvF3HziXtQGmCp7P8w5IUm/XYQBYaJBkWL
-        dHDN9a5MxZkBsFG05wsYI/7msA==
-X-Google-Smtp-Source: AK7set8GWLf4JlCIofR3paOsNVIlWn9C52sC04eD1IEBdiF9wnaw+PcT9kVK6A7ritTiQV5JJm0y7Q==
-X-Received: by 2002:a5d:684f:0:b0:2c5:594b:10d1 with SMTP id o15-20020a5d684f000000b002c5594b10d1mr1454118wrw.23.1676817495488;
-        Sun, 19 Feb 2023 06:38:15 -0800 (PST)
+        bh=hT0OFrc5BzA/EvvKaTBdDeJt/aCTGhUdeg6ktzHv2us=;
+        b=X5axPQytaoNVlFrxyF5T/IYKRa8mIoUzgW4f0Xe+aEYM0vPx7KAaIMtrBhZpQgloRS
+         fm8yJNz46izLN1EOi2VEbxxV1tTEexppJtVkxTpjDt1f9uH7IeVq8tZtIxY999sMMInp
+         atPmMGBdV0bE2dI/JDya7p7/3TNMZdWAFhMvsmVjsjjCSAgh3kHItCvsfh1Klhljxv8E
+         YUVioUTXUlJVyDO8GP1li/UpYjLBHjDs4zj2Wc9gzqGR0oe/fq5zGJPe8ND34XlBoQgr
+         S8YgztShuFGqDltUa7p3yj2Ya7ISPu3nhfZeZgVzIXaZheD+MVsLBi3RfCGecQ+mch1Q
+         YvIA==
+X-Gm-Message-State: AO0yUKWIcjyWlgkpguK/oYNFOvJqQhWfmPXhKSSgDJK9deN1ess4GjWp
+        x29AttaaOPwSGIoBTwVAbwvwHw==
+X-Google-Smtp-Source: AK7set9g+Xv8475Uge2nzGCrlGdlaMCAyOgNN15o6NiNULAV3ygGhrWV1qTQ1r30QtA0D7O9N+C6iQ==
+X-Received: by 2002:a05:6000:1789:b0:2c6:825d:ed13 with SMTP id e9-20020a056000178900b002c6825ded13mr368030wrg.25.1676817496530;
+        Sun, 19 Feb 2023 06:38:16 -0800 (PST)
 Received: from mai.box.freepro.com ([2a05:6e02:1041:c10:6f43:b92:7670:463])
-        by smtp.gmail.com with ESMTPSA id a18-20020adfe5d2000000b002be505ab59asm86176wrn.97.2023.02.19.06.38.14
+        by smtp.gmail.com with ESMTPSA id a18-20020adfe5d2000000b002be505ab59asm86176wrn.97.2023.02.19.06.38.15
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 19 Feb 2023 06:38:15 -0800 (PST)
+        Sun, 19 Feb 2023 06:38:16 -0800 (PST)
 From:   Daniel Lezcano <daniel.lezcano@linaro.org>
 To:     rafael@kernel.org, daniel.lezcano@linaro.org
 Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Kunihiko Hayashi <hayashi.kunihiko@socionext.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        linux-tegra@vger.kernel.org (open list:TEGRA ARCHITECTURE SUPPORT)
-Subject: [PATCH v1 14/17] thermal/tegra: Do not enable the thermal zone, it is already enabled
-Date:   Sun, 19 Feb 2023 15:36:54 +0100
-Message-Id: <20230219143657.241542-15-daniel.lezcano@linaro.org>
+        Peter Kaestle <peter@piie.net>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Mark Gross <markgross@kernel.org>,
+        platform-driver-x86@vger.kernel.org (open list:ACER ASPIRE ONE
+        TEMPERATURE AND FAN DRIVER)
+Subject: [PATCH v1 15/17] thermal/drivers/acerhdf: Make interval setting only at module load time
+Date:   Sun, 19 Feb 2023 15:36:55 +0100
+Message-Id: <20230219143657.241542-16-daniel.lezcano@linaro.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230219143657.241542-1-daniel.lezcano@linaro.org>
 References: <20230219143657.241542-1-daniel.lezcano@linaro.org>
@@ -80,40 +76,64 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The code enables the thermal zone after setting it up. But the thermal
-zone is already enabled by thermal_of_zone_register() function.
+The thermal zone device structure is in the process of being private
+to the thermal framework core code. This driver is directly accessing
+and changing the monitoring polling rate.
+
+After discussing with the maintainers of this driver, having the
+polling interval at module loading time is enough for their purpose.
+
+Change the code to take into account the interval when the module is
+loaded but restrict the permissions so the value can not be changed
+afterwards.
 
 Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
 ---
- drivers/thermal/tegra/tegra30-tsensor.c | 8 +-------
- 1 file changed, 1 insertion(+), 7 deletions(-)
+ drivers/platform/x86/acerhdf.c | 12 +++---------
+ 1 file changed, 3 insertions(+), 9 deletions(-)
 
-diff --git a/drivers/thermal/tegra/tegra30-tsensor.c b/drivers/thermal/tegra/tegra30-tsensor.c
-index 9cf74208673f..5b87b83a00aa 100644
---- a/drivers/thermal/tegra/tegra30-tsensor.c
-+++ b/drivers/thermal/tegra/tegra30-tsensor.c
-@@ -346,7 +346,7 @@ static int tegra_tsensor_enable_hw_channel(const struct tegra_tsensor *ts,
- {
- 	const struct tegra_tsensor_channel *tsc = &ts->ch[id];
- 	struct thermal_zone_device *tzd = tsc->tzd;
--	int err, hot_trip = 0, crit_trip = 0;
-+	int hot_trip = 0, crit_trip = 0;
- 	u32 val;
+diff --git a/drivers/platform/x86/acerhdf.c b/drivers/platform/x86/acerhdf.c
+index 1956469c3457..61f1c3090867 100644
+--- a/drivers/platform/x86/acerhdf.c
++++ b/drivers/platform/x86/acerhdf.c
+@@ -79,7 +79,6 @@ static unsigned int list_supported;
+ static unsigned int fanstate = ACERHDF_FAN_AUTO;
+ static char force_bios[16];
+ static char force_product[16];
+-static unsigned int prev_interval;
+ static struct thermal_zone_device *thz_dev;
+ static struct thermal_cooling_device *cl_dev;
+ static struct platform_device *acerhdf_dev;
+@@ -346,20 +345,15 @@ static void acerhdf_check_param(struct thermal_zone_device *thermal)
+ 	trips[0].temperature = fanon;
+ 	trips[0].hysteresis  = fanon - fanoff;
  
- 	if (!tzd) {
-@@ -401,12 +401,6 @@ static int tegra_tsensor_enable_hw_channel(const struct tegra_tsensor *ts,
- 	val |= FIELD_PREP(TSENSOR_SENSOR0_CONFIG0_INTR_THERMAL_RST_EN, 1);
- 	writel_relaxed(val, tsc->regs + TSENSOR_SENSOR0_CONFIG0);
- 
--	err = thermal_zone_device_enable(tzd);
--	if (err) {
--		dev_err(ts->dev, "ch%u: failed to enable zone: %d\n", id, err);
--		return err;
--	}
+-	if (kernelmode && prev_interval != interval) {
++	if (kernelmode) {
+ 		if (interval > ACERHDF_MAX_INTERVAL) {
+ 			pr_err("interval too high, set to %d\n",
+ 			       ACERHDF_MAX_INTERVAL);
+ 			interval = ACERHDF_MAX_INTERVAL;
+ 		}
++
+ 		if (verbose)
+ 			pr_notice("interval changed to: %d\n", interval);
 -
- 	return 0;
+-		if (thermal)
+-			thermal->polling_delay_jiffies =
+-				round_jiffies(msecs_to_jiffies(interval * 1000));
+-
+-		prev_interval = interval;
+ 	}
  }
  
+@@ -807,5 +801,5 @@ static const struct kernel_param_ops interval_ops = {
+ 	.get = param_get_uint,
+ };
+ 
+-module_param_cb(interval, &interval_ops, &interval, 0600);
++module_param_cb(interval, &interval_ops, &interval, 0000);
+ MODULE_PARM_DESC(interval, "Polling interval of temperature check");
 -- 
 2.34.1
 
