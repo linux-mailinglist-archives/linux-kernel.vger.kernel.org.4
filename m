@@ -2,114 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B1A1A69C2C1
-	for <lists+linux-kernel@lfdr.de>; Sun, 19 Feb 2023 22:38:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 66C8D69C2C6
+	for <lists+linux-kernel@lfdr.de>; Sun, 19 Feb 2023 22:46:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231424AbjBSViG convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Sun, 19 Feb 2023 16:38:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41940 "EHLO
+        id S231453AbjBSVqe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 19 Feb 2023 16:46:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44904 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230428AbjBSViF (ORCPT
+        with ESMTP id S231378AbjBSVqc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 19 Feb 2023 16:38:05 -0500
-Received: from smtprelay06.ispgateway.de (smtprelay06.ispgateway.de [80.67.31.95])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29654B759;
-        Sun, 19 Feb 2023 13:38:04 -0800 (PST)
-Received: from [80.82.223.85] (helo=mail.piie.net)
-        by smtprelay06.ispgateway.de with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-        (Exim 4.94.2)
-        (envelope-from <peter@piie.net>)
-        id 1pTrNi-0005s6-5P; Sun, 19 Feb 2023 22:38:02 +0100
+        Sun, 19 Feb 2023 16:46:32 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 547401817C;
+        Sun, 19 Feb 2023 13:46:31 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id B8BC5B80A4A;
+        Sun, 19 Feb 2023 21:46:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D25B4C433EF;
+        Sun, 19 Feb 2023 21:46:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1676843188;
+        bh=3dp2VRTM0rgvICutBpNvI63cxeHrXXr97AsrP7/6Wkc=;
+        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
+        b=u7etGimJO+tqv0kZha74A5d5ZJ8bxMq2RQYnK+r8nmnEaDp1mS4EaUFX1D9ZtuNQa
+         pRuGfdwnsZDt06ReZjMTWqk0wtD4+a+ThPFxR4FKIZjVHTWHzqKb/flbYw1TpvyVu1
+         Ue8fortwOZHR5OGNYBV/362bQCgzHNAmu1vZsOZAWZeysUrmfiw+rGz+9dhdzDdbM2
+         oLSv8gMA1MgNEByx0i0uM5G6pkJa+a22OMCRd7dXDNp388bF3aAA0aAI6MVkMGGh2F
+         KQTTcG8m3ycxpHYBK9M3bbgpPBHw/HekkkPSiUgGVV72j2qMIi17NWYpMVYPtbEq2/
+         u1sajKhCZcyhQ==
+Message-ID: <06c77bca76cd5679c8cd459480621b7db21f3a7b.camel@kernel.org>
+Subject: Re: [PATCH] tracing: Check for NULL field_name in
+ __synth_event_add_val()
+From:   Tom Zanussi <zanussi@kernel.org>
+To:     Steven Rostedt <rostedt@goodmis.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Linux Trace Kernel <linux-trace-kernel@vger.kernel.org>
+Cc:     Masami Hiramatsu <mhiramat@kernel.org>, ionut_n2001@yahoo.com
+Date:   Sun, 19 Feb 2023 15:46:24 -0600
+In-Reply-To: <20230218105921.12ddb86f@gandalf.local.home>
+References: <20230218105921.12ddb86f@gandalf.local.home>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.44.1-0ubuntu1 
 MIME-Version: 1.0
-Date:   Sun, 19 Feb 2023 21:38:02 +0000
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8BIT
-X-Mailer: RainLoop/1.16.0
-From:   "=?utf-8?B?UGV0ZXIgS8Okc3RsZQ==?=" <peter@piie.net>
-Message-ID: <4302bb253fb733b675dbf18d1c2bcd15@piie.net>
-Subject: Re: [PATCH v1 15/17] thermal/drivers/acerhdf: Make interval
- setting only at module load time
-To:     "Daniel Lezcano" <daniel.lezcano@linaro.org>, rafael@kernel.org
-Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        "Hans de Goede" <hdegoede@redhat.com>,
-        "Mark Gross" <markgross@kernel.org>,
-        platform-driver-x86@vger.kernel.org
-In-Reply-To: <20230219143657.241542-16-daniel.lezcano@linaro.org>
-References: <20230219143657.241542-16-daniel.lezcano@linaro.org>
- <20230219143657.241542-1-daniel.lezcano@linaro.org>
-X-Df-Sender: cGV0ZXJAcGlpZS5uZXQ=
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-19. Februar 2023 15:38, "Daniel Lezcano" <daniel.lezcano@linaro.org> schrieb:
+Hi Steve,
 
-> The thermal zone device structure is in the process of being private
-> to the thermal framework core code. This driver is directly accessing
-> and changing the monitoring polling rate.
-> 
-> After discussing with the maintainers of this driver, having the
-> polling interval at module loading time is enough for their purpose.
-> 
-> Change the code to take into account the interval when the module is
-> loaded but restrict the permissions so the value can not be changed
-> afterwards.
-> 
-> Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
+On Sat, 2023-02-18 at 10:59 -0500, Steven Rostedt wrote:
+> From: "Steven Rostedt (Google)" <rostedt@goodmis.org>
+>=20
+> It is possible that the field_name passed into
+> __synth_event_add_val() can
+> be NULL with the trace_state set to add_name (possibly set from a
+> previous
+> call), in which case it needs to be checked.
 
-Acked-by: Peter Kaestle <peter@piie.net>
+Hmm, I don't think this really is possible, see below...
 
-
+>=20
+> Cc: stable@vger.kernel.org
+> Bugzilla: https://bugzilla.kernel.org/show_bug.cgi?id=3D217053
+> Fixes: 8dcc53ad956d2 ("tracing: Add synth_event_trace() and related
+> functions")
+> Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
 > ---
-> drivers/platform/x86/acerhdf.c | 12 +++---------
-> 1 file changed, 3 insertions(+), 9 deletions(-)
-> 
-> diff --git a/drivers/platform/x86/acerhdf.c b/drivers/platform/x86/acerhdf.c
-> index 1956469c3457..61f1c3090867 100644
-> --- a/drivers/platform/x86/acerhdf.c
-> +++ b/drivers/platform/x86/acerhdf.c
-> @@ -79,7 +79,6 @@ static unsigned int list_supported;
-> static unsigned int fanstate = ACERHDF_FAN_AUTO;
-> static char force_bios[16];
-> static char force_product[16];
-> -static unsigned int prev_interval;
-> static struct thermal_zone_device *thz_dev;
-> static struct thermal_cooling_device *cl_dev;
-> static struct platform_device *acerhdf_dev;
-> @@ -346,20 +345,15 @@ static void acerhdf_check_param(struct thermal_zone_device *thermal)
-> trips[0].temperature = fanon;
-> trips[0].hysteresis = fanon - fanoff;
-> 
-> - if (kernelmode && prev_interval != interval) {
-> + if (kernelmode) {
-> if (interval > ACERHDF_MAX_INTERVAL) {
-> pr_err("interval too high, set to %d\n",
-> ACERHDF_MAX_INTERVAL);
-> interval = ACERHDF_MAX_INTERVAL;
-> }
-> +
-> if (verbose)
-> pr_notice("interval changed to: %d\n", interval);
-> -
-> - if (thermal)
-> - thermal->polling_delay_jiffies =
-> - round_jiffies(msecs_to_jiffies(interval * 1000));
-> -
-> - prev_interval = interval;
-> }
-> }
-> 
-> @@ -807,5 +801,5 @@ static const struct kernel_param_ops interval_ops = {
-> .get = param_get_uint,
-> };
-> 
-> -module_param_cb(interval, &interval_ops, &interval, 0600);
-> +module_param_cb(interval, &interval_ops, &interval, 0000);
-> MODULE_PARM_DESC(interval, "Polling interval of temperature check");
-> -- 
-> 2.34.1
+>=20
+> Tom, can you review this. Is there a legitimate case where you can
+> have a
+> previous call set "add_name" but the next call not require it? This
+> patch
+> assumes that it can't.
+>=20
+
+No, because this code just above it makes sure you can't mix add_name
+with add_next.  Once add_name is set it will return -EINVAL if
+field_name is ever null after that, and add_name will never be changed
+once set:
+
+       /* can't mix add_next_synth_val() with add_synth_val() */
+        if (field_name) {
+                if (trace_state->add_next) {
+                        ret =3D -EINVAL;
+                        goto out;
+                }
+                trace_state->add_name =3D true;
+        } else {
+                if (trace_state->add_name) {
+                        ret =3D -EINVAL;
+                        goto out;
+                }
+                trace_state->add_next =3D true;
+        }
+
+
+> =C2=A0kernel/trace/trace_events_synth.c | 4 ++++
+> =C2=A01 file changed, 4 insertions(+)
+>=20
+> diff --git a/kernel/trace/trace_events_synth.c
+> b/kernel/trace/trace_events_synth.c
+> index 70bddb25d9c0..fa28c1da06d2 100644
+> --- a/kernel/trace/trace_events_synth.c
+> +++ b/kernel/trace/trace_events_synth.c
+> @@ -1982,6 +1982,10 @@ static int __synth_event_add_val(const char
+> *field_name, u64 val,
+> =C2=A0
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0event =3D trace_state->ev=
+ent;
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0if (trace_state->add_name=
+) {
+> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0if (!field_name) {
+> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0ret =3D -=
+EINVAL;
+> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0goto out;
+> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0}
+
+So if add_name is set here, it must also mean that field_name can't be
+null, because of the above.
+
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0for (i =3D 0; i < event->n_fields; i++) {
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0fie=
+ld =3D event->fields[i];
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0if =
+(strcmp(field->name, field_name) =3D=3D 0)
+
+And if field_name can't be null, then I don't see how this strcmp could
+fail due to a null field_name.
+
+So I don't see the need for this patch.  The bugzilla shows a compiler
+warning when using -Wnonnull - could this just be a spurious gcc
+warning?
+
+Tom
