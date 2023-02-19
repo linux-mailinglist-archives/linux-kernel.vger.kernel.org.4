@@ -2,97 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9010E69C018
-	for <lists+linux-kernel@lfdr.de>; Sun, 19 Feb 2023 12:46:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 02B4C69C017
+	for <lists+linux-kernel@lfdr.de>; Sun, 19 Feb 2023 12:46:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229937AbjBSLqa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 19 Feb 2023 06:46:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58518 "EHLO
+        id S229882AbjBSLq1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 19 Feb 2023 06:46:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58516 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229786AbjBSLqZ (ORCPT
+        with ESMTP id S229640AbjBSLqY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 19 Feb 2023 06:46:25 -0500
-Received: from mout-p-101.mailbox.org (mout-p-101.mailbox.org [IPv6:2001:67c:2050:0:465::101])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF9FDCA27
+        Sun, 19 Feb 2023 06:46:24 -0500
+Received: from mail-il1-f200.google.com (mail-il1-f200.google.com [209.85.166.200])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E781ACA0C
         for <linux-kernel@vger.kernel.org>; Sun, 19 Feb 2023 03:46:19 -0800 (PST)
-Received: from smtp2.mailbox.org (smtp2.mailbox.org [IPv6:2001:67c:2050:b231:465::2])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mout-p-101.mailbox.org (Postfix) with ESMTPS id 4PKNzr1FXvz9sTx;
-        Sun, 19 Feb 2023 12:46:16 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oltmanns.dev;
-        s=MBO0001; t=1676807176;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=8s5cyNEZ69bCI7i4TE/gwmJDIVWf0jgsyM+wk8nT1gY=;
-        b=s3wUanb3YMmzXRANmsUL8lF+o9wOEVWd3y/FWEjtg+7HBePxjG3AreJ23l6BxZtNaPsvB6
-        0LBtV2Tyf17CzJcwwrq905k6uBdrBs1MPVipxfe4ITTKtEPe8KdPtdPDLL2ZlKKIvIwqSZ
-        xUXSQeefBi5+YJLoUN6Y8qSRfMNlI8spIaVqrrZ02Uwut5tUrNeSGGlZuYSsY9vLOrvSV8
-        XQuxZ2BtLc8LYzuy1D3MCMBzKh/Og+O206xdb+vqtBENxQub+D6XuQ2TCptObgc61Lu9vX
-        doSpstvqiKbAas+ZPWJLb/CyhaAE2tuVu5naGAJkXlna4z7OzD2Zsut5sL++1A==
-From:   Frank Oltmanns <frank@oltmanns.dev>
-To:     =?UTF-8?q?Guido=20G=C3=BCnther?= <agx@sigxcpu.org>,
-        Purism Kernel Team <kernel@puri.sm>,
-        Ondrej Jirman <megous@megous.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        dri-devel@lists.freedesktop.org (open list:DRM PANEL DRIVERS),
-        linux-kernel@vger.kernel.org (open list)
-Cc:     Frank Oltmanns <frank@oltmanns.dev>
-Subject: [PATCH 1/1] drm/panel: st7703: Fix vertical refresh rate of XBD599
-Date:   Sun, 19 Feb 2023 12:45:53 +0100
-Message-Id: <20230219114553.288057-2-frank@oltmanns.dev>
-In-Reply-To: <20230219114553.288057-1-frank@oltmanns.dev>
-References: <20230219114553.288057-1-frank@oltmanns.dev>
+Received: by mail-il1-f200.google.com with SMTP id f2-20020a926a02000000b003152ca1c48aso101609ilc.21
+        for <linux-kernel@vger.kernel.org>; Sun, 19 Feb 2023 03:46:19 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:from:subject:message-id:in-reply-to:date:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Zlr5WDVYSCJNG2/QD15o1eE035gzrC0DW5830kTwOlc=;
+        b=s2gOMUqCI5yNnb4Uw7AlxjyGhmmR2XuP15MlLZqrYKg+ANptZ0hwDA7Djx43LEb59u
+         KfSVKPj3sQb5UCZQLnXr1lXrA89FdYor/Cii9jTVWjGHRkRlQjf44JUBGhgl9gsXk+EA
+         VANXqtd62bzx1E3J8uRCJQAC7BnsjBJFiWhujQnGm1YXpk7GaPTDoNgX+FVPbV6108tK
+         x/MquswwOVJo5uBB0kSUH2uDozLchTKza9SI/mjvjgHx0wGu6pjzYup8lcMxSpfXFav+
+         l5um+AM4bN1EThzVUvo4qI7jV8T7IlWpQqRsFwjblp0u2U2B/Jt2qHbE8a9QH5YYomN5
+         lm+Q==
+X-Gm-Message-State: AO0yUKWJO2StJR5FUeEwdEsp5P4LD/3vNqurMqYh8VRALjqxtpVeBz2j
+        74kjSlEGXH8kCaz/lhPRap8Ty7N1Jk276S3ByaRrxnQodfEQ
+X-Google-Smtp-Source: AK7set+VFvL84svGepNuAsLXIrFrPy2CbjziZW+K1F36LbEQ5iGHi54c51+3wBsEKq3QsZ1lQU6Xm7ptwrPf/Dq2vtbvXdNVvMgg
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Rspamd-Queue-Id: 4PKNzr1FXvz9sTx
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Received: by 2002:a05:6e02:ee1:b0:315:50a4:c5e5 with SMTP id
+ j1-20020a056e020ee100b0031550a4c5e5mr7196ilk.2.1676807178943; Sun, 19 Feb
+ 2023 03:46:18 -0800 (PST)
+Date:   Sun, 19 Feb 2023 03:46:18 -0800
+In-Reply-To: <20230219114014.2224-1-hdanton@sina.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <00000000000042069905f50c18ee@google.com>
+Subject: Re: [syzbot] [bridge?] [netfilter?] KASAN: vmalloc-out-of-bounds Read
+ in __ebt_unregister_table
+From:   syzbot <syzbot+f61594de72d6705aea03@syzkaller.appspotmail.com>
+To:     hdanton@sina.com, linux-kernel@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Fix the XBD599 panel's slight visual stutter by correcting the pixel
-clock speed so that the panel's 60Hz vertical refresh rate is met.
+Hello,
 
-Set the clock speed using the underlying formula instead of a magic
-number. To have a consistent procedure for both panels, set the JH057N
-panel's clock also as a formula.
----
- drivers/gpu/drm/panel/panel-sitronix-st7703.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+syzbot tried to test the proposed patch but the build/boot failed:
 
-diff --git a/drivers/gpu/drm/panel/panel-sitronix-st7703.c b/drivers/gpu/drm/panel/panel-sitronix-st7703.c
-index 6747ca237ced..cd7d631f7573 100644
---- a/drivers/gpu/drm/panel/panel-sitronix-st7703.c
-+++ b/drivers/gpu/drm/panel/panel-sitronix-st7703.c
-@@ -139,7 +139,7 @@ static const struct drm_display_mode jh057n00900_mode = {
- 	.vsync_start = 1440 + 20,
- 	.vsync_end   = 1440 + 20 + 4,
- 	.vtotal	     = 1440 + 20 + 4 + 12,
--	.clock	     = 75276,
-+	.clock	     = (720 + 90 + 20 + 20) * (1440 + 20 + 4 + 12) * 60 / 1000,
- 	.flags	     = DRM_MODE_FLAG_NHSYNC | DRM_MODE_FLAG_NVSYNC,
- 	.width_mm    = 65,
- 	.height_mm   = 130,
-@@ -324,7 +324,7 @@ static const struct drm_display_mode xbd599_mode = {
- 	.vsync_start = 1440 + 18,
- 	.vsync_end   = 1440 + 18 + 10,
- 	.vtotal	     = 1440 + 18 + 10 + 17,
--	.clock	     = 69000,
-+	.clock	     = (720 + 40 + 40 + 40) * (1440 + 18 + 10 + 17) * 60 / 1000,
- 	.flags	     = DRM_MODE_FLAG_NHSYNC | DRM_MODE_FLAG_NVSYNC,
- 	.width_mm    = 68,
- 	.height_mm   = 136,
--- 
-2.39.1
+net/bridge/netfilter/ebtables.c:1215:28: error: passing argument 1 of 'ebt_verify_pointers' from incompatible pointer type [-Werror=incompatible-pointer-types]
+
+
+Tested on:
+
+commit:         3ac88fa4 Merge tag 'net-6.2-final' of git://git.kernel..
+git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+dashboard link: https://syzkaller.appspot.com/bug?extid=f61594de72d6705aea03
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+patch:          https://syzkaller.appspot.com/x/patch.diff?x=170d73d7480000
 
