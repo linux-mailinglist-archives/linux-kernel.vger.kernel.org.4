@@ -2,105 +2,200 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 329AD69BEE4
-	for <lists+linux-kernel@lfdr.de>; Sun, 19 Feb 2023 08:29:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 59A7C69BEE6
+	for <lists+linux-kernel@lfdr.de>; Sun, 19 Feb 2023 08:33:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229623AbjBSH3U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 19 Feb 2023 02:29:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40150 "EHLO
+        id S229640AbjBSHd3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 19 Feb 2023 02:33:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41180 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229436AbjBSH3S (ORCPT
+        with ESMTP id S229436AbjBSHd1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 19 Feb 2023 02:29:18 -0500
-Received: from mail-io1-f70.google.com (mail-io1-f70.google.com [209.85.166.70])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E58D7D500
-        for <linux-kernel@vger.kernel.org>; Sat, 18 Feb 2023 23:29:17 -0800 (PST)
-Received: by mail-io1-f70.google.com with SMTP id m23-20020a6bea17000000b007076e06ba3dso1139248ioc.20
-        for <linux-kernel@vger.kernel.org>; Sat, 18 Feb 2023 23:29:17 -0800 (PST)
+        Sun, 19 Feb 2023 02:33:27 -0500
+Received: from mail-oa1-x2d.google.com (mail-oa1-x2d.google.com [IPv6:2001:4860:4864:20::2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81FB2FF09;
+        Sat, 18 Feb 2023 23:33:26 -0800 (PST)
+Received: by mail-oa1-x2d.google.com with SMTP id 586e51a60fabf-171d57fcba3so403549fac.11;
+        Sat, 18 Feb 2023 23:33:26 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=YkLqesT26PDlQjhQXn4IlepRpuZlcVw6wZTGqd23uOM=;
+        b=KlBzoXu6leOvXsbKZEE/DdXu2JAdlx5qnLIElF3EN/8yJL7saLK+07QI4MkvwlZ0iI
+         r1wNrUXB/thUpranTfqVv1QaB67ma3+o9NgU7GYn+DG9XkJlJZzKdlQ+8MizoMzT+WmO
+         UYlXde/iRVSx6TaigtZDpvctklvxP32qZbEkEGKz6AL/Am0JkkKc9WSDfdrv31VSGkcn
+         bOSI6uDxAUIvdutQFAQycdGtWc/AL0MCn6u6zttbXdVqG0ZFICsru0+8sNcXchq+Wk89
+         i1zieOJiB6UlQzNvC1p+5bCW0X2CkwQ99Bp+nkYc/P1kOdZ6AY6iDL2aHN/t/zeSETlJ
+         3EjA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:in-reply-to:date:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Uor3y+OIZ1/fm+Dzx9qSE82tPDiXgyuaGAioMEv3br0=;
-        b=Xh8GJutSlkpwr+Lfyvt2KjmQmwG6qpPcN9VdhbQ3enhkgzQKDgjqw29k32S7/hfA4a
-         apmKDEJnQxTtQCfq245C5Q693Zc7rn27JCInAkNxPyBb3FXWcEYK0m9ePnhIHR6tKkua
-         XJnaVriR4jmNIh2qBMOfTkNZh8bVrHzPNIY+3c40OEUb/fBOZHPCbYlNegQuvVZszv0V
-         p4s8BcLbsitxsnRr+spuQ+MYP2cwkaESk2a3wd72c7nRyi4UwZ7f1RmlIdnlc1B9VpnF
-         LvhrYLSTKnLb395ZvdTGln7JbmdGrthCQ6/OPEy+vDmJwngURr4kf5Zid8/ssA8oQvGo
-         BHiw==
-X-Gm-Message-State: AO0yUKWNM+1cCZyhnuGU26odWWW8yUk74zF2KdfMzYE33ZvJcujaxOT9
-        GLlyiD0NGRckLneepajuAOulg8uHh2wPq9YCcsHZd36ZzD0F
-X-Google-Smtp-Source: AK7set8baOwb0GB9XtGCBqZHd/WPV+JrUUQaMix04AlIV/JRNpuD7yv7BCf2RgRdtW8LXuEQ12zbPWf4aNmnuMJF0ilbQABb+f9F
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=YkLqesT26PDlQjhQXn4IlepRpuZlcVw6wZTGqd23uOM=;
+        b=QTYSFDjOxECKhMc080mQbd4oPpKixPv7y2DEJi9G2Y5y7lnT7irO71RtXFhp/jehg3
+         MAJEiXvkKWgY04SkD1iw8UDTPcECQaSNmWAEnJjjLLQOa1YlhZq804hUSKgz/FmjoSiJ
+         +I9o0r7kj1gMyeyF2Wjs62+UBt0lBxader6GAIwZ6Bn7znoUE1vRK5KPWpA/CHEAFHSQ
+         pxcs9W+NGam9Ek2u7+CKRtnzINjCNuMFVYB8rJKiMBJgPbDbkAo4qsFYBSpDKzgxpmC8
+         u8rv49y2xMFAHmtEvz0eRDt2Sd5p7YMHEXPSY6Hg6aIdKbve7rHsckmolWslVRGEgbnX
+         Cq5A==
+X-Gm-Message-State: AO0yUKWyq8phTtPKCFFMKLV2PyjMAmG0OOkFVMOnDvEKbjp6v13+Q/cA
+        agXV8yGvz9bvOMPD6xDJoT8=
+X-Google-Smtp-Source: AK7set/aNuIVedOzWF1NbBuhIitn6w3joEyjQQTw3I5a5T4DIpsqPLy8GASC15+FjFc7lLA1E1E0tA==
+X-Received: by 2002:a05:6870:d287:b0:171:9a7c:c32b with SMTP id d7-20020a056870d28700b001719a7cc32bmr2333227oae.8.1676792005533;
+        Sat, 18 Feb 2023 23:33:25 -0800 (PST)
+Received: from localhost (227.sub-174-197-65.myvzw.com. [174.197.65.227])
+        by smtp.gmail.com with ESMTPSA id t1-20020a05687044c100b00163b85ef1bfsm3434565oai.35.2023.02.18.23.33.23
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 18 Feb 2023 23:33:25 -0800 (PST)
+From:   Nhat Pham <nphamcs@gmail.com>
+To:     akpm@linux-foundation.org
+Cc:     hannes@cmpxchg.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, bfoster@redhat.com,
+        willy@infradead.org, arnd@arndb.de, linux-api@vger.kernel.org,
+        kernel-team@meta.com
+Subject: [PATCH v10 0/3] cachestat: a new syscall for page cache state of files
+Date:   Sat, 18 Feb 2023 23:33:15 -0800
+Message-Id: <20230219073318.366189-1-nphamcs@gmail.com>
+X-Mailer: git-send-email 2.39.1
 MIME-Version: 1.0
-X-Received: by 2002:a05:6638:4184:b0:3a7:e46e:b15 with SMTP id
- az4-20020a056638418400b003a7e46e0b15mr4288347jab.2.1676791757270; Sat, 18 Feb
- 2023 23:29:17 -0800 (PST)
-Date:   Sat, 18 Feb 2023 23:29:17 -0800
-In-Reply-To: <20230219071501.2166-1-hdanton@sina.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000000dfa9605f5088119@google.com>
-Subject: Re: [syzbot] [bridge?] [netfilter?] KASAN: vmalloc-out-of-bounds Read
- in __ebt_unregister_table
-From:   syzbot <syzbot+f61594de72d6705aea03@syzkaller.appspotmail.com>
-To:     hdanton@sina.com, linux-kernel@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+Changelog:
+v10:
+  * Reorder the arguments for archs with alignment requirements.
+    (patch 2) (suggested by Arnd Bergmann)
+v9:
+  * Remove syscall from all the architectures syscall table except x86
+    (patch 2)
+  * API change: handle different cases for offset and add compat syscall.
+    (patch 2) (suggested by Johannes Weiner and Arnd Bergmann)
+v8:
+  * Add syscall to mips syscall tables (detected by kernel test robot)
+    (patch 2)
+  * Add a missing return (suggested by Yu Zhao) (patch 2)
+v7:
+  * Fix and use lru_gen_test_recent (suggested by Brian Foster)
+    (patch 2)
+  * Small formatting and organizational fixes
+v6:
+  * Add a missing fdput() (suggested by Brian Foster) (patch 2)
+  * Replace cstat_size with cstat_version (suggested by Brian Foster)
+    (patch 2)
+  * Add conditional resched to the xas walk. (suggested by Hillf Danton)
+    (patch 2)
+v5:
+  * Separate first patch into its own series.
+    (suggested by Andrew Morton)
+  * Expose filemap_cachestat() to non-syscall usage
+    (patch 2) (suggested by Brian Foster).
+  * Fix some build errors from last version.
+    (patch 2)
+  * Explain eviction and recent eviction in the draft man page and
+    documentation (suggested by Andrew Morton).
+    (patch 2)
+v4:
+  * Refactor cachestat and move it to mm/filemap.c (patch 3)
+    (suggested by Brian Foster)
+  * Remove redundant checks (!folio, access_ok)
+    (patch 3) (suggested by Matthew Wilcox and Al Viro)
+  * Fix a bug in handling multipages folio.
+    (patch 3) (suggested by Matthew Wilcox)
+  * Add a selftest for shmem files, which can be used to test huge
+    pages (patch 4) (suggested by Johannes Weiner)
+v3:
+  * Fix some minor formatting issues and build errors.
+  * Add the new syscall entry to missing architecture syscall tables.
+    (patch 3).
+  * Add flags argument for the syscall. (patch 3).
+  * Clean up the recency refactoring (patch 2) (suggested by Yu Zhao)
+  * Add the new Kconfig (CONFIG_CACHESTAT) to disable the syscall.
+    (patch 3) (suggested by Josh Triplett)
+v2:
+  * len == 0 means query to EOF. len < 0 is invalid.
+    (patch 3) (suggested by Brian Foster)
+  * Make cachestat extensible by adding the `cstat_size` argument in the
+    syscall (patch 3)
 
-syzbot has tested the proposed patch but the reproducer is still triggering an issue:
-KASAN: vmalloc-out-of-bounds Read in __ebt_unregister_table
+There is currently no good way to query the page cache state of large
+file sets and directory trees. There is mincore(), but it scales poorly:
+the kernel writes out a lot of bitmap data that userspace has to
+aggregate, when the user really doesn not care about per-page information
+in that case. The user also needs to mmap and unmap each file as it goes
+along, which can be quite slow as well.
 
-==================================================================
-BUG: KASAN: vmalloc-out-of-bounds in __ebt_unregister_table+0xc00/0xcd0 net/bridge/netfilter/ebtables.c:1175
-Read of size 4 at addr ffffc90003755000 by task kworker/u4:2/41
+This series of patches introduces a new system call, cachestat, that
+summarizes the page cache statistics (number of cached pages, dirty
+pages, pages marked for writeback, evicted pages etc.) of a file, in a
+specified range of bytes. It also include a selftest suite that tests some
+typical usage. Currently, the syscall is only wired in for x86
+architecture.
 
-CPU: 0 PID: 41 Comm: kworker/u4:2 Not tainted 6.2.0-rc8-syzkaller-00083-g3ac88fa4605e-dirty #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/21/2023
-Workqueue: netns cleanup_net
-Call Trace:
- <TASK>
- __dump_stack lib/dump_stack.c:88 [inline]
- dump_stack_lvl+0xd1/0x138 lib/dump_stack.c:106
- print_address_description mm/kasan/report.c:306 [inline]
- print_report+0x15e/0x45d mm/kasan/report.c:417
- kasan_report+0xbf/0x1f0 mm/kasan/report.c:517
- __ebt_unregister_table+0xc00/0xcd0 net/bridge/netfilter/ebtables.c:1175
- ebt_unregister_table+0x35/0x40 net/bridge/netfilter/ebtables.c:1383
- ops_exit_list+0xb0/0x170 net/core/net_namespace.c:169
- cleanup_net+0x4ee/0xb10 net/core/net_namespace.c:613
- process_one_work+0x9bf/0x1710 kernel/workqueue.c:2289
- worker_thread+0x669/0x1090 kernel/workqueue.c:2436
- kthread+0x2e8/0x3a0 kernel/kthread.c:376
- ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:308
- </TASK>
+This interface is inspired by past discussion and concerns with fincore,
+which has a similar design (and as a result, issues) as mincore.
+Relevant links:
 
-Memory state around the buggy address:
- ffffc90003754f00: f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8
- ffffc90003754f80: f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8
->ffffc90003755000: f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8
-                   ^
- ffffc90003755080: f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8
- ffffc90003755100: f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8
-==================================================================
+https://lkml.indiana.edu/hypermail/linux/kernel/1302.1/04207.html
+https://lkml.indiana.edu/hypermail/linux/kernel/1302.1/04209.html
+
+For comparison with mincore, I ran both syscalls on a 2TB sparse file:
+
+Using mincore:
+real    0m37.510s
+user    0m2.934s
+sys     0m34.558s
+
+Using cachestat:
+real    0m0.009s
+user    0m0.000s
+sys     0m0.009s
+
+This series should be applied on top of:
+
+workingset: fix confusion around eviction vs refault container
+https://lkml.org/lkml/2023/1/4/1066
+
+This series consist of 3 patches:
+
+Nhat Pham (3):
+  workingset: refactor LRU refault to expose refault recency check
+  cachestat: implement cachestat syscall
+  selftests: Add selftests for cachestat
+
+ MAINTAINERS                                   |   7 +
+ arch/x86/entry/syscalls/syscall_32.tbl        |   1 +
+ arch/x86/entry/syscalls/syscall_64.tbl        |   1 +
+ include/linux/compat.h                        |   4 +-
+ include/linux/fs.h                            |   3 +
+ include/linux/swap.h                          |   1 +
+ include/linux/syscalls.h                      |   3 +
+ include/uapi/asm-generic/unistd.h             |   5 +-
+ include/uapi/linux/mman.h                     |   9 +
+ init/Kconfig                                  |  10 +
+ kernel/sys_ni.c                               |   1 +
+ mm/filemap.c                                  | 158 +++++++++++
+ mm/workingset.c                               | 142 ++++++----
+ tools/testing/selftests/Makefile              |   1 +
+ tools/testing/selftests/cachestat/.gitignore  |   2 +
+ tools/testing/selftests/cachestat/Makefile    |   8 +
+ .../selftests/cachestat/test_cachestat.c      | 256 ++++++++++++++++++
+ 17 files changed, 564 insertions(+), 48 deletions(-)
+ create mode 100644 tools/testing/selftests/cachestat/.gitignore
+ create mode 100644 tools/testing/selftests/cachestat/Makefile
+ create mode 100644 tools/testing/selftests/cachestat/test_cachestat.c
 
 
-Tested on:
-
-commit:         3ac88fa4 Merge tag 'net-6.2-final' of git://git.kernel..
-git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-console output: https://syzkaller.appspot.com/x/log.txt?x=15693b58c80000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=fe56f7d193926860
-dashboard link: https://syzkaller.appspot.com/bug?extid=f61594de72d6705aea03
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-patch:          https://syzkaller.appspot.com/x/patch.diff?x=11afbd80c80000
-
+base-commit: 1440f576022887004f719883acb094e7e0dd4944
+prerequisite-patch-id: 171a43d333e1b267ce14188a5beaea2f313787fb
+--
+2.39.1
