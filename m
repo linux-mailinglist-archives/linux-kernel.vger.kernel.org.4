@@ -2,98 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 67F1269BE45
-	for <lists+linux-kernel@lfdr.de>; Sun, 19 Feb 2023 03:42:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0567D69BE55
+	for <lists+linux-kernel@lfdr.de>; Sun, 19 Feb 2023 04:10:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229704AbjBSCmG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 18 Feb 2023 21:42:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42326 "EHLO
+        id S229577AbjBSDKR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 18 Feb 2023 22:10:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57634 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229656AbjBSCla (ORCPT
+        with ESMTP id S229441AbjBSDKQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 18 Feb 2023 21:41:30 -0500
-Received: from dggsgout12.his.huawei.com (dggsgout12.his.huawei.com [45.249.212.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14A2611EB2;
-        Sat, 18 Feb 2023 18:41:30 -0800 (PST)
-Received: from mail02.huawei.com (unknown [172.30.67.143])
-        by dggsgout12.his.huawei.com (SkyGuard) with ESMTP id 4PK8v92Pnxz4f3jHn;
-        Sun, 19 Feb 2023 10:41:25 +0800 (CST)
-Received: from huaweicloud.com (unknown [10.175.124.27])
-        by APP2 (Coremail) with SMTP id Syh0CgBH7utQjPFjPmleDw--.7604S19;
-        Sun, 19 Feb 2023 10:41:27 +0800 (CST)
-From:   Kemeng Shi <shikemeng@huaweicloud.com>
-To:     paolo.valente@linaro.org, axboe@kernel.dk, jack@suse.cz
-Cc:     linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
-        shikemeng@huaweicloud.com
-Subject: [PATCH 17/17] block, bfq: remove unnecessary local variable __bfqq in bfq_setup_merge
-Date:   Sun, 19 Feb 2023 18:43:09 +0800
-Message-Id: <20230219104309.1511562-18-shikemeng@huaweicloud.com>
-X-Mailer: git-send-email 2.30.0
-In-Reply-To: <20230219104309.1511562-1-shikemeng@huaweicloud.com>
-References: <20230219104309.1511562-1-shikemeng@huaweicloud.com>
+        Sat, 18 Feb 2023 22:10:16 -0500
+Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 325CA12BD0;
+        Sat, 18 Feb 2023 19:10:14 -0800 (PST)
+Received: by mail-pl1-x62e.google.com with SMTP id t15so1909046plg.6;
+        Sat, 18 Feb 2023 19:10:14 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=AMxey5fgUXmuDtMw1WnDp+7u+hDJ5DMHaMqjjQ1kA6M=;
+        b=ZmmyS3WaSkXr90PdP9egZsWRomrEE3eZrrM7iwNnrdZvXXH0o/EL86j8Q4lZAX+Jka
+         nDPonioMiP/7zpr9sBFlOpr+TgS5YKkMmd0cM8XrsFDqt7Dh0Nr/yZa0g0b3BB8qgFbO
+         q52pyo4wVU+T/CyYOEoz8+2vsChOraLkGrqDsvQusDk4Oshz1QceDIVzV05g6VamPrqC
+         JlNkrOIYS5NpG7r8HPdjZbdRdP1SY75zoxhJxGZrTx7xXHbMTLpNoOHaOHoxX8OXISU8
+         YNaz3d12PSJ9cGUyHjJnh6/sZnlsK9Al1aFmtSUZzSDWbL1QB9JErKYCC0IlZaUGWzYR
+         gLWw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=AMxey5fgUXmuDtMw1WnDp+7u+hDJ5DMHaMqjjQ1kA6M=;
+        b=yTGoFvB689o87kRUOxkqn7vZGsDgFRzNcxBab9RPUe8g+lR4yH8Wgk0lqRJm/6QDkK
+         o5spRLzEkPf6PGghHFF4JCwPCbeW3ayemoR5MWPGKjdAP/SmW9CFeZwlKejhpR5HVJdV
+         hCJw5azcd3Nopeglnyp43WB855w7UTAyXf3CrpukwbZ4VnwNMGCJauNjd/mOdI0yVst3
+         hUgbliQLSzIOhGMQIVVpjRowCJ3Gt2pOzNsE+n9tWVd5gUXxDj1MfAMAB7ddVdZEXIwJ
+         zbm8cmn8ePdgWkUkBDAXcAIjhSZPr+9+sYJ9G1OyoQvOXiMLa8G2D86Lan3uk/Z3P7ra
+         7I9g==
+X-Gm-Message-State: AO0yUKVfitzOoaJdtoO4jBFIkkgNp3suQKFor7dVZidIvAAlBaojRl8E
+        b+qE3nSIs9x1Q3rQQY+q7FE=
+X-Google-Smtp-Source: AK7set+83IH+jFeIwXqmgax6iqqaYNHExJH0dGVhNcBAmDmtzQVupgTRWs8ZyFYMd+lOHH34+ZP5ZA==
+X-Received: by 2002:a17:902:f910:b0:19a:b6b1:ca82 with SMTP id kw16-20020a170902f91000b0019ab6b1ca82mr2837312plb.10.1676776213573;
+        Sat, 18 Feb 2023 19:10:13 -0800 (PST)
+Received: from debian.me (subs28-116-206-12-59.three.co.id. [116.206.12.59])
+        by smtp.gmail.com with ESMTPSA id ji9-20020a170903324900b0019aa5e0aadesm3551331plb.110.2023.02.18.19.10.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 18 Feb 2023 19:10:13 -0800 (PST)
+Received: by debian.me (Postfix, from userid 1000)
+        id 747F6105AB3; Sun, 19 Feb 2023 10:10:10 +0700 (WIB)
+From:   Bagas Sanjaya <bagasdotme@gmail.com>
+To:     Linux BPF <bpf@vger.kernel.org>,
+        Linux Documentation <linux-doc@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Cc:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Alan Maguire <alan.maguire@oracle.com>,
+        Bagas Sanjaya <bagasdotme@gmail.com>,
+        Ross Zwisler <zwisler@google.com>
+Subject: [PATCH] Documentation: bpf: Fix link to BTF doc
+Date:   Sun, 19 Feb 2023 10:09:56 +0700
+Message-Id: <20230219030956.22662-1-bagasdotme@gmail.com>
+X-Mailer: git-send-email 2.39.1
+In-Reply-To: <Y/GRSd/ZfFGnGQ+4@debian.me>
+References: <Y/GRSd/ZfFGnGQ+4@debian.me>
 MIME-Version: 1.0
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1481; i=bagasdotme@gmail.com; h=from:subject; bh=OCe9vfoq2z8zrJCalpAnmb2OUlb2m+yvHWTKun/50mg=; b=owGbwMvMwCX2bWenZ2ig32LG02pJDMkfJzM76/zQ/OvZFc1wt9Hcxekj3xLHsqcXRVteXFCMmPhv 31unjlIWBjEuBlkxRZZJiXxNp3cZiVxoX+sIM4eVCWQIAxenAEzEs5+RYVPJwy1udyS6X2+ddF4tUu 3ivtWZnY/rDfLtgnm/dWZ1vmb4w3t0V+SbX1y/S+qWbj394MRVO4H77yfadm59K9Ek8EhejRUA
+X-Developer-Key: i=bagasdotme@gmail.com; a=openpgp; fpr=701B806FDCA5D3A58FFB8F7D7C276C64A5E44A1D
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: Syh0CgBH7utQjPFjPmleDw--.7604S19
-X-Coremail-Antispam: 1UD129KBjvdXoW7GFykWr4fKFyruF1xXF47Arb_yoWkGrb_tF
-        ykKa4xtr4UGry5Xw1Yyr4xJ3ZxJFW8XF18ZF4qg34DJF17XFn5CasFgrs0yFZ8Ga1IkFy3
-        G397Wwn8GF1kWjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-        9fnUUIcSsGvfJTRUUUbqxFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k26cxKx2IYs7xG
-        6rWj6s0DM7CIcVAFz4kK6r1j6r18M280x2IEY4vEnII2IxkI6r1a6r45M28IrcIa0xkI8V
-        A2jI8067AKxVWUAVCq3wA2048vs2IY020Ec7CjxVAFwI0_Xr0E3s1l8cAvFVAK0II2c7xJ
-        M28CjxkF64kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVW7JVWDJwA2z4x0Y4vE2I
-        x0cI8IcVCY1x0267AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK
-        6I8E87Iv6xkF7I0E14v26rxl6s0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4
-        xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8
-        JwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41lF7I21c0EjII2zVCS5cI20V
-        AGYxC7MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAF
-        wI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUAVWUtwCIc4
-        0Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r4j6ryUMIIF0xvE2Ix0cI8IcVCY1x0267AK
-        xVW8Jr0_Cr1UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVW8JV
-        WxJwCI42IY6I8E87Iv6xkF7I0E14v26r4UJVWxJrUvcSsGvfC2KfnxnUUI43ZEXa7sRiVb
-        yDUUUUU==
-X-CM-SenderInfo: 5vklyvpphqwq5kxd4v5lfo033gof0z/
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=0.0 required=5.0 tests=BAYES_00,DATE_IN_FUTURE_06_12,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-We could traversal bfqq->new_bfqq list without a local variable easily and
-intuitively. So remove unnecessary local variable __bfqq.
+Ross reported broken link to BTF documentation
+(Documentation/bpf/btf.rst) in Documentation/bpf/bpf_devel_QA.rst. The
+link in question is written using external link syntax, which behaves
+badly when the link target is sibling doc.
 
-Signed-off-by: Kemeng Shi <shikemeng@huaweicloud.com>
+Fix the link by replacing external link syntax with simply writing out
+the target doc.
+
+Link: https://lore.kernel.org/linux-doc/Y++09LKx25dtR4Ow@google.com/
+Fixes: 6736aa793c2b5f ("selftests/bpf: Add general instructions for test execution")
+Reported-by: Ross Zwisler <zwisler@google.com>
+Signed-off-by: Bagas Sanjaya <bagasdotme@gmail.com>
 ---
- block/bfq-iosched.c | 6 ++----
- 1 file changed, 2 insertions(+), 4 deletions(-)
+ Documentation/bpf/bpf_devel_QA.rst | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/block/bfq-iosched.c b/block/bfq-iosched.c
-index 2705a24ab146..037f73a25567 100644
---- a/block/bfq-iosched.c
-+++ b/block/bfq-iosched.c
-@@ -2752,7 +2752,6 @@ static struct bfq_queue *
- bfq_setup_merge(struct bfq_queue *bfqq, struct bfq_queue *new_bfqq)
- {
- 	int process_refs, new_process_refs;
--	struct bfq_queue *__bfqq;
+diff --git a/Documentation/bpf/bpf_devel_QA.rst b/Documentation/bpf/bpf_devel_QA.rst
+index 03d4993eda6f05..a4c1634d18955d 100644
+--- a/Documentation/bpf/bpf_devel_QA.rst
++++ b/Documentation/bpf/bpf_devel_QA.rst
+@@ -469,7 +469,7 @@ under test should match the config file fragment in
+ tools/testing/selftests/bpf as closely as possible.
  
- 	/*
- 	 * If there are no process references on the new_bfqq, then it is
-@@ -2764,10 +2763,9 @@ bfq_setup_merge(struct bfq_queue *bfqq, struct bfq_queue *new_bfqq)
- 		return NULL;
- 
- 	/* Avoid a circular list and skip interim queue merges. */
--	while ((__bfqq = new_bfqq->new_bfqq)) {
--		if (__bfqq == bfqq)
-+	while ((new_bfqq = new_bfqq->new_bfqq)) {
-+		if (new_bfqq == bfqq)
- 			return NULL;
--		new_bfqq = __bfqq;
- 	}
- 
- 	process_refs = bfqq_process_refs(bfqq);
+ Finally to ensure support for latest BPF Type Format features -
+-discussed in `Documentation/bpf/btf.rst`_ - pahole version 1.16
++discussed in Documentation/bpf/btf.rst - pahole version 1.16
+ is required for kernels built with CONFIG_DEBUG_INFO_BTF=y.
+ pahole is delivered in the dwarves package or can be built
+ from source at
+
+base-commit: 168de0233586fb06c5c5c56304aa9a928a09b0ba
 -- 
-2.30.0
+An old man doll... just what I always wanted! - Clara
 
