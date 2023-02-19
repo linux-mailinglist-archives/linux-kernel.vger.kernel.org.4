@@ -2,180 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 69B5569C136
-	for <lists+linux-kernel@lfdr.de>; Sun, 19 Feb 2023 16:23:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A82E669C13C
+	for <lists+linux-kernel@lfdr.de>; Sun, 19 Feb 2023 16:30:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230246AbjBSPXF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 19 Feb 2023 10:23:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35766 "EHLO
+        id S230055AbjBSPaM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 19 Feb 2023 10:30:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38088 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230180AbjBSPXE (ORCPT
+        with ESMTP id S229870AbjBSPaK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 19 Feb 2023 10:23:04 -0500
-Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AEAC57DBB;
-        Sun, 19 Feb 2023 07:23:02 -0800 (PST)
-Received: by mail-lf1-x129.google.com with SMTP id be16so1010830lfb.9;
-        Sun, 19 Feb 2023 07:23:02 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=FcOM6cXhM0TQxn7f1e5bkETMl7oG+G75JRDm4X4TtcE=;
-        b=FsqXCtrNZ8seRhzWnVi3WWD7TD7GYRRqx6LV7izcyfuXpuTV/SkAKnZnxxPvuTVqU2
-         GdeY4x4phxkUP92214YoYKZDqdJEr4lkNu1jorttf8s9h1mVmmNMwD3K39K80xH7x/nz
-         DyVsE1XfxvBO4IyW8DdG1AjJamqS8rwLC+PRB306PXhYie8aBZOGXccpd6gz8v8zXmoI
-         93KqKh5yoV41GFOI7z2WQq8gFWw990NcCcASEbXoW8AfdiB4ebSqHnqj55FmtP6g7pL/
-         3xTUFJrevWIhP1WE8njOVMVmx3G8+01wyPuyVUp1FsqnL+zE6Z/q2RLjBFtgQX/CMo87
-         TWrA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=FcOM6cXhM0TQxn7f1e5bkETMl7oG+G75JRDm4X4TtcE=;
-        b=iEIyb+WEmA+HyluIWrxJo60isepPJLRc5IBWj+JjZxT2Qwh5bK6m9SlwWYbti1tXW8
-         GSNAOzCGmEIOG7uo5ZNO32hG+VEAhdRQQF3sJcVc6R3mIAY1isT3xeH8RMcl+nHMHqSP
-         PM2pTM2+6VYqXwhVAZc89MBjDwVOBT20AArB60K0pH/mhgY9SAIT0YOPYU5n6YlqV4OD
-         0pujRtAn0arCCMsUobNQYCsZf6/R5ZYX0dOMmHJklfJzEVf5PMseCm3TB+t1333P8kAm
-         FZeCl/M69INggN0MSQvTgD0ztZ7ddhAszl/vDMBCBt/RH7+SugiwWPunkoh8EH5asTPI
-         XNgg==
-X-Gm-Message-State: AO0yUKXGK0vxb47RkVijp1G7njJBOfYhki/gUtuM6OMEcp2gippBdLok
-        Cth48FPAecMd6K1noKRvBtI=
-X-Google-Smtp-Source: AK7set97Z1+jPF+/tC8pKYu3tBfJ4k/jQ0NrQc6qJF45c3f1OMSpofg1qJs4Ofq8+UaKty3XpaSmxQ==
-X-Received: by 2002:a19:700b:0:b0:4dc:7ff4:83f9 with SMTP id h11-20020a19700b000000b004dc7ff483f9mr87991lfc.16.1676820180888;
-        Sun, 19 Feb 2023 07:23:00 -0800 (PST)
-Received: from mkor.. (89-109-49-189.dynamic.mts-nn.ru. [89.109.49.189])
-        by smtp.gmail.com with ESMTPSA id f25-20020ac25339000000b004d865c781eesm58959lfh.24.2023.02.19.07.23.00
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 19 Feb 2023 07:23:00 -0800 (PST)
-From:   Maxim Korotkov <korotkov.maxim.s@gmail.com>
-To:     Rasesh Mody <rmody@marvell.com>
-Cc:     Maxim Korotkov <korotkov.maxim.s@gmail.com>,
-        GR-Linux-NIC-Dev@marvell.com,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Michael Chan <mchan@broadcom.com>,
-        Vadim Fedorenko <vadim.fedorenko@linux.dev>,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        lvc-project@linuxtesting.org
-Subject: [PATCH v2] bnx2: remove deadcode in bnx2_init_cpus()
-Date:   Sun, 19 Feb 2023 18:22:25 +0300
-Message-Id: <20230219152225.3339-1-korotkov.maxim.s@gmail.com>
-X-Mailer: git-send-email 2.37.2
+        Sun, 19 Feb 2023 10:30:10 -0500
+Received: from mail-4317.proton.ch (mail-4317.proton.ch [185.70.43.17])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3279FF01;
+        Sun, 19 Feb 2023 07:30:07 -0800 (PST)
+Date:   Sun, 19 Feb 2023 15:30:00 +0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=connolly.tech;
+        s=protonmail; t=1676820605; x=1677079805;
+        bh=ucl/nUvzkNkdPDWvkaASa6MWLaX46zxlHKTO/1V4RKU=;
+        h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
+         Feedback-ID:From:To:Cc:Date:Subject:Reply-To:Feedback-ID:
+         Message-ID:BIMI-Selector;
+        b=goDUvpW53D4mdq1g+VaJDFpGQeJybPvKJEcVXlBTW0uERq8xwOrrAToaoWbXx1swG
+         OymG/2k/6PbS0AODQ1dt2FKsEu7k2qOGVOlmlVy9bP0NsztaRpHYJWeySPGycuBlyP
+         lWbPJfTArnYbdY75Mkuli4p24Uwjyjms2HLxa+hE=
+To:     Gergo Koteles <soyer@irl.hu>, Pavel Machek <pavel@ucw.cz>
+From:   Caleb Connolly <caleb@connolly.tech>
+Cc:     Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Jiri Kosina <jikos@kernel.org>,
+        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
+        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org
+Subject: Re: [PATCH v2 3/3] arm64: dts: qcom: sdm845-oneplus: add tri-state-key
+Message-ID: <b2becbcf-fd9c-69b5-b208-17f4d0339684@connolly.tech>
+In-Reply-To: <007239f0-1b13-77b9-0d9c-d68747e20331@irl.hu>
+References: <20230209232556.91554-1-soyer@irl.hu> <Y+fE7gIMD4BDCffy@duo.ucw.cz> <d1959211-bf33-f4fd-01a8-91dcd247aa70@connolly.tech> <007239f0-1b13-77b9-0d9c-d68747e20331@irl.hu>
+Feedback-ID: 10753939:user:proton
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The load_cpu_fw function has no error return code
-and always returns zero. Checking the value returned by
-this function does not make sense.
-As a result, bnx2_init_cpus() will also return only zero
-Therefore, it will be safe to change the type of functions
-to void and remove checking
 
-Found by Security Code and Linux Verification
-Center (linuxtesting.org) with SVACE
 
-Fixes: 57579f7629a3 ("bnx2: Use request_firmware()")
-Signed-off-by: Maxim Korotkov <korotkov.maxim.s@gmail.com>
----
-changes v2:
-- bnx2_init_cpu_fw() and bnx2_init_cpus() are void
-- delete casts to void
-- remove check of bnx2_init_cpus() in bnx2_init_chip()
+On 16/02/2023 03:32, Gergo Koteles wrote:
+> Hi,
+>
+>>
+>>
+>> On 11/02/2023 16:40, Pavel Machek wrote:
+>>> Hi!
+>>>
+>>>> +++ b/arch/arm64/boot/dts/qcom/sdm845-oneplus-common.dtsi
+>>>> @@ -52,6 +52,43 @@ key-vol-up {
+>>>>   =09=09};
+>>>>   =09};
+>>>>
+>>>> +=09tri-state-key {
+>>>> +=09=09compatible =3D "gpio-keys";
+>>>> +=09=09label =3D "Tri-state key";
+>>>> +=09=09pinctrl-names =3D "default";
+>>>> +=09=09pinctrl-0 =3D <&tri_state_key_default>;
+>>>> +=09=09state-top {
+>>>> +=09=09=09label =3D "Tri-state key top";
+>>>
+>>> "top/middle" is not too useful. Do we need the label at all? If so,
+>>> should it say "loud/vibrations only/mute"?
+>>
+>> "mute", "vibrate" and "ring" sound good to me.
+>>
+>
+> OnePlus uses the silent/vibrate/ring, iPhone the silent/ring names.
+> Maybe silent/vibrate/ring are more familiar.
+>
+> Adding labels can document these modes here.
+> Should we also document these in input-event-codes.h?
 
- drivers/net/ethernet/broadcom/bnx2.c | 31 +++++++---------------------
- 1 file changed, 8 insertions(+), 23 deletions(-)
+Maybe it would be best to define macros for these rather than leave them
+as magic numbers
+> #define ABS_SND_PROFILE=09=090x22 /* 0 =3D silent; 1 =3D vibrate; 2 =3D r=
+ing */
 
-diff --git a/drivers/net/ethernet/broadcom/bnx2.c b/drivers/net/ethernet/broadcom/bnx2.c
-index 9f473854b0f4..19b053c879b0 100644
---- a/drivers/net/ethernet/broadcom/bnx2.c
-+++ b/drivers/net/ethernet/broadcom/bnx2.c
-@@ -3829,7 +3829,7 @@ load_rv2p_fw(struct bnx2 *bp, u32 rv2p_proc,
- 	return 0;
- }
- 
--static int
-+static void
- load_cpu_fw(struct bnx2 *bp, const struct cpu_reg *cpu_reg,
- 	    const struct bnx2_mips_fw_file_entry *fw_entry)
- {
-@@ -3897,48 +3897,34 @@ load_cpu_fw(struct bnx2 *bp, const struct cpu_reg *cpu_reg,
- 	val &= ~cpu_reg->mode_value_halt;
- 	bnx2_reg_wr_ind(bp, cpu_reg->state, cpu_reg->state_value_clear);
- 	bnx2_reg_wr_ind(bp, cpu_reg->mode, val);
--
--	return 0;
- }
- 
--static int
-+static void
- bnx2_init_cpus(struct bnx2 *bp)
- {
- 	const struct bnx2_mips_fw_file *mips_fw =
- 		(const struct bnx2_mips_fw_file *) bp->mips_firmware->data;
- 	const struct bnx2_rv2p_fw_file *rv2p_fw =
- 		(const struct bnx2_rv2p_fw_file *) bp->rv2p_firmware->data;
--	int rc;
- 
- 	/* Initialize the RV2P processor. */
- 	load_rv2p_fw(bp, RV2P_PROC1, &rv2p_fw->proc1);
- 	load_rv2p_fw(bp, RV2P_PROC2, &rv2p_fw->proc2);
- 
- 	/* Initialize the RX Processor. */
--	rc = load_cpu_fw(bp, &cpu_reg_rxp, &mips_fw->rxp);
--	if (rc)
--		goto init_cpu_err;
-+	load_cpu_fw(bp, &cpu_reg_rxp, &mips_fw->rxp);
- 
- 	/* Initialize the TX Processor. */
--	rc = load_cpu_fw(bp, &cpu_reg_txp, &mips_fw->txp);
--	if (rc)
--		goto init_cpu_err;
-+	load_cpu_fw(bp, &cpu_reg_txp, &mips_fw->txp);
- 
- 	/* Initialize the TX Patch-up Processor. */
--	rc = load_cpu_fw(bp, &cpu_reg_tpat, &mips_fw->tpat);
--	if (rc)
--		goto init_cpu_err;
-+	load_cpu_fw(bp, &cpu_reg_tpat, &mips_fw->tpat);
- 
- 	/* Initialize the Completion Processor. */
--	rc = load_cpu_fw(bp, &cpu_reg_com, &mips_fw->com);
--	if (rc)
--		goto init_cpu_err;
-+	load_cpu_fw(bp, &cpu_reg_com, &mips_fw->com);
- 
- 	/* Initialize the Command Processor. */
--	rc = load_cpu_fw(bp, &cpu_reg_cp, &mips_fw->cp);
--
--init_cpu_err:
--	return rc;
-+	load_cpu_fw(bp, &cpu_reg_cp, &mips_fw->cp);
- }
- 
- static void
-@@ -4951,8 +4937,7 @@ bnx2_init_chip(struct bnx2 *bp)
- 	} else
- 		bnx2_init_context(bp);
- 
--	if ((rc = bnx2_init_cpus(bp)) != 0)
--		return rc;
-+	bnx2_init_cpus(bp);
- 
- 	bnx2_init_nvram(bp);
- 
--- 
-2.37.2
+#define ABS_SND_PROFILE_SILENT=090
+#define ABS_SND_PROFILE_VIBRATE=091
+#define ABS_SND_PROFILE_RING=092
+
+>
+>
+> Thanks,
+> Gergo
+>
+>> Although it would be nice if users can easily map the physical key
+>> position to the action when viewing the input device or remapping the
+>> key in userspace.
+>>
+>> Do you have any ideas or recommendations on how to do this?
+>>>
+>>> BR,
+>>> =09=09=09=09=09=09=09=09Pavel
+>>
+>> --
+>> Kind Regards,
+>> Caleb
+>>
+>
+
+--
+Kind Regards,
+Caleb
 
