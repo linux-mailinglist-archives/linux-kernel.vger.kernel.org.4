@@ -2,128 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AC07869C210
-	for <lists+linux-kernel@lfdr.de>; Sun, 19 Feb 2023 19:57:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E4B169C212
+	for <lists+linux-kernel@lfdr.de>; Sun, 19 Feb 2023 20:04:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231279AbjBSS5o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 19 Feb 2023 13:57:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58196 "EHLO
+        id S231302AbjBSTEO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 19 Feb 2023 14:04:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32810 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231240AbjBSS5m (ORCPT
+        with ESMTP id S231279AbjBSTEM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 19 Feb 2023 13:57:42 -0500
-Received: from mail-vs1-xe2b.google.com (mail-vs1-xe2b.google.com [IPv6:2607:f8b0:4864:20::e2b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC829C66A
-        for <linux-kernel@vger.kernel.org>; Sun, 19 Feb 2023 10:57:41 -0800 (PST)
-Received: by mail-vs1-xe2b.google.com with SMTP id l12so492908vsm.2
-        for <linux-kernel@vger.kernel.org>; Sun, 19 Feb 2023 10:57:41 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1676833061;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=eWNimodxi9au0r5Bzipoe0I7y/50LsaRmfxwonhr5yw=;
-        b=NItqE9cDn+7xnRSLaeOmVP8n/yaKr2xhsDJffFt9GYe1ZyAas06GVB590Ez+JavOi9
-         UpDaT9J87GXZ2sACBSYTkVwv26pci2+/WtjUibMqLO5px0j1rc4BPOa6feLPYtHu2o9W
-         p1OPomMkN5mnETA1lI2RyikAdPoece/3onm3YQM1jSM5mC3T7nZOJ28R22+ZbV6HNFKm
-         KlMTVoOhCG2xqjUl6PTslJMhs28su9ef3Y54wvXETtxYaulBkNPJ3XEM/FRINlZEWMJy
-         OXdTG3qFN1zb03j5odieu+MKCnQh8Pft34b9+VYsto4Wv8JfbgkS6EUAaR29U4Rf3cDQ
-         FqZQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1676833061;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=eWNimodxi9au0r5Bzipoe0I7y/50LsaRmfxwonhr5yw=;
-        b=jdatLyW3iWnXN2544XxZUzaT3q9Xby3NJ+z4BbqreTzXXOpuewmaPHIzLf2NubTpHQ
-         crUWCnTbbv14OBfoS1MbLoCkSF/0Lv33Q5UIRrP9O/qtRUJvfGAsuiLSk5CH3eNIx8gy
-         cJLYVaQ/UJ9GkBj0OSaYYpeRxS90o9rSBJC7CCI13El5RyWD1ejYruC6ABuFtcgsGENy
-         FYNLzEFjLZV5wOXGO+jfVjPsr9W2/6FaGDKd5hC1BAnML4w2bBpcdGVV0kiKJgwpE8km
-         2oZ6jIfKOeBau1I2w/xP+E/xTRA0ng08qQFOSb0sR0Yhf7vWBk+l3O5HbtzZY9z1FO4j
-         jM9w==
-X-Gm-Message-State: AO0yUKUenRfK6J6sHDgxDB51hkinduf8MPzymllDnV7/wc3m4oHcmhbm
-        3Xajk5i6Ma/5JP9O9cs6H6xxTzm3hhrrnzjRUGRpNg==
-X-Google-Smtp-Source: AK7set/L7c6RqYyk5BpEa7w37MSB+QunqeHeN1u2QszV6pCx6bhn0OYsBQVuDpwhMJuiEVNm3JoaBzn6OgfxxMDYcWY=
-X-Received: by 2002:a05:6102:23d7:b0:411:a761:635f with SMTP id
- x23-20020a05610223d700b00411a761635fmr119350vsr.8.1676833060729; Sun, 19 Feb
- 2023 10:57:40 -0800 (PST)
+        Sun, 19 Feb 2023 14:04:12 -0500
+Received: from todd.t-8ch.de (todd.t-8ch.de [IPv6:2a01:4f8:c010:41de::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78145FF00
+        for <linux-kernel@vger.kernel.org>; Sun, 19 Feb 2023 11:04:10 -0800 (PST)
+Date:   Sun, 19 Feb 2023 19:04:04 +0000
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=t-8ch.de; s=mail;
+        t=1676833447; bh=kPnfaPn7CSZ8/i9pk9BccYPAG8gCoKhNdxd/Luo1jt0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=SFEaLHgRb532LB53TYjOoiCMhR7nR9nP2oyfFHsrepHL8vOewbwZftbbDyfEQF8VZ
+         2rV3l0eeMojZCe9x7TC2i/CAocnVfJg12+1oOfdx5K0jid7xnFywY/CWSx2/FKW8G6
+         OXX75ofwMqOdHEpz8dDbgnIO9jB9VlqZhww3aVvc=
+From:   Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <thomas@t-8ch.de>
+To:     Willy Tarreau <w@1wt.eu>
+Cc:     Vincent Dagonneau <v@vda.io>, linux-kernel@vger.kernel.org
+Subject: Re: [RFC PATCH 4/4] tools/nolibc: add tests for the integer limits
+ in stdint.h
+Message-ID: <c549eaa8-02c4-4ca5-9ad9-6b713e183609@t-8ch.de>
+References: <20230219185133.14576-1-w@1wt.eu>
+ <20230219185133.14576-5-w@1wt.eu>
 MIME-Version: 1.0
-References: <20230113193006.1320379-1-bgeffon@google.com> <20230114001518.1378049-1-bgeffon@google.com>
- <CAJZ5v0geG==MmZfvFBZgkuOuWE17BXYSMEzcYmyz6CALp6w2Fw@mail.gmail.com>
- <CADyq12wAkX+hAzuFgHj7k_Woy=G+3PLwpTc+UUxjp4bPe46_cw@mail.gmail.com> <Y/C7EO5xUHh4p/MS@duo.ucw.cz>
-In-Reply-To: <Y/C7EO5xUHh4p/MS@duo.ucw.cz>
-From:   Brian Geffon <bgeffon@google.com>
-Date:   Sun, 19 Feb 2023 13:56:57 -0500
-Message-ID: <CADyq12wYWF_SrcY3Zbt3cTq46yWdKwTJHbDAECU71r5A-=aNew@mail.gmail.com>
-Subject: Re: [PATCH v2] PM: hibernate: don't store zero pages in the image file.
-To:     Pavel Machek <pavel@ucw.cz>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Len Brown <len.brown@intel.com>, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230219185133.14576-5-w@1wt.eu>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Feb 18, 2023 at 6:49 AM Pavel Machek <pavel@ucw.cz> wrote:
->
-> Hi!
+On Sun, Feb 19, 2023 at 07:51:33PM +0100, Willy Tarreau wrote:
+> From: Vincent Dagonneau <v@vda.io>
+> 
+> This commit adds tests for the limits added in a previous commit. The
+> limits are defined in decimal in stdint.h and as hexadecimal in the
+> tests (e.g. 0x7f = 127 or 0x80 = -128). Hopefully it catches some o the
+> most egregious mistakes.
+> 
+> Signed-off-by: Vincent Dagonneau <v@vda.io>
+> [wt: rely on the compiler-provided __SIZEOF_LONG__ to decide what values
+>  to expect, and detect its miss to avoid reporting false errors]
+> Signed-off-by: Willy Tarreau <w@1wt.eu>
+> ---
+>  tools/testing/selftests/nolibc/nolibc-test.c | 45 +++++++++++++++++++-
+>  1 file changed, 44 insertions(+), 1 deletion(-)
+> 
+> diff --git a/tools/testing/selftests/nolibc/nolibc-test.c b/tools/testing/selftests/nolibc/nolibc-test.c
+> index 882140508d56..290249d6da30 100644
+> --- a/tools/testing/selftests/nolibc/nolibc-test.c
+> +++ b/tools/testing/selftests/nolibc/nolibc-test.c
+> @@ -561,7 +561,50 @@ int run_syscall(int min, int max)
+>  		CASE_TEST(waitpid_child);     EXPECT_SYSER(1, waitpid(getpid(), &tmp, WNOHANG), -1, ECHILD); break;
+>  		CASE_TEST(write_badf);        EXPECT_SYSER(1, write(-1, &tmp, 1), -1, EBADF); break;
+>  		CASE_TEST(write_zero);        EXPECT_SYSZR(1, write(1, &tmp, 0)); break;
+> -		case __LINE__:
+> +		CASE_TEST(limit_int8_max);          EXPECT_EQ(1, INT8_MAX,   (int8_t)   0x7f); break;
+> +		CASE_TEST(limit_int8_min);          EXPECT_EQ(1, INT8_MIN,   (int8_t)   0x80); break;
+> +		CASE_TEST(limit_uint8_max);         EXPECT_EQ(1, UINT8_MAX,  (uint8_t)  0xff); break;
+> +		CASE_TEST(limit_int16_max);         EXPECT_EQ(1, INT16_MAX,  (int16_t)  0x7fff); break;
+> +		CASE_TEST(limit_int16_min);         EXPECT_EQ(1, INT16_MIN,  (int16_t)  0x8000); break;
+> +		CASE_TEST(limit_uint16_max);        EXPECT_EQ(1, UINT16_MAX, (uint16_t) 0xffff); break;
+> +		CASE_TEST(limit_int32_max);         EXPECT_EQ(1, INT32_MAX,  (int32_t)  0x7fffffff); break;
+> +		CASE_TEST(limit_int32_min);         EXPECT_EQ(1, INT32_MIN,  (int32_t)  0x80000000); break;
+> +		CASE_TEST(limit_uint32_max);        EXPECT_EQ(1, UINT32_MAX, (uint32_t) 0xffffffff); break;
+> +		CASE_TEST(limit_int64_max);         EXPECT_EQ(1, INT64_MAX,  (int64_t)  0x7fffffffffffffff); break;
+> +		CASE_TEST(limit_int64_min);         EXPECT_EQ(1, INT64_MIN,  (int64_t)  0x8000000000000000); break;
+> +		CASE_TEST(limit_uint64_max);        EXPECT_EQ(1, UINT64_MAX, (uint64_t) 0xffffffffffffffff); break;
+> +		CASE_TEST(limit_int_least8_max);    EXPECT_EQ(1, INT_LEAST8_MAX,   (int_least8_t)    0x7f); break;
+> +		CASE_TEST(limit_int_least8_min);    EXPECT_EQ(1, INT_LEAST8_MIN,   (int_least8_t)    0x80); break;
+> +		CASE_TEST(limit_uint_least8_max);   EXPECT_EQ(1, UINT_LEAST8_MAX,  (uint_least8_t)   0xff); break;
+> +		CASE_TEST(limit_int_least16_max);   EXPECT_EQ(1, INT_LEAST16_MAX,  (int_least16_t)   0x7fff); break;
+> +		CASE_TEST(limit_int_least16_min);   EXPECT_EQ(1, INT_LEAST16_MIN,  (int_least16_t)   0x8000); break;
+> +		CASE_TEST(limit_uint_least16_max);  EXPECT_EQ(1, UINT_LEAST16_MAX, (uint_least16_t)  0xffff); break;
+> +		CASE_TEST(limit_int_least32_max);   EXPECT_EQ(1, INT_LEAST32_MAX,  (int_least32_t)   0x7fffffff); break;
+> +		CASE_TEST(limit_int_least32_min);   EXPECT_EQ(1, INT_LEAST32_MIN,  (int_least32_t)   0x80000000); break;
+> +		CASE_TEST(limit_uint_least32_max);  EXPECT_EQ(1, UINT_LEAST32_MAX, (uint_least32_t)  0xffffffffU); break;
+> +#if __SIZEOF_LONG__ == 8
+> +		CASE_TEST(limit_int_least64_max);   EXPECT_EQ(1, INT_LEAST64_MAX,  (int_least64_t)   0x7fffffffffffffffLL); break;
+> +		CASE_TEST(limit_int_least64_min);   EXPECT_EQ(1, INT_LEAST64_MIN,  (int_least64_t)   0x8000000000000000LL); break;
+> +		CASE_TEST(limit_uint_least64_max);  EXPECT_EQ(1, UINT_LEAST64_MAX, (uint_least64_t)  0xffffffffffffffffULL); break;
 
-Hey Pavel,
+int64 types are also defined for 32bit platforms, but the tests are only
+ran for 64bits. Is this intentional?
 
->
-> > > I need some more time to go through this in more detail, so it is
-> > > likely to miss 6.3.  Sorry about that.
-> >
-> > No problem, consider this more of an RFC, it seems like a
-> > low-risk/low-cost way to reduce image sizes so I was just hoping to
-> > get feedback. Take your time reviewing.
->
-> Seems like special case of compression, really, it might be better to
-> leave it to compression algorithm to solve that.
+> +		CASE_TEST(limit_intptr_min);        EXPECT_EQ(1, INTPTR_MIN,  (intptr_t)  0x8000000000000000LL); break;
+> +		CASE_TEST(limit_intptr_max);        EXPECT_EQ(1, INTPTR_MAX,  (intptr_t)  0x7fffffffffffffffLL); break;
+> +		CASE_TEST(limit_uintptr_max);       EXPECT_EQ(1, UINTPTR_MAX, (uintptr_t) 0xffffffffffffffffULL); break;
+> +		CASE_TEST(limit_ptrdiff_min);       EXPECT_EQ(1, PTRDIFF_MIN, (ptrdiff_t) 0x8000000000000000LL); break;
+> +		CASE_TEST(limit_ptrdiff_max);       EXPECT_EQ(1, PTRDIFF_MAX, (ptrdiff_t) 0x7fffffffffffffffLL); break;
+> +		CASE_TEST(limit_size_max);          EXPECT_EQ(1, SIZE_MAX,    (size_t)    0xffffffffffffffffULL); break;
+> +#elif __SIZEOF_LONG__ == 4
+> +		CASE_TEST(limit_intptr_min);        EXPECT_EQ(1, INTPTR_MIN,  (intptr_t)  0x80000000); break;
+> +		CASE_TEST(limit_intptr_max);        EXPECT_EQ(1, INTPTR_MAX,  (intptr_t)  0x7fffffff); break;
+> +		CASE_TEST(limit_uintptr_max);       EXPECT_EQ(1, UINTPTR_MAX, (uintptr_t) 0xffffffffU); break;
+> +		CASE_TEST(limit_ptrdiff_min);       EXPECT_EQ(1, PTRDIFF_MIN, (ptrdiff_t) 0x80000000); break;
+> +		CASE_TEST(limit_ptrdiff_max);       EXPECT_EQ(1, PTRDIFF_MAX, (ptrdiff_t) 0x7fffffff); break;
+> +		CASE_TEST(limit_ptrdiff_min);       EXPECT_EQ(1, PTRDIFF_MIN, (ptrdiff_t) 0x80000000); break;
+> +		CASE_TEST(limit_ptrdiff_max);       EXPECT_EQ(1, PTRDIFF_MAX, (ptrdiff_t) 0x7fffffff); break;
 
-It's true that it seems like an optimization that really does resemble
-compression. But there are a few distinctions I'd like to call out;
-firstly, this optimization has effectively an infinite compression
-ratio as the zero pages never have to be included at all for that
-reason this benefits both the compressed and non-compressed use-cases.
-Additionally, this is basically free for both the swsusp and uswsusp
-paths as it's transparently handled in the
-snapshot_read_next/snapshot_write_next paths.
+ptrdiff tests are duplicate.
 
->
-> Not sure if lzo is optimal if you want max speed, but things like gzip
-> should be "almost free", too.
+> +		CASE_TEST(limit_size_max);          EXPECT_EQ(1, SIZE_MAX,    (size_t)    0xffffffffU); break;
+> +#else
+> +# warning "__SIZEOF_LONG__ is undefined"
 
-While certain compression algorithms are cheap they are definitely not
-free. This specific optimization ultimately results in a single OR
-after testing the zero flag from a word copy we were already
-performing, now that's pretty much free :)
+Why not #error?
 
-Another final thing I'd like to note about this is that when
-compressing today, the default is to compress in 32 page chunks
-(iirc). By including the zero pages in those 32 pages you're limiting
-your ability to better compress the "real" data, if that makes sense.
-Why bother copying those zero pages over to the compressor kthreads
-anyway? With all that being said, the code itself is certainly not
-free in the sense that it does add some complexity to both the read
-and write paths, do you guys think that additional complexity is worth
-the benefits we might see?
+> +#endif /* __WORDSIZE == 64 */
 
->
-> Best regards,
->                                                                 Pavel
+#endif comment is now incorrect
 
-Thanks for taking the time to discuss this!
+> +			case __LINE__:
 
+The "case" should be further left, no?
 
-Brian
-
-> --
-> People of Russia, stop Putin before his war on Ukraine escalates.
+>  			return ret; /* must be last */
+>  		/* note: do not set any defaults so as to permit holes above */
+>  		}
+> -- 
+> 2.35.3
+> 
