@@ -2,58 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7F7E769C1C2
-	for <lists+linux-kernel@lfdr.de>; Sun, 19 Feb 2023 18:57:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CDE2269C1C5
+	for <lists+linux-kernel@lfdr.de>; Sun, 19 Feb 2023 18:59:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231218AbjBSR5Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 19 Feb 2023 12:57:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60156 "EHLO
+        id S230450AbjBSR6s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 19 Feb 2023 12:58:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33398 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231210AbjBSR5O (ORCPT
+        with ESMTP id S230235AbjBSR6p (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 19 Feb 2023 12:57:14 -0500
-Received: from mail-yw1-x112b.google.com (mail-yw1-x112b.google.com [IPv6:2607:f8b0:4864:20::112b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2A2E1026B
-        for <linux-kernel@vger.kernel.org>; Sun, 19 Feb 2023 09:57:12 -0800 (PST)
-Received: by mail-yw1-x112b.google.com with SMTP id 00721157ae682-5369b3204daso12430857b3.7
-        for <linux-kernel@vger.kernel.org>; Sun, 19 Feb 2023 09:57:12 -0800 (PST)
+        Sun, 19 Feb 2023 12:58:45 -0500
+Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F37D1043A
+        for <linux-kernel@vger.kernel.org>; Sun, 19 Feb 2023 09:58:44 -0800 (PST)
+Received: by mail-pl1-x62e.google.com with SMTP id w10so1066423ply.11
+        for <linux-kernel@vger.kernel.org>; Sun, 19 Feb 2023 09:58:44 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=sscneNe11LR3WffkFyUD3z+Ja4W5fhnimf00dL+tzak=;
-        b=WftmOx8+im1S7FRJ5eHmM1GLa3IimgiHInS2RR0fhJV5qHCEX0LMJ8YmJdAiHU3R84
-         BVEJRRQz+YleupKdWZtxqzXlgvzgIfBHE91bxS8w40mxAIE9PC5fWc7r1mdAm4a3jciH
-         TLOxb2i5aBOVkmSoeb6erf2TA7JsQEqVdV2d7LcMLLTUqGCia5bfvE6ZO/nc6d9OTrmV
-         OzPT9Rwim/drYpF5ygMCVZ9UGYlDTv/I2Hn+6/wciZcgvBdcvpqpsCkMvRAogUD9jbwY
-         TRVdNkOVX4ohiTVperjU+YwvJanbdE2Qc4EzE20VsKhljdjs+hnVqOnMQ45Bnpf0x4xN
-         waBg==
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=b2rY0fDePvZ3ge2mp7FGjGIShiKV6CSswgiMPgCf5uY=;
+        b=Q2fsYk+/ips79nToDdZaIQ5r56O5hTmDZv3zAog+oerEoHeUZzBmJzPUcIy20tmDC5
+         1SEo9LyX8X/p9GYsrp+XhAIWeiqCtJtxDlkn+JIWn7Y92zjaDN1paBCzaKUrAfnATJls
+         3Halcrnd18gcRkC4O+CvdstDiXB0kt8jZ3SYmlu+pMiydGNMCu3LHtkfPO4DcT/AHBzt
+         M/oBDwuDxujTAFg5pjGOc6eBBsGC5WexDg/5p8fnWhZ+JCuPUWYWfYuihESbRZLhvai5
+         ZJgxRRCgKbyeBlDVTen8QBA9NjPdkxXzbNUm2Mtkh03xemzQuS+gk80AD2dVZ2rOc8VF
+         +WAQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=sscneNe11LR3WffkFyUD3z+Ja4W5fhnimf00dL+tzak=;
-        b=X/VYTO4KM54MGm6+cNIwOY/mr0qlHV8d5I0DiH+0U1L+jihCi5Iy7qoCugjZdVPSUg
-         arZFkMrK8BcRtOAZyEN+lP2CwHS+UhQx1hm+1NJefT30v7/Y5z3sxgyLBeGJcbE7o/ef
-         7cmNzQM9k1FWY4rcWv4bJhM8LJDGDtZQXQ53tYl0J2FFskUO75XY/ZJiRgjvoRmCnIHY
-         j2S7bhrbAgmywKU7U2Mny/7jOSz/fwuib/aHGXVF0gNmvcP++px26U9qitMxU2CkeWie
-         nM9PWDuRCZto7ebxvRSlfN8vNiVFypa8DBPoHdC5xJknAtgA+DoriLTXGBoDVHHGH9zf
-         yULA==
-X-Gm-Message-State: AO0yUKV9T1OJ/k7h3ZhMUbWCSgaSks6kLrDPZ9iITDaULWyhRB42srHQ
-        r0q1hQXiTfDa48mtDMlGE+WV+VtdCKN4qRVvZGqIDw==
-X-Google-Smtp-Source: AK7set+65qfecMTYI0Ahz8F1uyux6Ma918+90Z7sXd1YIA5huooyLk5OpQDe0rfdJlYabaYOSaW9Udk1FdvuioaoOvc=
-X-Received: by 2002:a81:7302:0:b0:527:9fc2:66a3 with SMTP id
- o2-20020a817302000000b005279fc266a3mr11464ywc.83.1676829431453; Sun, 19 Feb
- 2023 09:57:11 -0800 (PST)
-MIME-Version: 1.0
-References: <20230214184606.510551-1-mizhang@google.com> <20230214184606.510551-2-mizhang@google.com>
- <Y/He1Sro3hb7Hn0h@gao-cwp>
-In-Reply-To: <Y/He1Sro3hb7Hn0h@gao-cwp>
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=b2rY0fDePvZ3ge2mp7FGjGIShiKV6CSswgiMPgCf5uY=;
+        b=UWS4nNr9k9dALkOzqk7K1iN+dgKAYmc88Lud7SU1JhjYBVYSWLKEgKFy5Bo67rwVga
+         4Nw6JyXjS/KZKYByRFq4TgigvCkI3nAaC9XcfHHjKSNzpSXtNuGIWx+LdBGL1ReIYe7U
+         A9Hcj42o/V1WP6htMc9QGHgdAC+bY037xoq22VKAo8beyBOexEj1kHoJNvOki1jhsvhe
+         CNfYq+IgebJUvwbY8XkxJtKaGPhqOy+WZkYX0LGKh0tCdjIA07mbnUzNuPRknGt02MQd
+         4euuiy0z/qLKeGoX8Z5U7P8Pcq1lXTY4qRlvHEWQls/wcLTa+BjgbYefRPekTapp1rEH
+         lTdA==
+X-Gm-Message-State: AO0yUKX2IXIcZj97kImZGEUzL1accbxhs71ublrnVCETfnsMinAFaNWk
+        YHWjfjdl5D6ZL2Um8LRTOyGmaKveSc5lm+d3fWA=
+X-Google-Smtp-Source: AK7set+GY3ybl/QsgojsDaqcMFssxRzRsKYU44N6hTtKw+of4RSi58cpzxDTb55Udub1Sz3I5DYV/Q==
+X-Received: by 2002:a17:902:d2cb:b0:19a:ad90:4223 with SMTP id n11-20020a170902d2cb00b0019aad904223mr660008plc.48.1676829523868;
+        Sun, 19 Feb 2023 09:58:43 -0800 (PST)
+Received: from google.com (77.62.105.34.bc.googleusercontent.com. [34.105.62.77])
+        by smtp.gmail.com with ESMTPSA id e8-20020a170902744800b0019a8468cbe7sm18392plt.224.2023.02.19.09.58.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 19 Feb 2023 09:58:43 -0800 (PST)
+Date:   Sun, 19 Feb 2023 17:58:40 +0000
 From:   Mingwei Zhang <mizhang@google.com>
-Date:   Sun, 19 Feb 2023 09:56:35 -0800
-Message-ID: <CAL715WJx1bjm21JnGzbsre+OQQnsKZ+rXQDqNAp9NwixZ_zEow@mail.gmail.com>
-Subject: Re: [PATCH v2 1/7] KVM: selftests: x86: Add a working xstate data structure
 To:     Chao Gao <chao.gao@intel.com>
 Cc:     Sean Christopherson <seanjc@google.com>,
         Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org,
@@ -62,11 +59,20 @@ Cc:     Sean Christopherson <seanjc@google.com>,
         Venkatesh Srinivas <venkateshs@google.com>,
         Aaron Lewis <aaronlewis@google.com>,
         "Chang S. Bae" <chang.seok.bae@intel.com>
-Content-Type: text/plain; charset="UTF-8"
+Subject: Re: [PATCH v2 2/7] KVM: selftests: x86: Fix an error in comment of
+ amx_test
+Message-ID: <Y/JjUEiIizj98hZb@google.com>
+References: <20230214184606.510551-1-mizhang@google.com>
+ <20230214184606.510551-3-mizhang@google.com>
+ <Y/Hh31GLftx3eZJY@gao-cwp>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y/Hh31GLftx3eZJY@gao-cwp>
 X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
         ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,17 +80,47 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Feb 19, 2023 at 12:33 AM Chao Gao <chao.gao@intel.com> wrote:
->
-> On Tue, Feb 14, 2023 at 06:46:00PM +0000, Mingwei Zhang wrote:
-> >-      /* xsave data for guest_code */
-> >-      xsavedata = vm_vaddr_alloc_pages(vm, 3);
-> >-      memset(addr_gva2hva(vm, xsavedata), 0, 3 * getpagesize());
-> >-      vcpu_args_set(vcpu, 3, amx_cfg, tiledata, xsavedata);
-> >+      /* XSAVE state for guest_code */
-> >+      xstate = vm_vaddr_alloc_pages(vm, DIV_ROUND_UP(XSAVE_SIZE, PAGE_SIZE));
-> >+      memset(addr_gva2hva(vm, xstate), 0, DIV_ROUND_UP(XSAVE_SIZE, PAGE_SIZE));
->
->                                             ^ this should be the size in bytes instead of in pages. Right?
+On Sun, Feb 19, 2023, Chao Gao wrote:
+> On Tue, Feb 14, 2023 at 06:46:01PM +0000, Mingwei Zhang wrote:
+> >After the execution of __tilerelease(), AMX component will be in INIT
+> >state. Therefore, execution of XSAVEC saving the AMX state into memory will
+> >cause the xstate_bv[18] cleared in xheader. However, the xcomp_bv[18] will
+> >remain set. Fix the error in comment. Also, update xsavec() to XSAVEC
+> >because xcomp_bv[18] is set due to the instruction, not the function.
+> >Finally, use XTILEDATA instead 'bit 18' in comments.
+> >
+> >Cc: Jim Mattson <jmattson@google.com>
+> >Cc: Venkatesh Srinivas <venkateshs@google.com>
+> >Cc: Aaron Lewis <aaronlewis@google.com>
+> >Signed-off-by: Mingwei Zhang <mizhang@google.com>
+> >---
+> > tools/testing/selftests/kvm/x86_64/amx_test.c | 5 ++++-
+> > 1 file changed, 4 insertions(+), 1 deletion(-)
+> >
+> >diff --git a/tools/testing/selftests/kvm/x86_64/amx_test.c b/tools/testing/selftests/kvm/x86_64/amx_test.c
+> >index d506821a5a26..aac727ff7cf8 100644
+> >--- a/tools/testing/selftests/kvm/x86_64/amx_test.c
+> >+++ b/tools/testing/selftests/kvm/x86_64/amx_test.c
+> >@@ -190,7 +190,10 @@ static void __attribute__((__flatten__)) guest_code(struct tile_config *amx_cfg,
+> > 	GUEST_SYNC(4);
+> > 	__tilerelease();
+> > 	GUEST_SYNC(5);
+> >-	/* bit 18 not in the XCOMP_BV after xsavec() */
+> >+	/*
+> >+	 * After XSAVEC, XTILEDATA is cleared in the xstate_bv but is set in
+> >+	 * the xcomp_bv.
+> >+	 */
+> > 	xstate->header.xstate_bv = XFEATURE_MASK_XTILEDATA;
+> > 	__xsavec(xstate, XFEATURE_MASK_XTILEDATA);
+> > 	GUEST_ASSERT(!(xstate->header.xstate_bv & XFEATURE_MASK_XTILEDATA));
+> 
+> maybe it would be better to add another GUEST_ASSERT() to enforce that
+> XTILEDATA is set in the xcomp_bv.
 
-Right, thanks for catching that. I will fix it in the next version.
+yeah. The check has been added in the 6th patch of the series, but I
+think it is hard to see. I will reorder the change next to this one in
+the next version.
+> 
+> >-- 
+> >2.39.1.581.gbfd45094c4-goog
+> >
