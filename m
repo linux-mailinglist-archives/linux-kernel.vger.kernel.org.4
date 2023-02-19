@@ -2,222 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3DCF369C1AA
-	for <lists+linux-kernel@lfdr.de>; Sun, 19 Feb 2023 18:15:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D24669C1B3
+	for <lists+linux-kernel@lfdr.de>; Sun, 19 Feb 2023 18:26:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231192AbjBSRPs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 19 Feb 2023 12:15:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47978 "EHLO
+        id S231208AbjBSR0i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 19 Feb 2023 12:26:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51604 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231165AbjBSRPq (ORCPT
+        with ESMTP id S231196AbjBSR0g (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 19 Feb 2023 12:15:46 -0500
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A50A9126DD;
-        Sun, 19 Feb 2023 09:15:44 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1676826944; x=1708362944;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=Mxup+H2pIaZG6RXHGUP7zKupNiYpigp1Qwch7Sph2WE=;
-  b=IEMNbCyJwXbUfYDY7Pas46PxwF2bnBeKZJDT2ovEn15f9tR3GDTbocHj
-   tAhynLNBZVsKNgW4ZBAvRvBFXVO2EWkGZBhQMQK6oa3e1djit5JgfwNmU
-   tMUkabwmkmtXnECTARNNZxKXVYWLvssPKBwWJCIRsdesHkp9957fIe57Z
-   RU4sY/X37/WsWHyCyVavNOjqFXrGZajYcJfeffCCkWNRTBF4fJ//8YmfX
-   /eOrILG0ane5qDJWyo+RlFEBnIywNZubN5EQLo7jr79d3C1kwCjwmQlYD
-   5LWG61O/ryzfRXD5TwW4yEP3jE4JgHQYL5mUO0wuMyxGAflrFxM5/Hxc5
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10626"; a="315979551"
-X-IronPort-AV: E=Sophos;i="5.97,310,1669104000"; 
-   d="scan'208";a="315979551"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Feb 2023 09:15:44 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10626"; a="620918327"
-X-IronPort-AV: E=Sophos;i="5.97,310,1669104000"; 
-   d="scan'208";a="620918327"
-Received: from lkp-server01.sh.intel.com (HELO 4455601a8d94) ([10.239.97.150])
-  by orsmga003.jf.intel.com with ESMTP; 19 Feb 2023 09:15:41 -0800
-Received: from kbuild by 4455601a8d94 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pTnHo-000DO9-0v;
-        Sun, 19 Feb 2023 17:15:40 +0000
-Date:   Mon, 20 Feb 2023 01:15:10 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Daniel Lezcano <daniel.lezcano@linaro.org>, rafael@kernel.org
-Cc:     oe-kbuild-all@lists.linux.dev, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>, linux-hwmon@vger.kernel.org
-Subject: Re: [PATCH v1 09/17] thermal: Add a thermal zone id accessor
-Message-ID: <202302200137.srsrI6dW-lkp@intel.com>
-References: <20230219143657.241542-10-daniel.lezcano@linaro.org>
+        Sun, 19 Feb 2023 12:26:36 -0500
+Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B7AC12F3C;
+        Sun, 19 Feb 2023 09:26:35 -0800 (PST)
+Received: by mail-ed1-x52d.google.com with SMTP id eg19so4464155edb.0;
+        Sun, 19 Feb 2023 09:26:34 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=googlemail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=3VEydMb61qXjyUuHx50DS5MjqkMWbNi7p/BGphDgb7g=;
+        b=BTDQKmDAUpCMrOaZ65GdSbOPIMPVt9MrMM2yyDYjGh5NttUwebWMfZRJKk/aym79M2
+         krwJSPLEjjSVd9ZxQ6t0eajf+A8F/FAe88qsZtN8cFlgeBZJP49ICI+U72C61KNSnutg
+         iFLNp91+zfOuoFggFt6d/n+4QpJ5RKV2nkxoTVMm6zz7PUzmrksewDw9XE1EjJPtW3bK
+         KVZrLOB+N3FfD17qI3V+oyqT49P3K9DrnzL4BKxkf4Fm3rcQkFEd8UA1sV7GFlqeRo80
+         I3OKYEM7d4YiM0WiuyRG8lEqETnSubptt9k6JL7CvzICu0BvKe34O/Ykn1FXp7/3upTB
+         uRvw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=3VEydMb61qXjyUuHx50DS5MjqkMWbNi7p/BGphDgb7g=;
+        b=RH9Q+Gj/foacthA9IoDsV00Yl/B8zwg9uVqD0lKAx8YC1ILQyGapvv3HSqQNY2X/KE
+         nuwcEvrAoYWS3fwIHMSrrcmLXNVbtD2Alv+BuF77C/0RTiwQfQx3P05XIZU3W2VqDijW
+         jdGBdMWEi7L8vTeHJrRJD6jEjfzbnpvBX7p6uybXamIDb5YLEVOzBeTtyG9lhIvJWPvk
+         s7hXPqdNFcdyQeXMrUfkng0+fKNasxO0u2s0ucey0leSrcr7ihGDQ/Mx0MIR0vCu2ZIW
+         LOO9u3g4RO02T3w3UljwBolbDZKlckJrUXHxOpjaDZhPGxGtKo0cX54lEb7p0ZGYPB2m
+         2emg==
+X-Gm-Message-State: AO0yUKW/8xeTP1nBAoVIC41bQc+RjAn4K0Wo7zOV4PrgbhQDdLJXDuVG
+        QTauuoJllVGY+lUGnSNdg5qBUHzpafrWq3BD0fM=
+X-Google-Smtp-Source: AK7set+HJ8ugf54hyVxoMHuivdcoWWsyfiGwYdZMNvgLG69WPq5tKTBVZni7iBuMPHyMZ4Z10CLK8MHIDK89J3oADnI=
+X-Received: by 2002:a17:906:c5b:b0:8cf:bb36:1486 with SMTP id
+ t27-20020a1709060c5b00b008cfbb361486mr448990ejf.6.1676827593334; Sun, 19 Feb
+ 2023 09:26:33 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230219143657.241542-10-daniel.lezcano@linaro.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+References: <20230219143657.241542-1-daniel.lezcano@linaro.org> <20230219143657.241542-6-daniel.lezcano@linaro.org>
+In-Reply-To: <20230219143657.241542-6-daniel.lezcano@linaro.org>
+From:   Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+Date:   Sun, 19 Feb 2023 18:26:22 +0100
+Message-ID: <CAFBinCAm+pFuuJEL3_2B3o3ZaLWxb-JqHhxY0vJfb8ZfxKOieQ@mail.gmail.com>
+Subject: Re: [PATCH v1 05/17] thermal/hwmon: Use the right device for devm_thermal_add_hwmon_sysfs()
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>
+Cc:     rafael@kernel.org, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Guillaume La Roque <glaroque@baylibre.com>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Thara Gopinath <thara.gopinath@gmail.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Vasily Khoruzhick <anarsoul@gmail.com>,
+        Yangtao Li <tiny.windzz@gmail.com>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Samuel Holland <samuel@sholland.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Eduardo Valentin <edubezval@gmail.com>,
+        Keerthy <j-keerthy@ti.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Daniel Golle <daniel@makrotopia.org>,
+        ye xingchen <ye.xingchen@zte.com.cn>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Balsam CHIHI <bchihi@baylibre.com>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Kunihiko Hayashi <hayashi.kunihiko@socionext.com>,
+        =?UTF-8?Q?Niklas_S=C3=B6derlund?= 
+        <niklas.soderlund+renesas@ragnatech.se>,
+        "open list:THERMAL DRIVER FOR AMLOGIC SOCS" 
+        <linux-amlogic@lists.infradead.org>,
+        "moderated list:ARM/FREESCALE IMX / MXC ARM ARCHITECTURE" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "open list:QUALCOMM TSENS THERMAL DRIVER" 
+        <linux-arm-msm@vger.kernel.org>,
+        "open list:ARM/Allwinner sunXi SoC support" 
+        <linux-sunxi@lists.linux.dev>,
+        "open list:TEGRA ARCHITECTURE SUPPORT" <linux-tegra@vger.kernel.org>,
+        "open list:TI BANDGAP AND THERMAL DRIVER" 
+        <linux-omap@vger.kernel.org>,
+        "moderated list:ARM/Mediatek SoC support" 
+        <linux-mediatek@lists.infradead.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Daniel,
-
-I love your patch! Yet something to improve:
-
-[auto build test ERROR on rafael-pm/thermal]
-[also build test ERROR on next-20230217]
-[cannot apply to groeck-staging/hwmon-next tegra/for-next linus/master v6.2-rc8]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Daniel-Lezcano/thermal-core-Add-a-thermal-zone-devdata-accessor/20230219-224155
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git thermal
-patch link:    https://lore.kernel.org/r/20230219143657.241542-10-daniel.lezcano%40linaro.org
-patch subject: [PATCH v1 09/17] thermal: Add a thermal zone id accessor
-config: csky-randconfig-r005-20230219 (https://download.01.org/0day-ci/archive/20230220/202302200137.srsrI6dW-lkp@intel.com/config)
-compiler: csky-linux-gcc (GCC) 12.1.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/37b2cf4cee949fd910b54e281577cb71b2df8842
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Daniel-Lezcano/thermal-core-Add-a-thermal-zone-devdata-accessor/20230219-224155
-        git checkout 37b2cf4cee949fd910b54e281577cb71b2df8842
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=csky olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=csky SHELL=/bin/bash drivers/hwmon/
-
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202302200137.srsrI6dW-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
-   drivers/hwmon/scmi-hwmon.c: In function 'scmi_hwmon_thermal_get_temp':
-   drivers/hwmon/scmi-hwmon.c:144:49: error: implicit declaration of function 'thermal_zone_device_get_data'; did you mean 'thermal_zone_device_enable'? [-Werror=implicit-function-declaration]
-     144 |         struct scmi_thermal_sensor *th_sensor = thermal_zone_device_get_data(tz);
-         |                                                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
-         |                                                 thermal_zone_device_enable
-   drivers/hwmon/scmi-hwmon.c:144:49: warning: initialization of 'struct scmi_thermal_sensor *' from 'int' makes pointer from integer without a cast [-Wint-conversion]
-   In file included from include/linux/device.h:15,
-                    from include/linux/scmi_protocol.h:12,
-                    from drivers/hwmon/scmi-hwmon.c:11:
-   drivers/hwmon/scmi-hwmon.c: In function 'scmi_thermal_sensor_register':
->> drivers/hwmon/scmi-hwmon.c:223:39: error: implicit declaration of function 'thermal_zone_device_get_id'; did you mean 'thermal_zone_device_enable'? [-Werror=implicit-function-declaration]
-     223 |                         sensor->name, thermal_zone_device_get_id(tzd));
-         |                                       ^~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/dev_printk.h:129:48: note: in definition of macro 'dev_printk'
-     129 |                 _dev_printk(level, dev, fmt, ##__VA_ARGS__);            \
-         |                                                ^~~~~~~~~~~
-   drivers/hwmon/scmi-hwmon.c:222:17: note: in expansion of macro 'dev_dbg'
-     222 |                 dev_dbg(dev, "Sensor '%s' attached to thermal zone ID:%d\n",
-         |                 ^~~~~~~
-   cc1: some warnings being treated as errors
-
-
-vim +223 drivers/hwmon/scmi-hwmon.c
-
-   138	
-   139	static int scmi_hwmon_thermal_get_temp(struct thermal_zone_device *tz,
-   140					       int *temp)
-   141	{
-   142		int ret;
-   143		long value;
- > 144		struct scmi_thermal_sensor *th_sensor = thermal_zone_device_get_data(tz);
-   145	
-   146		ret = scmi_hwmon_read_scaled_value(th_sensor->ph, th_sensor->info,
-   147						   &value);
-   148		if (!ret)
-   149			*temp = value;
-   150	
-   151		return ret;
-   152	}
-   153	
-   154	static const struct thermal_zone_device_ops scmi_hwmon_thermal_ops = {
-   155		.get_temp = scmi_hwmon_thermal_get_temp,
-   156	};
-   157	
-   158	static int scmi_hwmon_add_chan_info(struct hwmon_channel_info *scmi_hwmon_chan,
-   159					    struct device *dev, int num,
-   160					    enum hwmon_sensor_types type, u32 config)
-   161	{
-   162		int i;
-   163		u32 *cfg = devm_kcalloc(dev, num + 1, sizeof(*cfg), GFP_KERNEL);
-   164	
-   165		if (!cfg)
-   166			return -ENOMEM;
-   167	
-   168		scmi_hwmon_chan->type = type;
-   169		scmi_hwmon_chan->config = cfg;
-   170		for (i = 0; i < num; i++, cfg++)
-   171			*cfg = config;
-   172	
-   173		return 0;
-   174	}
-   175	
-   176	static enum hwmon_sensor_types scmi_types[] = {
-   177		[TEMPERATURE_C] = hwmon_temp,
-   178		[VOLTAGE] = hwmon_in,
-   179		[CURRENT] = hwmon_curr,
-   180		[POWER] = hwmon_power,
-   181		[ENERGY] = hwmon_energy,
-   182	};
-   183	
-   184	static u32 hwmon_attributes[hwmon_max] = {
-   185		[hwmon_temp] = HWMON_T_INPUT | HWMON_T_LABEL,
-   186		[hwmon_in] = HWMON_I_INPUT | HWMON_I_LABEL,
-   187		[hwmon_curr] = HWMON_C_INPUT | HWMON_C_LABEL,
-   188		[hwmon_power] = HWMON_P_INPUT | HWMON_P_LABEL,
-   189		[hwmon_energy] = HWMON_E_INPUT | HWMON_E_LABEL,
-   190	};
-   191	
-   192	static int scmi_thermal_sensor_register(struct device *dev,
-   193						const struct scmi_protocol_handle *ph,
-   194						const struct scmi_sensor_info *sensor)
-   195	{
-   196		struct scmi_thermal_sensor *th_sensor;
-   197		struct thermal_zone_device *tzd;
-   198	
-   199		th_sensor = devm_kzalloc(dev, sizeof(*th_sensor), GFP_KERNEL);
-   200		if (!th_sensor)
-   201			return -ENOMEM;
-   202	
-   203		th_sensor->ph = ph;
-   204		th_sensor->info = sensor;
-   205	
-   206		/*
-   207		 * Try to register a temperature sensor with the Thermal Framework:
-   208		 * skip sensors not defined as part of any thermal zone (-ENODEV) but
-   209		 * report any other errors related to misconfigured zones/sensors.
-   210		 */
-   211		tzd = devm_thermal_of_zone_register(dev, th_sensor->info->id, th_sensor,
-   212						    &scmi_hwmon_thermal_ops);
-   213		if (IS_ERR(tzd)) {
-   214			devm_kfree(dev, th_sensor);
-   215	
-   216			if (PTR_ERR(tzd) != -ENODEV)
-   217				return PTR_ERR(tzd);
-   218	
-   219			dev_dbg(dev, "Sensor '%s' not attached to any thermal zone.\n",
-   220				sensor->name);
-   221		} else {
-   222			dev_dbg(dev, "Sensor '%s' attached to thermal zone ID:%d\n",
- > 223				sensor->name, thermal_zone_device_get_id(tzd));
-   224		}
-   225	
-   226		return 0;
-   227	}
-   228	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+On Sun, Feb 19, 2023 at 3:38 PM Daniel Lezcano
+<daniel.lezcano@linaro.org> wrote:
+>
+> The devres variant of thermal_add_hwmon_sysfs() only takes the thermal
+> zone structure pointer as parameter.
+>
+> Actually, it uses the tz->device to add it in the devres list.
+>
+> It is preferable to use the device registering the thermal zone
+> instead of the thermal zone device itself. That prevents the driver
+> accessing the thermal zone structure internals and it is from my POV
+> more correct regarding how devm_ is used.
+>
+> Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
+> ---
+>  drivers/thermal/amlogic_thermal.c                  | 2 +-
+For amlogic_thermal.c:
+Acked-by: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
