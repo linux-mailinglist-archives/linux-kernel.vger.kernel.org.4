@@ -2,284 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D5FD69C049
+	by mail.lfdr.de (Postfix) with ESMTP id D987369C04A
 	for <lists+linux-kernel@lfdr.de>; Sun, 19 Feb 2023 14:11:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229907AbjBSNKZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 19 Feb 2023 08:10:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57050 "EHLO
+        id S229939AbjBSNLY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 19 Feb 2023 08:11:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57584 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229506AbjBSNKY (ORCPT
+        with ESMTP id S229506AbjBSNLW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 19 Feb 2023 08:10:24 -0500
-Received: from nbd.name (nbd.name [46.4.11.11])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15AB71040E;
-        Sun, 19 Feb 2023 05:10:19 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=nbd.name;
-        s=20160729; h=Content-Transfer-Encoding:MIME-Version:Message-Id:Date:Subject:
-        Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:Content-Description:
-        Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:
-        In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
-        List-Post:List-Owner:List-Archive;
-        bh=4OHw52BKjpu7NUk9y7oRGvtrPK79btkrHDuYaEwxHdw=; b=F2t0mA56TVHlxpY9AorPg3wZAE
-        7EZE94YZV/zOdmf+b5QVPO6N/LGcT5+SGuInUH+K56fKJURQiLHz3uE2IQ9vOXHfb986Pj5Vm45H0
-        cisI5Pn51UVwUHN5jSwn0cUAAWvqG0NaSveJq/O4rfdD18gwSJmHyqpx/LVQpfv/YhTc=;
-Received: from p200300daa7147b00887e0d3dc2704444.dip0.t-ipconnect.de ([2003:da:a714:7b00:887e:d3d:c270:4444] helo=Maecks.lan)
-        by ds12 with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_CHACHA20_POLY1305_SHA256
-        (Exim 4.94.2)
-        (envelope-from <nbd@nbd.name>)
-        id 1pTjSD-009vYp-49; Sun, 19 Feb 2023 14:10:09 +0100
-From:   Felix Fietkau <nbd@nbd.name>
-To:     netdev@vger.kernel.org, "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>
-Cc:     linux-kernel@vger.kernel.org
-Subject: [RFC v3] net/core: add optional threading for backlog processing
-Date:   Sun, 19 Feb 2023 14:10:05 +0100
-Message-Id: <20230219131006.92681-1-nbd@nbd.name>
-X-Mailer: git-send-email 2.39.0
+        Sun, 19 Feb 2023 08:11:22 -0500
+Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00BE710424
+        for <linux-kernel@vger.kernel.org>; Sun, 19 Feb 2023 05:11:21 -0800 (PST)
+Received: by mail-pj1-x1035.google.com with SMTP id r12so1575802pjm.0
+        for <linux-kernel@vger.kernel.org>; Sun, 19 Feb 2023 05:11:21 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=lmm/YNDqSQghMDQX55lPDlYWGePy3db21+ic3NGFbKI=;
+        b=HnJKjFepvTYDDYTYD8jlv5IZKuWCRAo9XSc3Ozwlq7Fpe1rbQxrKblbGZIOIsME8fj
+         wcxqhNQsYwqFfgyPUIRBDgjZC/2h01WXhUVQxA6bi7OHGOmI2btggvt9ePT76eKJ6eo+
+         ZbHe8D+FHt9cZagY+HDg5YQ/CPrPo8EjvGpoppaW43qkC0DN1DMWY3lLgr/u3kVGDd+y
+         YFmJL513F4wm4RfmdP1MMu56SP1qvy++qHWIbzia4nOywcoKzy4m6QyC80Z3m3cvMbWE
+         OLE3gTW4TdD2wGkRbepGPkA00EyxlD7Uoh3nJd4XEEr1P9J3flRql9ghu/Onb06igMBb
+         AiWQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:subject:message-id:date:from:reply-to:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=lmm/YNDqSQghMDQX55lPDlYWGePy3db21+ic3NGFbKI=;
+        b=Rj87QbxBoieLVsf76zaw0CSxoN5y4tPV64JaXy5hIg9Mpz5AK7lTxju92mYasAn2Aa
+         IJW0cO5joxpKa82Hl9INbCj9OUYuKcyEaIhGXttyGiyPVdZ93Cgl0XezRDYifjfM+dnO
+         mPCnOY83UIQQf4vblC+CFV/SFXZnrJt7XNVs29dKTnejd+tMRu3tFxmwTHIejeUdRLVN
+         f2yy4GCOOT/6FMWzUgWy4x2hMfm2nAAxQ8gKc6Okw2zBHl9ope6XomDe+4FpF0eHuNqK
+         fn3bPfqxSEpP2LDHizyC5EQ7k8aG9h1V8kSCxLrhOZLFFXkVMENQ3yNK2LoQzhaV4uUU
+         N05Q==
+X-Gm-Message-State: AO0yUKWT5+F/cb0SOCcDZP+iSydq4aEeDBYA9lX0QjCYOsP40rn+7gg0
+        ekyOLA3jYHIcrBq2El22D4eaohinLhZ8iw5PdHo=
+X-Google-Smtp-Source: AK7set+jiaNytP+uPOgqb31N1kdMVpo3z+yyECuUMf6uz9SnEyZCKGk2kb7iBMrbhECi/FLCGSwuxwkAu5lR+jr8JnA=
+X-Received: by 2002:a17:903:3293:b0:19a:b151:eb8d with SMTP id
+ jh19-20020a170903329300b0019ab151eb8dmr68739plb.12.1676812281523; Sun, 19 Feb
+ 2023 05:11:21 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+Received: by 2002:a05:6a11:2d1f:b0:418:f69a:af80 with HTTP; Sun, 19 Feb 2023
+ 05:11:21 -0800 (PST)
+Reply-To: fionahill.usa@outlook.com
+From:   Fiona Hill <lori.j.robinson.us@gmail.com>
+Date:   Sun, 19 Feb 2023 05:11:21 -0800
+Message-ID: <CAO0nU=chj+-oDZhuvy-aWkSBALsV4X2dBWFkryZ1tOBD0tQD8Q@mail.gmail.com>
+Subject: 
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=4.6 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,FREEMAIL_REPLYTO,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,UNDISC_FREEM autolearn=no
+        autolearn_force=no version=3.4.6
+X-Spam-Level: ****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When dealing with few flows or an imbalance on CPU utilization, static RPS
-CPU assignment can be too inflexible. Add support for enabling threaded NAPI
-for backlog processing in order to allow the scheduler to better balance
-processing. This helps better spread the load across idle CPUs.
-
-Signed-off-by: Felix Fietkau <nbd@nbd.name>
----
-RFC v3:
- - make patch more generic, applies to backlog processing in general
- - fix process queue access on flush
-RFC v2:
- - fix rebase error in rps locking
-
- include/linux/netdevice.h  |  2 +
- net/core/dev.c             | 78 +++++++++++++++++++++++++++++++++++---
- net/core/sysctl_net_core.c | 27 +++++++++++++
- 3 files changed, 102 insertions(+), 5 deletions(-)
-
-diff --git a/include/linux/netdevice.h b/include/linux/netdevice.h
-index d9cdbc047b49..b3cef91b1696 100644
---- a/include/linux/netdevice.h
-+++ b/include/linux/netdevice.h
-@@ -522,6 +522,7 @@ static inline bool napi_complete(struct napi_struct *n)
- }
- 
- int dev_set_threaded(struct net_device *dev, bool threaded);
-+int backlog_set_threaded(bool threaded);
- 
- /**
-  *	napi_disable - prevent NAPI from scheduling
-@@ -3192,6 +3193,7 @@ struct softnet_data {
- 	unsigned int		cpu;
- 	unsigned int		input_queue_tail;
- #endif
-+	unsigned int		process_queue_empty;
- 	unsigned int		received_rps;
- 	unsigned int		dropped;
- 	struct sk_buff_head	input_pkt_queue;
-diff --git a/net/core/dev.c b/net/core/dev.c
-index 357081b0113c..76874513b7b5 100644
---- a/net/core/dev.c
-+++ b/net/core/dev.c
-@@ -4597,7 +4597,7 @@ static int napi_schedule_rps(struct softnet_data *sd)
- 	struct softnet_data *mysd = this_cpu_ptr(&softnet_data);
- 
- #ifdef CONFIG_RPS
--	if (sd != mysd) {
-+	if (sd != mysd && !test_bit(NAPI_STATE_THREADED, &sd->backlog.state)) {
- 		sd->rps_ipi_next = mysd->rps_ipi_list;
- 		mysd->rps_ipi_list = sd;
- 
-@@ -5778,6 +5778,8 @@ static DEFINE_PER_CPU(struct work_struct, flush_works);
- /* Network device is going away, flush any packets still pending */
- static void flush_backlog(struct work_struct *work)
- {
-+	unsigned int process_queue_empty;
-+	bool threaded, flush_processq;
- 	struct sk_buff *skb, *tmp;
- 	struct softnet_data *sd;
- 
-@@ -5792,8 +5794,15 @@ static void flush_backlog(struct work_struct *work)
- 			input_queue_head_incr(sd);
- 		}
- 	}
-+
-+	threaded = test_bit(NAPI_STATE_THREADED, &sd->backlog.state);
-+	flush_processq = threaded &&
-+			 !skb_queue_empty_lockless(&sd->process_queue);
- 	rps_unlock_irq_enable(sd);
- 
-+	if (threaded)
-+		goto out;
-+
- 	skb_queue_walk_safe(&sd->process_queue, skb, tmp) {
- 		if (skb->dev->reg_state == NETREG_UNREGISTERING) {
- 			__skb_unlink(skb, &sd->process_queue);
-@@ -5801,7 +5810,16 @@ static void flush_backlog(struct work_struct *work)
- 			input_queue_head_incr(sd);
- 		}
- 	}
-+
-+out:
- 	local_bh_enable();
-+
-+	while (flush_processq) {
-+		msleep(1);
-+		rps_lock_irq_disable(sd);
-+		flush_processq = process_queue_empty == sd->process_queue_empty;
-+		rps_unlock_irq_enable(sd);
-+	}
- }
- 
- static bool flush_required(int cpu)
-@@ -5933,16 +5951,16 @@ static int process_backlog(struct napi_struct *napi, int quota)
- 		}
- 
- 		rps_lock_irq_disable(sd);
-+		sd->process_queue_empty++;
- 		if (skb_queue_empty(&sd->input_pkt_queue)) {
- 			/*
- 			 * Inline a custom version of __napi_complete().
--			 * only current cpu owns and manipulates this napi,
--			 * and NAPI_STATE_SCHED is the only possible flag set
--			 * on backlog.
-+			 * only current cpu owns and manipulates this napi.
- 			 * We can use a plain write instead of clear_bit(),
- 			 * and we dont need an smp_mb() memory barrier.
- 			 */
--			napi->state = 0;
-+			napi->state &= ~(NAPIF_STATE_SCHED |
-+					 NAPIF_STATE_SCHED_THREADED);
- 			again = false;
- 		} else {
- 			skb_queue_splice_tail_init(&sd->input_pkt_queue,
-@@ -6356,6 +6374,53 @@ int dev_set_threaded(struct net_device *dev, bool threaded)
- }
- EXPORT_SYMBOL(dev_set_threaded);
- 
-+int backlog_set_threaded(bool threaded)
-+{
-+	static bool backlog_threaded;
-+	int err = 0;
-+	int i;
-+
-+	if (backlog_threaded == threaded)
-+		return 0;
-+
-+	for_each_possible_cpu(i) {
-+		struct softnet_data *sd = &per_cpu(softnet_data, i);
-+		struct napi_struct *n = &sd->backlog;
-+
-+		n->thread = kthread_run(napi_threaded_poll, n, "napi/backlog-%d", i);
-+		if (IS_ERR(n->thread)) {
-+			err = PTR_ERR(n->thread);
-+			pr_err("kthread_run failed with err %d\n", err);
-+			n->thread = NULL;
-+			threaded = false;
-+			break;
-+		}
-+
-+	}
-+
-+	backlog_threaded = threaded;
-+
-+	/* Make sure kthread is created before THREADED bit
-+	 * is set.
-+	 */
-+	smp_mb__before_atomic();
-+
-+	for_each_possible_cpu(i) {
-+		struct softnet_data *sd = &per_cpu(softnet_data, i);
-+		struct napi_struct *n = &sd->backlog;
-+		unsigned long flags;
-+
-+		rps_lock_irqsave(sd, &flags);
-+		if (threaded)
-+			n->state |= NAPIF_STATE_THREADED;
-+		else
-+			n->state &= ~NAPIF_STATE_THREADED;
-+		rps_unlock_irq_restore(sd, &flags);
-+	}
-+
-+	return err;
-+}
-+
- void netif_napi_add_weight(struct net_device *dev, struct napi_struct *napi,
- 			   int (*poll)(struct napi_struct *, int), int weight)
- {
-@@ -11114,6 +11179,9 @@ static int dev_cpu_dead(unsigned int oldcpu)
- 	raise_softirq_irqoff(NET_TX_SOFTIRQ);
- 	local_irq_enable();
- 
-+	if (test_bit(NAPI_STATE_THREADED, &oldsd->backlog.state))
-+		return 0;
-+
- #ifdef CONFIG_RPS
- 	remsd = oldsd->rps_ipi_list;
- 	oldsd->rps_ipi_list = NULL;
-diff --git a/net/core/sysctl_net_core.c b/net/core/sysctl_net_core.c
-index 7130e6d9e263..3eea703b69d7 100644
---- a/net/core/sysctl_net_core.c
-+++ b/net/core/sysctl_net_core.c
-@@ -30,6 +30,7 @@ static int int_3600 = 3600;
- static int min_sndbuf = SOCK_MIN_SNDBUF;
- static int min_rcvbuf = SOCK_MIN_RCVBUF;
- static int max_skb_frags = MAX_SKB_FRAGS;
-+static int backlog_threaded;
- 
- static int net_msg_warn;	/* Unused, but still a sysctl */
- 
-@@ -165,6 +166,23 @@ static int rps_sock_flow_sysctl(struct ctl_table *table, int write,
- }
- #endif /* CONFIG_RPS */
- 
-+static int backlog_threaded_sysctl(struct ctl_table *table, int write,
-+			       void *buffer, size_t *lenp, loff_t *ppos)
-+{
-+	static DEFINE_MUTEX(backlog_threaded_mutex);
-+	int ret;
-+
-+	mutex_lock(&backlog_threaded_mutex);
-+
-+	ret = proc_dointvec_minmax(table, write, buffer, lenp, ppos);
-+	if (write && !ret)
-+		ret = backlog_set_threaded(backlog_threaded);
-+
-+	mutex_unlock(&backlog_threaded_mutex);
-+
-+	return ret;
-+}
-+
- #ifdef CONFIG_NET_FLOW_LIMIT
- static DEFINE_MUTEX(flow_limit_update_mutex);
- 
-@@ -514,6 +532,15 @@ static struct ctl_table net_core_table[] = {
- 		.proc_handler	= rps_default_mask_sysctl
- 	},
- #endif
-+	{
-+		.procname	= "backlog_threaded",
-+		.data		= &backlog_threaded,
-+		.maxlen		= sizeof(unsigned int),
-+		.mode		= 0644,
-+		.proc_handler	= backlog_threaded_sysctl,
-+		.extra1		= SYSCTL_ZERO,
-+		.extra2		= SYSCTL_ONE
-+	},
- #ifdef CONFIG_NET_FLOW_LIMIT
- 	{
- 		.procname	= "flow_limit_cpu_bitmap",
 -- 
-2.39.0
-
+Hello you see my message?
