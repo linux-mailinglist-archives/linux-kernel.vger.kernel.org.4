@@ -2,139 +2,207 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 06D4C69C12A
-	for <lists+linux-kernel@lfdr.de>; Sun, 19 Feb 2023 16:08:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D560469C12D
+	for <lists+linux-kernel@lfdr.de>; Sun, 19 Feb 2023 16:09:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230443AbjBSPIb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 19 Feb 2023 10:08:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58748 "EHLO
+        id S230450AbjBSPIr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 19 Feb 2023 10:08:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59172 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230398AbjBSPI3 (ORCPT
+        with ESMTP id S230462AbjBSPIo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 19 Feb 2023 10:08:29 -0500
-Received: from nbd.name (nbd.name [46.4.11.11])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CBB5BCC25;
-        Sun, 19 Feb 2023 07:08:28 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=nbd.name;
-        s=20160729; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:References:
-        Cc:To:From:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:Content-ID:
-        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-        :Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
-        List-Post:List-Owner:List-Archive;
-        bh=V6cAn+Kbhs2/g9CQamm2tp5eaYDHzFhILdtI4rJ8LGo=; b=sU14Thko0GAJ0Rp1KBkv9dHMq/
-        eADkI0ptMcrQyaXY3jzlHa8qPYDpsKb0z4X1Evoq6iW+bNhMNgmTGInLNC4nzGK9FgKrVQo/SMohT
-        6EDPoyri29KsTJtX44lkieZFWrZKXLp/b8xwDQUM0NVIH9SC0FY5kOOKMhGwnjeKQPsY=;
-Received: from p54ae9730.dip0.t-ipconnect.de ([84.174.151.48] helo=nf.local)
-        by ds12 with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-        (Exim 4.94.2)
-        (envelope-from <nbd@nbd.name>)
-        id 1pTlIa-009xOe-EL; Sun, 19 Feb 2023 16:08:20 +0100
-Message-ID: <a66335ec-0911-1902-7585-827b918fe957@nbd.name>
-Date:   Sun, 19 Feb 2023 16:08:19 +0100
+        Sun, 19 Feb 2023 10:08:44 -0500
+Received: from mail-lj1-x22e.google.com (mail-lj1-x22e.google.com [IPv6:2a00:1450:4864:20::22e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 972F811177
+        for <linux-kernel@vger.kernel.org>; Sun, 19 Feb 2023 07:08:40 -0800 (PST)
+Received: by mail-lj1-x22e.google.com with SMTP id y41so1629787ljq.5
+        for <linux-kernel@vger.kernel.org>; Sun, 19 Feb 2023 07:08:40 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ragnatech-se.20210112.gappssmtp.com; s=20210112;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=dSBge9mIuTlc4vzvyJj2lqtZNbusVps3AymwUTX05O0=;
+        b=Rg8Mi4g0jIhYFY8bF3M1CocgMhbf6Jwd+9Lp7p32VUgd7WYBmWl362prsopmEmz1v6
+         gqUlrYhOfRNmHMg5UgzkHwFHX0wLorFG4amGbldvxSgrJqX0aWbuMeEav8XyZOYByyFS
+         sftmzfqzI7Zv3gE8NjBNZn/RAlXVaaEKjkQmDpAMd1HuweVBrY5WslRAO4lYhmc1jL9d
+         ag6MECnD+FYGONxykSkOT4969YmF1bbjmdixwolttdyrtQI8KZplRvOh1pxnyZAMrl72
+         LdNUIL5hHMgBpxGyj0ZlEUjDk8nDuSYRDcT41p6Afbbi19aLJ7fGntrcROk7D4fEgsc/
+         ttLA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=dSBge9mIuTlc4vzvyJj2lqtZNbusVps3AymwUTX05O0=;
+        b=jkjBswsNXoghWrZoRZFsJW+0dqhhrxJEcWQWEXyJUqBJK/DyePAbpIeVvTVHU8PGgD
+         a49KHQENxYk7X6WOeoG9nLBi6CGDFYCADDE6MlUHWeM77Y5KaouNyMgBrAjXMqNeMo3s
+         tRtfZJTE7nk/xYC0FV8HKxObYRzWv2XISx0U5sbVEReVILjiO1NHpgsSbE1/l1wByzOG
+         ogPdW9eT07kQIINAz0AMDk65dQnqTbuBGDR1uG/WyagyjLeUcoM7J7+qnCj6A4/0My1X
+         z1SyzT7BSfiKyGEj4z3x+XFYdPXojbNCKkGp0cVehUcKnr4O+j6f3YQz+tcz+wMJvgq1
+         BZIQ==
+X-Gm-Message-State: AO0yUKXUscFBFbt+CmgCuwLvZYvUaGRb2n4bRAPs3fjS+OLzz9w7OiMn
+        C5T2mi+tW2u6y7nSeUxcu+4XfQ==
+X-Google-Smtp-Source: AK7set9giO9XVeahsn5If/QkM7Bceqee8m29SoUZWhwnHzM4iwAul8hcSgT6JpcSwcRdV6dUhBPZ6w==
+X-Received: by 2002:a2e:be93:0:b0:28b:9582:2bb with SMTP id a19-20020a2ebe93000000b0028b958202bbmr559114ljr.44.1676819318825;
+        Sun, 19 Feb 2023 07:08:38 -0800 (PST)
+Received: from localhost (h-46-59-89-207.A463.priv.bahnhof.se. [46.59.89.207])
+        by smtp.gmail.com with ESMTPSA id u12-20020ac24c2c000000b004b567e1f8e5sm1267703lfq.125.2023.02.19.07.08.38
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 19 Feb 2023 07:08:38 -0800 (PST)
+Date:   Sun, 19 Feb 2023 16:08:37 +0100
+From:   Niklas =?utf-8?Q?S=C3=B6derlund?= <niklas.soderlund@ragnatech.se>
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>
+Cc:     rafael@kernel.org, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Broadcom internal kernel review list 
+        <bcm-kernel-feedback-list@broadcom.com>,
+        Ray Jui <rjui@broadcom.com>,
+        Scott Branden <sbranden@broadcom.com>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Stefan Wahren <stefan.wahren@i2se.com>,
+        Kunihiko Hayashi <hayashi.kunihiko@socionext.com>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        ye xingchen <ye.xingchen@zte.com.cn>,
+        "moderated list:BROADCOM BCM2711/BCM2835 ARM ARCHITECTURE" 
+        <linux-rpi-kernel@lists.infradead.org>,
+        "moderated list:BROADCOM BCM2711/BCM2835 ARM ARCHITECTURE" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "open list:RENESAS R-CAR THERMAL DRIVERS" 
+        <linux-renesas-soc@vger.kernel.org>,
+        "open list:ARM/Rockchip SoC support" 
+        <linux-rockchip@lists.infradead.org>
+Subject: Re: [PATCH v1 04/17] thermal/hwmon: Do not set no_hwmon before
+ calling thermal_add_hwmon_sysfs()
+Message-ID: <Y/I7dZiHqT0xH7tC@oden.dyn.berto.se>
+References: <20230219143657.241542-1-daniel.lezcano@linaro.org>
+ <20230219143657.241542-5-daniel.lezcano@linaro.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.7.2
-Subject: Re: [RFC v3] net/core: add optional threading for backlog processing
-Content-Language: en-US
-From:   Felix Fietkau <nbd@nbd.name>
-To:     netdev@vger.kernel.org, "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>
-Cc:     linux-kernel@vger.kernel.org
-References: <20230219131006.92681-1-nbd@nbd.name>
-In-Reply-To: <20230219131006.92681-1-nbd@nbd.name>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20230219143657.241542-5-daniel.lezcano@linaro.org>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 19.02.23 14:10, Felix Fietkau wrote:
-> When dealing with few flows or an imbalance on CPU utilization, static RPS
-> CPU assignment can be too inflexible. Add support for enabling threaded NAPI
-> for backlog processing in order to allow the scheduler to better balance
-> processing. This helps better spread the load across idle CPUs.
+Hi Daniel,
+
+Thanks for your work.
+
+On 2023-02-19 15:36:44 +0100, Daniel Lezcano wrote:
+> The thermal->tzp->no_hwmon parameter is only used when calling
+> thermal_zone_device_register().
 > 
-> Signed-off-by: Felix Fietkau <nbd@nbd.name>
+> Setting it to 'false' before calling thermal_add_hwmon_sysfs() has no
+> effect.
+> 
+> Remove the call and again prevent the drivers to access the thermal
+> internals.
+> 
+> Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
 > ---
-> RFC v3:
->   - make patch more generic, applies to backlog processing in general
->   - fix process queue access on flush
-> RFC v2:
->   - fix rebase error in rps locking
+>  drivers/thermal/broadcom/bcm2711_thermal.c | 1 -
+>  drivers/thermal/broadcom/bcm2835_thermal.c | 1 -
+>  drivers/thermal/rcar_gen3_thermal.c        | 1 -
+>  drivers/thermal/rcar_thermal.c             | 5 -----
+
+For R-Car,
+
+Reviewed-by: Niklas Söderlund <niklas.soderlund+renesas@ragnatech.se>
+
+>  drivers/thermal/rockchip_thermal.c         | 1 -
+>  drivers/thermal/rzg2l_thermal.c            | 1 -
+>  6 files changed, 10 deletions(-)
 > 
->   include/linux/netdevice.h  |  2 +
->   net/core/dev.c             | 78 +++++++++++++++++++++++++++++++++++---
->   net/core/sysctl_net_core.c | 27 +++++++++++++
->   3 files changed, 102 insertions(+), 5 deletions(-)
+> diff --git a/drivers/thermal/broadcom/bcm2711_thermal.c b/drivers/thermal/broadcom/bcm2711_thermal.c
+> index 18b1a4d9ecc7..0a499435431c 100644
+> --- a/drivers/thermal/broadcom/bcm2711_thermal.c
+> +++ b/drivers/thermal/broadcom/bcm2711_thermal.c
+> @@ -98,7 +98,6 @@ static int bcm2711_thermal_probe(struct platform_device *pdev)
+>  
+>  	priv->thermal = thermal;
+>  
+> -	thermal->tzp->no_hwmon = false;
+>  	return thermal_add_hwmon_sysfs(thermal);
+>  }
+>  
+> diff --git a/drivers/thermal/broadcom/bcm2835_thermal.c b/drivers/thermal/broadcom/bcm2835_thermal.c
+> index de2f573863da..8ed7a80122a0 100644
+> --- a/drivers/thermal/broadcom/bcm2835_thermal.c
+> +++ b/drivers/thermal/broadcom/bcm2835_thermal.c
+> @@ -267,7 +267,6 @@ static int bcm2835_thermal_probe(struct platform_device *pdev)
+>  	 * Thermal_zone doesn't enable hwmon as default,
+>  	 * enable it here
+>  	 */
+> -	tz->tzp->no_hwmon = false;
+>  	err = thermal_add_hwmon_sysfs(tz);
+>  	if (err)
+>  		goto err_tz;
+> diff --git a/drivers/thermal/rcar_gen3_thermal.c b/drivers/thermal/rcar_gen3_thermal.c
+> index 8ad713cb4bf7..4ea9d4bd8e6f 100644
+> --- a/drivers/thermal/rcar_gen3_thermal.c
+> +++ b/drivers/thermal/rcar_gen3_thermal.c
+> @@ -527,7 +527,6 @@ static int rcar_gen3_thermal_probe(struct platform_device *pdev)
+>  		}
+>  		tsc->zone = zone;
+>  
+> -		tsc->zone->tzp->no_hwmon = false;
+>  		ret = thermal_add_hwmon_sysfs(tsc->zone);
+>  		if (ret)
+>  			goto error_unregister;
+> diff --git a/drivers/thermal/rcar_thermal.c b/drivers/thermal/rcar_thermal.c
+> index 538ed6731589..919f0e32d3c5 100644
+> --- a/drivers/thermal/rcar_thermal.c
+> +++ b/drivers/thermal/rcar_thermal.c
+> @@ -509,11 +509,6 @@ static int rcar_thermal_probe(struct platform_device *pdev)
+>  		}
+>  
+>  		if (chip->use_of_thermal) {
+> -			/*
+> -			 * thermal_zone doesn't enable hwmon as default,
+> -			 * but, enable it here to keep compatible
+> -			 */
+> -			priv->zone->tzp->no_hwmon = false;
+>  			ret = thermal_add_hwmon_sysfs(priv->zone);
+>  			if (ret)
+>  				goto error_unregister;
+> diff --git a/drivers/thermal/rockchip_thermal.c b/drivers/thermal/rockchip_thermal.c
+> index bd593ec712ee..3211b70c85b9 100644
+> --- a/drivers/thermal/rockchip_thermal.c
+> +++ b/drivers/thermal/rockchip_thermal.c
+> @@ -1451,7 +1451,6 @@ static int rockchip_thermal_probe(struct platform_device *pdev)
+>  
+>  	for (i = 0; i < thermal->chip->chn_num; i++) {
+>  		rockchip_thermal_toggle_sensor(&thermal->sensors[i], true);
+> -		thermal->sensors[i].tzd->tzp->no_hwmon = false;
+>  		error = thermal_add_hwmon_sysfs(thermal->sensors[i].tzd);
+>  		if (error)
+>  			dev_warn(&pdev->dev,
+> diff --git a/drivers/thermal/rzg2l_thermal.c b/drivers/thermal/rzg2l_thermal.c
+> index d3ba2a74e42d..a2f21c941cfe 100644
+> --- a/drivers/thermal/rzg2l_thermal.c
+> +++ b/drivers/thermal/rzg2l_thermal.c
+> @@ -216,7 +216,6 @@ static int rzg2l_thermal_probe(struct platform_device *pdev)
+>  	}
+>  
+>  	priv->zone = zone;
+> -	priv->zone->tzp->no_hwmon = false;
+>  	ret = thermal_add_hwmon_sysfs(priv->zone);
+>  	if (ret)
+>  		goto err;
+> -- 
+> 2.34.1
 > 
-> diff --git a/include/linux/netdevice.h b/include/linux/netdevice.h
-> index d9cdbc047b49..b3cef91b1696 100644
-> --- a/include/linux/netdevice.h
-> +++ b/include/linux/netdevice.h
-> @@ -522,6 +522,7 @@ static inline bool napi_complete(struct napi_struct *n)
->   }
->   
->   int dev_set_threaded(struct net_device *dev, bool threaded);
-> +int backlog_set_threaded(bool threaded);
->   
->   /**
->    *	napi_disable - prevent NAPI from scheduling
-> @@ -3192,6 +3193,7 @@ struct softnet_data {
->   	unsigned int		cpu;
->   	unsigned int		input_queue_tail;
->   #endif
-> +	unsigned int		process_queue_empty;
->   	unsigned int		received_rps;
->   	unsigned int		dropped;
->   	struct sk_buff_head	input_pkt_queue;
-> diff --git a/net/core/dev.c b/net/core/dev.c
-> index 357081b0113c..76874513b7b5 100644
-> --- a/net/core/dev.c
-> +++ b/net/core/dev.c
-> @@ -4597,7 +4597,7 @@ static int napi_schedule_rps(struct softnet_data *sd)
->   	struct softnet_data *mysd = this_cpu_ptr(&softnet_data);
->   
->   #ifdef CONFIG_RPS
-> -	if (sd != mysd) {
-> +	if (sd != mysd && !test_bit(NAPI_STATE_THREADED, &sd->backlog.state)) {
->   		sd->rps_ipi_next = mysd->rps_ipi_list;
->   		mysd->rps_ipi_list = sd;
->   
-> @@ -5778,6 +5778,8 @@ static DEFINE_PER_CPU(struct work_struct, flush_works);
->   /* Network device is going away, flush any packets still pending */
->   static void flush_backlog(struct work_struct *work)
->   {
-> +	unsigned int process_queue_empty;
-> +	bool threaded, flush_processq;
->   	struct sk_buff *skb, *tmp;
->   	struct softnet_data *sd;
->   
-> @@ -5792,8 +5794,15 @@ static void flush_backlog(struct work_struct *work)
->   			input_queue_head_incr(sd);
->   		}
->   	}
-> +
-> +	threaded = test_bit(NAPI_STATE_THREADED, &sd->backlog.state);
-> +	flush_processq = threaded &&
-> +			 !skb_queue_empty_lockless(&sd->process_queue);
-Sorry, the patch was missing these lines:
-	if (flush_processq)
-		process_queue_empty = sd->process_queue_empty;
 
->   	rps_unlock_irq_enable(sd);
->   
-> +	if (threaded)
-> +		goto out;
-> +
->   	skb_queue_walk_safe(&sd->process_queue, skb, tmp) {
->   		if (skb->dev->reg_state == NETREG_UNREGISTERING) {
->   			__skb_unlink(skb, &sd->process_queue);
-
-
+-- 
+Kind Regards,
+Niklas Söderlund
