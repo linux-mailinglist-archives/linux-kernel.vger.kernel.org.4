@@ -2,55 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4BB8369BE36
-	for <lists+linux-kernel@lfdr.de>; Sun, 19 Feb 2023 03:41:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 807C069BE3E
+	for <lists+linux-kernel@lfdr.de>; Sun, 19 Feb 2023 03:41:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229715AbjBSClg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 18 Feb 2023 21:41:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42284 "EHLO
+        id S229758AbjBSClq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 18 Feb 2023 21:41:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42288 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229586AbjBSCl2 (ORCPT
+        with ESMTP id S229597AbjBSCl2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Sat, 18 Feb 2023 21:41:28 -0500
 Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA67112051;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 079E912057;
         Sat, 18 Feb 2023 18:41:26 -0800 (PST)
 Received: from mail02.huawei.com (unknown [172.30.67.143])
-        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4PK8v60GP2z4f3pBy;
+        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4PK8v635HWz4f3p1D;
         Sun, 19 Feb 2023 10:41:22 +0800 (CST)
 Received: from huaweicloud.com (unknown [10.175.124.27])
-        by APP2 (Coremail) with SMTP id Syh0CgBH7utQjPFjPmleDw--.7604S8;
+        by APP2 (Coremail) with SMTP id Syh0CgBH7utQjPFjPmleDw--.7604S9;
         Sun, 19 Feb 2023 10:41:24 +0800 (CST)
 From:   Kemeng Shi <shikemeng@huaweicloud.com>
 To:     paolo.valente@linaro.org, axboe@kernel.dk, jack@suse.cz
 Cc:     linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
         shikemeng@huaweicloud.com
-Subject: [PATCH 06/17] block, bfq: correct bfq_max_budget and bfq_min_budget
-Date:   Sun, 19 Feb 2023 18:42:58 +0800
-Message-Id: <20230219104309.1511562-7-shikemeng@huaweicloud.com>
+Subject: [PATCH 07/17] block, bfq: correct interactive weight-raise check in bfq_set_budget_timeout
+Date:   Sun, 19 Feb 2023 18:42:59 +0800
+Message-Id: <20230219104309.1511562-8-shikemeng@huaweicloud.com>
 X-Mailer: git-send-email 2.30.0
 In-Reply-To: <20230219104309.1511562-1-shikemeng@huaweicloud.com>
 References: <20230219104309.1511562-1-shikemeng@huaweicloud.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: Syh0CgBH7utQjPFjPmleDw--.7604S8
-X-Coremail-Antispam: 1UD129KBjvJXoW7Jry5Zw15WF1UWrW3tr47Jwb_yoW8JrW5pa
-        4qqw10gF17JrZxXrs7K3WUX3W5twsxZF4kKr1YqrWjyF4IyF1ayF18Zw18X3WfKrWIyry5
-        X3sru34DXa12kaDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUPY14x267AKxVWrJVCq3wAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2jI8I6cxK62vIxIIY0VWUZVW8XwA2048vs2IY02
-        0E87I2jVAFwI0_JF0E3s1l82xGYIkIc2x26xkF7I0E14v26ryj6s0DM28lY4IEw2IIxxk0
-        rwA2F7IY1VAKz4vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Ar0_tr1l84ACjcxK6x
-        IIjxv20xvEc7CjxVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xv
-        wVC2z280aVCY1x0267AKxVW0oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFc
-        xC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_
-        Gr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcxkI7VAKI48JM4x0x7Aq67IIx4CEVc8vx2
-        IErcIFxwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E
-        14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_JF0_Jw1lIx
-        kGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUCVW8JwCI42IY6xIIjxv20xvEc7CjxVAF
-        wI0_Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r1j6r
-        4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x0pRvJPtU
-        UUUU=
+X-CM-TRANSID: Syh0CgBH7utQjPFjPmleDw--.7604S9
+X-Coremail-Antispam: 1UD129KBjvdXoWrtF17AF1UJFyUZF47AFW3trb_yoWkWFb_C3
+        Z5tr1rJF1kGr93CFsrt34rAryDKw18J3WkC34xKrnFgr42yFs2k34qgr90yFZ8Za9F9Fy3
+        JFsYqF1UJrsrZjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+        9fnUUIcSsGvfJTRUUUbDkFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k26cxKx2IYs7xG
+        6rWj6s0DM7CIcVAFz4kK6r1j6r18M280x2IEY4vEnII2IxkI6r1a6r45M28IrcIa0xkI8V
+        A2jI8067AKxVWUAVCq3wA2048vs2IY020Ec7CjxVAFwI0_Xr0E3s1l8cAvFVAK0II2c7xJ
+        M28CjxkF64kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVW7JVWDJwA2z4x0Y4vE2I
+        x0cI8IcVCY1x0267AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK
+        6I8E87Iv6xkF7I0E14v26rxl6s0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4
+        xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8
+        JwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41lF7I21c0EjII2zVCS5cI20V
+        AGYxC7MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAF
+        wI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUAVWUtwCIc4
+        0Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1I6r4UMIIF0xvE2Ix0cI8IcVCY1x0267AK
+        xVW8JVWxJwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Jr0_Gr
+        1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7sRiVbyDUU
+        UUU==
 X-CM-SenderInfo: 5vklyvpphqwq5kxd4v5lfo033gof0z/
 X-CFilter-Loop: Reflected
 X-Spam-Status: No, score=0.0 required=5.0 tests=BAYES_00,DATE_IN_FUTURE_06_12,
@@ -61,39 +61,33 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-For case that user set a max_budget, we should use bfq_max_budget
-set by user instead of bfq_default_max_budget when budgets_assigned
-is not enough to compulte auto-tuning max_budget.
+After weight-raise finished, bfqq->wr_coeff is reset to 1 while
+bfqq->wr_cur_max_time may not be reset. For example,
+Function bfq_update_bfqq_wr_on_rq_arrival will only reset wr_coeff to 1 if
+bfqq is created in burst creation. Function bfq_set_budget_timeout will be
+called when bfqq is selected while it's wr_cur_max_time is set and wr_coeff
+is 1. Fix this by check wr_coeff > 1 along with check wr_cur_max_time
+check like other code do.
 
 Signed-off-by: Kemeng Shi <shikemeng@huaweicloud.com>
 ---
- block/bfq-iosched.c | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+ block/bfq-iosched.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
 diff --git a/block/bfq-iosched.c b/block/bfq-iosched.c
-index 5b08711cbaf6..b32bae5259d5 100644
+index b32bae5259d5..5610a7dcacdf 100644
 --- a/block/bfq-iosched.c
 +++ b/block/bfq-iosched.c
-@@ -1458,7 +1458,8 @@ static int bfq_bfqq_budget_left(struct bfq_queue *bfqq)
-  */
- static int bfq_max_budget(struct bfq_data *bfqd)
+@@ -3297,7 +3297,8 @@ static void bfq_set_budget_timeout(struct bfq_data *bfqd,
  {
--	if (bfqd->budgets_assigned < bfq_stats_min_budgets)
-+	if (bfqd->budgets_assigned < bfq_stats_min_budgets &&
-+			bfqd->bfq_user_max_budget == 0)
- 		return bfq_default_max_budget;
+ 	unsigned int timeout_coeff;
+ 
+-	if (bfqq->wr_cur_max_time == bfqd->bfq_wr_rt_max_time)
++	if (bfqq->wr_coeff > 1 &&
++	    bfqq->wr_cur_max_time == bfqd->bfq_wr_rt_max_time)
+ 		timeout_coeff = 1;
  	else
- 		return bfqd->bfq_max_budget;
-@@ -1470,7 +1471,8 @@ static int bfq_max_budget(struct bfq_data *bfqd)
-  */
- static int bfq_min_budget(struct bfq_data *bfqd)
- {
--	if (bfqd->budgets_assigned < bfq_stats_min_budgets)
-+	if (bfqd->budgets_assigned < bfq_stats_min_budgets &&
-+			bfqd->bfq_user_max_budget == 0)
- 		return bfq_default_max_budget / 32;
- 	else
- 		return bfqd->bfq_max_budget / 32;
+ 		timeout_coeff = bfqq->entity.weight / bfqq->entity.orig_weight;
 -- 
 2.30.0
 
