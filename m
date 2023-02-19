@@ -2,57 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 77C1B69BFD7
-	for <lists+linux-kernel@lfdr.de>; Sun, 19 Feb 2023 10:47:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BFD1369BFB9
+	for <lists+linux-kernel@lfdr.de>; Sun, 19 Feb 2023 10:36:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230153AbjBSJr1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 19 Feb 2023 04:47:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42316 "EHLO
+        id S230010AbjBSJgm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 19 Feb 2023 04:36:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58814 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230145AbjBSJrY (ORCPT
+        with ESMTP id S230022AbjBSJgj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 19 Feb 2023 04:47:24 -0500
-Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5EC7112BC4
-        for <linux-kernel@vger.kernel.org>; Sun, 19 Feb 2023 01:46:52 -0800 (PST)
-Received: by mail-yb1-xb49.google.com with SMTP id f33-20020a25b0a1000000b009433a21be0dso2123448ybj.19
-        for <linux-kernel@vger.kernel.org>; Sun, 19 Feb 2023 01:46:52 -0800 (PST)
+        Sun, 19 Feb 2023 04:36:39 -0500
+Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95BC2126F1
+        for <linux-kernel@vger.kernel.org>; Sun, 19 Feb 2023 01:35:48 -0800 (PST)
+Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-536885323c1so17996037b3.15
+        for <linux-kernel@vger.kernel.org>; Sun, 19 Feb 2023 01:35:48 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=cc:to:from:subject:references:mime-version:message-id:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=8oK06fVQN6LXVRqRBpBf6uq7iBLthLemaenQUOot5L0=;
-        b=c/IhxSXdMkvdWRTmNwDGCw1H+VDaY0b3orkL+EP+I6StfnTz8H8pSrT5peoX5iGhyL
-         aZJVTGxQcotqY/9XbrXu5W8a7dwuTOKV2N61EKGNWX+G6n+kxuWgzbZDVX14qVNHNX+s
-         fs5RmxJ4NrWIuhyym0Yg7NUOknjeXIWnd1ZkQeNcEc6sxObdx3t563ad/6YllU0XSRVH
-         fEBlJh6xYkiCZVrIz2FJ28m1/wK+9QXfHWnY7uNt0V/Brg7V6nAD5888J6y3CRDbKjZN
-         b08tJOGA3QuQgVGwsV5oJ+JxevsQJNE5g65XNpdn5E/qZEfMghvi8DBRe4DWYkzPbiRl
-         Q1+w==
+        bh=Q1iaZVlYNhiAOA5cs/+UwDX1JeW2DyTfNmupgRycGXY=;
+        b=GXX1CCWTT7DpChHpiAo8vxK/43ddF9gck9mQoSZ2hA08LIJ0U1Cu7/SFYa9EJvJFxe
+         m8KaqG9d0IPv1H+awLg+uCW+JyHffDXi8RxqbbHwMymD1tyKhcsbVu23oOmaI7vI3Ggo
+         A8m02HvwUYluQ/hwtU5heVipo9Wh/I0ByZJ263Ywidlya5sIiWqmTKfXXSjdJB+GukoV
+         TUk+iK3GL6mVBoiR/DsqTD45H27yUEHyxZf4toav9JGdIbqj/1fHLuj6CnEuBf5HvRQU
+         AhDI6PM1KMSvWtTcjBjzp7iRHFEfMo2PY+iby22NhQ0i2XGrdBrVZdFwwu7jGnEkvvA1
+         P5NQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:from:subject:references:mime-version:message-id:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=8oK06fVQN6LXVRqRBpBf6uq7iBLthLemaenQUOot5L0=;
-        b=wdWNjv6xteuc8VFUp/oGNOEQxldgKDUnVW3PvOzsFOr7+NrhnBfvxiXAyCslrEvfEt
-         TSS2zF0Ug3eJSZwdw66IN0VZAH8dsmNgbjZzF9fw18NEP2ee1kYhhC6/UAphCpuhIbTR
-         7ElVgUv1IU0v0w5pAdBpgiGtNI7GlMa48aJr84JGMY0YiJLL6qEJal3tNKLMnLHdGhjG
-         3rExR9DFXamJaqgx3aF7dTNXVIqQfFyecMk5A4TZs6J50djjhQ+nvXgG94vst99OYere
-         CK9YzfyzzaMmOYPXlBOyYev+C5EEoDGN3G8dK64AXjFlFPhyQHmmuGObJr56sNbIX5fE
-         /4ow==
-X-Gm-Message-State: AO0yUKX05eYmhopCtakjyEokzRaTIHsojDLxHN8ofMXh5ajnWbzncIRt
-        +zA5zyC2Ghkl+aoVOEsFURSSoPpHijVq
-X-Google-Smtp-Source: AK7set+LQd+T0aRT1nOHEm7j8W4E/K6xfWruqyX18mazS98+efqvDllhLIgDjt9Oib0BQaMgkUONzQILaLjH
+        bh=Q1iaZVlYNhiAOA5cs/+UwDX1JeW2DyTfNmupgRycGXY=;
+        b=S3yNglxsSfJcMJ1Gioyloib6GxEHGCu7e71UqEARRGGpldMm0niCK/ZXtozrKdKnPV
+         eyypy9n7oprL+uW7beu/x74fVxlo8kY/ssobVAtKpAqTEPdPLVJVTgpsyES9Et3RVCdE
+         8SgZ3nCKvHvGeQi6R6ZCqmx9nLlLNBl6dNBZA9LO6s9jU6Kc0TaGI8SBOOYauekBnONJ
+         m2J1Y9oSFjqHMRP1MlZ/7eYMLSe6LhuvzE5UN05dv7L2dc2fwzsRvcCS13qOxcZperc2
+         FH0cU0pz/dzRfo1IatiszHFHAXpu8zqWkND/s0au2NkwWgINv+ktX6idZfKdHATuQNOp
+         rqMg==
+X-Gm-Message-State: AO0yUKUyv7YY8TEs+Hu8l8bZbNvrHRu2qbu3Fo6idEgl2RekiRJ4Wxkj
+        lIpzCM58sY4PSweTCYrre7qKBkanb2iS
+X-Google-Smtp-Source: AK7set+1MTqVPBeVJ1iYyp/8DZ7MkvnpE8pT6AIUM7vIfURx7AFVUwdj5cGYtnDmeFMNAIrj/Jd0CiKRDfkv
 X-Received: from irogers.svl.corp.google.com ([2620:15c:2d4:203:cde9:3fbc:e1f1:6e3b])
- (user=irogers job=sendgmr) by 2002:a25:9ac4:0:b0:967:e782:c03 with SMTP id
- t4-20020a259ac4000000b00967e7820c03mr884748ybo.430.1676799216733; Sun, 19 Feb
- 2023 01:33:36 -0800 (PST)
-Date:   Sun, 19 Feb 2023 01:28:30 -0800
+ (user=irogers job=sendgmr) by 2002:a0d:ee44:0:b0:52e:e6ed:30a1 with SMTP id
+ x65-20020a0dee44000000b0052ee6ed30a1mr1338109ywe.545.1676799225232; Sun, 19
+ Feb 2023 01:33:45 -0800 (PST)
+Date:   Sun, 19 Feb 2023 01:28:31 -0800
 In-Reply-To: <20230219092848.639226-1-irogers@google.com>
-Message-Id: <20230219092848.639226-34-irogers@google.com>
+Message-Id: <20230219092848.639226-35-irogers@google.com>
 Mime-Version: 1.0
 References: <20230219092848.639226-1-irogers@google.com>
 X-Mailer: git-send-email 2.39.2.637.g21b0678d19-goog
-Subject: [PATCH v1 33/51] perf jevent: Parse metric thresholds
+Subject: [PATCH v1 34/51] perf pmu-events: Test parsing metric thresholds with
+ the fake PMU
 From:   Ian Rogers <irogers@google.com>
 To:     Peter Zijlstra <peterz@infradead.org>,
         Ingo Molnar <mingo@redhat.com>,
@@ -97,60 +98,53 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Parse the metric threshold and add to the pmu-events.c file. The
-metric isn't parsed as the parser uses python's parser and will break
-the operator precedence.
+Test the correctness of metric thresholds by testing them all with the
+fake PMU logic.
 
 Signed-off-by: Ian Rogers <irogers@google.com>
 ---
- tools/perf/pmu-events/jevents.py   | 7 ++++++-
- tools/perf/pmu-events/pmu-events.h | 1 +
- 2 files changed, 7 insertions(+), 1 deletion(-)
+ tools/perf/tests/pmu-events.c | 22 ++++++++++++++++++++++
+ 1 file changed, 22 insertions(+)
 
-diff --git a/tools/perf/pmu-events/jevents.py b/tools/perf/pmu-events/jevents.py
-index e82dff3a1228..40b9e626fc15 100755
---- a/tools/perf/pmu-events/jevents.py
-+++ b/tools/perf/pmu-events/jevents.py
-@@ -51,7 +51,7 @@ _json_event_attributes = [
+diff --git a/tools/perf/tests/pmu-events.c b/tools/perf/tests/pmu-events.c
+index 521557c396bc..db2fed0c6993 100644
+--- a/tools/perf/tests/pmu-events.c
++++ b/tools/perf/tests/pmu-events.c
+@@ -1021,12 +1021,34 @@ static int test__parsing_fake(struct test_suite *test __maybe_unused,
+ 	return pmu_for_each_sys_metric(test__parsing_fake_callback, NULL);
+ }
  
- # Attributes that are in pmu_metric rather than pmu_event.
- _json_metric_attributes = [
--    'metric_name', 'metric_group', 'metric_expr', 'desc',
-+    'metric_name', 'metric_group', 'metric_expr', 'metric_threshold', 'desc',
-     'long_desc', 'unit', 'compat', 'aggr_mode', 'event_grouping'
- ]
- # Attributes that are bools or enum int values, encoded as '0', '1',...
-@@ -306,6 +306,9 @@ class JsonEvent:
-     self.metric_expr = None
-     if 'MetricExpr' in jd:
-       self.metric_expr = metric.ParsePerfJson(jd['MetricExpr']).Simplify()
-+    # Note, the metric formula for the threshold isn't parsed as the &
-+    # and > have incorrect precedence.
-+    self.metric_threshold = jd.get('MetricThreshold')
++static int test__parsing_threshold_callback(const struct pmu_metric *pm,
++					const struct pmu_metrics_table *table __maybe_unused,
++					void *data __maybe_unused)
++{
++	if (!pm->metric_threshold)
++		return 0;
++	return metric_parse_fake(pm->metric_name, pm->metric_threshold);
++}
++
++static int test__parsing_threshold(struct test_suite *test __maybe_unused,
++			      int subtest __maybe_unused)
++{
++	int err = 0;
++
++	err = pmu_for_each_core_metric(test__parsing_threshold_callback, NULL);
++	if (err)
++		return err;
++
++	return pmu_for_each_sys_metric(test__parsing_threshold_callback, NULL);
++}
++
+ static struct test_case pmu_events_tests[] = {
+ 	TEST_CASE("PMU event table sanity", pmu_event_table),
+ 	TEST_CASE("PMU event map aliases", aliases),
+ 	TEST_CASE_REASON("Parsing of PMU event table metrics", parsing,
+ 			 "some metrics failed"),
+ 	TEST_CASE("Parsing of PMU event table metrics with fake PMUs", parsing_fake),
++	TEST_CASE("Parsing of metric thresholds with fake PMUs", parsing_threshold),
+ 	{ .name = NULL, }
+ };
  
-     arch_std = jd.get('ArchStdEvent')
-     if precise and self.desc and '(Precise Event)' not in self.desc:
-@@ -362,6 +365,8 @@ class JsonEvent:
-         # Convert parsed metric expressions into a string. Slashes
-         # must be doubled in the file.
-         x = x.ToPerfJson().replace('\\', '\\\\')
-+      if metric and x and attr == 'metric_threshold':
-+        x = x.replace('\\', '\\\\')
-       if attr in _json_enum_attributes:
-         s += x if x else '0'
-       else:
-diff --git a/tools/perf/pmu-events/pmu-events.h b/tools/perf/pmu-events/pmu-events.h
-index 57a38e3e5c32..b7dff8f1021f 100644
---- a/tools/perf/pmu-events/pmu-events.h
-+++ b/tools/perf/pmu-events/pmu-events.h
-@@ -54,6 +54,7 @@ struct pmu_metric {
- 	const char *metric_name;
- 	const char *metric_group;
- 	const char *metric_expr;
-+	const char *metric_threshold;
- 	const char *unit;
- 	const char *compat;
- 	const char *desc;
 -- 
 2.39.2.637.g21b0678d19-goog
 
