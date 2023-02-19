@@ -2,57 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0223C69BF74
-	for <lists+linux-kernel@lfdr.de>; Sun, 19 Feb 2023 10:30:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6A29469BF75
+	for <lists+linux-kernel@lfdr.de>; Sun, 19 Feb 2023 10:30:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229823AbjBSJa3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 19 Feb 2023 04:30:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52290 "EHLO
+        id S229861AbjBSJae (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 19 Feb 2023 04:30:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52434 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229837AbjBSJaY (ORCPT
+        with ESMTP id S229840AbjBSJa2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 19 Feb 2023 04:30:24 -0500
-Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60F6112045
-        for <linux-kernel@vger.kernel.org>; Sun, 19 Feb 2023 01:29:53 -0800 (PST)
-Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-536885323c1so17938527b3.15
-        for <linux-kernel@vger.kernel.org>; Sun, 19 Feb 2023 01:29:53 -0800 (PST)
+        Sun, 19 Feb 2023 04:30:28 -0500
+Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98C7CEB75
+        for <linux-kernel@vger.kernel.org>; Sun, 19 Feb 2023 01:30:00 -0800 (PST)
+Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-53687f6de13so18395537b3.9
+        for <linux-kernel@vger.kernel.org>; Sun, 19 Feb 2023 01:30:00 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=cc:to:from:subject:references:mime-version:message-id:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=ty9nxmBgJsUnSpKV2MHBIMxHaMhrZHfa8zZXWCP8Cbg=;
-        b=fXPFn6oSwVykULAqbxpfhUL0GIEFqD2VYVuHvyjznRwBP0ndR6qs7rXslQtWXWUNDh
-         /2XPYoU8PtIy6GaUZ111tSYonx7D26wZEZSKzGtpsztGeEjNKD6TZA1M4wYrnGZz9BuG
-         GVN+QKkPziKsRuGsy1hU2SmnPxPPt+UDETmNsrK3VXcueClddLswkxO1Akd46lSS2YW6
-         uaJoN9BzoCcsr3DJPtkDs+01a1IBH3ojOB4udgVPPUg7gGlIxu2bwhMSr/KvdeFjGumO
-         BX/oZoE1NUz/N56t7evkLcNhnUn+6CYqcKAZlVrXPxXwzfkxuyJFXxTp6kiBL5aj5LHv
-         Y3WQ==
+        bh=McpPUh9UUbr+SfZnc3Yy3m0883o69CMJ9U4yySTvUIw=;
+        b=nr+0lt5VymGETH/u61CNycPQbXKy2g0gRYNfkLIoR9cI2Xz1zqqpvRQB4b+fwUG7ST
+         vok5Jj6oAiPiqTpK2qYsd0OSEZ1HtpmVkbitSOvgfeo2SX11R5cqjvdJj+7o4l3pP2Cd
+         M9yIKk4dJBKlIyffdAsE5VM7TQMCqt40bg09sqWDvbX5oSWMR+QbG+cvSpUeLzk5gQ5p
+         UBn4OhTfgAaRWfGzVdnvzS/ChmcUbPyAEprZQDL9beqiWSFPi01G1bQDim0d6bj9rTn3
+         IfeKuaPWVMI8DkuGAhsnoD79dvPT0XMD6WCXnyrM/WWfO+5k2nksBylj3NgndWilb/m6
+         cCOA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:from:subject:references:mime-version:message-id:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ty9nxmBgJsUnSpKV2MHBIMxHaMhrZHfa8zZXWCP8Cbg=;
-        b=MdZGWXh5AdJn3XaJNJcJqerSfsvbKsvVqbJcW6YVAUhFmrS56KoJvvwwDFF51P56Cb
-         Xd05KwxG0Dt64Q3rEu3aNdkIzwkdDhuIsiujCQoV2ZlIpvm0RHUcWmJJTU3CWxBtSfRQ
-         l6Pj0u3kd4ORojuetsfGMFTdN4/60GWvLA0ajGiHnc1gxVl9E26c0AKm7x8jE31XZkE9
-         2YjKeRhuxuBcQrglGyJ3JugTWwOO0HBsOF8haNVtqlGfeybny8ISHft5WT1hZkCQeCbm
-         /DeO91A24nGoc0B1u8T3G8+Y7ECgnRPuCJkaZoZ+gr+SLr0Dmk93nIVXiX7IxZWdvzgV
-         fAeQ==
-X-Gm-Message-State: AO0yUKWfz3zrSze38HJw/JySXdadamm5lKPooSxGpSdSRUxlSExeb9O8
-        2X3jLfOCAUjJHpXReK0ul89aptVtb3X0
-X-Google-Smtp-Source: AK7set8/9xn2NisKgllh+YoZULn5eZpfNzaNw83XW4wPsTC6NQrB1+wc0RUp1LPVAPXQL8Pa5tslQGVII/VV
+        bh=McpPUh9UUbr+SfZnc3Yy3m0883o69CMJ9U4yySTvUIw=;
+        b=QrO8Nksi1/T5Aih5lWlcF5dMv4gP4Vndngi2MGEw3rYbRj/R0EhmK31K4hQ2Gv1NkS
+         7Nsxg4SStuPfefUDcPaGbYs1DzMJtmgEY/omURFbXfwC1CVqgQTcNd2sqJp640jF1vZ1
+         qAampn3PzYKWYhPlpnie9IXgbdnsRR1UBOTZCK4sYUA5WrelRkA1m3ljuXJs1ARQyvnj
+         r/XCiZYG2tHixMb9YvxhHmS7yBCWdLmWiVJHCB235I5qSaDfF2O6HhrIHwSB7DNmZbOL
+         3RnRQneiOPnSvbHtAdMPWAkc895i/Z85txJungU0plXBkr0YqC98j3eb8MUdFfHjYe7g
+         38VA==
+X-Gm-Message-State: AO0yUKW400IArChcxvPY3oUNnWT/z/E+TE+fDP65EysIbVGCGJGrS+fz
+        P/LypTDoOYbQVvvyXfCZnFpRk04Zjh5A
+X-Google-Smtp-Source: AK7set/tYHCebNI8ZlW9vI/je+pg1JQ3IaTCJTwemTnxp8GWFHKNPaDgKuhJe4F8qrfLAcGYZUNSXbeBpGXk
 X-Received: from irogers.svl.corp.google.com ([2620:15c:2d4:203:cde9:3fbc:e1f1:6e3b])
- (user=irogers job=sendgmr) by 2002:a05:690c:f01:b0:52e:ac97:115f with SMTP id
- dc1-20020a05690c0f0100b0052eac97115fmr228775ywb.5.1676798992575; Sun, 19 Feb
- 2023 01:29:52 -0800 (PST)
-Date:   Sun, 19 Feb 2023 01:28:03 -0800
+ (user=irogers job=sendgmr) by 2002:a05:6902:45:b0:995:ccb:1aae with SMTP id
+ m5-20020a056902004500b009950ccb1aaemr109787ybh.13.1676799000276; Sun, 19 Feb
+ 2023 01:30:00 -0800 (PST)
+Date:   Sun, 19 Feb 2023 01:28:04 -0800
 In-Reply-To: <20230219092848.639226-1-irogers@google.com>
-Message-Id: <20230219092848.639226-7-irogers@google.com>
+Message-Id: <20230219092848.639226-8-irogers@google.com>
 Mime-Version: 1.0
 References: <20230219092848.639226-1-irogers@google.com>
 X-Mailer: git-send-email 2.39.2.637.g21b0678d19-goog
-Subject: [PATCH v1 06/51] perf pmu-events: Change perpkg to be a bool
+Subject: [PATCH v1 07/51] perf expr: Make the online topology accessible globally
 From:   Ian Rogers <irogers@google.com>
 To:     Peter Zijlstra <peterz@infradead.org>,
         Ingo Molnar <mingo@redhat.com>,
@@ -89,7 +89,7 @@ Cc:     Stephane Eranian <eranian@google.com>,
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -97,101 +97,199 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Switch to a more natural bool rather than string encoding, where NULL
-implicitly meant false. The only value of 'PerPkg' in the event json
-is '1'.
+Knowing the topology of online CPUs is useful for more than just expr
+literals. Move to a global function that caches the value. An
+additional upside is that this may also avoid computing the CPU
+topology in some situations.
 
 Signed-off-by: Ian Rogers <irogers@google.com>
 ---
- tools/perf/pmu-events/jevents.py   |  2 +-
- tools/perf/pmu-events/pmu-events.h |  2 +-
- tools/perf/tests/pmu-events.c      |  4 ++--
- tools/perf/util/pmu.c              | 11 ++++-------
- 4 files changed, 8 insertions(+), 11 deletions(-)
+ tools/perf/tests/expr.c   |  7 ++-----
+ tools/perf/util/cputopo.c | 14 ++++++++++++++
+ tools/perf/util/cputopo.h |  5 +++++
+ tools/perf/util/expr.c    | 16 ++++++----------
+ tools/perf/util/smt.c     | 11 +++++------
+ tools/perf/util/smt.h     | 12 ++++++------
+ 6 files changed, 38 insertions(+), 27 deletions(-)
 
-diff --git a/tools/perf/pmu-events/jevents.py b/tools/perf/pmu-events/jevents.py
-index 35ca34eca74a..2da55408398f 100755
---- a/tools/perf/pmu-events/jevents.py
-+++ b/tools/perf/pmu-events/jevents.py
-@@ -678,7 +678,7 @@ static void decompress_event(int offset, struct pmu_event *pe)
+diff --git a/tools/perf/tests/expr.c b/tools/perf/tests/expr.c
+index a9eb1ed6bd63..cbf0e0c74906 100644
+--- a/tools/perf/tests/expr.c
++++ b/tools/perf/tests/expr.c
+@@ -154,13 +154,10 @@ static int test__expr(struct test_suite *t __maybe_unused, int subtest __maybe_u
+ 
+ 	/* Only EVENT1 or EVENT2 need be measured depending on the value of smt_on. */
+ 	{
+-		struct cpu_topology *topology = cpu_topology__new();
+-		bool smton = smt_on(topology);
++		bool smton = smt_on();
+ 		bool corewide = core_wide(/*system_wide=*/false,
+-					  /*user_requested_cpus=*/false,
+-					  topology);
++					  /*user_requested_cpus=*/false);
+ 
+-		cpu_topology__delete(topology);
+ 		expr__ctx_clear(ctx);
+ 		TEST_ASSERT_VAL("find ids",
+ 				expr__find_ids("EVENT1 if #smt_on else EVENT2",
+diff --git a/tools/perf/util/cputopo.c b/tools/perf/util/cputopo.c
+index e08797c3cdbc..ca1d833a0c26 100644
+--- a/tools/perf/util/cputopo.c
++++ b/tools/perf/util/cputopo.c
+@@ -238,6 +238,20 @@ static bool has_die_topology(void)
+ 	return true;
+ }
+ 
++const struct cpu_topology *online_topology(void)
++{
++	static const struct cpu_topology *topology;
++
++	if (!topology) {
++		topology = cpu_topology__new();
++		if (!topology) {
++			pr_err("Error creating CPU topology");
++			abort();
++		}
++	}
++	return topology;
++}
++
+ struct cpu_topology *cpu_topology__new(void)
  {
- \tconst char *p = &big_c_string[offset];
- """)
--  enum_attributes = ['aggr_mode', 'deprecated']
-+  enum_attributes = ['aggr_mode', 'deprecated', 'perpkg']
-   for attr in _json_event_attributes:
-     _args.output_file.write(f'\n\tpe->{attr} = ')
-     if attr in enum_attributes:
-diff --git a/tools/perf/pmu-events/pmu-events.h b/tools/perf/pmu-events/pmu-events.h
-index 2434bc7cf92d..4d236bb32fd3 100644
---- a/tools/perf/pmu-events/pmu-events.h
-+++ b/tools/perf/pmu-events/pmu-events.h
-@@ -23,7 +23,7 @@ struct pmu_event {
- 	const char *long_desc;
- 	const char *pmu;
- 	const char *unit;
--	const char *perpkg;
-+	bool perpkg;
- 	bool deprecated;
+ 	struct cpu_topology *tp = NULL;
+diff --git a/tools/perf/util/cputopo.h b/tools/perf/util/cputopo.h
+index 969e5920a00e..8d42f6102954 100644
+--- a/tools/perf/util/cputopo.h
++++ b/tools/perf/util/cputopo.h
+@@ -56,6 +56,11 @@ struct hybrid_topology {
+ 	struct hybrid_topology_node	nodes[];
  };
  
-diff --git a/tools/perf/tests/pmu-events.c b/tools/perf/tests/pmu-events.c
-index 937804c84e29..521557c396bc 100644
---- a/tools/perf/tests/pmu-events.c
-+++ b/tools/perf/tests/pmu-events.c
-@@ -325,8 +325,8 @@ static int compare_pmu_events(const struct pmu_event *e1, const struct pmu_event
- 		return -1;
- 	}
++/*
++ * The topology for online CPUs, lazily created.
++ */
++const struct cpu_topology *online_topology(void);
++
+ struct cpu_topology *cpu_topology__new(void);
+ void cpu_topology__delete(struct cpu_topology *tp);
+ /* Determine from the core list whether SMT was enabled. */
+diff --git a/tools/perf/util/expr.c b/tools/perf/util/expr.c
+index c1da20b868db..d46a1878bc9e 100644
+--- a/tools/perf/util/expr.c
++++ b/tools/perf/util/expr.c
+@@ -402,7 +402,7 @@ double arch_get_tsc_freq(void)
  
--	if (!is_same(e1->perpkg, e2->perpkg)) {
--		pr_debug2("testing event e1 %s: mismatched perpkg, %s vs %s\n",
-+	if (e1->perpkg != e2->perpkg) {
-+		pr_debug2("testing event e1 %s: mismatched perpkg, %d vs %d\n",
- 			  e1->name, e1->perpkg, e2->perpkg);
- 		return -1;
- 	}
-diff --git a/tools/perf/util/pmu.c b/tools/perf/util/pmu.c
-index 80644e25a568..43b6182d96b7 100644
---- a/tools/perf/util/pmu.c
-+++ b/tools/perf/util/pmu.c
-@@ -328,17 +328,15 @@ static int __perf_pmu__new_alias(struct list_head *list, char *dir, char *name,
- 	struct parse_events_term *term;
- 	struct perf_pmu_alias *alias;
- 	int ret;
--	int num;
- 	char newval[256];
--	char *long_desc = NULL, *topic = NULL, *unit = NULL, *perpkg = NULL,
--	     *pmu_name = NULL;
--	bool deprecated = false;
-+	char *long_desc = NULL, *topic = NULL, *unit = NULL, *pmu_name = NULL;
-+	bool deprecated = false, perpkg = false;
+ double expr__get_literal(const char *literal, const struct expr_scanner_ctx *ctx)
+ {
+-	static struct cpu_topology *topology;
++	const struct cpu_topology *topology;
+ 	double result = NAN;
  
- 	if (pe) {
- 		long_desc = (char *)pe->long_desc;
- 		topic = (char *)pe->topic;
- 		unit = (char *)pe->unit;
--		perpkg = (char *)pe->perpkg;
-+		perpkg = pe->perpkg;
- 		deprecated = pe->deprecated;
- 		pmu_name = (char *)pe->pmu;
+ 	if (!strcmp("#num_cpus", literal)) {
+@@ -421,31 +421,27 @@ double expr__get_literal(const char *literal, const struct expr_scanner_ctx *ctx
+ 	 * these strings gives an indication of the number of packages, dies,
+ 	 * etc.
+ 	 */
+-	if (!topology) {
+-		topology = cpu_topology__new();
+-		if (!topology) {
+-			pr_err("Error creating CPU topology");
+-			goto out;
+-		}
+-	}
+ 	if (!strcasecmp("#smt_on", literal)) {
+-		result = smt_on(topology) ? 1.0 : 0.0;
++		result = smt_on() ? 1.0 : 0.0;
+ 		goto out;
  	}
-@@ -350,7 +348,7 @@ static int __perf_pmu__new_alias(struct list_head *list, char *dir, char *name,
- 	INIT_LIST_HEAD(&alias->terms);
- 	alias->scale = 1.0;
- 	alias->unit[0] = '\0';
--	alias->per_pkg = false;
-+	alias->per_pkg = perpkg;
- 	alias->snapshot = false;
- 	alias->deprecated = deprecated;
- 
-@@ -402,7 +400,6 @@ static int __perf_pmu__new_alias(struct list_head *list, char *dir, char *name,
- 			return -1;
- 		snprintf(alias->unit, sizeof(alias->unit), "%s", unit);
+ 	if (!strcmp("#core_wide", literal)) {
+-		result = core_wide(ctx->system_wide, ctx->user_requested_cpu_list, topology)
++		result = core_wide(ctx->system_wide, ctx->user_requested_cpu_list)
+ 			? 1.0 : 0.0;
+ 		goto out;
  	}
--	alias->per_pkg = perpkg && sscanf(perpkg, "%d", &num) == 1 && num == 1;
- 	alias->str = strdup(newval);
- 	alias->pmu_name = pmu_name ? strdup(pmu_name) : NULL;
+ 	if (!strcmp("#num_packages", literal)) {
++		topology = online_topology();
+ 		result = topology->package_cpus_lists;
+ 		goto out;
+ 	}
+ 	if (!strcmp("#num_dies", literal)) {
++		topology = online_topology();
+ 		result = topology->die_cpus_lists;
+ 		goto out;
+ 	}
+ 	if (!strcmp("#num_cores", literal)) {
++		topology = online_topology();
+ 		result = topology->core_cpus_lists;
+ 		goto out;
+ 	}
+diff --git a/tools/perf/util/smt.c b/tools/perf/util/smt.c
+index 994e9e418227..650e804d0adc 100644
+--- a/tools/perf/util/smt.c
++++ b/tools/perf/util/smt.c
+@@ -4,7 +4,7 @@
+ #include "cputopo.h"
+ #include "smt.h"
  
+-bool smt_on(const struct cpu_topology *topology)
++bool smt_on(void)
+ {
+ 	static bool cached;
+ 	static bool cached_result;
+@@ -16,22 +16,21 @@ bool smt_on(const struct cpu_topology *topology)
+ 	if (sysfs__read_int("devices/system/cpu/smt/active", &fs_value) >= 0)
+ 		cached_result = (fs_value == 1);
+ 	else
+-		cached_result = cpu_topology__smt_on(topology);
++		cached_result = cpu_topology__smt_on(online_topology());
+ 
+ 	cached = true;
+ 	return cached_result;
+ }
+ 
+-bool core_wide(bool system_wide, const char *user_requested_cpu_list,
+-	       const struct cpu_topology *topology)
++bool core_wide(bool system_wide, const char *user_requested_cpu_list)
+ {
+ 	/* If not everything running on a core is being recorded then we can't use core_wide. */
+ 	if (!system_wide)
+ 		return false;
+ 
+ 	/* Cheap case that SMT is disabled and therefore we're inherently core_wide. */
+-	if (!smt_on(topology))
++	if (!smt_on())
+ 		return true;
+ 
+-	return cpu_topology__core_wide(topology, user_requested_cpu_list);
++	return cpu_topology__core_wide(online_topology(), user_requested_cpu_list);
+ }
+diff --git a/tools/perf/util/smt.h b/tools/perf/util/smt.h
+index ae9095f2c38c..01441fd2c0a2 100644
+--- a/tools/perf/util/smt.h
++++ b/tools/perf/util/smt.h
+@@ -2,16 +2,16 @@
+ #ifndef __SMT_H
+ #define __SMT_H 1
+ 
+-struct cpu_topology;
+-
+-/* Returns true if SMT (aka hyperthreading) is enabled. */
+-bool smt_on(const struct cpu_topology *topology);
++/*
++ * Returns true if SMT (aka hyperthreading) is enabled. Determined via sysfs or
++ * the online topology.
++ */
++bool smt_on(void);
+ 
+ /*
+  * Returns true when system wide and all SMT threads for a core are in the
+  * user_requested_cpus map.
+  */
+-bool core_wide(bool system_wide, const char *user_requested_cpu_list,
+-	       const struct cpu_topology *topology);
++bool core_wide(bool system_wide, const char *user_requested_cpu_list);
+ 
+ #endif /* __SMT_H */
 -- 
 2.39.2.637.g21b0678d19-goog
 
