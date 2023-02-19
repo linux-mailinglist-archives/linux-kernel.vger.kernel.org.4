@@ -2,289 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5AD9B69C214
-	for <lists+linux-kernel@lfdr.de>; Sun, 19 Feb 2023 20:07:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CBFE069C216
+	for <lists+linux-kernel@lfdr.de>; Sun, 19 Feb 2023 20:09:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231309AbjBSTHS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 19 Feb 2023 14:07:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33458 "EHLO
+        id S231322AbjBSTJs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 19 Feb 2023 14:09:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34906 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230240AbjBSTHQ (ORCPT
+        with ESMTP id S231315AbjBSTJq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 19 Feb 2023 14:07:16 -0500
-Received: from 1wt.eu (wtarreau.pck.nerim.net [62.212.114.60])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 276D914235
-        for <linux-kernel@vger.kernel.org>; Sun, 19 Feb 2023 11:07:14 -0800 (PST)
-Received: (from willy@localhost)
-        by mail.home.local (8.17.1/8.17.1/Submit) id 31JJ6bw9007197;
-        Sun, 19 Feb 2023 20:06:37 +0100
-Date:   Sun, 19 Feb 2023 20:06:37 +0100
-From:   Willy Tarreau <w@1wt.eu>
-To:     Feiyang Chen <chris.chenfeiyang@gmail.com>
-Cc:     paulmck@kernel.org, Feiyang Chen <chenfeiyang@loongson.cn>,
-        arnd@arndb.de, chenhuacai@kernel.org, jiaxun.yang@flygoat.com,
-        loongarch@lists.linux.dev, linux-kernel@vger.kernel.org,
-        Vincent Dagonneau <v@vda.io>
-Subject: Re: [PATCH v3 2/5] tools/nolibc: Add statx() and make stat() rely on
- statx() if necessary
-Message-ID: <Y/JzPSYMPh/Hgjyn@1wt.eu>
-References: <cover.1675907639.git.chenfeiyang@loongson.cn>
- <f60027664200d6d1f0ed6c7b87915a223afb982f.1675907639.git.chenfeiyang@loongson.cn>
- <Y+lWQC3XU3xWqEi2@1wt.eu>
- <CACWXhK=FKV=CppZnHtO3x33GhJgMQ8gmcgxp_Hn-bo7YcxRrnQ@mail.gmail.com>
+        Sun, 19 Feb 2023 14:09:46 -0500
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9EBF811168
+        for <linux-kernel@vger.kernel.org>; Sun, 19 Feb 2023 11:09:45 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1676833785; x=1708369785;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=RjNYzSm9YhsjWSAojgCBC77HpHJ8nAT7F6ZoOY5rBnQ=;
+  b=P6L3c9W8j+Joemy+MJum9aKxmmL5qP/V7KNmS5pSGU1OJ587Ld+B+GY8
+   X9Tf4hmgVjAnNM39BAafvgeAFYwriJHRV0A1/g39WTbvEj/aRwbAeXUcF
+   U2fnbJT77Oyzk6z/n4cL2GXKbpXiq+wohKpRBXDSyVBStXYx3EcLb5lyM
+   cPJJX7Dnu/EU+TVan8w1cByO7TPDF5c0JWoStMVEe7M1EpMUWJa3BXGcD
+   SGJJoe5oOtbED+D5WWahNmoQ1hTsfJmelshRyBtlIHhN/2xJyWef/V6oI
+   5AE8XKl3OvvQLScpMk6lImwUWjJSnEJUM0q6I4wIj04hBbhhQDB79ooZ5
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10626"; a="320395832"
+X-IronPort-AV: E=Sophos;i="5.97,310,1669104000"; 
+   d="scan'208";a="320395832"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Feb 2023 11:09:45 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10626"; a="739831007"
+X-IronPort-AV: E=Sophos;i="5.97,310,1669104000"; 
+   d="scan'208";a="739831007"
+Received: from lkp-server01.sh.intel.com (HELO 4455601a8d94) ([10.239.97.150])
+  by fmsmga004.fm.intel.com with ESMTP; 19 Feb 2023 11:09:43 -0800
+Received: from kbuild by 4455601a8d94 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pTp4A-000DQT-2g;
+        Sun, 19 Feb 2023 19:09:42 +0000
+Date:   Mon, 20 Feb 2023 03:08:58 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Arnd Bergmann <arnd@arndb.de>
+Cc:     llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+        linux-kernel@vger.kernel.org
+Subject: drivers/gpu/drm/amd/amdgpu/amdgpu_rap.c:110:37: warning: unused
+ variable 'amdgpu_rap_debugfs_ops'
+Message-ID: <202302200339.Whql7Emr-lkp@intel.com>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="aBHNUFX0VHk+offp"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CACWXhK=FKV=CppZnHtO3x33GhJgMQ8gmcgxp_Hn-bo7YcxRrnQ@mail.gmail.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   925cf0457d7e62ce08878ffb789189ac08ca8677
+commit: df99e7bbbec3180693b3d932a9cbc88346e2a30e ARM: omap1: use pci_remap_iospace() for omap_cf
+date:   10 months ago
+config: arm-randconfig-r033-20230220 (https://download.01.org/0day-ci/archive/20230220/202302200339.Whql7Emr-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project db89896bbbd2251fff457699635acbbedeead27f)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install arm cross compiling tool for clang build
+        # apt-get install binutils-arm-linux-gnueabi
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=df99e7bbbec3180693b3d932a9cbc88346e2a30e
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout df99e7bbbec3180693b3d932a9cbc88346e2a30e
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash drivers/gpu/drm/amd/amdgpu/ drivers/gpu/drm/amd/pm/
 
---aBHNUFX0VHk+offp
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202302200339.Whql7Emr-lkp@intel.com/
 
-Hi Feiyang,
+All warnings (new ones prefixed by >>):
 
-On Mon, Feb 13, 2023 at 09:06:36AM +0800, Feiyang Chen wrote:
-> On Mon, 13 Feb 2023 at 05:12, Willy Tarreau <w@1wt.eu> wrote:
-> >
-> > Hi Feiyang,
-> >
-> > On Thu, Feb 09, 2023 at 11:24:13AM +0800, chris.chenfeiyang@gmail.com wrote:
-> > > From: Feiyang Chen <chenfeiyang@loongson.cn>
-> > >
-> > > LoongArch and RISC-V 32-bit only have statx(). ARC, Hexagon, Nios2 and
-> > > OpenRISC have statx() and stat64() but not stat() or newstat(). Add
-> > > statx() and make stat() rely on statx() if necessary to make them happy.
-> > > We may just use statx() for all architectures in the future.
-> > >
-> > > Signed-off-by: Feiyang Chen <chenfeiyang@loongson.cn>
-> > > ---
-> > >  tools/include/nolibc/sys.h | 56 ++++++++++++++++++++++++++++++++++++++
-> > >  1 file changed, 56 insertions(+)
-> > >
-> > > diff --git a/tools/include/nolibc/sys.h b/tools/include/nolibc/sys.h
-> > > index c4818a9c8823..70c30d457952 100644
-> > > --- a/tools/include/nolibc/sys.h
-> > > +++ b/tools/include/nolibc/sys.h
-> > > @@ -20,6 +20,7 @@
-> > >  #include <linux/time.h>
-> > >  #include <linux/auxvec.h>
-> > >  #include <linux/fcntl.h> // for O_* and AT_*
-> > > +#include <linux/stat.h>  // for statx()
-> >
-> > This one causes build warnings on all archs but x86_64:
-> >
-> >   /f/tc/nolibc/gcc-11.3.0-nolibc/aarch64-linux/bin/aarch64-linux-gcc -Os -fno-ident -fno-asynchronous-unwind-tables  -s -o nolibc-test \
-> >     -nostdlib -static -Isysroot/arm64/include nolibc-test.c -lgcc
-> >   In file included from sysroot/arm64/include/sys.h:23,
-> >                    from sysroot/arm64/include/nolibc.h:99,
-> >                    from sysroot/arm64/include/errno.h:26,
-> >                    from sysroot/arm64/include/stdio.h:14,
-> >                    from nolibc-test.c:15:
-> >   sysroot/arm64/include/linux/stat.h:9: warning: "S_IFMT" redefined
-> >       9 | #define S_IFMT  00170000
-> >         |
-> >   In file included from sysroot/arm64/include/nolibc.h:98,
-> >                    from sysroot/arm64/include/errno.h:26,
-> >                    from sysroot/arm64/include/stdio.h:14,
-> >                    from nolibc-test.c:15:
-> >   sysroot/arm64/include/types.h:27: note: this is the location of the previous definition
-> >
-> > This is caused by the definitions for S_IF* and S_IS* in types.h. However
-> > if I remove them I'm seeing x86_64 fail on S_IFCHR not defined. The root
-> > cause is that the x86_64 toolchain falls back to /usr/include for the
-> > include_next <limits.h> that others do not do (probably that when built
-> > it thought it was a native compiler instead of a cross-compiler). I'm
-> > apparently able to work around this by ifdefing out the definitions but
-> > it makes me feel like I'm hiding the dust under the carpet. Instead I'm
-> > thinking of reusing Vincent's work who added stdint and the definitions
-> > for the various INT*MAX values that are normally found in limits.h and
-> > providing our own limits.h so that this issue is globally addressed.
-> >
-> > I'm going to experiment a little bit about this and will propose something
-> > once I'm satisfied with a solution that we can queue for 6.4. Most likely
-> > it will involve merging a variant of Vincent's series first, a few changes
-> > to have limits.h then your series.
-> >
-> 
-> Hi, Willy,
-> 
-> OK. Thank you very much!
-
-You're welcome. I finally figured the root cause of the problem. As
-mentioned above, the cross-compiler mistakenly includes some glibc
-entries (regardless of me defining limits.h), and linux/stat.h sees
-glibc defined so it refrains from defining S_I* because this conflict
-was apparently already identified in the past. In order to work around
-the problem without touching the uapi headers, I preferred to modify
-the nolibc one to add a similar test and detect whether linux/stat.h
-had already provided them (see patch below). This way it remains simple
-to understand and still pretty effective. And now your patchset works
-fine with no modification.
-
-I'll send all of this to Paul next week-end once he's back.
-
-Thanks,
-Willy
-
+>> drivers/gpu/drm/amd/amdgpu/amdgpu_rap.c:110:37: warning: unused variable 'amdgpu_rap_debugfs_ops' [-Wunused-const-variable]
+   static const struct file_operations amdgpu_rap_debugfs_ops = {
+                                       ^
+   1 warning generated.
 --
+>> drivers/gpu/drm/amd/amdgpu/../pm/amdgpu_pm.c:38:34: warning: unused variable 'clocks' [-Wunused-const-variable]
+   static const struct cg_flag_name clocks[] = {
+                                    ^
+   1 warning generated.
 
-From 39843ae4a006c37cf09febaf286c438a9793f9a1 Mon Sep 17 00:00:00 2001
-From: Willy Tarreau <w@1wt.eu>
-Date: Sun, 19 Feb 2023 18:51:59 +0100
-Subject: [PATCH] tools/nolibc: check for S_I* macros before defining them
 
-Defining S_I* flags in types.h can cause some build failures if
-linux/stat.h is included prior to it. But if not defined, some toolchains
-that include some glibc parts will in turn fail because linux/stat.h
-already takes care of avoiding these definitions when glibc is present.
+vim +/amdgpu_rap_debugfs_ops +110 drivers/gpu/drm/amd/amdgpu/amdgpu_rap.c
 
-Let's preserve the macros here but first include linux/stat.h and check
-for their definition before doing so. We also define the previously
-missing permission macros so that we don't get a different behavior
-depending on the first include found.
+a4322e1881bed8 Wenhui Sheng 2020-08-11  109  
+a4322e1881bed8 Wenhui Sheng 2020-08-11 @110  static const struct file_operations amdgpu_rap_debugfs_ops = {
+a4322e1881bed8 Wenhui Sheng 2020-08-11  111  	.owner = THIS_MODULE,
+a4322e1881bed8 Wenhui Sheng 2020-08-11  112  	.read = NULL,
+a4322e1881bed8 Wenhui Sheng 2020-08-11  113  	.write = amdgpu_rap_debugfs_write,
+a4322e1881bed8 Wenhui Sheng 2020-08-11  114  	.llseek = default_llseek
+a4322e1881bed8 Wenhui Sheng 2020-08-11  115  };
+a4322e1881bed8 Wenhui Sheng 2020-08-11  116  
 
-Cc: Feiyang Chen <chenfeiyang@loongson.cn>
-Signed-off-by: Willy Tarreau <w@1wt.eu>
----
- tools/include/nolibc/types.h | 23 ++++++++++++++++++++++-
- 1 file changed, 22 insertions(+), 1 deletion(-)
+:::::: The code at line 110 was first introduced by commit
+:::::: a4322e1881bed80ddb904482f0b2e948fa7fd47e drm/amdgpu: add debugfs interface for RAP test
 
-diff --git a/tools/include/nolibc/types.h b/tools/include/nolibc/types.h
-index fbbc0e68c001..47a0997d2d74 100644
---- a/tools/include/nolibc/types.h
-+++ b/tools/include/nolibc/types.h
-@@ -9,6 +9,7 @@
- 
- #include "std.h"
- #include <linux/time.h>
-+#include <linux/stat.h>
- 
- 
- /* Only the generic macros and types may be defined here. The arch-specific
-@@ -16,7 +17,11 @@
-  * the layout of sys_stat_struct must not be defined here.
-  */
- 
--/* stat flags (WARNING, octal here) */
-+/* stat flags (WARNING, octal here). We need to check for an existing
-+ * definition because linux/stat.h may omit to define those if it finds
-+ * that any glibc header was already included.
-+ */
-+#if !defined(S_IFMT)
- #define S_IFDIR        0040000
- #define S_IFCHR        0020000
- #define S_IFBLK        0060000
-@@ -34,6 +39,22 @@
- #define S_ISLNK(mode)  (((mode) & S_IFMT) == S_IFLNK)
- #define S_ISSOCK(mode) (((mode) & S_IFMT) == S_IFSOCK)
- 
-+#define S_IRWXU 00700
-+#define S_IRUSR 00400
-+#define S_IWUSR 00200
-+#define S_IXUSR 00100
-+
-+#define S_IRWXG 00070
-+#define S_IRGRP 00040
-+#define S_IWGRP 00020
-+#define S_IXGRP 00010
-+
-+#define S_IRWXO 00007
-+#define S_IROTH 00004
-+#define S_IWOTH 00002
-+#define S_IXOTH 00001
-+#endif
-+
- /* dirent types */
- #define DT_UNKNOWN     0x0
- #define DT_FIFO        0x1
+:::::: TO: Wenhui Sheng <Wenhui.Sheng@amd.com>
+:::::: CC: Alex Deucher <alexander.deucher@amd.com>
+
 -- 
-2.35.3
-
-
---aBHNUFX0VHk+offp
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: attachment;
-	filename="0001-tools-nolibc-check-for-S_I-macros-before-defining-th.patch"
-
-From 39843ae4a006c37cf09febaf286c438a9793f9a1 Mon Sep 17 00:00:00 2001
-From: Willy Tarreau <w@1wt.eu>
-Date: Sun, 19 Feb 2023 18:51:59 +0100
-Subject: [PATCH] tools/nolibc: check for S_I* macros before defining them
-
-Defining S_I* flags in types.h can cause some build failures if
-linux/stat.h is included prior to it. But if not defined, some toolchains
-that include some glibc parts will in turn fail because linux/stat.h
-already takes care of avoiding these definitions when glibc is present.
-
-Let's preserve the macros here but first include linux/stat.h and check
-for their definition before doing so. We also define the previously
-missing permission macros so that we don't get a different behavior
-depending on the first include found.
-
-Cc: Feiyang Chen <chenfeiyang@loongson.cn>
-Signed-off-by: Willy Tarreau <w@1wt.eu>
----
- tools/include/nolibc/types.h | 23 ++++++++++++++++++++++-
- 1 file changed, 22 insertions(+), 1 deletion(-)
-
-diff --git a/tools/include/nolibc/types.h b/tools/include/nolibc/types.h
-index fbbc0e68c001..47a0997d2d74 100644
---- a/tools/include/nolibc/types.h
-+++ b/tools/include/nolibc/types.h
-@@ -9,6 +9,7 @@
- 
- #include "std.h"
- #include <linux/time.h>
-+#include <linux/stat.h>
- 
- 
- /* Only the generic macros and types may be defined here. The arch-specific
-@@ -16,7 +17,11 @@
-  * the layout of sys_stat_struct must not be defined here.
-  */
- 
--/* stat flags (WARNING, octal here) */
-+/* stat flags (WARNING, octal here). We need to check for an existing
-+ * definition because linux/stat.h may omit to define those if it finds
-+ * that any glibc header was already included.
-+ */
-+#if !defined(S_IFMT)
- #define S_IFDIR        0040000
- #define S_IFCHR        0020000
- #define S_IFBLK        0060000
-@@ -34,6 +39,22 @@
- #define S_ISLNK(mode)  (((mode) & S_IFMT) == S_IFLNK)
- #define S_ISSOCK(mode) (((mode) & S_IFMT) == S_IFSOCK)
- 
-+#define S_IRWXU 00700
-+#define S_IRUSR 00400
-+#define S_IWUSR 00200
-+#define S_IXUSR 00100
-+
-+#define S_IRWXG 00070
-+#define S_IRGRP 00040
-+#define S_IWGRP 00020
-+#define S_IXGRP 00010
-+
-+#define S_IRWXO 00007
-+#define S_IROTH 00004
-+#define S_IWOTH 00002
-+#define S_IXOTH 00001
-+#endif
-+
- /* dirent types */
- #define DT_UNKNOWN     0x0
- #define DT_FIFO        0x1
--- 
-2.35.3
-
-
---aBHNUFX0VHk+offp--
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
