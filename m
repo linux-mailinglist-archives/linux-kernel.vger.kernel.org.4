@@ -2,583 +2,224 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F38AD69BFC4
-	for <lists+linux-kernel@lfdr.de>; Sun, 19 Feb 2023 10:39:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C51369BFCE
+	for <lists+linux-kernel@lfdr.de>; Sun, 19 Feb 2023 10:45:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230084AbjBSJjS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 19 Feb 2023 04:39:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34172 "EHLO
+        id S230128AbjBSJpZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 19 Feb 2023 04:45:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40230 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230074AbjBSJjQ (ORCPT
+        with ESMTP id S230109AbjBSJpV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 19 Feb 2023 04:39:16 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E8969EC2;
-        Sun, 19 Feb 2023 01:38:21 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3E1F760C1A;
-        Sun, 19 Feb 2023 09:36:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9DC48C433A4;
-        Sun, 19 Feb 2023 09:36:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1676799406;
-        bh=8lz3JglubGr57hJ1JxrTxIga8MNv2n+qzS/V+NGNj0Y=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=X0qhkLgUgrGXvXfazmcVxTkGfYYnsCy1ofKKY7J3zIv2a3F2ORuYYb5IxEnDgNbvD
-         jnffVIYL26R7vZOJlLDLmC/+0ry4+PbURPWM+6Q71I/M/oIgSNcEKauS6iCz/thW2H
-         PVyt71R/pVW6hyzJKNcycjeIo3mbONAHlm1n6j8gecEwnucU3CZ/6Y87PjP8ktI8Na
-         2rC5YuyBCBbR1TTv+Gr+iEJleUs/vrsl0ShbMDaO8k42rhPIPX9bg9FEK1RxNXL/IV
-         GbI27lcxzg8b7UA6jpqK82V+WczrddwOxycKGGrTeRaDw8ChBAEZpqvB0TECQkmKPe
-         81E3INwaFeO6w==
-Received: by mail-ot1-f41.google.com with SMTP id w7-20020a056830280700b0068dbf908574so58311otu.8;
-        Sun, 19 Feb 2023 01:36:46 -0800 (PST)
-X-Gm-Message-State: AO0yUKXtvZuF+xLignOKcmozaSkiOhmV8joD9TSpXJny5l2pKdwldE03
-        zVYBZsvEiZTzkb0xru6U216ZWo+T9VsDVnm5hgc=
-X-Google-Smtp-Source: AK7set99I5tGOiFDZI4ENZQNTLBGBrNJ3TBQuXn2usZzLYFQWia0V4XaepreU6ZMflfokXkCsGrW/ew6dU8wgUTloc4=
-X-Received: by 2002:a05:6830:2476:b0:68d:48be:fa9c with SMTP id
- x54-20020a056830247600b0068d48befa9cmr382712otr.1.1676799405714; Sun, 19 Feb
- 2023 01:36:45 -0800 (PST)
+        Sun, 19 Feb 2023 04:45:21 -0500
+Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C31BB1043B;
+        Sun, 19 Feb 2023 01:44:35 -0800 (PST)
+Received: by mail-wm1-x336.google.com with SMTP id i5-20020a05600c354500b003e1f5f2a29cso285823wmq.4;
+        Sun, 19 Feb 2023 01:44:35 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=sMPdCMdS3VcScxunnSP7BsButuKXwgs+onI25X5O9Wc=;
+        b=XumHyq0Cel+dqLclnreHmI24z4esM8bQ4QTXjRvnlukF87pE4zpQVADGHFMsOkwnvI
+         +kRoyXBCMhN2n7Wk3f7YaVuguFfGb11LPoL56skE4G6TtIwU+Xt+RaKpA2aQR2TnAWv0
+         G6l/edmC4Bzuxa1F3QV2QBDgnW4+tntG6InSHaRJ+kNbAZis7czCOaAmw43A+JZI1ZFf
+         oMWw6bAayDEQroQsx3o4u/KUZcJs2DatuvYp9rPRcee91/Sq9nBB7I4ptgPtGtPQu4ES
+         4pXVWMKAMybmyHn/n93UvLuiDQTItMIpf1qpKZygxgSwJrxiL5iPRvZdEVYMPoTBeNxj
+         IjnQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=sMPdCMdS3VcScxunnSP7BsButuKXwgs+onI25X5O9Wc=;
+        b=nJTU3xf7k6K/vnhTIlpqG5wpt1xgJdqsY9i6tymZyIJVFyrzTFCrGf7Y2xIY40RUsT
+         NoNEzdxjZbWt3i8QmoiqWIdYEN2z7uFOsYG3eLefftzs1otWWD/uIrs0zRQ/x1NZ9jJN
+         Pjrzo27mu4/JEoL68PBuMiNVW4gOwELVo/1FhGgJL6h6Pr3uFT0zJqsUPZYkEMUqQXs4
+         1PJxDfclRz0/0dNxwespg8z2ZXmvh9Ngt9+urzo3ZH7XGDjLx8occI31EeVvQhAWUsBV
+         2/nyq0LHvW3NZ6KadD4r0oroqjoGUQAcKMoFEFwxs7Y0qbnbVha8FU46hO/oUOhgyuNZ
+         AVxQ==
+X-Gm-Message-State: AO0yUKVlwTqkSs2UVxqxpNgJ+ZwwAI4fqXV9Vmx6TUXpioU1V/Cnlirn
+        r2D4D2Kt/i6LzSHwJ1N+tPs=
+X-Google-Smtp-Source: AK7set8atZ/0JasJukEMru+9LylLz33ZwjogL+rdHQbeUs6uRBoAyZ26dM6gZyx+5AdgFnEZFXIpig==
+X-Received: by 2002:a05:600c:1895:b0:3e2:589:2512 with SMTP id x21-20020a05600c189500b003e205892512mr4627494wmp.21.1676799789000;
+        Sun, 19 Feb 2023 01:43:09 -0800 (PST)
+Received: from [192.168.0.106] ([77.126.33.94])
+        by smtp.gmail.com with ESMTPSA id u10-20020a05600c00ca00b003ddf2865aeasm5557673wmm.41.2023.02.19.01.43.07
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 19 Feb 2023 01:43:08 -0800 (PST)
+Message-ID: <07b5c523-7174-ac30-65cb-182e07db08dc@gmail.com>
+Date:   Sun, 19 Feb 2023 11:43:06 +0200
 MIME-Version: 1.0
-References: <20230217202234.32260-1-quic_johmoo@quicinc.com> <20230217202234.32260-2-quic_johmoo@quicinc.com>
-In-Reply-To: <20230217202234.32260-2-quic_johmoo@quicinc.com>
-From:   Masahiro Yamada <masahiroy@kernel.org>
-Date:   Sun, 19 Feb 2023 18:36:09 +0900
-X-Gmail-Original-Message-ID: <CAK7LNAQMgsNiizzKuZD+3VvJ=hPygcJ8PwNE+Q6pnxzBmQezCA@mail.gmail.com>
-Message-ID: <CAK7LNAQMgsNiizzKuZD+3VvJ=hPygcJ8PwNE+Q6pnxzBmQezCA@mail.gmail.com>
-Subject: Re: [PATCH RESEND 1/1] check-uapi: Introduce check-uapi.sh
-To:     John Moon <quic_johmoo@quicinc.com>
-Cc:     Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Nicolas Schier <nicolas@fjasle.eu>,
-        linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        Trilok Soni <quic_tsoni@quicinc.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Todd Kjos <tkjos@google.com>,
-        Matthias Maennich <maennich@google.com>,
-        Giuliano Procida <gprocida@google.com>,
-        kernel-team@android.com, Jordan Crouse <jorcrous@amazon.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,TRACKER_ID autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.2
+Subject: Re: [PATCH] net/mlx4_en: Introduce flexible array to silence overflow
+ warning
+Content-Language: en-US
+To:     Kees Cook <keescook@chromium.org>, Tariq Toukan <tariqt@nvidia.com>
+Cc:     Josef Oskera <joskera@redhat.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Yishai Hadas <yishaih@nvidia.com>, netdev@vger.kernel.org,
+        linux-rdma@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-hardening@vger.kernel.org
+References: <20230218183842.never.954-kees@kernel.org>
+From:   Tariq Toukan <ttoukan.linux@gmail.com>
+In-Reply-To: <20230218183842.never.954-kees@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Feb 18, 2023 at 5:23 AM John Moon <quic_johmoo@quicinc.com> wrote:
->
-> While the kernel community has been good at maintaining backwards
-> compatibility with kernel UAPIs, it would be helpful to have a tool
-> to check if a patch introduces changes that break backwards
-> compatibility.
->
-> To that end, introduce check-uapi.sh: a simple shell script that
-> checks for changes to UAPI headers using libabigail.
->
-> libabigail is "a framework which aims at helping developers and
-> software distributors to spot some ABI-related issues like interface
-> incompatibility in ELF shared libraries by performing a static
-> analysis of the ELF binaries at hand."
->
-> The script uses one of libabigail's tools, "abidiff", to compile the
-> changed header before and after the patch to detect any changes.
->
-> abidiff "compares the ABI of two shared libraries in ELF format. It
-> emits a meaningful report describing the differences between the two
-> ABIs."
->
-> Signed-off-by: John Moon <quic_johmoo@quicinc.com>
+
+
+On 18/02/2023 20:38, Kees Cook wrote:
+> The call "skb_copy_from_linear_data(skb, inl + 1, spc)" triggers a FORTIFY
+> memcpy() warning on ppc64 platform:
+> 
+> In function ‘fortify_memcpy_chk’,
+>      inlined from ‘skb_copy_from_linear_data’ at ./include/linux/skbuff.h:4029:2,
+>      inlined from ‘build_inline_wqe’ at drivers/net/ethernet/mellanox/mlx4/en_tx.c:722:4,
+>      inlined from ‘mlx4_en_xmit’ at drivers/net/ethernet/mellanox/mlx4/en_tx.c:1066:3:
+> ./include/linux/fortify-string.h:513:25: error: call to ‘__write_overflow_field’ declared with
+> attribute warning: detected write beyond size of field (1st parameter); maybe use struct_group()?
+> [-Werror=attribute-warning]
+>    513 |                         __write_overflow_field(p_size_field, size);
+>        |                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> 
+> Same behaviour on x86 you can get if you use "__always_inline" instead of
+> "inline" for skb_copy_from_linear_data() in skbuff.h
+> 
+> The call here copies data into inlined tx destricptor, which has 104
+> bytes (MAX_INLINE) space for data payload. In this case "spc" is known
+> in compile-time but the destination is used with hidden knowledge
+> (real structure of destination is different from that the compiler
+> can see). That cause the fortify warning because compiler can check
+> bounds, but the real bounds are different.  "spc" can't be bigger than
+> 64 bytes (MLX4_INLINE_ALIGN), so the data can always fit into inlined
+> tx descriptor. The fact that "inl" points into inlined tx descriptor is
+> determined earlier in mlx4_en_xmit().
+> 
+> Avoid confusing the compiler with "inl + 1" constructions to get to past
+> the inl header by introducing a flexible array "data" to the struct so
+> that the compiler can see that we are not dealing with an array of inl
+> structs, but rather, arbitrary data following the structure. There are
+> no changes to the structure layout reported by pahole, and the resulting
+> machine code is actually smaller.
+> 
+> Reported-by: Josef Oskera <joskera@redhat.com>
+> Link: https://lore.kernel.org/lkml/20230217094541.2362873-1-joskera@redhat.com
+> Fixes: f68f2ff91512 ("fortify: Detect struct member overflows in memcpy() at compile-time")
+> Cc: Tariq Toukan <tariqt@nvidia.com>
+> Cc: "David S. Miller" <davem@davemloft.net>
+> Cc: Eric Dumazet <edumazet@google.com>
+> Cc: Jakub Kicinski <kuba@kernel.org>
+> Cc: Paolo Abeni <pabeni@redhat.com>
+> Cc: Yishai Hadas <yishaih@nvidia.com>
+> Cc: netdev@vger.kernel.org
+> Cc: linux-rdma@vger.kernel.org
+> Signed-off-by: Kees Cook <keescook@chromium.org>
 > ---
->  scripts/check-uapi.sh | 245 ++++++++++++++++++++++++++++++++++++++++++
->  1 file changed, 245 insertions(+)
->  create mode 100755 scripts/check-uapi.sh
->
-> diff --git a/scripts/check-uapi.sh b/scripts/check-uapi.sh
-> new file mode 100755
-> index 000000000..b9cd3a2d7
-> --- /dev/null
-> +++ b/scripts/check-uapi.sh
-> @@ -0,0 +1,245 @@
-> +#!/bin/bash
-> +# SPDX-License-Identifier: GPL-2.0-only
-> +
-> +# Script to check a patch for UAPI stability
-> +set -o errexit
-> +set -o pipefail
-> +
-> +print_usage() {
-> +       name=$(basename "$0")
-> +       cat << EOF
-> +$name - check for UAPI header stability across Git commits
-> +
-> +By default, the script will check to make sure the latest commit did
-> +not introduce ABI changes (HEAD^1). You can check against additional
-> +commits/tags with the -r option.
-> +
-> +Usage: $name [-r GIT_REF]
-> +
-> +Options:
-> +    -r GIT_REF     Compare current version of file to GIT_REF (e.g. -r v6.1)
-> +
-> +Environmental Args:
-> +    ABIDIFF        Custom path to abidiff binary
-> +    ARCH           Architecture to build with (e.g. ARCH=arm)
-
-
-ARCH is not used anywhere in this script.
-
-
-
-
-
-> +    CC             C compiler (default is "gcc")
-> +    CROSS_COMPILE  Cross-compiling toochain prefix
-
-CROSS_COMPILE is unneeded since the toolchain prefix
-is a part of CC
-
-
-
-> +EOF
-> +}
-> +
-> +# Get the file and sanitize it using the headers_install script
-> +get_header() {
-> +       local -r ref="$1"
-> +       local -r file="$2"
-> +       local -r out="$3"
-> +
-> +       if [ ! -x "${KERNEL_SRC}/scripts/unifdef" ]; then
-> +               if ! make -C "${KERNEL_SRC}/scripts" unifdef; then
-
-
-
-I think
-
-  if ! make -f /dev/null "${KERNEL_SRC}/scripts/unifdef"; then
-
-... clarifies what you are doing here
-because you are using make's built-in rule,
-and nothing in scripts/Makefile.
-
-I do not understand the reason for using make
-if you do not use Makefile at all.
-
-You are just compiling scripts/unifdef.c directly.
-
-
-
-
-
-
-
-> +                       errlog 'error - failed to build required dependency "scripts/unifdef"'
-> +                       exit 1
-> +               fi
-> +       fi
-> +
-> +       mkdir -p "$(dirname "$out")"
-> +       (
-> +               cd "$KERNEL_SRC"
-> +               git show "${ref}:${file}" > "${out}.in"
-> +               scripts/headers_install.sh "${out}.in" "$out"
-> +       )
-
-
-Unneeded sub-shell fork.
-
-     git -C "$KERNEL_SRC" show "${ref}:${file}" > "${out}.in"
-     scripts/headers_install.sh "${out}.in" "$out"
-
-
-
-
-
-
-
-
-
-
-
-> +}
-> +
-> +# Compile the simple test app
-> +do_compile() {
-> +       local -r compiler="$1"
-> +       local -r inc_dir="$2"
-> +       local -r header="$3"
-> +       local -r out="$4"
-> +       echo "int main(int argc, char **argv) { return 0; }" | \
-
-bikeshed:   'int main(void) { return 0; }' is enough.
-
-
-> +               "$compiler" -c \
-
-
-You can expand ${CC} here
-
-                   "${CC:-gcc}" -c \
-
-
-I do not see anywhere else to use ${CC}.
-Remove the 'compiler' argument.
-
-
-
-
-> +                 -o "$out" \
-> +                 -x c \
-> +                 -O0 \
-> +                 -std=c90 \
-> +                 -fno-eliminate-unused-debug-types \
-> +                 -g \
-> +                 "-I$inc_dir" \
-
-
-"-I$inc_dir" is meaningless for most cases, unless
-two UAPI headers are changed in HEAD.
-
-
-In some cases, you cannot even compile the header.
-
-Think about this case:
-  include/uapi/linux/foo.h includes <linux/bar.h>
-
-linux/bar.h does not exist in this tmp directory.
-
-You assume <linux/bar.h> comes from the user's build environment,
-presumably located under /usr/include/.
-
-It does not necessarily new enough to compile
-include/uapi/linux/foo.h
-
-So, this does not work.
-I believe you need to re-consider the approach.
-
-
-
-
-
-> +                 -include "$header" \
-> +                 -
-> +}
-> +
-> +# Print to stderr
-> +errlog() {
-> +       echo "$@" >&2
-> +}
-> +
-> +# Grab the list of incompatible headers from the usr/include Makefile
-> +get_no_header_list() {
-> +       {
-> +               cat "${KERNEL_SRC}/usr/include/Makefile"
-> +               # shellcheck disable=SC2016
-> +               printf '\nall:\n\t@echo $(no-header-test)\n'
-> +       } | make -C "${KERNEL_SRC}/usr/include" -f - --just-print \
-> +         | grep '^echo' \
-> +         | cut -d ' ' -f 2-
-> +}
-
-
-Redundant.
-
-
-
-get_no_header_list() {
-        {
-             echo 'all: ; @echo $(no-header-test)'
-             cat "${KERNEL_SRC}/usr/include/Makefile"
-        } | make -f -
-}
-
-
-should be equivalent, but you still cannot exclude
-include/uapi/asm-generic/*.h, though.
-
-
-
-
-
-> +
-> +# Check any changed files in this commit for UAPI compatibility
-> +check_changed_files() {
-> +       refs_to_check=("$@")
-> +
-> +       local passed=0;
-> +       local failed=0;
-> +
-> +       while read -r status file; do
-> +               local -r base=${file/uapi\//}
-
-
-The -r option is wrong since 'base' is updated
-in the second iteration.
-
-
-If this while loop gets two or more input lines,
-I see the following in the second iteration.
-
-
-./scripts/check-uapi.sh: line 94: local: base: readonly variable
-
-
-
-
-
-
-> +
-> +               # Get the current version of the file and put it in the install dir
-> +               get_header "HEAD" "$file" "${tmp_dir}/usr/${base}"
-
-
-
-Is '/usr' needed?
-
-
-
-> +
-> +               for ref in "${refs_to_check[@]}"; do
-> +                       if ! git rev-parse --verify "$ref" > /dev/null 2>&1; then
-> +                               echo "error - invalid ref \"$ref\""
-> +                               exit 1
-> +                       fi
-> +
-> +                       if check_uapi_for_file "$status" "$file" "$ref" "$base"; then
-> +                               passed=$((passed + 1))
-> +                       else
-> +                               failed=$((failed + 1))
-> +                       fi
-> +               done
-> +       done < <(cd "$KERNEL_SRC" && git show HEAD --name-status --format="" --diff-filter=a -- include/uapi/)
-
-Redundant.
-
-done < <(git -C "$KERNEL_SRC" show HEAD --name-status --format=""
---diff-filter=a -- include/uapi/)
-
-
-
-
-Why are you checking only include/uapi/ ?
-UAPI headers exist in arch/*/include/uapi/
-
-
-
-
-
-
-
-
-
-> +
-> +       total=$((passed + failed))
-> +       if [ "$total" -eq 0 ]; then
-> +               errlog "No changes to UAPI headers detected in most recent commit"
-> +       else
-> +               errlog "${passed}/${total} UAPI header file changes are backwards compatible"
-> +       fi
-> +
-> +       return "$failed"
-> +}
-> +
-> +# Check UAPI compatibility for a given file
-> +check_uapi_for_file() {
-> +       local -r status="$1"
-> +       local -r file="$2"
-> +       local -r ref="$3"
-> +       local -r base="$4"
-> +
-> +       # shellcheck disable=SC2076
-> +       if [[ " $(get_no_header_list) " =~ " ${base/include\//} " ]]; then
-> +               errlog "$file cannot be tested by this script (see usr/include/Makefile)."
-> +               return 1
-> +       fi
-> +
-> +       if [ "$status" = "D" ]; then
-> +               errlog "UAPI header $file was incorrectly removed"
-> +               return 1
-> +       fi
-
-If you look at git history, we sometimes do this.
-
-e.g.
-
-1e6b57d6421f0343dd11619612e5ff8930cddf38
-
-
-
-
-
-
-
-> +
-> +       if [ "$status" = "R" ]; then
-> +               errlog "UAPI header $file was incorrectly renamed"
-> +               return 1
-> +       fi
-
-
-
-I think this is unneeded if you add --no-renames to 'git show'.
-
-I do not see any sense to distinguish removal and rename
-since it is what git detects from the similarity.
-
-
-
-
-
-
-
-
-
-
-> +
-> +       # Get the "previous" verison of the API header and put it in the install dir
-> +       get_header "$ref" "$file" "${tmp_dir}/usr/${base}.pre"
-
-Is '/usr' needed?
-
-
-> +
-> +       compare_abi "${CROSS_COMPILE}${CC:-gcc}" "$file" "$base" "$ref"
-
-CROSS_COMPILE is unneeded since it is included in ${CC}.
-
-
-
-
-
-
-
-
-> +}
-> +
-> +# Perform the A/B compilation and compare output ABI
-> +compare_abi() {
-> +       local -r compiler="$1"
-> +       local -r file="$2"
-> +       local -r base="$3"
-> +       local -r ref="$4"
-> +
-> +       pre_bin="${tmp_dir}/pre.bin"
-> +       post_bin="${tmp_dir}/post.bin"
-> +       log="${tmp_dir}/log"
-> +
-> +       if ! do_compile "$compiler" "${tmp_dir}/usr/include" "${tmp_dir}/usr/${base}.pre" "$pre_bin" 2> "$log"; then
-> +               errlog "Couldn't compile current version of UAPI header $file..."
-> +               cat "$log" >&2
-> +               return 1
-> +       fi
-> +
-> +       if ! do_compile "$compiler" "${tmp_dir}/usr/include" "${tmp_dir}/usr/${base}" "$post_bin" 2> "$log"; then
-> +               errlog "Couldn't compile new version of UAPI header $file..."
-> +               cat "$log" >&2
-> +               return 1
-> +       fi
-> +
-> +       if "$ABIDIFF" --non-reachable-types "$pre_bin" "$post_bin" > "$log"; then
-> +               echo "No ABI differences detected in $file (compared to file at $ref)"
-> +       else
-> +               errlog "!!! ABI differences detected in $file (compared to file at $ref) !!!"
-> +               echo >&2
-> +               sed  -e '/summary:/d' -e '/changed type/d' -e '/^$/d' -e 's/^/  /g' "$log" >&2
-> +               echo >&2
-> +               return 1
-> +       fi
-> +}
-> +
-> +# Make sure we have the tools we need
-> +check_deps() {
-> +       export ABIDIFF="${ABIDIFF:-abidiff}"
-> +
-> +       if ! command -v "$ABIDIFF" > /dev/null 2>&1; then
-> +               errlog "error - abidiff not found!"
-> +               errlog "Please install abigail-tools (version 1.7 or greater)"
-> +               errlog "See: https://sourceware.org/libabigail/manual/libabigail-overview.html"
-> +               exit 1
-> +       fi
-> +
-> +       read -r abidiff_maj abidiff_min _ < <("$ABIDIFF" --version | cut -d ' ' -f 2 | tr '.' ' ')
-> +       if [ "$abidiff_maj" -lt 1 ] || ([ "$abidiff_maj" -eq 1 ] && [ "$abidiff_min" -lt 7 ]); then
-> +               errlog "error - abidiff version too old: $("$ABIDIFF" --version)"
-> +               errlog "Please install abigail-tools (version 1.7 or greater)"
-> +               errlog "See: https://sourceware.org/libabigail/manual/libabigail-overview.html"
-> +               exit 1
-> +       fi
-> +}
-> +
-> +main() {
-> +       refs_to_check=( "HEAD^1" )
-> +       while getopts "hr:" opt; do
-> +               case $opt in
-> +               h)
-> +                       print_usage
-> +                       exit 0
-> +                       ;;
-> +               r)
-> +                       refs_to_check+=( "$OPTARG" )
-> +                       ;;
-> +               esac
-> +       done
-> +
-> +       check_deps
-> +
-> +       tmp_dir=$(mktemp -d)
-> +       trap 'rm -rf $tmp_dir' EXIT
-> +
-> +       if [ -z "$KERNEL_SRC" ]; then
-> +               KERNEL_SRC="$(realpath "$(dirname "$0")"/..)"
-> +       fi
-> +       export KERNEL_SRC
-
-
-Who will use KERNEL_SRC except this script?
-
-
-
-
-
-
-> +
-> +       if ! (cd "$KERNEL_SRC" && git rev-parse --is-inside-work-tree > /dev/null 2>&1); then
-> +               errlog "error - this script requires the kernel tree to be initialized with Git"
-> +               exit 1
-> +       fi
-> +
-> +       export ARCH
-> +       export CC
-> +       export CROSS_COMPILE
-
-print_usage() says these three are taken from
-environment variables.
-
-So, they are already exported, aren't they?
-
-
-
-
-
-
-> +
-> +       if ! check_changed_files "${refs_to_check[@]}"; then
-> +               errlog "UAPI header ABI check failed"
-> +               exit 1
-> +       fi
-> +}
-> +
-> +main "$@"
-> --
-> 2.17.1
->
---
-Best Regards
-Masahiro Yamada
+>   drivers/net/ethernet/mellanox/mlx4/en_tx.c | 22 +++++++++++-----------
+>   include/linux/mlx4/qp.h                    |  1 +
+>   2 files changed, 12 insertions(+), 11 deletions(-)
+> 
+
+Just saw your patch now, after commenting on the other thread. :)
+
+So you choose not to fix similar usages in RDMA driver 
+drivers/infiniband/hw/mlx4/qp.c, like:
+
+3204         spc = MLX4_INLINE_ALIGN -
+3205                 ((unsigned long) (inl + 1) & (MLX4_INLINE_ALIGN - 1));
+3206         if (header_size <= spc) {
+3207                 inl->byte_count = cpu_to_be32(1 << 31 | header_size);
+3208                 memcpy(inl + 1, sqp->header_buf, header_size);
+3209                 i = 1;
+3210         } else {
+3211                 inl->byte_count = cpu_to_be32(1 << 31 | spc);
+3212                 memcpy(inl + 1, sqp->header_buf, spc);
+3213
+3214                 inl = (void *) (inl + 1) + spc;
+3215                 memcpy(inl + 1, sqp->header_buf + spc, header_size 
+- spc);
+
+This keeps the patch minimal indeed.
+
+Did you repro the issue and test this solution?
+Maybe Josef can also verify it works for him?
+
+> diff --git a/drivers/net/ethernet/mellanox/mlx4/en_tx.c b/drivers/net/ethernet/mellanox/mlx4/en_tx.c
+> index c5758637b7be..2f79378fbf6e 100644
+> --- a/drivers/net/ethernet/mellanox/mlx4/en_tx.c
+> +++ b/drivers/net/ethernet/mellanox/mlx4/en_tx.c
+> @@ -699,32 +699,32 @@ static void build_inline_wqe(struct mlx4_en_tx_desc *tx_desc,
+>   			inl->byte_count = cpu_to_be32(1 << 31 | skb->len);
+>   		} else {
+>   			inl->byte_count = cpu_to_be32(1 << 31 | MIN_PKT_LEN);
+> -			memset(((void *)(inl + 1)) + skb->len, 0,
+> +			memset(inl->data + skb->len, 0,
+>   			       MIN_PKT_LEN - skb->len);
+>   		}
+> -		skb_copy_from_linear_data(skb, inl + 1, hlen);
+> +		skb_copy_from_linear_data(skb, inl->data, hlen);
+>   		if (shinfo->nr_frags)
+> -			memcpy(((void *)(inl + 1)) + hlen, fragptr,
+> +			memcpy(inl->data + hlen, fragptr,
+>   			       skb_frag_size(&shinfo->frags[0]));
+>   
+>   	} else {
+>   		inl->byte_count = cpu_to_be32(1 << 31 | spc);
+>   		if (hlen <= spc) {
+> -			skb_copy_from_linear_data(skb, inl + 1, hlen);
+> +			skb_copy_from_linear_data(skb, inl->data, hlen);
+>   			if (hlen < spc) {
+> -				memcpy(((void *)(inl + 1)) + hlen,
+> +				memcpy(inl->data + hlen,
+>   				       fragptr, spc - hlen);
+>   				fragptr +=  spc - hlen;
+>   			}
+> -			inl = (void *) (inl + 1) + spc;
+> -			memcpy(((void *)(inl + 1)), fragptr, skb->len - spc);
+> +			inl = (void *)inl->data + spc;
+> +			memcpy(inl->data, fragptr, skb->len - spc);
+>   		} else {
+> -			skb_copy_from_linear_data(skb, inl + 1, spc);
+> -			inl = (void *) (inl + 1) + spc;
+> -			skb_copy_from_linear_data_offset(skb, spc, inl + 1,
+> +			skb_copy_from_linear_data(skb, inl->data, spc);
+> +			inl = (void *)inl->data + spc;
+
+No need now for all these (void *) castings.
+
+> +			skb_copy_from_linear_data_offset(skb, spc, inl->data,
+>   							 hlen - spc);
+>   			if (shinfo->nr_frags)
+> -				memcpy(((void *)(inl + 1)) + hlen - spc,
+> +				memcpy(inl->data + hlen - spc,
+>   				       fragptr,
+>   				       skb_frag_size(&shinfo->frags[0]));
+>   		}
+> diff --git a/include/linux/mlx4/qp.h b/include/linux/mlx4/qp.h
+> index c78b90f2e9a1..b9a7b1319f5d 100644
+> --- a/include/linux/mlx4/qp.h
+> +++ b/include/linux/mlx4/qp.h
+> @@ -446,6 +446,7 @@ enum {
+>   
+>   struct mlx4_wqe_inline_seg {
+>   	__be32			byte_count;
+> +	__u8			data[];
+>   };
+>   
+>   enum mlx4_update_qp_attr {
