@@ -2,119 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A07F869C2BF
-	for <lists+linux-kernel@lfdr.de>; Sun, 19 Feb 2023 22:36:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B1A1A69C2C1
+	for <lists+linux-kernel@lfdr.de>; Sun, 19 Feb 2023 22:38:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231738AbjBSVgf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 19 Feb 2023 16:36:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40822 "EHLO
+        id S231424AbjBSViG convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Sun, 19 Feb 2023 16:38:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41940 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231424AbjBSVgd (ORCPT
+        with ESMTP id S230428AbjBSViF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 19 Feb 2023 16:36:33 -0500
-Received: from kylie.crudebyte.com (kylie.crudebyte.com [5.189.157.229])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96D4AF777;
-        Sun, 19 Feb 2023 13:36:30 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=crudebyte.com; s=kylie; h=Content-Type:Content-Transfer-Encoding:
-        MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:
-        Content-ID:Content-Description;
-        bh=PBokiqXsXo5Pc5WAkqYLqOvdwovmwqM/9idLauPogmA=; b=O5exEZ/p8bozHp6ym76iYZQ713
-        KO5khgWDNlQrjiYPNFuK284H6gkgu8iQQ+t906HUom2/+GqSMXsYKeXegrb6wGm86ptgopOBmHC7g
-        x3XvoiZWka4eLlWO1Wx6CD0D/3rYqmGgIWRTFZie/MdIr+osue5//0thK2gTCPRWBSyrVBTKq9SjP
-        CznCGYXM5k+YBEJ4b5t59xVuXCZnfKKjuzUx9g4PRQnXwk0VAJ6vXG4H798xXBvynLkFb+cXfKG7j
-        9547wmBr+3mlt30K7Gj/227nqnePt03wD2MDap/Y61yK7JvnOG/J0d/pnjgg9PJjfK7K8baj/up6y
-        U1iDQjuC2EOm4R9h8MiOsX4hPtN3KX2wRxdrumC5VB7SKH0tfSPgfE8J+WvY1Guy7YWiTm7ycNkBS
-        d0i8MT3OVGC4ztil7gMT6WLl+L3jtcJ5O2hEeDc/yReW1+UDrh3fooEgrt5K7VwVQk1El9O6fvaQ9
-        8svY8lwQQ8Cd+8hCp7vavdEGWBIieBlFmnleOYyI/hvcWyf+07F8F5dOGOwN0Zwr8DiaYvmk6iRUU
-        wGyErymXlHT/eKUcv5gejBlvTozbQjQquxk+Cyoe6ZzJgkBBdUMyuJPKglBRY2NvirU0qpiisGT+v
-        40ESyxInEUEliLcWxDbm6ieNhGhBFYHrGo0OunTKU=;
-From:   Christian Schoenebeck <linux_oss@crudebyte.com>
-To:     v9fs-developer@lists.sourceforge.net, asmadeus@codewreck.org,
-        rminnich@gmail.com, lucho@ionkov.net,
-        Eric Van Hensbergen <ericvh@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        Eric Van Hensbergen <ericvh@kernel.org>
-Subject: Re: [PATCH v4 00/11] Performance fixes for 9p filesystem
-Date:   Sun, 19 Feb 2023 22:36:20 +0100
-Message-ID: <12241224.W6qpu7VSM5@silver>
-In-Reply-To: <20230218003323.2322580-1-ericvh@kernel.org>
-References: <20230124023834.106339-1-ericvh@kernel.org>
- <20230218003323.2322580-1-ericvh@kernel.org>
+        Sun, 19 Feb 2023 16:38:05 -0500
+Received: from smtprelay06.ispgateway.de (smtprelay06.ispgateway.de [80.67.31.95])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29654B759;
+        Sun, 19 Feb 2023 13:38:04 -0800 (PST)
+Received: from [80.82.223.85] (helo=mail.piie.net)
+        by smtprelay06.ispgateway.de with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+        (Exim 4.94.2)
+        (envelope-from <peter@piie.net>)
+        id 1pTrNi-0005s6-5P; Sun, 19 Feb 2023 22:38:02 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Date:   Sun, 19 Feb 2023 21:38:02 +0000
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8BIT
+X-Mailer: RainLoop/1.16.0
+From:   "=?utf-8?B?UGV0ZXIgS8Okc3RsZQ==?=" <peter@piie.net>
+Message-ID: <4302bb253fb733b675dbf18d1c2bcd15@piie.net>
+Subject: Re: [PATCH v1 15/17] thermal/drivers/acerhdf: Make interval
+ setting only at module load time
+To:     "Daniel Lezcano" <daniel.lezcano@linaro.org>, rafael@kernel.org
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        "Hans de Goede" <hdegoede@redhat.com>,
+        "Mark Gross" <markgross@kernel.org>,
+        platform-driver-x86@vger.kernel.org
+In-Reply-To: <20230219143657.241542-16-daniel.lezcano@linaro.org>
+References: <20230219143657.241542-16-daniel.lezcano@linaro.org>
+ <20230219143657.241542-1-daniel.lezcano@linaro.org>
+X-Df-Sender: cGV0ZXJAcGlpZS5uZXQ=
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Saturday, February 18, 2023 1:33:12 AM CET Eric Van Hensbergen wrote:
-> This is the fourth version of a patch series which adds a number
-> of features to improve read/write performance in the 9p filesystem.
-> Mostly it focuses on fixing caching to help utilize the recently
-> increased MSIZE limits and also fixes some problematic behavior
-> within the writeback code.
+19. Februar 2023 15:38, "Daniel Lezcano" <daniel.lezcano@linaro.org> schrieb:
+
+> The thermal zone device structure is in the process of being private
+> to the thermal framework core code. This driver is directly accessing
+> and changing the monitoring polling rate.
 > 
-> All together, these show roughly 10x speed increases on simple
-> file transfers over no caching for readahead mode.  Future patch
-> sets will improve cache consistency and directory caching, which
-> should benefit loose mode.
+> After discussing with the maintainers of this driver, having the
+> polling interval at module loading time is enough for their purpose.
 > 
-> This iteration of the patch incorporates an important fix for
-> writeback which uses a stronger mechanism to flush writeback on
-> close of files and addresses observed bugs in previous versions of
-> the patch for writeback, mmap, and loose cache modes.
+> Change the code to take into account the interval when the module is
+> loaded but restrict the permissions so the value can not be changed
+> afterwards.
 > 
-> These patches are also available on github:
-> https://github.com/v9fs/linux/tree/ericvh/for-next
-> and on kernel.org:
-> https://git.kernel.org/pub/scm/linux/kernel/git/ericvh/v9fs.git
+> Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
+
+Acked-by: Peter Kaestle <peter@piie.net>
+
+
+> ---
+> drivers/platform/x86/acerhdf.c | 12 +++---------
+> 1 file changed, 3 insertions(+), 9 deletions(-)
 > 
-> Tested against qemu, cpu, and diod with fsx, dbench, and postmark
-> in every caching mode.
+> diff --git a/drivers/platform/x86/acerhdf.c b/drivers/platform/x86/acerhdf.c
+> index 1956469c3457..61f1c3090867 100644
+> --- a/drivers/platform/x86/acerhdf.c
+> +++ b/drivers/platform/x86/acerhdf.c
+> @@ -79,7 +79,6 @@ static unsigned int list_supported;
+> static unsigned int fanstate = ACERHDF_FAN_AUTO;
+> static char force_bios[16];
+> static char force_product[16];
+> -static unsigned int prev_interval;
+> static struct thermal_zone_device *thz_dev;
+> static struct thermal_cooling_device *cl_dev;
+> static struct platform_device *acerhdf_dev;
+> @@ -346,20 +345,15 @@ static void acerhdf_check_param(struct thermal_zone_device *thermal)
+> trips[0].temperature = fanon;
+> trips[0].hysteresis = fanon - fanoff;
 > 
-> I'm gonna definitely submit the first couple patches as they are
-> fairly harmless - but would like to submit the whole series to the
-> upcoming merge window.  Would appreciate reviews.
-
-I tested this version thoroughly today (msize=512k in all tests). Good news 
-first: the previous problems of v3 are gone. Great! But I'm still trying to 
-make sense of the performance numbers I get with these patches.
-
-So when doing some compilations with 9p, performance of mmap, writeback and 
-readahead are basically all the same, and only loose being 6x faster than the 
-other cache modes. Expected performance results? No errors at least. Good!
-
-Then I tested simple linear file I/O. First linear writing a 12GB file
-(time dd if=/dev/zero of=test.data bs=1G count=12):
-
-writeback    3m10s [this series - v4]
-readahead    0m11s [this series - v4]
-mmap         0m11s [this series - v4]
-mmap         0m11s [master]
-loose        2m50s [this series - v4]
-loose        2m19s [master]
-
-That's a bit surprising. Why is loose and writeback slower?
-
-Next linear reading a 12GB file
-(time cat test.data > /dev/null):
-
-writeback    0m24s [this series - v4]
-readahead    0m25s [this series - v4]
-mmap         0m25s [this series - v4]
-mmap         0m9s  [master]
-loose        0m24s [this series - v4]
-loose        0m24s [master]
-
-mmap degredation sticks out here, and no improvement with the other modes?
-
-I always performed a guest reboot between each run BTW.
-
-
-
+> - if (kernelmode && prev_interval != interval) {
+> + if (kernelmode) {
+> if (interval > ACERHDF_MAX_INTERVAL) {
+> pr_err("interval too high, set to %d\n",
+> ACERHDF_MAX_INTERVAL);
+> interval = ACERHDF_MAX_INTERVAL;
+> }
+> +
+> if (verbose)
+> pr_notice("interval changed to: %d\n", interval);
+> -
+> - if (thermal)
+> - thermal->polling_delay_jiffies =
+> - round_jiffies(msecs_to_jiffies(interval * 1000));
+> -
+> - prev_interval = interval;
+> }
+> }
+> 
+> @@ -807,5 +801,5 @@ static const struct kernel_param_ops interval_ops = {
+> .get = param_get_uint,
+> };
+> 
+> -module_param_cb(interval, &interval_ops, &interval, 0600);
+> +module_param_cb(interval, &interval_ops, &interval, 0000);
+> MODULE_PARM_DESC(interval, "Polling interval of temperature check");
+> -- 
+> 2.34.1
