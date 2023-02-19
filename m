@@ -2,53 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C66A69C283
-	for <lists+linux-kernel@lfdr.de>; Sun, 19 Feb 2023 21:47:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 77C1069C287
+	for <lists+linux-kernel@lfdr.de>; Sun, 19 Feb 2023 21:48:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231555AbjBSUrY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 19 Feb 2023 15:47:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45570 "EHLO
+        id S231566AbjBSUsZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 19 Feb 2023 15:48:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46964 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231547AbjBSUrX (ORCPT
+        with ESMTP id S231562AbjBSUsX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 19 Feb 2023 15:47:23 -0500
-Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE31E18B22
-        for <linux-kernel@vger.kernel.org>; Sun, 19 Feb 2023 12:47:21 -0800 (PST)
-Received: by mail-pj1-x1033.google.com with SMTP id o17-20020a17090ab89100b002349a303ca5so1181293pjr.4
-        for <linux-kernel@vger.kernel.org>; Sun, 19 Feb 2023 12:47:21 -0800 (PST)
+        Sun, 19 Feb 2023 15:48:23 -0500
+Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76554D53A
+        for <linux-kernel@vger.kernel.org>; Sun, 19 Feb 2023 12:48:21 -0800 (PST)
+Received: by mail-pj1-x102a.google.com with SMTP id e13so1295045pjt.4
+        for <linux-kernel@vger.kernel.org>; Sun, 19 Feb 2023 12:48:21 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=in-reply-to:content-disposition:mime-version:references:subject:cc
          :to:from:date:message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=EQwHKFAOnqqVUFe2laozm23usPDD0BYqQFbDjsfGGZ0=;
-        b=cMqm3sf+CmIV57EOrdFSH0Y6quW1uWdpJcrFTd2t38yjyfvYHAp87tnscm0cD4ruFl
-         v7qL2TLj0IqBM7k0klpcJ9znFuXEQiRHtOHi3tlHnL14nRlrX+q4Wk3TqWjm4O4KDzjW
-         jUhoMrl2bUhJOv+E5HJY1Zph4VZoAfhujd/fs=
+        bh=T6ogOI5fy9kZcGmbOh8R1Tnmx877fgaJfUkyo2bbhz4=;
+        b=O64JFYurCY6KM6mSXnFI/bvhb4Oa7RXnSdm6ui3KUo5AtmBeggaByaOWdeJ5bmXsLd
+         9PqYTDu9rTXfXM2IcL8/n66U5zPD/np1Bp/SfCRphnXkKuduPyIRKvgOESVi+YFCt4cz
+         R+rhrvpGrzmZSwcUHRZykq8tc4/RtynnmgL9M=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:subject:cc
          :to:from:date:message-id:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=EQwHKFAOnqqVUFe2laozm23usPDD0BYqQFbDjsfGGZ0=;
-        b=OPCKMeFHDb4spmIzNoANz1RzrXrMWHcAJY9MJPBKEQaOa9VpGxTA8aAJMIgniTaaK6
-         bAiq8SGo4QfLtG/4o9loJpxaZqojnppJpUD7SyFRvE24BopHJqT4jHUfHKOihmXwO8fM
-         uZ5X1nO5vVXOjDtQdSvnrMy94/+pdHkKasRXgAuP6f4zTmzVrKXRCYDl7VyLcY/gbOZ2
-         97wZzf/zn8TzeYQ2RXKVv3Q9XTE+I0+Y2XBTGtwAKKYi13X9X+LztZawpZ4FLA8lOQsi
-         jKK3Jw3jtYRWlJJMtls/ZFx84aCmAx56SFmSkVFDRcIvYC+FhOHn4NcsQlqjFtTFjF2L
-         tA7w==
-X-Gm-Message-State: AO0yUKX69sJBzvN6aIWKsnlrfzV4bDH5n8wdHb5ioM6iRYP2Qc0xiwcS
-        1tBm2t+sm6CxEzOA98W9nXETyQ==
-X-Google-Smtp-Source: AK7set/hFIrWVTPTKDhOCxl9WJjZkcr/+hEi3oT24AxwvFiqzEXI+5JP9z5meWKExDOcc6n6nMbzbA==
-X-Received: by 2002:a05:6a20:6929:b0:c7:2086:634b with SMTP id q41-20020a056a20692900b000c72086634bmr14963415pzj.18.1676839641160;
-        Sun, 19 Feb 2023 12:47:21 -0800 (PST)
+        bh=T6ogOI5fy9kZcGmbOh8R1Tnmx877fgaJfUkyo2bbhz4=;
+        b=CFsl1NyJuZgNFuEJG6RdKv2I0SO+075y+U5gmVTS+d+ynT1O4d1RUH4Em5aCe5dgwH
+         leLyOhgD5c/bgyLn6gozo5Px7r9qNgARPb9jKCYckymU9MkCQlF2aFwYofBsxn/MKsvU
+         bO2YdU4yG2l2Omm54RJQV76ISmPK/PQwRuZ3Teq8cmrwV6grhFoc82+aW83bPaSQTV3x
+         exWbn7mY706lk0xra+yhKIzoBVX0ssx9hRCfVHz9p/Bf7JSV1+SY9bgVpjVglsat3nOt
+         ZIL9PHObCKDCLBOzmY4CmtPdtU1+Y0Hd8bQgDSF6tXU0OeZlTiUcB+cQqpB4p92nMFHN
+         yOiQ==
+X-Gm-Message-State: AO0yUKW05wDoLQ4hI4ziBaBaXyWvW8rHvKCM4JwruiJmCaknj3OeqHC2
+        PRjVvmrscbL7NfCG8vshEEY54Q==
+X-Google-Smtp-Source: AK7set9AJDoPz3P8WrcTJKnVtGvdAn9cKTBx7QRH7COR7s96aLWXshdttfPlfDlbwFpcAoS0d+P3Rg==
+X-Received: by 2002:a17:90b:2243:b0:234:b03:5a70 with SMTP id hk3-20020a17090b224300b002340b035a70mr2120176pjb.35.1676839700900;
+        Sun, 19 Feb 2023 12:48:20 -0800 (PST)
 Received: from www.outflux.net (198-0-35-241-static.hfc.comcastbusiness.net. [198.0.35.241])
-        by smtp.gmail.com with ESMTPSA id 65-20020a630044000000b004f2c088328bsm1020035pga.43.2023.02.19.12.47.20
+        by smtp.gmail.com with ESMTPSA id d13-20020a17090ae28d00b00233e52b7797sm941662pjz.44.2023.02.19.12.48.20
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 19 Feb 2023 12:47:20 -0800 (PST)
-Message-ID: <63f28ad8.630a0220.b1efe.14e5@mx.google.com>
-X-Google-Original-Message-ID: <202302191245.@keescook>
-Date:   Sun, 19 Feb 2023 12:47:20 -0800
+        Sun, 19 Feb 2023 12:48:20 -0800 (PST)
+Message-ID: <63f28b14.170a0220.8cbeb.12e3@mx.google.com>
+X-Google-Original-Message-ID: <202302191248.@keescook>
+Date:   Sun, 19 Feb 2023 12:48:19 -0800
 From:   Kees Cook <keescook@chromium.org>
 To:     Rick Edgecombe <rick.p.edgecombe@intel.com>
 Cc:     x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
@@ -77,15 +77,14 @@ Cc:     x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
         eranian@google.com, rppt@kernel.org, jamorris@linux.microsoft.com,
         dethoma@microsoft.com, akpm@linux-foundation.org,
         Andrew.Cooper3@citrix.com, christina.schimpe@intel.com,
-        david@redhat.com, debug@rivosinc.com,
-        Yu-cheng Yu <yu-cheng.yu@intel.com>
-Subject: Re: [PATCH v6 37/41] selftests/x86: Add shadow stack test
+        david@redhat.com, debug@rivosinc.com
+Subject: Re: [PATCH v6 38/41] x86/fpu: Add helper for initing features
 References: <20230218211433.26859-1-rick.p.edgecombe@intel.com>
- <20230218211433.26859-38-rick.p.edgecombe@intel.com>
+ <20230218211433.26859-39-rick.p.edgecombe@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230218211433.26859-38-rick.p.edgecombe@intel.com>
+In-Reply-To: <20230218211433.26859-39-rick.p.edgecombe@intel.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
@@ -96,31 +95,25 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Feb 18, 2023 at 01:14:29PM -0800, Rick Edgecombe wrote:
-> Add a simple selftest for exercising some shadow stack behavior:
->  - map_shadow_stack syscall and pivot
->  - Faulting in shadow stack memory
->  - Handling shadow stack violations
->  - GUP of shadow stack memory
->  - mprotect() of shadow stack memory
->  - Userfaultfd on shadow stack memory
+On Sat, Feb 18, 2023 at 01:14:30PM -0800, Rick Edgecombe wrote:
+> If an xfeature is saved in a buffer, the xfeature's bit will be set in
+> xsave->header.xfeatures. The CPU may opt to not save the xfeature if it
+> is in it's init state. In this case the xfeature buffer address cannot
+> be retrieved with get_xsave_addr().
 > 
-> Since this test exercises a recently added syscall manually, it needs
-> to find the automatically created __NR_foo defines. Per the selftest
-> documentation, KHDR_INCLUDES can be used to help the selftest Makefile's
-> find the headers from the kernel source. This way the new selftest can
-> be built inside the kernel source tree without installing the headers
-> to the system. So also add KHDR_INCLUDES as described in the selftest
-> docs, to facilitate this.
+> Future patches will need to handle the case of writing to an xfeature
+> that may not be saved. So provide helpers to init an xfeature in an
+> xsave buffer.
+> 
+> This could of course be done directly by reaching into the xsave buffer,
+> however this would not be robust against future changes to optimize the
+> xsave buffer by compacting it. In that case the xsave buffer would need
+> to be re-arranged as well. So the logic properly belongs encapsulated
+> in a helper where the logic can be unified.
 > 
 > Tested-by: Pengfei Xu <pengfei.xu@intel.com>
 > Tested-by: John Allen <john.allen@amd.com>
-> Co-developed-by: Yu-cheng Yu <yu-cheng.yu@intel.com>
-> Signed-off-by: Yu-cheng Yu <yu-cheng.yu@intel.com>
 > Signed-off-by: Rick Edgecombe <rick.p.edgecombe@intel.com>
-
-I'll get some test hardware and run this myself too, but overall,
-ignoring the lack of kselftest_harness.h, it looks good:
 
 Reviewed-by: Kees Cook <keescook@chromium.org>
 
