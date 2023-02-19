@@ -2,107 +2,187 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 29B3869C367
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Feb 2023 00:30:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C67269C369
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Feb 2023 00:35:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229574AbjBSXaI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 19 Feb 2023 18:30:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56344 "EHLO
+        id S229602AbjBSXe6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 19 Feb 2023 18:34:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59120 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229461AbjBSXaB (ORCPT
+        with ESMTP id S229461AbjBSXe5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 19 Feb 2023 18:30:01 -0500
-Received: from gate2.alliedtelesis.co.nz (gate2.alliedtelesis.co.nz [IPv6:2001:df5:b000:5::4])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 990981ABC7
-        for <linux-kernel@vger.kernel.org>; Sun, 19 Feb 2023 15:30:00 -0800 (PST)
-Received: from svr-chch-seg1.atlnz.lc (mmarshal3.atlnz.lc [10.32.18.43])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by gate2.alliedtelesis.co.nz (Postfix) with ESMTPS id 40A6C2C05FA;
-        Mon, 20 Feb 2023 12:29:56 +1300 (NZDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alliedtelesis.co.nz;
-        s=mail181024; t=1676849396;
-        bh=bD34Flb4PZpQOH+aca7SIHb4GcyA+Pc/7slSPHD7C/E=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=zs4StTFrxzmPDAtLrb45oG7NG+/1eRHkCRQzNlhXqZzGJR4zTRI2yRpY6l1Pcrkqi
-         YmwXxiQ2W9zPmjAEHIhZS1vyxTZpZyQlDB3MzTDv1ZIk0Bo9YjQAUprtE39m4puf/q
-         +9YX8JIGg80tww3wW1Ihp+vG6/1bqRtC9rTOK0e1GbHTcb/8INtX2tLifqF/FZ/rFB
-         gOrVBYT2enFYm7bGIMIQ4RchwqGeda9HbP+1WhbHoAPgU3dgNwzSE7uRtX5B8pOfm6
-         MShDr+hJfDD7Lw4DZM8h4aceoyD8lqzzg1oVIxheEUBeTl7o5gMgJgFe/UYWc4k3TG
-         2lLLW/+gB1h2Q==
-Received: from pat.atlnz.lc (Not Verified[10.32.16.33]) by svr-chch-seg1.atlnz.lc with Trustwave SEG (v8,2,6,11305)
-        id <B63f2b0f40002>; Mon, 20 Feb 2023 12:29:56 +1300
-Received: from tonyo-dl.ws.atlnz.lc (tonyo-dl.ws.atlnz.lc [10.33.12.31])
-        by pat.atlnz.lc (Postfix) with ESMTP id 14A2913EE56;
-        Mon, 20 Feb 2023 12:29:56 +1300 (NZDT)
-Received: by tonyo-dl.ws.atlnz.lc (Postfix, from userid 1161)
-        id 1252DA008A; Mon, 20 Feb 2023 12:29:56 +1300 (NZDT)
-From:   Tony O'Brien <tony.obrien@alliedtelesis.co.nz>
-To:     jdelvare@suse.com, linux@roeck-us.net, linux-hwmon@vger.kernel.org
-Cc:     chris.packham@alliedtelesis.co.nz, hdegoede@redhat.com,
-        jordan.crouse@amd.com, linux-kernel@vger.kernel.org
-Subject: [PATCH 2/2] hwmon: (adt7475) Fix setting of hysteresis registers
-Date:   Mon, 20 Feb 2023 12:29:56 +1300
-Message-Id: <20230219232956.23784-3-tony.obrien@alliedtelesis.co.nz>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230219232956.23784-1-tony.obrien@alliedtelesis.co.nz>
-References: <20230219232956.23784-1-tony.obrien@alliedtelesis.co.nz>
+        Sun, 19 Feb 2023 18:34:57 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65AB0A27A
+        for <linux-kernel@vger.kernel.org>; Sun, 19 Feb 2023 15:34:56 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id EE40460C12
+        for <linux-kernel@vger.kernel.org>; Sun, 19 Feb 2023 23:34:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 23564C433D2;
+        Sun, 19 Feb 2023 23:34:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1676849695;
+        bh=HpPijLAkeZBcfgpuO4krVSl+jKWdeWQmrUDYyhPWGcQ=;
+        h=From:To:Cc:Subject:Date:From;
+        b=NsGjE+1Lp+eCe7wYIRJcHYd1KJ1QXkrs8uba2KgCXiVTVm9VfHlSxqhqsFKyYx3nH
+         ZW+5Gfxa5m95Cn0o3sn4WT/vHujk83q4/vwkiMj2eORE8Df1Nn7y3S+CqitnfLAIQY
+         VxIHWE8FFSnAzr4wY9Ypjstyr2KJDN14XMHLyUPLY2i1fjazCq4rLT/E3IitW4fZg2
+         lTT0Gdp0gVvnpOYKwAceBoN0h0It0DBDjK8YtaoiMU6OCRWpQvCeR5uJfSmAQuw2pV
+         GQcVFDgQRYW8aCWY8TRG88kwMEkx8Ea4sANyThy9uiNQZc3QEMnbNG3wuhngg70aI+
+         5KlzsgpCVrVTg==
+From:   Chun-Kuang Hu <chunkuang.hu@kernel.org>
+To:     Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
+Cc:     Chun-Kuang Hu <chunkuang.hu@kernel.org>
+Subject: [PATCH] soc: mediatek: cmdq: Remove unused helper funciton
+Date:   Sun, 19 Feb 2023 23:34:39 +0000
+Message-Id: <20230219233439.3157-1-chunkuang.hu@kernel.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-SEG-SpamProfiler-Analysis: v=2.3 cv=GdlpYjfL c=1 sm=1 tr=0 a=KLBiSEs5mFS1a/PbTCJxuA==:117 a=m04uMKEZRckA:10 a=528Z5tJWtxPNw0CsBnAA:9
-X-SEG-SpamProfiler-Score: 0
-x-atlnz-ls: pat
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In temp_store(), for the hysteresis setting calculation there were two
-errors.  The first tries to clamp the hysteresis value by comparing the
-required hysteresis value to THERM - 15C.  This is incorrect since the
-hysteresis value is a relative value whereas THERM - 15C is an absolute
-value. This causes it to always select 15C for hysteresis.  Change the
-first parameter to THERM - val to compare two absolute temperatures.
-The second error masks the wrong bits in the hysteresis register; indices
-0 and 2 should zero bits [7:4] and preserve bits [3:0], and index 1 shoul=
-d
-zero bits [3:0] and preserve bits [7:4].
+cmdq_pkt_create(), cmdq_pkt_destroy(), and cmdq_pkt_flush_async()
+are not used by all client drivers (MediaTek drm driver and
+MediaTek mdp3 driver), so remove them.
 
-Fixes: 1c301fc5394f ("hwmon: Add a driver for the ADT7475 hardware monito=
-ring chip")
-Signed-off-by: Tony O'Brien <tony.obrien@alliedtelesis.co.nz>
+Signed-off-by: Chun-Kuang Hu <chunkuang.hu@kernel.org>
 ---
- drivers/hwmon/adt7475.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ drivers/soc/mediatek/mtk-cmdq-helper.c | 59 --------------------------
+ include/linux/soc/mediatek/mtk-cmdq.h  | 28 ------------
+ 2 files changed, 87 deletions(-)
 
-diff --git a/drivers/hwmon/adt7475.c b/drivers/hwmon/adt7475.c
-index 77222c35a38e..68233191798e 100644
---- a/drivers/hwmon/adt7475.c
-+++ b/drivers/hwmon/adt7475.c
-@@ -484,14 +484,14 @@ static ssize_t temp_store(struct device *dev, struc=
-t device_attribute *attr,
- 		adt7475_read_hystersis(client);
-=20
- 		temp =3D reg2temp(data, data->temp[THERM][sattr->index]);
--		val =3D clamp_val(val, temp - 15000, temp);
-+		val =3D clamp_val(temp - val, temp - 15000, temp);
- 		val =3D (temp - val) / 1000;
-=20
- 		if (sattr->index !=3D 1) {
--			data->temp[HYSTERSIS][sattr->index] &=3D 0xF0;
-+			data->temp[HYSTERSIS][sattr->index] &=3D 0x0F;
- 			data->temp[HYSTERSIS][sattr->index] |=3D (val & 0xF) << 4;
- 		} else {
--			data->temp[HYSTERSIS][sattr->index] &=3D 0x0F;
-+			data->temp[HYSTERSIS][sattr->index] &=3D 0xF0;
- 			data->temp[HYSTERSIS][sattr->index] |=3D (val & 0xF);
- 		}
-=20
---=20
-2.39.2
+diff --git a/drivers/soc/mediatek/mtk-cmdq-helper.c b/drivers/soc/mediatek/mtk-cmdq-helper.c
+index c1837a468267..d4ab39236c79 100644
+--- a/drivers/soc/mediatek/mtk-cmdq-helper.c
++++ b/drivers/soc/mediatek/mtk-cmdq-helper.c
+@@ -104,50 +104,6 @@ void cmdq_mbox_destroy(struct cmdq_client *client)
+ }
+ EXPORT_SYMBOL(cmdq_mbox_destroy);
+ 
+-struct cmdq_pkt *cmdq_pkt_create(struct cmdq_client *client, size_t size)
+-{
+-	struct cmdq_pkt *pkt;
+-	struct device *dev;
+-	dma_addr_t dma_addr;
+-
+-	pkt = kzalloc(sizeof(*pkt), GFP_KERNEL);
+-	if (!pkt)
+-		return ERR_PTR(-ENOMEM);
+-	pkt->va_base = kzalloc(size, GFP_KERNEL);
+-	if (!pkt->va_base) {
+-		kfree(pkt);
+-		return ERR_PTR(-ENOMEM);
+-	}
+-	pkt->buf_size = size;
+-	pkt->cl = (void *)client;
+-
+-	dev = client->chan->mbox->dev;
+-	dma_addr = dma_map_single(dev, pkt->va_base, pkt->buf_size,
+-				  DMA_TO_DEVICE);
+-	if (dma_mapping_error(dev, dma_addr)) {
+-		dev_err(dev, "dma map failed, size=%u\n", (u32)(u64)size);
+-		kfree(pkt->va_base);
+-		kfree(pkt);
+-		return ERR_PTR(-ENOMEM);
+-	}
+-
+-	pkt->pa_base = dma_addr;
+-
+-	return pkt;
+-}
+-EXPORT_SYMBOL(cmdq_pkt_create);
+-
+-void cmdq_pkt_destroy(struct cmdq_pkt *pkt)
+-{
+-	struct cmdq_client *client = (struct cmdq_client *)pkt->cl;
+-
+-	dma_unmap_single(client->chan->mbox->dev, pkt->pa_base, pkt->buf_size,
+-			 DMA_TO_DEVICE);
+-	kfree(pkt->va_base);
+-	kfree(pkt);
+-}
+-EXPORT_SYMBOL(cmdq_pkt_destroy);
+-
+ static int cmdq_pkt_append_command(struct cmdq_pkt *pkt,
+ 				   struct cmdq_instruction inst)
+ {
+@@ -425,19 +381,4 @@ int cmdq_pkt_finalize(struct cmdq_pkt *pkt)
+ }
+ EXPORT_SYMBOL(cmdq_pkt_finalize);
+ 
+-int cmdq_pkt_flush_async(struct cmdq_pkt *pkt)
+-{
+-	int err;
+-	struct cmdq_client *client = (struct cmdq_client *)pkt->cl;
+-
+-	err = mbox_send_message(client->chan, pkt);
+-	if (err < 0)
+-		return err;
+-	/* We can send next packet immediately, so just call txdone. */
+-	mbox_client_txdone(client->chan, 0);
+-
+-	return 0;
+-}
+-EXPORT_SYMBOL(cmdq_pkt_flush_async);
+-
+ MODULE_LICENSE("GPL v2");
+diff --git a/include/linux/soc/mediatek/mtk-cmdq.h b/include/linux/soc/mediatek/mtk-cmdq.h
+index 2b498f4f3946..60e4c0ca52a1 100644
+--- a/include/linux/soc/mediatek/mtk-cmdq.h
++++ b/include/linux/soc/mediatek/mtk-cmdq.h
+@@ -57,21 +57,6 @@ struct cmdq_client *cmdq_mbox_create(struct device *dev, int index);
+  */
+ void cmdq_mbox_destroy(struct cmdq_client *client);
+ 
+-/**
+- * cmdq_pkt_create() - create a CMDQ packet
+- * @client:	the CMDQ mailbox client
+- * @size:	required CMDQ buffer size
+- *
+- * Return: CMDQ packet pointer
+- */
+-struct cmdq_pkt *cmdq_pkt_create(struct cmdq_client *client, size_t size);
+-
+-/**
+- * cmdq_pkt_destroy() - destroy the CMDQ packet
+- * @pkt:	the CMDQ packet
+- */
+-void cmdq_pkt_destroy(struct cmdq_pkt *pkt);
+-
+ /**
+  * cmdq_pkt_write() - append write command to the CMDQ packet
+  * @pkt:	the CMDQ packet
+@@ -264,17 +249,4 @@ int cmdq_pkt_jump(struct cmdq_pkt *pkt, dma_addr_t addr);
+  */
+ int cmdq_pkt_finalize(struct cmdq_pkt *pkt);
+ 
+-/**
+- * cmdq_pkt_flush_async() - trigger CMDQ to asynchronously execute the CMDQ
+- *                          packet and call back at the end of done packet
+- * @pkt:	the CMDQ packet
+- *
+- * Return: 0 for success; else the error code is returned
+- *
+- * Trigger CMDQ to asynchronously execute the CMDQ packet and call back
+- * at the end of done packet. Note that this is an ASYNC function. When the
+- * function returned, it may or may not be finished.
+- */
+-int cmdq_pkt_flush_async(struct cmdq_pkt *pkt);
+-
+ #endif	/* __MTK_CMDQ_H__ */
+-- 
+2.34.1
 
