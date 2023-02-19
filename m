@@ -2,135 +2,289 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E4B169C212
-	for <lists+linux-kernel@lfdr.de>; Sun, 19 Feb 2023 20:04:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5AD9B69C214
+	for <lists+linux-kernel@lfdr.de>; Sun, 19 Feb 2023 20:07:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231302AbjBSTEO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 19 Feb 2023 14:04:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32810 "EHLO
+        id S231309AbjBSTHS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 19 Feb 2023 14:07:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33458 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231279AbjBSTEM (ORCPT
+        with ESMTP id S230240AbjBSTHQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 19 Feb 2023 14:04:12 -0500
-Received: from todd.t-8ch.de (todd.t-8ch.de [IPv6:2a01:4f8:c010:41de::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78145FF00
-        for <linux-kernel@vger.kernel.org>; Sun, 19 Feb 2023 11:04:10 -0800 (PST)
-Date:   Sun, 19 Feb 2023 19:04:04 +0000
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=t-8ch.de; s=mail;
-        t=1676833447; bh=kPnfaPn7CSZ8/i9pk9BccYPAG8gCoKhNdxd/Luo1jt0=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=SFEaLHgRb532LB53TYjOoiCMhR7nR9nP2oyfFHsrepHL8vOewbwZftbbDyfEQF8VZ
-         2rV3l0eeMojZCe9x7TC2i/CAocnVfJg12+1oOfdx5K0jid7xnFywY/CWSx2/FKW8G6
-         OXX75ofwMqOdHEpz8dDbgnIO9jB9VlqZhww3aVvc=
-From:   Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <thomas@t-8ch.de>
-To:     Willy Tarreau <w@1wt.eu>
-Cc:     Vincent Dagonneau <v@vda.io>, linux-kernel@vger.kernel.org
-Subject: Re: [RFC PATCH 4/4] tools/nolibc: add tests for the integer limits
- in stdint.h
-Message-ID: <c549eaa8-02c4-4ca5-9ad9-6b713e183609@t-8ch.de>
-References: <20230219185133.14576-1-w@1wt.eu>
- <20230219185133.14576-5-w@1wt.eu>
+        Sun, 19 Feb 2023 14:07:16 -0500
+Received: from 1wt.eu (wtarreau.pck.nerim.net [62.212.114.60])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 276D914235
+        for <linux-kernel@vger.kernel.org>; Sun, 19 Feb 2023 11:07:14 -0800 (PST)
+Received: (from willy@localhost)
+        by mail.home.local (8.17.1/8.17.1/Submit) id 31JJ6bw9007197;
+        Sun, 19 Feb 2023 20:06:37 +0100
+Date:   Sun, 19 Feb 2023 20:06:37 +0100
+From:   Willy Tarreau <w@1wt.eu>
+To:     Feiyang Chen <chris.chenfeiyang@gmail.com>
+Cc:     paulmck@kernel.org, Feiyang Chen <chenfeiyang@loongson.cn>,
+        arnd@arndb.de, chenhuacai@kernel.org, jiaxun.yang@flygoat.com,
+        loongarch@lists.linux.dev, linux-kernel@vger.kernel.org,
+        Vincent Dagonneau <v@vda.io>
+Subject: Re: [PATCH v3 2/5] tools/nolibc: Add statx() and make stat() rely on
+ statx() if necessary
+Message-ID: <Y/JzPSYMPh/Hgjyn@1wt.eu>
+References: <cover.1675907639.git.chenfeiyang@loongson.cn>
+ <f60027664200d6d1f0ed6c7b87915a223afb982f.1675907639.git.chenfeiyang@loongson.cn>
+ <Y+lWQC3XU3xWqEi2@1wt.eu>
+ <CACWXhK=FKV=CppZnHtO3x33GhJgMQ8gmcgxp_Hn-bo7YcxRrnQ@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/mixed; boundary="aBHNUFX0VHk+offp"
 Content-Disposition: inline
-In-Reply-To: <20230219185133.14576-5-w@1wt.eu>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <CACWXhK=FKV=CppZnHtO3x33GhJgMQ8gmcgxp_Hn-bo7YcxRrnQ@mail.gmail.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Feb 19, 2023 at 07:51:33PM +0100, Willy Tarreau wrote:
-> From: Vincent Dagonneau <v@vda.io>
+
+--aBHNUFX0VHk+offp
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+
+Hi Feiyang,
+
+On Mon, Feb 13, 2023 at 09:06:36AM +0800, Feiyang Chen wrote:
+> On Mon, 13 Feb 2023 at 05:12, Willy Tarreau <w@1wt.eu> wrote:
+> >
+> > Hi Feiyang,
+> >
+> > On Thu, Feb 09, 2023 at 11:24:13AM +0800, chris.chenfeiyang@gmail.com wrote:
+> > > From: Feiyang Chen <chenfeiyang@loongson.cn>
+> > >
+> > > LoongArch and RISC-V 32-bit only have statx(). ARC, Hexagon, Nios2 and
+> > > OpenRISC have statx() and stat64() but not stat() or newstat(). Add
+> > > statx() and make stat() rely on statx() if necessary to make them happy.
+> > > We may just use statx() for all architectures in the future.
+> > >
+> > > Signed-off-by: Feiyang Chen <chenfeiyang@loongson.cn>
+> > > ---
+> > >  tools/include/nolibc/sys.h | 56 ++++++++++++++++++++++++++++++++++++++
+> > >  1 file changed, 56 insertions(+)
+> > >
+> > > diff --git a/tools/include/nolibc/sys.h b/tools/include/nolibc/sys.h
+> > > index c4818a9c8823..70c30d457952 100644
+> > > --- a/tools/include/nolibc/sys.h
+> > > +++ b/tools/include/nolibc/sys.h
+> > > @@ -20,6 +20,7 @@
+> > >  #include <linux/time.h>
+> > >  #include <linux/auxvec.h>
+> > >  #include <linux/fcntl.h> // for O_* and AT_*
+> > > +#include <linux/stat.h>  // for statx()
+> >
+> > This one causes build warnings on all archs but x86_64:
+> >
+> >   /f/tc/nolibc/gcc-11.3.0-nolibc/aarch64-linux/bin/aarch64-linux-gcc -Os -fno-ident -fno-asynchronous-unwind-tables  -s -o nolibc-test \
+> >     -nostdlib -static -Isysroot/arm64/include nolibc-test.c -lgcc
+> >   In file included from sysroot/arm64/include/sys.h:23,
+> >                    from sysroot/arm64/include/nolibc.h:99,
+> >                    from sysroot/arm64/include/errno.h:26,
+> >                    from sysroot/arm64/include/stdio.h:14,
+> >                    from nolibc-test.c:15:
+> >   sysroot/arm64/include/linux/stat.h:9: warning: "S_IFMT" redefined
+> >       9 | #define S_IFMT  00170000
+> >         |
+> >   In file included from sysroot/arm64/include/nolibc.h:98,
+> >                    from sysroot/arm64/include/errno.h:26,
+> >                    from sysroot/arm64/include/stdio.h:14,
+> >                    from nolibc-test.c:15:
+> >   sysroot/arm64/include/types.h:27: note: this is the location of the previous definition
+> >
+> > This is caused by the definitions for S_IF* and S_IS* in types.h. However
+> > if I remove them I'm seeing x86_64 fail on S_IFCHR not defined. The root
+> > cause is that the x86_64 toolchain falls back to /usr/include for the
+> > include_next <limits.h> that others do not do (probably that when built
+> > it thought it was a native compiler instead of a cross-compiler). I'm
+> > apparently able to work around this by ifdefing out the definitions but
+> > it makes me feel like I'm hiding the dust under the carpet. Instead I'm
+> > thinking of reusing Vincent's work who added stdint and the definitions
+> > for the various INT*MAX values that are normally found in limits.h and
+> > providing our own limits.h so that this issue is globally addressed.
+> >
+> > I'm going to experiment a little bit about this and will propose something
+> > once I'm satisfied with a solution that we can queue for 6.4. Most likely
+> > it will involve merging a variant of Vincent's series first, a few changes
+> > to have limits.h then your series.
+> >
 > 
-> This commit adds tests for the limits added in a previous commit. The
-> limits are defined in decimal in stdint.h and as hexadecimal in the
-> tests (e.g. 0x7f = 127 or 0x80 = -128). Hopefully it catches some o the
-> most egregious mistakes.
+> Hi, Willy,
 > 
-> Signed-off-by: Vincent Dagonneau <v@vda.io>
-> [wt: rely on the compiler-provided __SIZEOF_LONG__ to decide what values
->  to expect, and detect its miss to avoid reporting false errors]
-> Signed-off-by: Willy Tarreau <w@1wt.eu>
-> ---
->  tools/testing/selftests/nolibc/nolibc-test.c | 45 +++++++++++++++++++-
->  1 file changed, 44 insertions(+), 1 deletion(-)
-> 
-> diff --git a/tools/testing/selftests/nolibc/nolibc-test.c b/tools/testing/selftests/nolibc/nolibc-test.c
-> index 882140508d56..290249d6da30 100644
-> --- a/tools/testing/selftests/nolibc/nolibc-test.c
-> +++ b/tools/testing/selftests/nolibc/nolibc-test.c
-> @@ -561,7 +561,50 @@ int run_syscall(int min, int max)
->  		CASE_TEST(waitpid_child);     EXPECT_SYSER(1, waitpid(getpid(), &tmp, WNOHANG), -1, ECHILD); break;
->  		CASE_TEST(write_badf);        EXPECT_SYSER(1, write(-1, &tmp, 1), -1, EBADF); break;
->  		CASE_TEST(write_zero);        EXPECT_SYSZR(1, write(1, &tmp, 0)); break;
-> -		case __LINE__:
-> +		CASE_TEST(limit_int8_max);          EXPECT_EQ(1, INT8_MAX,   (int8_t)   0x7f); break;
-> +		CASE_TEST(limit_int8_min);          EXPECT_EQ(1, INT8_MIN,   (int8_t)   0x80); break;
-> +		CASE_TEST(limit_uint8_max);         EXPECT_EQ(1, UINT8_MAX,  (uint8_t)  0xff); break;
-> +		CASE_TEST(limit_int16_max);         EXPECT_EQ(1, INT16_MAX,  (int16_t)  0x7fff); break;
-> +		CASE_TEST(limit_int16_min);         EXPECT_EQ(1, INT16_MIN,  (int16_t)  0x8000); break;
-> +		CASE_TEST(limit_uint16_max);        EXPECT_EQ(1, UINT16_MAX, (uint16_t) 0xffff); break;
-> +		CASE_TEST(limit_int32_max);         EXPECT_EQ(1, INT32_MAX,  (int32_t)  0x7fffffff); break;
-> +		CASE_TEST(limit_int32_min);         EXPECT_EQ(1, INT32_MIN,  (int32_t)  0x80000000); break;
-> +		CASE_TEST(limit_uint32_max);        EXPECT_EQ(1, UINT32_MAX, (uint32_t) 0xffffffff); break;
-> +		CASE_TEST(limit_int64_max);         EXPECT_EQ(1, INT64_MAX,  (int64_t)  0x7fffffffffffffff); break;
-> +		CASE_TEST(limit_int64_min);         EXPECT_EQ(1, INT64_MIN,  (int64_t)  0x8000000000000000); break;
-> +		CASE_TEST(limit_uint64_max);        EXPECT_EQ(1, UINT64_MAX, (uint64_t) 0xffffffffffffffff); break;
-> +		CASE_TEST(limit_int_least8_max);    EXPECT_EQ(1, INT_LEAST8_MAX,   (int_least8_t)    0x7f); break;
-> +		CASE_TEST(limit_int_least8_min);    EXPECT_EQ(1, INT_LEAST8_MIN,   (int_least8_t)    0x80); break;
-> +		CASE_TEST(limit_uint_least8_max);   EXPECT_EQ(1, UINT_LEAST8_MAX,  (uint_least8_t)   0xff); break;
-> +		CASE_TEST(limit_int_least16_max);   EXPECT_EQ(1, INT_LEAST16_MAX,  (int_least16_t)   0x7fff); break;
-> +		CASE_TEST(limit_int_least16_min);   EXPECT_EQ(1, INT_LEAST16_MIN,  (int_least16_t)   0x8000); break;
-> +		CASE_TEST(limit_uint_least16_max);  EXPECT_EQ(1, UINT_LEAST16_MAX, (uint_least16_t)  0xffff); break;
-> +		CASE_TEST(limit_int_least32_max);   EXPECT_EQ(1, INT_LEAST32_MAX,  (int_least32_t)   0x7fffffff); break;
-> +		CASE_TEST(limit_int_least32_min);   EXPECT_EQ(1, INT_LEAST32_MIN,  (int_least32_t)   0x80000000); break;
-> +		CASE_TEST(limit_uint_least32_max);  EXPECT_EQ(1, UINT_LEAST32_MAX, (uint_least32_t)  0xffffffffU); break;
-> +#if __SIZEOF_LONG__ == 8
-> +		CASE_TEST(limit_int_least64_max);   EXPECT_EQ(1, INT_LEAST64_MAX,  (int_least64_t)   0x7fffffffffffffffLL); break;
-> +		CASE_TEST(limit_int_least64_min);   EXPECT_EQ(1, INT_LEAST64_MIN,  (int_least64_t)   0x8000000000000000LL); break;
-> +		CASE_TEST(limit_uint_least64_max);  EXPECT_EQ(1, UINT_LEAST64_MAX, (uint_least64_t)  0xffffffffffffffffULL); break;
+> OK. Thank you very much!
 
-int64 types are also defined for 32bit platforms, but the tests are only
-ran for 64bits. Is this intentional?
+You're welcome. I finally figured the root cause of the problem. As
+mentioned above, the cross-compiler mistakenly includes some glibc
+entries (regardless of me defining limits.h), and linux/stat.h sees
+glibc defined so it refrains from defining S_I* because this conflict
+was apparently already identified in the past. In order to work around
+the problem without touching the uapi headers, I preferred to modify
+the nolibc one to add a similar test and detect whether linux/stat.h
+had already provided them (see patch below). This way it remains simple
+to understand and still pretty effective. And now your patchset works
+fine with no modification.
 
-> +		CASE_TEST(limit_intptr_min);        EXPECT_EQ(1, INTPTR_MIN,  (intptr_t)  0x8000000000000000LL); break;
-> +		CASE_TEST(limit_intptr_max);        EXPECT_EQ(1, INTPTR_MAX,  (intptr_t)  0x7fffffffffffffffLL); break;
-> +		CASE_TEST(limit_uintptr_max);       EXPECT_EQ(1, UINTPTR_MAX, (uintptr_t) 0xffffffffffffffffULL); break;
-> +		CASE_TEST(limit_ptrdiff_min);       EXPECT_EQ(1, PTRDIFF_MIN, (ptrdiff_t) 0x8000000000000000LL); break;
-> +		CASE_TEST(limit_ptrdiff_max);       EXPECT_EQ(1, PTRDIFF_MAX, (ptrdiff_t) 0x7fffffffffffffffLL); break;
-> +		CASE_TEST(limit_size_max);          EXPECT_EQ(1, SIZE_MAX,    (size_t)    0xffffffffffffffffULL); break;
-> +#elif __SIZEOF_LONG__ == 4
-> +		CASE_TEST(limit_intptr_min);        EXPECT_EQ(1, INTPTR_MIN,  (intptr_t)  0x80000000); break;
-> +		CASE_TEST(limit_intptr_max);        EXPECT_EQ(1, INTPTR_MAX,  (intptr_t)  0x7fffffff); break;
-> +		CASE_TEST(limit_uintptr_max);       EXPECT_EQ(1, UINTPTR_MAX, (uintptr_t) 0xffffffffU); break;
-> +		CASE_TEST(limit_ptrdiff_min);       EXPECT_EQ(1, PTRDIFF_MIN, (ptrdiff_t) 0x80000000); break;
-> +		CASE_TEST(limit_ptrdiff_max);       EXPECT_EQ(1, PTRDIFF_MAX, (ptrdiff_t) 0x7fffffff); break;
-> +		CASE_TEST(limit_ptrdiff_min);       EXPECT_EQ(1, PTRDIFF_MIN, (ptrdiff_t) 0x80000000); break;
-> +		CASE_TEST(limit_ptrdiff_max);       EXPECT_EQ(1, PTRDIFF_MAX, (ptrdiff_t) 0x7fffffff); break;
+I'll send all of this to Paul next week-end once he's back.
 
-ptrdiff tests are duplicate.
+Thanks,
+Willy
 
-> +		CASE_TEST(limit_size_max);          EXPECT_EQ(1, SIZE_MAX,    (size_t)    0xffffffffU); break;
-> +#else
-> +# warning "__SIZEOF_LONG__ is undefined"
+--
 
-Why not #error?
+From 39843ae4a006c37cf09febaf286c438a9793f9a1 Mon Sep 17 00:00:00 2001
+From: Willy Tarreau <w@1wt.eu>
+Date: Sun, 19 Feb 2023 18:51:59 +0100
+Subject: [PATCH] tools/nolibc: check for S_I* macros before defining them
 
-> +#endif /* __WORDSIZE == 64 */
+Defining S_I* flags in types.h can cause some build failures if
+linux/stat.h is included prior to it. But if not defined, some toolchains
+that include some glibc parts will in turn fail because linux/stat.h
+already takes care of avoiding these definitions when glibc is present.
 
-#endif comment is now incorrect
+Let's preserve the macros here but first include linux/stat.h and check
+for their definition before doing so. We also define the previously
+missing permission macros so that we don't get a different behavior
+depending on the first include found.
 
-> +			case __LINE__:
+Cc: Feiyang Chen <chenfeiyang@loongson.cn>
+Signed-off-by: Willy Tarreau <w@1wt.eu>
+---
+ tools/include/nolibc/types.h | 23 ++++++++++++++++++++++-
+ 1 file changed, 22 insertions(+), 1 deletion(-)
 
-The "case" should be further left, no?
+diff --git a/tools/include/nolibc/types.h b/tools/include/nolibc/types.h
+index fbbc0e68c001..47a0997d2d74 100644
+--- a/tools/include/nolibc/types.h
++++ b/tools/include/nolibc/types.h
+@@ -9,6 +9,7 @@
+ 
+ #include "std.h"
+ #include <linux/time.h>
++#include <linux/stat.h>
+ 
+ 
+ /* Only the generic macros and types may be defined here. The arch-specific
+@@ -16,7 +17,11 @@
+  * the layout of sys_stat_struct must not be defined here.
+  */
+ 
+-/* stat flags (WARNING, octal here) */
++/* stat flags (WARNING, octal here). We need to check for an existing
++ * definition because linux/stat.h may omit to define those if it finds
++ * that any glibc header was already included.
++ */
++#if !defined(S_IFMT)
+ #define S_IFDIR        0040000
+ #define S_IFCHR        0020000
+ #define S_IFBLK        0060000
+@@ -34,6 +39,22 @@
+ #define S_ISLNK(mode)  (((mode) & S_IFMT) == S_IFLNK)
+ #define S_ISSOCK(mode) (((mode) & S_IFMT) == S_IFSOCK)
+ 
++#define S_IRWXU 00700
++#define S_IRUSR 00400
++#define S_IWUSR 00200
++#define S_IXUSR 00100
++
++#define S_IRWXG 00070
++#define S_IRGRP 00040
++#define S_IWGRP 00020
++#define S_IXGRP 00010
++
++#define S_IRWXO 00007
++#define S_IROTH 00004
++#define S_IWOTH 00002
++#define S_IXOTH 00001
++#endif
++
+ /* dirent types */
+ #define DT_UNKNOWN     0x0
+ #define DT_FIFO        0x1
+-- 
+2.35.3
 
->  			return ret; /* must be last */
->  		/* note: do not set any defaults so as to permit holes above */
->  		}
-> -- 
-> 2.35.3
-> 
+
+--aBHNUFX0VHk+offp
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: attachment;
+	filename="0001-tools-nolibc-check-for-S_I-macros-before-defining-th.patch"
+
+From 39843ae4a006c37cf09febaf286c438a9793f9a1 Mon Sep 17 00:00:00 2001
+From: Willy Tarreau <w@1wt.eu>
+Date: Sun, 19 Feb 2023 18:51:59 +0100
+Subject: [PATCH] tools/nolibc: check for S_I* macros before defining them
+
+Defining S_I* flags in types.h can cause some build failures if
+linux/stat.h is included prior to it. But if not defined, some toolchains
+that include some glibc parts will in turn fail because linux/stat.h
+already takes care of avoiding these definitions when glibc is present.
+
+Let's preserve the macros here but first include linux/stat.h and check
+for their definition before doing so. We also define the previously
+missing permission macros so that we don't get a different behavior
+depending on the first include found.
+
+Cc: Feiyang Chen <chenfeiyang@loongson.cn>
+Signed-off-by: Willy Tarreau <w@1wt.eu>
+---
+ tools/include/nolibc/types.h | 23 ++++++++++++++++++++++-
+ 1 file changed, 22 insertions(+), 1 deletion(-)
+
+diff --git a/tools/include/nolibc/types.h b/tools/include/nolibc/types.h
+index fbbc0e68c001..47a0997d2d74 100644
+--- a/tools/include/nolibc/types.h
++++ b/tools/include/nolibc/types.h
+@@ -9,6 +9,7 @@
+ 
+ #include "std.h"
+ #include <linux/time.h>
++#include <linux/stat.h>
+ 
+ 
+ /* Only the generic macros and types may be defined here. The arch-specific
+@@ -16,7 +17,11 @@
+  * the layout of sys_stat_struct must not be defined here.
+  */
+ 
+-/* stat flags (WARNING, octal here) */
++/* stat flags (WARNING, octal here). We need to check for an existing
++ * definition because linux/stat.h may omit to define those if it finds
++ * that any glibc header was already included.
++ */
++#if !defined(S_IFMT)
+ #define S_IFDIR        0040000
+ #define S_IFCHR        0020000
+ #define S_IFBLK        0060000
+@@ -34,6 +39,22 @@
+ #define S_ISLNK(mode)  (((mode) & S_IFMT) == S_IFLNK)
+ #define S_ISSOCK(mode) (((mode) & S_IFMT) == S_IFSOCK)
+ 
++#define S_IRWXU 00700
++#define S_IRUSR 00400
++#define S_IWUSR 00200
++#define S_IXUSR 00100
++
++#define S_IRWXG 00070
++#define S_IRGRP 00040
++#define S_IWGRP 00020
++#define S_IXGRP 00010
++
++#define S_IRWXO 00007
++#define S_IROTH 00004
++#define S_IWOTH 00002
++#define S_IXOTH 00001
++#endif
++
+ /* dirent types */
+ #define DT_UNKNOWN     0x0
+ #define DT_FIFO        0x1
+-- 
+2.35.3
+
+
+--aBHNUFX0VHk+offp--
