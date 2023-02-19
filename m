@@ -2,96 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E0DF069BF3F
-	for <lists+linux-kernel@lfdr.de>; Sun, 19 Feb 2023 10:00:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 59A4B69BF49
+	for <lists+linux-kernel@lfdr.de>; Sun, 19 Feb 2023 10:03:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229606AbjBSJAA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 19 Feb 2023 04:00:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38956 "EHLO
+        id S229838AbjBSJDK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 19 Feb 2023 04:03:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39878 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229523AbjBSI76 (ORCPT
+        with ESMTP id S229523AbjBSJDD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 19 Feb 2023 03:59:58 -0500
-Received: from mx01.omp.ru (mx01.omp.ru [90.154.21.10])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E24911160;
-        Sun, 19 Feb 2023 00:59:56 -0800 (PST)
-Received: from [192.168.1.103] (31.173.84.108) by msexch01.omp.ru
- (10.188.4.12) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.986.14; Sun, 19 Feb
- 2023 11:59:46 +0300
-Subject: Re: [PATCH 12/18] pata_parport: use print_hex_*
-To:     Ondrej Zary <linux@zary.sk>,
-        Damien Le Moal <damien.lemoal@opensource.wdc.com>
-CC:     Christoph Hellwig <hch@lst.de>, Jens Axboe <axboe@kernel.dk>,
-        Tim Waugh <tim@cyberelk.net>, <linux-block@vger.kernel.org>,
-        <linux-parport@lists.infradead.org>, <linux-ide@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-References: <20230218220138.5692-1-linux@zary.sk>
- <20230218220138.5692-13-linux@zary.sk>
-From:   Sergey Shtylyov <s.shtylyov@omp.ru>
-Organization: Open Mobile Platform
-Message-ID: <c75593a9-cb3f-4960-fad8-295e5ee4b84f@omp.ru>
-Date:   Sun, 19 Feb 2023 11:59:45 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.10.1
+        Sun, 19 Feb 2023 04:03:03 -0500
+Received: from elvis.franken.de (elvis.franken.de [193.175.24.41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B0ED8113F4;
+        Sun, 19 Feb 2023 01:03:01 -0800 (PST)
+Received: from uucp (helo=alpha)
+        by elvis.franken.de with local-bsmtp (Exim 3.36 #1)
+        id 1pTfaz-0000LC-00; Sun, 19 Feb 2023 10:02:57 +0100
+Received: by alpha.franken.de (Postfix, from userid 1000)
+        id 3A797C28CC; Sun, 19 Feb 2023 09:30:22 +0100 (CET)
+Date:   Sun, 19 Feb 2023 09:30:22 +0100
+From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+To:     Elvira Khabirova <lineprinter0@gmail.com>
+Cc:     "Dmitry V. Levin" <ldv@strace.io>, linux-mips@vger.kernel.org,
+        linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        Ralf Baechle <ralf@linux-mips.org>,
+        Paul Burton <paul.burton@mips.com>,
+        James Hogan <jhogan@kernel.org>,
+        Andreas Henriksson <ah@debian.org>
+Subject: Re: [PATCH] mips: fix syscall_get_nr
+Message-ID: <20230219083022.GA2924@alpha.franken.de>
+References: <20230218233212.1fed456b@akathisia>
 MIME-Version: 1.0
-In-Reply-To: <20230218220138.5692-13-linux@zary.sk>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [31.173.84.108]
-X-ClientProxiedBy: msexch01.omp.ru (10.188.4.12) To msexch01.omp.ru
- (10.188.4.12)
-X-KSE-ServerInfo: msexch01.omp.ru, 9
-X-KSE-AntiSpam-Interceptor-Info: scan successful
-X-KSE-AntiSpam-Version: 5.9.59, Database issued on: 02/19/2023 08:36:50
-X-KSE-AntiSpam-Status: KAS_STATUS_NOT_DETECTED
-X-KSE-AntiSpam-Method: none
-X-KSE-AntiSpam-Rate: 59
-X-KSE-AntiSpam-Info: Lua profiles 175607 [Feb 19 2023]
-X-KSE-AntiSpam-Info: Version: 5.9.59.0
-X-KSE-AntiSpam-Info: Envelope from: s.shtylyov@omp.ru
-X-KSE-AntiSpam-Info: LuaCore: 504 504 dc137e1f9c062eb6c0671e7d509ab442ae395562
-X-KSE-AntiSpam-Info: {rep_avail}
-X-KSE-AntiSpam-Info: {Tracking_from_domain_doesnt_match_to}
-X-KSE-AntiSpam-Info: {relay has no DNS name}
-X-KSE-AntiSpam-Info: {SMTP from is not routable}
-X-KSE-AntiSpam-Info: {Found in DNSBL: 31.173.84.108 in (user)
- b.barracudacentral.org}
-X-KSE-AntiSpam-Info: {Found in DNSBL: 31.173.84.108 in (user)
- dbl.spamhaus.org}
-X-KSE-AntiSpam-Info: 31.173.84.108:7.1.2;omp.ru:7.1.1;d41d8cd98f00b204e9800998ecf8427e.com:7.1.1;127.0.0.199:7.1.2
-X-KSE-AntiSpam-Info: ApMailHostAddress: 31.173.84.108
-X-KSE-AntiSpam-Info: {DNS response errors}
-X-KSE-AntiSpam-Info: Rate: 59
-X-KSE-AntiSpam-Info: Status: not_detected
-X-KSE-AntiSpam-Info: Method: none
-X-KSE-AntiSpam-Info: Auth:dmarc=temperror header.from=omp.ru;spf=temperror
- smtp.mailfrom=omp.ru;dkim=none
-X-KSE-Antiphishing-Info: Clean
-X-KSE-Antiphishing-ScanningType: Heuristic
-X-KSE-Antiphishing-Method: None
-X-KSE-Antiphishing-Bases: 02/19/2023 08:39:00
-X-KSE-AttachmentFiltering-Interceptor-Info: protection disabled
-X-KSE-Antivirus-Interceptor-Info: scan successful
-X-KSE-Antivirus-Info: Clean, bases: 2/19/2023 6:00:00 AM
-X-KSE-BulkMessagesFiltering-Scan-Result: InTheLimit
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230218233212.1fed456b@akathisia>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/19/23 1:01 AM, Ondrej Zary wrote:
-
-> Use print_hex_* for debug dumps.
+On Sat, Feb 18, 2023 at 11:43:59PM +0100, Elvira Khabirova wrote:
+> The implementation of syscall_get_nr on mips used to ignore the task
+> argument and return the syscall number of the calling thread instead of
+> the target thread.
 > 
-> Signed-off-by: Ondrej Zary <linux@zary.sk>
+> The bug was exposed to user space by commit 201766a20e30f ("ptrace: add
+> PTRACE_GET_SYSCALL_INFO request") and detected by strace test suite.
+> 
+> Link: https://github.com/strace/strace/issues/235
+> Fixes: c2d9f1775731 ("MIPS: Fix syscall_get_nr for the syscall exit tracing.")
+> Cc: <stable@vger.kernel.org> # v3.19+
+> Co-developed-by: Dmitry V. Levin <ldv@strace.io>
+> Signed-off-by: Dmitry V. Levin <ldv@strace.io>
+> Signed-off-by: Elvira Khabirova <lineprinter0@gmail.com>
+> ---
+>  arch/mips/include/asm/syscall.h | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/arch/mips/include/asm/syscall.h b/arch/mips/include/asm/syscall.h
+> index 25fa651c937d..ebdf4d910af2 100644
+> --- a/arch/mips/include/asm/syscall.h
+> +++ b/arch/mips/include/asm/syscall.h
+> @@ -38,7 +38,7 @@ static inline bool mips_syscall_is_indirect(struct task_struct *task,
+>  static inline long syscall_get_nr(struct task_struct *task,
+>  				  struct pt_regs *regs)
+>  {
+> -	return current_thread_info()->syscall;
+> +	return task_thread_info(task)->syscall;
+>  }
+>  
+>  static inline void mips_syscall_update_nr(struct task_struct *task,
+> -- 
 
-Reviewed-by: Sergey Shtylyov <s.shtylyov@omp.ru>
+applied to mips-next.
 
-[...]
+Thomas.
 
-MBR, Sergey
+-- 
+Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
+good idea.                                                [ RFC1925, 2.3 ]
