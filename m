@@ -2,174 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 96A6F69C198
-	for <lists+linux-kernel@lfdr.de>; Sun, 19 Feb 2023 18:07:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F9CD69C1A5
+	for <lists+linux-kernel@lfdr.de>; Sun, 19 Feb 2023 18:11:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231131AbjBSRHq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 19 Feb 2023 12:07:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43868 "EHLO
+        id S231158AbjBSRLo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 19 Feb 2023 12:11:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46022 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230209AbjBSRHp (ORCPT
+        with ESMTP id S230499AbjBSRLn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 19 Feb 2023 12:07:45 -0500
-Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D97F126EA
-        for <linux-kernel@vger.kernel.org>; Sun, 19 Feb 2023 09:07:43 -0800 (PST)
-Received: by mail-wm1-x32c.google.com with SMTP id j41-20020a05600c1c2900b003e1e754657aso713805wms.2
-        for <linux-kernel@vger.kernel.org>; Sun, 19 Feb 2023 09:07:43 -0800 (PST)
+        Sun, 19 Feb 2023 12:11:43 -0500
+Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FE51C678
+        for <linux-kernel@vger.kernel.org>; Sun, 19 Feb 2023 09:11:41 -0800 (PST)
+Received: by mail-lf1-x12a.google.com with SMTP id be16so1195382lfb.9
+        for <linux-kernel@vger.kernel.org>; Sun, 19 Feb 2023 09:11:41 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=6KxNFzRgs/0vUNP2uZncHosd2KHSBPqfvZ7J555gKlI=;
-        b=TqDmxeCqgjX/SCT0zS+PF6AfR/9dCo1FpS5mnG9j01BFC1+VD4Q7ubhlQfXhrmE083
-         0WYN1f0bIbo21XRTWifbJwcYTr2X1HSPBzZM87/35szohbgwJWtwst3ZB/Uyku+BZ1GT
-         fdjOk5jg86fdGhZQivHhMX1dUtyEtd0zEYACMvag1QVVQXdQ7R5c7aIxveMhWwkz75hR
-         8chbsS6v67DndN4W12l84nsUdBhyOjwMW1hwOqBmE6eyqzuIM8WMLxP7V5DN4UAzCAZX
-         vqLCw8gjWfj/gz3br1kNLOjZCJGA+sAEn8LyDTAn692JW1B2MJS3YSi60TU4KXtLsjqR
-         Lx/g==
+        d=joelfernandes.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=3MqB3YCnY1ABGfqAXVEWcDgg0yTzlVf+e/bFLeq+ZQQ=;
+        b=NSAGAEhY6tI3uhoF0rttWoEU/i5bXzjNYa/exUPePKl0ERQL45PCCquSF2gotXV1YR
+         EcWKXvtezU65YbcmNBjQaZe0Tls9LYNXJZcV3j52vWSqDvecPJNUhkTq/s98qJAgbhsN
+         Bm1pohXBtCHuBIOqW5j8ioZPsgmeU4IbZXUhk=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=6KxNFzRgs/0vUNP2uZncHosd2KHSBPqfvZ7J555gKlI=;
-        b=s1rbk/s4VDvc4i5vjrOSX+NGMfpmQvAUmYluLoGHK9fV41i5FNwWnMMHl5mIb+rWjM
-         P2G+Yywm3hmCuFJA5T5ki52HwUb+SYYprwBCcLms5uFKlxMr5YzU1OGA4f3ZnUW8/dfw
-         Xm+J3yS9xtglLfkfwkh3bIcSmKTEmwBU0CTJMiyXMe4jdxa0PjI+GXugDoU1RtBB5GHx
-         cXHA5MnrXLx30anEarSR8TB+zeGC08LwBefW7/rh2Khsp1Qz1mHEMmL1ZuXG0CWlPZl5
-         kMyyIUAUxvjmT4UJKLklr0Fcuu/jqC/9WnBEKoDrESSvv/vc4gwUnwqXRorPj+QrNAwG
-         rq4w==
-X-Gm-Message-State: AO0yUKWwB8ZNwRMUmQkPhG97jrmbIJJw7Lefe7PNwhwTJH2K1m4+lpqf
-        TBiRPmzIpSaYKZIqcSI3bSt5hQ==
-X-Google-Smtp-Source: AK7set83h6bWbda4YvPCa+ZBjfPRZ/9UdfQCE1sEN23gN10rONUKibwH121WMa44Jr/M6QZ46vWaSg==
-X-Received: by 2002:a05:600c:198e:b0:3e2:1f00:bff7 with SMTP id t14-20020a05600c198e00b003e21f00bff7mr7646707wmq.12.1676826461464;
-        Sun, 19 Feb 2023 09:07:41 -0800 (PST)
-Received: from ?IPV6:2a05:6e02:1041:c10:6f43:b92:7670:463? ([2a05:6e02:1041:c10:6f43:b92:7670:463])
-        by smtp.googlemail.com with ESMTPSA id n27-20020a05600c3b9b00b003e206cc7237sm15155832wms.24.2023.02.19.09.07.36
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 19 Feb 2023 09:07:40 -0800 (PST)
-Message-ID: <4d8f1e68-8d2c-b70f-69c7-a1137ac4b05f@linaro.org>
-Date:   Sun, 19 Feb 2023 18:07:36 +0100
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=3MqB3YCnY1ABGfqAXVEWcDgg0yTzlVf+e/bFLeq+ZQQ=;
+        b=DIxR0XqRnDVq8drJpdzj1z7cebfJL1FpgjleMWlJ7hN0/lwyeA+R4+Sc6v9KMVCj+f
+         7YF4DP453Nps9HALEbxke31Rps1N8vl34KUil84wBdvpM4uOPvsB+8ruAbeu9lpfX7/N
+         SFHJauIR7CkHZAqtRuqRvPDpkhMRs98uiqFyb6q81lNq9kkVigNIRAVnlha2+AvcAuyV
+         EFLyb/mbtRQhu3TWGUAjO5vBXYXcu2CjBUV7HBOpWfUZn1hxNba33Xg8f9SGYYmy2li0
+         zstf+VwCGV9eJFhK0rxs4TpduMNmjFePJdNK5pVZPPiqZ/HGeRgzzXJNAQqeowbUDXa0
+         vIjA==
+X-Gm-Message-State: AO0yUKXh9Puwc8Fgr0YTOlvR0NXFZDBs/dGeJoS2HaMu8F1ean/LqFFi
+        ir90LN2ZavRCZUrsjgFIEkW+nh8WY+Jqhp+sTaEskQ==
+X-Google-Smtp-Source: AK7set/WnQAeApK7cB9nndDp2q8sTInlXORDboYyJp0lyKOImBF9gNGJ5nwV8rYE9VVEGl+uF/WC1uEleOUifzS0HLM=
+X-Received: by 2002:a05:6512:71:b0:4db:eeb:3dea with SMTP id
+ i17-20020a056512007100b004db0eeb3deamr567717lfo.11.1676826699196; Sun, 19 Feb
+ 2023 09:11:39 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH v1 01/17] thermal/core: Add a thermal zone 'devdata'
- accessor
-Content-Language: en-US
-To:     =?UTF-8?Q?Niklas_S=c3=b6derlund?= <niklas.soderlund@ragnatech.se>
-Cc:     rafael@kernel.org, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Zhang Rui <rui.zhang@intel.com>,
-        Len Brown <lenb@kernel.org>,
-        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Samuel Holland <samuel@sholland.org>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Raju Rangoju <rajur@chelsio.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Ido Schimmel <idosch@nvidia.com>,
-        Petr Machata <petrm@nvidia.com>,
-        Gregory Greenman <gregory.greenman@intel.com>,
-        Kalle Valo <kvalo@kernel.org>,
-        Sebastian Reichel <sre@kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Amit Kucheria <amitk@kernel.org>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Broadcom internal kernel review list 
-        <bcm-kernel-feedback-list@broadcom.com>,
-        Ray Jui <rjui@broadcom.com>,
-        Scott Branden <sbranden@broadcom.com>,
-        Markus Mayer <mmayer@broadcom.com>,
-        Support Opensource <support.opensource@diasemi.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Thara Gopinath <thara.gopinath@gmail.com>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Bartlomiej Zolnierkiewicz <bzolnier@gmail.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Orson Zhai <orsonzhai@gmail.com>,
-        Baolin Wang <baolin.wang@linux.alibaba.com>,
-        Chunyan Zhang <zhang.lyra@gmail.com>,
-        Vasily Khoruzhick <anarsoul@gmail.com>,
-        Yangtao Li <tiny.windzz@gmail.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Talel Shenhar <talel@amazon.com>,
-        Eduardo Valentin <edubezval@gmail.com>,
-        Keerthy <j-keerthy@ti.com>,
-        Kunihiko Hayashi <hayashi.kunihiko@socionext.com>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Stefan Wahren <stefan.wahren@i2se.com>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        ye xingchen <ye.xingchen@zte.com.cn>,
-        Zheng Yongjun <zhengyongjun3@huawei.com>,
-        Tim Zimmermann <tim@linux4.de>,
-        Yang Li <yang.lee@linux.alibaba.com>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        Ricardo Neri <ricardo.neri-calderon@linux.intel.com>,
-        Jiang Jian <jiangjian@cdjrlc.com>,
-        Daniel Golle <daniel@makrotopia.org>,
-        Balsam CHIHI <bchihi@baylibre.com>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Mikko Perttunen <mperttunen@nvidia.com>,
-        "open list:ACPI THERMAL DRIVER" <linux-acpi@vger.kernel.org>,
-        "open list:LIBATA SUBSYSTEM (Serial and Parallel ATA drivers)" 
-        <linux-ide@vger.kernel.org>,
-        "moderated list:ARM/FREESCALE IMX / MXC ARM ARCHITECTURE" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "open list:HARDWARE MONITORING" <linux-hwmon@vger.kernel.org>,
-        "open list:IIO SUBSYSTEM AND DRIVERS" <linux-iio@vger.kernel.org>,
-        "open list:ARM/Allwinner sunXi SoC support" 
-        <linux-sunxi@lists.linux.dev>,
-        "open list:INPUT (KEYBOARD, MOUSE, JOYSTICK, TOUCHSCREEN)..." 
-        <linux-input@vger.kernel.org>,
-        "open list:CXGB4 ETHERNET DRIVER (CXGB4)" <netdev@vger.kernel.org>,
-        "open list:INTEL WIRELESS WIFI LINK (iwlwifi)" 
-        <linux-wireless@vger.kernel.org>,
-        "moderated list:BROADCOM BCM2711/BCM2835 ARM ARCHITECTURE" 
-        <linux-rpi-kernel@lists.infradead.org>,
-        "open list:ARM/QUALCOMM SUPPORT" <linux-arm-msm@vger.kernel.org>,
-        "open list:RENESAS R-CAR THERMAL DRIVERS" 
-        <linux-renesas-soc@vger.kernel.org>,
-        "open list:ARM/Rockchip SoC support" 
-        <linux-rockchip@lists.infradead.org>,
-        "open list:SAMSUNG THERMAL DRIVER" 
-        <linux-samsung-soc@vger.kernel.org>,
-        "open list:TEGRA ARCHITECTURE SUPPORT" <linux-tegra@vger.kernel.org>,
-        "open list:TI BANDGAP AND THERMAL DRIVER" 
-        <linux-omap@vger.kernel.org>,
-        "moderated list:ARM/Mediatek SoC support" 
-        <linux-mediatek@lists.infradead.org>
-References: <20230219143657.241542-1-daniel.lezcano@linaro.org>
- <20230219143657.241542-2-daniel.lezcano@linaro.org>
- <Y/I7KA2Uqqk7ib6L@oden.dyn.berto.se>
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-In-Reply-To: <Y/I7KA2Uqqk7ib6L@oden.dyn.berto.se>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+References: <20230213015506.778246-1-joel@joelfernandes.org> <Y/JS5SYKPeeDQErL@rowland.harvard.edu>
+In-Reply-To: <Y/JS5SYKPeeDQErL@rowland.harvard.edu>
+From:   Joel Fernandes <joel@joelfernandes.org>
+Date:   Sun, 19 Feb 2023 12:11:27 -0500
+Message-ID: <CAEXW_YQrFSiDEM9cuhkTT2_1+CZoGbg7vC9oL-D-Wd5OQ2mm2w@mail.gmail.com>
+Subject: Re: [PATCH] tools/memory-model: Add details about SRCU read-side
+ critical sections
+To:     Alan Stern <stern@rowland.harvard.edu>
+Cc:     linux-kernel@vger.kernel.org,
+        Andrea Parri <andrea.parri@amarulasolutions.com>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Jade Alglave <j.alglave@ucl.ac.uk>,
+        Luc Maranget <luc.maranget@inria.fr>,
+        "Paul E. McKenney" <paulmck@linux.ibm.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Will Deacon <will.deacon@arm.com>,
+        Jonas Oberhauser <jonas.oberhauser@huaweicloud.com>,
+        Akira Yokosawa <akiyks@gmail.com>,
+        Andrea Parri <parri.andrea@gmail.com>,
+        Daniel Lustig <dlustig@nvidia.com>,
+        David Howells <dhowells@redhat.com>,
+        Jonas Oberhauser <jonas.oberhauser@huawei.com>,
+        linux-arch@vger.kernel.org, Nicholas Piggin <npiggin@gmail.com>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        =?UTF-8?Q?Paul_Heidekr=C3=BCger?= <paul.heidekrueger@in.tum.de>,
+        Will Deacon <will@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -177,88 +80,300 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 19/02/2023 16:07, Niklas Söderlund wrote:
-> Hi Daniel,
-> 
-> Thanks for your work.
-> 
-> On 2023-02-19 15:36:41 +0100, Daniel Lezcano wrote:
->> The thermal zone device structure is exposed to the different drivers
->> and obviously they access the internals while that should be
->> restricted to the core thermal code.
->>
->> In order to self-encapsulate the thermal core code, we need to prevent
->> the drivers accessing directly the thermal zone structure and provide
->> accessor functions to deal with.
->>
->> Provide an accessor to the 'devdata' structure and make use of it in
->> the different drivers.
->>
->> No functional changes intended.
->>
->> Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
->> ---
-> 
-> ...
-> 
->>   drivers/thermal/rcar_gen3_thermal.c              |  4 ++--
->>   drivers/thermal/rcar_thermal.c                   |  3 +--
-> 
-> For R-Car,
-> 
-> Reviewed-by: Niklas Söderlund <niklas.soderlund+renesas@ragnatech.se>
-> 
-> ...
-> 
-> 
->> diff --git a/include/linux/thermal.h b/include/linux/thermal.h
->> index 2bb4bf33f4f3..724b95662da9 100644
->> --- a/include/linux/thermal.h
->> +++ b/include/linux/thermal.h
->> @@ -365,6 +365,8 @@ thermal_zone_device_register_with_trips(const char *, struct thermal_trip *, int
->>   					void *, struct thermal_zone_device_ops *,
->>   					struct thermal_zone_params *, int, int);
->>   
->> +void *thermal_zone_device_get_data(struct thermal_zone_device *tzd);
->> +
-> 
-> bikeshedding:
-> 
-> Would it make sens to name this thermal_zone_device_get_priv_data(),
-> thermal_zone_device_get_priv() or something like that? To make it more
-> explicitly when reading the driver code this fetches the drivers private
-> data, and not some data belonging to the zone itself.
+On Sun, Feb 19, 2023 at 11:48 AM Alan Stern <stern@rowland.harvard.edu> wrote:
+>
+> On Mon, Feb 13, 2023 at 01:55:06AM +0000, Joel Fernandes (Google) wrote:
+> > Add details about SRCU read-side critical sections and how they are
+> > modeled.
+> >
+> > Cc: Andrea Parri <andrea.parri@amarulasolutions.com>
+> > Cc: Boqun Feng <boqun.feng@gmail.com>
+> > Cc: Jade Alglave <j.alglave@ucl.ac.uk>
+> > Cc: Luc Maranget <luc.maranget@inria.fr>
+> > Cc: "Paul E. McKenney" <paulmck@linux.ibm.com>
+> > Cc: Peter Zijlstra <peterz@infradead.org>
+> > Cc: Will Deacon <will.deacon@arm.com>
+> > Cc: Jonas Oberhauser <jonas.oberhauser@huaweicloud.com>
+> > Suggested-by: Alan Stern <stern@rowland.harvard.edu>
+> > Signed-off-by: Joel Fernandes (Google) <joel@joelfernandes.org>
+> >
+> > ---
+> >  .../Documentation/explanation.txt             | 55 ++++++++++++++++++-
+> >  1 file changed, 52 insertions(+), 3 deletions(-)
+> >
+> > diff --git a/tools/memory-model/Documentation/explanation.txt b/tools/memory-model/Documentation/explanation.txt
+> > index 8e7085238470..5f486d39fe10 100644
+> > --- a/tools/memory-model/Documentation/explanation.txt
+> > +++ b/tools/memory-model/Documentation/explanation.txt
+> > @@ -28,9 +28,10 @@ Explanation of the Linux-Kernel Memory Consistency Model
+> >    20. THE HAPPENS-BEFORE RELATION: hb
+> >    21. THE PROPAGATES-BEFORE RELATION: pb
+> >    22. RCU RELATIONS: rcu-link, rcu-gp, rcu-rscsi, rcu-order, rcu-fence, and rb
+> > -  23. LOCKING
+> > -  24. PLAIN ACCESSES AND DATA RACES
+> > -  25. ODDS AND ENDS
+> > +  23. SRCU READ-SIDE CRITICAL SECTIONS
+> > +  24. LOCKING
+> > +  25. PLAIN ACCESSES AND DATA RACES
+> > +  26. ODDS AND ENDS
+> >
+> >
+> >
+> > @@ -1858,6 +1859,54 @@ links having the same SRCU domain with proper nesting); the details
+> >  are relatively unimportant.
+> >
+> >
+> > +SRCU READ-SIDE CRITICAL SECTIONS
+> > +--------------------------------
+> > +An SRCU read-side section is modeled with the srcu-rscs relation and
+> > +is different from rcu-rscs in the following respects:
+> > +
+> > +1. SRCU read-side sections are associated with a specific domain and
+> > +are independent of ones in different domains. Each domain has their
+> > +own independent grace-periods.
+> > +
+> > +2. Partitially overlapping SRCU read-side sections cannot fuse. It is
+> > +possible that among 2 partitally overlapping readers, the one that
+> > +starts earlier, starts before a GP started and the later reader starts
+> > +after the same GP started. These 2 readers are to be treated as
+> > +different srcu-rscs even for the same SRCU domain.
+> > +
+> > +3. The srcu_down_read() and srcu_up_read() primitives permit an SRCU
+> > +read-side lock to be acquired on one CPU and released another. While
+> > +this is also true about preemptible RCU, the LKMM does not model
+> > +preemption.  So unlike SRCU, RCU readers are still modeled and
+> > +expected to be locked and unlocked on the same CPU in litmus tests.
+> > +
+> > +To make it easy to model SRCU readers in LKMM with the above 3
+> > +properties, an SRCU lock operation is modeled as a load annotated with
+> > +'srcu-lock' and an SRCU unlock operation is modeled as a store
+> > +annotated with 'srcu-unlock'. This load and store takes the memory
+> > +address of an srcu_struct as an input, and the value returned is the
+> > +SRCU index (value). Thus LKMM creates a data-dependency between them
+> > +by virtue of the load and store memory accesses before performed on
+> > +the same srcu_struct:  R[srcu-lock] ->data W[srcu-unlock].
+> > +This data dependency becomes: R[srcu-lock] ->srcu-rscs W[srcu-unlock].
+> > +
+> > +It is also possible that the data loaded from the R[srcu-lock] is
+> > +stored back into a memory location, and loaded on the same or even
+> > +another CPU, before doing an unlock.
+> > +This becomes:
+> > +  R[srcu-lock] ->data W[once] ->rf R[once] ->data W[srcu-unlock]
+> > +
+> > +The model also treats this chaining of ->data and ->rf relations as:
+> > +  R[srcu-lock] ->srcu-rscs W[srcu-unlock] by the model.
+> > +
+> > +Care must be taken that:
+> > +  R[srcu-lock] ->data W[srcu-unlock] ->rf R[srcu-lock] is not
+> > +considered as a part of the above ->data and ->rf chain, which happens
+> > +because of one reader unlocking and another locking right after it.
+> > +The model excludes these ->rf relations when building the ->srcu-rscs
+> > +relation.
+> > +
+> > +
+> >  LOCKING
+> >  -------
+> >
+> I took the liberty of rewriting your text to make it agree better with
+> the style used in the rest of the document.  It ended up getting a lot
+> bigger, but I think it will be more comprehensible to readers.  Here is
+> the result.
 
-In the headers files, there are more occurrences with _name_priv():
+Great writeup! One comment below:
 
-# _name_priv()
-git grep priv include/linux/ | grep "priv(" | grep -v get | wc -l
-52
+> Alan
+>
+>
+> --- usb-devel.orig/tools/memory-model/Documentation/explanation.txt
+> +++ usb-devel/tools/memory-model/Documentation/explanation.txt
+> @@ -28,9 +28,10 @@ Explanation of the Linux-Kernel Memory C
+>    20. THE HAPPENS-BEFORE RELATION: hb
+>    21. THE PROPAGATES-BEFORE RELATION: pb
+>    22. RCU RELATIONS: rcu-link, rcu-gp, rcu-rscsi, rcu-order, rcu-fence, and rb
+> -  23. LOCKING
+> -  24. PLAIN ACCESSES AND DATA RACES
+> -  25. ODDS AND ENDS
+> +  23. SRCU READ-SIDE CRITICAL SECTIONS
+> +  24. LOCKING
+> +  25. PLAIN ACCESSES AND DATA RACES
+> +  26. ODDS AND ENDS
+>
+>
+>
+> @@ -1848,14 +1849,157 @@ section in P0 both starts before P1's gr
+>  before it does, and the critical section in P2 both starts after P1's
+>  grace period does and ends after it does.
+>
+> -Addendum: The LKMM now supports SRCU (Sleepable Read-Copy-Update) in
+> -addition to normal RCU.  The ideas involved are much the same as
+> -above, with new relations srcu-gp and srcu-rscsi added to represent
+> -SRCU grace periods and read-side critical sections.  There is a
+> -restriction on the srcu-gp and srcu-rscsi links that can appear in an
+> -rcu-order sequence (the srcu-rscsi links must be paired with srcu-gp
+> -links having the same SRCU domain with proper nesting); the details
+> -are relatively unimportant.
+> +The LKMM supports SRCU (Sleepable Read-Copy-Update) in addition to
+> +normal RCU.  The ideas involved are much the same as above, with new
+> +relations srcu-gp and srcu-rscsi added to represent SRCU grace periods
+> +and read-side critical sections.  However, there are some important
+> +differences between RCU read-side critical sections and their SRCU
+> +counterparts, as described in the next section.
+> +
+> +
+> +SRCU READ-SIDE CRITICAL SECTIONS
+> +--------------------------------
+> +
+> +The LKMM models SRCU read-side critical sections with the srcu-rscsi
+> +relation.  They are different from RCU read-side critical sections in
+> +the following respects:
+> +
+> +1.     Unlike the analogous RCU primitives, synchronize_srcu(),
+> +       srcu_read_lock(), and srcu_read_unlock() take a pointer to a
+> +       struct srcu_struct as an argument.  This structure is called
+> +       an SRCU domain, and calls linked by srcu-rscsi must have the
+> +       same domain.  Read-side critical sections and grace periods
+> +       associated with different domains are independent of one
+> +       another.  The SRCU version of the RCU Guarantee applies only
+> +       to pairs of critical sections and grace periods having the
+> +       same domain.
+> +
+> +2.     srcu_read_lock() returns a value, called the index, which must
+> +       be passed to the matching srcu_read_unlock() call.  Unlike
+> +       rcu_read_lock() and rcu_read_unlock(), an srcu_read_lock()
+> +       call does not always have to match the next unpaired
+> +       srcu_read_unlock().  In fact, it is possible for two SRCU
+> +       read-side critical sections to overlap partially, as in the
+> +       following example (where s is an srcu_struct and idx1 and idx2
+> +       are integer variables):
+> +
+> +               idx1 = srcu_read_lock(&s);      // Start of first RSCS
+> +               idx2 = srcu_read_lock(&s);      // Start of second RSCS
+> +               srcu_read_unlock(&s, idx1);     // End of first RSCS
+> +               srcu_read_unlock(&s, idx2);     // End of second RSCS
+> +
+> +       The matching is determined entirely by the domain pointer and
+> +       index value.  By contrast, if the calls had been
+> +       rcu_read_lock() and rcu_read_unlock() then they would have
+> +       created two nested (fully overlapping) read-side critical
+> +       sections: an inner one and an outer one.
+> +
+> +3.     The srcu_down_read() and srcu_up_read() primitives work
+> +       exactly like srcu_read_lock() and srcu_read_unlock(), except
+> +       that matching calls don't have to execute on the same CPU.
+> +       Since the matching is determined by the domain pointer and
+> +       index value, these primitives make it possible for an SRCU
+> +       read-side critical section to start on one CPU and end on
+> +       another, so to speak.
+> +
+> +The LKMM models srcu_read_lock() as a special type of load event
+> +(which is appropriate, since it takes a memory location as argument
+> +and returns a value, just like a load does) and srcu_read_unlock() as
+> +a special type of store event (again appropriate, since it takes as
+> +arguments a memory location and a value).  These loads and stores are
+> +annotated as belonging to the "srcu-lock" and "srcu-unlock" event
+> +classes respectively.
+> +
+> +This approach allows the LKMM to tell which unlock matches a
+> +particular lock, by checking for the presence of a data dependency
+> +from the load (srcu-lock) to the store (srcu-unlock).  For example,
+> +given the situation outlined earlier (with statement labels added):
+> +
+> +       A: idx1 = srcu_read_lock(&s);
+> +       B: idx2 = srcu_read_lock(&s);
+> +       C: srcu_read_unlock(&s, idx1);
+> +       D: srcu_read_unlock(&s, idx2);
+> +
+> +then the LKMM will treat A and B as loads from s yielding the values
+> +in idx1 and idx2 respectively.  Similarly, it will treat C and D as
+> +though they stored the values idx1 and idx2 in s.  The end result is
+> +as if we had written:
+> +
+> +       A: idx1 = READ_ONCE(s);
+> +       B: idx2 = READ_ONCE(s);
+> +       C: WRITE_ONCE(s, idx1);
+> +       D: WRITE_ONCE(s, idx2);
+> +
+> +(except for the presence of the special srcu-lock and srcu-unlock
+> +annotations).  You can see at once that we have A ->data C and
+> +B ->data D.  These dependencies tells the LKMM that C is the
+> +srcu-unlock event matching srcu-lock event A, and D is the
+> +srcu-unlock event matching srcu-lock event B.
+> +
+> +This approach is admittedly a hack, and it has the potential to lead
+> +to problems.  For example, in:
+> +
+> +       idx1 = srcu_read_lock(&s);
+> +       srcu_read_unlock(&s, idx1);
+> +       idx2 = srcu_read_lock(&s);
+> +       srcu_read_unlock(&s, idx2);
+> +
+> +the LKMM will believe that idx2 must have the same value as idx1,
+> +since it reads from the immediately preceding store of idx1 in s.
+> +Fortunately this won't matter, assuming that litmus tests never do
+> +anything with SRCU index values other than pass them to
+> +srcu_read_unlock() or srcu_up_read() calls.
+> +
+> +However, sometimes it is necessary to store an index value in a
+> +shared variable temporarily.  In fact, this is the only way for
+> +srcu_down_read() to pass the index it gets to an srcu_up_read() call
+> +on a different CPU.  In more detail, we might have:
+> +
+> +       struct srcu_struct s;
+> +       int x;
+> +
+> +       P0()
+> +       {
+> +               int r0;
+> +
+> +               A: r0 = srcu_down_read(s);
+> +               B: WRITE_ONCE(x, r0);
+> +       }
+> +
+> +       P1()
+> +       {
+> +               int r1;
+> +
+> +               C: r1 = READ_ONCE(x);
+> +               D: srcu_up_read(s, r1);
+> +       }
+> +
+> +Assuming that P1 executes after P0 and does read the index value
+> +stored in x, we can write this (using brackets to represent event
+> +annotations) as:
+> +
+> +       A[srcu-lock] ->data B[once] ->rf C[once] ->data D[srcu-unlock].
+> +
+> +The LKMM defines a carries-srcu-data relation to express this
+> +pattern; it permits multiple instances of a
+> +
+> +       data ; rf
+> +
+> +pair (that is, a data link followed by an rf link) to occur between an
+> +srcu-lock event and the final data dependency leading to the matching
+> +srcu-unlock event.  carry-srcu-data has to be careful that none of the
+> +intermediate store events in this series are instances of srcu-unlock.
+> +Without this protection, in a sequence like the one above:
+> +
+> +       A: idx1 = srcu_read_lock(&s);
+> +       B: srcu_read_unlock(&s, idx1);
+> +       C: idx2 = srcu_read_lock(&s);
+> +       D: srcu_read_unlock(&s, idx2);
+> +
+> +it would appear that B was a store to a temporary variable (i.e., s)
+> +and C was a load from that variable, thereby allowing carry-srcu-data
+> +to extend a data dependency from A to D and giving the impression
+> +that D was the srcu-unlock event matching A's srcu-lock.
 
-# _name_private()
-git grep priv include/linux/ | grep "private(" | grep -v get | wc -l
-33
+Even though it may be redundant: would it be possible to also mention
+(after this paragraph) that this case forms an undesirable "->rf" link
+between B and C, which then causes us to link A and D as a result?
 
-# _name_get_private()
-git grep priv include/linux/ | grep "private(" | grep get | wc -l
-12
+A[srcu-lock] ->data B[once] ->rf C[once] ->data D[srcu-unlock].
 
-# _name_get_priv()
-git grep priv include/linux/ | grep "priv(" | grep get | wc -l
-4
+Just an optional suggestion and I am happy with the change either way:
 
+Reviewed-by: Joel Fernandes (Google) <joel@joelfernandes.org>
 
-What about thermal_zone_device_priv() ?
+Thanks,
 
-
-
-
-
-
--- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
-
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
-
+ - Joel
