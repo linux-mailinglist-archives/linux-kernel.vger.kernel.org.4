@@ -2,99 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7225A69C027
-	for <lists+linux-kernel@lfdr.de>; Sun, 19 Feb 2023 13:14:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B2A1469C02A
+	for <lists+linux-kernel@lfdr.de>; Sun, 19 Feb 2023 13:21:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229751AbjBSMO1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 19 Feb 2023 07:14:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39828 "EHLO
+        id S229751AbjBSMVm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 19 Feb 2023 07:21:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41506 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229558AbjBSMOZ (ORCPT
+        with ESMTP id S229557AbjBSMVl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 19 Feb 2023 07:14:25 -0500
-Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADDA2EB48
-        for <linux-kernel@vger.kernel.org>; Sun, 19 Feb 2023 04:14:23 -0800 (PST)
-Received: by mail-ed1-x52b.google.com with SMTP id ee44so6084187edb.5
-        for <linux-kernel@vger.kernel.org>; Sun, 19 Feb 2023 04:14:23 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=sartura.hr; s=sartura;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=Kxkd4//RPVCLi8yyo6/EUcCuKUtpxv+tcfETfHyl5Tc=;
-        b=lUok8y13crnWg4US+/zCJWSqvwNztFNLO1MlPW38197fQcQreVFrBPBu8FJUezl6Hv
-         m+HIOHBk6nxMxIgWg1ppEupLpLm+h7NZ3f5NFHE9sGroD3/kMjKy7SgmBRrzjA56cRrS
-         U0djfU529pZtnXUIQTJWQhhYrA8XzrinQOnym7r71Y/ymSJPwW+U0TVmCQt5fO0slzvW
-         qlIwEeB6dd1NYUOMEL6ri3ZmjAUdBBXJzmiQhBaK8BZoF5JbBtzeZ5tLuWDzeVCz7lwY
-         fBd5s7fth3T/llOnsKpAfCABEEtc6WAw89MISQqhJaDM88lB5YlLFb3MOcUKMOEr3vDq
-         QfgQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Kxkd4//RPVCLi8yyo6/EUcCuKUtpxv+tcfETfHyl5Tc=;
-        b=yjJR8x6x7OvwgFtslVqngUiXQw3hBOXczOTA+K5t5YO2dA0Cg+CxFQlp12n1iiyPk0
-         NX6fX5Ret9rESyukd3kKrsdN+korrlp1DFaBHC9PuRSUkIyn8mTstVKgCqzKTUn9eoTM
-         JmNU53Zq1eWqfGz7f0wjpIFyWzwRtXl3CBgkcMUg57A+8E1X1QPQ6QpJQBQG6lwaItjZ
-         lGLjDue/HjerD6yaqF9m5QGC+pUlmb9RKcjTONfbXH4ACAf2ZPCcE9Pj6EdEDygXknVh
-         LURElUICyEG8Fk5FGjDVRpPnzAWmBajh+r/bWiHVbIilb0Gqleq4u7LGDrEVFJj2LZ2S
-         JiMQ==
-X-Gm-Message-State: AO0yUKUoeHoDGQRRm97Uw+wFW0i1JAOC6dw0uDuEsmMmMY7+wUeMENSa
-        FNINRyGVvSF2YCvFpmWWKTAXDA==
-X-Google-Smtp-Source: AK7set8r5En8t5kF8sy7TbBdXbnkn1cZFKrZZ5kevtvqC79aBGhRDkAOpGtHI8rCze/MLFNk5AXWKw==
-X-Received: by 2002:a17:906:2a59:b0:8b1:392f:f847 with SMTP id k25-20020a1709062a5900b008b1392ff847mr7570520eje.25.1676808862175;
-        Sun, 19 Feb 2023 04:14:22 -0800 (PST)
-Received: from fedora.. (cpezg-94-253-130-228-cbl.xnet.hr. [94.253.130.228])
-        by smtp.googlemail.com with ESMTPSA id qx3-20020a170906fcc300b008b13a1c3322sm4469538ejb.149.2023.02.19.04.14.20
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 19 Feb 2023 04:14:21 -0800 (PST)
-From:   Robert Marko <robert.marko@sartura.hr>
-To:     andrew@lunn.ch, gregory.clement@bootlin.com,
-        sebastian.hesselbarth@gmail.com, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org,
-        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Robert Marko <robert.marko@sartura.hr>
-Subject: [PATCH] arm64: dts: marvell: mochabin: enlarge PCI memory window
-Date:   Sun, 19 Feb 2023 13:14:18 +0100
-Message-Id: <20230219121418.1395401-1-robert.marko@sartura.hr>
-X-Mailer: git-send-email 2.39.2
+        Sun, 19 Feb 2023 07:21:41 -0500
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BB43E399;
+        Sun, 19 Feb 2023 04:21:39 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=ZJseHQTnv1iITs62Fnj7SadMOAE+fjrqhaVwjdlj74M=; b=CpsPmT7XFm6onB5jMft1I36dAA
+        ior0H9BAS84l6dnGQGcqxWqtyCS8r5oJxjwgkM0oHAySiuIpiZVL4oi0f3EWMx7Il3aBaQ/N7eKb1
+        BoKVXYCwXAv14xAqoi0GNdDKodhbVtsVc/Pj3CvAPU3gtlGAJYR+XA8GK0SrIKeibgJsx7u2lfZMw
+        A6me6OIOUj3JdffSzxqRCI23lsoPeYZ7F8ZAHJ8qYZTds4A+IVGaUIiwqkbbDPD9XuN3L/ImUR+mH
+        lrqcg8JjqFUp4L66ThpfT4S561/oRr96JjsI+VRTQwjxDan3RKQEk1mYDEGaV4rKEECG9q7PQQiLw
+        6/apbMwg==;
+Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1pTihC-00Aug2-7r; Sun, 19 Feb 2023 12:21:34 +0000
+Date:   Sun, 19 Feb 2023 12:21:34 +0000
+From:   Matthew Wilcox <willy@infradead.org>
+To:     Nhat Pham <nphamcs@gmail.com>
+Cc:     akpm@linux-foundation.org, hannes@cmpxchg.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, bfoster@redhat.com, arnd@arndb.de,
+        linux-api@vger.kernel.org, kernel-team@meta.com
+Subject: Re: [PATCH v10 2/3] cachestat: implement cachestat syscall
+Message-ID: <Y/IUTiL03C9OOSFx@casper.infradead.org>
+References: <20230219073318.366189-1-nphamcs@gmail.com>
+ <20230219073318.366189-3-nphamcs@gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230219073318.366189-3-nphamcs@gmail.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Armada 7040 uses a rather small 15MB memory window for every PCI adapter,
-however this is not sufficient for Qualcomm QCA6390 802.11ax cards that
-are shipped along with the OpenWrt WLAN model of MOCHAbin as ath11k
-requires at least 16MB of memory.
+On Sat, Feb 18, 2023 at 11:33:17PM -0800, Nhat Pham wrote:
+> diff --git a/include/linux/fs.h b/include/linux/fs.h
+> index e654435f1651..83300f1491e7 100644
+> --- a/include/linux/fs.h
+> +++ b/include/linux/fs.h
+> @@ -75,6 +75,7 @@ struct fs_context;
+>  struct fs_parameter_spec;
+>  struct fileattr;
+>  struct iomap_ops;
+> +struct cachestat;
+> 
+>  extern void __init inode_init(void);
+>  extern void __init inode_init_early(void);
+> @@ -830,6 +831,8 @@ void filemap_invalidate_lock_two(struct address_space *mapping1,
+>  				 struct address_space *mapping2);
+>  void filemap_invalidate_unlock_two(struct address_space *mapping1,
+>  				   struct address_space *mapping2);
+> +void filemap_cachestat(struct address_space *mapping, pgoff_t first_index,
+> +		pgoff_t last_index, struct cachestat *cs);
 
-So, similar to what MACCHIATOBin has been doing for years, lets move
-to using the second PCIe 2 memory window and expand it to 128MB to
-make it future proof.
+1. Why is this in fs.h instead of pagemap.h?
 
-Signed-off-by: Robert Marko <robert.marko@sartura.hr>
----
- arch/arm64/boot/dts/marvell/armada-7040-mochabin.dts | 1 +
- 1 file changed, 1 insertion(+)
+2. Why is it not static, since it's only used by the syscall,
+which is also in filemap.c?
 
-diff --git a/arch/arm64/boot/dts/marvell/armada-7040-mochabin.dts b/arch/arm64/boot/dts/marvell/armada-7040-mochabin.dts
-index 7ca71f2d7afb..39ce6e25a8ef 100644
---- a/arch/arm64/boot/dts/marvell/armada-7040-mochabin.dts
-+++ b/arch/arm64/boot/dts/marvell/armada-7040-mochabin.dts
-@@ -455,4 +455,5 @@ &cp0_pcie2 {
- 	phys = <&cp0_comphy5 2>;
- 	phy-names = "cp0-pcie2-x1-phy";
- 	reset-gpios = <&cp0_gpio1 9 GPIO_ACTIVE_LOW>;
-+	ranges = <0x82000000 0x0 0xc0000000 0x0 0xc0000000 0x0 0x8000000>;
- };
--- 
-2.39.2
+> @@ -55,6 +56,9 @@
+>  #include <linux/buffer_head.h> /* for try_to_free_buffers */
+> 
+>  #include <asm/mman.h>
+> +#include <uapi/linux/mman.h>
+
+I think this hunk should be:
+
+-#include <asm/mman.h>
++#include <linux/mman.h>
+
+(linux/mman.h includes uapi/linux/mman.h, which includes asm/mman.h)
+
+> +/**
+> + * filemap_cachestat() - compute the page cache statistics of a mapping
+> + * @mapping:	The mapping to compute the statistics for.
+> + * @first_index:	The starting page cache index.
+> + * @last_index:	The final page index (inclusive).
+> + * @cs:	the cachestat struct to write the result to.
+> + *
+> + * This will query the page cache statistics of a mapping in the
+> + * page range of [first_index, last_index] (inclusive). The statistics
+> + * queried include: number of dirty pages, number of pages marked for
+> + * writeback, and the number of (recently) evicted pages.
+> + */
+
+Do we care that this isn't going to work for hugetlbfs?
+
+> +	rcu_read_lock();
+> +	xas_for_each(&xas, folio, last_index) {
+> +		unsigned long nr_pages;
+> +		pgoff_t folio_first_index, folio_last_index;
+> +
+> +		if (xas_retry(&xas, folio))
+> +			continue;
+> +
+> +		nr_pages = folio_nr_pages(folio);
+> +		folio_first_index = folio_pgoff(folio);
+> +		folio_last_index = folio_first_index + nr_pages - 1;
+> +
+> +		/* Folios might straddle the range boundaries, only count covered subpages */
+
+s/subpages/pages/
 
