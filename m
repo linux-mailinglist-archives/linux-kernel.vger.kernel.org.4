@@ -2,140 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 586F269C359
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Feb 2023 00:15:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 93B1A69C35C
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Feb 2023 00:18:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229670AbjBSXPf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 19 Feb 2023 18:15:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50132 "EHLO
+        id S229690AbjBSXSR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 19 Feb 2023 18:18:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51632 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229656AbjBSXPe (ORCPT
+        with ESMTP id S229670AbjBSXSP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 19 Feb 2023 18:15:34 -0500
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC7451A67F;
-        Sun, 19 Feb 2023 15:15:32 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-        Content-Type:MIME-Version:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:
-        Content-ID:Content-Description:In-Reply-To:References;
-        bh=uS4cWikPVXiTQ453M9jkXQ6H6A9rByEcXI4R3QotgUM=; b=QeT6zOvuqCSQ9vd0vABhZmNBNQ
-        P62HvftNURvPjrvnGJougtaXa1qE8lzm0XQSDDbwemDL7UAmJqdA09Spy+naSH7EaQrZxaFvY7Slg
-        r0A/QUk5r3YeVzZLNZPnVbUMExO87G5gbQhoq9pdmepqIxZmbMtczik4DBkhhR2rZt5hL9MwpH/zU
-        tcqWuWQWP1nhppdMlPSKffQyaqCRQItQI6Lg6kNxhSEvDQDd6ahCNFldvIcF0EAEvnoMcU+3xKVmE
-        +ZrHJutdmm7Lzz8VoUE6jjI473PglhQ+xH5jsdOFSGRIPkVFL1kBvuXoeuneAH4BkOVLefOOx85b0
-        Wi0G4dZg==;
-Received: from [2601:1c2:980:9ec0::df2f] (helo=bombadil.infradead.org)
-        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1pTsty-002Tem-Rp; Sun, 19 Feb 2023 23:15:26 +0000
-From:   Randy Dunlap <rdunlap@infradead.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     Randy Dunlap <rdunlap@infradead.org>,
-        kernel test robot <lkp@intel.com>,
-        Dengcheng Zhu <dzhu@wavecomp.com>,
-        John Crispin <john@phrozen.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        =?UTF-8?q?Philippe=20Mathieu-Daud=C3=A9?= <philmd@linaro.org>,
-        "Steven J. Hill" <Steven.Hill@imgtec.com>,
-        Qais Yousef <Qais.Yousef@imgtec.com>,
-        Yang Yingliang <yangyingliang@huawei.com>,
-        Hauke Mehrtens <hauke@hauke-m.de>,
-        James Hogan <jhogan@kernel.org>, linux-mips@vger.kernel.org
-Subject: [PATCH v2] MIPS: vpe-mt: drop physical_memsize
-Date:   Sun, 19 Feb 2023 15:15:25 -0800
-Message-Id: <20230219231525.21542-1-rdunlap@infradead.org>
-X-Mailer: git-send-email 2.39.2
+        Sun, 19 Feb 2023 18:18:15 -0500
+Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1EDEDCC12
+        for <linux-kernel@vger.kernel.org>; Sun, 19 Feb 2023 15:18:15 -0800 (PST)
+Received: by mail-pl1-x62d.google.com with SMTP id o3so1777020plg.2
+        for <linux-kernel@vger.kernel.org>; Sun, 19 Feb 2023 15:18:15 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=tVojFOh61n5/mBoezlAnDiDZ41SFIo5Hngz7LkVm9nE=;
+        b=AebsIh1ceEodCkEa1047cDBag9J9Ax+iDGhtqvHqJnF6USC1ZSBtbdc0Hm5BXp3CII
+         CauR8wX+cZMnwj46bQLilXL/Av8OLh4zjMzwVstSH0jcKFCFEOvkwIKNhwBMf1MSdF8Q
+         O5um3if3znQp1zteSYa5U+iLp8iraNH1jUD0JudWyLoNnJkafp0MGuadWpLmGM5PBTme
+         lKXeUfv5TLl1h89McLfsElT48SrW8T6RwGIBQ8SRJBcFbYfyNqaUVbc9h4sGYFekj+oZ
+         sj9AgeMmCclvBUEwwtFqbHPu8JBmPtlOfGwnPXROSKqbizaY+oGDVHyYqmzw/LnjazRA
+         DlGw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=tVojFOh61n5/mBoezlAnDiDZ41SFIo5Hngz7LkVm9nE=;
+        b=PQavAVI97NLv2t9ApC/Rct0IVc6/UEFYRthLB8z+LQ7OVRMULvTuIt/sTau+pRSzaG
+         aQRpgNVbarX2N/UUOmVOJc23zqjYQX/nrbhznv+VqSS4WL2t2SgwH+klAEnGHZuhFLtD
+         E8DD6pljYQK1e2Kmpv5oy1THj6zMoaZg8Eyj5iHPsHQ1BqKQVyxNJeL87vYNqsqX8HRA
+         ZI0WTnbzspzaBmxCWosQmWyNPIq517LgmBUB/0EZr2tIKxQp6CXPwc02HfckgeVSacBa
+         WADxaHT3jzb52clehQqvK8ViFH7dGRR72kGVNK6K7lfbROzMNp5iIUAHi2fQz0jgERBH
+         YR2w==
+X-Gm-Message-State: AO0yUKXuYqy+jwPs12rIWYoPCmPOxFBIcItmVzlvO69gklCIRGVU1/ce
+        GRZPTD8Lq2yMSsCGXwiVgzo=
+X-Google-Smtp-Source: AK7set8AIMjeFw8TbOGbLNomobiOMmndSIri+gcL+66n9PuC9JnaOZp6PhTdnqLVOvHPTrZPgsthMw==
+X-Received: by 2002:a17:902:ea08:b0:199:30a6:3756 with SMTP id s8-20020a170902ea0800b0019930a63756mr2157772plg.18.1676848694243;
+        Sun, 19 Feb 2023 15:18:14 -0800 (PST)
+Received: from localhost (2603-800c-1a02-1bae-a7fa-157f-969a-4cde.res6.spectrum.com. [2603:800c:1a02:1bae:a7fa:157f:969a:4cde])
+        by smtp.gmail.com with ESMTPSA id g5-20020a1709026b4500b0019c33775574sm1380714plt.198.2023.02.19.15.18.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 19 Feb 2023 15:18:13 -0800 (PST)
+Sender: Tejun Heo <htejun@gmail.com>
+Date:   Sun, 19 Feb 2023 13:18:11 -1000
+From:   Tejun Heo <tj@kernel.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     linux-kernel@vger.kernel.org,
+        Lai Jiangshan <jiangshanlai@gmail.com>
+Subject: [GIT PULL] workqueue changes for v6.3-rc1
+Message-ID: <Y/KuM8ovt66dSAHU@slm.duckdns.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When neither LANTIQ nor MIPS_MALTA is set, 'physical_memsize' is not
-declared. This causes the build to fail with:
+The following changes since commit 512dee0c00ad9e9c7ae9f11fc6743702ea40caff:
 
-mips-linux-ld: arch/mips/kernel/vpe-mt.o: in function `vpe_run':
-arch/mips/kernel/vpe-mt.c:(.text.vpe_run+0x280): undefined reference to `physical_memsize'
+  Merge tag 'x86-urgent-2023-01-04' of git://git.kernel.org/pub/scm/linux/kernel/git/tip/tip (2023-01-04 12:11:29 -0800)
 
-LANTIQ is not using 'physical_memsize' and MIPS_MALTA's use of it is
-self-contained in mti-malta/malta-dtshim.c.
-Use of physical_memsize in vpe-mt.c appears to be unused, so eliminate
-this loader mode completely and require VPE programs to be compiled with
-DFLT_STACK_SIZE and DFLT_HEAP_SIZE defined.
+are available in the Git repository at:
 
-Fixes: 9050d50e2244 ("MIPS: lantiq: Set physical_memsize")
-Fixes: 1a2a6d7e8816 ("MIPS: APRP: Split VPE loader into separate files.")
-Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
-Reported-by: kernel test robot <lkp@intel.com>
-Link: https://lore.kernel.org/all/202302030625.2g3E98sY-lkp@intel.com/
-Cc: Dengcheng Zhu <dzhu@wavecomp.com>
-Cc: John Crispin <john@phrozen.org>
-Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc: Philippe Mathieu-Daudé <philmd@linaro.org>
-Cc: "Steven J. Hill" <Steven.Hill@imgtec.com>
-Cc: Qais Yousef <Qais.Yousef@imgtec.com>
-Cc: Yang Yingliang <yangyingliang@huawei.com>
-Cc: Hauke Mehrtens <hauke@hauke-m.de>
-Cc: James Hogan <jhogan@kernel.org>
-Cc: linux-mips@vger.kernel.org
----
-v2 changes: instead of providing a default physical_memsize of 0, which
-    is not correct for MIPS_MALTA, just eliminate its use in vpe-mt.c.
+  git://git.kernel.org/pub/scm/linux/kernel/git/tj/wq.git/ tags/wq-for-6.3
 
- arch/mips/include/asm/vpe.h |    1 -
- arch/mips/kernel/vpe-mt.c   |    7 +++----
- arch/mips/lantiq/prom.c     |    6 ------
- 3 files changed, 3 insertions(+), 11 deletions(-)
+for you to fetch changes up to c63a2e52d5e08f01140d7b76c08a78e15e801f03:
 
-diff -- a/arch/mips/lantiq/prom.c b/arch/mips/lantiq/prom.c
---- a/arch/mips/lantiq/prom.c
-+++ b/arch/mips/lantiq/prom.c
-@@ -23,12 +23,6 @@ DEFINE_SPINLOCK(ebu_lock);
- EXPORT_SYMBOL_GPL(ebu_lock);
- 
- /*
-- * This is needed by the VPE loader code, just set it to 0 and assume
-- * that the firmware hardcodes this value to something useful.
-- */
--unsigned long physical_memsize = 0L;
--
--/*
-  * this struct is filled by the soc specific detection code and holds
-  * information about the specific soc type, revision and name
-  */
-diff -- a/arch/mips/include/asm/vpe.h b/arch/mips/include/asm/vpe.h
---- a/arch/mips/include/asm/vpe.h
-+++ b/arch/mips/include/asm/vpe.h
-@@ -102,7 +102,6 @@ struct vpe_control {
- 	struct list_head tc_list;       /* Thread contexts */
- };
- 
--extern unsigned long physical_memsize;
- extern struct vpe_control vpecontrol;
- extern const struct file_operations vpe_fops;
- 
-diff -- a/arch/mips/kernel/vpe-mt.c b/arch/mips/kernel/vpe-mt.c
---- a/arch/mips/kernel/vpe-mt.c
-+++ b/arch/mips/kernel/vpe-mt.c
-@@ -92,12 +92,11 @@ int vpe_run(struct vpe *v)
- 	write_tc_c0_tchalt(read_tc_c0_tchalt() & ~TCHALT_H);
- 
- 	/*
--	 * The sde-kit passes 'memsize' to __start in $a3, so set something
--	 * here...  Or set $a3 to zero and define DFLT_STACK_SIZE and
--	 * DFLT_HEAP_SIZE when you compile your program
-+	 * We don't pass the memsize here, so VPE programs need to be
-+	 * compiled with DFLT_STACK_SIZE and DFLT_HEAP_SIZE defined.
- 	 */
-+	mttgpr(7, 0);
- 	mttgpr(6, v->ntcs);
--	mttgpr(7, physical_memsize);
- 
- 	/* set up VPE1 */
- 	/*
+  workqueue: Fold rebind_worker() within rebind_workers() (2023-01-13 07:50:40 -1000)
+
+----------------------------------------------------------------
+workqueue changes for v6.3-rc1
+
+* When per-cpu workqueue workers expire after sitting idle for too long,
+  they used to wake up to the CPU that they're bound to to exit. This
+  unfortunately could cause unwanted disturbances on CPUs isolated for e.g.
+  RT applications. The worker exit path is restructured so that an existing
+  worker is unbound from its CPU before being woken up for the last time,
+  allowing it to migrate away from an isolated CPU for exiting.
+
+* A couple debug improvements. Watchdog dump is made more compact and
+  workqueue now warns if used-after-free during the RCU grace period after
+  destroy_workqueue().
+
+----------------------------------------------------------------
+Lai Jiangshan (1):
+      workqueue: Protects wq_unbound_cpumask with wq_pool_attach_mutex
+
+Paul E. McKenney (1):
+      workqueue: Make show_pwq() use run-length encoding
+
+Richard Clark (1):
+      workqueue: Add a new flag to spot the potential UAF error
+
+Valentin Schneider (5):
+      workqueue: Factorize unbind/rebind_workers() logic
+      workqueue: Convert the idle_timer to a timer + work_struct
+      workqueue: Don't hold any lock while rcuwait'ing for !POOL_MANAGER_ACTIVE
+      workqueue: Unbind kworkers before sending them to exit()
+      workqueue: Fold rebind_worker() within rebind_workers()
+
+ include/linux/workqueue.h |   1 +
+ kernel/workqueue.c        | 280 ++++++++++++++++++++++++++++++++++------------
+ 2 files changed, 210 insertions(+), 71 deletions(-)
+
+-- 
+tejun
