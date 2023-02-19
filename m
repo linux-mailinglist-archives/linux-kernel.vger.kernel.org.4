@@ -2,136 +2,160 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5A69569C01A
-	for <lists+linux-kernel@lfdr.de>; Sun, 19 Feb 2023 12:48:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A506269C01C
+	for <lists+linux-kernel@lfdr.de>; Sun, 19 Feb 2023 12:52:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229823AbjBSLsq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 19 Feb 2023 06:48:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60406 "EHLO
+        id S229854AbjBSLw4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 19 Feb 2023 06:52:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33418 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229676AbjBSLsm (ORCPT
+        with ESMTP id S229668AbjBSLwv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 19 Feb 2023 06:48:42 -0500
-Received: from kuriko.dram.page (kuriko.dram.page [65.108.252.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BAFDCC1C;
-        Sun, 19 Feb 2023 03:48:41 -0800 (PST)
-Message-ID: <4bd8c6da-6ad4-5e1a-169c-48f48560b36b@dram.page>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=dram.page; s=mail;
-        t=1676807318; bh=IJFps8QiPqsxtkm8bbGRrhgiLRq/rPGQKvISbNPd8i4=;
-        h=Date:To:Cc:References:From:Subject:In-Reply-To;
-        b=NNRikU8qtdtoR2Z2vRLJNpcLFZ/r1A7KpOQc5C8tuONVpqWi/KjOoNX1+hlr8RbnT
-         6642eA05ALzSAjOkzbgUGXqGWhgVEmMG+nVesVABXBhD0jnQTLD95EitxuRhb+aIvw
-         w0o2R1e3c7QtmPO6DeL4jpv3gR5cBwNb3Y2rqsAw=
-Date:   Sun, 19 Feb 2023 19:48:27 +0800
-MIME-Version: 1.0
-Content-Language: en-US
-To:     Anup Patel <apatel@ventanamicro.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
+        Sun, 19 Feb 2023 06:52:51 -0500
+Received: from vulcan.natalenko.name (vulcan.natalenko.name [IPv6:2001:19f0:6c00:8846:5400:ff:fe0c:dfa0])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7FCFE2
+        for <linux-kernel@vger.kernel.org>; Sun, 19 Feb 2023 03:52:48 -0800 (PST)
+Received: from spock.localnet (unknown [83.148.33.151])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by vulcan.natalenko.name (Postfix) with ESMTPSA id 4564A1236E7C;
+        Sun, 19 Feb 2023 12:52:44 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=natalenko.name;
+        s=dkim-20170712; t=1676807564;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=LlM/jmDxuMpikTFQLI7Ipru8I8W1UZUK0W6ugJVYzIg=;
+        b=Du2to3A8IVx/+YQJsJhrR15PFz81aW47bkBKCFbWyZofxmFsMR9m+j6eAkU7XJBv5voM66
+        TP4X/YFbksBWA1fZj0+cngPt3XFXkt1qyFklHFuWip4LKs8hAm/w5gQTXljBE7vPosnW5Y
+        nAfbQKAXm+eatr/48j8GjEruY/DBX9c=
+From:   Oleksandr Natalenko <oleksandr@natalenko.name>
+To:     Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
         Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc:     Atish Patra <atishp@atishpatra.org>,
-        Alistair Francis <Alistair.Francis@wdc.com>,
-        Anup Patel <anup@brainfault.org>,
-        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org
-References: <20230103141409.772298-1-apatel@ventanamicro.com>
- <20230103141409.772298-7-apatel@ventanamicro.com>
-From:   Vivian Wang <uwu@dram.page>
-Subject: Re: [PATCH v2 6/9] dt-bindings: interrupt-controller: Add RISC-V
- advanced PLIC
-In-Reply-To: <20230103141409.772298-7-apatel@ventanamicro.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, hpa@zytor.com,
+        Wyes Karny <wyes.karny@amd.com>
+Cc:     x86@kernel.org, linux-perf-users@vger.kernel.org,
+        linux-kernel@vger.kernel.org, gautham.shenoy@amd.com,
+        ananth.narayan@amd.com, Wyes Karny <wyes.karny@amd.com>
+Subject: Re: [PATCH] perf/x86/rapl: Enable Core RAPL for AMD
+Date:   Sun, 19 Feb 2023 12:52:42 +0100
+Message-ID: <12153455.O9o76ZdvQC@natalenko.name>
+In-Reply-To: <20230217161354.129442-1-wyes.karny@amd.com>
+References: <20230217161354.129442-1-wyes.karny@amd.com>
+MIME-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="iso-8859-1"
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/3/23 22:14, Anup Patel wrote:
-> We add DT bindings document for RISC-V advanced platform level
-> interrupt controller (APLIC) defined by the RISC-V advanced
-> interrupt architecture (AIA) specification.
->
-> Signed-off-by: Anup Patel <apatel@ventanamicro.com>
+Hello.
+
+On p=E1tek 17. =FAnora 2023 17:13:54 CET Wyes Karny wrote:
+> AMD processors support per-package and per-core energy monitoring
+> through RAPL counters which can be accessed by users running in
+> supervisor mode.
+>=20
+> Core RAPL counters gives power consumption information per core.  For
+> AMD processors the package level RAPL counter are already exposed to
+> perf. Expose the core level RAPL counters also.
+>=20
+> sudo perf stat -a --per-core -C 0-127 -e power/energy-cores/
+>=20
+> Output:
+> S0-D0-C0           2               8.73 Joules power/energy-cores/
+> S0-D0-C1           2               8.73 Joules power/energy-cores/
+> S0-D0-C2           2               8.73 Joules power/energy-cores/
+> S0-D0-C3           2               8.73 Joules power/energy-cores/
+> S0-D0-C4           2               8.73 Joules power/energy-cores/
+>=20
+> Signed-off-by: Wyes Karny <wyes.karny@amd.com>
 > ---
->  .../interrupt-controller/riscv,aplic.yaml     | 159 ++++++++++++++++++
->  1 file changed, 159 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/interrupt-controller/riscv,aplic.yaml
->
-> diff --git a/Documentation/devicetree/bindings/interrupt-controller/riscv,aplic.yaml b/Documentation/devicetree/bindings/interrupt-controller/riscv,aplic.yaml
-> new file mode 100644
-> index 000000000000..b7f20aad72c2
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/interrupt-controller/riscv,aplic.yaml
-> @@ -0,0 +1,159 @@
->
-> <snip>
->
-> +  riscv,children:
-> +    $ref: /schemas/types.yaml#/definitions/phandle-array
-> +    minItems: 1
-> +    maxItems: 1024
-> +    items:
-> +      maxItems: 1
-> +    description:
-> +      A list of child APLIC domains for the given APLIC domain. Each child
-> +      APLIC domain is assigned child index in increasing order with the
-> +      first child APLIC domain assigned child index 0. The APLIC domain
-> +      child index is used by firmware to delegate interrupts from the
-> +      given APLIC domain to a particular child APLIC domain.
-> +
-> +  riscv,delegate:
-> +    $ref: /schemas/types.yaml#/definitions/phandle-array
-> +    minItems: 1
-> +    maxItems: 1024
-> +    items:
-> +      items:
-> +        - description: child APLIC domain phandle
-> +        - description: first interrupt number (inclusive)
-> +        - description: last interrupt number (inclusive)
-> +    description:
-> +      A interrupt delegation list where each entry is a triple consisting
-> +      of child APLIC domain phandle, first interrupt number, and last
-> +      interrupt number. The firmware will configure interrupt delegation
-> +      registers based on interrupt delegation list.
-> +
+>  arch/x86/events/rapl.c | 5 +++--
+>  1 file changed, 3 insertions(+), 2 deletions(-)
+>=20
+> diff --git a/arch/x86/events/rapl.c b/arch/x86/events/rapl.c
+> index 52e6e7ed4f78..d301bbbc3b93 100644
+> --- a/arch/x86/events/rapl.c
+> +++ b/arch/x86/events/rapl.c
+> @@ -537,7 +537,7 @@ static struct perf_msr intel_rapl_spr_msrs[] =3D {
+>   * - want to use same event codes across both architectures
+>   */
+>  static struct perf_msr amd_rapl_msrs[] =3D {
+> -	[PERF_RAPL_PP0]  =3D { 0, &rapl_events_cores_group, 0, false, 0 },
+> +	[PERF_RAPL_PP0]  =3D { MSR_AMD_CORE_ENERGY_STATUS, &rapl_events_cores_g=
+roup, test_msr, false, RAPL_MSR_MASK },
+>  	[PERF_RAPL_PKG]  =3D { MSR_AMD_PKG_ENERGY_STATUS,  &rapl_events_pkg_gro=
+up,   test_msr, false, RAPL_MSR_MASK },
+>  	[PERF_RAPL_RAM]  =3D { 0, &rapl_events_ram_group,   0, false, 0 },
+>  	[PERF_RAPL_PP1]  =3D { 0, &rapl_events_gpu_group,   0, false, 0 },
+> @@ -764,7 +764,8 @@ static struct rapl_model model_spr =3D {
+>  };
+> =20
+>  static struct rapl_model model_amd_hygon =3D {
+> -	.events		=3D BIT(PERF_RAPL_PKG),
+> +	.events		=3D BIT(PERF_RAPL_PP0) |
+> +			  BIT(PERF_RAPL_PKG),
+>  	.msr_power_unit =3D MSR_AMD_RAPL_POWER_UNIT,
+>  	.rapl_msrs      =3D amd_rapl_msrs,
+>  };
+>=20
 
-I'm not sure if this is the right place to ask, since it could be more
-of a OpenSBI/QEMU problem, but I think a more detailed description about
-what 'the firmware' does is appropriate here.
+With this patch:
 
-My main confusion is how to describe wired interrupts connected to
-APLICs. Say we have two APLIC nodes with labels aplic_m and aplic_s that
-are the APLIC domains for M-mode and S-mode respectively. IIUC, wired
-interrupts are connected directly to aplic_m. So how do I refer to it in
-the device nodes?
+```
+$ lscpu | grep 'Model name'
+Model name:                      AMD Ryzen 9 5950X 16-Core Processor
 
- 1. <&aplic_s num IRQ_TYPE_foo>, but it would be a lie to M-mode
-    software, which could be a problem. QEMU 7.2.0 seems to take this
-    approach. (I could also be misunderstanding QEMU and it actually
-    does connect wired interrupts to the S-mode APLIC, but then
-    riscv,children and riscv,delegate would be lies.)
- 2. <&aplic_m ...>, and when M-mode software gives S-mode software
-    access to devices, it delegates relevant interrupts and patches it
-    into <&aplic_s num IRQ_TYPE_foo>. Seems to be the 'correct'
-    approach, but pretty complicated.
- 3. <&aplic_m ...>, S-mode software sees this, and sees that aplic_m has
-    num in riscv,delegate, so goes to find the child it's been delegated
-    to, which is (should be) aplic_s. A bit annoyingly abstraction
-    breaking, since S-mode shouldn't even need to know about aplic_m.
+$ sudo perf stat -a --per-core -C 0-15 -e power/energy-cores/ -- dd if=3D/d=
+ev/zero of=3D/dev/null bs=3D1M count=3D100000
+100000+0 records in
+100000+0 records out
+104857600000 bytes (105 GB, 98 GiB) copied, 1,59252 s, 65,8 GB/s
 
-I see that others are also confused by riscv,delegate and riscv,children
-properties. It would be great if we could clarify the expected behavior
-here rather than just saying 'the firmware will do the thing'.
+Performance counter stats for 'system wide':
 
-> <snip>
-> +...
-Thanks,
-Vivian
+S0-D0-C0           1               1,56 Joules power/energy-cores/
+S0-D0-C1           1               1,56 Joules power/energy-cores/
+S0-D0-C2           1               1,56 Joules power/energy-cores/
+S0-D0-C3           1               1,56 Joules power/energy-cores/
+S0-D0-C4           1               1,56 Joules power/energy-cores/
+S0-D0-C5           1               1,56 Joules power/energy-cores/
+S0-D0-C6           1               1,56 Joules power/energy-cores/
+S0-D0-C7           1               1,56 Joules power/energy-cores/
+S0-D0-C8           1               1,56 Joules power/energy-cores/
+S0-D0-C9           1               1,56 Joules power/energy-cores/
+S0-D0-C10          1               1,56 Joules power/energy-cores/
+S0-D0-C11          1               1,56 Joules power/energy-cores/
+S0-D0-C12          1               1,56 Joules power/energy-cores/
+S0-D0-C13          1               1,56 Joules power/energy-cores/
+S0-D0-C14          1               1,56 Joules power/energy-cores/
+S0-D0-C15          1               1,56 Joules power/energy-cores/
+
+1,593982452 seconds time elapsed
+```
+
+Hence,
+
+Tested-by: Oleksandr Natalenko <oleksandr@natalenko.name>
+
+Thank you.
+
+=2D-=20
+Oleksandr Natalenko (post-factum)
+
+
