@@ -2,165 +2,268 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 67E4E69BE7B
-	for <lists+linux-kernel@lfdr.de>; Sun, 19 Feb 2023 05:45:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BDC7869BE82
+	for <lists+linux-kernel@lfdr.de>; Sun, 19 Feb 2023 06:05:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229602AbjBSEpm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 18 Feb 2023 23:45:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48792 "EHLO
+        id S229582AbjBSFEu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 19 Feb 2023 00:04:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53016 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229436AbjBSEpi (ORCPT
+        with ESMTP id S229436AbjBSFEs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 18 Feb 2023 23:45:38 -0500
-Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com [IPv6:2607:f8b0:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0283012044
-        for <linux-kernel@vger.kernel.org>; Sat, 18 Feb 2023 20:45:38 -0800 (PST)
-Received: by mail-pf1-x436.google.com with SMTP id dc6so964749pfb.7
-        for <linux-kernel@vger.kernel.org>; Sat, 18 Feb 2023 20:45:37 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=WRO+djRIibrSxvhTwvDO601H9x5cmQvtHgtRKlyn26Y=;
-        b=Em6R99nY10LV+04LV1tpvGe4v9ru6OQHdfcuhbC7K5WyLwwnmCZTg2J7EsnN2BMf6h
-         5I4voaKp4YdM0QmhhhXssHxouW6RmATlHzMNiUti2NEERIIGElNzcFsSD1xPFufVO7OI
-         IclyPYU2YYcjE5KQu61YFhuaXa7r9pqszzMtYzoCPIqltvAevJk5h97HV+5DhPotxVx+
-         pxjyT0s/JuCCSNVZCMwjc2b5zgR1q1rDLpMi5+6EiGPhgDq9QMX+abFp1NlFNjna8nM5
-         MOLF4k63pLGGOYSFnYQKpm0hvEGtHlo9DAVeA/yeuVgH7XLpas1QNGwyxf14OonkXVDG
-         eNMw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=WRO+djRIibrSxvhTwvDO601H9x5cmQvtHgtRKlyn26Y=;
-        b=ehRhBXhviSgxGYkQUCm7SYANyZy1+oqoj+WcaJkQknrU8XwOQBpdxDyCcY5sQld2zh
-         sI96GS5W5k82OmC+1SnDrBSrLZzj61aUY5oYKyd8YE1tL8kn5DJ0iq+UfrtVmCfNvUZv
-         LciZo0SDjPUrWLEaBTg7A14unSpAoiY5HgohUfRlvPPKLvrdHE6BK+y1RG51aBRApLP7
-         qV4njGp/i9ezqA/2UNalApnTpVytsRf/e4fq34pByruVD/w/uchb+CCNyxhH/foURGs2
-         W61Hba6w1+GUaH6mH9g8LmiwOU47J+7FIOvI9S8etxvIcq4GfUZzCQ7k+3RemhIqYFk/
-         U2yA==
-X-Gm-Message-State: AO0yUKWATmnu5WANWd9rm4TUFduiNH7UqqrKb+d9HVolhxoO8G0KF9ed
-        N+t9ZnCvr6Ge3516VF6KqhlQsEv0JvE=
-X-Google-Smtp-Source: AK7set8o0aTWb9qKbJ6RPKW9/L7zq9BhBFiZV+FiYAIY91ExzPYgICPHnJxWSp6NIzMP0O9ey32rJw==
-X-Received: by 2002:a62:1850:0:b0:5a8:ac17:fa6c with SMTP id 77-20020a621850000000b005a8ac17fa6cmr5960729pfy.15.1676781937398;
-        Sat, 18 Feb 2023 20:45:37 -0800 (PST)
-Received: from ?IPV6:240b:12:500:6500:c9c8:1e6f:495e:8dfe? ([240b:12:500:6500:c9c8:1e6f:495e:8dfe])
-        by smtp.gmail.com with ESMTPSA id e23-20020a62ee17000000b005907664a3eesm5299562pfi.125.2023.02.18.20.45.35
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 18 Feb 2023 20:45:37 -0800 (PST)
-Message-ID: <1276b70d-9461-4a4c-08f7-2bed42557fd6@gmail.com>
-Date:   Sun, 19 Feb 2023 13:45:33 +0900
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.0
-Subject: Re: [PATCH v3] nvmem: u-boot-env: align endianness of crc32 values
-To:     Christian Lamparter <chunkeey@gmail.com>,
-        =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <rafal@milecki.pl>
-Cc:     srinivas.kandagatla@linaro.org, linux-kernel@vger.kernel.org
-References: <20230213132351.837-1-musashino.open@gmail.com>
- <d8e6135f837462a7f7cdf59e20bfc449@milecki.pl>
- <93a02a4c-9cba-4b39-4b3e-406a30a8e094@gmail.com>
+        Sun, 19 Feb 2023 00:04:48 -0500
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F8AE12F15
+        for <linux-kernel@vger.kernel.org>; Sat, 18 Feb 2023 21:04:47 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1676783087; x=1708319087;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=P/Qbd18wHCzJK4KIX4NJpbn4bj1YlPKmbqMCOfDGrus=;
+  b=n6NnIrsiwrGjKDBdE1+lJjqqyZghEZnfE/VCWq1toRn6LD3US3jk0DlE
+   hi7k51LA2/iIbNJ005Tj6Ffhnd3Qcp/AogX037PsZ3s4KDXbQ0ZC03FSp
+   b4WeICCy8/A4wCu1di8AgFYWSwSd4PFM1AjfPEv8mRl+z0YIujvCcJ1C0
+   YWXAuBVX4hu9KyuhYXXC01LRBP63w1kJovV8bZwGoM32Xb5I0BF2SnPJn
+   YXlFBlh5hQcz/tT7DutskqIVXiArjU+Sl9o2XyZfcQw1DyDEadgQxkT+5
+   a2mmLd2+koc64Eus8WBD5zRe9SPOts5xSwtCueY3Kv1CWixgS3OQGhLQX
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10625"; a="334425288"
+X-IronPort-AV: E=Sophos;i="5.97,309,1669104000"; 
+   d="scan'208";a="334425288"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Feb 2023 21:04:46 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10625"; a="794841538"
+X-IronPort-AV: E=Sophos;i="5.97,309,1669104000"; 
+   d="scan'208";a="794841538"
+Received: from fmsmsx602.amr.corp.intel.com ([10.18.126.82])
+  by orsmga004.jf.intel.com with ESMTP; 18 Feb 2023 21:04:46 -0800
+Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
+ fmsmsx602.amr.corp.intel.com (10.18.126.82) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.16; Sat, 18 Feb 2023 21:04:45 -0800
+Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
+ fmsmsx610.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.16; Sat, 18 Feb 2023 21:04:45 -0800
+Received: from fmsedg602.ED.cps.intel.com (10.1.192.136) by
+ fmsmsx610.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.16 via Frontend Transport; Sat, 18 Feb 2023 21:04:45 -0800
+Received: from NAM11-DM6-obe.outbound.protection.outlook.com (104.47.57.175)
+ by edgegateway.intel.com (192.55.55.71) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.16; Sat, 18 Feb 2023 21:04:44 -0800
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=F15FlSXYYt/ugV7WnOWnSl8WdEsoiCOFSXZ4y9PKZHm5D1dIWJ03p3G0D8zQU7y5yIOa8vi192RVK/UrT5QCp9+7uLI8sb8899lGSs3ZZUKNllIjzUbxnkwn/7gErcSg+ltnxe2MUqboJXWGMO04c39kphi5v3q0jpatPWhyWDSIiosarveSGtgm9QGpINKHmzBfhZQpLIV1N80UrCfwYtKgm0gyyLHlO8IemI7iI0Bx7c4kfGbZylLyODZP16L7AV3LyvLaV3l80vuwq2uU29JkJbfzVwOegVIK5qu0ZyMb440j1nflHspRfEVQjN/1hRNHLjUqctG+A4UKD6q/eg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=v1GA69Tr/mJoyY8PLdmcFR3kdBbeT/pnbtU9NRR3HaE=;
+ b=S9NqXZ7zvzPk905rU5lS3WGW7DJwuYh9jrKfY/GC4b1Rp5WKQ9xQA4K3tDESF0boM8M7iH8tnGsj8tM13AJsp0y6vq90Qx1nGMHxDGglwptZ9MZGxJjR4WL6Sj2yB2FRWJz0CuQWttMimv5VRfm8FKdnJkxinsS0dTfulK6Va/USEk7j9Ixj4GLFqVfXYmOweVIfXBSWDCsTVt+sIdI0FtEkXzZUFHC899uUd2Pag8eDS2pmV7BfQvt3qaX07xSsOezb7ALmnC26j6/uxSwQoyW2niCVh734dDjyHZiXyeHwlIWgLTMmSksWQd9D4FEU3BlTkbClXqjgdqTCCRl8JQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Received: from PH0PR11MB5880.namprd11.prod.outlook.com (2603:10b6:510:143::14)
+ by BN9PR11MB5483.namprd11.prod.outlook.com (2603:10b6:408:104::10) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6111.18; Sun, 19 Feb
+ 2023 05:04:42 +0000
+Received: from PH0PR11MB5880.namprd11.prod.outlook.com
+ ([fe80::13e0:365f:80d9:f2be]) by PH0PR11MB5880.namprd11.prod.outlook.com
+ ([fe80::13e0:365f:80d9:f2be%4]) with mapi id 15.20.6111.018; Sun, 19 Feb 2023
+ 05:04:42 +0000
+From:   "Zhang, Qiang1" <qiang1.zhang@intel.com>
+To:     "paulmck@kernel.org" <paulmck@kernel.org>
+CC:     "dave@stgolabs.net" <dave@stgolabs.net>,
+        "josh@joshtriplett.org" <josh@joshtriplett.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: RE: [PATCH] locktorture: Add raw_spinlock* torture tests for
+ PREEMPT_RT kernels
+Thread-Topic: [PATCH] locktorture: Add raw_spinlock* torture tests for
+ PREEMPT_RT kernels
+Thread-Index: AQHZQQOQoUWyhnQ0g0erj0/4773a9K7VHgwAgACdRLA=
+Date:   Sun, 19 Feb 2023 05:04:41 +0000
+Message-ID: <PH0PR11MB5880CD867814DFAAF8930E5BDAA79@PH0PR11MB5880.namprd11.prod.outlook.com>
+References: <20230215061035.1534950-1-qiang1.zhang@intel.com>
+ <20230218193438.GE2948950@paulmck-ThinkPad-P17-Gen-1>
+In-Reply-To: <20230218193438.GE2948950@paulmck-ThinkPad-P17-Gen-1>
+Accept-Language: en-US
 Content-Language: en-US
-From:   INAGAKI Hiroshi <musashino.open@gmail.com>
-In-Reply-To: <93a02a4c-9cba-4b39-4b3e-406a30a8e094@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: PH0PR11MB5880:EE_|BN9PR11MB5483:EE_
+x-ms-office365-filtering-correlation-id: 6feb0193-d060-4532-1e16-08db1236cf22
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: 4jk0WHouRfOscMFr3hPhySGabNJGKQMiKJCQXFe7ykfZS5uXmPIyypCBrH/M1vCkMt449dEuoxwO4uWzR+8dB3yXfvErq1Z6iTK4P/C6Z+zzCBQT788SlL8Su27lBRIFhNYWs17TeQAof+wkK5Czr6v5e6nBpfr9xEKLXqebQhPR2jKIqa15OyBhvgmAKVxizXJx2Ad3/L/v3aBLCWxpR1GijTZqkcYWUJwiNuCXp6JHG4Lt9TtJncLgHwPUVFwop3YU7nU0+wtYxqv78WBDhOmLa/wkccqlNNBoQlEfC5W/BMV5hiTsMHnXeqNTNcrDlCSiDlS9gdq/yGJ+nc3U9UIrYVm2pB+gnEGElwAJrKlj0oe0vyaipd85jktjrR8qWpQ6U++XFqO3LpnMjkw9URf8tlXuxMj8sSefIDhY/lFR/WakxO8KDCdUjXgl2796umHDxUQ+POALjgvWNWxrb3cC11sXYM4VvUyDaHE3aDi0WE+UEQGw2xHJnx8rjC+sWRKxliDX+LtXBiRT115xJ2C/FuJg2itiQ63NJC2bDHYcxO/EjBSK43wp0w5vfAonKgrcY/B64upg7Fgagev1V8S7X+r9+7S/Sb5K2cgk1taBkoNbjzrtdGqtYN83ZNWUAYuZyrOvX7Ywx7aI4PqKYiBVNuZbednuehLGTDPVVgHYYnICoAny6Ch3d2NIDuNM0FusczJmB/a+Rlo5MFObRA==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR11MB5880.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(396003)(346002)(39860400002)(136003)(376002)(366004)(451199018)(33656002)(55016003)(83380400001)(2906002)(26005)(7696005)(9686003)(6506007)(71200400001)(186003)(86362001)(82960400001)(122000001)(38100700002)(38070700005)(4326008)(8676002)(66476007)(64756008)(41300700001)(478600001)(5660300002)(6916009)(52536014)(66446008)(76116006)(66556008)(66946007)(316002)(8936002)(54906003);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?+MVdDcbaACwChYzX0DDaVnEAXfsVbLeceT474irSR0XGVLxVt1N4Fbq5IX6+?=
+ =?us-ascii?Q?nzEt6httKq9XWZIpWvwXkej3CpH/y2Qfg9FhIxY4vwXhs6OFA+vUE7kaF92P?=
+ =?us-ascii?Q?ig0PA1H7lFsDpgM2aGVOPqEEdaZxhq0C9fzOMGUvOMWrAVtBq88SJ+ic44Fv?=
+ =?us-ascii?Q?XdPEmrn6ZDdNjP3QkW7EPP2L0CBin6HifnOkehaszqGR2LNOkAzIdSIqR0lk?=
+ =?us-ascii?Q?gBNKKYUFcwS1sgQ1F1B5HyJgrXgpN+hXSdMuVxXv1EVRpYCP1dmUKm6vp7Mg?=
+ =?us-ascii?Q?GR3F2XFeb9OVmjF9KXle4NSlqsYRUUsSWCi0UcWkgv9e1DNvemrM38dzD0Cc?=
+ =?us-ascii?Q?taL2n3/KeShSfM4nMdy/O4dCsWdlk+LPJvdcKMe8woUD9Eqd0BAncUhSpJfz?=
+ =?us-ascii?Q?unKyuBgTdQoMgd6WQDZuO5VrC/EHI56kJZ9un68F+jk/6ygNz8EFTRmyXwj8?=
+ =?us-ascii?Q?BClLMqpUyKFLxOOzIFVE7VPvyExQe3XOAq400r1tmSSilTErYI89hMjW5nVl?=
+ =?us-ascii?Q?uxfZqL2byFjUh0NgN7UPKHsvoS2RHxdRsUoCFfBHjPe1n0WKIqKSkLnMWIQe?=
+ =?us-ascii?Q?fGDO3Gcxwe0cX6tTNjVxj0uxMFwEuHZpiQvHQ0STab5AFIndVgjf0wUMswH3?=
+ =?us-ascii?Q?EBSoMeCyvrxWl4g+mzjXfC4lzNN7FpJjC66+14BGilhRn6oKJw59B9OFxZuk?=
+ =?us-ascii?Q?MAhOCaxb+BSEk6lsMXWOqx3I7zr8T/Hl8pZsrmIhLUtnxBcrUfkqsUGyBWyc?=
+ =?us-ascii?Q?W9+42KbS6tXvBkJOol9JwO1/X+137SacdJX6INByl5KT3ZKqVNIPxlYyAeq9?=
+ =?us-ascii?Q?Yp074WJ0HYObSnGa75gfSAW67JOdK+V0TMNXgdnnqN/VHQQyTMt1fT1R8VtC?=
+ =?us-ascii?Q?M1Xh0QxEvOWMJG5vr/P7VwzyU+ygaDjrj2WSLqfXrZ05eJUkkwE40wv7Lg4j?=
+ =?us-ascii?Q?4thbtQKeHobugQhdBlEHWfb88PPG3ZwHTtEATyiYkQ7K4GLau4s5R03LPSAl?=
+ =?us-ascii?Q?LAuST20RHuICpGF8CSCJySf0zWV8YClQgQIpZ2q8pm3ZS8XRJBQ8GlSeTZjd?=
+ =?us-ascii?Q?eAynphhfeunNM2ioPFxIZGivGrpYuSm2jA+0W06BhfmNMOwEvHMFFc0Ln1sQ?=
+ =?us-ascii?Q?RLkxdmnNqOs1eKqYx7Jhe92aTNUuyl0d2wzFgOD524u6vnVH0neVFSUwFSYn?=
+ =?us-ascii?Q?QlA4ePVy0ObYXBGXEWARnRopWFtCN++8F3fQKsQkH0EWfIUfZo9J3A19qfFQ?=
+ =?us-ascii?Q?yBnoLhh8VFoCkbQNBmKpBZZyIymQ/UpB5wyKgn0YNINDZZ5V+m8jon5pnIWH?=
+ =?us-ascii?Q?8m4ftDW34DbgqKhO1lvKmbkNs6uYL/ZS++Gc1lKduarm8kJ4CYuP3RweahJN?=
+ =?us-ascii?Q?ztLcsTv4uVd/Qp1ipnAufHRQ9QglZ/WmDGjppdc78lj8ToaCxzHhsz0uu7l+?=
+ =?us-ascii?Q?ftfsW1NTilcJRJ5HuR6vp15qM9xnTNJIuGCUJ9CzLCbCvd/Ji2sLydrcTV3B?=
+ =?us-ascii?Q?H8suwVxEd6WaIW8PJqKy0CDUK+ITCd2e0QFZOZK2fn0ztk3NUU8pMioUeSyO?=
+ =?us-ascii?Q?srLx1JqkiJlhnQCECtJBodVr3EvtC5aRsSRNrUlS?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: PH0PR11MB5880.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 6feb0193-d060-4532-1e16-08db1236cf22
+X-MS-Exchange-CrossTenant-originalarrivaltime: 19 Feb 2023 05:04:41.5398
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: HHWwG6uhQBdtNHCaJLhqHcrAM7J9BL6WuXdzzKrb7humlRXgnsK0QiXFMw9pzNweqmbJFGqMhMKEruSiixnKJw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN9PR11MB5483
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Christian,
 
-On 2023/02/18 2:30, Christian Lamparter wrote:
-> On 2/13/23 14:37, Rafał Miłecki wrote:
->> On 2023-02-13 14:23, INAGAKI Hiroshi wrote:
->>> This patch fixes crc32 error on Big-Endianness system by 
->>> conversion of
->>> calculated crc32 value.
->>>
->>> Little-Endianness system:
->>>
->>>   obtained crc32: Little
->>> calculated crc32: Little
->>>
->>> Big-Endianness system:
->>>
->>>   obtained crc32: Little
->>> calculated crc32: Big
->>>
->>> log (APRESIA ApresiaLightGS120GT-SS, RTL8382M, Big-Endianness):
->>>
->>> [    8.570000] u_boot_env
->>> 18001200.spi:flash@0:partitions:partition@c0000: Invalid calculated
->>> CRC32: 0x88cd6f09 (expected: 0x096fcd88)
->>> [    8.580000] u_boot_env: probe of
->>> 18001200.spi:flash@0:partitions:partition@c0000 failed with error -22
->>>
->>> Fixes: f955dc144506 ("nvmem: add driver handling U-Boot 
->>> environment variables")
->>>
->>> Signed-off-by: INAGAKI Hiroshi <musashino.open@gmail.com>
->>> ---
->>> v2 -> v3
->>>
->>> - fix sparse warning by using __le32 type and cpu_to_le32
->>> - fix character length of the short commit hash in "Fixes:" tag
->>>
->>> v1 -> v2
->>>
->>> - wrong fix for sparse warning due to misunderstanding
->>> - add missing "Fixes:" tag
->>>
->>>  drivers/nvmem/u-boot-env.c | 8 ++++----
->>>  1 file changed, 4 insertions(+), 4 deletions(-)
->>>
->>> diff --git a/drivers/nvmem/u-boot-env.c b/drivers/nvmem/u-boot-env.c
->>> index 29b1d87a3c51..164bb04dfc3b 100644
->>> --- a/drivers/nvmem/u-boot-env.c
->>> +++ b/drivers/nvmem/u-boot-env.c
->>> @@ -117,8 +117,8 @@ static int u_boot_env_parse(struct u_boot_env 
->>> *priv)
->>>      size_t crc32_offset;
->>>      size_t data_offset;
->>>      size_t data_len;
->>> -    uint32_t crc32;
->>> -    uint32_t calc;
->>> +    __le32 crc32;
->>> +    __le32 calc;
->>>      size_t bytes;
->>>      uint8_t *buf;
->>>      int err;
->>
->> This looks counter-intuitive to me, to store values on host system in
->> specified endianness. I'd say we should use __le32 type only to
->> represent numbers in device stored data (e.g. structs as processed by
->> device).
->>
->> My suggesion: leave uint32_t for local variables and use 
->> le32_to_cpu().
+>On Wed, Feb 15, 2023 at 02:10:35PM +0800, Zqiang wrote:
+> For PREEMPT_RT kernel, the spin_lock, spin_lock_irq will converted
+> to sleepable rt_spin_lock and the interrupt related suffix for
+> spin_lock/unlock(_irq, irqsave/irqrestore) do not affect CPU's
+> interrupt state. this commit therefore add raw_spin_lock torture
+> tests, this is a strict spin lock implementation in RT kernels.
+>=20
+> Signed-off-by: Zqiang <qiang1.zhang@intel.com>
 >
-> Hmm, this is strange. The kernel's u-boot-env driver works without any
-> additional changes in the le<->be department on the Big-Endian
-> PowerPC APM82181 WD MyBook Live NAS.
+>A nice addition!  Is this something you will be testing regularly?
+>If not, should there be additional locktorture scenarios, perhaps prefixed
+>by "RT-" to hint that they are not normally available?
 >
-> Is there something odd going on with the WD MyBook Live, or is it
-> the APRESIA ApresiaLightGS120GT-SS that is special?
+>Or did you have some other plan for making use of these?
+
+Hi Paul
+
+Thanks for reply,  in fact, I want to enrich the test of locktorture,=20
+after all, under the PREEMPT_RT kernel, we lost the test of the
+real spin lock.=20
+
+Thanks
+Zqiang
+
 >
-
-This additional changes are for resolving sparse warnings. Of course 
-it's working fine on my device with the previous changes, but due to 
-the warning it wasn't merged into the mainline and needs to be resolved.
-
-> Regards,
-> Christian
-
-Thanks,
-Hiroshi
+>						Thanx, Paul
+>
+> ---
+>  kernel/locking/locktorture.c | 58 ++++++++++++++++++++++++++++++++++++
+>  1 file changed, 58 insertions(+)
+>=20
+> diff --git a/kernel/locking/locktorture.c b/kernel/locking/locktorture.c
+> index 9425aff08936..521197366f27 100644
+> --- a/kernel/locking/locktorture.c
+> +++ b/kernel/locking/locktorture.c
+> @@ -257,6 +257,61 @@ static struct lock_torture_ops spin_lock_irq_ops =3D=
+ {
+>  	.name		=3D "spin_lock_irq"
+>  };
+> =20
+> +#ifdef CONFIG_PREEMPT_RT
+> +static DEFINE_RAW_SPINLOCK(torture_raw_spinlock);
+> +
+> +static int torture_raw_spin_lock_write_lock(int tid __maybe_unused)
+> +__acquires(torture_raw_spinlock)
+> +{
+> +	raw_spin_lock(&torture_raw_spinlock);
+> +	return 0;
+> +}
+> +
+> +static void torture_raw_spin_lock_write_unlock(int tid __maybe_unused)
+> +__releases(torture_raw_spinlock)
+> +{
+> +	raw_spin_unlock(&torture_raw_spinlock);
+> +}
+> +
+> +static struct lock_torture_ops raw_spin_lock_ops =3D {
+> +	.writelock	=3D torture_raw_spin_lock_write_lock,
+> +	.write_delay	=3D torture_spin_lock_write_delay,
+> +	.task_boost	=3D torture_rt_boost,
+> +	.writeunlock	=3D torture_raw_spin_lock_write_unlock,
+> +	.readlock	=3D NULL,
+> +	.read_delay	=3D NULL,
+> +	.readunlock	=3D NULL,
+> +	.name		=3D "raw_spin_lock"
+> +};
+> +
+> +static int torture_raw_spin_lock_write_lock_irq(int tid __maybe_unused)
+> +__acquires(torture_raw_spinlock)
+> +{
+> +	unsigned long flags;
+> +
+> +	raw_spin_lock_irqsave(&torture_raw_spinlock, flags);
+> +	cxt.cur_ops->flags =3D flags;
+> +	return 0;
+> +}
+> +
+> +static void torture_raw_spin_lock_write_unlock_irq(int tid __maybe_unuse=
+d)
+> +__releases(torture_raw_spinlock)
+> +{
+> +	raw_spin_unlock_irqrestore(&torture_raw_spinlock, cxt.cur_ops->flags);
+> +}
+> +
+> +static struct lock_torture_ops raw_spin_lock_irq_ops =3D {
+> +	.writelock	=3D torture_raw_spin_lock_write_lock_irq,
+> +	.write_delay	=3D torture_spin_lock_write_delay,
+> +	.task_boost	=3D torture_rt_boost,
+> +	.writeunlock	=3D torture_raw_spin_lock_write_unlock_irq,
+> +	.readlock	=3D NULL,
+> +	.read_delay	=3D NULL,
+> +	.readunlock	=3D NULL,
+> +	.name		=3D "raw_spin_lock_irq"
+> +};
+> +#endif
+> +
+>  static DEFINE_RWLOCK(torture_rwlock);
+> =20
+>  static int torture_rwlock_write_lock(int tid __maybe_unused)
+> @@ -1017,6 +1072,9 @@ static int __init lock_torture_init(void)
+>  	static struct lock_torture_ops *torture_ops[] =3D {
+>  		&lock_busted_ops,
+>  		&spin_lock_ops, &spin_lock_irq_ops,
+> +#ifdef CONFIG_PREEMPT_RT
+> +		&raw_spin_lock_ops, &raw_spin_lock_irq_ops,
+> +#endif
+>  		&rw_lock_ops, &rw_lock_irq_ops,
+>  		&mutex_lock_ops,
+>  		&ww_mutex_lock_ops,
+> --=20
+> 2.25.1
+>=20
