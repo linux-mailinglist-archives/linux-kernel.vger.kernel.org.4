@@ -2,141 +2,236 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B1B9569C60B
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Feb 2023 08:35:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A942F69C611
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Feb 2023 08:40:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230355AbjBTHff (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Feb 2023 02:35:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41958 "EHLO
+        id S230398AbjBTHkW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Feb 2023 02:40:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43738 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230103AbjBTHfd (ORCPT
+        with ESMTP id S229729AbjBTHkT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Feb 2023 02:35:33 -0500
-Received: from mailout1.samsung.com (mailout1.samsung.com [203.254.224.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA23DCC24
-        for <linux-kernel@vger.kernel.org>; Sun, 19 Feb 2023 23:35:30 -0800 (PST)
-Received: from epcas1p2.samsung.com (unknown [182.195.41.46])
-        by mailout1.samsung.com (KnoxPortal) with ESMTP id 20230220073528epoutp015e4c68714aef5f16dce40d3b8a250dae~FeCMq7WGh1374113741epoutp01n
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Feb 2023 07:35:28 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.samsung.com 20230220073528epoutp015e4c68714aef5f16dce40d3b8a250dae~FeCMq7WGh1374113741epoutp01n
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1676878528;
-        bh=jSnT7xXsWt3qlCKjvBNBOT2SiDlHAmghETbA9fpzlEs=;
-        h=From:To:Cc:Subject:Date:References:From;
-        b=dxf/ThBwPDWM2VXnt0aKJIn4dsuWlowc6RVAyvewBsXfMxVfEesjAI2s7zmAMoCUu
-         32zJuXsUequpl/sNNJEhmyDEFoV1FxYHqm96VeGGVF5AR+TRELCOzBclaObjgG1a/Z
-         TfkOuhhLMbVctRpNdY87SlTOiMKg6CoINl5HWFks=
-Received: from epsnrtp3.localdomain (unknown [182.195.42.164]) by
-        epcas1p4.samsung.com (KnoxPortal) with ESMTP id
-        20230220073528epcas1p459501f124f0bc21adeb1cee6327fdd5a~FeCMMIB0p3161731617epcas1p4c;
-        Mon, 20 Feb 2023 07:35:28 +0000 (GMT)
-Received: from epsmges1p5.samsung.com (unknown [182.195.36.225]) by
-        epsnrtp3.localdomain (Postfix) with ESMTP id 4PKvMz5j96z4x9Q1; Mon, 20 Feb
-        2023 07:35:27 +0000 (GMT)
-Received: from epcas1p1.samsung.com ( [182.195.41.45]) by
-        epsmges1p5.samsung.com (Symantec Messaging Gateway) with SMTP id
-        CC.97.54823.FB223F36; Mon, 20 Feb 2023 16:35:27 +0900 (KST)
-Received: from epsmtrp1.samsung.com (unknown [182.195.40.13]) by
-        epcas1p1.samsung.com (KnoxPortal) with ESMTPA id
-        20230220073527epcas1p1e901bfa667b8c51551d26478013131e6~FeCLZT7v31662216622epcas1p1e;
-        Mon, 20 Feb 2023 07:35:27 +0000 (GMT)
-Received: from epsmgms1p1new.samsung.com (unknown [182.195.42.41]) by
-        epsmtrp1.samsung.com (KnoxPortal) with ESMTP id
-        20230220073527epsmtrp180c2ff8448a7486d2916ec82a3666024~FeCLYns5J2290122901epsmtrp1M;
-        Mon, 20 Feb 2023 07:35:27 +0000 (GMT)
-X-AuditID: b6c32a39-29ffca800000d627-28-63f322bfaa11
-Received: from epsmtip1.samsung.com ( [182.195.34.30]) by
-        epsmgms1p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
-        1C.97.05839.FB223F36; Mon, 20 Feb 2023 16:35:27 +0900 (KST)
-Received: from localhost.localdomain (unknown [10.253.105.183]) by
-        epsmtip1.samsung.com (KnoxPortal) with ESMTPA id
-        20230220073527epsmtip1499f9e79152ba4f33d4ce10f2776e6a5~FeCLMvxV00185201852epsmtip1Y;
-        Mon, 20 Feb 2023 07:35:27 +0000 (GMT)
-From:   Sangmoon Kim <sangmoon.kim@samsung.com>
-To:     Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>
-Cc:     Mark Rutland <mark.rutland@arm.com>,
-        Mark Brown <broonie@kernel.org>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Sangmoon Kim <sangmoon.kim@samsung.com>
-Subject: [PATCH] arm64: pass ESR_ELx to die() of cfi_handler
-Date:   Mon, 20 Feb 2023 16:34:41 +0900
-Message-Id: <20230220073441.2753-1-sangmoon.kim@samsung.com>
-X-Mailer: git-send-email 2.17.1
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFjrPKsWRmVeSWpSXmKPExsWy7bCmru5+pc/JBjN+6VpMffiEzeL9sh5G
-        i02Pr7FaXN41h81i6fWLTBa3HjSyWLTcMXVg91gzbw2jx6ZVnWwem5fUe/RtWcXo8XmTXABr
-        VLZNRmpiSmqRQmpecn5KZl66rZJ3cLxzvKmZgaGuoaWFuZJCXmJuqq2Si0+ArltmDtARSgpl
-        iTmlQKGAxOJiJX07m6L80pJUhYz84hJbpdSClJwCswK94sTc4tK8dL281BIrQwMDI1OgwoTs
-        jOWdV9gKfrJVfOhYz9jAeJ+1i5GTQ0LARGLpy7dsXYxcHEICOxgltl06wQaSEBL4xCjxca4O
-        ROIbo8Tko22MMB0bvi9khUjsZZRYeGYpI4TzhVHi0YKDLCBVbAK6El/mXQbrEBHwkdj69zZY
-        EbPATkaJBws+gO0QFrCRuHZ2IjuIzSKgKvFregeYzQsUX/1hE9Q6eYnVGw4wgzRLCKxjl7ix
-        ah4TRMJF4va9l+wQtrDEq+NboGwpiZf9bewQDf2MEqe6u1ggElMYJeZe04SwjSV6ey4ATeUA
-        OklTYv0ufYiwosTO33PBFjML8Em8+9rDClIiIcAr0dEmBFGiJvH41V2o22Qk+u/Mh5ruIXHx
-        7lFWSNjFSly89YtxAqPsLIQFCxgZVzGKpRYU56anFhsWmMKjKTk/dxMjOGVpWe5gnP72g94h
-        RiYOxkOMEhzMSiK8/3k/JwvxpiRWVqUW5ccXleakFh9iNAUG2ERmKdHkfGDSzCuJNzSxNDAx
-        MzKxMLY0NlMS5xW3PZksJJCeWJKanZpakFoE08fEwSnVwCRy8tnNy6vvT7M5eE5a6+rluc+2
-        5160j6iL23dOpX+nzsL89b2zL253fPbxwfXwD3c8n2cnzPXXEC+u3KK6WaujZZ1ho1nW2XQF
-        vujqhL5/ExOmuZSpevhsqdd0/vDK+mrH+7ffchtm7jmSYKUZqeEksXemYr3TXP2kb4VLt70y
-        6E26vUy33P6F260XHV0WhZnVYf9qRfQUEwS+bJXn+/HrSdKMVUtP/gr2NLSs+W58LPzlI9aw
-        Gh3b1ZzTJLX3n516wjaqqObVseKVvHaPrrF+0lAyuZ+61rNTr7vh93f//B1XuzY97Twvvasn
-        IyTx2uqAhV9S11v9kFWYcvbBo/V8O1tWCjp9DTO9Klz6sEaJpTgj0VCLuag4EQDA0XeG4gMA
-        AA==
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFvrDJMWRmVeSWpSXmKPExsWy7bCSnO5+pc/JBjcP8VtMffiEzeL9sh5G
-        i02Pr7FaXN41h81i6fWLTBa3HjSyWLTcMXVg91gzbw2jx6ZVnWwem5fUe/RtWcXo8XmTXABr
-        FJdNSmpOZllqkb5dAlfG8s4rbAU/2So+dKxnbGC8z9rFyMkhIWAiseH7QiCbi0NIYDejRPfv
-        x1AJGYmdFzczdTFyANnCEocPF0PUfGKUeD99EgtIDZuArsSXeZcZQWpEBPwknj2rA6lhFtjL
-        KLFz6wdmkBphARuJa2cnsoPYLAKqEr+md4DZvEDx1R82MULskpdYveEA8wRGngWMDKsYJVML
-        inPTc4sNCwzzUsv1ihNzi0vz0vWS83M3MYIDSEtzB+P2VR/0DjEycTAeYpTgYFYS4f3P+zlZ
-        iDclsbIqtSg/vqg0J7X4EKM0B4uSOO+FrpPxQgLpiSWp2ampBalFMFkmDk6pBqbAPScad5au
-        Pf2tYO6RGb3TZ2hH7f/D+fXf0diN1z3ag6o3MrBq5KtMajCO7V/zp3R31bYvd1+t3ya2+YnV
-        CskvG5r+q11j9+RR1tw5K+TdxYV+rmsPT343S2Pl0mPV75++4iqoM967fQrb2aAm3p/Ln2d9
-        qz7c/zH2t6jsyhd9pd8U5pkeymY+7qerx9Bi7GD7cze3mOKCz2ZHV641vjBHfc8Fvl09LsG8
-        q8piUjKjepcomjld/tp+ZEvZs1+ymU5VDjPl4o5fkisruSVSwPx4fw1v81nL6dLtm0RFvhoL
-        ht16yVVXGtcp+Hd3Ov/VK0fmzqwUunt+PWeuYZnKXOGMVX8YdkvOkfv6cqltwSMOJZbijERD
-        Leai4kQAXlsskI8CAAA=
-X-CMS-MailID: 20230220073527epcas1p1e901bfa667b8c51551d26478013131e6
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-X-Sendblock-Type: SVC_REQ_APPROVE
-CMS-TYPE: 101P
-DLP-Filter: Pass
-X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20230220073527epcas1p1e901bfa667b8c51551d26478013131e6
-References: <CGME20230220073527epcas1p1e901bfa667b8c51551d26478013131e6@epcas1p1.samsung.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        Mon, 20 Feb 2023 02:40:19 -0500
+Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 585D9FF36;
+        Sun, 19 Feb 2023 23:40:17 -0800 (PST)
+Received: from [2a02:8108:8980:2478:8cde:aa2c:f324:937e]; authenticated
+        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        id 1pU0mQ-0003aA-Rp; Mon, 20 Feb 2023 08:40:10 +0100
+Message-ID: <8489afbb-2391-c22f-41fc-21726f09e444@leemhuis.info>
+Date:   Mon, 20 Feb 2023 08:40:09 +0100
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.2
+Subject: Re: scsi: Recent kernels drop into emergency shell
+Content-Language: en-US, de-DE
+To:     Srikar Dronamraju <srikar@linux.vnet.ibm.com>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>
+Cc:     linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        bvanassche@acm.org, hare@suse.de, hch@lst.de, ming.lei@redhat.com,
+        sumanesh.samanta@broadcom.com, michael.christie@oracle.com,
+        john.garry@huawei.com, johannes.thumshirn@wdc.com, axboe@kernel.dk,
+        osandov@fb.com, kashyap.desai@broadcom.com,
+        gregkh@linuxfoundation.org,
+        Linux kernel regressions list <regressions@lists.linux.dev>
+References: <20230220061559.GJ159593@linux.vnet.ibm.com>
+From:   "Linux regression tracking (Thorsten Leemhuis)" 
+        <regressions@leemhuis.info>
+Reply-To: Linux regressions mailing list <regressions@lists.linux.dev>
+In-Reply-To: <20230220061559.GJ159593@linux.vnet.ibm.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1676878817;102b9f98;
+X-HE-SMSGID: 1pU0mQ-0003aA-Rp
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Commit 0f2cb928a154 ("arm64: consistently pass ESR_ELx to die()") caused
-all callers to pass the ESR_ELx value to die().
+[CCing the regression list, as it should be in the loop for regressions:
+https://docs.kernel.org/admin-guide/reporting-regressions.html]
 
-For consistency, this patch also adds esr to die() call of cfi_handler.
-Also, when CFI error occurs, die handlers can use ESR_ELx value.
+On 20.02.23 07:15, Srikar Dronamraju wrote:
+> On a freshly installed system, booting latest upstream kernels causes the
+> system to drop into emergency shell. The reason for dropping into emergency
+> shell is system is unable to mount /home partition.
 
-Signed-off-by: Sangmoon Kim <sangmoon.kim@samsung.com>
----
- arch/arm64/kernel/traps.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+What kind of storage hardware do you have? Is this maybe related to this
+fix, that afaics never was merged?
+https://lore.kernel.org/all/20220928181350.9948-1-leeman.duncan@gmail.com/
 
-diff --git a/arch/arm64/kernel/traps.c b/arch/arm64/kernel/traps.c
-index 0ccc063daccb..4a623e2e982b 100644
---- a/arch/arm64/kernel/traps.c
-+++ b/arch/arm64/kernel/traps.c
-@@ -990,7 +990,7 @@ static int cfi_handler(struct pt_regs *regs, unsigned long esr)
- 
- 	switch (report_cfi_failure(regs, regs->pc, &target, type)) {
- 	case BUG_TRAP_TYPE_BUG:
--		die("Oops - CFI", regs, 0);
-+		die("Oops - CFI", regs, esr);
- 		break;
- 
- 	case BUG_TRAP_TYPE_WARN:
--- 
-2.17.1
+Anyway for the rest of this mail:
 
+[TLDR: I'm adding this report to the list of tracked Linux kernel
+regressions; the text you find below is based on a few templates
+paragraphs you might have encountered already in similar form.
+See link in footer if these mails annoy you.]
+
+> The system was able to boot properly on v5.18 kernel, but failed to boot
+> v5.19 and 6.2-rc8 kernels.
+> 
+> On the recent or failing kernels, I see the below msg when kernel drops into
+> emergency shell.
+> 
+> lvm[1370]: /dev/sda3 excluded: device is not in devices file.
+> lvm[1370]: WARNING: no autoactivation for /dev/sda3: system.devices naa.60050768108001b3a800000000000097 current missing device id.
+> systemd[1]: dev-mapper-rhel_ltcden3\x2d\x2dlp9\x2dhome.device: Job dev-mapper-rhel_ltcden3\x2d\x2dlp9\x2dhome.device/start timed out.
+> systemd[1]: Timed out waiting for device /dev/mapper/rhel_ltcden3--lp9-home.
+> systemd[1]: Dependency failed for /home.
+> systemd[1]: Dependency failed for Local File Systems.
+> systemd[1]: Dependency failed for Mark the need to relabel after reboot.
+> systemd[1]: selinux-autorelabel-mark.service: Job selinux-autorelabel-mark.service/start failed with result 'dependency'.
+> systemd[1]: local-fs.target: Job local-fs.target/start failed with result 'dependency'.
+> systemd[1]: local-fs.target: Triggering OnFailure= dependencies.
+> systemd[1]: home.mount: Job home.mount/start failed with result 'dependency'.
+> systemd[1]: dev-mapper-rhel_ltcden3\x2d\x2dlp9\x2dhome.device: Job dev-mapper-rhel_ltcden3\x2d\x2dlp9\x2dhome.device/start failed with result 'timeout'.
+> 
+> lsblk o/p when system has fallen into ememrgency shell (aka bad kernel)
+> NAME                       MAJ:MIN RM  SIZE RO TYPE MOUNTPOINTS
+> sda                          8:0    0  100G  0 disk
+> â”œâ”€sda1                       8:1    0    4M  0 part
+> â”œâ”€sda2                       8:2    0    1G  0 part /boot
+> â””â”€sda3                       8:3    0   99G  0 part
+>   â”œâ”€rhel_ltcden3--lp9-root 253:0    0 63.8G  0 lvm  /
+>   â””â”€rhel_ltcden3--lp9-swap 253:1    0    4G  0 lvm  [SWAP]
+> sr0                         11:0    1 1024M  0 rom
+> 
+> lsblk o/p when system boots normally on v5.18 or earlier kernels
+> NAME                       MAJ:MIN RM  SIZE RO TYPE MOUNTPOINTS
+> sda                          8:0    0  100G  0 disk
+> â”œâ”€sda1                       8:1    0    4M  0 part
+> â”œâ”€sda2                       8:2    0    1G  0 part /boot
+> â””â”€sda3                       8:3    0   99G  0 part
+>   â”œâ”€rhel_ltcden3--lp9-root 253:0    0 63.8G  0 lvm  /
+>   â”œâ”€rhel_ltcden3--lp9-swap 253:1    0    4G  0 lvm  [SWAP]
+>   â””â”€rhel_ltcden3--lp9-home 253:2    0 31.2G  0 lvm  /home
+> sr0                         11:0    1 1024M  0 rom
+> 
+> 
+> lvdisplay o/p when system has fallen into emergency shell (aka bad kernel)
+>   Devices file sys_wwid naa.60050768108001b3a800000000000097 PVID iws5FZqBFBVE12w874dFuppLWkQUyEcb last seen on /dev/sda3 not found.
+> 
+> lvdisplay o/p when system boots normally on v5.18 or earlier kernels
+>   --- Logical volume ---
+>   LV Path                /dev/rhel_ltcden3-lp9/swap
+>   LV Name                swap
+>   VG Name                rhel_ltcden3-lp9
+>   LV UUID                pzxuKG-ofVC-7jBY-HXn9-RDPN-G3hP-K5gdcI
+>   LV Write Access        read/write
+>   LV Creation host, time ltcden3-lp9, 2023-01-24 09:44:21 +0530
+>   LV Status              available
+>   # open                 2
+>   LV Size                <4.01 GiB
+>   Current LE             1026
+>   Segments               1
+>   Allocation             inherit
+>   Read ahead sectors     auto
+>   - currently set to     256
+>   Block device           253:1
+> 
+>   --- Logical volume ---
+>   LV Path                /dev/rhel_ltcden3-lp9/home
+>   LV Name                home
+>   VG Name                rhel_ltcden3-lp9
+>   LV UUID                XDcVN6-kP6V-0LtL-nLM4-rvLv-gMQm-uaDRwi
+>   LV Write Access        read/write
+>   LV Creation host, time ltcden3-lp9, 2023-01-24 09:44:26 +0530
+>   LV Status              available
+>   # open                 1
+>   LV Size                31.16 GiB
+>   Current LE             7977
+>   Segments               1
+>   Allocation             inherit
+>   Read ahead sectors     auto
+>   - currently set to     256
+>   Block device           253:2
+> 
+>   --- Logical volume ---
+>   LV Path                /dev/rhel_ltcden3-lp9/root
+>   LV Name                root
+>   VG Name                rhel_ltcden3-lp9
+>   LV UUID                sJlMVf-eE2v-UKJp-Esqg-uxis-wA1Y-gOXFnO
+>   LV Write Access        read/write
+>   LV Creation host, time ltcden3-lp9, 2023-01-24 09:44:36 +0530
+>   LV Status              available
+>   # open                 1
+>   LV Size                63.82 GiB
+>   Current LE             16339
+>   Segments               1
+>   Allocation             inherit
+>   Read ahead sectors     auto
+>   - currently set to     256
+>   Block device           253:0
+> 
+> git bisect start '--'
+> # bad: [3d7cb6b04c3f3115719235cc6866b10326de34cd] Linux 5.19
+> git bisect bad 3d7cb6b04c3f3115719235cc6866b10326de34cd
+> # good: [4b0986a3613c92f4ec1bdc7f60ec66fea135991f] Linux 5.18
+> git bisect good 4b0986a3613c92f4ec1bdc7f60ec66fea135991f
+> # bad: [c011dd537ffe47462051930413fed07dbdc80313] Merge tag 'arm-soc-5.19' of git://git.kernel.org/pub/scm/linux/kernel/git/soc/soc
+> git bisect bad c011dd537ffe47462051930413fed07dbdc80313
+> # good: [7e062cda7d90543ac8c7700fc7c5527d0c0f22ad] Merge tag 'net-next-5.19' of git://git.kernel.org/pub/scm/linux/kernel/git/netdev/net-next
+> git bisect good 7e062cda7d90543ac8c7700fc7c5527d0c0f22ad
+> # good: [f8122500a039abeabfff41b0ad8b6a2c94c1107d] Merge branch 'etnaviv/next' of https://git.pengutronix.de/git/lst/linux into drm-next
+> git bisect good f8122500a039abeabfff41b0ad8b6a2c94c1107d
+> # good: [2518f226c60d8e04d18ba4295500a5b0b8ac7659] Merge tag 'drm-next-2022-05-25' of git://anongit.freedesktop.org/drm/drm
+> git bisect good 2518f226c60d8e04d18ba4295500a5b0b8ac7659
+> # good: [f7a344468105ef8c54086dfdc800e6f5a8417d3e] ASoC: max98090: Move check for invalid values before casting in max98090_put_enab_tlv()
+> git bisect good f7a344468105ef8c54086dfdc800e6f5a8417d3e
+> # bad: [fbe86daca0ba878b04fa241b85e26e54d17d4229] Merge tag 'scsi-misc' of git://git.kernel.org/pub/scm/linux/kernel/git/jejb/scsi
+> git bisect bad fbe86daca0ba878b04fa241b85e26e54d17d4229
+> # bad: [f304d35e59958ea4be399f78e5be08d4a0c4db75] scsi: mpi3mr: Update driver version to 8.0.0.69.0
+> git bisect bad f304d35e59958ea4be399f78e5be08d4a0c4db75
+> # good: [21c2e3418d07955c7b87fc3f75688cb1c2b04a32] scsi: ufs: Remove the TRUE and FALSE definitions
+> git bisect good 21c2e3418d07955c7b87fc3f75688cb1c2b04a32
+> # good: [671a52f2aeafe2f42bddb53dcfe3933b1f641843] scsi: fnic: Remove unneeded flush_workqueue()
+> git bisect good 671a52f2aeafe2f42bddb53dcfe3933b1f641843
+> # bad: [d657700ccac71da19a4d1a591fafcd598ce0dd6e] scsi: core: Do not truncate INQUIRY data on modern devices
+> git bisect bad d657700ccac71da19a4d1a591fafcd598ce0dd6e
+> # good: [c5acd61dbb32b6bda0f3a354108f2b8dcb788985] scsi: megaraid: Fix error check return value of register_chrdev()
+> git bisect good c5acd61dbb32b6bda0f3a354108f2b8dcb788985
+> # good: [dc1178767cba9d67f5100fb370670fd613319362] scsi: mpt3sas: Use cached ATA Information VPD page
+> git bisect good dc1178767cba9d67f5100fb370670fd613319362
+> # bad: [e17d63403076affccd72d195f93bbf3f39514005] scsi: core: Pick suitable allocation length in scsi_report_opcode()
+> git bisect bad e17d63403076affccd72d195f93bbf3f39514005
+> # bad: [c92a6b5d63359dd6d2ce6ea88ecd8e31dd769f6b] scsi: core: Query VPD size before getting full page
+> git bisect bad c92a6b5d63359dd6d2ce6ea88ecd8e31dd769f6b
+> # first bad commit: [c92a6b5d63359dd6d2ce6ea88ecd8e31dd769f6b] scsi: core: Query VPD size before getting full page
+> 
+> Commit c92a6b5d6335 ("scsi: core: Query VPD size before getting full page")
+> went in between v5.18 and v5.19.
+> 
+> Verifications:
+> I have verified that reverting the said bad commit on top of v6.2-rc8, v5.19
+> and on top of c92a6b5d63359dd6d2ce6ea88ecd8e31dd769f6b causes the system to
+> boot normally.
+
+Thanks for the report. To be sure the issue doesn't fall through the
+cracks unnoticed, I'm adding it to regzbot, the Linux kernel regression
+tracking bot:
+
+#regzbot ^introduced c92a6b5d63359dd
+#regzbot title scsi: storage not properly detected
+#regzbot ignore-activity
+
+This isn't a regression? This issue or a fix for it are already
+discussed somewhere else? It was fixed already? You want to clarify when
+the regression started to happen? Or point out I got the title or
+something else totally wrong? Then just reply and tell me -- ideally
+while also telling regzbot about it, as explained by the page listed in
+the footer of this mail.
+
+Developers: When fixing the issue, remember to add 'Link:' tags pointing
+to the report (the parent of this mail). See page linked in footer for
+details.
+
+Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
+--
+Everything you wanna know about Linux kernel regression tracking:
+https://linux-regtracking.leemhuis.info/about/#tldr
+That page also explains what to do if mails like this annoy you.
