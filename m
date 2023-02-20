@@ -2,116 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DBA0669D10F
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Feb 2023 17:06:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C765D69D112
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Feb 2023 17:06:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231881AbjBTQGP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Feb 2023 11:06:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54956 "EHLO
+        id S232039AbjBTQGf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Feb 2023 11:06:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55430 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229579AbjBTQGN (ORCPT
+        with ESMTP id S232086AbjBTQGd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Feb 2023 11:06:13 -0500
-Received: from mail-qt1-x82d.google.com (mail-qt1-x82d.google.com [IPv6:2607:f8b0:4864:20::82d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FE151C302
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Feb 2023 08:06:12 -0800 (PST)
-Received: by mail-qt1-x82d.google.com with SMTP id s12so1195655qtq.11
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Feb 2023 08:06:12 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=n7NItqL5WlXKvPSPcmvVIXa/5KtssSjGrZiATi5QVhk=;
-        b=PWs2K0JhZjtqflvScdSGmd0Y0hWFtVpSYuI9LLqpM88SthMeysJ2lRX6YdJA9b9Rch
-         3Ly+O1cawkJ4ufcuHUzPB0mUe1rhbs04vuvNvCjdFYCbiZAFdxe7qVWrVymeEbe8eazw
-         M9DtfABRplQtK+Y4r8bRtdcC2+A6NIdqoliqfPfFDBmGtmXE06UQmA19vImMQx82YI1Y
-         xtim+We+dVtFWwZpUXp8UplPpE4a3ioRGciRGK5RikJOFgC3h0BWaZwQoCqO2dGwkyei
-         P5LoD+RIAuSTtURri2UySGFaCRixBSrwVsbebVPM5h5H0qaq0zmFVqEKhr5CZUf+sNLl
-         E9QA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=n7NItqL5WlXKvPSPcmvVIXa/5KtssSjGrZiATi5QVhk=;
-        b=7Y1BNBHUO0T+dVvoFea3MEhPAKRatGzEdLOgbNHoRN2NDX04GZUQpM5niNZ3XshI7I
-         7YHetNjMbb0jVL+kzhruUjB6DJZWve0DP1+e8rOXu+2XURo49Kk/vcO+enWNpVq7aRFu
-         I4LKLBUGnN9IYrOyXHYRD7lK12ScUvoHHPgoyIy/bwBNVLNUgDQp1997N3DykBwcmkXw
-         EvssWAhrVwqGlC0QrMiJDjex/+lFHfIiqpDASemSaoGz5vi1nKsAr7McMRWWuXGA1Pmd
-         8UA2oHlfgLpb8JtaXie0qu0U0itYgcpDFFs0nATDvhnp5bSl0mc43ykCeBgE5bLdafYe
-         3TPA==
-X-Gm-Message-State: AO0yUKWImCSQPl3X83C5Mn67+xVJu8kxqrbkTiqwh84ibWQZonZrs+0B
-        9DGkhA9RU1pGm94omXOUKzk=
-X-Google-Smtp-Source: AK7set/YEESzSwtQVU5dIpOwx8NgJN2QEeD281zIf8VbvxsLMCdWOn27B1li5WUE2NM4FDpYRqM59A==
-X-Received: by 2002:ac8:7f13:0:b0:3bc:dd23:cbb2 with SMTP id f19-20020ac87f13000000b003bcdd23cbb2mr3446457qtk.33.1676909171267;
-        Mon, 20 Feb 2023 08:06:11 -0800 (PST)
-Received: from hotmail.com ([137.118.186.11])
-        by smtp.gmail.com with ESMTPSA id f30-20020ac8015e000000b003bd0e7ff466sm8265636qtg.7.2023.02.20.08.06.09
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 20 Feb 2023 08:06:10 -0800 (PST)
-Date:   Mon, 20 Feb 2023 11:06:08 -0500
-From:   Storm Dragon <stormdragon2976@gmail.com>
-To:     linux@weissschuh.net
-Cc:     George Kennedy <george.kennedy@oracle.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        linux-kernel@vger.kernel.org, Randy Dunlap <rdunlap@infradead.org>
-Subject: Re: [PATCH] vc_screen: don't clobber return value in vcs_read
-Message-ID: <Y/OacHw6nL/ZtrH3@hotmail.com>
-References: <Y/KtG9vK0oz0nQrN@hotmail.com>
- <20230220064612.1783-1-linux@weissschuh.net>
+        Mon, 20 Feb 2023 11:06:33 -0500
+Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A76341E9D0
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Feb 2023 08:06:27 -0800 (PST)
+Received: from zn.tnic (p5de8e9fe.dip0.t-ipconnect.de [93.232.233.254])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id A43E61EC04DA;
+        Mon, 20 Feb 2023 17:06:25 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1676909185;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:references;
+        bh=/8phSmJ+zfHQ4P4WcehWrw04sHB2nwS3D9rezDdWpnk=;
+        b=SuW1XJUQS0O5FMcdCQZIJPH1YxTmGmZOmjOgUBmW9cebRbIrtuLuREcAKHaPliOIU27ccB
+        ZVFf1gpKPvAvyIyXN9x8GqSCiK+JZcz6+RlHtQh3ANcMOWMCQwHcBb5ktTL5ALhUvpBD4Y
+        2OK8zTi1Z0/jw/Am64EX8HLWnsB5UxU=
+Date:   Mon, 20 Feb 2023 17:06:21 +0100
+From:   Borislav Petkov <bp@alien8.de>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     x86-ml <x86@kernel.org>, lkml <linux-kernel@vger.kernel.org>
+Subject: [GIT PULL] x86/cache for v6.3-rc1
+Message-ID: <Y/OafaXrqkAhaurS@zn.tnic>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="F5B7JLjsd7PEmIoy"
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20230220064612.1783-1-linux@weissschuh.net>
-X-Spam-Status: No, score=-1.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,NO_RDNS_DOTCOM_HELO,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Linus,
 
---F5B7JLjsd7PEmIoy
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+please pull the new pile of x86 resource control updates for 6.3.
 
-On Mon, Feb 20, 2023 at 06:46:12AM +0000, linux@weissschuh.net wrote:
->From: Thomas Wei=C3=9Fschuh <linux@weissschuh.net>
->
->@Storm Could you validate this patch?
+Thx.
 
+---
 
-I am willing to test, but I have almost no experience doing anything
-with the kernel other than upgrading it from time to time. Can you send
-me some instructions for testing this?
+The following changes since commit 2241ab53cbb5cdb08a6b2d4688feb13971058f65:
 
-Thanks,
-Storm
+  Linux 6.2-rc5 (2023-01-21 16:27:01 -0800)
 
---F5B7JLjsd7PEmIoy
-Content-Type: application/pgp-signature; name="signature.asc"
+are available in the Git repository at:
 
------BEGIN PGP SIGNATURE-----
+  git://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git tags/x86_cache_for_v6.3_rc1
 
-iQIzBAEBCgAdFiEEjjImGMhZhYoKESBfW+ojcUPdwZMFAmPzmmwACgkQW+ojcUPd
-wZNphg/7BsCOV4l6YkxwLCza4W15yEky5qLkQZ+ACRriC+hOgl/y/dCRZ89j96at
-knNR2EqLG/9YUXMBtt+jmLSaqvJrbTqYVi9FY3Eq/stKK3Jspex+SbRLhUPnz/cQ
-wNxjJ4vwfRIjr8C8ty8/wH3AlafxNqNHxrYDc4Qr01NaMdUTEU7xMi178Z6xIYXA
-WlUmiUnZ1TuzvN/JaQrZan0aIvIyCfc/UiTpMJF5kTsUQBvwzdzWKN9VEhtlcFqE
-haE92srM21Pn0yTO7ZLTdqGEHOTdODmDa6yrNBUZkeeQ99kuaYzh0NVRkh5mtF9W
-+F2UNiiZsayNO+ZjcgD65DHN1/CyZnOMqDheijueZcV/hvEQsT03h1BAD1FkCaaO
-JSeDH8yjo3wSvaaSf2wwRd3RAY1cgOtiIuJffsJdO8l6Qj8MdYHrVhQWvYEJp7A9
-78w3cuvrvvypANIKsjZdZ8xclrbwwQ5Z10271x9jZtgkI1QYKduUzxH9dKNKj4YW
-KGb6ztK9it+Bke7NzW6aWzcTkiTmH0e7ccyrMyj7T1crxqfK+Sq/CU41bdrwxHJl
-xmaCgit8q/sNdLvpzLUWU+6TncEhBgOYpmXhJ3Wk5yuHUFjEstdi29xONPoFr+Zm
-ft2ImsrWKbF6IATXHID0ptQCzgzCOYyNaW4tT4rNlDZ6D6xt/PI=
-=jaVa
------END PGP SIGNATURE-----
+for you to fetch changes up to 793207bad71c5339c614d12ac21d627da7bf771d:
 
---F5B7JLjsd7PEmIoy--
+  x86/resctrl: Fix a silly -Wunused-but-set-variable warning (2023-01-26 11:15:20 +0100)
+
+----------------------------------------------------------------
+- Add support for a new AMD feature called slow memory bandwidth
+allocation.  Its goal is to control resource allocation in external slow
+memory which is connected to the machine like for example through CXL devices,
+accelerators etc
+
+----------------------------------------------------------------
+Babu Moger (13):
+      x86/resctrl: Replace smp_call_function_many() with on_each_cpu_mask()
+      x86/cpufeatures: Add Slow Memory Bandwidth Allocation feature flag
+      x86/resctrl: Add a new resource type RDT_RESOURCE_SMBA
+      x86/cpufeatures: Add Bandwidth Monitoring Event Configuration feature flag
+      x86/resctrl: Include new features in command line options
+      x86/resctrl: Detect and configure Slow Memory Bandwidth Allocation
+      x86/resctrl: Add __init attribute to rdt_get_mon_l3_config()
+      x86/resctrl: Support monitor configuration
+      x86/resctrl: Add interface to read mbm_total_bytes_config
+      x86/resctrl: Add interface to read mbm_local_bytes_config
+      x86/resctrl: Add interface to write mbm_total_bytes_config
+      x86/resctrl: Add interface to write mbm_local_bytes_config
+      Documentation/x86: Update resctrl.rst for new features
+
+Borislav Petkov (AMD) (1):
+      x86/resctrl: Fix a silly -Wunused-but-set-variable warning
+
+ Documentation/admin-guide/kernel-parameters.txt |   2 +-
+ Documentation/x86/resctrl.rst                   | 147 +++++++++++-
+ arch/x86/include/asm/cpufeatures.h              |   2 +
+ arch/x86/include/asm/msr-index.h                |   2 +
+ arch/x86/kernel/cpu/cpuid-deps.c                |   2 +
+ arch/x86/kernel/cpu/resctrl/core.c              |  54 ++++-
+ arch/x86/kernel/cpu/resctrl/ctrlmondata.c       |  13 +-
+ arch/x86/kernel/cpu/resctrl/internal.h          |  28 +++
+ arch/x86/kernel/cpu/resctrl/monitor.c           |  30 ++-
+ arch/x86/kernel/cpu/resctrl/rdtgroup.c          | 307 ++++++++++++++++++++++--
+ arch/x86/kernel/cpu/scattered.c                 |   2 +
+ include/linux/resctrl.h                         |  11 +
+ 12 files changed, 559 insertions(+), 41 deletions(-)
+
+-- 
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette
