@@ -2,62 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A1D9869D42A
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Feb 2023 20:38:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ED78169D42B
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Feb 2023 20:38:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233203AbjBTTiY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Feb 2023 14:38:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35098 "EHLO
+        id S233210AbjBTTi1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Feb 2023 14:38:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35130 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231785AbjBTTiR (ORCPT
+        with ESMTP id S233186AbjBTTiV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Feb 2023 14:38:17 -0500
-Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E5D3A5EA
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Feb 2023 11:38:16 -0800 (PST)
-Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com [209.85.208.72])
+        Mon, 20 Feb 2023 14:38:21 -0500
+Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2298B10A93
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Feb 2023 11:38:20 -0800 (PST)
+Received: from mail-ed1-f69.google.com (mail-ed1-f69.google.com [209.85.208.69])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 494273F587
+        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id C23583F723
         for <linux-kernel@vger.kernel.org>; Mon, 20 Feb 2023 19:38:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
         s=20210705; t=1676921894;
-        bh=YuLEnjWYJ3ZScY+VoOmH9vHwx7aNhN3sNU3joAeNQOc=;
+        bh=IA26aCShKRrMxO7X4FNysG0cj87aSw923xvICaycoGk=;
         h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
          MIME-Version:Content-Type;
-        b=wMZmLNQ+i63tlWK+Yf+7US/vF8Y81qMUjDREhPV6j4gj+2dx4RE2E6vjWj4cZvnBk
-         lYPTANXyoAIbqdNmnq7v6IhXp1A4v1ruaLgueemeHeUFKSpHhfHSsEsPAbnKYHuhwO
-         mtQ7UnyJ4Iai6JkpDIodXKaRNW6SPg4qFnZc8yi2pY8IGOVRZn7aNOSxUAqgzjoWX2
-         c1NA/prH6Gz3q6FkS9vwgByQsLnkwWHeRuquZwNLjkUTlnDKOYFcwxJ9VJkU8Cyx3c
-         F/oU2uCRTorFdNj0JgHcPJjTFD16pNj+ln5C83FYlXGa3vSxkbnzSayexYPjVgJmcH
-         SAi2cMFKLqsxg==
-Received: by mail-ed1-f72.google.com with SMTP id co14-20020a0564020c0e00b004aab4319cedso2319420edb.2
+        b=OIkpmIH8RNGetb96v6ymGLn3ezUt2ixxvMm9zhD/R0xF4L2rkxdoFFDYduZ8icFfE
+         Qcaw+0A3KVwgfAWbYiUiq53tYK9Z/9NEdCeNsDfSpBcvslHlsz9M0UL7AAtL8aIk+R
+         OHyjQNBtm/vtgH9S6MIlX6anxn9L/AYvCgr4t/EuJYv1Fy0S2pYriFgfVrMXnOnW7g
+         sCOWm2ehHMW+vrjJfVMp9hm4IHsRrSgXPncPgMLfJN0fd9TdAQh8OQRtnUHO2R+lSN
+         C+zqclmZk0XD7ATctZ1R8uwoUMZMZnlXXr77hhjNBaDP+JisCl9HuRwrrLhTnQuGKT
+         i6E6b+gW4NWBg==
+Received: by mail-ed1-f69.google.com with SMTP id g24-20020a056402321800b004ace77022ebso2887925eda.8
         for <linux-kernel@vger.kernel.org>; Mon, 20 Feb 2023 11:38:14 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=YuLEnjWYJ3ZScY+VoOmH9vHwx7aNhN3sNU3joAeNQOc=;
-        b=fANHiCgY7ry50toIAxCXDtegfhyRlhJpq7nmpZg/VJ1sJ3oQLYN2NFEy17VR0Poh44
-         kUhhTcUP3r/GeqMmt4ZP2YxmRpFOh/Bi0k+VXo0csSo9WZucz9nUGkpoYn0S8eyWjHZT
-         JdLvxSKtIXADtdgsuogdxnrk2eEUCC6J7oq5byCutwOTwuAeCjfqXKoFjNzwunYpSfd+
-         ryJet3e4xUkOoACqCZD7OJqHdTE1lSf1EG9DTp3IRVKG49NoFpDgaiWdxlwXZldAvbH+
-         w79xQDIL49ZAXY+OpxihZOb9GzOzHlOoB/FB0MwEADLCuNe4N/X4OdXl7NmirrGfyKmN
-         LOig==
-X-Gm-Message-State: AO0yUKVM5J87Xh9ejnkBHuP7BwNO/2a3a2PlYije6DU81JXq+k5Ln1TN
-        Od9cQUwE2AOZI/PMkLxBpa1VSEFXN4weRaHD9fPmh172MaWISz8QMUtI8+39/tbHT3oEyaJ53EX
-        7DtuT8ptPxMfgX9RZ7fmQidqBGuDwMoH8WBv1+5xkrA==
-X-Received: by 2002:a17:906:264d:b0:8a9:e330:3a23 with SMTP id i13-20020a170906264d00b008a9e3303a23mr9886644ejc.26.1676921892767;
-        Mon, 20 Feb 2023 11:38:12 -0800 (PST)
-X-Google-Smtp-Source: AK7set+dotV8WedmVXCpUfp7Rt1J+dl2VV8JXLR/YqSls60Skj61wTIhQpTDznIUMAwG11YbDKBOeg==
-X-Received: by 2002:a17:906:264d:b0:8a9:e330:3a23 with SMTP id i13-20020a170906264d00b008a9e3303a23mr9886624ejc.26.1676921892581;
-        Mon, 20 Feb 2023 11:38:12 -0800 (PST)
+        bh=IA26aCShKRrMxO7X4FNysG0cj87aSw923xvICaycoGk=;
+        b=foFwTlxPWTLWy671JLtvZ8CUKSWm+FOGWEdcMXx+d+N2p/juG4ad6Q95Se/Gr6ToAP
+         jrybTO26Gqn+gT7AX5Giwj/vkXTviJFSp54Eni5Cxzk82rxFa738EpTN7wiX2ui4Q3Ct
+         wLUyZp3evsuaPiKFI4Zm47aj0b6UpxvyxB7VV9m5exuoxM29j2tB2Omwf3EdUc7RZWF0
+         7k+bmfpVBHmHWJ7LOrAISI77k4vTPjY+uhZE8EGz0LWkphf8SxVhVCySkn7cMm7xRelW
+         UaSlrfd0xbsRG7NK8ogVvUrS1MhhZJBlZt1+4UzDp+vYT5OJ86hhUU5PtybnyQdAJb59
+         iCkg==
+X-Gm-Message-State: AO0yUKXnZnvqACiO0V9FoxO8YxcKHGvC/5C+YVpR5S9eSFizyd/2xthl
+        /43yNSFz+PJPwvo0oLS2jNT1B5loEzcAIC9lG9K4FruRbXFGSITZKyn0STFdJVnfosCn7VpzEY1
+        /QbOXN8i/p9lgkRCGNd3gmUvlOm7y0Yz7gSi4dhFlow==
+X-Received: by 2002:a17:906:f4f:b0:8b1:2d35:2264 with SMTP id h15-20020a1709060f4f00b008b12d352264mr11644445ejj.73.1676921894604;
+        Mon, 20 Feb 2023 11:38:14 -0800 (PST)
+X-Google-Smtp-Source: AK7set/kzpSNlmX+NlKV1+qIODQptGJi5oLTQse0HNp9KgCX8jYq3jyxqDPdqMdITSdKmOX67REDXw==
+X-Received: by 2002:a17:906:f4f:b0:8b1:2d35:2264 with SMTP id h15-20020a1709060f4f00b008b12d352264mr11644422ejj.73.1676921894361;
+        Mon, 20 Feb 2023 11:38:14 -0800 (PST)
 Received: from amikhalitsyn.. ([2a02:8109:bd40:1414:bb20:aed2:bb7f:f0cf])
-        by smtp.gmail.com with ESMTPSA id a19-20020a17090680d300b008d4df095034sm1526693ejx.195.2023.02.20.11.38.11
+        by smtp.gmail.com with ESMTPSA id a19-20020a17090680d300b008d4df095034sm1526693ejx.195.2023.02.20.11.38.13
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 20 Feb 2023 11:38:12 -0800 (PST)
+        Mon, 20 Feb 2023 11:38:14 -0800 (PST)
 From:   Alexander Mikhalitsyn <aleksandr.mikhalitsyn@canonical.com>
 To:     mszeredi@redhat.com
 Cc:     Alexander Mikhalitsyn <aleksandr.mikhalitsyn@canonical.com>,
@@ -70,9 +70,9 @@ Cc:     Alexander Mikhalitsyn <aleksandr.mikhalitsyn@canonical.com>,
         Pavel Tikhomirov <ptikhomirov@virtuozzo.com>,
         linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
         criu@openvz.org
-Subject: [RFC PATCH 1/9] fuse: move FUSE_DEFAULT_* defines to fuse common header
-Date:   Mon, 20 Feb 2023 20:37:46 +0100
-Message-Id: <20230220193754.470330-2-aleksandr.mikhalitsyn@canonical.com>
+Subject: [RFC PATCH 2/9] fuse: add const qualifiers to common fuse helpers
+Date:   Mon, 20 Feb 2023 20:37:47 +0100
+Message-Id: <20230220193754.470330-3-aleksandr.mikhalitsyn@canonical.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230220193754.470330-1-aleksandr.mikhalitsyn@canonical.com>
 References: <20230220193754.470330-1-aleksandr.mikhalitsyn@canonical.com>
@@ -101,44 +101,70 @@ Cc: linux-kernel@vger.kernel.org
 Cc: criu@openvz.org
 Signed-off-by: Alexander Mikhalitsyn <aleksandr.mikhalitsyn@canonical.com>
 ---
- fs/fuse/fuse_i.h | 6 ++++++
- fs/fuse/inode.c  | 6 ------
- 2 files changed, 6 insertions(+), 6 deletions(-)
+ fs/fuse/fuse_i.h | 16 ++++++++--------
+ 1 file changed, 8 insertions(+), 8 deletions(-)
 
 diff --git a/fs/fuse/fuse_i.h b/fs/fuse/fuse_i.h
-index e13a8eff2e3d..4be7c404da4b 100644
+index 4be7c404da4b..d5fc2d89ff1c 100644
 --- a/fs/fuse/fuse_i.h
 +++ b/fs/fuse/fuse_i.h
-@@ -47,6 +47,12 @@
- /** Number of dentries for each connection in the control filesystem */
- #define FUSE_CTL_NUM_DENTRIES 5
+@@ -870,32 +870,32 @@ struct fuse_mount {
+ 	struct list_head fc_entry;
+ };
  
-+/** Maximum number of outstanding background requests */
-+#define FUSE_DEFAULT_MAX_BACKGROUND 12
-+
-+/** Congestion starts at 75% of maximum */
-+#define FUSE_DEFAULT_CONGESTION_THRESHOLD (FUSE_DEFAULT_MAX_BACKGROUND * 3 / 4)
-+
- /** List of active connections */
- extern struct list_head fuse_conn_list;
+-static inline struct fuse_mount *get_fuse_mount_super(struct super_block *sb)
++static inline struct fuse_mount *get_fuse_mount_super(const struct super_block *sb)
+ {
+ 	return sb->s_fs_info;
+ }
  
-diff --git a/fs/fuse/inode.c b/fs/fuse/inode.c
-index 114bdb3f7ccb..097b7049057e 100644
---- a/fs/fuse/inode.c
-+++ b/fs/fuse/inode.c
-@@ -53,12 +53,6 @@ MODULE_PARM_DESC(max_user_congthresh,
+-static inline struct fuse_conn *get_fuse_conn_super(struct super_block *sb)
++static inline struct fuse_conn *get_fuse_conn_super(const struct super_block *sb)
+ {
+ 	return get_fuse_mount_super(sb)->fc;
+ }
  
- #define FUSE_DEFAULT_BLKSIZE 512
+-static inline struct fuse_mount *get_fuse_mount(struct inode *inode)
++static inline struct fuse_mount *get_fuse_mount(const struct inode *inode)
+ {
+ 	return get_fuse_mount_super(inode->i_sb);
+ }
  
--/** Maximum number of outstanding background requests */
--#define FUSE_DEFAULT_MAX_BACKGROUND 12
--
--/** Congestion starts at 75% of maximum */
--#define FUSE_DEFAULT_CONGESTION_THRESHOLD (FUSE_DEFAULT_MAX_BACKGROUND * 3 / 4)
--
- #ifdef CONFIG_BLOCK
- static struct file_system_type fuseblk_fs_type;
- #endif
+-static inline struct fuse_conn *get_fuse_conn(struct inode *inode)
++static inline struct fuse_conn *get_fuse_conn(const struct inode *inode)
+ {
+ 	return get_fuse_mount_super(inode->i_sb)->fc;
+ }
+ 
+-static inline struct fuse_inode *get_fuse_inode(struct inode *inode)
++static inline struct fuse_inode *get_fuse_inode(const struct inode *inode)
+ {
+ 	return container_of(inode, struct fuse_inode, inode);
+ }
+ 
+-static inline u64 get_node_id(struct inode *inode)
++static inline u64 get_node_id(const struct inode *inode)
+ {
+ 	return get_fuse_inode(inode)->nodeid;
+ }
+@@ -905,7 +905,7 @@ static inline int invalid_nodeid(u64 nodeid)
+ 	return !nodeid || nodeid == FUSE_ROOT_ID;
+ }
+ 
+-static inline u64 fuse_get_attr_version(struct fuse_conn *fc)
++static inline u64 fuse_get_attr_version(const struct fuse_conn *fc)
+ {
+ 	return atomic64_read(&fc->attr_version);
+ }
+@@ -923,7 +923,7 @@ static inline void fuse_make_bad(struct inode *inode)
+ 	set_bit(FUSE_I_BAD, &get_fuse_inode(inode)->state);
+ }
+ 
+-static inline bool fuse_is_bad(struct inode *inode)
++static inline bool fuse_is_bad(const struct inode *inode)
+ {
+ 	return unlikely(test_bit(FUSE_I_BAD, &get_fuse_inode(inode)->state));
+ }
 -- 
 2.34.1
 
