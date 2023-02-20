@@ -2,59 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 20E2B69D170
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Feb 2023 17:40:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8CD7E69D179
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Feb 2023 17:41:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232276AbjBTQkO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Feb 2023 11:40:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49778 "EHLO
+        id S230392AbjBTQlM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Feb 2023 11:41:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51214 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230516AbjBTQkM (ORCPT
+        with ESMTP id S230516AbjBTQlJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Feb 2023 11:40:12 -0500
-Received: from vulcan.natalenko.name (vulcan.natalenko.name [IPv6:2001:19f0:6c00:8846:5400:ff:fe0c:dfa0])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B188B1CAD5;
-        Mon, 20 Feb 2023 08:40:09 -0800 (PST)
-Received: from spock.localnet (unknown [83.148.33.151])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by vulcan.natalenko.name (Postfix) with ESMTPSA id 016821239736;
-        Mon, 20 Feb 2023 17:40:06 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=natalenko.name;
-        s=dkim-20170712; t=1676911207;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=qInaD/eaN8WTbVwS6QyVZ8Zw96m6hAlVUDnXEnn9AbM=;
-        b=nBkxoUeYm//jpnKItttUghQPz4kVXwKtMvoQCgaIUhrwQpQYBJZFldyZILAhJA7EcYOEuD
-        7HzkXsiiXJchdTsHzMqu7agtYzESX035wOzpGps1nSOeGDhI3VPIF8NPLDvnnn59BYVfqq
-        0n5CvxjSFiEY6474RMniqXg4d6wnLls=
-From:   Oleksandr Natalenko <oleksandr@natalenko.name>
-To:     tglx@linutronix.de, kim.phillips@amd.com,
-        Usama Arif <usama.arif@bytedance.com>,
-        David Woodhouse <dwmw2@infradead.org>
-Cc:     arjan@linux.intel.com, mingo@redhat.com, bp@alien8.de,
-        dave.hansen@linux.intel.com, hpa@zytor.com, x86@kernel.org,
-        pbonzini@redhat.com, paulmck@kernel.org,
-        linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        rcu@vger.kernel.org, mimoja@mimoja.de, hewenliang4@huawei.com,
-        thomas.lendacky@amd.com, seanjc@google.com, pmenzel@molgen.mpg.de,
-        fam.zheng@bytedance.com, punit.agrawal@bytedance.com,
-        simon.evans@bytedance.com, liangma@liangbit.com
-Subject: Re: [PATCH v9 0/8] Parallel CPU bringup for x86_64
-Date:   Mon, 20 Feb 2023 17:40:05 +0100
-Message-ID: <2668869.mvXUDI8C0e@natalenko.name>
-In-Reply-To: <ed8d662351cfe5793f8cc7e7e8c514d05d16c501.camel@infradead.org>
-References: <20230215145425.420125-1-usama.arif@bytedance.com>
- <2668799.mvXUDI8C0e@natalenko.name>
- <ed8d662351cfe5793f8cc7e7e8c514d05d16c501.camel@infradead.org>
+        Mon, 20 Feb 2023 11:41:09 -0500
+Received: from fudo.makrotopia.org (fudo.makrotopia.org [IPv6:2a07:2ec0:3002::71])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 240D21A665;
+        Mon, 20 Feb 2023 08:40:58 -0800 (PST)
+Received: from local
+        by fudo.makrotopia.org with esmtpsa (TLS1.3:TLS_AES_256_GCM_SHA384:256)
+         (Exim 4.96)
+        (envelope-from <daniel@makrotopia.org>)
+        id 1pU9Dd-0002bO-2I;
+        Mon, 20 Feb 2023 17:40:49 +0100
+Date:   Mon, 20 Feb 2023 16:40:43 +0000
+From:   Daniel Golle <daniel@makrotopia.org>
+To:     devicetree@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        netdev@vger.kernel.org, linux-mediatek@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Russell King <linux@armlinux.org.uk>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Lorenzo Bianconi <lorenzo@kernel.org>,
+        Mark Lee <Mark-MC.Lee@mediatek.com>,
+        John Crispin <john@phrozen.org>, Felix Fietkau <nbd@nbd.name>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        DENG Qingfang <dqfext@gmail.com>,
+        Landen Chao <Landen.Chao@mediatek.com>,
+        Sean Wang <sean.wang@mediatek.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Eric Dumazet <edumazet@google.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Andrew Lunn <andrew@lunn.ch>
+Cc:     Jianhui Zhao <zhaojh329@gmail.com>,
+        =?iso-8859-1?Q?Bj=F8rn?= Mork <bjorn@mork.no>
+Subject: [PATCH v9 00/12] net: ethernet: mtk_eth_soc: various enhancements
+Message-ID: <cover.1676910958.git.daniel@makrotopia.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
         SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -62,39 +60,97 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello.
+This series brings a variety of fixes and enhancements for mtk_eth_soc,
+adds support for the MT7981 SoC and facilitates sharing the SGMII PCS
+code between mtk_eth_soc and mt7530.
 
-Thank you for your reply.
+Note that this series depends on commit 697c3892d825
+("regmap: apply reg_base and reg_downshift for single register ops") to
+not break mt7530 pcs register access.
 
-On pond=C4=9Bl=C3=AD 20. =C3=BAnora 2023 17:20:13 CET David Woodhouse wrote:
-> On Mon, 2023-02-20 at 17:08 +0100, Oleksandr Natalenko wrote:
-> >=20
-> > I've applied this to the v6.2 kernel, and suspend/resume broke on my
-> > Ryzen 5950X desktop. The machine suspends just fine, but on resume
-> > the screen stays blank, and there's no visible disk I/O.
-> >=20
-> > Reverting the series brings suspend/resume back to working state.
->=20
-> Hm, thanks. What if you add 'no_parallel_bringup' on the command line?
+The whole series has been tested on MT7622+MT7531 (BPi-R64),
+MT7623+MT7530 (BPi-R2) and MT7981+GPY211 (GL.iNet GL-MT3000).
 
-If the `no_parallel_bringup` param is added, the suspend/resume works.
+Changes since v8:
+ * move mediatek,sgmiisys dt-bindings to correct net/pcs folder
+ * rebase on top of net-next/main so series applies cleanly again
 
-> Is that using X2APIC?
+Changes since v7:
+ * move mediatek,sgmiisys.yaml to more appropriate folder
+ * don't include <linux/phylink.h> twice in PCS driver, sort includes
 
-Probably?
+Changes since v6:
+ * label MAC MCR bit 12 in 08/12, MediaTek replied explaining its function
 
-```
-$ dmesg | grep -i x2apic
-[    0.632740] x2apic: IRQ remapping doesn't support X2APIC mode
-```
+Changes since v5:
+ * drop dev pointer also from struct mtk_sgmii, pass it as function
+   paramter instead
+ * address comments left for dt-bindings
+ * minor improvements to commit messages
 
-> If so, what about 'nox2apic' on the command line?
+Changes since v4:
+ * remove unused dev pointer in struct pcs_mtk_lynxi
+ * squash link timer check into correct follow-up patch
 
-If `no_parallel_bringup` is removed and `nox2apic` is added, then the `x2ap=
-ic: =E2=80=A6` stuff disappears from dmesg, but suspend/resume remains brok=
-en.
+Changes since v3:
+ * remove unused #define's
+ * use BMCR_* instead of #define'ing our own constants
+ * return before changing registers in case of invalid link timer
 
-=2D-=20
-Oleksandr Natalenko (post-factum)
+Changes since v2:
+ * improve dt-bindings, convert sgmisys bindings to dt-schema yaml
+ * fix typo
 
+Changes since v1:
+ * apply reverse xmas tree everywhere
+ * improve commit descriptions
+ * add dt binding documentation
+ * various small changes addressing all comments received for v1
+
+
+Daniel Golle (12):
+  net: ethernet: mtk_eth_soc: add support for MT7981 SoC
+  dt-bindings: net: mediatek,net: add mt7981-eth binding
+  dt-bindings: arm: mediatek: sgmiisys: Convert to DT schema
+  dt-bindings: arm: mediatek: sgmiisys: add MT7981 SoC
+  net: ethernet: mtk_eth_soc: set MDIO bus clock frequency
+  net: ethernet: mtk_eth_soc: reset PCS state
+  net: ethernet: mtk_eth_soc: only write values if needed
+  net: ethernet: mtk_eth_soc: fix RX data corruption issue
+  net: ethernet: mtk_eth_soc: ppe: add support for flow accounting
+  net: pcs: add driver for MediaTek SGMII PCS
+  net: ethernet: mtk_eth_soc: switch to external PCS driver
+  net: dsa: mt7530: use external PCS driver
+
+ .../arm/mediatek/mediatek,sgmiisys.txt        |  25 --
+ .../devicetree/bindings/net/mediatek,net.yaml |  52 ++-
+ .../bindings/net/pcs/mediatek,sgmiisys.yaml   |  55 ++++
+ MAINTAINERS                                   |   7 +
+ drivers/net/dsa/Kconfig                       |   1 +
+ drivers/net/dsa/mt7530.c                      | 277 ++++------------
+ drivers/net/dsa/mt7530.h                      |  47 +--
+ drivers/net/ethernet/mediatek/Kconfig         |   2 +
+ drivers/net/ethernet/mediatek/mtk_eth_path.c  |  14 +-
+ drivers/net/ethernet/mediatek/mtk_eth_soc.c   |  67 +++-
+ drivers/net/ethernet/mediatek/mtk_eth_soc.h   | 105 +++---
+ drivers/net/ethernet/mediatek/mtk_ppe.c       | 114 ++++++-
+ drivers/net/ethernet/mediatek/mtk_ppe.h       |  25 +-
+ .../net/ethernet/mediatek/mtk_ppe_debugfs.c   |   9 +-
+ .../net/ethernet/mediatek/mtk_ppe_offload.c   |   8 +
+ drivers/net/ethernet/mediatek/mtk_ppe_regs.h  |  14 +
+ drivers/net/ethernet/mediatek/mtk_sgmii.c     | 192 ++---------
+ drivers/net/pcs/Kconfig                       |   7 +
+ drivers/net/pcs/Makefile                      |   1 +
+ drivers/net/pcs/pcs-mtk-lynxi.c               | 302 ++++++++++++++++++
+ include/linux/pcs/pcs-mtk-lynxi.h             |  13 +
+ 21 files changed, 801 insertions(+), 536 deletions(-)
+ delete mode 100644 Documentation/devicetree/bindings/arm/mediatek/mediatek,sgmiisys.txt
+ create mode 100644 Documentation/devicetree/bindings/net/pcs/mediatek,sgmiisys.yaml
+ create mode 100644 drivers/net/pcs/pcs-mtk-lynxi.c
+ create mode 100644 include/linux/pcs/pcs-mtk-lynxi.h
+
+
+base-commit: 3fcdf2dfefb6313ea0395519d1784808c0b6559b
+-- 
+2.39.2
 
