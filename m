@@ -2,111 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 29E1069C939
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Feb 2023 12:04:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D212969C93E
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Feb 2023 12:04:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231466AbjBTLER (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Feb 2023 06:04:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58548 "EHLO
+        id S230087AbjBTLEV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Feb 2023 06:04:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58578 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229913AbjBTLEQ (ORCPT
+        with ESMTP id S231674AbjBTLER (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Feb 2023 06:04:16 -0500
-Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 836C3A5F5
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Feb 2023 03:04:04 -0800 (PST)
+        Mon, 20 Feb 2023 06:04:17 -0500
+Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CDA6013DCE
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Feb 2023 03:04:06 -0800 (PST)
 Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com [209.85.208.71])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 0D1FF3F71A
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Feb 2023 11:04:03 +0000 (UTC)
+        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 694AB3F586
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Feb 2023 11:04:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1676891043;
-        bh=8s2ZZvrSW+uH/rhz7pK/tGrl1ulPHLMkcDQleiMlk1E=;
-        h=From:To:Cc:Subject:Date:Message-Id:MIME-Version;
-        b=nYqdSQyP9F1YGDhONpy5OxRcdiJn0GqrdRd+5J+YuO5NV2IjKm5LL3aqRKxVxE2UJ
-         W3lROrRmUMGDWqYBfZxpjBNlSeNOAe/91YDHk/Dl7byB+uz7d4AoAyt4v6HihQfdu9
-         /+wML3UfyPm21kJ73TsqV7RsPOjfJuzq/J44clxus9cEbPz53O7LMFxNlLeLwQvX9l
-         SSZ1zN49jjIdTo/QEQElP33eApS7juI2sY2mlER8I7IOclnQU1+hYnBgubKk1sY5PV
-         G8tLM5thr/OpZW17p5oMICmfg5R/P/XQWCbMTGi6L2zzuVUZLeTZ8BoteAKAZ4EzND
-         zgTR/fYgucnIw==
-Received: by mail-ed1-f71.google.com with SMTP id b1-20020aa7dc01000000b004ad062fee5eso1251490edu.17
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Feb 2023 03:04:03 -0800 (PST)
+        s=20210705; t=1676891044;
+        bh=PQ/e3yix0m9X8IeKW6PjCOf86G2Z7hFs9Ie/f4F1ppE=;
+        h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+         MIME-Version;
+        b=jARpOUNcIkLbXx9McVsaMufnktMVBZesAkUzUBOVEN0IMN41a5c58sfuIqthfoMOq
+         ZfU1aGNrM3D1vFWejdxmBKq9srfxMt8vLTQrwiBX2MawLUDlGnDC9XP7IfmabQMflC
+         hlCieqzZsdETvHLbRhLpsfCWcjXKz/Pwxaeb7ihBHfrrUmNfNR2oOE7uyb95a4qaVE
+         TVt0fuJHohthe3S2HkCqYI8R2qq/+OU6uhThyratA6YtIlRNkTtl3WwnNm+K1Wp5gc
+         dsDtNujVGPnoKGxc6Cc3FafYz+BkCabw6yFkN7wdOKNdx4ERKxhYdn6tADaur5c/2x
+         KU3rlRefGTtyQ==
+Received: by mail-ed1-f71.google.com with SMTP id ck7-20020a0564021c0700b004a25d8d7593so722618edb.0
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Feb 2023 03:04:04 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=8s2ZZvrSW+uH/rhz7pK/tGrl1ulPHLMkcDQleiMlk1E=;
-        b=KxKj9R3P2O+Qb+5RlrGMo0VuQkM0OHi657AMebTpOU7YvE29/r2FsPewv/y90veDTW
-         CMAcxQ3H2/Yg3/HA3MHPrQLfE7HVuSJYCbP5vJ+ubttubynb1QwfrsXU+8OR76AFbP7W
-         RXJTxzYz/GY1r4PUI6M89am66OOZIvbr40cbNMxHGno6SqK5+SkmclkIAgb6wrm4H4he
-         ee6E8Mj2zILfzs6Tcsa+ijjItiKj+tanm5Rmz6RQJqPN60E2GgU9PnFKV970yUz983m+
-         07hxVAisCojnGGE+HnrrRXqJvaMoNefS+y117n5asb1GIeg92GhzXzeaJGyy9pRV/Zbj
-         RJ/g==
-X-Gm-Message-State: AO0yUKXzZh7k7aMhA0EXobBUjrcjJXKLog/9XFjuNQq8q4j7wCB2tupz
-        mxTz5R58Wyan2PY8ExkqDxoFJl2T99AuE5g+WO5m8mRZx7xiKWb6jkURvuMJ3UO8uuunl2dXccy
-        YB1M5QwmXsI+En7bJWpmI/bn7kUjAZncnN/kv0tRjDQ==
-X-Received: by 2002:a17:906:f88c:b0:8b2:8857:5963 with SMTP id lg12-20020a170906f88c00b008b288575963mr10167717ejb.8.1676891042743;
-        Mon, 20 Feb 2023 03:04:02 -0800 (PST)
-X-Google-Smtp-Source: AK7set90wDqto+2q0VKKfX4TGmc7OSMp/t3KCccA9ptGYfkhYgpoWsEjZZzx//l8J+KfKcAh1aBtUg==
-X-Received: by 2002:a17:906:f88c:b0:8b2:8857:5963 with SMTP id lg12-20020a170906f88c00b008b288575963mr10167703ejb.8.1676891042503;
-        Mon, 20 Feb 2023 03:04:02 -0800 (PST)
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=PQ/e3yix0m9X8IeKW6PjCOf86G2Z7hFs9Ie/f4F1ppE=;
+        b=D68bJmBhCj08LsZL03MB+ogX5kR0iVnkvZUA4Ec6XO4j/XBEC2FA+tDLEUcPP+oeGz
+         Syhf3cFv2Ai2DNULsjh43f0L3JHy+8BU5gCg43m+PqohoC0yWbWMlxK7seQ3wb0kuWEM
+         1Q8JtJ0Zdjsf5QtvIEWNz2y80eRFoJbheUW5A2pGOyWD3wttMRcFSIb0jZ6UscLDv3KX
+         p4Br5tu//sTjRlWrngeTGYkt87j/KGnrNfWbkg4V4izmhMHezQCmN+DtHiaSlXcne7TG
+         gUzT1t96JlFfcs12UapTstmLhxyjmRIe+LQK7+HqOlwYPF05azZpF9J2qwJOh6Apen6f
+         2dgg==
+X-Gm-Message-State: AO0yUKVGm5dEifQFUM/oiBfcSkeEbNtK4qA9H3Q5Nm0ARZM/JlpIlBRF
+        +9LiyA8T1J1LqceEA6oVb9PBc92aZzLeu4g1uiwHYqc3jfDGpwGZ1C3BvP0vMhBHUATqwHbrjsC
+        92HLpKm14u1bB55k9ot/msC32hQr4mTtY3XWU3iw4Ow==
+X-Received: by 2002:a17:907:6e87:b0:871:dd2:4af0 with SMTP id sh7-20020a1709076e8700b008710dd24af0mr11742885ejc.26.1676891043832;
+        Mon, 20 Feb 2023 03:04:03 -0800 (PST)
+X-Google-Smtp-Source: AK7set9K9DWYKm6njTRouQU2LGApclEmMni7DIBij60SxRmB3n34Dr/nplqD3hOHz76k2PwAFJ+yyQ==
+X-Received: by 2002:a17:907:6e87:b0:871:dd2:4af0 with SMTP id sh7-20020a1709076e8700b008710dd24af0mr11742867ejc.26.1676891043606;
+        Mon, 20 Feb 2023 03:04:03 -0800 (PST)
 Received: from work.lan (77-169-125-32.fixed.kpn.net. [77.169.125.32])
-        by smtp.gmail.com with ESMTPSA id b11-20020a1709062b4b00b008b147ad0ad1sm5582552ejg.200.2023.02.20.03.04.01
+        by smtp.gmail.com with ESMTPSA id b11-20020a1709062b4b00b008b147ad0ad1sm5582552ejg.200.2023.02.20.03.04.02
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 20 Feb 2023 03:04:01 -0800 (PST)
+        Mon, 20 Feb 2023 03:04:03 -0800 (PST)
 From:   Roxana Nicolescu <roxana.nicolescu@canonical.com>
 To:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
         pabeni@redhat.com, shuah@kernel.org
 Cc:     netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH 0/1] selftest: fib_tests: Always cleanup before exit
-Date:   Mon, 20 Feb 2023 12:03:59 +0100
-Message-Id: <20230220110400.26737-1-roxana.nicolescu@canonical.com>
+Subject: [PATCH 1/1] selftest: fib_tests: Always cleanup before exit
+Date:   Mon, 20 Feb 2023 12:04:00 +0100
+Message-Id: <20230220110400.26737-2-roxana.nicolescu@canonical.com>
 X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20230220110400.26737-1-roxana.nicolescu@canonical.com>
+References: <20230220110400.26737-1-roxana.nicolescu@canonical.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Usually when a subtest is executed, setup and cleanup functions
-are linearly called at the beginning and end of it.
-In some of them, `set -e` is used before executing commands.
-If one of the commands returns a non zero code, the whole script exists
-without cleaning up the resources allocated at setup.
+Usage of `set -e` before executing a command causes immediate exit
+on failure, without cleanup up the resources allocated at setup.
 This can affect the next tests that use the same resources,
 leading to a chain of failures.
 
-To be consistent with other tests, calling cleanup function when the
-script exists fixes the issue.
+A simple fix is to always call cleanup function when the script exists.
+This approach is already used by other existing tests.
 
-Steps to reproduce it:
-1. Build with CONFIG_IP_ROUTE_MULTIPATH disabled.
-2. Run net kselftest suite
-3. fib_tests:fib_unreg_multipath_test fails when executing
-`ip -netns ns1 route add 203.0.113.0/24 nexthop via 198.51.100.2 dev
-dummy0 nexthop via 192.0.2.2 dev dummy1` because
-CONFIG_IP_ROUTE_MULTIPATH is disabled.
-This results in resources allocated during setup (e.g namespace ns1)
-not being cleaned up.
-4. When icmp.sh tries to create namespace ns1 during its setup, it fails
-with the following error:
-Cannot create namespace file "/run/netns/ns1": File exists
-
-Roxana Nicolescu (1):
-  selftest: fib_tests: Always cleanup before exit
-
+Fixes: 1056691b2680 ("selftests: fib_tests: Make test results more verbose")
+Signed-off-by: Roxana Nicolescu <roxana.nicolescu@canonical.com>
+---
  tools/testing/selftests/net/fib_tests.sh | 2 ++
  1 file changed, 2 insertions(+)
 
+diff --git a/tools/testing/selftests/net/fib_tests.sh b/tools/testing/selftests/net/fib_tests.sh
+index 5637b5dadabd..70ea8798b1f6 100755
+--- a/tools/testing/selftests/net/fib_tests.sh
++++ b/tools/testing/selftests/net/fib_tests.sh
+@@ -2065,6 +2065,8 @@ EOF
+ ################################################################################
+ # main
+ 
++trap cleanup EXIT
++
+ while getopts :t:pPhv o
+ do
+ 	case $o in
 -- 
 2.34.1
 
