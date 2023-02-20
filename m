@@ -2,62 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6ED2E69D436
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Feb 2023 20:39:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6DA6469D439
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Feb 2023 20:39:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232742AbjBTTjQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Feb 2023 14:39:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36024 "EHLO
+        id S232820AbjBTTjW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Feb 2023 14:39:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35720 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233252AbjBTTim (ORCPT
+        with ESMTP id S231814AbjBTTin (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Feb 2023 14:38:42 -0500
+        Mon, 20 Feb 2023 14:38:43 -0500
 Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B2281C7C3
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AFFA81EFC8
         for <linux-kernel@vger.kernel.org>; Mon, 20 Feb 2023 11:38:30 -0800 (PST)
-Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com [209.85.208.70])
+Received: from mail-ed1-f69.google.com (mail-ed1-f69.google.com [209.85.208.69])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id B850B3F596
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Feb 2023 19:38:24 +0000 (UTC)
+        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 8AA1E3F59E
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Feb 2023 19:38:26 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1676921904;
-        bh=TXvnYBcpsks2j9HUsorAhOJizmKzS+zfkd4wCIIYO2g=;
+        s=20210705; t=1676921906;
+        bh=UkUQubY1Bu38XsxKMjNY5NMQGaX63HQlYUrmxOQ8bow=;
         h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
          MIME-Version:Content-Type;
-        b=XYNp8m6qvmxD6Lm+DWbqEUlyF8PVxsJYXEK86l57UZnCev4zBHNcn1PFEuhB2yoA0
-         LhyDgwTcxUhR1yfi/Zj3noVZ1Bb7gp70R1JK+jgM8PLiD8q6pa2OIPeKufBbZZBQ85
-         pkLzFabmaH00GO5snIDaLRp+oIKUPB8zWhmAC0rQxIwvwk8Y0Lz9frucO0kZMXb5KZ
-         Qrew6sZhp+vNdp02+6zs9E07qNIbQ50XNrBrRC9YnmTly+b10S74R7jpJ+aBAXPEct
-         opHMyz4AFyTBCdbBqIfmdJVXHwgiYe+nEK4aIzN1rPH9W7qwhyqgwkGuHxpfOORz+h
-         TRhhMmo6E7Ghg==
-Received: by mail-ed1-f70.google.com with SMTP id fi8-20020a056402550800b004a26cc7f6cbso2737929edb.4
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Feb 2023 11:38:24 -0800 (PST)
+        b=WMwuniJ3/8IZMBAy9GRWU/oJefa83TEo9KgHBerGAbWbKtvXcKEFHZ4MWjuiA/arG
+         m3MXgdFskOSG6bZj3jtFeUUb+0ZRHF/Kq3pR5c+R5CImkq/2D5Y0TP+vIZcFIJDUa/
+         8/LNvsSMtJtGaOhb84yFWxMpvA/FZyB+sjhYok1QkK5tLVdfHhDpyPq03B64n4tc0G
+         wI9t+vjtYHi9btAV4muN4HVAdK2MhJiywziT1wMEoCSzrGs/CHIvjvWe6a60ioXaKL
+         2btBZfnn/FWDOC1EsQVeb6q7zHrD2rliM/e86dq7BMrfFfbJmicyzYDBUX0BPTvko8
+         jOSf7SCTDYzkQ==
+Received: by mail-ed1-f69.google.com with SMTP id cz22-20020a0564021cb600b004a245f58006so3138066edb.12
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Feb 2023 11:38:26 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=TXvnYBcpsks2j9HUsorAhOJizmKzS+zfkd4wCIIYO2g=;
-        b=2N982dvW2bLIshN9VwGuGJhQ07ZNIASg/IDSlHZPTdpxpICCufzi24CCO/5+s2xxmO
-         t5N2JLdkjtoRzMCoG18LNm+YbFuVOIm8dskEys+p8GZYqcp02FNssy5mzc2Iac/uSNKM
-         4QPgMnxIJ6xS2Mp4FAUyeK1ZwNpdNQELTSyFt04NGz5iZzys2AoN+869L/QP3T9uCucW
-         PXjuyxpAulaxjzrG6bhTQ06a8h9pYVH/8Dqqgx4celaq3GPx2QXPivfc2lNoIPzQV6y/
-         QePtdNe3QhB71qykdpMUCeOirI0PmHZIloPDlzHf9CL2spW7R7bA41q5uXRG8WcyFgu+
-         JMeA==
-X-Gm-Message-State: AO0yUKXrXcPrRc4KTIv0S4cyyZKGDCoOhaua2yEla12acyFrcnTr1qG3
-        yCJm6v0NsZON1zfDn0tzP5N6zVfsjpR2tFBE1GL8lqdcXMDZJJeorDnmFIKNpWe38Bdh0wtZ4sh
-        pu10EUH50hrfzLWZOoKXX98oJWhALXkvVUFfMys8wkg==
-X-Received: by 2002:a17:906:fcd5:b0:8b1:81eb:158f with SMTP id qx21-20020a170906fcd500b008b181eb158fmr13780364ejb.62.1676921904506;
-        Mon, 20 Feb 2023 11:38:24 -0800 (PST)
-X-Google-Smtp-Source: AK7set+zc9gLLqzwJi8cf9vJZoGnswWczh9rYsXB3je/ww+BatP9c9Egec/MMFNNrEczNQTJZ5/tGw==
-X-Received: by 2002:a17:906:fcd5:b0:8b1:81eb:158f with SMTP id qx21-20020a170906fcd500b008b181eb158fmr13780341ejb.62.1676921904319;
-        Mon, 20 Feb 2023 11:38:24 -0800 (PST)
+        bh=UkUQubY1Bu38XsxKMjNY5NMQGaX63HQlYUrmxOQ8bow=;
+        b=601XINf5EvNVr4CUBdQ4uHr8LOW5OATif2uf0o6evaJncCOEG2FmpfqGRESFqmIPt8
+         HBZiJd/m/GR+5/U9muUv4ChWBZrXyUelYe4DpJAJXOPRLRFunPTPj9BBeVSLzxfPZNI/
+         n2p0tF3uKfMaRekXcxClPe9a+MtA7kUCfJDM8WKclTEuS8/K9LufTezq98kwRBKrc0Wp
+         /4FNLJGGWrxlagWFfVsjfRHMVgkLEdffccfFBhgFJk8jP6IJ5wVUambskrboNztBmPHU
+         QYjOTrKn2774GqUYQTEHH2u0fGMAiI24CTdp8HPfkP1c4H1aT2O7Qnkx6dHZUJBEwBN2
+         IS5A==
+X-Gm-Message-State: AO0yUKVAIyJxkV8/+O8FGZPVJI4Pfx4xbeYZKSK12Ub5n9iNGmoKc7+1
+        y1b4Z1321w/x82Q3WbJyLfNTIgc34RX+eZ9EAJOpskPK/vWmfao5rWt/FAwaXeLV/AMD7MenNDn
+        L6hvn5xD0igHsxQd3pdJ4CAFjGGc+eCjn+p3iOLljBg==
+X-Received: by 2002:a17:907:212d:b0:882:2027:c8e2 with SMTP id qo13-20020a170907212d00b008822027c8e2mr8368288ejb.56.1676921906406;
+        Mon, 20 Feb 2023 11:38:26 -0800 (PST)
+X-Google-Smtp-Source: AK7set96fcCzs+lPytOCWj2qNo6Mdct532xPl3ASVj3hsJmH6TzKtAV3cPadITrlTBOH7//xQsOeig==
+X-Received: by 2002:a17:907:212d:b0:882:2027:c8e2 with SMTP id qo13-20020a170907212d00b008822027c8e2mr8368281ejb.56.1676921906261;
+        Mon, 20 Feb 2023 11:38:26 -0800 (PST)
 Received: from amikhalitsyn.. ([2a02:8109:bd40:1414:bb20:aed2:bb7f:f0cf])
-        by smtp.gmail.com with ESMTPSA id a19-20020a17090680d300b008d4df095034sm1526693ejx.195.2023.02.20.11.38.23
+        by smtp.gmail.com with ESMTPSA id a19-20020a17090680d300b008d4df095034sm1526693ejx.195.2023.02.20.11.38.25
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 20 Feb 2023 11:38:23 -0800 (PST)
+        Mon, 20 Feb 2023 11:38:25 -0800 (PST)
 From:   Alexander Mikhalitsyn <aleksandr.mikhalitsyn@canonical.com>
 To:     mszeredi@redhat.com
 Cc:     Alexander Mikhalitsyn <aleksandr.mikhalitsyn@canonical.com>,
@@ -70,9 +70,9 @@ Cc:     Alexander Mikhalitsyn <aleksandr.mikhalitsyn@canonical.com>,
         Pavel Tikhomirov <ptikhomirov@virtuozzo.com>,
         linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
         criu@openvz.org
-Subject: [RFC PATCH 8/9] namespace: add sb_revalidate_bindmounts helper
-Date:   Mon, 20 Feb 2023 20:37:53 +0100
-Message-Id: <20230220193754.470330-9-aleksandr.mikhalitsyn@canonical.com>
+Subject: [RFC PATCH 9/9] fuse: add fuse device ioctl(FUSE_DEV_IOC_BM_REVAL)
+Date:   Mon, 20 Feb 2023 20:37:54 +0100
+Message-Id: <20230220193754.470330-10-aleksandr.mikhalitsyn@canonical.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230220193754.470330-1-aleksandr.mikhalitsyn@canonical.com>
 References: <20230220193754.470330-1-aleksandr.mikhalitsyn@canonical.com>
@@ -81,15 +81,19 @@ Content-Type: text/plain; charset=ASCII
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Useful if for some reason bindmounts root dentries get invalidated
-but it's needed to revalidate existing bindmounts without remounting.
+This ioctl allows to revalidate all the existing fuse bindmounts
+by performing relookup of all root dentries and resetting them.
+
+Useful if it's needed to make fuse bindmounts work without
+remounting them after fuse connection reinitialization.
 
 Cc: Miklos Szeredi <mszeredi@redhat.com>
 Cc: Al Viro <viro@zeniv.linux.org.uk>
@@ -104,132 +108,83 @@ Cc: linux-kernel@vger.kernel.org
 Cc: criu@openvz.org
 Signed-off-by: Alexander Mikhalitsyn <aleksandr.mikhalitsyn@canonical.com>
 ---
- fs/namespace.c                | 90 +++++++++++++++++++++++++++++++++++
- include/linux/mnt_namespace.h |  3 ++
- 2 files changed, 93 insertions(+)
+ fs/fuse/dev.c             | 29 ++++++++++++++++++++++++++++-
+ include/uapi/linux/fuse.h |  1 +
+ 2 files changed, 29 insertions(+), 1 deletion(-)
 
-diff --git a/fs/namespace.c b/fs/namespace.c
-index ab467ee58341..88491f9c8bbd 100644
---- a/fs/namespace.c
-+++ b/fs/namespace.c
-@@ -682,6 +682,96 @@ static int mnt_make_readonly(struct mount *mnt)
- 	return ret;
+diff --git a/fs/fuse/dev.c b/fs/fuse/dev.c
+index 0f53ffd63957..ae301cb8486b 100644
+--- a/fs/fuse/dev.c
++++ b/fs/fuse/dev.c
+@@ -13,6 +13,7 @@
+ #include <linux/poll.h>
+ #include <linux/sched/signal.h>
+ #include <linux/uio.h>
++#include <linux/mnt_namespace.h>
+ #include <linux/miscdevice.h>
+ #include <linux/pagemap.h>
+ #include <linux/file.h>
+@@ -2293,6 +2294,27 @@ static int fuse_reinit_conn(struct fuse_conn *fc)
+ 	return 0;
  }
  
-+struct bind_mount_list_item {
-+	struct list_head list;
-+	struct vfsmount *mnt;
-+};
-+
-+/*
-+ * sb_revalidate_bindmounts - Relookup/reset bindmounts root dentries
-+ *
-+ * Useful if for some reason bindmount root dentries get invalidated
-+ * but it's needed to revalidate existing bindmounts without remounting.
-+ */
-+int sb_revalidate_bindmounts(struct super_block *sb)
++static ssize_t fuse_revalidate_bindmounts(struct fuse_conn *fc)
 +{
-+	struct mount *mnt;
-+	struct bind_mount_list_item *bmnt, *next;
-+	int err = 0;
-+	struct vfsmount *root_mnt = NULL;
-+	LIST_HEAD(mnt_to_update);
-+	char *buf;
++	int ret = 0;
 +
-+	buf = (char *) __get_free_page(GFP_KERNEL);
-+	if (!buf)
-+		return -ENOMEM;
++	down_read(&fc->killsb);
++	if (!list_empty(&fc->mounts)) {
++		struct fuse_mount *fm;
 +
-+	lock_mount_hash();
-+	list_for_each_entry(mnt, &sb->s_mounts, mnt_instance) {
-+		/* we only want to touch bindmounts */
-+		if (mnt->mnt.mnt_root == sb->s_root) {
-+			if (!root_mnt)
-+				root_mnt = mntget(&mnt->mnt);
-+
-+			continue;
++		fm = list_first_entry(&fc->mounts, struct fuse_mount, fc_entry);
++		if (!fm->sb) {
++			up_read(&fc->killsb);
++			return -EINVAL;
 +		}
 +
-+		bmnt = kzalloc(sizeof(struct bind_mount_list_item), GFP_NOWAIT | __GFP_NOWARN);
-+		if (!bmnt) {
-+			err = -ENOMEM;
-+			goto exit;
-+		}
-+
-+		bmnt->mnt = mntget(&mnt->mnt);
-+		list_add_tail(&bmnt->list, &mnt_to_update);
++		ret = sb_revalidate_bindmounts(fm->sb);
 +	}
-+	unlock_mount_hash();
++	up_read(&fc->killsb);
 +
-+	/* TODO: get rid of this limitation */
-+	if (!root_mnt) {
-+		err = -ENOENT;
-+		goto exit;
-+	}
-+
-+	list_for_each_entry_safe(bmnt, next, &mnt_to_update, list) {
-+		struct vfsmount *cur_mnt = bmnt->mnt;
-+		struct path path;
-+		struct dentry *old_root;
-+		char *p;
-+
-+		p = dentry_path(cur_mnt->mnt_root, buf, PAGE_SIZE);
-+		if (IS_ERR(p))
-+			goto exit;
-+
-+		/* TODO: are these lookup flags fully safe and correct? */
-+		err = vfs_path_lookup(root_mnt->mnt_root, root_mnt,
-+				p, LOOKUP_FOLLOW|LOOKUP_AUTOMOUNT|LOOKUP_REVAL, &path);
-+		if (err)
-+			goto exit;
-+
-+		/* replace bindmount root dentry */
-+		lock_mount_hash();
-+		old_root = cur_mnt->mnt_root;
-+		cur_mnt->mnt_root = dget(path.dentry);
-+		dput(old_root);
-+		unlock_mount_hash();
-+
-+		path_put(&path);
-+	}
-+
-+exit:
-+	free_page((unsigned long) buf);
-+	mntput(root_mnt);
-+	list_for_each_entry_safe(bmnt, next, &mnt_to_update, list) {
-+		list_del(&bmnt->list);
-+		mntput(bmnt->mnt);
-+		kfree(bmnt);
-+	}
-+
-+	return err;
++	return ret;
 +}
-+EXPORT_SYMBOL_GPL(sb_revalidate_bindmounts);
 +
- int sb_prepare_remount_readonly(struct super_block *sb)
+ void fuse_wait_aborted(struct fuse_conn *fc)
  {
- 	struct mount *mnt;
-diff --git a/include/linux/mnt_namespace.h b/include/linux/mnt_namespace.h
-index 8f882f5881e8..20ac29e702f5 100644
---- a/include/linux/mnt_namespace.h
-+++ b/include/linux/mnt_namespace.h
-@@ -3,6 +3,7 @@
- #define _NAMESPACE_H_
- #ifdef __KERNEL__
+ 	/* matches implicit memory barrier in fuse_drop_waiting() */
+@@ -2389,6 +2411,7 @@ static long fuse_dev_ioctl(struct file *file, unsigned int cmd,
+ 		}
+ 		break;
+ 	case FUSE_DEV_IOC_REINIT:
++	case FUSE_DEV_IOC_BM_REVAL:
+ 		struct fuse_conn *fc;
  
-+struct super_block;
- struct mnt_namespace;
- struct fs_struct;
- struct user_namespace;
-@@ -13,6 +14,8 @@ extern struct mnt_namespace *copy_mnt_ns(unsigned long, struct mnt_namespace *,
- extern void put_mnt_ns(struct mnt_namespace *ns);
- extern struct ns_common *from_mnt_ns(struct mnt_namespace *);
+ 		if (!checkpoint_restore_ns_capable(file->f_cred->user_ns))
+@@ -2409,7 +2432,11 @@ static long fuse_dev_ioctl(struct file *file, unsigned int cmd,
+ 			mutex_unlock(&fuse_mutex);
  
-+extern int sb_revalidate_bindmounts(struct super_block *sb);
+ 			if (fc) {
+-				res = fuse_reinit_conn(fc);
++				if (cmd == FUSE_DEV_IOC_REINIT)
++					res = fuse_reinit_conn(fc);
++				else if (cmd == FUSE_DEV_IOC_BM_REVAL)
++					res = fuse_revalidate_bindmounts(fc);
 +
- extern const struct file_operations proc_mounts_operations;
- extern const struct file_operations proc_mountinfo_operations;
- extern const struct file_operations proc_mountstats_operations;
+ 				fuse_conn_put(fc);
+ 			}
+ 		}
+diff --git a/include/uapi/linux/fuse.h b/include/uapi/linux/fuse.h
+index 3dac67b25eae..14f7fe4a99cf 100644
+--- a/include/uapi/linux/fuse.h
++++ b/include/uapi/linux/fuse.h
+@@ -990,6 +990,7 @@ struct fuse_notify_retrieve_in {
+ #define FUSE_DEV_IOC_MAGIC		229
+ #define FUSE_DEV_IOC_CLONE		_IOR(FUSE_DEV_IOC_MAGIC, 0, uint32_t)
+ #define FUSE_DEV_IOC_REINIT		_IO(FUSE_DEV_IOC_MAGIC, 0)
++#define FUSE_DEV_IOC_BM_REVAL		_IO(FUSE_DEV_IOC_MAGIC, 1)
+ 
+ struct fuse_lseek_in {
+ 	uint64_t	fh;
 -- 
 2.34.1
 
