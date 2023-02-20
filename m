@@ -2,156 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DDFB569C642
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Feb 2023 09:04:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C26A69C65A
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Feb 2023 09:15:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230288AbjBTIEP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Feb 2023 03:04:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55580 "EHLO
+        id S229810AbjBTIPU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Feb 2023 03:15:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60374 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230238AbjBTIEN (ORCPT
+        with ESMTP id S229451AbjBTIPS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Feb 2023 03:04:13 -0500
-Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21846CC3E
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Feb 2023 00:04:11 -0800 (PST)
-Received: by mail-ed1-x52b.google.com with SMTP id h32so1388303eda.2
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Feb 2023 00:04:11 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=88lumBnapMN7Ps8Hk/t0fPR3JUqopUiwWmOnEOlc2Ws=;
-        b=iv2wsbD8ixRzECtunIA135V2n+ioaO7wEObmSzYZhRFZTPB0DtI+Pa5Y8yG5Zgc2Ul
-         pReND9ioKG44Zifqoiu3zKe4IEPn2R27mkdfHdnyF1ZsAoTW0flND5qUAisZNKKMLKl2
-         pBo0mQYsaG7QCLvxkYJ8TR+aaeABws3PD9ZW/Y5clAuLETFr5DrMWbyn5SNuc7zDVN4A
-         rOobs03cbKom8XT4A0d3kgsbs+E6fEAAxclBogri63fXpwca5NqyA3+vThBT/77oSfpQ
-         9BX8kikm6xHsLg36zzmGdWw4VKr4D+aMGAWkNg3d45QYVYXx1uTo4pL/JKj4hppItDTv
-         pJYg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=88lumBnapMN7Ps8Hk/t0fPR3JUqopUiwWmOnEOlc2Ws=;
-        b=OkMlyTjhmObCg3B6z663hiICfQ6vpKoqNeXZcDA8N03JkqyLw583DpAt4rY1V87HAe
-         prjBooMbTlRepXmXpCG5cVpmLAB2I58eKzKx+Hg0VvHuYya0k+k4AhJ1u/U6TA2KDrLP
-         kIrqsYsc7uaAFf0LoV0m2jp9J4RTetkYtH2krpkjsQhnheYgpAw+TIkXU3k3VIowwCfb
-         qwYunyEVhzNvwj/igwtpGHQFX/+Fm56GgmrdbcyjEohYj8ov34C9VebgIi149C9NW83J
-         XD7etiTqnDotTlqqhTg28MDKzeLOyGDFd579O2L5T8uNA5PjxYg7tBtY2CuurY8dZWPx
-         iSjA==
-X-Gm-Message-State: AO0yUKU1vfY2SwvUaKBAgEqEQNYHNX8SET6IqNhrj01H9mz5fL8ZEUjl
-        upbzB6C/boFvd4EBEBE+Nxa5hQ==
-X-Google-Smtp-Source: AK7set9Hivfdi5qmCapoh8XxH5/JBmdwusVTUbOJ1qWsWjyJy8ITtqKPhFZuTlU28cbY75K6X/ZwKg==
-X-Received: by 2002:a17:906:a87:b0:878:955e:b4a4 with SMTP id y7-20020a1709060a8700b00878955eb4a4mr8105935ejf.33.1676880249568;
-        Mon, 20 Feb 2023 00:04:09 -0800 (PST)
-Received: from [192.168.1.109] ([178.197.216.144])
-        by smtp.gmail.com with ESMTPSA id y6-20020a17090668c600b008874c903ec5sm5416739ejr.43.2023.02.20.00.04.08
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 20 Feb 2023 00:04:09 -0800 (PST)
-Message-ID: <646cc26f-ed98-10fc-217b-5dc4416670a6@linaro.org>
-Date:   Mon, 20 Feb 2023 09:04:07 +0100
+        Mon, 20 Feb 2023 03:15:18 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87A896A49
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Feb 2023 00:15:17 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 47607B80A4A
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Feb 2023 08:15:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B546AC433D2;
+        Mon, 20 Feb 2023 08:15:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1676880914;
+        bh=H13OuIPnoOpwY/dJtekf2XFjYKtpU4yA1/Mz9u7v62k=;
+        h=From:To:Cc:Subject:Date:From;
+        b=S8SJipjisbs6cd+OioZ63HlBqPnG+Lcg+xfHlKNX6Qnh4dGmugE8fBKYpSn67Jw/t
+         SPmpolO/zRDy17Y30aw/0qc4QOXcSRgjiK5ogmaQVSb75uEr5V1WfXOKiJmbkA+Nmv
+         yKpWOYY6JBBNxxoxbKW2gJpE4jafz61vqMZ1s2O+d0mh4JqbDfn0YFoBxon268Rf+2
+         TXS8ogZTY4I2tCdqo9Hn5QS0q0VnQ9rYWiwu46oSwD22tPo5FjLvyAape9e2BCVGX6
+         IN4YZcpVj7Otz3MqbQdNcdyxM0THJQagYAnsPpSvWsBYlPCKmbZ9kpNjf2ZQEktlQs
+         4dXSkYic0LVRg==
+Received: by pali.im (Postfix)
+        id 4369B9D5; Mon, 20 Feb 2023 09:15:12 +0100 (CET)
+From:   =?UTF-8?q?Pali=20Roh=C3=A1r?= <pali@kernel.org>
+To:     Michael Ellerman <mpe@ellerman.id.au>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>
+Cc:     linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org
+Subject: [PATCH RESEND] powerpc: dts: turris1x.dts: Set lower priority for CPLD syscon-reboot
+Date:   Mon, 20 Feb 2023 09:04:35 +0100
+Message-Id: <20230220080435.4237-1-pali@kernel.org>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH] dt-bindings: interrupt-controller: convert
- loongson,ls1x-intc.txt to json-schema
-Content-Language: en-US
-To:     Keguang Zhang <keguang.zhang@gmail.com>,
-        linux-mips@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>
-References: <20230218122236.1919465-1-keguang.zhang@gmail.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230218122236.1919465-1-keguang.zhang@gmail.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 18/02/2023 13:22, Keguang Zhang wrote:
-> Convert the Loongson1 interrupt controller dt-bindings to json-schema.
-> 
-> Signed-off-by: Keguang Zhang <keguang.zhang@gmail.com>
-> ---
->  .../loongson,ls1x-intc.txt                    | 24 ---------
->  .../loongson,ls1x-intc.yaml                   | 51 +++++++++++++++++++
->  2 files changed, 51 insertions(+), 24 deletions(-)
->  delete mode 100644 Documentation/devicetree/bindings/interrupt-controller/loongson,ls1x-intc.txt
->  create mode 100644 Documentation/devicetree/bindings/interrupt-controller/loongson,ls1x-intc.yaml
-> 
-> diff --git a/Documentation/devicetree/bindings/interrupt-controller/loongson,ls1x-intc.txt b/Documentation/devicetree/bindings/interrupt-controller/loongson,ls1x-intc.txt
-> deleted file mode 100644
-> index a63ed9fcb535..000000000000
-> --- a/Documentation/devicetree/bindings/interrupt-controller/loongson,ls1x-intc.txt
-> +++ /dev/null
-> @@ -1,24 +0,0 @@
-> -Loongson ls1x Interrupt Controller
-> -
-> -Required properties:
-> -
-> -- compatible : should be "loongson,ls1x-intc". Valid strings are:
-> -
-> -- reg : Specifies base physical address and size of the registers.
-> -- interrupt-controller : Identifies the node as an interrupt controller
-> -- #interrupt-cells : Specifies the number of cells needed to encode an
-> -  interrupt source. The value shall be 2.
-> -- interrupts : Specifies the CPU interrupt the controller is connected to.
-> -
-> -Example:
-> -
-> -intc: interrupt-controller@1fd01040 {
-> -	compatible = "loongson,ls1x-intc";
-> -	reg = <0x1fd01040 0x18>;
-> -
-> -	interrupt-controller;
-> -	#interrupt-cells = <2>;
-> -
-> -	interrupt-parent = <&cpu_intc>;
-> -	interrupts = <2>;
-> -};
-> diff --git a/Documentation/devicetree/bindings/interrupt-controller/loongson,ls1x-intc.yaml b/Documentation/devicetree/bindings/interrupt-controller/loongson,ls1x-intc.yaml
-> new file mode 100644
-> index 000000000000..4cea3ee9fbb1
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/interrupt-controller/loongson,ls1x-intc.yaml
-> @@ -0,0 +1,51 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/interrupt-controller/loongson,ls1x-intc.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Loongson-1 Interrupt Controller
+Due to CPLD firmware bugs, set CPLD syscon-reboot priority level to 64
+(between rstcr and watchdog) to ensure that rstcr's global-utilities reset
+method which is preferred stay as default one, and to ensure that CPLD
+syscon-reboot is more preferred than watchdog reset method.
 
-You changed the title, so this binding now will cover all Loonson-1
-interrupt controllers?
+Fixes: 0531a4abd1c6 ("powerpc: dts: turris1x.dts: Add CPLD reboot node")
+Signed-off-by: Pali Rohár <pali@kernel.org>
 
-> +
-> +maintainers:
-> +  - Keguang Zhang <keguang.zhang@gmail.com>
-> +
-> +description: |
+---
+Original patch: https://lore.kernel.org/lkml/878rgtyx2y.fsf@mpe.ellerman.id.au/
 
-Drop |
+Commit https://git.kernel.org/pub/scm/linux/kernel/git/sre/linux-power-supply.git/commit/?h=for-next&id=e6333293f27cd395e77c6521afd52ff0bdc58107
+("power: reset: syscon-reboot: Add support for specifying priority")
+implements priority level and this patch just wiring it for turris1x.dts
+---
+ arch/powerpc/boot/dts/turris1x.dts | 23 +++++++++++++++++++++++
+ 1 file changed, 23 insertions(+)
 
-> +  Loongson-1 interrupt controller is connected to the MIPS core interrupt
-> +  controller, which controls several groups of interrupts.
-> +
-
-
-Best regards,
-Krzysztof
+diff --git a/arch/powerpc/boot/dts/turris1x.dts b/arch/powerpc/boot/dts/turris1x.dts
+index e9cda34a140e..c9b619f6ed5c 100644
+--- a/arch/powerpc/boot/dts/turris1x.dts
++++ b/arch/powerpc/boot/dts/turris1x.dts
+@@ -367,11 +367,34 @@
+ 			};
+ 
+ 			reboot@d {
++				/*
++				 * CPLD firmware which manages system reset and
++				 * watchdog registers has bugs. It does not
++				 * autoclear system reset register after change
++				 * and watchdog ignores reset line on immediate
++				 * succeeding reset cycle triggered by watchdog.
++				 * These bugs have to be workarounded in U-Boot
++				 * bootloader. So use system reset via syscon as
++				 * a last resort because older U-Boot versions
++				 * do not have workaround for watchdog.
++				 *
++				 * Reset method via rstcr's global-utilities
++				 * (the preferred one) has priority level 128,
++				 * watchdog has priority level 0 and default
++				 * syscon-reboot priority level is 192.
++				 *
++				 * So define syscon-reboot with custom priority
++				 * level 64 (between rstcr and watchdog) because
++				 * rstcr should stay as default preferred reset
++				 * method and reset via watchdog is more broken
++				 * than system reset via syscon.
++				 */
+ 				compatible = "syscon-reboot";
+ 				reg = <0x0d 0x01>;
+ 				offset = <0x0d>;
+ 				mask = <0x01>;
+ 				value = <0x01>;
++				priority = <64>;
+ 			};
+ 
+ 			led-controller@13 {
+-- 
+2.20.1
 
