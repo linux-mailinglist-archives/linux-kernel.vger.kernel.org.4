@@ -2,104 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E06569D27F
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Feb 2023 19:02:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D9FF869D281
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Feb 2023 19:04:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232499AbjBTSCl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Feb 2023 13:02:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54634 "EHLO
+        id S232507AbjBTSED (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Feb 2023 13:04:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56190 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229500AbjBTSCj (ORCPT
+        with ESMTP id S232494AbjBTSEB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Feb 2023 13:02:39 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CEB7B20D29
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Feb 2023 10:02:12 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 5AA18B80DB6
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Feb 2023 18:02:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E849CC433AF
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Feb 2023 18:02:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1676916129;
-        bh=FEnH8PA47nkF30lpCZ/PsYPNrdatuY2N3fVeRs38P1g=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=lq9hqjEVIRJ4HV13We+QjWeNqhUwLds8sd2kmyp+J3o8LPpS4Sz+wKHMLBuI/x8s/
-         O1RWUAhu475220fk2ZBdCIPuj1QQ7SknY1SgdTj//eNQ6XU5VhT9g9SF5p9MeCm1ft
-         HZ+ECMhbkmzt37s9jWuRdkvHTDJjwWt1yo4et9fW+rDdzV7h0d1BU3IoutaPCqdM/O
-         QY/TrhxisUaIXO4OFQF2OJ6MTaoLGzeY/BRk84Fpid2vaXnBkMvFr3cS6PBmsdBRhT
-         O3bcPpxkzAIl5cq9WOC3rnJo6k/uzCuId17yBWCXA/YlM0evmfiPjvGiMqVIvD0NqA
-         qr+aSxAKm1jGw==
-Received: by mail-ed1-f46.google.com with SMTP id ck15so9085768edb.0
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Feb 2023 10:02:09 -0800 (PST)
-X-Gm-Message-State: AO0yUKV+r2jg9CxPoKuyNM3LuB8VnPRNeyr7s6L2a2Z2B4JGpbrv8nPU
-        /phKbhxhTRpbapRhl6wA57yy8icZE5KwrXLLkoK9QQ==
-X-Google-Smtp-Source: AK7set9rqzzR8nu8ZEnT5HrUX9cdHQJjqiaSVVtsIvKc/kOcHDxCLncbkWwVaTJfKM88w0q89eZkGI0Lh84yMPyf9Oc=
-X-Received: by 2002:a50:c301:0:b0:49d:ec5e:1e9a with SMTP id
- a1-20020a50c301000000b0049dec5e1e9amr585704edb.7.1676916128128; Mon, 20 Feb
- 2023 10:02:08 -0800 (PST)
+        Mon, 20 Feb 2023 13:04:01 -0500
+Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8BBF1BE5
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Feb 2023 10:03:59 -0800 (PST)
+Received: by mail-ed1-x52e.google.com with SMTP id eg37so4051328edb.12
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Feb 2023 10:03:59 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=to:subject:message-id:date:from:mime-version:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=A6D0LDt5tOZpJuOjBEExW7WXP/fQt80zWM8U7ozVGKY=;
+        b=J+BefhrSZAVrhQrTx474ZlE6ZYO1CqSsZoKgn+OBFZjvHO15QVaOCnNCR9L59DqFTR
+         h9msqBhlEtFVFdXB6Tqvddobh+ws7R1VOmF7JN1J0s0hW1P33sqrV6qDBWs4oUsyaobX
+         r+P4Jsay/hi6G98U4pthAFK1kU7ZoQESzw0P38WF8NuZSIvdA6Oxp6fXLEUNvGnoIP3B
+         Cn5dXp3fI98uUeRBVnhHT9oH9A6+ChxJgBKKYOPXGYiJfvTc84X6TZM0uudxudsZL7OH
+         PUWwbRijzbtOMOPenHvFke4kmXDW1h7eTNzFyRPWXL5vt39I82EovnwB13wHUBQycnCB
+         epxg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:subject:message-id:date:from:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=A6D0LDt5tOZpJuOjBEExW7WXP/fQt80zWM8U7ozVGKY=;
+        b=NSgmNIbbSqGmnfw0NBV4O1LJCiBrHw36pHMHRdX95s/wSKqkQoQD9LLd1wkuktgVx9
+         /pDP+fni7BxBxJo4fTEiuoojRzGoJgsXFlBNlsUxxrjgZNaUWWsVTNXyVkvkSSKTpivm
+         rHt8qykiN8KBFc3whjuZpNEDLp0v5JpcFHQVN046cvrh0TpQn80QIVW/TaTigaQl/bZO
+         hRQjx42KPbkgS3hMLazfjxaXu+wDa8h2eXtsuX/0Mb1kygupC5ExOExJ6Sj+ELGd1Ju+
+         eSLbW/vjgHs351SkyYWH+hXTPUSGKEWZH1oRbg3yLng122eE2PHinxFY+ELMdjcCAiAE
+         GWfA==
+X-Gm-Message-State: AO0yUKUZ0xRzM29xYHrZS61f25ZKcS7FoER2M6j7Tn1Eq8+h0Nt/jgsp
+        Ji1cltulAn1vxz1jw0e9nf8yG8ZjmpOtCnYGlBw=
+X-Google-Smtp-Source: AK7set/F7AmbmO+7Raxe54NXRABadQSL0C2q0GLFiBydRAav0Bs+FawkHoqI2NOzaAP9ZSU6WNmv2MUPxHQ80tiqz1o=
+X-Received: by 2002:a17:906:b746:b0:88d:64e7:a2be with SMTP id
+ fx6-20020a170906b74600b0088d64e7a2bemr4747888ejb.15.1676916238232; Mon, 20
+ Feb 2023 10:03:58 -0800 (PST)
 MIME-Version: 1.0
-References: <20230220120127.1975241-1-kpsingh@kernel.org> <20230220121350.aidsipw3kd4rsyss@treble>
- <CACYkzJ5L9MLuE5Jz+z5-NJCCrUqTbgKQkXSqnQnCfTD_WNA7_Q@mail.gmail.com>
- <CACYkzJ6n=-tobhX0ONQhjHSgmnNjWnNe_dZnEOGtD8Y6S3RHbA@mail.gmail.com>
- <20230220163442.7fmaeef3oqci4ee3@treble> <Y/Ox3MJZF1Yb7b6y@zn.tnic> <20230220175929.2laflfb2met6y3kc@treble>
-In-Reply-To: <20230220175929.2laflfb2met6y3kc@treble>
-From:   KP Singh <kpsingh@kernel.org>
-Date:   Mon, 20 Feb 2023 10:01:57 -0800
-X-Gmail-Original-Message-ID: <CACYkzJ71xqzY6-wL+YShcL+d6ugzcdFHr6tbYWWE_ep52+RBZQ@mail.gmail.com>
-Message-ID: <CACYkzJ71xqzY6-wL+YShcL+d6ugzcdFHr6tbYWWE_ep52+RBZQ@mail.gmail.com>
-Subject: Re: [PATCH RESEND] x86/speculation: Fix user-mode spectre-v2
- protection with KERNEL_IBRS
-To:     Josh Poimboeuf <jpoimboe@kernel.org>
-Cc:     Borislav Petkov <bp@alien8.de>, linux-kernel@vger.kernel.org,
-        pjt@google.com, evn@google.com, tglx@linutronix.de,
-        mingo@redhat.com, dave.hansen@linux.intel.com, x86@kernel.org,
-        hpa@zytor.com, peterz@infradead.org,
-        pawan.kumar.gupta@linux.intel.com, kim.phillips@amd.com,
-        alexandre.chartre@oracle.com, daniel.sneddon@linux.intel.com,
-        =?UTF-8?Q?Jos=C3=A9_Oliveira?= <joseloliveira11@gmail.com>,
-        Rodrigo Branco <rodrigo@kernelhacking.com>,
-        Alexandra Sandulescu <aesa@google.com>,
-        Jim Mattson <jmattson@google.com>, stable@vger.kernel.org
+From:   Palash Oswal <oswalpalash@gmail.com>
+Date:   Mon, 20 Feb 2023 10:03:46 -0800
+Message-ID: <CAGyP=7cYsboh5JSczkZR31_+dPh=XRq4TBF63u8jQcX3h3biLw@mail.gmail.com>
+Subject: KASAN: null-ptr-deref Write in f2fs_stop_discard_thread
+To:     chao@kernel.org, jaegeuk@kernel.org,
+        linux-f2fs-devel@lists.sourceforge.net,
+        LKML <linux-kernel@vger.kernel.org>,
+        syzkaller-bugs <syzkaller-bugs@googlegroups.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 20, 2023 at 9:59 AM Josh Poimboeuf <jpoimboe@kernel.org> wrote:
->
-> On Mon, Feb 20, 2023 at 06:46:04PM +0100, Borislav Petkov wrote:
-> > On Mon, Feb 20, 2023 at 08:34:42AM -0800, Josh Poimboeuf wrote:
-> > > We will never enable IBRS in user space.  We tried that years ago and it
-> > > was very slow.
-> >
-> > Then I don't know what this is trying to fix.
-> >
-> > We'd need a proper bug statement in the commit message what the problem
-> > is. As folks have established, the hw vuln mess is a whole universe of
-> > crazy. So without proper documenting, this spaghetti madness will be
-> > completely unreadable.
->
-> Agreed, and there seems to be a lot of confusion around this patch.  I
-> think I understand the issue, let me write up a new patch which is
-> hopefully clearer.
+Hello,
+I found the following issue using syzkaller on:
+HEAD commit : e60276b8c11ab4a8be23807bc67b04
+8cfb937dfa (v6.0.8)
+git tree: stable
 
-Feel free to write a patch, but I don't get the confusion.
+C Reproducer : https://gist.github.com/oswalpalash/eb758955c10d951eae2b5995ffe11d8c
+Kernel .config :
+https://gist.github.com/oswalpalash/0962c70d774e5ec736a047bba917cecb
 
-Well, we disable IBRS userspace (this is KENREL_IBRS), because it is
-slow. Now if a user space process wants to protect itself from cross
-thread training, it should be able to do it, either by turning STIBP
-always on or using a prctl to enable. With the current logic, it's
-unable to do so. All of this is mentioned in the commit message.
+Console log :
 
->
-> --
-> Josh
+==================================================================
+BUG: KASAN: null-ptr-deref in kthread_stop+0x8b/0x710
+Write of size 4 at addr 000000000000001c by task syz-executor.0/6491
+
+CPU: 1 PID: 6491 Comm: syz-executor.0 Not tainted 6.0.8-pasta #2
+Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS
+1.13.0-1ubuntu1.1 04/01/2014
+Call Trace:
+ <TASK>
+ dump_stack_lvl+0xcd/0x134
+ print_report.cold+0x36/0x63a
+ kasan_report+0x8a/0x1b0
+ kasan_check_range+0x13b/0x190
+ kthread_stop+0x8b/0x710
+ f2fs_stop_discard_thread+0x91/0xb0
+ kill_f2fs_super+0xde/0x3e0
+ deactivate_locked_super+0x8c/0xf0
+ deactivate_super+0xad/0xd0
+ cleanup_mnt+0x347/0x4b0
+ task_work_run+0xe0/0x1a0
+ exit_to_user_mode_prepare+0x25d/0x270
+ syscall_exit_to_user_mode+0x19/0x50
+ do_syscall_64+0x42/0xb0
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+RIP: 0033:0x7fb3a5c9143b
+Code: ff ff ff f7 d8 64 89 01 48 83 c8 ff c3 66 90 f3 0f 1e fa 31 f6
+e9 05 00 00 00 0f 1f 44 00 00 f3 0f 1e fa b8 a6 00 00 00 0f 05 <48> 3d
+01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007ffe801d8e68 EFLAGS: 00000246 ORIG_RAX: 00000000000000a6
+RAX: 0000000000000000 RBX: 0000000000000000 RCX: 00007fb3a5c9143b
+RDX: 00007fb3a5c28a90 RSI: 000000000000000a RDI: 00007ffe801d8f30
+RBP: 00007ffe801d8f30 R08: 00007fb3a5cfba1f R09: 00007ffe801d8cf0
+R10: 00000000fffffffb R11: 0000000000000246 R12: 00007fb3a5cfb9f8
+R13: 00007ffe801d9fd0 R14: 0000555557244d90 R15: 0000000000000032
+ </TASK>
+==================================================================
