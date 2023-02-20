@@ -2,123 +2,317 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 528AC69C862
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Feb 2023 11:16:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7832069C864
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Feb 2023 11:16:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231395AbjBTKQJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Feb 2023 05:16:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44746 "EHLO
+        id S231386AbjBTKQu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Feb 2023 05:16:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45308 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229503AbjBTKQH (ORCPT
+        with ESMTP id S229503AbjBTKQs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Feb 2023 05:16:07 -0500
-Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88C6E16311
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Feb 2023 02:16:03 -0800 (PST)
-Received: from mail-qv1-f70.google.com (mail-qv1-f70.google.com [209.85.219.70])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        Mon, 20 Feb 2023 05:16:48 -0500
+Received: from mx1.tq-group.com (mx1.tq-group.com [93.104.207.81])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34A0D1420A;
+        Mon, 20 Feb 2023 02:16:45 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
+  t=1676888206; x=1708424206;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=2F6wQMWsfMZl9xIjqvGFKN23H5UpqXNa5nAwW2/Rdc0=;
+  b=KZ9y4igNKQxvO5EGwLc9TBCkpUrRQrlG1hDAxnYYUd/H+V4r63LVdDvP
+   OvbUhhHvAuN7jeg8iLlPevNCrdFVR2ibZPokNpoqvM7RcnQ9ADtXDrFwq
+   lwfxaldRUwEnNNZziMWLpF6yN48REkGHFQRDgwH2imxSveMSEF/kK3jJt
+   8dz4qeIJu31jRSq5HnRZwFvGf7RDFR1KxQAEihwQetelAWtBZOJYTPqFF
+   UfzPEHEKz3v9vHS62QSOYEBddqoVMslkPaJgOoa8Ba1/H+lq8yIE4OhvN
+   vVk8ODs5+POzy9ZaPMAmQn/QMSlCXu2/09JUZ24f5nDQMluh7iO5dYa2/
+   w==;
+X-IronPort-AV: E=Sophos;i="5.97,312,1669071600"; 
+   d="scan'208";a="29185203"
+Received: from unknown (HELO tq-pgp-pr1.tq-net.de) ([192.168.6.15])
+  by mx1-pgp.tq-group.com with ESMTP; 20 Feb 2023 11:16:44 +0100
+Received: from mx1.tq-group.com ([192.168.6.7])
+  by tq-pgp-pr1.tq-net.de (PGP Universal service);
+  Mon, 20 Feb 2023 11:16:44 +0100
+X-PGP-Universal: processed;
+        by tq-pgp-pr1.tq-net.de on Mon, 20 Feb 2023 11:16:44 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
+  t=1676888204; x=1708424204;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=2F6wQMWsfMZl9xIjqvGFKN23H5UpqXNa5nAwW2/Rdc0=;
+  b=hQX2B1BC4M5+8xuLPP1XvPAEpGcCMxy6sbsuJkW7RMkwNLBFqVqxPdMB
+   InQVwdCba3lYOuzoEkmbjE0abajWqPLHZuy7egr7gVU4xhRHle5Yq2NYp
+   60dycR/H3SoA6umQT0QdR6zDtaRASeBknal4t2byDs4VyxvuHPpgDqkQr
+   9mSvc13GrmEwN0CHFBZgzkAedq83Yz1EYirCrhvwPgXubrUN58u661RYA
+   +CrSQWmhI9C0IRh0uoJaXjAILf3qbo9aGBDXccdGNc/ygwW3mCKcUGL+5
+   wIriCCN50TG/ut+7uvhYGEkqcbOdS0DPukOlNdWtz+FQ7Pcv5f896SvU2
+   w==;
+X-IronPort-AV: E=Sophos;i="5.97,312,1669071600"; 
+   d="scan'208";a="29185202"
+Received: from vtuxmail01.tq-net.de ([10.115.0.20])
+  by mx1.tq-group.com with ESMTP; 20 Feb 2023 11:16:44 +0100
+Received: from steina-w.localnet (unknown [10.123.53.21])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
         (No client certificate requested)
-        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id B269F3F71D
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Feb 2023 10:16:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1676888161;
-        bh=fKd9fxybT9+hFfyTDDr2Mtw7ZX+21Hd2dT0jDnkibYM=;
-        h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-         To:Cc:Content-Type;
-        b=tRLcIaWxDCXwruIFB/pF04r4bvV/4oy8w/TsPsD9Ijd2oJTnkKEwyoKst2TayaiDr
-         KQXCkpLvVl15Z3b+Yuu8XYA7S0ETBth6ZxrXSpbiC7ugTjElm8bH2g41d7xqdfnrb3
-         mYt0LotLWDCwKv365VpewV1YCVbFnT8NsYloMEO723uAwvgOCGsIsmzMAbijeDcWld
-         7EEFfs4MUM4xt855p8ojj9Kl4RqM3FuWtaJOF6o2YrqfNlt5NYa1vb21NfOg7zOAVS
-         QZcERLcpISKslJUVCSQ0VborlhchrYRBPL4dgqASfO5iYzn0J/ed2y+KsFa0sXpXru
-         EjwVnKRq5o83A==
-Received: by mail-qv1-f70.google.com with SMTP id pm5-20020ad446c5000000b0056eb3830243so207173qvb.16
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Feb 2023 02:16:01 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=fKd9fxybT9+hFfyTDDr2Mtw7ZX+21Hd2dT0jDnkibYM=;
-        b=YCYSLHRh338ymTPYoCeO5w423VSW7lZNtHap6oM3N6mtv8k75B37a5P5OY00576/Z9
-         tGOGQUF/2jfk4ta0EVK6KozOa3ADgc6MAOSPtNs/tTE08S4M2lWgUjWl3XnxH6f6qDqt
-         gSgldE2PQAOZmsvZWzg/2hgcWpVtGcs0JWmAdA8Y7KENMTUqaJpu3uObnHLtJgiuKtKj
-         dRD2ktyLgMMoyfiz6PHXwYkQ1al4l0LMpVgpfY7EaR1mk34zeXTZIJuLox44TqmAOltl
-         cJcEoGx6ayV+lNbQSFH7Bwu3gaa2XEFgcDhK7i86mDYekmHLNWQ+xr0BOolAt3Mo1WA4
-         p62A==
-X-Gm-Message-State: AO0yUKWJLOxR42fJbImxi6PtAx0rRngfZxkLzbYUC8ifeAvU0/sUN01c
-        sn8TP9CV+PNZBS2FLpzY/GEWbv1GFoTpT9wDyMqSbgdSXRNDnYgzkXENBsT/LS4TSjLlZpMu+uH
-        uEjWJuHXgAoz9QfdPD5pxPrmhVIsYXUjLhKBaC9fZJqVHBPR1kZ/PXAcrfQ==
-X-Received: by 2002:a0c:d990:0:b0:570:fc87:4f2c with SMTP id y16-20020a0cd990000000b00570fc874f2cmr203800qvj.83.1676888160751;
-        Mon, 20 Feb 2023 02:16:00 -0800 (PST)
-X-Google-Smtp-Source: AK7set/YEwtnCc0MdoLEDmbY+Jh+bhbVGYGL0//BwQFePHm998lWNjLRhslfWc3fYUt397bZwhY8xJy7wcjRn5Bnl4Y=
-X-Received: by 2002:a0c:d990:0:b0:570:fc87:4f2c with SMTP id
- y16-20020a0cd990000000b00570fc874f2cmr203789qvj.83.1676888160500; Mon, 20 Feb
- 2023 02:16:00 -0800 (PST)
+        by vtuxmail01.tq-net.de (Postfix) with ESMTPSA id AD3D9280056;
+        Mon, 20 Feb 2023 11:16:43 +0100 (CET)
+From:   Alexander Stein <alexander.stein@ew.tq-group.com>
+To:     Liu Ying <victor.liu@nxp.com>
+Cc:     dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        marex@denx.de, stefan@agner.ch, airlied@gmail.com, daniel@ffwll.ch,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        shawnguo@kernel.org, s.hauer@pengutronix.de, kernel@pengutronix.de,
+        festevam@gmail.com, linux-imx@nxp.com,
+        krzysztof.kozlowski@linaro.org, LW@karo-electronics.de
+Subject: Re: [PATCH v4 0/6] drm: lcdif: Add i.MX93 LCDIF support
+Date:   Mon, 20 Feb 2023 11:16:41 +0100
+Message-ID: <2871322.e9J7NaK4W3@steina-w>
+Organization: TQ-Systems GmbH
+In-Reply-To: <2135575.irdbgypaU6@steina-w>
+References: <20230217065407.2259731-1-victor.liu@nxp.com> <52b8025ee9b71dfb147127bd1cb2c532d222df3c.camel@nxp.com> <2135575.irdbgypaU6@steina-w>
 MIME-Version: 1.0
-References: <20230209143702.44408-1-hal.feng@starfivetech.com>
- <CACRpkdbao9M5dMHFO_QE8z4_E6DZLZsMUW1OnUNjKSfQc59=ew@mail.gmail.com> <4211d93d-702c-6759-6f25-f86160c0be5d@starfivetech.com>
-In-Reply-To: <4211d93d-702c-6759-6f25-f86160c0be5d@starfivetech.com>
-From:   Emil Renner Berthing <emil.renner.berthing@canonical.com>
-Date:   Mon, 20 Feb 2023 11:15:44 +0100
-Message-ID: <CAJM55Z-+Cxdebcn4MLXfQdOVhx4c2SQ+zMH8cjn-Yq35xO8g0A@mail.gmail.com>
-Subject: Re: [PATCH v5 0/4] Basic pinctrl support for StarFive JH7110 RISC-V SoC
-To:     Hal Feng <hal.feng@starfivetech.com>
-Cc:     Linus Walleij <linus.walleij@linaro.org>,
-        linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-riscv@lists.infradead.org, Andreas Schwab <schwab@suse.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor@kernel.org>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Jianlong Huang <jianlong.huang@starfivetech.com>,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="iso-8859-1"
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, 11 Feb 2023 at 09:25, Hal Feng <hal.feng@starfivetech.com> wrote:
-> On Fri, 10 Feb 2023 23:45:05 +0100, Linus Walleij wrote:
-> > On Thu, Feb 9, 2023 at 3:37 PM Hal Feng <hal.feng@starfivetech.com> wrote:
-> >
-> > > This patch series adds basic pinctrl support for StarFive JH7110 SoC.
-> >
-> > This v4 version applied, the driver is in good shape and all bindings ACKed,
-> > nice work on this driver!
->
-> v4? Is this a typo? This series is v5.
-> Anyway, thank you so much!
+Hi Liu,
 
-Hi Hal and Linus
+Am Montag, 20. Februar 2023, 09:55:19 CET schrieb Alexander Stein:
+> Hi Liu,
+>=20
+> Am Freitag, 17. Februar 2023, 09:59:14 CET schrieb Liu Ying:
+> > On Fri, 2023-02-17 at 09:18 +0100, Alexander Stein wrote:
+> > > Hi Liu,
+> >=20
+> > Hi Alexander,
+> >=20
+> > > Am Freitag, 17. Februar 2023, 07:54:01 CET schrieb Liu Ying:
+> > > > Hi,
+> > > >=20
+> > > > This patch set aims to add i.MX93 LCDIF display controller support
+> > > > in the existing LCDIF DRM driver.  The LCDIF embedded in i.MX93 SoC
+> > > > is essentially the same to those embedded in i.MX8mp SoC.  Through
+> > > > internal bridges, i.MX93 LCDIF may drive a MIPI DSI display or a LV=
+DS
+> > > > display or a parallel display.
+> > > >=20
+> > > > Patch 1/6 adds device tree binding support for i.MX93 LCDIF in the
+> > > > existing fsl,lcdif.yaml.
+> > > >=20
+> > > > Patch 2/6 drops lcdif->bridge NULL pointer check as a cleanup patch.
+> > > >=20
+> > > > Patch 3/6~5/6 prepare for adding i.MX93 LCDIF support step by step.
+> > > >=20
+> > > > Patch 6/6 adds i.MX93 LCDIF compatible string as the last step of
+> > > > adding i.MX93 LCDIF support.
+> > >=20
+> > > Thanks for the series. I could test this on my TQMa93xxLA/MBa93xxCA w=
+ith
+> > > a
+> > > single LVDS display attached, so no DSI or parallel display. Hence I
+> > > could
+> > > not test the bus format and flags checks, but they look okay.
+> > > So you can add
+> > > Tested-by: Alexander Stein <alexander.stein@ew.tq-group.com>
+> > > to the whole series as well.
+> >=20
+> > Thanks for your test.
+> >=20
+> > > One thing I noticed is that, sometimes it seems that before probing
+> > > lcdif
+> > > my system completely freezes. Adding some debug output it seems that's
+> > > during powering up the IMX93_MEDIABLK_PD_LCDIF power domain there is
+> > > some
+> > > race condition. But adding more more detailed output made the problem=
+ go
+> > > away. Did you notice something similar? It might be a red hering thou=
+gh.
+> >=20
+> > I don't see system freezing with my i.MX93 11x11 EVK when probing
+> > lcdif. I did try to boot the system several times. All look ok. This is
+> > a snippet of dmesg when lcdif probes:
+> >=20
+> > --------------------------8<------------------------------------------
+> > [    0.753083] Serial: 8250/16550 driver, 4 ports, IRQ sharing enabled
+> > [    0.761669] SuperH (H)SCI(F) driver initialized
+> > [    0.766523] msm_serial: driver initialized
+> > [    0.780523] printk: console [ttyLP0] enabled0x44380010 (irq =3D 16,
+> > base_baud =3D 1500000) is a FSL_LPUART
+> > [    0.780523] printk: console [ttyLP0] enabled
+> > [    0.788928] printk: bootconsole [lpuart32] disabled
+> > [    0.788928] printk: bootconsole [lpuart32] disabled
+> > [    0.804632] panel-simple lvds_panel: supply power not found, using
+> > dummy regulator
+> > [    0.814741] [drm] Initialized imx-lcdif 1.0.0 20220417 for
+> > 4ae30000.lcd-controller on minor 0
+> > [    1.195930] Console: switching to colour frame buffer device 160x50
+> > [    1.218385] imx-lcdif 4ae30000.lcd-controller: [drm] fb0: imx-
+> > lcdifdrmfb frame buffer device
+> > [    1.227099] cacheinfo: Unable to detect cache hierarchy for CPU 0
+> > [    1.236725] loop: module loaded
+> > --------------------------8<------------------------------------------
+> >=20
+> > ~300 milliseconds are consumed by the enablement delay required by the
+> > "boe,ev121wxm-n10-1850" LVDS panel I use.
+>=20
+> It seems you have the drivers compiled in. I use modules in my case and
+> simple-panel as well. But this is unrelated, because lcdif_probe() is yet=
+ to
+> be called. Using the debug diff from below I get the following output:
+>=20
+> [   16.111197] imx93-blk-ctrl 4ac10000.system-controller:
+> imx93_blk_ctrl_power_on: 1
+> [   16.122491] imx93-blk-ctrl 4ac10000.system-controller:
+> imx93_blk_ctrl_power_on: 2
+> [   16.137766] imx93-blk-ctrl 4ac10000.system-controller:
+> imx93_blk_ctrl_power_on: 3
+> [   16.154905] imx93-blk-ctrl 4ac10000.system-controller:
+> imx93_blk_ctrl_power_on: 4
+>=20
+> It seems setting BLK_CLK_EN blocks the whole system, even reading is not
+> possible. I don't have any details on the hardware, but it seems that eit=
+her
+> some clock or power domain is not enabled. This can also happen if I'm
+> loading the lcdif module manually after boot. But I can't detect any
+> differences in / sys/kernel/debug/clk/clk_summary.
 
-I'm curious if there is a plan to address Icenowy's concerns here:
-https://lore.kernel.org/linux-gpio/52dcbe48dbf5f2561713a9642943353216fef15a.camel@icenowy.me/
+I think I found the cause. It's the maximum clock frequency for media_axi a=
+nd=20
+media_apb. These clocks were not explicitly configured, most probably=20
+exceeding the maximum frequency allowed.
 
-The problem is that input from "GPIO" pins is configured a little
-differently on the StarFive SoCs. Instead of having a register pr.
-pin(grroup) there is a register pr. control line to the peripherals,
-and into these you write the pin number + 2 of the pin you want the
-peripheral to react to. Why +2? That's because 0 is a special "always
-low" signal and similarly 1 is a special "always high" signal.
+Best regards,
+Alexander
 
-With the current bindings one hacky way to solve this is to treat
-those two special values as kind of "virtual pins" that will always be
-high or low. So that would be something like
-
-pinmux = <GPIOMUX(GPIO_ALWAYS_LOW, GPOUT_IGNORED, GPOEN_DISABLE,
-GPI_SYS_USB_OVERCURRENT)>;
-
-..but this means we might need to mux these two virtual pins to
-multiple peripherals. I'm not sure the pinmux framework is prepared
-for that.
-
-/Emil
-
+> ---8<---
+> diff --git a/drivers/soc/imx/imx93-blk-ctrl.c b/drivers/soc/imx/imx93-blk-
+> ctrl.c
+> index 2c600329436cf..50aeb20ce90dc 100644
+> --- a/drivers/soc/imx/imx93-blk-ctrl.c
+> +++ b/drivers/soc/imx/imx93-blk-ctrl.c
+> @@ -129,12 +129,14 @@ static int imx93_blk_ctrl_power_on(struct
+> generic_pm_domain *genpd)
+>  	struct imx93_blk_ctrl *bc =3D domain->bc;
+>  	int ret;
+>=20
+> +	dev_info(bc->dev, "%s: 1\n", __func__);
+>  	ret =3D clk_bulk_prepare_enable(bc->num_clks, bc->clks);
+>  	if (ret) {
+>  		dev_err(bc->dev, "failed to enable bus clocks\n");
+>  		return ret;
+>  	}
+>=20
+> +	dev_info(bc->dev, "%s: 2\n", __func__);
+>  	ret =3D clk_bulk_prepare_enable(data->num_clks, domain->clks);
+>  	if (ret) {
+>  		clk_bulk_disable_unprepare(bc->num_clks, bc->clks);
+> @@ -142,6 +144,7 @@ static int imx93_blk_ctrl_power_on(struct
+> generic_pm_domain *genpd)
+>  		return ret;
+>  	}
+>=20
+> +	dev_info(bc->dev, "%s: 3\n", __func__);
+>  	ret =3D pm_runtime_get_sync(bc->dev);
+>  	if (ret < 0) {
+>  		pm_runtime_put_noidle(bc->dev);
+> @@ -149,11 +152,15 @@ static int imx93_blk_ctrl_power_on(struct
+> generic_pm_domain *genpd)
+>  		goto disable_clk;
+>  	}
+>=20
+> +	dev_info(bc->dev, "%s: 4\n", __func__);
+> +
+>  	/* ungate clk */
+>  	regmap_clear_bits(bc->regmap, BLK_CLK_EN, data->clk_mask);
+> +	dev_info(bc->dev, "%s: 5\n", __func__);
+>=20
+>  	/* release reset */
+>  	regmap_set_bits(bc->regmap, BLK_SFT_RSTN, data->rst_mask);
+> +	dev_info(bc->dev, "%s: 6\n", __func__);
+>=20
+>  	dev_dbg(bc->dev, "pd_on: name: %s\n", genpd->name);
+>=20
+>=20
+> ---8<---
+>=20
 > Best regards,
-> Hal
+> Alexander
+>=20
+> > Regards,
+> > Liu Ying
+> >=20
+> > > Best regards,
+> > > Alexander
+> > >=20
+> > > > v3->v4:
+> > > > * Improve warning message when ignoring invalid LCDIF OF endpoint i=
+ds
+> > > > in
+> > > >=20
+> > > >   patch 5/6. (Alexander)
+> > > >=20
+> > > > * Use 'new_{c,p}state' instead of 'new_{crtc,plane}_state' in patch
+> > > > 3/6.
+> > > >=20
+> > > >   (Alexander)
+> > > >=20
+> > > > * Simplify lcdif_crtc_reset() by calling
+> > > > lcdif_crtc_atomic_destroy_state()
+> > > >=20
+> > > >   in patch 3/6. (Alexander)
+> > > >=20
+> > > > * Add '!crtc->state' check in lcdif_crtc_atomic_duplicate_state() in
+> > > > patch
+> > > > 3/6. (Alexander)
+> > > > * Collect Alexander's R-b tags on patch 1/6, 2/6 and 6/6.
+> > > >=20
+> > > > v2->v3:
+> > > > * Fix a trivial typo in patch 6/6's commit message.
+> > > >=20
+> > > > v1->v2:
+> > > > * Add Krzysztof's A-b and Marek's R-b tags on patch 1/6.
+> > > > * Split patch 2/2 in v1 into patch 2/6~6/6 in v2. (Marek, Alexander)
+> > > > * Drop '!remote ||' from lcdif_attach_bridge(). (Lothar)
+> > > > * Add comment on the 'base' member of lcdif_crtc_state structure to
+> > > >=20
+> > > >   note it should always be the first member. (Lothar)
+> > > >=20
+> > > > * Drop unneeded 'bridges' member from lcdif_drm_private structure.
+> > > > * Drop a comment about bridge input bus format from
+> > > > lcdif_crtc_atomic_check().
+> > > >=20
+> > > > Liu Ying (6):
+> > > >   dt-bindings: lcdif: Add i.MX93 LCDIF support
+> > > >   drm: lcdif: Drop unnecessary NULL pointer check on lcdif->bridge
+> > > >   drm: lcdif: Determine bus format and flags in ->atomic_check()
+> > > >   drm: lcdif: Check consistent bus format and flags across first
+> > > >   bridges
+> > > >   drm: lcdif: Add multiple encoders and first bridges support
+> > > >   drm: lcdif: Add i.MX93 LCDIF compatible string
+> > > > =20
+> > > >  .../bindings/display/fsl,lcdif.yaml           |   7 +-
+> > > >  drivers/gpu/drm/mxsfb/lcdif_drv.c             |  71 ++++++-
+> > > >  drivers/gpu/drm/mxsfb/lcdif_drv.h             |   5 +-
+> > > >  drivers/gpu/drm/mxsfb/lcdif_kms.c             | 198
+> > > >  ++++++++++++------
+> > > >  4 files changed, 206 insertions(+), 75 deletions(-)
+
+
+=2D-=20
+TQ-Systems GmbH | M=FChlstra=DFe 2, Gut Delling | 82229 Seefeld, Germany
+Amtsgericht M=FCnchen, HRB 105018
+Gesch=E4ftsf=FChrer: Detlef Schneider, R=FCdiger Stahl, Stefan Schneider
+http://www.tq-group.com/
+
+
