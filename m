@@ -2,66 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 007F069D10A
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Feb 2023 17:03:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5EB7E69D111
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Feb 2023 17:06:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231643AbjBTQDT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Feb 2023 11:03:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53136 "EHLO
+        id S231995AbjBTQGX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Feb 2023 11:06:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55134 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229986AbjBTQDS (ORCPT
+        with ESMTP id S231918AbjBTQGV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Feb 2023 11:03:18 -0500
-Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50D196A7B;
-        Mon, 20 Feb 2023 08:03:17 -0800 (PST)
-Received: by mail-wm1-x32c.google.com with SMTP id j2-20020a05600c1c0200b003e1e754657aso1513151wms.2;
-        Mon, 20 Feb 2023 08:03:17 -0800 (PST)
+        Mon, 20 Feb 2023 11:06:21 -0500
+Received: from mail-pg1-x535.google.com (mail-pg1-x535.google.com [IPv6:2607:f8b0:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87E681C7F7;
+        Mon, 20 Feb 2023 08:06:20 -0800 (PST)
+Received: by mail-pg1-x535.google.com with SMTP id s17so928989pgv.4;
+        Mon, 20 Feb 2023 08:06:20 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1676908996;
+        d=gmail.com; s=20210112;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=3pGXihfz169wq8vbQ55A6qeCeAolkvlGTPS+YPqxvGk=;
-        b=lKBmSTvu26BgzUl2Zzjw/98dkPyHLiKxGTyeDbp1SD5AMbvNgDFAtbbSfC9rsLJxtR
-         A9yP0mPzhzgQibvFy+ZhiyAj7VFh2kVO2/l1Vdp76wlnoYWLTASI7/qQo6kOd/Yc3IP7
-         CsLLAAhkcf371t4bwSf5prmw2UrRCBusdkHqKlnuNClA9unxqwsNgH8QgnEXx+Ot5lSb
-         RGg0SPf1AhNgltPUEiedqp1LeJX+uvRUDRdprJRnOMr9jw07jwyAMnb4ZQDTQQgibjlZ
-         WGldx9Nq8Inh7xF3OPbiMT9IacbibYsY+wzjiUtA2I2DZK93keZ5WtEhCaVCik8b0rQ2
-         AFKw==
+        bh=bk7vaE/atjJO4Fqu2qGdVLjQ50MCmbikjDKBd/vaAg8=;
+        b=GEi5wubyOXRiLewDvnQqPoR/hmDN6Ft464QGxWVh0Vu9Bi0ObftUAC5bmVhJGHmrbP
+         m7UXsBgftBcPDt1zEkgU8wttqfrnyA3TPQtVOHfU9DtAOlaIX6w886NjvyPuCFmqw5tp
+         B2ptBpqRYTGoDCK6eBOt00d26oln3e4BnwfMcjF/TM3gi5I+/HBprY0hDxT4IkAVZxry
+         WRkCDQmIv9qaPZ4n6ZiAk00DM8MPPaqk5Xa3O+goNvjrSD8neRjjpgDYKd9n1kM+O8jB
+         IX5C6HOJGFqXEJ/V8zBxK7n5XYwolR/gXh0HRRyT0vkSAvVRPbrJE6jqNtujYXVWg5CA
+         4shw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1676908996;
+        d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=3pGXihfz169wq8vbQ55A6qeCeAolkvlGTPS+YPqxvGk=;
-        b=cwikCaiXX6aX8uSXwdo2jHLBj7gNxzUYd0pLssAxb14bTushxP/+fpKUIIRBVd+oKC
-         /R/ObEKWxUcRDK2s7qcdSpt/vzRmG3UwKEklbmn8iIASzn2+TvhNaxKmOnji9DBF6wzC
-         PkjmySCx5dUCf55YUYOrs9EynvOye2Qh9RccI/aIMPytoWp1YB/9UdYUT2eEDx648yu1
-         O81Z/D2U5EtmntV+WdlcyFFQRisYpiyyDA6B4EuUOR6fAPSlcDXoobVrLmWPTWIOzF4s
-         X+SkeNL/euakHnHg3AZ1zwUfmZZG3C+JI+uyNmSgL4qp95TvcW4NghA2ibOFQ5KuoNkc
-         qPZg==
-X-Gm-Message-State: AO0yUKU9MK8BQr3eo8EM/E8QbYfkGBTmYs/OjInq9iDR8I690HMMFhaQ
-        TdsQokn+CI7A+5D1ZEFe0JP4oNueHX0jBQ==
-X-Google-Smtp-Source: AK7set+B7Vk1SliuOLcO86rQuSrYfVzTWswcPjiN1gE7Qv213tLM4+k/E8RXN4++r8zWq42guPEcYw==
-X-Received: by 2002:a05:600c:2318:b0:3df:f7ba:14f8 with SMTP id 24-20020a05600c231800b003dff7ba14f8mr1426028wmo.1.1676908995694;
-        Mon, 20 Feb 2023 08:03:15 -0800 (PST)
-Received: from mineorpe-virtual-machine.localdomain ([37.252.81.68])
-        by smtp.gmail.com with ESMTPSA id o10-20020a1c750a000000b003dfe8c4c497sm438528wmc.39.2023.02.20.08.03.14
+        bh=bk7vaE/atjJO4Fqu2qGdVLjQ50MCmbikjDKBd/vaAg8=;
+        b=d/bQdk8tdN51ZXjOEcgBAwxovhY/D0VmVndFaOu4LK3ns6dbB4ZaBsC5ZhgPvUe00K
+         Qa+l/ySMl0RKQ/2ZqZG6EZs+Ldhln/LpTGwc07H18EVpH+grjQK3ZiKKylXaVc6sDYrc
+         Y76SCLfWn0YFje+LsstXW0MYsLzJaBzQI+NsDNCjt30VpgKQDvQPyGXXL183gCYVdDS5
+         rqqna45qP2iCf2PcaMUpBp3YPRSSPLBhhMCKbe4SKndNUPUE4/nXrFbZqx0qnCKojBYv
+         I2lvS45ATWGzwfWz8pGGkxPOM8Gk5j+Nta+gaANVGGSBh29zf0WNNph6BhWxpOFdNy2+
+         3rjw==
+X-Gm-Message-State: AO0yUKUZ12lh0MwEIaWvpZG8xWmyqCY2SAblxZtbnPuMNJzviMtvpHg9
+        KtC/foJtdlqEMvRBEz8SNtAxaV6F4BDl4S7j5qA=
+X-Google-Smtp-Source: AK7set+7e9q3zUHK5ld4gUKuHY7folcfIERHgVR1fUGHvhtvPFMGMlb+WTahKW+oMlyt3Y3DSG2+/Q==
+X-Received: by 2002:aa7:9985:0:b0:593:2289:f01c with SMTP id k5-20020aa79985000000b005932289f01cmr3086487pfh.25.1676909179633;
+        Mon, 20 Feb 2023 08:06:19 -0800 (PST)
+Received: from localhost.localdomain ([117.176.249.147])
+        by smtp.gmail.com with ESMTPSA id x17-20020a62fb11000000b005893f281d43sm7830958pfm.27.2023.02.20.08.06.16
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 20 Feb 2023 08:03:15 -0800 (PST)
-From:   Ivan Orlov <ivan.orlov0322@gmail.com>
-To:     shuah@kernel.org
-Cc:     Ivan Orlov <ivan.orlov0322@gmail.com>,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] Refactor 'peeksiginfo' ptrace test part
-Date:   Mon, 20 Feb 2023 19:03:02 +0300
-Message-Id: <20230220160302.4679-1-ivan.orlov0322@gmail.com>
-X-Mailer: git-send-email 2.34.1
+        Mon, 20 Feb 2023 08:06:19 -0800 (PST)
+From:   Moonlinh <jinhaochen.cloud@gmail.com>
+X-Google-Original-From: Moonlinh <moonlinh@MoonLinhdeMacBook-Air.local>
+To:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        brauner@kernel.org
+Cc:     Moonlinh <moonlinh@MoonLinhdeMacBook-Air.local>
+Subject: [PATCH 1/1] *** fix potential NULL dereference in real_cred ***
+Date:   Tue, 21 Feb 2023 00:04:28 +0800
+Message-Id: <20230220160429.2950-1-moonlinh@MoonLinhdeMacBook-Air.local>
+X-Mailer: git-send-email 2.24.3 (Apple Git-128)
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,48 +70,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-peeksiginfo creates an array of 10 instances of 'siginfo_t',
-but actually uses only one. This patch will reduce amount
-of memory on the stack used by the peeksiginfo test.
+*** BLURB HERE ***
 
-Signed-off-by: Ivan Orlov <ivan.orlov0322@gmail.com>
----
- tools/testing/selftests/ptrace/peeksiginfo.c | 14 +++++++-------
- 1 file changed, 7 insertions(+), 7 deletions(-)
+ChenJinhao (1):
+    fix NULL dereference in real_cred
 
-diff --git a/tools/testing/selftests/ptrace/peeksiginfo.c b/tools/testing/selftests/ptrace/peeksiginfo.c
-index 54900657eb44..a6884f66dc01 100644
---- a/tools/testing/selftests/ptrace/peeksiginfo.c
-+++ b/tools/testing/selftests/ptrace/peeksiginfo.c
-@@ -151,7 +151,7 @@ int check_direct_path(pid_t child, int shared, int nr)
- 
- int main(int argc, char *argv[])
- {
--	siginfo_t siginfo[SIGNR];
-+	siginfo_t siginfo;
- 	int i, exit_code = 1;
- 	sigset_t blockmask;
- 	pid_t child;
-@@ -176,13 +176,13 @@ int main(int argc, char *argv[])
- 
- 	/* Send signals in process-wide and per-thread queues */
- 	for (i = 0; i < SIGNR; i++) {
--		siginfo->si_code = TEST_SICODE_SHARE;
--		siginfo->si_int = i;
--		sys_rt_sigqueueinfo(child, SIGRTMIN, siginfo);
-+		siginfo.si_code = TEST_SICODE_SHARE;
-+		siginfo.si_int = i;
-+		sys_rt_sigqueueinfo(child, SIGRTMIN, &siginfo);
- 
--		siginfo->si_code = TEST_SICODE_PRIV;
--		siginfo->si_int = i;
--		sys_rt_tgsigqueueinfo(child, child, SIGRTMIN, siginfo);
-+		siginfo.si_code = TEST_SICODE_PRIV;
-+		siginfo.si_int = i;
-+		sys_rt_tgsigqueueinfo(child, child, SIGRTMIN, &siginfo);
- 	}
- 
- 	if (sys_ptrace(PTRACE_ATTACH, child, NULL, NULL) == -1)
+    When PAUSE-Loop-Exiting is triggered, it is possible that task->real_cred
+    will be set to NULL. In this case, directly parsing euid and egid of real_cred in
+    task_dump_owner will lead to NULL dereference and cause kernel panic like below.
+
+     #1 [ffff97eb73757938] __crash_kexec at ffffffff8655bbdd
+     #2 [ffff97eb73757a00] crash_kexec at ffffffff8655cabd
+     #3 [ffff97eb73757a18] oops_end at ffffffff86421edd
+     #4 [ffff97eb73757a38] no_context at ffffffff8646978e
+     #5 [ffff97eb73757a90] do_page_fault at ffffffff8646a2c2
+     #6 [ffff97eb73757ac0] page_fault at ffffffff86e0120e
+        [exception RIP: task_dump_owner+47]
+        RIP: ffffffff867496cf  RSP: ffff97eb73757b78  RFLAGS: 00010246
+        RAX: 0000000000000000  RBX: ffff89fbb63dbd80  RCX: ffff89bb687677c0
+        RDX: ffff89bb687677bc  RSI: 000000000000416d  RDI: ffff89fbb63dbd80
+        RBP: 0000000000000000   R8: ffff89f51e1f5980   R9: 732f373839323734
+        R10: 0000000000000006  R11: 0000000000000000  R12: ffff89bb687677c0
+        R13: ffff97eb73757c50  R14: ffff89f53b19c7a0  R15: ffff8a75170e2cc0
+
+    euid and egid are temporarily set here, and for certain modes, they will
+    be updated to GLOBAL_ROOT_UID/GID by default when make_uid/make_gid
+    returns invalid values.
+
+    So, whether the NULL real_cred can also be considered as invalid value, and
+    treat the same?
+
+ fs/proc/base.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
 -- 
-2.34.1
+2.24.3 (Apple Git-128)
 
