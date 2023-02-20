@@ -2,107 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B456069CE75
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Feb 2023 14:59:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5370569CE64
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Feb 2023 14:59:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232800AbjBTN7a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Feb 2023 08:59:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51144 "EHLO
+        id S232738AbjBTN7I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Feb 2023 08:59:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50058 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232767AbjBTN7R (ORCPT
+        with ESMTP id S232706AbjBTN7D (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Feb 2023 08:59:17 -0500
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 005991EFEC;
-        Mon, 20 Feb 2023 05:58:58 -0800 (PST)
-Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 5CF246602149;
-        Mon, 20 Feb 2023 13:58:30 +0000 (GMT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1676901511;
-        bh=SsOeXt+P4iwbX9REZy4GabzaEzha82/twxsj56mbnP0=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=ApwaLqnSxqZSACmOYBRcautqtgPCym4zXwmdQy3gJ8+JNxQGjJZz79agFwnCkU8qO
-         68q3OZBddtmNffxG7S29M9BYVR13x5iZcc8tBQ/uqzbg4s4vsceyZyI5gLMFlCBnXK
-         Q5uo2o3jWuosSwCatSLGMt981Q9+dHxZqEFBCJH3HuH2XJsLum95myMvAcU9hn7+vV
-         RNo6NQOwouOekReWXxCnO12RdNJZNvtBuxA+jantW3I2fsKKMgeAQnz8j4QdcIinBj
-         BDJLh9wQ19ZPmHBmDpghBon1bzqvglddr95ejGgiWlWhJmPg3G6E9nTuGFBkI2BcyT
-         fFjQdUfgJb0tA==
-Message-ID: <c6058eb2-0cb5-4cbd-e7d9-5ae5975be86f@collabora.com>
-Date:   Mon, 20 Feb 2023 14:58:27 +0100
+        Mon, 20 Feb 2023 08:59:03 -0500
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F6721EBE5;
+        Mon, 20 Feb 2023 05:58:36 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=BDP+GXZzksa3aQWqV2A3A4f9tq1StQVPiy8S81efm1s=; b=p9q3AMbI+icsav00MNd4G4w2PG
+        yXAliSSxVqUaclV3ZXF/+ItfsOVUdpeiRi/dGsIgp0j+OU45ZEGtHKsMQZSteeg5Etzfp8lnBFe0K
+        moJsbV796AYxVTnPuW5+1MwuhkwjuYIMF4k6oF2IRPaQRlq9wHb+zKnmSVUXel96xC/IpX+SUlSUc
+        /tqaHM8G/uLAKehz9NKuQvBJczqYsal9teH0SvQNFhkBW4/Q0SIf+GKls3MnBLXARKJl3dKih9Aqx
+        297jQngNqmT8ShoaRw87hCQhfEc52SE+VH9ef5c854JMu6h1gprJXtjJEhTkC7vXh+WUcJt+cdBo5
+        qfJfLjAA==;
+Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1pU6gX-00BlzV-KL; Mon, 20 Feb 2023 13:58:29 +0000
+Date:   Mon, 20 Feb 2023 13:58:29 +0000
+From:   Matthew Wilcox <willy@infradead.org>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Steve French <smfrench@gmail.com>,
+        CIFS <linux-cifs@vger.kernel.org>,
+        David Howells <dhowells@redhat.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Steve French <stfrench@microsoft.com>,
+        "Vishal Moola (Oracle)" <vishal.moola@gmail.com>
+Subject: Re: linux-next: manual merge of the mm-stable tree with the cifs tree
+Message-ID: <Y/N8hVWeR3AjssUC@casper.infradead.org>
+References: <20230220152933.1ab8fa4a@canb.auug.org.au>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.2
-Subject: Re: [PATCH] scsi: ufs: Add select to CONFIG_PM in Kconfig
-Content-Language: en-US
-To:     Stephen Zhang <starzhangzsd@gmail.com>, jejb@linux.ibm.com,
-        artin.petersen@oracle.com, matthias.bgg@gmail.com,
-        beanhuo@micron.com, bvanassche@acm.org, avri.altman@wdc.com,
-        yoshihiro.shimoda.uh@renesas.com
-Cc:     linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, zhangshida@kylinos.cn,
-        k2ci <kernel-bot@kylinos.cn>
-References: <20230220083256.997470-1-zhangshida@kylinos.cn>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20230220083256.997470-1-zhangshida@kylinos.cn>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230220152933.1ab8fa4a@canb.auug.org.au>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 20/02/23 09:32, Stephen Zhang ha scritto:
-> From: Shida Zhang <zhangshida@kylinos.cn>
+On Mon, Feb 20, 2023 at 03:29:33PM +1100, Stephen Rothwell wrote:
+> Hi all,
 > 
-> From: Shida Zhang <zhangshida@kylinos.cn>
+> Today's linux-next merge of the mm-stable tree got a conflict in:
 > 
-> In a configuration with CONFIG_SCSI_UFS_MEDIATEK set to 'm' and
-> CONFIG_PM set to 'n', errors occur at compile time:
+>   fs/cifs/file.c
 > 
-> ====
-> ../drivers/ufs/host/ufs-mediatek.c: In function ‘ufs_mtk_runtime_suspend’:
-> ../drivers/ufs/host/ufs-mediatek.c:1621:8: error: implicit declaration of function ‘ufshcd_runtime_suspend’; did you mean ‘ufs_mtk_runtime_suspend’? [-Werror=implicit-function-declaration]
-> ../drivers/ufs/host/ufs-mediatek.c: In function ‘ufs_mtk_runtime_resume’:
-> ../drivers/ufs/host/ufs-mediatek.c:1636:9: error: implicit declaration of function ‘ufshcd_runtime_resume’; did you mean ‘ufs_mtk_runtime_resume’? [-Werror=implicit-function-declaration]
-> ====
+> between commit:
 > 
+>   c8859bc0c129 ("cifs: Remove unused code")
+> 
+> from the cifs tree and commits:
+> 
+>   4cda80f3a7a5 ("cifs: convert wdata_alloc_and_fillpages() to use filemap_get_folios_tag()")
+>   d585bdbeb79a ("fs: convert writepage_t callback to pass a folio")
+> 
+> from the mm-stable tree.
+> 
+> This is a real mess :-(
 
-That's wrong. This driver should be made to compile for both !CONFIG_PM
-and CONFIG_PM.
+Doesn't look too bad to me.  Dave's commit is just removing the
+functions, so it doesn't matter how they're being changed.
 
-Regards,
-Angelo
-
-> This patch fixes these by selecting CONFIG_PM from CONFIG_SCSI_UFS_MEDIATEK.
-> 
-> Reported-by: k2ci <kernel-bot@kylinos.cn>
-> Signed-off-by: Shida Zhang <zhangshida@kylinos.cn>
-> ---
->   drivers/ufs/host/Kconfig | 1 +
->   1 file changed, 1 insertion(+)
-> 
-> diff --git a/drivers/ufs/host/Kconfig b/drivers/ufs/host/Kconfig
-> index 4cc2dbd79ed0..f9786f085b54 100644
-> --- a/drivers/ufs/host/Kconfig
-> +++ b/drivers/ufs/host/Kconfig
-> @@ -71,6 +71,7 @@ config SCSI_UFS_QCOM
->   config SCSI_UFS_MEDIATEK
->   	tristate "Mediatek specific hooks to UFS controller platform driver"
->   	depends on SCSI_UFSHCD_PLATFORM && ARCH_MEDIATEK
-> +	select PM
->   	select PHY_MTK_UFS
->   	select RESET_TI_SYSCON
->   	help
-
+The real question in my mind is why for-next is being updated two days
+before the merge window with new patches.  What's the point in -next
+if patches are being added at this late point?
 
