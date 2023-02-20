@@ -2,62 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A91E769D438
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Feb 2023 20:39:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6ED2E69D436
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Feb 2023 20:39:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232532AbjBTTjT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Feb 2023 14:39:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35722 "EHLO
+        id S232742AbjBTTjQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Feb 2023 14:39:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36024 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233255AbjBTTim (ORCPT
+        with ESMTP id S233252AbjBTTim (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 20 Feb 2023 14:38:42 -0500
 Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6ECD921A04
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B2281C7C3
         for <linux-kernel@vger.kernel.org>; Mon, 20 Feb 2023 11:38:30 -0800 (PST)
 Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com [209.85.208.70])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 873223F4BB
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Feb 2023 19:38:26 +0000 (UTC)
+        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id B850B3F596
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Feb 2023 19:38:24 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1676921906;
-        bh=wgK/ccpFWDdrinS6PVt6yIooJLrwdbOVGSrrVMJp+Ho=;
+        s=20210705; t=1676921904;
+        bh=TXvnYBcpsks2j9HUsorAhOJizmKzS+zfkd4wCIIYO2g=;
         h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
          MIME-Version:Content-Type;
-        b=fEBaX4R1yp39zxP7K6kpmGhyLOvIQ+RiGAsLh29G+DS7QaWUC7JUMMVRmK9l5WY71
-         dPoRMYVDeFk+MNpIxm7zcDK/HSgd2D8IAipkI8hsFRPJe3r2g3DUBxiWwhis9E0H0W
-         QTWXhqms8p7LaSuvsqHUHHoavsleesPoSv+p8Z+sb6ThkdB0MJsbbrtvpq8Hh4hvq3
-         e20QQBm5UTelrmZ0aW9zkysUTAs+KZzNuxX/zMNdy8BeGSvoCaKjwiYHrlcEU3ebCV
-         xge4zErNLPk6ZaR+dgnZK1+aKhsJaeF675MnTAXzJPFNbAY1t17HKK8ExGe8AWwYhG
-         X5x7KbcbhgMDQ==
-Received: by mail-ed1-f70.google.com with SMTP id s13-20020a508dcd000000b004aab6614de9so2099532edh.6
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Feb 2023 11:38:26 -0800 (PST)
+        b=XYNp8m6qvmxD6Lm+DWbqEUlyF8PVxsJYXEK86l57UZnCev4zBHNcn1PFEuhB2yoA0
+         LhyDgwTcxUhR1yfi/Zj3noVZ1Bb7gp70R1JK+jgM8PLiD8q6pa2OIPeKufBbZZBQ85
+         pkLzFabmaH00GO5snIDaLRp+oIKUPB8zWhmAC0rQxIwvwk8Y0Lz9frucO0kZMXb5KZ
+         Qrew6sZhp+vNdp02+6zs9E07qNIbQ50XNrBrRC9YnmTly+b10S74R7jpJ+aBAXPEct
+         opHMyz4AFyTBCdbBqIfmdJVXHwgiYe+nEK4aIzN1rPH9W7qwhyqgwkGuHxpfOORz+h
+         TRhhMmo6E7Ghg==
+Received: by mail-ed1-f70.google.com with SMTP id fi8-20020a056402550800b004a26cc7f6cbso2737929edb.4
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Feb 2023 11:38:24 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=wgK/ccpFWDdrinS6PVt6yIooJLrwdbOVGSrrVMJp+Ho=;
-        b=vSw7I92Ot/JhpOLOAvhflLyqPpUj7FK0rk41gUlQgG1daH4hhuY4HunWm0cRliJ5cs
-         JQoKUM6YxBlBbGcF2tROpb2bQb7hwVGllNYOmb+bnyCFUPXIHaK8bbdoTw3tMCWi2Gwq
-         DG4Qo0MvSf0gql1RbxNaTmN6U7MS1XLIojuwDAbFfA0Gc/onSwpuqNhnhHeit/Umx80a
-         yJDxmmwCXRnxWCksUoaRokMvtDl+GLk/DNhMctQutn8omNqgRDwc0lFwrfCorNMd86b6
-         D3ikFxGDEkIhjbfVv0zLsYWug8gD5yWJvlcA04NZZrNfRK4komDXulHoYPYG0+u8WYjB
-         SKEA==
-X-Gm-Message-State: AO0yUKUcmIL83ggQlILNLFShN1kOfwQhB0X5RbfCVdp5Y6HlZadkl/iS
-        3zKdVj8ACnee4rrWqs/wjyiw2pDNP+rJZ7uIn5N2DH61murzrBRL0mD1SmwQOJgeijLSfZyQaSd
-        f7wM491fcOO6gEdG/dgNY24RPT5R8qIniXoP41qUl1g==
-X-Received: by 2002:a17:906:5f93:b0:8af:2a97:91d4 with SMTP id a19-20020a1709065f9300b008af2a9791d4mr8676548eju.14.1676921902860;
-        Mon, 20 Feb 2023 11:38:22 -0800 (PST)
-X-Google-Smtp-Source: AK7set9bcTHcatncXa8wlU3TSRfSP2fOd0mUHQR7oqeIqA73Ga6RM+ssQr4E60NApZKqHA8RyLtkAw==
-X-Received: by 2002:a17:906:5f93:b0:8af:2a97:91d4 with SMTP id a19-20020a1709065f9300b008af2a9791d4mr8676526eju.14.1676921902560;
-        Mon, 20 Feb 2023 11:38:22 -0800 (PST)
+        bh=TXvnYBcpsks2j9HUsorAhOJizmKzS+zfkd4wCIIYO2g=;
+        b=2N982dvW2bLIshN9VwGuGJhQ07ZNIASg/IDSlHZPTdpxpICCufzi24CCO/5+s2xxmO
+         t5N2JLdkjtoRzMCoG18LNm+YbFuVOIm8dskEys+p8GZYqcp02FNssy5mzc2Iac/uSNKM
+         4QPgMnxIJ6xS2Mp4FAUyeK1ZwNpdNQELTSyFt04NGz5iZzys2AoN+869L/QP3T9uCucW
+         PXjuyxpAulaxjzrG6bhTQ06a8h9pYVH/8Dqqgx4celaq3GPx2QXPivfc2lNoIPzQV6y/
+         QePtdNe3QhB71qykdpMUCeOirI0PmHZIloPDlzHf9CL2spW7R7bA41q5uXRG8WcyFgu+
+         JMeA==
+X-Gm-Message-State: AO0yUKXrXcPrRc4KTIv0S4cyyZKGDCoOhaua2yEla12acyFrcnTr1qG3
+        yCJm6v0NsZON1zfDn0tzP5N6zVfsjpR2tFBE1GL8lqdcXMDZJJeorDnmFIKNpWe38Bdh0wtZ4sh
+        pu10EUH50hrfzLWZOoKXX98oJWhALXkvVUFfMys8wkg==
+X-Received: by 2002:a17:906:fcd5:b0:8b1:81eb:158f with SMTP id qx21-20020a170906fcd500b008b181eb158fmr13780364ejb.62.1676921904506;
+        Mon, 20 Feb 2023 11:38:24 -0800 (PST)
+X-Google-Smtp-Source: AK7set+zc9gLLqzwJi8cf9vJZoGnswWczh9rYsXB3je/ww+BatP9c9Egec/MMFNNrEczNQTJZ5/tGw==
+X-Received: by 2002:a17:906:fcd5:b0:8b1:81eb:158f with SMTP id qx21-20020a170906fcd500b008b181eb158fmr13780341ejb.62.1676921904319;
+        Mon, 20 Feb 2023 11:38:24 -0800 (PST)
 Received: from amikhalitsyn.. ([2a02:8109:bd40:1414:bb20:aed2:bb7f:f0cf])
-        by smtp.gmail.com with ESMTPSA id a19-20020a17090680d300b008d4df095034sm1526693ejx.195.2023.02.20.11.38.21
+        by smtp.gmail.com with ESMTPSA id a19-20020a17090680d300b008d4df095034sm1526693ejx.195.2023.02.20.11.38.23
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 20 Feb 2023 11:38:22 -0800 (PST)
+        Mon, 20 Feb 2023 11:38:23 -0800 (PST)
 From:   Alexander Mikhalitsyn <aleksandr.mikhalitsyn@canonical.com>
 To:     mszeredi@redhat.com
 Cc:     Alexander Mikhalitsyn <aleksandr.mikhalitsyn@canonical.com>,
@@ -70,9 +70,9 @@ Cc:     Alexander Mikhalitsyn <aleksandr.mikhalitsyn@canonical.com>,
         Pavel Tikhomirov <ptikhomirov@virtuozzo.com>,
         linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
         criu@openvz.org
-Subject: [RFC PATCH 7/9] fuse: add fuse device ioctl(FUSE_DEV_IOC_REINIT)
-Date:   Mon, 20 Feb 2023 20:37:52 +0100
-Message-Id: <20230220193754.470330-8-aleksandr.mikhalitsyn@canonical.com>
+Subject: [RFC PATCH 8/9] namespace: add sb_revalidate_bindmounts helper
+Date:   Mon, 20 Feb 2023 20:37:53 +0100
+Message-Id: <20230220193754.470330-9-aleksandr.mikhalitsyn@canonical.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230220193754.470330-1-aleksandr.mikhalitsyn@canonical.com>
 References: <20230220193754.470330-1-aleksandr.mikhalitsyn@canonical.com>
@@ -81,17 +81,15 @@ Content-Type: text/plain; charset=ASCII
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This ioctl aborts fuse connection and then reinitializes it,
-sends FUSE_INIT request to allow a new userspace daemon
-to pick up the fuse connection.
+Useful if for some reason bindmounts root dentries get invalidated
+but it's needed to revalidate existing bindmounts without remounting.
 
 Cc: Miklos Szeredi <mszeredi@redhat.com>
 Cc: Al Viro <viro@zeniv.linux.org.uk>
@@ -106,172 +104,132 @@ Cc: linux-kernel@vger.kernel.org
 Cc: criu@openvz.org
 Signed-off-by: Alexander Mikhalitsyn <aleksandr.mikhalitsyn@canonical.com>
 ---
- fs/fuse/dev.c             | 132 ++++++++++++++++++++++++++++++++++++++
- include/uapi/linux/fuse.h |   1 +
- 2 files changed, 133 insertions(+)
+ fs/namespace.c                | 90 +++++++++++++++++++++++++++++++++++
+ include/linux/mnt_namespace.h |  3 ++
+ 2 files changed, 93 insertions(+)
 
-diff --git a/fs/fuse/dev.c b/fs/fuse/dev.c
-index 737764c2295e..0f53ffd63957 100644
---- a/fs/fuse/dev.c
-+++ b/fs/fuse/dev.c
-@@ -2187,6 +2187,112 @@ void fuse_abort_conn(struct fuse_conn *fc)
+diff --git a/fs/namespace.c b/fs/namespace.c
+index ab467ee58341..88491f9c8bbd 100644
+--- a/fs/namespace.c
++++ b/fs/namespace.c
+@@ -682,6 +682,96 @@ static int mnt_make_readonly(struct mount *mnt)
+ 	return ret;
  }
- EXPORT_SYMBOL_GPL(fuse_abort_conn);
  
-+static int fuse_reinit_conn(struct fuse_conn *fc)
++struct bind_mount_list_item {
++	struct list_head list;
++	struct vfsmount *mnt;
++};
++
++/*
++ * sb_revalidate_bindmounts - Relookup/reset bindmounts root dentries
++ *
++ * Useful if for some reason bindmount root dentries get invalidated
++ * but it's needed to revalidate existing bindmounts without remounting.
++ */
++int sb_revalidate_bindmounts(struct super_block *sb)
 +{
-+	struct fuse_iqueue *fiq = &fc->iq;
-+	struct fuse_dev *fud;
-+	unsigned int i;
++	struct mount *mnt;
++	struct bind_mount_list_item *bmnt, *next;
++	int err = 0;
++	struct vfsmount *root_mnt = NULL;
++	LIST_HEAD(mnt_to_update);
++	char *buf;
 +
-+	if (fc->conn_gen + 1 < fc->conn_gen)
-+		return -EOVERFLOW;
++	buf = (char *) __get_free_page(GFP_KERNEL);
++	if (!buf)
++		return -ENOMEM;
 +
-+	fuse_abort_conn(fc);
-+	fuse_wait_aborted(fc);
++	lock_mount_hash();
++	list_for_each_entry(mnt, &sb->s_mounts, mnt_instance) {
++		/* we only want to touch bindmounts */
++		if (mnt->mnt.mnt_root == sb->s_root) {
++			if (!root_mnt)
++				root_mnt = mntget(&mnt->mnt);
 +
-+	spin_lock(&fc->lock);
-+	if (fc->connected) {
-+		spin_unlock(&fc->lock);
-+		return -EINVAL;
-+	}
-+
-+	if (fc->conn_gen + 1 < fc->conn_gen) {
-+		spin_unlock(&fc->lock);
-+		return -EOVERFLOW;
-+	}
-+
-+	fc->conn_gen++;
-+
-+	spin_lock(&fiq->lock);
-+	if (request_pending(fiq) || fiq->forget_list_tail != &fiq->forget_list_head) {
-+		spin_unlock(&fiq->lock);
-+		spin_unlock(&fc->lock);
-+		return -EINVAL;
-+	}
-+
-+	if (&fuse_dev_fiq_ops != fiq->ops) {
-+		spin_unlock(&fiq->lock);
-+		spin_unlock(&fc->lock);
-+		return -EOPNOTSUPP;
-+	}
-+
-+	fiq->connected = 1;
-+	spin_unlock(&fiq->lock);
-+
-+	spin_lock(&fc->bg_lock);
-+	if (!list_empty(&fc->bg_queue)) {
-+		spin_unlock(&fc->bg_lock);
-+		spin_unlock(&fc->lock);
-+		return -EINVAL;
-+	}
-+
-+	fc->blocked = 0;
-+	fc->max_background = FUSE_DEFAULT_MAX_BACKGROUND;
-+	spin_unlock(&fc->bg_lock);
-+
-+	list_for_each_entry(fud, &fc->devices, entry) {
-+		struct fuse_pqueue *fpq = &fud->pq;
-+
-+		spin_lock(&fpq->lock);
-+		if (!list_empty(&fpq->io)) {
-+			spin_unlock(&fpq->lock);
-+			spin_unlock(&fc->lock);
-+			return -EINVAL;
++			continue;
 +		}
 +
-+		for (i = 0; i < FUSE_PQ_HASH_SIZE; i++) {
-+			if (!list_empty(&fpq->processing[i])) {
-+				spin_unlock(&fpq->lock);
-+				spin_unlock(&fc->lock);
-+				return -EINVAL;
-+			}
++		bmnt = kzalloc(sizeof(struct bind_mount_list_item), GFP_NOWAIT | __GFP_NOWARN);
++		if (!bmnt) {
++			err = -ENOMEM;
++			goto exit;
 +		}
 +
-+		fpq->connected = 1;
-+		spin_unlock(&fpq->lock);
++		bmnt->mnt = mntget(&mnt->mnt);
++		list_add_tail(&bmnt->list, &mnt_to_update);
++	}
++	unlock_mount_hash();
++
++	/* TODO: get rid of this limitation */
++	if (!root_mnt) {
++		err = -ENOENT;
++		goto exit;
 +	}
 +
-+	fuse_set_initialized(fc);
++	list_for_each_entry_safe(bmnt, next, &mnt_to_update, list) {
++		struct vfsmount *cur_mnt = bmnt->mnt;
++		struct path path;
++		struct dentry *old_root;
++		char *p;
 +
-+	/* Background queuing checks fc->connected under bg_lock */
-+	spin_lock(&fc->bg_lock);
-+	fc->connected = 1;
-+	spin_unlock(&fc->bg_lock);
++		p = dentry_path(cur_mnt->mnt_root, buf, PAGE_SIZE);
++		if (IS_ERR(p))
++			goto exit;
 +
-+	fc->aborted = false;
-+	fc->abort_err = 0;
++		/* TODO: are these lookup flags fully safe and correct? */
++		err = vfs_path_lookup(root_mnt->mnt_root, root_mnt,
++				p, LOOKUP_FOLLOW|LOOKUP_AUTOMOUNT|LOOKUP_REVAL, &path);
++		if (err)
++			goto exit;
 +
-+	/* nullify all the flags */
-+	memset(&fc->flags, 0, sizeof(struct fuse_conn_flags));
++		/* replace bindmount root dentry */
++		lock_mount_hash();
++		old_root = cur_mnt->mnt_root;
++		cur_mnt->mnt_root = dget(path.dentry);
++		dput(old_root);
++		unlock_mount_hash();
 +
-+	spin_unlock(&fc->lock);
-+
-+	down_read(&fc->killsb);
-+	if (!list_empty(&fc->mounts)) {
-+		struct fuse_mount *fm;
-+
-+		fm = list_first_entry(&fc->mounts, struct fuse_mount, fc_entry);
-+		if (!fm->sb) {
-+			up_read(&fc->killsb);
-+			return -EINVAL;
-+		}
-+
-+		fuse_send_init(fm);
++		path_put(&path);
 +	}
-+	up_read(&fc->killsb);
 +
-+	return 0;
++exit:
++	free_page((unsigned long) buf);
++	mntput(root_mnt);
++	list_for_each_entry_safe(bmnt, next, &mnt_to_update, list) {
++		list_del(&bmnt->list);
++		mntput(bmnt->mnt);
++		kfree(bmnt);
++	}
++
++	return err;
 +}
++EXPORT_SYMBOL_GPL(sb_revalidate_bindmounts);
 +
- void fuse_wait_aborted(struct fuse_conn *fc)
+ int sb_prepare_remount_readonly(struct super_block *sb)
  {
- 	/* matches implicit memory barrier in fuse_drop_waiting() */
-@@ -2282,6 +2388,32 @@ static long fuse_dev_ioctl(struct file *file, unsigned int cmd,
- 			}
- 		}
- 		break;
-+	case FUSE_DEV_IOC_REINIT:
-+		struct fuse_conn *fc;
-+
-+		if (!checkpoint_restore_ns_capable(file->f_cred->user_ns))
-+			return -EPERM;
-+
-+		res = -EINVAL;
-+		fud = fuse_get_dev(file);
-+
-+		/*
-+		 * Only fuse mounts with an already initialized fuse
-+		 * connection are supported
-+		 */
-+		if (file->f_op == &fuse_dev_operations && fud) {
-+			mutex_lock(&fuse_mutex);
-+			fc = fud->fc;
-+			if (fc)
-+				fc = fuse_conn_get(fc);
-+			mutex_unlock(&fuse_mutex);
-+
-+			if (fc) {
-+				res = fuse_reinit_conn(fc);
-+				fuse_conn_put(fc);
-+			}
-+		}
-+		break;
- 	default:
- 		res = -ENOTTY;
- 		break;
-diff --git a/include/uapi/linux/fuse.h b/include/uapi/linux/fuse.h
-index 1b9d0dfae72d..3dac67b25eae 100644
---- a/include/uapi/linux/fuse.h
-+++ b/include/uapi/linux/fuse.h
-@@ -989,6 +989,7 @@ struct fuse_notify_retrieve_in {
- /* Device ioctls: */
- #define FUSE_DEV_IOC_MAGIC		229
- #define FUSE_DEV_IOC_CLONE		_IOR(FUSE_DEV_IOC_MAGIC, 0, uint32_t)
-+#define FUSE_DEV_IOC_REINIT		_IO(FUSE_DEV_IOC_MAGIC, 0)
+ 	struct mount *mnt;
+diff --git a/include/linux/mnt_namespace.h b/include/linux/mnt_namespace.h
+index 8f882f5881e8..20ac29e702f5 100644
+--- a/include/linux/mnt_namespace.h
++++ b/include/linux/mnt_namespace.h
+@@ -3,6 +3,7 @@
+ #define _NAMESPACE_H_
+ #ifdef __KERNEL__
  
- struct fuse_lseek_in {
- 	uint64_t	fh;
++struct super_block;
+ struct mnt_namespace;
+ struct fs_struct;
+ struct user_namespace;
+@@ -13,6 +14,8 @@ extern struct mnt_namespace *copy_mnt_ns(unsigned long, struct mnt_namespace *,
+ extern void put_mnt_ns(struct mnt_namespace *ns);
+ extern struct ns_common *from_mnt_ns(struct mnt_namespace *);
+ 
++extern int sb_revalidate_bindmounts(struct super_block *sb);
++
+ extern const struct file_operations proc_mounts_operations;
+ extern const struct file_operations proc_mountinfo_operations;
+ extern const struct file_operations proc_mountstats_operations;
 -- 
 2.34.1
 
