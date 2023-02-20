@@ -2,268 +2,152 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1228169C909
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Feb 2023 11:52:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A81A69C90D
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Feb 2023 11:52:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230428AbjBTKvo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Feb 2023 05:51:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43108 "EHLO
+        id S231743AbjBTKwL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Feb 2023 05:52:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43546 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229728AbjBTKvn (ORCPT
+        with ESMTP id S231264AbjBTKwH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Feb 2023 05:51:43 -0500
-Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 142ED125A7
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Feb 2023 02:51:41 -0800 (PST)
-Received: by mail-ed1-x52e.google.com with SMTP id o12so3353771edb.9
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Feb 2023 02:51:40 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=googlemail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=1zcGRTl/9l2GpF8LYO2/lWbNZQDU6Xe0XQhuGFj5NQk=;
-        b=B6uKlERavDvKoVnUAsopmtnUrrjgtlfadYYrEW+1d6mx6Dp7WDWk2LSrMYkiBImSJg
-         2MX6IMhFhciuSVo2IVdK8RLwB099a6FrmRRNKXdb3xxENLlHDWHjotUUUjAmEQMwuDBe
-         aWatdxsvw3ci4l9yYNl7gE2GQyoa2bsMEDG8FHeP41AvnHs8C2Sgi+aqRlOGr1pd27J+
-         yWI91Q1FxLXu1h9QAHxbsHEzDLzpqA8mH9ElWsKR9LNn1dG3voNVw2FGedLk/3Q3Qu+D
-         4rvRA2DokgYwEo4qjf2yMgW+juWr0Isi0hDCc5TUrVYjbei39zGSC9v0Q+uO43XgTm7E
-         Ax0w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=1zcGRTl/9l2GpF8LYO2/lWbNZQDU6Xe0XQhuGFj5NQk=;
-        b=x7swbz2/vd1HfSVvd/KwknvtrkjoKGmyJ4Y9js/1rpQvAMN6ulbIDICSelpUk98XPH
-         yE6SiXvOi4xG5YxJ7uDn6yOL9hQuYD7Ygmzg+EAUQUdHyYK3SBomFv4rnrjWON1jZKCW
-         SEq0KdAHVia2Dc1tbIVeA4PYvYOMJjb+Rx/EvaFLSvj4kGe6eJ9zmgZICkjf0QiybDbT
-         rZkNEIJuZDNMq2icZixtkHAcrsIfaaFaxPNYQ8bk33WI4IUjEzBnJxfemfpl2RXePhTo
-         SbpE0fmTRpCLHYcFrIUgBq/uwRPj5mFx7xIxec/K1RXf656vjPrhGX5jczl8ak4g4hu2
-         Q7Xw==
-X-Gm-Message-State: AO0yUKWUOKqda90UoukvF7YsWk7G7Kkyf7gp6q/vLCLwvZWJJhn9+uTr
-        mtRtby4Krtl5lCnEWJJ6KLk=
-X-Google-Smtp-Source: AK7set8TW5veSVICkPbHeLQ5wN2iSlqP+gqOJcmhQuifsFLIWce6R5b8cWaoCiDrC0NMmPiqdjWQjg==
-X-Received: by 2002:a05:6402:3890:b0:4a3:43c1:843e with SMTP id fd16-20020a056402389000b004a343c1843emr1507395edb.18.1676890299222;
-        Mon, 20 Feb 2023 02:51:39 -0800 (PST)
-Received: from [192.168.1.10] (97e09f27.skybroadband.com. [151.224.159.39])
-        by smtp.googlemail.com with ESMTPSA id m9-20020a50c189000000b004ad7af3955dsm832108edf.15.2023.02.20.02.51.38
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 20 Feb 2023 02:51:38 -0800 (PST)
-Message-ID: <c12aa9b8-65a1-0cdf-8948-15309f16b955@googlemail.com>
-Date:   Mon, 20 Feb 2023 10:51:36 +0000
+        Mon, 20 Feb 2023 05:52:07 -0500
+Received: from EUR04-VI1-obe.outbound.protection.outlook.com (mail-vi1eur04on2077.outbound.protection.outlook.com [40.107.8.77])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2CCAF196BF;
+        Mon, 20 Feb 2023 02:52:03 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=cRlzf1m6fl8vv+VElSgxhYdkHB0zUH0Yki1fYFWlhyHYf00GU/V715N+yDNH7nOlYADsteYN3SKK+V2UNgenq+6jJcOatJBmaXhg7DEdyHjqElaSlX0L5Q8nAxwKnXq86wiVZKXkXBAfKd8y7kf4yVij81uEH8nbiiJRaexOXLpluBQwyD6sAOOUsdRIqRnrIhhVfDjBtUduQ65wTtZJqO059bmiFlnS/E342s9PECf0z5LRjtuWsr0YEWb5OA4GNl+Uot7S786QfVskMxy2zZVwq/6Wjz1GUwQdxbVMxhGL/fPsLvl7c8xq8ojQ7CviAbq6v4X43X2Xn/LvExLtNw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=h7jBEZCklkP/XzXteWJEE6Cz47LBC6NYxQELvdV7c7c=;
+ b=mGq+BQZrOQt82K8f1BQZzMtYNZpOGADKHE2ZsxFy+JcXgtCnZidoSW+RM6gxIDoVxCQikzZrOR9bQ33uOuMqfl7Rpw6BDE4uVRywsPm5UDD/j9C0oueBrIJ5F+lPa87njhyo56wVnDLSaoTo701DIm/RDyp3POwVfMHNwMmL0kinc+f0MpJsAGddFm48hfngVWmJeyAkVdu4vIPl09sNk6q5a56z4XeFNsh2fYxu/UZGvN+Rv/Pkv7dYxPUswHLAj8Et7dylF3vFGNjm5+ZmzbcKLE4HmfLpKlf7tPH1VUaMLea8DaCIXRVXMf3FmVqzSbnnlpBLnDjwQ2SnccBIAg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=h7jBEZCklkP/XzXteWJEE6Cz47LBC6NYxQELvdV7c7c=;
+ b=H2HqQ+nJHUUswN0hmNkjEPl5ArI86JlLlBnps26ZUlhcZ815cE9G7jkgmi5OvhGbf74cvSqzwS2HQEoKMEhtcigMiaFBh21qBtXSq2JsxTwkLChiAGa7gwlZtnQ7hq9n/3eF7vXoW//eefADcQQ2KRhjLSlooHQJD4RalRJRDKk=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nxp.com;
+Received: from DU0PR04MB9563.eurprd04.prod.outlook.com (2603:10a6:10:314::7)
+ by AM8PR04MB7203.eurprd04.prod.outlook.com (2603:10a6:20b:1d5::16) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6111.19; Mon, 20 Feb
+ 2023 10:52:01 +0000
+Received: from DU0PR04MB9563.eurprd04.prod.outlook.com
+ ([fe80::a518:512c:4af1:276e]) by DU0PR04MB9563.eurprd04.prod.outlook.com
+ ([fe80::a518:512c:4af1:276e%4]) with mapi id 15.20.6111.018; Mon, 20 Feb 2023
+ 10:52:01 +0000
+From:   meenakshi.aggarwal@nxp.com
+To:     horia.geanta@nxp.com, V.sethi@nxp.com, pankaj.gupta@nxp.com,
+        gaurav.jain@nxp.com, herbert@gondor.apana.org.au,
+        davem@davemloft.net, VIJAY.BALAKRISHNA@microsoft.com,
+        Tyler.Hicks@microsoft.com, linux-crypto@vger.kernel.org,
+        linux-kernel@vger.kernel.org, franck.lenormand@nxp.com
+Cc:     linux-imx@nxp.com
+Subject: [PATCH] drivers: crypto: caam: jr: add .shutdown hook
+Date:   Mon, 20 Feb 2023 16:21:39 +0530
+Message-Id: <20230220105139.1450262-1-meenakshi.aggarwal@nxp.com>
+X-Mailer: git-send-email 2.25.1
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: SI1PR02CA0059.apcprd02.prod.outlook.com
+ (2603:1096:4:1f5::19) To DU0PR04MB9563.eurprd04.prod.outlook.com
+ (2603:10a6:10:314::7)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: linux-6.2-rc4+ hangs on poweroff/reboot: Bisected
-To:     Ben Skeggs <skeggsb@gmail.com>
-Cc:     Karol Herbst <kherbst@redhat.com>,
-        Linux regressions mailing list <regressions@lists.linux.dev>,
-        Dave Airlie <airlied@gmail.com>, bskeggs@redhat.com,
-        Lyude Paul <lyude@redhat.com>,
-        ML nouveau <nouveau@lists.freedesktop.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        ML dri-devel <dri-devel@lists.freedesktop.org>
-References: <b64705e3-2e63-a466-f829-f9568b06766a@googlemail.com>
- <5abbee70-cc84-1528-c3d8-9befd9edd611@googlemail.com>
- <5cf46df8-0fa2-e9f5-aa8e-7f7f703d96dd@googlemail.com>
- <f72fe15b-db1d-56dd-aaf6-3cba68a8bf0a@leemhuis.info>
- <CACO55tvR4ydDOXt=9nbR3n2aFLKrj8zeuGRR_xpezVQBBLrjqg@mail.gmail.com>
- <a6188878-f84c-0fcc-9509-b9d7ab797f4c@leemhuis.info>
- <d031f0a5-8d5e-af51-6db6-11844de3eeba@googlemail.com>
- <CAPM=9tz+wksJTvMi_4Ef7XWezfH0ReN2se189s8Q=obJjHC+Fw@mail.gmail.com>
- <4e786e22-f17a-da76-5129-8fef0c7c825a@googlemail.com>
- <b829633e-ccc4-7a54-1cad-f29254de1251@leemhuis.info>
- <CACO55tsvM07_6mGU3dCgeji0a6B4JJKSDOOBuCHv2Mw3rYbCHg@mail.gmail.com>
- <181bea6a-e501-f5bd-b002-de7a244a921a@googlemail.com>
- <CACO55tsGXfy9-a-nexvcn7pnDGoEWXMqhiQEBwCDkGyOeT1sXQ@mail.gmail.com>
- <dbfc1f77-29f3-7690-c231-55f906a4e7e5@googlemail.com>
- <7f6ec5b3-b5c7-f564-003e-132f112b7cf4@googlemail.com>
- <CACAvsv7Uf5=K44y8YLsiy0aMnc1zvGEQdeDe7RQF=AV+fxxzuQ@mail.gmail.com>
-Content-Language: en-GB
-From:   Chris Clayton <chris2553@googlemail.com>
-In-Reply-To: <CACAvsv7Uf5=K44y8YLsiy0aMnc1zvGEQdeDe7RQF=AV+fxxzuQ@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DU0PR04MB9563:EE_|AM8PR04MB7203:EE_
+X-MS-Office365-Filtering-Correlation-Id: aadda204-0334-4523-7309-08db13307eb0
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: K7Ou6olipXlf2DbRjgywa5H/iJC8nZlxhdlsl1OYmreLUf6jttB5fMhsBPqJpI6IyQ6sUIOznNwoWpHDR09ZxWRFKlmodgeGdgWwGjd9WAah5DMOsrLlk2JUDJ+nG1Crloc771uNBCj6ISezXWjUZaifowtObfEiVT/w1Ho1MVhYEenBE/XNP6zRa43h0Lxy+o+v6IrVCpvIw9x5ZExubXHnLArAqdovd1kxD4y22/7xFFWwXUvdPX1fVUpjplt9M3udySwbwwOtwhIRs4Ig+EphIU53pIiJXVqQ87XyikW/ummeJ/ZGA82AVgJER5voi6kX3FsNXwWC/vOobIZQzSZCz6IRSZQmVf9q6Givj59hKI/qtWoYIPm5nPNGrJgY1ojlS8nlUs2KmdUh/KOlMHezQG2IQoitkzhFJjPzySKIMFVtDKiFvu3twAbXl3PlgdShmjEygbriUf7fQbomzr/Ew8QjMsVChM0v5rcUDKPGY/0a4KYEcgMsUKfbJnb/MshL6cJjLsg0I0knRIDOo5GIU3NG8Q8kwwvG7fthZzMLyPMFHnbAmd1mzmZuVFhC29Ts9F5k81R/2dohYLPVi5iPBMv7rXLzI6JLYn9svJ8k6v/S41RWxj9Iz5COFBroroloo4GM3kUKeMKjkpPPRMIUHmUOCA8vOitP4rhz66kwbuyg8ZOK+Y6zwf+alVC70/qWit/wjDk9EX7crcheStzKNvrXj/OJXQPY+ZE6CgqGHLmUinOdd8EshqMJQRIx
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DU0PR04MB9563.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(39860400002)(366004)(396003)(136003)(346002)(376002)(451199018)(6666004)(66946007)(8936002)(316002)(66556008)(66476007)(6506007)(8676002)(2616005)(4326008)(1076003)(41300700001)(26005)(186003)(6512007)(9686003)(6486002)(478600001)(52116002)(921005)(36756003)(86362001)(5660300002)(4744005)(2906002)(38350700002)(38100700002)(142923001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?+qujD54iLmn5uz6gL/kTGwYc8UbbKweVKMCUwFdYlUX01BLgEN69aPdH3Q/1?=
+ =?us-ascii?Q?jAWaxo5W1TaAzm6sJGPh9mg0duAtOSVA8LtVV8ZRNzs+ceqG+bMqUnmjk7Vc?=
+ =?us-ascii?Q?wQdG1Y/G7cX1ocN/w2dom3Onpyw4g6f/wDSRoVgdbrc3dA2OqX4f9FkcyqOF?=
+ =?us-ascii?Q?CxTpoNhBOJ9IRkrGbOJ4kayFo98LQ4WzyKwgaWFE16d8qOb4we0RC0/9PAFz?=
+ =?us-ascii?Q?K3V5D1zuBI6SM28LnkBG1ls7Co8d1ibTDyyIdZZqCa+sS9FtMRgHqmigxlxC?=
+ =?us-ascii?Q?jVQWlZjgs6TNcoWAvV9ebUEx3FpE6HSMiz5PJ/Rp1Zsg0P9gaYjGNhE5QKrB?=
+ =?us-ascii?Q?qkBTVH6WoPaKUX4BdmEZgG87xsgYpsnuDEqisPK8xexq6egnRXCS4mRgTr02?=
+ =?us-ascii?Q?34MNR78syOcyCyRPd8nXgqr+EqO6+Co649FszCeN1ir69JPtslydk9CW0p8R?=
+ =?us-ascii?Q?gHKviritpKU/sRjp4kQp8OUKNFJ3aXt1sw7jky/nkdOG1vW3BvB306tguMyV?=
+ =?us-ascii?Q?i4tgX+ASv76AhEOYY/hJIwvE9Q8FByjHuiXZD3QamhX6FYl84F5bATFtrk7k?=
+ =?us-ascii?Q?SBmCMV4j8wWcQ5ZWkxT2HXsMP6tSoAh7kQOaq3h9S0cxGxHpQGce43+yE3Ui?=
+ =?us-ascii?Q?rt01zlOZKnr8/5aCzdtkuMXMML599citDnW0W/OrUQRuEK08M5QtPqCERqx9?=
+ =?us-ascii?Q?cHPQRCjlSjZ0MZuP9PyLBHwy0k9F2/hR9VDiriuZ83DSa5oMs9t83iXoxNsR?=
+ =?us-ascii?Q?icQSazFqDKqcS2oPQr0MqD84oWMxE3y3qC9bE1wvyseh5TRQHwKFNLNHitVi?=
+ =?us-ascii?Q?t0BViCXIY4oCwADEfgFZyJQ4+imzdalY4CN9bvWARqD3+iXvYIWG5/0o1+fi?=
+ =?us-ascii?Q?X/QgAHgHIVEj7dKgj3+6qkmurrInVkgJ2Fz+AjJgCC6MYZDscksfUAxDF+E6?=
+ =?us-ascii?Q?Eue/ysMXZg6pLb1z6e5FalG5166BKhagZDuVmnvielEVMfxIviQfIuQ4jILr?=
+ =?us-ascii?Q?oLlGd7xy75UnOxhe0GdVwsv6FuknVNyivNlVk0SYUmDbzi17EqXKTC7/IH9S?=
+ =?us-ascii?Q?eTszfixDC8B9cu8kakE675TgpP5yeWto/gyEoJNVfHcRTSBuiLnTrYLs0+h2?=
+ =?us-ascii?Q?WFVcoDRRcb1njvg0zTGCr2okO2OI/L1lsq262INJMxmQ3WSgKyONaL5Jz47M?=
+ =?us-ascii?Q?zYyC1tF1zE3t26S4CXjfCkr5kd0jOxicDfae69h9YIJtnY6RBW7jO/mdnF6T?=
+ =?us-ascii?Q?sb2bR+Oy703f9iJ57TIOuU8zo74f/KKiMvAZLBPhIKSChTLGDOtRWiAj51u1?=
+ =?us-ascii?Q?DVvPJwUsGkjSFEKrxDST8bBk9BuKeaXPKdhXoRRNFZ9uahYLULMVANNLgPxi?=
+ =?us-ascii?Q?Rug4Fqj2bSu25OHccHY1IT/ZmY7EWTEGPSL0eNbbr9vDIXfKnUSzwN5GyK/w?=
+ =?us-ascii?Q?w1EUojzwwXg7VqO4RLDCLWFmc8MnDkz7vn/tMfyzJB30T69TUrrSqC9eM7xk?=
+ =?us-ascii?Q?WGixD7i1yBMR8JtmhqJNi2TqqKS+i2Ve7Eyr8wEqGaZnH7XJg7hJ9EHpigiW?=
+ =?us-ascii?Q?jqaPLGPvUjP1uMxsrb50nsutkoiBr+C3FsrFbYr5nfoAilhVBiedNEOcIac0?=
+ =?us-ascii?Q?vA=3D=3D?=
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: aadda204-0334-4523-7309-08db13307eb0
+X-MS-Exchange-CrossTenant-AuthSource: DU0PR04MB9563.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 20 Feb 2023 10:52:01.1671
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 0N2AXGXYb+BNVM0hSNMniBdGdp5ul82MaszTAiEteBUNYmYjqRI1hvRGqgzaMPOgLdEUHvZwdlx+h+5Bzx+onuOk++1Yekj4/tMwIvhF61o=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM8PR04MB7203
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+From: Gaurav Jain <gaurav.jain@nxp.com>
 
+add .shutdown hook in caam_jr driver to support kexec boot
 
-On 20/02/2023 05:35, Ben Skeggs wrote:
-> On Sun, 19 Feb 2023 at 04:55, Chris Clayton <chris2553@googlemail.com> wrote:
->>
->>
->>
->> On 18/02/2023 15:19, Chris Clayton wrote:
->>>
->>>
->>> On 18/02/2023 12:25, Karol Herbst wrote:
->>>> On Sat, Feb 18, 2023 at 1:22 PM Chris Clayton <chris2553@googlemail.com> wrote:
->>>>>
->>>>>
->>>>>
->>>>> On 15/02/2023 11:09, Karol Herbst wrote:
->>>>>> On Wed, Feb 15, 2023 at 11:36 AM Linux regression tracking #update
->>>>>> (Thorsten Leemhuis) <regressions@leemhuis.info> wrote:
->>>>>>>
->>>>>>> On 13.02.23 10:14, Chris Clayton wrote:
->>>>>>>> On 13/02/2023 02:57, Dave Airlie wrote:
->>>>>>>>> On Sun, 12 Feb 2023 at 00:43, Chris Clayton <chris2553@googlemail.com> wrote:
->>>>>>>>>>
->>>>>>>>>>
->>>>>>>>>>
->>>>>>>>>> On 10/02/2023 19:33, Linux regression tracking (Thorsten Leemhuis) wrote:
->>>>>>>>>>> On 10.02.23 20:01, Karol Herbst wrote:
->>>>>>>>>>>> On Fri, Feb 10, 2023 at 7:35 PM Linux regression tracking (Thorsten
->>>>>>>>>>>> Leemhuis) <regressions@leemhuis.info> wrote:
->>>>>>>>>>>>>
->>>>>>>>>>>>> On 08.02.23 09:48, Chris Clayton wrote:
->>>>>>>>>>>>>>
->>>>>>>>>>>>>> I'm assuming  that we are not going to see a fix for this regression before 6.2 is released.
->>>>>>>>>>>>>
->>>>>>>>>>>>> Yeah, looks like it. That's unfortunate, but happens. But there is still
->>>>>>>>>>>>> time to fix it and there is one thing I wonder:
->>>>>>>>>>>>>
->>>>>>>>>>>>> Did any of the nouveau developers look at the netconsole captures Chris
->>>>>>>>>>>>> posted more than a week ago to check if they somehow help to track down
->>>>>>>>>>>>> the root of this problem?
->>>>>>>>>>>>
->>>>>>>>>>>> I did now and I can't spot anything. I think at this point it would
->>>>>>>>>>>> make sense to dump the active tasks/threads via sqsrq keys to see if
->>>>>>>>>>>> any is in a weird state preventing the machine from shutting down.
->>>>>>>>>>>
->>>>>>>>>>> Many thx for looking into it!
->>>>>>>>>>
->>>>>>>>>> Yes, thanks Karol.
->>>>>>>>>>
->>>>>>>>>> Attached is the output from dmesg when this block of code:
->>>>>>>>>>
->>>>>>>>>>         /bin/mount /dev/sda7 /mnt/sda7
->>>>>>>>>>         /bin/mountpoint /proc || /bin/mount /proc
->>>>>>>>>>         /bin/dmesg -w > /mnt/sda7/sysrq.dmesg.log &
->>>>>>>>>>         /bin/echo t > /proc/sysrq-trigger
->>>>>>>>>>         /bin/sleep 1
->>>>>>>>>>         /bin/sync
->>>>>>>>>>         /bin/sleep 1
->>>>>>>>>>         kill $(pidof dmesg)
->>>>>>>>>>         /bin/umount /mnt/sda7
->>>>>>>>>>
->>>>>>>>>> is executed immediately before /sbin/reboot is called as the final step of rebooting my system.
->>>>>>>>>>
->>>>>>>>>> I hope this is what you were looking for, but if not, please let me know what you need
->>>>>>>>
->>>>>>>> Thanks Dave. [...]
->>>>>>> FWIW, in case anyone strands here in the archives: the msg was
->>>>>>> truncated. The full post can be found in a new thread:
->>>>>>>
->>>>>>> https://lore.kernel.org/lkml/e0b80506-b3cf-315b-4327-1b988d86031e@googlemail.com/
->>>>>>>
->>>>>>> Sadly it seems the info "With runpm=0, both reboot and poweroff work on
->>>>>>> my laptop." didn't bring us much further to a solution. :-/ I don't
->>>>>>> really like it, but for regression tracking I'm now putting this on the
->>>>>>> back-burner, as a fix is not in sight.
->>>>>>>
->>>>>>> #regzbot monitor:
->>>>>>> https://lore.kernel.org/lkml/e0b80506-b3cf-315b-4327-1b988d86031e@googlemail.com/
->>>>>>> #regzbot backburner: hard to debug and apparently rare
->>>>>>> #regzbot ignore-activity
->>>>>>>
->>>>>>
->>>>>> yeah.. this bug looks a little annoying. Sadly the only Turing based
->>>>>> laptop I got doesn't work on Nouveau because of firmware related
->>>>>> issues and we probably need to get updated ones from Nvidia here :(
->>>>>>
->>>>>> But it's a bit weird that the kernel doesn't shutdown, because I don't
->>>>>> see anything in the logs which would prevent that from happening.
->>>>>> Unless it's waiting on one of the tasks to complete, but none of them
->>>>>> looked in any way nouveau related.
->>>>>>
->>>>>> If somebody else has any fancy kernel debugging tips here to figure
->>>>>> out why it hangs, that would be very helpful...
->>>>>>
->>>>>
->>>>> I think I've figured this out. It's to do with how my system is configured. I do have an initrd, but the only thing on
->>>>> it is the cpu microcode which, it is recommended, should be loaded early. The absence of the NVidia firmare from an
->>>>> initrd doesn't matter because the drivers for the hardware that need to load firmware are all built as modules, So, by
->>>>> the time the devices are configured via udev, the root partition is mounted and the drivers can get at the firmware.
->>>>>
->>>>> I've found, by turning on nouveau debug and taking a video of the screen as the system shuts down, that nouveau seems to
->>>>> be trying to run the scrubber very very late in the shutdown process. The problem is that by this time, I think the root
->>>>> partition, and thus the scrubber binary, have become inaccessible.
->>>>>
->>>>> I seem to have two choices - either make the firmware accessible on an initrd or unload the module in a shutdown script
->>>>> before the scrubber binary becomes inaccessible. The latter of these is the workaround I have implemented whilst the
->>>>> problem I reported has been under investigation. For simplicity, I think I'll promote my workaround to being the
->>>>> permanent solution.
->>>>>
->>>>> So, apologies (and thanks) to everyone whose time I have taken up with this non-bug.
->>>>>
->>>>
->>>> Well.. nouveau shouldn't prevent the system from shutting down if the
->>>> firmware file isn't available. Or at least it should print a
->>>> warning/error. Mind messing with the code a little to see if skipping
->>>> it kind of works? I probably can also come up with a patch by next
->>>> week.
->>>>
->>> Well, I'd love to but a quick glance at the code caused me to bump into this obscenity:
->>>
->>> int
->>> gm200_flcn_reset_wait_mem_scrubbing(struct nvkm_falcon *falcon)
->>> {
->>>         nvkm_falcon_mask(falcon, 0x040, 0x00000000, 0x00000000);
->>>
->>>         if (nvkm_msec(falcon->owner->device, 10,
->>>                 if (!(nvkm_falcon_rd32(falcon, 0x10c) & 0x00000006))
->>>                         break;
->>>         ) < 0)
->>>                 return -ETIMEDOUT;
->>>
->>>         return 0;
->>> }
->>>
->>> nvkm_msec is #defined to nvkm_usec which in turn is #defined to nvkm_nsec where the loop that the break is related to
->>> appears
->>
->> I think someone who knows the code needs to look at this. What I can confirm is that after a freeze, I waited for 90
->> seconds for a timeout to occur, but it didn't.
-> Hey,
-> 
-> Are you able to try the attached patch for me please?
-> 
-> Thanks,
-> Ben.
-> 
+Signed-off-by: Gaurav Jain <gaurav.jain@nxp.com>
+---
+ drivers/crypto/caam/jr.c | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-Thanks Ben.
+diff --git a/drivers/crypto/caam/jr.c b/drivers/crypto/caam/jr.c
+index 8745fe3cb575..a2a99d09b4ad 100644
+--- a/drivers/crypto/caam/jr.c
++++ b/drivers/crypto/caam/jr.c
+@@ -198,6 +198,11 @@ static int caam_jr_remove(struct platform_device *pdev)
+ 	return ret;
+ }
+ 
++static void caam_jr_platform_shutdown(struct platform_device *pdev)
++{
++	caam_jr_remove(pdev);
++}
++
+ /* Main per-ring interrupt handler */
+ static irqreturn_t caam_jr_interrupt(int irq, void *st_dev)
+ {
+@@ -653,6 +658,7 @@ static struct platform_driver caam_jr_driver = {
+ 	},
+ 	.probe       = caam_jr_probe,
+ 	.remove      = caam_jr_remove,
++	.shutdown = caam_jr_platform_shutdown,
+ };
+ 
+ static int __init jr_driver_init(void)
+-- 
+2.25.1
 
-Yes, this patch fixes the lockup on reboot and poweroff that I've been seeing on my laptop. As you would expect,
-offloaded rendering is still working and the discrete GPU is being powered on and off as required.
-
-Thanks.
-
-Reported-by: Chris Clayton <chris2553@googlemail.com>
-Tested-by: Chris Clayton <chris2553@googlemail.com>
-
->>
->>
->> .> Chris
->>>>>
->>>>>>> Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
->>>>>>> --
->>>>>>> Everything you wanna know about Linux kernel regression tracking:
->>>>>>> https://linux-regtracking.leemhuis.info/about/#tldr
->>>>>>> That page also explains what to do if mails like this annoy you.
->>>>>>>
->>>>>>> #regzbot ignore-activity
->>>>>>>
->>>>>>
->>>>>
->>>>
