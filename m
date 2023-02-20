@@ -2,137 +2,356 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B1EE69D607
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Feb 2023 22:57:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6CE7569D60B
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Feb 2023 22:58:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232410AbjBTV5l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Feb 2023 16:57:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52636 "EHLO
+        id S232454AbjBTV6P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Feb 2023 16:58:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53582 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229738AbjBTV5j (ORCPT
+        with ESMTP id S232449AbjBTV6N (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Feb 2023 16:57:39 -0500
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47B3D16AF9;
-        Mon, 20 Feb 2023 13:57:37 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1676930257; x=1708466257;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=lFNJ4xZ2jtjUGX9TOVIKdIbazyFjXPKRgiWY4LvKm+s=;
-  b=J9VtzsXO5z72fIfBtXyWpgDkpiaPEsGQEP6YhSUimTHWTECgbc7dBysa
-   dxfJaMaSnxyB3ypV85sqBeUxUr32aAimFlVBLwjvPrwHdC9J1Mi45xWlY
-   BSsqCA6debstm5vpHl8m5IekpyoL36M5kAEzGK7q1DNAu/P58EZskffLT
-   oYuh0dzEw8W0wLAEvUqAQfE5nZS44hnOQ9e4SwrbV+Je8tzNRxJzgWz7o
-   AlwQMHuCbd95j3FdbZg6uWHCdzHBFJhp49/+p9DlOu8wDOA5T/7GyOoZh
-   m69N4WH3JYtMwo2hlLRf4rQWX69HaMls3RW9BTQMkOV1v7yH/UYdBIwHG
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10627"; a="320621922"
-X-IronPort-AV: E=Sophos;i="5.97,313,1669104000"; 
-   d="scan'208";a="320621922"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Feb 2023 13:57:36 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10627"; a="845438006"
-X-IronPort-AV: E=Sophos;i="5.97,313,1669104000"; 
-   d="scan'208";a="845438006"
-Received: from lkp-server01.sh.intel.com (HELO 4455601a8d94) ([10.239.97.150])
-  by orsmga005.jf.intel.com with ESMTP; 20 Feb 2023 13:57:31 -0800
-Received: from kbuild by 4455601a8d94 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pUEA6-000ECb-1f;
-        Mon, 20 Feb 2023 21:57:30 +0000
-Date:   Tue, 21 Feb 2023 05:56:58 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Nitesh Shetty <nj.shetty@samsung.com>,
-        Jens Axboe <axboe@kernel.dk>, Alasdair Kergon <agk@redhat.com>,
-        Mike Snitzer <snitzer@kernel.org>, dm-devel@redhat.com,
-        Keith Busch <kbusch@kernel.org>,
-        Christoph Hellwig <hch@lst.de>,
-        Sagi Grimberg <sagi@grimberg.me>,
-        James Smart <james.smart@broadcom.com>,
-        Chaitanya Kulkarni <kch@nvidia.com>,
-        Alexander Viro <viro@zeniv.linux.org.uk>
-Cc:     oe-kbuild-all@lists.linux.dev, bvanassche@acm.org, hare@suse.de,
-        ming.lei@redhat.com, damien.lemoal@opensource.wdc.com,
-        anuj20.g@samsung.com, joshi.k@samsung.com, nitheshshetty@gmail.com,
-        gost.dev@samsung.com, Nitesh Shetty <nj.shetty@samsung.com>,
-        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-nvme@lists.infradead.org, linux-fsdevel@vger.kernel.org
-Subject: Re: [PATCH v7 4/8] fs, block: copy_file_range for def_blk_ops for
- direct block device.
-Message-ID: <202302210520.EIfbuJLy-lkp@intel.com>
-References: <20230220105336.3810-5-nj.shetty@samsung.com>
+        Mon, 20 Feb 2023 16:58:13 -0500
+Received: from mail-pf1-x430.google.com (mail-pf1-x430.google.com [IPv6:2607:f8b0:4864:20::430])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C02A21974
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Feb 2023 13:58:03 -0800 (PST)
+Received: by mail-pf1-x430.google.com with SMTP id e24so1431401pfn.3
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Feb 2023 13:58:03 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=o6uK3JRKD9glmPZVrtfk/3zmVSx28VEnBekWkjPdr5Y=;
+        b=JQdsgB85zsGpr7bJJtGBrfD6jVZ3ad3XG7mHodDwjrQOppO96CfKnvWDvn027EwEHC
+         96gBnPMYLefqcV9GtDQ0+KdVQAIS6RA+3R1CqkJMaXPu7rOJpoBPfnZY1CbEx4/KGiY+
+         VfP4cOljStALIu5BZ2RNwopsKcX+99WTfzFTQNDzn+y3tdQCnMs5sWt7qUe0ODIy7Iik
+         rlyymb0gEjbJtJyh7Rd+hwcHOS4yxtkxXZAaAzwGwiygiwlezXQcXtGzZKN1IVWJrIZ6
+         KYTBZopgGfTqij71ZSZLw/vf2qKwz80hU2KGTAh3EobzSPjUtDhENfl1b0+KTbQSPJ7m
+         IUdA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=o6uK3JRKD9glmPZVrtfk/3zmVSx28VEnBekWkjPdr5Y=;
+        b=a+IbtCV3dih9b4bhDtsI23Of/pGv4AVXKwJI7/JO7yyORWIxoIBjiNjsMbfZAt7GF9
+         15ygE77ek3Nlcc5kI+SOgAB/+NgvrfS9TtKeXnPvKwBkt3oDmxgt0u1Je/SngbKLv1ce
+         eOtfrPEjVlpqzhepicc5vdjhztBQbnId0uhnQhxtxLJH2Te7m/mZ1xYAF66yN3c/EMS0
+         x0E0IVjnKAKwsBLrow8ORqVJBQe3Q4TGah0LhaDlY1JGCq/jsTC+7vhp30rCmPnGRPfe
+         7Li1zQUxabtdF9A8jR8sWLp22B5mjBKMtBSlzQTFKPVtWvs5u8D9IUh+ESjriQkYalBy
+         2m6A==
+X-Gm-Message-State: AO0yUKWCLA3CBro1JH1gl4T9brq+DrFtS7GQbzZs9WG/QTdf0HrNrTqF
+        Q2Zqbsg8M87FfTETCS7pZ6q0mA==
+X-Google-Smtp-Source: AK7set+5H75omPr1jx07B6MYxxT9l6o0A4rTTnvrjrtvO9CaWBAnSNy7c5wG62GfASXCoYugnTS1OA==
+X-Received: by 2002:a05:6a00:4194:b0:5a8:cc39:fc58 with SMTP id ca20-20020a056a00419400b005a8cc39fc58mr3447013pfb.6.1676930282962;
+        Mon, 20 Feb 2023 13:58:02 -0800 (PST)
+Received: from p14s ([2604:3d09:148c:c800:66c:5b9c:15ea:e519])
+        by smtp.gmail.com with ESMTPSA id m20-20020aa79014000000b00593c1c5bd0esm1433029pfo.164.2023.02.20.13.58.01
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 20 Feb 2023 13:58:02 -0800 (PST)
+Date:   Mon, 20 Feb 2023 14:58:00 -0700
+From:   Mathieu Poirier <mathieu.poirier@linaro.org>
+To:     "Iuliana Prodan (OSS)" <iuliana.prodan@oss.nxp.com>
+Cc:     Bjorn Andersson <andersson@kernel.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        "S.J. Wang" <shengjiu.wang@nxp.com>,
+        Fabio Estevam <festevam@gmail.com>,
+        Daniel Baluta <daniel.baluta@nxp.com>,
+        Iuliana Prodan <iuliana.prodan@nxp.com>,
+        linux-imx <linux-imx@nxp.com>, linux-remoteproc@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Pengutronix Kernel Team <kernel@pengutronix.de>
+Subject: Re: [PATCH v4] remoteproc: imx_dsp_rproc: add custom memory copy
+ implementation for i.MX DSP Cores
+Message-ID: <20230220215800.GA794395@p14s>
+References: <20230207134401.26724-1-iuliana.prodan@oss.nxp.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230220105336.3810-5-nj.shetty@samsung.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230207134401.26724-1-iuliana.prodan@oss.nxp.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Nitesh,
+Hi Iuliana,
 
-Thank you for the patch! Yet something to improve:
+On Tue, Feb 07, 2023 at 03:44:01PM +0200, Iuliana Prodan (OSS) wrote:
+> From: Iuliana Prodan <iuliana.prodan@nxp.com>
+> 
+> The IRAM is part of the HiFi DSP.
+> According to hardware specification only 32-bits write are allowed
+> otherwise we get a Kernel panic.
+> 
+> Therefore add a custom memory copy and memset functions to deal with
+> the above restriction.
+> 
+> Signed-off-by: Iuliana Prodan <iuliana.prodan@nxp.com>
+> 
+> ---
+> Changes since v3
+> - remove Reported-by
+> 
+> Changes since v2
+> - fix warning "cast from pointer to integer of different size"
+> reported by kernel test robot.
+> 
+> Changes since v1
+> - added missing check for cases when the memory slot is bigger than the file size;
+> - added a custom memset function
+> - removed is_iomem flag since is not used here
+> - updated custom memcpy function to avoid reading after end of source
+> 
+> ---
+>  drivers/remoteproc/imx_dsp_rproc.c | 181 ++++++++++++++++++++++++++++-
+>  1 file changed, 180 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/remoteproc/imx_dsp_rproc.c b/drivers/remoteproc/imx_dsp_rproc.c
+> index 2d9f4214a4c51..6a7cef1329329 100644
+> --- a/drivers/remoteproc/imx_dsp_rproc.c
+> +++ b/drivers/remoteproc/imx_dsp_rproc.c
+> @@ -715,6 +715,185 @@ static void imx_dsp_rproc_kick(struct rproc *rproc, int vqid)
+>  		dev_err(dev, "%s: failed (%d, err:%d)\n", __func__, vqid, err);
+>  }
+>  
+> +/*
+> + * Custom memory copy implementation for i.MX DSP Cores
+> + *
+> + * The IRAM is part of the HiFi DSP.
+> + * According to hw specs only 32-bits writes are allowed.
+> + */
+> +static int imx_dsp_rproc_memcpy(void *dest, const void *src, size_t size)
+> +{
+> +	const u8 *src_byte = src;
+> +	u32 affected_mask;
+> +	u32 tmp;
+> +	int i, q, r;
+> +
 
-[auto build test ERROR on device-mapper-dm/for-next]
-[also build test ERROR on linus/master v6.2 next-20230220]
-[cannot apply to axboe-block/for-next]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+	const u8 *src_byte = src;
+	u32 affected_mask;
+	int i, q, r;
+	u32 tmp;
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Nitesh-Shetty/block-Add-copy-offload-support-infrastructure/20230220-205057
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/device-mapper/linux-dm.git for-next
-patch link:    https://lore.kernel.org/r/20230220105336.3810-5-nj.shetty%40samsung.com
-patch subject: [PATCH v7 4/8] fs, block: copy_file_range for def_blk_ops for direct block device.
-config: riscv-randconfig-r042-20230219 (https://download.01.org/0day-ci/archive/20230221/202302210520.EIfbuJLy-lkp@intel.com/config)
-compiler: riscv64-linux-gcc (GCC) 12.1.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/0f95ad2cb727ac6ac8406a01ff216d9237b403b7
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Nitesh-Shetty/block-Add-copy-offload-support-infrastructure/20230220-205057
-        git checkout 0f95ad2cb727ac6ac8406a01ff216d9237b403b7
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=riscv olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash
+> +	/* destination must be 32bit aligned */
+> +	if (!IS_ALIGNED((uintptr_t)dest, 4))
+> +		return -EINVAL;
+> +
+> +	q = size / 4;
+> +	r = size % 4;
+> +
+> +	/* __iowrite32_copy use 32bit size values so divide by 4 */
+> +	__iowrite32_copy(dest, src, q);
+> +
+> +	if (r) {
+> +		affected_mask = (1 << (8 * r)) - 1;
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202302210520.EIfbuJLy-lkp@intel.com/
+Please use GENMASK()
 
-All errors (new ones prefixed by >>):
+> +
+> +		/* first read the 32bit data of dest, then change affected
+> +		 * bytes, and write back to dest.
+> +		 * For unaffected bytes, it should not be changed
+> +		 */
 
-   riscv64-linux-ld: fs/read_write.o: in function `__do_compat_sys_preadv2':
->> fs/read_write.c:1134: undefined reference to `I_BDEV'
+Wrong multi-line comment format.
 
+> +		tmp = ioread32(dest + q * 4);
 
-vim +1134 fs/read_write.c
+This turns into readl().
 
-3ebfd81f7fb3e8 H.J. Lu           2016-07-14  1128  
-f17d8b35452cab Milosz Tanski     2016-03-03  1129  COMPAT_SYSCALL_DEFINE6(preadv2, compat_ulong_t, fd,
-3523a9d4547898 Christoph Hellwig 2020-09-25  1130  		const struct iovec __user *, vec,
-f17d8b35452cab Milosz Tanski     2016-03-03  1131  		compat_ulong_t, vlen, u32, pos_low, u32, pos_high,
-ddef7ed2b5cbaf Christoph Hellwig 2017-07-06  1132  		rwf_t, flags)
-f17d8b35452cab Milosz Tanski     2016-03-03  1133  {
-f17d8b35452cab Milosz Tanski     2016-03-03 @1134  	loff_t pos = ((loff_t)pos_high << 32) | pos_low;
-f17d8b35452cab Milosz Tanski     2016-03-03  1135  
-f17d8b35452cab Milosz Tanski     2016-03-03  1136  	if (pos == -1)
-3523a9d4547898 Christoph Hellwig 2020-09-25  1137  		return do_readv(fd, vec, vlen, flags);
-3523a9d4547898 Christoph Hellwig 2020-09-25  1138  	return do_preadv(fd, vec, vlen, pos, flags);
-72ec35163f9f72 Al Viro           2013-03-20  1139  }
-72ec35163f9f72 Al Viro           2013-03-20  1140  
+> +		tmp &= ~affected_mask;
+> +
+> +		/* avoid reading after end of source */
+> +		for (i = 0; i < r; i++)
+> +			tmp |= (src_byte[q * 4 + i] << (8 * i));
+> +
+> +		iowrite32(tmp, dest + q * 4);
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+As far as I can tell this turns into a simple writel(), leading me to beleive
+the above __iowrite32_copy() can safely be replaced by a loop that calls
+writel().
+
+> +	}
+> +
+> +	return 0;
+> +}
+> +
+> +/*
+> + * Custom memset implementation for i.MX DSP Cores
+> + *
+> + * The IRAM is part of the HiFi DSP.
+> + * According to hw specs only 32-bits writes are allowed.
+> + */
+> +static int imx_dsp_rproc_memset(void *addr, u8 value, size_t size)
+> +{
+> +	u32 affected_mask;
+> +	u32 tmp_val = value;
+> +	u32 *tmp_dst = addr;
+> +	u32 tmp;
+> +	int q, r;
+> +
+> +	/* destination must be 32bit aligned */
+> +	if (!IS_ALIGNED((uintptr_t)addr, 4))
+> +		return -EINVAL;
+> +
+
+Same as above
+
+> +	tmp_val |= tmp_val << 8;
+> +	tmp_val |= tmp_val << 16;
+> +
+> +	q = size / 4;
+> +	r = size % 4;
+> +
+> +	while (q--)
+> +		iowrite32(tmp_val, tmp_dst++);
+> +
+
+This proves my point about __iowrite32_copy() above.
+
+> +	if (r) {
+> +		affected_mask = (1 << (8 * r)) - 1;
+
+Please use GENMASK()
+
+> +
+> +		/* first read the 32bit data of addr, then change affected
+> +		 * bytes, and write back to addr.
+> +		 * For unaffected bytes, it should not be changed
+> +		 */
+
+Wrong multi-line comment format.
+
+> +		tmp = ioread32(tmp_dst);
+
+                readl();
+
+> +		tmp &= ~affected_mask;
+> +
+> +		tmp |= (tmp_val & affected_mask);
+> +		iowrite32(tmp, tmp_dst);
+
+                writel();
+
+Thanks,
+Mathieu
+
+> +	}
+> +
+> +	return 0;
+> +}
+> +/**
+> + * imx_dsp_rproc_elf_load_segments() - load firmware segments to memory
+> + * @rproc: remote processor which will be booted using these fw segments
+> + * @fw: the ELF firmware image
+> + *
+> + * This function loads the firmware segments to memory, where the remote
+> + * processor expects them.
+> + *
+> + * Return: 0 on success and an appropriate error code otherwise
+> + */
+> +static int imx_dsp_rproc_elf_load_segments(struct rproc *rproc, const struct firmware *fw)
+> +{
+> +	struct device *dev = &rproc->dev;
+> +	const void *ehdr, *phdr;
+> +	int i, ret = 0;
+> +	u16 phnum;
+> +	const u8 *elf_data = fw->data;
+> +	u8 class = fw_elf_get_class(fw);
+> +	u32 elf_phdr_get_size = elf_size_of_phdr(class);
+> +
+> +	ehdr = elf_data;
+> +	phnum = elf_hdr_get_e_phnum(class, ehdr);
+> +	phdr = elf_data + elf_hdr_get_e_phoff(class, ehdr);
+> +
+> +	/* go through the available ELF segments */
+> +	for (i = 0; i < phnum; i++, phdr += elf_phdr_get_size) {
+> +		u64 da = elf_phdr_get_p_paddr(class, phdr);
+> +		u64 memsz = elf_phdr_get_p_memsz(class, phdr);
+> +		u64 filesz = elf_phdr_get_p_filesz(class, phdr);
+> +		u64 offset = elf_phdr_get_p_offset(class, phdr);
+> +		u32 type = elf_phdr_get_p_type(class, phdr);
+> +		void *ptr;
+> +
+> +		if (type != PT_LOAD || !memsz)
+> +			continue;
+> +
+> +		dev_dbg(dev, "phdr: type %d da 0x%llx memsz 0x%llx filesz 0x%llx\n",
+> +			type, da, memsz, filesz);
+> +
+> +		if (filesz > memsz) {
+> +			dev_err(dev, "bad phdr filesz 0x%llx memsz 0x%llx\n",
+> +				filesz, memsz);
+> +			ret = -EINVAL;
+> +			break;
+> +		}
+> +
+> +		if (offset + filesz > fw->size) {
+> +			dev_err(dev, "truncated fw: need 0x%llx avail 0x%zx\n",
+> +				offset + filesz, fw->size);
+> +			ret = -EINVAL;
+> +			break;
+> +		}
+> +
+> +		if (!rproc_u64_fit_in_size_t(memsz)) {
+> +			dev_err(dev, "size (%llx) does not fit in size_t type\n",
+> +				memsz);
+> +			ret = -EOVERFLOW;
+> +			break;
+> +		}
+> +
+> +		/* grab the kernel address for this device address */
+> +		ptr = rproc_da_to_va(rproc, da, memsz, NULL);
+> +		if (!ptr) {
+> +			dev_err(dev, "bad phdr da 0x%llx mem 0x%llx\n", da,
+> +				memsz);
+> +			ret = -EINVAL;
+> +			break;
+> +		}
+> +
+> +		/* put the segment where the remote processor expects it */
+> +		if (filesz) {
+> +			ret = imx_dsp_rproc_memcpy(ptr, elf_data + offset, filesz);
+> +			if (ret) {
+> +				dev_err(dev, "memory copy failed for da 0x%llx memsz 0x%llx\n",
+> +					da, memsz);
+> +				break;
+> +			}
+> +		}
+> +
+> +		/* zero out remaining memory for this segment */
+> +		if (memsz > filesz) {
+> +			ret = imx_dsp_rproc_memset(ptr + filesz, 0, memsz - filesz);
+> +			if (ret) {
+> +				dev_err(dev, "memset failed for da 0x%llx memsz 0x%llx\n",
+> +					da, memsz);
+> +				break;
+> +			}
+> +		}
+> +	}
+> +
+> +	return ret;
+> +}
+> +
+>  static int imx_dsp_rproc_parse_fw(struct rproc *rproc, const struct firmware *fw)
+>  {
+>  	if (rproc_elf_load_rsc_table(rproc, fw))
+> @@ -729,7 +908,7 @@ static const struct rproc_ops imx_dsp_rproc_ops = {
+>  	.start		= imx_dsp_rproc_start,
+>  	.stop		= imx_dsp_rproc_stop,
+>  	.kick		= imx_dsp_rproc_kick,
+> -	.load		= rproc_elf_load_segments,
+> +	.load		= imx_dsp_rproc_elf_load_segments,
+>  	.parse_fw	= imx_dsp_rproc_parse_fw,
+>  	.sanity_check	= rproc_elf_sanity_check,
+>  	.get_boot_addr	= rproc_elf_get_boot_addr,
+> -- 
+> 2.17.1
+> 
