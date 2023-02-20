@@ -2,166 +2,203 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F50E69C57E
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Feb 2023 07:54:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A126E69C592
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Feb 2023 07:58:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230308AbjBTGy3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Feb 2023 01:54:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34362 "EHLO
+        id S230426AbjBTG5x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Feb 2023 01:57:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35292 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230110AbjBTGy1 (ORCPT
+        with ESMTP id S230238AbjBTG5n (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Feb 2023 01:54:27 -0500
-Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20AFCD536
-        for <linux-kernel@vger.kernel.org>; Sun, 19 Feb 2023 22:54:26 -0800 (PST)
-Received: from mail-yb1-f199.google.com (mail-yb1-f199.google.com [209.85.219.199])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 841AB3F212
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Feb 2023 06:54:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1676876064;
-        bh=6loQ2derknDF1fwYr1ujI7Q/SpJj4KMMMpxnbRSctLQ=;
-        h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-         To:Cc:Content-Type;
-        b=ishZJqNz24rt6ljUH8gmE8hQgOmat3xEaXUIpQ0KvCjir4YQn5UjnGSqIBA6cktCF
-         MBMhYZNC9F0zKE0asFg+6otg3bdsVcT2rrpqSkHFQ89UHcsimdQFo6Lah3yWIrGAYk
-         5u3FpHXk42WleSr8OGwahrUfD8B4/aiYNOccVCrAOmQzS2VXrEfW+9ctptJvEnyvIt
-         d4Za4QR6UD45TsMQH638JMjWUqbJWAtTH6cVDjziyDRyroDHZvpV0RPTndHAw5JQvs
-         Opy0uFEfBXS2Sq7Vb7PfSlld7pirFZuKr5zMbVS8Y8C2oJtlm1QnnosiWPoXLvQqEF
-         5OZN+/bVQzn5A==
-Received: by mail-yb1-f199.google.com with SMTP id i11-20020a256d0b000000b0086349255277so2222281ybc.8
-        for <linux-kernel@vger.kernel.org>; Sun, 19 Feb 2023 22:54:24 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=6loQ2derknDF1fwYr1ujI7Q/SpJj4KMMMpxnbRSctLQ=;
-        b=RrM/ytFGi6+AkCkcE0vBo8hudDAwPckGJZjJsDJTlzB8B292qlPQRD4JH4qQcXhmA9
-         dzHiVL0zNOgE+OP16wlE9tePipj+8gOcjuFeqmp82AwUJknXXJyGgo8CqdMpkin9SuO8
-         qXnqz6eX5I0Q3USb6kQlXnXekKDXQ7qZNJjdRtURWdeJ6XRZKbc6AUolJA6Sf4OngwYy
-         d5KRnqBmED6aNLLA+jfwKnTE+Mv70rR0CfqQFH8N+834nl5WbpO1JqumDWJBccmbQkaj
-         VoZ9ufbbxOZ1yOSN/Q45lovV3FZBh27OjNRJvJZCR+C2M9L485JWC0UFqNOuPekF8fT+
-         jhmQ==
-X-Gm-Message-State: AO0yUKWYPhN7Iohs5bGqdyq4Mj+hb6cCqY/fU4c/5MA6lpoF1ciRoPWI
-        iZ67WANOcRQB3fJe4KvKp6lLu6I6B8x9KsJYZaYtugSSoxqnBwrzrzM/tGeMEtfFcM2jbhQz6TW
-        xeq0JYDgpvtNKDMu70r9ACw+M62/AMQqddgcyrTvX9P2jtqcUJhplMf1deA==
-X-Received: by 2002:a0d:e4c2:0:b0:506:3aca:6ff6 with SMTP id n185-20020a0de4c2000000b005063aca6ff6mr2563823ywe.213.1676876062512;
-        Sun, 19 Feb 2023 22:54:22 -0800 (PST)
-X-Google-Smtp-Source: AK7set/BVRO9NeOsU+tO5ARGrKD0myhKVlAaKv66ZF0A3G7P/VDIqxuQ2SQM6upwT1jKTQHFnYQNYv3QUFoAI/H/XF0=
-X-Received: by 2002:a0d:e4c2:0:b0:506:3aca:6ff6 with SMTP id
- n185-20020a0de4c2000000b005063aca6ff6mr2563801ywe.213.1676876062284; Sun, 19
- Feb 2023 22:54:22 -0800 (PST)
-MIME-Version: 1.0
-References: <20230215075855.46204-1-acelan.kao@canonical.com> <141b6b13-00ca-c941-e315-6b2fe62e6515@amd.com>
-In-Reply-To: <141b6b13-00ca-c941-e315-6b2fe62e6515@amd.com>
-From:   AceLan Kao <acelan.kao@canonical.com>
-Date:   Mon, 20 Feb 2023 14:54:11 +0800
-Message-ID: <CAFv23Qk2yG+KPGd1s1JsY8rBfU_z-tFe6KSo6r=q7DsQ6ETL_w@mail.gmail.com>
-Subject: Re: [PATCH] usb: xhci: Workaround for runpm issue on AMD xHC
-To:     Mario Limonciello <mario.limonciello@amd.com>
-Cc:     Mathias Nyman <mathias.nyman@intel.com>,
+        Mon, 20 Feb 2023 01:57:43 -0500
+Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4E36F1042F;
+        Sun, 19 Feb 2023 22:57:39 -0800 (PST)
+Received: from loongson.cn (unknown [10.2.5.185])
+        by gateway (Coremail) with SMTP id _____8BxMMzhGfNjJLQCAA--.65S3;
+        Mon, 20 Feb 2023 14:57:37 +0800 (CST)
+Received: from localhost.localdomain (unknown [10.2.5.185])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8Ax+73fGfNjFvk2AA--.34690S2;
+        Mon, 20 Feb 2023 14:57:35 +0800 (CST)
+From:   Tianrui Zhao <zhaotianrui@loongson.cn>
+To:     Paolo Bonzini <pbonzini@redhat.com>
+Cc:     Huacai Chen <chenhuacai@kernel.org>,
+        WANG Xuerui <kernel@xen0n.name>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Shyam Sundar S K <Shyam-sundar.S-k@amd.com>,
-        "Tsao, Anson" <anson.tsao@amd.com>,
-        "Gong, Richard" <Richard.Gong@amd.com>,
-        Basavaraj Natikar <Basavaraj.Natikar@amd.com>,
-        "Oakes, Gregory" <Gregory.Oakes@amd.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        loongarch@lists.linux.dev, linux-kernel@vger.kernel.org,
+        kvm@vger.kernel.org, Jens Axboe <axboe@kernel.dk>,
+        Mark Brown <broonie@kernel.org>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        Oliver Upton <oliver.upton@linux.dev>, maobibo@loongson.cn
+Subject: [PATCH v2 00/29] Add KVM LoongArch support
+Date:   Mon, 20 Feb 2023 14:57:06 +0800
+Message-Id: <20230220065735.1282809-1-zhaotianrui@loongson.cn>
+X-Mailer: git-send-email 2.31.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: AQAAf8Ax+73fGfNjFvk2AA--.34690S2
+X-CM-SenderInfo: p2kd03xldq233l6o00pqjv00gofq/
+X-Coremail-Antispam: 1Uk129KBjvJXoWxKFWkZFWrGr4kGry7Jr1DKFg_yoWxur43pF
+        W3urn8Gr4DGrsaq39Yq3s8Z3s8ZF1xGryaq3Wa9Fy8CrW2qry8Z34kKr9FvFy3AaykJr10
+        qr1rKw1ag3WUJaDanT9S1TB71UUUUjJqnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
+        qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
+        bckFc2x0x2IEx4CE42xK8VAvwI8IcIk0rVWrJVCq3wA2ocxC64kIII0Yj41l84x0c7CEw4
+        AK67xGY2AK021l84ACjcxK6xIIjxv20xvE14v26F1j6w1UM28EF7xvwVC0I7IYx2IY6xkF
+        7I0E14v26F4j6r4UJwA2z4x0Y4vEx4A2jsIE14v26r4UJVWxJr1l84ACjcxK6I8E87Iv6x
+        kF7I0E14v26F4UJVW0owAaw2AFwI0_JF0_Jw1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAq
+        jxCEc2xF0cIa020Ex4CE44I27wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E74AGY7Cv6c
+        x26rWlOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcxkI7VAKI48JMxkF7I0En4kS14v26r12
+        6r1DMxAIw28IcxkI7VAKI48JMxAIw28IcVCjz48v1sIEY20_WwCFx2IqxVCFs4IE7xkEbV
+        WUJVW8JwCFI7km07C267AKxVWUAVWUtwC20s026c02F40E14v26r1j6r18MI8I3I0E7480
+        Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41lIxAIcVC0I7
+        IYx2IY67AKxVW5JVW7JwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1lIxAIcVCF04k2
+        6cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r4j6F4UMIIF0xvEx4A2jsIEc7CjxV
+        AFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x0zR9iSdUUUUU=
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Mario,
+This series adds KVM LoongArch support. Loongson 3A5000 supports hardware
+assisted virtualization. With cpu virtualization, there are separate
+hw-supported user mode and kernel mode in guest mode. With memory
+virtualization, there are two-level hw mmu table for guest mode and host
+mode. Also there is separate hw cpu timer with consant frequency in
+guest mode, so that vm can migrate between hosts with different freq.
+Currently, we are able to boot LoongArch Linux Guests.
 
-Mario Limonciello <mario.limonciello@amd.com> =E6=96=BC 2023=E5=B9=B42=E6=
-=9C=8820=E6=97=A5 =E9=80=B1=E4=B8=80 =E4=B8=8A=E5=8D=8811:14=E5=AF=AB=E9=81=
-=93=EF=BC=9A
->
-> + a bunch of AMD guys
->
-> Please don't submit quirks for AMD systems without talking to AMD about
-> if they make sense.
-Got it.
+Few key aspects of KVM LoongArch added by this series are:
+1. Enable kvm hardware function when kvm module is loaded.
+2. Implement VM and vcpu related ioctl interface such as vcpu create,
+   vcpu run etc. GET_ONE_REG/SET_ONE_REG ioctl commands are use to
+   get general registers one by one.
+3. Hardware access about MMU, timer and csr are emulated in kernel.
+4. Hardwares such as mmio and iocsr device are emulated in user space
+   such as APIC, IPI, pci devices etc.
 
->
-> On 2/15/23 01:58, AceLan Kao wrote:
-> > From: "Chia-Lin Kao (AceLan)" <acelan.kao@canonical.com>
-> >
-> > When the xHC host is runtime suspended, the device connects to it will =
-be
-> > disconnected while trying to use it.
-> > The quirk in commit 2a632815683d ("usb: xhci: Workaround for S3 issue o=
-n
-> > AMD SNPS 3.0 xHC") also works for this issue, so added its ID to the
-> > quirk, too.
-> >
-> > 05:00.0 USB controller [0c03]: Advanced Micro Devices, Inc. [AMD] Devic=
-e [1022:1505] (prog-if 30 [XHCI])
-> >          Subsystem: Dell Device [1028:0c3f]
-> >          Control: I/O+ Mem+ BusMaster+ SpecCycle- MemWINV- VGASnoop- Pa=
-rErr- Stepping- SERR- FastB2B- DisINTx+
-> >          Status: Cap+ 66MHz- UDF- FastB2B- ParErr- DEVSEL=3Dfast >TAbor=
-t- <TAbort- <MAbort- >SERR- <PERR- INTx-
-> >          Latency: 0, Cache Line Size: 64 bytes
-> >          Interrupt: pin A routed to IRQ 60
-> >          IOMMU group: 21
-> >          Region 0: Memory at c0000000 (64-bit, non-prefetchable) [size=
-=3D1M]
-> >          Capabilities: <access denied>
-> >          Kernel driver in use: xhci_hcd
-> >          Kernel modules: xhci_pci
-> >
-> > [   20.769275] xhci_hcd 0000:05:00.0: xHCI host not responding to stop =
-endpoint command
-> > [   20.771429] xhci_hcd 0000:05:00.0: xHCI host controller not respondi=
-ng, assume dead
-> > [   20.771444] xhci_hcd 0000:05:00.0: HC died; cleaning up
-> > [   20.771733] usb 5-1: USB disconnect, device number 2
-> >
-> > Cc: stable@vger.kernel.org #v4.19+
-> > Signed-off-by: Chia-Lin Kao (AceLan) <acelan.kao@canonical.com>
->
-> Is this system that you're finding this bug already launched?  This
-> looks like a BIOS bug.
->
-> If it's not launched we should fix it from BIOS, reach out to AMD off
-> list to talk about it.
-This system is not launched yet, any hints about the BIOS issue?
-I tried to disable D3Cold, but the symptom is the same.
-The xHC enters D3Hot and then it can't be waken up.
+The running environment of LoongArch virt machine:
+1. Cross tools to build kernel and uefi:
+   $ wget https://github.com/loongson/build-tools/releases/download/2022.09.06/loongarch64-clfs-6.3-cross-tools-gcc-glibc.tar.xz
+   tar -vxf loongarch64-clfs-6.3-cross-tools-gcc-glibc.tar.xz  -C /opt
+   export PATH=/opt/cross-tools/bin:$PATH
+   export LD_LIBRARY_PATH=/opt/cross-tools/lib:$LD_LIBRARY_PATH
+   export LD_LIBRARY_PATH=/opt/cross-tools/loongarch64-unknown-linux-gnu/lib/:$LD_LIBRARY_PATH
+2. This series is based on the linux source code:
+   https://github.com/loongson/linux-loongarch-kvm
+   Build command:
+   git checkout kvm-loongarch
+   make ARCH=loongarch CROSS_COMPILE=loongarch64-unknown-linux-gnu- loongson3_defconfig
+   make ARCH=loongarch CROSS_COMPILE=loongarch64-unknown-linux-gnu-
+3. QEMU hypervisor with LoongArch supported:
+   https://github.com/loongson/qemu
+   Build command:
+   git checkout kvm-loongarch
+   ./configure --target-list="loongarch64-softmmu"  --enable-kvm
+   make
+4. Uefi bios of LoongArch virt machine:
+   Reference: https://github.com/tianocore/edk2-platforms/tree/master/Platform/Loongson/LoongArchQemuPkg#readme
+5. you can also access the binary files we have already build:
+   https://github.com/yangxiaojuan-loongson/qemu-binary
 
->
-> > ---
-> >   drivers/usb/host/xhci-pci.c | 4 +++-
-> >   1 file changed, 3 insertions(+), 1 deletion(-)
-> >
-> > diff --git a/drivers/usb/host/xhci-pci.c b/drivers/usb/host/xhci-pci.c
-> > index fb988e4ea924..b8f6843a8cd1 100644
-> > --- a/drivers/usb/host/xhci-pci.c
-> > +++ b/drivers/usb/host/xhci-pci.c
-> > @@ -177,7 +177,9 @@ static void xhci_pci_quirks(struct device *dev, str=
-uct xhci_hcd *xhci)
-> >           (pdev->device =3D=3D 0x15e0 || pdev->device =3D=3D 0x15e1))
-> >               xhci->quirks |=3D XHCI_SNPS_BROKEN_SUSPEND;
-> >
-> > -     if (pdev->vendor =3D=3D PCI_VENDOR_ID_AMD && pdev->device =3D=3D =
-0x15e5) {
-> > +     if (pdev->vendor =3D=3D PCI_VENDOR_ID_AMD &&
-> > +             (pdev->device =3D=3D 0x15e5 ||
-> > +              pdev->device =3D=3D 0x1505)) {
-> >               xhci->quirks |=3D XHCI_DISABLE_SPARSE;
-> >               xhci->quirks |=3D XHCI_RESET_ON_RESUME;
-> >       }
->
+The command to boot loongarch virt machine:
+   $ qemu-system-loongarch64 -machine virt -m 4G -cpu la464 \
+   -smp 1 -bios QEMU_EFI.fd -kernel vmlinuz.efi -initrd ramdisk \
+   -serial stdio   -monitor telnet:localhost:4495,server,nowait \
+   -append "root=/dev/ram rdinit=/sbin/init console=ttyS0,115200" \
+   --nographic
+
+Changes since v1:
+1. Seprate the original patch-01 and patch-03 into small patches, and the
+patches mainly contain kvm module init, module exit, vcpu create, vcpu run,
+etc.
+2. Remove the original KVM_{GET,SET}_CSRS ioctl in the kvm uapi header,
+and we use the common KVM_{GET,SET}_ONE_REG to access register.
+3. Use BIT(x) to replace the "1 << n_bits" statement.
+                                                                                  
+Tianrui Zhao (29):
+  LoongArch: KVM: Add kvm related header files
+  LoongArch: KVM: Implement kvm module related interface
+  LoongArch: KVM: Implement kvm hardware enable, disable interface
+  LoongArch: KVM: Implement VM related functions
+  LoongArch: KVM: Add vcpu related header files
+  LoongArch: KVM: Implement vcpu create and destroy interface
+  LoongArch: KVM: Implement vcpu run interface
+  LoongArch: KVM: Implement vcpu handle exit interface
+  LoongArch: KVM: Implement vcpu get, vcpu set registers
+  LoongArch: KVM: Implement vcpu ENABLE_CAP, CHECK_EXTENSION ioctl
+    interface
+  LoongArch: KVM: Implement fpu related operations for vcpu
+  LoongArch: KVM: Implement vcpu interrupt operations
+  LoongArch: KVM: Implement misc vcpu related interfaces
+  LoongArch: KVM: Implement vcpu load and vcpu put operations
+  LoongArch: KVM: Implement vcpu status description
+  LoongArch: KVM: Implement update VM id function
+  LoongArch: KVM: Implement virtual machine tlb operations
+  LoongArch: KVM: Implement vcpu timer operations
+  LoongArch: KVM: Implement kvm mmu operations
+  LoongArch: KVM: Implement handle csr excption
+  LoongArch: KVM: Implement handle iocsr exception
+  LoongArch: KVM: Implement handle idle exception
+  LoongArch: KVM: Implement handle gspr exception
+  LoongArch: KVM: Implement handle mmio exception
+  LoongArch: KVM: Implement handle fpu exception
+  LoongArch: KVM: Implement kvm exception vector
+  LoongArch: KVM: Implement vcpu world switch
+  LoongArch: KVM: Implement probe virtualization when loongarch cpu init
+  LoongArch: KVM: Enable kvm config and add the makefile
+
+ arch/loongarch/Kbuild                      |    1 +
+ arch/loongarch/Kconfig                     |    2 +
+ arch/loongarch/configs/loongson3_defconfig |    2 +
+ arch/loongarch/include/asm/cpu-features.h  |   22 +
+ arch/loongarch/include/asm/cpu-info.h      |   13 +
+ arch/loongarch/include/asm/inst.h          |   16 +
+ arch/loongarch/include/asm/kvm_csr.h       |   89 ++
+ arch/loongarch/include/asm/kvm_host.h      |  257 +++++
+ arch/loongarch/include/asm/kvm_types.h     |   11 +
+ arch/loongarch/include/asm/kvm_vcpu.h      |  112 ++
+ arch/loongarch/include/asm/loongarch.h     |  195 +++-
+ arch/loongarch/include/uapi/asm/kvm.h      |  107 ++
+ arch/loongarch/kernel/asm-offsets.c        |   32 +
+ arch/loongarch/kernel/cpu-probe.c          |   53 +
+ arch/loongarch/kvm/Kconfig                 |   38 +
+ arch/loongarch/kvm/Makefile                |   21 +
+ arch/loongarch/kvm/exit.c                  |  702 ++++++++++++
+ arch/loongarch/kvm/interrupt.c             |  126 +++
+ arch/loongarch/kvm/main.c                  |  152 +++
+ arch/loongarch/kvm/mmu.c                   |  821 ++++++++++++++
+ arch/loongarch/kvm/switch.S                |  327 ++++++
+ arch/loongarch/kvm/timer.c                 |  266 +++++
+ arch/loongarch/kvm/tlb.c                   |   31 +
+ arch/loongarch/kvm/trace.h                 |  137 +++
+ arch/loongarch/kvm/vcpu.c                  | 1118 ++++++++++++++++++++
+ arch/loongarch/kvm/vm.c                    |   85 ++
+ arch/loongarch/kvm/vmid.c                  |   64 ++
+ include/uapi/linux/kvm.h                   |   12 +
+ 28 files changed, 4806 insertions(+), 6 deletions(-)
+ create mode 100644 arch/loongarch/include/asm/kvm_csr.h
+ create mode 100644 arch/loongarch/include/asm/kvm_host.h
+ create mode 100644 arch/loongarch/include/asm/kvm_types.h
+ create mode 100644 arch/loongarch/include/asm/kvm_vcpu.h
+ create mode 100644 arch/loongarch/include/uapi/asm/kvm.h
+ create mode 100644 arch/loongarch/kvm/Kconfig
+ create mode 100644 arch/loongarch/kvm/Makefile
+ create mode 100644 arch/loongarch/kvm/exit.c
+ create mode 100644 arch/loongarch/kvm/interrupt.c
+ create mode 100644 arch/loongarch/kvm/main.c
+ create mode 100644 arch/loongarch/kvm/mmu.c
+ create mode 100644 arch/loongarch/kvm/switch.S
+ create mode 100644 arch/loongarch/kvm/timer.c
+ create mode 100644 arch/loongarch/kvm/tlb.c
+ create mode 100644 arch/loongarch/kvm/trace.h
+ create mode 100644 arch/loongarch/kvm/vcpu.c
+ create mode 100644 arch/loongarch/kvm/vm.c
+ create mode 100644 arch/loongarch/kvm/vmid.c
+
+-- 
+2.31.1
+
