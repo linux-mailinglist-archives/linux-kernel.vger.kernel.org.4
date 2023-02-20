@@ -2,228 +2,182 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 672B869CC0D
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Feb 2023 14:26:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B90069CE1D
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Feb 2023 14:56:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231976AbjBTN0T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Feb 2023 08:26:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39146 "EHLO
+        id S232590AbjBTN4D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Feb 2023 08:56:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45050 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231502AbjBTN0S (ORCPT
+        with ESMTP id S232577AbjBTN4A (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Feb 2023 08:26:18 -0500
-Received: from dggsgout11.his.huawei.com (unknown [45.249.212.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5EC461ABEE;
-        Mon, 20 Feb 2023 05:26:16 -0800 (PST)
-Received: from mail02.huawei.com (unknown [172.30.67.153])
-        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4PL38d6tS0z4f3w0Y;
-        Mon, 20 Feb 2023 21:26:09 +0800 (CST)
-Received: from huaweicloud.com (unknown [10.175.124.27])
-        by APP4 (Coremail) with SMTP id gCh0CgBXwLPtdPNjrs7vDw--.52497S4;
-        Mon, 20 Feb 2023 21:26:07 +0800 (CST)
-From:   Hou Tao <houtao@huaweicloud.com>
-To:     linux-block@vger.kernel.org
-Cc:     Bart Van Assche <bvanassche@acm.org>, Jan Kara <jack@suse.cz>,
-        Bagas Sanjaya <bagasdotme@gmail.com>,
-        Jens Axboe <axboe@kernel.dk>, cgroups@vger.kernel.org,
-        Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Jonathan Corbet <corbet@lwn.net>, linux-kernel@vger.kernel.org,
-        linux-doc@vger.kernel.org, houtao1@huawei.com
-Subject: [PATCH v2] blk-ioprio: Introduce promote-to-rt policy
-Date:   Mon, 20 Feb 2023 21:54:28 +0800
-Message-Id: <20230220135428.2632906-1-houtao@huaweicloud.com>
-X-Mailer: git-send-email 2.29.2
+        Mon, 20 Feb 2023 08:56:00 -0500
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7FF951E9E7;
+        Mon, 20 Feb 2023 05:55:55 -0800 (PST)
+Received: from pps.filterd (m0279871.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 31K5l5lm027414;
+        Mon, 20 Feb 2023 13:55:32 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=B/rlVhJvUxZCNcI3JwfDGsrkVkQ6lvojO9Mkp8yABVM=;
+ b=iqS9JmgVnKzbkJBcTkNmi87ZI2l6l9XKg0hnsGIJJy9xityKR0UIUCu3bPXSFKgCfND5
+ VdGY/4vAwKuvImrGj33yFQ/HyLxRfBebvosnWiJunGwpfpsSUdy4w7p8mBquAF9KKlqi
+ oFONiO+kf/drRO942jC7DxEEgmDhJl2eBGvppGbHnvrgO1Ewl2+BPYiYvqgvah+Ie3u9
+ 4n28K5s52FCS+DrLGT0gjC5XWiNioSQgrneC+OzcMPWM1+ekLCYTIhwU5/FtgWyg9Ap9
+ JLuHGhF1KGgFb1sHJ2s8jWOfpe09osgxZMOQ+C7yExVzVb84jxb32JK8CrdC78v36H5P bw== 
+Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3ntp98d9ph-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 20 Feb 2023 13:55:32 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 31KDtUhh022362
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 20 Feb 2023 13:55:30 GMT
+Received: from [10.216.11.20] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.41; Mon, 20 Feb
+ 2023 05:55:22 -0800
+Message-ID: <1d1cdd40-8bc8-c6e2-bc80-961e6aa2328d@quicinc.com>
+Date:   Mon, 20 Feb 2023 19:25:19 +0530
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: gCh0CgBXwLPtdPNjrs7vDw--.52497S4
-X-Coremail-Antispam: 1UD129KBjvJXoW3GF1ftF4UWrW3uw1rJF45trb_yoWxGF4DpF
-        4fAF9xur9YqF1xJFnrJ3WkXrWrtas2yw47CFsxKFyF934UAw1q9F40yF1kWFyfA3yDXFZ8
-        XrZ8JrW8CF1Dur7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUk2b4IE77IF4wAFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k2
-        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
-        vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_tr0E3s1l84ACjcxK6xIIjxv20xvEc7Cj
-        xVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x
-        0267AKxVW0oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG
-        6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFV
-        Cjc4AY6r1j6r4UM4x0Y48IcxkI7VAKI48JM4IIrI8v6xkF7I0E8cxan2IY04v7MxAIw28I
-        cxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2
-        IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUtVW8ZwCIc40Y0x0EwIxGrwCI
-        42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwCI42
-        IY6xAIw20EY4v20xvaj40_WFyUJVCq3wCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E
-        87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjxUrR6zUUUUU
-X-CM-SenderInfo: xkrx3t3r6k3tpzhluzxrxghudrp/
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,KHOP_HELO_FCRDNS,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [PATCH V2 2/5] clk: qcom: apss-ipq-pll: Enable APSS clock driver
+ in IPQ9574
+Content-Language: en-US
+To:     Konrad Dybcio <konrad.dybcio@linaro.org>, <agross@kernel.org>,
+        <andersson@kernel.org>, <mturquette@baylibre.com>,
+        <sboyd@kernel.org>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <jassisinghbrar@gmail.com>,
+        <catalin.marinas@arm.com>, <will@kernel.org>,
+        <dmitry.baryshkov@linaro.org>, <arnd@arndb.de>,
+        <geert+renesas@glider.be>, <nfraprado@collabora.com>,
+        <broonie@kernel.org>, <rafal@milecki.pl>,
+        <linux-arm-msm@vger.kernel.org>, <linux-clk@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>
+CC:     <quic_srichara@quicinc.com>, <quic_gokulsri@quicinc.com>,
+        <quic_sjaganat@quicinc.com>, <quic_kathirav@quicinc.com>,
+        <quic_arajkuma@quicinc.com>, <quic_anusha@quicinc.com>
+References: <20230217134107.13946-1-quic_devipriy@quicinc.com>
+ <20230217134107.13946-3-quic_devipriy@quicinc.com>
+ <3bc2f33d-163c-1f26-1d05-e3056f852bcd@linaro.org>
+From:   Devi Priya <quic_devipriy@quicinc.com>
+In-Reply-To: <3bc2f33d-163c-1f26-1d05-e3056f852bcd@linaro.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: KcHRkWijTEaaPkxVEN3h_y81VGaMb_r3
+X-Proofpoint-ORIG-GUID: KcHRkWijTEaaPkxVEN3h_y81VGaMb_r3
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.170.22
+ definitions=2023-02-20_11,2023-02-20_02,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=999 mlxscore=0
+ adultscore=0 priorityscore=1501 malwarescore=0 suspectscore=0
+ lowpriorityscore=0 bulkscore=0 clxscore=1015 impostorscore=0 spamscore=0
+ phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2302200126
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Hou Tao <houtao1@huawei.com>
 
-Since commit a78418e6a04c ("block: Always initialize bio IO priority on
-submit"), bio->bi_ioprio will never be IOPRIO_CLASS_NONE when calling
-blkcg_set_ioprio(), so there will be no way to promote the io-priority
-of one cgroup to IOPRIO_CLASS_RT, because bi_ioprio will always be
-greater than or equals to IOPRIO_CLASS_RT.
 
-It seems possible to call blkcg_set_ioprio() first then try to
-initialize bi_ioprio later in bio_set_ioprio(), but this doesn't work
-for bio in which bi_ioprio is already initialized (e.g., direct-io), so
-introduce a new ioprio policy to promote the iopriority of bio to
-IOPRIO_CLASS_RT if the ioprio is not already RT.
-
-So introduce a new promote-to-rt policy to achieve this. For none-to-rt
-policy, although it doesn't work now, but considering that its purpose
-was also to override the io-priority to RT and allow for a smoother
-transition, just keep it and treat it as an alias of the promote-to-rt
-policy.
-
-Signed-off-by: Hou Tao <houtao1@huawei.com>
----
-v2:
- * Simplify the implementation of promote-to-rt (from Bart)
- * Make none-to-rt to work again by treating it as an alias of
-   the promote-to-rt policy (from Bart & Jan)
- * fix the style of new content in cgroup-v2.rst (from Bagas)
- * set the default priority level to 4 instead of 0 for promote-to-rt
-
-v1: https://lore.kernel.org/linux-block/20230201045227.2203123-1-houtao@huaweicloud.com
-
- Documentation/admin-guide/cgroup-v2.rst | 42 ++++++++++++++-----------
- block/blk-ioprio.c                      | 23 ++++++++++++--
- 2 files changed, 44 insertions(+), 21 deletions(-)
-
-diff --git a/Documentation/admin-guide/cgroup-v2.rst b/Documentation/admin-guide/cgroup-v2.rst
-index 74cec76be9f2..ccfb9fdfbc16 100644
---- a/Documentation/admin-guide/cgroup-v2.rst
-+++ b/Documentation/admin-guide/cgroup-v2.rst
-@@ -2021,31 +2021,33 @@ that attribute:
-   no-change
- 	Do not modify the I/O priority class.
- 
--  none-to-rt
--	For requests that do not have an I/O priority class (NONE),
--	change the I/O priority class into RT. Do not modify
--	the I/O priority class of other requests.
-+  promote-to-rt
-+	For requests that have a no-RT I/O priority class, change it into RT.
-+	Also change the priority level of these requests to 4. Do not modify
-+	the I/O priority of requests that have priority class RT.
- 
-   restrict-to-be
- 	For requests that do not have an I/O priority class or that have I/O
--	priority class RT, change it into BE. Do not modify the I/O priority
--	class of requests that have priority class IDLE.
-+	priority class RT, change it into BE. Also change the priority level
-+	of these requests to 0. Do not modify the I/O priority class of
-+	requests that have priority class IDLE.
- 
-   idle
- 	Change the I/O priority class of all requests into IDLE, the lowest
- 	I/O priority class.
- 
-+  none-to-rt
-+	Deprecated. Just an alias for promote-to-rt.
-+
- The following numerical values are associated with the I/O priority policies:
- 
--+-------------+---+
--| no-change   | 0 |
--+-------------+---+
--| none-to-rt  | 1 |
--+-------------+---+
--| rt-to-be    | 2 |
--+-------------+---+
--| all-to-idle | 3 |
--+-------------+---+
-++----------------+---+
-+| no-change      | 0 |
-++----------------+---+
-+| rt-to-be       | 2 |
-++----------------+---+
-+| all-to-idle    | 3 |
-++----------------+---+
- 
- The numerical value that corresponds to each I/O priority class is as follows:
- 
-@@ -2061,9 +2063,13 @@ The numerical value that corresponds to each I/O priority class is as follows:
- 
- The algorithm to set the I/O priority class for a request is as follows:
- 
--- Translate the I/O priority class policy into a number.
--- Change the request I/O priority class into the maximum of the I/O priority
--  class policy number and the numerical I/O priority class.
-+- If I/O priority class policy is promote-to-rt, change the request I/O
-+  priority class to IOPRIO_CLASS_RT and change the request I/O priority
-+  level to 4.
-+- If I/O priorityt class is not promote-to-rt, translate the I/O priority
-+  class policy into a number, then change the request I/O priority class
-+  into the maximum of the I/O priority class policy number and the numerical
-+  I/O priority class.
- 
- PID
- ---
-diff --git a/block/blk-ioprio.c b/block/blk-ioprio.c
-index 8bb6b8eba4ce..4eba569d4823 100644
---- a/block/blk-ioprio.c
-+++ b/block/blk-ioprio.c
-@@ -23,25 +23,28 @@
- /**
-  * enum prio_policy - I/O priority class policy.
-  * @POLICY_NO_CHANGE: (default) do not modify the I/O priority class.
-- * @POLICY_NONE_TO_RT: modify IOPRIO_CLASS_NONE into IOPRIO_CLASS_RT.
-+ * @POLICY_PROMOTE_TO_RT: modify no-IOPRIO_CLASS_RT to IOPRIO_CLASS_RT.
-  * @POLICY_RESTRICT_TO_BE: modify IOPRIO_CLASS_NONE and IOPRIO_CLASS_RT into
-  *		IOPRIO_CLASS_BE.
-  * @POLICY_ALL_TO_IDLE: change the I/O priority class into IOPRIO_CLASS_IDLE.
-+ * @POLICY_NONE_TO_RT: an alias for POLICY_PROMOTE_TO_RT.
-  *
-  * See also <linux/ioprio.h>.
-  */
- enum prio_policy {
- 	POLICY_NO_CHANGE	= 0,
--	POLICY_NONE_TO_RT	= 1,
-+	POLICY_PROMOTE_TO_RT	= 1,
- 	POLICY_RESTRICT_TO_BE	= 2,
- 	POLICY_ALL_TO_IDLE	= 3,
-+	POLICY_NONE_TO_RT	= 4,
- };
- 
- static const char *policy_name[] = {
- 	[POLICY_NO_CHANGE]	= "no-change",
--	[POLICY_NONE_TO_RT]	= "none-to-rt",
-+	[POLICY_PROMOTE_TO_RT]	= "promote-to-rt",
- 	[POLICY_RESTRICT_TO_BE]	= "restrict-to-be",
- 	[POLICY_ALL_TO_IDLE]	= "idle",
-+	[POLICY_NONE_TO_RT]	= "none-to-rt",
- };
- 
- static struct blkcg_policy ioprio_policy;
-@@ -189,6 +192,20 @@ void blkcg_set_ioprio(struct bio *bio)
- 	if (!blkcg || blkcg->prio_policy == POLICY_NO_CHANGE)
- 		return;
- 
-+	if (blkcg->prio_policy == POLICY_PROMOTE_TO_RT ||
-+	    blkcg->prio_policy == POLICY_NONE_TO_RT) {
-+		/*
-+		 * For RT threads, the default priority level is 4 because
-+		 * task_nice is 0. By promoting non-RT io-priority to RT-class
-+		 * and default level 4, those requests that are already
-+		 * RT-class but need a higher io-priority can use ioprio_set()
-+		 * to achieve this.
-+		 */
-+		if (IOPRIO_PRIO_CLASS(bio->bi_ioprio) != IOPRIO_CLASS_RT)
-+			bio->bi_ioprio = IOPRIO_PRIO_VALUE(IOPRIO_CLASS_RT, 4);
-+		return;
-+	}
-+
- 	/*
- 	 * Except for IOPRIO_CLASS_NONE, higher I/O priority numbers
- 	 * correspond to a lower priority. Hence, the max_t() below selects
--- 
-2.29.2
-
+On 2/17/2023 7:43 PM, Konrad Dybcio wrote:
+> 
+> 
+> On 17.02.2023 14:41, Devi Priya wrote:
+> The subject is.. weird.. something like:
+> 
+> clk: qcom: apss-ipq-pll: add support for IPQ9574
+> 
+> would have made more sense, as you're not enabling the clock
+> driver, and certainly not *in* the SoC.
+Yes agreed. Will update this in V3
+> 
+>> Add the compatible and configuration values
+> Generally the lines in commit messages should be broken at 70-75
+> chars, not 40.
+> 
+Okay
+>> for A73 Huayra PLL found on IPQ9574
+>>
+>> Co-developed-by: Praveenkumar I <quic_ipkumar@quicinc.com>
+>> Signed-off-by: Praveenkumar I <quic_ipkumar@quicinc.com>
+> Is Praveenkumar's last name "I"?
+yes, it is
+> 
+>> Signed-off-by: Devi Priya <quic_devipriy@quicinc.com>
+>> ---
+> Otherwise the code looks good, I think.
+Sure, thanks
+> 
+> Konrad
+>>   Changes in V2:
+>> 	- Rebased the changes on the below series which refactors the
+>> 	  driver to accommodate Huayra & Stromer Plus PLLs
+>> 	  https://lore.kernel.org/linux-arm-msm/20230217083308.12017-2-quic_kathirav@quicinc.com/
+>> 	- Changed the hex value in ipq9574_pll_config to lowercase
+>> 	- Dropped the mailbox driver changes as ipq9574 mailbox is
+>> 	  compatible with ipq6018
+>>
+>>   drivers/clk/qcom/apss-ipq-pll.c | 19 +++++++++++++++++++
+>>   1 file changed, 19 insertions(+)
+>>
+>> diff --git a/drivers/clk/qcom/apss-ipq-pll.c b/drivers/clk/qcom/apss-ipq-pll.c
+>> index cf4f0d340cbf..ce28d882ee78 100644
+>> --- a/drivers/clk/qcom/apss-ipq-pll.c
+>> +++ b/drivers/clk/qcom/apss-ipq-pll.c
+>> @@ -111,6 +111,18 @@ static const struct alpha_pll_config ipq8074_pll_config = {
+>>   	.test_ctl_hi_val = 0x4000,
+>>   };
+>>   
+>> +static const struct alpha_pll_config ipq9574_pll_config = {
+>> +	.l = 0x3b,
+>> +	.config_ctl_val = 0x200d4828,
+>> +	.config_ctl_hi_val = 0x6,
+>> +	.early_output_mask = BIT(3),
+>> +	.aux2_output_mask = BIT(2),
+>> +	.aux_output_mask = BIT(1),
+>> +	.main_output_mask = BIT(0),
+>> +	.test_ctl_val = 0x0,
+>> +	.test_ctl_hi_val = 0x4000,
+>> +};
+>> +
+>>   struct apss_pll_data {
+>>   	int pll_type;
+>>   	struct clk_alpha_pll *pll;
+>> @@ -135,6 +147,12 @@ static struct apss_pll_data ipq6018_pll_data = {
+>>   	.pll_config = &ipq6018_pll_config,
+>>   };
+>>   
+>> +static struct apss_pll_data ipq9574_pll_data = {
+>> +	.pll_type = CLK_ALPHA_PLL_TYPE_HUAYRA,
+>> +	.pll = &ipq_pll_huayra,
+>> +	.pll_config = &ipq9574_pll_config,
+>> +};
+>> +
+>>   static const struct regmap_config ipq_pll_regmap_config = {
+>>   	.reg_bits		= 32,
+>>   	.reg_stride		= 4,
+>> @@ -180,6 +198,7 @@ static const struct of_device_id apss_ipq_pll_match_table[] = {
+>>   	{ .compatible = "qcom,ipq5332-a53pll", .data = &ipq5332_pll_data },
+>>   	{ .compatible = "qcom,ipq6018-a53pll", .data = &ipq6018_pll_data },
+>>   	{ .compatible = "qcom,ipq8074-a53pll", .data = &ipq8074_pll_data },
+>> +	{ .compatible = "qcom,ipq9574-a73pll", .data = &ipq9574_pll_data },
+>>   	{ }
+>>   };
+>>   MODULE_DEVICE_TABLE(of, apss_ipq_pll_match_table);
+Best Regards,
+Devi Priya
