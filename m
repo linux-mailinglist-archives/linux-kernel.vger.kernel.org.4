@@ -2,76 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CF3A269C650
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Feb 2023 09:11:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2970969C65F
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Feb 2023 09:16:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230463AbjBTILT convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 20 Feb 2023 03:11:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58714 "EHLO
+        id S229885AbjBTIQI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Feb 2023 03:16:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60814 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230168AbjBTILQ (ORCPT
+        with ESMTP id S229451AbjBTIQG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Feb 2023 03:11:16 -0500
-Received: from mail-wr1-f53.google.com (mail-wr1-f53.google.com [209.85.221.53])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F1571206A;
-        Mon, 20 Feb 2023 00:11:14 -0800 (PST)
-Received: by mail-wr1-f53.google.com with SMTP id o4so163018wrs.4;
-        Mon, 20 Feb 2023 00:11:14 -0800 (PST)
+        Mon, 20 Feb 2023 03:16:06 -0500
+Received: from mail-qv1-f51.google.com (mail-qv1-f51.google.com [209.85.219.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 570D411EAC;
+        Mon, 20 Feb 2023 00:16:03 -0800 (PST)
+Received: by mail-qv1-f51.google.com with SMTP id nv15so439034qvb.7;
+        Mon, 20 Feb 2023 00:16:03 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=WDLq+6nQ6gFdWsxQf+By7KyagWm+A3Kp2Sy8RaFfDVs=;
-        b=nayinzZ3vAqNXT2Suy7YqwxiPnrz2CZyjK60SThHcBI2lqwIS9enijkdtCqvjbrA8o
-         ABm7SMR4zkFwq9i2YJdM/WwQIGnLyvl2jFI5X9hm5nag8PKEQCNBpUep3SNbldeilcdA
-         puojTix8eIokfy8XtcTGC8XtFx3/rZK58tyalgiKMcBNuBsOHtSWO2DQ+LwYAdVotSnf
-         lW3xXwjJSbMDMAm+3G1td3wo4t3ktsNNe9VuzjhgkI33208c387dnuwHTDnEEuPHE4iR
-         RmxcKT2TdQOflL3/WibOgJVLD+qWYKbEPtcDpDGbQ53lsUuDDLzrPFUVebaBM/nEr+HQ
-         gicQ==
-X-Gm-Message-State: AO0yUKWwWgftfS2XOXf22sLDJ2Wlchj4slAGLr0ZF6YMFFllEaaM6zXx
-        m2oDRceYVtjW8qMRDXul7uY=
-X-Google-Smtp-Source: AK7set/CGjdtL0cLnAkrvZGZDoymhT6OHeR/2o8bGXSOua2eOCKu6+3vpf4sQ/6KQb9NZINXi+YcaQ==
-X-Received: by 2002:adf:ce8c:0:b0:2c5:7eb5:9797 with SMTP id r12-20020adfce8c000000b002c57eb59797mr1838773wrn.8.1676880672630;
-        Mon, 20 Feb 2023 00:11:12 -0800 (PST)
-Received: from [10.148.80.132] ([195.228.69.10])
-        by smtp.gmail.com with ESMTPSA id g11-20020a5d698b000000b002c5a1bd5280sm1985956wru.95.2023.02.20.00.11.11
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 20 Feb 2023 00:11:12 -0800 (PST)
-Message-ID: <be80cf7b04b60e212dc4733f47e5d1f687a9f551.camel@inf.elte.hu>
-Subject: Re: [PATCH net-next 00/12] Add tc-mqprio and tc-taprio support for
- preemptible traffic classes
-From:   Ferenc Fejes <fejes@inf.elte.hu>
-To:     Vladimir Oltean <vladimir.oltean@nxp.com>
-Cc:     netdev@vger.kernel.org, "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Jamal Hadi Salim <jhs@mojatatu.com>,
-        Cong Wang <xiyou.wangcong@gmail.com>,
-        Jiri Pirko <jiri@resnulli.us>,
-        Vinicius Costa Gomes <vinicius.gomes@intel.com>,
-        Kurt Kanzenbach <kurt@linutronix.de>,
-        Gerhard Engleder <gerhard@engleder-embedded.com>,
-        Amritha Nambiar <amritha.nambiar@intel.com>,
-        Claudiu Manoil <claudiu.manoil@nxp.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        UNGLinuxDriver@microchip.com, Andrew Lunn <andrew@lunn.ch>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Xiaoliang Yang <xiaoliang.yang_1@nxp.com>,
-        linux-kernel@vger.kernel.org,
-        Pranavi Somisetty <pranavi.somisetty@amd.com>,
-        Harini Katakam <harini.katakam@amd.com>
-Date:   Mon, 20 Feb 2023 09:11:10 +0100
-In-Reply-To: <20230219125820.mw3uchmqr4bvohle@skbuf>
-References: <20230216232126.3402975-1-vladimir.oltean@nxp.com>
-         <20230218152021.puhz7m26uu2lzved@skbuf>
-         <dd782435586a73ada32c099150c274c79e1c3003.camel@inf.elte.hu>
-         <20230219125820.mw3uchmqr4bvohle@skbuf>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-User-Agent: Evolution 3.46.4-1 
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=GhdeujqRrZ30kHbfp+IOG4sWxnU1RJIBCIHIcK/nUfw=;
+        b=mAch6/WxRQr30734M+PlFZ3k0wulvkDnwQFLSC2jlmX2e0I00OYTTeuTaDdFeudzwa
+         W1FE72smK4l+pfFctloub379nzNQX7xOPOD03B7pepH7VIAhE4DfWz1Nq1aIACD4xTdr
+         unp4WR5Kqv4kp1lTg3jz44FCX5nLihaEMQGDMFYzxz4ZLHkvmvObpL5T7oEXDIivT73+
+         JGUnvhOGQURx7uPFENLmVya8acElpg7gkzieam+GYJMFqzJLQ6uJoMrijFk7VjQjrhTI
+         HKYVVTV19ndXCD5mEETfSiloREGLA6wBErEKsEFDB8bDDkcQCChVDJlyBhW+x3rV6tpE
+         QM3g==
+X-Gm-Message-State: AO0yUKU6stAy/L/RDACa6xO4YDKSG83EkVjOkL62Zf+MaopmMSLyn3by
+        5sWxehk4LyRTPDfzIXg/AXRk27kT7H5oRw==
+X-Google-Smtp-Source: AK7set+AaLu2GD+WsctcxcZEACYu/N/F6+7DGzFBzKu5gbg3+yDzec078nZ56mhtr560D7zesC6aIA==
+X-Received: by 2002:a05:6214:2a86:b0:56f:5466:20d8 with SMTP id jr6-20020a0562142a8600b0056f546620d8mr801341qvb.3.1676880961801;
+        Mon, 20 Feb 2023 00:16:01 -0800 (PST)
+Received: from mail-yb1-f180.google.com (mail-yb1-f180.google.com. [209.85.219.180])
+        by smtp.gmail.com with ESMTPSA id q188-20020a378ec5000000b0073d82a8113bsm3510028qkd.126.2023.02.20.00.16.01
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 20 Feb 2023 00:16:01 -0800 (PST)
+Received: by mail-yb1-f180.google.com with SMTP id v78so392255ybe.3;
+        Mon, 20 Feb 2023 00:16:01 -0800 (PST)
+X-Received: by 2002:a5b:f06:0:b0:95e:613:ca4c with SMTP id x6-20020a5b0f06000000b0095e0613ca4cmr125776ybr.12.1676880960980;
+ Mon, 20 Feb 2023 00:16:00 -0800 (PST)
 MIME-Version: 1.0
+References: <20230217185225.43310-1-prabhakar.mahadev-lad.rj@bp.renesas.com> <20230217185225.43310-4-prabhakar.mahadev-lad.rj@bp.renesas.com>
+In-Reply-To: <20230217185225.43310-4-prabhakar.mahadev-lad.rj@bp.renesas.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Mon, 20 Feb 2023 09:15:49 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdVW-rBR43QCuaBDJD407wUUZ4=nJP_+UvXUrJ4+BsXRbA@mail.gmail.com>
+Message-ID: <CAMuHMdVW-rBR43QCuaBDJD407wUUZ4=nJP_+UvXUrJ4+BsXRbA@mail.gmail.com>
+Subject: Re: [PATCH 3/4] arm64: dts: renesas: r9a07g044: Update IRQ numbers
+ for SSI channels
+To:     Prabhakar <prabhakar.csengg@gmail.com>
+Cc:     Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Magnus Damm <magnus.damm@gmail.com>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>, alsa-devel@alsa-project.org,
+        linux-renesas-soc@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Biju Das <biju.das.jz@bp.renesas.com>,
+        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
         FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
         RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
@@ -82,80 +75,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Vladimir!
+Hi Prabhakar,
 
-Thank you for the update!
+On Fri, Feb 17, 2023 at 7:53 PM Prabhakar <prabhakar.csengg@gmail.com> wrote:
+> From: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+>
+> From R01UH0914EJ0120 Rev.1.20 HW manual the interrupt numbers for SSI
+> channels have been updated,
+>
+> SPI 329 - SSIF0 is now marked as reserved
+> SPI 333 - SSIF1 is now marked as reserved
+> SPI 335 - SSIF2 is now marked as reserved
+> SPI 336 - SSIF2 is now marked as reserved
+> SPI 341 - SSIF3 is now marked as reserved
+>
+> This patch drops the above IRQs from SoC DTSI.
+>
+> Fixes: 92a341315afc9 ("arm64: dts: renesas: r9a07g044: Add SSI support")
+> Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+> Reviewed-by: Biju Das <biju.das.jz@bp.renesas.com>
+> ---
+> Hi Geert,
+>
+> As this is is a fixes patch and we are still waiting for [0] to be merged
+> shall do the same for V2L SoC?
 
-On Sun, 2023-02-19 at 14:58 +0200, Vladimir Oltean wrote:
-> Hi Ferenc,
-> 
-> On Sun, Feb 19, 2023 at 10:47:31AM +0100, Ferenc Fejes wrote:
-> > Do you have the iproute2 part? Sorry if I missed it, but it would
-> > be
-> > nice to see how is that UAPI exposed for the config tools. Is there
-> > any
-> > new parameter for mqprio/taprio?
-> 
-> I haven't posted the iproute2 part (yet). For those familiar with my
-> recent development, FP is a per-traffic-class netlink attribute just
-> like queueMaxSDU from tc-taprio. That was exposed in iproute2 as an
-> array of values, one per tc.
-> 
-> What I have in my tree would allow something like this:
-> 
-> tc qdisc replace dev $swp1 root stab overhead 20 taprio \
->         num_tc 8 \
->         map 0 1 2 3 4 5 6 7 \
->         queues 1@0 1@1 1@2 1@3 1@4 1@5 1@6 1@7 \
->         base-time 0 \
->         sched-entry S 0x7e 900000 \
->         sched-entry S 0x82 100000 \
->         max-sdu 0 0 0 0 0 0 0 200 \
->         fp P E E E E E E E \   # this is new (one entry per tc)
->         flags 0x2
-> 
-> tc qdisc replace dev $swp1 root mqprio \
->         num_tc 8 \
->         map 0 1 2 3 4 5 6 7 \
->         queues 1@0 1@1 1@2 1@3 1@4 1@5 1@6 1@7 \
->         fp P E E E E E E E \   # this is new (one entry per tc)
->         hw 1
-> 
-> of course the exact syntax is a potential matter of debate on its
-> own,
-> and does not really matter for the purpose of defining the kernel
-> UAPI,
-> which is why I wanted to keep discussions separate.
+Yes please. Thank you!
 
-Fair enough. What you have right here is pretty straightforward IMO, I
-would definitely support something like this.
+> [0] https://patchwork.kernel.org/project/linux-renesas-soc/cover/20230131223529.11905-1-prabhakar.mahadev-lad.rj@bp.renesas.com/
 
-> 
-> For hardware which understands preemptible queues rather than traffic
-> classes, how many queues are preemptible, and what are their offsets,
-> will be deduced by translating the "queues" argument.
-> 
-> For hardware which understands preemptible priorities rather than
-> traffic classes, which priorities are preemptible will be deduced by
-> translating the "map" argument.
+Gr{oetje,eeting}s,
 
-Great, that cover both cases with the same UAPI. I love the fact that
-this even lets open the possibility to use prio-s (map) instead of
-queues for FP.
+                        Geert
 
-> 
-> The traffic class is the kernel entity which has the preemptible
-> priority in my proposed UAPI because this is what my analysis of the
-> standard has deduced that the preemptible quality is fundamentally
-> attached to.
-> 
-> Considering that the UAPI for FP is a topic that has been discussed
-> to
-> death at least since August without any really new input since then,
-> I'm
-> going to submit v2 later today, and the iproute2 patch set afterwards
-> (still need to write man page entries for that).
+-- 
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
 
-Best,
-Ferenc
-
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
