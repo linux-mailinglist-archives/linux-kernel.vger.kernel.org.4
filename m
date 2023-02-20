@@ -2,123 +2,198 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A10669CA8E
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Feb 2023 13:14:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 91EB669CA92
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Feb 2023 13:15:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231422AbjBTMOB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Feb 2023 07:14:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32788 "EHLO
+        id S231575AbjBTMPE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Feb 2023 07:15:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33854 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229768AbjBTMN7 (ORCPT
+        with ESMTP id S230245AbjBTMPD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Feb 2023 07:13:59 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CDF0B1A67E;
-        Mon, 20 Feb 2023 04:13:54 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 83A7EB80C03;
-        Mon, 20 Feb 2023 12:13:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 971ECC433EF;
-        Mon, 20 Feb 2023 12:13:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1676895232;
-        bh=H858yOx8NUQoy8dR556ttHgcbTm2syhGg76ezLDH0dY=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=pp1DJCpq5KblTCwODOc9AMcNY8x+aDn40BVimo9Ix+fD61/dtjB/B639dCtVrNpQk
-         BRvpOdAn6qs7bNkTSCzZ0uFv6IqM/qyziDuqDRdM/RaE0G01H0dYYwPNZ8FLfoGAO0
-         5nf6uFK2rSPH/yANJUoxzrmt57ia8kzB6ZpuE8SuG/eDTjjzR8Wmv9+UFA6rqO24Eb
-         RMx3I+8nhpc2cXGzyBUCEa/ot5F1fHdhmJMgeRFLqm0+dRKnr2tZ6Nv5qc6xme4uku
-         6EQOCz0M6dqgcYmgM9gBcG/+U6boMyvC2OALmfaJ/iNZgy6qo5aAiEjXUqU2YawGJ/
-         5pnE2pEX2mVpw==
-Date:   Mon, 20 Feb 2023 04:13:50 -0800
-From:   Josh Poimboeuf <jpoimboe@kernel.org>
-To:     KP Singh <kpsingh@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, pjt@google.com, evn@google.com,
-        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
-        dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
-        peterz@infradead.org, pawan.kumar.gupta@linux.intel.com,
-        kim.phillips@amd.com, alexandre.chartre@oracle.com,
-        daniel.sneddon@linux.intel.com,
-        =?utf-8?B?Sm9zw6k=?= Oliveira <joseloliveira11@gmail.com>,
-        Rodrigo Branco <rodrigo@kernelhacking.com>,
-        Alexandra Sandulescu <aesa@google.com>,
-        Jim Mattson <jmattson@google.com>, stable@vger.kernel.org
-Subject: Re: [PATCH RESEND] x86/speculation: Fix user-mode spectre-v2
- protection with KERNEL_IBRS
-Message-ID: <20230220121350.aidsipw3kd4rsyss@treble>
-References: <20230220120127.1975241-1-kpsingh@kernel.org>
+        Mon, 20 Feb 2023 07:15:03 -0500
+Received: from mail-qt1-f177.google.com (mail-qt1-f177.google.com [209.85.160.177])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0AC0D1A67E;
+        Mon, 20 Feb 2023 04:15:02 -0800 (PST)
+Received: by mail-qt1-f177.google.com with SMTP id x1so1247634qtw.3;
+        Mon, 20 Feb 2023 04:15:02 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=i1MSO2w1kMSKm/Y9n62XXqY52kNnO7PPqBPx0Lzak2c=;
+        b=nHwOUCLXZvjPZfTIcJGfhLVjuNZu3NAMy3g/C+gG44nv/xIURrAW51hBnYWJe5CLgL
+         ypHymGRbiBhYBOUbfL06eE2RDber2yc9mR3WEO/xvKxMr8Q6a6G1rn3p6WRRd/Matl1D
+         ANyt3xaR9pP1nDSwlqIUhCY3bRsD/wMj1UaVC6F+4KNM6dTGSqi6xZXwIeyFDvRQtr3E
+         d1mHziGBLtru8rUcA2yHzXE31H/Eo/XNVNzGnsQxF1CoNS1Z6d5ErXk+x1uc4uZdoNDz
+         TDez/qn+fTVh43V7EZYmhiPKgb/xxy0kVpZ5ixJGqVEPNMUHUiDfts8pmBv5nZR1qzIJ
+         mfBw==
+X-Gm-Message-State: AO0yUKVSsHppYN3tdUhIDqxaNbHeZzqL0Bl9heWW9MB0NZAKR/KLU5HT
+        FbSuWxc0fvmkrIjDnpv7aEDuIDSv8scrmw==
+X-Google-Smtp-Source: AK7set9xK0kSmh7m0c+2eWRaCYtzSK2Qqjl6Z5w+NViYKqBBen2EnTD9yHbWKNYCk3RJgY2/Ro2dHA==
+X-Received: by 2002:ac8:5f12:0:b0:3b9:c889:ec24 with SMTP id x18-20020ac85f12000000b003b9c889ec24mr15377681qta.12.1676895300819;
+        Mon, 20 Feb 2023 04:15:00 -0800 (PST)
+Received: from mail-yb1-f179.google.com (mail-yb1-f179.google.com. [209.85.219.179])
+        by smtp.gmail.com with ESMTPSA id l28-20020ac8459c000000b003b9bf862c04sm8885465qtn.55.2023.02.20.04.15.00
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 20 Feb 2023 04:15:00 -0800 (PST)
+Received: by mail-yb1-f179.google.com with SMTP id o145so1783994ybg.8;
+        Mon, 20 Feb 2023 04:15:00 -0800 (PST)
+X-Received: by 2002:a05:6902:2d0:b0:920:2b79:84b4 with SMTP id
+ w16-20020a05690202d000b009202b7984b4mr702298ybh.386.1676895300117; Mon, 20
+ Feb 2023 04:15:00 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20230220120127.1975241-1-kpsingh@kernel.org>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <cover.1675743217.git.wqu@suse.com> <f82eed6746d19cf3bea15631a120648eadf20852.1675743217.git.wqu@suse.com>
+ <e3c9bab1-41e-7fe0-1833-1c81ced89a20@linux-m68k.org> <e567a113-1cbd-134b-6db0-82433eca6685@gmx.com>
+In-Reply-To: <e567a113-1cbd-134b-6db0-82433eca6685@gmx.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Mon, 20 Feb 2023 13:14:48 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdVwXB4YsCFEpLoTm8pxyjMty6tAT7joNj2EME4ynY8keQ@mail.gmail.com>
+Message-ID: <CAMuHMdVwXB4YsCFEpLoTm8pxyjMty6tAT7joNj2EME4ynY8keQ@mail.gmail.com>
+Subject: Re: [PATCH v2 4/4] btrfs: replace btrfs_io_context::raid_map[] with a
+ fixed u64 value
+To:     quwenruo.btrfs@gmx.com
+Cc:     Qu Wenruo <wqu@suse.com>, David Sterba <dsterba@suse.com>,
+        linux-btrfs@vger.kernel.org, linux-next@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 20, 2023 at 01:01:27PM +0100, KP Singh wrote:
-> +static inline bool spectre_v2_user_no_stibp(enum spectre_v2_mitigation mode)
-> +{
-> +	/* When IBRS or enhanced IBRS is enabled, STIBP is not needed.
-> +	 *
-> +	 * However, With KERNEL_IBRS, the IBRS bit is cleared on return
-> +	 * to user and the user-mode code needs to be able to enable protection
-> +	 * from cross-thread training, either by always enabling STIBP or
-> +	 * by enabling it via prctl.
-> +	 */
-> +	return (spectre_v2_in_ibrs_mode(mode) &&
-> +		!cpu_feature_enabled(X86_FEATURE_KERNEL_IBRS));
-> +}
+Hi Qu,
 
-The comments and code confused me, they both seem to imply some
-distinction between IBRS and KERNEL_IBRS, but in the kernel those are
-functionally the same thing.  e.g., the kernel doesn't have a user IBRS
-mode.
+On Mon, Feb 20, 2023 at 12:50 PM Qu Wenruo <quwenruo.btrfs@gmx.com> wrote:
+> On 2023/2/20 16:53, Geert Uytterhoeven wrote:
+> > On Tue, 7 Feb 2023, Qu Wenruo wrote:
+> >> In btrfs_io_context structure, we have a pointer raid_map, which is to
+> >> indicate the logical bytenr for each stripe.
+> >>
+> >> But considering we always call sort_parity_stripes(), the result
+> >> raid_map[] is always sorted, thus raid_map[0] is always the logical
+> >> bytenr of the full stripe.
+> >>
+> >> So why we waste the space and time (for sorting) for raid_map[]?
+> >>
+> >> This patch will replace btrfs_io_context::raid_map with a single u64
+> >> number, full_stripe_start, by:
+> >>
+> >> - Replace btrfs_io_context::raid_map with full_stripe_start
+> >>
+> >> - Replace call sites using raid_map[0] to use full_stripe_start
+> >>
+> >> - Replace call sites using raid_map[i] to compare with nr_data_stripes.
+> >>
+> >> The benefits are:
+> >>
+> >> - Less memory wasted on raid_map
+> >>  It's sizeof(u64) * num_stripes vs size(u64).
+> >>  It's always a save for at least one u64, and the benefit grows larger
+> >>  with num_stripes.
+> >>
+> >> - No more weird alloc_btrfs_io_context() behavior
+> >>  As there is only one fixed size + one variable length array.
+> >>
+> >> Signed-off-by: Qu Wenruo <wqu@suse.com>
+> >
+> > Thanks for your patch, which is now commit 4a8c6e8a6dc8ae4c ("btrfs:
+> > replace btrfs_io_context::raid_map with a fixed u64 value") in
+> > next-20230220.
+> >
+> > noreply@ellerman.id.au reported several build failures when
+> > building for 32-bit platforms:
+> >
+> >      ERROR: modpost: "__umoddi3" [fs/btrfs/btrfs.ko] undefined!
+> >
+> >> --- a/fs/btrfs/volumes.c
+> >> +++ b/fs/btrfs/volumes.c
+> >> @@ -6556,35 +6532,44 @@ int __btrfs_map_block(struct btrfs_fs_info
+> >> *fs_info, enum btrfs_map_op op,
+> >>     }
+> >>     bioc->map_type = map->type;
+> >>
+> >> -    for (i = 0; i < num_stripes; i++) {
+> >> -        set_io_stripe(&bioc->stripes[i], map, stripe_index,
+> >> stripe_offset,
+> >> -                  stripe_nr);
+> >> -        stripe_index++;
+> >> -    }
+> >> -
+> >> -    /* Build raid_map */
+> >> +    /*
+> >> +     * For RAID56 full map, we need to make sure the stripes[] follows
+> >> +     * the rule that data stripes are all ordered, then followed with P
+> >> +     * and Q (if we have).
+> >> +     *
+> >> +     * It's still mostly the same as other profiles, just with extra
+> >> +     * rotataion.
+> >> +     */
+> >>     if (map->type & BTRFS_BLOCK_GROUP_RAID56_MASK && need_raid_map &&
+> >>         (need_full_stripe(op) || mirror_num > 1)) {
+> >> -        u64 tmp;
+> >> -        unsigned rot;
+> >> -
+> >> -        /* Work out the disk rotation on this stripe-set */
+> >> -        rot = stripe_nr % num_stripes;
+> >> -
+> >> -        /* Fill in the logical address of each stripe */
+> >> -        tmp = stripe_nr * data_stripes;
+> >> -        for (i = 0; i < data_stripes; i++)
+> >> -            bioc->raid_map[(i + rot) % num_stripes] =
+> >> -                em->start + ((tmp + i) << BTRFS_STRIPE_LEN_SHIFT);
+> >> -
+> >> -        bioc->raid_map[(i + rot) % map->num_stripes] = RAID5_P_STRIPE;
+> >> -        if (map->type & BTRFS_BLOCK_GROUP_RAID6)
+> >> -            bioc->raid_map[(i + rot + 1) % num_stripes] =
+> >> -                RAID6_Q_STRIPE;
+> >> -
+> >> -        sort_parity_stripes(bioc, num_stripes);
+> >> +        /*
+> >> +         * For RAID56 @stripe_nr is already the number of full stripes
+> >> +         * before us, which is also the rotation value (needs to modulo
+> >> +         * with num_stripes).
+> >> +         *
+> >> +         * In this case, we just add @stripe_nr with @i, then do the
+> >> +         * modulo, to reduce one modulo call.
+> >> +         */
+> >> +        bioc->full_stripe_logical = em->start +
+> >> +            ((stripe_nr * data_stripes) << BTRFS_STRIPE_LEN_SHIFT);
+> >> +        for (i = 0; i < num_stripes; i++) {
+> >> +            set_io_stripe(&bioc->stripes[i], map,
+> >> +                      (i + stripe_nr) % num_stripes,
+> >
+> > As stripe_nr is u64, this is a 64-by-32 modulo operation, which
+> > should be implemented using a helper from include/linux/math64.h
+> > instead.
+>
+> This is an older version, in the latest version, the @stripe_nr variable
+> is also u32, and I tried compiling the latest branch with i686, it
+> doesn't cause any u64 division problems anymore.
+>
+> You can find the latest branch in either github or from the mailling list:
+>
+> https://github.com/adam900710/linux/tree/map_block_refactor
+>
+> https://lore.kernel.org/linux-btrfs/cover.1676611535.git.wqu@suse.com/
 
-And, unless I'm missing some subtlety here, it seems to be a convoluted
-way of saying that eIBRS doesn't need STIBP in user space.
+So the older version was "v2", and the latest version had no
+version indicator, nor changelog, thus assuming v1?
+No surprise people end up applying the wrong version...
 
-It would be simpler to just call it spectre_v2_in_eibrs_mode().
+Gr{oetje,eeting}s,
 
-static inline bool spectre_v2_in_eibrs_mode(enum spectre_v2_mitigation mode)
-{
-	return mode == SPECTRE_V2_EIBRS ||
-	       mode == SPECTRE_V2_EIBRS_RETPOLINE ||
-	       mode == SPECTRE_V2_EIBRS_LFENCE;
-}
-
-And then spectre_v2_in_ibrs_mode() could be changed to call that:
-
-static inline bool spectre_v2_in_eibrs_mode(enum spectre_v2_mitigation mode)
-{
-	return spectre_v2_in_eibrs_mode(mode) || mode == SPECTRE_V2_IBRS;
-}
-
-> @@ -1496,6 +1504,7 @@ static void __init spectre_v2_select_mitigation(void)
->  		break;
->  
->  	case SPECTRE_V2_IBRS:
-> +		pr_err("enabling KERNEL_IBRS");
-
-Why?
-
-> @@ -2327,7 +2336,7 @@ static ssize_t mmio_stale_data_show_state(char *buf)
->  
->  static char *stibp_state(void)
->  {
-> -	if (spectre_v2_in_ibrs_mode(spectre_v2_enabled))
-> +	if (spectre_v2_user_no_stibp(spectre_v2_enabled))
->  		return "";
-
-This seems like old cruft, can we just remove this check altogether?  In
-the eIBRS case, spectre_v2_user_stibp will already have its default of
-SPECTRE_V2_USER_NONE.
+                        Geert
 
 -- 
-Josh
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
