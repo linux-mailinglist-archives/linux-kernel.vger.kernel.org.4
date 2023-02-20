@@ -2,396 +2,201 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 84F8C69C818
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Feb 2023 10:56:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6716269C822
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Feb 2023 10:59:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230324AbjBTJ45 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Feb 2023 04:56:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58462 "EHLO
+        id S231350AbjBTJ7s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Feb 2023 04:59:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60596 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231299AbjBTJ4y (ORCPT
+        with ESMTP id S231311AbjBTJ7h (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Feb 2023 04:56:54 -0500
-Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 265E9CC2A
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Feb 2023 01:56:51 -0800 (PST)
-Received: by mail-ed1-x536.google.com with SMTP id eq27so6974291edb.5
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Feb 2023 01:56:51 -0800 (PST)
+        Mon, 20 Feb 2023 04:59:37 -0500
+Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8800A15C84
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Feb 2023 01:59:35 -0800 (PST)
+Received: by mail-lf1-x12e.google.com with SMTP id a26so2146431lfk.10
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Feb 2023 01:59:35 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=5JxyzZLWqH4CmIH4TH2Vy9MuCCxUIYLIZaOnWZ1UUbw=;
-        b=pgUcemSNzWrbFTBSg5vIkS/KJ19DqW6lzGGnd/9EwVvdHmuUQ6fluJAajuerUXNle1
-         HXLL4lz+A+3fIxpNfDmhWR3wvIZbjrpvKOVW3/rEwCCli8QDHHCquLbAGcpWJrsZVS1P
-         FvR+AKpENnJa9r7GCFa7+ZQHVylqiLuKe3qunECPpZbJWWCreVS9NlqPhkmJmQOrP2ov
-         StJgwck25ycP8owa5+xBILR72WdjJb07ckBQZcwJARh/5v2dWKu38hwLmJI91LYMcoYv
-         Uc+6ZqwFrR0VfFkaCyLwJCOBafZtYZougWKBZFUTPye7H7ZdQbeLuqWDIev2EZ4GlTiK
-         4EvA==
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=ywAU8OoBbAUucxBkw+OQ9oXs8iU9JAIrIjeKhlO8RdU=;
+        b=qzWSYW/QA2ZJHpcMwlFP4k9gyOtvYZfoeb0vb5PALj+ufZKtsvhwL3irYC3nsY/GjX
+         QZb6OYgoUaIKxd0NbkqkzlOqkgqDIDXWKc2CLYHSqfYB1aeSntmCDQeMca2piFZOGXJr
+         jqLxJYuP6UHT4NLnsr4utMo+9+CKyrGUwdgl+K6eN63+EU4QKhxknSPmCX282hlR4neW
+         pWVjV9MfNkp+njmEO8Ks121zRCdMYDmCpLLRxLEIAccuz0SGc+zGtmil+5Vufz1INfdd
+         E4JPrludd89gEhZJFkX9elm3H7ROym/zItA+1Ig4FI6lGRDXI0GuJzvpymyH5qWVSBwD
+         qILg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=5JxyzZLWqH4CmIH4TH2Vy9MuCCxUIYLIZaOnWZ1UUbw=;
-        b=75SAKaWhSUcKYFtDNtmVwvmsf60sKYlT+ld7SGuFPTtAtocHT9SC0eip0dbmu2LaD0
-         aGFJo8X51PC/I4DvkwXZJpEujz4ERlQNB08ijvUS5a2XaAthieoPBfoD7VgugZxHs7nV
-         Bt2Uxmw8dZUgyUiDzV7I1Jn6YNkKdhgqw+CH7wvwq31YaGYtuJbsRQVTEqsHxOlTP2lS
-         gWwS0tQaFtVqv5gy/VW4pK3K23n++sZgUH1V9lq71bEIZMa8eZYak3sQEka1xEOBfsHE
-         p7YYRvGPsDbQ76ZPVUXDMplgUqLqUAwZviJLq5ynEbv37Ltx4ilHv5UI8Bwq4t/qfeQ0
-         mCZg==
-X-Gm-Message-State: AO0yUKW2ZCmCltztENoTxw87shOqPH2tMbangzqRhpKTfmmNJCNokxae
-        aAJ/Uqe+YbwSow/0JCIfo0djFzrn2MgrfhhM
-X-Google-Smtp-Source: AK7set80VzeP05Tf00cqGKyKOMUVYdyTqbqPyH6ydENKRVs7GrKbjY72bowMpNFv8iFRAf2JGwPdPA==
-X-Received: by 2002:a17:906:2491:b0:878:7471:6da7 with SMTP id e17-20020a170906249100b0087874716da7mr7846678ejb.66.1676887009189;
-        Mon, 20 Feb 2023 01:56:49 -0800 (PST)
-Received: from krzk-bin.. ([178.197.216.144])
-        by smtp.gmail.com with ESMTPSA id b25-20020a17090636d900b008b129b7f4e4sm5513120ejc.167.2023.02.20.01.56.47
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 20 Feb 2023 01:56:48 -0800 (PST)
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Banajit Goswami <bgoswami@quicinc.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        alsa-devel@alsa-project.org, linux-arm-msm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH 2/2] ASoC: dt-bindings: qcom,wcd9335: Convert to dtschema
-Date:   Mon, 20 Feb 2023 10:56:43 +0100
-Message-Id: <20230220095643.64898-2-krzysztof.kozlowski@linaro.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230220095643.64898-1-krzysztof.kozlowski@linaro.org>
-References: <20230220095643.64898-1-krzysztof.kozlowski@linaro.org>
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=ywAU8OoBbAUucxBkw+OQ9oXs8iU9JAIrIjeKhlO8RdU=;
+        b=TTR+HeFQZ2q7AUeeGVPJJmss+wsr27U5hxxRHer3zSgLY4ANaSJs2Cw5q1mCe16phR
+         8ixuW6lU4g5aGDrh9J6K8dymaRuGFe0NaG5dLgpcYwCkUcZpOH3PwF6pLq0Xuxmbt48j
+         YdTpibgm5xpGcdw7F+9GS9nulajMOxm3aU4lNx+sbSgd/n+OAgHwEfB2OCoAPEU2g71q
+         rFmBqRCYi1hoiaaCV/4fUckAOT840aQycPQHcqeQ1aIlodgVGxpqfe45L8DAOVQ747Jq
+         BN/hf/acsTMx8Im15SZbJr6ZohIt2KlmEuWMVCj07rBV02F78Q35v8SB7U5M+EuF5EKo
+         wwtA==
+X-Gm-Message-State: AO0yUKXRmzk6ZSp4Sh7kFPyBJKFOsqEWohHqFJrxT9Le+f84TiQMSt7E
+        AentXhism/Fls1HNTjRgSM5O1Q==
+X-Google-Smtp-Source: AK7set/DCtI50kuFxGmgY0zVWagZ8vwkt/Nbtajm7tyz/ZgVuY15E401RNI5p2Ar4Ic3vU2pxdkGfg==
+X-Received: by 2002:ac2:5921:0:b0:4b5:3200:eb37 with SMTP id v1-20020ac25921000000b004b53200eb37mr348994lfi.43.1676887173736;
+        Mon, 20 Feb 2023 01:59:33 -0800 (PST)
+Received: from [192.168.1.101] (abxh184.neoplus.adsl.tpnet.pl. [83.9.1.184])
+        by smtp.gmail.com with ESMTPSA id u13-20020ac248ad000000b004d3f0f20b98sm1479286lfg.40.2023.02.20.01.59.32
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 20 Feb 2023 01:59:33 -0800 (PST)
+Message-ID: <cc7a9cce-cd12-0f35-d8f7-933b64bbb34d@linaro.org>
+Date:   Mon, 20 Feb 2023 10:59:31 +0100
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH v2 06/14] drm/msm/gpu: Use dev_pm_opp_set_rate for non-GMU
+ GPUs
+Content-Language: en-US
+To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        linux-arm-msm@vger.kernel.org, andersson@kernel.org,
+        agross@kernel.org
+Cc:     marijn.suijten@somainline.org, Rob Clark <robdclark@gmail.com>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Akhil P Oommen <quic_akhilpo@quicinc.com>,
+        Emma Anholt <emma@anholt.net>, Chia-I Wu <olvaffe@gmail.com>,
+        Dan Carpenter <error27@gmail.com>,
+        dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org
+References: <20230214173145.2482651-1-konrad.dybcio@linaro.org>
+ <20230214173145.2482651-7-konrad.dybcio@linaro.org>
+ <2e129fd6-d4e5-a955-5355-3ca71166fb33@linaro.org>
+ <82c84ba4-ca33-3ce0-fe86-efedfce04cda@linaro.org>
+ <170ee26d-8904-0829-f92e-4ea6678b08eb@linaro.org>
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+In-Reply-To: <170ee26d-8904-0829-f92e-4ea6678b08eb@linaro.org>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Convert the Qualcomm WCD9335 audio codec binding to DT schema.
 
-Changes against original binding:
-1. Drop "mclk2" from clocks as neither Linux driver nor DTS uses it.
-2. Do not require vdd-micbias-supply as several DTS do not provide it.
 
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+On 18.02.2023 17:47, Dmitry Baryshkov wrote:
+> On 18/02/2023 13:04, Konrad Dybcio wrote:
+>>
+>>
+>> On 17.02.2023 22:07, Dmitry Baryshkov wrote:
+>>> On 14/02/2023 19:31, Konrad Dybcio wrote:
+>>>> Currently we only utilize the OPP table connected to the GPU for
+>>>> getting (available) frequencies. We do however need to scale the
+>>>> voltage rail(s) accordingly to ensure that we aren't trying to
+>>>> run the GPU at 1GHz with a VDD_LOW vote, as that would result in
+>>>> an otherwise inexplainable hang.
+>>>>
+>>>> Tell the OPP framework that we want to scale the "core" clock
+>>>> and swap out the clk_set_rate to a dev_pm_opp_set_rate in
+>>>> msm_devfreq_target() to enable usage of required-opps and by
+>>>> extension proper voltage level/corner scaling.
+>>>>
+>>>> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+>>>> ---
+>>>>    drivers/gpu/drm/msm/adreno/adreno_gpu.c | 4 ++++
+>>>>    drivers/gpu/drm/msm/msm_gpu_devfreq.c   | 2 +-
+>>>>    2 files changed, 5 insertions(+), 1 deletion(-)
+>>>>
+>>>> diff --git a/drivers/gpu/drm/msm/adreno/adreno_gpu.c b/drivers/gpu/drm/msm/adreno/adreno_gpu.c
+>>>> index ce6b76c45b6f..15e405e4f977 100644
+>>>> --- a/drivers/gpu/drm/msm/adreno/adreno_gpu.c
+>>>> +++ b/drivers/gpu/drm/msm/adreno/adreno_gpu.c
+>>>> @@ -1047,6 +1047,10 @@ int adreno_gpu_init(struct drm_device *drm, struct platform_device *pdev,
+>>>>        const char *gpu_name;
+>>>>        u32 speedbin;
+>>>>    +    /* This can only be done here, or devm_pm_opp_set_supported_hw will WARN_ON() */
+>>>> +    if (!IS_ERR(devm_clk_get(dev, "core")))
+>>>> +        devm_pm_opp_set_clkname(dev, "core");
+>>>
+>>> Can we instead move a call to a6xx_set_supported_hw() / check_speed_bin after the adreno_gpu_init() ? It will call msm_gpu_init, which in turn sets gpu->core_clk.
+>>>
+>>> Ideally you can call devm_pm_opp_set_clkname() from that function.
+>>
+>>
+>>> Or maybe completely drop gpu->core_clk and always use devm_pm_opp_set_clk_rate().
+>> That would break non-OPP targets, last of which were probably added N=big years ago..
+> 
+> No. In the lack of OPP tables, dev_pm_opp_clk_set_rate() should behave exactly like the clk_set_rate().
+Not sure if that's what you meant, but if a device lacks OPP,
+devm_pm_opp_set_rate will return -ENODEV.
 
----
+If you meant "if we can't find an opp table, behave as if we
+called clk_set_rate", a discussion on #freedreno with robclark
+indicates he'd accept getting rid of non-opp code, provided we
+construct a table if need be, since we have the data required
+to do so ([FMIN=27MHz, FMAX=fast_rate]).
 
-Few DTS boards have incomplete WCD9335 node causing dtbs_check warnings.
-These are fixed here:
-https://lore.kernel.org/linux-arm-msm/42f7d53b-a922-760a-4be2-7498ea0d560a@linaro.org/T/#t
----
- .../bindings/sound/qcom,wcd9335.txt           | 123 --------------
- .../bindings/sound/qcom,wcd9335.yaml          | 156 ++++++++++++++++++
- 2 files changed, 156 insertions(+), 123 deletions(-)
- delete mode 100644 Documentation/devicetree/bindings/sound/qcom,wcd9335.txt
- create mode 100644 Documentation/devicetree/bindings/sound/qcom,wcd9335.yaml
+> 
+>> I'm not sure these would still work, as I think we've got rid of some ugly
+>> clock getters that were looking for both "core" and "core_clk" etc.
+> 
+> We still support core vs core_clk, see the get_clocks() at msm_gpu.c and then msm_clk_bulk_get_clock(). However we might mimick this function and call devm_pm_opp_set_clkname() with the proper name ("core" or "core_clk").
+> 
+>>
+>> See 8db0b6c7b636376789e356d861c3c6c35dcb6913 for what seems to be the most recent
+>> example of non-OPP.
+>>
+>> IMX51/53 also have no OPP tables and are using the (AFAIK) now-defunct _clk-suffixed
+>> clock-names.
+> 
+> It works, I tested it during this cycle.
+Oh okay, I had a feeling like that was dropped at one point..
 
-diff --git a/Documentation/devicetree/bindings/sound/qcom,wcd9335.txt b/Documentation/devicetree/bindings/sound/qcom,wcd9335.txt
-deleted file mode 100644
-index 1f75feec3dec..000000000000
---- a/Documentation/devicetree/bindings/sound/qcom,wcd9335.txt
-+++ /dev/null
-@@ -1,123 +0,0 @@
--QCOM WCD9335 Codec
--
--Qualcomm WCD9335 Codec is a standalone Hi-Fi audio codec IC, supports
--Qualcomm Technologies, Inc. (QTI) multimedia solutions, including
--the MSM8996, MSM8976, and MSM8956 chipsets. It has in-built
--Soundwire controller, interrupt mux. It supports both I2S/I2C and
--SLIMbus audio interfaces.
--
--Required properties with SLIMbus Interface:
--
--- compatible:
--	Usage: required
--	Value type: <stringlist>
--	Definition: For SLIMbus interface it should be "slimMID,PID",
--		    textual representation of Manufacturer ID, Product Code,
--		    shall be in lower case hexadecimal with leading zeroes
--		    suppressed.  Refer to slimbus/bus.txt for details.
--		    Should be:
--		    "slim217,1a0" for MSM8996 and APQ8096 SoCs with SLIMbus.
--
--- reg
--	Usage: required
--	Value type: <u32 u32>
--	Definition: Should be ('Device index', 'Instance ID')
--
--- interrupts
--	Usage: required
--	Value type: <prop-encoded-array>
--	Definition: Interrupts via WCD INTR1 and INTR2 pins
--
--- interrupt-names:
--	Usage: required
--	Value type: <String array>
--	Definition: Interrupt names of WCD INTR1 and INTR2
--	Should be: "intr1", "intr2"
--
--- reset-gpios:
--	Usage: required
--	Value type: <String Array>
--	Definition: Reset gpio line
--
--- slim-ifc-dev:
--	Usage: required
--	Value type: <phandle>
--	Definition: SLIM interface device
--
--- clocks:
--	Usage: required
--	Value type: <prop-encoded-array>
--	Definition: See clock-bindings.txt section "consumers". List of
--                three clock specifiers for mclk, mclk2 and slimbus clock.
--
--- clock-names:
--	Usage: required
--	Value type: <string>
--	Definition: Must contain "mclk", "mclk2" and "slimbus" strings.
--
--- vdd-buck-supply:
--	Usage: required
--	Value type: <phandle>
--	Definition: Should contain a reference to the 1.8V buck supply
--
--- vdd-buck-sido-supply:
--	Usage: required
--	Value type: <phandle>
--	Definition: Should contain a reference to the 1.8V SIDO buck supply
--
--- vdd-rx-supply:
--	Usage: required
--	Value type: <phandle>
--	Definition: Should contain a reference to the 1.8V rx supply
--
--- vdd-tx-supply:
--	Usage: required
--	Value type: <phandle>
--	Definition: Should contain a reference to the 1.8V tx supply
--
--- vdd-vbat-supply:
--	Usage: Optional
--	Value type: <phandle>
--	Definition: Should contain a reference to the vbat supply
--
--- vdd-micbias-supply:
--	Usage: required
--	Value type: <phandle>
--	Definition: Should contain a reference to the micbias supply
--
--- vdd-io-supply:
--	Usage: required
--	Value type: <phandle>
--	Definition: Should contain a reference to the 1.8V io supply
--
--- interrupt-controller:
--	Usage: required
--	Definition: Indicating that this is a interrupt controller
--
--- #interrupt-cells:
--	Usage: required
--	Value type: <int>
--	Definition: should be 1
--
--#sound-dai-cells
--	Usage: required
--	Value type: <u32>
--	Definition: Must be 1
--
--audio-codec@1{
--	compatible = "slim217,1a0";
--	reg  = <1 0>;
--	interrupts = <&msmgpio 54 IRQ_TYPE_LEVEL_HIGH>;
--	interrupt-names = "intr2"
--	reset-gpios = <&msmgpio 64 GPIO_ACTIVE_LOW>;
--	slim-ifc-dev  = <&wc9335_ifd>;
--	clock-names = "mclk", "native";
--	clocks = <&rpmcc RPM_SMD_DIV_CLK1>,
--		 <&rpmcc RPM_SMD_BB_CLK1>;
--	vdd-buck-supply = <&pm8994_s4>;
--	vdd-rx-supply = <&pm8994_s4>;
--	vdd-buck-sido-supply = <&pm8994_s4>;
--	vdd-tx-supply = <&pm8994_s4>;
--	vdd-io-supply = <&pm8994_s4>;
--	#sound-dai-cells = <1>;
--}
-diff --git a/Documentation/devicetree/bindings/sound/qcom,wcd9335.yaml b/Documentation/devicetree/bindings/sound/qcom,wcd9335.yaml
-new file mode 100644
-index 000000000000..34f8fe4da9d4
---- /dev/null
-+++ b/Documentation/devicetree/bindings/sound/qcom,wcd9335.yaml
-@@ -0,0 +1,156 @@
-+# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/sound/qcom,wcd9335.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Qualcomm WCD9335 Audio Codec
-+
-+maintainers:
-+  - Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-+
-+description:
-+  Qualcomm WCD9335 Codec is a standalone Hi-Fi audio codec IC with in-built
-+  Soundwire controller and interrupt mux. It supports both I2S/I2C and SLIMbus
-+  audio interfaces.
-+
-+properties:
-+  compatible:
-+    const: slim217,1a0
-+
-+  reg:
-+    maxItems: 1
-+
-+  clocks:
-+    maxItems: 2
-+
-+  clock-names:
-+    items:
-+      - const: mclk
-+      - const: slimbus
-+
-+  interrupts:
-+    maxItems: 2
-+
-+  interrupt-names:
-+    items:
-+      - const: intr1
-+      - const: intr2
-+
-+  interrupt-controller: true
-+
-+  '#interrupt-cells':
-+    const: 1
-+
-+  reset-gpios:
-+    maxItems: 1
-+
-+  slim-ifc-dev:
-+    description: SLIM IFC device interface
-+    $ref: /schemas/types.yaml#/definitions/phandle
-+
-+  '#sound-dai-cells':
-+    const: 1
-+
-+  vdd-buck-supply:
-+    description: 1.8V buck supply
-+
-+  vdd-buck-sido-supply:
-+    description: 1.8V SIDO buck supply
-+
-+  vdd-io-supply:
-+    description: 1.8V I/O supply
-+
-+  vdd-micbias-supply:
-+    description: micbias supply
-+
-+  vdd-rx-supply:
-+    description: 1.8V rx supply
-+
-+  vdd-tx-supply:
-+    description: 1.8V tx supply
-+
-+  vdd-vbat-supply:
-+    description: vbat supply
-+
-+required:
-+  - compatible
-+  - reg
-+
-+allOf:
-+  - $ref: dai-common.yaml#
-+  - if:
-+      required:
-+        - slim-ifc-dev
-+    then:
-+      required:
-+        - clocks
-+        - clock-names
-+        - interrupts
-+        - interrupt-names
-+        - interrupt-controller
-+        - '#interrupt-cells'
-+        - reset-gpios
-+        - slim-ifc-dev
-+        - '#sound-dai-cells'
-+        - vdd-buck-supply
-+        - vdd-buck-sido-supply
-+        - vdd-io-supply
-+        - vdd-rx-supply
-+        - vdd-tx-supply
-+    else:
-+      properties:
-+        clocks: false
-+        clock-names: false
-+        interrupts: false
-+        interrupt-names: false
-+        interrupt-controller: false
-+        '#interrupt-cells': false
-+        reset-gpios: false
-+        slim-ifc-dev: false
-+        '#sound-dai-cells': false
-+        vdd-buck-supply: false
-+        vdd-buck-sido-supply: false
-+        vdd-io-supply: false
-+        vdd-micbias-supply: false
-+        vdd-rx-supply: false
-+        vdd-tx-supply: false
-+        vdd-vbat-supply: false
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    #include <dt-bindings/clock/qcom,rpmcc.h>
-+    #include <dt-bindings/gpio/gpio.h>
-+    #include <dt-bindings/interrupt-controller/irq.h>
-+
-+    tasha_ifd: codec@0,0 {
-+        compatible = "slim217,1a0";
-+        reg = <0 0>;
-+    };
-+
-+    codec@1,0 {
-+        compatible = "slim217,1a0";
-+        reg = <1 0>;
-+
-+        clock-names = "mclk", "slimbus";
-+        clocks = <&div1_mclk>, <&rpmcc RPM_SMD_BB_CLK1>;
-+
-+        interrupt-parent = <&tlmm>;
-+        interrupts = <54 IRQ_TYPE_LEVEL_HIGH>,
-+                     <53 IRQ_TYPE_LEVEL_HIGH>;
-+        interrupt-names = "intr1", "intr2";
-+        interrupt-controller;
-+        #interrupt-cells = <1>;
-+
-+        reset-gpios = <&tlmm 64 GPIO_ACTIVE_LOW>;
-+        slim-ifc-dev = <&tasha_ifd>;
-+        #sound-dai-cells = <1>;
-+
-+        vdd-buck-supply = <&vreg_s4a_1p8>;
-+        vdd-buck-sido-supply = <&vreg_s4a_1p8>;
-+        vdd-tx-supply = <&vreg_s4a_1p8>;
-+        vdd-rx-supply = <&vreg_s4a_1p8>;
-+        vdd-io-supply = <&vreg_s4a_1p8>;
-+    };
--- 
-2.34.1
+> 
+>>
+>> I'd be more than happy to rip out some of this legacy code and convert it
+>> to something modern like OPP, but I'm not sure you guys would like it considering
+>> the breakage on (arguably ancient and borderline retired) platforms.
+> 
+> I think, we should try switching to OPP-for-everybody, granted the promise of dev_pm_opp_set_clk_rate() being backwards compatible with bare clk_set_rate().
+It's not, but as I mentioned, we can easily work around that.
 
+> 
+>>
+>> This patch as-is "only" breaks non-OPP a5xx & a6xx (as they have .gpu_busy defined),
+>> of which there are none..
+...but we want to get devfreq everywhere and it's a few LoC away..
+
+Konrad
+>>
+>>>
+>>>> +
+>>>>        adreno_gpu->funcs = funcs;
+>>>>        adreno_gpu->info = adreno_info(config->rev);
+>>>>        adreno_gpu->gmem = adreno_gpu->info->gmem;
+>>>> diff --git a/drivers/gpu/drm/msm/msm_gpu_devfreq.c b/drivers/gpu/drm/msm/msm_gpu_devfreq.c
+>>>> index e27dbf12b5e8..ea70c1c32d94 100644
+>>>> --- a/drivers/gpu/drm/msm/msm_gpu_devfreq.c
+>>>> +++ b/drivers/gpu/drm/msm/msm_gpu_devfreq.c
+>>>> @@ -48,7 +48,7 @@ static int msm_devfreq_target(struct device *dev, unsigned long *freq,
+>>>>            gpu->funcs->gpu_set_freq(gpu, opp, df->suspended);
+>>>>            mutex_unlock(&df->lock);
+>>>>        } else {
+>>>> -        clk_set_rate(gpu->core_clk, *freq);
+>>>> +        dev_pm_opp_set_rate(dev, *freq);
+>>>
+>>> This is not enough, there are calls to clk_set_rate(gpu->core_clk) in msm_gpu.c which are called from the suspend/resume path.
+>> Right, good catch.
+>>
+>> Konrad
+>>>
+>>>>        }
+>>>>          dev_pm_opp_put(opp);
+>>>
+> 
