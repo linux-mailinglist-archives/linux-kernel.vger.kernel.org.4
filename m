@@ -2,73 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CC94469C5F2
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Feb 2023 08:27:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4745169C5F5
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Feb 2023 08:28:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230177AbjBTH1P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Feb 2023 02:27:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36002 "EHLO
+        id S230238AbjBTH2Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Feb 2023 02:28:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37170 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230138AbjBTH1N (ORCPT
+        with ESMTP id S230138AbjBTH2X (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Feb 2023 02:27:13 -0500
-Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80AD4E3A2
-        for <linux-kernel@vger.kernel.org>; Sun, 19 Feb 2023 23:26:47 -0800 (PST)
-Received: by mail-pj1-x102d.google.com with SMTP id f9-20020a17090a9b0900b00236679bc70cso1010865pjp.4
-        for <linux-kernel@vger.kernel.org>; Sun, 19 Feb 2023 23:26:47 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=Z8cjV9tBotVQoVLeoP2FgDZXVqOq0e7x0vn0sOuSOa0=;
-        b=Xnb7NRKMt8MYXu9k7qM8ig0x/Cb/XyWlbHHJdwLidqfjzJHpaNGxrAr5wHoQF8a7fI
-         E3EwTbgj0y+qLJ2Mf99kt9jEzE2BbRlFY9SPmsuldOUBKGwiLP6v1POabszUUKemEZ1E
-         OCHCYD8QbDlkVHmApwfLHcY1uPngcktSUNuDbZ6k6RgKFEj2H7I+T/3ET+AZu5iVuIZg
-         hxBwWbOc6j5bgH0Ec9CqCCr2bn1ljA1Z5dYqlf/z2O029yXh8mFMOiarwXoOnmrYXdDV
-         j7UvrBhlhNwmOICmjwRIfQf5SHFRJvx4vCwUCrn54rS18noAo4iZYvk4neo3wG9DjTBQ
-         sevA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Z8cjV9tBotVQoVLeoP2FgDZXVqOq0e7x0vn0sOuSOa0=;
-        b=R8agGYQ0BqdUHJNnImYfpS8hSD5zDSYalRUeglCAOKHguLfoezFzE36vJWDHcfEwPQ
-         Z5QEK1hKRrlbBQaVmd4CWFnx/YdzH9BuDRiKwyiSIrG++3l9Fo5+j7+dN5+n0s7p+GQW
-         2T/ZjoSQms/HFogzkk7NKZSYRXwrgwSFCgRgIeZLTidWId5E+UsyA7WthiZuvF2sbfl+
-         jD3H0IBNxYOfd5ld7IvxV9z2x7KabJ0hwT/zO7oAESI6i1qv/0tHUZSfS2lEB4+BTblU
-         Lw5YbhuuMtY6cgpSA8dlmKqAXkQyVbJm45dka2uAM27tWnjIxbjFvLSCqKNwCMROxvSF
-         /JnQ==
-X-Gm-Message-State: AO0yUKUuD/xVEFMQI4Gf2jnBESzsXEfeizTzigaD2HKuiOnoQL1wPO61
-        q23ZBMluQrY52Oj9dVEUIfIIrlY59RFpqs6C
-X-Google-Smtp-Source: AK7set/DeED0wXvq2tFZ0anEIxa+MnnkNcRSpD6q5g0JxwlcapDjJFYNK/TDmG4CNonjJ3ERU3VU5g==
-X-Received: by 2002:a17:90a:20b:b0:22c:64c6:b7c4 with SMTP id c11-20020a17090a020b00b0022c64c6b7c4mr445184pjc.2.1676878006950;
-        Sun, 19 Feb 2023 23:26:46 -0800 (PST)
-Received: from [10.70.252.135] ([139.177.225.229])
-        by smtp.gmail.com with ESMTPSA id d14-20020a17090a3b0e00b002369d3b282csm747286pjc.40.2023.02.19.23.26.44
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 19 Feb 2023 23:26:46 -0800 (PST)
-Message-ID: <896c1146-21bb-35bb-dc25-a12014eb5ccd@bytedance.com>
-Date:   Mon, 20 Feb 2023 15:26:41 +0800
+        Mon, 20 Feb 2023 02:28:23 -0500
+Received: from pegase2.c-s.fr (pegase2.c-s.fr [93.17.235.10])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2DD6CA2A
+        for <linux-kernel@vger.kernel.org>; Sun, 19 Feb 2023 23:28:20 -0800 (PST)
+Received: from localhost (mailhub3.si.c-s.fr [172.26.127.67])
+        by localhost (Postfix) with ESMTP id 4PKvCk3PQtz9sVj;
+        Mon, 20 Feb 2023 08:28:18 +0100 (CET)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from pegase2.c-s.fr ([172.26.127.65])
+        by localhost (pegase2.c-s.fr [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id fdDzw5b5m4H1; Mon, 20 Feb 2023 08:28:18 +0100 (CET)
+Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
+        by pegase2.c-s.fr (Postfix) with ESMTP id 4PKvCk2Yr7z9sVf;
+        Mon, 20 Feb 2023 08:28:18 +0100 (CET)
+Received: from localhost (localhost [127.0.0.1])
+        by messagerie.si.c-s.fr (Postfix) with ESMTP id 481128B76E;
+        Mon, 20 Feb 2023 08:28:18 +0100 (CET)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from messagerie.si.c-s.fr ([127.0.0.1])
+        by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
+        with ESMTP id KJbmKU7i1vCq; Mon, 20 Feb 2023 08:28:18 +0100 (CET)
+Received: from [172.25.230.108] (unknown [172.25.230.108])
+        by messagerie.si.c-s.fr (Postfix) with ESMTP id 24A048B763;
+        Mon, 20 Feb 2023 08:28:18 +0100 (CET)
+Message-ID: <c4d5cb6c-bf8f-fbc1-78ca-475f9578c551@csgroup.eu>
+Date:   Mon, 20 Feb 2023 08:28:18 +0100
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.7.2
-Subject: Re: linux-next: build warning after merge of the driver-core tree
-Content-Language: en-US
-To:     Stephen Rothwell <sfr@canb.auug.org.au>, Greg KH <greg@kroah.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-References: <20230220163133.481e43d8@canb.auug.org.au>
-From:   Qi Zheng <zhengqi.arch@bytedance.com>
-In-Reply-To: <20230220163133.481e43d8@canb.auug.org.au>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.0
+Subject: Re: [PATCH v3] powerpc/boot: Don't always pass -mcpu=powerpc when
+ building 32-bit uImage
+Content-Language: fr-FR
+From:   Christophe Leroy <christophe.leroy@csgroup.eu>
+To:     =?UTF-8?Q?Pali_Roh=c3=a1r?= <pali@kernel.org>
+Cc:     Michael Ellerman <mpe@ellerman.id.au>,
+        Joel Stanley <joel@jms.id.au>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+References: <20220820105200.30425-1-pali@kernel.org>
+ <20220828095659.4061-1-pali@kernel.org>
+ <e3cb2642-20e4-6c26-104d-329a04260946@csgroup.eu>
+ <c8d657db-02da-7840-5b40-755e47277a2c@csgroup.eu>
+ <20220828174135.rcql4uiunqbnn5gh@pali>
+ <d49c5905-ff68-00e9-ddaf-d60d5e5ebe65@csgroup.eu>
+ <20221208191602.diywrt3g2f6zmt4s@pali>
+ <aca70dc9-2185-9def-7bc0-b415bec8a5c6@csgroup.eu>
+ <20221224174452.xxlkmos7yoy3qn42@pali> <20230122111931.hgcsc72fk6alrmzu@pali>
+ <da635f99-ce3f-18e8-cf7d-7fd5923c8451@csgroup.eu>
+In-Reply-To: <da635f99-ce3f-18e8-cf7d-7fd5923c8451@csgroup.eu>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -77,23 +74,30 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 
 
-On 2023/2/20 13:31, Stephen Rothwell wrote:
-> Hi all,
+Le 25/01/2023 à 08:40, Christophe Leroy a écrit :
 > 
-> After merging the driver-core tree, today's linux-next build
-> (htmldocs) produced this warning:
 > 
-> Documentation/filesystems/api-summary:146: fs/debugfs/inode.c:804: WARNING: Inline literal start-string without end-string.
+> Le 22/01/2023 à 12:19, Pali Rohár a écrit :
+>> On Saturday 24 December 2022 18:44:52 Pali Rohár wrote:
+>>> On Thursday 08 December 2022 19:57:39 Christophe Leroy wrote:
+>>>> Le 08/12/2022 à 20:16, Pali Rohár a écrit :
+>>>>>
+>>>>> With "[PATCH v1] powerpc/64: Set default CPU in Kconfig" patch from
+>>>>> https://lore.kernel.org/linuxppc-dev/3fd60c2d8a28668a42b766b18362a526ef47e757.1670420281.git.christophe.leroy@csgroup.eu/
+>>>>> this change does not throw above compile error anymore.
+>>>>
+>>>>
+>>>> That patch should land in powerpc/next soon. When it has landed, could
+>>>> you resent this patch so that snowpatch checks the build again ?
+>>>
+>>> Yes. But I'm still waiting because patch is not in powerpc/next yet.
+>>
+>> Seems that it still has not landed. Any suggestions to move forward?
 > 
-> Introduced by commit
+> Hi
 > 
->    d3002468cb5d ("debugfs: update comment of debugfs_rename()")
+> I just reposted to see if it passed the CI tests this time.
 
-This is just a comment modification. Didn't see where my modification
-caused this WARNING. :(
+It is now in the tree.
 
-> 
-
--- 
-Thanks,
-Qi
+Christophe
