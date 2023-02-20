@@ -2,202 +2,197 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BA96F69D0E4
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Feb 2023 16:47:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 856A869D0DF
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Feb 2023 16:47:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232286AbjBTPra (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Feb 2023 10:47:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44074 "EHLO
+        id S231563AbjBTPqo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Feb 2023 10:46:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43238 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230296AbjBTPr2 (ORCPT
+        with ESMTP id S230296AbjBTPqm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Feb 2023 10:47:28 -0500
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B62051ADDD;
-        Mon, 20 Feb 2023 07:47:27 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1676908047; x=1708444047;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=KyQHPhhLwjCGfbAVCMQ6vPm6Y6uusFqb2Ch94Y3sMwg=;
-  b=V+vRxvC0W6aI73pmevryyMfMXQZX8OXM3Bg2V8h3KlZXg2mhhJqpLE+x
-   0ebFgItZGJQ9e5ap8vE5VKeqQNoCrbfAko3mwajYv0AN2Xwu8hrUuyRFI
-   /B6RbqJIxnQTYr3HdoZ4rbP8yzV4yBZTPX20x3vdswkEDjk4zkBcJh7om
-   0FYJeO6SCrlfFEW2Q+MuMx1yBhLrfqZOzP6W0zqlXn7TmBxP3hwXbUdIX
-   xJ8IFJhCWXTQPvfX+bt92KceJsTm12UpGyZ2g94je9pw+zVLvyeaQgUKl
-   gROHhUev7Ub7L1UXWC1oZdK4tosz4xg78US1E8Vx8ffDHXHwsgcdgqkqT
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10627"; a="332433662"
-X-IronPort-AV: E=Sophos;i="5.97,313,1669104000"; 
-   d="scan'208";a="332433662"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Feb 2023 07:47:27 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10627"; a="701711283"
-X-IronPort-AV: E=Sophos;i="5.97,313,1669104000"; 
-   d="scan'208";a="701711283"
-Received: from irvmail002.ir.intel.com ([10.43.11.120])
-  by orsmga008.jf.intel.com with ESMTP; 20 Feb 2023 07:47:22 -0800
-Received: from newjersey.igk.intel.com (newjersey.igk.intel.com [10.102.20.203])
-        by irvmail002.ir.intel.com (Postfix) with ESMTP id 6DCE635CC4;
-        Mon, 20 Feb 2023 15:47:21 +0000 (GMT)
-From:   Alexander Lobakin <aleksander.lobakin@intel.com>
-To:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>
-Cc:     Alexander Lobakin <aleksander.lobakin@intel.com>,
-        =?UTF-8?q?Toke=20H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>,
-        Song Liu <song@kernel.org>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        Jakub Kicinski <kuba@kernel.org>, bpf@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Martin KaFai Lau <martin.lau@kernel.org>
-Subject: [PATCH bpf-next v5] bpf, test_run: fix &xdp_frame misplacement for LIVE_FRAMES
-Date:   Mon, 20 Feb 2023 16:46:27 +0100
-Message-Id: <20230220154627.72267-1-aleksander.lobakin@intel.com>
-X-Mailer: git-send-email 2.39.1
+        Mon, 20 Feb 2023 10:46:42 -0500
+Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4A421B571
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Feb 2023 07:46:40 -0800 (PST)
+Received: by mail-ed1-x532.google.com with SMTP id da10so7567776edb.3
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Feb 2023 07:46:40 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=MgpWFr42yyB70QXJviPiRhFMPmBtcy7arHMU218wFoA=;
+        b=YG3EAlqSZvciLAdyppJGhSknjHtILO1vHLGwhzDP1HcWLEbcio5KSVrJGsChged1Fx
+         dTCsYV8e4XuQkU9lFJasl+AnMjfG5jd9rewIXQywaQu0PMBgb5brGNlq0qMmVtNi5j8c
+         a0EEKOlinSTxyp4elYG9hVBTPbxQM2HBx4N3szj6WP8c7IH+5zK2sstl2mmLtmX6fp8O
+         sVVW4rxiowjq4qt4HcPHEKBpk9ZHJv6E3gHvGn4r4e2CNz/73VA7PB7jnZxRXanXMzQF
+         6cFww8VVWGX+iCLT4anVObWSTO+1xjkbeZWFD2UK6WA3fD0nQP+h+sWu4uh7LyoshNEo
+         Y2HQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=MgpWFr42yyB70QXJviPiRhFMPmBtcy7arHMU218wFoA=;
+        b=pZPYm21yPlAG2QTIiqLGdbLMrI+ggzT9cA5hhRAYgVBR6CkxkLkPepx41e/dxiC7dd
+         pxBD4On3VjfyAJXKLGpat29GgPMMH2U1+FKcxkJchouRyP9lYEHk4Q4uiVEu4C5495Qf
+         0NCnX5xIl53MQ/mz74dPMpkBLoLZKS7hS/0SslbOR/Zk+oI7x9/UDBwi1wMk9SZgVF42
+         pFD3V8+jziE+uob/w1xiJxtl8RRT9/VV7l3cJCQl74AZv/aG03igmE8JxkjKWx7LJJ06
+         so+8Uxod6vb/AvziMyTqiNmIAZnSS7a3CmTdUsTsJZAP/+sN0HpprGwc4TNIPgaL0wDm
+         OPpQ==
+X-Gm-Message-State: AO0yUKU1k50dfDMrfFmcxr30M2ZEmS81JJq8EvWYVWk2p1YXkS4qMXLU
+        bZOldSLCQnppctHWTn9KwSMQ1Q==
+X-Google-Smtp-Source: AK7set8UdxThUko8BY/93y4ZBzuOyJz3wtqFjQJk+1EmT98vdZiKltWaWOtk7xojW3JetFYGdOTyew==
+X-Received: by 2002:a17:907:2cc7:b0:8b0:23a6:c491 with SMTP id hg7-20020a1709072cc700b008b023a6c491mr15844987ejc.31.1676907999030;
+        Mon, 20 Feb 2023 07:46:39 -0800 (PST)
+Received: from linaro.org ([94.52.112.99])
+        by smtp.gmail.com with ESMTPSA id m8-20020a1709060d8800b0084d381d0528sm5973544eji.180.2023.02.20.07.46.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 20 Feb 2023 07:46:38 -0800 (PST)
+Date:   Mon, 20 Feb 2023 17:46:36 +0200
+From:   Abel Vesa <abel.vesa@linaro.org>
+To:     Stephen Boyd <sboyd@kernel.org>
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Mike Turquette <mturquette@baylibre.com>,
+        linux-clk@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-arm-msm@vger.kernel.org, mka@chromium.org
+Subject: Re: [PATCH v3 1/2] clk: Add generic sync_state callback for
+ disabling unused clocks
+Message-ID: <Y/OV3CF0ootyooDJ@linaro.org>
+References: <20221227204528.1899863-1-abel.vesa@linaro.org>
+ <ebc257025ebd641e624ef506ea09c800.sboyd@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ebc257025ebd641e624ef506ea09c800.sboyd@kernel.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-&xdp_buff and &xdp_frame are bound in a way that
+On 23-02-17 21:38:22, Stephen Boyd wrote:
+> Quoting Abel Vesa (2022-12-27 12:45:27)
+> > There are unused clocks that need to remain untouched by clk_disable_unused,
+> > and most likely could be disabled later on sync_state. So provide a generic
+> > sync_state callback for the clock providers that register such clocks.
+> > Then, use the same mechanism as clk_disable_unused from that generic
+> > callback, but pass the device to make sure only the clocks belonging to
+> > the current clock provider get disabled, if unused. Also, during the
+> > default clk_disable_unused, if the driver that registered the clock has
+> > the generic clk_sync_state_disable_unused callback set for sync_state,
+> > skip disabling its clocks.
+> 
+> How does that avoid disabling clks randomly in the clk tree? I'm
+> concerned about disabling an unused clk in the middle of the tree
+> because it doesn't have a driver using sync state, while the clk is the
+> parent of an unused clk that is backed by sync state.
+> 
+>    clk A -->  clk B 
+> 
+> clk A: No sync state
+> clk B: sync state
+> 
+> clk B is left on by the bootloader. __clk_disable_unused(NULL) is called
+> from late init. Imagine clk A is the root of the tree.
+> 
+> 	clk_disable_unused_subtree(clk_core A)
+> 	  clk_disable_unused_subtree(clk_core B)
+> 	    if (from_sync_state && core->dev != dev)
+> 	      return;
+> 	  ...
+> 	  clk core A->ops->disable()
+> 
+> clk core B is off now?
 
-xdp_buff->data_hard_start == xdp_frame
+Yes, that is correct. But the same thing is happening currently if the
+clk_ignore_unused in not specified. At least with this new approach, we
+get to leave unused clocks enabled either until sync_state is called or forever.
+All the provider has to do is to implement a sync_state callback (or use
+the generic one provided). So the provider of clk A would obviously need
+a sync state callback registered.
 
-It's always the case and e.g. xdp_convert_buff_to_frame() relies on
-this.
-IOW, the following:
+> 
+> Also sync_state seems broken right now. I saw mka mentioned that if you
+> have a device node enabled in your DT but never enable a driver for it
+> in the kernel we'll never get sync_state called. This is another
+> problem, but it concerns me that sync_state would make the unused clk
+> disabling happen at some random time or not at all.
 
-	for (u32 i = 0; i < 0xdead; i++) {
-		xdpf = xdp_convert_buff_to_frame(&xdp);
-		xdp_convert_frame_to_buff(xdpf, &xdp);
-	}
+Well, the fact that the sync state not being called because a driver for
+a consumer device doesn't probe does not really mean it is broken. Just
+because the consumer driver hasn't probed yet, doesn't mean it will
+not probe later on.
 
-shouldn't ever modify @xdpf's contents or the pointer itself.
-However, "live packet" code wrongly treats &xdp_frame as part of its
-context placed *before* the data_hard_start. With such flow,
-data_hard_start is sizeof(*xdpf) off to the right and no longer points
-to the XDP frame.
+That aside, rather than going with clk_ignore_unused all the time on
+qcom platforms, at least in a perfect scenario (where sync state is
+reached for all providers) the clocks get disabled.
 
-Instead of replacing `sizeof(ctx)` with `offsetof(ctx, xdpf)` in several
-places and praying that there are no more miscalcs left somewhere in the
-code, unionize ::frm with ::data in a flex array, so that both starts
-pointing to the actual data_hard_start and the XDP frame actually starts
-being a part of it, i.e. a part of the headroom, not the context.
-A nice side effect is that the maximum frame size for this mode gets
-increased by 40 bytes, as xdp_buff::frame_sz includes everything from
-data_hard_start (-> includes xdpf already) to the end of XDP/skb shared
-info.
-Also update %MAX_PKT_SIZE accordingly in the selftests code. Leave it
-hardcoded for 64 bit && 4k pages, it can be made more flexible later on.
+> 
+> Can the problem be approached more directly? If this is about fixing
+> continuous splash screen, then I wonder why we can't list out the clks
+> that we know are enabled by the bootloader in some new DT binding, e.g.:
+> 
+> 	clock-controller {
+> 		#clock-cells = <1>;
+> 		boot-handoff-clocks = <&consumer_device "clock cells for this clk provider">;
+> 	};
+> 
+> Then mark those as "critical/don't turn off" all the way up the clk tree
+> when the clk driver probes by essentially incrementing the
+> prepare/enable count but not actually touching the hardware, and when
+> the clks are acquired by clk_get() for that device that's using them
+> from boot we make the first clk_prepare_enable() do nothing and not
+> increment the count at all. We can probably stick some flag into the
+> 'struct clk' for this when we create the handle in clk_get() so that the
+> prepare and enable functions can special case and skip over.
 
-Minor: align `&head->data` with how `head->frm` is assigned for
-consistency.
-Minor #2: rename 'frm' to 'frame' in &xdp_page_head while at it for
-clarity.
+Well, that means we need to play whack-a-mole by alsways adding such clocks to
+devicetree.
 
-(was found while testing XDP traffic generator on ice, which calls
- xdp_convert_frame_to_buff() for each XDP frame)
+> 
+> The sync_state hook operates on a driver level, which is too large when
+> you consider that a single clk driver may register hundreds of clks that
+> are not related. We want to target a solution at the clk level so that
+> any damage from keeping on all the clks provided by the controller is
+> limited to just the drivers that aren't probed and ready to handle their
+> clks. If sync_state could be called whenever a clk consumer consumes a
+> clk it may work? Technically we already have that by the clk_hw_provider
+> function but there isn't enough information being passed there, like the
+> getting device.
 
-Fixes: b530e9e1063e ("bpf: Add "live packet" mode for XDP in BPF_PROG_RUN")
-Acked-by: Toke Høiland-Jørgensen <toke@redhat.com>
-Signed-off-by: Alexander Lobakin <aleksander.lobakin@intel.com>
-Link: https://lore.kernel.org/r/20230215185440.4126672-1-aleksander.lobakin@intel.com
-Signed-off-by: Martin KaFai Lau <martin.lau@kernel.org>
----
- net/bpf/test_run.c                            | 19 +++++++++++++------
- .../bpf/prog_tests/xdp_do_redirect.c          |  7 ++++---
- 2 files changed, 17 insertions(+), 9 deletions(-)
+Actually, from the multitude of clocks registered by one provider, the
+ones already explicitely enabled (and obvisously their parents) by thier
+consumer are safe. The only ones we need to worry about are the ones that
+might be enabled by bootloader and need to remain on. With the sync state
+approach, the latter mentioned clocks will either remain on indefinitely
+or will be disabled on sync state. The provider driver is the only level
+that has a registered sync state callback.
 
-diff --git a/net/bpf/test_run.c b/net/bpf/test_run.c
-index 6f3d654b3339..f81b24320a36 100644
---- a/net/bpf/test_run.c
-+++ b/net/bpf/test_run.c
-@@ -97,8 +97,11 @@ static bool bpf_test_timer_continue(struct bpf_test_timer *t, int iterations,
- struct xdp_page_head {
- 	struct xdp_buff orig_ctx;
- 	struct xdp_buff ctx;
--	struct xdp_frame frm;
--	u8 data[];
-+	union {
-+		/* ::data_hard_start starts here */
-+		DECLARE_FLEX_ARRAY(struct xdp_frame, frame);
-+		DECLARE_FLEX_ARRAY(u8, data);
-+	};
- };
- 
- struct xdp_test_data {
-@@ -113,6 +116,10 @@ struct xdp_test_data {
- 	u32 frame_cnt;
- };
- 
-+/* tools/testing/selftests/bpf/prog_tests/xdp_do_redirect.c:%MAX_PKT_SIZE
-+ * must be updated accordingly this gets changed, otherwise BPF selftests
-+ * will fail.
-+ */
- #define TEST_XDP_FRAME_SIZE (PAGE_SIZE - sizeof(struct xdp_page_head))
- #define TEST_XDP_MAX_BATCH 256
- 
-@@ -132,8 +139,8 @@ static void xdp_test_run_init_page(struct page *page, void *arg)
- 	headroom -= meta_len;
- 
- 	new_ctx = &head->ctx;
--	frm = &head->frm;
--	data = &head->data;
-+	frm = head->frame;
-+	data = head->data;
- 	memcpy(data + headroom, orig_ctx->data_meta, frm_len);
- 
- 	xdp_init_buff(new_ctx, TEST_XDP_FRAME_SIZE, &xdp->rxq);
-@@ -223,7 +230,7 @@ static void reset_ctx(struct xdp_page_head *head)
- 	head->ctx.data = head->orig_ctx.data;
- 	head->ctx.data_meta = head->orig_ctx.data_meta;
- 	head->ctx.data_end = head->orig_ctx.data_end;
--	xdp_update_frame_from_buff(&head->ctx, &head->frm);
-+	xdp_update_frame_from_buff(&head->ctx, head->frame);
- }
- 
- static int xdp_recv_frames(struct xdp_frame **frames, int nframes,
-@@ -285,7 +292,7 @@ static int xdp_test_run_batch(struct xdp_test_data *xdp, struct bpf_prog *prog,
- 		head = phys_to_virt(page_to_phys(page));
- 		reset_ctx(head);
- 		ctx = &head->ctx;
--		frm = &head->frm;
-+		frm = head->frame;
- 		xdp->frame_cnt++;
- 
- 		act = bpf_prog_run_xdp(prog, ctx);
-diff --git a/tools/testing/selftests/bpf/prog_tests/xdp_do_redirect.c b/tools/testing/selftests/bpf/prog_tests/xdp_do_redirect.c
-index 2666c84dbd01..7271a18ab3e2 100644
---- a/tools/testing/selftests/bpf/prog_tests/xdp_do_redirect.c
-+++ b/tools/testing/selftests/bpf/prog_tests/xdp_do_redirect.c
-@@ -65,12 +65,13 @@ static int attach_tc_prog(struct bpf_tc_hook *hook, int fd)
- }
- 
- /* The maximum permissible size is: PAGE_SIZE - sizeof(struct xdp_page_head) -
-- * sizeof(struct skb_shared_info) - XDP_PACKET_HEADROOM = 3368 bytes
-+ * SKB_DATA_ALIGN(sizeof(struct skb_shared_info)) - XDP_PACKET_HEADROOM =
-+ * 3408 bytes for 64-byte cacheline and 3216 for 256-byte one.
-  */
- #if defined(__s390x__)
--#define MAX_PKT_SIZE 3176
-+#define MAX_PKT_SIZE 3216
- #else
--#define MAX_PKT_SIZE 3368
-+#define MAX_PKT_SIZE 3408
- #endif
- static void test_max_pkt_size(int fd)
- {
--- 
-2.39.1
+> 
+> > diff --git a/include/linux/clk-provider.h b/include/linux/clk-provider.h
+> > index 842e72a5348f..cf1adfeaf257 100644
+> > --- a/include/linux/clk-provider.h
+> > +++ b/include/linux/clk-provider.h
+> > @@ -720,6 +720,7 @@ struct clk *clk_register_divider_table(struct device *dev, const char *name,
+> >                 void __iomem *reg, u8 shift, u8 width,
+> >                 u8 clk_divider_flags, const struct clk_div_table *table,
+> >                 spinlock_t *lock);
+> > +void clk_sync_state_disable_unused(struct device *dev);
+> 
+> This is a weird place to put this. Why not in the helper functions
+> section?
 
+Sure this can be moved.
+
+> 
+> >  /**
+> >   * clk_register_divider - register a divider clock with the clock framework
+> >   * @dev: device registering this clock
