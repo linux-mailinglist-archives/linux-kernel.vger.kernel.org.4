@@ -2,209 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D86669D1F0
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Feb 2023 18:12:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7491B69D1FD
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Feb 2023 18:16:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232227AbjBTRM0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Feb 2023 12:12:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50604 "EHLO
+        id S232374AbjBTRQG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Feb 2023 12:16:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52818 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232271AbjBTRMY (ORCPT
+        with ESMTP id S231783AbjBTRP5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Feb 2023 12:12:24 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7FA120D07;
-        Mon, 20 Feb 2023 09:12:21 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5D6CF60D2D;
-        Mon, 20 Feb 2023 17:12:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8C379C433EF;
-        Mon, 20 Feb 2023 17:12:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1676913140;
-        bh=K+WQrxm35AL6mxuGen7EEnIB+qmIkik493gpzXp+i6w=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=aIDa4PJkpe8nWW47apxX3M9MuiHHBTgDOLlhz0+Jv2iEyO+0mRyBsb2cjbmDh1aUR
-         ZsS1jHpPiYxGdZrM1jONUER/tIEZYoJ/MeC7nYL+7o4qhbKX1v/s080k+ZxoUsntkc
-         7ssO/LKSYex1liQLrvm39X8RXUjcYZBf30PxL/AvcXyIj/dGeC+ZbyGNvSvCNBzBSF
-         Cdt2wsIbhpcyl9mva97T6mEs68iKtS076CHjbfADbjkIya4MTA/NHpBxQ/aOMlA/3M
-         At/QFAKmmeACLFnq1mPNk78atZ89MJFgsRrreXXsOMtL9lnx9tb+zT8Ikem/MAVE6a
-         VN8l+HCsWyPEg==
-Date:   Mon, 20 Feb 2023 09:15:50 -0800
-From:   Bjorn Andersson <andersson@kernel.org>
-To:     Doug Anderson <dianders@chromium.org>
-Cc:     Saravana Kannan <saravanak@google.com>,
-        Abel Vesa <abel.vesa@linaro.org>,
-        Matthias Kaehlcke <mka@chromium.org>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Kevin Hilman <khilman@kernel.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Andy Gross <agross@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        linux-pm@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-arm-msm@vger.kernel.org,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Stephen Boyd <sboyd@kernel.org>
-Subject: Re: [RFC PATCH v2 1/2] PM: domains: Skip disabling unused domains if
- provider has sync_state
-Message-ID: <20230220171550.43a3h56gznfc3gec@ripper>
-References: <20230127104054.895129-1-abel.vesa@linaro.org>
- <Y9v/z8CYik3faHh7@google.com>
- <Y+ErWTyV8CnE3Hl+@linaro.org>
- <Y+E3T6bozU1K2sFb@google.com>
- <Y+E9Z+/+eCpPK6DE@linaro.org>
- <CAGETcx99ev_JdgYoifEdUg6rqNCs5LHc-CfwTc7j3Bd_zeizew@mail.gmail.com>
- <CAD=FV=X3nnwuTK2=w7DJfjL_Ai7MiuvTwv8BiVJPMVEWKzR-_g@mail.gmail.com>
- <CAGETcx-LJEZAXT1VazhRf7xtNpST0tfLNmgxH878gkOOP4TDAw@mail.gmail.com>
- <CAD=FV=WG1v4U5iQirG=-ECZFtXE=hwL=oY+6zjsu6TWCiBX=QA@mail.gmail.com>
+        Mon, 20 Feb 2023 12:15:57 -0500
+Received: from mail-oa1-f45.google.com (mail-oa1-f45.google.com [209.85.160.45])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77A05199D9;
+        Mon, 20 Feb 2023 09:15:56 -0800 (PST)
+Received: by mail-oa1-f45.google.com with SMTP id 586e51a60fabf-17211366c6aso1748733fac.13;
+        Mon, 20 Feb 2023 09:15:56 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=date:subject:message-id:references:in-reply-to:cc:to:from
+         :mime-version:content-transfer-encoding:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=03mvMv3OBvjG3ElAvQ4qRAwM8DjYRN7O/uLbM3eCM4s=;
+        b=Cs0ta0mbFWAmPKoH4bLZGhY3+H4zBC4Gjjju24QvsftIqM4KBmMVg0tPMvnhi8PGBQ
+         ckzoezy6BJe8j0EHfJJY0k5liuFEYGvj2V/r+joWjSQYLV41ZEElr2G0wNNyyH1PZx28
+         93uQPv5CQqv/e0DqO3ciAa7rHCBRcCpHq32TvHpIZdZxBri1TUV8oWDyW5N5jDI1MLPg
+         JKblSoC0XSWMmFwuTSaBvVWP7He0F3mEEJgo9Z33WztgdumsBS+iA6T35PkDxLhEtSMq
+         UgweP3CzRKu+EFOroPpLsUC+aoqhyLQ03eaOF3p+KwOR05tGQ1EAwN/AOIrG8WvGTB0t
+         93Xg==
+X-Gm-Message-State: AO0yUKX9PQQsJI4F6zpT7UQHgy4MR30cyzn5UiReluZM3j52EWzNFwcw
+        pnw4qjZOkWj5VBxwuaZTo46JVV5+rw==
+X-Google-Smtp-Source: AK7set8/7ONpY57pYHX9q0jBRtphSUDrp2r2g2sZBQkEX8p9zdLPkp5DBfMT0w2yng2j+2hTBvaInA==
+X-Received: by 2002:a05:6870:d1d4:b0:16f:389a:d97b with SMTP id b20-20020a056870d1d400b0016f389ad97bmr6347136oac.46.1676913355649;
+        Mon, 20 Feb 2023 09:15:55 -0800 (PST)
+Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id ec21-20020a0568708c1500b00143824af059sm4587738oab.7.2023.02.20.09.15.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 20 Feb 2023 09:15:55 -0800 (PST)
+Received: (nullmailer pid 3973202 invoked by uid 1000);
+        Mon, 20 Feb 2023 17:15:54 -0000
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 8bit
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAD=FV=WG1v4U5iQirG=-ECZFtXE=hwL=oY+6zjsu6TWCiBX=QA@mail.gmail.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+From:   Rob Herring <robh@kernel.org>
+To:     Daniel Golle <daniel@makrotopia.org>
+Cc:     Florian Fainelli <f.fainelli@gmail.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Jianhui Zhao <zhaojh329@gmail.com>, netdev@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Sean Wang <sean.wang@mediatek.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Mark Lee <Mark-MC.Lee@mediatek.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        =?UTF-8?Q?Bj=C3=B8rn_Mork?= <bjorn@mork.no>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        devicetree@vger.kernel.org, linux-mediatek@lists.infradead.org,
+        Felix Fietkau <nbd@nbd.name>,
+        Russell King <linux@armlinux.org.uk>,
+        Landen Chao <Landen.Chao@mediatek.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        John Crispin <john@phrozen.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        DENG Qingfang <dqfext@gmail.com>,
+        Lorenzo Bianconi <lorenzo@kernel.org>,
+        Andrew Lunn <andrew@lunn.ch>, linux-kernel@vger.kernel.org
+In-Reply-To: <03f9d40849dd2d563a93b27732a7b5d7dd1defc5.1676910958.git.daniel@makrotopia.org>
+References: <cover.1676910958.git.daniel@makrotopia.org>
+ <03f9d40849dd2d563a93b27732a7b5d7dd1defc5.1676910958.git.daniel@makrotopia.org>
+Message-Id: <167691325732.3971281.4378006887073697625.robh@kernel.org>
+Subject: Re: [PATCH v9 03/12] dt-bindings: arm: mediatek: sgmiisys: Convert
+ to DT schema
+Date:   Mon, 20 Feb 2023 11:15:53 -0600
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 07, 2023 at 03:45:35PM -0800, Doug Anderson wrote:
-> Hi,
+
+On Mon, 20 Feb 2023 16:41:16 +0000, Daniel Golle wrote:
+> Convert mediatek,sgmiiisys bindings to DT schema format.
+> Add maintainer Matthias Brugger, no maintainers were listed in the
+> original documentation.
+> As this node is also referenced by the Ethernet controller and used
+> as SGMII PCS add this fact to the description.
+> Move the file to Documentation/devicetree/bindings/pcs/ which seems more
+> appropriate given that the great majority of registers are related to
+> SGMII PCS functionality and only one register represents clock bits.
 > 
-> On Mon, Feb 6, 2023 at 1:35 PM Saravana Kannan <saravanak@google.com> wrote:
-> >
-> > On Mon, Feb 6, 2023 at 1:10 PM Doug Anderson <dianders@chromium.org> wrote:
-> > >
-> > > Hi,
-> > >
-> > > On Mon, Feb 6, 2023 at 11:33 AM Saravana Kannan <saravanak@google.com> wrote:
-> > > >
-> > > > On Mon, Feb 6, 2023 at 9:48 AM Abel Vesa <abel.vesa@linaro.org> wrote:
-> > > > >
-> > > > >
-> > > > > CC'ed Saravana
-> > > >
-> > > > Thanks. Please do cc me for stuff like this from the start. I skimmed
-> > > > the series and I think it's doing one of my TODO items. So, thanks for
-> > > > the patch!
-> > > >
-> > > > I'll take a closer look within a few days -- trying to get through
-> > > > some existing fw_devlink stuff.
-> > > >
-> > > > But long story short, it is the right thing to keep a supplier on
-> > > > indefinitely if there's a consumer device (that's not disabled in DT)
-> > > > that never gets probed. It's a pretty common scenario -- for example,
-> > > > say a display backlight. The default case should be functional
-> > > > correctness. And then we can add stuff that allows changing this
-> > > > behavior with command line args or something else that can be done
-> > > > from userspace.
-> > > >
-> > > > +1 to what Doug said elsewhere in this thread too. I'm trying to
-> > > > consolidate the "when do we give up" decision at the driver core level
-> > > > independent of what framework is being used.
-> > >
-> > > I'm not really sure I agree with the above, at least not without lots
-> > > of discussion in the community. It really goes against what the kernel
-> > > has been doing for years and years in the regulator and clock
-> > > frameworks. Those frameworks both eventually give up and power down
-> > > resources that no active drivers are using. Either changing the
-> > > regulator/clock frameworks or saying that other frameworks should work
-> > > in an opposite way seems like a recipe for confusion.
-> > >
-> > > Now, certainly I won't say that the way that the regulator and clock
-> > > frameworks function is perfect nor will I say that they don't cause
-> > > any problems. However, going the opposite way where resources are kept
-> > > at full power indefinitely will _also_ cause problems.
-> > >
-> > > Specifically, let's look at the case you mentioned of a display
-> > > backlight. I think you're saying that if there is no backlight driver
-> > > enabled in the kernel that you'd expect the backlight to just be on at
-> > > full brightness.
-> >
-> > No, I'm not saying that.
-> >
-> > > Would you expect this even if the firmware didn't
-> > > leave the backlight on?
-> >
-> > sync_state() never turns on anything that wasn't already on at boot.
-> > So in your example, if the firmware didn't turn on the backlight, then
-> > it'll remain off.
-> 
-> As per offline discussion, part of the problems are that today this
-> _isn't_ true for a few Qualcomm things (like interconnect). The
-> interconnect frameway specifically maxes things out for early boot.
+> Reviewed-by: Rob Herring <robh@kernel.org>
+> Signed-off-by: Daniel Golle <daniel@makrotopia.org>
+> ---
+>  .../arm/mediatek/mediatek,sgmiisys.txt        | 25 ----------
+>  .../bindings/net/pcs/mediatek,sgmiisys.yaml   | 49 +++++++++++++++++++
+>  2 files changed, 49 insertions(+), 25 deletions(-)
+>  delete mode 100644 Documentation/devicetree/bindings/arm/mediatek/mediatek,sgmiisys.txt
+>  create mode 100644 Documentation/devicetree/bindings/net/pcs/mediatek,sgmiisys.yaml
 > 
 
-The problem being solved here is that the bootloader leaves some vote at
-1GB/s, as needed by hardware related to driver B.
+My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
+on your patch (DT_CHECKER_FLAGS is new in v5.13):
 
-Driver A is loaded first and votes for 1kb/s; what should the kernel do
-now, without knowledge of the needs from the hardware associated with B,
-or the ability to read back the bootloader's votes.
+yamllint warnings/errors:
 
-This was the behavior of the initial implementation, and the practical
-implications was seen as the UART would typically come along really
-early, cast a low vote on the various buses and it would take forever to
-get to the probing of the drivers that actually gave us reasonable
-votes.
+dtschema/dtc warnings/errors:
+./Documentation/devicetree/bindings/net/pcs/mediatek,sgmiisys.yaml: $id: relative path/filename doesn't match actual path or filename
+	expected: http://devicetree.org/schemas/net/pcs/mediatek,sgmiisys.yaml#
 
+doc reference errors (make refcheckdocs):
 
-Also consider the case where driver A probes, votes for bandwidth, does
-it's initialization and then votes for 0. Without making assumptions
-about the needs of B (or a potential B even), we'd turn off critical
-resources - possible preventing us from ever attempting to probe B.
+See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/03f9d40849dd2d563a93b27732a7b5d7dd1defc5.1676910958.git.daniel@makrotopia.org
 
+The base for the series is generally the latest rc1. A different dependency
+should be noted in *this* patch.
 
+If you already ran 'make dt_binding_check' and didn't see the above
+error(s), then make sure 'yamllint' is installed and dt-schema is up to
+date:
 
-As such, the only safe solution is to assume that there might be a later
-loaded/probed client that has a large vote and preemptively vote for
-some higher bandwidth until then.
+pip3 install dtschema --upgrade
 
-> 
-> > > In any case, why do you say it's more correct?
-> >
-> > Because if you turn off the display, the device is unusable. In other
-> > circumstances, it can crash a device because the firmware powered it
-> > on left it in a "good enough" state, but we'd go turn it off and crash
-> > the system.
-> >
-> > > I suppose you'd say that the screen is at least usable like this.
-> > > ...except that you've broken a different feature: suspend/resume.
-> >
-> > If the display is off and the laptop is unusable, then we have bigger
-> > problems than suspend/resume?
-> 
-> I suspect that here we'll have to agree to disagree. IMO it's a
-> non-goal to expect hardware to work for which there is no driver. So
-> making the backlight work without a backlight driver isn't really
-> something we should strive for.
-> 
+Please check and re-submit after running the above command yourself. Note
+that DT_SCHEMA_FILES can be set to your schema file to speed up checking
+your schema. However, it must be unset to test all examples with your schema.
 
-Without trying to make you agree ;)
-
-How can you differentiate between "the driver wasn't built" and "the
-driver isn't yet available"?
-
-Consider the case where I boot my laptop, I have some set of builtin
-drivers, some set of drivers in the ramdisk and some set of drivers in
-the root filesystem.
-
-In the event that something goes wrong mounting the rootfs, I will now
-be in the ramdisk console. Given the current timer-based disabling of
-regulators, I have ~25 seconds to solve my problem before the backlight
-goes blank.
-
-
-Obviously this isn't a typical scenario in a consumer device, but it
-seems conceivable that your ramdisk would run fsck for some amount of
-time before mounting the rootfs and picking up the last tier of drivers.
-
-Regards,
-Bjorn
