@@ -2,64 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B737669CBA4
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Feb 2023 14:10:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 082F269CBD7
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Feb 2023 14:15:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232185AbjBTNKi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Feb 2023 08:10:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55152 "EHLO
+        id S231497AbjBTNPE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Feb 2023 08:15:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58252 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232005AbjBTNKf (ORCPT
+        with ESMTP id S231160AbjBTNOm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Feb 2023 08:10:35 -0500
-Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 611B01CAE2
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Feb 2023 05:10:29 -0800 (PST)
-Received: by mail-ed1-x533.google.com with SMTP id eg37so685759edb.12
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Feb 2023 05:10:29 -0800 (PST)
+        Mon, 20 Feb 2023 08:14:42 -0500
+Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A872BDEA
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Feb 2023 05:14:41 -0800 (PST)
+Received: by mail-ed1-x535.google.com with SMTP id h16so4728598edz.10
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Feb 2023 05:14:41 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-disposition:mime-version:message-id:subject:cc:to:from:date
          :sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=JYMrPsjykRPhmLbo9HjwMzJ9AhaI0qU7QxL4YH1ZCP0=;
-        b=LEjMBRNxiZ4nDetu3PBn6CdFwJxfgQS7C7IjeijkYwrLRsZR6AAlGnoJGljv9oevpe
-         LMYFD8iil6JAkwMTUZiAM3yoc2CL3TpVV4roUGxo+wkSq8i2VkZdNZSUfLlI0wQ0xVZB
-         KIuEGrEb1mUpxXeT3FrP9BXKNcKF6msXsNDB+ihc5WxL05t6ZOoiJ6B8fUxn3nTn6PK/
-         w38whXrtlLQ/SqtgQDvZjS7hEwrum6XJHKChLuoItwu+77SCa4hXWkKwsfSjxkSaSS/C
-         dCZFfVt70ylie5NPY9jLwFrAiWd6dj26UevNJqlAMtZBhnN7Iy9xptMXM5LBLNFg+31V
-         BB8Q==
+        bh=tLOVEDpnix7Q9ugiGBHyM3tS+zJ6i1NVh4eILlSalmo=;
+        b=Phbb4IUcbUO32qJjIBxlMU0neD0r9lNsI6ndqGMk8UjDWY3eaU3sX9vjLT89uYgQL0
+         5ewf6VHaQBYkEvPSVSGiFlxLBjOxhhVPjYAhKFXNsOr8lZwsQyANu64X3axFuvjWyZiY
+         AWn+dwMRH9VnOa/qZRMHBd8YwvL4eKVS8PNymE+gEjqGG3XqnsyxvepwpOVzfXe0NTRL
+         rzu6NtgPzWd9Zyxa+okBFDXizUqTqB0a8xTvLJupTAwjsrlFf49AYjBcFCUreq4TDdFO
+         xnG4CpSmJxS3AU4e7bWtyPRah5uXiUmCBlWPsdZGVLY8EVvgRnJjTCics9HN6CIPwQAT
+         bvTg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-disposition:mime-version:message-id:subject:cc:to:from:date
          :sender:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=JYMrPsjykRPhmLbo9HjwMzJ9AhaI0qU7QxL4YH1ZCP0=;
-        b=IjIg5POrttEyyhDwqF4NfSlxYbEhuzkLPQrJy6R04zMTXX4u4yep9Kxw1qc67JTjby
-         19ACjYorUUJGxEtP1ZWZpSDcBS45b9zlx2DVNNXz/pnAwbGaqGaFK6cBW2Wg4fzuaUkj
-         AmaMVHPFTc4Q56KA00PeYF5tjCspYJ+4hTW6J1CVdzaqdrY59iNMCxjxJmpsfFyJ7X/n
-         bD1hdo9f3FhzT+/giSvfeqz2xU/UOVQmdSiYNCYu+DC8yKvhJU/HK3EYIdH8NVosw03h
-         5PPwBb5KyillUByZ4GYZF70HLif2goO4UMeyWDyI6W2u4c60AXRT3vI3fg8VvOV43d0n
-         PWMw==
-X-Gm-Message-State: AO0yUKWedzERfMlDxv54rqd/WMBV4cRbChFscOPYqD1LpclrjSPhmOAx
-        5lVJ+SjWG5ZS+IBUsaXPgEE=
-X-Google-Smtp-Source: AK7set/tnZNmeqH85i/opPsmzx66FcdgvMUGmmrsiIUMS/xAOsg+tvq36p7NkrEprgLuuvveIQcxiQ==
-X-Received: by 2002:a17:907:10c3:b0:8b1:bafe:6135 with SMTP id rv3-20020a17090710c300b008b1bafe6135mr10310968ejb.60.1676898627929;
-        Mon, 20 Feb 2023 05:10:27 -0800 (PST)
+        bh=tLOVEDpnix7Q9ugiGBHyM3tS+zJ6i1NVh4eILlSalmo=;
+        b=lR9yHVtczMwFx+1UY+FdywdsS9Ms9vhyunXxmmgt8+M9KhNqpwyKaAYJuaT0tNf1yU
+         cymqB5s74001tIzyH14oA5neRPf/iIVNNpaxRgeigBYFbkiC+KPbQ1pnDN1ZHCU3sEqm
+         XN1OtLj/gDPb5dw8bR40A94C/LnhR3xrssMjTMfwzzm3l6lpgzlOkxZgKlxcvIwYlTTZ
+         oz6UAW1sDH6JXbg/iLLz15FRlgdK72czryf3YE6//9klbXpPilMqTWsM3QbrbvtilXhH
+         Yzb6neM6DWExEgj9hTaxMTYzEs3M+lk+Xo0ush8i0K6wL3lk9AD4KVli4mkcxHdIj4lh
+         F53Q==
+X-Gm-Message-State: AO0yUKUhntVCu1BjeHDW7pmjR1T1w1zY790TV3ld3i9QY0x9JJuBF/vs
+        JTvr81x2cebffsHleyR0Ya0=
+X-Google-Smtp-Source: AK7set+Q2vMsM/Jh0cxeUluxN1AN8NToldnYA4JRniB0hqAGupQIp/GfEcqzTuGxgbGlWnR4SYiOGA==
+X-Received: by 2002:aa7:cb92:0:b0:4ab:49b9:686f with SMTP id r18-20020aa7cb92000000b004ab49b9686fmr202786edt.30.1676898879404;
+        Mon, 20 Feb 2023 05:14:39 -0800 (PST)
 Received: from gmail.com (1F2EF163.nat.pool.telekom.hu. [31.46.241.99])
-        by smtp.gmail.com with ESMTPSA id rh16-20020a17090720f000b008b6aea4738esm3915991ejb.42.2023.02.20.05.10.27
+        by smtp.gmail.com with ESMTPSA id m30-20020a50d7de000000b004acc61206cfsm1429253edj.33.2023.02.20.05.14.38
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 20 Feb 2023 05:10:27 -0800 (PST)
+        Mon, 20 Feb 2023 05:14:38 -0800 (PST)
 Sender: Ingo Molnar <mingo.kernel.org@gmail.com>
-Date:   Mon, 20 Feb 2023 14:10:25 +0100
+Date:   Mon, 20 Feb 2023 14:14:34 +0100
 From:   Ingo Molnar <mingo@kernel.org>
 To:     Linus Torvalds <torvalds@linux-foundation.org>
 Cc:     linux-kernel@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>,
         Borislav Petkov <bp@alien8.de>,
-        "H. Peter Anvin" <hpa@zytor.com>,
         Peter Zijlstra <peterz@infradead.org>,
-        Andrew Morton <akpm@linux-foundation.org>
-Subject: [GIT PULL] x86/boot changes for v6.3
-Message-ID: <Y/NxQfkj3P7DOBWl@gmail.com>
+        Andrew Morton <akpm@linux-foundation.org>,
+        "H. Peter Anvin" <hpa@zytor.com>
+Subject: [GIT PULL] x86/build change for v6.3
+Message-ID: <Y/NyOgU2AU5paKua@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
@@ -75,36 +75,23 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 Linus,
 
-Please pull the latest x86/boot git tree from:
+Please pull the latest x86/build git tree from:
 
-   git://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git x86-boot-2023-02-20
+   git://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git x86-build-2023-02-20
 
-   # HEAD: e2869bd7af608c343988429ceb1c2fe99644a01f x86/acpi/boot: Do not register processors that cannot be onlined for x2APIC
+   # HEAD: f9bb7f6a7eb0efd282f7364115f97e652677a29b x86/build: Make 64-bit defconfig the default
 
-Changes in this cycle:
-
- - Robustify/fix calling startup_{32,64}() from the decompressor code,
-   and removing x86 quirk from scripts/head-object-list.txt as
-   a result.
-
- - Do not register processors that cannot be onlined for x2APIC
+Make the 64-bit defconfig the x86 default for all builds,
+unless x86-32 is requested explicitly.
 
  Thanks,
 
 	Ingo
 
 ------------------>
-Alexander Lobakin (2):
-      x86/boot: Robustify calling startup_{32,64}() from the decompressor code
-      scripts/head-object-list: Remove x86 from the list
-
-Kishon Vijay Abraham I (1):
-      x86/acpi/boot: Do not register processors that cannot be onlined for x2APIC
+Arnd Bergmann (1):
+      x86/build: Make 64-bit defconfig the default
 
 
- arch/x86/boot/compressed/head_32.S |  2 +-
- arch/x86/boot/compressed/head_64.S |  2 +-
- arch/x86/boot/compressed/misc.c    | 18 +++++++++++-------
- arch/x86/kernel/acpi/boot.c        | 19 ++++++++++++++++---
- scripts/head-object-list.txt       |  6 ------
- 5 files changed, 29 insertions(+), 18 deletions(-)
+ arch/x86/Makefile | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
