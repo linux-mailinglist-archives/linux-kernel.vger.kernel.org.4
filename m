@@ -2,74 +2,163 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D6A0469C896
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Feb 2023 11:33:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4BCFB69C89A
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Feb 2023 11:34:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231489AbjBTKdb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Feb 2023 05:33:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54266 "EHLO
+        id S231643AbjBTKev (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Feb 2023 05:34:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54840 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229492AbjBTKd3 (ORCPT
+        with ESMTP id S229492AbjBTKeo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Feb 2023 05:33:29 -0500
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9173914483;
-        Mon, 20 Feb 2023 02:33:27 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1676889208; x=1708425208;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=gMmZ0r6hf7TDjajRLymz5GG8FbL+fuZU7Rc97O5DCnI=;
-  b=SqBPgVOfX6ftLnXWrl5IYYfLaUgwRI3kja5loREuRnbBmfQymBxsRP9f
-   pCVDonyD4+rkfsdBHBQBj2uTE93ZKZ4iAbYBAHc47v2+KOKiPjMIc+i/u
-   xoYyzSS3DueyCQRM0+SnKLzj7R/RRBrUqwm+QUDdknZcrSIFSEPgycWhd
-   A6pBoEPqlOLOUaSfM+qYPbtokCVYwPk8A9JFEGB2zgoCiC0eyljk5UcK+
-   iuUZCRF0mQK6AzW010aBmHr6NK23BnpgZ7dRIa3Yj63WDdgyLlAOpTcuu
-   ie06cbDXNzJq8S2YGwfFngvMBm4E8Rf/5Enou4QjOupDTGkxDx+7/4aNV
-   w==;
-X-IronPort-AV: E=Sophos;i="5.97,312,1669100400"; 
-   d="asc'?scan'208";a="201712956"
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa5.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 20 Feb 2023 03:33:26 -0700
-Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
- chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.16; Mon, 20 Feb 2023 03:33:25 -0700
-Received: from wendy (10.10.115.15) by chn-vm-ex04.mchp-main.com
- (10.10.85.152) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.16 via Frontend
- Transport; Mon, 20 Feb 2023 03:33:23 -0700
-Date:   Mon, 20 Feb 2023 10:32:57 +0000
-From:   Conor Dooley <conor.dooley@microchip.com>
-To:     Anup Patel <apatel@ventanamicro.com>
-CC:     Conor Dooley <conor@kernel.org>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Atish Patra <atishp@atishpatra.org>,
-        Alistair Francis <Alistair.Francis@wdc.com>,
-        Anup Patel <anup@brainfault.org>,
-        <linux-riscv@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
-        <devicetree@vger.kernel.org>
-Subject: Re: [PATCH v2 6/9] dt-bindings: interrupt-controller: Add RISC-V
- advanced PLIC
-Message-ID: <Y/NMWZAW4KAqKXEs@wendy>
-References: <20230103141409.772298-1-apatel@ventanamicro.com>
- <20230103141409.772298-7-apatel@ventanamicro.com>
- <Y7X62v5Zp6+thx5A@spud>
- <CAK9=C2UPa5SATTG1pJdckqaoJxh-8EBz8xsENirZQ-vbaHTgjg@mail.gmail.com>
+        Mon, 20 Feb 2023 05:34:44 -0500
+Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F4251716A
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Feb 2023 02:34:42 -0800 (PST)
+Received: by mail-ed1-x52c.google.com with SMTP id da10so3988596edb.3
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Feb 2023 02:34:42 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=hgK+pzbgsRct7v66y7EeW9btlFAMDnGp7qA3LyQeueA=;
+        b=ShobCGbFij7tUT+5/n7fnEr53C2/0jxVBdNu1dHkJSG6s4KAO6LFFnRrmCnoBOmXJy
+         0eCMJfuG7fVPmFNODgUHbM40obtDqhrtM9XX2Juj5n1FM0jJup7zwFDOwvN80x/f+G+5
+         Yl68/2isRSQpRcyoGePuKEaWY3YuN6aJC01OUipDJhlG1zqPwve0pSSkBASZ7sIT08TB
+         TCAIkz7ilnchLiNBIRyP4IMso6UIuFCLo1fgD8Z/3NAwzdjQwuahaJfkwOMpIpIT3Fv8
+         n2kqIPCEHS3nHF8puaQ1L/g8SEMkTntwpiPPdL/eZ9au/HMGX8ITkAyqrnnvOcCi5ePm
+         d8iw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=hgK+pzbgsRct7v66y7EeW9btlFAMDnGp7qA3LyQeueA=;
+        b=IMRtQf9by8eUhQjQd0KxGiAu2ZaxVTgetYxekOjV/IId8aJsO1bCdayQvYDvOpYh9o
+         kDoap77J3qAF1c1HtWlWIWDp48pLV8DB7I3GooN/inB3sh5N5/FVFXXpn73q2Uqgmrm5
+         fXD6LVQN5ff1Vk2qOU0FOiCBbvY1wKbbyPkT9FoTauouzix8fPKVVux4+Q+C6JUX7JF3
+         WJLQPQDidJANhIUFdNQe41fbcuUgvC6EUcTJLP1tyMJwGMPCk+FNbTbk4dwo3npEbdu9
+         TkWWAj/P+BRccVDTdiisqzUDck7t3576D3UOEkkvlhq3EJfEGLPOezrOYYdq+SRQ8xQu
+         CAeA==
+X-Gm-Message-State: AO0yUKWK7iua8DjMLJ4lVBZURpocIaNRQnZLrSlN5Ra8Tu8Fj8jVWTze
+        6Z59y/oqPJK0rET9BxrdF+ZUfaANFZqOFfd2y2fCOg==
+X-Google-Smtp-Source: AK7set9kOckIby41ckXXZd5uq/qQcyFAoci84eoqUFhxhM0EZ569btim73i+tZ6vLNTWM1FX3dsvXtMctilu1VP6iHI=
+X-Received: by 2002:a17:906:fcad:b0:8b1:3d0d:5333 with SMTP id
+ qw13-20020a170906fcad00b008b13d0d5333mr3882123ejb.13.1676889282013; Mon, 20
+ Feb 2023 02:34:42 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="oq5et5R3KJ6LBPlj"
-Content-Disposition: inline
-In-Reply-To: <CAK9=C2UPa5SATTG1pJdckqaoJxh-8EBz8xsENirZQ-vbaHTgjg@mail.gmail.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+References: <20230219143657.241542-1-daniel.lezcano@linaro.org> <20230219143657.241542-2-daniel.lezcano@linaro.org>
+In-Reply-To: <20230219143657.241542-2-daniel.lezcano@linaro.org>
+From:   Balsam CHIHI <bchihi@baylibre.com>
+Date:   Mon, 20 Feb 2023 11:34:05 +0100
+Message-ID: <CAGuA+oonRP3s4kfzU2-yfMSy4uB+Hea4OhVTXt_A3zpB8aziZg@mail.gmail.com>
+Subject: Re: [PATCH v1 01/17] thermal/core: Add a thermal zone 'devdata' accessor
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>
+Cc:     rafael@kernel.org, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Zhang Rui <rui.zhang@intel.com>,
+        Len Brown <lenb@kernel.org>,
+        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Samuel Holland <samuel@sholland.org>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Raju Rangoju <rajur@chelsio.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Ido Schimmel <idosch@nvidia.com>,
+        Petr Machata <petrm@nvidia.com>,
+        Gregory Greenman <gregory.greenman@intel.com>,
+        Kalle Valo <kvalo@kernel.org>,
+        Sebastian Reichel <sre@kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Amit Kucheria <amitk@kernel.org>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Broadcom internal kernel review list 
+        <bcm-kernel-feedback-list@broadcom.com>,
+        Ray Jui <rjui@broadcom.com>,
+        Scott Branden <sbranden@broadcom.com>,
+        Markus Mayer <mmayer@broadcom.com>,
+        Support Opensource <support.opensource@diasemi.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Thara Gopinath <thara.gopinath@gmail.com>,
+        =?UTF-8?Q?Niklas_S=C3=B6derlund?= <niklas.soderlund@ragnatech.se>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Bartlomiej Zolnierkiewicz <bzolnier@gmail.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Orson Zhai <orsonzhai@gmail.com>,
+        Baolin Wang <baolin.wang@linux.alibaba.com>,
+        Chunyan Zhang <zhang.lyra@gmail.com>,
+        Vasily Khoruzhick <anarsoul@gmail.com>,
+        Yangtao Li <tiny.windzz@gmail.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Talel Shenhar <talel@amazon.com>,
+        Eduardo Valentin <edubezval@gmail.com>,
+        Keerthy <j-keerthy@ti.com>,
+        Kunihiko Hayashi <hayashi.kunihiko@socionext.com>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Stefan Wahren <stefan.wahren@i2se.com>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        ye xingchen <ye.xingchen@zte.com.cn>,
+        Zheng Yongjun <zhengyongjun3@huawei.com>,
+        Tim Zimmermann <tim@linux4.de>,
+        Yang Li <yang.lee@linux.alibaba.com>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        Ricardo Neri <ricardo.neri-calderon@linux.intel.com>,
+        Jiang Jian <jiangjian@cdjrlc.com>,
+        Daniel Golle <daniel@makrotopia.org>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Mikko Perttunen <mperttunen@nvidia.com>,
+        "open list:ACPI THERMAL DRIVER" <linux-acpi@vger.kernel.org>,
+        "open list:LIBATA SUBSYSTEM (Serial and Parallel ATA drivers)" 
+        <linux-ide@vger.kernel.org>,
+        "moderated list:ARM/FREESCALE IMX / MXC ARM ARCHITECTURE" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "open list:HARDWARE MONITORING" <linux-hwmon@vger.kernel.org>,
+        "open list:IIO SUBSYSTEM AND DRIVERS" <linux-iio@vger.kernel.org>,
+        "open list:ARM/Allwinner sunXi SoC support" 
+        <linux-sunxi@lists.linux.dev>,
+        "open list:INPUT (KEYBOARD, MOUSE, JOYSTICK, TOUCHSCREEN)..." 
+        <linux-input@vger.kernel.org>,
+        "open list:CXGB4 ETHERNET DRIVER (CXGB4)" <netdev@vger.kernel.org>,
+        "open list:INTEL WIRELESS WIFI LINK (iwlwifi)" 
+        <linux-wireless@vger.kernel.org>,
+        "moderated list:BROADCOM BCM2711/BCM2835 ARM ARCHITECTURE" 
+        <linux-rpi-kernel@lists.infradead.org>,
+        "open list:ARM/QUALCOMM SUPPORT" <linux-arm-msm@vger.kernel.org>,
+        "open list:RENESAS R-CAR THERMAL DRIVERS" 
+        <linux-renesas-soc@vger.kernel.org>,
+        "open list:ARM/Rockchip SoC support" 
+        <linux-rockchip@lists.infradead.org>,
+        "open list:SAMSUNG THERMAL DRIVER" 
+        <linux-samsung-soc@vger.kernel.org>,
+        "open list:TEGRA ARCHITECTURE SUPPORT" <linux-tegra@vger.kernel.org>,
+        "open list:TI BANDGAP AND THERMAL DRIVER" 
+        <linux-omap@vger.kernel.org>,
+        "moderated list:ARM/Mediatek SoC support" 
+        <linux-mediatek@lists.infradead.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,64 +166,50 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---oq5et5R3KJ6LBPlj
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+On Sun, Feb 19, 2023 at 3:37 PM Daniel Lezcano
+<daniel.lezcano@linaro.org> wrote:
+>
+> The thermal zone device structure is exposed to the different drivers
+> and obviously they access the internals while that should be
+> restricted to the core thermal code.
+>
+> In order to self-encapsulate the thermal core code, we need to prevent
+> the drivers accessing directly the thermal zone structure and provide
+> accessor functions to deal with.
+>
+> Provide an accessor to the 'devdata' structure and make use of it in
+> the different drivers.
+>
+> No functional changes intended.
+>
+> Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
+> ---
+[...]
+>  drivers/thermal/mediatek/lvts_thermal.c          |  4 ++--
+[...]
+> diff --git a/drivers/thermal/mediatek/lvts_thermal.c b/drivers/thermal/mediatek/lvts_thermal.c
+> index 84ba65a27acf..86d280187c83 100644
+> --- a/drivers/thermal/mediatek/lvts_thermal.c
+> +++ b/drivers/thermal/mediatek/lvts_thermal.c
+> @@ -252,7 +252,7 @@ static u32 lvts_temp_to_raw(int temperature)
+>
+>  static int lvts_get_temp(struct thermal_zone_device *tz, int *temp)
+>  {
+> -       struct lvts_sensor *lvts_sensor = tz->devdata;
+> +       struct lvts_sensor *lvts_sensor = thermal_zone_device_get_data(tz);
+>         void __iomem *msr = lvts_sensor->msr;
+>         u32 value;
+>
+> @@ -290,7 +290,7 @@ static int lvts_get_temp(struct thermal_zone_device *tz, int *temp)
+>
+>  static int lvts_set_trips(struct thermal_zone_device *tz, int low, int high)
+>  {
+> -       struct lvts_sensor *lvts_sensor = tz->devdata;
+> +       struct lvts_sensor *lvts_sensor = thermal_zone_device_get_data(tz);
+>         void __iomem *base = lvts_sensor->base;
+>         u32 raw_low = lvts_temp_to_raw(low);
+>         u32 raw_high = lvts_temp_to_raw(high);
 
-Hey Anup,
+for MediaTek LVTS :
 
-On Mon, Feb 20, 2023 at 10:06:49AM +0530, Anup Patel wrote:
-> On Thu, Jan 5, 2023 at 3:47 AM Conor Dooley <conor@kernel.org> wrote:
-> > On Tue, Jan 03, 2023 at 07:44:06PM +0530, Anup Patel wrote:
-> > > We add DT bindings document for RISC-V advanced platform level
-> > > interrupt controller (APLIC) defined by the RISC-V advanced
-> > > interrupt architecture (AIA) specification.
-> > >
-> > > Signed-off-by: Anup Patel <apatel@ventanamicro.com>
-> > > ---
-> > >  .../interrupt-controller/riscv,aplic.yaml     | 159 ++++++++++++++++=
-++
-> > >  1 file changed, 159 insertions(+)
-> > >  create mode 100644 Documentation/devicetree/bindings/interrupt-contr=
-oller/riscv,aplic.yaml
-
-> > I'm sorry Anup, but this child versus delegate thing is still not clear
-> > to me binding wise. See below.
->=20
-> There are two different information in-context of APLIC domain:
->=20
-> 1) HW child domain numbering: If an APLIC domain has N children
->     then HW will have a fixed child index for each of the N children
->     in the range 0 to N-1. This HW child index is required at the time
->     of setting up interrupt delegation in sourcecfgX registers. The
->     "riscv,children" DT property helps firmware (or bootloader) find
->     the total number of child APLIC domains and corresponding
->     HW child index number.
->=20
-> 2) IRQ delegation to child domains: An APLIC domain can delegate
->    any IRQ range(s) to a particular APLIC child domain. The
->    "riscv,delegate" DT property is simply a table where we have
->    one row for each IRQ range which is delegated to some child
->    APLIC domain. This property is more of a system setting fixed
->    by the RISC-V platform vendor.
-
-Thanks for the explanations. It's been a while since my brain swapped
-this stuff out, but I think delegate/child makes sense to me now.
-Just don't ask me to write the dt entry as proof...
-
-Thanks,
-Conor.
-
---oq5et5R3KJ6LBPlj
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCY/NMWQAKCRB4tDGHoIJi
-0sA5AQCb+6M/fBkWGw999APet2trx8vgEFPEqNrYEq/4Ao54SQEA2x1nyqApHLMa
-7qdYK/TB1TlgBDnZ0TvxpDcYLBPaiAI=
-=VmEP
------END PGP SIGNATURE-----
-
---oq5et5R3KJ6LBPlj--
+Reviewed-by: Balsam CHIHI <bchihi@baylibre.com>
