@@ -2,114 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 70B0769C7ED
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Feb 2023 10:49:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0DA9869C7F4
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Feb 2023 10:50:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231152AbjBTJtc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Feb 2023 04:49:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52290 "EHLO
+        id S230138AbjBTJu3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Feb 2023 04:50:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53558 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229604AbjBTJta (ORCPT
+        with ESMTP id S229604AbjBTJu1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Feb 2023 04:49:30 -0500
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C5F5E3AA;
-        Mon, 20 Feb 2023 01:49:29 -0800 (PST)
-From:   Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1676886567;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=TPl0DrGnr7zNxFgbqoWf6u0miQVU+auTMSGa2+U7pAY=;
-        b=GIqR8oMFAsLUQb/X0Py0ja/UYy6u33oOOVFx5uoimI7PKyy7u7+oy5PUXlrFrTRqPjl7Ki
-        mm2fYNVygVa7eeVjOt2jE/iGRq8wi+89RGwiC2PaKsXAo9CUnR8yTYzeiMRCzhPuTtLAqL
-        MJhswGFTFul52sw/A5B/HxB/77t/wzT8v8E8RACm0JsmGrOfv5vZnqUJtUlAgQHHFTz+9I
-        QzwOR1kbhzrNbYajrPtiAs+6Mc1MbH/M4kvs89bkXaScMNntC0f/JYsIpwA0eZOEpjqv54
-        oZlLbjmKIPZ44clraoolcZq4AGwvqTETRFtfvajdJhgv90PoFO26KonGxmOQfA==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1676886567;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=TPl0DrGnr7zNxFgbqoWf6u0miQVU+auTMSGa2+U7pAY=;
-        b=v9TvVu/l1u8eWKywTTPAtNEuZ+KY6NuHI3TRxi27J7Tq2Hrbm2KVw9D3KlcEkWcr/AjYAW
-        uJqeo1Q/jB+XtBAw==
-To:     Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Crystal Wood <swood@redhat.com>
-Cc:     John Keeping <john@metanate.com>, linux-rt-users@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: rtmutex, pi_blocked_on, and blk_flush_plug()
-In-Reply-To: <Y+47FVJ+hI+NA2In@linutronix.de>
-References: <4b4ab374d3e24e6ea8df5cadc4297619a6d945af.camel@redhat.com>
- <Y+47FVJ+hI+NA2In@linutronix.de>
-Date:   Mon, 20 Feb 2023 10:49:26 +0100
-Message-ID: <87k00cr7ix.ffs@tglx>
+        Mon, 20 Feb 2023 04:50:27 -0500
+Received: from frasgout12.his.huawei.com (frasgout12.his.huawei.com [14.137.139.154])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A05D3EF9A;
+        Mon, 20 Feb 2023 01:50:25 -0800 (PST)
+Received: from mail02.huawei.com (unknown [172.18.147.227])
+        by frasgout12.his.huawei.com (SkyGuard) with ESMTP id 4PKy9T11bDz9xtV3;
+        Mon, 20 Feb 2023 17:41:33 +0800 (CST)
+Received: from roberto-ThinkStation-P620 (unknown [10.204.63.22])
+        by APP1 (Coremail) with SMTP id LxC2BwC3QAw4QvNjBIw5AQ--.54153S2;
+        Mon, 20 Feb 2023 10:49:55 +0100 (CET)
+Message-ID: <ab9245bfb43b96fd8eded8a4ca25f5cae20b9f04.camel@huaweicloud.com>
+Subject: Re: [PATCH v7 6/6] evm: Support multiple LSMs providing an xattr
+From:   Roberto Sassu <roberto.sassu@huaweicloud.com>
+To:     Mimi Zohar <zohar@linux.ibm.com>, mark@fasheh.com,
+        jlbec@evilplan.org, joseph.qi@linux.alibaba.com,
+        dmitry.kasatkin@gmail.com, paul@paul-moore.com, jmorris@namei.org,
+        serge@hallyn.com, stephen.smalley.work@gmail.com,
+        eparis@parisplace.org, casey@schaufler-ca.com
+Cc:     ocfs2-devel@oss.oracle.com, reiserfs-devel@vger.kernel.org,
+        linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org, selinux@vger.kernel.org,
+        linux-kernel@vger.kernel.org, keescook@chromium.org,
+        nicolas.bouchinet@clip-os.org,
+        Roberto Sassu <roberto.sassu@huawei.com>
+Date:   Mon, 20 Feb 2023 10:49:37 +0100
+In-Reply-To: <1f252850086a39e3c15736f252600d388f6b9c24.camel@linux.ibm.com>
+References: <20221201104125.919483-1-roberto.sassu@huaweicloud.com>
+         <20221201104125.919483-7-roberto.sassu@huaweicloud.com>
+         <1f252850086a39e3c15736f252600d388f6b9c24.camel@linux.ibm.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.36.5-0ubuntu1 
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-CM-TRANSID: LxC2BwC3QAw4QvNjBIw5AQ--.54153S2
+X-Coremail-Antispam: 1UD129KBjvJXoW7Aw4rGr45WF1DGr1xKF4xtFb_yoW8GrWDpF
+        WfG3W2vF1kJF1xGry3ZayxZayfKrW8Gr43Xws0yw15ArnxCr1akrySkF43uFyUurWUJasY
+        va1jkFnxZ3Z8Aa7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUk0b4IE77IF4wAFF20E14v26ryj6rWUM7CY07I20VC2zVCF04k2
+        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
+        vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7Cj
+        xVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIEc7CjxV
+        AFwI0_Gr0_Gr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40E
+        x7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x
+        0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1l42xK82IYc2Ij
+        64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x
+        8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r4a6rW5MIIYrxkI7VAKI48JMIIF0xvE
+        2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE42
+        xK8VAvwI8IcIk0rVWrJr0_WFyUJwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv
+        6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjxUFDGOUUUUU
+X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAgAOBF1jj4UwqgABsn
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 16 2023 at 15:17, Sebastian Andrzej Siewior wrote:
-> On 2023-02-09 22:31:57 [-0600], Crystal Wood wrote:
->> It is possible for blk_flush_plug() to be called while
->> current->pi_blocked_on is set, in the process of trying to acquire an rwsem.
->> If the block flush blocks trying to acquire some lock, then it appears that
->> current->pi_blocked_on will be overwritten, and then set to NULL once that
->> lock is acquired, even though the task is still blocked on the original
->> rwsem.  Am I missing something that deals with this situation?  It seems
->> like the lock types that are supposed to call blk_flush_plug() should do so
->> before calling task_blocks_on_rt_mutex().
->
-> Do you experience a problem in v6.1-RT?
->
->> I originally noticed this while investigating a related issue on an older
->> RHEL kernel where task_blocked_on_mutex() has a BUG_ON if entered with
->> current->pi_blocked_on non-NULL.  Current kernels lack this check.
->
-> The logic is different but the deadlock should be avoided:
-> - mutex_t and rw_semaphore invoke schedule() while blocking on a lock.
->   As part of schedule() sched_submit_work() is invoked.
->   This is the same in RT and !RT so I don't expect any dead lock since
->   the involved locks are the same.
+On Sun, 2023-02-19 at 14:42 -0500, Mimi Zohar wrote:
+> On Thu, 2022-12-01 at 11:41 +0100, Roberto Sassu wrote:
+> > From: Roberto Sassu <roberto.sassu@huawei.com>
+> > 
+> > Currently, evm_inode_init_security() processes a single LSM xattr from
+> > the array passed by security_inode_init_security(), and calculates the
+> > HMAC on it and other inode metadata.
+> > 
+> > Given that initxattrs() callbacks, called by
+> > security_inode_init_security(), expect that this array is terminated when
+> > the xattr name is set to NULL, reuse the same assumption to scan all xattrs
+> > and to calculate the HMAC on all of them.
+> > 
+> > Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
+> > Reviewed-by: Casey Schaufler <casey@schaufler-ca.com>
+> 
+> Normally changing the contents of the EVM HMAC calculation would break
+> existing systems.  Assuming for the time being this is safe, at what
+> point will it affect backwards compatability?  Should it be documented
+> now or then?
 
-Huch?
+Actually, the current patch set continues to fullfill user space
+expectation on the EVM behavior. If the LSM infrastructure created more
+xattrs and EVM calculated the HMAC on just one, there would be a
+problem on subsequent xattr operations and on IMA verification.
 
-xlog_cil_commit()
-  down_read(&cil->xc_ctx_lock)
-    __rwbase_read_lock()
-       __rt_mutex_slowlock()
-         current->pi_blocked_on = ...
-         schedule()
-           __blk_flush_plug()
-             dd_insert_requests()
-               rt_spin_lock()
-                 WARN_ON(current->pi_blocked_on);
+By updating both the LSM infrastructure and EVM to support multiple
+xattrs, everything will continue to work.
 
-So something like the below is required. But that might not cut it
-completely. wq_worker_sleeping() is fine, but I'm not convinced that
-io_wq_worker_sleeping() is safe. That needs some investigation.
+Thanks
 
-Thanks,
+Roberto
 
-        tglx
----
-
---- a/kernel/sched/core.c
-+++ b/kernel/sched/core.c
-@@ -6666,6 +6666,9 @@ static inline void sched_submit_work(str
- 	 */
- 	SCHED_WARN_ON(current->__state & TASK_RTLOCK_WAIT);
- 
-+	if (current->pi_blocked_on)
-+		return;
-+
- 	/*
- 	 * If we are going to sleep and we have plugged IO queued,
- 	 * make sure to submit it to avoid deadlocks.
