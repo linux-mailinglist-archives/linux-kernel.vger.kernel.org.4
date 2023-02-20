@@ -2,246 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 67E2F69CBE0
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Feb 2023 14:18:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1706069CBE2
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Feb 2023 14:18:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231174AbjBTNST (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Feb 2023 08:18:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60336 "EHLO
+        id S231475AbjBTNSt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Feb 2023 08:18:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60972 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229579AbjBTNSR (ORCPT
+        with ESMTP id S231893AbjBTNSp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Feb 2023 08:18:17 -0500
-Received: from JPN01-TYC-obe.outbound.protection.outlook.com (mail-tycjpn01on2103.outbound.protection.outlook.com [40.107.114.103])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30F4ABDF2;
-        Mon, 20 Feb 2023 05:18:13 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=BpH+dGVitcezQ032gAnJm+IRDgDLr1+hYdkGpB22ZDuzFFF7V6Iib48ly/n/jkL1ZeSkS0uUOzGlTRhQ3OXw425+YMZrLQSpwFLGgSRHwb9g5AXWpl3PZxMtUijcLqK1O+YWcERrgGfUH2uq15Zgb2d3Zg8Ka80JWdycB3bZqZthYs3DWbw7VeG8dEmtaKqo/NNTZcJ9mWjp/Y+7U7OJGh5Nk3aoai/uGoIY46egjHKtiX3zKroR6n3qlIzLi/Dp4S+g7XaUJ4VQ3SuzGDVb12vcaW/dgIczXS+kd2hDkse8KRQxH3zszRDwDVXd1kOornqSFHBA0roRqWYVUG8+KA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=t36J5Qtqjgt6Pp3RXMF7UBl3KTE6kdf2GcBjL0VOHII=;
- b=jbZ/tLS4oxyJNbh+5eLpFKDoYdk/atgLtTq9k7M6YR5OVRv57OwqNMBl6AkxpWAbLmEImJmiH7Eh5rGsVGUAzb4nlAD9w4kljfVAwKm5wXSRRs/3Uet6wGv7eQ64q2WoW9GWSzrZ1cl3YddJgb/k4r80fwOuEkScPs/4RPSb2SqQOtiA+pAStg3qElNS+8mfX531cgmTsU/gHeFf4DHEEVFuInKWkUM0L3nQWAMTMmSIRWMP3PCxsYXUvUF7hyst7Fa5RJt3MVFmz8Y0r+xcpF6LDyFsq5vZcEwVsMUAF5QUrSbGrfgOft+oDPDqF3V6WAhrQzz6dhmdwonzm+xzEQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=bp.renesas.com; dmarc=pass action=none
- header.from=bp.renesas.com; dkim=pass header.d=bp.renesas.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bp.renesas.com;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=t36J5Qtqjgt6Pp3RXMF7UBl3KTE6kdf2GcBjL0VOHII=;
- b=ffKADlrXmcpxVs6OOkU+Ba96pXR5lrFELQjhDtmX9CQdgHsnya2Flb4asm3TdhC+G6q0++ganMnKIrAognFC+GWpzRbcNWf6VVhzsHCP9wgY8Gi37ID8aLKyigmZjrWFVgeI2o/qQH+eUB9uzNXzCf1vkiAVntrmI5GyK9n4iGo=
-Received: from OS0PR01MB5922.jpnprd01.prod.outlook.com (2603:1096:604:bb::5)
- by TYCPR01MB10760.jpnprd01.prod.outlook.com (2603:1096:400:294::12) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6111.18; Mon, 20 Feb
- 2023 13:18:10 +0000
-Received: from OS0PR01MB5922.jpnprd01.prod.outlook.com
- ([fe80::343d:7339:78e5:a46e]) by OS0PR01MB5922.jpnprd01.prod.outlook.com
- ([fe80::343d:7339:78e5:a46e%8]) with mapi id 15.20.6111.020; Mon, 20 Feb 2023
- 13:18:08 +0000
-From:   Biju Das <biju.das.jz@bp.renesas.com>
-To:     Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-CC:     "linux-clk@vger.kernel.org" <linux-clk@vger.kernel.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>,
-        Prabhakar Mahadev Lad <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        Fabrizio Castro <fabrizio.castro.jz@renesas.com>,
-        Mark Brown <broonie@kernel.org>, Takashi Iwai <tiwai@suse.de>,
-        "alsa-devel@alsa-project.org" <alsa-devel@alsa-project.org>,
-        "linux-renesas-soc@vger.kernel.org" 
-        <linux-renesas-soc@vger.kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: RE: [PATCH RFC 0/3] Add Versa3 clock generator support
-Thread-Topic: [PATCH RFC 0/3] Add Versa3 clock generator support
-Thread-Index: AQHZRS0b8JYC5www50CVHBoCQPQrMK7X0LvQ
-Date:   Mon, 20 Feb 2023 13:18:08 +0000
-Message-ID: <OS0PR01MB592217664FC7D09EB968947486A49@OS0PR01MB5922.jpnprd01.prod.outlook.com>
-References: <20230220131307.269100-1-biju.das.jz@bp.renesas.com>
-In-Reply-To: <20230220131307.269100-1-biju.das.jz@bp.renesas.com>
-Accept-Language: en-GB, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=bp.renesas.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: OS0PR01MB5922:EE_|TYCPR01MB10760:EE_
-x-ms-office365-filtering-correlation-id: 58ee151a-ae7a-4f55-fdd1-08db1344e87f
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: WyIyJozhWHkrZ6fmdQHJghTVTgY0nIvptTZeaYMknJPbGe4a7A9V4jVdK3vEz0SBRjlUy/94aAlewiYf+1+dCcIpZexSyMwiU0j22ugJg/eZ618vAGRr7TGn7K7ruwo0MqtWcX6jd24CIajkBWbvdEJXQWCZqQxlfkMv7UG70ZETDeWfYjVhO27nLx04N4Jvl44OZaUUJYe0cLwRiPqG0vGaK/grqPeNcPcsflfqC3ZrgAvolKjlO0GQm8zaV9LDvSIhMWwZ7j1+k9vMnC5NtZ/7GTmV7Iz5F5KhJ8Mu3QgLGo9gAEuUCMzrVTNbuoafARm99i4FFzTfPUdcndrt1Marol5FSmnY0YYw9LwlYwrGnkPEiaoNz6iwWeyBdSxYS7qELPFZR/4w6Z8bO8q0zRKW7iLQZwhA4nLJQrouc05EQxUwm13V4ssHD40uDMlT7Uo8DJK0ln8/dCcVBBACRWHQQIH/dtmlaObZGoc5a5ONLFYt4r4RHk/NLas6NXEL2VDDdktTKBsFp63Ltb0h/ZbWSCNCpbQnFprr8zb6tcAvV1Opcv9pqIbIj83ZYm2YQbqckVSwxR8Tk7HYfxM91X7Tky5VWygpqQ/YWMJMiyTLz2OAbwDhSo8SNZdAh+ZEQkwqS/68ENXKSYzggRh0YJE5MVLw77H+Ls0UHE08Dt8bmFgSIsGJowrEQkzAhtf7
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:OS0PR01MB5922.jpnprd01.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(346002)(136003)(396003)(366004)(376002)(39860400002)(451199018)(38100700002)(7696005)(54906003)(110136005)(316002)(122000001)(38070700005)(76116006)(2906002)(966005)(83380400001)(64756008)(66556008)(5660300002)(66476007)(66946007)(478600001)(71200400001)(86362001)(52536014)(6506007)(55016003)(8936002)(7416002)(53546011)(66446008)(8676002)(4326008)(41300700001)(33656002)(26005)(9686003)(186003);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?OavH7Zgn9O1zlUqHe9s4nre3Qkrdaor8d3etIh0UkwYDUycZJ+GIUgd/MkSM?=
- =?us-ascii?Q?kqAtM4SGnhADBzoN85w+rTGYx6OZSB/YmwFsXuJkzhMPlaNxJRfHWgWVXfoi?=
- =?us-ascii?Q?79VHXXHBwD6L58I4awxf+B8k58PUNEJJh7jh4l2X6wHVikyfPaVdfGhDJ1Vo?=
- =?us-ascii?Q?cUOw9/glvkrK493rfmgHg06YVZ+ndfsGrv9J4Iy28kj9l4WLZ5o4u67TEfjp?=
- =?us-ascii?Q?XcRtqKHlHmmxsHjLA7rXvWtY4O2wadIWx6AHbUE/Fmn7XOGeLA5iWmCrqMC3?=
- =?us-ascii?Q?mCrECNDErdQucpxsIrjmpglKCd7YB8X1id2R6tlXz8+Fk5evyJ1EJoM5m8FL?=
- =?us-ascii?Q?sUnz71buUh/pSVyb0SE0QXDzbxa4rPuEblMrmqmQ1BFtxafxDqQzsy6Er99c?=
- =?us-ascii?Q?6wJy9TDppt/JdiatqpNX2wl/+hWsJzDZWl/oZxrarvPoLvc9y0jsvQ2EX3qO?=
- =?us-ascii?Q?bbN7EOD8jgld8bta5+pI/JYyfoL9TkWHW7gV2Exs+xzpX+2f4Y6OKolbT9rR?=
- =?us-ascii?Q?44h4HutcB3/8Ys3Qw8NgIPvTMf6XZ0uxsDinHO65YbE5cF4O04XYEkYCYvlx?=
- =?us-ascii?Q?RWhcdOMclWw4YsWsdqzwzpc2IkpofJVI3pfmzGhIaaN/FADSQEeqmF3qc0Rg?=
- =?us-ascii?Q?lpe0JZMmdZIccDGkX5g4s+2PPqRpyqWWyBWheMjM+6viF5YoKCYPCRfZcKoK?=
- =?us-ascii?Q?MDOTnGvD0rgdQRyOxedqvpGa1PFyn/kxOd+3idnHWvCvlJ9iAioR2XKoZsTU?=
- =?us-ascii?Q?BPCwyABoxxdBrJGGW7nAlcHIFEvSc+qeoAosTDnOuMfm/FtHPBTDC+y7oOtG?=
- =?us-ascii?Q?9auMJQ0umzj7nBBLyz+AP2dcCbdsLYw6+d4Pg7qCCu7toq58F2Y57r8L06PD?=
- =?us-ascii?Q?t8+isuyvbDV25DqiEjCtPUElA102gHbxKC9AqpLkYs8WWOH5r6UmkmP0WbUD?=
- =?us-ascii?Q?9OMBI5/TLXjg9zXXK+Qnom4EFzPpOzesFV4UJHNPhpmunX5lBoyfmcy5ppNQ?=
- =?us-ascii?Q?QM++pN9l0/6nAIb8d2ZIrbsABfYk09I1QFAhiSnQL+356bx6IqoVnUkiC5bB?=
- =?us-ascii?Q?vhum6XwmZAoOx2m+JTxDNbqdKc1ocSt0bIkTwnHiiypWFjN8UfT8nXx1/JBA?=
- =?us-ascii?Q?ES5Xzi0iGhOyCGtVUii1BNjci476Fnwt4uoap0HLkPMGX1Q05SXr+oakRLob?=
- =?us-ascii?Q?6JizPkTWgpvbhz62S3Q4vCTR6jXVxAa+2fDM82n8Fvw1ySeQvwpZHkV1/knB?=
- =?us-ascii?Q?13PWCSiiN92RavQFrYMisl7xp2zljhGvl7myvGg3DD1rGCBLc9XzihYCP4Rz?=
- =?us-ascii?Q?Xa2W7wtYJIZnv4uN9Z1cR4B5SbKOz6iwqnvVtzm9LXN3u4UejBqY1GpxwOuL?=
- =?us-ascii?Q?VU6G38v0Xbmh+LoVlZ2j/nuVwUip4fDECLvsq4Pj/TTgA2we1r1Hobm5tVC8?=
- =?us-ascii?Q?A4tw297i5OBywKQisY0hX/angac7yoK+OZcNDif2lCl9VsRRMSPDPD1Dn8p3?=
- =?us-ascii?Q?FMHpsj6IOoOkISvxt3VbNymFeD3uRcj+Qi/URUJCI6tV6Zl6PgATCKmqf3lv?=
- =?us-ascii?Q?7u457UK+9wPRpK6/cNQ/yCHUgvKN90LGBp1TmuCUTgzZpAXccs0OesuJJIwh?=
- =?us-ascii?Q?3Q=3D=3D?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        Mon, 20 Feb 2023 08:18:45 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16505CA04
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Feb 2023 05:18:40 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 67F0BCE0FBE
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Feb 2023 13:18:38 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D6880C433A0
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Feb 2023 13:18:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1676899116;
+        bh=GlZKUnCJqUH65twZtiEVTQTDCQszZly8hq9gwbRGHjg=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=qD/+X1APdetLuEl/OT497kV6yMShj6Mp35mz4f13nagEZDFzWXvoMInCNMptOYhRD
+         2263a3/etuC93kK+2hR/GnUuhVxU4xs3yL5nmFtf8+I0Els9YvhbKvlLDdpIF+Dzz3
+         S2vP4nPO4B2PI48Nm0aQ1b6dJ7q40+I9e5xvnEAEn5TEsMNmJAH9fFMOz78yXPj+r7
+         HPO/7jI36guY6oehUkcQvC0PVwwzw0Hr6iK3ljcTUk8u14HTE2Q6MUyoboz6BCu+t/
+         DoGR+DZm7Z5PkDVTHDVh9WgMPgJORkVpNT2qkzEIRJBPIDPVBTExTWT/y2/SSUqW0P
+         h8kazQKRSlNxw==
+Received: by mail-lf1-f43.google.com with SMTP id y22so1434652lfa.12
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Feb 2023 05:18:36 -0800 (PST)
+X-Gm-Message-State: AO0yUKVrAbWMQ1F5PidSP7dEiCCEMr+X71pZ3xGE1iaHfUrVz0W2kVr8
+        dmZI8EoBmqVaAH0RTkrXmFpw+L8iCEY/cEtuEOA=
+X-Google-Smtp-Source: AK7set/CQeWJVds+2pEuoKGTzTL8qHQBpaa7FEIMp7tvK8ndk8We0AGZQwC9wX9dQZ0J4e6mb0UMPoAwFu50kCl+8dg=
+X-Received: by 2002:a05:6512:b0e:b0:4dc:8090:f94b with SMTP id
+ w14-20020a0565120b0e00b004dc8090f94bmr1008879lfu.5.1676899114892; Mon, 20 Feb
+ 2023 05:18:34 -0800 (PST)
 MIME-Version: 1.0
-X-OriginatorOrg: bp.renesas.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: OS0PR01MB5922.jpnprd01.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 58ee151a-ae7a-4f55-fdd1-08db1344e87f
-X-MS-Exchange-CrossTenant-originalarrivaltime: 20 Feb 2023 13:18:08.2150
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 53d82571-da19-47e4-9cb4-625a166a4a2a
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: YhY2AEyP5kEIbM1hm4O9WX7c0Cc87BlGVhQXrW/ydHENktbcH4QBpp8+niElODXTp53z39Plhj1gdzmE9aAVOkQxkRdFya+Bbn2JCtwx4hQ=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: TYCPR01MB10760
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <00000000000028ea4105f4e2ef54@google.com> <Y/Nwfrb42e6MRrAi@FVFF77S0Q05N>
+In-Reply-To: <Y/Nwfrb42e6MRrAi@FVFF77S0Q05N>
+From:   Ard Biesheuvel <ardb@kernel.org>
+Date:   Mon, 20 Feb 2023 14:18:23 +0100
+X-Gmail-Original-Message-ID: <CAMj1kXGhWKPbZAeEx4HOqhswx__mY_mZCzdhgaj6eWw2z3PSQg@mail.gmail.com>
+Message-ID: <CAMj1kXGhWKPbZAeEx4HOqhswx__mY_mZCzdhgaj6eWw2z3PSQg@mail.gmail.com>
+Subject: Re: [syzbot] upstream-arm64 build error
+To:     Mark Rutland <mark.rutland@arm.com>
+Cc:     syzbot <syzbot+f8ac312e31226e23302b@syzkaller.appspotmail.com>,
+        catalin.marinas@arm.com, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com,
+        will@kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-+ Rob , Krzysztof Kozlowski
+On Mon, 20 Feb 2023 at 14:07, Mark Rutland <mark.rutland@arm.com> wrote:
+>
+> On Fri, Feb 17, 2023 at 02:39:55AM -0800, syzbot wrote:
+> > Hello,
+> >
+> > syzbot found the following issue on:
+> >
+> > HEAD commit:    2d3827b3f393 Merge branch 'for-next/core' into for-kernelci
+> > git tree:       git://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git for-kernelci
+> > console output: https://syzkaller.appspot.com/x/log.txt?x=160f19d7480000
+> > kernel config:  https://syzkaller.appspot.com/x/.config?x=f5c7f0c5a0c5dbdb
+> > dashboard link: https://syzkaller.appspot.com/bug?extid=f8ac312e31226e23302b
+> > compiler:       Debian clang version 15.0.7, GNU ld (GNU Binutils for Debian) 2.35.2
+> > userspace arch: arm64
+> >
+> > IMPORTANT: if you fix the issue, please add the following tag to the commit:
+> > Reported-by: syzbot+f8ac312e31226e23302b@syzkaller.appspotmail.com
+> >
+> > failed to run ["make" "-j" "64" "ARCH=arm64" "CROSS_COMPILE=aarch64-linux-gnu-" "CC=clang" "Image.gz"]: exit status 2
+>
+> For the benefit of others, the actual error from the console log is:
+>
+>   LD      .tmp_vmlinux.kallsyms1
+>   aarch64-linux-gnu-ld: ID map text too big or misaligned
+>   make[1]: *** [scripts/Makefile.vmlinux:35: vmlinux] Error 1
+>   make: *** [Makefile:1264: vmlinux] Error 2
+>
+> ... and I see the same on for-next/core with my usual fuzzing configs applied
+> atop, building with GCC 12.1.0.
+>
+> That "ID map text too big or misalignes" error is from an assertion in arm64's
+> vmlinux.lds.S, and if I hack that out, the kernel builds and the idmap text
+> section is 4K aligned and ~2900 bytes in size.
+>
+> My config worked on v6.2-rc3, and bisecting led me to commit:
+>
+>   3dcf60bbfd284e5e ("arm64: head: Clean the ID map and the HYP text to the PoC if needed")
+>
+> ... which plays with sections a bit, but doesn't do anything obviously wrong.
+>
+> I think the error is misleading, and what's actually happening here is that the
+> size of the .idmap.text section hasn't been determined at the point the
+> assertion is tested.
+>
+> With my config, the Image size is ~242MiB, and I think what's happening is that
+> some branches from .idmap.text to .text are (possibly) out-of-range, but the
+> linker doesn't know the final position of the sections yet and hasn't placed
+> PLTs, and doesn't know the final size of the sections.
+>
+> I don't know much about the linker, so that's conjecture, but the below diff
+> got rid of the build error for me.
+>
 
-> -----Original Message-----
-> From: Biju Das <biju.das.jz@bp.renesas.com>
-> Sent: Monday, February 20, 2023 1:13 PM
-> To: Michael Turquette <mturquette@baylibre.com>; Stephen Boyd
-> <sboyd@kernel.org>
-> Cc: Biju Das <biju.das.jz@bp.renesas.com>; linux-clk@vger.kernel.org; Gee=
-rt
-> Uytterhoeven <geert+renesas@glider.be>; Kuninori Morimoto
-> <kuninori.morimoto.gx@renesas.com>; Prabhakar Mahadev Lad
-> <prabhakar.mahadev-lad.rj@bp.renesas.com>; Fabrizio Castro
-> <fabrizio.castro.jz@renesas.com>; Mark Brown <broonie@kernel.org>; Takash=
-i
-> Iwai <tiwai@suse.de>; alsa-devel@alsa-project.org; linux-renesas-
-> soc@vger.kernel.org
-> Subject: [PATCH RFC 0/3] Add Versa3 clock generator support
->=20
-> The 5P35023 is a VersaClock programmable clock generator and it provides =
-6
-> clk outputs {diff2, diff1, se3, se2, se1 and refin}.
->=20
-> It has an internal OTP memory allows the user to store the configuration =
-in
-> the device. After power up, the user can change the device register setti=
-ngs
-> through the I2C interface when I2C mode is selected.
->=20
-> This driver is for overriding OTP default values during boot based on a f=
-ull
-> register map from DT, and also minimal support to change the parent of a
-> output clock.
->=20
-> The motivation for developing this driver is for supporting 48KHz
-> playback/record with audio codec on RZ/G2L SMARC EVK.
->=20
-> On RZ/G2L SMARC EVK, By default audio mclk is connected to
-> 11.2896 MHz clk which is multiple of 44.1KHz.
->=20
-> Please see the below default OTP configuration of Dividers connected to
-> output clocks.
->=20
-> DIV3 12.2880 MHz   DIFF2--> Audio clk2
-> DIV5 11.2896 MHz   SE1  --> Audio clk1
-> DIV5 11.2896 MHz   SE2  --> Audio mck
-> DIV4 12      MHz   SE3  --> This clk Not used
-> DIV1 25 MHz        DIFF1-->Ethernet clk
-> Ref1-> 24MHz
->=20
-> With this setup, we won't be able to do 48KHz playback/record on audio
-> codec, as mck is always connected to 11.2896MHz clk.
->=20
-> But by programming the i2c, we can make use of DIV4 to generate 12.2880 M=
-Hz
-> and make that as parent of SE2 and there by supporting 48KHz
-> playback/record.
->=20
-> A block diagram with modification can be find here[1]
-> [1] https://paste.pics/a253ce7cdc8720c3b5eb6953b97b25ff=20
->=20
-> DIV3 12.2880 MHz   DIFF2--> Audio clk2
-> DIV5 11.2896 MHz   SE1  --> Audio clk1
-> DIV5 11.2896 MHz | SE2  --> Audio mck
-> DIV4 12.2880 MHz |
-> DIV2 12      MHz   SE3  --> This clk Not used
-> DIV1 25 MHz        DIFF1--> Ethernet clk
-> Ref1-> 24MHz
->=20
-> The driver can read a full register map from the DT, and will use that
-> register map to initialize the clk generator when the system boots.
-> and later, based on sampling rate, it switches the parent of SE2 and supp=
-ort
-> both 44.1 and 48 KHz playback/record at run time.
->=20
-> 48KHz playback
-> 1f: f6 --> setting Div4 as clock source for se2 Read at address  0x10049C=
-00
-> : 0x300B4022 --> Setting Audio clk2 in SSI
->        pfd2                           1        1        0    24000000
->           pll2                        1        1        0   491519897
->              div4_mux                 1        1        0   491519897
->                 div4                  1        1        0    12287998
->                    se2_mux            1        1        0    12287998
->                       se2             1        1        0    12287998
->=20
-> 44.1KHz playback
-> 1f: b6 --> setting Div5 as clock source for se2 Read at address  0x10049C=
-00:
-> 0x700B4022--> Setting Audio clk1 in SSI
->     pfd3_mux                          1        1        0    24000000
->        pfd3                           1        1        0      960000
->           pll3                        1        1        0   564480000
->              div5                     1        1        0    11289600
->                 se2_mux               1        1        0    11289600
->                    se2                1        1        0    11289600
->=20
-> Please provide your valuable comment for this patch series.
->=20
-> Biju Das (3):
->   dt-bindings: clock: Add Renesas versa3 clock generator bindings
->   drivers: clk: Add support for versa3 clock driver
->   arm64: dts: renesas: rzg2l-smarc: Use versa3 clk for audio mclk
->=20
->  .../bindings/clock/renesas,versaclock3.yaml   |  135 ++
->  .../boot/dts/renesas/rz-smarc-common.dtsi     |    7 -
->  arch/arm64/boot/dts/renesas/rzg2l-smarc.dtsi  |   35 +
->  drivers/clk/Kconfig                           |    9 +
->  drivers/clk/Makefile                          |    1 +
->  drivers/clk/clk-versaclock3.c                 | 1134 +++++++++++++++++
->  6 files changed, 1314 insertions(+), 7 deletions(-)  create mode 100644
-> Documentation/devicetree/bindings/clock/renesas,versaclock3.yaml
->  create mode 100644 drivers/clk/clk-versaclock3.c
->=20
-> --
-> 2.25.1
+This issue was reported before here:
 
+https://lore.kernel.org/all/CAMj1kXGAf7ikEU5jLoik0xrOde0xBg0yJkOo5=PtEtNXoUxMXA@mail.gmail.com/
+
+and the bisect ended up somewhere else.
+
+The issue seems to be where exactly the veneers for the entire image
+are dumped, and when this is right after .idmap.text (being the last
+input section with the EXEC ELF attribute), it pushes the
+__idmap_text_end symbol over the next 4k boundary.
+
+Not sure what the most robust fix would be here - we could try whether
+or not placing *.text.stub input sections explicitly makes a
+difference here but it still feels a bit ad-hoc (surprisingly,
+.idmap.text.stub does not get flagged as an orphan input section even
+though it is not mentioned in the linker script)
