@@ -2,137 +2,189 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 53A0669CB99
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Feb 2023 14:07:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 682C069CB9E
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Feb 2023 14:10:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232170AbjBTNHk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Feb 2023 08:07:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52146 "EHLO
+        id S231960AbjBTNKJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Feb 2023 08:10:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54430 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231982AbjBTNHd (ORCPT
+        with ESMTP id S230265AbjBTNKH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Feb 2023 08:07:33 -0500
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.17.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0EAFA1BACE;
-        Mon, 20 Feb 2023 05:07:29 -0800 (PST)
-Received: from [192.168.1.155] ([77.2.78.131]) by mrelayeu.kundenserver.de
- (mreue107 [212.227.15.183]) with ESMTPSA (Nemesis) id
- 1MAP77-1pMeAu3XFT-00BpPs; Mon, 20 Feb 2023 14:07:27 +0100
-Message-ID: <f1f102dc-0e9a-4a13-1e40-f4c3d594fe7e@metux.net>
-Date:   Mon, 20 Feb 2023 14:07:27 +0100
+        Mon, 20 Feb 2023 08:10:07 -0500
+Received: from mail-lj1-x22a.google.com (mail-lj1-x22a.google.com [IPv6:2a00:1450:4864:20::22a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBE19D538
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Feb 2023 05:10:04 -0800 (PST)
+Received: by mail-lj1-x22a.google.com with SMTP id b13so2084391ljf.6
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Feb 2023 05:10:04 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=TXPP8v5Me9ivNoHQ306aXdAuISsblqiSjG1puCpj0yQ=;
+        b=R84wIUvdDXaOchL9oK69XjlSdwtT1eJGbkMutWTGmyGgOFMn+1/F2qxZBDj4gH8QcR
+         Zx5M97qEXj2qZ1qk299LPooHL5gW/BccECBM+69IIhWCCQBAoTD4um34lv2SNbGQUZjJ
+         ibYe4mSvY50GvzHjwqJ0ToxD8kqEd5sGCJW8Hyxm3gb8vMUgBgo6Bn2IL0+y6aOyDOlx
+         4iAtGB4nf9td+arSNz6hCW/I6odo1GzR7VsPrg35mo2LHZt+42R1fp66c6CAlobE66zI
+         d1lRYrHDXrEFu+D6NRzddEUaudMScskhvo0sF2xM6IKbbOyK2lUQjAeExQ8z/RJ7+rsV
+         adyQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=TXPP8v5Me9ivNoHQ306aXdAuISsblqiSjG1puCpj0yQ=;
+        b=5Qi53HEsX9S+LtYZeHw4Ee1cObQq50jbb0sR252pEMebnnJjjOgEYFtYY7ZhEMARSs
+         6DA7feGIk86inrpdvWRPLpnlFzbjzBreT+KlfBGHLxBxotf1W57EJjiIM2VGYoN9kxQa
+         hUlKuUYy/y4htDiDeUAvTW4yQD8JlobrAdJ3yA/46Zu5CRFDINJHYwaGSY7L0fHQYqZg
+         +YjTA6S+W2BxYZSV+/VFPjspyB9bs52YJwIWoqvtEYcP3k8CfTupJuReMY2f6gaD7ypp
+         gOIynEP0UMCns1BJi7njgP4h2wHTxG/qhK2bKotz7KIX0OiDEBv7pzb/udsfU4CPEBwx
+         potw==
+X-Gm-Message-State: AO0yUKWOKgOmNZiomBRGAXgqas4MGeF91rsUBfBkTMgDzncaSgsozK3N
+        VfqIco7SmlI0bmg/oeP9bJVCCw==
+X-Google-Smtp-Source: AK7set/5hkcbqDQjuszf4v7bV6XAO+pNUKVXF/eLSFcvADD1XSYN5HZGhYOgH/zB9LAx1JZo9yuaPQ==
+X-Received: by 2002:a2e:a4a9:0:b0:294:66bc:7605 with SMTP id g9-20020a2ea4a9000000b0029466bc7605mr435943ljm.30.1676898602985;
+        Mon, 20 Feb 2023 05:10:02 -0800 (PST)
+Received: from [192.168.1.101] (abxh184.neoplus.adsl.tpnet.pl. [83.9.1.184])
+        by smtp.gmail.com with ESMTPSA id t28-20020a2e8e7c000000b002946be8475esm341419ljk.135.2023.02.20.05.10.01
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 20 Feb 2023 05:10:02 -0800 (PST)
+Message-ID: <22c180ed-0ef9-7ef5-9c13-31fd658e5fa8@linaro.org>
+Date:   Mon, 20 Feb 2023 14:10:00 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: RFC: shall we have a baseband subsystem ?
-Content-Language: tl
-To:     platform-driver-x86@vger.kernel.org,
-        "Enrico Weigelt, metux IT consult" <info@metux.net>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        netdev@vger.kernel.org, linux-wireless@vger.kernel.org,
-        isdn@linux-pingi.de
-References: <20230113231139.436943-1-philipp@redfish-solutions.com>
- <44e0ef20-d6d3-4c87-1828-f88dbc08e942@redhat.com>
- <7f5644a8-2e6f-b4c6-4db8-2419d1a7f005@metux.net>
- <48beb1c5-5136-a287-1a74-bdc558bffe3e@wildgooses.com>
-From:   "Enrico Weigelt, metux IT consult" <lkml@metux.net>
-In-Reply-To: <48beb1c5-5136-a287-1a74-bdc558bffe3e@wildgooses.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+ Thunderbird/102.8.0
+Subject: Re: [PATCH v10 2/6] dt-bindings: opp: v2-qcom-level: Document CPR3
+ open/closed loop volt adjustment
+Content-Language: en-US
+To:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Rob Herring <robh@kernel.org>
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Niklas Cassel <nks@flawful.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Robert Marko <robimarko@gmail.com>,
+        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-pm@vger.kernel.org
+References: <20230217-topic-cpr3h-v10-0-67aed8fdfa61@linaro.org>
+ <20230217-topic-cpr3h-v10-2-67aed8fdfa61@linaro.org>
+ <20230217231330.GA2238521-robh@kernel.org>
+ <c2bfa6b0-edee-b492-d40e-cf43291b90d4@linaro.org>
+ <1274e18b-e35e-7997-68ea-22aa11592720@collabora.com>
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+In-Reply-To: <1274e18b-e35e-7997-68ea-22aa11592720@collabora.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Provags-ID: V03:K1:vv9F4NyMh6vUI+tw/EyExBNzQXIMuyenETIWWlm+TV7N2oBo53u
- K0It3+xrz3NQrzlslBqG276mtLxVAT5cIgeW4OZFVAPswpUpbOw6vVqI+jh8/XCbg+fiDa/
- bVNEIK7dlmIddoGSWOSqjJAG676VYJW6LLfS5HtkTVNpyJr0hXLIhcUj3xJBTUkiNOkC/pW
- 1RjC6pZFM/w21zmLBkfhw==
-UI-OutboundReport: notjunk:1;M01:P0:2b2YihBhKJo=;KyBhkNudcj6r+eMb/eJHR8eKUfM
- lZFLYXeVK/b7W42L6x9x5nxj51PQTP6vRT0W7G7d2/LxGWzUHWTvSnLhJBs+7edEFba8a3xm4
- 99YgZD2XRdoPe5wa9sckzXB/pE1J08dLsegylhwuSjHSCwQQLYnQ6dGisKGTkI/2Va3CM+Era
- RFCJajnCGGwOK04FqsT44tU0Vci9EsR72Ku5+zwakQ7fuT3soZiAcsb6HkiQb+efA6Zee2j4U
- XYYRx1Octn8uC4GcAGao8j/FOou4jcDJHkjantEjFQvmdwI+rrwuwH3ZivhdIb+Es5M98Kia7
- 4Wc1omjVJ9bmBAI7vsX36+bTHuSMh6vxs01/fQSBwUT71frjKLqxRqdEWGvfnzfeDHWvjey0o
- 1SsreL5QZaXkeEHsecHxKAOIsCeGCljwJTz/OHt9l4daXxK1kKqc80KZeB+WqlcU2AVrgk9X4
- 02OfkyJxkOfusYnfRtOrbgrpR9c3of1CzpJ+4/jsyHKc4X8YBi3WIGGH5vkPMX/i5bTkwz/t0
- M1MyUbsuFXQ6m/nGcN59Oa4C76y209AMH1mdrxD6KTom7ky9KtmfkhGYSib//5Uxns6fKhFki
- ReYW2us4SzODHvtaKsw6edJqYwN2OZVlHrnp7CoBlZrpkud6qIwpQoQ6HYZcRhrwYBzuf6Lm2
- REkH0bYd8wmgU0j4cX30VaS1OHqCGwMZDYF/kcjOOw==
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello folks,
 
 
-in recent times we had several discussions on issues related to
-controlling various baseband controllers, which tend to be quite
-board specific - for example:
+On 20.02.2023 12:27, AngeloGioacchino Del Regno wrote:
+> Il 18/02/23 01:26, Konrad Dybcio ha scritto:
+>>
+>>
+>> On 18.02.2023 00:13, Rob Herring wrote:
+>>> On Fri, Feb 17, 2023 at 12:08:25PM +0100, Konrad Dybcio wrote:
+>>>> CPR3 and newer can be fed per-OPP voltage adjustment values for both
+>>>> open- and closed-loop paths to make better decisions about settling
+>>>> on the final voltage offset target. Document these properties.
+>>>>
+>>>> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+>>>> ---
+>>>>   .../devicetree/bindings/opp/opp-v2-qcom-level.yaml         | 14 ++++++++++++++
+>>>>   1 file changed, 14 insertions(+)
+>>>>
+>>>> diff --git a/Documentation/devicetree/bindings/opp/opp-v2-qcom-level.yaml b/Documentation/devicetree/bindings/opp/opp-v2-qcom-level.yaml
+>>>> index a30ef93213c0..93cc88434dfe 100644
+>>>> --- a/Documentation/devicetree/bindings/opp/opp-v2-qcom-level.yaml
+>>>> +++ b/Documentation/devicetree/bindings/opp/opp-v2-qcom-level.yaml
+>>>> @@ -34,6 +34,20 @@ patternProperties:
+>>>>           minItems: 1
+>>>>           maxItems: 2
+>>>>   +      qcom,opp-cloop-vadj:
+>>>> +        description: |
+>>>> +          A value representing the closed-loop voltage adjustment value
+>>>
+>>> A value?
+>>>
+>>>> +          associated with this OPP node.
+>>>> +        $ref: /schemas/types.yaml#/definitions/int32-array
+>>>> +        maxItems: 2
+>>>
+>>> Or 2 values?
+>> Right, this description doesn't make any sense if you're just
+>> looking at the documentation without looking at the driver..
+>>
+>> Generally, each CPR3 instance can have multiple "threads"
+>> (each one of which regulates voltage for some on-SoC IP or
+>> part of it). The nth entry in the qcom,opp-[co]loop-vadj
+>> array corresponds to a voltage offset for the nth thread.
+>>
+>> If the nth entry in the array is missing, the driver assumes
+>> the arr[0] one is "global" to this CPR3 instance at this OPP
+>> level and applies it to all threads. ...and looking at it
+>> again, this is sorta just bad design, especially if you
+>> take into account that there's no known user of CPR3 that
+>> employs more than 2 threads.
+>>
+>> I'll remove that from the driver and make the description clearer.
+>>
+> 
+> description:
+>   Represents the closed-loop voltage adjustment associated with
+>   this OPP node.
+> 
+> P.S.: Drop '|' here and on oloop!
+> 
+> This binding is intended to support either single or multiple CPR threads;
+> the driver's behavior is unimportant as bindings describe the hardware,
+> not the driver.
+Correct, but specifying just one value regardless of the number of threads
+is not in the spirit of representing things clearly. These properties do
+not describe the hardware. They let us pass configuration values that are
+specific to the SoC hosting the CPR, not to the CPR itself.
 
-* RST lines on APU board family's M2 slots, which can be used to
-   devices in there, eg. modems (actual GPIO is model specific)
-* switchable power supply (onboard basebands)
-* SIM-slot multiplexers (also on APU)
-* RF exposure sensors for TX strength regulation
-* active antenna or boosters
-* fly-mode (rfkill)
-
-Originally I thought about extending rfkill, but quickly turned out that
-there're too many aspects in here that are way ouf of scope for rfkill.
-Similar for isdn4linux. And seems netdev the right place, since it 
-usually comes into play much later, when an actual connection is made.
-
-The biggest challenge from userland/application side IMHO is probing the
-presence of those feature and the actual connection between individual
-pieces. Since the kernel usually knows best about the current HW setup
-and serves as an universal HAL in many many other places, I believe that
-it also should carry the necessary knowledge of those stuff, too.
-
-I'm currently thinking of a new device class, representing the whole
-baseband setup with its surrounding peripherals in sysfs. There we'll
-find several entries, eg.:
-
-* model information, supported protocols and interfaces
-* link to the tty device (if it's speaking AT commands)
-* enumerating and setting sim slot choices
-* get / set power state
-* trigger HW reset
-* get/set TX limits
-* booster configuration
-* link to netdev (if applicable)
-* link to rfkill
-* link to mixer/dsp channels for direct mic links
-...
-
-
-Userland can now query this information or act on these devices in 
-standard way, no need to care about individual HW details anymore.
-Even on an average PC, this can make detection of connected basebands
-easier (eg. no need to configure the tty device name, ...)
-
-Probing probably needs some callbacks for dealing with hotplug, so board
-drivers can act when some other subsys detects a device that might be a
-baseband. For example on the APU boards, basebands are connected via
-USB, so we have to hook in here and let the board driver check whether 
-the new USB device is a baseband and in which HW slot it's in - and in
-this case it sets up baseband device and connects all other peripherals.
-
-Actually, I'm not fully settled on the naming yet - "baseband" was just
-the first to come in mind, but this should also work for other devices
-like wifi (hmm, maybe even some wired ones ?).
-
-
-What's you oppinion on that ?
-
-
---mtx
-
--- 
----
-Hinweis: unverschlüsselte E-Mails können leicht abgehört und manipuliert
-werden ! Für eine vertrauliche Kommunikation senden Sie bitte ihren
-GPG/PGP-Schlüssel zu.
----
-Enrico Weigelt, metux IT consult
-Free software and Linux embedded engineering
-info@metux.net -- +49-151-27565287
+Konrad
+> 
+> Regards,
+> Angelo
+> 
+>>
+>> Also, only noticed now.. "qcom,sdm630-cprh" was not documented,
+>> so that's to be fixed for the next submission as well!
+>>
+>>
+>> Konrad
+>>>
+>>>> +
+>>>> +      qcom,opp-oloop-vadj:
+>>>> +        description: |
+>>>> +          A value representing the open-loop voltage adjustment value
+>>>> +          associated with this OPP node.
+>>>> +        $ref: /schemas/types.yaml#/definitions/int32-array
+>>>> +        maxItems: 2
+>>>> +
+>>>>       required:
+>>>>         - opp-level
+>>>>         - qcom,opp-fuse-level
+>>>>
+>>>> -- 
+>>>> 2.39.1
+>>>>
+> 
+> 
+> 
