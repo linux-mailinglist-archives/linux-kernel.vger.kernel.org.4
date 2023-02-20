@@ -2,121 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D0BB69CAEA
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Feb 2023 13:26:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 412AB69CB0F
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Feb 2023 13:33:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231625AbjBTM0s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Feb 2023 07:26:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45954 "EHLO
+        id S231660AbjBTMdB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Feb 2023 07:33:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53200 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232027AbjBTM0m (ORCPT
+        with ESMTP id S230257AbjBTMc7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Feb 2023 07:26:42 -0500
-Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B5B71C5A9
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Feb 2023 04:26:00 -0800 (PST)
-Received: by mail-ed1-x532.google.com with SMTP id ck15so5208878edb.0
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Feb 2023 04:26:00 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:message-id:subject:cc
-         :to:from:date:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=EynXUdhr4SzeElz1eUHPbvQuXV4RNv2h58STo+TjxMM=;
-        b=GiTK1w5Z+YcYQzbcxnKXsM9caMz7CXXQYbr6qfxlY6WJg/ZWJYsVUeWwPf3t6/EqfQ
-         FtAhAJQSW+9qbYqGMsKX1UXiA2jSnLcv0SFFllIiOCzWa/mSdmz10WyUN1UG0O6ZpOHJ
-         XPouP61z3KCTTSB0YYHwO7/JibmjfLTiS4+JUWoj5/QiMbFC9AfYfZMVrtLUPyarXg0u
-         iutZ8+VYcN8W6cwHB/KFVNAkdyGcBDkIrInYOwj4mq4QPpHSiqFRcaYBglKUI3JCP5sT
-         6tgnwlGBd6UqKvR6nqKtGQs4GwfS3XT4orAsYznPYbIX6gsbtoB/zyNzRnlI0pdIzC7z
-         R4Tw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:message-id:subject:cc
-         :to:from:date:sender:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=EynXUdhr4SzeElz1eUHPbvQuXV4RNv2h58STo+TjxMM=;
-        b=j9zCFuOun0EW85Mp7LB7BtRO6A9TFfHDy/qLFMs9eHjCdGbm2oShn9IjbOfKxU4P1l
-         SFWVtsG3CM29zcUqcMTXlhLYb1tICM5afBrc6W4+F5jMyDwRMBv/YKkZJM6mvTIgQdaP
-         ccxEx9YOHS6fDiu3TvcXHFpIuxhCbPAeZ6+u24qQe5PAEUcEocOK0T/GXvDFMd8E9HyJ
-         sL943C3+eV7/D5AAfuJKQPu7eq8Wz/GdHPY3vIiakafoQRQzZns7G2BC7tbzDBGxwBtd
-         5fGopbK1pnzeT4b36EOkURmJ3lZik7BvQ/+oVAEqVIaSK8FegOPrFY0rlo4kIZDYaZhd
-         IIXQ==
-X-Gm-Message-State: AO0yUKU37+xUDPfs+z6MJPpMflf1xksKe2cJ3XxiITvMpYP8P9MGO7fn
-        hQ+QwQMIEATRGo1h0Wfj0OI=
-X-Google-Smtp-Source: AK7set+pQn0BPSscW+Pg1PYHUKNWDNrBX010kvZDmZBoDAavK0KSLo/kbPxRt0m5j0vXTKOSj8KWhQ==
-X-Received: by 2002:a17:906:f0ca:b0:8b2:37b5:cc4 with SMTP id dk10-20020a170906f0ca00b008b237b50cc4mr11994036ejb.7.1676895957189;
-        Mon, 20 Feb 2023 04:25:57 -0800 (PST)
-Received: from gmail.com ([31.46.241.99])
-        by smtp.gmail.com with ESMTPSA id u18-20020a50c052000000b004ace62d6eaesm74990edd.57.2023.02.20.04.25.56
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 20 Feb 2023 04:25:56 -0800 (PST)
-Sender: Ingo Molnar <mingo.kernel.org@gmail.com>
-Date:   Mon, 20 Feb 2023 13:25:50 +0100
-From:   Ingo Molnar <mingo@kernel.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     linux-kernel@vger.kernel.org,
-        Peter Zijlstra <peterz@infradead.org>,
-        Will Deacon <will@kernel.org>,
-        Waiman Long <longman@redhat.com>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Andrew Morton <akpm@linux-foundation.org>
-Subject: [GIT PULL] locking changes for v6.3
-Message-ID: <Y/NmzouehvMWTPVZ@gmail.com>
+        Mon, 20 Feb 2023 07:32:59 -0500
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56FA776A7;
+        Mon, 20 Feb 2023 04:32:55 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1676896376; x=1708432376;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=vgSCEUc8iWaLUJXuISUE4WfvVHLMArLiY4LlOtGKzjE=;
+  b=CeVYdhKqQX68jyRF9UBPb1yetaHoIyGVK5YUeJmex3hQKdNRmhHBYp6D
+   oiru2zM86xdfNjwL9VZ41HyIG7jsNbRmoF8kMs8DNMBm+Tf7v+A6ZhirW
+   X3Bx+ABbmp8qhYJNz0xlJ1m4P2vSThqzADqOAZcJjgR+os5uASi3v2Cd8
+   Hgwcy6jFh6TKgHCtsk7xwEbad0JcbKV6FUOdm1VtIrw/b2oyioZblZpi5
+   hSjDRMkTFsWph94G45J70Jsr/PCoe1AL2p4uzyMUxwVg15s4qVSfrxJOr
+   fKmN+3Bf2GnX8AfjwPQZs0NIglClQR4bL+9gQl/BcZLCSruh443nN7Tbl
+   g==;
+X-IronPort-AV: E=Sophos;i="5.97,312,1669100400"; 
+   d="scan'208";a="201422084"
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa2.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 20 Feb 2023 05:32:55 -0700
+Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
+ chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.16; Mon, 20 Feb 2023 05:32:51 -0700
+Received: from marius-VM.mshome.net (10.10.115.15) by
+ chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server id
+ 15.1.2507.16 via Frontend Transport; Mon, 20 Feb 2023 05:32:50 -0700
+From:   <marius.cristea@microchip.com>
+To:     <jic23@kernel.org>, <lars@metafoo.de>, <robh+dt@kernel.org>
+CC:     <linux-iio@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <marius.cristea@microchip.com>
+Subject: [PATCH v1 0/2] adding support for Microchip PAC193X Power Monitor
+Date:   Mon, 20 Feb 2023 14:32:30 +0200
+Message-ID: <20230220123232.413029-1-marius.cristea@microchip.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y5eMDYABnSszN9/s@gmail.com>
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+From: Marius Cristea <marius.cristea@microchip.com>
 
-Linus,
+Adding support for Microchip PAC193X series of Power Monitor with
+Accumulator chip family.
 
-Please pull the latest locking tree from:
+Differences related to previous patch:
 
-   git://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git locking-core-2023-02-20
-
-   # HEAD: 3b4863fa5b7dd50dab1b10abbed938efd203752f vduse: Remove include of rwlock.h
-
-Updates for this cycle were:
-
- - rwsem micro-optimizations
- - spinlock micro-optimizations
- - cleanups, simplifications
-
- Thanks,
-
-	Ingo
-
------------------->
-Guo Ren (1):
-      locking/qspinlock: Micro-optimize pending state waiting for unlock
-
-Sebastian Andrzej Siewior (2):
-      locking/lockdep: Remove lockdep_init_map_crosslock.
-      vduse: Remove include of rwlock.h
-
-Uros Bizjak (2):
-      x86/PAT: Use try_cmpxchg() in set_page_memtype()
-      x86/ACPI/boot: Use try_cmpxchg() in __acpi_{acquire,release}_global_lock()
-
-Waiman Long (3):
-      locking/rwsem: Prevent non-first waiter from spinning in down_write() slowpath
-      locking/rwsem: Disable preemption in all down_read*() and up_read() code paths
-      locking/rwsem: Disable preemption in all down_write*() and up_write() code paths
+v1:
+- first version comitted to review
 
 
- arch/x86/kernel/acpi/boot.c          | 16 +++----
- arch/x86/mm/pat/memtype.c            |  4 +-
- drivers/vdpa/vdpa_user/iova_domain.h |  1 -
- include/linux/lockdep.h              |  1 -
- kernel/locking/qspinlock.c           |  4 +-
- kernel/locking/rwsem.c               | 87 +++++++++++++++++++++---------------
- 6 files changed, 64 insertions(+), 49 deletions(-)
+Marius Cristea (2):
+  dt-bindings: iio: adc: adding dt-bindings for PAC193X
+  iio: adc: adding support for pac193x
+
+ .../bindings/iio/adc/microchip,pac193x.yaml   |  122 +
+ MAINTAINERS                                   |    7 +
+ drivers/iio/adc/Kconfig                       |   12 +
+ drivers/iio/adc/Makefile                      |    1 +
+ drivers/iio/adc/pac193x.c                     | 2072 +++++++++++++++++
+ 5 files changed, 2214 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/iio/adc/microchip,pac193x.yaml
+ create mode 100644 drivers/iio/adc/pac193x.c
+
+-- 
+2.34.1
+
