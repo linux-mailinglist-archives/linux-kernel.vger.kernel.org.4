@@ -2,348 +2,160 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 797EE69C6FF
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Feb 2023 09:49:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 04BBF69C6F5
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Feb 2023 09:48:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231335AbjBTItK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Feb 2023 03:49:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32884 "EHLO
+        id S231287AbjBTIsP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Feb 2023 03:48:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60460 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231298AbjBTIsh (ORCPT
+        with ESMTP id S230508AbjBTIro (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Feb 2023 03:48:37 -0500
-Received: from mail-pg1-x543.google.com (mail-pg1-x543.google.com [IPv6:2607:f8b0:4864:20::543])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48C9BA5E8;
-        Mon, 20 Feb 2023 00:48:36 -0800 (PST)
-Received: by mail-pg1-x543.google.com with SMTP id z10so157728pgr.8;
-        Mon, 20 Feb 2023 00:48:36 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=58ee7vnFHWkvoXsHnSOER/mqNBtRIp0tw7RNuB1f0XA=;
-        b=Lu1Vql4e6ToBfvoOVCKEiwdpSdadoczUa/i3fxqR6SZSAnxSduKN37/sM4rUrp5ZIy
-         446evvNrGO6T0MXZMXRIv4zXih7aXjoKk5mauNgwlq3L/86DYR5TlvYVx9p7A700wZ/i
-         SV5wO4l2D2JBO6uOwsbIni0XoyxSaVc9XjLe9oJEbS1YC2PGea+Ok1Un9rpikY6jyxZX
-         0AmUBVzxyqoOQBvlGddDeVCsiLe15GvxpLzci7ku/W/9UUB/JdJz/qRzBCkb/gm04ttB
-         08hx9Ix/DISi+6zR7gvkqgmd+YNGs6B4qGCeWWJC8bWJMRD6TG40rEaaf0wZgBBWxyMZ
-         7LKQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=58ee7vnFHWkvoXsHnSOER/mqNBtRIp0tw7RNuB1f0XA=;
-        b=NytfX3528vJL8XF9cfIAMKJddbYhWFLGL/wEomWR5wOxF43FbgsB+RMkeWJI9HmedE
-         mgDS0bpzcfPbLK+zFJGq5Fdt58YJjlofrPuD1yNs9RP9KJUACmH8i0hWu0DAXJtY+Bal
-         zQqC9WO40I9JE2lK21PXIJL6oEJ4ENGFhRokH9TUx4BTTj6bSjJpq1O/BPoN3vPgoDFv
-         Z08+ASRP8Vy5oQc7nQoYNZN7QNXbZtzwrcmw1KI8pMxV+3ceEnBkZejwlO3i38rFij8G
-         1iRdcGw74Vu5au/otq2W0TbrKVgp2+Ci0/aU349MG77LZAXLG6IKCC5x8BQZzUjg4hmN
-         FALw==
-X-Gm-Message-State: AO0yUKWDNWeegr6vcfNBEuFxTV7NY25IZz6F4JkN0ZnJRH7sgyednKP9
-        3imUiEORhEyQ8427ir5CiZk=
-X-Google-Smtp-Source: AK7set9wo3WK9QqzzSKtbZz179DmHRUc1mL7lM51Aknbh/DIQFUioUcdu4Z37eOPdMCugTHUHg3y7A==
-X-Received: by 2002:a62:17ce:0:b0:5a8:abd2:2beb with SMTP id 197-20020a6217ce000000b005a8abd22bebmr1126434pfx.30.1676882915690;
-        Mon, 20 Feb 2023 00:48:35 -0800 (PST)
-Received: from localhost.localdomain ([203.205.141.21])
-        by smtp.gmail.com with ESMTPSA id n11-20020a62e50b000000b00586fbbdf6e4sm7136378pff.34.2023.02.20.00.48.32
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 20 Feb 2023 00:48:35 -0800 (PST)
-From:   menglong8.dong@gmail.com
-X-Google-Original-From: imagedong@tencent.com
-To:     andrii.nakryiko@gmail.com, alan.maguire@oracle.com
-Cc:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
-        martin.lau@linux.dev, song@kernel.org, yhs@fb.com,
-        john.fastabend@gmail.com, kpsingh@kernel.org, sdf@google.com,
-        haoluo@google.com, jolsa@kernel.org, bpf@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Menglong Dong <imagedong@tencent.com>
-Subject: [PATCH bpf-next v2 3/3] selftests/bpf: add test for legacy/perf kprobe/uprobe attach mode
-Date:   Mon, 20 Feb 2023 16:47:11 +0800
-Message-Id: <20230220084711.261642-4-imagedong@tencent.com>
-X-Mailer: git-send-email 2.39.0
-In-Reply-To: <20230220084711.261642-1-imagedong@tencent.com>
-References: <20230220084711.261642-1-imagedong@tencent.com>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        Mon, 20 Feb 2023 03:47:44 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 450D1C16F
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Feb 2023 00:47:42 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E1FE960CF7
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Feb 2023 08:47:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3D9EEC433D2;
+        Mon, 20 Feb 2023 08:47:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1676882861;
+        bh=DmuaPjOTORNSh9WvrC/jxjMBglQwDodpPLZaRxHc1iE=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=RBKsNFWNlxx9RBbi5UH/AXVHT9I3FPU2tdAcGOslxCwxcyHm/HnvCHUGrNVe/2qTK
+         5zxDx66DW0f7/awhbPBUZ4o3O46iwo18KNJuZQKVp9L1AL6l4D7VUpRB8JpGYTwohs
+         je6F3NbztfXjQK2TWLMtGthFf95Dc6hQHFJ4vtAYCmf/kmzzjWXdfMSBqK9uRAzpSH
+         UIeneztEhXvlaMi5/pbGaryvlPwwMO9b/JVxaUZgBW5bwnSSqBXEUBZFHFrMCrjvNV
+         DaRjDyvkeTsm5NfBBL3LA9bk2D1pV5vpoY0slkCImKo4fQsXoSXAMqTwOIo2e46k+C
+         bt48rgZ9L2o2Q==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=goblin-girl.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <maz@kernel.org>)
+        id 1pU1pi-00BjuK-OR;
+        Mon, 20 Feb 2023 08:47:38 +0000
+Date:   Mon, 20 Feb 2023 08:47:38 +0000
+Message-ID: <86h6vgyb85.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     "Raghavendra, Vignesh" <vigneshr@ti.com>
+Cc:     Nishanth Menon <nm@ti.com>, Tero Kristo <kristo@kernel.org>,
+        Santosh Shilimkar <ssantosh@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: Re: [RFC PATCH 2/2] irqchip: irq-ti-sci-inta: Introduce IRQ affinity support
+In-Reply-To: <cba927be-a83c-d397-100c-03c89b5696ec@ti.com>
+References: <20230122081607.959474-1-vigneshr@ti.com>
+        <20230122081607.959474-3-vigneshr@ti.com>
+        <86y1ppl6pl.wl-maz@kernel.org>
+        <cba927be-a83c-d397-100c-03c89b5696ec@ti.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/28.2
+ (aarch64-unknown-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: vigneshr@ti.com, nm@ti.com, kristo@kernel.org, ssantosh@kernel.org, tglx@linutronix.de, linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Menglong Dong <imagedong@tencent.com>
+On Fri, 27 Jan 2023 17:53:55 +0000,
+"Raghavendra, Vignesh" <vigneshr@ti.com> wrote:
+>
 
-Add the testing for kprobe/uprobe attaching in default, legacy, perf and
-link mode. And the testing passed:
+[...]
 
-./test_progs -t attach_probe
-$5/1     attach_probe/manual-default:OK
-$5/2     attach_probe/manual-legacy:OK
-$5/3     attach_probe/manual-perf:OK
-$5/4     attach_probe/manual-link:OK
-$5/5     attach_probe/auto:OK
-$5/6     attach_probe/kprobe-sleepable:OK
-$5/7     attach_probe/uprobe-lib:OK
-$5/8     attach_probe/uprobe-sleepable:OK
-$5/9     attach_probe/uprobe-ref_ctr:OK
-$5       attach_probe:OK
-Summary: 1/9 PASSED, 0 SKIPPED, 0 FAILED
+> >> @@ -504,11 +509,45 @@ static void ti_sci_inta_ack_irq(struct irq_data *data)
+> >>  		ti_sci_inta_manage_event(data, VINT_STATUS_OFFSET);
+> >>  }
+> >>  
+> >> +#ifdef CONFIG_SMP
+> >> +static int ti_sci_inta_set_affinity(struct irq_data *d,
+> >> +				    const struct cpumask *mask_val, bool force)
+> >> +{
+> >> +	struct ti_sci_inta_event_desc *event_desc;
+> >> +	struct ti_sci_inta_vint_desc *vint_desc;
+> >> +	struct irq_data *parent_irq_data;
+> >> +
+> >> +	if (cpumask_equal(irq_data_get_effective_affinity_mask(d), mask_val))
+> >> +		return 0;
+> >> +
+> >> +	event_desc = irq_data_get_irq_chip_data(d);
+> >> +	if (event_desc) {
+> >> +		vint_desc = to_vint_desc(event_desc, event_desc->vint_bit);
+> >> +
+> >> +		/*
+> >> +		 * Cannot set affinity if there is more than one event
+> >> +		 * mapped to same VINT
+> >> +		 */
+> >> +		if (bitmap_weight(vint_desc->event_map, MAX_EVENTS_PER_VINT) > 1)
+> >> +			return -EINVAL;
+> >> +
+> >> +		vint_desc->affinity_managed = true;
+> >> +
+> >> +		irq_data_update_effective_affinity(d, mask_val);
+> >> +		parent_irq_data = irq_get_irq_data(vint_desc->parent_virq);
+> >> +		if (parent_irq_data->chip->irq_set_affinity)
+> >> +			return parent_irq_data->chip->irq_set_affinity(parent_irq_data, mask_val, force);
+> > 
+> > This looks completely wrong.
+> > 
+> > You still have a chained irqchip on all paths, and have to do some
+> > horrible probing to work out:
+> > 
+> > - which parent interrupt this is
+> > 
+> > - how many interrupts are connected to it
+> > 
+> > And then the fun begins:
+> > 
+> > - You have one interrupt that is standalone, so its affinity can be
+> >   moved
+> > 
+> > - An unrelated driver gets probed, and one of its interrupts gets
+> >   lumped together with the one above
+> > 
+> > - Now it cannot be moved anymore, and userspace complains
+> > 
+> > The rule is very simple: chained irqchip, no affinity management.
+> > Either you reserve a poll of direct interrupts that have affinity
+> 
+> This is what I am trying to accomplish, that is, reserve a pool of
+> direct interrupts that can be used by certain drivers that require IRQ
+> steering for performance. But I don't see a way to indicate from client
+> drivers to allocate from this reserved pool (there is no hint in
+> request_irq() call that ends up in .irq_request_resources() that I can use)
+> 
+> I can try and virtually split INTA into two irqchips perhaps, with one
+> part modeled as chained irqchip and other as stacked for the reserved
+> pool (and would have to spawn of two child msi-domains I presume).
+> But, there is only one DT node for this irqchip and thus clients cannot
+> request IRQ for reserved pool.
 
-Signed-off-by: Menglong Dong <imagedong@tencent.com>
----
- .../selftests/bpf/prog_tests/attach_probe.c   | 54 ++++++++++++++-----
- .../selftests/bpf/progs/test_attach_probe.c   | 32 -----------
- .../bpf/progs/test_attach_probe_manual.c      | 53 ++++++++++++++++++
- 3 files changed, 93 insertions(+), 46 deletions(-)
- create mode 100644 tools/testing/selftests/bpf/progs/test_attach_probe_manual.c
+I don't see why DT should be aware of this. You only need to decide at
+allocation time which one is where, and plug it at the right level.
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/attach_probe.c b/tools/testing/selftests/bpf/prog_tests/attach_probe.c
-index 9824a5eb8595..54868af49b5e 100644
---- a/tools/testing/selftests/bpf/prog_tests/attach_probe.c
-+++ b/tools/testing/selftests/bpf/prog_tests/attach_probe.c
-@@ -1,6 +1,7 @@
- // SPDX-License-Identifier: GPL-2.0
- #include <test_progs.h>
- #include "test_attach_kprobe_sleepable.skel.h"
-+#include "test_attach_probe_manual.skel.h"
- #include "test_attach_probe.skel.h"
- 
- /* this is how USDT semaphore is actually defined, except volatile modifier */
-@@ -33,33 +34,48 @@ static noinline void trigger_func4(void)
- static char test_data[] = "test_data";
- 
- /* manual attach kprobe/kretprobe/uprobe/uretprobe testings */
--static void test_attach_probe_manual(struct test_attach_probe *skel)
-+static void test_attach_probe_manual(enum probe_attach_mode attach_mode)
- {
- 	DECLARE_LIBBPF_OPTS(bpf_uprobe_opts, uprobe_opts);
-+	DECLARE_LIBBPF_OPTS(bpf_kprobe_opts, kprobe_opts);
- 	struct bpf_link *kprobe_link, *kretprobe_link;
- 	struct bpf_link *uprobe_link, *uretprobe_link;
-+	struct test_attach_probe_manual *skel;
- 	ssize_t uprobe_offset;
- 
-+	skel = test_attach_probe_manual__open();
-+	if (!ASSERT_OK_PTR(skel, "skel_kprobe_manual_open"))
-+		return;
-+
-+	if (!ASSERT_OK(test_attach_probe_manual__load(skel), "skel_manual_load"))
-+		goto cleanup;
-+	if (!ASSERT_OK_PTR(skel->bss, "manual_check_bss"))
-+		goto cleanup;
-+
- 	uprobe_offset = get_uprobe_offset(&trigger_func);
- 	if (!ASSERT_GE(uprobe_offset, 0, "uprobe_offset"))
--		return;
-+		goto cleanup;
- 
- 	/* manual-attach kprobe/kretprobe */
--	kprobe_link = bpf_program__attach_kprobe(skel->progs.handle_kprobe,
--						 false /* retprobe */,
--						 SYS_NANOSLEEP_KPROBE_NAME);
-+	kprobe_opts.attach_mode = attach_mode;
-+	kprobe_opts.retprobe = false;
-+	kprobe_link = bpf_program__attach_kprobe_opts(skel->progs.handle_kprobe,
-+						      SYS_NANOSLEEP_KPROBE_NAME,
-+						      &kprobe_opts);
- 	if (!ASSERT_OK_PTR(kprobe_link, "attach_kprobe"))
--		return;
-+		goto cleanup;
- 	skel->links.handle_kprobe = kprobe_link;
- 
--	kretprobe_link = bpf_program__attach_kprobe(skel->progs.handle_kretprobe,
--						    true /* retprobe */,
--						    SYS_NANOSLEEP_KPROBE_NAME);
-+	kprobe_opts.retprobe = true;
-+	kretprobe_link = bpf_program__attach_kprobe_opts(skel->progs.handle_kretprobe,
-+							 SYS_NANOSLEEP_KPROBE_NAME,
-+							 &kprobe_opts);
- 	if (!ASSERT_OK_PTR(kretprobe_link, "attach_kretprobe"))
--		return;
-+		goto cleanup;
- 	skel->links.handle_kretprobe = kretprobe_link;
- 
- 	/* manual-attach uprobe/uretprobe */
-+	uprobe_opts.attach_mode = attach_mode;
- 	uprobe_opts.ref_ctr_offset = 0;
- 	uprobe_opts.retprobe = false;
- 	uprobe_link = bpf_program__attach_uprobe_opts(skel->progs.handle_uprobe,
-@@ -68,7 +84,7 @@ static void test_attach_probe_manual(struct test_attach_probe *skel)
- 						      uprobe_offset,
- 						      &uprobe_opts);
- 	if (!ASSERT_OK_PTR(uprobe_link, "attach_uprobe"))
--		return;
-+		goto cleanup;
- 	skel->links.handle_uprobe = uprobe_link;
- 
- 	uprobe_opts.retprobe = true;
-@@ -77,7 +93,7 @@ static void test_attach_probe_manual(struct test_attach_probe *skel)
- 							 "/proc/self/exe",
- 							 uprobe_offset, &uprobe_opts);
- 	if (!ASSERT_OK_PTR(uretprobe_link, "attach_uretprobe"))
--		return;
-+		goto cleanup;
- 	skel->links.handle_uretprobe = uretprobe_link;
- 
- 	/* attach uprobe by function name manually */
-@@ -106,6 +122,9 @@ static void test_attach_probe_manual(struct test_attach_probe *skel)
- 	ASSERT_EQ(skel->bss->uprobe_res, 3, "check_uprobe_res");
- 	ASSERT_EQ(skel->bss->uretprobe_res, 4, "check_uretprobe_res");
- 	ASSERT_EQ(skel->bss->uprobe_byname_res, 5, "check_uprobe_byname_res");
-+
-+cleanup:
-+	test_attach_probe_manual__destroy(skel);
- }
- 
- static void test_attach_probe_auto(struct test_attach_probe *skel)
-@@ -287,8 +306,15 @@ void test_attach_probe(void)
- 	if (!ASSERT_OK_PTR(skel->bss, "check_bss"))
- 		goto cleanup;
- 
--	if (test__start_subtest("manual"))
--		test_attach_probe_manual(skel);
-+	if (test__start_subtest("manual-default"))
-+		test_attach_probe_manual(PROBE_ATTACH_MODE_DEFAULT);
-+	if (test__start_subtest("manual-legacy"))
-+		test_attach_probe_manual(PROBE_ATTACH_MODE_LEGACY);
-+	if (test__start_subtest("manual-perf"))
-+		test_attach_probe_manual(PROBE_ATTACH_MODE_PERF);
-+	if (test__start_subtest("manual-link"))
-+		test_attach_probe_manual(PROBE_ATTACH_MODE_LINK);
-+
- 	if (test__start_subtest("auto"))
- 		test_attach_probe_auto(skel);
- 	if (test__start_subtest("kprobe-sleepable"))
-diff --git a/tools/testing/selftests/bpf/progs/test_attach_probe.c b/tools/testing/selftests/bpf/progs/test_attach_probe.c
-index 9e1e7163bb67..68466a6ad18c 100644
---- a/tools/testing/selftests/bpf/progs/test_attach_probe.c
-+++ b/tools/testing/selftests/bpf/progs/test_attach_probe.c
-@@ -7,12 +7,8 @@
- #include <bpf/bpf_core_read.h>
- #include "bpf_misc.h"
- 
--int kprobe_res = 0;
- int kprobe2_res = 0;
--int kretprobe_res = 0;
- int kretprobe2_res = 0;
--int uprobe_res = 0;
--int uretprobe_res = 0;
- int uprobe_byname_res = 0;
- int uretprobe_byname_res = 0;
- int uprobe_byname2_res = 0;
-@@ -23,13 +19,6 @@ int uretprobe_byname3_sleepable_res = 0;
- int uretprobe_byname3_res = 0;
- void *user_ptr = 0;
- 
--SEC("kprobe")
--int handle_kprobe(struct pt_regs *ctx)
--{
--	kprobe_res = 1;
--	return 0;
--}
--
- SEC("ksyscall/nanosleep")
- int BPF_KSYSCALL(handle_kprobe_auto, struct __kernel_timespec *req, struct __kernel_timespec *rem)
- {
-@@ -37,13 +26,6 @@ int BPF_KSYSCALL(handle_kprobe_auto, struct __kernel_timespec *req, struct __ker
- 	return 0;
- }
- 
--SEC("kretprobe")
--int handle_kretprobe(struct pt_regs *ctx)
--{
--	kretprobe_res = 2;
--	return 0;
--}
--
- SEC("kretsyscall/nanosleep")
- int BPF_KRETPROBE(handle_kretprobe_auto, int ret)
- {
-@@ -51,20 +33,6 @@ int BPF_KRETPROBE(handle_kretprobe_auto, int ret)
- 	return ret;
- }
- 
--SEC("uprobe")
--int handle_uprobe(struct pt_regs *ctx)
--{
--	uprobe_res = 3;
--	return 0;
--}
--
--SEC("uretprobe")
--int handle_uretprobe(struct pt_regs *ctx)
--{
--	uretprobe_res = 4;
--	return 0;
--}
--
- SEC("uprobe")
- int handle_uprobe_ref_ctr(struct pt_regs *ctx)
- {
-diff --git a/tools/testing/selftests/bpf/progs/test_attach_probe_manual.c b/tools/testing/selftests/bpf/progs/test_attach_probe_manual.c
-new file mode 100644
-index 000000000000..7f08bce94596
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/test_attach_probe_manual.c
-@@ -0,0 +1,53 @@
-+// SPDX-License-Identifier: GPL-2.0
-+// Copyright (c) 2017 Facebook
-+
-+#include "vmlinux.h"
-+#include <bpf/bpf_helpers.h>
-+#include <bpf/bpf_tracing.h>
-+#include <bpf/bpf_core_read.h>
-+#include "bpf_misc.h"
-+
-+int kprobe_res = 0;
-+int kretprobe_res = 0;
-+int uprobe_res = 0;
-+int uretprobe_res = 0;
-+int uprobe_byname_res = 0;
-+void *user_ptr = 0;
-+
-+SEC("kprobe")
-+int handle_kprobe(struct pt_regs *ctx)
-+{
-+	kprobe_res = 1;
-+	return 0;
-+}
-+
-+SEC("kretprobe")
-+int handle_kretprobe(struct pt_regs *ctx)
-+{
-+	kretprobe_res = 2;
-+	return 0;
-+}
-+
-+SEC("uprobe")
-+int handle_uprobe(struct pt_regs *ctx)
-+{
-+	uprobe_res = 3;
-+	return 0;
-+}
-+
-+SEC("uretprobe")
-+int handle_uretprobe(struct pt_regs *ctx)
-+{
-+	uretprobe_res = 4;
-+	return 0;
-+}
-+
-+SEC("uprobe")
-+int handle_uprobe_byname(struct pt_regs *ctx)
-+{
-+	uprobe_byname_res = 5;
-+	return 0;
-+}
-+
-+
-+char _license[] SEC("license") = "GPL";
+And you probably only need *one* chained interrupt that muxes
+everything that cannot be allocated direct path.
+
+> Wondering if you have any pointers here?
+
+I don't. But this shouldn't be too hard to bolt onto the existing
+framework.
+
+	M.
+
 -- 
-2.39.0
-
+Without deviation from the norm, progress is not possible.
