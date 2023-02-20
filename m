@@ -2,111 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 047BB69D2BA
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Feb 2023 19:26:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A3D4769D2BC
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Feb 2023 19:27:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231553AbjBTS0g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Feb 2023 13:26:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40758 "EHLO
+        id S231817AbjBTS1Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Feb 2023 13:27:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41236 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231396AbjBTS0e (ORCPT
+        with ESMTP id S229885AbjBTS1W (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Feb 2023 13:26:34 -0500
-Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CEA121C31A
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Feb 2023 10:26:33 -0800 (PST)
-Received: from zn.tnic (p5de8e9fe.dip0.t-ipconnect.de [93.232.233.254])
+        Mon, 20 Feb 2023 13:27:22 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 343A71C31A;
+        Mon, 20 Feb 2023 10:27:21 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 632821EC04CC;
-        Mon, 20 Feb 2023 19:26:32 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1676917592;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:references;
-        bh=1ms2JWYgerTx86Xa7nkcTBP58I8olNgMgYOQi6dhvRw=;
-        b=hqbj/G+SoFg83XSNQNsO3PqbGW+WoF6hU2MMBxIdoWS8hN92pNWfi2kkZvR4dUgZt21i3o
-        OPHCWD2teQxlxboQcDZ04rbaN+aWDLHc8+NPe4snYcx3AqSehOX3yc3NugO+rKLN59GlOe
-        nFfolc8cuN1QJQXuQbP2cnpLBcOABt4=
-Date:   Mon, 20 Feb 2023 19:26:32 +0100
-From:   Borislav Petkov <bp@alien8.de>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     x86-ml <x86@kernel.org>, lkml <linux-kernel@vger.kernel.org>
-Subject: [GIT PULL] x86/vdso for v6.3-rc1
-Message-ID: <Y/O7WByYDrjPy6sC@zn.tnic>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A781860F00;
+        Mon, 20 Feb 2023 18:27:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5FFABC4339B;
+        Mon, 20 Feb 2023 18:27:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1676917640;
+        bh=T7ZxLDOEHL5a48unqqdISt58VJOeJ4E3/WLn0nVRKCc=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=uqE9+1R/bBNbWjA+oKlDucXB7DEGP9lhZkLY/MFrrjkLOemujnpYEywdzT2fT3Vxs
+         bsbanDWV6wca2uXqpo5RtprA1GqJW91apcJeFNcL/5K6srwBSa1MxMuYXA02Y+dq79
+         mZxBvzDa9WbpU0AXUqn0TmmsbpXJA3SJhUAcyay5T7Zf9cAP6HfBTyQ+hzXhYpssgx
+         exT1bItyrpzsWmCuZjz8luhWCeNiBFc/6/UwBIoctZ+P5fS32pz0VkHkegg6mOZW5/
+         JgA9M+MXtfFRdiM/uX0+QPLKY8+rt3qSR5witakoCgmE5YSyONhR78CcOunQnRMuzZ
+         aC0vt5DD6alBw==
+Date:   Mon, 20 Feb 2023 10:27:17 -0800
+From:   Josh Poimboeuf <jpoimboe@kernel.org>
+To:     KP Singh <kpsingh@kernel.org>
+Cc:     Borislav Petkov <bp@alien8.de>, linux-kernel@vger.kernel.org,
+        pjt@google.com, evn@google.com, tglx@linutronix.de,
+        mingo@redhat.com, dave.hansen@linux.intel.com, x86@kernel.org,
+        hpa@zytor.com, peterz@infradead.org,
+        pawan.kumar.gupta@linux.intel.com, kim.phillips@amd.com,
+        alexandre.chartre@oracle.com, daniel.sneddon@linux.intel.com,
+        =?utf-8?B?Sm9zw6k=?= Oliveira <joseloliveira11@gmail.com>,
+        Rodrigo Branco <rodrigo@kernelhacking.com>,
+        Alexandra Sandulescu <aesa@google.com>,
+        Jim Mattson <jmattson@google.com>, stable@vger.kernel.org
+Subject: [PATCH] x86/bugs: Allow STIBP with IBRS
+Message-ID: <20230220182717.uzrym2gtavlbjbxo@treble>
+References: <20230220120127.1975241-1-kpsingh@kernel.org>
+ <20230220121350.aidsipw3kd4rsyss@treble>
+ <CACYkzJ5L9MLuE5Jz+z5-NJCCrUqTbgKQkXSqnQnCfTD_WNA7_Q@mail.gmail.com>
+ <CACYkzJ6n=-tobhX0ONQhjHSgmnNjWnNe_dZnEOGtD8Y6S3RHbA@mail.gmail.com>
+ <20230220163442.7fmaeef3oqci4ee3@treble>
+ <Y/Ox3MJZF1Yb7b6y@zn.tnic>
+ <20230220175929.2laflfb2met6y3kc@treble>
+ <CACYkzJ71xqzY6-wL+YShcL+d6ugzcdFHr6tbYWWE_ep52+RBZQ@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CACYkzJ71xqzY6-wL+YShcL+d6ugzcdFHr6tbYWWE_ep52+RBZQ@mail.gmail.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Linus,
+IBRS is only enabled in kernel space.  Since it's not enabled in user
+space, user space isn't protected from indirect branch prediction
+attacks from a sibling CPU thread.
 
-please pull a bunch of x86 vdso improvements for 6.3.
+Allow STIBP to be enabled to protect against such attacks.
 
-Thx.
-
+Fixes: 7c693f54c873 ("x86/speculation: Add spectre_v2=ibrs option to support Kernel IBRS")
+Reported-by: José Oliveira <joseloliveira11@gmail.com>
+Reported-by: Rodrigo Branco <rodrigo@kernelhacking.com>
+Signed-off-by: Josh Poimboeuf <jpoimboe@kernel.org>
 ---
+ arch/x86/kernel/cpu/bugs.c | 18 ++++++++++--------
+ 1 file changed, 10 insertions(+), 8 deletions(-)
 
-The following changes since commit 2241ab53cbb5cdb08a6b2d4688feb13971058f65:
-
-  Linux 6.2-rc5 (2023-01-21 16:27:01 -0800)
-
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git tags/x86_vdso_for_v6.3_rc1
-
-for you to fetch changes up to dac0da428f8dfb23666ab4ea54a7768c152b857a:
-
-  x86/vdso: Fix -Wmissing-prototypes warnings (2023-02-07 18:23:17 +0100)
-
-----------------------------------------------------------------
-- Add getcpu support for the 32-bit version of the vDSO
-
-- Some smaller fixes
-
-----------------------------------------------------------------
-Borislav Petkov (AMD) (1):
-      x86/vdso: Fix -Wmissing-prototypes warnings
-
-Brian Gerst (1):
-      x86/vdso: Move VDSO image init to vdso2c generated code
-
-Sebastian Andrzej Siewior (4):
-      x86/cpu: Provide the full setup for getcpu() on x86-32
-      x86/vdso: Provide getcpu for x86-32.
-      selftests: Emit a warning if getcpu() is missing on 32bit
-      x86/vdso: Fake 32bit VDSO build on 64bit compile for vgetcpu
-
- arch/x86/entry/vdso/Makefile                  |  3 ++-
- arch/x86/entry/vdso/vdso2c.h                  |  6 ++++++
- arch/x86/entry/vdso/vdso32-setup.c            |  9 ---------
- arch/x86/entry/vdso/vdso32/fake_32bit_build.h | 25 +++++++++++++++++++++++++
- arch/x86/entry/vdso/vdso32/vclock_gettime.c   | 27 +--------------------------
- arch/x86/entry/vdso/vdso32/vdso32.lds.S       |  1 +
- arch/x86/entry/vdso/vdso32/vgetcpu.c          |  3 +++
- arch/x86/entry/vdso/vgetcpu.c                 |  3 +--
- arch/x86/entry/vdso/vma.c                     | 19 ++++---------------
- arch/x86/include/asm/processor.h              |  1 -
- arch/x86/include/asm/segment.h                |  8 ++++----
- arch/x86/include/asm/vdso.h                   |  2 +-
- arch/x86/include/asm/vdso/gettimeofday.h      |  2 ++
- arch/x86/include/asm/vdso/processor.h         |  4 ++++
- arch/x86/kernel/cpu/common.c                  |  5 +----
- tools/testing/selftests/x86/test_vsyscall.c   |  7 ++-----
- 16 files changed, 57 insertions(+), 68 deletions(-)
- create mode 100644 arch/x86/entry/vdso/vdso32/fake_32bit_build.h
- create mode 100644 arch/x86/entry/vdso/vdso32/vgetcpu.c
-
+diff --git a/arch/x86/kernel/cpu/bugs.c b/arch/x86/kernel/cpu/bugs.c
+index 85168740f76a..b97c0d28e573 100644
+--- a/arch/x86/kernel/cpu/bugs.c
++++ b/arch/x86/kernel/cpu/bugs.c
+@@ -1124,14 +1124,19 @@ spectre_v2_parse_user_cmdline(void)
+ 	return SPECTRE_V2_USER_CMD_AUTO;
+ }
+ 
+-static inline bool spectre_v2_in_ibrs_mode(enum spectre_v2_mitigation mode)
++static inline bool spectre_v2_in_eibrs_mode(enum spectre_v2_mitigation mode)
+ {
+-	return mode == SPECTRE_V2_IBRS ||
+-	       mode == SPECTRE_V2_EIBRS ||
++	return mode == SPECTRE_V2_EIBRS ||
+ 	       mode == SPECTRE_V2_EIBRS_RETPOLINE ||
+ 	       mode == SPECTRE_V2_EIBRS_LFENCE;
+ }
+ 
++static inline bool spectre_v2_in_ibrs_mode(enum spectre_v2_mitigation mode)
++{
++	return spectre_v2_in_eibrs_mode(mode) ||
++	       mode == SPECTRE_V2_IBRS;
++}
++
+ static void __init
+ spectre_v2_user_select_mitigation(void)
+ {
+@@ -1194,12 +1199,12 @@ spectre_v2_user_select_mitigation(void)
+ 	}
+ 
+ 	/*
+-	 * If no STIBP, IBRS or enhanced IBRS is enabled, or SMT impossible,
++	 * If no STIBP, enhanced IBRS is enabled, or SMT impossible,
+ 	 * STIBP is not required.
+ 	 */
+ 	if (!boot_cpu_has(X86_FEATURE_STIBP) ||
+ 	    !smt_possible ||
+-	    spectre_v2_in_ibrs_mode(spectre_v2_enabled))
++	    spectre_v2_in_eibrs_mode(spectre_v2_enabled))
+ 		return;
+ 
+ 	/*
+@@ -2327,9 +2332,6 @@ static ssize_t mmio_stale_data_show_state(char *buf)
+ 
+ static char *stibp_state(void)
+ {
+-	if (spectre_v2_in_ibrs_mode(spectre_v2_enabled))
+-		return "";
+-
+ 	switch (spectre_v2_user_stibp) {
+ 	case SPECTRE_V2_USER_NONE:
+ 		return ", STIBP: disabled";
 -- 
-Regards/Gruss,
-    Boris.
+2.39.1
 
-https://people.kernel.org/tglx/notes-about-netiquette
