@@ -2,164 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8DF5E69C4F3
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Feb 2023 06:31:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DE79B69C4F5
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Feb 2023 06:31:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230021AbjBTFbJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Feb 2023 00:31:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51062 "EHLO
+        id S230025AbjBTFbr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Feb 2023 00:31:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51666 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229955AbjBTFbH (ORCPT
+        with ESMTP id S229736AbjBTFbp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Feb 2023 00:31:07 -0500
-Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7F67BDC1
-        for <linux-kernel@vger.kernel.org>; Sun, 19 Feb 2023 21:31:03 -0800 (PST)
-Received: by mail-wr1-x42a.google.com with SMTP id c17so1411789wrx.0
-        for <linux-kernel@vger.kernel.org>; Sun, 19 Feb 2023 21:31:03 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=VyrfGt2FN77QTYZFXpX99DHt0bq2IkMtyc2KjQMiV8c=;
-        b=e4SvGtUVBMCp2DQcqbtiNxiiPYgxiKUVXHYdpXcTHPxT2a43JvXQ2kOUpHuB2Hba97
-         uzFuEHxK+pngPvI4rg27e7zXnTBs+6JKC3l0ocVndzInd+ghXrJyRCK7PNERnZFxU8Ox
-         mTrWZfRZJHtkd7Ap95PyHf/wKeIOeWCEQqAZEgBA6x+94XO3jNR0k9z+Fx29/haaXQ+C
-         c16c9OtfTWk9+kqSrFoCDZ87h9dRlM5ucECudTWs642QkdIJpAtPWNvi5qbxm777EW0M
-         BqxFqAd1TAtrf2Tm+yUvU9nFiU0hVkWa3hZpch2XvtVbeDGpcqQ74fpzk/L+IPzUd+lJ
-         RhIw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=VyrfGt2FN77QTYZFXpX99DHt0bq2IkMtyc2KjQMiV8c=;
-        b=xK0TW8fiXeoCr6IXt9PHVZMclvOdcqJocW/gf9KALTioPFi55Co0VuqmNrBJLZdse9
-         DOkJ1FVqENIxAEr+T7RnxK6w6EbeIS8GT6+PS8zRXNnpgmsJ+9r62ssCRKycYX9yEXdz
-         EeWGRmESWHRiOzlEqbRKReTxjf0bmRUivaMcd+7144LW4ulegJrcsIptE0UnY0oeFLBG
-         VOa9U17CFcJkyPRlwzYx02BhaM97tqinJ/hDX+quVbROqRVavPtFki24dcEhtqm3hfKU
-         T0WR7k1Y6yE3n0+rc2WKmvJiXnIGhuA0GPAGNRcCux0jL9nKu+Fbs8HwQBODj4KZdNMP
-         rCtg==
-X-Gm-Message-State: AO0yUKV4rioT3xIQkWRpmBUsuezxrLQtBU7X3h/11tuqhKDzjadXZ/no
-        Kjcn6+gfn48oHt4wMFC5lCpjZQ==
-X-Google-Smtp-Source: AK7set9NxX2ASpmPL1uCTqe51ixIB3oHzSVDCLaDlY7uYoWgYJcR+6kLCNcv/ioOAj4vJorfZMwHyg==
-X-Received: by 2002:adf:f942:0:b0:2c6:e87f:30cc with SMTP id q2-20020adff942000000b002c6e87f30ccmr1381373wrr.48.1676871062297;
-        Sun, 19 Feb 2023 21:31:02 -0800 (PST)
-Received: from blmsp ([2001:4090:a247:8056:883:2e39:923e:f1d])
-        by smtp.gmail.com with ESMTPSA id t15-20020adfe10f000000b002c3f7dfd15csm3691489wrz.32.2023.02.19.21.31.01
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 19 Feb 2023 21:31:01 -0800 (PST)
-Date:   Mon, 20 Feb 2023 06:31:00 +0100
-From:   Markus Schneider-Pargmann <msp@baylibre.com>
-To:     Simon Horman <simon.horman@corigine.com>
-Cc:     Marc Kleine-Budde <mkl@pengutronix.de>,
-        Chandrasekar Ramakrishnan <rcsekar@samsung.com>,
-        Wolfgang Grandegger <wg@grandegger.com>,
-        Vincent MAILHOL <mailhol.vincent@wanadoo.fr>,
-        linux-can@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 08/18] can: m_can: Write transmit header and data in
- one transaction
-Message-ID: <20230220053100.nh2suaqi7237g5ny@blmsp>
-References: <20230125195059.630377-1-msp@baylibre.com>
- <20230125195059.630377-9-msp@baylibre.com>
- <Y9I0KEeWq0JFy6iB@corigine.com>
- <20230130080419.dzdnmq4vtag7wbpd@blmsp>
- <Y95YNQwMfTM2h7iW@corigine.com>
+        Mon, 20 Feb 2023 00:31:45 -0500
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 754FEBDFD;
+        Sun, 19 Feb 2023 21:31:39 -0800 (PST)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4PKrd25Pkvz4x82;
+        Mon, 20 Feb 2023 16:31:34 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1676871095;
+        bh=gBmo0TN95mb7CUHM3s3ZvsNFVOEMgcqzQUoS0x4tA8w=;
+        h=Date:From:To:Cc:Subject:From;
+        b=JliKbLjDZ7xBu+f1+kT2gbnlZhECHdKn5E8SYforSoOhewnJWsxBTm+AiUzqC8iXB
+         V3BVYWs6dpDFa4aNQhHotkEN+Zs5K2Ylqc2f1V7qcp7EMVTPdfAZ/aIqFG6bz+57q1
+         4o96+EgXmVu6HCbbySw7EtsFnj3Uam0n3iN3MrbnvRkKKJ36JvuJ1wWE6goBhwMD8K
+         GD6/+2+27XpLV/SiqQL1xl4qS+Ez74iPDR7DL/eNk8SlAARn9P/+l2jzfsWNdEzJ2T
+         L+bthiwbmCYD9H5x6aHERZIhfZRmEMHG9+SVEPnhWHathqZDWJ1GTLfJRbW17QKlF0
+         SspjHkXxcJWyQ==
+Date:   Mon, 20 Feb 2023 16:31:33 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Greg KH <greg@kroah.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Qi Zheng <zhengqi.arch@bytedance.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: build warning after merge of the driver-core tree
+Message-ID: <20230220163133.481e43d8@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <Y95YNQwMfTM2h7iW@corigine.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/v+1hp8+gtYxSdL44PGiY79/";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Simon,
+--Sig_/v+1hp8+gtYxSdL44PGiY79/
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-On Sat, Feb 04, 2023 at 02:05:57PM +0100, Simon Horman wrote:
-> On Mon, Jan 30, 2023 at 09:04:19AM +0100, Markus Schneider-Pargmann wrote:
-> > Hi Simon,
-> > 
-> > On Thu, Jan 26, 2023 at 09:04:56AM +0100, Simon Horman wrote:
-> > > On Wed, Jan 25, 2023 at 08:50:49PM +0100, Markus Schneider-Pargmann wrote:
-> > > > Combine header and data before writing to the transmit fifo to reduce
-> > > > the overhead for peripheral chips.
-> > > > 
-> > > > Signed-off-by: Markus Schneider-Pargmann <msp@baylibre.com>
-> > > > ---
-> > > >  drivers/net/can/m_can/m_can.c | 10 +++++-----
-> > > >  1 file changed, 5 insertions(+), 5 deletions(-)
-> > > > 
-> > > > diff --git a/drivers/net/can/m_can/m_can.c b/drivers/net/can/m_can/m_can.c
-> > > > index 78f6ed744c36..440bc0536951 100644
-> > > > --- a/drivers/net/can/m_can/m_can.c
-> > > > +++ b/drivers/net/can/m_can/m_can.c
-> > > > @@ -1681,6 +1681,7 @@ static netdev_tx_t m_can_tx_handler(struct m_can_classdev *cdev)
-> > > >  		m_can_write(cdev, M_CAN_TXBAR, 0x1);
-> > > >  		/* End of xmit function for version 3.0.x */
-> > > >  	} else {
-> > > > +		char buf[TXB_ELEMENT_SIZE];
-> > > >  		/* Transmit routine for version >= v3.1.x */
-> > > >  
-> > > >  		txfqs = m_can_read(cdev, M_CAN_TXFQS);
-> > > > @@ -1720,12 +1721,11 @@ static netdev_tx_t m_can_tx_handler(struct m_can_classdev *cdev)
-> > > >  		fifo_header.dlc = FIELD_PREP(TX_BUF_MM_MASK, putidx) |
-> > > >  			FIELD_PREP(TX_BUF_DLC_MASK, can_fd_len2dlc(cf->len)) |
-> > > >  			fdflags | TX_BUF_EFC;
-> > > > -		err = m_can_fifo_write(cdev, putidx, M_CAN_FIFO_ID, &fifo_header, 2);
-> > > > -		if (err)
-> > > > -			goto out_fail;
-> > > > +		memcpy(buf, &fifo_header, 8);
-> > > > +		memcpy(&buf[8], &cf->data, cf->len);
-> > > >  
-> > > > -		err = m_can_fifo_write(cdev, putidx, M_CAN_FIFO_DATA,
-> > > > -				       cf->data, DIV_ROUND_UP(cf->len, 4));
-> > > > +		err = m_can_fifo_write(cdev, putidx, M_CAN_FIFO_ID,
-> > > > +				       buf, 8 + DIV_ROUND_UP(cf->len, 4));
-> > > 
-> > > Perhaps I am missing something here, but my reading is that:
-> > > 
-> > > - 8 is a length in bytes
-> > > - the 5th argument to m_can_fifo_write is the val_count parameter,
-> > >   whose unit is 4-byte long values.
-> > > 
-> > >   By this logic, perhaps the correct value for this argument is:
-> > > 
-> > >   DIV_ROUND_UP(8 + cf->len, 4)
-> > 
-> > Thank you for spotting this. You are totally right, I will fix it for
-> > the next version.
-> 
-> Thanks.
-> 
-> > > Also:
-> > > 
-> > > - If cf->len is not a multiple of 4, is there a possibility
-> > >   that uninitialised trailing data in buf will be used
-> > >   indirectly by m_can_fifo_write()?
-> > 
-> > Good point. I think this can only happen for 1, 2, 3, 5, 6, 7 bytes,
-> > values above have to be multiple of 4 because of the CAN-FD
-> > specification.
-> > 
-> > With 'buf' it should read garbage from the buffer which I think is not a
-> > problem as the chip knows how much of the data to use. Also the tx
-> > elemnt size is hardcoded to 64 byte in the driver, so we do not overwrite
-> > the next element with that. The chip minimum size is 8 bytes for the
-> > data field anyways. So I think this is fine.
-> 
-> I'm not the expert on the hw in question here, but intuitively
-> I do feel that it may be unwise to send uninitialised data.
-> While I'm happy to defer to you on this, I do wonder if it would be somehow
-> better to use memcpy_and_pad() in place of memcpy().
+Hi all,
 
-Thank you, I think it is safe, but memcpy_and_pad seems like a good
-solution here to make it even safer.
+After merging the driver-core tree, today's linux-next build
+(htmldocs) produced this warning:
 
-Best,
-Markus
+Documentation/filesystems/api-summary:146: fs/debugfs/inode.c:804: WARNING:=
+ Inline literal start-string without end-string.
+
+Introduced by commit
+
+  d3002468cb5d ("debugfs: update comment of debugfs_rename()")
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/v+1hp8+gtYxSdL44PGiY79/
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmPzBbUACgkQAVBC80lX
+0Gyf3wgAjiXdcYU+fPh8hp/rmr5RKjreo5nJVkSR5VFR8dkQTjH+x3Gbyr0GfI8f
+o8JftQNYOCgZ3GCFZBZYKDXtyKiqBWWC+IxICxZPZDWc6xpBX+ulknaRU/Fsl+8j
+apqgFr+i91MVlrGVNa93ypNFpYDUFegOYcbKPYK9lUiBD/ueFqBOHBAV3rgUV1WU
+1ZCv2cPQyX7Rsam2z5CAqi16J7ui0fTDd/Euu6gp4fNPWaBeQEaVOImF10bCQLhX
+wA3/FkDEQWW5JDL0H/lm/LL55PWri8IWKrgjh7tP1Z6gvQQcPtMoRaoUuIa1VK2R
+ZLXtHMO+qMQHzVYTaG4dRIq1HdAahQ==
+=D4Em
+-----END PGP SIGNATURE-----
+
+--Sig_/v+1hp8+gtYxSdL44PGiY79/--
