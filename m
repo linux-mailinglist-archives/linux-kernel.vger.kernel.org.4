@@ -2,133 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D61C69C45C
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Feb 2023 04:06:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D6F7C69C45F
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Feb 2023 04:10:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229652AbjBTDGB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 19 Feb 2023 22:06:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54580 "EHLO
+        id S229723AbjBTDKR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 19 Feb 2023 22:10:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56438 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229572AbjBTDF7 (ORCPT
+        with ESMTP id S229572AbjBTDKP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 19 Feb 2023 22:05:59 -0500
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6D6B8A5B
-        for <linux-kernel@vger.kernel.org>; Sun, 19 Feb 2023 19:05:57 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1676862357; x=1708398357;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=RM4eXjQHbqlzn7GyqU4NeWYxcc4BEN6iCP/UFyCc9iI=;
-  b=oABIKNxEhkrRewfSscsGQOtxjM/KOHIjW2g243IGM1W4NLEspWb+RJRm
-   /WXmgA3F8i3QkNm4kOQSFeHpOE4Ukq3CRtgP+3EUKPKOl+qu90XPbUizD
-   sXwz3a+3EYz1DSgYI50tv/BEGqYWdeqSUkJcz1svuPwBPGWwYlZNMM2jU
-   KqWP2AEA7WgsYp3zRbzRc1DF7oGB0xL5uAPdCg2SQmWKtT+w+Tl4BL/6+
-   33Jyod7JBhMl6lmy4Dm9R1weluU0ksNsqBBIcRXsShj8tBWm3YakOsVye
-   5704OYfFLTvUiczRVhLv/zkmtZ7TzbYJs4oEuRlcF6P3TDTLIj0ea8UoY
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10626"; a="394793919"
-X-IronPort-AV: E=Sophos;i="5.97,311,1669104000"; 
-   d="scan'208";a="394793919"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Feb 2023 19:05:57 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10626"; a="701529419"
-X-IronPort-AV: E=Sophos;i="5.97,311,1669104000"; 
-   d="scan'208";a="701529419"
-Received: from lkp-server01.sh.intel.com (HELO 4455601a8d94) ([10.239.97.150])
-  by orsmga008.jf.intel.com with ESMTP; 19 Feb 2023 19:05:56 -0800
-Received: from kbuild by 4455601a8d94 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pTwV1-000Dbd-0s;
-        Mon, 20 Feb 2023 03:05:55 +0000
-Date:   Mon, 20 Feb 2023 11:05:21 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Frederic Weisbecker <frederic@kernel.org>
-Cc:     oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Nicolas Saenz Julienne <nsaenzju@redhat.com>
-Subject: vmlinux.o: warning: objtool: ct_idle_enter+0x14: call to
- ftrace_likely_update() leaves .noinstr.text section
-Message-ID: <202302201112.den9cybf-lkp@intel.com>
+        Sun, 19 Feb 2023 22:10:15 -0500
+Received: from gnuweeb.org (gnuweeb.org [51.81.211.47])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0149DC147;
+        Sun, 19 Feb 2023 19:10:13 -0800 (PST)
+Received: from localhost.localdomain (unknown [182.253.183.169])
+        by gnuweeb.org (Postfix) with ESMTPSA id 3571083127;
+        Mon, 20 Feb 2023 03:10:06 +0000 (UTC)
+X-GW-Data: lPqxHiMPbJw1wb7CM9QUryAGzr0yq5atzVDdxTR0iA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gnuweeb.org;
+        s=default; t=1676862613;
+        bh=uMnGCk1LjhkcOqlZi4n4FjfUb/hJZvPJ4KZ7CjBby/I=;
+        h=From:To:Cc:Subject:Date:From;
+        b=N9q5INGfCoqCLCKsHeKuDGThktG/Hs3zHpS8j6zfmGOR77mjZc5EvTQP8jWeLS9BO
+         uPIZZSHE2i/IUE2q0JskLOavL9/reZUTlU8Z0tplePRkSif4zVXNJww+HcOhwjreUz
+         5v9Zx9Bx7u5d/G7pFcRmmv8XidlYujD2164t+08JMbCHuUGdRnZkX9FH7Y7FMWI+V8
+         wwWrChIGALo3JqZcrCzk52t5Hdy5X+KYdWnO6iKFATOBqwamI8D3T4FdU6JNzbn5I4
+         WPtyiAawbE9B9SoJXZ8ZngQBnTUeijKXdIy2dOWZTgvoId4NvKILw5smEKmgBua2pq
+         Hn0y0w/Cl6/nw==
+From:   Ammar Faizi <ammarfaizi2@gnuweeb.org>
+To:     Dave Hansen <dave.hansen@intel.com>, Xin Li <xin3.li@intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, Ingo Molnar <mingo@kernel.org>
+Cc:     Ammar Faizi <ammarfaizi2@gnuweeb.org>,
+        Andrew Cooper <Andrew.Cooper3@citrix.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Borislav Petkov <bp@alien8.de>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        x86 Mailing List <x86@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Kselftest Mailing List 
+        <linux-kselftest@vger.kernel.org>,
+        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>
+Subject: [RESEND RFC PATCH v8 0/3] Intel FRED architecture support for the sysret_rip selftest
+Date:   Mon, 20 Feb 2023 10:09:56 +0700
+Message-Id: <20230220030959.119222-1-ammarfaizi2@gnuweeb.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Frederic,
+[ 
+   RESEND, get rid of: Linux x86-64 Mailing List <linux-x86_64@vger.kernel.org>
+   from the CC list. It bounces and makes noise. Sorry for the wrong address.
+]
 
-FYI, the error/warning still remains.
+Hi,
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   c9c3395d5e3dcc6daee66c6908354d47bf98cb0c
-commit: c33ef43a359001415032665dfcd433979c462b71 rcu/context-tracking: Remove unused and/or unecessary middle functions
-date:   8 months ago
-config: x86_64-randconfig-a001-20230220 (https://download.01.org/0day-ci/archive/20230220/202302201112.den9cybf-lkp@intel.com/config)
-compiler: gcc-11 (Debian 11.3.0-8) 11.3.0
-reproduce (this is a W=1 build):
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=c33ef43a359001415032665dfcd433979c462b71
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout c33ef43a359001415032665dfcd433979c462b71
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        make W=1 O=build_dir ARCH=x86_64 olddefconfig
-        make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
+This is an RFC v8. Based on the x86/cpu branch in the tip tree.
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202302201112.den9cybf-lkp@intel.com/
+The 'syscall' instruction on the Intel FRED architecture does not
+clobber %rcx and %r11. This behavior leads to an assertion failure in
+the sysret_rip selftest because it asserts %r11 = %rflags.
 
-All warnings (new ones prefixed by >>):
+In the previous discussion, we agreed that there are two cases for
+'syscall':
 
-   ld: warning: net/bpfilter/bpfilter_umh_blob.o: missing .note.GNU-stack section implies executable stack
-   ld: NOTE: This behaviour is deprecated and will be removed in a future version of the linker
-   vmlinux.o: warning: objtool: __rdgsbase_inactive+0x34: call to ftrace_likely_update() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: __wrgsbase_inactive+0x39: call to ftrace_likely_update() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: fixup_bad_iret+0x89: call to ftrace_likely_update() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: noist_exc_debug+0x50: call to ftrace_likely_update() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: exc_nmi+0x35: call to ftrace_likely_update() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: poke_int3_handler+0x4b: call to ftrace_likely_update() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: irqentry_nmi_enter+0x4c: call to ftrace_likely_update() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: irqentry_nmi_exit+0x53: call to ftrace_likely_update() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: enter_from_user_mode+0x5b: call to ftrace_likely_update() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: syscall_enter_from_user_mode+0x60: call to ftrace_likely_update() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: syscall_enter_from_user_mode_prepare+0x5b: call to ftrace_likely_update() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: irqentry_enter_from_user_mode+0x5b: call to ftrace_likely_update() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: irqentry_exit+0x40: call to ftrace_likely_update() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: rcu_dynticks_eqs_enter+0x28: call to ftrace_likely_update() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: rcu_dynticks_eqs_exit+0x28: call to ftrace_likely_update() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: rcu_eqs_exit.constprop.0+0x26: call to ftrace_likely_update() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: rcu_eqs_enter.constprop.0+0x3d: call to ftrace_likely_update() leaves .noinstr.text section
->> vmlinux.o: warning: objtool: ct_idle_enter+0x14: call to ftrace_likely_update() leaves .noinstr.text section
->> vmlinux.o: warning: objtool: ct_nmi_enter+0x36: call to ftrace_likely_update() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: ct_irq_enter+0x38: call to ftrace_likely_update() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: ct_irq_exit+0x38: call to ftrace_likely_update() leaves .noinstr.text section
+  A) 'syscall' in a FRED system preserves %rcx and %r11.
+
+  B) 'syscall' in a non-FRED system sets %rcx=%rip and %r11=%rflags.
+
+This series fixes the selftest. Make it work on the Intel FRED
+architecture. Also, add more tests to ensure the syscall behavior is
+consistent. It must always be (A) or always be (B). Not a mix of them.
+
+See the previous discussion here:
+https://lore.kernel.org/lkml/5d4ad3e3-034f-c7da-d141-9c001c2343af@intel.com
+
+## Changelog revision
+
+v8:
+  - Stop using "+r"(rsp) to avoid the red zone problem because it
+    generates the wrong Assembly code (Ammar).
+    See: https://gcc.gnu.org/bugzilla/show_bug.cgi?id=108799
+
+  - Update commit message (Ammar).
+
+v7:
+  - Fix comment, REGS_ERROR no longer exists in the enum (Ammar).
+
+  - Update commit message (Ammar).
+
+v6:
+  - Move the check-regs assertion in sigusr1() to check_regs_result() (HPA).
+
+  - Add a new test just like sigusr1(), but don't modify REG_RCX and
+    REG_R11. This is used to test SYSRET behavior consistency (HPA).
+
+v5:
+  - Fix do_syscall() return value (Ammar).
+
+v4:
+  - Fix the assertion condition inside the SIGUSR1 handler (Xin Li).
+
+  - Explain the purpose of patch #2 in the commit message (HPA).
+
+  - Update commit message (Ammar).
+
+  - Repeat test_syscall_rcx_r11_consistent() 32 times to be more sure
+    that the result is really consistent (Ammar).
+
+v3:
+  - Test that we don't get a mix of REGS_SAVED and REGS_SYSRET, which
+    is a major part of the point (HPA).
+
+v2:
+  - Use "+r"(rsp) as the right way to avoid redzone problems per
+    Andrew's comment (HPA).
+
+Co-developed-by: H. Peter Anvin (Intel) <hpa@zytor.com>
+Signed-off-by: H. Peter Anvin (Intel) <hpa@zytor.com>
+Signed-off-by: Ammar Faizi <ammarfaizi2@gnuweeb.org>
+---
+
+Ammar Faizi (3):
+  selftests/x86: sysret_rip: Handle syscall on the Intel FRED architecture
+  selftests/x86: sysret_rip: Add more tests to verify the 'syscall' behavior
+  selftests/x86: sysret_rip: Test SYSRET with a signal handler
+
+ tools/testing/selftests/x86/sysret_rip.c | 169 +++++++++++++++++++++--
+ 1 file changed, 160 insertions(+), 9 deletions(-)
 
 
-objdump-func vmlinux.o ct_idle_enter:
-0000 000000000000325e <ct_idle_enter>:
-0000     325e:	f3 0f 1e fa          	endbr64
-0004     3262:	31 d2                	xor    %edx,%edx
-0006     3264:	31 f6                	xor    %esi,%esi
-0008     3266:	b9 01 00 00 00       	mov    $0x1,%ecx
-000d     326b:	48 c7 c7 00 00 00 00 	mov    $0x0,%rdi	326e: R_X86_64_32S	_ftrace_annotated_branch+0x54090
-0014     3272:	e8 00 00 00 00       	call   3277 <ct_idle_enter+0x19>	3273: R_X86_64_PLT32	ftrace_likely_update-0x4
-0019     3277:	b9 01 00 00 00       	mov    $0x1,%ecx
-001e     327c:	31 d2                	xor    %edx,%edx
-0020     327e:	31 f6                	xor    %esi,%esi
-0022     3280:	48 c7 c7 00 00 00 00 	mov    $0x0,%rdi	3283: R_X86_64_32S	_ftrace_annotated_branch+0x54060
-0029     3287:	e8 00 00 00 00       	call   328c <ct_idle_enter+0x2e>	3288: R_X86_64_PLT32	ftrace_likely_update-0x4
-002e     328c:	e9 44 fe ff ff       	jmp    30d5 <rcu_eqs_enter.constprop.0>
-
+base-commit: e067248949e3de7fbeae812b0ccbbee7a401e7aa
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+Ammar Faizi
+
