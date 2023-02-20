@@ -2,48 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D5DF69C447
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Feb 2023 03:58:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EC87969C44C
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Feb 2023 04:03:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229781AbjBTC6t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 19 Feb 2023 21:58:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49524 "EHLO
+        id S229904AbjBTDD0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 19 Feb 2023 22:03:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51154 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229572AbjBTC6s (ORCPT
+        with ESMTP id S229572AbjBTDDY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 19 Feb 2023 21:58:48 -0500
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BAD3BB8E;
-        Sun, 19 Feb 2023 18:58:47 -0800 (PST)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4PKnDj2vsyz4x5Y;
-        Mon, 20 Feb 2023 13:58:45 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1676861925;
-        bh=q7lP8DrogDLmuyR5YNW/czXfL8KaWmB+HhDmsECEDIk=;
-        h=Date:From:To:Cc:Subject:From;
-        b=q72TMkRWIVqjzxssT4dRG5GgZkhT676yNPcBctgQHrHejaH8HDhiNimCn6ogXBcZn
-         nZj+4mNWHDudAimWy9snvu9NqinKJ/2fLNp2G9WsSVIcWwFonKu+KqomHLfB2gXR3r
-         OyOy6cV5Dy21kRaDm5vDZhXzSlDUJ7S/79OX/avRhvhB8KxmOXOaCuKz3JR9ZUHrTK
-         /akeHTc9evpv4pxlyXSx4fxvq+E10TadF+W6rHIr1i8Ocab1xdisNohFYwedil6E7L
-         uYDR6dOuLr/dMofm4cVpewIArDHL1M0D+0M8CZgkbe3ImsXZC31rV5ZLxeD8/TTMCW
-         szUA0zIVWJVBQ==
-Date:   Mon, 20 Feb 2023 13:58:44 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Ard Biesheuvel <ardb@kernel.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Pierre Gondois <pierre.gondois@arm.com>
-Subject: linux-next: manual merge of the efi tree with Linus' tree
-Message-ID: <20230220135844.73e9dcae@canb.auug.org.au>
+        Sun, 19 Feb 2023 22:03:24 -0500
+Received: from gnuweeb.org (gnuweeb.org [51.81.211.47])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 859369EC0;
+        Sun, 19 Feb 2023 19:03:20 -0800 (PST)
+Received: from localhost.localdomain (unknown [182.253.183.169])
+        by gnuweeb.org (Postfix) with ESMTPSA id E2DC883127;
+        Mon, 20 Feb 2023 03:03:12 +0000 (UTC)
+X-GW-Data: lPqxHiMPbJw1wb7CM9QUryAGzr0yq5atzVDdxTR0iA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gnuweeb.org;
+        s=default; t=1676862199;
+        bh=GsqZ9BCgNywZeu6U972GkrKT4lGOkNYqfVTPGNRK+3g=;
+        h=From:To:Cc:Subject:Date:From;
+        b=P3cIv4870Q7kVt9m0xN1OoLmPXfDwsH4/KstW4RtqmRu1lwGQ/FEsubNtJRnCzNLs
+         DJinBwmUxil3BPRdUcDi+PBVaPMQsXyTkg3gBVMSWT+2paykPEUllfHlbE7PKJv5SJ
+         fmwCqAVD+BoAdVCHsQp4fLIzr3CHoyjcj9rK/1oXyjNxk5YUCwxQLcpl7hLcBS15aS
+         cTTVKS1264x0mQrm4/EWEPlG8eK+bxaHWED9brMCVP78+Eqe10e9syoyVkU1gdZkdW
+         Ljy6+XoaICOLMR5lZebEXsjbuZ5eyQeg1gbPI8JSfd5qZhmHnMTdUBgwujvdmfr+u3
+         7otJWWglEj5JA==
+From:   Ammar Faizi <ammarfaizi2@gnuweeb.org>
+To:     Dave Hansen <dave.hansen@intel.com>, Xin Li <xin3.li@intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, Ingo Molnar <mingo@kernel.org>
+Cc:     Ammar Faizi <ammarfaizi2@gnuweeb.org>,
+        Andrew Cooper <Andrew.Cooper3@citrix.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Borislav Petkov <bp@alien8.de>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        x86 Mailing List <x86@kernel.org>,
+        Linux x86-64 Mailing List <linux-x86_64@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Kselftest Mailing List 
+        <linux-kselftest@vger.kernel.org>,
+        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>
+Subject: [RFC PATCH v8 0/3] Intel FRED architecture support for the sysret_rip selftest
+Date:   Mon, 20 Feb 2023 10:02:41 +0700
+Message-Id: <20230220030244.115808-1-ammarfaizi2@gnuweeb.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/cNYlBCqbc_9Zi4hLFVflN2c";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -51,78 +61,84 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/cNYlBCqbc_9Zi4hLFVflN2c
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+Hi,
 
-Hi all,
+This is an RFC v8. Based on the x86/cpu branch in the tip tree.
 
-Today's linux-next merge of the efi tree got a conflict in:
+The 'syscall' instruction on the Intel FRED architecture does not
+clobber %rcx and %r11. This behavior leads to an assertion failure in
+the sysret_rip selftest because it asserts %r11 = %rflags.
 
-  arch/arm64/include/asm/efi.h
+In the previous discussion, we agreed that there are two cases for
+'syscall':
 
-between commit:
+  A) 'syscall' in a FRED system preserves %rcx and %r11.
 
-  8a9a1a18731e ("arm64: efi: Avoid workqueue to check whether EFI runtime i=
-s live")
+  B) 'syscall' in a non-FRED system sets %rcx=%rip and %r11=%rflags.
 
-from Linus' tree and commit:
+This series fixes the selftest. Make it work on the Intel FRED
+architecture. Also, add more tests to ensure the syscall behavior is
+consistent. It must always be (A) or always be (B). Not a mix of them.
 
-  0e68b5517d37 ("arm64: efi: Make efi_rt_lock a raw_spinlock")
+See the previous discussion here:
+https://lore.kernel.org/lkml/5d4ad3e3-034f-c7da-d141-9c001c2343af@intel.com
 
-from the efi tree.
+## Changelog revision
 
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
+v8:
+  - Stop using "+r"(rsp) to avoid the red zone problem because it
+    generates the wrong Assembly code (Ammar).
+    See: https://gcc.gnu.org/bugzilla/show_bug.cgi?id=108799
 
---=20
-Cheers,
-Stephen Rothwell
+  - Update commit message (Ammar).
 
-diff --cc arch/arm64/include/asm/efi.h
-index acaa39f6381a,1b81dd5554cb..000000000000
---- a/arch/arm64/include/asm/efi.h
-+++ b/arch/arm64/include/asm/efi.h
-@@@ -47,18 -48,9 +48,18 @@@ int efi_set_mapping_permissions(struct=20
-  	efi_virtmap_unload();						\
-  })
- =20
-- extern spinlock_t efi_rt_lock;
-+ extern raw_spinlock_t efi_rt_lock;
- +extern u64 *efi_rt_stack_top;
-  efi_status_t __efi_rt_asm_wrapper(void *, const char *, ...);
- =20
- +/*
- + * efi_rt_stack_top[-1] contains the value the stack pointer had before
- + * switching to the EFI runtime stack.
- + */
- +#define current_in_efi()						\
- +	(!preemptible() && efi_rt_stack_top !=3D NULL &&			\
- +	 on_task_stack(current, READ_ONCE(efi_rt_stack_top[-1]), 1))
- +
-  #define ARCH_EFI_IRQ_FLAGS_MASK (PSR_D_BIT | PSR_A_BIT | PSR_I_BIT | PSR_=
-F_BIT)
- =20
-  /*
+v7:
+  - Fix comment, REGS_ERROR no longer exists in the enum (Ammar).
 
---Sig_/cNYlBCqbc_9Zi4hLFVflN2c
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
+  - Update commit message (Ammar).
 
------BEGIN PGP SIGNATURE-----
+v6:
+  - Move the check-regs assertion in sigusr1() to check_regs_result() (HPA).
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmPy4eQACgkQAVBC80lX
-0GxDZAgAmQMAhjeaOZtoS3wIaCO9sa2C/EqeGcops8N3A/DL+Q7ESeJhDRaDpsSD
-C+qdqlnZpSjWrmAg/Rw8iZenzddhOGtdKjvIWz+g5HDFltyC5RdMMYzfie9VWVA5
-T897r14pVFsLnq//qyfrVegn0tcUWSu23Yu7NAlqGztR4EyRGz3lQYHnmvOn4tLr
-YRF+jGiFpAnod9KDEpWbnDH0RclEAZXic9ePi0rOLUYs4oj9lDgY5YEP2Xw4ri1V
-Er1VlWNAy+D1KcbFxJ8OeqT53r5auJXjWCQ1HXDaTeLpRUQGYRsszEjcQYIUXQNu
-TohVHNT+e4HSBjKSbH4RcxruALq6GA==
-=1XgF
------END PGP SIGNATURE-----
+  - Add a new test just like sigusr1(), but don't modify REG_RCX and
+    REG_R11. This is used to test SYSRET behavior consistency (HPA).
 
---Sig_/cNYlBCqbc_9Zi4hLFVflN2c--
+v5:
+  - Fix do_syscall() return value (Ammar).
+
+v4:
+  - Fix the assertion condition inside the SIGUSR1 handler (Xin Li).
+
+  - Explain the purpose of patch #2 in the commit message (HPA).
+
+  - Update commit message (Ammar).
+
+  - Repeat test_syscall_rcx_r11_consistent() 32 times to be more sure
+    that the result is really consistent (Ammar).
+
+v3:
+  - Test that we don't get a mix of REGS_SAVED and REGS_SYSRET, which
+    is a major part of the point (HPA).
+
+v2:
+  - Use "+r"(rsp) as the right way to avoid redzone problems per
+    Andrew's comment (HPA).
+
+Co-developed-by: H. Peter Anvin (Intel) <hpa@zytor.com>
+Signed-off-by: H. Peter Anvin (Intel) <hpa@zytor.com>
+Signed-off-by: Ammar Faizi <ammarfaizi2@gnuweeb.org>
+---
+
+Ammar Faizi (3):
+  selftests/x86: sysret_rip: Handle syscall on the Intel FRED architecture
+  selftests/x86: sysret_rip: Add more tests to verify the 'syscall' behavior
+  selftests/x86: sysret_rip: Test SYSRET with a signal handler
+
+ tools/testing/selftests/x86/sysret_rip.c | 169 +++++++++++++++++++++--
+ 1 file changed, 160 insertions(+), 9 deletions(-)
+
+
+base-commit: e067248949e3de7fbeae812b0ccbbee7a401e7aa
+-- 
+Ammar Faizi
+
