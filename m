@@ -2,209 +2,177 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4396869CA23
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Feb 2023 12:47:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 22DFE69CA24
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Feb 2023 12:47:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231435AbjBTLr2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Feb 2023 06:47:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39886 "EHLO
+        id S231846AbjBTLrx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Feb 2023 06:47:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40522 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231243AbjBTLr0 (ORCPT
+        with ESMTP id S231586AbjBTLrv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Feb 2023 06:47:26 -0500
-Received: from mail-ed1-f47.google.com (mail-ed1-f47.google.com [209.85.208.47])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63DA01A966;
-        Mon, 20 Feb 2023 03:47:25 -0800 (PST)
-Received: by mail-ed1-f47.google.com with SMTP id g1so3307731edz.7;
-        Mon, 20 Feb 2023 03:47:25 -0800 (PST)
+        Mon, 20 Feb 2023 06:47:51 -0500
+Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CBE01BE2
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Feb 2023 03:47:49 -0800 (PST)
+Received: by mail-ed1-x52c.google.com with SMTP id s26so3525990edw.11
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Feb 2023 03:47:49 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=amarulasolutions.com; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=5MYDnxht01aIuDWLkYyvj7yZmM3aYYqRac20Yepq1lY=;
+        b=JD2Iy/hmscHCz5oe0S09jyZNKkPVxb0f+R3OtOMg1ztU0utW792Q/7de9jd31ORy1D
+         B8/BkYZf6BHU1DD2QJ1pIlCi6TmNJZNzF5vdeKHKq2vCqthijEX+CpT/uPO5s/52e1FT
+         USHp1LIJRtmWSGwbhATDwSMzhkrT1QncRLStg=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
-         :content-language:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=4HvsutTANG3cjuLMBWKYQu5HgoJwLQebTSdHXrLXPcM=;
-        b=vslTjukZkT/UQQnrn/q6To3YIcnIQe4G/tgmI+3Ty8dRydNiTq6XX5pesvTQwaPpAo
-         h8APmssQuJjP3pFJibpVwyPzQuTB5oeP0XHc8cZ6YTiGUC16p7uF5/x+4Cr7OI/oHybo
-         LSZV3l5dDiQrqqf5IYf/z2SxCbppiMDt8zKJE9o4FavcVpudeKCI5PzHPjsNl6DaQiMr
-         5IXmbVfe6TCHzqzY4UYAuRpMqTRDlksx533vuBUj6y1wSRFs25LiXcmguwSDd2/CDdZy
-         SzefX2wZwTQ2JKgkfjBzibK1wgmzwtU8+eJQuzKzGgyh7GHfmVC/dakQVeMbnAGGN9Y0
-         FDyQ==
-X-Gm-Message-State: AO0yUKVgVcVSFGDYN3PJPmyrcxVwpQHdj5IQQMn/bdfuqIFBrOKfHhoh
-        F95gD77iv3kQPNgnAPs7Tyo=
-X-Google-Smtp-Source: AK7set9GCdIByppmjb4jggC0khoDJcMB71fwHYywjKBjQXCHiOgnru8Yhlf4TWRBLNTiKe/MxhZDsw==
-X-Received: by 2002:a50:e606:0:b0:4ac:bcf9:6d7e with SMTP id y6-20020a50e606000000b004acbcf96d7emr1274149edm.11.1676893643342;
-        Mon, 20 Feb 2023 03:47:23 -0800 (PST)
-Received: from ?IPV6:2a0b:e7c0:0:107::aaaa:49? ([2a0b:e7c0:0:107::aaaa:49])
-        by smtp.gmail.com with ESMTPSA id t14-20020a508d4e000000b004acb696a0f6sm1257671edt.91.2023.02.20.03.47.21
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 20 Feb 2023 03:47:22 -0800 (PST)
-Message-ID: <fa21b4df-951d-129e-4c98-de9dd25f10db@kernel.org>
-Date:   Mon, 20 Feb 2023 12:47:21 +0100
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=5MYDnxht01aIuDWLkYyvj7yZmM3aYYqRac20Yepq1lY=;
+        b=wzK5dXJRzVyw3NhoBf+PD9YqvSfOgOEQRPeEuFFVYiZ6MKczahNVgLbOoA1BymXs0b
+         Yz2NaKikT2qhf3X6/0N8F6UoaE+u2rQ2AJwmMvvZ2do4/MrKwH2VsyjDOE2zhbnTzQsK
+         xLoEoKKdIdBDKNTf6aR8XwP5r+dRe7gJaUl4GW0vgWQwBWgjANB1jBaqdbPP60i33HQp
+         321u+d4zAdW2FbXrchriFQK+ocOlB0w4v7hcLBaZ3FNt3KbpiiebIUWMohLawaxHfdKz
+         ui5HWDn6D1cmUXq/SW56KKQlEy7KiHZF0y4h5UEpMW8CYkP8aoyJm/uazzzpJE6U49LQ
+         zdnQ==
+X-Gm-Message-State: AO0yUKVfpYNhLs59cGD08Zm31iMUlrchC/5uhwUEYmFYFumloXActr6a
+        0FA7yRBPcPm0Z71z5UsM2zXSkgxnMsN2irNjdZHRJA==
+X-Google-Smtp-Source: AK7set/zCjOOdMN9SRibEUbaA9HfctlmSgam0qlRKB6MEy1DjJtBrvoHn8BdX7JrDkqX+PqSTeYHpnpEDE7gKZgyzMs=
+X-Received: by 2002:a50:d544:0:b0:4ad:6e3e:7da6 with SMTP id
+ f4-20020a50d544000000b004ad6e3e7da6mr1367603edj.6.1676893667828; Mon, 20 Feb
+ 2023 03:47:47 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Content-Language: en-US
-To:     Florian Eckert <fe@dev.tdt.de>, u.kleine-koenig@pengutronix.de,
-        gregkh@linuxfoundation.org, pavel@ucw.cz, lee@kernel.org
-Cc:     linux-kernel@vger.kernel.org, linux-leds@vger.kernel.org,
-        Eckert.Florian@googlemail.com
-References: <20230220093739.320478-1-fe@dev.tdt.de>
- <20230220093739.320478-3-fe@dev.tdt.de>
-From:   Jiri Slaby <jirislaby@kernel.org>
-Subject: Re: [PATCH v3 2/2] trigger: ledtrig-tty: add additional modes
-In-Reply-To: <20230220093739.320478-3-fe@dev.tdt.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+References: <20230211064527.3481754-1-jstultz@google.com> <20230211064527.3481754-2-jstultz@google.com>
+ <CAOf5uwnW1u=nfFnj3C8kCVmhgwRaVh6sHZR1RGnXdbrCNpkGVg@mail.gmail.com>
+ <87o7porea9.ffs@tglx> <CAOf5uwmhtQ8GXhMiE-Y3-wgL5=xfjOv0Tpq1vqPB8p=LyZHBmw@mail.gmail.com>
+In-Reply-To: <CAOf5uwmhtQ8GXhMiE-Y3-wgL5=xfjOv0Tpq1vqPB8p=LyZHBmw@mail.gmail.com>
+From:   Michael Nazzareno Trimarchi <michael@amarulasolutions.com>
+Date:   Mon, 20 Feb 2023 12:47:36 +0100
+Message-ID: <CAOf5uwmpayJwpAFzUS6qsCgdpyek1f-2t2t9YNr76vnRjSC8=w@mail.gmail.com>
+Subject: Re: [RFC][PATCH 2/2] time: alarmtimer: Use TASK_FREEZABLE to cleanup
+ freezer handling
+To:     Thomas Gleixner <tglx@linutronix.de>
+Cc:     John Stultz <jstultz@google.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Stephen Boyd <sboyd@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+        Michael <michael@mipisi.de>, kernel-team@android.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 20. 02. 23, 10:37, Florian Eckert wrote:
-> Add additional modes to trigger the selected LED.
-> The following modes are supported:
-> 
-> Tx/Rx:	Flash LED on data transmission (default)
-> CTS:	DCE Ready to accept data from the DTE.
-> DSR:	DCE is ready to receive and send data.
-> CAR:	DCE is receiving a carrier from a remote DTE.
-> RNG:	DCE has detected an incoming ring signal.
-> 
-> The mode can be changed for example with the following command:
-> echo "CTS" > /sys/class/leds/<led>/mode
-> 
-> This would turn on the LED, when the DTE(modem) signals the DCE that it
-> is ready to accept data.
-> 
-> Signed-off-by: Florian Eckert <fe@dev.tdt.de>
+Hi
 
-> --- a/drivers/leds/trigger/ledtrig-tty.c
-> +++ b/drivers/leds/trigger/ledtrig-tty.c
-> @@ -7,6 +7,15 @@
->   #include <linux/tty.h>
->   #include <uapi/linux/serial.h>
->   
-> +enum tty_led_mode {
-> +	TTY_LED_CNT,
-> +	TTY_LED_CTS,
-> +	TTY_LED_DSR,
-> +	TTY_LED_CAR,
-> +	TTY_LED_RNG,
+On Mon, Feb 20, 2023 at 9:23 AM Michael Nazzareno Trimarchi
+<michael@amarulasolutions.com> wrote:
+>
+> Hi Thomas
+>
+> On Mon, Feb 20, 2023 at 8:23 AM Thomas Gleixner <tglx@linutronix.de> wrote:
+> >
+> > On Sat, Feb 18 2023 at 15:56, Michael Nazzareno Trimarchi wrote:
+> > >
+> > > I have changed the alarm test to check some corner case
+> >
+> > Could you tell us please which test did you change and what the change is?
+> >
+>
 
-I would do:
-  __TTY_LED_LAST = TTY_LED_RNG;
+There are no changes in the kernel apart pr_info on enqueue dequeue
+and fired call
+in alarmtimer.c. linux  master branch sha
+38f8ccde04a3fa317b51b05e63c3cb57e1641931
+and both patches applied
 
-instead of:
+time: alarmtimer: Use TASK_FREEZABLE to cleanup freezer handling
+time: alarmtimer: Fix erroneous case of using 0 as an "invalid"
+initialization value
 
-> +	__TTY_LED_MAX
+Michael
 
-
-> +};
-> +
->   struct ledtrig_tty_data {
->   	struct led_classdev *led_cdev;
->   	struct delayed_work dwork;
-> @@ -14,6 +23,15 @@ struct ledtrig_tty_data {
->   	const char *ttyname;
->   	struct tty_struct *tty;
->   	int rx, tx;
-> +	enum tty_led_mode mode;
-> +};
-> +
-> +static const char * const mode[] = {
-> +	[TTY_LED_CNT] = "Tx/Rx", // Trasmit Data / Receive Data
-> +	[TTY_LED_CTS] = "CTS", // CTS Clear To Send
-> +	[TTY_LED_DSR] = "DSR", // DSR Data Set Ready
-> +	[TTY_LED_CAR] = "CAR", // CAR Data Carrier Detect (DCD)
-> +	[TTY_LED_RNG] = "RNG", // RNG Ring Indicator (RI)
->   };
->   
->   static void ledtrig_tty_restart(struct ledtrig_tty_data *trigger_data)
-> @@ -21,6 +39,71 @@ static void ledtrig_tty_restart(struct ledtrig_tty_data *trigger_data)
->   	schedule_delayed_work(&trigger_data->dwork, 0);
+>   if (timer_create(CLOCK_REALTIME_ALARM, &se, &tm1) == -1) {
+>        printf("timer_create failed, %s unsupported?\n",
+>        clockstring(alarm_clock_id));
+>        exit(1);
 >   }
->   
-> +static ssize_t ledtrig_tty_mode_show(char *buf, enum tty_led_mode tty_mode)
-> +{
-> +	int len = 0;
-> +	int i;
-> +
-> +	for (i = 0; i < __TTY_LED_MAX; i++) {
-> +		bool hit;
-> +
-> +		hit = tty_mode == i;
+>
+>   clock_gettime(alarm_clock_id, &start_time);
+>   printf("Start time (%s): %ld:%ld\n", clockstring(alarm_clock_id),
+>                                 start_time.tv_sec, start_time.tv_nsec);
+>   printf("Setting alarm for every %i seconds\n", SUSPEND_SECS);
+>   its1.it_value = start_time;
+>   its1.it_value.tv_sec += 4;
+>   /* Empiric value for get in between a freeze task and fire of the timer */
+>   its1.it_value.tv_nsec += 132079666;
+>   its1.it_interval.tv_sec = 4;
+>   its1.it_interval.tv_nsec = 0;
+>
+>   timer_settime(tm1, TIMER_ABSTIME, &its1, &its2);
+>
+>   printf("Starting suspend loops\n");
+>   while (1) {
+>       int ret;
+>       sleep(4);
+>       system("echo mem > /sys/power/state");
+>   }
+>
+> > > periodic_alarm
+> > > Start time (CLOCK_REALTIME_ALARM)[   85.624819] alarmtimer_enqueue: called
+> > > : 94:865096467
+> > > Setting alarm for every 4 seconds
+> > > Starting suspend loops
+> > > [   89.674127] PM: suspend entry (deep)
+> > > [   89.714916] Filesystems sync: 0.037 seconds
+> > > [   89.733594] Freezing user space processes
+> > > [   89.740680] Freezing user space processes completed (elapsed 0.002 seconds)
+> > > [   89.748593] OOM killer disabled.
+> > > [   89.752257] Freezing remaining freezable tasks
+> > > [   89.756807] alarmtimer_fired: called
+> > > [   89.756831] alarmtimer_dequeue: called <---- HERE
+> > >
+> > > I have the dequeue but not an enquee of the periodic alarm. I was
+> > > thinking that create a periodic time of 4 seconds
+> > > and have the first alarm on suspend will always guarantee the re-arm
+> > > it but it's not working as I expect
+> >
+> > Again. You are not telling what you expect. It depends on how the timer
+> > is set up whether the timer is self rearmed or not.
+> >
+>
+> Posted the pseudo code. As far as I understand, the timer periodic is
+> re-armed in get_signal
+> do_work_pending->do_signal()->get_signal(), then in the posix timer
+> code the enqueue_alarm is called. All the timers
+> used from suspend are coming from the expiration list that contains
+> only the enqueue alarm
+>
+> My test case is a single core, arm and with only one REAL_TIME_ALARM
+> periodic timer created.
+>
+> Michael
+>
+> > Thanks,
+> >
+> >         tglx
 
-Both the decl and assignment can be on a single line.
 
-> +		len += sysfs_emit_at(buf, len, "%s%s%s",
-> +				  hit ? "[" : "",
-> +				  mode[i],
-> +				  hit ? "]" : "");
-> +
-> +		if (i < __TTY_LED_MAX - 1)
-> +			len += sysfs_emit_at(buf, len, " ");
 
-And all this could be then:
-for (i = 0; i <= __TTY_LED_LAST; i++) {
-   bool hit = i == tty_mode;
-   bool last = i == __TTY_LED_LAST;
-
-   len += sysfs_emit_at(buf, len, "%s%s%s%s",
-				  hit ? "[" : "",
-				  mode[i],
-				  hit ? "]" : "",
-				  last ? "" : " ");
-}
-
-> +	}
-> +
-> +	len += sysfs_emit_at(buf, len, "\n");
-> +
-> +	return len;
-> +}
-...
-> +static ssize_t tty_led_mode_store(struct device *dev,
-> +			  struct device_attribute *attr, const char *buf,
-> +			  size_t size)
-> +{
-> +	struct ledtrig_tty_data *trigger_data = led_trigger_get_drvdata(dev);
-> +	ssize_t ret = size;
-> +	enum tty_led_mode tty_mode = __TTY_LED_MAX;
-> +	int i;
-> +
-> +	/* Check for new line in string*/
-> +	if (size > 0 && buf[size - 1] == '\n')
-> +		size -= 1;
-> +
-> +	for (i = 0; i < __TTY_LED_MAX; i++) {
-> +		if (strncmp(buf, mode[i], size) == 0)
-> +			tty_mode = i;
-> +	}
-> +
-> +	if (tty_mode == __TTY_LED_MAX)
-> +		return -EINVAL;
-
-Ah, you use __TTY_LED_MAX as an extra value. It doesn't look nice. So 
-now, what about:
-
-	for (i = 0; i <= __TTY_LED_LAST; i++)
-		if (strncmp(buf, mode[i], size) == 0) {
-			tty_mode = i;
-			break;
-		}
-
-	if (i > __TTY_LED_LAST)
-		return -EINVAL;
-
-?
-
-thanks,
 -- 
-js
-suse labs
+Michael Nazzareno Trimarchi
+Co-Founder & Chief Executive Officer
+M. +39 347 913 2170
+michael@amarulasolutions.com
+__________________________________
 
+Amarula Solutions BV
+Joop Geesinkweg 125, 1114 AB, Amsterdam, NL
+T. +31 (0)85 111 9172
+info@amarulasolutions.com
+www.amarulasolutions.com
