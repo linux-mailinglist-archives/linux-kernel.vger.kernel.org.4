@@ -2,130 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8AF9769CC1F
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Feb 2023 14:34:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 71A1E69CC20
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Feb 2023 14:34:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231514AbjBTNeS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Feb 2023 08:34:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43724 "EHLO
+        id S231782AbjBTNel (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Feb 2023 08:34:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44216 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230384AbjBTNeQ (ORCPT
+        with ESMTP id S231534AbjBTNeg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Feb 2023 08:34:16 -0500
-Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 690351A659
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Feb 2023 05:34:11 -0800 (PST)
-Received: by mail-wm1-x331.google.com with SMTP id m14-20020a7bce0e000000b003e00c739ce4so882110wmc.5
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Feb 2023 05:34:11 -0800 (PST)
+        Mon, 20 Feb 2023 08:34:36 -0500
+Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D99661ABEA
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Feb 2023 05:34:33 -0800 (PST)
+Received: by mail-pj1-x1032.google.com with SMTP id na9-20020a17090b4c0900b0023058bbd7b2so1364398pjb.0
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Feb 2023 05:34:33 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:to:from:references:cc
-         :content-language:subject:user-agent:mime-version:date:message-id
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=6MTcE1D6Wq+f2x/4bGVRNKlqQDDwTAwPuTBkZqVC40M=;
-        b=RzLz7H+PRYdW8zKmbhU5lTHnS2bdRG5p+9hkdCoJAl3LUecYi5jw2fRx/lGL4yOtKQ
-         RFRJK0ECoKdekHErYwdieWEv5VnlF5CxBR8Gum2vsPThyprhgDpout9ngt0l3pX5aemj
-         X+ZIl4ScQCAzdbBINRhEp9+mGJud8UGYHXYaTiIWOtb9PdtMo+afLUHxAelX3HQjlnFb
-         1OBfcYRafj5IabmHn8tq9z/XAjeooGsKopjFKTHVF8B3vKN158wJY3vOB5qcV29Evqtu
-         64d4HHc2Ep3zm93PpHJ49LyI4e00EdXlDYbWghCBHm5PC4HEbzgV00olx5ZVJ6fjyGE6
-         0qwQ==
+        bh=NUCp9YKX3Ddj4Bg7opa4+in3GKumx6vDOOx0A/l+ix4=;
+        b=a9IL9qr4LSzTWiFKY+QVq7Xg5jSSsXCNC0HpV4+cqfkKgdjoanuZOrtm6uuWOHzhIX
+         Oo63RYhBNg1JbCYQXVsPnoBqitJrB4OraKADhnH0Vkvc6q8Kd8qBY7P7SROcscAjsUNe
+         8f+vqIjDJs3xOpXznAk3X1kQQOPZjIpKtbcQb5bpPHZHZ9r+1m1MhGNnt0GgOrHGCeDG
+         wjACjipOW8nJpqwBc78iBihx3M6pJrTnyOlCgcNcQAhRTubXuv5dr6g/9OiP3oVc81vl
+         cFMr4Bk3jZmxreJW9V1XLvkA/AoJ9PhmbATW2Q7d26IHzsrIw9pN9O40EWjFdCHiCBsG
+         +Xlg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:to:from:references:cc
-         :content-language:subject:user-agent:mime-version:date:message-id
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=6MTcE1D6Wq+f2x/4bGVRNKlqQDDwTAwPuTBkZqVC40M=;
-        b=gS2K7EOX0xv1YYaW6oIeTvG2BQLGTrbicYxgC5m3VY6q/7VoeE6HiocI4kC17Jx+gw
-         4UINOkQa3eXyNA+yfI4L9N3/jltjZQigSoHOa2YDtMXFBSVlOcPgu2JKyHQgMwDB+c9i
-         uDdEzKGtgqPdvE7Q4rr5ST3DVmXu/Md8eM1XxPcWgjy/vGXnlH6yMOiWQBh5LXGr/1rC
-         CIoGkGbqgxbtd+nkEQY+iPNGNI5KgdMhFx1Z2XlupwQKuG3NywrxOmiTKG+HLo+Osepd
-         7Q8ypW2C6knPLSNGcKSXaKilGoY2EDQVhXwiRGYH45VCztORTNbiyr6j5IxtFwRx4z2+
-         +T3w==
-X-Gm-Message-State: AO0yUKX6KtxV5gRspSk6yeyrUoC93YJpqb8qEOp/xtKw8OXZFwmIobNK
-        TeyTmqQjeKxBmALALWr0iSMArw==
-X-Google-Smtp-Source: AK7set81/Q7A64hUMTxW9WOSXdz9VNxzNMtMlyoZCzc3TwuBvqQd5+65Z3Ox48WTaqWewhjp/zNiFw==
-X-Received: by 2002:a05:600c:319a:b0:3db:5f1:53a5 with SMTP id s26-20020a05600c319a00b003db05f153a5mr448165wmp.20.1676900049817;
-        Mon, 20 Feb 2023 05:34:09 -0800 (PST)
-Received: from ?IPV6:2a05:6e02:1041:c10:8d87:e6b4:7d0f:3fdb? ([2a05:6e02:1041:c10:8d87:e6b4:7d0f:3fdb])
-        by smtp.googlemail.com with ESMTPSA id k18-20020a05600c409200b003db06224953sm1562488wmh.41.2023.02.20.05.34.08
+        bh=NUCp9YKX3Ddj4Bg7opa4+in3GKumx6vDOOx0A/l+ix4=;
+        b=ygcWpjq1sfGBdJ13qxyw4Ax7Kpxs6BDVEOyx0vXC+BSP3LvARCSbgC6vGAxPbDlWUd
+         NS5MgUSkdYCbm/0GEFMd3lHGjYbEl7wxb89r0sZmBTxY5ZrzOsCpPVAjCMwQUsaczHP2
+         m70iKZtpiSIhzThgrNnxFVqWS9xTn0XanHMRkFkN0m0CKTyRlUdP3DcC1C5Mjt5W7LV4
+         zSRzTv5cGE+C4UpxWeHlfENnYQQc5f6/bsvLyGcXOxiA51+Bs93rvQT3AZ/9hOkIdpTR
+         DyiGsXgs9PhKoDTAYCNePSWyicfZBTVJaUpSjNFGAbK6obfJVA9gtbZUB8y6oIirZsbp
+         o43g==
+X-Gm-Message-State: AO0yUKX5QY2tA2pmJCuHx7PA5ntQj1+1XbDgRHQqEw1xwwCz22JOlfht
+        6ZArwRCUJAQL0IYvgAUGq3A=
+X-Google-Smtp-Source: AK7set/47cWvnjU2FyUkux0Z38yfw1dJwfb+NScN1HFB4ME2hKp1WINTzoaONO1P87eciJUglqaQoQ==
+X-Received: by 2002:a05:6a20:a008:b0:bc:8b20:97b7 with SMTP id p8-20020a056a20a00800b000bc8b2097b7mr11837306pzj.28.1676900073261;
+        Mon, 20 Feb 2023 05:34:33 -0800 (PST)
+Received: from [192.168.1.39] (M014008005000.v4.enabler.ne.jp. [14.8.5.0])
+        by smtp.gmail.com with ESMTPSA id d4-20020a170902c18400b00198f9fa23a3sm3019088pld.287.2023.02.20.05.34.31
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 20 Feb 2023 05:34:09 -0800 (PST)
-Message-ID: <9ac3a59f-a3b7-4128-87d0-7b3310ce7828@linaro.org>
-Date:   Mon, 20 Feb 2023 14:34:08 +0100
+        Mon, 20 Feb 2023 05:34:32 -0800 (PST)
+Message-ID: <ebaa2a4e-0e35-7210-42a7-8cfffefc5db4@gmail.com>
+Date:   Mon, 20 Feb 2023 22:34:10 +0900
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH v1 07/17] thermal/hwmon: Use the thermal API instead
- tampering the internals
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH v3] nvmem: u-boot-env: align endianness of crc32 values
+To:     =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <rafal@milecki.pl>,
+        srinivas.kandagatla@linaro.org
+Cc:     chunkeey@gmail.com, linux-kernel@vger.kernel.org
+References: <20230213132351.837-1-musashino.open@gmail.com>
+ <724bcb6f-775d-a7be-d47c-447dc8ac4c19@milecki.pl>
 Content-Language: en-US
-Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>, rafael@kernel.org
-References: <20230219143657.241542-1-daniel.lezcano@linaro.org>
- <20230219143657.241542-8-daniel.lezcano@linaro.org>
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-To:     Guenter Roeck <linux@roeck-us.net>
-In-Reply-To: <20230219143657.241542-8-daniel.lezcano@linaro.org>
+From:   INAGAKI Hiroshi <musashino.open@gmail.com>
+In-Reply-To: <724bcb6f-775d-a7be-d47c-447dc8ac4c19@milecki.pl>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Guenter,
+Hi Rafał,
 
-my script should have Cc'ed you but it didn't, so just a heads up this 
-patch ;)
+On 2023/02/20 17:01, Rafał Miłecki wrote:
+> On 13.02.2023 14:23, INAGAKI Hiroshi wrote:
+>> @@ -117,8 +117,8 @@ static int u_boot_env_parse(struct u_boot_env 
+>> *priv)
+>>       size_t crc32_offset;
+>>       size_t data_offset;
+>>       size_t data_len;
+>> -    uint32_t crc32;
+>> -    uint32_t calc;
+>> +    __le32 crc32;
+>> +    __le32 calc;
+>>       size_t bytes;
+>>       uint8_t *buf;
+>>       int err;
+>> @@ -152,11 +152,11 @@ static int u_boot_env_parse(struct u_boot_env 
+>> *priv)
+>>           data_offset = offsetof(struct u_boot_env_image_broadcom, 
+>> data);
+>>           break;
+>>       }
+>> -    crc32 = le32_to_cpu(*(__le32 *)(buf + crc32_offset));
+>> +    crc32 = cpu_to_le32(*(uint32_t *)(buf + crc32_offset));
+>>       crc32_data_len = priv->mtd->size - crc32_data_offset;
+>>       data_len = priv->mtd->size - data_offset;
+>>   -    calc = crc32(~0, buf + crc32_data_offset, crc32_data_len) ^ 
+>> ~0L;
+>> +    calc = cpu_to_le32(crc32(~0, buf + crc32_data_offset, 
+>> crc32_data_len) ^ ~0L);
+>
+> Can you see what happens on BE device if instead of this whole patch 
+> you
+> just replace crc32() in above line with crc32_le()?
 
-On 19/02/2023 15:36, Daniel Lezcano wrote:
-> In this function, there is a guarantee the thermal zone is registered.
-> 
-> The sysfs hwmon unregistering will be blocked until we exit the
-> function. The thermal zone is unregistered after the sysfs hwmon is
-> unregistered.
-> 
-> When we are in this function, the thermal zone is registered.
-> 
-> We can call the thermal_zone_get_crit_temp() function safely and let
-> the function use the lock which is private the thermal core code.
-> 
-> Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
-> ---
->   drivers/thermal/thermal_hwmon.c | 10 +---------
->   1 file changed, 1 insertion(+), 9 deletions(-)
-> 
-> diff --git a/drivers/thermal/thermal_hwmon.c b/drivers/thermal/thermal_hwmon.c
-> index bc02095b314c..15158715b967 100644
-> --- a/drivers/thermal/thermal_hwmon.c
-> +++ b/drivers/thermal/thermal_hwmon.c
-> @@ -77,15 +77,7 @@ temp_crit_show(struct device *dev, struct device_attribute *attr, char *buf)
->   	int temperature;
->   	int ret;
->   
-> -	mutex_lock(&tz->lock);
-> -
-> -	if (device_is_registered(&tz->device))
-> -		ret = tz->ops->get_crit_temp(tz, &temperature);
-> -	else
-> -		ret = -ENODEV;
-> -
-> -	mutex_unlock(&tz->lock);
-> -
-> +	ret = thermal_zone_get_crit_temp(tz, &temperature);
->   	if (ret)
->   		return ret;
->   
+Thank you for your suggestion.
+I tried it, but "calc" still has big-endianness value and needs to be 
+converted to little-endianness value.
 
--- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+log:
 
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
+[    8.725024] u_boot_env 
+18001200.spi:flash@0:partitions:partition@c0000: Invalid calculated 
+CRC32: 0x88cd6f09 (expected: 0x096fcd88)
 
+"crc32()" seems to be the same as "crc32_le()" [0].
+
+[0]: 
+https://elixir.bootlin.com/linux/v5.15.94/source/include/linux/crc32.h#L66
+
+>
+>
+>>       if (calc != crc32) {
+>>           dev_err(dev, "Invalid calculated CRC32: 0x%08x (expected: 
+>> 0x%08x)\n", calc, crc32);
+>>           err = -EINVAL;
+
+Thanks,
+Hiroshi
