@@ -2,352 +2,190 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CCA1F69D13E
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Feb 2023 17:20:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BB31969D141
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Feb 2023 17:21:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231485AbjBTQUS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Feb 2023 11:20:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34988 "EHLO
+        id S231923AbjBTQVK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Feb 2023 11:21:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35806 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229479AbjBTQUP (ORCPT
+        with ESMTP id S230062AbjBTQVI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Feb 2023 11:20:15 -0500
-Received: from mail-oa1-x35.google.com (mail-oa1-x35.google.com [IPv6:2001:4860:4864:20::35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5EE913596
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Feb 2023 08:20:14 -0800 (PST)
-Received: by mail-oa1-x35.google.com with SMTP id 586e51a60fabf-17213c961dfso1377239fac.0
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Feb 2023 08:20:14 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=/0p3LPNhbtXZVHQ0KXCbO4t7UGZG8cqmR73L2JPywN8=;
-        b=llJs2UEq4nJ44+iP6g74zAtfuY+X6AqSOFJ4K3RGSYpANyPZeIh12hkcIJPp8DsFfr
-         PxynjMHjio2tPN4V/uPpmbQ9BOpMoFg0oMNc1nm+AxSa7s4rWhAA3vJJs4bWI9NVmpdn
-         P+LKvQDeUan+wViUn73qnXAstjRq7dLwhn6nb4Ioqz8I89YPBnhLbbg95x5iYU6zr9Lp
-         23crzFiT6+mQVkxoOHsS3pb9SLv/25qXXxLt2f2Ul8cApOuLy2J7aHW0fFsmjXL23ISf
-         Fgp3R5acGJVAT4mGwO4Vq8cXR1r9lqZSuMpUtIxhI6IZPXNg5wvPo8C0/N0jm6MufeXa
-         P8yw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=/0p3LPNhbtXZVHQ0KXCbO4t7UGZG8cqmR73L2JPywN8=;
-        b=p1Jc7anaNvJ2CqHhR44exVFojs8zi3UXE0iFPa1juRgGkKDr9OF7aEdJ1k5+AVVfas
-         IVTuA6Po+VkfQtro8zfAX+yVC027lYkMMnUjix4MdHhvU/patvyHETbaU02F/Z8EgS8K
-         Ri4J/uV6yMIYfi9v0s2htnZe9Zo/B7l24FMkGzDMs0IjcjRZq11wa7tHYtbQK+fRpt39
-         UvFbHVQ/YjtgvCgtmDagVwKi+4KEwfNhJh+Fk1xnBF+2/L5zPSXFEUchXACDC3NVm/IU
-         soos1PN5MX9+YfZzPhEV6d0qWS4GzrtWVSRhO2OKyvV7bIoVrv3X1q2HVO43YGQjz8mn
-         0kpA==
-X-Gm-Message-State: AO0yUKUXtiW2QqnggASBqC3St6nEbMKE4g9FFhCxeVsFP/Nz8qL3pr95
-        sEmME3cLHVuKBRdKfwHDc+DiRKELyAeS9Q3hxtg=
-X-Google-Smtp-Source: AK7set/ced+CJ00blev+IgUMPb1g6skEoqdRVPsy6UHvrTHEkAn+0CO4cRQwHrbFrsQy/CV1Ds+no98BIMQEZo4oSMg=
-X-Received: by 2002:a05:6870:32d4:b0:16e:5e5a:49da with SMTP id
- r20-20020a05687032d400b0016e5e5a49damr1187270oac.58.1676910013598; Mon, 20
- Feb 2023 08:20:13 -0800 (PST)
+        Mon, 20 Feb 2023 11:21:08 -0500
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DA4FFF2E;
+        Mon, 20 Feb 2023 08:21:03 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=MIME-Version:Content-Type:References:
+        In-Reply-To:Date:Cc:To:From:Subject:Message-ID:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=2N0mjLDF4RCECwYgGB5UhLjBmELGQo92MP9bsWA0jW8=; b=IJiQh8zbhURvfw5gNdxP0jXVtg
+        XVT17YXclc19YBiQzx+rgbPoO1RZEZjffd2icsJiYuXOvEtAFL/hg8k+bWgccs99fr0IJ+ZuEupgh
+        NA0SBMY1GresjopCd2LuNCGwHfXOvAlYIxHjaPl2kTYBATBF5f0CPOT5ryv+jfU+Okv5pptVl+GG2
+        tcHpZ9bK4JuwuSI4/sYPj2BAf0sYJeO6NMlqb+EFGUnd5+uBEjQt9dvZznQ7b0wZtaZoNqgUvmy+u
+        sxqQdYZ5pv/lxtu2eYSZJkWxcz1T0yF6Nr/9ihFo0e9vhlGc7Kh7sINCt1S3eSOHv1DTo5egQ1vEm
+        4LDkWeHw==;
+Received: from [2001:8b0:10b:5::bb3] (helo=u3832b3a9db3152.ant.amazon.com)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1pU8tj-00Br48-CV; Mon, 20 Feb 2023 16:20:15 +0000
+Message-ID: <ed8d662351cfe5793f8cc7e7e8c514d05d16c501.camel@infradead.org>
+Subject: Re: [PATCH v9 0/8] Parallel CPU bringup for x86_64
+From:   David Woodhouse <dwmw2@infradead.org>
+To:     Oleksandr Natalenko <oleksandr@natalenko.name>, tglx@linutronix.de,
+        kim.phillips@amd.com, Usama Arif <usama.arif@bytedance.com>
+Cc:     arjan@linux.intel.com, mingo@redhat.com, bp@alien8.de,
+        dave.hansen@linux.intel.com, hpa@zytor.com, x86@kernel.org,
+        pbonzini@redhat.com, paulmck@kernel.org,
+        linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        rcu@vger.kernel.org, mimoja@mimoja.de, hewenliang4@huawei.com,
+        thomas.lendacky@amd.com, seanjc@google.com, pmenzel@molgen.mpg.de,
+        fam.zheng@bytedance.com, punit.agrawal@bytedance.com,
+        simon.evans@bytedance.com, liangma@liangbit.com
+Date:   Mon, 20 Feb 2023 16:20:13 +0000
+In-Reply-To: <2668799.mvXUDI8C0e@natalenko.name>
+References: <20230215145425.420125-1-usama.arif@bytedance.com>
+         <2668799.mvXUDI8C0e@natalenko.name>
+Content-Type: multipart/signed; micalg="sha-256"; protocol="application/pkcs7-signature";
+        boundary="=-uE9XCa0ZzGivZ6OioyoI"
+User-Agent: Evolution 3.44.4-0ubuntu1 
 MIME-Version: 1.0
-References: <20230218211608.1630586-1-robdclark@gmail.com> <20230218211608.1630586-10-robdclark@gmail.com>
- <20230220110553.47ecd504@eldfell>
-In-Reply-To: <20230220110553.47ecd504@eldfell>
-From:   Rob Clark <robdclark@gmail.com>
-Date:   Mon, 20 Feb 2023 08:20:03 -0800
-Message-ID: <CAF6AEGt0xZavULWDfKfeNA1Ysb9gwdcGSDW-hVB0vLxTzEXK1w@mail.gmail.com>
-Subject: Re: [PATCH v4 09/14] drm/syncobj: Add deadline support for syncobj waits
-To:     Pekka Paalanen <ppaalanen@gmail.com>
-Cc:     dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org,
-        Daniel Vetter <daniel@ffwll.ch>,
-        =?UTF-8?Q?Christian_K=C3=B6nig?= <ckoenig.leichtzumerken@gmail.com>,
-        =?UTF-8?Q?Michel_D=C3=A4nzer?= <michel@daenzer.net>,
-        Tvrtko Ursulin <tvrtko.ursulin@intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        Simon Ser <contact@emersion.fr>,
-        Rob Clark <robdclark@chromium.org>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        David Airlie <airlied@gmail.com>,
-        open list <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-SRS-Rewrite: SMTP reverse-path rewritten from <dwmw2@infradead.org> by casper.infradead.org. See http://www.infradead.org/rpr.html
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 20, 2023 at 1:05 AM Pekka Paalanen <ppaalanen@gmail.com> wrote:
->
-> On Sat, 18 Feb 2023 13:15:52 -0800
-> Rob Clark <robdclark@gmail.com> wrote:
->
-> > From: Rob Clark <robdclark@chromium.org>
-> >
-> > Add a new flag to let userspace provide a deadline as a hint for syncobj
-> > and timeline waits.  This gives a hint to the driver signaling the
-> > backing fences about how soon userspace needs it to compete work, so it
-> > can addjust GPU frequency accordingly.  An immediate deadline can be
-> > given to provide something equivalent to i915 "wait boost".
-> >
-> > Signed-off-by: Rob Clark <robdclark@chromium.org>
-> > ---
-> >
-> > I'm a bit on the fence about the addition of the DRM_CAP, but it seems
-> > useful to give userspace a way to probe whether the kernel and driver
-> > supports the new wait flag, especially since we have vk-common code
-> > dealing with syncobjs.  But open to suggestions.
-> >
-> >  drivers/gpu/drm/drm_ioctl.c   |  3 ++
-> >  drivers/gpu/drm/drm_syncobj.c | 59 ++++++++++++++++++++++++++++-------
-> >  include/drm/drm_drv.h         |  6 ++++
-> >  include/uapi/drm/drm.h        | 16 ++++++++--
-> >  4 files changed, 71 insertions(+), 13 deletions(-)
-> >
-> > diff --git a/drivers/gpu/drm/drm_ioctl.c b/drivers/gpu/drm/drm_ioctl.c
-> > index 7c9d66ee917d..1c5c942cf0f9 100644
-> > --- a/drivers/gpu/drm/drm_ioctl.c
-> > +++ b/drivers/gpu/drm/drm_ioctl.c
-> > @@ -254,6 +254,9 @@ static int drm_getcap(struct drm_device *dev, void *data, struct drm_file *file_
-> >       case DRM_CAP_SYNCOBJ_TIMELINE:
-> >               req->value = drm_core_check_feature(dev, DRIVER_SYNCOBJ_TIMELINE);
-> >               return 0;
-> > +     case DRM_CAP_SYNCOBJ_DEADLINE:
-> > +             req->value = drm_core_check_feature(dev, DRIVER_SYNCOBJ_TIMELINE);
->
-> Hi,
->
-> is that a typo for DRIVER_SYNCOBJ_DEADLINE?
 
-Ahh, yes, that is a typo.. but I'm thinking of dropping the cap and
-allowing count_handles==0 instead as a way for userspace to probe
-whether the kernel supports the new ioctl flag/fields.
+--=-uE9XCa0ZzGivZ6OioyoI
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-> > +             return 0;
-> >       }
-> >
-> >       /* Other caps only work with KMS drivers */
-> > diff --git a/drivers/gpu/drm/drm_syncobj.c b/drivers/gpu/drm/drm_syncobj.c
-> > index 0c2be8360525..61cf97972a60 100644
-> > --- a/drivers/gpu/drm/drm_syncobj.c
-> > +++ b/drivers/gpu/drm/drm_syncobj.c
-> > @@ -973,7 +973,8 @@ static signed long drm_syncobj_array_wait_timeout(struct drm_syncobj **syncobjs,
-> >                                                 uint32_t count,
-> >                                                 uint32_t flags,
-> >                                                 signed long timeout,
-> > -                                               uint32_t *idx)
-> > +                                               uint32_t *idx,
-> > +                                               ktime_t *deadline)
-> >  {
-> >       struct syncobj_wait_entry *entries;
-> >       struct dma_fence *fence;
-> > @@ -1053,6 +1054,15 @@ static signed long drm_syncobj_array_wait_timeout(struct drm_syncobj **syncobjs,
-> >                       drm_syncobj_fence_add_wait(syncobjs[i], &entries[i]);
-> >       }
-> >
-> > +     if (deadline) {
-> > +             for (i = 0; i < count; ++i) {
-> > +                     fence = entries[i].fence;
-> > +                     if (!fence)
-> > +                             continue;
-> > +                     dma_fence_set_deadline(fence, *deadline);
-> > +             }
-> > +     }
-> > +
-> >       do {
-> >               set_current_state(TASK_INTERRUPTIBLE);
-> >
-> > @@ -1151,7 +1161,8 @@ static int drm_syncobj_array_wait(struct drm_device *dev,
-> >                                 struct drm_file *file_private,
-> >                                 struct drm_syncobj_wait *wait,
-> >                                 struct drm_syncobj_timeline_wait *timeline_wait,
-> > -                               struct drm_syncobj **syncobjs, bool timeline)
-> > +                               struct drm_syncobj **syncobjs, bool timeline,
-> > +                               ktime_t *deadline)
-> >  {
-> >       signed long timeout = 0;
-> >       uint32_t first = ~0;
-> > @@ -1162,7 +1173,8 @@ static int drm_syncobj_array_wait(struct drm_device *dev,
-> >                                                        NULL,
-> >                                                        wait->count_handles,
-> >                                                        wait->flags,
-> > -                                                      timeout, &first);
-> > +                                                      timeout, &first,
-> > +                                                      deadline);
-> >               if (timeout < 0)
-> >                       return timeout;
-> >               wait->first_signaled = first;
-> > @@ -1172,7 +1184,8 @@ static int drm_syncobj_array_wait(struct drm_device *dev,
-> >                                                        u64_to_user_ptr(timeline_wait->points),
-> >                                                        timeline_wait->count_handles,
-> >                                                        timeline_wait->flags,
-> > -                                                      timeout, &first);
-> > +                                                      timeout, &first,
-> > +                                                      deadline);
-> >               if (timeout < 0)
-> >                       return timeout;
-> >               timeline_wait->first_signaled = first;
-> > @@ -1243,13 +1256,20 @@ drm_syncobj_wait_ioctl(struct drm_device *dev, void *data,
-> >  {
-> >       struct drm_syncobj_wait *args = data;
-> >       struct drm_syncobj **syncobjs;
-> > +     unsigned possible_flags;
-> > +     ktime_t t, *tp = NULL;
-> >       int ret = 0;
-> >
-> >       if (!drm_core_check_feature(dev, DRIVER_SYNCOBJ))
-> >               return -EOPNOTSUPP;
-> >
-> > -     if (args->flags & ~(DRM_SYNCOBJ_WAIT_FLAGS_WAIT_ALL |
-> > -                         DRM_SYNCOBJ_WAIT_FLAGS_WAIT_FOR_SUBMIT))
-> > +     possible_flags = DRM_SYNCOBJ_WAIT_FLAGS_WAIT_ALL |
-> > +                      DRM_SYNCOBJ_WAIT_FLAGS_WAIT_FOR_SUBMIT;
-> > +
-> > +     if (drm_core_check_feature(dev, DRIVER_SYNCOBJ_DEADLINE))
-> > +             possible_flags |= DRM_SYNCOBJ_WAIT_FLAGS_WAIT_DEADLINE;
-> > +
-> > +     if (args->flags & ~possible_flags)
-> >               return -EINVAL;
-> >
-> >       if (args->count_handles == 0)
-> > @@ -1262,8 +1282,13 @@ drm_syncobj_wait_ioctl(struct drm_device *dev, void *data,
-> >       if (ret < 0)
-> >               return ret;
-> >
-> > +     if (args->flags & DRM_SYNCOBJ_WAIT_FLAGS_WAIT_DEADLINE) {
-> > +             t = ktime_set(args->deadline_sec, args->deadline_nsec);
-> > +             tp = &t;
-> > +     }
-> > +
-> >       ret = drm_syncobj_array_wait(dev, file_private,
-> > -                                  args, NULL, syncobjs, false);
-> > +                                  args, NULL, syncobjs, false, tp);
-> >
-> >       drm_syncobj_array_free(syncobjs, args->count_handles);
-> >
-> > @@ -1276,14 +1301,21 @@ drm_syncobj_timeline_wait_ioctl(struct drm_device *dev, void *data,
-> >  {
-> >       struct drm_syncobj_timeline_wait *args = data;
-> >       struct drm_syncobj **syncobjs;
-> > +     unsigned possible_flags;
-> > +     ktime_t t, *tp = NULL;
-> >       int ret = 0;
-> >
-> >       if (!drm_core_check_feature(dev, DRIVER_SYNCOBJ_TIMELINE))
-> >               return -EOPNOTSUPP;
-> >
-> > -     if (args->flags & ~(DRM_SYNCOBJ_WAIT_FLAGS_WAIT_ALL |
-> > -                         DRM_SYNCOBJ_WAIT_FLAGS_WAIT_FOR_SUBMIT |
-> > -                         DRM_SYNCOBJ_WAIT_FLAGS_WAIT_AVAILABLE))
-> > +     possible_flags = DRM_SYNCOBJ_WAIT_FLAGS_WAIT_ALL |
-> > +                      DRM_SYNCOBJ_WAIT_FLAGS_WAIT_FOR_SUBMIT |
-> > +                      DRM_SYNCOBJ_WAIT_FLAGS_WAIT_AVAILABLE;
-> > +
-> > +     if (drm_core_check_feature(dev, DRIVER_SYNCOBJ_DEADLINE))
-> > +             possible_flags |= DRM_SYNCOBJ_WAIT_FLAGS_WAIT_DEADLINE;
-> > +
-> > +     if (args->flags & ~possible_flags)
-> >               return -EINVAL;
-> >
-> >       if (args->count_handles == 0)
-> > @@ -1296,8 +1328,13 @@ drm_syncobj_timeline_wait_ioctl(struct drm_device *dev, void *data,
-> >       if (ret < 0)
-> >               return ret;
-> >
-> > +     if (args->flags & DRM_SYNCOBJ_WAIT_FLAGS_WAIT_DEADLINE) {
-> > +             t = ktime_set(args->deadline_sec, args->deadline_nsec);
-> > +             tp = &t;
-> > +     }
-> > +
-> >       ret = drm_syncobj_array_wait(dev, file_private,
-> > -                                  NULL, args, syncobjs, true);
-> > +                                  NULL, args, syncobjs, true, tp);
-> >
-> >       drm_syncobj_array_free(syncobjs, args->count_handles);
-> >
-> > diff --git a/include/drm/drm_drv.h b/include/drm/drm_drv.h
-> > index 1d76d0686b03..9aa24f097e22 100644
-> > --- a/include/drm/drm_drv.h
-> > +++ b/include/drm/drm_drv.h
-> > @@ -104,6 +104,12 @@ enum drm_driver_feature {
-> >        * acceleration should be handled by two drivers that are connected using auxiliary bus.
-> >        */
-> >       DRIVER_COMPUTE_ACCEL            = BIT(7),
-> > +     /**
-> > +      * @DRIVER_SYNCOBJ_DEADLINE:
-> > +      *
-> > +      * Driver supports &dma_fence_ops.set_deadline
-> > +      */
-> > +     DRIVER_SYNCOBJ_DEADLINE         = BIT(8),
-> >
-> >       /* IMPORTANT: Below are all the legacy flags, add new ones above. */
-> >
-> > diff --git a/include/uapi/drm/drm.h b/include/uapi/drm/drm.h
-> > index 642808520d92..c6b85bb13810 100644
-> > --- a/include/uapi/drm/drm.h
-> > +++ b/include/uapi/drm/drm.h
-> > @@ -767,6 +767,13 @@ struct drm_gem_open {
-> >   * Documentation/gpu/drm-mm.rst, section "DRM Sync Objects".
-> >   */
-> >  #define DRM_CAP_SYNCOBJ_TIMELINE     0x14
-> > +/**
-> > + * DRM_CAP_SYNCOBJ_DEADLINE
-> > + *
-> > + * If set to 1, the driver supports DRM_SYNCOBJ_WAIT_FLAGS_WAIT_DEADLINE flag
-> > + * on the SYNCOBJ_TIMELINE_WAIT/SYNCOBJ_WAIT ioctls.
-> > + */
-> > +#define DRM_CAP_SYNCOBJ_DEADLINE     0x15
-> >
-> >  /* DRM_IOCTL_GET_CAP ioctl argument type */
-> >  struct drm_get_cap {
-> > @@ -887,6 +894,7 @@ struct drm_syncobj_transfer {
-> >  #define DRM_SYNCOBJ_WAIT_FLAGS_WAIT_ALL (1 << 0)
-> >  #define DRM_SYNCOBJ_WAIT_FLAGS_WAIT_FOR_SUBMIT (1 << 1)
-> >  #define DRM_SYNCOBJ_WAIT_FLAGS_WAIT_AVAILABLE (1 << 2) /* wait for time point to become available */
-> > +#define DRM_SYNCOBJ_WAIT_FLAGS_WAIT_DEADLINE (1 << 3) /* set fence deadline based to deadline_nsec/sec */
->
-> Where was the UAPI documentation explaining what a fence deadline is
-> and what it does, again?
->
-> >  struct drm_syncobj_wait {
-> >       __u64 handles;
-> >       /* absolute timeout */
-> > @@ -894,7 +902,9 @@ struct drm_syncobj_wait {
-> >       __u32 count_handles;
-> >       __u32 flags;
-> >       __u32 first_signaled; /* only valid when not waiting all */
-> > -     __u32 pad;
-> > +     /* Deadline to set on backing fence(s) in CLOCK_MONOTONIC: */
-> > +     __u32 deadline_nsec;
-> > +     __u64 deadline_sec;
-> >  };
-> >
-> >  struct drm_syncobj_timeline_wait {
-> > @@ -906,7 +916,9 @@ struct drm_syncobj_timeline_wait {
-> >       __u32 count_handles;
-> >       __u32 flags;
-> >       __u32 first_signaled; /* only valid when not waiting all */
-> > -     __u32 pad;
-> > +     /* Deadline to set on backing fence(s) in CLOCK_MONOTONIC: */
-> > +     __u32 deadline_nsec;
-> > +     __u64 deadline_sec;
-> >  };
->
-> It seems inconsistent that these sec,nsec are here unsigned, when in
-> other places they are signed. There is also the question if these need
-> to meet clock_settime() requirements of valid values.
->
+On Mon, 2023-02-20 at 17:08 +0100, Oleksandr Natalenko wrote:
+>=20
+> I've applied this to the v6.2 kernel, and suspend/resume broke on my
+> Ryzen 5950X desktop. The machine suspends just fine, but on resume
+> the screen stays blank, and there's no visible disk I/O.
+>=20
+> Reverting the series brings suspend/resume back to working state.
 
-Yes, should have been signed.  But I think Christian has convinced me
-to use 'u64 ns' (absolute monotonic) instead for the sync_file ioctl.
-And it would make sense to use the same here.
+Hm, thanks. What if you add 'no_parallel_bringup' on the command line?
 
-BR,
--R
+Is that using X2APIC? If so, what about 'nox2apic' on the command line?
 
->
-> Thanks,
-> pq
+--=-uE9XCa0ZzGivZ6OioyoI
+Content-Type: application/pkcs7-signature; name="smime.p7s"
+Content-Disposition: attachment; filename="smime.p7s"
+Content-Transfer-Encoding: base64
+
+MIAGCSqGSIb3DQEHAqCAMIACAQExDzANBglghkgBZQMEAgEFADCABgkqhkiG9w0BBwEAAKCCEkQw
+ggYQMIID+KADAgECAhBNlCwQ1DvglAnFgS06KwZPMA0GCSqGSIb3DQEBDAUAMIGIMQswCQYDVQQG
+EwJVUzETMBEGA1UECBMKTmV3IEplcnNleTEUMBIGA1UEBxMLSmVyc2V5IENpdHkxHjAcBgNVBAoT
+FVRoZSBVU0VSVFJVU1QgTmV0d29yazEuMCwGA1UEAxMlVVNFUlRydXN0IFJTQSBDZXJ0aWZpY2F0
+aW9uIEF1dGhvcml0eTAeFw0xODExMDIwMDAwMDBaFw0zMDEyMzEyMzU5NTlaMIGWMQswCQYDVQQG
+EwJHQjEbMBkGA1UECBMSR3JlYXRlciBNYW5jaGVzdGVyMRAwDgYDVQQHEwdTYWxmb3JkMRgwFgYD
+VQQKEw9TZWN0aWdvIExpbWl0ZWQxPjA8BgNVBAMTNVNlY3RpZ28gUlNBIENsaWVudCBBdXRoZW50
+aWNhdGlvbiBhbmQgU2VjdXJlIEVtYWlsIENBMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKC
+AQEAyjztlApB/975Rrno1jvm2pK/KxBOqhq8gr2+JhwpKirSzZxQgT9tlC7zl6hn1fXjSo5MqXUf
+ItMltrMaXqcESJuK8dtK56NCSrq4iDKaKq9NxOXFmqXX2zN8HHGjQ2b2Xv0v1L5Nk1MQPKA19xeW
+QcpGEGFUUd0kN+oHox+L9aV1rjfNiCj3bJk6kJaOPabPi2503nn/ITX5e8WfPnGw4VuZ79Khj1YB
+rf24k5Ee1sLTHsLtpiK9OjG4iQRBdq6Z/TlVx/hGAez5h36bBJMxqdHLpdwIUkTqT8se3ed0PewD
+ch/8kHPo5fZl5u1B0ecpq/sDN/5sCG52Ds+QU5O5EwIDAQABo4IBZDCCAWAwHwYDVR0jBBgwFoAU
+U3m/WqorSs9UgOHYm8Cd8rIDZsswHQYDVR0OBBYEFAnA8vwL2pTbX/4r36iZQs/J4K0AMA4GA1Ud
+DwEB/wQEAwIBhjASBgNVHRMBAf8ECDAGAQH/AgEAMB0GA1UdJQQWMBQGCCsGAQUFBwMCBggrBgEF
+BQcDBDARBgNVHSAECjAIMAYGBFUdIAAwUAYDVR0fBEkwRzBFoEOgQYY/aHR0cDovL2NybC51c2Vy
+dHJ1c3QuY29tL1VTRVJUcnVzdFJTQUNlcnRpZmljYXRpb25BdXRob3JpdHkuY3JsMHYGCCsGAQUF
+BwEBBGowaDA/BggrBgEFBQcwAoYzaHR0cDovL2NydC51c2VydHJ1c3QuY29tL1VTRVJUcnVzdFJT
+QUFkZFRydXN0Q0EuY3J0MCUGCCsGAQUFBzABhhlodHRwOi8vb2NzcC51c2VydHJ1c3QuY29tMA0G
+CSqGSIb3DQEBDAUAA4ICAQBBRHUAqznCFfXejpVtMnFojADdF9d6HBA4kMjjsb0XMZHztuOCtKF+
+xswhh2GqkW5JQrM8zVlU+A2VP72Ky2nlRA1GwmIPgou74TZ/XTarHG8zdMSgaDrkVYzz1g3nIVO9
+IHk96VwsacIvBF8JfqIs+8aWH2PfSUrNxP6Ys7U0sZYx4rXD6+cqFq/ZW5BUfClN/rhk2ddQXyn7
+kkmka2RQb9d90nmNHdgKrwfQ49mQ2hWQNDkJJIXwKjYA6VUR/fZUFeCUisdDe/0ABLTI+jheXUV1
+eoYV7lNwNBKpeHdNuO6Aacb533JlfeUHxvBz9OfYWUiXu09sMAviM11Q0DuMZ5760CdO2VnpsXP4
+KxaYIhvqPqUMWqRdWyn7crItNkZeroXaecG03i3mM7dkiPaCkgocBg0EBYsbZDZ8bsG3a08LwEsL
+1Ygz3SBsyECa0waq4hOf/Z85F2w2ZpXfP+w8q4ifwO90SGZZV+HR/Jh6rEaVPDRF/CEGVqR1hiuQ
+OZ1YL5ezMTX0ZSLwrymUE0pwi/KDaiYB15uswgeIAcA6JzPFf9pLkAFFWs1QNyN++niFhsM47qod
+x/PL+5jR87myx5uYdBEQkkDc+lKB1Wct6ucXqm2EmsaQ0M95QjTmy+rDWjkDYdw3Ms6mSWE3Bn7i
+5ZgtwCLXgAIe5W8mybM2JzCCBhQwggT8oAMCAQICEQDGvhmWZ0DEAx0oURL6O6l+MA0GCSqGSIb3
+DQEBCwUAMIGWMQswCQYDVQQGEwJHQjEbMBkGA1UECBMSR3JlYXRlciBNYW5jaGVzdGVyMRAwDgYD
+VQQHEwdTYWxmb3JkMRgwFgYDVQQKEw9TZWN0aWdvIExpbWl0ZWQxPjA8BgNVBAMTNVNlY3RpZ28g
+UlNBIENsaWVudCBBdXRoZW50aWNhdGlvbiBhbmQgU2VjdXJlIEVtYWlsIENBMB4XDTIyMDEwNzAw
+MDAwMFoXDTI1MDEwNjIzNTk1OVowJDEiMCAGCSqGSIb3DQEJARYTZHdtdzJAaW5mcmFkZWFkLm9y
+ZzCCAiIwDQYJKoZIhvcNAQEBBQADggIPADCCAgoCggIBALQ3GpC2bomUqk+91wLYBzDMcCj5C9m6
+oZaHwvmIdXftOgTbCJXADo6G9T7BBAebw2JV38EINgKpy/ZHh7htyAkWYVoFsFPrwHounto8xTsy
+SSePMiPlmIdQ10BcVSXMUJ3Juu16GlWOnAMJY2oYfEzmE7uT9YgcBqKCo65pTFmOnR/VVbjJk4K2
+xE34GC2nAdUQkPFuyaFisicc6HRMOYXPuF0DuwITEKnjxgNjP+qDrh0db7PAjO1D4d5ftfrsf+kd
+RR4gKVGSk8Tz2WwvtLAroJM4nXjNPIBJNT4w/FWWc/5qPHJy2U+eITZ5LLE5s45mX2oPFknWqxBo
+bQZ8a9dsZ3dSPZBvE9ZrmtFLrVrN4eo1jsXgAp1+p7bkfqd3BgBEmfsYWlBXO8rVXfvPgLs32VdV
+NZxb/CDWPqBsiYv0Hv3HPsz07j5b+/cVoWqyHDKzkaVbxfq/7auNVRmPB3v5SWEsH8xi4Bez2V9U
+KxfYCnqsjp8RaC2/khxKt0A552Eaxnz/4ly/2C7wkwTQnBmdlFYhAflWKQ03Ufiu8t3iBE3VJbc2
+5oMrglj7TRZrmKq3CkbFnX0fyulB+kHimrt6PIWn7kgyl9aelIl6vtbhMA+l0nfrsORMa4kobqQ5
+C5rveVgmcIad67EDa+UqEKy/GltUwlSh6xy+TrK1tzDvAgMBAAGjggHMMIIByDAfBgNVHSMEGDAW
+gBQJwPL8C9qU21/+K9+omULPyeCtADAdBgNVHQ4EFgQUzMeDMcimo0oz8o1R1Nver3ZVpSkwDgYD
+VR0PAQH/BAQDAgWgMAwGA1UdEwEB/wQCMAAwHQYDVR0lBBYwFAYIKwYBBQUHAwQGCCsGAQUFBwMC
+MEAGA1UdIAQ5MDcwNQYMKwYBBAGyMQECAQEBMCUwIwYIKwYBBQUHAgEWF2h0dHBzOi8vc2VjdGln
+by5jb20vQ1BTMFoGA1UdHwRTMFEwT6BNoEuGSWh0dHA6Ly9jcmwuc2VjdGlnby5jb20vU2VjdGln
+b1JTQUNsaWVudEF1dGhlbnRpY2F0aW9uYW5kU2VjdXJlRW1haWxDQS5jcmwwgYoGCCsGAQUFBwEB
+BH4wfDBVBggrBgEFBQcwAoZJaHR0cDovL2NydC5zZWN0aWdvLmNvbS9TZWN0aWdvUlNBQ2xpZW50
+QXV0aGVudGljYXRpb25hbmRTZWN1cmVFbWFpbENBLmNydDAjBggrBgEFBQcwAYYXaHR0cDovL29j
+c3Auc2VjdGlnby5jb20wHgYDVR0RBBcwFYETZHdtdzJAaW5mcmFkZWFkLm9yZzANBgkqhkiG9w0B
+AQsFAAOCAQEAyW6MUir5dm495teKqAQjDJwuFCi35h4xgnQvQ/fzPXmtR9t54rpmI2TfyvcKgOXp
+qa7BGXNFfh1JsqexVkIqZP9uWB2J+uVMD+XZEs/KYNNX2PvIlSPrzIB4Z2wyIGQpaPLlYflrrVFK
+v9CjT2zdqvy2maK7HKOQRt3BiJbVG5lRiwbbygldcALEV9ChWFfgSXvrWDZspnU3Gjw/rMHrGnql
+Htlyebp3pf3fSS9kzQ1FVtVIDrL6eqhTwJxe+pXSMMqFiN0whpBtXdyDjzBtQTaZJ7zTT/vlehc/
+tDuqZwGHm/YJy883Ll+GP3NvOkgaRGWEuYWJJ6hFCkXYjyR9IzCCBhQwggT8oAMCAQICEQDGvhmW
+Z0DEAx0oURL6O6l+MA0GCSqGSIb3DQEBCwUAMIGWMQswCQYDVQQGEwJHQjEbMBkGA1UECBMSR3Jl
+YXRlciBNYW5jaGVzdGVyMRAwDgYDVQQHEwdTYWxmb3JkMRgwFgYDVQQKEw9TZWN0aWdvIExpbWl0
+ZWQxPjA8BgNVBAMTNVNlY3RpZ28gUlNBIENsaWVudCBBdXRoZW50aWNhdGlvbiBhbmQgU2VjdXJl
+IEVtYWlsIENBMB4XDTIyMDEwNzAwMDAwMFoXDTI1MDEwNjIzNTk1OVowJDEiMCAGCSqGSIb3DQEJ
+ARYTZHdtdzJAaW5mcmFkZWFkLm9yZzCCAiIwDQYJKoZIhvcNAQEBBQADggIPADCCAgoCggIBALQ3
+GpC2bomUqk+91wLYBzDMcCj5C9m6oZaHwvmIdXftOgTbCJXADo6G9T7BBAebw2JV38EINgKpy/ZH
+h7htyAkWYVoFsFPrwHounto8xTsySSePMiPlmIdQ10BcVSXMUJ3Juu16GlWOnAMJY2oYfEzmE7uT
+9YgcBqKCo65pTFmOnR/VVbjJk4K2xE34GC2nAdUQkPFuyaFisicc6HRMOYXPuF0DuwITEKnjxgNj
+P+qDrh0db7PAjO1D4d5ftfrsf+kdRR4gKVGSk8Tz2WwvtLAroJM4nXjNPIBJNT4w/FWWc/5qPHJy
+2U+eITZ5LLE5s45mX2oPFknWqxBobQZ8a9dsZ3dSPZBvE9ZrmtFLrVrN4eo1jsXgAp1+p7bkfqd3
+BgBEmfsYWlBXO8rVXfvPgLs32VdVNZxb/CDWPqBsiYv0Hv3HPsz07j5b+/cVoWqyHDKzkaVbxfq/
+7auNVRmPB3v5SWEsH8xi4Bez2V9UKxfYCnqsjp8RaC2/khxKt0A552Eaxnz/4ly/2C7wkwTQnBmd
+lFYhAflWKQ03Ufiu8t3iBE3VJbc25oMrglj7TRZrmKq3CkbFnX0fyulB+kHimrt6PIWn7kgyl9ae
+lIl6vtbhMA+l0nfrsORMa4kobqQ5C5rveVgmcIad67EDa+UqEKy/GltUwlSh6xy+TrK1tzDvAgMB
+AAGjggHMMIIByDAfBgNVHSMEGDAWgBQJwPL8C9qU21/+K9+omULPyeCtADAdBgNVHQ4EFgQUzMeD
+Mcimo0oz8o1R1Nver3ZVpSkwDgYDVR0PAQH/BAQDAgWgMAwGA1UdEwEB/wQCMAAwHQYDVR0lBBYw
+FAYIKwYBBQUHAwQGCCsGAQUFBwMCMEAGA1UdIAQ5MDcwNQYMKwYBBAGyMQECAQEBMCUwIwYIKwYB
+BQUHAgEWF2h0dHBzOi8vc2VjdGlnby5jb20vQ1BTMFoGA1UdHwRTMFEwT6BNoEuGSWh0dHA6Ly9j
+cmwuc2VjdGlnby5jb20vU2VjdGlnb1JTQUNsaWVudEF1dGhlbnRpY2F0aW9uYW5kU2VjdXJlRW1h
+aWxDQS5jcmwwgYoGCCsGAQUFBwEBBH4wfDBVBggrBgEFBQcwAoZJaHR0cDovL2NydC5zZWN0aWdv
+LmNvbS9TZWN0aWdvUlNBQ2xpZW50QXV0aGVudGljYXRpb25hbmRTZWN1cmVFbWFpbENBLmNydDAj
+BggrBgEFBQcwAYYXaHR0cDovL29jc3Auc2VjdGlnby5jb20wHgYDVR0RBBcwFYETZHdtdzJAaW5m
+cmFkZWFkLm9yZzANBgkqhkiG9w0BAQsFAAOCAQEAyW6MUir5dm495teKqAQjDJwuFCi35h4xgnQv
+Q/fzPXmtR9t54rpmI2TfyvcKgOXpqa7BGXNFfh1JsqexVkIqZP9uWB2J+uVMD+XZEs/KYNNX2PvI
+lSPrzIB4Z2wyIGQpaPLlYflrrVFKv9CjT2zdqvy2maK7HKOQRt3BiJbVG5lRiwbbygldcALEV9Ch
+WFfgSXvrWDZspnU3Gjw/rMHrGnqlHtlyebp3pf3fSS9kzQ1FVtVIDrL6eqhTwJxe+pXSMMqFiN0w
+hpBtXdyDjzBtQTaZJ7zTT/vlehc/tDuqZwGHm/YJy883Ll+GP3NvOkgaRGWEuYWJJ6hFCkXYjyR9
+IzGCBMcwggTDAgEBMIGsMIGWMQswCQYDVQQGEwJHQjEbMBkGA1UECBMSR3JlYXRlciBNYW5jaGVz
+dGVyMRAwDgYDVQQHEwdTYWxmb3JkMRgwFgYDVQQKEw9TZWN0aWdvIExpbWl0ZWQxPjA8BgNVBAMT
+NVNlY3RpZ28gUlNBIENsaWVudCBBdXRoZW50aWNhdGlvbiBhbmQgU2VjdXJlIEVtYWlsIENBAhEA
+xr4ZlmdAxAMdKFES+jupfjANBglghkgBZQMEAgEFAKCCAeswGAYJKoZIhvcNAQkDMQsGCSqGSIb3
+DQEHATAcBgkqhkiG9w0BCQUxDxcNMjMwMjIwMTYyMDEzWjAvBgkqhkiG9w0BCQQxIgQgzO2hyBf3
+8I3JhhhO0aSjLtdzxl5dm1xOE/AjQ9tw0KUwgb0GCSsGAQQBgjcQBDGBrzCBrDCBljELMAkGA1UE
+BhMCR0IxGzAZBgNVBAgTEkdyZWF0ZXIgTWFuY2hlc3RlcjEQMA4GA1UEBxMHU2FsZm9yZDEYMBYG
+A1UEChMPU2VjdGlnbyBMaW1pdGVkMT4wPAYDVQQDEzVTZWN0aWdvIFJTQSBDbGllbnQgQXV0aGVu
+dGljYXRpb24gYW5kIFNlY3VyZSBFbWFpbCBDQQIRAMa+GZZnQMQDHShREvo7qX4wgb8GCyqGSIb3
+DQEJEAILMYGvoIGsMIGWMQswCQYDVQQGEwJHQjEbMBkGA1UECBMSR3JlYXRlciBNYW5jaGVzdGVy
+MRAwDgYDVQQHEwdTYWxmb3JkMRgwFgYDVQQKEw9TZWN0aWdvIExpbWl0ZWQxPjA8BgNVBAMTNVNl
+Y3RpZ28gUlNBIENsaWVudCBBdXRoZW50aWNhdGlvbiBhbmQgU2VjdXJlIEVtYWlsIENBAhEAxr4Z
+lmdAxAMdKFES+jupfjANBgkqhkiG9w0BAQEFAASCAgAG7egpu9AyoAp+wQ38DrTUPQ55pBOZqELo
+ipMBsZDVvgbOeORtrDMl2uHixNrDQRkaNffhWZhCYEiFLzYnlond8swIRos+rKNdkbemuiKnvIUp
+A9uduFNCn2ypPYMPl/qe9XEphfy7uM3619NZsoW4h2SkSvOgxegLvxtFjwNram/UcneuTck7jGW8
+PHcM8jO3sUxdf8Mb+YU8GRIGjXIOv0lEk3fBBV6HsNCBq76ag3u99DsWhG/B+kIQBtLoAFCt+SvB
+xYrSnUUdewgSCOLmsa1u0ZB+shXgMrz2ylhNzq+jI4KktLJhLmc360agpAfeNHpOSfRyyhyru4o+
+GSy2B3AQy8iTNEJf6Ro9WdZx4LPTg3aG6m7Z2CJWOi+FdRCEkpG4uQygdlxLzQWY9lMpAVdg0vGr
+UpTIyBJcwsLwnI9teTdkmaqyEuGFyvEogEUnuMT537uzXve8GI5X9ziGFpLHVvj+Knov3JyUhyBA
+u7bj1B4mSxfRwJ3SnAlgLOXwyhqxN/EVMwUbUxvLAkALK88jtj/6owZl3UFFNz5b2GazWmH3+F2F
+80aV/3kwOW5dPnACtAIkxcSErcmoWrcTmPhC4tqpXhYuzm3XhJe6iZrT2QSBA+QJFLCWn8ods51k
++RyDBNR3Sbz6XMPw0b2k69cAC+VgMNEzfWL0vwcFGgAAAAAAAA==
+
+
+--=-uE9XCa0ZzGivZ6OioyoI--
