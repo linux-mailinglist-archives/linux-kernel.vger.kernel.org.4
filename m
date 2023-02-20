@@ -2,64 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A428F69CAB6
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Feb 2023 13:21:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7FBCE69CABD
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Feb 2023 13:21:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231992AbjBTMVS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Feb 2023 07:21:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39456 "EHLO
+        id S232008AbjBTMVz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Feb 2023 07:21:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40342 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231714AbjBTMVP (ORCPT
+        with ESMTP id S231997AbjBTMVw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Feb 2023 07:21:15 -0500
-Received: from mx0b-0016f401.pphosted.com (mx0a-0016f401.pphosted.com [67.231.148.174])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AAD0C1A968;
-        Mon, 20 Feb 2023 04:21:14 -0800 (PST)
-Received: from pps.filterd (m0045849.ppops.net [127.0.0.1])
-        by mx0a-0016f401.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 31KARCML015915;
-        Mon, 20 Feb 2023 04:21:02 -0800
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=marvell.com; h=from : to : cc :
- subject : date : message-id : mime-version : content-transfer-encoding :
- content-type; s=pfpt0220; bh=U/igizjUnjAnW/ogHe0/GJc6RUu5xJOtFonIac+URKc=;
- b=HV7lVM8I59C8WJj3SyRwTsRHSU6FNSFoYFadZkDZ4VUxzKN2XOib/kocIwQp/YGRqL1O
- PU8YHI4Y3QNgxpKtFmM2TnIc/kjMii9Q+yghrUklEA/2UDAcIFmioVmUGiq7hoFQvW9N
- NdEtej1u/xoit+tesFr8evBxz+Xt3HzArYh746N3yZc1r7AqT4MHWHicIu5uHRV3jdAm
- Z4QX8xivtO+YIxz1uAAYpha23rebPQuZ/febX9abUbd36bn/785NkJBPDcq8Mr0w+Bbx
- qUXSiGCrzaUxrEon+TSH3LXpbnkm+/wn90SF/lZh+xoPGGbEpTwAy5nttCt+hRL/pSQL dw== 
-Received: from dc5-exch01.marvell.com ([199.233.59.181])
-        by mx0a-0016f401.pphosted.com (PPS) with ESMTPS id 3ntvwumbkx-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT);
-        Mon, 20 Feb 2023 04:21:02 -0800
-Received: from DC5-EXCH01.marvell.com (10.69.176.38) by DC5-EXCH01.marvell.com
- (10.69.176.38) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Mon, 20 Feb
- 2023 04:21:00 -0800
-Received: from maili.marvell.com (10.69.176.80) by DC5-EXCH01.marvell.com
- (10.69.176.38) with Microsoft SMTP Server id 15.0.1497.42 via Frontend
- Transport; Mon, 20 Feb 2023 04:21:00 -0800
-Received: from hyd1425.marvell.com (unknown [10.29.37.83])
-        by maili.marvell.com (Postfix) with ESMTP id 4C4E23F70A6;
-        Mon, 20 Feb 2023 04:20:57 -0800 (PST)
-From:   Sai Krishna <saikrishnag@marvell.com>
-To:     <davem@davemloft.net>, <edumazet@google.com>, <kuba@kernel.org>,
-        <pabeni@redhat.com>, <netdev@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <sgoutham@marvell.com>,
-        <gakula@marvell.com>, <richardcochran@gmail.com>
-CC:     Hariprasad Kelam <hkelam@marvell.com>,
-        Sai Krishna <saikrishnag@marvell.com>
-Subject: [net PATCH] octeontx2-pf: Recalculate UDP checksum for ptp 1-step sync packet
-Date:   Mon, 20 Feb 2023 17:50:50 +0530
-Message-ID: <20230220122050.1639299-1-saikrishnag@marvell.com>
-X-Mailer: git-send-email 2.25.1
+        Mon, 20 Feb 2023 07:21:52 -0500
+Received: from frasgout13.his.huawei.com (frasgout13.his.huawei.com [14.137.139.46])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E56C81A968;
+        Mon, 20 Feb 2023 04:21:43 -0800 (PST)
+Received: from mail02.huawei.com (unknown [172.18.147.228])
+        by frasgout13.his.huawei.com (SkyGuard) with ESMTP id 4PL1XW0wGwz9xtml;
+        Mon, 20 Feb 2023 20:13:15 +0800 (CST)
+Received: from roberto-ThinkStation-P620 (unknown [10.204.63.22])
+        by APP1 (Coremail) with SMTP id LxC2BwCHCgavZfNjaQo6AQ--.54254S2;
+        Mon, 20 Feb 2023 13:21:15 +0100 (CET)
+Message-ID: <70d079a7e8b2fa08683b68742a22ba2918765dfc.camel@huaweicloud.com>
+Subject: Re: [PATCH v7 2/6] ocfs2: Switch to security_inode_init_security()
+From:   Roberto Sassu <roberto.sassu@huaweicloud.com>
+To:     Mimi Zohar <zohar@linux.ibm.com>, mark@fasheh.com,
+        jlbec@evilplan.org, joseph.qi@linux.alibaba.com,
+        dmitry.kasatkin@gmail.com, paul@paul-moore.com, jmorris@namei.org,
+        serge@hallyn.com, stephen.smalley.work@gmail.com,
+        eparis@parisplace.org, casey@schaufler-ca.com
+Cc:     ocfs2-devel@oss.oracle.com, reiserfs-devel@vger.kernel.org,
+        linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org, selinux@vger.kernel.org,
+        linux-kernel@vger.kernel.org, keescook@chromium.org,
+        nicolas.bouchinet@clip-os.org,
+        Roberto Sassu <roberto.sassu@huawei.com>
+Date:   Mon, 20 Feb 2023 13:20:56 +0100
+In-Reply-To: <1e93d7b299de3b6cf61b5a5c4be91eb47d864ac6.camel@linux.ibm.com>
+References: <20221201104125.919483-1-roberto.sassu@huaweicloud.com>
+         <20221201104125.919483-3-roberto.sassu@huaweicloud.com>
+         <a20a6d84d8e682fbff546b80eda75a1918d7c108.camel@linux.ibm.com>
+         <aaeee7490cfee1b2163a3c9c894294aaf13e100c.camel@linux.ibm.com>
+         <95f9b1dfca0cbff1c6a447dde45c2f835bc1a254.camel@huaweicloud.com>
+         <1e93d7b299de3b6cf61b5a5c4be91eb47d864ac6.camel@linux.ibm.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.36.5-0ubuntu1 
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Proofpoint-GUID: Wi11AWWIDstoAktjDh3Z4ZNM37leDHkz
-X-Proofpoint-ORIG-GUID: Wi11AWWIDstoAktjDh3Z4ZNM37leDHkz
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.170.22
- definitions=2023-02-20_09,2023-02-20_02,2023-02-09_01
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+Content-Transfer-Encoding: 7bit
+X-CM-TRANSID: LxC2BwCHCgavZfNjaQo6AQ--.54254S2
+X-Coremail-Antispam: 1UD129KBjvJXoW7Aw1ruw1rZryrAr4DAr43ZFb_yoW8tr43pF
+        W8tFyUKr15tFy5Cry0qa1Y9ws29FWfGrsrXwsxJr1DAF1qyrn7tr1Fyr1Uu3WrJr98JF10
+        qr4UAF43uwn8ArJanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUk0b4IE77IF4wAFF20E14v26ryj6rWUM7CY07I20VC2zVCF04k2
+        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
+        vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7Cj
+        xVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIEc7CjxV
+        AFwI0_Gr1j6F4UJwAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG
+        6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFV
+        Cjc4AY6r1j6r4UM4x0Y48IcVAKI48JM4IIrI8v6xkF7I0E8cxan2IY04v7MxAIw28IcxkI
+        7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxV
+        Cjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVW8ZVWrXwCIc40Y0x0EwIxGrwCI42IY
+        6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwCI42IY6x
+        AIw20EY4v20xvaj40_WFyUJVCq3wCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv
+        6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjxUFDGOUUUUU
+X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAQAOBF1jj4maCAAAsh
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
         SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -67,168 +73,63 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Geetha sowjanya <gakula@marvell.com>
+On Mon, 2023-02-20 at 06:08 -0500, Mimi Zohar wrote:
+> > > > > diff --git a/fs/ocfs2/xattr.c b/fs/ocfs2/xattr.c
+> > > > > index 95d0611c5fc7..55699c573541 100644
+> > > > > @@ -7277,13 +7289,23 @@ int ocfs2_init_security_get(struct inode *inode,
+> > > > >  			    const struct qstr *qstr,
+> > > > >  			    struct ocfs2_security_xattr_info *si)
+> > > > >  {
+> > > > > +	int ret;
+> > > > > +
+> > > > >  	/* check whether ocfs2 support feature xattr */
+> > > > >  	if (!ocfs2_supports_xattr(OCFS2_SB(dir->i_sb)))
+> > > > >  		return -EOPNOTSUPP;
+> > > > > -	if (si)
+> > > > > -		return security_old_inode_init_security(inode, dir, qstr,
+> > > > > -							&si->name, &si->value,
+> > > > > -							&si->value_len);
+> > > > > +	if (si) {
+> > > > > +		ret = security_inode_init_security(inode, dir, qstr,
+> > > > > +						   &ocfs2_initxattrs, si);
+> > > > 
+> > > > The "if (unlikely(IS_PRIVATE(inode))"  test exists in both
+> > > > security_old_inode_init_security() and security_inode_init_security(),
+> > > > but return different values.  In the former case, it returns
+> > > > -EOPNOTSUPP.  In the latter case, it returns 0.  The question is
+> > > > whether or not we need to be concerned about private inodes on ocfs2.  
+> > > > If private inodes on ocfs2 are possible, then ocsf2_mknod() or
+> > > > ocfs2_symlink() would fail to create the inode or symlink.
+> > > 
+> > > Correction, previously when returning -EOPNOTSUPP for private inodes,
+> > > xattrs would not be wrriten.  By returning 0 without setting si->enable 
+> > > to 0, xattrs will be written.
+> > 
+> > Ok, but if there is a private inode, we would be setting si->enable to
+> > zero. Should be ok, I guess.
+> 
+> si->enable is being set to zero, below, but is conditional on !si-
+> > name.
+> 
+> This is the last concern, otherwise the patch set looks good.
 
-When checksum offload is disabled in the driver via ethtool,
-the PTP 1-step sync packets contain incorrect checksum, since
-the stack calculates the checksum before driver updates
-PTP timestamp field in the packet. This results in PTP packets
-getting dropped at the other end. This patch fixes the issue by
-re-calculating the UDP checksum after updating PTP
-timestamp field in the driver.
+Uhm, if the inode is private, security_inode_init_security() will
+immediately return. So, the condition !si->name should be always true.
 
-Fixes: 2958d17a8984 ("octeontx2-pf: Add support for ptp 1-step mode on CN10K silicon")
-Signed-off-by: Geetha sowjanya <gakula@marvell.com>
-Signed-off-by: Hariprasad Kelam <hkelam@marvell.com>
-Signed-off-by: Sunil Kovvuri Goutham <sgoutham@marvell.com>
-Signed-off-by: Sai Krishna <saikrishnag@marvell.com>
----
- .../marvell/octeontx2/nic/otx2_txrx.c         | 78 ++++++++++++++-----
- 1 file changed, 59 insertions(+), 19 deletions(-)
+Thanks
 
-diff --git a/drivers/net/ethernet/marvell/octeontx2/nic/otx2_txrx.c b/drivers/net/ethernet/marvell/octeontx2/nic/otx2_txrx.c
-index ef10aef3cda0..67345a3e2bba 100644
---- a/drivers/net/ethernet/marvell/octeontx2/nic/otx2_txrx.c
-+++ b/drivers/net/ethernet/marvell/octeontx2/nic/otx2_txrx.c
-@@ -10,6 +10,7 @@
- #include <net/tso.h>
- #include <linux/bpf.h>
- #include <linux/bpf_trace.h>
-+#include <net/ip6_checksum.h>
- 
- #include "otx2_reg.h"
- #include "otx2_common.h"
-@@ -699,7 +700,7 @@ static void otx2_sqe_add_ext(struct otx2_nic *pfvf, struct otx2_snd_queue *sq,
- 
- static void otx2_sqe_add_mem(struct otx2_snd_queue *sq, int *offset,
- 			     int alg, u64 iova, int ptp_offset,
--			     u64 base_ns, int udp_csum)
-+			     u64 base_ns, bool udp_csum_crt)
- {
- 	struct nix_sqe_mem_s *mem;
- 
-@@ -711,7 +712,7 @@ static void otx2_sqe_add_mem(struct otx2_snd_queue *sq, int *offset,
- 
- 	if (ptp_offset) {
- 		mem->start_offset = ptp_offset;
--		mem->udp_csum_crt = udp_csum;
-+		mem->udp_csum_crt = !!udp_csum_crt;
- 		mem->base_ns = base_ns;
- 		mem->step_type = 1;
- 	}
-@@ -986,10 +987,11 @@ static bool otx2_validate_network_transport(struct sk_buff *skb)
- 	return false;
- }
- 
--static bool otx2_ptp_is_sync(struct sk_buff *skb, int *offset, int *udp_csum)
-+static bool otx2_ptp_is_sync(struct sk_buff *skb, int *offset, bool *udp_csum_crt)
- {
- 	struct ethhdr *eth = (struct ethhdr *)(skb->data);
- 	u16 nix_offload_hlen = 0, inner_vhlen = 0;
-+	bool udp_hdr_present = false, is_sync;
- 	u8 *data = skb->data, *msgtype;
- 	__be16 proto = eth->h_proto;
- 	int network_depth = 0;
-@@ -1029,45 +1031,83 @@ static bool otx2_ptp_is_sync(struct sk_buff *skb, int *offset, int *udp_csum)
- 		if (!otx2_validate_network_transport(skb))
- 			return false;
- 
--		*udp_csum = 1;
- 		*offset = nix_offload_hlen + skb_transport_offset(skb) +
- 			  sizeof(struct udphdr);
-+		udp_hdr_present = true;
-+
- 	}
- 
- 	msgtype = data + *offset;
--
- 	/* Check PTP messageId is SYNC or not */
--	return (*msgtype & 0xf) == 0;
-+	is_sync =  ((*msgtype & 0xf) == 0) ? true : false;
-+	if (is_sync) {
-+		if (udp_hdr_present)
-+			*udp_csum_crt = true;
-+	} else {
-+		*offset = 0;
-+	}
-+
-+	return is_sync;
- }
- 
- static void otx2_set_txtstamp(struct otx2_nic *pfvf, struct sk_buff *skb,
- 			      struct otx2_snd_queue *sq, int *offset)
- {
-+	struct ethhdr	*eth = (struct ethhdr *)(skb->data);
- 	struct ptpv2_tstamp *origin_tstamp;
--	int ptp_offset = 0, udp_csum = 0;
-+	bool udp_csum_crt = false;
-+	unsigned int udphoff;
- 	struct timespec64 ts;
-+	int ptp_offset = 0;
-+	__wsum skb_csum;
- 	u64 iova;
- 
- 	if (unlikely(!skb_shinfo(skb)->gso_size &&
- 		     (skb_shinfo(skb)->tx_flags & SKBTX_HW_TSTAMP))) {
--		if (unlikely(pfvf->flags & OTX2_FLAG_PTP_ONESTEP_SYNC)) {
--			if (otx2_ptp_is_sync(skb, &ptp_offset, &udp_csum)) {
--				origin_tstamp = (struct ptpv2_tstamp *)
--						((u8 *)skb->data + ptp_offset +
--						 PTP_SYNC_SEC_OFFSET);
--				ts = ns_to_timespec64(pfvf->ptp->tstamp);
--				origin_tstamp->seconds_msb = htons((ts.tv_sec >> 32) & 0xffff);
--				origin_tstamp->seconds_lsb = htonl(ts.tv_sec & 0xffffffff);
--				origin_tstamp->nanoseconds = htonl(ts.tv_nsec);
--				/* Point to correction field in PTP packet */
--				ptp_offset += 8;
-+		if (unlikely(pfvf->flags & OTX2_FLAG_PTP_ONESTEP_SYNC &&
-+			     otx2_ptp_is_sync(skb, &ptp_offset, &udp_csum_crt))) {
-+			origin_tstamp = (struct ptpv2_tstamp *)
-+					((u8 *)skb->data + ptp_offset +
-+					 PTP_SYNC_SEC_OFFSET);
-+			ts = ns_to_timespec64(pfvf->ptp->tstamp);
-+			origin_tstamp->seconds_msb = htons((ts.tv_sec >> 32) & 0xffff);
-+			origin_tstamp->seconds_lsb = htonl(ts.tv_sec & 0xffffffff);
-+			origin_tstamp->nanoseconds = htonl(ts.tv_nsec);
-+			/* Point to correction field in PTP packet */
-+			ptp_offset += 8;
-+
-+			/* When user disables hw checksum, stack calculates the csum,
-+			 * but it does not cover ptp timestamp which is added later.
-+			 * Recalculate the checksum manually considering the timestamp.
-+			 */
-+			if (udp_csum_crt) {
-+				struct udphdr *uh = udp_hdr(skb);
-+
-+				if (skb->ip_summed != CHECKSUM_PARTIAL && uh->check != 0) {
-+					udphoff = skb_transport_offset(skb);
-+					uh->check = 0;
-+					skb_csum = skb_checksum(skb, udphoff, skb->len - udphoff,
-+								0);
-+					if (ntohs(eth->h_proto) == ETH_P_IPV6)
-+						uh->check = csum_ipv6_magic(&ipv6_hdr(skb)->saddr,
-+									    &ipv6_hdr(skb)->daddr,
-+									    skb->len - udphoff,
-+									    ipv6_hdr(skb)->nexthdr,
-+									    skb_csum);
-+					else
-+						uh->check = csum_tcpudp_magic(ip_hdr(skb)->saddr,
-+									      ip_hdr(skb)->daddr,
-+									      skb->len - udphoff,
-+									      IPPROTO_UDP,
-+									      skb_csum);
-+				}
- 			}
- 		} else {
- 			skb_shinfo(skb)->tx_flags |= SKBTX_IN_PROGRESS;
- 		}
- 		iova = sq->timestamps->iova + (sq->head * sizeof(u64));
- 		otx2_sqe_add_mem(sq, offset, NIX_SENDMEMALG_E_SETTSTMP, iova,
--				 ptp_offset, pfvf->ptp->base_ns, udp_csum);
-+				 ptp_offset, pfvf->ptp->base_ns, udp_csum_crt);
- 	} else {
- 		skb_tx_timestamp(skb);
- 	}
--- 
-2.25.1
+Roberto
+
+> > > > > +		/*
+> > > > > +		 * security_inode_init_security() does not return -EOPNOTSUPP,
+> > > > > +		 * we have to check the xattr ourselves.
+> > > > > +		 */
+> > > > > +		if (!ret && !si->name)
+> > > > > +			si->enable = 0;
+> > > > > +
+> > > > > +		return ret;
+> > > > > +	}
+> > > > >  
+> > > > >  	return security_inode_init_security(inode, dir, qstr,
+> > > > >  					    &ocfs2_initxattrs, NULL);
 
