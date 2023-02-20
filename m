@@ -2,160 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A6ED69D256
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Feb 2023 18:49:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C174769D259
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Feb 2023 18:49:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231958AbjBTRte (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Feb 2023 12:49:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43218 "EHLO
+        id S232458AbjBTRtr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Feb 2023 12:49:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43674 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231433AbjBTRtb (ORCPT
+        with ESMTP id S231809AbjBTRtp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Feb 2023 12:49:31 -0500
-Received: from fudo.makrotopia.org (fudo.makrotopia.org [IPv6:2a07:2ec0:3002::71])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D39F1C17D;
-        Mon, 20 Feb 2023 09:49:29 -0800 (PST)
-Received: from local
-        by fudo.makrotopia.org with esmtpsa (TLS1.3:TLS_AES_256_GCM_SHA384:256)
-         (Exim 4.96)
-        (envelope-from <daniel@makrotopia.org>)
-        id 1pUAHy-00031I-00;
-        Mon, 20 Feb 2023 18:49:22 +0100
-Date:   Mon, 20 Feb 2023 17:49:14 +0000
-From:   Daniel Golle <daniel@makrotopia.org>
-To:     Rob Herring <robh@kernel.org>
-Cc:     Florian Fainelli <f.fainelli@gmail.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Jianhui Zhao <zhaojh329@gmail.com>, netdev@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Sean Wang <sean.wang@mediatek.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Mark Lee <Mark-MC.Lee@mediatek.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        =?iso-8859-1?Q?Bj=F8rn?= Mork <bjorn@mork.no>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        devicetree@vger.kernel.org, linux-mediatek@lists.infradead.org,
-        Felix Fietkau <nbd@nbd.name>,
-        Russell King <linux@armlinux.org.uk>,
-        Landen Chao <Landen.Chao@mediatek.com>,
+        Mon, 20 Feb 2023 12:49:45 -0500
+Received: from mail-lj1-x22e.google.com (mail-lj1-x22e.google.com [IPv6:2a00:1450:4864:20::22e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BADB9CC3E;
+        Mon, 20 Feb 2023 09:49:40 -0800 (PST)
+Received: by mail-lj1-x22e.google.com with SMTP id b18so2019422ljr.4;
+        Mon, 20 Feb 2023 09:49:40 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=8FGe9Nk23MtKGd2Di6KmMIvhk+QEojQFWCNwRtr+vnU=;
+        b=mvk+TThKU7ubB56YYV+lW4V2BDunzS2i086o9i9QeBoNCeTQQxjbnWeoZ9e/QNqsVK
+         Sg5yh34HjWTRZ1fxni4rA6nGR2yiWjplrI+VHSuEHZXoQYA1t8b0s/kJ2q2GmbNrUBts
+         uwxMqd2eJEHwtoMKppfRIGQVAYlRUv+sE4mZopglLLjKsSszsTEvawYS2vhQgEingQRE
+         yIHkL/EKoYPT1wv3OLG+G4xInbh+zQIBGdUNNJx3DXPD21mBDl/zc5DEY1Bt/ofa0R59
+         RM/aBfj6GrXg6SeLGeB1nfiUni5JTNJTrgEe0ThFUO8U2YXMDEB2DZ3mvDOTxD8xkdrZ
+         hrCA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=8FGe9Nk23MtKGd2Di6KmMIvhk+QEojQFWCNwRtr+vnU=;
+        b=tHZBV3sM7lP/SDqwLrDwToIaJZeQfoz+pM3eP5gMEXy1JcdNSdO2/6vZwuktkcVsEo
+         Loi6EJnxt7dzsWgHhSh9pS/LVlo/0DC964wg3QizkMUxy39T0NjU1WavuPnbPk/9Vonf
+         p2qIUXONrWR4r7UDH4n/OgCz91u5khwbrpQHu5mjYlQSHeuDs81vUoR9gLiHxzV47Fov
+         9HFBRaeJ86UPw21TQqz3DfZ1fvOntENA0c5kve/hcmibOerz0MtD66W6+nP3TAi2XbKf
+         nAaDauhzSwY6VTW+wqmMekpApegWa8BnS5f6trnQ0o+7fLdBZvpInHn/Ewk1xulvJAVO
+         NBRA==
+X-Gm-Message-State: AO0yUKWCPjfAt+IuV1D+CGq0MNZGcC/uIIbb8nne5Y6RrsOKpwytouU8
+        B1tElb2DMBm2VUs+4OwKvp0=
+X-Google-Smtp-Source: AK7set9xxybpVCvBucs1tVZ78OmOAio0JOq4btRXAwdqDX8LKNUvBFuwFLH6Bpkxpupku4UmK1wBSg==
+X-Received: by 2002:a2e:9092:0:b0:290:603d:4337 with SMTP id l18-20020a2e9092000000b00290603d4337mr641579ljg.51.1676915378771;
+        Mon, 20 Feb 2023 09:49:38 -0800 (PST)
+Received: from localhost.lan (ip-194-187-74-233.konfederacka.maverick.com.pl. [194.187.74.233])
+        by smtp.gmail.com with ESMTPSA id u22-20020a2e9f16000000b0029353491df6sm294695ljk.48.2023.02.20.09.49.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 20 Feb 2023 09:49:38 -0800 (PST)
+From:   =?UTF-8?q?Rafa=C5=82=20Mi=C5=82ecki?= <zajec5@gmail.com>
+To:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
         Rob Herring <robh+dt@kernel.org>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        John Crispin <john@phrozen.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        DENG Qingfang <dqfext@gmail.com>,
-        Lorenzo Bianconi <lorenzo@kernel.org>,
-        Andrew Lunn <andrew@lunn.ch>, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v9 03/12] dt-bindings: arm: mediatek: sgmiisys: Convert
- to DT schema
-Message-ID: <Y/OymoWRP2pcikXy@makrotopia.org>
-References: <cover.1676910958.git.daniel@makrotopia.org>
- <03f9d40849dd2d563a93b27732a7b5d7dd1defc5.1676910958.git.daniel@makrotopia.org>
- <167691325732.3971281.4378006887073697625.robh@kernel.org>
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     Matthias Brugger <matthias.bgg@gmail.com>,
+        Kunihiko Hayashi <hayashi.kunihiko@socionext.com>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        linux-mediatek@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        =?UTF-8?q?Rafa=C5=82=20Mi=C5=82ecki?= <rafal@milecki.pl>
+Subject: [PATCH V3 0/2] nvmem: add and use generic MMIO NVMEM
+Date:   Mon, 20 Feb 2023 18:49:28 +0100
+Message-Id: <20230220174930.7440-1-zajec5@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <167691325732.3971281.4378006887073697625.robh@kernel.org>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Rob,
+From: Rafał Miłecki <rafal@milecki.pl>
 
-On Mon, Feb 20, 2023 at 11:15:53AM -0600, Rob Herring wrote:
-> 
-> On Mon, 20 Feb 2023 16:41:16 +0000, Daniel Golle wrote:
-> > Convert mediatek,sgmiiisys bindings to DT schema format.
-> > Add maintainer Matthias Brugger, no maintainers were listed in the
-> > original documentation.
-> > As this node is also referenced by the Ethernet controller and used
-> > as SGMII PCS add this fact to the description.
-> > Move the file to Documentation/devicetree/bindings/pcs/ which seems more
-> > appropriate given that the great majority of registers are related to
-> > SGMII PCS functionality and only one register represents clock bits.
-> > 
-> > Reviewed-by: Rob Herring <robh@kernel.org>
-> > Signed-off-by: Daniel Golle <daniel@makrotopia.org>
-> > ---
-> >  .../arm/mediatek/mediatek,sgmiisys.txt        | 25 ----------
-> >  .../bindings/net/pcs/mediatek,sgmiisys.yaml   | 49 +++++++++++++++++++
-> >  2 files changed, 49 insertions(+), 25 deletions(-)
-> >  delete mode 100644 Documentation/devicetree/bindings/arm/mediatek/mediatek,sgmiisys.txt
-> >  create mode 100644 Documentation/devicetree/bindings/net/pcs/mediatek,sgmiisys.yaml
-> > 
-> 
-> My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
-> on your patch (DT_CHECKER_FLAGS is new in v5.13):
-> 
-> yamllint warnings/errors:
-> 
-> dtschema/dtc warnings/errors:
-> ./Documentation/devicetree/bindings/net/pcs/mediatek,sgmiisys.yaml: $id: relative path/filename doesn't match actual path or filename
-> 	expected: http://devicetree.org/schemas/net/pcs/mediatek,sgmiisys.yaml#
+MMIO accessible NVMEM devices should be simple enough to allow using a
+single binding & driver for them.
 
-I simply didn't even consider that moving the file to its correct
-location may cause this kind of havoc. Please apologize, I'm quite new
-to this whole dt-schema game and still learning...
+In V3 I didn't decide to modify existing Mediatek & UniPhier drivers as
+there are some concerns about adding writing support to them. If needed
+that can be done later.
 
-> 
-> doc reference errors (make refcheckdocs):
-> 
-> See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/03f9d40849dd2d563a93b27732a7b5d7dd1defc5.1676910958.git.daniel@makrotopia.org
-> 
-> The base for the series is generally the latest rc1. A different dependency
-> should be noted in *this* patch.
-> 
-> If you already ran 'make dt_binding_check' and didn't see the above
-> error(s), then make sure 'yamllint' is installed and dt-schema is up to
-> date:
-> 
-> pip3 install dtschema --upgrade
-> 
-> Please check and re-submit after running the above command yourself. Note
-> that DT_SCHEMA_FILES can be set to your schema file to speed up checking
-> your schema. However, it must be unset to test all examples with your schema.
-> 
+I decided to support Broadcom's NVRAM with generic driver though. That
+is my main goal right now. To let generic code handle NVRAM access and
+let NVRAM specific driver handle its content. That way it can be reused
+for other NVMEM devices later (once we get layouts support).
 
-I've fixed the wrong path now also within mediatek,sgmiisys.yaml itself.
-Result:
+Rafał Miłecki (2):
+  dt-bindings: nvmem: mmio: new binding for MMIO accessible NVMEM
+    devices
+  nvmem: add generic driver for devices with MMIO access
 
-[daniel@box linux.git]$ make dt_binding_check DT_SCHEMA_FILES=mediatek,sgmiisys
-  HOSTCC  scripts/dtc/util.o
-  LEX     scripts/dtc/dtc-lexer.lex.c
-  YACC    scripts/dtc/dtc-parser.tab.[ch]
-  HOSTCC  scripts/dtc/dtc-lexer.lex.o
-  HOSTCC  scripts/dtc/dtc-parser.tab.o
-  HOSTCC  scripts/dtc/checks.o
-  HOSTLD  scripts/dtc/dtc
-  HOSTCC  scripts/dtc/libfdt/fdt.o
-  HOSTCC  scripts/dtc/libfdt/fdt_ro.o
-  HOSTCC  scripts/dtc/libfdt/fdt_wip.o
-  HOSTCC  scripts/dtc/libfdt/fdt_sw.o
-  HOSTCC  scripts/dtc/libfdt/fdt_rw.o
-  HOSTCC  scripts/dtc/libfdt/fdt_strerror.o
-  HOSTCC  scripts/dtc/libfdt/fdt_empty_tree.o
-  HOSTCC  scripts/dtc/libfdt/fdt_addresses.o
-  HOSTCC  scripts/dtc/libfdt/fdt_overlay.o
-  HOSTCC  scripts/dtc/fdtoverlay.o
-  HOSTLD  scripts/dtc/fdtoverlay
-  LINT    Documentation/devicetree/bindings
-  CHKDT   Documentation/devicetree/bindings/processed-schema.json
-  SCHEMA  Documentation/devicetree/bindings/processed-schema.json
-  DTEX    Documentation/devicetree/bindings/net/pcs/mediatek,sgmiisys.example.dts
-  DTC_CHK Documentation/devicetree/bindings/net/pcs/mediatek,sgmiisys.example.dtb
+ .../devicetree/bindings/nvmem/mmio.yaml       |  50 +++++++
+ drivers/nvmem/Kconfig                         |  10 ++
+ drivers/nvmem/Makefile                        |   2 +
+ drivers/nvmem/mmio.c                          | 125 ++++++++++++++++++
+ 4 files changed, 187 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/nvmem/mmio.yaml
+ create mode 100644 drivers/nvmem/mmio.c
 
+-- 
+2.34.1
 
-I'll wait for more potentials comments on the series and re-submit tomorrow.
-
-
-Thank you!
-
-
-Daniel
