@@ -2,145 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6935869C85D
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Feb 2023 11:15:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 528AC69C862
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Feb 2023 11:16:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230423AbjBTKPn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Feb 2023 05:15:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44362 "EHLO
+        id S231395AbjBTKQJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Feb 2023 05:16:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44746 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229503AbjBTKPl (ORCPT
+        with ESMTP id S229503AbjBTKQH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Feb 2023 05:15:41 -0500
-Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D35B1041A
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Feb 2023 02:15:40 -0800 (PST)
-Received: by mail-pl1-x630.google.com with SMTP id q11so1096029plx.5
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Feb 2023 02:15:40 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=wDD8xziudShyN84cQ723X8XCrACsB7T+hEhcyNLXyo0=;
-        b=4+ALj2DyLn3QBTGFnRp3NSe/gkeRUbssOGPBdbv1QlhqCciZ3R9I2c7fVyRobMBOpS
-         w6D05jNJGRn+FNdeC9GC3TmNIsDSw04tEv/9G7H1CqF4mqVJylYQRNX7u8GMaXfecbYH
-         3UHngZw8oUj9eJdUtG3pWx/CjfrhHm0O+JYQVV8ne6CL9pweK+Prp0x76Rdx2hDE5Ign
-         tDi0VuPwhjm0fxuUwetk35GADaaOIL0+u4AXHjEAdgmcbxHH0vq1Y/P0PVcOIvfcBo0S
-         GwCxVbbmm6VELN9B5AFk8TNMUA9dlDV/DY6HNLvXlhN16jhYHTHkIPyoMyID2JZvjbY7
-         S9SQ==
+        Mon, 20 Feb 2023 05:16:07 -0500
+Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88C6E16311
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Feb 2023 02:16:03 -0800 (PST)
+Received: from mail-qv1-f70.google.com (mail-qv1-f70.google.com [209.85.219.70])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id B269F3F71D
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Feb 2023 10:16:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1676888161;
+        bh=fKd9fxybT9+hFfyTDDr2Mtw7ZX+21Hd2dT0jDnkibYM=;
+        h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+         To:Cc:Content-Type;
+        b=tRLcIaWxDCXwruIFB/pF04r4bvV/4oy8w/TsPsD9Ijd2oJTnkKEwyoKst2TayaiDr
+         KQXCkpLvVl15Z3b+Yuu8XYA7S0ETBth6ZxrXSpbiC7ugTjElm8bH2g41d7xqdfnrb3
+         mYt0LotLWDCwKv365VpewV1YCVbFnT8NsYloMEO723uAwvgOCGsIsmzMAbijeDcWld
+         7EEFfs4MUM4xt855p8ojj9Kl4RqM3FuWtaJOF6o2YrqfNlt5NYa1vb21NfOg7zOAVS
+         QZcERLcpISKslJUVCSQ0VborlhchrYRBPL4dgqASfO5iYzn0J/ed2y+KsFa0sXpXru
+         EjwVnKRq5o83A==
+Received: by mail-qv1-f70.google.com with SMTP id pm5-20020ad446c5000000b0056eb3830243so207173qvb.16
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Feb 2023 02:16:01 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=wDD8xziudShyN84cQ723X8XCrACsB7T+hEhcyNLXyo0=;
-        b=TCh5FOzhTyxH7XptUvAwStwEurvOrEbZdDiYXh1pdO7yDL25vVJveYp9fL8ezrbZ1T
-         5XjIhKFGbmIDeQjUMeKmfokGo9Wb2CDf8sbKdzq0P5nBYOBhCs62kyh65F0ERE8OWUbB
-         jGWuucMywniIPfrfua9R+xL/C7Gd32wYg7OLhWVTaPquaaPMr7FJ4QRpgXsPbE1yOolC
-         IFYq9+JjzRRpY4ejqi/5GvWEfo19NAYfv9SaEX1MJbiLHoS8BulyjXMTPYBPMnJdoeAF
-         cSLb6C7+PKnJaveLUH7ShUn+NsZ/8Ykk4uhR0SrHRgGeqHSdMRuyBgkcEv3R/EjCZeMc
-         L6mw==
-X-Gm-Message-State: AO0yUKVX89dIetbkGaKktr/HcksaYkcmOHOm5JSuEkHucooGlxexftoo
-        UXiwg8xbomBktCf0JMYYYE7AIQ==
-X-Google-Smtp-Source: AK7set+Yu8mpux2UxJJt06JUgc5iypBoah90YWGwuJ3I/6VEFM9NK+FDrj5uHvE/iztN/OxgDvYAVA==
-X-Received: by 2002:a17:90b:397:b0:233:f0f3:238b with SMTP id ga23-20020a17090b039700b00233f0f3238bmr965122pjb.1.1676888139733;
-        Mon, 20 Feb 2023 02:15:39 -0800 (PST)
-Received: from [10.70.252.135] ([139.177.225.229])
-        by smtp.gmail.com with ESMTPSA id k7-20020a17090a3cc700b002348bfd3799sm706715pjd.39.2023.02.20.02.15.37
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 20 Feb 2023 02:15:39 -0800 (PST)
-Message-ID: <3a449abe-b5c8-cee3-6c2e-bfb79eb51f73@bytedance.com>
-Date:   Mon, 20 Feb 2023 18:15:33 +0800
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=fKd9fxybT9+hFfyTDDr2Mtw7ZX+21Hd2dT0jDnkibYM=;
+        b=YCYSLHRh338ymTPYoCeO5w423VSW7lZNtHap6oM3N6mtv8k75B37a5P5OY00576/Z9
+         tGOGQUF/2jfk4ta0EVK6KozOa3ADgc6MAOSPtNs/tTE08S4M2lWgUjWl3XnxH6f6qDqt
+         gSgldE2PQAOZmsvZWzg/2hgcWpVtGcs0JWmAdA8Y7KENMTUqaJpu3uObnHLtJgiuKtKj
+         dRD2ktyLgMMoyfiz6PHXwYkQ1al4l0LMpVgpfY7EaR1mk34zeXTZIJuLox44TqmAOltl
+         cJcEoGx6ayV+lNbQSFH7Bwu3gaa2XEFgcDhK7i86mDYekmHLNWQ+xr0BOolAt3Mo1WA4
+         p62A==
+X-Gm-Message-State: AO0yUKWJLOxR42fJbImxi6PtAx0rRngfZxkLzbYUC8ifeAvU0/sUN01c
+        sn8TP9CV+PNZBS2FLpzY/GEWbv1GFoTpT9wDyMqSbgdSXRNDnYgzkXENBsT/LS4TSjLlZpMu+uH
+        uEjWJuHXgAoz9QfdPD5pxPrmhVIsYXUjLhKBaC9fZJqVHBPR1kZ/PXAcrfQ==
+X-Received: by 2002:a0c:d990:0:b0:570:fc87:4f2c with SMTP id y16-20020a0cd990000000b00570fc874f2cmr203800qvj.83.1676888160751;
+        Mon, 20 Feb 2023 02:16:00 -0800 (PST)
+X-Google-Smtp-Source: AK7set/YEwtnCc0MdoLEDmbY+Jh+bhbVGYGL0//BwQFePHm998lWNjLRhslfWc3fYUt397bZwhY8xJy7wcjRn5Bnl4Y=
+X-Received: by 2002:a0c:d990:0:b0:570:fc87:4f2c with SMTP id
+ y16-20020a0cd990000000b00570fc874f2cmr203789qvj.83.1676888160500; Mon, 20 Feb
+ 2023 02:16:00 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.7.2
-Subject: Re: linux-next: build warning after merge of the driver-core tree
-Content-Language: en-US
-To:     Bagas Sanjaya <bagasdotme@gmail.com>, Greg KH <greg@kroah.com>
-Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-References: <20230220163133.481e43d8@canb.auug.org.au>
- <896c1146-21bb-35bb-dc25-a12014eb5ccd@bytedance.com>
- <Y/Mh7uA61KMvMHAt@kroah.com> <Y/NCPC3rjOT7dJtE@debian.me>
-From:   Qi Zheng <zhengqi.arch@bytedance.com>
-In-Reply-To: <Y/NCPC3rjOT7dJtE@debian.me>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+References: <20230209143702.44408-1-hal.feng@starfivetech.com>
+ <CACRpkdbao9M5dMHFO_QE8z4_E6DZLZsMUW1OnUNjKSfQc59=ew@mail.gmail.com> <4211d93d-702c-6759-6f25-f86160c0be5d@starfivetech.com>
+In-Reply-To: <4211d93d-702c-6759-6f25-f86160c0be5d@starfivetech.com>
+From:   Emil Renner Berthing <emil.renner.berthing@canonical.com>
+Date:   Mon, 20 Feb 2023 11:15:44 +0100
+Message-ID: <CAJM55Z-+Cxdebcn4MLXfQdOVhx4c2SQ+zMH8cjn-Yq35xO8g0A@mail.gmail.com>
+Subject: Re: [PATCH v5 0/4] Basic pinctrl support for StarFive JH7110 RISC-V SoC
+To:     Hal Feng <hal.feng@starfivetech.com>
+Cc:     Linus Walleij <linus.walleij@linaro.org>,
+        linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-riscv@lists.infradead.org, Andreas Schwab <schwab@suse.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor@kernel.org>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Jianlong Huang <jianlong.huang@starfivetech.com>,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Sat, 11 Feb 2023 at 09:25, Hal Feng <hal.feng@starfivetech.com> wrote:
+> On Fri, 10 Feb 2023 23:45:05 +0100, Linus Walleij wrote:
+> > On Thu, Feb 9, 2023 at 3:37 PM Hal Feng <hal.feng@starfivetech.com> wrote:
+> >
+> > > This patch series adds basic pinctrl support for StarFive JH7110 SoC.
+> >
+> > This v4 version applied, the driver is in good shape and all bindings ACKed,
+> > nice work on this driver!
+>
+> v4? Is this a typo? This series is v5.
+> Anyway, thank you so much!
 
+Hi Hal and Linus
 
-On 2023/2/20 17:49, Bagas Sanjaya wrote:
-> On Mon, Feb 20, 2023 at 08:31:58AM +0100, Greg KH wrote:
->> On Mon, Feb 20, 2023 at 03:26:41PM +0800, Qi Zheng wrote:
->>>
->>>
->>> On 2023/2/20 13:31, Stephen Rothwell wrote:
->>>> Hi all,
->>>>
->>>> After merging the driver-core tree, today's linux-next build
->>>> (htmldocs) produced this warning:
->>>>
->>>> Documentation/filesystems/api-summary:146: fs/debugfs/inode.c:804: WARNING: Inline literal start-string without end-string.
->>>>
->>>> Introduced by commit
->>>>
->>>>     d3002468cb5d ("debugfs: update comment of debugfs_rename()")
->>>
->>> This is just a comment modification. Didn't see where my modification
->>> caused this WARNING. :(
->>
->> Yeah, I don't understand either, here's the diff, what's wrong with it?
->>
->>
->> --- a/fs/debugfs/inode.c
->> +++ b/fs/debugfs/inode.c
->> @@ -802,8 +802,8 @@ EXPORT_SYMBOL_GPL(debugfs_lookup_and_remove);
->>    * exist for rename to succeed.
->>    *
->>    * This function will return a pointer to old_dentry (which is updated to
->> - * reflect renaming) if it succeeds. If an error occurs, %NULL will be
->> - * returned.
->> + * reflect renaming) if it succeeds. If an error occurs, %ERR_PTR(-ERROR)
->> + * will be returned.
->>    *
->>    * If debugfs is not enabled in the kernel, the value -%ENODEV will be
->>    * returned.
-> 
-> Hi Greg and Qi,
-> 
-> The simple fix is to drop the percent (which is an inline code variant):
-> 
-> ---- >8 ----
-> diff --git a/fs/debugfs/inode.c b/fs/debugfs/inode.c
-> index 58a35afb7c5d89..a7a6a0821605a8 100644
-> --- a/fs/debugfs/inode.c
-> +++ b/fs/debugfs/inode.c
-> @@ -802,7 +802,7 @@ EXPORT_SYMBOL_GPL(debugfs_lookup_and_remove);
->    * exist for rename to succeed.
->    *
->    * This function will return a pointer to old_dentry (which is updated to
-> - * reflect renaming) if it succeeds. If an error occurs, %ERR_PTR(-ERROR)
-> + * reflect renaming) if it succeeds. If an error occurs, ERR_PTR(-ERROR)
->    * will be returned.
->    *
->    * If debugfs is not enabled in the kernel, the value -%ENODEV will be
+I'm curious if there is a plan to address Icenowy's concerns here:
+https://lore.kernel.org/linux-gpio/52dcbe48dbf5f2561713a9642943353216fef15a.camel@icenowy.me/
 
-LGTM, do I need to resend the patch with this fix?
+The problem is that input from "GPIO" pins is configured a little
+differently on the StarFive SoCs. Instead of having a register pr.
+pin(grroup) there is a register pr. control line to the peripherals,
+and into these you write the pin number + 2 of the pin you want the
+peripheral to react to. Why +2? That's because 0 is a special "always
+low" signal and similarly 1 is a special "always high" signal.
 
-> 
-> Thanks.
-> 
+With the current bindings one hacky way to solve this is to treat
+those two special values as kind of "virtual pins" that will always be
+high or low. So that would be something like
 
--- 
-Thanks,
-Qi
+pinmux = <GPIOMUX(GPIO_ALWAYS_LOW, GPOUT_IGNORED, GPOEN_DISABLE,
+GPI_SYS_USB_OVERCURRENT)>;
+
+..but this means we might need to mux these two virtual pins to
+multiple peripherals. I'm not sure the pinmux framework is prepared
+for that.
+
+/Emil
+
+> Best regards,
+> Hal
