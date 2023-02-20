@@ -2,187 +2,193 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 55C1869CBF2
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Feb 2023 14:23:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2EC8469CBFC
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Feb 2023 14:24:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231434AbjBTNXD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Feb 2023 08:23:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34870 "EHLO
+        id S231208AbjBTNXf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Feb 2023 08:23:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35584 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230122AbjBTNWc (ORCPT
+        with ESMTP id S231993AbjBTNXX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Feb 2023 08:22:32 -0500
-Received: from mx0b-0016f401.pphosted.com (mx0b-0016f401.pphosted.com [67.231.156.173])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF4661A646;
-        Mon, 20 Feb 2023 05:22:30 -0800 (PST)
-Received: from pps.filterd (m0045851.ppops.net [127.0.0.1])
-        by mx0b-0016f401.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 31KCRDP6007741;
-        Mon, 20 Feb 2023 05:22:17 -0800
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=marvell.com; h=date : from : to :
- cc : subject : message-id : references : mime-version : content-type :
- in-reply-to; s=pfpt0220; bh=dhKelfLH8aJy1+bLl4u6+viGj8jNiDdLf7QWa3W/h7M=;
- b=QcBLBbnZ3QxONV9Cf5tKUiK/wiG9gG4UpzVbUJelFMGyGffaiErfbAZNVloTzw5YZpvN
- BXDxpTvtnZUT8l3Qnvayns4lEOehmxwdyAbMqsciEPniawfVe79rffDYXROAarQ/du7l
- 7wunEGUEoW7aFIys7pUdyhYrUVErX1AsR6/ESEnUtsL7N6MRjof4hkGalMnJFT3xMESE
- Qo++nsPMuEefPbyaXOF5wN2dg+nYfvwuvb8OoQX2Zuw/K0slJtTdOjfdE1TJPCXB+Caa
- aPULn7p2Ixuo3HfFOeis/dK0DMVQQCKvJkYCEcCODycwMn1ClAUQayGINSMCEBIuN3ON rQ== 
-Received: from dc5-exch01.marvell.com ([199.233.59.181])
-        by mx0b-0016f401.pphosted.com (PPS) with ESMTPS id 3nty2yy8kw-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT);
-        Mon, 20 Feb 2023 05:22:17 -0800
-Received: from DC5-EXCH02.marvell.com (10.69.176.39) by DC5-EXCH01.marvell.com
- (10.69.176.38) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Mon, 20 Feb
- 2023 05:22:14 -0800
-Received: from maili.marvell.com (10.69.176.80) by DC5-EXCH02.marvell.com
- (10.69.176.39) with Microsoft SMTP Server id 15.0.1497.42 via Frontend
- Transport; Mon, 20 Feb 2023 05:22:14 -0800
-Received: from Dell2s-9 (unknown [10.110.150.250])
-        by maili.marvell.com (Postfix) with ESMTP id 795D93F7073;
-        Mon, 20 Feb 2023 05:22:14 -0800 (PST)
-Date:   Mon, 20 Feb 2023 05:22:14 -0800
-From:   Piyush Malgujar <pmalgujar@marvell.com>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-CC:     <linux-mmc@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <adrian.hunter@intel.com>, <ulf.hansson@linaro.org>,
-        <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
-        <yamada.masahiro@socionext.com>, <devicetree@vger.kernel.org>,
-        <jannadurai@marvell.com>, <cchavva@marvell.com>
-Subject: Re: [PATCH v2 4/5] dt-bindings: mmc: sdhci-cadence: SD6 support
-Message-ID: <20230220132214.GA24729@Dell2s-9>
-References: <20230123192735.21136-1-pmalgujar@marvell.com>
- <20230123192735.21136-5-pmalgujar@marvell.com>
- <d05161ed-eb30-2d4d-e9bc-4b40e8ae09e7@linaro.org>
+        Mon, 20 Feb 2023 08:23:23 -0500
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3EF98690
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Feb 2023 05:23:21 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1676899401; x=1708435401;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=A6LhRpr42B3nwFfoj1JoUbQMjjWOTcLN6oT7PjbxPc8=;
+  b=YHqSlq2JG9mQFcwZylzKSTYFu862jdSi3WmU1GfI1SrlN4W/owb8Z3+u
+   Nr6BJfTnfpYcj2XSle4zQCTez2zUbtMYv5Up5yVanQaOZooF7eL7QB9m1
+   ZB753Hrx0YIUMztLhex+C3Mx13IizMQkqMjGCYHiRZzzyDDYhMMwmyT+X
+   MgmbpIxgQPliuRebOZ7FpYYrUuU3BG+qr/B2GK8onayyNkLnrYUF8l380
+   de9IjoFlpeGogo+2iDM312b1cC9oxakvWkWSkCyFCiJ0n3pzDehD+5/Bs
+   AlGwizJwiYMZeJy3N0bwK63hxxBFqVPIW4QcKIzRstoMHCpVZICS5NykX
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10627"; a="330112820"
+X-IronPort-AV: E=Sophos;i="5.97,312,1669104000"; 
+   d="scan'208";a="330112820"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Feb 2023 05:23:21 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10627"; a="673361962"
+X-IronPort-AV: E=Sophos;i="5.97,312,1669104000"; 
+   d="scan'208";a="673361962"
+Received: from lkp-server01.sh.intel.com (HELO 4455601a8d94) ([10.239.97.150])
+  by fmsmga007.fm.intel.com with ESMTP; 20 Feb 2023 05:23:17 -0800
+Received: from kbuild by 4455601a8d94 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pU68S-000Dw1-2K;
+        Mon, 20 Feb 2023 13:23:16 +0000
+Date:   Mon, 20 Feb 2023 21:22:45 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Qi Zheng <zhengqi.arch@bytedance.com>, akpm@linux-foundation.org,
+        hannes@cmpxchg.org, shakeelb@google.com, mhocko@kernel.org,
+        roman.gushchin@linux.dev, muchun.song@linux.dev, david@redhat.com,
+        shy828301@gmail.com
+Cc:     llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, tkhai@ya.ru,
+        sultan@kerneltoast.com, dave@stgolabs.net,
+        penguin-kernel@i-love.sakura.ne.jp, paulmck@kernel.org,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        Qi Zheng <zhengqi.arch@bytedance.com>
+Subject: Re: [PATCH 3/5] mm: shrinkers: make count and scan in shrinker
+ debugfs lockless
+Message-ID: <202302202134.OFjSh3rl-lkp@intel.com>
+References: <20230220091637.64865-4-zhengqi.arch@bytedance.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <d05161ed-eb30-2d4d-e9bc-4b40e8ae09e7@linaro.org>
-User-Agent: Mutt/1.9.4 (2018-02-28)
-X-Proofpoint-GUID: tBUWEJSQod4CqVY50BpMJx56NXMKGx1i
-X-Proofpoint-ORIG-GUID: tBUWEJSQod4CqVY50BpMJx56NXMKGx1i
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.170.22
- definitions=2023-02-20_11,2023-02-20_02,2023-02-09_01
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230220091637.64865-4-zhengqi.arch@bytedance.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Krzysztof,
+Hi Qi,
 
-Thank you for your review comments.
+Thank you for the patch! Perhaps something to improve:
 
-On Mon, Jan 23, 2023 at 08:42:54PM +0100, Krzysztof Kozlowski wrote:
-> On 23/01/2023 20:27, Piyush Malgujar wrote:
-> > From: Jayanthi Annadurai <jannadurai@marvell.com>
-> > 
-> > Add support for SD6 controller support.
-> 
-> This is a friendly reminder during the review process.
-> 
-> It seems my previous comments were not fully addressed. Maybe my
-> feedback got lost between the quotes, maybe you just forgot to apply it.
-> Please go back to the previous discussion and either implement all
-> requested changes or keep discussing them.
-> 
-> Thank you.
-> 
-> > 
-> > Signed-off-by: Jayanthi Annadurai <jannadurai@marvell.com>
-> > Signed-off-by: Piyush Malgujar <pmalgujar@marvell.com>
-> > ---
-> >  .../devicetree/bindings/mmc/cdns,sdhci.yaml   | 34 +++++++++++++++++--
-> >  1 file changed, 32 insertions(+), 2 deletions(-)
-> > 
-> > diff --git a/Documentation/devicetree/bindings/mmc/cdns,sdhci.yaml b/Documentation/devicetree/bindings/mmc/cdns,sdhci.yaml
-> > index 8b1a0fdcb5e3e2e8b87d8d7678e37f3dad447fc1..26ef2804aa9e17c583adaa906338ec7af8c4990b 100644
-> > --- a/Documentation/devicetree/bindings/mmc/cdns,sdhci.yaml
-> > +++ b/Documentation/devicetree/bindings/mmc/cdns,sdhci.yaml
-> > @@ -4,7 +4,7 @@
-> >  $id: http://devicetree.org/schemas/mmc/cdns,sdhci.yaml#
-> >  $schema: http://devicetree.org/meta-schemas/core.yaml#
-> >  
-> > -title: Cadence SD/SDIO/eMMC Host Controller (SD4HC)
-> > +title: Cadence SD/SDIO/eMMC Host Controller (SD4HC, SD6HC)
-> >  
-> >  maintainers:
-> >    - Masahiro Yamada <yamada.masahiro@socionext.com>
-> > @@ -18,7 +18,9 @@ properties:
-> >        - enum:
-> >            - microchip,mpfs-sd4hc
-> >            - socionext,uniphier-sd4hc
-> > -      - const: cdns,sd4hc
-> > +      - enum:
-> > +          - cdns,sd4hc
-> > +          - cdns,sd6hc
-> >  
-> >    reg:
-> >      maxItems: 1
-> > @@ -111,6 +113,34 @@ properties:
-> >      minimum: 0
-> >      maximum: 0x7f
-> >  
-> > +  cdns,iocell-input-delay:
-> > +    description: Delay in ps across the input IO cells
-> 
-> Use proper unit suffix -ps, so ref wont' be needed.
-> 
-> This comment was also ignored.
-> 
-> > +    $ref: "/schemas/types.yaml#/definitions/uint32"
-> > +
-> > +  cdns,iocell-output-delay:
-> > +    description: Delay in ps across the output IO cells
-> 
-> Ditto
-> 
-> > +    $ref: "/schemas/types.yaml#/definitions/uint32"
-> > +
-> > +  cdns,delay-element:
-> > +    description: Delay element in ps used for calculating phy timings
-> 
-> Ditto
-> 
+[auto build test WARNING on akpm-mm/mm-everything]
+[also build test WARNING on next-20230220]
+[cannot apply to device-mapper-dm/for-next linus/master v6.2]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-Yes, will add -ps and remove the $ref.
+url:    https://github.com/intel-lab-lkp/linux/commits/Qi-Zheng/mm-vmscan-make-global-slab-shrink-lockless/20230220-171954
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-everything
+patch link:    https://lore.kernel.org/r/20230220091637.64865-4-zhengqi.arch%40bytedance.com
+patch subject: [PATCH 3/5] mm: shrinkers: make count and scan in shrinker debugfs lockless
+config: riscv-randconfig-r036-20230219 (https://download.01.org/0day-ci/archive/20230220/202302202134.OFjSh3rl-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project db89896bbbd2251fff457699635acbbedeead27f)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install riscv cross compiling tool for clang build
+        # apt-get install binutils-riscv64-linux-gnu
+        # https://github.com/intel-lab-lkp/linux/commit/b5b7259339a7a5cfae5a120356750c5a9e151d12
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Qi-Zheng/mm-vmscan-make-global-slab-shrink-lockless/20230220-171954
+        git checkout b5b7259339a7a5cfae5a120356750c5a9e151d12
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash
 
-> > +    $ref: "/schemas/types.yaml#/definitions/uint32"
-> > +
-> > +  cdns,read-dqs-cmd-delay:
-> > +    description: Command delay used in HS200 tuning
-> 
-> What are the units?
-> 
-> > +    $ref: "/schemas/types.yaml#/definitions/uint32"
-> 
-> Drop quotes (everywhere)
-> 
-> > +
-> > +  cdns,tune-val-start:
-> > +    description: Staring value of data delay used in HS200 tuning
-> 
-> Same problem - missing units.
-> 
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202302202134.OFjSh3rl-lkp@intel.com/
 
-These are integer values, will add in the description that these units are integer used
-in tuning. Also, will remove the $ref.
+All warnings (new ones prefixed by >>):
 
-> > +    $ref: "/schemas/types.yaml#/definitions/uint32"
-> > +
-> 
-> 
-> I don't get why the feedback has to be repeated. It's a bit a waste of
-> time, isn't it?
-> 
-> Best regards,
-> Krzysztof
-> 
+>> mm/shrinker_debug.c:88:11: warning: variable 'ret' is used uninitialized whenever 'do' loop exits because its condition is false [-Wsometimes-uninitialized]
+           } while ((memcg = mem_cgroup_iter(NULL, memcg, NULL)) != NULL);
+                    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   mm/shrinker_debug.c:93:9: note: uninitialized use occurs here
+           return ret;
+                  ^~~
+   mm/shrinker_debug.c:88:11: note: remove the condition if it is always true
+           } while ((memcg = mem_cgroup_iter(NULL, memcg, NULL)) != NULL);
+                    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                    1
+>> mm/shrinker_debug.c:78:7: warning: variable 'ret' is used uninitialized whenever 'if' condition is true [-Wsometimes-uninitialized]
+                   if (!memcg_aware) {
+                       ^~~~~~~~~~~~
+   mm/shrinker_debug.c:93:9: note: uninitialized use occurs here
+           return ret;
+                  ^~~
+   mm/shrinker_debug.c:78:3: note: remove the 'if' if its condition is always false
+                   if (!memcg_aware) {
+                   ^~~~~~~~~~~~~~~~~~~
+   mm/shrinker_debug.c:53:9: note: initialize the variable 'ret' to silence this warning
+           int ret, nid, srcu_idx;
+                  ^
+                   = 0
+   2 warnings generated.
 
-Please let me know if with above changes, it will be good and acceptable for V3.
 
-Thanks,
-Piyush
+vim +88 mm/shrinker_debug.c
 
+5035ebc644aec9 Roman Gushchin 2022-05-31  45  
+5035ebc644aec9 Roman Gushchin 2022-05-31  46  static int shrinker_debugfs_count_show(struct seq_file *m, void *v)
+5035ebc644aec9 Roman Gushchin 2022-05-31  47  {
+5035ebc644aec9 Roman Gushchin 2022-05-31  48  	struct shrinker *shrinker = m->private;
+5035ebc644aec9 Roman Gushchin 2022-05-31  49  	unsigned long *count_per_node;
+5035ebc644aec9 Roman Gushchin 2022-05-31  50  	struct mem_cgroup *memcg;
+5035ebc644aec9 Roman Gushchin 2022-05-31  51  	unsigned long total;
+5035ebc644aec9 Roman Gushchin 2022-05-31  52  	bool memcg_aware;
+b5b7259339a7a5 Qi Zheng       2023-02-20  53  	int ret, nid, srcu_idx;
+5035ebc644aec9 Roman Gushchin 2022-05-31  54  
+5035ebc644aec9 Roman Gushchin 2022-05-31  55  	count_per_node = kcalloc(nr_node_ids, sizeof(unsigned long), GFP_KERNEL);
+5035ebc644aec9 Roman Gushchin 2022-05-31  56  	if (!count_per_node)
+5035ebc644aec9 Roman Gushchin 2022-05-31  57  		return -ENOMEM;
+5035ebc644aec9 Roman Gushchin 2022-05-31  58  
+b5b7259339a7a5 Qi Zheng       2023-02-20  59  	srcu_idx = srcu_read_lock(&shrinker_srcu);
+5035ebc644aec9 Roman Gushchin 2022-05-31  60  
+5035ebc644aec9 Roman Gushchin 2022-05-31  61  	memcg_aware = shrinker->flags & SHRINKER_MEMCG_AWARE;
+5035ebc644aec9 Roman Gushchin 2022-05-31  62  
+5035ebc644aec9 Roman Gushchin 2022-05-31  63  	memcg = mem_cgroup_iter(NULL, NULL, NULL);
+5035ebc644aec9 Roman Gushchin 2022-05-31  64  	do {
+5035ebc644aec9 Roman Gushchin 2022-05-31  65  		if (memcg && !mem_cgroup_online(memcg))
+5035ebc644aec9 Roman Gushchin 2022-05-31  66  			continue;
+5035ebc644aec9 Roman Gushchin 2022-05-31  67  
+5035ebc644aec9 Roman Gushchin 2022-05-31  68  		total = shrinker_count_objects(shrinker,
+5035ebc644aec9 Roman Gushchin 2022-05-31  69  					       memcg_aware ? memcg : NULL,
+5035ebc644aec9 Roman Gushchin 2022-05-31  70  					       count_per_node);
+5035ebc644aec9 Roman Gushchin 2022-05-31  71  		if (total) {
+5035ebc644aec9 Roman Gushchin 2022-05-31  72  			seq_printf(m, "%lu", mem_cgroup_ino(memcg));
+5035ebc644aec9 Roman Gushchin 2022-05-31  73  			for_each_node(nid)
+5035ebc644aec9 Roman Gushchin 2022-05-31  74  				seq_printf(m, " %lu", count_per_node[nid]);
+5035ebc644aec9 Roman Gushchin 2022-05-31  75  			seq_putc(m, '\n');
+5035ebc644aec9 Roman Gushchin 2022-05-31  76  		}
+5035ebc644aec9 Roman Gushchin 2022-05-31  77  
+5035ebc644aec9 Roman Gushchin 2022-05-31 @78  		if (!memcg_aware) {
+5035ebc644aec9 Roman Gushchin 2022-05-31  79  			mem_cgroup_iter_break(NULL, memcg);
+5035ebc644aec9 Roman Gushchin 2022-05-31  80  			break;
+5035ebc644aec9 Roman Gushchin 2022-05-31  81  		}
+5035ebc644aec9 Roman Gushchin 2022-05-31  82  
+5035ebc644aec9 Roman Gushchin 2022-05-31  83  		if (signal_pending(current)) {
+5035ebc644aec9 Roman Gushchin 2022-05-31  84  			mem_cgroup_iter_break(NULL, memcg);
+5035ebc644aec9 Roman Gushchin 2022-05-31  85  			ret = -EINTR;
+5035ebc644aec9 Roman Gushchin 2022-05-31  86  			break;
+5035ebc644aec9 Roman Gushchin 2022-05-31  87  		}
+5035ebc644aec9 Roman Gushchin 2022-05-31 @88  	} while ((memcg = mem_cgroup_iter(NULL, memcg, NULL)) != NULL);
+5035ebc644aec9 Roman Gushchin 2022-05-31  89  
+b5b7259339a7a5 Qi Zheng       2023-02-20  90  	srcu_read_unlock(&shrinker_srcu, srcu_idx);
+5035ebc644aec9 Roman Gushchin 2022-05-31  91  
+5035ebc644aec9 Roman Gushchin 2022-05-31  92  	kfree(count_per_node);
+5035ebc644aec9 Roman Gushchin 2022-05-31 @93  	return ret;
+5035ebc644aec9 Roman Gushchin 2022-05-31  94  }
+5035ebc644aec9 Roman Gushchin 2022-05-31  95  DEFINE_SHOW_ATTRIBUTE(shrinker_debugfs_count);
+5035ebc644aec9 Roman Gushchin 2022-05-31  96  
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
