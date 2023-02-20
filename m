@@ -2,134 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7FBCE69CABD
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Feb 2023 13:21:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F281169CAB8
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Feb 2023 13:21:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232008AbjBTMVz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Feb 2023 07:21:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40342 "EHLO
+        id S231998AbjBTMVh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Feb 2023 07:21:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39936 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231997AbjBTMVw (ORCPT
+        with ESMTP id S231994AbjBTMVf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Feb 2023 07:21:52 -0500
-Received: from frasgout13.his.huawei.com (frasgout13.his.huawei.com [14.137.139.46])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E56C81A968;
-        Mon, 20 Feb 2023 04:21:43 -0800 (PST)
-Received: from mail02.huawei.com (unknown [172.18.147.228])
-        by frasgout13.his.huawei.com (SkyGuard) with ESMTP id 4PL1XW0wGwz9xtml;
-        Mon, 20 Feb 2023 20:13:15 +0800 (CST)
-Received: from roberto-ThinkStation-P620 (unknown [10.204.63.22])
-        by APP1 (Coremail) with SMTP id LxC2BwCHCgavZfNjaQo6AQ--.54254S2;
-        Mon, 20 Feb 2023 13:21:15 +0100 (CET)
-Message-ID: <70d079a7e8b2fa08683b68742a22ba2918765dfc.camel@huaweicloud.com>
-Subject: Re: [PATCH v7 2/6] ocfs2: Switch to security_inode_init_security()
-From:   Roberto Sassu <roberto.sassu@huaweicloud.com>
-To:     Mimi Zohar <zohar@linux.ibm.com>, mark@fasheh.com,
-        jlbec@evilplan.org, joseph.qi@linux.alibaba.com,
-        dmitry.kasatkin@gmail.com, paul@paul-moore.com, jmorris@namei.org,
-        serge@hallyn.com, stephen.smalley.work@gmail.com,
-        eparis@parisplace.org, casey@schaufler-ca.com
-Cc:     ocfs2-devel@oss.oracle.com, reiserfs-devel@vger.kernel.org,
-        linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org, selinux@vger.kernel.org,
-        linux-kernel@vger.kernel.org, keescook@chromium.org,
-        nicolas.bouchinet@clip-os.org,
-        Roberto Sassu <roberto.sassu@huawei.com>
-Date:   Mon, 20 Feb 2023 13:20:56 +0100
-In-Reply-To: <1e93d7b299de3b6cf61b5a5c4be91eb47d864ac6.camel@linux.ibm.com>
-References: <20221201104125.919483-1-roberto.sassu@huaweicloud.com>
-         <20221201104125.919483-3-roberto.sassu@huaweicloud.com>
-         <a20a6d84d8e682fbff546b80eda75a1918d7c108.camel@linux.ibm.com>
-         <aaeee7490cfee1b2163a3c9c894294aaf13e100c.camel@linux.ibm.com>
-         <95f9b1dfca0cbff1c6a447dde45c2f835bc1a254.camel@huaweicloud.com>
-         <1e93d7b299de3b6cf61b5a5c4be91eb47d864ac6.camel@linux.ibm.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.36.5-0ubuntu1 
+        Mon, 20 Feb 2023 07:21:35 -0500
+Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC6FD1C311;
+        Mon, 20 Feb 2023 04:21:27 -0800 (PST)
+Received: by mail-pl1-x62d.google.com with SMTP id z2so1311131plf.12;
+        Mon, 20 Feb 2023 04:21:27 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=Xov+H10N4vCuWc2wR2lV1r0anzrEzPO+y5PbK8+0+Wg=;
+        b=oEXNk9FTQfMd90pGU9YBBD0J8HTO3YCODyFDym0F4VsxzZKDOxSFizVgrhFrqELNoG
+         /DuyJVlDJHEh+EQyROUpC6xQq8R+pLm4ax3Qsf8bBsAaBgl7N5H9g47EOpWkj+5el0Fu
+         yr9seuay5UIy6F2sZTQTCmSEqgj2Rx1zb57/P8PkzkdFMMBRn1M0tVAwTx0EFFty1cDY
+         +1alyKKQXgJOVxTowZDQF8pfrXOiahMUGISj48f5XC4Rk9m1heCPYUPgGVmsiTD5LaVa
+         Y/AnRlu0CRBEmw2w804UOcvACBPncbyGXBTdtNhlVyC+5XmkHVyOr9GhStorubPx0XtN
+         UPgQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Xov+H10N4vCuWc2wR2lV1r0anzrEzPO+y5PbK8+0+Wg=;
+        b=q1xh24gOKAwIkHDagKp1Ttk+Z9u/iWkBbPIeOrVmlzq0mH+yP2+rvmm3dedMqT4e9C
+         mMy3p2ppTrl0AjBwIw959al5lg0jhvxl4JnikYyi9d/56EaNi1qSgSB1F1Hb0igxSLS5
+         6BCxjUKAEvdJBjBA2iFJ74mI6bWGinCa/awBfyyRS6TXXW99AdDu45Yn9hCmPdRzDC1s
+         4XgVEmlXNgMFMUuFZkDANFSd7mr+eU+YkUw/MYJNVJSPboyqCWnG71O1uqR151j4wC4F
+         egUmIdMcGqsZK+sB+gx6+t4ptMSgcMIEN6p37cFoK7ir8BYVnaXn40dhCnfSnXafqbGc
+         fsbg==
+X-Gm-Message-State: AO0yUKXTy4bh+HC+8Ziym7DKPGstIHcRLaS1vZEk/b9/+OEshhw0K0Wi
+        lZiyUV3BkDL1vtNON1dZvBk=
+X-Google-Smtp-Source: AK7set/dU7RFWwNrbEHXiFCOrku4J6mCeCr53TSrPYuLtRQ/6uMT+ANyMbeiH/D26pXhj0QPcJVH2Q==
+X-Received: by 2002:a05:6a20:a008:b0:bc:8b20:97b7 with SMTP id p8-20020a056a20a00800b000bc8b2097b7mr11689327pzj.28.1676895687178;
+        Mon, 20 Feb 2023 04:21:27 -0800 (PST)
+Received: from XHD-CHAVAN-L1.amd.com ([149.199.50.128])
+        by smtp.gmail.com with ESMTPSA id 20-20020aa79114000000b005a7bd10bb2asm7564064pfh.79.2023.02.20.04.21.24
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 20 Feb 2023 04:21:26 -0800 (PST)
+From:   Rohit Chavan <roheetchavan@gmail.com>
+To:     Leon Romanovsky <leon@kernel.org>, Jason Gunthorpe <jgg@ziepe.ca>,
+        linux-rdma@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Rohit Chavan <roheetchavan@gmail.com>
+Subject: [PATCH] RDMA/mlx5: Coding style fix
+Date:   Mon, 20 Feb 2023 17:51:16 +0530
+Message-Id: <20230220122116.2047-1-roheetchavan@gmail.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-CM-TRANSID: LxC2BwCHCgavZfNjaQo6AQ--.54254S2
-X-Coremail-Antispam: 1UD129KBjvJXoW7Aw1ruw1rZryrAr4DAr43ZFb_yoW8tr43pF
-        W8tFyUKr15tFy5Cry0qa1Y9ws29FWfGrsrXwsxJr1DAF1qyrn7tr1Fyr1Uu3WrJr98JF10
-        qr4UAF43uwn8ArJanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUk0b4IE77IF4wAFF20E14v26ryj6rWUM7CY07I20VC2zVCF04k2
-        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
-        vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7Cj
-        xVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIEc7CjxV
-        AFwI0_Gr1j6F4UJwAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG
-        6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFV
-        Cjc4AY6r1j6r4UM4x0Y48IcVAKI48JM4IIrI8v6xkF7I0E8cxan2IY04v7MxAIw28IcxkI
-        7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxV
-        Cjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVW8ZVWrXwCIc40Y0x0EwIxGrwCI42IY
-        6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwCI42IY6x
-        AIw20EY4v20xvaj40_WFyUJVCq3wCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv
-        6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjxUFDGOUUUUU
-X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAQAOBF1jj4maCAAAsh
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 2023-02-20 at 06:08 -0500, Mimi Zohar wrote:
-> > > > > diff --git a/fs/ocfs2/xattr.c b/fs/ocfs2/xattr.c
-> > > > > index 95d0611c5fc7..55699c573541 100644
-> > > > > @@ -7277,13 +7289,23 @@ int ocfs2_init_security_get(struct inode *inode,
-> > > > >  			    const struct qstr *qstr,
-> > > > >  			    struct ocfs2_security_xattr_info *si)
-> > > > >  {
-> > > > > +	int ret;
-> > > > > +
-> > > > >  	/* check whether ocfs2 support feature xattr */
-> > > > >  	if (!ocfs2_supports_xattr(OCFS2_SB(dir->i_sb)))
-> > > > >  		return -EOPNOTSUPP;
-> > > > > -	if (si)
-> > > > > -		return security_old_inode_init_security(inode, dir, qstr,
-> > > > > -							&si->name, &si->value,
-> > > > > -							&si->value_len);
-> > > > > +	if (si) {
-> > > > > +		ret = security_inode_init_security(inode, dir, qstr,
-> > > > > +						   &ocfs2_initxattrs, si);
-> > > > 
-> > > > The "if (unlikely(IS_PRIVATE(inode))"  test exists in both
-> > > > security_old_inode_init_security() and security_inode_init_security(),
-> > > > but return different values.  In the former case, it returns
-> > > > -EOPNOTSUPP.  In the latter case, it returns 0.  The question is
-> > > > whether or not we need to be concerned about private inodes on ocfs2.  
-> > > > If private inodes on ocfs2 are possible, then ocsf2_mknod() or
-> > > > ocfs2_symlink() would fail to create the inode or symlink.
-> > > 
-> > > Correction, previously when returning -EOPNOTSUPP for private inodes,
-> > > xattrs would not be wrriten.  By returning 0 without setting si->enable 
-> > > to 0, xattrs will be written.
-> > 
-> > Ok, but if there is a private inode, we would be setting si->enable to
-> > zero. Should be ok, I guess.
-> 
-> si->enable is being set to zero, below, but is conditional on !si-
-> > name.
-> 
-> This is the last concern, otherwise the patch set looks good.
+Signed-off-by: Rohit Chavan <roheetchavan@gmail.com>
+---
+ drivers/infiniband/hw/mlx5/qp.c | 9 ++++-----
+ 1 file changed, 4 insertions(+), 5 deletions(-)
 
-Uhm, if the inode is private, security_inode_init_security() will
-immediately return. So, the condition !si->name should be always true.
-
-Thanks
-
-Roberto
-
-> > > > > +		/*
-> > > > > +		 * security_inode_init_security() does not return -EOPNOTSUPP,
-> > > > > +		 * we have to check the xattr ourselves.
-> > > > > +		 */
-> > > > > +		if (!ret && !si->name)
-> > > > > +			si->enable = 0;
-> > > > > +
-> > > > > +		return ret;
-> > > > > +	}
-> > > > >  
-> > > > >  	return security_inode_init_security(inode, dir, qstr,
-> > > > >  					    &ocfs2_initxattrs, NULL);
+diff --git a/drivers/infiniband/hw/mlx5/qp.c b/drivers/infiniband/hw/mlx5/qp.c
+index cf953d23d18d..45c45e57bbb8 100644
+--- a/drivers/infiniband/hw/mlx5/qp.c
++++ b/drivers/infiniband/hw/mlx5/qp.c
+@@ -2769,9 +2769,9 @@ static void process_vendor_flag(struct mlx5_ib_dev *dev, int *flags, int flag,
+ 	case MLX5_QP_FLAG_SCATTER_CQE:
+ 	case MLX5_QP_FLAG_ALLOW_SCATTER_CQE:
+ 		/*
+-			 * We don't return error if these flags were provided,
+-			 * and mlx5 doesn't have right capability.
+-			 */
++		 * We don't return error if these flags were provided,
++		 * and mlx5 doesn't have right capability.
++		 */
+ 		*flags &= ~(MLX5_QP_FLAG_SCATTER_CQE |
+ 			    MLX5_QP_FLAG_ALLOW_SCATTER_CQE);
+ 		return;
+@@ -5514,8 +5514,7 @@ int mlx5_ib_modify_wq(struct ib_wq *wq, struct ib_wq_attr *wq_attr,
+ 		if (wq_attr->flags_mask & IB_WQ_FLAGS_CVLAN_STRIPPING) {
+ 			if (!(MLX5_CAP_GEN(dev->mdev, eth_net_offloads) &&
+ 			      MLX5_CAP_ETH(dev->mdev, vlan_cap))) {
+-				mlx5_ib_dbg(dev, "VLAN offloads are not "
+-					    "supported\n");
++				mlx5_ib_dbg(dev, "VLAN offloads are not supported\n");
+ 				err = -EOPNOTSUPP;
+ 				goto out;
+ 			}
+-- 
+2.30.2
 
