@@ -2,131 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 38A4E69C6F1
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Feb 2023 09:46:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7406D69C6FC
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Feb 2023 09:49:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231286AbjBTIqE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Feb 2023 03:46:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59492 "EHLO
+        id S231309AbjBTIs6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Feb 2023 03:48:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32772 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230508AbjBTIqC (ORCPT
+        with ESMTP id S231294AbjBTIs0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Feb 2023 03:46:02 -0500
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69936C164;
-        Mon, 20 Feb 2023 00:46:01 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1676882761; x=1708418761;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=wRQGYaheBX/3R65qusfDmCgRZiKlnsyVOKTVMzWu8mU=;
-  b=i5luY265oCVq/31UUV6ZV4MyWDJehytFgTyoKRfJ5hUNIXTiORDT2M8W
-   hntlinFB8WPopZhwpxIUCXjVOjG3i5iqFk7Tz2ApGnDCH4HPLA3A0Bol9
-   3wn3QtTdOomrulRzD4sEGo0Jg59WD1TSczIYYV3KWJvg0NFoSV4LYpL7i
-   jfnSNVmNk+2DRo+iGy5wbAeihhz7CwozvLVXepFoAo++9rKimV5G1eeeI
-   +Kyie2qA3dUpw4Ubm0NxfP7a9a7lOffsfQI3s//Hm/yZUAXxbtWNtOwQT
-   0A8AdEFgty1cBvls6t0ID0U+yAHKRUXv5MRprESHj8om6p0XQ4C78rpSn
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10626"; a="330068036"
-X-IronPort-AV: E=Sophos;i="5.97,312,1669104000"; 
-   d="scan'208";a="330068036"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Feb 2023 00:46:01 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10626"; a="664567879"
-X-IronPort-AV: E=Sophos;i="5.97,312,1669104000"; 
-   d="scan'208";a="664567879"
-Received: from ubuntu.bj.intel.com ([10.238.155.108])
-  by orsmga007.jf.intel.com with ESMTP; 20 Feb 2023 00:45:58 -0800
-From:   Jun Miao <jun.miao@intel.com>
-To:     pbonzini@redhat.com, corbet@lwn.net
-Cc:     seanjc@google.com, maciej.szmigiero@oracle.com,
-        kvm@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, jun.miao@intel.com
-Subject: [PATCH] KVM: Align the function name of kvm_swap_active_memslots()
-Date:   Mon, 20 Feb 2023 16:45:00 +0800
-Message-Id: <20230220084500.938739-1-jun.miao@intel.com>
-X-Mailer: git-send-email 2.32.0
+        Mon, 20 Feb 2023 03:48:26 -0500
+Received: from mail-pj1-x1041.google.com (mail-pj1-x1041.google.com [IPv6:2607:f8b0:4864:20::1041])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C573893C2;
+        Mon, 20 Feb 2023 00:48:24 -0800 (PST)
+Received: by mail-pj1-x1041.google.com with SMTP id cp9so1723115pjb.0;
+        Mon, 20 Feb 2023 00:48:24 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=uYnkhQbWM4LZJsmgLPfHe7W3LYiU/dDbk2eSvNPNzZM=;
+        b=h/BKAeytoo1Q2M46VZnM7+Cmzg6aaDbjJQNiFBlK7TE5qnMYP4Mt6oVh/rahd8Ypng
+         H/gjxNc1XMPKh3P1BzquJJAjctmuC2eeykOvwmkAo5nK5XN8WJc1CepKxs5AePa6Ugpt
+         7eW05dt8MhPxTZhvjOQVYXA6oqVXjfCrbVdF8PHsIXCFfGCGRAOcHXLcdW86zzOHahUL
+         gFiDqdVUfMO3ybOzyKRgBBsTqNkaJf9D2++jn7gvOYzo06G7Brbrf3PkoWlkfDN+K1Qu
+         p6g7GRRc18Pp6SpsomasmRYIwAK5F1EymBGExRNRUOD13nGT1QOTb4+2KPqcINlGIlF+
+         76hg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=uYnkhQbWM4LZJsmgLPfHe7W3LYiU/dDbk2eSvNPNzZM=;
+        b=S13nOKllKplDVBhzRURZHvFMaCaxWoQ7TqMIzCyG3QwmPP0QBXfw9LIzRNx5EtUfaG
+         0o6h6QXOlVePzf7V9/EBpO7W3cLRbO/qAIwVUEV4hUEejiOU5PegSrjq2urvLb2KvPq/
+         DZzicaTccSOurQ2y+bEnZZTslqofADyoRTLCi1AgaT6BMxYQ8WcCi1ZzLiMNWA6Um41k
+         oMBZAnHdXisItpkO5D7UE/Q9EMUjGsykxeg29fSF09NIjuvOhg3MCAGK9htwl/73mzYV
+         N3aoh2R6doaFkf1qjhJ4Qrdxrn1E1hZrZPa1oZhVWKWZkHjmCW2Or4qQ9hIlNn2/mWul
+         Ufyg==
+X-Gm-Message-State: AO0yUKVOIh2CsJFHYRLrWnnLOIgsU6fkqsl5a1JdYQ7Oz6dvAtxjdJlQ
+        XL0Z1IkUQCVobX/p5UOj748=
+X-Google-Smtp-Source: AK7set/yIHLQLlTuhm+v9tjWCZUfsPKRF5KOILAfTr08ukAB+nu18E0gDx8JVkAxPECMiSCYXrABhA==
+X-Received: by 2002:a05:6a21:999a:b0:bc:bdb1:165a with SMTP id ve26-20020a056a21999a00b000bcbdb1165amr8356926pzb.39.1676882904163;
+        Mon, 20 Feb 2023 00:48:24 -0800 (PST)
+Received: from localhost.localdomain ([203.205.141.21])
+        by smtp.gmail.com with ESMTPSA id n11-20020a62e50b000000b00586fbbdf6e4sm7136378pff.34.2023.02.20.00.48.20
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 20 Feb 2023 00:48:23 -0800 (PST)
+From:   menglong8.dong@gmail.com
+X-Google-Original-From: imagedong@tencent.com
+To:     andrii.nakryiko@gmail.com, alan.maguire@oracle.com
+Cc:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+        martin.lau@linux.dev, song@kernel.org, yhs@fb.com,
+        john.fastabend@gmail.com, kpsingh@kernel.org, sdf@google.com,
+        haoluo@google.com, jolsa@kernel.org, bpf@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Menglong Dong <imagedong@tencent.com>
+Subject: [PATCH bpf-next v2 0/3] libbpf: allow users to set kprobe/uprobe attach mode
+Date:   Mon, 20 Feb 2023 16:47:08 +0800
+Message-Id: <20230220084711.261642-1-imagedong@tencent.com>
+X-Mailer: git-send-email 2.39.0
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The function of install_new_memslots() is replaced by kvm_swap_active_memslots().
-In order to avoid confusion, align the name in the comments which always be ignored.
+From: Menglong Dong <imagedong@tencent.com>
 
-Fixes: a54d806688fe "KVM: Keep memslots in tree-based structures instead of array-based ones")
-Signed-off-by: Jun Miao <jun.miao@intel.com>
----
- Documentation/virt/kvm/locking.rst | 2 +-
- include/linux/kvm_host.h           | 4 ++--
- virt/kvm/kvm_main.c                | 4 ++--
- 3 files changed, 5 insertions(+), 5 deletions(-)
+By default, libbpf will attach the kprobe/uprobe eBPF program in the
+latest mode that supported by kernel. In this series, we add the support
+to let users manually attach kprobe/uprobe in legacy/perf/link mode in
+the 1th patch.
 
-diff --git a/Documentation/virt/kvm/locking.rst b/Documentation/virt/kvm/locking.rst
-index 14c4e9fa501d..ac0e549a3ae7 100644
---- a/Documentation/virt/kvm/locking.rst
-+++ b/Documentation/virt/kvm/locking.rst
-@@ -21,7 +21,7 @@ The acquisition orders for mutexes are as follows:
- - kvm->mn_active_invalidate_count ensures that pairs of
-   invalidate_range_start() and invalidate_range_end() callbacks
-   use the same memslots array.  kvm->slots_lock and kvm->slots_arch_lock
--  are taken on the waiting side in install_new_memslots, so MMU notifiers
-+  are taken on the waiting side in kvm_swap_active_memslots, so MMU notifiers
-   must not take either kvm->slots_lock or kvm->slots_arch_lock.
- 
- For SRCU:
-diff --git a/include/linux/kvm_host.h b/include/linux/kvm_host.h
-index 8ada23756b0e..7f8242dd2745 100644
---- a/include/linux/kvm_host.h
-+++ b/include/linux/kvm_host.h
-@@ -58,7 +58,7 @@
- 
- /*
-  * Bit 63 of the memslot generation number is an "update in-progress flag",
-- * e.g. is temporarily set for the duration of install_new_memslots().
-+ * e.g. is temporarily set for the duration of kvm_swap_active_memslots().
-  * This flag effectively creates a unique generation number that is used to
-  * mark cached memslot data, e.g. MMIO accesses, as potentially being stale,
-  * i.e. may (or may not) have come from the previous memslots generation.
-@@ -713,7 +713,7 @@ struct kvm {
- 	 * use by the VM. To be used under the slots_lock (above) or in a
- 	 * kvm->srcu critical section where acquiring the slots_lock would
- 	 * lead to deadlock with the synchronize_srcu in
--	 * install_new_memslots.
-+	 * kvm_swap_active_memslots.
- 	 */
- 	struct mutex slots_arch_lock;
- 	struct mm_struct *mm; /* userspace tied to this vm */
-diff --git a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
-index d255964ec331..7a4ff9fc5978 100644
---- a/virt/kvm/kvm_main.c
-+++ b/virt/kvm/kvm_main.c
-@@ -1298,7 +1298,7 @@ static void kvm_destroy_vm(struct kvm *kvm)
- 	 * At this point, pending calls to invalidate_range_start()
- 	 * have completed but no more MMU notifiers will run, so
- 	 * mn_active_invalidate_count may remain unbalanced.
--	 * No threads can be waiting in install_new_memslots as the
-+	 * No threads can be waiting in kvm_swap_active_memslots as the
- 	 * last reference on KVM has been dropped, but freeing
- 	 * memslots would deadlock without this manual intervention.
- 	 */
-@@ -1748,7 +1748,7 @@ static void kvm_invalidate_memslot(struct kvm *kvm,
- 	/*
- 	 * Copy the arch-specific field of the newly-installed slot back to the
- 	 * old slot as the arch data could have changed between releasing
--	 * slots_arch_lock in install_new_memslots() and re-acquiring the lock
-+	 * slots_arch_lock in kvm_swap_active_memslots() and re-acquiring the lock
- 	 * above.  Writers are required to retrieve memslots *after* acquiring
- 	 * slots_arch_lock, thus the active slot's data is guaranteed to be fresh.
- 	 */
+And in the 2th patch, we split the testing 'attach_probe' into multi
+subtests, as Andrii suggested.
+
+In the 3th patch, we add the testings for loading kprobe/uprobe in
+different mode.
+
+Changes since v1:
+- some small changes in the 1th patch, as Andrii suggested
+- split 'attach_probe' into multi subtests
+
+Menglong Dong (3):
+  libbpf: add support to set kprobe/uprobe attach mode
+  selftests/bpf: split test_attach_probe into multi subtests
+  selftests/bpf: add test for legacy/perf kprobe/uprobe attach mode
+
+ tools/lib/bpf/libbpf.c                        |  42 ++-
+ tools/lib/bpf/libbpf.h                        |  31 +-
+ .../selftests/bpf/prog_tests/attach_probe.c   | 283 ++++++++++++------
+ .../bpf/progs/test_attach_kprobe_sleepable.c  |  23 ++
+ .../selftests/bpf/progs/test_attach_probe.c   |  45 +--
+ .../bpf/progs/test_attach_probe_manual.c      |  53 ++++
+ 6 files changed, 337 insertions(+), 140 deletions(-)
+ create mode 100644 tools/testing/selftests/bpf/progs/test_attach_kprobe_sleepable.c
+ create mode 100644 tools/testing/selftests/bpf/progs/test_attach_probe_manual.c
+
 -- 
-2.32.0
+2.39.0
 
