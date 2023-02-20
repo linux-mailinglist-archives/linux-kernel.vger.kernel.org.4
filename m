@@ -2,63 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 756C569C5E0
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Feb 2023 08:15:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E8E1269C5EF
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Feb 2023 08:26:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229767AbjBTHPm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Feb 2023 02:15:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57724 "EHLO
+        id S230050AbjBTHXc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Feb 2023 02:23:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34052 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229635AbjBTHPk (ORCPT
+        with ESMTP id S229451AbjBTHXa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Feb 2023 02:15:40 -0500
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85799977E
-        for <linux-kernel@vger.kernel.org>; Sun, 19 Feb 2023 23:15:39 -0800 (PST)
-Received: from [192.168.10.12] (unknown [39.45.217.110])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: usama.anjum)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id CCAC666018CA;
-        Mon, 20 Feb 2023 07:15:35 +0000 (GMT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1676877338;
-        bh=GaQ8q2yWSZQVknoEXEBxDV7yMaL3s3t9rakelGBhOcE=;
-        h=Date:Cc:Subject:To:References:From:In-Reply-To:From;
-        b=HjkC4gWARwV/Y2CWqKu5d+rvsEnEpgscgjDG/HyIP2DHTKGEW+5At98iXUeK5HhRD
-         D4vHLtbia8rysGOjxHU5i2gKLiaiU/3OxoTV1Ua/AxNYMUhPv0Pv5k2Gbs6WaYLxkM
-         aLO/rnyGiIAbW+o0wnJbq3Q5hg9PZuNKVLLQ6RCrnghGyNEqkE3JWLEMlsrCjdy6qc
-         45ehs4WqNLkZTXuw6dOI3v0NHKNXgdQyLJ76YAvQRJ9CfiT1OUIinBGXWoVxrbp55C
-         ect//Zrm/QOabtJf+Y/keo3xeH1+iEZv0mdqO0l2CFG4cn/lEsWtFeMTGI+qHsTf3f
-         KHtEIKQV2nQ5w==
-Message-ID: <6bdd805d-6a99-a1d5-f376-3d2d0c915d38@collabora.com>
-Date:   Mon, 20 Feb 2023 12:15:31 +0500
+        Mon, 20 Feb 2023 02:23:30 -0500
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1BD9BDF4
+        for <linux-kernel@vger.kernel.org>; Sun, 19 Feb 2023 23:23:29 -0800 (PST)
+From:   Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1676877807;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=IhCL6jB+9rByr1E5xp030i/jHAvOGuR13U47/0pMa+M=;
+        b=v5SLrmbRXRw5chdCkrep1emH49+AmBfGRRD7g35xmLS2a+aNzfaTsiO5WdzAfoAtrilIAx
+        BYo4Rj/+/db3wdZJVkMKywKM3Q3Sffc36bwpfD8/kvF8csy0Htx91UkXoivjdOSp6obFrD
+        QAhiqOmJ/lOePim18q0QZliH4tSpF+E0SB0ATFsYPS+yZYrAFhtMjL10uFYubbiNNVFjMg
+        qpOh7QKns7c04Jtp57+zPa7kKVg5KYbZKmQ+6c02W81wMr/p0bCD6svy4T5Req0ujQwUmx
+        QEzc84KwJIrQ/UOXE4a4TCp2+37u1NuEIvVlsBglZwTf+hmiwW8/+UmaefeSJw==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1676877807;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=IhCL6jB+9rByr1E5xp030i/jHAvOGuR13U47/0pMa+M=;
+        b=SlxCHV3Oz+f177JEQZVt4LC0K4vJ0Wx6d232zWfpHg2PWDuMdDecwfbmmHyy1bI0v7lrSW
+        BuSGR4r6ghGqT+Ag==
+To:     Michael Nazzareno Trimarchi <michael@amarulasolutions.com>,
+        John Stultz <jstultz@google.com>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Stephen Boyd <sboyd@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+        Michael <michael@mipisi.de>, kernel-team@android.com
+Subject: Re: [RFC][PATCH 2/2] time: alarmtimer: Use TASK_FREEZABLE to
+ cleanup freezer handling
+In-Reply-To: <CAOf5uwnW1u=nfFnj3C8kCVmhgwRaVh6sHZR1RGnXdbrCNpkGVg@mail.gmail.com>
+References: <20230211064527.3481754-1-jstultz@google.com>
+ <20230211064527.3481754-2-jstultz@google.com>
+ <CAOf5uwnW1u=nfFnj3C8kCVmhgwRaVh6sHZR1RGnXdbrCNpkGVg@mail.gmail.com>
+Date:   Mon, 20 Feb 2023 08:23:26 +0100
+Message-ID: <87o7porea9.ffs@tglx>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Cc:     Muhammad Usama Anjum <usama.anjum@collabora.com>,
-        David Hildenbrand <david@redhat.com>,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        Axel Rasmussen <axelrasmussen@google.com>,
-        Mike Rapoport <rppt@linux.vnet.ibm.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Nadav Amit <nadav.amit@gmail.com>
-Subject: Re: [PATCH] mm/uffd: UFFD_FEATURE_WP_ZEROPAGE
-To:     Peter Xu <peterx@redhat.com>
-References: <20230215210257.224243-1-peterx@redhat.com>
- <7eb2bce9-d0b1-a0e3-8be3-f28d858a61a0@redhat.com> <Y+5Z+88Z3T2TyxUI@x1n>
- <4f64d62f-c21d-b7c8-640e-d41742bbbe7b@redhat.com> <Y+5uIS5E9sTLi41T@x1n>
- <456f8e2e-9554-73a3-4fdb-be21f9cc54b6@redhat.com> <Y+6NKPuty9V3nycI@x1n>
- <427298c4-0da9-059f-02ff-c5147d317c87@collabora.com> <Y/AJUi4o5hOKDkgy@x1n>
-Content-Language: en-US
-From:   Muhammad Usama Anjum <usama.anjum@collabora.com>
-In-Reply-To: <Y/AJUi4o5hOKDkgy@x1n>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
         SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -66,45 +59,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Peter,
+On Sat, Feb 18 2023 at 15:56, Michael Nazzareno Trimarchi wrote:
+>
+> I have changed the alarm test to check some corner case
 
-Thank you so much for working on this.
+Could you tell us please which test did you change and what the change is?
 
-On 2/18/23 4:10 AM, Peter Xu wrote:
-> Hi, Muhammad,
-> 
-> On Fri, Feb 17, 2023 at 05:31:19PM +0500, Muhammad Usama Anjum wrote:
->> I've just ran my single threaded selftest [1] over an over again to get
->> some numbers.
->>
->> Without zeropage
->> qemu has 6 cores: 26.0355
-> 
-> Did you count in the time of read prefault?  Or did you not prefault at
-> all?
-No, pre-faulting is not being done in both of the runs.
+> periodic_alarm
+> Start time (CLOCK_REALTIME_ALARM)[   85.624819] alarmtimer_enqueue: called
+> : 94:865096467
+> Setting alarm for every 4 seconds
+> Starting suspend loops
+> [   89.674127] PM: suspend entry (deep)
+> [   89.714916] Filesystems sync: 0.037 seconds
+> [   89.733594] Freezing user space processes
+> [   89.740680] Freezing user space processes completed (elapsed 0.002 seconds)
+> [   89.748593] OOM killer disabled.
+> [   89.752257] Freezing remaining freezable tasks
+> [   89.756807] alarmtimer_fired: called
+> [   89.756831] alarmtimer_dequeue: called <---- HERE
+>
+> I have the dequeue but not an enquee of the periodic alarm. I was
+> thinking that create a periodic time of 4 seconds
+> and have the first alarm on suspend will always guarantee the re-arm
+> it but it's not working as I expect
 
-Without zeropage, I'm checking pte_none() to decide if page is dirty.
-With zeropage, I'm just checking if WP flag isn't set to decide if page is
-dirty.
+Again. You are not telling what you expect. It depends on how the timer
+is set up whether the timer is self rearmed or not.
 
-> 
->> With zeropage
->> qemu has 6 cores: 39.203
->>
->> 33% worse performance with zero pages
->>
->> Definitely, there can be better benchmark application. Please let me know
->> if I should write better benchmarks on my end.
->>
->> [1]
->> https://lore.kernel.org/all/20230202112915.867409-7-usama.anjum@collabora.com
-> 
-> I'll have a closer look too next week.
-> 
-> Thanks,
-> 
+Thanks,
 
--- 
-BR,
-Muhammad Usama Anjum
+        tglx
