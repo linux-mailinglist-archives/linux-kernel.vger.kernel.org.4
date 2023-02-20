@@ -2,72 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 67B6169CB6B
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Feb 2023 13:52:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1906369CB6D
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Feb 2023 13:53:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231840AbjBTMwZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Feb 2023 07:52:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43872 "EHLO
+        id S231868AbjBTMx2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Feb 2023 07:53:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44354 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231802AbjBTMwV (ORCPT
+        with ESMTP id S231358AbjBTMx0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Feb 2023 07:52:21 -0500
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 242BB40CD
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Feb 2023 04:51:56 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1676897517; x=1708433517;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=967pb3bxs0YkCizJHi05UwZ2dIQOSUkl3uF0lxY+PxU=;
-  b=kzndUl8qz6WdevV/5U0bczJKPd0yFLVg2mZODgWv3rQHF3E2PmXAjSLl
-   PUpjyMqwF7eQ+Js8UgRpPK+/rn2lu1c1wr4fff1vplATTyomLdlwL+d2P
-   fYImmJuiefKfoFBc2TIMilZ+wGK13/lItgOuYz3weY/gLai7qpkJGrzWY
-   JW1x8ikvT1mrnR9415srKlbUx17cnE6zqcbx3qShixaDe58JVtL2dPQVp
-   IDp64VbWSR0dpXdBtQ8mbrG0OijSS9nqiVozvxmIzSa1S/tXoTLd5mDlP
-   FtwK5WqYNlAyXUgolo2V71XnOYcXs5DoturQo4IzjVdLWq+JBndupEgkc
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10626"; a="334592880"
-X-IronPort-AV: E=Sophos;i="5.97,312,1669104000"; 
-   d="scan'208";a="334592880"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Feb 2023 04:51:37 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10626"; a="845314765"
-X-IronPort-AV: E=Sophos;i="5.97,312,1669104000"; 
-   d="scan'208";a="845314765"
-Received: from irvmail002.ir.intel.com ([10.43.11.120])
-  by orsmga005.jf.intel.com with ESMTP; 20 Feb 2023 04:51:34 -0800
-Received: from [10.249.130.22] (mwajdecz-MOBL.ger.corp.intel.com [10.249.130.22])
-        by irvmail002.ir.intel.com (Postfix) with ESMTP id 133D837E14;
-        Mon, 20 Feb 2023 12:51:32 +0000 (GMT)
-Message-ID: <540d63d2-88ca-9d46-ffe6-4436026d0107@intel.com>
-Date:   Mon, 20 Feb 2023 13:51:32 +0100
+        Mon, 20 Feb 2023 07:53:26 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B4E16181
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Feb 2023 04:52:39 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1676897558;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=mi2k6ov9PIEEOKF8HtnT+0K1MGZyhTRbqIFEKucrAxQ=;
+        b=Pi27/CwsY/H/a2ClsPQY4Dak9WhqcJ00dblzmrrxhUeiPYufyi0mTLx/0yOw7D8qoi48e4
+        xswS1ULkSOpVhUMww3SOD3E1u7j/EMCIbUQSgAmjaG2sGI2B9eBcF5NeXo2BpiOPMM6zxE
+        Mf6Lk9Y+wCkZMmtqTI5z5F74Uuyqpfo=
+Received: from mail-pg1-f197.google.com (mail-pg1-f197.google.com
+ [209.85.215.197]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-256-5GkPd_02PniHJhHnkFN7zg-1; Mon, 20 Feb 2023 07:52:37 -0500
+X-MC-Unique: 5GkPd_02PniHJhHnkFN7zg-1
+Received: by mail-pg1-f197.google.com with SMTP id 62-20020a630241000000b004fb3343142dso516642pgc.5
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Feb 2023 04:52:37 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=mi2k6ov9PIEEOKF8HtnT+0K1MGZyhTRbqIFEKucrAxQ=;
+        b=P+ZbNvP12IvOQXoJ4h1iJH7Yyvb0Y6juevsNeYa0zN87f9MvriLwNMYcpPlvG9FnII
+         bkFNcC01T6NuE7Ws6e7JuapK7OSUsvpVNwha8LphWm4J/kkF5hYHgwQ1rzWF0AUWf6RG
+         MynpMB0qV/VowMkKNNxYuVM5BV0VFVdLf5+1skHZVuELu8AinFb8o4uES3tvnQPp3rYa
+         11v2nGzWLp6h7pDWkqOqZKdYtxTvlpk7kFqVuGs1fAIJ317Snpp2ImBnY9OzCEm0y1dV
+         g8OiCbejN8HYjYyaykK6MAf5BR/dbMns0X5tGZg5CFochykX95w8+mbU0tqMTuEwOQKV
+         qx+A==
+X-Gm-Message-State: AO0yUKW1PNjfF7jLqEaFQLFmqgnyd0zcUnP/b2UipWwuiPu0TjgZKGsK
+        7Ys4IYtt+D+PKYmj3E1efraFi7IGeDGI5gfAhw6/kBY+pTeT6wFrlHRrOPSmBwliwbbYxRrMOK/
+        TMiCWX1ENXbuVYVKGR+kfnxV+eY2hgenkqVH1vvU8
+X-Received: by 2002:a17:903:449:b0:19a:f63a:47db with SMTP id iw9-20020a170903044900b0019af63a47dbmr191499plb.2.1676897556568;
+        Mon, 20 Feb 2023 04:52:36 -0800 (PST)
+X-Google-Smtp-Source: AK7set/HmWnP91UrLVg24xciP71WBRN1oXKx7zdnbGZIUV6VrXz5Bnk6LyVvuteQq63xg3d0WGyePBM+ET5m+YQOvdI=
+X-Received: by 2002:a17:903:449:b0:19a:f63a:47db with SMTP id
+ iw9-20020a170903044900b0019af63a47dbmr191497plb.2.1676897556296; Mon, 20 Feb
+ 2023 04:52:36 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Firefox/102.0 Thunderbird/102.6.1
-Subject: Re: [PATCH] drm/i915/guc: avoid FIELD_PREP warning
-To:     Arnd Bergmann <arnd@kernel.org>,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Matthew Brost <matthew.brost@intel.com>,
-        John Harrison <John.C.Harrison@Intel.com>
-Cc:     Arnd Bergmann <arnd@arndb.de>, intel-gfx@lists.freedesktop.org,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
-References: <20230217124724.1324126-1-arnd@kernel.org>
-Content-Language: en-US
-From:   Michal Wajdeczko <michal.wajdeczko@intel.com>
-In-Reply-To: <20230217124724.1324126-1-arnd@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+References: <20230210145823.756906-1-omosnace@redhat.com>
+In-Reply-To: <20230210145823.756906-1-omosnace@redhat.com>
+From:   Ondrej Mosnacek <omosnace@redhat.com>
+Date:   Mon, 20 Feb 2023 13:52:24 +0100
+Message-ID: <CAFqZXNt84oqHo5aQQbjuroA6fGzMyso9HuN4fz3u1mygze2Yrw@mail.gmail.com>
+Subject: Re: [PATCH] sysctl: fix proc_dobool() usability
+To:     Luis Chamberlain <mcgrof@kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        Iurii Zaikin <yzaikin@google.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        linux-fsdevel@vger.kernel.org, linux-nfs@vger.kernel.org,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,50 +77,51 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 17.02.2023 13:46, Arnd Bergmann wrote:
-> From: Arnd Bergmann <arnd@arndb.de>
-> 
-> With gcc-7 and earlier, there are lots of warnings like
-> 
-> In file included from <command-line>:0:0:
-> In function '__guc_context_policy_add_priority.isra.66',
->     inlined from '__guc_context_set_prio.isra.67' at drivers/gpu/drm/i915/gt/uc/intel_guc_submission.c:3292:3,
->     inlined from 'guc_context_set_prio' at drivers/gpu/drm/i915/gt/uc/intel_guc_submission.c:3320:2:
-> include/linux/compiler_types.h:399:38: error: call to '__compiletime_assert_631' declared with attribute error: FIELD_PREP: mask is not constant
->   _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
->                                       ^
-> ...
-> drivers/gpu/drm/i915/gt/uc/intel_guc_submission.c:2422:3: note: in expansion of macro 'FIELD_PREP'
->    FIELD_PREP(GUC_KLV_0_KEY, GUC_CONTEXT_POLICIES_KLV_ID_##id) | \
->    ^~~~~~~~~~
-> 
-> Make sure that GUC_KLV_0_KEY is an unsigned value to avoid the warning.
-> 
-> Fixes: 77b6f79df66e ("drm/i915/guc: Update to GuC version 69.0.3")
-> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
-
-Reviewed-by: Michal Wajdeczko <michal.wajdeczko@intel.com>
-
+On Fri, Feb 10, 2023 at 3:58 PM Ondrej Mosnacek <omosnace@redhat.com> wrote:
+> Currently proc_dobool expects a (bool *) in table->data, but sizeof(int)
+> in table->maxsize, because it uses do_proc_dointvec() directly.
+>
+> This is unsafe for at least two reasons:
+> 1. A sysctl table definition may use { .data = &variable, .maxsize =
+>    sizeof(variable) }, not realizing that this makes the sysctl unusable
+>    (see the Fixes: tag) and that they need to use the completely
+>    counterintuitive sizeof(int) instead.
+> 2. proc_dobool() will currently try to parse an array of values if given
+>    .maxsize >= 2*sizeof(int), but will try to write values of type bool
+>    by offsets of sizeof(int), so it will not work correctly with neither
+>    an (int *) nor a (bool *). There is no .maxsize validation to prevent
+>    this.
+>
+> Fix this by:
+> 1. Constraining proc_dobool() to allow only one value and .maxsize ==
+>    sizeof(bool).
+> 2. Wrapping the original struct ctl_table in a temporary one with .data
+>    pointing to a local int variable and .maxsize set to sizeof(int) and
+>    passing this one to proc_dointvec(), converting the value to/from
+>    bool as needed (using proc_dou8vec_minmax() as an example).
+> 3. Extending sysctl_check_table() to enforce proc_dobool() expectations.
+> 4. Fixing the proc_dobool() docstring (it was just copy-pasted from
+>    proc_douintvec, apparently...).
+> 5. Converting all existing proc_dobool() users to set .maxsize to
+>    sizeof(bool) instead of sizeof(int).
+>
+> Fixes: 83efeeeb3d04 ("tty: Allow TIOCSTI to be disabled")
+> Fixes: a2071573d634 ("sysctl: introduce new proc handler proc_dobool")
+> Signed-off-by: Ondrej Mosnacek <omosnace@redhat.com>
 > ---
->  drivers/gpu/drm/i915/gt/uc/abi/guc_klvs_abi.h | 6 +++---
->  1 file changed, 3 insertions(+), 3 deletions(-)
-> 
-> diff --git a/drivers/gpu/drm/i915/gt/uc/abi/guc_klvs_abi.h b/drivers/gpu/drm/i915/gt/uc/abi/guc_klvs_abi.h
-> index 58012edd4eb0..4f4f53c42a9c 100644
-> --- a/drivers/gpu/drm/i915/gt/uc/abi/guc_klvs_abi.h
-> +++ b/drivers/gpu/drm/i915/gt/uc/abi/guc_klvs_abi.h
-> @@ -29,9 +29,9 @@
->   */
->  
->  #define GUC_KLV_LEN_MIN				1u
-> -#define GUC_KLV_0_KEY				(0xffff << 16)
-> -#define GUC_KLV_0_LEN				(0xffff << 0)
-> -#define GUC_KLV_n_VALUE				(0xffffffff << 0)
-> +#define GUC_KLV_0_KEY				(0xffffu << 16)
-> +#define GUC_KLV_0_LEN				(0xffffu << 0)
-> +#define GUC_KLV_n_VALUE				(0xffffffffu << 0)
->  
->  /**
->   * DOC: GuC Self Config KLVs
+>  fs/lockd/svc.c        |  2 +-
+>  fs/proc/proc_sysctl.c |  6 ++++++
+>  kernel/sysctl.c       | 43 ++++++++++++++++++++++++-------------------
+>  mm/hugetlb_vmemmap.c  |  2 +-
+>  4 files changed, 32 insertions(+), 21 deletions(-)
+
+Gentle ping... Without this patch the new "dev.tty.legacy_tiocsti"
+sysctl is unusable. This is blocking me from making selinux-testsuite
+work with CONFIG_LEGACY_TIOCSTI=n:
+https://lore.kernel.org/selinux/CAHC9VhQwrjwdW27+ktcT_9q-N7AmuUK8GYgoYbPXGVAcjwA4nQ@mail.gmail.com/T/
+
+-- 
+Ondrej Mosnacek
+Senior Software Engineer, Linux Security - SELinux kernel
+Red Hat, Inc.
+
