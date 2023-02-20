@@ -2,143 +2,233 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 125D369CAB4
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Feb 2023 13:20:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A428F69CAB6
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Feb 2023 13:21:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231986AbjBTMUy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Feb 2023 07:20:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38868 "EHLO
+        id S231992AbjBTMVS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Feb 2023 07:21:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39456 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231984AbjBTMUu (ORCPT
+        with ESMTP id S231714AbjBTMVP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Feb 2023 07:20:50 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BA7F1B561
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Feb 2023 04:20:49 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 124B1B80CC3
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Feb 2023 12:20:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C6AA2C433D2
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Feb 2023 12:20:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1676895646;
-        bh=AOiqBaz/1bpeBA/U6iAsQTlLT3G5oF8qSnpEs9TlY7Y=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=RHN8saFbzrrKrkWJ7y8qDVIxW1qSBQm7envNiAitBu7FpMC0BuKlnud8bivJ0xn78
-         uIinhRS8JkzVoaUbhNcecT3ZjLi4asiEG7tXNopRYevaBrU1fgtFY3qz8ViEEe9vcS
-         QQlBhJH2vYhL3hVJ656QukcW6BFsszObcbXiUgw8+19mplvchWOshnTqurypfF/t5j
-         5pYBMW7j+seKPf8ta5ODMeHUmTBn7DxLGNgsE/N9CKQaRaCVj9hk6BICJ3w4WzUrJM
-         VYxTXhWFaMN5cmlFx1ARTg6x7VaOjTqU7a42Mg0WqnWDpgrsLJFbUow97BQYPG8k7H
-         IM17GO0vJ6r+A==
-Received: by mail-ed1-f45.google.com with SMTP id ck15so5149419edb.0
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Feb 2023 04:20:46 -0800 (PST)
-X-Gm-Message-State: AO0yUKXoqYcHV29VZFuKhDugIpSWEPyJG6fImuMADC78it4wv9BzULVd
-        Lp58NDLsm7SGQoUQLjRU8qT5p77IIBAz/NItzr8m4Q==
-X-Google-Smtp-Source: AK7set/fgpQc73FYf0piSSCiyvkWsRGgSNTloru9BpfVyE0k9at/KApLyDXJyBvWkrp6QGp20qQcoMlMyb4MvTT4OFo=
-X-Received: by 2002:a17:906:f88f:b0:8b0:7e1d:f6fa with SMTP id
- lg15-20020a170906f88f00b008b07e1df6famr3893511ejb.15.1676895645061; Mon, 20
- Feb 2023 04:20:45 -0800 (PST)
+        Mon, 20 Feb 2023 07:21:15 -0500
+Received: from mx0b-0016f401.pphosted.com (mx0a-0016f401.pphosted.com [67.231.148.174])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AAD0C1A968;
+        Mon, 20 Feb 2023 04:21:14 -0800 (PST)
+Received: from pps.filterd (m0045849.ppops.net [127.0.0.1])
+        by mx0a-0016f401.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 31KARCML015915;
+        Mon, 20 Feb 2023 04:21:02 -0800
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=marvell.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-transfer-encoding :
+ content-type; s=pfpt0220; bh=U/igizjUnjAnW/ogHe0/GJc6RUu5xJOtFonIac+URKc=;
+ b=HV7lVM8I59C8WJj3SyRwTsRHSU6FNSFoYFadZkDZ4VUxzKN2XOib/kocIwQp/YGRqL1O
+ PU8YHI4Y3QNgxpKtFmM2TnIc/kjMii9Q+yghrUklEA/2UDAcIFmioVmUGiq7hoFQvW9N
+ NdEtej1u/xoit+tesFr8evBxz+Xt3HzArYh746N3yZc1r7AqT4MHWHicIu5uHRV3jdAm
+ Z4QX8xivtO+YIxz1uAAYpha23rebPQuZ/febX9abUbd36bn/785NkJBPDcq8Mr0w+Bbx
+ qUXSiGCrzaUxrEon+TSH3LXpbnkm+/wn90SF/lZh+xoPGGbEpTwAy5nttCt+hRL/pSQL dw== 
+Received: from dc5-exch01.marvell.com ([199.233.59.181])
+        by mx0a-0016f401.pphosted.com (PPS) with ESMTPS id 3ntvwumbkx-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT);
+        Mon, 20 Feb 2023 04:21:02 -0800
+Received: from DC5-EXCH01.marvell.com (10.69.176.38) by DC5-EXCH01.marvell.com
+ (10.69.176.38) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Mon, 20 Feb
+ 2023 04:21:00 -0800
+Received: from maili.marvell.com (10.69.176.80) by DC5-EXCH01.marvell.com
+ (10.69.176.38) with Microsoft SMTP Server id 15.0.1497.42 via Frontend
+ Transport; Mon, 20 Feb 2023 04:21:00 -0800
+Received: from hyd1425.marvell.com (unknown [10.29.37.83])
+        by maili.marvell.com (Postfix) with ESMTP id 4C4E23F70A6;
+        Mon, 20 Feb 2023 04:20:57 -0800 (PST)
+From:   Sai Krishna <saikrishnag@marvell.com>
+To:     <davem@davemloft.net>, <edumazet@google.com>, <kuba@kernel.org>,
+        <pabeni@redhat.com>, <netdev@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <sgoutham@marvell.com>,
+        <gakula@marvell.com>, <richardcochran@gmail.com>
+CC:     Hariprasad Kelam <hkelam@marvell.com>,
+        Sai Krishna <saikrishnag@marvell.com>
+Subject: [net PATCH] octeontx2-pf: Recalculate UDP checksum for ptp 1-step sync packet
+Date:   Mon, 20 Feb 2023 17:50:50 +0530
+Message-ID: <20230220122050.1639299-1-saikrishnag@marvell.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <20230220120127.1975241-1-kpsingh@kernel.org> <20230220121350.aidsipw3kd4rsyss@treble>
-In-Reply-To: <20230220121350.aidsipw3kd4rsyss@treble>
-From:   KP Singh <kpsingh@kernel.org>
-Date:   Mon, 20 Feb 2023 04:20:34 -0800
-X-Gmail-Original-Message-ID: <CACYkzJ5L9MLuE5Jz+z5-NJCCrUqTbgKQkXSqnQnCfTD_WNA7_Q@mail.gmail.com>
-Message-ID: <CACYkzJ5L9MLuE5Jz+z5-NJCCrUqTbgKQkXSqnQnCfTD_WNA7_Q@mail.gmail.com>
-Subject: Re: [PATCH RESEND] x86/speculation: Fix user-mode spectre-v2
- protection with KERNEL_IBRS
-To:     Josh Poimboeuf <jpoimboe@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, pjt@google.com, evn@google.com,
-        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
-        dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
-        peterz@infradead.org, pawan.kumar.gupta@linux.intel.com,
-        kim.phillips@amd.com, alexandre.chartre@oracle.com,
-        daniel.sneddon@linux.intel.com,
-        =?UTF-8?Q?Jos=C3=A9_Oliveira?= <joseloliveira11@gmail.com>,
-        Rodrigo Branco <rodrigo@kernelhacking.com>,
-        Alexandra Sandulescu <aesa@google.com>,
-        Jim Mattson <jmattson@google.com>, stable@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Proofpoint-GUID: Wi11AWWIDstoAktjDh3Z4ZNM37leDHkz
+X-Proofpoint-ORIG-GUID: Wi11AWWIDstoAktjDh3Z4ZNM37leDHkz
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.170.22
+ definitions=2023-02-20_09,2023-02-20_02,2023-02-09_01
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 20, 2023 at 4:13 AM Josh Poimboeuf <jpoimboe@kernel.org> wrote:
->
-> On Mon, Feb 20, 2023 at 01:01:27PM +0100, KP Singh wrote:
-> > +static inline bool spectre_v2_user_no_stibp(enum spectre_v2_mitigation mode)
-> > +{
-> > +     /* When IBRS or enhanced IBRS is enabled, STIBP is not needed.
-> > +      *
-> > +      * However, With KERNEL_IBRS, the IBRS bit is cleared on return
-> > +      * to user and the user-mode code needs to be able to enable protection
-> > +      * from cross-thread training, either by always enabling STIBP or
-> > +      * by enabling it via prctl.
-> > +      */
-> > +     return (spectre_v2_in_ibrs_mode(mode) &&
-> > +             !cpu_feature_enabled(X86_FEATURE_KERNEL_IBRS));
-> > +}
->
-> The comments and code confused me, they both seem to imply some
-> distinction between IBRS and KERNEL_IBRS, but in the kernel those are
-> functionally the same thing.  e.g., the kernel doesn't have a user IBRS
-> mode.
->
-> And, unless I'm missing some subtlety here, it seems to be a convoluted
-> way of saying that eIBRS doesn't need STIBP in user space.
->
-> It would be simpler to just call it spectre_v2_in_eibrs_mode().
+From: Geetha sowjanya <gakula@marvell.com>
 
-Thanks, yeah this would work too. I was just trying to ensure that, if
-somehow, KERNEL_IBRS gets enabled with SPECTRE_V2_EIBRS, but this does
-not seem to be the case currently. Maybe we should also add a BUG_ON
-to ensure that KERNEL_IBRS does not get enabled in EIBRS mode?
+When checksum offload is disabled in the driver via ethtool,
+the PTP 1-step sync packets contain incorrect checksum, since
+the stack calculates the checksum before driver updates
+PTP timestamp field in the packet. This results in PTP packets
+getting dropped at the other end. This patch fixes the issue by
+re-calculating the UDP checksum after updating PTP
+timestamp field in the driver.
 
->
-> static inline bool spectre_v2_in_eibrs_mode(enum spectre_v2_mitigation mode)
-> {
->         return mode == SPECTRE_V2_EIBRS ||
->                mode == SPECTRE_V2_EIBRS_RETPOLINE ||
->                mode == SPECTRE_V2_EIBRS_LFENCE;
-> }
->
-> And then spectre_v2_in_ibrs_mode() could be changed to call that:
->
-> static inline bool spectre_v2_in_eibrs_mode(enum spectre_v2_mitigation mode)
-> {
->         return spectre_v2_in_eibrs_mode(mode) || mode == SPECTRE_V2_IBRS;
-> }
->
-> > @@ -1496,6 +1504,7 @@ static void __init spectre_v2_select_mitigation(void)
-> >               break;
-> >
-> >       case SPECTRE_V2_IBRS:
-> > +             pr_err("enabling KERNEL_IBRS");
->
-> Why?
+Fixes: 2958d17a8984 ("octeontx2-pf: Add support for ptp 1-step mode on CN10K silicon")
+Signed-off-by: Geetha sowjanya <gakula@marvell.com>
+Signed-off-by: Hariprasad Kelam <hkelam@marvell.com>
+Signed-off-by: Sunil Kovvuri Goutham <sgoutham@marvell.com>
+Signed-off-by: Sai Krishna <saikrishnag@marvell.com>
+---
+ .../marvell/octeontx2/nic/otx2_txrx.c         | 78 ++++++++++++++-----
+ 1 file changed, 59 insertions(+), 19 deletions(-)
 
-Removed.
+diff --git a/drivers/net/ethernet/marvell/octeontx2/nic/otx2_txrx.c b/drivers/net/ethernet/marvell/octeontx2/nic/otx2_txrx.c
+index ef10aef3cda0..67345a3e2bba 100644
+--- a/drivers/net/ethernet/marvell/octeontx2/nic/otx2_txrx.c
++++ b/drivers/net/ethernet/marvell/octeontx2/nic/otx2_txrx.c
+@@ -10,6 +10,7 @@
+ #include <net/tso.h>
+ #include <linux/bpf.h>
+ #include <linux/bpf_trace.h>
++#include <net/ip6_checksum.h>
+ 
+ #include "otx2_reg.h"
+ #include "otx2_common.h"
+@@ -699,7 +700,7 @@ static void otx2_sqe_add_ext(struct otx2_nic *pfvf, struct otx2_snd_queue *sq,
+ 
+ static void otx2_sqe_add_mem(struct otx2_snd_queue *sq, int *offset,
+ 			     int alg, u64 iova, int ptp_offset,
+-			     u64 base_ns, int udp_csum)
++			     u64 base_ns, bool udp_csum_crt)
+ {
+ 	struct nix_sqe_mem_s *mem;
+ 
+@@ -711,7 +712,7 @@ static void otx2_sqe_add_mem(struct otx2_snd_queue *sq, int *offset,
+ 
+ 	if (ptp_offset) {
+ 		mem->start_offset = ptp_offset;
+-		mem->udp_csum_crt = udp_csum;
++		mem->udp_csum_crt = !!udp_csum_crt;
+ 		mem->base_ns = base_ns;
+ 		mem->step_type = 1;
+ 	}
+@@ -986,10 +987,11 @@ static bool otx2_validate_network_transport(struct sk_buff *skb)
+ 	return false;
+ }
+ 
+-static bool otx2_ptp_is_sync(struct sk_buff *skb, int *offset, int *udp_csum)
++static bool otx2_ptp_is_sync(struct sk_buff *skb, int *offset, bool *udp_csum_crt)
+ {
+ 	struct ethhdr *eth = (struct ethhdr *)(skb->data);
+ 	u16 nix_offload_hlen = 0, inner_vhlen = 0;
++	bool udp_hdr_present = false, is_sync;
+ 	u8 *data = skb->data, *msgtype;
+ 	__be16 proto = eth->h_proto;
+ 	int network_depth = 0;
+@@ -1029,45 +1031,83 @@ static bool otx2_ptp_is_sync(struct sk_buff *skb, int *offset, int *udp_csum)
+ 		if (!otx2_validate_network_transport(skb))
+ 			return false;
+ 
+-		*udp_csum = 1;
+ 		*offset = nix_offload_hlen + skb_transport_offset(skb) +
+ 			  sizeof(struct udphdr);
++		udp_hdr_present = true;
++
+ 	}
+ 
+ 	msgtype = data + *offset;
+-
+ 	/* Check PTP messageId is SYNC or not */
+-	return (*msgtype & 0xf) == 0;
++	is_sync =  ((*msgtype & 0xf) == 0) ? true : false;
++	if (is_sync) {
++		if (udp_hdr_present)
++			*udp_csum_crt = true;
++	} else {
++		*offset = 0;
++	}
++
++	return is_sync;
+ }
+ 
+ static void otx2_set_txtstamp(struct otx2_nic *pfvf, struct sk_buff *skb,
+ 			      struct otx2_snd_queue *sq, int *offset)
+ {
++	struct ethhdr	*eth = (struct ethhdr *)(skb->data);
+ 	struct ptpv2_tstamp *origin_tstamp;
+-	int ptp_offset = 0, udp_csum = 0;
++	bool udp_csum_crt = false;
++	unsigned int udphoff;
+ 	struct timespec64 ts;
++	int ptp_offset = 0;
++	__wsum skb_csum;
+ 	u64 iova;
+ 
+ 	if (unlikely(!skb_shinfo(skb)->gso_size &&
+ 		     (skb_shinfo(skb)->tx_flags & SKBTX_HW_TSTAMP))) {
+-		if (unlikely(pfvf->flags & OTX2_FLAG_PTP_ONESTEP_SYNC)) {
+-			if (otx2_ptp_is_sync(skb, &ptp_offset, &udp_csum)) {
+-				origin_tstamp = (struct ptpv2_tstamp *)
+-						((u8 *)skb->data + ptp_offset +
+-						 PTP_SYNC_SEC_OFFSET);
+-				ts = ns_to_timespec64(pfvf->ptp->tstamp);
+-				origin_tstamp->seconds_msb = htons((ts.tv_sec >> 32) & 0xffff);
+-				origin_tstamp->seconds_lsb = htonl(ts.tv_sec & 0xffffffff);
+-				origin_tstamp->nanoseconds = htonl(ts.tv_nsec);
+-				/* Point to correction field in PTP packet */
+-				ptp_offset += 8;
++		if (unlikely(pfvf->flags & OTX2_FLAG_PTP_ONESTEP_SYNC &&
++			     otx2_ptp_is_sync(skb, &ptp_offset, &udp_csum_crt))) {
++			origin_tstamp = (struct ptpv2_tstamp *)
++					((u8 *)skb->data + ptp_offset +
++					 PTP_SYNC_SEC_OFFSET);
++			ts = ns_to_timespec64(pfvf->ptp->tstamp);
++			origin_tstamp->seconds_msb = htons((ts.tv_sec >> 32) & 0xffff);
++			origin_tstamp->seconds_lsb = htonl(ts.tv_sec & 0xffffffff);
++			origin_tstamp->nanoseconds = htonl(ts.tv_nsec);
++			/* Point to correction field in PTP packet */
++			ptp_offset += 8;
++
++			/* When user disables hw checksum, stack calculates the csum,
++			 * but it does not cover ptp timestamp which is added later.
++			 * Recalculate the checksum manually considering the timestamp.
++			 */
++			if (udp_csum_crt) {
++				struct udphdr *uh = udp_hdr(skb);
++
++				if (skb->ip_summed != CHECKSUM_PARTIAL && uh->check != 0) {
++					udphoff = skb_transport_offset(skb);
++					uh->check = 0;
++					skb_csum = skb_checksum(skb, udphoff, skb->len - udphoff,
++								0);
++					if (ntohs(eth->h_proto) == ETH_P_IPV6)
++						uh->check = csum_ipv6_magic(&ipv6_hdr(skb)->saddr,
++									    &ipv6_hdr(skb)->daddr,
++									    skb->len - udphoff,
++									    ipv6_hdr(skb)->nexthdr,
++									    skb_csum);
++					else
++						uh->check = csum_tcpudp_magic(ip_hdr(skb)->saddr,
++									      ip_hdr(skb)->daddr,
++									      skb->len - udphoff,
++									      IPPROTO_UDP,
++									      skb_csum);
++				}
+ 			}
+ 		} else {
+ 			skb_shinfo(skb)->tx_flags |= SKBTX_IN_PROGRESS;
+ 		}
+ 		iova = sq->timestamps->iova + (sq->head * sizeof(u64));
+ 		otx2_sqe_add_mem(sq, offset, NIX_SENDMEMALG_E_SETTSTMP, iova,
+-				 ptp_offset, pfvf->ptp->base_ns, udp_csum);
++				 ptp_offset, pfvf->ptp->base_ns, udp_csum_crt);
+ 	} else {
+ 		skb_tx_timestamp(skb);
+ 	}
+-- 
+2.25.1
 
->
-> > @@ -2327,7 +2336,7 @@ static ssize_t mmio_stale_data_show_state(char *buf)
-> >
-> >  static char *stibp_state(void)
-> >  {
-> > -     if (spectre_v2_in_ibrs_mode(spectre_v2_enabled))
-> > +     if (spectre_v2_user_no_stibp(spectre_v2_enabled))
-> >               return "";
->
-> This seems like old cruft, can we just remove this check altogether?  In
-> the eIBRS case, spectre_v2_user_stibp will already have its default of
-> SPECTRE_V2_USER_NONE.
->
-> --
-> Josh
