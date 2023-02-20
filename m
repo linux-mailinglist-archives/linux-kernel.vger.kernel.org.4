@@ -2,206 +2,182 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 207CE69CAAF
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Feb 2023 13:19:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 34C1669CAA9
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Feb 2023 13:19:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231899AbjBTMTY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Feb 2023 07:19:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36906 "EHLO
+        id S231963AbjBTMTV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Feb 2023 07:19:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37026 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231694AbjBTMSy (ORCPT
+        with ESMTP id S231756AbjBTMTI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Feb 2023 07:18:54 -0500
-Received: from mail-qt1-f180.google.com (mail-qt1-f180.google.com [209.85.160.180])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A586C65C;
-        Mon, 20 Feb 2023 04:18:53 -0800 (PST)
-Received: by mail-qt1-f180.google.com with SMTP id v19so512904qtx.1;
-        Mon, 20 Feb 2023 04:18:52 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=6Re6NLj3mYWi/PS1iVcG93D07BAspc2CGyOXyoSaH5I=;
-        b=Hv2om3mMlad73jLiyOltGX+vU7tUvhpeLSqRu6RuGSxvU/6x6QiVoYcmYWlkhgsBdK
-         4v6WofJLjv3eRjiD9MVM5P7eRZn6uZgpQbt5ZfDUnY9lfmes9kyhLyP/HXzd6yU4cxbx
-         rVapytEKP2P8uCG9w7HUZZXaGboBsSi1xQn3Mk7WtqVA4JUmwOP2J+Qq6m07ybqrEvZK
-         /r6OpiCgVa+7jER2nyIclqmHD6UIk42vZWOTLYHI4GR8/Vd8/xu+HDqNOAYftQPBiLui
-         GEHLWV45MJGdyyO/+aC+7W2y6Ab5ib63NNHayaC6Jex/Z6Ssfr6aOuarBnV/Iz616up2
-         ZAcw==
-X-Gm-Message-State: AO0yUKVpaNpYof5LDpPmDQuboV5Bl83O2dNy7WirqLYWpshvE2VoyF/0
-        Hc0q71GJvRGaw61VIGmZo/giDvfmACzzJ02U
-X-Google-Smtp-Source: AK7set+Nd09WGAMk7rH/9anu8D73O6lfdhS4LT5/yzwDDc9S8njlIVGCAwuqGENvmr71hLP61eee9Q==
-X-Received: by 2002:a05:622a:1213:b0:3b9:b6c8:6d5b with SMTP id y19-20020a05622a121300b003b9b6c86d5bmr2150244qtx.35.1676895531806;
-        Mon, 20 Feb 2023 04:18:51 -0800 (PST)
-Received: from mail-yw1-f180.google.com (mail-yw1-f180.google.com. [209.85.128.180])
-        by smtp.gmail.com with ESMTPSA id m4-20020a37bc04000000b0074028d8a795sm1210904qkf.125.2023.02.20.04.18.49
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 20 Feb 2023 04:18:50 -0800 (PST)
-Received: by mail-yw1-f180.google.com with SMTP id 00721157ae682-536b7ffdd34so11523257b3.6;
-        Mon, 20 Feb 2023 04:18:49 -0800 (PST)
-X-Received: by 2002:a81:8606:0:b0:52e:e6ed:308e with SMTP id
- w6-20020a818606000000b0052ee6ed308emr1847623ywf.526.1676895529736; Mon, 20
- Feb 2023 04:18:49 -0800 (PST)
+        Mon, 20 Feb 2023 07:19:08 -0500
+Received: from EUR03-DBA-obe.outbound.protection.outlook.com (mail-dbaeur03on2117.outbound.protection.outlook.com [40.107.104.117])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7511AB748;
+        Mon, 20 Feb 2023 04:19:05 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=FR3/C/Iw+rXVwGUrVdCj3riig1oru79OBLtV17tMQhhKpzuTKZ/I8l/Rgd5xuPXV3ekDKs3c6CF0dCZyaM3Qh3QF89eS1quMgFkKlevONCCZQWIAkho8b4jsD0VlDY4LHkVQlPfgQyQIy5GzyvI3m3M46JVgG1j3IaVPg0F7GO6CLoORjhEsaS3NutZ53InmAiYxZwiR+Yx6lBE68XgBk1Oox/xq4T3gKgPHoWx5H4R9iDNztNTHYyTGvAuZQ0ljNAACvhAp3xAdp7rjU+GqDR2eXR7yz2+micgwSYvT7X+nBvh1IlDQFxPKGqTH/uG6zJzHE+yajZ0OTVGDscd2YA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=eLWF4mUUX/uYrKCDT3DTXOnUh8TmBt/3lwzvU08sQnw=;
+ b=jKRiIwI976mTfQ7b9xkyzaj1lUSqD/P35TvLUm3AILr4H7yxwqdKPeOabLiwwwTXxaQJlDL2f/M5i0LegC20YvmXfQ2Jma/DXTUI8by/JCpf/f+pGPOfKAavPEF9fzhvMffocflX4v5aDZ8ZidUqc5vxTcWtX5Z9+t0cIk2LnRXgrW+Nhk/mAzybDw4xB29IyoyvjYP1G2u51B0YM0TNixvAi82WjasVXwMH/2rrpVQPadVT+u9DEAU680NWKUxJksZg/3KmzVHV4WU/sXAXtcSzIeB3wD84TfLr97rhfPtKeTmUNYkRfwU+PRJXxJbq2v1VLgQSrxeHhBbYSfUL2Q==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=prevas.dk; dmarc=pass action=none header.from=prevas.dk;
+ dkim=pass header.d=prevas.dk; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=prevas.dk;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=eLWF4mUUX/uYrKCDT3DTXOnUh8TmBt/3lwzvU08sQnw=;
+ b=dgdZqutL3ndIn672e/Q8tX+lCb+zqvlc935Ct3Jcs2h0au96pz5dIt8Nj73m49sO9JQmClMk15BR4PFKbpJEyxf/y+WnFX8VnWhHUfXkZH4PdQ8g9TmBIp/w/bBUPWXb6wu2kIQBoTaAsfF0o8axwaYJSAu0BsdEToOIyqmalls=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=prevas.dk;
+Received: from DU0PR10MB5266.EURPRD10.PROD.OUTLOOK.COM (2603:10a6:10:34a::22)
+ by DU2PR10MB7861.EURPRD10.PROD.OUTLOOK.COM (2603:10a6:10:497::6) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6111.19; Mon, 20 Feb
+ 2023 12:19:02 +0000
+Received: from DU0PR10MB5266.EURPRD10.PROD.OUTLOOK.COM
+ ([fe80::d067:93ef:f184:668a]) by DU0PR10MB5266.EURPRD10.PROD.OUTLOOK.COM
+ ([fe80::d067:93ef:f184:668a%4]) with mapi id 15.20.6111.019; Mon, 20 Feb 2023
+ 12:19:02 +0000
+Message-ID: <ed28bbda-16b6-043b-5310-8ac0e8ebd900@prevas.dk>
+Date:   Mon, 20 Feb 2023 13:18:59 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH v4 0/6] drm: lcdif: Add i.MX93 LCDIF support
+To:     Alexander Stein <alexander.stein@ew.tq-group.com>,
+        dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        Liu Ying <victor.liu@nxp.com>
+Cc:     marex@denx.de, stefan@agner.ch, airlied@gmail.com, daniel@ffwll.ch,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        shawnguo@kernel.org, s.hauer@pengutronix.de, kernel@pengutronix.de,
+        festevam@gmail.com, linux-imx@nxp.com,
+        krzysztof.kozlowski@linaro.org, LW@karo-electronics.de
+References: <20230217065407.2259731-1-victor.liu@nxp.com>
+ <13207614.uLZWGnKmhe@steina-w>
+Content-Language: en-US, da
+From:   Rasmus Villemoes <rasmus.villemoes@prevas.dk>
+In-Reply-To: <13207614.uLZWGnKmhe@steina-w>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: MM0P280CA0091.SWEP280.PROD.OUTLOOK.COM
+ (2603:10a6:190:9::29) To DU0PR10MB5266.EURPRD10.PROD.OUTLOOK.COM
+ (2603:10a6:10:34a::22)
 MIME-Version: 1.0
-References: <20230219143657.241542-1-daniel.lezcano@linaro.org>
- <20230219143657.241542-2-daniel.lezcano@linaro.org> <OS3PR01MB8460E7C2D1F9EEEDDC579FFEC2A49@OS3PR01MB8460.jpnprd01.prod.outlook.com>
-In-Reply-To: <OS3PR01MB8460E7C2D1F9EEEDDC579FFEC2A49@OS3PR01MB8460.jpnprd01.prod.outlook.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Mon, 20 Feb 2023 13:18:38 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdWFn+LbKE=77mRBfGqSu3x5qsk3X-pQVeu3uZXEejyRRg@mail.gmail.com>
-Message-ID: <CAMuHMdWFn+LbKE=77mRBfGqSu3x5qsk3X-pQVeu3uZXEejyRRg@mail.gmail.com>
-Subject: Re: [PATCH v1 01/17] thermal/core: Add a thermal zone 'devdata' accessor
-To:     DLG Adam Ward <DLG-Adam.Ward.opensource@dm.renesas.com>
-Cc:     Daniel Lezcano <daniel.lezcano@linaro.org>,
-        "rafael@kernel.org" <rafael@kernel.org>,
-        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>, Len Brown <lenb@kernel.org>,
-        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Samuel Holland <samuel@sholland.org>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Raju Rangoju <rajur@chelsio.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Ido Schimmel <idosch@nvidia.com>,
-        Petr Machata <petrm@nvidia.com>,
-        Gregory Greenman <gregory.greenman@intel.com>,
-        Kalle Valo <kvalo@kernel.org>,
-        Sebastian Reichel <sre@kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Amit Kucheria <amitk@kernel.org>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Broadcom internal kernel review list 
-        <bcm-kernel-feedback-list@broadcom.com>,
-        Ray Jui <rjui@broadcom.com>,
-        Scott Branden <sbranden@broadcom.com>,
-        Markus Mayer <mmayer@broadcom.com>,
-        Support Opensource <support.opensource@diasemi.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Thara Gopinath <thara.gopinath@gmail.com>,
-        =?UTF-8?Q?Niklas_S=C3=B6derlund?= <niklas.soderlund@ragnatech.se>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Bartlomiej Zolnierkiewicz <bzolnier@gmail.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Orson Zhai <orsonzhai@gmail.com>,
-        Baolin Wang <baolin.wang@linux.alibaba.com>,
-        Chunyan Zhang <zhang.lyra@gmail.com>,
-        Vasily Khoruzhick <anarsoul@gmail.com>,
-        Yangtao Li <tiny.windzz@gmail.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Talel Shenhar <talel@amazon.com>,
-        Eduardo Valentin <edubezval@gmail.com>,
-        Keerthy <j-keerthy@ti.com>,
-        Kunihiko Hayashi <hayashi.kunihiko@socionext.com>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Stefan Wahren <stefan.wahren@i2se.com>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        ye xingchen <ye.xingchen@zte.com.cn>,
-        Zheng Yongjun <zhengyongjun3@huawei.com>,
-        Tim Zimmermann <tim@linux4.de>,
-        Yang Li <yang.lee@linux.alibaba.com>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        Ricardo Neri <ricardo.neri-calderon@linux.intel.com>,
-        Jiang Jian <jiangjian@cdjrlc.com>,
-        Daniel Golle <daniel@makrotopia.org>,
-        Balsam CHIHI <bchihi@baylibre.com>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Mikko Perttunen <mperttunen@nvidia.com>,
-        "open list:ACPI THERMAL DRIVER" <linux-acpi@vger.kernel.org>,
-        "open list:LIBATA SUBSYSTEM (Serial and Parallel ATA drivers)" 
-        <linux-ide@vger.kernel.org>,
-        "moderated list:ARM/FREESCALE IMX / MXC ARM ARCHITECTURE" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "open list:HARDWARE MONITORING" <linux-hwmon@vger.kernel.org>,
-        "open list:IIO SUBSYSTEM AND DRIVERS" <linux-iio@vger.kernel.org>,
-        "open list:ARM/Allwinner sunXi SoC support" 
-        <linux-sunxi@lists.linux.dev>,
-        "open list:INPUT (KEYBOARD, MOUSE, JOYSTICK, TOUCHSCREEN)..." 
-        <linux-input@vger.kernel.org>,
-        "open list:CXGB4 ETHERNET DRIVER (CXGB4)" <netdev@vger.kernel.org>,
-        "open list:INTEL WIRELESS WIFI LINK (iwlwifi)" 
-        <linux-wireless@vger.kernel.org>,
-        "moderated list:BROADCOM BCM2711/BCM2835 ARM ARCHITECTURE" 
-        <linux-rpi-kernel@lists.infradead.org>,
-        "open list:ARM/QUALCOMM SUPPORT" <linux-arm-msm@vger.kernel.org>,
-        "open list:RENESAS R-CAR THERMAL DRIVERS" 
-        <linux-renesas-soc@vger.kernel.org>,
-        "open list:ARM/Rockchip SoC support" 
-        <linux-rockchip@lists.infradead.org>,
-        "open list:SAMSUNG THERMAL DRIVER" 
-        <linux-samsung-soc@vger.kernel.org>,
-        "open list:TEGRA ARCHITECTURE SUPPORT" <linux-tegra@vger.kernel.org>,
-        "open list:TI BANDGAP AND THERMAL DRIVER" 
-        <linux-omap@vger.kernel.org>,
-        "moderated list:ARM/Mediatek SoC support" 
-        <linux-mediatek@lists.infradead.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DU0PR10MB5266:EE_|DU2PR10MB7861:EE_
+X-MS-Office365-Filtering-Correlation-Id: c591d00e-f284-4610-5ee5-08db133ca6e5
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: Pb7eCiP5OTGm6ZU2pqUEzpP3VovgSPyXGVgkcwFpt8gU9cTbe9HLlpirhqBTb9ZtksFPFtb5Uu42NbscGy5rH1kfla4EkJrigm7sBZ77VofmsXrrv8BXDyRQ+apAWZeEFW0IKowQRvELL3OImjPJoe43wEk43akSbi9JwK07sJhDpg5aMVZSkyW6yHwBdzzbs5KPzdyznaRTgnvr1xX06RKSY6W+IcgaAo6cebhpSlrmwHgsbpCKRLUeHhBKg1N8l0O8ywcBTbzBn7Yc88hvwnpZfr7eyyiORM73N70a3hyZC6UD/qko5cLs1orO+WXNK5OfNjkRaJBhRq1SCJrigxkUnjx/MrW0QJA81tfDdSdaLjBQjzGX/3znkIpYUpET+I33d6YnQ4YbUcvHmm25kAZidq0bd5XrVDu/gmDjazBs3ILPIATSVPebbXmlDGP3Ea2Fih6bpph7llJEI7BzWBlnUCOo7HlEcN0VVGC9c76fWo9l95lInUC2pDzZX5i7JNRvxiKd1rzbFsnMmUrWVh5mNd0XzcTzBaas3S/VMFHbj+aAvFr1k0vfCAGDpl4Wn3+rwif+7pOXvESBfUZMoea2OQu58EUOAkJxU3BvlLrQ6w43XCfcqGb37IOk3JVpQZodP0lJIWsM+gT7d3PIGrlorRNluPq8OJ4zLAGUeufocjk0LXzNrA19W5wWMsR5RJE1qlz/+hEUycrCWKFnh3FzPsNnH/xcsBrgmoNrMGuYrcTqImUXmjm6bMckjSeM
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DU0PR10MB5266.EURPRD10.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230025)(39850400004)(376002)(136003)(366004)(396003)(346002)(451199018)(83380400001)(66476007)(66556008)(66946007)(8676002)(52116002)(478600001)(110136005)(316002)(19627235002)(6512007)(6506007)(31686004)(186003)(26005)(8936002)(8976002)(2616005)(7416002)(6486002)(36756003)(4326008)(966005)(41300700001)(5660300002)(6666004)(38350700002)(38100700002)(86362001)(31696002)(44832011)(2906002)(43740500002)(45980500001);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?RWczRDVsYmJya2RjV3g0Q1lkbThVVWhnZUNtVEVvbjNHNUczdXdOenc5QVBN?=
+ =?utf-8?B?NDFYWFJFMy81M1k5dENvSFpBMmRicXQ0ci9LYlp2M29KREVjZWRTdU9ENzc4?=
+ =?utf-8?B?RlZhWnNRMDlmS0N4bEppQ25NUFhYVEVRWno2Szl3blFVYUpXQ1VON2ZPcmFs?=
+ =?utf-8?B?T0JzZjVSa0NueE45SDNRbGk0VUd2b0RHUGlhT0dWWjN2QnZNNkQ0VWpkTVkv?=
+ =?utf-8?B?V3drcHlYMnUyQWVCamVoc1llNGJaWXlNQUxxYmlLSTNJYWZqT2RyRzE5eHNu?=
+ =?utf-8?B?U0k4aHpRc2x4alZEaDNiYnI0ME8rOFVNR2hzTHB4ZzBKMEZ3RmNtekorM0Mw?=
+ =?utf-8?B?ZVp2Y0tyUFhFZWtzaXVZbkRsMTgwUW12UmtLRnFGZVh0cFV4cGRvZlo2dWI2?=
+ =?utf-8?B?azg4eDk5UnM2bXlTSkVJUHVXbnJKdzRSZjA2RzVXb0NzczljN1VOaTF6NXFZ?=
+ =?utf-8?B?SmR4S3RkVTRVNlRYcDhPV1VnZkZNK01WVWYrSVNHK2NjQUk5dnBWUnVPeERz?=
+ =?utf-8?B?cDhoUnMyN25SSjEwekFEbTdpWWJmYjgxTUNBR3RMb0g2NFc5SVZxc3lGMHVI?=
+ =?utf-8?B?dTd3YTJ4MGpGUUZPd1VFUUNGN2pOVkZsREo1aE05V3JxVk9xMlJ0L0p3eDRC?=
+ =?utf-8?B?SUhxSjFKS1loandsL2I0TGhqWDQvZkNPRlR3ckNIRW9wTFA4M09jQjZSNkQv?=
+ =?utf-8?B?NXFLUWRLMjAxb21uYmxBbEExTzhSeXJvUWx2U1dQNVBzd1oxNlJrbThHZ2lt?=
+ =?utf-8?B?QnR3VWJmZVdDbFppeDl4UXFqZVpSRnR0SGpzL0Fmc3JlaE0wQkV1OHd3ZVNp?=
+ =?utf-8?B?aVIxZG5UWEtkZTRCUFpKWHlDWG1ER01XYytZcWlSQkh5dVdsV0Nya2toUkd4?=
+ =?utf-8?B?YXREUUZTYkRreUpHVzI5dUZORDhnNElta0RySGJaV2Jya0VLcUFLQmFsNm1o?=
+ =?utf-8?B?eFRRcU00TDYzQ3dUaFJjVkV4cnZ6UFkzUDRPeTBFK1VyZFFQRHJlRVRhSFE0?=
+ =?utf-8?B?dGFXUnlKRmsxQldEVEFvQ1hKTmNFL1kzaXdtR3JtWG1FQmNZc2ovMWJtUVVl?=
+ =?utf-8?B?Qm5jUWV2Z0Fjc05vSFUwTm4xWWZWWVlHSzYxOHBvWkFjdEJxWGIraStqS3BY?=
+ =?utf-8?B?SE9MSXNZdjg2UHRjbUlPdCtOcnpxTm9VWEhIUEN0ZzZ4SEtxNVFaVGRjaW5m?=
+ =?utf-8?B?cjdqbHROeFVHc2hTS29aOUpRbHNzcVFMY2FFVXR6KzVVYXJ4a0QzdjcwNUQz?=
+ =?utf-8?B?Zi9PNDc0Y2JnSXF5clY3aS8xL05xV010dkJqcVQrMC9HNE9ZYUpHVCtrRjVP?=
+ =?utf-8?B?dFZwVjNPcWszSHJmb2JjcW5tYzBmakVRL0gvSDVQNUdHTHAySVl2N0VMbWl0?=
+ =?utf-8?B?L3N1MGM5NmZnK2pnRVlscFR2c2g0OHRUSjdOQXY5VnVEVGFtUjM3dmNuS1RC?=
+ =?utf-8?B?eUtBcHUrYnh3OGlPL09CSGNxU3dBcXBzMGNndy95ak5EWVhralplUkhVZFlt?=
+ =?utf-8?B?TGZRMS9PbHc3NnE0TytlVzk3STV6R3ZRZ0s5eE9RYVhYU3NFVnJMdnVKcnZY?=
+ =?utf-8?B?SEVFQjVvRFlpZUxIWERucTBrRStpNmtpbW95NjJYMUw3a09INkM2SWRxQ3pM?=
+ =?utf-8?B?M3lnWHRIWnZNcHd2WjAvM2dnZmJmem1Ka201NDkxaFhUMW0yaHZHQkF5V3Vw?=
+ =?utf-8?B?TzVmRXh4YUZ4alViOUdMcldxbnBRRUxUZTVLek13UlJaTDRJYXBSRWhLL0dp?=
+ =?utf-8?B?aVVYcnQ1RERSbXQvTFJjaWFNRW81VzdyWEJDOStpdkRVM1M2Uk9RQlNDNVdG?=
+ =?utf-8?B?SVpsMkw0eVBJWnBxbWFucDJOWkRwNXpSUnIxTW5ySDlrU0lWWmtnTWVPVldS?=
+ =?utf-8?B?eFYxeSt2L2tGZ2xZWUdLTGlrQ3hTUUU0OWwveG51ZzZRMVNSWFZ1VTBhR2s1?=
+ =?utf-8?B?Yzd3ZURHV1dTcXdyQXM2WTNTbXByR3RyVGJyMFk3Mms1L1BkdU8wb21pOFh3?=
+ =?utf-8?B?Mm9rTTZpRU5VWENhUTF4WTZKOU95T2VWb1NvZDBwNnoyZi9DcGMrYXIzdnF6?=
+ =?utf-8?B?SnVONWJTRGZGY2NZbmZuVXduUHhDaFVpM3VNUFdoNXRwOWhnWFZOQ3hpK0FT?=
+ =?utf-8?B?WDR3VkVDWmVIQ0VqZHgvK2ZhYVh2c2lsVGg4aEEzOEJxdUhVSkd6YnNyWTRU?=
+ =?utf-8?B?REE9PQ==?=
+X-OriginatorOrg: prevas.dk
+X-MS-Exchange-CrossTenant-Network-Message-Id: c591d00e-f284-4610-5ee5-08db133ca6e5
+X-MS-Exchange-CrossTenant-AuthSource: DU0PR10MB5266.EURPRD10.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 20 Feb 2023 12:19:02.3947
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: d350cf71-778d-4780-88f5-071a4cb1ed61
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 9FdsN97l+3LI5ROGUag83FkP+HWM+Vb32pQQDujuFv3sG8+CKmGn+vQTjBqA0iv1Zn7Tf0B03n6jwxSlnjLQqvSvQ9rzJZKr8PPYTvEFv6o=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DU2PR10MB7861
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Adam,
+On 17/02/2023 09.18, Alexander Stein wrote:
+> Hi Liu,
+> 
+> Am Freitag, 17. Februar 2023, 07:54:01 CET schrieb Liu Ying:
+>> Hi,
+>>
+>> This patch set aims to add i.MX93 LCDIF display controller support
+>> in the existing LCDIF DRM driver.  The LCDIF embedded in i.MX93 SoC
+>> is essentially the same to those embedded in i.MX8mp SoC.  Through
+>> internal bridges, i.MX93 LCDIF may drive a MIPI DSI display or a LVDS
+>> display or a parallel display.
+>>
+>> Patch 1/6 adds device tree binding support for i.MX93 LCDIF in the
+>> existing fsl,lcdif.yaml.
+>>
+>> Patch 2/6 drops lcdif->bridge NULL pointer check as a cleanup patch.
+>>
+>> Patch 3/6~5/6 prepare for adding i.MX93 LCDIF support step by step.
+>>
+>> Patch 6/6 adds i.MX93 LCDIF compatible string as the last step of
+>> adding i.MX93 LCDIF support.
+> 
+> Thanks for the series. I could test this on my TQMa93xxLA/MBa93xxCA with a 
+> single LVDS display attached, so no DSI or parallel display. Hence I could not 
+> test the bus format and flags checks, but they look okay.
+> So you can add
+> Tested-by: Alexander Stein <alexander.stein@ew.tq-group.com>
+> to the whole series as well.
+> 
+> One thing I noticed is that, sometimes it seems that before probing lcdif my 
+> system completely freezes. Adding some debug output it seems that's during 
+> powering up the IMX93_MEDIABLK_PD_LCDIF power domain there is some race 
+> condition. But adding more more detailed output made the problem go away.
+> Did you notice something similar? It might be a red hering though.
 
-On Mon, Feb 20, 2023 at 12:14 PM DLG Adam Ward
-<DLG-Adam.Ward.opensource@dm.renesas.com> wrote:
-> On 19/02/23 14:37, Daniel Lezcano wrote:
-> >The thermal zone device structure is exposed to the different drivers and obviously they access the internals while that should be restricted to the core thermal code.
-> >
-> >In order to self-encapsulate the thermal core code, we need to prevent the drivers accessing directly the thermal zone structure and provide accessor functions to deal with.
-> >
-> >Provide an accessor to the 'devdata' structure and make use of it in the different drivers.
-> >No functional changes intended.
-> >
-> >Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
-> >---
->
-> >drivers/thermal/da9062-thermal.c                 |  2 +-
->
-> For da9062:
->
-> Reviewed-by: Adam Ward <DLG-Adam.Ward.opensource@dm.renesas.com>
+Interesting. Sounds similar to what I encountered on several
+imx8mp-based boards, both the NXP EVK and our custom design, running a
+mainline U-Boot and downstream NXP kernel:
 
-Looks like Daniel has found the new Dialog maintainer he was looking
-for? Time to update MAINTAINERS?
+https://lore.kernel.org/u-boot/20220823133645.4046432-1-rasmus.villemoes@prevas.dk/
 
-Thanks!
+I never really found a real solution, but as the hack I ended up
+applying in U-Boot does involve some clock settings, and you apparently
+now figured out some connection to "overclocking", I do think these
+issues are related.
 
-Gr{oetje,eeting}s,
+Rasmus
 
-                        Geert
-
--- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
