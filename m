@@ -2,126 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8AFAF69C9B2
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Feb 2023 12:22:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9FBDF69C9B3
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Feb 2023 12:23:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231496AbjBTLWx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Feb 2023 06:22:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47908 "EHLO
+        id S231590AbjBTLXO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Feb 2023 06:23:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48466 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231350AbjBTLWw (ORCPT
+        with ESMTP id S231563AbjBTLXM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Feb 2023 06:22:52 -0500
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9F3B897
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Feb 2023 03:22:49 -0800 (PST)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id A1AB115BF;
-        Mon, 20 Feb 2023 03:23:31 -0800 (PST)
-Received: from [10.57.15.240] (unknown [10.57.15.240])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 00A1C3F703;
-        Mon, 20 Feb 2023 03:22:46 -0800 (PST)
-Message-ID: <d99b1097-1d77-1547-30bf-860756d4952f@arm.com>
-Date:   Mon, 20 Feb 2023 11:22:45 +0000
+        Mon, 20 Feb 2023 06:23:12 -0500
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C55961A5
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Feb 2023 03:23:11 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=k/F6jHj9dGb4FP0SDDGOBoJmF3CEJjTDFmT6ghn0D34=; b=gjzTzA31fWyJaNXWu6g8dQ7Al1
+        u7HDHBGEKBix9cuEl4rMqCAwkZ3+fFhXEXrWRPHI7tJHZCmTwEfEG5XgUphI9gitPSRXjNRQKXbRT
+        Ghg7HtyteiwF7hatI3aPxe4VQj0cTz5NCeF4EbiGiLqSRgl9IRx5vw20sMV8o0KEusZ0D3wx+0err
+        aYofv25D/C9Bh03gc3LGAFOPAcupeBRrkazMikNV1fH/HdniZ/yccPjVBrkpPPYj09P71pJ3KiyvU
+        0n/yzdhhkWm8Q++5AUPoBANESjWs+CnPWWj6NFDlovpmHk3D9tNLl395QMo11V6TXokR2lWPu9e5z
+        CRfUmCfQ==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by desiato.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
+        id 1pU4Fx-00Bn4D-1i;
+        Mon, 20 Feb 2023 11:22:55 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id B953A30020B;
+        Mon, 20 Feb 2023 12:22:51 +0100 (CET)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 9F2112135FAB8; Mon, 20 Feb 2023 12:22:51 +0100 (CET)
+Date:   Mon, 20 Feb 2023 12:22:51 +0100
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Zhang Rui <rui.zhang@intel.com>
+Cc:     tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+        dave.hansen@linux.intel.com, hpa@zytor.com, x86@kernel.org,
+        linux-kernel@vger.kernel.org, zhang.jia@linux.alibaba.com,
+        len.brown@intel.com
+Subject: Re: [PATCH V2 1/1] x86/topology: fix erroneous smp_num_siblings on
+ Intel Hybrid platform
+Message-ID: <Y/NYC+hjcU0NWC6p@hirez.programming.kicks-ass.net>
+References: <20230220032856.661884-1-rui.zhang@intel.com>
+ <20230220032856.661884-2-rui.zhang@intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH v2 3/3] sched/tp: Add new tracepoint to track compute
- energy computation
-Content-Language: en-US
-To:     Qais Yousef <qyousef@layalina.io>
-Cc:     linux-kernel@vger.kernel.org, Wei Wang <wvw@google.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Xuewen Yan <xuewen.yan94@gmail.com>,
-        Hank <han.lin@mediatek.com>,
-        Jonathan JMChen <Jonathan.JMChen@mediatek.com>,
-        Ingo Molnar <mingo@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>
-References: <20230205224318.2035646-1-qyousef@layalina.io>
- <20230205224318.2035646-4-qyousef@layalina.io>
-From:   Lukasz Luba <lukasz.luba@arm.com>
-In-Reply-To: <20230205224318.2035646-4-qyousef@layalina.io>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230220032856.661884-2-rui.zhang@intel.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Qais,
-
-On 2/5/23 22:43, Qais Yousef wrote:
-> It was useful to track feec() placement decision and debug the spare
-> capacity and optimization issues vs uclamp_max.
+On Mon, Feb 20, 2023 at 11:28:56AM +0800, Zhang Rui wrote:
+> The SMT siblings value returned by CPUID.1F SMT level EBX differs
+> among CPUs on Intel Hybrid platforms like AlderLake and MeteorLake.
+> It returns 2 for Pcore CPUs which have SMT siblings and returns 1 for
+> Ecore CPUs which do not have SMT siblings.
 > 
-> Signed-off-by: Qais Yousef <qyousef@layalina.io>
+> Today, the CPU boot code sets the global variable smp_num_siblings when
+> every CPU thread is brought up. The last thread to boot will overwrite
+> it with the number of siblings of *that* thread. That last thread to
+> boot will "win". If the thread is a Pcore, smp_num_siblings == 2.  If it
+> is an Ecore, smp_num_siblings == 1.
+> 
+> smp_num_siblings describes if the *system* supports SMT.  It should
+> specify the maximum number of SMT threads among all cores.
+> 
+> Ensure that smp_num_siblings represents the system-wide maximum number
+> of siblings by always increasing its value. Never allow it to decrease.
+> 
+> On MeteorLake-P platform, this fixes a problem that the Ecore CPUs are
+> not updated in any cpu sibling map because the system is treated as an
+> UP system when probing Ecore CPUs.
+> 
+> Below shows part of the CPU topology information before and after the
+> fix, for both Pcore and Ecore CPU (cpu0 is Pcore, cpu 12 is Ecore).
+> ...
+> -/sys/devices/system/cpu/cpu0/topology/package_cpus:000fff
+> -/sys/devices/system/cpu/cpu0/topology/package_cpus_list:0-11
+> +/sys/devices/system/cpu/cpu0/topology/package_cpus:3fffff
+> +/sys/devices/system/cpu/cpu0/topology/package_cpus_list:0-21
+> ...
+> -/sys/devices/system/cpu/cpu12/topology/package_cpus:001000
+> -/sys/devices/system/cpu/cpu12/topology/package_cpus_list:12
+> +/sys/devices/system/cpu/cpu12/topology/package_cpus:3fffff
+> +/sys/devices/system/cpu/cpu12/topology/package_cpus_list:0-21
+> 
+> And this also breaks userspace tools like lscpu
+> -Core(s) per socket:  1
+> -Socket(s):           11
+> +Core(s) per socket:  16
+> +Socket(s):           1
+> 
+> CC: stable@kernel.org
+> Suggested-by: Len Brown <len.brown@intel.com>
+> Signed-off-by: Zhang Rui <rui.zhang@intel.com>
 > ---
->   include/trace/events/sched.h | 4 ++++
->   kernel/sched/core.c          | 1 +
->   kernel/sched/fair.c          | 7 ++++++-
->   3 files changed, 11 insertions(+), 1 deletion(-)
+>  arch/x86/kernel/cpu/topology.c | 5 +++--
+>  1 file changed, 3 insertions(+), 2 deletions(-)
 > 
-> diff --git a/include/trace/events/sched.h b/include/trace/events/sched.h
-> index fbb99a61f714..20cc884f72ff 100644
-> --- a/include/trace/events/sched.h
-> +++ b/include/trace/events/sched.h
-> @@ -735,6 +735,10 @@ DECLARE_TRACE(sched_update_nr_running_tp,
->   	TP_PROTO(struct rq *rq, int change),
->   	TP_ARGS(rq, change));
->   
-> +DECLARE_TRACE(sched_compute_energy_tp,
-> +	TP_PROTO(struct task_struct *p, int dst_cpu, unsigned long energy),
-> +	TP_ARGS(p, dst_cpu, energy));
-> +
->   #endif /* _TRACE_SCHED_H */
->   
->   /* This part must be outside protection */
-> diff --git a/kernel/sched/core.c b/kernel/sched/core.c
-> index 4580fe3e1d0c..5f6dde9b892b 100644
-> --- a/kernel/sched/core.c
-> +++ b/kernel/sched/core.c
-> @@ -110,6 +110,7 @@ EXPORT_TRACEPOINT_SYMBOL_GPL(sched_overutilized_tp);
->   EXPORT_TRACEPOINT_SYMBOL_GPL(sched_util_est_cfs_tp);
->   EXPORT_TRACEPOINT_SYMBOL_GPL(sched_util_est_se_tp);
->   EXPORT_TRACEPOINT_SYMBOL_GPL(sched_update_nr_running_tp);
-> +EXPORT_TRACEPOINT_SYMBOL_GPL(sched_compute_energy_tp);
->   
->   DEFINE_PER_CPU_SHARED_ALIGNED(struct rq, runqueues);
->   
-> diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
-> index a8c3d92ff3f6..801e903c4307 100644
-> --- a/kernel/sched/fair.c
-> +++ b/kernel/sched/fair.c
-> @@ -7295,11 +7295,16 @@ compute_energy(struct energy_env *eenv, struct perf_domain *pd,
->   {
->   	unsigned long max_util = eenv_pd_max_util(eenv, pd_cpus, p, dst_cpu);
->   	unsigned long busy_time = eenv->pd_busy_time;
-> +	unsigned long energy;
->   
->   	if (dst_cpu >= 0)
->   		busy_time = min(eenv->pd_cap, busy_time + eenv->task_busy_time);
->   
-> -	return em_cpu_energy(pd->em_pd, max_util, busy_time, eenv->cpu_cap);
-> +	energy = em_cpu_energy(pd->em_pd, max_util, busy_time, eenv->cpu_cap);
-> +
-> +	trace_sched_compute_energy_tp(p, dst_cpu, energy);
+> diff --git a/arch/x86/kernel/cpu/topology.c b/arch/x86/kernel/cpu/topology.c
+> index 5e868b62a7c4..0270925fe013 100644
+> --- a/arch/x86/kernel/cpu/topology.c
+> +++ b/arch/x86/kernel/cpu/topology.c
+> @@ -79,7 +79,7 @@ int detect_extended_topology_early(struct cpuinfo_x86 *c)
+>  	 * initial apic id, which also represents 32-bit extended x2apic id.
+>  	 */
+>  	c->initial_apicid = edx;
+> -	smp_num_siblings = LEVEL_MAX_SIBLINGS(ebx);
+> +	smp_num_siblings = max_t(int, smp_num_siblings, LEVEL_MAX_SIBLINGS(ebx));
+>  #endif
+>  	return 0;
+>  }
+> @@ -109,7 +109,8 @@ int detect_extended_topology(struct cpuinfo_x86 *c)
+>  	 */
+>  	cpuid_count(leaf, SMT_LEVEL, &eax, &ebx, &ecx, &edx);
+>  	c->initial_apicid = edx;
+> -	core_level_siblings = smp_num_siblings = LEVEL_MAX_SIBLINGS(ebx);
+> +	core_level_siblings = LEVEL_MAX_SIBLINGS(ebx);
+> +	smp_num_siblings = max_t(int, smp_num_siblings, LEVEL_MAX_SIBLINGS(ebx));
+>  	core_plus_mask_width = ht_mask_width = BITS_SHIFT_NEXT_LEVEL(eax);
+>  	die_level_siblings = LEVEL_MAX_SIBLINGS(ebx);
+>  	pkg_mask_width = die_plus_mask_width = BITS_SHIFT_NEXT_LEVEL(eax);
 
-Could we also dump the max_util and busy_time?
+Seems ok, but perhaps you can stick an 'int' cast in
+LEVEL_MAX_SIGLINGS instead and write a simpler max() -- and/or convert
+smt_num_siblings to unsigned int.
 
-> +
-> +	return energy;
->   }
->   
->   /*
+Regardless,
 
-
-IMO this one is really helpful. I hope it won't be an issue if we can
-have it in this code path.
-
-Regards,
-Lukasz
+Acked-by: Peter Zijlstra (Intel) <peterz@infradead.org>
