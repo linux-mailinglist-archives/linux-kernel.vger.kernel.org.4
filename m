@@ -2,142 +2,250 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9FBDF69C9B3
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Feb 2023 12:23:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9EB2369C9BB
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Feb 2023 12:24:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231590AbjBTLXO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Feb 2023 06:23:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48466 "EHLO
+        id S231804AbjBTLYb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Feb 2023 06:24:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49042 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231563AbjBTLXM (ORCPT
+        with ESMTP id S231697AbjBTLYZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Feb 2023 06:23:12 -0500
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C55961A5
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Feb 2023 03:23:11 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=k/F6jHj9dGb4FP0SDDGOBoJmF3CEJjTDFmT6ghn0D34=; b=gjzTzA31fWyJaNXWu6g8dQ7Al1
-        u7HDHBGEKBix9cuEl4rMqCAwkZ3+fFhXEXrWRPHI7tJHZCmTwEfEG5XgUphI9gitPSRXjNRQKXbRT
-        Ghg7HtyteiwF7hatI3aPxe4VQj0cTz5NCeF4EbiGiLqSRgl9IRx5vw20sMV8o0KEusZ0D3wx+0err
-        aYofv25D/C9Bh03gc3LGAFOPAcupeBRrkazMikNV1fH/HdniZ/yccPjVBrkpPPYj09P71pJ3KiyvU
-        0n/yzdhhkWm8Q++5AUPoBANESjWs+CnPWWj6NFDlovpmHk3D9tNLl395QMo11V6TXokR2lWPu9e5z
-        CRfUmCfQ==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
-        id 1pU4Fx-00Bn4D-1i;
-        Mon, 20 Feb 2023 11:22:55 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id B953A30020B;
-        Mon, 20 Feb 2023 12:22:51 +0100 (CET)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 9F2112135FAB8; Mon, 20 Feb 2023 12:22:51 +0100 (CET)
-Date:   Mon, 20 Feb 2023 12:22:51 +0100
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Zhang Rui <rui.zhang@intel.com>
-Cc:     tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
-        dave.hansen@linux.intel.com, hpa@zytor.com, x86@kernel.org,
-        linux-kernel@vger.kernel.org, zhang.jia@linux.alibaba.com,
-        len.brown@intel.com
-Subject: Re: [PATCH V2 1/1] x86/topology: fix erroneous smp_num_siblings on
- Intel Hybrid platform
-Message-ID: <Y/NYC+hjcU0NWC6p@hirez.programming.kicks-ass.net>
-References: <20230220032856.661884-1-rui.zhang@intel.com>
- <20230220032856.661884-2-rui.zhang@intel.com>
+        Mon, 20 Feb 2023 06:24:25 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1AEE19023
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Feb 2023 03:23:34 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1676892214;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=JGvEUYyDyInAU1qTOkUUwH1+5Pn5/FfAg09zLJh1EcU=;
+        b=LJ4z/ydlreQO2yAtfBGq5VjJCLgp297eaAHVbIuZOwUBIi2Z0QExyTv6nd/ARNoqMqdjn1
+        /zMysMRY0+wYzE6vrOvE/OCyAU5zz2zZy4+k6HBeuFrxSJpfHYMdYB4k5d6NnCqUnBPAwg
+        e5+N+BoK+DPErZpuJFnQdtZCGVRIc3E=
+Received: from mail-wr1-f69.google.com (mail-wr1-f69.google.com
+ [209.85.221.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-433-y1c9zVkxPiec5bMllBpTWQ-1; Mon, 20 Feb 2023 06:23:33 -0500
+X-MC-Unique: y1c9zVkxPiec5bMllBpTWQ-1
+Received: by mail-wr1-f69.google.com with SMTP id n14-20020a5d67ce000000b002bfc2f61048so318428wrw.23
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Feb 2023 03:23:32 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:organization:from:references
+         :cc:to:content-language:subject:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=JGvEUYyDyInAU1qTOkUUwH1+5Pn5/FfAg09zLJh1EcU=;
+        b=WjaP+6vVb9xhQGh8z6LuW1wKdgFt1MGTKLOWA6EpFZIF5vbta8SNM//fsFXVNE+NzF
+         KNuyD1PjGFYOPBXhp94rGium0LDp5SJP9n+Clfg0LDqsEWZNZ8v2yYjwDKYBGDXTkx90
+         pRfOVkZNlc4jeSA5A2fUk7VgJIsn9DU207lZVJpjIVR2eyMM+E8VAGeJ6B32Kdcv4Vwh
+         cLwJxe3sAUMYgZL/dagXLSAIFgaEhnt+OYUjkZMJmbpmZpMIEuKn8h1ixdLPNzYCDI3w
+         JDqQ5xROt7nhM+gtCYSwP5kU3cwqTNuZO6zgzEpTPqIXgo7xSP01UiUDRcOhOUzwG7M+
+         MEGg==
+X-Gm-Message-State: AO0yUKXr2KpAftBrMXV+u8FUgu6hCaYZ+OB58bTMc87GgVxqUG1x/If9
+        ItOHg1tZdZzQ/t3YuRpBOj+ugy+f4g64b0POKloxeXkfZqdokZVuUSmsjcF299jXFEX5nMuYxsU
+        6XxdpC7HhjlclY6FA3Mk7bsnh
+X-Received: by 2002:adf:e889:0:b0:2bf:ae19:d8e4 with SMTP id d9-20020adfe889000000b002bfae19d8e4mr1431247wrm.16.1676892211955;
+        Mon, 20 Feb 2023 03:23:31 -0800 (PST)
+X-Google-Smtp-Source: AK7set8MwtYqrZBvXsoQ9yPZN/bwu32QfvZtBFBM6ley7E2vAkMmUmM+SZmaWRHMAwPacrP/Dgjyyg==
+X-Received: by 2002:adf:e889:0:b0:2bf:ae19:d8e4 with SMTP id d9-20020adfe889000000b002bfae19d8e4mr1431211wrm.16.1676892211619;
+        Mon, 20 Feb 2023 03:23:31 -0800 (PST)
+Received: from ?IPV6:2003:cb:c705:8300:e519:4218:a8b5:5bec? (p200300cbc7058300e5194218a8b55bec.dip0.t-ipconnect.de. [2003:cb:c705:8300:e519:4218:a8b5:5bec])
+        by smtp.gmail.com with ESMTPSA id u13-20020a5d434d000000b002c55ec7f661sm154441wrr.5.2023.02.20.03.23.28
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 20 Feb 2023 03:23:30 -0800 (PST)
+Message-ID: <f50daeb7-7b41-0bed-73f0-b6358169521b@redhat.com>
+Date:   Mon, 20 Feb 2023 12:23:28 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230220032856.661884-2-rui.zhang@intel.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.2
+Subject: Re: [PATCH v6 13/41] mm: Make pte_mkwrite() take a VMA
+Content-Language: en-US
+To:     Rick Edgecombe <rick.p.edgecombe@intel.com>, x86@kernel.org,
+        "H . Peter Anvin" <hpa@zytor.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-mm@kvack.org,
+        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
+        Arnd Bergmann <arnd@arndb.de>,
+        Andy Lutomirski <luto@kernel.org>,
+        Balbir Singh <bsingharora@gmail.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Cyrill Gorcunov <gorcunov@gmail.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Eugene Syromiatnikov <esyr@redhat.com>,
+        Florian Weimer <fweimer@redhat.com>,
+        "H . J . Lu" <hjl.tools@gmail.com>, Jann Horn <jannh@google.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Kees Cook <keescook@chromium.org>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Nadav Amit <nadav.amit@gmail.com>,
+        Oleg Nesterov <oleg@redhat.com>, Pavel Machek <pavel@ucw.cz>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Weijiang Yang <weijiang.yang@intel.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        John Allen <john.allen@amd.com>, kcc@google.com,
+        eranian@google.com, rppt@kernel.org, jamorris@linux.microsoft.com,
+        dethoma@microsoft.com, akpm@linux-foundation.org,
+        Andrew.Cooper3@citrix.com, christina.schimpe@intel.com,
+        debug@rivosinc.com
+Cc:     linux-alpha@vger.kernel.org, linux-snps-arc@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-csky@vger.kernel.org,
+        linux-hexagon@vger.kernel.org, linux-ia64@vger.kernel.org,
+        loongarch@lists.linux.dev, linux-m68k@lists.linux-m68k.org,
+        Michal Simek <monstr@monstr.eu>,
+        Dinh Nguyen <dinguyen@kernel.org>, linux-mips@vger.kernel.org,
+        openrisc@lists.librecores.org, linux-parisc@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org,
+        linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
+        sparclinux@vger.kernel.org, linux-um@lists.infradead.org,
+        xen-devel@lists.xenproject.org
+References: <20230218211433.26859-1-rick.p.edgecombe@intel.com>
+ <20230218211433.26859-14-rick.p.edgecombe@intel.com>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+In-Reply-To: <20230218211433.26859-14-rick.p.edgecombe@intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 20, 2023 at 11:28:56AM +0800, Zhang Rui wrote:
-> The SMT siblings value returned by CPUID.1F SMT level EBX differs
-> among CPUs on Intel Hybrid platforms like AlderLake and MeteorLake.
-> It returns 2 for Pcore CPUs which have SMT siblings and returns 1 for
-> Ecore CPUs which do not have SMT siblings.
+On 18.02.23 22:14, Rick Edgecombe wrote:
+> The x86 Control-flow Enforcement Technology (CET) feature includes a new
+> type of memory called shadow stack. This shadow stack memory has some
+> unusual properties, which requires some core mm changes to function
+> properly.
 > 
-> Today, the CPU boot code sets the global variable smp_num_siblings when
-> every CPU thread is brought up. The last thread to boot will overwrite
-> it with the number of siblings of *that* thread. That last thread to
-> boot will "win". If the thread is a Pcore, smp_num_siblings == 2.  If it
-> is an Ecore, smp_num_siblings == 1.
+> One of these unusual properties is that shadow stack memory is writable,
+> but only in limited ways. These limits are applied via a specific PTE
+> bit combination. Nevertheless, the memory is writable, and core mm code
+> will need to apply the writable permissions in the typical paths that
+> call pte_mkwrite().
 > 
-> smp_num_siblings describes if the *system* supports SMT.  It should
-> specify the maximum number of SMT threads among all cores.
+> In addition to VM_WRITE, the shadow stack VMA's will have a flag denoting
+> that they are special shadow stack flavor of writable memory. So make
+> pte_mkwrite() take a VMA, so that the x86 implementation of it can know to
+> create regular writable memory or shadow stack memory.
 > 
-> Ensure that smp_num_siblings represents the system-wide maximum number
-> of siblings by always increasing its value. Never allow it to decrease.
+> Apply the same changes for pmd_mkwrite() and huge_pte_mkwrite().
 > 
-> On MeteorLake-P platform, this fixes a problem that the Ecore CPUs are
-> not updated in any cpu sibling map because the system is treated as an
-> UP system when probing Ecore CPUs.
+> No functional change.
 > 
-> Below shows part of the CPU topology information before and after the
-> fix, for both Pcore and Ecore CPU (cpu0 is Pcore, cpu 12 is Ecore).
-> ...
-> -/sys/devices/system/cpu/cpu0/topology/package_cpus:000fff
-> -/sys/devices/system/cpu/cpu0/topology/package_cpus_list:0-11
-> +/sys/devices/system/cpu/cpu0/topology/package_cpus:3fffff
-> +/sys/devices/system/cpu/cpu0/topology/package_cpus_list:0-21
-> ...
-> -/sys/devices/system/cpu/cpu12/topology/package_cpus:001000
-> -/sys/devices/system/cpu/cpu12/topology/package_cpus_list:12
-> +/sys/devices/system/cpu/cpu12/topology/package_cpus:3fffff
-> +/sys/devices/system/cpu/cpu12/topology/package_cpus_list:0-21
+> Cc: linux-doc@vger.kernel.org
+> Cc: linux-kernel@vger.kernel.org
+> Cc: linux-alpha@vger.kernel.org
+> Cc: linux-snps-arc@lists.infradead.org
+> Cc: linux-arm-kernel@lists.infradead.org
+> Cc: linux-csky@vger.kernel.org
+> Cc: linux-hexagon@vger.kernel.org
+> Cc: linux-ia64@vger.kernel.org
+> Cc: loongarch@lists.linux.dev
+> Cc: linux-m68k@lists.linux-m68k.org
+> Cc: Michal Simek <monstr@monstr.eu>
+> Cc: Dinh Nguyen <dinguyen@kernel.org>
+> Cc: linux-mips@vger.kernel.org
+> Cc: openrisc@lists.librecores.org
+> Cc: linux-parisc@vger.kernel.org
+> Cc: linuxppc-dev@lists.ozlabs.org
+> Cc: linux-riscv@lists.infradead.org
+> Cc: linux-s390@vger.kernel.org
+> Cc: linux-sh@vger.kernel.org
+> Cc: sparclinux@vger.kernel.org
+> Cc: linux-um@lists.infradead.org
+> Cc: xen-devel@lists.xenproject.org
+> Cc: linux-arch@vger.kernel.org
+> Cc: linux-mm@kvack.org
+> Tested-by: Pengfei Xu <pengfei.xu@intel.com>
+> Suggested-by: David Hildenbrand <david@redhat.com>
+> Signed-off-by: Rick Edgecombe <rick.p.edgecombe@intel.com>
 > 
-> And this also breaks userspace tools like lscpu
-> -Core(s) per socket:  1
-> -Socket(s):           11
-> +Core(s) per socket:  16
-> +Socket(s):           1
-> 
-> CC: stable@kernel.org
-> Suggested-by: Len Brown <len.brown@intel.com>
-> Signed-off-by: Zhang Rui <rui.zhang@intel.com>
 > ---
->  arch/x86/kernel/cpu/topology.c | 5 +++--
->  1 file changed, 3 insertions(+), 2 deletions(-)
+> Hi Non-x86 Arch’s,
 > 
-> diff --git a/arch/x86/kernel/cpu/topology.c b/arch/x86/kernel/cpu/topology.c
-> index 5e868b62a7c4..0270925fe013 100644
-> --- a/arch/x86/kernel/cpu/topology.c
-> +++ b/arch/x86/kernel/cpu/topology.c
-> @@ -79,7 +79,7 @@ int detect_extended_topology_early(struct cpuinfo_x86 *c)
->  	 * initial apic id, which also represents 32-bit extended x2apic id.
->  	 */
->  	c->initial_apicid = edx;
-> -	smp_num_siblings = LEVEL_MAX_SIBLINGS(ebx);
-> +	smp_num_siblings = max_t(int, smp_num_siblings, LEVEL_MAX_SIBLINGS(ebx));
->  #endif
->  	return 0;
->  }
-> @@ -109,7 +109,8 @@ int detect_extended_topology(struct cpuinfo_x86 *c)
->  	 */
->  	cpuid_count(leaf, SMT_LEVEL, &eax, &ebx, &ecx, &edx);
->  	c->initial_apicid = edx;
-> -	core_level_siblings = smp_num_siblings = LEVEL_MAX_SIBLINGS(ebx);
-> +	core_level_siblings = LEVEL_MAX_SIBLINGS(ebx);
-> +	smp_num_siblings = max_t(int, smp_num_siblings, LEVEL_MAX_SIBLINGS(ebx));
->  	core_plus_mask_width = ht_mask_width = BITS_SHIFT_NEXT_LEVEL(eax);
->  	die_level_siblings = LEVEL_MAX_SIBLINGS(ebx);
->  	pkg_mask_width = die_plus_mask_width = BITS_SHIFT_NEXT_LEVEL(eax);
+> x86 has a feature that allows for the creation of a special type of
+> writable memory (shadow stack) that is only writable in limited specific
+> ways. Previously, changes were proposed to core MM code to teach it to
+> decide when to create normally writable memory or the special shadow stack
+> writable memory, but David Hildenbrand suggested[0] to change
+> pXX_mkwrite() to take a VMA, so awareness of shadow stack memory can be
+> moved into x86 code.
+> 
+> Since pXX_mkwrite() is defined in every arch, it requires some tree-wide
+> changes. So that is why you are seeing some patches out of a big x86
+> series pop up in your arch mailing list. There is no functional change.
+> After this refactor, the shadow stack series goes on to use the arch
+> helpers to push shadow stack memory details inside arch/x86.
+> 
+> Testing was just 0-day build testing.
+> 
+> Hopefully that is enough context. Thanks!
+> 
+> [0] https://lore.kernel.org/lkml/0e29a2d0-08d8-bcd6-ff26-4bea0e4037b0@redhat.com/#t
+> 
+> v6:
+>   - New patch
+> ---
+>   Documentation/mm/arch_pgtable_helpers.rst    |  9 ++++++---
+>   arch/alpha/include/asm/pgtable.h             |  6 +++++-
+>   arch/arc/include/asm/hugepage.h              |  2 +-
+>   arch/arc/include/asm/pgtable-bits-arcv2.h    |  7 ++++++-
+>   arch/arm/include/asm/pgtable-3level.h        |  7 ++++++-
+>   arch/arm/include/asm/pgtable.h               |  2 +-
+>   arch/arm64/include/asm/pgtable.h             |  4 ++--
+>   arch/csky/include/asm/pgtable.h              |  2 +-
+>   arch/hexagon/include/asm/pgtable.h           |  2 +-
+>   arch/ia64/include/asm/pgtable.h              |  2 +-
+>   arch/loongarch/include/asm/pgtable.h         |  4 ++--
+>   arch/m68k/include/asm/mcf_pgtable.h          |  2 +-
+>   arch/m68k/include/asm/motorola_pgtable.h     |  6 +++++-
+>   arch/m68k/include/asm/sun3_pgtable.h         |  6 +++++-
+>   arch/microblaze/include/asm/pgtable.h        |  2 +-
+>   arch/mips/include/asm/pgtable.h              |  6 +++---
+>   arch/nios2/include/asm/pgtable.h             |  2 +-
+>   arch/openrisc/include/asm/pgtable.h          |  2 +-
+>   arch/parisc/include/asm/pgtable.h            |  6 +++++-
+>   arch/powerpc/include/asm/book3s/32/pgtable.h |  2 +-
+>   arch/powerpc/include/asm/book3s/64/pgtable.h |  4 ++--
+>   arch/powerpc/include/asm/nohash/32/pgtable.h |  2 +-
+>   arch/powerpc/include/asm/nohash/32/pte-8xx.h |  2 +-
+>   arch/powerpc/include/asm/nohash/64/pgtable.h |  2 +-
+>   arch/riscv/include/asm/pgtable.h             |  6 +++---
+>   arch/s390/include/asm/hugetlb.h              |  4 ++--
+>   arch/s390/include/asm/pgtable.h              |  4 ++--
+>   arch/sh/include/asm/pgtable_32.h             | 10 ++++++++--
+>   arch/sparc/include/asm/pgtable_32.h          |  2 +-
+>   arch/sparc/include/asm/pgtable_64.h          |  6 +++---
+>   arch/um/include/asm/pgtable.h                |  2 +-
+>   arch/x86/include/asm/pgtable.h               |  6 ++++--
+>   arch/xtensa/include/asm/pgtable.h            |  2 +-
+>   include/asm-generic/hugetlb.h                |  4 ++--
+>   include/linux/mm.h                           |  2 +-
+>   mm/debug_vm_pgtable.c                        | 16 ++++++++--------
+>   mm/huge_memory.c                             |  6 +++---
+>   mm/hugetlb.c                                 |  4 ++--
+>   mm/memory.c                                  |  4 ++--
+>   mm/migrate_device.c                          |  2 +-
+>   mm/mprotect.c                                |  2 +-
+>   mm/userfaultfd.c                             |  2 +-
+>   42 files changed, 106 insertions(+), 69 deletions(-)
 
-Seems ok, but perhaps you can stick an 'int' cast in
-LEVEL_MAX_SIGLINGS instead and write a simpler max() -- and/or convert
-smt_num_siblings to unsigned int.
+That looks painful but IMHO worth it :)
 
-Regardless,
+Acked-by: David Hildenbrand <david@redhat.com>
 
-Acked-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+-- 
+Thanks,
+
+David / dhildenb
+
