@@ -2,111 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 560E869C9DE
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Feb 2023 12:29:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2790F69C9E2
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Feb 2023 12:30:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231637AbjBTL3m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Feb 2023 06:29:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54456 "EHLO
+        id S231768AbjBTLar (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Feb 2023 06:30:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55060 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229741AbjBTL3k (ORCPT
+        with ESMTP id S229741AbjBTLao (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Feb 2023 06:29:40 -0500
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8138E14E9B;
-        Mon, 20 Feb 2023 03:29:38 -0800 (PST)
-X-IronPort-AV: E=McAfee;i="6500,9779,10626"; a="312010717"
-X-IronPort-AV: E=Sophos;i="5.97,312,1669104000"; 
-   d="scan'208";a="312010717"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Feb 2023 03:29:38 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10626"; a="648808407"
-X-IronPort-AV: E=Sophos;i="5.97,312,1669104000"; 
-   d="scan'208";a="648808407"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by orsmga006.jf.intel.com with ESMTP; 20 Feb 2023 03:29:34 -0800
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andy.shevchenko@gmail.com>)
-        id 1pU4MO-009O14-0L;
-        Mon, 20 Feb 2023 13:29:32 +0200
-Date:   Mon, 20 Feb 2023 13:29:31 +0200
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-To:     Orlando Chamberlain <orlandoch.dev@gmail.com>
-Cc:     linux-doc@vger.kernel.org, linux-input@vger.kernel.org,
-        Jonathan Corbet <corbet@lwn.net>,
-        Jiri Kosina <jikos@kernel.org>,
-        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
-        linux-kernel@vger.kernel.org, Pavel Machek <pavel@ucw.cz>,
-        Aditya Garg <gargaditya08@live.com>,
-        Aun-Ali Zaidi <admin@kodeit.net>,
-        Kerem Karabay <kekrby@gmail.com>,
-        Thomas =?iso-8859-1?Q?Wei=DFschuh?= <thomas@t-8ch.de>,
-        Thomas =?iso-8859-1?Q?Wei=DFschuh?= <linux@weissschuh.net>
-Subject: Re: [PATCH v4 2/2] HID: hid-apple-magic-backlight: Add driver for
- keyboard backlight on internal Magic Keyboards
-Message-ID: <Y/NZm22JQKeF1+6R@smile.fi.intel.com>
-References: <20230218090709.7467-1-orlandoch.dev@gmail.com>
- <20230218090709.7467-3-orlandoch.dev@gmail.com>
- <CAHp75VeF6ypA7mSYZrMsNr777f6zjEJ6nkygEc_NQe-nMhjRFQ@mail.gmail.com>
- <20230220180932.2a7aa6b1@redecorated-mbp>
+        Mon, 20 Feb 2023 06:30:44 -0500
+Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1F1216338;
+        Mon, 20 Feb 2023 03:30:42 -0800 (PST)
+Received: by mail-pj1-x1036.google.com with SMTP id ei9-20020a17090ae54900b002349a303ca5so983919pjb.4;
+        Mon, 20 Feb 2023 03:30:42 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=1P9/6aReNdXAKar49I2nURKgXArBVnKjo9gr/F/R4YM=;
+        b=OheKix9MsQGFeo1ke3nrz6jBnbxh3nUNpiYiEqKwuQq6pQuo4ir+OzmfKqciNCqpSB
+         y8884pqAmNE51J6fxXdkmlXcKkqEm4tjrInY3rkpD7VbQREdpjM2ZZbU6OxdZQRnEVWV
+         TYGFGN4GivnCDeWVV1Y+eOYuiwDqjeP4or9MNBXKU/hKPZ7tdLCY6BLR21HOn9c9h9Vf
+         DFM+EQaVmK0HWzAk0Y5C12piqXmfqKGJtbcCgqNxxP7h8kmw8yOTFXadO/QaB34GP2vY
+         TdkucHj+aCQE3B9VAZEGJHKjwuh1yR4g4ZLB4xGwGYeo6BLJoJAuGJOwdQbGCx6pjhd9
+         Uuqw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=1P9/6aReNdXAKar49I2nURKgXArBVnKjo9gr/F/R4YM=;
+        b=n+MLk35d+sCTmosdVNEtcNVzgIx3WcmnRhrNwRBpv6yyX/V/89OshTIkNeROnT2qMy
+         uZr66bhDrvzlLxE4jdxIuiykzXWQq3IvCcuUrlOSunu0qrjbDSXijUd2GRgmj0/6USpP
+         eLA7uBkNSMGJbpHdBT70GKAaHlsetpy6EOV8ODQUuZOgXEW+sAAPVoB0kRvUYVrhYh3f
+         +pva3/NT7ZMDUjqEDP+Z26FFNP0hm2h5cNMyUYoWJOUYRixdBC9i9ZgpiRnmFc+YaAn2
+         cgZePUOSUQoQTrRWllDhfWrPltW2s2NkwX8Oo4SFJ5CdiojZQQ3Y/wt9Cv8lz2Ef3DoY
+         Zmzg==
+X-Gm-Message-State: AO0yUKXvFYPRShnzFnC24dwNG6uMobU3k/DVm4FNSq4j3QLzpdEmswRc
+        XQt6stu41cEzE9DfupvzGt6TE8ZQHn2+YQ==
+X-Google-Smtp-Source: AK7set8wGeIaO0DDGtCgyjja7YMqKByomt9SfIQRgGs7K7+3mw/nhFvObj2bfvD0dvFOGLC4hOn/HA==
+X-Received: by 2002:a17:90b:1b03:b0:233:d3ac:5dc2 with SMTP id nu3-20020a17090b1b0300b00233d3ac5dc2mr277633pjb.18.1676892641968;
+        Mon, 20 Feb 2023 03:30:41 -0800 (PST)
+Received: from kelvin-ThinkPad-L14-Gen-1.. (94.130.220.35.bc.googleusercontent.com. [35.220.130.94])
+        by smtp.gmail.com with ESMTPSA id c26-20020a6566da000000b004fb171df68fsm1525527pgw.7.2023.02.20.03.30.38
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 20 Feb 2023 03:30:41 -0800 (PST)
+From:   Keguang Zhang <keguang.zhang@gmail.com>
+To:     linux-mips@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Keguang Zhang <keguang.zhang@gmail.com>
+Subject: [PATCH] dt-bindings: mips: loongson: Add Loongson-1 based boards
+Date:   Mon, 20 Feb 2023 19:30:07 +0800
+Message-Id: <20230220113007.2037750-1-keguang.zhang@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230220180932.2a7aa6b1@redecorated-mbp>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,DKIM_ADSP_CUSTOM_MED,
-        FORGED_GMAIL_RCVD,FREEMAIL_FROM,NML_ADSP_CUSTOM_MED,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_SOFTFAIL autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_SBL_CSS,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
+X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 20, 2023 at 06:09:32PM +1100, Orlando Chamberlain wrote:
-> On Sun, 19 Feb 2023 16:09:26 +0200
-> Andy Shevchenko <andy.shevchenko@gmail.com> wrote:
-> > On Sat, Feb 18, 2023 at 11:08 AM Orlando Chamberlain
-> > <orlandoch.dev@gmail.com> wrote:
+Add two Loongson-1 based boards: LSGZ 1B and Smartloongson 1C.
 
-...
+Signed-off-by: Keguang Zhang <keguang.zhang@gmail.com>
+---
+ .../devicetree/bindings/mips/loongson/devices.yaml     | 10 ++++++++++
+ 1 file changed, 10 insertions(+)
 
-> > > +       help
-> > > +       Say Y here if you want support for the keyboard backlight
-> > > on Macs with
-> > > +       the magic keyboard (MacBookPro16,x and MacBookAir9,1). Note
-> > > that this
-> > > +       driver is not for external magic keyboards.
-> > > +
-> > > +       To compile this driver as a module, choose M here: the
-> > > +       module will be called hid-apple-magic-backlight.  
-> > 
-> > Is it my email client or is the indentation of the help text
-> > incorrect?
-> > 
-> > Hint: the text of the help should be <TAB><SPACE><SPACE> indented.
-> > 
-> > I believe checkpatch.pl at least in --strict mode should complain
-> > about this.
-> 
-> Looking at the hid Kconfig, it seems like some have it as you've
-> described, and some just have tab (and a few have just tab for the
-> first line, and tab space space for the rest of the lines).
+diff --git a/Documentation/devicetree/bindings/mips/loongson/devices.yaml b/Documentation/devicetree/bindings/mips/loongson/devices.yaml
+index f13ce386f42c..6ed6e8d1c0a6 100644
+--- a/Documentation/devicetree/bindings/mips/loongson/devices.yaml
++++ b/Documentation/devicetree/bindings/mips/loongson/devices.yaml
+@@ -37,6 +37,16 @@ properties:
+         items:
+           - const: loongson,loongson64v-4core-virtio
+ 
++      - description: LSGZ 1B Development Board
++        items:
++          - const: lsgz,1b
++          - const: loongson,ls1b
++
++      - description: Smart Loongson 1C Board
++        items:
++          - const: smartloongson,1c
++          - const: loongson,ls1c
++
+ additionalProperties: true
+ 
+ ...
 
-Okay, I have checked in the other MUA I'm using for patch reviews and indeed
-your Kconfig indentation is broken.
-
-> checkpatch.pl --strict didn't complain about the indentation so
-> hopefully it's alright as is.
-
-No, it's not. Must be fixed.
-
-https://www.kernel.org/doc/html/latest/process/coding-style.html#kconfig-configuration-files
-
+base-commit: 39459ce717b863556d7d75466fcbd904a6fbbbd8
 -- 
-With Best Regards,
-Andy Shevchenko
-
+2.34.1
 
