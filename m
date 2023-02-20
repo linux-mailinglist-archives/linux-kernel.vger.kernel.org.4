@@ -2,292 +2,352 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CAAE669D181
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Feb 2023 17:41:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CCA1F69D13E
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Feb 2023 17:20:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231529AbjBTQll (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Feb 2023 11:41:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51982 "EHLO
+        id S231485AbjBTQUS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Feb 2023 11:20:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34988 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232370AbjBTQl3 (ORCPT
+        with ESMTP id S229479AbjBTQUP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Feb 2023 11:41:29 -0500
-Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2086.outbound.protection.outlook.com [40.107.94.86])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9676206AB;
-        Mon, 20 Feb 2023 08:41:18 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=D6USKytXKZLfOSxuOyBGl4SlkJOOpDtJ+15DBLKVxCpWrFD4KrXwKzQMnIa6xNbo/GDBKgYxPcuEDXGEoqNny0Tid6lqW4wdywF3wpVFDB5ciHqWqEiapFMmtKtauLHv3WO7Q/uyxdpiSOVHzgLm4Fovv9PcyZQ+STaUef0LMsGv4P0xfECjVdbmd7jlv/gBUX/4VDsqmoqv3GgfpegZ3R1HkduXx04Pow57fR6KidmYlGcKNSz6chvmxiutgMNR9Sx6YP1oNHzAkf5ApuggQNe2ptKnFGuZ+mH6mjXzRqreL/brG7vMsuvRcaRm6Q//sMqrIsKrlf3YQYP7kKrHLA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=CXcfaW3dWUbugSefHUtpb/s4DncZt1qaRcxfgd64UDA=;
- b=eoZU274HplIlRrdVUMXupVP6PPU6BPo7EyTx6PV7JLP3v571AJY1JQoaaoxDN3PygwhCbI4a2GwFs4h2uSPR7toTGtR7i66eLVb6hnDLM6dqu/ajRqXnH4FBIT201n4w0FZABdaNK27wDuP2QxH+sordFiu8S9nv0huTKlbQWhcco8IPMKZs9VNP6PDzA9d42sORx21DgBfS8FlXMLF9V4ozHh60ZC5jN783gl8yPUxle2bhRfbCyCiiz5wXWhqvKM7IEl36nX4O3or4qcVxDIyURvLOvWaNYKLYc9y75tovmMRFWZKn9g9KGhbU/rTlbpqkCGMVKGh0IyzBmTv+3g==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=kernel.org smtp.mailfrom=amd.com; dmarc=pass
- (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=CXcfaW3dWUbugSefHUtpb/s4DncZt1qaRcxfgd64UDA=;
- b=3yNZeBhBLEqNN2wRpF3uZjuHkWKeejd0339LHvc6919JBrUXCsQWsgAhmH08P77m295+2qesaIr6MwLFESzER8UQIn6uN9YgMcOIhCArR4OSqG2XW5YfCm2QfYy+UezFsSSvpIs5xGwJu8xbfsTTN1/93rNP9KPBtx+ndNOS54E=
-Received: from BN9PR03CA0070.namprd03.prod.outlook.com (2603:10b6:408:fc::15)
- by MW4PR12MB7438.namprd12.prod.outlook.com (2603:10b6:303:219::18) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6111.20; Mon, 20 Feb
- 2023 16:41:16 +0000
-Received: from BN8NAM11FT082.eop-nam11.prod.protection.outlook.com
- (2603:10b6:408:fc:cafe::da) by BN9PR03CA0070.outlook.office365.com
- (2603:10b6:408:fc::15) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6111.20 via Frontend
- Transport; Mon, 20 Feb 2023 16:41:15 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- BN8NAM11FT082.mail.protection.outlook.com (10.13.176.94) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.6111.20 via Frontend Transport; Mon, 20 Feb 2023 16:41:15 +0000
-Received: from localhost (10.180.168.240) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Mon, 20 Feb
- 2023 10:41:14 -0600
-Date:   Mon, 20 Feb 2023 10:18:42 -0600
-From:   Michael Roth <michael.roth@amd.com>
-To:     Jarkko Sakkinen <jarkko@kernel.org>
-CC:     Borislav Petkov <bp@alien8.de>, <kvm@vger.kernel.org>,
-        <linux-coco@lists.linux.dev>, <linux-mm@kvack.org>,
-        <linux-crypto@vger.kernel.org>, <x86@kernel.org>,
-        <linux-kernel@vger.kernel.org>, <tglx@linutronix.de>,
-        <mingo@redhat.com>, <jroedel@suse.de>, <thomas.lendacky@amd.com>,
-        <hpa@zytor.com>, <ardb@kernel.org>, <pbonzini@redhat.com>,
-        <seanjc@google.com>, <vkuznets@redhat.com>,
-        <wanpengli@tencent.com>, <jmattson@google.com>, <luto@kernel.org>,
-        <dave.hansen@linux.intel.com>, <slp@redhat.com>,
-        <pgonda@google.com>, <peterz@infradead.org>,
-        <srinivas.pandruvada@linux.intel.com>, <rientjes@google.com>,
-        <dovmurik@linux.ibm.com>, <tobin@ibm.com>, <vbabka@suse.cz>,
-        <kirill@shutemov.name>, <ak@linux.intel.com>,
-        <tony.luck@intel.com>, <marcorr@google.com>,
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        <alpergun@google.com>, <dgilbert@redhat.com>,
-        <ashish.kalra@amd.com>, <harald@profian.com>,
-        Nikunj A Dadhania <nikunj@amd.com>,
-        <chao.p.peng@linux.intel.com>
-Subject: Re: [PATCH RFC v7 03/64] KVM: SVM: Advertise private memory support
- to KVM
-Message-ID: <20230220161842.ou73dqulryed3k75@amd.com>
-References: <20221214194056.161492-1-michael.roth@amd.com>
- <20221214194056.161492-4-michael.roth@amd.com>
- <Y6Xd0ruz3kMij/5F@zn.tnic>
- <20230105021419.rs23nfq44rv64tsd@amd.com>
- <Y8sFnsk2GvnUCVFI@kernel.org>
+        Mon, 20 Feb 2023 11:20:15 -0500
+Received: from mail-oa1-x35.google.com (mail-oa1-x35.google.com [IPv6:2001:4860:4864:20::35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5EE913596
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Feb 2023 08:20:14 -0800 (PST)
+Received: by mail-oa1-x35.google.com with SMTP id 586e51a60fabf-17213c961dfso1377239fac.0
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Feb 2023 08:20:14 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=/0p3LPNhbtXZVHQ0KXCbO4t7UGZG8cqmR73L2JPywN8=;
+        b=llJs2UEq4nJ44+iP6g74zAtfuY+X6AqSOFJ4K3RGSYpANyPZeIh12hkcIJPp8DsFfr
+         PxynjMHjio2tPN4V/uPpmbQ9BOpMoFg0oMNc1nm+AxSa7s4rWhAA3vJJs4bWI9NVmpdn
+         P+LKvQDeUan+wViUn73qnXAstjRq7dLwhn6nb4Ioqz8I89YPBnhLbbg95x5iYU6zr9Lp
+         23crzFiT6+mQVkxoOHsS3pb9SLv/25qXXxLt2f2Ul8cApOuLy2J7aHW0fFsmjXL23ISf
+         Fgp3R5acGJVAT4mGwO4Vq8cXR1r9lqZSuMpUtIxhI6IZPXNg5wvPo8C0/N0jm6MufeXa
+         P8yw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=/0p3LPNhbtXZVHQ0KXCbO4t7UGZG8cqmR73L2JPywN8=;
+        b=p1Jc7anaNvJ2CqHhR44exVFojs8zi3UXE0iFPa1juRgGkKDr9OF7aEdJ1k5+AVVfas
+         IVTuA6Po+VkfQtro8zfAX+yVC027lYkMMnUjix4MdHhvU/patvyHETbaU02F/Z8EgS8K
+         Ri4J/uV6yMIYfi9v0s2htnZe9Zo/B7l24FMkGzDMs0IjcjRZq11wa7tHYtbQK+fRpt39
+         UvFbHVQ/YjtgvCgtmDagVwKi+4KEwfNhJh+Fk1xnBF+2/L5zPSXFEUchXACDC3NVm/IU
+         soos1PN5MX9+YfZzPhEV6d0qWS4GzrtWVSRhO2OKyvV7bIoVrv3X1q2HVO43YGQjz8mn
+         0kpA==
+X-Gm-Message-State: AO0yUKUXtiW2QqnggASBqC3St6nEbMKE4g9FFhCxeVsFP/Nz8qL3pr95
+        sEmME3cLHVuKBRdKfwHDc+DiRKELyAeS9Q3hxtg=
+X-Google-Smtp-Source: AK7set/ced+CJ00blev+IgUMPb1g6skEoqdRVPsy6UHvrTHEkAn+0CO4cRQwHrbFrsQy/CV1Ds+no98BIMQEZo4oSMg=
+X-Received: by 2002:a05:6870:32d4:b0:16e:5e5a:49da with SMTP id
+ r20-20020a05687032d400b0016e5e5a49damr1187270oac.58.1676910013598; Mon, 20
+ Feb 2023 08:20:13 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <Y8sFnsk2GvnUCVFI@kernel.org>
-X-Originating-IP: [10.180.168.240]
-X-ClientProxiedBy: SATLEXMB04.amd.com (10.181.40.145) To SATLEXMB04.amd.com
- (10.181.40.145)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BN8NAM11FT082:EE_|MW4PR12MB7438:EE_
-X-MS-Office365-Filtering-Correlation-Id: 7be97b1f-4a5b-41c9-739e-08db1361486d
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: S3AtAncVSVRoe8/daDhhirQecZhqEvjg99rERb4jH6F7V/Qx+0HN5IduQaj4WTs6UhW7Xyfp3eMXlELE7EPqduV95lGqX9NOrrjK+V8tQ5WvCLrVOhTXyZOcX68QKrg9BQw79cPSbcpp6C+x6TQydfTWUanKpcL1Gq6sLm0sRgo/hWyvW7qZQMp986spLG1BzvXeqHvEq2qwhOAVRhnxMpzQN8/CiEeNszFTSBiv1BriXrUBkh07WWulVMiBwX6r4yzHeevA7kFZ1rBJepm8ztc5KrqYXMpWhveZKUm5d1HQ8YWtxNtM7u4QGpEa0eEil0NHa7IWidowFyfw+GDEGDmqctG1KzNs9FUlAnRQWunVWyW1ulmpg5zpDY7VY4izeJlbcS7Xd2KX1CZkTOlAsog2hEmk+mCsM/KMmRHIkZcKWClk/Yd4ScnG1U+PFE/QFqItbk2+EEt6awn98PAwkbLh26hBFUpuF5W8oMsLVimqTZBmOQIQusG4rx2w3IJVyiX4q7lxl3TYob6PmkMQP9FWRxNwc+wZNYdFMP+0kWxrLkjed9soracPcl+l6yZpA5VoCBPTk5tvzYIkZjfOJRFY3lsp2R0vjbrGCwsEYJ2sUVc8SEix6u2GjCX7vq8VPjbYtcn/WMfRy4VgoHSlUTRR4Vo7He4DHM9DXWzl4MGmGzcWn6oyqIFbA7kTs3TEEauWwamhoegUt27kj3spuSH42ev9uKfybdbIswfIBTU=
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230025)(4636009)(376002)(39860400002)(346002)(396003)(136003)(451199018)(36840700001)(46966006)(40470700004)(8936002)(2616005)(7406005)(7416002)(36860700001)(5660300002)(336012)(6916009)(4326008)(82310400005)(8676002)(70206006)(86362001)(70586007)(36756003)(83380400001)(54906003)(45080400002)(426003)(40480700001)(47076005)(316002)(478600001)(966005)(40460700003)(41300700001)(26005)(186003)(16526019)(82740400003)(356005)(2906002)(81166007)(1076003)(66899018)(6666004)(44832011)(36900700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 20 Feb 2023 16:41:15.0320
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 7be97b1f-4a5b-41c9-739e-08db1361486d
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT082.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW4PR12MB7438
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
-        autolearn=no autolearn_force=no version=3.4.6
+References: <20230218211608.1630586-1-robdclark@gmail.com> <20230218211608.1630586-10-robdclark@gmail.com>
+ <20230220110553.47ecd504@eldfell>
+In-Reply-To: <20230220110553.47ecd504@eldfell>
+From:   Rob Clark <robdclark@gmail.com>
+Date:   Mon, 20 Feb 2023 08:20:03 -0800
+Message-ID: <CAF6AEGt0xZavULWDfKfeNA1Ysb9gwdcGSDW-hVB0vLxTzEXK1w@mail.gmail.com>
+Subject: Re: [PATCH v4 09/14] drm/syncobj: Add deadline support for syncobj waits
+To:     Pekka Paalanen <ppaalanen@gmail.com>
+Cc:     dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org,
+        Daniel Vetter <daniel@ffwll.ch>,
+        =?UTF-8?Q?Christian_K=C3=B6nig?= <ckoenig.leichtzumerken@gmail.com>,
+        =?UTF-8?Q?Michel_D=C3=A4nzer?= <michel@daenzer.net>,
+        Tvrtko Ursulin <tvrtko.ursulin@intel.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        Simon Ser <contact@emersion.fr>,
+        Rob Clark <robdclark@chromium.org>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        David Airlie <airlied@gmail.com>,
+        open list <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 20, 2023 at 09:20:30PM +0000, Jarkko Sakkinen wrote:
-> On Wed, Jan 04, 2023 at 08:14:19PM -0600, Michael Roth wrote:
-> > On Fri, Dec 23, 2022 at 05:56:50PM +0100, Borislav Petkov wrote:
-> > > On Wed, Dec 14, 2022 at 01:39:55PM -0600, Michael Roth wrote:
-> > > > +       bool (*private_mem_enabled)(struct kvm *kvm);
-> > > 
-> > > This looks like a function returning boolean to me. IOW, you can
-> > > simplify this to:
-> > 
-> > The semantics and existing uses of KVM_X86_OP_OPTIONAL_RET0() gave me the
-> > impression it needed to return an integer value, since by default if a
-> > platform doesn't implement the op it would "return 0", and so could
-> > still be called unconditionally.
-> > 
-> > Maybe that's not actually enforced, by it seems awkward to try to use a
-> > bool return instead. At least for KVM_X86_OP_OPTIONAL_RET0().
-> > 
-> > However, we could just use KVM_X86_OP() to declare it so we can cleanly
-> > use a function that returns bool, and then we just need to do:
-> > 
-> >   bool kvm_arch_has_private_mem(struct kvm *kvm)
-> >   {
-> >           if (kvm_x86_ops.private_mem_enabled)
-> >                   return static_call(kvm_x86_private_mem_enabled)(kvm);
-> 
-> I guess this is missing:
-> 
->         return false;
-> 
-> >   }
-> >     
-> > instead of relying on default return value. So I'll take that approach
-> > and adopt your other suggested changes.
-> > 
-> > ...
-> > 
-> > On a separate topic though, at a high level, this hook is basically a way
-> > for platform-specific code to tell generic KVM code that private memslots
-> > are supported by overriding the kvm_arch_has_private_mem() weak
-> > reference. In this case the AMD platform is using using kvm->arch.upm_mode
-> > flag to convey that, which is in turn set by the
-> > KVM_CAP_UNMAPPED_PRIVATE_MEMORY introduced in this series.
-> > 
-> > But if, as I suggested in response to your PATCH 2 comments, we drop
-> > KVM_CAP_UNAMMPED_PRIVATE_MEMORY in favor of
-> > KVM_SET_SUPPORTED_MEMORY_ATTRIBUTES ioctl to enable "UPM mode" in SEV/SNP
-> > code, then we need to rethink things a bit, since KVM_SET_MEMORY_ATTRIBUTES
-> > in-part relies on kvm_arch_has_private_mem() to determine what flags are
-> > supported, whereas SEV/SNP code would be using what was set by
-> > KVM_SET_MEMORY_ATTRIBUTES to determine the return value in
-> > kvm_arch_has_private_mem().
-> 
-> Does this mean that internal calls to  kvm_vm_set_region_attr() will
-> cease to exist, and it will rely for user space to use the ioctl
-> properly instead?
+On Mon, Feb 20, 2023 at 1:05 AM Pekka Paalanen <ppaalanen@gmail.com> wrote:
+>
+> On Sat, 18 Feb 2023 13:15:52 -0800
+> Rob Clark <robdclark@gmail.com> wrote:
+>
+> > From: Rob Clark <robdclark@chromium.org>
+> >
+> > Add a new flag to let userspace provide a deadline as a hint for syncobj
+> > and timeline waits.  This gives a hint to the driver signaling the
+> > backing fences about how soon userspace needs it to compete work, so it
+> > can addjust GPU frequency accordingly.  An immediate deadline can be
+> > given to provide something equivalent to i915 "wait boost".
+> >
+> > Signed-off-by: Rob Clark <robdclark@chromium.org>
+> > ---
+> >
+> > I'm a bit on the fence about the addition of the DRM_CAP, but it seems
+> > useful to give userspace a way to probe whether the kernel and driver
+> > supports the new wait flag, especially since we have vk-common code
+> > dealing with syncobjs.  But open to suggestions.
+> >
+> >  drivers/gpu/drm/drm_ioctl.c   |  3 ++
+> >  drivers/gpu/drm/drm_syncobj.c | 59 ++++++++++++++++++++++++++++-------
+> >  include/drm/drm_drv.h         |  6 ++++
+> >  include/uapi/drm/drm.h        | 16 ++++++++--
+> >  4 files changed, 71 insertions(+), 13 deletions(-)
+> >
+> > diff --git a/drivers/gpu/drm/drm_ioctl.c b/drivers/gpu/drm/drm_ioctl.c
+> > index 7c9d66ee917d..1c5c942cf0f9 100644
+> > --- a/drivers/gpu/drm/drm_ioctl.c
+> > +++ b/drivers/gpu/drm/drm_ioctl.c
+> > @@ -254,6 +254,9 @@ static int drm_getcap(struct drm_device *dev, void *data, struct drm_file *file_
+> >       case DRM_CAP_SYNCOBJ_TIMELINE:
+> >               req->value = drm_core_check_feature(dev, DRIVER_SYNCOBJ_TIMELINE);
+> >               return 0;
+> > +     case DRM_CAP_SYNCOBJ_DEADLINE:
+> > +             req->value = drm_core_check_feature(dev, DRIVER_SYNCOBJ_TIMELINE);
+>
+> Hi,
+>
+> is that a typo for DRIVER_SYNCOBJ_DEADLINE?
 
-Patches 1-3 are no longer needed and have been dropped for v8, instead
-"UPM mode" is set via KVM_VM_CREATE vm_type arg, and SEV/SNP can simply
-call kvm_arch_has_private_mem() to query whether userspace has enabled
-UPM mode or not.
+Ahh, yes, that is a typo.. but I'm thinking of dropping the cap and
+allowing count_handles==0 instead as a way for userspace to probe
+whether the kernel supports the new ioctl flag/fields.
 
-But even still, we call kvm_vm_set_region_attr() in
-sev_launch_update_data() and snp_launch_update() after copying initial
-payload into private memory.
+> > +             return 0;
+> >       }
+> >
+> >       /* Other caps only work with KMS drivers */
+> > diff --git a/drivers/gpu/drm/drm_syncobj.c b/drivers/gpu/drm/drm_syncobj.c
+> > index 0c2be8360525..61cf97972a60 100644
+> > --- a/drivers/gpu/drm/drm_syncobj.c
+> > +++ b/drivers/gpu/drm/drm_syncobj.c
+> > @@ -973,7 +973,8 @@ static signed long drm_syncobj_array_wait_timeout(struct drm_syncobj **syncobjs,
+> >                                                 uint32_t count,
+> >                                                 uint32_t flags,
+> >                                                 signed long timeout,
+> > -                                               uint32_t *idx)
+> > +                                               uint32_t *idx,
+> > +                                               ktime_t *deadline)
+> >  {
+> >       struct syncobj_wait_entry *entries;
+> >       struct dma_fence *fence;
+> > @@ -1053,6 +1054,15 @@ static signed long drm_syncobj_array_wait_timeout(struct drm_syncobj **syncobjs,
+> >                       drm_syncobj_fence_add_wait(syncobjs[i], &entries[i]);
+> >       }
+> >
+> > +     if (deadline) {
+> > +             for (i = 0; i < count; ++i) {
+> > +                     fence = entries[i].fence;
+> > +                     if (!fence)
+> > +                             continue;
+> > +                     dma_fence_set_deadline(fence, *deadline);
+> > +             }
+> > +     }
+> > +
+> >       do {
+> >               set_current_state(TASK_INTERRUPTIBLE);
+> >
+> > @@ -1151,7 +1161,8 @@ static int drm_syncobj_array_wait(struct drm_device *dev,
+> >                                 struct drm_file *file_private,
+> >                                 struct drm_syncobj_wait *wait,
+> >                                 struct drm_syncobj_timeline_wait *timeline_wait,
+> > -                               struct drm_syncobj **syncobjs, bool timeline)
+> > +                               struct drm_syncobj **syncobjs, bool timeline,
+> > +                               ktime_t *deadline)
+> >  {
+> >       signed long timeout = 0;
+> >       uint32_t first = ~0;
+> > @@ -1162,7 +1173,8 @@ static int drm_syncobj_array_wait(struct drm_device *dev,
+> >                                                        NULL,
+> >                                                        wait->count_handles,
+> >                                                        wait->flags,
+> > -                                                      timeout, &first);
+> > +                                                      timeout, &first,
+> > +                                                      deadline);
+> >               if (timeout < 0)
+> >                       return timeout;
+> >               wait->first_signaled = first;
+> > @@ -1172,7 +1184,8 @@ static int drm_syncobj_array_wait(struct drm_device *dev,
+> >                                                        u64_to_user_ptr(timeline_wait->points),
+> >                                                        timeline_wait->count_handles,
+> >                                                        timeline_wait->flags,
+> > -                                                      timeout, &first);
+> > +                                                      timeout, &first,
+> > +                                                      deadline);
+> >               if (timeout < 0)
+> >                       return timeout;
+> >               timeline_wait->first_signaled = first;
+> > @@ -1243,13 +1256,20 @@ drm_syncobj_wait_ioctl(struct drm_device *dev, void *data,
+> >  {
+> >       struct drm_syncobj_wait *args = data;
+> >       struct drm_syncobj **syncobjs;
+> > +     unsigned possible_flags;
+> > +     ktime_t t, *tp = NULL;
+> >       int ret = 0;
+> >
+> >       if (!drm_core_check_feature(dev, DRIVER_SYNCOBJ))
+> >               return -EOPNOTSUPP;
+> >
+> > -     if (args->flags & ~(DRM_SYNCOBJ_WAIT_FLAGS_WAIT_ALL |
+> > -                         DRM_SYNCOBJ_WAIT_FLAGS_WAIT_FOR_SUBMIT))
+> > +     possible_flags = DRM_SYNCOBJ_WAIT_FLAGS_WAIT_ALL |
+> > +                      DRM_SYNCOBJ_WAIT_FLAGS_WAIT_FOR_SUBMIT;
+> > +
+> > +     if (drm_core_check_feature(dev, DRIVER_SYNCOBJ_DEADLINE))
+> > +             possible_flags |= DRM_SYNCOBJ_WAIT_FLAGS_WAIT_DEADLINE;
+> > +
+> > +     if (args->flags & ~possible_flags)
+> >               return -EINVAL;
+> >
+> >       if (args->count_handles == 0)
+> > @@ -1262,8 +1282,13 @@ drm_syncobj_wait_ioctl(struct drm_device *dev, void *data,
+> >       if (ret < 0)
+> >               return ret;
+> >
+> > +     if (args->flags & DRM_SYNCOBJ_WAIT_FLAGS_WAIT_DEADLINE) {
+> > +             t = ktime_set(args->deadline_sec, args->deadline_nsec);
+> > +             tp = &t;
+> > +     }
+> > +
+> >       ret = drm_syncobj_array_wait(dev, file_private,
+> > -                                  args, NULL, syncobjs, false);
+> > +                                  args, NULL, syncobjs, false, tp);
+> >
+> >       drm_syncobj_array_free(syncobjs, args->count_handles);
+> >
+> > @@ -1276,14 +1301,21 @@ drm_syncobj_timeline_wait_ioctl(struct drm_device *dev, void *data,
+> >  {
+> >       struct drm_syncobj_timeline_wait *args = data;
+> >       struct drm_syncobj **syncobjs;
+> > +     unsigned possible_flags;
+> > +     ktime_t t, *tp = NULL;
+> >       int ret = 0;
+> >
+> >       if (!drm_core_check_feature(dev, DRIVER_SYNCOBJ_TIMELINE))
+> >               return -EOPNOTSUPP;
+> >
+> > -     if (args->flags & ~(DRM_SYNCOBJ_WAIT_FLAGS_WAIT_ALL |
+> > -                         DRM_SYNCOBJ_WAIT_FLAGS_WAIT_FOR_SUBMIT |
+> > -                         DRM_SYNCOBJ_WAIT_FLAGS_WAIT_AVAILABLE))
+> > +     possible_flags = DRM_SYNCOBJ_WAIT_FLAGS_WAIT_ALL |
+> > +                      DRM_SYNCOBJ_WAIT_FLAGS_WAIT_FOR_SUBMIT |
+> > +                      DRM_SYNCOBJ_WAIT_FLAGS_WAIT_AVAILABLE;
+> > +
+> > +     if (drm_core_check_feature(dev, DRIVER_SYNCOBJ_DEADLINE))
+> > +             possible_flags |= DRM_SYNCOBJ_WAIT_FLAGS_WAIT_DEADLINE;
+> > +
+> > +     if (args->flags & ~possible_flags)
+> >               return -EINVAL;
+> >
+> >       if (args->count_handles == 0)
+> > @@ -1296,8 +1328,13 @@ drm_syncobj_timeline_wait_ioctl(struct drm_device *dev, void *data,
+> >       if (ret < 0)
+> >               return ret;
+> >
+> > +     if (args->flags & DRM_SYNCOBJ_WAIT_FLAGS_WAIT_DEADLINE) {
+> > +             t = ktime_set(args->deadline_sec, args->deadline_nsec);
+> > +             tp = &t;
+> > +     }
+> > +
+> >       ret = drm_syncobj_array_wait(dev, file_private,
+> > -                                  NULL, args, syncobjs, true);
+> > +                                  NULL, args, syncobjs, true, tp);
+> >
+> >       drm_syncobj_array_free(syncobjs, args->count_handles);
+> >
+> > diff --git a/include/drm/drm_drv.h b/include/drm/drm_drv.h
+> > index 1d76d0686b03..9aa24f097e22 100644
+> > --- a/include/drm/drm_drv.h
+> > +++ b/include/drm/drm_drv.h
+> > @@ -104,6 +104,12 @@ enum drm_driver_feature {
+> >        * acceleration should be handled by two drivers that are connected using auxiliary bus.
+> >        */
+> >       DRIVER_COMPUTE_ACCEL            = BIT(7),
+> > +     /**
+> > +      * @DRIVER_SYNCOBJ_DEADLINE:
+> > +      *
+> > +      * Driver supports &dma_fence_ops.set_deadline
+> > +      */
+> > +     DRIVER_SYNCOBJ_DEADLINE         = BIT(8),
+> >
+> >       /* IMPORTANT: Below are all the legacy flags, add new ones above. */
+> >
+> > diff --git a/include/uapi/drm/drm.h b/include/uapi/drm/drm.h
+> > index 642808520d92..c6b85bb13810 100644
+> > --- a/include/uapi/drm/drm.h
+> > +++ b/include/uapi/drm/drm.h
+> > @@ -767,6 +767,13 @@ struct drm_gem_open {
+> >   * Documentation/gpu/drm-mm.rst, section "DRM Sync Objects".
+> >   */
+> >  #define DRM_CAP_SYNCOBJ_TIMELINE     0x14
+> > +/**
+> > + * DRM_CAP_SYNCOBJ_DEADLINE
+> > + *
+> > + * If set to 1, the driver supports DRM_SYNCOBJ_WAIT_FLAGS_WAIT_DEADLINE flag
+> > + * on the SYNCOBJ_TIMELINE_WAIT/SYNCOBJ_WAIT ioctls.
+> > + */
+> > +#define DRM_CAP_SYNCOBJ_DEADLINE     0x15
+> >
+> >  /* DRM_IOCTL_GET_CAP ioctl argument type */
+> >  struct drm_get_cap {
+> > @@ -887,6 +894,7 @@ struct drm_syncobj_transfer {
+> >  #define DRM_SYNCOBJ_WAIT_FLAGS_WAIT_ALL (1 << 0)
+> >  #define DRM_SYNCOBJ_WAIT_FLAGS_WAIT_FOR_SUBMIT (1 << 1)
+> >  #define DRM_SYNCOBJ_WAIT_FLAGS_WAIT_AVAILABLE (1 << 2) /* wait for time point to become available */
+> > +#define DRM_SYNCOBJ_WAIT_FLAGS_WAIT_DEADLINE (1 << 3) /* set fence deadline based to deadline_nsec/sec */
+>
+> Where was the UAPI documentation explaining what a fence deadline is
+> and what it does, again?
+>
+> >  struct drm_syncobj_wait {
+> >       __u64 handles;
+> >       /* absolute timeout */
+> > @@ -894,7 +902,9 @@ struct drm_syncobj_wait {
+> >       __u32 count_handles;
+> >       __u32 flags;
+> >       __u32 first_signaled; /* only valid when not waiting all */
+> > -     __u32 pad;
+> > +     /* Deadline to set on backing fence(s) in CLOCK_MONOTONIC: */
+> > +     __u32 deadline_nsec;
+> > +     __u64 deadline_sec;
+> >  };
+> >
+> >  struct drm_syncobj_timeline_wait {
+> > @@ -906,7 +916,9 @@ struct drm_syncobj_timeline_wait {
+> >       __u32 count_handles;
+> >       __u32 flags;
+> >       __u32 first_signaled; /* only valid when not waiting all */
+> > -     __u32 pad;
+> > +     /* Deadline to set on backing fence(s) in CLOCK_MONOTONIC: */
+> > +     __u32 deadline_nsec;
+> > +     __u64 deadline_sec;
+> >  };
+>
+> It seems inconsistent that these sec,nsec are here unsigned, when in
+> other places they are signed. There is also the question if these need
+> to meet clock_settime() requirements of valid values.
+>
 
-I don't think there's much worth in having userspace have to do it via
-KVM_SET_MEMORY_ATTRIBUTES afterward. It could be done that way I suppose,
-but generally RMP update from shared->private happens as part of
-KVM_SET_MEMORY_ATTRIBUTES, whereas in this case it would necessarily
-happen *after* the RMP updates, since SNP_LAUNCH_UPDATE expects the pages
-to be marked private beforehand.
+Yes, should have been signed.  But I think Christian has convinced me
+to use 'u64 ns' (absolute monotonic) instead for the sync_file ioctl.
+And it would make sense to use the same here.
 
-Just seems like more corner cases to deal with and more boilerplate code
-for userspace, which already needed to operate under the assumption that
-pages will be private after SNP_LAUNCH_UPDATE, so seems to make sense to
-just have the memory attributes also updated accordingly.
+BR,
+-R
 
--Mike
-> 
-> > So, for AMD, the return value of kvm_arch_has_private_mem() needs to rely
-> > on something else. Maybe the logic can just be:
-> > 
-> >   bool svm_private_mem_enabled(struct kvm *kvm)
-> >   {
-> >     return sev_enabled(kvm) || sev_snp_enabled(kvm)
-> >   }
-> > 
-> > (at least in the context of this patchset where UPM support is added for
-> > both SEV and SNP).
-> > 
-> > So I'll plan to make that change as well.
-> > 
-> > -Mike
-> > 
-> > > 
-> > > diff --git a/arch/x86/include/asm/kvm-x86-ops.h b/arch/x86/include/asm/kvm-x86-ops.h
-> > > index 82ba4a564e58..4449aeff0dff 100644
-> > > --- a/arch/x86/include/asm/kvm-x86-ops.h
-> > > +++ b/arch/x86/include/asm/kvm-x86-ops.h
-> > > @@ -129,6 +129,7 @@ KVM_X86_OP(msr_filter_changed)
-> > >  KVM_X86_OP(complete_emulated_msr)
-> > >  KVM_X86_OP(vcpu_deliver_sipi_vector)
-> > >  KVM_X86_OP_OPTIONAL_RET0(vcpu_get_apicv_inhibit_reasons);
-> > > +KVM_X86_OP_OPTIONAL_RET0(private_mem_enabled);
-> > >  
-> > >  #undef KVM_X86_OP
-> > >  #undef KVM_X86_OP_OPTIONAL
-> > > diff --git a/arch/x86/include/asm/kvm_host.h b/arch/x86/include/asm/kvm_host.h
-> > > index 1da0474edb2d..1b4b89ddeb55 100644
-> > > --- a/arch/x86/include/asm/kvm_host.h
-> > > +++ b/arch/x86/include/asm/kvm_host.h
-> > > @@ -1574,6 +1574,7 @@ struct kvm_x86_ops {
-> > >  
-> > >  	void (*load_mmu_pgd)(struct kvm_vcpu *vcpu, hpa_t root_hpa,
-> > >  			     int root_level);
-> > > +	bool (*private_mem_enabled)(struct kvm *kvm);
-> > >  
-> > >  	bool (*has_wbinvd_exit)(void);
-> > >  
-> > > diff --git a/arch/x86/kvm/svm/svm.c b/arch/x86/kvm/svm/svm.c
-> > > index ce362e88a567..73b780fa4653 100644
-> > > --- a/arch/x86/kvm/svm/svm.c
-> > > +++ b/arch/x86/kvm/svm/svm.c
-> > > @@ -4680,6 +4680,14 @@ static int svm_vm_init(struct kvm *kvm)
-> > >  	return 0;
-> > >  }
-> > >  
-> > > +static bool svm_private_mem_enabled(struct kvm *kvm)
-> > > +{
-> > > +	if (sev_guest(kvm))
-> > > +		return kvm->arch.upm_mode;
-> > > +
-> > > +	return IS_ENABLED(CONFIG_HAVE_KVM_PRIVATE_MEM_TESTING);
-> > > +}
-> > > +
-> > >  static struct kvm_x86_ops svm_x86_ops __initdata = {
-> > >  	.name = "kvm_amd",
-> > >  
-> > > @@ -4760,6 +4768,8 @@ static struct kvm_x86_ops svm_x86_ops __initdata = {
-> > >  
-> > >  	.vcpu_after_set_cpuid = svm_vcpu_after_set_cpuid,
-> > >  
-> > > +	.private_mem_enabled = svm_private_mem_enabled,
-> > > +
-> > >  	.has_wbinvd_exit = svm_has_wbinvd_exit,
-> > >  
-> > >  	.get_l2_tsc_offset = svm_get_l2_tsc_offset,
-> > > diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
-> > > index 823646d601db..9a1ca59d36a4 100644
-> > > --- a/arch/x86/kvm/x86.c
-> > > +++ b/arch/x86/kvm/x86.c
-> > > @@ -12556,6 +12556,11 @@ void __user * __x86_set_memory_region(struct kvm *kvm, int id, gpa_t gpa,
-> > >  }
-> > >  EXPORT_SYMBOL_GPL(__x86_set_memory_region);
-> > >  
-> > > +bool kvm_arch_has_private_mem(struct kvm *kvm)
-> > > +{
-> > > +	return static_call(kvm_x86_private_mem_enabled)(kvm);
-> > > +}
-> > > +
-> > >  void kvm_arch_pre_destroy_vm(struct kvm *kvm)
-> > >  {
-> > >  	kvm_mmu_pre_destroy_vm(kvm);
-> > > 
-> > > -- 
-> > > Regards/Gruss,
-> > >     Boris.
-> > > 
-> > > https://nam11.safelinks.protection.outlook.com/?url=https%3A%2F%2Fpeople.kernel.org%2Ftglx%2Fnotes-about-netiquette&data=05%7C01%7Cmichael.roth%40amd.com%7C319e89ce555a46eace4d08dae506b51a%7C3dd8961fe4884e608e11a82d994e183d%7C0%7C0%7C638074114318137471%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C3000%7C%7C%7C&sdata=aG11K7va1BhemwlKCKKdcIXEwXGUzImYL%2BZ9%2FQ7XToI%3D&reserved=0
-> 
-> BR, Jarkko
+>
+> Thanks,
+> pq
