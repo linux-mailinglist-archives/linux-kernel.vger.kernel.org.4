@@ -2,72 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8AFE669D4DB
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Feb 2023 21:22:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D09D69D4DE
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Feb 2023 21:22:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229709AbjBTUV6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Feb 2023 15:21:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41072 "EHLO
+        id S232269AbjBTUWS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Feb 2023 15:22:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41396 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231534AbjBTUV4 (ORCPT
+        with ESMTP id S232466AbjBTUWL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Feb 2023 15:21:56 -0500
+        Mon, 20 Feb 2023 15:22:11 -0500
 Received: from wout5-smtp.messagingengine.com (wout5-smtp.messagingengine.com [64.147.123.21])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91ED421A35
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Feb 2023 12:21:24 -0800 (PST)
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-        by mailout.west.internal (Postfix) with ESMTP id 4282C3200D2B;
-        Mon, 20 Feb 2023 15:20:23 -0500 (EST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38EDB211F3
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Feb 2023 12:21:43 -0800 (PST)
+Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
+        by mailout.west.internal (Postfix) with ESMTP id 0EA083200D02;
+        Mon, 20 Feb 2023 15:20:26 -0500 (EST)
 Received: from mailfrontend1 ([10.202.2.162])
-  by compute6.internal (MEProxy); Mon, 20 Feb 2023 15:20:23 -0500
+  by compute2.internal (MEProxy); Mon, 20 Feb 2023 15:20:27 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vda.io; h=cc:cc
         :content-transfer-encoding:date:date:from:from:in-reply-to
-        :message-id:mime-version:reply-to:sender:subject:subject:to:to;
-         s=fm2; t=1676924422; x=1677010822; bh=NcyI+Ot5bOq+DbkDpPioxq3dJ
-        pdojFXhm2HCHfIaIkU=; b=KgNxOt0s6M9QBrokYTsZOWlg2s5K9arVXx4+ShV8N
-        m0CkTc0Lw7aHu4mQIcupEuG2TVtO3fFpk2whGJ/Dxj1qLQe6BXBN5DMmNZ0vVuel
-        3v7kihS6Xcn4CrfSMt+rx8gVWXgPfXSlytrYN/JauS/NWdB4afIITu11zGbhvxPi
-        AaUYXzSMGHRyA2sHRoIruPAy5R/p1rp78Q72CDLLSavVtO4THuLjN1ehUM7/7oGV
-        WBm6o680YE2ne248HNl4xAAkUdLM9tL0PUzWS49RMBn69m3t9VBTxce/YCUEUPkz
-        RouMG5AcmY1gB9a1qn//1avkJzgfPKn5uKZZ7ibSLC8JA==
+        :in-reply-to:message-id:mime-version:references:reply-to:sender
+        :subject:subject:to:to; s=fm2; t=1676924426; x=1677010826; bh=Xx
+        4qBliVKsg1YlSBFtbTjWlGqegbiuzHynPZ7O9RbxU=; b=xYzCQ3XlxzAr8THnwZ
+        AVvdyD0dFiq7PiOtn1UH6YUjQiIJ809QigbxbFSjt4oTOdZZlU/hONUC8OAvEs2g
+        9Hl8GcDnQAxkn9qXxfk84CdCs0Mm7bG5PcMbzm0A8hXcG3eKcFvYbHBzQJAPjatJ
+        cKQNJd5Z7/y7JuNZfhqRbFtuQ8sjWRJv+g/FkYnhKf/++xf1hH/WnqqcBfRo8eKh
+        lGYQjDJJTBjPvzF+PWneGUzH8xVjao6PsFtUVNWsrl74K5/Qatwmbdn9fTxczy1w
+        zIeKTASU4wbOT8giywrH0xvrp5TdpPW/WJV8m5zr8ief94qznWlEGU5FyUXSuEgb
+        Zu/w==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
         messagingengine.com; h=cc:cc:content-transfer-encoding:date:date
-        :feedback-id:feedback-id:from:from:in-reply-to:message-id
-        :mime-version:reply-to:sender:subject:subject:to:to:x-me-proxy
-        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=
-        1676924422; x=1677010822; bh=NcyI+Ot5bOq+DbkDpPioxq3dJpdojFXhm2H
-        CHfIaIkU=; b=t7pdPxg+ofuYCxq5hW8WY58RkycEPCw3eT0c+Wjj0gAyMuWGBs2
-        X2FjEtE8wxXx+ZbxPGRpDzyF6nJvPencwmrDqIcZvvbF3DXX/aG2V4LWsWqdghQ0
-        3nerVdeEqvBFut6U078kbKOuLkDTagknki8Q0oUQZk6pp65Attxc6P6svBKeBdsT
-        cEBIvi6erZG+8uKHSMCmdkknllCLFYXQXuI8n7ugyC33eXCtWVFpZ8kUlQd+MKMT
-        JLfvSf4lnsg2XNit1Qy8hsdtH/qOtxzncsbOWbFMdNF1Fesw+UH+XpaJLcyxu7pL
-        HPFHYwjHphHXbla87vPvTzmOBWsbPTfh1gQ==
-X-ME-Sender: <xms:BtbzY9viTq9Vtky_MAxYbw_Qg5Ky9wi5AAMkrLhz1ZdJIq_LzUs9eQ>
-    <xme:BtbzY2d1Qdh3FpM6JmiZh7uPY2-_CEXqoLp0Plc3M_pWjSEynx_8ADev3lhonxz1F
-    z72t7BgQUifPYKfTKA>
-X-ME-Received: <xmr:BtbzYwzfrWecoYQieSAFsvcEH0pgU8-voVeQ6NIIB-hC8grP7xFO5AXscRMWdykCoDBvuqLt0EZQmV5dFEXkcHfKnSuW>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrudejhedguddvlecutefuodetggdotefrod
+        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm1; t=1676924426; x=1677010826; bh=Xx4qBliVKsg1Y
+        lSBFtbTjWlGqegbiuzHynPZ7O9RbxU=; b=PXs9txMlCBQQoSayZcMU3GOr8f4cE
+        7jQlIZr6nt3ySHppgtbgqMoDvZYnEwfTp+mgdAK83g6B8U1p+NXEbvKGC8UUHyGX
+        SOrynWUn7+9YTwUpmHfJDvJ2SrR6OQ44sv8vwzrRkiZSS8SBgcCUflBYKRaAqh71
+        0A8jwqaY5RmjrCoQHHfzRJ8OWdSVVWgcecmvCgDUMuQ+9GlkmdJMzB56+1oC1hKj
+        S0aJc2GHVF/q6l8fEUhWvjx8fn/JFKrMZgtixR3q3XQ4zNItfw1aPifqC1YGuviI
+        QHGVaiTkbPa1TsMANklcmy2DyW2QjkELxTCrbGvzPPf0WmUK9BJS6HYoQ==
+X-ME-Sender: <xms:CtbzY6jWjPwq9KUIaZgND7sHxSVsFd5kVC0r61j8spHvQFyafL-duQ>
+    <xme:CtbzY7BxqOtVkDUxamogUiroNgAqmU0XbqR55b00dw5o8BKFOfoeQN1qL0SinbNmx
+    41_x8kJohT9aVM7qA8>
+X-ME-Received: <xmr:CtbzYyHgfBJ_m_MC9tvM-tJB90cF73Jz6OJoutYOShAkB_I46GrR_2XVftJhOY9WBVDz75y5rt0AaDFjFrpMr2ARaKaA>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrudejhedgudeftdcutefuodetggdotefrod
     ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecunecujfgurhephffvvefufffkofgggfestdekre
-    dtredttdenucfhrhhomhepgghinhgtvghnthcuffgrghhonhhnvggruhcuoehvsehvuggr
-    rdhioheqnecuggftrfgrthhtvghrnhepteekhefgudekjeehgeelfeejudegieevveeutd
-    duleegudehueelkeettdevffdtnecuffhomhgrihhnpehkvghrnhgvlhdrohhrghenucev
-    lhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehvsehvuggrrd
-    hioh
-X-ME-Proxy: <xmx:BtbzY0MsYKdl5U4jXJKQHYYJrYkxsPKbicRHLVCYQKKUZIhy2IcjKg>
-    <xmx:BtbzY9_Ovs8WCtBxVygvmBA8udnhm5jvsoJbOHblu-22SoccbBBbCw>
-    <xmx:BtbzY0ULlXoK3muaQEdIPrwSqumku4VXgwhJi7dN4lkkOsXdoou-uQ>
-    <xmx:BtbzY_lc6Wyi4nfGMKoixRuKcVMk49u2ayVZEN4PABjn0SvMSwhMhw>
+    necuuegrihhlohhuthemuceftddtnecunecujfgurhephffvvefufffkofgjfhgggfestd
+    ekredtredttdenucfhrhhomhepgghinhgtvghnthcuffgrghhonhhnvggruhcuoehvsehv
+    uggrrdhioheqnecuggftrfgrthhtvghrnhepudejtdeggfdtlefffeejgefggfeigfejve
+    evtdejhfduvdelieduteeutdfffeehnecuvehluhhsthgvrhfuihiivgeptdenucfrrghr
+    rghmpehmrghilhhfrhhomhepvhesvhgurgdrihho
+X-ME-Proxy: <xmx:CtbzYzSA2JGx0w_I-bEze0LjheB00KJeuyPR38y3uS1PgLQCGKT_aw>
+    <xmx:CtbzY3wSkSCjalaSIZ8U5BnClUH7693mVEFD-PkCj0xEykuBORYmBg>
+    <xmx:CtbzYx7jlkcctRaeKSAFc1DC9BfUhrtW6Txl51D92PzwEGRbwlL3kg>
+    <xmx:CtbzYwreYzOt8ZsqhrI-QpjaYzO7gzWYRyNmHQitM3fvHPrBfl4lZw>
 Feedback-ID: ic7094478:Fastmail
 Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
- 20 Feb 2023 15:20:21 -0500 (EST)
+ 20 Feb 2023 15:20:26 -0500 (EST)
 From:   Vincent Dagonneau <v@vda.io>
 To:     linux-kernel@vger.kernel.org
 Cc:     w@1wt.eu, Vincent Dagonneau <v@vda.io>
-Subject: [PATCH v4 0/4] tools/nolibc: Adding stdint.h, more integer types and tests
-Date:   Mon, 20 Feb 2023 15:20:06 -0500
-Message-Id: <20230220202010.37475-1-v@vda.io>
+Subject: [PATCH v5 1/4] tools/nolibc: add stdint.h
+Date:   Mon, 20 Feb 2023 15:20:07 -0500
+Message-Id: <20230220202010.37475-2-v@vda.io>
 X-Mailer: git-send-email 2.39.2
+In-Reply-To: <20230220202010.37475-1-v@vda.io>
+References: <20230220202010.37475-1-v@vda.io>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -79,40 +81,92 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+Nolibc works fine for small and limited program however most program
+expect integer types to be defined in stdint.h rather than std.h.
 
-This is version 5 of the patch to add stdint.h to nolibc. Previous
-versions of this patch are available here:
+This is a quick fix that moves the existing integer definitions in std.h
+to stdint.h.
 
-* v4: https://lore.kernel.org/all/20230209024044.13127-1-v@vda.io/
-* v3: https://lore.kernel.org/all/20230206013248.471664-1-v@vda.io/
-* v2: https://lore.kernel.org/all/20230202201101.43160-1-v@vda.io/
-* v1: https://lore.kernel.org/all/20230202160236.25342-1-v@vda.io/
-
-This version includes the work done by Willy (see
-https://lore.kernel.org/all/20230219185133.14576-1-w@1wt.eu/) on using
-__LONG_MAX__ to calculate the max size of ssize_t, size_t, intptr_t,
-uintptr_t and ptrdiff_t.
-
-It also includes the '*fast*' types, although I have never seen them used
-in the wild.
-
-Thank you Willy for the review and the guidance!
-Vincent.
-
-Vincent Dagonneau (4):
-  tools/nolibc: Adding stdint.h
-  tools/nolibc: Adding integer types and integer limit macros
-  tools/nolibc: Enlarging column width of tests
-  tools/nolibc: Adds tests for the integer limits in stdint.h
-
- tools/include/nolibc/Makefile                |   4 +-
- tools/include/nolibc/std.h                   |  15 +-
- tools/include/nolibc/stdint.h                |  84 +++++++++++
- tools/testing/selftests/nolibc/nolibc-test.c | 139 ++++++++++++-------
- 4 files changed, 177 insertions(+), 65 deletions(-)
+Signed-off-by: Vincent Dagonneau <v@vda.io>
+Signed-off-by: Willy Tarreau <w@1wt.eu>
+---
+ tools/include/nolibc/Makefile |  4 ++--
+ tools/include/nolibc/std.h    | 15 +--------------
+ tools/include/nolibc/stdint.h | 24 ++++++++++++++++++++++++
+ 3 files changed, 27 insertions(+), 16 deletions(-)
  create mode 100644 tools/include/nolibc/stdint.h
 
+diff --git a/tools/include/nolibc/Makefile b/tools/include/nolibc/Makefile
+index cfd06764b5ae..ec57d3932506 100644
+--- a/tools/include/nolibc/Makefile
++++ b/tools/include/nolibc/Makefile
+@@ -25,8 +25,8 @@ endif
+ 
+ nolibc_arch := $(patsubst arm64,aarch64,$(ARCH))
+ arch_file := arch-$(nolibc_arch).h
+-all_files := ctype.h errno.h nolibc.h signal.h std.h stdio.h stdlib.h string.h \
+-             sys.h time.h types.h unistd.h
++all_files := ctype.h errno.h nolibc.h signal.h std.h stdint.h stdio.h stdlib.h \
++             string.h sys.h time.h types.h unistd.h
+ 
+ # install all headers needed to support a bare-metal compiler
+ all: headers
+diff --git a/tools/include/nolibc/std.h b/tools/include/nolibc/std.h
+index 1747ae125392..933bc0be7e1c 100644
+--- a/tools/include/nolibc/std.h
++++ b/tools/include/nolibc/std.h
+@@ -18,20 +18,7 @@
+ #define NULL ((void *)0)
+ #endif
+ 
+-/* stdint types */
+-typedef unsigned char       uint8_t;
+-typedef   signed char        int8_t;
+-typedef unsigned short     uint16_t;
+-typedef   signed short      int16_t;
+-typedef unsigned int       uint32_t;
+-typedef   signed int        int32_t;
+-typedef unsigned long long uint64_t;
+-typedef   signed long long  int64_t;
+-typedef unsigned long        size_t;
+-typedef   signed long       ssize_t;
+-typedef unsigned long     uintptr_t;
+-typedef   signed long      intptr_t;
+-typedef   signed long     ptrdiff_t;
++#include "stdint.h"
+ 
+ /* those are commonly provided by sys/types.h */
+ typedef unsigned int          dev_t;
+diff --git a/tools/include/nolibc/stdint.h b/tools/include/nolibc/stdint.h
+new file mode 100644
+index 000000000000..4ba264031df9
+--- /dev/null
++++ b/tools/include/nolibc/stdint.h
+@@ -0,0 +1,24 @@
++/* SPDX-License-Identifier: LGPL-2.1 OR MIT */
++/*
++ * Standard definitions and types for NOLIBC
++ * Copyright (C) 2023 Vincent Dagonneau <v@vda.io>
++ */
++
++#ifndef _NOLIBC_STDINT_H
++#define _NOLIBC_STDINT_H
++
++typedef unsigned char       uint8_t;
++typedef   signed char        int8_t;
++typedef unsigned short     uint16_t;
++typedef   signed short      int16_t;
++typedef unsigned int       uint32_t;
++typedef   signed int        int32_t;
++typedef unsigned long long uint64_t;
++typedef   signed long long  int64_t;
++typedef unsigned long        size_t;
++typedef   signed long       ssize_t;
++typedef unsigned long     uintptr_t;
++typedef   signed long      intptr_t;
++typedef   signed long     ptrdiff_t;
++
++#endif /* _NOLIBC_STDINT_H */
 -- 
-2.39.1
+2.39.2
 
