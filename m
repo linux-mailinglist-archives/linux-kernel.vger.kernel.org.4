@@ -2,1036 +2,514 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C6B5569C4E8
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Feb 2023 06:19:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 68C2869C4EA
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Feb 2023 06:22:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229950AbjBTFTN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Feb 2023 00:19:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45922 "EHLO
+        id S229670AbjBTFWt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Feb 2023 00:22:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47162 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229811AbjBTFTK (ORCPT
+        with ESMTP id S229451AbjBTFWq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Feb 2023 00:19:10 -0500
-Received: from mail-pg1-x52d.google.com (mail-pg1-x52d.google.com [IPv6:2607:f8b0:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8999C975D
-        for <linux-kernel@vger.kernel.org>; Sun, 19 Feb 2023 21:19:05 -0800 (PST)
-Received: by mail-pg1-x52d.google.com with SMTP id y19so89994pgk.5
-        for <linux-kernel@vger.kernel.org>; Sun, 19 Feb 2023 21:19:05 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=VxMFKT5lk8snGUJdFU1LdD5wffjtjklYHwMyYDkEL48=;
-        b=O4BtuRUzqVZhMrjM1VrldQm0R5o0PlGH8iNSZxMTBlCwls2UHTDaH1CsG+15wm+bHu
-         jBsRXygTlTJ4EoRc5A0U4GZr3atrAwBGqzZoiDjAzfWeQ0Ix8WRJArJrWVsxFeVZAkvU
-         /Nud35+mEea3J9DbrivFXRXiOPQAm8ZS4Ka4jFHUFLZjMjDpW6UvwCrGMsWu1zaHRwuT
-         wIOOVca5jmH+w8brMDAchGyOdd+WayrBWXR+6rJlKKzdcZJRjmNhfqfqUoUY8xCc0aHq
-         bb+YAuHm3CnfPqZLCJicBxl83GlF3gThe7mrK+ct1SqJf6lmCXvnRBSoXeH+XQC/xhN6
-         26Yg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=VxMFKT5lk8snGUJdFU1LdD5wffjtjklYHwMyYDkEL48=;
-        b=vQjf5OfUuATcdFfLLL7RaYOApTNY7Xlj8mmbnS3DQBfmL1NcajnFxTo4Gk/S6F5HTl
-         m9jHTpMKSY/lajrfw+eNKuHn19e6WVGHYak9cOAHELyKGw9/Jxozhcpip8n15uz6LZRd
-         t/LaAqg7iycF20UbZ45zALvpcGL8BQgV0ZGrILFxA1gMpPtcQhQ5CLzbqbBwaZyiFooO
-         nZiNWWdkWzVmUbJZhIuh+8g8k+tTeflyjd4XN7gYvfqygLoTGZNVonNmbSJqyAp88WLn
-         F1JPj7OGmbzrndWD4WCGJ4tK5v1+F3hYJz6w/L9gqLvOFc//4in5F0pjwZ5wqO3rFDru
-         sHjw==
-X-Gm-Message-State: AO0yUKXz6Z2boal35KYCTH3oBceLG3e/Qs+9KOU/aIQRzicY8GaiAGSr
-        AIiY+bn/0bXb+x8aApJKKOhx6w==
-X-Google-Smtp-Source: AK7set+UXPdInGCns5/ZJoHWDlulahYAB/jO0QJl7ESpTPYRZyE2pl+SkeSAMxUCOaF7aY+ZFwyISA==
-X-Received: by 2002:aa7:9ad1:0:b0:5a8:eb62:293e with SMTP id x17-20020aa79ad1000000b005a8eb62293emr396494pfp.7.1676870344728;
-        Sun, 19 Feb 2023 21:19:04 -0800 (PST)
-Received: from localhost.localdomain (fp9875a45d.knge128.ap.nuro.jp. [152.117.164.93])
-        by smtp.gmail.com with ESMTPSA id h5-20020a62b405000000b005ae8e94b0d5sm3192087pfn.107.2023.02.19.21.19.01
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 19 Feb 2023 21:19:03 -0800 (PST)
-From:   Masahisa Kojima <masahisa.kojima@linaro.org>
-To:     Ard Biesheuvel <ardb@kernel.org>,
-        Jens Wiklander <jens.wiklander@linaro.org>,
-        Sumit Garg <sumit.garg@linaro.org>,
-        linux-kernel@vger.kernel.org, op-tee@lists.trustedfirmware.org
-Cc:     Ilias Apalodimas <ilias.apalodimas@linaro.org>,
-        Johan Hovold <johan+linaro@kernel.org>,
-        Masahisa Kojima <masahisa.kojima@linaro.org>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        linux-efi@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org
-Subject: [PATCH v2 4/4] efi: Add tee-based EFI variable driver
-Date:   Mon, 20 Feb 2023 14:17:22 +0900
-Message-Id: <20230220051723.1257-5-masahisa.kojima@linaro.org>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20230220051723.1257-1-masahisa.kojima@linaro.org>
-References: <20230220051723.1257-1-masahisa.kojima@linaro.org>
+        Mon, 20 Feb 2023 00:22:46 -0500
+Received: from 167-179-156-38.a7b39c.syd.nbn.aussiebb.net (167-179-156-38.a7b39c.syd.nbn.aussiebb.net [167.179.156.38])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A053BBB90;
+        Sun, 19 Feb 2023 21:22:43 -0800 (PST)
+Received: from loth.rohan.me.apana.org.au ([192.168.167.2])
+        by formenos.hmeau.com with smtp (Exim 4.94.2 #2 (Debian))
+        id 1pTydE-00DF1P-Rz; Mon, 20 Feb 2023 13:22:33 +0800
+Received: by loth.rohan.me.apana.org.au (sSMTP sendmail emulation); Mon, 20 Feb 2023 13:22:32 +0800
+Date:   Mon, 20 Feb 2023 13:22:32 +0800
+From:   Herbert Xu <herbert@gondor.apana.org.au>
+To:     Linus Torvalds <torvalds@linux-foundation.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>
+Subject: [GIT PULL] Crypto Update for 6.3
+Message-ID: <Y/MDmL02XYfSz8XX@gondor.apana.org.au>
+References: <20211029041408.GA3192@gondor.apana.org.au>
+ <20211112104815.GA14105@gondor.apana.org.au>
+ <YcKz4wHYTe3qlW7L@gondor.apana.org.au>
+ <YgMn+1qQPQId50hO@gondor.apana.org.au>
+ <YjE5yThYIzih2kM6@gondor.apana.org.au>
+ <YkUdKiJflWqxBmx5@gondor.apana.org.au>
+ <YpC1/rWeVgMoA5X1@gondor.apana.org.au>
+ <Yui+kNeY+Qg4fKVl@gondor.apana.org.au>
+ <Yzv0wXi4Uu2WND37@gondor.apana.org.au>
+ <Y5mGGrBJaDL6mnQJ@gondor.apana.org.au>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_FILL_THIS_FORM_SHORT autolearn=unavailable
-        autolearn_force=no version=3.4.6
+In-Reply-To: <Y5mGGrBJaDL6mnQJ@gondor.apana.org.au>
+X-Spam-Status: No, score=2.7 required=5.0 tests=BAYES_00,HELO_DYNAMIC_IPADDR2,
+        PDS_RDNS_DYNAMIC_FP,RDNS_DYNAMIC,SPF_HELO_NONE,SPF_PASS,TVD_RCVD_IP
+        autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: **
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When the flash is not owned by the non-secure world, accessing the EFI
-variables is straightforward and done via EFI Runtime Variable Services.
-In this case, critical variables for system integrity and security
-are normally stored in the dedicated secure storage and only accessible
-from the secure world.
+Hi Linus:
 
-On the other hand, the small embedded devices don't have the special
-dedicated secure storage. The eMMC device with an RPMB partition is
-becoming more common, we can use an RPMB partition to store the
-EFI Variables.
+The following changes since commit 736f88689c6912f05d0116917910603a7ba97de7:
 
-The eMMC device is typically owned by the non-secure world(linux in
-this case). There is an existing solution utilizing eMMC RPMB partition
-for EFI Variables, it is implemented by interacting with
-TEE(OP-TEE in this case), StandaloneMM(as EFI Variable Service Pseudo TA),
-eMMC driver and tee-supplicant. The last piece is the tee-based
-variable access driver to interact with TEE and StandaloneMM.
+  crypto: arm64/sm4 - fix possible crash with CFI enabled (2022-12-30 17:57:42 +0800)
 
-So let's add the kernel functions needed.
+are available in the Git repository at:
 
-This feature is implemented as a kernel module.
-StMM PTA has TA_FLAG_DEVICE_ENUM_SUPP flag when registered to OP-TEE
-so that this tee_stmm_efi module is probed after tee-supplicant starts,
-since "SetVariable" EFI Runtime Variable Service requires to
-interact with tee-supplicant.
+  git://git.kernel.org/pub/scm/linux/kernel/git/herbert/crypto-2.6.git v6.3-p1 
 
-Co-developed-by: Ilias Apalodimas <ilias.apalodimas@linaro.org>
-Signed-off-by: Ilias Apalodimas <ilias.apalodimas@linaro.org>
-Signed-off-by: Masahisa Kojima <masahisa.kojima@linaro.org>
----
- drivers/firmware/efi/Kconfig                 |  15 +
- drivers/firmware/efi/Makefile                |   1 +
- drivers/firmware/efi/stmm/mm_communication.h | 249 ++++++++
- drivers/firmware/efi/stmm/tee_stmm_efi.c     | 620 +++++++++++++++++++
- 4 files changed, 885 insertions(+)
- create mode 100644 drivers/firmware/efi/stmm/mm_communication.h
- create mode 100644 drivers/firmware/efi/stmm/tee_stmm_efi.c
+for you to fetch changes up to 8b84475318641c2b89320859332544cf187e1cbd:
 
-diff --git a/drivers/firmware/efi/Kconfig b/drivers/firmware/efi/Kconfig
-index 043ca31c114e..8fed46d72999 100644
---- a/drivers/firmware/efi/Kconfig
-+++ b/drivers/firmware/efi/Kconfig
-@@ -287,3 +287,18 @@ config UEFI_CPER_X86
- 	bool
- 	depends on UEFI_CPER && X86
- 	default y
-+
-+config TEE_STMM_EFI
-+	tristate "TEE based EFI runtime variable service driver"
-+	depends on OPTEE && !EFI_VARS_PSTORE
-+	help
-+	  Select this config option if TEE is compiled to include StandAloneMM
-+	  as a separate secure partition it has the ability to check and store
-+	  EFI variables on an RPMB or any other non-volatile medium used by
-+	  StandAloneMM.
-+
-+	  Enabling this will change the EFI runtime services from the firmware
-+	  provided functions to TEE calls.
-+
-+	  To compile this driver as a module, choose M here: the module
-+	  will be called tee_stmm_efi.
-diff --git a/drivers/firmware/efi/Makefile b/drivers/firmware/efi/Makefile
-index b51f2a4c821e..2ca8ee6ab490 100644
---- a/drivers/firmware/efi/Makefile
-+++ b/drivers/firmware/efi/Makefile
-@@ -41,3 +41,4 @@ obj-$(CONFIG_EFI_CAPSULE_LOADER)	+= capsule-loader.o
- obj-$(CONFIG_EFI_EARLYCON)		+= earlycon.o
- obj-$(CONFIG_UEFI_CPER_ARM)		+= cper-arm.o
- obj-$(CONFIG_UEFI_CPER_X86)		+= cper-x86.o
-+obj-$(CONFIG_TEE_STMM_EFI)		+= stmm/tee_stmm_efi.o
-diff --git a/drivers/firmware/efi/stmm/mm_communication.h b/drivers/firmware/efi/stmm/mm_communication.h
-new file mode 100644
-index 000000000000..a7fa6723d56e
---- /dev/null
-+++ b/drivers/firmware/efi/stmm/mm_communication.h
-@@ -0,0 +1,249 @@
-+/* SPDX-License-Identifier: GPL-2.0+ */
-+/*
-+ *  Headers for EFI variable service via StandAloneMM, EDK2 application running
-+ *  in OP-TEE
-+ *
-+ *  Copyright (c) 2017, Intel Corporation. All rights reserved.
-+ *  Copyright (C) 2020 Linaro Ltd.
-+ */
-+
-+#ifndef _MM_COMMUNICATION_H_
-+#define _MM_COMMUNICATION_H_
-+
-+/*
-+ * Interface to the pseudo Trusted Application (TA), which provides a
-+ * communication channel with the Standalone MM (Management Mode)
-+ * Secure Partition running at Secure-EL0
-+ */
-+
-+#define PTA_STMM_CMD_COMMUNICATE 0
-+
-+/* OP-TEE is using big endian GUIDs while UEFI uses little endian ones */
-+#define PTA_STMM_UUID \
-+	UUID_INIT(0xed32d533, 0x99e6, 0x4209, \
-+		  0x9c, 0xc0, 0x2d, 0x72, 0xcd, 0xd9, 0x98, 0xa7)
-+
-+#define EFI_MM_VARIABLE_GUID \
-+	EFI_GUID(0xed32d533, 0x99e6, 0x4209, \
-+		 0x9c, 0xc0, 0x2d, 0x72, 0xcd, 0xd9, 0x98, 0xa7)
-+
-+/* Defined in EDK2 MdePkg/Include/Protocol/MmCommunication.h */
-+
-+/**
-+ * struct efi_mm_communicate_header - Header used for SMM variable communication
-+
-+ * @header_guid:  header use for disambiguation of content
-+ * @message_len:  length of the message. Does not include the size of the
-+ *                header
-+ * @data:         payload of the message
-+ *
-+ * Defined in EDK2 as EFI_MM_COMMUNICATE_HEADER.
-+ * To avoid confusion in interpreting frames, the communication buffer should
-+ * always begin with efi_mm_communicate_header.
-+ */
-+struct efi_mm_communicate_header {
-+	efi_guid_t header_guid;
-+	size_t     message_len;
-+	u8         data[];
-+} __packed;
-+
-+#define MM_COMMUNICATE_HEADER_SIZE \
-+	(sizeof(struct efi_mm_communicate_header))
-+
-+/* Defined in EDK2 ArmPkg/Include/IndustryStandard/ArmMmSvc.h */
-+
-+/* SPM return error codes */
-+#define ARM_SVC_SPM_RET_SUCCESS               0
-+#define ARM_SVC_SPM_RET_NOT_SUPPORTED        -1
-+#define ARM_SVC_SPM_RET_INVALID_PARAMS       -2
-+#define ARM_SVC_SPM_RET_DENIED               -3
-+#define ARM_SVC_SPM_RET_NO_MEMORY            -5
-+
-+/* Defined in EDK2 MdeModulePkg/Include/Guid/SmmVariableCommon.h */
-+
-+#define SMM_VARIABLE_FUNCTION_GET_VARIABLE  1
-+/*
-+ * The payload for this function is
-+ * SMM_VARIABLE_COMMUNICATE_GET_NEXT_VARIABLE_NAME.
-+ */
-+#define SMM_VARIABLE_FUNCTION_GET_NEXT_VARIABLE_NAME  2
-+/*
-+ * The payload for this function is SMM_VARIABLE_COMMUNICATE_ACCESS_VARIABLE.
-+ */
-+#define SMM_VARIABLE_FUNCTION_SET_VARIABLE  3
-+/*
-+ * The payload for this function is
-+ * SMM_VARIABLE_COMMUNICATE_QUERY_VARIABLE_INFO.
-+ */
-+#define SMM_VARIABLE_FUNCTION_QUERY_VARIABLE_INFO  4
-+/*
-+ * It is a notify event, no extra payload for this function.
-+ */
-+#define SMM_VARIABLE_FUNCTION_READY_TO_BOOT  5
-+/*
-+ * It is a notify event, no extra payload for this function.
-+ */
-+#define SMM_VARIABLE_FUNCTION_EXIT_BOOT_SERVICE  6
-+/*
-+ * The payload for this function is VARIABLE_INFO_ENTRY.
-+ * The GUID in EFI_SMM_COMMUNICATE_HEADER is gEfiSmmVariableProtocolGuid.
-+ */
-+#define SMM_VARIABLE_FUNCTION_GET_STATISTICS  7
-+/*
-+ * The payload for this function is SMM_VARIABLE_COMMUNICATE_LOCK_VARIABLE
-+ */
-+#define SMM_VARIABLE_FUNCTION_LOCK_VARIABLE   8
-+
-+#define SMM_VARIABLE_FUNCTION_VAR_CHECK_VARIABLE_PROPERTY_SET  9
-+
-+#define SMM_VARIABLE_FUNCTION_VAR_CHECK_VARIABLE_PROPERTY_GET  10
-+
-+#define SMM_VARIABLE_FUNCTION_GET_PAYLOAD_SIZE  11
-+/*
-+ * The payload for this function is
-+ * SMM_VARIABLE_COMMUNICATE_RUNTIME_VARIABLE_CACHE_CONTEXT
-+ */
-+#define SMM_VARIABLE_FUNCTION_INIT_RUNTIME_VARIABLE_CACHE_CONTEXT 12
-+
-+#define SMM_VARIABLE_FUNCTION_SYNC_RUNTIME_CACHE  13
-+/*
-+ * The payload for this function is
-+ * SMM_VARIABLE_COMMUNICATE_GET_RUNTIME_CACHE_INFO
-+ */
-+#define SMM_VARIABLE_FUNCTION_GET_RUNTIME_CACHE_INFO  14
-+
-+/**
-+ * struct smm_variable_communicate_header - Used for SMM variable communication
-+
-+ * @function:     function to call in Smm.
-+ * @ret_status:   return status
-+ * @data:         payload
-+ *
-+ * Defined in EDK2 as SMM_VARIABLE_COMMUNICATE_HEADER.
-+ */
-+struct smm_variable_communicate_header {
-+	size_t  function;
-+	efi_status_t ret_status;
-+	u8 data[];
-+};
-+
-+#define MM_VARIABLE_COMMUNICATE_SIZE \
-+	(sizeof(struct smm_variable_communicate_header))
-+
-+/**
-+ * struct smm_variable_access - Used to communicate with StMM by
-+ *                              SetVariable and GetVariable.
-+
-+ * @guid:         vendor GUID
-+ * @data_size:    size of EFI variable data
-+ * @name_size:    size of EFI name
-+ * @attr:         attributes
-+ * @name:         variable name
-+ *
-+ * Defined in EDK2 as SMM_VARIABLE_COMMUNICATE_ACCESS_VARIABLE.
-+ *
-+ */
-+struct smm_variable_access {
-+	efi_guid_t  guid;
-+	size_t data_size;
-+	size_t name_size;
-+	u32 attr;
-+	u16 name[];
-+};
-+
-+#define MM_VARIABLE_ACCESS_HEADER_SIZE \
-+	(sizeof(struct smm_variable_access))
-+/**
-+ * struct smm_variable_payload_size - Used to get the max allowed
-+ *                                    payload used in StMM.
-+ *
-+ * @size:  size to fill in
-+ *
-+ * Defined in EDK2 as SMM_VARIABLE_COMMUNICATE_GET_PAYLOAD_SIZE.
-+ *
-+ */
-+struct smm_variable_payload_size {
-+	size_t size;
-+};
-+
-+/**
-+ * struct smm_variable_getnext - Used to communicate with StMM for
-+ *                               GetNextVariableName.
-+ *
-+ * @guid:       vendor GUID
-+ * @name_size:  size of the name of the variable
-+ * @name:       variable name
-+ *
-+ * Defined in EDK2 as SMM_VARIABLE_COMMUNICATE_GET_NEXT_VARIABLE_NAME.
-+ */
-+struct smm_variable_getnext {
-+	efi_guid_t  guid;
-+	size_t name_size;
-+	u16         name[];
-+};
-+
-+#define MM_VARIABLE_GET_NEXT_HEADER_SIZE \
-+	(sizeof(struct smm_variable_getnext))
-+
-+/**
-+ * struct smm_variable_query_info - Used to communicate with StMM for
-+ *                                  QueryVariableInfo.
-+ *
-+ * @max_variable_storage:        max available storage
-+ * @remaining_variable_storage:  remaining available storage
-+ * @max_variable_size:           max variable supported size
-+ * @attr:                        attributes to query storage for
-+ *
-+ * Defined in EDK2 as SMM_VARIABLE_COMMUNICATE_QUERY_VARIABLE_INFO.
-+ */
-+struct smm_variable_query_info {
-+	u64 max_variable_storage;
-+	u64 remaining_variable_storage;
-+	u64 max_variable_size;
-+	u32 attr;
-+};
-+
-+#define VAR_CHECK_VARIABLE_PROPERTY_REVISION 0x0001
-+#define VAR_CHECK_VARIABLE_PROPERTY_READ_ONLY BIT(0)
-+/**
-+ * struct var_check_property - Used to store variable properties in StMM
-+ *
-+ * @revision:   magic revision number for variable property checking
-+ * @property:   properties mask for the variable used in StMM.
-+ *              Currently RO flag is supported
-+ * @attributes: variable attributes used in StMM checking when properties
-+ *              for a variable are enabled
-+ * @minsize:    minimum allowed size for variable payload checked against
-+ *              smm_variable_access->datasize in StMM
-+ * @maxsize:    maximum allowed size for variable payload checked against
-+ *              smm_variable_access->datasize in StMM
-+ *
-+ * Defined in EDK2 as VAR_CHECK_VARIABLE_PROPERTY.
-+ */
-+struct var_check_property {
-+	u16 revision;
-+	u16 property;
-+	u32 attributes;
-+	size_t minsize;
-+	size_t maxsize;
-+};
-+
-+/**
-+ * struct smm_variable_var_check_property - Used to communicate variable
-+ *                                          properties with StMM
-+ *
-+ * @guid:       vendor GUID
-+ * @name_size:  size of EFI name
-+ * @property:   variable properties struct
-+ * @name:       variable name
-+ *
-+ * Defined in EDK2 as SMM_VARIABLE_COMMUNICATE_VAR_CHECK_VARIABLE_PROPERTY.
-+ */
-+struct smm_variable_var_check_property {
-+	efi_guid_t guid;
-+	size_t name_size;
-+	struct var_check_property property;
-+	u16 name[];
-+};
-+
-+#endif /* _MM_COMMUNICATION_H_ */
-diff --git a/drivers/firmware/efi/stmm/tee_stmm_efi.c b/drivers/firmware/efi/stmm/tee_stmm_efi.c
-new file mode 100644
-index 000000000000..d3cf47d8986f
---- /dev/null
-+++ b/drivers/firmware/efi/stmm/tee_stmm_efi.c
-@@ -0,0 +1,620 @@
-+// SPDX-License-Identifier: GPL-2.0+
-+/*
-+ *  EFI variable service via TEE
-+ *
-+ *  Copyright (C) 2022 Linaro
-+ */
-+
-+#include <linux/efi.h>
-+#include <linux/kernel.h>
-+#include <linux/slab.h>
-+#include <linux/tee.h>
-+#include <linux/tee_drv.h>
-+#include <linux/ucs2_string.h>
-+#include "mm_communication.h"
-+
-+static struct efivars tee_efivars;
-+static struct efivar_operations tee_efivar_ops;
-+
-+static size_t max_buffer_size; /* comm + var + func + data */
-+static size_t max_payload_size; /* func + data */
-+
-+struct tee_stmm_efi_private {
-+	struct tee_context *ctx;
-+	u32 session;
-+	struct device *dev;
-+};
-+
-+static struct tee_stmm_efi_private pvt_data;
-+
-+/* UUID of the stmm PTA */
-+static const struct tee_client_device_id tee_stmm_efi_id_table[] = {
-+	{PTA_STMM_UUID},
-+	{}
-+};
-+
-+static int tee_ctx_match(struct tee_ioctl_version_data *ver, const void *data)
-+{
-+	/* currently only OP-TEE is supported as a communication path */
-+	if (ver->impl_id == TEE_IMPL_ID_OPTEE)
-+		return 1;
-+	else
-+		return 0;
-+}
-+
-+/**
-+ * tee_mm_communicate() - Pass a buffer to StandaloneMM running in TEE
-+ *
-+ * @comm_buf:		locally allocated communication buffer
-+ * @dsize:		buffer size
-+ * Return:		status code
-+ */
-+static efi_status_t tee_mm_communicate(void *comm_buf, size_t dsize)
-+{
-+	size_t buf_size;
-+	efi_status_t ret;
-+	struct efi_mm_communicate_header *mm_hdr;
-+	struct tee_ioctl_invoke_arg arg;
-+	struct tee_param param[4];
-+	struct tee_shm *shm = NULL;
-+	int rc;
-+
-+	if (!comm_buf)
-+		return EFI_INVALID_PARAMETER;
-+
-+	mm_hdr = (struct efi_mm_communicate_header *)comm_buf;
-+	buf_size = mm_hdr->message_len + sizeof(efi_guid_t) + sizeof(size_t);
-+
-+	if (dsize != buf_size)
-+		return EFI_INVALID_PARAMETER;
-+
-+	shm = tee_shm_register_kernel_buf(pvt_data.ctx, comm_buf, buf_size);
-+	if (IS_ERR(shm)) {
-+		dev_err(pvt_data.dev, "Unable to register shared memory\n");
-+		return EFI_UNSUPPORTED;
-+	}
-+
-+	memset(&arg, 0, sizeof(arg));
-+	arg.func = PTA_STMM_CMD_COMMUNICATE;
-+	arg.session = pvt_data.session;
-+	arg.num_params = 4;
-+
-+	memset(param, 0, sizeof(param));
-+	param[0].attr = TEE_IOCTL_PARAM_ATTR_TYPE_MEMREF_INOUT;
-+	param[0].u.memref.size = buf_size;
-+	param[0].u.memref.shm = shm;
-+	param[1].attr = TEE_IOCTL_PARAM_ATTR_TYPE_VALUE_OUTPUT;
-+	param[2].attr = TEE_IOCTL_PARAM_ATTR_TYPE_NONE;
-+	param[3].attr = TEE_IOCTL_PARAM_ATTR_TYPE_NONE;
-+
-+	rc = tee_client_invoke_func(pvt_data.ctx, &arg, param);
-+	tee_shm_free(shm);
-+
-+	if (arg.ret != 0)
-+		return EFI_DEVICE_ERROR;
-+
-+	switch (param[1].u.value.a) {
-+	case ARM_SVC_SPM_RET_SUCCESS:
-+		ret = EFI_SUCCESS;
-+		break;
-+
-+	case ARM_SVC_SPM_RET_INVALID_PARAMS:
-+		ret = EFI_INVALID_PARAMETER;
-+		break;
-+
-+	case ARM_SVC_SPM_RET_DENIED:
-+		ret = EFI_ACCESS_DENIED;
-+		break;
-+
-+	case ARM_SVC_SPM_RET_NO_MEMORY:
-+		ret = EFI_OUT_OF_RESOURCES;
-+		break;
-+
-+	default:
-+		ret = EFI_ACCESS_DENIED;
-+	}
-+
-+	return ret;
-+}
-+
-+/**
-+ * mm_communicate() - Adjust the communication buffer to StandAlonneMM and send
-+ * it to TEE
-+ *
-+ * @comm_buf:		locally allocated communication buffer
-+ * @dsize:		buffer size
-+ * Return:		status code
-+ */
-+static efi_status_t mm_communicate(u8 *comm_buf, size_t dsize)
-+{
-+	efi_status_t ret;
-+	struct efi_mm_communicate_header *mm_hdr;
-+	struct smm_variable_communicate_header *var_hdr;
-+
-+	dsize += MM_COMMUNICATE_HEADER_SIZE + MM_VARIABLE_COMMUNICATE_SIZE;
-+	mm_hdr = (struct efi_mm_communicate_header *)comm_buf;
-+	var_hdr = (struct smm_variable_communicate_header *)mm_hdr->data;
-+
-+	ret = tee_mm_communicate(comm_buf, dsize);
-+	if (ret != EFI_SUCCESS) {
-+		dev_err(pvt_data.dev, "%s failed!\n", __func__);
-+		return ret;
-+	}
-+
-+	return var_hdr->ret_status;
-+}
-+
-+/**
-+ * setup_mm_hdr() -	Allocate a buffer for StandAloneMM and initialize the
-+ *			header data.
-+ *
-+ * @dptr:		pointer address of the corresponding StandAloneMM
-+ *			function
-+ * @payload_size:	buffer size
-+ * @func:		standAloneMM function number
-+ * @ret:		EFI return code
-+ * Return:		buffer or NULL
-+ */
-+static u8 *setup_mm_hdr(void **dptr, size_t payload_size, size_t func,
-+			efi_status_t *ret)
-+{
-+	const efi_guid_t mm_var_guid = EFI_MM_VARIABLE_GUID;
-+	struct efi_mm_communicate_header *mm_hdr;
-+	struct smm_variable_communicate_header *var_hdr;
-+	u8 *comm_buf;
-+
-+	/* In the init function we initialize max_buffer_size with
-+	 * get_max_payload(). So skip the test if max_buffer_size is initialized
-+	 * StandAloneMM will perform similar checks and drop the buffer if it's
-+	 * too long
-+	 */
-+	if (max_buffer_size &&
-+	    max_buffer_size < (MM_COMMUNICATE_HEADER_SIZE +
-+			       MM_VARIABLE_COMMUNICATE_SIZE + payload_size)) {
-+		*ret = EFI_INVALID_PARAMETER;
-+		return NULL;
-+	}
-+
-+	comm_buf = kzalloc(MM_COMMUNICATE_HEADER_SIZE +
-+				   MM_VARIABLE_COMMUNICATE_SIZE + payload_size,
-+			   GFP_KERNEL);
-+	if (!comm_buf) {
-+		*ret = EFI_OUT_OF_RESOURCES;
-+		return NULL;
-+	}
-+
-+	mm_hdr = (struct efi_mm_communicate_header *)comm_buf;
-+	memcpy(&mm_hdr->header_guid, &mm_var_guid, sizeof(mm_hdr->header_guid));
-+	mm_hdr->message_len = MM_VARIABLE_COMMUNICATE_SIZE + payload_size;
-+
-+	var_hdr = (struct smm_variable_communicate_header *)mm_hdr->data;
-+	var_hdr->function = func;
-+	if (dptr)
-+		*dptr = var_hdr->data;
-+	*ret = EFI_SUCCESS;
-+
-+	return comm_buf;
-+}
-+
-+/**
-+ * get_max_payload() - Get variable payload size from StandAloneMM.
-+ *
-+ * @size:    size of the variable in storage
-+ * Return:   status code
-+ */
-+static efi_status_t get_max_payload(size_t *size)
-+{
-+	struct smm_variable_payload_size *var_payload = NULL;
-+	size_t payload_size;
-+	u8 *comm_buf = NULL;
-+	efi_status_t ret;
-+
-+	if (!size) {
-+		ret = EFI_INVALID_PARAMETER;
-+		goto out;
-+	}
-+
-+	payload_size = sizeof(*var_payload);
-+	comm_buf = setup_mm_hdr((void **)&var_payload, payload_size,
-+				SMM_VARIABLE_FUNCTION_GET_PAYLOAD_SIZE, &ret);
-+	if (!comm_buf)
-+		goto out;
-+
-+	ret = mm_communicate(comm_buf, payload_size);
-+	if (ret != EFI_SUCCESS)
-+		goto out;
-+
-+	/* Make sure the buffer is big enough for storing variables */
-+	if (var_payload->size < MM_VARIABLE_ACCESS_HEADER_SIZE + 0x20) {
-+		ret = EFI_DEVICE_ERROR;
-+		goto out;
-+	}
-+	*size = var_payload->size;
-+	/*
-+	 * There seems to be a bug in EDK2 miscalculating the boundaries and
-+	 * size checks, so deduct 2 more bytes to fulfill this requirement. Fix
-+	 * it up here to ensure backwards compatibility with older versions
-+	 * (cf. StandaloneMmPkg/Drivers/StandaloneMmCpu/AArch64/EventHandle.c.
-+	 * sizeof (EFI_MM_COMMUNICATE_HEADER) instead the size minus the
-+	 * flexible array member).
-+	 *
-+	 * size is guaranteed to be > 2 due to checks on the beginning.
-+	 */
-+	*size -= 2;
-+out:
-+	kfree(comm_buf);
-+	return ret;
-+}
-+
-+static efi_status_t get_property_int(u16 *name, size_t name_size,
-+				     const efi_guid_t *vendor,
-+				     struct var_check_property *var_property)
-+{
-+	struct smm_variable_var_check_property *smm_property;
-+	size_t payload_size;
-+	u8 *comm_buf = NULL;
-+	efi_status_t ret;
-+
-+	memset(var_property, 0, sizeof(*var_property));
-+	payload_size = sizeof(*smm_property) + name_size;
-+	if (payload_size > max_payload_size) {
-+		ret = EFI_INVALID_PARAMETER;
-+		goto out;
-+	}
-+	comm_buf = setup_mm_hdr(
-+		(void **)&smm_property, payload_size,
-+		SMM_VARIABLE_FUNCTION_VAR_CHECK_VARIABLE_PROPERTY_GET, &ret);
-+	if (!comm_buf)
-+		goto out;
-+
-+	memcpy(&smm_property->guid, vendor, sizeof(smm_property->guid));
-+	smm_property->name_size = name_size;
-+	memcpy(smm_property->name, name, name_size);
-+
-+	ret = mm_communicate(comm_buf, payload_size);
-+	/*
-+	 * Currently only R/O property is supported in StMM.
-+	 * Variables that are not set to R/O will not set the property in StMM
-+	 * and the call will return EFI_NOT_FOUND. We are setting the
-+	 * properties to 0x0 so checking against that is enough for the
-+	 * EFI_NOT_FOUND case.
-+	 */
-+	if (ret == EFI_NOT_FOUND)
-+		ret = EFI_SUCCESS;
-+	if (ret != EFI_SUCCESS)
-+		goto out;
-+	memcpy(var_property, &smm_property->property, sizeof(*var_property));
-+
-+out:
-+	kfree(comm_buf);
-+	return ret;
-+}
-+
-+static efi_status_t tee_get_variable(u16 *name, efi_guid_t *vendor,
-+				     u32 *attributes, unsigned long *data_size,
-+				     void *data)
-+{
-+	struct var_check_property var_property;
-+	struct smm_variable_access *var_acc;
-+	size_t payload_size;
-+	size_t name_size;
-+	size_t tmp_dsize;
-+	u8 *comm_buf = NULL;
-+	efi_status_t ret;
-+
-+	if (!name || !vendor || !data_size) {
-+		ret = EFI_INVALID_PARAMETER;
-+		goto out;
-+	}
-+
-+	name_size = (ucs2_strnlen(name, EFI_VAR_NAME_LEN) + 1) * sizeof(u16);
-+	if (name_size > max_payload_size - MM_VARIABLE_ACCESS_HEADER_SIZE) {
-+		ret = EFI_INVALID_PARAMETER;
-+		goto out;
-+	}
-+
-+	/* Trim output buffer size */
-+	tmp_dsize = *data_size;
-+	if (name_size + tmp_dsize >
-+	    max_payload_size - MM_VARIABLE_ACCESS_HEADER_SIZE) {
-+		tmp_dsize = max_payload_size - MM_VARIABLE_ACCESS_HEADER_SIZE -
-+			    name_size;
-+	}
-+
-+	/* Get communication buffer and initialize header */
-+	payload_size = MM_VARIABLE_ACCESS_HEADER_SIZE + name_size + tmp_dsize;
-+	comm_buf = setup_mm_hdr((void **)&var_acc, payload_size,
-+				SMM_VARIABLE_FUNCTION_GET_VARIABLE, &ret);
-+	if (!comm_buf)
-+		goto out;
-+
-+	/* Fill in contents */
-+	memcpy(&var_acc->guid, vendor, sizeof(var_acc->guid));
-+	var_acc->data_size = tmp_dsize;
-+	var_acc->name_size = name_size;
-+	var_acc->attr = attributes ? *attributes : 0;
-+	memcpy(var_acc->name, name, name_size);
-+
-+	/* Communicate */
-+	ret = mm_communicate(comm_buf, payload_size);
-+	if (ret == EFI_SUCCESS || ret == EFI_BUFFER_TOO_SMALL)
-+		/* Update with reported data size for trimmed case */
-+		*data_size = var_acc->data_size;
-+	if (ret != EFI_SUCCESS)
-+		goto out;
-+
-+	ret = get_property_int(name, name_size, vendor, &var_property);
-+	if (ret != EFI_SUCCESS)
-+		goto out;
-+
-+	if (attributes)
-+		*attributes = var_acc->attr;
-+
-+	if (data)
-+		memcpy(data, (u8 *)var_acc->name + var_acc->name_size,
-+		       var_acc->data_size);
-+	else
-+		ret = EFI_INVALID_PARAMETER;
-+
-+out:
-+	kfree(comm_buf);
-+	return ret;
-+}
-+
-+static efi_status_t tee_get_next_variable(unsigned long *name_size,
-+					  efi_char16_t *name, efi_guid_t *guid)
-+{
-+	struct smm_variable_getnext *var_getnext;
-+	size_t payload_size;
-+	size_t out_name_size;
-+	size_t in_name_size;
-+	u8 *comm_buf = NULL;
-+	efi_status_t ret;
-+
-+	if (!name_size || !name || !guid) {
-+		ret = EFI_INVALID_PARAMETER;
-+		goto out;
-+	}
-+
-+	out_name_size = *name_size;
-+	in_name_size = (ucs2_strnlen(name, EFI_VAR_NAME_LEN) + 1) * sizeof(u16);
-+
-+	if (out_name_size < in_name_size) {
-+		ret = EFI_INVALID_PARAMETER;
-+		goto out;
-+	}
-+
-+	if (in_name_size >
-+	    max_payload_size - MM_VARIABLE_GET_NEXT_HEADER_SIZE) {
-+		ret = EFI_INVALID_PARAMETER;
-+		goto out;
-+	}
-+
-+	/* Trim output buffer size */
-+	if (out_name_size > max_payload_size - MM_VARIABLE_GET_NEXT_HEADER_SIZE)
-+		out_name_size =
-+			max_payload_size - MM_VARIABLE_GET_NEXT_HEADER_SIZE;
-+
-+	payload_size = MM_VARIABLE_GET_NEXT_HEADER_SIZE + out_name_size;
-+	comm_buf = setup_mm_hdr((void **)&var_getnext, payload_size,
-+				SMM_VARIABLE_FUNCTION_GET_NEXT_VARIABLE_NAME,
-+				&ret);
-+	if (!comm_buf)
-+		goto out;
-+
-+	/* Fill in contents */
-+	memcpy(&var_getnext->guid, guid, sizeof(var_getnext->guid));
-+	var_getnext->name_size = out_name_size;
-+	memcpy(var_getnext->name, name, in_name_size);
-+	memset((u8 *)var_getnext->name + in_name_size, 0x0,
-+	       out_name_size - in_name_size);
-+
-+	/* Communicate */
-+	ret = mm_communicate(comm_buf, payload_size);
-+	if (ret == EFI_SUCCESS || ret == EFI_BUFFER_TOO_SMALL) {
-+		/* Update with reported data size for trimmed case */
-+		*name_size = var_getnext->name_size;
-+	}
-+	if (ret != EFI_SUCCESS)
-+		goto out;
-+
-+	memcpy(guid, &var_getnext->guid, sizeof(*guid));
-+	memcpy(name, var_getnext->name, var_getnext->name_size);
-+
-+out:
-+	kfree(comm_buf);
-+	return ret;
-+}
-+
-+static efi_status_t tee_set_variable(efi_char16_t *name, efi_guid_t *vendor,
-+				     u32 attributes, unsigned long data_size,
-+				     void *data)
-+{
-+	efi_status_t ret;
-+	struct var_check_property var_property;
-+	struct smm_variable_access *var_acc;
-+	size_t payload_size;
-+	size_t name_size;
-+	u8 *comm_buf = NULL;
-+
-+	if (!name || name[0] == 0 || !vendor) {
-+		ret = EFI_INVALID_PARAMETER;
-+		goto out;
-+	}
-+	if (data_size > 0 && !data) {
-+		ret = EFI_INVALID_PARAMETER;
-+		goto out;
-+	}
-+	/* Check payload size */
-+	name_size = (ucs2_strnlen(name, EFI_VAR_NAME_LEN) + 1) * sizeof(u16);
-+	payload_size = MM_VARIABLE_ACCESS_HEADER_SIZE + name_size + data_size;
-+	if (payload_size > max_payload_size) {
-+		ret = EFI_INVALID_PARAMETER;
-+		goto out;
-+	}
-+
-+	/*
-+	 * Allocate the buffer early, before switching to RW (if needed)
-+	 * so we won't need to account for any failures in reading/setting
-+	 * the properties, if the allocation fails
-+	 */
-+	comm_buf = setup_mm_hdr((void **)&var_acc, payload_size,
-+				SMM_VARIABLE_FUNCTION_SET_VARIABLE, &ret);
-+	if (!comm_buf)
-+		goto out;
-+
-+	/*
-+	 * The API has the ability to override RO flags. If no RO check was
-+	 * requested switch the variable to RW for the duration of this call
-+	 */
-+	ret = get_property_int(name, name_size, vendor, &var_property);
-+	if (ret != EFI_SUCCESS) {
-+		dev_err(pvt_data.dev, "Getting variable property failed\n");
-+		goto out;
-+	}
-+
-+	if (var_property.property & VAR_CHECK_VARIABLE_PROPERTY_READ_ONLY) {
-+		ret = EFI_WRITE_PROTECTED;
-+		goto out;
-+	}
-+
-+	/* Fill in contents */
-+	memcpy(&var_acc->guid, vendor, sizeof(var_acc->guid));
-+	var_acc->data_size = data_size;
-+	var_acc->name_size = name_size;
-+	var_acc->attr = attributes;
-+	memcpy(var_acc->name, name, name_size);
-+	memcpy((u8 *)var_acc->name + name_size, data, data_size);
-+
-+
-+	/* Communicate */
-+	ret = mm_communicate(comm_buf, payload_size);
-+	dev_dbg(pvt_data.dev, "Set Variable %s %d %lx\n", __FILE__, __LINE__, ret);
-+out:
-+	kfree(comm_buf);
-+	return ret;
-+}
-+
-+static efi_status_t __maybe_unused tee_query_variable_info(u32 attributes,
-+					    u64 *max_variable_storage_size,
-+					    u64 *remain_variable_storage_size,
-+					    u64 *max_variable_size)
-+{
-+	struct smm_variable_query_info *mm_query_info;
-+	size_t payload_size;
-+	efi_status_t ret;
-+	u8 *comm_buf;
-+
-+	payload_size = sizeof(*mm_query_info);
-+	comm_buf = setup_mm_hdr((void **)&mm_query_info, payload_size,
-+				SMM_VARIABLE_FUNCTION_QUERY_VARIABLE_INFO,
-+				&ret);
-+	if (!comm_buf)
-+		goto out;
-+
-+	mm_query_info->attr = attributes;
-+	ret = mm_communicate(comm_buf, payload_size);
-+	if (ret != EFI_SUCCESS)
-+		goto out;
-+	*max_variable_storage_size = mm_query_info->max_variable_storage;
-+	*remain_variable_storage_size =
-+		mm_query_info->remaining_variable_storage;
-+	*max_variable_size = mm_query_info->max_variable_size;
-+
-+out:
-+	kfree(comm_buf);
-+	return ret;
-+}
-+
-+static int tee_stmm_efi_probe(struct device *dev)
-+{
-+	struct tee_ioctl_open_session_arg sess_arg;
-+	efi_status_t ret;
-+	int rc;
-+
-+	/* Open context with TEE driver */
-+	pvt_data.ctx = tee_client_open_context(NULL, tee_ctx_match, NULL, NULL);
-+	if (IS_ERR(pvt_data.ctx))
-+		return -ENODEV;
-+
-+	/* Open session with StMM PTA */
-+	memset(&sess_arg, 0, sizeof(sess_arg));
-+	export_uuid(sess_arg.uuid, &tee_stmm_efi_id_table[0].uuid);
-+	rc = tee_client_open_session(pvt_data.ctx, &sess_arg, NULL);
-+	if ((rc < 0) || (sess_arg.ret != 0)) {
-+		dev_err(dev, "tee_client_open_session failed, err: %x\n",
-+			sess_arg.ret);
-+		rc = -EINVAL;
-+		goto out_ctx;
-+	}
-+	pvt_data.session = sess_arg.session;
-+	pvt_data.dev = dev;
-+
-+	ret = get_max_payload(&max_payload_size);
-+	if (ret != EFI_SUCCESS) {
-+		rc = -EIO;
-+		goto out_sess;
-+	}
-+
-+	max_buffer_size = MM_COMMUNICATE_HEADER_SIZE +
-+			  MM_VARIABLE_COMMUNICATE_SIZE +
-+			  max_payload_size;
-+
-+	tee_efivar_ops.get_variable = tee_get_variable;
-+	tee_efivar_ops.get_next_variable = tee_get_next_variable;
-+	tee_efivar_ops.set_variable = tee_set_variable;
-+	/* TODO: support non-blocking variant */
-+	tee_efivar_ops.set_variable_nonblocking = NULL;
-+	tee_efivar_ops.query_variable_store = efi_query_variable_store;
-+
-+	tee_register_efivar_ops(&tee_efivars, &tee_efivar_ops);
-+
-+	return 0;
-+
-+out_sess:
-+	tee_client_close_session(pvt_data.ctx, pvt_data.session);
-+out_ctx:
-+	tee_client_close_context(pvt_data.ctx);
-+
-+	return rc;
-+}
-+
-+static int tee_stmm_efi_remove(struct device *dev)
-+{
-+	tee_unregister_efivar_ops(&tee_efivars);
-+
-+	tee_client_close_session(pvt_data.ctx, pvt_data.session);
-+	tee_client_close_context(pvt_data.ctx);
-+
-+	return 0;
-+}
-+
-+MODULE_DEVICE_TABLE(tee, tee_stmm_efi_id_table);
-+
-+static struct tee_client_driver tee_stmm_efi_driver = {
-+	.id_table	= tee_stmm_efi_id_table,
-+	.driver		= {
-+		.name		= "tee-stmm-efi",
-+		.bus		= &tee_bus_type,
-+		.probe		= tee_stmm_efi_probe,
-+		.remove		= tee_stmm_efi_remove,
-+	},
-+};
-+
-+static int __init tee_stmm_efi_mod_init(void)
-+{
-+	return driver_register(&tee_stmm_efi_driver.driver);
-+}
-+
-+static void __exit tee_stmm_efi_mod_exit(void)
-+{
-+	driver_unregister(&tee_stmm_efi_driver.driver);
-+}
-+
-+module_init(tee_stmm_efi_mod_init);
-+module_exit(tee_stmm_efi_mod_exit);
-+
-+MODULE_LICENSE("GPL");
-+MODULE_AUTHOR("Ilias Apalodimas <ilias.apalodimas@linaro.org>");
-+MODULE_AUTHOR("Masahisa Kojima <masahisa.kojima@linaro.org>");
-+MODULE_DESCRIPTION("TEE based EFI runtime variable service driver");
+  crypto: x86/aria-avx - Do not use avx2 instructions (2023-02-14 13:39:33 +0800)
+
+----------------------------------------------------------------
+This update includes the following changes:
+
+API:
+
+- Use kmap_local instead of kmap_atomic.
+- Change request callback to take void pointer.
+- Print FIPS status in /proc/crypto (when enabled).
+
+Algorithms:
+
+- Add rfc4106/gcm support on arm64.
+- Add ARIA AVX2/512 support on x86.
+
+Drivers:
+
+- Add TRNG driver for StarFive SoC.
+- Delete ux500/hash driver (subsumed by stm32/hash).
+- Add zlib support in qat.
+- Add RSA support in aspeed.
+
+----------------------------------------------------------------
+Alexander Lobakin (1):
+      crypto: octeontx2 - Fix objects shared between several modules
+
+Ard Biesheuvel (5):
+      crypto: scatterwalk - use kmap_local() not kmap_atomic()
+      crypto: skcipher - Use scatterwalk (un)map interface for dst and src buffers
+      crypto: arm64/gcm - add RFC4106 support
+      crypto: tcrypt - include larger key sizes in RFC4106 benchmark
+      crypto: aead - fix inaccurate documentation
+
+Arnd Bergmann (1):
+      crypto: wp512 - disable kmsan checks in wp512_process_buffer()
+
+Christophe JAILLET (1):
+      crypto: virtio/akcipher - Do not use GFP_ATOMIC when not needed
+
+Danny Tsen (6):
+      crypto: p10-aes-gcm - Update Kconfig and Makefile
+      crypto: p10-aes-gcm - Glue code for AES/GCM stitched implementation
+      crypto: p10-aes-gcm - An accelerated AES/GCM stitched implementation
+      crypto: p10-aes-gcm - Supporting functions for AES
+      crypto: p10-aes-gcm - Supporting functions for ghash
+      crypto: p10-aes-gcm - A perl script to process PowerPC assembler source
+
+David Rientjes (1):
+      crypto: ccp - Avoid page allocation failure warning for SEV_GET_ID2
+
+Eric Biggers (3):
+      crypto: x86/ghash - fix unaligned access in ghash_setkey()
+      crypto: x86/ghash - use le128 instead of u128
+      crypto: x86/ghash - add comment and fix broken link
+
+Giovanni Cabiddu (2):
+      crypto: qat - fix out-of-bounds read
+      crypto: qat - drop log level of msg in get_instance_node()
+
+Gustavo A. R. Silva (1):
+      crypto: aspeed - Replace zero-length array with flexible-array member
+
+Herbert Xu (77):
+      crypto: arm/sha1 - Fix clang function cast warnings
+      crypto: lib/blake2s - Split up test function to halve stack usage
+      lib/mpi: Fix buffer overrun when SG is too long
+      crypto: caam - Avoid GCC memset bug warning
+      crypto: sun8i-ss - Remove GFP_DMA and add DMA alignment padding
+      crypto: caam - Remove GFP_DMA and add DMA alignment padding
+      crypto: talitos - Remove GFP_DMA and add DMA alignment padding
+      crypto: p10-aes-gcm - Revert implementation
+      crypto: essiv - Handle EBUSY correctly
+      crypto: seqiv - Handle EBUSY correctly
+      crypto: cryptd - Remove unnecessary skcipher_request_zero
+      crypto: bcm - Use subrequest for fallback
+      crypto: caam - Use ahash_request_complete
+      crypto: xts - Handle EBUSY correctly
+      crypto: engine - Fix excess parameter doc warning
+      Revert "crypto: rsa-pkcs1pad - Replace GFP_ATOMIC with GFP_KERNEL in pkcs1pad_encrypt_sign_complete"
+      crypto: img-hash - Fix sparse endianness warning
+      crypto: marvell/cesa - Use crypto_wait_req
+      hwrng: starfive - Enable compile testing
+      crypto: arm64/aes-ccm - Rewrite skcipher walker loop
+      crypto: safexcel - Use crypto_wait_req
+      crypto: arm64/sm4-gcm - Fix possible crash in GCM cryption
+      crypto: api - Add scaffolding to change completion function signature
+      dm: Add scaffolding to change completion function signature
+      net: macsec: Add scaffolding to change completion function signature
+      fs: ecryptfs: Use crypto_wait_req
+      Bluetooth: Use crypto_wait_req
+      net: ipv4: Add scaffolding to change completion function signature
+      net: ipv6: Add scaffolding to change completion function signature
+      tipc: Add scaffolding to change completion function signature
+      tls: Only use data field in crypto completion function
+      KEYS: DH: Use crypto_wait_req
+      crypto: cryptd - Use subreq for AEAD
+      crypto: acompress - Use crypto_request_complete
+      crypto: aead - Use crypto_request_complete
+      crypto: akcipher - Use crypto_request_complete
+      crypto: hash - Use crypto_request_complete
+      crypto: kpp - Use crypto_request_complete
+      crypto: skcipher - Use crypto_request_complete
+      crypto: engine - Use crypto_request_complete
+      crypto: rsa-pkcs1pad - Use akcipher_request_complete
+      crypto: cryptd - Use request_complete helpers
+      crypto: atmel - Use request_complete helpers
+      crypto: artpec6 - Use request_complete helpers
+      crypto: bcm - Use request_complete helpers
+      crypto: cpt - Use request_complete helpers
+      crypto: nitrox - Use request_complete helpers
+      crypto: ccp - Use request_complete helpers
+      crypto: chelsio - Use request_complete helpers
+      crypto: hifn_795x - Use request_complete helpers
+      crypto: hisilicon - Use request_complete helpers
+      crypto: img-hash - Use request_complete helpers
+      crypto: safexcel - Use request_complete helpers
+      crypto: ixp4xx - Use request_complete helpers
+      crypto: marvell/cesa - Use request_complete helpers
+      crypto: octeontx - Use request_complete helpers
+      crypto: octeontx2 - Use request_complete helpers
+      crypto: mxs-dcp - Use request_complete helpers
+      crypto: qat - Use request_complete helpers
+      crypto: qce - Use request_complete helpers
+      crypto: s5p-sss - Use request_complete helpers
+      crypto: sahara - Use request_complete helpers
+      crypto: talitos - Use request_complete helpers
+      crypto: api - Use data directly in completion function
+      dm: Remove completion function scaffolding
+      net: macsec: Remove completion function scaffolding
+      net: ipv4: Remove completion function scaffolding
+      net: ipv6: Remove completion function scaffolding
+      tipc: Remove completion function scaffolding
+      tls: Remove completion function scaffolding
+      crypto: api - Remove completion function scaffolding
+      tls: Pass rec instead of aead_req into tls_encrypt_done
+      crypto: ecc - Silence sparse warning
+      crypto: nx - Fix sparse warnings
+      crypto: crypto4xx - Call dma_unmap_page when done
+      crypto: proc - Print fips status
+      crypto: aspeed - Fix modular aspeed-acry
+
+Jia Jie Ho (2):
+      dt-bindings: rng: Add StarFive TRNG module
+      hwrng: starfive - Add TRNG driver for StarFive SoC
+
+Koba Ko (1):
+      crypto: ccp - Failure on re-initialization due to duplicate sysfs filename
+
+Linus Walleij (7):
+      crypto: stm32 - Use accelerated readsl/writesl
+      dt-bindings: crypto: Let STM32 define Ux500 HASH
+      crypto: stm32/hash - Simplify code
+      crypto: stm32/hash - Use existing busy poll function
+      crypto: stm32/hash - Wait for idle before final CPU xmit
+      crypto: stm32/hash - Support Ux500 hash
+      crypto: ux500/hash - delete driver
+
+Lucas Segarra Fernandez (2):
+      crypto: qat - extend buffer list logic interface
+      crypto: qat - add qat_zlib_deflate
+
+Lukas Bulwahn (4):
+      crypto: ux500 - update debug config after ux500 cryp driver removal
+      crypto: hisilicon - remove redundant config PCI dependency for some CRYPTO_DEV_HISI configs
+      crypto: atmel-i2c - avoid defines prefixed with CONFIG
+      MAINTAINERS: repair file entry for STARFIVE TRNG DRIVER
+
+Meadhbh (1):
+      Documentation: qat: change kernel version
+
+Meadhbh Fitzpatrick (1):
+      crypto: qat - fix spelling mistakes from 'bufer' to 'buffer'
+
+Neal Liu (5):
+      crypto: aspeed - Add ACRY RSA driver
+      ARM: dts: aspeed: Add ACRY/AHBC device controller node
+      dt-bindings: crypto: add documentation for Aspeed ACRY
+      dt-bindings: bus: add documentation for Aspeed AHBC
+      crypto: aspeed - fix type warnings
+
+Nicolai Stange (4):
+      crypto: xts - restrict key lengths to approved values in FIPS mode
+      crypto: testmgr - disallow plain cbcmac(aes) in FIPS mode
+      crypto: testmgr - disallow plain ghash in FIPS mode
+      crypto: testmgr - allow ecdsa-nist-p256 and -p384 in FIPS mode
+
+Peter Lafreniere (4):
+      crypto: x86 - exit fpu context earlier in ECB/CBC macros
+      crypto: x86/blowfish - Remove unused encode parameter
+      crypto: x86/blowfish - Convert to use ECB/CBC helpers
+      crypto: x86/blowfish - Eliminate use of SYM_TYPED_FUNC_START in asm
+
+Samuel Holland (2):
+      dt-bindings: crypto: sun8i-ce: Add compatible for D1
+      crypto: sun8i-ce - Add TRNG clock to the D1 variant
+
+Sergiu Moga (1):
+      crypto: atmel - Add capability case for the 0x600 SHA and AES IP versions
+
+Taehee Yoo (8):
+      crypto: x86/aria - add keystream array into request ctx
+      crypto: x86/aria - do not use magic number offsets of aria_ctx
+      crypto: x86/aria - implement aria-avx2
+      crypto: x86/aria - implement aria-avx512
+      crypto: x86/aria-avx - fix build failure with old binutils
+      crypto: x86/aria-avx2 - fix build failure with old binutils
+      crypto: x86/aria-avx512 - fix build failure with old binutils
+      crypto: x86/aria-avx - Do not use avx2 instructions
+
+Tianjia Zhang (1):
+      crypto: arm64/sm4-ccm - Rewrite skcipher walker loop
+
+Tom Lendacky (3):
+      crypto: ccp - Provide MMIO register naming for documenation
+      crypto: ccp - Add a firmware definition for EPYC gen 4 processors
+      crypto: ccp - Flush the SEV-ES TMR memory before giving it to firmware
+
+Uwe Kleine-König (1):
+      crypto: atmel - Drop unused id parameter from atmel_i2c_probe()
+
+Vladis Dronov (3):
+      crypto: xts - drop xts_check_key()
+      crypto: s390/aes - drop redundant xts key check
+      crypto: testmgr - disallow certain DRBG hash functions in FIPS mode
+
+Weili Qian (5):
+      crypto: hisilicon/qm - remove some unused defines
+      crypto: hisilicon/qm - use min() instead of min_t()
+      crypto: hisilicon/qm - change function names
+      crypto: hisilicon/qm - update comments to match function
+      crypto: hisilicon/qm - fix coding style issues
+
+Yang Yingliang (1):
+      crypto: aspeed - change aspeed_acry_akcipher_algs to static
+
+Zhang Yiqun (1):
+      crypto: testmgr - add diff-splits of src/dst into default cipher config
+
+ye xingchen (1):
+      crypto: aspeed - Use devm_platform_get_and_ioremap_resource()
+
+ Documentation/ABI/testing/sysfs-driver-qat         |    4 +-
+ .../bindings/bus/aspeed,ast2600-ahbc.yaml          |   37 +
+ .../bindings/crypto/allwinner,sun8i-ce.yaml        |   33 +-
+ .../bindings/crypto/aspeed,ast2600-acry.yaml       |   49 +
+ .../devicetree/bindings/crypto/st,stm32-hash.yaml  |   23 +-
+ .../bindings/rng/starfive,jh7110-trng.yaml         |   55 +
+ MAINTAINERS                                        |    8 +-
+ arch/arm/boot/dts/aspeed-g6.dtsi                   |   13 +
+ arch/arm/crypto/sha1_glue.c                        |   14 +-
+ arch/arm64/crypto/aes-ce-ccm-glue.c                |   57 +-
+ arch/arm64/crypto/ghash-ce-glue.c                  |  145 +-
+ arch/arm64/crypto/sm4-ce-ccm-glue.c                |   44 +-
+ arch/arm64/crypto/sm4-ce-gcm-glue.c                |   51 +-
+ arch/s390/crypto/aes_s390.c                        |    4 -
+ arch/s390/crypto/paes_s390.c                       |    2 +-
+ arch/x86/Kconfig.assembler                         |    5 +
+ arch/x86/crypto/Kconfig                            |   38 +
+ arch/x86/crypto/Makefile                           |    6 +
+ arch/x86/crypto/aria-aesni-avx-asm_64.S            |  172 +-
+ arch/x86/crypto/aria-aesni-avx2-asm_64.S           | 1441 ++++++++++++++
+ arch/x86/crypto/aria-avx.h                         |   48 +-
+ arch/x86/crypto/aria-gfni-avx512-asm_64.S          |  971 ++++++++++
+ arch/x86/crypto/aria_aesni_avx2_glue.c             |  254 +++
+ arch/x86/crypto/aria_aesni_avx_glue.c              |   49 +-
+ arch/x86/crypto/aria_gfni_avx512_glue.c            |  250 +++
+ arch/x86/crypto/blowfish-x86_64-asm_64.S           |   71 +-
+ arch/x86/crypto/blowfish_glue.c                    |  200 +-
+ arch/x86/crypto/ecb_cbc_helpers.h                  |   19 +-
+ arch/x86/crypto/ghash-clmulni-intel_asm.S          |    6 +-
+ arch/x86/crypto/ghash-clmulni-intel_glue.c         |   45 +-
+ arch/x86/kernel/asm-offsets.c                      |    8 +
+ crypto/adiantum.c                                  |    5 +-
+ crypto/af_alg.c                                    |    6 +-
+ crypto/ahash.c                                     |  195 +-
+ crypto/api.c                                       |    4 +-
+ crypto/aria_generic.c                              |    4 +
+ crypto/authenc.c                                   |   14 +-
+ crypto/authencesn.c                                |   15 +-
+ crypto/ccm.c                                       |    9 +-
+ crypto/chacha20poly1305.c                          |   40 +-
+ crypto/cryptd.c                                    |  290 +--
+ crypto/crypto_engine.c                             |    8 +-
+ crypto/cts.c                                       |   12 +-
+ crypto/dh.c                                        |    5 +-
+ crypto/ecc.c                                       |    6 +-
+ crypto/essiv.c                                     |   15 +-
+ crypto/gcm.c                                       |   36 +-
+ crypto/hctr2.c                                     |    5 +-
+ crypto/lrw.c                                       |    4 +-
+ crypto/pcrypt.c                                    |    4 +-
+ crypto/proc.c                                      |    6 +
+ crypto/rsa-pkcs1pad.c                              |   51 +-
+ crypto/seqiv.c                                     |    7 +-
+ crypto/shash.c                                     |    4 +-
+ crypto/skcipher.c                                  |   22 +-
+ crypto/tcrypt.c                                    |    8 +-
+ crypto/tcrypt.h                                    |    2 +-
+ crypto/testmgr.c                                   |   16 +-
+ crypto/wp512.c                                     |    2 +-
+ crypto/xts.c                                       |   20 +-
+ drivers/char/hw_random/Kconfig                     |   10 +
+ drivers/char/hw_random/Makefile                    |    1 +
+ drivers/char/hw_random/jh7110-trng.c               |  393 ++++
+ drivers/crypto/Kconfig                             |   10 -
+ drivers/crypto/Makefile                            |    1 -
+ drivers/crypto/allwinner/sun8i-ce/sun8i-ce-core.c  |    1 +
+ drivers/crypto/allwinner/sun8i-ce/sun8i-ce.h       |    2 +-
+ .../crypto/allwinner/sun8i-ss/sun8i-ss-cipher.c    |    4 +-
+ drivers/crypto/allwinner/sun8i-ss/sun8i-ss-core.c  |   13 +-
+ drivers/crypto/allwinner/sun8i-ss/sun8i-ss-hash.c  |    4 +-
+ drivers/crypto/allwinner/sun8i-ss/sun8i-ss-prng.c  |   11 +-
+ drivers/crypto/amcc/crypto4xx_core.c               |   10 +-
+ drivers/crypto/aspeed/Kconfig                      |   11 +
+ drivers/crypto/aspeed/Makefile                     |    4 +
+ drivers/crypto/aspeed/aspeed-acry.c                |  828 +++++++++
+ drivers/crypto/aspeed/aspeed-hace.c                |    5 +-
+ drivers/crypto/aspeed/aspeed-hace.h                |    2 +-
+ drivers/crypto/atmel-aes.c                         |    7 +-
+ drivers/crypto/atmel-ecc.c                         |    3 +-
+ drivers/crypto/atmel-i2c.c                         |    4 +-
+ drivers/crypto/atmel-i2c.h                         |    4 +-
+ drivers/crypto/atmel-sha.c                         |   10 +-
+ drivers/crypto/atmel-sha204a.c                     |    3 +-
+ drivers/crypto/atmel-tdes.c                        |    4 +-
+ drivers/crypto/axis/artpec6_crypto.c               |   14 +-
+ drivers/crypto/bcm/cipher.c                        |  102 +-
+ drivers/crypto/bcm/cipher.h                        |    7 +-
+ drivers/crypto/caam/blob_gen.c                     |    2 +-
+ drivers/crypto/caam/caamalg.c                      |   16 +-
+ drivers/crypto/caam/caamalg_qi.c                   |   16 +-
+ drivers/crypto/caam/caamalg_qi2.c                  |   56 +-
+ drivers/crypto/caam/caamalg_qi2.h                  |   10 +-
+ drivers/crypto/caam/caamhash.c                     |   18 +-
+ drivers/crypto/caam/caampkc.c                      |   31 +-
+ drivers/crypto/caam/caamprng.c                     |   12 +-
+ drivers/crypto/caam/caamrng.c                      |   11 +-
+ drivers/crypto/caam/ctrl.c                         |    4 +-
+ drivers/crypto/caam/desc_constr.h                  |    3 +-
+ drivers/crypto/caam/key_gen.c                      |    2 +-
+ drivers/crypto/caam/qi.c                           |    4 +-
+ drivers/crypto/caam/qi.h                           |   12 +-
+ drivers/crypto/cavium/cpt/cptvf_algs.c             |   10 +-
+ drivers/crypto/cavium/nitrox/nitrox_aead.c         |    4 +-
+ drivers/crypto/cavium/nitrox/nitrox_skcipher.c     |    8 +-
+ drivers/crypto/ccp/ccp-crypto-main.c               |   12 +-
+ drivers/crypto/ccp/ccp-dmaengine.c                 |   21 +-
+ drivers/crypto/ccp/sev-dev.c                       |   16 +-
+ drivers/crypto/ccp/sp-pci.c                        |   46 +-
+ drivers/crypto/ccree/cc_cipher.c                   |    2 +-
+ drivers/crypto/chelsio/chcr_algo.c                 |    6 +-
+ drivers/crypto/hifn_795x.c                         |    4 +-
+ drivers/crypto/hisilicon/Kconfig                   |    8 +-
+ drivers/crypto/hisilicon/qm.c                      |   54 +-
+ drivers/crypto/hisilicon/sec/sec_algs.c            |    6 +-
+ drivers/crypto/hisilicon/sec2/sec_crypto.c         |   10 +-
+ drivers/crypto/hisilicon/sgl.c                     |    1 -
+ drivers/crypto/img-hash.c                          |   12 +-
+ drivers/crypto/inside-secure/safexcel.c            |   15 +-
+ drivers/crypto/inside-secure/safexcel.h            |    6 -
+ drivers/crypto/inside-secure/safexcel_cipher.c     |   21 +-
+ drivers/crypto/inside-secure/safexcel_hash.c       |   54 +-
+ drivers/crypto/ixp4xx_crypto.c                     |    4 +-
+ drivers/crypto/marvell/cesa/cesa.c                 |    4 +-
+ drivers/crypto/marvell/cesa/hash.c                 |   41 +-
+ drivers/crypto/marvell/cesa/tdma.c                 |    2 +-
+ drivers/crypto/marvell/octeontx/otx_cptvf_algs.c   |    6 +-
+ drivers/crypto/marvell/octeontx2/Makefile          |   11 +-
+ drivers/crypto/marvell/octeontx2/cn10k_cpt.c       |    9 +-
+ drivers/crypto/marvell/octeontx2/cn10k_cpt.h       |    2 -
+ drivers/crypto/marvell/octeontx2/otx2_cpt_common.h |    2 -
+ .../marvell/octeontx2/otx2_cpt_mbox_common.c       |   14 +-
+ drivers/crypto/marvell/octeontx2/otx2_cptlf.c      |   11 +
+ drivers/crypto/marvell/octeontx2/otx2_cptpf_main.c |    2 +
+ drivers/crypto/marvell/octeontx2/otx2_cptvf_algs.c |    6 +-
+ drivers/crypto/marvell/octeontx2/otx2_cptvf_main.c |    2 +
+ drivers/crypto/mxs-dcp.c                           |    8 +-
+ drivers/crypto/nx/nx-common-powernv.c              |   13 +-
+ drivers/crypto/nx/nx-common-pseries.c              |    6 +-
+ .../qat/qat_common/adf_transport_access_macros.h   |    2 +-
+ drivers/crypto/qat/qat_common/qat_algs.c           |    6 +-
+ drivers/crypto/qat/qat_common/qat_algs_send.c      |    3 +-
+ drivers/crypto/qat/qat_common/qat_bl.c             |  115 +-
+ drivers/crypto/qat/qat_common/qat_bl.h             |    4 +-
+ drivers/crypto/qat/qat_common/qat_comp_algs.c      |  169 +-
+ drivers/crypto/qat/qat_common/qat_compression.c    |    2 +-
+ drivers/crypto/qat/qat_common/qat_crypto.c         |    2 +-
+ drivers/crypto/qce/core.c                          |    4 +-
+ drivers/crypto/s5p-sss.c                           |    8 +-
+ drivers/crypto/sahara.c                            |    4 +-
+ drivers/crypto/stm32/stm32-cryp.c                  |   37 +-
+ drivers/crypto/stm32/stm32-hash.c                  |  266 ++-
+ drivers/crypto/talitos.c                           |    6 +-
+ drivers/crypto/ux500/Kconfig                       |   22 -
+ drivers/crypto/ux500/Makefile                      |    7 -
+ drivers/crypto/ux500/hash/Makefile                 |   11 -
+ drivers/crypto/ux500/hash/hash_alg.h               |  398 ----
+ drivers/crypto/ux500/hash/hash_core.c              | 1966 --------------------
+ .../crypto/virtio/virtio_crypto_akcipher_algs.c    |    2 +-
+ drivers/md/dm-crypt.c                              |    8 +-
+ drivers/md/dm-integrity.c                          |    4 +-
+ drivers/net/macsec.c                               |    8 +-
+ fs/ecryptfs/crypto.c                               |   30 +-
+ include/crypto/aead.h                              |   20 +-
+ include/crypto/algapi.h                            |    6 +
+ include/crypto/if_alg.h                            |    4 +-
+ include/crypto/internal/acompress.h                |    2 +-
+ include/crypto/internal/aead.h                     |    2 +-
+ include/crypto/internal/akcipher.h                 |    2 +-
+ include/crypto/internal/hash.h                     |    2 +-
+ include/crypto/internal/kpp.h                      |    2 +-
+ include/crypto/internal/skcipher.h                 |    2 +-
+ include/crypto/scatterwalk.h                       |    4 +-
+ include/crypto/xts.h                               |   25 +-
+ include/linux/crypto.h                             |    4 +-
+ include/linux/hisi_acc_qm.h                        |    5 +-
+ lib/crypto/blake2s-selftest.c                      |   25 +-
+ lib/mpi/mpicoder.c                                 |    3 +-
+ net/bluetooth/ecdh_helper.c                        |   37 +-
+ net/ipv4/ah4.c                                     |    8 +-
+ net/ipv4/esp4.c                                    |   20 +-
+ net/ipv6/ah6.c                                     |    8 +-
+ net/ipv6/esp6.c                                    |   20 +-
+ net/tipc/crypto.c                                  |   12 +-
+ net/tls/tls.h                                      |    2 +
+ net/tls/tls_sw.c                                   |   42 +-
+ security/keys/dh.c                                 |   30 +-
+ 186 files changed, 6379 insertions(+), 4053 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/bus/aspeed,ast2600-ahbc.yaml
+ create mode 100644 Documentation/devicetree/bindings/crypto/aspeed,ast2600-acry.yaml
+ create mode 100644 Documentation/devicetree/bindings/rng/starfive,jh7110-trng.yaml
+ create mode 100644 arch/x86/crypto/aria-aesni-avx2-asm_64.S
+ create mode 100644 arch/x86/crypto/aria-gfni-avx512-asm_64.S
+ create mode 100644 arch/x86/crypto/aria_aesni_avx2_glue.c
+ create mode 100644 arch/x86/crypto/aria_gfni_avx512_glue.c
+ create mode 100644 drivers/char/hw_random/jh7110-trng.c
+ create mode 100644 drivers/crypto/aspeed/aspeed-acry.c
+ delete mode 100644 drivers/crypto/ux500/Kconfig
+ delete mode 100644 drivers/crypto/ux500/Makefile
+ delete mode 100644 drivers/crypto/ux500/hash/Makefile
+ delete mode 100644 drivers/crypto/ux500/hash/hash_alg.h
+ delete mode 100644 drivers/crypto/ux500/hash/hash_core.c
+
+Thanks,
 -- 
-2.30.2
-
+Email: Herbert Xu <herbert@gondor.apana.org.au>
+Home Page: http://gondor.apana.org.au/~herbert/
+PGP Key: http://gondor.apana.org.au/~herbert/pubkey.txt
