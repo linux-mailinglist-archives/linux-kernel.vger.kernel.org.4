@@ -2,136 +2,172 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5185269C953
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Feb 2023 12:13:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A8AEF69C995
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Feb 2023 12:17:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230416AbjBTLNL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Feb 2023 06:13:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37120 "EHLO
+        id S231674AbjBTLRN convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 20 Feb 2023 06:17:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42588 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229479AbjBTLNJ (ORCPT
+        with ESMTP id S231446AbjBTLRL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Feb 2023 06:13:09 -0500
-Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net [217.70.183.199])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 265A0AD09;
-        Mon, 20 Feb 2023 03:13:07 -0800 (PST)
-Received: (Authenticated sender: clement.leger@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id 5AED7FF808;
-        Mon, 20 Feb 2023 11:13:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1676891586;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=NBNhxTT0X44tQOAptGeGNkb0fKbycyMGhTxjQUIviTw=;
-        b=EKNJ3yyIlDeRNCSzP49IeP4CvxVi+8kybmIW0GmMNtL8azxxSOQNhyVpTCiz0SVeBefycQ
-        UJ0I/emTfe9jHlHIQqnmas3nY/eejYoLlhO8BhVyJTDVdpRkl1C9aR91aMSLgXklTLjVTU
-        0mUDlzxWs8hV79v1j3dWsIFH+VCNWF3jAo2wS7Q5zJ6ha8814mprMBKx0bRqXXz/3roNYM
-        W2AX7FKbd3ISNx1zG6WbQDr8BjL/W2uLt7tFv/nHU0UU8rnrV7fdFgbfYx8bfGt4CTZIjO
-        UX/wmqnRTDq2fvpn7w9SbS/fbvKGOefnk1XrgcijjnUSEnjIVvgxnapeclI6wA==
-Date:   Mon, 20 Feb 2023 12:15:38 +0100
-From:   =?UTF-8?B?Q2zDqW1lbnQgTMOpZ2Vy?= <clement.leger@bootlin.com>
-To:     Frank Rowand <frowand.list@gmail.com>
-Cc:     Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Lizhi Hou <lizhi.hou@xilinx.com>,
-        Allan Nielsen <allan.nielsen@microchip.com>,
-        Horatiu Vultur <horatiu.vultur@microchip.com>,
-        Steen Hegelund <steen.hegelund@microchip.com>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Subject: Re: [PATCH 1/2] of: create of_root if no dtb provided
-Message-ID: <20230220121538.36abab68@fixe.home>
-In-Reply-To: <defd6445-a6e3-8d81-c9e7-f1dd343e7875@gmail.com>
-References: <20220624034327.2542112-1-frowand.list@gmail.com>
-        <20220624034327.2542112-2-frowand.list@gmail.com>
-        <20220624141320.3c473605@fixe.home>
-        <6d40876c-2751-01bb-94ab-7c9ab90e636f@gmail.com>
-        <20221011092654.6c7d7ec3@fixe.home>
-        <20230109094009.3878c30e@fixe.home>
-        <907b6b75-55bc-b38c-442b-4ccb036a3690@gmail.com>
-        <20230110091206.72c3df24@fixe.home>
-        <defd6445-a6e3-8d81-c9e7-f1dd343e7875@gmail.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.36; x86_64-pc-linux-gnu)
+        Mon, 20 Feb 2023 06:17:11 -0500
+Received: from mail-wm1-f46.google.com (mail-wm1-f46.google.com [209.85.128.46])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0F9619F0D;
+        Mon, 20 Feb 2023 03:16:34 -0800 (PST)
+Received: by mail-wm1-f46.google.com with SMTP id l7-20020a05600c1d0700b003dc4050c94aso666147wms.4;
+        Mon, 20 Feb 2023 03:16:34 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=kmnW6DpFTG4UPg7/RI/zIKxCvf9LrO9JDmiTL7d0yI0=;
+        b=rFlRvsxqRJja00uKB/ijErrVJj8rYypYMQ3Pr2l+c8p9O6QTtn18snsi/QX7y4rSAC
+         +kde+4gyJm/orFM4+D6yRBqPReqgQZt3ZlD0tX7PNboo35pTB8/A9OvHs4wdFgCJLTlv
+         28DbgshRRJA2phqqVNf63qsfDkUmg5nINpW5RynwVKvy+I98W4ZOsFYZbT9OqKfFYZbm
+         me7eUzyE5NXHOYTC8wiYduW3BVTCgYoo/OE8H2LPRm1XxkabUYn1oUZnYjNJuCFbEY1H
+         ah1bVG5CEGZT/D3FX3koUnZ5xgC/0Wktyn9DQc4bvAELBgp5vxOzejnAPASQM0ah8ZfW
+         CFDA==
+X-Gm-Message-State: AO0yUKUtceYI8n3AAGICtfhNpVJRF8yFGgPjozNGi3zuwv0I4a/ZSiFQ
+        DsOgu6PJ3MIy31ZjDA09MdI=
+X-Google-Smtp-Source: AK7set/DbIvDhAhqEapx98JghuyDiFsmUSrysHHGZ8Afl/Gm/DpnbBYYGcePSbgSq2D2aW1tq5Bx5g==
+X-Received: by 2002:a05:600c:2ed2:b0:3df:94c3:46f2 with SMTP id q18-20020a05600c2ed200b003df94c346f2mr435736wmn.23.1676891759426;
+        Mon, 20 Feb 2023 03:15:59 -0800 (PST)
+Received: from [10.148.80.132] (business-89-135-192-225.business.broadband.hu. [89.135.192.225])
+        by smtp.gmail.com with ESMTPSA id p8-20020a05600c468800b003e2232d0960sm1355422wmo.23.2023.02.20.03.15.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 20 Feb 2023 03:15:58 -0800 (PST)
+Message-ID: <d016f61224b293a77969c35d09d65d5cfea7d137.camel@inf.elte.hu>
+Subject: Re: [PATCH v2 net-next 00/12] Add tc-mqprio and tc-taprio support
+ for preemptible traffic classes
+From:   Ferenc Fejes <fejes@inf.elte.hu>
+To:     Vladimir Oltean <vladimir.oltean@nxp.com>, netdev@vger.kernel.org
+Cc:     "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Jamal Hadi Salim <jhs@mojatatu.com>,
+        Cong Wang <xiyou.wangcong@gmail.com>,
+        Jiri Pirko <jiri@resnulli.us>,
+        Vinicius Costa Gomes <vinicius.gomes@intel.com>,
+        Kurt Kanzenbach <kurt@linutronix.de>,
+        Gerhard Engleder <gerhard@engleder-embedded.com>,
+        Amritha Nambiar <amritha.nambiar@intel.com>,
+        Claudiu Manoil <claudiu.manoil@nxp.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        UNGLinuxDriver@microchip.com, Andrew Lunn <andrew@lunn.ch>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Xiaoliang Yang <xiaoliang.yang_1@nxp.com>,
+        Roger Quadros <rogerq@kernel.org>,
+        Pranavi Somisetty <pranavi.somisetty@amd.com>,
+        Harini Katakam <harini.katakam@amd.com>,
+        linux-kernel@vger.kernel.org,
+        Giuseppe Cavallaro <peppe.cavallaro@st.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Jose Abreu <joabreu@synopsys.com>,
+        Wong Vee Khee <vee.khee.wong@linux.intel.com>,
+        Michael Sit Wei Hong <michael.wei.hong.sit@intel.com>,
+        Jacob Keller <jacob.e.keller@intel.com>
+Date:   Mon, 20 Feb 2023 12:15:57 +0100
+In-Reply-To: <20230219135309.594188-1-vladimir.oltean@nxp.com>
+References: <20230219135309.594188-1-vladimir.oltean@nxp.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+User-Agent: Evolution 3.46.4-1 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Le Tue, 24 Jan 2023 08:34:53 -0600,
-Frank Rowand <frowand.list@gmail.com> a =C3=A9crit :
+On Sun, 2023-02-19 at 15:52 +0200, Vladimir Oltean wrote:
+> The last RFC in August 2022 contained a proposal for the UAPI of both
+> TSN standards which together form Frame Preemption (802.1Q and
+> 802.3):
+> https://patchwork.kernel.org/project/netdevbpf/cover/20220816222920.1952936-1-vladimir.oltean@nxp.com/
+> 
+> It wasn't clear at the time whether the 802.1Q portion of Frame
+> Preemption
+> should be exposed via the tc qdisc (mqprio, taprio) or via some other
+> layer (perhaps also ethtool like the 802.3 portion, or dcbnl), even
+> though the options were discussed extensively, with pros and cons:
+> https://patchwork.kernel.org/project/netdevbpf/patch/20220816222920.1952936-3-vladimir.oltean@nxp.com/
+> 
+> So the 802.3 portion got submitted separately and finally was
+> accepted:
+> https://patchwork.kernel.org/project/netdevbpf/cover/20230119122705.73054-1-vladimir.oltean@nxp.com/
+> 
+> leaving the only remaining question: how do we expose the 802.1Q
+> bits?
+> 
+> This series proposes that we use the Qdisc layer, through separate
+> (albeit very similar) UAPI in mqprio and taprio, and that both these
+> Qdiscs pass the information down to the offloading device driver
+> through
+> the common mqprio offload structure (which taprio also passes).
+> 
+> Implementations are provided for the NXP LS1028A on-board Ethernet
+> (enetc, felix).
+> 
+> Some patches should have maybe belonged to separate series, leaving
+> here
+> only patches 09/12 - 12/12, for ease of review. That may be true,
+> however due to a perceived lack of time to wait for the prerequisite
+> cleanup to be merged, here they are all together.
+> 
+> Changes in v2:
+> - add missing EXPORT_SYMBOL_GPL(ethtool_dev_mm_supported)
+> - slightly reword some commit messages
+> - move #include <linux/ethtool_netlink.h> to the respective patch in
+>   mqprio
+> - remove self-evident comment "only for dump and offloading" in
+> mqprio
+> 
+> v1 at:
+> https://patchwork.kernel.org/project/netdevbpf/cover/20230216232126.3402975-1-vladimir.oltean@nxp.com/
+> 
+> Vladimir Oltean (12):
+>   net: enetc: rename "mqprio" to "qopt"
+>   net: mscc: ocelot: add support for mqprio offload
+>   net: dsa: felix: act upon the mqprio qopt in taprio offload
+>   net: ethtool: fix __ethtool_dev_mm_supported() implementation
+>   net: ethtool: create and export ethtool_dev_mm_supported()
+>   net/sched: mqprio: simplify handling of nlattr portion of
+> TCA_OPTIONS
+>   net/sched: mqprio: add extack to mqprio_parse_nlattr()
+>   net/sched: mqprio: add an extack message to mqprio_parse_opt()
+>   net/sched: mqprio: allow per-TC user input of FP adminStatus
+>   net/sched: taprio: allow per-TC user input of FP adminStatus
+>   net: mscc: ocelot: add support for preemptible traffic classes
+>   net: enetc: add support for preemptible traffic classes
+> 
+>  drivers/net/dsa/ocelot/felix_vsc9959.c        |  44 ++++-
+>  drivers/net/ethernet/freescale/enetc/enetc.c  |  31 ++-
+>  drivers/net/ethernet/freescale/enetc/enetc.h  |   1 +
+>  .../net/ethernet/freescale/enetc/enetc_hw.h   |   4 +
+>  drivers/net/ethernet/mscc/ocelot.c            |  51 +++++
+>  drivers/net/ethernet/mscc/ocelot.h            |   2 +
+>  drivers/net/ethernet/mscc/ocelot_mm.c         |  56 ++++++
+>  include/linux/ethtool_netlink.h               |   6 +
+>  include/net/pkt_sched.h                       |   1 +
+>  include/soc/mscc/ocelot.h                     |   6 +
+>  include/uapi/linux/pkt_sched.h                |  17 ++
+>  net/ethtool/mm.c                              |  25 ++-
+>  net/sched/sch_mqprio.c                        | 182 +++++++++++++++-
+> --
+>  net/sched/sch_mqprio_lib.c                    |  14 ++
+>  net/sched/sch_mqprio_lib.h                    |   2 +
+>  net/sched/sch_taprio.c                        |  65 +++++--
+>  16 files changed, 460 insertions(+), 47 deletions(-)
+> 
 
-> On 1/10/23 02:12, Cl=C3=A9ment L=C3=A9ger wrote:
-> > Le Tue, 10 Jan 2023 00:27:16 -0600,
-> > Frank Rowand <frowand.list@gmail.com> a =C3=A9crit :
-> >  =20
-> >> On 1/9/23 02:40, Cl=C3=A9ment L=C3=A9ger wrote: =20
-> >>> Le Tue, 11 Oct 2022 09:26:54 +0200,
-> >>> Cl=C3=A9ment L=C3=A9ger <clement.leger@bootlin.com> a =C3=A9crit :
-> >>>    =20
-> >>>> Le Fri, 24 Jun 2022 11:44:07 -0500,
-> >>>> Frank Rowand <frowand.list@gmail.com> a =C3=A9crit : =20
->=20
-> < snip >
->=20
-> >>>> Any news on this series ?
-> >>>>   =20
-> >>>
-> >>> Hi Frank,
-> >>>
-> >>> Do you plan on resubmitting this series ? If not, could I resubmit it
-> >>> after fixing problems that were raised in the review ?   =20
-> >>>> Thanks,   =20
-> >>>    =20
-> >>
-> >> Thanks for the prod.  I'll re-spin it. =20
-> >=20
-> > Ok great, thanks Frank. =20
->=20
-> My apologies, I haven't done this yet and I'm going on vacation for a wee=
-k or so.
-> I'll get back to this.
+LGTM.
 
-Hi Frank, any news on this ? I'm asking again, but if you do not have
-time for this, do you mind if I re-spin your series ? This item is
-important for us.
+Reviewed-by: Ferenc Fejes <fejes@inf.elte.hu>
 
-Thanks,
-
-Cl=C3=A9ment
-
->=20
-> This is one of the three items at the top of my devicetree todo list (alo=
-ng with
-> Lizhi Hou's "Generate device tree node for pci devices" patch series).
->=20
-> -Frank
->=20
-> >>
-> >> If I properly captured all the comments, I'll have to implement
-> >> Rob's suggestion:
-> >>
-> >>   "either CONFIG_OF_FLATTREE or CONFIG_OF_EARLY_FLATTREE will need=20
-> >>   to become user selectable." =20
-> >  =20
-> >>
-> >> -Frank =20
-> >=20
-> >=20
-> >  =20
->=20
-
-
-
---=20
-Cl=C3=A9ment L=C3=A9ger,
-Embedded Linux and Kernel engineer at Bootlin
-https://bootlin.com
