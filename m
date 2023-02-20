@@ -2,161 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0CD7969C50B
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Feb 2023 06:45:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 13DFB69C50E
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Feb 2023 06:46:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230044AbjBTFpA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Feb 2023 00:45:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56300 "EHLO
+        id S230078AbjBTFp5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Feb 2023 00:45:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56780 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230047AbjBTFo5 (ORCPT
+        with ESMTP id S230047AbjBTFpv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Feb 2023 00:44:57 -0500
-Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 33E14BDFA;
-        Sun, 19 Feb 2023 21:44:54 -0800 (PST)
-Received: from loongson.cn (unknown [10.20.42.35])
-        by gateway (Coremail) with SMTP id _____8AxJPzUCPNjh68CAA--.34S3;
-        Mon, 20 Feb 2023 13:44:52 +0800 (CST)
-Received: from [10.20.42.35] (unknown [10.20.42.35])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8Bxjb7TCPNj1_I2AA--.39054S3;
-        Mon, 20 Feb 2023 13:44:51 +0800 (CST)
-Subject: Re: [PATCH v10 2/4] clk: clk-loongson2: add clock controller driver
- support
-To:     Stephen Boyd <sboyd@kernel.org>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Jianmin Lv <lvjianmin@loongson.cn>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        WANG Xuerui <kernel@xen0n.name>,
-        Yang Li <yang.lee@linux.alibaba.com>,
-        devicetree@vger.kernel.org, linux-clk@vger.kernel.org,
-        linux-kernel@vger.kernel.org, liupeibao@loongson.cn,
-        loongarch@lists.linux.dev, wanghongliang@loongson.cn
-References: <20221129034157.15036-1-zhuyinbo@loongson.cn>
- <20221129034157.15036-2-zhuyinbo@loongson.cn>
- <31c690a347f858a477bbba9c838984ed.sboyd@kernel.org>
- <4b5fd886-57ce-01ef-8224-432898b7fb1c@loongson.cn>
- <8332a1cf44b01f06bdd5db9dc5d7f387.sboyd@kernel.org>
-From:   zhuyinbo <zhuyinbo@loongson.cn>
-Message-ID: <01ee3dc6-a868-fd2b-93aa-11e6bdfcc9df@loongson.cn>
-Date:   Mon, 20 Feb 2023 13:44:51 +0800
-User-Agent: Mozilla/5.0 (X11; Linux loongarch64; rv:68.0) Gecko/20100101
- Thunderbird/68.7.0
+        Mon, 20 Feb 2023 00:45:51 -0500
+Received: from mailout4.samsung.com (mailout4.samsung.com [203.254.224.34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30F02C147
+        for <linux-kernel@vger.kernel.org>; Sun, 19 Feb 2023 21:45:49 -0800 (PST)
+Received: from epcas1p3.samsung.com (unknown [182.195.41.47])
+        by mailout4.samsung.com (KnoxPortal) with ESMTP id 20230220054547epoutp04f67112825dae3c4639c5283e585ce348~FcibexY110305303053epoutp04e
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Feb 2023 05:45:47 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout4.samsung.com 20230220054547epoutp04f67112825dae3c4639c5283e585ce348~FcibexY110305303053epoutp04e
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1676871947;
+        bh=kMO4/j3TuBLxMQ3PH9c33KhJRhhyCZtYJwHZRxCJouI=;
+        h=From:To:Cc:Subject:Date:References:From;
+        b=aLOK9naNFtVv4CseUvr5RFVHCiOpJ7b0JYRMLZXVq8lnmdk4OHgG3gzHNbldfpRuv
+         APBOwQ2HlJAVjLliNa3M+vhcJXC7sUkpKBhujGWrcaBsQrxGUjM7BesV8gPXalZD69
+         OwkfNUvCKDbs2NkAD3xgO6cwIKiAYeVm+Ehkgm4A=
+Received: from epsnrtp2.localdomain (unknown [182.195.42.163]) by
+        epcas1p1.samsung.com (KnoxPortal) with ESMTP id
+        20230220054547epcas1p1e9f6024b4078cc9b5ac1ca38edc8d9b7~FcibH8BWk1974419744epcas1p1R;
+        Mon, 20 Feb 2023 05:45:47 +0000 (GMT)
+Received: from epsmges1p2.samsung.com (unknown [182.195.36.224]) by
+        epsnrtp2.localdomain (Postfix) with ESMTP id 4PKrxQ1jc8z4x9Q7; Mon, 20 Feb
+        2023 05:45:46 +0000 (GMT)
+Received: from epcas1p4.samsung.com ( [182.195.41.48]) by
+        epsmges1p2.samsung.com (Symantec Messaging Gateway) with SMTP id
+        48.F9.12562.A0903F36; Mon, 20 Feb 2023 14:45:46 +0900 (KST)
+Received: from epsmtrp1.samsung.com (unknown [182.195.40.13]) by
+        epcas1p4.samsung.com (KnoxPortal) with ESMTPA id
+        20230220054545epcas1p4a2e170c1c67a675c6a54496417171d51~FciZvi_6P2418624186epcas1p4g;
+        Mon, 20 Feb 2023 05:45:45 +0000 (GMT)
+Received: from epsmgms1p1new.samsung.com (unknown [182.195.42.41]) by
+        epsmtrp1.samsung.com (KnoxPortal) with ESMTP id
+        20230220054545epsmtrp10a428392b400027fe6401ffa9590d63e~FciZu2mlJ1501015010epsmtrp1i;
+        Mon, 20 Feb 2023 05:45:45 +0000 (GMT)
+X-AuditID: b6c32a36-bfdff70000023112-7d-63f3090ae91e
+Received: from epsmtip1.samsung.com ( [182.195.34.30]) by
+        epsmgms1p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
+        B5.5A.05839.90903F36; Mon, 20 Feb 2023 14:45:45 +0900 (KST)
+Received: from VDBS1418.vd.sec.samsung.net (unknown [168.219.244.30]) by
+        epsmtip1.samsung.com (KnoxPortal) with ESMTPA id
+        20230220054545epsmtip1d0df9efce8b2e5cc8aee90cd435e6c72~FciZiQDL22531625316epsmtip1V;
+        Mon, 20 Feb 2023 05:45:45 +0000 (GMT)
+From:   Bumwoo Lee <bw365.lee@samsung.com>
+To:     MyungJoo Ham <myungjoo.ham@samsung.com>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        linux-kernel@vger.kernel.org
+Cc:     Bumwoo Lee <bw365.lee@samsung.com>
+Subject: [PATCH v2 0/4] Simplify extcon_dev_register function.
+Date:   Mon, 20 Feb 2023 14:45:09 +0900
+Message-Id: <20230220054513.27385-1-bw365.lee@samsung.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-In-Reply-To: <8332a1cf44b01f06bdd5db9dc5d7f387.sboyd@kernel.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Transfer-Encoding: 8bit
-Content-Language: en-US
-X-CM-TRANSID: AQAAf8Bxjb7TCPNj1_I2AA--.39054S3
-X-CM-SenderInfo: 52kx5xhqerqz5rrqw2lrqou0/
-X-Coremail-Antispam: 1Uk129KBjvJXoWxArykCF15Xw18GFWkKrWktFb_yoW5Gr1Dpr
-        y3Zay7KF4Dtr4qvrnF934UZ3ZIvr43tF17XF4fG3WDC34qk343Zr4UXFyrCas3Aw13J3y0
-        vryvgF47CF98ZFDanT9S1TB71UUUUj7qnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
-        qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
-        bDkFc2x0x2IEx4CE42xK8VAvwI8IcIk0rVWrJVCq3wAFIxvE14AKwVWUXVWUAwA2ocxC64
-        kIII0Yj41l84x0c7CEw4AK67xGY2AK021l84ACjcxK6xIIjxv20xvE14v26r4j6ryUM28E
-        F7xvwVC0I7IYx2IY6xkF7I0E14v26r4j6F4UM28EF7xvwVC2z280aVAFwI0_Gr1j6F4UJw
-        A2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gr1j6F4UJwAaw2AFwI0_JF0_Jw1le2I262IYc4CY
-        6c8Ij28IcVAaY2xG8wAqjxCEc2xF0cIa020Ex4CE44I27wAqx4xG64xvF2IEw4CE5I8CrV
-        C2j2WlYx0E2Ix0cI8IcVAFwI0_JF0_Jw1lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE
-        7xkEbVWUJVW8JwACjcxG0xvEwIxGrwCYjI0SjxkI62AI1cAE67vIY487MxkF7I0En4kS14
-        v26r126r1DMxAIw28IcxkI7VAKI48JMxAIw28IcVCjz48v1sIEY20_WwCFx2IqxVCFs4IE
-        7xkEbVWUJVW8JwCFI7km07C267AKxVWUAVWUtwC20s026c02F40E14v26r1j6r18MI8I3I
-        0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41lIxAI
-        cVC0I7IYx2IY67AKxVWUCVW8JwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr0_Gr1lIxAIcV
-        CF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIE
-        c7CjxVAFwI0_Jr0_GrUvcSsGvfC2KfnxnUUI43ZEXa7IU8FAp5UUUUU==
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFrrPKsWRmVeSWpSXmKPExsWy7bCmgS4X5+dkg4unuSxOrFnEZHH9y3NW
+        i8u75rBZ3G5cwebA4tG3ZRWjx+dNcgFMUdk2GamJKalFCql5yfkpmXnptkrewfHO8aZmBoa6
+        hpYW5koKeYm5qbZKLj4Bum6ZOUCLlBTKEnNKgUIBicXFSvp2NkX5pSWpChn5xSW2SqkFKTkF
+        ZgV6xYm5xaV56Xp5qSVWhgYGRqZAhQnZGSuaTzAWTGKpODupk7mBcStzFyMnh4SAicS0TT1A
+        NheHkMAORomPG2cxQTifGCW6Vl5hg3C+MUrMf3QKruXzz6WMILaQwF5GiS8fUyCKfjFKTNq/
+        HayITUBDYs/FBqBuDg4RgUKJw/3ZIGFmATWJB6s2soPYwgJ2EmvebWEBsVkEVCXOHp/AAlLO
+        K2Al0X1UDGKVvET3vz9gJbwCghInZz5hgRgjL9G8dTbY1RICi9glfnQ8YoRocJG4fq0DyhaW
+        eHV8CzuELSXxsr8Nyk6XWHnlDpSdI/H6fjtUvbHEu7drmUFuYBbQlFi/Sx8irCix8/dcRoi9
+        fBLvvvawgpRICPBKdLQJQZQoS3Q/eMEEYUtKLH56B2qih8TKeQeZISEVK9G7dxLrBEb5WUi+
+        mYXkm1kIixcwMq9iFEstKM5NTy02LDCCR2lyfu4mRnBK0zLbwTjp7Qe9Q4xMHIyHGCU4mJVE
+        eKUPfUgW4k1JrKxKLcqPLyrNSS0+xGgKDN6JzFKiyfnApJpXEm9oYmlgYmZkYmFsaWymJM4r
+        bnsyWUggPbEkNTs1tSC1CKaPiYNTqoFpvr7UKU5z560FeS9WfOsNnWqU/jfg7PWAgOqURPtH
+        HpcnhoW81c/xltc47Cxk/87/4uLARLetSj5Sf5h//5OPXLC/02RX8iWpvcIPOV2DfqqdXzRp
+        3qE5nMJNNi3mCl4WNYazLn1grw08InNqRtnhsITtSzS//7nkt7L/pPlchy3vTq0uYt9idLZE
+        eOZqBu+mfw/WmnWsFr200DDCUWPS+g2ql3bVMSU9l9z03OBZYmL8naQU71Ztn8cfXnLEOl3k
+        YV/1zW3R1WmZ/+acuib8fYZKi4OyE/tCO41bvd9fz1J/csj1pdx7L/Zjhmu4GyfVfs++0bI0
+        vf65Ntub73dvmr/mvcp4oPf965X7swJOKLEUZyQaajEXFScCAMt+g7/yAwAA
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFupnluLIzCtJLcpLzFFi42LZdlhJTpeT83OywfNrShYn1ixisrj+5Tmr
+        xeVdc9gsbjeuYHNg8ejbsorR4/MmuQCmKC6blNSczLLUIn27BK6MFc0nGAsmsVScndTJ3MC4
+        lbmLkZNDQsBE4vPPpYxdjFwcQgK7GSUOvt/GCpGQlDi7/BF7FyMHkC0scfhwMUTND0aJ47dn
+        gjWzCWhI7LnYwAZiiwgUS1w4sJgFxGYWUJN4sGojO4gtLGAnsebdFrA4i4CqxNnjE1hAZvIK
+        WEl0HxWDWCUv0f3vD1gJr4CgxMmZT6DGyEs0b53NPIGRbxaS1CwkqQWMTKsYJVMLinPTc4sN
+        CwzzUsv1ihNzi0vz0vWS83M3MYLDTEtzB+P2VR/0DjEycTAeYpTgYFYS4ZU+9CFZiDclsbIq
+        tSg/vqg0J7X4EKM0B4uSOO+FrpPxQgLpiSWp2ampBalFMFkmDk6pBqZFCxdZK33y0XgmIJgS
+        dut34TaR/X016tu2FF92jXFr+eIpsKKHi938uNWqrvQJx4v1D7e869aRd3N7r/hxRfj2xtaG
+        GK+dpg2B0cIZW2t/dKXvsw1f/dI1kiXa8CTvm3vLpptwdrp4KBlqtmxNfGnREhxwald+w6eY
+        9zU3biswXolZ17LR61/M9knPTVUkZNe12wWvtF3NqW6iXlepKxx6+E6pYWKk77U3e5QXcwWs
+        cX4QcNAo57qKzM5LM5VM7nWtny/Lv9fA8af6bv/Z353S39dwhpqeYVVcb2t3YO9zsdkLHgvH
+        Jqs8cqwp3ZE6I1tL47rg4pWHn/1+sVJdaG2UAfdO9vXpW90dZKdHKLEUZyQaajEXFScCAMEQ
+        nxOiAgAA
+X-CMS-MailID: 20230220054545epcas1p4a2e170c1c67a675c6a54496417171d51
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+X-Sendblock-Type: SVC_REQ_APPROVE
+CMS-TYPE: 101P
+DLP-Filter: Pass
+X-CFilter-Loop: Reflected
+X-CMS-RootMailID: 20230220054545epcas1p4a2e170c1c67a675c6a54496417171d51
+References: <CGME20230220054545epcas1p4a2e170c1c67a675c6a54496417171d51@epcas1p4.samsung.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+It was modified to increase readability.
 
-在 2023/2/18 上午6:15, Stephen Boyd 写道:
-> Quoting zhuyinbo (2023-02-14 23:35:22)
->> 在 2023/2/11 上午7:42, Stephen Boyd 写道:
->>> Quoting Yinbo Zhu (2022-11-28 19:41:55)
->>>
->>>> +
->>>> +       mult = (val >> LOONGSON2_USB_FREQSCALE_SHIFT) &
->>>> +                       clk_div_mask(LOONGSON2_USB_FREQSCALE_WIDTH);
->>>> +
->>>> +       rate = parent_rate * (mult + 1);
->>>> +       do_div(rate, 8);
->>> Why is do_div() being used?
->> no expecial reason, I only want to get a result that rate divide 8.
-> Ok, you can use div_u64() here and simplify.
-okay, I got it.
->
->> you meaning is to use clk_parent_data to rework
->> loongson2_clk_pll_register  and drop
->>
->> loongson2_obtain_fixed_clk_hw ?
-> Yes
->
->>>> +}
->>>> +
->>>> +static void __init loongson2_clocks_init(struct device_node *np)
->>>> +{
->>>> +       struct clk_hw **hws;
->>>> +       struct clk_hw_onecell_data *clk_hw_data;
->>>> +       spinlock_t loongson2_clk_lock;
->>>> +
->>>> +       loongson2_pll_base = of_iomap(np, 0);
->>>> +
->>>> +       if (!loongson2_pll_base) {
->>>> +               pr_err("clk: unable to map loongson2 clk registers\n");
->>>> +               goto err;
->>> return?
->> sorry, I don't get it.  you meaning is that  remove "goto err". Instead,
->> add a "return".
-> Yes.
->
->>>> +       }
->>>> +
->>>> +       clk_hw_data = kzalloc(struct_size(clk_hw_data, hws, LOONGSON2_CLK_END),
->>>> +                                       GFP_KERNEL);
->>>> +       if (WARN_ON(!clk_hw_data))
->>>> +               goto err;
-> [...]
->>>> +
->>>> +err:
->>>> +       iounmap(loongson2_pll_base);
->>>> +}
->>>> +
->>>> +CLK_OF_DECLARE(loongson2_clk, "loongson,ls2k-clk", loongson2_clocks_init);
->>> Any reason this can't be a platform driver?
+Changes from v1:
+added return value handling.
 
-Your question is that  why I don't use the platform_driver_register to 
-register  clk and use CLK_OF_DECLARE ?
+Bumwoo Lee (4):
+  extcon: Removed redundant null checking for class
+  extcon: Added extcon_alloc_cables to simplify extcon register function
+  extcon: Added extcon_alloc_muex to simplify extcon register function
+  extcon: Added extcon_alloc_groups to simplify extcon register function
 
-I was  consider other clock controllers of Loongson-2 series may be 
-different with 2k1000 and I can add a line
+ drivers/extcon/extcon.c | 289 ++++++++++++++++++++++------------------
+ 1 file changed, 163 insertions(+), 126 deletions(-)
 
-CLK_OF_DECLARE() for compatible other platform in the future. eg.
-
-CLK_OF_DECLARE(loongson2_clk, "loongson,ls2k-clk", loongson2_clocks_init);
-
-+  CLK_OF_DECLARE(xxx1, xxx2,  xxx3);  // for other clock controllers of 
-Loongson-2 series
-
->> For the compatible consideration of other clock controllers of
->> Loongson-2 series in the future, the way of using dts can be
->>
->> better compatible.
->>
-> Sorry that sentence doesn't make sense to me. The use of dts doesn't
-> require the use of CLK_OF_DECLARE.
-
-yes, the use of dts doesn't require the use of CLK_OF_DECLARE and can 
-use platform_driver_register
-
-but my drvier not use platform_driver_register to register  clk and use 
-CLK_OF_DECLARE to match of_clk_init.
+-- 
+2.35.1
 
