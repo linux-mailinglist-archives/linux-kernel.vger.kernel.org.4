@@ -2,105 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 324C969D20C
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Feb 2023 18:19:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 28E9569D209
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Feb 2023 18:19:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231814AbjBTRTX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Feb 2023 12:19:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55186 "EHLO
+        id S232342AbjBTRTN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Feb 2023 12:19:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55220 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232409AbjBTRTV (ORCPT
+        with ESMTP id S231951AbjBTRTM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Feb 2023 12:19:21 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36F671C7EF
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Feb 2023 09:18:34 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1676913513;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=n9UUOuyc1RiLX6lt0RLTFWolnPF6Xb+dal6ndxAWPtg=;
-        b=Vq10yZR3A7b7rPIPnWDgQAQgBV2lsTaMzKWelkcd61Ss13FiE5LMvyESweEMWy/OnNcwC1
-        KroPBbEdxcGDqXM1wUdNt0fUX/kA5ebUGSRhFO4HxxONu4XuY1KkdT0VuETToscb3pU5bN
-        c+JZ6QxDt69QE0nCg7iD4brf2iUcJ8o=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-465-0ZToPXgeO9mm24tFAWT64g-1; Mon, 20 Feb 2023 12:18:30 -0500
-X-MC-Unique: 0ZToPXgeO9mm24tFAWT64g-1
-Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        Mon, 20 Feb 2023 12:19:12 -0500
+Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E0DF1C7F5
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Feb 2023 09:19:10 -0800 (PST)
+Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com [209.85.208.70])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 7618288562A;
-        Mon, 20 Feb 2023 17:18:29 +0000 (UTC)
-Received: from [10.18.17.153] (dhcp-17-153.bos.redhat.com [10.18.17.153])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id B4C9A492C3C;
-        Mon, 20 Feb 2023 17:18:28 +0000 (UTC)
-Message-ID: <248fbb79-744b-4e49-71de-a6d3d0a0e7ef@redhat.com>
-Date:   Mon, 20 Feb 2023 12:18:28 -0500
+        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 873B63F582
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Feb 2023 17:19:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1676913546;
+        bh=KsFWVKyUTisvLWEBfJHuAqZZOIzRC+wakmOYPwQrXVU=;
+        h=From:To:Cc:Subject:Date:Message-Id:MIME-Version;
+        b=FZMzSoeecI91UrA5teqL8d4x6aQbaIiXb6laVlwqHzRU2vioww5CHpvnaQ1oCEGKW
+         iXE+W5kkIjMnKl8MVSgEP3w3QFUeAf9c7InTtYY3YWJkBgn3Vw4CbEMS5ehn3Lvmsj
+         rb/FVr3bQjgJYmenUJSsIbfZ3XUu7GjmYi+U6hMMTd8zIAya4IHoGKx1plBsMNSX4f
+         gYIkyr98FT/4P4jzHnO1jBIrAy48XS19llrrwFAyh5DFGRjkZXcNHfVLo92Db7rLBB
+         c11hHySKzRqHfsOBwwttQHUNNA+qNWELKjfCxam3h3/9FE6OD8mCXPt9dBuuMSUm+Z
+         lg8EcUMXwMzSg==
+Received: by mail-ed1-f70.google.com with SMTP id dk16-20020a0564021d9000b004aaa054d189so2261506edb.11
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Feb 2023 09:19:06 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=KsFWVKyUTisvLWEBfJHuAqZZOIzRC+wakmOYPwQrXVU=;
+        b=mqdSRICZ3WRGrLl0pwvL6JfG8A3K0y8y0N9bPN/6vmZVDWVm3ZoOE8sM0Z+Z/62BCC
+         vc6IhoUMJP1PcaLbrYit/mjZ2I660iz2hnOh2/8aGkEPInin6xNGhDr6ECPoGvS5yR5O
+         5ZJG5SIkhDr3z1Y1TlxUE7eRm/gbefrbMpsY6rUAn/b2WNTe9pIcGRDxH3EI14KWGYyA
+         hj4JbLNhvCv7bXyLJ3QH0mc0vY5sJizAi8h38dvqRSib2l343poqDWxluD7AOCeup7cl
+         clmYCqLfrxkiI8DtP7PuakEOviGCziKvqtRr59qpWzVM/Zt+XRmI+my73UuaCimF415n
+         S6fw==
+X-Gm-Message-State: AO0yUKV8b4hUUM6oftTQi+HOZRukFcUfr25drg6n0j0whS9ljXNeEJHD
+        NepYogfaeetjUugkWNYAfCRBjYtppG30lzyikd3JuhvfAI351Y0a1uKwcDUe33Zuv6Mns16PbQo
+        kAx7XhSwC38G7xblfnqnIJ4AUWBCTaikIIehxAYxsZAqERm+ldQ==
+X-Received: by 2002:a05:6402:1151:b0:4ac:beba:dc87 with SMTP id g17-20020a056402115100b004acbebadc87mr1075439edw.0.1676913546121;
+        Mon, 20 Feb 2023 09:19:06 -0800 (PST)
+X-Google-Smtp-Source: AK7set8Oj7a1xx8jk5ISCHq4+eehJqR5ZQt/ZuPqDE6BQzrZixfjYgaHw5I/qT7NHOl5lv7OxFJ56Q==
+X-Received: by 2002:a05:6402:1151:b0:4ac:beba:dc87 with SMTP id g17-20020a056402115100b004acbebadc87mr1075416edw.0.1676913545790;
+        Mon, 20 Feb 2023 09:19:05 -0800 (PST)
+Received: from localhost.localdomain (host-79-44-179-55.retail.telecomitalia.it. [79.44.179.55])
+        by smtp.gmail.com with ESMTPSA id ee51-20020a056402293300b004aef6454d6dsm1984489edb.37.2023.02.20.09.19.04
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 20 Feb 2023 09:19:05 -0800 (PST)
+From:   Andrea Righi <andrea.righi@canonical.com>
+To:     Jani Nikula <jani.nikula@linux.intel.com>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>
+Cc:     Emil Renner Berthing <emil.renner.berthing@canonical.com>,
+        intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] drm/i915/sseu: fix max_subslices array-index-out-of-bounds access
+Date:   Mon, 20 Feb 2023 18:18:58 +0100
+Message-Id: <20230220171858.131416-1-andrea.righi@canonical.com>
+X-Mailer: git-send-email 2.38.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: Re: [PATCH] docs: locking: refer to the actual existing config names
-Content-Language: en-US
-To:     Lukas Bulwahn <lukas.bulwahn@gmail.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org
-Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20230220165749.12850-1-lukas.bulwahn@gmail.com>
-From:   Waiman Long <longman@redhat.com>
-In-Reply-To: <20230220165749.12850-1-lukas.bulwahn@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.9
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/20/23 11:57, Lukas Bulwahn wrote:
-> The config is actually called CONFIG_RT_MUTEXES, not CONFIG_RT_MUTEX.
->
-> The config CONFIG_LOCK_TORTURE_TEST should be connected by underscore, for
-> the sake of consistent referencing to configs in the kernel documentation.
->
-> Address those issues.
->
-> Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
-> ---
->   Documentation/locking/locktorture.rst | 4 ++--
->   1 file changed, 2 insertions(+), 2 deletions(-)
->
-> diff --git a/Documentation/locking/locktorture.rst b/Documentation/locking/locktorture.rst
-> index dfaf9fc883f4..7f56fc0d7c31 100644
-> --- a/Documentation/locking/locktorture.rst
-> +++ b/Documentation/locking/locktorture.rst
-> @@ -5,7 +5,7 @@ Kernel Lock Torture Test Operation
->   CONFIG_LOCK_TORTURE_TEST
->   ========================
->   
-> -The CONFIG LOCK_TORTURE_TEST config option provides a kernel module
-> +The CONFIG_LOCK_TORTURE_TEST config option provides a kernel module
->   that runs torture tests on core kernel locking primitives. The kernel
->   module, 'locktorture', may be built after the fact on the running
->   kernel to be tested, if desired. The tests periodically output status
-> @@ -67,7 +67,7 @@ torture_type
->   
->   		     - "rtmutex_lock":
->   				rtmutex_lock() and rtmutex_unlock() pairs.
-> -				Kernel must have CONFIG_RT_MUTEX=y.
-> +				Kernel must have CONFIG_RT_MUTEXES=y.
->   
->   		     - "rwsem_lock":
->   				read/write down() and up() semaphore pairs.
-Acked-by: Waiman Long <longman@redhat.com>
+It seems that commit bc3c5e0809ae ("drm/i915/sseu: Don't try to store EU
+mask internally in UAPI format") exposed a potential out-of-bounds
+access, reported by UBSAN as following on a laptop with a gen 11 i915
+card:
+
+  UBSAN: array-index-out-of-bounds in drivers/gpu/drm/i915/gt/intel_sseu.c:65:27
+  index 6 is out of range for type 'u16 [6]'
+  CPU: 2 PID: 165 Comm: systemd-udevd Not tainted 6.2.0-9-generic #9-Ubuntu
+  Hardware name: Dell Inc. XPS 13 9300/077Y9N, BIOS 1.11.0 03/22/2022
+  Call Trace:
+   <TASK>
+   show_stack+0x4e/0x61
+   dump_stack_lvl+0x4a/0x6f
+   dump_stack+0x10/0x18
+   ubsan_epilogue+0x9/0x3a
+   __ubsan_handle_out_of_bounds.cold+0x42/0x47
+   gen11_compute_sseu_info+0x121/0x130 [i915]
+   intel_sseu_info_init+0x15d/0x2b0 [i915]
+   intel_gt_init_mmio+0x23/0x40 [i915]
+   i915_driver_mmio_probe+0x129/0x400 [i915]
+   ? intel_gt_probe_all+0x91/0x2e0 [i915]
+   i915_driver_probe+0xe1/0x3f0 [i915]
+   ? drm_privacy_screen_get+0x16d/0x190 [drm]
+   ? acpi_dev_found+0x64/0x80
+   i915_pci_probe+0xac/0x1b0 [i915]
+   ...
+
+According to the definition of sseu_dev_info, eu_mask->hsw is limited to
+a maximum of GEN_MAX_SS_PER_HSW_SLICE (6) sub-slices, but
+gen11_sseu_info_init() can potentially set 8 sub-slices, in the
+!IS_JSL_EHL(gt->i915) case.
+
+Fix this by reserving up to 8 slots for max_subslices in the eu_mask
+struct.
+
+Reported-by: Emil Renner Berthing <emil.renner.berthing@canonical.com>
+Signed-off-by: Andrea Righi <andrea.righi@canonical.com>
+---
+ drivers/gpu/drm/i915/gt/intel_sseu.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/gpu/drm/i915/gt/intel_sseu.h b/drivers/gpu/drm/i915/gt/intel_sseu.h
+index aa87d3832d60..d7e8c374f153 100644
+--- a/drivers/gpu/drm/i915/gt/intel_sseu.h
++++ b/drivers/gpu/drm/i915/gt/intel_sseu.h
+@@ -27,7 +27,7 @@ struct drm_printer;
+  * is only relevant to pre-Xe_HP platforms (Xe_HP and beyond use the
+  * I915_MAX_SS_FUSE_BITS value below).
+  */
+-#define GEN_MAX_SS_PER_HSW_SLICE	6
++#define GEN_MAX_SS_PER_HSW_SLICE	8
+ 
+ /*
+  * Maximum number of 32-bit registers used by hardware to express the
+-- 
+2.38.1
 
