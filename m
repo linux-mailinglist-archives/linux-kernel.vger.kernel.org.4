@@ -2,161 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1804169C9D6
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Feb 2023 12:27:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 560E869C9DE
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Feb 2023 12:29:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231215AbjBTL1h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Feb 2023 06:27:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52428 "EHLO
+        id S231637AbjBTL3m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Feb 2023 06:29:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54456 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231674AbjBTL1a (ORCPT
+        with ESMTP id S229741AbjBTL3k (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Feb 2023 06:27:30 -0500
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C27365AD;
-        Mon, 20 Feb 2023 03:27:23 -0800 (PST)
-Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (No client certificate requested)
-        (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 66272660213E;
-        Mon, 20 Feb 2023 11:27:21 +0000 (GMT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1676892442;
-        bh=Ccrr/t4+V0OVhZ8gqGibkB/KOTRPiWU2u1jxcFC3QY8=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=iqKdIru32vHfY8IikTkBuOYDwm/PEvVwiXXTbSEEM6JQDSYhqkM0QEXpgXnx2EVHT
-         V4Ht1juoMp41IRJT6k+gTQm76I6uniiisL4G6kTAMjqKuziOR/HzqxjEfrG5P8D56z
-         /7ayqtpWo4zi7MzafWXd2aw1AlXNWjwJXqYV6UKFbvPiCadkc2IHwEru/Tiq6GOKoz
-         /54259VsZUrtEN7xgd9Ak2uOz7nt1vlkR+tp5j2BbhwZ4FV2jwnJpXLBFU7q5I0TUz
-         U4oiPXXOB3SmvnSA5QmhQKj2Uc6XlARftU3qBu4BYyCugEI96PbWjo/r3uHsip92nf
-         s6bS6JuQRrI1g==
-Message-ID: <1274e18b-e35e-7997-68ea-22aa11592720@collabora.com>
-Date:   Mon, 20 Feb 2023 12:27:18 +0100
+        Mon, 20 Feb 2023 06:29:40 -0500
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8138E14E9B;
+        Mon, 20 Feb 2023 03:29:38 -0800 (PST)
+X-IronPort-AV: E=McAfee;i="6500,9779,10626"; a="312010717"
+X-IronPort-AV: E=Sophos;i="5.97,312,1669104000"; 
+   d="scan'208";a="312010717"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Feb 2023 03:29:38 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10626"; a="648808407"
+X-IronPort-AV: E=Sophos;i="5.97,312,1669104000"; 
+   d="scan'208";a="648808407"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by orsmga006.jf.intel.com with ESMTP; 20 Feb 2023 03:29:34 -0800
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andy.shevchenko@gmail.com>)
+        id 1pU4MO-009O14-0L;
+        Mon, 20 Feb 2023 13:29:32 +0200
+Date:   Mon, 20 Feb 2023 13:29:31 +0200
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+To:     Orlando Chamberlain <orlandoch.dev@gmail.com>
+Cc:     linux-doc@vger.kernel.org, linux-input@vger.kernel.org,
+        Jonathan Corbet <corbet@lwn.net>,
+        Jiri Kosina <jikos@kernel.org>,
+        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
+        linux-kernel@vger.kernel.org, Pavel Machek <pavel@ucw.cz>,
+        Aditya Garg <gargaditya08@live.com>,
+        Aun-Ali Zaidi <admin@kodeit.net>,
+        Kerem Karabay <kekrby@gmail.com>,
+        Thomas =?iso-8859-1?Q?Wei=DFschuh?= <thomas@t-8ch.de>,
+        Thomas =?iso-8859-1?Q?Wei=DFschuh?= <linux@weissschuh.net>
+Subject: Re: [PATCH v4 2/2] HID: hid-apple-magic-backlight: Add driver for
+ keyboard backlight on internal Magic Keyboards
+Message-ID: <Y/NZm22JQKeF1+6R@smile.fi.intel.com>
+References: <20230218090709.7467-1-orlandoch.dev@gmail.com>
+ <20230218090709.7467-3-orlandoch.dev@gmail.com>
+ <CAHp75VeF6ypA7mSYZrMsNr777f6zjEJ6nkygEc_NQe-nMhjRFQ@mail.gmail.com>
+ <20230220180932.2a7aa6b1@redecorated-mbp>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.2
-Subject: Re: [PATCH v10 2/6] dt-bindings: opp: v2-qcom-level: Document CPR3
- open/closed loop volt adjustment
-Content-Language: en-US
-To:     Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Rob Herring <robh@kernel.org>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Niklas Cassel <nks@flawful.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Robert Marko <robimarko@gmail.com>,
-        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-pm@vger.kernel.org
-References: <20230217-topic-cpr3h-v10-0-67aed8fdfa61@linaro.org>
- <20230217-topic-cpr3h-v10-2-67aed8fdfa61@linaro.org>
- <20230217231330.GA2238521-robh@kernel.org>
- <c2bfa6b0-edee-b492-d40e-cf43291b90d4@linaro.org>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <c2bfa6b0-edee-b492-d40e-cf43291b90d4@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230220180932.2a7aa6b1@redecorated-mbp>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,DKIM_ADSP_CUSTOM_MED,
+        FORGED_GMAIL_RCVD,FREEMAIL_FROM,NML_ADSP_CUSTOM_MED,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_SOFTFAIL autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 18/02/23 01:26, Konrad Dybcio ha scritto:
-> 
-> 
-> On 18.02.2023 00:13, Rob Herring wrote:
->> On Fri, Feb 17, 2023 at 12:08:25PM +0100, Konrad Dybcio wrote:
->>> CPR3 and newer can be fed per-OPP voltage adjustment values for both
->>> open- and closed-loop paths to make better decisions about settling
->>> on the final voltage offset target. Document these properties.
->>>
->>> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
->>> ---
->>>   .../devicetree/bindings/opp/opp-v2-qcom-level.yaml         | 14 ++++++++++++++
->>>   1 file changed, 14 insertions(+)
->>>
->>> diff --git a/Documentation/devicetree/bindings/opp/opp-v2-qcom-level.yaml b/Documentation/devicetree/bindings/opp/opp-v2-qcom-level.yaml
->>> index a30ef93213c0..93cc88434dfe 100644
->>> --- a/Documentation/devicetree/bindings/opp/opp-v2-qcom-level.yaml
->>> +++ b/Documentation/devicetree/bindings/opp/opp-v2-qcom-level.yaml
->>> @@ -34,6 +34,20 @@ patternProperties:
->>>           minItems: 1
->>>           maxItems: 2
->>>   
->>> +      qcom,opp-cloop-vadj:
->>> +        description: |
->>> +          A value representing the closed-loop voltage adjustment value
->>
->> A value?
->>
->>> +          associated with this OPP node.
->>> +        $ref: /schemas/types.yaml#/definitions/int32-array
->>> +        maxItems: 2
->>
->> Or 2 values?
-> Right, this description doesn't make any sense if you're just
-> looking at the documentation without looking at the driver..
-> 
-> Generally, each CPR3 instance can have multiple "threads"
-> (each one of which regulates voltage for some on-SoC IP or
-> part of it). The nth entry in the qcom,opp-[co]loop-vadj
-> array corresponds to a voltage offset for the nth thread.
-> 
-> If the nth entry in the array is missing, the driver assumes
-> the arr[0] one is "global" to this CPR3 instance at this OPP
-> level and applies it to all threads. ...and looking at it
-> again, this is sorta just bad design, especially if you
-> take into account that there's no known user of CPR3 that
-> employs more than 2 threads.
-> 
-> I'll remove that from the driver and make the description clearer.
-> 
+On Mon, Feb 20, 2023 at 06:09:32PM +1100, Orlando Chamberlain wrote:
+> On Sun, 19 Feb 2023 16:09:26 +0200
+> Andy Shevchenko <andy.shevchenko@gmail.com> wrote:
+> > On Sat, Feb 18, 2023 at 11:08 AM Orlando Chamberlain
+> > <orlandoch.dev@gmail.com> wrote:
 
-description:
-   Represents the closed-loop voltage adjustment associated with
-   this OPP node.
+...
 
-P.S.: Drop '|' here and on oloop!
-
-This binding is intended to support either single or multiple CPR threads;
-the driver's behavior is unimportant as bindings describe the hardware,
-not the driver.
-
-Regards,
-Angelo
-
+> > > +       help
+> > > +       Say Y here if you want support for the keyboard backlight
+> > > on Macs with
+> > > +       the magic keyboard (MacBookPro16,x and MacBookAir9,1). Note
+> > > that this
+> > > +       driver is not for external magic keyboards.
+> > > +
+> > > +       To compile this driver as a module, choose M here: the
+> > > +       module will be called hid-apple-magic-backlight.  
+> > 
+> > Is it my email client or is the indentation of the help text
+> > incorrect?
+> > 
+> > Hint: the text of the help should be <TAB><SPACE><SPACE> indented.
+> > 
+> > I believe checkpatch.pl at least in --strict mode should complain
+> > about this.
 > 
-> Also, only noticed now.. "qcom,sdm630-cprh" was not documented,
-> so that's to be fixed for the next submission as well!
-> 
-> 
-> Konrad
->>
->>> +
->>> +      qcom,opp-oloop-vadj:
->>> +        description: |
->>> +          A value representing the open-loop voltage adjustment value
->>> +          associated with this OPP node.
->>> +        $ref: /schemas/types.yaml#/definitions/int32-array
->>> +        maxItems: 2
->>> +
->>>       required:
->>>         - opp-level
->>>         - qcom,opp-fuse-level
->>>
->>> -- 
->>> 2.39.1
->>>
+> Looking at the hid Kconfig, it seems like some have it as you've
+> described, and some just have tab (and a few have just tab for the
+> first line, and tab space space for the rest of the lines).
 
+Okay, I have checked in the other MUA I'm using for patch reviews and indeed
+your Kconfig indentation is broken.
+
+> checkpatch.pl --strict didn't complain about the indentation so
+> hopefully it's alright as is.
+
+No, it's not. Must be fixed.
+
+https://www.kernel.org/doc/html/latest/process/coding-style.html#kconfig-configuration-files
+
+-- 
+With Best Regards,
+Andy Shevchenko
 
 
