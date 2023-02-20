@@ -2,143 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C263F69CCFF
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Feb 2023 14:45:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C3BC69CD36
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Feb 2023 14:47:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232250AbjBTNpQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Feb 2023 08:45:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57148 "EHLO
+        id S232300AbjBTNr3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Feb 2023 08:47:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60210 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232244AbjBTNpO (ORCPT
+        with ESMTP id S232291AbjBTNr1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Feb 2023 08:45:14 -0500
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CEC801D91B;
-        Mon, 20 Feb 2023 05:44:54 -0800 (PST)
-Received: from pps.filterd (m0279864.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 31K5EKYc005194;
-        Mon, 20 Feb 2023 13:44:42 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=jYkMyl5gn5qrmoMjcdhJ36GQx7v+D5e0l0Jxxi0TnHw=;
- b=pcbG2htr2uJpUGADtincUG51VoBWLTL9IrLOG9tNrvGpX0SFDxuMI3+7J371z6oz1yGY
- NkOtUJ91rycEar/3KISAORBXpQT6UvXHQwWOdVVeAon9plgzoQ1x+3ldV3vem4UhE1v0
- 3JnWMcTXPDnThwo3JfL02HhyhBWGDQsP8NQLJCbw1t+x3zCpqJmRFWf7INNRqLRW4dju
- yPagXy8K0a29/oCnWptiU5GJ0+nIevbXYxw2m5Uxaeyt8FDVj8AhZ7vcbg8dl2v9IeVy
- Xe8IAMAk3WajgGZUAw+FM6e7BtKtSJsyG213h3vE5H7pFFNZt/Tqvq06n6mTL0AGwFPI JQ== 
-Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3nubb1u629-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 20 Feb 2023 13:44:42 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 31KDifrc016945
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 20 Feb 2023 13:44:41 GMT
-Received: from [10.216.11.20] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.41; Mon, 20 Feb
- 2023 05:44:32 -0800
-Message-ID: <1ec15d17-9079-5577-757c-8113e394edef@quicinc.com>
-Date:   Mon, 20 Feb 2023 19:14:29 +0530
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH 6/7] clk: qcom: gcc-ipq9574: Add PCIe related clocks
-Content-Language: en-US
-To:     Sricharan Ramabadhran <quic_srichara@quicinc.com>,
-        <agross@kernel.org>, <andersson@kernel.org>,
-        <konrad.dybcio@linaro.org>, <lpieralisi@kernel.org>,
-        <kw@linux.com>, <robh@kernel.org>, <bhelgaas@google.com>,
-        <krzysztof.kozlowski+dt@linaro.org>, <vkoul@kernel.org>,
-        <kishon@kernel.org>, <mturquette@baylibre.com>, <sboyd@kernel.org>,
-        <mani@kernel.org>, <p.zabel@pengutronix.de>,
-        <svarbanov@mm-sol.com>, <linux-arm-msm@vger.kernel.org>,
-        <linux-pci@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-phy@lists.infradead.org>,
-        <linux-clk@vger.kernel.org>
-CC:     <quic_gokulsri@quicinc.com>, <quic_sjaganat@quicinc.com>,
-        <quic_kathirav@quicinc.com>, <quic_arajkuma@quicinc.com>,
-        <quic_anusha@quicinc.com>
-References: <20230214164135.17039-1-quic_devipriy@quicinc.com>
- <20230214164135.17039-7-quic_devipriy@quicinc.com>
- <0d5f6df8-bb44-f9fe-8d5c-50e488ae4c53@quicinc.com>
-From:   Devi Priya <quic_devipriy@quicinc.com>
-In-Reply-To: <0d5f6df8-bb44-f9fe-8d5c-50e488ae4c53@quicinc.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
+        Mon, 20 Feb 2023 08:47:27 -0500
+Received: from APC01-TYZ-obe.outbound.protection.outlook.com (mail-tyzapc01on2101.outbound.protection.outlook.com [40.107.117.101])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70D7A1E1F2
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Feb 2023 05:47:11 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=LREQjqHDoWTWdQJlkxOLSNEn32g6hrX729e7xOvJlop1FRnpXo4yi7X6aakrBbTNL7GRm30byP6tlBwP978mNbYGnmmxzm2KNhVXwd8YAm6kkJSgGWC4QJOBE0jWLQBYnV26xDhUdxItVPj3x/OzZ589W70RlR1kxI9l2vtFmg3Wh2SuX/QOli7cbPonZDbuHauqPwI0m5P56snvYfYi0VCJDEZDOa4+rWjA5CdXPU0iD/WpUpG3Ejj+ojP1WcPNx3B1nWCZxY/Sii0xLpfr5ybQPHZz6+IOTinoJs27498tO2/NegkzZq8WHOvCB7b/9Gj4tUdtFsR27YG8R57MLg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=xQtaz4aQV69kpUr/6zrDopdjPrmWDadZ7rpWz2CL5KI=;
+ b=iJt6NsVUcP6P7AM3Cm4zqOTPxP0JQegoSXjGwopCU6ycAK/EWKTYMD4BQc4EwsV20XQTdu2VpeLBLB8EnpUPg5SMr2yW4eSXw40ZI3FI5q/VUb8BxVbI8DWBqlmfRQZUO7SJKpQeUO2aMGWtO6rqAFDc/dsbUy8UnuJ1kPZVhq0BxShD4WQyo7QIPXZE9pUvcVG8FhNw9LzoMBG2GVbgXzA0DQXRo+8P6aKSR03ZZeTgfq5ASqokqUgtkq1CVodV1WPfOifd4HHQHo0z+2dBgRKB2HLByFw2wlnNjK2XFD9cH28K6cDSBPyFkSFk0gh760Kt67UrQXRyO/qwyUsY4g==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=vivo.com; dmarc=pass action=none header.from=vivo.com;
+ dkim=pass header.d=vivo.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vivo.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=xQtaz4aQV69kpUr/6zrDopdjPrmWDadZ7rpWz2CL5KI=;
+ b=RxrumYT+eJyLu5MjvmK9j8T2TmkKVvme6GMzMTcXZZAdRVl2X4pg59zQzxsja/MK8x9XdH9/uVIMP4BcomhkgVlq36aO3LIuGpN0T2+OALhbkT2/WAhLSCxhs+QoMMkAFnX3Nux4W1WxcvUcR2zXZ8VcOI6E3h6Sba51nklTqGtWXvt63T8N4IfhsFLiyZnpU4vkyDPqxIF9h88p195PYmTAl61NNW9QaceLSkpzmf41dGw042iu7L1pe6GalL7wOYs38sLRFQZc4U8gO+djiuOGY76d6o802NBzV3qDgLocYJo5pPXXr2fGs7no+y0OFAcRt4T9YclXawh45MCmXQ==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=vivo.com;
+Received: from TYZPR06MB5275.apcprd06.prod.outlook.com (2603:1096:400:1f5::6)
+ by SI2PR06MB3993.apcprd06.prod.outlook.com (2603:1096:4:e9::9) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6134.15; Mon, 20 Feb 2023 13:47:01 +0000
+Received: from TYZPR06MB5275.apcprd06.prod.outlook.com
+ ([fe80::a2c6:4a08:7779:5190]) by TYZPR06MB5275.apcprd06.prod.outlook.com
+ ([fe80::a2c6:4a08:7779:5190%3]) with mapi id 15.20.6111.009; Mon, 20 Feb 2023
+ 13:47:01 +0000
+From:   Yangtao Li <frank.li@vivo.com>
+To:     jack@suse.com
+Cc:     linux-kernel@vger.kernel.org, Yangtao Li <frank.li@vivo.com>
+Subject: [PATCH] quota: make dquot_set_dqinfo return errors from ->write_info
+Date:   Mon, 20 Feb 2023 21:46:52 +0800
+Message-Id: <20230220134652.6204-1-frank.li@vivo.com>
+X-Mailer: git-send-email 2.35.1
 Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: afA5-XwtB0vxNeg9OKtxq-cn1MIxu_hV
-X-Proofpoint-GUID: afA5-XwtB0vxNeg9OKtxq-cn1MIxu_hV
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.170.22
- definitions=2023-02-20_11,2023-02-20_02,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 impostorscore=0
- suspectscore=0 adultscore=0 lowpriorityscore=0 spamscore=0 bulkscore=0
- mlxlogscore=999 malwarescore=0 priorityscore=1501 mlxscore=0 phishscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2212070000
- definitions=main-2302200125
-X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-ClientProxiedBy: SI2PR01CA0013.apcprd01.prod.exchangelabs.com
+ (2603:1096:4:191::9) To TYZPR06MB5275.apcprd06.prod.outlook.com
+ (2603:1096:400:1f5::6)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: TYZPR06MB5275:EE_|SI2PR06MB3993:EE_
+X-MS-Office365-Filtering-Correlation-Id: 9e1aba67-d382-44be-f932-08db1348f19b
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: f+FwxknMmF4tk7oOYZdkjhu9zJvdTnA1LkpPSKrzceRCEjDyNiofAUQGSk9cYrsEZseVnvoBupa2TRZLROKih0ewHLhex5OTL65dOHeD6DpG3aPH92F4qSaGXWm3Uvs/LAOBB+sMlJbUWxM1kYnYKMAbJhfWCxDCM4MAoSfmiTr4VRuMX7MDAD+0OaShyu9RQCl3pe3HZqffrZarcnLpMZ/KpspxzKaQJGQRJx1BmCAcSz325nqlFm43fkc6B8J+Ns1u3RHjCiTlrYzDA7xcP2xnVVBRpFqkX289znh6eIlOCi7abFRpxQrb0RISU6ep26Fo0+wbrrj9AgCMFOTBIs6LZdMLISQ8OQW2NhWmp4PdovZZqpGrvdWtPMU7yxbjlyeWOM9c/T/U1fWvTukRV4z9wBBoG4LoBfySJx6ej/Tgz6ZbYSFW/wudp+QoPEVwDMkJxPEIvzREsluSoiTIp5ZKf1r7+NajmgnRD+rv+jSZXeCck1puv4sWFe9BY9xH2dMNyuM2mxja+zXbjhauLoRbF4mIk0AV5pOsyEPB04hO2OiFWztV72kWrDVG6YV/GBUOMsQ1eFGjv9u9Wf7QPPaaQ1/9bxzBySEK1YAavzYzrMLi7fvaBe+99vQuhbcI64XSsnL94OotwgtY3BRnm65U9ay1LiZxUO2YHXqwaF0Zop0DOP+RqebVjAnLiO0rXn4wPHapDE1D2kzBUMEZXw==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:TYZPR06MB5275.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(346002)(136003)(39860400002)(366004)(396003)(376002)(451199018)(6916009)(66946007)(8676002)(4326008)(41300700001)(316002)(52116002)(66556008)(6486002)(8936002)(5660300002)(86362001)(36756003)(66476007)(478600001)(6666004)(38350700002)(26005)(1076003)(6512007)(107886003)(186003)(6506007)(38100700002)(2616005)(15650500001)(4744005)(2906002)(83380400001);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?PjFDYZ+fF2Gfvx41S1ddxSYzXBNKtQU2Qa06spN4hWge0WZQCVmWGj/oGaJv?=
+ =?us-ascii?Q?e6KjmgXEsBo/OVQ9q2x6jXDqwX5AitE06lw48KEe0QQKG4NZCGFIC6D2L+g7?=
+ =?us-ascii?Q?viX9Sr7gRDVVFfsucBO40NNRTONPlvM43i+bAfEEWZ5x+CyYyPTspqWnGwTs?=
+ =?us-ascii?Q?uQ1jDAundl8kxAZir8a17VpFntojARVmpB/OjJ3vzUTvZ8+4qJ5ngA7L9NKo?=
+ =?us-ascii?Q?TwDw2P/4M5Zlo2rhCYkUjDBVActEik1cbOG/Y4aPUEPITYxvPidU09HiZwBy?=
+ =?us-ascii?Q?1kCxBMx/q5Gkv369Lx5zvKY7KMLiPbhkkAWk12M0doe8eNMiRZQIgcqfZK/U?=
+ =?us-ascii?Q?3wF1FjRieMHnLZ4CdZy5EgCa/JZkGbzkEjpBzB/c7kVp6aC0n/odOfwTU3IW?=
+ =?us-ascii?Q?Y4qT2HokeE/AIarQ8GC0K/eOCD6DFhI6cLwyruhFkA/dqOqkBNIIxRrxdegb?=
+ =?us-ascii?Q?KFSk/UJuED2ijo/zOycO5mlLqp3t2BqTFYeQzQK8HM+j5Hr1p7BkyqY5Wa4r?=
+ =?us-ascii?Q?Bk82JxReXEZq0mxOnyBTIznhr0JGmambLVXAyGxlnt60U08T7pCVvKTJG+lD?=
+ =?us-ascii?Q?xuvzqukAOuP2X08MkAsfMxTbTPMiiNgo+ZXb0i0BKOgGWDEFIG7WAg/pQX09?=
+ =?us-ascii?Q?t2ZEM6GXPKmA+4ccXr+GpYe/buXz6OnbFnYPhnz7zH7NbfF+CdAI74oX/mv4?=
+ =?us-ascii?Q?KFBDzvpOBaQyzxADGGIKmKkwiXzdSo3SL4LhnX51+9QiaKrp5lrDdrExHSQ3?=
+ =?us-ascii?Q?NT/vGjVqMDca/2kvjV5/VkoLwmeeEwmH0wQ5BnToULDzc/tvfX2M1U3x7805?=
+ =?us-ascii?Q?yN2bJpP1uiq4b8zwtmNiVMDnDNa2Ldytif80j6noPYtvgcfPorx5NtJ4B2SU?=
+ =?us-ascii?Q?NctFeZNQ4RKDlNmNGXftA0v9jxLgZ+z1KQmjDzDlKFV3aOa+7jnBzjabrx+B?=
+ =?us-ascii?Q?ob+Mfk3eYZd3Tywfy+ez9BrjYwpDAVjpsqc1q/5V8dz1oVeFLV/bh3/RB/bR?=
+ =?us-ascii?Q?YsMuNAqSR0sEK3B6omtAtT6TmHVXzd2Qy8hO6lF4iJFm3zQDIxFwpbtS+ltl?=
+ =?us-ascii?Q?yAtzKdN1zQMw6U/d76dV9be7yErKsdeB/nJkAhypEVu/Pjv3/1upusauN0Zw?=
+ =?us-ascii?Q?I5IVQ1vKLjANWYHyJotr5bTpbPZpKQ85H4lTljk9VmcnLQgEt4m82INTBI3Q?=
+ =?us-ascii?Q?KryyGdmeA4gTpk8LIDVuDeqfvw7LTOYxAptbMkFksvaD2PymeS/e3K/HyXgw?=
+ =?us-ascii?Q?3JC/mT3Hw7cBpQxYBy0LClKqmx0rKS/cCoNcW42ueFUZva4VRbHob8RnBsc7?=
+ =?us-ascii?Q?kA06nTKWewexatgIq4/4Vd8TKLgPrc9hrusL2g7LXVmHY0lf6dz5W4dcDgvt?=
+ =?us-ascii?Q?cLLQx86cERTalVlYKX68BbjhLnIEzM2JR6/zoXQbGfm4+510duNrgySfgCOj?=
+ =?us-ascii?Q?G8dye0D8APLZSno8a56tfBSURZes4Pssz7tBZovV3MwYL8utU053zFcaUl9c?=
+ =?us-ascii?Q?02fYMn55ISTefAHqUeOdqYbJn+fnlR/fpVXjnYQS7yt9DP4KuZBbZhXZYK5H?=
+ =?us-ascii?Q?yDbqJaoioEunAAFYf3n5LvGLPwdvwjPo2eqU/+Em?=
+X-OriginatorOrg: vivo.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 9e1aba67-d382-44be-f932-08db1348f19b
+X-MS-Exchange-CrossTenant-AuthSource: TYZPR06MB5275.apcprd06.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 20 Feb 2023 13:47:01.7504
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 923e42dc-48d5-4cbe-b582-1a797a6412ed
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: b7yFX2XmEY9VqX3LB6bioWTiVENj3oBcLbQ06qq9p+/TmGsiZUdD7gVrudU6DIji6J6Pu+Yk8JERoriUtNI/YQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SI2PR06MB3993
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+dquot_set_dqinfo() ignores the return code from the ->write_info
+call, which means that quotacalls like Q_SETINFO never see the error.
+This doesn't seem right, so fix that.
 
+Signed-off-by: Yangtao Li <frank.li@vivo.com>
+---
+ fs/quota/dquot.c | 4 +---
+ 1 file changed, 1 insertion(+), 3 deletions(-)
 
-On 2/17/2023 2:13 PM, Sricharan Ramabadhran wrote:
-> Hi Devi,
-> 
-> On 2/14/2023 10:11 PM, Devi Priya wrote:
->> Add the clocks needed for enabling PCIe in IPQ9574
->>
->> Co-developed-by: Anusha Rao <quic_anusha@quicinc.com>
->> Signed-off-by: Anusha Rao <quic_anusha@quicinc.com>
->> Signed-off-by: Devi Priya <quic_devipriy@quicinc.com>
->> ---
->>   drivers/clk/qcom/gcc-ipq9574.c | 76 ++++++++++++++++++++++++++++++++++
->>   1 file changed, 76 insertions(+)
->>
->> diff --git a/drivers/clk/qcom/gcc-ipq9574.c 
->> b/drivers/clk/qcom/gcc-ipq9574.c
->> index b2a2d618a5ec..1bf33d582dc2 100644
->> --- a/drivers/clk/qcom/gcc-ipq9574.c
->> +++ b/drivers/clk/qcom/gcc-ipq9574.c
->> @@ -1538,6 +1538,24 @@ static struct clk_regmap_phy_mux 
->> pcie0_pipe_clk_src = {
->>       },
->>   };
->> +static struct clk_branch gcc_pcie0_pipe_clk = {
->> +    .halt_reg = 0x28044,
->> +    .halt_check = BRANCH_HALT_DELAY,
->> +    .clkr = {
->> +        .enable_reg = 0x28044,
->> +        .enable_mask = BIT(0),
->> +        .hw.init = &(struct clk_init_data){
->> +            .name = "gcc_pcie0_pipe_clk",
->> +            .parent_hws = (const struct clk_hw *[]) {
->> +                &pcie0_pipe_clk_src.clkr.hw
->> +            },
->> +            .num_parents = 1,
->> +            .flags = CLK_SET_RATE_PARENT,
->> +            .ops = &clk_branch2_ops,
->> +        },
->> +    },
->> +};
->> +
-> 
->    Also, this patch should come before your phy driver updates.
-Sure got it, will reorder the patches in V2
-> 
-> Regards,
->   Sricharan
-> 
-Best Regards,
-Devi Priya
+diff --git a/fs/quota/dquot.c b/fs/quota/dquot.c
+index f27faf5db554..be702905c74f 100644
+--- a/fs/quota/dquot.c
++++ b/fs/quota/dquot.c
+@@ -2819,7 +2819,6 @@ EXPORT_SYMBOL(dquot_get_state);
+ int dquot_set_dqinfo(struct super_block *sb, int type, struct qc_info *ii)
+ {
+ 	struct mem_dqinfo *mi;
+-	int err = 0;
+ 
+ 	if ((ii->i_fieldmask & QC_WARNS_MASK) ||
+ 	    (ii->i_fieldmask & QC_RT_SPC_TIMER))
+@@ -2846,8 +2845,7 @@ int dquot_set_dqinfo(struct super_block *sb, int type, struct qc_info *ii)
+ 	spin_unlock(&dq_data_lock);
+ 	mark_info_dirty(sb, type);
+ 	/* Force write to disk */
+-	sb->dq_op->write_info(sb, type);
+-	return err;
++	return sb->dq_op->write_info(sb, type);
+ }
+ EXPORT_SYMBOL(dquot_set_dqinfo);
+ 
+-- 
+2.25.1
+
