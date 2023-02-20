@@ -2,205 +2,267 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D49C069C884
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Feb 2023 11:27:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D0ED69C739
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Feb 2023 10:03:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231312AbjBTK07 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Feb 2023 05:26:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50312 "EHLO
+        id S231392AbjBTJDb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Feb 2023 04:03:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47130 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229451AbjBTK04 (ORCPT
+        with ESMTP id S231340AbjBTJD3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Feb 2023 05:26:56 -0500
-Received: from mout-p-202.mailbox.org (mout-p-202.mailbox.org [80.241.56.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D9CE974C
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Feb 2023 02:26:54 -0800 (PST)
-Received: from smtp102.mailbox.org (smtp102.mailbox.org [IPv6:2001:67c:2050:b231:465::102])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mout-p-202.mailbox.org (Postfix) with ESMTPS id 4PKz9k0mtKz9sSj;
-        Mon, 20 Feb 2023 11:26:50 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oltmanns.dev;
-        s=MBO0001; t=1676888810;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=nw7utrCKJZ11SBTdEKu8EmY729voqWiToPXqZxlP6g8=;
-        b=nz/2vz68ElMsNd3L4ArepIEjFAwWT/ASsWOv5KdBQ3l6bZjkgKE1ebrdV6drC6PQxjuKbW
-        JyuQSLdlNq5KkDGGXHJbXbXWkxSE6az9Rr+U/wR7CiuJL7DvL9qKtFFLpAwLxWM3UaADOw
-        qrBtNZ9y3y+46OS4IxFKIKdDByZFWxwXsAMVJa8Fs9f5vxCL/4LIQ6AtF2Yf+JkhSTo9Vg
-        dpIoOPqQKRmk5WBwIttnAp3GaypK6HHuLA/qzJo16v5ljoykyrq1RVMJ29eZd+w9GZqIUz
-        h+1qQPgJaULgdk1J+uMieNX0t8+d4y8DCcCWEewAfeSlGN/1KZ6RycKreYlEZw==
-From:   Frank Oltmanns <frank@oltmanns.dev>
-To:     =?utf-8?Q?Ond=C5=99ej?= Jirman <megous@megous.com>
-Cc:     Guido =?utf-8?Q?G=C3=BCnther?= <agx@sigxcpu.org>,
-        Purism Kernel Team <kernel@puri.sm>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Sam Ravnborg <sam@ravnborg.org>,
+        Mon, 20 Feb 2023 04:03:29 -0500
+Received: from mail-io1-xd2d.google.com (mail-io1-xd2d.google.com [IPv6:2607:f8b0:4864:20::d2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F38FB47B
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Feb 2023 01:03:02 -0800 (PST)
+Received: by mail-io1-xd2d.google.com with SMTP id y140so447483iof.6
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Feb 2023 01:03:02 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=6vK8cWtmG3hyaLbDRLFgpGqrS4p5hCk6+ikOOD3341A=;
+        b=BT2ud7sxoolXPSVz5YqHI7AD9RUl8N77zxnGMFNIRbnYZ5NkGNX9t15jb4JPaWA0gx
+         RjgNyOP62hyyw3LtDM51WRaeDbSW+gmOyX365JR1nV/4MS/DGuN+CxjtV2S82wMFZDkJ
+         APJfi8WJHRCCVh7BpaS6YJFgaYSTVJLIbJWYU=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=6vK8cWtmG3hyaLbDRLFgpGqrS4p5hCk6+ikOOD3341A=;
+        b=AFOS4p1E/GcvVruU4twSNxfMxzccY7mmMQoNfDNGBtlA/gAEiGGJ4+8DsB7Ob7zzCX
+         WRiFwyq4l/5SuPMRZycPkUfCHFc8JnRhwj0gb8STzAKOdwIHF7k66V2qB6q5zJYZJRQg
+         s1TXq+xOB3xpbpopTdUswRBrpbiihA3DWGJrKvt7qa+DY8W7c9OpF87VwEIMNSg1SZwq
+         iMKxGIymiodrdZMP36egR2AvRYh8lbxZmiJZZZQlbMz6GFeTX+LYoRoGd2RXig+Nq82U
+         5Qfc7Nmxeh5JZxJC+LYNOLZ1Llq8nxX18SR62yt1BUTWlSqS/6sYXzyCSVcEDjm+1Hj0
+         RuFg==
+X-Gm-Message-State: AO0yUKXcxLr9V77dViJIsvCAAcYEOiwQTlBnsvl9EudL/RSheqx0OBSm
+        WI95UNevVoEci1Gsw1D9gGoxz/jGazPupY9sB6qrsg==
+X-Google-Smtp-Source: AK7set/kfz8hhDABr4DJ+44LUPCJEAg1cYsDPb4PwPecz9RynTAejbvde/9b9DWWLC1U8dNQIeThAlbfMv3O8bnKttg=
+X-Received: by 2002:a05:6638:1342:b0:3c2:c1c9:8bca with SMTP id
+ u2-20020a056638134200b003c2c1c98bcamr1153386jad.2.1676883781590; Mon, 20 Feb
+ 2023 01:03:01 -0800 (PST)
+MIME-Version: 1.0
+References: <20230204133040.1236799-1-treapking@chromium.org>
+ <20230204133040.1236799-4-treapking@chromium.org> <Y+LBzkP+/j6RQ5Jy@ashyti-mobl2.lan>
+ <CAEXTbpfxJVyL_TT7j1J0tbEjWnzj6JYOrEJZLa14OdHZQhYopg@mail.gmail.com>
+In-Reply-To: <CAEXTbpfxJVyL_TT7j1J0tbEjWnzj6JYOrEJZLa14OdHZQhYopg@mail.gmail.com>
+From:   Pin-yen Lin <treapking@chromium.org>
+Date:   Mon, 20 Feb 2023 17:02:50 +0800
+Message-ID: <CAEXTbpe_DGzF+M6Cm041Qkec-FZTXn5G8oCa_P-1cU355MA0JA@mail.gmail.com>
+Subject: Re: [PATCH v11 3/9] drm/display: Add Type-C switch helpers
+To:     Andi Shyti <andi.shyti@linux.intel.com>
+Cc:     Andrzej Hajda <andrzej.hajda@intel.com>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
+        Jonas Karlman <jonas@kwiboo.se>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
         David Airlie <airlied@gmail.com>,
         Daniel Vetter <daniel@ffwll.ch>,
-        "open list:DRM PANEL DRIVERS" <dri-devel@lists.freedesktop.org>,
-        open list <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 1/1] drm/panel: st7703: Fix vertical refresh rate of XBD599
-Date:   Mon, 20 Feb 2023 08:40:28 +0100
-References: <20230219114553.288057-1-frank@oltmanns.dev>
- <20230219114553.288057-2-frank@oltmanns.dev>
- <20230219123542.yxb5ixe424ig6ofv@core>
-In-reply-to: <20230219123542.yxb5ixe424ig6ofv@core>
-Message-ID: <874jrgr5t3.fsf@oltmanns.dev>
-MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="=-=-="
-X-Rspamd-Queue-Id: 4PKz9k0mtKz9sSj
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Daniel Scally <djrscally@gmail.com>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Prashant Malani <pmalani@chromium.org>,
+        Benson Leung <bleung@chromium.org>,
+        Guenter Roeck <groeck@chromium.org>,
+        linux-kernel@vger.kernel.org,
+        =?UTF-8?B?TsOtY29sYXMgRiAuIFIgLiBBIC4gUHJhZG8=?= 
+        <nfraprado@collabora.com>, Hsin-Yi Wang <hsinyi@chromium.org>,
+        devicetree@vger.kernel.org, Allen Chen <allen.chen@ite.com.tw>,
+        Lyude Paul <lyude@redhat.com>, linux-acpi@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, Marek Vasut <marex@denx.de>,
+        Xin Ji <xji@analogixsemi.com>,
+        Stephen Boyd <swboyd@chromium.org>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Javier Martinez Canillas <javierm@redhat.com>,
+        chrome-platform@lists.linux.dev,
+        Alex Deucher <alexander.deucher@amd.com>,
+        Douglas Anderson <dianders@chromium.org>,
+        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+        Imre Deak <imre.deak@intel.com>,
+        Jani Nikula <jani.nikula@intel.com>,
+        Kees Cook <keescook@chromium.org>,
+        Thierry Reding <treding@nvidia.com>,
+        Robert Foss <rfoss@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---=-=-=
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+I think I accidentally used HTML mode for the previous email. Sorry about t=
+hat.
 
-Hi Ond=C5=99ej,
-hi all,
+On Mon, Feb 20, 2023 at 4:41 PM Pin-yen Lin <treapking@chromium.org> wrote:
+>
+> Hi Andi,
+>
+> Thanks for the review.
+>
+> On Wed, Feb 8, 2023 at 5:25 AM Andi Shyti <andi.shyti@linux.intel.com> wr=
+ote:
+>>
+>> Hi Pin-yen,
+>>
+>> [...]
+>>
+>> > +static int drm_dp_register_mode_switch(struct device *dev,
+>> > +                                    struct fwnode_handle *fwnode,
+>> > +                                    struct drm_dp_typec_switch_desc *=
+switch_desc,
+>> > +                                    void *data, typec_mux_set_fn_t mu=
+x_set)
+>> > +{
+>> > +     struct drm_dp_typec_port_data *port_data;
+>> > +     struct typec_mux_desc mux_desc =3D {};
+>> > +     char name[32];
+>> > +     u32 port_num;
+>> > +     int ret;
+>> > +
+>> > +     ret =3D fwnode_property_read_u32(fwnode, "reg", &port_num);
+>> > +     if (ret) {
+>> > +             dev_err(dev, "Failed to read reg property: %d\n", ret);
+>> > +             return ret;
+>> > +     }
+>> > +
+>> > +     port_data =3D &switch_desc->typec_ports[port_num];
+>> > +     port_data->data =3D data;
+>> > +     port_data->port_num =3D port_num;
+>> > +     port_data->fwnode =3D fwnode;
+>> > +     mux_desc.fwnode =3D fwnode;
+>> > +     mux_desc.drvdata =3D port_data;
+>> > +     snprintf(name, sizeof(name), "%pfwP-%u", fwnode, port_num);
+>> > +     mux_desc.name =3D name;
+>> > +     mux_desc.set =3D mux_set;
+>> > +
+>> > +     port_data->typec_mux =3D typec_mux_register(dev, &mux_desc);
+>> > +     if (IS_ERR(port_data->typec_mux)) {
+>> > +             ret =3D PTR_ERR(port_data->typec_mux);
+>> > +             dev_err(dev, "Mode switch register for port %d failed: %=
+d\n",
+>> > +                     port_num, ret);
+>> > +
+>> > +             return ret;
+>>
+>> you don't need this return here...
+>>
+>> > +     }
+>> > +
+>> > +     return 0;
+>>
+>> Just "return ret;" here.
 
-Ond=C5=99ej Jirman <megous@megous.com> writes:
-> On Sun, Feb 19, 2023 at 12:45:53PM +0100, Frank Oltmanns wrote:
->> Fix the XBD599 panel=E2=80=99s slight visual stutter by correcting the p=
-ixel
->> clock speed so that the panel=E2=80=99s 60Hz vertical refresh rate is me=
+This was actually suggested by Angelo in [1]. I personally don't have
+a strong opinion on either approach.
+
+[1]https://lore.kernel.org/all/023519eb-0adb-3b08-71b9-afb92a6cceaf@collabo=
+ra.com/
+
+Pin-yen
+>>
+>>
+>> > +}
+>> > +
+>> > +/**
+>> > + * drm_dp_register_typec_switches() - register Type-C switches
+>> > + * @dev: Device that registers Type-C switches
+>> > + * @port: Device node for the switch
+>> > + * @switch_desc: A Type-C switch descriptor
+>> > + * @data: Private data for the switches
+>> > + * @mux_set: Callback function for typec_mux_set
+>> > + *
+>> > + * This function registers USB Type-C switches for DP bridges that ca=
+n switch
+>> > + * the output signal between their output pins.
+>> > + *
+>> > + * Currently only mode switches are implemented, and the function ass=
+umes the
+>> > + * given @port device node has endpoints with "mode-switch" property.
+>> > + * The port number is determined by the "reg" property of the endpoin=
 t.
+>> > + */
+>> > +int drm_dp_register_typec_switches(struct device *dev, struct fwnode_=
+handle *port,
+>> > +                                struct drm_dp_typec_switch_desc *swit=
+ch_desc,
+>> > +                                void *data, typec_mux_set_fn_t mux_se=
+t)
+>> > +{
+>> > +     struct fwnode_handle *sw;
+>> > +     int ret;
+>> > +
+>> > +     fwnode_for_each_child_node(port, sw) {
+>> > +             if (fwnode_property_present(sw, "mode-switch"))
+>> > +                     switch_desc->num_typec_switches++;
+>> > +     }
 >>
->> Set the clock speed using the underlying formula instead of a magic
->> number. To have a consistent procedure for both panels, set the JH057N
->> panel=E2=80=99s clock also as a formula.
+>> no need for brackets here
 >>
->> =E2=80=94
->>  drivers/gpu/drm/panel/panel-sitronix-st7703.c | 4 ++=E2=80=93
->>  1 file changed, 2 insertions(+), 2 deletions(-)
+>> > +
+>> > +     if (!switch_desc->num_typec_switches) {
+>> > +             dev_dbg(dev, "No Type-C switches node found\n");
 >>
->> diff =E2=80=93git a/drivers/gpu/drm/panel/panel-sitronix-st7703.c b/driv=
-ers/gpu/drm/panel/panel-sitronix-st7703.c
->> index 6747ca237ced..cd7d631f7573 100644
->> =E2=80=94 a/drivers/gpu/drm/panel/panel-sitronix-st7703.c
->> +++ b/drivers/gpu/drm/panel/panel-sitronix-st7703.c
->> @@ -139,7 +139,7 @@ static const struct drm_display_mode jh057n00900_mod=
-e =3D {
->>  	.vsync_start =3D 1440 + 20,
->>  	.vsync_end   =3D 1440 + 20 + 4,
->>  	.vtotal	     =3D 1440 + 20 + 4 + 12,
->> -	.clock	     =3D 75276,
->> +	.clock	     =3D (720 + 90 + 20 + 20) * (1440 + 20 + 4 + 12) * 60 / 100=
-0,
->>  	.flags	     =3D DRM_MODE_FLAG_NHSYNC | DRM_MODE_FLAG_NVSYNC,
->>  	.width_mm    =3D 65,
->>  	.height_mm   =3D 130,
->> @@ -324,7 +324,7 @@ static const struct drm_display_mode xbd599_mode =3D=
- {
->>  	.vsync_start =3D 1440 + 18,
->>  	.vsync_end   =3D 1440 + 18 + 10,
->>  	.vtotal	     =3D 1440 + 18 + 10 + 17,
->> -	.clock	     =3D 69000,
->> +	.clock	     =3D (720 + 40 + 40 + 40) * (1440 + 18 + 10 + 17) * 60 / 10=
-00,
+>> dev_warn()?
 >
-> As for pinephone, A64 can=E2=80=99t produce 74.844 MHz precisely, so this=
- will not work.
 >
-> Better fix is to alter the mode so that clock can be something the only S=
-oC this
-> panel is used with can actually produce.
+> I used dev_dbg here because the users might call this without checking if=
+ there are mode switch endpoints present, and this is the case for the curr=
+ent users (it6505 and anx7625). If we use dev_warn here, there will be warn=
+ings every time even on use cases without Type-C switches.
 >
-> See eg. <https://github.com/megous/linux/commit/dd070679d717e7f34af755856=
-3698240a43981a6>
-> which is tested to actually produce 60Hz by measuring the vsync events ag=
-ainst
-> the CPU timer.
->
-> Your patch will not produce the intended effect.
->
-> kind regards,
-> 	o.
->
-
-The TL;DR of my upcoming musings are: Thank you very much for your feedback=
-! Any
-recommendations for an informative read about the topic that you or anybody=
- else
-has, is greatly appreciated.
-
-How did you measure the vsync events? Were you using vblank interrupts [1]?
-
-I have to admit that I tested only visually and couldn=E2=80=99t spot a dif=
-ference
-between your patch and mine. I=E2=80=99ll need to put more thinking into th=
-is, and maybe
-you or anyone reading this can help me with that.
-
-My interpretation of the `struct drm_display_mode` documentation [2] was, t=
-hat
-these are logical dimensions/clocks that somewhere down the stack are conve=
-rted
-to their physical/hardware representation.
-
-But now I=E2=80=99ve read the description of the struct=E2=80=99s =E2=80=9C=
-crtc_clock=E2=80=9D member more
-carefully. It says:
-=E2=80=9CActual pixel or dot clock in the hardware. This differs from the
-logical @clock when e.g. using interlacing, double-clocking, stereo
-modes or other fancy stuff that changes the timings and signals
-actually sent over the wire.=E2=80=9D
-
-So, can I say that if we don=E2=80=99t use =E2=80=9Cinterlacing, double-clo=
-cking, stereo modes
-or other fancy stuff=E2=80=9D that `crtc_clock` will be equal to `clock` an=
-d therefore
-we have to choose `clock` according to the SoC=E2=80=99s capabilities?
-
-Also, I haven=E2=80=99t found a source about which values to use for the fr=
-ont and back
-porch part of the panel and why can you just =E2=80=9Carbitrarily=E2=80=9D =
-change those. My
-assumption is, that those are just extra pixels we can add to make the
-dimensions match the ratio of clock and vertical refresh rate. At least that
-seems to be, what you did in your patch. But again, no source to back my
-assumption about the range the porches can have.
-
-I=E2=80=99ve put the following docs on my =E2=80=9Cto read and understand=
-=E2=80=9D list:
-=E2=80=A2 Allwinner A64 User Manual (to learn more about the SoC=E2=80=99s =
-TCON0 and what
-  clock=E2=80=99s the SoC can produce)
-=E2=80=A2 drm-internals.rst
-=E2=80=A2 =E2=80=9CRendering PinePhone=E2=80=99s display=E2=80=9D [3], to l=
-earn why it produces 69 MHz.
-=E2=80=A2 Your commit message for the PinePhone Pro panel [4] (found on you=
-r blog:
-  <https://xnux.eu/log/>)
-
-Is there anything else I should add?
-
-Thank you again and best regards,
-  Frank
-
-[1] <https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tre=
-e/drivers/gpu/drm/drm_vblank.c>
-[2] <https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tre=
-e/include/drm/drm_modes.h#n198>
-[3] <https://lupyuen.github.io/articles/de>
-[4] <https://github.com/megous/linux/commit/a173b114c9323c718530280b3a918d0=
-925edaa6a>
-
->>  	.flags	     =3D DRM_MODE_FLAG_NHSYNC | DRM_MODE_FLAG_NVSYNC,
->>  	.width_mm    =3D 68,
->>  	.height_mm   =3D 136,
->> =E2=80=93
->> 2.39.1
+> Thanks and regards,
+> Pin-yen
 >>
-
---=-=-=--
+>>
+>> > +             return 0;
+>> > +     }
+>> > +
+>> > +     switch_desc->typec_ports =3D devm_kcalloc(
+>> > +             dev, switch_desc->num_typec_switches,
+>> > +             sizeof(struct drm_dp_typec_port_data), GFP_KERNEL);
+>> > +
+>> > +     if (!switch_desc->typec_ports)
+>> > +             return -ENOMEM;
+>> > +
+>> > +     /* Register switches for each connector. */
+>> > +     fwnode_for_each_child_node(port, sw) {
+>> > +             if (!fwnode_property_present(sw, "mode-switch"))
+>> > +                     continue;
+>> > +             ret =3D drm_dp_register_mode_switch(dev, sw, switch_desc=
+, data, mux_set);
+>> > +             if (ret)
+>> > +                     goto err_unregister_typec_switches;
+>> > +     }
+>> > +
+>> > +     return 0;
+>> > +
+>> > +err_unregister_typec_switches:
+>> > +     fwnode_handle_put(sw);
+>> > +     drm_dp_unregister_typec_switches(switch_desc);
+>> > +     dev_err(dev, "Failed to register mode switch: %d\n", ret);
+>>
+>> there is a bit of dmesg spamming. Please choose where you want to
+>> print the error, either in this function or in
+>> drm_dp_register_mode_switch().
+>>
+>> Andi
+>>
+>> > +     return ret;
+>> > +}
+>> > +EXPORT_SYMBOL(drm_dp_register_typec_switches);
+>>
+>> [...]
