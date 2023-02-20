@@ -2,115 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1925869D2F1
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Feb 2023 19:44:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AD37169D300
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Feb 2023 19:45:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232557AbjBTSoj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Feb 2023 13:44:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52666 "EHLO
+        id S232597AbjBTSpn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Feb 2023 13:45:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53140 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230076AbjBTSoi (ORCPT
+        with ESMTP id S231740AbjBTSph (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Feb 2023 13:44:38 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B2331E1C7
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Feb 2023 10:44:37 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id E5C6CB80ACE
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Feb 2023 18:44:35 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7AFC2C433A8
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Feb 2023 18:44:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1676918674;
-        bh=d4Bx4S2fq9PeffyCcYcLMHDz/eiQssEMBaaCsyajxBg=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=ZD2xM9cxegW3YFS2bjgy88Jlcl1DX+wcPQLIt++GbrFj0BcCYlnE0xOYWwY35ki+k
-         zS+snxYinTFgz0iwrFDpYgdnzoeu3XjLBh68RDIpzFOkAufMpEQdfnCZF7J5JlL9ut
-         ESqiahZzxCX3bVO8uazrdNyLPuTGxi1SfDUBnpiGGvryF1kNDCOYWoeX60f+0ozrNY
-         QwSywLYLN9ITjQBYrFCeFswQCgyFxfv6NdqeA4/BJn28I+OIrlOKQNdPLv+rEeQ3eA
-         4qdvdFiW6H1bfgCtpZid393vljFCitebAQpKVNLrAwdMSSpZzwVzwhKbw4yE5pwjha
-         fXc8nEAvPcM3g==
-Received: by mail-ed1-f50.google.com with SMTP id da10so9449645edb.3
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Feb 2023 10:44:34 -0800 (PST)
-X-Gm-Message-State: AO0yUKVVnabSh3epu8sbPN8iSKqR7bcmuELbyvB8q/SFQlFBzSZFuUNO
-        8g42ubpuczDAGF2/VwCvXyZNy+cfEoc8AzcKS9tfeA==
-X-Google-Smtp-Source: AK7set8yxxVXxUKNQJv0i3ws370cOjEt5HV31hok9VcKrtUgqK64+Pxa5bz9wMlQ6dJs4bMV+ph6A8I/BRWBRn1ppBs=
-X-Received: by 2002:a17:906:b746:b0:88d:64e7:a2be with SMTP id
- fx6-20020a170906b74600b0088d64e7a2bemr4795555ejb.15.1676918672685; Mon, 20
- Feb 2023 10:44:32 -0800 (PST)
+        Mon, 20 Feb 2023 13:45:37 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30EA41E1F4
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Feb 2023 10:44:48 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1676918687;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=5o6eRTQNfDmApvYWeJ5Fj/h2ml291ODKP5nMoklmwOg=;
+        b=axs1HljxYlNniipImmcz8h5/Yz5PZo6cgsEObn5l4n6FEjOnh3G3gCj1HF9Lt7bQot6yq9
+        NO0xVxGUd5hMwTzkmW8vz7LQMlH2mzUwmWAVX2gdsCEqGvzHV2JO0NTTL+VhEQDEG8Kn/D
+        tvIH/vTHjge6sic/KgT+fdXtOoQ4Qro=
+Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com
+ [209.85.208.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-7-WeOMW5AAPeWPc1_tS-mSQA-1; Mon, 20 Feb 2023 13:44:46 -0500
+X-MC-Unique: WeOMW5AAPeWPc1_tS-mSQA-1
+Received: by mail-ed1-f70.google.com with SMTP id da15-20020a056402176f00b004ace822b750so2811603edb.20
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Feb 2023 10:44:45 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=5o6eRTQNfDmApvYWeJ5Fj/h2ml291ODKP5nMoklmwOg=;
+        b=SoE4vdn3eEB0J8tbXgSGfcz9L+KdPbHt/BHM2mc1xj/htIkC6vU9BMbNLpBVgQrQV5
+         7d1gdgFGVkN/0G/Fpnw+RV9U4dGzXUObLmb6lOUQny2EcV1EKxiLfuz4lSqUdjAyBOiF
+         qfjWQaLZvziOnlA6U6u0LW26GvX21jA9rAA4GXxOctvDBpcwXm/UdsYtsXzXhXWRvO81
+         sK9uY878BwLdJIgBq2dxV++X22gzHFKhs6ipHsVG4JT3iwZAHIc2aUu0OhAdhRHkzJFP
+         drkrfxxxmsqiSX5KEpKVse3DbGl7Rf+xvx6enPANpz6T6W7YT4MaPqV0GN4ief2Pw3Xy
+         i0gg==
+X-Gm-Message-State: AO0yUKUCPCBr7R+GsQrNGPM1FvQiT/RH6ZrwQuuWPhjFi3QtVR8cvW9f
+        Ml5FULVZ0vPtmpZU1nmOEVUwWVSMas8l+QFqsl2rR+340xYpPw36wQxaFn5IUeLhAeSnMIlBwVc
+        JTJRBWu2MKCX5OD0+C0NjVLzG
+X-Received: by 2002:a17:907:7288:b0:8bc:9bce:7eb6 with SMTP id dt8-20020a170907728800b008bc9bce7eb6mr11093417ejc.7.1676918684880;
+        Mon, 20 Feb 2023 10:44:44 -0800 (PST)
+X-Google-Smtp-Source: AK7set9ocE67SLza6haA31oEbJHJRcyYUHybtxqKgcJJvEaEBloE29nx4Mt4k9LeCQov7jkXoVJscw==
+X-Received: by 2002:a17:907:7288:b0:8bc:9bce:7eb6 with SMTP id dt8-20020a170907728800b008bc9bce7eb6mr11093401ejc.7.1676918684569;
+        Mon, 20 Feb 2023 10:44:44 -0800 (PST)
+Received: from ?IPV6:2001:b07:6468:f312:4783:a68:c1ee:15c5? ([2001:b07:6468:f312:4783:a68:c1ee:15c5])
+        by smtp.googlemail.com with ESMTPSA id u20-20020a1709064ad400b008d21431e705sm1751526ejt.84.2023.02.20.10.44.43
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 20 Feb 2023 10:44:44 -0800 (PST)
+Message-ID: <489768bf-34e1-305b-9264-cdb1cebf3be2@redhat.com>
+Date:   Mon, 20 Feb 2023 19:44:43 +0100
 MIME-Version: 1.0
-References: <20230220120127.1975241-1-kpsingh@kernel.org> <20230220121350.aidsipw3kd4rsyss@treble>
- <CACYkzJ5L9MLuE5Jz+z5-NJCCrUqTbgKQkXSqnQnCfTD_WNA7_Q@mail.gmail.com>
- <CACYkzJ6n=-tobhX0ONQhjHSgmnNjWnNe_dZnEOGtD8Y6S3RHbA@mail.gmail.com>
- <20230220163442.7fmaeef3oqci4ee3@treble> <Y/Ox3MJZF1Yb7b6y@zn.tnic>
- <20230220175929.2laflfb2met6y3kc@treble> <CACYkzJ71xqzY6-wL+YShcL+d6ugzcdFHr6tbYWWE_ep52+RBZQ@mail.gmail.com>
- <Y/O6Wr4BbtfhXrNt@zn.tnic>
-In-Reply-To: <Y/O6Wr4BbtfhXrNt@zn.tnic>
-From:   KP Singh <kpsingh@kernel.org>
-Date:   Mon, 20 Feb 2023 10:44:21 -0800
-X-Gmail-Original-Message-ID: <CACYkzJ4jvOGGhuQ1HDzfpGS5vffg9X6hEcLC93QJBFqX+LxLVw@mail.gmail.com>
-Message-ID: <CACYkzJ4jvOGGhuQ1HDzfpGS5vffg9X6hEcLC93QJBFqX+LxLVw@mail.gmail.com>
-Subject: Re: [PATCH RESEND] x86/speculation: Fix user-mode spectre-v2
- protection with KERNEL_IBRS
-To:     Borislav Petkov <bp@alien8.de>
-Cc:     Josh Poimboeuf <jpoimboe@kernel.org>, linux-kernel@vger.kernel.org,
-        pjt@google.com, evn@google.com, tglx@linutronix.de,
-        mingo@redhat.com, dave.hansen@linux.intel.com, x86@kernel.org,
-        hpa@zytor.com, peterz@infradead.org,
-        pawan.kumar.gupta@linux.intel.com, kim.phillips@amd.com,
-        alexandre.chartre@oracle.com, daniel.sneddon@linux.intel.com,
-        =?UTF-8?Q?Jos=C3=A9_Oliveira?= <joseloliveira11@gmail.com>,
-        Rodrigo Branco <rodrigo@kernelhacking.com>,
-        Alexandra Sandulescu <aesa@google.com>,
-        Jim Mattson <jmattson@google.com>, stable@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH v2 07/29] LoongArch: KVM: Implement vcpu run interface
+Content-Language: en-US
+To:     Tianrui Zhao <zhaotianrui@loongson.cn>
+Cc:     Huacai Chen <chenhuacai@kernel.org>,
+        WANG Xuerui <kernel@xen0n.name>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        loongarch@lists.linux.dev, linux-kernel@vger.kernel.org,
+        kvm@vger.kernel.org, Jens Axboe <axboe@kernel.dk>,
+        Mark Brown <broonie@kernel.org>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        Oliver Upton <oliver.upton@linux.dev>, maobibo@loongson.cn
+References: <20230220065735.1282809-1-zhaotianrui@loongson.cn>
+ <20230220065735.1282809-8-zhaotianrui@loongson.cn>
+From:   Paolo Bonzini <pbonzini@redhat.com>
+In-Reply-To: <20230220065735.1282809-8-zhaotianrui@loongson.cn>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 20, 2023 at 10:22 AM Borislav Petkov <bp@alien8.de> wrote:
->
-> On Mon, Feb 20, 2023 at 10:01:57AM -0800, KP Singh wrote:
-> > Well, we disable IBRS userspace (this is KENREL_IBRS), because it is
-> > slow. Now if a user space process wants to protect itself from cross
-> > thread training, it should be able to do it, either by turning STIBP
-> > always on or using a prctl to enable. With the current logic, it's
-> > unable to do so.
->
-> Ofcourse it can:
->
->         [SPECTRE_V2_USER_PRCTL]                 = "User space: Mitigation: STIBP via prctl",
->
-> we did this at the time so that a userspace process can control it via
-> prctl().
+On 2/20/23 07:57, Tianrui Zhao wrote:
+> +	lose_fpu(1);
 
-No it cannot with IBRS which is really just KERNEL_IBRS enabled, we
-bail out if spectre_v2_in_inbrs_mode and ignore any selections:
+Is this enough to clear CSR_EUEN_FPEN?
 
-https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/arch/x86/kernel/cpu/bugs.c#n1202
+Paolo
 
-The whole confusion spews from the fact that while the user thinks
-they are enabling spectre_v2=ibrs, they only really get KERNEL_IBRS
-and IBRS is dropped in userspace. This in itself seems like a decision
-the kernel implicitly took on behalf of the user. Now it also took
-their ability to enable spectre_v2_user in this case, which is what
-this patch is fixing.
-
-
->
-> So, maybe you should explain what you're trying to accomplish in detail
-> and where it fails...
->
-> --
-> Regards/Gruss,
->     Boris.
->
-> https://people.kernel.org/tglx/notes-about-netiquette
