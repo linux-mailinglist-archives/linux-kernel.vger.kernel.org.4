@@ -2,96 +2,173 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D2C8769C86F
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Feb 2023 11:17:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F350B69C86B
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Feb 2023 11:17:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231562AbjBTKRt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Feb 2023 05:17:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46088 "EHLO
+        id S231504AbjBTKRi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Feb 2023 05:17:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45820 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231514AbjBTKRr (ORCPT
+        with ESMTP id S231422AbjBTKRg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Feb 2023 05:17:47 -0500
-Received: from mx0b-001ae601.pphosted.com (mx0b-001ae601.pphosted.com [67.231.152.168])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 639FE1555B;
-        Mon, 20 Feb 2023 02:17:46 -0800 (PST)
-Received: from pps.filterd (m0077474.ppops.net [127.0.0.1])
-        by mx0b-001ae601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 31K5bmhs025658;
-        Mon, 20 Feb 2023 04:17:05 -0600
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cirrus.com; h=date : from : to : cc
- : subject : message-id : references : mime-version : content-type :
- in-reply-to; s=PODMain02222019;
- bh=4t3QpaWWouFSiBxmF3fvCCsghAJG/UHx01EbLuY8ygI=;
- b=FKbRaf4/kLURFVrQnV4+RP67tz7EEPCVUm2824VVKmOhSq6kG/zIbPdyQskLYbyK5/jK
- TKyfIXCKwxryEDSKnIb5hyvqInLZ0DEOBVeiistBtnx+cnbAVXmhd5pHJ/BpgGm5VLg7
- NQuQgS8Uist+PcyN/YpIJBUr/aD0kCrSk++qALh1jkFUgarMvCUXyLtBZpiOoVHdhOk+
- nnes6mIAbUqvCW6sqRK+AGWJj8XTEWiilm75ZM8dbeZ3z0sP7KuA0IQHTyD4WmeCUq/w
- 7pn1EzQWT4hi56vVRNOoLoktthz+ziLFpCtUXoz9m7I2nSux0cUiGkQElVJegVPwLuIq Pg== 
-Received: from ediex02.ad.cirrus.com ([84.19.233.68])
-        by mx0b-001ae601.pphosted.com (PPS) with ESMTPS id 3ntuyst25a-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 20 Feb 2023 04:17:05 -0600
-Received: from ediex01.ad.cirrus.com (198.61.84.80) by ediex02.ad.cirrus.com
- (198.61.84.81) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.21; Mon, 20 Feb
- 2023 04:17:03 -0600
-Received: from ediswmail.ad.cirrus.com (198.61.86.93) by ediex01.ad.cirrus.com
- (198.61.84.80) with Microsoft SMTP Server id 15.2.1118.21 via Frontend
- Transport; Mon, 20 Feb 2023 04:17:03 -0600
-Received: from ediswmail.ad.cirrus.com (ediswmail.ad.cirrus.com [198.61.86.93])
-        by ediswmail.ad.cirrus.com (Postfix) with ESMTP id D383011A8;
-        Mon, 20 Feb 2023 10:17:03 +0000 (UTC)
-Date:   Mon, 20 Feb 2023 10:17:03 +0000
-From:   Charles Keepax <ckeepax@opensource.cirrus.com>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-CC:     Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
+        Mon, 20 Feb 2023 05:17:36 -0500
+Received: from mail-lj1-x231.google.com (mail-lj1-x231.google.com [IPv6:2a00:1450:4864:20::231])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DAFD14EAD
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Feb 2023 02:17:34 -0800 (PST)
+Received: by mail-lj1-x231.google.com with SMTP id a10so692314ljq.1
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Feb 2023 02:17:34 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=j/mBL/s9w+zymmQfyS3pY3QfWP8+AdeFf5eGjucm2qQ=;
+        b=K0DJ6JGrVOuibpGD9yC40OezN6wlr46KLSXOAhJ/xQXV4yUZSsxz+ErlGrfaYJ7C18
+         SMZwk+EkgOJQuLyOGio2KcqOMwJ01JsCf3eCHlZ1bpyEZm+/JTes23QciSGvEixNtxEs
+         FSGwouwqpkoGnM0RDBoEaZyHKRrKKNIWl/A/jMDxdSruvWRRqO9S6fZAAOCdqXNgHFHH
+         a7O9cLMVOEJTCRDPY+IOSflkkjhCLtuIY4pVk35KBOarD8YAFpddKbZR4KBmrTTnvAKZ
+         PPl5Jf2jKzb8M2E9dJChb23I5v3U+p9ZAxry8qYu4JUY6am0be+j7wDk543sqvGml6xe
+         aVRQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=j/mBL/s9w+zymmQfyS3pY3QfWP8+AdeFf5eGjucm2qQ=;
+        b=rAbBAEdeCCo+8Q/XlEYPhfQuIrE3YFA039nyhTkTFwX43F9/oWalp0M1WL+/f7N8hX
+         zT0W0RwtXU159mpIZum/e9Uz86aNLeTuQDWBLRRJNBOpUGxgXcx9UJHF2KKuOWqu2Gq6
+         Q+368sxjnWAJMnTO89C7Nzke5Km/v5cRHgvxOP9VO7Ye/9tPKGWmg3cs5091Tv7StgN3
+         j0ix4BPtmmytQN4x8HxGasOPHS7E1RhChW9rsthto7bS/RvdWtETSXSMZ0HvneGikPdc
+         D4YAHRYcG9oNCUn2ewCexLyAng2czAi0KeVkyzVWIl5nIXfYyDWQPTmIqNWMkgFTg++u
+         D+CQ==
+X-Gm-Message-State: AO0yUKXnj96OjxdtsJSYDz1uVhFEgPrwqGxXWDmfImbpWMb0BGrNcFhf
+        ayb7UiKHvtMTrwDFZa2wkxNjqA==
+X-Google-Smtp-Source: AK7set9te5orsT1nxfrNdKCa9pXCN/rIlq+CkslRUZs+CTQaSpFhy3Q0sLXDHcGtEax3mF2k8OS84Q==
+X-Received: by 2002:a05:651c:1508:b0:28f:890b:c5fd with SMTP id e8-20020a05651c150800b0028f890bc5fdmr259549ljf.39.1676888252419;
+        Mon, 20 Feb 2023 02:17:32 -0800 (PST)
+Received: from [192.168.1.101] (abxh184.neoplus.adsl.tpnet.pl. [83.9.1.184])
+        by smtp.gmail.com with ESMTPSA id i62-20020a2e2241000000b002934d0ff439sm1472769lji.104.2023.02.20.02.17.31
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 20 Feb 2023 02:17:32 -0800 (PST)
+Message-ID: <be1201a5-f315-9125-8768-4719a92f07f9@linaro.org>
+Date:   Mon, 20 Feb 2023 11:17:30 +0100
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH v3 3/3] arm64: dts: qcom: sdm845-oneplus: add alert-slider
+Content-Language: en-US
+To:     Gergo Koteles <soyer@irl.hu>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        - <patches@opensource.cirrus.com>,
-        Adrien Grassein <adrien.grassein@gmail.com>,
-        Randy Li <ayaka@soulik.info>, <alsa-devel@alsa-project.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-samsung-soc@vger.kernel.org>
-Subject: Re: [PATCH 1/3] ASoC: dt-bindings: wlf,wm8960: Convert to dtschema
-Message-ID: <20230220101703.GL68926@ediswmail.ad.cirrus.com>
-References: <20230217150627.779764-1-krzysztof.kozlowski@linaro.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <20230217150627.779764-1-krzysztof.kozlowski@linaro.org>
-User-Agent: Mutt/1.5.21 (2010-09-15)
-X-Proofpoint-GUID: vKwsPWc5Lsz0QnISxBTIqrwxYh6kG-RP
-X-Proofpoint-ORIG-GUID: vKwsPWc5Lsz0QnISxBTIqrwxYh6kG-RP
-X-Proofpoint-Spam-Reason: safe
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        Jiri Kosina <jikos@kernel.org>,
+        Benjamin Tissoires <benjamin.tissoires@redhat.com>
+Cc:     linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        Caleb Connolly <caleb@connolly.tech>
+References: <cover.1676850819.git.soyer@irl.hu>
+ <16e6c00389bf0ee881a055f81a3dbfd5bfc9c469.1676850819.git.soyer@irl.hu>
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+In-Reply-To: <16e6c00389bf0ee881a055f81a3dbfd5bfc9c469.1676850819.git.soyer@irl.hu>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Feb 17, 2023 at 04:06:25PM +0100, Krzysztof Kozlowski wrote:
-> Convert the Wolfson WM8960 audio codecs bindings to DT schema.
+
+
+On 20.02.2023 01:13, Gergo Koteles wrote:
+> The alert-slider is a tri-state sound profile switch found on the OnePlus 6,
+> Android maps the states to "silent", "vibrate" and "ring". Expose them as
+> ABS_SND_PROFILE events.
+> The previous GPIO numbers were wrong. Update them to the correct
+> ones.
 > 
-> Changes against original binding:
-> 1. Document clocks and clock-names - already present in DTS and used
->    by Linux driver.
-> 
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> 
+> Co-developed-by: Caleb Connolly <caleb@connolly.tech>
+> Signed-off-by: Caleb Connolly <caleb@connolly.tech>
+> Signed-off-by: Gergo Koteles <soyer@irl.hu>
 > ---
+>  .../boot/dts/qcom/sdm845-oneplus-common.dtsi  | 43 ++++++++++++++++++-
+>  1 file changed, 41 insertions(+), 2 deletions(-)
+> 
+> diff --git a/arch/arm64/boot/dts/qcom/sdm845-oneplus-common.dtsi b/arch/arm64/boot/dts/qcom/sdm845-oneplus-common.dtsi
+> index 64638ea94db7..ff982dd853a9 100644
+> --- a/arch/arm64/boot/dts/qcom/sdm845-oneplus-common.dtsi
+> +++ b/arch/arm64/boot/dts/qcom/sdm845-oneplus-common.dtsi
+> @@ -52,6 +52,45 @@ key-vol-up {
+>  		};
+>  	};
+>  
+> +	alert-slider {
+This is out of order, alphabetically.
 
-Acked-by: Charles Keepax <ckeepax@opensource.cirrus.com>
+> +		compatible = "gpio-keys";
+> +		label = "Alert slider";
+> +
+> +		pinctrl-0 = <&alert_slider_default>;
+> +		pinctrl-names = "default";
+> +
+> +		switch-top {
+> +			label = "Silent";
+> +			linux,input-type = <EV_ABS>;
+> +			linux,code = <ABS_SND_PROFILE>;
+> +			linux,input-value = <SND_PROFILE_SILENT>;
+> +			gpios = <&tlmm 126 GPIO_ACTIVE_LOW>;
+> +			debounce-interval = <50>;
+Is there a reason it can't be the default 5ms, since it should
+more or less be a simple input ping to the userspace?
 
-Thanks,
-Charles
+Other than that:
+
+Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+
+Konrad
+> +			linux,can-disable;
+> +		};
+> +
+> +		switch-middle {
+> +			label = "Vibrate";
+> +			linux,input-type = <EV_ABS>;
+> +			linux,code = <ABS_SND_PROFILE>;
+> +			linux,input-value = <SND_PROFILE_VIBRATE>;
+> +			gpios = <&tlmm 52 GPIO_ACTIVE_LOW>;
+> +			debounce-interval = <50>;
+> +			linux,can-disable;
+> +
+> +		};
+> +
+> +		switch-bottom {
+> +			label = "Ring";
+> +			linux,input-type = <EV_ABS>;
+> +			linux,code = <ABS_SND_PROFILE>;
+> +			linux,input-value = <SND_PROFILE_RING>;
+> +			gpios = <&tlmm 24 GPIO_ACTIVE_LOW>;
+> +			debounce-interval = <50>;
+> +			linux,can-disable;
+> +		};
+> +	};
+> +
+>  	reserved-memory {
+>  		/*
+>  		 * The rmtfs_mem needs to be guarded due to "XPU limitations"
+> @@ -753,8 +792,8 @@ &usb_1_hsphy {
+>  &tlmm {
+>  	gpio-reserved-ranges = <0 4>, <81 4>;
+>  
+> -	tri_state_key_default: tri-state-key-default-state {
+> -		pins = "gpio40", "gpio42", "gpio26";
+> +	alert_slider_default: alert-slider-default-state {
+> +		pins = "gpio126", "gpio52", "gpio24";
+>  		function = "gpio";
+>  		drive-strength = <2>;
+>  		bias-disable;
