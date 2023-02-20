@@ -2,173 +2,168 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A4C8069C706
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Feb 2023 09:53:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3200769C708
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Feb 2023 09:54:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230295AbjBTIxx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Feb 2023 03:53:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37148 "EHLO
+        id S230480AbjBTIx7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Feb 2023 03:53:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37332 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229997AbjBTIxu (ORCPT
+        with ESMTP id S229997AbjBTIx5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Feb 2023 03:53:50 -0500
-Received: from michel.telenet-ops.be (michel.telenet-ops.be [IPv6:2a02:1800:110:4::f00:18])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3CBF39013
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Feb 2023 00:53:48 -0800 (PST)
-Received: from ramsan.of.borg ([IPv6:2a02:1810:ac12:ed50:e2ba:5470:259d:9c84])
-        by michel.telenet-ops.be with bizsmtp
-        id PLtl290072zSf1N06LtlMR; Mon, 20 Feb 2023 09:53:45 +0100
-Received: from geert (helo=localhost)
-        by ramsan.of.borg with local-esmtp (Exim 4.95)
-        (envelope-from <geert@linux-m68k.org>)
-        id 1pU1vd-009WV9-4b;
-        Mon, 20 Feb 2023 09:53:45 +0100
-Date:   Mon, 20 Feb 2023 09:53:45 +0100 (CET)
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-To:     Qu Wenruo <wqu@suse.com>
-cc:     David Sterba <dsterba@suse.com>, linux-btrfs@vger.kernel.org,
-        linux-next@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 4/4] btrfs: replace btrfs_io_context::raid_map[] with
- a fixed u64 value
-In-Reply-To: <f82eed6746d19cf3bea15631a120648eadf20852.1675743217.git.wqu@suse.com>
-Message-ID: <e3c9bab1-41e-7fe0-1833-1c81ced89a20@linux-m68k.org>
-References: <cover.1675743217.git.wqu@suse.com> <f82eed6746d19cf3bea15631a120648eadf20852.1675743217.git.wqu@suse.com>
+        Mon, 20 Feb 2023 03:53:57 -0500
+Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8F079013;
+        Mon, 20 Feb 2023 00:53:51 -0800 (PST)
+Received: by mail-lf1-x133.google.com with SMTP id i9so602327lfc.6;
+        Mon, 20 Feb 2023 00:53:51 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:message-id:subject:cc:to:from
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=trdU/6mZ4q/7CXRXpWi9nWU7w+Kvl3oqkNpwnPL/xoY=;
+        b=azGbtfYk+TZRcFnh0hwpFLW2w98LQp4ZhJllv0TIkOe7zj8GlJl5S+XpZoTAG4TdBJ
+         XHrECHIIuZFxlI0jOGbPIRjLjp29kFnrf8q1QYLHIrRQMDdDVw622BQePfbruj1uInec
+         YpnUpDYKU4oBjNs/mswVwX4ydicK6ewSZIxO11or5LYowag9KdyQn3qRlNnJh72UrVjU
+         QHFAX1l7Th0hMZXApsOL8Hdfs0GDs8SjifG93E69m2OQDS6XoxzvIVxXxAR3S8TN0tKC
+         BmSlEoPkgseU5j5e61AUhgV1etJ/Okhme6ZlLLalSY90UuYasgbWtK59V6AwEaJl/twA
+         Nm7Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=mime-version:references:in-reply-to:message-id:subject:cc:to:from
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=trdU/6mZ4q/7CXRXpWi9nWU7w+Kvl3oqkNpwnPL/xoY=;
+        b=UA1yexoo7KqFYAdfRE+nMgG+P4s6V8qoM9TeCpkf0GKX8hM2VtBPQrLzYDVfEbUIjw
+         Q7zhOca0/DShQMnsi0GE5RgJ2x4uWXJYOuB5LXaHD1FMBW3Gzrgm7Tk/r6Lwq88KOG8R
+         TgfEUetlrRC3Jz/KNPbvAgzI2sSy2sdLByWeyQdiSGj1ZnP8TgtUf1SF6YEi/dhp6vMw
+         sMaj+SH4CCBeSa5FsNrqMvjbMyoTZrkQKFk80eUzxRN+Ipq9WuALjnyWTBLiGJZ33jsa
+         +0K+VI3mlWeDciTjfe8n9nH0L01Jo5BGiX+FeRzAerLyBTHq2vk2XK8J3sIVMPX55ycD
+         2peg==
+X-Gm-Message-State: AO0yUKU3x27YqsnFtQBFEBtWHMc4WLcP6YgF1maNkXhvFMQU+fEgzFUE
+        OSJZDWA46Ppbf9+SC7LJMUo=
+X-Google-Smtp-Source: AK7set+chHdtsONmBxQKyeY3ayi/UIiPA+HEV1eVQ7sK7gsxB+50rZIjxz2VEjts5QnZPfmkKKBw6w==
+X-Received: by 2002:ac2:5307:0:b0:4b6:f30c:c7a9 with SMTP id c7-20020ac25307000000b004b6f30cc7a9mr284863lfh.1.1676883229906;
+        Mon, 20 Feb 2023 00:53:49 -0800 (PST)
+Received: from eldfell ([194.136.85.206])
+        by smtp.gmail.com with ESMTPSA id f25-20020ac25339000000b004d865c781eesm251470lfh.24.2023.02.20.00.53.49
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 20 Feb 2023 00:53:49 -0800 (PST)
+Date:   Mon, 20 Feb 2023 10:53:45 +0200
+From:   Pekka Paalanen <ppaalanen@gmail.com>
+To:     Rob Clark <robdclark@gmail.com>
+Cc:     dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Christian =?UTF-8?B?S8O2bmln?= <ckoenig.leichtzumerken@gmail.com>,
+        Michel =?UTF-8?B?RMOkbnplcg==?= <michel@daenzer.net>,
+        Tvrtko Ursulin <tvrtko.ursulin@intel.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        Simon Ser <contact@emersion.fr>,
+        Rob Clark <robdclark@chromium.org>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        Gustavo Padovan <gustavo@padovan.org>,
+        Christian =?UTF-8?B?S8O2bmln?= <christian.koenig@amd.com>,
+        linux-media@vger.kernel.org (open list:SYNC FILE FRAMEWORK),
+        linaro-mm-sig@lists.linaro.org (moderated list:DMA BUFFER SHARING
+        FRAMEWORK), linux-kernel@vger.kernel.org (open list)
+Subject: Re: [PATCH v4 06/14] dma-buf/sync_file: Support (E)POLLPRI
+Message-ID: <20230220105345.70e46fa5@eldfell>
+In-Reply-To: <20230218211608.1630586-7-robdclark@gmail.com>
+References: <20230218211608.1630586-1-robdclark@gmail.com>
+        <20230218211608.1630586-7-robdclark@gmail.com>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII; format=flowed
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/wnWeB2/6YYExS1Py=pCZ2ib";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
- 	Hi Qu,
+--Sig_/wnWeB2/6YYExS1Py=pCZ2ib
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-On Tue, 7 Feb 2023, Qu Wenruo wrote:
-> In btrfs_io_context structure, we have a pointer raid_map, which is to
-> indicate the logical bytenr for each stripe.
->
-> But considering we always call sort_parity_stripes(), the result
-> raid_map[] is always sorted, thus raid_map[0] is always the logical
-> bytenr of the full stripe.
->
-> So why we waste the space and time (for sorting) for raid_map[]?
->
-> This patch will replace btrfs_io_context::raid_map with a single u64
-> number, full_stripe_start, by:
->
-> - Replace btrfs_io_context::raid_map with full_stripe_start
->
-> - Replace call sites using raid_map[0] to use full_stripe_start
->
-> - Replace call sites using raid_map[i] to compare with nr_data_stripes.
->
-> The benefits are:
->
-> - Less memory wasted on raid_map
->  It's sizeof(u64) * num_stripes vs size(u64).
->  It's always a save for at least one u64, and the benefit grows larger
->  with num_stripes.
->
-> - No more weird alloc_btrfs_io_context() behavior
->  As there is only one fixed size + one variable length array.
->
-> Signed-off-by: Qu Wenruo <wqu@suse.com>
+On Sat, 18 Feb 2023 13:15:49 -0800
+Rob Clark <robdclark@gmail.com> wrote:
 
-Thanks for your patch, which is now commit 4a8c6e8a6dc8ae4c ("btrfs:
-replace btrfs_io_context::raid_map with a fixed u64 value") in
-next-20230220.
+> From: Rob Clark <robdclark@chromium.org>
+>=20
+> Allow userspace to use the EPOLLPRI/POLLPRI flag to indicate an urgent
+> wait (as opposed to a "housekeeping" wait to know when to cleanup after
+> some work has completed).  Usermode components of GPU driver stacks
+> often poll() on fence fd's to know when it is safe to do things like
+> free or reuse a buffer, but they can also poll() on a fence fd when
+> waiting to read back results from the GPU.  The EPOLLPRI/POLLPRI flag
+> lets the kernel differentiate these two cases.
+>=20
+> Signed-off-by: Rob Clark <robdclark@chromium.org>
 
-noreply@ellerman.id.au reported several build failures when
-building for 32-bit platforms:
+Hi,
 
-     ERROR: modpost: "__umoddi3" [fs/btrfs/btrfs.ko] undefined!
+where would the UAPI documentation of this go?
+It seems to be missing.
 
-> --- a/fs/btrfs/volumes.c
-> +++ b/fs/btrfs/volumes.c
-> @@ -6556,35 +6532,44 @@ int __btrfs_map_block(struct btrfs_fs_info *fs_info, enum btrfs_map_op op,
-> 	}
-> 	bioc->map_type = map->type;
->
-> -	for (i = 0; i < num_stripes; i++) {
-> -		set_io_stripe(&bioc->stripes[i], map, stripe_index, stripe_offset,
-> -			      stripe_nr);
-> -		stripe_index++;
-> -	}
-> -
-> -	/* Build raid_map */
+If a Wayland compositor is polling application fences to know which
+client buffer to use in its rendering, should the compositor poll with
+PRI or not? If a compositor polls with PRI, then all fences from all
+applications would always be PRI. Would that be harmful somehow or
+would it be beneficial?
+
+
+Thanks,
+pq
+
+> ---
+>  drivers/dma-buf/sync_file.c | 8 ++++++++
+>  1 file changed, 8 insertions(+)
+>=20
+> diff --git a/drivers/dma-buf/sync_file.c b/drivers/dma-buf/sync_file.c
+> index fb6ca1032885..c30b2085ee0a 100644
+> --- a/drivers/dma-buf/sync_file.c
+> +++ b/drivers/dma-buf/sync_file.c
+> @@ -192,6 +192,14 @@ static __poll_t sync_file_poll(struct file *file, po=
+ll_table *wait)
+>  {
+>  	struct sync_file *sync_file =3D file->private_data;
+> =20
 > +	/*
-> +	 * For RAID56 full map, we need to make sure the stripes[] follows
-> +	 * the rule that data stripes are all ordered, then followed with P
-> +	 * and Q (if we have).
-> +	 *
-> +	 * It's still mostly the same as other profiles, just with extra
-> +	 * rotataion.
+> +	 * The POLLPRI/EPOLLPRI flag can be used to signal that
+> +	 * userspace wants the fence to signal ASAP, express this
+> +	 * as an immediate deadline.
 > +	 */
-> 	if (map->type & BTRFS_BLOCK_GROUP_RAID56_MASK && need_raid_map &&
-> 	    (need_full_stripe(op) || mirror_num > 1)) {
-> -		u64 tmp;
-> -		unsigned rot;
-> -
-> -		/* Work out the disk rotation on this stripe-set */
-> -		rot = stripe_nr % num_stripes;
-> -
-> -		/* Fill in the logical address of each stripe */
-> -		tmp = stripe_nr * data_stripes;
-> -		for (i = 0; i < data_stripes; i++)
-> -			bioc->raid_map[(i + rot) % num_stripes] =
-> -				em->start + ((tmp + i) << BTRFS_STRIPE_LEN_SHIFT);
-> -
-> -		bioc->raid_map[(i + rot) % map->num_stripes] = RAID5_P_STRIPE;
-> -		if (map->type & BTRFS_BLOCK_GROUP_RAID6)
-> -			bioc->raid_map[(i + rot + 1) % num_stripes] =
-> -				RAID6_Q_STRIPE;
-> -
-> -		sort_parity_stripes(bioc, num_stripes);
-> +		/*
-> +		 * For RAID56 @stripe_nr is already the number of full stripes
-> +		 * before us, which is also the rotation value (needs to modulo
-> +		 * with num_stripes).
-> +		 *
-> +		 * In this case, we just add @stripe_nr with @i, then do the
-> +		 * modulo, to reduce one modulo call.
-> +		 */
-> +		bioc->full_stripe_logical = em->start +
-> +			((stripe_nr * data_stripes) << BTRFS_STRIPE_LEN_SHIFT);
-> +		for (i = 0; i < num_stripes; i++) {
-> +			set_io_stripe(&bioc->stripes[i], map,
-> +				      (i + stripe_nr) % num_stripes,
-
-As stripe_nr is u64, this is a 64-by-32 modulo operation, which
-should be implemented using a helper from include/linux/math64.h
-instead.
-
-> +				      stripe_offset, stripe_nr);
-> +		}
-> +	} else {
-> +		/*
-> +		 * For all other non-RAID56 profiles, just copy the target
-> +		 * stripe into the bioc.
-> +		 */
-> +		for (i = 0; i < num_stripes; i++) {
-> +			set_io_stripe(&bioc->stripes[i], map, stripe_index,
-> +				      stripe_offset, stripe_nr);
-> +			stripe_index++;
-> +		}
-> 	}
->
+> +	if (poll_requested_events(wait) & EPOLLPRI)
+> +		dma_fence_set_deadline(sync_file->fence, ktime_get());
 > +
-> 	if (need_full_stripe(op))
-> 		max_errors = btrfs_chunk_max_errors(map);
+>  	poll_wait(file, &sync_file->wq, wait);
+> =20
+>  	if (list_empty(&sync_file->cb.node) &&
 
-Gr{oetje,eeting}s,
 
- 						Geert
+--Sig_/wnWeB2/6YYExS1Py=pCZ2ib
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
 
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+-----BEGIN PGP SIGNATURE-----
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
- 							    -- Linus Torvalds
+iQIzBAEBCAAdFiEEJQjwWQChkWOYOIONI1/ltBGqqqcFAmPzNRoACgkQI1/ltBGq
+qqe77A//VJjJucK06UFHDO7Zu3DgjaELDyU40vdJCa9iz91ZDSzArZnKxVbTGdBk
+yJ+wWbQP/18GcPB49moFu/VY5FZWt8NzAgEGd7phYI7nE9EOoL3yo/8xMMjLAZYS
+lDeBsEDYav7xiCr1Y5y4zM3/pp+9RZWN4VIc3eEFNc+DBZojirvB2dNO7g2JC/Gu
+gmZWfl6UY83SEUEo9jzf7vBQJ+J7lLcsZ/OoL7l8289AF9CRSKOX/01qNc18nhhT
+ZU6P0MoIlJK8CcFMXBvVlo7PkFdayZBELiZUaZb1uBhDCmCcN0jD3rZlYT8knUQ5
+051QX7vJ7fHma9vOu729Rbdy+zAg+k/y2H2NZG9HaKknsbObhbv/GLHr8KXvJCP3
+oUaxw87cx+tR1+WMhGq7wDUIwj59byxURD4T1ZSrGLvodOEk/BoYEaOKOUeicXfp
+XcHhPdOi6mnPr8X34AlZx6PBrcGyHD65NI884dwmkikB1LhMAY9FFOejVje8Gj9a
+ImS22N1SI0EvelgP6QNobhyP4AhYz63FQBKOVH3P11AkbvzBov555LsTt0nkxyyF
+14jExe1mrErutmQo274Km3nnAjq4yg18/oRqNBM1ntS4KIl0EyqIqOcptPELnyKv
+ieAzCXRvgipizQG+wbhAZphPqYtMMpHsSofY8iA0XDSBHQs8O+Y=
+=hARr
+-----END PGP SIGNATURE-----
+
+--Sig_/wnWeB2/6YYExS1Py=pCZ2ib--
