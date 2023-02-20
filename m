@@ -2,147 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BB3A169C3D7
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Feb 2023 02:01:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F36169C3DC
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Feb 2023 02:02:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229737AbjBTBBA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 19 Feb 2023 20:01:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36692 "EHLO
+        id S229781AbjBTBCA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 19 Feb 2023 20:02:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37226 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229567AbjBTBA5 (ORCPT
+        with ESMTP id S229567AbjBTBB6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 19 Feb 2023 20:00:57 -0500
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B6B5C177;
-        Sun, 19 Feb 2023 17:00:55 -0800 (PST)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4PKkcZ5RDfz4x81;
-        Mon, 20 Feb 2023 12:00:46 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ellerman.id.au;
-        s=201909; t=1676854853;
-        bh=F/BA55hncJJcUXKiAlKImZaWKF9J7v8lLnKr9dq21p4=;
-        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=XslnKyUEjBPQ1U1pxlZfaOackH5Uc53v2LGKi4H/fZCzwS12mRxSKUo5Y0d1NKeZn
-         awyroz/jmv/ppUpYp1TDhtbm3Xr2UbxbQ7SLm7HpIZR367un5O+1m6RO8MFNGLc4tN
-         bOsgsJ/QSRuN9qLOaQNEAnGHLCgJYRh2AmA+hh1/q0GxiYmMbgWuXckkgvhyXESi3z
-         pkyDk+R2FxF/Bbq8WxwITYwB8LWISeRkdVED0wYKG14B7OppQx/VBH6ejWIfX4nrhf
-         +DPFJJxnIwj6xY4eD5/CyK6ZQt6qJeWIa8XOq0dKk/I3y+LAhnFdM5gYPtu4P26I4l
-         sm8Hu7By7kuYg==
-From:   Michael Ellerman <mpe@ellerman.id.au>
-To:     Rick Edgecombe <rick.p.edgecombe@intel.com>, x86@kernel.org,
-        "H . Peter Anvin" <hpa@zytor.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-mm@kvack.org,
-        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
-        Arnd Bergmann <arnd@arndb.de>,
-        Andy Lutomirski <luto@kernel.org>,
-        Balbir Singh <bsingharora@gmail.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Cyrill Gorcunov <gorcunov@gmail.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Eugene Syromiatnikov <esyr@redhat.com>,
-        Florian Weimer <fweimer@redhat.com>,
-        "H . J . Lu" <hjl.tools@gmail.com>, Jann Horn <jannh@google.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Kees Cook <keescook@chromium.org>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Nadav Amit <nadav.amit@gmail.com>,
-        Oleg Nesterov <oleg@redhat.com>, Pavel Machek <pavel@ucw.cz>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Weijiang Yang <weijiang.yang@intel.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        John Allen <john.allen@amd.com>, kcc@google.com,
-        eranian@google.com, rppt@kernel.org, jamorris@linux.microsoft.com,
-        dethoma@microsoft.com, akpm@linux-foundation.org,
-        Andrew.Cooper3@citrix.com, christina.schimpe@intel.com,
-        david@redhat.com, debug@rivosinc.com
-Cc:     rick.p.edgecombe@intel.com, linux-alpha@vger.kernel.org,
-        linux-snps-arc@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-csky@vger.kernel.org,
-        linux-hexagon@vger.kernel.org, linux-ia64@vger.kernel.org,
-        loongarch@lists.linux.dev, linux-m68k@lists.linux-m68k.org,
-        Michal Simek <monstr@monstr.eu>,
-        Dinh Nguyen <dinguyen@kernel.org>, linux-mips@vger.kernel.org,
-        openrisc@lists.librecores.org, linux-parisc@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org,
-        linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
-        sparclinux@vger.kernel.org, linux-um@lists.infradead.org,
-        xen-devel@lists.xenproject.org
-Subject: Re: [PATCH v6 13/41] mm: Make pte_mkwrite() take a VMA
-In-Reply-To: <20230218211433.26859-14-rick.p.edgecombe@intel.com>
-References: <20230218211433.26859-1-rick.p.edgecombe@intel.com>
- <20230218211433.26859-14-rick.p.edgecombe@intel.com>
-Date:   Mon, 20 Feb 2023 12:00:46 +1100
-Message-ID: <875ybxywu9.fsf@mpe.ellerman.id.au>
+        Sun, 19 Feb 2023 20:01:58 -0500
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE06AD52C;
+        Sun, 19 Feb 2023 17:01:57 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1676854917; x=1708390917;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=ZzntQ3V7u7adDDspP52ftt0OsOPYSqFBr5Qb62NUZuE=;
+  b=ExNTsluAk+QWn0XkIbDp4JqGUYLRGbVryu7Zyh148tE66e9xEBBSDef0
+   KYM239QKcQGwVDWjTCyk60Q/N9pOFwQZhUAlucvV4Ylb6wng+hYniMqmx
+   J0UJMraZxqlMNaSMbdXramWuxls1DdOn2TFF+CtB85NXCM7izeFNjYWQI
+   9bux+cJ8a2JNrqXwFk6tdU9F52ORrEDOpPhJ9TlU0iR0aV19oISLIaFXt
+   N1FCDpi7JtK7hfbamBDta6LlHZnaamWY1dhysyUqSy+jQUdulYjGE4OiZ
+   wK2s4nEks1jbOEJbCxve0jqPpMX38L1ov4+qm+M/Nu8uXrwKfvdHeGYh8
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10626"; a="359763573"
+X-IronPort-AV: E=Sophos;i="5.97,311,1669104000"; 
+   d="scan'208";a="359763573"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Feb 2023 17:01:57 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10626"; a="795012209"
+X-IronPort-AV: E=Sophos;i="5.97,311,1669104000"; 
+   d="scan'208";a="795012209"
+Received: from lkp-server01.sh.intel.com (HELO 4455601a8d94) ([10.239.97.150])
+  by orsmga004.jf.intel.com with ESMTP; 19 Feb 2023 17:01:52 -0800
+Received: from kbuild by 4455601a8d94 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pTuYx-000DWR-1Y;
+        Mon, 20 Feb 2023 01:01:51 +0000
+Date:   Mon, 20 Feb 2023 09:00:54 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Ye Xiang <xiang.ye@intel.com>, Lee Jones <lee@kernel.org>,
+        Wolfram Sang <wsa-dev@sang-engineering.com>,
+        Tyrone Ting <kfting@nuvoton.com>,
+        Mark Brown <broonie@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>, linux-i2c@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-spi@vger.kernel.org,
+        linux-gpio@vger.kernel.org
+Cc:     oe-kbuild-all@lists.linux.dev, srinivas.pandruvada@intel.com,
+        heikki.krogerus@linux.intel.com, andriy.shevchenko@linux.intel.com,
+        sakari.ailus@linux.intel.com, zhifeng.wang@intel.com,
+        wentong.wu@intel.com, lixu.zhang@intel.com,
+        Ye Xiang <xiang.ye@intel.com>
+Subject: Re: [PATCH 2/5] gpio: Add support for Intel LJCA USB GPIO driver
+Message-ID: <202302200820.aUaMtEFR-lkp@intel.com>
+References: <20230219183059.1029525-3-xiang.ye@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230219183059.1029525-3-xiang.ye@intel.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Rick Edgecombe <rick.p.edgecombe@intel.com> writes:
-> The x86 Control-flow Enforcement Technology (CET) feature includes a new
-> type of memory called shadow stack. This shadow stack memory has some
-> unusual properties, which requires some core mm changes to function
-> properly.
-...
-> ---
-> Hi Non-x86 Arch=E2=80=99s,
->
-> x86 has a feature that allows for the creation of a special type of
-> writable memory (shadow stack) that is only writable in limited specific
-> ways. Previously, changes were proposed to core MM code to teach it to
-> decide when to create normally writable memory or the special shadow stack
-> writable memory, but David Hildenbrand suggested[0] to change
-> pXX_mkwrite() to take a VMA, so awareness of shadow stack memory can be
-> moved into x86 code.
->
-> Since pXX_mkwrite() is defined in every arch, it requires some tree-wide
-> changes. So that is why you are seeing some patches out of a big x86
-> series pop up in your arch mailing list. There is no functional change.
-> After this refactor, the shadow stack series goes on to use the arch
-> helpers to push shadow stack memory details inside arch/x86.
-...
-> ---
->  Documentation/mm/arch_pgtable_helpers.rst    |  9 ++++++---
->  arch/alpha/include/asm/pgtable.h             |  6 +++++-
->  arch/arc/include/asm/hugepage.h              |  2 +-
->  arch/arc/include/asm/pgtable-bits-arcv2.h    |  7 ++++++-
->  arch/arm/include/asm/pgtable-3level.h        |  7 ++++++-
->  arch/arm/include/asm/pgtable.h               |  2 +-
->  arch/arm64/include/asm/pgtable.h             |  4 ++--
->  arch/csky/include/asm/pgtable.h              |  2 +-
->  arch/hexagon/include/asm/pgtable.h           |  2 +-
->  arch/ia64/include/asm/pgtable.h              |  2 +-
->  arch/loongarch/include/asm/pgtable.h         |  4 ++--
->  arch/m68k/include/asm/mcf_pgtable.h          |  2 +-
->  arch/m68k/include/asm/motorola_pgtable.h     |  6 +++++-
->  arch/m68k/include/asm/sun3_pgtable.h         |  6 +++++-
->  arch/microblaze/include/asm/pgtable.h        |  2 +-
->  arch/mips/include/asm/pgtable.h              |  6 +++---
->  arch/nios2/include/asm/pgtable.h             |  2 +-
->  arch/openrisc/include/asm/pgtable.h          |  2 +-
->  arch/parisc/include/asm/pgtable.h            |  6 +++++-
->  arch/powerpc/include/asm/book3s/32/pgtable.h |  2 +-
->  arch/powerpc/include/asm/book3s/64/pgtable.h |  4 ++--
->  arch/powerpc/include/asm/nohash/32/pgtable.h |  2 +-
->  arch/powerpc/include/asm/nohash/32/pte-8xx.h |  2 +-
->  arch/powerpc/include/asm/nohash/64/pgtable.h |  2 +-
+Hi Ye,
 
-Looks like you discovered the joys of ppc's at-least 5 different MMU
-implementations, sorry :)
+Thank you for the patch! Perhaps something to improve:
 
-Acked-by: Michael Ellerman <mpe@ellerman.id.au> (powerpc)
+[auto build test WARNING on lee-mfd/for-mfd-next]
+[also build test WARNING on lee-mfd/for-mfd-fixes wsa/i2c/for-next broonie-spi/for-next linus/master v6.2-rc8]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-cheers
+url:    https://github.com/intel-lab-lkp/linux/commits/Ye-Xiang/mfd-Add-support-for-Intel-LJCA-device/20230220-023253
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/lee/mfd.git for-mfd-next
+patch link:    https://lore.kernel.org/r/20230219183059.1029525-3-xiang.ye%40intel.com
+patch subject: [PATCH 2/5] gpio: Add support for Intel LJCA USB GPIO driver
+config: i386-allyesconfig (https://download.01.org/0day-ci/archive/20230220/202302200820.aUaMtEFR-lkp@intel.com/config)
+compiler: gcc-11 (Debian 11.3.0-8) 11.3.0
+reproduce (this is a W=1 build):
+        # https://github.com/intel-lab-lkp/linux/commit/ddd4f4ee32eff2fd7cb9933efdc8966d58894160
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Ye-Xiang/mfd-Add-support-for-Intel-LJCA-device/20230220-023253
+        git checkout ddd4f4ee32eff2fd7cb9933efdc8966d58894160
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        make W=1 O=build_dir ARCH=i386 olddefconfig
+        make W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/gpio/
+
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202302200820.aUaMtEFR-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+>> drivers/gpio/gpio-ljca.c:436:40: warning: 'ljca_gpio_id' defined but not used [-Wunused-const-variable=]
+     436 | static const struct platform_device_id ljca_gpio_id[] = {
+         |                                        ^~~~~~~~~~~~
+
+
+vim +/ljca_gpio_id +436 drivers/gpio/gpio-ljca.c
+
+   434	
+   435	#define LJCA_GPIO_DRV_NAME "ljca-gpio"
+ > 436	static const struct platform_device_id ljca_gpio_id[] = {
+   437		{ LJCA_GPIO_DRV_NAME, 0 },
+   438		{ /* sentinel */ }
+   439	};
+   440	MODULE_DEVICE_TABLE(platform, ljca_gpio_id);
+   441	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
