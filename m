@@ -2,128 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6816569D064
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Feb 2023 16:16:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CE7B169D09F
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Feb 2023 16:27:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232328AbjBTPQc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Feb 2023 10:16:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40646 "EHLO
+        id S231931AbjBTP1s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Feb 2023 10:27:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55276 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231197AbjBTPQ2 (ORCPT
+        with ESMTP id S231191AbjBTP1p (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Feb 2023 10:16:28 -0500
-Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91A282005C
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Feb 2023 07:15:58 -0800 (PST)
-Received: by mail-ed1-x52c.google.com with SMTP id b12so5955141edd.4
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Feb 2023 07:15:58 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=BNAlVSR8kU7GTnrIr0mJ68bBXk8C5rGAvpg1ZvtynWA=;
-        b=Epn1QDfC0DOaV6xenHMvLvmub3s+pwqmg+Qs7rPLxDjIY/oulsSQgGtIV5u+ya2e1B
-         4/oGULzf9PfsIfWcPrEox2uF/jQK+1ZAne+US/fkgjdvMUCHlKU1VQHzwEVszo9WxZUl
-         UaKNeD4LjPzGy2saPoNGBz+O7GWRPbd6Rk903iZ6XSPWQfWxlsJBdi/+fF9Jvpx6bK23
-         1QSB37WfLFsiqIJouNtjDnQG1yPN/OCDTRM9MWCany90Mm0A8lW9YQeRej1ai7B3fzyb
-         TKCDzGQ3dcQsaDYLgLxzinmZ8iMQWYgesmnkIvpkLRqqg6hkx1f1ef4KoJRTcVVLKSQM
-         NRHA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=BNAlVSR8kU7GTnrIr0mJ68bBXk8C5rGAvpg1ZvtynWA=;
-        b=zNUzGzkI7TehUhABOUYMzt1tGBQ1StWUX1NwQ3RMTXVHHYPYIDI/C6ufmKHzp0W0/G
-         qDsebizA+qbyYS4C2pUmHRgt7Y0sUqS+1TPONjnWUv3eGKTHQxSsYPE4GCH1KceRZKRT
-         PYVZ+hEVfyrf2Zk7NwiSP6qudzABwxe5U+3nacdqZ/EQFNx+jMA5APpSnncibdMcqsLH
-         E96S6OwuUKLRSEMRM92BT8bhEoVWRSR7uy5Fd3ubWrwqGoatYuDBxHNdfGRvUbYcmNa7
-         8+f8xeMami2jJHPMmGdPQWlq1L7KUCjUvrcGR3jfT7ZktVcdzgLDqW2PRFlYSUCDudf3
-         +lkA==
-X-Gm-Message-State: AO0yUKXA0lXRohUNF8ajI1Y0mGbX7xek1MdwM3nAnRu25Ys4V8Jf5f6G
-        vzG7rLkhzWanrPC86C9D+tsAHuRcZSE=
-X-Google-Smtp-Source: AK7set+2D43SgKM0RcXcOmqH8qxrhArCUPRslbHI+gzRjKFF9zcV+RuPOZjC/G+PPLvIYblzQqLsCA==
-X-Received: by 2002:a05:600c:16c5:b0:3df:94c3:4725 with SMTP id l5-20020a05600c16c500b003df94c34725mr7516673wmn.38.1676905439051;
-        Mon, 20 Feb 2023 07:03:59 -0800 (PST)
-Received: from localhost ([102.36.222.112])
-        by smtp.gmail.com with ESMTPSA id o27-20020a05600c511b00b003e21dcccf9fsm1232096wms.16.2023.02.20.07.03.57
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 20 Feb 2023 07:03:58 -0800 (PST)
-Date:   Mon, 20 Feb 2023 18:03:54 +0300
-From:   Dan Carpenter <error27@gmail.com>
-To:     Shibo Li <zzutcyha@163.com>
-Cc:     Larry Finger <Larry.Finger@lwfinger.net>,
-        Florian Schilhabel <florian.c.schilhabel@googlemail.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] staging: rtl8712: Fix Sparse warnings in
- rtl871x_ioctl_linux.c
-Message-ID: <Y/OL2i1Gt82fqPoO@kadam>
-References: <20230220143758.4396-1-zzutcyha@163.com>
+        Mon, 20 Feb 2023 10:27:45 -0500
+X-Greylist: delayed 720 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 20 Feb 2023 07:27:21 PST
+Received: from frasgout12.his.huawei.com (frasgout12.his.huawei.com [14.137.139.154])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CEDC93C3B
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Feb 2023 07:27:21 -0800 (PST)
+Received: from mail02.huawei.com (unknown [172.18.147.227])
+        by frasgout12.his.huawei.com (SkyGuard) with ESMTP id 4PL5Bn1W4vz9xGY9
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Feb 2023 22:58:09 +0800 (CST)
+Received: from huaweicloud.com (unknown [10.81.223.230])
+        by APP1 (Coremail) with SMTP id LxC2BwCXHwuAjPNjH5A6AQ--.54716S2;
+        Mon, 20 Feb 2023 16:06:47 +0100 (CET)
+From:   Petr Tesarik <petrtesarik@huaweicloud.com>
+To:     Christoph Hellwig <hch@lst.de>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Robin Murphy <robin.murphy@arm.com>,
+        iommu@lists.linux.dev (open list:DMA MAPPING HELPERS),
+        linux-kernel@vger.kernel.org (open list)
+Cc:     roberto.sassu@huaweicloud.com,
+        Petr Tesarik <petrtesarik@huaweicloud.com>
+Subject: [PATCH] dma-direct: cleanup parameters to dma_direct_optimal_gfp_mask
+Date:   Mon, 20 Feb 2023 16:06:22 +0100
+Message-Id: <20230220150622.454-1-petrtesarik@huaweicloud.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230220143758.4396-1-zzutcyha@163.com>
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: LxC2BwCXHwuAjPNjH5A6AQ--.54716S2
+X-Coremail-Antispam: 1UD129KBjvJXoW7Zr48CFyDtr4rAr4kCw48Zwb_yoW8KF1kpr
+        4xGFy3GrWFvF1fZa9rZa1kCryYy3sYka1fJFyxtwn3ArZ8Wr9aqF9rKw15tw1fJF9Y9r1f
+        XFs5Ja45Ars8ZaUanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUv014x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+        rVWUuVWrJwAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
+        1l84ACjcxK6xIIjxv20xvE14v26r1j6r1xM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r1j
+        6r4UM28EF7xvwVC2z280aVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv6xkF7I0E14v26r4UJV
+        WxJr1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E
+        2Ix0cI8IcVAFwI0_JrI_JrylYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJV
+        W8JwACjcxG0xvY0x0EwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lc7CjxVAKzI0EY4vE
+        52x082I5MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrV
+        AFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUtVW8ZwCI
+        c40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267
+        AKxVWUJVW8JwCI42IY6xAIw20EY4v20xvaj40_Wr1j6rW3Jr1lIxAIcVC2z280aVAFwI0_
+        Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7VUj
+        dHUDUUUUU==
+X-CM-SenderInfo: hshw23xhvd2x3n6k3tpzhluzxrxghudrp/
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 20, 2023 at 02:37:58PM +0000, Shibo Li wrote:
-> This patch fixes the following warning in rtl871x_ioctl_linux.c
-> 
-> WARNING: Avoid multiple line dereference - prefer 'pnetwork->network.InfrastructureMode'
-> +                                       if (pnetwork->network.
-> +                                               InfrastructureMode
-> 
-> WARNING: Avoid multiple line dereference - prefer 'padapter->mlmepriv.cur_network.network'
-> +                                               padapter->mlmepriv.
-> +                                               cur_network.network.
-> 
-> WARNING: Avoid multiple line dereference - prefer 'cur_network.network.InfrastructureMode'
-> +                                               cur_network.network.
-> +                                               InfrastructureMode)
-> 
-> Signed-off-by: Shibo Li <zzutcyha@163.com>
-> ---
->  drivers/staging/rtl8712/rtl871x_ioctl_linux.c | 11 ++++-------
->  1 file changed, 4 insertions(+), 7 deletions(-)
-> 
-> diff --git a/drivers/staging/rtl8712/rtl871x_ioctl_linux.c b/drivers/staging/rtl8712/rtl871x_ioctl_linux.c
-> index 36f6904d25ab..6673befeb2f0 100644
-> --- a/drivers/staging/rtl8712/rtl871x_ioctl_linux.c
-> +++ b/drivers/staging/rtl8712/rtl871x_ioctl_linux.c
-> @@ -1268,14 +1268,11 @@ static int r8711_wx_set_essid(struct net_device *dev,
->  			if ((!memcmp(dst_ssid, src_ssid, ndis_ssid.SsidLength))
->  			    && (pnetwork->network.Ssid.SsidLength ==
->  			     ndis_ssid.SsidLength)) {
-> -				if (check_fwstate(pmlmepriv,
-> -							WIFI_ADHOC_STATE)) {
-> -					if (pnetwork->network.
-> -						InfrastructureMode
-> +				if (check_fwstate(pmlmepriv, WIFI_ADHOC_STATE)) {
-> +					if (pnetwork->network.configurationInfrastructureMode
->  						!=
-> -						padapter->mlmepriv.
-> -						cur_network.network.
-> -						InfrastructureMode)
-> +						padapter->mlmepriv.assoc_by_rssi.
-> +						cur_network.network.InfrastructureMode)
->  						continue;
+Since both callers of dma_direct_optimal_gfp_mask() pass
+dev->coherent_dma_mask as the second argument, it is better to
+remove that parameter altogether.
 
-This one is not okay.  The indenting is still messed up.  There is still
-a multi-line dereference.  The != is on the wrong line.  The parts of
-the if statement should use space so they are aligned properly but
-instead they're lined  up with the continue...
+Not only is reducing number of parameters good for readability, but
+the new function signature is also more logical: The optimal flags
+depend only on data contained in struct device.
 
-Look at the bigger picture.  Re-write the code to avoid so many tabs.
-Reverse the outside if statement to return earlier for example.
+While touching this code, let's also rename phys_mask to phys_limit
+in dma_direct_alloc_from_pool(), because it is indeed a limit.
 
-regards,
-dan carpenter
+Signed-off-by: Petr Tesarik <petrtesarik@huaweicloud.com>
+---
+ kernel/dma/direct.c | 15 +++++++--------
+ 1 file changed, 7 insertions(+), 8 deletions(-)
+
+diff --git a/kernel/dma/direct.c b/kernel/dma/direct.c
+index 63859a101ed8..5595d1d5cdcc 100644
+--- a/kernel/dma/direct.c
++++ b/kernel/dma/direct.c
+@@ -44,10 +44,11 @@ u64 dma_direct_get_required_mask(struct device *dev)
+ 	return (1ULL << (fls64(max_dma) - 1)) * 2 - 1;
+ }
+ 
+-static gfp_t dma_direct_optimal_gfp_mask(struct device *dev, u64 dma_mask,
+-				  u64 *phys_limit)
++static gfp_t dma_direct_optimal_gfp_mask(struct device *dev, u64 *phys_limit)
+ {
+-	u64 dma_limit = min_not_zero(dma_mask, dev->bus_dma_limit);
++	u64 dma_limit = min_not_zero(
++		dev->coherent_dma_mask,
++		dev->bus_dma_limit);
+ 
+ 	/*
+ 	 * Optimistically try the zone that the physical address mask falls
+@@ -126,8 +127,7 @@ static struct page *__dma_direct_alloc_pages(struct device *dev, size_t size,
+ 	if (is_swiotlb_for_alloc(dev))
+ 		return dma_direct_alloc_swiotlb(dev, size);
+ 
+-	gfp |= dma_direct_optimal_gfp_mask(dev, dev->coherent_dma_mask,
+-					   &phys_limit);
++	gfp |= dma_direct_optimal_gfp_mask(dev, &phys_limit);
+ 	page = dma_alloc_contiguous(dev, size, gfp);
+ 	if (page) {
+ 		if (!dma_coherent_ok(dev, page_to_phys(page), size) ||
+@@ -172,14 +172,13 @@ static void *dma_direct_alloc_from_pool(struct device *dev, size_t size,
+ 		dma_addr_t *dma_handle, gfp_t gfp)
+ {
+ 	struct page *page;
+-	u64 phys_mask;
++	u64 phys_limit;
+ 	void *ret;
+ 
+ 	if (WARN_ON_ONCE(!IS_ENABLED(CONFIG_DMA_COHERENT_POOL)))
+ 		return NULL;
+ 
+-	gfp |= dma_direct_optimal_gfp_mask(dev, dev->coherent_dma_mask,
+-					   &phys_mask);
++	gfp |= dma_direct_optimal_gfp_mask(dev, &phys_limit);
+ 	page = dma_alloc_from_pool(dev, size, &ret, gfp, dma_coherent_ok);
+ 	if (!page)
+ 		return NULL;
+-- 
+2.25.1
 
