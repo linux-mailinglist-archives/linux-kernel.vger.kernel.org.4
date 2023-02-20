@@ -2,110 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B2F6A69C510
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Feb 2023 06:46:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 484A669C50F
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Feb 2023 06:46:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230086AbjBTFqI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Feb 2023 00:46:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56796 "EHLO
+        id S230100AbjBTFqG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Feb 2023 00:46:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56798 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230074AbjBTFpx (ORCPT
+        with ESMTP id S230076AbjBTFpx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 20 Feb 2023 00:45:53 -0500
 Received: from mailout3.samsung.com (mailout3.samsung.com [203.254.224.33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 316ACD50B
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39CCBDBC5
         for <linux-kernel@vger.kernel.org>; Sun, 19 Feb 2023 21:45:51 -0800 (PST)
-Received: from epcas1p2.samsung.com (unknown [182.195.41.46])
-        by mailout3.samsung.com (KnoxPortal) with ESMTP id 20230220054547epoutp03a71e9c13552cace11a977d2132304065~Fciblhrh20689906899epoutp03Z
+Received: from epcas1p4.samsung.com (unknown [182.195.41.48])
+        by mailout3.samsung.com (KnoxPortal) with ESMTP id 20230220054547epoutp03c5937f86feaee31f31e7e78e112c7cae~Fcibrbr6V0620706207epoutp03v
         for <linux-kernel@vger.kernel.org>; Mon, 20 Feb 2023 05:45:47 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout3.samsung.com 20230220054547epoutp03a71e9c13552cace11a977d2132304065~Fciblhrh20689906899epoutp03Z
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout3.samsung.com 20230220054547epoutp03c5937f86feaee31f31e7e78e112c7cae~Fcibrbr6V0620706207epoutp03v
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
         s=mail20170921; t=1676871947;
-        bh=15QEWNO/YBw7mVP+MxhNzSlTSz4ta3BdtNp9n1HdAJk=;
+        bh=Lomkw3wOGq30Z8bGw0g7vY7CMRkAMEbVBey5jm8G6Ak=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=GYT1e+EFvJoj9heuhExsaJ5z1ISzeVoyPoky3K/wcvrJbzAp3i/ryh09uAPEPIP7t
-         mdudYHuqGcC9rhL8SfMgButAkWY4wtuOW21Kgd44ygXUMbxZKZsyCluySyyr690JPG
-         PZvwpcPGjJhPlfj+dzrbx0oCBBbNQqYB9gE+uUEI=
+        b=IXxAMwvNA4yN6Sl0+4FH4g98ZhhbR7qBm1Y6tcty637GyecRZlKWmTv8k22ZQfrOY
+         qr/qN/Nj+IkrR92CZBlROcj8fBmHJATU4p3BqIy4hySTVnbo5qUBnQsvDq4qrTaKQ+
+         yRSUU6JQMa/Bo4s0+nGw6Fw8oqcWBYOwJyO33x0g=
 Received: from epsnrtp4.localdomain (unknown [182.195.42.165]) by
-        epcas1p3.samsung.com (KnoxPortal) with ESMTP id
-        20230220054547epcas1p3bbd0305c4f4844a56fdd838a4fd683f1~FcibFpyhr1540715407epcas1p3t;
+        epcas1p1.samsung.com (KnoxPortal) with ESMTP id
+        20230220054547epcas1p189575adc2ceea9b747fb1b5c1891de5f~FcibWe71Q2217522175epcas1p1_;
         Mon, 20 Feb 2023 05:45:47 +0000 (GMT)
-Received: from epsmges1p4.samsung.com (unknown [182.195.36.222]) by
-        epsnrtp4.localdomain (Postfix) with ESMTP id 4PKrxQ09VSz4x9QB; Mon, 20 Feb
+Received: from epsmges1p2.samsung.com (unknown [182.195.36.222]) by
+        epsnrtp4.localdomain (Postfix) with ESMTP id 4PKrxQ2Xqcz4x9Q9; Mon, 20 Feb
         2023 05:45:46 +0000 (GMT)
-Received: from epcas1p2.samsung.com ( [182.195.41.46]) by
-        epsmges1p4.samsung.com (Symantec Messaging Gateway) with SMTP id
-        15.A5.37890.90903F36; Mon, 20 Feb 2023 14:45:45 +0900 (KST)
+Received: from epcas1p1.samsung.com ( [182.195.41.45]) by
+        epsmges1p2.samsung.com (Symantec Messaging Gateway) with SMTP id
+        A8.F9.12562.A0903F36; Mon, 20 Feb 2023 14:45:46 +0900 (KST)
 Received: from epsmtrp2.samsung.com (unknown [182.195.40.14]) by
         epcas1p3.samsung.com (KnoxPortal) with ESMTPA id
-        20230220054545epcas1p34e5575ffdfd1dcef55bdee3c3563c925~FciZ0mNeM1540715407epcas1p3q;
+        20230220054545epcas1p3ab4b1281f464c72a7b5ed8681a8b087f~FciZ1eVcr1540615406epcas1p3f;
         Mon, 20 Feb 2023 05:45:45 +0000 (GMT)
 Received: from epsmgms1p1new.samsung.com (unknown [182.195.42.41]) by
         epsmtrp2.samsung.com (KnoxPortal) with ESMTP id
-        20230220054545epsmtrp273db62166c22ca59eee32c0ca130556a~FciZz7K3Z0972009720epsmtrp2i;
+        20230220054545epsmtrp2fc038af6876d068e3afaf5df7136443a~FciZ0GU780986209862epsmtrp2C;
         Mon, 20 Feb 2023 05:45:45 +0000 (GMT)
-X-AuditID: b6c32a38-bbd3aa8000029402-14-63f30909823a
+X-AuditID: b6c32a36-bfdff70000023112-7f-63f3090a2bbc
 Received: from epsmtip1.samsung.com ( [182.195.34.30]) by
         epsmgms1p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
-        06.5A.05839.90903F36; Mon, 20 Feb 2023 14:45:45 +0900 (KST)
+        16.5A.05839.90903F36; Mon, 20 Feb 2023 14:45:45 +0900 (KST)
 Received: from VDBS1418.vd.sec.samsung.net (unknown [168.219.244.30]) by
         epsmtip1.samsung.com (KnoxPortal) with ESMTPA id
-        20230220054545epsmtip106c71a61c85c67776e2da3f7d27f1905~FciZqv6Ut2598425984epsmtip1k;
+        20230220054545epsmtip14c1317fc0a019a6d360c1b1b4dca9823~FciZsjDQ82594925949epsmtip1t;
         Mon, 20 Feb 2023 05:45:45 +0000 (GMT)
 From:   Bumwoo Lee <bw365.lee@samsung.com>
 To:     MyungJoo Ham <myungjoo.ham@samsung.com>,
         Chanwoo Choi <cw00.choi@samsung.com>,
         linux-kernel@vger.kernel.org
 Cc:     Bumwoo Lee <bw365.lee@samsung.com>
-Subject: [PATCH v2 2/4] extcon: Added extcon_alloc_cables to simplify extcon
+Subject: [PATCH v2 3/4] extcon: Added extcon_alloc_muex to simplify extcon
  register function
-Date:   Mon, 20 Feb 2023 14:45:11 +0900
-Message-Id: <20230220054513.27385-3-bw365.lee@samsung.com>
+Date:   Mon, 20 Feb 2023 14:45:12 +0900
+Message-Id: <20230220054513.27385-4-bw365.lee@samsung.com>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20230220054513.27385-1-bw365.lee@samsung.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFnrNKsWRmVeSWpSXmKPExsWy7bCmni4n5+dkg0uzrS1OrFnEZHH9y3NW
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFnrDKsWRmVeSWpSXmKPExsWy7bCmri4X5+dkgxvzBSxOrFnEZHH9y3NW
         i8u75rBZ3G5cwebA4tG3ZRWjx+dNcgFMUdk2GamJKalFCql5yfkpmXnptkrewfHO8aZmBoa6
         hpYW5koKeYm5qbZKLj4Bum6ZOUCLlBTKEnNKgUIBicXFSvp2NkX5pSWpChn5xSW2SqkFKTkF
-        ZgV6xYm5xaV56Xp5qSVWhgYGRqZAhQnZGR8b5rEXHJKr2DZlAnsD4xGJLkZODgkBE4n3jQfY
-        uhi5OIQEdjBKXFx4kwXC+cQocfLTBqjMN0aJ6ct72GFaPm37zAJiCwnsZZT48k8UougXo8Sm
-        xWvAEmwCGhJ7LjYAdXNwiAgUShzuzwYJMwuoSTxYtRFsjrBAgsTcvgVsIDaLgKrEpZN3mUDK
-        eQWsJPpWuEKskpfo/vcHbCKngLXEv+eLwMp5BQQlTs58wgIxUl6ieetsZpATJAT2sUu8OHGT
-        CaLZReL6wrdQtrDEq+NboO6Xkvj8bi8bhJ0usfLKHah4jsTr++2MELaxxLu3a5lB7mEW0JRY
-        v0sfIqwosfP3XEaIvXwS7772sIKUSAjwSnS0CUGUKEt0P3gBtVVSYvHTO1ATPSQmnTvBCgm1
-        PkaJG6fLJzAqzELyzSwk38xCWLyAkXkVo1hqQXFuemqxYYEJPHqT83M3MYJTnZbFDsa5bz/o
-        HWJk4mA8xCjBwawkwit96EOyEG9KYmVValF+fFFpTmrxIUZTYFBPZJYSTc4HJtu8knhDE0sD
-        EzMjEwtjS2MzJXFecduTyUIC6YklqdmpqQWpRTB9TBycUg1MpkVKthxn7zAs7nerMDNps+hb
-        KiazhOPHVD4uo5X8czrc1seWLBBX+Smu9PKRO/ucygj5WcucOlKvlTT+0N/tVp6tOrXT6IQs
-        T8yCIt3VMp9v3nfji954jYvf+JB3nFefz8PJ24o+7Tz2Xe6xNNP1q276m31sZW76Tzy5PtH+
-        we6PVvFBDU/XP7zYPEvG0pz9x7Sal+cz8iTPyGbUapd6n/JwfLv8kl3iu5Nbc6zvCgZJHbFi
-        d+NosujYHh8Y6vZP2d6VT9VUeKbv0pVed+Y3nI+U/pG/7qq7U0P97tRzxxtZ5A/U+M87/+n0
-        k0SF77O8hY7GKs9eOj3l7tM9sv9rGQ89yDt16f61+j2xtQuUWIozEg21mIuKEwG0gBYU/gMA
-        AA==
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFlrOLMWRmVeSWpSXmKPExsWy7bCSnC4n5+dkgwX/NCxOrFnEZHH9y3NW
-        i8u75rBZ3G5cwebA4tG3ZRWjx+dNcgFMUVw2Kak5mWWpRfp2CVwZHxvmsRcckqvYNmUCewPj
-        EYkuRk4OCQETiU/bPrN0MXJxCAnsZpTYs6KFCSIhKXF2+SP2LkYOIFtY4vDhYoiaH4wSy3e8
-        ZAepYRPQkNhzsYENxBYRKJa4cGAxC4jNLKAm8WDVRrAaYYE4iS+bWllBbBYBVYlLJ+8ygczk
-        FbCS6FvhCrFKXqL73x+wVk4Ba4l/zxeBjRQCKmmbPJkZxOYVEJQ4OfMJ1Hh5ieats5knMArM
-        QpKahSS1gJFpFaNkakFxbnpusWGBYV5quV5xYm5xaV66XnJ+7iZGcFhqae5g3L7qg94hRiYO
-        xkOMEhzMSiK80oc+JAvxpiRWVqUW5ccXleakFh9ilOZgURLnvdB1Ml5IID2xJDU7NbUgtQgm
-        y8TBKdXAJLMqvqFw+oQ9l1iEZlUrb8suKP+4sHGDzK2C/9sPH8x/WLGG80/z/unbeO9wfX1+
-        7QNn4PG9P5bN8wvR4mG73//vicmih+r2X1/JiGa8b5NQPJWx/LObMOMfo40/+Oc9+NrxyTgp
-        iD0uuV57g27fd353y33B25t5V8V5ytpLzd1xsabScWL5bU9Z3SuZLdOlKr62L7EwWhlX07FB
-        5diUji2N39iELXcEHWjNuOSx993+qzYFcV0hf15rbtieWJKg1/tL8fnuHqGvGZpVlysvME7t
-        /aNR7G/5YeXUJwJOsTZs4h/d3pW5XU53FeObIz7tGXvr4vo6r+DViWIasysmNyw2vc1V1v9v
-        bZmeRZumEktxRqKhFnNRcSIA3v7DwLoCAAA=
-X-CMS-MailID: 20230220054545epcas1p34e5575ffdfd1dcef55bdee3c3563c925
+        ZgV6xYm5xaV56Xp5qSVWhgYGRqZAhQnZGWcnvWAvmCpfMXf2UvYGxncSXYycHBICJhI/Hl9l
+        7WLk4hAS2MEo0b1wIhuE84lRYmnDTnYI5xujxJLHk9lgWvb/XAeV2Mso8ejDFWYI5xejxIIj
+        11hBqtgENCT2XGwA6uDgEBEolDjcnw0SZhZQk3iwaiM7iC0sECex4sFjFhCbRUBVYuPeR2Bx
+        XgEriSctF5ghlslLdP/7A1bDKWAt8e/5IjaIGkGJkzOfsEDMlJdo3jobqn4Xu8SGD9EQtovE
+        tf7b7BC2sMSr41ugbCmJz+/2Qj2TLrHyyh2oeI7E6/vtjBC2scS7t2uZQc5nFtCUWL9LHyKs
+        KLHz91xGiLV8Eu++9rCClEgI8Ep0tAlBlChLdD94wQRhS0osfnoHaqKHxILuzWAXCwn0MUpM
+        6ZOcwKgwC8kzs5A8Mwth8QJG5lWMYqkFxbnpqcWGBUbw+E3Oz93ECE52WmY7GCe9/aB3iJGJ
+        g/EQowQHs5IIr/ShD8lCvCmJlVWpRfnxRaU5qcWHGE2BQT2RWUo0OR+YbvNK4g1NLA1MzIxM
+        LIwtjc2UxHnFbU8mCwmkJ5akZqemFqQWwfQxcXBKNTDFs8wuPn/W3HjiRUe7mntFGSIn/O/s
+        2KV/+Z7FSa1ak1NBjz8YPpwveYuxeU74K+VvvMunPQhpz9DLyz7MeENMeprcL/djBw+Izd/2
+        1/Nhgvp28TU5z4U/b22b4xq1tMYn2PFT+FWWuAc7MnRyjt3il+dPklohsF/z2OI+veU6BTsU
+        haoXVYt18q73PVtaFrSxbPHBTsPLwh5LJrjsEFSVn6N3YVvZubrDy6PXN1+oSJ+gYVT3yC/N
+        /0RYxup5F6s+GHcsmHquQNczQ08tnefv6i39a0zPlVnlVE6cOz+X6cKP5dtZf5c8PLxjJ4/V
+        iguffcWFfuns3PMueyXLlFcnffeZ/O1f921hvFu+mnOpEktxRqKhFnNRcSIAod9d/f8DAAA=
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFlrBLMWRmVeSWpSXmKPExsWy7bCSnC4n5+dkg03PtSxOrFnEZHH9y3NW
+        i8u75rBZ3G5cwebA4tG3ZRWjx+dNcgFMUVw2Kak5mWWpRfp2CVwZZye9YC+YKl8xd/ZS9gbG
+        dxJdjJwcEgImEvt/rmPvYuTiEBLYzSix9N9KNoiEpMTZ5Y+AEhxAtrDE4cPFEDU/GCUaVzcz
+        gtSwCWhI7LnYAFYvIlAsceHAYhYQm1lATeLBqo3sILawQIzEo+s/mEFsFgFViY17H4HFeQWs
+        JJ60XGCG2CUv0f3vD1gvp4C1xL/ni8BmCgHVtE2ezAxRLyhxcuYTqPnyEs1bZzNPYBSYhSQ1
+        C0lqASPTKkbJ1ILi3PTcYsMCw7zUcr3ixNzi0rx0veT83E2M4MDU0tzBuH3VB71DjEwcjIcY
+        JTiYlUR4pQ99SBbiTUmsrEotyo8vKs1JLT7EKM3BoiTOe6HrZLyQQHpiSWp2ampBahFMlomD
+        U6qBKTtaekXw5M6QOz+bLuQG/6teffXEtLqqz13Liz8/dVGs5My93rBiZlz9wz3Jxg+tH7/7
+        0cUWHBhtbZmkv2/JnZaf07NWXhD443Ri6dppRZMVtM+IvMg8yqXqnRPKlvaDI3nXKrWPk2M+
+        xEd5hAcf4hJofnVoUeOy4inmEhP/fn7LGca8/oDg+oBq4Qt2K4OeHby4pqyd7Vht8dIrRWtK
+        lSQ+rmSa5DpduJbzkrhIEfOxNIcK3d0twbpOxZGlj35+sTubpfko89QeljOT8uReccYHr5PL
+        Fl3fsf+T/6nG892e7+022naeCZK5sj3zYqC4IE/Wrhc5h3yDIoxKG3/YbJSwCf2z+tCfwkyP
+        0wKnlViKMxINtZiLihMBSRFhDLsCAAA=
+X-CMS-MailID: 20230220054545epcas1p3ab4b1281f464c72a7b5ed8681a8b087f
 X-Msg-Generator: CA
 Content-Type: text/plain; charset="utf-8"
 X-Sendblock-Type: SVC_REQ_APPROVE
 CMS-TYPE: 101P
 DLP-Filter: Pass
 X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20230220054545epcas1p34e5575ffdfd1dcef55bdee3c3563c925
+X-CMS-RootMailID: 20230220054545epcas1p3ab4b1281f464c72a7b5ed8681a8b087f
 References: <20230220054513.27385-1-bw365.lee@samsung.com>
-        <CGME20230220054545epcas1p34e5575ffdfd1dcef55bdee3c3563c925@epcas1p3.samsung.com>
+        <CGME20230220054545epcas1p3ab4b1281f464c72a7b5ed8681a8b087f@epcas1p3.samsung.com>
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
@@ -116,72 +115,71 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The cable allocation part is functionalized from extcon_dev_register.
+The mutual exclusive part is functionalized from extcon_dev_register.
 
 Signed-off-by: Bumwoo Lee <bw365.lee@samsung.com>
 ---
- drivers/extcon/extcon.c | 104 +++++++++++++++++++++++-----------------
- 1 file changed, 59 insertions(+), 45 deletions(-)
+ drivers/extcon/extcon.c | 106 ++++++++++++++++++++++------------------
+ 1 file changed, 58 insertions(+), 48 deletions(-)
 
 diff --git a/drivers/extcon/extcon.c b/drivers/extcon/extcon.c
-index adcf01132f70..3c2f540785e8 100644
+index 3c2f540785e8..2aec34909843 100644
 --- a/drivers/extcon/extcon.c
 +++ b/drivers/extcon/extcon.c
-@@ -1070,6 +1070,61 @@ void extcon_dev_free(struct extcon_dev *edev)
+@@ -1125,6 +1125,60 @@ static int extcon_alloc_cables(struct extcon_dev *edev)
+ 	return 0;
  }
- EXPORT_SYMBOL_GPL(extcon_dev_free);
  
 +/**
-+ * extcon_alloc_cables() - alloc the cables for extcon device
-+ * @edev:	extcon device which has cables
++ * extcon_alloc_muex() - alloc the mutual exclusive for extcon device
++ * @edev:	extcon device
 + *
 + * Returns 0 if success or error number if fail.
 + */
-+static int extcon_alloc_cables(struct extcon_dev *edev)
++static int extcon_alloc_muex(struct extcon_dev *edev)
 +{
++	char *name;
 +	int index;
-+	char *str;
-+	struct extcon_cable *cable;
 +
-+	if (!edev->max_supported)
++	if (!(edev->max_supported && edev->mutually_exclusive))
 +		return 0;
 +
-+	edev->cables = kcalloc(edev->max_supported,
-+			       sizeof(struct extcon_cable),
-+			       GFP_KERNEL);
-+	if (!edev->cables)
++	/* Count the size of mutually_exclusive array */
++	for (index = 0; edev->mutually_exclusive[index]; index++)
++		;
++
++	edev->attrs_muex = kcalloc(index + 1,
++				   sizeof(struct attribute *),
++				   GFP_KERNEL);
++	if (!edev->attrs_muex)
 +		return -ENOMEM;
 +
-+	for (index = 0; index < edev->max_supported; index++) {
-+		cable = &edev->cables[index];
++	edev->d_attrs_muex = kcalloc(index,
++				     sizeof(struct device_attribute),
++				     GFP_KERNEL);
++	if (!edev->d_attrs_muex) {
++		kfree(edev->attrs_muex);
++		return -ENOMEM;
++	}
 +
-+		str = kasprintf(GFP_KERNEL, "cable.%d", index);
-+		if (!str) {
-+			for (index--; index >= 0; index--) {
-+				cable = &edev->cables[index];
-+				kfree(cable->attr_g.name);
-+			}
++	for (index = 0; edev->mutually_exclusive[index]; index++) {
++		name = kasprintf(GFP_KERNEL, "0x%x",
++				 edev->mutually_exclusive[index]);
++		if (!name) {
++			for (index--; index >= 0; index--)
++				kfree(edev->d_attrs_muex[index].attr.name);
++
++			kfree(edev->d_attrs_muex);
++			kfree(edev->attrs_muex);
 +			return -ENOMEM;
 +		}
-+
-+		cable->edev = edev;
-+		cable->cable_index = index;
-+		cable->attrs[0] = &cable->attr_name.attr;
-+		cable->attrs[1] = &cable->attr_state.attr;
-+		cable->attrs[2] = NULL;
-+		cable->attr_g.name = str;
-+		cable->attr_g.attrs = cable->attrs;
-+
-+		sysfs_attr_init(&cable->attr_name.attr);
-+		cable->attr_name.attr.name = "name";
-+		cable->attr_name.attr.mode = 0444;
-+		cable->attr_name.show = cable_name_show;
-+
-+		sysfs_attr_init(&cable->attr_state.attr);
-+		cable->attr_state.attr.name = "state";
-+		cable->attr_state.attr.mode = 0444;
-+		cable->attr_state.show = cable_state_show;
++		sysfs_attr_init(&edev->d_attrs_muex[index].attr);
++		edev->d_attrs_muex[index].attr.name = name;
++		edev->d_attrs_muex[index].attr.mode = 0000;
++		edev->attrs_muex[index] = &edev->d_attrs_muex[index].attr;
 +	}
++	edev->attr_g_muex.name = muex_name;
++	edev->attr_g_muex.attrs = edev->attrs_muex;
 +
 +	return 0;
 +}
@@ -189,69 +187,72 @@ index adcf01132f70..3c2f540785e8 100644
  /**
   * extcon_dev_register() - Register an new extcon device
   * @edev:	the extcon device to be registered
-@@ -1117,50 +1172,9 @@ int extcon_dev_register(struct extcon_dev *edev)
- 	dev_set_name(&edev->dev, "extcon%lu",
- 			(unsigned long)atomic_inc_return(&edev_no));
+@@ -1176,53 +1230,9 @@ int extcon_dev_register(struct extcon_dev *edev)
+ 	if (ret)
+ 		goto err_alloc_cables;
  
--	if (edev->max_supported) {
--		char *str;
--		struct extcon_cable *cable;
+-	if (edev->max_supported && edev->mutually_exclusive) {
+-		char *name;
 -
--		edev->cables = kcalloc(edev->max_supported,
--				       sizeof(struct extcon_cable),
--				       GFP_KERNEL);
--		if (!edev->cables) {
+-		/* Count the size of mutually_exclusive array */
+-		for (index = 0; edev->mutually_exclusive[index]; index++)
+-			;
+-
+-		edev->attrs_muex = kcalloc(index + 1,
+-					   sizeof(struct attribute *),
+-					   GFP_KERNEL);
+-		if (!edev->attrs_muex) {
 -			ret = -ENOMEM;
--			goto err_sysfs_alloc;
+-			goto err_muex;
 -		}
--		for (index = 0; index < edev->max_supported; index++) {
--			cable = &edev->cables[index];
 -
--			str = kasprintf(GFP_KERNEL, "cable.%d", index);
--			if (!str) {
+-		edev->d_attrs_muex = kcalloc(index,
+-					     sizeof(struct device_attribute),
+-					     GFP_KERNEL);
+-		if (!edev->d_attrs_muex) {
+-			ret = -ENOMEM;
+-			kfree(edev->attrs_muex);
+-			goto err_muex;
+-		}
+-
+-		for (index = 0; edev->mutually_exclusive[index]; index++) {
+-			name = kasprintf(GFP_KERNEL, "0x%x",
+-					 edev->mutually_exclusive[index]);
+-			if (!name) {
 -				for (index--; index >= 0; index--) {
--					cable = &edev->cables[index];
--					kfree(cable->attr_g.name);
+-					kfree(edev->d_attrs_muex[index].attr.
+-					      name);
 -				}
+-				kfree(edev->d_attrs_muex);
+-				kfree(edev->attrs_muex);
 -				ret = -ENOMEM;
--
--				goto err_alloc_cables;
+-				goto err_muex;
 -			}
--
--			cable->edev = edev;
--			cable->cable_index = index;
--			cable->attrs[0] = &cable->attr_name.attr;
--			cable->attrs[1] = &cable->attr_state.attr;
--			cable->attrs[2] = NULL;
--			cable->attr_g.name = str;
--			cable->attr_g.attrs = cable->attrs;
--
--			sysfs_attr_init(&cable->attr_name.attr);
--			cable->attr_name.attr.name = "name";
--			cable->attr_name.attr.mode = 0444;
--			cable->attr_name.show = cable_name_show;
--
--			sysfs_attr_init(&cable->attr_state.attr);
--			cable->attr_state.attr.name = "state";
--			cable->attr_state.attr.mode = 0444;
--			cable->attr_state.show = cable_state_show;
+-			sysfs_attr_init(&edev->d_attrs_muex[index].attr);
+-			edev->d_attrs_muex[index].attr.name = name;
+-			edev->d_attrs_muex[index].attr.mode = 0000;
+-			edev->attrs_muex[index] = &edev->d_attrs_muex[index]
+-							.attr;
 -		}
+-		edev->attr_g_muex.name = muex_name;
+-		edev->attr_g_muex.attrs = edev->attrs_muex;
+-
 -	}
-+	ret = extcon_alloc_cables(edev);
++	ret = extcon_alloc_muex(edev);
 +	if (ret)
-+		goto err_alloc_cables;
++		goto err_alloc_muex;
  
- 	if (edev->max_supported && edev->mutually_exclusive) {
- 		char *name;
-@@ -1282,7 +1296,7 @@ int extcon_dev_register(struct extcon_dev *edev)
+ 	if (edev->max_supported) {
+ 		edev->extcon_dev_type.groups =
+@@ -1290,7 +1300,7 @@ int extcon_dev_register(struct extcon_dev *edev)
+ 		kfree(edev->d_attrs_muex);
+ 		kfree(edev->attrs_muex);
+ 	}
+-err_muex:
++err_alloc_muex:
+ 	for (index = 0; index < edev->max_supported; index++)
+ 		kfree(edev->cables[index].attr_g.name);
  err_alloc_cables:
- 	if (edev->max_supported)
- 		kfree(edev->cables);
--err_sysfs_alloc:
-+
- 	return ret;
- }
- EXPORT_SYMBOL_GPL(extcon_dev_register);
 -- 
 2.35.1
 
