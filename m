@@ -2,55 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E8D869CA0E
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Feb 2023 12:41:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0736D69CA17
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Feb 2023 12:45:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231828AbjBTLly (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Feb 2023 06:41:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35242 "EHLO
+        id S231586AbjBTLpR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Feb 2023 06:45:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37626 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231733AbjBTLlx (ORCPT
+        with ESMTP id S229666AbjBTLpO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Feb 2023 06:41:53 -0500
-Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net [217.70.183.200])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 925781040A;
-        Mon, 20 Feb 2023 03:41:50 -0800 (PST)
-Received: (Authenticated sender: clement.leger@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id 8CE3C20003;
-        Mon, 20 Feb 2023 11:41:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1676893308;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=jY7+m1T4iK7eneAS7by4Sgyb4VAUahP14Dhi2ddZYA4=;
-        b=FCFNl1vpj7/nLGwcGSnwVMPbgC+DNQp1hpgREPU1kVSgBRRIWCE937LK3HswkU3HIhXsnb
-        faOtZ0WhnqilEsk+CUkssYuqRk02Ki3Q+4paMPjgGIgmwwBeLJgmZ+97UOmaVd19QvBlCt
-        9pQiTEBXIzgv9uaQ6zYeAU6HKuc9Zp5xc79KwsT7DMJfxQrvgrygT3knpG2Q2dPU9Qzi1v
-        P36VxLAx5cCk88bubNCDY8p92vgVS4CYyhxwLlwBvBZvTEVB1DxH/eDYtqsw0AsFcA2XnI
-        ma3lTVVDY7GHJzjFmLr2t9xV473wjsjsYXdxU/2kQmzqbGn7rz1KJGtXeOhh+A==
-Date:   Mon, 20 Feb 2023 12:44:20 +0100
-From:   =?UTF-8?B?Q2zDqW1lbnQgTMOpZ2Vy?= <clement.leger@bootlin.com>
-To:     Sylwester Nawrocki <s.nawrocki@samsung.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] clk: add missing of_node_put() in "assigned-clocks"
- property parsing
-Message-ID: <20230220124420.4150c767@fixe.home>
-In-Reply-To: <20230131083227.10990-1-clement.leger@bootlin.com>
-References: <20230131083227.10990-1-clement.leger@bootlin.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.36; x86_64-pc-linux-gnu)
+        Mon, 20 Feb 2023 06:45:14 -0500
+Received: from mail-pg1-x532.google.com (mail-pg1-x532.google.com [IPv6:2607:f8b0:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD621EC53;
+        Mon, 20 Feb 2023 03:45:13 -0800 (PST)
+Received: by mail-pg1-x532.google.com with SMTP id h31so557666pgl.6;
+        Mon, 20 Feb 2023 03:45:13 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=lQQ4SoAuUv1jRYgJ9+jggXgvoVrSMDksG2ZxS3S5548=;
+        b=Fl1IYAJT2mLiDNZQl844lpLC/YWSN6mYXpPIODlsLe6UsIaZs1uwZXFnTtPo16BBaB
+         BCRqCBQiLpzBqhxCc9aTpKAL+Lh6F8NupJMQiVp6Q4fXwXFAJ7joac03v2UKqZU+QEMc
+         5LYub/0iFFxz+bFirKkvNhgA9LVi8Y94NMRy7j68jmGVgrFoAiSQLdfJh7haUsw7nYIS
+         i4dOMDYeGVMoXjASoA66v7P+PKrX5Jo5wrXY5WFPHqAqcbo3uYuQLRJvlFlRwEVJ75My
+         XoMiI6ApMj1kE3is1ZpAW+3b/xsu5b0Mb5Z42CxXSbRs2h5ir3Y5FLm9JO9KN1tP8ZEn
+         xUeg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=lQQ4SoAuUv1jRYgJ9+jggXgvoVrSMDksG2ZxS3S5548=;
+        b=AqRkZ91vKpiTqPB+iHLYhHlvGTmEleUJC/VbhT4kRtLybMlVJ8WsvPcx0+UmuR2nH8
+         poJN3uXDlErvZmFCWxugJIY/jzotgPGCA3nyarQq79/VmRro+RGaj9CXpTtL0AQjeLLI
+         yHVTcwhpWB+v6chR37RO+Su1uAtZnsYhCC1oUmrnyTIt5Qp3rhDqh4HJcD3/GW5TmYe3
+         92c6g0iTSJ/AJNElCggwIJfWb6DX3WAtAa1VzFoqzOlDnvhcP9Luq/7EPfKDQKTpVhKq
+         D3RlIf9dHY9xHnZ5iHcmH3QlNbcuhKI96p6QOa0oUIEK5+KOOxzj8bSAdcEvfO9nqojL
+         OpIg==
+X-Gm-Message-State: AO0yUKUe+OPkwyljfsDi64AbIXnWO4OCU7g2Pyu7rLPU+VO04d7lHHJZ
+        /e8TQY/IcMcO0B3lPRsUcZ4=
+X-Google-Smtp-Source: AK7set9Y9436fW+4i+iWxcXDtm9qUYTotP5VCmaHCFXxpaMReuKiMm05DFtAW3j48Y5e7XQqBczy4w==
+X-Received: by 2002:aa7:96ee:0:b0:591:3d20:3827 with SMTP id i14-20020aa796ee000000b005913d203827mr283357pfq.21.1676893513222;
+        Mon, 20 Feb 2023 03:45:13 -0800 (PST)
+Received: from redecorated-mbp ([202.53.32.211])
+        by smtp.gmail.com with ESMTPSA id x9-20020aa793a9000000b005a8173829d5sm2407136pff.66.2023.02.20.03.45.08
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 20 Feb 2023 03:45:13 -0800 (PST)
+Date:   Mon, 20 Feb 2023 22:45:00 +1100
+From:   Orlando Chamberlain <orlandoch.dev@gmail.com>
+To:     Andy Shevchenko <andy.shevchenko@gmail.com>
+Cc:     linux-doc@vger.kernel.org, linux-input@vger.kernel.org,
+        Jonathan Corbet <corbet@lwn.net>,
+        Jiri Kosina <jikos@kernel.org>,
+        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
+        linux-kernel@vger.kernel.org, Pavel Machek <pavel@ucw.cz>,
+        Aditya Garg <gargaditya08@live.com>,
+        Aun-Ali Zaidi <admin@kodeit.net>,
+        Kerem Karabay <kekrby@gmail.com>,
+        Thomas =?UTF-8?B?V2Vpw59zY2h1aA==?= <thomas@t-8ch.de>,
+        Thomas =?UTF-8?B?V2Vpw59z?= =?UTF-8?B?Y2h1aA==?= 
+        <linux@weissschuh.net>
+Subject: Re: [PATCH v4 2/2] HID: hid-apple-magic-backlight: Add driver for
+ keyboard backlight on internal Magic Keyboards
+Message-ID: <20230220224500.0486bc3b@redecorated-mbp>
+In-Reply-To: <Y/NZm22JQKeF1+6R@smile.fi.intel.com>
+References: <20230218090709.7467-1-orlandoch.dev@gmail.com>
+        <20230218090709.7467-3-orlandoch.dev@gmail.com>
+        <CAHp75VeF6ypA7mSYZrMsNr777f6zjEJ6nkygEc_NQe-nMhjRFQ@mail.gmail.com>
+        <20230220180932.2a7aa6b1@redecorated-mbp>
+        <Y/NZm22JQKeF1+6R@smile.fi.intel.com>
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.35; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -58,78 +87,48 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Le Tue, 31 Jan 2023 09:32:27 +0100,
-Cl=C3=A9ment L=C3=A9ger <clement.leger@bootlin.com> a =C3=A9crit :
+On Mon, 20 Feb 2023 13:29:31 +0200
+Andy Shevchenko <andy.shevchenko@gmail.com> wrote:
 
-Ping ?
+> On Mon, Feb 20, 2023 at 06:09:32PM +1100, Orlando Chamberlain wrote:
+> > On Sun, 19 Feb 2023 16:09:26 +0200
+> > Andy Shevchenko <andy.shevchenko@gmail.com> wrote:  
+> > > On Sat, Feb 18, 2023 at 11:08 AM Orlando Chamberlain
+> > > <orlandoch.dev@gmail.com> wrote:  
+> 
+> ...
+> 
+> > > > +       help
+> > > > +       Say Y here if you want support for the keyboard
+> > > > backlight on Macs with
+> > > > +       the magic keyboard (MacBookPro16,x and MacBookAir9,1).
+> > > > Note that this
+> > > > +       driver is not for external magic keyboards.
+> > > > +
+> > > > +       To compile this driver as a module, choose M here: the
+> > > > +       module will be called hid-apple-magic-backlight.    
+> > > 
+> > > Is it my email client or is the indentation of the help text
+> > > incorrect?
+> > > 
+> > > Hint: the text of the help should be <TAB><SPACE><SPACE> indented.
+> > > 
+> > > I believe checkpatch.pl at least in --strict mode should complain
+> > > about this.  
+> > 
+> > Looking at the hid Kconfig, it seems like some have it as you've
+> > described, and some just have tab (and a few have just tab for the
+> > first line, and tab space space for the rest of the lines).  
+> 
+> Okay, I have checked in the other MUA I'm using for patch reviews and
+> indeed your Kconfig indentation is broken.
+> 
+> > checkpatch.pl --strict didn't complain about the indentation so
+> > hopefully it's alright as is.  
+> 
+> No, it's not. Must be fixed.
+> 
+> https://www.kernel.org/doc/html/latest/process/coding-style.html#kconfig-configuration-files
+> 
 
-> When returning from of_parse_phandle_with_args(), the np member of the
-> of_phandle_args structure should be put after usage. Add missing
-> of_node_put() calls in both __set_clk_parents() and __set_clk_rates().
->=20
-> Fixes: 86be408bfbd8 ("clk: Support for clock parents and rates assigned f=
-rom device tree")
-> Signed-off-by: Cl=C3=A9ment L=C3=A9ger <clement.leger@bootlin.com>
-> ---
-> v2:
->  - Add "Fixes"
->=20
->  drivers/clk/clk-conf.c | 12 ++++++++++--
->  1 file changed, 10 insertions(+), 2 deletions(-)
->=20
-> diff --git a/drivers/clk/clk-conf.c b/drivers/clk/clk-conf.c
-> index 2ef819606c41..1a4e6340f95c 100644
-> --- a/drivers/clk/clk-conf.c
-> +++ b/drivers/clk/clk-conf.c
-> @@ -33,9 +33,12 @@ static int __set_clk_parents(struct device_node *node,=
- bool clk_supplier)
->  			else
->  				return rc;
->  		}
-> -		if (clkspec.np =3D=3D node && !clk_supplier)
-> +		if (clkspec.np =3D=3D node && !clk_supplier) {
-> +			of_node_put(clkspec.np);
->  			return 0;
-> +		}
->  		pclk =3D of_clk_get_from_provider(&clkspec);
-> +		of_node_put(clkspec.np);
->  		if (IS_ERR(pclk)) {
->  			if (PTR_ERR(pclk) !=3D -EPROBE_DEFER)
->  				pr_warn("clk: couldn't get parent clock %d for %pOF\n",
-> @@ -48,10 +51,12 @@ static int __set_clk_parents(struct device_node *node=
-, bool clk_supplier)
->  		if (rc < 0)
->  			goto err;
->  		if (clkspec.np =3D=3D node && !clk_supplier) {
-> +			of_node_put(clkspec.np);
->  			rc =3D 0;
->  			goto err;
->  		}
->  		clk =3D of_clk_get_from_provider(&clkspec);
-> +		of_node_put(clkspec.np);
->  		if (IS_ERR(clk)) {
->  			if (PTR_ERR(clk) !=3D -EPROBE_DEFER)
->  				pr_warn("clk: couldn't get assigned clock %d for %pOF\n",
-> @@ -93,10 +98,13 @@ static int __set_clk_rates(struct device_node *node, =
-bool clk_supplier)
->  				else
->  					return rc;
->  			}
-> -			if (clkspec.np =3D=3D node && !clk_supplier)
-> +			if (clkspec.np =3D=3D node && !clk_supplier) {
-> +				of_node_put(clkspec.np);
->  				return 0;
-> +			}
-> =20
->  			clk =3D of_clk_get_from_provider(&clkspec);
-> +			of_node_put(clkspec.np);
->  			if (IS_ERR(clk)) {
->  				if (PTR_ERR(clk) !=3D -EPROBE_DEFER)
->  					pr_warn("clk: couldn't get clock %d for %pOF\n",
-
-
-
---=20
-Cl=C3=A9ment L=C3=A9ger,
-Embedded Linux and Kernel engineer at Bootlin
-https://bootlin.com
+No worries, I'll fix that in v5.
