@@ -2,203 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AEBDD69CB8C
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Feb 2023 14:02:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C0DB569CB8E
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Feb 2023 14:03:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232049AbjBTNC4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Feb 2023 08:02:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49388 "EHLO
+        id S232023AbjBTNDG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Feb 2023 08:03:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49704 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230107AbjBTNCy (ORCPT
+        with ESMTP id S232186AbjBTNDD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Feb 2023 08:02:54 -0500
-Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4A07A270D;
-        Mon, 20 Feb 2023 05:02:53 -0800 (PST)
-Received: from vm02.corp.microsoft.com (unknown [167.220.196.155])
-        by linux.microsoft.com (Postfix) with ESMTPSA id ADC5C209A88D;
-        Mon, 20 Feb 2023 05:02:51 -0800 (PST)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com ADC5C209A88D
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1676898172;
-        bh=U1TEgC//qrS3upr0HOqpecLJ2Ei13B1/WGBub5prWr0=;
-        h=From:To:Cc:Subject:Date:From;
-        b=enrwxpZbFqagIZ3T2LYJq+e43kievalPtz+BVBCZjO/Uz1skU0rO9Fw2YDB+R4NDx
-         pbI0HchgBwxea+0dcSVbQQGoRgg0/8VhT1s+q/vxt6mwTj9kpY3G5ATDaJZr2ye+Dr
-         fDkKtsm8Ks1o88t3TrEco7TwT30VMqwuNvrDzCqo=
-From:   Jeremi Piotrowski <jpiotrowski@linux.microsoft.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     Jeremi Piotrowski <jpiotrowski@linux.microsoft.com>,
-        netdev@vger.kernel.org, Richard Cochran <richardcochran@gmail.com>,
-        Christoph Hellwig <hch@lst.de>
-Subject: [PATCH] ptp: kvm: Use decrypted memory in confidential guest on x86
-Date:   Mon, 20 Feb 2023 13:02:35 +0000
-Message-Id: <20230220130235.2603366-1-jpiotrowski@linux.microsoft.com>
-X-Mailer: git-send-email 2.25.1
+        Mon, 20 Feb 2023 08:03:03 -0500
+Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2075559C6
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Feb 2023 05:02:59 -0800 (PST)
+Received: by mail-ed1-x52c.google.com with SMTP id g1so4157165edz.7
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Feb 2023 05:02:59 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=omN2dnLSVe9aABOg/lBEWYbyUhDj383CyEPYnU3/aZ0=;
+        b=fGcC2Kjp5QZF80tDjhQDwMjLJGR/9lmGa60T8djqUNxQLBc6p1zPin0xx70601gTaw
+         QHLaybuQbuQfPrSoo+x30davvcxGBKlGoJxFduvIGOeyjbiQS+l28LCysr0eJFNW0uyq
+         P86S2wjScq5EyViaKdIzPN/eb/zobhEG5XHsnDaCdKY7SSZ6500j5qeGWIIR0+isCrhF
+         bSRDbqFEnJ1EeU4sSrLD4RRVjzjM0JPyV2lCFLAj3nSXaSfvAkDAusEpLjbRP7mgyx/P
+         +iOWx8EFW7G/LEs/lQ0v+WJOSGCl6+cFlbh4xh71WcKutCYDx36qiIouFdv3O/fBe1A4
+         QaYg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=omN2dnLSVe9aABOg/lBEWYbyUhDj383CyEPYnU3/aZ0=;
+        b=MJUyFpTU8wdbdlesJIqw2ecIXDzsAJXld0pysXKyT1FkZJqma5d0KFTHNftvZdOlOE
+         FrbAarghM6AeiH4o48dykOlTVq+a+eJRsOHKzJjz1h/2PKxfkQIpA8q+VCMoKWYQY/mU
+         Jy6iu7YuRGZbV3yatUL0Eyll1TM4cNumnjJhQOp9MyoL3MUMBV3r+Pqa5Peim/ih9Tla
+         wb8+TE2GMr12ZBFq/cgM4gO21jACv6hpiIyyrH+6AXRycjKmB4uWPrDoJ+PlcNuSZRbT
+         jhX6OKYMuzEmjPJ/AfCoHt+5Xe0lIZgOzTncnmKp26ZW0KHn+XElXtWgucaQe1r1sffJ
+         BWgg==
+X-Gm-Message-State: AO0yUKWM8RfLj3cyFY4eH3Cl47K4/9loGvGQnI8RQ3OeHuHyC46otqai
+        gd946y0ijlHbjA4FiKbm0Q4=
+X-Google-Smtp-Source: AK7set8S9YUWsbk0FJBnT1JqGWGfoIrm7UPqiOpOXv8mWju2krRJD+tJwLBpOWQT7qA2lxm3nC4YnA==
+X-Received: by 2002:a17:907:7288:b0:8bd:dc0:3834 with SMTP id dt8-20020a170907728800b008bd0dc03834mr9618676ejc.34.1676898178000;
+        Mon, 20 Feb 2023 05:02:58 -0800 (PST)
+Received: from gmail.com (1F2EF163.nat.pool.telekom.hu. [31.46.241.99])
+        by smtp.gmail.com with ESMTPSA id kw24-20020a170907771800b008cd1f773754sm1858919ejc.5.2023.02.20.05.02.56
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 20 Feb 2023 05:02:57 -0800 (PST)
+Sender: Ingo Molnar <mingo.kernel.org@gmail.com>
+Date:   Mon, 20 Feb 2023 14:02:55 +0100
+From:   Ingo Molnar <mingo@kernel.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     linux-kernel@vger.kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Borislav Petkov <bp@alien8.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Andrew Morton <akpm@linux-foundation.org>
+Subject: [GIT PULL] x86/asm changes for v6.3
+Message-ID: <Y/Nvf+xayGNkhaOd@gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-19.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-KVM_HC_CLOCK_PAIRING currently fails inside SEV-SNP guests because the guest
-passes an address to static data to the host. In confidential computing the
-host can't access arbitrary guest memory so handling the hypercall runs into an
-"rmpfault". To make the hypercall work, the guest needs to explicitly mark the
-memory as decrypted. Do that in kvm_arch_ptp_init(), but retain the previous
-behavior for non-confidential guests to save us from having to allocate memory
-when not needed.
+Linus,
 
-Add a new arch-specific function (kvm_arch_ptp_exit()) to free the
-allocation and mark the memory as encrypted again.
+Please pull the latest x86/asm git tree from:
 
-Signed-off-by: Jeremi Piotrowski <jpiotrowski@linux.microsoft.com>
----
-Hi,
+   git://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git x86-asm-2023-02-20
 
-I would love to not allocate a whole page just for this driver, swiotlb is
-decrypted but I don't have access to a 'struct device' here. Does anyone have
-any suggestion?
+   # HEAD: 65c24d7b0f9142c6acc9bd6dabeba22767077681 x86/lib: Fix compiler and kernel-doc warnings
 
-Jeremi
+Header fixes and a DocBook fix.
 
- drivers/ptp/ptp_kvm_arm.c    |  4 +++
- drivers/ptp/ptp_kvm_common.c |  1 +
- drivers/ptp/ptp_kvm_x86.c    | 59 +++++++++++++++++++++++++++++-------
- 3 files changed, 53 insertions(+), 11 deletions(-)
+ Thanks,
 
-diff --git a/drivers/ptp/ptp_kvm_arm.c b/drivers/ptp/ptp_kvm_arm.c
-index b7d28c8dfb84..e68e6943167b 100644
---- a/drivers/ptp/ptp_kvm_arm.c
-+++ b/drivers/ptp/ptp_kvm_arm.c
-@@ -22,6 +22,10 @@ int kvm_arch_ptp_init(void)
- 	return 0;
- }
- 
-+void kvm_arch_ptp_exit(void)
-+{
-+}
-+
- int kvm_arch_ptp_get_clock(struct timespec64 *ts)
- {
- 	return kvm_arch_ptp_get_crosststamp(NULL, ts, NULL);
-diff --git a/drivers/ptp/ptp_kvm_common.c b/drivers/ptp/ptp_kvm_common.c
-index 9141162c4237..2418977989be 100644
---- a/drivers/ptp/ptp_kvm_common.c
-+++ b/drivers/ptp/ptp_kvm_common.c
-@@ -130,6 +130,7 @@ static struct kvm_ptp_clock kvm_ptp_clock;
- static void __exit ptp_kvm_exit(void)
- {
- 	ptp_clock_unregister(kvm_ptp_clock.ptp_clock);
-+	kvm_arch_ptp_exit();
- }
- 
- static int __init ptp_kvm_init(void)
-diff --git a/drivers/ptp/ptp_kvm_x86.c b/drivers/ptp/ptp_kvm_x86.c
-index 4991054a2135..902844cc1a17 100644
---- a/drivers/ptp/ptp_kvm_x86.c
-+++ b/drivers/ptp/ptp_kvm_x86.c
-@@ -14,27 +14,64 @@
- #include <uapi/linux/kvm_para.h>
- #include <linux/ptp_clock_kernel.h>
- #include <linux/ptp_kvm.h>
-+#include <linux/set_memory.h>
- 
- static phys_addr_t clock_pair_gpa;
--static struct kvm_clock_pairing clock_pair;
-+static struct kvm_clock_pairing clock_pair_glbl;
-+static struct kvm_clock_pairing *clock_pair;
- 
- int kvm_arch_ptp_init(void)
- {
-+	struct page *p;
- 	long ret;
- 
- 	if (!kvm_para_available())
- 		return -ENODEV;
- 
--	clock_pair_gpa = slow_virt_to_phys(&clock_pair);
--	if (!pvclock_get_pvti_cpu0_va())
--		return -ENODEV;
-+	if (cc_platform_has(CC_ATTR_GUEST_MEM_ENCRYPT)) {
-+		p = alloc_page(GFP_KERNEL | __GFP_ZERO);
-+		if (!p)
-+			return -ENOMEM;
-+
-+		clock_pair = page_address(p);
-+		ret = set_memory_decrypted((unsigned long)clock_pair, 1);
-+		if (ret) {
-+			__free_page(p);
-+			clock_pair = NULL;
-+			goto nofree;
-+		}
-+	} else {
-+		clock_pair = &clock_pair_glbl;
-+	}
-+
-+	clock_pair_gpa = slow_virt_to_phys(clock_pair);
-+	if (!pvclock_get_pvti_cpu0_va()) {
-+		ret = -ENODEV;
-+		goto err;
-+	}
- 
- 	ret = kvm_hypercall2(KVM_HC_CLOCK_PAIRING, clock_pair_gpa,
- 			     KVM_CLOCK_PAIRING_WALLCLOCK);
--	if (ret == -KVM_ENOSYS)
--		return -ENODEV;
-+	if (ret == -KVM_ENOSYS) {
-+		ret = -ENODEV;
-+		goto err;
-+	}
- 
- 	return ret;
-+
-+err:
-+	kvm_arch_ptp_exit();
-+nofree:
-+	return ret;
-+}
-+
-+void kvm_arch_ptp_exit(void)
-+{
-+	if (cc_platform_has(CC_ATTR_GUEST_MEM_ENCRYPT)) {
-+		WARN_ON(set_memory_encrypted((unsigned long)clock_pair, 1));
-+		free_page((unsigned long)clock_pair);
-+		clock_pair = NULL;
-+	}
- }
- 
- int kvm_arch_ptp_get_clock(struct timespec64 *ts)
-@@ -49,8 +86,8 @@ int kvm_arch_ptp_get_clock(struct timespec64 *ts)
- 		return -EOPNOTSUPP;
- 	}
- 
--	ts->tv_sec = clock_pair.sec;
--	ts->tv_nsec = clock_pair.nsec;
-+	ts->tv_sec = clock_pair->sec;
-+	ts->tv_nsec = clock_pair->nsec;
- 
- 	return 0;
- }
-@@ -81,9 +118,9 @@ int kvm_arch_ptp_get_crosststamp(u64 *cycle, struct timespec64 *tspec,
- 			pr_err_ratelimited("clock pairing hypercall ret %lu\n", ret);
- 			return -EOPNOTSUPP;
- 		}
--		tspec->tv_sec = clock_pair.sec;
--		tspec->tv_nsec = clock_pair.nsec;
--		*cycle = __pvclock_read_cycles(src, clock_pair.tsc);
-+		tspec->tv_sec = clock_pair->sec;
-+		tspec->tv_nsec = clock_pair->nsec;
-+		*cycle = __pvclock_read_cycles(src, clock_pair->tsc);
- 	} while (pvclock_read_retry(src, version));
- 
- 	*cs = &kvm_clock;
--- 
-2.25.1
+	Ingo
 
+------------------>
+Anuradha Weeraman (2):
+      x86/lib: Include <asm/misc.h> to fix a missing prototypes warning at build time
+      x86/lib: Fix compiler and kernel-doc warnings
+
+
+ arch/x86/lib/cmdline.c | 4 +++-
+ arch/x86/lib/misc.c    | 2 ++
+ 2 files changed, 5 insertions(+), 1 deletion(-)
