@@ -2,173 +2,457 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F350B69C86B
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Feb 2023 11:17:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 947D169C873
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Feb 2023 11:19:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231504AbjBTKRi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Feb 2023 05:17:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45820 "EHLO
+        id S231532AbjBTKTH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Feb 2023 05:19:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47216 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231422AbjBTKRg (ORCPT
+        with ESMTP id S229690AbjBTKTF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Feb 2023 05:17:36 -0500
-Received: from mail-lj1-x231.google.com (mail-lj1-x231.google.com [IPv6:2a00:1450:4864:20::231])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DAFD14EAD
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Feb 2023 02:17:34 -0800 (PST)
-Received: by mail-lj1-x231.google.com with SMTP id a10so692314ljq.1
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Feb 2023 02:17:34 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=j/mBL/s9w+zymmQfyS3pY3QfWP8+AdeFf5eGjucm2qQ=;
-        b=K0DJ6JGrVOuibpGD9yC40OezN6wlr46KLSXOAhJ/xQXV4yUZSsxz+ErlGrfaYJ7C18
-         SMZwk+EkgOJQuLyOGio2KcqOMwJ01JsCf3eCHlZ1bpyEZm+/JTes23QciSGvEixNtxEs
-         FSGwouwqpkoGnM0RDBoEaZyHKRrKKNIWl/A/jMDxdSruvWRRqO9S6fZAAOCdqXNgHFHH
-         a7O9cLMVOEJTCRDPY+IOSflkkjhCLtuIY4pVk35KBOarD8YAFpddKbZR4KBmrTTnvAKZ
-         PPl5Jf2jKzb8M2E9dJChb23I5v3U+p9ZAxry8qYu4JUY6am0be+j7wDk543sqvGml6xe
-         aVRQ==
+        Mon, 20 Feb 2023 05:19:05 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64C6640C3
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Feb 2023 02:18:03 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1676888282;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=E5QH0XjK/2mI3uFcmWIFTgu6W6Ma/zrzy+oip3onN3w=;
+        b=Iqjcm3WS0FAHOqY9l3VLSFLMplrxqCyb5CfmE4u0rKHHE2bETqk/hiAjmvFm6fqjc79pty
+        ZIpS+6jBbYRmdMUpidU2Rz/XX6uIOyBx3RzZj5BlX9SA1hY2u7aAbIsBimNme0I7KqFJaG
+        EKHIQ18Rs9gsRx4f4f1FnPba4lG5k7w=
+Received: from mail-ed1-f69.google.com (mail-ed1-f69.google.com
+ [209.85.208.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-638-fdZCPE8IPAy-nAgSxiGE4w-1; Mon, 20 Feb 2023 05:18:00 -0500
+X-MC-Unique: fdZCPE8IPAy-nAgSxiGE4w-1
+Received: by mail-ed1-f69.google.com with SMTP id ec13-20020a0564020d4d00b004a621e993a8so825506edb.13
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Feb 2023 02:18:00 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=j/mBL/s9w+zymmQfyS3pY3QfWP8+AdeFf5eGjucm2qQ=;
-        b=rAbBAEdeCCo+8Q/XlEYPhfQuIrE3YFA039nyhTkTFwX43F9/oWalp0M1WL+/f7N8hX
-         zT0W0RwtXU159mpIZum/e9Uz86aNLeTuQDWBLRRJNBOpUGxgXcx9UJHF2KKuOWqu2Gq6
-         Q+368sxjnWAJMnTO89C7Nzke5Km/v5cRHgvxOP9VO7Ye/9tPKGWmg3cs5091Tv7StgN3
-         j0ix4BPtmmytQN4x8HxGasOPHS7E1RhChW9rsthto7bS/RvdWtETSXSMZ0HvneGikPdc
-         D4YAHRYcG9oNCUn2ewCexLyAng2czAi0KeVkyzVWIl5nIXfYyDWQPTmIqNWMkgFTg++u
-         D+CQ==
-X-Gm-Message-State: AO0yUKXnj96OjxdtsJSYDz1uVhFEgPrwqGxXWDmfImbpWMb0BGrNcFhf
-        ayb7UiKHvtMTrwDFZa2wkxNjqA==
-X-Google-Smtp-Source: AK7set9te5orsT1nxfrNdKCa9pXCN/rIlq+CkslRUZs+CTQaSpFhy3Q0sLXDHcGtEax3mF2k8OS84Q==
-X-Received: by 2002:a05:651c:1508:b0:28f:890b:c5fd with SMTP id e8-20020a05651c150800b0028f890bc5fdmr259549ljf.39.1676888252419;
-        Mon, 20 Feb 2023 02:17:32 -0800 (PST)
-Received: from [192.168.1.101] (abxh184.neoplus.adsl.tpnet.pl. [83.9.1.184])
-        by smtp.gmail.com with ESMTPSA id i62-20020a2e2241000000b002934d0ff439sm1472769lji.104.2023.02.20.02.17.31
+        h=content-transfer-encoding:content-language:cc:to:subject:from
+         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=E5QH0XjK/2mI3uFcmWIFTgu6W6Ma/zrzy+oip3onN3w=;
+        b=Ra15mxhdKCo+GSMimv7K4KrZJROsPKeGiG7OIn8gQNajN1xmzqGGLl+mKqWwHVXpFm
+         aXW/vXPKdqFOLj64N07ID29TCFWBgBZNX2H/Ur0n/Jj+7NZrCAQF9NBtLERG3QjCDKm/
+         Dagr6jTZSSMBIZvvdxAy7joGz4dVRhAls6kGCipIUmneio/p04kpIdVZAcFcnptkXA3R
+         RUMXdmToBPvEJFFJTyVg7OuymW/xcQOoxNGUMv91lUGpbHRCFIR14Ql3eUfVIb+BazXY
+         xuJ93M+OpByURlWnctDDoLa0uixgysXoM3QDldARwMLOGFNSE4T8lOTioo/QgJzzFvQu
+         JIxw==
+X-Gm-Message-State: AO0yUKWLlPHfkDB6lOjlVytmfVlGpwIm/cBJ3lKTdUY1tpyQlLSaTF1i
+        Oi4RnsD85CsaPJxHqViUBA52w2frrgoz/vAuTKzES/xtHZkbZyEuR6EhzCT+lzNHaKJ/lb01m7w
+        pF53Eu/DFLApKCyt202rui3VGTEhioA==
+X-Received: by 2002:a17:906:580d:b0:8bd:11a1:fe9 with SMTP id m13-20020a170906580d00b008bd11a10fe9mr6597607ejq.16.1676888278735;
+        Mon, 20 Feb 2023 02:17:58 -0800 (PST)
+X-Google-Smtp-Source: AK7set+SxoAFi+dQ2897O+UlBviu7MOsuIzVFRpkvUpUsITT/H2ivSY3g/HN8H3Tr9Q8OXyuG+oMFA==
+X-Received: by 2002:a17:906:580d:b0:8bd:11a1:fe9 with SMTP id m13-20020a170906580d00b008bd11a10fe9mr6597592ejq.16.1676888278358;
+        Mon, 20 Feb 2023 02:17:58 -0800 (PST)
+Received: from [10.40.98.142] ([78.108.130.194])
+        by smtp.gmail.com with ESMTPSA id q11-20020a17090622cb00b008b1569b37edsm5576788eja.214.2023.02.20.02.17.57
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 20 Feb 2023 02:17:32 -0800 (PST)
-Message-ID: <be1201a5-f315-9125-8768-4719a92f07f9@linaro.org>
-Date:   Mon, 20 Feb 2023 11:17:30 +0100
+        Mon, 20 Feb 2023 02:17:57 -0800 (PST)
+Message-ID: <9f696a6a-9161-ab4c-5304-dc2db865f5d8@redhat.com>
+Date:   Mon, 20 Feb 2023 11:17:57 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH v3 3/3] arm64: dts: qcom: sdm845-oneplus: add alert-slider
+ Thunderbird/102.7.1
+From:   Hans de Goede <hdegoede@redhat.com>
+Subject: [GIT PULL] platform-drivers-x86 for 6.3-1
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Andy Shevchenko <andy@infradead.org>,
+        Mark Gross <mark.gross@intel.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>
 Content-Language: en-US
-To:     Gergo Koteles <soyer@irl.hu>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Jiri Kosina <jikos@kernel.org>,
-        Benjamin Tissoires <benjamin.tissoires@redhat.com>
-Cc:     linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        Caleb Connolly <caleb@connolly.tech>
-References: <cover.1676850819.git.soyer@irl.hu>
- <16e6c00389bf0ee881a055f81a3dbfd5bfc9c469.1676850819.git.soyer@irl.hu>
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <16e6c00389bf0ee881a055f81a3dbfd5bfc9c469.1676850819.git.soyer@irl.hu>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Linus,
+
+Here is the main PDx86 PR for 6.3.
+
+Highlights:
+ -  AMD PMC: Improvements to aid s2idle debugging
+ -  Dell WMI-DDV: hwmon support
+ -  INT3472 camera sensor power-management: Improve privacy LED support
+ -  Intel VSEC: Base TPMI (Topology Aware Register and PM Capsule Interface) support
+ -  Mellanox: SN5600 and Nvidia L1 switch support
+ -  Microsoft Surface Support: Various cleanups + code improvements
+ -  tools/intel-speed-select: Various improvements
+ -  Miscellaneous other cleanups / fixes
+
+Note this includes some drivers/leds changes from ib-leds-led_get-v6.3
+and also some drivers/media/v4l2-core/ changes related to privacy LED
+handling which have been acked by Sakari (one of the media maintainers).
+
+Regards,
+
+Hans
 
 
-On 20.02.2023 01:13, Gergo Koteles wrote:
-> The alert-slider is a tri-state sound profile switch found on the OnePlus 6,
-> Android maps the states to "silent", "vibrate" and "ring". Expose them as
-> ABS_SND_PROFILE events.
-> The previous GPIO numbers were wrong. Update them to the correct
-> ones.
-> 
-> Co-developed-by: Caleb Connolly <caleb@connolly.tech>
-> Signed-off-by: Caleb Connolly <caleb@connolly.tech>
-> Signed-off-by: Gergo Koteles <soyer@irl.hu>
-> ---
->  .../boot/dts/qcom/sdm845-oneplus-common.dtsi  | 43 ++++++++++++++++++-
->  1 file changed, 41 insertions(+), 2 deletions(-)
-> 
-> diff --git a/arch/arm64/boot/dts/qcom/sdm845-oneplus-common.dtsi b/arch/arm64/boot/dts/qcom/sdm845-oneplus-common.dtsi
-> index 64638ea94db7..ff982dd853a9 100644
-> --- a/arch/arm64/boot/dts/qcom/sdm845-oneplus-common.dtsi
-> +++ b/arch/arm64/boot/dts/qcom/sdm845-oneplus-common.dtsi
-> @@ -52,6 +52,45 @@ key-vol-up {
->  		};
->  	};
->  
-> +	alert-slider {
-This is out of order, alphabetically.
+The following changes since commit eecf2acd4a580e9364e5087daf0effca60a240b7:
 
-> +		compatible = "gpio-keys";
-> +		label = "Alert slider";
-> +
-> +		pinctrl-0 = <&alert_slider_default>;
-> +		pinctrl-names = "default";
-> +
-> +		switch-top {
-> +			label = "Silent";
-> +			linux,input-type = <EV_ABS>;
-> +			linux,code = <ABS_SND_PROFILE>;
-> +			linux,input-value = <SND_PROFILE_SILENT>;
-> +			gpios = <&tlmm 126 GPIO_ACTIVE_LOW>;
-> +			debounce-interval = <50>;
-Is there a reason it can't be the default 5ms, since it should
-more or less be a simple input ping to the userspace?
+  platform/x86: touchscreen_dmi: Add Chuwi Vi8 (CWI501) DMI match (2023-02-02 11:34:38 +0100)
 
-Other than that:
+are available in the Git repository at:
 
-Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+  git://git.kernel.org/pub/scm/linux/kernel/git/pdx86/platform-drivers-x86.git tags/platform-drivers-x86-v6.3-1
 
-Konrad
-> +			linux,can-disable;
-> +		};
-> +
-> +		switch-middle {
-> +			label = "Vibrate";
-> +			linux,input-type = <EV_ABS>;
-> +			linux,code = <ABS_SND_PROFILE>;
-> +			linux,input-value = <SND_PROFILE_VIBRATE>;
-> +			gpios = <&tlmm 52 GPIO_ACTIVE_LOW>;
-> +			debounce-interval = <50>;
-> +			linux,can-disable;
-> +
-> +		};
-> +
-> +		switch-bottom {
-> +			label = "Ring";
-> +			linux,input-type = <EV_ABS>;
-> +			linux,code = <ABS_SND_PROFILE>;
-> +			linux,input-value = <SND_PROFILE_RING>;
-> +			gpios = <&tlmm 24 GPIO_ACTIVE_LOW>;
-> +			debounce-interval = <50>;
-> +			linux,can-disable;
-> +		};
-> +	};
-> +
->  	reserved-memory {
->  		/*
->  		 * The rmtfs_mem needs to be guarded due to "XPU limitations"
-> @@ -753,8 +792,8 @@ &usb_1_hsphy {
->  &tlmm {
->  	gpio-reserved-ranges = <0 4>, <81 4>;
->  
-> -	tri_state_key_default: tri-state-key-default-state {
-> -		pins = "gpio40", "gpio42", "gpio26";
-> +	alert_slider_default: alert-slider-default-state {
-> +		pins = "gpio126", "gpio52", "gpio24";
->  		function = "gpio";
->  		drive-strength = <2>;
->  		bias-disable;
+for you to fetch changes up to 0d9bdd8a550170306c2021b8d6766c5343b870c2:
+
+  platform/x86: nvidia-wmi-ec-backlight: Add force module parameter (2023-02-18 11:45:52 +0100)
+
+----------------------------------------------------------------
+platform-drivers-x86 for v6.3-1
+
+Highlights:
+ -  AMD PMC: Improvements to aid s2idle debugging
+ -  Dell WMI-DDV: hwmon support
+ -  INT3472 camera sensor power-management: Improve privacy LED support
+ -  Intel VSEC: Base TPMI (Topology Aware Register and PM Capsule Interface) support
+ -  Mellanox: SN5600 and Nvidia L1 switch support
+ -  Microsoft Surface Support: Various cleanups + code improvements
+ -  tools/intel-speed-select: Various improvements
+ -  Miscellaneous other cleanups / fixes
+
+The following is an automated git shortlog grouped by driver:
+
+Add include/linux/platform_data/x86 to MAINTAINERS:
+ -  Add include/linux/platform_data/x86 to MAINTAINERS
+
+Documentation/ABI:
+ -  Add new attribute for mlxreg-io sysfs interfaces
+
+Fix header inclusion in linux/platform_data/x86/soc.h:
+ -  Fix header inclusion in linux/platform_data/x86/soc.h
+
+HID:
+ -  surface-hid: Use target-ID enum instead of hard-coding values
+
+MAINTAINERS:
+ -  dell-wmi-sysman: drop Divya Bharathi
+ -  Add entry for TPMI driver
+
+Merge tag 'ib-leds-led_get-v6.3' into HEAD:
+ - Merge tag 'ib-leds-led_get-v6.3' into HEAD
+
+acerhdf:
+ -  Drop empty platform remove function
+
+apple_gmux:
+ -  Drop no longer used ACPI_VIDEO Kconfig dependency
+
+dell-ddv:
+ -  Prefer asynchronous probing
+ -  Add hwmon support
+ -  Add "force" module param
+ -  Replace EIO with ENOMSG
+ -  Return error if buffer is empty
+ -  Add support for interface version 3
+
+dell-smo8800:
+ -  Use min_t() for comparison and assignment
+
+dell-wmi-sysman:
+ -  Make kobj_type structure constant
+
+hp-wmi:
+ -  Ignore Win-Lock key events
+
+int1092:
+ -  Switch to use acpi_evaluate_dsm_typed()
+
+int3472/discrete:
+ -  add LEDS_CLASS dependency
+ -  Drop unnecessary obj->type == string check
+ -  Get the polarity from the _DSM entry
+ -  Move GPIO request to skl_int3472_register_clock()
+ -  Create a LED class device for the privacy LED
+ -  Refactor GPIO to sensor mapping
+
+intel:
+ -  punit_ipc: Drop empty platform remove function
+ -  oaktrail: Drop empty platform remove function
+
+intel/pmc:
+ -  Switch to use acpi_evaluate_dsm_typed()
+
+leds:
+ -  led-class: Add generic [devm_]led_get()
+ -  led-class: Add __devm_led_get() helper
+ -  led-class: Add led_module_get() helper
+ -  led-class: Add missing put_device() to led_put()
+
+media:
+ -  v4l2-core: Make the v4l2-core code enable/disable the privacy LED if present
+
+nvidia-wmi-ec-backlight:
+ -  Add force module parameter
+
+platform:
+ -  mellanox: mlx-platform: Move bus shift assignment out of the loop
+ -  mellanox: mlx-platform: Add mux selection register to regmap
+ -  mellanox: Extend all systems with I2C notification callback
+ -  mellanox: Split logic in init and exit flow
+ -  mellanox: Split initialization procedure
+ -  mellanox: Introduce support of new Nvidia L1 switch
+ -  mellanox: Introduce support for next-generation 800GB/s switch
+ -  mellanox: Cosmetic changes - rename to more common name
+ -  mellanox: Change "reset_pwr_converter_fail" attribute
+ -  mellanox: Introduce support for rack manager switch
+
+platform/mellanox:
+ -  mlxreg-hotplug: Allow more flexible hotplug events configuration
+
+platform/surface:
+ -  Switch to use acpi_evaluate_dsm_typed()
+ -  aggregator: Rename top-level request functions to avoid ambiguities
+ -  aggregator_registry: Fix target-ID of base-hub
+ -  aggregator: Enforce use of target-ID enum in device ID macros
+ -  dtx: Use target-ID enum instead of hard-coding values
+ -  aggregator_tabletsw: Use target-ID enum instead of hard-coding values
+ -  aggregator_hub: Use target-ID enum instead of hard-coding values
+ -  aggregator: Add target and source IDs to command trace events
+ -  aggregator: Improve documentation and handling of message target and source IDs
+
+platform/x86/amd:
+ -  pmc: Add line break for readability
+ -  pmc: differentiate STB/SMU messaging prints
+ -  pmc: Write dummy postcode into the STB DRAM
+ -  pmc: Add num_samples message id support to STB
+
+platform/x86/amd/pmf:
+ -  Add depends on CONFIG_POWER_SUPPLY
+
+platform/x86/intel:
+ -  Intel TPMI enumeration driver
+
+platform/x86/intel/tpmi:
+ -  ADD tpmi external interface for tpmi feature drivers
+ -  Process CPU package mapping
+
+platform/x86/intel/vsec:
+ -  Use mutex for ida_alloc() and ida_free()
+ -  Support private data
+ -  Enhance and Export intel_vsec_add_aux()
+ -  Add TPMI ID
+
+platform_data/mlxreg:
+ -  Add field with mapped resource address
+
+think-lmi:
+ -  Make kobj_type structure constant
+ -  Use min_t() for comparison and assignment
+
+tools/power/x86/intel-speed-select:
+ -  v1.14 release
+ -  Adjust uncore max/min frequency
+ -  Add Emerald Rapid quirk
+ -  Fix display of uncore min frequency
+ -  turbo-freq auto mode with SMT off
+ -  cpufreq reads on offline CPUs
+ -  Use null-terminated string
+ -  Remove duplicate dup()
+ -  Handle open() failure case
+ -  Remove unused non_block flag
+ -  Remove wrong check in set_isst_id()
+
+x86/platform/uv:
+ -  Make kobj_type structure constant
+
+----------------------------------------------------------------
+Andy Shevchenko (5):
+      platform/surface: Switch to use acpi_evaluate_dsm_typed()
+      platform/x86: intel/pmc: Switch to use acpi_evaluate_dsm_typed()
+      platform/x86: int1092: Switch to use acpi_evaluate_dsm_typed()
+      platform/x86: Fix header inclusion in linux/platform_data/x86/soc.h
+      platform/x86: Add include/linux/platform_data/x86 to MAINTAINERS
+
+Armin Wolf (6):
+      platform/x86: dell-ddv: Add support for interface version 3
+      platform/x86: dell-ddv: Return error if buffer is empty
+      platform/x86: dell-ddv: Replace EIO with ENOMSG
+      platform/x86: dell-ddv: Add "force" module param
+      platform/x86: dell-ddv: Add hwmon support
+      platform/x86: dell-ddv: Prefer asynchronous probing
+
+Arnd Bergmann (1):
+      platform/x86: int3472/discrete: add LEDS_CLASS dependency
+
+Deepak R Varma (2):
+      platform/x86: dell-smo8800: Use min_t() for comparison and assignment
+      platform/x86: think-lmi: Use min_t() for comparison and assignment
+
+Hans de Goede (13):
+      leds: led-class: Add missing put_device() to led_put()
+      leds: led-class: Add led_module_get() helper
+      leds: led-class: Add __devm_led_get() helper
+      leds: led-class: Add generic [devm_]led_get()
+      platform/x86: apple_gmux: Drop no longer used ACPI_VIDEO Kconfig dependency
+      Merge tag 'ib-leds-led_get-v6.3' into HEAD
+      media: v4l2-core: Make the v4l2-core code enable/disable the privacy LED if present
+      platform/x86: int3472/discrete: Refactor GPIO to sensor mapping
+      platform/x86: int3472/discrete: Create a LED class device for the privacy LED
+      platform/x86: int3472/discrete: Move GPIO request to skl_int3472_register_clock()
+      platform/x86: int3472/discrete: Get the polarity from the _DSM entry
+      platform/x86: int3472/discrete: Drop unnecessary obj->type == string check
+      platform/x86: nvidia-wmi-ec-backlight: Add force module parameter
+
+Maximilian Luz (9):
+      platform/surface: aggregator: Improve documentation and handling of message target and source IDs
+      platform/surface: aggregator: Add target and source IDs to command trace events
+      platform/surface: aggregator_hub: Use target-ID enum instead of hard-coding values
+      platform/surface: aggregator_tabletsw: Use target-ID enum instead of hard-coding values
+      platform/surface: dtx: Use target-ID enum instead of hard-coding values
+      HID: surface-hid: Use target-ID enum instead of hard-coding values
+      platform/surface: aggregator: Enforce use of target-ID enum in device ID macros
+      platform/surface: aggregator_registry: Fix target-ID of base-hub
+      platform/surface: aggregator: Rename top-level request functions to avoid ambiguities
+
+Rishit Bansal (1):
+      platform/x86: hp-wmi: Ignore Win-Lock key events
+
+Shyam Sundar S K (5):
+      platform/x86/amd: pmc: Add num_samples message id support to STB
+      platform/x86/amd: pmc: Write dummy postcode into the STB DRAM
+      platform/x86/amd: pmc: differentiate STB/SMU messaging prints
+      platform/x86/amd: pmc: Add line break for readability
+      platform/x86/amd/pmf: Add depends on CONFIG_POWER_SUPPLY
+
+Srinivas Pandruvada (13):
+      tools/power/x86/intel-speed-select: cpufreq reads on offline CPUs
+      tools/power/x86/intel-speed-select: turbo-freq auto mode with SMT off
+      tools/power/x86/intel-speed-select: Fix display of uncore min frequency
+      tools/power/x86/intel-speed-select: Adjust uncore max/min frequency
+      tools/power/x86/intel-speed-select: v1.14 release
+      platform/x86/intel/vsec: Add TPMI ID
+      platform/x86/intel/vsec: Enhance and Export intel_vsec_add_aux()
+      platform/x86/intel/vsec: Support private data
+      platform/x86/intel: Intel TPMI enumeration driver
+      platform/x86/intel/tpmi: Process CPU package mapping
+      platform/x86/intel/tpmi: ADD tpmi external interface for tpmi feature drivers
+      MAINTAINERS: Add entry for TPMI driver
+      platform/x86/intel/vsec: Use mutex for ida_alloc() and ida_free()
+
+Thomas Weißschuh (4):
+      platform/x86: dell-wmi-sysman: Make kobj_type structure constant
+      platform/x86: think-lmi: Make kobj_type structure constant
+      x86/platform/uv: Make kobj_type structure constant
+      MAINTAINERS: dell-wmi-sysman: drop Divya Bharathi
+
+Uwe Kleine-König (3):
+      platform/x86: acerhdf: Drop empty platform remove function
+      platform/x86: intel: oaktrail: Drop empty platform remove function
+      platform/x86: intel: punit_ipc: Drop empty platform remove function
+
+Vadim Pasternak (13):
+      platform: mellanox: Introduce support for rack manager switch
+      platform: mellanox: Change "reset_pwr_converter_fail" attribute
+      platform: mellanox: Cosmetic changes - rename to more common name
+      platform: mellanox: Introduce support for next-generation 800GB/s switch
+      platform: mellanox: Introduce support of new Nvidia L1 switch
+      platform: mellanox: Split initialization procedure
+      platform: mellanox: Split logic in init and exit flow
+      platform: mellanox: Extend all systems with I2C notification callback
+      platform/mellanox: mlxreg-hotplug: Allow more flexible hotplug events configuration
+      platform_data/mlxreg: Add field with mapped resource address
+      platform: mellanox: mlx-platform: Add mux selection register to regmap
+      platform: mellanox: mlx-platform: Move bus shift assignment out of the loop
+      Documentation/ABI: Add new attribute for mlxreg-io sysfs interfaces
+
+Zhang Rui (6):
+      tools/power/x86/intel-speed-select: Remove wrong check in set_isst_id()
+      tools/power/x86/intel-speed-select: Remove unused non_block flag
+      tools/power/x86/intel-speed-select: Handle open() failure case
+      tools/power/x86/intel-speed-select: Remove duplicate dup()
+      tools/power/x86/intel-speed-select: Use null-terminated string
+      tools/power/x86/intel-speed-select: Add Emerald Rapid quirk
+
+ Documentation/ABI/stable/sysfs-driver-mlxreg-io    |  122 +-
+ .../driver-api/surface_aggregator/client.rst       |   12 +-
+ .../driver-api/surface_aggregator/ssh.rst          |   36 +-
+ MAINTAINERS                                        |    9 +-
+ drivers/hid/surface-hid/surface_hid.c              |    8 +-
+ drivers/hid/surface-hid/surface_kbd.c              |    8 +-
+ drivers/leds/led-class.c                           |  138 +-
+ drivers/media/v4l2-core/v4l2-async.c               |    4 +
+ drivers/media/v4l2-core/v4l2-fwnode.c              |    7 +
+ drivers/media/v4l2-core/v4l2-subdev-priv.h         |   14 +
+ drivers/media/v4l2-core/v4l2-subdev.c              |   46 +
+ drivers/platform/mellanox/mlxreg-hotplug.c         |   28 +-
+ drivers/platform/surface/aggregator/bus.c          |    6 +-
+ drivers/platform/surface/aggregator/controller.c   |   44 +-
+ drivers/platform/surface/aggregator/ssh_msgb.h     |    4 +-
+ .../surface/aggregator/ssh_request_layer.c         |   11 +-
+ drivers/platform/surface/aggregator/trace.h        |   73 +-
+ drivers/platform/surface/surface_acpi_notify.c     |    2 +-
+ drivers/platform/surface/surface_aggregator_cdev.c |    6 +-
+ drivers/platform/surface/surface_aggregator_hub.c  |    8 +-
+ .../platform/surface/surface_aggregator_registry.c |    2 +-
+ .../platform/surface/surface_aggregator_tabletsw.c |   12 +-
+ drivers/platform/surface/surface_dtx.c             |   20 +-
+ drivers/platform/surface/surface_hotplug.c         |   13 +-
+ .../platform/surface/surface_platform_profile.c    |    2 +-
+ drivers/platform/x86/Kconfig                       |    1 -
+ drivers/platform/x86/acerhdf.c                     |    6 -
+ drivers/platform/x86/amd/pmc.c                     |   40 +-
+ drivers/platform/x86/amd/pmf/Kconfig               |    1 +
+ drivers/platform/x86/dell/Kconfig                  |    8 +-
+ drivers/platform/x86/dell/dell-smo8800.c           |    5 +-
+ drivers/platform/x86/dell/dell-wmi-ddv.c           |  528 +++++++-
+ drivers/platform/x86/dell/dell-wmi-sysman/sysman.c |    2 +-
+ drivers/platform/x86/hp/hp-wmi.c                   |    2 +
+ drivers/platform/x86/intel/Kconfig                 |   13 +
+ drivers/platform/x86/intel/Makefile                |    4 +
+ drivers/platform/x86/intel/int1092/intel_sar.c     |   15 +-
+ drivers/platform/x86/intel/int3472/Kconfig         |    1 +
+ drivers/platform/x86/intel/int3472/Makefile        |    2 +-
+ .../platform/x86/intel/int3472/clk_and_regulator.c |   34 +-
+ drivers/platform/x86/intel/int3472/common.h        |   18 +-
+ drivers/platform/x86/intel/int3472/discrete.c      |  108 +-
+ drivers/platform/x86/intel/int3472/led.c           |   75 ++
+ drivers/platform/x86/intel/oaktrail.c              |    6 -
+ drivers/platform/x86/intel/pmc/tgl.c               |    6 +-
+ drivers/platform/x86/intel/punit_ipc.c             |    6 -
+ drivers/platform/x86/intel/tpmi.c                  |  415 ++++++
+ drivers/platform/x86/intel/vsec.c                  |   30 +-
+ drivers/platform/x86/intel/vsec.h                  |    6 +
+ drivers/platform/x86/mlx-platform.c                | 1394 +++++++++++++++++---
+ drivers/platform/x86/nvidia-wmi-ec-backlight.c     |    6 +-
+ drivers/platform/x86/think-lmi.c                   |    8 +-
+ drivers/platform/x86/uv_sysfs.c                    |    6 +-
+ drivers/power/supply/surface_battery.c             |    4 +-
+ drivers/power/supply/surface_charger.c             |    2 +-
+ include/linux/intel_tpmi.h                         |   30 +
+ include/linux/leds.h                               |   21 +
+ include/linux/platform_data/mlxreg.h               |    2 +
+ include/linux/platform_data/x86/soc.h              |    7 +-
+ include/linux/surface_aggregator/controller.h      |   60 +-
+ include/linux/surface_aggregator/device.h          |   58 +-
+ include/linux/surface_aggregator/serial_hub.h      |   40 +-
+ include/media/v4l2-subdev.h                        |    4 +
+ tools/power/x86/intel-speed-select/hfi-events.c    |    4 -
+ tools/power/x86/intel-speed-select/isst-config.c   |   82 +-
+ tools/power/x86/intel-speed-select/isst-core.c     |   23 +
+ tools/power/x86/intel-speed-select/isst-daemon.c   |    3 +-
+ tools/power/x86/intel-speed-select/isst-display.c  |   11 +-
+ tools/power/x86/intel-speed-select/isst.h          |    4 +
+ 69 files changed, 3174 insertions(+), 562 deletions(-)
+ create mode 100644 drivers/media/v4l2-core/v4l2-subdev-priv.h
+ create mode 100644 drivers/platform/x86/intel/int3472/led.c
+ create mode 100644 drivers/platform/x86/intel/tpmi.c
+ create mode 100644 include/linux/intel_tpmi.h
+
