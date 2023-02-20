@@ -2,116 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B00869CF2E
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Feb 2023 15:18:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 371D869CF3A
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Feb 2023 15:21:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231588AbjBTOSu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Feb 2023 09:18:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43452 "EHLO
+        id S231661AbjBTOVM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Feb 2023 09:21:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45238 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231466AbjBTOSr (ORCPT
+        with ESMTP id S231588AbjBTOVK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Feb 2023 09:18:47 -0500
-Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B192610A8E;
-        Mon, 20 Feb 2023 06:18:44 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=F3HH6Boj0AYyg5UcJPeckqn32F4X2DjoktZw34EHU4o=; b=sUSzxP4ZjvNMlgzwhu3zPNRGcC
-        uDYhpqh5b9StXo5d5RYzXD9k8Bivo48/otIgNJ2Lf2ML/BmTHxx/rYwXAdPiw6DgUJZkyTmHuxqs1
-        kiXi7SM351vxEGP5WmUNqkoXx4xi6CuvolPFAfuoGNCBskP3LTdNhbBQNtLKnGizUaVPaE2wVlofv
-        FQXnT4w4hgv2QS0IHJfFfFRqLHL46m+4PFSoGC37zmHqSiETjRHntkrE8M6Z6KtG4Uat5zo5D6mMQ
-        ehkBG/RlKRC9mUVNnt+6q/40rbbdd39wDMEHjR7RGoj6jH7opHP53mmQI5qYKoHranRWnIpNEApXd
-        A+mi2y+Q==;
-Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:45172)
-        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <linux@armlinux.org.uk>)
-        id 1pU702-0004b5-C4; Mon, 20 Feb 2023 14:18:38 +0000
-Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
-        (envelope-from <linux@shell.armlinux.org.uk>)
-        id 1pU701-0001HQ-6E; Mon, 20 Feb 2023 14:18:37 +0000
-Date:   Mon, 20 Feb 2023 14:18:37 +0000
-From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
-To:     Oleksij Rempel <o.rempel@pengutronix.de>
-Cc:     Andrew Lunn <andrew@lunn.ch>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, kernel@pengutronix.de,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org
-Subject: Re: [PATCH net-next v1 3/4] net: phy: do not force EEE support
-Message-ID: <Y/OBPZRGM+viGp+8@shell.armlinux.org.uk>
-References: <20230220135605.1136137-1-o.rempel@pengutronix.de>
- <20230220135605.1136137-4-o.rempel@pengutronix.de>
+        Mon, 20 Feb 2023 09:21:10 -0500
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1E1971EBFB
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Feb 2023 06:21:05 -0800 (PST)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id B81BFFEC;
+        Mon, 20 Feb 2023 06:21:47 -0800 (PST)
+Received: from [10.57.76.145] (unknown [10.57.76.145])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 554A63F881;
+        Mon, 20 Feb 2023 06:21:03 -0800 (PST)
+Message-ID: <60bbb654-9af0-e300-23df-388737a90151@arm.com>
+Date:   Mon, 20 Feb 2023 14:21:00 +0000
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230220135605.1136137-4-o.rempel@pengutronix.de>
-Sender: Russell King (Oracle) <linux@armlinux.org.uk>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.2
+Subject: Re: [PATCH v2 1/6] ARM/dma-mapping: Remove iommu_detach_device()
+Content-Language: en-GB
+To:     Lu Baolu <baolu.lu@linux.intel.com>, iommu@lists.linux.dev
+Cc:     Joerg Roedel <joro@8bytes.org>, Jason Gunthorpe <jgg@nvidia.com>,
+        Christoph Hellwig <hch@infradead.org>,
+        Kevin Tian <kevin.tian@intel.com>,
+        Will Deacon <will@kernel.org>, linux-kernel@vger.kernel.org
+References: <20230217094736.159005-1-baolu.lu@linux.intel.com>
+ <20230217094736.159005-2-baolu.lu@linux.intel.com>
+From:   Robin Murphy <robin.murphy@arm.com>
+In-Reply-To: <20230217094736.159005-2-baolu.lu@linux.intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On 2023-02-17 09:47, Lu Baolu wrote:
+> iommu_detach_device() attaches the default domain to the device, or if
+> default domain is not supported by the IOMMU driver, it calls its
+> set_platform_dma_ops callback. If the default domain is supported or
+> the IOMMU driver is not iommu-dma aware, iommu_detach_device() is
+> actually a noop.
+> 
+> The 64-bit ARM drivers always support default domain and iommu-dma is
+> even not enabled for 32-bit ARM. This turns out that iommu_detach_device()
+> is always a noop in arm_iommu_detach_device(). Remove it to avoid dead
+> code.
 
-A couple of minor points, but not sufficient not to prevent merging
-this.
+Huh? This call clearly balances the iommu_attach_device() call in 
+arm_iommu_attach_device() - it has nothing to do with default domains.
 
-On Mon, Feb 20, 2023 at 02:56:04PM +0100, Oleksij Rempel wrote:
-> @@ -865,7 +864,12 @@ EXPORT_SYMBOL_GPL(genphy_c45_read_eee_abilities);
->   */
->  int genphy_c45_an_config_eee_aneg(struct phy_device *phydev)
->  {
-> -	return genphy_c45_write_eee_adv(phydev, phydev->supported_eee);
-> +	__ETHTOOL_DECLARE_LINK_MODE_MASK(adv) = {};
+> The bonus is that it also removes a obstacle of arm_iommu_detach_device()
+> re-entering the iommu core during release_device. With this removed, the
+> iommu core code could be simplified a lot.
 
-It would be nice to avoid this initialisation in the case where
-eee_enabled is true, as this takes CPU cycles. However, not too
-bothered about it as this isn't a fast path.
+That needs to be worked around in those release paths, not by breaking 
+the public API. Should probably just be a case of doing as much "detach" 
+as necessary directly, then calling arm_iommu_release_mapping(). Just 
+beware that arm_teardown_iommu_dma_ops() may or may not have done some 
+of it already, depending on whether a driver ever bound to the device.
 
-> +
-> +	if (!phydev->eee_enabled)
-> +		return genphy_c45_write_eee_adv(phydev, adv);
-> +
-> +	return genphy_c45_write_eee_adv(phydev, phydev->advertising_eee);
->  }
->  
->  /**
-> @@ -1431,17 +1435,17 @@ EXPORT_SYMBOL(genphy_c45_ethtool_get_eee);
->  int genphy_c45_ethtool_set_eee(struct phy_device *phydev,
->  			       struct ethtool_eee *data)
->  {
-> -	__ETHTOOL_DECLARE_LINK_MODE_MASK(adv) = {};
->  	int ret;
->  
->  	if (data->eee_enabled) {
-> +		phydev->eee_enabled = true;
->  		if (data->advertised)
-> -			adv[0] = data->advertised;
-> -		else
-> -			linkmode_copy(adv, phydev->supported_eee);
-> +			phydev->advertising_eee[0] = data->advertised;
+Thanks,
+Robin.
 
-Is there a reason not to use ethtool_convert_legacy_u32_to_link_mode()?
-I'm guessing this will be more efficient.
-
-Other than that, looks good.
-
-Reviewed-by: Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
-
-Thanks!
-
--- 
-RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
-FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!
+> Signed-off-by: Lu Baolu <baolu.lu@linux.intel.com>
+> ---
+>   arch/arm/mm/dma-mapping.c | 1 -
+>   1 file changed, 1 deletion(-)
+> 
+> diff --git a/arch/arm/mm/dma-mapping.c b/arch/arm/mm/dma-mapping.c
+> index 8bc01071474a..dcbc2f4586d4 100644
+> --- a/arch/arm/mm/dma-mapping.c
+> +++ b/arch/arm/mm/dma-mapping.c
+> @@ -1699,7 +1699,6 @@ void arm_iommu_detach_device(struct device *dev)
+>   		return;
+>   	}
+>   
+> -	iommu_detach_device(mapping->domain, dev);
+>   	kref_put(&mapping->kref, release_iommu_mapping);
+>   	to_dma_iommu_mapping(dev) = NULL;
+>   	set_dma_ops(dev, NULL);
