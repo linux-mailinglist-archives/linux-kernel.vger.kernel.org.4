@@ -2,80 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B8A569CF5B
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Feb 2023 15:27:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BFCBF69CF6B
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Feb 2023 15:30:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229479AbjBTO1L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Feb 2023 09:27:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50766 "EHLO
+        id S232049AbjBTOak (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Feb 2023 09:30:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52768 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232017AbjBTO1I (ORCPT
+        with ESMTP id S232017AbjBTOai (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Feb 2023 09:27:08 -0500
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C290C1F909;
-        Mon, 20 Feb 2023 06:27:06 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=Q1jdBb9x0UC/lDiAiZWoZ9+qPuTkTKRRoKMvz0a85cQ=; b=tKUGXttRE4o/02IFOlFvDHz2D/
-        /WX1V7Vi0XGRRVQHIyedSnRkwZ+BozrsKfjtP1DmFA/Om3CdIBlNgFojjEPONT5XuRl//g0RLWXdQ
-        hYjMiMwynpZfK0riHkTaiJF5hAQixeZHwQqOvtH1tXd9VN2C8llD1lLsM+oe1ag/vi+4P0QvF1I+Q
-        STF0zSiWd5IRvfZ0tKlCEhFsEhVormKgC+Uw5oJO7jv1ypAnXUtXFepo9MV3fCDimGZvJp7tU12NP
-        EYIWzTGDQPivr9O/Q1i5OxyRza3LU5qu7GeWPPHuI6BiAQkhfiOgXznvLnnwKiYNBFqoh1sxubw2l
-        9qZmkPAg==;
-Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1pU789-00Bn1A-15; Mon, 20 Feb 2023 14:27:01 +0000
-Date:   Mon, 20 Feb 2023 14:27:00 +0000
-From:   Matthew Wilcox <willy@infradead.org>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Theodore Ts'o <tytso@mit.edu>, Jan Kara <jack@suse.cz>,
+        Mon, 20 Feb 2023 09:30:38 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CD7411EA2
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Feb 2023 06:29:51 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1676903390;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=x5p6lK28Ra573v7+UHzSn0UqRqk59msus4yoHKjo37Y=;
+        b=Jt0UNBnHGCzm+L0RHqWxYpFD41YEs3W9hip31AxTf8nLgxEAAptoWRZtIx+ApYWrphCDti
+        4Uu6wBVJsv0cmWFjFZKzO2x5Y3dL0w3jGmTPVHlOqB7K3PUJAgOBph3xJVEAYtcCyW21JU
+        PsK0sG0XYcYDf5axjqNlszHrYAWPlMs=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-74-BUWw3wZaOMeCm6RwB8xb4Q-1; Mon, 20 Feb 2023 09:29:44 -0500
+X-MC-Unique: BUWw3wZaOMeCm6RwB8xb4Q-1
+Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id DF90329AB44F;
+        Mon, 20 Feb 2023 14:29:43 +0000 (UTC)
+Received: from warthog.procyon.org.uk (unknown [10.33.36.18])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 702734097544;
+        Mon, 20 Feb 2023 14:29:42 +0000 (UTC)
+Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
+        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
+        Kingdom.
+        Registered in England and Wales under Company Registration No. 3798903
+From:   David Howells <dhowells@redhat.com>
+In-Reply-To: <Y/N8hVWeR3AjssUC@casper.infradead.org>
+References: <Y/N8hVWeR3AjssUC@casper.infradead.org> <20230220152933.1ab8fa4a@canb.auug.org.au>
+To:     Matthew Wilcox <willy@infradead.org>
+Cc:     dhowells@redhat.com, Stephen Rothwell <sfr@canb.auug.org.au>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Steve French <smfrench@gmail.com>,
+        CIFS <linux-cifs@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Steve French <stfrench@microsoft.com>,
         "Vishal Moola (Oracle)" <vishal.moola@gmail.com>
-Subject: Re: linux-next: manual merge of the mm-stable tree with the ext4 tree
-Message-ID: <Y/ODNJ3MfoD6dUru@casper.infradead.org>
-References: <20230220152938.45f62d5a@canb.auug.org.au>
+Subject: Re: linux-next: manual merge of the mm-stable tree with the cifs tree
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230220152938.45f62d5a@canb.auug.org.au>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <1676389.1676903381.1@warthog.procyon.org.uk>
+Date:   Mon, 20 Feb 2023 14:29:41 +0000
+Message-ID: <1676391.1676903381@warthog.procyon.org.uk>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.1
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 20, 2023 at 03:29:38PM +1100, Stephen Rothwell wrote:
-> Hi all,
-> 
-> Today's linux-next merge of the mm-stable tree got a conflict in:
-> 
->   fs/ext4/inode.c
-> 
-> between commits:
-> 
->   726432969963 ("ext4: use nr_to_write directly in mpage_prepare_extent_to_map()")
->   9ff6a9153c8f ("ext4: move page unlocking out of mpage_submit_page()")
->   b4d26e70a755 ("ext4: move mpage_page_done() calls after error handling")
->   9b18c23c131a ("ext4: convert data=journal writeback to use ext4_writepages()")
-> 
-> from the ext4 tree and commits:
-> 
->   50ead2537441 ("ext4: convert mpage_prepare_extent_to_map() to use filemap_get_folios_tag()")
->   d585bdbeb79a ("fs: convert writepage_t callback to pass a folio")
-> 
-> from the mm-stable tree.
-> 
-> I have no idea how to fix this up, so I have used the ext4 tree from
-> next-20230217 for today.
+Matthew Wilcox <willy@infradead.org> wrote:
 
-Yeah, this one's a mess.  Probably the easiest solution is for Ted to
-pull in 247f9e1feef4 and 50ead2537441 and then redo Jan's patches on
-top of them.
+> Doesn't look too bad to me.  Dave's commit is just removing the
+> functions, so it doesn't matter how they're being changed.
+> 
+> The real question in my mind is why for-next is being updated two days
+> before the merge window with new patches.  What's the point in -next
+> if patches are being added at this late point?
+
+It's more of a transfer of a subset of my iov/splice patches from the
+linux-block tree to the cifs tree.  I thought Jens would've dropped my branch
+from his tree for the moment.
+
+David
 
