@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 972F369D4CA
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Feb 2023 21:20:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 83E5D69D4D0
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Feb 2023 21:20:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232108AbjBTUUB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Feb 2023 15:20:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37512 "EHLO
+        id S232761AbjBTUUH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Feb 2023 15:20:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37310 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231534AbjBTUTl (ORCPT
+        with ESMTP id S232721AbjBTUTr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Feb 2023 15:19:41 -0500
-Received: from mail-pg1-x532.google.com (mail-pg1-x532.google.com [IPv6:2607:f8b0:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCF97212B4
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Feb 2023 12:19:34 -0800 (PST)
-Received: by mail-pg1-x532.google.com with SMTP id p5so1191110pgh.11
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Feb 2023 12:19:34 -0800 (PST)
+        Mon, 20 Feb 2023 15:19:47 -0500
+Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9EA1020547;
+        Mon, 20 Feb 2023 12:19:36 -0800 (PST)
+Received: by mail-pj1-x1034.google.com with SMTP id cp9so3603991pjb.0;
+        Mon, 20 Feb 2023 12:19:36 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=9yF21jz9Wf1+ysDiZnumY8mp3PUToyh/n6nr/hm38/k=;
-        b=lvipANIQsaWNUdRbi8p53cd5scp9HEL/FMz/zPxLfgMuJrmChNXU1njroAo0j8QUNN
-         +hlen5sr+/XlUz7mobPetUYmDMzXSNLJrUPKnh29D1Oe1gt7UA/iMSbTqVMY8WPKXQnl
-         iTP3MCe3Oqph3l6oWVrJgwsziBvVvw2yEPlsRrwp+2Edme83jB88NYVxOFJ/PSU1QtR4
-         l01R8SxajC7MaZCCwKkDzkW1IdX/heJI4xKNG4ossix0v+4yU2OzbAp3wExHMxl+tb9N
-         aQLW40Rb6GqF0QAcRrPdzGncMPL1PvgmzemEC4C2f/c2lIVyqUUlR9mRKjblXmakm623
-         bcyA==
+        bh=uqyHMdEv/I4h+kB4S5EmXwyYyPXw9FA0QD7a4XeiZZ4=;
+        b=qWxbi7cysynJlROyYqpT1W5K38P/2KBzlq1IDmM8LAsxKTEBy+yKtthSfCwkwQpTch
+         bJssSD7Jm1bOfNrHo2EZ8pl9i75VI9BkwXKX6wx2OWcwSiqz+LFI4ESOB9eMaeaU+Hra
+         UEawNS4Axf9WfdwkAE0wURqqKZ/MzmKm4VHNtQV7Fp0HSwit+2A811AMVbq/tDLcB3tG
+         0UYa2Z2WB3lgmlP4y39XuJ3tAdT4EzjY/f2FJHue0XlasQa8LkPliR47zFrwyAT1it7j
+         6zzbs6m7tGkhnFCdkXE42R75YTq2J1CFMceXM51jdtDfP9oSRPYD2AJjWKwMbz8ZDaQz
+         HW5g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=9yF21jz9Wf1+ysDiZnumY8mp3PUToyh/n6nr/hm38/k=;
-        b=TJvd69wtBj/p6sizTrww/69zzEjpUGRyQ9ukz5Kf1JdxAGrkOAF/My+kc7i+JklpLO
-         gjX47MpBray6AXj30uJGQXOPIAn475W/Q21E0038Ov3gakPgOphVTDDMy2YGqFrZDQZp
-         IEQIOa6qYZZFydOfS7sBoH+sgSCwBgKh3IEhQjYnFnoSf7UAGJMAW+blsFiHihY0jfYV
-         UKUB05EUxh0qM3agqKjRcG48SxDd1Gq+VsOhiYy7gY57x73TzHLcp7SQNqWF9TUgYn37
-         p8ei6gCR61XiLGb+XdH9wFRfBSZfU63CM6SVgY8bp3CxroQQWkENIEyZSXumRL451O7r
-         UBQA==
-X-Gm-Message-State: AO0yUKU5bFbrQfPrYF+n+GbRF0v4pxbC0IRUU6TA8SoIoJQpjDzirs5s
-        ku0t/4dBsf82JpCDGr9h3tg=
-X-Google-Smtp-Source: AK7set+/m0Mqndnwo3/kdSSWJI3dteVdKvTtFzD7FJZbcVYsVjIK/CX8AqRRPuz2ghIlApBRtj94IQ==
-X-Received: by 2002:a05:6a00:409a:b0:5ad:8c9:2c9a with SMTP id bw26-20020a056a00409a00b005ad08c92c9amr1811318pfb.11.1676924373807;
-        Mon, 20 Feb 2023 12:19:33 -0800 (PST)
+        bh=uqyHMdEv/I4h+kB4S5EmXwyYyPXw9FA0QD7a4XeiZZ4=;
+        b=CL10t5W6wiNcGehm1/zSyDDwy0fjVL5QVFB+XBzdPISwkmHuCuxZHaIJTfamuiLVy3
+         jg4CMfu60bS8loMymoL3wNpQYr+TWjGsYtCD+eJolvlyt4Evx998v1N+os5ophW00WKL
+         c6Xgw4RwyTtLezcYE6Xr64Vj1d0SaePyR3q1Trh6pmOLjGP4/QYHzcK8ZFyQPJ+D0YhT
+         b+cshl3pOr+a6GzJObJ4JNrb3mxesne2PsCtsslxVerAGDRbSbePwBGnN5g4qP1OLFbz
+         mb1FSUBlTH5HvjTQGpI/8hWvVNdBZWeOy7uabEB82YJJOAXy+ahUBFc5mPCnGGyNIJUu
+         pQHg==
+X-Gm-Message-State: AO0yUKWa+2p16YpgtDT0IwyzzoSHnIJv0nDbt5QeoY+I39S8cUI/B+ax
+        9npRlHXHDgFo9A9lA7RcMZE=
+X-Google-Smtp-Source: AK7set9MW9Ae7MZ9KibrDVZ+SbelSx7YqcKLkt2u5xbEXakFPUpi+tzyphq21rOe4G4OT1nqIYfOeA==
+X-Received: by 2002:a17:90b:4f4d:b0:233:e1e6:33dc with SMTP id pj13-20020a17090b4f4d00b00233e1e633dcmr1373625pjb.48.1676924375715;
+        Mon, 20 Feb 2023 12:19:35 -0800 (PST)
 Received: from localhost (c-73-67-135-195.hsd1.or.comcast.net. [73.67.135.195])
-        by smtp.gmail.com with ESMTPSA id z8-20020aa791c8000000b005a8a4665d3bsm2070875pfa.116.2023.02.20.12.19.33
+        by smtp.gmail.com with ESMTPSA id go6-20020a17090b03c600b00233afe09177sm1872773pjb.8.2023.02.20.12.19.34
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 20 Feb 2023 12:19:33 -0800 (PST)
+        Mon, 20 Feb 2023 12:19:34 -0800 (PST)
 From:   Rob Clark <robdclark@gmail.com>
 To:     dri-devel@lists.freedesktop.org
 Cc:     freedreno@lists.freedesktop.org, Daniel Vetter <daniel@ffwll.ch>,
@@ -62,15 +62,20 @@ Cc:     freedreno@lists.freedesktop.org, Daniel Vetter <daniel@ffwll.ch>,
         Pekka Paalanen <ppaalanen@gmail.com>,
         Simon Ser <contact@emersion.fr>,
         Rob Clark <robdclark@chromium.org>,
-        Daniel Vetter <daniel.vetter@ffwll.ch>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        David Airlie <airlied@gmail.com>,
-        linux-kernel@vger.kernel.org (open list)
-Subject: [PATCH v5 11/14] drm/atomic-helper: Set fence deadline for vblank
-Date:   Mon, 20 Feb 2023 12:18:58 -0800
-Message-Id: <20230220201916.1822214-12-robdclark@gmail.com>
+        Rob Clark <robdclark@gmail.com>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
+        linux-arm-msm@vger.kernel.org (open list:DRM DRIVER FOR MSM ADRENO GPU),
+        linux-kernel@vger.kernel.org (open list),
+        linux-media@vger.kernel.org (open list:DMA BUFFER SHARING FRAMEWORK),
+        linaro-mm-sig@lists.linaro.org (moderated list:DMA BUFFER SHARING
+        FRAMEWORK)
+Subject: [PATCH v5 12/14] drm/msm: Add deadline based boost support
+Date:   Mon, 20 Feb 2023 12:18:59 -0800
+Message-Id: <20230220201916.1822214-13-robdclark@gmail.com>
 X-Mailer: git-send-email 2.39.1
 In-Reply-To: <20230220201916.1822214-1-robdclark@gmail.com>
 References: <20230220201916.1822214-1-robdclark@gmail.com>
@@ -88,72 +93,158 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Rob Clark <robdclark@chromium.org>
 
-For an atomic commit updating a single CRTC (ie. a pageflip) calculate
-the next vblank time, and inform the fence(s) of that deadline.
+Track the nearest deadline on a fence timeline and set a timer to expire
+shortly before to trigger boost if the fence has not yet been signaled.
 
-v2: Comment typo fix (danvet)
+v2: rebase
 
-Signed-off-by: Rob Clark <robdclark@chromium.org>
-Reviewed-by: Daniel Vetter <daniel.vetter@ffwll.ch>
 Signed-off-by: Rob Clark <robdclark@chromium.org>
 ---
- drivers/gpu/drm/drm_atomic_helper.c | 36 +++++++++++++++++++++++++++++
- 1 file changed, 36 insertions(+)
+ drivers/gpu/drm/msm/msm_fence.c | 74 +++++++++++++++++++++++++++++++++
+ drivers/gpu/drm/msm/msm_fence.h | 20 +++++++++
+ 2 files changed, 94 insertions(+)
 
-diff --git a/drivers/gpu/drm/drm_atomic_helper.c b/drivers/gpu/drm/drm_atomic_helper.c
-index d579fd8f7cb8..35a4dc714920 100644
---- a/drivers/gpu/drm/drm_atomic_helper.c
-+++ b/drivers/gpu/drm/drm_atomic_helper.c
-@@ -1511,6 +1511,40 @@ void drm_atomic_helper_commit_modeset_enables(struct drm_device *dev,
- }
- EXPORT_SYMBOL(drm_atomic_helper_commit_modeset_enables);
+diff --git a/drivers/gpu/drm/msm/msm_fence.c b/drivers/gpu/drm/msm/msm_fence.c
+index 56641408ea74..51b461f32103 100644
+--- a/drivers/gpu/drm/msm/msm_fence.c
++++ b/drivers/gpu/drm/msm/msm_fence.c
+@@ -8,6 +8,35 @@
  
-+/*
-+ * For atomic updates which touch just a single CRTC, calculate the time of the
-+ * next vblank, and inform all the fences of the deadline.
-+ */
-+static void set_fence_deadline(struct drm_device *dev,
-+			       struct drm_atomic_state *state)
+ #include "msm_drv.h"
+ #include "msm_fence.h"
++#include "msm_gpu.h"
++
++static struct msm_gpu *fctx2gpu(struct msm_fence_context *fctx)
 +{
-+	struct drm_crtc *crtc, *wait_crtc = NULL;
-+	struct drm_crtc_state *new_crtc_state;
-+	struct drm_plane *plane;
-+	struct drm_plane_state *new_plane_state;
-+	ktime_t vbltime;
-+	int i;
-+
-+	for_each_new_crtc_in_state (state, crtc, new_crtc_state, i) {
-+		if (wait_crtc)
-+			return;
-+		wait_crtc = crtc;
-+	}
-+
-+	/* If no CRTCs updated, then nothing to do: */
-+	if (!wait_crtc)
-+		return;
-+
-+	if (drm_crtc_next_vblank_time(wait_crtc, &vbltime))
-+		return;
-+
-+	for_each_new_plane_in_state (state, plane, new_plane_state, i) {
-+		if (!new_plane_state->fence)
-+			continue;
-+		dma_fence_set_deadline(new_plane_state->fence, vbltime);
-+	}
++	struct msm_drm_private *priv = fctx->dev->dev_private;
++	return priv->gpu;
 +}
 +
- /**
-  * drm_atomic_helper_wait_for_fences - wait for fences stashed in plane state
-  * @dev: DRM device
-@@ -1540,6 +1574,8 @@ int drm_atomic_helper_wait_for_fences(struct drm_device *dev,
- 	struct drm_plane_state *new_plane_state;
- 	int i, ret;
- 
-+	set_fence_deadline(dev, state);
++static enum hrtimer_restart deadline_timer(struct hrtimer *t)
++{
++	struct msm_fence_context *fctx = container_of(t,
++			struct msm_fence_context, deadline_timer);
 +
- 	for_each_new_plane_in_state(state, plane, new_plane_state, i) {
- 		if (!new_plane_state->fence)
- 			continue;
++	kthread_queue_work(fctx2gpu(fctx)->worker, &fctx->deadline_work);
++
++	return HRTIMER_NORESTART;
++}
++
++static void deadline_work(struct kthread_work *work)
++{
++	struct msm_fence_context *fctx = container_of(work,
++			struct msm_fence_context, deadline_work);
++
++	/* If deadline fence has already passed, nothing to do: */
++	if (msm_fence_completed(fctx, fctx->next_deadline_fence))
++		return;
++
++	msm_devfreq_boost(fctx2gpu(fctx), 2);
++}
+ 
+ 
+ struct msm_fence_context *
+@@ -36,6 +65,13 @@ msm_fence_context_alloc(struct drm_device *dev, volatile uint32_t *fenceptr,
+ 	fctx->completed_fence = fctx->last_fence;
+ 	*fctx->fenceptr = fctx->last_fence;
+ 
++	hrtimer_init(&fctx->deadline_timer, CLOCK_MONOTONIC, HRTIMER_MODE_ABS);
++	fctx->deadline_timer.function = deadline_timer;
++
++	kthread_init_work(&fctx->deadline_work, deadline_work);
++
++	fctx->next_deadline = ktime_get();
++
+ 	return fctx;
+ }
+ 
+@@ -62,6 +98,8 @@ void msm_update_fence(struct msm_fence_context *fctx, uint32_t fence)
+ 	spin_lock_irqsave(&fctx->spinlock, flags);
+ 	if (fence_after(fence, fctx->completed_fence))
+ 		fctx->completed_fence = fence;
++	if (msm_fence_completed(fctx, fctx->next_deadline_fence))
++		hrtimer_cancel(&fctx->deadline_timer);
+ 	spin_unlock_irqrestore(&fctx->spinlock, flags);
+ }
+ 
+@@ -92,10 +130,46 @@ static bool msm_fence_signaled(struct dma_fence *fence)
+ 	return msm_fence_completed(f->fctx, f->base.seqno);
+ }
+ 
++static void msm_fence_set_deadline(struct dma_fence *fence, ktime_t deadline)
++{
++	struct msm_fence *f = to_msm_fence(fence);
++	struct msm_fence_context *fctx = f->fctx;
++	unsigned long flags;
++	ktime_t now;
++
++	spin_lock_irqsave(&fctx->spinlock, flags);
++	now = ktime_get();
++
++	if (ktime_after(now, fctx->next_deadline) ||
++			ktime_before(deadline, fctx->next_deadline)) {
++		fctx->next_deadline = deadline;
++		fctx->next_deadline_fence =
++			max(fctx->next_deadline_fence, (uint32_t)fence->seqno);
++
++		/*
++		 * Set timer to trigger boost 3ms before deadline, or
++		 * if we are already less than 3ms before the deadline
++		 * schedule boost work immediately.
++		 */
++		deadline = ktime_sub(deadline, ms_to_ktime(3));
++
++		if (ktime_after(now, deadline)) {
++			kthread_queue_work(fctx2gpu(fctx)->worker,
++					&fctx->deadline_work);
++		} else {
++			hrtimer_start(&fctx->deadline_timer, deadline,
++					HRTIMER_MODE_ABS);
++		}
++	}
++
++	spin_unlock_irqrestore(&fctx->spinlock, flags);
++}
++
+ static const struct dma_fence_ops msm_fence_ops = {
+ 	.get_driver_name = msm_fence_get_driver_name,
+ 	.get_timeline_name = msm_fence_get_timeline_name,
+ 	.signaled = msm_fence_signaled,
++	.set_deadline = msm_fence_set_deadline,
+ };
+ 
+ struct dma_fence *
+diff --git a/drivers/gpu/drm/msm/msm_fence.h b/drivers/gpu/drm/msm/msm_fence.h
+index 7f1798c54cd1..cdaebfb94f5c 100644
+--- a/drivers/gpu/drm/msm/msm_fence.h
++++ b/drivers/gpu/drm/msm/msm_fence.h
+@@ -52,6 +52,26 @@ struct msm_fence_context {
+ 	volatile uint32_t *fenceptr;
+ 
+ 	spinlock_t spinlock;
++
++	/*
++	 * TODO this doesn't really deal with multiple deadlines, like
++	 * if userspace got multiple frames ahead.. OTOH atomic updates
++	 * don't queue, so maybe that is ok
++	 */
++
++	/** next_deadline: Time of next deadline */
++	ktime_t next_deadline;
++
++	/**
++	 * next_deadline_fence:
++	 *
++	 * Fence value for next pending deadline.  The deadline timer is
++	 * canceled when this fence is signaled.
++	 */
++	uint32_t next_deadline_fence;
++
++	struct hrtimer deadline_timer;
++	struct kthread_work deadline_work;
+ };
+ 
+ struct msm_fence_context * msm_fence_context_alloc(struct drm_device *dev,
 -- 
 2.39.1
 
