@@ -2,223 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C44D69C731
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Feb 2023 10:02:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E6A1869C735
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Feb 2023 10:02:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231379AbjBTJCZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Feb 2023 04:02:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45464 "EHLO
+        id S231393AbjBTJCi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Feb 2023 04:02:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45786 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231358AbjBTJCP (ORCPT
+        with ESMTP id S231340AbjBTJCh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Feb 2023 04:02:15 -0500
-Received: from mailout1.w1.samsung.com (mailout1.w1.samsung.com [210.118.77.11])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C756B16300
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Feb 2023 01:02:04 -0800 (PST)
-Received: from eucas1p1.samsung.com (unknown [182.198.249.206])
-        by mailout1.w1.samsung.com (KnoxPortal) with ESMTP id 20230220090202euoutp01559bdaaaed1893536a0ce82f5c97d98a~FfNxTwg_x2520025200euoutp01C
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Feb 2023 09:02:02 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.w1.samsung.com 20230220090202euoutp01559bdaaaed1893536a0ce82f5c97d98a~FfNxTwg_x2520025200euoutp01C
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1676883722;
-        bh=to47rSbFD1h6QuwWeBY9Ghw1s2WR3QcW5M5Zg/7hvzM=;
-        h=Date:Subject:To:Cc:From:In-Reply-To:References:From;
-        b=P6HF/ZnvHSP/d3GVRxwFvgAbHPadJLb9lWUC8z7aEHB1Zryglvhe4UdpxKQWR5Q9f
-         aN4o84oOLY8sFwdHzuhYCvOIdGGhUSiyzNL+y+Fn+g+S1JmV6xSglzlGTNFaD9Eii9
-         FO2MUbDe3Q7onMpkWH/iMbXpiScROeWqD0K1YlDo=
-Received: from eusmges3new.samsung.com (unknown [203.254.199.245]) by
-        eucas1p2.samsung.com (KnoxPortal) with ESMTP id
-        20230220090201eucas1p2556056f6bf916a8145893e0737328a4b~FfNw0rOfQ0505505055eucas1p2r;
-        Mon, 20 Feb 2023 09:02:01 +0000 (GMT)
-Received: from eucas1p2.samsung.com ( [182.198.249.207]) by
-        eusmges3new.samsung.com (EUCPMTA) with SMTP id DB.EA.61197.90733F36; Mon, 20
-        Feb 2023 09:02:01 +0000 (GMT)
-Received: from eusmtrp2.samsung.com (unknown [182.198.249.139]) by
-        eucas1p1.samsung.com (KnoxPortal) with ESMTPA id
-        20230220090200eucas1p1d53479c6b7e927ccd500778f3da5b1e2~FfNwXUBT93045230452eucas1p1N;
-        Mon, 20 Feb 2023 09:02:00 +0000 (GMT)
-Received: from eusmgms1.samsung.com (unknown [182.198.249.179]) by
-        eusmtrp2.samsung.com (KnoxPortal) with ESMTP id
-        20230220090200eusmtrp2e1f700a331bfa9ac2244f11d5ed418ef~FfNwWg8HD2020820208eusmtrp2a;
-        Mon, 20 Feb 2023 09:02:00 +0000 (GMT)
-X-AuditID: cbfec7f5-7c5ff7000000ef0d-25-63f33709b4df
-Received: from eusmtip2.samsung.com ( [203.254.199.222]) by
-        eusmgms1.samsung.com (EUCPMTA) with SMTP id 2D.A3.02722.80733F36; Mon, 20
-        Feb 2023 09:02:00 +0000 (GMT)
-Received: from [106.210.134.192] (unknown [106.210.134.192]) by
-        eusmtip2.samsung.com (KnoxPortal) with ESMTPA id
-        20230220090200eusmtip21336bd7cbbca3e5301b03263cdca17a1~FfNvhtI6Y1785817858eusmtip2e;
-        Mon, 20 Feb 2023 09:02:00 +0000 (GMT)
-Message-ID: <e3814c81-c74d-7087-e87d-12dcb49e6444@samsung.com>
-Date:   Mon, 20 Feb 2023 10:01:59 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0)
-        Gecko/20100101 Thunderbird/102.7.2
-Subject: Re: [RFC v1 0/4] Simplify regulator supply resolution code by
- offloading to driver core
+        Mon, 20 Feb 2023 04:02:37 -0500
+Received: from mx.sberdevices.ru (mx.sberdevices.ru [45.89.227.171])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1191DFF1A;
+        Mon, 20 Feb 2023 01:02:19 -0800 (PST)
+Received: from s-lin-edge02.sberdevices.ru (localhost [127.0.0.1])
+        by mx.sberdevices.ru (Postfix) with ESMTP id 702CF5FD41;
+        Mon, 20 Feb 2023 12:02:17 +0300 (MSK)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sberdevices.ru;
+        s=mail; t=1676883737;
+        bh=VlvWeERXUiNtfOqASZFPm3v3jAcmeDDopMGQqrbvT0s=;
+        h=From:To:Subject:Date:Message-ID:Content-Type:MIME-Version;
+        b=J+m0WkZnmzlrUGX2UbkJI3imxyijb1tHg5uUa0ACZ4ISi9fGSmEQklxKpUZV7DfV3
+         9qghPfnMsrveL0x+VJYWCWQVCBv9/68nejkJbKMGIzPZjmGBdEuRJi8uAb0nh3US0V
+         ldj8OpZ5s2gOgnEgFrzZzJGNrwS6X/4fHI1ZfTSS7LOxwa9C/BaIh7xbsP7fM7Bv7J
+         eHaGgmIjNezbqqUYmWrvuSNvBC32IOxZ8tQJcd6efQy4RQHtdPB5EjTTJOnwfTaiFj
+         zPnDAuRz+N1UF1x+ftWBGxbCnriyJlQQaVZ0TLu8Jxn3j73TlL58mTjM1VKGgo3eVj
+         E8XzTmWrqCefw==
+Received: from S-MS-EXCH02.sberdevices.ru (S-MS-EXCH02.sberdevices.ru [172.16.1.5])
+        by mx.sberdevices.ru (Postfix) with ESMTP;
+        Mon, 20 Feb 2023 12:02:17 +0300 (MSK)
+From:   Krasnov Arseniy <AVKrasnov@sberdevices.ru>
+To:     Stefano Garzarella <sgarzare@redhat.com>
+CC:     Stefan Hajnoczi <stefanha@redhat.com>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Jason Wang <jasowang@redhat.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Krasnov Arseniy <oxffffaa@gmail.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        "virtualization@lists.linux-foundation.org" 
+        <virtualization@lists.linux-foundation.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        kernel <kernel@sberdevices.ru>
+Subject: Re: [RFC PATCH v1 05/12] vsock/virtio: non-linear skb support
+Thread-Topic: [RFC PATCH v1 05/12] vsock/virtio: non-linear skb support
+Thread-Index: AQHZOfhn3a4rtLPBJ0ikS/zrL9u2k67RfPkAgAXwE4A=
+Date:   Mon, 20 Feb 2023 09:02:17 +0000
+Message-ID: <dd627cde-e20a-6b0e-b82c-b749dc367db1@sberdevices.ru>
+References: <0e7c6fc4-b4a6-a27b-36e9-359597bba2b5@sberdevices.ru>
+ <b3060caf-df19-f1df-6d27-4e58f894c417@sberdevices.ru>
+ <20230216141856.fnczv3ui6d3lpujy@sgarzare-redhat>
+In-Reply-To: <20230216141856.fnczv3ui6d3lpujy@sgarzare-redhat>
+Accept-Language: en-US, ru-RU
 Content-Language: en-US
-To:     Saravana Kannan <saravanak@google.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Tony Lindgren <tony@atomide.com>,
-        Doug Anderson <dianders@chromium.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Luca Weiss <luca.weiss@fairphone.com>, kernel-team@android.com,
-        linux-kernel@vger.kernel.org
-From:   Marek Szyprowski <m.szyprowski@samsung.com>
-In-Reply-To: <20230218083252.2044423-1-saravanak@google.com>
-Content-Transfer-Encoding: 8bit
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFrrDKsWRmVeSWpSXmKPExsWy7djP87qc5p+TDabdk7DY1mFjMfXhEzaL
-        s8sOslk8u7WXyaJ58Xo2ix3bRSy+Xelgsri8aw6bxZOFZ5gsHq4wsug69JfNYvmpHSwW+694
-        OfB6bNu9jdVjzbw1jB7fvk5i8ZjdcJHFo63pJavHzll32T0WbCr12LSqk83j0OEORo/9c9ew
-        e+z83sDu8XmTXABPFJdNSmpOZllqkb5dAlfGlSn7GQt+K1Ys+L2RsYHxrHQXIyeHhICJxP3d
-        d5i6GLk4hARWMEpM2X2GEcL5wijxqGMSK4TzmVHi6LYn7DAta2cthqpazihxtuUEVP9HRomN
-        h/eBVfEK2ElcWrMYzGYRUJWY92QjM0RcUOLkzCcsILaoQIrE6dV72EBsYYEkiR/7j7GC2MwC
-        4hK3nsxnArFFBIok1je3sYAsYBZoYJZ43XQfrIhNwFCi620XWDOngI3EjqaHLBDN8hLNW2cz
-        gzRICGznlOj4cQnqbheJS3MhNksICEu8Or4FKi4j8X/nfCaIhnZGiQW/70M5ExglGp7fYoSo
-        spa4c+4X0DoOoBWaEut36UOEHSX2nHnADhKWEOCTuPFWEOIIPolJ26YzQ4R5JTrahCCq1SRm
-        HV8Ht/bghUvMExiVZiGFyywk/89C8s4shL0LGFlWMYqnlhbnpqcWG+ellusVJ+YWl+al6yXn
-        525iBCbA0/+Of93BuOLVR71DjEwcjIcYJTiYlUR4//N+ThbiTUmsrEotyo8vKs1JLT7EKM3B
-        oiTOq217MllIID2xJDU7NbUgtQgmy8TBKdXAZPxghW7Qx8Df9YrGZ82mXfq5M/fXxv9mj+9s
-        D7NUb5o3MUg2Ruyu1UzRtTdO76h32HZL6p7ESovexRG2BzhuFs/sPrOTv6DfvePF1IVuhT+k
-        Dyoy39pj8eOP0Y0aCbbjfQVBBYd8Xq7dI9Y75+j/D+aTwtYZXLx9THGmsUEQO0vYg+RNxQ+P
-        iDboRAo4dTwuYFpWElgSGtRvBzS9bt+Vy8pf2cP62dodBbZt+r58+QS/bPODdk1vRe0mmN3c
-        Y7vqyvICq1MCWZ3Teb13p2dddZr6raz8F/eyX4wCGWHxXcXve6a5pz7aqOtTIP7eJfWXw65X
-        fzpOWf876Pg39QZz+6XAprenvmsyKl910OdWYinOSDTUYi4qTgQAS/hrN+8DAAA=
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFnrDIsWRmVeSWpSXmKPExsVy+t/xe7oc5p+TDRpmmFhs67CxmPrwCZvF
-        2WUH2Sye3drLZNG8eD2bxY7tIhbfrnQwWVzeNYfN4snCM0wWD1cYWXQd+stmsfzUDhaL/Ve8
-        HHg9tu3exuqxZt4aRo9vXyexeMxuuMji0db0ktVj56y77B4LNpV6bFrVyeZx6HAHo8f+uWvY
-        PXZ+b2D3+LxJLoAnSs+mKL+0JFUhI7+4xFYp2tDCSM/Q0kLPyMRSz9DYPNbKyFRJ384mJTUn
-        syy1SN8uQS/jypT9jAW/FSsW/N7I2MB4VrqLkZNDQsBEYu2sxYxdjFwcQgJLGSUWHP7DDJGQ
-        kTg5rYEVwhaW+HOtiw3EFhJ4zygxbVkxiM0rYCdxac1idhCbRUBVYt6TjcwQcUGJkzOfsIDY
-        ogIpEp/vzQWrERZIkvix/xjYTGYBcYlbT+YzdTFycIgIFEmsO8wJcgOzQAOzxLLPf1kgDupn
-        lDj2cAVYM5uAoUTXW4gjOAVsJHY0PWSBGGQm0bW1ixHClpdo3jqbeQKj0Cwkd8xCsm8WkpZZ
-        SFoWMLKsYhRJLS3OTc8tNtQrTswtLs1L10vOz93ECIz2bcd+bt7BOO/VR71DjEwcjIcYJTiY
-        lUR4//N+ThbiTUmsrEotyo8vKs1JLT7EaAoMjInMUqLJ+cB0k1cSb2hmYGpoYmZpYGppZqwk
-        zutZ0JEoJJCeWJKanZpakFoE08fEwSnVwHTkaUUA85xvc37tFvNbImqwUiy54fipKkfvXmuD
-        QMO93p23XpqkMPVcUXhTaKMc8m1Docc9j59yq99JJb0rzrhpu+d3ddXXAr5EvTOtk2NOHvvV
-        elZ+TQfbciMOz8SVhxtYTnfdcX2mpbllqtua33N/9H7Ir7vQHeyQFbmxMG5ZYKry4rLDssqX
-        bn5ulJNITL9yJkz2p1BEQKv/SYv97taisWGNSW+Z7DKFsp9K7mgN/nVNPC70R1T8keK2rYVd
-        4efyJf4rJxy/+u5RyYwDV6+4pSRIPPH+VL2kdkV80bbSc7J7hdbejBdTnnVXoOJH6oaF5YFt
-        GZcST//YWj1tI5OU60af/S9KIzPa51/lUmIpzkg01GIuKk4EADaH4ml/AwAA
-X-CMS-MailID: 20230220090200eucas1p1d53479c6b7e927ccd500778f3da5b1e2
-X-Msg-Generator: CA
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [172.16.1.12]
 Content-Type: text/plain; charset="utf-8"
-X-RootMTR: 20230218083300eucas1p28c7c584877b8914a3b88904690be82f6
-X-EPHeader: CA
-CMS-TYPE: 201P
-X-CMS-RootMailID: 20230218083300eucas1p28c7c584877b8914a3b88904690be82f6
-References: <CGME20230218083300eucas1p28c7c584877b8914a3b88904690be82f6@eucas1p2.samsung.com>
-        <20230218083252.2044423-1-saravanak@google.com>
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-ID: <18FBA27B9F20034E8B8A1E8E3C320438@sberdevices.ru>
+Content-Transfer-Encoding: base64
+MIME-Version: 1.0
+X-KSMG-Rule-ID: 4
+X-KSMG-Message-Action: clean
+X-KSMG-AntiSpam-Status: not scanned, disabled by settings
+X-KSMG-AntiSpam-Interceptor-Info: not scanned
+X-KSMG-AntiPhishing: not scanned, disabled by settings
+X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 1.1.2.30, bases: 2023/02/20 05:01:00 #20887657
+X-KSMG-AntiVirus-Status: Clean, skipped
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Saravana,
-
-On 18.02.2023 09:32, Saravana Kannan wrote:
-> Hi Mark/Liam,
->
-> This series is just an RFC to see if you agree with where this is going.
-> Please point out bugs, but don't bother with a proper code review.
->
-> The high level idea is to not reimplement what driver core can already
-> handle for us and use it to do some of the work. Instead of trying to
-> resolve supplies from all different code paths and bits and pieces of
-> the tree, we just build it from the root to the leaves by using deferred
-> probing to sequence things in the right order.
->
-> The last patch is the main one. Rest of them are just setting up for it.
->
-> I believe there's room for further simplification but this is what I
-> could whip up as a quick first draft that shows the high level idea.
-> I'll probably need some help with getting a better understanding of why
-> things are done in a specific order in regulator_register() before I
-> could attempt simplifying things further.
->
-> Ideally, regulator_register() would just have DT parsing, init data
-> struct sanity checks and adding the regulator device and then we move
-> everything else to into the probe function that's guaranteed to run only
-> after the supply has been resolved/ready to resolve.
->
-> fw_devlink/device links should further optimize the flow and also allow
-> us to simplify some of the guarantees and address some of the existing
-> FIXMEs. But this patch series is NOT dependent on fw_devlink or device
-> links.
->
-> Any thoughts on where this is going?
->
-> I've tested this on one hardware I have and it works and nothing is
-> broken. But the regulator tree in my hardware isn't that complicated or
-> deep. The regulators are also added mostly in the right order (due to
-> existing fw_devlink). So if you agree with the idea, the next step is to
-> ask people to give it a test.
->
-> Also, it's based on driver-core-next since that's what I had synced up
-> and had a working baseline. I'll rebase it on the regulator tree when I
-> go from RFC -> PATCH.
-
-I've applied this patchset on top of linux next-20230220 and gave it a 
-try on my test farm, as it revealed a few issues related to regulator 
-initialization in the past. It looks that handling of some corner cases 
-is missing, because this patchset introduced a regression on Samsung 
-Snow/Peach-Pit/Peach-Pi Chromebooks, as well as Hardkernel's Odroid-M1 
-board. It looks that the issue is common - PHY devices don't probe 
-properly. This is an output from Odroid-M1 board 
-(arch/arm64/boot/dts/rockchip/rk3568-odroid-m1.dts):
-
-# cat /sys/kernel/debug/devices_deferred 2>/dev/null
-fd8c0000.usb    platform: wait for supplier host-port
-fe830000.phy
-fe8a0000.usb2phy        rockchip-usb2phy: failed to create phy
-fe8b0000.usb2phy        rockchip-usb2phy: failed to create phy
-3c0800000.pcie  rockchip-dw-pcie: failed to get vpcie3v3 regulator
-fcc00000.usb    platform: wait for supplier otg-port
-fd000000.usb    platform: wait for supplier host-port
-fd800000.usb    platform: wait for supplier otg-port
-fd840000.usb    platform: wait for supplier otg-port
-fd880000.usb    platform: wait for supplier host-port
-fe820000.phy
-
-If you need any additional tests on the mentioned boards, let me know.
-
-
-> Thanks,
-> Saravana
->
-> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> Cc: Geert Uytterhoeven <geert@linux-m68k.org>
-> Cc: Marek Szyprowski <m.szyprowski@samsung.com>
-> Cc: Bjorn Andersson <andersson@kernel.org>
-> Cc: Sudeep Holla <sudeep.holla@arm.com>
-> Cc: Tony Lindgren <tony@atomide.com>
-> Cc: Doug Anderson <dianders@chromium.org>
-> Cc: Guenter Roeck <linux@roeck-us.net>
-> Cc: Luca Weiss <luca.weiss@fairphone.com>
->
-> Saravana Kannan (4):
->    regulator: core: Add regulator devices to bus instead of class
->    regulator: core: Add sysfs class backward compatibility
->    regulator: core: Probe regulator devices
->    regulator: core: Move regulator supply resolving to the probe function
->
->   drivers/regulator/core.c         | 102 +++++++++++++++++++------------
->   drivers/regulator/internal.h     |   2 +-
->   drivers/regulator/of_regulator.c |   2 +-
->   3 files changed, 64 insertions(+), 42 deletions(-)
->
-Best regards
--- 
-Marek Szyprowski, PhD
-Samsung R&D Institute Poland
-
+T24gMTYuMDIuMjAyMyAxNzoxOCwgU3RlZmFubyBHYXJ6YXJlbGxhIHdyb3RlOg0KPiBPbiBNb24s
+IEZlYiAwNiwgMjAyMyBhdCAwNjo1ODoyNEFNICswMDAwLCBBcnNlbml5IEtyYXNub3Ygd3JvdGU6
+DQo+PiBVc2UgcGFnZXMgb2Ygbm9uLWxpbmVhciBza2IgYXMgYnVmZmVycyBpbiB2aXJ0aW8gdHgg
+cXVldWUuDQo+Pg0KPj4gU2lnbmVkLW9mZi1ieTogQXJzZW5peSBLcmFzbm92IDxBVktyYXNub3ZA
+c2JlcmRldmljZXMucnU+DQo+PiAtLS0NCj4+IG5ldC92bXdfdnNvY2svdmlydGlvX3RyYW5zcG9y
+dC5jIHwgMzEgKysrKysrKysrKysrKysrKysrKysrKysrKy0tLS0tLQ0KPj4gMSBmaWxlIGNoYW5n
+ZWQsIDI1IGluc2VydGlvbnMoKyksIDYgZGVsZXRpb25zKC0pDQo+Pg0KPj4gZGlmZiAtLWdpdCBh
+L25ldC92bXdfdnNvY2svdmlydGlvX3RyYW5zcG9ydC5jIGIvbmV0L3Ztd192c29jay92aXJ0aW9f
+dHJhbnNwb3J0LmMNCj4+IGluZGV4IDI4YjVhOGU4ZTA5NC4uYjhhN2Q2ZGM5ZjQ2IDEwMDY0NA0K
+Pj4gLS0tIGEvbmV0L3Ztd192c29jay92aXJ0aW9fdHJhbnNwb3J0LmMNCj4+ICsrKyBiL25ldC92
+bXdfdnNvY2svdmlydGlvX3RyYW5zcG9ydC5jDQo+PiBAQCAtMTAwLDcgKzEwMCw4IEBAIHZpcnRp
+b190cmFuc3BvcnRfc2VuZF9wa3Rfd29yayhzdHJ1Y3Qgd29ya19zdHJ1Y3QgKndvcmspDQo+PiDC
+oMKgwqDCoHZxID0gdnNvY2stPnZxc1tWU09DS19WUV9UWF07DQo+Pg0KPj4gwqDCoMKgwqBmb3Ig
+KDs7KSB7DQo+PiAtwqDCoMKgwqDCoMKgwqAgc3RydWN0IHNjYXR0ZXJsaXN0IGhkciwgYnVmLCAq
+c2dzWzJdOw0KPj4gK8KgwqDCoMKgwqDCoMKgIHN0cnVjdCBzY2F0dGVybGlzdCAqc2dzW01BWF9T
+S0JfRlJBR1MgKyAxXTsNCj4+ICvCoMKgwqDCoMKgwqDCoCBzdHJ1Y3Qgc2NhdHRlcmxpc3QgYnVm
+c1tNQVhfU0tCX0ZSQUdTICsgMV07DQo+IA0KPiArIDEgaXMgZm9yIHRoZSBoZWFkZXIsIHJpZ2h0
+Pw0KPiBJJ2QgYWRkIGEgY29tbWVudCBqdXN0IHRvIGJlIGNsZWFyIDstKQ0KPiANCj4+IMKgwqDC
+oMKgwqDCoMKgIGludCByZXQsIGluX3NnID0gMCwgb3V0X3NnID0gMDsNCj4+IMKgwqDCoMKgwqDC
+oMKgIHN0cnVjdCBza19idWZmICpza2I7DQo+PiDCoMKgwqDCoMKgwqDCoCBib29sIHJlcGx5Ow0K
+Pj4gQEAgLTExMSwxMiArMTEyLDMwIEBAIHZpcnRpb190cmFuc3BvcnRfc2VuZF9wa3Rfd29yayhz
+dHJ1Y3Qgd29ya19zdHJ1Y3QgKndvcmspDQo+Pg0KPj4gwqDCoMKgwqDCoMKgwqAgdmlydGlvX3Ry
+YW5zcG9ydF9kZWxpdmVyX3RhcF9wa3Qoc2tiKTsNCj4+IMKgwqDCoMKgwqDCoMKgIHJlcGx5ID0g
+dmlydGlvX3Zzb2NrX3NrYl9yZXBseShza2IpOw0KPj4gK8KgwqDCoMKgwqDCoMKgIHNnX2luaXRf
+b25lKCZidWZzWzBdLCB2aXJ0aW9fdnNvY2tfaGRyKHNrYiksIHNpemVvZigqdmlydGlvX3Zzb2Nr
+X2hkcihza2IpKSk7DQo+PiArwqDCoMKgwqDCoMKgwqAgc2dzW291dF9zZysrXSA9ICZidWZzWzBd
+Ow0KPj4gKw0KPj4gK8KgwqDCoMKgwqDCoMKgIGlmIChza2JfaXNfbm9ubGluZWFyKHNrYikpIHsN
+Cj4+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIGludCBpOw0KPj4gKw0KPj4gK8KgwqDCoMKgwqDC
+oMKgwqDCoMKgwqAgZm9yIChpID0gMDsgaSA8IHNrYl9zaGluZm8oc2tiKS0+bnJfZnJhZ3M7IGkr
+Kykgew0KPj4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCBzdHJ1Y3QgcGFnZSAqZGF0
+YV9wYWdlID0gc2tiX3NoaW5mbyhza2IpLT5mcmFnc1tpXS5idl9wYWdlOw0KPj4gKw0KPj4gK8Kg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCAvKiBXZSB3aWxsIHVzZSAncGFnZV90b192aXJ0
+KCknIGZvciB1c2Vyc3BhY2UgcGFnZSBoZXJlLA0KPj4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgICogYmVjYXVzZSB2aXJ0aW8gbGF5ZXIgd2lsbCBjYWxsICd2aXJ0X3RvX3BoeXMo
+KScgbGF0ZXINCj4+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCAqIHRvIGZpbGwg
+YnVmZmVyIGRlc2NyaXB0b3IuIFdlIGRvbid0IHRvdWNoIG1lbW9yeSBhdA0KPj4gK8KgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgICogInZpcnR1YWwiIGFkZHJlc3Mgb2YgdGhpcyBwYWdl
+Lg0KPj4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgICovDQo+IA0KPiBJSVVDIGRh
+dGFfcGFnZSBpcyBhIHVzZXIgcGFnZSwgc28gc2luY2Ugd2UgYXJlIGV4cG9zaW5nIGl0IHRvIHRo
+ZSBob3N0LA0KPiBJIHRoaW5rIHdlIHNob3VsZCBwaW4gaXQuDQo+IA0KPiBJcyBkYXRhX3BhZ2Ug
+YWx3YXlzIGEgdXNlciBwYWdlLCBvciBjYW4gaXQgYmUgYSBrZXJuZWwgcGFnZSB3aGVuIHNrYiBp
+cyBub25saW5lYXI/DQoNCkJ5IGRlZmF1bHQgaXQgaXMgdXNlciBwYWdlLCBidXQuLi5tYXkgYmUg
+aXQgaXMgcG9zc2libGUgdG8gc2VuZCBwYWdlIG9mIG1hcHBlZA0KZmlsZSB3aXRoIE1BUF9TSEFS
+RUQgZmxhZ3MoaSB0aGluayBpdCB0aGlzIGNhc2UgaXQgd2lsbCBiZSBwYWdlIGZyb20gcGFnZSBj
+YWNoZSkNCg0KPiANCj4gVGhhbmtzLA0KPiBTdGVmYW5vDQo+IA0KPj4gK8KgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoCBzZ19pbml0X29uZSgmYnVmc1tpICsgMV0sDQo+PiArwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCBwYWdlX3RvX3ZpcnQoZGF0YV9w
+YWdlKSwgUEFHRV9TSVpFKTsNCj4+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgc2dz
+W291dF9zZysrXSA9ICZidWZzW2kgKyAxXTsNCj4+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIH0N
+Cj4+ICvCoMKgwqDCoMKgwqDCoCB9IGVsc2Ugew0KPj4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqAg
+aWYgKHNrYi0+bGVuID4gMCkgew0KPj4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCBz
+Z19pbml0X29uZSgmYnVmc1sxXSwgc2tiLT5kYXRhLCBza2ItPmxlbik7DQo+PiArwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgIHNnc1tvdXRfc2crK10gPSAmYnVmc1sxXTsNCj4+ICvCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgIH0NCj4+DQo+PiAtwqDCoMKgwqDCoMKgwqAgc2dfaW5pdF9vbmUo
+JmhkciwgdmlydGlvX3Zzb2NrX2hkcihza2IpLCBzaXplb2YoKnZpcnRpb192c29ja19oZHIoc2ti
+KSkpOw0KPj4gLcKgwqDCoMKgwqDCoMKgIHNnc1tvdXRfc2crK10gPSAmaGRyOw0KPj4gLcKgwqDC
+oMKgwqDCoMKgIGlmIChza2ItPmxlbiA+IDApIHsNCj4+IC3CoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+IHNnX2luaXRfb25lKCZidWYsIHNrYi0+ZGF0YSwgc2tiLT5sZW4pOw0KPj4gLcKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqAgc2dzW291dF9zZysrXSA9ICZidWY7DQo+PiDCoMKgwqDCoMKgwqDCoCB9DQo+
+Pg0KPj4gwqDCoMKgwqDCoMKgwqAgcmV0ID0gdmlydHF1ZXVlX2FkZF9zZ3ModnEsIHNncywgb3V0
+X3NnLCBpbl9zZywgc2tiLCBHRlBfS0VSTkVMKTsNCj4+IC0twqANCj4+IDIuMjUuMQ0KPiANCg0K
