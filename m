@@ -2,85 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F2E269C713
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Feb 2023 09:58:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3B59C69C716
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Feb 2023 09:58:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230458AbjBTI6C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Feb 2023 03:58:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40008 "EHLO
+        id S230329AbjBTI6s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Feb 2023 03:58:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41222 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230122AbjBTI55 (ORCPT
+        with ESMTP id S229678AbjBTI6p (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Feb 2023 03:57:57 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 510DD7EFF;
-        Mon, 20 Feb 2023 00:57:56 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id ED1E3B80B46;
-        Mon, 20 Feb 2023 08:57:54 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 63A14C433D2;
-        Mon, 20 Feb 2023 08:57:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1676883473;
-        bh=cn2uG6h1Z4V5em3rkbUzwLVNE0WxlJeGFfNh8HPkEw8=;
-        h=Subject:From:In-Reply-To:References:To:Cc:Date:From;
-        b=bu2j1/eVWJEWPVWt8awRoRGUNv6v6xk8DtnmKtp2ZF7tPl66VH+mUsJ9paGtOUYs+
-         z3t4MnvL9+m41LUoFslSpvlV8q0ayfW8S0lerzI4f/9ITLdJIBmsaXGnzlb/jqKBAy
-         m0U7a2X7gBROblOisdQkf9NFnHXfJGFULiQvTFw12Wis2err8Eneagir23+cPKZwVv
-         yMK45fbQQvAeXE1K8SwRX93YkcxhUygQnqEs4aerTJiCflc49eU34uKqQMXEg4zrkV
-         1qpkXmutpl0w8t4wLGZYZ4e0KqWFNp1n9ASePw5NgOaYMKG8gY98lDNUk0V0s4/W0g
-         ItCaL/yb1oixA==
-Content-Type: text/plain; charset="utf-8"
+        Mon, 20 Feb 2023 03:58:45 -0500
+Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net [217.70.183.195])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 887767DB8;
+        Mon, 20 Feb 2023 00:58:33 -0800 (PST)
+Received: (Authenticated sender: miquel.raynal@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id C198760002;
+        Mon, 20 Feb 2023 08:58:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1676883511;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=fz7ymKkeqvHCDa/6k6ptYf6tiYPwOleZAKDnnk0ryko=;
+        b=WRXxB5cRd4mIWFQQx94i4cOSCLm26Fqr86Rg1aViqT3mwAQqKP6f+SZCAeNxPuF6YYgSx6
+        YiN0/1c9H/0ueNExaOd+BUSDu7nVPs3K4clkWQuHW0MJa1NS11IN4PXEZBuXUaZYTrly5g
+        mB+lxg74Ht14gbpP3k1fOpOvbOPtScmaybhxxTElFl5psZncnCZU0BGUiglsQU5HykqPiP
+        92UxNJuC1UlUHh7DDHsRygjfyNMVhPqZhjdrfiA6mIKtIInpB/KVCiTLBumQlgoCKd/dym
+        MRtPbQa5dNzpyKn6U+aADxeFF7hqCgLRS7pc1GViYWYuLwN0IEgVYg2hvi0fhw==
+Date:   Mon, 20 Feb 2023 09:58:29 +0100
+From:   Miquel Raynal <miquel.raynal@bootlin.com>
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>
+Cc:     rafael@kernel.org, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Markus Mayer <mmayer@broadcom.com>,
+        Broadcom internal kernel review list 
+        <bcm-kernel-feedback-list@broadcom.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Heiko Stuebner <heiko@sntech.de>,
+        linux-arm-kernel@lists.infradead.org (moderated list:BROADCOM BCM7XXX
+        ARM ARCHITECTURE),
+        linux-rockchip@lists.infradead.org (open list:ARM/Rockchip SoC support)
+Subject: Re: [PATCH v1 03/17] thermal: Remove debug or error messages in
+ get_temp() ops
+Message-ID: <20230220095829.1591a532@xps-13>
+In-Reply-To: <20230219143657.241542-4-daniel.lezcano@linaro.org>
+References: <20230219143657.241542-1-daniel.lezcano@linaro.org>
+        <20230219143657.241542-4-daniel.lezcano@linaro.org>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Subject: Re: [PATCH] wifi: ath11k: fix SAC bug on peer addition with sta band
- migration
-From:   Kalle Valo <kvalo@kernel.org>
-In-Reply-To: <20230209222622.1751-1-ansuelsmth@gmail.com>
-References: <20230209222622.1751-1-ansuelsmth@gmail.com>
-To:     Christian Marangi <ansuelsmth@gmail.com>
-Cc:     "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Christian Marangi <ansuelsmth@gmail.com>,
-        ath11k@lists.infradead.org, linux-wireless@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Dan Carpenter <error27@gmail.com>
-User-Agent: pwcli/0.1.1-git (https://github.com/kvalo/pwcli/) Python/3.7.3
-Message-ID: <167688346963.21606.5485334408823363188.kvalo@kernel.org>
-Date:   Mon, 20 Feb 2023 08:57:51 +0000 (UTC)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Christian Marangi <ansuelsmth@gmail.com> wrote:
+Hi Daniel,
 
-> Fix sleep in atomic context warning detected by Smatch static checker
-> analyzer.
-> 
-> Following the locking pattern for peer_rhash_add lock tbl_mtx_lock mutex
-> always even if sta is not transitioning to another band.
-> This is peer_add function and a more secure locking should not cause
-> performance regression.
-> 
-> Fixes: d673cb6fe6c0 ("wifi: ath11k: fix peer addition/deletion error on sta band migration")
-> Reported-by: Dan Carpenter <error27@gmail.com>
-> Signed-off-by: Christian Marangi <ansuelsmth@gmail.com>
-> Signed-off-by: Kalle Valo <quic_kvalo@quicinc.com>
+daniel.lezcano@linaro.org wrote on Sun, 19 Feb 2023 15:36:43 +0100:
 
-I assume you only compile tested this and I'll add that to the commit log. It's
-always good to know how the patch was tested.
+> Some get_temp() ops implementation are showing an error or a debug
+> message if the reading of the sensor fails.
+>=20
+> The debug message is already displayed from the call site of this
+> ops. So we can remove it.
+>=20
+> On the other side, the error should not be displayed because in
+> production that can raise tons of messages.
+>=20
+> Finally, some drivers are showing a debug message with the
+> temperature, this is also accessible through the trace from the core
+> code in the temperature_update() function.
+>=20
+> Another benefit is the dev_* messages are accessing the thermal zone
+> device field from the structure, so we encapsulate even more the code
+> by preventing these accesses.
+>=20
+> Remove those messages.
+>=20
+> Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
+> ---
+>  drivers/thermal/armada_thermal.c           | 10 ++--------
 
--- 
-https://patchwork.kernel.org/project/linux-wireless/patch/20230209222622.1751-1-ansuelsmth@gmail.com/
+For Armada:
 
-https://wireless.wiki.kernel.org/en/developers/documentation/submittingpatches
+Reviewed-by: Miquel Raynal <miquel.raynal@bootlin.com>
 
+Thanks,
+Miqu=C3=A8l
