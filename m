@@ -2,149 +2,219 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5088E69D117
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Feb 2023 17:08:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5DCEF69D11B
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Feb 2023 17:09:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232039AbjBTQIn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Feb 2023 11:08:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57608 "EHLO
+        id S232202AbjBTQJV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Feb 2023 11:09:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58158 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231265AbjBTQIl (ORCPT
+        with ESMTP id S231265AbjBTQJU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Feb 2023 11:08:41 -0500
-Received: from vulcan.natalenko.name (vulcan.natalenko.name [IPv6:2001:19f0:6c00:8846:5400:ff:fe0c:dfa0])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B470B47E
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Feb 2023 08:08:39 -0800 (PST)
-Received: from spock.localnet (unknown [83.148.33.151])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by vulcan.natalenko.name (Postfix) with ESMTPSA id 02623123964E;
-        Mon, 20 Feb 2023 17:08:34 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=natalenko.name;
-        s=dkim-20170712; t=1676909315;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=e6XF2Mly5uci1etXydiI+TP9d1uuQZIXE3ICU4vlUTw=;
-        b=VMENmGm5tydIgyf48jG/O8TYEBhpM5St8bruDWHTLiyXc3ag6Sinv9jRREfJ8KVedhOER3
-        Z5/RkRNcXSpmDn1BBtxBjnXe5VVguia30JnT2hRLYy8AA5ZCJL8DsRMAyiqLgnH6KIMQKf
-        WUCKzD1suspBieYrxR0plX52TbkJt94=
-From:   Oleksandr Natalenko <oleksandr@natalenko.name>
-To:     dwmw2@infradead.org, tglx@linutronix.de, kim.phillips@amd.com,
-        Usama Arif <usama.arif@bytedance.com>
-Cc:     arjan@linux.intel.com, mingo@redhat.com, bp@alien8.de,
-        dave.hansen@linux.intel.com, hpa@zytor.com, x86@kernel.org,
-        pbonzini@redhat.com, paulmck@kernel.org,
-        linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        rcu@vger.kernel.org, mimoja@mimoja.de, hewenliang4@huawei.com,
-        thomas.lendacky@amd.com, seanjc@google.com, pmenzel@molgen.mpg.de,
-        fam.zheng@bytedance.com, punit.agrawal@bytedance.com,
-        simon.evans@bytedance.com, liangma@liangbit.com,
-        Usama Arif <usama.arif@bytedance.com>
-Subject: Re: [PATCH v9 0/8] Parallel CPU bringup for x86_64
-Date:   Mon, 20 Feb 2023 17:08:32 +0100
-Message-ID: <2668799.mvXUDI8C0e@natalenko.name>
-In-Reply-To: <20230215145425.420125-1-usama.arif@bytedance.com>
-References: <20230215145425.420125-1-usama.arif@bytedance.com>
+        Mon, 20 Feb 2023 11:09:20 -0500
+Received: from mail-oi1-x22e.google.com (mail-oi1-x22e.google.com [IPv6:2607:f8b0:4864:20::22e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1600B1B571;
+        Mon, 20 Feb 2023 08:09:16 -0800 (PST)
+Received: by mail-oi1-x22e.google.com with SMTP id w7so1594554oik.13;
+        Mon, 20 Feb 2023 08:09:16 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=5qKwgEmFMvHxp8bhwKryOQIDMT3gDmSzeZYz7HFGi0A=;
+        b=mcwIt39UTsOH/VD2CWB0f3XpfojSkJOsoHINEprOWCQfhExKIq9ldl6m1/7kJxUMJE
+         g2ReIRbkPxlH8TDlSVNoy2zlDUBCWenL+AQSSKunKqtko03Q8eruiXp1s2mNTNfxxjAP
+         5p1Qh6HvyEvUDwdiURvsx+ioU1hJKOg4Q8C+NQFppWyjKXeiL4RqqGHdwJFuwTmzKsp4
+         OTVREXLeRILTF/F1FE9MTvoo4Vx2Zz5iU2OP+DwxW7sl6Y1JuWFjuLElVqkdLhCjrEFJ
+         +WvBKHUtxeIuBOp/j/kuq4B2yS35No16DshXpt/B8oBI+93LUFEkYrYRD4R0U/fe1KsZ
+         647A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=5qKwgEmFMvHxp8bhwKryOQIDMT3gDmSzeZYz7HFGi0A=;
+        b=FCo0B6WmeRZuNqoiwqO8OzGtKCcOFFrpJ1GkjMOt0g5jnWy7eUcaGihpoFwoVj1qe1
+         Be69pDj9k24oQMQp6wUWfv76MI+NTQfpg4d2Fc7h0zSgQP6J6tmfeFt95Qm9kEodxdJW
+         UnDEqyDErGzkKna6DimzBPUxvaApWMi1DtDz1HLxhFLMj0gpbtPKtLlZq7ZPqqocFRJz
+         1XkBEemEcuyWVLTYqshVzoGWNbDq9hiI/Do1p29ZlYqOVJfz0TM3cvGvyUTt7LNFYfHJ
+         irj8sqE90WMvINBzlFiDyZ05Y30Du0w4IXMl+1QJ9guXQV3jQa52nQCcy8OohVATxnug
+         w4bQ==
+X-Gm-Message-State: AO0yUKWaTdqkXH74sn0GPzzpOIGrGcy2Bx4J1lb13y3/YLbU/+m6Ok/P
+        IeNvQXN4wUismDV0p6JplNDxmdVy+trE26/qns0=
+X-Google-Smtp-Source: AK7set+aFRYNQDGiaDd/8xtOQGQcGZhiqPbhDzJH2jTmHgUMuPs3oBV9oiMJLS3mZRVOrAjR6iKZ0/p6GM5gSm52s04=
+X-Received: by 2002:a05:6808:ec7:b0:364:c0a5:1fcf with SMTP id
+ q7-20020a0568080ec700b00364c0a51fcfmr1103306oiv.58.1676909355341; Mon, 20 Feb
+ 2023 08:09:15 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
+References: <20230218211608.1630586-1-robdclark@gmail.com> <20230218211608.1630586-6-robdclark@gmail.com>
+ <37ec0125-8d0b-7d87-321d-ed4c7c7b32a7@amd.com>
+In-Reply-To: <37ec0125-8d0b-7d87-321d-ed4c7c7b32a7@amd.com>
+From:   Rob Clark <robdclark@gmail.com>
+Date:   Mon, 20 Feb 2023 08:09:04 -0800
+Message-ID: <CAF6AEGtAHXQ05tWoXdbx3_TK+11+XN6J9wuXssSh3PswUhvwgg@mail.gmail.com>
+Subject: Re: [PATCH v4 05/14] dma-buf/sync_file: Add SET_DEADLINE ioctl
+To:     =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>
+Cc:     dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org,
+        Daniel Vetter <daniel@ffwll.ch>,
+        =?UTF-8?Q?Christian_K=C3=B6nig?= <ckoenig.leichtzumerken@gmail.com>,
+        =?UTF-8?Q?Michel_D=C3=A4nzer?= <michel@daenzer.net>,
+        Tvrtko Ursulin <tvrtko.ursulin@intel.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        Pekka Paalanen <ppaalanen@gmail.com>,
+        Simon Ser <contact@emersion.fr>,
+        Rob Clark <robdclark@chromium.org>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        Gustavo Padovan <gustavo@padovan.org>,
+        "open list:SYNC FILE FRAMEWORK" <linux-media@vger.kernel.org>,
+        "moderated list:DMA BUFFER SHARING FRAMEWORK" 
+        <linaro-mm-sig@lists.linaro.org>,
+        open list <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello.
+On Mon, Feb 20, 2023 at 12:27 AM Christian K=C3=B6nig
+<christian.koenig@amd.com> wrote:
+>
+> Am 18.02.23 um 22:15 schrieb Rob Clark:
+> > From: Rob Clark <robdclark@chromium.org>
+> >
+> > The initial purpose is for igt tests, but this would also be useful for
+> > compositors that wait until close to vblank deadline to make decisions
+> > about which frame to show.
+> >
+> > The igt tests can be found at:
+> >
+> > https://gitlab.freedesktop.org/robclark/igt-gpu-tools/-/commits/fence-d=
+eadline
+> >
+> > v2: Clarify the timebase, add link to igt tests
+> >
+> > Signed-off-by: Rob Clark <robdclark@chromium.org>
+> > ---
+> >   drivers/dma-buf/sync_file.c    | 19 +++++++++++++++++++
+> >   include/uapi/linux/sync_file.h | 22 ++++++++++++++++++++++
+> >   2 files changed, 41 insertions(+)
+> >
+> > diff --git a/drivers/dma-buf/sync_file.c b/drivers/dma-buf/sync_file.c
+> > index af57799c86ce..fb6ca1032885 100644
+> > --- a/drivers/dma-buf/sync_file.c
+> > +++ b/drivers/dma-buf/sync_file.c
+> > @@ -350,6 +350,22 @@ static long sync_file_ioctl_fence_info(struct sync=
+_file *sync_file,
+> >       return ret;
+> >   }
+> >
+> > +static int sync_file_ioctl_set_deadline(struct sync_file *sync_file,
+> > +                                     unsigned long arg)
+> > +{
+> > +     struct sync_set_deadline ts;
+> > +
+> > +     if (copy_from_user(&ts, (void __user *)arg, sizeof(ts)))
+> > +             return -EFAULT;
+> > +
+> > +     if (ts.pad)
+> > +             return -EINVAL;
+> > +
+> > +     dma_fence_set_deadline(sync_file->fence, ktime_set(ts.tv_sec, ts.=
+tv_nsec));
+> > +
+> > +     return 0;
+> > +}
+> > +
+> >   static long sync_file_ioctl(struct file *file, unsigned int cmd,
+> >                           unsigned long arg)
+> >   {
+> > @@ -362,6 +378,9 @@ static long sync_file_ioctl(struct file *file, unsi=
+gned int cmd,
+> >       case SYNC_IOC_FILE_INFO:
+> >               return sync_file_ioctl_fence_info(sync_file, arg);
+> >
+> > +     case SYNC_IOC_SET_DEADLINE:
+> > +             return sync_file_ioctl_set_deadline(sync_file, arg);
+> > +
+> >       default:
+> >               return -ENOTTY;
+> >       }
+> > diff --git a/include/uapi/linux/sync_file.h b/include/uapi/linux/sync_f=
+ile.h
+> > index ee2dcfb3d660..c8666580816f 100644
+> > --- a/include/uapi/linux/sync_file.h
+> > +++ b/include/uapi/linux/sync_file.h
+> > @@ -67,6 +67,20 @@ struct sync_file_info {
+> >       __u64   sync_fence_info;
+> >   };
+> >
+> > +/**
+> > + * struct sync_set_deadline - set a deadline on a fence
+> > + * @tv_sec:  seconds elapsed since epoch
+> > + * @tv_nsec: nanoseconds elapsed since the time given by the tv_sec
+> > + * @pad:     must be zero
+> > + *
+> > + * The timebase for the deadline is CLOCK_MONOTONIC (same as vblank)
+> > + */
+> > +struct sync_set_deadline {
+> > +     __s64   tv_sec;
+> > +     __s32   tv_nsec;
+> > +     __u32   pad;
+>
+> IIRC struct timespec defined this as time_t/long (which is horrible for
+> an UAPI because of the sizeof(long) dependency), one possible
+> alternative is to use 64bit nanoseconds from CLOCK_MONOTONIC (which is
+> essentially ktime).
+>
+> Not 100% sure if there is any preferences documented, but I think the
+> later might be better.
 
-On st=C5=99eda 15. =C3=BAnora 2023 15:54:17 CET Usama Arif wrote:
-> The main change over v8 is dropping the patch to avoid repeated saves of =
-MTRR
-> at boot time. It didn't make a difference to smpboot time and is independ=
-ent
-> of parallel CPU bringup, so if needed can be explored in a separate patch=
-set.
->=20
-> The patches have also been rebased to v6.2-rc8 and retested and the
-> improvement in boot time is the same as v8.
->=20
-> Thanks,
-> Usama
->=20
-> Changes across versions:
-> v2: Cut it back to just INIT/SIPI/SIPI in parallel for now, nothing more
-> v3: Clean up x2apic patch, add MTRR optimisation, lock topology update
->     in preparation for more parallelisation.
-> v4: Fixes to the real mode parallelisation patch spotted by SeanC, to
->     avoid scribbling on initial_gs in common_cpu_up(), and to allow all
->     24 bits of the physical X2APIC ID to be used. That patch still needs
->     a Signed-off-by from its original author, who once claimed not to
->     remember writing it at all. But now we've fixed it, hopefully he'll
->     admit it now :)
-> v5: rebase to v6.1 and remeasure performance, disable parallel bringup
->     for AMD CPUs.
-> v6: rebase to v6.2-rc6, disabled parallel boot on amd as a cpu bug and
->     reused timer calibration for secondary CPUs.
-> v7: [David Woodhouse] iterate over all possible CPUs to find any existing
->     cluster mask in alloc_clustermask. (patch 1/9)
->     Keep parallel AMD support enabled in AMD, using APIC ID in CPUID leaf
->     0x0B (for x2APIC mode) or CPUID leaf 0x01 where 8 bits are sufficient.
->     Included sanity checks for APIC id from 0x0B. (patch 6/9)
->     Removed patch for reusing timer calibration for secondary CPUs.
->     commit message and code improvements.
-> v8: Fix CPU0 hotplug by setting up the initial_gs, initial_stack and
->     early_gdt_descr.
->     Drop trampoline lock and bail if APIC ID not found in find_cpunr.
->     Code comments improved and debug prints added.
-> v9: Drop patch to avoid repeated saves of MTRR at boot time.
->     rebased and retested at v6.2-rc8.
->     added kernel doc for no_parallel_bringup and made do_parallel_bringup
->     __ro_after_init.
->=20
-> David Woodhouse (8):
->   x86/apic/x2apic: Allow CPU cluster_mask to be populated in parallel
->   cpu/hotplug: Move idle_thread_get() to <linux/smpboot.h>
->   cpu/hotplug: Add dynamic parallel bringup states before
->     CPUHP_BRINGUP_CPU
->   x86/smpboot: Reference count on smpboot_setup_warm_reset_vector()
->   x86/smpboot: Split up native_cpu_up into separate phases and document
->     them
->   x86/smpboot: Support parallel startup of secondary CPUs
->   x86/smpboot: Send INIT/SIPI/SIPI to secondary CPUs in parallel
->   x86/smpboot: Serialize topology updates for secondary bringup
->=20
->  .../admin-guide/kernel-parameters.txt         |   3 +
->  arch/x86/include/asm/realmode.h               |   3 +
->  arch/x86/include/asm/smp.h                    |  14 +-
->  arch/x86/include/asm/topology.h               |   2 -
->  arch/x86/kernel/acpi/sleep.c                  |   1 +
->  arch/x86/kernel/apic/apic.c                   |   2 +-
->  arch/x86/kernel/apic/x2apic_cluster.c         | 130 ++++---
->  arch/x86/kernel/cpu/common.c                  |   6 +-
->  arch/x86/kernel/head_64.S                     |  99 ++++-
->  arch/x86/kernel/smpboot.c                     | 350 +++++++++++++-----
->  arch/x86/realmode/init.c                      |   3 +
->  arch/x86/realmode/rm/trampoline_64.S          |  14 +
->  arch/x86/xen/smp_pv.c                         |   4 +-
->  include/linux/cpuhotplug.h                    |   2 +
->  include/linux/smpboot.h                       |   7 +
->  kernel/cpu.c                                  |  31 +-
->  kernel/smpboot.c                              |   2 +-
->  kernel/smpboot.h                              |   2 -
->  18 files changed, 515 insertions(+), 160 deletions(-)
+The original thought is that this maps directly to clock_gettime()
+without extra conversion needed, and is similar to other pre-ktime_t
+UAPI.  But OTOH if userspace wants to add an offset, it is maybe
+better to convert completely to ns in userspace and use a u64 (as that
+is what ns_to_ktime() uses).. (and OFC whatever decision here also
+applies to the syncobj wait ioctls)
 
-I've applied this to the v6.2 kernel, and suspend/resume broke on my Ryzen =
-5950X desktop. The machine suspends just fine, but on resume the screen sta=
-ys blank, and there's no visible disk I/O.
+I'm leaning towards u64 CLOCK_MONOTONIC ns if no one has a good
+argument against that.
 
-Reverting the series brings suspend/resume back to working state.
+BR,
+-R
 
-=2D-=20
-Oleksandr Natalenko (post-factum)
-
-
+> Either way the patch is Acked-by: Christian K=C3=B6nig
+> <christian.koenig@amd.com> for this patch.
+>
+> Regards,
+> Christian.
+>
+> > +};
+> > +
+> >   #define SYNC_IOC_MAGIC              '>'
+> >
+> >   /**
+> > @@ -95,4 +109,12 @@ struct sync_file_info {
+> >    */
+> >   #define SYNC_IOC_FILE_INFO  _IOWR(SYNC_IOC_MAGIC, 4, struct sync_file=
+_info)
+> >
+> > +
+> > +/**
+> > + * DOC: SYNC_IOC_SET_DEADLINE - set a deadline on a fence
+> > + *
+> > + * Allows userspace to set a deadline on a fence, see dma_fence_set_de=
+adline()
+> > + */
+> > +#define SYNC_IOC_SET_DEADLINE        _IOW(SYNC_IOC_MAGIC, 5, struct sy=
+nc_set_deadline)
+> > +
+> >   #endif /* _UAPI_LINUX_SYNC_H */
+>
