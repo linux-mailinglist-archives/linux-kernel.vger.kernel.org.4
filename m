@@ -2,138 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C0EA69CF8D
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Feb 2023 15:39:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 83DDE69CD67
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Feb 2023 14:49:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232169AbjBTOjK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Feb 2023 09:39:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59934 "EHLO
+        id S232377AbjBTNs7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Feb 2023 08:48:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35032 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231782AbjBTOjI (ORCPT
+        with ESMTP id S232360AbjBTNs4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Feb 2023 09:39:08 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F203D9EF1
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Feb 2023 06:38:19 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1676903899;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=ZooPx0J4FahhlqcFr0VVGzJP8CK2Lifinz64+tcHuxs=;
-        b=FmJjSnvqrAMUAk5uUlffMYY+ktnL01a+8f4LUF1L5BIAVg7Bof9WsKyvE4xXY7U7oH+1tW
-        PeQ8CeyKXZPhdWs2FZXqBBUg77gZaNulD4u3dTeZr1gAAb0Uwsz4mnz+DvZMdyysGZ6jP3
-        /L+3MLXK8MUHg5fNcQPVUf/ZsWqmSlE=
-Received: from mail-ed1-f69.google.com (mail-ed1-f69.google.com
- [209.85.208.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-648-7szl6ezvPNir14LTUYX3nA-1; Mon, 20 Feb 2023 09:38:17 -0500
-X-MC-Unique: 7szl6ezvPNir14LTUYX3nA-1
-Received: by mail-ed1-f69.google.com with SMTP id k12-20020a50c8cc000000b004accf30f6d3so2015369edh.14
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Feb 2023 06:38:17 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:organization:from:references
-         :cc:to:content-language:subject:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=ZooPx0J4FahhlqcFr0VVGzJP8CK2Lifinz64+tcHuxs=;
-        b=eIfPGCbR4e2VHmewRTH091cBP+BnivTwB1HH+Knsu/X7QckPQLmi7YuxzkQ5noeJ4Z
-         gEghqcmblfyc7TjD/f/Pf4GI1I+oEbdf6yD0aY6VyNaft+VdhVaPksm+FGtiF1SQkr+P
-         6iB5WnelEzR/hXDJ3sWszQqoQ7jzSl/+SauoslH2/1kwyvfiNcMWF/z+319CtMkhxEva
-         jMgaEAAGb8cPMNSZ+jyp52VyfQxCpn2p59hJmWQzJQeuZOcVVL11M50bOlRSszZMtfvu
-         BehBxBpXeDPiDQLtuAyn1U15nF2E5mBCiQ3knOxQOJdQ9sOJXS6Ct9cR414R9612f6qT
-         jYsA==
-X-Gm-Message-State: AO0yUKW1kKUVZJ9uzwR2oKGZcdxcbJerkK6gPSBkjVXkO/nEXbMPCvGB
-        E9SC3CqKdEUqGkILuo0az5sio27PdRpfdZbOZGTnJGV4j7ZylceduuE5BsCzbIfyEbuSjRcJmEP
-        hq3I1UaOuCjcCG1IJICX9gR8q
-X-Received: by 2002:a17:907:c10:b0:87b:da74:d272 with SMTP id ga16-20020a1709070c1000b0087bda74d272mr11177677ejc.45.1676903896717;
-        Mon, 20 Feb 2023 06:38:16 -0800 (PST)
-X-Google-Smtp-Source: AK7set890fgad0EenmfhXcAtdl+hYlW2r/ANHXfflzV6RWOHKEQ6317uyFhrXsZ5SSZOJN3kSOCx5Q==
-X-Received: by 2002:a17:907:c10:b0:87b:da74:d272 with SMTP id ga16-20020a1709070c1000b0087bda74d272mr11177652ejc.45.1676903896465;
-        Mon, 20 Feb 2023 06:38:16 -0800 (PST)
-Received: from ?IPV6:2a02:810d:4b3f:de78:642:1aff:fe31:a15c? ([2a02:810d:4b3f:de78:642:1aff:fe31:a15c])
-        by smtp.gmail.com with ESMTPSA id kj8-20020a170907764800b008c0b8dd4cbdsm3118420ejc.112.2023.02.20.06.38.14
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 20 Feb 2023 06:38:15 -0800 (PST)
-Message-ID: <e4244345-962d-1175-6ee3-a55083389437@redhat.com>
-Date:   Mon, 20 Feb 2023 14:48:20 +0100
+        Mon, 20 Feb 2023 08:48:56 -0500
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CFAF40C4;
+        Mon, 20 Feb 2023 05:48:44 -0800 (PST)
+Received: from pps.filterd (m0279871.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 31KCEMj2006715;
+        Mon, 20 Feb 2023 13:48:33 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=ORSU/Kgrr5YXCnp8lyw5sWPwL7mXbpJ3GoH/DEN7i44=;
+ b=p3qOn7D/rpccX+D2Qv2gOgr2XXdtpcSFzBTGi6gTa1/Tz5BN7ZYnE/yKhBMuJ1QjY0Hb
+ CXxikNM0i54V2SOq2XHhzphBiFWrgEWyw9+99ZSPPyKN2NGl5NLTrNo3P3OcuZcmDnBW
+ LSgAzzCfCzG9S74ey0RCmfCiJg/lkHVC03jnR99i24zlZ6jIamNu7Fv7O8/aqOiQjUil
+ 3T0O2PpKtplWxiZPhMVfOui0kU68I8EOcDsp4a5pTkx/fVYJbMp6VXY44Fb8JVlZdJot
+ VNC5nTmscRuHo6uXCeFXYoqfA7M09z802f8QrOLz6t5gT0gZ8K6jutCAzXgnD1RoxT2Q mQ== 
+Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3ntp98d916-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 20 Feb 2023 13:48:33 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 31KDmWXQ014742
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 20 Feb 2023 13:48:32 GMT
+Received: from [10.216.11.20] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.41; Mon, 20 Feb
+ 2023 05:48:24 -0800
+Message-ID: <989e460a-b92c-e056-75e5-4e2d36885ac3@quicinc.com>
+Date:   Mon, 20 Feb 2023 19:18:21 +0530
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH drm-next v2 03/16] maple_tree: split up MA_STATE() macro
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [PATCH 0/7] Add PCIe support for IPQ9574
 Content-Language: en-US
-To:     Matthew Wilcox <willy@infradead.org>
-Cc:     airlied@gmail.com, daniel@ffwll.ch, tzimmermann@suse.de,
-        mripard@kernel.org, corbet@lwn.net, christian.koenig@amd.com,
-        bskeggs@redhat.com, Liam.Howlett@oracle.com,
-        matthew.brost@intel.com, boris.brezillon@collabora.com,
-        alexdeucher@gmail.com, ogabbay@kernel.org, bagasdotme@gmail.com,
-        jason@jlekstrand.net, dri-devel@lists.freedesktop.org,
-        nouveau@lists.freedesktop.org, linux-doc@vger.kernel.org,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org
-References: <20230217134422.14116-1-dakr@redhat.com>
- <20230217134422.14116-4-dakr@redhat.com>
- <Y+/ZW/8WXzrkQnUT@casper.infradead.org>
-From:   Danilo Krummrich <dakr@redhat.com>
-Organization: RedHat
-In-Reply-To: <Y+/ZW/8WXzrkQnUT@casper.infradead.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+To:     Sricharan Ramabadhran <quic_srichara@quicinc.com>,
+        <agross@kernel.org>, <andersson@kernel.org>,
+        <konrad.dybcio@linaro.org>, <lpieralisi@kernel.org>,
+        <kw@linux.com>, <robh@kernel.org>, <bhelgaas@google.com>,
+        <krzysztof.kozlowski+dt@linaro.org>, <vkoul@kernel.org>,
+        <kishon@kernel.org>, <mturquette@baylibre.com>, <sboyd@kernel.org>,
+        <mani@kernel.org>, <p.zabel@pengutronix.de>,
+        <linux-arm-msm@vger.kernel.org>, <linux-pci@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-phy@lists.infradead.org>, <linux-clk@vger.kernel.org>
+CC:     <quic_gokulsri@quicinc.com>, <quic_sjaganat@quicinc.com>,
+        <quic_kathirav@quicinc.com>, <quic_arajkuma@quicinc.com>,
+        <quic_anusha@quicinc.com>
+References: <20230214164135.17039-1-quic_devipriy@quicinc.com>
+ <a987fc17-3924-7ece-59e2-3fa1d000afc1@quicinc.com>
+From:   Devi Priya <quic_devipriy@quicinc.com>
+In-Reply-To: <a987fc17-3924-7ece-59e2-3fa1d000afc1@quicinc.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: RcJZbM2r-nlb2Q96w9jR_KwfenFL0kh4
+X-Proofpoint-ORIG-GUID: RcJZbM2r-nlb2Q96w9jR_KwfenFL0kh4
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.170.22
+ definitions=2023-02-20_11,2023-02-20_02,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=755 mlxscore=0
+ adultscore=0 priorityscore=1501 malwarescore=0 suspectscore=0
+ lowpriorityscore=0 bulkscore=0 clxscore=1015 impostorscore=0 spamscore=0
+ phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2302200125
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/17/23 20:45, Matthew Wilcox wrote:
-> On Fri, Feb 17, 2023 at 02:44:09PM +0100, Danilo Krummrich wrote:
->> \#define SAMPLE_ITER(name, __mgr) \
->> 	struct sample_iter name = { \
->> 		.mas = __MA_STATE(&(__mgr)->mt, 0, 0),
+
+
+On 2/17/2023 2:18 PM, Sricharan Ramabadhran wrote:
 > 
-> This is usually called MA_STATE_INIT()
-
-Yep, that's better.
-
 > 
->> #define sample_iter_for_each_range(it__, start__, end__) \
->> 	for ((it__).mas.index = start__, (it__).entry = mas_find(&(it__).mas, end__ - 1); \
->> 	     (it__).entry; (it__).entry = mas_find(&(it__).mas, end__ - 1))
+> On 2/14/2023 10:11 PM, Devi Priya wrote:
+>> PCIe0, PCIe1, PCIe2, PCIe3 (and corresponding PHY) devices
+>> are found on IPQ9574 platform. The PCIe0 & PCIe1 are 1-lane
+>> Gen3 host whereas PCIe2 & PCIe3 are 2-lane Gen3 host.
+>>
+>> This series adds support for enabling the same
+>>
 > 
-> This is a bad iterator design.  It's usually best to do this:
 > 
-> 	struct sample *sample;
-> 	SAMPLE_ITERATOR(si, min);
+> <svarbanov@mm-sol.com>  --> This is bouncing, please remove it
 > 
-> 	sample_iter_for_each(&si, sample, max) {
-> 		frob(mgr, sample);
-> 	}
-> 
+Sure, okay
 
+> Regards,
+>   Sricharan
 
-The reason why I don't set index (and max) within SAMPLE_ITER() is that 
-the range to iterate might not yet be known at that time, so I thought 
-it could just be set in sample_iter_for_each_range().
-
-However, I see that this might prevail users to assume that it's safe to 
-iterate a range based on the same iterator instance multiple times 
-though. Instead users should maybe move the tree walk to another 
-function once the range is known.
-
-The reason for the payload structure to be part of the iterator is that 
-I have two maple trees in the GPUVA manager and hence two different 
-payload types. Within the iterator structure they're just within a union 
-allowing me to implement the tree walk macro just once rather than twice.
-
-Anyway, I feel like your approach looks cleaner, hence I'll change it.
-
-> I don't mind splitting apart MA_STATE_INIT from MA_STATE, and if you
-> do that, we can also use it in VMA_ITERATOR.
-> 
-
+Best Regards,
+Devi Priya
