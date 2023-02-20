@@ -2,77 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A1EF69C6CF
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Feb 2023 09:35:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F2A469C6D0
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Feb 2023 09:35:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231243AbjBTIfV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Feb 2023 03:35:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49912 "EHLO
+        id S231162AbjBTIff (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Feb 2023 03:35:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50682 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230178AbjBTIfK (ORCPT
+        with ESMTP id S230178AbjBTIfc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Feb 2023 03:35:10 -0500
-Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 442A326B5
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Feb 2023 00:35:08 -0800 (PST)
-Received: by mail-ed1-x535.google.com with SMTP id eq27so6110224edb.5
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Feb 2023 00:35:08 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=zPgdhAOmSIiYem88u79FyFtC580XWiSnDRefpcl3wxU=;
-        b=XWuKWkAULnvOtoiztVJqveR6mJF0HJSLsHXvwCqTl47YE1Z09KyvXcf2p6HuH/9tS6
-         1VDN4XRJZFPJ3TPX8UXippcMlEA0yObXO3eSR/pw60Ks8dgBAyQYb47UHzfHVXKItjVf
-         9Lhk5+6yRVZi77L8OaxOOQFy9v8X+xQsKbG0ec3Fz7M534XEnmPtGXufX11HGrFzvseG
-         JcYBiUgG+Qgda7WMkNL0PdAv9Mjw5qmgRhcA1s+o7HTP3BA5JqT7YhiRiPQ2WKLOaHq5
-         W7DiYnGWmCTc+yiQohwONZc2jOyTKiV5RAdFIS9ni36dJWzATWW/GKDy3GnRl8boJl5o
-         3iZg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=zPgdhAOmSIiYem88u79FyFtC580XWiSnDRefpcl3wxU=;
-        b=tls2L2NEWqyZkllZqbKPI9CSGBc+0WNW6PRDiArTcyv7VMzMYoTe99rGScMOEeNOPl
-         Mb/zq+yuPA3WSR2MvjQ4Sg/9gHHAiMZD57IsF7cu/1pJyZ6CDXaXjtO0Wdv7sRI0L8bb
-         cKqkoP88KZHpe6DqO+QHDVvgeX9pH969EbvrAtxm8K7sUtsjhCrBBV8lqMUa0jCRyOyC
-         +eR8CaUTtG1wxqyW/v/V92qkCUkjl80TfzxhuUiBKyK3atHjzcvFIyvXPOz0FU81jm79
-         mr/iiWsPG/2axsOJzg0vTb1naWbRXrtyhcWUKxtWn86OGqxLyFRS6bTKvWdfP3K779qi
-         kW8w==
-X-Gm-Message-State: AO0yUKWdHlslW93IbDOE798eAWD/vesuXHrii+Mm+pjJjMCH8djQEPe0
-        w1U1J5gLV9D4YdSEQfPth76t9Q==
-X-Google-Smtp-Source: AK7set80th0Zs5GwkSRoZ8yyoVVCdR5vADjna3NgcLVVDgQANN7HhHjfPwAuhBHbUzPjMXDUMdQ9sw==
-X-Received: by 2002:a17:906:174b:b0:88e:e6ee:feab with SMTP id d11-20020a170906174b00b0088ee6eefeabmr9286561eje.62.1676882106773;
-        Mon, 20 Feb 2023 00:35:06 -0800 (PST)
-Received: from [192.168.1.109] ([178.197.216.144])
-        by smtp.gmail.com with ESMTPSA id y16-20020a17090629d000b008cc0294b69esm1665877eje.108.2023.02.20.00.35.05
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 20 Feb 2023 00:35:06 -0800 (PST)
-Message-ID: <676c7777-635c-cc1f-b919-d33e84a45442@linaro.org>
-Date:   Mon, 20 Feb 2023 09:35:04 +0100
+        Mon, 20 Feb 2023 03:35:32 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 995F3C656
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Feb 2023 00:35:23 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3341260D14
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Feb 2023 08:35:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8A52FC433EF;
+        Mon, 20 Feb 2023 08:35:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1676882122;
+        bh=t6o76SpkKeY0IDaJlCcpDVZz0b59aNg8O2fMx9z3208=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=da/twIOg+FJsGXDHG1kgjRR4NcXBO0fHM5I3FX69wQMCMrn5RWwc9FJQR9uQzpF96
+         kQfj/xoa6H2p4yHQQlkJ+JPVFiyWb9PPL0vA/+fnCEjfwfg1exTPPRJ7HKZNCS6ws2
+         h5CaUJpaOJmiSk9TqBmn1gwd06LTr7M3I2qSHThNaNOlNtnQirLqpM7042vkmj0nsd
+         V+aTDXnDyp6NhkCHjm7A0M//dx3+gGGkTVkKIp7LKscxcviSeOKJq7te0ZjGPHa1py
+         5oc6lMnMfAX7gM+jPP/az7ZCjXOZhiQtJm1Tm4Uly7b1PnH4kBc5dMbohZmYVrHfW0
+         z2egG6w/f4z7Q==
+Received: from disco-boy.misterjones.org ([51.254.78.96] helo=www.loen.fr)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <maz@kernel.org>)
+        id 1pU1do-00Bjku-3c;
+        Mon, 20 Feb 2023 08:35:20 +0000
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH v5 1/2] dt-bindings: i2c: Add support for ASPEED i2Cv2
-Content-Language: en-US
-To:     Ryan Chen <ryan_chen@aspeedtech.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Joel Stanley <joel@jms.id.au>,
-        Andrew Jeffery <andrew@aj.id.au>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        openbmc@lists.ozlabs.org, linux-arm-kernel@lists.infradead.org,
-        linux-aspeed@lists.ozlabs.org, linux-kernel@vger.kernel.org
-References: <20230220061745.1973981-1-ryan_chen@aspeedtech.com>
- <20230220061745.1973981-2-ryan_chen@aspeedtech.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230220061745.1973981-2-ryan_chen@aspeedtech.com>
-Content-Type: text/plain; charset=UTF-8
+Date:   Mon, 20 Feb 2023 08:35:19 +0000
+From:   Marc Zyngier <maz@kernel.org>
+To:     Palmer Dabbelt <palmer@dabbelt.com>
+Cc:     apatel@ventanamicro.com, Paul Walmsley <paul.walmsley@sifive.com>,
+        tglx@linutronix.de, daniel.lezcano@linaro.org, marcan@marcan.st,
+        sven@svenpeter.dev, alyssa@rosenzweig.io, atishp@atishpatra.org,
+        Alistair Francis <Alistair.Francis@wdc.com>,
+        anup@brainfault.org, linux-riscv@lists.infradead.org,
+        linux-kernel@vger.kernel.org, asahi@lists.linux.dev
+Subject: Re: [PATCH v16 0/9] RISC-V IPI Improvements
+In-Reply-To: <mhng-a886c4b4-d748-420f-889b-76ada4f9a432@palmer-ri-x1c9>
+References: <mhng-a886c4b4-d748-420f-889b-76ada4f9a432@palmer-ri-x1c9>
+User-Agent: Roundcube Webmail/1.4.13
+Message-ID: <0a0d1a182cef674a8e70347b2ed6f67b@kernel.org>
+X-Sender: maz@kernel.org
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+X-SA-Exim-Connect-IP: 51.254.78.96
+X-SA-Exim-Rcpt-To: palmer@dabbelt.com, apatel@ventanamicro.com, paul.walmsley@sifive.com, tglx@linutronix.de, daniel.lezcano@linaro.org, marcan@marcan.st, sven@svenpeter.dev, alyssa@rosenzweig.io, atishp@atishpatra.org, Alistair.Francis@wdc.com, anup@brainfault.org, linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org, asahi@lists.linux.dev
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -80,125 +70,54 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 20/02/2023 07:17, Ryan Chen wrote:
-> AST2600 support new register set for I2Cv2 controller, add bindings
-> document to support driver of i2cv2 new register mode controller.
+On 2023-02-15 03:17, Palmer Dabbelt wrote:
+> On Sun, 05 Feb 2023 03:04:14 PST (-0800), Marc Zyngier wrote:
+>> On Tue, 03 Jan 2023 14:12:12 +0000,
+>> Anup Patel <apatel@ventanamicro.com> wrote:
+>>> 
+>>> This series aims to improve IPI support in Linux RISC-V in following 
+>>> ways:
+>>>  1) Treat IPIs as normal per-CPU interrupts instead of having custom 
+>>> RISC-V
+>>>     specific hooks. This also makes Linux RISC-V IPI support aligned 
+>>> with
+>>>     other architectures.
+>>>  2) Remote TLB flushes and icache flushes should prefer local IPIs 
+>>> instead
+>>>     of SBI calls whenever we have specialized hardware (such as 
+>>> RISC-V AIA
+>>>     IMSIC and RISC-V SWI) which allows S-mode software to directly 
+>>> inject
+>>>     IPIs without any assistance from M-mode runtime firmware.
+>> 
+>> [...]
+>> 
+>> I'm queuing patches 3 and 9 via the irqchip tree as they are
+>> standalone.
+>> 
+>> For the rest, I need an Ack from the riscv maintainers as they change
+>> a large amount of arch-specific code, and the couple of irqchip
+>> patches depend on these changes.
+>> 
+>> Palmer, Paul?
 > 
-> Signed-off-by: Ryan Chen <ryan_chen@aspeedtech.com>
-> ---
->  .../devicetree/bindings/i2c/aspeed,i2cv2.yaml | 83 +++++++++++++++++++
->  1 file changed, 83 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/i2c/aspeed,i2cv2.yaml
-
-New compatible is okay, but as this is the same controller as old one,
-this should go to old binding.
-
-There are several issues anyway here, but I won't reviewing it except
-few obvious cases.
-
+> I haven't gotten time to give this a proper review, but I think we've
+> got enough of a mess with our interrupt handling that it doesn't
+> really matter so
 > 
-> diff --git a/Documentation/devicetree/bindings/i2c/aspeed,i2cv2.yaml b/Documentation/devicetree/bindings/i2c/aspeed,i2cv2.yaml
-> new file mode 100644
-> index 000000000000..913fb45d5fbe
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/i2c/aspeed,i2cv2.yaml
-> @@ -0,0 +1,83 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/i2c/aspeed,i2cv2.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: ASPEED I2Cv2 Controller on the AST26XX SoCs
-> +
-> +maintainers:
-> +  - Ryan Chen <ryan_chen@aspeedtech.com>
-> +
-> +allOf:
-> +  - $ref: /schemas/i2c/i2c-controller.yaml#
-> +
-> +properties:
-> +  compatible:
-> +    enum:
-> +      - aspeed,ast2600-i2cv2
-> +
-> +  reg:
-> +    minItems: 1
-> +    items:
-> +      - description: address offset and range of register
-> +      - description: address offset and range of buffer register
+> Acked-by: Palmer Dabbelt <palmer@rivosinc.com>
+> 
+> if you want to take it for this cycle that's fine with me, but I'm
+> also fine holding off so it can have a while to bake in linux-next --
+> there's no real rush for any of this, as there's no hardware yet.
 
-Why this is optional?
+Letting this sort of things simmering in -next is the way.
 
-> +
-> +  interrupts:
-> +    maxItems: 1
-> +
-> +  clocks:
-> +    maxItems: 1
-> +    description:
-> +      Reference clock for the I2C bus
-> +
-> +  resets:
-> +    maxItems: 1
-> +
-> +  clock-frequency:
-> +    description:
-> +      Desired I2C bus clock frequency in Hz. default 100khz.
-> +
-> +  multi-master:
-> +    type: boolean
-> +    description:
-> +      states that there is another master active on this bus
+Now that the basic dependencies are on their way, I'd expect this to be
+rebased on 6.3-rc1, and we can then put the whole thing in -next.
 
-Drop description and type. Just :true.
+Thanks,
 
-> +
-> +  timeout:
-> +    type: boolean
-> +    description: Enable i2c bus timeout for master/slave (35ms)
-
-Why this is property for DT? It's for sure not bool, but proper type
-coming from units.
-
-> +
-> +  byte-mode:
-> +    type: boolean
-> +    description: Force i2c driver use byte mode transmit
-
-Drop, not a DT property.
-
-> +
-> +  buff-mode:
-> +    type: boolean
-> +    description: Force i2c driver use buffer mode transmit
-
-Drop, not a DT property.
-
-> +
-> +  aspeed,gr:
-> +    $ref: /schemas/types.yaml#/definitions/phandle
-> +    description: The phandle of i2c global register node.
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +  - interrupts
-> +  - clocks
-> +  - resets
-> +  - aspeed,gr
-> +
-> +unevaluatedProperties: false
-> +
-> +examples:
-> +  - |
-> +    #include <dt-bindings/interrupt-controller/arm-gic.h>
-> +    #include <dt-bindings/clock/ast2600-clock.h>
-> +    i2c: i2c-bus@80 {
-
-You did not test the bindings... This is i2c.
-
-
-Best regards,
-Krzysztof
-
+         M.
+-- 
+Jazz is not dead. It just smells funny...
