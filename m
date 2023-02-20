@@ -2,88 +2,156 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1467F69C667
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Feb 2023 09:17:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DDFB569C642
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Feb 2023 09:04:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229840AbjBTIRO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Feb 2023 03:17:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33514 "EHLO
+        id S230288AbjBTIEP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Feb 2023 03:04:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55580 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229678AbjBTIRM (ORCPT
+        with ESMTP id S230238AbjBTIEN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Feb 2023 03:17:12 -0500
-X-Greylist: delayed 929 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 20 Feb 2023 00:17:09 PST
-Received: from 5.mo560.mail-out.ovh.net (5.mo560.mail-out.ovh.net [87.98.181.248])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACF3412063
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Feb 2023 00:17:09 -0800 (PST)
-Received: from director11.ghost.mail-out.ovh.net (unknown [10.108.1.121])
-        by mo560.mail-out.ovh.net (Postfix) with ESMTP id 2BC1A20BB6
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Feb 2023 08:01:38 +0000 (UTC)
-Received: from ghost-submission-6684bf9d7b-b5gl9 (unknown [10.110.103.34])
-        by director11.ghost.mail-out.ovh.net (Postfix) with ESMTPS id 460391FEB7;
-        Mon, 20 Feb 2023 08:01:37 +0000 (UTC)
-Received: from milecki.pl ([37.59.142.97])
-        by ghost-submission-6684bf9d7b-b5gl9 with ESMTPSA
-        id RQ+QBuEo82NWsBMAbEMOzw
-        (envelope-from <rafal@milecki.pl>); Mon, 20 Feb 2023 08:01:37 +0000
-Authentication-Results: garm.ovh; auth=pass (GARM-97G00236d10b2f-d027-4f6b-9238-bcc4db552a7c,
-                    EFA20DE6CD4C4DB577D33D0A6633E50025442685) smtp.auth=rafal@milecki.pl
-X-OVh-ClientIp: 194.187.74.233
-Message-ID: <724bcb6f-775d-a7be-d47c-447dc8ac4c19@milecki.pl>
-Date:   Mon, 20 Feb 2023 09:01:36 +0100
+        Mon, 20 Feb 2023 03:04:13 -0500
+Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21846CC3E
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Feb 2023 00:04:11 -0800 (PST)
+Received: by mail-ed1-x52b.google.com with SMTP id h32so1388303eda.2
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Feb 2023 00:04:11 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=88lumBnapMN7Ps8Hk/t0fPR3JUqopUiwWmOnEOlc2Ws=;
+        b=iv2wsbD8ixRzECtunIA135V2n+ioaO7wEObmSzYZhRFZTPB0DtI+Pa5Y8yG5Zgc2Ul
+         pReND9ioKG44Zifqoiu3zKe4IEPn2R27mkdfHdnyF1ZsAoTW0flND5qUAisZNKKMLKl2
+         pBo0mQYsaG7QCLvxkYJ8TR+aaeABws3PD9ZW/Y5clAuLETFr5DrMWbyn5SNuc7zDVN4A
+         rOobs03cbKom8XT4A0d3kgsbs+E6fEAAxclBogri63fXpwca5NqyA3+vThBT/77oSfpQ
+         9BX8kikm6xHsLg36zzmGdWw4VKr4D+aMGAWkNg3d45QYVYXx1uTo4pL/JKj4hppItDTv
+         pJYg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=88lumBnapMN7Ps8Hk/t0fPR3JUqopUiwWmOnEOlc2Ws=;
+        b=OkMlyTjhmObCg3B6z663hiICfQ6vpKoqNeXZcDA8N03JkqyLw583DpAt4rY1V87HAe
+         prjBooMbTlRepXmXpCG5cVpmLAB2I58eKzKx+Hg0VvHuYya0k+k4AhJ1u/U6TA2KDrLP
+         kIrqsYsc7uaAFf0LoV0m2jp9J4RTetkYtH2krpkjsQhnheYgpAw+TIkXU3k3VIowwCfb
+         qwYunyEVhzNvwj/igwtpGHQFX/+Fm56GgmrdbcyjEohYj8ov34C9VebgIi149C9NW83J
+         XD7etiTqnDotTlqqhTg28MDKzeLOyGDFd579O2L5T8uNA5PjxYg7tBtY2CuurY8dZWPx
+         iSjA==
+X-Gm-Message-State: AO0yUKU1vfY2SwvUaKBAgEqEQNYHNX8SET6IqNhrj01H9mz5fL8ZEUjl
+        upbzB6C/boFvd4EBEBE+Nxa5hQ==
+X-Google-Smtp-Source: AK7set9Hivfdi5qmCapoh8XxH5/JBmdwusVTUbOJ1qWsWjyJy8ITtqKPhFZuTlU28cbY75K6X/ZwKg==
+X-Received: by 2002:a17:906:a87:b0:878:955e:b4a4 with SMTP id y7-20020a1709060a8700b00878955eb4a4mr8105935ejf.33.1676880249568;
+        Mon, 20 Feb 2023 00:04:09 -0800 (PST)
+Received: from [192.168.1.109] ([178.197.216.144])
+        by smtp.gmail.com with ESMTPSA id y6-20020a17090668c600b008874c903ec5sm5416739ejr.43.2023.02.20.00.04.08
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 20 Feb 2023 00:04:09 -0800 (PST)
+Message-ID: <646cc26f-ed98-10fc-217b-5dc4416670a6@linaro.org>
+Date:   Mon, 20 Feb 2023 09:04:07 +0100
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:96.0) Gecko/20100101
- Thunderbird/96.0
-Subject: Re: [PATCH v3] nvmem: u-boot-env: align endianness of crc32 values
-To:     INAGAKI Hiroshi <musashino.open@gmail.com>,
-        srinivas.kandagatla@linaro.org
-Cc:     chunkeey@gmail.com, linux-kernel@vger.kernel.org
-References: <20230213132351.837-1-musashino.open@gmail.com>
-From:   =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <rafal@milecki.pl>
-In-Reply-To: <20230213132351.837-1-musashino.open@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH] dt-bindings: interrupt-controller: convert
+ loongson,ls1x-intc.txt to json-schema
+Content-Language: en-US
+To:     Keguang Zhang <keguang.zhang@gmail.com>,
+        linux-mips@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Marc Zyngier <maz@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>
+References: <20230218122236.1919465-1-keguang.zhang@gmail.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230218122236.1919465-1-keguang.zhang@gmail.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Ovh-Tracer-Id: 2945635633656343515
-X-VR-SPAMSTATE: OK
-X-VR-SPAMSCORE: 0
-X-VR-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvhedrudejgedgudduvdcutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfqggfjpdevjffgvefmvefgnecuuegrihhlohhuthemucehtddtnecunecujfgurhepkfffgggfuffvvehfhfgjtgfgsehtjeertddtfeejnecuhfhrohhmpeftrghfrghlucfoihhlvggtkhhiuceorhgrfhgrlhesmhhilhgvtghkihdrphhlqeenucggtffrrghtthgvrhhnpedtgeetheeutddvudekuddtkeetveehteegleehffetkeehjeetfffgveegkeefueenucfkphepuddvjedrtddrtddruddpfeejrdehledrudegvddrleejnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepuddvjedrtddrtddruddpmhgrihhlfhhrohhmpeeorhgrfhgrlhesmhhilhgvtghkihdrphhlqedpnhgspghrtghpthhtohepuddprhgtphhtthhopehlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnhgvlhdrohhrghdpoffvtefjohhsthepmhhoheeitddpmhhouggvpehsmhhtphhouhht
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 13.02.2023 14:23, INAGAKI Hiroshi wrote:
-> @@ -117,8 +117,8 @@ static int u_boot_env_parse(struct u_boot_env *priv)
->   	size_t crc32_offset;
->   	size_t data_offset;
->   	size_t data_len;
-> -	uint32_t crc32;
-> -	uint32_t calc;
-> +	__le32 crc32;
-> +	__le32 calc;
->   	size_t bytes;
->   	uint8_t *buf;
->   	int err;
-> @@ -152,11 +152,11 @@ static int u_boot_env_parse(struct u_boot_env *priv)
->   		data_offset = offsetof(struct u_boot_env_image_broadcom, data);
->   		break;
->   	}
-> -	crc32 = le32_to_cpu(*(__le32 *)(buf + crc32_offset));
-> +	crc32 = cpu_to_le32(*(uint32_t *)(buf + crc32_offset));
->   	crc32_data_len = priv->mtd->size - crc32_data_offset;
->   	data_len = priv->mtd->size - data_offset;
->   
-> -	calc = crc32(~0, buf + crc32_data_offset, crc32_data_len) ^ ~0L;
-> +	calc = cpu_to_le32(crc32(~0, buf + crc32_data_offset, crc32_data_len) ^ ~0L);
+On 18/02/2023 13:22, Keguang Zhang wrote:
+> Convert the Loongson1 interrupt controller dt-bindings to json-schema.
+> 
+> Signed-off-by: Keguang Zhang <keguang.zhang@gmail.com>
+> ---
+>  .../loongson,ls1x-intc.txt                    | 24 ---------
+>  .../loongson,ls1x-intc.yaml                   | 51 +++++++++++++++++++
+>  2 files changed, 51 insertions(+), 24 deletions(-)
+>  delete mode 100644 Documentation/devicetree/bindings/interrupt-controller/loongson,ls1x-intc.txt
+>  create mode 100644 Documentation/devicetree/bindings/interrupt-controller/loongson,ls1x-intc.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/interrupt-controller/loongson,ls1x-intc.txt b/Documentation/devicetree/bindings/interrupt-controller/loongson,ls1x-intc.txt
+> deleted file mode 100644
+> index a63ed9fcb535..000000000000
+> --- a/Documentation/devicetree/bindings/interrupt-controller/loongson,ls1x-intc.txt
+> +++ /dev/null
+> @@ -1,24 +0,0 @@
+> -Loongson ls1x Interrupt Controller
+> -
+> -Required properties:
+> -
+> -- compatible : should be "loongson,ls1x-intc". Valid strings are:
+> -
+> -- reg : Specifies base physical address and size of the registers.
+> -- interrupt-controller : Identifies the node as an interrupt controller
+> -- #interrupt-cells : Specifies the number of cells needed to encode an
+> -  interrupt source. The value shall be 2.
+> -- interrupts : Specifies the CPU interrupt the controller is connected to.
+> -
+> -Example:
+> -
+> -intc: interrupt-controller@1fd01040 {
+> -	compatible = "loongson,ls1x-intc";
+> -	reg = <0x1fd01040 0x18>;
+> -
+> -	interrupt-controller;
+> -	#interrupt-cells = <2>;
+> -
+> -	interrupt-parent = <&cpu_intc>;
+> -	interrupts = <2>;
+> -};
+> diff --git a/Documentation/devicetree/bindings/interrupt-controller/loongson,ls1x-intc.yaml b/Documentation/devicetree/bindings/interrupt-controller/loongson,ls1x-intc.yaml
+> new file mode 100644
+> index 000000000000..4cea3ee9fbb1
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/interrupt-controller/loongson,ls1x-intc.yaml
+> @@ -0,0 +1,51 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/interrupt-controller/loongson,ls1x-intc.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Loongson-1 Interrupt Controller
 
-Can you see what happens on BE device if instead of this whole patch you
-just replace crc32() in above line with crc32_le()?
+You changed the title, so this binding now will cover all Loonson-1
+interrupt controllers?
+
+> +
+> +maintainers:
+> +  - Keguang Zhang <keguang.zhang@gmail.com>
+> +
+> +description: |
+
+Drop |
+
+> +  Loongson-1 interrupt controller is connected to the MIPS core interrupt
+> +  controller, which controls several groups of interrupts.
+> +
 
 
->   	if (calc != crc32) {
->   		dev_err(dev, "Invalid calculated CRC32: 0x%08x (expected: 0x%08x)\n", calc, crc32);
->   		err = -EINVAL;
+Best regards,
+Krzysztof
+
