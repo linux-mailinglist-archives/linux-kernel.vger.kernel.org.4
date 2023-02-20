@@ -2,57 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A14B69D48D
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Feb 2023 21:15:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E10A869D490
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Feb 2023 21:16:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232556AbjBTUPV convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 20 Feb 2023 15:15:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33192 "EHLO
+        id S232574AbjBTUQD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Feb 2023 15:16:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34028 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232447AbjBTUPS (ORCPT
+        with ESMTP id S232564AbjBTUQB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Feb 2023 15:15:18 -0500
-Received: from lithops.sigma-star.at (lithops.sigma-star.at [195.201.40.130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB80D1EBE8;
-        Mon, 20 Feb 2023 12:15:17 -0800 (PST)
-Received: from localhost (localhost [127.0.0.1])
-        by lithops.sigma-star.at (Postfix) with ESMTP id 8192E6382EE5;
-        Mon, 20 Feb 2023 21:15:16 +0100 (CET)
-Received: from lithops.sigma-star.at ([127.0.0.1])
-        by localhost (lithops.sigma-star.at [127.0.0.1]) (amavisd-new, port 10032)
-        with ESMTP id nCMa2EWiTZK8; Mon, 20 Feb 2023 21:15:15 +0100 (CET)
-Received: from localhost (localhost [127.0.0.1])
-        by lithops.sigma-star.at (Postfix) with ESMTP id 991D16382EFF;
-        Mon, 20 Feb 2023 21:15:15 +0100 (CET)
-Received: from lithops.sigma-star.at ([127.0.0.1])
-        by localhost (lithops.sigma-star.at [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id YFeslGAXLKQb; Mon, 20 Feb 2023 21:15:15 +0100 (CET)
-Received: from lithops.sigma-star.at (lithops.sigma-star.at [195.201.40.130])
-        by lithops.sigma-star.at (Postfix) with ESMTP id 768396382EE5;
-        Mon, 20 Feb 2023 21:15:15 +0100 (CET)
-Date:   Mon, 20 Feb 2023 21:15:15 +0100 (CET)
-From:   Richard Weinberger <richard@nod.at>
-To:     wei fang <wei.fang@nxp.com>
-Cc:     netdev <netdev@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        pabeni <pabeni@redhat.com>, kuba <kuba@kernel.org>,
-        edumazet <edumazet@google.com>, davem <davem@davemloft.net>,
-        linux-imx <linux-imx@nxp.com>,
-        xiaoning wang <xiaoning.wang@nxp.com>,
-        shenwei wang <shenwei.wang@nxp.com>
-Message-ID: <1448370281.155186.1676924115387.JavaMail.zimbra@nod.at>
-In-Reply-To: <PAXPR04MB81093DB4BF1F6A6B3F8F895088A49@PAXPR04MB8109.eurprd04.prod.outlook.com>
-References: <20230218214037.16977-1-richard@nod.at> <PAXPR04MB81093DB4BF1F6A6B3F8F895088A49@PAXPR04MB8109.eurprd04.prod.outlook.com>
-Subject: Re: [PATCH] [RFC] net: fec: Allow turning off IRQ coalescing
+        Mon, 20 Feb 2023 15:16:01 -0500
+Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02E2020073
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Feb 2023 12:15:59 -0800 (PST)
+Received: by mail-ed1-x52c.google.com with SMTP id f13so8467002edz.6
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Feb 2023 12:15:58 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ventanamicro.com; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=64v0b9wMigK7c/r93Ya8QO/swfrpWXwK/PsuhD+FDn4=;
+        b=NVZM89GiYAZYzEwCI4nIfa8QbXd+DNnr2PG59kkv6v1nsMejn/bDCCYjMo6XF3RGfg
+         IcrczEMXSrTvOKYP6gT2/3Xpw5/uGaTn9y5nKuurvkykWxI6fCm3oThETyeoSky95Wtx
+         ODu4fO/CavtyXmTanOeIAo5M4Cf0kJl5jwFNIet2iY84+bXmz+YoA0egvxWS970f0buA
+         FI/X370SWTcZEf9xB1QwlbrgbPSXpVedDsg5drq71CgkgjED2ocJ/ODruLGOuJswl0W/
+         uuv05daLFhjZS2lx2/LkaoMYAnbYtiVmcHN+DrQnm7mrSHx/C9ITHMCVFG3w2Pl1xebX
+         rqEg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=64v0b9wMigK7c/r93Ya8QO/swfrpWXwK/PsuhD+FDn4=;
+        b=kg3beUpY8Wbq3Rr/r39KglX1MTATnEo37E82/Yg+YX4y/X8w7JGzglwOXbYK9No8Na
+         4+2zClYzfvBR7Ym+aBwpwmY0M6y1IMoKs5XGu21rVAqb6CUa74q8NI4e7JPZqpoTuy+y
+         UPCWk331PGC8slPBf16PYrtX1FicXzKxA+Y0b/wlceMm0JR5hGK9tYcw2Zt4p1ZIGPK0
+         5w6I8HfUA4sNmlvuxDmdDbahOyXgv5nPLIhmHt4gt6ljyQwUmFmivugha+2gWr6TAq3L
+         F1vFoGMnxm4Wjsyxa0fTehCKWswMvqQr1It/FRYuN1mJy4R+Hy1TPvpE3Uyi0cIdmADw
+         iVpg==
+X-Gm-Message-State: AO0yUKWMpwKtyF/O+HTaCuNh9ib+NVwnjFn4NppvO2fXQzJVCdlx35cx
+        UjPY9Gxte/x/zomwZuq4SJ5yBw==
+X-Google-Smtp-Source: AK7set8EYvyS0KUGBYqhaUXbJMzPLDxhdTgj3Aa5X3d/dKS8NQ3loGJmrI55BK77rB9i9PNp/3+5vw==
+X-Received: by 2002:a17:906:3e43:b0:88a:2e57:9813 with SMTP id t3-20020a1709063e4300b0088a2e579813mr10027851eji.33.1676924157519;
+        Mon, 20 Feb 2023 12:15:57 -0800 (PST)
+Received: from localhost (cst2-173-16.cust.vodafone.cz. [31.30.173.16])
+        by smtp.gmail.com with ESMTPSA id gj18-20020a170906e11200b008d47cd2edfbsm1608023ejb.60.2023.02.20.12.15.56
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 20 Feb 2023 12:15:57 -0800 (PST)
+Date:   Mon, 20 Feb 2023 21:15:56 +0100
+From:   Andrew Jones <ajones@ventanamicro.com>
+To:     Sunil V L <sunilvl@ventanamicro.com>
+Cc:     Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Len Brown <lenb@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Marc Zyngier <maz@kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        linux-riscv@lists.infradead.org, linux-acpi@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Conor Dooley <conor.dooley@microchip.com>,
+        Anup Patel <apatel@ventanamicro.com>,
+        Atish Patra <atishp@rivosinc.com>,
+        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>
+Subject: Re: [PATCH V2 21/21] Documentation/kernel-parameters.txt: Add RISC-V
+ for ACPI parameter
+Message-ID: <20230220201556.i3dihi3oj2lwckno@orel>
+References: <20230216182043.1946553-1-sunilvl@ventanamicro.com>
+ <20230216182043.1946553-22-sunilvl@ventanamicro.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 8BIT
-X-Originating-IP: [195.201.40.130]
-X-Mailer: Zimbra 8.8.12_GA_3807 (ZimbraWebClient - FF97 (Linux)/8.8.12_GA_3809)
-Thread-Topic: Allow turning off IRQ coalescing
-Thread-Index: AQHZQ+Gy2VXqw+BDuEeU3ZeJCH1tfq7XFCgQXmSDC7w=
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,PDS_BAD_THREAD_QP_64,
-        SPF_HELO_NONE,T_SPF_PERMERROR autolearn=ham autolearn_force=no
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230216182043.1946553-22-sunilvl@ventanamicro.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -60,40 +85,48 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Wei Fang,
-
------ Ursprüngliche Mail -----
-> Von: "wei fang" <wei.fang@nxp.com>
->>  /* Set threshold for interrupt coalescing */
->> -static void fec_enet_itr_coal_set(struct net_device *ndev)
->> +static int fec_enet_itr_coal_set(struct net_device *ndev)
->>  {
->> +	bool disable_rx_itr = false, disable_tx_itr = false;
->>  	struct fec_enet_private *fep = netdev_priv(ndev);
-> disable_rx_itr should be defined below fep to follow the style of the reverse
-> Christmas tree.
-
-Of course, will fix in v2.
- 
->> -	int rx_itr, tx_itr;
->> +	struct device *dev = &fep->pdev->dev;
->> +	int rx_itr = 0, tx_itr = 0;
->> 
->> -	/* Must be greater than zero to avoid unpredictable behavior */
->> -	if (!fep->rx_time_itr || !fep->rx_pkts_itr ||
->> -	    !fep->tx_time_itr || !fep->tx_pkts_itr)
->> -		return;
->> +	if (!fep->rx_time_itr || !fep->rx_pkts_itr) {
->> +		if (fep->rx_time_itr || fep->rx_pkts_itr) {
+On Thu, Feb 16, 2023 at 11:50:43PM +0530, Sunil V L wrote:
+> With ACPI support added for RISC-V, this kernel parameter is also
+> supported on RISC-V. Hence, update the documentation.
 > 
-> I think the below should be better:
-> if (!!fep->rx_time_itr == ! fep->rx_pkts_itr)
+> Signed-off-by: Sunil V L <sunilvl@ventanamicro.com>
+> Acked-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> ---
+>  Documentation/admin-guide/kernel-parameters.txt | 8 ++++----
+>  1 file changed, 4 insertions(+), 4 deletions(-)
+> 
+> diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
+> index 6cfa6e3996cf..b3a5a5844daa 100644
+> --- a/Documentation/admin-guide/kernel-parameters.txt
+> +++ b/Documentation/admin-guide/kernel-parameters.txt
+> @@ -1,17 +1,17 @@
+> -	acpi=		[HW,ACPI,X86,ARM64]
+> +	acpi=		[HW,ACPI,X86,ARM64,RISC-V]
+>  			Advanced Configuration and Power Interface
+>  			Format: { force | on | off | strict | noirq | rsdt |
+>  				  copy_dsdt }
+>  			force -- enable ACPI if default was off
+> -			on -- enable ACPI but allow fallback to DT [arm64]
+> +			on -- enable ACPI but allow fallback to DT [arm64,riscv]
+>  			off -- disable ACPI if default was on
+>  			noirq -- do not use ACPI for IRQ routing
+>  			strict -- Be less tolerant of platforms that are not
+>  				strictly ACPI specification compliant.
+>  			rsdt -- prefer RSDT over (default) XSDT
+>  			copy_dsdt -- copy DSDT to memory
+> -			For ARM64, ONLY "acpi=off", "acpi=on" or "acpi=force"
+> -			are available
+> +			For ARM64 and RISC-V, ONLY "acpi=off", "acpi=on" or
+> +			"acpi=force" are available
+>  
+>  			See also Documentation/power/runtime_pm.rst, pci=noacpi
+>  
+> -- 
+> 2.34.1
+>
 
-At least it's shorter. :-)
-I'm not sure which variant is easier to understand, though.
-
-But in general you are fine with returning -EINVAL in this case?
-I'm asking because that a userspace visible change.
+I'd squash this into patch 18, "RISC-V: Add ACPI initialization in
+setup_arch()"
 
 Thanks,
-//richard
+drew
