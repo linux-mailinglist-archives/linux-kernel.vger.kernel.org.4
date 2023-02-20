@@ -2,94 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 453CD69CE27
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Feb 2023 14:56:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B456069CE75
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Feb 2023 14:59:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232580AbjBTN4t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Feb 2023 08:56:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46290 "EHLO
+        id S232800AbjBTN7a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Feb 2023 08:59:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51144 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232600AbjBTN4r (ORCPT
+        with ESMTP id S232767AbjBTN7R (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Feb 2023 08:56:47 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E58A51EBE8
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Feb 2023 05:56:21 -0800 (PST)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ore@pengutronix.de>)
-        id 1pU6eG-0006k3-QX; Mon, 20 Feb 2023 14:56:08 +0100
-Received: from [2a0a:edc0:0:1101:1d::ac] (helo=dude04.red.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <ore@pengutronix.de>)
-        id 1pU6eD-006HMG-Rk; Mon, 20 Feb 2023 14:56:07 +0100
-Received: from ore by dude04.red.stw.pengutronix.de with local (Exim 4.94.2)
-        (envelope-from <ore@pengutronix.de>)
-        id 1pU6eE-004laK-6u; Mon, 20 Feb 2023 14:56:06 +0100
-From:   Oleksij Rempel <o.rempel@pengutronix.de>
-To:     Andrew Lunn <andrew@lunn.ch>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>
-Cc:     Oleksij Rempel <o.rempel@pengutronix.de>, kernel@pengutronix.de,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        Russell King <linux@armlinux.org.uk>
-Subject: [PATCH net-next v1 4/4] net: phy: c45: genphy_c45_ethtool_set_eee: validate EEE link modes
-Date:   Mon, 20 Feb 2023 14:56:05 +0100
-Message-Id: <20230220135605.1136137-5-o.rempel@pengutronix.de>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20230220135605.1136137-1-o.rempel@pengutronix.de>
-References: <20230220135605.1136137-1-o.rempel@pengutronix.de>
+        Mon, 20 Feb 2023 08:59:17 -0500
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 005991EFEC;
+        Mon, 20 Feb 2023 05:58:58 -0800 (PST)
+Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: kholk11)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 5CF246602149;
+        Mon, 20 Feb 2023 13:58:30 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1676901511;
+        bh=SsOeXt+P4iwbX9REZy4GabzaEzha82/twxsj56mbnP0=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=ApwaLqnSxqZSACmOYBRcautqtgPCym4zXwmdQy3gJ8+JNxQGjJZz79agFwnCkU8qO
+         68q3OZBddtmNffxG7S29M9BYVR13x5iZcc8tBQ/uqzbg4s4vsceyZyI5gLMFlCBnXK
+         Q5uo2o3jWuosSwCatSLGMt981Q9+dHxZqEFBCJH3HuH2XJsLum95myMvAcU9hn7+vV
+         RNo6NQOwouOekReWXxCnO12RdNJZNvtBuxA+jantW3I2fsKKMgeAQnz8j4QdcIinBj
+         BDJLh9wQ19ZPmHBmDpghBon1bzqvglddr95ejGgiWlWhJmPg3G6E9nTuGFBkI2BcyT
+         fFjQdUfgJb0tA==
+Message-ID: <c6058eb2-0cb5-4cbd-e7d9-5ae5975be86f@collabora.com>
+Date:   Mon, 20 Feb 2023 14:58:27 +0100
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.2
+Subject: Re: [PATCH] scsi: ufs: Add select to CONFIG_PM in Kconfig
+Content-Language: en-US
+To:     Stephen Zhang <starzhangzsd@gmail.com>, jejb@linux.ibm.com,
+        artin.petersen@oracle.com, matthias.bgg@gmail.com,
+        beanhuo@micron.com, bvanassche@acm.org, avri.altman@wdc.com,
+        yoshihiro.shimoda.uh@renesas.com
+Cc:     linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, zhangshida@kylinos.cn,
+        k2ci <kernel-bot@kylinos.cn>
+References: <20230220083256.997470-1-zhangshida@kylinos.cn>
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <20230220083256.997470-1-zhangshida@kylinos.cn>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ore@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Currently, it is possible to let some PHYs to advertise not supported
-EEE link modes. So, validate them before overwriting existing
-configuration.
+Il 20/02/23 09:32, Stephen Zhang ha scritto:
+> From: Shida Zhang <zhangshida@kylinos.cn>
+> 
+> From: Shida Zhang <zhangshida@kylinos.cn>
+> 
+> In a configuration with CONFIG_SCSI_UFS_MEDIATEK set to 'm' and
+> CONFIG_PM set to 'n', errors occur at compile time:
+> 
+> ====
+> ../drivers/ufs/host/ufs-mediatek.c: In function ‘ufs_mtk_runtime_suspend’:
+> ../drivers/ufs/host/ufs-mediatek.c:1621:8: error: implicit declaration of function ‘ufshcd_runtime_suspend’; did you mean ‘ufs_mtk_runtime_suspend’? [-Werror=implicit-function-declaration]
+> ../drivers/ufs/host/ufs-mediatek.c: In function ‘ufs_mtk_runtime_resume’:
+> ../drivers/ufs/host/ufs-mediatek.c:1636:9: error: implicit declaration of function ‘ufshcd_runtime_resume’; did you mean ‘ufs_mtk_runtime_resume’? [-Werror=implicit-function-declaration]
+> ====
+> 
 
-Signed-off-by: Oleksij Rempel <o.rempel@pengutronix.de>
----
- drivers/net/phy/phy-c45.c | 12 +++++++++++-
- 1 file changed, 11 insertions(+), 1 deletion(-)
+That's wrong. This driver should be made to compile for both !CONFIG_PM
+and CONFIG_PM.
 
-diff --git a/drivers/net/phy/phy-c45.c b/drivers/net/phy/phy-c45.c
-index 974d6e96fc71..34efade0e2c3 100644
---- a/drivers/net/phy/phy-c45.c
-+++ b/drivers/net/phy/phy-c45.c
-@@ -1439,8 +1439,18 @@ int genphy_c45_ethtool_set_eee(struct phy_device *phydev,
- 
- 	if (data->eee_enabled) {
- 		phydev->eee_enabled = true;
--		if (data->advertised)
-+		if (data->advertised) {
-+			__ETHTOOL_DECLARE_LINK_MODE_MASK(adv) = {};
-+
-+			adv[0] = data->advertised;
-+			linkmode_andnot(adv, adv, phydev->supported_eee);
-+			if (!linkmode_empty(adv)) {
-+				phydev_warn(phydev, "At least some EEE link modes are not supported.\n");
-+				return -EINVAL;
-+			}
-+
- 			phydev->advertising_eee[0] = data->advertised;
-+		}
- 	} else {
- 		phydev->eee_enabled = false;
- 	}
--- 
-2.30.2
+Regards,
+Angelo
+
+> This patch fixes these by selecting CONFIG_PM from CONFIG_SCSI_UFS_MEDIATEK.
+> 
+> Reported-by: k2ci <kernel-bot@kylinos.cn>
+> Signed-off-by: Shida Zhang <zhangshida@kylinos.cn>
+> ---
+>   drivers/ufs/host/Kconfig | 1 +
+>   1 file changed, 1 insertion(+)
+> 
+> diff --git a/drivers/ufs/host/Kconfig b/drivers/ufs/host/Kconfig
+> index 4cc2dbd79ed0..f9786f085b54 100644
+> --- a/drivers/ufs/host/Kconfig
+> +++ b/drivers/ufs/host/Kconfig
+> @@ -71,6 +71,7 @@ config SCSI_UFS_QCOM
+>   config SCSI_UFS_MEDIATEK
+>   	tristate "Mediatek specific hooks to UFS controller platform driver"
+>   	depends on SCSI_UFSHCD_PLATFORM && ARCH_MEDIATEK
+> +	select PM
+>   	select PHY_MTK_UFS
+>   	select RESET_TI_SYSCON
+>   	help
+
 
