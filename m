@@ -2,36 +2,36 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ADC9569C8E7
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Feb 2023 11:49:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A603F69C8EA
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Feb 2023 11:49:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231682AbjBTKtC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Feb 2023 05:49:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39896 "EHLO
+        id S231694AbjBTKtF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Feb 2023 05:49:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39912 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229741AbjBTKtA (ORCPT
+        with ESMTP id S231643AbjBTKtB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Feb 2023 05:49:00 -0500
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F5BFAD0D;
+        Mon, 20 Feb 2023 05:49:01 -0500
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD1F1B77E;
         Mon, 20 Feb 2023 02:48:59 -0800 (PST)
 Received: from benjamin-XPS-13-9310.. (unknown [IPv6:2a01:e0a:120:3210:d30c:b155:96fb:dcc])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
         (Authenticated sender: benjamin.gaignard)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id A41796602135;
-        Mon, 20 Feb 2023 10:48:57 +0000 (GMT)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 362366602149;
+        Mon, 20 Feb 2023 10:48:58 +0000 (GMT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
         s=mail; t=1676890138;
-        bh=mU6dx4hn+cwCgHPnwybSeD67XSVlGhz85RqJ+3iMsW4=;
+        bh=nAuFKvKMZ2YBTXOWwp+TuprTbhS3UMLPUmAFqn4ND1I=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=hAfqO2zphslE1XZvxsSv+wFSwQhqwzKxh9Q7tQbrLqNKyvhEdb81v1OPRszY8PjRP
-         hVTDcMTwz2MRa7IrTbdz9G152y1AI8h5F9wAljx/fKMskyczSQX4zeZtM2REANUFgv
-         hEp4dXxdLy+/UMN9v9+w/COy6OdT1XUcvFLfvd8Y8nYcuccYdgIoQ2ynV+m4aO4gA4
-         fVDzIp3VCY9476oE36M/61O70q1iYTHWV10wGduc5M6oGvjDeSXRDi664JPbibvpcK
-         VTZvyYMvag6I1XF+aPzKRfdx5Wk855nDnx1KMlyekOGrnVaXfaCH+B4CE589MAewaP
-         NichsQwCaqt2w==
+        b=CHnsD/NNj+DyMumjt9VtCfdS16dVMvfR3ArcmpJYFx/Jz0vIJYEWJzw8uxZoSTHXU
+         l9Aw7fyj34YpCyfsKPVsAWnK7DyBfWDrEcsxFLMG1SN+cmPb91FhILwC4lA+sKwoVm
+         KaatgDdQUjx7HjZw7iUY7nleWSw8vNZiB1+hohhq7gjPuhFrCmj9iGPzvOl3Hw4vVz
+         /9mkuooij25y5/TAGjlIB4OM5RPxqMouecSXpetfUwMrkIqW/NuS1kL039IfoUJORo
+         ThLaJ29gaVwZ49vMEU8E7p93XSe6noqvgODtt4S88ZauIK59Q41mmBL3oPZBq2p5Uy
+         kg2/RzwBo06ww==
 From:   Benjamin Gaignard <benjamin.gaignard@collabora.com>
 To:     ezequiel@vanguardiasur.com.ar, p.zabel@pengutronix.de,
         mchehab@kernel.org, shawnguo@kernel.org, s.hauer@pengutronix.de,
@@ -42,9 +42,9 @@ Cc:     linux-media@vger.kernel.org, linux-rockchip@lists.infradead.org,
         linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         kernel@collabora.com,
         Benjamin Gaignard <benjamin.gaignard@collabora.com>
-Subject: [PATCH v9 1/6] media: verisilicon: Do not set context src/dst formats in reset functions
-Date:   Mon, 20 Feb 2023 11:48:44 +0100
-Message-Id: <20230220104849.398203-2-benjamin.gaignard@collabora.com>
+Subject: [PATCH v9 2/6] media: verisilicon: Do not use ctx fields as format storage when resetting
+Date:   Mon, 20 Feb 2023 11:48:45 +0100
+Message-Id: <20230220104849.398203-3-benjamin.gaignard@collabora.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230220104849.398203-1-benjamin.gaignard@collabora.com>
 References: <20230220104849.398203-1-benjamin.gaignard@collabora.com>
@@ -59,49 +59,86 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Setting context source and destination formats should only be done
-in hantro_set_fmt_out() and hantro_set_fmt_cap() after check that
-the targeted queue is not busy.
-Remove these calls from hantro_reset_encoded_fmt() and
-hantro_reset_raw_fmt() to clean the driver.
+Source and destination pixel formats fields of context structure should
+not be used as storage when resetting the format.
+Use local variables instead and let hantro_set_fmt_out() and
+hantro_set_fmt_cap() set them correctly later.
 
 Signed-off-by: Benjamin Gaignard <benjamin.gaignard@collabora.com>
 ---
- drivers/media/platform/verisilicon/hantro_v4l2.c | 9 ++-------
- 1 file changed, 2 insertions(+), 7 deletions(-)
+ .../media/platform/verisilicon/hantro_v4l2.c  | 40 +++++++++----------
+ 1 file changed, 18 insertions(+), 22 deletions(-)
 
 diff --git a/drivers/media/platform/verisilicon/hantro_v4l2.c b/drivers/media/platform/verisilicon/hantro_v4l2.c
-index c0d427956210..d8aa42bd4cd4 100644
+index d8aa42bd4cd4..d94c99f875c8 100644
 --- a/drivers/media/platform/verisilicon/hantro_v4l2.c
 +++ b/drivers/media/platform/verisilicon/hantro_v4l2.c
-@@ -382,13 +382,10 @@ hantro_reset_encoded_fmt(struct hantro_ctx *ctx)
+@@ -378,47 +378,43 @@ static void
+ hantro_reset_encoded_fmt(struct hantro_ctx *ctx)
+ {
+ 	const struct hantro_fmt *vpu_fmt;
+-	struct v4l2_pix_format_mplane *fmt;
++	struct v4l2_pix_format_mplane fmt;
  
  	vpu_fmt = hantro_get_default_fmt(ctx, true);
++	if (!vpu_fmt)
++		return;
+ 
++	hantro_reset_fmt(&fmt, vpu_fmt);
++	fmt.width = vpu_fmt->frmsize.min_width;
++	fmt.height = vpu_fmt->frmsize.min_height;
+ 	if (ctx->is_encoder)
+-		fmt = &ctx->dst_fmt;
+-	else
+-		fmt = &ctx->src_fmt;
+-
+-	hantro_reset_fmt(fmt, vpu_fmt);
+-	fmt->width = vpu_fmt->frmsize.min_width;
+-	fmt->height = vpu_fmt->frmsize.min_height;
+-	if (ctx->is_encoder)
+-		hantro_set_fmt_cap(ctx, fmt);
++		hantro_set_fmt_cap(ctx, &fmt);
+ 	else
+-		hantro_set_fmt_out(ctx, fmt);
++		hantro_set_fmt_out(ctx, &fmt);
+ }
+ 
+ static void
+ hantro_reset_raw_fmt(struct hantro_ctx *ctx)
+ {
+ 	const struct hantro_fmt *raw_vpu_fmt;
+-	struct v4l2_pix_format_mplane *raw_fmt, *encoded_fmt;
++	struct v4l2_pix_format_mplane raw_fmt, *encoded_fmt;
+ 
+ 	raw_vpu_fmt = hantro_get_default_fmt(ctx, false);
++	if (!raw_vpu_fmt)
++		return;
  
 -	if (ctx->is_encoder) {
--		ctx->vpu_dst_fmt = vpu_fmt;
+-		raw_fmt = &ctx->src_fmt;
 +	if (ctx->is_encoder)
- 		fmt = &ctx->dst_fmt;
+ 		encoded_fmt = &ctx->dst_fmt;
 -	} else {
--		ctx->vpu_src_fmt = vpu_fmt;
+-		raw_fmt = &ctx->dst_fmt;
 +	else
- 		fmt = &ctx->src_fmt;
+ 		encoded_fmt = &ctx->src_fmt;
 -	}
  
- 	hantro_reset_fmt(fmt, vpu_fmt);
- 	fmt->width = vpu_fmt->frmsize.min_width;
-@@ -408,11 +405,9 @@ hantro_reset_raw_fmt(struct hantro_ctx *ctx)
- 	raw_vpu_fmt = hantro_get_default_fmt(ctx, false);
+-	hantro_reset_fmt(raw_fmt, raw_vpu_fmt);
+-	raw_fmt->width = encoded_fmt->width;
+-	raw_fmt->height = encoded_fmt->height;
++	hantro_reset_fmt(&raw_fmt, raw_vpu_fmt);
++	raw_fmt.width = encoded_fmt->width;
++	raw_fmt.height = encoded_fmt->height;
+ 	if (ctx->is_encoder)
+-		hantro_set_fmt_out(ctx, raw_fmt);
++		hantro_set_fmt_out(ctx, &raw_fmt);
+ 	else
+-		hantro_set_fmt_cap(ctx, raw_fmt);
++		hantro_set_fmt_cap(ctx, &raw_fmt);
+ }
  
- 	if (ctx->is_encoder) {
--		ctx->vpu_src_fmt = raw_vpu_fmt;
- 		raw_fmt = &ctx->src_fmt;
- 		encoded_fmt = &ctx->dst_fmt;
- 	} else {
--		ctx->vpu_dst_fmt = raw_vpu_fmt;
- 		raw_fmt = &ctx->dst_fmt;
- 		encoded_fmt = &ctx->src_fmt;
- 	}
+ void hantro_reset_fmts(struct hantro_ctx *ctx)
 -- 
 2.34.1
 
