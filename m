@@ -2,130 +2,165 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EA37969D1DE
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Feb 2023 18:06:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D871C69D24E
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Feb 2023 18:46:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231649AbjBTRF5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Feb 2023 12:05:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46716 "EHLO
+        id S232446AbjBTRqf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Feb 2023 12:46:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39256 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229468AbjBTRF4 (ORCPT
+        with ESMTP id S232448AbjBTRqd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Feb 2023 12:05:56 -0500
-Received: from EUR02-DB5-obe.outbound.protection.outlook.com (mail-db5eur02olkn2043.outbound.protection.outlook.com [40.92.50.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA4A220549;
-        Mon, 20 Feb 2023 09:05:54 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=OUmvJy9U95FBy+ovmMMRGfKuNFnu+EhyUuaD3X9WXniPGmcMKjTwUCYuUEqvw2sUHegBa2Dz2kefzVNdJqt541mzt7579b9u/PYjE/x39jIWnHsj5AtrlOSTnaMd30aJD3cHCbJAeCS1N5Ooy9CtQVM12T9B5hkdSHCV39po5jNBFh862Nvu32KISQo4TsyHAkOPuCRMu8nRVriyIZ1mDcNmZAITVynhPbDp0M4yJ0G/tXWDleag3kJ6L8jdxsxD397ufWe71Ye+faQqw0m0npu8L6rkiqyByvdQ50CqTgko60vAhQkrLd+2at+kfoijp6dBFi7daKa+Sdd62MYb0g==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=EKWczuGRG4c24DYZG7A+X+rwWo6Ycti31Kuz41J9WTg=;
- b=SjQ+a317QK3kdQtqCgiha6kQIU8ebSt85qzWc4/9KwIuLCXieKdntv7PLjohzQt/b+w/PEjgMVIrHVF1NrLtJcLCxfyf42w86vmYFm5rgKfJukkeuX3FKmQcfJOZMYO6UbkwgpcP016S4JK9fiy5TfdtlwQtN2ogH/XGP0H0yix5i4IvHgMFqZ/JhVe0bsE6sJdSiDlwz5U+0mTBQEbg6+OoVw6dnmm4YR4HLQRVrKoUUfPSsJdwub+aLwskhJEdtFXMXVIT+Ms/g+2rrecAq3KpEuM4EsIGRHMLR049yoXAeqhEiliq6JkxvtNWWon/3IRz6SrJCEJSLm2oeZinLg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
- dkim=none; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=hotmail.com;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=EKWczuGRG4c24DYZG7A+X+rwWo6Ycti31Kuz41J9WTg=;
- b=jW3mTy2JQJHmBeYG0X2ywfsN6x2FRUSabc0auZJcL+qVGHok8tivzgv25PhqYAjBWljF7hSoVmjox7YL+JTaC35JmLy/v61/77SwrsP4rfWcjhIi3+15PJ7ECxqIPJNRb2CAWAsRrClufJsBwSx7g0btIHYSgit+Jerwame8Y4v0YYHQuwOew0exZP47GNW1UYb4BLlJVgET4d17ap+rMDcPOwO6cPd+GmbmOpeCFfeLYeRxnd/7NTmvy4cu7M6EsVkZ1e+XZ4RMSCo+ZxsGszEeBptl2mcroeHeD2kRW6PIwC3jfaCiU6u2DgGL39Xz7JdXhWHDg17PxsrV6T19Aw==
-Received: from DB6P189MB0568.EURP189.PROD.OUTLOOK.COM (2603:10a6:6:31::16) by
- VI1P189MB2561.EURP189.PROD.OUTLOOK.COM (2603:10a6:800:1c5::7) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.6111.19; Mon, 20 Feb 2023 17:05:52 +0000
-Received: from DB6P189MB0568.EURP189.PROD.OUTLOOK.COM
- ([fe80::4a20:e1a:db8c:28d9]) by DB6P189MB0568.EURP189.PROD.OUTLOOK.COM
- ([fe80::4a20:e1a:db8c:28d9%3]) with mapi id 15.20.6111.019; Mon, 20 Feb 2023
- 17:05:52 +0000
-From:   David Binderman <dcb314@hotmail.com>
-To:     "broonie@kernel.org" <broonie@kernel.org>,
-        "linux-spi@vger.kernel.org" <linux-spi@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: possible bug in linux-6.2/drivers/spi/spi-sn-f-ospi.c
-Thread-Topic: possible bug in linux-6.2/drivers/spi/spi-sn-f-ospi.c
-Thread-Index: AQHZRUzb4j5iSQysFkim+9O41b8hsw==
-Date:   Mon, 20 Feb 2023 17:05:52 +0000
-Message-ID: <DB6P189MB0568F3BE9384315F5C8C1A3E9CA49@DB6P189MB0568.EURP189.PROD.OUTLOOK.COM>
-Accept-Language: en-GB, en-US
-Content-Language: en-GB
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-msip_labels: 
-x-ms-exchange-messagesentrepresentingtype: 1
-x-tmn:  [ZRGhk7sTQ+BMItuctEWXfsbtcGBhkiJH]
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: DB6P189MB0568:EE_|VI1P189MB2561:EE_
-x-ms-office365-filtering-correlation-id: 7b0efe1a-7c8d-4232-af8d-08db1364b929
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: PcUSiRB3A7CZQEWJBh35TdHUzQCxExxFSxbQEExjoWFOJzP8AJiwJSwccmbdzAekb+XfBdc0ehuFkFs2axi+/wDaZdPgA0rMZ8kbrJQEi5tOzYRiU1PSMzb6vPUI4rnVlC6/shhW1iPQzvbFO90PlY3RvbnDNYQt730vXaubJzo8nDusff8m1d4JoLDHb5eiBEFVUNhjdVgrIEiyVrjMNo2vNR9wiqicQYFlGK46B71tDUPy8ZwTotRsDYO3l3G4ZH9OLLXtamfjxFWg0pKFKdZjArLqekMKN7N1eQaPhufOrNad5BQ4dxb93LBGwwDsAt/5JOAjBXEgFBNhLFpak5+M9WbuSZAU9kcpVe0hwPe/IIlq3L+cNWJXPfagGNTKtvevmhYv1wKwbgCxiYK/Fm1NA3JckUeFRlLB6sUPfascJxxfparwy//As9BdoIWSB+kBACCBehRXU1xEtTQBxGUTeKn3A/dtUFcGGjVbOaTuF7RakAFaPQOrV8wZFX3MK6Tw/eRB8YB//r9gfIkhlZZ+TDvUL0Yn68Y7qDD89gI3O1+/MIrPJQGmLAAtzg8iS8VpQVBinjrpBZsi7FG/UPB18n0VX57+9JnFectqmYQ=
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?iso-8859-1?Q?mEihLzO/yuSJR/k7t8QCgOabGXjSFXYkz+WQqm545TKX8DwI79IgOOoQoD?=
- =?iso-8859-1?Q?zKPHtF/gnArQEtiYDBsdZ0zNqLmauAq3OAt7mlHqgB2QNRR0OypUtldPG6?=
- =?iso-8859-1?Q?IDKOhp+FOajnwERuCNlqYseGhCZWGPuDvaf6rr8HATDXjI3ui31gWSU5Bg?=
- =?iso-8859-1?Q?89a/CY87KP3syLgC/94+lS4buBZZFOqNDfUfCo5Vpae4Gwz3MpPMg3+IYG?=
- =?iso-8859-1?Q?onvfFgttIkk6i+GV/SsXR7PaLQx4kwT9oObU1t6gPzLa+J5Bw4YxFBHZmI?=
- =?iso-8859-1?Q?jFPK8VZiwOj5792wc5qj9n0kLtmKTGi15qT5fldJN2fuvJFNW7Udz9IGT4?=
- =?iso-8859-1?Q?mSJPW14pPMo+ta3vl+awKTs2uoZd8wTKPr1NLp67vmRWoJHdZ9MASErMff?=
- =?iso-8859-1?Q?3baeVAStnyJlY+NwxALfUOrJ755uAHiJVmXTi7oUsych63dxUKKan+AZDu?=
- =?iso-8859-1?Q?MXICv130AiZ8ijdGjcIKmD6nrVSLfWQZeuRT6gUFZpzD/CaEXoVsYoaSGM?=
- =?iso-8859-1?Q?TZZ+FXdGALyLmbiDKRPo2Tv9tgW00sW9mBRoXSmpQOqjVtZrKs8NhcuevY?=
- =?iso-8859-1?Q?GxbaxDalOapx6kg/0n76KVWqr4CSjhZQzNht9D/P8HkWTcgsTPr0YxnS9g?=
- =?iso-8859-1?Q?WJhnT5v2zMvJSahiR8DcdhNWO7b/Ei4Jv2VRVeXmvcD9fGEB5zRYr9/Vlm?=
- =?iso-8859-1?Q?eIYn0YSY5HrJteCv9x4uHfdnRIDuQKxfhjZJ8jB7+B6/CRHBKD5f5i97tq?=
- =?iso-8859-1?Q?K5xLDE6Ojz2ZN5yrVYGd0aAjl/5e1Ng4s2KuV67Zvj8QufBYk223iUgyJ5?=
- =?iso-8859-1?Q?5nBxNIYhiwm8nlgUUgpDg4TqjmD2C2oupgkkDpq+odb5Rtjae7HrDPtxno?=
- =?iso-8859-1?Q?8na2FFmJ1yGp2EpNG708HU0zSvV5MuiIH+dlwORYHb/QN77MgHXo7TXIgp?=
- =?iso-8859-1?Q?A/kBYOU2GsSAHsuV0Gxi2063EADgS5Ob9Nx6/5Gf/7iwiD1BoszvnR2Nc/?=
- =?iso-8859-1?Q?RzHyGQj7XgVFB+oeiV3XVRPWypQprRfWPS+8myPRBoYx2yvEPzihF3xZ/5?=
- =?iso-8859-1?Q?nkG0iRYLsTLuQvkXp8pEM9oqmqKWUDxy8nOFTvpFj/WUZc1ffZ+EsK+El7?=
- =?iso-8859-1?Q?m3Ont81SnK5XVE3mxQlkYKhN9aH5+4lg/MusSfzC1tB9W9npdiyYYiEwAG?=
- =?iso-8859-1?Q?2v0e8DP0hXS8YMyIwgz+GmjFerlvHGvlBb4mcX8TrcNlaxs6LH6MSbDBVc?=
- =?iso-8859-1?Q?CjZvYUkTvN9pkaWLk7ebfDlv9bMdnPvsF79L2RE7GKT1f7s7Yyu1E1fzl5?=
- =?iso-8859-1?Q?i4Iu?=
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
+        Mon, 20 Feb 2023 12:46:33 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90E4B1DB8F
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Feb 2023 09:45:44 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1676915143;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=p0Izq1sT8yQqR3StJyRIa9aUpeGU1pXLanSYRIGX2E8=;
+        b=i6Gquehn/na+E1+cR772Pwl8cY9jFWi4zwlqLIVRnaR8GgKzAsFHHCW7/H24liF1gIdOXm
+        uXEokRS5FWvCmHMyoPC4YYq+7KRyGl7dEHT4dgYRbxhLFMHGoLLyC5NRm481bqYSu9ARXi
+        GDIodAvYAgZ5O5y8M5xwmxYegVStVz0=
+Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com
+ [209.85.208.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-320-ypJX01bVOTmB--iAQMmQ8Q-1; Mon, 20 Feb 2023 12:45:41 -0500
+X-MC-Unique: ypJX01bVOTmB--iAQMmQ8Q-1
+Received: by mail-ed1-f72.google.com with SMTP id cz22-20020a0564021cb600b004a245f58006so2866113edb.12
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Feb 2023 09:45:41 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:organization:from:references
+         :cc:to:content-language:subject:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=p0Izq1sT8yQqR3StJyRIa9aUpeGU1pXLanSYRIGX2E8=;
+        b=psedNHAizEFDWngNfI2Q45gX5gyTGDb5PTxovL3G4yKW0DfLzn/6RRM4qRy6UceQLk
+         mf6U7HlF76dGJsCBzNUGDUnHZQdvIZf1gArCQiD+Txd4MwVm/KULKPq0E/wjKY7TeS2v
+         Zj0lse8afv3jR5d+wBp4bfYH2uy1oWgV1zDkyUAWlPrSJ2Se2rfsQvU0LcfpP6HpEIWk
+         MenB4D7bqt1f+9Mlrue+3CwnIBejZXdP0zDg/8j6BquKwYN8n9RRE8LapyVI8/iF3CCI
+         SXIDw8HBRfm/D7OOTnFpPuhhIpD/j595tCIrXoWanaDdJw+tZBdrG40NVCxLBWRt4A4Z
+         4MqA==
+X-Gm-Message-State: AO0yUKVcHD7IcC5jf6Z1Q8Bjo5k3UAMShyZHwCy+zptyxDC4/KhDFa00
+        7PiaX3JPC7pUs2Y5cSOVPrfoCN61HyvntJ+VFLahqi4HF7aPsWWEIShbDOzn9BnEg5TVfJI9r2k
+        yZk+42kvaYi3/PgaKImzba8E4
+X-Received: by 2002:a17:907:94c5:b0:8b1:319c:c29c with SMTP id dn5-20020a17090794c500b008b1319cc29cmr13659855ejc.70.1676915140665;
+        Mon, 20 Feb 2023 09:45:40 -0800 (PST)
+X-Google-Smtp-Source: AK7set/Ga6rG3Eq1hZqRFlC9SxeuFv04ZCxlmBzWk9HFcUACYcpXem95hxGHCYiEqsp+Ho5tDk/t+w==
+X-Received: by 2002:a17:907:94c5:b0:8b1:319c:c29c with SMTP id dn5-20020a17090794c500b008b1319cc29cmr13659833ejc.70.1676915140411;
+        Mon, 20 Feb 2023 09:45:40 -0800 (PST)
+Received: from ?IPV6:2a02:810d:4b3f:de78:642:1aff:fe31:a15c? ([2a02:810d:4b3f:de78:642:1aff:fe31:a15c])
+        by smtp.gmail.com with ESMTPSA id f21-20020a170906561500b008d09b900614sm1826220ejq.80.2023.02.20.09.45.38
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 20 Feb 2023 09:45:39 -0800 (PST)
+Message-ID: <e43f6acc-175d-1031-c4a2-67a6f1741866@redhat.com>
+Date:   Mon, 20 Feb 2023 18:06:03 +0100
 MIME-Version: 1.0
-X-OriginatorOrg: sct-15-20-4734-24-msonline-outlook-c54b5.templateTenant
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: DB6P189MB0568.EURP189.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg: 00000000-0000-0000-0000-000000000000
-X-MS-Exchange-CrossTenant-Network-Message-Id: 7b0efe1a-7c8d-4232-af8d-08db1364b929
-X-MS-Exchange-CrossTenant-originalarrivaltime: 20 Feb 2023 17:05:52.6606
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
-X-MS-Exchange-CrossTenant-rms-persistedconsumerorg: 00000000-0000-0000-0000-000000000000
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1P189MB2561
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH drm-next v2 04/16] maple_tree: add flag MT_FLAGS_LOCK_NONE
+Content-Language: en-US
+To:     Matthew Wilcox <willy@infradead.org>
+Cc:     matthew.brost@intel.com, dri-devel@lists.freedesktop.org,
+        corbet@lwn.net, nouveau@lists.freedesktop.org, ogabbay@kernel.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, boris.brezillon@collabora.com,
+        bskeggs@redhat.com, tzimmermann@suse.de, Liam.Howlett@oracle.com,
+        bagasdotme@gmail.com, christian.koenig@amd.com,
+        jason@jlekstrand.net
+References: <20230217134422.14116-1-dakr@redhat.com>
+ <20230217134422.14116-5-dakr@redhat.com>
+ <Y+/Xn11dfdn7SfBD@casper.infradead.org>
+ <3bb02ec3-4d19-9135-cabc-26ed210f7396@redhat.com>
+ <Y/ONYhyDCPEYH1ml@casper.infradead.org>
+From:   Danilo Krummrich <dakr@redhat.com>
+Organization: RedHat
+In-Reply-To: <Y/ONYhyDCPEYH1ml@casper.infradead.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello there,=0A=
-=0A=
-Static analyser cppcheck says:=0A=
-=0A=
-linux-6.2/drivers/spi/spi-sn-f-ospi.c:614:31: style: Same expression 'SPI_T=
-X_OCTAL' found multiple times in chain of '|' operators. [duplicateExpressi=
-on]=0A=
-=0A=
-Source code is =0A=
-=0A=
-   ctlr->mode_bits =3D SPI_TX_DUAL | SPI_TX_QUAD | SPI_TX_OCTAL=0A=
-        | SPI_RX_DUAL | SPI_RX_QUAD | SPI_TX_OCTAL=0A=
-        | SPI_MODE_0 | SPI_MODE_1 | SPI_LSB_FIRST;=0A=
-=0A=
-Maybe better code:=0A=
-=0A=
-  ctlr->mode_bits =3D SPI_TX_DUAL | SPI_TX_QUAD | SPI_TX_OCTAL=0A=
-        | SPI_RX_DUAL | SPI_RX_QUAD | SPI_RX_OCTAL=0A=
-        | SPI_MODE_0 | SPI_MODE_1 | SPI_LSB_FIRST;=0A=
-=0A=
-Regards=0A=
-=0A=
-David Binderman=0A=
+On 2/20/23 16:10, Matthew Wilcox wrote:
+> On Mon, Feb 20, 2023 at 03:00:59PM +0100, Danilo Krummrich wrote:
+>> On 2/17/23 20:38, Matthew Wilcox wrote:
+>>> On Fri, Feb 17, 2023 at 02:44:10PM +0100, Danilo Krummrich wrote:
+>>>> Generic components making use of the maple tree (such as the
+>>>> DRM GPUVA Manager) delegate the responsibility of ensuring mutual
+>>>> exclusion to their users.
+>>>>
+>>>> While such components could inherit the concept of an external lock,
+>>>> some users might just serialize the access to the component and hence to
+>>>> the internal maple tree.
+>>>>
+>>>> In order to allow such use cases, add a new flag MT_FLAGS_LOCK_NONE to
+>>>> indicate not to do any internal lockdep checks.
+>>>
+>>> I'm really against this change.
+>>>
+>>> First, we really should check that users have their locking right.
+>>> It's bitten us so many times when they get it wrong.
+>>
+>> In case of the DRM GPUVA manager, some users might serialize the access to
+>> the GPUVA manager and hence to it's maple tree instances, e.g. through the
+>> drm_gpu_scheduler. In such a case ensuring to hold a lock would be a bit
+>> pointless and I wouldn't really know how to "sell" this to potential users
+>> of the GPUVA manager.
+> 
+> This is why we like people to use the spinlock embedded in the tree.
+> There's nothing for the user to care about.  If the access really is
+> serialised, acquiring/releasing the uncontended spinlock is a minimal
+> cost compared to all the other things that will happen while modifying
+> the tree.
+
+I think as for the users of the GPUVA manager we'd have two cases:
+
+1) Accesses to the manager (and hence the tree) are serialized, no lock 
+needed.
+
+2) Multiple operations on the tree must be locked in order to make them 
+appear atomic.
+
+In either case the embedded spinlock wouldn't be useful, we'd either 
+need an external lock or no lock at all.
+
+If there are any internal reasons why specific tree operations must be 
+mutually excluded (such as those you explain below), wouldn't it make 
+more sense to always have the internal lock and, optionally, allow users 
+to specify an external lock additionally?
+
+> 
+>>> Second, having a lock allows us to defragment the slab cache.  The
+>>> patches to do that haven't gone anywhere recently, but if we drop the
+>>> requirement now, we'll never be able to compact ranges of memory that
+>>> have slabs allocated to them.
+>>>
+>>
+>> Not sure if I get that, do you mind explaining a bit how this would affect
+>> other users of the maple tree, such as my use case, the GPUVA manager?
+> 
+> When we want to free a slab in order to defragment memory, we need
+> to relocate all the objects allocated within that slab.  To do that
+> for the maple tree node cache, for each node in this particular slab,
+> we'll need to walk up to the top of the tree and lock it.  We can then
+> allocate a new node from a different slab, change the parent to point
+> to the new node and drop the lock.  After an RCU delay, we can free the
+> slab and create a larger contiguous block of memory.
+> 
+> As I said, this is somewhat hypothetical in that there's no current
+> code in the tree to reclaim slabs when we're trying to defragment
+> memory.  And that's because it's hard to do.  The XArray and maple
+> tree were designed to make it possible for their slabs.
+> 
+
