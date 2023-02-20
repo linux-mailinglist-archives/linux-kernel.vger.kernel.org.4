@@ -2,250 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9EB2369C9BB
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Feb 2023 12:24:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9AA1B69C9C2
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Feb 2023 12:24:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231804AbjBTLYb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Feb 2023 06:24:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49042 "EHLO
+        id S231635AbjBTLYi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Feb 2023 06:24:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49024 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231697AbjBTLYZ (ORCPT
+        with ESMTP id S231825AbjBTLYc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Feb 2023 06:24:25 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1AEE19023
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Feb 2023 03:23:34 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1676892214;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=JGvEUYyDyInAU1qTOkUUwH1+5Pn5/FfAg09zLJh1EcU=;
-        b=LJ4z/ydlreQO2yAtfBGq5VjJCLgp297eaAHVbIuZOwUBIi2Z0QExyTv6nd/ARNoqMqdjn1
-        /zMysMRY0+wYzE6vrOvE/OCyAU5zz2zZy4+k6HBeuFrxSJpfHYMdYB4k5d6NnCqUnBPAwg
-        e5+N+BoK+DPErZpuJFnQdtZCGVRIc3E=
-Received: from mail-wr1-f69.google.com (mail-wr1-f69.google.com
- [209.85.221.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-433-y1c9zVkxPiec5bMllBpTWQ-1; Mon, 20 Feb 2023 06:23:33 -0500
-X-MC-Unique: y1c9zVkxPiec5bMllBpTWQ-1
-Received: by mail-wr1-f69.google.com with SMTP id n14-20020a5d67ce000000b002bfc2f61048so318428wrw.23
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Feb 2023 03:23:32 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:organization:from:references
-         :cc:to:content-language:subject:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=JGvEUYyDyInAU1qTOkUUwH1+5Pn5/FfAg09zLJh1EcU=;
-        b=WjaP+6vVb9xhQGh8z6LuW1wKdgFt1MGTKLOWA6EpFZIF5vbta8SNM//fsFXVNE+NzF
-         KNuyD1PjGFYOPBXhp94rGium0LDp5SJP9n+Clfg0LDqsEWZNZ8v2yYjwDKYBGDXTkx90
-         pRfOVkZNlc4jeSA5A2fUk7VgJIsn9DU207lZVJpjIVR2eyMM+E8VAGeJ6B32Kdcv4Vwh
-         cLwJxe3sAUMYgZL/dagXLSAIFgaEhnt+OYUjkZMJmbpmZpMIEuKn8h1ixdLPNzYCDI3w
-         JDqQ5xROt7nhM+gtCYSwP5kU3cwqTNuZO6zgzEpTPqIXgo7xSP01UiUDRcOhOUzwG7M+
-         MEGg==
-X-Gm-Message-State: AO0yUKXr2KpAftBrMXV+u8FUgu6hCaYZ+OB58bTMc87GgVxqUG1x/If9
-        ItOHg1tZdZzQ/t3YuRpBOj+ugy+f4g64b0POKloxeXkfZqdokZVuUSmsjcF299jXFEX5nMuYxsU
-        6XxdpC7HhjlclY6FA3Mk7bsnh
-X-Received: by 2002:adf:e889:0:b0:2bf:ae19:d8e4 with SMTP id d9-20020adfe889000000b002bfae19d8e4mr1431247wrm.16.1676892211955;
-        Mon, 20 Feb 2023 03:23:31 -0800 (PST)
-X-Google-Smtp-Source: AK7set8MwtYqrZBvXsoQ9yPZN/bwu32QfvZtBFBM6ley7E2vAkMmUmM+SZmaWRHMAwPacrP/Dgjyyg==
-X-Received: by 2002:adf:e889:0:b0:2bf:ae19:d8e4 with SMTP id d9-20020adfe889000000b002bfae19d8e4mr1431211wrm.16.1676892211619;
-        Mon, 20 Feb 2023 03:23:31 -0800 (PST)
-Received: from ?IPV6:2003:cb:c705:8300:e519:4218:a8b5:5bec? (p200300cbc7058300e5194218a8b55bec.dip0.t-ipconnect.de. [2003:cb:c705:8300:e519:4218:a8b5:5bec])
-        by smtp.gmail.com with ESMTPSA id u13-20020a5d434d000000b002c55ec7f661sm154441wrr.5.2023.02.20.03.23.28
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 20 Feb 2023 03:23:30 -0800 (PST)
-Message-ID: <f50daeb7-7b41-0bed-73f0-b6358169521b@redhat.com>
-Date:   Mon, 20 Feb 2023 12:23:28 +0100
+        Mon, 20 Feb 2023 06:24:32 -0500
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 841AA1ABC3;
+        Mon, 20 Feb 2023 03:24:09 -0800 (PST)
+Received: from pps.filterd (m0098396.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 31K9xxec009147;
+        Mon, 20 Feb 2023 11:23:38 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
+ subject : message-id : reply-to : references : content-type : in-reply-to
+ : mime-version; s=pp1; bh=+bgfQQ2gRBhxSo6/YEAWQTMXET0VtHWdWTgI4vde+lg=;
+ b=E3A8u/hkxOn4hXS0u6wIYdfXVWQptikq4mVQYtYOXYowikhJsnwebNNK9GGGZZDpCsaA
+ kA19oRYuUfFTKmBn1K0m9M9hE+ztAIKlb6Wn/eSnQG2m50fa/F51C/ZvpCfpV7sEE4y5
+ auTGKUii8T5b9gjqrNvoHWaVs+hjboYpS7cmeOOH+kXWcIR4cXa/qpVkSSjvdIXb5FFd
+ ymGHKn1ySbBDDyXKXhCiVJ5LyKXN7xRJtbDjJYB38UxmesYtnq+zFjc+ogTeVIzeFVkL
+ DNfPZUdHzW7WgCa+TdEoj6iqXpbzHkXYY7UvGg/ZsnX4AXJOKXZZ1elvbWOXmAm6fXq3 /Q== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3nuyk6kn0y-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 20 Feb 2023 11:23:38 +0000
+Received: from m0098396.ppops.net (m0098396.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 31KAUuxR002123;
+        Mon, 20 Feb 2023 11:23:37 GMT
+Received: from ppma06ams.nl.ibm.com (66.31.33a9.ip4.static.sl-reverse.com [169.51.49.102])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3nuyk6kn03-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 20 Feb 2023 11:23:37 +0000
+Received: from pps.filterd (ppma06ams.nl.ibm.com [127.0.0.1])
+        by ppma06ams.nl.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 31JJlwd6025443;
+        Mon, 20 Feb 2023 11:23:35 GMT
+Received: from smtprelay04.fra02v.mail.ibm.com ([9.218.2.228])
+        by ppma06ams.nl.ibm.com (PPS) with ESMTPS id 3ntnxf2kta-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 20 Feb 2023 11:23:34 +0000
+Received: from smtpav05.fra02v.mail.ibm.com (smtpav05.fra02v.mail.ibm.com [10.20.54.104])
+        by smtprelay04.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 31KBNWhP19727082
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 20 Feb 2023 11:23:32 GMT
+Received: from smtpav05.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 67D1720043;
+        Mon, 20 Feb 2023 11:23:32 +0000 (GMT)
+Received: from smtpav05.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 701CC20040;
+        Mon, 20 Feb 2023 11:23:29 +0000 (GMT)
+Received: from linux.vnet.ibm.com (unknown [9.126.150.29])
+        by smtpav05.fra02v.mail.ibm.com (Postfix) with SMTP;
+        Mon, 20 Feb 2023 11:23:29 +0000 (GMT)
+Date:   Mon, 20 Feb 2023 16:53:28 +0530
+From:   Srikar Dronamraju <srikar@linux.vnet.ibm.com>
+To:     Linux regressions mailing list <regressions@lists.linux.dev>
+Cc:     "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        bvanassche@acm.org, hare@suse.de, hch@lst.de, ming.lei@redhat.com,
+        sumanesh.samanta@broadcom.com, michael.christie@oracle.com,
+        john.garry@huawei.com, johannes.thumshirn@wdc.com, axboe@kernel.dk,
+        osandov@fb.com, kashyap.desai@broadcom.com,
+        gregkh@linuxfoundation.org
+Subject: Re: scsi: Recent kernels drop into emergency shell
+Message-ID: <20230220112328.GA803890@linux.vnet.ibm.com>
+Reply-To: Srikar Dronamraju <srikar@linux.vnet.ibm.com>
+References: <20230220061559.GJ159593@linux.vnet.ibm.com>
+ <8489afbb-2391-c22f-41fc-21726f09e444@leemhuis.info>
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+In-Reply-To: <8489afbb-2391-c22f-41fc-21726f09e444@leemhuis.info>
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: TJvYzwnMKh7QZRyGnISPEoIw0a1U0cHz
+X-Proofpoint-ORIG-GUID: 7gTjYswlT1fukq3G_3tSjO6I_Ix5XiGs
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.2
-Subject: Re: [PATCH v6 13/41] mm: Make pte_mkwrite() take a VMA
-Content-Language: en-US
-To:     Rick Edgecombe <rick.p.edgecombe@intel.com>, x86@kernel.org,
-        "H . Peter Anvin" <hpa@zytor.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-mm@kvack.org,
-        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
-        Arnd Bergmann <arnd@arndb.de>,
-        Andy Lutomirski <luto@kernel.org>,
-        Balbir Singh <bsingharora@gmail.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Cyrill Gorcunov <gorcunov@gmail.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Eugene Syromiatnikov <esyr@redhat.com>,
-        Florian Weimer <fweimer@redhat.com>,
-        "H . J . Lu" <hjl.tools@gmail.com>, Jann Horn <jannh@google.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Kees Cook <keescook@chromium.org>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Nadav Amit <nadav.amit@gmail.com>,
-        Oleg Nesterov <oleg@redhat.com>, Pavel Machek <pavel@ucw.cz>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Weijiang Yang <weijiang.yang@intel.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        John Allen <john.allen@amd.com>, kcc@google.com,
-        eranian@google.com, rppt@kernel.org, jamorris@linux.microsoft.com,
-        dethoma@microsoft.com, akpm@linux-foundation.org,
-        Andrew.Cooper3@citrix.com, christina.schimpe@intel.com,
-        debug@rivosinc.com
-Cc:     linux-alpha@vger.kernel.org, linux-snps-arc@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-csky@vger.kernel.org,
-        linux-hexagon@vger.kernel.org, linux-ia64@vger.kernel.org,
-        loongarch@lists.linux.dev, linux-m68k@lists.linux-m68k.org,
-        Michal Simek <monstr@monstr.eu>,
-        Dinh Nguyen <dinguyen@kernel.org>, linux-mips@vger.kernel.org,
-        openrisc@lists.librecores.org, linux-parisc@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org,
-        linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
-        sparclinux@vger.kernel.org, linux-um@lists.infradead.org,
-        xen-devel@lists.xenproject.org
-References: <20230218211433.26859-1-rick.p.edgecombe@intel.com>
- <20230218211433.26859-14-rick.p.edgecombe@intel.com>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-In-Reply-To: <20230218211433.26859-14-rick.p.edgecombe@intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.170.22
+ definitions=2023-02-20_08,2023-02-20_02,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ lowpriorityscore=0 spamscore=0 bulkscore=0 mlxscore=0 phishscore=0
+ impostorscore=0 suspectscore=0 adultscore=0 malwarescore=0 clxscore=1011
+ mlxlogscore=999 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2302200100
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 18.02.23 22:14, Rick Edgecombe wrote:
-> The x86 Control-flow Enforcement Technology (CET) feature includes a new
-> type of memory called shadow stack. This shadow stack memory has some
-> unusual properties, which requires some core mm changes to function
-> properly.
-> 
-> One of these unusual properties is that shadow stack memory is writable,
-> but only in limited ways. These limits are applied via a specific PTE
-> bit combination. Nevertheless, the memory is writable, and core mm code
-> will need to apply the writable permissions in the typical paths that
-> call pte_mkwrite().
-> 
-> In addition to VM_WRITE, the shadow stack VMA's will have a flag denoting
-> that they are special shadow stack flavor of writable memory. So make
-> pte_mkwrite() take a VMA, so that the x86 implementation of it can know to
-> create regular writable memory or shadow stack memory.
-> 
-> Apply the same changes for pmd_mkwrite() and huge_pte_mkwrite().
-> 
-> No functional change.
-> 
-> Cc: linux-doc@vger.kernel.org
-> Cc: linux-kernel@vger.kernel.org
-> Cc: linux-alpha@vger.kernel.org
-> Cc: linux-snps-arc@lists.infradead.org
-> Cc: linux-arm-kernel@lists.infradead.org
-> Cc: linux-csky@vger.kernel.org
-> Cc: linux-hexagon@vger.kernel.org
-> Cc: linux-ia64@vger.kernel.org
-> Cc: loongarch@lists.linux.dev
-> Cc: linux-m68k@lists.linux-m68k.org
-> Cc: Michal Simek <monstr@monstr.eu>
-> Cc: Dinh Nguyen <dinguyen@kernel.org>
-> Cc: linux-mips@vger.kernel.org
-> Cc: openrisc@lists.librecores.org
-> Cc: linux-parisc@vger.kernel.org
-> Cc: linuxppc-dev@lists.ozlabs.org
-> Cc: linux-riscv@lists.infradead.org
-> Cc: linux-s390@vger.kernel.org
-> Cc: linux-sh@vger.kernel.org
-> Cc: sparclinux@vger.kernel.org
-> Cc: linux-um@lists.infradead.org
-> Cc: xen-devel@lists.xenproject.org
-> Cc: linux-arch@vger.kernel.org
-> Cc: linux-mm@kvack.org
-> Tested-by: Pengfei Xu <pengfei.xu@intel.com>
-> Suggested-by: David Hildenbrand <david@redhat.com>
-> Signed-off-by: Rick Edgecombe <rick.p.edgecombe@intel.com>
-> 
-> ---
-> Hi Non-x86 Arch’s,
-> 
-> x86 has a feature that allows for the creation of a special type of
-> writable memory (shadow stack) that is only writable in limited specific
-> ways. Previously, changes were proposed to core MM code to teach it to
-> decide when to create normally writable memory or the special shadow stack
-> writable memory, but David Hildenbrand suggested[0] to change
-> pXX_mkwrite() to take a VMA, so awareness of shadow stack memory can be
-> moved into x86 code.
-> 
-> Since pXX_mkwrite() is defined in every arch, it requires some tree-wide
-> changes. So that is why you are seeing some patches out of a big x86
-> series pop up in your arch mailing list. There is no functional change.
-> After this refactor, the shadow stack series goes on to use the arch
-> helpers to push shadow stack memory details inside arch/x86.
-> 
-> Testing was just 0-day build testing.
-> 
-> Hopefully that is enough context. Thanks!
-> 
-> [0] https://lore.kernel.org/lkml/0e29a2d0-08d8-bcd6-ff26-4bea0e4037b0@redhat.com/#t
-> 
-> v6:
->   - New patch
-> ---
->   Documentation/mm/arch_pgtable_helpers.rst    |  9 ++++++---
->   arch/alpha/include/asm/pgtable.h             |  6 +++++-
->   arch/arc/include/asm/hugepage.h              |  2 +-
->   arch/arc/include/asm/pgtable-bits-arcv2.h    |  7 ++++++-
->   arch/arm/include/asm/pgtable-3level.h        |  7 ++++++-
->   arch/arm/include/asm/pgtable.h               |  2 +-
->   arch/arm64/include/asm/pgtable.h             |  4 ++--
->   arch/csky/include/asm/pgtable.h              |  2 +-
->   arch/hexagon/include/asm/pgtable.h           |  2 +-
->   arch/ia64/include/asm/pgtable.h              |  2 +-
->   arch/loongarch/include/asm/pgtable.h         |  4 ++--
->   arch/m68k/include/asm/mcf_pgtable.h          |  2 +-
->   arch/m68k/include/asm/motorola_pgtable.h     |  6 +++++-
->   arch/m68k/include/asm/sun3_pgtable.h         |  6 +++++-
->   arch/microblaze/include/asm/pgtable.h        |  2 +-
->   arch/mips/include/asm/pgtable.h              |  6 +++---
->   arch/nios2/include/asm/pgtable.h             |  2 +-
->   arch/openrisc/include/asm/pgtable.h          |  2 +-
->   arch/parisc/include/asm/pgtable.h            |  6 +++++-
->   arch/powerpc/include/asm/book3s/32/pgtable.h |  2 +-
->   arch/powerpc/include/asm/book3s/64/pgtable.h |  4 ++--
->   arch/powerpc/include/asm/nohash/32/pgtable.h |  2 +-
->   arch/powerpc/include/asm/nohash/32/pte-8xx.h |  2 +-
->   arch/powerpc/include/asm/nohash/64/pgtable.h |  2 +-
->   arch/riscv/include/asm/pgtable.h             |  6 +++---
->   arch/s390/include/asm/hugetlb.h              |  4 ++--
->   arch/s390/include/asm/pgtable.h              |  4 ++--
->   arch/sh/include/asm/pgtable_32.h             | 10 ++++++++--
->   arch/sparc/include/asm/pgtable_32.h          |  2 +-
->   arch/sparc/include/asm/pgtable_64.h          |  6 +++---
->   arch/um/include/asm/pgtable.h                |  2 +-
->   arch/x86/include/asm/pgtable.h               |  6 ++++--
->   arch/xtensa/include/asm/pgtable.h            |  2 +-
->   include/asm-generic/hugetlb.h                |  4 ++--
->   include/linux/mm.h                           |  2 +-
->   mm/debug_vm_pgtable.c                        | 16 ++++++++--------
->   mm/huge_memory.c                             |  6 +++---
->   mm/hugetlb.c                                 |  4 ++--
->   mm/memory.c                                  |  4 ++--
->   mm/migrate_device.c                          |  2 +-
->   mm/mprotect.c                                |  2 +-
->   mm/userfaultfd.c                             |  2 +-
->   42 files changed, 106 insertions(+), 69 deletions(-)
+* Linux regression tracking (Thorsten Leemhuis) <regressions@leemhuis.info> [2023-02-20 08:40:09]:
 
-That looks painful but IMHO worth it :)
+> [CCing the regression list, as it should be in the loop for regressions:
+> https://docs.kernel.org/admin-guide/reporting-regressions.html]
+> 
+> On 20.02.23 07:15, Srikar Dronamraju wrote:
+> > On a freshly installed system, booting latest upstream kernels causes the
+> > system to drop into emergency shell. The reason for dropping into emergency
+> > shell is system is unable to mount /home partition.
+> 
+> What kind of storage hardware do you have? Is this maybe related to this
+> fix, that afaics never was merged?
 
-Acked-by: David Hildenbrand <david@redhat.com>
+$ lsslot
+# Slot                     Description       Linux Name    Device(s)
+U9080.HEX.134C1E8-V9-C0    Virtual I/O Slot  30000000      vty
+U9080.HEX.134C1E8-V9-C2    Virtual I/O Slot  30000002      l-lan
+U9080.HEX.134C1E8-V9-C109  Virtual I/O Slot  3000006d      v-scsi
+
+$ ls-vscsi
+host0 U9080.HEX.134C1E8-V9-C109-T0
+
+$ lsscsi
+[0:0:1:0]    disk    AIX      VDASD            0001  /dev/sda
+[0:0:2:0]    cd/dvd  AIX      VOPTA                  /dev/sr0
+
+Incase you need any other details please let me know.
+
+> https://lore.kernel.org/all/20220928181350.9948-1-leeman.duncan@gmail.com/
+> 
+
+Thanks that fixes the problem. I have added a tested-by for the same.
+Thanks for pointing out.
+
 
 -- 
-Thanks,
-
-David / dhildenb
-
+Thanks and Regards
+Srikar Dronamraju
