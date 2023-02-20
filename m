@@ -2,62 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0EEC169D4E1
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Feb 2023 21:22:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 928A369D4E9
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Feb 2023 21:23:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232564AbjBTUWf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Feb 2023 15:22:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41598 "EHLO
+        id S232704AbjBTUXI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Feb 2023 15:23:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42328 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232615AbjBTUWZ (ORCPT
+        with ESMTP id S232708AbjBTUXD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Feb 2023 15:22:25 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B640921A12;
-        Mon, 20 Feb 2023 12:21:56 -0800 (PST)
+        Mon, 20 Feb 2023 15:23:03 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CBE821A18;
+        Mon, 20 Feb 2023 12:22:31 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0A96B60F2F;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7838760F3E;
         Mon, 20 Feb 2023 20:20:05 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id C422CC433D2;
-        Mon, 20 Feb 2023 20:20:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 485E3C43321;
+        Mon, 20 Feb 2023 20:20:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1676924404;
-        bh=99h1FX1DYIZ8FxUg0cKoapThaYPydsBdF/rO8Y7+58s=;
+        s=k20201202; t=1676924405;
+        bh=fp7OIdYbOdBg/TIA6BuvtGBBPP0rn1LeqIEx/iKKBwU=;
         h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=u7loxAInSMPATdjFegvUQlEKrcO8jSZ6o5gyakp8MEdfB3Gnj3bU31av/sdrrKQz2
-         dWWS/m3kJJFAlezBBQaHU21CCWvIdjXOwrbl5sProKcTvTUf4KzmstjcVygYxhzFOn
-         e8jqd4zddwLtROZMaE5xybrVnMKh2MytpCCqUaflcNBa765NHSq+IPf19Iwcs+zbBA
-         3u6fBcdaOpxeVAgpb/RQxnIbHaRI2GlOFVV3T3aPSniCzI000tC3CuLjFwH9Jw69Ng
-         x8ZlDn93pPdm1FnrcjIYhe88+bh2wGS4t/EO+YBNJ50dwB0OGELmwhFdHcYbpi3pTS
-         aa6yF4S7CwF6Q==
+        b=j8jIRMAP+Yx1YSKeLq2QDZYE4QggLsdNsA9Ks5D054/DS744/zXi7XmrQvuJr2J/F
+         tOUuawYR+VngTm0j83Y8wtioxLfMEFgydH1DPSpDyahayoFB6CU6VZl4r1FpGfNRfA
+         WOymKIx0zJZMxgyyEasm01LNGB7PW00RIFtYHKu7HT2UKYDNtnbeiiBjwRHJ7DD91k
+         kXe/lmlhujD9X5EOB9lUiGY/injZXWvsWUC78YSILPCiVakviR/JAqLaBaTbeD+fL3
+         IH/7MM/oHP4vT8J354FTs3K/cy9QlhRi/mv0dMg3kjOwd4nyYyOQdz1/Z0CASbch2u
+         tiDaWtLV+6Ljg==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id AE259E68D20;
-        Mon, 20 Feb 2023 20:20:04 +0000 (UTC)
-Subject: Re: [GIT PULL] Rust for 6.3
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 3088AC43161;
+        Mon, 20 Feb 2023 20:20:05 +0000 (UTC)
+Subject: Re: [GIT PULL] i_version handling changes for v6.3
 From:   pr-tracker-bot@kernel.org
-In-Reply-To: <20230212183249.162376-1-ojeda@kernel.org>
-References: <20230212183249.162376-1-ojeda@kernel.org>
+In-Reply-To: <0d67a8a252ef22c6506f45761c2f7d1185a44190.camel@kernel.org>
+References: <0d67a8a252ef22c6506f45761c2f7d1185a44190.camel@kernel.org>
 X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
-X-PR-Tracked-Message-Id: <20230212183249.162376-1-ojeda@kernel.org>
-X-PR-Tracked-Remote: https://github.com/Rust-for-Linux/linux tags/rust-6.3
-X-PR-Tracked-Commit-Id: 7ea01d3169a28d090fc8f22e7fcb4e4f1090c2d2
+X-PR-Tracked-Message-Id: <0d67a8a252ef22c6506f45761c2f7d1185a44190.camel@kernel.org>
+X-PR-Tracked-Remote: https://git.kernel.org/pub/scm/linux/kernel/git/jlayton/linux.git tags/iversion-v6.3
+X-PR-Tracked-Commit-Id: 58a033c9a3e003e048a0431a296e58c6b363b02b
 X-PR-Merge-Tree: torvalds/linux.git
 X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 69adb0bcb833963050d82e645b6a1a0747662490
-Message-Id: <167692440469.19824.12170630179739195973.pr-tracker-bot@kernel.org>
-Date:   Mon, 20 Feb 2023 20:20:04 +0000
-To:     Miguel Ojeda <ojeda@kernel.org>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Miguel Ojeda <ojeda@kernel.org>,
-        Wedson Almeida Filho <wedsonaf@gmail.com>,
-        Alex Gaynor <alex.gaynor@gmail.com>,
-        Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
-        =?UTF-8?q?Bj=C3=B6rn=20Roy=20Baron?= <bjorn3_gh@protonmail.com>,
-        rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+X-PR-Merge-Commit-Id: de630176bdf885eed442902afe94eb60d8f5f826
+Message-Id: <167692440519.19824.9061915764435780458.pr-tracker-bot@kernel.org>
+Date:   Mon, 20 Feb 2023 20:20:05 +0000
+To:     Jeff Layton <jlayton@kernel.org>
+Cc:     Linus Torvalds <torvalds@linuxfoundation.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        linux-fsdevel <linux-fsdevel@vger.kernel.org>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -65,12 +61,12 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The pull request you sent on Sun, 12 Feb 2023 19:32:49 +0100:
+The pull request you sent on Thu, 16 Feb 2023 06:19:17 -0500:
 
-> https://github.com/Rust-for-Linux/linux tags/rust-6.3
+> https://git.kernel.org/pub/scm/linux/kernel/git/jlayton/linux.git tags/iversion-v6.3
 
 has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/69adb0bcb833963050d82e645b6a1a0747662490
+https://git.kernel.org/torvalds/c/de630176bdf885eed442902afe94eb60d8f5f826
 
 Thank you!
 
