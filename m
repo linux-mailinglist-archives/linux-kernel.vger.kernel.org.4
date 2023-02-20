@@ -2,136 +2,154 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D652269D463
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Feb 2023 20:58:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A9C369D461
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Feb 2023 20:58:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232363AbjBTT6V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Feb 2023 14:58:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49896 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232238AbjBTT6S (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
+        id S232261AbjBTT6S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
         Mon, 20 Feb 2023 14:58:18 -0500
-Received: from mail-qt1-x82f.google.com (mail-qt1-x82f.google.com [IPv6:2607:f8b0:4864:20::82f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D0F41C33C
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Feb 2023 11:58:12 -0800 (PST)
-Received: by mail-qt1-x82f.google.com with SMTP id l12so2552983qtr.0
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Feb 2023 11:58:12 -0800 (PST)
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49844 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231340AbjBTT6Q (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 20 Feb 2023 14:58:16 -0500
+Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87F583C33
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Feb 2023 11:58:11 -0800 (PST)
+Received: by mail-ed1-x533.google.com with SMTP id da10so10075943edb.3
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Feb 2023 11:58:11 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=O7rkSAN5LAMQyeEaKY1rCygZe9FB1uxO0LO3uAv87QU=;
-        b=hInwNusK1f2xWu38WC2TBIVbF8f2TO5jkZeMa3ENjF8+qZQNIQ1MTr6rSdq3y+Btjj
-         6BIDSl7yj7uHqrzdyIoI/UMjBzPuslcrV+Q+GrjgBiWT7ywPd/P6BVOdzmIbFW4XirzN
-         1GDvraFCY30SpfM/41Ra/eV1LxnCL5I0RalU3w7+qykDmmPnkBpbd2IUljWw+cw/LPp1
-         2S1c8I9Tp2jZhgBraFlDDBdvp/sZMrxZalVFVA2qIdXMtkbA6E5Hen2YunYwcGVLmwbt
-         w1U+aLxo8qFs9hnIoTnklHuBLNGbOiMibwiz17Hw2Y2Gdy/LSEkir86U3fL3Y0qWBBy5
-         n8+Q==
+        d=ventanamicro.com; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=PrugdTKLSDJwHyjHjZ36D6OjjlvSRka7EpHAWIsGDzo=;
+        b=QaGObWgZc1ovML+WcKgHPHYayMiw6l/d2CRjtcpbEfbU3WzgAUnE4PghRbQkWPZhCM
+         zwvEurQW6YHEL0FCkn1CpJ/jj07Q7eCNa2YSgg2pNjmh1pUnHpCvuSLK4yNijpFaMbai
+         S9ywBG5R312pa2XZa5Adqa3J6Xiy7bPUob7HuIpdMWP3ypMtipsbdPlKgAZt8tD7ptC/
+         sXTBjXSLuLZ4r1SgkbOEfaerw/Q2YoI9/b1B+pF2ossbynGyGeeUQZ2qmW7Dyte/MIot
+         GB3kDCmOuDoVE9cgd1xswfqkNi+BohvzTeeyvrM503kxOUlhoyn6eCkJClNVWs5fFc2A
+         /klg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=O7rkSAN5LAMQyeEaKY1rCygZe9FB1uxO0LO3uAv87QU=;
-        b=COPDwzfOlK9icu0knH+W+7yfb+GrziSIfj75kt97HxlcFKmoRIcWTHMigjDux37Ev0
-         9yLHU8SeSBK4ztM0zK6beP+21zpAdFoRyOG/uMb1YTwYph9vQFu0UbKMt1Bh6BY3PRoC
-         Au9x5ioa6NQT+MY8UhImmm4HXA30iLsLLirtbQC968k1wt1jS1XZth0FgGgj7r7AFKfo
-         HsIBRJpUbBl6g0UtGQ0LDSRTuPjh1gS64vj4JU3Y74svJTaXEQpjOKEmpV+opOoTAj6B
-         IfyDhc4goBs1Z5o+afSXgaU6u7rpfjBTWvsr1bEaSXkZ4BxSx/8eNpBEVYxovjnzHhqh
-         aG0Q==
-X-Gm-Message-State: AO0yUKUhvmJtfdDy1vyD+0AJDXsTiGAmfT6qt4q8Cm1tUTBZoU6GFIPS
-        Jq5jDKwMX4XLd+iWK8qM7sFdDQ==
-X-Google-Smtp-Source: AK7set/sYxfkHmLO+xORTsRgDUCiomQwgSGXUzHB9SZzOE2YWrMYkjAsLwH9nBABUIsDsOgaxEchJw==
-X-Received: by 2002:ac8:7c43:0:b0:3b8:340b:1aab with SMTP id o3-20020ac87c43000000b003b8340b1aabmr19284007qtv.25.1676923091286;
-        Mon, 20 Feb 2023 11:58:11 -0800 (PST)
-Received: from ripple.attlocal.net (172-10-233-147.lightspeed.sntcca.sbcglobal.net. [172.10.233.147])
-        by smtp.gmail.com with ESMTPSA id q202-20020a3743d3000000b0073b341148b3sm9483000qka.121.2023.02.20.11.58.07
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=PrugdTKLSDJwHyjHjZ36D6OjjlvSRka7EpHAWIsGDzo=;
+        b=KAXjuBpOYrBKMB10d5JoL9Cd1MfELwPGSaY2MjVhvq8qD97RP+c0IdOqWijNzm8i9k
+         Wnn3ejtgao+D6Wz7fSZH8xmjr19/3OJM4e1LI9ClcRrxY8v6zX/A5C3z4w/NRtet4Cdm
+         4puj8WL1HzRj3nzuRQn/xoyc5cv7aZaI+b55PxAMwu3iQ9ool2KHn6BhPY9SaGA+FVyn
+         QiOnlEZHsX8s5PsIfJLf1hDrcsbXVDOr83GXngz1o/qqUbmUe2DSXgUUo2F1Hqf1f9Uq
+         fpJGgW4BLSC4Iv0hplnmHVsyP7qqbOPYHFFaC5LANbKbfcQupP76rzZQPI/dJwMUrsgb
+         k7hA==
+X-Gm-Message-State: AO0yUKV8J4HmCSRIJ6U8ub5Z7UrR76u9T0VH6DLJ1LIFcjJfumXYhBct
+        c+WoHFnSdVPwIFNd5o+AB+aWUA==
+X-Google-Smtp-Source: AK7set//9YBqcSpXyQvjERLB7zb/V6CJ6RVjsiEoNC5DrECGp5WFq8Wo5HkcHQI2vOoive6rCOJFHQ==
+X-Received: by 2002:a17:907:3e87:b0:8af:4969:1bb4 with SMTP id hs7-20020a1709073e8700b008af49691bb4mr13130826ejc.53.1676923090092;
         Mon, 20 Feb 2023 11:58:10 -0800 (PST)
-Date:   Mon, 20 Feb 2023 11:57:59 -0800 (PST)
-From:   Hugh Dickins <hughd@google.com>
-X-X-Sender: hugh@ripple.attlocal.net
-To:     Michael Roth <michael.roth@amd.com>
-cc:     kvm@vger.kernel.org, linux-coco@lists.linux.dev,
-        linux-mm@kvack.org, linux-crypto@vger.kernel.org, x86@kernel.org,
-        linux-kernel@vger.kernel.org, tglx@linutronix.de, mingo@redhat.com,
-        jroedel@suse.de, thomas.lendacky@amd.com, hpa@zytor.com,
-        ardb@kernel.org, pbonzini@redhat.com, seanjc@google.com,
-        vkuznets@redhat.com, jmattson@google.com, luto@kernel.org,
-        dave.hansen@linux.intel.com, slp@redhat.com, pgonda@google.com,
-        peterz@infradead.org, srinivas.pandruvada@linux.intel.com,
-        rientjes@google.com, dovmurik@linux.ibm.com, tobin@ibm.com,
-        bp@alien8.de, vbabka@suse.cz, kirill@shutemov.name,
-        ak@linux.intel.com, tony.luck@intel.com, marcorr@google.com,
-        sathyanarayanan.kuppuswamy@linux.intel.com, alpergun@google.com,
-        dgilbert@redhat.com, jarkko@kernel.org, ashish.kalra@amd.com,
-        nikunj.dadhania@amd.com, Hugh Dickins <hughd@google.com>
-Subject: Re: [PATCH RFC v8 18/56] x86/fault: fix handle_split_page_fault()
- to work with memfd backed pages
-In-Reply-To: <20230220183847.59159-19-michael.roth@amd.com>
-Message-ID: <29e9ed33-52eb-fbb4-5358-76939df747a9@google.com>
-References: <20230220183847.59159-1-michael.roth@amd.com> <20230220183847.59159-19-michael.roth@amd.com>
+Received: from localhost (cst2-173-16.cust.vodafone.cz. [31.30.173.16])
+        by smtp.gmail.com with ESMTPSA id w19-20020a170906b19300b008ddf3476c75sm131906ejy.92.2023.02.20.11.58.09
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 20 Feb 2023 11:58:09 -0800 (PST)
+Date:   Mon, 20 Feb 2023 20:58:08 +0100
+From:   Andrew Jones <ajones@ventanamicro.com>
+To:     Sunil V L <sunilvl@ventanamicro.com>
+Cc:     Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Len Brown <lenb@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Marc Zyngier <maz@kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        linux-riscv@lists.infradead.org, linux-acpi@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Conor Dooley <conor.dooley@microchip.com>,
+        Anup Patel <apatel@ventanamicro.com>,
+        Atish Patra <atishp@rivosinc.com>,
+        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>
+Subject: Re: [PATCH V2 17/21] RISC-V: time.c: Add ACPI support for time_init()
+Message-ID: <20230220195808.reyuclvefujucpsq@orel>
+References: <20230216182043.1946553-1-sunilvl@ventanamicro.com>
+ <20230216182043.1946553-18-sunilvl@ventanamicro.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230216182043.1946553-18-sunilvl@ventanamicro.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 20 Feb 2023, Michael Roth wrote:
-
-> From: Hugh Dickins <hughd@google.com>
-
-No.
-
+On Thu, Feb 16, 2023 at 11:50:39PM +0530, Sunil V L wrote:
+> On ACPI based platforms, timer related information is
+> available in RHCT. Add ACPI based probe support to the
+> timer initialization.
 > 
-> When the address is backed by a memfd, the code to split the page does
-> nothing more than remove the PMD from the page tables. So immediately
-> install a PTE to ensure that any other pages in that 2MB region are
-> brought back as in 4K pages.
-> 
-> Signed-off-by: Hugh Dickins <hughd@google.com>
-
-No.  Suggested-by would be okay.
-
-> Cc: Hugh Dickins <hughd@google.com>
-
-Thanks.  I'm really sorry to be such a jobsworth,
-and have nothing more constructive to say than I did before in
-https://lore.kernel.org/linux-mm/7f2228c4-1586-2934-7b92-1a9d23b6046@google.com/
-(please re-read), but adding a Signed-off-by where none was given is wrong;
-and I'm not ever going to comprehend enough of the context to give it.
-
-Best of luck for the series,
-Hugh
-
-> Signed-off-by: Ashish Kalra <ashish.kalra@amd.com>
-> Signed-off-by: Michael Roth <michael.roth@amd.com>
+> Signed-off-by: Sunil V L <sunilvl@ventanamicro.com>
+> Acked-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 > ---
->  mm/memory.c | 5 +++++
->  1 file changed, 5 insertions(+)
+>  arch/riscv/kernel/time.c | 25 +++++++++++++++++++------
+>  1 file changed, 19 insertions(+), 6 deletions(-)
 > 
-> diff --git a/mm/memory.c b/mm/memory.c
-> index e68da7e403c6..33c9020ba1f8 100644
-> --- a/mm/memory.c
-> +++ b/mm/memory.c
-> @@ -4999,6 +4999,11 @@ static vm_fault_t handle_pte_fault(struct vm_fault *vmf)
->  static int handle_split_page_fault(struct vm_fault *vmf)
->  {
->  	__split_huge_pmd(vmf->vma, vmf->pmd, vmf->address, false, NULL);
-> +	/*
-> +	 * Install a PTE immediately to ensure that any other pages in
-> +	 * this 2MB region are brought back in as 4K pages.
-> +	 */
-> +	__pte_alloc(vmf->vma->vm_mm, vmf->pmd);
->  	return 0;
->  }
+> diff --git a/arch/riscv/kernel/time.c b/arch/riscv/kernel/time.c
+> index 1cf21db4fcc7..e49b897fc657 100644
+> --- a/arch/riscv/kernel/time.c
+> +++ b/arch/riscv/kernel/time.c
+> @@ -4,6 +4,7 @@
+>   * Copyright (C) 2017 SiFive
+>   */
 >  
+> +#include <linux/acpi.h>
+>  #include <linux/of_clk.h>
+>  #include <linux/clockchips.h>
+>  #include <linux/clocksource.h>
+> @@ -18,17 +19,29 @@ EXPORT_SYMBOL_GPL(riscv_timebase);
+>  void __init time_init(void)
+>  {
+>  	struct device_node *cpu;
+> +	struct acpi_table_rhct *rhct;
+> +	acpi_status status;
+>  	u32 prop;
+>  
+> -	cpu = of_find_node_by_path("/cpus");
+> -	if (!cpu || of_property_read_u32(cpu, "timebase-frequency", &prop))
+> -		panic(KERN_WARNING "RISC-V system with no 'timebase-frequency' in DTS\n");
+> -	of_node_put(cpu);
+> -	riscv_timebase = prop;
+> +	if (acpi_disabled) {
+> +		cpu = of_find_node_by_path("/cpus");
+> +		if (!cpu || of_property_read_u32(cpu, "timebase-frequency", &prop))
+> +			panic("RISC-V system with no 'timebase-frequency' in DTS\n");
+> +		of_node_put(cpu);
+> +		riscv_timebase = prop;
+> +	} else {
+> +		status = acpi_get_table(ACPI_SIG_RHCT, 0, (struct acpi_table_header **)&rhct);
+> +		if (ACPI_FAILURE(status))
+> +			panic("RISC-V ACPI system with no RHCT table\n");
+> +		riscv_timebase = rhct->time_base_freq;
+> +		acpi_put_table((struct acpi_table_header *)rhct);
+> +	}
+>  
+>  	lpj_fine = riscv_timebase / HZ;
+>  
+> -	of_clk_init(NULL);
+> +	if (acpi_disabled)
+> +		of_clk_init(NULL);
+
+I think we should be able to move of_clk_init() up into the acpi_disabled
+arm rather than add another if here.
+
+> +
+>  	timer_probe();
+>  
+>  	tick_setup_hrtimer_broadcast();
 > -- 
-> 2.25.1
+> 2.34.1
+> 
+
+Otherwise,
+
+Reviewed-by: Andrew Jones <ajones@ventanamicro.com>
