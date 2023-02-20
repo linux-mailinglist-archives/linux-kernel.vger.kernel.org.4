@@ -2,263 +2,166 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EC52569C579
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Feb 2023 07:53:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F50E69C57E
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Feb 2023 07:54:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230295AbjBTGxw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Feb 2023 01:53:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33956 "EHLO
+        id S230308AbjBTGy3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Feb 2023 01:54:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34362 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230110AbjBTGxv (ORCPT
+        with ESMTP id S230110AbjBTGy1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Feb 2023 01:53:51 -0500
-Received: from mail-il1-f198.google.com (mail-il1-f198.google.com [209.85.166.198])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DF4BEB6E
-        for <linux-kernel@vger.kernel.org>; Sun, 19 Feb 2023 22:53:49 -0800 (PST)
-Received: by mail-il1-f198.google.com with SMTP id x17-20020a92d651000000b003157534461aso1099114ilp.11
-        for <linux-kernel@vger.kernel.org>; Sun, 19 Feb 2023 22:53:49 -0800 (PST)
+        Mon, 20 Feb 2023 01:54:27 -0500
+Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20AFCD536
+        for <linux-kernel@vger.kernel.org>; Sun, 19 Feb 2023 22:54:26 -0800 (PST)
+Received: from mail-yb1-f199.google.com (mail-yb1-f199.google.com [209.85.219.199])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 841AB3F212
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Feb 2023 06:54:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1676876064;
+        bh=6loQ2derknDF1fwYr1ujI7Q/SpJj4KMMMpxnbRSctLQ=;
+        h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+         To:Cc:Content-Type;
+        b=ishZJqNz24rt6ljUH8gmE8hQgOmat3xEaXUIpQ0KvCjir4YQn5UjnGSqIBA6cktCF
+         MBMhYZNC9F0zKE0asFg+6otg3bdsVcT2rrpqSkHFQ89UHcsimdQFo6Lah3yWIrGAYk
+         5u3FpHXk42WleSr8OGwahrUfD8B4/aiYNOccVCrAOmQzS2VXrEfW+9ctptJvEnyvIt
+         d4Za4QR6UD45TsMQH638JMjWUqbJWAtTH6cVDjziyDRyroDHZvpV0RPTndHAw5JQvs
+         Opy0uFEfBXS2Sq7Vb7PfSlld7pirFZuKr5zMbVS8Y8C2oJtlm1QnnosiWPoXLvQqEF
+         5OZN+/bVQzn5A==
+Received: by mail-yb1-f199.google.com with SMTP id i11-20020a256d0b000000b0086349255277so2222281ybc.8
+        for <linux-kernel@vger.kernel.org>; Sun, 19 Feb 2023 22:54:24 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=m/AmDIpLZkmroQ+870/z+05HD1TcWtyHCKJNzJ4mXk4=;
-        b=p55b6yMB1lFWriK5oMc/aCW9mGhj+0V3e66K1Z2Wk7AfHjgBGfGptEAoZ+n8ge7klG
-         rmTjUsFjTBkCd31lqpztI47ObF5AExiawy/gBlbfKIlbcfdqF+HrfKRAo1vJWzAwsQ49
-         6mPTiUSeBOMESqTbNFlGPXxonmk4fxgVyXt1usaken3CMCO20XjCGKoTPjudaOhiuru8
-         9NbzebYsEBLuuQUPPTy6YU7Po7dz/OlfcW2cKU3W+0cKouYs6ZSb2hkRIj8+v/U4D4YO
-         LB+Z4LMTtHLuZMLYDa9A+m/4eubnbnLPl6ks1uEFjg2maOTZu/aTK3hjuHdrBy2VXuzj
-         7K7g==
-X-Gm-Message-State: AO0yUKVjjbY0ehsmDBuP22HncCzdohWasoeZmxsnQ6icJp9k0EdaO+85
-        tqU2Av0qMXJ5xGMUlNMr3L0QWqwV7HtDfrDC8WGg485o/d8L
-X-Google-Smtp-Source: AK7set+FFpjbtuBQBhmtm/zLYnmGRleTT9tprXbZUp+IhHGwBlFe49kIikW5fIAHkSZqc7pTfK5ZasYVUwC2QmmXE0CeT5XazSQ/
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=6loQ2derknDF1fwYr1ujI7Q/SpJj4KMMMpxnbRSctLQ=;
+        b=RrM/ytFGi6+AkCkcE0vBo8hudDAwPckGJZjJsDJTlzB8B292qlPQRD4JH4qQcXhmA9
+         dzHiVL0zNOgE+OP16wlE9tePipj+8gOcjuFeqmp82AwUJknXXJyGgo8CqdMpkin9SuO8
+         qXnqz6eX5I0Q3USb6kQlXnXekKDXQ7qZNJjdRtURWdeJ6XRZKbc6AUolJA6Sf4OngwYy
+         d5KRnqBmED6aNLLA+jfwKnTE+Mv70rR0CfqQFH8N+834nl5WbpO1JqumDWJBccmbQkaj
+         VoZ9ufbbxOZ1yOSN/Q45lovV3FZBh27OjNRJvJZCR+C2M9L485JWC0UFqNOuPekF8fT+
+         jhmQ==
+X-Gm-Message-State: AO0yUKWYPhN7Iohs5bGqdyq4Mj+hb6cCqY/fU4c/5MA6lpoF1ciRoPWI
+        iZ67WANOcRQB3fJe4KvKp6lLu6I6B8x9KsJYZaYtugSSoxqnBwrzrzM/tGeMEtfFcM2jbhQz6TW
+        xeq0JYDgpvtNKDMu70r9ACw+M62/AMQqddgcyrTvX9P2jtqcUJhplMf1deA==
+X-Received: by 2002:a0d:e4c2:0:b0:506:3aca:6ff6 with SMTP id n185-20020a0de4c2000000b005063aca6ff6mr2563823ywe.213.1676876062512;
+        Sun, 19 Feb 2023 22:54:22 -0800 (PST)
+X-Google-Smtp-Source: AK7set/BVRO9NeOsU+tO5ARGrKD0myhKVlAaKv66ZF0A3G7P/VDIqxuQ2SQM6upwT1jKTQHFnYQNYv3QUFoAI/H/XF0=
+X-Received: by 2002:a0d:e4c2:0:b0:506:3aca:6ff6 with SMTP id
+ n185-20020a0de4c2000000b005063aca6ff6mr2563801ywe.213.1676876062284; Sun, 19
+ Feb 2023 22:54:22 -0800 (PST)
 MIME-Version: 1.0
-X-Received: by 2002:a5d:8614:0:b0:73b:1230:3318 with SMTP id
- f20-20020a5d8614000000b0073b12303318mr1971093iol.94.1676876028767; Sun, 19
- Feb 2023 22:53:48 -0800 (PST)
-Date:   Sun, 19 Feb 2023 22:53:48 -0800
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <00000000000006f99205f51c2064@google.com>
-Subject: [syzbot] [f2fs?] KASAN: use-after-free Read in f2fs_lookup_rb_tree_ret
-From:   syzbot <syzbot+be5d4a7d1df4ced1c53c@syzkaller.appspotmail.com>
-To:     chao@kernel.org, jaegeuk@kernel.org,
-        linux-f2fs-devel@lists.sourceforge.net,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com
+References: <20230215075855.46204-1-acelan.kao@canonical.com> <141b6b13-00ca-c941-e315-6b2fe62e6515@amd.com>
+In-Reply-To: <141b6b13-00ca-c941-e315-6b2fe62e6515@amd.com>
+From:   AceLan Kao <acelan.kao@canonical.com>
+Date:   Mon, 20 Feb 2023 14:54:11 +0800
+Message-ID: <CAFv23Qk2yG+KPGd1s1JsY8rBfU_z-tFe6KSo6r=q7DsQ6ETL_w@mail.gmail.com>
+Subject: Re: [PATCH] usb: xhci: Workaround for runpm issue on AMD xHC
+To:     Mario Limonciello <mario.limonciello@amd.com>
+Cc:     Mathias Nyman <mathias.nyman@intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Shyam Sundar S K <Shyam-sundar.S-k@amd.com>,
+        "Tsao, Anson" <anson.tsao@amd.com>,
+        "Gong, Richard" <Richard.Gong@amd.com>,
+        Basavaraj Natikar <Basavaraj.Natikar@amd.com>,
+        "Oakes, Gregory" <Gregory.Oakes@amd.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+Hi Mario,
 
-syzbot found the following issue on:
+Mario Limonciello <mario.limonciello@amd.com> =E6=96=BC 2023=E5=B9=B42=E6=
+=9C=8820=E6=97=A5 =E9=80=B1=E4=B8=80 =E4=B8=8A=E5=8D=8811:14=E5=AF=AB=E9=81=
+=93=EF=BC=9A
+>
+> + a bunch of AMD guys
+>
+> Please don't submit quirks for AMD systems without talking to AMD about
+> if they make sense.
+Got it.
 
-HEAD commit:    e1c04510f521 Merge tag 'pm-6.2-rc9' of git://git.kernel.or..
-git tree:       upstream
-console output: https://syzkaller.appspot.com/x/log.txt?x=13833880c80000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=ed360bed0f6dd86a
-dashboard link: https://syzkaller.appspot.com/bug?extid=be5d4a7d1df4ced1c53c
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+>
+> On 2/15/23 01:58, AceLan Kao wrote:
+> > From: "Chia-Lin Kao (AceLan)" <acelan.kao@canonical.com>
+> >
+> > When the xHC host is runtime suspended, the device connects to it will =
+be
+> > disconnected while trying to use it.
+> > The quirk in commit 2a632815683d ("usb: xhci: Workaround for S3 issue o=
+n
+> > AMD SNPS 3.0 xHC") also works for this issue, so added its ID to the
+> > quirk, too.
+> >
+> > 05:00.0 USB controller [0c03]: Advanced Micro Devices, Inc. [AMD] Devic=
+e [1022:1505] (prog-if 30 [XHCI])
+> >          Subsystem: Dell Device [1028:0c3f]
+> >          Control: I/O+ Mem+ BusMaster+ SpecCycle- MemWINV- VGASnoop- Pa=
+rErr- Stepping- SERR- FastB2B- DisINTx+
+> >          Status: Cap+ 66MHz- UDF- FastB2B- ParErr- DEVSEL=3Dfast >TAbor=
+t- <TAbort- <MAbort- >SERR- <PERR- INTx-
+> >          Latency: 0, Cache Line Size: 64 bytes
+> >          Interrupt: pin A routed to IRQ 60
+> >          IOMMU group: 21
+> >          Region 0: Memory at c0000000 (64-bit, non-prefetchable) [size=
+=3D1M]
+> >          Capabilities: <access denied>
+> >          Kernel driver in use: xhci_hcd
+> >          Kernel modules: xhci_pci
+> >
+> > [   20.769275] xhci_hcd 0000:05:00.0: xHCI host not responding to stop =
+endpoint command
+> > [   20.771429] xhci_hcd 0000:05:00.0: xHCI host controller not respondi=
+ng, assume dead
+> > [   20.771444] xhci_hcd 0000:05:00.0: HC died; cleaning up
+> > [   20.771733] usb 5-1: USB disconnect, device number 2
+> >
+> > Cc: stable@vger.kernel.org #v4.19+
+> > Signed-off-by: Chia-Lin Kao (AceLan) <acelan.kao@canonical.com>
+>
+> Is this system that you're finding this bug already launched?  This
+> looks like a BIOS bug.
+>
+> If it's not launched we should fix it from BIOS, reach out to AMD off
+> list to talk about it.
+This system is not launched yet, any hints about the BIOS issue?
+I tried to disable D3Cold, but the symptom is the same.
+The xHC enters D3Hot and then it can't be waken up.
 
-Unfortunately, I don't have any reproducer for this issue yet.
-
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+be5d4a7d1df4ced1c53c@syzkaller.appspotmail.com
-
-loop0: rw=1048577, sector=79920, nr_sectors = 2000 limit=40427
-kworker/u17:1: attempt to access beyond end of device
-loop0: rw=1048577, sector=49152, nr_sectors = 4096 limit=40427
-==================================================================
-BUG: KASAN: use-after-free in f2fs_lookup_rb_tree_ret+0x70e/0x750 fs/f2fs/extent_cache.c:268
-Read of size 8 at addr ffff888048193118 by task kworker/u17:1/15
-
-CPU: 2 PID: 15 Comm: kworker/u17:1 Not tainted 6.2.0-rc8-syzkaller-00021-ge1c04510f521 #0
-Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS 1.14.0-2 04/01/2014
-Workqueue: writeback wb_workfn (flush-7:0)
-Call Trace:
- <TASK>
- __dump_stack lib/dump_stack.c:88 [inline]
- dump_stack_lvl+0xd1/0x138 lib/dump_stack.c:106
- print_address_description mm/kasan/report.c:306 [inline]
- print_report+0x15e/0x461 mm/kasan/report.c:417
- kasan_report+0xbf/0x1f0 mm/kasan/report.c:517
- f2fs_lookup_rb_tree_ret+0x70e/0x750 fs/f2fs/extent_cache.c:268
- __update_extent_tree_range+0x322/0x1740 fs/f2fs/extent_cache.c:712
- __update_extent_cache+0x588/0x740 fs/f2fs/extent_cache.c:962
- f2fs_outplace_write_data+0x1eb/0x280 fs/f2fs/segment.c:3453
- f2fs_do_write_data_page+0x9c7/0x1e20 fs/f2fs/data.c:2745
- f2fs_write_single_data_page+0x13f0/0x1920 fs/f2fs/data.c:2863
- f2fs_write_cache_pages+0xaa8/0x2010 fs/f2fs/data.c:3115
- __f2fs_write_data_pages fs/f2fs/data.c:3265 [inline]
- f2fs_write_data_pages+0xca8/0x1230 fs/f2fs/data.c:3292
- do_writepages+0x1af/0x690 mm/page-writeback.c:2581
- __writeback_single_inode+0x159/0x1440 fs/fs-writeback.c:1598
- writeback_sb_inodes+0x54d/0xf90 fs/fs-writeback.c:1889
- __writeback_inodes_wb+0xc6/0x280 fs/fs-writeback.c:1960
- wb_writeback+0x8d6/0xd70 fs/fs-writeback.c:2065
- wb_check_background_flush fs/fs-writeback.c:2131 [inline]
- wb_do_writeback fs/fs-writeback.c:2219 [inline]
- wb_workfn+0xa16/0x12f0 fs/fs-writeback.c:2246
- process_one_work+0x9bf/0x1710 kernel/workqueue.c:2289
- worker_thread+0x669/0x1090 kernel/workqueue.c:2436
- kthread+0x2e8/0x3a0 kernel/kthread.c:376
- ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:308
- </TASK>
-
-Allocated by task 5258:
- kasan_save_stack+0x22/0x40 mm/kasan/common.c:45
- kasan_set_track+0x25/0x30 mm/kasan/common.c:52
- __kasan_slab_alloc+0x7f/0x90 mm/kasan/common.c:328
- kasan_slab_alloc include/linux/kasan.h:201 [inline]
- slab_post_alloc_hook mm/slab.h:761 [inline]
- slab_alloc_node mm/slab.c:3263 [inline]
- slab_alloc mm/slab.c:3272 [inline]
- __kmem_cache_alloc_lru mm/slab.c:3449 [inline]
- kmem_cache_alloc+0x225/0x460 mm/slab.c:3458
- f2fs_kmem_cache_alloc_nofail fs/f2fs/f2fs.h:2796 [inline]
- f2fs_kmem_cache_alloc fs/f2fs/f2fs.h:2806 [inline]
- __grab_extent_tree+0x278/0x5a0 fs/f2fs/extent_cache.c:423
- f2fs_init_extent_tree+0x57/0x80 fs/f2fs/extent_cache.c:533
- f2fs_new_inode+0xdfa/0x2760 fs/f2fs/namei.c:312
- __f2fs_tmpfile+0xba/0x440 fs/f2fs/namei.c:852
- f2fs_ioc_start_atomic_write+0x409/0x1260 fs/f2fs/file.c:2098
- __f2fs_ioctl+0x3f2a/0xaaf0 fs/f2fs/file.c:4150
- f2fs_ioctl+0x18e/0x220 fs/f2fs/file.c:4242
- vfs_ioctl fs/ioctl.c:51 [inline]
- __do_sys_ioctl fs/ioctl.c:870 [inline]
- __se_sys_ioctl fs/ioctl.c:856 [inline]
- __x64_sys_ioctl+0x197/0x210 fs/ioctl.c:856
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-
-Freed by task 5258:
- kasan_save_stack+0x22/0x40 mm/kasan/common.c:45
- kasan_set_track+0x25/0x30 mm/kasan/common.c:52
- kasan_save_free_info+0x2b/0x40 mm/kasan/generic.c:523
- ____kasan_slab_free mm/kasan/common.c:236 [inline]
- ____kasan_slab_free+0x13b/0x1a0 mm/kasan/common.c:200
- kasan_slab_free include/linux/kasan.h:177 [inline]
- __cache_free mm/slab.c:3396 [inline]
- __do_kmem_cache_free mm/slab.c:3582 [inline]
- kmem_cache_free mm/slab.c:3607 [inline]
- kmem_cache_free+0x108/0x4c0 mm/slab.c:3600
- __destroy_extent_tree+0x1f8/0x7f0 fs/f2fs/extent_cache.c:1193
- f2fs_destroy_extent_tree+0x17/0x30 fs/f2fs/extent_cache.c:1204
- f2fs_evict_inode+0x38b/0x1df0 fs/f2fs/inode.c:789
- evict+0x2ed/0x6b0 fs/inode.c:664
- iput_final fs/inode.c:1747 [inline]
- iput.part.0+0x59b/0x880 fs/inode.c:1773
- iput+0x5c/0x80 fs/inode.c:1763
- f2fs_abort_atomic_write+0xea/0x4f0 fs/f2fs/segment.c:196
- f2fs_release_file+0xc8/0xf0 fs/f2fs/file.c:1869
- __fput+0x27c/0xa90 fs/file_table.c:320
- task_work_run+0x16f/0x270 kernel/task_work.c:179
- get_signal+0x1c7/0x2450 kernel/signal.c:2635
- arch_do_signal_or_restart+0x79/0x5c0 arch/x86/kernel/signal.c:306
- exit_to_user_mode_loop kernel/entry/common.c:168 [inline]
- exit_to_user_mode_prepare+0x15f/0x250 kernel/entry/common.c:203
- __syscall_exit_to_user_mode_work kernel/entry/common.c:285 [inline]
- syscall_exit_to_user_mode+0x1d/0x50 kernel/entry/common.c:296
- do_syscall_64+0x46/0xb0 arch/x86/entry/common.c:86
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-
-The buggy address belongs to the object at ffff888048193110
- which belongs to the cache f2fs_extent_tree of size 144
-The buggy address is located 8 bytes inside of
- 144-byte region [ffff888048193110, ffff8880481931a0)
-
-The buggy address belongs to the physical page:
-page:ffffea00012064c0 refcount:1 mapcount:0 mapping:0000000000000000 index:0xffff888048193ee0 pfn:0x48193
-flags: 0x4fff00000000200(slab|node=1|zone=1|lastcpupid=0x7ff)
-raw: 04fff00000000200 ffff888043be9e00 ffff888043c15d40 ffff888043c15d40
-raw: ffff888048193ee0 ffff888048193040 0000000100000002 0000000000000000
-page dumped because: kasan: bad access detected
-page_owner tracks the page as allocated
-page last allocated via order 0, migratetype Reclaimable, gfp_mask 0x140c50(GFP_NOFS|__GFP_COMP|__GFP_HARDWALL|__GFP_RECLAIMABLE), pid 5258, tgid 5254 (syz-executor.0), ts 231438117054, free_ts 231023552910
- prep_new_page mm/page_alloc.c:2531 [inline]
- get_page_from_freelist+0x119c/0x2ce0 mm/page_alloc.c:4283
- __alloc_pages+0x1cb/0x5b0 mm/page_alloc.c:5549
- __alloc_pages_node include/linux/gfp.h:237 [inline]
- kmem_getpages mm/slab.c:1363 [inline]
- cache_grow_begin+0x94/0x390 mm/slab.c:2576
- fallback_alloc+0x1e2/0x2d0 mm/slab.c:3119
- __do_cache_alloc mm/slab.c:3223 [inline]
- slab_alloc_node mm/slab.c:3256 [inline]
- slab_alloc mm/slab.c:3272 [inline]
- __kmem_cache_alloc_lru mm/slab.c:3449 [inline]
- kmem_cache_alloc+0x302/0x460 mm/slab.c:3458
- f2fs_kmem_cache_alloc_nofail fs/f2fs/f2fs.h:2796 [inline]
- f2fs_kmem_cache_alloc fs/f2fs/f2fs.h:2806 [inline]
- __grab_extent_tree+0x278/0x5a0 fs/f2fs/extent_cache.c:423
- f2fs_init_extent_tree+0x57/0x80 fs/f2fs/extent_cache.c:533
- f2fs_new_inode+0xdfa/0x2760 fs/f2fs/namei.c:312
- f2fs_create+0x1db/0x670 fs/f2fs/namei.c:353
- lookup_open.isra.0+0xee7/0x1270 fs/namei.c:3413
- open_last_lookups fs/namei.c:3481 [inline]
- path_openat+0x975/0x2a50 fs/namei.c:3711
- do_filp_open+0x1ba/0x410 fs/namei.c:3741
- do_sys_openat2+0x16d/0x4c0 fs/open.c:1310
- do_sys_open fs/open.c:1326 [inline]
- __do_sys_openat fs/open.c:1342 [inline]
- __se_sys_openat fs/open.c:1337 [inline]
- __x64_sys_openat+0x143/0x1f0 fs/open.c:1337
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-page last free stack trace:
- reset_page_owner include/linux/page_owner.h:24 [inline]
- free_pages_prepare mm/page_alloc.c:1446 [inline]
- free_pcp_prepare+0x65c/0xc00 mm/page_alloc.c:1496
- free_unref_page_prepare mm/page_alloc.c:3369 [inline]
- free_unref_page+0x1d/0x490 mm/page_alloc.c:3464
- slab_destroy mm/slab.c:1619 [inline]
- slabs_destroy+0x85/0xc0 mm/slab.c:1639
- __cache_free_alien mm/slab.c:774 [inline]
- cache_free_alien mm/slab.c:790 [inline]
- ___cache_free+0x204/0x3d0 mm/slab.c:3423
- qlink_free mm/kasan/quarantine.c:168 [inline]
- qlist_free_all+0x4f/0x1a0 mm/kasan/quarantine.c:187
- kasan_quarantine_reduce+0x192/0x220 mm/kasan/quarantine.c:294
- __kasan_slab_alloc+0x63/0x90 mm/kasan/common.c:305
- kasan_slab_alloc include/linux/kasan.h:201 [inline]
- slab_post_alloc_hook mm/slab.h:761 [inline]
- slab_alloc_node mm/slab.c:3263 [inline]
- slab_alloc mm/slab.c:3272 [inline]
- __kmem_cache_alloc_lru mm/slab.c:3449 [inline]
- kmem_cache_alloc+0x225/0x460 mm/slab.c:3458
- getname_flags.part.0+0x50/0x4f0 fs/namei.c:139
- getname_flags+0x9e/0xe0 include/linux/audit.h:320
- user_path_at_empty+0x2f/0x60 fs/namei.c:2875
- user_path_at include/linux/namei.h:57 [inline]
- ksys_umount fs/namespace.c:1927 [inline]
- __do_sys_umount fs/namespace.c:1935 [inline]
- __se_sys_umount fs/namespace.c:1933 [inline]
- __x64_sys_umount+0xfc/0x190 fs/namespace.c:1933
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-
-Memory state around the buggy address:
- ffff888048193000: fc fc fc fc fc fc fc fc 00 00 00 00 00 00 00 00
- ffff888048193080: 00 00 00 00 00 00 00 00 00 00 fc fc fc fc fc fc
->ffff888048193100: fc fc fa fb fb fb fb fb fb fb fb fb fb fb fb fb
-                            ^
- ffff888048193180: fb fb fb fb fc fc fc fc fc fc fc fc fc fc fc fc
- ffff888048193200: fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc
-==================================================================
-
-
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+>
+> > ---
+> >   drivers/usb/host/xhci-pci.c | 4 +++-
+> >   1 file changed, 3 insertions(+), 1 deletion(-)
+> >
+> > diff --git a/drivers/usb/host/xhci-pci.c b/drivers/usb/host/xhci-pci.c
+> > index fb988e4ea924..b8f6843a8cd1 100644
+> > --- a/drivers/usb/host/xhci-pci.c
+> > +++ b/drivers/usb/host/xhci-pci.c
+> > @@ -177,7 +177,9 @@ static void xhci_pci_quirks(struct device *dev, str=
+uct xhci_hcd *xhci)
+> >           (pdev->device =3D=3D 0x15e0 || pdev->device =3D=3D 0x15e1))
+> >               xhci->quirks |=3D XHCI_SNPS_BROKEN_SUSPEND;
+> >
+> > -     if (pdev->vendor =3D=3D PCI_VENDOR_ID_AMD && pdev->device =3D=3D =
+0x15e5) {
+> > +     if (pdev->vendor =3D=3D PCI_VENDOR_ID_AMD &&
+> > +             (pdev->device =3D=3D 0x15e5 ||
+> > +              pdev->device =3D=3D 0x1505)) {
+> >               xhci->quirks |=3D XHCI_DISABLE_SPARSE;
+> >               xhci->quirks |=3D XHCI_RESET_ON_RESUME;
+> >       }
+>
