@@ -2,98 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 43BE569D445
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Feb 2023 20:44:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E8D3269D447
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Feb 2023 20:44:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232342AbjBTToA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Feb 2023 14:44:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41732 "EHLO
+        id S232371AbjBTTos (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Feb 2023 14:44:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42284 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231921AbjBTTn7 (ORCPT
+        with ESMTP id S231605AbjBTToq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Feb 2023 14:43:59 -0500
-Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B322CA10;
-        Mon, 20 Feb 2023 11:43:57 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-        bh=9HbrxqQTQpnPyk90Ibmi+L1eYlZ8P8y6XH2D3rbiNws=; b=UfFwuH6iH/M1sgUS3t+DNVm34J
-        hyEwZY+mOKUDtI34qcK4zuS9bReY+5FrBE4PLLAmm814GqdqowfY41TFnRqrrbVUc5RrDT85KHAcM
-        VM+FSvlsXppxYfq8qVwOLeTlxKqSOoKd6Fm20bWRMREnfV8VdMOsU4EVCfy35cme8usA=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-        (envelope-from <andrew@lunn.ch>)
-        id 1pUC4e-005XE4-Td; Mon, 20 Feb 2023 20:43:44 +0100
-Date:   Mon, 20 Feb 2023 20:43:44 +0100
-From:   Andrew Lunn <andrew@lunn.ch>
-To:     "Russell King (Oracle)" <linux@armlinux.org.uk>
-Cc:     Marc Zyngier <maz@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        LKML <linux-kernel@vger.kernel.org>, x86@kernel.org,
-        Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
-        linux-pci@vger.kernel.org, Bjorn Helgaas <bhelgaas@google.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jason Gunthorpe <jgg@mellanox.com>,
-        Dave Jiang <dave.jiang@intel.com>,
-        Alex Williamson <alex.williamson@redhat.com>,
-        Kevin Tian <kevin.tian@intel.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Logan Gunthorpe <logang@deltatee.com>,
-        Ashok Raj <ashok.raj@intel.com>, Jon Mason <jdmason@kudzu.us>,
-        Allen Hubbe <allenbh@gmail.com>
-Subject: Re: [REGRESSION] Re: [patch V3 09/33] genirq/msi: Add range checking
- to msi_insert_desc()
-Message-ID: <Y/PNcLACXSN2X/F/@lunn.ch>
-References: <20221124230505.073418677@linutronix.de>
- <20221124232325.798556374@linutronix.de>
- <Y/Opu6ETe3ZzZ/8E@shell.armlinux.org.uk>
- <86fsb0xkaa.wl-maz@kernel.org>
- <Y/PHN+0nETV3o1pQ@shell.armlinux.org.uk>
+        Mon, 20 Feb 2023 14:44:46 -0500
+Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3EB3E047
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Feb 2023 11:44:43 -0800 (PST)
+Received: by mail-wm1-x334.google.com with SMTP id n31so1622923wms.2
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Feb 2023 11:44:43 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=fx6Cy3cfwtLc2tIkcYv2b/6D80WxggLsKcXv+WH52kA=;
+        b=Yzr32MycoFefeV/s5hGlruGe4mCnnO/LjwL2l8oZAJaeg9M+kOHt1A9JP6b1LjIyJi
+         ZBD3GzBYVzqpXOzA3eq3W8nKGr2ZmAInCdp7lNPsuDhiFIj36DJQwsxsKpXid7dL/CrC
+         q20SDqdEx6TDdM9x0EiMagmv4/BH/htFIVWRX+1T43WRniojzL/kkSmMdIMFFL5L3Zsi
+         SBLziUP+GmnAbXFaUGfaERO3oS000f9I5alU8bLG13OlhF+YHbL+RHuY42AB711IPh5k
+         2AUqcRNZ6kXtZcAB40EMv2yQGV/OiOpU97JgraWxzEGL+CSDxP+1SrMlSf4q2/vggpXy
+         vXrQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=fx6Cy3cfwtLc2tIkcYv2b/6D80WxggLsKcXv+WH52kA=;
+        b=1QIHUQ9PGtqU+t7+lfblCWyPWwtLKzsRL2Fycgn3eLm1CvBpsiD7QhVCMJpIc5qkLT
+         V2qOpoxX2ROzUNLZ6r++bDGbymvD536d8TjxEX2Ecyq1meXRfcTEHTljmHNbAKIIB+74
+         df3evEWSKMtJv7X5rxBtwR+XRGDyGCSeuqCPqfzhfvJn0IKdzvM56wKpobAMZ5GLN2pP
+         MoX7Gnvj2pZc3ClGS3PsICDtCBTj3xSuR9XeQUUpGYz2hLfJJoB54LbL8mXRQBACqmDD
+         isAiwsGX0rNF8vuxNlBolDjQdETCaMBSePdcdgtElSYft0TESL5GWKZGEbUlz0x8m85f
+         wpoQ==
+X-Gm-Message-State: AO0yUKXwM88HUP1bN2e7f+pNcO/QIcub+jqpyTdsFC2hdH7S0iQtOVab
+        Tnh3pKBjesPZ8HKX6LzghVd9Zw==
+X-Google-Smtp-Source: AK7set81wWp/nPh3uqn5YDsno1xkj3omzQM9DY1JIhAnX8EuPDIa6IJRQOWOHx81vBlsHWmBpa7Bkw==
+X-Received: by 2002:a05:600c:4f44:b0:3e1:df8d:e022 with SMTP id m4-20020a05600c4f4400b003e1df8de022mr1754669wmq.9.1676922282285;
+        Mon, 20 Feb 2023 11:44:42 -0800 (PST)
+Received: from blmsp ([2001:4090:a247:8056:be7d:83e:a6a5:4659])
+        by smtp.gmail.com with ESMTPSA id s10-20020a7bc38a000000b003dc1a525f22sm14871414wmj.25.2023.02.20.11.44.41
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 20 Feb 2023 11:44:41 -0800 (PST)
+Date:   Mon, 20 Feb 2023 20:44:41 +0100
+From:   Markus Schneider-Pargmann <msp@baylibre.com>
+To:     Matthias Brugger <matthias.bgg@gmail.com>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Chun-Jie Chen <chun-jie.chen@mediatek.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Fabien Parent <parent.f@gmail.com>, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org,
+        Fabien Parent <fparent@baylibre.com>
+Subject: Re: [PATCH 8/8] soc: mediatek: pm-domains: Add support for MT8365
+Message-ID: <20230220194441.2564ct25qsxvvvic@blmsp>
+References: <20230105170735.1637416-1-msp@baylibre.com>
+ <20230105170735.1637416-9-msp@baylibre.com>
+ <07a16be1-3f96-374c-3a9b-e3920bb4b437@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <Y/PHN+0nETV3o1pQ@shell.armlinux.org.uk>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <07a16be1-3f96-374c-3a9b-e3920bb4b437@gmail.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 20, 2023 at 07:17:11PM +0000, Russell King (Oracle) wrote:
-> On Mon, Feb 20, 2023 at 06:29:33PM +0000, Marc Zyngier wrote:
-> > Lockdep also reports[1] a possible circular locking dependency between
-> > phy_attach_direct() and rtnetlink_rcv_msg(), which looks interesting.
+Hi Matthias,
+
+On Fri, Feb 03, 2023 at 01:22:38PM +0100, Matthias Brugger wrote:
+> 
+> 
+> On 05/01/2023 18:07, Markus Schneider-Pargmann wrote:
+> > From: Fabien Parent <fparent@baylibre.com>
 > > 
-> > [1] https://paste.debian.net/1271454/
+> > Add the needed board data to support MT8365 SoC.
+> > 
+> > Signed-off-by: Fabien Parent <fparent@baylibre.com>
+> > Signed-off-by: Markus Schneider-Pargmann <msp@baylibre.com>
+> > ---
+> >   drivers/soc/mediatek/mt8365-pm-domains.h | 147 +++++++++++++++++++++++
+> >   drivers/soc/mediatek/mtk-pm-domains.c    |   5 +
+> >   2 files changed, 152 insertions(+)
+> >   create mode 100644 drivers/soc/mediatek/mt8365-pm-domains.h
+> > 
+> > diff --git a/drivers/soc/mediatek/mt8365-pm-domains.h b/drivers/soc/mediatek/mt8365-pm-domains.h
+> > new file mode 100644
+> > index 000000000000..8735e833b15b
+> > --- /dev/null
+> > +++ b/drivers/soc/mediatek/mt8365-pm-domains.h
+> > @@ -0,0 +1,147 @@
+> > +/* SPDX-License-Identifier: GPL-2.0-only */
+> > +
+> > +#ifndef __SOC_MEDIATEK_MT8365_PM_DOMAINS_H
+> > +#define __SOC_MEDIATEK_MT8365_PM_DOMAINS_H
+> > +
+> > +#include "mtk-pm-domains.h"
+> > +#include <dt-bindings/power/mediatek,mt8365-power.h>
+> > +
+> > +/*
+> > + * MT8365 power domain support
+> > + */
+> > +
+> > +static const struct scpsys_domain_data scpsys_domain_data_mt8365[] = {
+> > +	[MT8365_POWER_DOMAIN_MM] = {
+> > +		.name = "mm",
+> > +		.sta_mask = PWR_STATUS_DISP,
+> > +		.ctl_offs = 0x30c,
+> > +		.pwr_sta_offs = 0x0180,
+> > +		.pwr_sta2nd_offs = 0x0184,
+> > +		.sram_pdn_bits = GENMASK(8, 8),
+> > +		.sram_pdn_ack_bits = GENMASK(12, 12),
+> > +		.caps = MTK_SCPD_STRICT_BUS_PROTECTION | MTK_SCPD_HAS_WAY_EN,
+> > +		.bp_infracfg = {
+> > +			BUS_PROT_WR(BIT(16) | BIT(17), 0x2a8, 0x2ac, 0x258),
+> > +			BUS_PROT_WR(BIT(1) | BIT(2) | BIT(10) | BIT(11), 0x2a0, 0x2a4, 0x228),
+> > +			BUS_PROT_WAY_EN(BIT(6), 0x200, BIT(24), 0x0),
+> > +			BUS_PROT_WAY_EN(BIT(5), 0x234, BIT(14), 0x28),
+> > +			BUS_PROT_WR(BIT(6), 0x2a0, 0x2a4, 0x228),
 > 
-> Adding Andrew, but really this should be in a separate thread, since
-> this has nothing to do with MSI.
 > 
-> It looks like the open path takes the RTNL lock followed by the phydev
-> lock, whereas the PHY probe path takes the phydev lock, and then if
-> there's a SFP attached to the PHY, we end up taking the RTNL lock.
-> That's going to be utterly horrid to try and solve, and isn't going
-> to be quick to fix.
+> BUS_PROT_WR(BIT(6), 0x2a0, 0x2a4, 0x228) repeates several times in the
+> definition. Would it make sense to create a new define like we did with
+> BUS_PROT_UPDATE_TOPAXI()? Are this offests are used in other SoCs.
+> 
+> In any case instead of magic numbers the values should be defined in
+> include/linux/soc/mediatek/infracfg.h or appropiate header files.
 
-What are we actually trying to protect in phy_probe() when we take the
-lock and call phydev->drv->probe(phydev) ?
+Thanks, you are right, I got rid of all the magic numbers and introduced
+some helper defines as well.
 
-The main purpose of the lock is to protect members of phydev, such as
-link, speed, duplex, which can be inconsistent when the lock is not
-held. But the PHY is not attached to a MAC yet, so a MAC cannot be
-using it, and those members of phydev are not valid yet anyway.
-
-The lock also prevents parallel operation on the device by phylib, but
-i cannot think of how that could happen at this early stage in the
-life of the PHY.
-
-So maybe we can move the mutex_lock() after the call to
-phydev->drv->probe()?
-
-	Andrew
+Thank you,
+Markus
