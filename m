@@ -2,52 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B504569C47F
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Feb 2023 04:29:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 78A2F69C480
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Feb 2023 04:29:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229840AbjBTD3O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 19 Feb 2023 22:29:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35286 "EHLO
+        id S230037AbjBTD3W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 19 Feb 2023 22:29:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35392 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229642AbjBTD3M (ORCPT
+        with ESMTP id S229991AbjBTD3R (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 19 Feb 2023 22:29:12 -0500
+        Sun, 19 Feb 2023 22:29:17 -0500
 Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE4A1C66B
-        for <linux-kernel@vger.kernel.org>; Sun, 19 Feb 2023 19:29:10 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54E1DEB59
+        for <linux-kernel@vger.kernel.org>; Sun, 19 Feb 2023 19:29:16 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1676863750; x=1708399750;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=UbFOTIk6kgGuUkd1NfbpBJotjTmWKsF4mSJ46RkdXNI=;
-  b=ZJzkVI7GphW5CWel6MK8fobdh0nRjVYfeehQXspmDPEhIaRlHezMjdjz
-   EcW9EewJC8lNHaCzAy4zuJaYwB366ntMIDzwHc0y9Chf3klD2YK57oF16
-   j0JH6vhADV0KJhxtew16rgycg6k8a9MdevAMz3FHIYcX59RSJ+CHcFs7S
-   qSPHatT69l03u4CWExJoMjGzyY+p6QlqtngQ0TEDfPPYJ4Mfsi7WzE2ho
-   zoYU9jnvs2MVi0/7Tq5eWanm95ydb8WPQnKue7XaX+j+kVzYjOZMRUt7O
-   XuD0SbwASzPbsUQpNeYX+VWkRcl0C4Sgn3R2ID4LfjOayXS5l+YXrhZ95
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10626"; a="418537672"
+  t=1676863756; x=1708399756;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=OVq9oAd5QD0ENighwhiYLDkNS/J1VuFUQxbIz93W3Ew=;
+  b=Y1wpXkfUb/xNy5z71Dk+xjv4ctUrOISHHy1UDIOCLTPSfrBSTD/6+WWF
+   DjobiUZPgVXpPTCj3blh/JM1nooS3wtLPEM/997/uYe0M5UJmienOiOPi
+   SigEr1VHXN1BUvcZusET99XDeRrscHg8jj17PSS4XyW7cDy+iQvzJoMx/
+   W4h1zezSKuf05sJiqCpKbuD/iM7eNIsDsRDwhyVefPN9g4UJ0ldQeMWxQ
+   tlH1B63i3eZ0NIoXmKRuwXlJuEzQRq0tfBhovrS4w4MBpa4sNhYC7MIIq
+   P1+kPop7rFY85G4pCE9pSsX343gNkDZRtBVvhIeFM4ogFpUhwZdlgL+cT
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10626"; a="418537681"
 X-IronPort-AV: E=Sophos;i="5.97,311,1669104000"; 
-   d="scan'208";a="418537672"
+   d="scan'208";a="418537681"
 Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Feb 2023 19:29:10 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10626"; a="813986499"
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Feb 2023 19:29:16 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10626"; a="813986517"
 X-IronPort-AV: E=Sophos;i="5.97,311,1669104000"; 
-   d="scan'208";a="813986499"
+   d="scan'208";a="813986517"
 Received: from cyi-mobl.ccr.corp.intel.com (HELO rzhang1-DESK.intel.com) ([10.255.29.242])
-  by fmsmga001-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Feb 2023 19:29:07 -0800
+  by fmsmga001-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Feb 2023 19:29:13 -0800
 From:   Zhang Rui <rui.zhang@intel.com>
 To:     tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
         dave.hansen@linux.intel.com, hpa@zytor.com
 Cc:     x86@kernel.org, linux-kernel@vger.kernel.org,
         zhang.jia@linux.alibaba.com, len.brown@intel.com,
         rui.zhang@intel.com
-Subject: [RFC PATCH V2 0/1] x86: cpu topology fix and question on x86_max_cores
-Date:   Mon, 20 Feb 2023 11:28:55 +0800
-Message-Id: <20230220032856.661884-1-rui.zhang@intel.com>
+Subject: [PATCH V2 1/1] x86/topology: fix erroneous smp_num_siblings on Intel Hybrid platform
+Date:   Mon, 20 Feb 2023 11:28:56 +0800
+Message-Id: <20230220032856.661884-2-rui.zhang@intel.com>
 X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20230220032856.661884-1-rui.zhang@intel.com>
+References: <20230220032856.661884-1-rui.zhang@intel.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
@@ -59,59 +61,26 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, All,
+The SMT siblings value returned by CPUID.1F SMT level EBX differs
+among CPUs on Intel Hybrid platforms like AlderLake and MeteorLake.
+It returns 2 for Pcore CPUs which have SMT siblings and returns 1 for
+Ecore CPUs which do not have SMT siblings.
 
-There are two kernel issues observed on Intel Hybrid platform named
-MeteorLake. And these two issues altogether bring broken CPU topology.
+Today, the CPU boot code sets the global variable smp_num_siblings when
+every CPU thread is brought up. The last thread to boot will overwrite
+it with the number of siblings of *that* thread. That last thread to
+boot will "win". If the thread is a Pcore, smp_num_siblings == 2.  If it
+is an Ecore, smp_num_siblings == 1.
 
-This patch series aims to
-1. provide a solution for the first issue, as an urgent fix and -stable
-   candidate, so that this problem is not exposed to end users.
-2. get feedback on how to fix the second issue.
+smp_num_siblings describes if the *system* supports SMT.  It should
+specify the maximum number of SMT threads among all cores.
 
-Any comments on this are really appreciated.
+Ensure that smp_num_siblings represents the system-wide maximum number
+of siblings by always increasing its value. Never allow it to decrease.
 
-Problem details on MeteorLake
------------------------------
-
-On Intel Hybrid platforms like AlderLake-P/S, both smp_num_siblings
-and cpuinfo_x86.x86_max_cores are broken like below
- 
-[    0.201005] detect_extended_topology: CPU APICID 0x0, smp_num_siblings 2, x86_max_cores 10
-[    0.201117] start_kernel->check_bugs->cpu_smt_check_topology: smp_num_siblings 2
-...
-[    0.010146] detect_extended_topology: CPU APICID 0x8, smp_num_siblings 2, x86_max_cores 10
-...
-[    0.010146] detect_extended_topology: CPU APICID 0x39, smp_num_siblings 2, x86_max_cores 10
-[    0.010146] detect_extended_topology: CPU APICID 0x48, smp_num_siblings 1, x86_max_cores 20
-...
-[    0.010146] detect_extended_topology: CPU APICID 0x4e, smp_num_siblings 1, x86_max_cores 20
-[    2.583800] sched_set_itmt_core_prio: smp_num_siblings 1
-
-This is because the SMT siblings value returned by CPUID.1F SMT level
-EBX differs among CPUs. It returns 2 for Pcore CPUs which have HT
-sibling and returns 1 for Ecore CPUs which do not have SMT sibling.
-
-This brings several potential issues:
-1. some kernel configuration like cpu_smt_control, as set in
-   start_kernel()->check_bugs()->cpu_smt_check_topology(), depends on
-   smp_num_siblings set by boot cpu.
-   It is pure luck that all the current hybrid platforms use Pcore as cpu0
-   and hide this problem.
-2. some per CPU data like cpuinfo_x86.x86_max_cores that depends on
-   smp_num_siblings becomes inconsistent and bogus.
-3. the final smp_num_siblings value after boot depends on the last CPU
-   enumerated, which could either be Pcore or Ecore CPU.
-
-Previously, there is no functional issue observed on AlderLake-P/S.
-
-However, on MeteorLake, this becomes worse.
-a). smp_num_siblings varies like AlderLake and it is set to 1 for Ecore.
-b). x86_max_cores is totally broken and it is set to 1 for the boot cpu.
-
-Altogether, these two issues make the system being treated as an UP 
-system in set_cpu_sibling_map() when probing Ecore CPUs, and the Ecore 
-CPUs are not updated in any cpu sibling maps erroneously.
+On MeteorLake-P platform, this fixes a problem that the Ecore CPUs are
+not updated in any cpu sibling map because the system is treated as an
+UP system when probing Ecore CPUs.
 
 Below shows part of the CPU topology information before and after the
 fix, for both Pcore and Ecore CPU (cpu0 is Pcore, cpu 12 is Ecore).
@@ -132,93 +101,36 @@ And this also breaks userspace tools like lscpu
 +Core(s) per socket:  16
 +Socket(s):           1
 
-Solution for fix smp_num_sibling
---------------------------------
-
-Patch 1/1 ensures that smp_num_siblings represents the system-wide maximum
-number of siblings by always increasing its value. Never allow it to
-decrease.
-
-It is sufficient to make the problem go away.
-
-However, there is a pontenial problem left. That is, when boot CPU is an
-Ecore CPU, smp_num_sibling is set to 1 during BSP probe, kernel disables
-SMT support by setting cpu_smt_control to CPU_SMT_NOT_SUPPORTED in
-start_kernel()->check_bugs()->cpu_smt_check_topology().
-So far, we don't have such platforms.
-
-Questions on how to fix cpuinfo_x86.x86_max_cores
--------------------------------------------------
-
-Fixing x86_max_cores is more complex. Current kernel uses below logic to
-get x86_max_cores
-	x86_max_cores = cpus_in_a_package / smp_num_siblings
-But
-1. There is a known bug in CPUID.1F handling code. Thus cpus_in_a_package
-   can be bogus. To fix it, I will add CPUID.1F Module level support.
-2. x86_max_cores is set and used in an inconsistent way in current kernel.
-   In short, smp_num_siblings/x86_max_cores
-   2.1 represents the number of maximum *addressable* threads/cores in a
-       core/package when retrieved via CPUID 1 and 4 on old platforms.
-       CPUID.1 EBX 23:16 "Maximum number of addressable IDs for logical
-       processors in this physical package".
-       CPUID.4 EAX 31:26 "Maximum number of addressable IDs for processor
-       cores in the physical package".
-   2.2 represents the number of maximum *possible* threads/cores in a
-       core/package, when retrieved via CPUID.B/1F on non-Hybrid platforms.
-       CPUID.B/1F EBX 15:0 "Number of logical processors at this level type.
-       The number reflects configuration as shipped by Intel".
-       For example, in calc_llc_size_per_core()
-          do_div(llc_size, c->x86_max_cores);
-       x86_max_cores is used as the max *possible* cores in a package.
-   2.3 is used in a conflict way on other vendors like AMD by checking the
-       code. I need help on confirming the proper behavior for AMD.
-       For example, in amd_get_topology(),
-          c->x86_coreid_bits = get_count_order(c->x86_max_cores);
-       x86_max_cores is used as the max *addressable* cores in a package.
-       in get_nbc_for_node(),
-          cores_per_node = (c->x86_max_cores * smp_num_siblings) / amd_get_nodes_per_socket();
-       x86_max_cores is used as the max *possible* cores in a package.
-3. using
-      x86_max_cores = cpus_in_a_package / smp_num_siblings
-   to get the number of maximum *possible* cores in a package during boot
-   cpu bringup is not applicable on platforms with asymmetric cores.
-   Because, for a given number of threads, we don't know how many of the
-   threads are the master thread or the only thread of a core, and how
-   many of them are SMT siblings.
-   For example, on a platform with 6 Pcore and 8 Ecore, there are 20
-   threads. But setting x86_max_cores to 10 is apparently wrong.
-
-Given the above situation, I have below question and any input is really
-appreciated.
-
-Is this inconsistency a problem or not?
-
-If we want to keep it consistent, it has to represent the max
-*addressable* cores in a package. Because max *possible* cores in a
-package is not available on Intel Hybrid platform.
-
-I have proposed a patch for this purpose, but gave up because I didn't
-address the above scenarios that uses x86_max_core differently.
-https://lore.kernel.org/all/20220922133800.12918-7-rui.zhang@intel.com/
-
-Does this break the expectation on AMD platforms using CPUID.B?
-If yes, what should we do?
-
-BTW, this also fixes the potential issue that kernel runs as SMT disabled
-when cpu0 is a Ecore cpu.
-
-The downside is that, on a platform that does not have SMT, like
-AlderLake-N, which has Ecore CPUs only, kernel will still run as
-SMT-capable with this solution. Because SMT ID still takes 1 bit in
-APIC-ID and smp_num_siblings is set to 2. But given that kernel has
-already optimized for non-SMT case at runtime in places like scheduler,
-by checking sibling maps, so my current understanding is that the overhead
-won't be big.
-
-thanks,
-rui
-
+CC: stable@kernel.org
+Suggested-by: Len Brown <len.brown@intel.com>
+Signed-off-by: Zhang Rui <rui.zhang@intel.com>
 ---
-Changes in V2:
-- improve changelog to more focus on the smp_num_siblings issue.
+ arch/x86/kernel/cpu/topology.c | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
+
+diff --git a/arch/x86/kernel/cpu/topology.c b/arch/x86/kernel/cpu/topology.c
+index 5e868b62a7c4..0270925fe013 100644
+--- a/arch/x86/kernel/cpu/topology.c
++++ b/arch/x86/kernel/cpu/topology.c
+@@ -79,7 +79,7 @@ int detect_extended_topology_early(struct cpuinfo_x86 *c)
+ 	 * initial apic id, which also represents 32-bit extended x2apic id.
+ 	 */
+ 	c->initial_apicid = edx;
+-	smp_num_siblings = LEVEL_MAX_SIBLINGS(ebx);
++	smp_num_siblings = max_t(int, smp_num_siblings, LEVEL_MAX_SIBLINGS(ebx));
+ #endif
+ 	return 0;
+ }
+@@ -109,7 +109,8 @@ int detect_extended_topology(struct cpuinfo_x86 *c)
+ 	 */
+ 	cpuid_count(leaf, SMT_LEVEL, &eax, &ebx, &ecx, &edx);
+ 	c->initial_apicid = edx;
+-	core_level_siblings = smp_num_siblings = LEVEL_MAX_SIBLINGS(ebx);
++	core_level_siblings = LEVEL_MAX_SIBLINGS(ebx);
++	smp_num_siblings = max_t(int, smp_num_siblings, LEVEL_MAX_SIBLINGS(ebx));
+ 	core_plus_mask_width = ht_mask_width = BITS_SHIFT_NEXT_LEVEL(eax);
+ 	die_level_siblings = LEVEL_MAX_SIBLINGS(ebx);
+ 	pkg_mask_width = die_plus_mask_width = BITS_SHIFT_NEXT_LEVEL(eax);
+-- 
+2.25.1
+
