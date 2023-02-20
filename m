@@ -2,93 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 89F5E69C4ED
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Feb 2023 06:24:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8DF5E69C4F3
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Feb 2023 06:31:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230008AbjBTFYh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Feb 2023 00:24:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48578 "EHLO
+        id S230021AbjBTFbJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Feb 2023 00:31:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51062 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229973AbjBTFYb (ORCPT
+        with ESMTP id S229955AbjBTFbH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Feb 2023 00:24:31 -0500
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D436DBDF
-        for <linux-kernel@vger.kernel.org>; Sun, 19 Feb 2023 21:24:30 -0800 (PST)
-Received: from pps.filterd (m0098396.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 31K48tp6008440;
-        Mon, 20 Feb 2023 05:24:22 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
- : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding; s=pp1;
- bh=cxpRmD1r/l0y73gtwE8LvDnfk8MOnVYk4pVujUt8NHQ=;
- b=L6DVQ46soHmA439J2M+X0/WfMDk6gWB5PpPzSJ5Fn+1TDcB9GPRyZH10i3g6KyqcQYPb
- bMtwBkHQ53D+IAC5yKKalDEJctjO5A9uE/L6vRCvwkPtjs/3YrG3VBDOyI4OVJaH+iJY
- gIKZXCuVU+nYyL2a+c3uydfTyrhsoDXgG4Px9PvVV6Pyy3aQBCEjMZ5j4bqmznJdnn3Z
- l3/8uPzebu5R9D1UA7fvr2yWo8DJ321KHPxzLn94SyfR4lIHEyi14eeuEY9VLcSVU8s0
- t+xvvFPl/d0hoZxK19otrhWy+tJs62CiHOOILY9BKA3VOesfGumAUEoPNU0nDUvfCAj2 7w== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3nuyk6bdj7-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 20 Feb 2023 05:24:22 +0000
-Received: from m0098396.ppops.net (m0098396.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 31K5ArOG020121;
-        Mon, 20 Feb 2023 05:24:21 GMT
-Received: from ppma06ams.nl.ibm.com (66.31.33a9.ip4.static.sl-reverse.com [169.51.49.102])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3nuyk6bdhg-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 20 Feb 2023 05:24:21 +0000
-Received: from pps.filterd (ppma06ams.nl.ibm.com [127.0.0.1])
-        by ppma06ams.nl.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 31JKUJWc025548;
-        Mon, 20 Feb 2023 05:24:19 GMT
-Received: from smtprelay04.fra02v.mail.ibm.com ([9.218.2.228])
-        by ppma06ams.nl.ibm.com (PPS) with ESMTPS id 3ntnxf267u-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 20 Feb 2023 05:24:18 +0000
-Received: from smtpav04.fra02v.mail.ibm.com (smtpav04.fra02v.mail.ibm.com [10.20.54.103])
-        by smtprelay04.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 31K5OCcE25493812
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 20 Feb 2023 05:24:12 GMT
-Received: from smtpav04.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 95F852004B;
-        Mon, 20 Feb 2023 05:24:12 +0000 (GMT)
-Received: from smtpav04.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 5714A20043;
-        Mon, 20 Feb 2023 05:24:10 +0000 (GMT)
-Received: from li-a450e7cc-27df-11b2-a85c-b5a9ac31e8ef.in.ibm.com (unknown [9.109.216.99])
-        by smtpav04.fra02v.mail.ibm.com (Postfix) with ESMTP;
-        Mon, 20 Feb 2023 05:24:10 +0000 (GMT)
-From:   Kautuk Consul <kconsul@linux.vnet.ibm.com>
-To:     Michael Ellerman <mpe@ellerman.id.au>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        "Naveen N. Rao" <naveen.n.rao@linux.vnet.ibm.com>,
-        Fabiano Rosas <farosas@linux.ibm.com>,
-        Alexey Kardashevskiy <aik@ozlabs.ru>,
-        Sathvika Vasireddy <sv@linux.ibm.com>
-Cc:     linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org,
-        Kautuk Consul <kconsul@linux.vnet.ibm.com>
-Subject: [PATCH 2/2] arch/powerpc/kvm: kvmppc_hv_entry: remove r4 argument
-Date:   Mon, 20 Feb 2023 10:53:55 +0530
-Message-Id: <20230220052355.109033-3-kconsul@linux.vnet.ibm.com>
-X-Mailer: git-send-email 2.31.1
-In-Reply-To: <20230220052355.109033-1-kconsul@linux.vnet.ibm.com>
-References: <20230220052355.109033-1-kconsul@linux.vnet.ibm.com>
+        Mon, 20 Feb 2023 00:31:07 -0500
+Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7F67BDC1
+        for <linux-kernel@vger.kernel.org>; Sun, 19 Feb 2023 21:31:03 -0800 (PST)
+Received: by mail-wr1-x42a.google.com with SMTP id c17so1411789wrx.0
+        for <linux-kernel@vger.kernel.org>; Sun, 19 Feb 2023 21:31:03 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=VyrfGt2FN77QTYZFXpX99DHt0bq2IkMtyc2KjQMiV8c=;
+        b=e4SvGtUVBMCp2DQcqbtiNxiiPYgxiKUVXHYdpXcTHPxT2a43JvXQ2kOUpHuB2Hba97
+         uzFuEHxK+pngPvI4rg27e7zXnTBs+6JKC3l0ocVndzInd+ghXrJyRCK7PNERnZFxU8Ox
+         mTrWZfRZJHtkd7Ap95PyHf/wKeIOeWCEQqAZEgBA6x+94XO3jNR0k9z+Fx29/haaXQ+C
+         c16c9OtfTWk9+kqSrFoCDZ87h9dRlM5ucECudTWs642QkdIJpAtPWNvi5qbxm777EW0M
+         BqxFqAd1TAtrf2Tm+yUvU9nFiU0hVkWa3hZpch2XvtVbeDGpcqQ74fpzk/L+IPzUd+lJ
+         RhIw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=VyrfGt2FN77QTYZFXpX99DHt0bq2IkMtyc2KjQMiV8c=;
+        b=xK0TW8fiXeoCr6IXt9PHVZMclvOdcqJocW/gf9KALTioPFi55Co0VuqmNrBJLZdse9
+         DOkJ1FVqENIxAEr+T7RnxK6w6EbeIS8GT6+PS8zRXNnpgmsJ+9r62ssCRKycYX9yEXdz
+         EeWGRmESWHRiOzlEqbRKReTxjf0bmRUivaMcd+7144LW4ulegJrcsIptE0UnY0oeFLBG
+         VOa9U17CFcJkyPRlwzYx02BhaM97tqinJ/hDX+quVbROqRVavPtFki24dcEhtqm3hfKU
+         T0WR7k1Y6yE3n0+rc2WKmvJiXnIGhuA0GPAGNRcCux0jL9nKu+Fbs8HwQBODj4KZdNMP
+         rCtg==
+X-Gm-Message-State: AO0yUKV4rioT3xIQkWRpmBUsuezxrLQtBU7X3h/11tuqhKDzjadXZ/no
+        Kjcn6+gfn48oHt4wMFC5lCpjZQ==
+X-Google-Smtp-Source: AK7set9NxX2ASpmPL1uCTqe51ixIB3oHzSVDCLaDlY7uYoWgYJcR+6kLCNcv/ioOAj4vJorfZMwHyg==
+X-Received: by 2002:adf:f942:0:b0:2c6:e87f:30cc with SMTP id q2-20020adff942000000b002c6e87f30ccmr1381373wrr.48.1676871062297;
+        Sun, 19 Feb 2023 21:31:02 -0800 (PST)
+Received: from blmsp ([2001:4090:a247:8056:883:2e39:923e:f1d])
+        by smtp.gmail.com with ESMTPSA id t15-20020adfe10f000000b002c3f7dfd15csm3691489wrz.32.2023.02.19.21.31.01
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 19 Feb 2023 21:31:01 -0800 (PST)
+Date:   Mon, 20 Feb 2023 06:31:00 +0100
+From:   Markus Schneider-Pargmann <msp@baylibre.com>
+To:     Simon Horman <simon.horman@corigine.com>
+Cc:     Marc Kleine-Budde <mkl@pengutronix.de>,
+        Chandrasekar Ramakrishnan <rcsekar@samsung.com>,
+        Wolfgang Grandegger <wg@grandegger.com>,
+        Vincent MAILHOL <mailhol.vincent@wanadoo.fr>,
+        linux-can@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 08/18] can: m_can: Write transmit header and data in
+ one transaction
+Message-ID: <20230220053100.nh2suaqi7237g5ny@blmsp>
+References: <20230125195059.630377-1-msp@baylibre.com>
+ <20230125195059.630377-9-msp@baylibre.com>
+ <Y9I0KEeWq0JFy6iB@corigine.com>
+ <20230130080419.dzdnmq4vtag7wbpd@blmsp>
+ <Y95YNQwMfTM2h7iW@corigine.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: hK3-2RJh0dfC1BT7p9uajZkZllkHjEPK
-X-Proofpoint-ORIG-GUID: uZ8vqrY6yx2aef1nlp0aTGthPC-QsrHb
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.170.22
- definitions=2023-02-20_02,2023-02-17_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- lowpriorityscore=0 spamscore=0 bulkscore=0 mlxscore=0 phishscore=0
- impostorscore=0 suspectscore=0 adultscore=0 malwarescore=0 clxscore=1015
- mlxlogscore=999 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2302200046
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE autolearn=ham
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <Y95YNQwMfTM2h7iW@corigine.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -96,58 +79,87 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-kvmppc_hv_entry is called from only 2 locations within
-book3s_hv_rmhandlers.S. Both of those locations set r4
-as HSTATE_KVM_VCPU(r13) before calling kvmppc_hv_entry.
-So, shift the r4 load instruction to kvmppc_hv_entry and
-thus modify the calling convention of this function.
+Hi Simon,
 
-Signed-off-by: Kautuk Consul <kconsul@linux.vnet.ibm.com>
----
- arch/powerpc/kvm/book3s_hv_rmhandlers.S | 9 ++++-----
- 1 file changed, 4 insertions(+), 5 deletions(-)
+On Sat, Feb 04, 2023 at 02:05:57PM +0100, Simon Horman wrote:
+> On Mon, Jan 30, 2023 at 09:04:19AM +0100, Markus Schneider-Pargmann wrote:
+> > Hi Simon,
+> > 
+> > On Thu, Jan 26, 2023 at 09:04:56AM +0100, Simon Horman wrote:
+> > > On Wed, Jan 25, 2023 at 08:50:49PM +0100, Markus Schneider-Pargmann wrote:
+> > > > Combine header and data before writing to the transmit fifo to reduce
+> > > > the overhead for peripheral chips.
+> > > > 
+> > > > Signed-off-by: Markus Schneider-Pargmann <msp@baylibre.com>
+> > > > ---
+> > > >  drivers/net/can/m_can/m_can.c | 10 +++++-----
+> > > >  1 file changed, 5 insertions(+), 5 deletions(-)
+> > > > 
+> > > > diff --git a/drivers/net/can/m_can/m_can.c b/drivers/net/can/m_can/m_can.c
+> > > > index 78f6ed744c36..440bc0536951 100644
+> > > > --- a/drivers/net/can/m_can/m_can.c
+> > > > +++ b/drivers/net/can/m_can/m_can.c
+> > > > @@ -1681,6 +1681,7 @@ static netdev_tx_t m_can_tx_handler(struct m_can_classdev *cdev)
+> > > >  		m_can_write(cdev, M_CAN_TXBAR, 0x1);
+> > > >  		/* End of xmit function for version 3.0.x */
+> > > >  	} else {
+> > > > +		char buf[TXB_ELEMENT_SIZE];
+> > > >  		/* Transmit routine for version >= v3.1.x */
+> > > >  
+> > > >  		txfqs = m_can_read(cdev, M_CAN_TXFQS);
+> > > > @@ -1720,12 +1721,11 @@ static netdev_tx_t m_can_tx_handler(struct m_can_classdev *cdev)
+> > > >  		fifo_header.dlc = FIELD_PREP(TX_BUF_MM_MASK, putidx) |
+> > > >  			FIELD_PREP(TX_BUF_DLC_MASK, can_fd_len2dlc(cf->len)) |
+> > > >  			fdflags | TX_BUF_EFC;
+> > > > -		err = m_can_fifo_write(cdev, putidx, M_CAN_FIFO_ID, &fifo_header, 2);
+> > > > -		if (err)
+> > > > -			goto out_fail;
+> > > > +		memcpy(buf, &fifo_header, 8);
+> > > > +		memcpy(&buf[8], &cf->data, cf->len);
+> > > >  
+> > > > -		err = m_can_fifo_write(cdev, putidx, M_CAN_FIFO_DATA,
+> > > > -				       cf->data, DIV_ROUND_UP(cf->len, 4));
+> > > > +		err = m_can_fifo_write(cdev, putidx, M_CAN_FIFO_ID,
+> > > > +				       buf, 8 + DIV_ROUND_UP(cf->len, 4));
+> > > 
+> > > Perhaps I am missing something here, but my reading is that:
+> > > 
+> > > - 8 is a length in bytes
+> > > - the 5th argument to m_can_fifo_write is the val_count parameter,
+> > >   whose unit is 4-byte long values.
+> > > 
+> > >   By this logic, perhaps the correct value for this argument is:
+> > > 
+> > >   DIV_ROUND_UP(8 + cf->len, 4)
+> > 
+> > Thank you for spotting this. You are totally right, I will fix it for
+> > the next version.
+> 
+> Thanks.
+> 
+> > > Also:
+> > > 
+> > > - If cf->len is not a multiple of 4, is there a possibility
+> > >   that uninitialised trailing data in buf will be used
+> > >   indirectly by m_can_fifo_write()?
+> > 
+> > Good point. I think this can only happen for 1, 2, 3, 5, 6, 7 bytes,
+> > values above have to be multiple of 4 because of the CAN-FD
+> > specification.
+> > 
+> > With 'buf' it should read garbage from the buffer which I think is not a
+> > problem as the chip knows how much of the data to use. Also the tx
+> > elemnt size is hardcoded to 64 byte in the driver, so we do not overwrite
+> > the next element with that. The chip minimum size is 8 bytes for the
+> > data field anyways. So I think this is fine.
+> 
+> I'm not the expert on the hw in question here, but intuitively
+> I do feel that it may be unwise to send uninitialised data.
+> While I'm happy to defer to you on this, I do wonder if it would be somehow
+> better to use memcpy_and_pad() in place of memcpy().
 
-diff --git a/arch/powerpc/kvm/book3s_hv_rmhandlers.S b/arch/powerpc/kvm/book3s_hv_rmhandlers.S
-index 7e063fde7adc..922667b09168 100644
---- a/arch/powerpc/kvm/book3s_hv_rmhandlers.S
-+++ b/arch/powerpc/kvm/book3s_hv_rmhandlers.S
-@@ -85,7 +85,7 @@ _GLOBAL_TOC(kvmppc_hv_entry_trampoline)
- 	RFI_TO_KERNEL
- 
- kvmppc_call_hv_entry:
--	ld	r4, HSTATE_KVM_VCPU(r13)
-+	/* Enter guest. */
- 	bl	kvmppc_hv_entry
- 
- 	/* Back from guest - restore host state and return to caller */
-@@ -352,9 +352,7 @@ kvm_secondary_got_guest:
- 	mtspr	SPRN_LDBAR, r0
- 	isync
- 63:
--	/* Order load of vcpu after load of vcore */
--	lwsync
--	ld	r4, HSTATE_KVM_VCPU(r13)
-+	/* Enter guest. */
- 	bl	kvmppc_hv_entry
- 
- 	/* Back from the guest, go back to nap */
-@@ -506,7 +504,6 @@ kvmppc_hv_entry:
- 
- 	/* Required state:
- 	 *
--	 * R4 = vcpu pointer (or NULL)
- 	 * MSR = ~IR|DR
- 	 * R13 = PACA
- 	 * R1 = host R1
-@@ -524,6 +521,8 @@ kvmppc_hv_entry:
- 	li	r6, KVM_GUEST_MODE_HOST_HV
- 	stb	r6, HSTATE_IN_GUEST(r13)
- 
-+	ld	r4, HSTATE_KVM_VCPU(r13)
-+
- #ifdef CONFIG_KVM_BOOK3S_HV_P8_TIMING
- 	/* Store initial timestamp */
- 	cmpdi	r4, 0
--- 
-2.31.1
+Thank you, I think it is safe, but memcpy_and_pad seems like a good
+solution here to make it even safer.
 
+Best,
+Markus
