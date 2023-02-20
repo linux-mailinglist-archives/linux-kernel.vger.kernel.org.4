@@ -2,228 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2293069CF44
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Feb 2023 15:22:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F96169CF47
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Feb 2023 15:23:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231801AbjBTOWl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Feb 2023 09:22:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46260 "EHLO
+        id S231840AbjBTOXk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Feb 2023 09:23:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47476 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231553AbjBTOWj (ORCPT
+        with ESMTP id S231661AbjBTOXi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Feb 2023 09:22:39 -0500
-Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 949F51EFCE
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Feb 2023 06:22:37 -0800 (PST)
-Received: from mail-qv1-f69.google.com (mail-qv1-f69.google.com [209.85.219.69])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 555B13F1C3
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Feb 2023 14:22:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1676902956;
-        bh=15KdzNFX7MaKLfDAFP/yezApxH/xR6DxYD9Z1QEyvxM=;
-        h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-         To:Cc:Content-Type;
-        b=aw+CJ6efsksFvrIUuatebjN+9htiQN2MZRX/+RhPfSWIPUlrYuBJFGUZcDgQ3Yz8r
-         pjjDES4obX6kk5Z4uWue0qFQheuQxxfR078kToEhuu/v36y2elQ/VLcaAJCRmb+7Ux
-         wmpVCiTNoQ2nfMbmZmBKFR/x6pbaJD4hDTnTKlMmEvRXo4MpuiPg8NXWNg7vg7SEkL
-         DBlhUV4eTXCGjI9w5KyVqWa73acfy7Z/9NesuKSUaOYefXmtzJSUmwFZJWh4Pa5ejC
-         qmZVeZTEF9d8pwACDvpO54dCElrREYoYmKrMVoMynqqoKe1bPGTeqQxEUi3PS4lGFK
-         BzARUkrx7JF5A==
-Received: by mail-qv1-f69.google.com with SMTP id u18-20020a0cec92000000b0056ea549d728so559393qvo.10
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Feb 2023 06:22:36 -0800 (PST)
+        Mon, 20 Feb 2023 09:23:38 -0500
+Received: from mail-wr1-f54.google.com (mail-wr1-f54.google.com [209.85.221.54])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B99E3C3F;
+        Mon, 20 Feb 2023 06:23:37 -0800 (PST)
+Received: by mail-wr1-f54.google.com with SMTP id r7so1230614wrz.6;
+        Mon, 20 Feb 2023 06:23:37 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=15KdzNFX7MaKLfDAFP/yezApxH/xR6DxYD9Z1QEyvxM=;
-        b=k7ftENc+0CnGFkEyiYis2ffgM7fbwINwAh4zd5AVuj+DIGZp9Er6vhzH9xChYVBjyB
-         2R9pETKFeqmvqk8x6rEpr5V0eCUZS+ZGVq3koreDW2f0yOIcRd0GYx8sn2cqsAOWgPq1
-         fw/P3MiA1aFhZ0GSA2RAO9bWqX+PpitrnP9555/OAfhiwypkarjzQh9uIbNXPZi9GZL0
-         yeIPUWMirr3fvMJBP6F65CdNF4kZQuqhTRxagtJtEZKPVvUH/ZSLNyk6XQpya0A4oDTl
-         6cUKOXjXKarDV6iJ5POOXRCEZUpPj2fy1Li/NxW8rGQKE3g/YtZKXZF41JuaNiLr2LG6
-         Fbbg==
-X-Gm-Message-State: AO0yUKXgGS2704xySpjeVXIEXgeYU9j24Lv7wa0/GzhG1eUc/s7H2oA2
-        hShFRaW1tsEOiBhvkHz0YgrfAZOvw5+WLaKMwvPb0MmenAOhwmrnbxxuE5sZowcNqcE8rfJn0Ii
-        1cxP4EKOWxPV7IBBJyWFTFjXfCVw8HNbPY4igYBLcljTlID7zYaxLLsd4lg==
-X-Received: by 2002:ac8:701b:0:b0:3b7:fda5:1cbc with SMTP id x27-20020ac8701b000000b003b7fda51cbcmr213066qtm.5.1676902954913;
-        Mon, 20 Feb 2023 06:22:34 -0800 (PST)
-X-Google-Smtp-Source: AK7set+dV6jlM0TuskfDPI955wHdR3MIsyp4aZm7ZGrdR5YGZR5IqoJRIZac7YadjSfeXQ/9C9c1FhXN+okz8gNXcw4=
-X-Received: by 2002:ac8:701b:0:b0:3b7:fda5:1cbc with SMTP id
- x27-20020ac8701b000000b003b7fda51cbcmr213061qtm.5.1676902954624; Mon, 20 Feb
- 2023 06:22:34 -0800 (PST)
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=/UWNMxDMeHE0TebZowkoBIFZYFHiATXlwqsb06ZfgVg=;
+        b=Fg0DoVWXKoHq/AmT7R0ojXUhmSPe3mfNYBH9x8bcjaAYNXi10JzxcgRApqbbCQs/4S
+         398bYwig6zUoeZklbUR1VP1C7xT9Q53FtqYFXFBVd9fXq1UGEDhOy49B2IzSoGMBrqR5
+         ri/Zrb6VtSgREEhPAVmH4i7eewyOozPeSTHEbFRQKHK64uGdpZyTYGk1H9XuT9ZCAC8G
+         CC0O5J5w6Z5jGV9PbNcYDC2BNOA6QNmvLiDYAwaBpDC5PHWirFbvHeHV3kd1ILn6Ro87
+         TIpHLEpLV0WHqLaYn6VY/bxmJzAwCitmKqee1aCxJUyteH+hGIqtADFEIDrF0F7huUsX
+         YmsA==
+X-Gm-Message-State: AO0yUKUl7v+90wRs1Ssjp7+i3vcw4mXKRuy+zIvk1QeS9Y5tKgyiVjZD
+        s0lMOrhdcd4wKCzWe1DsX78=
+X-Google-Smtp-Source: AK7set/LDFMwxzZl+i5MOxauBVR4yzGzF/L5bcerLNWlMqVHhHX7Ar4VyXZn0MNfInakmDD6hPK85w==
+X-Received: by 2002:adf:f5c9:0:b0:2c5:5886:850d with SMTP id k9-20020adff5c9000000b002c55886850dmr758189wrp.5.1676903015738;
+        Mon, 20 Feb 2023 06:23:35 -0800 (PST)
+Received: from liuwe-devbox-debian-v2 ([51.145.34.42])
+        by smtp.gmail.com with ESMTPSA id a9-20020a5d5709000000b002be099f78c0sm2145989wrv.69.2023.02.20.06.23.34
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 20 Feb 2023 06:23:35 -0800 (PST)
+Date:   Mon, 20 Feb 2023 14:23:11 +0000
+From:   Wei Liu <wei.liu@kernel.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Wei Liu <wei.liu@kernel.org>,
+        Linux on Hyper-V List <linux-hyperv@vger.kernel.org>,
+        Linux Kernel List <linux-kernel@vger.kernel.org>,
+        kys@microsoft.com, haiyangz@microsoft.com, decui@microsoft.com,
+        Michael Kelley <mikelley@microsoft.com>
+Subject: [GIT PULL] Hyper-V commits for 6.3
+Message-ID: <Y/OCT7A/7GHNxgX4@liuwe-devbox-debian-v2>
 MIME-Version: 1.0
-References: <20230118061701.30047-1-yanhong.wang@starfivetech.com> <20230118061701.30047-7-yanhong.wang@starfivetech.com>
-In-Reply-To: <20230118061701.30047-7-yanhong.wang@starfivetech.com>
-From:   Emil Renner Berthing <emil.renner.berthing@canonical.com>
-Date:   Mon, 20 Feb 2023 15:22:18 +0100
-Message-ID: <CAJM55Z9=wXxHXLHhLK1H2H2PnLv4Z+FiQPVd_+gtPss+P01MRg@mail.gmail.com>
-Subject: Re: [PATCH v4 6/7] riscv: dts: starfive: jh7110: Add ethernet device node
-To:     Yanhong Wang <yanhong.wang@starfivetech.com>
-Cc:     linux-riscv@lists.infradead.org, netdev@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Emil Renner Berthing <kernel@esmil.dk>,
-        Richard Cochran <richardcochran@gmail.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Peter Geis <pgwipeout@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 18 Jan 2023 at 07:19, Yanhong Wang
-<yanhong.wang@starfivetech.com> wrote:
-> Add JH7110 ethernet device node to support gmac driver for the JH7110
-> RISC-V SoC.
->
-> Signed-off-by: Yanhong Wang <yanhong.wang@starfivetech.com>
-> ---
->  arch/riscv/boot/dts/starfive/jh7110.dtsi | 93 ++++++++++++++++++++++++
->  1 file changed, 93 insertions(+)
->
-> diff --git a/arch/riscv/boot/dts/starfive/jh7110.dtsi b/arch/riscv/boot/dts/starfive/jh7110.dtsi
-> index c22e8f1d2640..c6de6e3b1a25 100644
-> --- a/arch/riscv/boot/dts/starfive/jh7110.dtsi
-> +++ b/arch/riscv/boot/dts/starfive/jh7110.dtsi
-> @@ -433,5 +433,98 @@
->                         reg-shift = <2>;
->                         status = "disabled";
->                 };
-> +
-> +               stmmac_axi_setup: stmmac-axi-config {
-> +                       snps,lpi_en;
-> +                       snps,wr_osr_lmt = <4>;
-> +                       snps,rd_osr_lmt = <4>;
-> +                       snps,blen = <256 128 64 32 0 0 0>;
-> +               };
-> +
-> +               gmac0: ethernet@16030000 {
-> +                       compatible = "starfive,jh7110-dwmac", "snps,dwmac-5.20";
-> +                       reg = <0x0 0x16030000 0x0 0x10000>;
-> +                       clocks = <&aoncrg JH7110_AONCLK_GMAC0_AXI>,
-> +                                <&aoncrg JH7110_AONCLK_GMAC0_AHB>,
-> +                                <&syscrg JH7110_SYSCLK_GMAC0_PTP>,
-> +                                <&aoncrg JH7110_AONCLK_GMAC0_TX>,
+Hi Linus,
 
-The gmac0_tx clock is a mux that takes either the gmac0_gtxclk or
-rmii_rtx as parent. However it is then followed by an inverter that
-optionally inverts the clock, gmac0_tx_inv. I'm guessing this
-optionally inverted signal is what is actually used (otherwise why
-would the inverter exist), so I think this clock is what should be
-claimed here. Eg.
-    <&aoncrg JH7110_AONCLK_GMAC0_TX_INV>,
+The following changes since commit b7bfaa761d760e72a969d116517eaa12e404c262:
 
-Right now it works only because the inverted signal can't be gated
-(turned off) even when it's not claimed by any driver.
+  Linux 6.2-rc3 (2023-01-08 11:49:43 -0600)
 
-> +                                <&syscrg JH7110_SYSCLK_GMAC0_GTXC>,
-> +                                <&syscrg JH7110_SYSCLK_GMAC0_GTXCLK>;
+are available in the Git repository at:
 
-Here the gmac0_gtxclk clock is the parent of the gmac0_gtxc, so
-claiming the gmac0_gtxc should be enough. Since the gmac0_gtxc is just
-a gate it should have the CLK_SET_RATE_PARENT flag set, so the driver
-can just change the rate of the child and it should propagate to the
-parent. In short I think claiming only the gmac0_gtxc clock should be
-enough here.
+  ssh://git@gitolite.kernel.org/pub/scm/linux/kernel/git/hyperv/linux.git tags/hyperv-next-signed-20230220
 
-> +                       clock-names = "stmmaceth", "pclk", "ptp_ref",
-> +                                               "tx", "gtxc", "gtx";
-> +                       resets = <&aoncrg JH7110_AONRST_GMAC0_AXI>,
-> +                                <&aoncrg JH7110_AONRST_GMAC0_AHB>;
-> +                       reset-names = "stmmaceth", "ahb";
-> +                       interrupts = <7>, <6>, <5>;
-> +                       interrupt-names = "macirq", "eth_wake_irq", "eth_lpi";
-> +                       phy-mode = "rgmii-id";
-> +                       snps,multicast-filter-bins = <64>;
-> +                       snps,perfect-filter-entries = <8>;
-> +                       rx-fifo-depth = <2048>;
-> +                       tx-fifo-depth = <2048>;
-> +                       snps,fixed-burst;
-> +                       snps,no-pbl-x8;
-> +                       snps,force_thresh_dma_mode;
-> +                       snps,axi-config = <&stmmac_axi_setup>;
-> +                       snps,tso;
-> +                       snps,en-tx-lpi-clockgating;
-> +                       snps,txpbl = <16>;
-> +                       snps,rxpbl = <16>;
-> +                       status = "disabled";
-> +                       phy-handle = <&phy0>;
-> +
-> +                       mdio0: mdio {
-> +                               #address-cells = <1>;
-> +                               #size-cells = <0>;
-> +                               compatible = "snps,dwmac-mdio";
-> +
-> +                               phy0: ethernet-phy@0 {
-> +                                       reg = <0>;
-> +                               };
-> +                       };
-> +               };
-> +
-> +               gmac1: ethernet@16040000 {
-> +                       compatible = "starfive,jh7110-dwmac", "snps,dwmac-5.20";
-> +                       reg = <0x0 0x16040000 0x0 0x10000>;
-> +                       clocks = <&syscrg JH7110_SYSCLK_GMAC1_AXI>,
-> +                                <&syscrg JH7110_SYSCLK_GMAC1_AHB>,
-> +                                <&syscrg JH7110_SYSCLK_GMAC1_PTP>,
-> +                                <&syscrg JH7110_SYSCLK_GMAC1_TX>,
-> +                                <&syscrg JH7110_SYSCLK_GMAC1_GTXC>,
-> +                                <&syscrg JH7110_SYSCLK_GMAC1_GTXCLK>;
-> +                       clock-names = "stmmaceth", "pclk", "ptp_ref",
-> +                                       "tx", "gtxc", "gtx";
-> +                       resets = <&syscrg JH7110_SYSRST_GMAC1_AXI>,
-> +                                <&syscrg JH7110_SYSRST_GMAC1_AHB>;
-> +                       reset-names = "stmmaceth", "ahb";
-> +                       interrupts = <78>, <77>, <76>;
-> +                       interrupt-names = "macirq", "eth_wake_irq", "eth_lpi";
-> +                       phy-mode = "rgmii-id";
-> +                       snps,multicast-filter-bins = <64>;
-> +                       snps,perfect-filter-entries = <8>;
-> +                       rx-fifo-depth = <2048>;
-> +                       tx-fifo-depth = <2048>;
-> +                       snps,fixed-burst;
-> +                       snps,no-pbl-x8;
-> +                       snps,force_thresh_dma_mode;
-> +                       snps,axi-config = <&stmmac_axi_setup>;
-> +                       snps,tso;
-> +                       snps,en-tx-lpi-clockgating;
-> +                       snps,txpbl = <16>;
-> +                       snps,rxpbl = <16>;
-> +                       status = "disabled";
-> +                       phy-handle = <&phy1>;
-> +
-> +                       mdio1: mdio {
-> +                               #address-cells = <1>;
-> +                               #size-cells = <0>;
-> +                               compatible = "snps,dwmac-mdio";
-> +
-> +                               phy1: ethernet-phy@1 {
-> +                                       reg = <1>;
-> +                               };
-> +                       };
-> +               };
->         };
->  };
-> --
-> 2.17.1
->
->
-> _______________________________________________
-> linux-riscv mailing list
-> linux-riscv@lists.infradead.org
-> http://lists.infradead.org/mailman/listinfo/linux-riscv
+for you to fetch changes up to b14033a3e6ba73a5c68974a80b05cba55553ed5b:
+
+  x86/hyperv: Fix hv_get/set_register for nested bringup (2023-02-16 14:32:37 +0000)
+
+----------------------------------------------------------------
+hyperv-next for v6.3.
+ - Patches that allow Linux to run as the nested root partition for
+   Microsoft Hypervisor (Jinank Jain and Nuno Das Neves).
+ - One patch to clean up the return type of callback functions (Dawei
+   Li).
+----------------------------------------------------------------
+Dawei Li (1):
+      Drivers: hv: Make remove callback of hyperv driver void returned
+
+Jinank Jain (4):
+      x86/hyperv: Add support for detecting nested hypervisor
+      Drivers: hv: Setup synic registers in case of nested root partition
+      x86/hyperv: Add an interface to do nested hypercalls
+      Drivers: hv: Enable vmbus driver for nested root partition
+
+Nuno Das Neves (1):
+      x86/hyperv: Fix hv_get/set_register for nested bringup
+
+ arch/x86/include/asm/hyperv-tlfs.h      | 17 ++++++-
+ arch/x86/include/asm/mshyperv.h         | 78 +++++++++++++++++++++------------
+ arch/x86/kernel/cpu/mshyperv.c          | 72 ++++++++++++++++++++++++++++++
+ drivers/gpu/drm/hyperv/hyperv_drm_drv.c |  4 +-
+ drivers/hid/hid-hyperv.c                |  4 +-
+ drivers/hv/hv.c                         | 18 +++++---
+ drivers/hv/hv_balloon.c                 |  4 +-
+ drivers/hv/hv_common.c                  |  9 ++--
+ drivers/hv/hv_util.c                    |  4 +-
+ drivers/hv/vmbus_drv.c                  |  2 +-
+ drivers/input/serio/hyperv-keyboard.c   |  4 +-
+ drivers/net/hyperv/netvsc_drv.c         |  5 +--
+ drivers/pci/controller/pci-hyperv.c     |  8 +---
+ drivers/scsi/storvsc_drv.c              |  4 +-
+ drivers/uio/uio_hv_generic.c            |  5 +--
+ drivers/video/fbdev/hyperv_fb.c         |  5 +--
+ include/asm-generic/hyperv-tlfs.h       |  1 +
+ include/asm-generic/mshyperv.h          |  1 +
+ include/linux/hyperv.h                  |  2 +-
+ net/vmw_vsock/hyperv_transport.c        |  4 +-
+ 20 files changed, 172 insertions(+), 79 deletions(-)
