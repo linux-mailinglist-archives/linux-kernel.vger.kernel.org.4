@@ -2,414 +2,480 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0169869CC7B
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Feb 2023 14:40:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 27DD769CC85
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Feb 2023 14:41:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231826AbjBTNkk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Feb 2023 08:40:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49634 "EHLO
+        id S231865AbjBTNlQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Feb 2023 08:41:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50290 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231514AbjBTNki (ORCPT
+        with ESMTP id S231844AbjBTNlH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Feb 2023 08:40:38 -0500
-Received: from mail-vk1-xa34.google.com (mail-vk1-xa34.google.com [IPv6:2607:f8b0:4864:20::a34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3EAD41C7DD
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Feb 2023 05:40:36 -0800 (PST)
-Received: by mail-vk1-xa34.google.com with SMTP id s135so531049vkb.3
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Feb 2023 05:40:36 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=uci-edu.20210112.gappssmtp.com; s=20210112; t=1676900435;
-        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=1Ya9VJkNMLV6sraHQUFCjzra7r4hT2/y6zdPI830Kus=;
-        b=dW/WctZ0H+aPaO3yjozxOSOVSzOE48uj4Iq5OeoLhSdTBVXEQZ1Z7GUPrytIhheT3l
-         VF1OpYTE9m6BFleSyQEHakEwlVbXDY9q85ARpkhjHAz4OX058iZF8p1geCu6eGzawVFi
-         sigWuZIDng52NR8Asupql4frjnC7ibGRSzojRpH6gkL911Nh1QgfwPrHvklJ49+8afJq
-         YompZhqJW+i24Om7XXMFMM6jK0YEBWyrfkoeHKvYQW9kULifzycKzNtoKkV1SxLOyyvY
-         NKxh3q0u8X83eI7ZY5uKdpuJA6cLnsF3ggVCFr0SBUsEz+V30Zra2rLilPiOjN1U1GEX
-         R5Ig==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1676900435;
-        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=1Ya9VJkNMLV6sraHQUFCjzra7r4hT2/y6zdPI830Kus=;
-        b=nsk5zuEbkX0WZy2m6ISSEK3VB7Jt590mFmtArRmKOKshxqvWWBs1UqQ1P1H9rYvfVx
-         oH79am/7mbn8SzyVtPbn9PotKeeY6C9XLbF2hkX9DdSBztnmbvDylCMfzmfK/50y/nM4
-         KztX0Qe4IDxnc1irk+a0JEpcy3+3OtwdY/Adah8dLkDrZlRsai8HIUesGWy9R9HxYexv
-         oYIKmHMP701pxoh1grB42XWlUtkc01woOZpPzPu7XhWLw2+uGVXR0spvYUr3atsTps9+
-         7K6nVhbaPUsQib/lSpydfo3jos7HBcbMGa17iXx84HnLQL9yjGa4hpcAlgQKY9RY7zx1
-         /uMg==
-X-Gm-Message-State: AO0yUKW8hRIwMXkG5K+QNsKlnb3gIIXKefYfVjGUIve48mwqr+8FMdr/
-        wFB7ihdIkKYAJJBgyawpim5/FleQrcOKerXV8iHZDA==
-X-Google-Smtp-Source: AK7set/Up6yyP+BzP5kn23ljy4FYbo/MfdVBFYQExn4eEUIF4j6irdsU+LfhlIho8DmbbrXg5XJysz1zEnY9EO0bDSw=
-X-Received: by 2002:a1f:f4cf:0:b0:401:1f9:ca21 with SMTP id
- s198-20020a1ff4cf000000b0040101f9ca21mr446701vkh.31.1676900435110; Mon, 20
- Feb 2023 05:40:35 -0800 (PST)
+        Mon, 20 Feb 2023 08:41:07 -0500
+Received: from mx0b-0016f401.pphosted.com (mx0a-0016f401.pphosted.com [67.231.148.174])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 380FF1D910;
+        Mon, 20 Feb 2023 05:40:55 -0800 (PST)
+Received: from pps.filterd (m0045849.ppops.net [127.0.0.1])
+        by mx0a-0016f401.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 31KD26E8020390;
+        Mon, 20 Feb 2023 05:40:45 -0800
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=marvell.com; h=date : from : to :
+ cc : subject : message-id : references : mime-version : content-type :
+ in-reply-to; s=pfpt0220; bh=wrCTEsPQlbbQHwO6N9fYbuOV+ItGiVwJcpHZiIyDepI=;
+ b=WTVtCjBrOU/SkmP+MADWCtp/sZakX2KimU8GNE/D4p7gF7ECL4kfv2i/QevGwFXOLPvi
+ E2mezNT676MPm05gGm6YNrh2zoU9ae18vHW5bCe2+yBKip1pvR+nQiwHcbITe08SEhf+
+ HIMksdH/NbtxQlJpKpMmWEycUDGG3fQFzzJShpJjoG8kJq+zdxSE4rbWCkXSqwxdn3LO
+ 3nuftJzZlRn/0LEvRQphGxxxGWdI9noW5TPbcGLf5dsJasiolo4odT7GGXHiz8Ms8O6H
+ kiWVaWqSSgc6BJCmfD4lteotfrg6y4cuvKYE6birjvGpma2BmRWskW5jLFMrVOrX/1Ck FQ== 
+Received: from dc5-exch01.marvell.com ([199.233.59.181])
+        by mx0a-0016f401.pphosted.com (PPS) with ESMTPS id 3ntvwumgdh-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT);
+        Mon, 20 Feb 2023 05:40:45 -0800
+Received: from DC5-EXCH02.marvell.com (10.69.176.39) by DC5-EXCH01.marvell.com
+ (10.69.176.38) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Mon, 20 Feb
+ 2023 05:40:43 -0800
+Received: from maili.marvell.com (10.69.176.80) by DC5-EXCH02.marvell.com
+ (10.69.176.39) with Microsoft SMTP Server id 15.0.1497.42 via Frontend
+ Transport; Mon, 20 Feb 2023 05:40:43 -0800
+Received: from Dell2s-9 (unknown [10.110.150.250])
+        by maili.marvell.com (Postfix) with ESMTP id 3A1413F705A;
+        Mon, 20 Feb 2023 05:40:43 -0800 (PST)
+Date:   Mon, 20 Feb 2023 05:40:43 -0800
+From:   Piyush Malgujar <pmalgujar@marvell.com>
+To:     Adrian Hunter <adrian.hunter@intel.com>
+CC:     <linux-mmc@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <ulf.hansson@linaro.org>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>,
+        <yamada.masahiro@socionext.com>, <devicetree@vger.kernel.org>,
+        Brad Larson <blarson@amd.com>, <jannadurai@marvell.com>,
+        <cchavva@marvell.com>, Dhananjay Kangude <dkangude@cadence.com>
+Subject: Re: [PATCH v2 1/5] drivers: mmc: sdhci-cadence: Reformat the code
+Message-ID: <20230220134043.GB24729@Dell2s-9>
+References: <20230123192735.21136-1-pmalgujar@marvell.com>
+ <20230123192735.21136-2-pmalgujar@marvell.com>
+ <d08a1fc5-727c-7845-7aeb-729c5aa68189@intel.com>
 MIME-Version: 1.0
-From:   Hsin-Wei Hung <hsinweih@uci.edu>
-Date:   Mon, 20 Feb 2023 07:39:59 -0600
-Message-ID: <CABcoxUayum5oOqFMMqAeWuS8+EzojquSOSyDA3J_2omY=2EeAg@mail.gmail.com>
-Subject: A potential deadlock in sockhash map
-To:     John Fastabend <john.fastabend@gmail.com>,
-        Jakub Sitnicki <jakub@cloudflare.com>
-Cc:     "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
-        bpf@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <d08a1fc5-727c-7845-7aeb-729c5aa68189@intel.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
+X-Proofpoint-GUID: Ck-4bqSBqt_ZOeb7KbFfrSQ7BxuRcPHS
+X-Proofpoint-ORIG-GUID: Ck-4bqSBqt_ZOeb7KbFfrSQ7BxuRcPHS
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.170.22
+ definitions=2023-02-20_11,2023-02-20_02,2023-02-09_01
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+Hi Adrian,
 
-I think my previous report got blocked since it contained HTML
-subparts so I am sending it again. Our bpf runtime fuzzer (a
-customized syzkaller) triggered a lockdep warning in the bpf subsystem
-indicating a potential deadlock. We are able to trigger this bug on
-v5.15.25 and v5.19. The following code is a BPF PoC, and the lockdep
-warning is attached at the end.
+Thank you for your review comments.
 
-#include "/usr/local/include/vmlinux.h"
-#include "/usr/include/bpf/bpf_helpers.h"
+On Thu, Feb 02, 2023 at 08:42:33PM +0200, Adrian Hunter wrote:
+> On 23/01/23 21:27, Piyush Malgujar wrote:
+> > From: Dhananjay Kangude <dkangude@cadence.com>
+> > 
+> > Reformat the code so that further SD6 changes could be
+> > added and it could be isolated from SD4 related code.
+> > Also renamed functions accordingly.
+> 
+> It is good to have the renaming and white space changes
+> in a separate patch, but there is also some restructuring
+> in this patch that needs to be in 1 or more separate patches.
+> 
+> There are also still some white space changes in the next
+> patch.
+> 
+> > 
+> > Signed-off-by: Dhananjay Kangude <dkangude@cadence.com>
+> > Co-developed-by: Jayanthi Annadurai <jannadurai@marvell.com>
+> > Signed-off-by: Jayanthi Annadurai <jannadurai@marvell.com>
+> > Signed-off-by: Piyush Malgujar <pmalgujar@marvell.com>
+> > ---
+> >  drivers/mmc/host/sdhci-cadence.c | 165 ++++++++++++++++++++-----------
+> >  1 file changed, 110 insertions(+), 55 deletions(-)
+> > 
+> > diff --git a/drivers/mmc/host/sdhci-cadence.c b/drivers/mmc/host/sdhci-cadence.c
+> > index 6f2de54a598773879bf339aae8450f63e1251509..cb108ff9abda32767b356bb572abdf8626746cd6 100644
+> > --- a/drivers/mmc/host/sdhci-cadence.c
+> > +++ b/drivers/mmc/host/sdhci-cadence.c
+> > @@ -15,14 +15,14 @@
+> >  
+> >  #include "sdhci-pltfm.h"
+> >  
+> > -/* HRS - Host Register Set (specific to Cadence) */
+> > +/* SD 4.0 Controller HRS - Host Register Set (specific to Cadence) */
+> >  #define SDHCI_CDNS_HRS04		0x10		/* PHY access port */
+> > -#define   SDHCI_CDNS_HRS04_ACK			BIT(26)
+> > -#define   SDHCI_CDNS_HRS04_RD			BIT(25)
+> > -#define   SDHCI_CDNS_HRS04_WR			BIT(24)
+> > -#define   SDHCI_CDNS_HRS04_RDATA		GENMASK(23, 16)
+> > -#define   SDHCI_CDNS_HRS04_WDATA		GENMASK(15, 8)
+> > -#define   SDHCI_CDNS_HRS04_ADDR			GENMASK(5, 0)
+> > +#define SDHCI_CDNS_SD4_HRS04_ACK		BIT(26)
+> > +#define SDHCI_CDNS_SD4_HRS04_RD			BIT(25)
+> > +#define SDHCI_CDNS_SD4_HRS04_WR			BIT(24)
+> > +#define SDHCI_CDNS_SD4_HRS04_RDATA		GENMASK(23, 16)
+> > +#define SDHCI_CDNS_SD4_HRS04_WDATA		GENMASK(15, 8)
+> > +#define SDHCI_CDNS_SD4_HRS04_ADDR		GENMASK(5, 0)
+> >  
+> >  #define SDHCI_CDNS_HRS06		0x18		/* eMMC control */
+> >  #define   SDHCI_CDNS_HRS06_TUNE_UP		BIT(15)
+> > @@ -38,7 +38,7 @@
+> >  /* SRS - Slot Register Set (SDHCI-compatible) */
+> >  #define SDHCI_CDNS_SRS_BASE		0x200
+> >  
+> > -/* PHY */
+> > +/* PHY registers for SD4 controller */
+> >  #define SDHCI_CDNS_PHY_DLY_SD_HS	0x00
+> >  #define SDHCI_CDNS_PHY_DLY_SD_DEFAULT	0x01
+> >  #define SDHCI_CDNS_PHY_DLY_UHS_SDR12	0x02
+> > @@ -59,24 +59,43 @@
+> >   */
+> >  #define SDHCI_CDNS_MAX_TUNING_LOOP	40
+> >  
+> > -struct sdhci_cdns_phy_param {
+> > +struct sdhci_cdns_priv;
+> > +
+> > +struct sdhci_cdns_sd4_phy_param {
+> >  	u8 addr;
+> >  	u8 data;
+> >  };
+> >  
+> > +struct sdhci_cdns_data {
+> > +	int (*phy_init)(struct sdhci_cdns_priv *priv);
+> > +	int (*set_tune_val)(struct sdhci_host *host, unsigned int val);
+> > +};
+> > +
+> > +struct sdhci_cdns_sd4_phy {
+> > +	unsigned int nr_phy_params;
+> > +	struct sdhci_cdns_sd4_phy_param phy_params[];
+> > +};
+> > +
+> >  struct sdhci_cdns_priv {
+> >  	void __iomem *hrs_addr;
+> >  	bool enhanced_strobe;
+> > -	unsigned int nr_phy_params;
+> > -	struct sdhci_cdns_phy_param phy_params[];
+> > +	const struct sdhci_cdns_data *cdns_data;
+> > +	void *phy;
+> >  };
+> >  
+> > -struct sdhci_cdns_phy_cfg {
+> > +struct sdhci_cdns_sd4_phy_cfg {
+> >  	const char *property;
+> >  	u8 addr;
+> >  };
+> >  
+> > -static const struct sdhci_cdns_phy_cfg sdhci_cdns_phy_cfgs[] = {
+> > +struct sdhci_cdns_of_data {
+> > +	const struct sdhci_pltfm_data *pltfm_data;
+> > +	const struct sdhci_cdns_data *cdns_data;
+> > +	int (*phy_probe)(struct platform_device *pdev,
+> > +			 struct sdhci_cdns_priv *priv);
+> > +};
+> > +
+> > +static const struct sdhci_cdns_sd4_phy_cfg sdhci_cdns_sd4_phy_cfgs[] = {
+> >  	{ "cdns,phy-input-delay-sd-highspeed", SDHCI_CDNS_PHY_DLY_SD_HS, },
+> >  	{ "cdns,phy-input-delay-legacy", SDHCI_CDNS_PHY_DLY_SD_DEFAULT, },
+> >  	{ "cdns,phy-input-delay-sd-uhs-sdr12", SDHCI_CDNS_PHY_DLY_UHS_SDR12, },
+> > @@ -90,80 +109,80 @@ static const struct sdhci_cdns_phy_cfg sdhci_cdns_phy_cfgs[] = {
+> >  	{ "cdns,phy-dll-delay-strobe", SDHCI_CDNS_PHY_DLY_STROBE, },
+> >  };
+> >  
+> > -static int sdhci_cdns_write_phy_reg(struct sdhci_cdns_priv *priv,
+> > -				    u8 addr, u8 data)
+> > +static int sdhci_cdns_sd4_write_phy_reg(struct sdhci_cdns_priv *priv,
+> > +					u8 addr, u8 data)
+> >  {
+> >  	void __iomem *reg = priv->hrs_addr + SDHCI_CDNS_HRS04;
+> >  	u32 tmp;
+> >  	int ret;
+> >  
+> > -	ret = readl_poll_timeout(reg, tmp, !(tmp & SDHCI_CDNS_HRS04_ACK),
+> > +	ret = readl_poll_timeout(reg, tmp, !(tmp & SDHCI_CDNS_SD4_HRS04_ACK),
+> >  				 0, 10);
+> >  	if (ret)
+> >  		return ret;
+> >  
+> > -	tmp = FIELD_PREP(SDHCI_CDNS_HRS04_WDATA, data) |
+> > -	      FIELD_PREP(SDHCI_CDNS_HRS04_ADDR, addr);
+> > +	tmp = FIELD_PREP(SDHCI_CDNS_SD4_HRS04_WDATA, data) |
+> > +	      FIELD_PREP(SDHCI_CDNS_SD4_HRS04_ADDR, addr);
+> >  	writel(tmp, reg);
+> >  
+> > -	tmp |= SDHCI_CDNS_HRS04_WR;
+> > +	tmp |= SDHCI_CDNS_SD4_HRS04_WR;
+> >  	writel(tmp, reg);
+> >  
+> > -	ret = readl_poll_timeout(reg, tmp, tmp & SDHCI_CDNS_HRS04_ACK, 0, 10);
+> > +	ret = readl_poll_timeout(reg, tmp, tmp & SDHCI_CDNS_SD4_HRS04_ACK, 0, 10);
+> >  	if (ret)
+> >  		return ret;
+> >  
+> > -	tmp &= ~SDHCI_CDNS_HRS04_WR;
+> > +	tmp &= ~SDHCI_CDNS_SD4_HRS04_WR;
+> >  	writel(tmp, reg);
+> >  
+> > -	ret = readl_poll_timeout(reg, tmp, !(tmp & SDHCI_CDNS_HRS04_ACK),
+> > +	ret = readl_poll_timeout(reg, tmp, !(tmp & SDHCI_CDNS_SD4_HRS04_ACK),
+> >  				 0, 10);
+> >  
+> >  	return ret;
+> >  }
+> >  
+> > -static unsigned int sdhci_cdns_phy_param_count(struct device_node *np)
+> > +static unsigned int sdhci_cdns_sd4_phy_param_count(struct device_node *np)
+> >  {
+> >  	unsigned int count = 0;
+> >  	int i;
+> >  
+> > -	for (i = 0; i < ARRAY_SIZE(sdhci_cdns_phy_cfgs); i++)
+> > -		if (of_property_read_bool(np, sdhci_cdns_phy_cfgs[i].property))
+> > +	for (i = 0; i < ARRAY_SIZE(sdhci_cdns_sd4_phy_cfgs); i++)
+> > +		if (of_property_read_bool(np, sdhci_cdns_sd4_phy_cfgs[i].property))
+> >  			count++;
+> >  
+> >  	return count;
+> >  }
+> >  
+> > -static void sdhci_cdns_phy_param_parse(struct device_node *np,
+> > -				       struct sdhci_cdns_priv *priv)
+> > +static void sdhci_cdns_sd4_phy_param_parse(struct device_node *np,
+> > +					   struct sdhci_cdns_sd4_phy *phy)
+> >  {
+> > -	struct sdhci_cdns_phy_param *p = priv->phy_params;
+> > +	struct sdhci_cdns_sd4_phy_param *p = phy->phy_params;
+> >  	u32 val;
+> >  	int ret, i;
+> >  
+> > -	for (i = 0; i < ARRAY_SIZE(sdhci_cdns_phy_cfgs); i++) {
+> > -		ret = of_property_read_u32(np, sdhci_cdns_phy_cfgs[i].property,
+> > +	for (i = 0; i < ARRAY_SIZE(sdhci_cdns_sd4_phy_cfgs); i++) {
+> > +		ret = of_property_read_u32(np, sdhci_cdns_sd4_phy_cfgs[i].property,
+> >  					   &val);
+> >  		if (ret)
+> >  			continue;
+> >  
+> > -		p->addr = sdhci_cdns_phy_cfgs[i].addr;
+> > +		p->addr = sdhci_cdns_sd4_phy_cfgs[i].addr;
+> >  		p->data = val;
+> >  		p++;
+> >  	}
+> >  }
+> >  
+> > -static int sdhci_cdns_phy_init(struct sdhci_cdns_priv *priv)
+> > +static int sdhci_cdns_sd4_phy_init(struct sdhci_cdns_priv *priv)
+> >  {
+> >  	int ret, i;
+> > +	struct sdhci_cdns_sd4_phy *phy = priv->phy;
+> >  
+> > -	for (i = 0; i < priv->nr_phy_params; i++) {
+> > -		ret = sdhci_cdns_write_phy_reg(priv, priv->phy_params[i].addr,
+> > -					       priv->phy_params[i].data);
+> > +	for (i = 0; i < phy->nr_phy_params; i++) {
+> > +		ret = sdhci_cdns_sd4_write_phy_reg(priv, phy->phy_params[i].addr,
+> > +						   phy->phy_params[i].data);
+> >  		if (ret)
+> >  			return ret;
+> >  	}
+> > -
+> >  	return 0;
+> >  }
+> >  
+> > @@ -202,7 +221,28 @@ static u32 sdhci_cdns_get_emmc_mode(struct sdhci_cdns_priv *priv)
+> >  	return FIELD_GET(SDHCI_CDNS_HRS06_MODE, tmp);
+> >  }
+> >  
+> > -static int sdhci_cdns_set_tune_val(struct sdhci_host *host, unsigned int val)
+> > +static int sdhci_cdns_sd4_phy_probe(struct platform_device *pdev,
+> > +				    struct sdhci_cdns_priv *priv)
+> > +{
+> > +	unsigned int nr_phy_params;
+> > +	struct sdhci_cdns_sd4_phy *phy;
+> > +	struct device *dev = &pdev->dev;
+> > +
+> > +	nr_phy_params = sdhci_cdns_sd4_phy_param_count(dev->of_node);
+> > +	phy = devm_kzalloc(dev, struct_size(phy, phy_params, nr_phy_params),
+> > +			   GFP_KERNEL);
+> > +	if (!phy)
+> > +		return -ENOMEM;
+> > +
+> > +	phy->nr_phy_params = nr_phy_params;
+> > +
+> > +	sdhci_cdns_sd4_phy_param_parse(dev->of_node, phy);
+> > +	priv->phy = phy;
+> > +
+> > +	return 0;
+> > +}
+> > +
+> > +static int sdhci_cdns_sd4_set_tune_val(struct sdhci_host *host, unsigned int val)
+> >  {
+> >  	struct sdhci_cdns_priv *priv = sdhci_cdns_priv(host);
+> >  	void __iomem *reg = priv->hrs_addr + SDHCI_CDNS_HRS06;
+> > @@ -255,7 +295,7 @@ static int sdhci_cdns_execute_tuning(struct sdhci_host *host, u32 opcode)
+> >  		return 0;
+> >  
+> >  	for (i = 0; i < SDHCI_CDNS_MAX_TUNING_LOOP; i++) {
+> > -		if (sdhci_cdns_set_tune_val(host, i) ||
+> > +		if (sdhci_cdns_sd4_set_tune_val(host, i) ||
+> >  		    mmc_send_tuning(host->mmc, opcode, NULL)) { /* bad */
+> >  			cur_streak = 0;
+> >  		} else { /* good */
+> > @@ -272,7 +312,7 @@ static int sdhci_cdns_execute_tuning(struct sdhci_host *host, u32 opcode)
+> >  		return -EIO;
+> >  	}
+> >  
+> > -	return sdhci_cdns_set_tune_val(host, end_of_streak - max_streak / 2);
+> > +	return sdhci_cdns_sd4_set_tune_val(host, end_of_streak - max_streak / 2);
+> >  }
+> >  
+> >  static void sdhci_cdns_set_uhs_signaling(struct sdhci_host *host,
+> > @@ -309,7 +349,7 @@ static void sdhci_cdns_set_uhs_signaling(struct sdhci_host *host,
+> >  		sdhci_set_uhs_signaling(host, timing);
+> >  }
+> >  
+> > -static const struct sdhci_ops sdhci_cdns_ops = {
+> > +static const struct sdhci_ops sdhci_cdns_sd4_ops = {
+> >  	.set_clock = sdhci_set_clock,
+> >  	.get_timeout_clock = sdhci_cdns_get_timeout_clock,
+> >  	.set_bus_width = sdhci_set_bus_width,
+> > @@ -319,12 +359,23 @@ static const struct sdhci_ops sdhci_cdns_ops = {
+> >  };
+> >  
+> >  static const struct sdhci_pltfm_data sdhci_cdns_uniphier_pltfm_data = {
+> > -	.ops = &sdhci_cdns_ops,
+> > +	.ops = &sdhci_cdns_sd4_ops,
+> >  	.quirks2 = SDHCI_QUIRK2_PRESET_VALUE_BROKEN,
+> >  };
+> >  
+> > -static const struct sdhci_pltfm_data sdhci_cdns_pltfm_data = {
+> > -	.ops = &sdhci_cdns_ops,
+> > +static const struct sdhci_pltfm_data sdhci_cdns_sd4_pltfm_data = {
+> > +	.ops = &sdhci_cdns_sd4_ops,
+> > +};
+> > +
+> > +static const struct sdhci_cdns_data sdhci_cdns_sd4_data = {
+> > +	.phy_init = sdhci_cdns_sd4_phy_init,
+> > +	.set_tune_val = sdhci_cdns_sd4_set_tune_val,
+> > +};
+> > +
+> > +static const struct sdhci_cdns_of_data sdhci_cdns_sd4_of_data = {
+> > +	.pltfm_data = &sdhci_cdns_sd4_pltfm_data,
+> > +	.cdns_data = &sdhci_cdns_sd4_data,
+> > +	.phy_probe = sdhci_cdns_sd4_phy_probe,
+> >  };
+> >  
+> >  static void sdhci_cdns_hs400_enhanced_strobe(struct mmc_host *mmc,
+> > @@ -350,11 +401,10 @@ static void sdhci_cdns_hs400_enhanced_strobe(struct mmc_host *mmc,
+> >  static int sdhci_cdns_probe(struct platform_device *pdev)
+> >  {
+> >  	struct sdhci_host *host;
+> > -	const struct sdhci_pltfm_data *data;
+> > +	const struct sdhci_cdns_of_data *data;
+> >  	struct sdhci_pltfm_host *pltfm_host;
+> >  	struct sdhci_cdns_priv *priv;
+> >  	struct clk *clk;
+> > -	unsigned int nr_phy_params;
+> >  	int ret;
+> >  	struct device *dev = &pdev->dev;
+> >  	static const u16 version = SDHCI_SPEC_400 << SDHCI_SPEC_VER_SHIFT;
+> > @@ -368,12 +418,12 @@ static int sdhci_cdns_probe(struct platform_device *pdev)
+> >  		return ret;
+> >  
+> >  	data = of_device_get_match_data(dev);
+> > -	if (!data)
+> > -		data = &sdhci_cdns_pltfm_data;
+> > +	if (!data) {
+> > +		return PTR_ERR(clk);
+> > +		goto disable_clk;
+> 
+> 'return' followed by 'goto'
+> 
+> Please review patches before submitting.
+> 
+> > +	}
+> >  
+> > -	nr_phy_params = sdhci_cdns_phy_param_count(dev->of_node);
+> > -	host = sdhci_pltfm_init(pdev, data,
+> > -				struct_size(priv, phy_params, nr_phy_params));
+> > +	host = sdhci_pltfm_init(pdev, data->pltfm_data, sizeof(*priv));
+> >  	if (IS_ERR(host)) {
+> >  		ret = PTR_ERR(host);
+> >  		goto disable_clk;
+> > @@ -383,9 +433,9 @@ static int sdhci_cdns_probe(struct platform_device *pdev)
+> >  	pltfm_host->clk = clk;
+> >  
+> >  	priv = sdhci_pltfm_priv(pltfm_host);
+> > -	priv->nr_phy_params = nr_phy_params;
+> >  	priv->hrs_addr = host->ioaddr;
+> >  	priv->enhanced_strobe = false;
+> > +	priv->cdns_data = data->cdns_data;
+> >  	host->ioaddr += SDHCI_CDNS_SRS_BASE;
+> >  	host->mmc_host_ops.hs400_enhanced_strobe =
+> >  				sdhci_cdns_hs400_enhanced_strobe;
+> > @@ -398,9 +448,11 @@ static int sdhci_cdns_probe(struct platform_device *pdev)
+> >  	if (ret)
+> >  		goto free;
+> >  
+> > -	sdhci_cdns_phy_param_parse(dev->of_node, priv);
+> > +	ret = data->phy_probe(pdev, priv);
+> > +	if (ret)
+> > +		goto free;
+> >  
+> > -	ret = sdhci_cdns_phy_init(priv);
+> > +	ret = priv->cdns_data->phy_init(priv);
+> >  	if (ret)
+> >  		goto free;
+> >  
+> > @@ -429,7 +481,7 @@ static int sdhci_cdns_resume(struct device *dev)
+> >  	if (ret)
+> >  		return ret;
+> >  
+> > -	ret = sdhci_cdns_phy_init(priv);
+> > +	ret = priv->cdns_data->phy_init(priv);
+> >  	if (ret)
+> >  		goto disable_clk;
+> >  
+> > @@ -455,7 +507,10 @@ static const struct of_device_id sdhci_cdns_match[] = {
+> >  		.compatible = "socionext,uniphier-sd4hc",
+> >  		.data = &sdhci_cdns_uniphier_pltfm_data,
+> >  	},
+> > -	{ .compatible = "cdns,sd4hc" },
+> > +	{
+> > +		.compatible = "cdns,sd4hc",
+> > +		.data = &sdhci_cdns_sd4_of_data,
+> 
+> sdhci_cdns_uniphier_pltfm_data is a pointer to a struct sdhci_pltfm_data, but
+> sdhci_cdns_sd4_of_data is a pointer to a struct sdhci_cdns_of_data.
+> That is error prone.  For example, you dereference data->cdns_data
+> unconditionally even though it does not exist for sdhci_cdns_uniphier_pltfm_data.
+> 
 
-#define __uint(name, val) int (*name)[val]
-#define __type(name, val) typeof(val) *name
-#define __array(name, val) typeof(val) *name[]
+This will be taken care in V3, will handle sdhci_cdns_uniphier_pltfm_data in same
+manner as sdhci_cdns_sd4_of_data and make it compatible with the design.
 
-#define SEC(name) \
-        _Pragma("GCC diagnostic push")                                  \
-        _Pragma("GCC diagnostic ignored \"-Wignored-attributes\"")      \
-        __attribute__((section(name), used))                            \
-        _Pragma("GCC diagnostic pop")
+> Also this patch is in conflict with the approach taken by:
+> 
+> https://lore.kernel.org/linux-mmc/20230119035136.21603-14-blarson@amd.com/
+> 
 
-#define DEFINE_BPF_MAP(the_map, TypeOfMap, MapFlags, TypeOfKey,
-TypeOfValue, MaxEntries) \
-        struct {                                                        \
-            __uint(type, TypeOfMap);                                    \
-            __uint(map_flags, (MapFlags));                              \
-            __uint(max_entries, (MaxEntries));                          \
-            __type(key, TypeOfKey);                                     \
-            __type(value, TypeOfValue);                                 \
-        } the_map SEC(".maps");
+The above patch seems to be specific to Elba Soc for SD4.
+The approach taken in our patches is more generic modular and also incorporates
+SD6 controller.
 
-DEFINE_BPF_MAP(map_0, BPF_MAP_TYPE_SOCKHASH, 0, uint32_t, uint32_t, 1005);
-SEC("tp/sched/sched_switch")
-int func(__u64 *ctx) {
-        uint32_t v0 = 0;
-        uint64_t v1 = 0;
-        v1 = bpf_map_delete_elem(&map_0, &v0);
-        return 0;
-}
-char _license[] SEC("license") = "GPL";
+> > +	},
+> >  	{ /* sentinel */ }
+> >  };
+> >  MODULE_DEVICE_TABLE(of, sdhci_cdns_match);
+> 
 
-=====================================================
-WARNING: CPU: 1 PID: 0 at kernel/softirq.c:376 __local_bh_enable_ip+0xc6/0x110
-WARNING: HARDIRQ-safe -> HARDIRQ-unsafe lock order detected
-Modules linked in:
-5.19.0+ #2 Not tainted
+Rest of the comments will be taken care in V3.
 
------------------------------------------------------
-syz-executor.0/1299 [HC0[0]:SC0[2]:HE0:SE0] is trying to acquire:
-CPU: 1 PID: 0 Comm: swapper/1 Not tainted 5.19.0+ #2
-ffffc90000a173e0
-Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS
-1.13.0-1ubuntu1.1 04/01/2014
- (
-RIP: 0010:__local_bh_enable_ip+0xc6/0x110
-&htab->buckets[i].lock
-Code: 00 ff ff 00 74 39 65 ff 0d 17 e8 25 4f e8 62 bb 3c 00 fb 0f 1f
-44 00 00 5b 5d c3 cc cc cc cc 65 8b 05 7a ee 25 4f 85 c0 75 9b <0f> 0b
-eb 97 e8 41 ba 3c 00 eb a4 48 89 ef e8 b7 6e 16 00 eb ad 65
-){+...}-{2:2}
-RSP: 0018:ffff888001b1fac8 EFLAGS: 00010046
-, at: sock_hash_delete_elem+0xcc/0x290
-
-
-and this task is already holding:
-RAX: 0000000000000000 RBX: 0000000000000201 RCX: 1ffffffff6a5dcf1
-ffff888054a42c98
-RDX: 0000000000000000 RSI: 0000000000000201 RDI: ffffffffb2c89dfd
- (
-RBP: ffffffffb2c89dfd R08: 0000000000000000 R09: ffffc90000a173cb
-&rq->__lock
-R10: fffff52000142e79 R11: 0000000000000001 R12: 00000000fffffffe
-){-.-.}-{2:2}
-R13: ffffc90000a173c8 R14: 00000000049396b8 R15: 0000000000000004
-, at: __schedule+0x29a/0x28c0
-FS:  0000000000000000(0000) GS:ffff888054a80000(0000) knlGS:0000000000000000
-which would create a new lock dependency:
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
- (&rq->__lock
-CR2: 0000001b30b20000 CR3: 0000000006eb2004 CR4: 0000000000370ee0
-){-.-.}-{2:2}
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
- -> (
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-&htab->buckets[i].lock
-Call Trace:
-){+...}-{2:2}
- <TASK>
-
-
-but this new dependency connects a HARDIRQ-irq-safe lock:
- sock_hash_delete_elem+0x20d/0x290
- (&rq->__lock
- bpf_prog_ca95c5394311bbec_func+0x2d/0x31
-){-.-.}-{2:2}
- trace_call_bpf+0x274/0x5f0
-
-... which became HARDIRQ-irq-safe at:
- ? tracing_prog_func_proto+0x490/0x490
-  lock_acquire+0x1a1/0x500
- perf_trace_run_bpf_submit+0x96/0x1c0
-  _raw_spin_lock_nested+0x2a/0x40
- perf_trace_sched_switch+0x452/0x6c0
-  scheduler_tick+0x9f/0x770
- ? psi_task_switch+0x3ae/0x4c0
-  update_process_times+0x10f/0x150
- ? trace_raw_output_sched_wake_idle_without_ipi+0xb0/0xb0
-  tick_periodic+0x72/0x230
- ? do_raw_spin_lock+0x125/0x270
-  tick_handle_periodic+0x46/0x120
- ? pick_next_task_fair+0x46a/0xee0
-  timer_interrupt+0x4a/0x80
- __schedule+0x134f/0x28c0
-  __handle_irq_event_percpu+0x214/0x7b0
- ? io_schedule_timeout+0x150/0x150
-  handle_irq_event+0xac/0x1e0
- ? tick_nohz_idle_exit+0x13a/0x3d0
-  handle_level_irq+0x245/0x6e0
- ? lockdep_hardirqs_on_prepare+0x27b/0x3f0
-  __common_interrupt+0x6c/0x160
- ? trace_hardirqs_on+0x2d/0x100
-  common_interrupt+0x78/0xa0
- schedule_idle+0x5c/0xa0
-  asm_common_interrupt+0x22/0x40
- do_idle+0x2e0/0x550
-  __x86_return_thunk+0x0/0x8
- ? arch_cpu_idle_exit+0x40/0x40
-  _raw_spin_unlock_irqrestore+0x33/0x50
- ? lockdep_hardirqs_on_prepare+0x27b/0x3f0
-  __setup_irq+0x101a/0x1ca0
- ? trace_hardirqs_on+0x2d/0x100
-  request_threaded_irq+0x2b7/0x3e0
- cpu_startup_entry+0x19/0x20
-  hpet_time_init+0x2d/0x4b
- start_secondary+0x241/0x2d0
-  x86_late_time_init+0x63/0xa6
- ? set_cpu_sibling_map+0x1ed0/0x1ed0
-  start_kernel+0x443/0x517
- ? set_bringup_idt_handler.constprop.0+0x98/0xc0
-  secondary_startup_64_no_verify+0xd3/0xdb
- ? start_cpu0+0xc/0xc
-
-to a HARDIRQ-irq-unsafe lock:
- secondary_startup_64_no_verify+0xd3/0xdb
- (
- </TASK>
-&htab->buckets[i].lock
-irq event stamp: 304481
-){+...}-{2:2}
-hardirqs last  enabled at (304479): [<ffffffffb1043fca>]
-tick_nohz_idle_exit+0x13a/0x3d0
-
-... which became HARDIRQ-irq-unsafe at:
-hardirqs last disabled at (304480): [<ffffffffb33a2e07>]
-__schedule+0x14d7/0x28c0
-...
-  lock_acquire+0x1a1/0x500
-softirqs last  enabled at (304354): [<ffffffffb0dd1079>]
-__irq_exit_rcu+0x189/0x1f0
-  _raw_spin_lock_bh+0x34/0x40
-softirqs last disabled at (304481): [<ffffffffb2c89cbc>]
-sock_hash_delete_elem+0xcc/0x290
-  sock_hash_free+0x124/0x970
----[ end trace 0000000000000000 ]---
-  __sys_bpf+0x39c4/0x6070
-  __x64_sys_bpf+0x7a/0xc0
-  do_syscall_64+0x3b/0x90
-  entry_SYSCALL_64_after_hwframe+0x63/0xcd
-
-other info that might help us debug this:
-
- Possible interrupt unsafe locking scenario:
-
-       CPU0                    CPU1
-       ----                    ----
-  lock(&htab->buckets[i].lock);
-                               local_irq_disable();
-                               lock(&rq->__lock);
-                               lock(&htab->buckets[i].lock);
-  <Interrupt>
-    lock(&rq->__lock);
-
- *** DEADLOCK ***
-
-2 locks held by syz-executor.0/1299:
- #0: ffff888054a42c98 (&rq->__lock){-.-.}-{2:2}, at: __schedule+0x29a/0x28c0
- #1: ffffffffb4bc25c0 (rcu_read_lock){....}-{1:2}, at: trace_call_bpf+0xa0/0x5f0
-
-the dependencies between HARDIRQ-irq-safe lock and the holding lock:
--> (&rq->__lock){-.-.}-{2:2} {
-   IN-HARDIRQ-W at:
-                    lock_acquire+0x1a1/0x500
-                    _raw_spin_lock_nested+0x2a/0x40
-                    scheduler_tick+0x9f/0x770
-                    update_process_times+0x10f/0x150
-                    tick_periodic+0x72/0x230
-                    tick_handle_periodic+0x46/0x120
-                    timer_interrupt+0x4a/0x80
-                    __handle_irq_event_percpu+0x214/0x7b0
-                    handle_irq_event+0xac/0x1e0
-                    handle_level_irq+0x245/0x6e0
-                    __common_interrupt+0x6c/0x160
-                    common_interrupt+0x78/0xa0
-                    asm_common_interrupt+0x22/0x40
-                    __x86_return_thunk+0x0/0x8
-                    _raw_spin_unlock_irqrestore+0x33/0x50
-                    __setup_irq+0x101a/0x1ca0
-                    request_threaded_irq+0x2b7/0x3e0
-                    hpet_time_init+0x2d/0x4b
-                    x86_late_time_init+0x63/0xa6
-                    start_kernel+0x443/0x517
-                    secondary_startup_64_no_verify+0xd3/0xdb
-   IN-SOFTIRQ-W at:
-                    lock_acquire+0x1a1/0x500
-                    _raw_spin_lock_nested+0x2a/0x40
-                    try_to_wake_up+0x4b6/0x1650
-                    call_timer_fn+0x187/0x590
-                    __run_timers.part.0+0x66b/0xa20
-                    run_timer_softirq+0x85/0x130
-                    __do_softirq+0x1c2/0x845
-                    __irq_exit_rcu+0x189/0x1f0
-                    irq_exit_rcu+0xa/0x20
-                    sysvec_apic_timer_interrupt+0x6f/0x90
-                    asm_sysvec_apic_timer_interrupt+0x16/0x20
-                    kmemleak_alloc+0x11/0x80
-                    kmem_cache_alloc_trace+0x2ae/0x4a0
-                    kprobe_add_ksym_blacklist+0xf4/0x300
-                    kprobe_add_area_blacklist+0x6f/0xb0
-                    init_kprobes+0x129/0x310
-                    do_one_initcall+0xf0/0x550
-                    kernel_init_freeable+0x50b/0x7c4
-                    kernel_init+0x1f/0x1f0
-                    ret_from_fork+0x22/0x30
-   INITIAL USE at:
-                   lock_acquire+0x1a1/0x500
-                   _raw_spin_lock_nested+0x2a/0x40
-                   raw_spin_rq_lock_nested+0x11/0x20
-                   _raw_spin_rq_lock_irqsave+0x25/0x50
-                   rq_attach_root+0x25/0x340
-                   sched_init+0x938/0xe26
-                   start_kernel+0x1a8/0x517
-                   secondary_startup_64_no_verify+0xd3/0xdb
- }
- ... key      at: [<ffffffffb5ddd400>] __key.265+0x0/0x40
-
-the dependencies between the lock to be acquired
- and HARDIRQ-irq-unsafe lock:
--> (&htab->buckets[i].lock){+...}-{2:2} {
-   HARDIRQ-ON-W at:
-                    lock_acquire+0x1a1/0x500
-                    _raw_spin_lock_bh+0x34/0x40
-                    sock_hash_free+0x124/0x970
-                    __sys_bpf+0x39c4/0x6070
-                    __x64_sys_bpf+0x7a/0xc0
-                    do_syscall_64+0x3b/0x90
-                    entry_SYSCALL_64_after_hwframe+0x63/0xcd
-   INITIAL USE at:
-                   lock_acquire+0x1a1/0x500
-                   _raw_spin_lock_bh+0x34/0x40
-                   sock_hash_free+0x124/0x970
-                   __sys_bpf+0x39c4/0x6070
-                   __x64_sys_bpf+0x7a/0xc0
-                   do_syscall_64+0x3b/0x90
-                   entry_SYSCALL_64_after_hwframe+0x63/0xcd
- }
- ... key      at: [<ffffffffb70688e0>] __key.0+0x0/0x40
- ... acquired at:
-   lock_acquire+0x1a1/0x500
-   _raw_spin_lock_bh+0x34/0x40
-   sock_hash_delete_elem+0xcc/0x290
-   bpf_prog_ca95c5394311bbec_func+0x2d/0x31
-   trace_call_bpf+0x274/0x5f0
-   perf_trace_run_bpf_submit+0x96/0x1c0
-   perf_trace_sched_switch+0x452/0x6c0
-   __schedule+0x134f/0x28c0
-   schedule+0xd4/0x1f0
-   exit_to_user_mode_prepare+0x124/0x230
-   syscall_exit_to_user_mode+0x16/0x50
-   do_syscall_64+0x48/0x90
-   entry_SYSCALL_64_after_hwframe+0x63/0xcd
-
-
-stack backtrace:
-CPU: 0 PID: 1299 Comm: syz-executor.0 Tainted: G        W         5.19.0+ #2
-Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS
-1.13.0-1ubuntu1.1 04/01/2014
-Call Trace:
- <TASK>
- dump_stack_lvl+0x9c/0xc9
- check_irq_usage.cold+0x4ab/0x666
- ? print_shortest_lock_dependencies_backwards+0x80/0x80
- ? check_path.constprop.0+0x24/0x50
- ? register_lock_class+0xb8/0x1120
- ? lock_is_held_type+0xa6/0x120
- ? lockdep_lock+0xbe/0x1c0
- ? call_rcu_zapped+0xc0/0xc0
- __lock_acquire+0x293f/0x5320
- ? lockdep_hardirqs_on_prepare+0x3f0/0x3f0
- ? __lock_acquire+0x15c3/0x5320
- lock_acquire+0x1a1/0x500
- ? sock_hash_delete_elem+0xcc/0x290
- ? lock_release+0x720/0x720
- ? lock_acquire+0x1a1/0x500
- ? trace_call_bpf+0xa0/0x5f0
- ? lock_release+0x720/0x720
- ? __sanitizer_cov_trace_switch+0x50/0x90
- _raw_spin_lock_bh+0x34/0x40
- ? sock_hash_delete_elem+0xcc/0x290
- sock_hash_delete_elem+0xcc/0x290
- bpf_prog_ca95c5394311bbec_func+0x2d/0x31
- trace_call_bpf+0x274/0x5f0
- ? tracing_prog_func_proto+0x490/0x490
- perf_trace_run_bpf_submit+0x96/0x1c0
- perf_trace_sched_switch+0x452/0x6c0
- ? psi_task_switch+0x186/0x4c0
- ? trace_raw_output_sched_wake_idle_without_ipi+0xb0/0xb0
- ? do_raw_spin_lock+0x125/0x270
- ? pick_next_task_fair+0x46a/0xee0
- __schedule+0x134f/0x28c0
- ? io_schedule_timeout+0x150/0x150
- ? fput+0x30/0x1a0
- ? ksys_write+0x1a8/0x260
- schedule+0xd4/0x1f0
- exit_to_user_mode_prepare+0x124/0x230
- syscall_exit_to_user_mode+0x16/0x50
- do_syscall_64+0x48/0x90
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-RIP: 0033:0x7f79ef08636f
-Code: 89 54 24 18 48 89 74 24 10 89 7c 24 08 e8 99 fd ff ff 48 8b 54
-24 18 48 8b 74 24 10 41 89 c0 8b 7c 24 08 b8 01 00 00 00 0f 05 <48> 3d
-00 f0 ff ff 77 2d 44 89 c7 48 89 44 24 08 e8 cc fd ff ff 48
-RSP: 002b:00007f79f0337300 EFLAGS: 00000293 ORIG_RAX: 0000000000000001
-RAX: 0000000000000011 RBX: 0000000000000011 RCX: 00007f79ef08636f
-RDX: 0000000000000011 RSI: 00007f79f03374d0 RDI: 0000000000000002
-RBP: 00007f79f03374d0 R08: 0000000000000000 R09: 0000000000000011
-R10: 0000000000000000 R11: 0000000000000293 R12: 0000000000000011
-R13: 00007f79ef202080 R14: 0000000000000011 R15: 00007f79ef203ba0
- </TASK>
-
-Thank you,
-Hsin-Wei Hung
-
---
-Computer Science Department
-University of California, Irvine
+Thanks,
+Piyush
