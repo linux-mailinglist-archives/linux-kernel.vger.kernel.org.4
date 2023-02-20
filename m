@@ -2,124 +2,162 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5725569C947
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Feb 2023 12:09:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F0CD769C94E
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Feb 2023 12:09:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231452AbjBTLJF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Feb 2023 06:09:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34274 "EHLO
+        id S231757AbjBTLJp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Feb 2023 06:09:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35064 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229479AbjBTLJD (ORCPT
+        with ESMTP id S230491AbjBTLJl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Feb 2023 06:09:03 -0500
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E3B5B779
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Feb 2023 03:08:47 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=tkoxDrw8EDDRtnI6iJWRhG5PvCkA9PC/AkIws3Xlkdw=; b=jdFHLHjiFQvmrjBL7zwpLhvuGe
-        W8HOSnG2dnD/RGvAk9IEmY3lT97A9W88JJZ4+AsgsnwjCPB+Nck5k2E/K3oFrzwz0y7qz7HZV8w12
-        ljtwx8h5Ob10JywR2QAXZMf2ULE/XGySuHZVsjPVTgrc5LAMAggMneG7n+cMhFVv6rNQmAF/1EJUB
-        zGFuxd8YuufUie9gTh4rrlLrTwygURKcUGESweM7urDXhQMumN6YaFNs3cZnCctkom7Lxtiv9SKLy
-        tNoPkQwnLYavWta/E7jwXMI2PsLTNNI9hYbBJ7CQeiKF8GyPv15QOZucI7FDqBMaMY+363ie9g8Wq
-        vIHBdy3w==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
-        id 1pU41n-00Bmce-1x;
-        Mon, 20 Feb 2023 11:08:17 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 4B4B130020B;
-        Mon, 20 Feb 2023 12:08:14 +0100 (CET)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 2EE4A2135FAB8; Mon, 20 Feb 2023 12:08:14 +0100 (CET)
-Date:   Mon, 20 Feb 2023 12:08:14 +0100
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Zhang Rui <rui.zhang@intel.com>
-Cc:     tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
-        dave.hansen@linux.intel.com, hpa@zytor.com, x86@kernel.org,
-        linux-kernel@vger.kernel.org, zhang.jia@linux.alibaba.com,
-        len.brown@intel.com
-Subject: Re: [RFC PATCH V2 0/1] x86: cpu topology fix and question on
- x86_max_cores
-Message-ID: <Y/NUni00nDuURT1H@hirez.programming.kicks-ass.net>
-References: <20230220032856.661884-1-rui.zhang@intel.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230220032856.661884-1-rui.zhang@intel.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+        Mon, 20 Feb 2023 06:09:41 -0500
+Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61CC01A95B;
+        Mon, 20 Feb 2023 03:09:33 -0800 (PST)
+Received: from pps.filterd (m0098419.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 31KAVTda004941;
+        Mon, 20 Feb 2023 11:09:06 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ mime-version : content-transfer-encoding; s=pp1;
+ bh=iaff3ymAW5HS/2O66xYNAHjFL1PE3JHi2WMFx/EOoTU=;
+ b=gGXn0ElsRvpMwlsc3zR4Nb+UQaretD+157EGIQ4UtgX8oR3+XPvJmaaLtfm1fkNCRBlP
+ Y2HcHjhzlbisyNy9PNLv+0B8uMss+3b0mFBtj8VOrAxzwimmsAXoEV551kvchJKSxjQQ
+ G9R8W9PdBIECBY3PwwgSu5zR/vjucaQYfaKjiqZOBAh+DC+yZA5C8dWB+IlGlBzEpRyp
+ R7Q3No76DQP3YYzofJEp24qBC6fViy2wyc1+AupZ1oZ8smXIkjpErQH4J0ZTjCf/Bofg
+ CghLsHWLmdWovYY3T/A15rALxH+14Jyne0Etw5ttORvmKKoq0mWHw28RHuT/DSeqG3cq /w== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3nv76erudn-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 20 Feb 2023 11:09:06 +0000
+Received: from m0098419.ppops.net (m0098419.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 31KB9587025556;
+        Mon, 20 Feb 2023 11:09:05 GMT
+Received: from ppma01dal.us.ibm.com (83.d6.3fa9.ip4.static.sl-reverse.com [169.63.214.131])
+        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3nv76erud8-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 20 Feb 2023 11:09:05 +0000
+Received: from pps.filterd (ppma01dal.us.ibm.com [127.0.0.1])
+        by ppma01dal.us.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 31KAgax0003567;
+        Mon, 20 Feb 2023 11:09:04 GMT
+Received: from smtprelay05.wdc07v.mail.ibm.com ([9.208.129.117])
+        by ppma01dal.us.ibm.com (PPS) with ESMTPS id 3ntpa77ykv-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 20 Feb 2023 11:09:04 +0000
+Received: from smtpav06.wdc07v.mail.ibm.com (smtpav06.wdc07v.mail.ibm.com [10.39.53.233])
+        by smtprelay05.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 31KB93XW10486482
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 20 Feb 2023 11:09:03 GMT
+Received: from smtpav06.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id EBBF6581EB;
+        Mon, 20 Feb 2023 11:09:02 +0000 (GMT)
+Received: from smtpav06.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id B0EC1581E9;
+        Mon, 20 Feb 2023 11:09:00 +0000 (GMT)
+Received: from li-f45666cc-3089-11b2-a85c-c57d1a57929f.ibm.com (unknown [9.160.169.160])
+        by smtpav06.wdc07v.mail.ibm.com (Postfix) with ESMTP;
+        Mon, 20 Feb 2023 11:09:00 +0000 (GMT)
+Message-ID: <1e93d7b299de3b6cf61b5a5c4be91eb47d864ac6.camel@linux.ibm.com>
+Subject: Re: [PATCH v7 2/6] ocfs2: Switch to security_inode_init_security()
+From:   Mimi Zohar <zohar@linux.ibm.com>
+To:     Roberto Sassu <roberto.sassu@huaweicloud.com>, mark@fasheh.com,
+        jlbec@evilplan.org, joseph.qi@linux.alibaba.com,
+        dmitry.kasatkin@gmail.com, paul@paul-moore.com, jmorris@namei.org,
+        serge@hallyn.com, stephen.smalley.work@gmail.com,
+        eparis@parisplace.org, casey@schaufler-ca.com
+Cc:     ocfs2-devel@oss.oracle.com, reiserfs-devel@vger.kernel.org,
+        linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org, selinux@vger.kernel.org,
+        linux-kernel@vger.kernel.org, keescook@chromium.org,
+        nicolas.bouchinet@clip-os.org,
+        Roberto Sassu <roberto.sassu@huawei.com>
+Date:   Mon, 20 Feb 2023 06:08:59 -0500
+In-Reply-To: <95f9b1dfca0cbff1c6a447dde45c2f835bc1a254.camel@huaweicloud.com>
+References: <20221201104125.919483-1-roberto.sassu@huaweicloud.com>
+         <20221201104125.919483-3-roberto.sassu@huaweicloud.com>
+         <a20a6d84d8e682fbff546b80eda75a1918d7c108.camel@linux.ibm.com>
+         <aaeee7490cfee1b2163a3c9c894294aaf13e100c.camel@linux.ibm.com>
+         <95f9b1dfca0cbff1c6a447dde45c2f835bc1a254.camel@huaweicloud.com>
+Content-Type: text/plain; charset="ISO-8859-15"
+X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: 6lNVikMS0SAUfWIDOH1uiyXIQ30K7aaL
+X-Proofpoint-ORIG-GUID: pMFEojQ7-w5xpbKMvakwCAsqTV1HCPTy
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.170.22
+ definitions=2023-02-20_08,2023-02-17_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 mlxlogscore=999
+ clxscore=1015 malwarescore=0 impostorscore=0 phishscore=0 spamscore=0
+ priorityscore=1501 lowpriorityscore=0 suspectscore=0 adultscore=0
+ mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2302200100
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 20, 2023 at 11:28:55AM +0800, Zhang Rui wrote:
+> > > > diff --git a/fs/ocfs2/xattr.c b/fs/ocfs2/xattr.c
+> > > > index 95d0611c5fc7..55699c573541 100644
 
-> Questions on how to fix cpuinfo_x86.x86_max_cores
-> -------------------------------------------------
+> > > > @@ -7277,13 +7289,23 @@ int ocfs2_init_security_get(struct inode *inode,
+> > > >  			    const struct qstr *qstr,
+> > > >  			    struct ocfs2_security_xattr_info *si)
+> > > >  {
+> > > > +	int ret;
+> > > > +
+> > > >  	/* check whether ocfs2 support feature xattr */
+> > > >  	if (!ocfs2_supports_xattr(OCFS2_SB(dir->i_sb)))
+> > > >  		return -EOPNOTSUPP;
+> > > > -	if (si)
+> > > > -		return security_old_inode_init_security(inode, dir, qstr,
+> > > > -							&si->name, &si->value,
+> > > > -							&si->value_len);
+> > > > +	if (si) {
+> > > > +		ret = security_inode_init_security(inode, dir, qstr,
+> > > > +						   &ocfs2_initxattrs, si);
+> > > 
+> > > The "if (unlikely(IS_PRIVATE(inode))"  test exists in both
+> > > security_old_inode_init_security() and security_inode_init_security(),
+> > > but return different values.  In the former case, it returns
+> > > -EOPNOTSUPP.  In the latter case, it returns 0.  The question is
+> > > whether or not we need to be concerned about private inodes on ocfs2.  
+> > > If private inodes on ocfs2 are possible, then ocsf2_mknod() or
+> > > ocfs2_symlink() would fail to create the inode or symlink.
+> > 
+> > Correction, previously when returning -EOPNOTSUPP for private inodes,
+> > xattrs would not be wrriten.  By returning 0 without setting si->enable 
+> > to 0, xattrs will be written.
 > 
-> Fixing x86_max_cores is more complex. Current kernel uses below logic to
-> get x86_max_cores
-> 	x86_max_cores = cpus_in_a_package / smp_num_siblings
-> But
-> 1. There is a known bug in CPUID.1F handling code. Thus cpus_in_a_package
->    can be bogus. To fix it, I will add CPUID.1F Module level support.
-> 2. x86_max_cores is set and used in an inconsistent way in current kernel.
->    In short, smp_num_siblings/x86_max_cores
->    2.1 represents the number of maximum *addressable* threads/cores in a
->        core/package when retrieved via CPUID 1 and 4 on old platforms.
->        CPUID.1 EBX 23:16 "Maximum number of addressable IDs for logical
->        processors in this physical package".
->        CPUID.4 EAX 31:26 "Maximum number of addressable IDs for processor
->        cores in the physical package".
->    2.2 represents the number of maximum *possible* threads/cores in a
->        core/package, when retrieved via CPUID.B/1F on non-Hybrid platforms.
->        CPUID.B/1F EBX 15:0 "Number of logical processors at this level type.
->        The number reflects configuration as shipped by Intel".
->        For example, in calc_llc_size_per_core()
->           do_div(llc_size, c->x86_max_cores);
->        x86_max_cores is used as the max *possible* cores in a package.
->    2.3 is used in a conflict way on other vendors like AMD by checking the
->        code. I need help on confirming the proper behavior for AMD.
->        For example, in amd_get_topology(),
->           c->x86_coreid_bits = get_count_order(c->x86_max_cores);
->        x86_max_cores is used as the max *addressable* cores in a package.
->        in get_nbc_for_node(),
->           cores_per_node = (c->x86_max_cores * smp_num_siblings) / amd_get_nodes_per_socket();
->        x86_max_cores is used as the max *possible* cores in a package.
-> 3. using
->       x86_max_cores = cpus_in_a_package / smp_num_siblings
->    to get the number of maximum *possible* cores in a package during boot
->    cpu bringup is not applicable on platforms with asymmetric cores.
->    Because, for a given number of threads, we don't know how many of the
->    threads are the master thread or the only thread of a core, and how
->    many of them are SMT siblings.
->    For example, on a platform with 6 Pcore and 8 Ecore, there are 20
->    threads. But setting x86_max_cores to 10 is apparently wrong.
+> Ok, but if there is a private inode, we would be setting si->enable to
+> zero. Should be ok, I guess.
+
+si->enable is being set to zero, below, but is conditional on !si-
+>name.
+
+This is the last concern, otherwise the patch set looks good.
+
+> > > > +		/*
+> > > > +		 * security_inode_init_security() does not return -EOPNOTSUPP,
+> > > > +		 * we have to check the xattr ourselves.
+> > > > +		 */
+> > > > +		if (!ret && !si->name)
+> > > > +			si->enable = 0;
+> > > > +
+> > > > +		return ret;
+> > > > +	}
+> > > >  
+> > > >  	return security_inode_init_security(inode, dir, qstr,
+> > > >  					    &ocfs2_initxattrs, NULL);
 > 
-> Given the above situation, I have below question and any input is really
-> appreciated.
-> 
-> Is this inconsistency a problem or not?
+-- 
+thanks,
 
-IIRC x86_max_cores in specific is only ever used in arch specific code,
-the pmu uncore drivers and things like that (grep shows MCE).
+Mimi
 
-Also, perhaps you want to look at calculate_max_logical_packages(). That
-has a comment about there not being heterogeneous systems :/
-
-Anyway, the reason I went and had a look there, is because I remember
-Thomas and me spend entirely too much time to try and figure out means
-to size an array for number of pacakges at boot time and getting it
-wrong too many times to recount.
-
-If only there was a sane way to tell these things without actually
-bringing everything online first :-(
