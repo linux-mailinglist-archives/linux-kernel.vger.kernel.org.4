@@ -2,196 +2,184 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 71B0069C757
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Feb 2023 10:08:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CFE6569C761
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Feb 2023 10:09:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230484AbjBTJIa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Feb 2023 04:08:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52928 "EHLO
+        id S231450AbjBTJJ3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Feb 2023 04:09:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53688 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230040AbjBTJI2 (ORCPT
+        with ESMTP id S230040AbjBTJJ0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Feb 2023 04:08:28 -0500
-Received: from mail-lj1-x22d.google.com (mail-lj1-x22d.google.com [IPv6:2a00:1450:4864:20::22d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B93889ED5
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Feb 2023 01:08:26 -0800 (PST)
-Received: by mail-lj1-x22d.google.com with SMTP id h9so310117ljq.2
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Feb 2023 01:08:26 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:message-id:subject:cc:to:from
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=NutlO2ATmThTH22YhjGR8PNsMsgJdYkW73y3XZaI7VQ=;
-        b=byi+PooNk3PIYIfAKwj6AKM4Nu65rFPUN4mG3M0RIs59vrXayVZF5qCd+YOf/e7jhI
-         XIrPDDx9s8vDe/zyuVRLpZOk1bVcvF7Vph7dkSiDoMO94nMFo5lmWX7JrW+qN9+o/sWT
-         NsBypwj0eS96DkJSGt03jlHcYk9hhLsb7q53Cn0gE03hpcaj/5mxZjZKtn/xAex55dJX
-         FEKKa/eCa4PSQuuVrUeIuuzbwMoHENDXCGPH0I2IXQMhKixC73Ck3EsIj0ILDAXiAWTo
-         zUNPp5dU6wlDBmNtgtbWi01PXN3jgWW8pU+bZoczbayMc5B60zpjkuPbQ1DAenrHhliZ
-         38ZQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=mime-version:references:in-reply-to:message-id:subject:cc:to:from
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=NutlO2ATmThTH22YhjGR8PNsMsgJdYkW73y3XZaI7VQ=;
-        b=445icyuLRDxt3jGGcMwGgbNOaV0usaKs92hSy2VdHzsJ55K2bnSXULB652uTbk1sxt
-         gZE3aZ6m2CUZ+kpGNrh6zj3i8/jUcKHnkKT8Qod9QCdkyOHsNnM5Dcoa1l7/6NBuBfmn
-         M0nIJiLAW6nXC4RrEp80fKygc2GpbumkFDXX8nA8ZCRDUFtshCcXfogw9kycqWwh44J6
-         yWAYddvxfr4S5doe8tHyFfBTrht3GB84aVMUAuOORobBBkzRRjDv11q3GuEJb/RJLv81
-         TLmkbWcbgOfMJcVCaUDoi7biO08mjUV7UgWSyySzCPWeEA/PGamlu48iwZ/Exme3t421
-         eTow==
-X-Gm-Message-State: AO0yUKXZzr2f491PeZ+jEokYnak1SRSzCZaXOjNPc8PsDaAzAvDYVyRZ
-        NQcVEJ6EjSQ2RXe8Ih/aTR4=
-X-Google-Smtp-Source: AK7set9vj0oSbid2209RUqLVAXqfe/ixnjc00eGOFHAclC3guZtwycp4QCicGkkUfgifM1tnuU8MCg==
-X-Received: by 2002:a05:651c:2128:b0:293:fea:c912 with SMTP id a40-20020a05651c212800b002930feac912mr286371ljq.13.1676884104931;
-        Mon, 20 Feb 2023 01:08:24 -0800 (PST)
-Received: from eldfell ([194.136.85.206])
-        by smtp.gmail.com with ESMTPSA id z7-20020a2e8847000000b00290517c661asm1529498ljj.40.2023.02.20.01.08.24
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 20 Feb 2023 01:08:24 -0800 (PST)
-Date:   Mon, 20 Feb 2023 11:08:20 +0200
-From:   Pekka Paalanen <ppaalanen@gmail.com>
-To:     Rob Clark <robdclark@gmail.com>
-Cc:     dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Christian =?UTF-8?B?S8O2bmln?= <ckoenig.leichtzumerken@gmail.com>,
-        Michel =?UTF-8?B?RMOkbnplcg==?= <michel@daenzer.net>,
-        Tvrtko Ursulin <tvrtko.ursulin@intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        Simon Ser <contact@emersion.fr>,
-        Rob Clark <robdclark@chromium.org>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        David Airlie <airlied@gmail.com>,
-        linux-kernel@vger.kernel.org (open list)
-Subject: Re: [PATCH v4 10/14] drm/vblank: Add helper to get next vblank time
-Message-ID: <20230220110820.595cfa37@eldfell>
-In-Reply-To: <20230218211608.1630586-11-robdclark@gmail.com>
-References: <20230218211608.1630586-1-robdclark@gmail.com>
-        <20230218211608.1630586-11-robdclark@gmail.com>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        Mon, 20 Feb 2023 04:09:26 -0500
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D04FEB66;
+        Mon, 20 Feb 2023 01:09:25 -0800 (PST)
+Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (No client certificate requested)
+        (Authenticated sender: kholk11)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 3E8BA660213E;
+        Mon, 20 Feb 2023 09:09:19 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1676884163;
+        bh=CcTg7ASDuP93bA3Rq45SQJeq89x8G+dp6U70KNUsMPE=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=hJka8ss87wnQqdZEpCLiQcXMdci2VjXO/ExBxWNd2u3NQv77pVKCv+DGHYQubq0/o
+         jOR1Q9V8fiDUdLUie9ZgAWAm2ZS3SUyTJtxh8d6pVVh99Gr3ejUZL6i9kC3bBz/ibR
+         4leGEmi7b30mDq5fBsiprHv3BwcOXyvhPyjnHM9WLt2ciyCmXLOgawlXk3rZAPCCqO
+         ayFqXWG5eOvRXt8snq6HqCK7P4pk8nwQ8Ekb0YXVJwQKcbaks6FZeHSLPNr2hy20ng
+         rBEuqKxU6Xm2BcKhPUt1DFa6cukGDfP/GXtAZgoeuEt0eguqDnFCt0KOiWbA1373Vz
+         JoFgV86+K/1GA==
+Message-ID: <516d9af5-41cc-94a9-4b35-677672101d9c@collabora.com>
+Date:   Mon, 20 Feb 2023 10:09:16 +0100
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/3U5.kjZizK/N8hsnfPFgtqr";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.2
+Subject: Re: [PATCH v1 01/17] thermal/core: Add a thermal zone 'devdata'
+ accessor
+Content-Language: en-US
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>, rafael@kernel.org
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Zhang Rui <rui.zhang@intel.com>, Len Brown <lenb@kernel.org>,
+        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Samuel Holland <samuel@sholland.org>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Raju Rangoju <rajur@chelsio.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Ido Schimmel <idosch@nvidia.com>,
+        Petr Machata <petrm@nvidia.com>,
+        Gregory Greenman <gregory.greenman@intel.com>,
+        Kalle Valo <kvalo@kernel.org>,
+        Sebastian Reichel <sre@kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Amit Kucheria <amitk@kernel.org>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Broadcom internal kernel review list 
+        <bcm-kernel-feedback-list@broadcom.com>,
+        Ray Jui <rjui@broadcom.com>,
+        Scott Branden <sbranden@broadcom.com>,
+        Markus Mayer <mmayer@broadcom.com>,
+        Support Opensource <support.opensource@diasemi.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Thara Gopinath <thara.gopinath@gmail.com>,
+        =?UTF-8?Q?Niklas_S=c3=b6derlund?= <niklas.soderlund@ragnatech.se>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Bartlomiej Zolnierkiewicz <bzolnier@gmail.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Orson Zhai <orsonzhai@gmail.com>,
+        Baolin Wang <baolin.wang@linux.alibaba.com>,
+        Chunyan Zhang <zhang.lyra@gmail.com>,
+        Vasily Khoruzhick <anarsoul@gmail.com>,
+        Yangtao Li <tiny.windzz@gmail.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Talel Shenhar <talel@amazon.com>,
+        Eduardo Valentin <edubezval@gmail.com>,
+        Keerthy <j-keerthy@ti.com>,
+        Kunihiko Hayashi <hayashi.kunihiko@socionext.com>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Stefan Wahren <stefan.wahren@i2se.com>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        ye xingchen <ye.xingchen@zte.com.cn>,
+        Zheng Yongjun <zhengyongjun3@huawei.com>,
+        Tim Zimmermann <tim@linux4.de>,
+        Yang Li <yang.lee@linux.alibaba.com>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        Ricardo Neri <ricardo.neri-calderon@linux.intel.com>,
+        Jiang Jian <jiangjian@cdjrlc.com>,
+        Daniel Golle <daniel@makrotopia.org>,
+        Balsam CHIHI <bchihi@baylibre.com>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Mikko Perttunen <mperttunen@nvidia.com>,
+        "open list:ACPI THERMAL DRIVER" <linux-acpi@vger.kernel.org>,
+        "open list:LIBATA SUBSYSTEM (Serial and Parallel ATA drivers)" 
+        <linux-ide@vger.kernel.org>,
+        "moderated list:ARM/FREESCALE IMX / MXC ARM ARCHITECTURE" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "open list:HARDWARE MONITORING" <linux-hwmon@vger.kernel.org>,
+        "open list:IIO SUBSYSTEM AND DRIVERS" <linux-iio@vger.kernel.org>,
+        "open list:ARM/Allwinner sunXi SoC support" 
+        <linux-sunxi@lists.linux.dev>,
+        "open list:INPUT (KEYBOARD, MOUSE, JOYSTICK, TOUCHSCREEN)..." 
+        <linux-input@vger.kernel.org>,
+        "open list:CXGB4 ETHERNET DRIVER (CXGB4)" <netdev@vger.kernel.org>,
+        "open list:INTEL WIRELESS WIFI LINK (iwlwifi)" 
+        <linux-wireless@vger.kernel.org>,
+        "moderated list:BROADCOM BCM2711/BCM2835 ARM ARCHITECTURE" 
+        <linux-rpi-kernel@lists.infradead.org>,
+        "open list:ARM/QUALCOMM SUPPORT" <linux-arm-msm@vger.kernel.org>,
+        "open list:RENESAS R-CAR THERMAL DRIVERS" 
+        <linux-renesas-soc@vger.kernel.org>,
+        "open list:ARM/Rockchip SoC support" 
+        <linux-rockchip@lists.infradead.org>,
+        "open list:SAMSUNG THERMAL DRIVER" 
+        <linux-samsung-soc@vger.kernel.org>,
+        "open list:TEGRA ARCHITECTURE SUPPORT" <linux-tegra@vger.kernel.org>,
+        "open list:TI BANDGAP AND THERMAL DRIVER" 
+        <linux-omap@vger.kernel.org>,
+        "moderated list:ARM/Mediatek SoC support" 
+        <linux-mediatek@lists.infradead.org>
+References: <20230219143657.241542-1-daniel.lezcano@linaro.org>
+ <20230219143657.241542-2-daniel.lezcano@linaro.org>
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <20230219143657.241542-2-daniel.lezcano@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/3U5.kjZizK/N8hsnfPFgtqr
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
-
-On Sat, 18 Feb 2023 13:15:53 -0800
-Rob Clark <robdclark@gmail.com> wrote:
-
-> From: Rob Clark <robdclark@chromium.org>
->=20
-> Will be used in the next commit to set a deadline on fences that an
-> atomic update is waiting on.
->=20
-> Signed-off-by: Rob Clark <robdclark@chromium.org>
+Il 19/02/23 15:36, Daniel Lezcano ha scritto:
+> The thermal zone device structure is exposed to the different drivers
+> and obviously they access the internals while that should be
+> restricted to the core thermal code.
+> 
+> In order to self-encapsulate the thermal core code, we need to prevent
+> the drivers accessing directly the thermal zone structure and provide
+> accessor functions to deal with.
+> 
+> Provide an accessor to the 'devdata' structure and make use of it in
+> the different drivers.
+> 
+> No functional changes intended.
+> 
+> Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
 > ---
->  drivers/gpu/drm/drm_vblank.c | 32 ++++++++++++++++++++++++++++++++
->  include/drm/drm_vblank.h     |  1 +
->  2 files changed, 33 insertions(+)
->=20
-> diff --git a/drivers/gpu/drm/drm_vblank.c b/drivers/gpu/drm/drm_vblank.c
-> index 2ff31717a3de..caf25ebb34c5 100644
-> --- a/drivers/gpu/drm/drm_vblank.c
-> +++ b/drivers/gpu/drm/drm_vblank.c
-> @@ -980,6 +980,38 @@ u64 drm_crtc_vblank_count_and_time(struct drm_crtc *=
-crtc,
->  }
->  EXPORT_SYMBOL(drm_crtc_vblank_count_and_time);
-> =20
-> +/**
-> + * drm_crtc_next_vblank_time - calculate the time of the next vblank
-> + * @crtc: the crtc for which to calculate next vblank time
-> + * @vblanktime: pointer to time to receive the next vblank timestamp.
-> + *
-> + * Calculate the expected time of the next vblank based on time of previ=
-ous
-> + * vblank and frame duration
-
-Hi,
-
-for VRR this targets the highest frame rate possible for the current
-VRR mode, right?
 
 
-Thanks,
-pq
+>   drivers/thermal/mediatek/auxadc_thermal.c        |  2 +-
+>   drivers/thermal/mediatek/lvts_thermal.c          |  4 ++--
 
-> + */
-> +int drm_crtc_next_vblank_time(struct drm_crtc *crtc, ktime_t *vblanktime)
-> +{
-> +	unsigned int pipe =3D drm_crtc_index(crtc);
-> +	struct drm_vblank_crtc *vblank =3D &crtc->dev->vblank[pipe];
-> +	u64 count;
-> +
-> +	if (!vblank->framedur_ns)
-> +		return -EINVAL;
-> +
-> +	count =3D drm_vblank_count_and_time(crtc->dev, pipe, vblanktime);
-> +
-> +	/*
-> +	 * If we don't get a valid count, then we probably also don't
-> +	 * have a valid time:
-> +	 */
-> +	if (!count)
-> +		return -EINVAL;
-> +
-> +	*vblanktime =3D ktime_add(*vblanktime, ns_to_ktime(vblank->framedur_ns)=
-);
-> +
-> +	return 0;
-> +}
-> +EXPORT_SYMBOL(drm_crtc_next_vblank_time);
-> +
->  static void send_vblank_event(struct drm_device *dev,
->  		struct drm_pending_vblank_event *e,
->  		u64 seq, ktime_t now)
-> diff --git a/include/drm/drm_vblank.h b/include/drm/drm_vblank.h
-> index 733a3e2d1d10..a63bc2c92f3c 100644
-> --- a/include/drm/drm_vblank.h
-> +++ b/include/drm/drm_vblank.h
-> @@ -230,6 +230,7 @@ bool drm_dev_has_vblank(const struct drm_device *dev);
->  u64 drm_crtc_vblank_count(struct drm_crtc *crtc);
->  u64 drm_crtc_vblank_count_and_time(struct drm_crtc *crtc,
->  				   ktime_t *vblanktime);
-> +int drm_crtc_next_vblank_time(struct drm_crtc *crtc, ktime_t *vblanktime=
-);
->  void drm_crtc_send_vblank_event(struct drm_crtc *crtc,
->  			       struct drm_pending_vblank_event *e);
->  void drm_crtc_arm_vblank_event(struct drm_crtc *crtc,
+For MediaTek auxadc and lvts:
+
+Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 
 
---Sig_/3U5.kjZizK/N8hsnfPFgtqr
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAEBCAAdFiEEJQjwWQChkWOYOIONI1/ltBGqqqcFAmPzOIQACgkQI1/ltBGq
-qqee6hAAi3Ug/m6OCB4xFw6ghLUrut2lBjLcfLV9I6QcZDuvUxJcyFu7wRD7yhzN
-Fw2klHyeYk7LWri8bmbWVVbMk++0+0CVee3hEEHwXw2NbaAdjB9BzDooXVbILcDY
-u34uoxalVKuZ8fLvuSlaMxnIv3lbiHSlTZJecswIpOaQozLTebMPIieZ9tWZ+GYK
-Id4/PnHFDjeAGwaEWzvQMkKXp65Pe+upngOxN8++KqmxCcp1ZPkX+xf0G7fv5Hhw
-T3/aNBqHMlt4/cYQeOJLHF7KrNfoH6+jhziyyZjyNU7dVFgjscLMGdLMie/hE4+D
-kd5IjnXjjOz4zEuQmYPCaVKVjl6ZcN4F4/JTds4L3ntI738IsilHDrgbAifBcVSD
-rL5ScDT7r50+BivhEd86iTwcTra6X51ldX/kT0pDwmSrweWtHIk7dy0Iuaiez0HM
-nnEbE1j6d2Kbev8dmR03tWbaEuNiJT2LR/jGsE9QGWJXbmKP+WaCHf5tKTWiiTXG
-1jxpzEdqUq+dxNZdjABhGTdiygx1fdqm/d3o3PcqixFNePdNW39sovXGOcIfYhmJ
-VIWJOg8oj6jFN4DVHPoV458LlgcJfT0lF4Z7GJ2/GrsWEZ5xSF0XKBx7xs3reI11
-IM0SuH91apzu0hDMxT8juBWk0O6HukZEih/iTsVDYIWcsZTfdYA=
-=hxHE
------END PGP SIGNATURE-----
-
---Sig_/3U5.kjZizK/N8hsnfPFgtqr--
