@@ -2,82 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F245E69D616
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Feb 2023 23:01:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E776E69D619
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Feb 2023 23:02:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232506AbjBTWBp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Feb 2023 17:01:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55400 "EHLO
+        id S232556AbjBTWC1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Feb 2023 17:02:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56172 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232500AbjBTWBn (ORCPT
+        with ESMTP id S232342AbjBTWCZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Feb 2023 17:01:43 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BA90222D5;
-        Mon, 20 Feb 2023 14:01:39 -0800 (PST)
+        Mon, 20 Feb 2023 17:02:25 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B5AE222F5;
+        Mon, 20 Feb 2023 14:02:06 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 63EF160F2F;
-        Mon, 20 Feb 2023 22:01:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 863D7C4339B;
-        Mon, 20 Feb 2023 22:01:37 +0000 (UTC)
-Date:   Mon, 20 Feb 2023 17:01:35 -0500
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     Beau Belgrave <beaub@linux.microsoft.com>
-Cc:     mhiramat@kernel.org, mathieu.desnoyers@efficios.com,
-        dcook@linux.microsoft.com, alanau@linux.microsoft.com,
-        brauner@kernel.org, akpm@linux-foundation.org,
-        linux-trace-devel@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v7 00/11] tracing/user_events: Remote write ABI
-Message-ID: <20230220170135.3c9bea01@rorschach.local.home>
-In-Reply-To: <20230120230518.17697-1-beaub@linux.microsoft.com>
-References: <20230120230518.17697-1-beaub@linux.microsoft.com>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        by ams.source.kernel.org (Postfix) with ESMTPS id AB83DB80DCB;
+        Mon, 20 Feb 2023 22:02:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E2C2AC433D2;
+        Mon, 20 Feb 2023 22:02:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1676930523;
+        bh=fQRoiH/vfT+YhxHdQBo3IjRJtBv45VLnzgTpqQ2GMnY=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=ktZMNexkwbQT7SSP4qmLKo8Uvlirzq4lFcth9KK5SGKvDKCcvZDxPyAWicz0jb+qp
+         2Xs1MYD2YHUHUvHDDxuYSrbKfvvz0baUTb/A51kevnKuvdUw/HMTT8UspZVONCOAEK
+         M1vEVzt/sJ7RZ5/w/SEKo02Z9sdhqRT3C7TmNhWX6ScUwa/8+bPuva1AXSLLtb9YDl
+         Zezp7qA6+jG2r2Ml1zOA6ENCb1Qe+T1yM80YYHmjnEVhdhypUJd+SzJkJThC8+qaBr
+         KMxMrLjO51IH3JsJUtWJ2FKSTY0nglSR9vbNaVvvgjvk+lXVSBHFooFxgFrjEpQp4P
+         qrI242eJkucqA==
+Date:   Mon, 20 Feb 2023 14:02:01 -0800
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     Rob Herring <robh+dt@kernel.org>
+Cc:     Janne Grunau <j@jannau.net>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Mailing List <devicetree-spec@vger.kernel.org>,
+        Kalle Valo <kvalo@kernel.org>, van Spriel <arend@broadcom.com>,
+        =?UTF-8?B?SsOpcsO0bWU=?= Pouiller <jerome.pouiller@silabs.com>,
+        Dinh Nguyen <dinguyen@kernel.org>,
+        Ley Foon Tan <lftan@altera.com>,
+        Chee Nouk Phoon <cnphoon@altera.com>, netdev@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-wireless@vger.kernel.org
+Subject: Re: [PATCH v2 0/4] dt-bindings: net: Add network-class.yaml schema
+Message-ID: <20230220140201.20450889@kernel.org>
+In-Reply-To: <CAL_Jsq+2_gQzAjAZQVux1GOff5ocdSz5qQMhjRzvtyD+9C-TQQ@mail.gmail.com>
+References: <20230203-dt-bindings-network-class-v2-0-499686795073@jannau.net>
+        <20230220114016.71628270@kernel.org>
+        <CAL_Jsq+2_gQzAjAZQVux1GOff5ocdSz5qQMhjRzvtyD+9C-TQQ@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 20 Jan 2023 15:05:07 -0800
-Beau Belgrave <beaub@linux.microsoft.com> wrote:
-
-
->  Documentation/trace/user_events.rst           | 177 ++--
->  fs/exec.c                                     |   2 +
->  include/linux/sched.h                         |   5 +
->  include/linux/user_events.h                   | 101 +-
->  include/uapi/linux/user_events.h              |  81 ++
->  kernel/exit.c                                 |   2 +
->  kernel/fork.c                                 |   2 +
-
-There's several files that are touched outside of the tracing
-subsystem. You may need to run get_maintainers on this to get their
-input. I started playing a little with this, but it won't mean anything
-if we get push back from these maintainers.
-
--- Steve
-
-
->  kernel/trace/Kconfig                          |   5 +-
->  kernel/trace/trace_events_user.c              | 863 +++++++++++++++---
->  samples/user_events/example.c                 |  47 +-
->  tools/testing/selftests/user_events/Makefile  |   2 +-
->  .../testing/selftests/user_events/abi_test.c  | 226 +++++
->  .../testing/selftests/user_events/dyn_test.c  |   2 +-
->  .../selftests/user_events/ftrace_test.c       | 162 ++--
->  .../testing/selftests/user_events/perf_test.c |  39 +-
->  15 files changed, 1317 insertions(+), 399 deletions(-)
->  create mode 100644 include/uapi/linux/user_events.h
->  create mode 100644 tools/testing/selftests/user_events/abi_test.c
+On Mon, 20 Feb 2023 15:49:44 -0600 Rob Herring wrote:
+> > Rob, Krzysztof - is this one on your todo list? It's been hanging
+> > around in my queue, I'm worried I missed some related conversation.  
 > 
-> 
-> base-commit: 5dc4c995db9eb45f6373a956eb1f69460e69e6d4
+> Andrew suggested changes on 1 and 2 which seem reasonable to me.
 
+Ah, thank you! I see them in lore but not in my MUA.
