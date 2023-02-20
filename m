@@ -2,143 +2,205 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E6A1869C735
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Feb 2023 10:02:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D49C069C884
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Feb 2023 11:27:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231393AbjBTJCi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Feb 2023 04:02:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45786 "EHLO
+        id S231312AbjBTK07 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Feb 2023 05:26:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50312 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231340AbjBTJCh (ORCPT
+        with ESMTP id S229451AbjBTK04 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Feb 2023 04:02:37 -0500
-Received: from mx.sberdevices.ru (mx.sberdevices.ru [45.89.227.171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1191DFF1A;
-        Mon, 20 Feb 2023 01:02:19 -0800 (PST)
-Received: from s-lin-edge02.sberdevices.ru (localhost [127.0.0.1])
-        by mx.sberdevices.ru (Postfix) with ESMTP id 702CF5FD41;
-        Mon, 20 Feb 2023 12:02:17 +0300 (MSK)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sberdevices.ru;
-        s=mail; t=1676883737;
-        bh=VlvWeERXUiNtfOqASZFPm3v3jAcmeDDopMGQqrbvT0s=;
-        h=From:To:Subject:Date:Message-ID:Content-Type:MIME-Version;
-        b=J+m0WkZnmzlrUGX2UbkJI3imxyijb1tHg5uUa0ACZ4ISi9fGSmEQklxKpUZV7DfV3
-         9qghPfnMsrveL0x+VJYWCWQVCBv9/68nejkJbKMGIzPZjmGBdEuRJi8uAb0nh3US0V
-         ldj8OpZ5s2gOgnEgFrzZzJGNrwS6X/4fHI1ZfTSS7LOxwa9C/BaIh7xbsP7fM7Bv7J
-         eHaGgmIjNezbqqUYmWrvuSNvBC32IOxZ8tQJcd6efQy4RQHtdPB5EjTTJOnwfTaiFj
-         zPnDAuRz+N1UF1x+ftWBGxbCnriyJlQQaVZ0TLu8Jxn3j73TlL58mTjM1VKGgo3eVj
-         E8XzTmWrqCefw==
-Received: from S-MS-EXCH02.sberdevices.ru (S-MS-EXCH02.sberdevices.ru [172.16.1.5])
-        by mx.sberdevices.ru (Postfix) with ESMTP;
-        Mon, 20 Feb 2023 12:02:17 +0300 (MSK)
-From:   Krasnov Arseniy <AVKrasnov@sberdevices.ru>
-To:     Stefano Garzarella <sgarzare@redhat.com>
-CC:     Stefan Hajnoczi <stefanha@redhat.com>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        Jason Wang <jasowang@redhat.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Krasnov Arseniy <oxffffaa@gmail.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "virtualization@lists.linux-foundation.org" 
-        <virtualization@lists.linux-foundation.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        kernel <kernel@sberdevices.ru>
-Subject: Re: [RFC PATCH v1 05/12] vsock/virtio: non-linear skb support
-Thread-Topic: [RFC PATCH v1 05/12] vsock/virtio: non-linear skb support
-Thread-Index: AQHZOfhn3a4rtLPBJ0ikS/zrL9u2k67RfPkAgAXwE4A=
-Date:   Mon, 20 Feb 2023 09:02:17 +0000
-Message-ID: <dd627cde-e20a-6b0e-b82c-b749dc367db1@sberdevices.ru>
-References: <0e7c6fc4-b4a6-a27b-36e9-359597bba2b5@sberdevices.ru>
- <b3060caf-df19-f1df-6d27-4e58f894c417@sberdevices.ru>
- <20230216141856.fnczv3ui6d3lpujy@sgarzare-redhat>
-In-Reply-To: <20230216141856.fnczv3ui6d3lpujy@sgarzare-redhat>
-Accept-Language: en-US, ru-RU
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [172.16.1.12]
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <18FBA27B9F20034E8B8A1E8E3C320438@sberdevices.ru>
-Content-Transfer-Encoding: base64
+        Mon, 20 Feb 2023 05:26:56 -0500
+Received: from mout-p-202.mailbox.org (mout-p-202.mailbox.org [80.241.56.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D9CE974C
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Feb 2023 02:26:54 -0800 (PST)
+Received: from smtp102.mailbox.org (smtp102.mailbox.org [IPv6:2001:67c:2050:b231:465::102])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mout-p-202.mailbox.org (Postfix) with ESMTPS id 4PKz9k0mtKz9sSj;
+        Mon, 20 Feb 2023 11:26:50 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oltmanns.dev;
+        s=MBO0001; t=1676888810;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=nw7utrCKJZ11SBTdEKu8EmY729voqWiToPXqZxlP6g8=;
+        b=nz/2vz68ElMsNd3L4ArepIEjFAwWT/ASsWOv5KdBQ3l6bZjkgKE1ebrdV6drC6PQxjuKbW
+        JyuQSLdlNq5KkDGGXHJbXbXWkxSE6az9Rr+U/wR7CiuJL7DvL9qKtFFLpAwLxWM3UaADOw
+        qrBtNZ9y3y+46OS4IxFKIKdDByZFWxwXsAMVJa8Fs9f5vxCL/4LIQ6AtF2Yf+JkhSTo9Vg
+        dpIoOPqQKRmk5WBwIttnAp3GaypK6HHuLA/qzJo16v5ljoykyrq1RVMJ29eZd+w9GZqIUz
+        h+1qQPgJaULgdk1J+uMieNX0t8+d4y8DCcCWEewAfeSlGN/1KZ6RycKreYlEZw==
+From:   Frank Oltmanns <frank@oltmanns.dev>
+To:     =?utf-8?Q?Ond=C5=99ej?= Jirman <megous@megous.com>
+Cc:     Guido =?utf-8?Q?G=C3=BCnther?= <agx@sigxcpu.org>,
+        Purism Kernel Team <kernel@puri.sm>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        "open list:DRM PANEL DRIVERS" <dri-devel@lists.freedesktop.org>,
+        open list <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH 1/1] drm/panel: st7703: Fix vertical refresh rate of XBD599
+Date:   Mon, 20 Feb 2023 08:40:28 +0100
+References: <20230219114553.288057-1-frank@oltmanns.dev>
+ <20230219114553.288057-2-frank@oltmanns.dev>
+ <20230219123542.yxb5ixe424ig6ofv@core>
+In-reply-to: <20230219123542.yxb5ixe424ig6ofv@core>
+Message-ID: <874jrgr5t3.fsf@oltmanns.dev>
 MIME-Version: 1.0
-X-KSMG-Rule-ID: 4
-X-KSMG-Message-Action: clean
-X-KSMG-AntiSpam-Status: not scanned, disabled by settings
-X-KSMG-AntiSpam-Interceptor-Info: not scanned
-X-KSMG-AntiPhishing: not scanned, disabled by settings
-X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 1.1.2.30, bases: 2023/02/20 05:01:00 #20887657
-X-KSMG-AntiVirus-Status: Clean, skipped
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/mixed; boundary="=-=-="
+X-Rspamd-Queue-Id: 4PKz9k0mtKz9sSj
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-T24gMTYuMDIuMjAyMyAxNzoxOCwgU3RlZmFubyBHYXJ6YXJlbGxhIHdyb3RlOg0KPiBPbiBNb24s
-IEZlYiAwNiwgMjAyMyBhdCAwNjo1ODoyNEFNICswMDAwLCBBcnNlbml5IEtyYXNub3Ygd3JvdGU6
-DQo+PiBVc2UgcGFnZXMgb2Ygbm9uLWxpbmVhciBza2IgYXMgYnVmZmVycyBpbiB2aXJ0aW8gdHgg
-cXVldWUuDQo+Pg0KPj4gU2lnbmVkLW9mZi1ieTogQXJzZW5peSBLcmFzbm92IDxBVktyYXNub3ZA
-c2JlcmRldmljZXMucnU+DQo+PiAtLS0NCj4+IG5ldC92bXdfdnNvY2svdmlydGlvX3RyYW5zcG9y
-dC5jIHwgMzEgKysrKysrKysrKysrKysrKysrKysrKysrKy0tLS0tLQ0KPj4gMSBmaWxlIGNoYW5n
-ZWQsIDI1IGluc2VydGlvbnMoKyksIDYgZGVsZXRpb25zKC0pDQo+Pg0KPj4gZGlmZiAtLWdpdCBh
-L25ldC92bXdfdnNvY2svdmlydGlvX3RyYW5zcG9ydC5jIGIvbmV0L3Ztd192c29jay92aXJ0aW9f
-dHJhbnNwb3J0LmMNCj4+IGluZGV4IDI4YjVhOGU4ZTA5NC4uYjhhN2Q2ZGM5ZjQ2IDEwMDY0NA0K
-Pj4gLS0tIGEvbmV0L3Ztd192c29jay92aXJ0aW9fdHJhbnNwb3J0LmMNCj4+ICsrKyBiL25ldC92
-bXdfdnNvY2svdmlydGlvX3RyYW5zcG9ydC5jDQo+PiBAQCAtMTAwLDcgKzEwMCw4IEBAIHZpcnRp
-b190cmFuc3BvcnRfc2VuZF9wa3Rfd29yayhzdHJ1Y3Qgd29ya19zdHJ1Y3QgKndvcmspDQo+PiDC
-oMKgwqDCoHZxID0gdnNvY2stPnZxc1tWU09DS19WUV9UWF07DQo+Pg0KPj4gwqDCoMKgwqBmb3Ig
-KDs7KSB7DQo+PiAtwqDCoMKgwqDCoMKgwqAgc3RydWN0IHNjYXR0ZXJsaXN0IGhkciwgYnVmLCAq
-c2dzWzJdOw0KPj4gK8KgwqDCoMKgwqDCoMKgIHN0cnVjdCBzY2F0dGVybGlzdCAqc2dzW01BWF9T
-S0JfRlJBR1MgKyAxXTsNCj4+ICvCoMKgwqDCoMKgwqDCoCBzdHJ1Y3Qgc2NhdHRlcmxpc3QgYnVm
-c1tNQVhfU0tCX0ZSQUdTICsgMV07DQo+IA0KPiArIDEgaXMgZm9yIHRoZSBoZWFkZXIsIHJpZ2h0
-Pw0KPiBJJ2QgYWRkIGEgY29tbWVudCBqdXN0IHRvIGJlIGNsZWFyIDstKQ0KPiANCj4+IMKgwqDC
-oMKgwqDCoMKgIGludCByZXQsIGluX3NnID0gMCwgb3V0X3NnID0gMDsNCj4+IMKgwqDCoMKgwqDC
-oMKgIHN0cnVjdCBza19idWZmICpza2I7DQo+PiDCoMKgwqDCoMKgwqDCoCBib29sIHJlcGx5Ow0K
-Pj4gQEAgLTExMSwxMiArMTEyLDMwIEBAIHZpcnRpb190cmFuc3BvcnRfc2VuZF9wa3Rfd29yayhz
-dHJ1Y3Qgd29ya19zdHJ1Y3QgKndvcmspDQo+Pg0KPj4gwqDCoMKgwqDCoMKgwqAgdmlydGlvX3Ry
-YW5zcG9ydF9kZWxpdmVyX3RhcF9wa3Qoc2tiKTsNCj4+IMKgwqDCoMKgwqDCoMKgIHJlcGx5ID0g
-dmlydGlvX3Zzb2NrX3NrYl9yZXBseShza2IpOw0KPj4gK8KgwqDCoMKgwqDCoMKgIHNnX2luaXRf
-b25lKCZidWZzWzBdLCB2aXJ0aW9fdnNvY2tfaGRyKHNrYiksIHNpemVvZigqdmlydGlvX3Zzb2Nr
-X2hkcihza2IpKSk7DQo+PiArwqDCoMKgwqDCoMKgwqAgc2dzW291dF9zZysrXSA9ICZidWZzWzBd
-Ow0KPj4gKw0KPj4gK8KgwqDCoMKgwqDCoMKgIGlmIChza2JfaXNfbm9ubGluZWFyKHNrYikpIHsN
-Cj4+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIGludCBpOw0KPj4gKw0KPj4gK8KgwqDCoMKgwqDC
-oMKgwqDCoMKgwqAgZm9yIChpID0gMDsgaSA8IHNrYl9zaGluZm8oc2tiKS0+bnJfZnJhZ3M7IGkr
-Kykgew0KPj4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCBzdHJ1Y3QgcGFnZSAqZGF0
-YV9wYWdlID0gc2tiX3NoaW5mbyhza2IpLT5mcmFnc1tpXS5idl9wYWdlOw0KPj4gKw0KPj4gK8Kg
-wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCAvKiBXZSB3aWxsIHVzZSAncGFnZV90b192aXJ0
-KCknIGZvciB1c2Vyc3BhY2UgcGFnZSBoZXJlLA0KPj4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
-oMKgwqDCoMKgICogYmVjYXVzZSB2aXJ0aW8gbGF5ZXIgd2lsbCBjYWxsICd2aXJ0X3RvX3BoeXMo
-KScgbGF0ZXINCj4+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCAqIHRvIGZpbGwg
-YnVmZmVyIGRlc2NyaXB0b3IuIFdlIGRvbid0IHRvdWNoIG1lbW9yeSBhdA0KPj4gK8KgwqDCoMKg
-wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgICogInZpcnR1YWwiIGFkZHJlc3Mgb2YgdGhpcyBwYWdl
-Lg0KPj4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgICovDQo+IA0KPiBJSVVDIGRh
-dGFfcGFnZSBpcyBhIHVzZXIgcGFnZSwgc28gc2luY2Ugd2UgYXJlIGV4cG9zaW5nIGl0IHRvIHRo
-ZSBob3N0LA0KPiBJIHRoaW5rIHdlIHNob3VsZCBwaW4gaXQuDQo+IA0KPiBJcyBkYXRhX3BhZ2Ug
-YWx3YXlzIGEgdXNlciBwYWdlLCBvciBjYW4gaXQgYmUgYSBrZXJuZWwgcGFnZSB3aGVuIHNrYiBp
-cyBub25saW5lYXI/DQoNCkJ5IGRlZmF1bHQgaXQgaXMgdXNlciBwYWdlLCBidXQuLi5tYXkgYmUg
-aXQgaXMgcG9zc2libGUgdG8gc2VuZCBwYWdlIG9mIG1hcHBlZA0KZmlsZSB3aXRoIE1BUF9TSEFS
-RUQgZmxhZ3MoaSB0aGluayBpdCB0aGlzIGNhc2UgaXQgd2lsbCBiZSBwYWdlIGZyb20gcGFnZSBj
-YWNoZSkNCg0KPiANCj4gVGhhbmtzLA0KPiBTdGVmYW5vDQo+IA0KPj4gK8KgwqDCoMKgwqDCoMKg
-wqDCoMKgwqDCoMKgwqDCoCBzZ19pbml0X29uZSgmYnVmc1tpICsgMV0sDQo+PiArwqDCoMKgwqDC
-oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCBwYWdlX3RvX3ZpcnQoZGF0YV9w
-YWdlKSwgUEFHRV9TSVpFKTsNCj4+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgc2dz
-W291dF9zZysrXSA9ICZidWZzW2kgKyAxXTsNCj4+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIH0N
-Cj4+ICvCoMKgwqDCoMKgwqDCoCB9IGVsc2Ugew0KPj4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqAg
-aWYgKHNrYi0+bGVuID4gMCkgew0KPj4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCBz
-Z19pbml0X29uZSgmYnVmc1sxXSwgc2tiLT5kYXRhLCBza2ItPmxlbik7DQo+PiArwqDCoMKgwqDC
-oMKgwqDCoMKgwqDCoMKgwqDCoMKgIHNnc1tvdXRfc2crK10gPSAmYnVmc1sxXTsNCj4+ICvCoMKg
-wqDCoMKgwqDCoMKgwqDCoMKgIH0NCj4+DQo+PiAtwqDCoMKgwqDCoMKgwqAgc2dfaW5pdF9vbmUo
-JmhkciwgdmlydGlvX3Zzb2NrX2hkcihza2IpLCBzaXplb2YoKnZpcnRpb192c29ja19oZHIoc2ti
-KSkpOw0KPj4gLcKgwqDCoMKgwqDCoMKgIHNnc1tvdXRfc2crK10gPSAmaGRyOw0KPj4gLcKgwqDC
-oMKgwqDCoMKgIGlmIChza2ItPmxlbiA+IDApIHsNCj4+IC3CoMKgwqDCoMKgwqDCoMKgwqDCoMKg
-IHNnX2luaXRfb25lKCZidWYsIHNrYi0+ZGF0YSwgc2tiLT5sZW4pOw0KPj4gLcKgwqDCoMKgwqDC
-oMKgwqDCoMKgwqAgc2dzW291dF9zZysrXSA9ICZidWY7DQo+PiDCoMKgwqDCoMKgwqDCoCB9DQo+
-Pg0KPj4gwqDCoMKgwqDCoMKgwqAgcmV0ID0gdmlydHF1ZXVlX2FkZF9zZ3ModnEsIHNncywgb3V0
-X3NnLCBpbl9zZywgc2tiLCBHRlBfS0VSTkVMKTsNCj4+IC0twqANCj4+IDIuMjUuMQ0KPiANCg0K
+--=-=-=
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+Hi Ond=C5=99ej,
+hi all,
+
+Ond=C5=99ej Jirman <megous@megous.com> writes:
+> On Sun, Feb 19, 2023 at 12:45:53PM +0100, Frank Oltmanns wrote:
+>> Fix the XBD599 panel=E2=80=99s slight visual stutter by correcting the p=
+ixel
+>> clock speed so that the panel=E2=80=99s 60Hz vertical refresh rate is me=
+t.
+>>
+>> Set the clock speed using the underlying formula instead of a magic
+>> number. To have a consistent procedure for both panels, set the JH057N
+>> panel=E2=80=99s clock also as a formula.
+>>
+>> =E2=80=94
+>>  drivers/gpu/drm/panel/panel-sitronix-st7703.c | 4 ++=E2=80=93
+>>  1 file changed, 2 insertions(+), 2 deletions(-)
+>>
+>> diff =E2=80=93git a/drivers/gpu/drm/panel/panel-sitronix-st7703.c b/driv=
+ers/gpu/drm/panel/panel-sitronix-st7703.c
+>> index 6747ca237ced..cd7d631f7573 100644
+>> =E2=80=94 a/drivers/gpu/drm/panel/panel-sitronix-st7703.c
+>> +++ b/drivers/gpu/drm/panel/panel-sitronix-st7703.c
+>> @@ -139,7 +139,7 @@ static const struct drm_display_mode jh057n00900_mod=
+e =3D {
+>>  	.vsync_start =3D 1440 + 20,
+>>  	.vsync_end   =3D 1440 + 20 + 4,
+>>  	.vtotal	     =3D 1440 + 20 + 4 + 12,
+>> -	.clock	     =3D 75276,
+>> +	.clock	     =3D (720 + 90 + 20 + 20) * (1440 + 20 + 4 + 12) * 60 / 100=
+0,
+>>  	.flags	     =3D DRM_MODE_FLAG_NHSYNC | DRM_MODE_FLAG_NVSYNC,
+>>  	.width_mm    =3D 65,
+>>  	.height_mm   =3D 130,
+>> @@ -324,7 +324,7 @@ static const struct drm_display_mode xbd599_mode =3D=
+ {
+>>  	.vsync_start =3D 1440 + 18,
+>>  	.vsync_end   =3D 1440 + 18 + 10,
+>>  	.vtotal	     =3D 1440 + 18 + 10 + 17,
+>> -	.clock	     =3D 69000,
+>> +	.clock	     =3D (720 + 40 + 40 + 40) * (1440 + 18 + 10 + 17) * 60 / 10=
+00,
+>
+> As for pinephone, A64 can=E2=80=99t produce 74.844 MHz precisely, so this=
+ will not work.
+>
+> Better fix is to alter the mode so that clock can be something the only S=
+oC this
+> panel is used with can actually produce.
+>
+> See eg. <https://github.com/megous/linux/commit/dd070679d717e7f34af755856=
+3698240a43981a6>
+> which is tested to actually produce 60Hz by measuring the vsync events ag=
+ainst
+> the CPU timer.
+>
+> Your patch will not produce the intended effect.
+>
+> kind regards,
+> 	o.
+>
+
+The TL;DR of my upcoming musings are: Thank you very much for your feedback=
+! Any
+recommendations for an informative read about the topic that you or anybody=
+ else
+has, is greatly appreciated.
+
+How did you measure the vsync events? Were you using vblank interrupts [1]?
+
+I have to admit that I tested only visually and couldn=E2=80=99t spot a dif=
+ference
+between your patch and mine. I=E2=80=99ll need to put more thinking into th=
+is, and maybe
+you or anyone reading this can help me with that.
+
+My interpretation of the `struct drm_display_mode` documentation [2] was, t=
+hat
+these are logical dimensions/clocks that somewhere down the stack are conve=
+rted
+to their physical/hardware representation.
+
+But now I=E2=80=99ve read the description of the struct=E2=80=99s =E2=80=9C=
+crtc_clock=E2=80=9D member more
+carefully. It says:
+=E2=80=9CActual pixel or dot clock in the hardware. This differs from the
+logical @clock when e.g. using interlacing, double-clocking, stereo
+modes or other fancy stuff that changes the timings and signals
+actually sent over the wire.=E2=80=9D
+
+So, can I say that if we don=E2=80=99t use =E2=80=9Cinterlacing, double-clo=
+cking, stereo modes
+or other fancy stuff=E2=80=9D that `crtc_clock` will be equal to `clock` an=
+d therefore
+we have to choose `clock` according to the SoC=E2=80=99s capabilities?
+
+Also, I haven=E2=80=99t found a source about which values to use for the fr=
+ont and back
+porch part of the panel and why can you just =E2=80=9Carbitrarily=E2=80=9D =
+change those. My
+assumption is, that those are just extra pixels we can add to make the
+dimensions match the ratio of clock and vertical refresh rate. At least that
+seems to be, what you did in your patch. But again, no source to back my
+assumption about the range the porches can have.
+
+I=E2=80=99ve put the following docs on my =E2=80=9Cto read and understand=
+=E2=80=9D list:
+=E2=80=A2 Allwinner A64 User Manual (to learn more about the SoC=E2=80=99s =
+TCON0 and what
+  clock=E2=80=99s the SoC can produce)
+=E2=80=A2 drm-internals.rst
+=E2=80=A2 =E2=80=9CRendering PinePhone=E2=80=99s display=E2=80=9D [3], to l=
+earn why it produces 69 MHz.
+=E2=80=A2 Your commit message for the PinePhone Pro panel [4] (found on you=
+r blog:
+  <https://xnux.eu/log/>)
+
+Is there anything else I should add?
+
+Thank you again and best regards,
+  Frank
+
+[1] <https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tre=
+e/drivers/gpu/drm/drm_vblank.c>
+[2] <https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tre=
+e/include/drm/drm_modes.h#n198>
+[3] <https://lupyuen.github.io/articles/de>
+[4] <https://github.com/megous/linux/commit/a173b114c9323c718530280b3a918d0=
+925edaa6a>
+
+>>  	.flags	     =3D DRM_MODE_FLAG_NHSYNC | DRM_MODE_FLAG_NVSYNC,
+>>  	.width_mm    =3D 68,
+>>  	.height_mm   =3D 136,
+>> =E2=80=93
+>> 2.39.1
+>>
+
+--=-=-=--
