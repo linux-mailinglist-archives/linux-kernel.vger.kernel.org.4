@@ -2,444 +2,512 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8921F69CB71
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Feb 2023 13:53:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A714D69CB73
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Feb 2023 13:55:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232160AbjBTMxv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Feb 2023 07:53:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45340 "EHLO
+        id S231655AbjBTMz0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Feb 2023 07:55:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45884 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231484AbjBTMxt (ORCPT
+        with ESMTP id S231714AbjBTMzY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Feb 2023 07:53:49 -0500
-Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26D8983F5;
-        Mon, 20 Feb 2023 04:53:47 -0800 (PST)
-Received: from pps.filterd (m0098416.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 31KCXa3U024143;
-        Mon, 20 Feb 2023 12:53:43 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : cc : date : in-reply-to : references : content-type :
- content-transfer-encoding : mime-version; s=pp1;
- bh=YztoCcKA1qAotP7zviv5DPxU/2kKFA3RhwizP6I7Dcg=;
- b=mpGTwSa+vYunD7qX9iSbxW85/6zMN4gp0KEGuNLaY27bGEL9byzSVjYXocuXuMjCa+oN
- R/kGYvRdaJr8pQ1V1rUUa2UD1O/wAH2i5jZyDohxZqkpTEtzJdEaJBQJ5QOQOuIZSdDp
- vMrSI16gLZXXZyYhtVkbKWYigyC4e0MvcR0bWCpT2QJoV9xJ8ac+4OAuyNcwVwchavTl
- n+Uz0uhRqINy3ZiK4+9wmCoTdIcFHsNa5j+X/UP5mcRs2pTLVsxX60X4Vdlsr6k7aadg
- peS/JVHhaJXskr+2X2PjnuAnj7i8ha3x/8UEC1wTbrg5q0RZjCVridQEFEtajGUKdiXn ZQ== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3nv2at26xd-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 20 Feb 2023 12:53:42 +0000
-Received: from m0098416.ppops.net (m0098416.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 31KCo9Kp025432;
-        Mon, 20 Feb 2023 12:53:42 GMT
-Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
-        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3nv2at26x0-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 20 Feb 2023 12:53:41 +0000
-Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
-        by ppma04ams.nl.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 31KBgY3Y004632;
-        Mon, 20 Feb 2023 12:53:39 GMT
-Received: from smtprelay03.fra02v.mail.ibm.com ([9.218.2.224])
-        by ppma04ams.nl.ibm.com (PPS) with ESMTPS id 3ntpa6apnx-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 20 Feb 2023 12:53:39 +0000
-Received: from smtpav05.fra02v.mail.ibm.com (smtpav05.fra02v.mail.ibm.com [10.20.54.104])
-        by smtprelay03.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 31KCrZMm36962730
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 20 Feb 2023 12:53:36 GMT
-Received: from smtpav05.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id E15C320040;
-        Mon, 20 Feb 2023 12:53:35 +0000 (GMT)
-Received: from smtpav05.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id D311E20049;
-        Mon, 20 Feb 2023 12:53:34 +0000 (GMT)
-Received: from [9.171.0.30] (unknown [9.171.0.30])
-        by smtpav05.fra02v.mail.ibm.com (Postfix) with ESMTP;
-        Mon, 20 Feb 2023 12:53:34 +0000 (GMT)
-Message-ID: <1a621a2b836d81d12b6f265f47d93b827e0a82df.camel@linux.ibm.com>
-Subject: Re: [PATCH RESEND] PCI: s390: Fix use-after-free of PCI bus
- resources with s390 per-function hotplug
-From:   Niklas Schnelle <schnelle@linux.ibm.com>
-To:     Bjorn Helgaas <helgaas@kernel.org>
-Cc:     Gerd Bayer <gbayer@linux.ibm.com>,
-        Gerald Schaefer <gerald.schaefer@linux.ibm.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Sven Schnelle <svens@linux.ibm.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Pierre Morel <pmorel@linux.ibm.com>,
-        Matthew Rosato <mjrosato@linux.ibm.com>,
-        linux-s390@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-pci@vger.kernel.org
-Date:   Mon, 20 Feb 2023 13:53:34 +0100
-In-Reply-To: <20230217231503.GA3425666@bhelgaas>
-References: <20230217231503.GA3425666@bhelgaas>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.46.3 (3.46.3-1.fc37) 
+        Mon, 20 Feb 2023 07:55:24 -0500
+Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 941C814E9A
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Feb 2023 04:55:21 -0800 (PST)
+Received: by mail-ed1-x52d.google.com with SMTP id eg37so496417edb.12
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Feb 2023 04:55:21 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=DgZrbWeFA9j+he9UtLgDgb6cFaZYirSMMhpT8R84Vzw=;
+        b=VRgsMgY7mK5uxk3CzVKiP1yyLJlo/CpK4wEr8aatK1dTEeHkwN+/jgk4okRgrP4v+F
+         wjc+rCVVENz22PBq3Aj3zdg9XMVhU2H0A2q2xvIsvFp44UIvTmwcCB1oFleUjx3ZhB2h
+         6F5o2enEE5BTYu8C4InJL2sTabHUvc795scVxjd7TsqzQCGMsn+gUgLLZeo892k6LVl2
+         xtEfvdePiHubBA2UJxJTpDDXwyHU1g/NmxxJ4/K/0OVe6z7A1QhnFuQCGKdWhjdHxRp2
+         mioMBC8idgWFtS4c/L3LTJr+m1VcnMlKtX9MjlrcB9dk9Hf3PPP4pPAeS35lfc7PLhME
+         1o1Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=DgZrbWeFA9j+he9UtLgDgb6cFaZYirSMMhpT8R84Vzw=;
+        b=CglJLWvNgWPyjvFDcYTNTQ0Hx+BuQIcSIwvZPwOxHc/4VtcGUNbxwLEv5365WBuWFe
+         OwQTE4jmskNoXMIPKNaa66XodXCyP1z8MUzyGX6ah9ybA92l4ujw896325nYL8fUkQvf
+         zcoERTl9VhtbOa+cVn6m73okD5z4iNeHTe5XHz0/lL/pPQ+/CUST9LPelf29rSsuaRoT
+         004meVawWke+YCyozksRA3KZLCQC2FRkQPcwWPMfuU32f3/GMYZppK6UAmv6BZfW9kNF
+         r/YMNZvBzu86sN+0AVcML8B1+dKcBrazgoZj+z4KroeiIxEFaIMnUgwsJohO5NuMFWpl
+         hthQ==
+X-Gm-Message-State: AO0yUKWxTqMHsoFKQ6pQn7aZiEqedSzuHfbcN5NNjh3khRK3zT6jb6Gu
+        nioVzP57g0D0671Kbrl6vOY=
+X-Google-Smtp-Source: AK7set8gY3KJLEKElEBp66mQnLHwnVWIYIdSDMMxAK7ANw5JtJzGseXwaL6r8gYvEPpcuURyqThB+g==
+X-Received: by 2002:a17:907:888b:b0:878:6519:c740 with SMTP id rp11-20020a170907888b00b008786519c740mr11598740ejc.44.1676897719974;
+        Mon, 20 Feb 2023 04:55:19 -0800 (PST)
+Received: from gmail.com (1F2EF163.nat.pool.telekom.hu. [31.46.241.99])
+        by smtp.gmail.com with ESMTPSA id kg19-20020a17090776f300b008be0b7242d5sm3208352ejc.90.2023.02.20.04.55.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 20 Feb 2023 04:55:19 -0800 (PST)
+Sender: Ingo Molnar <mingo.kernel.org@gmail.com>
+Date:   Mon, 20 Feb 2023 13:55:17 +0100
+From:   Ingo Molnar <mingo@kernel.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     linux-kernel@vger.kernel.org,
+        Peter Zijlstra <peterz@infradead.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Borislav Petkov <bp@alien8.de>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Valentin Schneider <vschneid@redhat.com>
+Subject: [GIT PULL] scheduler changes for v6.3
+Message-ID: <Y/NttaqRZ+zaHIjo@gmail.com>
 MIME-Version: 1.0
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: uzcwYrTmgbMkSaFItKDZZyEpzzcMV6az
-X-Proofpoint-ORIG-GUID: hBw7SIIb_gaVLwCvApgsQy8lvVTCchwH
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.170.22
- definitions=2023-02-20_10,2023-02-20_02,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 malwarescore=0
- suspectscore=0 mlxlogscore=999 adultscore=0 phishscore=0 mlxscore=0
- clxscore=1011 lowpriorityscore=0 impostorscore=0 spamscore=0
- priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2302200114
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 2023-02-17 at 17:15 -0600, Bjorn Helgaas wrote:
-> On Tue, Feb 14, 2023 at 10:49:10AM +0100, Niklas Schnelle wrote:
-> > On s390 PCI functions may be hotplugged individually even when they
-> > belong to a multi-function device. In particular on an SR-IOV device VF=
-s
-> > may be removed and later re-added.
->=20
-> Is there something special about the SR-IOV/VF case that relates to
-> this problem?  If not, it might be unnecessary distraction to mention
-> it.
 
-It's not really special in that the problem could also be triggered by
-other hotplug but it is the most common scenario where you'd run into
-this problem. Some background. If you simply do a "echo 0 >
-/sys/bus/pci/slots/<func>/power" and then power on again the PCI
-resources are not removed because the function stays visible to the
-system just deconfigured. To trigger removal you'd have to move a
-single function to a different system in the machine hypervisor but
-then you're less likely to bring it back again so the dangling resource
-pointer won't cause problems. When using "../sriov_numvfs" to change
-the number of VFs however they are temporarily removed and then re-
-appear.
+Linus,
 
->=20
-> > In commit a50297cf8235 ("s390/pci: separate zbus creation from
-> > scanning") it was missed however that struct pci_bus and struct
-> > zpci_bus's resource list retained a reference to the PCI functions MMIO
-> > resources even though those resources are released and freed on
-> > hot-unplug. These stale resources may subsequently be claimed when the
-> > PCI function re-appears resulting in use-after-free.
->=20
-> Lifetimes of all these resources definitely aren't obvious to me.
+Please pull the latest sched/core git tree from:
 
-Yes the problem is that the old code did muddy the water here because
-it didn't properly separate which resources are tied to a PCI function
-and which to the bus as a whole. I tried to fix this in this patch.
+   git://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git sched-core-2023-02-20
 
-But  let me first explain lifetimes of the struct zpci_bus and struct
-zpci_bus. As our basic architecture works with one struct zpci_dev per
-function and they can be hot(un-)plugged in any order but we still want
-to support exposing the topology within a multi-function PCI device the
-struct zpci_bus representing the PCI bus on which the functions reside
-is created when the first PCI function on that bus is discovered and it
-exists until the last PCI function on that bus disappears.
+   # HEAD: 7c4a5b89a0b5a57a64b601775b296abf77a9fe97 sched/rt: pick_next_rt_entity(): check list_entry
+
+Scheduler updates in this cycle are:
+
+ - Improve the scalability of the CFS bandwidth unthrottling logic
+   with large number of CPUs.
+
+ - Fix & rework various cpuidle routines, simplify interaction with
+   the generic scheduler code. Add __cpuidle methods as noinstr to
+   objtool's noinstr detection and fix boatloads of cpuidle bugs & quirks.
+
+ - Add new ABI: introduce MEMBARRIER_CMD_GET_REGISTRATIONS,
+   to query previously issued registrations.
+
+ - Limit scheduler slice duration to the sysctl_sched_latency period,
+   to improve scheduling granularity with a large number of SCHED_IDLE
+   tasks.
+
+ - Debuggability enhancement on sys_exit(): warn about disabled IRQs,
+   but also enable them to prevent a cascade of followup problems and
+   repeat warnings.
+
+ - Fix the rescheduling logic in prio_changed_dl().
+
+ - Micro-optimize cpufreq and sched-util methods.
+
+ - Micro-optimize ttwu_runnable()
+
+ - Micro-optimize the idle-scanning in update_numa_stats(),
+   select_idle_capacity() and steal_cookie_task().
+
+ - Update the RSEQ code & self-tests
+
+ - Constify various scheduler methods
+
+ - Remove unused methods
+
+ - Refine __init tags
+
+ - Documentation updates
+
+ - ... Misc other cleanups, fixes
+
+ Thanks,
+
+	Ingo
+
+------------------>
+Arnd Bergmann (1):
+      cpuidle: mvebu: Fix duplicate flags assignment
+
+Bing Huang (2):
+      sched/topology: Add __init for init_defrootdomain
+      sched/topology: Add __init for sched_init_domains()
+
+Chengming Zhou (2):
+      sched/core: Micro-optimize ttwu_runnable()
+      sched/core: Reorganize ttwu_do_wakeup() and ttwu_do_activate()
+
+Hao Jia (2):
+      sched/numa: Stop an exhastive search if an idle core is found
+      sched/core: Adjusting the order of scanning CPU
+
+Ingo Molnar (1):
+      sched/cputime: Fix IA64 build error of missing arch_vtime_task_switch() prototype
+
+Josh Don (1):
+      sched: Async unthrottling for cfs bandwidth
+
+Lukasz Luba (1):
+      cpufreq, sched/util: Optimize operations with single CPU capacity lookup
+
+Mark Brown (1):
+      KVM: selftests: Fix build of rseq test
+
+Mark Rutland (1):
+      cpuidle: drivers: firmware: psci: Dont instrument suspend code
+
+Mathieu Desnoyers (25):
+      selftests/rseq: Fix: Fail thread registration when CONFIG_RSEQ=n
+      rseq: Introduce feature size and alignment ELF auxiliary vector entries
+      rseq: Introduce extensible rseq ABI
+      rseq: Extend struct rseq with numa node id
+      selftests/rseq: Use ELF auxiliary vector for extensible rseq
+      selftests/rseq: Implement rseq numa node id field selftest
+      sched: Introduce per-memory-map concurrency ID
+      rseq: Extend struct rseq with per-memory-map concurrency ID
+      selftests/rseq: Remove RSEQ_SKIP_FASTPATH code
+      selftests/rseq: Implement rseq mm_cid field support
+      selftests/rseq: x86: Template memory ordering and percpu access mode
+      selftests/rseq: arm: Template memory ordering and percpu access mode
+      selftests/rseq: arm64: Template memory ordering and percpu access mode
+      selftests/rseq: mips: Template memory ordering and percpu access mode
+      selftests/rseq: ppc: Template memory ordering and percpu access mode
+      selftests/rseq: s390: Template memory ordering and percpu access mode
+      selftests/rseq: riscv: Template memory ordering and percpu access mode
+      selftests/rseq: Implement basic percpu ops mm_cid test
+      selftests/rseq: Implement parametrized mm_cid test
+      selftests/rseq: parametrized test: Report/abort on negative concurrency ID
+      tracing/rseq: Add mm_cid field to rseq_update
+      selftests/rseq: Add mm_numa_cid to test script
+      sched/rseq: Fix concurrency ID handling of usermodehelper kthreads
+      selftests/rseq: Revert "selftests/rseq: Add mm_numa_cid to test script"
+      rseq: Increase AT_VECTOR_SIZE_BASE to match rseq auxvec entries
+
+Matthew Wilcox (Oracle) (1):
+      sched: Make const-safe
+
+Michal Clapinski (2):
+      sched/membarrier: Introduce MEMBARRIER_CMD_GET_REGISTRATIONS
+      selftests/membarrier: Test MEMBARRIER_CMD_GET_REGISTRATIONS
+
+Nicholas Piggin (2):
+      cputime: remove cputime_to_nsecs fallback
+      exit: Detect and fix irq disabled state in oops
+
+Peter Zijlstra (59):
+      x86/perf/amd: Remove tracing from perf_lopwr_cb()
+      x86/idle: Replace 'x86_idle' function pointer with a static_call
+      cpuidle/poll: Ensure IRQs stay disabled after cpuidle_state::enter() calls
+      cpuidle: Move IRQ state validation
+      cpuidle, riscv: Push RCU-idle into driver
+      cpuidle, tegra: Push RCU-idle into driver
+      cpuidle, psci: Push RCU-idle into driver
+      cpuidle, ARM/imx6: Push RCU-idle into driver
+      cpuidle, OMAP3: Push RCU-idle into driver
+      cpuidle, armada: Push RCU-idle into driver
+      cpuidle, OMAP4: Push RCU-idle into driver
+      cpuidle, dt: Push RCU-idle into driver
+      cpuidle: Fix ct_idle_*() usage
+      cpuidle, cpu_pm: Remove RCU fiddling from cpu_pm_{enter,exit}()
+      acpi_idle: Remove tracing
+      cpuidle: Annotate poll_idle()
+      objtool/idle: Validate __cpuidle code as noinstr
+      cpuidle, intel_idle: Fix CPUIDLE_FLAG_IRQ_ENABLE *again*
+      cpuidle, intel_idle: Fix CPUIDLE_FLAG_INIT_XSTATE
+      cpuidle, intel_idle: Fix CPUIDLE_FLAG_IBRS
+      arch/idle: Change arch_cpu_idle() behavior: always exit with IRQs disabled
+      x86/tdx: Remove TDX_HCALL_ISSUE_STI
+      arm, smp: Remove trace_.*_rcuidle() usage
+      arm64, smp: Remove trace_.*_rcuidle() usage
+      printk: Remove trace_.*_rcuidle() usage
+      time/tick-broadcast: Remove RCU_NONIDLE() usage
+      cpuidle, sched: Remove instrumentation from TIF_{POLLING_NRFLAG,NEED_RESCHED}
+      cpuidle, mwait: Make the mwait code noinstr clean
+      cpuidle, tdx: Make TDX code noinstr clean
+      cpuidle, xenpv: Make more PARAVIRT_XXL noinstr clean
+      cpuidle, nospec: Make mds_idle_clear_cpu_buffers() noinstr clean
+      cpuidle, ACPI: Make noinstr clean
+      tracing: Remove trace_hardirqs_{on,off}_caller()
+      tracing: WARN on rcuidle
+      tracing, hardirq: No moar _rcuidle() tracing
+      cpuidle, OMAP3: Use WFI for omap3_pm_idle()
+      cpuidle, OMAP3: Push RCU-idle into omap_sram_idle()
+      arm, OMAP2: Use WFI for omap2_pm_idle()
+      cpuidle, ARM: OMAP2+: powerdomain: Remove trace_.*_rcuidle()
+      cpuidle, clk: Remove trace_.*_rcuidle()
+      ubsan: Fix objtool UACCESS warns
+      intel_idle: Add force_irq_on module param
+      entry, kasan, x86: Disallow overriding mem*() functions
+      sched/core: Always inline __this_cpu_preempt_check()
+      arm64, riscv, perf: Remove RCU_NONIDLE() usage
+      cpuidle: Ensure ct_cpuidle_enter() is always called from noinstr/__cpuidle
+      cpuidle, arch: Mark all ct_cpuidle_enter() callers __cpuidle
+      cpuidle,arch: Mark all regular cpuidle_state:: Enter methods __cpuidle
+      cpuidle: Add comments about noinstr/__cpuidle usage
+      context_tracking: Fix noinstr vs KASAN
+      cpuidle, arm64: Fix the ARM64 cpuidle logic
+      cpuidle: lib/bug: Disable rcu_is_watching() during WARN/BUG
+      cpuidle: tracing: Warn about !rcu_is_watching()
+      cpuidle: tracing, preempt: Squash _rcuidle tracing
+      x86/atomics: Always inline arch_atomic64*()
+      sched/clock/x86: Mark sched_clock() noinstr
+      sched/clock: Make local_clock() noinstr
+      cpuidle: Fix poll_idle() noinstr annotation
+      objtool: mem*() are not uaccess safe
+
+Pietro Borrello (1):
+      sched/rt: pick_next_rt_entity(): check list_entry
+
+Qais Yousef (1):
+      sched/documentation: Document the util clamp feature
+
+Tony Lindgren (1):
+      cpuidle, OMAP4: Push RCU-idle into omap4_enter_lowpower()
+
+Uros Bizjak (1):
+      x86/pvclock: Improve atomic update of last_value in pvclock_clocksource_read()
+
+Valentin Schneider (1):
+      sched/deadline: Add more reschedule cases to prio_changed_dl()
+
+Vincent Guittot (3):
+      sched/fair: Limit sched slice duration
+      sched/fair: unlink misfit task from cpu overutilized
+      sched/fair: Remove capacity inversion detection
+
+Zhang Qiao (1):
+      sched/fair: sanitize vruntime of entity being placed
 
 
->=20
-> So I guess the critical thing here is the new
-> pci_bus_remove_resource() in zpci_cleanup_bus_resources(), which
-> removes (and kfrees when necessary) the resource from
-> pci_bus->resources.
->=20
-> I'm not clear on where the zpci_bus resource list comes in.  I guess
-> we kalloc resources in zpci_setup_bus_resources(), and the current
-> code adds them to zpci_bus->resources and copies them onto the pci_bus
-> list.
->=20
-> The new code does not add them to zpci_bus->resources at all, and only
-> adds them to the pci_bus resource list.  Right?  I guess maybe that's
-> what the "no need to add the MMIO resources at all" below refers to?
-
-Yes exactly. The problem is that I got confused with how to map our
-model where the BAR resources are strictly tied to the PCI function to
-the common API which more closely resembles real hardware and where the
-BAR resources are tied to the PCI bus. Instead of making sure that the
-per-function resources are added and removed together with the PCI
-function matching when they are accessible in our architecture I added
-them to the struct zpci_bus and didn't properly remove them neither
-from sruct zpci_bus nor the common PCI bus though they were freed thus
-creating the use-after free in two places at once. I think somehow I
-had though that release_resource() somehow removed it from the resource
-lists.
-
->=20
-> > One idea of fixing this use-after-free in s390 specific code that was
-> > investigated was to simply keep resources around from the moment a PCI
-> > function first appeared until the whole virtual PCI bus created for
-> > a multi-function device disappears. The problem with this however is
-> > that due to the requirement of artificial MMIO addreesses (address
-> > cookies) we will then need extra logic and tracking in struct zpci_bus
-> > to keep these compatible for re-use. At the same time the MMIO resource=
-s
-> > semantically belong to the PCI function so tying their lifecycle to the
-> > function seems more logical.
-> >=20
-> > Instead a simpler approach is to remove the resources of an individuall=
-y
-> > hot-unplugged PCI function from the PCI bus's resource list while
-> > keeping the resources of other PCI functions on the PCI bus untouched.
->=20
-> Do we currently never kfree the pci_bus resource list until we free
-> the whole pci_bus via release_pcibus_dev()?  Does a remove + add just
-> allocate more resources that are probably duplicates of what the
-> pci_bus already had?
-
-Yes the current code adds new resources on remove + add while leaving
-dangling freed resources in the list creating kind of half duplicates.
-It's only due to the order that we end up using the freed dangling
-resources instead of the new ones.
-
->=20
-> > This is done by introducing pci_bus_remove_resource() to remove an
-> > individual resource. Similarly the resource also needs to be removed
-> > from the struct zpci_bus's resource list. It turns out however, that
-> > there is really no need to add the MMIO resources at all and instead we
-> > can simply use the zpci_bar_struct's resource pointer directly.
-> >=20
-> > Fixes: a50297cf8235 ("s390/pci: separate zbus creation from scanning")
-> > Signed-off-by: Niklas Schnelle <schnelle@linux.ibm.com>
->=20
-> Other random questions unrelated to this patch:
->=20
->   - zpci_bus_create_pci_bus() calls pci_bus_add_devices().  Isn't that
->     pointless?  AFAICT, the bus->devices list is empty then.
-
-Yes I think you're right it does nothing and can be dropped.
-
->=20
->   - What about zpci_bus_scan_device()?  Why does it call both
->     pci_bus_add_device() and pci_bus_add_devices()?  The latter will
->     just call the former, so it looks redundant.  And the latter is
->     locked but not the former?
-
-Hmm. great find. This seems to have been weird and redundant since I
-first used that pattern in 3047766bc6ec ("s390/pci: fix enabling a
-reserved PCI function"). I think maybe then the reason for this was
-that prior to 960ac3626487 ("s390/pci: allow zPCI zbus without a
-function zero") when the newly enabled is devfn =3D=3D 0 there could be
-functions from the same bus which would not have been added yet. I'm
-not sure though. That was definitely the idea behind the
-zpci_bus_scan_bus() in zpci_scan_configured_devices() that is also
-redundant now as we can now scan each function as it appears.
-
-This will definitely need to be cleaned up.
-
->=20
->   - Struct zpci_bus has a "resources" list.  I guess this contains the
->     &zbus->bus_resource put there in zpci_bus_alloc(), plus an entry
->     for every BAR of every device on the bus (I guess you'd never see
->     an actual PCI-to-PCI bridge on s390?), kalloc'ed in
->     zpci_setup_bus_resources()?
-
-Yes that was the situation before this patch. After this patch only the
-zpci_bus.bus_resource is in this resources list. After this patch the
-BAR resources are not on the list and only referred to via zdev-
->bars[i].res thus tying them to struct zpci_dev.
-
-Currently Linux does not see PCI-to-PCI bridges on s390. We do have
-PCIe switches in the hardware in the so called I/O drawers but they are
-hidden from us by firmware. There have been some ideas about having
-PCI-to-PCI bridges visible to Linux but nothing concrete at the moment.
-
->=20
->     What happens when zpci_bus_release() calls
->     pci_free_resource_list() on &zbus->resources?  It looks like that
->     ultimately calls kfree(), which is OK for the
->     zpci_setup_bus_resources() stuff, but what about the
->     zbus->bus_resource that was not kalloc'ed?
-
-As far as I can see pci_free_resource_list() only calls kfree() on the
-entry not on entry->res. The resources set up in
-zpci_setup_bus_resources() are freed in zpci_cleanup_bus_resources()
-explicitly.
-
->=20
-> > ---
-> >  arch/s390/pci/pci.c     | 16 ++++++++++------
-> >  arch/s390/pci/pci_bus.c | 12 +++++-------
-> >  arch/s390/pci/pci_bus.h |  3 +--
-> >  drivers/pci/bus.c       | 23 +++++++++++++++++++++++
-> >  include/linux/pci.h     |  1 +
-> >  5 files changed, 40 insertions(+), 15 deletions(-)
-> >=20
-> > diff --git a/arch/s390/pci/pci.c b/arch/s390/pci/pci.c
-> > index ef38b1514c77..e16afacc8fd1 100644
-> > --- a/arch/s390/pci/pci.c
-> > +++ b/arch/s390/pci/pci.c
-> > @@ -544,8 +544,7 @@ static struct resource *__alloc_res(struct zpci_dev=
- *zdev, unsigned long start,
-> >  	return r;
-> >  }
-> > =20
-> > -int zpci_setup_bus_resources(struct zpci_dev *zdev,
-> > -			     struct list_head *resources)
-> > +int zpci_setup_bus_resources(struct zpci_dev *zdev)
-> >  {
-> >  	unsigned long addr, size, flags;
-> >  	struct resource *res;
-> > @@ -581,7 +580,6 @@ int zpci_setup_bus_resources(struct zpci_dev *zdev,
-> >  			return -ENOMEM;
-> >  		}
-> >  		zdev->bars[i].res =3D res;
-> > -		pci_add_resource(resources, res);
-> >  	}
-> >  	zdev->has_resources =3D 1;
-> > =20
-> > @@ -590,17 +588,23 @@ int zpci_setup_bus_resources(struct zpci_dev *zde=
-v,
-> > =20
-> >  static void zpci_cleanup_bus_resources(struct zpci_dev *zdev)
-> >  {
-> > +	struct resource *res;
-> >  	int i;
-> > =20
-> > +	pci_lock_rescan_remove();
->=20
-> What exactly is this protecting?  This doesn't seem like quite the
-> right place since we're not adding/removing a pci_dev here.  Is this
-> to protect the bus->resources list in pci_bus_remove_resource()?
-
-Yes I did not find a lock that is specifically for bus->resources but
-it seemed to me that changes to resources would only affect things
-running under the rescan/remove lock.
-
->=20
-> >  	for (i =3D 0; i < PCI_STD_NUM_BARS; i++) {
-> > -		if (!zdev->bars[i].size || !zdev->bars[i].res)
-> > +		res =3D zdev->bars[i].res;
-> > +		if (!res)
-> >  			continue;
-> > =20
-> > +		release_resource(res);
-> > +		pci_bus_remove_resource(zdev->zbus->bus, res);
-> >  		zpci_free_iomap(zdev, zdev->bars[i].map_idx);
-> > -		release_resource(zdev->bars[i].res);
-> > -		kfree(zdev->bars[i].res);
-> > +		zdev->bars[i].res =3D NULL;
-> > +		kfree(res);
-> >  	}
-> >  	zdev->has_resources =3D 0;
-> > +	pci_unlock_rescan_remove();
-> >  }
-> > =20
-> >  int pcibios_device_add(struct pci_dev *pdev)
-> > diff --git a/arch/s390/pci/pci_bus.c b/arch/s390/pci/pci_bus.c
-> > index 6a8da1b742ae..a99926af2b69 100644
-> > --- a/arch/s390/pci/pci_bus.c
-> > +++ b/arch/s390/pci/pci_bus.c
-> > @@ -41,9 +41,7 @@ static int zpci_nb_devices;
-> >   */
-> >  static int zpci_bus_prepare_device(struct zpci_dev *zdev)
-> >  {
-> > -	struct resource_entry *window, *n;
-> > -	struct resource *res;
-> > -	int rc;
-> > +	int rc, i;
-> > =20
-> >  	if (!zdev_enabled(zdev)) {
-> >  		rc =3D zpci_enable_device(zdev);
-> > @@ -57,10 +55,10 @@ static int zpci_bus_prepare_device(struct zpci_dev =
-*zdev)
-> >  	}
-> > =20
-> >  	if (!zdev->has_resources) {
-> > -		zpci_setup_bus_resources(zdev, &zdev->zbus->resources);
-> > -		resource_list_for_each_entry_safe(window, n, &zdev->zbus->resources)=
- {
-> > -			res =3D window->res;
-> > -			pci_bus_add_resource(zdev->zbus->bus, res, 0);
-> > +		zpci_setup_bus_resources(zdev);
-> > +		for (i =3D 0; i < PCI_STD_NUM_BARS; i++) {
-> > +			if (zdev->bars[i].res)
-> > +				pci_bus_add_resource(zdev->zbus->bus, zdev->bars[i].res, 0);
-> >  		}
-> >  	}
-> > =20
-> > diff --git a/arch/s390/pci/pci_bus.h b/arch/s390/pci/pci_bus.h
-> > index e96c9860e064..af9f0ac79a1b 100644
-> > --- a/arch/s390/pci/pci_bus.h
-> > +++ b/arch/s390/pci/pci_bus.h
-> > @@ -30,8 +30,7 @@ static inline void zpci_zdev_get(struct zpci_dev *zde=
-v)
-> > =20
-> >  int zpci_alloc_domain(int domain);
-> >  void zpci_free_domain(int domain);
-> > -int zpci_setup_bus_resources(struct zpci_dev *zdev,
-> > -			     struct list_head *resources);
-> > +int zpci_setup_bus_resources(struct zpci_dev *zdev);
-> > =20
-> >  static inline struct zpci_dev *zdev_from_bus(struct pci_bus *bus,
-> >  					     unsigned int devfn)
-> > diff --git a/drivers/pci/bus.c b/drivers/pci/bus.c
-> > index 83ae838ceb5f..f021f1d4af9f 100644
-> > --- a/drivers/pci/bus.c
-> > +++ b/drivers/pci/bus.c
-> > @@ -76,6 +76,29 @@ struct resource *pci_bus_resource_n(const struct pci=
-_bus *bus, int n)
-> >  }
-> >  EXPORT_SYMBOL_GPL(pci_bus_resource_n);
-> > =20
-> > +void pci_bus_remove_resource(struct pci_bus *bus, struct resource *res=
-)
-> > +{
-> > +	struct pci_bus_resource *bus_res, *tmp;
-> > +	int i;
-> > +
-> > +	for (i =3D 0; i < PCI_BRIDGE_RESOURCE_NUM; i++) {
-> > +		if (bus->resource[i] =3D=3D res) {
-> > +			bus->resource[i] =3D NULL;
-> > +			return;
-> > +		}
-> > +	}
-> > +
-> > +	list_for_each_entry_safe(bus_res, tmp, &bus->resources, list) {
-> > +		if (bus_res->res =3D=3D res) {
-> > +			list_del(&bus_res->list);
-> > +			kfree(bus_res);
-> > +			return;
-> > +		}
-> > +	}
-> > +	return;
-> > +
->=20
-> Superfluous "return" and blank line.
-
-Will drop.
-
->=20
-> > +}
-> > +
-> >  void pci_bus_remove_resources(struct pci_bus *bus)
-> >  {
-> >  	int i;
-> > diff --git a/include/linux/pci.h b/include/linux/pci.h
-> > index adffd65e84b4..3b1974e2ec73 100644
-> > --- a/include/linux/pci.h
-> > +++ b/include/linux/pci.h
-> > @@ -1436,6 +1436,7 @@ void pci_bus_add_resource(struct pci_bus *bus, st=
-ruct resource *res,
-> >  			  unsigned int flags);
-> >  struct resource *pci_bus_resource_n(const struct pci_bus *bus, int n);
-> >  void pci_bus_remove_resources(struct pci_bus *bus);
-> > +void pci_bus_remove_resource(struct pci_bus *bus, struct resource *res=
-);
-> >  int devm_request_pci_bus_resources(struct device *dev,
-> >  				   struct list_head *resources);
-> > =20
-> > --=20
-> > 2.37.2
-> >=20
-
+ Documentation/admin-guide/cgroup-v2.rst            |    3 +
+ Documentation/scheduler/index.rst                  |    1 +
+ Documentation/scheduler/sched-util-clamp.rst       |  741 ++++++++++++
+ arch/alpha/kernel/process.c                        |    1 -
+ arch/alpha/kernel/vmlinux.lds.S                    |    1 -
+ arch/arc/kernel/process.c                          |    3 +
+ arch/arc/kernel/vmlinux.lds.S                      |    1 -
+ arch/arm/include/asm/vmlinux.lds.h                 |    1 -
+ arch/arm/kernel/cpuidle.c                          |    4 +-
+ arch/arm/kernel/process.c                          |    1 -
+ arch/arm/kernel/smp.c                              |    6 +-
+ arch/arm/mach-davinci/cpuidle.c                    |    4 +-
+ arch/arm/mach-gemini/board-dt.c                    |    3 +-
+ arch/arm/mach-imx/cpuidle-imx5.c                   |    4 +-
+ arch/arm/mach-imx/cpuidle-imx6q.c                  |    8 +-
+ arch/arm/mach-imx/cpuidle-imx6sl.c                 |    4 +-
+ arch/arm/mach-imx/cpuidle-imx6sx.c                 |    9 +-
+ arch/arm/mach-imx/cpuidle-imx7ulp.c                |    4 +-
+ arch/arm/mach-omap2/common.h                       |    6 +-
+ arch/arm/mach-omap2/cpuidle34xx.c                  |   16 +-
+ arch/arm/mach-omap2/cpuidle44xx.c                  |   29 +-
+ arch/arm/mach-omap2/omap-mpuss-lowpower.c          |   12 +-
+ arch/arm/mach-omap2/pm.h                           |    2 +-
+ arch/arm/mach-omap2/pm24xx.c                       |   51 +-
+ arch/arm/mach-omap2/pm34xx.c                       |   14 +-
+ arch/arm/mach-omap2/pm44xx.c                       |    2 +-
+ arch/arm/mach-omap2/powerdomain.c                  |   10 +-
+ arch/arm/mach-s3c/cpuidle-s3c64xx.c                |    5 +-
+ arch/arm64/kernel/cpuidle.c                        |    6 +-
+ arch/arm64/kernel/idle.c                           |    1 -
+ arch/arm64/kernel/smp.c                            |    4 +-
+ arch/arm64/kernel/suspend.c                        |   12 +-
+ arch/arm64/kernel/vmlinux.lds.S                    |    1 -
+ arch/csky/kernel/process.c                         |    1 -
+ arch/csky/kernel/smp.c                             |    2 +-
+ arch/csky/kernel/vmlinux.lds.S                     |    1 -
+ arch/hexagon/kernel/process.c                      |    1 -
+ arch/hexagon/kernel/vmlinux.lds.S                  |    1 -
+ arch/ia64/kernel/process.c                         |    1 +
+ arch/ia64/kernel/time.c                            |    1 +
+ arch/ia64/kernel/vmlinux.lds.S                     |    1 -
+ arch/loongarch/kernel/idle.c                       |    1 +
+ arch/loongarch/kernel/vmlinux.lds.S                |    1 -
+ arch/m68k/kernel/vmlinux-nommu.lds                 |    1 -
+ arch/m68k/kernel/vmlinux-std.lds                   |    1 -
+ arch/m68k/kernel/vmlinux-sun3.lds                  |    1 -
+ arch/microblaze/kernel/process.c                   |    1 -
+ arch/microblaze/kernel/vmlinux.lds.S               |    1 -
+ arch/mips/kernel/idle.c                            |   14 +-
+ arch/mips/kernel/vmlinux.lds.S                     |    1 -
+ arch/nios2/kernel/process.c                        |    1 -
+ arch/nios2/kernel/vmlinux.lds.S                    |    1 -
+ arch/openrisc/kernel/process.c                     |    1 +
+ arch/openrisc/kernel/vmlinux.lds.S                 |    1 -
+ arch/parisc/kernel/process.c                       |    2 -
+ arch/parisc/kernel/vmlinux.lds.S                   |    1 -
+ arch/powerpc/kernel/idle.c                         |    5 +-
+ arch/powerpc/kernel/vmlinux.lds.S                  |    1 -
+ arch/riscv/kernel/process.c                        |    1 -
+ arch/riscv/kernel/vmlinux-xip.lds.S                |    1 -
+ arch/riscv/kernel/vmlinux.lds.S                    |    1 -
+ arch/s390/kernel/idle.c                            |    3 +-
+ arch/s390/kernel/vmlinux.lds.S                     |    1 -
+ arch/s390/kernel/vtime.c                           |    2 +-
+ arch/sh/kernel/idle.c                              |    1 +
+ arch/sh/kernel/vmlinux.lds.S                       |    1 -
+ arch/sparc/kernel/leon_pmc.c                       |    4 +
+ arch/sparc/kernel/process_32.c                     |    1 -
+ arch/sparc/kernel/process_64.c                     |    3 +-
+ arch/sparc/kernel/vmlinux.lds.S                    |    1 -
+ arch/um/kernel/dyn.lds.S                           |    1 -
+ arch/um/kernel/process.c                           |    1 -
+ arch/um/kernel/uml.lds.S                           |    1 -
+ arch/x86/boot/compressed/vmlinux.lds.S             |    1 +
+ arch/x86/coco/tdx/tdcall.S                         |   15 +-
+ arch/x86/coco/tdx/tdx.c                            |   25 +-
+ arch/x86/events/amd/brs.c                          |   13 +-
+ arch/x86/include/asm/atomic64_32.h                 |   44 +-
+ arch/x86/include/asm/atomic64_64.h                 |   36 +-
+ arch/x86/include/asm/fpu/xcr.h                     |    4 +-
+ arch/x86/include/asm/irqflags.h                    |   11 +-
+ arch/x86/include/asm/kvmclock.h                    |    2 +-
+ arch/x86/include/asm/mwait.h                       |   14 +-
+ arch/x86/include/asm/nospec-branch.h               |    2 +-
+ arch/x86/include/asm/paravirt.h                    |    8 +-
+ arch/x86/include/asm/perf_event.h                  |    2 +-
+ arch/x86/include/asm/pvclock.h                     |    3 +-
+ arch/x86/include/asm/shared/io.h                   |    4 +-
+ arch/x86/include/asm/shared/tdx.h                  |    1 -
+ arch/x86/include/asm/special_insns.h               |    8 +-
+ arch/x86/include/asm/xen/hypercall.h               |    2 +-
+ arch/x86/kernel/cpu/bugs.c                         |    2 +-
+ arch/x86/kernel/cpu/vmware.c                       |    2 +-
+ arch/x86/kernel/fpu/core.c                         |    4 +-
+ arch/x86/kernel/kvmclock.c                         |    6 +-
+ arch/x86/kernel/paravirt.c                         |   14 +-
+ arch/x86/kernel/process.c                          |   65 +-
+ arch/x86/kernel/pvclock.c                          |   22 +-
+ arch/x86/kernel/tsc.c                              |    7 +-
+ arch/x86/kernel/vmlinux.lds.S                      |    1 -
+ arch/x86/lib/memcpy_64.S                           |    5 +-
+ arch/x86/lib/memmove_64.S                          |    4 +-
+ arch/x86/lib/memset_64.S                           |    4 +-
+ arch/x86/xen/enlighten_pv.c                        |    2 +-
+ arch/x86/xen/irq.c                                 |    2 +-
+ arch/x86/xen/time.c                                |   12 +-
+ arch/xtensa/kernel/process.c                       |    1 +
+ arch/xtensa/kernel/vmlinux.lds.S                   |    1 -
+ drivers/acpi/processor_idle.c                      |   28 +-
+ drivers/base/power/runtime.c                       |   24 +-
+ drivers/clk/clk.c                                  |    8 +-
+ drivers/cpuidle/cpuidle-arm.c                      |    4 +-
+ drivers/cpuidle/cpuidle-big_little.c               |   12 +-
+ drivers/cpuidle/cpuidle-mvebu-v7.c                 |   15 +-
+ drivers/cpuidle/cpuidle-psci.c                     |   22 +-
+ drivers/cpuidle/cpuidle-qcom-spm.c                 |    4 +-
+ drivers/cpuidle/cpuidle-riscv-sbi.c                |   19 +-
+ drivers/cpuidle/cpuidle-tegra.c                    |   31 +-
+ drivers/cpuidle/cpuidle.c                          |   72 +-
+ drivers/cpuidle/dt_idle_states.c                   |    2 +-
+ drivers/cpuidle/poll_state.c                       |    8 +-
+ drivers/firmware/psci/psci.c                       |   42 +-
+ drivers/idle/intel_idle.c                          |   19 +-
+ drivers/perf/arm_pmu.c                             |   11 +-
+ drivers/perf/riscv_pmu_sbi.c                       |    8 +-
+ fs/binfmt_elf.c                                    |    5 +
+ fs/exec.c                                          |    4 +
+ include/asm-generic/vmlinux.lds.h                  |    9 +-
+ include/linux/auxvec.h                             |    2 +-
+ include/linux/clockchips.h                         |    4 +-
+ include/linux/compiler_types.h                     |   18 +-
+ include/linux/context_tracking.h                   |   27 +
+ include/linux/cpu.h                                |    3 -
+ include/linux/cpuidle.h                            |   50 +-
+ include/linux/cpumask.h                            |    4 +-
+ include/linux/math64.h                             |    4 +-
+ include/linux/mm.h                                 |   25 +
+ include/linux/mm_types.h                           |   43 +-
+ include/linux/percpu-defs.h                        |    2 +-
+ include/linux/sched.h                              |    9 +
+ include/linux/sched/clock.h                        |    8 +-
+ include/linux/sched/cputime.h                      |    9 -
+ include/linux/sched/idle.h                         |   40 +-
+ include/linux/thread_info.h                        |   18 +-
+ include/linux/trace_recursion.h                    |   18 +
+ include/linux/tracepoint.h                         |   15 +-
+ include/trace/events/rseq.h                        |    7 +-
+ include/uapi/linux/auxvec.h                        |    2 +
+ include/uapi/linux/membarrier.h                    |    4 +
+ include/uapi/linux/rseq.h                          |   22 +
+ init/Kconfig                                       |    4 +
+ kernel/context_tracking.c                          |   12 +-
+ kernel/cpu_pm.c                                    |    9 -
+ kernel/exit.c                                      |    7 +
+ kernel/fork.c                                      |    8 +-
+ kernel/locking/lockdep.c                           |    3 +
+ kernel/panic.c                                     |    5 +
+ kernel/printk/printk.c                             |    2 +-
+ kernel/ptrace.c                                    |    2 +-
+ kernel/rseq.c                                      |   65 +-
+ kernel/sched/clock.c                               |   27 +-
+ kernel/sched/core.c                                |  134 ++-
+ kernel/sched/cpufreq_schedutil.c                   |   43 +-
+ kernel/sched/cputime.c                             |    4 +
+ kernel/sched/deadline.c                            |   42 +-
+ kernel/sched/fair.c                                |  389 ++++---
+ kernel/sched/idle.c                                |   47 +-
+ kernel/sched/membarrier.c                          |   39 +-
+ kernel/sched/rt.c                                  |    5 +-
+ kernel/sched/sched.h                               |  107 +-
+ kernel/sched/topology.c                            |    4 +-
+ kernel/signal.c                                    |    2 +
+ kernel/time/tick-broadcast-hrtimer.c               |   29 +-
+ kernel/time/tick-broadcast.c                       |    6 +-
+ kernel/trace/trace.c                               |    3 +
+ kernel/trace/trace_preemptirq.c                    |   61 +-
+ lib/bug.c                                          |   15 +-
+ lib/ubsan.c                                        |    5 +-
+ mm/kasan/kasan.h                                   |    4 +
+ mm/kasan/shadow.c                                  |   38 +
+ tools/objtool/check.c                              |   14 +
+ tools/testing/selftests/kvm/rseq_test.c            |   16 +-
+ .../selftests/membarrier/membarrier_test_impl.h    |   33 +
+ .../membarrier/membarrier_test_multi_thread.c      |    2 +-
+ .../membarrier/membarrier_test_single_thread.c     |    6 +-
+ tools/testing/selftests/rseq/.gitignore            |    4 +
+ tools/testing/selftests/rseq/Makefile              |   20 +-
+ .../testing/selftests/rseq/basic_percpu_ops_test.c |   46 +-
+ tools/testing/selftests/rseq/basic_test.c          |    4 +
+ tools/testing/selftests/rseq/compiler.h            |    6 +
+ tools/testing/selftests/rseq/param_test.c          |  157 ++-
+ tools/testing/selftests/rseq/rseq-abi.h            |   22 +
+ tools/testing/selftests/rseq/rseq-arm-bits.h       |  505 +++++++++
+ tools/testing/selftests/rseq/rseq-arm.h            |  701 +-----------
+ tools/testing/selftests/rseq/rseq-arm64-bits.h     |  392 +++++++
+ tools/testing/selftests/rseq/rseq-arm64.h          |  520 +--------
+ tools/testing/selftests/rseq/rseq-bits-reset.h     |   11 +
+ tools/testing/selftests/rseq/rseq-bits-template.h  |   41 +
+ tools/testing/selftests/rseq/rseq-mips-bits.h      |  462 ++++++++
+ tools/testing/selftests/rseq/rseq-mips.h           |  646 +----------
+ tools/testing/selftests/rseq/rseq-ppc-bits.h       |  454 ++++++++
+ tools/testing/selftests/rseq/rseq-ppc.h            |  617 +---------
+ tools/testing/selftests/rseq/rseq-riscv-bits.h     |  410 +++++++
+ tools/testing/selftests/rseq/rseq-riscv.h          |  529 +--------
+ tools/testing/selftests/rseq/rseq-s390-bits.h      |  474 ++++++++
+ tools/testing/selftests/rseq/rseq-s390.h           |  495 +-------
+ tools/testing/selftests/rseq/rseq-skip.h           |   65 --
+ tools/testing/selftests/rseq/rseq-x86-bits.h       |  993 ++++++++++++++++
+ tools/testing/selftests/rseq/rseq-x86.h            | 1193 +-------------------
+ tools/testing/selftests/rseq/rseq.c                |   91 +-
+ tools/testing/selftests/rseq/rseq.h                |  215 +++-
+ tools/testing/selftests/rseq/run_param_test.sh     |    5 +
+ 212 files changed, 6784 insertions(+), 5553 deletions(-)
+ create mode 100644 Documentation/scheduler/sched-util-clamp.rst
+ create mode 100644 tools/testing/selftests/rseq/rseq-arm-bits.h
+ create mode 100644 tools/testing/selftests/rseq/rseq-arm64-bits.h
+ create mode 100644 tools/testing/selftests/rseq/rseq-bits-reset.h
+ create mode 100644 tools/testing/selftests/rseq/rseq-bits-template.h
+ create mode 100644 tools/testing/selftests/rseq/rseq-mips-bits.h
+ create mode 100644 tools/testing/selftests/rseq/rseq-ppc-bits.h
+ create mode 100644 tools/testing/selftests/rseq/rseq-riscv-bits.h
+ create mode 100644 tools/testing/selftests/rseq/rseq-s390-bits.h
+ delete mode 100644 tools/testing/selftests/rseq/rseq-skip.h
+ create mode 100644 tools/testing/selftests/rseq/rseq-x86-bits.h
