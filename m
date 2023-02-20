@@ -2,81 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 872D269C6AC
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Feb 2023 09:30:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E86469C6B2
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Feb 2023 09:31:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230113AbjBTIae (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Feb 2023 03:30:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44054 "EHLO
+        id S231208AbjBTIbB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Feb 2023 03:31:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44184 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229663AbjBTIac (ORCPT
+        with ESMTP id S231180AbjBTIag (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Feb 2023 03:30:32 -0500
-Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75A0013D46;
-        Mon, 20 Feb 2023 00:30:19 -0800 (PST)
-Received: by mail-wr1-x42b.google.com with SMTP id t15so308685wrz.7;
-        Mon, 20 Feb 2023 00:30:19 -0800 (PST)
+        Mon, 20 Feb 2023 03:30:36 -0500
+Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0884C13503
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Feb 2023 00:30:28 -0800 (PST)
+Received: by mail-ed1-x52e.google.com with SMTP id ec43so890337edb.8
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Feb 2023 00:30:27 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=VgPzqSQESn15Hy9eYP0tvbIKK9Eg8jsN9T7ptRq/d64=;
-        b=lesBfLDhuZMdjd7WwVl9vGUJ8u9y8h9h408IcwB5VqaIf+ZJfPmpaULMS9grpSzRFe
-         YqCHj0FSOHol5kDESczrYElfo5GtBRxDJcLQOXBWpfzpt9zKGepavo0CEAsFoJns5dAq
-         bpFbXqu5dc+VtqgwGGTZUmBaD1pMekfNhY6keQ/UFPKs+yTy8AW06Y9MXGqfjnJ4IBMG
-         W5CmTyyHQ/oK2C+Tx3szP+VwLNVK2kTENie49LFD9CVSLW3Rt48PZvGIxUBlK3AQuyIh
-         6ZJ0pyMOlEnHtVvOhfyPE/G46MFCu1FbnQUOxQN8UNkY46v4Dr24i8nAM2NLRanBb+gD
-         4ccw==
+        bh=Js7L+CkgcBF/y/Uhhz2Sc316S081v8fL7RAo0kHVqwk=;
+        b=IGB4kXcYu67P245U4esqcKoLzMy8Kjkvo8zfwueszOkGC3HxvBxpRftuFL6CR+yVQL
+         ejXHuDRCpdSZ75of2N6xqwXKIHoTyBILDODkcC3wPyNr4jTSWPSYhksUjim9EWz3fvJZ
+         i5M7kaO2WFG0NvrM9AriGfWqLuhbqtq61LGCGmDz9dQXh8LdXOyT741FM2wiTifIxTvm
+         BrW5hKvkRRjx0DQcFHAZZOAJyaei5EG6MfUUW5L74UWcDjxyZJnyW6dJzcSR6qf1uSlB
+         6WpTPlMbaO2J+Lq36Nmn8mCz1KmorioT4Thf0lOdQ1juqCRwDYA48BwjKqL+qjxxacXQ
+         mFkg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+        h=content-transfer-encoding:in-reply-to:from:references:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=VgPzqSQESn15Hy9eYP0tvbIKK9Eg8jsN9T7ptRq/d64=;
-        b=hZdxBq1OgLJqWhVQEio9cAmtF22PDzKmcK5xE92puNgBuCvF0yToBea+rbo3HU5M56
-         m+cnEdDQxnyR5UqxnvbDJVJB60IBTBGVsA+a1Ndl/nefWHnGA5/PhCEO4c3RjTLNpYpX
-         vtlSyMsw2KnlLLo3DYunZdjxnC9QwM3l+RpbD4vRJyXeLMUL8cXCxdox4y3SRFoBgVdZ
-         s9CgSx7//A9UKOBSLJ0FKyH+5sMAHfItrVXgsKTFb4MCSVzwwfnrNk1RQFCNl/OzrKVe
-         C794HxvDYqMb8WDhra1zc+U98TtUgUfJgqdXe/h5/XuY+xrI2a5h3M9NVK8EQDyelMii
-         +Uqw==
-X-Gm-Message-State: AO0yUKVyYT7ktmefWSPf4ZM7MTTWaay+oX8MQuxln6NBjc1djRMGvrtC
-        hdtRPJ6yiWHkt+gBPhl0IXbWO3DyHng=
-X-Google-Smtp-Source: AK7set9Ea53Z2FgK27fMofUSVbW+R32Gx3MvdczNOshe2uNIXBxf3i0O/XEWa00S2LjGuIZfZ7oaHw==
-X-Received: by 2002:a5d:4046:0:b0:2c5:5ff8:6aff with SMTP id w6-20020a5d4046000000b002c55ff86affmr1236772wrp.3.1676881817750;
-        Mon, 20 Feb 2023 00:30:17 -0800 (PST)
-Received: from [192.168.1.115] ([77.124.87.109])
-        by smtp.gmail.com with ESMTPSA id s14-20020a5d510e000000b002c569acab1esm1102877wrt.73.2023.02.20.00.30.16
+        bh=Js7L+CkgcBF/y/Uhhz2Sc316S081v8fL7RAo0kHVqwk=;
+        b=MO1ArtAB/vbSUwNlu0nCLlMWt0sQIEIp/eWZ2DBepTgPry26jOgCiHsDpktu6FQiE+
+         /mw3BBo7vapwoysv6FyB21RUUiJ2XNhhVelmH1hPJwH8R6YGx5qOsXVQWLBEFKljfKDC
+         vZKaMuIJGuWA0H3KUEItaT7n4sFkJnb3tH1tn9kDRr7xMDufyhFPTeP/CAfmhyjSjqCt
+         TX4Dg4uOsush4Z8uA9fmx9oUr6H8nLkZ9C/9yN41o/ZjTxnZb3y3Sxl8h62Gj5E5lh9N
+         SmL0QKyqK+g2SrzIgGa9LYOQ/8PdoNa4p1pDHb7Ak0AXAFVFfkxG35OTnVnfhFaOI3tO
+         cJKQ==
+X-Gm-Message-State: AO0yUKXU1k1GZ9GyNd6fR4C1opRY8rDFisXrU7u/28YL28HQ3decN7Sd
+        ERDu73BNBdUIDZ4HL6M3xw6TNA==
+X-Google-Smtp-Source: AK7set+kA39fOKMbx4fa7bjTggtkXN1nyAZdsFsGIrOygGYCF8H99jPC9Z9nxFi5UUMXqsaVR8tAKg==
+X-Received: by 2002:a17:907:6e8f:b0:878:4d11:f868 with SMTP id sh15-20020a1709076e8f00b008784d11f868mr13303080ejc.2.1676881826565;
+        Mon, 20 Feb 2023 00:30:26 -0800 (PST)
+Received: from [192.168.1.109] ([178.197.216.144])
+        by smtp.gmail.com with ESMTPSA id mj8-20020a170906af8800b008b12c368ba0sm5443723ejb.45.2023.02.20.00.30.25
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 20 Feb 2023 00:30:17 -0800 (PST)
-Message-ID: <e8551085-30b8-dce3-28b7-233b47a7ddc1@gmail.com>
-Date:   Mon, 20 Feb 2023 10:30:15 +0200
+        Mon, 20 Feb 2023 00:30:26 -0800 (PST)
+Message-ID: <54ef0dee-30dc-3ba9-d2f7-8270204b5505@linaro.org>
+Date:   Mon, 20 Feb 2023 09:30:24 +0100
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.2
-Subject: Re: [PATCH net] mlx4: supress fortify for inlined xmit
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH v5 0/2] Add ASPEED AST2600 I2Cv2 controller driver
 Content-Language: en-US
-To:     Kees Cook <kees@kernel.org>, Josef Oskera <joskera@redhat.com>,
-        netdev@vger.kernel.org
-Cc:     Tariq Toukan <tariqt@nvidia.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Kees Cook <keescook@chromium.org>, linux-rdma@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20230217094541.2362873-1-joskera@redhat.com>
- <2E9A091B-ABA3-4B99-965A-EA893F402F25@kernel.org>
- <febbc959-4cc7-a810-8000-db37f2de53cc@gmail.com>
-From:   Tariq Toukan <ttoukan.linux@gmail.com>
-In-Reply-To: <febbc959-4cc7-a810-8000-db37f2de53cc@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+To:     Ryan Chen <ryan_chen@aspeedtech.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Joel Stanley <joel@jms.id.au>,
+        Andrew Jeffery <andrew@aj.id.au>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        openbmc@lists.ozlabs.org, linux-arm-kernel@lists.infradead.org,
+        linux-aspeed@lists.ozlabs.org, linux-kernel@vger.kernel.org
+References: <20230220061745.1973981-1-ryan_chen@aspeedtech.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230220061745.1973981-1-ryan_chen@aspeedtech.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -84,91 +80,19 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
+On 20/02/2023 07:17, Ryan Chen wrote:
+> This series add AST2600 i2cv2 new register set driver. The i2cv2 new
+> register set have new clock divider option for more flexiable generation.
 
-On 19/02/2023 11:16, Tariq Toukan wrote:
-> 
-> 
-> On 18/02/2023 18:26, Kees Cook wrote:
->> On February 17, 2023 1:45:41 AM PST, Josef Oskera <joskera@redhat.com> 
->> wrote:
->>> This call "skb_copy_from_linear_data(skb, inl + 1, spc)" triggers 
->>> FORTIFY memcpy()
->>> warning on ppc64 platform.
->>>
->>> In function ‘fortify_memcpy_chk’,
->>>     inlined from ‘skb_copy_from_linear_data’ at 
->>> ./include/linux/skbuff.h:4029:2,
->>>     inlined from ‘build_inline_wqe’ at 
->>> drivers/net/ethernet/mellanox/mlx4/en_tx.c:722:4,
->>>     inlined from ‘mlx4_en_xmit’ at 
->>> drivers/net/ethernet/mellanox/mlx4/en_tx.c:1066:3:
->>> ./include/linux/fortify-string.h:513:25: error: call to 
->>> ‘__write_overflow_field’ declared with attribute warning: detected 
->>> write beyond size of field (1st parameter); maybe use struct_group()? 
->>> [-Werror=attribute-warning]
->>>   513 |                         __write_overflow_field(p_size_field, 
->>> size);
->>>       |                         
->>> ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->>>
->>> Same behaviour on x86 you can get if you use "__always_inline" 
->>> instead of
->>> "inline" for skb_copy_from_linear_data() in skbuff.h
->>>
->>> The call here copies data into inlined tx destricptor, which has 104 
->>> bytes
->>> (MAX_INLINE) space for data payload. In this case "spc" is known in 
->>> compile-time
->>> but the destination is used with hidden knowledge (real structure of 
->>> destination
->>> is different from that the compiler can see). That cause the fortify 
->>> warning
->>> because compiler can check bounds, but the real bounds are different.
->>> "spc" can't be bigger than 64 bytes (MLX4_INLINE_ALIGN), so the data 
->>> can always
->>> fit into inlined tx descriptor.
->>> The fact that "inl" points into inlined tx descriptor is determined 
->>> earlier
->>> in mlx4_en_xmit().
->>>
->>> Fixes: f68f2ff91512c1 fortify: Detect struct member overflows in 
->>> memcpy() at compile-time
->>> Signed-off-by: Josef Oskera <joskera@redhat.com>
->>> ---
->>> drivers/net/ethernet/mellanox/mlx4/en_tx.c | 11 ++++++++++-
->>> 1 file changed, 10 insertions(+), 1 deletion(-)
->>>
->>> diff --git a/drivers/net/ethernet/mellanox/mlx4/en_tx.c 
->>> b/drivers/net/ethernet/mellanox/mlx4/en_tx.c
->>> index c5758637b7bed6..f30ca9fe90e5b4 100644
->>> --- a/drivers/net/ethernet/mellanox/mlx4/en_tx.c
->>> +++ b/drivers/net/ethernet/mellanox/mlx4/en_tx.c
->>> @@ -719,7 +719,16 @@ static void build_inline_wqe(struct 
->>> mlx4_en_tx_desc *tx_desc,
->>>             inl = (void *) (inl + 1) + spc;
->>>             memcpy(((void *)(inl + 1)), fragptr, skb->len - spc);
->>
->> Using "unsafe" isn't the right solution here. What needs fixing is the 
->> "inl + 1" pattern which lacks any sense from the compilet's 
->> perspective. The struct of inl needs to end with a flex array, and it 
->> should be used for all the accesses. i.e. replace all the "inl + 1" 
->> instances with "inl->data". This makes it more readable for humans 
->> too. :)
->>
->> I can send a patch...
->>
-> 
-> Although expanding the mlx4_wqe_inline_seg struct with a flex array 
-> sounds valid, I wouldn't go that way as it requires a larger change, 
-> touching common and RDMA code as well, for a driver in it's end-of-life 
-> stage.
-> 
-> We already have such unsafe_memcpy usage in mlx5 driver, so I can accept 
-> it here as well.
-> 
-> Let's keep the change as contained as possible.
-> 
-> Reviewed-by: Tariq Toukan <tariqt@nvidia.com>
+Typo: flexible
 
-Kees posted a contained alternative solution.
-Let's go with that one. Thanks.
+> And also have separate i2c master and slave register set for control.
+
+Since several of my questions remained unanswered and quite frankly it's
+fruitless... so let me read the commit msg directly - it's the same
+device, just with different register layout. Having new compatible makes
+sense, but this should be part of old binding.
+
+Best regards,
+Krzysztof
+
