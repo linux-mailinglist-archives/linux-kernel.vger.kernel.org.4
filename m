@@ -2,82 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F60669D551
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Feb 2023 21:52:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DC16A69D576
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Feb 2023 21:58:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232222AbjBTUwJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Feb 2023 15:52:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39668 "EHLO
+        id S232399AbjBTU6M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Feb 2023 15:58:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42176 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231708AbjBTUwH (ORCPT
+        with ESMTP id S232300AbjBTU6J (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Feb 2023 15:52:07 -0500
-Received: from mout.gmx.net (mout.gmx.net [212.227.15.15])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A19C7EDC;
-        Mon, 20 Feb 2023 12:52:05 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.de; s=s31663417;
-        t=1676926324; i=rwarsow@gmx.de;
-        bh=Z50Va+cpon0wV2h3lbmhdnICZt1BGnwSH/yeqkJPa3Q=;
-        h=X-UI-Sender-Class:Date:From:To:Cc:Subject;
-        b=tF2VntlDv9XmcNLE4D5Vq87I2vdIllVCfRkQYt1pm+m6Vix1/gsCu/Yjlhqp7JA+e
-         xADzQqIXdYiiu4qcuH/xz3RqYPo1PUpwaZ4Kh9oAEKFHidVZ9Kg/dFjFVENzBfG5qa
-         L4T9Pm4aoAA+G+Bxlt6/+C4k76r1MNNXkiH9hEZ19dBmBQptQkBbZHcJRoCJwg/4LV
-         BecaQ0pLMz6OT3TuuOurVKJSC4me/TzHESS3gipZ41tr9g3Jdie7lfGuEA4YICfPUV
-         KGGKKGgrIY/xUeLbG7ut6sPjW98k1Pr0rSj7pa0GHsh1CupYr67ZVybMpw0GXN4Z6J
-         KSwdIrFGPc59Q==
-X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from [192.168.100.20] ([46.142.33.120]) by mail.gmx.net (mrgmx005
- [212.227.17.190]) with ESMTPSA (Nemesis) id 1N4zAs-1oVXSy1Mpw-010vk6; Mon, 20
- Feb 2023 21:52:04 +0100
-Message-ID: <e7970821-017f-df54-85ee-66e7cc61aee6@gmx.de>
-Date:   Mon, 20 Feb 2023 21:52:03 +0100
+        Mon, 20 Feb 2023 15:58:09 -0500
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E99912F16;
+        Mon, 20 Feb 2023 12:58:07 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=tSEs9ht0iaoG7yWtyGM3oIpGa4Q834m/lzRPmNUenPM=; b=P70RpSPdOwsJJCNEvNL96B9dbQ
+        2ry6UEWVKemTiXJUvKBFX7mFl8R6Ss7NmtVASjgDDpWAODVgkqyHEYy2chdF6JSLwELZFM3Z0s/pg
+        +aHvcT7b/ZG1hvxml3x/qtzkCl29OqEOXY9AhEpqJ73KDYpcRMdUeAtfCvRW9VC4mbdYra3I6uXgo
+        iHmgxQ7G0S18FD99bppKicS8uFglD642Mk0rf1kzAh4PZfVZI9v55iVJEwlgY3rLO4KfjJTxeK9g7
+        fayoQxIyrUGwlSMQ2oT+0gM2P5JQxRHC/ymIJs8vs1PWgQ39CjS1ceX+3Vd9Vs/TEhR/MGKqEmAgx
+        kqLzS1Qw==;
+Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1pUDEZ-00C1OQ-VY; Mon, 20 Feb 2023 20:58:04 +0000
+Date:   Mon, 20 Feb 2023 20:58:03 +0000
+From:   Matthew Wilcox <willy@infradead.org>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Steve French <smfrench@gmail.com>,
+        CIFS <linux-cifs@vger.kernel.org>,
+        David Howells <dhowells@redhat.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Steve French <stfrench@microsoft.com>,
+        "Vishal Moola (Oracle)" <vishal.moola@gmail.com>
+Subject: Re: linux-next: manual merge of the mm-stable tree with the cifs tree
+Message-ID: <Y/Pe2xHklSr1hDtz@casper.infradead.org>
+References: <20230220152933.1ab8fa4a@canb.auug.org.au>
+ <Y/N8hVWeR3AjssUC@casper.infradead.org>
+ <20230220190157.3b43b9a7@canb.auug.org.au>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-From:   Ronald Warsow <rwarsow@gmx.de>
-To:     linux-kernel@vger.kernel.org
-Cc:     stable@vger.kernel.org
-Content-Language: de-DE
-Subject: Re: [PATCH 6.1 000/118] 6.1.13-rc1 review
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Provags-ID: V03:K1:ifcX1ikFTabIyuEktYmnZTMkrhs/ZEv1YZsDZUE/ZPAXzmeHfBv
- JSioTobIArSoWDaFzwLnfv3rcO84Av+Aw/fdX6MlpO4x1Cdzm9OA9Eyi8q6Ik7RgqqGMGgh
- hfGGynJQSfacXvJQ9KiBykkQTPuntdBoarWx+cH3xOSNvQekcYfo3ky0HcMJrevm0e3xyVe
- fLQUstAXAbjB3Q7wxmmWw==
-UI-OutboundReport: notjunk:1;M01:P0:e5uGblQIkNY=;vy2nP7KZZOVbUvylZP76LtFlRDT
- VaRL/kHqOPyrApeGhOGY4vMdl9vREheSc17zSGeMnAq/rGWDiF7809qYR8AW+gHmEOmZC2Uaa
- D4sEx/9RQvrU4tzfxc3on7ieyOGRSldUlLoDNuXd6dfD/t63uv0bGRMhAwCqcFJnYLtITmR+i
- 25HGeBoSQExNbQZyPi8JZnzDt/ExFwiqJC0vGey6Evpt7oJ3mgdkOElvcsA8D1qU2ongi6t+8
- AWouJf0kBrwhxKK7rh9be0k4wxDxJxD3K8buG7RriVAoIJwevqgEtO4xvNCqNVOPbTj9ANZuy
- oFM30SUXJ/shh3GF3bzy2OEFYBusyuxWQm5byvUrtMiu0wtUDofNhKOwzE6luSQL94qnnXBzf
- SoPlRnhH9zKAFbXaIf4P4DYLCuasSKM7vQl+ql3jR926CX7JDREpHYW58GEy/Z+QaKmd9bopr
- rdhcm0gn1cj0oSDI3X0L8hM132ekQu3cX4Ow0OAjLl0DkD9Vy83uQX9tG0bfYuK/sI4kmmglB
- aqdmtwNOpP40Rk9qKKSdyssgxkBG46QXJhzckSsnoZh3z0MSb/fonXWHlDVxA7NVFQdvSfnTI
- ieaemqirTmcUAXisWzCd+p4i15ELEivhY6xWTMgiRQurunX0RAuRnlT+FoIO/2jZXgZKDI3ka
- NimNHO5eLfaa4IuXWrTsrD81wLv+LYhIudyej5LKl45vLk3v9+Z0w6h4jUFJWf3GrOgiwbCo5
- nUVEmbkUVuZ5uxHdoAU0majR1sz6VwDE8Ilgup7KwWAbtg0/OewEZko1X5W3s8fs2BaCrJXJk
- lRH913fzwv9lgtRGC/8h/R52ZwNr1iSn8VvZUlclnAkA68UvfsmpaAU39cZCX1tEdVAzOefjU
- u61QaB6rGsf80dq9rUdg+gSUU79rmKexPWIzV5h+uEgPxqvcPaRv8c3/Ii2S7ahxvOGR5l/A8
- /OGON7OWvTQhWoQKqVR6A1+Gimg=
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230220190157.3b43b9a7@canb.auug.org.au>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Greg
+On Mon, Feb 20, 2023 at 07:01:57PM +1100, Stephen Rothwell wrote:
+> Hi Matthew,
+> 
+> On Mon, 20 Feb 2023 13:58:29 +0000 Matthew Wilcox <willy@infradead.org> wrote:
+> >
+> > On Mon, Feb 20, 2023 at 03:29:33PM +1100, Stephen Rothwell wrote:
+> > > 
+> > > Today's linux-next merge of the mm-stable tree got a conflict in:
+> > > 
+> > >   fs/cifs/file.c
+> > > 
+> > > between commit:
+> > > 
+> > >   c8859bc0c129 ("cifs: Remove unused code")
+> > > 
+> > > from the cifs tree and commits:
+> > > 
+> > >   4cda80f3a7a5 ("cifs: convert wdata_alloc_and_fillpages() to use filemap_get_folios_tag()")
+> > >   d585bdbeb79a ("fs: convert writepage_t callback to pass a folio")
+> > > 
+> > > from the mm-stable tree.
+> > > 
+> > > This is a real mess :-(  
+> > 
+> > Doesn't look too bad to me.  Dave's commit is just removing the
+> > functions, so it doesn't matter how they're being changed.
+> 
+> The problem I see is that an earlier commit in the cifs tree moves the
+> use of find_get_pages_range_tag() to another function and 4cda80f3a7a5
+> then removes find_get_pages_range_tag().
 
-6.1.13-rc1
-
-compiles, boots and runs here on x86_64
-(Intel i5-11400, Fedora 37)
-
-Thanks
-
-Tested-by: Ronald Warsow <rwarsow@gmx.de>
+Ah.  Just removing all traces of it should be fine.  As long as there
+are no remaining callers of find_get_pages_range_tag() after the merge,
+it's good from my point of view.
 
