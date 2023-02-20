@@ -2,72 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2970969C65F
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Feb 2023 09:16:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6AD6269C663
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Feb 2023 09:16:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229885AbjBTIQI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Feb 2023 03:16:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60814 "EHLO
+        id S230230AbjBTIQ2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Feb 2023 03:16:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32958 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229451AbjBTIQG (ORCPT
+        with ESMTP id S230121AbjBTIQ0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Feb 2023 03:16:06 -0500
-Received: from mail-qv1-f51.google.com (mail-qv1-f51.google.com [209.85.219.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 570D411EAC;
-        Mon, 20 Feb 2023 00:16:03 -0800 (PST)
-Received: by mail-qv1-f51.google.com with SMTP id nv15so439034qvb.7;
-        Mon, 20 Feb 2023 00:16:03 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=GhdeujqRrZ30kHbfp+IOG4sWxnU1RJIBCIHIcK/nUfw=;
-        b=mAch6/WxRQr30734M+PlFZ3k0wulvkDnwQFLSC2jlmX2e0I00OYTTeuTaDdFeudzwa
-         W1FE72smK4l+pfFctloub379nzNQX7xOPOD03B7pepH7VIAhE4DfWz1Nq1aIACD4xTdr
-         unp4WR5Kqv4kp1lTg3jz44FCX5nLihaEMQGDMFYzxz4ZLHkvmvObpL5T7oEXDIivT73+
-         JGUnvhOGQURx7uPFENLmVya8acElpg7gkzieam+GYJMFqzJLQ6uJoMrijFk7VjQjrhTI
-         HKYVVTV19ndXCD5mEETfSiloREGLA6wBErEKsEFDB8bDDkcQCChVDJlyBhW+x3rV6tpE
-         QM3g==
-X-Gm-Message-State: AO0yUKU6stAy/L/RDACa6xO4YDKSG83EkVjOkL62Zf+MaopmMSLyn3by
-        5sWxehk4LyRTPDfzIXg/AXRk27kT7H5oRw==
-X-Google-Smtp-Source: AK7set+AaLu2GD+WsctcxcZEACYu/N/F6+7DGzFBzKu5gbg3+yDzec078nZ56mhtr560D7zesC6aIA==
-X-Received: by 2002:a05:6214:2a86:b0:56f:5466:20d8 with SMTP id jr6-20020a0562142a8600b0056f546620d8mr801341qvb.3.1676880961801;
-        Mon, 20 Feb 2023 00:16:01 -0800 (PST)
-Received: from mail-yb1-f180.google.com (mail-yb1-f180.google.com. [209.85.219.180])
-        by smtp.gmail.com with ESMTPSA id q188-20020a378ec5000000b0073d82a8113bsm3510028qkd.126.2023.02.20.00.16.01
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 20 Feb 2023 00:16:01 -0800 (PST)
-Received: by mail-yb1-f180.google.com with SMTP id v78so392255ybe.3;
-        Mon, 20 Feb 2023 00:16:01 -0800 (PST)
-X-Received: by 2002:a5b:f06:0:b0:95e:613:ca4c with SMTP id x6-20020a5b0f06000000b0095e0613ca4cmr125776ybr.12.1676880960980;
- Mon, 20 Feb 2023 00:16:00 -0800 (PST)
+        Mon, 20 Feb 2023 03:16:26 -0500
+Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2086.outbound.protection.outlook.com [40.107.94.86])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23DE0126E3;
+        Mon, 20 Feb 2023 00:16:20 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=XLTjAMiDk5HYX2E6tb5L0IjYpQZlD5Xur9GHlT793xdhemXq46dLRGB0muPnAtpz44h8fIQT/S9TlNLCkBo4fN5KPzr17ZxjLxoLORjgA0vlWloOnJxNgljm0R2ZxxpndRbO+/ldF4Prj6FBD1QhIqp34pUt7XkUNam/6rdJl1fDbD3GjIWsVouvOLoYRxyGSzNaTAq77svHODWkZlkr2FdDKD7Hd9dDdtGEWN5LIQOWdnMqE6nfobrThYnI0lS9Si0n3lEpwxowbH5kPnRFiRm3p+EtjRMeSBbJBZL8AUNhVWUkW7wc8PoJm3gs+DuXhIW7IS+/CjlqYcEea7qPRw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=uPIH0SA/LOj4D7ZOI/QvZ3/L2vEdx3sArdEG6dfNj4g=;
+ b=MBSvYy+sfDS1g7Hq/djd96H3qEGz2RSxoKO3iM6+WELuCYfMnM9vltxbI7rSVxTh46Gtpn40GY4TFJASf9V8mWjwPUPq2tjNnXCYaIi2UlP+JaTq06VCMUfeA0lnpAFSfpAG7/1hPEpZARLOmVmFHL/TOBnmAADwW02xt4HcwZiMNEMaiXNip2ax3fx5Ply0bxOKZE1qhO1VhkwJX4zjbniqRPy5ItOlPDRaUlIYtKzD+cW8bDQI0r3sXoA0z3fxhrD8ObnDs+A0/lr4qGfen4t8Th9B+yOO2IErDkTlffDstF7Zn/A1zEp0D7v/Cmg4kgke9H4Mi0oJeY9fJ78LCQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=uPIH0SA/LOj4D7ZOI/QvZ3/L2vEdx3sArdEG6dfNj4g=;
+ b=17YZVwdAqNWFgSxiI9WIn4hCUnepBiiJEODdmKsfBIw8hhR2Vkvq3QdyRa5sSqnRykjABZm5AYbaEv7GJMRtKllwYpKXkc/28BhrmJiSrQK0Yg0q+tYyGQw332obO6yX7BX7W81zL+U1qt7yiYXQCPtRf6DLryPArJLiN3hGLNg=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from BN8PR12MB3587.namprd12.prod.outlook.com (2603:10b6:408:43::13)
+ by IA0PR12MB7603.namprd12.prod.outlook.com (2603:10b6:208:439::9) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6111.19; Mon, 20 Feb
+ 2023 08:16:17 +0000
+Received: from BN8PR12MB3587.namprd12.prod.outlook.com
+ ([fe80::2e4f:4041:28be:ba7a]) by BN8PR12MB3587.namprd12.prod.outlook.com
+ ([fe80::2e4f:4041:28be:ba7a%6]) with mapi id 15.20.6111.019; Mon, 20 Feb 2023
+ 08:16:17 +0000
+Message-ID: <0630025f-d7b5-320f-b5ec-2a459963d76d@amd.com>
+Date:   Mon, 20 Feb 2023 09:16:11 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH v4 04/14] dma-buf/dma-resv: Add a way to set fence
+ deadline
+Content-Language: en-US
+To:     Rob Clark <robdclark@gmail.com>, dri-devel@lists.freedesktop.org
+Cc:     freedreno@lists.freedesktop.org, Daniel Vetter <daniel@ffwll.ch>,
+        =?UTF-8?Q?Michel_D=c3=a4nzer?= <michel@daenzer.net>,
+        Tvrtko Ursulin <tvrtko.ursulin@intel.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        Pekka Paalanen <ppaalanen@gmail.com>,
+        Simon Ser <contact@emersion.fr>,
+        Rob Clark <robdclark@chromium.org>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
+        "open list:DMA BUFFER SHARING FRAMEWORK" 
+        <linux-media@vger.kernel.org>,
+        "moderated list:DMA BUFFER SHARING FRAMEWORK" 
+        <linaro-mm-sig@lists.linaro.org>,
+        open list <linux-kernel@vger.kernel.org>
+References: <20230218211608.1630586-1-robdclark@gmail.com>
+ <20230218211608.1630586-5-robdclark@gmail.com>
+From:   =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>
+In-Reply-To: <20230218211608.1630586-5-robdclark@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: FR0P281CA0087.DEUP281.PROD.OUTLOOK.COM
+ (2603:10a6:d10:1e::12) To BN8PR12MB3587.namprd12.prod.outlook.com
+ (2603:10b6:408:43::13)
 MIME-Version: 1.0
-References: <20230217185225.43310-1-prabhakar.mahadev-lad.rj@bp.renesas.com> <20230217185225.43310-4-prabhakar.mahadev-lad.rj@bp.renesas.com>
-In-Reply-To: <20230217185225.43310-4-prabhakar.mahadev-lad.rj@bp.renesas.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Mon, 20 Feb 2023 09:15:49 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdVW-rBR43QCuaBDJD407wUUZ4=nJP_+UvXUrJ4+BsXRbA@mail.gmail.com>
-Message-ID: <CAMuHMdVW-rBR43QCuaBDJD407wUUZ4=nJP_+UvXUrJ4+BsXRbA@mail.gmail.com>
-Subject: Re: [PATCH 3/4] arm64: dts: renesas: r9a07g044: Update IRQ numbers
- for SSI channels
-To:     Prabhakar <prabhakar.csengg@gmail.com>
-Cc:     Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Magnus Damm <magnus.damm@gmail.com>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>, alsa-devel@alsa-project.org,
-        linux-renesas-soc@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Biju Das <biju.das.jz@bp.renesas.com>,
-        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BN8PR12MB3587:EE_|IA0PR12MB7603:EE_
+X-MS-Office365-Filtering-Correlation-Id: e03011e2-63be-4ae1-6ad4-08db131abd67
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: USRjSnhshMNqhtTOzZUJwIMVr6kDvriB+va9dlag522uUGT9FdGD6+C/aN1Uyy0dKIeEPDoUJJKv7ddpAxrP9XjVoMrtiufis5rrkF8qxko9qV44dQMwZTW5RFowct8ki4GJWazkw6uoYojodN7JvfdeQHrjmFFpTLqMkAaBpDpQCABhGtUSwoEHL6awtpJ+1j25S+5zyR5cKAUoViYB5blR/+lXKW/lg8de0qTF0k+JuOZF8aXsRqAYt/VbeT9YXtFOG6rYKymCZozudCTRgdyK18X7ke+8VK+83Uv8zROsXaL90y0WdLlDieidTHDKS9HEiMIexNHhh9s6DoOo/EPMh/SRODv0hewajeQphiPwLRDp1+8gUfrj5oD65MCp7HoLznBd1Jbd2s+dZzxOv2EHJ10ilvctSNPU5YbWRmBB9JqZaXOOHJFJaOC5D381TBJlqHdVRpIkvxMiZ59BEcQp1dC2h4ke5eiQZI0l9ynKfvLQoY+b4idDRPUD39MbdBnsRzB3/k72ugBaHT9SBp1c8/lg0PiolZmpXiitsV4+JxawiEJdJeBf1qAMMoU+/sIm0qChp2eI8A3ctySL5/wIcwFc3/MbQMAz9GcgsekMkOrnpHDdQ5/sEo8jpRY8JB7KuhbysmjOj2GUNUmg3amwmo0a2ZMMpuYXYGNGgY0MDPurShCSEKKU/48OMIVo6bXcGXk8D/vHyJoHbFs/K+91d/z9xMwtrI1W3Rk2sMKczfiw/2IppPw6XyGoSCYx
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN8PR12MB3587.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(366004)(376002)(346002)(396003)(39860400002)(136003)(451199018)(31686004)(8676002)(66946007)(4326008)(66476007)(316002)(6486002)(66556008)(7416002)(54906003)(41300700001)(8936002)(5660300002)(36756003)(31696002)(86362001)(478600001)(186003)(6512007)(38100700002)(6666004)(6506007)(66574015)(2616005)(2906002)(83380400001)(43043002)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?MnVjc2JXUlpnc3I0NUF5TXNvZWhjNldpa3I3TFRqMXY2THZZQWdUZlZ6enJz?=
+ =?utf-8?B?YzRQU2FpUGJHcjBHSUQ0RFJSUENlK21qb3VTdEtuUldnZXhubjJKZzlYWnVS?=
+ =?utf-8?B?b3BBcUk2T1JkM3dCM2RSQWZsRHpyOUU1MTI3d1QwSnRIRGpLcGJVbTU4bjNv?=
+ =?utf-8?B?MTV6MlZlN3hDeTF4eE5teHJGWmh6bkFKWUROclhqYll1N1ZHZ0ovZXhkMUxi?=
+ =?utf-8?B?cUM0b3VtbzR3OE9zdGZ4OExRZlJqMHRIYVVRd0Nuanc0V0NYc2Z6VEFZYlAr?=
+ =?utf-8?B?NUp5MmkwUUg0M3cvemgrNDA1N2pmV1cycnlRRy9vTXNMUGRsSWlrQkhMTlhs?=
+ =?utf-8?B?c3hEVVpYOWFNYjhITk9tY016bkVJcEdKUTlmZlFUQ0Fkc2ZFWFFDanhrS3pt?=
+ =?utf-8?B?MWQ1V05qOU1BSVJiL0JzYjhJZ2VsNmFmRzF1WWFpOE9MMmtQZjR0eDJweFVa?=
+ =?utf-8?B?Uk9Hd0lUYkxJbHhrREEvRE5Fb3luQmxwTzZNdjhmMVVKRzROZXdyM2R1a3ht?=
+ =?utf-8?B?RjBOeTdETVpyUjdWSzlYUkc1VzhQUFlMMXQwdmEvMW42UWNUMUpxaXJjTWRL?=
+ =?utf-8?B?UEdLWmc2aXNYUlZIZnpHL2NoclhKT0ZIdlJkU3F6WFZsZHY0MzM3VDNHN1pU?=
+ =?utf-8?B?U1MwM1JQbkdvTzVzTTY2M3VlWEZDNStmTnpON0JOeXh2MXVOL3IzRDFSWktQ?=
+ =?utf-8?B?bTRrVjR6L3k0Ukl5M2xESStSSFRrVjFpN0VpemxpS3dSSktULy85aHR1U0dQ?=
+ =?utf-8?B?WmhVUHVJWERyUmExUGwyQTVXOTArek5sTzBrNHhqY3VYM2p2S2RCVXEvRTAw?=
+ =?utf-8?B?YWlNczc5UlUwWmhCWFBMWmltWW55MnJaVnMrTTM0SE1VNUdXWVEySndkNUdt?=
+ =?utf-8?B?VFBrR1YwbTdZY3N1Y2JFdW9NZ2x4R0NuZ0VkQmlUNFlZaHU0VElSTkVIbk1B?=
+ =?utf-8?B?T3VxeUtCTDNkOGh1MkQ4UUtKRmNCVEpkbVAxeld2ZDlYd2lyU0tScEpZRUxx?=
+ =?utf-8?B?bkhJcUdoVWsvK0ViMWRmTmpFUUlEVENac2FSYmw5YmlNYXBmS21rZ1RubVBX?=
+ =?utf-8?B?eXRZL3lHWHdBdE5yOS9HVU5VN0tTdGg3Qm1leHF3bEROcHAwMTZHekhGblhU?=
+ =?utf-8?B?ZWFrenJlSSttNTBzUldjbmMrVzFCaEk3MnZZV0RWNFIvc24vMWhyM2FMY0VU?=
+ =?utf-8?B?TU9pSVgyR2drYU5JWG4rMEZ0bSs5VGxVV24vS0ZhVktFOWtQd25mczZaL0F1?=
+ =?utf-8?B?eTVWT0N3WEIrZmdJSWoyY3ZmVFpLSE1XVGhzZVBnajhmN1hkRUNPMCtaR1NY?=
+ =?utf-8?B?T0tkWksrMlFqUDZVYmp6ZC9LT2ZSeVY5ZkxJb0l5Q2M1akI3WHhXb2xGeW8v?=
+ =?utf-8?B?Vk1LY1RqY3lWc1hzN1VBaTVwWFUwMzkxQmx1TDZ3Y0dMci9VUktwTGFsTjdx?=
+ =?utf-8?B?dDg2aVFpM084RkNpMXF3UXM3NFd5bXZveEZGdlFyUjV3RmZkTFBPdUdBMzZz?=
+ =?utf-8?B?b1lXSWhIUUpkb0RMbU15bFc2MngvK0J6TDNKdG9OendFVGltZDlLN2ZtYTQ2?=
+ =?utf-8?B?MUEzaE9RbHV0Q1RGS1NlYms4Q2x6UXhXeHR2V1ZzWnBiYjR6bitqMDFZTGdR?=
+ =?utf-8?B?NCs4UjViUFNySkhTNWs5eENOUzFicGdNbnNCSVB2OERCYWYyNWg0SHpkcWk5?=
+ =?utf-8?B?TGJ1Y3dZTkxFVnZWQ0hhSko1SWdpbkRINXFXWHVvL3A2VS9xWHpHclFzaTBB?=
+ =?utf-8?B?eU4vVW5PcFQ3RzlrQy9iYnZhUThoVlRCeVpQWU93MzcxRzdmSGNtR3oyRytH?=
+ =?utf-8?B?b2Jqb1VobVB4YjBwOFNjbFpLeFE2VGlPa0JTK2ZPT1oySWh5eTJQNVFMdEFn?=
+ =?utf-8?B?aVlJM3ZDUUE5VklRNGg1Mml1bmpOOFE2N2x1RVEwNGNpWkxWY2M5NjhMSUdU?=
+ =?utf-8?B?TTVhanB3WFRmZy9xTGlqc3JUSzhuWm5JWFp2VlJCTmxhclR1VFV1OE9zNTMw?=
+ =?utf-8?B?SGt2RnYzWXNNUVk5Rnc0Nk1oc0l5aEVwM1o5SmNEWXRHVStRYTRSb09oQUs2?=
+ =?utf-8?B?ZlkvTnZFVVNXZXR6aDhyUmczSlFPRkVjNkNGcDlyUHZDYTdMbkh4T0xDNCtX?=
+ =?utf-8?B?dGtDN1Y4b3V3RXpRWmNka2VCa2pvSjFKd3hlRDROS2QyVmtZQitSUnpnSTls?=
+ =?utf-8?Q?bKQ3VN6Te7DTLiOAPfls97SlbujTcVBU2YMmnuhDf1dV?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: e03011e2-63be-4ae1-6ad4-08db131abd67
+X-MS-Exchange-CrossTenant-AuthSource: BN8PR12MB3587.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 20 Feb 2023 08:16:17.3774
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: us4B/IElYoqI8/KaiTFaX4BOQ8RyrZILx+0gNFolmu8uBppwuxgr5OpdVUB3ukUr
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA0PR12MB7603
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
         autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,42 +140,70 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Prabhakar,
-
-On Fri, Feb 17, 2023 at 7:53 PM Prabhakar <prabhakar.csengg@gmail.com> wrote:
-> From: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Am 18.02.23 um 22:15 schrieb Rob Clark:
+> From: Rob Clark <robdclark@chromium.org>
 >
-> From R01UH0914EJ0120 Rev.1.20 HW manual the interrupt numbers for SSI
-> channels have been updated,
+> Add a way to set a deadline on remaining resv fences according to the
+> requested usage.
 >
-> SPI 329 - SSIF0 is now marked as reserved
-> SPI 333 - SSIF1 is now marked as reserved
-> SPI 335 - SSIF2 is now marked as reserved
-> SPI 336 - SSIF2 is now marked as reserved
-> SPI 341 - SSIF3 is now marked as reserved
->
-> This patch drops the above IRQs from SoC DTSI.
->
-> Fixes: 92a341315afc9 ("arm64: dts: renesas: r9a07g044: Add SSI support")
-> Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-> Reviewed-by: Biju Das <biju.das.jz@bp.renesas.com>
+> Signed-off-by: Rob Clark <robdclark@chromium.org>
 > ---
-> Hi Geert,
+>   drivers/dma-buf/dma-resv.c | 19 +++++++++++++++++++
+>   include/linux/dma-resv.h   |  2 ++
+>   2 files changed, 21 insertions(+)
 >
-> As this is is a fixes patch and we are still waiting for [0] to be merged
-> shall do the same for V2L SoC?
+> diff --git a/drivers/dma-buf/dma-resv.c b/drivers/dma-buf/dma-resv.c
+> index 1c76aed8e262..0c86f6d577ab 100644
+> --- a/drivers/dma-buf/dma-resv.c
+> +++ b/drivers/dma-buf/dma-resv.c
+> @@ -684,6 +684,25 @@ long dma_resv_wait_timeout(struct dma_resv *obj, enum dma_resv_usage usage,
+>   }
+>   EXPORT_SYMBOL_GPL(dma_resv_wait_timeout);
+>   
+> +/**
+> + * dma_resv_set_deadline - Set a deadline on reservation's objects fences
+> + * @obj: the reservation object
+> + * @usage: controls which fences to include, see enum dma_resv_usage.
+> + * @deadline: the requested deadline (MONOTONIC)
 
-Yes please. Thank you!
+Please add an additional description line, something like "Can be called 
+without holding the dma_resv lock and sets @deadline on all fences 
+filtered by @usage.".
 
-> [0] https://patchwork.kernel.org/project/linux-renesas-soc/cover/20230131223529.11905-1-prabhakar.mahadev-lad.rj@bp.renesas.com/
+With that done the patch is Reviewed-by: Christian König 
+<christian.koenig@amd.com>
 
-Gr{oetje,eeting}s,
+Regards,
+Christian.
 
-                        Geert
+> + */
+> +void dma_resv_set_deadline(struct dma_resv *obj, enum dma_resv_usage usage,
+> +			   ktime_t deadline)
+> +{
+> +	struct dma_resv_iter cursor;
+> +	struct dma_fence *fence;
+> +
+> +	dma_resv_iter_begin(&cursor, obj, usage);
+> +	dma_resv_for_each_fence_unlocked(&cursor, fence) {
+> +		dma_fence_set_deadline(fence, deadline);
+> +	}
+> +	dma_resv_iter_end(&cursor);
+> +}
+> +EXPORT_SYMBOL_GPL(dma_resv_set_deadline);
+>   
+>   /**
+>    * dma_resv_test_signaled - Test if a reservation object's fences have been
+> diff --git a/include/linux/dma-resv.h b/include/linux/dma-resv.h
+> index 0637659a702c..8d0e34dad446 100644
+> --- a/include/linux/dma-resv.h
+> +++ b/include/linux/dma-resv.h
+> @@ -479,6 +479,8 @@ int dma_resv_get_singleton(struct dma_resv *obj, enum dma_resv_usage usage,
+>   int dma_resv_copy_fences(struct dma_resv *dst, struct dma_resv *src);
+>   long dma_resv_wait_timeout(struct dma_resv *obj, enum dma_resv_usage usage,
+>   			   bool intr, unsigned long timeout);
+> +void dma_resv_set_deadline(struct dma_resv *obj, enum dma_resv_usage usage,
+> +			   ktime_t deadline);
+>   bool dma_resv_test_signaled(struct dma_resv *obj, enum dma_resv_usage usage);
+>   void dma_resv_describe(struct dma_resv *obj, struct seq_file *seq);
+>   
 
--- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
