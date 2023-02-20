@@ -2,90 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F77669D1BD
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Feb 2023 17:57:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C1FD769D1C1
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Feb 2023 17:58:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231971AbjBTQ51 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Feb 2023 11:57:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39810 "EHLO
+        id S231582AbjBTQ6G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Feb 2023 11:58:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40548 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229514AbjBTQ5Z (ORCPT
+        with ESMTP id S232073AbjBTQ55 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Feb 2023 11:57:25 -0500
-Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DADBA1CAD6
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Feb 2023 08:57:23 -0800 (PST)
-Received: by mail-wr1-x432.google.com with SMTP id c5so2593543wrr.5
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Feb 2023 08:57:23 -0800 (PST)
+        Mon, 20 Feb 2023 11:57:57 -0500
+Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F43F7A8F;
+        Mon, 20 Feb 2023 08:57:55 -0800 (PST)
+Received: by mail-ed1-x535.google.com with SMTP id o12so7606728edb.9;
+        Mon, 20 Feb 2023 08:57:55 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=arista.com; s=google;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=kwv6znKz3Eoo3aqqWo9NDOw9GIUxjeSkvIbkrVuAVC0=;
-        b=QCtW9f52c3WhCXFog/acp9ajq3DG6g9cyJLFXB3PErOf6SUbisSOkA+NFCH+j1XvDT
-         /5vODNZtc3QAmOVZyfN9iydI9hLfXLmciA87f1fp/knIbEPbGXw8aZ11sWWzR7NWkr3c
-         2AEWukfSysI9WGtAQcyVSbctuzi06lGDS3B6y0bf9owm2+ZR7pVHXNJP26DD6F+tZ7MA
-         PB8ziBcNmylx/L023iJWGsfCUkP921ifoGqI+b07c+uF7+7ETpoiYz0CExkLOJWxribi
-         U++SsChuv9uqmsI+4q+XBx+sq9lOGrGB3fNwmYKF20JFet1MhWc1Dzb8Xmf8FDAIS9Le
-         nHkQ==
+        d=gmail.com; s=20210112;
+        h=message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=sKhS1XkPMQxMCs4PB6gvYep2AFIGq1h4u0coF+hO4cs=;
+        b=PiXZZTBpnSk7jqOvEbc8PkUHAQktrGb4YNVGKT/ZHKH7ZuHbGZUsQDWfhsYT1ofpsY
+         juUYSy3JCUoOfp/cM/Yd3IWpid9re8SW8pap9fHQWupba9QkDz1XpFwBw6+c707VDOgw
+         x6bLoAEoLN91vxCXVehQ2wqD6XkQJkkptMLIseBmgdGDCIAW87h3F+8YKdN1FV7qxj12
+         5RYLoLQ+5G9DFZm3laExe2B2xcBKK7U8QrAaD5e4ARtjADnxzfXXx55YJ/9qusX0SRi6
+         rIMWy5XAUtbY4W44ahIoqN6a7JPqX7vwpIIC8dl+/VqOz99DDyX795OARNKkB+57Witp
+         5OGQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=kwv6znKz3Eoo3aqqWo9NDOw9GIUxjeSkvIbkrVuAVC0=;
-        b=e9IgM7FSfaKb7abjAij37Csfz2zUwKSzFsacpcHo1iZcF9ZJ73qGLLB6Xkun1ZiU2x
-         bOGpoQXOhlnTFoYrZ6ek6Esx6IiL6vzHEqV0nhkB8BGhxe6ACAPeqJmnCJCok52CoTVP
-         tI8jlVBZssJC4KXnMC67vC18Tw7C4XheDM6dFGkVyvgCa9WD4WrCoBwFroD7VbOic/R4
-         hycSC9I0srDTitqJ+FBEzoz8vqnjm2NcJdapaGs8ATctwFzOBvnl8QqygaIPM+il7xcu
-         f4OIh+EmYWcOtOBRwlONh1SlN0qiheK25pANfUfCWNPVUhvusrDNg+fFQrkv8Q3eXa5S
-         4qiA==
-X-Gm-Message-State: AO0yUKUwQa4OFUlnlpjY42olR/lNBjaa2rh+VwYof53/SIJ0BaHI2t++
-        Qnp5cf8DSZTngG5i692o8nGTFg==
-X-Google-Smtp-Source: AK7set9utMidQPfF/+lU6HJd7mSFiYVFPiN9AsN/ma4nxOxNzwTYBKzLhzb3LnnENQVkLO1hje3MYg==
-X-Received: by 2002:a5d:5147:0:b0:2c5:52c3:cdb9 with SMTP id u7-20020a5d5147000000b002c552c3cdb9mr2160492wrt.66.1676912242321;
-        Mon, 20 Feb 2023 08:57:22 -0800 (PST)
-Received: from [10.83.37.24] ([217.173.96.166])
-        by smtp.gmail.com with ESMTPSA id z3-20020adff1c3000000b002c559def236sm569446wro.57.2023.02.20.08.57.20
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 20 Feb 2023 08:57:21 -0800 (PST)
-Message-ID: <bd40ff2f-b015-4ed4-7755-f9d547c8b868@arista.com>
-Date:   Mon, 20 Feb 2023 16:57:20 +0000
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.2
-Subject: Re: [PATCH v4 01/21] net/tcp: Prepare tcp_md5sig_pool for TCP-AO
-To:     Herbert Xu <herbert@gondor.apana.org.au>
-Cc:     linux-kernel@vger.kernel.org, David Ahern <dsahern@kernel.org>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Andy Lutomirski <luto@amacapital.net>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Bob Gilligan <gilligan@arista.com>,
-        David Laight <David.Laight@aculab.com>,
-        Dmitry Safonov <0x7f454c46@gmail.com>,
-        Eric Biggers <ebiggers@kernel.org>,
-        "Eric W. Biederman" <ebiederm@xmission.com>,
-        Francesco Ruggeri <fruggeri05@gmail.com>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        Ivan Delalande <colona@arista.com>,
-        Leonard Crestez <cdleonard@gmail.com>,
-        Salam Noureddine <noureddine@arista.com>,
-        netdev@vger.kernel.org
-References: <20230215183335.800122-1-dima@arista.com>
- <20230215183335.800122-2-dima@arista.com>
- <Y/NAXtPrOkzjLewO@gondor.apana.org.au>
-Content-Language: en-US
-From:   Dmitry Safonov <dima@arista.com>
-In-Reply-To: <Y/NAXtPrOkzjLewO@gondor.apana.org.au>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        h=message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=sKhS1XkPMQxMCs4PB6gvYep2AFIGq1h4u0coF+hO4cs=;
+        b=D8wuBJNiHoJiIWZSjMUOBXYBEF8gz28FFvYhZ52zKhEJ1E9Mix/VyohRLJk1qjKl/P
+         862a4qAxVaU09OocFp6AZeJcpTBUE7W7MCH8er1jRvyC+H4IdilYLGcp+VV4c2BqAwY3
+         R9BNUkbzFHzDDfYwl1OYgJ0eMg0XbReu9CuWD+G37Z5GNS2aVlU+hLK0FjzwUTpT/3/5
+         bwDqlSi9qW8jEsOYA39Sfl/yVKDE9+gA85H+KkBbL4zHI//Pw3qnMufdHAw+GbBxdcOQ
+         TolV8f0SMJjDj/SUOR9lzfNtcWC8wLs69ToAmL/NufFrOWtEV/T5HD/yWxjID4XKfw5D
+         ofFA==
+X-Gm-Message-State: AO0yUKXgZYAmM0WkI0a3n0ZpBp0oau+c9d0MqD9/EMpSy0IaGJDG9kjw
+        Hm8lHBWz+kZDxyk+K74hmnMoirxgO+E=
+X-Google-Smtp-Source: AK7set+mH7M/KvRblmnMoa+9/DsPaLZW6zlUTOWS4is9TUws62Uxkgy5fA8KpE6ss2dF9bPRf8HVSQ==
+X-Received: by 2002:a17:906:7c55:b0:88e:d435:3fd6 with SMTP id g21-20020a1709067c5500b0088ed4353fd6mr10651591ejp.63.1676912273814;
+        Mon, 20 Feb 2023 08:57:53 -0800 (PST)
+Received: from felia.fritz.box ([2a02:810d:2a40:1104:ad0f:1d29:d8a4:7999])
+        by smtp.gmail.com with ESMTPSA id hb22-20020a170906b89600b008b14d3978adsm6004006ejb.189.2023.02.20.08.57.53
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 20 Feb 2023 08:57:53 -0800 (PST)
+From:   Lukas Bulwahn <lukas.bulwahn@gmail.com>
+To:     Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>,
+        Waiman Long <longman@redhat.com>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org
+Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Lukas Bulwahn <lukas.bulwahn@gmail.com>
+Subject: [PATCH] docs: locking: refer to the actual existing config names
+Date:   Mon, 20 Feb 2023 17:57:49 +0100
+Message-Id: <20230220165749.12850-1-lukas.bulwahn@gmail.com>
+X-Mailer: git-send-email 2.17.1
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -93,76 +70,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Herbert,
+The config is actually called CONFIG_RT_MUTEXES, not CONFIG_RT_MUTEX.
 
-On 2/20/23 09:41, Herbert Xu wrote:
-> On Wed, Feb 15, 2023 at 06:33:15PM +0000, Dmitry Safonov wrote:
->> TCP-AO similarly to TCP-MD5 needs to allocate tfms on a slow-path, which
->> is setsockopt() and use crypto ahash requests on fast paths, which are
->> RX/TX softirqs. It as well needs a temporary/scratch buffer for
->> preparing the hashing request.
->>
->> Extend tcp_md5sig_pool to support other hashing algorithms than MD5.
->> Move it in a separate file.
->>
->> This patch was previously submitted as more generic crypto_pool [1],
->> but Herbert nacked making it generic crypto API. His view is that crypto
->> requests should be atomically allocated on fast-paths. So, in this
->> version I don't move this pool anywhere outside TCP, only extending it
->> for TCP-AO use-case. It can be converted once there will be per-request
->> hashing crypto keys.
->>
->> [1]: https://lore.kernel.org/all/20230118214111.394416-1-dima@arista.com/T/#u
->> Signed-off-by: Dmitry Safonov <dima@arista.com>
->> ---
->>  include/net/tcp.h        |  48 ++++--
->>  net/ipv4/Kconfig         |   4 +
->>  net/ipv4/Makefile        |   1 +
->>  net/ipv4/tcp.c           | 103 +++---------
->>  net/ipv4/tcp_ipv4.c      |  97 +++++++-----
->>  net/ipv4/tcp_minisocks.c |  21 ++-
->>  net/ipv4/tcp_sigpool.c   | 333 +++++++++++++++++++++++++++++++++++++++
->>  net/ipv6/tcp_ipv6.c      |  58 +++----
->>  8 files changed, 493 insertions(+), 172 deletions(-)
->>  create mode 100644 net/ipv4/tcp_sigpool.c
-> 
-> Please wait for my per-request hash work before you resubmit this.
+The config CONFIG_LOCK_TORTURE_TEST should be connected by underscore, for
+the sake of consistent referencing to configs in the kernel documentation.
 
-Do you have a timeline for that work?
-And if you don't mind I keep re-iterating, as I'm trying to address TCP
-reviews and missed functionality/selftests.
+Address those issues.
 
-> Once that's in place all you need is a single tfm for the whole
-> system.
+Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
+---
+ Documentation/locking/locktorture.rst | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-Unfortunately, not really: RFC5926 prescribes the mandatory-to-implement
-MAC algorithms for TCP-AO: HMAC-SHA-1-96 and AES-128-CMAC-96. But since
-the RFC was written sha1 is now more eligible for attacks as well as
-RFC5925 has:
-> The option should support algorithms other than the default, to
-> allow agility over time.
-> TCP-AO allows any desired algorithm, subject to TCP option
-> space limitations, as noted in Section 2.2. The use of a set
-> of MKTs allows separate connections to use different
-> algorithms, both for the MAC and the KDF.
+diff --git a/Documentation/locking/locktorture.rst b/Documentation/locking/locktorture.rst
+index dfaf9fc883f4..7f56fc0d7c31 100644
+--- a/Documentation/locking/locktorture.rst
++++ b/Documentation/locking/locktorture.rst
+@@ -5,7 +5,7 @@ Kernel Lock Torture Test Operation
+ CONFIG_LOCK_TORTURE_TEST
+ ========================
+ 
+-The CONFIG LOCK_TORTURE_TEST config option provides a kernel module
++The CONFIG_LOCK_TORTURE_TEST config option provides a kernel module
+ that runs torture tests on core kernel locking primitives. The kernel
+ module, 'locktorture', may be built after the fact on the running
+ kernel to be tested, if desired. The tests periodically output status
+@@ -67,7 +67,7 @@ torture_type
+ 
+ 		     - "rtmutex_lock":
+ 				rtmutex_lock() and rtmutex_unlock() pairs.
+-				Kernel must have CONFIG_RT_MUTEX=y.
++				Kernel must have CONFIG_RT_MUTEXES=y.
+ 
+ 		     - "rwsem_lock":
+ 				read/write down() and up() semaphore pairs.
+-- 
+2.17.1
 
-As well as from a customer's request we need to support more than two
-required algorithms. So, this implementation let the user choose the
-algorithm that is supported by crypto/ layer (more or less like xfrm does).
-
-Which means, that it still has to support multiple tfms. I guess that
-pool of tfms can be converted to use per-request keys quite easily.
-
-> As to request pools what exactly is the point of that? Just kmalloc
-> them on demand.
-
-1) before your per-request key patches - it's not possible.
-2) after your patches - my question would be: "is it better to
-kmalloc(GFP_ATOMIC) in RX/TX for every signed TCP segment, rather than
-pre-allocate it?"
-
-The price of (2) may just well be negligible, but worth measuring before
-switching.
-
-Thanks,
-          Dmitry
