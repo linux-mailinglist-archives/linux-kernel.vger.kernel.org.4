@@ -2,74 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EC27A69D631
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Feb 2023 23:12:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E97EA69D63E
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Feb 2023 23:16:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232454AbjBTWM5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Feb 2023 17:12:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33738 "EHLO
+        id S232646AbjBTWQo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Feb 2023 17:16:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36038 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231806AbjBTWMz (ORCPT
+        with ESMTP id S229885AbjBTWQm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Feb 2023 17:12:55 -0500
-Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E21C3583;
-        Mon, 20 Feb 2023 14:12:53 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-        bh=sHT69Pcxg42yL1CYvz0YQD+Q5YjZ9X6LjI+IheSRHKA=; b=OBP5jB/Ti491wRbqAdiq3B4+dw
-        MYo8n185Qawan5IoHGFD+/8KntEpZjNOq5ViFut1p4bdyXlDuySmR8StvQk0dVKnQFHhgnXAQwT6P
-        3I0kn7WFGCl1mKE8UwHXEF1Z89KtwXcNh68KaA4XFAQbXraLhM6GDX3s0mcYx3Zt7ODw=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-        (envelope-from <andrew@lunn.ch>)
-        id 1pUEOp-005XYT-F9; Mon, 20 Feb 2023 23:12:43 +0100
-Date:   Mon, 20 Feb 2023 23:12:43 +0100
-From:   Andrew Lunn <andrew@lunn.ch>
-To:     Wolfram Sang <wsa+renesas@sang-engineering.com>
-Cc:     linux-renesas-soc@vger.kernel.org,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] net: phy: micrel: drop superfluous use of temp variable
-Message-ID: <Y/PwWzO6HVkf/whr@lunn.ch>
-References: <20230220203930.31989-1-wsa+renesas@sang-engineering.com>
+        Mon, 20 Feb 2023 17:16:42 -0500
+Received: from smtp.smtpout.orange.fr (smtp-29.smtpout.orange.fr [80.12.242.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D557B1ABF5
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Feb 2023 14:16:37 -0800 (PST)
+Received: from [192.168.1.18] ([86.243.2.178])
+        by smtp.orange.fr with ESMTPA
+        id UESYpyOTplrplUESYpdBva; Mon, 20 Feb 2023 23:16:35 +0100
+X-ME-Helo: [192.168.1.18]
+X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
+X-ME-Date: Mon, 20 Feb 2023 23:16:35 +0100
+X-ME-IP: 86.243.2.178
+Message-ID: <e92c7992-303a-0f71-13b2-f33efbba4b22@wanadoo.fr>
+Date:   Mon, 20 Feb 2023 23:16:34 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230220203930.31989-1-wsa+renesas@sang-engineering.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH] RDMA/restrack: Reorder fields in 'struct
+ rdma_restrack_entry'
+To:     Jason Gunthorpe <jgg@ziepe.ca>
+Cc:     Leon Romanovsky <leon@kernel.org>, linux-kernel@vger.kernel.org,
+        kernel-janitors@vger.kernel.org, linux-rdma@vger.kernel.org
+References: <d47800d9fd5ac7c33d01af04b12b6d43ad23c96e.1676379187.git.christophe.jaillet@wanadoo.fr>
+ <Y+uH0k0OBzPip1P8@ziepe.ca> <75480cf9-8d06-7a7d-4624-6ddbb7d6053a@wanadoo.fr>
+ <Y+uiLCB7H2xVvQZW@ziepe.ca> <Y+zCkwTgevj0zDFK@unreal>
+Content-Language: fr, en-US
+From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+In-Reply-To: <Y+zCkwTgevj0zDFK@unreal>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 20, 2023 at 09:39:30PM +0100, Wolfram Sang wrote:
-> 'temp' was used before commit c0c99d0cd107 ("net: phy: micrel: remove
-> the use of .ack_interrupt()") refactored the code. Now, we can simplify
-> it a little.
+Le 15/02/2023 à 12:31, Leon Romanovsky a écrit :
+> On Tue, Feb 14, 2023 at 11:01:00AM -0400, Jason Gunthorpe wrote:
+>> On Tue, Feb 14, 2023 at 03:34:21PM +0100, Christophe JAILLET wrote:
+>>> Le 14/02/2023 à 14:08, Jason Gunthorpe a écrit :
+>>>> On Tue, Feb 14, 2023 at 01:53:52PM +0100, Christophe JAILLET wrote:
+>>>>> diff --git a/include/rdma/restrack.h b/include/rdma/restrack.h
+>>>>> index 8b7c46daeb07..da53fefe6f9e 100644
+>>>>> --- a/include/rdma/restrack.h
+>>>>> +++ b/include/rdma/restrack.h
+>>>>> @@ -80,6 +80,10 @@ struct rdma_restrack_entry {
+>>>>>    	 * query stage.
+>>>>>    	 */
+>>>>>    	u8			no_track : 1;
+>>>>> +	/**
+>>>>> +	 * @user: user resource
+>>>>> +	 */
+>>>>> +	bool			user;
+>>>>
+>>>> Can we combine this into the bitfield above?
+>>>>
+>>>> Jason
+>>>>
+>>> Hi,
+>>>
+>>> and even above, we have
+>>> 	bool	valid;
+>>>
+>>> I wanted to keep the changes as minimal as possible, but I can change them
+>>> all in a single bitfield.
+>>
+>> IIRC it needs to be checked, I vaugely remember valid can't be a
+>> bitfield because it is an atomic
 > 
-> Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
+> I don't remember anything like this.
+> 
+> Thanks
+> 
 
-Hi Wolfram
+If I understand code correctly, 'valid' is only used in 
+rdma_restrack_add() and rdma_restrack_del().
 
-netdev has a few process things which other subsystems do not
-have. Take a look at
+I don't think that any atomic behavior is in place in these functions.
 
-https://www.kernel.org/doc/html/latest/process/maintainer-netdev.html
 
-This should be for net-next. It could be that tree is already closed
-for the merge window.
+I'll send in the coming days a v2 which changes 'valid', 'no_track' and 
+'user' as bool:1.
 
-Reviewed-by: Andrew Lunn <andrew@lunn.ch>
-
-    Andrew
+CJ
