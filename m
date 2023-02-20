@@ -2,161 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E91A69C3A4
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Feb 2023 01:27:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 86B3269C3AA
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Feb 2023 01:33:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229862AbjBTA1j convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Sun, 19 Feb 2023 19:27:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51578 "EHLO
+        id S229729AbjBTAdi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 19 Feb 2023 19:33:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54754 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229499AbjBTA1i (ORCPT
+        with ESMTP id S229441AbjBTAdh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 19 Feb 2023 19:27:38 -0500
-Received: from rtits2.realtek.com.tw (rtits2.realtek.com [211.75.126.72])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03474E384;
-        Sun, 19 Feb 2023 16:27:22 -0800 (PST)
-Authenticated-By: 
-X-SpamFilter-By: ArmorX SpamTrap 5.77 with qID 31K0RAG30009846, This message is accepted by code: ctloc85258
-Received: from mail.realtek.com (rtexh36506.realtek.com.tw[172.21.6.27])
-        by rtits2.realtek.com.tw (8.15.2/2.81/5.90) with ESMTPS id 31K0RAG30009846
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=OK);
-        Mon, 20 Feb 2023 08:27:10 +0800
-Received: from RTEXMBS02.realtek.com.tw (172.21.6.95) by
- RTEXH36506.realtek.com.tw (172.21.6.27) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.17; Mon, 20 Feb 2023 08:27:13 +0800
-Received: from RTEXMBS04.realtek.com.tw (172.21.6.97) by
- RTEXMBS02.realtek.com.tw (172.21.6.95) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.7; Mon, 20 Feb 2023 08:27:13 +0800
-Received: from RTEXMBS04.realtek.com.tw ([fe80::b4a2:2bcc:48d1:8b02]) by
- RTEXMBS04.realtek.com.tw ([fe80::b4a2:2bcc:48d1:8b02%5]) with mapi id
- 15.01.2375.007; Mon, 20 Feb 2023 08:27:13 +0800
-From:   Ping-Ke Shih <pkshih@realtek.com>
-To:     Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        "linux-wireless@vger.kernel.org" <linux-wireless@vger.kernel.org>
-CC:     "tony0620emma@gmail.com" <tony0620emma@gmail.com>,
-        "kvalo@kernel.org" <kvalo@kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Neo Jou <neojou@gmail.com>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>
-Subject: RE: [PATCH v2 5/5] wifi: rtw88: rtw8822c: Implement RTL8822CS (SDIO) efuse parsing
-Thread-Topic: [PATCH v2 5/5] wifi: rtw88: rtw8822c: Implement RTL8822CS (SDIO)
- efuse parsing
-Thread-Index: AQHZQ63rMCLWuNGH80+RhMdnfBFBV67W/LtA
-Date:   Mon, 20 Feb 2023 00:27:13 +0000
-Message-ID: <c3042a4d40c441cb947162b005fe25db@realtek.com>
-References: <20230218152944.48842-1-martin.blumenstingl@googlemail.com>
- <20230218152944.48842-6-martin.blumenstingl@googlemail.com>
-In-Reply-To: <20230218152944.48842-6-martin.blumenstingl@googlemail.com>
-Accept-Language: en-US, zh-TW
-Content-Language: zh-TW
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [172.21.69.188]
-x-kse-serverinfo: RTEXMBS02.realtek.com.tw, 9
-x-kse-attachmentfiltering-interceptor-info: no applicable attachment filtering
- rules found
-x-kse-antivirus-interceptor-info: scan successful
-x-kse-antivirus-info: =?us-ascii?Q?Clean,_bases:_2023/2/19_=3F=3F_05:27:00?=
-x-kse-bulkmessagesfiltering-scan-result: protection disabled
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 8BIT
+        Sun, 19 Feb 2023 19:33:37 -0500
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E83FA25B;
+        Sun, 19 Feb 2023 16:33:35 -0800 (PST)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4PKk1B1sVjz4x81;
+        Mon, 20 Feb 2023 11:33:34 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1676853214;
+        bh=ApASluTziQDk9afKuSHsqgBJh+IGSZg0ib5EfoC4bn4=;
+        h=Date:From:To:Cc:Subject:From;
+        b=ri7gjoWHnYTWAqqnMufNhuvYY6/bKwvwr1RBxo7cc0d98VOW2Z6nifMLl6s2OckV5
+         wZqrGhX/rEAc9hHaUT53g4ijipKNbm4fFf+6amvyXQ6RfxNJ/QeOhWnpZmpoLrqLOJ
+         W+VIOmEsGv5QL7gE2+eBsxXGgSaEji9OXR2SqhP4QMh/3jiFaCj6mhnGnwT4+4daEi
+         VEUuzFTChIX9OzXVqr0Wsc/QNYGxBLCx/UQOEpSWXuF9QmR0xHer3L8qZimbyH1NF9
+         D/yRs4tzRJMbbrQ1PuINkE01rD2e3q2fZdKHeyjiEhHkeXvWi0t/VAhDlleELXdTtV
+         jiOK3kZQwqPOw==
+Date:   Mon, 20 Feb 2023 11:33:33 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Jens Axboe <axboe@kernel.dk>, Steve French <smfrench@gmail.com>
+Cc:     CIFS <linux-cifs@vger.kernel.org>,
+        David Howells <dhowells@redhat.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Steve French <stfrench@microsoft.com>
+Subject: linux-next: manual merge of the block tree with the cifs tree
+Message-ID: <20230220113333.16a38bbd@canb.auug.org.au>
 MIME-Version: 1.0
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/Fqt4cW+V3nFgtx/_pEaFB=K";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+--Sig_/Fqt4cW+V3nFgtx/_pEaFB=K
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
+Hi all,
 
-> -----Original Message-----
-> From: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-> Sent: Saturday, February 18, 2023 11:30 PM
-> To: linux-wireless@vger.kernel.org
-> Cc: tony0620emma@gmail.com; kvalo@kernel.org; netdev@vger.kernel.org; linux-kernel@vger.kernel.org; Neo
-> Jou <neojou@gmail.com>; Jernej Skrabec <jernej.skrabec@gmail.com>; Ping-Ke Shih <pkshih@realtek.com>;
-> Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-> Subject: [PATCH v2 5/5] wifi: rtw88: rtw8822c: Implement RTL8822CS (SDIO) efuse parsing
-> 
-> The efuse of the SDIO RTL8822CS chip has only one known member: the mac
-> address is at offset 0x16a. Add a struct rtw8822cs_efuse describing this
-> and use it for copying the mac address when the SDIO bus is used.
-> 
-> Signed-off-by: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+Today's linux-next merge of the block tree got a conflict in:
 
-Reviewed-by: Ping-Ke Shih <pkshih@realtek.com>
+  fs/cifs/file.c
 
-> ---
-> - add the new function/union member/case statement last (after USB)
-> - while here, also sort the union members to be consistent with
->   the switch case (PCIe first, USB second, SDIO last)
-> 
-> 
->  drivers/net/wireless/realtek/rtw88/rtw8822c.c | 9 +++++++++
->  drivers/net/wireless/realtek/rtw88/rtw8822c.h | 8 +++++++-
->  2 files changed, 16 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/net/wireless/realtek/rtw88/rtw8822c.c
-> b/drivers/net/wireless/realtek/rtw88/rtw8822c.c
-> index 964e27887fe2..5a2c004b12df 100644
-> --- a/drivers/net/wireless/realtek/rtw88/rtw8822c.c
-> +++ b/drivers/net/wireless/realtek/rtw88/rtw8822c.c
-> @@ -35,6 +35,12 @@ static void rtw8822cu_efuse_parsing(struct rtw_efuse *efuse,
->         ether_addr_copy(efuse->addr, map->u.mac_addr);
->  }
-> 
-> +static void rtw8822cs_efuse_parsing(struct rtw_efuse *efuse,
-> +                                   struct rtw8822c_efuse *map)
-> +{
-> +       ether_addr_copy(efuse->addr, map->s.mac_addr);
-> +}
-> +
->  static int rtw8822c_read_efuse(struct rtw_dev *rtwdev, u8 *log_map)
->  {
->         struct rtw_efuse *efuse = &rtwdev->efuse;
-> @@ -67,6 +73,9 @@ static int rtw8822c_read_efuse(struct rtw_dev *rtwdev, u8 *log_map)
->         case RTW_HCI_TYPE_USB:
->                 rtw8822cu_efuse_parsing(efuse, map);
->                 break;
-> +       case RTW_HCI_TYPE_SDIO:
-> +               rtw8822cs_efuse_parsing(efuse, map);
-> +               break;
->         default:
->                 /* unsupported now */
->                 return -ENOTSUPP;
-> diff --git a/drivers/net/wireless/realtek/rtw88/rtw8822c.h
-> b/drivers/net/wireless/realtek/rtw88/rtw8822c.h
-> index 479d5d769c52..1bc0e7f5d6bb 100644
-> --- a/drivers/net/wireless/realtek/rtw88/rtw8822c.h
-> +++ b/drivers/net/wireless/realtek/rtw88/rtw8822c.h
-> @@ -16,6 +16,11 @@ struct rtw8822cu_efuse {
->         u8 res2[0x3d];
->  };
-> 
-> +struct rtw8822cs_efuse {
-> +       u8 res0[0x4a];                  /* 0x120 */
-> +       u8 mac_addr[ETH_ALEN];          /* 0x16a */
-> +} __packed;
-> +
->  struct rtw8822ce_efuse {
->         u8 mac_addr[ETH_ALEN];          /* 0x120 */
->         u8 vender_id[2];
-> @@ -91,8 +96,9 @@ struct rtw8822c_efuse {
->         u8 res9;
->         u8 res10[0x42];
->         union {
-> -               struct rtw8822cu_efuse u;
->                 struct rtw8822ce_efuse e;
-> +               struct rtw8822cu_efuse u;
-> +               struct rtw8822cs_efuse s;
->         };
->  };
-> 
-> --
-> 2.39.2
+between commit:
 
+  8378eea2e41f ("cifs: Change the I/O paths to use an iterator rather than =
+a page list")
+
+from the cifs tree and commit:
+
+  45b94876f54e ("iov_iter: Kill ITER_PIPE")
+
+from the block tree.
+
+I fixed it up (the former removed the function updated by the latter,
+so I did that) and can carry the fix as necessary. This is now fixed as
+far as linux-next is concerned, but any non trivial conflicts should be
+mentioned to your upstream maintainer when your tree is submitted for
+merging.  You may also want to consider cooperating with the maintainer
+of the conflicting tree to minimise any particularly complex conflicts.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/Fqt4cW+V3nFgtx/_pEaFB=K
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmPyv90ACgkQAVBC80lX
+0GyUPQf/WBWjv2MKg8Ynn1fAUhwsLPQoJgyQoJ27UxcE1xR2K2zthmgLE75RJwYi
+aMWNeFNa1D/EHOXwn0jjwQua8YVJanGmCv2kuYw3vF20ltydphsr2noVWtmH9uXZ
+ZW6BIrpNdFiCQ/wuCbhDDdW2WjDtwGti4pAhx69nGAsbyZwJDBJUz9N9FMtyIwNl
+WowZu/68csxYMfWZMAKMF53DO8eIUIxPLnlD8SEr8hETHUfgNS798FeLxZdZLlo7
+zlBuVa69+sT8LLLkQlec3mO7KpKv5o/vrflQ/TG+yW04cBtvux1sv3qoRQ5ih7N5
+qVE2Pvs49FKqHQChoE8WOL639edszA==
+=F0GM
+-----END PGP SIGNATURE-----
+
+--Sig_/Fqt4cW+V3nFgtx/_pEaFB=K--
