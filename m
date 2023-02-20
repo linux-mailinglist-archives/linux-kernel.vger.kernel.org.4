@@ -2,72 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 205A469C4DE
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Feb 2023 06:10:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6984F69C4E1
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Feb 2023 06:17:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229593AbjBTFKM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Feb 2023 00:10:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42170 "EHLO
+        id S229888AbjBTFRs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Feb 2023 00:17:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43816 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229451AbjBTFKK (ORCPT
+        with ESMTP id S229591AbjBTFRq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Feb 2023 00:10:10 -0500
-Received: from mail-vk1-xa36.google.com (mail-vk1-xa36.google.com [IPv6:2607:f8b0:4864:20::a36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED9B8CC25
-        for <linux-kernel@vger.kernel.org>; Sun, 19 Feb 2023 21:10:08 -0800 (PST)
-Received: by mail-vk1-xa36.google.com with SMTP id o27so1132594vkn.7
-        for <linux-kernel@vger.kernel.org>; Sun, 19 Feb 2023 21:10:08 -0800 (PST)
+        Mon, 20 Feb 2023 00:17:46 -0500
+Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B20A9CC3E
+        for <linux-kernel@vger.kernel.org>; Sun, 19 Feb 2023 21:17:42 -0800 (PST)
+Received: by mail-pj1-x1029.google.com with SMTP id g14so112289pjb.2
+        for <linux-kernel@vger.kernel.org>; Sun, 19 Feb 2023 21:17:42 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ventanamicro.com; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=NgBPiBFudnfp+7ZvqZ/TkWNG31i8uXBHpDwh2oWMqzE=;
-        b=BDBIi58gFTYL1Ye7j2+aVGb70PhaM+5gaPYE8OtvNOkBlo7FTuGosQ8ay6pWKO2h6m
-         kS9KKzq5TEJ2hWGzG0sI5nB3LW/7nI6yrJHRnInnrC5vbkGG8YCJ4y3WW5Iooh4el4eQ
-         bEb42TocXTFACSywTV1SjaK7X/96qaPoCdOj0LocD77SCoSrPuqSZQIxtISDdVA5ntJ0
-         eQRzfTQGp3RxpUHAbgp5o5/hzCrVGvyD6CkgCOKTxcmg1xigEhpyDyncoAQPYYKrbG06
-         f1LwWcRQ6m6PYNltlepXhqFYnOKoWugCGEtPDsq0bNCpYdQWLlqe2TvOEt6ST9ZD+uvG
-         0/+A==
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=HD+Nl+GfzBGiSwRfO/bSjedzMDMeWkGv1s23h0bZ6lA=;
+        b=C4Jo8WUflAV5wmCxoI8DLlwQchJVCd86+LASD/xrXSqvc7CaR6OZXr8AsQkJXTjrJU
+         uFgSRvk2Tl7AzfjBT+xnR5ycz3fZuRAsNNt5tnEZhdAe6FVbspAysoTdDTVqkX4PicjM
+         KNRrYniTsMzEqXXyILeVy9uqe2KamAYfnDr9VxsuDPfLKFDgh6QfjyRqiEArreVkbC7z
+         JUHMtPNf/9+w1Uh8gr5GkMc7Nv8mBd3Rzb5B4/ueIKYeIglQHdZwyPHpIw9hFipCFuLW
+         a6FMOBUOUAu2WN21kyMTso34gJl2CVl1AKjx/j8zIQV31UcOLYnky24veWuMWKyfql8+
+         oOyQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=NgBPiBFudnfp+7ZvqZ/TkWNG31i8uXBHpDwh2oWMqzE=;
-        b=YzI2u0ljIZq8JUtrn4C7Bu5IxmeBYwEUmIkDa/HgKhxzfbk76WEuaFhYQ0f+mNKxYO
-         oZLfrK7Ppetf5oKDE/27kP0OpTTLWPiMM3c0vGNLLtpnvbWCqv+timhnCcNHXjo/aoqI
-         dhfhwM54z02IkenQO2At7/RxGbKJtE9md1QyCUpVQ8Jgup2/Bvr3RO5HDrsQzLpFScNK
-         3JZhL0qg4DJ2eVquC2gW0d/YbgcVKdoWH46JqHERPE/INm0WvyNVaJLIDKGIZTu3gTun
-         UV+Qkos59tBhhKeSh3MxyIzBOxry1lFdafqTWZgK303oOPJCOM5uGQqn7ncU1nfxTAJi
-         1akQ==
-X-Gm-Message-State: AO0yUKUu+xVnlWOBYdziEmWe3Q0nzHXbMsDJ2cVprtiE5jqmecRaUlC+
-        g7tDN1EE01yDEfJ2QY3xZbzizN37nX5l7tyvkSPdhg==
-X-Google-Smtp-Source: AK7set8FC6hXeAgP2mDNjCcg4nLEnoSw3NsjrH4zo8zCcxifANoD+MXxgaK8eYhqFpLzsjpz6TDINMrGKctI5n+y9eY=
-X-Received: by 2002:a1f:a682:0:b0:3d5:9b32:7ba4 with SMTP id
- p124-20020a1fa682000000b003d59b327ba4mr119794vke.15.1676869807876; Sun, 19
- Feb 2023 21:10:07 -0800 (PST)
+        bh=HD+Nl+GfzBGiSwRfO/bSjedzMDMeWkGv1s23h0bZ6lA=;
+        b=q4TG6suuh7RXtxknVjA/w3dhJ6llkvQ2X1XUg/R9f3tLECX8uyLJ2xVXYCpWPkEwtD
+         tOstnzKjykYHX8mTXWLvjFxUbVObgoPlx02GSuWT5MDe/+b8k6jLWAlMnW0CeUP36AnV
+         PJmGMiT1wYtCjxUFWTqL4+waIrR28lATKPrGqSmB4Y+dNtmzUsUavS4fWGk82fTjr43W
+         36h6N6iat+OzFGqOTE3NAmxyUNzxff9dTdZ406juK7gs5X+NjvYYLJti0vIBMwYzZ8Mw
+         YmrrqJFAKFPKxEtrkJg4CHS7KNpu2GeLCpoQi5Tc0E9JLdRts+WrWRNAfRH4M3zHiKWs
+         +1Aw==
+X-Gm-Message-State: AO0yUKXUMz+Q8fIU78g1cg7V/o7IcsvMioLXSESNdJsDvLp9Js6NtMo+
+        7abiat8+5onRqxv19Ap4A8wVFw==
+X-Google-Smtp-Source: AK7set99wQ4PEjS+Hyco0N1NtEQe1E3IfSGA7oF7zVXuuGpkHqYsxoINr02VRnLzYQ8kSow9uXen6w==
+X-Received: by 2002:a05:6a20:698e:b0:c0:d8e1:82ae with SMTP id t14-20020a056a20698e00b000c0d8e182aemr286322pzk.36.1676870262119;
+        Sun, 19 Feb 2023 21:17:42 -0800 (PST)
+Received: from localhost.localdomain (fp9875a45d.knge128.ap.nuro.jp. [152.117.164.93])
+        by smtp.gmail.com with ESMTPSA id h5-20020a62b405000000b005ae8e94b0d5sm3192087pfn.107.2023.02.19.21.17.39
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 19 Feb 2023 21:17:41 -0800 (PST)
+From:   Masahisa Kojima <masahisa.kojima@linaro.org>
+To:     Ard Biesheuvel <ardb@kernel.org>,
+        Jens Wiklander <jens.wiklander@linaro.org>,
+        Sumit Garg <sumit.garg@linaro.org>,
+        linux-kernel@vger.kernel.org, op-tee@lists.trustedfirmware.org
+Cc:     Ilias Apalodimas <ilias.apalodimas@linaro.org>,
+        Johan Hovold <johan+linaro@kernel.org>,
+        Masahisa Kojima <masahisa.kojima@linaro.org>
+Subject: [PATCH v2 0/4] introduce tee-based EFI Runtime Variable Service
+Date:   Mon, 20 Feb 2023 14:17:18 +0900
+Message-Id: <20230220051723.1257-1-masahisa.kojima@linaro.org>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-References: <20230103141409.772298-1-apatel@ventanamicro.com>
- <20230103141409.772298-7-apatel@ventanamicro.com> <4bd8c6da-6ad4-5e1a-169c-48f48560b36b@dram.page>
-In-Reply-To: <4bd8c6da-6ad4-5e1a-169c-48f48560b36b@dram.page>
-From:   Anup Patel <apatel@ventanamicro.com>
-Date:   Mon, 20 Feb 2023 10:39:56 +0530
-Message-ID: <CAK9=C2XpGRH98MvrnwiuS7zhT8woKnnihGSinkNP1vcKz3WtRQ@mail.gmail.com>
-Subject: Re: [PATCH v2 6/9] dt-bindings: interrupt-controller: Add RISC-V
- advanced PLIC
-To:     Vivian Wang <uwu@dram.page>
-Cc:     Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Atish Patra <atishp@atishpatra.org>,
-        Alistair Francis <Alistair.Francis@wdc.com>,
-        Anup Patel <anup@brainfault.org>,
-        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -77,121 +72,54 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Feb 19, 2023 at 5:18 PM Vivian Wang <uwu@dram.page> wrote:
->
-> On 1/3/23 22:14, Anup Patel wrote:
-> > We add DT bindings document for RISC-V advanced platform level
-> > interrupt controller (APLIC) defined by the RISC-V advanced
-> > interrupt architecture (AIA) specification.
-> >
-> > Signed-off-by: Anup Patel <apatel@ventanamicro.com>
-> > ---
-> >  .../interrupt-controller/riscv,aplic.yaml     | 159 ++++++++++++++++++
-> >  1 file changed, 159 insertions(+)
-> >  create mode 100644 Documentation/devicetree/bindings/interrupt-controller/riscv,aplic.yaml
-> >
-> > diff --git a/Documentation/devicetree/bindings/interrupt-controller/riscv,aplic.yaml b/Documentation/devicetree/bindings/interrupt-controller/riscv,aplic.yaml
-> > new file mode 100644
-> > index 000000000000..b7f20aad72c2
-> > --- /dev/null
-> > +++ b/Documentation/devicetree/bindings/interrupt-controller/riscv,aplic.yaml
-> > @@ -0,0 +1,159 @@
-> >
-> > <snip>
-> >
-> > +  riscv,children:
-> > +    $ref: /schemas/types.yaml#/definitions/phandle-array
-> > +    minItems: 1
-> > +    maxItems: 1024
-> > +    items:
-> > +      maxItems: 1
-> > +    description:
-> > +      A list of child APLIC domains for the given APLIC domain. Each child
-> > +      APLIC domain is assigned child index in increasing order with the
-> > +      first child APLIC domain assigned child index 0. The APLIC domain
-> > +      child index is used by firmware to delegate interrupts from the
-> > +      given APLIC domain to a particular child APLIC domain.
-> > +
-> > +  riscv,delegate:
-> > +    $ref: /schemas/types.yaml#/definitions/phandle-array
-> > +    minItems: 1
-> > +    maxItems: 1024
-> > +    items:
-> > +      items:
-> > +        - description: child APLIC domain phandle
-> > +        - description: first interrupt number (inclusive)
-> > +        - description: last interrupt number (inclusive)
-> > +    description:
-> > +      A interrupt delegation list where each entry is a triple consisting
-> > +      of child APLIC domain phandle, first interrupt number, and last
-> > +      interrupt number. The firmware will configure interrupt delegation
-> > +      registers based on interrupt delegation list.
-> > +
->
-> I'm not sure if this is the right place to ask, since it could be more
-> of a OpenSBI/QEMU problem, but I think a more detailed description about
-> what 'the firmware' does is appropriate here.
->
-> My main confusion is how to describe wired interrupts connected to
-> APLICs. Say we have two APLIC nodes with labels aplic_m and aplic_s that
-> are the APLIC domains for M-mode and S-mode respectively. IIUC, wired
-> interrupts are connected directly to aplic_m. So how do I refer to it in
-> the device nodes?
+This series introduces the tee based EFI Runtime Variable Service.
 
-Please see my previous reply to Conor about these DT properties.
-The riscv,children DT property describes HW child numbering whereas
-the riscv,delegate DT propert is a table of IRQ delegation.
+This version moves StMM related code from drivers/tee/optee to
+drivers/firmware/efi/stmm, since StMM code does not contain
+OP-TEE specific code and can be used with other TEE implementation.
 
-In your example, let's assume we have N wired interrupts. This
-means we will have devices connected to the root APLIC domain
-(aplic_m). Now since aplic_s is a child of aplic_m, we will have
-N wired interrupts going from from aplic_m to aplic_s where
-aplic_m will route a wired/device interrupt x to aplic_s if
-sourcecfg[x].D = 1 and sourcecfg[x].child = 0.
+The eMMC device is typically owned by the non-secure world(linux in
+this case). There is an existing solution utilizing eMMC RPMB partition
+for EFI Variables, it is implemented by interacting with
+OP-TEE, StandaloneMM(as EFI Variable Service Pseudo TA), eMMC driver
+and tee-supplicant. The last piece is the tee-based variable access
+driver to interact with OP-TEE and StandaloneMM.
 
->
->  1. <&aplic_s num IRQ_TYPE_foo>, but it would be a lie to M-mode
->     software, which could be a problem. QEMU 7.2.0 seems to take this
->     approach. (I could also be misunderstanding QEMU and it actually
->     does connect wired interrupts to the S-mode APLIC, but then
->     riscv,children and riscv,delegate would be lies.)
+Changelog:
+rfc v1 -> v2:
+- split patch into three patches, one for drivers/tee,
+  one for include/linux/efi.h, and one for the driver/firmware/efi/stmm
+- context/session management into probe() and remove() same as other tee
+client driver
+- StMM variable driver is moved from driver/tee/optee to driver/firmware/efi
+- use "tee" prefix instead of "optee" in driver/firmware/efi/stmm/tee_stmm_efi.c,
+  this file does not contain op-tee specific code, abstracted by tee layer and
+  StMM variable driver will work on other tee implementation.
+- PTA_STMM_CMD_COMMUNICATE -> PTA_STMM_CMD_COMMUNICATE
+- implement query_variable_store() but currently not used
+- no use of TEEC_SUCCESS, it is defined in driver/tee/optee/optee_private.h.
+  Other tee client drivers use 0 instead of using TEEC_SUCCESS
+- remove TEEC_ERROR_EXCESS_DATA status, it is refered just to output
+error message
 
-No, it's not a lie. The <&aplic_s num IRQ_TYPE_foo> in a device DT
-node is based on the IRQ delegation fixed by the RISC-V platform.
-QEMU has its own strategy of delegating IRQs to APLIC S-mode
-while other platforms can use a different strategy.
+Masahisa Kojima (4):
+  efi: expose efivar generic ops register function
+  efi: Add EFI_ACCESS_DENIED status code
+  tee: expose tee efivar register function
+  efi: Add tee-based EFI variable driver
 
->  2. <&aplic_m ...>, and when M-mode software gives S-mode software
->     access to devices, it delegates relevant interrupts and patches it
->     into <&aplic_s num IRQ_TYPE_foo>. Seems to be the 'correct'
->     approach, but pretty complicated.
+ drivers/firmware/efi/Kconfig                 |  15 +
+ drivers/firmware/efi/Makefile                |   1 +
+ drivers/firmware/efi/efi.c                   |  12 +
+ drivers/firmware/efi/stmm/mm_communication.h | 249 ++++++++
+ drivers/firmware/efi/stmm/tee_stmm_efi.c     | 620 +++++++++++++++++++
+ drivers/tee/tee_core.c                       |  23 +
+ include/linux/efi.h                          |   4 +
+ include/linux/tee_drv.h                      |  23 +
+ 8 files changed, 947 insertions(+)
+ create mode 100644 drivers/firmware/efi/stmm/mm_communication.h
+ create mode 100644 drivers/firmware/efi/stmm/tee_stmm_efi.c
 
-The APLIC M-mode domain is not accessible to S-mode software so
-Linux cannot create an irqdomain using APLIC M-mode DT node. This
-means device DT nodes must have <&aplic_s num IRQ_TYPE_foo>
-which points to APLIC S-mode domain.
+-- 
+2.30.2
 
-It is totally up to RISC-V firmware and platform if it wants to dynamically
-add/patch <&aplic_s num IRQ_TYPE_foo> in device DT nodes. Currently,
-we do not patch device DT nodes in OpenSBI and instead have the
-device DT nodes point to correct APLIC domain based on the IRQ
-delegation.
-
->  3. <&aplic_m ...>, S-mode software sees this, and sees that aplic_m has
->     num in riscv,delegate, so goes to find the child it's been delegated
->     to, which is (should be) aplic_s. A bit annoyingly abstraction
->     breaking, since S-mode shouldn't even need to know about aplic_m.
-
-Yes, S-mode should know about aplic_m and if it tries to access aplic_m
-then it will get an access fault.
-
-This is exactly why device DT node should have "interrupts" DT property
-pointing to the actual APLIC domain which is delivering interrupt to S-mode.
-
->
-> I see that others are also confused by riscv,delegate and riscv,children
-> properties. It would be great if we could clarify the expected behavior
-> here rather than just saying 'the firmware will do the thing'.
-
-Regards,
-Anup
