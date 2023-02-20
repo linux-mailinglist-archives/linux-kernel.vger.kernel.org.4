@@ -2,36 +2,36 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 514CA69D03E
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Feb 2023 16:06:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E119869D032
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Feb 2023 16:05:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233023AbjBTPGK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Feb 2023 10:06:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48450 "EHLO
+        id S232290AbjBTPFR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Feb 2023 10:05:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48604 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232969AbjBTPFw (ORCPT
+        with ESMTP id S232678AbjBTPEl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Feb 2023 10:05:52 -0500
+        Mon, 20 Feb 2023 10:04:41 -0500
 Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E04C81DB9F;
-        Mon, 20 Feb 2023 07:04:11 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5884E7EC3;
+        Mon, 20 Feb 2023 07:02:55 -0800 (PST)
 Received: from IcarusMOD.eternityproject.eu (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
         (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 1D52A6602169;
-        Mon, 20 Feb 2023 15:02:28 +0000 (GMT)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 78B23660216A;
+        Mon, 20 Feb 2023 15:02:29 +0000 (GMT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1676905349;
-        bh=M5hdGMuzmKCUIv2g12dDgcyuK136Nce3uLfpDQsboOQ=;
+        s=mail; t=1676905350;
+        bh=xEzNnjlrGCa8nDnkjYmWB7XHA1caeWO11UfF0hFXRg4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=aaVL1z4+bFi5k5Pm92LtPA2oZYmKSVXIi3EpYw3kN79tgEJDKZQpUPOZMXcx/gGFe
-         QrxLcIQqhx+lUCUjuA4FYxZT5+sUJjV76Ydum6eJOXq7xNCXInW04Go9fZDJmIUuxK
-         MI2i4Wg+35RAQ9aDRns6YEC2T1n+JH/xjybUtH78yuDtMWRLf3F3NimAk6/Pg88PX4
-         2nDq4p0k8jhdpkGZwyRVupxsZZpFaVRHkz4PNLyn76mrOG3o2jqzWihjmY5Lh01KdS
-         cvQFE447RQXMyaf1zDnKPv/Sja6+JIz3YeGWFdBu2H+rFx4tKoJC344SNSMwEshH44
-         ggLC9Nmgl5VIQ==
+        b=nWovtCCRi06sL5fIm5639Dw16mBs8mH8fSte1LynwbJu4Tad7oP/fmdgnf2z6avWX
+         SAGCGk3ty7SU7tjwb/1mYJ7HAwhyVvWLRAFvjFTwxyKrHVxgUpOsLMSjUmr5Wvj4SJ
+         28eHvUTS/SHrH9MnPRN79btSbmdoLuXmyriVR+Li2ZD3EhAEYAbqEgf6bQyd2pE/Pc
+         IndX9wVzPM8QaG4vkdxoysmsbbNnAbrcvKO7RObtt1f+3hvw2hy8u5pwN+ZtWEEe/8
+         lkBFyaqjhwlB1SrPX6mPQA3s6M+GtaPJ6kr3H9OE7eWrcpjC4ig/M86PMkFUBq/KcN
+         89IA7XYACZ4CQ==
 From:   AngeloGioacchino Del Regno 
         <angelogioacchino.delregno@collabora.com>
 To:     mturquette@baylibre.com
@@ -47,9 +47,9 @@ Cc:     sboyd@kernel.org, matthias.bgg@gmail.com,
         chen.zhong@mediatek.com, linux-kernel@vger.kernel.org,
         linux-clk@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         linux-mediatek@lists.infradead.org
-Subject: [PATCH v3 52/55] clk: mediatek: mt8135-apmixedsys: Convert to platform_driver and module
-Date:   Mon, 20 Feb 2023 16:01:08 +0100
-Message-Id: <20230220150111.77897-53-angelogioacchino.delregno@collabora.com>
+Subject: [PATCH v3 53/55] clk: mediatek: mt8135: Join root_clk_alias and top_divs arrays
+Date:   Mon, 20 Feb 2023 16:01:09 +0100
+Message-Id: <20230220150111.77897-54-angelogioacchino.delregno@collabora.com>
 X-Mailer: git-send-email 2.39.1
 In-Reply-To: <20230220150111.77897-1-angelogioacchino.delregno@collabora.com>
 References: <20230220150111.77897-1-angelogioacchino.delregno@collabora.com>
@@ -64,86 +64,54 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Convert apmixedsys clocks to be a platform driver; while at it, also
-add necessary error handling to the probe function, add a remove
-callback and provide a MODULE_DESCRIPTION().
+In preparation for converting this driver to the common simple probe
+mechanism, join the root_clk_alias and top_divs mtk_fixed_factor
+arrays.
 
-This driver is now compatible with an eventual module build.
+This commit brings no functional change.
 
 Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 ---
- drivers/clk/mediatek/clk-mt8135-apmixedsys.c | 53 ++++++++++++++++++--
- 1 file changed, 48 insertions(+), 5 deletions(-)
+ drivers/clk/mediatek/clk-mt8135.c | 7 +------
+ 1 file changed, 1 insertion(+), 6 deletions(-)
 
-diff --git a/drivers/clk/mediatek/clk-mt8135-apmixedsys.c b/drivers/clk/mediatek/clk-mt8135-apmixedsys.c
-index 2b4d379300fc..744aae092281 100644
---- a/drivers/clk/mediatek/clk-mt8135-apmixedsys.c
-+++ b/drivers/clk/mediatek/clk-mt8135-apmixedsys.c
-@@ -47,16 +47,59 @@ static const struct mtk_pll_data plls[] = {
- 	PLL(CLK_APMIXED_VDECPLL, "vdecpll", 0x304, 0x31c, 0x80000000, 0, 21, 0x2b0, 6, 0x0, 0x308, 0),
- };
+diff --git a/drivers/clk/mediatek/clk-mt8135.c b/drivers/clk/mediatek/clk-mt8135.c
+index 1c76c0003f99..8785d58cb3a5 100644
+--- a/drivers/clk/mediatek/clk-mt8135.c
++++ b/drivers/clk/mediatek/clk-mt8135.c
+@@ -2,8 +2,6 @@
+ /*
+  * Copyright (c) 2014 MediaTek Inc.
+  * Author: James Liao <jamesjj.liao@mediatek.com>
+- * Copyright (c) 2023 Collabora, Ltd.
+- *               AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+  */
  
--static void __init mtk_apmixedsys_init(struct device_node *node)
-+static int clk_mt8135_apmixed_probe(struct platform_device *pdev)
- {
- 	struct clk_hw_onecell_data *clk_data;
-+	struct device_node *node = pdev->dev.of_node;
-+	int ret;
+ #include <linux/clk.h>
+@@ -19,14 +17,12 @@
  
- 	clk_data = mtk_alloc_clk_data(CLK_APMIXED_NR_CLK);
- 	if (!clk_data)
--		return;
-+		return -ENOMEM;
+ static DEFINE_SPINLOCK(mt8135_clk_lock);
  
--	mtk_clk_register_plls(node, plls, ARRAY_SIZE(plls), clk_data);
-+	ret = mtk_clk_register_plls(node, plls, ARRAY_SIZE(plls), clk_data);
-+	if (ret)
-+		return ret;
-+
-+	ret = of_clk_add_hw_provider(node, of_clk_hw_onecell_get, clk_data);
-+	if (ret)
-+		goto unregister_plls;
-+
-+	return 0;
-+
-+unregister_plls:
-+	mtk_clk_unregister_plls(plls, ARRAY_SIZE(plls), clk_data);
-+
-+	return ret;
-+}
-+
-+static int clk_mt8135_apmixed_remove(struct platform_device *pdev)
-+{
-+	struct device_node *node = pdev->dev.of_node;
-+	struct clk_hw_onecell_data *clk_data = platform_get_drvdata(pdev);
-+
-+	of_clk_del_provider(node);
-+	mtk_clk_unregister_plls(plls, ARRAY_SIZE(plls), clk_data);
-+	mtk_free_clk_data(clk_data);
-+
-+	return 0;
- }
--CLK_OF_DECLARE(mtk_apmixedsys, "mediatek,mt8135-apmixedsys",
--		mtk_apmixedsys_init);
-+
-+static const struct of_device_id of_match_clk_mt8135_apmixed[] = {
-+	{ .compatible = "mediatek,mt8135-apmixedsys" },
-+	{ /* sentinel */ }
-+};
-+MODULE_DEVICE_TABLE(of, of_match_clk_mt8135_apmixed);
-+
-+static struct platform_driver clk_mt8135_apmixed_drv = {
-+	.probe = clk_mt8135_apmixed_probe,
-+	.remove = clk_mt8135_apmixed_remove,
-+	.driver = {
-+		.name = "clk-mt8135-apmixed",
-+		.of_match_table = of_match_clk_mt8135_apmixed,
-+	},
-+};
-+module_platform_driver(clk_mt8135_apmixed_drv)
-+
-+MODULE_DESCRIPTION("MediaTek MT8135 apmixedsys clocks driver");
- MODULE_LICENSE("GPL");
+-static const struct mtk_fixed_factor root_clk_alias[] __initconst = {
++static const struct mtk_fixed_factor top_divs[] __initconst = {
+ 	FACTOR(CLK_TOP_DSI0_LNTC_DSICLK, "dsi0_lntc_dsiclk", "clk_null", 1, 1),
+ 	FACTOR(CLK_TOP_HDMITX_CLKDIG_CTS, "hdmitx_clkdig_cts", "clk_null", 1, 1),
+ 	FACTOR(CLK_TOP_CLKPH_MCK, "clkph_mck", "clk_null", 1, 1),
+ 	FACTOR(CLK_TOP_CPUM_TCK_IN, "cpum_tck_in", "clk_null", 1, 1),
+-};
+ 
+-static const struct mtk_fixed_factor top_divs[] __initconst = {
+ 	FACTOR(CLK_TOP_MAINPLL_806M, "mainpll_806m", "mainpll", 1, 2),
+ 	FACTOR(CLK_TOP_MAINPLL_537P3M, "mainpll_537p3m", "mainpll", 1, 3),
+ 	FACTOR(CLK_TOP_MAINPLL_322P4M, "mainpll_322p4m", "mainpll", 1, 5),
+@@ -534,7 +530,6 @@ static void __init mtk_topckgen_init(struct device_node *node)
+ 
+ 	clk_data = mtk_alloc_clk_data(CLK_TOP_NR_CLK);
+ 
+-	mtk_clk_register_factors(root_clk_alias, ARRAY_SIZE(root_clk_alias), clk_data);
+ 	mtk_clk_register_factors(top_divs, ARRAY_SIZE(top_divs), clk_data);
+ 	mtk_clk_register_composites(NULL, top_muxes,
+ 				    ARRAY_SIZE(top_muxes), base,
 -- 
 2.39.1
 
