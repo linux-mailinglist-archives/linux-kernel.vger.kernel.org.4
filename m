@@ -2,174 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F79969CAB2
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Feb 2023 13:20:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 125D369CAB4
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Feb 2023 13:20:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231694AbjBTMUl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Feb 2023 07:20:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38646 "EHLO
+        id S231986AbjBTMUy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Feb 2023 07:20:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38868 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229738AbjBTMUj (ORCPT
+        with ESMTP id S231984AbjBTMUu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Feb 2023 07:20:39 -0500
-Received: from esa2.hgst.iphmx.com (esa2.hgst.iphmx.com [68.232.143.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C611B166CE
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Feb 2023 04:20:26 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
-  t=1676895626; x=1708431626;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=r2t9/+0mPyYRoKhemlejneFLZV/XH/8xS8WW3RqGIus=;
-  b=q5Cpa5zLi2XgtSYBPuyVcDupPHDr7/5LIpKDtjXecg9LYxPmIWL1+Y8g
-   gFyCCYCBJ5ILRpi5CdDxnLiya7Z2PmohWPy/0Ry6rXBzEnuBQW0spLd7G
-   sMowb6HcAdTC4JBzqEBUFBtVH6CoMHLPxAQdVg9ag8X6WUY+p8JZ/Kn1L
-   H4pwDy11Hmg6VauDDPzLYmixOYegSG91he5D8yXywqFG2nxXBzv1jsemc
-   nfuwWHHYlAKGyUnvXSjBb26P2r2IWepn3GSA1p7AhXASzudYm1xdoP1be
-   gl233SAj5ULzsv/Hv31razIRH+bzFIzZVRquWdfFr/LHPGqpBp+//xYEd
-   Q==;
-X-IronPort-AV: E=Sophos;i="5.97,312,1669046400"; 
-   d="scan'208";a="328032386"
-Received: from h199-255-45-15.hgst.com (HELO uls-op-cesaep02.wdc.com) ([199.255.45.15])
-  by ob1.hgst.iphmx.com with ESMTP; 20 Feb 2023 20:20:25 +0800
-IronPort-SDR: milIDzsvmwqMCZ8qKbevEBoyIWqVpuywvftMBfq+HUtKR7sar51CmBtpX7XpJpEYQ22B1UASDe
- 7p8SalOg/3cZ9MZZaukYdca0dO9464jAyz1PlsPkpuKbMbsOvJXnTXc7IYY+UCXuAfc0y/RDW1
- cZjU8FV92wUey2Lid3f7gOBlHCD8XTnTvJ1xygIelYdOgXkH7rIm9hcnhqXoTlMdrvNIOBtJMQ
- Fn5Oi6RYwx6VOUjpwhVT6WxraOS/cQeIA2egacikR+7oEI709B4S42pwtzvTDjjDwMDCkPEvCc
- VAQ=
-Received: from uls-op-cesaip02.wdc.com ([10.248.3.37])
-  by uls-op-cesaep02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 20 Feb 2023 03:31:42 -0800
-IronPort-SDR: J4bt4eoSnMDc5GaXdqcwwNCKpVEtitq4fR5WlvKXEZ2TaGvSMXrxLeiUyAS52bOrIp8K3bqlJE
- N7JcGIWpCQvf2NNzWMvpNRD325rj9cP39CfyF9JEVQ6qmyUXsxYjKYyZJM0QvAxbN9zyPk/pE0
- M0zIv76/w1I2UxlDz67Zan3p2tWclBArpQ2JKvDZBfk1Ta/WFmD+cMXXQisp9IAhO+8lIxjWPH
- MVjolckdK2Z89pj8OJ71Zcy2qqsrv/v8vc7hLnSb17N89jeQ4LOKFGE4P7yqxk2qT+qRtwFhUT
- 314=
-WDCIronportException: Internal
-Received: from dellx5.wdc.com (HELO gsv.cphwdc) ([10.200.210.81])
-  by uls-op-cesaip02.wdc.com with ESMTP; 20 Feb 2023 04:20:23 -0800
-From:   Hans Holmberg <hans.holmberg@wdc.com>
-To:     Jaegeuk Kim <jaegeuk@kernel.org>, Chao Yu <chao@kernel.org>
-Cc:     linux-f2fs-devel@lists.sourceforge.net, damien.lemoal@wdc.com,
-        aravind.ramesh@wdc.com, hans@owltronix.com,
-        linux-kernel@vger.kernel.org, Hans Holmberg <hans.holmberg@wdc.com>
-Subject: [RFC PATCH] f2fs: preserve direct write semantics when buffering is forced
-Date:   Mon, 20 Feb 2023 13:20:04 +0100
-Message-Id: <20230220122004.26555-1-hans.holmberg@wdc.com>
-X-Mailer: git-send-email 2.25.1
+        Mon, 20 Feb 2023 07:20:50 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BA7F1B561
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Feb 2023 04:20:49 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 124B1B80CC3
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Feb 2023 12:20:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C6AA2C433D2
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Feb 2023 12:20:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1676895646;
+        bh=AOiqBaz/1bpeBA/U6iAsQTlLT3G5oF8qSnpEs9TlY7Y=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=RHN8saFbzrrKrkWJ7y8qDVIxW1qSBQm7envNiAitBu7FpMC0BuKlnud8bivJ0xn78
+         uIinhRS8JkzVoaUbhNcecT3ZjLi4asiEG7tXNopRYevaBrU1fgtFY3qz8ViEEe9vcS
+         QQlBhJH2vYhL3hVJ656QukcW6BFsszObcbXiUgw8+19mplvchWOshnTqurypfF/t5j
+         5pYBMW7j+seKPf8ta5ODMeHUmTBn7DxLGNgsE/N9CKQaRaCVj9hk6BICJ3w4WzUrJM
+         VYxTXhWFaMN5cmlFx1ARTg6x7VaOjTqU7a42Mg0WqnWDpgrsLJFbUow97BQYPG8k7H
+         IM17GO0vJ6r+A==
+Received: by mail-ed1-f45.google.com with SMTP id ck15so5149419edb.0
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Feb 2023 04:20:46 -0800 (PST)
+X-Gm-Message-State: AO0yUKXoqYcHV29VZFuKhDugIpSWEPyJG6fImuMADC78it4wv9BzULVd
+        Lp58NDLsm7SGQoUQLjRU8qT5p77IIBAz/NItzr8m4Q==
+X-Google-Smtp-Source: AK7set/fgpQc73FYf0piSSCiyvkWsRGgSNTloru9BpfVyE0k9at/KApLyDXJyBvWkrp6QGp20qQcoMlMyb4MvTT4OFo=
+X-Received: by 2002:a17:906:f88f:b0:8b0:7e1d:f6fa with SMTP id
+ lg15-20020a170906f88f00b008b07e1df6famr3893511ejb.15.1676895645061; Mon, 20
+ Feb 2023 04:20:45 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+References: <20230220120127.1975241-1-kpsingh@kernel.org> <20230220121350.aidsipw3kd4rsyss@treble>
+In-Reply-To: <20230220121350.aidsipw3kd4rsyss@treble>
+From:   KP Singh <kpsingh@kernel.org>
+Date:   Mon, 20 Feb 2023 04:20:34 -0800
+X-Gmail-Original-Message-ID: <CACYkzJ5L9MLuE5Jz+z5-NJCCrUqTbgKQkXSqnQnCfTD_WNA7_Q@mail.gmail.com>
+Message-ID: <CACYkzJ5L9MLuE5Jz+z5-NJCCrUqTbgKQkXSqnQnCfTD_WNA7_Q@mail.gmail.com>
+Subject: Re: [PATCH RESEND] x86/speculation: Fix user-mode spectre-v2
+ protection with KERNEL_IBRS
+To:     Josh Poimboeuf <jpoimboe@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, pjt@google.com, evn@google.com,
+        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+        dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
+        peterz@infradead.org, pawan.kumar.gupta@linux.intel.com,
+        kim.phillips@amd.com, alexandre.chartre@oracle.com,
+        daniel.sneddon@linux.intel.com,
+        =?UTF-8?Q?Jos=C3=A9_Oliveira?= <joseloliveira11@gmail.com>,
+        Rodrigo Branco <rodrigo@kernelhacking.com>,
+        Alexandra Sandulescu <aesa@google.com>,
+        Jim Mattson <jmattson@google.com>, stable@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In some cases, e.g. for zoned block devices, direct writes are
-forced into buffered writes that will populate the page cache
-and be written out just like buffered io.
+On Mon, Feb 20, 2023 at 4:13 AM Josh Poimboeuf <jpoimboe@kernel.org> wrote:
+>
+> On Mon, Feb 20, 2023 at 01:01:27PM +0100, KP Singh wrote:
+> > +static inline bool spectre_v2_user_no_stibp(enum spectre_v2_mitigation mode)
+> > +{
+> > +     /* When IBRS or enhanced IBRS is enabled, STIBP is not needed.
+> > +      *
+> > +      * However, With KERNEL_IBRS, the IBRS bit is cleared on return
+> > +      * to user and the user-mode code needs to be able to enable protection
+> > +      * from cross-thread training, either by always enabling STIBP or
+> > +      * by enabling it via prctl.
+> > +      */
+> > +     return (spectre_v2_in_ibrs_mode(mode) &&
+> > +             !cpu_feature_enabled(X86_FEATURE_KERNEL_IBRS));
+> > +}
+>
+> The comments and code confused me, they both seem to imply some
+> distinction between IBRS and KERNEL_IBRS, but in the kernel those are
+> functionally the same thing.  e.g., the kernel doesn't have a user IBRS
+> mode.
+>
+> And, unless I'm missing some subtlety here, it seems to be a convoluted
+> way of saying that eIBRS doesn't need STIBP in user space.
+>
+> It would be simpler to just call it spectre_v2_in_eibrs_mode().
 
-Direct reads, on the other hand, is supported for the zoned
-block device case. This has the effect that applications
-built for direct io will fill up the page cache with data
-that will never be read, and that is a waste of resources.
+Thanks, yeah this would work too. I was just trying to ensure that, if
+somehow, KERNEL_IBRS gets enabled with SPECTRE_V2_EIBRS, but this does
+not seem to be the case currently. Maybe we should also add a BUG_ON
+to ensure that KERNEL_IBRS does not get enabled in EIBRS mode?
 
-If we agree that this is a problem, how do we fix it?
+>
+> static inline bool spectre_v2_in_eibrs_mode(enum spectre_v2_mitigation mode)
+> {
+>         return mode == SPECTRE_V2_EIBRS ||
+>                mode == SPECTRE_V2_EIBRS_RETPOLINE ||
+>                mode == SPECTRE_V2_EIBRS_LFENCE;
+> }
+>
+> And then spectre_v2_in_ibrs_mode() could be changed to call that:
+>
+> static inline bool spectre_v2_in_eibrs_mode(enum spectre_v2_mitigation mode)
+> {
+>         return spectre_v2_in_eibrs_mode(mode) || mode == SPECTRE_V2_IBRS;
+> }
+>
+> > @@ -1496,6 +1504,7 @@ static void __init spectre_v2_select_mitigation(void)
+> >               break;
+> >
+> >       case SPECTRE_V2_IBRS:
+> > +             pr_err("enabling KERNEL_IBRS");
+>
+> Why?
 
-A) Supporting proper direct writes for zoned block devices would
-be the best, but it is currently not supported (probably for
-a good but non-obvious reason). Would it be feasible to
-implement proper direct IO?
+Removed.
 
-B) Avoid the cost of keeping unwanted data by syncing and throwing
-out the cached pages for buffered O_DIRECT writes before completion.
-
-This patch implements B) by reusing the code for how partial
-block writes are flushed out on the "normal" direct write path.
-
-Note that this changes the performance characteristics of f2fs
-quite a bit.
-
-Direct IO performance for zoned block devices is lower for
-small writes after this patch, but this should be expected
-with direct IO and in line with how f2fs behaves on top of
-conventional block devices.
-
-Another open question is if the flushing should be done for
-all cases where buffered writes are forced.
-
-Signed-off-by: Hans Holmberg <hans.holmberg@wdc.com>
----
- fs/f2fs/file.c | 38 ++++++++++++++++++++++++++++++--------
- 1 file changed, 30 insertions(+), 8 deletions(-)
-
-diff --git a/fs/f2fs/file.c b/fs/f2fs/file.c
-index ecbc8c135b49..4e57c37bce35 100644
---- a/fs/f2fs/file.c
-+++ b/fs/f2fs/file.c
-@@ -4513,6 +4513,19 @@ static const struct iomap_dio_ops f2fs_iomap_dio_write_ops = {
- 	.end_io = f2fs_dio_write_end_io,
- };
- 
-+static void f2fs_flush_buffered_write(struct address_space *mapping,
-+				      loff_t start_pos, loff_t end_pos)
-+{
-+	int ret;
-+
-+	ret = filemap_write_and_wait_range(mapping, start_pos, end_pos);
-+	if (ret < 0)
-+		return;
-+	invalidate_mapping_pages(mapping,
-+				 start_pos >> PAGE_SHIFT,
-+				 end_pos >> PAGE_SHIFT);
-+}
-+
- static ssize_t f2fs_dio_write_iter(struct kiocb *iocb, struct iov_iter *from,
- 				   bool *may_need_sync)
- {
-@@ -4612,14 +4625,9 @@ static ssize_t f2fs_dio_write_iter(struct kiocb *iocb, struct iov_iter *from,
- 
- 			ret += ret2;
- 
--			ret2 = filemap_write_and_wait_range(file->f_mapping,
--							    bufio_start_pos,
--							    bufio_end_pos);
--			if (ret2 < 0)
--				goto out;
--			invalidate_mapping_pages(file->f_mapping,
--						 bufio_start_pos >> PAGE_SHIFT,
--						 bufio_end_pos >> PAGE_SHIFT);
-+			f2fs_flush_buffered_write(file->f_mapping,
-+						  bufio_start_pos,
-+						  bufio_end_pos);
- 		}
- 	} else {
- 		/* iomap_dio_rw() already handled the generic_write_sync(). */
-@@ -4717,8 +4725,22 @@ static ssize_t f2fs_file_write_iter(struct kiocb *iocb, struct iov_iter *from)
- 	inode_unlock(inode);
- out:
- 	trace_f2fs_file_write_iter(inode, orig_pos, orig_count, ret);
-+
- 	if (ret > 0 && may_need_sync)
- 		ret = generic_write_sync(iocb, ret);
-+
-+	/* If buffered IO was forced, flush and drop the data from
-+	 * the page cache to preserve O_DIRECT semantics
-+	 */
-+	if (ret > 0 && !dio && (iocb->ki_flags & IOCB_DIRECT)) {
-+		struct file *file = iocb->ki_filp;
-+		loff_t end_pos = orig_pos + ret - 1;
-+
-+		f2fs_flush_buffered_write(file->f_mapping,
-+					  orig_pos,
-+					  end_pos);
-+	}
-+
- 	return ret;
- }
- 
--- 
-2.25.1
-
+>
+> > @@ -2327,7 +2336,7 @@ static ssize_t mmio_stale_data_show_state(char *buf)
+> >
+> >  static char *stibp_state(void)
+> >  {
+> > -     if (spectre_v2_in_ibrs_mode(spectre_v2_enabled))
+> > +     if (spectre_v2_user_no_stibp(spectre_v2_enabled))
+> >               return "";
+>
+> This seems like old cruft, can we just remove this check altogether?  In
+> the eIBRS case, spectre_v2_user_stibp will already have its default of
+> SPECTRE_V2_USER_NONE.
+>
+> --
+> Josh
