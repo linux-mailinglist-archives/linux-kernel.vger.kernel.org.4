@@ -2,113 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DDB1169D573
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Feb 2023 21:58:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 08FE369D3F9
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Feb 2023 20:15:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232143AbjBTU6F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Feb 2023 15:58:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42000 "EHLO
+        id S233196AbjBTTPR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Feb 2023 14:15:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42434 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229709AbjBTU6D (ORCPT
+        with ESMTP id S233244AbjBTTPH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Feb 2023 15:58:03 -0500
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76FC2BDF2;
-        Mon, 20 Feb 2023 12:58:02 -0800 (PST)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4PLFB06BlWz4x1R;
-        Tue, 21 Feb 2023 07:58:00 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1676926681;
-        bh=fjl7Sq7lh7+rwBgYb1dUIlexcmRQSJ2tmb+eCOJT+wE=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=krjeEwh1m6C738MNUeVHeOfZZlEjpfkwUznvqsbAD8cf1J6UL5QQ1y23vyWr4Myj2
-         9qlRseRBPkCQIO/89n0iGQVXC9wa/g5PFaU8e90hqVFHv/Rpd1oFIKX998qotauCGK
-         jPrny6yUPoq/1mIBSgcQBF+BeDDHULvxpShF9QdaCRW9cjSumNF1X6IEmp9vAL/kXM
-         LxwnYEU7EUz9y1grqWzus/MlEpoBk3XeZx+PmY8AaX++SI2zIfQGxP7mL7wDsB3Xth
-         u43mo5KRYvXiWcc8qk/OHS6Xzx6Fe+AV7HRlEAElyP7QE/yQPRRu2fPHvaIxv5c/99
-         s7OVfHWgXl3vQ==
-Date:   Mon, 20 Feb 2023 19:05:09 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Matthew Wilcox <willy@infradead.org>
-Cc:     David Howells <dhowells@redhat.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Steve French <smfrench@gmail.com>,
-        CIFS <linux-cifs@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Steve French <stfrench@microsoft.com>,
-        "Vishal Moola (Oracle)" <vishal.moola@gmail.com>
-Subject: Re: linux-next: manual merge of the mm-stable tree with the cifs
- tree
-Message-ID: <20230220190509.06e9a3cb@canb.auug.org.au>
-In-Reply-To: <Y/ON+ugfcFBdeZ4i@casper.infradead.org>
-References: <Y/N8hVWeR3AjssUC@casper.infradead.org>
-        <20230220152933.1ab8fa4a@canb.auug.org.au>
-        <1676391.1676903381@warthog.procyon.org.uk>
-        <Y/ON+ugfcFBdeZ4i@casper.infradead.org>
+        Mon, 20 Feb 2023 14:15:07 -0500
+Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47C1830DA;
+        Mon, 20 Feb 2023 11:14:39 -0800 (PST)
+Received: by mail-wr1-x429.google.com with SMTP id o4so2245072wrs.4;
+        Mon, 20 Feb 2023 11:14:39 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:subject:cc
+         :to:from:date:message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=h2G8MngECsHzRoNNMvCe3AyTwuYcmDjYyCf7cYz5mro=;
+        b=FiH+g/c3F+TK9/pTSWbaazdl0EjMRu4oWLJHOIVeiv8dixCeIrKhAeWTJH8ShXE6W2
+         dPZLbuYov5gRflXDGfvx5xOBFVehL/BZ1N8PGZeqxDMEsfy+qAAOHCMxP7wXgsfkASND
+         ul34d0snmd6kUn1Ekr1FTh8Dv/qEWqgAGcZYSR6RNXqdRG6iNnVgXL5xpUXXkmMdBa96
+         TTE7Oq7KR7qB6n4DZGP2pEMcIDPX9599JYpREADFnD+1EG8QOj+fXVUueBNM7pHmzPxn
+         gerWkPpuvWNu6gIU6eYgwy74TJ/Nu74KuQ45ZYTuV4cWaMtAaeekllkzoTFr6kh5g2kP
+         628g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:subject:cc
+         :to:from:date:message-id:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=h2G8MngECsHzRoNNMvCe3AyTwuYcmDjYyCf7cYz5mro=;
+        b=pOYg63XlqmQ3Li4RGtw0d/ShFVNTk+I0tTSi6mpNEMZTln01vq3unBsksJpy8Sdw2e
+         8RTrdl7mPROuQdCaq1zmxlVAV4qSx6Pby17Fk8E412uY5udt7K3G8yc9L1B5GLoRkyci
+         mVr13z/24+PkJxU7tQ248TK3pnKJaNENEqn5mwygaRs1aqXKbsDN3RYzP3R11RetA1f0
+         CqN7oqRmBnVg5aG6thaLtMYl3IzS/o47nPCvILorb6rS5/Em/p2KJagkbR/X0RbF6GNF
+         LAF7pVqPl6aiCh89zCewM8wuCFXWZwKWMrdgBpmHhkW+rfKOVlRqLzEegcReYn1OkXPv
+         PFAw==
+X-Gm-Message-State: AO0yUKV3a3cmqybmpnnMegSPjTejA+Y9KLM7NXlw41RYP1kI6pw8ROha
+        OnLhcDoCB5pxl9cSPaFj9Uk=
+X-Google-Smtp-Source: AK7set988zUOPEqn4TkVkaUYPoBvug/eErlH7rGdBRWRxec5NZOC/O83RWRup2dzm+rGJooePAO5ZQ==
+X-Received: by 2002:a5d:5306:0:b0:2c5:62c8:5f43 with SMTP id e6-20020a5d5306000000b002c562c85f43mr262102wrv.29.1676920472224;
+        Mon, 20 Feb 2023 11:14:32 -0800 (PST)
+Received: from Ansuel-xps. (93-34-91-73.ip49.fastwebnet.it. [93.34.91.73])
+        by smtp.gmail.com with ESMTPSA id p14-20020a5d4e0e000000b002c5a790e959sm4921331wrt.19.2023.02.20.11.14.31
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 20 Feb 2023 11:14:31 -0800 (PST)
+Message-ID: <63f3c697.5d0a0220.8f9f5.c859@mx.google.com>
+X-Google-Original-Message-ID: <Y/N6yWyzhc12zhvD@Ansuel-xps.>
+Date:   Mon, 20 Feb 2023 14:51:05 +0100
+From:   Christian Marangi <ansuelsmth@gmail.com>
+To:     Kalle Valo <kvalo@kernel.org>
+Cc:     "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, ath11k@lists.infradead.org,
+        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Dan Carpenter <error27@gmail.com>
+Subject: Re: [PATCH] wifi: ath11k: fix SAC bug on peer addition with sta band
+ migration
+References: <20230209222622.1751-1-ansuelsmth@gmail.com>
+ <167688346963.21606.5485334408823363188.kvalo@kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/3TCpOURP6L_/Swc0Tm5qjLy";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-1.0 required=5.0 tests=BAYES_00,DATE_IN_PAST_12_24,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <167688346963.21606.5485334408823363188.kvalo@kernel.org>
+X-Spam-Status: No, score=-0.5 required=5.0 tests=BAYES_00,DATE_IN_PAST_03_06,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/3TCpOURP6L_/Swc0Tm5qjLy
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On Mon, Feb 20, 2023 at 08:57:51AM +0000, Kalle Valo wrote:
+> Christian Marangi <ansuelsmth@gmail.com> wrote:
+> 
+> > Fix sleep in atomic context warning detected by Smatch static checker
+> > analyzer.
+> > 
+> > Following the locking pattern for peer_rhash_add lock tbl_mtx_lock mutex
+> > always even if sta is not transitioning to another band.
+> > This is peer_add function and a more secure locking should not cause
+> > performance regression.
+> > 
+> > Fixes: d673cb6fe6c0 ("wifi: ath11k: fix peer addition/deletion error on sta band migration")
+> > Reported-by: Dan Carpenter <error27@gmail.com>
+> > Signed-off-by: Christian Marangi <ansuelsmth@gmail.com>
+> > Signed-off-by: Kalle Valo <quic_kvalo@quicinc.com>
+> 
+> I assume you only compile tested this and I'll add that to the commit log. It's
+> always good to know how the patch was tested.
+> 
 
-Hi Matthew,
+Hi, I just got time to test this and works correctly on my Xiaomi
+AX3600.
 
-On Mon, 20 Feb 2023 15:12:58 +0000 Matthew Wilcox <willy@infradead.org> wro=
-te:
->
-> On Mon, Feb 20, 2023 at 02:29:41PM +0000, David Howells wrote:
-> > Matthew Wilcox <willy@infradead.org> wrote:
-> >  =20
-> > > Doesn't look too bad to me.  Dave's commit is just removing the
-> > > functions, so it doesn't matter how they're being changed.
-> > >=20
-> > > The real question in my mind is why for-next is being updated two days
-> > > before the merge window with new patches.  What's the point in -next
-> > > if patches are being added at this late point? =20
-> >=20
-> > It's more of a transfer of a subset of my iov/splice patches from the
-> > linux-block tree to the cifs tree.  I thought Jens would've dropped my =
-branch
-> > from his tree for the moment. =20
->=20
-> Your iov/splice patches don't conflict.  The part that you snipped says
-> it's c8859bc0c129 ("cifs: Remove unused code")
+Tested-on: IPQ8074 hw2.0 AHB WLAN.HK.2.5.0.1-01208-QCAHKSWPL_SILICONZ-1
 
-That is just the immediate conflict. See my other reply.
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/3TCpOURP6L_/Swc0Tm5qjLy
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmPzKbUACgkQAVBC80lX
-0Gx2Lgf/UklYtwpTkibZrdi2GXNRjV4CPSeWRUgBw2f7YTVudivI04tHFO3/nXOi
-WmRkLZ6zKfJjtEzR8dyPe8DrcUk8u4CybWe4m3PVpm5yFg+rhtNRfzIwHKbLxOZ/
-i65foCtqRO57V/ZbphgzqxeeUy6shSc7N1Xo4HFlUqJbyCvAPoO05DH8szcg+nQV
-z1tVRzTYZiHc+PC9ugjEmkboMLYBvwP5iLjrc46PsjBXDzDtPBWHRks0Yl/PIokh
-6pK0IMx7uF3KkSryeGauUOs9tLTrmPqLjJzX5viCVf9BWHELv4MRuDTjipk4yKL9
-nEgxY3aWjNb0aEhkeOm59AhRsSDRCA==
-=YeX2
------END PGP SIGNATURE-----
-
---Sig_/3TCpOURP6L_/Swc0Tm5qjLy--
+-- 
+	Ansuel
