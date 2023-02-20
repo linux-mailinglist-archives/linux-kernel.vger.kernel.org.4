@@ -2,323 +2,176 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D44DF69C783
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Feb 2023 10:17:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A559E69C780
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Feb 2023 10:17:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231516AbjBTJRi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Feb 2023 04:17:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58028 "EHLO
+        id S231476AbjBTJR0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Feb 2023 04:17:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57856 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231500AbjBTJRd (ORCPT
+        with ESMTP id S231332AbjBTJRX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Feb 2023 04:17:33 -0500
-Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B78A915543
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Feb 2023 01:17:30 -0800 (PST)
-Received: by mail-pj1-x1036.google.com with SMTP id co23-20020a17090afe9700b002341fadc370so539917pjb.1
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Feb 2023 01:17:30 -0800 (PST)
+        Mon, 20 Feb 2023 04:17:23 -0500
+Received: from mail-vk1-xa32.google.com (mail-vk1-xa32.google.com [IPv6:2607:f8b0:4864:20::a32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6A0D1165C
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Feb 2023 01:17:22 -0800 (PST)
+Received: by mail-vk1-xa32.google.com with SMTP id 26so294342vkn.10
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Feb 2023 01:17:22 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=3B7sNafZtBlgHmh5fpLAa14mnyUBnuiEHhgxOSu4EUY=;
-        b=4puz4Jgz93txeceBh3fQ+lEdkKu9A4lOtC1kYgX78UKROjsP3O5+Y11jVMsovlB8oU
-         sXuaRzKA6g9H9MXb3TdaF5sp9f/QMmV6iVKEx444zjffMm5LRNXcvYaal2t+iybJaLjY
-         dOAt6AzfkgtaTHsJmUt79SpRjjglW8OOcC+KtEe+U5VqwR2qSZOga5VUjMCAWJRD00IM
-         JG/qWE7eie2G7sZ4cJOwULL9sO4k8JkKSdEghpO73ZZLKfjRUL1R74gz0k7djhVwirUQ
-         TM5T4chfi9rC4wta62Q+8DdRwAl1M2SQDAocd2oBCkh1qD+vWeFfRIBKkH20GK8x1S4Z
-         r++w==
+        d=linaro.org; s=google; t=1676884642;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=XLuISGfJQz6zltLFCoKr8DlpUMxBl8e7Y8Zw2CLDKq8=;
+        b=S9MI9YjKoTB63VvqXhVlvO6pw33RhafAlgTa3uudVSmfE2yaIHfyilXcYZ9xkBonWD
+         8J9BLKqOyx02YnBarsqIF8/g1DE9ohNn1Sn5JMztYTmHKRkXo7Bf6ZtgyTgQA11l/DUl
+         i1idYlCRU2Fm/jF6GXSTrbunR7sgUP6GMSlsZflFmtg1wbw964sHX8SgP5ItBLyCrxnG
+         l68JIqltO0A3yCDtEIHPlm9H/QIdurILTSVak4zmMM267a3Sdv9I/HBfmZu2pDBWa6GH
+         2Yl6eEpmXdDw8YuVWorum+2pMH5Bl8+kMSfTl8aTMhVLYBh0ooEORWrjcAPe1kqsMlWK
+         rruA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=3B7sNafZtBlgHmh5fpLAa14mnyUBnuiEHhgxOSu4EUY=;
-        b=H5ysqQGJuRDIH5nBKd9UGUQzbVrrx3b1XPONajKCf0lMWAOrmKn5sxzwlSjquzNb+i
-         j6HUVAs8F2vBa9uVJE28aWmWjmTIXlV3A6JL5fRDCpCqF4Gaim3SYJJSeeYiPhusbC1N
-         oC9hdvbDSwHkOXhmUmTxgc2/mcLgmLU+49VaDNVkZ+jFGs97cLRNthNAiGzdkLMvDbtU
-         IxQkUkXeOlHOJrZ2/BjUuBxNs+FkYPNTzLksqr5S6vrNqsl2C/KjWmkkEGhL9xKXXa/Z
-         YlRVPs8mn8QLI9rs8omSIW98nsObQMwUSAePN1QB1AnLbv0rUlo0OApG2dSLWAIUsbvV
-         YWpQ==
-X-Gm-Message-State: AO0yUKUXMOW5eTzuDSDDgVM4okhxBgyHJN6DJpo6cae4h3TRdF8CJUYN
-        dOI8i36Xab0VLsl2cZOdQMgENQ==
-X-Google-Smtp-Source: AK7set/FrMA+DzzJjfgDbDVBnD4DP8OP+6IttlJ5FihjDu+ykoY0DseCdfCDQOT7VAaqhwcLBAHAYg==
-X-Received: by 2002:a17:90b:948:b0:236:7f67:8338 with SMTP id dw8-20020a17090b094800b002367f678338mr365975pjb.4.1676884650199;
-        Mon, 20 Feb 2023 01:17:30 -0800 (PST)
-Received: from C02DW0BEMD6R.bytedance.net ([139.177.225.229])
-        by smtp.gmail.com with ESMTPSA id fs13-20020a17090af28d00b002339195a47bsm432382pjb.53.2023.02.20.01.17.24
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 20 Feb 2023 01:17:29 -0800 (PST)
-From:   Qi Zheng <zhengqi.arch@bytedance.com>
-To:     akpm@linux-foundation.org, hannes@cmpxchg.org, shakeelb@google.com,
-        mhocko@kernel.org, roman.gushchin@linux.dev, muchun.song@linux.dev,
-        david@redhat.com, shy828301@gmail.com
-Cc:     tkhai@ya.ru, sultan@kerneltoast.com, dave@stgolabs.net,
-        penguin-kernel@I-love.SAKURA.ne.jp, paulmck@kernel.org,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        Qi Zheng <zhengqi.arch@bytedance.com>
-Subject: [PATCH 5/5] mm: shrinkers: convert shrinker_rwsem to mutex
-Date:   Mon, 20 Feb 2023 17:16:37 +0800
-Message-Id: <20230220091637.64865-6-zhengqi.arch@bytedance.com>
-X-Mailer: git-send-email 2.24.3 (Apple Git-128)
-In-Reply-To: <20230220091637.64865-1-zhengqi.arch@bytedance.com>
-References: <20230220091637.64865-1-zhengqi.arch@bytedance.com>
+        d=1e100.net; s=20210112; t=1676884642;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=XLuISGfJQz6zltLFCoKr8DlpUMxBl8e7Y8Zw2CLDKq8=;
+        b=rF0AvEVOQFqq99OjcwugtL2ekN6ksK23x92PvUcsPoRfinDSO5wVdp6WQNM5Avb6F+
+         c3BPxFAjeakcCFsnIrSynX8Vd9wZ8UAANQsuCQlA4GF8ZT4zGnrSffyEfcobYXgq2Pwp
+         hTQYl2Z5LO8MY2VSp+EBFcvqo88b9o3cN0anbH0pXZbT/v3h9NLqbPNSTg3Jom0HK97E
+         uOp3M1ibCavEQIHaSjq/8AFRIxhYX2TH7Mi49V+JiJSDFJtWmG2wxmsEqh2YAcEvtNN5
+         wxm2Vsv7YIQfywXIXXAbqh7x1kiEmAqxoVznI4+0WaZed7Sndumnjb8CHXsjd5sCvPqU
+         z3ug==
+X-Gm-Message-State: AO0yUKX71zrgy3eXcEiBlbvB9Jy/9VGESEnyWfI7e6HMQr0+NJt1PuE5
+        evOt9p1Lz3oOFpdeAQkGrlVBjN3xzX4E80qeKgsopg==
+X-Google-Smtp-Source: AK7set8LeB7kTT1iKD7WbHMRpuG4dToaKcXA+XG20qQgHpnLYOyFGHlWNFanUMrt565brFUK7e/B5qzf/1DfGtLA1Nc=
+X-Received: by 2002:a05:6122:1435:b0:3e1:f8b0:e35d with SMTP id
+ o21-20020a056122143500b003e1f8b0e35dmr119185vkp.35.1676884641885; Mon, 20 Feb
+ 2023 01:17:21 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20230220051723.1257-1-masahisa.kojima@linaro.org> <20230220051723.1257-4-masahisa.kojima@linaro.org>
+In-Reply-To: <20230220051723.1257-4-masahisa.kojima@linaro.org>
+From:   Sumit Garg <sumit.garg@linaro.org>
+Date:   Mon, 20 Feb 2023 14:47:10 +0530
+Message-ID: <CAFA6WYPdhWAgkBs+ehADVB__5-C9xDmdGL=D9Q5V047yEoL2EA@mail.gmail.com>
+Subject: Re: [PATCH v2 3/4] tee: expose tee efivar register function
+To:     Masahisa Kojima <masahisa.kojima@linaro.org>
+Cc:     Ard Biesheuvel <ardb@kernel.org>,
+        Jens Wiklander <jens.wiklander@linaro.org>,
+        linux-kernel@vger.kernel.org, op-tee@lists.trustedfirmware.org,
+        Ilias Apalodimas <ilias.apalodimas@linaro.org>,
+        Johan Hovold <johan+linaro@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Now there are no readers of shrinker_rwsem, so we
-can simply replace it with mutex lock.
+Hi Masahisa,
 
-Signed-off-by: Qi Zheng <zhengqi.arch@bytedance.com>
----
- drivers/md/dm-cache-metadata.c |  2 +-
- drivers/md/dm-thin-metadata.c  |  2 +-
- fs/super.c                     |  2 +-
- mm/shrinker_debug.c            | 14 +++++++-------
- mm/vmscan.c                    | 30 +++++++++++++++---------------
- 5 files changed, 25 insertions(+), 25 deletions(-)
+On Mon, 20 Feb 2023 at 10:47, Masahisa Kojima
+<masahisa.kojima@linaro.org> wrote:
+>
+> This commit adds the functions to register/unregister
+> the tee-based EFI variable driver.
+>
 
-diff --git a/drivers/md/dm-cache-metadata.c b/drivers/md/dm-cache-metadata.c
-index acffed750e3e..9e0c69958587 100644
---- a/drivers/md/dm-cache-metadata.c
-+++ b/drivers/md/dm-cache-metadata.c
-@@ -1828,7 +1828,7 @@ int dm_cache_metadata_abort(struct dm_cache_metadata *cmd)
- 	 * Replacement block manager (new_bm) is created and old_bm destroyed outside of
- 	 * cmd root_lock to avoid ABBA deadlock that would result (due to life-cycle of
- 	 * shrinker associated with the block manager's bufio client vs cmd root_lock).
--	 * - must take shrinker_rwsem without holding cmd->root_lock
-+	 * - must take shrinker_mutex without holding cmd->root_lock
- 	 */
- 	new_bm = dm_block_manager_create(cmd->bdev, DM_CACHE_METADATA_BLOCK_SIZE << SECTOR_SHIFT,
- 					 CACHE_MAX_CONCURRENT_LOCKS);
-diff --git a/drivers/md/dm-thin-metadata.c b/drivers/md/dm-thin-metadata.c
-index fd464fb024c3..9f5cb52c5763 100644
---- a/drivers/md/dm-thin-metadata.c
-+++ b/drivers/md/dm-thin-metadata.c
-@@ -1887,7 +1887,7 @@ int dm_pool_abort_metadata(struct dm_pool_metadata *pmd)
- 	 * Replacement block manager (new_bm) is created and old_bm destroyed outside of
- 	 * pmd root_lock to avoid ABBA deadlock that would result (due to life-cycle of
- 	 * shrinker associated with the block manager's bufio client vs pmd root_lock).
--	 * - must take shrinker_rwsem without holding pmd->root_lock
-+	 * - must take shrinker_mutex without holding pmd->root_lock
- 	 */
- 	new_bm = dm_block_manager_create(pmd->bdev, THIN_METADATA_BLOCK_SIZE << SECTOR_SHIFT,
- 					 THIN_MAX_CONCURRENT_LOCKS);
-diff --git a/fs/super.c b/fs/super.c
-index 84332d5cb817..91a4037b1d95 100644
---- a/fs/super.c
-+++ b/fs/super.c
-@@ -54,7 +54,7 @@ static char *sb_writers_name[SB_FREEZE_LEVELS] = {
-  * One thing we have to be careful of with a per-sb shrinker is that we don't
-  * drop the last active reference to the superblock from within the shrinker.
-  * If that happens we could trigger unregistering the shrinker from within the
-- * shrinker path and that leads to deadlock on the shrinker_rwsem. Hence we
-+ * shrinker path and that leads to deadlock on the shrinker_mutex. Hence we
-  * take a passive reference to the superblock to avoid this from occurring.
-  */
- static unsigned long super_cache_scan(struct shrinker *shrink,
-diff --git a/mm/shrinker_debug.c b/mm/shrinker_debug.c
-index 6a26e8ac40aa..4c3a5d9afb5c 100644
---- a/mm/shrinker_debug.c
-+++ b/mm/shrinker_debug.c
-@@ -7,7 +7,7 @@
- #include <linux/memcontrol.h>
- 
- /* defined in vmscan.c */
--extern struct rw_semaphore shrinker_rwsem;
-+extern struct mutex shrinker_mutex;
- extern struct list_head shrinker_list;
- extern struct srcu_struct shrinker_srcu;
- 
-@@ -167,7 +167,7 @@ int shrinker_debugfs_add(struct shrinker *shrinker)
- 	char buf[128];
- 	int id;
- 
--	lockdep_assert_held(&shrinker_rwsem);
-+	lockdep_assert_held(&shrinker_mutex);
- 
- 	/* debugfs isn't initialized yet, add debugfs entries later. */
- 	if (!shrinker_debugfs_root)
-@@ -210,7 +210,7 @@ int shrinker_debugfs_rename(struct shrinker *shrinker, const char *fmt, ...)
- 	if (!new)
- 		return -ENOMEM;
- 
--	down_write(&shrinker_rwsem);
-+	mutex_lock(&shrinker_mutex);
- 
- 	old = shrinker->name;
- 	shrinker->name = new;
-@@ -228,7 +228,7 @@ int shrinker_debugfs_rename(struct shrinker *shrinker, const char *fmt, ...)
- 			shrinker->debugfs_entry = entry;
- 	}
- 
--	up_write(&shrinker_rwsem);
-+	mutex_unlock(&shrinker_mutex);
- 
- 	kfree_const(old);
- 
-@@ -240,7 +240,7 @@ struct dentry *shrinker_debugfs_remove(struct shrinker *shrinker)
- {
- 	struct dentry *entry = shrinker->debugfs_entry;
- 
--	lockdep_assert_held(&shrinker_rwsem);
-+	lockdep_assert_held(&shrinker_mutex);
- 
- 	kfree_const(shrinker->name);
- 	shrinker->name = NULL;
-@@ -265,14 +265,14 @@ static int __init shrinker_debugfs_init(void)
- 	shrinker_debugfs_root = dentry;
- 
- 	/* Create debugfs entries for shrinkers registered at boot */
--	down_write(&shrinker_rwsem);
-+	mutex_lock(&shrinker_mutex);
- 	list_for_each_entry(shrinker, &shrinker_list, list)
- 		if (!shrinker->debugfs_entry) {
- 			ret = shrinker_debugfs_add(shrinker);
- 			if (ret)
- 				break;
- 		}
--	up_write(&shrinker_rwsem);
-+	mutex_unlock(&shrinker_mutex);
- 
- 	return ret;
- }
-diff --git a/mm/vmscan.c b/mm/vmscan.c
-index b8da56beba96..f94bfe540675 100644
---- a/mm/vmscan.c
-+++ b/mm/vmscan.c
-@@ -35,7 +35,7 @@
- #include <linux/cpuset.h>
- #include <linux/compaction.h>
- #include <linux/notifier.h>
--#include <linux/rwsem.h>
-+#include <linux/mutex.h>
- #include <linux/delay.h>
- #include <linux/kthread.h>
- #include <linux/freezer.h>
-@@ -202,7 +202,7 @@ static void set_task_reclaim_state(struct task_struct *task,
- }
- 
- LIST_HEAD(shrinker_list);
--DECLARE_RWSEM(shrinker_rwsem);
-+DEFINE_MUTEX(shrinker_mutex);
- DEFINE_SRCU(shrinker_srcu);
- 
- #ifdef CONFIG_MEMCG
-@@ -224,7 +224,7 @@ static struct shrinker_info *shrinker_info_protected(struct mem_cgroup *memcg,
- {
- 	return srcu_dereference_check(memcg->nodeinfo[nid]->shrinker_info,
- 				      &shrinker_srcu,
--				      lockdep_is_held(&shrinker_rwsem));
-+				      lockdep_is_held(&shrinker_mutex));
- }
- 
- static struct shrinker_info *shrinker_info_srcu(struct mem_cgroup *memcg,
-@@ -297,7 +297,7 @@ int alloc_shrinker_info(struct mem_cgroup *memcg)
- 	int nid, size, ret = 0;
- 	int map_size, defer_size = 0;
- 
--	down_write(&shrinker_rwsem);
-+	mutex_lock(&shrinker_mutex);
- 	map_size = shrinker_map_size(shrinker_nr_max);
- 	defer_size = shrinker_defer_size(shrinker_nr_max);
- 	size = map_size + defer_size;
-@@ -312,7 +312,7 @@ int alloc_shrinker_info(struct mem_cgroup *memcg)
- 		info->map = (void *)info->nr_deferred + defer_size;
- 		rcu_assign_pointer(memcg->nodeinfo[nid]->shrinker_info, info);
- 	}
--	up_write(&shrinker_rwsem);
-+	mutex_unlock(&shrinker_mutex);
- 
- 	return ret;
- }
-@@ -337,7 +337,7 @@ static int expand_shrinker_info(int new_id)
- 	if (!root_mem_cgroup)
- 		goto out;
- 
--	lockdep_assert_held(&shrinker_rwsem);
-+	lockdep_assert_held(&shrinker_mutex);
- 
- 	map_size = shrinker_map_size(new_nr_max);
- 	defer_size = shrinker_defer_size(new_nr_max);
-@@ -384,7 +384,7 @@ static int prealloc_memcg_shrinker(struct shrinker *shrinker)
- 	if (mem_cgroup_disabled())
- 		return -ENOSYS;
- 
--	down_write(&shrinker_rwsem);
-+	mutex_lock(&shrinker_mutex);
- 	id = idr_alloc(&shrinker_idr, shrinker, 0, 0, GFP_KERNEL);
- 	if (id < 0)
- 		goto unlock;
-@@ -398,7 +398,7 @@ static int prealloc_memcg_shrinker(struct shrinker *shrinker)
- 	shrinker->id = id;
- 	ret = 0;
- unlock:
--	up_write(&shrinker_rwsem);
-+	mutex_unlock(&shrinker_mutex);
- 	return ret;
- }
- 
-@@ -408,7 +408,7 @@ static void unregister_memcg_shrinker(struct shrinker *shrinker)
- 
- 	BUG_ON(id < 0);
- 
--	lockdep_assert_held(&shrinker_rwsem);
-+	lockdep_assert_held(&shrinker_mutex);
- 
- 	idr_remove(&shrinker_idr, id);
- }
-@@ -701,9 +701,9 @@ void free_prealloced_shrinker(struct shrinker *shrinker)
- 	shrinker->name = NULL;
- #endif
- 	if (shrinker->flags & SHRINKER_MEMCG_AWARE) {
--		down_write(&shrinker_rwsem);
-+		mutex_lock(&shrinker_mutex);
- 		unregister_memcg_shrinker(shrinker);
--		up_write(&shrinker_rwsem);
-+		mutex_unlock(&shrinker_mutex);
- 		return;
- 	}
- 
-@@ -713,11 +713,11 @@ void free_prealloced_shrinker(struct shrinker *shrinker)
- 
- void register_shrinker_prepared(struct shrinker *shrinker)
- {
--	down_write(&shrinker_rwsem);
-+	mutex_lock(&shrinker_mutex);
- 	list_add_tail_rcu(&shrinker->list, &shrinker_list);
- 	shrinker->flags |= SHRINKER_REGISTERED;
- 	shrinker_debugfs_add(shrinker);
--	up_write(&shrinker_rwsem);
-+	mutex_unlock(&shrinker_mutex);
- }
- 
- static int __register_shrinker(struct shrinker *shrinker)
-@@ -767,13 +767,13 @@ void unregister_shrinker(struct shrinker *shrinker)
- 	if (!(shrinker->flags & SHRINKER_REGISTERED))
- 		return;
- 
--	down_write(&shrinker_rwsem);
-+	mutex_lock(&shrinker_mutex);
- 	list_del_rcu(&shrinker->list);
- 	shrinker->flags &= ~SHRINKER_REGISTERED;
- 	if (shrinker->flags & SHRINKER_MEMCG_AWARE)
- 		unregister_memcg_shrinker(shrinker);
- 	debugfs_entry = shrinker_debugfs_remove(shrinker);
--	up_write(&shrinker_rwsem);
-+	mutex_unlock(&shrinker_mutex);
- 
- 	synchronize_srcu(&shrinker_srcu);
- 
--- 
-2.20.1
+I am unsure if this commit adds any value now since the TEE StMM EFI
+driver should be able to directly use efivars_{register/unregister}()
+APIs. Do you expect any other TEE kernel driver to use these?
 
+-Sumit
+
+> Co-developed-by: Ilias Apalodimas <ilias.apalodimas@linaro.org>
+> Signed-off-by: Ilias Apalodimas <ilias.apalodimas@linaro.org>
+> Signed-off-by: Masahisa Kojima <masahisa.kojima@linaro.org>
+> ---
+>  drivers/tee/tee_core.c  | 23 +++++++++++++++++++++++
+>  include/linux/tee_drv.h | 23 +++++++++++++++++++++++
+>  2 files changed, 46 insertions(+)
+>
+> diff --git a/drivers/tee/tee_core.c b/drivers/tee/tee_core.c
+> index 98da206cd761..0dce5b135d2c 100644
+> --- a/drivers/tee/tee_core.c
+> +++ b/drivers/tee/tee_core.c
+> @@ -7,6 +7,7 @@
+>
+>  #include <linux/cdev.h>
+>  #include <linux/cred.h>
+> +#include <linux/efi.h>
+>  #include <linux/fs.h>
+>  #include <linux/idr.h>
+>  #include <linux/module.h>
+> @@ -1263,6 +1264,28 @@ static void __exit tee_exit(void)
+>         tee_class = NULL;
+>  }
+>
+> +void tee_register_efivar_ops(struct efivars *tee_efivars,
+> +                            struct efivar_operations *ops)
+> +{
+> +       /*
+> +        * If the firmware EFI runtime services support SetVariable(),
+> +        * tee-based EFI variable services are not used.
+> +        */
+> +       if (!efivar_supports_writes()) {
+> +               efivars_generic_ops_unregister();
+> +               pr_info("Use tee-based EFI runtime variable services\n");
+> +               efivars_register(tee_efivars, ops);
+> +       }
+> +}
+> +EXPORT_SYMBOL_GPL(tee_register_efivar_ops);
+> +
+> +void tee_unregister_efivar_ops(struct efivars *tee_efivars)
+> +{
+> +       efivars_unregister(tee_efivars);
+> +       efivars_generic_ops_register();
+> +}
+> +EXPORT_SYMBOL_GPL(tee_unregister_efivar_ops);
+> +
+>  subsys_initcall(tee_init);
+>  module_exit(tee_exit);
+>
+> diff --git a/include/linux/tee_drv.h b/include/linux/tee_drv.h
+> index 17eb1c5205d3..def4ea6212ee 100644
+> --- a/include/linux/tee_drv.h
+> +++ b/include/linux/tee_drv.h
+> @@ -7,6 +7,7 @@
+>  #define __TEE_DRV_H
+>
+>  #include <linux/device.h>
+> +#include <linux/efi.h>
+>  #include <linux/idr.h>
+>  #include <linux/kref.h>
+>  #include <linux/list.h>
+> @@ -507,4 +508,26 @@ struct tee_context *teedev_open(struct tee_device *teedev);
+>   */
+>  void teedev_close_context(struct tee_context *ctx);
+>
+> +/**
+> + * tee_register_efivar_ops() - register the efivar ops
+> + * @tee_efivars:       pointer to efivars structure
+> + * @ops:               pointer to contain the efivar operation
+> + *
+> + * This function registers the tee-based efivar operation as an
+> + * EFI Runtime Service.
+> + *
+> + */
+> +void tee_register_efivar_ops(struct efivars *tee_efivars,
+> +                            struct efivar_operations *ops);
+> +
+> +/**
+> + * tee_unregister_efivar_ops() - unregister the efivar ops
+> + * @tee_efivars:       pointer to efivars structure
+> + *
+> + * This function unregisters the tee-based efivar operation
+> + * and reverts to the generic operation.
+> + *
+> + */
+> +void tee_unregister_efivar_ops(struct efivars *tee_efivars);
+> +
+>  #endif /*__TEE_DRV_H*/
+> --
+> 2.30.2
+>
