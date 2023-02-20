@@ -2,114 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C853069CAE6
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Feb 2023 13:26:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 681A669CB04
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Feb 2023 13:27:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229579AbjBTM0p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Feb 2023 07:26:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45968 "EHLO
+        id S231512AbjBTM1w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Feb 2023 07:27:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47492 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232073AbjBTM0j (ORCPT
+        with ESMTP id S231659AbjBTM1u (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Feb 2023 07:26:39 -0500
-Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86A8E1C316
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Feb 2023 04:25:50 -0800 (PST)
-Received: by mail-wm1-x329.google.com with SMTP id m23so751356wms.5
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Feb 2023 04:25:50 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=ZhuNX7zk4hZihBAY5sZG0csyVV6AYylCGdugAnsAC6c=;
-        b=bPba3qLwuP3pL5YFqhCwvExtNWIznWHdFR4XAXSWPf0VlwLp3X4gk+vhiYZBF3OCJB
-         +4ozenOOlX3dJ/BMfSl1I7nbv+4Wwr8BGYHqFrEq6/zebScqZhGU7To/OG33/EIlPRT7
-         M+9e/UeO0I0d2UIeOy+DsB19ih2wSBOe8cRr0z1lTPt5VdBO5JdBzoebAvZnImBSg23A
-         yK4OMN0MfJlj0WW4lStMk5mkiowmWQnxJ7CXOZT7yMuChSPRjKzssAqWKgPqqP6loVUg
-         zuJEUUlNrRfJDRKiIE8sEXk2EDL6lrTw+gRTiWg1S6zzPItFUW1sJ/tohDunfoSjrsL8
-         biaw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ZhuNX7zk4hZihBAY5sZG0csyVV6AYylCGdugAnsAC6c=;
-        b=dHYrZRZvKbzm8FW0nbZo9a/lA5nTV0bgGhtJlsuGZuYDpa2jg2QwAe0++mlQgLUz42
-         4c18FJna1s/mWQiW+2ShfZHUU8n1Cf0QAHsOcsejNUGNe8y8bkyW0sLY4Avvm4ulZP8u
-         sgdShv0DhDk1fMzntW0nCSaeY8bhXzbJrf5ZB7riXpjz9kgodFkbl9JClCC/4Vjb4ayD
-         YrCE3GOcqdPJzbfLRFf/ueIUIwNlBrIjjWiAV8SbUv2BKXDFu8Z/+ASNieOqP/1ENUvh
-         UZGRHJMMc4mkP4CvPU3Dk20lHs4IE3Py4hTcUmceu61DE0DE9R+BsgrVpyKMNFs/2sxM
-         FLQQ==
-X-Gm-Message-State: AO0yUKUXXTPJRxuUlv6iLzqQWp1xAOsL0+rXRYRGlMHs6S84UoP1XoCR
-        wra6/M3HGqjZ3Rp6NFxSr/rqcQ==
-X-Google-Smtp-Source: AK7set8fM14qE0F61S6lht5sfkP3yhezdAmuiQBgst8exmUIwWFYJljR5sQgrg0d08gSACnwp/jIVA==
-X-Received: by 2002:a05:600c:1d9c:b0:3df:9858:c032 with SMTP id p28-20020a05600c1d9c00b003df9858c032mr716208wms.7.1676895945499;
-        Mon, 20 Feb 2023 04:25:45 -0800 (PST)
-Received: from aspen.lan (cpc141216-aztw34-2-0-cust174.18-1.cable.virginm.net. [80.7.220.175])
-        by smtp.gmail.com with ESMTPSA id e16-20020adfe390000000b002c54c8e70b1sm1542169wrm.9.2023.02.20.04.25.44
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 20 Feb 2023 04:25:44 -0800 (PST)
-Date:   Mon, 20 Feb 2023 12:25:42 +0000
-From:   Daniel Thompson <daniel.thompson@linaro.org>
-To:     Luca Weiss <luca@z3ntu.xyz>
-Cc:     ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Lee Jones <lee@kernel.org>, Jingoo Han <jingoohan1@gmail.com>,
-        Helge Deller <deller@gmx.de>, linux-arm-msm@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, linux-fbdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] backlight: qcom-wled: Add PMI8950 compatible
-Message-ID: <Y/NmxjZgo9V6Enad@aspen.lan>
-References: <20221226-msm8953-6-2-wled-v1-1-e318d4c71d05@z3ntu.xyz>
+        Mon, 20 Feb 2023 07:27:50 -0500
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 614741A94E;
+        Mon, 20 Feb 2023 04:27:04 -0800 (PST)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 4F1C6C14;
+        Mon, 20 Feb 2023 04:26:35 -0800 (PST)
+Received: from [192.168.1.102] (unknown [172.31.20.19])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 308AF3F881;
+        Mon, 20 Feb 2023 04:25:51 -0800 (PST)
+Message-ID: <5b3b3017-d9bf-a1dc-4361-f974a5845dbc@arm.com>
+Date:   Mon, 20 Feb 2023 12:25:43 +0000
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221226-msm8953-6-2-wled-v1-1-e318d4c71d05@z3ntu.xyz>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.2
+Subject: =?UTF-8?B?UmU6IOetlOWkjTogW1BBVENIXSBQQ0k6IG9mOiBXYXJuIGlmIGJyaWRn?=
+ =?UTF-8?Q?e_base/limit_region_overlaps_with_system_ram_region?=
+To:     Bjorn Helgaas <helgaas@kernel.org>, guo.ziliang@zte.com.cn
+Cc:     bhelgaas@google.com, linux-pci@vger.kernel.org,
+        linux-kernel@vger.kernel.org, chen.lin5@zte.com.cn,
+        Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>
+References: <20230216233546.GA3354802@bhelgaas>
+Content-Language: en-GB
+From:   Robin Murphy <robin.murphy@arm.com>
+In-Reply-To: <20230216233546.GA3354802@bhelgaas>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 06, 2023 at 08:58:30PM +0100, Luca Weiss wrote:
-> PMI8950 contains WLED of version 4. Add support for it to the driver.
->
-> Signed-off-by: Luca Weiss <luca@z3ntu.xyz>
+On 2023-02-16 23:35, Bjorn Helgaas wrote:
+> [+cc Joerg, Will, Robin]
+> 
+> On Mon, Jan 09, 2023 at 04:35:25PM +0800, guo.ziliang@zte.com.cn wrote:
+>> bridge base/limit(memory behind in lspci info, outbound pcie address/size)
+>> region is used to route outbound mem read/write transaction to ep. This
+>> base/limit region also may filter out inbound transactions which will
+>> result in inbound(eg: dma) transaction fail.
+>>
+>> For example, if bridge base/limit is [0x20000000, 0x203fffff], system ram
+>> is [0x20000000, 0x27ffffff]. The inbound mapping is usually 1:1 equal
+>> mapping. When allocated system ram for inbound tansaction is 0x20004000
+>> (any in bridge base/limit), this inbound transactions will be filter out.
+>>
+>> AER may report 'UnsupReq' on inbound mem read/write transactions if address
+>> is in this base/limit region, but not all pcie AER enabled or work well. We
+>> warn it also in bridge pci address setting phase.
+>>
+>> Signed-off-by: Chen Lin <chen.lin5@zte.com.cn>
+> 
+> This would need the 0-day warnings cleaned up, of course.
+> 
+>> ---
+>>   drivers/pci/setup-bus.c | 20 ++++++++++++++++++++
+>>   1 file changed, 20 insertions(+)
+>>
+>> diff --git a/drivers/pci/setup-bus.c b/drivers/pci/setup-bus.c
+>> index b4096598dbcb..1a9f527d2317 100644
+>> --- a/drivers/pci/setup-bus.c
+>> +++ b/drivers/pci/setup-bus.c
+>> @@ -608,6 +608,24 @@ static void pci_setup_bridge_io(struct pci_dev *bridge)
+>>   	pci_write_config_dword(bridge, PCI_IO_BASE_UPPER16, io_upper16);
+>>   }
+>>
+>> +static void check_bridge_region_overlaps_systemram(struct pci_dev *bridge,
+>> +							struct pci_bus_region *region)
+>> +{
+>> +	int is_ram;
+>> +
+>> +	/*
+>> +	 * bridge base/limit(memory behind) region may filter out inbound
+>> +	 * transactions which will result in inbound(eg: dma) fail of ep.
+>> +	 * AER may report it if enabled, we warn it also.
+>> +	 */
+>> +	is_ram = region_intersects(region->start, region->end - region->start + 1,
+>> +				IORESOURCE_SYSTEM_RAM, IORES_DESC_NONE);
+>> +	if (is_ram == REGION_INTERSECTS) {
+>> +		pci_warn(bridge, "%#012llx..%#012llx bridge base/limit region overlaps with system ram, may result in inbound fail\n",
+>> +			region->start, region->end);
+> 
+> This compares PCI bus addresses (from struct pci_bus_region) with CPU
+> physical addresses (the struct resources used by region_intersects()).
+> 
+> But I don't think you can do that directly because an IOMMU might map
+> those PCI bus addresses to something different before a DMA gets to
+> system RAM.
+> 
+> I see that you say "The inbound mapping is usually 1:1 equal mapping"
+> above, so maybe I'm missing something.  Maybe the IOMMU folks will
+> clue me in.
 
-Reviewed-by: Daniel Thompson <daniel.thompson@linaro.org>
+IOMMUs typically wouldn't be reflected here - in fact they would 
+typically hide this issue anyway, since inbound DMA would then be to 
+virtual addresses anywhere in PCI Mem space (and we try our best to 
+carve out the regions used for outbound resources). However there 
+certainly exist systems where the PCI host bridge itself makes a static 
+non-identity translation between PCI Mem space and system PA space, with 
+potentially different mappings for inbound vs. outbound as well. So 
+indeed, this code looks wrong - at the very least any consideration of 
+region->offset is missing (assuming that's initialised correctly in this 
+context), but that still won't account for inbound translation.
 
+In fact this is really the same thing as in the recent discussions of 
+the MSI thing in the DWC driver - it's all a matter of whether a bus 
+address may overlap a valid DMA address or not. A mechanism for making 
+that check properly would go hand-in-hand with the mechanism we need for 
+allocating such bus addresses for inline MSI widgets.
 
-> ---
-> While adding dt-bindings and dts in a previous series I forgot to add the
-> compatible to the driver. Fix that now.
-> ---
->  drivers/video/backlight/qcom-wled.c | 1 +
->  1 file changed, 1 insertion(+)
->
-> diff --git a/drivers/video/backlight/qcom-wled.c b/drivers/video/backlight/qcom-wled.c
-> index 527210e85795..5f504883aca5 100644
-> --- a/drivers/video/backlight/qcom-wled.c
-> +++ b/drivers/video/backlight/qcom-wled.c
-> @@ -1731,6 +1731,7 @@ static int wled_remove(struct platform_device *pdev)
->
->  static const struct of_device_id wled_match_table[] = {
->  	{ .compatible = "qcom,pm8941-wled", .data = (void *)3 },
-> +	{ .compatible = "qcom,pmi8950-wled", .data = (void *)4 },
->  	{ .compatible = "qcom,pmi8994-wled", .data = (void *)4 },
->  	{ .compatible = "qcom,pmi8998-wled", .data = (void *)4 },
->  	{ .compatible = "qcom,pm660l-wled", .data = (void *)4 },
->
-> ---
-> base-commit: 1b929c02afd37871d5afb9d498426f83432e71c2
-> change-id: 20221226-msm8953-6-2-wled-5f966bfa4db3
->
-> Best regards,
-> --
-> Luca Weiss <luca@z3ntu.xyz>
->
+Thanks,
+Robin.
+
+>> +	}
+>> +}
+>> +
+>>   static void pci_setup_bridge_mmio(struct pci_dev *bridge)
+>>   {
+>>   	struct resource *res;
+>> @@ -621,6 +639,7 @@ static void pci_setup_bridge_mmio(struct pci_dev *bridge)
+>>   		l = (region.start >> 16) & 0xfff0;
+>>   		l |= region.end & 0xfff00000;
+>>   		pci_info(bridge, "  bridge window %pR\n", res);
+>> +		check_bridge_region_overlaps_systemram(bridge, &region);
+>>   	} else {
+>>   		l = 0x0000fff0;
+>>   	}
+>> @@ -652,6 +671,7 @@ static void pci_setup_bridge_mmio_pref(struct pci_dev *bridge)
+>>   			lu = upper_32_bits(region.end);
+>>   		}
+>>   		pci_info(bridge, "  bridge window %pR\n", res);
+>> +		check_bridge_region_overlaps_systemram(bridge, &region);
+>>   	} else {
+>>   		l = 0x0000fff0;
+>>   	}
+>> -- 
+>> 2.15.2
