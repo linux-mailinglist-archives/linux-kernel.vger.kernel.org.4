@@ -2,56 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6001469C7BA
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Feb 2023 10:32:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B724B69C7BC
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Feb 2023 10:33:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231527AbjBTJc0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Feb 2023 04:32:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38340 "EHLO
+        id S230329AbjBTJdw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Feb 2023 04:33:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39736 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230062AbjBTJcY (ORCPT
+        with ESMTP id S229503AbjBTJdv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Feb 2023 04:32:24 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1589166DF;
-        Mon, 20 Feb 2023 01:32:19 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1934F60D38;
-        Mon, 20 Feb 2023 09:32:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 59BB1C4339B;
-        Mon, 20 Feb 2023 09:32:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1676885538;
-        bh=WP/C8hKVpvdrRvMRdROd3OdMlXuM01497fljMlMi13o=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Ne24zRzA9QCyMRSpjrif2y6f5rLPcC0ETThe1iYNjjAPHbITeX6qnCpTIr2gRpBkn
-         naztHHw2oEfx4t2zDq3yhKTbnS0Sg37tjoNdzIdlxq4jD39qyFFkH5z3alt1AO6paw
-         yTGE9rnUoKgvZ6swolAIHfOSiUV2kDoGxVkmESi4aqJt7EwX6xXguI1aAI1TdS66jK
-         seazaUZJ6ZHubyphkZ5IqmH3qhiinYEdlbPADku+RKCMy8yUjJAsPofF7dxPkfOJ5h
-         Px4s8Xh+WmsO3wo8T6F3qBcZ8BKpC4hJxE4K9EC9gxVZG9rBt5q1mC5veXVbW5+/Wh
-         VJjXz/e91+JSQ==
-Date:   Mon, 20 Feb 2023 15:02:10 +0530
-From:   Manivannan Sadhasivam <mani@kernel.org>
-To:     Stephen Zhang <starzhangzsd@gmail.com>
-Cc:     jejb@linux.ibm.com, artin.petersen@oracle.com,
-        matthias.bgg@gmail.com, angelogioacchino.delregno@collabora.com,
-        beanhuo@micron.com, bvanassche@acm.org, avri.altman@wdc.com,
-        yoshihiro.shimoda.uh@renesas.com, linux-scsi@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, zhangshida@kylinos.cn,
-        k2ci <kernel-bot@kylinos.cn>
-Subject: Re: [PATCH] scsi: ufs: Add select to CONFIG_PM in Kconfig
-Message-ID: <20230220093210.GA27366@thinkpad>
-References: <20230220083256.997470-1-zhangshida@kylinos.cn>
+        Mon, 20 Feb 2023 04:33:51 -0500
+Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F8958680
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Feb 2023 01:33:49 -0800 (PST)
+Received: by mail-pj1-x1033.google.com with SMTP id u10so685198pjc.5
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Feb 2023 01:33:49 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=auUSvs8UsdFaj/xThMRdjaVCog/Zx9EFkKoJMU//YhU=;
+        b=VEzgNlH1ZIpSeIIW4BHakqAskqPavaOvnwg+FDMkymbI+7fRGLlkwr/700K8ZFQqJg
+         aqdAQuNVLlRPa6+vEKtYLb6ZYTpXrj7248N7dJQSbSTS3XLrbD5J2mXlMnb5MW20z/lv
+         vfcUsoDMycHnvx4SXBpfS5WMxKHzjKjYiqqR4=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=auUSvs8UsdFaj/xThMRdjaVCog/Zx9EFkKoJMU//YhU=;
+        b=xuEjHt2su15FJu195EXIH8VBh62cQDGjuV/iJwkgbyI4OjBLF+mVPvZLFqgGBdNdlx
+         2+gYjw044d3eWLaEwwuNcgAFyaYBwvJv8uRH3/XPHCdo63S16DwdlFWCOBEAsYKm8DsI
+         EWhL2f+LcSHVlSzcD+sGxHYqJFqjN6OHbztQ0kteBeHvJg+6ALaadlpAmhvE/ETPbOde
+         zY+QctBa2OY2SIb1s9GTDOxYemX4EvD8Mo3yIfgnbULwNG0sUlF5cdA3xtz9kUJTHP4u
+         CZzH4jRGeHvqq7sKzxtQWHjCvbmrmthsj6IOo1ZfRJNWdzqFKzD7ivych5gsG18KIE/t
+         3Qww==
+X-Gm-Message-State: AO0yUKVBrkygvn81HqMwoSlFc/xTghj7z3go6fuX1MI4SCzRtGGmqsqh
+        47kv7zjTfeHSYsGny7GUU1YyxQ==
+X-Google-Smtp-Source: AK7set/mx+AT01XAXlnDozbSnH6dwDZECdvgBPrkFE3Z+Q+N302TjAwATXil1kIEzmGxWYX76fcotg==
+X-Received: by 2002:a17:902:f94e:b0:19b:e73:809c with SMTP id kx14-20020a170902f94e00b0019b0e73809cmr764263plb.1.1676885628697;
+        Mon, 20 Feb 2023 01:33:48 -0800 (PST)
+Received: from hsinyi-z840.tpe.corp.google.com ([2401:fa00:1:10:22dd:c2d9:add9:3828])
+        by smtp.gmail.com with ESMTPSA id q7-20020a170902a3c700b0019324fbec59sm7427728plb.41.2023.02.20.01.33.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 20 Feb 2023 01:33:48 -0800 (PST)
+From:   Hsin-Yi Wang <hsinyi@chromium.org>
+To:     Matthias Brugger <matthias.bgg@gmail.com>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org
+Subject: [PATCH] arm64: dts: mediatek: mt8183: kukui: Add scp firmware-name
+Date:   Mon, 20 Feb 2023 17:33:43 +0800
+Message-Id: <20230220093343.3447381-1-hsinyi@chromium.org>
+X-Mailer: git-send-email 2.39.2.637.g21b0678d19-goog
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230220083256.997470-1-zhangshida@kylinos.cn>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -59,55 +70,26 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 20, 2023 at 04:32:56PM +0800, Stephen Zhang wrote:
-> From: Shida Zhang <zhangshida@kylinos.cn>
-> 
-> From: Shida Zhang <zhangshida@kylinos.cn>
-> 
-> In a configuration with CONFIG_SCSI_UFS_MEDIATEK set to 'm' and
-> CONFIG_PM set to 'n', errors occur at compile time:
-> 
-> ====
-> ../drivers/ufs/host/ufs-mediatek.c: In function ‘ufs_mtk_runtime_suspend’:
-> ../drivers/ufs/host/ufs-mediatek.c:1621:8: error: implicit declaration of function ‘ufshcd_runtime_suspend’; did you mean ‘ufs_mtk_runtime_suspend’? [-Werror=implicit-function-declaration]
-> ../drivers/ufs/host/ufs-mediatek.c: In function ‘ufs_mtk_runtime_resume’:
-> ../drivers/ufs/host/ufs-mediatek.c:1636:9: error: implicit declaration of function ‘ufshcd_runtime_resume’; did you mean ‘ufs_mtk_runtime_resume’? [-Werror=implicit-function-declaration]
-> ====
-> 
-> This patch fixes these by selecting CONFIG_PM from CONFIG_SCSI_UFS_MEDIATEK.
-> 
-> Reported-by: k2ci <kernel-bot@kylinos.cn>
-> Signed-off-by: Shida Zhang <zhangshida@kylinos.cn>
-> ---
->  drivers/ufs/host/Kconfig | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/drivers/ufs/host/Kconfig b/drivers/ufs/host/Kconfig
-> index 4cc2dbd79ed0..f9786f085b54 100644
-> --- a/drivers/ufs/host/Kconfig
-> +++ b/drivers/ufs/host/Kconfig
-> @@ -71,6 +71,7 @@ config SCSI_UFS_QCOM
->  config SCSI_UFS_MEDIATEK
->  	tristate "Mediatek specific hooks to UFS controller platform driver"
->  	depends on SCSI_UFSHCD_PLATFORM && ARCH_MEDIATEK
-> +	select PM
+The upstream SCP firmware path is /lib/firmware/mediatek/mt8183/scp.img
 
-Forcing a dependency is only valid if the driver won't work without it. PM is
-an optional feature, so it shouldn't be forced. Moreover, in your case the
-drivers were not used but instead erroring out because their definitions exist.
+Signed-off-by: Hsin-Yi Wang <hsinyi@chromium.org>
+---
+ arch/arm64/boot/dts/mediatek/mt8183-kukui.dtsi | 2 ++
+ 1 file changed, 2 insertions(+)
 
-Here you should guard the ufs_mtk_runtime_suspend and ufs_mtk_runtime_resume
-functions with CONFIG_PM instead.
-
-Thanks,
-Mani
-
->  	select PHY_MTK_UFS
->  	select RESET_TI_SYSCON
->  	help
-> -- 
-> 2.27.0
-> 
-
+diff --git a/arch/arm64/boot/dts/mediatek/mt8183-kukui.dtsi b/arch/arm64/boot/dts/mediatek/mt8183-kukui.dtsi
+index fbe14b13051a..8390e89dbc83 100644
+--- a/arch/arm64/boot/dts/mediatek/mt8183-kukui.dtsi
++++ b/arch/arm64/boot/dts/mediatek/mt8183-kukui.dtsi
+@@ -807,6 +807,8 @@ &pwm0 {
+ 
+ &scp {
+ 	status = "okay";
++
++	firmware-name = "mediatek/mt8183/scp.img";
+ 	pinctrl-names = "default";
+ 	pinctrl-0 = <&scp_pins>;
+ 
 -- 
-மணிவண்ணன் சதாசிவம்
+2.39.2.637.g21b0678d19-goog
+
