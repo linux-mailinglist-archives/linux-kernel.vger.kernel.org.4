@@ -2,123 +2,165 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EAC1469D748
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 00:45:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4441369D749
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 00:45:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232747AbjBTXph (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Feb 2023 18:45:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54932 "EHLO
+        id S232324AbjBTXpz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Feb 2023 18:45:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55454 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230516AbjBTXpe (ORCPT
+        with ESMTP id S230516AbjBTXpy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Feb 2023 18:45:34 -0500
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE07F1E9FD;
-        Mon, 20 Feb 2023 15:45:32 -0800 (PST)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        Mon, 20 Feb 2023 18:45:54 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46AE32201D
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Feb 2023 15:45:49 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4PLJvG5Bgwz4x1h;
-        Tue, 21 Feb 2023 10:45:30 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1676936731;
-        bh=JLytw3ranhc4JM8T9vusgGGu8sJVzGcLp30afq00hdo=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=r3cgDiAoBWnvnMoPqX8BtV8KcqpHEYY8+Vi26MQ9vhpXHlh6yBmHebV+EKPRbgsM+
-         k25qADToOvkakTcwSG5K3IuGWS1wioY6GAERz0RKOCt332cyNWggBJ0j1/T8wpa1aL
-         4kHJ5KGZeee61GrrLXRkINXveGlrKI2UppxUDwQO1WCfMCgz1YFs+fDs6xzy2WPROX
-         N4WJjjcPiOfCZTs+ToLCRGGfEMjs/hU0t9C7pvl2BR23pxRrUqJnghp/DgsE3DKXSC
-         F9ma0ypqqftQhVWwC0gL/UxrXFGYA5hu4MzBWnFkI8S8HNbWSkA9/LUVLWMKLG2sVe
-         sUCdDK4KdA6iA==
-Date:   Tue, 21 Feb 2023 10:45:29 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     Jan Kara <jack@suse.cz>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: duplicate patch in the mm-nonmm-stable tree
-Message-ID: <20230221104529.631ac4c9@canb.auug.org.au>
-In-Reply-To: <20230220151211.1cdec7528db28a00320a855f@linux-foundation.org>
-References: <20230221090827.16d1bf96@canb.auug.org.au>
-        <20230220151211.1cdec7528db28a00320a855f@linux-foundation.org>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C930460C56
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Feb 2023 23:45:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 29801C433AC
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Feb 2023 23:45:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1676936748;
+        bh=lHqy7KaRTiXvEtoIHLDya9sELFHz4Y5zTlEpTGfK2so=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=WpKkMJR1KO+e/GG1AaQt3isP8Cp3SqZw+gFPGFGrHTLHz3IngZn1k4tJV62EbOOVa
+         TLzI20woFXj0I5r3vpIAgJ7OMcf5vTlpwKAMM8w5JI1+XWcltiDO4TB1VXllxEsMUt
+         BdY1k72N/F+Nu8EzLbqCx3mVov6fxbXYacfTxmztjF7tQsQQJ2UWCeX2S1Bn5PFWYi
+         I6h/7Z7HXcdJISUHlw1dF04FX71g2J3xBq9HKLmPBUiEGG5CfuUy07jNUrBWNEkqe9
+         v6GUTxGraiGRLAKS8lKs/8uYtoDnl6AjAGt8igc0uGoqYCuY5OMgB2X+MD8OL6+dkd
+         X+SG+k4OJqA1g==
+Received: by mail-ed1-f53.google.com with SMTP id cq23so10199429edb.1
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Feb 2023 15:45:48 -0800 (PST)
+X-Gm-Message-State: AO0yUKVmoncofQ1rN/nm7veE704b8TXP9HmW4CMWPwWuqwirLhDke2g4
+        5SppOgBB6ws0XUw6c1sK3Ozhd3ZPpp6lgqUdOmvLDA==
+X-Google-Smtp-Source: AK7set+v7ZnTho0nPLYgzxi4AwTt0me1YzleMkwglp/Me6loAowj15CqGWw9nLkhgolRVf1BKnYRgLxYAOhKWheMX5o=
+X-Received: by 2002:a17:906:13d9:b0:8de:c6a6:5134 with SMTP id
+ g25-20020a17090613d900b008dec6a65134mr212605ejc.15.1676936746315; Mon, 20 Feb
+ 2023 15:45:46 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/DPNSBE/vYqU9CtRprg8ITkd";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20230220120127.1975241-1-kpsingh@kernel.org> <20230220121350.aidsipw3kd4rsyss@treble>
+ <CACYkzJ5L9MLuE5Jz+z5-NJCCrUqTbgKQkXSqnQnCfTD_WNA7_Q@mail.gmail.com>
+ <CACYkzJ6n=-tobhX0ONQhjHSgmnNjWnNe_dZnEOGtD8Y6S3RHbA@mail.gmail.com>
+ <Y/OETPFTJbGtCADM@zn.tnic> <3a65d18f-b218-60e7-4748-f1609eb76fd5@citrix.com>
+ <Y/PhxDIVsa4WU5gu@zn.tnic> <50231372-2d6d-e4af-be88-5fe45e0c210d@citrix.com>
+In-Reply-To: <50231372-2d6d-e4af-be88-5fe45e0c210d@citrix.com>
+From:   KP Singh <kpsingh@kernel.org>
+Date:   Mon, 20 Feb 2023 15:45:35 -0800
+X-Gmail-Original-Message-ID: <CACYkzJ6k+Gm5NogQ6u4kLcHYfhyvNOtL3RvmDoJYq9KH5c4eqw@mail.gmail.com>
+Message-ID: <CACYkzJ6k+Gm5NogQ6u4kLcHYfhyvNOtL3RvmDoJYq9KH5c4eqw@mail.gmail.com>
+Subject: Re: [PATCH RESEND] x86/speculation: Fix user-mode spectre-v2
+ protection with KERNEL_IBRS
+To:     Andrew Cooper <andrew.cooper3@citrix.com>
+Cc:     Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@intel.com>,
+        Josh Poimboeuf <jpoimboe@kernel.org>,
+        linux-kernel@vger.kernel.org, pjt@google.com, evn@google.com,
+        tglx@linutronix.de, mingo@redhat.com, dave.hansen@linux.intel.com,
+        x86@kernel.org, hpa@zytor.com, peterz@infradead.org,
+        pawan.kumar.gupta@linux.intel.com, kim.phillips@amd.com,
+        alexandre.chartre@oracle.com, daniel.sneddon@linux.intel.com,
+        =?UTF-8?Q?Jos=C3=A9_Oliveira?= <joseloliveira11@gmail.com>,
+        Rodrigo Branco <rodrigo@kernelhacking.com>,
+        Alexandra Sandulescu <aesa@google.com>,
+        Jim Mattson <jmattson@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/DPNSBE/vYqU9CtRprg8ITkd
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
-
-Hi Andrew,
-
-On Mon, 20 Feb 2023 15:12:11 -0800 Andrew Morton <akpm@linux-foundation.org=
-> wrote:
+On Mon, Feb 20, 2023 at 3:31 PM Andrew Cooper <andrew.cooper3@citrix.com> wrote:
 >
-> On Tue, 21 Feb 2023 09:08:27 +1100 Stephen Rothwell <sfr@canb.auug.org.au=
-> wrote:
->=20
-> > The following commit is also in Linus Torvalds' tree as a different com=
-mit
-> > (but the same patch):
-> >=20
-> >   bf470202dd9f ("fs: gracefully handle ->get_block not mapping bh in __=
-mpage_writepage") =20
->=20
-> CommitDate: Thu Feb 2 22:50:07 2023 -0800
->=20
-> > This is commit
-> >=20
-> >   7010839ccfd4 ("fs: gracefully handle ->get_block not mapping bh in __=
-mpage_writepage")
-> >=20
-> > in Linus' tree. =20
->=20
-> CommitDate: Thu Jan 26 16:46:35 2023 +0100
->=20
->=20
-> So I'm wondering why this came to light on Feb 20?
+> On 20/02/2023 9:10 pm, Borislav Petkov wrote:
+> > On Mon, Feb 20, 2023 at 07:57:25PM +0000, Andrew Cooper wrote:
+> >> I think we're discussing the legacy IBRS case here.  i.e. what was
+> >> retrofitted in microcode for existing parts?
+> > Any IBRS actually. The one which is *not* the automatic, fire'n'forget
+> > thing.
+>
+> /sigh so we're still talking about 3 different things then.
+>
+> 1) Intel's legacy IBRS
+> 2) AMD's regular IBRS
+> 3) AMD's AutoIBRS
+>
+> which all have different relevant behaviours for userspace.  Just so
+> it's written out coherently in at least one place...
+>
+> When SEV-SNP is enabled in firmware, whether or not it's being used by
+> software, AutoIBRS keeps indirect predictions inhibited in all of
+> ASID0.  That's all host userspace to the non-hypervisor devs reading
+> this thread.
+>
+> For any AMD configuration setting STIBP, there must be an IBPB after
+> having set STIBP.   Setting STIBP alone does not evict previously
+> created shared predictions.  This one can go subtly wrong for anyone who
+> assumes that Intel STIBP and AMD STIBP have the same behaviour.
 
-Sorry about that, but I wouldn't worry about it too much as it doesn't
-seem to be causing a conflict.
+This is very useful, but I think this is also why the STIBP and IBPB's
+conditionals seemed to be tangled together. The prctl / seccomp code
+should set STIBP and trigger an IBPB.
 
-The latter commit was in the ext3 tree before being merged by Linus and
-I guess I missed it initially because sometimes the check for
-duplicates in the mm tree produces a longish list when the mm tree is
-updated during the day and the mm-hotfixes tree has already been merged
-(and gets rebased as part of the mm tree rebase).
+I took a stab at the documentation piece, Andrew and others could you
+help me with a review and suggestions?
 
-It would have been put in the list of things to ignore until it turned
-up in Linus's tree today (which is an earlier and check and has a
-separate ignore list).
+diff --git a/Documentation/admin-guide/hw-vuln/spectre.rst
+b/Documentation/admin-guide/hw-vuln/spectre.rst
+index c4dcdb3d0d45..d7003bbc82f6 100644
+--- a/Documentation/admin-guide/hw-vuln/spectre.rst
++++ b/Documentation/admin-guide/hw-vuln/spectre.rst
+@@ -479,8 +479,17 @@ Spectre variant 2
+    On Intel Skylake-era systems the mitigation covers most, but not all,
+    cases. See :ref:`[3] <spec_ref3>` for more details.
 
-I'll try to be more careful.
---=20
-Cheers,
-Stephen Rothwell
+-   On CPUs with hardware mitigation for Spectre variant 2 (e.g. Enhanced
+-   IBRS on x86), retpoline is automatically disabled at run time.
++   On CPUs with hardware mitigation for Spectre variant 2 (e.g. IBRS
++   or enhanced IBRS on x86), retpoline is automatically disabled at run time.
++
++   Setting the IBRS bit implicitly enables STIBP which guards against
++   cross-thread branch target injection on SMT systems. On systems
+with enhanced
++   IBRS, the kernel sets the bit once, which keeps cross-thread protections
++   always enabled, obviating the need for an explicit STIBP. On CPUs
+with legacy
++   IBRS, the kernel clears the IBRS bit on returning to user-space, thus also
++   disabling the implicit STIBP. Consequently, STIBP needs to be explicitly
++   enabled to guard against cross-thread attacks in userspace.
++
 
---Sig_/DPNSBE/vYqU9CtRprg8ITkd
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
+    The retpoline mitigation is turned on by default on vulnerable
+    CPUs. It can be forced on or off by the administrator
+@@ -504,9 +513,12 @@ Spectre variant 2
+    For Spectre variant 2 mitigation, individual user programs
+    can be compiled with return trampolines for indirect branches.
+    This protects them from consuming poisoned entries in the branch
+-   target buffer left by malicious software.  Alternatively, the
+-   programs can disable their indirect branch speculation via prctl()
+-   (See :ref:`Documentation/userspace-api/spec_ctrl.rst <set_spec_ctrl>`).
++   target buffer left by malicious software.
++
++   On legacy IBRS systems where the IBRS bit is cleared and thus disabling the
++   implicit STIBP on returning to userspace, the programs can disable their
++   indirect branch speculation via prctl() (See
++   :ref:`Documentation/userspace-api/spec_ctrl.rst <set_spec_ctrl>`).
+    On x86, this will turn on STIBP to guard against attacks from the
+    sibling thread when the user program is running, and use IBPB to
+    flush the branch target buffer when switching to/from the program.
 
------BEGIN PGP SIGNATURE-----
+>
+> Furthermore, extra care needs taking on vmexit because transitioning
+> from the guest STIBP setting to the host STIBP setting can leave shared
+> predictions intact.
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmP0BhkACgkQAVBC80lX
-0GzK1Af9FgqpE1E+x94od5TT0VytuWop7jJBqQCANZLCM/1XMA7U6m1fTg/NFoyz
-BcZuzcAclD3dl9J2iKmW3giH8GV7pnk+B+nRZjpl9KfDxWN0IGEVkAkcKo3mNGvU
-SHDbgsDwSgNX5wTfcwc0KOV2M7+rcqPC9hx4CHx+D3+kCcZkXiRc9XzFGTnyk54X
-ix/hHeGJMic4dekljFKD2iCNCpTGouOHTCcK1bZlgVa1klOWskSTOrDbrBlmA74K
-t+I7mXYpAGOSoFmEA43pyJBVGbvETCIAQITS6CMUZYaR8nFoRtPM+9f/aM2wYZUX
-RX66WdnI9pInFOqoj+4dna0DgyJvAA==
-=5T5G
------END PGP SIGNATURE-----
 
---Sig_/DPNSBE/vYqU9CtRprg8ITkd--
+
+>
+> ~Andrew
