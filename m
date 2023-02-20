@@ -2,112 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D212969C93E
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Feb 2023 12:04:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B7E9769C941
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Feb 2023 12:05:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230087AbjBTLEV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Feb 2023 06:04:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58578 "EHLO
+        id S231578AbjBTLFX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Feb 2023 06:05:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59886 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231674AbjBTLER (ORCPT
+        with ESMTP id S231756AbjBTLFE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Feb 2023 06:04:17 -0500
-Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CDA6013DCE
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Feb 2023 03:04:06 -0800 (PST)
-Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com [209.85.208.71])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 694AB3F586
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Feb 2023 11:04:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1676891044;
-        bh=PQ/e3yix0m9X8IeKW6PjCOf86G2Z7hFs9Ie/f4F1ppE=;
-        h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-         MIME-Version;
-        b=jARpOUNcIkLbXx9McVsaMufnktMVBZesAkUzUBOVEN0IMN41a5c58sfuIqthfoMOq
-         ZfU1aGNrM3D1vFWejdxmBKq9srfxMt8vLTQrwiBX2MawLUDlGnDC9XP7IfmabQMflC
-         hlCieqzZsdETvHLbRhLpsfCWcjXKz/Pwxaeb7ihBHfrrUmNfNR2oOE7uyb95a4qaVE
-         TVt0fuJHohthe3S2HkCqYI8R2qq/+OU6uhThyratA6YtIlRNkTtl3WwnNm+K1Wp5gc
-         dsDtNujVGPnoKGxc6Cc3FafYz+BkCabw6yFkN7wdOKNdx4ERKxhYdn6tADaur5c/2x
-         KU3rlRefGTtyQ==
-Received: by mail-ed1-f71.google.com with SMTP id ck7-20020a0564021c0700b004a25d8d7593so722618edb.0
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Feb 2023 03:04:04 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=PQ/e3yix0m9X8IeKW6PjCOf86G2Z7hFs9Ie/f4F1ppE=;
-        b=D68bJmBhCj08LsZL03MB+ogX5kR0iVnkvZUA4Ec6XO4j/XBEC2FA+tDLEUcPP+oeGz
-         Syhf3cFv2Ai2DNULsjh43f0L3JHy+8BU5gCg43m+PqohoC0yWbWMlxK7seQ3wb0kuWEM
-         1Q8JtJ0Zdjsf5QtvIEWNz2y80eRFoJbheUW5A2pGOyWD3wttMRcFSIb0jZ6UscLDv3KX
-         p4Br5tu//sTjRlWrngeTGYkt87j/KGnrNfWbkg4V4izmhMHezQCmN+DtHiaSlXcne7TG
-         gUzT1t96JlFfcs12UapTstmLhxyjmRIe+LQK7+HqOlwYPF05azZpF9J2qwJOh6Apen6f
-         2dgg==
-X-Gm-Message-State: AO0yUKVGm5dEifQFUM/oiBfcSkeEbNtK4qA9H3Q5Nm0ARZM/JlpIlBRF
-        +9LiyA8T1J1LqceEA6oVb9PBc92aZzLeu4g1uiwHYqc3jfDGpwGZ1C3BvP0vMhBHUATqwHbrjsC
-        92HLpKm14u1bB55k9ot/msC32hQr4mTtY3XWU3iw4Ow==
-X-Received: by 2002:a17:907:6e87:b0:871:dd2:4af0 with SMTP id sh7-20020a1709076e8700b008710dd24af0mr11742885ejc.26.1676891043832;
-        Mon, 20 Feb 2023 03:04:03 -0800 (PST)
-X-Google-Smtp-Source: AK7set9K9DWYKm6njTRouQU2LGApclEmMni7DIBij60SxRmB3n34Dr/nplqD3hOHz76k2PwAFJ+yyQ==
-X-Received: by 2002:a17:907:6e87:b0:871:dd2:4af0 with SMTP id sh7-20020a1709076e8700b008710dd24af0mr11742867ejc.26.1676891043606;
-        Mon, 20 Feb 2023 03:04:03 -0800 (PST)
-Received: from work.lan (77-169-125-32.fixed.kpn.net. [77.169.125.32])
-        by smtp.gmail.com with ESMTPSA id b11-20020a1709062b4b00b008b147ad0ad1sm5582552ejg.200.2023.02.20.03.04.02
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 20 Feb 2023 03:04:03 -0800 (PST)
-From:   Roxana Nicolescu <roxana.nicolescu@canonical.com>
-To:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, shuah@kernel.org
-Cc:     netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH 1/1] selftest: fib_tests: Always cleanup before exit
-Date:   Mon, 20 Feb 2023 12:04:00 +0100
-Message-Id: <20230220110400.26737-2-roxana.nicolescu@canonical.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230220110400.26737-1-roxana.nicolescu@canonical.com>
-References: <20230220110400.26737-1-roxana.nicolescu@canonical.com>
+        Mon, 20 Feb 2023 06:05:04 -0500
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58578EFBC;
+        Mon, 20 Feb 2023 03:04:58 -0800 (PST)
+Date:   Mon, 20 Feb 2023 12:04:55 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1676891096;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=a5K+nNXU/aOhOrHEM+8WiqTHs4DgPAa77M4xUQIhQFA=;
+        b=U19Z8M1ktqI7u2yK4OYbmyTdfEb7+iBxB5POxwnzKTdgcCxNBeRWA5aODFzCq/PTM8TPOQ
+        w9nVzkYtL2gY68MF1bzoo0Dgdqe8NrbXHh5n9cjei/8svduobxPq0MS1/PNVgLZXawpX7f
+        rHnKY4BvPDGCNlJmAsEeygU6N5NH1+dL69ThQ9ZjRJ461dss7NJNUZQ4fOyMnvAYCywwGm
+        aRA/xjq70cFzz3RXqNBqyxEB7uMSYiOU7FDgmaMKE6YnRJH9jPSC3RiVN46rMbNxTU7ubJ
+        sDn0Nu1OHdIBlBXXwHTHsEZRSisBx14gPNlNUsq9diIQyBJIWMU0UscZqJVawg==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1676891096;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=a5K+nNXU/aOhOrHEM+8WiqTHs4DgPAa77M4xUQIhQFA=;
+        b=/ZcF1/bMaDLwLhua3sSEQzF1BKgfYID0a8wGlSvrkyHhkTg39pKxbGPpOCpDREyMhI3M9Z
+        FUluMeZEaUB3nQAQ==
+From:   Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+To:     Thomas Gleixner <tglx@linutronix.de>
+Cc:     Crystal Wood <swood@redhat.com>, John Keeping <john@metanate.com>,
+        linux-rt-users@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: rtmutex, pi_blocked_on, and blk_flush_plug()
+Message-ID: <Y/NT1/ynarp9cDlS@linutronix.de>
+References: <4b4ab374d3e24e6ea8df5cadc4297619a6d945af.camel@redhat.com>
+ <Y+47FVJ+hI+NA2In@linutronix.de>
+ <87k00cr7ix.ffs@tglx>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <87k00cr7ix.ffs@tglx>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Usage of `set -e` before executing a command causes immediate exit
-on failure, without cleanup up the resources allocated at setup.
-This can affect the next tests that use the same resources,
-leading to a chain of failures.
+On 2023-02-20 10:49:26 [+0100], Thomas Gleixner wrote:
+> > The logic is different but the deadlock should be avoided:
+> > - mutex_t and rw_semaphore invoke schedule() while blocking on a lock.
+> >   As part of schedule() sched_submit_work() is invoked.
+> >   This is the same in RT and !RT so I don't expect any dead lock since
+> >   the involved locks are the same.
+> 
+> Huch?
+> 
+> xlog_cil_commit()
+>   down_read(&cil->xc_ctx_lock)
+>     __rwbase_read_lock()
+>        __rt_mutex_slowlock()
+>          current->pi_blocked_on = ...
+>          schedule()
+>            __blk_flush_plug()
+>              dd_insert_requests()
+>                rt_spin_lock()
+>                  WARN_ON(current->pi_blocked_on);
+> 
+> So something like the below is required. But that might not cut it
+> completely. wq_worker_sleeping() is fine, but I'm not convinced that
+> io_wq_worker_sleeping() is safe. That needs some investigation.
 
-A simple fix is to always call cleanup function when the script exists.
-This approach is already used by other existing tests.
+Okay, so this makes sense.
 
-Fixes: 1056691b2680 ("selftests: fib_tests: Make test results more verbose")
-Signed-off-by: Roxana Nicolescu <roxana.nicolescu@canonical.com>
----
- tools/testing/selftests/net/fib_tests.sh | 2 ++
- 1 file changed, 2 insertions(+)
+> Thanks,
+> 
+>         tglx
+> ---
+> 
+> --- a/kernel/sched/core.c
+> +++ b/kernel/sched/core.c
+> @@ -6666,6 +6666,9 @@ static inline void sched_submit_work(str
+>  	 */
+>  	SCHED_WARN_ON(current->__state & TASK_RTLOCK_WAIT);
+>  
+> +	if (current->pi_blocked_on)
+> +		return;
+> +
 
-diff --git a/tools/testing/selftests/net/fib_tests.sh b/tools/testing/selftests/net/fib_tests.sh
-index 5637b5dadabd..70ea8798b1f6 100755
---- a/tools/testing/selftests/net/fib_tests.sh
-+++ b/tools/testing/selftests/net/fib_tests.sh
-@@ -2065,6 +2065,8 @@ EOF
- ################################################################################
- # main
- 
-+trap cleanup EXIT
-+
- while getopts :t:pPhv o
- do
- 	case $o in
--- 
-2.34.1
+The ->pi_blocked_on field is set by __rwbase_read_lock() before
+schedule() is invoked while blocking on the sleeping lock. By doing this
+we avoid __blk_flush_plug() and as such will may deadlock because we are
+going to sleep and made I/O progress earlier which is not globally
+visibly but might be (s/might be/is/ in the deadlock case) expected by
+the owner of the lock.
 
+We could trylock and if this fails, flush and do the proper lock.
+This would ensure that we set pi_blocked_on after we flushed.
+
+>  	/*
+>  	 * If we are going to sleep and we have plugged IO queued,
+>  	 * make sure to submit it to avoid deadlocks.
+
+Sebastian
