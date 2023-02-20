@@ -2,142 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D64369C96A
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Feb 2023 12:14:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 71D2A69C96D
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Feb 2023 12:14:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231751AbjBTLOW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Feb 2023 06:14:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38424 "EHLO
+        id S231255AbjBTLOu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Feb 2023 06:14:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38530 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231685AbjBTLOS (ORCPT
+        with ESMTP id S231705AbjBTLOj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Feb 2023 06:14:18 -0500
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47C9D1ABE7;
-        Mon, 20 Feb 2023 03:14:09 -0800 (PST)
-Received: from pps.filterd (m0127361.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 31K9xH5L015352;
-        Mon, 20 Feb 2023 11:14:03 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
- subject : message-id : reply-to : references : mime-version : content-type
- : in-reply-to; s=pp1; bh=xR7MhnROeM1r0/Sm02pu8nKl+srHSuBfn9ADf82CgeY=;
- b=g4ZF9puM0rx4fyEMPtasQlBLZS250ZRvUu58Xv7LHRm6IuuZNShKzsD9lHWwC62+FXJF
- w6qOTWlqnHU/KL9/Dt8fl1CPuVhE3Q8wCQSpPtDvQOHwuFSFlYgpJVQ5ejaqC+UtAnXA
- Phsp1wqMizo+vyUlfA552h7VdXbVxwLjqrIGPXfraSz+RgoE90VYKanOtDORZ1puY8Sr
- ZQZMV0LLXkzGj+wWU0YJh2vb67yrd0YGgj1aT6Tpd4JVWRi2/GGjSZgFj53jzs26vRdn
- 7yshGtPbJ8wZBUQN/WF+PqhDBG3uEQ4Xf85kG3Pkycb+mYdePCb9IyLj5SCFbLuMRxZt ag== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3nv6qbhr5s-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 20 Feb 2023 11:14:02 +0000
-Received: from m0127361.ppops.net (m0127361.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 31KAkpaX032615;
-        Mon, 20 Feb 2023 11:14:02 GMT
-Received: from ppma01fra.de.ibm.com (46.49.7a9f.ip4.static.sl-reverse.com [159.122.73.70])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3nv6qbhr4x-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 20 Feb 2023 11:14:02 +0000
-Received: from pps.filterd (ppma01fra.de.ibm.com [127.0.0.1])
-        by ppma01fra.de.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 31K7sJQe030599;
-        Mon, 20 Feb 2023 11:14:00 GMT
-Received: from smtprelay03.fra02v.mail.ibm.com ([9.218.2.224])
-        by ppma01fra.de.ibm.com (PPS) with ESMTPS id 3ntpa69xug-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 20 Feb 2023 11:14:00 +0000
-Received: from smtpav06.fra02v.mail.ibm.com (smtpav06.fra02v.mail.ibm.com [10.20.54.105])
-        by smtprelay03.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 31KBDwph30015762
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 20 Feb 2023 11:13:58 GMT
-Received: from smtpav06.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id E8CB320043;
-        Mon, 20 Feb 2023 11:13:57 +0000 (GMT)
-Received: from smtpav06.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 5078320040;
-        Mon, 20 Feb 2023 11:13:56 +0000 (GMT)
-Received: from linux.vnet.ibm.com (unknown [9.126.150.29])
-        by smtpav06.fra02v.mail.ibm.com (Postfix) with SMTP;
-        Mon, 20 Feb 2023 11:13:56 +0000 (GMT)
-Date:   Mon, 20 Feb 2023 16:43:55 +0530
-From:   Srikar Dronamraju <srikar@linux.vnet.ibm.com>
-To:     Lee Duncan <leeman.duncan@gmail.com>
-Cc:     "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Lee Duncan <lduncan@suse.com>, Martin Wilck <mwilck@suse.com>,
-        Hannes Reinecke <hare@suse.de>
-Subject: Re: [PATCH] scsi: core: Add BLIST_NO_ASK_VPD_SIZE for some VDASD
-Message-ID: <20230220111355.GA805552@linux.vnet.ibm.com>
-Reply-To: Srikar Dronamraju <srikar@linux.vnet.ibm.com>
-References: <20220928181350.9948-1-leeman.duncan@gmail.com>
+        Mon, 20 Feb 2023 06:14:39 -0500
+Received: from lelv0142.ext.ti.com (lelv0142.ext.ti.com [198.47.23.249])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FFE71ABFE;
+        Mon, 20 Feb 2023 03:14:28 -0800 (PST)
+Received: from fllv0035.itg.ti.com ([10.64.41.0])
+        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 31KBEDVK116582;
+        Mon, 20 Feb 2023 05:14:13 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1676891653;
+        bh=JE4se0I3G6VjxeboBHZBJ8Ucn6OSsawsuxjPJv463fE=;
+        h=From:To:CC:Subject:Date;
+        b=amPBB03lGKHp/yBOVMfpq9h6fmUuw1JdtaE0yJU3/4JrW8U45UBXM2DZMUubOuDH9
+         kkZN9CRS3rLu6EvhmY6cPAOgrX6lBYVKU92wqMXXMfJxtgrOWHDnW9nqE3PEtI3y1g
+         7dzkIVz3AYAXKEwlftdtTDFv2y80VlXVmd/WBZKw=
+Received: from DFLE100.ent.ti.com (dfle100.ent.ti.com [10.64.6.21])
+        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 31KBEDYK080438
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Mon, 20 Feb 2023 05:14:13 -0600
+Received: from DFLE107.ent.ti.com (10.64.6.28) by DFLE100.ent.ti.com
+ (10.64.6.21) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Mon, 20
+ Feb 2023 05:14:12 -0600
+Received: from fllv0039.itg.ti.com (10.64.41.19) by DFLE107.ent.ti.com
+ (10.64.6.28) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
+ Frontend Transport; Mon, 20 Feb 2023 05:14:13 -0600
+Received: from uda0500640.dal.design.ti.com (ileaxei01-snat.itg.ti.com [10.180.69.5])
+        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 31KBE981068490;
+        Mon, 20 Feb 2023 05:14:09 -0600
+From:   Ravi Gunasekaran <r-gunasekaran@ti.com>
+To:     <nm@ti.com>, <afd@ti.com>, <vigneshr@ti.com>, <kristo@kernel.org>,
+        <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
+        <s-vadapalli@ti.com>, <r-gunasekaran@ti.com>
+CC:     <linux-arm-kernel@lists.infradead.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: [PATCH v9 0/9] arm64: j721s2: Add support for additional IPs
+Date:   Mon, 20 Feb 2023 16:43:59 +0530
+Message-ID: <20230220111408.9476-1-r-gunasekaran@ti.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-In-Reply-To: <20220928181350.9948-1-leeman.duncan@gmail.com>
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: 0eSVwE3sxnfqcUe2PAOOmKubdcJCQFzD
-X-Proofpoint-ORIG-GUID: XL0Tm_2lZtxMKzosClRqRAQV5kX6u70r
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.170.22
- definitions=2023-02-20_08,2023-02-20_02,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0
- impostorscore=0 mlxscore=0 bulkscore=0 adultscore=0 phishscore=0
- suspectscore=0 lowpriorityscore=0 spamscore=0 clxscore=1011
- mlxlogscore=999 priorityscore=1501 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2212070000 definitions=main-2302200100
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-* Lee Duncan <leeman.duncan@gmail.com> [2022-09-28 11:13:50]:
+The following series of patches add support for the following
+on J721S2 common processor board,
 
-> From: Lee Duncan <lduncan@suse.com>
-> 
-> Some storage, such as AIX VDASD (virtual storage) and IBM 2076
-> (front end) do not like the recent commit:
-> 
-> commit c92a6b5d6335 ("scsi: core: Query VPD size before getting full page")
-> 
-> That commit changed getting SCSI VPD pages so that we now read
-> just enough of the page to get the actual page size, then read
-> the whole page in a second read. The problem is that the above
-> mentioned hardware returns zero for the page size, because of
-> a firmware error. In such cases, until the firmware is fixed,
-> this new black flag says to revert to the original method of
-> reading the VPD pages, i.e. try to read as a whole buffer's
-> worth on the first try.
-> 
-> Fixes: c92a6b5d6335 ("scsi: core: Query VPD size before getting full page")
-> Reported-by: Martin Wilck <mwilck@suse.com>
-> Suggested-by: Hannes Reinecke <hare@suse.de>
-> Signed-off-by: Lee Duncan <lduncan@suse.com>
+- USB
+- SerDes
+- OSPI
+- PCIe
 
-Facing similar problem on latest upstream kernel and this fixes it in my
-testing.
+Changes from v1:
+* Resolve issues with dt schema reporting
+* Minor changes related to consistency on node naming and value
 
-Incase this helps:
+Changes from v2:
+* Added PCIe RC + EP enablement patchsets
+* Added device-id for j722s2 PCIe host in dt documentation
+* Reworked SERDES + WIZ enablement patchset to use properies for clocks
+  defines versus entire devicetree nodes. Results in cleaner code that
+  doesn't break dt-schema or the driver functionality.
 
-$ lsslot
-# Slot                     Description       Linux Name    Device(s)
-U9080.HEX.134C1E8-V9-C0    Virtual I/O Slot  30000000      vty
-U9080.HEX.134C1E8-V9-C2    Virtual I/O Slot  30000002      l-lan
-U9080.HEX.134C1E8-V9-C109  Virtual I/O Slot  3000006d      v-scsi
+Changes from v3:
+* Rebased changes on top of '[PATCH 00/12] TI J7x Disable Incomplete DT Nodes'
+* Removed "dt-bindings: PCI: Add host mode device-id for j721s2 platform" patch and
+  send it own series to avoid a dependency that would hold up other patches in this
+  series
 
-$ ls-vscsi
-host0 U9080.HEX.134C1E8-V9-C109-T0
+Changes from v4:
+* Add my Signed-off-by lines to all patchsets
 
-$ lsscsi
-[0:0:1:0]    disk    AIX      VDASD            0001  /dev/sda
-[0:0:2:0]    cd/dvd  AIX      VOPTA                  /dev/sr0
+Changes from v5:
+* Removed Cc from commit messages to reduce clutter
+* Squashed changes for device tree nodes that get modified latter in the patchset
+  series
 
+Changes from v6:
+* Changes to ti,j721s2-wiz-10g compatible string from ti,am64-wiz-10g but
+  requires this series to be merged first
+  Ref: https://lore.kernel.org/linux-arm-kernel/20221122092203.762308-1-mranostay@ti.com/
+* Removed unused pcie1_ep based on feedback
+* Switch from incorrect "ti,j721e-system-controller", "syscon", "simple-mfd" compatible for
+  SPI node to "simple-bus"
 
-Tested-by: Srikar Dronamraju <srikar@linux.vnet.ibm.com>
+Changes from v7:
+* Fix node names as per bindings document
 
+Changes from v8:
+* Update the ti,j721e-system-controller bindings document
+* Fix dtbs warnings
+
+Aswath Govindraju (7):
+  arm64: dts: ti: k3-j721s2-main: Add support for USB
+  arm64: dts: ti: k3-j721s2-mcu-wakeup: Add support of OSPI
+  arm64: dts: ti: k3-j721s2-common-proc-board: Enable SERDES0
+  arm64: dts: ti: k3-j721s2-common-proc-board: Add USB support
+  arm64: dts: ti: k3-j721s2: Add support for OSPI Flashes
+  arm64: dts: ti: k3-j721s2-main: Add PCIe device tree node
+  arm64: dts: ti: k3-j721s2-common-proc-board: Enable PCIe
+
+Matt Ranostay (1):
+  arm64: dts: ti: k3-j721s2-main: Add SERDES and WIZ device tree node
+
+Ravi Gunasekaran (1):
+  dt-bindings: mfd: ti,j721e-system-controller: Fix mux node regex
+
+ .../mfd/ti,j721e-system-controller.yaml       |   8 +-
+ .../dts/ti/k3-j721s2-common-proc-board.dts    |  85 +++++++++++
+ arch/arm64/boot/dts/ti/k3-j721s2-main.dtsi    | 137 ++++++++++++++++++
+ .../boot/dts/ti/k3-j721s2-mcu-wakeup.dtsi     |  41 ++++++
+ arch/arm64/boot/dts/ti/k3-j721s2-som-p0.dtsi  |  42 ++++++
+ 5 files changed, 312 insertions(+), 1 deletion(-)
 
 -- 
-Thanks and Regards
-Srikar Dronamraju
+2.17.1
+
