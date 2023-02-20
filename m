@@ -2,114 +2,167 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B4D9169D1B7
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Feb 2023 17:54:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F77669D1BD
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Feb 2023 17:57:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232211AbjBTQyH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Feb 2023 11:54:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37948 "EHLO
+        id S231971AbjBTQ51 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Feb 2023 11:57:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39810 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230062AbjBTQyF (ORCPT
+        with ESMTP id S229514AbjBTQ5Z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Feb 2023 11:54:05 -0500
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24F8418AAC;
-        Mon, 20 Feb 2023 08:54:04 -0800 (PST)
-Date:   Mon, 20 Feb 2023 17:54:01 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1676912042;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type;
-        bh=MavDyGT1xeppoPKTgqyDw9Ojgq7OmsmvM2dptZkC7PE=;
-        b=u9o0bd8/huXnf95zp/XdhvA0ovWIaj/TbDCcfaLoqQnh5vI3XhsgHAkbEwujkWeHdttibo
-        q0oB6mcfMl8kFCAkNMdTAuYeelFGwufkHoGDw1ad9J4xoO97YZBvxZyYxBa1zaOfkimggR
-        n4KS1+ghZLcFGItXNLTB6SU22vMcb2VtFs2KN1fC/DdG5dLPP2bVPDeoGnjKUhBgbO7qtq
-        944ftxZmNM4KJYsC8KnI2YiLqVI5qoQuxJMTMWUgSQncbuJJxREO+HcCuS4v4R14tUlODg
-        LibVMQsu2DMXd9Wb63LLZCbDJ5Q6tW8MooU7lx4o6Nlql/Q+45bgWy5wuwXIPw==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1676912042;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type;
-        bh=MavDyGT1xeppoPKTgqyDw9Ojgq7OmsmvM2dptZkC7PE=;
-        b=qNNaa6qfhhcXmAUHrlrjaQrhlxkbeJINQ/6wCOZGeJSL7uvXfkbEplBzCcHurjFyrPKgdV
-        wwM3pJbF+/WnyZAQ==
-From:   Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-To:     Thomas Gleixner <tglx@linutronix.de>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        linux-rt-users@vger.kernel.org,
-        Steven Rostedt <rostedt@goodmis.org>
-Subject: [ANNOUNCE] v6.1.12-rt7
-Message-ID: <Y/Olqd9NQkVW5NJ0@linutronix.de>
+        Mon, 20 Feb 2023 11:57:25 -0500
+Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DADBA1CAD6
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Feb 2023 08:57:23 -0800 (PST)
+Received: by mail-wr1-x432.google.com with SMTP id c5so2593543wrr.5
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Feb 2023 08:57:23 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=arista.com; s=google;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=kwv6znKz3Eoo3aqqWo9NDOw9GIUxjeSkvIbkrVuAVC0=;
+        b=QCtW9f52c3WhCXFog/acp9ajq3DG6g9cyJLFXB3PErOf6SUbisSOkA+NFCH+j1XvDT
+         /5vODNZtc3QAmOVZyfN9iydI9hLfXLmciA87f1fp/knIbEPbGXw8aZ11sWWzR7NWkr3c
+         2AEWukfSysI9WGtAQcyVSbctuzi06lGDS3B6y0bf9owm2+ZR7pVHXNJP26DD6F+tZ7MA
+         PB8ziBcNmylx/L023iJWGsfCUkP921ifoGqI+b07c+uF7+7ETpoiYz0CExkLOJWxribi
+         U++SsChuv9uqmsI+4q+XBx+sq9lOGrGB3fNwmYKF20JFet1MhWc1Dzb8Xmf8FDAIS9Le
+         nHkQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=kwv6znKz3Eoo3aqqWo9NDOw9GIUxjeSkvIbkrVuAVC0=;
+        b=e9IgM7FSfaKb7abjAij37Csfz2zUwKSzFsacpcHo1iZcF9ZJ73qGLLB6Xkun1ZiU2x
+         bOGpoQXOhlnTFoYrZ6ek6Esx6IiL6vzHEqV0nhkB8BGhxe6ACAPeqJmnCJCok52CoTVP
+         tI8jlVBZssJC4KXnMC67vC18Tw7C4XheDM6dFGkVyvgCa9WD4WrCoBwFroD7VbOic/R4
+         hycSC9I0srDTitqJ+FBEzoz8vqnjm2NcJdapaGs8ATctwFzOBvnl8QqygaIPM+il7xcu
+         f4OIh+EmYWcOtOBRwlONh1SlN0qiheK25pANfUfCWNPVUhvusrDNg+fFQrkv8Q3eXa5S
+         4qiA==
+X-Gm-Message-State: AO0yUKUwQa4OFUlnlpjY42olR/lNBjaa2rh+VwYof53/SIJ0BaHI2t++
+        Qnp5cf8DSZTngG5i692o8nGTFg==
+X-Google-Smtp-Source: AK7set9utMidQPfF/+lU6HJd7mSFiYVFPiN9AsN/ma4nxOxNzwTYBKzLhzb3LnnENQVkLO1hje3MYg==
+X-Received: by 2002:a5d:5147:0:b0:2c5:52c3:cdb9 with SMTP id u7-20020a5d5147000000b002c552c3cdb9mr2160492wrt.66.1676912242321;
+        Mon, 20 Feb 2023 08:57:22 -0800 (PST)
+Received: from [10.83.37.24] ([217.173.96.166])
+        by smtp.gmail.com with ESMTPSA id z3-20020adff1c3000000b002c559def236sm569446wro.57.2023.02.20.08.57.20
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 20 Feb 2023 08:57:21 -0800 (PST)
+Message-ID: <bd40ff2f-b015-4ed4-7755-f9d547c8b868@arista.com>
+Date:   Mon, 20 Feb 2023 16:57:20 +0000
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.2
+Subject: Re: [PATCH v4 01/21] net/tcp: Prepare tcp_md5sig_pool for TCP-AO
+To:     Herbert Xu <herbert@gondor.apana.org.au>
+Cc:     linux-kernel@vger.kernel.org, David Ahern <dsahern@kernel.org>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Andy Lutomirski <luto@amacapital.net>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Bob Gilligan <gilligan@arista.com>,
+        David Laight <David.Laight@aculab.com>,
+        Dmitry Safonov <0x7f454c46@gmail.com>,
+        Eric Biggers <ebiggers@kernel.org>,
+        "Eric W. Biederman" <ebiederm@xmission.com>,
+        Francesco Ruggeri <fruggeri05@gmail.com>,
+        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
+        Ivan Delalande <colona@arista.com>,
+        Leonard Crestez <cdleonard@gmail.com>,
+        Salam Noureddine <noureddine@arista.com>,
+        netdev@vger.kernel.org
+References: <20230215183335.800122-1-dima@arista.com>
+ <20230215183335.800122-2-dima@arista.com>
+ <Y/NAXtPrOkzjLewO@gondor.apana.org.au>
+Content-Language: en-US
+From:   Dmitry Safonov <dima@arista.com>
+In-Reply-To: <Y/NAXtPrOkzjLewO@gondor.apana.org.au>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Dear RT folks!
+Hi Herbert,
 
-I'm pleased to announce the v6.1.12-rt7 patch set. 
+On 2/20/23 09:41, Herbert Xu wrote:
+> On Wed, Feb 15, 2023 at 06:33:15PM +0000, Dmitry Safonov wrote:
+>> TCP-AO similarly to TCP-MD5 needs to allocate tfms on a slow-path, which
+>> is setsockopt() and use crypto ahash requests on fast paths, which are
+>> RX/TX softirqs. It as well needs a temporary/scratch buffer for
+>> preparing the hashing request.
+>>
+>> Extend tcp_md5sig_pool to support other hashing algorithms than MD5.
+>> Move it in a separate file.
+>>
+>> This patch was previously submitted as more generic crypto_pool [1],
+>> but Herbert nacked making it generic crypto API. His view is that crypto
+>> requests should be atomically allocated on fast-paths. So, in this
+>> version I don't move this pool anywhere outside TCP, only extending it
+>> for TCP-AO use-case. It can be converted once there will be per-request
+>> hashing crypto keys.
+>>
+>> [1]: https://lore.kernel.org/all/20230118214111.394416-1-dima@arista.com/T/#u
+>> Signed-off-by: Dmitry Safonov <dima@arista.com>
+>> ---
+>>  include/net/tcp.h        |  48 ++++--
+>>  net/ipv4/Kconfig         |   4 +
+>>  net/ipv4/Makefile        |   1 +
+>>  net/ipv4/tcp.c           | 103 +++---------
+>>  net/ipv4/tcp_ipv4.c      |  97 +++++++-----
+>>  net/ipv4/tcp_minisocks.c |  21 ++-
+>>  net/ipv4/tcp_sigpool.c   | 333 +++++++++++++++++++++++++++++++++++++++
+>>  net/ipv6/tcp_ipv6.c      |  58 +++----
+>>  8 files changed, 493 insertions(+), 172 deletions(-)
+>>  create mode 100644 net/ipv4/tcp_sigpool.c
+> 
+> Please wait for my per-request hash work before you resubmit this.
 
-Changes since v6.1.12-rt6:
+Do you have a timeline for that work?
+And if you don't mind I keep re-iterating, as I'm trying to address TCP
+reviews and missed functionality/selftests.
 
-  - Always wake the ktimers thread once the hrtimer softirq is raised.
-    If the softirq is running then the wake of the thread will be
-    delayed until the next jiffy tick. Patch by Junxiao Chang.
+> Once that's in place all you need is a single tfm for the whole
+> system.
 
-Known issues
-     None.
+Unfortunately, not really: RFC5926 prescribes the mandatory-to-implement
+MAC algorithms for TCP-AO: HMAC-SHA-1-96 and AES-128-CMAC-96. But since
+the RFC was written sha1 is now more eligible for attacks as well as
+RFC5925 has:
+> The option should support algorithms other than the default, to
+> allow agility over time.
+> TCP-AO allows any desired algorithm, subject to TCP option
+> space limitations, as noted in Section 2.2. The use of a set
+> of MKTs allows separate connections to use different
+> algorithms, both for the MAC and the KDF.
 
-The delta patch against v6.1.12-rt6 is appended below and can be found here:
- 
-     https://cdn.kernel.org/pub/linux/kernel/projects/rt/6.1/incr/patch-6.1.12-rt6-rt7.patch.xz
+As well as from a customer's request we need to support more than two
+required algorithms. So, this implementation let the user choose the
+algorithm that is supported by crypto/ layer (more or less like xfrm does).
 
-You can get this release via the git tree at:
+Which means, that it still has to support multiple tfms. I guess that
+pool of tfms can be converted to use per-request keys quite easily.
 
-    git://git.kernel.org/pub/scm/linux/kernel/git/rt/linux-rt-devel.git v6.1.12-rt7
+> As to request pools what exactly is the point of that? Just kmalloc
+> them on demand.
 
-The RT patch against v6.1.12 can be found here:
+1) before your per-request key patches - it's not possible.
+2) after your patches - my question would be: "is it better to
+kmalloc(GFP_ATOMIC) in RX/TX for every signed TCP segment, rather than
+pre-allocate it?"
 
-    https://cdn.kernel.org/pub/linux/kernel/projects/rt/6.1/older/patch-6.1.12-rt7.patch.xz
+The price of (2) may just well be negligible, but worth measuring before
+switching.
 
-The split quilt queue is available at:
-
-    https://cdn.kernel.org/pub/linux/kernel/projects/rt/6.1/older/patches-6.1.12-rt7.tar.xz
-
-Sebastian
-
-diff --git a/kernel/softirq.c b/kernel/softirq.c
-index ab1fe34326bab..82f3e68fbe220 100644
---- a/kernel/softirq.c
-+++ b/kernel/softirq.c
-@@ -664,13 +664,12 @@ static inline void __irq_exit_rcu(void)
- #endif
- 	account_hardirq_exit(current);
- 	preempt_count_sub(HARDIRQ_OFFSET);
--	if (!in_interrupt()) {
--		if (local_softirq_pending())
--			invoke_softirq();
-+	if (!in_interrupt() && local_softirq_pending())
-+		invoke_softirq();
- 
--		if (IS_ENABLED(CONFIG_PREEMPT_RT) && local_pending_timers())
--			wake_timersd();
--	}
-+	if (IS_ENABLED(CONFIG_PREEMPT_RT) && local_pending_timers() &&
-+	    !(in_nmi() | in_hardirq()))
-+		wake_timersd();
- 
- 	tick_irq_exit();
- }
-diff --git a/localversion-rt b/localversion-rt
-index 8fc605d806670..045478966e9f1 100644
---- a/localversion-rt
-+++ b/localversion-rt
-@@ -1 +1 @@
---rt6
-+-rt7
+Thanks,
+          Dmitry
