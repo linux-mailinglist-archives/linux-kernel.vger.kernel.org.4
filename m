@@ -2,196 +2,187 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BECB969D5D3
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Feb 2023 22:36:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B8E769D5D6
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Feb 2023 22:37:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232411AbjBTVgg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Feb 2023 16:36:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39534 "EHLO
+        id S232039AbjBTVhR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Feb 2023 16:37:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40126 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231809AbjBTVge (ORCPT
+        with ESMTP id S230265AbjBTVhO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Feb 2023 16:36:34 -0500
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 460CF212A2;
-        Mon, 20 Feb 2023 13:36:33 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1676928993; x=1708464993;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=w2bTio2+n94BCqE5in+uzbaZH9Mysz6HXfVYmqRQfz4=;
-  b=Lu5G7rATHb9cvBzEVWIWJZFqC2+qNRv1awoV2KMdoQzy+VZPoHzbHpYk
-   AxHrkIz2tLBvHX7/q5g0O9Xpkzr3p2v1Iuf4JY+3iyspcOruYskwmCLR1
-   8M2QhJEueXc11cGWU04bQIiO8yxxl31LVeB3ZHp5/XiuXE2s2yC27gWMN
-   1fHTGtvyvpBqtpjDyJIAVyKc/gDfunwRJcG8KFbLmuA+OPmEyFd1b9ogc
-   m86yYDflTdPX/jgJWnZkRxX+hkV7vf1GVVDoh8qcdBApTtUVWEFpLtnGd
-   SJG2qq4eUZ82SMvAxM4JwsidQh8gVkNtIzjmtHkRG9O9qYp3U6XssBteU
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10627"; a="330214450"
-X-IronPort-AV: E=Sophos;i="5.97,313,1669104000"; 
-   d="scan'208";a="330214450"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Feb 2023 13:36:32 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10627"; a="648948637"
-X-IronPort-AV: E=Sophos;i="5.97,313,1669104000"; 
-   d="scan'208";a="648948637"
-Received: from lkp-server01.sh.intel.com (HELO 4455601a8d94) ([10.239.97.150])
-  by orsmga006.jf.intel.com with ESMTP; 20 Feb 2023 13:36:30 -0800
-Received: from kbuild by 4455601a8d94 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pUDpl-000EBk-3C;
-        Mon, 20 Feb 2023 21:36:29 +0000
-Date:   Tue, 21 Feb 2023 05:36:23 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     marius.cristea@microchip.com, jic23@kernel.org, lars@metafoo.de,
-        robh+dt@kernel.org
-Cc:     oe-kbuild-all@lists.linux.dev, linux-iio@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        marius.cristea@microchip.com
-Subject: Re: [PATCH v1 2/2] iio: adc: adding support for pac193x
-Message-ID: <202302210551.5yGSdcbc-lkp@intel.com>
-References: <20230220123232.413029-3-marius.cristea@microchip.com>
+        Mon, 20 Feb 2023 16:37:14 -0500
+Received: from mail-lj1-x236.google.com (mail-lj1-x236.google.com [IPv6:2a00:1450:4864:20::236])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5773421950;
+        Mon, 20 Feb 2023 13:37:13 -0800 (PST)
+Received: by mail-lj1-x236.google.com with SMTP id a10so2503470ljq.1;
+        Mon, 20 Feb 2023 13:37:13 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ntTegXxHE2C6Lp8xdtMzn8aIclw1LjjCN5pS0JeaA8A=;
+        b=K8zGSFBNI3bdU6J5gbrSYZcfL5sYsQjVxJTFkpIjhAqxR1Xxr817nUsCsnvL/JrUMp
+         qoPWnoDVVtnpBTvblsnDdqASG0UQ7WxtCHGWIaD8xXMKvw5xxrEYv2zRrGw6EEzNHKUj
+         UvEzax+npqRsxhJ8JA5VL57mkKzv9SPf0eqWr2PQ9wgxyXnOW9NxfdumExqueZbw8FsP
+         wisNc6cs8i8MKfQZbkfwjawdBzTETXo+kIWV3oi/vN1tHuW82XTJjBjtLNQC8BQNNasi
+         WK8w/uHuMYgkSPwZ4AYAG3k6i5mpyxrTtxYMwhqKcy7nCMpQ5pEsrC1o/nSFiQWyHmA1
+         CWng==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=ntTegXxHE2C6Lp8xdtMzn8aIclw1LjjCN5pS0JeaA8A=;
+        b=s86O6DVA+j36TewuTjirw4ij08QE4aNeKj504Ccn6pER2jgO7BtjTYO0ukKzTA2fS+
+         +AxOztBbX7XYBr35em0BG1OqFfbCVwQ6Y7h5tRQ83KraHEKJ084UyC3vAQZKOx12CWFN
+         FS6wBVQixbJzsisScHkKvL2QGconoYgjATGW5Dkjr/9zEfphVogbBD0Eg7oBe3+19qVt
+         jVJksFLWAE2QHJAiDUA0qLy6/CQyse2DGN1KSiXa7a+t/aDivoChoV279en9u69jB7+s
+         ylXrTN2L6WO7Vp1vHmr+pvME1WjSz9/e9fgsAum9uSMA0s9rJfhURY6GZ/aFDC8h7bPs
+         JEsQ==
+X-Gm-Message-State: AO0yUKUCqR72wuO2l/Qe4p+GMec/EOfW6VkOSzCNXWRU5rG0kx5IQnWU
+        DODvHPM6b6TMCH/TKutxEaQ=
+X-Google-Smtp-Source: AK7set9ere6899+uPRGjAaNY74PLHi6orKNOrPSws3NLJTJtiICDHHa4uvOj8GLhs/n/V591Itkx1Q==
+X-Received: by 2002:a05:651c:210f:b0:293:52a4:9717 with SMTP id a15-20020a05651c210f00b0029352a49717mr1528073ljq.4.1676929031468;
+        Mon, 20 Feb 2023 13:37:11 -0800 (PST)
+Received: from localhost (88-115-161-74.elisa-laajakaista.fi. [88.115.161.74])
+        by smtp.gmail.com with ESMTPSA id y2-20020a2e3202000000b002934ff9c817sm401104ljy.107.2023.02.20.13.37.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 20 Feb 2023 13:37:11 -0800 (PST)
+Date:   Mon, 20 Feb 2023 23:37:09 +0200
+From:   Zhi Wang <zhi.wang.linux@gmail.com>
+To:     Michael Roth <michael.roth@amd.com>
+Cc:     <kvm@vger.kernel.org>, <linux-coco@lists.linux.dev>,
+        <linux-mm@kvack.org>, <linux-crypto@vger.kernel.org>,
+        <x86@kernel.org>, <linux-kernel@vger.kernel.org>,
+        <tglx@linutronix.de>, <mingo@redhat.com>, <jroedel@suse.de>,
+        <thomas.lendacky@amd.com>, <hpa@zytor.com>, <ardb@kernel.org>,
+        <pbonzini@redhat.com>, <seanjc@google.com>, <vkuznets@redhat.com>,
+        <jmattson@google.com>, <luto@kernel.org>,
+        <dave.hansen@linux.intel.com>, <slp@redhat.com>,
+        <pgonda@google.com>, <peterz@infradead.org>,
+        <srinivas.pandruvada@linux.intel.com>, <rientjes@google.com>,
+        <dovmurik@linux.ibm.com>, <tobin@ibm.com>, <bp@alien8.de>,
+        <vbabka@suse.cz>, <kirill@shutemov.name>, <ak@linux.intel.com>,
+        <tony.luck@intel.com>, <marcorr@google.com>,
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        <alpergun@google.com>, <dgilbert@redhat.com>, <jarkko@kernel.org>,
+        <ashish.kalra@amd.com>, <nikunj.dadhania@amd.com>,
+        Vishal Annapurve <vannapurve@google.com>
+Subject: Re: [PATCH RFC v8 04/56] KVM: Add HVA range operator
+Message-ID: <20230220233709.00006dfc@gmail.com>
+In-Reply-To: <20230220183847.59159-5-michael.roth@amd.com>
+References: <20230220183847.59159-1-michael.roth@amd.com>
+        <20230220183847.59159-5-michael.roth@amd.com>
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.33; x86_64-w64-mingw32)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230220123232.413029-3-marius.cristea@microchip.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On Mon, 20 Feb 2023 12:37:55 -0600
+Michael Roth <michael.roth@amd.com> wrote:
 
-I love your patch! Perhaps something to improve:
+> From: Vishal Annapurve <vannapurve@google.com>
+> 
+> Introduce HVA range operator so that other KVM subsystems
+> can operate on HVA range.
+> 
+> Signed-off-by: Vishal Annapurve <vannapurve@google.com>
+> [mdr: minor checkpatch alignment fixups]
+> Signed-off-by: Michael Roth <michael.roth@amd.com>
+> ---
+>  include/linux/kvm_host.h |  6 +++++
+>  virt/kvm/kvm_main.c      | 48 ++++++++++++++++++++++++++++++++++++++++
+>  2 files changed, 54 insertions(+)
+> 
+> diff --git a/include/linux/kvm_host.h b/include/linux/kvm_host.h
+> index 4d542060cd93..c615650ed256 100644
+> --- a/include/linux/kvm_host.h
+> +++ b/include/linux/kvm_host.h
+> @@ -1402,6 +1402,12 @@ void kvm_mmu_invalidate_begin(struct kvm *kvm);
+>  void kvm_mmu_invalidate_range_add(struct kvm *kvm, gfn_t start, gfn_t end);
+>  void kvm_mmu_invalidate_end(struct kvm *kvm);
+>  
+> +typedef int (*kvm_hva_range_op_t)(struct kvm *kvm,
+> +				struct kvm_gfn_range *range, void *data);
+> +
+> +int kvm_vm_do_hva_range_op(struct kvm *kvm, unsigned long hva_start,
+> +			   unsigned long hva_end, kvm_hva_range_op_t handler, void *data);
+> +
+>  long kvm_arch_dev_ioctl(struct file *filp,
+>  			unsigned int ioctl, unsigned long arg);
+>  long kvm_arch_vcpu_ioctl(struct file *filp,
+> diff --git a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
+> index f7e00593cc5d..4ccd655dd5af 100644
+> --- a/virt/kvm/kvm_main.c
+> +++ b/virt/kvm/kvm_main.c
+> @@ -642,6 +642,54 @@ static __always_inline int __kvm_handle_hva_range(struct kvm *kvm,
+>  	return (int)ret;
+>  }
+>  
 
-[auto build test WARNING on jic23-iio/togreg]
-[also build test WARNING on linus/master v6.2 next-20230220]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+Below function seems a reduced duplicate of __kvm_handle_hva_range()
+in virt/kvm/kvm_main.c. It would be nice to factor __kvm_handle_hva_range().
 
-url:    https://github.com/intel-lab-lkp/linux/commits/marius-cristea-microchip-com/dt-bindings-iio-adc-adding-dt-bindings-for-PAC193X/20230220-203540
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/jic23/iio.git togreg
-patch link:    https://lore.kernel.org/r/20230220123232.413029-3-marius.cristea%40microchip.com
-patch subject: [PATCH v1 2/2] iio: adc: adding support for pac193x
-config: powerpc-allmodconfig (https://download.01.org/0day-ci/archive/20230221/202302210551.5yGSdcbc-lkp@intel.com/config)
-compiler: powerpc-linux-gcc (GCC) 12.1.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/fd3be916ffe18735a98bdc55ccc0cb5f3097582c
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review marius-cristea-microchip-com/dt-bindings-iio-adc-adding-dt-bindings-for-PAC193X/20230220-203540
-        git checkout fd3be916ffe18735a98bdc55ccc0cb5f3097582c
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=powerpc olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=powerpc SHELL=/bin/bash
+> +int kvm_vm_do_hva_range_op(struct kvm *kvm, unsigned long hva_start,
+> +			   unsigned long hva_end, kvm_hva_range_op_t handler, void *data)
+> +{
+> +	int ret = 0;
+> +	struct kvm_gfn_range gfn_range;
+> +	struct kvm_memory_slot *slot;
+> +	struct kvm_memslots *slots;
+> +	int i, idx;
+> +
+> +	if (WARN_ON_ONCE(hva_end <= hva_start))
+> +		return -EINVAL;
+> +
+> +	idx = srcu_read_lock(&kvm->srcu);
+> +
+> +	for (i = 0; i < kvm_arch_nr_memslot_as_ids(kvm); i++) {
+> +		struct interval_tree_node *node;
+> +
+> +		slots = __kvm_memslots(kvm, i);
+> +		kvm_for_each_memslot_in_hva_range(node, slots,
+> +						  hva_start, hva_end - 1) {
+> +			unsigned long start, end;
+> +
+> +			slot = container_of(node, struct kvm_memory_slot,
+> +					    hva_node[slots->node_idx]);
+> +			start = max(hva_start, slot->userspace_addr);
+> +			end = min(hva_end, slot->userspace_addr +
+> +						  (slot->npages << PAGE_SHIFT));
+> +
+> +			/*
+> +			 * {gfn(page) | page intersects with [hva_start, hva_end)} =
+> +			 * {gfn_start, gfn_start+1, ..., gfn_end-1}.
+> +			 */
+> +			gfn_range.start = hva_to_gfn_memslot(start, slot);
+> +			gfn_range.end = hva_to_gfn_memslot(end + PAGE_SIZE - 1, slot);
+> +			gfn_range.slot = slot;
+> +
+> +			ret = handler(kvm, &gfn_range, data);
+> +			if (ret)
+> +				goto e_ret;
+> +		}
+> +	}
+> +
+> +e_ret:
+> +	srcu_read_unlock(&kvm->srcu, idx);
+> +
+> +	return ret;
+> +}
+> +
+>  static __always_inline int kvm_handle_hva_range(struct mmu_notifier *mn,
+>  						unsigned long start,
+>  						unsigned long end,
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202302210551.5yGSdcbc-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
-   drivers/iio/adc/pac193x.c: In function 'pac193x_acpi_get_acpi_match_entry':
-   drivers/iio/adc/pac193x.c:1402:21: warning: variable 'status' set but not used [-Wunused-but-set-variable]
-    1402 |         acpi_status status;
-         |                     ^~~~~~
-   drivers/iio/adc/pac193x.c: In function 'pac193x_match_acpi_device':
->> drivers/iio/adc/pac193x.c:1469:57: warning: '<<' in boolean context, did you mean '<'? [-Wint-in-bool-context]
-    1469 |         chip_info->bi_dir[0] = (bi_dir_mask & (1 << 1)) << 1;
-         |                                ~~~~~~~~~~~~~~~~~~~~~~~~~^~~~
-   drivers/iio/adc/pac193x.c:1470:57: warning: '<<' in boolean context, did you mean '<'? [-Wint-in-bool-context]
-    1470 |         chip_info->bi_dir[0] = (bi_dir_mask & (1 << 2)) << 2;
-         |                                ~~~~~~~~~~~~~~~~~~~~~~~~~^~~~
-   drivers/iio/adc/pac193x.c:1471:57: warning: '<<' in boolean context, did you mean '<'? [-Wint-in-bool-context]
-    1471 |         chip_info->bi_dir[0] = (bi_dir_mask & (1 << 3)) << 3;
-         |                                ~~~~~~~~~~~~~~~~~~~~~~~~~^~~~
-
-
-vim +1469 drivers/iio/adc/pac193x.c
-
-  1411	
-  1412	static const char *pac193x_match_acpi_device(struct i2c_client *client,
-  1413						     struct pac193x_chip_info *chip_info)
-  1414	{
-  1415		char *name;
-  1416		acpi_handle handle;
-  1417		union acpi_object *rez;
-  1418		unsigned short bi_dir_mask;
-  1419		int idx, i;
-  1420	
-  1421		handle = ACPI_HANDLE(&client->dev);
-  1422		name = pac193x_acpi_get_acpi_match_entry(handle);
-  1423		if (!name)
-  1424			return NULL;
-  1425	
-  1426		rez = pac193x_acpi_eval_function(handle, 0, PAC193X_ACPI_GET_NAMES_AND_MOHMS_VALS);
-  1427	
-  1428		if (!rez)
-  1429			return NULL;
-  1430	
-  1431		for (i = 0; i < rez->package.count; i += 2) {
-  1432			idx = i / 2;
-  1433			chip_info->channel_names[idx] =
-  1434				devm_kmemdup(&client->dev, rez->package.elements[i].string.pointer,
-  1435					     (size_t)rez->package.elements[i].string.length + 1,
-  1436					     GFP_KERNEL);
-  1437			chip_info->channel_names[idx][rez->package.elements[i].string.length] = '\0';
-  1438			chip_info->shunts[idx] =
-  1439				rez->package.elements[i + 1].integer.value * 1000;
-  1440			chip_info->active_channels[idx] = (chip_info->shunts[idx] != 0);
-  1441		}
-  1442	
-  1443		kfree(rez);
-  1444	
-  1445		rez = pac193x_acpi_eval_function(handle, 1, PAC193X_ACPI_GET_UOHMS_VALS);
-  1446		if (!rez) {
-  1447			/*
-  1448			 * initialising with default values
-  1449			 * we assume all channels are unidectional(the mask is zero)
-  1450			 * and assign the default sampling rate
-  1451			 */
-  1452			chip_info->sample_rate_value = PAC193X_DEFAULT_CHIP_SAMP_SPEED;
-  1453			return name;
-  1454		}
-  1455	
-  1456		for (i = 0; i < rez->package.count; i++) {
-  1457			idx = i;
-  1458			chip_info->shunts[idx] = rez->package.elements[i].integer.value;
-  1459			chip_info->active_channels[idx] = (chip_info->shunts[idx] != 0);
-  1460		}
-  1461	
-  1462		kfree(rez);
-  1463	
-  1464		rez = pac193x_acpi_eval_function(handle, 1, PAC193X_ACPI_GET_BIPOLAR_SETTINGS);
-  1465		if (!rez)
-  1466			return NULL;
-  1467		bi_dir_mask = rez->package.elements[0].integer.value;
-  1468		chip_info->bi_dir[0] = (bi_dir_mask & (1 << 0)) << 0;
-> 1469		chip_info->bi_dir[0] = (bi_dir_mask & (1 << 1)) << 1;
-  1470		chip_info->bi_dir[0] = (bi_dir_mask & (1 << 2)) << 2;
-  1471		chip_info->bi_dir[0] = (bi_dir_mask & (1 << 3)) << 3;
-  1472		kfree(rez);
-  1473	
-  1474		rez = pac193x_acpi_eval_function(handle, 1, PAC193X_ACPI_GET_SAMP);
-  1475		if (!rez)
-  1476			return NULL;
-  1477	
-  1478		chip_info->sample_rate_value = rez->package.elements[0].integer.value;
-  1479		kfree(rez);
-  1480	
-  1481		return name;
-  1482	}
-  1483	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
