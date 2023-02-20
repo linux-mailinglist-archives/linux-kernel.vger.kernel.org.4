@@ -2,215 +2,195 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EC57A69D423
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Feb 2023 20:37:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0FB2E69D428
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Feb 2023 20:38:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232169AbjBTThX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Feb 2023 14:37:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34072 "EHLO
+        id S232574AbjBTTiV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Feb 2023 14:38:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35096 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231902AbjBTThT (ORCPT
+        with ESMTP id S231625AbjBTTiR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Feb 2023 14:37:19 -0500
-Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C28117CF1
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Feb 2023 11:37:17 -0800 (PST)
-Received: by mail-ed1-x52d.google.com with SMTP id o12so9111957edb.9
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Feb 2023 11:37:17 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ventanamicro.com; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=xJVBt3/YJNTn3qprChv795hjhggAd8khstdoNTzpzHo=;
-        b=dWt6MGmkihA5uqeHIcvRZBSlYD5Phimw9u0TJRTYf+Vsm6BQlqG2p4thi2GbYMZomi
-         R8iXdp3BLmQ0rb8nD9T59x6iGcVyryso0N1SpStf5DWXqQliGtvidSEnuiTFYiq9bwKS
-         MAaFgfi8OQGydLx2sHbX4Ln71Ilp6DbN+Pt9WmROSLLL1NSSbwHO5iwQ9tyqleFyomMe
-         uSVJDe95mN4r/7S4e64U8AENQR04YweERcwZSdrWNw5b4juhUBuZI0v4i50NwZXlK+NF
-         9ehL8lEbPRhPAFhWyDuo/nbUZzjD8m3BAJ35ObBxCER68R5v8yTlOy4J/ShREhL8KWgG
-         X+Eg==
+        Mon, 20 Feb 2023 14:38:17 -0500
+Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96CB99EC2
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Feb 2023 11:38:13 -0800 (PST)
+Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com [209.85.208.70])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 5D9023F4BB
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Feb 2023 19:38:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1676921890;
+        bh=jW91GFwHa0q+MwWu64cv8oJoKWfJC8HOCJGt4MYrAGA=;
+        h=From:To:Cc:Subject:Date:Message-Id:MIME-Version:Content-Type;
+        b=k53De/kHoO50vIgo8RG2gNL6HaUSZ4yQVLOEIk1PGcfcES9EkaD8+dOUq5n8r8lVG
+         WJPdaK1wIFbHrDJMGIWj748CJ7a90Aa0Uor5Qbj3Gr7gW7brJ926xRLrahi2cIc6Po
+         gR9+tH2pUX3oI9ztFxOJ1Ii/MsJi/NiOtLJNa41uItHp8kCOQY6SPstxvT/3guPt+K
+         35NrFI4GYnbtW91oBWjFYSmp98eijxm3S2Zf46M9YRdoBCJ6WWcrr0340BK/PJvLDJ
+         pKnUPdF21OPSqGmS4uY7Xumm57aBz6yybjoxp7FmY6CQy1G2hd6f8CyeIvvhxZJa4D
+         nMikXDEaVNdzw==
+Received: by mail-ed1-f70.google.com with SMTP id b1-20020aa7dc01000000b004ad062fee5eso2738156edu.17
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Feb 2023 11:38:10 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=xJVBt3/YJNTn3qprChv795hjhggAd8khstdoNTzpzHo=;
-        b=53KY9Ptjp+k4xui0rmgr2BjM3wdLw9owU22WgCV1U/OMvKR73g14TtPXyoV1KnvHlB
-         yCd5z7fkleipY60ijpv67In9aZ7qjCX1OTcGfLkaP+Sk6vDx38pVgFPz/ABs1BnS3ZOJ
-         ra81ewqMwgdm7qw6DFNZfcFUemGt6HYEk+oQUfko2ZwTD1cVkO4bpOslDUpRjx8DSNOk
-         o+sugc4BeV7bQN4n/eyOcfESQmFJEFrYnJEDKh/JTkDpIialWAP4iXkDMsIXLjGPH50J
-         m5bwy/dSuv25RKGlvBTImQ7nMrHJuSXxD8MXJxNLj1H8nPU1gR6R4VB6tPAVGN2Lf6pr
-         5tJw==
-X-Gm-Message-State: AO0yUKXaP1Wv8ZNuH6q/P9g1jMv40cZr+rhcqjIb7GMy7uLd0MQpAdbi
-        innIRvO2rQQWxUaxn/6tTn9wyw==
-X-Google-Smtp-Source: AK7set+BSMcumfMl+jddfOTjTB/vuhi+s06jPFTcqynULYCS0JmyqnhwX3tgdid0842xakTTzqT2zg==
-X-Received: by 2002:a17:907:2cc7:b0:885:6d0f:4660 with SMTP id hg7-20020a1709072cc700b008856d0f4660mr15074547ejc.22.1676921835816;
-        Mon, 20 Feb 2023 11:37:15 -0800 (PST)
-Received: from localhost (cst2-173-16.cust.vodafone.cz. [31.30.173.16])
-        by smtp.gmail.com with ESMTPSA id i14-20020a50d74e000000b004acbde59e64sm1782600edj.8.2023.02.20.11.37.15
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=jW91GFwHa0q+MwWu64cv8oJoKWfJC8HOCJGt4MYrAGA=;
+        b=Jgy20Yf+9YZ8ipuqIiH9MxWkAUVAYXrTDfo7J1Q8TcY15l7Tb3BrZk+UTn3OvBXRC3
+         xQr2qgBnubDxsUj8mtkV2S0kaUiqaKiDiPJ5/XMkyUBDgq9/Rshg83Vi9zI12+oiHFWD
+         Eb9wdfIyxnNzko9HqD3SRVHzWDBaMQoBszYd0ODK8YSjAk/P5YihEXIpRDS6bb2eXZPs
+         x1/dt5299Sp0dUJjG5l9cArRH6Z+4yUaQ/zq2kpYhVNIvgWNdMnQpNyP/M84Ee5C+Mo5
+         Q84Zvj32xv/146yqiERLrGg/2ocmWzNKMl9UEQbJfhgdQ2geR3RoK9GkcJzI62nrVBhr
+         +sQA==
+X-Gm-Message-State: AO0yUKXxIp0GPwo5txrzzi19E5tXFbIvSUojXNZMTcgk4tFBtbN2iU7F
+        l9JmS8Ky/KMFUAjf4pZO6r8Nr7pYDw1PAL5Hjgjwwrim4JhXkvxfZpb0yXG9mKv96AqS3KtpII+
+        Y3VrlH8948iEanTeim7MRaeYR1sg4D1G7/DcFgKqjHw==
+X-Received: by 2002:a17:906:29cc:b0:884:9217:4536 with SMTP id y12-20020a17090629cc00b0088492174536mr10234569eje.64.1676921889975;
+        Mon, 20 Feb 2023 11:38:09 -0800 (PST)
+X-Google-Smtp-Source: AK7set8z4Sn4FmTnxgH5/jvKzM2daPBSTzC8mbt7UgpOQKe2nkZcGU5ZLvwGrxz1EWKJaq8w5Ww+QA==
+X-Received: by 2002:a17:906:29cc:b0:884:9217:4536 with SMTP id y12-20020a17090629cc00b0088492174536mr10234551eje.64.1676921889675;
+        Mon, 20 Feb 2023 11:38:09 -0800 (PST)
+Received: from amikhalitsyn.. ([2a02:8109:bd40:1414:bb20:aed2:bb7f:f0cf])
+        by smtp.gmail.com with ESMTPSA id a19-20020a17090680d300b008d4df095034sm1526693ejx.195.2023.02.20.11.38.08
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 20 Feb 2023 11:37:15 -0800 (PST)
-Date:   Mon, 20 Feb 2023 20:37:14 +0100
-From:   Andrew Jones <ajones@ventanamicro.com>
-To:     Sunil V L <sunilvl@ventanamicro.com>
-Cc:     Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Len Brown <lenb@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        linux-riscv@lists.infradead.org, linux-acpi@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Conor Dooley <conor.dooley@microchip.com>,
-        Anup Patel <apatel@ventanamicro.com>,
-        Atish Patra <atishp@rivosinc.com>,
-        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>
-Subject: Re: [PATCH V2 14/21] irqchip/riscv-intc: Add ACPI support
-Message-ID: <20230220193714.kuef6sfg7xmdyfty@orel>
-References: <20230216182043.1946553-1-sunilvl@ventanamicro.com>
- <20230216182043.1946553-15-sunilvl@ventanamicro.com>
+        Mon, 20 Feb 2023 11:38:09 -0800 (PST)
+From:   Alexander Mikhalitsyn <aleksandr.mikhalitsyn@canonical.com>
+To:     mszeredi@redhat.com
+Cc:     Alexander Mikhalitsyn <aleksandr.mikhalitsyn@canonical.com>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Amir Goldstein <amir73il@gmail.com>,
+        =?UTF-8?q?St=C3=A9phane=20Graber?= <stgraber@ubuntu.com>,
+        Seth Forshee <sforshee@kernel.org>,
+        Christian Brauner <brauner@kernel.org>,
+        Andrei Vagin <avagin@gmail.com>,
+        Pavel Tikhomirov <ptikhomirov@virtuozzo.com>,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        criu@openvz.org
+Subject: [RFC PATCH 0/9] fuse: API for Checkpoint/Restore
+Date:   Mon, 20 Feb 2023 20:37:45 +0100
+Message-Id: <20230220193754.470330-1-aleksandr.mikhalitsyn@canonical.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230216182043.1946553-15-sunilvl@ventanamicro.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=ASCII
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 16, 2023 at 11:50:36PM +0530, Sunil V L wrote:
-> Add support for initializing the RISC-V INTC driver on ACPI
-> platforms.
-> 
-> Signed-off-by: Sunil V L <sunilvl@ventanamicro.com>
-> Acked-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> ---
->  drivers/irqchip/irq-riscv-intc.c | 78 +++++++++++++++++++++++++++-----
->  1 file changed, 66 insertions(+), 12 deletions(-)
-> 
-> diff --git a/drivers/irqchip/irq-riscv-intc.c b/drivers/irqchip/irq-riscv-intc.c
-> index f229e3e66387..97a8db0fbc6c 100644
-> --- a/drivers/irqchip/irq-riscv-intc.c
-> +++ b/drivers/irqchip/irq-riscv-intc.c
-> @@ -6,6 +6,7 @@
->   */
->  
->  #define pr_fmt(fmt) "riscv-intc: " fmt
-> +#include <linux/acpi.h>
->  #include <linux/atomic.h>
->  #include <linux/bits.h>
->  #include <linux/cpu.h>
-> @@ -112,6 +113,30 @@ static struct fwnode_handle *riscv_intc_hwnode(void)
->  	return intc_domain->fwnode;
->  }
->  
-> +static int __init riscv_intc_init_common(struct fwnode_handle *fn)
-> +{
-> +	int rc;
-> +
-> +	intc_domain = irq_domain_create_linear(fn, BITS_PER_LONG,
-> +					       &riscv_intc_domain_ops, NULL);
-> +	if (!intc_domain) {
-> +		pr_err("unable to add IRQ domain\n");
-> +		return -ENXIO;
-> +	}
-> +
-> +	rc = set_handle_irq(&riscv_intc_irq);
-> +	if (rc) {
-> +		pr_err("failed to set irq handler\n");
-> +		return rc;
-> +	}
-> +
-> +	riscv_set_intc_hwnode_fn(riscv_intc_hwnode);
-> +
-> +	pr_info("%d local interrupts mapped\n", BITS_PER_LONG);
-> +
-> +	return 0;
-> +}
-> +
->  static int __init riscv_intc_init(struct device_node *node,
->  				  struct device_node *parent)
->  {
-> @@ -133,24 +158,53 @@ static int __init riscv_intc_init(struct device_node *node,
->  	if (riscv_hartid_to_cpuid(hartid) != smp_processor_id())
->  		return 0;
->  
-> -	intc_domain = irq_domain_add_linear(node, BITS_PER_LONG,
-> -					    &riscv_intc_domain_ops, NULL);
-> -	if (!intc_domain) {
-> -		pr_err("unable to add IRQ domain\n");
-> -		return -ENXIO;
-> -	}
-> -
-> -	rc = set_handle_irq(&riscv_intc_irq);
-> +	rc = riscv_intc_init_common(of_node_to_fwnode(node));
->  	if (rc) {
-> -		pr_err("failed to set irq handler\n");
-> +		pr_err("failed to initialize INTC\n");
->  		return rc;
->  	}
->  
-> -	riscv_set_intc_hwnode_fn(riscv_intc_hwnode);
-> +	return 0;
-> +}
->  
-> -	pr_info("%d local interrupts mapped\n", BITS_PER_LONG);
-> +IRQCHIP_DECLARE(riscv, "riscv,cpu-intc", riscv_intc_init);
-> +
-> +#ifdef CONFIG_ACPI
-> +
-> +static int __init
-> +riscv_intc_acpi_init(union acpi_subtable_headers *header,
-> +		     const unsigned long end)
+Hello everyone,
 
-Please keep the function and its return type on the same line. We can go
-to 100 chars.
+It would be great to hear your comments regarding this proof-of-concept Checkpoint/Restore API for FUSE.
 
-> +{
-> +	int rc;
-> +	struct fwnode_handle *fn;
-> +	struct acpi_madt_rintc *rintc;
-> +
-> +	rintc = (struct acpi_madt_rintc *)header;
-> +
-> +	/*
-> +	 * The ACPI MADT will have one INTC for each CPU (or HART)
-> +	 * so riscv_intc_acpi_init() function will be called once
-> +	 * for each INTC. We only do INTC initialization
-> +	 * for the INTC belonging to the boot CPU (or boot HART).
-> +	 */
-> +	if (riscv_hartid_to_cpuid(rintc->hart_id) != smp_processor_id())
-> +		return 0;
-> +
-> +	fn = irq_domain_alloc_named_fwnode("RISCV-INTC");
-> +	if (!fn) {
-> +		pr_err("unable to allocate INTC FW node\n");
-> +		return -ENOMEM;
-> +	}
-> +
-> +	rc = riscv_intc_init_common(fn);
-> +	if (rc) {
-> +		pr_err("failed to initialize INTC\n");
-> +		return rc;
-> +	}
->  
->  	return 0;
->  }
->  
-> -IRQCHIP_DECLARE(riscv, "riscv,cpu-intc", riscv_intc_init);
-> +IRQCHIP_ACPI_DECLARE(riscv_intc, ACPI_MADT_TYPE_RINTC, NULL,
-> +		     ACPI_MADT_RINTC_VERSION_V1, riscv_intc_acpi_init);
-> +#endif
-> -- 
-> 2.34.1
->
+Support of FUSE C/R is a challenging task for CRIU [1]. Last year I've given a brief talk on LPC 2022
+about how we handle files C/R in CRIU and which blockers we have for FUSE filesystems. [2]
 
-Otherwise,
+The main problem for CRIU is that we have to restore mount namespaces and memory mappings before the process tree.
+It means that when CRIU is performing mount of fuse filesystem it can't use the original FUSE daemon from the
+restorable process tree, but instead use a "fake daemon".
 
-Reviewed-by: Andrew Jones <ajones@ventanamicro.com>
+This leads to many other technical problems:
+* "fake" daemon has to reply to FUSE_INIT request from the kernel and initialize fuse connection somehow.
+This setup can be not consistent with the original daemon (protocol version, daemon capabilities/settings
+like no_open, no_flush, readahead, and so on).
+* each fuse request has a unique ID. It could confuse userspace if this unique ID sequence was reset.
+
+We can workaround some issues and implement fragile and limited support of FUSE in CRIU but it doesn't make any sense, IMHO.
+Btw, I've enumerated only CRIU restore-stage problems there. The dump stage is another story...
+
+My proposal is not only about CRIU. The same interface can be useful for FUSE mounts recovery after daemon crashes.
+LXC project uses LXCFS [3] as a procfs/cgroupfs/sysfs emulation layer for containers. We are using a scheme when
+one LXCFS daemon handles all the work for all the containers and we use bindmounts to overmount particular
+files/directories in procfs/cgroupfs/sysfs. If this single daemon crashes for some reason we are in trouble,
+because we have to restart all the containers (fuse bindmounts become invalid after the crash).
+The solution is fairly easy:
+allow somehow to reinitialize the existing fuse connection and replace the daemon on the fly
+This case is a little bit simpler than CRIU cause we don't need to care about the previously opened files
+and other stuff, we are only interested in mounts.
+
+Current PoC implementation was developed and tested with this "recovery case".
+Right now I only have LXCFS patched and have nothing for CRIU. But I wanted to discuss this idea before going forward with CRIU.
+
+Brief API/design description.
+
+I've added two ioctl's:
+* ioctl(FUSE_DEV_IOC_REINIT)
+Performs fuse connection abort and then reinitializes all internal fuse structures as "brand new".
+Then sends a FUSE_INIT request, so a new userspace daemon can reply to it and start processing fuse reqs.
+
+* ioctl(FUSE_DEV_IOC_BM_REVAL)
+A little bit hacky thing. Traverses all the bindmounts of existing fuse mount and performs relookup
+of (struct vfsmount)->mnt_root dentries with the new daemon and reset them to new dentries.
+Pretty useful for the recovery case (for instance, LXCFS).
+
+Now about the dentry/inode invalidation mechanism.
+* added the "fuse connection generation" concept.
+When reinit is performed then connection generation is increased by 1.
+Each fuse inode stores the generation of the connection it was allocated with.
+
+* perform dentry revalidation if it has an old generation [fuse_dentry_revalidate]
+The current implementation of fuse_dentry_revalidate follows a simple and elegant idea. When we
+want to revalidate the dentry we just send a FUSE_LOOKUP request to the userspace
+for the parent dentry with the name of the current dentry and check which attributes/inode id
+it gets. If inode ids are the same and attributes (provided by the userspace) are valid
+then we mark dentry valid and it continues to live (with inode).
+I've only added a connection generation check to the condition when we have to perform revalidation
+and added an inode connection generation reset (to actual connection gen) if the new userspace
+daemon has looked up the same inode id (important for the CRIU case!).
+
+Thank you for your attention and I'm waiting for your feedback :)
+
+References:
+[1] Support FUSE mountpoints https://github.com/checkpoint-restore/criu/issues/53
+[2] Bringing up FUSE mounts C/R support https://lpc.events/event/16/contributions/1243/
+[3] LXCFS https://github.com/lxc/lxcfs
+
+Kind regards,
+Alex
+
+Cc: Miklos Szeredi <mszeredi@redhat.com>
+Cc: Al Viro <viro@zeniv.linux.org.uk>
+Cc: Amir Goldstein <amir73il@gmail.com>
+Cc: Stéphane Graber <stgraber@ubuntu.com>
+Cc: Seth Forshee <sforshee@kernel.org>
+Cc: Christian Brauner <brauner@kernel.org>
+Cc: Andrei Vagin <avagin@gmail.com>
+Cc: Pavel Tikhomirov <ptikhomirov@virtuozzo.com>
+Cc: linux-fsdevel@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org
+Cc: criu@openvz.org
+
+Alexander Mikhalitsyn (9):
+  fuse: move FUSE_DEFAULT_* defines to fuse common header
+  fuse: add const qualifiers to common fuse helpers
+  fuse: add fuse connection generation
+  fuse: handle stale inode connection in fuse_queue_forget
+  fuse: move fuse connection flags to the separate structure
+  fuse: take fuse connection generation into account
+  fuse: add fuse device ioctl(FUSE_DEV_IOC_REINIT)
+  namespace: add sb_revalidate_bindmounts helper
+  fuse: add fuse device ioctl(FUSE_DEV_IOC_BM_REVAL)
+
+ fs/fuse/acl.c                 |   6 +-
+ fs/fuse/dev.c                 | 167 +++++++++++++++++++-
+ fs/fuse/dir.c                 |  38 ++---
+ fs/fuse/file.c                |  85 +++++-----
+ fs/fuse/fuse_i.h              | 281 ++++++++++++++++++++--------------
+ fs/fuse/inode.c               |  62 ++++----
+ fs/fuse/readdir.c             |   8 +-
+ fs/fuse/xattr.c               |  18 +--
+ fs/namespace.c                |  90 +++++++++++
+ include/linux/mnt_namespace.h |   3 +
+ include/uapi/linux/fuse.h     |   2 +
+ 11 files changed, 531 insertions(+), 229 deletions(-)
+
+-- 
+2.34.1
+
