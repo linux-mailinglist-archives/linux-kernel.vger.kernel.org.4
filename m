@@ -2,34 +2,34 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B69469C9CE
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Feb 2023 12:26:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 095D369C9CF
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Feb 2023 12:26:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231489AbjBTL02 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Feb 2023 06:26:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51152 "EHLO
+        id S231702AbjBTL0a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Feb 2023 06:26:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51162 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230215AbjBTL00 (ORCPT
+        with ESMTP id S230383AbjBTL02 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Feb 2023 06:26:26 -0500
+        Mon, 20 Feb 2023 06:26:28 -0500
 Received: from mx1.tq-group.com (mx1.tq-group.com [93.104.207.81])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 245558A6B
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Feb 2023 03:26:22 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A6DE9023
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Feb 2023 03:26:26 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
   d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
-  t=1676892383; x=1708428383;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=J7LmUwU+SS2w5GKPk+OLCBAiJ2JdcxGmTNn38enXxhA=;
-  b=ORKUvrwaLveNaKSoZOOmdfJLL+s59sz/rrj48w0hPXdEGB+p5ZUwYz9M
-   Lnd1+INz6aljLeOtbRDY3+jVeAojwgslvxIyvHJ58o/t+uyUKaAK82ys9
-   eXwbkmjU8llqBtTu6ziIq2cgfFdtOIoyhwcWY+FgWQMySnpfraeaEKVzA
-   fDWrO7yDP30jONvoI2Tsql3TPu4T/Yz2fpknUSY1e/KYlR7uYtqvPli5K
-   OuDBtOwE3yNbw1tS1tqIVwslIeQLx78oksk202d3wsvMgOCBdoKMvgdzt
-   VdStxxAXZXqXcJjhgdw88xD34xO3CxRNe7mNS6zVmmEtctUExB4H3pX6l
-   w==;
+  t=1676892386; x=1708428386;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=q5lXumQ8qCSEY6OU+rn431DpvEqvf2R0gCQDL8bf8zo=;
+  b=TWAZaj8pOy/eaG9GPvYmTLZa7FOtzHjBesfw4GD6ACMpzeHjWcnjPoYL
+   rOxfH0fEu0FYDU+PBl84qohJ6GORIYQrm8/u0p/6pJANvpEC/KFjgQdeX
+   elG4xUsgwRN8SZi+b00Df3M+7JwamQDOzvEE58FR3QSJwggxRPRxIERIV
+   ZqMlOjWxaKmlCVZelKadpuF7vHKCh5ruWqViZN9p524vLckNZ1lsJpTLn
+   330lO9ZDW0BpDiaHYVcU4d91VrGercmYUQiE/CswaizfTBiI/1AshitY7
+   DMOtP9NzA4X77eElhdcOR2YjfFIi1P8hSBnVB5KXVmNzm/bluWrREouCQ
+   Q==;
 X-IronPort-AV: E=Sophos;i="5.97,312,1669071600"; 
-   d="scan'208";a="29187432"
+   d="scan'208";a="29187430"
 Received: from unknown (HELO tq-pgp-pr1.tq-net.de) ([192.168.6.15])
   by mx1-pgp.tq-group.com with ESMTP; 20 Feb 2023 12:26:21 +0100
 Received: from mx1.tq-group.com ([192.168.6.7])
@@ -40,32 +40,34 @@ X-PGP-Universal: processed;
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
   d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
   t=1676892381; x=1708428381;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=J7LmUwU+SS2w5GKPk+OLCBAiJ2JdcxGmTNn38enXxhA=;
-  b=ClklIeCSKuQbo+bBYc7lqRBKlR8Qz20thTpSXbqOpcC9FLdQqYcPxEwn
-   9c8sup22lNt3naSWW/+8Uk6poRBDnvIOaIod28TNQCg7SI7GD3mlP2nYz
-   oGdW1FArZhsAvCmFbv0lL/oIRujonYbZyRi/STAgnOvuaZ+eCfS4QyIIW
-   iORYd78clYA6sgvgrhFMT6SLvwOxPoD1QIjXNQJcATrwf/aB9MC7wwp7h
-   KMgJM6LeeLc5qxoK53kQ3pAcVGeIgCx8/58/1jstLkBNjZbF02tRa9fwJ
-   w+YCafk1+lHBk2OC88AUYyNu9jsSDxqeJC3DTqj2L/JtcWbpnM08CgLeh
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=q5lXumQ8qCSEY6OU+rn431DpvEqvf2R0gCQDL8bf8zo=;
+  b=jb5RjXBpn8K9sH21Oowkqs/qpb55p2Cj94vKtbYA3fQrmEaGZEqvYE/7
+   idwYGRL5iCaWcNitraM8NekX1IY/JDo2gYwNi69T3mwW/7gQJ6MgQGlrQ
+   WJbxxEC4DxlWjKz2/FOAcws3FhwrlQdfEBR3QyLSdITTHzs4UzkzhIanf
+   l3ZMPZO9r2jnNjwtu1IPlCTFeY8W1awtyQgFcbjcD8op0uPlpNGWKmvm6
+   P75TKNvGH/hBQlVH6vXh3DwbTqVcyfLmHwBMOT0YNcoseRzrVHO9BvIiD
+   PJ9RVQEu49qu3ur3alYLJGR+T5ugXvAukufTNwH/bGt6EbsFZ/VUun+wU
    Q==;
 X-IronPort-AV: E=Sophos;i="5.97,312,1669071600"; 
-   d="scan'208";a="29187424"
+   d="scan'208";a="29187425"
 Received: from vtuxmail01.tq-net.de ([10.115.0.20])
   by mx1.tq-group.com with ESMTP; 20 Feb 2023 12:26:20 +0100
 Received: from localhost.localdomain (SCHIFFERM-M2.tq-net.de [10.121.49.14])
-        by vtuxmail01.tq-net.de (Postfix) with ESMTPA id EF709280056;
-        Mon, 20 Feb 2023 12:26:14 +0100 (CET)
+        by vtuxmail01.tq-net.de (Postfix) with ESMTPA id 15149280072;
+        Mon, 20 Feb 2023 12:26:15 +0100 (CET)
 From:   Matthias Schiffer <matthias.schiffer@ew.tq-group.com>
 To:     Lee Jones <lee@kernel.org>
 Cc:     Andrew Lunn <andrew@lunn.ch>, linux-kernel@vger.kernel.org,
         linux@ew.tq-group.com,
         Matthias Schiffer <matthias.schiffer@ew.tq-group.com>
-Subject: [PATCH v2 1/3] mfd: tqmx86: do not access I2C_DETECT register through io_base
-Date:   Mon, 20 Feb 2023 12:25:44 +0100
-Message-Id: <e8300a30f0791afb67d79db8089fb6004855f378.1676892223.git.matthias.schiffer@ew.tq-group.com>
+Subject: [PATCH v2 2/3] mfd: tqmx86: specify IO port register range more precisely
+Date:   Mon, 20 Feb 2023 12:25:45 +0100
+Message-Id: <db4677ac318b1283c8956f637f409995a30a31c3.1676892223.git.matthias.schiffer@ew.tq-group.com>
 X-Mailer: git-send-email 2.34.1
+In-Reply-To: <e8300a30f0791afb67d79db8089fb6004855f378.1676892223.git.matthias.schiffer@ew.tq-group.com>
+References: <e8300a30f0791afb67d79db8089fb6004855f378.1676892223.git.matthias.schiffer@ew.tq-group.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -77,55 +79,59 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The I2C_DETECT register is at IO port 0x1a7, which is outside the range
-passed to devm_ioport_map() for io_base, and was only working because
-there aren't actually any bounds checks for IO port accesses.
+Registers 0x160..0x17f are unassigned. Use 0x180 as base register and
+update offets accordingly.
 
-Extending the range does not seem like a good solution here, as it would
-then conflict with the IO resource assigned to the I2C controller. As
-this is just a one-off access during probe, use a simple inb() instead.
-
-While we're at it, drop the unused define TQMX86_REG_I2C_INT_EN.
+Also change the size of the range to include 0x19f. While 0x19f is
+currently reserved for future extensions, so are several of the previous
+registers up to 0x19e, and it is weird to leave out just the last one.
 
 Fixes: 2f17dd34ffed ("mfd: tqmx86: IO controller with I2C, Wachdog and GPIO")
 Signed-off-by: Matthias Schiffer <matthias.schiffer@ew.tq-group.com>
+Reviewed-by: Andrew Lunn <andrew@lunn.ch>
 ---
 
 Notes:
-    v2: add comment regarding use of inb() as suggested by Andrew
+    v2: add Reviewed-by from v1
 
- drivers/mfd/tqmx86.c | 10 +++++++---
- 1 file changed, 7 insertions(+), 3 deletions(-)
+ drivers/mfd/tqmx86.c | 10 +++++-----
+ 1 file changed, 5 insertions(+), 5 deletions(-)
 
 diff --git a/drivers/mfd/tqmx86.c b/drivers/mfd/tqmx86.c
-index 7ae906ff8e353..31d0efb5aacf8 100644
+index 31d0efb5aacf8..958334f14eb00 100644
 --- a/drivers/mfd/tqmx86.c
 +++ b/drivers/mfd/tqmx86.c
-@@ -49,9 +49,8 @@
- #define TQMX86_REG_IO_EXT_INT_MASK		0x3
- #define TQMX86_REG_IO_EXT_INT_GPIO_SHIFT	4
+@@ -16,8 +16,8 @@
+ #include <linux/platform_data/i2c-ocores.h>
+ #include <linux/platform_device.h>
  
--#define TQMX86_REG_I2C_DETECT	0x47
-+#define TQMX86_REG_I2C_DETECT	0x1a7
- #define TQMX86_REG_I2C_DETECT_SOFT		0xa5
--#define TQMX86_REG_I2C_INT_EN	0x49
+-#define TQMX86_IOBASE	0x160
+-#define TQMX86_IOSIZE	0x3f
++#define TQMX86_IOBASE	0x180
++#define TQMX86_IOSIZE	0x20
+ #define TQMX86_IOBASE_I2C	0x1a0
+ #define TQMX86_IOSIZE_I2C	0xa
+ #define TQMX86_IOBASE_WATCHDOG	0x18b
+@@ -25,7 +25,7 @@
+ #define TQMX86_IOBASE_GPIO	0x18d
+ #define TQMX86_IOSIZE_GPIO	0x4
  
- static uint gpio_irq;
- module_param(gpio_irq, uint, 0);
-@@ -213,7 +212,12 @@ static int tqmx86_probe(struct platform_device *pdev)
- 		 "Found %s - Board ID %d, PCB Revision %d, PLD Revision %d\n",
- 		 board_name, board_id, rev >> 4, rev & 0xf);
- 
--	i2c_det = ioread8(io_base + TQMX86_REG_I2C_DETECT);
-+	/*
-+	 * The I2C_DETECT register is in the range assigned to the I2C driver
-+	 * later, so we don't extend TQMX86_IOSIZE. Use inb() for this one-off
-+	 * access instead of ioport_map + unmap.
-+	 */
-+	i2c_det = inb(TQMX86_REG_I2C_DETECT);
- 
- 	if (gpio_irq_cfg) {
- 		io_ext_int_val =
+-#define TQMX86_REG_BOARD_ID	0x20
++#define TQMX86_REG_BOARD_ID	0x00
+ #define TQMX86_REG_BOARD_ID_E38M	1
+ #define TQMX86_REG_BOARD_ID_50UC	2
+ #define TQMX86_REG_BOARD_ID_E38C	3
+@@ -40,8 +40,8 @@
+ #define TQMX86_REG_BOARD_ID_E40S	13
+ #define TQMX86_REG_BOARD_ID_E40C1	14
+ #define TQMX86_REG_BOARD_ID_E40C2	15
+-#define TQMX86_REG_BOARD_REV	0x21
+-#define TQMX86_REG_IO_EXT_INT	0x26
++#define TQMX86_REG_BOARD_REV	0x01
++#define TQMX86_REG_IO_EXT_INT	0x06
+ #define TQMX86_REG_IO_EXT_INT_NONE		0
+ #define TQMX86_REG_IO_EXT_INT_7			1
+ #define TQMX86_REG_IO_EXT_INT_9			2
 -- 
 2.34.1
 
