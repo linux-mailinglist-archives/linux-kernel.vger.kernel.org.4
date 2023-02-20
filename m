@@ -2,113 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 559CB69D2C8
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Feb 2023 19:35:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C03669D2CE
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Feb 2023 19:37:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232317AbjBTSfE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Feb 2023 13:35:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45564 "EHLO
+        id S231734AbjBTShA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Feb 2023 13:37:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46138 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229468AbjBTSfB (ORCPT
+        with ESMTP id S231970AbjBTSg6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Feb 2023 13:35:01 -0500
-Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8EDD1ADD0
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Feb 2023 10:35:00 -0800 (PST)
-Received: from zn.tnic (p5de8e9fe.dip0.t-ipconnect.de [93.232.233.254])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 653CE1EC04CC;
-        Mon, 20 Feb 2023 19:34:59 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1676918099;
+        Mon, 20 Feb 2023 13:36:58 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E77401B308
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Feb 2023 10:36:15 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1676918175;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=1bHT9AJljCQca1SrfqoO65rJvzjVNwjrn2lJJ27XoOg=;
-        b=GFiGBcPUqWgWrZOED/0n9MEY7JJkG3yXNQk51i5WNZ/rpoyZTo9T7yTY2/3/CJbKmI+SBL
-        SIfu+WFv28Ha9+zJYiTi51/24YLI6XXvu9op/qKCAQamA555ZoNq1LzoU5p8EsaQp8fT85
-        +tlekny4UIeJUiDx8K97VfhycdTNuCM=
-Date:   Mon, 20 Feb 2023 19:34:59 +0100
-From:   Borislav Petkov <bp@alien8.de>
-To:     Josh Poimboeuf <jpoimboe@kernel.org>
-Cc:     KP Singh <kpsingh@kernel.org>, linux-kernel@vger.kernel.org,
-        pjt@google.com, evn@google.com, tglx@linutronix.de,
-        mingo@redhat.com, dave.hansen@linux.intel.com, x86@kernel.org,
-        hpa@zytor.com, peterz@infradead.org,
-        pawan.kumar.gupta@linux.intel.com, kim.phillips@amd.com,
-        alexandre.chartre@oracle.com, daniel.sneddon@linux.intel.com,
-        =?utf-8?B?Sm9zw6k=?= Oliveira <joseloliveira11@gmail.com>,
-        Rodrigo Branco <rodrigo@kernelhacking.com>,
-        Alexandra Sandulescu <aesa@google.com>,
-        Jim Mattson <jmattson@google.com>
-Subject: Re: [PATCH] x86/bugs: Allow STIBP with IBRS
-Message-ID: <Y/O9U4KFtXE8Yoyt@zn.tnic>
-References: <20230220120127.1975241-1-kpsingh@kernel.org>
- <20230220121350.aidsipw3kd4rsyss@treble>
- <CACYkzJ5L9MLuE5Jz+z5-NJCCrUqTbgKQkXSqnQnCfTD_WNA7_Q@mail.gmail.com>
- <CACYkzJ6n=-tobhX0ONQhjHSgmnNjWnNe_dZnEOGtD8Y6S3RHbA@mail.gmail.com>
- <20230220163442.7fmaeef3oqci4ee3@treble>
- <Y/Ox3MJZF1Yb7b6y@zn.tnic>
- <20230220175929.2laflfb2met6y3kc@treble>
- <CACYkzJ71xqzY6-wL+YShcL+d6ugzcdFHr6tbYWWE_ep52+RBZQ@mail.gmail.com>
- <20230220182717.uzrym2gtavlbjbxo@treble>
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type;
+        bh=+BQMVtEdSqE57prMMKR11VCTUBB3gnlcS/QDAiHyCC0=;
+        b=Fx78a5M2pw49+1KvnA0pTeUieRdb8KSP5IXJR63fVO3+S/ILVww/TQdAy2y0rfKp7g22lL
+        JFBdlZtL6AbFFmMvzP0T87RX5rImnrJ6uJAv9jDncJfRezX3hHCIb5fnfhVXEne4AFd2++
+        EDXzdBorpxrVvILxbRaiIozR0NGLfa0=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-149-eSXRd3SpOjKEy2jBZo6Jtg-1; Mon, 20 Feb 2023 13:36:13 -0500
+X-MC-Unique: eSXRd3SpOjKEy2jBZo6Jtg-1
+Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 76A41185A794;
+        Mon, 20 Feb 2023 18:36:13 +0000 (UTC)
+Received: from redhat.com (null.msp.redhat.com [10.15.80.136])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 3F79240B40E4;
+        Mon, 20 Feb 2023 18:36:13 +0000 (UTC)
+Date:   Mon, 20 Feb 2023 12:36:11 -0600
+From:   David Teigland <teigland@redhat.com>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     linux-kernel@vger.kernel.org, cluster-devel@redhat.com
+Subject: [GIT PULL] dlm updates for 6.3
+Message-ID: <20230220183611.GA11414@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230220182717.uzrym2gtavlbjbxo@treble>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mutt/1.8.3 (2017-05-23)
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.1
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Drop stable@ again.
+Hi Linus,
 
-On Mon, Feb 20, 2023 at 10:27:17AM -0800, Josh Poimboeuf wrote:
-> IBRS is only enabled in kernel space.  Since it's not enabled in user
-> space, user space isn't protected from indirect branch prediction
-> attacks from a sibling CPU thread.
-> 
-> Allow STIBP to be enabled to protect against such attacks.
-> 
-> Fixes: 7c693f54c873 ("x86/speculation: Add spectre_v2=ibrs option to support Kernel IBRS")
+Please pull dlm updates from tag:
 
-Yah, look at that one:
+git://git.kernel.org/pub/scm/linux/kernel/git/teigland/linux-dlm.git dlm-6.3
 
-commit 7c693f54c873691a4b7da05c7e0f74e67745d144
-Author: Pawan Gupta <pawan.kumar.gupta@linux.intel.com>
-Date:   Tue Jun 14 23:15:55 2022 +0200
+This patch set fixes some races in the lowcomms startup and shutdown code
+that were found by targetted stress testing that quickly and repeatedly
+joins and leaves lockspaces.
 
-    x86/speculation: Add spectre_v2=ibrs option to support Kernel IBRS
+Thanks,
+Dave
 
-    Extend spectre_v2= boot option with Kernel IBRS.
+Alexander Aring (15):
+      fs: dlm: start midcomms before scand
+      fs: dlm: fix use after free in midcomms commit
+      fs: dlm: be sure to call dlm_send_queue_flush()
+      fs: dlm: fix race setting stop tx flag
+      fs: dlm: don't set stop rx flag after node reset
+      fs: dlm: move sending fin message into state change handling
+      fs: dlm: send FIN ack back in right cases
+      fs: dlm: bring back previous shutdown handling
+      fs: dlm: ignore unexpected non dlm opts msgs
+      fs: dlm: wait until all midcomms nodes detect version
+      fs: dlm: make dlm sequence id more robust
+      fs: dlm: reduce the shutdown timeout to 5 secs
+      fs: dlm: remove newline in log_print
+      fs: dlm: move state change into else branch
+      fs: dlm: remove unnecessary waker_up() calls
 
-    [jpoimboe: no STIBP with IBRS]
-    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Paul E. McKenney (1):
+      fs/dlm: Remove "select SRCU"
 
-I'm assuming this was supposed to mean no STIBP in *kernel mode* when
-IBRS is selected?
+Yang Yingliang (1):
+      fs: dlm: fix return value check in dlm_memory_init()
 
-In user mode, STIBP should be selectable as we disable IBRS there.
 
-Close?
+ fs/dlm/Kconfig     |   1 -
+ fs/dlm/lockspace.c |  21 +++++----
+ fs/dlm/lowcomms.c  |  77 ++++++++++++++++++++++---------
+ fs/dlm/memory.c    |   2 +-
+ fs/dlm/midcomms.c  | 131 +++++++++++++++++++++++++++--------------------------
+ fs/dlm/midcomms.h  |   1 +
+ 6 files changed, 136 insertions(+), 97 deletions(-)
 
-If so, pls document it too while at it:
-
-Documentation/admin-guide/hw-vuln/spectre.rst
-
-because we will be wondering next time again.
-
-Like we wonder each time this madness is being touched. ;-(
-
-Thx.
-
--- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette
