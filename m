@@ -2,198 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0707F69C62B
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Feb 2023 08:55:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C3CFB69C625
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Feb 2023 08:54:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230470AbjBTHzU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Feb 2023 02:55:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50544 "EHLO
+        id S230390AbjBTHyv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Feb 2023 02:54:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50148 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230427AbjBTHzO (ORCPT
+        with ESMTP id S229660AbjBTHys (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Feb 2023 02:55:14 -0500
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52C6DEB55;
-        Sun, 19 Feb 2023 23:55:12 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1676879712; x=1708415712;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=FZW5/j3uO31V1iPBqTannk1XJ56QpM62jjUtPnyt2z4=;
-  b=DCrmhTVrjyjIyYIoSja/OGmAfk8Ufe5vC4ATuA58xeyycrKpdQZw/UTC
-   zeEOR6ZLK4ssGfelDYRbEkU9CXU+0Cxzy3rwSH0RoLVGP4Rt30c+Y7wAZ
-   nfxBIOSqpUP0RBsFMHD0Kspzzj+RdKVtRyVQVAjXgrScIe/hd95f1CXrD
-   buCVVmJy5whcb1avQ28Lmp2e1IPvNQvqsvNL/IijvKquAAZXmU/JqCt6c
-   D4TcFJpp+/w7p4aNYCCpupE4aQ5Ewh6t+iAaM4ND2MHt8p4JnTlniGwio
-   bFXQF3He9bwNW2qSHrZJKEhaAfYbsBzjYrQDQmG4vVDPtNtM+IF9wRlZS
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10626"; a="330059142"
-X-IronPort-AV: E=Sophos;i="5.97,311,1669104000"; 
-   d="scan'208";a="330059142"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Feb 2023 23:55:11 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10626"; a="814045929"
-X-IronPort-AV: E=Sophos;i="5.97,311,1669104000"; 
-   d="scan'208";a="814045929"
-Received: from lkp-server01.sh.intel.com (HELO 4455601a8d94) ([10.239.97.150])
-  by fmsmga001.fm.intel.com with ESMTP; 19 Feb 2023 23:55:07 -0800
-Received: from kbuild by 4455601a8d94 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pU10s-000Dlh-2n;
-        Mon, 20 Feb 2023 07:55:06 +0000
-Date:   Mon, 20 Feb 2023 15:54:34 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Masahisa Kojima <masahisa.kojima@linaro.org>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Jens Wiklander <jens.wiklander@linaro.org>,
-        Sumit Garg <sumit.garg@linaro.org>,
-        linux-kernel@vger.kernel.org, op-tee@lists.trustedfirmware.org
-Cc:     oe-kbuild-all@lists.linux.dev,
-        Ilias Apalodimas <ilias.apalodimas@linaro.org>,
-        Johan Hovold <johan+linaro@kernel.org>,
-        Masahisa Kojima <masahisa.kojima@linaro.org>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        linux-efi@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH v2 4/4] efi: Add tee-based EFI variable driver
-Message-ID: <202302201535.Ns6H0Dok-lkp@intel.com>
-References: <20230220051723.1257-5-masahisa.kojima@linaro.org>
+        Mon, 20 Feb 2023 02:54:48 -0500
+Received: from mail-il1-f208.google.com (mail-il1-f208.google.com [209.85.166.208])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93354CC3E
+        for <linux-kernel@vger.kernel.org>; Sun, 19 Feb 2023 23:54:46 -0800 (PST)
+Received: by mail-il1-f208.google.com with SMTP id i6-20020a925406000000b0030efd0ed890so20996ilb.7
+        for <linux-kernel@vger.kernel.org>; Sun, 19 Feb 2023 23:54:46 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=96yj1aHD38hIt7rAdjlqjX1GsnoopRCQUkxRVi9L4P0=;
+        b=wsG+nvht48KyEKmbMDY4FIFeoK4wSBWEXfUNk4S3weHaccbni1zJDhUWu+Km+e5mqW
+         5NHNzmyRhTHZobQidpoRo9K43vDGf3rNnP94R5ZtAu6RlP6IXf4xIIGoc1+ukKrONv1A
+         enjg9IkbExGPWtjz6si9pd+8gPrn1n5HeD03kZqhx2QFLZlgxzkhhRpeYD25UyMUGcOw
+         PDaUIMh0lTTAJPMxi94H0u3i7Sh+OS06qYrbvyBkBYiEPo6kkb0pO6F2n3thV/M4jk2o
+         DzLXzmiAKg5UdIbvREE44yvZlxp0FbfOqp1VLY4Shb2lLfnjbTawalr//WtTVfDjAk1A
+         zOuw==
+X-Gm-Message-State: AO0yUKW7kMjOov9i+nn7yezgsyNo+0pYCt7b9mzhICXJqMlIbndDFN9e
+        1iXaS/hSEruopUWmXLKujoGtZmCqVX6OfRqfkOIDUuMXrFwx
+X-Google-Smtp-Source: AK7set+S+y1GWOWBgC3KownZ7sPSvSzsW/4WNlYyMDg0EhpWi0MaSNWu1NYiugx7lWDMZvJXAA/TgJFFFx1wlsJfD6KAkprE7VwH
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230220051723.1257-5-masahisa.kojima@linaro.org>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-Received: by 2002:a02:8503:0:b0:3b1:7d3:88b2 with SMTP id
+ g3-20020a028503000000b003b107d388b2mr634528jai.6.1676879685936; Sun, 19 Feb
+ 2023 23:54:45 -0800 (PST)
+Date:   Sun, 19 Feb 2023 23:54:45 -0800
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <00000000000002eb8105f51cfa96@google.com>
+Subject: [syzbot] [btrfs?] kernel BUG in btrfs_ioctl_add_dev
+From:   syzbot <syzbot+afdee14f9fd3d20448e7@syzkaller.appspotmail.com>
+To:     chris@chrisdown.name, clm@fb.com, dsterba@suse.com,
+        josef@toxicpanda.com, linux-btrfs@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SORTED_RECIPS,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Masahisa,
+Hello,
 
-I love your patch! Perhaps something to improve:
+syzbot found the following issue on:
 
-[auto build test WARNING on efi/next]
-[cannot apply to linus/master v6.2]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+HEAD commit:    c9c3395d5e3d Linux 6.2
+git tree:       upstream
+console output: https://syzkaller.appspot.com/x/log.txt?x=1216e630c80000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=f4a1b2323673cc82
+dashboard link: https://syzkaller.appspot.com/bug?extid=afdee14f9fd3d20448e7
+compiler:       Debian clang version 15.0.7, GNU ld (GNU Binutils for Debian) 2.35.2
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=14c9a378c80000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=14e5c044c80000
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Masahisa-Kojima/efi-expose-efivar-generic-ops-register-function/20230220-132235
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/efi/efi.git next
-patch link:    https://lore.kernel.org/r/20230220051723.1257-5-masahisa.kojima%40linaro.org
-patch subject: [PATCH v2 4/4] efi: Add tee-based EFI variable driver
-config: arm-allmodconfig (https://download.01.org/0day-ci/archive/20230220/202302201535.Ns6H0Dok-lkp@intel.com/config)
-compiler: arm-linux-gnueabi-gcc (GCC) 12.1.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/8ce55b3818062f45af62bc5eeb52f97585d0ffd1
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Masahisa-Kojima/efi-expose-efivar-generic-ops-register-function/20230220-132235
-        git checkout 8ce55b3818062f45af62bc5eeb52f97585d0ffd1
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=arm olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash drivers/firmware/efi/
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/26e9c877102c/disk-c9c3395d.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/9e3e3feba050/vmlinux-c9c3395d.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/21beac50cf7f/bzImage-c9c3395d.xz
+mounted in repro: https://storage.googleapis.com/syzbot-assets/9f00aa255474/mount_0.gz
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202302201535.Ns6H0Dok-lkp@intel.com/
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+afdee14f9fd3d20448e7@syzkaller.appspotmail.com
 
-All warnings (new ones prefixed by >>):
+assertion failed: fs_info->exclusive_operation == BTRFS_EXCLOP_BALANCE || fs_info->exclusive_operation == BTRFS_EXCLOP_DEV_ADD, in fs/btrfs/ioctl.c:457
+------------[ cut here ]------------
+kernel BUG at fs/btrfs/messages.c:259!
+invalid opcode: 0000 [#1] PREEMPT SMP KASAN
+CPU: 1 PID: 6416 Comm: syz-executor132 Not tainted 6.2.0-syzkaller #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/21/2023
+RIP: 0010:btrfs_assertfail+0x18/0x20 fs/btrfs/messages.c:259
+Code: df e8 0c 2d 3c f7 e9 50 fb ff ff e8 e2 7e 01 00 66 90 66 0f 1f 00 89 d1 48 89 f2 48 89 fe 48 c7 c7 20 16 2c 8b e8 38 62 ff ff <0f> 0b 66 0f 1f 44 00 00 66 0f 1f 00 53 48 89 fb e8 03 f4 e6 f6 48
+RSP: 0018:ffffc9000ca0fea0 EFLAGS: 00010246
+RAX: 0000000000000097 RBX: 00000000fffffff2 RCX: eb26e11d15dcfa00
+RDX: 0000000000000000 RSI: 0000000080000001 RDI: 0000000000000000
+RBP: 0000000000000000 R08: ffffffff816efb3c R09: fffff52001941f8d
+R10: 0000000000000000 R11: dffffc0000000001 R12: dffffc0000000000
+R13: 0000000000000003 R14: ffff888029d64680 R15: 1ffff110053acc1a
+FS:  00007f9e79ad6700(0000) GS:ffff8880b9900000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 0000000000000000 CR3: 0000000077d02000 CR4: 00000000003506e0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ <TASK>
+ btrfs_exclop_balance fs/btrfs/ioctl.c:456 [inline]
+ btrfs_ioctl_add_dev+0x347/0x480 fs/btrfs/ioctl.c:2660
+ vfs_ioctl fs/ioctl.c:51 [inline]
+ __do_sys_ioctl fs/ioctl.c:870 [inline]
+ __se_sys_ioctl+0xf1/0x160 fs/ioctl.c:856
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x41/0xc0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+RIP: 0033:0x7f9e80f4b589
+Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 71 15 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007f9e79ad62f8 EFLAGS: 00000246 ORIG_RAX: 0000000000000010
+RAX: ffffffffffffffda RBX: 00007f9e80fd57b0 RCX: 00007f9e80f4b589
+RDX: 0000000000000000 RSI: 000000005000940a RDI: 0000000000000004
+RBP: 00007f9e80fd57bc R08: 00007f9e79ad6700 R09: 0000000000000000
+R10: 00007f9e79ad6700 R11: 0000000000000246 R12: 00007f9e80fa2660
+R13: 01c8dfb098cf77b9 R14: 0030656c69662f2e R15: 00007f9e80fd57b8
+ </TASK>
+Modules linked in:
+---[ end trace 0000000000000000 ]---
+RIP: 0010:btrfs_assertfail+0x18/0x20 fs/btrfs/messages.c:259
+Code: df e8 0c 2d 3c f7 e9 50 fb ff ff e8 e2 7e 01 00 66 90 66 0f 1f 00 89 d1 48 89 f2 48 89 fe 48 c7 c7 20 16 2c 8b e8 38 62 ff ff <0f> 0b 66 0f 1f 44 00 00 66 0f 1f 00 53 48 89 fb e8 03 f4 e6 f6 48
+RSP: 0018:ffffc9000ca0fea0 EFLAGS: 00010246
+RAX: 0000000000000097 RBX: 00000000fffffff2 RCX: eb26e11d15dcfa00
+RDX: 0000000000000000 RSI: 0000000080000001 RDI: 0000000000000000
+RBP: 0000000000000000 R08: ffffffff816efb3c R09: fffff52001941f8d
+R10: 0000000000000000 R11: dffffc0000000001 R12: dffffc0000000000
+R13: 0000000000000003 R14: ffff888029d64680 R15: 1ffff110053acc1a
+FS:  00007f9e79ad6700(0000) GS:ffff8880b9900000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 0000000000000000 CR3: 0000000077d02000 CR4: 00000000003506e0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
 
-   drivers/firmware/efi/stmm/tee_stmm_efi.c: In function 'tee_mm_communicate':
->> drivers/firmware/efi/stmm/tee_stmm_efi.c:60:13: warning: variable 'rc' set but not used [-Wunused-but-set-variable]
-      60 |         int rc;
-         |             ^~
 
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-vim +/rc +60 drivers/firmware/efi/stmm/tee_stmm_efi.c
-
-    44	
-    45	/**
-    46	 * tee_mm_communicate() - Pass a buffer to StandaloneMM running in TEE
-    47	 *
-    48	 * @comm_buf:		locally allocated communication buffer
-    49	 * @dsize:		buffer size
-    50	 * Return:		status code
-    51	 */
-    52	static efi_status_t tee_mm_communicate(void *comm_buf, size_t dsize)
-    53	{
-    54		size_t buf_size;
-    55		efi_status_t ret;
-    56		struct efi_mm_communicate_header *mm_hdr;
-    57		struct tee_ioctl_invoke_arg arg;
-    58		struct tee_param param[4];
-    59		struct tee_shm *shm = NULL;
-  > 60		int rc;
-    61	
-    62		if (!comm_buf)
-    63			return EFI_INVALID_PARAMETER;
-    64	
-    65		mm_hdr = (struct efi_mm_communicate_header *)comm_buf;
-    66		buf_size = mm_hdr->message_len + sizeof(efi_guid_t) + sizeof(size_t);
-    67	
-    68		if (dsize != buf_size)
-    69			return EFI_INVALID_PARAMETER;
-    70	
-    71		shm = tee_shm_register_kernel_buf(pvt_data.ctx, comm_buf, buf_size);
-    72		if (IS_ERR(shm)) {
-    73			dev_err(pvt_data.dev, "Unable to register shared memory\n");
-    74			return EFI_UNSUPPORTED;
-    75		}
-    76	
-    77		memset(&arg, 0, sizeof(arg));
-    78		arg.func = PTA_STMM_CMD_COMMUNICATE;
-    79		arg.session = pvt_data.session;
-    80		arg.num_params = 4;
-    81	
-    82		memset(param, 0, sizeof(param));
-    83		param[0].attr = TEE_IOCTL_PARAM_ATTR_TYPE_MEMREF_INOUT;
-    84		param[0].u.memref.size = buf_size;
-    85		param[0].u.memref.shm = shm;
-    86		param[1].attr = TEE_IOCTL_PARAM_ATTR_TYPE_VALUE_OUTPUT;
-    87		param[2].attr = TEE_IOCTL_PARAM_ATTR_TYPE_NONE;
-    88		param[3].attr = TEE_IOCTL_PARAM_ATTR_TYPE_NONE;
-    89	
-    90		rc = tee_client_invoke_func(pvt_data.ctx, &arg, param);
-    91		tee_shm_free(shm);
-    92	
-    93		if (arg.ret != 0)
-    94			return EFI_DEVICE_ERROR;
-    95	
-    96		switch (param[1].u.value.a) {
-    97		case ARM_SVC_SPM_RET_SUCCESS:
-    98			ret = EFI_SUCCESS;
-    99			break;
-   100	
-   101		case ARM_SVC_SPM_RET_INVALID_PARAMS:
-   102			ret = EFI_INVALID_PARAMETER;
-   103			break;
-   104	
-   105		case ARM_SVC_SPM_RET_DENIED:
-   106			ret = EFI_ACCESS_DENIED;
-   107			break;
-   108	
-   109		case ARM_SVC_SPM_RET_NO_MEMORY:
-   110			ret = EFI_OUT_OF_RESOURCES;
-   111			break;
-   112	
-   113		default:
-   114			ret = EFI_ACCESS_DENIED;
-   115		}
-   116	
-   117		return ret;
-   118	}
-   119	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+syzbot can test patches for this issue, for details see:
+https://goo.gl/tpsmEJ#testing-patches
