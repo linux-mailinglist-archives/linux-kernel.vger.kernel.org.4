@@ -2,220 +2,250 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AAAA169C68D
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Feb 2023 09:26:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 010C069C692
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Feb 2023 09:28:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230230AbjBTI0v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Feb 2023 03:26:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40426 "EHLO
+        id S230434AbjBTI2C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Feb 2023 03:28:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41214 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229810AbjBTI0t (ORCPT
+        with ESMTP id S230081AbjBTI2A (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Feb 2023 03:26:49 -0500
-Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3AF3C12863
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Feb 2023 00:26:48 -0800 (PST)
-Received: by mail-ed1-x536.google.com with SMTP id b12so1357293edd.4
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Feb 2023 00:26:48 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=to:subject:message-id:date:from:mime-version:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=ox6jck2o4GGhqs86ktZk8BkoqIgSSF1hbrtYJ/AXHMU=;
-        b=F/nV5mh58MnIkXzcx0l9CJwZ2asOXY2hGZ4He439hWVAbQ+xV+EvgPAHdhK4WlnXHX
-         8T6Mn5rCLLAwzQVA/N+xznqo7uRNg+RKWm2Ba6I6wNYmFEX/HL/82JUN2zJVbEKVaADy
-         A5yDuZ83mH3StmOkvsgznYT/WYgnlVNHlLz5K0pHBNvo9uAQdvX0PYH6xJtowkFYgAfO
-         bjzCMmsNAniar1umM0e+nopiGmu3bSUsdKDAJeYlyI9qlUxwtu3ZxouGrd2PteDRrSwE
-         wRtPKITFySs4rg3etD4px/mvcaHbWI4HL2BpOlqnV1wxbMJyaUe3gCfA8qDtdSjGIZmr
-         LEdQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:subject:message-id:date:from:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=ox6jck2o4GGhqs86ktZk8BkoqIgSSF1hbrtYJ/AXHMU=;
-        b=PXuxd27c3LUoOFo1pR9SCytY0trrNP/f8L9cINqfPTPtLIZQxGblZT1ONu9r/+v9eY
-         kZZWbCl/WalqIW8q8fw34MEOz70kt6TLEOMl2zgzq4Srgll+Eq8OtBS8zUWBImtFCydK
-         cB/TqEu5OvWjQer9VkPwr/cfGUKJiuWHqr7SbyDQA2L4G0k+uxg5zVHOjsgMGztq9+0m
-         b2Orem58C2UjTtFtcuhY4L8jkmOKV1S+0pXwsIwBeD1VtRiDf/H+6xf72C/wqhbi5S8u
-         faM0AlOQPs1uz9PLW5RMTgD7pZFCVSHpBWRYQPBWLlj7EWkqR70lwfjQXaic4LXO/ZCX
-         aFJw==
-X-Gm-Message-State: AO0yUKVQWEcl3xO/pt6e4aLKHLElpZWNEc7sJi6y+6N5RyURjj7B6Pj5
-        P4PQFB5MEqj1EQXsC/1gXocfoWFcAzZWoUj0fas=
-X-Google-Smtp-Source: AK7set/1K1Qv5nSTvlx+Fd5Pgt/mf5UDBtNt74K2MRwJny1kfl/m5gHPi0II3iiqJgjXTLoQqAVxL1VrxquuAya84ZM=
-X-Received: by 2002:a50:f690:0:b0:4ac:20b:96b0 with SMTP id
- d16-20020a50f690000000b004ac020b96b0mr1120681edn.3.1676881606566; Mon, 20 Feb
- 2023 00:26:46 -0800 (PST)
+        Mon, 20 Feb 2023 03:28:00 -0500
+Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2049.outbound.protection.outlook.com [40.107.94.49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 561BF83D3;
+        Mon, 20 Feb 2023 00:27:58 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=eGpX8d+W9CiYkaIcxiCkNvq2ti52zXeSG9DqcP2Hgpzpxc9fh5ejXCNGdtuTq7wedWxdzvnRT7IH79ajzCf4lfA+UyXt7Phr/+r+VSM8X+snKqmqRcnbiDjUYfFoLydsAoWmSC+bB8liOBesxgZBUZo7P9KsTZBse9XXqcVYlrfbMyTzFXbA+9pA7mkUQTWU4h3IFD2gRvjVxYTvKPvLiq3v4T9gNmLxwZ5RaxlTCb7MvTjyxIB1eK0thfTNjiiCiWhUheQa9/mpE32XaS+27fdmT87tFed2mNtNOitPEW5iGjX7IAGruHfuWDzvvv6yslyx1rb2vwqQNcPjMEBBKQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=La9te35KdvZ3bAXoBV3kbWsqFrt3+Nxi70SvEbfaYy4=;
+ b=de9NaoV8NyhXbqD9gdCMqYj8eTm2b8PiFp+aWFr42sWl2twnLaqIyUB7G3qmexVKLo90jGq982vktyoBiMGvzM4VJpikQKUFHQVyhgdIFAWgsE+2EPEcM5i+VEW7k3k09sKB2fBEzBHTdXqJeumaPigNBGKi3l9kUgn5JgUtcTSAgNrIM8iBJtFdnF4TBzFBkoAAKilQ2TE9l6q10wtT1hZ8csgNpylcDGEqRrY/bLX6z8oCvjEcreFoHMxwYIArgHQYkQV2Jnkbs1kjr9H2jdasrBJOFLmo073ibfYg7h8ROPPbtjvuP88u1oqRoDbdf5oX8xBUoRo5ITdZXOve+w==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=La9te35KdvZ3bAXoBV3kbWsqFrt3+Nxi70SvEbfaYy4=;
+ b=zJE0wPdy1ANp0Yst22Bpw71FZkWA1TQ3dWs1fueC/y0FtNQx/PdKhDClsh5LCGwUbMm+3VKAheEphXEH7d1f99UO1C3qlK8F+4aHaYJic5MmfijC/OW7SpJXlaC1m8leRw0STdBq0uktym+eZ/4z3zSwYHYuL9Qyk+nz6EmEMc0=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from BN8PR12MB3587.namprd12.prod.outlook.com (2603:10b6:408:43::13)
+ by SA0PR12MB4495.namprd12.prod.outlook.com (2603:10b6:806:70::13) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6111.20; Mon, 20 Feb
+ 2023 08:27:55 +0000
+Received: from BN8PR12MB3587.namprd12.prod.outlook.com
+ ([fe80::2e4f:4041:28be:ba7a]) by BN8PR12MB3587.namprd12.prod.outlook.com
+ ([fe80::2e4f:4041:28be:ba7a%6]) with mapi id 15.20.6111.019; Mon, 20 Feb 2023
+ 08:27:55 +0000
+Message-ID: <37ec0125-8d0b-7d87-321d-ed4c7c7b32a7@amd.com>
+Date:   Mon, 20 Feb 2023 09:27:47 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH v4 05/14] dma-buf/sync_file: Add SET_DEADLINE ioctl
+Content-Language: en-US
+To:     Rob Clark <robdclark@gmail.com>, dri-devel@lists.freedesktop.org
+Cc:     freedreno@lists.freedesktop.org, Daniel Vetter <daniel@ffwll.ch>,
+        =?UTF-8?Q?Christian_K=c3=b6nig?= <ckoenig.leichtzumerken@gmail.com>,
+        =?UTF-8?Q?Michel_D=c3=a4nzer?= <michel@daenzer.net>,
+        Tvrtko Ursulin <tvrtko.ursulin@intel.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        Pekka Paalanen <ppaalanen@gmail.com>,
+        Simon Ser <contact@emersion.fr>,
+        Rob Clark <robdclark@chromium.org>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        Gustavo Padovan <gustavo@padovan.org>,
+        "open list:SYNC FILE FRAMEWORK" <linux-media@vger.kernel.org>,
+        "moderated list:DMA BUFFER SHARING FRAMEWORK" 
+        <linaro-mm-sig@lists.linaro.org>,
+        open list <linux-kernel@vger.kernel.org>
+References: <20230218211608.1630586-1-robdclark@gmail.com>
+ <20230218211608.1630586-6-robdclark@gmail.com>
+From:   =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>
+In-Reply-To: <20230218211608.1630586-6-robdclark@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: FR2P281CA0150.DEUP281.PROD.OUTLOOK.COM
+ (2603:10a6:d10:98::11) To BN8PR12MB3587.namprd12.prod.outlook.com
+ (2603:10b6:408:43::13)
 MIME-Version: 1.0
-From:   Palash Oswal <oswalpalash@gmail.com>
-Date:   Mon, 20 Feb 2023 00:26:35 -0800
-Message-ID: <CAGyP=7fTKyew8AWO_Lj136U6UivEXRdoASKr60ea1gpW-7d6ZA@mail.gmail.com>
-Subject: KASAN: use-after-free Read in run_unpack
-To:     almaz.alexandrovich@paragon-software.com,
-        LKML <linux-kernel@vger.kernel.org>, ntfs3@lists.linux.dev,
-        syzkaller-bugs <syzkaller-bugs@googlegroups.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BN8PR12MB3587:EE_|SA0PR12MB4495:EE_
+X-MS-Office365-Filtering-Correlation-Id: 7ffbabe9-32a5-4619-4b30-08db131c5d38
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: RtAFcl9i4O141V50LpxXhnQNCtBrQqjSeyv0EHOK9CvKntExvdPC8LZWUV7Y/6eu3ct59pTfEDye1stf4Ffmy6WzrFS8kWHMPj0xhJSlduUhS8CdsiNweNsYNME6U69m5/HNjs0xFV2wXEt9EIFPRaNPSXfZuik1z+Tq0VTRjeZefX18oGbcPGgXjLbHXW82H7CT5P9UNIPFHtlQmsCmWFRUno4xKkaz0w2OH/iA8dxvzPMlx8hzAVmBOIMX5b12EwGB0YiDCbGDyK4WHWnD3NB/A9j/R4Otcz0NLhpEEkS7HLU4hqLfD3RXpn4lVIplSk+D8bWK3NJPMVCu9N9Db56TVx0tQGmspVIVac1o17Ac9Vc3bDiaMaqA4qntXV0/n5SDC1AMAp2ooR8uej9ESd5RPMkU1WogIHH+GlgAMtNn/H3UwSViBdS28j6zZZMPWyQ2AdsqS4fdvcpAOUavy09TQQwH2j2VPUKivhD5hxvfSnSgXhUWTFOpOqbzbOJEu3Sf6yvFXXwmny31LYl+cvr4o2A9g2ErlOpIh8yLowAiTBPcn6WKy4Q/BUwASyS5QB3bEkjEgdOxIG5u1jtbuLWlx0sPc8E+sv65Ik0EO4fS9DxOa4vHNip0dxfqB3tXcIYxFrHohX27h6Bc+asP4q0OdLNIjm9lJCgjGmlVu2/CR0+wysd9KoDM59rUvNtC
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN8PR12MB3587.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(39860400002)(136003)(366004)(376002)(396003)(346002)(451199018)(186003)(2906002)(6512007)(41300700001)(31686004)(6506007)(38100700002)(6666004)(7416002)(2616005)(5660300002)(8936002)(478600001)(316002)(966005)(6486002)(86362001)(66946007)(66556008)(66476007)(8676002)(4326008)(31696002)(66574015)(36756003)(83380400001)(54906003)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?T0ZEVC9NT2UwN1ltU0ROeDhEeWM4d2pvenQxemY4NndMV0NlRkd0MndJTEw3?=
+ =?utf-8?B?K1llNm1DeTZmc0NOdDRWU1ZlVHEvZ3gvYmhGdWl6eCtyak9TbTdzS2MwQ1kz?=
+ =?utf-8?B?N01qRGpndWhSYld1eVlIb2tGUm9VWmlXMDBXS3RyWjhxNDF6VTR0UEVnYlNp?=
+ =?utf-8?B?UFlqUE9mckZ3L3JYdlN2amdRanU2ZzlPR0pyREdiWjhyVU5TVzA0dGdZUlpX?=
+ =?utf-8?B?QWF5MnBkeXdHT25CQStaZ00xaHBRemk3UlZhQ0YvSGhEQ3I2V3Rua3Z4bkNM?=
+ =?utf-8?B?ZGFIVURyRG5iM2VFTXdlTGdSSTlBU0ZMSWFLVmloOG42NW1yWmc4bTB6czFU?=
+ =?utf-8?B?VDJBa2RhaXhsS3hxeThTQk12Uzd0QmJHbGd2RTJTbUFueFMyQzBhMkZvckM1?=
+ =?utf-8?B?QzlFYmErc3R6SFNaZmVRWHppTmt0ejZuVHNEV1RocHVQOGFmb1hOOWduYzlC?=
+ =?utf-8?B?bytuc3hiTEJyTlEvZWZvQ3hQazV2Nk5UaytwemJTb0dUbFFpU0RKd2VsSm1V?=
+ =?utf-8?B?VE9NQ2NidjFDK2IzU3FwOStaNXJNZkVhR1F0eGdGMUxOS3BWbVFBMDN5aXZK?=
+ =?utf-8?B?UmQvSjhnek9MY3FOWnloT0JxeWJXd0JwMmppQzl6bUNCcWliSldUV1NHeTc1?=
+ =?utf-8?B?cFZ1KzJjb2hsNzV5VEFka0pBUzMwQTNqYnY0Zi8rc2QvRnJkOFg2MWltWWk5?=
+ =?utf-8?B?ek1qRVROeG9QMFl2KzExVTEwakhrOExJb0xtNy9DaEV2VCs0SithVkFvQnkv?=
+ =?utf-8?B?YSt5b011eHBQSGN0VEZNWVBHa0dTSFdRMFZ2WlROSThiM2NlaEFJVmJma1Ja?=
+ =?utf-8?B?VHBjcHFUWnpIbGMvVkl2QUNmV2xkbnI1TUJ2amR6dGcvQ0IxaEJjL2JFaWJJ?=
+ =?utf-8?B?aW4xb0VmTEh4ZDMwZjZqYXc2VDZSdGFXbjlzVXpJMldaTDNmM2pIamk0dDZ2?=
+ =?utf-8?B?NExEaHcwbjkvclUzR2FmcHdxbjlJRUc2eVhqTmIyeUZld1BxeVVJb1JVSjMv?=
+ =?utf-8?B?ZVhqSiszVU1CSzZ2WEw3TjdYNG94NDdXSlVNdkdhK3lONnZzbWhGbEt5VEVS?=
+ =?utf-8?B?RkJCOG1JNFo3TFRhaTVhZTdmaSs1K3dmelM1aU1LQXhYMWMzSk9TWlZGSVgv?=
+ =?utf-8?B?RnpmNzNpeWIwTnpOSTRWQkhQbFkvS1lTUUZOZWI3dEJvWVJiMDBqeUVLSmdI?=
+ =?utf-8?B?SHVJYk9vaVNYS3RudEJ3WWxkekYyMVQ3QXg0Ly95VUdwWjVlTUVBSUVJVXZh?=
+ =?utf-8?B?NXUvU1pOaG9KSjh6NEdtdFc5Z1Uwdi9QY25qaUgwQ3pQSTVvWUpnb20vZlJV?=
+ =?utf-8?B?NXB1bHFaTnZiWXNRSzN6ekRsL0RRcklKMkFla1UrTWtIWCtFemtLSFYvL0E0?=
+ =?utf-8?B?blZLR3FNcHRuU2hNTkswaFdPZkh4Z3VtRnI4OFlXNU5XR3lWN0poMkZ6dXNM?=
+ =?utf-8?B?VmtFUklYeGVZempRMGZHQUx1SVhhWjdxZ3o2dTJxQllFQWF6K2xXSm9oaHR1?=
+ =?utf-8?B?d09zSXVHK0lLMUwrT3R5S2xZbTJTV1JCSlpyRGF0by91YzhRRm5EUG5jdExU?=
+ =?utf-8?B?eWY4eUUwbzBXR3lrREhDbFI3MGY4RlRnUmtyUlRncks1eXZUMWpUTktxTERS?=
+ =?utf-8?B?ZGd2bEd0bUZxNVdFbXRRUG80K0FaaTgwRnBuWG05TklJZFpEc21FV0wwZm9r?=
+ =?utf-8?B?K1VPZFN4N2JJMTdDS2ZnT0hFQnlFSGJGeEdaOWc0aStkMmlQZW5qVHdFdWR5?=
+ =?utf-8?B?QUtWMjU2QW5HMUF1WE0yd0tSVUw0c3pIc1BZdmVUMityTGhqTE56b1IxY1gv?=
+ =?utf-8?B?WkpEZWxTZzlzcHFTZnJ5MGVsRVZiblR2azV4RWczWjI0NFcveFloaHEvOUFy?=
+ =?utf-8?B?MUk3YVhhdUVVd2gwdlY2Zlc4aVJFNWxjc0xoMzA0M3JQeTV5UUtpcm1DZGFr?=
+ =?utf-8?B?bnBxK3E0ZkhFZDNmdGtES2J4b2Y1aVZlZm5SYlZjM3ptV05ZSEp2aDArb2tr?=
+ =?utf-8?B?NnJhWXNMUWJnTmZ5ZnJ3Qld5VEVyNDJweVRrMjQ3RjI3SzZBRENnS1YyZXdr?=
+ =?utf-8?B?VTBzZVZDRDRqTHU3UW9Tcnd5ZmYvdTdUQ3hTZW0zb0hWTDVlQTZsSnJ5cG1L?=
+ =?utf-8?B?YURZVkh3UDhGaG9DdlFJOFhDaVozN005cktuQVRac2RIRFR1UlNpaEplYllW?=
+ =?utf-8?Q?HjfNAqvEGO+ESL4duNmGYayMPWwpHzdurdQJnUL9Idpo?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 7ffbabe9-32a5-4619-4b30-08db131c5d38
+X-MS-Exchange-CrossTenant-AuthSource: BN8PR12MB3587.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 20 Feb 2023 08:27:54.8914
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: xNSiDsBtNdBeswBoyXxmR+fKFyhwZyb0yRHMYVNdg5aDFSLv9YsMYZryLNjwcLg2
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA0PR12MB4495
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
-I found the following issue using syzkaller on:
-HEAD commit : e60276b8c11ab4a8be23807bc67b048cfb937dfa (v6.0.8)
-git tree: stable
+Am 18.02.23 um 22:15 schrieb Rob Clark:
+> From: Rob Clark <robdclark@chromium.org>
+>
+> The initial purpose is for igt tests, but this would also be useful for
+> compositors that wait until close to vblank deadline to make decisions
+> about which frame to show.
+>
+> The igt tests can be found at:
+>
+> https://gitlab.freedesktop.org/robclark/igt-gpu-tools/-/commits/fence-deadline
+>
+> v2: Clarify the timebase, add link to igt tests
+>
+> Signed-off-by: Rob Clark <robdclark@chromium.org>
+> ---
+>   drivers/dma-buf/sync_file.c    | 19 +++++++++++++++++++
+>   include/uapi/linux/sync_file.h | 22 ++++++++++++++++++++++
+>   2 files changed, 41 insertions(+)
+>
+> diff --git a/drivers/dma-buf/sync_file.c b/drivers/dma-buf/sync_file.c
+> index af57799c86ce..fb6ca1032885 100644
+> --- a/drivers/dma-buf/sync_file.c
+> +++ b/drivers/dma-buf/sync_file.c
+> @@ -350,6 +350,22 @@ static long sync_file_ioctl_fence_info(struct sync_file *sync_file,
+>   	return ret;
+>   }
+>   
+> +static int sync_file_ioctl_set_deadline(struct sync_file *sync_file,
+> +					unsigned long arg)
+> +{
+> +	struct sync_set_deadline ts;
+> +
+> +	if (copy_from_user(&ts, (void __user *)arg, sizeof(ts)))
+> +		return -EFAULT;
+> +
+> +	if (ts.pad)
+> +		return -EINVAL;
+> +
+> +	dma_fence_set_deadline(sync_file->fence, ktime_set(ts.tv_sec, ts.tv_nsec));
+> +
+> +	return 0;
+> +}
+> +
+>   static long sync_file_ioctl(struct file *file, unsigned int cmd,
+>   			    unsigned long arg)
+>   {
+> @@ -362,6 +378,9 @@ static long sync_file_ioctl(struct file *file, unsigned int cmd,
+>   	case SYNC_IOC_FILE_INFO:
+>   		return sync_file_ioctl_fence_info(sync_file, arg);
+>   
+> +	case SYNC_IOC_SET_DEADLINE:
+> +		return sync_file_ioctl_set_deadline(sync_file, arg);
+> +
+>   	default:
+>   		return -ENOTTY;
+>   	}
+> diff --git a/include/uapi/linux/sync_file.h b/include/uapi/linux/sync_file.h
+> index ee2dcfb3d660..c8666580816f 100644
+> --- a/include/uapi/linux/sync_file.h
+> +++ b/include/uapi/linux/sync_file.h
+> @@ -67,6 +67,20 @@ struct sync_file_info {
+>   	__u64	sync_fence_info;
+>   };
+>   
+> +/**
+> + * struct sync_set_deadline - set a deadline on a fence
+> + * @tv_sec:	seconds elapsed since epoch
+> + * @tv_nsec:	nanoseconds elapsed since the time given by the tv_sec
+> + * @pad:	must be zero
+> + *
+> + * The timebase for the deadline is CLOCK_MONOTONIC (same as vblank)
+> + */
+> +struct sync_set_deadline {
+> +	__s64	tv_sec;
+> +	__s32	tv_nsec;
+> +	__u32	pad;
 
-C Reproducer : https://gist.github.com/oswalpalash/76ca8fcd92332c75a0a7efaa26269c42
-Kernel .config :
-https://gist.github.com/oswalpalash/0962c70d774e5ec736a047bba917cecb
+IIRC struct timespec defined this as time_t/long (which is horrible for 
+an UAPI because of the sizeof(long) dependency), one possible 
+alternative is to use 64bit nanoseconds from CLOCK_MONOTONIC (which is 
+essentially ktime).
 
-Console log :
-loop0: detected capacity change from 0 to 4096
-ntfs3: loop0: Different NTFS' sector size (1024) and media sector size (512)
-==================================================================
-BUG: KASAN: use-after-free in run_unpack+0x89a/0x940
-Read of size 1 at addr ffff888024b21900 by task syz-executor.0/16961
+Not 100% sure if there is any preferences documented, but I think the 
+later might be better.
 
-CPU: 0 PID: 16961 Comm: syz-executor.0 Not tainted 6.0.8-pasta #2
-Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS
-1.13.0-1ubuntu1.1 04/01/2014
-Call Trace:
- <TASK>
- dump_stack_lvl+0xcd/0x134
- print_report.cold+0xe5/0x63a
- kasan_report+0x8a/0x1b0
- run_unpack+0x89a/0x940
- run_unpack_ex+0xb8/0x620
- ntfs_iget5+0xc18/0x3270
- ntfs_fill_super+0x27de/0x3d30
- get_tree_bdev+0x440/0x760
- vfs_get_tree+0x89/0x2f0
- path_mount+0x121b/0x1cb0
- do_mount+0xf3/0x110
- __x64_sys_mount+0x18f/0x230
- do_syscall_64+0x35/0xb0
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-RIP: 0033:0x7fcf8309146e
-Code: 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48 83 c8 ff c3 66 2e 0f 1f
-84 00 00 00 00 00 90 f3 0f 1e fa 49 89 ca b8 a5 00 00 00 0f 05 <48> 3d
-01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007fcf83dc4a08 EFLAGS: 00000206 ORIG_RAX: 00000000000000a5
-RAX: ffffffffffffffda RBX: 0000000020000200 RCX: 00007fcf8309146e
-RDX: 0000000020000000 RSI: 0000000020000100 RDI: 00007fcf83dc4a60
-RBP: 00007fcf83dc4aa0 R08: 00007fcf83dc4aa0 R09: 0000000020000000
-R10: 0000000000000000 R11: 0000000000000206 R12: 0000000020000000
-R13: 0000000020000100 R14: 00007fcf83dc4a60 R15: 0000000020002a00
- </TASK>
+Either way the patch is Acked-by: Christian König 
+<christian.koenig@amd.com> for this patch.
 
-Allocated by task 6460:
- kasan_save_stack+0x1e/0x40
- __kasan_kmalloc+0xa6/0xd0
- kmalloc_reserve+0x32/0xd0
- __alloc_skb+0x11a/0x320
- tcp_stream_alloc_skb+0x38/0x550
- tcp_sendmsg_locked+0xc44/0x2fd0
- tcp_sendmsg+0x2b/0x40
- inet_sendmsg+0x99/0xe0
- sock_sendmsg+0xc3/0x120
- sock_write_iter+0x291/0x3d0
- vfs_write+0x9ca/0xd90
- ksys_write+0x1e8/0x250
- do_syscall_64+0x35/0xb0
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
+Regards,
+Christian.
 
-Freed by task 6460:
- kasan_save_stack+0x1e/0x40
- kasan_set_track+0x21/0x30
- kasan_set_free_info+0x20/0x30
- __kasan_slab_free+0xf5/0x180
- kfree+0x15e/0x540
- skb_free_head+0xac/0x110
- skb_release_data+0x56f/0x850
- skb_release_all+0x46/0x60
- __kfree_skb+0x11/0x20
- tcp_ack+0x1e54/0x5af0
- tcp_rcv_established+0x14b5/0x2130
- tcp_v4_do_rcv+0x701/0xd00
- __release_sock+0x12f/0x3a0
- release_sock+0x54/0x1b0
- tcp_sendmsg+0x36/0x40
- inet_sendmsg+0x99/0xe0
- sock_sendmsg+0xc3/0x120
- sock_write_iter+0x291/0x3d0
- vfs_write+0x9ca/0xd90
- ksys_write+0x1e8/0x250
- do_syscall_64+0x35/0xb0
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
+> +};
+> +
+>   #define SYNC_IOC_MAGIC		'>'
+>   
+>   /**
+> @@ -95,4 +109,12 @@ struct sync_file_info {
+>    */
+>   #define SYNC_IOC_FILE_INFO	_IOWR(SYNC_IOC_MAGIC, 4, struct sync_file_info)
+>   
+> +
+> +/**
+> + * DOC: SYNC_IOC_SET_DEADLINE - set a deadline on a fence
+> + *
+> + * Allows userspace to set a deadline on a fence, see dma_fence_set_deadline()
+> + */
+> +#define SYNC_IOC_SET_DEADLINE	_IOW(SYNC_IOC_MAGIC, 5, struct sync_set_deadline)
+> +
+>   #endif /* _UAPI_LINUX_SYNC_H */
 
-Last potentially related work creation:
- kasan_save_stack+0x1e/0x40
- __kasan_record_aux_stack+0x7e/0x90
- call_rcu+0x99/0x740
- xfrm_policy_kill+0x120/0x250
- xfrm_policy_delete+0x65/0x90
- sk_common_release+0x24e/0x330
- inet_release+0x12e/0x270
- __sock_release+0xcd/0x280
- sock_close+0x18/0x20
- __fput+0x27c/0xa90
- task_work_run+0xe0/0x1a0
- exit_to_user_mode_prepare+0x25d/0x270
- syscall_exit_to_user_mode+0x19/0x50
- do_syscall_64+0x42/0xb0
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-
-The buggy address belongs to the object at ffff888024b21800
- which belongs to the cache kmalloc-1k of size 1024
-The buggy address is located 256 bytes inside of
- 1024-byte region [ffff888024b21800, ffff888024b21c00)
-
-The buggy address belongs to the physical page:
-page:ffffea000092c840 refcount:1 mapcount:0 mapping:0000000000000000
-index:0x0 pfn:0x24b21
-flags: 0xfff00000000200(slab|node=0|zone=1|lastcpupid=0x7ff)
-raw: 00fff00000000200 ffffea0000a00188 ffffea000077b9c8 ffff888011840700
-raw: 0000000000000000 ffff888024b21000 0000000100000002 0000000000000000
-page dumped because: kasan: bad access detected
-page_owner tracks the page as allocated
-page last allocated via order 0, migratetype Unmovable, gfp_mask
-0x2c2220(__GFP_HIGH|__GFP_ATOMIC|__GFP_NOWARN|__GFP_COMP|__GFP_NOMEMALLOC|__GFP_THISNODE),
-pid 16, tgid 16 (ksoftirqd/0), ts 86734280820, free_ts 86664849571
- prep_new_page+0x2c6/0x350
- get_page_from_freelist+0xae9/0x3a80
- __alloc_pages+0x321/0x710
- cache_grow_begin+0x75/0x360
- kmem_cache_alloc_node_trace+0xbe2/0xd40
- __kmalloc_node_track_caller+0x38/0x60
- kmalloc_reserve+0x32/0xd0
- __alloc_skb+0x11a/0x320
- tcp_stream_alloc_skb+0x38/0x550
- tcp_write_xmit+0x1c72/0x6170
- __tcp_push_pending_frames+0xaa/0x380
- tcp_rcv_established+0x9d5/0x2130
- tcp_v4_do_rcv+0x701/0xd00
- tcp_v4_rcv+0x3cf0/0x3f70
- ip_protocol_deliver_rcu+0x9b/0x7c0
- ip_local_deliver_finish+0x2fb/0x4e0
-page last free stack trace:
- free_pcp_prepare+0x5ab/0xd00
- free_unref_page+0x19/0x410
- slab_destroy+0x14/0x50
- drain_freelist+0x9c/0xe0
- cache_reap+0x1b9/0x2f0
- process_one_work+0x9c7/0x1650
- worker_thread+0x623/0x1070
- kthread+0x2e9/0x3a0
- ret_from_fork+0x1f/0x30
-
-Memory state around the buggy address:
- ffff888024b21800: fa fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
- ffff888024b21880: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
->ffff888024b21900: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
-                   ^
- ffff888024b21980: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
- ffff888024b21a00: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
-==================================================================
