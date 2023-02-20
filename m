@@ -2,184 +2,175 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E7F3369C890
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Feb 2023 11:32:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C379669C894
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Feb 2023 11:32:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231607AbjBTKcG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Feb 2023 05:32:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52792 "EHLO
+        id S231616AbjBTKcN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Feb 2023 05:32:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52972 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229492AbjBTKcE (ORCPT
+        with ESMTP id S231610AbjBTKcL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Feb 2023 05:32:04 -0500
-Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 835FA14483
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Feb 2023 02:32:03 -0800 (PST)
-Received: by mail-ed1-x530.google.com with SMTP id h16so2927658edz.10
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Feb 2023 02:32:03 -0800 (PST)
+        Mon, 20 Feb 2023 05:32:11 -0500
+Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2123.outbound.protection.outlook.com [40.107.223.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6935219699;
+        Mon, 20 Feb 2023 02:32:09 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=a2YDo+ckL3FpfyuT8kLsexFuOmPhXtuOxyVaeEQ9Cb0r/TORp1mcesyPf6xxrgYHKejAxNfwzaZIeJoEW/6eBTdcTUQltagGbQHrXQWRkM+pncfcx8GMov3hOUA99Dgi8eck2O5QQJjJtlO6lNiqf5ER96WB4HISceFgTrDQZJ/b6vFtnTdzwM3zLRzSLh1v9W/dwuzOvsfVQU/CAsi2xbnwz/uw/wM5GvWD+ARvNUGe2p4j0HUkjuIEWkG2xPtxotwJ0rPWLZaEs+DnUe+0Z+I7Rbb0iAEcCweM7QV4HWBzKJjVv2fQw3sy0KfWkjO/9k1ZdCRrHhpEr4foaHctmA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=4bIvZOOeiH+U+LZ3bFmtJk9hhq77/9vt1PUVGYolbao=;
+ b=LanTQUUT8ZoFcVQvaa8LtzBbqgbeFlPson3XLolUpZU5/odMQkTroCKAuptlTxC47pwaT5Rgvu087mRxhCq3lHSZAHZMHRKw2s9s1Di4QY1W19j9Zqv1FKIMVHbFW24uIqf24khVQQ26S6b9yCA13pnp72bJ1fZXtxRzPCsUvpJZyGMqnAEt8ZDz8GyCb+qyr8ds6U9gr8nH1mPSEmLHugMvgYpDKm5aJXnbwRhVsyMeUjn8kYQQ2eQAMjq6KQqAkDzpftzjC+KKezOaomU3qpMGWafJ+gbitSauwZB+o73KzCJ33mqrLV3qlEOmOd0+rYxt+01tjBh+Yf+mtGLNMA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=corigine.com; dmarc=pass action=none header.from=corigine.com;
+ dkim=pass header.d=corigine.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=paV6BTyDbDK8lLzQOpiKyOjr8c2QWDAG5Sx7tYMnMf0=;
-        b=sUqfx2GkQWW0/mkbayKMOts6wK8b0GxH1Wx6kW57PAX6jgwV5mRUPRISdjJ3is/FYv
-         MWTXjdznl9W4rXCYpVlk4kLil0FT7CGJV9PSvsE/3CEeGIuX6ixxGGKWa1oke4nZpOSE
-         wl9mVPIQGcOpYSYwjcSQ/mdyGoiefeUvXK8ujVnPHUwN/gIwDoL1WoCfEwdfiyZ6tdvE
-         okeTXmUrXQ2NNGDat1+RKZaUI1KKSlgN2Mv5cpeStWkN9Mv1B+D9+UfS4+OHQtAWbgqr
-         qrYn80u3pYIeJ2ZLti0clGlD8yWlGi+6V3BUtgfgZ+7/m8bHDagi73HBdNiB4doVUs7h
-         WDJg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=paV6BTyDbDK8lLzQOpiKyOjr8c2QWDAG5Sx7tYMnMf0=;
-        b=tWRozDrwtl1qTjL135Rk3gy39XGufcoDMQqw4pcYo+w5TAcLqv27M83NioIgAzI705
-         2dF2ASkMrfN3eogKnBOsK1ZCsP711+VcE80brRjXbhzlHC4XysvpQW2MKWnuoD+7vEr9
-         W8OClJXEt9DkzORjH3EMD4Zu4fbFm0lzenA0f2elbcRU9FjIY2C6eeIoVDoF2FTCtgS6
-         gx3vjbSFqAr/wrxS++2FLkssYL7SDdYrDjxIq6kcfNo0/3ctVi59/amTWVvC+JhXe8oq
-         X3HAXDgOnpH2EfNwHM2WaCRa5o1Xm5V+oz7JWhxwVm/0vrhCLoY4yt6uMkDM1PDmzEg+
-         CrpA==
-X-Gm-Message-State: AO0yUKVGlA+ibdPOqqmMl1wfFLuAu+zFX//XCYAodzrUfb4xh3KITGOQ
-        2+gGxTyJjsFsCvnxNe+iwiFKoA==
-X-Google-Smtp-Source: AK7set/vIPmDHCiFPf7406PxS4ywTJP3gluEz3K1IoOEEfYdwk4lcG5idx/OXz/rBTLLLjfWKSxprQ==
-X-Received: by 2002:a17:906:edd2:b0:8b1:7e1e:7756 with SMTP id sb18-20020a170906edd200b008b17e1e7756mr10873066ejb.73.1676889122026;
-        Mon, 20 Feb 2023 02:32:02 -0800 (PST)
-Received: from [192.168.1.109] ([178.197.216.144])
-        by smtp.gmail.com with ESMTPSA id qn19-20020a170907211300b008baeb5c9bdbsm3335412ejb.141.2023.02.20.02.32.00
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 20 Feb 2023 02:32:01 -0800 (PST)
-Message-ID: <761f1f4b-6f47-83a3-1e55-9e5dfccbaab8@linaro.org>
+ d=corigine.onmicrosoft.com; s=selector2-corigine-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=4bIvZOOeiH+U+LZ3bFmtJk9hhq77/9vt1PUVGYolbao=;
+ b=IvBaTKF7ZyLdfs0tOjqXzXVj0FaKvbVOFdvDNS9YicHu1eqdiO85B3FB0/TOWqKlAcZChAmgE/OO+8JxVfsLktSJ5a/b6Kt6y6sIop/eaH2AC43+flNpm/mih12mbJGTn104cqlq+CfAZhJMvHqlZ8K+v/zDAMt+ZMrnEmTPbEs=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=corigine.com;
+Received: from PH0PR13MB4842.namprd13.prod.outlook.com (2603:10b6:510:78::6)
+ by DM6PR13MB3738.namprd13.prod.outlook.com (2603:10b6:5:245::19) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6111.20; Mon, 20 Feb
+ 2023 10:32:06 +0000
+Received: from PH0PR13MB4842.namprd13.prod.outlook.com
+ ([fe80::85f5:bdb:fb9e:294c]) by PH0PR13MB4842.namprd13.prod.outlook.com
+ ([fe80::85f5:bdb:fb9e:294c%9]) with mapi id 15.20.6111.019; Mon, 20 Feb 2023
+ 10:32:06 +0000
 Date:   Mon, 20 Feb 2023 11:31:59 +0100
+From:   Simon Horman <simon.horman@corigine.com>
+To:     Gavin Li <gavinl@nvidia.com>
+Cc:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, roopa@nvidia.com,
+        eng.alaamohamedsoliman.am@gmail.com, bigeasy@linutronix.de,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        gavi@nvidia.com, roid@nvidia.com, maord@nvidia.com,
+        saeedm@nvidia.com
+Subject: Re: [PATCH net-next v3 2/5] vxlan: Expose helper vxlan_build_gbp_hdr
+Message-ID: <Y/NMH2QRKoUpdNef@corigine.com>
+References: <20230217033925.160195-1-gavinl@nvidia.com>
+ <20230217033925.160195-3-gavinl@nvidia.com>
+ <Y/KHWxQWqyFbmi9Y@corigine.com>
+ <b0f07723-893a-5158-2a95-6570d3a0481c@nvidia.com>
+ <Y/MV1JFn4NuptO9q@corigine.com>
+ <c8fcebb5-4eba-71c8-e20c-cd7afd7e0d98@nvidia.com>
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <c8fcebb5-4eba-71c8-e20c-cd7afd7e0d98@nvidia.com>
+X-ClientProxiedBy: AM3PR05CA0131.eurprd05.prod.outlook.com
+ (2603:10a6:207:2::33) To PH0PR13MB4842.namprd13.prod.outlook.com
+ (2603:10b6:510:78::6)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH v2 1/2] dt-bindings: display/msm: dsi-controller-main: Fix
- deprecated QCM2290 compatible
-Content-Language: en-US
-To:     Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
-        linux-arm-msm@vger.kernel.org, andersson@kernel.org,
-        agross@kernel.org
-Cc:     marijn.suijten@somainline.org, Rob Clark <robdclark@gmail.com>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Krishna Manikandan <quic_mkrishn@quicinc.com>,
-        dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20230217111316.306241-1-konrad.dybcio@linaro.org>
- <c49904be-d842-fc12-a443-17f229d53166@linaro.org>
- <a4eaccfd-34ba-15f3-033f-165b46c43317@linaro.org>
- <a158bca2-78bf-5b38-60fe-88118e8b4ad7@linaro.org>
- <ab35cdcf-53ae-a3f2-fc08-d0f58c51a0ae@linaro.org>
- <48cb00cd-961c-b72f-fba8-1842d658e289@linaro.org>
- <d4ffa9f0-797e-7a32-147e-64aa46d7e197@linaro.org>
- <e6d397bb-dd5d-8308-eb07-3aeb2589115c@linaro.org>
- <fbece9d6-2204-2534-e44f-29c29cc56413@linaro.org>
- <9a0245af-b7f3-0874-385b-47c86d6e6a60@linaro.org>
- <3d2e681b-0cc0-5d86-7d40-63022a5358c9@linaro.org>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <3d2e681b-0cc0-5d86-7d40-63022a5358c9@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: PH0PR13MB4842:EE_|DM6PR13MB3738:EE_
+X-MS-Office365-Filtering-Correlation-Id: 106420f8-4329-42e4-2405-08db132db69c
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 2cfO7teoyis0jbOiybJzEwFp5x+MWu60P4RrTRAZzhycIPpLRGop1jHgttY0FzhmmhwnYjOymg26x3wRr1aoOPFKsMTDn+8GeOwmO/s/klFWx8/OLSOhsScfd7AFSCPaSr1KE+eKspYLdjx7IyvMz1PTaO8qkGjNih9ew+qLfqwW3BvK0v2lV6fZCdLrrCtY5r6JQtPXKIKkDtOuItCtuxmYm7d8qwHeKAG9Ki7CiWiUuxl5/YdV1KdiE/mgd5DBESGVgfj5lyPh+kdFBoRohQBSLuIKcbA90aeb0BKci+Ul4ed+sNH2HuAqtw7JTGdAD8dg+ZT0Vx7ocX1XJupsqoiz0qkMIZjgZHVv9Ew0uzdK9rUHg0TpZM60ilOVv6Sny8GYPlFbgp70VmVgHyfondGvsbKeraDyhFdqfpVbl4CANQhonj1YU1Ua6ed/wKWHLMDaG4ejvd6Sb5DdTBv2KQ159rFvjBTEUe5Oeg7ZKs+vFLySURWl4WpyGF9RWNYbUzDnlQs2lF1FfOT0AHW05yXE5bDViruWKn2CbZtg7IOgAI3gp2wYQDxFl1OnVj3wU18BTyec2qcqzFXEamqOaIT4+Dj0CIgueGvCe6gDHY3R6L3eI/BT4fszEQSWoffFho4+2fBl2VVC1DwXh2ug4Q==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR13MB4842.namprd13.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(396003)(346002)(366004)(376002)(39840400004)(136003)(451199018)(316002)(186003)(6512007)(53546011)(478600001)(6506007)(6666004)(2616005)(66476007)(66556008)(66946007)(8676002)(6486002)(6916009)(38100700002)(86362001)(83380400001)(2906002)(4326008)(36756003)(5660300002)(41300700001)(44832011)(7416002)(8936002);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?SnNyTldpTG1PdlJqSERFSVV4Ti85RnRUT2U2WS9FQ3lSKzEyUnc3Y2RkamYv?=
+ =?utf-8?B?aHNXbFVKNVJyc2tKT1NtV2Z6YzVzWU44aG4wSEpUeXdoYU1JV0RoSFI5dXVh?=
+ =?utf-8?B?bGwyd0R5Mm12SFpOSXBVVmRCaFo0dkQrZXJhSjM3RU0wRElJN0pkUkZIdHYw?=
+ =?utf-8?B?VmkzcTY1Z1NlRnNyNG1ra241QUE1cGNNcVhHZ3RQUndjL21jZHcveUw4UFJs?=
+ =?utf-8?B?cVcvTjBRUERhcDNzNXVEdDJtWUR5eHlOY29xa0JtK1REMmYwOWJXalU4U0lj?=
+ =?utf-8?B?RFlwS2x1QjBzNkliQWdzZ1hGcXVyNnVONmVNUEFLaHozKzZDcmhGRkx6SkJ5?=
+ =?utf-8?B?ejJValQrVDBDaDE0S1BTK1UzMFRhNjhLeEQ4YVVHS3dYTVBYaDlQUXM1aFlK?=
+ =?utf-8?B?K2VraC9PY1VDVUM1WFBmWHczMEVFWDRpREtTb0FjTDM1NnFyT1VIMk1jM2Fa?=
+ =?utf-8?B?QWJ3VThtc2gvMWc5dGF5S295dnFSWEZkVGFnM0MyeDB3MU96S0N1NkVNcEhn?=
+ =?utf-8?B?TTJTMWM1RlREbmsxWnlsRUF4Rm9WdEpieU5yOC9zOWlyYk9RUFQ3TzVkVFZi?=
+ =?utf-8?B?c2ozeHp3SVpNZ1JwdXVLdHZLc2tOajVCaWN2d2h2Q3dXdldwUEhJVG1lYzFy?=
+ =?utf-8?B?VlpKc3hDYXlYak5XemN6Tm9HU0VoYmRqejVjWjVFYVZBT0RHeUVFck91YmFC?=
+ =?utf-8?B?WjRabVAwUjF2TnN1UTk2NHlsVlJSNnV6NnNVb3hualZBcW5Qd1lZSEpDSjlW?=
+ =?utf-8?B?ZGxibGhkc2U5NGpEYzBvazE0THdPMExmSFV0WWwyMlM5WkJJazZlbGRRUm9W?=
+ =?utf-8?B?Mm8zVUtwZ2FJSjd2ckZkZEYzbHRTWlJyNEZNYytVTjYvaEowcEdNWlNJam9j?=
+ =?utf-8?B?SHRtT0k4VUNlS3VGbmE3Z21wanpwcTYwK0ZNU3pJUjVzM25UckFPa2prejFL?=
+ =?utf-8?B?bHc3QUkrbWZXamtzVkczNjRRMmp4QUkrMHl4bVlQZ2hCUjZOaDhzVG5WRUc0?=
+ =?utf-8?B?SC9rbHRnYmVuSndzU2lBWERuL0syYmFxQmt4RnZQNmwrQnlja1VWVzFzOG9L?=
+ =?utf-8?B?cG9oQXdEMTVvY1o3TXV2N2tjUVdxR2VWN3FHL2pRendmK3BxYkZLTmNjT0hQ?=
+ =?utf-8?B?OTdReHNMeGZPMmhUOVJJMWs1UGNDME0yMnh2b2piV2pyYlZ0Q0d2ZHVWcEN5?=
+ =?utf-8?B?enU5S29TWXhSdklUdDNBZ0R2c25mdGVyNUtUUEdFSlNoYUlKR3owRzduOEJC?=
+ =?utf-8?B?WUhnNXN1YmRQZ1VObExBNHZkc2ZOWmg2ZzNVUmVoc2F1M21KQVB3NTlKS0Ft?=
+ =?utf-8?B?dUQ1eGQxdFVVek9RbVI0QzAxNGRCR0IzTnRnaHZoQzFFT1hpU1hjZHJKcW1V?=
+ =?utf-8?B?TWQrRVd3akt0aWlobkVzQUNxVTFPODRWU0dWYWxJcG9OWHlRUFRYN2hjb0Fx?=
+ =?utf-8?B?S2taek5VYW5WRVRUejFSY2RmVFgzSHR0MURNV1FEb1Z6Y05iQzU4ZzhkOHJq?=
+ =?utf-8?B?cWhwbENlbW1qVHJCZVAvTSs1Z0p6NitnRis0QlRqT2VTQ3FSU2hCNnk4blpL?=
+ =?utf-8?B?M3hYMWk2MXlLVnVaczBiREhUSStIV0xNbFYrWmZocFpPcDlEZmhXYmEvN1pL?=
+ =?utf-8?B?bjF2UG5LdGMvVVpyQU9MbkhWN29nQWFLTGpQd0pVZXd2SEhwNmg5bk90dDhk?=
+ =?utf-8?B?cDh3WDZoNG90SGRnQjNWd1hyWXdqWUJSeHJjZnp5bU5GUGYxKzN5MVFCTUlX?=
+ =?utf-8?B?dHhnZ1ZRYjdlZmxQalRya1VJNVpMcldMb1BrOC91NklVTC94K2lVekpxck9m?=
+ =?utf-8?B?cEJuTlJteUkxOFFkYWt4VHo0TjFkT2doRDUvT3FpV3pxb2NNTnNIbDFmUFZO?=
+ =?utf-8?B?YXUwU2MvV2xnTGltaUNZN1hxb3pOMW55Y3B3QkZuMWczR2pESmhzd1VUdk11?=
+ =?utf-8?B?UitzZEpNY2tWRHhDaXY3MWsvcit6R3A0OUxOazRvZUtINkxwMGZoS1RKWWpK?=
+ =?utf-8?B?blovKzJxSitGZVFkdi9rMUV6eitaNFNUeVRxa0srTkVkK2JSU1NhS1pLSEJI?=
+ =?utf-8?B?d0NZRktPYmEyMGU2Zm1ndUJKQldpWGYyQ2RmZC8zWFJzYmFscWpycG9meVEy?=
+ =?utf-8?B?M0RtK0lnS1didzkxL1VjUlp6czJrSnUyek5FZWNxOEVHTEFZVWhrTGw5ZmVN?=
+ =?utf-8?B?S1Nxdk1ud2Q1bkhRd1dmbmJuK0F5eU5zSjNudThWWDgyYUF1aGNhU0s0dEpT?=
+ =?utf-8?B?WDJBTXEvU1hPYXBYZmpaTVdVUXh3PT0=?=
+X-OriginatorOrg: corigine.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 106420f8-4329-42e4-2405-08db132db69c
+X-MS-Exchange-CrossTenant-AuthSource: PH0PR13MB4842.namprd13.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 20 Feb 2023 10:32:06.2605
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: fe128f2c-073b-4c20-818e-7246a585940c
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 9BxjoMikMzyDvEsDrnfGTgx/69E+cQY+Vpx72t8aD86HLJttWtmxVzhKp9mo11QjnQOUeVG8Txorpyts2qTlSPGz0DTxM1KV4o25gT5eo3A=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR13MB3738
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 20/02/2023 11:24, Konrad Dybcio wrote:
+On Mon, Feb 20, 2023 at 03:15:20PM +0800, Gavin Li wrote:
 > 
+> On 2/20/2023 2:40 PM, Simon Horman wrote:
+> > External email: Use caution opening links or attachments
+> > 
+> > 
+> > On Mon, Feb 20, 2023 at 10:05:00AM +0800, Gavin Li wrote:
+> > > On 2/20/2023 4:32 AM, Simon Horman wrote:
+> > > > External email: Use caution opening links or attachments
+> > > > 
+> > > > 
+> > > > On Fri, Feb 17, 2023 at 05:39:22AM +0200, Gavin Li wrote:
+> > > > > vxlan_build_gbp_hdr will be used by other modules to build gbp option in
+> > > > > vxlan header according to gbp flags.
+> > > > > 
+> > > > > Signed-off-by: Gavin Li <gavinl@nvidia.com>
+> > > > > Reviewed-by: Gavi Teitz <gavi@nvidia.com>
+> > > > > Reviewed-by: Roi Dayan <roid@nvidia.com>
+> > > > > Reviewed-by: Maor Dickman <maord@nvidia.com>
+> > > > > Acked-by: Saeed Mahameed <saeedm@nvidia.com>
+> > > > I do wonder if this needs to be a static inline function.
+> > > > But nonetheless,
+> > > Will get "unused-function" from gcc without "inline"
+> > > 
+> > > ./include/net/vxlan.h:569:13: warning: ‘vxlan_build_gbp_hdr’ defined but not
+> > > used [-Wunused-function]
+> > >   static void vxlan_build_gbp_hdr(struct vxlanhdr *vxh, const struct
+> > > vxlan_metadata *md)
+> > Right. But what I was really wondering is if the definition
+> > of the function could stay in drivers/net/vxlan/vxlan_core.c,
+> > without being static. And have a declaration in include/net/vxlan.h
 > 
-> On 18.02.2023 15:49, Krzysztof Kozlowski wrote:
->> On 18/02/2023 12:23, Konrad Dybcio wrote:
->>>
->>>
->>> On 18.02.2023 11:14, Krzysztof Kozlowski wrote:
->>>> On 17/02/2023 22:13, Bryan O'Donoghue wrote:
->>>>> On 17/02/2023 12:24, Krzysztof Kozlowski wrote:
->>>>>> First, it would be nice to know what was the intention of Bryan's commit?
->>>>>
->>>>> Sorry I've been grazing this thread but, not responding.
->>>>>
->>>>> - qcom,dsi-ctrl-6g-qcm2290
->>>>>
->>>>> is non-compliant with qcom,socid-dsi-ctrl which is our desired naming 
->>>>> convention, so that's what the deprecation is about i.e. moving this 
->>>>> compat to "qcom,qcm2290-dsi-ctrl"
->>>>
->>>> OK, then there was no intention to deprecate qcom,mdss-dsi-ctrl and it
->>>> should be left as allowed compatible.
->>> Not sure if we're on the same page.
->>
->> We are.
->>
->>>
->>> It wasn't intended to deprecate [1] "qcom,qcm2290-dsi-ctrl", "qcom-mdss-dsi-ctrl";
->>> (newly-introduced in Bryan's cleanup patchset) but it was intended to deprecate
->>> [2] "qcom,dsi-ctrl-6g-qcm2290"; which was introduced long before that *and* used in
->>> the 6115 dt (and it still is in linux-next today, as my cleanup hasn't landed yet).
->>>
->>> [3] "qcom,dsi-ctrl-6g-qcm2290", "qcom,mdss-dsi-ctrl" was never used (and should never
->>> be, considering there's a proper compatible [1] now) so adding it to bindings
->>> didn't solve the undocumented-ness issue. Plus the fallback would have never
->>> worked back then, as the DSI hw revision check would spit out 2.4.1 or 2.4.
->>> which is SC7180 or SDM845 and then it would never match the base register, as
->>> they're waay different.
->>
->> All these were known. I was asking about "qcom,mdss-dsi-ctrl", because
->> the original intention also affects the way we want to keep it now
->> (unless there are other reasons).
-> Okay, so we want to deprecate:
+> Tried that the first time the function was called by driver code. It would
+> introduce dependency in linking between the driver and the kernel module.
 > 
-> "qcom,dsi-ctrl-6g-qcm2290", "qcom,mdss-dsi-ctrl"
+> Do you think it's OK to have such dependency?
 
-No, we don't want to deprecate it. Such compatible was never existing
-originally and was only introduced by mistake. We want to correct the
-mistake, but we don't want to deprecate such list.
+IMHO, yes. But others may feel differently.
 
-> 
-> because it is:
-> 
-> 1) non-compliant with the qcom,socname-hwblock formula
-> 2) replaceable since we rely on the fallback compatible
-> 3) "qcom,dsi-ctrl-6g-qcm2290" alone would have been expected to
->    be fixed in the DTSI similar to other SoCs
-> 
-> Is that correct?
-
-No. So again, I am talking only about qcom,mdss-dsi-ctrl. Since
-beginning of this thread:
-
-"Wasn't then intention to deprecate both - qcm2290 and mdss - when used
-alone?"
-
-Why do you bring the list to the topic? The list was created by mistake
-and Bryan confirmed that it was never his intention.
-
-> 
-> Because 2) doesn't hold, as - at the time of the introduction
-> of Bryan's patchset - the fallback compatible would not have
-> been sufficient from the Linux POV [1]
-
-There was no fallback compatible at that time.
-
-> , though it would have been
-> sufficient from the hardware description POV, as the hardware
-> on the SoC *is* essentially what qcom,mdss-dsi-ctrl refers to.
-> 
-> [1] The driver would simply not probe. It *would be* Linux-correct
-> after my code-fixing series was applied, but I think I'm just failing
-> to comprehend what sort of ABI we're trying to preserve here :/
-
-Best regards,
-Krzysztof
-
+I do wonder if any performance overhead of a non-inline function
+also needs to be considered.
