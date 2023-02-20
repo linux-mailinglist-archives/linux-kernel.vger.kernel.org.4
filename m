@@ -2,56 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1921669C8FB
+	by mail.lfdr.de (Postfix) with ESMTP id 8B79269C8FD
 	for <lists+linux-kernel@lfdr.de>; Mon, 20 Feb 2023 11:50:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231674AbjBTKub (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Feb 2023 05:50:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41628 "EHLO
+        id S231558AbjBTKu1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Feb 2023 05:50:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41604 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231350AbjBTKuU (ORCPT
+        with ESMTP id S230355AbjBTKuT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Feb 2023 05:50:20 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A764FBBBC;
-        Mon, 20 Feb 2023 02:50:19 -0800 (PST)
+        Mon, 20 Feb 2023 05:50:19 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4200D13522;
+        Mon, 20 Feb 2023 02:50:18 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 5BA1FB80C68;
-        Mon, 20 Feb 2023 10:50:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 0E4AAC4339E;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D23D060DCE;
+        Mon, 20 Feb 2023 10:50:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 38A2AC433A8;
         Mon, 20 Feb 2023 10:50:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1676890217;
-        bh=fkE/tCEHY8MUYu9SmsvKs0Adj+VFvuGQSd3ylZhAUQE=;
+        bh=gwFo9Hg00bQqTzT8sZEh658DqP/8C0QbZFvJL7Pah/w=;
         h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=c6iflmHfeQdSQYeiQuD1+5rJj4X4biV6wEFlt2EjY7wAs0447t5yom4vE/6BqJ7ee
-         Ymgvh4Hh4+HTpo23nf2+dtvRFaKzxq9fY9kT5OwQzlLqEnnYPWTQD8U27QYyM8xTpA
-         ZXjgqRcaxHkux0A53ZmVQPVyG73oO7Eb3G9Y/ZEvwr0GQCJWWpfe1BiZmZVZFRFYwj
-         uTMuNq93xivF9XmtUyMvKN0c1ppaDzMkVqtBbkF5qqkcbnAlNWPT9Tu0/qD7JdcPwI
-         Qw+BXh3XV8D4LbtxK5WbjA352zT+fkEIy57gqhgdd9Kpi7ydDIkgVF+zFfdT1MSNLG
-         /ndgmEsUgFeDw==
+        b=VqNPD0gaZTjzwe0yGkzqJG87iCH1jBoju9yHRVSkEu6ZkAlvZLnPir/64OS14A52O
+         AspuM+lShY0UnL+/IZJBrdSH4qtf/QiOkCaFetphoFWvOpALMVvBoAvIvpNg7cRoL4
+         jpF6VhIZ4W8XE6370h7afkQPj1OEs4lfbemKbRy5k3fPHv2osZYmw7uK9lkr5LGlNP
+         pvR1RBErwSHM63sd/qNp1GUDTdmHke338kAakkKcJ+NbBlSx3txeBSfDart6Qc1aN7
+         9TV05ZmpJHCcGkxKzSglh7uFlPLQXnzLk1uF3MalzXN50F0lQg+Ijatp+Mt7avcYLg
+         lcPAQwwyqBVjw==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id E9666C59A4C;
-        Mon, 20 Feb 2023 10:50:16 +0000 (UTC)
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 08FF5C691DE;
+        Mon, 20 Feb 2023 10:50:17 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH][next][V2] sfc: Fix spelling mistake "creationg" -> "creation"
+Subject: Re: [net-next PATCH] octeontx2-af: Add NIX Errata workaround on CN10K
+ silicon
 From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <167689021695.13054.3399599919959341923.git-patchwork-notify@kernel.org>
-Date:   Mon, 20 Feb 2023 10:50:16 +0000
-References: <20230217143753.599629-1-colin.i.king@gmail.com>
-In-Reply-To: <20230217143753.599629-1-colin.i.king@gmail.com>
-To:     Colin Ian King <colin.i.king@gmail.com>
-Cc:     ecree.xilinx@gmail.com, habetsm.xilinx@gmail.com,
-        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+Message-Id: <167689021703.13054.16188471204013171476.git-patchwork-notify@kernel.org>
+Date:   Mon, 20 Feb 2023 10:50:17 +0000
+References: <20230217055112.1248842-1-saikrishnag@marvell.com>
+In-Reply-To: <20230217055112.1248842-1-saikrishnag@marvell.com>
+To:     Sai Krishna <saikrishnag@marvell.com>
+Cc:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
         pabeni@redhat.com, netdev@vger.kernel.org,
-        kernel-janitors@vger.kernel.org, alejandro.lucero-palau@amd.com,
-        linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        linux-kernel@vger.kernel.org, sgoutham@marvell.com,
+        gakula@marvell.com
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -64,19 +64,20 @@ Hello:
 This patch was applied to netdev/net-next.git (master)
 by David S. Miller <davem@davemloft.net>:
 
-On Fri, 17 Feb 2023 14:37:53 +0000 you wrote:
-> There is a spelling mistake in a pci_warn message. Fix it.
+On Fri, 17 Feb 2023 11:21:12 +0530 you wrote:
+> From: Geetha sowjanya <gakula@marvell.com>
 > 
-> Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
-> Reviewed-by:  Alejandro Lucero <alejandro.lucero-palau@amd.com>
-> ---
-> V2: Fix subject to match the actual spelling mistake fix
+> This patch adds workaround for below 2 HW erratas
+> 
+> 1. Due to improper clock gating, NIXRX may free the same
+> NPA buffer multiple times.. to avoid this, always enable
+> NIX RX conditional clock.
 > 
 > [...]
 
 Here is the summary with links:
-  - [next,V2] sfc: Fix spelling mistake "creationg" -> "creation"
-    https://git.kernel.org/netdev/net-next/c/0d39ad3e1b04
+  - [net-next] octeontx2-af: Add NIX Errata workaround on CN10K silicon
+    https://git.kernel.org/netdev/net-next/c/933a01ad5997
 
 You are awesome, thank you!
 -- 
