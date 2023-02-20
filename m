@@ -2,104 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3811669CA2F
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Feb 2023 12:49:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F45969CA30
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Feb 2023 12:49:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231882AbjBTLtK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Feb 2023 06:49:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42008 "EHLO
+        id S231896AbjBTLtM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Feb 2023 06:49:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42028 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231811AbjBTLtH (ORCPT
+        with ESMTP id S231877AbjBTLtI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Feb 2023 06:49:07 -0500
-Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D58D11B547;
-        Mon, 20 Feb 2023 03:48:56 -0800 (PST)
-Received: from [2a02:8108:8980:2478:8cde:aa2c:f324:937e]; authenticated
-        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        id 1pU4f4-0001yf-Vd; Mon, 20 Feb 2023 12:48:51 +0100
-Message-ID: <99455c99-dd5c-4ab4-2c86-058aaf6d17c9@leemhuis.info>
-Date:   Mon, 20 Feb 2023 12:48:50 +0100
+        Mon, 20 Feb 2023 06:49:08 -0500
+Received: from mail-ed1-f41.google.com (mail-ed1-f41.google.com [209.85.208.41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10D881A65E
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Feb 2023 03:49:03 -0800 (PST)
+Received: by mail-ed1-f41.google.com with SMTP id da10so4803448edb.3
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Feb 2023 03:49:02 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=BvCEsTm2ceYew1jDTl5DCI2eQ1K4Kl+LDZ7WMSZ1bCI=;
+        b=lYDU8RNwAR0/RA7McwLKCmlhaDrtSa4rug0u/l2PZwzQeSQ9RO/l19wI5UKfX21LUb
+         aAhNuMPAbS2JTe5vTGhYyTEFKPHl+DeNADD/FPyCiInU3sd3FpjPBCMK91X1n7HfoOkv
+         ZreRCJEtEoboVT2uBFoKy2qTgjVyTAs88trLxStszB/NyDnZ3xgn5mbTHku8R4h+Ts8i
+         7CQvHSkHv916dMjln/cYtQ9oe3r/o4LCVaLBVxrF6HwJX2myZYUhBbG4Mibaa1/4lJpx
+         TqE4cousK3/c/OAoWlKKTUN5iFLZFE81uI48/wVhFx1bjXgpfWk44c2C5EXAjxP6UU1S
+         w6bA==
+X-Gm-Message-State: AO0yUKW9N+igZfvjslfAK3Ivt2dTRHsyxC6soFC+hFL2a9Y7wTUCqoL1
+        PUj9Dxzoj7aTY9a9osFlYZ0=
+X-Google-Smtp-Source: AK7set/hJz6ucFu3dJ3WMS3V/R7Rn5NX8MKjemRiQ7MhralJhnsZfT2GLCVUy3nCp9TY3fbsxnhgmA==
+X-Received: by 2002:a05:6402:203b:b0:4ad:7b13:96a2 with SMTP id ay27-20020a056402203b00b004ad7b1396a2mr1479574edb.26.1676893741509;
+        Mon, 20 Feb 2023 03:49:01 -0800 (PST)
+Received: from ?IPV6:2a0b:e7c0:0:107::aaaa:49? ([2a0b:e7c0:0:107::aaaa:49])
+        by smtp.gmail.com with ESMTPSA id v11-20020a50c40b000000b004acaa4d51bdsm964635edf.32.2023.02.20.03.49.00
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 20 Feb 2023 03:49:00 -0800 (PST)
+Message-ID: <dcaaf7d5-b2d5-dbb9-f3fe-2232ee525cc8@kernel.org>
+Date:   Mon, 20 Feb 2023 12:48:59 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.2
-Subject: Re: scsi: Recent kernels drop into emergency shell
-Content-Language: en-US, de-DE
-To:     Srikar Dronamraju <srikar@linux.vnet.ibm.com>,
-        Linux regressions mailing list <regressions@lists.linux.dev>
-Cc:     "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        bvanassche@acm.org, hare@suse.de, hch@lst.de, ming.lei@redhat.com,
-        sumanesh.samanta@broadcom.com, michael.christie@oracle.com,
-        john.garry@huawei.com, johannes.thumshirn@wdc.com, axboe@kernel.dk,
-        osandov@fb.com, kashyap.desai@broadcom.com,
-        gregkh@linuxfoundation.org
-References: <20230220061559.GJ159593@linux.vnet.ibm.com>
- <8489afbb-2391-c22f-41fc-21726f09e444@leemhuis.info>
- <20230220112328.GA803890@linux.vnet.ibm.com>
-From:   "Linux regression tracking (Thorsten Leemhuis)" 
-        <regressions@leemhuis.info>
-Reply-To: Linux regressions mailing list <regressions@lists.linux.dev>
-In-Reply-To: <20230220112328.GA803890@linux.vnet.ibm.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1676893736;47f2d493;
-X-HE-SMSGID: 1pU4f4-0001yf-Vd
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+ Thunderbird/102.7.1
+Subject: Re: [PATCH] vc_screen: don't clobber return value in vcs_read
+Content-Language: en-US
+To:     linux@weissschuh.net, George Kennedy <george.kennedy@oracle.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, Randy Dunlap <rdunlap@infradead.org>,
+        Storm Dragon <stormdragon2976@gmail.com>
+References: <Y/KtG9vK0oz0nQrN@hotmail.com>
+ <20230220064612.1783-1-linux@weissschuh.net>
+From:   Jiri Slaby <jirislaby@kernel.org>
+In-Reply-To: <20230220064612.1783-1-linux@weissschuh.net>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 20.02.23 12:23, Srikar Dronamraju wrote:
-> * Linux regression tracking (Thorsten Leemhuis) <regressions@leemhuis.info> [2023-02-20 08:40:09]:
+On 20. 02. 23, 7:46, linux@weissschuh.net wrote:
+> From: Thomas Weißschuh <linux@weissschuh.net>
 > 
->> [CCing the regression list, as it should be in the loop for regressions:
->> https://docs.kernel.org/admin-guide/reporting-regressions.html]
->>
->> On 20.02.23 07:15, Srikar Dronamraju wrote:
->>> On a freshly installed system, booting latest upstream kernels causes the
->>> system to drop into emergency shell. The reason for dropping into emergency
->>> shell is system is unable to mount /home partition.
->>
->> What kind of storage hardware do you have? Is this maybe related to this
->> fix, that afaics never was merged?
+> Commit 226fae124b2d
+> ("vc_screen: move load of struct vc_data pointer in vcs_read() to avoid UAF")
+> moved the call to vcs_vc() into the loop.
+> While doing this it also moved the unconditional assignment of
+> "ret = -ENXIO".
+> This unconditional assignment was valid outside the loop but within it
+> it clobbers the actual value of ret.
 > 
-> $ lsslot
-> # Slot                     Description       Linux Name    Device(s)
-> U9080.HEX.134C1E8-V9-C0    Virtual I/O Slot  30000000      vty
-> U9080.HEX.134C1E8-V9-C2    Virtual I/O Slot  30000002      l-lan
-> U9080.HEX.134C1E8-V9-C109  Virtual I/O Slot  3000006d      v-scsi
-> 
-> $ ls-vscsi
-> host0 U9080.HEX.134C1E8-V9-C109-T0
-> 
-> $ lsscsi
-> [0:0:1:0]    disk    AIX      VDASD            0001  /dev/sda
-> [0:0:2:0]    cd/dvd  AIX      VOPTA                  /dev/sr0
-> 
-> Incase you need any other details please let me know.
-> 
->> https://lore.kernel.org/all/20220928181350.9948-1-leeman.duncan@gmail.com/
-> 
-> Thanks that fixes the problem. I have added a tested-by for the same.
+> To avoid this only assign "ret = -ENXIO" when actually needed.
 
-Great, thx. Hopefully that will revive the discussion to get this
-finally solved.
+Not sure -- I cannot find it -- but hasn't George fixed this yet?
 
-#regzbot monitor:
-https://lore.kernel.org/all/20220928181350.9948-1-leeman.duncan@gmail.com/
+> Reported-by: Storm Dragon <stormdragon2976@gmail.com>
+> Link: https://lore.kernel.org/lkml/Y%2FKS6vdql2pIsCiI@hotmail.com/
+> Fixes: 226fae124b2d ("vc_screen: move load of struct vc_data pointer in vcs_read() to avoid UAF")
+> Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
+> 
+> ---
+> 
+> @Storm Could you validate this patch?
+> ---
+>   drivers/tty/vt/vc_screen.c | 5 +++--
+>   1 file changed, 3 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/tty/vt/vc_screen.c b/drivers/tty/vt/vc_screen.c
+> index f566eb1839dc..2ef519a40a87 100644
+> --- a/drivers/tty/vt/vc_screen.c
+> +++ b/drivers/tty/vt/vc_screen.c
+> @@ -403,10 +403,11 @@ vcs_read(struct file *file, char __user *buf, size_t count, loff_t *ppos)
+>   		unsigned int this_round, skip = 0;
+>   		int size;
+>   
+> -		ret = -ENXIO;
+>   		vc = vcs_vc(inode, &viewed);
+> -		if (!vc)
+> +		if (!vc) {
+> +			ret = -ENXIO;
+>   			goto unlock_out;
+> +		}
+>   
+>   		/* Check whether we are above size each round,
+>   		 * as copy_to_user at the end of this loop
+> 
+> base-commit: c9c3395d5e3dcc6daee66c6908354d47bf98cb0c
 
-> Thanks for pointing out.
+-- 
+js
+suse labs
 
-Yw. FWIW, I just found it by searching on lore for "c92a6b5d*".
-
-Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
---
-Everything you wanna know about Linux kernel regression tracking:
-https://linux-regtracking.leemhuis.info/about/#tldr
-If I did something stupid, please tell me, as explained on that page.
