@@ -2,116 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E919469D160
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Feb 2023 17:34:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9304769D162
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Feb 2023 17:34:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232039AbjBTQee (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Feb 2023 11:34:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45452 "EHLO
+        id S232164AbjBTQew (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Feb 2023 11:34:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45934 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231821AbjBTQed (ORCPT
+        with ESMTP id S231821AbjBTQeu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Feb 2023 11:34:33 -0500
-Received: from todd.t-8ch.de (todd.t-8ch.de [IPv6:2a01:4f8:c010:41de::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB11119699;
-        Mon, 20 Feb 2023 08:34:31 -0800 (PST)
-Date:   Mon, 20 Feb 2023 16:34:26 +0000
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=weissschuh.net;
-        s=mail; t=1676910869;
-        bh=+WjH0a/+KL5t0mQ5h5SREVXFQYNQuDN/Ef8igbKTOVw=;
+        Mon, 20 Feb 2023 11:34:50 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 734571E293;
+        Mon, 20 Feb 2023 08:34:46 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id AA48660ED5;
+        Mon, 20 Feb 2023 16:34:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1D75CC433EF;
+        Mon, 20 Feb 2023 16:34:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1676910885;
+        bh=r669q4trvVRbS9L9jBRi6DwmqW9Am1sW5bCegLzG1X0=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=dFR/TqBQw6wyJ+GIMaTVb0EhdEVpSIzuiv9GoBTHb4y7HuxlSQcM6F+PyQMF4D3Wp
-         J6G7Oid+eVljk5aUosOWtAw71gOBG5XHdZOYN1Std9BHN0bjMLTsoDB7sYxyqe1Dj1
-         KKNe8wNcYZRxrKyruAcWfhVVI04flryDGOfHOrCs=
-From:   Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <linux@weissschuh.net>
-To:     Jiri Slaby <jirislaby@kernel.org>
-Cc:     George Kennedy <george.kennedy@oracle.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org, Randy Dunlap <rdunlap@infradead.org>,
-        Storm Dragon <stormdragon2976@gmail.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        sfr@canb.auug.org.au, akpm@linux-foundation.org,
-        linux-serial@vger.kernel.org
-Subject: Re: [PATCH] vc_screen: don't clobber return value in vcs_read
-Message-ID: <2094ecec-f63c-4e8a-ba97-da77c5266da1@t-8ch.de>
-References: <Y/KtG9vK0oz0nQrN@hotmail.com>
- <20230220064612.1783-1-linux@weissschuh.net>
- <dcaaf7d5-b2d5-dbb9-f3fe-2232ee525cc8@kernel.org>
+        b=BdmOjcAexhPPM1hkwnwPXT2pQfwJsqgk03ykdX/3F3sEI7jbfSx6KxmtpRb7UlNqg
+         WCDMVBy6w3paN2roznrD9jcENaOoXsWLciUcQM+VvIHPNi6Y0TVSMDxeeY66mjYQVj
+         v5z3tVgmWTH2zw125UoQC88kDexi2Baiy/IicZGy+4bZIp3dsYtAvuSPasJKMsjyot
+         AS2ny8dfgwy93CCb3o5ugyhYeeHKomsNYZ992rx3+HeU1T475+F+l+wHHnDyATXgcd
+         C3Lf7FyeGZIq1jyzGnVGjVy/XipIHCTMctgjBWobP2Y01jCzwozzUG8e87XeU96f9z
+         JZdXJZ/V2+N1A==
+Date:   Mon, 20 Feb 2023 08:34:42 -0800
+From:   Josh Poimboeuf <jpoimboe@kernel.org>
+To:     KP Singh <kpsingh@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, pjt@google.com, evn@google.com,
+        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+        dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
+        peterz@infradead.org, pawan.kumar.gupta@linux.intel.com,
+        kim.phillips@amd.com, alexandre.chartre@oracle.com,
+        daniel.sneddon@linux.intel.com,
+        =?utf-8?B?Sm9zw6k=?= Oliveira <joseloliveira11@gmail.com>,
+        Rodrigo Branco <rodrigo@kernelhacking.com>,
+        Alexandra Sandulescu <aesa@google.com>,
+        Jim Mattson <jmattson@google.com>, stable@vger.kernel.org
+Subject: Re: [PATCH RESEND] x86/speculation: Fix user-mode spectre-v2
+ protection with KERNEL_IBRS
+Message-ID: <20230220163442.7fmaeef3oqci4ee3@treble>
+References: <20230220120127.1975241-1-kpsingh@kernel.org>
+ <20230220121350.aidsipw3kd4rsyss@treble>
+ <CACYkzJ5L9MLuE5Jz+z5-NJCCrUqTbgKQkXSqnQnCfTD_WNA7_Q@mail.gmail.com>
+ <CACYkzJ6n=-tobhX0ONQhjHSgmnNjWnNe_dZnEOGtD8Y6S3RHbA@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <dcaaf7d5-b2d5-dbb9-f3fe-2232ee525cc8@kernel.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <CACYkzJ6n=-tobhX0ONQhjHSgmnNjWnNe_dZnEOGtD8Y6S3RHbA@mail.gmail.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-+Cc people who were involved in the original thread.
-
-On Mon, Feb 20, 2023 at 12:48:59PM +0100, Jiri Slaby wrote:
-> On 20. 02. 23, 7:46, linux@weissschuh.net wrote:
-> > From: Thomas Weißschuh <linux@weissschuh.net>
-> > 
-> > Commit 226fae124b2d
-> > ("vc_screen: move load of struct vc_data pointer in vcs_read() to avoid UAF")
-> > moved the call to vcs_vc() into the loop.
-> > While doing this it also moved the unconditional assignment of
-> > "ret = -ENXIO".
-> > This unconditional assignment was valid outside the loop but within it
-> > it clobbers the actual value of ret.
-> > 
-> > To avoid this only assign "ret = -ENXIO" when actually needed.
+On Mon, Feb 20, 2023 at 04:34:02AM -0800, KP Singh wrote:
+> On Mon, Feb 20, 2023 at 4:20 AM KP Singh <kpsingh@kernel.org> wrote:
+> >
+> > On Mon, Feb 20, 2023 at 4:13 AM Josh Poimboeuf <jpoimboe@kernel.org> wrote:
+> > >
+> > > On Mon, Feb 20, 2023 at 01:01:27PM +0100, KP Singh wrote:
+> > > > +static inline bool spectre_v2_user_no_stibp(enum spectre_v2_mitigation mode)
+> > > > +{
+> > > > +     /* When IBRS or enhanced IBRS is enabled, STIBP is not needed.
+> > > > +      *
+> > > > +      * However, With KERNEL_IBRS, the IBRS bit is cleared on return
+> > > > +      * to user and the user-mode code needs to be able to enable protection
+> > > > +      * from cross-thread training, either by always enabling STIBP or
+> > > > +      * by enabling it via prctl.
+> > > > +      */
+> > > > +     return (spectre_v2_in_ibrs_mode(mode) &&
+> > > > +             !cpu_feature_enabled(X86_FEATURE_KERNEL_IBRS));
+> > > > +}
+> > >
+> > > The comments and code confused me, they both seem to imply some
+> > > distinction between IBRS and KERNEL_IBRS, but in the kernel those are
+> > > functionally the same thing.  e.g., the kernel doesn't have a user IBRS
+> > > mode.
+> > >
+> > > And, unless I'm missing some subtlety here, it seems to be a convoluted
+> > > way of saying that eIBRS doesn't need STIBP in user space.
 > 
-> Not sure -- I cannot find it -- but hasn't George fixed this yet?
-
-Indeed there was a proposed fix at
-https://lore.kernel.org/lkml/1675704844-17228-1-git-send-email-george.kennedy@oracle.com/
-
-Linus had some suggestions so it was not applied as is.
-
-I'm not sure what the current state is.
-George, do you have something in the pipeline?
-
-I also tested the patch proposed by Linus as attachment and that works.
-(The small inline patch snippet doesn't)
-
-> > Reported-by: Storm Dragon <stormdragon2976@gmail.com>
-> > Link: https://lore.kernel.org/lkml/Y%2FKS6vdql2pIsCiI@hotmail.com/
-> > Fixes: 226fae124b2d ("vc_screen: move load of struct vc_data pointer in vcs_read() to avoid UAF")
-> > Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
-> > 
-> > ---
-> > 
-> > @Storm Could you validate this patch?
-> > ---
-> >   drivers/tty/vt/vc_screen.c | 5 +++--
-> >   1 file changed, 3 insertions(+), 2 deletions(-)
-> > 
-> > diff --git a/drivers/tty/vt/vc_screen.c b/drivers/tty/vt/vc_screen.c
-> > index f566eb1839dc..2ef519a40a87 100644
-> > --- a/drivers/tty/vt/vc_screen.c
-> > +++ b/drivers/tty/vt/vc_screen.c
-> > @@ -403,10 +403,11 @@ vcs_read(struct file *file, char __user *buf, size_t count, loff_t *ppos)
-> >   		unsigned int this_round, skip = 0;
-> >   		int size;
-> > -		ret = -ENXIO;
-> >   		vc = vcs_vc(inode, &viewed);
-> > -		if (!vc)
-> > +		if (!vc) {
-> > +			ret = -ENXIO;
-> >   			goto unlock_out;
-> > +		}
-> >   		/* Check whether we are above size each round,
-> >   		 * as copy_to_user at the end of this loop
-> > 
-> > base-commit: c9c3395d5e3dcc6daee66c6908354d47bf98cb0c
+> Actually, there is a subtlety, STIBP is not needed in IBRS and eIBRS
+> however, with KERNEL_IBRS we only enable IBRS (by setting and
+> unsetting the IBRS bit of SPEC_CTL) in the kernel context and this is
+> why we need to allow STIBP in userspace. If it were for pure IBRS, we
+> would not need it either (based on my reading). Now, with
+> spectre_v2_in_ibrs_mode, as per the current implementation implies
+> that KERNEL_IBRS is chosen, but this may change. Also, I would also
+> prefer to have it more readable in the sense that:
 > 
-> -- 
-> js
-> suse labs
-> 
+> "If the kernel decides to write 0 to the IBRS bit on returning to the
+> user, STIBP needs to to be allowed in user space"
+
+We will never enable IBRS in user space.  We tried that years ago and it
+was very slow.
+
+-- 
+Josh
