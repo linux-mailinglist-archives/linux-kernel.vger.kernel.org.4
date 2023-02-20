@@ -2,312 +2,220 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B04B169D149
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Feb 2023 17:24:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CA7C469D14A
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Feb 2023 17:24:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231993AbjBTQYh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Feb 2023 11:24:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38264 "EHLO
+        id S232087AbjBTQYi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Feb 2023 11:24:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38288 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230402AbjBTQYf (ORCPT
+        with ESMTP id S231923AbjBTQYg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Feb 2023 11:24:35 -0500
-Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 628C91E9CB
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Feb 2023 08:24:33 -0800 (PST)
-Received: by mail-wm1-x32c.google.com with SMTP id o4-20020a05600c4fc400b003e1f5f2a29cso1570745wmq.4
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Feb 2023 08:24:33 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=nLUnfNdm2yVAS1wkgyhep1P3VK/E8L4MHqepWzvtV2A=;
-        b=HXj+Ml/IOsNGF70NWfV0sWjyRPdtg+qSFDpNq96Cir9HFptYInAcn0q3RP6WJRrw+B
-         /vL8Omzi3+v4hHI+wjKJTi+GiYjpWaDiGrbhWPR4RQJpl2uGCKsbpDm3iVTe/52yMvJ2
-         wvTCF4sQ23ca3R7LJxZx5QcFiBiZj4rVUMXvhqsLvLUqz/Pir484juQvI42Uo2txdReO
-         xouHE8GkaS9vC7T0lHM210oNA2un/im6s57TkF6sPkcE9ymQyQ1sbBuEzAwG3s70oObV
-         LjWVWRoJgZ73YUYiWzS4kaodWoxFsZ/RXq1kuHyKv0F2JSEjhfmiHx1KDiIRfraHDzFD
-         2d7w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=nLUnfNdm2yVAS1wkgyhep1P3VK/E8L4MHqepWzvtV2A=;
-        b=MhkJAu5pTFlGCW0yKnmEV4LsoL6/pSPeKIvQPMP5grIZrIklNM59C2KBs7klL0dNET
-         XPdOuZdZSECMhGDXGC2oL61guD+v6y+8oV7ojHvH5QSgAd1Ro30uqMJ0R5IKEgEldBHM
-         hI/wh9EiQOJ/+3WPnfu0/NFchL++8KAzWEHV+2M6VOxhpY9w42HEqh5AB2sM+l7+RWHV
-         rseFqX8Q7pfWZO3e6FTf7PLI7GUDEOwHjZ1SDn9vFplAUW9G5bDbz9faxb7+j4QneWQR
-         AKAzvfleT1daL/ISWpm+5qFwxU9Uro896i+b6mNUUYNdUPKosnYmGiKlaE66uYXJUrRb
-         egeA==
-X-Gm-Message-State: AO0yUKUZV0RHp179dwNbdusnpmTjnQR6SDbHraHR5YiRx5Ok7kgtrjls
-        5VKe5aTl+J5uP6DEE6W9HA52/w==
-X-Google-Smtp-Source: AK7set80kti+P68q37zOf6HqC7R55YpEo8WsMlPbL2NUZgrVJwnhPKkelSrV32R3Pe4yUuV5QO7fyQ==
-X-Received: by 2002:a05:600c:1c9c:b0:3df:fc69:e96b with SMTP id k28-20020a05600c1c9c00b003dffc69e96bmr1017185wms.5.1676910271790;
-        Mon, 20 Feb 2023 08:24:31 -0800 (PST)
-Received: from mai.box.freepro.com ([2a05:6e02:1041:c10:8d87:e6b4:7d0f:3fdb])
-        by smtp.gmail.com with ESMTPSA id a6-20020a05600c348600b003df5be8987esm10136587wmq.20.2023.02.20.08.24.30
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 20 Feb 2023 08:24:31 -0800 (PST)
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-To:     daniel.lezcano@linaro.org, rafael@kernel.org
-Cc:     Sujith Thomas <sujith.thomas@intel.com>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        linux-pm@vger.kernel.org (open list:INTEL MENLOW THERMAL DRIVER),
-        linux-kernel@vger.kernel.org (open list)
-Subject: [PATCH RFC] thermal/drivers/intel_menlow: Remove add_one_attribute
-Date:   Mon, 20 Feb 2023 17:24:19 +0100
-Message-Id: <20230220162419.1276952-1-daniel.lezcano@linaro.org>
-X-Mailer: git-send-email 2.34.1
+        Mon, 20 Feb 2023 11:24:36 -0500
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7933B1E9D8;
+        Mon, 20 Feb 2023 08:24:34 -0800 (PST)
+Received: from [IPV6:2a01:e0a:120:3210:d30c:b155:96fb:dcc] (unknown [IPv6:2a01:e0a:120:3210:d30c:b155:96fb:dcc])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: benjamin.gaignard)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 7FB746602149;
+        Mon, 20 Feb 2023 16:24:32 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1676910272;
+        bh=g2IHNrew0kWcRPOw2e3XyoeeIUPD0YEIAtIZiAGobF4=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=Na154KLhB9zEUG8GfxTqr6v0pbvHwVgfIavVzgzRWoHlgGcxnzrB3mUg4srgRwG19
+         aGAOaXcSrWuAwxyOxltOOjjZ8RGrDdk+soV+FozMRexYLiZvGugivhWGaQ7k5invVv
+         DDeL4HWp/jO72vRXyV2vQx+tWaXWWzSHbfSxgpVSJ52VrC51aCuB+xI2WR0MDEewSB
+         3YN5QXuvvKl2wGKbPgiacoivHzbZOgKuL47luAK8h03olp0B3B4fjGfiSAdSxfoqZD
+         1Ko8gEkWdrHuQ9LlNkuxJHuZya9FzVNUxJiUsB46MkB+UWt+Ve8tlIK3D8LHJzGd+t
+         n8v8UFDN3rBcA==
+Message-ID: <c4d355d5-5e14-8eba-1944-fc26b1050cf5@collabora.com>
+Date:   Mon, 20 Feb 2023 17:24:30 +0100
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH v4 06/12] media: verisilicon: Check AV1 bitstreams bit
+ depth
+Content-Language: en-US
+To:     Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
+Cc:     p.zabel@pengutronix.de, mchehab@kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, heiko@sntech.de,
+        hverkuil@xs4all.nl, nicolas.dufresne@collabora.com,
+        jernej.skrabec@gmail.com, linux-media@vger.kernel.org,
+        linux-rockchip@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        kernel@collabora.com
+References: <20230214140557.537984-1-benjamin.gaignard@collabora.com>
+ <20230214140557.537984-7-benjamin.gaignard@collabora.com>
+ <CAAEAJfDihZND+1FSzFxT86j9u6h-wH6uMMNh7BiaEWQWtSpk=Q@mail.gmail.com>
+From:   Benjamin Gaignard <benjamin.gaignard@collabora.com>
+In-Reply-To: <CAAEAJfDihZND+1FSzFxT86j9u6h-wH6uMMNh7BiaEWQWtSpk=Q@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The driver hooks the thermal framework sysfs to add some driver
-specific information. A debatable approach as that may belong the
-device sysfs directory, not the thermal zone directory.
 
-As the driver is accessing the thermal internals, we should provide at
-least an API to the thermal framework to add an attribute to the
-existing sysfs thermal zone entry.
+Le 18/02/2023 à 14:11, Ezequiel Garcia a écrit :
+> On Tue, Feb 14, 2023 at 11:06 AM Benjamin Gaignard
+> <benjamin.gaignard@collabora.com> wrote:
+>> The driver supports 8 and 10 bits bitstreams, make sure to discard
+>> other cases.
+>> It could happens that userland test if V4L2_CID_STATELESS_AV1_SEQUENCE
+>> exists without setting bit_depth field in this case use
+>> HANTRO_DEFAULT_BIT_DEPTH value.
+>>
+> This shouldn't happen.
+>
+> If the bit_depth argument in hantro_check_depth_match()
+> can be set unchecked by userspace, we have done something wrong!!
+>
+> Are you sure that userspace can do a S_CTRL with an invalid bit-depth?
+> The try_or_set_cluster() function seems to always call try_ctrl before s_ctrl.
 
-Before doing that and given the age of the driver (2008) may be it is
-worth to double check if these attributes are really needed. So my
-first proposal is to remove them if that does not hurt.
+I have dump the stack when AV1 sequence bit depth = 0 in s_ctrl.
+It is happening when opening the driver, v4l2 setup the ctrls by calling __v4l2_ctrl_handler_setup()
+this led to call hantro_av1_s_ctrl() with empty structure.
 
-Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
----
- drivers/thermal/intel/intel_menlow.c | 193 ---------------------------
- 1 file changed, 193 deletions(-)
+For other codecs isn't a problem because bit depth is coded with a minus 8 value (ie: 8 bits = 0)
+while for AV1 it is the real value (ie: 8 bits = 8).
 
-diff --git a/drivers/thermal/intel/intel_menlow.c b/drivers/thermal/intel/intel_menlow.c
-index 5a6ad0552311..5a9738a93083 100644
---- a/drivers/thermal/intel/intel_menlow.c
-+++ b/drivers/thermal/intel/intel_menlow.c
-@@ -230,174 +230,8 @@ struct intel_menlow_attribute {
- static LIST_HEAD(intel_menlow_attr_list);
- static DEFINE_MUTEX(intel_menlow_attr_lock);
- 
--/*
-- * sensor_get_auxtrip - get the current auxtrip value from sensor
-- * @handle: Object handle
-- * @index : GET_AUX1/GET_AUX0
-- * @value : The address will be fill by the value
-- */
--static int sensor_get_auxtrip(acpi_handle handle, int index,
--							unsigned long long *value)
--{
--	acpi_status status;
--
--	if ((index != 0 && index != 1) || !value)
--		return -EINVAL;
--
--	status = acpi_evaluate_integer(handle, index ? GET_AUX1 : GET_AUX0,
--				       NULL, value);
--	if (ACPI_FAILURE(status))
--		return -EIO;
--
--	return 0;
--}
--
--/*
-- * sensor_set_auxtrip - set the new auxtrip value to sensor
-- * @handle: Object handle
-- * @index : GET_AUX1/GET_AUX0
-- * @value : The value will be set
-- */
--static int sensor_set_auxtrip(acpi_handle handle, int index, int value)
--{
--	acpi_status status;
--	union acpi_object arg = {
--		ACPI_TYPE_INTEGER
--	};
--	struct acpi_object_list args = {
--		1, &arg
--	};
--	unsigned long long temp;
--
--	if (index != 0 && index != 1)
--		return -EINVAL;
--
--	status = acpi_evaluate_integer(handle, index ? GET_AUX0 : GET_AUX1,
--				       NULL, &temp);
--	if (ACPI_FAILURE(status))
--		return -EIO;
--	if ((index && value < temp) || (!index && value > temp))
--		return -EINVAL;
--
--	arg.integer.value = value;
--	status = acpi_evaluate_integer(handle, index ? SET_AUX1 : SET_AUX0,
--				       &args, &temp);
--	if (ACPI_FAILURE(status))
--		return -EIO;
--
--	/* do we need to check the return value of SAX0/SAX1 ? */
--
--	return 0;
--}
--
--#define to_intel_menlow_attr(_attr)	\
--	container_of(_attr, struct intel_menlow_attribute, attr)
--
--static ssize_t aux_show(struct device *dev, struct device_attribute *dev_attr,
--			char *buf, int idx)
--{
--	struct intel_menlow_attribute *attr = to_intel_menlow_attr(dev_attr);
--	unsigned long long value;
--	int result;
--
--	result = sensor_get_auxtrip(attr->handle, idx, &value);
--	if (result)
--		return result;
--
--	return sprintf(buf, "%lu", deci_kelvin_to_celsius(value));
--}
--
--static ssize_t aux0_show(struct device *dev,
--			 struct device_attribute *dev_attr, char *buf)
--{
--	return aux_show(dev, dev_attr, buf, 0);
--}
--
--static ssize_t aux1_show(struct device *dev,
--			 struct device_attribute *dev_attr, char *buf)
--{
--	return aux_show(dev, dev_attr, buf, 1);
--}
--
--static ssize_t aux_store(struct device *dev, struct device_attribute *dev_attr,
--			 const char *buf, size_t count, int idx)
--{
--	struct intel_menlow_attribute *attr = to_intel_menlow_attr(dev_attr);
--	int value;
--	int result;
--
--	/*Sanity check; should be a positive integer */
--	if (!sscanf(buf, "%d", &value))
--		return -EINVAL;
--
--	if (value < 0)
--		return -EINVAL;
--
--	result = sensor_set_auxtrip(attr->handle, idx,
--				    celsius_to_deci_kelvin(value));
--	return result ? result : count;
--}
--
--static ssize_t aux0_store(struct device *dev,
--			  struct device_attribute *dev_attr,
--			  const char *buf, size_t count)
--{
--	return aux_store(dev, dev_attr, buf, count, 0);
--}
--
--static ssize_t aux1_store(struct device *dev,
--			  struct device_attribute *dev_attr,
--			  const char *buf, size_t count)
--{
--	return aux_store(dev, dev_attr, buf, count, 1);
--}
--
- /* BIOS can enable/disable the thermal user application in dabney platform */
- #define BIOS_ENABLED "\\_TZ.GSTS"
--static ssize_t bios_enabled_show(struct device *dev,
--				 struct device_attribute *attr, char *buf)
--{
--	acpi_status status;
--	unsigned long long bios_enabled;
--
--	status = acpi_evaluate_integer(NULL, BIOS_ENABLED, NULL, &bios_enabled);
--	if (ACPI_FAILURE(status))
--		return -ENODEV;
--
--	return sprintf(buf, "%s\n", bios_enabled ? "enabled" : "disabled");
--}
--
--static int intel_menlow_add_one_attribute(char *name, umode_t mode, void *show,
--					  void *store, struct device *dev,
--					  acpi_handle handle)
--{
--	struct intel_menlow_attribute *attr;
--	int result;
--
--	attr = kzalloc(sizeof(struct intel_menlow_attribute), GFP_KERNEL);
--	if (!attr)
--		return -ENOMEM;
--
--	sysfs_attr_init(&attr->attr.attr); /* That is consistent naming :D */
--	attr->attr.attr.name = name;
--	attr->attr.attr.mode = mode;
--	attr->attr.show = show;
--	attr->attr.store = store;
--	attr->device = dev;
--	attr->handle = handle;
--
--	result = device_create_file(dev, &attr->attr);
--	if (result) {
--		kfree(attr);
--		return result;
--	}
--
--	mutex_lock(&intel_menlow_attr_lock);
--	list_add_tail(&attr->node, &intel_menlow_attr_list);
--	mutex_unlock(&intel_menlow_attr_lock);
--
--	return 0;
--}
- 
- static acpi_status intel_menlow_register_sensor(acpi_handle handle, u32 lvl,
- 						void *context, void **rv)
-@@ -420,12 +254,6 @@ static acpi_status intel_menlow_register_sensor(acpi_handle handle, u32 lvl,
- 	if (ACPI_FAILURE(status))
- 		return (status == AE_NOT_FOUND) ? AE_OK : status;
- 
--	result = intel_menlow_add_one_attribute("aux0", 0644,
--						aux0_show, aux0_store,
--						&thermal->device, handle);
--	if (result)
--		return AE_ERROR;
--
- 	status = acpi_get_handle(handle, GET_AUX1, &dummy);
- 	if (ACPI_FAILURE(status))
- 		goto aux1_not_found;
-@@ -434,27 +262,6 @@ static acpi_status intel_menlow_register_sensor(acpi_handle handle, u32 lvl,
- 	if (ACPI_FAILURE(status))
- 		goto aux1_not_found;
- 
--	result = intel_menlow_add_one_attribute("aux1", 0644,
--						aux1_show, aux1_store,
--						&thermal->device, handle);
--	if (result) {
--		intel_menlow_unregister_sensor();
--		return AE_ERROR;
--	}
--
--	/*
--	 * create the "dabney_enabled" attribute which means the user app
--	 * should be loaded or not
--	 */
--
--	result = intel_menlow_add_one_attribute("bios_enabled", 0444,
--						bios_enabled_show, NULL,
--						&thermal->device, handle);
--	if (result) {
--		intel_menlow_unregister_sensor();
--		return AE_ERROR;
--	}
--
- 	return AE_OK;
- 
-  aux1_not_found:
--- 
-2.34.1
+[   88.478751] Hardware name: Radxa Rock 5A Board (DT)
+[   88.479184] Call trace:
+[   88.479406]  dump_backtrace.part.0+0xdc/0xf0
+[   88.479796]  show_stack+0x18/0x30
+[   88.480099]  dump_stack_lvl+0x68/0x84
+[   88.480431]  dump_stack+0x18/0x34
+[   88.480732]  hantro_av1_s_ctrl+0x7c/0xcc [hantro_vpu]
+[   88.481211]  __v4l2_ctrl_handler_setup+0x120/0x154
+[   88.481643]  v4l2_ctrl_handler_setup+0x2c/0x50
+[   88.482043]  hantro_open+0x138/0x204 [hantro_vpu]
+[   88.482490]  v4l2_open+0xa8/0x124
+[   88.482794]  chrdev_open+0xc0/0x22c
+[   88.483114]  do_dentry_open+0x13c/0x490
+[   88.483464]  vfs_open+0x2c/0x40
+[   88.483749]  path_openat+0x878/0xe50
+[   88.484074]  do_filp_open+0x80/0x130
+[   88.484399]  do_sys_openat2+0xb4/0x170
+[   88.484736]  __arm64_sys_openat+0x60/0xb0
+[   88.485097]  invoke_syscall+0x48/0x114
+[   88.485437]  el0_svc_common.constprop.0+0x44/0xfc
+[   88.485860]  do_el0_svc+0x3c/0xc0
+[   88.486163]  el0_svc+0x2c/0x84
+[   88.486441]  el0t_64_sync_handler+0xbc/0x140
+[   88.486826]  el0t_64_sync+0x190/0x194
 
+Regards,
+Benjamin
+
+>
+> Thanks,
+> Ezequiel
+>
+>> Signed-off-by: Benjamin Gaignard <benjamin.gaignard@collabora.com>
+>> ---
+>> version 4:
+>> - This patch is the result of squashing "Save bit depth for AV1 decoder"
+>>    and "Check AV1 bitstreams bit depth" of version 3 + adapation to
+>>    "[PATCH v8 0/6] media: verisilicon: HEVC: fix 10bits handling" series.
+>>
+>>   .../media/platform/verisilicon/hantro_drv.c   | 36 +++++++++++++++++++
+>>   .../media/platform/verisilicon/hantro_v4l2.c  |  4 +++
+>>   2 files changed, 40 insertions(+)
+>>
+>> diff --git a/drivers/media/platform/verisilicon/hantro_drv.c b/drivers/media/platform/verisilicon/hantro_drv.c
+>> index bc1a85456142..666cd46902da 100644
+>> --- a/drivers/media/platform/verisilicon/hantro_drv.c
+>> +++ b/drivers/media/platform/verisilicon/hantro_drv.c
+>> @@ -275,7 +275,13 @@ static int hantro_try_ctrl(struct v4l2_ctrl *ctrl)
+>>                  /* We only support profile 0 */
+>>                  if (dec_params->profile != 0)
+>>                          return -EINVAL;
+>> +       } else if (ctrl->id == V4L2_CID_STATELESS_AV1_SEQUENCE) {
+>> +               const struct v4l2_ctrl_av1_sequence *sequence = ctrl->p_new.p_av1_sequence;
+>> +
+>> +               if (sequence->bit_depth != 8 && sequence->bit_depth != 10)
+>> +                       return -EINVAL;
+>>          }
+>> +
+>>          return 0;
+>>   }
+>>
+>> @@ -348,6 +354,30 @@ static int hantro_hevc_s_ctrl(struct v4l2_ctrl *ctrl)
+>>          return 0;
+>>   }
+>>
+>> +static int hantro_av1_s_ctrl(struct v4l2_ctrl *ctrl)
+>> +{
+>> +       struct hantro_ctx *ctx;
+>> +
+>> +       ctx = container_of(ctrl->handler,
+>> +                          struct hantro_ctx, ctrl_handler);
+>> +
+>> +       switch (ctrl->id) {
+>> +       case V4L2_CID_STATELESS_AV1_SEQUENCE:
+>> +       {
+>> +               int bit_depth = ctrl->p_new.p_av1_sequence->bit_depth;
+>> +
+>> +               if (ctx->bit_depth == bit_depth)
+>> +                       return 0;
+>> +
+>> +               return hantro_reset_raw_fmt(ctx, bit_depth);
+>> +       }
+>> +       default:
+>> +               return -EINVAL;
+>> +       }
+>> +
+>> +       return 0;
+>> +}
+>> +
+>>   static const struct v4l2_ctrl_ops hantro_ctrl_ops = {
+>>          .try_ctrl = hantro_try_ctrl,
+>>   };
+>> @@ -365,6 +395,11 @@ static const struct v4l2_ctrl_ops hantro_hevc_ctrl_ops = {
+>>          .s_ctrl = hantro_hevc_s_ctrl,
+>>   };
+>>
+>> +static const struct v4l2_ctrl_ops hantro_av1_ctrl_ops = {
+>> +       .try_ctrl = hantro_try_ctrl,
+>> +       .s_ctrl = hantro_av1_s_ctrl,
+>> +};
+>> +
+>>   #define HANTRO_JPEG_ACTIVE_MARKERS     (V4L2_JPEG_ACTIVE_MARKER_APP0 | \
+>>                                           V4L2_JPEG_ACTIVE_MARKER_COM | \
+>>                                           V4L2_JPEG_ACTIVE_MARKER_DQT | \
+>> @@ -542,6 +577,7 @@ static const struct hantro_ctrl controls[] = {
+>>                  .codec = HANTRO_AV1_DECODER,
+>>                  .cfg = {
+>>                          .id = V4L2_CID_STATELESS_AV1_SEQUENCE,
+>> +                       .ops = &hantro_av1_ctrl_ops,
+>>                  },
+>>          }, {
+>>                  .codec = HANTRO_AV1_DECODER,
+>> diff --git a/drivers/media/platform/verisilicon/hantro_v4l2.c b/drivers/media/platform/verisilicon/hantro_v4l2.c
+>> index 992c5baa929f..7e74e47c9a89 100644
+>> --- a/drivers/media/platform/verisilicon/hantro_v4l2.c
+>> +++ b/drivers/media/platform/verisilicon/hantro_v4l2.c
+>> @@ -86,6 +86,10 @@ hantro_check_depth_match(const struct hantro_fmt *fmt, int bit_depth)
+>>          if (!fmt->match_depth && !fmt->postprocessed)
+>>                  return true;
+>>
+>> +       /* 0 means default depth, which is 8 */
+>> +       if (!bit_depth)
+>> +               bit_depth = HANTRO_DEFAULT_BIT_DEPTH;
+>> +
+>>          fmt_depth = hantro_get_format_depth(fmt->fourcc);
+>>
+>>          /*
+>> --
+>> 2.34.1
+>>
