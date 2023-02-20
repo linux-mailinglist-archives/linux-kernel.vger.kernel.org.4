@@ -2,107 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 12A6469C3DF
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Feb 2023 02:02:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7AFE069C3E2
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Feb 2023 02:04:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229818AbjBTBCj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 19 Feb 2023 20:02:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37724 "EHLO
+        id S229786AbjBTBEe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 19 Feb 2023 20:04:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38830 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229567AbjBTBCi (ORCPT
+        with ESMTP id S229567AbjBTBEc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 19 Feb 2023 20:02:38 -0500
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 662B4D52C;
-        Sun, 19 Feb 2023 17:02:37 -0800 (PST)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4PKkfg3k0sz4x87;
-        Mon, 20 Feb 2023 12:02:35 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1676854955;
-        bh=99/2cu/oKbkgwuErf6nmajBlS2oLtDnVrf5Qoar4UlM=;
-        h=Date:From:To:Cc:Subject:From;
-        b=u9VpCBMIAkWUgR/HTyt/Vo2tOoQTn+Wocjf46LioD3xn8lJCTHN1rA5kANC3QnFvL
-         b49ld7bwfqfKtdcO6Xd38cgC1C6vvR7zjmdfG2O0l3m/T2bk1LSFQFXYjftVTqHYKq
-         zD6DTpqCWqcKZPGzMOWR7Wm1WRHLS3f5KO50HnKmv00v7abe1kdouw1oqpaZesriS/
-         DujunLhN93AEBc2BdsCEvKO7HEeSPO/XVqRbV83rPaWyW8NIELx1PueOJ74mNBYkY9
-         IumS3+aDGrQTddEndNTbX0cBwBeD/Dwj8gVu5/pl4Jm5JqX7f6zr4j1QwBh+dP5a/m
-         17qlsCSKA4HwA==
-Date:   Mon, 20 Feb 2023 12:02:34 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Jens Axboe <axboe@kernel.dk>, Steve French <smfrench@gmail.com>
-Cc:     CIFS <linux-cifs@vger.kernel.org>,
-        David Howells <dhowells@redhat.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: duplicate patches in the block tree
-Message-ID: <20230220120234.161a6002@canb.auug.org.au>
+        Sun, 19 Feb 2023 20:04:32 -0500
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9A42D52C;
+        Sun, 19 Feb 2023 17:04:31 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+        MIME-Version:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:
+        Content-ID:Content-Description:In-Reply-To:References;
+        bh=ovqZtYKPJQ6/2tewzPzR4aQLjzsj+HmREsk7V7Fv1eg=; b=AW2niDUyFd6c5SQTpM3F2Y5Dpg
+        XyPzZ8fu5vCzkd6PVQKw3lKwEPKHk9wvNfvCmv3LUmu7dFMaS2PJkzQEAK9MNllHuYkAdEMjp5pGs
+        PjX5cKk9gSIYEaRPJbjt8CiKlTCw3+hONrdrZ+txskDBa4luXWk8vBJxWLn8eXkUnYh0Df7fFPWqR
+        ms93hxgrx/JYa2gd1Eu/522kgI6XqJC6zoYSyrt1FN/+KH5Wbt0NCLUUY+hw2V6bcnXV9Ro7/VaR7
+        rmCKlWUss1NhzfJ6nEr/DFMY0LaVzDf6qWUFD/ok0NhDc1xyVSnFTYOCvk0FTzU/yDc/VmJvWZ6/f
+        PFQa+eAQ==;
+Received: from [2601:1c2:980:9ec0::df2f] (helo=bombadil.infradead.org)
+        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1pTubX-002eJA-2B; Mon, 20 Feb 2023 01:04:31 +0000
+From:   Randy Dunlap <rdunlap@infradead.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Randy Dunlap <rdunlap@infradead.org>,
+        Rob Clark <robdclark@gmail.com>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>, linux-arm-msm@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org
+Subject: [PATCH v2] drm/msm: DEVFREQ_GOV_SIMPLE_ONDEMAND is no longer needed
+Date:   Sun, 19 Feb 2023 17:04:28 -0800
+Message-Id: <20230220010428.16910-1-rdunlap@infradead.org>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/WHhgSQWrYHIpG74LLPSKD21";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/WHhgSQWrYHIpG74LLPSKD21
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+DRM_MSM no longer needs DEVFREQ_GOV_SIMPLE_ONDEMAND (since dbd7a2a941b8
+in linux-next: PM / devfreq: Fix build issues with devfreq disabled),
+so remove that select from the DRM_MSM Kconfig file.
 
-Hi all,
+Fixes: 6563f60f14cb ("drm/msm/gpu: Add devfreq tuning debugfs")
+Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+Cc: Rob Clark <robdclark@gmail.com>
+Cc: Abhinav Kumar <quic_abhinavk@quicinc.com>
+Cc: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Cc: Sean Paul <sean@poorly.run>
+Cc: David Airlie <airlied@gmail.com>
+Cc: Daniel Vetter <daniel@ffwll.ch>
+Cc: linux-arm-msm@vger.kernel.org
+Cc: dri-devel@lists.freedesktop.org
+Cc: freedreno@lists.freedesktop.org
+---
+v2: since <linux/devfreq.h> has been patched, this select is no longer
+    needed (Rob Clark)
 
-The following commits are also in Linus Torvalds' tree as different
-commits (but the same patches):
+ drivers/gpu/drm/msm/Kconfig |    1 -
+ 1 file changed, 1 deletion(-)
 
-  78e11ab5adf7 ("mm: Pass info, not iter, into filemap_get_pages()")
-  a53cad008099 ("splice: Add a func to do a splice from a buffered file wit=
-hout ITER_PIPE")
-  f2aa2c5707ac ("splice: Add a func to do a splice from an O_DIRECT file wi=
-thout ITER_PIPE")
-  51e851b5d16f ("iov_iter: Define flags to qualify page extraction.")
-  0fff5a38a770 ("iov_iter: Add a function to extract a page list from an it=
-erator")
-
-These are commits
-
-  c935d7b85ae1 ("mm: Pass info, not iter, into filemap_get_pages()")
-  03aaa67b45e7 ("splice: Add a func to do a splice from a buffered file wit=
-hout ITER_PIPE")
-  1dba0a6d58da ("splice: Add a func to do a splice from an O_DIRECT file wi=
-thout ITER_PIPE")
-  f48b6bcd02a1 ("iov_iter: Define flags to qualify page extraction.")
-  c82edb69b878 ("iov_iter: Add a function to extract a page list from an it=
-erator")
-
-in the cifs tree.
-
-(A few of these are not exactly the same, but very similar)
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/WHhgSQWrYHIpG74LLPSKD21
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmPyxqoACgkQAVBC80lX
-0GwhBQf/fd8qSVaIOvjzRqfosD1J2I+EdQtkwUE2Da4HRDKjoTCD/EMMtmTXEI9R
-QIApyz/zQYpait3JUT/ukFm3lpxUSlo0Vb8eaAt6u7sG9IorWvsl4U/U2BiXizJk
-zICpMZS7dHblaihaYwcnyb1MwQ2v2Dz5c3NGosI9TjPpXFzMmlq+aiSkfWi0RFLA
-zn440tDKGBe8DhUi3eK/LAOMKoNriooX2ORLfxXwv+Hm2Riv5yp1ckJWVpU2CSVD
-XO0nQohslTNNdiC5Q+NhtfVGpn+hp27qMoN6qhmz3r+cib+GXRplkoa4o6hnoXKE
-YwRViAAQ+1t9rEv/ioXcUfsNrVxUdw==
-=zCMy
------END PGP SIGNATURE-----
-
---Sig_/WHhgSQWrYHIpG74LLPSKD21--
+diff -- a/drivers/gpu/drm/msm/Kconfig b/drivers/gpu/drm/msm/Kconfig
+--- a/drivers/gpu/drm/msm/Kconfig
++++ b/drivers/gpu/drm/msm/Kconfig
+@@ -23,7 +23,6 @@ config DRM_MSM
+ 	select SHMEM
+ 	select TMPFS
+ 	select QCOM_SCM
+-	select DEVFREQ_GOV_SIMPLE_ONDEMAND
+ 	select WANT_DEV_COREDUMP
+ 	select SND_SOC_HDMI_CODEC if SND_SOC
+ 	select SYNC_FILE
