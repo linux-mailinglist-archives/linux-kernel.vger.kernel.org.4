@@ -2,108 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C1FD769D1C1
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Feb 2023 17:58:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C4E169D1C7
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Feb 2023 18:00:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231582AbjBTQ6G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Feb 2023 11:58:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40548 "EHLO
+        id S231951AbjBTRAf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Feb 2023 12:00:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42372 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232073AbjBTQ55 (ORCPT
+        with ESMTP id S230062AbjBTRAc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Feb 2023 11:57:57 -0500
-Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F43F7A8F;
-        Mon, 20 Feb 2023 08:57:55 -0800 (PST)
-Received: by mail-ed1-x535.google.com with SMTP id o12so7606728edb.9;
-        Mon, 20 Feb 2023 08:57:55 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=sKhS1XkPMQxMCs4PB6gvYep2AFIGq1h4u0coF+hO4cs=;
-        b=PiXZZTBpnSk7jqOvEbc8PkUHAQktrGb4YNVGKT/ZHKH7ZuHbGZUsQDWfhsYT1ofpsY
-         juUYSy3JCUoOfp/cM/Yd3IWpid9re8SW8pap9fHQWupba9QkDz1XpFwBw6+c707VDOgw
-         x6bLoAEoLN91vxCXVehQ2wqD6XkQJkkptMLIseBmgdGDCIAW87h3F+8YKdN1FV7qxj12
-         5RYLoLQ+5G9DFZm3laExe2B2xcBKK7U8QrAaD5e4ARtjADnxzfXXx55YJ/9qusX0SRi6
-         rIMWy5XAUtbY4W44ahIoqN6a7JPqX7vwpIIC8dl+/VqOz99DDyX795OARNKkB+57Witp
-         5OGQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=sKhS1XkPMQxMCs4PB6gvYep2AFIGq1h4u0coF+hO4cs=;
-        b=D8wuBJNiHoJiIWZSjMUOBXYBEF8gz28FFvYhZ52zKhEJ1E9Mix/VyohRLJk1qjKl/P
-         862a4qAxVaU09OocFp6AZeJcpTBUE7W7MCH8er1jRvyC+H4IdilYLGcp+VV4c2BqAwY3
-         R9BNUkbzFHzDDfYwl1OYgJ0eMg0XbReu9CuWD+G37Z5GNS2aVlU+hLK0FjzwUTpT/3/5
-         bwDqlSi9qW8jEsOYA39Sfl/yVKDE9+gA85H+KkBbL4zHI//Pw3qnMufdHAw+GbBxdcOQ
-         TolV8f0SMJjDj/SUOR9lzfNtcWC8wLs69ToAmL/NufFrOWtEV/T5HD/yWxjID4XKfw5D
-         ofFA==
-X-Gm-Message-State: AO0yUKXgZYAmM0WkI0a3n0ZpBp0oau+c9d0MqD9/EMpSy0IaGJDG9kjw
-        Hm8lHBWz+kZDxyk+K74hmnMoirxgO+E=
-X-Google-Smtp-Source: AK7set+mH7M/KvRblmnMoa+9/DsPaLZW6zlUTOWS4is9TUws62Uxkgy5fA8KpE6ss2dF9bPRf8HVSQ==
-X-Received: by 2002:a17:906:7c55:b0:88e:d435:3fd6 with SMTP id g21-20020a1709067c5500b0088ed4353fd6mr10651591ejp.63.1676912273814;
-        Mon, 20 Feb 2023 08:57:53 -0800 (PST)
-Received: from felia.fritz.box ([2a02:810d:2a40:1104:ad0f:1d29:d8a4:7999])
-        by smtp.gmail.com with ESMTPSA id hb22-20020a170906b89600b008b14d3978adsm6004006ejb.189.2023.02.20.08.57.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 20 Feb 2023 08:57:53 -0800 (PST)
-From:   Lukas Bulwahn <lukas.bulwahn@gmail.com>
-To:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>,
-        Waiman Long <longman@redhat.com>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org
-Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Lukas Bulwahn <lukas.bulwahn@gmail.com>
-Subject: [PATCH] docs: locking: refer to the actual existing config names
-Date:   Mon, 20 Feb 2023 17:57:49 +0100
-Message-Id: <20230220165749.12850-1-lukas.bulwahn@gmail.com>
-X-Mailer: git-send-email 2.17.1
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        Mon, 20 Feb 2023 12:00:32 -0500
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C67B9E3BF;
+        Mon, 20 Feb 2023 09:00:31 -0800 (PST)
+Received: from pps.filterd (m0098417.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 31KG3XSt028165;
+        Mon, 20 Feb 2023 17:00:30 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : content-type : content-transfer-encoding :
+ mime-version; s=pp1; bh=CbJXhk0sld4b1qBn69aVBQube5W90uHQhPBbPjlZiTQ=;
+ b=Llw6dvFoKSPJ9eDo7JzpB0JiHILO7R+qNZrisZNtg6GEhpNE1M5A87KgDcRKHU2u/UBm
+ iloHEM4bbFPdvMHC0x6wzBoPOjESv6J550WIIp9KqDpA3gOinLFiucIH/hfaEp3NNULt
+ 7SGfl5slsfaDhc2ZfNb0eHbH552UnvyDQFHM4utrxOINtUX9uVzYpBAabWkESmyw3vHK
+ x4gI+zmYauMtHrfE3pLge6t/eUqHNWlT/ZMLR1Yynt3m2EzQFjI7+Sz4VJ6sR3Q+uIHF
+ LU1RkDxYKhqXpZfrzZI7mMk8yF9jroLEsr/NLbA13QBRr0SYHhBRJvKaDYaopoPIh7v1 MA== 
+Received: from ppma03wdc.us.ibm.com (ba.79.3fa9.ip4.static.sl-reverse.com [169.63.121.186])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3nvc24h9qf-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 20 Feb 2023 17:00:30 +0000
+Received: from pps.filterd (ppma03wdc.us.ibm.com [127.0.0.1])
+        by ppma03wdc.us.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 31KFJAnL023050;
+        Mon, 20 Feb 2023 17:00:29 GMT
+Received: from smtprelay04.wdc07v.mail.ibm.com ([9.208.129.114])
+        by ppma03wdc.us.ibm.com (PPS) with ESMTPS id 3ntpa6p92h-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 20 Feb 2023 17:00:29 +0000
+Received: from smtpav05.dal12v.mail.ibm.com (smtpav05.dal12v.mail.ibm.com [10.241.53.104])
+        by smtprelay04.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 31KH0SOd25559790
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 20 Feb 2023 17:00:28 GMT
+Received: from smtpav05.dal12v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 4A7F55806A;
+        Mon, 20 Feb 2023 17:00:28 +0000 (GMT)
+Received: from smtpav05.dal12v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id E8C835806B;
+        Mon, 20 Feb 2023 17:00:27 +0000 (GMT)
+Received: from li-f45666cc-3089-11b2-a85c-c57d1a57929f.ibm.com (unknown [9.160.169.160])
+        by smtpav05.dal12v.mail.ibm.com (Postfix) with ESMTP;
+        Mon, 20 Feb 2023 17:00:27 +0000 (GMT)
+Message-ID: <1c1482de9ab0573f0ca4bef0a47260026264e926.camel@linux.ibm.com>
+Subject: [GIT PULL] integrity: susbsytem updates for v6.3
+From:   Mimi Zohar <zohar@linux.ibm.com>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     linux-integrity <linux-integrity@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>
+Date:   Mon, 20 Feb 2023 12:00:26 -0500
+Content-Type: text/plain; charset="ISO-8859-15"
+X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: g8IM6t8TNWBDMLQV91K0rHedad2NCJOg
+X-Proofpoint-ORIG-GUID: g8IM6t8TNWBDMLQV91K0rHedad2NCJOg
+Content-Transfer-Encoding: 7bit
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+MIME-Version: 1.0
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.170.22
+ definitions=2023-02-20_13,2023-02-20_02,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 mlxscore=0
+ lowpriorityscore=0 bulkscore=0 mlxlogscore=999 clxscore=1011 spamscore=0
+ impostorscore=0 suspectscore=0 malwarescore=0 priorityscore=1501
+ adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2302200151
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The config is actually called CONFIG_RT_MUTEXES, not CONFIG_RT_MUTEX.
+Hi Linus,
 
-The config CONFIG_LOCK_TORTURE_TEST should be connected by underscore, for
-the sake of consistent referencing to configs in the kernel documentation.
+Contains one of each doc and code cleanup, and two bug fixes (4
+patches).
 
-Address those issues.
+FYI, Stephen Rothwell is carrying a merge conflict with "fs: port xattr
+to mnt_idmap" from the vfs-idmapping tree.
 
-Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
----
- Documentation/locking/locktorture.rst | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+thanks,
 
-diff --git a/Documentation/locking/locktorture.rst b/Documentation/locking/locktorture.rst
-index dfaf9fc883f4..7f56fc0d7c31 100644
---- a/Documentation/locking/locktorture.rst
-+++ b/Documentation/locking/locktorture.rst
-@@ -5,7 +5,7 @@ Kernel Lock Torture Test Operation
- CONFIG_LOCK_TORTURE_TEST
- ========================
- 
--The CONFIG LOCK_TORTURE_TEST config option provides a kernel module
-+The CONFIG_LOCK_TORTURE_TEST config option provides a kernel module
- that runs torture tests on core kernel locking primitives. The kernel
- module, 'locktorture', may be built after the fact on the running
- kernel to be tested, if desired. The tests periodically output status
-@@ -67,7 +67,7 @@ torture_type
- 
- 		     - "rtmutex_lock":
- 				rtmutex_lock() and rtmutex_unlock() pairs.
--				Kernel must have CONFIG_RT_MUTEX=y.
-+				Kernel must have CONFIG_RT_MUTEXES=y.
- 
- 		     - "rwsem_lock":
- 				read/write down() and up() semaphore pairs.
--- 
-2.17.1
+Mimi
+
+The following changes since commit 5dc4c995db9eb45f6373a956eb1f69460e69e6d4:
+
+  Linux 6.2-rc4 (2023-01-15 09:22:43 -0600)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/zohar/linux-integrity.git tags/integrity-v6.3
+
+for you to fetch changes up to 4958db3245fa655bf18251bd2a83bcc164071c39:
+
+  ima: Introduce MMAP_CHECK_REQPROT hook (2023-01-31 13:08:39 -0500)
+
+----------------------------------------------------------------
+integrity-v6.3
+
+----------------------------------------------------------------
+Matt Bobrowski (2):
+      ima: fix error handling logic when file measurement failed
+      ima: return IMA digest value only when IMA_COLLECTED flag is set
+
+Randy Dunlap (1):
+      ima: fix ima_delete_rules() kernel-doc warning
+
+Roberto Sassu (2):
+      ima: Align ima_file_mmap() parameters with mmap_file LSM hook
+      ima: Introduce MMAP_CHECK_REQPROT hook
+
+Xiu Jianfeng (1):
+      evm: call dump_security_xattr() in all cases to remove code duplication
+
+ Documentation/ABI/testing/ima_policy  |  2 +-
+ include/linux/ima.h                   |  6 ++++--
+ security/integrity/evm/evm_crypto.c   | 33 +++++++++++++++---------------
+ security/integrity/ima/ima.h          |  1 +
+ security/integrity/ima/ima_api.c      |  5 +++--
+ security/integrity/ima/ima_appraise.c |  3 +++
+ security/integrity/ima/ima_main.c     | 38 ++++++++++++++++++++++++++---------
+ security/integrity/ima/ima_policy.c   |  7 ++++++-
+ security/security.c                   |  7 ++++---
+ 9 files changed, 67 insertions(+), 35 deletions(-)
 
