@@ -2,109 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 484A669C50F
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Feb 2023 06:46:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BD68369C50D
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Feb 2023 06:46:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230100AbjBTFqG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Feb 2023 00:46:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56798 "EHLO
+        id S230087AbjBTFqB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Feb 2023 00:46:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56792 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230076AbjBTFpx (ORCPT
+        with ESMTP id S230059AbjBTFpw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Feb 2023 00:45:53 -0500
-Received: from mailout3.samsung.com (mailout3.samsung.com [203.254.224.33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39CCBDBC5
-        for <linux-kernel@vger.kernel.org>; Sun, 19 Feb 2023 21:45:51 -0800 (PST)
+        Mon, 20 Feb 2023 00:45:52 -0500
+Received: from mailout1.samsung.com (mailout1.samsung.com [203.254.224.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51496C14B
+        for <linux-kernel@vger.kernel.org>; Sun, 19 Feb 2023 21:45:49 -0800 (PST)
 Received: from epcas1p4.samsung.com (unknown [182.195.41.48])
-        by mailout3.samsung.com (KnoxPortal) with ESMTP id 20230220054547epoutp03c5937f86feaee31f31e7e78e112c7cae~Fcibrbr6V0620706207epoutp03v
+        by mailout1.samsung.com (KnoxPortal) with ESMTP id 20230220054547epoutp01d93b85319fe64847ea5e8684bf2f103e~FcibU0Dt12911729117epoutp017
         for <linux-kernel@vger.kernel.org>; Mon, 20 Feb 2023 05:45:47 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout3.samsung.com 20230220054547epoutp03c5937f86feaee31f31e7e78e112c7cae~Fcibrbr6V0620706207epoutp03v
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.samsung.com 20230220054547epoutp01d93b85319fe64847ea5e8684bf2f103e~FcibU0Dt12911729117epoutp017
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
         s=mail20170921; t=1676871947;
-        bh=Lomkw3wOGq30Z8bGw0g7vY7CMRkAMEbVBey5jm8G6Ak=;
+        bh=lNPksCGpheSqXVu55qAf+P0bJ2VIXVru95h9wl5NU28=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=IXxAMwvNA4yN6Sl0+4FH4g98ZhhbR7qBm1Y6tcty637GyecRZlKWmTv8k22ZQfrOY
-         qr/qN/Nj+IkrR92CZBlROcj8fBmHJATU4p3BqIy4hySTVnbo5qUBnQsvDq4qrTaKQ+
-         yRSUU6JQMa/Bo4s0+nGw6Fw8oqcWBYOwJyO33x0g=
-Received: from epsnrtp4.localdomain (unknown [182.195.42.165]) by
-        epcas1p1.samsung.com (KnoxPortal) with ESMTP id
-        20230220054547epcas1p189575adc2ceea9b747fb1b5c1891de5f~FcibWe71Q2217522175epcas1p1_;
+        b=MCGdJnvhJw9Gy/sXdwdojODrmr+cdjnC3/OP5NgNjg6FoH2CKSR3Bu8x+5G+SsLqg
+         O754Oz2r04krCOjK06bslW27DaY3UrMhwhA48vRqOZeliLHLEoQeqmyxFDac6MdIBc
+         F7G/o0XeBqlJO/CmgE0aRX/Rk4ovtkEyfNqvsc44=
+Received: from epsnrtp3.localdomain (unknown [182.195.42.164]) by
+        epcas1p2.samsung.com (KnoxPortal) with ESMTP id
+        20230220054547epcas1p2695e6ad99af607f325f4aab6da708f2e~Fcia-VGsF1742417424epcas1p2o;
         Mon, 20 Feb 2023 05:45:47 +0000 (GMT)
-Received: from epsmges1p2.samsung.com (unknown [182.195.36.222]) by
-        epsnrtp4.localdomain (Postfix) with ESMTP id 4PKrxQ2Xqcz4x9Q9; Mon, 20 Feb
+Received: from epsmges1p1.samsung.com (unknown [182.195.38.247]) by
+        epsnrtp3.localdomain (Postfix) with ESMTP id 4PKrxQ2ghfz4x9Q7; Mon, 20 Feb
         2023 05:45:46 +0000 (GMT)
 Received: from epcas1p1.samsung.com ( [182.195.41.45]) by
-        epsmges1p2.samsung.com (Symantec Messaging Gateway) with SMTP id
-        A8.F9.12562.A0903F36; Mon, 20 Feb 2023 14:45:46 +0900 (KST)
+        epsmges1p1.samsung.com (Symantec Messaging Gateway) with SMTP id
+        00.DC.55531.A0903F36; Mon, 20 Feb 2023 14:45:46 +0900 (KST)
 Received: from epsmtrp2.samsung.com (unknown [182.195.40.14]) by
-        epcas1p3.samsung.com (KnoxPortal) with ESMTPA id
-        20230220054545epcas1p3ab4b1281f464c72a7b5ed8681a8b087f~FciZ1eVcr1540615406epcas1p3f;
+        epcas1p1.samsung.com (KnoxPortal) with ESMTPA id
+        20230220054545epcas1p1b26d2a04a170dab4517e09bd6cf09c3f~FciZ2oWJY1974419744epcas1p1L;
         Mon, 20 Feb 2023 05:45:45 +0000 (GMT)
-Received: from epsmgms1p1new.samsung.com (unknown [182.195.42.41]) by
+Received: from epsmgms1p2.samsung.com (unknown [182.195.42.42]) by
         epsmtrp2.samsung.com (KnoxPortal) with ESMTP id
-        20230220054545epsmtrp2fc038af6876d068e3afaf5df7136443a~FciZ0GU780986209862epsmtrp2C;
+        20230220054545epsmtrp22e61a1b18f5835cd5d3740a68e40ec09~FciZ1_eoJ0972009720epsmtrp2j;
         Mon, 20 Feb 2023 05:45:45 +0000 (GMT)
-X-AuditID: b6c32a36-bfdff70000023112-7f-63f3090a2bbc
+X-AuditID: b6c32a35-d9fff7000000d8eb-58-63f3090ab484
 Received: from epsmtip1.samsung.com ( [182.195.34.30]) by
-        epsmgms1p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
-        16.5A.05839.90903F36; Mon, 20 Feb 2023 14:45:45 +0900 (KST)
+        epsmgms1p2.samsung.com (Symantec Messaging Gateway) with SMTP id
+        3F.77.17995.90903F36; Mon, 20 Feb 2023 14:45:45 +0900 (KST)
 Received: from VDBS1418.vd.sec.samsung.net (unknown [168.219.244.30]) by
         epsmtip1.samsung.com (KnoxPortal) with ESMTPA id
-        20230220054545epsmtip14c1317fc0a019a6d360c1b1b4dca9823~FciZsjDQ82594925949epsmtip1t;
+        20230220054545epsmtip114bcfb45fbc387c9de05bf0c7567a728~FciZuNwbS2561925619epsmtip13;
         Mon, 20 Feb 2023 05:45:45 +0000 (GMT)
 From:   Bumwoo Lee <bw365.lee@samsung.com>
 To:     MyungJoo Ham <myungjoo.ham@samsung.com>,
         Chanwoo Choi <cw00.choi@samsung.com>,
         linux-kernel@vger.kernel.org
 Cc:     Bumwoo Lee <bw365.lee@samsung.com>
-Subject: [PATCH v2 3/4] extcon: Added extcon_alloc_muex to simplify extcon
+Subject: [PATCH v2 4/4] extcon: Added extcon_alloc_groups to simplify extcon
  register function
-Date:   Mon, 20 Feb 2023 14:45:12 +0900
-Message-Id: <20230220054513.27385-4-bw365.lee@samsung.com>
+Date:   Mon, 20 Feb 2023 14:45:13 +0900
+Message-Id: <20230220054513.27385-5-bw365.lee@samsung.com>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20230220054513.27385-1-bw365.lee@samsung.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFnrDKsWRmVeSWpSXmKPExsWy7bCmri4X5+dkgxvzBSxOrFnEZHH9y3NW
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFnrNKsWRmVeSWpSXmKPExsWy7bCmri4X5+dkg8MPBC1OrFnEZHH9y3NW
         i8u75rBZ3G5cwebA4tG3ZRWjx+dNcgFMUdk2GamJKalFCql5yfkpmXnptkrewfHO8aZmBoa6
         hpYW5koKeYm5qbZKLj4Bum6ZOUCLlBTKEnNKgUIBicXFSvp2NkX5pSWpChn5xSW2SqkFKTkF
-        ZgV6xYm5xaV56Xp5qSVWhgYGRqZAhQnZGWcnvWAvmCpfMXf2UvYGxncSXYycHBICJhI/Hl9l
-        7WLk4hAS2MEo0b1wIhuE84lRYmnDTnYI5xujxJLHk9lgWvb/XAeV2Mso8ejDFWYI5xejxIIj
-        11hBqtgENCT2XGwA6uDgEBEolDjcnw0SZhZQk3iwaiM7iC0sECex4sFjFhCbRUBVYuPeR2Bx
-        XgEriSctF5ghlslLdP/7A1bDKWAt8e/5IjaIGkGJkzOfsEDMlJdo3jobqn4Xu8SGD9EQtovE
-        tf7b7BC2sMSr41ugbCmJz+/2Qj2TLrHyyh2oeI7E6/vtjBC2scS7t2uZQc5nFtCUWL9LHyKs
-        KLHz91xGiLV8Eu++9rCClEgI8Ep0tAlBlChLdD94wQRhS0osfnoHaqKHxILuzWAXCwn0MUpM
-        6ZOcwKgwC8kzs5A8Mwth8QJG5lWMYqkFxbnpqcWGBUbw+E3Oz93ECE52WmY7GCe9/aB3iJGJ
-        g/EQowQHs5IIr/ShD8lCvCmJlVWpRfnxRaU5qcWHGE2BQT2RWUo0OR+YbvNK4g1NLA1MzIxM
-        LIwtjc2UxHnFbU8mCwmkJ5akZqemFqQWwfQxcXBKNTDFs8wuPn/W3HjiRUe7mntFGSIn/O/s
-        2KV/+Z7FSa1ak1NBjz8YPpwveYuxeU74K+VvvMunPQhpz9DLyz7MeENMeprcL/djBw+Izd/2
-        1/Nhgvp28TU5z4U/b22b4xq1tMYn2PFT+FWWuAc7MnRyjt3il+dPklohsF/z2OI+veU6BTsU
-        haoXVYt18q73PVtaFrSxbPHBTsPLwh5LJrjsEFSVn6N3YVvZubrDy6PXN1+oSJ+gYVT3yC/N
-        /0RYxup5F6s+GHcsmHquQNczQ08tnefv6i39a0zPlVnlVE6cOz+X6cKP5dtZf5c8PLxjJ4/V
-        iguffcWFfuns3PMueyXLlFcnffeZ/O1f921hvFu+mnOpEktxRqKhFnNRcSIAod9d/f8DAAA=
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFlrBLMWRmVeSWpSXmKPExsWy7bCSnC4n5+dkg03PtSxOrFnEZHH9y3NW
-        i8u75rBZ3G5cwebA4tG3ZRWjx+dNcgFMUVw2Kak5mWWpRfp2CVwZZye9YC+YKl8xd/ZS9gbG
-        dxJdjJwcEgImEvt/rmPvYuTiEBLYzSix9N9KNoiEpMTZ5Y+AEhxAtrDE4cPFEDU/GCUaVzcz
-        gtSwCWhI7LnYAFYvIlAsceHAYhYQm1lATeLBqo3sILawQIzEo+s/mEFsFgFViY17H4HFeQWs
-        JJ60XGCG2CUv0f3vD1gvp4C1xL/ni8BmCgHVtE2ezAxRLyhxcuYTqPnyEs1bZzNPYBSYhSQ1
-        C0lqASPTKkbJ1ILi3PTcYsMCw7zUcr3ixNzi0rx0veT83E2M4MDU0tzBuH3VB71DjEwcjIcY
-        JTiYlUR4pQ99SBbiTUmsrEotyo8vKs1JLT7EKM3BoiTOe6HrZLyQQHpiSWp2ampBahFMlomD
-        U6qBKTtaekXw5M6QOz+bLuQG/6teffXEtLqqz13Liz8/dVGs5My93rBiZlz9wz3Jxg+tH7/7
-        0cUWHBhtbZmkv2/JnZaf07NWXhD443Ri6dppRZMVtM+IvMg8yqXqnRPKlvaDI3nXKrWPk2M+
-        xEd5hAcf4hJofnVoUeOy4inmEhP/fn7LGca8/oDg+oBq4Qt2K4OeHby4pqyd7Vht8dIrRWtK
-        lSQ+rmSa5DpduJbzkrhIEfOxNIcK3d0twbpOxZGlj35+sTubpfko89QeljOT8uReccYHr5PL
-        Fl3fsf+T/6nG892e7+022naeCZK5sj3zYqC4IE/Wrhc5h3yDIoxKG3/YbJSwCf2z+tCfwkyP
-        0wKnlViKMxINtZiLihMBSRFhDLsCAAA=
-X-CMS-MailID: 20230220054545epcas1p3ab4b1281f464c72a7b5ed8681a8b087f
+        ZgV6xYm5xaV56Xp5qSVWhgYGRqZAhQnZGU83X2Au6BGumPRhFXsD4zP+LkZODgkBE4nWk9OZ
+        QGwhgR2MEtc/pncxcgHZnxglvi14wwqR+Mwo8edeLUzDuYaJ7BBFuxgl+pY+YoNwfjFKzNjU
+        wgZSxSagIbHnYgOQzcEhIlAocbg/GyTMLKAm8WDVRnYQW1ggQeLsl39gm1kEVCW6j3awgNi8
+        AlYS/3ouM0Esk5fo/vcHLM4pYC3x7/kiNogaQYmTM5+wQMyUl2jeOpsZ5AYJgV3sEnfO/gDb
+        KyHgIvH5UTTEHGGJV8e3sEPYUhKf3+1lg7DTJVZeuQMVz5F4fb+dEcI2lnj3di0zyBhmAU2J
+        9bv0IcKKEjt/z2WEWMsn8e5rDyvEJl6JjjYhiBJlie4HL6Cul5RY/PQO1EQPicZFE1ghIdXH
+        KPG49zzLBEaFWUi+mYXkm1kImxcwMq9iFEstKM5NTy02LDCER29yfu4mRnCq0zLdwTjx7Qe9
+        Q4xMHIyHGCU4mJVEeKUPfUgW4k1JrKxKLcqPLyrNSS0+xGgKDOuJzFKiyfnAZJtXEm9oYmlg
+        YmZkYmFsaWymJM4rbnsyWUggPbEkNTs1tSC1CKaPiYNTqoGpVvnES9eZFvqVD5+a5d9ce0SZ
+        UzsjJrPy17TSsIIUN/3d/2QZjwhtqHhZE1/wbnLI2bV3Ki4V2XxSrpNXTM2fcM3wr2BEXviK
+        7iZjhean5Wt7Ujcuna5XJ/mmbJWk/aMrTwrXbz587/caj6w7K6o0a6aVc0Yk8i/+f3jrinfK
+        K411+FQlM3tadzPlPOmdxs2h9GdmeGzz40WmodIMshZfZmVUvFwWVTIp9oGwg/JUzStJCnZ+
+        9ZPcjT36lavntqgnLc/+zSe7J/Jp/rdp8SUXop8HzL0gtyVqSpbsr42PV3LaL59b8txQ7QiT
+        kZ/nvUfHwnImljLX/ctXOXNts27lw/lCPfk98zK/afeFCyixFGckGmoxFxUnAgAfrUsm/gMA
+        AA==
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFlrBLMWRmVeSWpSXmKPExsWy7bCSnC4n5+dkg7YjOhYn1ixisrj+5Tmr
+        xeVdc9gsbjeuYHNg8ejbsorR4/MmuQCmKC6blNSczLLUIn27BK6Mp5svMBf0CFdM+rCKvYHx
+        GX8XIyeHhICJxLmGiexdjFwcQgI7GCV+LZ/KApGQlDi7/BFQggPIFpY4fLgYouYHo8Tk/ovs
+        IDVsAhoSey42sIHYIgLFEhcOLAbrZRZQk3iwaiNYjbBAnMSztVuYQWwWAVWJ7qMdYDW8AlYS
+        /3ouM0Hskpfo/vcHLM4pYC3x7/kisJlCQDVtkyczQ9QLSpyc+QRqvrxE89bZzBMYBWYhSc1C
+        klrAyLSKUTK1oDg3PbfYsMAoL7Vcrzgxt7g0L10vOT93EyM4MLW0djDuWfVB7xAjEwfjIUYJ
+        DmYlEV7pQx+ShXhTEiurUovy44tKc1KLDzFKc7AoifNe6DoZLySQnliSmp2aWpBaBJNl4uCU
+        amDq5mLzPruh/k6gHottkKjZ0UnFJ9r1NF/w/jk/W2hv/q+pHvf7+cOtTshfiNlyr/BGupW/
+        iGfvgf8xE9o6DY6/Y2py1jN+U+nRkOzce13v7hrF6deST32fEuaWavdiN8d67odTI3mVOSq3
+        RD2YsyhALtqoq8nnj+9Wn5S3U1cfKbt4YG/JkRwXZelk6VPed5eskM69NH3B3J815T9bD1ss
+        dlA+Lc1yy3p9d+IVrgo5/8/LYqftOz1HeNEKuQN/J7X5TY24oGwYc5PxQI2uwLXjLEeNRfj5
+        gyMiWDPuPX59SY955bwZ/2f1ufD4+LRJRb3ZZHPng8Pb2/sFvuiZW+Y61taeVX74yNtsRujL
+        C1+UWIozEg21mIuKEwH+zzqCuwIAAA==
+X-CMS-MailID: 20230220054545epcas1p1b26d2a04a170dab4517e09bd6cf09c3f
 X-Msg-Generator: CA
 Content-Type: text/plain; charset="utf-8"
 X-Sendblock-Type: SVC_REQ_APPROVE
 CMS-TYPE: 101P
 DLP-Filter: Pass
 X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20230220054545epcas1p3ab4b1281f464c72a7b5ed8681a8b087f
+X-CMS-RootMailID: 20230220054545epcas1p1b26d2a04a170dab4517e09bd6cf09c3f
 References: <20230220054513.27385-1-bw365.lee@samsung.com>
-        <CGME20230220054545epcas1p3ab4b1281f464c72a7b5ed8681a8b087f@epcas1p3.samsung.com>
+        <CGME20230220054545epcas1p1b26d2a04a170dab4517e09bd6cf09c3f@epcas1p1.samsung.com>
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
@@ -115,71 +116,50 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The mutual exclusive part is functionalized from extcon_dev_register.
+The alloc groups is functionalized from extcon_dev_register.
 
 Signed-off-by: Bumwoo Lee <bw365.lee@samsung.com>
 ---
- drivers/extcon/extcon.c | 106 ++++++++++++++++++++++------------------
- 1 file changed, 58 insertions(+), 48 deletions(-)
+ drivers/extcon/extcon.c | 58 +++++++++++++++++++++++++----------------
+ 1 file changed, 36 insertions(+), 22 deletions(-)
 
 diff --git a/drivers/extcon/extcon.c b/drivers/extcon/extcon.c
-index 3c2f540785e8..2aec34909843 100644
+index 2aec34909843..919d77539039 100644
 --- a/drivers/extcon/extcon.c
 +++ b/drivers/extcon/extcon.c
-@@ -1125,6 +1125,60 @@ static int extcon_alloc_cables(struct extcon_dev *edev)
+@@ -1179,6 +1179,39 @@ static int extcon_alloc_muex(struct extcon_dev *edev)
  	return 0;
  }
  
 +/**
-+ * extcon_alloc_muex() - alloc the mutual exclusive for extcon device
++ * extcon_alloc_groups() - alloc the groups for extcon device
 + * @edev:	extcon device
 + *
 + * Returns 0 if success or error number if fail.
 + */
-+static int extcon_alloc_muex(struct extcon_dev *edev)
++static int extcon_alloc_groups(struct extcon_dev *edev)
 +{
-+	char *name;
 +	int index;
 +
-+	if (!(edev->max_supported && edev->mutually_exclusive))
++	if (!edev->max_supported)
 +		return 0;
 +
-+	/* Count the size of mutually_exclusive array */
-+	for (index = 0; edev->mutually_exclusive[index]; index++)
-+		;
-+
-+	edev->attrs_muex = kcalloc(index + 1,
-+				   sizeof(struct attribute *),
-+				   GFP_KERNEL);
-+	if (!edev->attrs_muex)
++	edev->extcon_dev_type.groups = kcalloc(edev->max_supported + 2,
++			sizeof(struct attribute_group *),
++			GFP_KERNEL);
++	if (!edev->extcon_dev_type.groups)
 +		return -ENOMEM;
 +
-+	edev->d_attrs_muex = kcalloc(index,
-+				     sizeof(struct device_attribute),
-+				     GFP_KERNEL);
-+	if (!edev->d_attrs_muex) {
-+		kfree(edev->attrs_muex);
-+		return -ENOMEM;
-+	}
++	edev->extcon_dev_type.name = dev_name(&edev->dev);
++	edev->extcon_dev_type.release = dummy_sysfs_dev_release;
 +
-+	for (index = 0; edev->mutually_exclusive[index]; index++) {
-+		name = kasprintf(GFP_KERNEL, "0x%x",
-+				 edev->mutually_exclusive[index]);
-+		if (!name) {
-+			for (index--; index >= 0; index--)
-+				kfree(edev->d_attrs_muex[index].attr.name);
++	for (index = 0; index < edev->max_supported; index++)
++		edev->extcon_dev_type.groups[index] = &edev->cables[index].attr_g;
 +
-+			kfree(edev->d_attrs_muex);
-+			kfree(edev->attrs_muex);
-+			return -ENOMEM;
-+		}
-+		sysfs_attr_init(&edev->d_attrs_muex[index].attr);
-+		edev->d_attrs_muex[index].attr.name = name;
-+		edev->d_attrs_muex[index].attr.mode = 0000;
-+		edev->attrs_muex[index] = &edev->d_attrs_muex[index].attr;
-+	}
-+	edev->attr_g_muex.name = muex_name;
-+	edev->attr_g_muex.attrs = edev->attrs_muex;
++	if (edev->mutually_exclusive)
++		edev->extcon_dev_type.groups[index] = &edev->attr_g_muex;
++
++	edev->dev.type = &edev->extcon_dev_type;
 +
 +	return 0;
 +}
@@ -187,72 +167,38 @@ index 3c2f540785e8..2aec34909843 100644
  /**
   * extcon_dev_register() - Register an new extcon device
   * @edev:	the extcon device to be registered
-@@ -1176,53 +1230,9 @@ int extcon_dev_register(struct extcon_dev *edev)
+@@ -1234,28 +1267,9 @@ int extcon_dev_register(struct extcon_dev *edev)
  	if (ret)
- 		goto err_alloc_cables;
+ 		goto err_alloc_muex;
  
--	if (edev->max_supported && edev->mutually_exclusive) {
--		char *name;
--
--		/* Count the size of mutually_exclusive array */
--		for (index = 0; edev->mutually_exclusive[index]; index++)
--			;
--
--		edev->attrs_muex = kcalloc(index + 1,
--					   sizeof(struct attribute *),
--					   GFP_KERNEL);
--		if (!edev->attrs_muex) {
+-	if (edev->max_supported) {
+-		edev->extcon_dev_type.groups =
+-			kcalloc(edev->max_supported + 2,
+-				sizeof(struct attribute_group *),
+-				GFP_KERNEL);
+-		if (!edev->extcon_dev_type.groups) {
 -			ret = -ENOMEM;
--			goto err_muex;
+-			goto err_alloc_groups;
 -		}
 -
--		edev->d_attrs_muex = kcalloc(index,
--					     sizeof(struct device_attribute),
--					     GFP_KERNEL);
--		if (!edev->d_attrs_muex) {
--			ret = -ENOMEM;
--			kfree(edev->attrs_muex);
--			goto err_muex;
--		}
+-		edev->extcon_dev_type.name = dev_name(&edev->dev);
+-		edev->extcon_dev_type.release = dummy_sysfs_dev_release;
 -
--		for (index = 0; edev->mutually_exclusive[index]; index++) {
--			name = kasprintf(GFP_KERNEL, "0x%x",
--					 edev->mutually_exclusive[index]);
--			if (!name) {
--				for (index--; index >= 0; index--) {
--					kfree(edev->d_attrs_muex[index].attr.
--					      name);
--				}
--				kfree(edev->d_attrs_muex);
--				kfree(edev->attrs_muex);
--				ret = -ENOMEM;
--				goto err_muex;
--			}
--			sysfs_attr_init(&edev->d_attrs_muex[index].attr);
--			edev->d_attrs_muex[index].attr.name = name;
--			edev->d_attrs_muex[index].attr.mode = 0000;
--			edev->attrs_muex[index] = &edev->d_attrs_muex[index]
--							.attr;
--		}
--		edev->attr_g_muex.name = muex_name;
--		edev->attr_g_muex.attrs = edev->attrs_muex;
+-		for (index = 0; index < edev->max_supported; index++)
+-			edev->extcon_dev_type.groups[index] =
+-				&edev->cables[index].attr_g;
+-		if (edev->mutually_exclusive)
+-			edev->extcon_dev_type.groups[index] =
+-				&edev->attr_g_muex;
 -
+-		edev->dev.type = &edev->extcon_dev_type;
 -	}
-+	ret = extcon_alloc_muex(edev);
++	ret = extcon_alloc_groups(edev);
 +	if (ret)
-+		goto err_alloc_muex;
++		goto err_alloc_groups;
  
+ 	spin_lock_init(&edev->lock);
  	if (edev->max_supported) {
- 		edev->extcon_dev_type.groups =
-@@ -1290,7 +1300,7 @@ int extcon_dev_register(struct extcon_dev *edev)
- 		kfree(edev->d_attrs_muex);
- 		kfree(edev->attrs_muex);
- 	}
--err_muex:
-+err_alloc_muex:
- 	for (index = 0; index < edev->max_supported; index++)
- 		kfree(edev->cables[index].attr_g.name);
- err_alloc_cables:
 -- 
 2.35.1
 
