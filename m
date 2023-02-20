@@ -2,94 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B84CC69D2E7
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Feb 2023 19:43:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1925869D2F1
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Feb 2023 19:44:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232550AbjBTSna (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Feb 2023 13:43:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51552 "EHLO
+        id S232557AbjBTSoj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Feb 2023 13:44:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52666 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231872AbjBTSn2 (ORCPT
+        with ESMTP id S230076AbjBTSoi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Feb 2023 13:43:28 -0500
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92607B46F;
-        Mon, 20 Feb 2023 10:43:26 -0800 (PST)
-From:   Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1676918604;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=3GJstKrfvyA8WSRqNcmXOcPWiJSvltdM7jv/QCmpHbw=;
-        b=VjjnGWGPUBl95Lnj89MykR1iV1NreRdrDL/fhxObaIELpKbzcsTfLaXeqOiQmoIo6YBv6y
-        FIPlHN1WG2MkJ2Jd/2HIQF+9jFwmFF7MnXzZp9rYC8Jz6wcGAcpG1Coo0fNHS2oS0v9ulY
-        F+fujCgCr6fIYB5Jl4Zg6ENr91LT+q2DtJyNWWjnJU0vUlnOhpzW+BByoB2Iqm1AjmwWE9
-        PCvi2B7YZvGt72LtShbr5zDbLRPzMr/GMjutYbc9dgCF4EQonywUsKKIdtPNCw902L2wLE
-        5+XUcHEqHTISkNEtJp78XV3kA7a2JGgvKrjajwlFLa9aXTWsIt0sbg/4Jobo8g==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1676918604;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=3GJstKrfvyA8WSRqNcmXOcPWiJSvltdM7jv/QCmpHbw=;
-        b=JGM0MYFczgf1SKnkK9ja49sEmUJsbM2LXLGpCj5DvKOYxXYWpGeRBuwnrwYHlNTJ88RQuE
-        Gnfwd0T2kL0TwjAQ==
-To:     Marc Zyngier <maz@kernel.org>,
-        "Russell King (Oracle)" <linux@armlinux.org.uk>
-Cc:     LKML <linux-kernel@vger.kernel.org>, x86@kernel.org,
-        Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
-        linux-pci@vger.kernel.org, Bjorn Helgaas <bhelgaas@google.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jason Gunthorpe <jgg@mellanox.com>,
-        Dave Jiang <dave.jiang@intel.com>,
-        Alex Williamson <alex.williamson@redhat.com>,
-        Kevin Tian <kevin.tian@intel.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Logan Gunthorpe <logang@deltatee.com>,
-        Ashok Raj <ashok.raj@intel.com>, Jon Mason <jdmason@kudzu.us>,
-        Allen Hubbe <allenbh@gmail.com>
-Subject: Re: [REGRESSION] Re: [patch V3 09/33] genirq/msi: Add range
- checking to msi_insert_desc()
-In-Reply-To: <86fsb0xkaa.wl-maz@kernel.org>
-References: <20221124230505.073418677@linutronix.de>
- <20221124232325.798556374@linutronix.de>
- <Y/Opu6ETe3ZzZ/8E@shell.armlinux.org.uk> <86fsb0xkaa.wl-maz@kernel.org>
-Date:   Mon, 20 Feb 2023 19:43:24 +0100
-Message-ID: <87y1osp48j.ffs@tglx>
+        Mon, 20 Feb 2023 13:44:38 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B2331E1C7
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Feb 2023 10:44:37 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id E5C6CB80ACE
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Feb 2023 18:44:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7AFC2C433A8
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Feb 2023 18:44:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1676918674;
+        bh=d4Bx4S2fq9PeffyCcYcLMHDz/eiQssEMBaaCsyajxBg=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=ZD2xM9cxegW3YFS2bjgy88Jlcl1DX+wcPQLIt++GbrFj0BcCYlnE0xOYWwY35ki+k
+         zS+snxYinTFgz0iwrFDpYgdnzoeu3XjLBh68RDIpzFOkAufMpEQdfnCZF7J5JlL9ut
+         ESqiahZzxCX3bVO8uazrdNyLPuTGxi1SfDUBnpiGGvryF1kNDCOYWoeX60f+0ozrNY
+         QwSywLYLN9ITjQBYrFCeFswQCgyFxfv6NdqeA4/BJn28I+OIrlOKQNdPLv+rEeQ3eA
+         4qdvdFiW6H1bfgCtpZid393vljFCitebAQpKVNLrAwdMSSpZzwVzwhKbw4yE5pwjha
+         fXc8nEAvPcM3g==
+Received: by mail-ed1-f50.google.com with SMTP id da10so9449645edb.3
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Feb 2023 10:44:34 -0800 (PST)
+X-Gm-Message-State: AO0yUKVVnabSh3epu8sbPN8iSKqR7bcmuELbyvB8q/SFQlFBzSZFuUNO
+        8g42ubpuczDAGF2/VwCvXyZNy+cfEoc8AzcKS9tfeA==
+X-Google-Smtp-Source: AK7set8yxxVXxUKNQJv0i3ws370cOjEt5HV31hok9VcKrtUgqK64+Pxa5bz9wMlQ6dJs4bMV+ph6A8I/BRWBRn1ppBs=
+X-Received: by 2002:a17:906:b746:b0:88d:64e7:a2be with SMTP id
+ fx6-20020a170906b74600b0088d64e7a2bemr4795555ejb.15.1676918672685; Mon, 20
+ Feb 2023 10:44:32 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20230220120127.1975241-1-kpsingh@kernel.org> <20230220121350.aidsipw3kd4rsyss@treble>
+ <CACYkzJ5L9MLuE5Jz+z5-NJCCrUqTbgKQkXSqnQnCfTD_WNA7_Q@mail.gmail.com>
+ <CACYkzJ6n=-tobhX0ONQhjHSgmnNjWnNe_dZnEOGtD8Y6S3RHbA@mail.gmail.com>
+ <20230220163442.7fmaeef3oqci4ee3@treble> <Y/Ox3MJZF1Yb7b6y@zn.tnic>
+ <20230220175929.2laflfb2met6y3kc@treble> <CACYkzJ71xqzY6-wL+YShcL+d6ugzcdFHr6tbYWWE_ep52+RBZQ@mail.gmail.com>
+ <Y/O6Wr4BbtfhXrNt@zn.tnic>
+In-Reply-To: <Y/O6Wr4BbtfhXrNt@zn.tnic>
+From:   KP Singh <kpsingh@kernel.org>
+Date:   Mon, 20 Feb 2023 10:44:21 -0800
+X-Gmail-Original-Message-ID: <CACYkzJ4jvOGGhuQ1HDzfpGS5vffg9X6hEcLC93QJBFqX+LxLVw@mail.gmail.com>
+Message-ID: <CACYkzJ4jvOGGhuQ1HDzfpGS5vffg9X6hEcLC93QJBFqX+LxLVw@mail.gmail.com>
+Subject: Re: [PATCH RESEND] x86/speculation: Fix user-mode spectre-v2
+ protection with KERNEL_IBRS
+To:     Borislav Petkov <bp@alien8.de>
+Cc:     Josh Poimboeuf <jpoimboe@kernel.org>, linux-kernel@vger.kernel.org,
+        pjt@google.com, evn@google.com, tglx@linutronix.de,
+        mingo@redhat.com, dave.hansen@linux.intel.com, x86@kernel.org,
+        hpa@zytor.com, peterz@infradead.org,
+        pawan.kumar.gupta@linux.intel.com, kim.phillips@amd.com,
+        alexandre.chartre@oracle.com, daniel.sneddon@linux.intel.com,
+        =?UTF-8?Q?Jos=C3=A9_Oliveira?= <joseloliveira11@gmail.com>,
+        Rodrigo Branco <rodrigo@kernelhacking.com>,
+        Alexandra Sandulescu <aesa@google.com>,
+        Jim Mattson <jmattson@google.com>, stable@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 20 2023 at 18:29, Marc Zyngier wrote:
-> diff --git a/kernel/irq/msi.c b/kernel/irq/msi.c
-> index 783a3e6a0b10..13d96495e6d0 100644
-> --- a/kernel/irq/msi.c
-> +++ b/kernel/irq/msi.c
-> @@ -1084,10 +1084,13 @@ int msi_domain_populate_irqs(struct irq_domain *domain, struct device *dev,
->  	struct xarray *xa;
->  	int ret, virq;
->  
-> -	if (!msi_ctrl_valid(dev, &ctrl))
-> -		return -EINVAL;
-> -
->  	msi_lock_descs(dev);
-> +
-> +	if (!msi_ctrl_valid(dev, &ctrl)) {
-> +		ret = -EINVAL;
-> +		goto unlock;
-> +	}
-> +
->  	ret = msi_domain_add_simple_msi_descs(dev, &ctrl);
->  	if (ret)
->  		goto unlock;
+On Mon, Feb 20, 2023 at 10:22 AM Borislav Petkov <bp@alien8.de> wrote:
+>
+> On Mon, Feb 20, 2023 at 10:01:57AM -0800, KP Singh wrote:
+> > Well, we disable IBRS userspace (this is KENREL_IBRS), because it is
+> > slow. Now if a user space process wants to protect itself from cross
+> > thread training, it should be able to do it, either by turning STIBP
+> > always on or using a prctl to enable. With the current logic, it's
+> > unable to do so.
+>
+> Ofcourse it can:
+>
+>         [SPECTRE_V2_USER_PRCTL]                 = "User space: Mitigation: STIBP via prctl",
+>
+> we did this at the time so that a userspace process can control it via
+> prctl().
 
-Yup, you beat me by a minute :)
+No it cannot with IBRS which is really just KERNEL_IBRS enabled, we
+bail out if spectre_v2_in_inbrs_mode and ignore any selections:
+
+https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/arch/x86/kernel/cpu/bugs.c#n1202
+
+The whole confusion spews from the fact that while the user thinks
+they are enabling spectre_v2=ibrs, they only really get KERNEL_IBRS
+and IBRS is dropped in userspace. This in itself seems like a decision
+the kernel implicitly took on behalf of the user. Now it also took
+their ability to enable spectre_v2_user in this case, which is what
+this patch is fixing.
+
+
+>
+> So, maybe you should explain what you're trying to accomplish in detail
+> and where it fails...
+>
+> --
+> Regards/Gruss,
+>     Boris.
+>
+> https://people.kernel.org/tglx/notes-about-netiquette
