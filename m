@@ -2,50 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7FD5669C3BB
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Feb 2023 01:51:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5159869C3BF
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Feb 2023 01:54:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229632AbjBTAvC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 19 Feb 2023 19:51:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33158 "EHLO
+        id S229637AbjBTAyy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 19 Feb 2023 19:54:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34618 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229441AbjBTAvA (ORCPT
+        with ESMTP id S229567AbjBTAyw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 19 Feb 2023 19:51:00 -0500
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1218BDEC;
-        Sun, 19 Feb 2023 16:50:59 -0800 (PST)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4PKkPF5mWRz4x7j;
-        Mon, 20 Feb 2023 11:50:57 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1676854258;
-        bh=FT4HmflXkNRJsCIexIFENG2HM0fP4ER5q6khNnErFwA=;
-        h=Date:From:To:Cc:Subject:From;
-        b=YC20eCPmuI2GYmxG7zrl+Q+Nbaz1fN4kW6Dh02fjAUm55LJm9UZD15I0qjgxw7aza
-         4HDLTBkrDPcZpN1rTyuTxZFgWiHf1xddZNr5hugxAEG0vubKcjZk4cuxGmBBfBdEoY
-         D6j3o3sY6qxPpBwC5LZhMfAPUXr+0/y7d+vGnGzuDXFT6fHr07NOgeILM/ml7Zs6Sq
-         GNmI2nJ9ZaMGoF8v5emgyoD4wBxYXisZAyIN8BCXnlvvf+avfIb3Mxv3BF9f6GPbhb
-         +tIlb6pFPRpbfyaxeZGPi0d4enVyGODlFSTYf1ecxF+Dk+pEq4RAunIsJNcL7qhEt0
-         hrP1vGQCFefYg==
-Date:   Mon, 20 Feb 2023 11:50:56 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Jens Axboe <axboe@kernel.dk>, Steve French <smfrench@gmail.com>
-Cc:     CIFS <linux-cifs@vger.kernel.org>, Christoph Hellwig <hch@lst.de>,
-        David Howells <dhowells@redhat.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Steve French <stfrench@microsoft.com>
-Subject: linux-next: manual merge of the block tree with the cifs tree
-Message-ID: <20230220115056.22751cf6@canb.auug.org.au>
+        Sun, 19 Feb 2023 19:54:52 -0500
+Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 606F5C662;
+        Sun, 19 Feb 2023 16:54:51 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
+        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
+        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
+        bh=5rWrJp0Cn073TtNCs5tPbw4GqVbeTmduP4mZBEZzKKQ=; b=c6zkFLI8NpbBt1B4srVKO+UNBK
+        jOMZZ8h+W7MhtkhDFRKz11+vHOqESTlcse3vaZviro0Mi3pNEOvyzcknK7Sp8p4B9e6TBUrjnVmVu
+        UKpHZIJVBRW58rPtf4IUS42DoL8w6aJKDL/9XoMS9K220Uu0q5FzyZAhzPpM+SjZ9laU=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+        (envelope-from <andrew@lunn.ch>)
+        id 1pTuS5-005Sxp-P2; Mon, 20 Feb 2023 01:54:45 +0100
+Date:   Mon, 20 Feb 2023 01:54:45 +0100
+From:   Andrew Lunn <andrew@lunn.ch>
+To:     Horatiu Vultur <horatiu.vultur@microchip.com>
+Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        hkallweit1@gmail.com, linux@armlinux.org.uk, davem@davemloft.net,
+        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
+        richardcochran@gmail.com
+Subject: Re: [PATCH net-next v2] net: phy: micrel: Add support for
+ PTP_PF_PEROUT for lan8841
+Message-ID: <Y/LE1SzlpKcWHAti@lunn.ch>
+References: <20230218123038.2761383-1-horatiu.vultur@microchip.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/.pnJTFBH=.MHEZKa1YOF8LE";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230218123038.2761383-1-horatiu.vultur@microchip.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -53,52 +50,23 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/.pnJTFBH=.MHEZKa1YOF8LE
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+> +static int lan8841_ptp_set_target(struct kszphy_ptp_priv *ptp_priv, u8 event,
+> +				  s64 sec, u32 nsec)
+> +{
+> +	struct phy_device *phydev = ptp_priv->phydev;
+> +	int ret;
+> +
+> +	ret = phy_write_mmd(phydev, 2, LAN8841_PTP_LTC_TARGET_SEC_HI(event),
+> +			    upper_16_bits(sec));
+> +	ret |= phy_write_mmd(phydev, 2, LAN8841_PTP_LTC_TARGET_SEC_LO(event),
+> +			     lower_16_bits(sec));
+> +	ret |= phy_write_mmd(phydev, 2, LAN8841_PTP_LTC_TARGET_NS_HI(event) & 0x3fff,
+> +			     upper_16_bits(nsec));
+> +	ret |= phy_write_mmd(phydev, 2, LAN8841_PTP_LTC_TARGET_NS_LO(event),
+> +			     lower_16_bits(nsec));
 
-Hi all,
+ORing together error codes generally does not work. MDIO transactions
+can sometimes give ETIMEDOUT, or EINVAL. Combine those and i think you
+get ENOKEY, which is going to be interesting to track down.
 
-Today's linux-next merge of the block tree got a conflict in:
-
-  fs/cifs/smb2ops.c
-
-between commit:
-
-  8378eea2e41f ("cifs: Change the I/O paths to use an iterator rather than =
-a page list")
-
-from the cifs tree and commit:
-
-  220ae4a5c2ba ("cifs: use bvec_set_page to initialize bvecs")
-
-from the block tree.
-
-I fixed it up (the former removed the code updated by the latter) and
-can carry the fix as necessary. This is now fixed as far as linux-next
-is concerned, but any non trivial conflicts should be mentioned to your
-upstream maintainer when your tree is submitted for merging.  You may
-also want to consider cooperating with the maintainer of the conflicting
-tree to minimise any particularly complex conflicts.
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/.pnJTFBH=.MHEZKa1YOF8LE
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmPyw/EACgkQAVBC80lX
-0GzA4gf/ezrbWjNJmt0MuSYZNGCQ6RbWYoB2gSDqn4MqMla5Mh0Oi0MRxY0c+Oat
-S/AYZXxICXcUJcleCmFgdUczrSCdiqW/YUpthvAhMF60jYpWCr8TINLM2eMatLL9
-qGztP1NrJIrike32F8qQC3WfmKTysREHZF6TuPnm3zjfHDCRi4mgEY+CdYnrTu3O
-dMQrCI1nrtrmb4rS2g3fIhWaPEgVCnUTY0/iegXOeYIDZRJqHPbKlbrFM4edE8vw
-sE49iC2tlyfKcExZmcJa3JXhvSDf0j3BpyO4f0Kx8nedoiKwp4qh5FFjDWH8ziI5
-WTUYTYkGv/ZOv3mYn2fe0AuJBi4xVg==
-=AmTV
------END PGP SIGNATURE-----
-
---Sig_/.pnJTFBH=.MHEZKa1YOF8LE--
+    Andrew
