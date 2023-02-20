@@ -2,397 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ADFDD69CD4F
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Feb 2023 14:48:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C0EA69CF8D
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Feb 2023 15:39:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232320AbjBTNsL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Feb 2023 08:48:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33424 "EHLO
+        id S232169AbjBTOjK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Feb 2023 09:39:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59934 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232336AbjBTNsH (ORCPT
+        with ESMTP id S231782AbjBTOjI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Feb 2023 08:48:07 -0500
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C37BA270;
-        Mon, 20 Feb 2023 05:47:56 -0800 (PST)
-Received: from pps.filterd (m0279862.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 31K6oXx1008956;
-        Mon, 20 Feb 2023 13:47:40 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=r6EUcESr3EsNtFncTgeBqrVDL+HQr5/zjGym9TXBqAI=;
- b=aD8SCXKkhA1ZHOaKgP1+G58S0CQMFeMu2GV4NHMKA+Kjmk6f7FL9njazAKu9bxs3e7X0
- GYxOiTL/f9Fl8/5gbGI/iI5QsELRxQsHV23Zd/xoORFGpTpnF2LsD/X4qaw25G73y5yW
- u/eQJ9MVlzgAzTOku9Y3tImaycl4J/2Uz9OdbItyMMQG3YjN7Wqi5qZtb7nrqEE8b+V3
- 15iB4OIQAdLMsofs403PTdf24aBkXglTWJ/3FVcU+2SW75yUrVuCB0gNSdsRtOm0OwO2
- yaid5xZWjnyAG2eRRAjb+39QIJQs8mE++4hz6TyqA1XcdHtsWsDlALzBywnQ5twzdzz4 4w== 
-Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3ntqencudr-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 20 Feb 2023 13:47:40 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 31KDldxu027108
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 20 Feb 2023 13:47:39 GMT
-Received: from [10.216.11.20] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.41; Mon, 20 Feb
- 2023 05:47:31 -0800
-Message-ID: <d2ad4b35-4aa3-8612-4a2a-1cb50cd05e44@quicinc.com>
-Date:   Mon, 20 Feb 2023 19:17:27 +0530
+        Mon, 20 Feb 2023 09:39:08 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F203D9EF1
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Feb 2023 06:38:19 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1676903899;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=ZooPx0J4FahhlqcFr0VVGzJP8CK2Lifinz64+tcHuxs=;
+        b=FmJjSnvqrAMUAk5uUlffMYY+ktnL01a+8f4LUF1L5BIAVg7Bof9WsKyvE4xXY7U7oH+1tW
+        PeQ8CeyKXZPhdWs2FZXqBBUg77gZaNulD4u3dTeZr1gAAb0Uwsz4mnz+DvZMdyysGZ6jP3
+        /L+3MLXK8MUHg5fNcQPVUf/ZsWqmSlE=
+Received: from mail-ed1-f69.google.com (mail-ed1-f69.google.com
+ [209.85.208.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-648-7szl6ezvPNir14LTUYX3nA-1; Mon, 20 Feb 2023 09:38:17 -0500
+X-MC-Unique: 7szl6ezvPNir14LTUYX3nA-1
+Received: by mail-ed1-f69.google.com with SMTP id k12-20020a50c8cc000000b004accf30f6d3so2015369edh.14
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Feb 2023 06:38:17 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:organization:from:references
+         :cc:to:content-language:subject:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=ZooPx0J4FahhlqcFr0VVGzJP8CK2Lifinz64+tcHuxs=;
+        b=eIfPGCbR4e2VHmewRTH091cBP+BnivTwB1HH+Knsu/X7QckPQLmi7YuxzkQ5noeJ4Z
+         gEghqcmblfyc7TjD/f/Pf4GI1I+oEbdf6yD0aY6VyNaft+VdhVaPksm+FGtiF1SQkr+P
+         6iB5WnelEzR/hXDJ3sWszQqoQ7jzSl/+SauoslH2/1kwyvfiNcMWF/z+319CtMkhxEva
+         jMgaEAAGb8cPMNSZ+jyp52VyfQxCpn2p59hJmWQzJQeuZOcVVL11M50bOlRSszZMtfvu
+         BehBxBpXeDPiDQLtuAyn1U15nF2E5mBCiQ3knOxQOJdQ9sOJXS6Ct9cR414R9612f6qT
+         jYsA==
+X-Gm-Message-State: AO0yUKW1kKUVZJ9uzwR2oKGZcdxcbJerkK6gPSBkjVXkO/nEXbMPCvGB
+        E9SC3CqKdEUqGkILuo0az5sio27PdRpfdZbOZGTnJGV4j7ZylceduuE5BsCzbIfyEbuSjRcJmEP
+        hq3I1UaOuCjcCG1IJICX9gR8q
+X-Received: by 2002:a17:907:c10:b0:87b:da74:d272 with SMTP id ga16-20020a1709070c1000b0087bda74d272mr11177677ejc.45.1676903896717;
+        Mon, 20 Feb 2023 06:38:16 -0800 (PST)
+X-Google-Smtp-Source: AK7set890fgad0EenmfhXcAtdl+hYlW2r/ANHXfflzV6RWOHKEQ6317uyFhrXsZ5SSZOJN3kSOCx5Q==
+X-Received: by 2002:a17:907:c10:b0:87b:da74:d272 with SMTP id ga16-20020a1709070c1000b0087bda74d272mr11177652ejc.45.1676903896465;
+        Mon, 20 Feb 2023 06:38:16 -0800 (PST)
+Received: from ?IPV6:2a02:810d:4b3f:de78:642:1aff:fe31:a15c? ([2a02:810d:4b3f:de78:642:1aff:fe31:a15c])
+        by smtp.gmail.com with ESMTPSA id kj8-20020a170907764800b008c0b8dd4cbdsm3118420ejc.112.2023.02.20.06.38.14
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 20 Feb 2023 06:38:15 -0800 (PST)
+Message-ID: <e4244345-962d-1175-6ee3-a55083389437@redhat.com>
+Date:   Mon, 20 Feb 2023 14:48:20 +0100
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH 7/7] arm64: dts: qcom: ipq9574: Add PCIe PHYs and
- controller nodes
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH drm-next v2 03/16] maple_tree: split up MA_STATE() macro
 Content-Language: en-US
-To:     Sricharan Ramabadhran <quic_srichara@quicinc.com>,
-        <agross@kernel.org>, <andersson@kernel.org>,
-        <konrad.dybcio@linaro.org>, <lpieralisi@kernel.org>,
-        <kw@linux.com>, <robh@kernel.org>, <bhelgaas@google.com>,
-        <krzysztof.kozlowski+dt@linaro.org>, <vkoul@kernel.org>,
-        <kishon@kernel.org>, <mturquette@baylibre.com>, <sboyd@kernel.org>,
-        <mani@kernel.org>, <p.zabel@pengutronix.de>,
-        <svarbanov@mm-sol.com>, <linux-arm-msm@vger.kernel.org>,
-        <linux-pci@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-phy@lists.infradead.org>,
-        <linux-clk@vger.kernel.org>
-CC:     <quic_gokulsri@quicinc.com>, <quic_sjaganat@quicinc.com>,
-        <quic_kathirav@quicinc.com>, <quic_arajkuma@quicinc.com>,
-        <quic_anusha@quicinc.com>
-References: <20230214164135.17039-1-quic_devipriy@quicinc.com>
- <20230214164135.17039-8-quic_devipriy@quicinc.com>
- <288a7d8a-130d-5ad1-42ea-726db3b880ce@quicinc.com>
-From:   Devi Priya <quic_devipriy@quicinc.com>
-In-Reply-To: <288a7d8a-130d-5ad1-42ea-726db3b880ce@quicinc.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: RW5f2Ihs_R02c2ZA4c0xGVhWWEK94ZQ5
-X-Proofpoint-ORIG-GUID: RW5f2Ihs_R02c2ZA4c0xGVhWWEK94ZQ5
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.170.22
- definitions=2023-02-20_11,2023-02-20_02,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0
- lowpriorityscore=0 priorityscore=1501 malwarescore=0 clxscore=1015
- suspectscore=0 mlxscore=0 impostorscore=0 phishscore=0 bulkscore=0
- mlxlogscore=999 adultscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2212070000 definitions=main-2302200125
-X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+To:     Matthew Wilcox <willy@infradead.org>
+Cc:     airlied@gmail.com, daniel@ffwll.ch, tzimmermann@suse.de,
+        mripard@kernel.org, corbet@lwn.net, christian.koenig@amd.com,
+        bskeggs@redhat.com, Liam.Howlett@oracle.com,
+        matthew.brost@intel.com, boris.brezillon@collabora.com,
+        alexdeucher@gmail.com, ogabbay@kernel.org, bagasdotme@gmail.com,
+        jason@jlekstrand.net, dri-devel@lists.freedesktop.org,
+        nouveau@lists.freedesktop.org, linux-doc@vger.kernel.org,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org
+References: <20230217134422.14116-1-dakr@redhat.com>
+ <20230217134422.14116-4-dakr@redhat.com>
+ <Y+/ZW/8WXzrkQnUT@casper.infradead.org>
+From:   Danilo Krummrich <dakr@redhat.com>
+Organization: RedHat
+In-Reply-To: <Y+/ZW/8WXzrkQnUT@casper.infradead.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 2/17/23 20:45, Matthew Wilcox wrote:
+> On Fri, Feb 17, 2023 at 02:44:09PM +0100, Danilo Krummrich wrote:
+>> \#define SAMPLE_ITER(name, __mgr) \
+>> 	struct sample_iter name = { \
+>> 		.mas = __MA_STATE(&(__mgr)->mt, 0, 0),
+> 
+> This is usually called MA_STATE_INIT()
+
+Yep, that's better.
+
+> 
+>> #define sample_iter_for_each_range(it__, start__, end__) \
+>> 	for ((it__).mas.index = start__, (it__).entry = mas_find(&(it__).mas, end__ - 1); \
+>> 	     (it__).entry; (it__).entry = mas_find(&(it__).mas, end__ - 1))
+> 
+> This is a bad iterator design.  It's usually best to do this:
+> 
+> 	struct sample *sample;
+> 	SAMPLE_ITERATOR(si, min);
+> 
+> 	sample_iter_for_each(&si, sample, max) {
+> 		frob(mgr, sample);
+> 	}
+> 
 
 
-On 2/17/2023 2:05 PM, Sricharan Ramabadhran wrote:
+The reason why I don't set index (and max) within SAMPLE_ITER() is that 
+the range to iterate might not yet be known at that time, so I thought 
+it could just be set in sample_iter_for_each_range().
+
+However, I see that this might prevail users to assume that it's safe to 
+iterate a range based on the same iterator instance multiple times 
+though. Instead users should maybe move the tree walk to another 
+function once the range is known.
+
+The reason for the payload structure to be part of the iterator is that 
+I have two maple trees in the GPUVA manager and hence two different 
+payload types. Within the iterator structure they're just within a union 
+allowing me to implement the tree walk macro just once rather than twice.
+
+Anyway, I feel like your approach looks cleaner, hence I'll change it.
+
+> I don't mind splitting apart MA_STATE_INIT from MA_STATE, and if you
+> do that, we can also use it in VMA_ITERATOR.
 > 
-> Hi Devi,
-> 
-> On 2/14/2023 10:11 PM, Devi Priya wrote:
->> Add PCIe0, PCIe1, PCIe2, PCIe3 (and corresponding PHY) devices
->> found on IPQ9574 platform. The PCIe0 & PCIe1 are 1-lane Gen3
->> host whereas PCIe2 & PCIe3 are 2-lane Gen3 host.
->>
->> Co-developed-by: Anusha Rao <quic_anusha@quicinc.com>
->> Signed-off-by: Anusha Rao <quic_anusha@quicinc.com>
->> Signed-off-by: Devi Priya <quic_devipriy@quicinc.com>
->> ---
->>   arch/arm64/boot/dts/qcom/ipq9574-al02-c7.dts |  28 ++
->>   arch/arm64/boot/dts/qcom/ipq9574.dtsi        | 477 ++++++++++++++++++-
->>   2 files changed, 499 insertions(+), 6 deletions(-)
->>
->> diff --git a/arch/arm64/boot/dts/qcom/ipq9574-al02-c7.dts 
->> b/arch/arm64/boot/dts/qcom/ipq9574-al02-c7.dts
->> index 2c8430197ec0..21b53f34ce84 100644
->> --- a/arch/arm64/boot/dts/qcom/ipq9574-al02-c7.dts
->> +++ b/arch/arm64/boot/dts/qcom/ipq9574-al02-c7.dts
->> @@ -8,6 +8,7 @@
->>   /dts-v1/;
->> +#include <dt-bindings/gpio/gpio.h>
->>   #include "ipq9574.dtsi"
->>   / {
->> @@ -29,6 +30,33 @@
->>       status = "okay";
->>   };
->> +&pcie1_phy {
->> +    status = "okay";
->> +};
->> +
->> +&pcie1_x1 {
->> +    perst-gpios = <&tlmm 26 GPIO_ACTIVE_LOW>;
->> +    status = "okay";
->> +};
->> +
->> +&pcie2_phy {
->> +    status = "okay";
->> +};
->> +
->> +&pcie2_x2 {
->> +    perst-gpios = <&tlmm 29 GPIO_ACTIVE_LOW>;
->> +    status = "okay";
->> +};
->> +
->> +&pcie3_phy {
->> +    status = "okay";
->> +};
->> +
->> +&pcie3_x2 {
->> +    perst-gpios = <&tlmm 32 GPIO_ACTIVE_LOW>;
->> +    status = "okay";
->> +};
->> +
->>   &sdhc_1 {
->>       pinctrl-0 = <&sdc_default_state>;
->>       pinctrl-names = "default";
->> diff --git a/arch/arm64/boot/dts/qcom/ipq9574.dtsi 
->> b/arch/arm64/boot/dts/qcom/ipq9574.dtsi
->> index 062f80798ebb..a32dbdeb5bed 100644
->> --- a/arch/arm64/boot/dts/qcom/ipq9574.dtsi
->> +++ b/arch/arm64/boot/dts/qcom/ipq9574.dtsi
->> @@ -6,8 +6,8 @@
->>    * Copyright (c) 2023, Qualcomm Innovation Center, Inc. All rights 
->> reserved.
->>    */
->> -#include <dt-bindings/interrupt-controller/arm-gic.h>
->>   #include <dt-bindings/clock/qcom,ipq9574-gcc.h>
->> +#include <dt-bindings/interrupt-controller/arm-gic.h>
->>   #include <dt-bindings/reset/qcom,ipq9574-gcc.h>
->>   / {
->> @@ -22,11 +22,41 @@
->>               #clock-cells = <0>;
->>           };
->> +        pcie30_phy0_pipe_clk: pcie30_phy0_pipe_clk {
->> +            compatible = "fixed-clock";
->> +            clock-frequency = <250000000>;
->> +            #clock-cells = <0>;
->> +        };
->> +
->> +        pcie30_phy1_pipe_clk: pcie30_phy1_pipe_clk {
->> +            compatible = "fixed-clock";
->> +            clock-frequency = <250000000>;
->> +            #clock-cells = <0>;
->> +        };
->> +
->> +        pcie30_phy2_pipe_clk: pcie30_phy2_pipe_clk {
->> +            compatible = "fixed-clock";
->> +            clock-frequency = <250000000>;
->> +            #clock-cells = <0>;
->> +        };
->> +
->> +        pcie30_phy3_pipe_clk: pcie30_phy3_pipe_clk {
->> +            compatible = "fixed-clock";
->> +            clock-frequency = <250000000>;
->> +            #clock-cells = <0>;
->> +        };
->> +
->>           sleep_clk: sleep-clk {
->>               compatible = "fixed-clock";
->>               #clock-cells = <0>;
->>           };
->> +        usb3phy_0_cc_pipe_clk: usb3phy_0_cc_pipe_clk {
->> +            compatible = "fixed-clock";
->> +            clock-frequency = <125000000>;
->> +            #clock-cells = <0>;
->> +        };
->> +
-> 
->    Why is the usb clock added here ?
-As we have brought in the QMP PHY support, added the usb pipe clock too.
-Will drop it as it is unrelated to the series.
-> 
->>           xo_board_clk: xo-board-clk {
->>               compatible = "fixed-clock";
->>               #clock-cells = <0>;
->> @@ -121,6 +151,155 @@
->>           #size-cells = <1>;
->>           ranges = <0 0 0 0xffffffff>;
->> +        pcie0_phy: phy@84000 {
->> +            compatible = "qcom,ipq9574-qmp-gen3x1-pcie-phy";
->> +            reg = <0x00084000 0x1bc>; /* Serdes PLL */
->> +            #address-cells = <1>;
->> +            #size-cells = <1>;
->> +            ranges;
->> +            clocks = <&gcc GCC_PCIE0_AUX_CLK>,
->> +                 <&gcc GCC_PCIE0_AHB_CLK>,
->> +                 <&gcc GCC_ANOC_PCIE0_1LANE_M_CLK>,
->> +                 <&gcc GCC_SNOC_PCIE0_1LANE_S_CLK>;
->> +            clock-names = "aux", "cfg_ahb", "anoc_lane", "snoc_lane";
->> +
->> +            assigned-clocks = <&gcc GCC_PCIE0_AUX_CLK>;
->> +            assigned-clock-rates = <20000000>;
->> +
->> +            resets = <&gcc GCC_PCIE0_PHY_BCR>,
->> +                 <&gcc GCC_PCIE0PHY_PHY_BCR>;
->> +            reset-names = "phy", "common";
->> +
->> +            status = "disabled";
->> +
->> +            pcie0_lane: phy@84200 {
->> +                reg = <0x00084200 0x16c>, /* Serdes Tx */
->> +                      <0x00084400 0x200>, /* Serdes Rx */
->> +                      <0x00084800 0x1f0>, /* PCS: Lane0, COM, PCIE */
->> +                      <0x00084c00 0xf4>;  /* pcs_misc */
->> +                #phy-cells = <0>;
->> +
->> +                clocks = <&gcc GCC_PCIE0_PIPE_CLK>;
->> +                clock-names = "pipe0";
->> +                clock-output-names = "gcc_pcie0_pipe_clk_src";
->> +                #clock-cells = <0>;
->> +            };
->> +        };
->> +
->> +        pcie2_phy: phy@8c000 {
-> 
->    Can the phy/pcie nodes labelled in order ?
->    Currently it 0/2/3/1 ?
-Sure, okay
-> 
->> +            compatible = "qcom,ipq9574-qmp-gen3x2-pcie-phy";
->> +            reg = <0x0008c000 0x1bc>; /* Serdes PLL */
->> +            #address-cells = <1>;
->> +            #size-cells = <1>;
->> +            ranges;
->> +
->> +            clocks = <&gcc GCC_PCIE2_AUX_CLK>,
->> +                 <&gcc GCC_PCIE2_AHB_CLK>,
->> +                 <&gcc GCC_ANOC_PCIE2_2LANE_M_CLK>,
->> +                 <&gcc GCC_SNOC_PCIE2_2LANE_S_CLK>;
->> +            clock-names = "aux", "cfg_ahb", "anoc_lane", "snoc_lane";
->> +
->> +            assigned-clocks = <&gcc GCC_PCIE2_AUX_CLK>;
->> +            assigned-clock-rates = <20000000>;
->> +
->> +            resets = <&gcc GCC_PCIE2_PHY_BCR>,
->> +                 <&gcc GCC_PCIE2PHY_PHY_BCR>;
->> +            reset-names = "phy", "common";
->> +
->> +            status = "disabled";
->> +
->> +            pcie2_lanes: phy@8c200 {
->> +                reg = <0x0008c200 0x16c>, /* Serdes Tx0 */
->> +                      <0x0008c400 0x200>, /* Serdes Rx0 */
->> +                      <0x0008d000 0x1f0>, /* PCS: Lane0, COM, PCIE */
->> +                      <0x0008c600 0x16c>, /* Serdes Tx1 */
->> +                      <0x0008c800 0x200>, /* Serdes Rx1 */
->> +                      <0x0008d400 0x0f8>; /* pcs_misc */
->> +
->> +                #phy-cells = <0>;
->> +
->> +                clocks = <&gcc GCC_PCIE2_PIPE_CLK>;
->> +                clock-names = "pipe0";
->> +                clock-output-names = "gcc_pcie2_pipe_clk_src";
->> +                #clock-cells = <0>;
->> +            };
->> +        };
->> +
->> +        pcie3_phy: phy@f4000 {
->> +            compatible = "qcom,ipq9574-qmp-gen3x2-pcie-phy";
->> +            reg = <0x000f4000 0x1bc>; /* Serdes PLL */
->> +            #address-cells = <1>;
->> +            #size-cells = <1>;
->> +            ranges;
->> +
->> +            clocks = <&gcc GCC_PCIE3_AUX_CLK>,
->> +                 <&gcc GCC_PCIE3_AHB_CLK>,
->> +                 <&gcc GCC_ANOC_PCIE3_2LANE_M_CLK>,
->> +                 <&gcc GCC_SNOC_PCIE3_2LANE_S_CLK>;
->> +            clock-names = "aux", "cfg_ahb", "anoc_lane", "snoc_lane";
->> +
->> +            assigned-clocks = <&gcc GCC_PCIE3_AUX_CLK>;
->> +            assigned-clock-rates = <20000000>;
->> +
->> +            resets = <&gcc GCC_PCIE3_PHY_BCR>,
->> +                 <&gcc GCC_PCIE3PHY_PHY_BCR>;
->> +            reset-names = "phy", "common";
->> +
->> +            status = "disabled";
->> +
->> +            pcie3_lanes: phy@f4200 {
->> +                reg = <0x000f4200 0x16c>, /* Serdes Tx0 */
->> +                      <0x000f4400 0x200>, /* Serdes Rx0 */
->> +                      <0x000f5000 0x1f0>, /* PCS: Lane0, COM, PCIE */
->> +                      <0x000f4600 0x16c>, /* Serdes Tx1 */
->> +                      <0x000f4800 0x200>, /* Serdes Rx1 */
->> +                      <0x000f5400 0x0f8>; /* pcs_misc */
->> +
->> +                #phy-cells = <0>;
->> +
->> +                clocks = <&gcc GCC_PCIE3_PIPE_CLK>;
->> +                clock-names = "pipe0";
->> +                clock-output-names = "gcc_pcie3_pipe_clk_src";
->> +                #clock-cells = <0>;
->> +            };
->> +        };
->> +
->> +        pcie1_phy: phy@fc000 {
->> +            compatible = "qcom,ipq9574-qmp-gen3x1-pcie-phy";
->> +            reg = <0x000fc000 0x1bc>; /* Serdes PLL */
->> +            #address-cells = <1>;
->> +            #size-cells = <1>;
->> +            ranges;
->> +
->> +            clocks = <&gcc GCC_PCIE1_AUX_CLK>,
->> +                 <&gcc GCC_PCIE1_AHB_CLK>,
->> +                 <&gcc GCC_ANOC_PCIE1_1LANE_M_CLK>,
->> +                 <&gcc GCC_SNOC_PCIE1_1LANE_S_CLK>;
->> +            clock-names = "aux", "cfg_ahb", "anoc_lane", "snoc_lane";
->> +
->> +            assigned-clocks = <&gcc GCC_PCIE1_AUX_CLK>;
->> +            assigned-clock-rates = <20000000>;
->> +
->> +            resets = <&gcc GCC_PCIE1_PHY_BCR>,
->> +                 <&gcc GCC_PCIE1PHY_PHY_BCR>;
->> +            reset-names = "phy", "common";
->> +
->> +            status = "disabled";
->> +
->> +            pcie1_lane: phy@fc200 {
->> +                reg = <0x000fc200 0x16c>, /* Serdes Tx */
->> +                      <0x000fc400 0x200>, /* Serdes Rx */
->> +                      <0x000fc800 0x1f0>, /* PCS: Lane0, COM, PCIE */
->> +                      <0x000fcc00 0xf4>;  /* pcs_misc */
->> +                #phy-cells = <0>;
->> +
->> +                clocks = <&gcc GCC_PCIE1_PIPE_CLK>;
->> +                clock-names = "pipe0";
->> +                clock-output-names = "gcc_pcie1_pipe_clk_src";
->> +                #clock-cells = <0>;
->> +            };
->> +        };
->> +
->>           tlmm: pinctrl@1000000 {
->>               compatible = "qcom,ipq9574-tlmm";
->>               reg = <0x01000000 0x300000>;
->> @@ -145,11 +324,11 @@
->>               clocks = <&xo_board_clk>,
->>                    <&sleep_clk>,
->>                    <&bias_pll_ubi_nc_clk>,
->> -                 <0>,
->> -                 <0>,
->> -                 <0>,
->> -                 <0>,
->> -                 <0>;
->> +                 <&pcie30_phy0_pipe_clk>,
->> +                 <&pcie30_phy1_pipe_clk>,
->> +                 <&pcie30_phy2_pipe_clk>,
->> +                 <&pcie30_phy3_pipe_clk>,
->> +                 <&usb3phy_0_cc_pipe_clk>;
-> 
->     Same , why usb3 clk is added here ?
-Sure, will drop it
-> 
-> Regards,
->   Sricharan
-> 
-Best Regards,
-Devi Priya
+
