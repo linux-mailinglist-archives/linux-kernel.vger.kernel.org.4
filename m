@@ -2,157 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4C91869D5AC
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Feb 2023 22:23:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 11BA369D5AE
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Feb 2023 22:23:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232289AbjBTVXL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Feb 2023 16:23:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58094 "EHLO
+        id S232140AbjBTVXs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Feb 2023 16:23:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58768 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229500AbjBTVXJ (ORCPT
+        with ESMTP id S229500AbjBTVXq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Feb 2023 16:23:09 -0500
-Received: from fanzine2.igalia.com (fanzine2.igalia.com [213.97.179.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 229A055A5;
-        Mon, 20 Feb 2023 13:23:08 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
-        s=20170329; h=Content-Transfer-Encoding:MIME-Version:Message-Id:Date:Subject:
-        Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:Content-Description:
-        Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:
-        In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
-        List-Post:List-Owner:List-Archive;
-        bh=g922yg1g9NH71TSdfv2O7rorl313NaV/Mj9LoIZeB/s=; b=V9CoriCseTPWK+0DD2sbU2j6M0
-        oxZkX5eeJlIazFmt7PaBXun4K3/wCoZPLM00CKslop5VFDuJZn7iVNTyKI9tAfdPgWK2R4vzxadyV
-        FxbsDenxw76ZvxQDvN6NqhQqDShsEpC1yNnAqD8ZOdKcIEZrxU1Wzj2xjErzBAOd4jJkKikyY7/t+
-        HGATqu1ePZEJGzaNiNizu3VGPKfowEKsrv62XumULwHIbiz3XjcYa0E/cbNTFbWPjVO69pxNGtAJ5
-        7rAToGttlJUbK6u/V+h3UAj/mtTTZx5ealfEbGbVYzVsC/NWXsHJjDKDmQNf+ezD0dbT6DiQfTHi+
-        tWF3uNYw==;
-Received: from [179.232.147.2] (helo=localhost)
-        by fanzine2.igalia.com with esmtpsa 
-        (Cipher TLS1.3:ECDHE_SECP256R1__RSA_PSS_RSAE_SHA256__AES_256_GCM:256) (Exim)
-        id 1pUDck-0099On-LB; Mon, 20 Feb 2023 22:23:03 +0100
-From:   "Guilherme G. Piccoli" <gpiccoli@igalia.com>
-To:     linux-alpha@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, kernel-dev@igalia.com,
-        kernel@gpiccoli.net, "Guilherme G. Piccoli" <gpiccoli@igalia.com>,
-        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
-        Matt Turner <mattst88@gmail.com>,
-        Richard Henderson <richard.henderson@linaro.org>,
-        Petr Mladek <pmladek@suse.com>
-Subject: [PATCH v4] alpha: Clean-up the panic notifier code
-Date:   Mon, 20 Feb 2023 18:22:45 -0300
-Message-Id: <20230220212245.153554-1-gpiccoli@igalia.com>
-X-Mailer: git-send-email 2.39.1
+        Mon, 20 Feb 2023 16:23:46 -0500
+X-Greylist: delayed 18902 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 20 Feb 2023 13:23:44 PST
+Received: from vulcan.natalenko.name (vulcan.natalenko.name [104.207.131.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7551A1449E;
+        Mon, 20 Feb 2023 13:23:44 -0800 (PST)
+Received: from mail.natalenko.name (vulcan.natalenko.name [IPv6:2001:19f0:6c00:8846:5400:ff:fe0c:dfa0])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by vulcan.natalenko.name (Postfix) with ESMTPSA id 6F5BF123A053;
+        Mon, 20 Feb 2023 22:23:38 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=natalenko.name;
+        s=dkim-20170712; t=1676928218;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=0qqvnUkRBbicgMsDkhzKgEsS7l6Qd98l5tLX80ln7xs=;
+        b=ePAv+g2hzEoZHJFXA94OuHBJ/0Ys/1ab1faRZqoQop6BEX7eCZYl9K0g/6aQlj1jRCvM3d
+        HeUvKIhwBabh5LLXi7XDOo4tistPs+6nq/VY6C8Q6RSyV9LqytVykoZA1FcB1yIyVR+tYG
+        DBbjEczoNqLH5tuU56NyXb4yAmjdOmE=
 MIME-Version: 1.0
+Date:   Mon, 20 Feb 2023 22:23:38 +0100
+From:   Oleksandr Natalenko <oleksandr@natalenko.name>
+To:     David Woodhouse <dwmw2@infradead.org>
+Cc:     tglx@linutronix.de, kim.phillips@amd.com,
+        Usama Arif <usama.arif@bytedance.com>, arjan@linux.intel.com,
+        mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
+        hpa@zytor.com, x86@kernel.org, pbonzini@redhat.com,
+        paulmck@kernel.org, linux-kernel@vger.kernel.org,
+        kvm@vger.kernel.org, rcu@vger.kernel.org, mimoja@mimoja.de,
+        hewenliang4@huawei.com, thomas.lendacky@amd.com, seanjc@google.com,
+        pmenzel@molgen.mpg.de, fam.zheng@bytedance.com,
+        punit.agrawal@bytedance.com, simon.evans@bytedance.com,
+        liangma@liangbit.com, Piotr Gorski <lucjan.lucjanov@gmail.com>
+Subject: Re: [PATCH v9 0/8] Parallel CPU bringup for x86_64
+In-Reply-To: <2a67f6cf18dd2c1879fad9fd8a28242918d3e5d2.camel@infradead.org>
+References: <20230215145425.420125-1-usama.arif@bytedance.com>
+ <2668799.mvXUDI8C0e@natalenko.name>
+ <ed8d662351cfe5793f8cc7e7e8c514d05d16c501.camel@infradead.org>
+ <2668869.mvXUDI8C0e@natalenko.name>
+ <2a67f6cf18dd2c1879fad9fd8a28242918d3e5d2.camel@infradead.org>
+Message-ID: <982e1d6140705414e8fd60b990bd259a@natalenko.name>
+X-Sender: oleksandr@natalenko.name
+Content-Type: text/plain; charset=UTF-8;
+ format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The alpha panic notifier has some code issues, not following
-the conventions of other notifiers. Also, it might halt the
-machine but still it is set to run as early as possible, which
-doesn't seem to be a good idea.
+Hello.
 
-So, let's clean the code and set the notifier to run as the
-latest, following the same approach other architectures are
-doing - also, remove the unnecessary include of a header already
-included indirectly.
+On 20.02.2023 21:31, David Woodhouse wrote:
+> On Mon, 2023-02-20 at 17:40 +0100, Oleksandr Natalenko wrote:
+>> On pondělí 20. února 2023 17:20:13 CET David Woodhouse wrote:
+>> > On Mon, 2023-02-20 at 17:08 +0100, Oleksandr Natalenko wrote:
+>> > >
+>> > > I've applied this to the v6.2 kernel, and suspend/resume broke on
+>> > > my
+>> > > Ryzen 5950X desktop. The machine suspends just fine, but on
+>> > > resume
+>> > > the screen stays blank, and there's no visible disk I/O.
+>> > >
+>> > > Reverting the series brings suspend/resume back to working state.
+>> >
+>> > Hm, thanks. What if you add 'no_parallel_bringup' on the command
+>> > line?
+>> 
+>> If the `no_parallel_bringup` param is added, the suspend/resume
+>> works.
+> 
+> Thanks for the testing. Can I ask you to do one further test: apply the
+> series only as far as patch 6/8 'x86/smpboot: Support parallel startup
+> of secondary CPUs'.
+> 
+> That will do the new startup asm sequence where each CPU finds its own
+> per-cpu data so it *could* work in parallel, but doesn't actually do
+> the bringup in parallel yet.
 
-Cc: Ivan Kokshaysky <ink@jurassic.park.msu.ru>
-Cc: Matt Turner <mattst88@gmail.com>
-Cc: Richard Henderson <richard.henderson@linaro.org>
-Reviewed-by: Petr Mladek <pmladek@suse.com>
-Signed-off-by: Guilherme G. Piccoli <gpiccoli@igalia.com>
+With patches 1 to 6 (including) applied and no extra cmdline params 
+added the resume doesn't work.
 
----
+> Does your box have a proper serial port?
 
+No, sorry. I know it'd help with getting logs, and I do have a 
+serial-to-USB cable that I use for another machine, but in this one the 
+port is not routed to outside. I think I can put a header there as the 
+motherboard does have pins, but I'd have to buy one first. In theory, I 
+can do that, but that won't happen within the next few weeks.
 
-V4:
-- Rebased (and build-tested) against v6.2.
+P.S. Piotr Gorski (in Cc) also reported this: "My friend from CachyOS 
+can confirm bugs with smpboot patches. AMD FX 6300 only shows 1 core 
+when using smp boot patchset". Probably, he can reply to this thread and 
+provide more details.
 
-V3:
-- No changes.
-
-V2:
-- Fixed rth email address;
-- Added Petr's review tag - thanks!
-
-
- arch/alpha/kernel/setup.c | 36 +++++++++++++++---------------------
- 1 file changed, 15 insertions(+), 21 deletions(-)
-
-diff --git a/arch/alpha/kernel/setup.c b/arch/alpha/kernel/setup.c
-index 33bf3a627002..1eb67a67823f 100644
---- a/arch/alpha/kernel/setup.c
-+++ b/arch/alpha/kernel/setup.c
-@@ -41,19 +41,11 @@
- #include <linux/sysrq.h>
- #include <linux/reboot.h>
- #endif
--#include <linux/notifier.h>
- #include <asm/setup.h>
- #include <asm/io.h>
- #include <linux/log2.h>
- #include <linux/export.h>
- 
--static int alpha_panic_event(struct notifier_block *, unsigned long, void *);
--static struct notifier_block alpha_panic_block = {
--	alpha_panic_event,
--        NULL,
--        INT_MAX /* try to do it first */
--};
--
- #include <linux/uaccess.h>
- #include <asm/hwrpb.h>
- #include <asm/dma.h>
-@@ -435,6 +427,21 @@ static const struct sysrq_key_op srm_sysrq_reboot_op = {
- };
- #endif
- 
-+static int alpha_panic_event(struct notifier_block *this,
-+			     unsigned long event, void *ptr)
-+{
-+	/* If we are using SRM and serial console, just hard halt here. */
-+	if (alpha_using_srm && srmcons_output)
-+		__halt();
-+
-+	return NOTIFY_DONE;
-+}
-+
-+static struct notifier_block alpha_panic_block = {
-+	.notifier_call = alpha_panic_event,
-+	.priority = INT_MIN, /* may not return, do it last */
-+};
-+
- void __init
- setup_arch(char **cmdline_p)
- {
-@@ -1427,19 +1434,6 @@ const struct seq_operations cpuinfo_op = {
- 	.show	= show_cpuinfo,
- };
- 
--
--static int
--alpha_panic_event(struct notifier_block *this, unsigned long event, void *ptr)
--{
--#if 1
--	/* FIXME FIXME FIXME */
--	/* If we are using SRM and serial console, just hard halt here. */
--	if (alpha_using_srm && srmcons_output)
--		__halt();
--#endif
--        return NOTIFY_DONE;
--}
--
- static __init int add_pcspkr(void)
- {
- 	struct platform_device *pd;
 -- 
-2.39.1
-
+   Oleksandr Natalenko (post-factum)
