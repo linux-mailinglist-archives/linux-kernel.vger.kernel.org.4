@@ -2,118 +2,154 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 01C1E69C828
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Feb 2023 11:01:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2021769C834
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Feb 2023 11:02:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231407AbjBTKBi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Feb 2023 05:01:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33548 "EHLO
+        id S231357AbjBTKCu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Feb 2023 05:02:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35188 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231365AbjBTKBf (ORCPT
+        with ESMTP id S231629AbjBTKCf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Feb 2023 05:01:35 -0500
-Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38D501714A
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Feb 2023 02:01:31 -0800 (PST)
-Received: by mail-lf1-x130.google.com with SMTP id bp25so1132854lfb.0
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Feb 2023 02:01:31 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=vBEZvAjX93RycLXsAWqWLohrTp8jq3ubVbqPFKfLzbc=;
-        b=vUJGmgC/qJ1hDB631DmR499TOBB6+1XRceb2+zwS9CHH6FUACrLqIK3FMomZdvYqHR
-         PAKOjDR/Gd9OqsBlA7xU0ePBWZqlorxMmcLXrn5tlK253e/vUeE71H5XbW1MFnc+s51R
-         TELqrbQwSdeJuNBD4LfJXw9WRI69iRYUN7HnwR2BDxlQL3txXgveqacqPfaZP80T/GTT
-         IHCB1Lf4aIjPYi1anEYs1GdSYE7UQHYVjBGE5jWF7ufLDN1DlK0uYFT5uTB11zrFsJEg
-         aGWsU8469zWvkdmU6cxDcpMdqk78eGnwyie7C2pTxSbFmF0BL4go2fGba5crcMkOyT2O
-         EmrA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=vBEZvAjX93RycLXsAWqWLohrTp8jq3ubVbqPFKfLzbc=;
-        b=V2zDpyfbS7cBO+sABfuh3phr1xHHi3SSjNfapLEL5Ot+TfNVAUXqFFmVMxdjHhebBi
-         inMeEUAsJsVd/rVadN4Nid0z36M8OtN1UIzPhX5QrsPOL8XB+t+TQJWVlRVsHMpWQMg8
-         TZZK8qNm86N7P7rLv2L1QbbfPORbh+EodcynUf+ZzhhhlzG7SfF9XapLWy/yDIGgNtqP
-         64bQ+/QQB8/rqB9tnll2kf8gNcF7dnY78tynlRjC6vWcoVeN3uiQ9EuovbMc2GMBfs5k
-         MK8Actxmd0hhKVO9XbLbRZcPKSUVh7iOXke+IKG5ihJdVDnF4Ryc3Gl4LcoyoT+A4OSW
-         zt+w==
-X-Gm-Message-State: AO0yUKXDOtizO7blyNSvEremTE5vzsShDPJpfMIw7kvAusv7KhEfAwZy
-        grxCMEuC1p5h9S0Dv0POyYWOLQ==
-X-Google-Smtp-Source: AK7set/RLED7POxANEjawWCZd9y0DhL7+H+vwPHf4ZhZvIDfUCF8oyOn5KWO/fdxk86dYuLaO/POiw==
-X-Received: by 2002:ac2:48bc:0:b0:4dc:4b70:a723 with SMTP id u28-20020ac248bc000000b004dc4b70a723mr270817lfg.30.1676887289426;
-        Mon, 20 Feb 2023 02:01:29 -0800 (PST)
-Received: from [192.168.1.101] (abxh184.neoplus.adsl.tpnet.pl. [83.9.1.184])
-        by smtp.gmail.com with ESMTPSA id l13-20020a19c20d000000b004b550c26949sm1481452lfc.290.2023.02.20.02.01.28
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 20 Feb 2023 02:01:29 -0800 (PST)
-Message-ID: <357f475a-e8e2-2e99-5250-0d63578e3b0f@linaro.org>
-Date:   Mon, 20 Feb 2023 11:01:27 +0100
+        Mon, 20 Feb 2023 05:02:35 -0500
+Received: from albert.telenet-ops.be (albert.telenet-ops.be [IPv6:2a02:1800:110:4::f00:1a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E682A19699
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Feb 2023 02:02:12 -0800 (PST)
+Received: from ramsan.of.borg ([IPv6:2a02:1810:ac12:ed50:e2ba:5470:259d:9c84])
+        by albert.telenet-ops.be with bizsmtp
+        id PN29290152zSf1N06N29nx; Mon, 20 Feb 2023 11:02:09 +0100
+Received: from rox.of.borg ([192.168.97.57])
+        by ramsan.of.borg with esmtp (Exim 4.95)
+        (envelope-from <geert@linux-m68k.org>)
+        id 1pU2zR-009XE9-1q
+        for linux-kernel@vger.kernel.org;
+        Mon, 20 Feb 2023 11:02:09 +0100
+Received: from geert by rox.of.borg with local (Exim 4.95)
+        (envelope-from <geert@linux-m68k.org>)
+        id 1pU2zp-000VkD-Gh
+        for linux-kernel@vger.kernel.org;
+        Mon, 20 Feb 2023 11:02:09 +0100
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+To:     linux-kernel@vger.kernel.org
+Subject: Build regressions/improvements in v6.2
+Date:   Mon, 20 Feb 2023 11:02:09 +0100
+Message-Id: <20230220100209.121987-1-geert@linux-m68k.org>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <CAHk-=wio46vC4t6xXD-sFqjoPwFm_u515jm3suzmkGxQTeA1_A@mail.gmail.com>
+References: <CAHk-=wio46vC4t6xXD-sFqjoPwFm_u515jm3suzmkGxQTeA1_A@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH 2/2] arm64: dts: qcom: sc7280-qcard: drop incorrect
- dai-cells from WCD938x SDW
-Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20230220095401.64196-1-krzysztof.kozlowski@linaro.org>
- <20230220095401.64196-2-krzysztof.kozlowski@linaro.org>
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <20230220095401.64196-2-krzysztof.kozlowski@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Below is the list of build error/warning regressions/improvements in
+v6.2[1] compared to v6.1[2].
+
+Summarized:
+  - build errors: +9/-14
+  - build warnings: +30/-10
+
+JFYI, when comparing v6.2[1] to v6.2-rc8[3], the summaries are:
+  - build errors: +0/-11
+  - build warnings: +0/-0
+
+Happy fixing! ;-)
+
+Thanks to the linux-next team for providing the build service.
+
+[1] http://kisskb.ellerman.id.au/kisskb/branch/linus/head/c9c3395d5e3dcc6daee66c6908354d47bf98cb0c/ (all 152 configs)
+[2] http://kisskb.ellerman.id.au/kisskb/branch/linus/head/830b3c68c1fb1e9176028d02ef86f3cf76aa2476/ (all 152 configs)
+[3] http://kisskb.ellerman.id.au/kisskb/branch/linus/head/ceaa837f96adb69c0df0397937cd74991d5d821a/ (all 152 configs)
 
 
-On 20.02.2023 10:54, Krzysztof Kozlowski wrote:
-> The WCD938x audio codec Soundwire interface part is not a DAI and does
-> not allow sound-dai-cells:
-> 
->   sc7280-herobrine-crd.dtb: codec@0,4: '#sound-dai-cells' does not match any of the regexes: 'pinctrl-[0-9]+'
-> 
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> ---
-Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+*** ERRORS ***
 
-Konrad
->  arch/arm64/boot/dts/qcom/sc7280-qcard.dtsi | 2 --
->  1 file changed, 2 deletions(-)
-> 
-> diff --git a/arch/arm64/boot/dts/qcom/sc7280-qcard.dtsi b/arch/arm64/boot/dts/qcom/sc7280-qcard.dtsi
-> index cb0cc2ba2fa3..95d9e4a19d76 100644
-> --- a/arch/arm64/boot/dts/qcom/sc7280-qcard.dtsi
-> +++ b/arch/arm64/boot/dts/qcom/sc7280-qcard.dtsi
-> @@ -419,7 +419,6 @@ &swr0 {
->  	wcd_rx: codec@0,4 {
->  		compatible = "sdw20217010d00";
->  		reg = <0 4>;
-> -		#sound-dai-cells = <1>;
->  		qcom,rx-port-mapping = <1 2 3 4 5>;
->  	};
->  };
-> @@ -428,7 +427,6 @@ &swr1 {
->  	wcd_tx: codec@0,3 {
->  		compatible = "sdw20217010d00";
->  		reg = <0 3>;
-> -		#sound-dai-cells = <1>;
->  		qcom,tx-port-mapping = <1 2 3 4>;
->  	};
->  };
+9 error regressions:
+  + /kisskb/src/drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn31/display_mode_vba_31.c: error: the frame size of 2224 bytes is larger than 2048 bytes [-Werror=frame-larger-than=]:  => 7082:1
+  + /kisskb/src/drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn314/display_mode_vba_314.c: error: the frame size of 2208 bytes is larger than 2048 bytes [-Werror=frame-larger-than=]:  => 7127:1
+  + /kisskb/src/drivers/media/platform/nxp/imx-jpeg/mxc-jpeg.c: error: array subscript 2 is above array bounds of 'u32[2]' {aka 'unsigned int[2]'} [-Werror=array-bounds]:  => 641:28
+  + /kisskb/src/drivers/media/platform/nxp/imx-jpeg/mxc-jpeg.c: error: array subscript 3 is above array bounds of 'u32[2]' {aka 'unsigned int[2]'} [-Werror=array-bounds]:  => 641:28
+  + /opt/cross/kisskb/br-mipsel-o32-full-2016.08-613-ge98b4dd/bin/../lib/gcc/mipsel-buildroot-linux-uclibc/5.4.0/plugin/include/gimple.h: error: 'gimple_call_addr_fndecl' was not declared in this scope:  => 2790:10
+  + /opt/cross/kisskb/br-mipsel-o32-full-2016.08-613-ge98b4dd/bin/../lib/gcc/mipsel-buildroot-linux-uclibc/5.4.0/plugin/include/gimple.h: error: 'is_gimple_reg' was not declared in this scope:  => 2556:18
+  + /opt/cross/kisskb/br-mipsel-o32-full-2016.08-613-ge98b4dd/bin/../lib/gcc/mipsel-buildroot-linux-uclibc/5.4.0/plugin/include/gimple.h: error: field 'call_clobbered' has incomplete type 'pt_solution':  => 284:22
+  + /opt/cross/kisskb/br-mipsel-o32-full-2016.08-613-ge98b4dd/bin/../lib/gcc/mipsel-buildroot-linux-uclibc/5.4.0/plugin/include/gimple.h: error: field 'call_used' has incomplete type 'pt_solution':  => 283:22
+  + {standard input}: Error: unknown pseudo-op: `.cfi_def_c':  => 1718
+
+14 error improvements:
+  - /kisskb/src/arch/sh/include/asm/io.h: error: cast to pointer from integer of different size [-Werror=int-to-pointer-cast]: 239:34 => 
+  - /kisskb/src/arch/sparc/kernel/irq_32.c: error: array subscript [16, 79] is outside array bounds of 'struct tt_entry[1]' [-Werror=array-bounds]: 258:14, 261:46, 262:14, 263:14, 259:14 => 
+  - /kisskb/src/drivers/infiniband/hw/qib/qib_wc_x86_64.c: error: 'X86_VENDOR_AMD' undeclared (first use in this function): 149:37 => 
+  - /kisskb/src/drivers/infiniband/hw/qib/qib_wc_x86_64.c: error: 'struct cpuinfo_um' has no member named 'x86_vendor': 149:22 => 
+  - /kisskb/src/drivers/infiniband/hw/qib/qib_wc_x86_64.c: error: control reaches end of non-void function [-Werror=return-type]: 150:1 => 
+  - /kisskb/src/drivers/infiniband/sw/rdmavt/qp.c: error: 'struct cpuinfo_um' has no member named 'x86_cache_size': 88:22 => 
+  - /kisskb/src/drivers/infiniband/sw/rdmavt/qp.c: error: control reaches end of non-void function [-Werror=return-type]: 89:1 => 
+  - /kisskb/src/drivers/infiniband/sw/rdmavt/qp.c: error: implicit declaration of function '__copy_user_nocache' [-Werror=implicit-function-declaration]: 100:2 => 
+  - /kisskb/src/drivers/net/ethernet/marvell/prestera/prestera_flower.c: error: 'rule' is used uninitialized [-Werror=uninitialized]: 480:34 => 
+  - {standard input}: Error: displacement to undefined symbol .L377 overflows 12-bit field: 2286 => 
+  - {standard input}: Error: displacement to undefined symbol .L378 overflows 8-bit field : 2302 => 
+  - {standard input}: Error: displacement to undefined symbol .L382 overflows 8-bit field : 2213 => 
+  - {standard input}: Error: pcrel too far: 2293, 2206, 2217, 2229, 2232, 2261, 2247, 2215, 2248, 2249, 2204, 2274, 2231, 2262, 2216, 2259, 2221, 2209 => 
+  - {standard input}: Error: unknown pseudo-op: `.l': 2305 => 
+
+
+*** WARNINGS ***
+
+30 warning regressions:
+  + modpost: WARNING: modpost: "__ashldi3" [drivers/block/drbd/drbd.ko] has no CRC!:  => N/A
+  + modpost: WARNING: modpost: "__ashldi3" [drivers/bus/mhi/host/mhi_pci_generic.ko] has no CRC!:  => N/A
+  + modpost: WARNING: modpost: "__ashldi3" [drivers/extcon/extcon-fsa9480.ko] has no CRC!:  => N/A
+  + modpost: WARNING: modpost: "__ashldi3" [drivers/md/dm-zoned.ko] has no CRC!:  => N/A
+  + modpost: WARNING: modpost: "__ashldi3" [drivers/media/cec/core/cec.ko] has no CRC!:  => N/A
+  + modpost: WARNING: modpost: "__ashldi3" [drivers/media/usb/hdpvr/hdpvr.ko] has no CRC!:  => N/A
+  + modpost: WARNING: modpost: "__ashldi3" [drivers/misc/habanalabs/habanalabs.ko] has no CRC!:  => N/A
+  + modpost: WARNING: modpost: "__ashldi3" [drivers/mtd/nand/onenand/onenand.ko] has no CRC!:  => N/A
+  + modpost: WARNING: modpost: "__ashldi3" [drivers/mtd/nand/raw/nand.ko] has no CRC!:  => N/A
+  + modpost: WARNING: modpost: "__ashldi3" [drivers/net/ethernet/mellanox/mlx5/core/mlx5_core.ko] has no CRC!:  => N/A
+  + modpost: WARNING: modpost: "__ashldi3" [drivers/net/wireless/ath/wil6210/wil6210.ko] has no CRC!:  => N/A
+  + modpost: WARNING: modpost: "__ashldi3" [drivers/pwm/pwm-sifive.ko] has no CRC!:  => N/A
+  + modpost: WARNING: modpost: "__ashldi3" [drivers/scsi/hptiop.ko] has no CRC!:  => N/A
+  + modpost: WARNING: modpost: "__lshrdi3" [drivers/block/drbd/drbd.ko] has no CRC!:  => N/A
+  + modpost: WARNING: modpost: "__lshrdi3" [drivers/mtd/nand/raw/nand.ko] has no CRC!:  => N/A
+  + modpost: WARNING: modpost: "__lshrdi3" [drivers/scsi/sd_mod.ko] has no CRC!:  => N/A
+  + modpost: WARNING: modpost: "__ndelay" [drivers/gpio/gpio-latch.ko] has no CRC!:  => N/A
+  + modpost: WARNING: modpost: "__udelay" [drivers/iio/adc/max11410.ko] has no CRC!:  => N/A
+  + modpost: WARNING: modpost: "__udelay" [drivers/input/keyboard/tegra-kbc.ko] has no CRC!:  => N/A
+  + modpost: WARNING: modpost: "__udelay" [drivers/mfd/axp20x.ko] has no CRC!:  => N/A
+  + modpost: WARNING: modpost: "__udelay" [drivers/mmc/host/sunplus-mmc.ko] has no CRC!:  => N/A
+  + modpost: WARNING: modpost: "__udelay" [drivers/net/ethernet/renesas/rswitch_drv.ko] has no CRC!:  => N/A
+  + modpost: WARNING: modpost: "__udelay" [drivers/net/mdio/mdio-mux-meson-g12a.ko] has no CRC!:  => N/A
+  + modpost: WARNING: modpost: "__udelay" [drivers/net/wireless/mediatek/mt76/mt7996/mt7996e.ko] has no CRC!:  => N/A
+  + modpost: WARNING: modpost: "__udelay" [drivers/net/wireless/realtek/rtw89/rtw89_8852b.ko] has no CRC!:  => N/A
+  + modpost: WARNING: modpost: "__udelay" [drivers/phy/renesas/r8a779f0-ether-serdes.ko] has no CRC!:  => N/A
+  + modpost: WARNING: modpost: "__udelay" [drivers/ptp/ptp_idt82p33.ko] has no CRC!:  => N/A
+  + modpost: WARNING: modpost: "__udelay" [drivers/usb/fotg210/fotg210.ko] has no CRC!:  => N/A
+  + modpost: WARNING: modpost: "__udelay" [fs/xfs/xfs.ko] has no CRC!:  => N/A
+  + modpost: WARNING: modpost: "empty_zero_page" [net/rxrpc/rxperf.ko] has no CRC!:  => N/A
+
+10 warning improvements:
+  - /kisskb/src/arch/m68k/include/asm/string.h: warning: '__builtin_memset' offset [0, 11] is out of the bounds [0, 0] [-Warray-bounds]: 68:25 => 
+  - /kisskb/src/arch/s390/kernel/setup.c: warning: 'memcpy' offset [0, 127] is out of the bounds [0, 0] [-Warray-bounds]: 524:9 => 
+  - /kisskb/src/drivers/net/ethernet/i825xx/sun3_82586.c: warning: array subscript 1 is above array bounds of 'volatile struct transmit_cmd_struct *[1]' [-Warray-bounds]: 989:108, 989:122 => 989:108
+  - /kisskb/src/fs/coredump.c: warning: 'dump_emit_page' defined but not used [-Wunused-function]: 834:12 => 
+  - modpost: WARNING: modpost: "__ashldi3" [lib/zstd/zstd_compress.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/net/can/pch_can.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/net/ethernet/fealnx.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/net/ethernet/smsc/smc911x.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/net/pcs/pcs-altera-tse.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/usb/host/fotg210-hcd.ko] has no CRC!: N/A => 
+
+Gr{oetje,eeting}s,
+
+						Geert
+
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+							    -- Linus Torvalds
