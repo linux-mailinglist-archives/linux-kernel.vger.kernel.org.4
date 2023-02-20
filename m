@@ -2,142 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A027269D075
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Feb 2023 16:19:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AAD7C69D07B
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Feb 2023 16:21:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231435AbjBTPTT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Feb 2023 10:19:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44678 "EHLO
+        id S232387AbjBTPU7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Feb 2023 10:20:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45742 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231585AbjBTPTR (ORCPT
+        with ESMTP id S231713AbjBTPUw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Feb 2023 10:19:17 -0500
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C001166DA;
-        Mon, 20 Feb 2023 07:19:08 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1676906348; x=1708442348;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=daUuz6PCkNi/Pv0EW1m00p8WjYzG3GsLrXsE65CvLaI=;
-  b=jUBbTQX2DZ1o/ejy8MPmJW/79k7HTsKUxT8nsz/liWg4sejPF+JYFTyt
-   9Q5L4eLBiecXJ1hecOf1UW0LV+NIHVJExfXA+QQpnTWGzpFch0vZgxo3U
-   Uno/+vkJqh/YtIWPnCjJ+3vs7N/qeTceNp1O4eYEgmU2QLT1iUVE18UdO
-   yuIeEex6yIu0FyBTaMBnvfoXjm41EnCrh4pf4+2CYgc+Ba4s5MrZm6hSD
-   BLToNg7Dl91lIF/GKc3JlzH6jWr96vzTvzFWkG2QZB6NMPc6M9SCQ+7Iv
-   K+8NVKzcOEBo/lX7rvziFKyNgg9QsabAxD9dLVZJt2eVGMqY04Al9OAny
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10627"; a="331087846"
-X-IronPort-AV: E=Sophos;i="5.97,312,1669104000"; 
-   d="scan'208";a="331087846"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Feb 2023 07:18:26 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10627"; a="814167593"
-X-IronPort-AV: E=Sophos;i="5.97,312,1669104000"; 
-   d="scan'208";a="814167593"
-Received: from lkp-server01.sh.intel.com (HELO 4455601a8d94) ([10.239.97.150])
-  by fmsmga001.fm.intel.com with ESMTP; 20 Feb 2023 07:18:21 -0800
-Received: from kbuild by 4455601a8d94 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pU7vo-000E13-1K;
-        Mon, 20 Feb 2023 15:18:20 +0000
-Date:   Mon, 20 Feb 2023 23:18:00 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Nitesh Shetty <nj.shetty@samsung.com>,
-        Jens Axboe <axboe@kernel.dk>, Alasdair Kergon <agk@redhat.com>,
-        Mike Snitzer <snitzer@kernel.org>, dm-devel@redhat.com,
-        Keith Busch <kbusch@kernel.org>,
-        Christoph Hellwig <hch@lst.de>,
-        Sagi Grimberg <sagi@grimberg.me>,
-        James Smart <james.smart@broadcom.com>,
-        Chaitanya Kulkarni <kch@nvidia.com>,
-        Alexander Viro <viro@zeniv.linux.org.uk>
-Cc:     oe-kbuild-all@lists.linux.dev, bvanassche@acm.org, hare@suse.de,
-        ming.lei@redhat.com, damien.lemoal@opensource.wdc.com,
-        anuj20.g@samsung.com, joshi.k@samsung.com, nitheshshetty@gmail.com,
-        gost.dev@samsung.com, Nitesh Shetty <nj.shetty@samsung.com>,
-        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-nvme@lists.infradead.org, linux-fsdevel@vger.kernel.org
-Subject: Re: [PATCH v7 4/8] fs, block: copy_file_range for def_blk_ops for
- direct block device.
-Message-ID: <202302202321.zfUe705N-lkp@intel.com>
-References: <20230220105336.3810-5-nj.shetty@samsung.com>
+        Mon, 20 Feb 2023 10:20:52 -0500
+Received: from mxout70.expurgate.net (mxout70.expurgate.net [91.198.224.70])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8095A30D6;
+        Mon, 20 Feb 2023 07:20:49 -0800 (PST)
+Received: from [127.0.0.1] (helo=localhost)
+        by relay.expurgate.net with smtp (Exim 4.92)
+        (envelope-from <prvs=9429674533=fe@dev.tdt.de>)
+        id 1pU7y7-000F81-TL; Mon, 20 Feb 2023 16:20:43 +0100
+Received: from [195.243.126.94] (helo=securemail.tdt.de)
+        by relay.expurgate.net with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <fe@dev.tdt.de>)
+        id 1pU7y7-0009Vd-6t; Mon, 20 Feb 2023 16:20:43 +0100
+Received: from securemail.tdt.de (localhost [127.0.0.1])
+        by securemail.tdt.de (Postfix) with ESMTP id A910B24004B;
+        Mon, 20 Feb 2023 16:20:42 +0100 (CET)
+Received: from mail.dev.tdt.de (unknown [10.2.4.42])
+        by securemail.tdt.de (Postfix) with ESMTP id 1A327240040;
+        Mon, 20 Feb 2023 16:20:42 +0100 (CET)
+Received: from localhost.localdomain (unknown [10.2.3.40])
+        by mail.dev.tdt.de (Postfix) with ESMTPSA id 9C37F2C0D2;
+        Mon, 20 Feb 2023 16:20:41 +0100 (CET)
+From:   Florian Eckert <fe@dev.tdt.de>
+To:     u.kleine-koenig@pengutronix.de, gregkh@linuxfoundation.org,
+        jirislaby@kernel.org, pavel@ucw.cz, lee@kernel.org
+Cc:     linux-kernel@vger.kernel.org, linux-leds@vger.kernel.org,
+        Eckert.Florian@googlemail.com
+Subject: [PATCH v4 0/2] leds: ledtrig-tty: add tty_led_mode xtension
+Date:   Mon, 20 Feb 2023 16:20:36 +0100
+Message-ID: <20230220152038.3877596-1-fe@dev.tdt.de>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230220105336.3810-5-nj.shetty@samsung.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_PASS,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+Content-Transfer-Encoding: quoted-printable
+X-purgate-ID: 151534::1676906443-5BFF91EA-05EE3E06/0/0
+X-purgate: clean
+X-purgate-type: clean
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Nitesh,
+Hello,
 
-Thank you for the patch! Perhaps something to improve:
-
-[auto build test WARNING on device-mapper-dm/for-next]
-[also build test WARNING on linus/master v6.2 next-20230220]
-[cannot apply to axboe-block/for-next]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Nitesh-Shetty/block-Add-copy-offload-support-infrastructure/20230220-205057
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/device-mapper/linux-dm.git for-next
-patch link:    https://lore.kernel.org/r/20230220105336.3810-5-nj.shetty%40samsung.com
-patch subject: [PATCH v7 4/8] fs, block: copy_file_range for def_blk_ops for direct block device.
-config: powerpc-allnoconfig (https://download.01.org/0day-ci/archive/20230220/202302202321.zfUe705N-lkp@intel.com/config)
-compiler: powerpc-linux-gcc (GCC) 12.1.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/0f95ad2cb727ac6ac8406a01ff216d9237b403b7
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Nitesh-Shetty/block-Add-copy-offload-support-infrastructure/20230220-205057
-        git checkout 0f95ad2cb727ac6ac8406a01ff216d9237b403b7
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=powerpc olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=powerpc SHELL=/bin/bash
-
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202302202321.zfUe705N-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
->> block/fops.c:614:9: warning: no previous prototype for 'blkdev_copy_file_range' [-Wmissing-prototypes]
-     614 | ssize_t blkdev_copy_file_range(struct file *file_in, loff_t pos_in,
-         |         ^~~~~~~~~~~~~~~~~~~~~~
+here commes v4 of this series to add additional tty_led_modes.
 
 
-vim +/blkdev_copy_file_range +614 block/fops.c
+v4:
+Changes compared to the v3 patchset with
+20230220093739.320478-1-fe@dev.tdt.de are.
 
-   613	
- > 614	ssize_t blkdev_copy_file_range(struct file *file_in, loff_t pos_in,
-   615					struct file *file_out, loff_t pos_out,
-   616					size_t len, unsigned int flags)
-   617	{
-   618		struct block_device *in_bdev = I_BDEV(bdev_file_inode(file_in));
-   619		struct block_device *out_bdev = I_BDEV(bdev_file_inode(file_out));
-   620		int comp_len;
-   621	
-   622		comp_len = blkdev_copy_offload(in_bdev, pos_in, out_bdev, pos_out, len,
-   623				    NULL, NULL, GFP_KERNEL);
-   624		if (comp_len != len)
-   625			comp_len = generic_copy_file_range(file_in, pos_in + comp_len,
-   626				file_out, pos_out + comp_len, len - comp_len, flags);
-   627	
-   628		return comp_len;
-   629	}
-   630	
+Addressed review comments by Jiri Slaby are:
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+ledtrig-tty.c:
+- Do not use __TTY_LED_MAX pattern us instead __TTY_LED_LAST =3D TTY_LED_=
+RNG
+- Move declartion and assignment into one singel line
+- Use __TTY_LED_LAST pattern, to simplify tty_mode_show and
+  tty_mode_store handling
+
+
+v3:
+Changes compared to the v2 patchset with
+20230217094403.1574468-1-fe@dev.tdt.de are.
+
+Addressed review comments by Greg K-H are:
+
+tty.h:
+- Fix first comment line and remark -%ENOTTY for the new function
+  'tty_get_mget' to make a proper kernel doc.
+- Add the return value -%ENOTTY again, I thought it was no longer needed.
+
+
+v2:
+Changes compared to the initial patchset with
+20230213140638.620206-1-fe@dev.tdt.de are.
+
+Addressed review comments by Jiri Slaby are:
+
+tty.h:
+- Fix compilation error because of wrong rebaseing
+- Remove empty lines
+- Use new 'tty_get_mget' in 'tty_tiocmget'
+
+ledtrig-tty.c:
+- Update commit description
+- Use enum for tty_led_mod in struct ledtrig_tty_date
+- Rename sysfs file from 'mode' to 'tty_led_mode'
+- Change tty_led_mode show function to use loop instead of switch/case
+- Change tty_led_mode store function to use loop instead of switch/case
+- Check return value of function tty_get_mget
+
+Florian Eckert (2):
+  tty: new helper function tty_get_mget
+  trigger: ledtrig-tty: add additional modes
+
+ .../ABI/testing/sysfs-class-led-trigger-tty   |  16 ++
+ drivers/leds/trigger/ledtrig-tty.c            | 146 ++++++++++++++++--
+ drivers/tty/tty_io.c                          |  28 +++-
+ include/linux/tty.h                           |   1 +
+ 4 files changed, 170 insertions(+), 21 deletions(-)
+
+--=20
+2.30.2
+
