@@ -2,254 +2,228 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BB0BC69CDF8
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Feb 2023 14:54:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 672B869CC0D
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Feb 2023 14:26:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232535AbjBTNyn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Feb 2023 08:54:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43014 "EHLO
+        id S231976AbjBTN0T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Feb 2023 08:26:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39146 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232531AbjBTNyk (ORCPT
+        with ESMTP id S231502AbjBTN0S (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Feb 2023 08:54:40 -0500
-Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D603B18B39
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Feb 2023 05:54:38 -0800 (PST)
-Received: by mail-pj1-x1031.google.com with SMTP id pt11so2042910pjb.1
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Feb 2023 05:54:38 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1676901278;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=LfmieH10uvfkDMduLvl87yGY+s7U5r5nYAKE9dRffQE=;
-        b=JfGpAXmX+5nIWrobI4CuunUQ/Qrdvt8Svk1pVFYxDvuztz+d/nC7gFTjEA/0ubRo+L
-         ZqJL1LYkrNuZm6dAyZwNi+3cnvvfcQqAXhl5bwnctZIG+P8goZBZMwaeKy7zr6+GOEAR
-         vpukQE/a70N+/LOvnk9+Qb4T/ZVj5uoxPWuZBOAyA5YikWGJ1qtSEI7WCzr0eej9s9A7
-         cuHsgw2/UId1gWTqcM2+L6AVbWvSWYm1cGK2UjYx5FCtf2mP65T3kzSFTWERQO8bcGbE
-         CE0bDw/Ut0K5a8L5PwN2yS9pQVxPqQ5BInkppkafv+zoxT5RA5XOw8FcasNspgq7YAag
-         ESBQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1676901278;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=LfmieH10uvfkDMduLvl87yGY+s7U5r5nYAKE9dRffQE=;
-        b=LsYtCQsF7cagxAdVQEuwVVHksLlk1syh2v1twQGrA2EVwqOmvV+qTDY5CFeBCzLQ7Y
-         MU7nBfMCCxeMpC1kxG3knI4h36o79YAfwHD1q7Dpv17R+oar5sBr8I3EiJKxDkViVjEH
-         HLaqJP1F/31S2yjKxHfbcjUO42BucXwbJi0zMXqRXVT4MjtJqpOVVREb310SumEuIW2t
-         Bk/ViAu/CDHDFo22QBvIasNao1v3OTq61dLg0kWlm5iFwrGFCFJ56sG3CsvEejV3gb7d
-         93Kgdz1LHUEDdK8fv6GBfywxWs8V/invL28aUz6QmHCzxbDXup0lHyjjS7PEvNaeTcXY
-         PwUw==
-X-Gm-Message-State: AO0yUKVPDwdHCX1N/PonlAdcFBmqMmxmY3L4XT+jTUSiBfi48JL1HzR8
-        rgbE9ltFOaIlOGDJW8VNuln0/eFLk54AxXUDalWeJQ==
-X-Google-Smtp-Source: AK7set+VKG5FaLBtzPo8qPgnUYjbJFjqu/MFrqCaJkJrUaYHun1MIuv3lpEBGYcCffnKMoUrwDHeupnDmGzRH0kk02I=
-X-Received: by 2002:a17:902:848c:b0:199:1f95:9ad5 with SMTP id
- c12-20020a170902848c00b001991f959ad5mr33707plo.28.1676901278159; Mon, 20 Feb
- 2023 05:54:38 -0800 (PST)
+        Mon, 20 Feb 2023 08:26:18 -0500
+Received: from dggsgout11.his.huawei.com (unknown [45.249.212.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5EC461ABEE;
+        Mon, 20 Feb 2023 05:26:16 -0800 (PST)
+Received: from mail02.huawei.com (unknown [172.30.67.153])
+        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4PL38d6tS0z4f3w0Y;
+        Mon, 20 Feb 2023 21:26:09 +0800 (CST)
+Received: from huaweicloud.com (unknown [10.175.124.27])
+        by APP4 (Coremail) with SMTP id gCh0CgBXwLPtdPNjrs7vDw--.52497S4;
+        Mon, 20 Feb 2023 21:26:07 +0800 (CST)
+From:   Hou Tao <houtao@huaweicloud.com>
+To:     linux-block@vger.kernel.org
+Cc:     Bart Van Assche <bvanassche@acm.org>, Jan Kara <jack@suse.cz>,
+        Bagas Sanjaya <bagasdotme@gmail.com>,
+        Jens Axboe <axboe@kernel.dk>, cgroups@vger.kernel.org,
+        Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Jonathan Corbet <corbet@lwn.net>, linux-kernel@vger.kernel.org,
+        linux-doc@vger.kernel.org, houtao1@huawei.com
+Subject: [PATCH v2] blk-ioprio: Introduce promote-to-rt policy
+Date:   Mon, 20 Feb 2023 21:54:28 +0800
+Message-Id: <20230220135428.2632906-1-houtao@huaweicloud.com>
+X-Mailer: git-send-email 2.29.2
 MIME-Version: 1.0
-References: <20220829055450.1703092-1-dietmar.eggemann@arm.com>
- <0f82011994be68502fd9833e499749866539c3df.camel@mediatek.com>
- <YzVpqweg21yIn30A@hirez.programming.kicks-ass.net> <YzV9Gejo/+DL3UjK@e126311.manchester.arm.com>
- <YzV/yT6OYMgaq0kD@hirez.programming.kicks-ass.net> <YzWuq5ShtJC6KWqe@e126311.manchester.arm.com>
- <Y2kLA8x40IiBEPYg@hirez.programming.kicks-ass.net> <20221108194843.i4qckcu7zwqstyis@airbuntu>
- <Y2vMBWpPlIArwnI7@hirez.programming.kicks-ass.net> <424e2c81-987d-f10e-106d-8b4c611768bc@arm.com>
- <CAKfTPtD0ZOndFef3-JxBn3G9tcX=cZEObjHZ0iqiVTJz7+QrmQ@mail.gmail.com> <249816c9-c2b5-8016-f9ce-dab7b7d384e4@arm.com>
-In-Reply-To: <249816c9-c2b5-8016-f9ce-dab7b7d384e4@arm.com>
-From:   Vincent Guittot <vincent.guittot@linaro.org>
-Date:   Mon, 20 Feb 2023 14:54:26 +0100
-Message-ID: <CAKfTPtA4gSZAmi3FtU2Y57cuqCzC5LCR=+7Q8Xh=VtkbfaQP5Q@mail.gmail.com>
-Subject: Re: [RFC PATCH 0/1] sched/pelt: Change PELT halflife at runtime
-To:     Dietmar Eggemann <dietmar.eggemann@arm.com>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Qais Yousef <qyousef@layalina.io>,
-        Kajetan Puchalski <kajetan.puchalski@arm.com>,
-        Jian-Min Liu <jian-min.liu@mediatek.com>,
-        Ingo Molnar <mingo@kernel.org>,
-        Morten Rasmussen <morten.rasmussen@arm.com>,
-        Vincent Donnefort <vdonnefort@google.com>,
-        Quentin Perret <qperret@google.com>,
-        Patrick Bellasi <patrick.bellasi@matbug.net>,
-        Abhijeet Dharmapurikar <adharmap@quicinc.com>,
-        Qais Yousef <qais.yousef@arm.com>,
-        linux-kernel@vger.kernel.org,
-        Jonathan JMChen <jonathan.jmchen@mediatek.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: gCh0CgBXwLPtdPNjrs7vDw--.52497S4
+X-Coremail-Antispam: 1UD129KBjvJXoW3GF1ftF4UWrW3uw1rJF45trb_yoWxGF4DpF
+        4fAF9xur9YqF1xJFnrJ3WkXrWrtas2yw47CFsxKFyF934UAw1q9F40yF1kWFyfA3yDXFZ8
+        XrZ8JrW8CF1Dur7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUk2b4IE77IF4wAFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k2
+        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
+        vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_tr0E3s1l84ACjcxK6xIIjxv20xvEc7Cj
+        xVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x
+        0267AKxVW0oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG
+        6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFV
+        Cjc4AY6r1j6r4UM4x0Y48IcxkI7VAKI48JM4IIrI8v6xkF7I0E8cxan2IY04v7MxAIw28I
+        cxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2
+        IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUtVW8ZwCIc40Y0x0EwIxGrwCI
+        42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwCI42
+        IY6xAIw20EY4v20xvaj40_WFyUJVCq3wCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E
+        87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjxUrR6zUUUUU
+X-CM-SenderInfo: xkrx3t3r6k3tpzhluzxrxghudrp/
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,KHOP_HELO_FCRDNS,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 17 Feb 2023 at 14:54, Dietmar Eggemann <dietmar.eggemann@arm.com> wrote:
->
-> On 09/02/2023 17:16, Vincent Guittot wrote:
-> > On Tue, 7 Feb 2023 at 11:29, Dietmar Eggemann <dietmar.eggemann@arm.com> wrote:
-> >>
-> >> On 09/11/2022 16:49, Peter Zijlstra wrote:
-> >>> On Tue, Nov 08, 2022 at 07:48:43PM +0000, Qais Yousef wrote:
-> >>>> On 11/07/22 14:41, Peter Zijlstra wrote:
-> >>>>> On Thu, Sep 29, 2022 at 03:41:47PM +0100, Kajetan Puchalski wrote:
->
-> [...]
->
-> >> (B) *** Where does util_est_faster help exactly? ***
-> >>
-> >> It turns out that the score improvement comes from the more aggressive
-> >> DVFS request ('_freq') (1) due to the CPU util boost in sugov_get_util()
-> >> -> effective_cpu_util(..., cpu_util_cfs(), ...).
-> >>
-> >> At the beginning of an episode (e.g. beginning of an image list view
-> >> fling) when the periodic tasks (~1/16ms (60Hz) at 'max uArch'/'max CPU
-> >> frequency') of the Android Graphics Pipeline (AGP) start to run, the
-> >> CPU Operating Performance Point (OPP) is often so low that those tasks
-> >> run more like 10/16ms which let the test application count a lot of
-> >> Jankframes at those moments.
-> >
-> > I don't see how util_est_faster can help this 1ms task here ? It's
-> > most probably never be preempted during this 1ms. For such an Android
->
-> It's 1/16ms at max CPU frequency and on a big CPU. Could be a longer
-> runtime with min CPU frequency at little CPU. I see runtime up to 10ms
-> at the beginning of a test episode.
->
-> Like I mentioned below, it could also be that the tasks have more work
-> to do at the beginning. It's easy to spot using Google's perfetto and
-> those moments also correlate with the occurrence of jankframes. I'm not
-> yet sure how much this has to do with the perfetto instrumentation though.
->
-> But you're right, on top of that, there is preemption (e.g. of the UI
-> thread) by other threads (render thread, involved binder threads,
-> surfaceflinger, etc.) going on. So the UI thread could be
-> running+runnable for > 20ms, again marked as a jankframe.
->
-> > Graphics Pipeline short task, hasn't uclamp_min been designed for and
-> > a better solution ?
->
-> Yes, it has. I'm not sure how feasible this is to do for all tasks
-> involved. I'm thinking about the Binder threads here for instance.
+From: Hou Tao <houtao1@huawei.com>
 
-Yes, that can probably not  help for all threads but some system
-threads like surfaceflinger and graphic composer should probably
-benefit from min uclamp
+Since commit a78418e6a04c ("block: Always initialize bio IO priority on
+submit"), bio->bi_ioprio will never be IOPRIO_CLASS_NONE when calling
+blkcg_set_ioprio(), so there will be no way to promote the io-priority
+of one cgroup to IOPRIO_CLASS_RT, because bi_ioprio will always be
+greater than or equals to IOPRIO_CLASS_RT.
 
->
-> [...]
->
-> >> Looks like that 'util_est_faster' can prevent Jankframes by boosting CPU
-> >> util when periodic tasks have a longer runtime compared to when they reach
-> >> steady-sate.
-> >>
-> >> The results is very similar to PELT halflife reduction. The advantage is
-> >> that 'util_est_faster' is only activated selectively when the runtime of
-> >> the current task in its current activation is long enough to create this
-> >> CPU util boost.
-> >
-> > IIUC how util_est_faster works, it removes the waiting time when
-> > sharing cpu time with other tasks. So as long as there is no (runnable
-> > but not running time), the result is the same as current util_est.
-> > util_est_faster makes a difference only when the task alternates
-> > between runnable and running slices.
-> > Have you considered using runnable_avg metrics in the increase of cpu
-> > freq ? This takes into the runnable slice and not only the running
-> > time and increase faster than util_avg when tasks compete for the same
-> > CPU
->
-> Good idea! No, I haven't.
->
-> I just glanced over the code, there shouldn't be an advantage in terms
-> of more recent update between `curr->sum_exec_runtime` and
-> update_load_avg(cfs_rq) even in the taskgroup case.
->
-> Per-task view:
->
-> https://nbviewer.org/github/deggeman/lisa/blob/ipynbs/ipynb/scratchpad/cpu_runnable_avg_boost.ipynb
->
->
-> All tests ran 10 iterations of all Jankbench sub-tests. (Reran the
-> `max_util_scaled_util_est_faster_rbl_freq` once with very similar
-> results. Just to make sure the results are somehow correct).
->
-> Max_frame_duration:
-> +------------------------------------------+------------+
-> |             kernel                       |    value   |
-> +------------------------------------------+------------+
-> |            base-a30b17f016b0             | 147.571352 |
-> |                pelt-hl-m2                | 119.416351 |
-> |                pelt-hl-m4                | 96.473412  |
-> |       scaled_util_est_faster_freq        | 126.646506 |
-> | max_util_scaled_util_est_faster_rbl_freq | 157.974501 | <-- !!!
-> +------------------------------------------+------------+
->
-> Mean_frame_duration:
-> +------------------------------------------+-------+-----------+
-> |                  kernel                  | value | perc_diff |
-> +------------------------------------------+-------+-----------+
-> |            base-a30b17f016b0             | 14.7  |   0.0%    |
-> |                pelt-hl-m2                | 13.6  |   -7.5%   |
-> |                pelt-hl-m4                | 13.0  |  -11.68%  |
-> |       scaled_util_est_faster_freq        | 13.7  |  -6.81%   |
-> | max_util_scaled_util_est_faster_rbl_freq | 12.1  |  -17.85%  |
-> +------------------------------------------+-------+-----------+
->
-> Jank percentage (Jank deadline 16ms):
-> +------------------------------------------+-------+-----------+
-> |                  kernel                  | value | perc_diff |
-> +------------------------------------------+-------+-----------+
-> |            base-a30b17f016b0             |  1.8  |   0.0%    |
-> |                pelt-hl-m2                |  1.8  |  -4.91%   |
-> |                pelt-hl-m4                |  1.2  |  -36.61%  |
-> |       scaled_util_est_faster_freq        |  1.3  |  -27.63%  |
-> | max_util_scaled_util_est_faster_rbl_freq |  0.8  |  -54.86%  |
-> +------------------------------------------+-------+-----------+
->
-> Power usage [mW] (total - all CPUs):
-> +------------------------------------------+-------+-----------+
-> |             kernel                       | value | perc_diff |
-> +------------------------------------------+-------+-----------+
-> |            base-a30b17f016b0             | 144.4 |   0.0%    |
-> |                pelt-hl-m2                | 141.6 |  -1.97%   |
-> |                pelt-hl-m4                | 163.2 |  12.99%   |
-> |       scaled_util_est_faster_freq        | 132.3 |  -8.41%   |
-> | max_util_scaled_util_est_faster_rbl_freq | 133.4 |  -7.67%   |
-> +------------------------------------------+-------+-----------+
->
-> There is a regression in `Max_frame_duration` but `Mean_frame_duration`,
-> `Jank percentage` and `Power usage` are better.
+It seems possible to call blkcg_set_ioprio() first then try to
+initialize bi_ioprio later in bio_set_ioprio(), but this doesn't work
+for bio in which bi_ioprio is already initialized (e.g., direct-io), so
+introduce a new ioprio policy to promote the iopriority of bio to
+IOPRIO_CLASS_RT if the ioprio is not already RT.
 
-The max frame duration is interesting. Could it be the very 1st frame
-of the test ?
-It's interesting that it's even worse than baseline whereas it should
-take the max of baseline and runnable_avg
+So introduce a new promote-to-rt policy to achieve this. For none-to-rt
+policy, although it doesn't work now, but considering that its purpose
+was also to override the io-priority to RT and allow for a smoother
+transition, just keep it and treat it as an alias of the promote-to-rt
+policy.
 
->
-> So maybe DVFS boosting in preempt-scenarios is really the thing here to
-> further improve the Android Graphics Pipeline.
->
-> I ran the same test (boosting only for DVFS requests) with:
->
-> -->8--
->
-> diff --git a/kernel/sched/sched.h b/kernel/sched/sched.h
-> index dbc56e8b85f9..7a4bf38f2920 100644
-> --- a/kernel/sched/sched.h
-> +++ b/kernel/sched/sched.h
-> @@ -2946,6 +2946,8 @@ static inline unsigned long cpu_util_cfs(int cpu)
->                              READ_ONCE(cfs_rq->avg.util_est.enqueued));
->         }
->
-> +       util = max(util, READ_ONCE(cfs_rq->avg.runnable_avg));
-> +
->         return min(util, capacity_orig_of(cpu));
->
-> Thanks!
->
-> -- Dietmar
->
->
->
->
->
->
+Signed-off-by: Hou Tao <houtao1@huawei.com>
+---
+v2:
+ * Simplify the implementation of promote-to-rt (from Bart)
+ * Make none-to-rt to work again by treating it as an alias of
+   the promote-to-rt policy (from Bart & Jan)
+ * fix the style of new content in cgroup-v2.rst (from Bagas)
+ * set the default priority level to 4 instead of 0 for promote-to-rt
+
+v1: https://lore.kernel.org/linux-block/20230201045227.2203123-1-houtao@huaweicloud.com
+
+ Documentation/admin-guide/cgroup-v2.rst | 42 ++++++++++++++-----------
+ block/blk-ioprio.c                      | 23 ++++++++++++--
+ 2 files changed, 44 insertions(+), 21 deletions(-)
+
+diff --git a/Documentation/admin-guide/cgroup-v2.rst b/Documentation/admin-guide/cgroup-v2.rst
+index 74cec76be9f2..ccfb9fdfbc16 100644
+--- a/Documentation/admin-guide/cgroup-v2.rst
++++ b/Documentation/admin-guide/cgroup-v2.rst
+@@ -2021,31 +2021,33 @@ that attribute:
+   no-change
+ 	Do not modify the I/O priority class.
+ 
+-  none-to-rt
+-	For requests that do not have an I/O priority class (NONE),
+-	change the I/O priority class into RT. Do not modify
+-	the I/O priority class of other requests.
++  promote-to-rt
++	For requests that have a no-RT I/O priority class, change it into RT.
++	Also change the priority level of these requests to 4. Do not modify
++	the I/O priority of requests that have priority class RT.
+ 
+   restrict-to-be
+ 	For requests that do not have an I/O priority class or that have I/O
+-	priority class RT, change it into BE. Do not modify the I/O priority
+-	class of requests that have priority class IDLE.
++	priority class RT, change it into BE. Also change the priority level
++	of these requests to 0. Do not modify the I/O priority class of
++	requests that have priority class IDLE.
+ 
+   idle
+ 	Change the I/O priority class of all requests into IDLE, the lowest
+ 	I/O priority class.
+ 
++  none-to-rt
++	Deprecated. Just an alias for promote-to-rt.
++
+ The following numerical values are associated with the I/O priority policies:
+ 
+-+-------------+---+
+-| no-change   | 0 |
+-+-------------+---+
+-| none-to-rt  | 1 |
+-+-------------+---+
+-| rt-to-be    | 2 |
+-+-------------+---+
+-| all-to-idle | 3 |
+-+-------------+---+
+++----------------+---+
++| no-change      | 0 |
+++----------------+---+
++| rt-to-be       | 2 |
+++----------------+---+
++| all-to-idle    | 3 |
+++----------------+---+
+ 
+ The numerical value that corresponds to each I/O priority class is as follows:
+ 
+@@ -2061,9 +2063,13 @@ The numerical value that corresponds to each I/O priority class is as follows:
+ 
+ The algorithm to set the I/O priority class for a request is as follows:
+ 
+-- Translate the I/O priority class policy into a number.
+-- Change the request I/O priority class into the maximum of the I/O priority
+-  class policy number and the numerical I/O priority class.
++- If I/O priority class policy is promote-to-rt, change the request I/O
++  priority class to IOPRIO_CLASS_RT and change the request I/O priority
++  level to 4.
++- If I/O priorityt class is not promote-to-rt, translate the I/O priority
++  class policy into a number, then change the request I/O priority class
++  into the maximum of the I/O priority class policy number and the numerical
++  I/O priority class.
+ 
+ PID
+ ---
+diff --git a/block/blk-ioprio.c b/block/blk-ioprio.c
+index 8bb6b8eba4ce..4eba569d4823 100644
+--- a/block/blk-ioprio.c
++++ b/block/blk-ioprio.c
+@@ -23,25 +23,28 @@
+ /**
+  * enum prio_policy - I/O priority class policy.
+  * @POLICY_NO_CHANGE: (default) do not modify the I/O priority class.
+- * @POLICY_NONE_TO_RT: modify IOPRIO_CLASS_NONE into IOPRIO_CLASS_RT.
++ * @POLICY_PROMOTE_TO_RT: modify no-IOPRIO_CLASS_RT to IOPRIO_CLASS_RT.
+  * @POLICY_RESTRICT_TO_BE: modify IOPRIO_CLASS_NONE and IOPRIO_CLASS_RT into
+  *		IOPRIO_CLASS_BE.
+  * @POLICY_ALL_TO_IDLE: change the I/O priority class into IOPRIO_CLASS_IDLE.
++ * @POLICY_NONE_TO_RT: an alias for POLICY_PROMOTE_TO_RT.
+  *
+  * See also <linux/ioprio.h>.
+  */
+ enum prio_policy {
+ 	POLICY_NO_CHANGE	= 0,
+-	POLICY_NONE_TO_RT	= 1,
++	POLICY_PROMOTE_TO_RT	= 1,
+ 	POLICY_RESTRICT_TO_BE	= 2,
+ 	POLICY_ALL_TO_IDLE	= 3,
++	POLICY_NONE_TO_RT	= 4,
+ };
+ 
+ static const char *policy_name[] = {
+ 	[POLICY_NO_CHANGE]	= "no-change",
+-	[POLICY_NONE_TO_RT]	= "none-to-rt",
++	[POLICY_PROMOTE_TO_RT]	= "promote-to-rt",
+ 	[POLICY_RESTRICT_TO_BE]	= "restrict-to-be",
+ 	[POLICY_ALL_TO_IDLE]	= "idle",
++	[POLICY_NONE_TO_RT]	= "none-to-rt",
+ };
+ 
+ static struct blkcg_policy ioprio_policy;
+@@ -189,6 +192,20 @@ void blkcg_set_ioprio(struct bio *bio)
+ 	if (!blkcg || blkcg->prio_policy == POLICY_NO_CHANGE)
+ 		return;
+ 
++	if (blkcg->prio_policy == POLICY_PROMOTE_TO_RT ||
++	    blkcg->prio_policy == POLICY_NONE_TO_RT) {
++		/*
++		 * For RT threads, the default priority level is 4 because
++		 * task_nice is 0. By promoting non-RT io-priority to RT-class
++		 * and default level 4, those requests that are already
++		 * RT-class but need a higher io-priority can use ioprio_set()
++		 * to achieve this.
++		 */
++		if (IOPRIO_PRIO_CLASS(bio->bi_ioprio) != IOPRIO_CLASS_RT)
++			bio->bi_ioprio = IOPRIO_PRIO_VALUE(IOPRIO_CLASS_RT, 4);
++		return;
++	}
++
+ 	/*
+ 	 * Except for IOPRIO_CLASS_NONE, higher I/O priority numbers
+ 	 * correspond to a lower priority. Hence, the max_t() below selects
+-- 
+2.29.2
+
