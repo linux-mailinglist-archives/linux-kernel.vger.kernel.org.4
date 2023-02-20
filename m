@@ -2,109 +2,196 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 60F5869D5E6
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Feb 2023 22:40:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BECB969D5D3
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Feb 2023 22:36:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232179AbjBTVkg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Feb 2023 16:40:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44036 "EHLO
+        id S232411AbjBTVgg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Feb 2023 16:36:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39534 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229618AbjBTVke (ORCPT
+        with ESMTP id S231809AbjBTVge (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Feb 2023 16:40:34 -0500
-X-Greylist: delayed 350 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 20 Feb 2023 13:40:32 PST
-Received: from mail.ptr1337.dev (mail.ptr1337.dev [202.61.224.105])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A6921A665;
-        Mon, 20 Feb 2023 13:40:32 -0800 (PST)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 668F1280210;
-        Mon, 20 Feb 2023 22:34:25 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cachyos.org; s=dkim;
-        t=1676928877; h=from:subject:date:message-id:to:mime-version:content-type:
-         content-transfer-encoding:content-language:in-reply-to:references;
-        bh=Ol4kJPN1FGj3D0wZh79xPVHLrHqfMZsGnENgoQj18jc=;
-        b=FC9Hn2clk4ydnfjqyfWMRoivvDV5TRvjSeEpXCAfpg1IKPa3zp+i4jAXrqrg8QqXvr5HbS
-        EfhVWyDhK/CL8jWeIt1Rqk4rLyT6vEExuEc0Ph8de88FCqbEN+fMAOT2eZgI5p1XW/JH/l
-        YewE0AiPz1ksIUkOXMzrAATA/Nxetj8e51wSq5BjcoLRWHJgNDHpoO6Bm0XUamkp2r2sRv
-        05gdISBjJkPm88WcG9mZEEDzEs4NYN4y4EabzlS93WzG9NvJtOJHD1ffXOsuy4gLAlF5SX
-        HpJZfSe0RKJ80i6u6LQhnjAsCCiHD0C335mf6uwvYP4htphlMMBIQgnfQXhz8w==
-Message-ID: <bd0cdf23-080a-eb83-a587-fb6d785cafdf@cachyos.org>
-Date:   Mon, 20 Feb 2023 22:34:24 +0100
+        Mon, 20 Feb 2023 16:36:34 -0500
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 460CF212A2;
+        Mon, 20 Feb 2023 13:36:33 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1676928993; x=1708464993;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=w2bTio2+n94BCqE5in+uzbaZH9Mysz6HXfVYmqRQfz4=;
+  b=Lu5G7rATHb9cvBzEVWIWJZFqC2+qNRv1awoV2KMdoQzy+VZPoHzbHpYk
+   AxHrkIz2tLBvHX7/q5g0O9Xpkzr3p2v1Iuf4JY+3iyspcOruYskwmCLR1
+   8M2QhJEueXc11cGWU04bQIiO8yxxl31LVeB3ZHp5/XiuXE2s2yC27gWMN
+   1fHTGtvyvpBqtpjDyJIAVyKc/gDfunwRJcG8KFbLmuA+OPmEyFd1b9ogc
+   m86yYDflTdPX/jgJWnZkRxX+hkV7vf1GVVDoh8qcdBApTtUVWEFpLtnGd
+   SJG2qq4eUZ82SMvAxM4JwsidQh8gVkNtIzjmtHkRG9O9qYp3U6XssBteU
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10627"; a="330214450"
+X-IronPort-AV: E=Sophos;i="5.97,313,1669104000"; 
+   d="scan'208";a="330214450"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Feb 2023 13:36:32 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10627"; a="648948637"
+X-IronPort-AV: E=Sophos;i="5.97,313,1669104000"; 
+   d="scan'208";a="648948637"
+Received: from lkp-server01.sh.intel.com (HELO 4455601a8d94) ([10.239.97.150])
+  by orsmga006.jf.intel.com with ESMTP; 20 Feb 2023 13:36:30 -0800
+Received: from kbuild by 4455601a8d94 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pUDpl-000EBk-3C;
+        Mon, 20 Feb 2023 21:36:29 +0000
+Date:   Tue, 21 Feb 2023 05:36:23 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     marius.cristea@microchip.com, jic23@kernel.org, lars@metafoo.de,
+        robh+dt@kernel.org
+Cc:     oe-kbuild-all@lists.linux.dev, linux-iio@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        marius.cristea@microchip.com
+Subject: Re: [PATCH v1 2/2] iio: adc: adding support for pac193x
+Message-ID: <202302210551.5yGSdcbc-lkp@intel.com>
+References: <20230220123232.413029-3-marius.cristea@microchip.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH v9 0/8] Parallel CPU bringup for x86_64
-References: <20230215145425.420125-1-usama.arif@bytedance.com>
- <2668799.mvXUDI8C0e@natalenko.name>
- <ed8d662351cfe5793f8cc7e7e8c514d05d16c501.camel@infradead.org>
- <2668869.mvXUDI8C0e@natalenko.name>
- <2a67f6cf18dd2c1879fad9fd8a28242918d3e5d2.camel@infradead.org>
- <982e1d6140705414e8fd60b990bd259a@natalenko.name>
-Content-Language: pl-PL, en-US
-From:   Piotr Gorski <piotrgorski@cachyos.org>
-To:     ukryci-adresaci:;
-In-Reply-To: <982e1d6140705414e8fd60b990bd259a@natalenko.name>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Last-TLS-Session-Version: TLSv1.3
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230220123232.413029-3-marius.cristea@microchip.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello.
+Hi,
 
-In my case, admittedly, the error does not occur, while I have 
-information from a friend that AMD FX 6300 only shows 1 core when using 
-smp boot patchset, so mentioned Oleksandr. Probably soon the friend will 
-join the discussion and will be able to provide more information.
+I love your patch! Perhaps something to improve:
 
-W dniu 20.02.2023 o 22:23, Oleksandr Natalenko pisze:
-> Hello.
->
-> On 20.02.2023 21:31, David Woodhouse wrote:
->> On Mon, 2023-02-20 at 17:40 +0100, Oleksandr Natalenko wrote:
->>> On pondělí 20. února 2023 17:20:13 CET David Woodhouse wrote:
->>> > On Mon, 2023-02-20 at 17:08 +0100, Oleksandr Natalenko wrote:
->>> > >
->>> > > I've applied this to the v6.2 kernel, and suspend/resume broke on
->>> > > my
->>> > > Ryzen 5950X desktop. The machine suspends just fine, but on
->>> > > resume
->>> > > the screen stays blank, and there's no visible disk I/O.
->>> > >
->>> > > Reverting the series brings suspend/resume back to working state.
->>> >
->>> > Hm, thanks. What if you add 'no_parallel_bringup' on the command
->>> > line?
->>>
->>> If the `no_parallel_bringup` param is added, the suspend/resume
->>> works.
->>
->> Thanks for the testing. Can I ask you to do one further test: apply the
->> series only as far as patch 6/8 'x86/smpboot: Support parallel startup
->> of secondary CPUs'.
->>
->> That will do the new startup asm sequence where each CPU finds its own
->> per-cpu data so it *could* work in parallel, but doesn't actually do
->> the bringup in parallel yet.
->
-> With patches 1 to 6 (including) applied and no extra cmdline params 
-> added the resume doesn't work.
->
->> Does your box have a proper serial port?
->
-> No, sorry. I know it'd help with getting logs, and I do have a 
-> serial-to-USB cable that I use for another machine, but in this one 
-> the port is not routed to outside. I think I can put a header there as 
-> the motherboard does have pins, but I'd have to buy one first. In 
-> theory, I can do that, but that won't happen within the next few weeks.
->
-> P.S. Piotr Gorski (in Cc) also reported this: "My friend from CachyOS 
-> can confirm bugs with smpboot patches. AMD FX 6300 only shows 1 core 
-> when using smp boot patchset". Probably, he can reply to this thread 
-> and provide more details.
->
+[auto build test WARNING on jic23-iio/togreg]
+[also build test WARNING on linus/master v6.2 next-20230220]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/marius-cristea-microchip-com/dt-bindings-iio-adc-adding-dt-bindings-for-PAC193X/20230220-203540
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/jic23/iio.git togreg
+patch link:    https://lore.kernel.org/r/20230220123232.413029-3-marius.cristea%40microchip.com
+patch subject: [PATCH v1 2/2] iio: adc: adding support for pac193x
+config: powerpc-allmodconfig (https://download.01.org/0day-ci/archive/20230221/202302210551.5yGSdcbc-lkp@intel.com/config)
+compiler: powerpc-linux-gcc (GCC) 12.1.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/fd3be916ffe18735a98bdc55ccc0cb5f3097582c
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review marius-cristea-microchip-com/dt-bindings-iio-adc-adding-dt-bindings-for-PAC193X/20230220-203540
+        git checkout fd3be916ffe18735a98bdc55ccc0cb5f3097582c
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=powerpc olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=powerpc SHELL=/bin/bash
+
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202302210551.5yGSdcbc-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+   drivers/iio/adc/pac193x.c: In function 'pac193x_acpi_get_acpi_match_entry':
+   drivers/iio/adc/pac193x.c:1402:21: warning: variable 'status' set but not used [-Wunused-but-set-variable]
+    1402 |         acpi_status status;
+         |                     ^~~~~~
+   drivers/iio/adc/pac193x.c: In function 'pac193x_match_acpi_device':
+>> drivers/iio/adc/pac193x.c:1469:57: warning: '<<' in boolean context, did you mean '<'? [-Wint-in-bool-context]
+    1469 |         chip_info->bi_dir[0] = (bi_dir_mask & (1 << 1)) << 1;
+         |                                ~~~~~~~~~~~~~~~~~~~~~~~~~^~~~
+   drivers/iio/adc/pac193x.c:1470:57: warning: '<<' in boolean context, did you mean '<'? [-Wint-in-bool-context]
+    1470 |         chip_info->bi_dir[0] = (bi_dir_mask & (1 << 2)) << 2;
+         |                                ~~~~~~~~~~~~~~~~~~~~~~~~~^~~~
+   drivers/iio/adc/pac193x.c:1471:57: warning: '<<' in boolean context, did you mean '<'? [-Wint-in-bool-context]
+    1471 |         chip_info->bi_dir[0] = (bi_dir_mask & (1 << 3)) << 3;
+         |                                ~~~~~~~~~~~~~~~~~~~~~~~~~^~~~
+
+
+vim +1469 drivers/iio/adc/pac193x.c
+
+  1411	
+  1412	static const char *pac193x_match_acpi_device(struct i2c_client *client,
+  1413						     struct pac193x_chip_info *chip_info)
+  1414	{
+  1415		char *name;
+  1416		acpi_handle handle;
+  1417		union acpi_object *rez;
+  1418		unsigned short bi_dir_mask;
+  1419		int idx, i;
+  1420	
+  1421		handle = ACPI_HANDLE(&client->dev);
+  1422		name = pac193x_acpi_get_acpi_match_entry(handle);
+  1423		if (!name)
+  1424			return NULL;
+  1425	
+  1426		rez = pac193x_acpi_eval_function(handle, 0, PAC193X_ACPI_GET_NAMES_AND_MOHMS_VALS);
+  1427	
+  1428		if (!rez)
+  1429			return NULL;
+  1430	
+  1431		for (i = 0; i < rez->package.count; i += 2) {
+  1432			idx = i / 2;
+  1433			chip_info->channel_names[idx] =
+  1434				devm_kmemdup(&client->dev, rez->package.elements[i].string.pointer,
+  1435					     (size_t)rez->package.elements[i].string.length + 1,
+  1436					     GFP_KERNEL);
+  1437			chip_info->channel_names[idx][rez->package.elements[i].string.length] = '\0';
+  1438			chip_info->shunts[idx] =
+  1439				rez->package.elements[i + 1].integer.value * 1000;
+  1440			chip_info->active_channels[idx] = (chip_info->shunts[idx] != 0);
+  1441		}
+  1442	
+  1443		kfree(rez);
+  1444	
+  1445		rez = pac193x_acpi_eval_function(handle, 1, PAC193X_ACPI_GET_UOHMS_VALS);
+  1446		if (!rez) {
+  1447			/*
+  1448			 * initialising with default values
+  1449			 * we assume all channels are unidectional(the mask is zero)
+  1450			 * and assign the default sampling rate
+  1451			 */
+  1452			chip_info->sample_rate_value = PAC193X_DEFAULT_CHIP_SAMP_SPEED;
+  1453			return name;
+  1454		}
+  1455	
+  1456		for (i = 0; i < rez->package.count; i++) {
+  1457			idx = i;
+  1458			chip_info->shunts[idx] = rez->package.elements[i].integer.value;
+  1459			chip_info->active_channels[idx] = (chip_info->shunts[idx] != 0);
+  1460		}
+  1461	
+  1462		kfree(rez);
+  1463	
+  1464		rez = pac193x_acpi_eval_function(handle, 1, PAC193X_ACPI_GET_BIPOLAR_SETTINGS);
+  1465		if (!rez)
+  1466			return NULL;
+  1467		bi_dir_mask = rez->package.elements[0].integer.value;
+  1468		chip_info->bi_dir[0] = (bi_dir_mask & (1 << 0)) << 0;
+> 1469		chip_info->bi_dir[0] = (bi_dir_mask & (1 << 1)) << 1;
+  1470		chip_info->bi_dir[0] = (bi_dir_mask & (1 << 2)) << 2;
+  1471		chip_info->bi_dir[0] = (bi_dir_mask & (1 << 3)) << 3;
+  1472		kfree(rez);
+  1473	
+  1474		rez = pac193x_acpi_eval_function(handle, 1, PAC193X_ACPI_GET_SAMP);
+  1475		if (!rez)
+  1476			return NULL;
+  1477	
+  1478		chip_info->sample_rate_value = rez->package.elements[0].integer.value;
+  1479		kfree(rez);
+  1480	
+  1481		return name;
+  1482	}
+  1483	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
