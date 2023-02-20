@@ -2,102 +2,177 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DCBAA69CC13
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Feb 2023 14:29:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 28B5169CC19
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Feb 2023 14:31:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231992AbjBTN3V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Feb 2023 08:29:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41344 "EHLO
+        id S232064AbjBTNbX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Feb 2023 08:31:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42238 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230392AbjBTN3U (ORCPT
+        with ESMTP id S230392AbjBTNbV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Feb 2023 08:29:20 -0500
-Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4195F9039
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Feb 2023 05:29:19 -0800 (PST)
-Received: by mail-ed1-x52e.google.com with SMTP id cq23so4418095edb.1
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Feb 2023 05:29:19 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=E+1bqLLLjLW1FI/aGhvjFDFwCFvcmqJnn+ZsqlNUCbU=;
-        b=fURrixGoK5k53L8wVDs0d6mR/e6wEFmRxZVllR0nFKAFsoFdxMtB9CS/BqxCyCAWC/
-         WsMupYa2RPJ4er8qvbP3hVRSFlegDKBA48PSO3hUjKHar2I84fLPXT9lKnxJcZua1qMZ
-         THJWIF+Be1VElPZYxzFR2yIS2/8+M5jPGt3Bg+Sa4CF4S/vUPGNgTcBBnGqxA8cxx2in
-         x7uiI5PDDWJSPhqRHkwmt9jbnlWTgaQ/gwKpyWYtOgP6Ti3pqvxyFM5Nny6TgdnMsF6J
-         V4zTJOXPfKSnXEiG27BjbmHiVwqu5qKiUXU0YuENCSWarCY8tCHzXN71HSuD4ufgYcSW
-         iS2Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=E+1bqLLLjLW1FI/aGhvjFDFwCFvcmqJnn+ZsqlNUCbU=;
-        b=Jo+c/MV7USvzLmyEZPpViMCIXdTrS1MWxGkTZG8cfJFA7j1p4HWCMhriKUGh+rduIk
-         R41PV5hZukj6xchj/LKaVVljTk+hlyx0ROvE+3PHBQrk7hUTVoDYOokJfpzYx1N86gPU
-         5NWOwxYj9YIeHziLkuoTuLck1kL7fyLXJDuhYdQnzIEf8668TXgx/Vxqs7LUoEyozPvl
-         teCqYPqY9HvtNgeKXv3zqm7Rds5e0xOv/KOyiFb3Ze9k2kTZnqkwVTaXxTQPJFfK2kLO
-         qHr/and7E77sGu6YcS/p+NljFBe1XJtfok6LSC95t8kBtrSCBBZRo+RKYW0/WkQMurHs
-         rpZg==
-X-Gm-Message-State: AO0yUKU9uh5raRKhsTre6BwMhXWVnlSXjhiBFJHYJ9Qkk+WY1hwKsbTO
-        66WPiJUZoarAwT0uJaVk894=
-X-Google-Smtp-Source: AK7set/7nCkWFh2Wa5wiZ5OIAt77f8rKElmiJ65OuAtMsX5nOjN/9XgyIIrg/7kzQ1vpt+AeL5Awzw==
-X-Received: by 2002:a17:906:4b02:b0:8aa:c143:ffe1 with SMTP id y2-20020a1709064b0200b008aac143ffe1mr9642772eju.48.1676899757794;
-        Mon, 20 Feb 2023 05:29:17 -0800 (PST)
-Received: from gmail.com (1F2EF163.nat.pool.telekom.hu. [31.46.241.99])
-        by smtp.gmail.com with ESMTPSA id z10-20020a170906714a00b008ba365e7e59sm3576213ejj.121.2023.02.20.05.29.16
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 20 Feb 2023 05:29:17 -0800 (PST)
-Sender: Ingo Molnar <mingo.kernel.org@gmail.com>
-Date:   Mon, 20 Feb 2023 14:29:15 +0100
-From:   Ingo Molnar <mingo@kernel.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     linux-kernel@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>,
-        Borislav Petkov <bp@alien8.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Andrew Morton <akpm@linux-foundation.org>
-Subject: [GIT PULL] x86/platform changes for v6.3
-Message-ID: <Y/N1q8vlYJMyrwSr@gmail.com>
+        Mon, 20 Feb 2023 08:31:21 -0500
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D0911A944;
+        Mon, 20 Feb 2023 05:31:19 -0800 (PST)
+Received: from pps.filterd (m0279873.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 31K5kJir003643;
+        Mon, 20 Feb 2023 13:30:50 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=FcZjGbKOZP48Di41hyXSrR5yDt+ItQvfWr70SwpNl3g=;
+ b=gYrdhKe5AiJb2WlDV0dyoPvosZYlzhSPN4MEbbM/5ReeqLi7fosWqnlHTGn7S/yJrn0w
+ LHXAb8ua+8sDiO7ZmuQO3Puc12VYAW/eUZOH0wDwTdlA7sO48Df/Nb7Cy420aAz2z85u
+ 4KZf3SuZzXEbuwpAJXv04xfhhZmel/zIZkp2a9WVCNwcqeyOfA0qqpVwrbTOdi7OfEoe
+ twgd7GY6+5U4Qbf6LB6NwuT2WxE8Gg3W+GfBzpvXD5hErio/NPrjJzHnoX7Vo+3jzrN7
+ ZdMMIjb1wERFrBFQYLMNAqT21X053XjJp8q0G6aVcmaIM1dbbTBDcy0KcyQH8Rx8UHwo bw== 
+Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3ntm1vdfkq-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 20 Feb 2023 13:30:50 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 31KDUmuI008152
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 20 Feb 2023 13:30:48 GMT
+Received: from [10.216.11.20] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.41; Mon, 20 Feb
+ 2023 05:29:41 -0800
+Message-ID: <86b64f46-a142-9b5e-ac93-04337f66c61f@quicinc.com>
+Date:   Mon, 20 Feb 2023 18:59:31 +0530
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [PATCH 1/7] dt-bindings: PCI: qcom: Add IPQ9574 specific
+ compatible
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        <agross@kernel.org>, <andersson@kernel.org>,
+        <konrad.dybcio@linaro.org>, <lpieralisi@kernel.org>,
+        <kw@linux.com>, <robh@kernel.org>, <bhelgaas@google.com>,
+        <krzysztof.kozlowski+dt@linaro.org>, <vkoul@kernel.org>,
+        <kishon@kernel.org>, <mturquette@baylibre.com>, <sboyd@kernel.org>,
+        <mani@kernel.org>, <p.zabel@pengutronix.de>,
+        <svarbanov@mm-sol.com>, <linux-arm-msm@vger.kernel.org>,
+        <linux-pci@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-phy@lists.infradead.org>,
+        <linux-clk@vger.kernel.org>
+CC:     <quic_srichara@quicinc.com>, <quic_gokulsri@quicinc.com>,
+        <quic_sjaganat@quicinc.com>, <quic_kathirav@quicinc.com>,
+        <quic_arajkuma@quicinc.com>, <quic_anusha@quicinc.com>
+References: <20230214164135.17039-1-quic_devipriy@quicinc.com>
+ <20230214164135.17039-2-quic_devipriy@quicinc.com>
+ <f883e857-1281-ceae-74ac-72a1f07d6413@linaro.org>
+Content-Language: en-US
+From:   Devi Priya <quic_devipriy@quicinc.com>
+In-Reply-To: <f883e857-1281-ceae-74ac-72a1f07d6413@linaro.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: tGiBzl2aWykuNuYe1mLK45B6RXThRdx0
+X-Proofpoint-GUID: tGiBzl2aWykuNuYe1mLK45B6RXThRdx0
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.170.22
+ definitions=2023-02-20_10,2023-02-20_02,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 phishscore=0
+ bulkscore=0 malwarescore=0 mlxscore=0 lowpriorityscore=0 mlxlogscore=950
+ suspectscore=0 adultscore=0 impostorscore=0 priorityscore=1501 spamscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2212070000
+ definitions=main-2302200123
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Linus,
+Hi Krzysztof,
+Thanks for taking time to review the patch!
 
-Please pull the latest x86/platform git tree from:
+On 2/16/2023 3:59 PM, Krzysztof Kozlowski wrote:
+> On 14/02/2023 17:41, Devi Priya wrote:
+>> Document the compatible for IPQ9574
+>>
+>> Signed-off-by: Devi Priya <quic_devipriy@quicinc.com>
+>> ---
+>>   .../devicetree/bindings/pci/qcom,pcie.yaml    | 72 ++++++++++++++++++-
+>>   1 file changed, 70 insertions(+), 2 deletions(-)
+>>
+>> diff --git a/Documentation/devicetree/bindings/pci/qcom,pcie.yaml b/Documentation/devicetree/bindings/pci/qcom,pcie.yaml
+>> index 872817d6d2bd..dabdf2684e2d 100644
+>> --- a/Documentation/devicetree/bindings/pci/qcom,pcie.yaml
+>> +++ b/Documentation/devicetree/bindings/pci/qcom,pcie.yaml
+>> @@ -26,6 +26,7 @@ properties:
+>>             - qcom,pcie-ipq8064-v2
+>>             - qcom,pcie-ipq8074
+>>             - qcom,pcie-ipq8074-gen3
+>> +          - qcom,pcie-ipq9574
+>>             - qcom,pcie-msm8996
+>>             - qcom,pcie-qcs404
+>>             - qcom,pcie-sa8540p
+>> @@ -44,11 +45,11 @@ properties:
+>>   
+>>     reg:
+>>       minItems: 4
+>> -    maxItems: 5
+>> +    maxItems: 6
+>>   
+>>     reg-names:
+>>       minItems: 4
+>> -    maxItems: 5
+>> +    maxItems: 6
+>>   
+>>     interrupts:
+>>       minItems: 1
+>> @@ -105,6 +106,8 @@ properties:
+>>       items:
+>>         - const: pciephy
+>>   
+>> +  msi-parent: true
+>> +
+>>     power-domains:
+>>       maxItems: 1
+>>   
+>> @@ -173,6 +176,27 @@ allOf:
+>>               - const: parf # Qualcomm specific registers
+>>               - const: config # PCIe configuration space
+>>   
+>> +  - if:
+>> +      properties:
+>> +        compatible:
+>> +          contains:
+>> +            enum:
+>> +              - qcom,pcie-ipq9574
+>> +    then:
+>> +      properties:
+>> +        reg:
+>> +          minItems: 5
+>> +          maxItems: 6
+>> +        reg-names:
+>> +          minItems: 5
+>> +          items:
+>> +            - const: dbi # DesignWare PCIe registers
+>> +            - const: elbi # External local bus interface registers
+>> +            - const: atu # ATU address space
+>> +            - const: parf # Qualcomm specific registers
+>> +            - const: config # PCIe configuration space
+>> +            - const: aggr_noc #PCIe aggr_noc
+> 
+> Why last one is optional? I would assume device either has it or has not.
+> 
+Yes right, the device has aggr_noc.
+The rate adapter update was required only for 1-lane PCIe
+But will check and update this accordingly in the next spin.
 
-   git://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git x86-platform-2023-02-20
-
-   # HEAD: 7ddf0050a21fdcc025c3cb1055fe3db60df1cd97 x86/mce/dev-mcelog: use strscpy() to instead of strncpy()
-
-Changes in this cycle:
-
- - Simplify add_rtc_cmos()
-
- - Use strscpy() in the mcelog code
-
- Thanks,
-
-	Ingo
-
------------------->
-Hans de Goede (1):
-      x86/rtc: Simplify PNP ids check
-
-Xu Panda (1):
-      x86/mce/dev-mcelog: use strscpy() to instead of strncpy()
-
-
- arch/x86/kernel/cpu/mce/dev-mcelog.c | 3 +--
- arch/x86/kernel/rtc.c                | 9 +++------
- 2 files changed, 4 insertions(+), 8 deletions(-)
+> 
+> Best regards,
+> Krzysztof
+> 
+Best Regards,
+Devi Priya
