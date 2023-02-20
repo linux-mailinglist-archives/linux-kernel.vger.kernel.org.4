@@ -2,246 +2,384 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 65CB669C748
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Feb 2023 10:05:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0818769C752
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Feb 2023 10:06:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231458AbjBTJFa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Feb 2023 04:05:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50122 "EHLO
+        id S230432AbjBTJGi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Feb 2023 04:06:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51570 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231476AbjBTJFZ (ORCPT
+        with ESMTP id S230371AbjBTJGh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Feb 2023 04:05:25 -0500
-Received: from mx.sberdevices.ru (mx.sberdevices.ru [45.89.227.171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03AF0EB66;
-        Mon, 20 Feb 2023 01:05:16 -0800 (PST)
-Received: from s-lin-edge02.sberdevices.ru (localhost [127.0.0.1])
-        by mx.sberdevices.ru (Postfix) with ESMTP id 5D2465FD41;
-        Mon, 20 Feb 2023 12:05:14 +0300 (MSK)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sberdevices.ru;
-        s=mail; t=1676883914;
-        bh=LymHhLQmA0CwL95o6n5QJvTg+gldJBbnj8yDRVle4Xc=;
-        h=From:To:Subject:Date:Message-ID:Content-Type:MIME-Version;
-        b=QHqgHEugWCqp5l1hAof/OGVkXK3fAwSBU8L8T6s+CO5wZF6+veCfLt5N7GvghZXT5
-         QwwTLBwaYEJTFZAp4P3LSLsa/dVgzzLI0UvKsnZtY8RQheHJ/+ZeuzB8gvAolYQt/S
-         yRWw+IdDXWavCp624iN8X4+qdM0tboZMWSfuD0eJdgjWx70oSXS5BmDN4tSsv8PFBU
-         3e0GQoV1yA+0p+xbIr67awn8bLraBxllvJveSCZYLRteXssiI4mXFDMVD/pVzQiOoG
-         TYcV3PH9KKbx94nFE+ZfcYV7A7aHk2t2BEXMdAw/OVN7oq1FUwv+f9qVf3lkq2m433
-         lFkNZqtJuA0sA==
-Received: from S-MS-EXCH02.sberdevices.ru (S-MS-EXCH02.sberdevices.ru [172.16.1.5])
-        by mx.sberdevices.ru (Postfix) with ESMTP;
-        Mon, 20 Feb 2023 12:05:13 +0300 (MSK)
-From:   Krasnov Arseniy <AVKrasnov@sberdevices.ru>
-To:     Stefano Garzarella <sgarzare@redhat.com>
-CC:     Stefan Hajnoczi <stefanha@redhat.com>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        Jason Wang <jasowang@redhat.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Krasnov Arseniy <oxffffaa@gmail.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "virtualization@lists.linux-foundation.org" 
-        <virtualization@lists.linux-foundation.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        kernel <kernel@sberdevices.ru>
-Subject: Re: [RFC PATCH v1 12/12] test/vsock: MSG_ZEROCOPY support for
- vsock_perf
-Thread-Topic: [RFC PATCH v1 12/12] test/vsock: MSG_ZEROCOPY support for
- vsock_perf
-Thread-Index: AQHZOfmKbgKypo6Z8EmH8tGoyYFWV67RkMCAgAXdG4A=
-Date:   Mon, 20 Feb 2023 09:05:12 +0000
-Message-ID: <d5de8b79-f903-d65f-a5bc-e591578144e7@sberdevices.ru>
-References: <0e7c6fc4-b4a6-a27b-36e9-359597bba2b5@sberdevices.ru>
- <03570f48-f56a-2af4-9579-15a685127aeb@sberdevices.ru>
- <20230216152945.qdh6vrq66pl2bfxe@sgarzare-redhat>
-In-Reply-To: <20230216152945.qdh6vrq66pl2bfxe@sgarzare-redhat>
-Accept-Language: en-US, ru-RU
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [172.16.1.12]
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <096BCC104877B94E8A85FA06026465CA@sberdevices.ru>
-Content-Transfer-Encoding: base64
+        Mon, 20 Feb 2023 04:06:37 -0500
+Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20BF615C94
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Feb 2023 01:05:59 -0800 (PST)
+Received: by mail-lf1-x131.google.com with SMTP id m7so737904lfj.8
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Feb 2023 01:05:59 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:message-id:subject:cc:to:from
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=91aTdz1Aogqeher/EAKcddfL7wOgCqquWNNbDgH7YwY=;
+        b=VVz0rN9nlQgr75YmcUQO3k+1zBiZEHXx2HuAGOJrfJ23ccZ3Y02UeGmf4Ni9jx2t4p
+         tbtHhtMXX3G2+p5OvXr4cpuTbsMvwNdB3sOoQNwrUC4Z1s9MXZjLjutYNs/yMIr0SPLl
+         fzBZfLfE0Wx+ZS+ghTQLaCWhuPUNCicRj4tBsSXfxFvCeyVypkFgZTA2Vehm6gRGu1d8
+         9ZRX2Cn8KudhmbylakOG0N6fl0h/UGbrPSH57xTYUBjznY6GK3k8zSypSIDX7PfNKp/b
+         vyfHV5SLoBRPUIqYEW2uddX8xUeYYuCqbfhaQa3cSNtgakofpSM7X3VcHs41N8+dF6Ce
+         YiKg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=mime-version:references:in-reply-to:message-id:subject:cc:to:from
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=91aTdz1Aogqeher/EAKcddfL7wOgCqquWNNbDgH7YwY=;
+        b=EsVCsbTUi+baHmORwwY1ffYKkyMTP32fMgIVFt9dUDGGXZY27/EmRcyUPKumc0iZ94
+         WMxoVR8RJkKVea2MKX5xyvoxRdvMPyRcOGEGDjokrApBc+Vk2EQMB9FyD9qFdeiwMQJC
+         zt0/nSXoz7GpkM+bsGhtss0vHLQhtV52fj2zJBOx9cVkhUdX63IdVzxsU3RMvbE9qE4J
+         zfdQPuwykBXF7y2Pab4iZvYLkD3CulzRz5uvh1IhGhC4QndADsXIVUswPdN6GUe2KhU+
+         wPzPakjRehYjfZTGuUJbRkvcfeJ2T4o1lrL/DpcFvGpaTYpyiHY9KeAoIPm3KJJtfdWn
+         qnTg==
+X-Gm-Message-State: AO0yUKXeiN6B4skVPpfxtDaEzg0PL2aiC7wiB5U/AljsYm0YGgj+kEsq
+        yrmRTtIs6Y7Nk2yt9uN3Vqo=
+X-Google-Smtp-Source: AK7set/mFnepBkg+YWiJJuw4i9/rn6t5jRDMo4peG+3SEN+gGWobrmLITRptS3fGDNzp8iFIYkXULw==
+X-Received: by 2002:ac2:4465:0:b0:4aa:e120:b431 with SMTP id y5-20020ac24465000000b004aae120b431mr473824lfl.38.1676883957311;
+        Mon, 20 Feb 2023 01:05:57 -0800 (PST)
+Received: from eldfell ([194.136.85.206])
+        by smtp.gmail.com with ESMTPSA id u6-20020ac243c6000000b004db3900da02sm271259lfl.73.2023.02.20.01.05.56
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 20 Feb 2023 01:05:56 -0800 (PST)
+Date:   Mon, 20 Feb 2023 11:05:53 +0200
+From:   Pekka Paalanen <ppaalanen@gmail.com>
+To:     Rob Clark <robdclark@gmail.com>
+Cc:     dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Christian =?UTF-8?B?S8O2bmln?= <ckoenig.leichtzumerken@gmail.com>,
+        Michel =?UTF-8?B?RMOkbnplcg==?= <michel@daenzer.net>,
+        Tvrtko Ursulin <tvrtko.ursulin@intel.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        Simon Ser <contact@emersion.fr>,
+        Rob Clark <robdclark@chromium.org>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        David Airlie <airlied@gmail.com>,
+        linux-kernel@vger.kernel.org (open list)
+Subject: Re: [PATCH v4 09/14] drm/syncobj: Add deadline support for syncobj
+ waits
+Message-ID: <20230220110553.47ecd504@eldfell>
+In-Reply-To: <20230218211608.1630586-10-robdclark@gmail.com>
+References: <20230218211608.1630586-1-robdclark@gmail.com>
+        <20230218211608.1630586-10-robdclark@gmail.com>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-X-KSMG-Rule-ID: 4
-X-KSMG-Message-Action: clean
-X-KSMG-AntiSpam-Status: not scanned, disabled by settings
-X-KSMG-AntiSpam-Interceptor-Info: not scanned
-X-KSMG-AntiPhishing: not scanned, disabled by settings
-X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 1.1.2.30, bases: 2023/02/20 05:01:00 #20887657
-X-KSMG-AntiVirus-Status: Clean, skipped
+Content-Type: multipart/signed; boundary="Sig_/wm570xKYRZuqxUZ+wire3zk";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-T24gMTYuMDIuMjAyMyAxODoyOSwgU3RlZmFubyBHYXJ6YXJlbGxhIHdyb3RlOg0KPiBPbiBNb24s
-IEZlYiAwNiwgMjAyMyBhdCAwNzowNjozMkFNICswMDAwLCBBcnNlbml5IEtyYXNub3Ygd3JvdGU6
-DQo+PiBUbyB1c2UgdGhpcyBvcHRpb24gcGFzcyAnLS16YycgcGFyYW1ldGVyOg0KPiANCj4gLS16
-ZXJvY29weSBvciAtLXplcm8tY29weSBtYXliZSBiZXR0ZXIgZm9sbG93IHdoYXQgd2UgZGlkIHdp
-dGggdGhlIG90aGVyIHBhcmFtZXRlcnMgOi0pDQo+IA0KPj4NCj4+IC4vdnNvY2tfcGVyZiAtLXpj
-IC0tc2VuZGVyIDxjaWQ+IC0tcG9ydCA8cG9ydD4gLS1ieXRlcyA8Ynl0ZXMgdG8gc2VuZD4NCj4+
-DQo+PiBXaXRoIHRoaXMgb3B0aW9uIE1TR19aRVJPQ09QWSBmbGFnIHdpbGwgYmUgcGFzc2VkIHRv
-IHRoZSAnc2VuZCgpJyBjYWxsLg0KPj4NCj4+IFNpZ25lZC1vZmYtYnk6IEFyc2VuaXkgS3Jhc25v
-diA8QVZLcmFzbm92QHNiZXJkZXZpY2VzLnJ1Pg0KPj4gLS0tDQo+PiB0b29scy90ZXN0aW5nL3Zz
-b2NrL3Zzb2NrX3BlcmYuYyB8IDEyNyArKysrKysrKysrKysrKysrKysrKysrKysrKysrKy0tDQo+
-PiAxIGZpbGUgY2hhbmdlZCwgMTIwIGluc2VydGlvbnMoKyksIDcgZGVsZXRpb25zKC0pDQo+Pg0K
-Pj4gZGlmZiAtLWdpdCBhL3Rvb2xzL3Rlc3RpbmcvdnNvY2svdnNvY2tfcGVyZi5jIGIvdG9vbHMv
-dGVzdGluZy92c29jay92c29ja19wZXJmLmMNCj4+IGluZGV4IGE3MjUyMDMzOGY4NC4uMWQ0MzVi
-ZTliNDhlIDEwMDY0NA0KPj4gLS0tIGEvdG9vbHMvdGVzdGluZy92c29jay92c29ja19wZXJmLmMN
-Cj4+ICsrKyBiL3Rvb2xzL3Rlc3RpbmcvdnNvY2svdnNvY2tfcGVyZi5jDQo+PiBAQCAtMTgsNiAr
-MTgsOCBAQA0KPj4gI2luY2x1ZGUgPHBvbGwuaD4NCj4+ICNpbmNsdWRlIDxzeXMvc29ja2V0Lmg+
-DQo+PiAjaW5jbHVkZSA8bGludXgvdm1fc29ja2V0cy5oPg0KPj4gKyNpbmNsdWRlIDxzeXMvbW1h
-bi5oPg0KPj4gKyNpbmNsdWRlIDxsaW51eC9lcnJxdWV1ZS5oPg0KPj4NCj4+ICNkZWZpbmUgREVG
-QVVMVF9CVUZfU0laRV9CWVRFU8KgwqDCoCAoMTI4ICogMTAyNCkNCj4+ICNkZWZpbmUgREVGQVVM
-VF9UT19TRU5EX0JZVEVTwqDCoMKgICg2NCAqIDEwMjQpDQo+PiBAQCAtMjgsOSArMzAsMTQgQEAN
-Cj4+ICNkZWZpbmUgQllURVNfUEVSX0dCwqDCoMKgwqDCoMKgwqAgKDEwMjQgKiAxMDI0ICogMTAy
-NFVMTCkNCj4+ICNkZWZpbmUgTlNFQ19QRVJfU0VDwqDCoMKgwqDCoMKgwqAgKDEwMDAwMDAwMDBV
-TEwpDQo+Pg0KPj4gKyNpZm5kZWYgU09MX1ZTT0NLDQo+PiArI2RlZmluZSBTT0xfVlNPQ0sgMjg3
-DQo+PiArI2VuZGlmDQo+IA0KPiBJIHRob3VnaHQgd2UgdXNlIHRoZSBjdXJyZW50IGtlcm5lbCBo
-ZWFkZXJzIHdoZW4gd2UgY29tcGlsZSB0aGUgdGVzdHMsDQo+IGRvIHdlIG5lZWQgdG8gZml4IHNv
-bWV0aGluZyBpbiB0aGUgbWFrZWZpbGU/DQpOb3Qgc3VyZSwgb2YgY291cnNlIHdlIGFyZSB1c2lu
-ZyB1YXBpLiBCdXQgaSBzZWUsIHRoYXQgZGVmaW5lcyBsaWtlIFNPTF9YWFggaXMgbm90DQpkZWZp
-bmVkIGluIHVhcGkgaGVhZGVycy4gRm9yIGV4YW1wbGUgU09MX0lQIGlzIGRlZmluZWQgaW4gaW5j
-bHVkZS9saW51eC9zb2NrZXQuaCwNCmJ1dCB1c2Vyc3BhY2UgYXBwIHVzZXMgU09MX0lQIGZyb20g
-aW4uaCAoYXQgbGVhc3Qgb24gbXkgbWFjaGluZSkuIEUuZy4gU09MX1hYWCBpcw0Kbm90IGV4cG9y
-dGVkIHRvIHVzZXIuDQo+IA0KPj4gKw0KPj4gc3RhdGljIHVuc2lnbmVkIGludCBwb3J0ID0gREVG
-QVVMVF9QT1JUOw0KPj4gc3RhdGljIHVuc2lnbmVkIGxvbmcgYnVmX3NpemVfYnl0ZXMgPSBERUZB
-VUxUX0JVRl9TSVpFX0JZVEVTOw0KPj4gc3RhdGljIHVuc2lnbmVkIGxvbmcgdnNvY2tfYnVmX2J5
-dGVzID0gREVGQVVMVF9WU09DS19CVUZfQllURVM7DQo+PiArc3RhdGljIGJvb2wgemVyb2NvcHk7
-DQo+Pg0KPj4gc3RhdGljIHZvaWQgZXJyb3IoY29uc3QgY2hhciAqcykNCj4+IHsNCj4+IEBAIC0y
-NDcsMTUgKzI1NCw3NCBAQCBzdGF0aWMgdm9pZCBydW5fcmVjZWl2ZXIodW5zaWduZWQgbG9uZyBy
-Y3Zsb3dhdF9ieXRlcykNCj4+IMKgwqDCoMKgY2xvc2UoZmQpOw0KPj4gfQ0KPj4NCj4+ICtzdGF0
-aWMgdm9pZCByZWN2X2NvbXBsZXRpb24oaW50IGZkKQ0KPj4gK3sNCj4+ICvCoMKgwqAgc3RydWN0
-IHNvY2tfZXh0ZW5kZWRfZXJyICpzZXJyOw0KPj4gK8KgwqDCoCBjaGFyIGNtc2dfZGF0YVsxMjhd
-Ow0KPj4gK8KgwqDCoCBzdHJ1Y3QgY21zZ2hkciAqY207DQo+PiArwqDCoMKgIHN0cnVjdCBtc2do
-ZHIgbXNnOw0KPj4gK8KgwqDCoCBpbnQgcmV0Ow0KPj4gKw0KPj4gK8KgwqDCoCBtc2cubXNnX2Nv
-bnRyb2wgPSBjbXNnX2RhdGE7DQo+PiArwqDCoMKgIG1zZy5tc2dfY29udHJvbGxlbiA9IHNpemVv
-ZihjbXNnX2RhdGEpOw0KPj4gKw0KPj4gK8KgwqDCoCByZXQgPSByZWN2bXNnKGZkLCAmbXNnLCBN
-U0dfRVJSUVVFVUUpOw0KPj4gK8KgwqDCoCBpZiAocmV0ID09IC0xKQ0KPj4gK8KgwqDCoMKgwqDC
-oMKgIHJldHVybjsNCj4+ICsNCj4+ICvCoMKgwqAgY20gPSBDTVNHX0ZJUlNUSERSKCZtc2cpOw0K
-Pj4gK8KgwqDCoCBpZiAoIWNtKSB7DQo+PiArwqDCoMKgwqDCoMKgwqAgZnByaW50ZihzdGRlcnIs
-ICJjbXNnOiBubyBjbXNnXG4iKTsNCj4+ICvCoMKgwqDCoMKgwqDCoCByZXR1cm47DQo+PiArwqDC
-oMKgIH0NCj4+ICsNCj4+ICvCoMKgwqAgaWYgKGNtLT5jbXNnX2xldmVsICE9IFNPTF9WU09DSykg
-ew0KPj4gK8KgwqDCoMKgwqDCoMKgIGZwcmludGYoc3RkZXJyLCAiY21zZzogdW5leHBlY3RlZCAn
-Y21zZ19sZXZlbCdcbiIpOw0KPj4gK8KgwqDCoMKgwqDCoMKgIHJldHVybjsNCj4+ICvCoMKgwqAg
-fQ0KPj4gKw0KPj4gK8KgwqDCoCBpZiAoY20tPmNtc2dfdHlwZSkgew0KPj4gK8KgwqDCoMKgwqDC
-oMKgIGZwcmludGYoc3RkZXJyLCAiY21zZzogdW5leHBlY3RlZCAnY21zZ190eXBlJ1xuIik7DQo+
-PiArwqDCoMKgwqDCoMKgwqAgcmV0dXJuOw0KPj4gK8KgwqDCoCB9DQo+PiArDQo+PiArwqDCoMKg
-IHNlcnIgPSAodm9pZCAqKUNNU0dfREFUQShjbSk7DQo+PiArwqDCoMKgIGlmIChzZXJyLT5lZV9v
-cmlnaW4gIT0gU09fRUVfT1JJR0lOX1pFUk9DT1BZKSB7DQo+PiArwqDCoMKgwqDCoMKgwqAgZnBy
-aW50ZihzdGRlcnIsICJzZXJyOiB3cm9uZyBvcmlnaW5cbiIpOw0KPj4gK8KgwqDCoMKgwqDCoMKg
-IHJldHVybjsNCj4+ICvCoMKgwqAgfQ0KPj4gKw0KPj4gK8KgwqDCoCBpZiAoc2Vyci0+ZWVfZXJy
-bm8pIHsNCj4+ICvCoMKgwqDCoMKgwqDCoCBmcHJpbnRmKHN0ZGVyciwgInNlcnI6IHdyb25nIGVy
-cm9yIGNvZGVcbiIpOw0KPj4gK8KgwqDCoMKgwqDCoMKgIHJldHVybjsNCj4+ICvCoMKgwqAgfQ0K
-Pj4gKw0KPj4gK8KgwqDCoCBpZiAoemVyb2NvcHkgJiYgKHNlcnItPmVlX2NvZGUgJiBTT19FRV9D
-T0RFX1pFUk9DT1BZX0NPUElFRCkpDQo+PiArwqDCoMKgwqDCoMKgwqAgZnByaW50ZihzdGRlcnIs
-ICJ3YXJuaW5nOiBjb3B5IGluc3RlYWQgb2YgemVyb2NvcHlcbiIpOw0KPj4gK30NCj4+ICsNCj4+
-ICtzdGF0aWMgdm9pZCBlbmFibGVfc29femVyb2NvcHkoaW50IGZkKQ0KPj4gK3sNCj4+ICvCoMKg
-wqAgaW50IHZhbCA9IDE7DQo+PiArDQo+PiArwqDCoMKgIGlmIChzZXRzb2Nrb3B0KGZkLCBTT0xf
-U09DS0VULCBTT19aRVJPQ09QWSwgJnZhbCwgc2l6ZW9mKHZhbCkpKQ0KPj4gK8KgwqDCoMKgwqDC
-oMKgIGVycm9yKCJzZXRzb2Nrb3B0KFNPX1pFUk9DT1BZKSIpOw0KPj4gK30NCj4+ICsNCj4+IHN0
-YXRpYyB2b2lkIHJ1bl9zZW5kZXIoaW50IHBlZXJfY2lkLCB1bnNpZ25lZCBsb25nIHRvX3NlbmRf
-Ynl0ZXMpDQo+PiB7DQo+PiDCoMKgwqDCoHRpbWVfdCB0eF9iZWdpbl9uczsNCj4+IMKgwqDCoMKg
-dGltZV90IHR4X3RvdGFsX25zOw0KPj4gwqDCoMKgwqBzaXplX3QgdG90YWxfc2VuZDsNCj4+ICvC
-oMKgwqAgdGltZV90IHRpbWVfaW5fc2VuZDsNCj4+IMKgwqDCoMKgdm9pZCAqZGF0YTsNCj4+IMKg
-wqDCoMKgaW50IGZkOw0KPj4NCj4+IC3CoMKgwqAgcHJpbnRmKCJSdW4gYXMgc2VuZGVyXG4iKTsN
-Cj4+ICvCoMKgwqAgaWYgKHplcm9jb3B5KQ0KPj4gK8KgwqDCoMKgwqDCoMKgIHByaW50ZigiUnVu
-IGFzIHNlbmRlciBNU0dfWkVST0NPUFlcbiIpOw0KPj4gK8KgwqDCoCBlbHNlDQo+PiArwqDCoMKg
-wqDCoMKgwqAgcHJpbnRmKCJSdW4gYXMgc2VuZGVyXG4iKTsNCj4+ICsNCj4+IMKgwqDCoMKgcHJp
-bnRmKCJDb25uZWN0IHRvICVpOiV1XG4iLCBwZWVyX2NpZCwgcG9ydCk7DQo+PiDCoMKgwqDCoHBy
-aW50ZigiU2VuZCAlbHUgYnl0ZXNcbiIsIHRvX3NlbmRfYnl0ZXMpOw0KPj4gwqDCoMKgwqBwcmlu
-dGYoIlRYIGJ1ZmZlciAlbHUgYnl0ZXNcbiIsIGJ1Zl9zaXplX2J5dGVzKTsNCj4+IEBAIC0yNjUs
-MjUgKzMzMSw1OCBAQCBzdGF0aWMgdm9pZCBydW5fc2VuZGVyKGludCBwZWVyX2NpZCwgdW5zaWdu
-ZWQgbG9uZyB0b19zZW5kX2J5dGVzKQ0KPj4gwqDCoMKgwqBpZiAoZmQgPCAwKQ0KPj4gwqDCoMKg
-wqDCoMKgwqAgZXhpdChFWElUX0ZBSUxVUkUpOw0KPj4NCj4+IC3CoMKgwqAgZGF0YSA9IG1hbGxv
-YyhidWZfc2l6ZV9ieXRlcyk7DQo+PiArwqDCoMKgIGlmICh6ZXJvY29weSkgew0KPj4gK8KgwqDC
-oMKgwqDCoMKgIGVuYWJsZV9zb196ZXJvY29weShmZCk7DQo+Pg0KPj4gLcKgwqDCoCBpZiAoIWRh
-dGEpIHsNCj4+IC3CoMKgwqDCoMKgwqDCoCBmcHJpbnRmKHN0ZGVyciwgIidtYWxsb2MoKScgZmFp
-bGVkXG4iKTsNCj4+IC3CoMKgwqDCoMKgwqDCoCBleGl0KEVYSVRfRkFJTFVSRSk7DQo+PiArwqDC
-oMKgwqDCoMKgwqAgZGF0YSA9IG1tYXAoTlVMTCwgYnVmX3NpemVfYnl0ZXMsIFBST1RfUkVBRCB8
-IFBST1RfV1JJVEUsDQo+PiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIE1BUF9QUklW
-QVRFIHwgTUFQX0FOT05ZTU9VUywgLTEsIDApOw0KPj4gK8KgwqDCoMKgwqDCoMKgIGlmIChkYXRh
-ID09IE1BUF9GQUlMRUQpIHsNCj4+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIHBlcnJvcigibW1h
-cCIpOw0KPj4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqAgZXhpdChFWElUX0ZBSUxVUkUpOw0KPj4g
-K8KgwqDCoMKgwqDCoMKgIH0NCj4+ICvCoMKgwqAgfSBlbHNlIHsNCj4+ICvCoMKgwqDCoMKgwqDC
-oCBkYXRhID0gbWFsbG9jKGJ1Zl9zaXplX2J5dGVzKTsNCj4+ICsNCj4+ICvCoMKgwqDCoMKgwqDC
-oCBpZiAoIWRhdGEpIHsNCj4+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIGZwcmludGYoc3RkZXJy
-LCAiJ21hbGxvYygpJyBmYWlsZWRcbiIpOw0KPj4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqAgZXhp
-dChFWElUX0ZBSUxVUkUpOw0KPj4gK8KgwqDCoMKgwqDCoMKgIH0NCj4+IMKgwqDCoMKgfQ0KPiAN
-Cj4gRXZlbnR1YWxseSB0byBzaW1wbGlmeSB0aGUgY29kZSBJIHRoaW5rIHdlIGNhbiB1c2UgdGhl
-IG1tYXBlZCBidWZmZXIgaW4NCj4gYm90aCBjYXNlcy4NCj4gDQo+Pg0KPj4gwqDCoMKgwqBtZW1z
-ZXQoZGF0YSwgMCwgYnVmX3NpemVfYnl0ZXMpOw0KPj4gwqDCoMKgwqB0b3RhbF9zZW5kID0gMDsN
-Cj4+ICvCoMKgwqAgdGltZV9pbl9zZW5kID0gMDsNCj4+IMKgwqDCoMKgdHhfYmVnaW5fbnMgPSBj
-dXJyZW50X25zZWMoKTsNCj4+DQo+PiDCoMKgwqDCoHdoaWxlICh0b3RhbF9zZW5kIDwgdG9fc2Vu
-ZF9ieXRlcykgew0KPj4gwqDCoMKgwqDCoMKgwqAgc3NpemVfdCBzZW50Ow0KPj4gK8KgwqDCoMKg
-wqDCoMKgIHNpemVfdCByZXN0X2J5dGVzOw0KPj4gK8KgwqDCoMKgwqDCoMKgIHRpbWVfdCBiZWZv
-cmU7DQo+PiArDQo+PiArwqDCoMKgwqDCoMKgwqAgcmVzdF9ieXRlcyA9IHRvX3NlbmRfYnl0ZXMg
-LSB0b3RhbF9zZW5kOw0KPj4NCj4+IC3CoMKgwqDCoMKgwqDCoCBzZW50ID0gd3JpdGUoZmQsIGRh
-dGEsIGJ1Zl9zaXplX2J5dGVzKTsNCj4+ICvCoMKgwqDCoMKgwqDCoCBiZWZvcmUgPSBjdXJyZW50
-X25zZWMoKTsNCj4+ICvCoMKgwqDCoMKgwqDCoCBzZW50ID0gc2VuZChmZCwgZGF0YSwgKHJlc3Rf
-Ynl0ZXMgPiBidWZfc2l6ZV9ieXRlcykgPw0KPj4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
-wqDCoCBidWZfc2l6ZV9ieXRlcyA6IHJlc3RfYnl0ZXMsDQo+PiArwqDCoMKgwqDCoMKgwqDCoMKg
-wqDCoMKgwqDCoMKgIHplcm9jb3B5ID8gTVNHX1pFUk9DT1BZIDogMCk7DQo+PiArwqDCoMKgwqDC
-oMKgwqAgdGltZV9pbl9zZW5kICs9IChjdXJyZW50X25zZWMoKSAtIGJlZm9yZSk7DQo+Pg0KPj4g
-wqDCoMKgwqDCoMKgwqAgaWYgKHNlbnQgPD0gMCkNCj4+IMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAg
-ZXJyb3IoIndyaXRlIik7DQo+Pg0KPj4gK8KgwqDCoMKgwqDCoMKgIGlmICh6ZXJvY29weSkgew0K
-Pj4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqAgc3RydWN0IHBvbGxmZCBmZHMgPSB7IDAgfTsNCj4+
-ICsNCj4+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIGZkcy5mZCA9IGZkOw0KPiANCj4gV2hpY2gg
-ZXZlbnQgYXJlIHdlIHdhaXRpbmcgZm9yIGhlcmU/DQo+IA0KPj4gKw0KPj4gK8KgwqDCoMKgwqDC
-oMKgwqDCoMKgwqAgaWYgKHBvbGwoJmZkcywgMSwgLTEpIDwgMCkgew0KPj4gK8KgwqDCoMKgwqDC
-oMKgwqDCoMKgwqDCoMKgwqDCoCBwZXJyb3IoInBvbGwiKTsNCj4+ICvCoMKgwqDCoMKgwqDCoMKg
-wqDCoMKgwqDCoMKgwqAgZXhpdChFWElUX0ZBSUxVUkUpOw0KPj4gK8KgwqDCoMKgwqDCoMKgwqDC
-oMKgwqAgfQ0KPiANCj4gV2UgbmVlZCB0aGlzIGJlY2F1c2Ugd2UgdXNlIG9ubHkgb25lIGJ1ZmZl
-ciwgYnV0IGlmIHdlIHVzZSBtb3JlIHRoYW4NCj4gb25lLCB3ZSBjb3VsZCB0YWtlIGZ1bGwgYWR2
-YW50YWdlIG9mIHplcm9jb3B5LCByaWdodD8NCj4gDQo+IE90aGVyd2lzZSwgSSBkb24ndCB0aGlu
-ayBpdCdzIGEgZmFpciBjb21wYXJpc29uIHdpdGggbm9uLXplcm9jb3B5Lg0KWWVzIG9yIGNvdXJz
-ZSwgaW4gbmV4dCB2ZXJzaW9ucyBpJ2xsIHVwZGF0ZSB0aGlzIHRlc3QgZm9yIHVzaW5nDQptb3Jl
-IGxvbmcgaW92cy4NCj4gDQo+IFRoYW5rcywNCj4gU3RlZmFubw0KPiANCj4+ICsNCj4+ICvCoMKg
-wqDCoMKgwqDCoMKgwqDCoMKgIHJlY3ZfY29tcGxldGlvbihmZCk7DQo+PiArwqDCoMKgwqDCoMKg
-wqAgfQ0KPj4gKw0KPj4gwqDCoMKgwqDCoMKgwqAgdG90YWxfc2VuZCArPSBzZW50Ow0KPj4gwqDC
-oMKgwqB9DQo+Pg0KPj4gQEAgLTI5NCw5ICszOTMsMTQgQEAgc3RhdGljIHZvaWQgcnVuX3NlbmRl
-cihpbnQgcGVlcl9jaWQsIHVuc2lnbmVkIGxvbmcgdG9fc2VuZF9ieXRlcykNCj4+IMKgwqDCoMKg
-wqDCoMKgwqDCoMKgIGdldF9nYnBzKHRvdGFsX3NlbmQgKiA4LCB0eF90b3RhbF9ucykpOw0KPj4g
-wqDCoMKgwqBwcmludGYoInRvdGFsIHRpbWUgaW4gJ3dyaXRlKCknOiAlZiBzZWNcbiIsDQo+PiDC
-oMKgwqDCoMKgwqDCoMKgwqDCoCAoZmxvYXQpdHhfdG90YWxfbnMgLyBOU0VDX1BFUl9TRUMpOw0K
-Pj4gK8KgwqDCoCBwcmludGYoInRpbWUgaW4gc2VuZCAlZlxuIiwgKGZsb2F0KXRpbWVfaW5fc2Vu
-ZCAvIE5TRUNfUEVSX1NFQyk7DQo+Pg0KPj4gwqDCoMKgwqBjbG9zZShmZCk7DQo+PiAtwqDCoMKg
-IGZyZWUoZGF0YSk7DQo+PiArDQo+PiArwqDCoMKgIGlmICh6ZXJvY29weSkNCj4+ICvCoMKgwqDC
-oMKgwqDCoCBtdW5tYXAoZGF0YSwgYnVmX3NpemVfYnl0ZXMpOw0KPj4gK8KgwqDCoCBlbHNlDQo+
-PiArwqDCoMKgwqDCoMKgwqAgZnJlZShkYXRhKTsNCj4+IH0NCj4+DQo+PiBzdGF0aWMgY29uc3Qg
-Y2hhciBvcHRzdHJpbmdbXSA9ICIiOw0KPj4gQEAgLTMzNiw2ICs0NDAsMTEgQEAgc3RhdGljIGNv
-bnN0IHN0cnVjdCBvcHRpb24gbG9uZ29wdHNbXSA9IHsNCj4+IMKgwqDCoMKgwqDCoMKgIC5oYXNf
-YXJnID0gcmVxdWlyZWRfYXJndW1lbnQsDQo+PiDCoMKgwqDCoMKgwqDCoCAudmFsID0gJ1InLA0K
-Pj4gwqDCoMKgwqB9LA0KPj4gK8KgwqDCoCB7DQo+PiArwqDCoMKgwqDCoMKgwqAgLm5hbWUgPSAi
-emMiLA0KPj4gK8KgwqDCoMKgwqDCoMKgIC5oYXNfYXJnID0gbm9fYXJndW1lbnQsDQo+PiArwqDC
-oMKgwqDCoMKgwqAgLnZhbCA9ICdaJywNCj4+ICvCoMKgwqAgfSwNCj4+IMKgwqDCoMKge30sDQo+
-PiB9Ow0KPj4NCj4+IEBAIC0zNTEsNiArNDYwLDcgQEAgc3RhdGljIHZvaWQgdXNhZ2Uodm9pZCkN
-Cj4+IMKgwqDCoMKgwqDCoMKgwqDCoMKgICLCoCAtLWhlbHDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
-IFRoaXMgbWVzc2FnZVxuIg0KPj4gwqDCoMKgwqDCoMKgwqDCoMKgwqAgIsKgIC0tc2VuZGVywqDC
-oCA8Y2lkPsKgwqDCoMKgwqDCoMKgIFNlbmRlciBtb2RlIChyZWNlaXZlciBkZWZhdWx0KVxuIg0K
-Pj4gwqDCoMKgwqDCoMKgwqDCoMKgwqAgIsKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
-wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIDxjaWQ+IG9mIHRoZSByZWNlaXZlciB0byBj
-b25uZWN0IHRvXG4iDQo+PiArwqDCoMKgwqDCoMKgwqDCoMKgwqAgIsKgIC0temPCoMKgwqDCoMKg
-wqDCoMKgwqDCoMKgwqDCoMKgwqAgRW5hYmxlIHplcm9jb3B5XG4iDQo+PiDCoMKgwqDCoMKgwqDC
-oMKgwqDCoCAiwqAgLS1wb3J0wqDCoMKgwqAgPHBvcnQ+wqDCoMKgwqDCoMKgwqAgUG9ydCAoZGVm
-YXVsdCAlZClcbiINCj4+IMKgwqDCoMKgwqDCoMKgwqDCoMKgICLCoCAtLWJ5dGVzwqDCoMKgIDxi
-eXRlcz5LTUfCoMKgwqDCoMKgwqDCoCBCeXRlcyB0byBzZW5kIChkZWZhdWx0ICVkKVxuIg0KPj4g
-wqDCoMKgwqDCoMKgwqDCoMKgwqAgIsKgIC0tYnVmLXNpemUgPGJ5dGVzPktNR8KgwqDCoMKgwqDC
-oMKgIERhdGEgYnVmZmVyIHNpemUgKGRlZmF1bHQgJWQpLiBJbiBzZW5kZXIgbW9kZVxuIg0KPj4g
-QEAgLTQxMyw2ICs1MjMsOSBAQCBpbnQgbWFpbihpbnQgYXJnYywgY2hhciAqKmFyZ3YpDQo+PiDC
-oMKgwqDCoMKgwqDCoCBjYXNlICdIJzogLyogSGVscC4gKi8NCj4+IMKgwqDCoMKgwqDCoMKgwqDC
-oMKgwqAgdXNhZ2UoKTsNCj4+IMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgYnJlYWs7DQo+PiArwqDC
-oMKgwqDCoMKgwqAgY2FzZSAnWic6IC8qIFplcm9jb3B5LiAqLw0KPj4gK8KgwqDCoMKgwqDCoMKg
-wqDCoMKgwqAgemVyb2NvcHkgPSB0cnVlOw0KPj4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqAgYnJl
-YWs7DQo+PiDCoMKgwqDCoMKgwqDCoCBkZWZhdWx0Og0KPj4gwqDCoMKgwqDCoMKgwqDCoMKgwqDC
-oCB1c2FnZSgpOw0KPj4gwqDCoMKgwqDCoMKgwqAgfQ0KPj4gLS3CoA0KPj4gMi4yNS4xDQo+Pg0K
-PiANCg0K
+--Sig_/wm570xKYRZuqxUZ+wire3zk
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
+
+On Sat, 18 Feb 2023 13:15:52 -0800
+Rob Clark <robdclark@gmail.com> wrote:
+
+> From: Rob Clark <robdclark@chromium.org>
+>=20
+> Add a new flag to let userspace provide a deadline as a hint for syncobj
+> and timeline waits.  This gives a hint to the driver signaling the
+> backing fences about how soon userspace needs it to compete work, so it
+> can addjust GPU frequency accordingly.  An immediate deadline can be
+> given to provide something equivalent to i915 "wait boost".
+>=20
+> Signed-off-by: Rob Clark <robdclark@chromium.org>
+> ---
+>=20
+> I'm a bit on the fence about the addition of the DRM_CAP, but it seems
+> useful to give userspace a way to probe whether the kernel and driver
+> supports the new wait flag, especially since we have vk-common code
+> dealing with syncobjs.  But open to suggestions.
+>=20
+>  drivers/gpu/drm/drm_ioctl.c   |  3 ++
+>  drivers/gpu/drm/drm_syncobj.c | 59 ++++++++++++++++++++++++++++-------
+>  include/drm/drm_drv.h         |  6 ++++
+>  include/uapi/drm/drm.h        | 16 ++++++++--
+>  4 files changed, 71 insertions(+), 13 deletions(-)
+>=20
+> diff --git a/drivers/gpu/drm/drm_ioctl.c b/drivers/gpu/drm/drm_ioctl.c
+> index 7c9d66ee917d..1c5c942cf0f9 100644
+> --- a/drivers/gpu/drm/drm_ioctl.c
+> +++ b/drivers/gpu/drm/drm_ioctl.c
+> @@ -254,6 +254,9 @@ static int drm_getcap(struct drm_device *dev, void *d=
+ata, struct drm_file *file_
+>  	case DRM_CAP_SYNCOBJ_TIMELINE:
+>  		req->value =3D drm_core_check_feature(dev, DRIVER_SYNCOBJ_TIMELINE);
+>  		return 0;
+> +	case DRM_CAP_SYNCOBJ_DEADLINE:
+> +		req->value =3D drm_core_check_feature(dev, DRIVER_SYNCOBJ_TIMELINE);
+
+Hi,
+
+is that a typo for DRIVER_SYNCOBJ_DEADLINE?
+
+> +		return 0;
+>  	}
+> =20
+>  	/* Other caps only work with KMS drivers */
+> diff --git a/drivers/gpu/drm/drm_syncobj.c b/drivers/gpu/drm/drm_syncobj.c
+> index 0c2be8360525..61cf97972a60 100644
+> --- a/drivers/gpu/drm/drm_syncobj.c
+> +++ b/drivers/gpu/drm/drm_syncobj.c
+> @@ -973,7 +973,8 @@ static signed long drm_syncobj_array_wait_timeout(str=
+uct drm_syncobj **syncobjs,
+>  						  uint32_t count,
+>  						  uint32_t flags,
+>  						  signed long timeout,
+> -						  uint32_t *idx)
+> +						  uint32_t *idx,
+> +						  ktime_t *deadline)
+>  {
+>  	struct syncobj_wait_entry *entries;
+>  	struct dma_fence *fence;
+> @@ -1053,6 +1054,15 @@ static signed long drm_syncobj_array_wait_timeout(=
+struct drm_syncobj **syncobjs,
+>  			drm_syncobj_fence_add_wait(syncobjs[i], &entries[i]);
+>  	}
+> =20
+> +	if (deadline) {
+> +		for (i =3D 0; i < count; ++i) {
+> +			fence =3D entries[i].fence;
+> +			if (!fence)
+> +				continue;
+> +			dma_fence_set_deadline(fence, *deadline);
+> +		}
+> +	}
+> +
+>  	do {
+>  		set_current_state(TASK_INTERRUPTIBLE);
+> =20
+> @@ -1151,7 +1161,8 @@ static int drm_syncobj_array_wait(struct drm_device=
+ *dev,
+>  				  struct drm_file *file_private,
+>  				  struct drm_syncobj_wait *wait,
+>  				  struct drm_syncobj_timeline_wait *timeline_wait,
+> -				  struct drm_syncobj **syncobjs, bool timeline)
+> +				  struct drm_syncobj **syncobjs, bool timeline,
+> +				  ktime_t *deadline)
+>  {
+>  	signed long timeout =3D 0;
+>  	uint32_t first =3D ~0;
+> @@ -1162,7 +1173,8 @@ static int drm_syncobj_array_wait(struct drm_device=
+ *dev,
+>  							 NULL,
+>  							 wait->count_handles,
+>  							 wait->flags,
+> -							 timeout, &first);
+> +							 timeout, &first,
+> +							 deadline);
+>  		if (timeout < 0)
+>  			return timeout;
+>  		wait->first_signaled =3D first;
+> @@ -1172,7 +1184,8 @@ static int drm_syncobj_array_wait(struct drm_device=
+ *dev,
+>  							 u64_to_user_ptr(timeline_wait->points),
+>  							 timeline_wait->count_handles,
+>  							 timeline_wait->flags,
+> -							 timeout, &first);
+> +							 timeout, &first,
+> +							 deadline);
+>  		if (timeout < 0)
+>  			return timeout;
+>  		timeline_wait->first_signaled =3D first;
+> @@ -1243,13 +1256,20 @@ drm_syncobj_wait_ioctl(struct drm_device *dev, vo=
+id *data,
+>  {
+>  	struct drm_syncobj_wait *args =3D data;
+>  	struct drm_syncobj **syncobjs;
+> +	unsigned possible_flags;
+> +	ktime_t t, *tp =3D NULL;
+>  	int ret =3D 0;
+> =20
+>  	if (!drm_core_check_feature(dev, DRIVER_SYNCOBJ))
+>  		return -EOPNOTSUPP;
+> =20
+> -	if (args->flags & ~(DRM_SYNCOBJ_WAIT_FLAGS_WAIT_ALL |
+> -			    DRM_SYNCOBJ_WAIT_FLAGS_WAIT_FOR_SUBMIT))
+> +	possible_flags =3D DRM_SYNCOBJ_WAIT_FLAGS_WAIT_ALL |
+> +			 DRM_SYNCOBJ_WAIT_FLAGS_WAIT_FOR_SUBMIT;
+> +
+> +	if (drm_core_check_feature(dev, DRIVER_SYNCOBJ_DEADLINE))
+> +		possible_flags |=3D DRM_SYNCOBJ_WAIT_FLAGS_WAIT_DEADLINE;
+> +
+> +	if (args->flags & ~possible_flags)
+>  		return -EINVAL;
+> =20
+>  	if (args->count_handles =3D=3D 0)
+> @@ -1262,8 +1282,13 @@ drm_syncobj_wait_ioctl(struct drm_device *dev, voi=
+d *data,
+>  	if (ret < 0)
+>  		return ret;
+> =20
+> +	if (args->flags & DRM_SYNCOBJ_WAIT_FLAGS_WAIT_DEADLINE) {
+> +		t =3D ktime_set(args->deadline_sec, args->deadline_nsec);
+> +		tp =3D &t;
+> +	}
+> +
+>  	ret =3D drm_syncobj_array_wait(dev, file_private,
+> -				     args, NULL, syncobjs, false);
+> +				     args, NULL, syncobjs, false, tp);
+> =20
+>  	drm_syncobj_array_free(syncobjs, args->count_handles);
+> =20
+> @@ -1276,14 +1301,21 @@ drm_syncobj_timeline_wait_ioctl(struct drm_device=
+ *dev, void *data,
+>  {
+>  	struct drm_syncobj_timeline_wait *args =3D data;
+>  	struct drm_syncobj **syncobjs;
+> +	unsigned possible_flags;
+> +	ktime_t t, *tp =3D NULL;
+>  	int ret =3D 0;
+> =20
+>  	if (!drm_core_check_feature(dev, DRIVER_SYNCOBJ_TIMELINE))
+>  		return -EOPNOTSUPP;
+> =20
+> -	if (args->flags & ~(DRM_SYNCOBJ_WAIT_FLAGS_WAIT_ALL |
+> -			    DRM_SYNCOBJ_WAIT_FLAGS_WAIT_FOR_SUBMIT |
+> -			    DRM_SYNCOBJ_WAIT_FLAGS_WAIT_AVAILABLE))
+> +	possible_flags =3D DRM_SYNCOBJ_WAIT_FLAGS_WAIT_ALL |
+> +			 DRM_SYNCOBJ_WAIT_FLAGS_WAIT_FOR_SUBMIT |
+> +			 DRM_SYNCOBJ_WAIT_FLAGS_WAIT_AVAILABLE;
+> +
+> +	if (drm_core_check_feature(dev, DRIVER_SYNCOBJ_DEADLINE))
+> +		possible_flags |=3D DRM_SYNCOBJ_WAIT_FLAGS_WAIT_DEADLINE;
+> +
+> +	if (args->flags & ~possible_flags)
+>  		return -EINVAL;
+> =20
+>  	if (args->count_handles =3D=3D 0)
+> @@ -1296,8 +1328,13 @@ drm_syncobj_timeline_wait_ioctl(struct drm_device =
+*dev, void *data,
+>  	if (ret < 0)
+>  		return ret;
+> =20
+> +	if (args->flags & DRM_SYNCOBJ_WAIT_FLAGS_WAIT_DEADLINE) {
+> +		t =3D ktime_set(args->deadline_sec, args->deadline_nsec);
+> +		tp =3D &t;
+> +	}
+> +
+>  	ret =3D drm_syncobj_array_wait(dev, file_private,
+> -				     NULL, args, syncobjs, true);
+> +				     NULL, args, syncobjs, true, tp);
+> =20
+>  	drm_syncobj_array_free(syncobjs, args->count_handles);
+> =20
+> diff --git a/include/drm/drm_drv.h b/include/drm/drm_drv.h
+> index 1d76d0686b03..9aa24f097e22 100644
+> --- a/include/drm/drm_drv.h
+> +++ b/include/drm/drm_drv.h
+> @@ -104,6 +104,12 @@ enum drm_driver_feature {
+>  	 * acceleration should be handled by two drivers that are connected usi=
+ng auxiliary bus.
+>  	 */
+>  	DRIVER_COMPUTE_ACCEL            =3D BIT(7),
+> +	/**
+> +	 * @DRIVER_SYNCOBJ_DEADLINE:
+> +	 *
+> +	 * Driver supports &dma_fence_ops.set_deadline
+> +	 */
+> +	DRIVER_SYNCOBJ_DEADLINE         =3D BIT(8),
+> =20
+>  	/* IMPORTANT: Below are all the legacy flags, add new ones above. */
+> =20
+> diff --git a/include/uapi/drm/drm.h b/include/uapi/drm/drm.h
+> index 642808520d92..c6b85bb13810 100644
+> --- a/include/uapi/drm/drm.h
+> +++ b/include/uapi/drm/drm.h
+> @@ -767,6 +767,13 @@ struct drm_gem_open {
+>   * Documentation/gpu/drm-mm.rst, section "DRM Sync Objects".
+>   */
+>  #define DRM_CAP_SYNCOBJ_TIMELINE	0x14
+> +/**
+> + * DRM_CAP_SYNCOBJ_DEADLINE
+> + *
+> + * If set to 1, the driver supports DRM_SYNCOBJ_WAIT_FLAGS_WAIT_DEADLINE=
+ flag
+> + * on the SYNCOBJ_TIMELINE_WAIT/SYNCOBJ_WAIT ioctls.
+> + */
+> +#define DRM_CAP_SYNCOBJ_DEADLINE	0x15
+> =20
+>  /* DRM_IOCTL_GET_CAP ioctl argument type */
+>  struct drm_get_cap {
+> @@ -887,6 +894,7 @@ struct drm_syncobj_transfer {
+>  #define DRM_SYNCOBJ_WAIT_FLAGS_WAIT_ALL (1 << 0)
+>  #define DRM_SYNCOBJ_WAIT_FLAGS_WAIT_FOR_SUBMIT (1 << 1)
+>  #define DRM_SYNCOBJ_WAIT_FLAGS_WAIT_AVAILABLE (1 << 2) /* wait for time =
+point to become available */
+> +#define DRM_SYNCOBJ_WAIT_FLAGS_WAIT_DEADLINE (1 << 3) /* set fence deadl=
+ine based to deadline_nsec/sec */
+
+Where was the UAPI documentation explaining what a fence deadline is
+and what it does, again?
+
+>  struct drm_syncobj_wait {
+>  	__u64 handles;
+>  	/* absolute timeout */
+> @@ -894,7 +902,9 @@ struct drm_syncobj_wait {
+>  	__u32 count_handles;
+>  	__u32 flags;
+>  	__u32 first_signaled; /* only valid when not waiting all */
+> -	__u32 pad;
+> +	/* Deadline to set on backing fence(s) in CLOCK_MONOTONIC: */
+> +	__u32 deadline_nsec;
+> +	__u64 deadline_sec;
+>  };
+> =20
+>  struct drm_syncobj_timeline_wait {
+> @@ -906,7 +916,9 @@ struct drm_syncobj_timeline_wait {
+>  	__u32 count_handles;
+>  	__u32 flags;
+>  	__u32 first_signaled; /* only valid when not waiting all */
+> -	__u32 pad;
+> +	/* Deadline to set on backing fence(s) in CLOCK_MONOTONIC: */
+> +	__u32 deadline_nsec;
+> +	__u64 deadline_sec;
+>  };
+
+It seems inconsistent that these sec,nsec are here unsigned, when in
+other places they are signed. There is also the question if these need
+to meet clock_settime() requirements of valid values.
+
+
+Thanks,
+pq
+
+--Sig_/wm570xKYRZuqxUZ+wire3zk
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAEBCAAdFiEEJQjwWQChkWOYOIONI1/ltBGqqqcFAmPzN/EACgkQI1/ltBGq
+qqd2SBAAkSxyGD4KzyhJzz6AyxSF3XmPih/HhR60so/PxdDlsemRsqvSQpfHXVK8
+jM2MTtcOTZdd7QHyPOlPaOkY53HJPo6zEgUiP+AIzioud1kSjVf31uyXtufyuLKi
+pKBrUqVtwGnSCNegWuIYl3A8cjdpz2b+8/pbOFub+RkT/Sk947wth/gtIfaMldGR
+TC7EsOAvcLsf0pMSiAa44ifymtOIQpCgxmqtfOVPGGsD33Z7rb4hNnGwcaKCeVrf
+9ZtqU1Irgsg8xLKsg95WCzTh+gvxwyrPqRpZDnnDHX34mTnmMRQrMpQpUkOvLHxX
+e5yu3DS2krWRl4EqehKD+jN1Y/E25kki1vOeTEvGYu0XzPlGqaI2Y7xLrEl1BTb3
+4/jtglp7iGvCwjWJ+sIobyepl9I0R2dtJ3ILMlH8TnD4xVdRifxflvlA/B4/VhpX
+85+aBfU1+ajlDgBKp0r0m08qE5Tax21aJrmJb+NvOdn43qg0TeNmlHkcjZSKWJUu
+QkVwC16qiQlET7mVt5aPOuUQICDVPS/DPTfr43u2uAXYxB/EseQ9eESCoLXXvDnu
+ykXEqKcBYR2UuttFZvAEAMPzixP1SeKuO/262iOeV8iXg++h0DV1LbIBkxVXOhCJ
+LdU8LSJko6MgK6beZxaY6Jm7rtSUhG7o94KCENDVff4J86ZdIf8=
+=yfSf
+-----END PGP SIGNATURE-----
+
+--Sig_/wm570xKYRZuqxUZ+wire3zk--
