@@ -2,179 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A7C2069D50A
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Feb 2023 21:34:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E66E569D507
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Feb 2023 21:33:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232163AbjBTUe1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Feb 2023 15:34:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57368 "EHLO
+        id S232555AbjBTUdx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Feb 2023 15:33:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56602 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229468AbjBTUeY (ORCPT
+        with ESMTP id S229885AbjBTUdv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Feb 2023 15:34:24 -0500
-Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2045.outbound.protection.outlook.com [40.107.220.45])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1E7C193FB;
-        Mon, 20 Feb 2023 12:34:23 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=F93Li0DgAqbCxqdP+rZpunYdYTDRgRj6c9In86/FX8hFBrBFXNNvSgpQtYiBhIycCIxtQcNjWGJNnh5LzCvrtAS6vlbbS5serBdMC167f2nEBYn57kAccO5Z9GWEaEBn1b//BvfTDHkvPU77YRD/uuF4JjH7IGZ32/A7bZAytOv+DbqoAbRlcJFJ3VrYI+L1GOs9DLJzMLcL3zucuynDx9W27K9kbhlx6tgAobNkseSGM0WKAPgfCbPOc5DFUCMjVuPuCrRrY4VgFaaa80mGPkxtCMcdV8qCew1fgufMOfX3rB0KIhgp/dd6Eb8hHyZaDK9i3Iul0gSPlKR0YkU4/Q==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=A0GngpEAj0k1OWgyk0D03qOWG2sQkyN2bOfyqNVfyHI=;
- b=kmA+BfDSRMHp997ibtwX/9pPKR0sStZVbyogjWxy35S3GAJ2jkB+tWRP8MQN2973mcroVzR+JxziTBgkBB9Uh6t+rvWhKuieeW5V1+OTPUP21f+WmkXxiClcUttr0Z1IQkbVmeDRtNhUJyL6GJEY4FpXOihAbQ2LJUffBSe+c+dyWeb4GpP8q2eZivN6tryzsQD7PikbL5WRR/4lT8Apj5f4v7d9neP13iOFQEk/OMVe18vFY7BDVTQ3aBwaRo/wxXDik8TJEYmEfhJee5mVXwNQ8Jew/Ahb6mHoy9GP7uCaDjBRENMF4KLJM8e7w3iJNZru5+JO3n+WL8XR2Jad2Q==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=google.com smtp.mailfrom=amd.com; dmarc=pass
- (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=A0GngpEAj0k1OWgyk0D03qOWG2sQkyN2bOfyqNVfyHI=;
- b=iA1Zm3T0iL4pmL1di7tZAx/lpkS+H8ndcwxMAbqcc5AepZKD1BKGpcGk5Iw3oa9UdtHhvSgbjpe+/6m+Nl99P6e6oel24FNeGmNMYOmHmqL1Q/bgT7H7JULeg6HkSGVDsdTuhx8jplp8CgO1srmLIGjO89+7VbLWa2BhL3173mo=
-Received: from DM6PR03CA0042.namprd03.prod.outlook.com (2603:10b6:5:100::19)
- by DS0PR12MB7560.namprd12.prod.outlook.com (2603:10b6:8:133::17) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6111.19; Mon, 20 Feb
- 2023 20:34:21 +0000
-Received: from DM6NAM11FT037.eop-nam11.prod.protection.outlook.com
- (2603:10b6:5:100:cafe::9c) by DM6PR03CA0042.outlook.office365.com
- (2603:10b6:5:100::19) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6111.20 via Frontend
- Transport; Mon, 20 Feb 2023 20:34:21 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- DM6NAM11FT037.mail.protection.outlook.com (10.13.172.122) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.6111.19 via Frontend Transport; Mon, 20 Feb 2023 20:34:21 +0000
-Received: from localhost (10.180.168.240) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Mon, 20 Feb
- 2023 14:34:20 -0600
-Date:   Mon, 20 Feb 2023 14:31:27 -0600
-From:   Michael Roth <michael.roth@amd.com>
-To:     Hugh Dickins <hughd@google.com>
-CC:     <kvm@vger.kernel.org>, <linux-coco@lists.linux.dev>,
-        <linux-mm@kvack.org>, <linux-crypto@vger.kernel.org>,
-        <x86@kernel.org>, <linux-kernel@vger.kernel.org>,
-        <tglx@linutronix.de>, <mingo@redhat.com>, <jroedel@suse.de>,
-        <thomas.lendacky@amd.com>, <hpa@zytor.com>, <ardb@kernel.org>,
-        <pbonzini@redhat.com>, <seanjc@google.com>, <vkuznets@redhat.com>,
-        <jmattson@google.com>, <luto@kernel.org>,
-        <dave.hansen@linux.intel.com>, <slp@redhat.com>,
-        <pgonda@google.com>, <peterz@infradead.org>,
-        <srinivas.pandruvada@linux.intel.com>, <rientjes@google.com>,
-        <dovmurik@linux.ibm.com>, <tobin@ibm.com>, <bp@alien8.de>,
-        <vbabka@suse.cz>, <kirill@shutemov.name>, <ak@linux.intel.com>,
-        <tony.luck@intel.com>, <marcorr@google.com>,
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        <alpergun@google.com>, <dgilbert@redhat.com>, <jarkko@kernel.org>,
-        <ashish.kalra@amd.com>, <nikunj.dadhania@amd.com>
-Subject: Re: [PATCH RFC v8 18/56] x86/fault: fix handle_split_page_fault() to
- work with memfd backed pages
-Message-ID: <20230220203127.o4mf2bcrlwgsmf7z@amd.com>
-References: <20230220183847.59159-1-michael.roth@amd.com>
- <20230220183847.59159-19-michael.roth@amd.com>
- <29e9ed33-52eb-fbb4-5358-76939df747a9@google.com>
+        Mon, 20 Feb 2023 15:33:51 -0500
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2813FBBBB;
+        Mon, 20 Feb 2023 12:33:50 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=X6oKYpBwCPPA2hKDvH6wktIKJITLyPmX0fi+XHJg5NA=; b=mYmoJ0rbUaT5FaaxuvwwJb3Ehe
+        APso/ZhX3utDjjf8833KEVujc3ZRAlkvVNcEp3kq/Vke+H2z+mGGIH9KFor5MOJpidNYY+92Fp3jD
+        SqGAstCH6lAUYqyhaBp8ZUZIkOwlmOiXgQwrVyiDTGYm51xTZN/0jmooRF+bg0ifoTLCvgzjNVief
+        guN5FOAhbkmXODvTRPGzDv8BxOJtg7DZyewqvGsvkvLS/j3unzSdzMH1WR3gns1TGGZhnmkZNJ+0b
+        NbgHzIBLoKGJQ8Jd5bSoPdGixKvBijeQemjCLBIpx6nThFLb774j9BxAbb/06H3VZVtoNiRpTQwaV
+        1Aep9b8g==;
+Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1pUCqt-00C0Dm-D9; Mon, 20 Feb 2023 20:33:35 +0000
+Date:   Mon, 20 Feb 2023 20:33:35 +0000
+From:   Matthew Wilcox <willy@infradead.org>
+To:     Danilo Krummrich <dakr@redhat.com>
+Cc:     matthew.brost@intel.com, dri-devel@lists.freedesktop.org,
+        corbet@lwn.net, nouveau@lists.freedesktop.org, ogabbay@kernel.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, boris.brezillon@collabora.com,
+        bskeggs@redhat.com, tzimmermann@suse.de, Liam.Howlett@oracle.com,
+        bagasdotme@gmail.com, christian.koenig@amd.com,
+        jason@jlekstrand.net
+Subject: Re: [PATCH drm-next v2 04/16] maple_tree: add flag MT_FLAGS_LOCK_NONE
+Message-ID: <Y/PZH/q2Xsr3od9m@casper.infradead.org>
+References: <20230217134422.14116-1-dakr@redhat.com>
+ <20230217134422.14116-5-dakr@redhat.com>
+ <Y+/Xn11dfdn7SfBD@casper.infradead.org>
+ <3bb02ec3-4d19-9135-cabc-26ed210f7396@redhat.com>
+ <Y/ONYhyDCPEYH1ml@casper.infradead.org>
+ <e43f6acc-175d-1031-c4a2-67a6f1741866@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <29e9ed33-52eb-fbb4-5358-76939df747a9@google.com>
-X-Originating-IP: [10.180.168.240]
-X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
- (10.181.40.145)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DM6NAM11FT037:EE_|DS0PR12MB7560:EE_
-X-MS-Office365-Filtering-Correlation-Id: 5053471c-e46e-4a48-8340-08db1381d8ed
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: zeC4GVYzt7Zj+W6CjjgyDsTGI0vI0/NJ9J75aEqW5ZqhANrQ9NYlOZBCMVH8BIIHMztU+H+ydBRpMD72nKpHr1PXUZX80eDJJCs46yjYqIsY/IPmpbuQlIgnpnuV9vbDGRtx+XIH2th8IHoJjam2wKhe3KUCSa7yFDNYNrgwgV67EPPw3TzwP7dgPnMou/5p6Q9X8zCfi2cdVH+UfO89eEtdIar8Wq6QQmR/SPiQKiRXvaEc0hG6qxmlUM5yHULkhV46C37KjMUHyy7MKZ7KQ9IgpzC0Bv0aqdUC8IUneM1GUsi1wOMdJ0wIcm7WHW2lKgFOfj6kDyXxviazu2yk31qFiDO7LTX0Ijdf27Qrbu4gY61U0NodMUM+Z8G/YySJ/FaF9TzfVwLbRwK/feTPyeiUOJrHm1BLK2p8G6EG8mrn31UI7CAdCKDr88043ZyeGQ5ZcDbeiKdqthssaENc/ignNrWkjmsUb5w7ec2XTWdM+r/d7G7hOtqPf3X6imkqxtSM5nZJurFla5eiRS7F/c3jGTIs2nWviU2srUhALwZCGRzOXhxKb0eJfmso9Slb8VSuPByUb/PWt2nd0dC4EDT9uom0runwV3HfP0F9baazMw3HAAQlyuUcCOZMHC0iP06iu3Yn1JTgpOpKaN3Xfz4cFEfzeqqiBOuuaOzzCwZe7VkHyYmtQtcXjBKcbHOtBgBOGtHovKT+WZ38yF4digVrn8oaxkmiM7tVaZpzw38=
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230025)(4636009)(396003)(376002)(346002)(39860400002)(136003)(451199018)(36840700001)(40470700004)(46966006)(6916009)(83380400001)(40460700003)(36756003)(86362001)(5660300002)(36860700001)(7406005)(7416002)(2906002)(81166007)(8936002)(356005)(40480700001)(47076005)(82310400005)(426003)(336012)(70206006)(966005)(1076003)(8676002)(82740400003)(478600001)(70586007)(44832011)(186003)(54906003)(26005)(41300700001)(2616005)(4326008)(16526019)(316002)(36900700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 20 Feb 2023 20:34:21.3585
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 5053471c-e46e-4a48-8340-08db1381d8ed
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: DM6NAM11FT037.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS0PR12MB7560
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
-        autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <e43f6acc-175d-1031-c4a2-67a6f1741866@redhat.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 20, 2023 at 11:57:59AM -0800, Hugh Dickins wrote:
-> On Mon, 20 Feb 2023, Michael Roth wrote:
+On Mon, Feb 20, 2023 at 06:06:03PM +0100, Danilo Krummrich wrote:
+> On 2/20/23 16:10, Matthew Wilcox wrote:
+> > This is why we like people to use the spinlock embedded in the tree.
+> > There's nothing for the user to care about.  If the access really is
+> > serialised, acquiring/releasing the uncontended spinlock is a minimal
+> > cost compared to all the other things that will happen while modifying
+> > the tree.
 > 
-> > From: Hugh Dickins <hughd@google.com>
+> I think as for the users of the GPUVA manager we'd have two cases:
 > 
-> No.
+> 1) Accesses to the manager (and hence the tree) are serialized, no lock
+> needed.
 > 
-> > 
-> > When the address is backed by a memfd, the code to split the page does
-> > nothing more than remove the PMD from the page tables. So immediately
-> > install a PTE to ensure that any other pages in that 2MB region are
-> > brought back as in 4K pages.
-> > 
-> > Signed-off-by: Hugh Dickins <hughd@google.com>
-> 
-> No.  Suggested-by would be okay.
-> 
-> > Cc: Hugh Dickins <hughd@google.com>
-> 
-> Thanks.  I'm really sorry to be such a jobsworth,
-> and have nothing more constructive to say than I did before in
-> https://lore.kernel.org/linux-mm/7f2228c4-1586-2934-7b92-1a9d23b6046@google.com/
-> (please re-read), but adding a Signed-off-by where none was given is wrong;
-> and I'm not ever going to comprehend enough of the context to give it.
+> 2) Multiple operations on the tree must be locked in order to make them
+> appear atomic.
 
-Hi Hugh,
+Could you give an example here of what you'd like to do?  Ideally
+something complicated so I don't say "Oh, you can just do this" when
+there's a more complex example for which "this" won't work.  I'm sure
+that's embedded somewhere in the next 20-odd patches, but it's probably
+quicker for you to describe in terms of tree operations that have to
+appear atomic than for me to try to figure it out.
 
-Sorry for the mix-up, I'd intended to remove this patch before submitting. I'll
-make sure to remove it from future postings.
-
+> In either case the embedded spinlock wouldn't be useful, we'd either need an
+> external lock or no lock at all.
 > 
-> Best of luck for the series,
+> If there are any internal reasons why specific tree operations must be
+> mutually excluded (such as those you explain below), wouldn't it make more
+> sense to always have the internal lock and, optionally, allow users to
+> specify an external lock additionally?
 
-Thank you!
+So the way this works for the XArray, which is a little older than the
+Maple tree, is that we always use the internal spinlock for
+modifications (possibly BH or IRQ safe), and if someone wants to
+use an external mutex to make some callers atomic with respect to each
+other, they're free to do so.  In that case, the XArray doesn't check
+the user's external locking at all, because it really can't know.
 
--Mike
-
-> Hugh
-> 
-> > Signed-off-by: Ashish Kalra <ashish.kalra@amd.com>
-> > Signed-off-by: Michael Roth <michael.roth@amd.com>
-> > ---
-> >  mm/memory.c | 5 +++++
-> >  1 file changed, 5 insertions(+)
-> > 
-> > diff --git a/mm/memory.c b/mm/memory.c
-> > index e68da7e403c6..33c9020ba1f8 100644
-> > --- a/mm/memory.c
-> > +++ b/mm/memory.c
-> > @@ -4999,6 +4999,11 @@ static vm_fault_t handle_pte_fault(struct vm_fault *vmf)
-> >  static int handle_split_page_fault(struct vm_fault *vmf)
-> >  {
-> >  	__split_huge_pmd(vmf->vma, vmf->pmd, vmf->address, false, NULL);
-> > +	/*
-> > +	 * Install a PTE immediately to ensure that any other pages in
-> > +	 * this 2MB region are brought back in as 4K pages.
-> > +	 */
-> > +	__pte_alloc(vmf->vma->vm_mm, vmf->pmd);
-> >  	return 0;
-> >  }
-> >  
-> > -- 
-> > 2.25.1
+I'd advise taking that approach; if there's really no way to use the
+internal spinlock to make your complicated updates appear atomic
+then just let the maple tree use its internal spinlock, and you can
+also use your external mutex however you like.
