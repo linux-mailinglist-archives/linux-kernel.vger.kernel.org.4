@@ -2,119 +2,322 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1228969D406
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Feb 2023 20:19:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 87CBC69D410
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Feb 2023 20:26:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231899AbjBTTTo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Feb 2023 14:19:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49798 "EHLO
+        id S232750AbjBTT0N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Feb 2023 14:26:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55690 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232782AbjBTTTn (ORCPT
+        with ESMTP id S232269AbjBTT0L (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Feb 2023 14:19:43 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45D49421B;
-        Mon, 20 Feb 2023 11:19:42 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C49AF60ED4;
-        Mon, 20 Feb 2023 19:19:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7BD95C433EF;
-        Mon, 20 Feb 2023 19:19:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1676920781;
-        bh=FhzBPaQTni5fZj9kNa01otoHP++iDGtEwYpHAuLQaaA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=jPCYgP0f+Wbtuv32WShtnkjSfXxOV4GU1BwA4WOarTwclmiFiKQzIdl8KaMHkyKEd
-         JHlSEH1/dyiJOboW8RHLTFLJ7M2Qa+gUPy7/SmsUt2M3NczLhbA9hBdpQhnJ+X7hVa
-         AqaM2zmUJs2VIDxXOgUdW4DhdvNNfiQdIOb653Sz/pNMCI90vvzfYnBxlE4H5TYq1k
-         YkkkSgNVqjEFxYN35Uj9ZKYUlJj7RtfOtI+9uY4TM3uHaHKJOp07AmBOsZliYL9t9I
-         DRiPdR6ismlbSpaEiJzMkt5Jnrc4RWhC17vw8MLKCXXzuYYlZEcQqgIT2snIi3NyF0
-         Ppc5K2y4Emcmw==
-Date:   Mon, 20 Feb 2023 11:19:38 -0800
-From:   Josh Poimboeuf <jpoimboe@kernel.org>
-To:     KP Singh <kpsingh@kernel.org>
-Cc:     Borislav Petkov <bp@alien8.de>, linux-kernel@vger.kernel.org,
-        pjt@google.com, evn@google.com, tglx@linutronix.de,
-        mingo@redhat.com, dave.hansen@linux.intel.com, x86@kernel.org,
-        hpa@zytor.com, peterz@infradead.org,
-        pawan.kumar.gupta@linux.intel.com, kim.phillips@amd.com,
-        alexandre.chartre@oracle.com, daniel.sneddon@linux.intel.com,
-        =?utf-8?B?Sm9zw6k=?= Oliveira <joseloliveira11@gmail.com>,
-        Rodrigo Branco <rodrigo@kernelhacking.com>,
-        Alexandra Sandulescu <aesa@google.com>,
-        Jim Mattson <jmattson@google.com>, stable@vger.kernel.org
-Subject: Re: [PATCH] x86/bugs: Allow STIBP with IBRS
-Message-ID: <20230220191938.hti3ktgh4idzx7iu@treble>
-References: <CACYkzJ5L9MLuE5Jz+z5-NJCCrUqTbgKQkXSqnQnCfTD_WNA7_Q@mail.gmail.com>
- <CACYkzJ6n=-tobhX0ONQhjHSgmnNjWnNe_dZnEOGtD8Y6S3RHbA@mail.gmail.com>
- <20230220163442.7fmaeef3oqci4ee3@treble>
- <Y/Ox3MJZF1Yb7b6y@zn.tnic>
- <20230220175929.2laflfb2met6y3kc@treble>
- <CACYkzJ71xqzY6-wL+YShcL+d6ugzcdFHr6tbYWWE_ep52+RBZQ@mail.gmail.com>
- <20230220182717.uzrym2gtavlbjbxo@treble>
- <CACYkzJ5z3qLhkWqKLvP55HcjLACzAJbFjc4XjRzcft9ww40MaQ@mail.gmail.com>
- <20230220185957.yzjdnhcqpmkji2xs@treble>
- <CACYkzJ6p0+bTjbAyv6PD+ZKyyfjM9NyvtuMB-vwNHkeWm72B7A@mail.gmail.com>
+        Mon, 20 Feb 2023 14:26:11 -0500
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45DCD13D5B;
+        Mon, 20 Feb 2023 11:26:07 -0800 (PST)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out1.suse.de (Postfix) with ESMTP id DCA5E33893;
+        Mon, 20 Feb 2023 19:26:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1676921165; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=X/yYnG44gTdXUcqMRIxo+cfObb3PPFOBWdM2v5Ayie0=;
+        b=Z7D98O05rcCIgeoO38xdXt/CcAjfZN9OQ3mEvpf/lBI70+809yEckZIGN18TRdNyN748SC
+        8qhPbv+v243j5rXJxZVnhb2+rst+4chpj+vEkJD5lb2sDl8cYkMPsP9AmaJC+st5XTYvAw
+        QbuQ5HZM8qr41BrEt5xvEI3baTcYSfQ=
+Received: from ds.suse.cz (ds.suse.cz [10.100.12.205])
+        by relay2.suse.de (Postfix) with ESMTP id CC77B2C141;
+        Mon, 20 Feb 2023 19:26:05 +0000 (UTC)
+Received: by ds.suse.cz (Postfix, from userid 10065)
+        id A0930DA7F3; Mon, 20 Feb 2023 20:20:11 +0100 (CET)
+From:   David Sterba <dsterba@suse.com>
+To:     torvalds@linux-foundation.org
+Cc:     David Sterba <dsterba@suse.com>, linux-btrfs@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [GIT PULL] Btrfs updates for 6.3
+Date:   Mon, 20 Feb 2023 20:20:08 +0100
+Message-Id: <cover.1676908729.git.dsterba@suse.com>
+X-Mailer: git-send-email 2.37.3
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <CACYkzJ6p0+bTjbAyv6PD+ZKyyfjM9NyvtuMB-vwNHkeWm72B7A@mail.gmail.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_SOFTFAIL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 20, 2023 at 11:04:56AM -0800, KP Singh wrote:
-> On Mon, Feb 20, 2023 at 11:00 AM Josh Poimboeuf <jpoimboe@kernel.org> wrote:
-> >
-> > On Mon, Feb 20, 2023 at 10:33:56AM -0800, KP Singh wrote:
-> > >  static char *stibp_state(void)
-> > >  {
-> > > -       if (spectre_v2_in_ibrs_mode(spectre_v2_enabled))
-> > > +       if (!spectre_v2_user_needs_stibp(spectre_v2_enabled))
-> > >                 return "";
-> > >
-> > >         switch (spectre_v2_user_stibp) {
-> > >
-> > > Also Josh, is it okay for us to have a discussion and have me write
-> > > the patch as a v2? Your current patch does not even credit me at all.
-> > > Seems a bit unfair, but I don't really care. I was going to rev up the
-> > > patch with your suggestions.
-> >
-> > Well, frankly the patch needed a complete rewrite.  The patch
-> > description was unclear about what the problem is and what's being
-> 
-> Josh, this is a complex issue, we are figuring it out together on the
-> list. It's complex, that's why folks got it wrong in the first place.
-> Calling the patch obtuse and unclear is unfair!
-> 
-> > fixed.  The code was obtuse and the comments didn't help.  I could tell
-> > by the other replies that I wasn't the only one confused.
-> 
-> The patch you sent is not clear either, it implicitly ties in STIBP
-> with eIBRS. There is no explanation anywhere that IBRS just means
-> KERNEL_IBRS.
+Hi,
 
-Ok, so something like this on top?
+there's a usual mix of performance improvements and new features. The
+core change is reworking how checksums are processed, with followup
+cleanups and simplifications. There are two minor changes in block layer
+and iomap code.
 
-diff --git a/arch/x86/kernel/cpu/bugs.c b/arch/x86/kernel/cpu/bugs.c
-index b97c0d28e573..fb3079445700 100644
---- a/arch/x86/kernel/cpu/bugs.c
-+++ b/arch/x86/kernel/cpu/bugs.c
-@@ -1201,6 +1201,10 @@ spectre_v2_user_select_mitigation(void)
- 	/*
- 	 * If no STIBP, enhanced IBRS is enabled, or SMT impossible,
- 	 * STIBP is not required.
-+	 *
-+	 * For legacy IBRS, STIBP may still be needed because IBRS is only
-+	 * enabled in kernel space, so user space isn't protected from indirect
-+	 * branch prediction attacks from a sibling CPU thread.
- 	 */
- 	if (!boot_cpu_has(X86_FEATURE_STIBP) ||
- 	    !smt_possible ||
+Please pull, thanks.
+
+Features:
+
+- block group allocation class heuristics
+  - pack files by size (up to 128k, up to 8M, more) to avoid
+    fragmentation in block groups, assuming that file size and life time
+    is correlated, in particular this may help during balance
+  - with tracepoints and extensible in the future
+
+Performance:
+
+- send: cache directory utimes and only emit the command when necessary
+  - speedup up to 10x
+  - smaller final stream produced (no redundant utimes commands issued),
+  - compatibility not affected
+
+- fiemap: skip backref checks for shared leaves
+  - speedup 3x on sample filesystem with all leaves shared (e.g. on
+    snapshots)
+
+- micro optimized b-tree key lookup, speedup in metadata operations
+  (sample benchmark: fs_mark +10% of files/sec)
+
+Core changes:
+
+- change where checksumming is done in the io path
+  - checksum and read repair does verification at lower layer
+  - cascaded cleanups and simplifications
+
+- raid56 refactoring and cleanups
+
+Fixes:
+
+- sysfs: make sure that a run-time change of a feature is correctly
+  tracked by the feature files
+
+- scrub: better reporting of tree block errors
+
+Other:
+
+- locally enable -Wmaybe-uninitialized after fixing all warnings
+
+- misc cleanups, spelling fixes
+
+Other code:
+
+- block: export bio_split_rw
+
+- iomap: remove IOMAP_F_ZONE_APPEND
+
+----------------------------------------------------------------
+The following changes since commit ceaa837f96adb69c0df0397937cd74991d5d821a:
+
+  Linux 6.2-rc8 (2023-02-12 14:10:17 -0800)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/kdave/linux.git for-6.3-tag
+
+for you to fetch changes up to 964a54e5e1a0d70cd80bd5a0885a1938463625b1:
+
+  btrfs: make kobj_type structures constant (2023-02-15 19:38:55 +0100)
+
+----------------------------------------------------------------
+Boris Burkov (6):
+      btrfs: pass find_free_extent_ctl to allocator tracepoints
+      btrfs: add more find_free_extent tracepoints
+      btrfs: introduce size class to block group allocator
+      btrfs: load block group size class when caching
+      btrfs: don't use size classes for zoned file systems
+      btrfs: hold block group refcount during async discard
+
+Christoph Hellwig (48):
+      btrfs: remove the wait argument to btrfs_start_ordered_extent
+      block: export bio_split_rw
+      btrfs: better document struct btrfs_bio
+      btrfs: add a btrfs_inode pointer to struct btrfs_bio
+      btrfs: remove the direct I/O read checksum lookup optimization
+      btrfs: simplify parameters of btrfs_lookup_bio_sums
+      btrfs: refactor error handling in btrfs_submit_bio
+      btrfs: save the bio iter for checksum validation in common code
+      btrfs: pre-load data checksum for reads in btrfs_submit_bio
+      btrfs: add a btrfs_data_csum_ok helper
+      btrfs: handle checksum validation and repair at the storage layer
+      btrfs: open code btrfs_bio_free_csum
+      btrfs: remove btrfs_bio_for_each_sector
+      btrfs: remove now unused checksumming helpers
+      btrfs: remove struct btrfs_bio::device field
+      btrfs: remove the io_failure_record infrastructure
+      btrfs: rename btrfs_bio::iter field
+      btrfs: remove struct btrfs_bio::is_metadata flag
+      btrfs: open code the submit_bio_start helpers
+      btrfs: simplify the btrfs_csum_one_bio calling convention
+      btrfs: handle checksum generation in the storage layer
+      btrfs: handle recording of zoned writes in the storage layer
+      btrfs: support cloned bios in btree_csum_one_bio
+      btrfs: allow btrfs_submit_bio to split bios
+      btrfs: pass the iomap bio to btrfs_submit_bio
+      btrfs: remove struct btrfs_io_geometry
+      btrfs: open code submit_encoded_read_bio
+      btrfs: remove the fs_info argument to btrfs_submit_bio
+      btrfs: remove now spurious bio submission helpers
+      btrfs: calculate file system wide queue limit for zoned mode
+      btrfs: split zone append bios in btrfs_submit_bio
+      iomap: remove IOMAP_F_ZONE_APPEND
+      btrfs: raid56: simplify error handling and code flow in raid56_parity_write
+      btrfs: raid56: simplify code flow in rmw_rbio
+      btrfs: raid56: wait for I/O completion in submit_read_bios
+      btrfs: raid56: add a bio_list_put helper
+      btrfs: raid56: fold recover_assemble_read_bios into recover_rbio
+      btrfs: raid56: fold rmw_read_wait_recover into rmw_read_bios
+      btrfs: raid56: submit the read bios from scrub_assemble_read_bios
+      btrfs: raid56: handle endio in rmw_rbio
+      btrfs: raid56: handle endio in recover_rbio
+      btrfs: raid56: handle endio in scrub_rbio
+      btrfs: use file_offset to limit bios size in calc_bio_boundaries
+      btrfs: set bbio->file_offset in alloc_new_bio
+      btrfs: pass a btrfs_bio to btrfs_use_append
+      btrfs: never return true for reads in btrfs_use_zone_append
+      btrfs: don't rely on unchanging ->bi_bdev for zone append remaps
+      btrfs: remove the bdev argument to btrfs_rmap_block
+
+Colin Ian King (1):
+      btrfs: fix spelling mistakes found using codespell
+
+Filipe Manana (24):
+      btrfs: use a negative value for BTRFS_LOG_FORCE_COMMIT
+      btrfs: use a single variable to track return value for log_dir_items()
+      btrfs: send: directly return from did_overwrite_ref() and simplify it
+      btrfs: send: avoid unnecessary generation search at did_overwrite_ref()
+      btrfs: send: directly return from will_overwrite_ref() and simplify it
+      btrfs: send: avoid extra b+tree searches when checking reference overrides
+      btrfs: send: remove send_progress argument from can_rmdir()
+      btrfs: send: avoid duplicated orphan dir allocation and initialization
+      btrfs: send: avoid unnecessary orphan dir rbtree search at can_rmdir()
+      btrfs: send: reduce searches on parent root when checking if dir can be removed
+      btrfs: send: iterate waiting dir move rbtree only once when processing refs
+      btrfs: send: initialize all the red black trees earlier
+      btrfs: send: genericize the backref cache to allow it to be reused
+      btrfs: adapt lru cache to allow for 64 bits keys on 32 bits systems
+      btrfs: send: cache information about created directories
+      btrfs: allow a generation number to be associated with lru cache entries
+      btrfs: add an api to delete a specific entry from the lru cache
+      btrfs: send: use the lru cache to implement the name cache
+      btrfs: send: update size of roots array for backref cache entries
+      btrfs: send: cache utimes operations for directories if possible
+      btrfs: assert commit root semaphore is held when accessing backref cache
+      btrfs: skip backref walking during fiemap if we know the leaf is shared
+      btrfs: eliminate extra call when doing binary search on extent buffer
+      btrfs: do unsigned integer division in the extent buffer binary search loop
+
+Johannes Thumshirn (4):
+      btrfs: drop unused trans parameter of drop_delayed_ref
+      btrfs: remove trans parameter of merge_ref
+      btrfs: drop trans parameter of insert_delayed_ref
+      btrfs: directly pass in fs_info to btrfs_merge_delayed_refs
+
+Josef Bacik (15):
+      btrfs: move btrfs_abort_transaction to transaction.c
+      btrfs: fix uninitialized variable warning in btrfs_cleanup_ordered_extents
+      btrfs: fix uninitialized variable warning in get_inode_gen
+      btrfs: fix uninitialized variable warning in btrfs_update_block_group
+      btrfs: fix uninitialized variable warnings in __set_extent_bit and convert_extent_bit
+      btrfs: fix uninitialized variable warning in btrfs_sb_log_location
+      btrfs: fix uninitialized variable warning in run_one_async_start
+      btrfs: turn on -Wmaybe-uninitialized
+      btrfs: always lock the block before calling btrfs_clean_tree_block
+      btrfs: add trans argument to btrfs_clean_tree_block
+      btrfs: replace clearing extent buffer dirty bit with btrfs_clean_block
+      btrfs: do not increment dirty_metadata_bytes in set_btree_ioerr
+      btrfs: rename btrfs_clean_tree_block to btrfs_clear_buffer_dirty
+      btrfs: combine btrfs_clear_buffer_dirty and clear_extent_buffer_dirty
+      btrfs: replace btrfs_wait_tree_block_writeback by wait_on_extent_buffer_writeback
+
+Naohiro Aota (1):
+      btrfs: zoned: fix uninitialized variable warning in btrfs_get_dev_zones
+
+Peng Hao (1):
+      btrfs: go to matching label when cleaning em in btrfs_submit_direct
+
+Qu Wenruo (6):
+      btrfs: scrub: improve tree block error reporting
+      btrfs: sysfs: update fs features directory asynchronously
+      btrfs: raid56: reduce overhead to calculate the bio length
+      btrfs: remove stripe boundary calculation for buffered I/O
+      btrfs: remove stripe boundary calculation for compressed I/O
+      btrfs: remove stripe boundary calculation for encoded I/O
+
+Thomas Weißschuh (1):
+      btrfs: make kobj_type structures constant
+
+Yushan Zhou (1):
+      btrfs: use PAGE_{ALIGN, ALIGNED, ALIGN_DOWN} macro
+
+ye xingchen (1):
+      btrfs: remove duplicate include header in extent-tree.c
+
+ block/blk-merge.c                 |   3 +-
+ fs/btrfs/Makefile                 |   6 +-
+ fs/btrfs/backref.c                |  33 +-
+ fs/btrfs/bio.c                    | 557 +++++++++++++++++++++++++++----
+ fs/btrfs/bio.h                    |  67 +---
+ fs/btrfs/block-group.c            | 273 +++++++++++++--
+ fs/btrfs/block-group.h            |  24 +-
+ fs/btrfs/btrfs_inode.h            |  22 +-
+ fs/btrfs/compression.c            | 276 +++------------
+ fs/btrfs/compression.h            |   3 -
+ fs/btrfs/ctree.c                  |  62 ++--
+ fs/btrfs/ctree.h                  |  15 +
+ fs/btrfs/defrag.c                 |   4 +-
+ fs/btrfs/delayed-ref.c            |  24 +-
+ fs/btrfs/delayed-ref.h            |   2 +-
+ fs/btrfs/discard.c                |  41 ++-
+ fs/btrfs/disk-io.c                | 225 ++-----------
+ fs/btrfs/disk-io.h                |  14 +-
+ fs/btrfs/extent-io-tree.c         |  10 +-
+ fs/btrfs/extent-io-tree.h         |   1 -
+ fs/btrfs/extent-tree.c            | 181 +++-------
+ fs/btrfs/extent-tree.h            |  81 +++++
+ fs/btrfs/extent_io.c              | 582 ++++----------------------------
+ fs/btrfs/extent_io.h              |  36 +-
+ fs/btrfs/file-item.c              |  72 ++--
+ fs/btrfs/file-item.h              |   8 +-
+ fs/btrfs/file.c                   |   2 +-
+ fs/btrfs/free-space-tree.c        |   2 +-
+ fs/btrfs/fs.c                     |   4 +
+ fs/btrfs/fs.h                     |  11 +-
+ fs/btrfs/inode.c                  | 641 +++++------------------------------
+ fs/btrfs/ioctl.c                  |   2 +-
+ fs/btrfs/lru_cache.c              | 166 +++++++++
+ fs/btrfs/lru_cache.h              |  80 +++++
+ fs/btrfs/lzo.c                    |   2 +-
+ fs/btrfs/messages.c               |  30 --
+ fs/btrfs/messages.h               |  34 --
+ fs/btrfs/ordered-data.c           |  25 +-
+ fs/btrfs/ordered-data.h           |   3 +-
+ fs/btrfs/qgroup.c                 |   2 +-
+ fs/btrfs/raid56.c                 | 334 +++++++------------
+ fs/btrfs/raid56.h                 |   4 +-
+ fs/btrfs/relocation.c             |   2 +-
+ fs/btrfs/scrub.c                  |  51 ++-
+ fs/btrfs/send.c                   | 684 ++++++++++++++++++++------------------
+ fs/btrfs/super.c                  |   3 +-
+ fs/btrfs/sysfs.c                  |  41 +--
+ fs/btrfs/sysfs.h                  |   3 +-
+ fs/btrfs/tests/extent-map-tests.c |   2 +-
+ fs/btrfs/transaction.c            |  34 ++
+ fs/btrfs/transaction.h            |  31 ++
+ fs/btrfs/tree-log.c               |  87 ++---
+ fs/btrfs/tree-log.h               |   9 +-
+ fs/btrfs/volumes.c                | 116 ++-----
+ fs/btrfs/volumes.h                |  18 -
+ fs/btrfs/zoned.c                  | 146 ++++----
+ fs/btrfs/zoned.h                  |  20 +-
+ fs/iomap/direct-io.c              |  10 +-
+ include/linux/bio.h               |   4 +
+ include/linux/iomap.h             |   3 +-
+ include/trace/events/btrfs.h      | 127 +++++--
+ 61 files changed, 2457 insertions(+), 2898 deletions(-)
+ create mode 100644 fs/btrfs/lru_cache.c
+ create mode 100644 fs/btrfs/lru_cache.h
