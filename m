@@ -2,126 +2,223 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4123769C47E
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Feb 2023 04:26:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B504569C47F
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Feb 2023 04:29:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229970AbjBTD0K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 19 Feb 2023 22:26:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33930 "EHLO
+        id S229840AbjBTD3O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 19 Feb 2023 22:29:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35286 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229642AbjBTD0H (ORCPT
+        with ESMTP id S229642AbjBTD3M (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 19 Feb 2023 22:26:07 -0500
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CCCAC165;
-        Sun, 19 Feb 2023 19:26:03 -0800 (PST)
+        Sun, 19 Feb 2023 22:29:12 -0500
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE4A1C66B
+        for <linux-kernel@vger.kernel.org>; Sun, 19 Feb 2023 19:29:10 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1676863563; x=1708399563;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=/FKG+kLC7zN9Z05qh2Wi25UR5M4uashZ0aGzWIvhyNY=;
-  b=DpxFErmVZRXzDIzQqAzIjEdwBgSEsiNWrt3HNB/6ZGfj9yO+kp1Z11Qr
-   fNK74xvZLFaFQd1ZL0xUlvYPE6n8QQ+53zbQ1fubIq3UkY+OivrX4pt/m
-   p8CNhEGLGUVPfQmrwujB3jUEdNGFMej7gNaRTSMgZvEzP/p1rHca133vC
-   MpFu+F7IlUonYRb8JsIrbpAjxLlVddFJOHPXqZk2sFzRjoKvMD3S+mh0s
-   bzowvM+5IZ6RvGHX1ITdv0t7+GoZxmob5PPnxWzIQ8aRAMlDJKiw2xJcZ
-   ZcPriKZ/iulytUm3uUiVNQFsdnHtlsOoKnSWzzv6j6bOsBqc22FqsOGB0
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10626"; a="316028654"
+  t=1676863750; x=1708399750;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=UbFOTIk6kgGuUkd1NfbpBJotjTmWKsF4mSJ46RkdXNI=;
+  b=ZJzkVI7GphW5CWel6MK8fobdh0nRjVYfeehQXspmDPEhIaRlHezMjdjz
+   EcW9EewJC8lNHaCzAy4zuJaYwB366ntMIDzwHc0y9Chf3klD2YK57oF16
+   j0JH6vhADV0KJhxtew16rgycg6k8a9MdevAMz3FHIYcX59RSJ+CHcFs7S
+   qSPHatT69l03u4CWExJoMjGzyY+p6QlqtngQ0TEDfPPYJ4Mfsi7WzE2ho
+   zoYU9jnvs2MVi0/7Tq5eWanm95ydb8WPQnKue7XaX+j+kVzYjOZMRUt7O
+   XuD0SbwASzPbsUQpNeYX+VWkRcl0C4Sgn3R2ID4LfjOayXS5l+YXrhZ95
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10626"; a="418537672"
 X-IronPort-AV: E=Sophos;i="5.97,311,1669104000"; 
-   d="scan'208";a="316028654"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Feb 2023 19:26:02 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10626"; a="664489510"
+   d="scan'208";a="418537672"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Feb 2023 19:29:10 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10626"; a="813986499"
 X-IronPort-AV: E=Sophos;i="5.97,311,1669104000"; 
-   d="scan'208";a="664489510"
-Received: from lkp-server01.sh.intel.com (HELO 4455601a8d94) ([10.239.97.150])
-  by orsmga007.jf.intel.com with ESMTP; 19 Feb 2023 19:25:57 -0800
-Received: from kbuild by 4455601a8d94 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pTwoO-000DdN-2d;
-        Mon, 20 Feb 2023 03:25:56 +0000
-Date:   Mon, 20 Feb 2023 11:25:45 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Ye Xiang <xiang.ye@intel.com>, Lee Jones <lee@kernel.org>,
-        Wolfram Sang <wsa-dev@sang-engineering.com>,
-        Tyrone Ting <kfting@nuvoton.com>,
-        Mark Brown <broonie@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>, linux-i2c@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-spi@vger.kernel.org,
-        linux-gpio@vger.kernel.org
-Cc:     oe-kbuild-all@lists.linux.dev, srinivas.pandruvada@intel.com,
-        heikki.krogerus@linux.intel.com, andriy.shevchenko@linux.intel.com,
-        sakari.ailus@linux.intel.com, zhifeng.wang@intel.com,
-        wentong.wu@intel.com, lixu.zhang@intel.com,
-        Ye Xiang <xiang.ye@intel.com>
-Subject: Re: [PATCH 4/5] spi: Add support for Intel LJCA USB SPI driver
-Message-ID: <202302201128.XeS2tn5i-lkp@intel.com>
-References: <20230219183059.1029525-5-xiang.ye@intel.com>
+   d="scan'208";a="813986499"
+Received: from cyi-mobl.ccr.corp.intel.com (HELO rzhang1-DESK.intel.com) ([10.255.29.242])
+  by fmsmga001-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Feb 2023 19:29:07 -0800
+From:   Zhang Rui <rui.zhang@intel.com>
+To:     tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+        dave.hansen@linux.intel.com, hpa@zytor.com
+Cc:     x86@kernel.org, linux-kernel@vger.kernel.org,
+        zhang.jia@linux.alibaba.com, len.brown@intel.com,
+        rui.zhang@intel.com
+Subject: [RFC PATCH V2 0/1] x86: cpu topology fix and question on x86_max_cores
+Date:   Mon, 20 Feb 2023 11:28:55 +0800
+Message-Id: <20230220032856.661884-1-rui.zhang@intel.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230219183059.1029525-5-xiang.ye@intel.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Ye,
+Hi, All,
 
-Thank you for the patch! Perhaps something to improve:
+There are two kernel issues observed on Intel Hybrid platform named
+MeteorLake. And these two issues altogether bring broken CPU topology.
 
-[auto build test WARNING on lee-mfd/for-mfd-next]
-[also build test WARNING on lee-mfd/for-mfd-fixes wsa/i2c/for-next broonie-spi/for-next linus/master v6.2]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+This patch series aims to
+1. provide a solution for the first issue, as an urgent fix and -stable
+   candidate, so that this problem is not exposed to end users.
+2. get feedback on how to fix the second issue.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Ye-Xiang/mfd-Add-support-for-Intel-LJCA-device/20230220-023253
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/lee/mfd.git for-mfd-next
-patch link:    https://lore.kernel.org/r/20230219183059.1029525-5-xiang.ye%40intel.com
-patch subject: [PATCH 4/5] spi: Add support for Intel LJCA USB SPI driver
-config: x86_64-allyesconfig (https://download.01.org/0day-ci/archive/20230220/202302201128.XeS2tn5i-lkp@intel.com/config)
-compiler: gcc-11 (Debian 11.3.0-8) 11.3.0
-reproduce (this is a W=1 build):
-        # https://github.com/intel-lab-lkp/linux/commit/6fbec44daa135bd057079083efafd579c710467e
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Ye-Xiang/mfd-Add-support-for-Intel-LJCA-device/20230220-023253
-        git checkout 6fbec44daa135bd057079083efafd579c710467e
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        make W=1 O=build_dir ARCH=x86_64 olddefconfig
-        make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/spi/
+Any comments on this are really appreciated.
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202302201128.XeS2tn5i-lkp@intel.com/
+Problem details on MeteorLake
+-----------------------------
 
-All warnings (new ones prefixed by >>):
+On Intel Hybrid platforms like AlderLake-P/S, both smp_num_siblings
+and cpuinfo_x86.x86_max_cores are broken like below
+ 
+[    0.201005] detect_extended_topology: CPU APICID 0x0, smp_num_siblings 2, x86_max_cores 10
+[    0.201117] start_kernel->check_bugs->cpu_smt_check_topology: smp_num_siblings 2
+...
+[    0.010146] detect_extended_topology: CPU APICID 0x8, smp_num_siblings 2, x86_max_cores 10
+...
+[    0.010146] detect_extended_topology: CPU APICID 0x39, smp_num_siblings 2, x86_max_cores 10
+[    0.010146] detect_extended_topology: CPU APICID 0x48, smp_num_siblings 1, x86_max_cores 20
+...
+[    0.010146] detect_extended_topology: CPU APICID 0x4e, smp_num_siblings 1, x86_max_cores 20
+[    2.583800] sched_set_itmt_core_prio: smp_num_siblings 1
 
->> drivers/spi/spi-ljca.c:269:40: warning: 'ljca_spi_id' defined but not used [-Wunused-const-variable=]
-     269 | static const struct platform_device_id ljca_spi_id[] = {
-         |                                        ^~~~~~~~~~~
+This is because the SMT siblings value returned by CPUID.1F SMT level
+EBX differs among CPUs. It returns 2 for Pcore CPUs which have HT
+sibling and returns 1 for Ecore CPUs which do not have SMT sibling.
 
+This brings several potential issues:
+1. some kernel configuration like cpu_smt_control, as set in
+   start_kernel()->check_bugs()->cpu_smt_check_topology(), depends on
+   smp_num_siblings set by boot cpu.
+   It is pure luck that all the current hybrid platforms use Pcore as cpu0
+   and hide this problem.
+2. some per CPU data like cpuinfo_x86.x86_max_cores that depends on
+   smp_num_siblings becomes inconsistent and bogus.
+3. the final smp_num_siblings value after boot depends on the last CPU
+   enumerated, which could either be Pcore or Ecore CPU.
 
-vim +/ljca_spi_id +269 drivers/spi/spi-ljca.c
+Previously, there is no functional issue observed on AlderLake-P/S.
 
-   267	
-   268	#define LJCA_SPI_DRV_NAME "ljca-spi"
- > 269	static const struct platform_device_id ljca_spi_id[] = {
-   270		{ LJCA_SPI_DRV_NAME, 0 },
-   271		{ /* sentinel */ }
-   272	};
-   273	MODULE_DEVICE_TABLE(platform, ljca_spi_id);
-   274	
+However, on MeteorLake, this becomes worse.
+a). smp_num_siblings varies like AlderLake and it is set to 1 for Ecore.
+b). x86_max_cores is totally broken and it is set to 1 for the boot cpu.
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+Altogether, these two issues make the system being treated as an UP 
+system in set_cpu_sibling_map() when probing Ecore CPUs, and the Ecore 
+CPUs are not updated in any cpu sibling maps erroneously.
+
+Below shows part of the CPU topology information before and after the
+fix, for both Pcore and Ecore CPU (cpu0 is Pcore, cpu 12 is Ecore).
+...
+-/sys/devices/system/cpu/cpu0/topology/package_cpus:000fff
+-/sys/devices/system/cpu/cpu0/topology/package_cpus_list:0-11
++/sys/devices/system/cpu/cpu0/topology/package_cpus:3fffff
++/sys/devices/system/cpu/cpu0/topology/package_cpus_list:0-21
+...
+-/sys/devices/system/cpu/cpu12/topology/package_cpus:001000
+-/sys/devices/system/cpu/cpu12/topology/package_cpus_list:12
++/sys/devices/system/cpu/cpu12/topology/package_cpus:3fffff
++/sys/devices/system/cpu/cpu12/topology/package_cpus_list:0-21
+
+And this also breaks userspace tools like lscpu
+-Core(s) per socket:  1
+-Socket(s):           11
++Core(s) per socket:  16
++Socket(s):           1
+
+Solution for fix smp_num_sibling
+--------------------------------
+
+Patch 1/1 ensures that smp_num_siblings represents the system-wide maximum
+number of siblings by always increasing its value. Never allow it to
+decrease.
+
+It is sufficient to make the problem go away.
+
+However, there is a pontenial problem left. That is, when boot CPU is an
+Ecore CPU, smp_num_sibling is set to 1 during BSP probe, kernel disables
+SMT support by setting cpu_smt_control to CPU_SMT_NOT_SUPPORTED in
+start_kernel()->check_bugs()->cpu_smt_check_topology().
+So far, we don't have such platforms.
+
+Questions on how to fix cpuinfo_x86.x86_max_cores
+-------------------------------------------------
+
+Fixing x86_max_cores is more complex. Current kernel uses below logic to
+get x86_max_cores
+	x86_max_cores = cpus_in_a_package / smp_num_siblings
+But
+1. There is a known bug in CPUID.1F handling code. Thus cpus_in_a_package
+   can be bogus. To fix it, I will add CPUID.1F Module level support.
+2. x86_max_cores is set and used in an inconsistent way in current kernel.
+   In short, smp_num_siblings/x86_max_cores
+   2.1 represents the number of maximum *addressable* threads/cores in a
+       core/package when retrieved via CPUID 1 and 4 on old platforms.
+       CPUID.1 EBX 23:16 "Maximum number of addressable IDs for logical
+       processors in this physical package".
+       CPUID.4 EAX 31:26 "Maximum number of addressable IDs for processor
+       cores in the physical package".
+   2.2 represents the number of maximum *possible* threads/cores in a
+       core/package, when retrieved via CPUID.B/1F on non-Hybrid platforms.
+       CPUID.B/1F EBX 15:0 "Number of logical processors at this level type.
+       The number reflects configuration as shipped by Intel".
+       For example, in calc_llc_size_per_core()
+          do_div(llc_size, c->x86_max_cores);
+       x86_max_cores is used as the max *possible* cores in a package.
+   2.3 is used in a conflict way on other vendors like AMD by checking the
+       code. I need help on confirming the proper behavior for AMD.
+       For example, in amd_get_topology(),
+          c->x86_coreid_bits = get_count_order(c->x86_max_cores);
+       x86_max_cores is used as the max *addressable* cores in a package.
+       in get_nbc_for_node(),
+          cores_per_node = (c->x86_max_cores * smp_num_siblings) / amd_get_nodes_per_socket();
+       x86_max_cores is used as the max *possible* cores in a package.
+3. using
+      x86_max_cores = cpus_in_a_package / smp_num_siblings
+   to get the number of maximum *possible* cores in a package during boot
+   cpu bringup is not applicable on platforms with asymmetric cores.
+   Because, for a given number of threads, we don't know how many of the
+   threads are the master thread or the only thread of a core, and how
+   many of them are SMT siblings.
+   For example, on a platform with 6 Pcore and 8 Ecore, there are 20
+   threads. But setting x86_max_cores to 10 is apparently wrong.
+
+Given the above situation, I have below question and any input is really
+appreciated.
+
+Is this inconsistency a problem or not?
+
+If we want to keep it consistent, it has to represent the max
+*addressable* cores in a package. Because max *possible* cores in a
+package is not available on Intel Hybrid platform.
+
+I have proposed a patch for this purpose, but gave up because I didn't
+address the above scenarios that uses x86_max_core differently.
+https://lore.kernel.org/all/20220922133800.12918-7-rui.zhang@intel.com/
+
+Does this break the expectation on AMD platforms using CPUID.B?
+If yes, what should we do?
+
+BTW, this also fixes the potential issue that kernel runs as SMT disabled
+when cpu0 is a Ecore cpu.
+
+The downside is that, on a platform that does not have SMT, like
+AlderLake-N, which has Ecore CPUs only, kernel will still run as
+SMT-capable with this solution. Because SMT ID still takes 1 bit in
+APIC-ID and smp_num_siblings is set to 2. But given that kernel has
+already optimized for non-SMT case at runtime in places like scheduler,
+by checking sibling maps, so my current understanding is that the overhead
+won't be big.
+
+thanks,
+rui
+
+---
+Changes in V2:
+- improve changelog to more focus on the smp_num_siblings issue.
