@@ -2,138 +2,168 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7A8C169C452
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Feb 2023 04:03:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A0B769C449
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Feb 2023 04:03:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229723AbjBTDD5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 19 Feb 2023 22:03:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52044 "EHLO
+        id S229810AbjBTDDM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 19 Feb 2023 22:03:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50822 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229981AbjBTDDy (ORCPT
+        with ESMTP id S229572AbjBTDDK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 19 Feb 2023 22:03:54 -0500
-Received: from gnuweeb.org (gnuweeb.org [51.81.211.47])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B0E1E3AA;
-        Sun, 19 Feb 2023 19:03:42 -0800 (PST)
-Received: from localhost.localdomain (unknown [182.253.183.169])
-        by gnuweeb.org (Postfix) with ESMTPSA id 738E683133;
-        Mon, 20 Feb 2023 03:03:35 +0000 (UTC)
-X-GW-Data: lPqxHiMPbJw1wb7CM9QUryAGzr0yq5atzVDdxTR0iA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gnuweeb.org;
-        s=default; t=1676862222;
-        bh=8+ewo69UeU0rHb78uAAPEiHOOweqFJBmdi5nkVAJieo=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=fQb5MRbcGzKs+xDyXwlIuAgQUmuMECY9c8DDzj3txjNOnHftopsZgnGd91RKcuon6
-         BtjA39ED7RNJuUYINZOUaFjbckKzCMjzZq9c7WUPK6Llqe0hvCE3Cfaitxfa+hnaKE
-         /n2akSAu0xyDw/UUuKBpo17/eBMQgY5/Of10RRh3WI0/ITYauIviRI28b64iMM2yZl
-         x/81Aoc1yzeQ/6rxnnK6//2RhTPS4TZZX1xDclsvztmk33tYTsX7Nqy5sJXjKT7RF0
-         vUKXlQKwvsaNBNYVPnen9DlLn8fSDRV3riPlA7xLXiN3SwNufu6TQwsvTt4meG5Ob8
-         GmH5D6E6lAFRw==
-From:   Ammar Faizi <ammarfaizi2@gnuweeb.org>
-To:     Ingo Molnar <mingo@kernel.org>, "H. Peter Anvin" <hpa@zytor.com>,
-        Dave Hansen <dave.hansen@intel.com>, Xin Li <xin3.li@intel.com>
-Cc:     Ammar Faizi <ammarfaizi2@gnuweeb.org>,
-        Andrew Cooper <Andrew.Cooper3@citrix.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Borislav Petkov <bp@alien8.de>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        x86 Mailing List <x86@kernel.org>,
-        Linux x86-64 Mailing List <linux-x86_64@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Kselftest Mailing List 
-        <linux-kselftest@vger.kernel.org>,
-        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>
-Subject: [RFC PATCH v8 3/3] selftests/x86: sysret_rip: Test SYSRET with a signal handler
-Date:   Mon, 20 Feb 2023 10:02:44 +0700
-Message-Id: <20230220030244.115808-4-ammarfaizi2@gnuweeb.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230220030244.115808-1-ammarfaizi2@gnuweeb.org>
-References: <20230220030244.115808-1-ammarfaizi2@gnuweeb.org>
+        Sun, 19 Feb 2023 22:03:10 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 262417D9C
+        for <linux-kernel@vger.kernel.org>; Sun, 19 Feb 2023 19:03:08 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 300B2CE0AFF
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Feb 2023 03:03:07 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 00220C433D2;
+        Mon, 20 Feb 2023 03:03:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1676862185;
+        bh=K4g+VWnYi5actU4XQ7u2VfOjBh1wfqtMcWd25MgtzYY=;
+        h=Date:From:To:Cc:Subject:From;
+        b=XP1MxDD2uR2PcAJ7G3afM0U1tJyCa5WqVHcG2X1jM3nZm6l5qdJnm+8MACuNmpr36
+         bbVddT3X1TYN0YJ9wyVCbBtrOQqnis1T8dlriLryiXG86rYp9gzp9HqfASZ7E03FYm
+         7GqAZQw8RTl2ld2GPxsI80Qlnk11U53UpP38V/rxMIXvT251/rpAMKYTx+hcNEK8gP
+         RyqDPI4vgzzyD3X0g82Quy0UzAPdagJ0IdrL5rvD4CDBzP0L48xVS42VVaRwqfVPTI
+         XfxuZbGtLOQH42/VfYpXI3+jY/ivaHm8KOIXizeqaQ4haD8WRKeWcZL6wplpVfk4h0
+         Q0h9VtRsoeiGw==
+Date:   Mon, 20 Feb 2023 11:02:58 +0800
+From:   Gao Xiang <xiang@kernel.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     linux-erofs@lists.ozlabs.org, LKML <linux-kernel@vger.kernel.org>,
+        Sandeep Dhavale <dhavale@google.com>,
+        Jingbo Xu <jefflexu@linux.alibaba.com>,
+        Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <linux@weissschuh.net>,
+        Yue Hu <huyue2@coolpad.com>, Yangtao Li <frank.li@vivo.com>,
+        Dan Carpenter <error27@gmail.com>, Chao Yu <chao@kernel.org>
+Subject: [GIT PULL] erofs updates for 6.3-rc1
+Message-ID: <Y/Li4s7qPOArhcSm@debian>
+Mail-Followup-To: Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-erofs@lists.ozlabs.org, LKML <linux-kernel@vger.kernel.org>,
+        Sandeep Dhavale <dhavale@google.com>,
+        Jingbo Xu <jefflexu@linux.alibaba.com>,
+        Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <linux@weissschuh.net>,
+        Yue Hu <huyue2@coolpad.com>, Yangtao Li <frank.li@vivo.com>,
+        Dan Carpenter <error27@gmail.com>, Chao Yu <chao@kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The current test_sigreturn_to() goes to the slow-path syscall with
-IRET due to non-canonical addresses. It uses the SIGUSR1 signal to
-perform the test.
+Hi Linus,
 
-Add a similar test that goes to the SYSRET path instead of IRET using
-the SIGUSR2 signal. There are two cases:
+Could you consider this pull request for 6.3-rc1?
 
-  A) 'syscall' in a FRED system preserves %rcx and %r11.
+The most noticeable feature for this cycle is per-CPU kthread
+decompression since Android use cases need low-latency I/O handling
+in order to ensure the app runtime performance, currently unbounded
+workqueue latencies are not quite good for production on many aarch64
+hardwares and thus we need to introduce a deterministic expectation
+for these.  Decompression is CPU-intensive and it is sleepable for
+EROFS, so other alternatives like decompression under softirq contexts
+are not considered.  More details are in the corresponding commit
+message.
 
-  B) 'syscall' in a non-FRED system sets %rcx=%rip and %r11=%rflags.
+Others are random cleanups around the whole codebase and we will
+continue to clean up further in the next few months.
 
-The __raise(SIGUSR2) call verifies the 'syscall' behavior consistency
-when dealing with a signal handler. It must always be (A) or always be
-(B). Not a mix of them.
+Due to Lunar New Year holidays, some new features were not completely
+reviewed and solidified as expected and we may delay them into the
+next version.  All commits have been in -next for a while.
 
-Cc: Xin Li <xin3.li@intel.com>
-Link: https://lore.kernel.org/lkml/8770815f-0f23-d0c5-e56a-d401827842c9@zytor.com
-Suggested-by: H. Peter Anvin (Intel) <hpa@zytor.com>
-Signed-off-by: Ammar Faizi <ammarfaizi2@gnuweeb.org>
----
- tools/testing/selftests/x86/sysret_rip.c | 30 ++++++++++++++++++++++++
- 1 file changed, 30 insertions(+)
+Thanks,
+Gao Xiang
 
-diff --git a/tools/testing/selftests/x86/sysret_rip.c b/tools/testing/selftests/x86/sysret_rip.c
-index 1531593b50d02150..746801675fe77e9c 100644
---- a/tools/testing/selftests/x86/sysret_rip.c
-+++ b/tools/testing/selftests/x86/sysret_rip.c
-@@ -274,6 +274,28 @@ static void test_syscall_rcx_r11_consistent(void)
- 	do_syscall(__NR_getppid, 0, 0, 0, 0, 0, 0);
- }
- 
-+static unsigned long usr2_rcx;
-+static unsigned long usr2_r11;
-+
-+static void sigusr2(int sig, siginfo_t *info, void *ctx_void)
-+{
-+	ucontext_t *ctx = (ucontext_t*)ctx_void;
-+
-+	usr2_r11 = ctx->uc_mcontext.gregs[REG_R11];
-+	usr2_rcx = ctx->uc_mcontext.gregs[REG_RCX];
-+
-+	check_regs_result(ctx->uc_mcontext.gregs[REG_R11],
-+			  ctx->uc_mcontext.gregs[REG_RCX],
-+			  ctx->uc_mcontext.gregs[REG_RBX]);
-+}
-+
-+static void test_sysret_consistent(void)
-+{
-+	printf("[RUN]\ttest_sysret_consistent\n");
-+	__raise(SIGUSR2);
-+	printf("[OK]\tRCX = %#lx;  R11 = %#lx\n", usr2_rcx, usr2_r11);
-+}
-+
- int main()
- {
- 	int i;
-@@ -291,6 +313,14 @@ int main()
- 	for (i = 47; i < 64; i++)
- 		test_sigreturn_to(1UL<<i);
- 
-+	/*
-+	 * test_sigreturn_to() above will test the IRET path. Now test
-+	 * the SYSRET path.
-+	 */
-+	sethandler(SIGUSR2, sigusr2, 0);
-+	for (i = 0; i < 32; i++)
-+		test_sysret_consistent();
-+
- 	clearhandler(SIGUSR1);
- 
- 	sethandler(SIGSEGV, sigsegv_for_fallthrough, 0);
--- 
-Ammar Faizi
+The following changes since commit 2241ab53cbb5cdb08a6b2d4688feb13971058f65:
 
+  Linux 6.2-rc5 (2023-01-21 16:27:01 -0800)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/xiang/erofs.git tags/erofs-for-6.3-rc1
+
+for you to fetch changes up to 8d1b80a79452630f157bf634ae9cfcd9f4eed161:
+
+  erofs: fix an error code in z_erofs_init_zip_subsystem() (2023-02-16 22:51:53 +0800)
+
+----------------------------------------------------------------
+Changes since last update:
+
+ - Add per-cpu kthreads for low-latency decompression for Android
+   use cases;
+
+ - Get rid of tagged pointer helpers since they are rarely used now;
+
+ - Several code cleanups to reduce codebase;
+
+ - Documentation and MAINTAINERS updates.
+
+----------------------------------------------------------------
+Dan Carpenter (1):
+      erofs: fix an error code in z_erofs_init_zip_subsystem()
+
+Gao Xiang (10):
+      erofs: clean up erofs_iget()
+      erofs: remove linux/buffer_head.h dependency
+      erofs: get rid of debug_one_dentry()
+      erofs: simplify iloc()
+      erofs: get rid of erofs_inode_datablocks()
+      erofs: avoid tagged pointers to mark sync decompression
+      erofs: remove tagged pointer helpers
+      erofs: move zdata.h into zdata.c
+      erofs: get rid of z_erofs_do_map_blocks() forward declaration
+      erofs: tidy up internal.h
+
+Jingbo Xu (6):
+      erofs: update print symbols for various flags in trace
+      erofs: remove unused EROFS_GET_BLOCKS_RAW flag
+      erofs: remove unused device mapping in meta routine
+      erofs: maintain cookies of share domain in self-contained list
+      erofs: relinquish volume with mutex held
+      erofs: unify anonymous inodes for blob
+
+Sandeep Dhavale (1):
+      erofs: add per-cpu threads for decompression as an option
+
+Thomas Weißschuh (1):
+      erofs: make kobj_type structures constant
+
+Yangtao Li (1):
+      MAINTAINERS: erofs: Add Documentation/ABI/testing/sysfs-fs-erofs
+
+Yue Hu (1):
+      Documentation/ABI: sysfs-fs-erofs: update supported features
+
+ Documentation/ABI/testing/sysfs-fs-erofs |   3 +-
+ MAINTAINERS                              |   1 +
+ fs/erofs/Kconfig                         |  18 ++
+ fs/erofs/data.c                          |  23 +-
+ fs/erofs/dir.c                           |  17 --
+ fs/erofs/fscache.c                       | 146 +++++------
+ fs/erofs/inode.c                         |  42 +--
+ fs/erofs/internal.h                      | 146 ++++-------
+ fs/erofs/namei.c                         |  18 +-
+ fs/erofs/super.c                         |   3 +-
+ fs/erofs/sysfs.c                         |   6 +-
+ fs/erofs/tagptr.h                        | 107 --------
+ fs/erofs/xattr.c                         |  20 +-
+ fs/erofs/zdata.c                         | 424 ++++++++++++++++++++++++++-----
+ fs/erofs/zdata.h                         | 178 -------------
+ fs/erofs/zmap.c                          | 253 +++++++++---------
+ include/trace/events/erofs.h             |  17 +-
+ 17 files changed, 667 insertions(+), 755 deletions(-)
+ delete mode 100644 fs/erofs/tagptr.h
+ delete mode 100644 fs/erofs/zdata.h
