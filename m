@@ -2,480 +2,281 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 27DD769CC85
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Feb 2023 14:41:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 02DF469CCAF
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Feb 2023 14:42:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231865AbjBTNlQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Feb 2023 08:41:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50290 "EHLO
+        id S232177AbjBTNmk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Feb 2023 08:42:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52262 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231844AbjBTNlH (ORCPT
+        with ESMTP id S232170AbjBTNme (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Feb 2023 08:41:07 -0500
-Received: from mx0b-0016f401.pphosted.com (mx0a-0016f401.pphosted.com [67.231.148.174])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 380FF1D910;
-        Mon, 20 Feb 2023 05:40:55 -0800 (PST)
-Received: from pps.filterd (m0045849.ppops.net [127.0.0.1])
-        by mx0a-0016f401.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 31KD26E8020390;
-        Mon, 20 Feb 2023 05:40:45 -0800
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=marvell.com; h=date : from : to :
- cc : subject : message-id : references : mime-version : content-type :
- in-reply-to; s=pfpt0220; bh=wrCTEsPQlbbQHwO6N9fYbuOV+ItGiVwJcpHZiIyDepI=;
- b=WTVtCjBrOU/SkmP+MADWCtp/sZakX2KimU8GNE/D4p7gF7ECL4kfv2i/QevGwFXOLPvi
- E2mezNT676MPm05gGm6YNrh2zoU9ae18vHW5bCe2+yBKip1pvR+nQiwHcbITe08SEhf+
- HIMksdH/NbtxQlJpKpMmWEycUDGG3fQFzzJShpJjoG8kJq+zdxSE4rbWCkXSqwxdn3LO
- 3nuftJzZlRn/0LEvRQphGxxxGWdI9noW5TPbcGLf5dsJasiolo4odT7GGXHiz8Ms8O6H
- kiWVaWqSSgc6BJCmfD4lteotfrg6y4cuvKYE6birjvGpma2BmRWskW5jLFMrVOrX/1Ck FQ== 
-Received: from dc5-exch01.marvell.com ([199.233.59.181])
-        by mx0a-0016f401.pphosted.com (PPS) with ESMTPS id 3ntvwumgdh-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT);
-        Mon, 20 Feb 2023 05:40:45 -0800
-Received: from DC5-EXCH02.marvell.com (10.69.176.39) by DC5-EXCH01.marvell.com
- (10.69.176.38) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Mon, 20 Feb
- 2023 05:40:43 -0800
-Received: from maili.marvell.com (10.69.176.80) by DC5-EXCH02.marvell.com
- (10.69.176.39) with Microsoft SMTP Server id 15.0.1497.42 via Frontend
- Transport; Mon, 20 Feb 2023 05:40:43 -0800
-Received: from Dell2s-9 (unknown [10.110.150.250])
-        by maili.marvell.com (Postfix) with ESMTP id 3A1413F705A;
-        Mon, 20 Feb 2023 05:40:43 -0800 (PST)
-Date:   Mon, 20 Feb 2023 05:40:43 -0800
-From:   Piyush Malgujar <pmalgujar@marvell.com>
-To:     Adrian Hunter <adrian.hunter@intel.com>
-CC:     <linux-mmc@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <ulf.hansson@linaro.org>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>,
-        <yamada.masahiro@socionext.com>, <devicetree@vger.kernel.org>,
-        Brad Larson <blarson@amd.com>, <jannadurai@marvell.com>,
-        <cchavva@marvell.com>, Dhananjay Kangude <dkangude@cadence.com>
-Subject: Re: [PATCH v2 1/5] drivers: mmc: sdhci-cadence: Reformat the code
-Message-ID: <20230220134043.GB24729@Dell2s-9>
-References: <20230123192735.21136-1-pmalgujar@marvell.com>
- <20230123192735.21136-2-pmalgujar@marvell.com>
- <d08a1fc5-727c-7845-7aeb-729c5aa68189@intel.com>
+        Mon, 20 Feb 2023 08:42:34 -0500
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D69B1D90D;
+        Mon, 20 Feb 2023 05:42:27 -0800 (PST)
+Received: from pps.filterd (m0279865.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 31K6ZMVF028228;
+        Mon, 20 Feb 2023 13:42:05 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=3RWo/VGRg+v2FNa6JJL7OoXML1PZm142obMtM76O3J4=;
+ b=KOPX6BNyjBCfGC+90Dn+4iZn/pFu+9AJYX/Dxk/mGePVRO7Ue1bEWSZrO6HlkesfevC8
+ QwnB7OxoYfLePCiR3u2rPS3HL+gPig32YFeeKMeZUEcifhu8HHkyGm2ylQGeDoNA/FZU
+ mgCgohZtzhPgDvRU1wq+EG/9oggmJXBxesiruovh9Oe6a87kUTZ/w6prMD+4Nh77z5GH
+ WZ2T3OBBNAqn2CDGtdXLZkB6y6ipxL4OOxhOFSsLiNYilm5nT+2jEGJ9oVwtwPrE1bVz
+ l4g50a3Sb0miy9fVNfIcyxa1MSF/qBjQlTpc66uTh4VWKC2bAUGvGia12Vwn74rqvzGo pQ== 
+Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3ntnn05219-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 20 Feb 2023 13:42:05 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 31KDg47c021527
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 20 Feb 2023 13:42:04 GMT
+Received: from [10.216.11.20] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.41; Mon, 20 Feb
+ 2023 05:41:55 -0800
+Message-ID: <c766648f-c3a5-b842-2164-c3f480dee129@quicinc.com>
+Date:   Mon, 20 Feb 2023 19:11:52 +0530
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <d08a1fc5-727c-7845-7aeb-729c5aa68189@intel.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
-X-Proofpoint-GUID: Ck-4bqSBqt_ZOeb7KbFfrSQ7BxuRcPHS
-X-Proofpoint-ORIG-GUID: Ck-4bqSBqt_ZOeb7KbFfrSQ7BxuRcPHS
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [PATCH 2/7] PCI: qcom: Add IPQ9574 PCIe support
+Content-Language: en-US
+To:     Sricharan Ramabadhran <quic_srichara@quicinc.com>,
+        <agross@kernel.org>, <andersson@kernel.org>,
+        <konrad.dybcio@linaro.org>, <lpieralisi@kernel.org>,
+        <kw@linux.com>, <robh@kernel.org>, <bhelgaas@google.com>,
+        <krzysztof.kozlowski+dt@linaro.org>, <vkoul@kernel.org>,
+        <kishon@kernel.org>, <mturquette@baylibre.com>, <sboyd@kernel.org>,
+        <mani@kernel.org>, <p.zabel@pengutronix.de>,
+        <svarbanov@mm-sol.com>, <linux-arm-msm@vger.kernel.org>,
+        <linux-pci@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-phy@lists.infradead.org>,
+        <linux-clk@vger.kernel.org>
+CC:     <quic_gokulsri@quicinc.com>, <quic_sjaganat@quicinc.com>,
+        <quic_kathirav@quicinc.com>, <quic_arajkuma@quicinc.com>,
+        <quic_anusha@quicinc.com>
+References: <20230214164135.17039-1-quic_devipriy@quicinc.com>
+ <20230214164135.17039-3-quic_devipriy@quicinc.com>
+ <6ea43d8d-7b9c-5a11-097f-906e10ac3627@quicinc.com>
+From:   Devi Priya <quic_devipriy@quicinc.com>
+In-Reply-To: <6ea43d8d-7b9c-5a11-097f-906e10ac3627@quicinc.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: RTn0JSJl0gq1xjJmiXK-RMMRyT3xAFLt
+X-Proofpoint-GUID: RTn0JSJl0gq1xjJmiXK-RMMRyT3xAFLt
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.170.22
  definitions=2023-02-20_11,2023-02-20_02,2023-02-09_01
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
+ suspectscore=0 impostorscore=0 spamscore=0 priorityscore=1501
+ malwarescore=0 phishscore=0 clxscore=1015 adultscore=0 mlxscore=0
+ bulkscore=0 mlxlogscore=999 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2212070000 definitions=main-2302200125
+X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Adrian,
+Hi Sri,
+Thanks for taking time to review the patch!
 
-Thank you for your review comments.
+On 2/16/2023 5:08 PM, Sricharan Ramabadhran wrote:
+> Hi Devi,
+> 
+> On 2/14/2023 10:11 PM, Devi Priya wrote:
+>> Adding PCIe support for IPQ9574 SoC
+>>
+>> Co-developed-by: Anusha Rao <quic_anusha@quicinc.com>
+>> Signed-off-by: Anusha Rao <quic_anusha@quicinc.com>
+>> Signed-off-by: Devi Priya <quic_devipriy@quicinc.com>
+>> ---
+>>   drivers/pci/controller/dwc/pcie-qcom.c | 119 +++++++++++++++++++++++++
+>>   1 file changed, 119 insertions(+)
+>>
+>> diff --git a/drivers/pci/controller/dwc/pcie-qcom.c 
+>> b/drivers/pci/controller/dwc/pcie-qcom.c
+>> index a232b04af048..57606c113d45 100644
+>> --- a/drivers/pci/controller/dwc/pcie-qcom.c
+>> +++ b/drivers/pci/controller/dwc/pcie-qcom.c
+>> @@ -193,6 +193,12 @@ struct qcom_pcie_resources_2_9_0 {
+>>       struct reset_control *rst;
+>>   };
+>> +struct qcom_pcie_resources_1_27_0 {
+>> +    struct clk_bulk_data *clks;
+>> +    struct reset_control *rst;
+>> +    int num_clks;
+>> +};
+>> +
+>>   union qcom_pcie_resources {
+>>       struct qcom_pcie_resources_1_0_0 v1_0_0;
+>>       struct qcom_pcie_resources_2_1_0 v2_1_0;
+>> @@ -201,6 +207,7 @@ union qcom_pcie_resources {
+>>       struct qcom_pcie_resources_2_4_0 v2_4_0;
+>>       struct qcom_pcie_resources_2_7_0 v2_7_0;
+>>       struct qcom_pcie_resources_2_9_0 v2_9_0;
+>> +    struct qcom_pcie_resources_1_27_0 v1_27_0;
+>>   };
+>>   struct qcom_pcie;
+>> @@ -1409,6 +1416,104 @@ static int qcom_pcie_post_init_2_9_0(struct 
+>> qcom_pcie *pcie)
+>>       return 0;
+>>   }
+>> +static int qcom_pcie_get_resources_1_27_0(struct qcom_pcie *pcie)
+>> +{
+>> +    struct qcom_pcie_resources_1_27_0 *res = &pcie->res.v1_27_0;
+>> +    struct dw_pcie *pci = pcie->pci;
+>> +    struct device *dev = pci->dev;
+>> +
+>> +    res->num_clks = devm_clk_bulk_get_all(dev, &res->clks);
+>> +    if (res->clks < 0)
+>> +        return res->num_clks;
+>> +
+>> +    res->rst = devm_reset_control_array_get_exclusive(dev);
+>> +    if (IS_ERR(res->rst))
+>> +        return PTR_ERR(res->rst);
+>> +
+>> +    return 0;
+>> +}
+>> +
+>> +static void qcom_pcie_deinit_1_27_0(struct qcom_pcie *pcie)
+>> +{
+>> +    struct qcom_pcie_resources_1_27_0 *res = &pcie->res.v1_27_0;
+>> +
+>> +    clk_bulk_disable_unprepare(res->num_clks, res->clks);
+>> +}
+>> +
+>> +static int qcom_pcie_init_1_27_0(struct qcom_pcie *pcie)
+>> +{
+>> +    struct qcom_pcie_resources_1_27_0 *res = &pcie->res.v1_27_0;
+>> +    struct device *dev = pcie->pci->dev;
+>> +    int ret;
+>> +
+>> +    ret = reset_control_assert(res->rst);
+>> +    if (ret) {
+>> +        dev_err(dev, "reset assert failed (%d)\n", ret);
+>> +        return ret;
+>> +    }
+>> +
+>> +    /*
+>> +     * Delay periods before and after reset deassert are working values
+>> +     * from downstream Codeaurora kernel
+>> +     */
+>> +    usleep_range(2000, 2500);
+>> +
+>> +    ret = reset_control_deassert(res->rst);
+>> +    if (ret) {
+>> +        dev_err(dev, "reset deassert failed (%d)\n", ret);
+>> +        return ret;
+>> +    }
+>> +
+>> +    usleep_range(2000, 2500);
+>> +
+>> +    return clk_bulk_prepare_enable(res->num_clks, res->clks);
+>> +}
+>> +
+>> +static int qcom_pcie_post_init_1_27_0(struct qcom_pcie *pcie)
+>> +{
+>> +    struct dw_pcie *pci = pcie->pci;
+>> +    u16 offset = dw_pcie_find_capability(pci, PCI_CAP_ID_EXP);
+>> +    u32 val;
+>> +    int i;
+>> +
+>> +    writel(0x8000000, pcie->parf + PCIE20_v3_PARF_SLV_ADDR_SPACE_SIZE);
+>> +
+>> +    val = readl(pcie->parf + PCIE20_PARF_PHY_CTRL);
+>> +    val &= ~BIT(0);
+>> +    writel(val, pcie->parf + PCIE20_PARF_PHY_CTRL);
+>> +
+>> +    writel(0, pcie->parf + PCIE20_PARF_DBI_BASE_ADDR);
+>> +
+>> +    writel(DEVICE_TYPE_RC, pcie->parf + PCIE20_PARF_DEVICE_TYPE);
+>> +    writel(BYPASS | MSTR_AXI_CLK_EN | AHB_CLK_EN,
+>> +           pcie->parf + PCIE20_PARF_MHI_CLOCK_RESET_CTRL);
+>> +    writel(GEN3_RELATED_OFF_RXEQ_RGRDLESS_RXTS |
+>> +           GEN3_RELATED_OFF_GEN3_ZRXDC_NONCOMPL,
+>> +           pci->dbi_base + GEN3_RELATED_OFF);
+>> +
+>> +    writel(MST_WAKEUP_EN | SLV_WAKEUP_EN | MSTR_ACLK_CGC_DIS |
+>> +           SLV_ACLK_CGC_DIS | CORE_CLK_CGC_DIS |
+>> +           AUX_PWR_DET | L23_CLK_RMV_DIS | L1_CLK_RMV_DIS,
+>> +           pcie->parf + PCIE20_PARF_SYS_CTRL);
+>> +
+>> +    writel(0, pcie->parf + PCIE20_PARF_Q2A_FLUSH);
+>> +
+>> +    dw_pcie_dbi_ro_wr_en(pci);
+>> +    writel(PCIE_CAP_SLOT_VAL, pci->dbi_base + offset + PCI_EXP_SLTCAP);
+>> +
+>> +    val = readl(pci->dbi_base + offset + PCI_EXP_LNKCAP);
+>> +    val &= ~PCI_EXP_LNKCAP_ASPMS;
+>> +    writel(val, pci->dbi_base + offset + PCI_EXP_LNKCAP);
+>> +
+>> +    writel(PCI_EXP_DEVCTL2_COMP_TMOUT_DIS, pci->dbi_base + offset +
+>> +           PCI_EXP_DEVCTL2);
+>> +
+>> +    for (i = 0; i < 256; i++)
+>> +        writel(0, pcie->parf + PCIE20_PARF_BDF_TO_SID_TABLE_N + (4 * 
+>> i));
+>> +
+>> +    return 0;
+>> +}
+>> +
+>>   static int qcom_pcie_link_up(struct dw_pcie *pci)
+>>   {
+>>       u16 offset = dw_pcie_find_capability(pci, PCI_CAP_ID_EXP);
+>> @@ -1620,6 +1725,15 @@ static const struct qcom_pcie_ops ops_2_9_0 = {
+>>       .ltssm_enable = qcom_pcie_2_3_2_ltssm_enable,
+>>   };
+>> +/* Qcom IP rev.: 1.27.0 Synopsys IP rev.: 5.80a */
+>> +static const struct qcom_pcie_ops ops_1_27_0 = {
+>> +    .get_resources = qcom_pcie_get_resources_1_27_0,
+>> +    .init = qcom_pcie_init_1_27_0,
+>> +    .post_init = qcom_pcie_post_init_1_27_0,
+>> +    .deinit = qcom_pcie_deinit_1_27_0,
+>> +    .ltssm_enable = qcom_pcie_2_3_2_ltssm_enable,
+>> +};
+>> +
+>>   static const struct qcom_pcie_cfg cfg_1_0_0 = {
+>>       .ops = &ops_1_0_0,
+>>   };
+>> @@ -1652,6 +1766,10 @@ static const struct qcom_pcie_cfg cfg_2_9_0 = {
+>>       .ops = &ops_2_9_0,
+>>   };
+>> +static const struct qcom_pcie_cfg cfg_1_27_0 = {
+>> +    .ops = &ops_1_27_0,
+>> +};
+>> +
+>>   static const struct dw_pcie_ops dw_pcie_ops = {
+>>       .link_up = qcom_pcie_link_up,
+>>       .start_link = qcom_pcie_start_link,
+>> @@ -1829,6 +1947,7 @@ static const struct of_device_id 
+>> qcom_pcie_match[] = {
+>>       { .compatible = "qcom,pcie-ipq8064-v2", .data = &cfg_2_1_0 },
+>>       { .compatible = "qcom,pcie-ipq8074", .data = &cfg_2_3_3 },
+>>       { .compatible = "qcom,pcie-ipq8074-gen3", .data = &cfg_2_9_0 },
+>> +    { .compatible = "qcom,pcie-ipq9574", .data = &cfg_1_27_0 },
+> 
+>    I do not see much difference between 2_9_0 and 1_27_0. Is this patch
+>    really required. Can you check if it works with 2_9_0 itself ?
+Yes right Sri, Only the clocks seem to differ between 2_9_0 and 1_27_0.
+Will update 2_9_0 ops to get the clocks from the DT and use the same for 
+ipq9574 in the next spin.
 
-On Thu, Feb 02, 2023 at 08:42:33PM +0200, Adrian Hunter wrote:
-> On 23/01/23 21:27, Piyush Malgujar wrote:
-> > From: Dhananjay Kangude <dkangude@cadence.com>
-> > 
-> > Reformat the code so that further SD6 changes could be
-> > added and it could be isolated from SD4 related code.
-> > Also renamed functions accordingly.
+Best Regards,
+Devi Priya
 > 
-> It is good to have the renaming and white space changes
-> in a separate patch, but there is also some restructuring
-> in this patch that needs to be in 1 or more separate patches.
-> 
-> There are also still some white space changes in the next
-> patch.
-> 
-> > 
-> > Signed-off-by: Dhananjay Kangude <dkangude@cadence.com>
-> > Co-developed-by: Jayanthi Annadurai <jannadurai@marvell.com>
-> > Signed-off-by: Jayanthi Annadurai <jannadurai@marvell.com>
-> > Signed-off-by: Piyush Malgujar <pmalgujar@marvell.com>
-> > ---
-> >  drivers/mmc/host/sdhci-cadence.c | 165 ++++++++++++++++++++-----------
-> >  1 file changed, 110 insertions(+), 55 deletions(-)
-> > 
-> > diff --git a/drivers/mmc/host/sdhci-cadence.c b/drivers/mmc/host/sdhci-cadence.c
-> > index 6f2de54a598773879bf339aae8450f63e1251509..cb108ff9abda32767b356bb572abdf8626746cd6 100644
-> > --- a/drivers/mmc/host/sdhci-cadence.c
-> > +++ b/drivers/mmc/host/sdhci-cadence.c
-> > @@ -15,14 +15,14 @@
-> >  
-> >  #include "sdhci-pltfm.h"
-> >  
-> > -/* HRS - Host Register Set (specific to Cadence) */
-> > +/* SD 4.0 Controller HRS - Host Register Set (specific to Cadence) */
-> >  #define SDHCI_CDNS_HRS04		0x10		/* PHY access port */
-> > -#define   SDHCI_CDNS_HRS04_ACK			BIT(26)
-> > -#define   SDHCI_CDNS_HRS04_RD			BIT(25)
-> > -#define   SDHCI_CDNS_HRS04_WR			BIT(24)
-> > -#define   SDHCI_CDNS_HRS04_RDATA		GENMASK(23, 16)
-> > -#define   SDHCI_CDNS_HRS04_WDATA		GENMASK(15, 8)
-> > -#define   SDHCI_CDNS_HRS04_ADDR			GENMASK(5, 0)
-> > +#define SDHCI_CDNS_SD4_HRS04_ACK		BIT(26)
-> > +#define SDHCI_CDNS_SD4_HRS04_RD			BIT(25)
-> > +#define SDHCI_CDNS_SD4_HRS04_WR			BIT(24)
-> > +#define SDHCI_CDNS_SD4_HRS04_RDATA		GENMASK(23, 16)
-> > +#define SDHCI_CDNS_SD4_HRS04_WDATA		GENMASK(15, 8)
-> > +#define SDHCI_CDNS_SD4_HRS04_ADDR		GENMASK(5, 0)
-> >  
-> >  #define SDHCI_CDNS_HRS06		0x18		/* eMMC control */
-> >  #define   SDHCI_CDNS_HRS06_TUNE_UP		BIT(15)
-> > @@ -38,7 +38,7 @@
-> >  /* SRS - Slot Register Set (SDHCI-compatible) */
-> >  #define SDHCI_CDNS_SRS_BASE		0x200
-> >  
-> > -/* PHY */
-> > +/* PHY registers for SD4 controller */
-> >  #define SDHCI_CDNS_PHY_DLY_SD_HS	0x00
-> >  #define SDHCI_CDNS_PHY_DLY_SD_DEFAULT	0x01
-> >  #define SDHCI_CDNS_PHY_DLY_UHS_SDR12	0x02
-> > @@ -59,24 +59,43 @@
-> >   */
-> >  #define SDHCI_CDNS_MAX_TUNING_LOOP	40
-> >  
-> > -struct sdhci_cdns_phy_param {
-> > +struct sdhci_cdns_priv;
-> > +
-> > +struct sdhci_cdns_sd4_phy_param {
-> >  	u8 addr;
-> >  	u8 data;
-> >  };
-> >  
-> > +struct sdhci_cdns_data {
-> > +	int (*phy_init)(struct sdhci_cdns_priv *priv);
-> > +	int (*set_tune_val)(struct sdhci_host *host, unsigned int val);
-> > +};
-> > +
-> > +struct sdhci_cdns_sd4_phy {
-> > +	unsigned int nr_phy_params;
-> > +	struct sdhci_cdns_sd4_phy_param phy_params[];
-> > +};
-> > +
-> >  struct sdhci_cdns_priv {
-> >  	void __iomem *hrs_addr;
-> >  	bool enhanced_strobe;
-> > -	unsigned int nr_phy_params;
-> > -	struct sdhci_cdns_phy_param phy_params[];
-> > +	const struct sdhci_cdns_data *cdns_data;
-> > +	void *phy;
-> >  };
-> >  
-> > -struct sdhci_cdns_phy_cfg {
-> > +struct sdhci_cdns_sd4_phy_cfg {
-> >  	const char *property;
-> >  	u8 addr;
-> >  };
-> >  
-> > -static const struct sdhci_cdns_phy_cfg sdhci_cdns_phy_cfgs[] = {
-> > +struct sdhci_cdns_of_data {
-> > +	const struct sdhci_pltfm_data *pltfm_data;
-> > +	const struct sdhci_cdns_data *cdns_data;
-> > +	int (*phy_probe)(struct platform_device *pdev,
-> > +			 struct sdhci_cdns_priv *priv);
-> > +};
-> > +
-> > +static const struct sdhci_cdns_sd4_phy_cfg sdhci_cdns_sd4_phy_cfgs[] = {
-> >  	{ "cdns,phy-input-delay-sd-highspeed", SDHCI_CDNS_PHY_DLY_SD_HS, },
-> >  	{ "cdns,phy-input-delay-legacy", SDHCI_CDNS_PHY_DLY_SD_DEFAULT, },
-> >  	{ "cdns,phy-input-delay-sd-uhs-sdr12", SDHCI_CDNS_PHY_DLY_UHS_SDR12, },
-> > @@ -90,80 +109,80 @@ static const struct sdhci_cdns_phy_cfg sdhci_cdns_phy_cfgs[] = {
-> >  	{ "cdns,phy-dll-delay-strobe", SDHCI_CDNS_PHY_DLY_STROBE, },
-> >  };
-> >  
-> > -static int sdhci_cdns_write_phy_reg(struct sdhci_cdns_priv *priv,
-> > -				    u8 addr, u8 data)
-> > +static int sdhci_cdns_sd4_write_phy_reg(struct sdhci_cdns_priv *priv,
-> > +					u8 addr, u8 data)
-> >  {
-> >  	void __iomem *reg = priv->hrs_addr + SDHCI_CDNS_HRS04;
-> >  	u32 tmp;
-> >  	int ret;
-> >  
-> > -	ret = readl_poll_timeout(reg, tmp, !(tmp & SDHCI_CDNS_HRS04_ACK),
-> > +	ret = readl_poll_timeout(reg, tmp, !(tmp & SDHCI_CDNS_SD4_HRS04_ACK),
-> >  				 0, 10);
-> >  	if (ret)
-> >  		return ret;
-> >  
-> > -	tmp = FIELD_PREP(SDHCI_CDNS_HRS04_WDATA, data) |
-> > -	      FIELD_PREP(SDHCI_CDNS_HRS04_ADDR, addr);
-> > +	tmp = FIELD_PREP(SDHCI_CDNS_SD4_HRS04_WDATA, data) |
-> > +	      FIELD_PREP(SDHCI_CDNS_SD4_HRS04_ADDR, addr);
-> >  	writel(tmp, reg);
-> >  
-> > -	tmp |= SDHCI_CDNS_HRS04_WR;
-> > +	tmp |= SDHCI_CDNS_SD4_HRS04_WR;
-> >  	writel(tmp, reg);
-> >  
-> > -	ret = readl_poll_timeout(reg, tmp, tmp & SDHCI_CDNS_HRS04_ACK, 0, 10);
-> > +	ret = readl_poll_timeout(reg, tmp, tmp & SDHCI_CDNS_SD4_HRS04_ACK, 0, 10);
-> >  	if (ret)
-> >  		return ret;
-> >  
-> > -	tmp &= ~SDHCI_CDNS_HRS04_WR;
-> > +	tmp &= ~SDHCI_CDNS_SD4_HRS04_WR;
-> >  	writel(tmp, reg);
-> >  
-> > -	ret = readl_poll_timeout(reg, tmp, !(tmp & SDHCI_CDNS_HRS04_ACK),
-> > +	ret = readl_poll_timeout(reg, tmp, !(tmp & SDHCI_CDNS_SD4_HRS04_ACK),
-> >  				 0, 10);
-> >  
-> >  	return ret;
-> >  }
-> >  
-> > -static unsigned int sdhci_cdns_phy_param_count(struct device_node *np)
-> > +static unsigned int sdhci_cdns_sd4_phy_param_count(struct device_node *np)
-> >  {
-> >  	unsigned int count = 0;
-> >  	int i;
-> >  
-> > -	for (i = 0; i < ARRAY_SIZE(sdhci_cdns_phy_cfgs); i++)
-> > -		if (of_property_read_bool(np, sdhci_cdns_phy_cfgs[i].property))
-> > +	for (i = 0; i < ARRAY_SIZE(sdhci_cdns_sd4_phy_cfgs); i++)
-> > +		if (of_property_read_bool(np, sdhci_cdns_sd4_phy_cfgs[i].property))
-> >  			count++;
-> >  
-> >  	return count;
-> >  }
-> >  
-> > -static void sdhci_cdns_phy_param_parse(struct device_node *np,
-> > -				       struct sdhci_cdns_priv *priv)
-> > +static void sdhci_cdns_sd4_phy_param_parse(struct device_node *np,
-> > +					   struct sdhci_cdns_sd4_phy *phy)
-> >  {
-> > -	struct sdhci_cdns_phy_param *p = priv->phy_params;
-> > +	struct sdhci_cdns_sd4_phy_param *p = phy->phy_params;
-> >  	u32 val;
-> >  	int ret, i;
-> >  
-> > -	for (i = 0; i < ARRAY_SIZE(sdhci_cdns_phy_cfgs); i++) {
-> > -		ret = of_property_read_u32(np, sdhci_cdns_phy_cfgs[i].property,
-> > +	for (i = 0; i < ARRAY_SIZE(sdhci_cdns_sd4_phy_cfgs); i++) {
-> > +		ret = of_property_read_u32(np, sdhci_cdns_sd4_phy_cfgs[i].property,
-> >  					   &val);
-> >  		if (ret)
-> >  			continue;
-> >  
-> > -		p->addr = sdhci_cdns_phy_cfgs[i].addr;
-> > +		p->addr = sdhci_cdns_sd4_phy_cfgs[i].addr;
-> >  		p->data = val;
-> >  		p++;
-> >  	}
-> >  }
-> >  
-> > -static int sdhci_cdns_phy_init(struct sdhci_cdns_priv *priv)
-> > +static int sdhci_cdns_sd4_phy_init(struct sdhci_cdns_priv *priv)
-> >  {
-> >  	int ret, i;
-> > +	struct sdhci_cdns_sd4_phy *phy = priv->phy;
-> >  
-> > -	for (i = 0; i < priv->nr_phy_params; i++) {
-> > -		ret = sdhci_cdns_write_phy_reg(priv, priv->phy_params[i].addr,
-> > -					       priv->phy_params[i].data);
-> > +	for (i = 0; i < phy->nr_phy_params; i++) {
-> > +		ret = sdhci_cdns_sd4_write_phy_reg(priv, phy->phy_params[i].addr,
-> > +						   phy->phy_params[i].data);
-> >  		if (ret)
-> >  			return ret;
-> >  	}
-> > -
-> >  	return 0;
-> >  }
-> >  
-> > @@ -202,7 +221,28 @@ static u32 sdhci_cdns_get_emmc_mode(struct sdhci_cdns_priv *priv)
-> >  	return FIELD_GET(SDHCI_CDNS_HRS06_MODE, tmp);
-> >  }
-> >  
-> > -static int sdhci_cdns_set_tune_val(struct sdhci_host *host, unsigned int val)
-> > +static int sdhci_cdns_sd4_phy_probe(struct platform_device *pdev,
-> > +				    struct sdhci_cdns_priv *priv)
-> > +{
-> > +	unsigned int nr_phy_params;
-> > +	struct sdhci_cdns_sd4_phy *phy;
-> > +	struct device *dev = &pdev->dev;
-> > +
-> > +	nr_phy_params = sdhci_cdns_sd4_phy_param_count(dev->of_node);
-> > +	phy = devm_kzalloc(dev, struct_size(phy, phy_params, nr_phy_params),
-> > +			   GFP_KERNEL);
-> > +	if (!phy)
-> > +		return -ENOMEM;
-> > +
-> > +	phy->nr_phy_params = nr_phy_params;
-> > +
-> > +	sdhci_cdns_sd4_phy_param_parse(dev->of_node, phy);
-> > +	priv->phy = phy;
-> > +
-> > +	return 0;
-> > +}
-> > +
-> > +static int sdhci_cdns_sd4_set_tune_val(struct sdhci_host *host, unsigned int val)
-> >  {
-> >  	struct sdhci_cdns_priv *priv = sdhci_cdns_priv(host);
-> >  	void __iomem *reg = priv->hrs_addr + SDHCI_CDNS_HRS06;
-> > @@ -255,7 +295,7 @@ static int sdhci_cdns_execute_tuning(struct sdhci_host *host, u32 opcode)
-> >  		return 0;
-> >  
-> >  	for (i = 0; i < SDHCI_CDNS_MAX_TUNING_LOOP; i++) {
-> > -		if (sdhci_cdns_set_tune_val(host, i) ||
-> > +		if (sdhci_cdns_sd4_set_tune_val(host, i) ||
-> >  		    mmc_send_tuning(host->mmc, opcode, NULL)) { /* bad */
-> >  			cur_streak = 0;
-> >  		} else { /* good */
-> > @@ -272,7 +312,7 @@ static int sdhci_cdns_execute_tuning(struct sdhci_host *host, u32 opcode)
-> >  		return -EIO;
-> >  	}
-> >  
-> > -	return sdhci_cdns_set_tune_val(host, end_of_streak - max_streak / 2);
-> > +	return sdhci_cdns_sd4_set_tune_val(host, end_of_streak - max_streak / 2);
-> >  }
-> >  
-> >  static void sdhci_cdns_set_uhs_signaling(struct sdhci_host *host,
-> > @@ -309,7 +349,7 @@ static void sdhci_cdns_set_uhs_signaling(struct sdhci_host *host,
-> >  		sdhci_set_uhs_signaling(host, timing);
-> >  }
-> >  
-> > -static const struct sdhci_ops sdhci_cdns_ops = {
-> > +static const struct sdhci_ops sdhci_cdns_sd4_ops = {
-> >  	.set_clock = sdhci_set_clock,
-> >  	.get_timeout_clock = sdhci_cdns_get_timeout_clock,
-> >  	.set_bus_width = sdhci_set_bus_width,
-> > @@ -319,12 +359,23 @@ static const struct sdhci_ops sdhci_cdns_ops = {
-> >  };
-> >  
-> >  static const struct sdhci_pltfm_data sdhci_cdns_uniphier_pltfm_data = {
-> > -	.ops = &sdhci_cdns_ops,
-> > +	.ops = &sdhci_cdns_sd4_ops,
-> >  	.quirks2 = SDHCI_QUIRK2_PRESET_VALUE_BROKEN,
-> >  };
-> >  
-> > -static const struct sdhci_pltfm_data sdhci_cdns_pltfm_data = {
-> > -	.ops = &sdhci_cdns_ops,
-> > +static const struct sdhci_pltfm_data sdhci_cdns_sd4_pltfm_data = {
-> > +	.ops = &sdhci_cdns_sd4_ops,
-> > +};
-> > +
-> > +static const struct sdhci_cdns_data sdhci_cdns_sd4_data = {
-> > +	.phy_init = sdhci_cdns_sd4_phy_init,
-> > +	.set_tune_val = sdhci_cdns_sd4_set_tune_val,
-> > +};
-> > +
-> > +static const struct sdhci_cdns_of_data sdhci_cdns_sd4_of_data = {
-> > +	.pltfm_data = &sdhci_cdns_sd4_pltfm_data,
-> > +	.cdns_data = &sdhci_cdns_sd4_data,
-> > +	.phy_probe = sdhci_cdns_sd4_phy_probe,
-> >  };
-> >  
-> >  static void sdhci_cdns_hs400_enhanced_strobe(struct mmc_host *mmc,
-> > @@ -350,11 +401,10 @@ static void sdhci_cdns_hs400_enhanced_strobe(struct mmc_host *mmc,
-> >  static int sdhci_cdns_probe(struct platform_device *pdev)
-> >  {
-> >  	struct sdhci_host *host;
-> > -	const struct sdhci_pltfm_data *data;
-> > +	const struct sdhci_cdns_of_data *data;
-> >  	struct sdhci_pltfm_host *pltfm_host;
-> >  	struct sdhci_cdns_priv *priv;
-> >  	struct clk *clk;
-> > -	unsigned int nr_phy_params;
-> >  	int ret;
-> >  	struct device *dev = &pdev->dev;
-> >  	static const u16 version = SDHCI_SPEC_400 << SDHCI_SPEC_VER_SHIFT;
-> > @@ -368,12 +418,12 @@ static int sdhci_cdns_probe(struct platform_device *pdev)
-> >  		return ret;
-> >  
-> >  	data = of_device_get_match_data(dev);
-> > -	if (!data)
-> > -		data = &sdhci_cdns_pltfm_data;
-> > +	if (!data) {
-> > +		return PTR_ERR(clk);
-> > +		goto disable_clk;
-> 
-> 'return' followed by 'goto'
-> 
-> Please review patches before submitting.
-> 
-> > +	}
-> >  
-> > -	nr_phy_params = sdhci_cdns_phy_param_count(dev->of_node);
-> > -	host = sdhci_pltfm_init(pdev, data,
-> > -				struct_size(priv, phy_params, nr_phy_params));
-> > +	host = sdhci_pltfm_init(pdev, data->pltfm_data, sizeof(*priv));
-> >  	if (IS_ERR(host)) {
-> >  		ret = PTR_ERR(host);
-> >  		goto disable_clk;
-> > @@ -383,9 +433,9 @@ static int sdhci_cdns_probe(struct platform_device *pdev)
-> >  	pltfm_host->clk = clk;
-> >  
-> >  	priv = sdhci_pltfm_priv(pltfm_host);
-> > -	priv->nr_phy_params = nr_phy_params;
-> >  	priv->hrs_addr = host->ioaddr;
-> >  	priv->enhanced_strobe = false;
-> > +	priv->cdns_data = data->cdns_data;
-> >  	host->ioaddr += SDHCI_CDNS_SRS_BASE;
-> >  	host->mmc_host_ops.hs400_enhanced_strobe =
-> >  				sdhci_cdns_hs400_enhanced_strobe;
-> > @@ -398,9 +448,11 @@ static int sdhci_cdns_probe(struct platform_device *pdev)
-> >  	if (ret)
-> >  		goto free;
-> >  
-> > -	sdhci_cdns_phy_param_parse(dev->of_node, priv);
-> > +	ret = data->phy_probe(pdev, priv);
-> > +	if (ret)
-> > +		goto free;
-> >  
-> > -	ret = sdhci_cdns_phy_init(priv);
-> > +	ret = priv->cdns_data->phy_init(priv);
-> >  	if (ret)
-> >  		goto free;
-> >  
-> > @@ -429,7 +481,7 @@ static int sdhci_cdns_resume(struct device *dev)
-> >  	if (ret)
-> >  		return ret;
-> >  
-> > -	ret = sdhci_cdns_phy_init(priv);
-> > +	ret = priv->cdns_data->phy_init(priv);
-> >  	if (ret)
-> >  		goto disable_clk;
-> >  
-> > @@ -455,7 +507,10 @@ static const struct of_device_id sdhci_cdns_match[] = {
-> >  		.compatible = "socionext,uniphier-sd4hc",
-> >  		.data = &sdhci_cdns_uniphier_pltfm_data,
-> >  	},
-> > -	{ .compatible = "cdns,sd4hc" },
-> > +	{
-> > +		.compatible = "cdns,sd4hc",
-> > +		.data = &sdhci_cdns_sd4_of_data,
-> 
-> sdhci_cdns_uniphier_pltfm_data is a pointer to a struct sdhci_pltfm_data, but
-> sdhci_cdns_sd4_of_data is a pointer to a struct sdhci_cdns_of_data.
-> That is error prone.  For example, you dereference data->cdns_data
-> unconditionally even though it does not exist for sdhci_cdns_uniphier_pltfm_data.
-> 
-
-This will be taken care in V3, will handle sdhci_cdns_uniphier_pltfm_data in same
-manner as sdhci_cdns_sd4_of_data and make it compatible with the design.
-
-> Also this patch is in conflict with the approach taken by:
-> 
-> https://lore.kernel.org/linux-mmc/20230119035136.21603-14-blarson@amd.com/
-> 
-
-The above patch seems to be specific to Elba Soc for SD4.
-The approach taken in our patches is more generic modular and also incorporates
-SD6 controller.
-
-> > +	},
-> >  	{ /* sentinel */ }
-> >  };
-> >  MODULE_DEVICE_TABLE(of, sdhci_cdns_match);
-> 
-
-Rest of the comments will be taken care in V3.
-
-Thanks,
-Piyush
+> Regards,
+>   Sricharan
