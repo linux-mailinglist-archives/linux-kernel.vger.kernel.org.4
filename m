@@ -2,102 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 19C0B69C726
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Feb 2023 10:00:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1A2C169C72D
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Feb 2023 10:02:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231335AbjBTJAr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Feb 2023 04:00:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43552 "EHLO
+        id S231407AbjBTJCA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Feb 2023 04:02:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44678 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229619AbjBTJAp (ORCPT
+        with ESMTP id S231349AbjBTJBk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Feb 2023 04:00:45 -0500
-Received: from mx.sberdevices.ru (mx.sberdevices.ru [45.89.227.171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26E3C1631D;
-        Mon, 20 Feb 2023 01:00:15 -0800 (PST)
-Received: from s-lin-edge02.sberdevices.ru (localhost [127.0.0.1])
-        by mx.sberdevices.ru (Postfix) with ESMTP id 812285FD0A;
-        Mon, 20 Feb 2023 12:00:13 +0300 (MSK)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sberdevices.ru;
-        s=mail; t=1676883613;
-        bh=5kNdYyEYeIWvvkZ9qMM0KnX6zGYYUptfleZqD7jwav8=;
-        h=From:To:Subject:Date:Message-ID:Content-Type:MIME-Version;
-        b=FIPY0dasmHfwaTRO117dCVrFchSNLoo1sjBKXb2GUxn9FrRZH3nAhMry7da5sza6r
-         RuI/SJf/TGPWuZ4e7n10sdKOhutpPhA+wMD/PCN+Gue4WWHqxvO05DIAyOvxhaoq8h
-         Hda3CvS/Kj3Um3Pv8PGgLY6Lx2ZdLeu/E9AhI47iFeSHG3jlTaWhTnGcLA3icvx7aN
-         8aLbRa58nWw4J15VWitmtIueZj/uemIUGhH1hazXx7D3vWDstT0FUc0u+BR36/hx5u
-         dtxgncdkKlRm37Ah9m4+oaN7b+8feXVS6vvKF6EfUBaFS72hkXL04hFoTPpE0W9c6H
-         +UYG6gpbUrczg==
-Received: from S-MS-EXCH02.sberdevices.ru (S-MS-EXCH02.sberdevices.ru [172.16.1.5])
-        by mx.sberdevices.ru (Postfix) with ESMTP;
-        Mon, 20 Feb 2023 12:00:13 +0300 (MSK)
-From:   Krasnov Arseniy <AVKrasnov@sberdevices.ru>
-To:     Stefano Garzarella <sgarzare@redhat.com>
-CC:     Stefan Hajnoczi <stefanha@redhat.com>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        Jason Wang <jasowang@redhat.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Krasnov Arseniy <oxffffaa@gmail.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "virtualization@lists.linux-foundation.org" 
-        <virtualization@lists.linux-foundation.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        kernel <kernel@sberdevices.ru>
-Subject: Re: [RFC PATCH v1 01/12] vsock: check error queue to set EPOLLERR
-Thread-Topic: [RFC PATCH v1 01/12] vsock: check error queue to set EPOLLERR
-Thread-Index: AQHZOfe0xY93Ok9p00a/1VHxin2e2a7RckiAgAX6MAA=
-Date:   Mon, 20 Feb 2023 09:00:12 +0000
-Message-ID: <d1b4bb5a-26f0-65db-5828-8654ceedae7c@sberdevices.ru>
-References: <0e7c6fc4-b4a6-a27b-36e9-359597bba2b5@sberdevices.ru>
- <17a276d3-1112-3431-2a33-c17f3da67470@sberdevices.ru>
- <20230216134039.rgnb2hnzgme2ve76@sgarzare-redhat>
-In-Reply-To: <20230216134039.rgnb2hnzgme2ve76@sgarzare-redhat>
-Accept-Language: en-US, ru-RU
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [172.16.1.12]
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <3ED9CF40BB112C47B50F702CC2E5BDFC@sberdevices.ru>
-Content-Transfer-Encoding: base64
+        Mon, 20 Feb 2023 04:01:40 -0500
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A745613DEA;
+        Mon, 20 Feb 2023 01:01:37 -0800 (PST)
+Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: kholk11)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 0C5266600872;
+        Mon, 20 Feb 2023 09:01:35 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1676883696;
+        bh=wRsFQ2JC/MDhBdv1WWKTeDTXi0UHILH+uiTslXRktbo=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=DoA8WQ4Pg5/JafFh2rMOi4m2dKIDVwaIaM2iRRWSOQ7edl76MpAnqTs4zBOL5/2JM
+         9gHlW3TO6Ihgta4vrcb1BnWgnb6agHzu9sbDbhrjRTvAza0fusJr9zQTKKnWFMLgU+
+         9T5DRcCagczrZqyzzlyzXAqxJlPbAcyK7kUIKWpg1Z8LxbugK27+S8hzr4Bf9ZP1Rz
+         mbW2372OqFoXA3cUXtAtNhLxLW/3Vh/iFhbNZFWOgZj7HDq+nw7BdRct+VGzgT5jWq
+         x8vfkV4u9cn2PpnMoOc0iWhJ4UMycJ+J9wlMhn827dNPWzxgsAJOyqkl2DJKSnga2r
+         /0L7KlHOjifuw==
+Message-ID: <dd25fddb-5c62-2dc7-6095-861499a5d21d@collabora.com>
+Date:   Mon, 20 Feb 2023 10:01:27 +0100
 MIME-Version: 1.0
-X-KSMG-Rule-ID: 4
-X-KSMG-Message-Action: clean
-X-KSMG-AntiSpam-Status: not scanned, disabled by settings
-X-KSMG-AntiSpam-Interceptor-Info: not scanned
-X-KSMG-AntiPhishing: not scanned, disabled by settings
-X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 1.1.2.30, bases: 2023/02/20 05:01:00 #20887657
-X-KSMG-AntiVirus-Status: Clean, skipped
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.2
+Subject: Re: [PATCH v2 36/47] clk: mediatek: mt2712: Change Kconfig options to
+ allow module build
+To:     Chen-Yu Tsai <wenst@chromium.org>
+Cc:     mturquette@baylibre.com, sboyd@kernel.org, matthias.bgg@gmail.com,
+        johnson.wang@mediatek.com, miles.chen@mediatek.com,
+        chun-jie.chen@mediatek.com, daniel@makrotopia.org,
+        fparent@baylibre.com, msp@baylibre.com, nfraprado@collabora.com,
+        rex-bc.chen@mediatek.com, zhaojh329@gmail.com,
+        sam.shih@mediatek.com, edward-jw.yang@mediatek.com,
+        yangyingliang@huawei.com, granquet@baylibre.com,
+        pablo.sun@mediatek.com, sean.wang@mediatek.com,
+        chen.zhong@mediatek.com, linux-kernel@vger.kernel.org,
+        linux-clk@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, kernel@collabora.com
+References: <20230214134127.59273-1-angelogioacchino.delregno@collabora.com>
+ <20230214134127.59273-37-angelogioacchino.delregno@collabora.com>
+ <CAGXv+5FxnsJaVw2MzeH+-Z3yEPzPCRtTukp7FDhsBoKHfx=m=g@mail.gmail.com>
+ <37690521-4d24-ce55-f81e-30ad931dfe95@collabora.com>
+ <CAGXv+5FM_pxu4Ms1mbvpdJLxkOZe2ZXjNoiOCfANpdxLme+_Lg@mail.gmail.com>
+Content-Language: en-US
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <CAGXv+5FM_pxu4Ms1mbvpdJLxkOZe2ZXjNoiOCfANpdxLme+_Lg@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-T24gMTYuMDIuMjAyMyAxNjo0MCwgU3RlZmFubyBHYXJ6YXJlbGxhIHdyb3RlOg0KPiBPbiBNb24s
-IEZlYiAwNiwgMjAyMyBhdCAwNjo1MzoyMkFNICswMDAwLCBBcnNlbml5IEtyYXNub3Ygd3JvdGU6
-DQo+PiBJZiBzb2NrZXQncyBlcnJvciBxdWV1ZSBpcyBub3QgZW1wdHksIEVQT0xMRVJSIG11c3Qg
-YmUgc2V0Lg0KPiANCj4gQ291bGQgdGhpcyBwYXRjaCBnbyByZWdhcmRsZXNzIG9mIHRoaXMgc2Vy
-aWVzPw0KPiANCj4gQ2FuIHlvdSBleHBsYWluIChldmVuIGluIHRoZSBjb21taXQgbWVzc2FnZSkg
-d2hhdCBoYXBwZW5zIHdpdGhvdXQgdGhpcw0KPiBwYXRjaD8NCg0KU3VyZSEgVGhhbmtzDQoNCj4g
-DQo+IFRoYW5rcywNCj4gU3RlZmFubw0KPiANCj4+DQo+PiBTaWduZWQtb2ZmLWJ5OiBBcnNlbml5
-IEtyYXNub3YgPEFWS3Jhc25vdkBzYmVyZGV2aWNlcy5ydT4NCj4+IC0tLQ0KPj4gbmV0L3Ztd192
-c29jay9hZl92c29jay5jIHwgMiArLQ0KPj4gMSBmaWxlIGNoYW5nZWQsIDEgaW5zZXJ0aW9uKCsp
-LCAxIGRlbGV0aW9uKC0pDQo+Pg0KPj4gZGlmZiAtLWdpdCBhL25ldC92bXdfdnNvY2svYWZfdnNv
-Y2suYyBiL25ldC92bXdfdnNvY2svYWZfdnNvY2suYw0KPj4gaW5kZXggMTlhZWE3Y2JhMjZlLi5i
-NWU1MWVmNGE3NGMgMTAwNjQ0DQo+PiAtLS0gYS9uZXQvdm13X3Zzb2NrL2FmX3Zzb2NrLmMNCj4+
-ICsrKyBiL25ldC92bXdfdnNvY2svYWZfdnNvY2suYw0KPj4gQEAgLTEwMjYsNyArMTAyNiw3IEBA
-IHN0YXRpYyBfX3BvbGxfdCB2c29ja19wb2xsKHN0cnVjdCBmaWxlICpmaWxlLCBzdHJ1Y3Qgc29j
-a2V0ICpzb2NrLA0KPj4gwqDCoMKgwqBwb2xsX3dhaXQoZmlsZSwgc2tfc2xlZXAoc2spLCB3YWl0
-KTsNCj4+IMKgwqDCoMKgbWFzayA9IDA7DQo+Pg0KPj4gLcKgwqDCoCBpZiAoc2stPnNrX2VycikN
-Cj4+ICvCoMKgwqAgaWYgKHNrLT5za19lcnIgfHwgIXNrYl9xdWV1ZV9lbXB0eV9sb2NrbGVzcygm
-c2stPnNrX2Vycm9yX3F1ZXVlKSkNCj4+IMKgwqDCoMKgwqDCoMKgIC8qIFNpZ25pZnkgdGhhdCB0
-aGVyZSBoYXMgYmVlbiBhbiBlcnJvciBvbiB0aGlzIHNvY2tldC4gKi8NCj4+IMKgwqDCoMKgwqDC
-oMKgIG1hc2sgfD0gRVBPTExFUlI7DQo+Pg0KPj4gLS3CoA0KPj4gMi4yNS4xDQo+IA0KDQo=
+Il 17/02/23 16:19, Chen-Yu Tsai ha scritto:
+> On Fri, Feb 17, 2023 at 7:25 PM AngeloGioacchino Del Regno
+> <angelogioacchino.delregno@collabora.com> wrote:
+>>
+>> Il 17/02/23 05:24, Chen-Yu Tsai ha scritto:
+>>> On Tue, Feb 14, 2023 at 9:42 PM AngeloGioacchino Del Regno
+>>> <angelogioacchino.delregno@collabora.com> wrote:
+>>>>
+>>>> All of the mt2712 drivers have been converted to platform drivers!
+>>>> Change the Kconfig options for all MT2712 clocks to tristate to allow
+>>>> building all clock drivers as modules.
+>>>>
+>>>> Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+>>>> ---
+>>>>    drivers/clk/mediatek/Kconfig | 16 ++++++++--------
+>>>>    1 file changed, 8 insertions(+), 8 deletions(-)
+>>>>
+>>>> diff --git a/drivers/clk/mediatek/Kconfig b/drivers/clk/mediatek/Kconfig
+>>>> index b9c0a9e21cf1..45b7aea7648d 100644
+>>>> --- a/drivers/clk/mediatek/Kconfig
+>>>> +++ b/drivers/clk/mediatek/Kconfig
+>>>> @@ -75,7 +75,7 @@ config COMMON_CLK_MT2701_G3DSYS
+>>>>             This driver supports MediaTek MT2701 g3dsys clocks.
+>>>>
+>>>>    config COMMON_CLK_MT2712
+>>>> -       bool "Clock driver for MediaTek MT2712"
+>>>> +       tristate "Clock driver for MediaTek MT2712"
+>>>
+>>> Hmm... How does that work out if mt2712-apmixedsys is a
+>>> builtin_platform_driver?
+>>>
+>>> ChenYu
+>>
+>> That doesn't. Thanks for catching that, I've added a .remove() callback
+>> and changed it to module_platform_driver() for v3!
+> 
+> Actually, I thought that if it were built as a module, then the
+> builtin_platform_driver would then expand to a module_init() without
+> module_exit(). So it would become a loadable module that cannot be
+> unloaded.
+> 
+> That was just looking at the header files, so I could be mistaken.
+> 
+> Side note: IIRC a missing .remove() driver callback doesn't actually
+> block driver removal or unbinding.
+> 
+
+It doesn't, but we'd leak memory because of the kzalloc() that happened
+at the beginning of the probe function... so adding the .remove() callback
+was pretty much necessary :-)
+
+Thanks,
+Angelo
+
+> ChenYu
+> 
+
