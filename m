@@ -2,148 +2,219 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6674C69D648
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Feb 2023 23:23:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 153F169D64E
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Feb 2023 23:28:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232426AbjBTWXu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Feb 2023 17:23:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39738 "EHLO
+        id S232698AbjBTW2i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Feb 2023 17:28:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42540 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231993AbjBTWXs (ORCPT
+        with ESMTP id S232502AbjBTW2g (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Feb 2023 17:23:48 -0500
-Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95D781ADF5
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Feb 2023 14:23:46 -0800 (PST)
-Received: by mail-wm1-x333.google.com with SMTP id az11-20020a05600c600b00b003dc4fd6e61dso2114107wmb.5
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Feb 2023 14:23:46 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=LczbbPN2kv2frYuEgJiCHxGTOf36S6cKvzlYYeWhcYc=;
-        b=ikrp60BCJBudlPSFvolBO82G/COksPn0tDwAWENWUOYwuM+9Db3zUrF8CjanQXljgW
-         zQECHzWScYM4p2vVrTeJ69Ss97PnrJLrz7HdICQ+nmYJ/xj94ZrUb1JLnUbn/KceYw+0
-         kWsNMaf0qtj1JK6GHbVFFRaIxquzLtxKirbRT3vW1vRq9OmmlEl5Vjr7wX4caqWoEeUJ
-         BflbeggOi576F6hy0EeVpww7CTAaPZ5ha+/GaIC29JTCGX2KFjzqIrNQUVy5ZCydpSxP
-         yyaRWb+if1u/4D6sM/yRlXsHS6a7oxVyJwpR8v+iIQ09K2JvIWB8X7WsuLa4Q5zdvj1M
-         5lzw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=LczbbPN2kv2frYuEgJiCHxGTOf36S6cKvzlYYeWhcYc=;
-        b=kNiTvp043R7FVOVynXgfHd48GhGUEs0U2Nfan6YjVKFjRQUaplpYyqY7nWP/a8LZYK
-         tG3jNbU86Kkz7Oy6RIVq6o/3TMPTrJYVRyGgtf5DkkZnMv1Ot58rCE4vUmSghhWc/PLD
-         VVpPZakLjhuMg22f6vV+RlZY8Mx8X48FFJkhdQiOT9FvemSk77jz0vHjYdVB2Xedy09U
-         krNV4j14qLpfacHy66Y7+IY8R1KMrHKxAcmxsraLQA2zJnwyk2Q9apOHex49Xx/hjY6i
-         xXiB8klQTGX0xggOKDVe4hzslTEF3bKGeZFrFpUO/VBj6bjlde9QAvR6yT3ABD8Me8Ou
-         3q1A==
-X-Gm-Message-State: AO0yUKU37ONOLp7IxrxvZhFw5d9ImsxHpshek4lXqhYph6kE4wP6QPU5
-        wdVWW9cJr8q79rnvcR5swidsTQ==
-X-Google-Smtp-Source: AK7set/AoVRk1CSi530XSOQqXgKgQFGwnbmmgQs7zjKPPMKULilagc+ntPnuh70+ZOczY+cFJWCFww==
-X-Received: by 2002:a05:600c:80f:b0:3df:e46f:c226 with SMTP id k15-20020a05600c080f00b003dfe46fc226mr1217438wmp.16.1676931825044;
-        Mon, 20 Feb 2023 14:23:45 -0800 (PST)
-Received: from ?IPV6:2a02:6b6a:b566:0:8498:f303:14d8:47b5? ([2a02:6b6a:b566:0:8498:f303:14d8:47b5])
-        by smtp.gmail.com with ESMTPSA id x8-20020a1c7c08000000b003dc4480df80sm1468425wmc.34.2023.02.20.14.23.44
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 20 Feb 2023 14:23:44 -0800 (PST)
-Message-ID: <4a7b863c-469d-ea61-fc49-7aa8c819bb73@bytedance.com>
-Date:   Mon, 20 Feb 2023 22:23:43 +0000
+        Mon, 20 Feb 2023 17:28:36 -0500
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 752F09760;
+        Mon, 20 Feb 2023 14:28:35 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1676932115; x=1708468115;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=9uzJk+myGmC8/yplqkidRBa1M41hlA/b/WgDxjDLTt0=;
+  b=EPZ4WNJDGnO7ORbudlAxxfFqh68BvIs1dF0SM3oISse5T3Zzx6tzG5iI
+   74M27KgLzzmLShTyuL7/BWj601lO/ZPLmmv9nITZv1sS+5u+WYYI6n9Eh
+   Mou9QGDjSRjm5ont4iU5JJqjLg3ZS0/ZfJeE8kdGwr4iQiWedN5wNvbQP
+   rYdRAceRgenJjtiXdgpjY/KAhTCN3GVkflx1s/RjTx8+uRhnmRMP0t871
+   yyOGRcwx0BwB7wvmW5C42FelQuUbh059h9uc9h2TrXzyeaPsiGdnqrJfU
+   JEHjfSdG0X8eep57VpmdOGltJf1Za1OoccU+11nM9mVpSAVjAUYg8GeTB
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10627"; a="312131183"
+X-IronPort-AV: E=Sophos;i="5.97,313,1669104000"; 
+   d="scan'208";a="312131183"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Feb 2023 14:28:34 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10627"; a="703823736"
+X-IronPort-AV: E=Sophos;i="5.97,313,1669104000"; 
+   d="scan'208";a="703823736"
+Received: from lkp-server01.sh.intel.com (HELO 4455601a8d94) ([10.239.97.150])
+  by orsmga001.jf.intel.com with ESMTP; 20 Feb 2023 14:28:31 -0800
+Received: from kbuild by 4455601a8d94 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pUEe7-000EDP-0W;
+        Mon, 20 Feb 2023 22:28:31 +0000
+Date:   Tue, 21 Feb 2023 06:27:35 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Florian Eckert <fe@dev.tdt.de>, u.kleine-koenig@pengutronix.de,
+        gregkh@linuxfoundation.org, jirislaby@kernel.org, pavel@ucw.cz,
+        lee@kernel.org
+Cc:     oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
+        linux-leds@vger.kernel.org, Eckert.Florian@googlemail.com
+Subject: Re: [PATCH v4 2/2] trigger: ledtrig-tty: add additional modes
+Message-ID: <202302210614.4oTMenu2-lkp@intel.com>
+References: <20230220152038.3877596-3-fe@dev.tdt.de>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [External] Re: [PATCH v9 0/8] Parallel CPU bringup for x86_64
-To:     Oleksandr Natalenko <oleksandr@natalenko.name>,
-        David Woodhouse <dwmw2@infradead.org>
-Cc:     tglx@linutronix.de, kim.phillips@amd.com, arjan@linux.intel.com,
-        mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
-        hpa@zytor.com, x86@kernel.org, pbonzini@redhat.com,
-        paulmck@kernel.org, linux-kernel@vger.kernel.org,
-        kvm@vger.kernel.org, rcu@vger.kernel.org, mimoja@mimoja.de,
-        hewenliang4@huawei.com, thomas.lendacky@amd.com, seanjc@google.com,
-        pmenzel@molgen.mpg.de, fam.zheng@bytedance.com,
-        punit.agrawal@bytedance.com, simon.evans@bytedance.com,
-        liangma@liangbit.com, Piotr Gorski <lucjan.lucjanov@gmail.com>
-References: <20230215145425.420125-1-usama.arif@bytedance.com>
- <2668799.mvXUDI8C0e@natalenko.name>
- <ed8d662351cfe5793f8cc7e7e8c514d05d16c501.camel@infradead.org>
- <2668869.mvXUDI8C0e@natalenko.name>
- <2a67f6cf18dd2c1879fad9fd8a28242918d3e5d2.camel@infradead.org>
- <982e1d6140705414e8fd60b990bd259a@natalenko.name>
-Content-Language: en-US
-From:   Usama Arif <usama.arif@bytedance.com>
-In-Reply-To: <982e1d6140705414e8fd60b990bd259a@natalenko.name>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230220152038.3877596-3-fe@dev.tdt.de>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Florian,
+
+Thank you for the patch! Perhaps something to improve:
+
+[auto build test WARNING on tty/tty-testing]
+[also build test WARNING on tty/tty-next tty/tty-linus pavel-leds/for-next staging/staging-testing staging/staging-next staging/staging-linus linus/master v6.2]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Florian-Eckert/tty-new-helper-function-tty_get_mget/20230220-232129
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/tty.git tty-testing
+patch link:    https://lore.kernel.org/r/20230220152038.3877596-3-fe%40dev.tdt.de
+patch subject: [PATCH v4 2/2] trigger: ledtrig-tty: add additional modes
+config: x86_64-allyesconfig (https://download.01.org/0day-ci/archive/20230221/202302210614.4oTMenu2-lkp@intel.com/config)
+compiler: gcc-11 (Debian 11.3.0-8) 11.3.0
+reproduce (this is a W=1 build):
+        # https://github.com/intel-lab-lkp/linux/commit/8da3a8a2edcad2e4b36fce551cac1961a5cd90a6
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Florian-Eckert/tty-new-helper-function-tty_get_mget/20230220-232129
+        git checkout 8da3a8a2edcad2e4b36fce551cac1961a5cd90a6
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        make W=1 O=build_dir ARCH=x86_64 olddefconfig
+        make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/leds/
+
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202302210614.4oTMenu2-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+   drivers/leds/trigger/ledtrig-tty.c:15:24: error: 'TTY_LED_RNG' undeclared here (not in a function); did you mean 'TTY_LED_CNT'?
+      15 |         TTY_LED_LAST = TTY_LED_RNG
+         |                        ^~~~~~~~~~~
+         |                        TTY_LED_CNT
+   drivers/leds/trigger/ledtrig-tty.c:33:10: error: array index in initializer not of integer type
+      33 |         [TTY_LED_RNG] = "RNG", // RNG Ring Indicator (RI)
+         |          ^~~~~~~~~~~
+   drivers/leds/trigger/ledtrig-tty.c:33:10: note: (near initialization for 'mode')
+   drivers/leds/trigger/ledtrig-tty.c: In function 'ledtrig_tty_mode_show':
+   drivers/leds/trigger/ledtrig-tty.c:48:34: error: '__TTY_LED_LAST' undeclared (first use in this function); did you mean 'TTY_LED_LAST'?
+      48 |                 bool last = i == __TTY_LED_LAST;
+         |                                  ^~~~~~~~~~~~~~
+         |                                  TTY_LED_LAST
+   drivers/leds/trigger/ledtrig-tty.c:48:34: note: each undeclared identifier is reported only once for each function it appears in
+   drivers/leds/trigger/ledtrig-tty.c:50:48: warning: too many arguments for format [-Wformat-extra-args]
+      50 |                 len += sysfs_emit_at(buf, len, "%s%s%s",
+         |                                                ^~~~~~~~
+   drivers/leds/trigger/ledtrig-tty.c: In function 'tty_led_mode_store':
+   drivers/leds/trigger/ledtrig-tty.c:81:38: error: '__TTY_LED_MAX' undeclared (first use in this function); did you mean 'TTY_LED_CAR'?
+      81 |         enum tty_led_mode tty_mode = __TTY_LED_MAX;
+         |                                      ^~~~~~~~~~~~~
+         |                                      TTY_LED_CAR
+   drivers/leds/trigger/ledtrig-tty.c:88:26: error: '__TTY_LED_LAST' undeclared (first use in this function); did you mean 'TTY_LED_LAST'?
+      88 |         for (i = 0; i <= __TTY_LED_LAST; i++)
+         |                          ^~~~~~~~~~~~~~
+         |                          TTY_LED_LAST
+   drivers/leds/trigger/ledtrig-tty.c:89:17: warning: this 'if' clause does not guard... [-Wmisleading-indentation]
+      89 |                 if (strncmp(buf, mode[i], size) == 0)
+         |                 ^~
+   drivers/leds/trigger/ledtrig-tty.c:91:25: note: ...this statement, but the latter is misleadingly indented as if it were guarded by the 'if'
+      91 |                         break;
+         |                         ^~~~~
+   drivers/leds/trigger/ledtrig-tty.c:91:25: error: break statement not within loop or switch
+   drivers/leds/trigger/ledtrig-tty.c:81:27: warning: variable 'tty_mode' set but not used [-Wunused-but-set-variable]
+      81 |         enum tty_led_mode tty_mode = __TTY_LED_MAX;
+         |                           ^~~~~~~~
+>> drivers/leds/trigger/ledtrig-tty.c:80:17: warning: unused variable 'ret' [-Wunused-variable]
+      80 |         ssize_t ret = size;
+         |                 ^~~
+>> drivers/leds/trigger/ledtrig-tty.c:79:34: warning: unused variable 'trigger_data' [-Wunused-variable]
+      79 |         struct ledtrig_tty_data *trigger_data = led_trigger_get_drvdata(dev);
+         |                                  ^~~~~~~~~~~~
+   drivers/leds/trigger/ledtrig-tty.c:92:17: error: no return statement in function returning non-void [-Werror=return-type]
+      92 |                 }
+         |                 ^
+   drivers/leds/trigger/ledtrig-tty.c: At top level:
+   drivers/leds/trigger/ledtrig-tty.c:94:9: error: expected identifier or '(' before 'if'
+      94 |         if (tty_mode > __TTY_LED_LAST)
+         |         ^~
+   In file included from include/linux/rhashtable-types.h:14,
+                    from include/linux/ipc.h:7,
+                    from include/uapi/linux/sem.h:5,
+                    from include/linux/sem.h:5,
+                    from include/linux/sched.h:15,
+                    from include/linux/delay.h:23,
+                    from drivers/leds/trigger/ledtrig-tty.c:3:
+   drivers/leds/trigger/ledtrig-tty.c:97:20: error: expected declaration specifiers or '...' before '&' token
+      97 |         mutex_lock(&trigger_data->mutex);
+         |                    ^
+   include/linux/mutex.h:187:44: note: in definition of macro 'mutex_lock'
+     187 | #define mutex_lock(lock) mutex_lock_nested(lock, 0)
+         |                                            ^~~~
+   include/linux/mutex.h:187:50: error: expected declaration specifiers or '...' before numeric constant
+     187 | #define mutex_lock(lock) mutex_lock_nested(lock, 0)
+         |                                                  ^
+   drivers/leds/trigger/ledtrig-tty.c:97:9: note: in expansion of macro 'mutex_lock'
+      97 |         mutex_lock(&trigger_data->mutex);
+         |         ^~~~~~~~~~
+   drivers/leds/trigger/ledtrig-tty.c:98:21: error: expected '=', ',', ';', 'asm' or '__attribute__' before '->' token
+      98 |         trigger_data->mode = tty_mode;
+         |                     ^~
+   drivers/leds/trigger/ledtrig-tty.c:99:22: error: expected declaration specifiers or '...' before '&' token
+      99 |         mutex_unlock(&trigger_data->mutex);
+         |                      ^
+   drivers/leds/trigger/ledtrig-tty.c:101:9: error: expected identifier or '(' before 'return'
+     101 |         return ret;
+         |         ^~~~~~
+   drivers/leds/trigger/ledtrig-tty.c:102:1: error: expected identifier or '(' before '}' token
+     102 | }
+         | ^
+   cc1: some warnings being treated as errors
 
 
-On 20/02/2023 21:23, Oleksandr Natalenko wrote:
-> Hello.
-> 
-> On 20.02.2023 21:31, David Woodhouse wrote:
->> On Mon, 2023-02-20 at 17:40 +0100, Oleksandr Natalenko wrote:
->>> On pondělí 20. února 2023 17:20:13 CET David Woodhouse wrote:
->>> > On Mon, 2023-02-20 at 17:08 +0100, Oleksandr Natalenko wrote:
->>> > >
->>> > > I've applied this to the v6.2 kernel, and suspend/resume broke on
->>> > > my
->>> > > Ryzen 5950X desktop. The machine suspends just fine, but on
->>> > > resume
->>> > > the screen stays blank, and there's no visible disk I/O.
->>> > >
->>> > > Reverting the series brings suspend/resume back to working state.
->>> >
->>> > Hm, thanks. What if you add 'no_parallel_bringup' on the command
->>> > line?
->>>
->>> If the `no_parallel_bringup` param is added, the suspend/resume
->>> works.
->>
->> Thanks for the testing. Can I ask you to do one further test: apply the
->> series only as far as patch 6/8 'x86/smpboot: Support parallel startup
->> of secondary CPUs'.
->>
->> That will do the new startup asm sequence where each CPU finds its own
->> per-cpu data so it *could* work in parallel, but doesn't actually do
->> the bringup in parallel yet.
-> 
-> With patches 1 to 6 (including) applied and no extra cmdline params 
-> added the resume doesn't work.
-> 
->> Does your box have a proper serial port?
-> 
-> No, sorry. I know it'd help with getting logs, and I do have a 
-> serial-to-USB cable that I use for another machine, but in this one the 
-> port is not routed to outside. I think I can put a header there as the 
-> motherboard does have pins, but I'd have to buy one first. In theory, I 
-> can do that, but that won't happen within the next few weeks.
-> 
-> P.S. Piotr Gorski (in Cc) also reported this: "My friend from CachyOS 
-> can confirm bugs with smpboot patches. AMD FX 6300 only shows 1 core 
-> when using smp boot patchset". Probably, he can reply to this thread and 
-> provide more details.
-> 
+vim +/ret +80 drivers/leds/trigger/ledtrig-tty.c
 
-Hi Oleksandr,
+    74	
+    75	static ssize_t tty_led_mode_store(struct device *dev,
+    76				  struct device_attribute *attr, const char *buf,
+    77				  size_t size)
+    78	{
+  > 79		struct ledtrig_tty_data *trigger_data = led_trigger_get_drvdata(dev);
+  > 80		ssize_t ret = size;
+    81		enum tty_led_mode tty_mode = __TTY_LED_MAX;
+    82		int i;
+    83	
+    84		/* Check for new line in string*/
+    85		if (size > 0 && buf[size - 1] == '\n')
+    86			size -= 1;
+    87	
+    88		for (i = 0; i <= __TTY_LED_LAST; i++)
+    89			if (strncmp(buf, mode[i], size) == 0)
+    90				tty_mode = i;
+  > 91				break;
+    92			}
+    93	
+    94		if (tty_mode > __TTY_LED_LAST)
+    95			return -EINVAL;
+    96	
+    97		mutex_lock(&trigger_data->mutex);
+    98		trigger_data->mode = tty_mode;
+    99		mutex_unlock(&trigger_data->mutex);
+   100	
+   101		return ret;
+   102	}
+   103	static DEVICE_ATTR_RW(tty_led_mode);
+   104	
 
-So for initial boot, do all CPUs comes up for you when parallel smp boot 
-is enabled or only 1?
-
-I don't have access to Ryzen hardware so can only say from code, but it 
-would be weird if initial boot is fine but resume is broken if the same 
-code path is being taken.
-
-Thanks,
-Usama
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
