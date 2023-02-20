@@ -2,67 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3EC9769D1D1
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Feb 2023 18:02:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BD84E69D1AC
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Feb 2023 17:48:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232370AbjBTRCY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Feb 2023 12:02:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43434 "EHLO
+        id S232135AbjBTQsH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Feb 2023 11:48:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33150 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232246AbjBTRCR (ORCPT
+        with ESMTP id S232278AbjBTQsD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Feb 2023 12:02:17 -0500
-Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DEF121ADDD;
-        Mon, 20 Feb 2023 09:02:16 -0800 (PST)
-Received: by mail-ed1-x531.google.com with SMTP id s26so7202685edw.11;
-        Mon, 20 Feb 2023 09:02:16 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=references:in-reply-to:message-id:date:subject:cc:to:from:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=Yfugm/m5Cr0fTsBnS53U1NHSsEy5zCWigKnLIzVj5t0=;
-        b=HejyTNEwPWoL+g9B9OB8/LxbWHvzdayZwHq4ssATfH6rsx3iGqrga/Mrgi603DAT4D
-         mShTv0RpTEnQxroj/ZnVHMpMCGt0Ho92o6qcNrgqmLtvgSHbeNE56WGFStdGDpGLX3JG
-         V85w1khve/pfP2SmkvEKe7BSQRc1Af4pWrUuVqyacTgPY+wiBfXt4UiXdWBZD5FucCJg
-         n07Oo5CAkQp1MulxvlMum4XnJimAQr3gyHDabjHa2kPsFhQbTDq7KGnMfR0a5oYVb2lp
-         g/VvmD4codf5aacHF9vzjEcNJeJGT5hTpcUwdqs+dzkr9vSzSbvz7eZDoHCf/ACzL0OE
-         oh1g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=references:in-reply-to:message-id:date:subject:cc:to:from
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Yfugm/m5Cr0fTsBnS53U1NHSsEy5zCWigKnLIzVj5t0=;
-        b=4ev86FaIv1sjmAyNMTrFsYTuhqYWHh6xXjKcebCavWfh0CCLIgSugH2WW/BzesSUQ2
-         BODS8MmwUAmfESIvrz6HcdvPdqbS3P3z3BO1JezF2F8GHXIYp9IC3YkQ9wrxVWXTGhK/
-         3X+K2YCp0w/MSY1/xMteU2LyZGunfOjaDDC8rBIt70bV9hxmYoBOkMj9GXkrSmZ3YQWH
-         1ze7jRuQkYxnovIkgYlNsr9dSw+JbLH9zD3atzqjoKr4OVMMXSxJET2Gq4g4qC0iZUWZ
-         7tSHZO0CR/HvCbm4sYgS2EKXCajOjfHRtnWX68dsBg3sn4q8XvD8/J9VYKlL6L0M3aqT
-         RmNw==
-X-Gm-Message-State: AO0yUKWGLxaA/rDS9nCYdTdW+7ilYDkQMeuncMlTgn5FFCLM/ZZpYmRv
-        IXPbi7V2cb9fwEwIrzxO+kw=
-X-Google-Smtp-Source: AK7set8NPejudc0hauK7xZnLEEftWTSy8kxT/ObXTzYPFSXAWaOZyNKmrmu310CLNO89JwJWpFdFEg==
-X-Received: by 2002:a05:6402:6cd:b0:4ac:b59b:60dd with SMTP id n13-20020a05640206cd00b004acb59b60ddmr2668769edy.23.1676912535196;
-        Mon, 20 Feb 2023 09:02:15 -0800 (PST)
-Received: from felia.fritz.box ([2a02:810d:2a40:1104:ad0f:1d29:d8a4:7999])
-        by smtp.gmail.com with ESMTPSA id h10-20020a50c38a000000b004ad75c5c0fdsm927227edf.18.2023.02.20.09.02.14
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 20 Feb 2023 09:02:14 -0800 (PST)
-From:   Lukas Bulwahn <lukas.bulwahn@gmail.com>
-To:     Jonathan Corbet <corbet@lwn.net>, Anders Larsen <al@alarsen.net>,
-        linux-doc@vger.kernel.org
-Cc:     linux-fsdevel@vger.kernel.org, kernel-janitors@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Lukas Bulwahn <lukas.bulwahn@gmail.com>
-Subject: [PATCH 1/2] qnx6: credit contributor and mark filesystem orphan
-Date:   Mon, 20 Feb 2023 18:02:09 +0100
-Message-Id: <20230220170210.15677-2-lukas.bulwahn@gmail.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20230220170210.15677-1-lukas.bulwahn@gmail.com>
-References: <20230220170210.15677-1-lukas.bulwahn@gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        Mon, 20 Feb 2023 11:48:03 -0500
+Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 989352128D
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Feb 2023 08:47:42 -0800 (PST)
+Received: from canpemm500005.china.huawei.com (unknown [172.30.72.53])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4PL7Yt63FVz16Nsv;
+        Tue, 21 Feb 2023 00:44:50 +0800 (CST)
+Received: from localhost.huawei.com (10.175.126.31) by
+ canpemm500005.china.huawei.com (7.192.104.229) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.17; Tue, 21 Feb 2023 00:47:17 +0800
+From:   Su Weifeng <suweifeng1@huawei.com>
+To:     <gregkh@linuxfoundation.org>, <mst@redhat.com>
+CC:     <linux-kernel@vger.kernel.org>, <shikemeng@huawei.com>,
+        <liuzhiqiang26@huawei.com>, <linfeilong@huawei.com>,
+        <zhanghongtao22@huawei.com>, Weifeng Su <suweifeng1@huawei.com>
+Subject: [PATCH v2] uio:uio_pci_generic:Don't clear master bit when the process does not exit
+Date:   Tue, 21 Feb 2023 01:10:44 +0800
+Message-ID: <20230220171045.689736-1-suweifeng1@huawei.com>
+X-Mailer: git-send-email 2.33.0
+MIME-Version: 1.0
+Content-Type: text/plain; charset="y"
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.175.126.31]
+X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
+ canpemm500005.china.huawei.com (7.192.104.229)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,67 +47,82 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Replace the content of the qnx6 README file with the canonical places for
-such information.
+From: Weifeng Su <suweifeng1@huawei.com>
 
-Add the credits of the qnx6 contribution to CREDITS, and add an section in
-MAINTAINERS to mark this filesystem as Orphan, as the domain ontika.net and
-email address does not resolve to an IP address anymore.
+The /dev/uioX device has concurrent operations in a few scenarios.
 
-Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
+For example, when a process using the device exits abnormally,
+the management program starts the same process to operate the device.
+When the process exits and closes the /dev/uioX device,
+the master bit of the device is cleared. In this case, if the
+new process is issuing commands, I/Os are suspended and cannot be
+automatically recovered.
+
+Therefore, reference counting is added to clear the master bit
+only when the last process exits.
+
+Signed-off-by: Weifeng Su <suweifeng1@huawei.com>
 ---
- CREDITS        | 4 ++++
- MAINTAINERS    | 6 ++++++
- fs/qnx6/README | 8 --------
- 3 files changed, 10 insertions(+), 8 deletions(-)
- delete mode 100644 fs/qnx6/README
+The difference between the first patch and the first patch is that 
+the reference counting operation is performed using the atomic semantics, 
+just like other drivers under UIO:
+cdfa835c6e5e87d145f("uio_hv_generic: defer opening vmbus until first use").
 
-diff --git a/CREDITS b/CREDITS
-index 847059166a15..07e871d60cf0 100644
---- a/CREDITS
-+++ b/CREDITS
-@@ -229,6 +229,10 @@ S: University of Notre Dame
- S: Notre Dame, Indiana
- S: USA
+ drivers/uio/uio_pci_generic.c | 15 ++++++++++++++-
+ 1 file changed, 14 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/uio/uio_pci_generic.c b/drivers/uio/uio_pci_generic.c
+index e03f9b532..df436e3d9 100644
+--- a/drivers/uio/uio_pci_generic.c
++++ b/drivers/uio/uio_pci_generic.c
+@@ -31,6 +31,7 @@
+ struct uio_pci_generic_dev {
+ 	struct uio_info info;
+ 	struct pci_dev *pdev;
++	atomic_t	refcnt;
+ };
  
-+N: Kai Bankett
-+E: chaosman@ontika.net
-+D: QNX6 filesystem
-+
- N: Greg Banks
- E: gnb@alphalink.com.au
- D: IDT77105 ATM network driver
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 6b91bcbbc22f..2657a35dd96e 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -17174,6 +17174,12 @@ F:	fs/qnx4/
- F:	include/uapi/linux/qnx4_fs.h
- F:	include/uapi/linux/qnxtypes.h
+ static inline struct uio_pci_generic_dev *
+@@ -39,10 +40,19 @@ to_uio_pci_generic_dev(struct uio_info *info)
+ 	return container_of(info, struct uio_pci_generic_dev, info);
+ }
  
-+QNX6 FILESYSTEM
-+S:	Orphan
-+F:	Documentation/filesystems/qnx6.rst
-+F:	fs/qnx6/
-+F:	include/linux/qnx6_fs.h
++static int open(struct uio_info *info, struct inode *inode)
++{
++	struct uio_pci_generic_dev *gdev = to_uio_pci_generic_dev(info);
 +
- QORIQ DPAA2 FSL-MC BUS DRIVER
- M:	Stuart Yoder <stuyoder@gmail.com>
- M:	Laurentiu Tudor <laurentiu.tudor@nxp.com>
-diff --git a/fs/qnx6/README b/fs/qnx6/README
-deleted file mode 100644
-index 116d622026cc..000000000000
---- a/fs/qnx6/README
-+++ /dev/null
-@@ -1,8 +0,0 @@
--
--  This is a snapshot of the QNX6 filesystem for Linux.
--  Please send diffs and remarks to <chaosman@ontika.net> .
--
--Credits :
--
--Al Viro		<viro@ZenIV.linux.org.uk> (endless patience with me & support ;))
--Kai Bankett	<chaosman@ontika.net> (Maintainer)
++	atomic_inc(&gdev->refcnt);
++	return 0;
++}
++
+ static int release(struct uio_info *info, struct inode *inode)
+ {
+ 	struct uio_pci_generic_dev *gdev = to_uio_pci_generic_dev(info);
+ 
++
+ 	/*
+ 	 * This driver is insecure when used with devices doing DMA, but some
+ 	 * people (mis)use it with such devices.
+@@ -51,7 +61,8 @@ static int release(struct uio_info *info, struct inode *inode)
+ 	 * Note that there's a non-zero chance doing this will wedge the device
+ 	 * at least until reset.
+ 	 */
+-	pci_clear_master(gdev->pdev);
++	if (atomic_dec_and_test(&gdev->refcnt))
++		pci_clear_master(gdev->pdev);
+ 	return 0;
+ }
+ 
+@@ -93,7 +104,9 @@ static int probe(struct pci_dev *pdev,
+ 	gdev->info.name = "uio_pci_generic";
+ 	gdev->info.version = DRIVER_VERSION;
+ 	gdev->info.release = release;
++	gdev->info.open = open;
+ 	gdev->pdev = pdev;
++	atomic_set(&gdev->refcnt, 0);
+ 	if (pdev->irq && (pdev->irq != IRQ_NOTCONNECTED)) {
+ 		gdev->info.irq = pdev->irq;
+ 		gdev->info.irq_flags = IRQF_SHARED;
 -- 
-2.17.1
+2.33.0
 
