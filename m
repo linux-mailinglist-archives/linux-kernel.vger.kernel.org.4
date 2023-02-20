@@ -2,110 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9371269D3ED
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Feb 2023 20:12:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9CAB269D3F2
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Feb 2023 20:15:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232591AbjBTTMw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Feb 2023 14:12:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38806 "EHLO
+        id S233076AbjBTTOu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Feb 2023 14:14:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41942 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232147AbjBTTMt (ORCPT
+        with ESMTP id S231517AbjBTTOt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Feb 2023 14:12:49 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A2E02279D
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Feb 2023 11:12:20 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id C0FDFB80DC8
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Feb 2023 19:11:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 83B7AC433B4
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Feb 2023 19:10:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1676920259;
-        bh=HYj2JrNoOeQCfF/fA+CMso1srlcz6lsACttDPRCDH1c=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=QBSStRS19Ntd6ywZBG28lu434sDuhidjlN+csFk0l2Za8moi06UTXzpPZjAeY7RWj
-         7293qhpkI8ipEUcdgZ7anF5MDsIaFSGObagZk+RJsO37amSQxmsPkFKnW093/VfPSJ
-         v8+JEs2Bksj0OLFGAk4ejs+Av3jjg7IkToshnSnX76XEGwe/H8I2AcPhynrFT3DcoU
-         x9wqw2nhovIyJobkhiVbCusY5rkJizNNymUEouKSg13Lp+KqwLlbWJ7SUWsOXCUbUz
-         6eAGydBR2hFKn9pNTs8sjRKFLDVcG0m4WV+lPmDVAC56g+yimFNS1iTvVm2CPSZ/SK
-         FD+BePJC8VL5w==
-Received: by mail-ed1-f41.google.com with SMTP id s26so8429490edw.11
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Feb 2023 11:10:59 -0800 (PST)
-X-Gm-Message-State: AO0yUKUfv+6eDvge/dyAXDyGTaiw3pP4QsyrgM2P6XWAS7nu+/aVOKWs
-        JsKjyWueP8jv2rF5v7EbGq6K4tlUolrw8NXtai1T1g==
-X-Google-Smtp-Source: AK7set9zPY8xCuDm9jXKfRySwPKynaiEx+hJXoG08HoUM5m1451XL+fCoduFnLrl05xe924cEzonfAjlJycpTN+F8GA=
-X-Received: by 2002:a50:935b:0:b0:4ae:f648:950b with SMTP id
- n27-20020a50935b000000b004aef648950bmr1466871eda.7.1676920257643; Mon, 20 Feb
- 2023 11:10:57 -0800 (PST)
+        Mon, 20 Feb 2023 14:14:49 -0500
+Received: from mail-qt1-x82a.google.com (mail-qt1-x82a.google.com [IPv6:2607:f8b0:4864:20::82a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4F9F199CC
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Feb 2023 11:14:13 -0800 (PST)
+Received: by mail-qt1-x82a.google.com with SMTP id g26so2424897qts.7
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Feb 2023 11:14:13 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1676920406;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=2x/ZnGEIutJz/ohk0y7JjrYHPKC556kirwfWjoI34Jw=;
+        b=PzQ0DM3wYomL4jJe/hIApWXOa3Q9wtEiApGNHzzkVKHcOG4soR2g0iUSfZLxWwmDcK
+         IpA4AB14pGwBJ08ikH29yzkR1Kic6KBXMrI7HecxJjuB6DcpGG47wfUCTP/tOqpGG2sT
+         3m9MSm8E0yMIRW3OSR/HCSawaP5S+PTdzCkf8Oe5j53X5bjlOfJ6zkyXOaeeNzCIM69L
+         P16o/5zY0mB1r1mBOTKbMhO5T/u9PgpMq9tyO+GbnKDdEQqgaUl/CYOrLjbHwrVpCPqA
+         pdDbh3iFgIv9E/TuxdskMr8Tju8nW/1B093t4NtTWERkHCtaZEA1YprYaZQIWQ/LIMxh
+         yjYQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1676920406;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=2x/ZnGEIutJz/ohk0y7JjrYHPKC556kirwfWjoI34Jw=;
+        b=c4ODisRkq8B8WL9tt5BhE8fOw3pgCQaRptJby02BSmc5OI+bbYhbZjOgTcWIXbXHIj
+         rZ1QwVENI+dCaJ1W8roiBLf1UPsXhxkvMT51mAxris3ZpLZ1InejtydyFJrGAU4hkAYH
+         4d1Ovofno0XUdDzcw4DVdp7hM3uoOiLKtc4I4hAfGmwIuQk//mDq9wuKJmcLGYL0fUm4
+         UyMBBUC7GQhM5cYXXkrwIBEgVkIXMup1sna/0RAnwlomIsZseAJiaT+lQFpV5FtT25eq
+         rtWWKFal1A4X9T53OXNtC+poJjJDI8RfAU7CDi/HkgbAs/mPctzH3uq//GB9nQ3l2Cxe
+         p3kg==
+X-Gm-Message-State: AO0yUKVgRfdvCJAU+eWD/FzZy8i7ciMTm+RAHZ1DJUg5STlGZQwbnPM4
+        rVvbYpga6vCdVEYXCmVIED5X809AdFg=
+X-Google-Smtp-Source: AK7set9gipoyr+L5ZQ3MNWg6+3BKYxxqXVC+zmWaQRvfllT7fSoIriCXX8+Vvh80eIJfNBEnSFOJ+Q==
+X-Received: by 2002:a05:622a:2c2:b0:3b8:5dfe:c3dc with SMTP id a2-20020a05622a02c200b003b85dfec3dcmr4042525qtx.3.1676920406371;
+        Mon, 20 Feb 2023 11:13:26 -0800 (PST)
+Received: from [192.168.0.103] (p57935146.dip0.t-ipconnect.de. [87.147.81.70])
+        by smtp.gmail.com with ESMTPSA id y6-20020ac87086000000b003be56bdd3b1sm924231qto.92.2023.02.20.11.13.24
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 20 Feb 2023 11:13:25 -0800 (PST)
+Message-ID: <2d045c1a-5947-1ce4-b5cd-a1684761a812@gmail.com>
+Date:   Mon, 20 Feb 2023 20:13:23 +0100
 MIME-Version: 1.0
-References: <CACYkzJ5L9MLuE5Jz+z5-NJCCrUqTbgKQkXSqnQnCfTD_WNA7_Q@mail.gmail.com>
- <CACYkzJ6n=-tobhX0ONQhjHSgmnNjWnNe_dZnEOGtD8Y6S3RHbA@mail.gmail.com>
- <20230220163442.7fmaeef3oqci4ee3@treble> <Y/Ox3MJZF1Yb7b6y@zn.tnic>
- <20230220175929.2laflfb2met6y3kc@treble> <CACYkzJ71xqzY6-wL+YShcL+d6ugzcdFHr6tbYWWE_ep52+RBZQ@mail.gmail.com>
- <Y/O6Wr4BbtfhXrNt@zn.tnic> <CACYkzJ4jvOGGhuQ1HDzfpGS5vffg9X6hEcLC93QJBFqX+LxLVw@mail.gmail.com>
- <Y/PBSncEMTiO5scL@zn.tnic> <CACYkzJ5w_ey7aHxhGr-1gpQLPPtRAQLApHiJp_Kh0cOW4PTQkA@mail.gmail.com>
- <Y/PDqpwY3sF29PuM@zn.tnic>
-In-Reply-To: <Y/PDqpwY3sF29PuM@zn.tnic>
-From:   KP Singh <kpsingh@kernel.org>
-Date:   Mon, 20 Feb 2023 11:10:46 -0800
-X-Gmail-Original-Message-ID: <CACYkzJ4jAqDfSvdbNqMbmnQW6eyFj4qtknW1Wq_mm0kHUjOYyA@mail.gmail.com>
-Message-ID: <CACYkzJ4jAqDfSvdbNqMbmnQW6eyFj4qtknW1Wq_mm0kHUjOYyA@mail.gmail.com>
-Subject: Re: [PATCH RESEND] x86/speculation: Fix user-mode spectre-v2
- protection with KERNEL_IBRS
-To:     Borislav Petkov <bp@alien8.de>
-Cc:     Josh Poimboeuf <jpoimboe@kernel.org>, linux-kernel@vger.kernel.org,
-        pjt@google.com, evn@google.com, tglx@linutronix.de,
-        mingo@redhat.com, dave.hansen@linux.intel.com, x86@kernel.org,
-        hpa@zytor.com, peterz@infradead.org,
-        pawan.kumar.gupta@linux.intel.com, kim.phillips@amd.com,
-        alexandre.chartre@oracle.com, daniel.sneddon@linux.intel.com,
-        =?UTF-8?Q?Jos=C3=A9_Oliveira?= <joseloliveira11@gmail.com>,
-        Rodrigo Branco <rodrigo@kernelhacking.com>,
-        Alexandra Sandulescu <aesa@google.com>,
-        Jim Mattson <jmattson@google.com>, stable@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH] staging: rtl8712: Fix multiple line dereference
+Content-Language: en-US
+To:     Shibo Li <zzutcyha@163.com>,
+        Larry Finger <Larry.Finger@lwfinger.net>,
+        Florian Schilhabel <florian.c.schilhabel@googlemail.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
+References: <20230220084050.18459-1-zzutcyha@163.com>
+From:   Philipp Hortmann <philipp.g.hortmann@gmail.com>
+In-Reply-To: <20230220084050.18459-1-zzutcyha@163.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 20, 2023 at 11:02 AM Borislav Petkov <bp@alien8.de> wrote:
->
-> On Mon, Feb 20, 2023 at 10:56:38AM -0800, KP Singh wrote:
-> > Sure, it looks like an omission to me, we wrote a POC on Skylake that
-> > was able to do cross-thread training with the current set of
-> > mitigations.
->
-> Right.
->
-> > STIBP with IBRS is still correct if spectre_v2=ibrs had really meant
-> > IBRS everywhere,
->
-> Yeah, IBRS everywhere got shot down as a no-no very early in the game,
-> for apparent reasons.
+On 2/20/23 09:40, Shibo Li wrote:
+> This patch fixes the following warning in rtl871x_mlme.c
+> 
+> WARNING: Avoid multiple line dereference - prefer 'adapter->securitypriv.PrivacyAlgrthm'
+> 
+> Signed-off-by: Shibo Li <zzutcyha@163.com>
+> ---
+>   drivers/staging/rtl8712/rtl871x_mlme.c | 4 ++--
+>   1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/staging/rtl8712/rtl871x_mlme.c b/drivers/staging/rtl8712/rtl871x_mlme.c
+> index 63e12b157001..cc47c1cedd4e 100644
+> --- a/drivers/staging/rtl8712/rtl871x_mlme.c
+> +++ b/drivers/staging/rtl8712/rtl871x_mlme.c
+> @@ -773,8 +773,8 @@ void r8712_joinbss_event_callback(struct _adapter *adapter, u8 *pbuf)
+>   						adapter->securitypriv.busetkipkey = false;
+>   						adapter->securitypriv.bgrpkey_handshake = false;
+>   						ptarget_sta->ieee8021x_blocked = true;
+> -						ptarget_sta->XPrivacy = adapter->
+> -						securitypriv.PrivacyAlgrthm;
+> +						ptarget_sta->XPrivacy =
+> +							adapter->securitypriv.PrivacyAlgrthm;
+>   						memset((u8 *)&ptarget_sta->x_UncstKey,
+>   							 0,
+>   							 sizeof(union Keytype));
 
-As you said in the other thread, this needs to be documented both in
-the code and the kernel documentation.
-
->
-> > but just means KERNEL_IBRS, which means only kernel is protected,
-> > userspace is still unprotected.
->
-> Yes, that was always the intent with IBRS: enable on kernel entry and
-> disable on exit.
->
-> Thx.
->
-> --
-> Regards/Gruss,
->     Boris.
->
-> https://people.kernel.org/tglx/notes-about-netiquette
+Tested-by: Philipp Hortmann <philipp.g.hortmann@gmail.com> AW-NU120
