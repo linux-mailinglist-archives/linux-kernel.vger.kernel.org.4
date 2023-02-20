@@ -2,140 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 28E9569D209
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Feb 2023 18:19:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F5FB69D215
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Feb 2023 18:24:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232342AbjBTRTN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Feb 2023 12:19:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55220 "EHLO
+        id S232234AbjBTRYP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Feb 2023 12:24:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57664 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231951AbjBTRTM (ORCPT
+        with ESMTP id S230428AbjBTRYN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Feb 2023 12:19:12 -0500
-Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E0DF1C7F5
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Feb 2023 09:19:10 -0800 (PST)
-Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com [209.85.208.70])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 873B63F582
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Feb 2023 17:19:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1676913546;
-        bh=KsFWVKyUTisvLWEBfJHuAqZZOIzRC+wakmOYPwQrXVU=;
-        h=From:To:Cc:Subject:Date:Message-Id:MIME-Version;
-        b=FZMzSoeecI91UrA5teqL8d4x6aQbaIiXb6laVlwqHzRU2vioww5CHpvnaQ1oCEGKW
-         iXE+W5kkIjMnKl8MVSgEP3w3QFUeAf9c7InTtYY3YWJkBgn3Vw4CbEMS5ehn3Lvmsj
-         rb/FVr3bQjgJYmenUJSsIbfZ3XUu7GjmYi+U6hMMTd8zIAya4IHoGKx1plBsMNSX4f
-         gYIkyr98FT/4P4jzHnO1jBIrAy48XS19llrrwFAyh5DFGRjkZXcNHfVLo92Db7rLBB
-         c11hHySKzRqHfsOBwwttQHUNNA+qNWELKjfCxam3h3/9FE6OD8mCXPt9dBuuMSUm+Z
-         lg8EcUMXwMzSg==
-Received: by mail-ed1-f70.google.com with SMTP id dk16-20020a0564021d9000b004aaa054d189so2261506edb.11
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Feb 2023 09:19:06 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=KsFWVKyUTisvLWEBfJHuAqZZOIzRC+wakmOYPwQrXVU=;
-        b=mqdSRICZ3WRGrLl0pwvL6JfG8A3K0y8y0N9bPN/6vmZVDWVm3ZoOE8sM0Z+Z/62BCC
-         vc6IhoUMJP1PcaLbrYit/mjZ2I660iz2hnOh2/8aGkEPInin6xNGhDr6ECPoGvS5yR5O
-         5ZJG5SIkhDr3z1Y1TlxUE7eRm/gbefrbMpsY6rUAn/b2WNTe9pIcGRDxH3EI14KWGYyA
-         hj4JbLNhvCv7bXyLJ3QH0mc0vY5sJizAi8h38dvqRSib2l343poqDWxluD7AOCeup7cl
-         clmYCqLfrxkiI8DtP7PuakEOviGCziKvqtRr59qpWzVM/Zt+XRmI+my73UuaCimF415n
-         S6fw==
-X-Gm-Message-State: AO0yUKV8b4hUUM6oftTQi+HOZRukFcUfr25drg6n0j0whS9ljXNeEJHD
-        NepYogfaeetjUugkWNYAfCRBjYtppG30lzyikd3JuhvfAI351Y0a1uKwcDUe33Zuv6Mns16PbQo
-        kAx7XhSwC38G7xblfnqnIJ4AUWBCTaikIIehxAYxsZAqERm+ldQ==
-X-Received: by 2002:a05:6402:1151:b0:4ac:beba:dc87 with SMTP id g17-20020a056402115100b004acbebadc87mr1075439edw.0.1676913546121;
-        Mon, 20 Feb 2023 09:19:06 -0800 (PST)
-X-Google-Smtp-Source: AK7set8Oj7a1xx8jk5ISCHq4+eehJqR5ZQt/ZuPqDE6BQzrZixfjYgaHw5I/qT7NHOl5lv7OxFJ56Q==
-X-Received: by 2002:a05:6402:1151:b0:4ac:beba:dc87 with SMTP id g17-20020a056402115100b004acbebadc87mr1075416edw.0.1676913545790;
-        Mon, 20 Feb 2023 09:19:05 -0800 (PST)
-Received: from localhost.localdomain (host-79-44-179-55.retail.telecomitalia.it. [79.44.179.55])
-        by smtp.gmail.com with ESMTPSA id ee51-20020a056402293300b004aef6454d6dsm1984489edb.37.2023.02.20.09.19.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 20 Feb 2023 09:19:05 -0800 (PST)
-From:   Andrea Righi <andrea.righi@canonical.com>
-To:     Jani Nikula <jani.nikula@linux.intel.com>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>
-Cc:     Emil Renner Berthing <emil.renner.berthing@canonical.com>,
-        intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] drm/i915/sseu: fix max_subslices array-index-out-of-bounds access
-Date:   Mon, 20 Feb 2023 18:18:58 +0100
-Message-Id: <20230220171858.131416-1-andrea.righi@canonical.com>
-X-Mailer: git-send-email 2.38.1
+        Mon, 20 Feb 2023 12:24:13 -0500
+Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B1871BAD7;
+        Mon, 20 Feb 2023 09:24:11 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=MVStDAU/MhMJ8HyjTz1NdugFG2jwXeZFYaOaNP/80lE=; b=NxHpZtVZENUimreQoLfQPeDiQu
+        kxZByjPd13DkqxmODnSYbrf7yDftgOJPRSQ/Ju0sdOGPcLIlIO6IKGVKjNL4aDZcPA680MuF+eqJ1
+        lQ6somQo103xo89Tl64YOjJKTq3tF0CjMn0WZVs1pIyBeA96nGO98xFvyzA4tElv1VZBb/oJujEkI
+        4M+GZkBi6eLayqIu/AM2U77ODWsP73FUFDtis7DygmuvUkK6CVgO5DX2AvqfHaQK63mh5NzxlpefE
+        fm/ROiD+D64vPCMddHVmTiMHRZDuL5Yt80DUqqJCGHf3vso//mH/296pFha9/MynV1d6bmVtyD0gB
+        +q05AM5w==;
+Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:37710)
+        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <linux@armlinux.org.uk>)
+        id 1pU9tT-0004ps-Fz; Mon, 20 Feb 2023 17:24:03 +0000
+Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
+        (envelope-from <linux@shell.armlinux.org.uk>)
+        id 1pU9tR-0001P2-F6; Mon, 20 Feb 2023 17:24:01 +0000
+Date:   Mon, 20 Feb 2023 17:24:01 +0000
+From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
+To:     Oleksij Rempel <o.rempel@pengutronix.de>
+Cc:     Andrew Lunn <andrew@lunn.ch>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, kernel@pengutronix.de,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org
+Subject: Re: [PATCH net-next v1 3/4] net: phy: do not force EEE support
+Message-ID: <Y/OssaOmxIRDkrTr@shell.armlinux.org.uk>
+References: <20230220135605.1136137-1-o.rempel@pengutronix.de>
+ <20230220135605.1136137-4-o.rempel@pengutronix.de>
+ <Y/OB9oeEn98y0u4o@shell.armlinux.org.uk>
+ <20230220150720.GA19238@pengutronix.de>
+ <Y/OWSjQ0m65fF5dk@lunn.ch>
+ <20230220161339.GC19238@pengutronix.de>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230220161339.GC19238@pengutronix.de>
+Sender: Russell King (Oracle) <linux@armlinux.org.uk>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-It seems that commit bc3c5e0809ae ("drm/i915/sseu: Don't try to store EU
-mask internally in UAPI format") exposed a potential out-of-bounds
-access, reported by UBSAN as following on a laptop with a gen 11 i915
-card:
+On Mon, Feb 20, 2023 at 05:13:39PM +0100, Oleksij Rempel wrote:
+> On Mon, Feb 20, 2023 at 04:48:26PM +0100, Andrew Lunn wrote:
+> > > Hm.. ethtool do not provide enough information about expected behavior.
+> > > Here is my expectation:
+> > > - "ethtool --set-eee lan1 eee on" should enable EEE if it is disabled.
+> > > - "ethtool --set-eee lan1 advertise 0x10" should change set of
+> > >   advertised modes.
+> > > - a sequence of "..advertise 0x10", "..eee on", "eee off" should restore
+> > >   preconfigured advertise modes. advertising_eee instead of
+> > >   supported_eee.
+> > 
+> > I agree ethtool is not very well documented. However, i would follow
+> > what -s does. You can pass link modes you want to advertise, and you
+> > can turn auto-neg on and off. Does turning auto-neg off and on again
+> > reset the links modes which are advertised? I don't actually know, but
+> > i think the behaviour should be consistent for link modes and EEE
+> > modes.
+> 
+> Hm.. "ethtool -s lan1 autoneg on" will restore supported values. Even
+> without switching it off.
 
-  UBSAN: array-index-out-of-bounds in drivers/gpu/drm/i915/gt/intel_sseu.c:65:27
-  index 6 is out of range for type 'u16 [6]'
-  CPU: 2 PID: 165 Comm: systemd-udevd Not tainted 6.2.0-9-generic #9-Ubuntu
-  Hardware name: Dell Inc. XPS 13 9300/077Y9N, BIOS 1.11.0 03/22/2022
-  Call Trace:
-   <TASK>
-   show_stack+0x4e/0x61
-   dump_stack_lvl+0x4a/0x6f
-   dump_stack+0x10/0x18
-   ubsan_epilogue+0x9/0x3a
-   __ubsan_handle_out_of_bounds.cold+0x42/0x47
-   gen11_compute_sseu_info+0x121/0x130 [i915]
-   intel_sseu_info_init+0x15d/0x2b0 [i915]
-   intel_gt_init_mmio+0x23/0x40 [i915]
-   i915_driver_mmio_probe+0x129/0x400 [i915]
-   ? intel_gt_probe_all+0x91/0x2e0 [i915]
-   i915_driver_probe+0xe1/0x3f0 [i915]
-   ? drm_privacy_screen_get+0x16d/0x190 [drm]
-   ? acpi_dev_found+0x64/0x80
-   i915_pci_probe+0xac/0x1b0 [i915]
-   ...
+Remember that -s is for the media capabilities, not EEE. There is
+specific handling of the advertising mask in the userspace
+ethtool.c::do_sset() but that doesn't exist for EEE, which merely
+goes a ETHTOOL_GEEE, modifies the structure according to the arguments
+given, and then calls ETHTOOL_SEEE. So:
 
-According to the definition of sseu_dev_info, eu_mask->hsw is limited to
-a maximum of GEN_MAX_SS_PER_HSW_SLICE (6) sub-slices, but
-gen11_sseu_info_init() can potentially set 8 sub-slices, in the
-!IS_JSL_EHL(gt->i915) case.
+# ethtool --set-eee lan1 eee on
 
-Fix this by reserving up to 8 slots for max_subslices in the eu_mask
-struct.
+will merely change eeecmd.eee_enabled to be set if it wasn't already,
+but will not change eeecmd.advertised in any way - it'll contain
+whatever it did before, which may or may not be zero.
 
-Reported-by: Emil Renner Berthing <emil.renner.berthing@canonical.com>
-Signed-off-by: Andrea Righi <andrea.righi@canonical.com>
----
- drivers/gpu/drm/i915/gt/intel_sseu.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+This is in contrast to:
 
-diff --git a/drivers/gpu/drm/i915/gt/intel_sseu.h b/drivers/gpu/drm/i915/gt/intel_sseu.h
-index aa87d3832d60..d7e8c374f153 100644
---- a/drivers/gpu/drm/i915/gt/intel_sseu.h
-+++ b/drivers/gpu/drm/i915/gt/intel_sseu.h
-@@ -27,7 +27,7 @@ struct drm_printer;
-  * is only relevant to pre-Xe_HP platforms (Xe_HP and beyond use the
-  * I915_MAX_SS_FUSE_BITS value below).
-  */
--#define GEN_MAX_SS_PER_HSW_SLICE	6
-+#define GEN_MAX_SS_PER_HSW_SLICE	8
- 
- /*
-  * Maximum number of 32-bit registers used by hardware to express the
+# ethtool -s lan1 autoneg on
+
+which will set the advertisement to be the those that are supported.
+
 -- 
-2.38.1
-
+RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
+FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!
