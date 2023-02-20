@@ -2,79 +2,40 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C4E169D1C7
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Feb 2023 18:00:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C405D69D1C8
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Feb 2023 18:01:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231951AbjBTRAf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Feb 2023 12:00:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42372 "EHLO
+        id S232090AbjBTRBs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Feb 2023 12:01:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42964 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230062AbjBTRAc (ORCPT
+        with ESMTP id S230062AbjBTRBo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Feb 2023 12:00:32 -0500
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C67B9E3BF;
-        Mon, 20 Feb 2023 09:00:31 -0800 (PST)
-Received: from pps.filterd (m0098417.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 31KG3XSt028165;
-        Mon, 20 Feb 2023 17:00:30 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : cc : date : content-type : content-transfer-encoding :
- mime-version; s=pp1; bh=CbJXhk0sld4b1qBn69aVBQube5W90uHQhPBbPjlZiTQ=;
- b=Llw6dvFoKSPJ9eDo7JzpB0JiHILO7R+qNZrisZNtg6GEhpNE1M5A87KgDcRKHU2u/UBm
- iloHEM4bbFPdvMHC0x6wzBoPOjESv6J550WIIp9KqDpA3gOinLFiucIH/hfaEp3NNULt
- 7SGfl5slsfaDhc2ZfNb0eHbH552UnvyDQFHM4utrxOINtUX9uVzYpBAabWkESmyw3vHK
- x4gI+zmYauMtHrfE3pLge6t/eUqHNWlT/ZMLR1Yynt3m2EzQFjI7+Sz4VJ6sR3Q+uIHF
- LU1RkDxYKhqXpZfrzZI7mMk8yF9jroLEsr/NLbA13QBRr0SYHhBRJvKaDYaopoPIh7v1 MA== 
-Received: from ppma03wdc.us.ibm.com (ba.79.3fa9.ip4.static.sl-reverse.com [169.63.121.186])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3nvc24h9qf-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 20 Feb 2023 17:00:30 +0000
-Received: from pps.filterd (ppma03wdc.us.ibm.com [127.0.0.1])
-        by ppma03wdc.us.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 31KFJAnL023050;
-        Mon, 20 Feb 2023 17:00:29 GMT
-Received: from smtprelay04.wdc07v.mail.ibm.com ([9.208.129.114])
-        by ppma03wdc.us.ibm.com (PPS) with ESMTPS id 3ntpa6p92h-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 20 Feb 2023 17:00:29 +0000
-Received: from smtpav05.dal12v.mail.ibm.com (smtpav05.dal12v.mail.ibm.com [10.241.53.104])
-        by smtprelay04.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 31KH0SOd25559790
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 20 Feb 2023 17:00:28 GMT
-Received: from smtpav05.dal12v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 4A7F55806A;
-        Mon, 20 Feb 2023 17:00:28 +0000 (GMT)
-Received: from smtpav05.dal12v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id E8C835806B;
-        Mon, 20 Feb 2023 17:00:27 +0000 (GMT)
-Received: from li-f45666cc-3089-11b2-a85c-c57d1a57929f.ibm.com (unknown [9.160.169.160])
-        by smtpav05.dal12v.mail.ibm.com (Postfix) with ESMTP;
-        Mon, 20 Feb 2023 17:00:27 +0000 (GMT)
-Message-ID: <1c1482de9ab0573f0ca4bef0a47260026264e926.camel@linux.ibm.com>
-Subject: [GIT PULL] integrity: susbsytem updates for v6.3
-From:   Mimi Zohar <zohar@linux.ibm.com>
+        Mon, 20 Feb 2023 12:01:44 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84785E3BF
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Feb 2023 09:01:42 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A9E5760ED2
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Feb 2023 17:01:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 65349C433D2;
+        Mon, 20 Feb 2023 17:01:40 +0000 (UTC)
+Date:   Mon, 20 Feb 2023 12:01:38 -0500
+From:   Steven Rostedt <rostedt@goodmis.org>
 To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     linux-integrity <linux-integrity@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>
-Date:   Mon, 20 Feb 2023 12:00:26 -0500
-Content-Type: text/plain; charset="ISO-8859-15"
-X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: g8IM6t8TNWBDMLQV91K0rHedad2NCJOg
-X-Proofpoint-ORIG-GUID: g8IM6t8TNWBDMLQV91K0rHedad2NCJOg
-Content-Transfer-Encoding: 7bit
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        John 'Warthog9' Hawley <warthog9@kernel.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>
+Subject: [GIT PULL] ktest.pl: Updates for 6.3
+Message-ID: <20230220120138.2ae03ccd@rorschach.local.home>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.170.22
- definitions=2023-02-20_13,2023-02-20_02,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 mlxscore=0
- lowpriorityscore=0 bulkscore=0 mlxlogscore=999 clxscore=1011 spamscore=0
- impostorscore=0 suspectscore=0 malwarescore=0 priorityscore=1501
- adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2302200151
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -82,56 +43,162 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Linus,
 
-Contains one of each doc and code cleanup, and two bug fixes (4
-patches).
+Linus,
 
-FYI, Stephen Rothwell is carrying a merge conflict with "fs: port xattr
-to mnt_idmap" from the vfs-idmapping tree.
+Updates to ktest.pl:
 
-thanks,
+- Fix three instances that the tty is not given back to the console on exit.
+  Forcing the user to do a "reset" to get the console back.
 
-Mimi
+- Fix the console monitor to not hang when too much data is given by the ssh
+  output.
 
-The following changes since commit 5dc4c995db9eb45f6373a956eb1f69460e69e6d4:
+Note, these were all fixes, but I like to run them internally for a bit
+before pushing.
 
-  Linux 6.2-rc4 (2023-01-15 09:22:43 -0600)
+Please pull the latest ktest-v6.3 tree, which can be found at:
 
-are available in the Git repository at:
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/zohar/linux-integrity.git tags/integrity-v6.3
+  git://git.kernel.org/pub/scm/linux/kernel/git/rostedt/linux-ktest.git
+ktest-v6.3
 
-for you to fetch changes up to 4958db3245fa655bf18251bd2a83bcc164071c39:
+Tag SHA1: 9534fe8bbe22b6c7f7de555ad54e414f4165b88e
+Head SHA1: 7dc8e24f0e09834341f84d37433840b353d64bc8
 
-  ima: Introduce MMAP_CHECK_REQPROT hook (2023-01-31 13:08:39 -0500)
 
-----------------------------------------------------------------
-integrity-v6.3
+Masami Hiramatsu (Google) (1):
+      ktest: Restore stty setting at first in dodie
 
-----------------------------------------------------------------
-Matt Bobrowski (2):
-      ima: fix error handling logic when file measurement failed
-      ima: return IMA digest value only when IMA_COLLECTED flag is set
+Steven Rostedt (3):
+      ktest.pl: Fix missing "end_monitor" when machine check fails
+      ktest.pl: Give back console on Ctrt^C on monitor
+      ktest.pl: Add RUN_TIMEOUT option with default unlimited
 
-Randy Dunlap (1):
-      ima: fix ima_delete_rules() kernel-doc warning
-
-Roberto Sassu (2):
-      ima: Align ima_file_mmap() parameters with mmap_file LSM hook
-      ima: Introduce MMAP_CHECK_REQPROT hook
-
-Xiu Jianfeng (1):
-      evm: call dump_security_xattr() in all cases to remove code duplication
-
- Documentation/ABI/testing/ima_policy  |  2 +-
- include/linux/ima.h                   |  6 ++++--
- security/integrity/evm/evm_crypto.c   | 33 +++++++++++++++---------------
- security/integrity/ima/ima.h          |  1 +
- security/integrity/ima/ima_api.c      |  5 +++--
- security/integrity/ima/ima_appraise.c |  3 +++
- security/integrity/ima/ima_main.c     | 38 ++++++++++++++++++++++++++---------
- security/integrity/ima/ima_policy.c   |  7 ++++++-
- security/security.c                   |  7 ++++---
- 9 files changed, 67 insertions(+), 35 deletions(-)
-
+----
+ tools/testing/ktest/ktest.pl    | 36 ++++++++++++++++++++++++++----------
+ tools/testing/ktest/sample.conf |  5 +++++
+ 2 files changed, 31 insertions(+), 10 deletions(-)
+---------------------------
+diff --git a/tools/testing/ktest/ktest.pl b/tools/testing/ktest/ktest.pl
+index ac59999ed3de..829f5bdfd2e4 100755
+--- a/tools/testing/ktest/ktest.pl
++++ b/tools/testing/ktest/ktest.pl
+@@ -178,6 +178,7 @@ my $store_failures;
+ my $store_successes;
+ my $test_name;
+ my $timeout;
++my $run_timeout;
+ my $connect_timeout;
+ my $config_bisect_exec;
+ my $booted_timeout;
+@@ -340,6 +341,7 @@ my %option_map = (
+     "STORE_SUCCESSES"		=> \$store_successes,
+     "TEST_NAME"			=> \$test_name,
+     "TIMEOUT"			=> \$timeout,
++    "RUN_TIMEOUT"		=> \$run_timeout,
+     "CONNECT_TIMEOUT"		=> \$connect_timeout,
+     "CONFIG_BISECT_EXEC"	=> \$config_bisect_exec,
+     "BOOTED_TIMEOUT"		=> \$booted_timeout,
+@@ -1495,7 +1497,8 @@ sub reboot {
+ 
+ 	# Still need to wait for the reboot to finish
+ 	wait_for_monitor($time, $reboot_success_line);
+-
++    }
++    if ($powercycle || $time) {
+ 	end_monitor;
+     }
+ }
+@@ -1535,6 +1538,11 @@ sub dodie {
+     return if ($in_die);
+     $in_die = 1;
+ 
++    if ($monitor_cnt) {
++	# restore terminal settings
++	system("stty $stty_orig");
++    }
++
+     my $i = $iteration;
+ 
+     doprint "CRITICAL FAILURE... [TEST $i] ", @_, "\n";
+@@ -1581,11 +1589,6 @@ sub dodie {
+ 		"Your test started at $script_start_time has failed with:\n@_\n", $log_file);
+     }
+ 
+-    if ($monitor_cnt) {
+-	# restore terminal settings
+-	system("stty $stty_orig");
+-    }
+-
+     if (defined($post_test)) {
+ 	run_command $post_test;
+     }
+@@ -1857,6 +1860,14 @@ sub run_command {
+     $command =~ s/\$SSH_USER/$ssh_user/g;
+     $command =~ s/\$MACHINE/$machine/g;
+ 
++    if (!defined($timeout)) {
++	$timeout = $run_timeout;
++    }
++
++    if (!defined($timeout)) {
++	$timeout = -1; # tell wait_for_input to wait indefinitely
++    }
++
+     doprint("$command ... ");
+     $start_time = time;
+ 
+@@ -1883,13 +1894,10 @@ sub run_command {
+ 
+     while (1) {
+ 	my $fp = \*CMD;
+-	if (defined($timeout)) {
+-	    doprint "timeout = $timeout\n";
+-	}
+ 	my $line = wait_for_input($fp, $timeout);
+ 	if (!defined($line)) {
+ 	    my $now = time;
+-	    if (defined($timeout) && (($now - $start_time) >= $timeout)) {
++	    if ($timeout >= 0 && (($now - $start_time) >= $timeout)) {
+ 		doprint "Hit timeout of $timeout, killing process\n";
+ 		$hit_timeout = 1;
+ 		kill 9, $pid;
+@@ -2061,6 +2069,11 @@ sub wait_for_input {
+ 	$time = $timeout;
+     }
+ 
++    if ($time < 0) {
++	# Negative number means wait indefinitely
++	undef $time;
++    }
++
+     $rin = '';
+     vec($rin, fileno($fp), 1) = 1;
+     vec($rin, fileno(\*STDIN), 1) = 1;
+@@ -4200,6 +4213,9 @@ sub send_email {
+ }
+ 
+ sub cancel_test {
++    if ($monitor_cnt) {
++	end_monitor;
++    }
+     if ($email_when_canceled) {
+ 	my $name = get_test_name;
+ 	send_email("KTEST: Your [$name] test was cancelled",
+diff --git a/tools/testing/ktest/sample.conf b/tools/testing/ktest/sample.conf
+index 2d0fe15a096d..f43477a9b857 100644
+--- a/tools/testing/ktest/sample.conf
++++ b/tools/testing/ktest/sample.conf
+@@ -817,6 +817,11 @@
+ # is issued instead of a reboot.
+ # CONNECT_TIMEOUT = 25
+ 
++# The timeout in seconds for how long to wait for any running command
++# to timeout. If not defined, it will let it go indefinitely.
++# (default undefined)
++#RUN_TIMEOUT = 600
++
+ # In between tests, a reboot of the box may occur, and this
+ # is the time to wait for the console after it stops producing
+ # output. Some machines may not produce a large lag on reboot
