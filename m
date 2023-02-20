@@ -2,121 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B6F469D5E8
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Feb 2023 22:40:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 83DFD69D5F1
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Feb 2023 22:50:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232430AbjBTVkr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Feb 2023 16:40:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44222 "EHLO
+        id S231649AbjBTVuE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Feb 2023 16:50:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49230 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232373AbjBTVko (ORCPT
+        with ESMTP id S231392AbjBTVuC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Feb 2023 16:40:44 -0500
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D8512196C;
-        Mon, 20 Feb 2023 13:40:42 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=Content-Transfer-Encoding:Content-Type
-        :MIME-Version:Message-ID:References:In-Reply-To:Subject:CC:To:From:Date:
-        Sender:Reply-To:Content-ID:Content-Description;
-        bh=UTk0dveSKg3b6P6AkYblFEZidtHjEc+p03cXOJW2DpE=; b=Vx/urWg1Ywy799l6vsYA+nBe3D
-        wZ0qgz96UyCfK8YWrzEOV/OOYDeO2A68c04exLVfAGLaFLHwgHYNocdRlkgdOYT22UdrwCfrKPPHE
-        4h+unFshWU3Ila6ClaxPT4+n2GpfbA4mRtg7GbXNPpFiNSRYbENtTmFZ3MsU22u5nfTMMlq+SLplJ
-        swtik6OyG7bgIWEWNJBTyMxKtKXmIjyKW6UjJ0Lt4Y9Q3m5xsJTd6YjqpH+bogbw35d9GIQWytVUw
-        SWF/6HJEtWNNiPAAt0xWtVIwUmTcFH1pOeOvWZAksn+LRbl3/05/ZjHozdBk3xM/1xXjmfxpdGM1a
-        r27bbpyA==;
-Received: from [2001:8b0:10b:5:d3a1:ec0f:d323:fd4b] (helo=[IPv6:::1])
-        by desiato.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
-        id 1pUDsw-00BwIR-1a;
-        Mon, 20 Feb 2023 21:39:46 +0000
-Date:   Mon, 20 Feb 2023 21:39:46 +0000
-From:   David Woodhouse <dwmw2@infradead.org>
-To:     Oleksandr Natalenko <oleksandr@natalenko.name>
-CC:     tglx@linutronix.de, kim.phillips@amd.com,
-        Usama Arif <usama.arif@bytedance.com>, arjan@linux.intel.com,
-        mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
-        hpa@zytor.com, x86@kernel.org, pbonzini@redhat.com,
-        paulmck@kernel.org, linux-kernel@vger.kernel.org,
-        kvm@vger.kernel.org, rcu@vger.kernel.org, mimoja@mimoja.de,
-        hewenliang4@huawei.com, thomas.lendacky@amd.com, seanjc@google.com,
-        pmenzel@molgen.mpg.de, fam.zheng@bytedance.com,
-        punit.agrawal@bytedance.com, simon.evans@bytedance.com,
-        liangma@liangbit.com, Piotr Gorski <lucjan.lucjanov@gmail.com>
-Subject: Re: [PATCH v9 0/8] Parallel CPU bringup for x86_64
-User-Agent: K-9 Mail for Android
-In-Reply-To: <982e1d6140705414e8fd60b990bd259a@natalenko.name>
-References: <20230215145425.420125-1-usama.arif@bytedance.com> <2668799.mvXUDI8C0e@natalenko.name> <ed8d662351cfe5793f8cc7e7e8c514d05d16c501.camel@infradead.org> <2668869.mvXUDI8C0e@natalenko.name> <2a67f6cf18dd2c1879fad9fd8a28242918d3e5d2.camel@infradead.org> <982e1d6140705414e8fd60b990bd259a@natalenko.name>
-Message-ID: <715CBABF-4017-4784-8F30-5386F1524830@infradead.org>
+        Mon, 20 Feb 2023 16:50:02 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05627C651;
+        Mon, 20 Feb 2023 13:50:00 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 7972AB80DFB;
+        Mon, 20 Feb 2023 21:49:59 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 32E03C4339B;
+        Mon, 20 Feb 2023 21:49:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1676929798;
+        bh=jynWOqndAYviDgNMr9Apo3QCedjur8URGys30KxSl6U=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=KYg/8Q0W0WpxC/zGOt1U3KVF/UKoNdSu42UHUqTyl6P0p35XUES19jLknCCdbwJmP
+         l1XPM6bySbGP3tVO9gTQUf5yvrFwC1ui5LS/Anu8LwLaihr8N4wiSws28yZbKWxIr5
+         +XPnGEVFFFHwis1ZxGddz4NCpQg4CsMW7vXzBUgeTVt0Qo8AFJGZdQ2Pe1zIYerA5X
+         L3kOzQB0niYK1e+yCU+ZEFgBncO1SNMi/f5Rox+cUH0yCqCUQfehHR/6p0bKpLrjYe
+         mTO02q4yFdd7L1JzXeBnIYkrbPQOUF/5auzqw21QFw0REgOi4OC0ENOn+iz/vdM5rK
+         s0PadLj6PHIgQ==
+Received: by mail-yw1-f176.google.com with SMTP id 00721157ae682-536bc31e50eso29341117b3.7;
+        Mon, 20 Feb 2023 13:49:58 -0800 (PST)
+X-Gm-Message-State: AO0yUKUnx1FYeLznMJayARn2BjbEMmGfhxmIjCsOimLDRDAUm8fwGcir
+        EGSR8emC7I0vr5VqpeGRf7jkDmBglOEvjxoKbA==
+X-Google-Smtp-Source: AK7set/LG9VtkJ4m+YgIay3yfirO9DvA4v1w3HJUqxHjaTJ+8Ymg8LHKudws65YFdiaHoY25yb2xyQEI91gEQGXA1NU=
+X-Received: by 2002:a0d:dd4e:0:b0:52e:f77a:c3c with SMTP id
+ g75-20020a0ddd4e000000b0052ef77a0c3cmr375594ywe.454.1676929797250; Mon, 20
+ Feb 2023 13:49:57 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-SRS-Rewrite: SMTP reverse-path rewritten from <dwmw2@infradead.org> by desiato.infradead.org. See http://www.infradead.org/rpr.html
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+References: <20230203-dt-bindings-network-class-v2-0-499686795073@jannau.net> <20230220114016.71628270@kernel.org>
+In-Reply-To: <20230220114016.71628270@kernel.org>
+From:   Rob Herring <robh+dt@kernel.org>
+Date:   Mon, 20 Feb 2023 15:49:44 -0600
+X-Gmail-Original-Message-ID: <CAL_Jsq+2_gQzAjAZQVux1GOff5ocdSz5qQMhjRzvtyD+9C-TQQ@mail.gmail.com>
+Message-ID: <CAL_Jsq+2_gQzAjAZQVux1GOff5ocdSz5qQMhjRzvtyD+9C-TQQ@mail.gmail.com>
+Subject: Re: [PATCH v2 0/4] dt-bindings: net: Add network-class.yaml schema
+To:     Jakub Kicinski <kuba@kernel.org>
+Cc:     Janne Grunau <j@jannau.net>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Mailing List <devicetree-spec@vger.kernel.org>,
+        Kalle Valo <kvalo@kernel.org>, van Spriel <arend@broadcom.com>,
+        =?UTF-8?B?SsOpcsO0bWUgUG91aWxsZXI=?= <jerome.pouiller@silabs.com>,
+        Dinh Nguyen <dinguyen@kernel.org>,
+        Ley Foon Tan <lftan@altera.com>,
+        Chee Nouk Phoon <cnphoon@altera.com>, netdev@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-wireless@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 20 February 2023 21:23:38 GMT, Oleksandr Natalenko <oleksandr@natalenko=
-=2Ename> wrote:
->Hello=2E
+On Mon, Feb 20, 2023 at 1:40 PM Jakub Kicinski <kuba@kernel.org> wrote:
 >
->On 20=2E02=2E2023 21:31, David Woodhouse wrote:
->> On Mon, 2023-02-20 at 17:40 +0100, Oleksandr Natalenko wrote:
->>> On pond=C4=9Bl=C3=AD 20=2E =C3=BAnora 2023 17:20:13 CET David Woodhous=
-e wrote:
->>> > On Mon, 2023-02-20 at 17:08 +0100, Oleksandr Natalenko wrote:
->>> > >
->>> > > I've applied this to the v6=2E2 kernel, and suspend/resume broke o=
-n
->>> > > my
->>> > > Ryzen 5950X desktop=2E The machine suspends just fine, but on
->>> > > resume
->>> > > the screen stays blank, and there's no visible disk I/O=2E
->>> > >
->>> > > Reverting the series brings suspend/resume back to working state=
-=2E
->>> >
->>> > Hm, thanks=2E What if you add 'no_parallel_bringup' on the command
->>> > line?
->>>=20
->>> If the `no_parallel_bringup` param is added, the suspend/resume
->>> works=2E
->>=20
->> Thanks for the testing=2E Can I ask you to do one further test: apply t=
-he
->> series only as far as patch 6/8 'x86/smpboot: Support parallel startup
->> of secondary CPUs'=2E
->>=20
->> That will do the new startup asm sequence where each CPU finds its own
->> per-cpu data so it *could* work in parallel, but doesn't actually do
->> the bringup in parallel yet=2E
+> On Sun, 12 Feb 2023 13:16:28 +0100 Janne Grunau wrote:
+> > The Devicetree Specification, Release v0.3 specifies in section 4.3.1
+> > a "Network Class Binding". This covers MAC address and maximal frame
+> > size properties. "local-mac-address" and "mac-address" with a fixed
+> > "address-size" of 48 bits are already in the ethernet-controller.yaml
+> > schema so move those over.
+> >
+> > Keep "address-size" fixed to 48 bits as it's unclear if network protocols
+> > using 64-bit mac addresses like ZigBee, 6LoWPAN and others are relevant for
+> > this binding. This allows mac address array size validation for ethernet
+> > and wireless lan devices.
+> >
+> > "max-frame-size" in the Devicetree Specification is written to cover the
+> > whole layer 2 ethernet frame but actual use for this property is the
+> > payload size. Keep the description from ethernet-controller.yaml which
+> > specifies the property as MTU.
 >
->With patches 1 to 6 (including) applied and no extra cmdline params added=
- the resume doesn't work=2E
+> Rob, Krzysztof - is this one on your todo list? It's been hanging
+> around in my queue, I'm worried I missed some related conversation.
 
-Hm=2E Kim, is there some weirdness with the way AMD CPUs get their APIC ID=
- in CPUID 0x1? Especially after resume?
+Andrew suggested changes on 1 and 2 which seem reasonable to me.
 
-Perhaps we turn it off for any AMD CPU that doesn't have X2APIC and CPUID =
-0xB?
-
->> Does your box have a proper serial port?
->
->No, sorry=2E I know it'd help with getting logs, and I do have a serial-t=
-o-USB cable that I use for another machine, but in this one the port is not=
- routed to outside=2E I think I can put a header there as the motherboard d=
-oes have pins, but I'd have to buy one first=2E In theory, I can do that, b=
-ut that won't happen within the next few weeks=2E
->
->P=2ES=2E Piotr Gorski (in Cc) also reported this: "My friend from CachyOS=
- can confirm bugs with smpboot patches=2E AMD FX 6300 only shows 1 core whe=
-n using smp boot patchset"=2E Probably, he can reply to this thread and pro=
-vide more details=2E
->
+Rob
