@@ -2,167 +2,170 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 389C569CB88
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Feb 2023 13:59:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5EA6669CF2A
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Feb 2023 15:17:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231655AbjBTM7g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Feb 2023 07:59:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48314 "EHLO
+        id S231448AbjBTOQ4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Feb 2023 09:16:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41752 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230040AbjBTM7f (ORCPT
+        with ESMTP id S231708AbjBTOQi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Feb 2023 07:59:35 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81CCC6EA0
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Feb 2023 04:58:44 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1676897923;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=5AKvjdo8vNmSKS+z7HPo/X/JWX/EOdQCIVgjr3Q6aZc=;
-        b=MPpQr/fPELoz3eGJgrQzS337HzUUrUmSJtXHwe0/VI0tHFNqsSA0+2hlELGkZqR7P9JaEa
-        N9JB3jK8D9iycXFr9PUUT+d4xgziSXUKF/73673UHaxBGtH/z1fhNA3L8bKe4ADex9zZF0
-        EjJWL2QaU5fHMlAT540H5RmbN8Aqo7w=
-Received: from mail-wr1-f72.google.com (mail-wr1-f72.google.com
- [209.85.221.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-601-3WOfM_oAPW-w5LoitzX1OA-1; Mon, 20 Feb 2023 07:58:42 -0500
-X-MC-Unique: 3WOfM_oAPW-w5LoitzX1OA-1
-Received: by mail-wr1-f72.google.com with SMTP id n4-20020a5d5984000000b002c3b562d76cso221798wri.12
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Feb 2023 04:58:42 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:organization:from:references
-         :cc:to:content-language:subject:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=5AKvjdo8vNmSKS+z7HPo/X/JWX/EOdQCIVgjr3Q6aZc=;
-        b=Gbz7fcDgE6HcNHPOqCkdxtMOHlMwm6YRl8ifhKhceuA4mVh8Hr2GMy+PgpJVfOkc7J
-         +GLp8i5/IEwfhcXOIZeoAIyV3a1Ju7FtPdebOFhGPsn6UBG0rkDCwvnLxSPkCr4/CL0K
-         lk1ew5+IDmKugoETjR7nsjpMg/Jtwe4yvC732nUKho6yKMCzWseYHzThemM7+q6LohK0
-         q1H/IOgFYRaEtwePIc8cFvmo3iwG7mbrv9SS7Z+Ncd8ecRLObBgk7l5BCOrTjMN7PqR0
-         DlQSnwXScnihcuRD8ouDO1pUCysHETaSFbhQa0B5SWzs8rvFWFqianix1mptG+mCX39g
-         mgYg==
-X-Gm-Message-State: AO0yUKUxt0VvA0dcn+HtkLHvIrbDrh8eEjeFx4Z0bMGPA9lvbj3UrIg+
-        jvBB2QpFxShvE0mcaismj6K3Y/MuP0N2Sxo9AXbu6+4vuieTdP6b5vvJLlPjzByVQ9DpvgrfwB7
-        PGJgjykYuTo/1ZxQ9LElGhY/Y
-X-Received: by 2002:a05:6000:1866:b0:2c4:669:fda4 with SMTP id d6-20020a056000186600b002c40669fda4mr629391wri.0.1676897921378;
-        Mon, 20 Feb 2023 04:58:41 -0800 (PST)
-X-Google-Smtp-Source: AK7set/e+EH7H8iOfIcBc3Hls/umJBU/aGvav4lBivPqpX1AbbE4EERHr1HRg6ifH06VjqfdXoHU7w==
-X-Received: by 2002:a05:6000:1866:b0:2c4:669:fda4 with SMTP id d6-20020a056000186600b002c40669fda4mr629366wri.0.1676897921034;
-        Mon, 20 Feb 2023 04:58:41 -0800 (PST)
-Received: from ?IPV6:2003:cb:c705:8300:e519:4218:a8b5:5bec? (p200300cbc7058300e5194218a8b55bec.dip0.t-ipconnect.de. [2003:cb:c705:8300:e519:4218:a8b5:5bec])
-        by smtp.gmail.com with ESMTPSA id z3-20020adff1c3000000b002c559def236sm76762wro.57.2023.02.20.04.58.39
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 20 Feb 2023 04:58:40 -0800 (PST)
-Message-ID: <6ccc8d30-336a-12af-1179-5dc4eca3048d@redhat.com>
-Date:   Mon, 20 Feb 2023 13:58:38 +0100
+        Mon, 20 Feb 2023 09:16:38 -0500
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27FA11B331
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Feb 2023 06:16:37 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=tswCs6QGW2PJsdj58gWPreczQVCqth+ZmacoRRbhVcA=; b=Rd2V7nu45GyjKqn/6TRmKF/TUV
+        fKIQ7I1JVP8xs+WzjIs0rltUDdfSLZr+i0RKheD9vqw1yhpy+4E8E6CkviNyWQre3xzEzJI3qBF7H
+        3A6v7dLa8N2uYvdcXooExP1aNVALeQgaklpW8av+e//aINQi+TcBBpEEANi409EpwVFXI4ETYduTB
+        8uHmUMAz8+VDb3SiLDZhbwYPUyoDDCphyOrX1i3bJfXwTEXiNZC4JY8y+CCKVGbQ0dRITRxJC+/2S
+        KAD/dCjrUPgVFjbYYlb5r3k7RaGlfAUKDIXY5JOY5XKQM9L8A8OKj1GVwyaNUPKTOVZggkQLzHkTL
+        T4Uf0Slw==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1pU6xd-00BmdW-3W; Mon, 20 Feb 2023 14:16:09 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 288533001E7;
+        Mon, 20 Feb 2023 15:16:06 +0100 (CET)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 7D1C92029FD42; Mon, 20 Feb 2023 13:46:07 +0100 (CET)
+Date:   Mon, 20 Feb 2023 13:46:07 +0100
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Hao Jia <jiahao.os@bytedance.com>
+Cc:     mingo@redhat.com, mingo@kernel.org, juri.lelli@redhat.com,
+        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
+        rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de,
+        bristot@redhat.com, vschneid@redhat.com,
+        mgorman@techsingularity.net, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] sched/core: Adapt WARN_DOUBLE_CLOCK machinery for
+ core-sched
+Message-ID: <Y/Nrj4zdEPDxcc3+@hirez.programming.kicks-ass.net>
+References: <20230215073927.97802-1-jiahao.os@bytedance.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.2
-Subject: Re: [PATCH v6 22/41] mm/mmap: Add shadow stack pages to memory
- accounting
-Content-Language: en-US
-To:     Rick Edgecombe <rick.p.edgecombe@intel.com>, x86@kernel.org,
-        "H . Peter Anvin" <hpa@zytor.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-mm@kvack.org,
-        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
-        Arnd Bergmann <arnd@arndb.de>,
-        Andy Lutomirski <luto@kernel.org>,
-        Balbir Singh <bsingharora@gmail.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Cyrill Gorcunov <gorcunov@gmail.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Eugene Syromiatnikov <esyr@redhat.com>,
-        Florian Weimer <fweimer@redhat.com>,
-        "H . J . Lu" <hjl.tools@gmail.com>, Jann Horn <jannh@google.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Kees Cook <keescook@chromium.org>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Nadav Amit <nadav.amit@gmail.com>,
-        Oleg Nesterov <oleg@redhat.com>, Pavel Machek <pavel@ucw.cz>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Weijiang Yang <weijiang.yang@intel.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        John Allen <john.allen@amd.com>, kcc@google.com,
-        eranian@google.com, rppt@kernel.org, jamorris@linux.microsoft.com,
-        dethoma@microsoft.com, akpm@linux-foundation.org,
-        Andrew.Cooper3@citrix.com, christina.schimpe@intel.com,
-        debug@rivosinc.com
-Cc:     Yu-cheng Yu <yu-cheng.yu@intel.com>
-References: <20230218211433.26859-1-rick.p.edgecombe@intel.com>
- <20230218211433.26859-23-rick.p.edgecombe@intel.com>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-In-Reply-To: <20230218211433.26859-23-rick.p.edgecombe@intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230215073927.97802-1-jiahao.os@bytedance.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 18.02.23 22:14, Rick Edgecombe wrote:
-> From: Yu-cheng Yu <yu-cheng.yu@intel.com>
+On Wed, Feb 15, 2023 at 03:39:27PM +0800, Hao Jia wrote:
+> When sched_core_enabled(), we sometimes need to call update_rq_clock()
+> to update the rq clock of sibling CPUs on the same core, before that we
+> need to clear RQCF_UPDATED of rq->clock_update_flags to avoid the
+> WARN_DOUBLE_CLOCK warning. Because at this time the rq->clock_update_flags
+> of sibling CPUs may be RQCF_UPDATED. If sched_core_enabled(), we will get
+> a core wide rq->lock, so at this point we can safely clear RQCF_UPDATED of
+> rq->clock_update_flags of all CPUs on this core to avoid the
+> WARN_DOUBLE_CLOCK warning.
 > 
-> The x86 Control-flow Enforcement Technology (CET) feature includes a new
-> type of memory called shadow stack. This shadow stack memory has some
-> unusual properties, which requires some core mm changes to function
-> properly.
+> We cannot clear rq->clock_update_flags of other cpus on the same core in
+> rq_pin_lock(). Because in some functions, we will temporarily give up
+> core wide rq->lock, and then use raw_spin_rq_lock() to obtain core wide
+> rq->lock, such as newidle_balance() and _double_lock_balance().
 > 
-> Account shadow stack pages to stack memory.
+> Steps to reproduce:
+> 1. Enable CONFIG_SCHED_DEBUG and CONFIG_SCHED_CORE when compiling
+>    the kernel
+> 2. echo 1 > /sys/kernel/debug/clear_warn_once
+>    echo "WARN_DOUBLE_CLOCK" > /sys/kernel/debug/sched/features
+> 3. Run the linux/tools/testing/selftests/sched/cs_prctl_test test
 > 
-> Reviewed-by: Kees Cook <keescook@chromium.org>
-> Tested-by: Pengfei Xu <pengfei.xu@intel.com>
-> Tested-by: John Allen <john.allen@amd.com>
-> Signed-off-by: Yu-cheng Yu <yu-cheng.yu@intel.com>
-> Co-developed-by: Rick Edgecombe <rick.p.edgecombe@intel.com>
-> Signed-off-by: Rick Edgecombe <rick.p.edgecombe@intel.com>
-> Cc: Kees Cook <keescook@chromium.org>
-> 
+> Signed-off-by: Hao Jia <jiahao.os@bytedance.com>
 > ---
-> v3:
->   - Remove unneeded VM_SHADOW_STACK check in accountable_mapping()
->     (Kirill)
+>  - Adapt WARN_DOUBLE_CLOCK machinery for core-sched instead of clearing
+>    WARN_DOUBLE_CLOCK warning one by one.
+>  - Modify commit information
+>  [v1] https://lore.kernel.org/all/20221206070550.31763-1-jiahao.os@bytedance.com
 > 
-> v2:
->   - Remove is_shadow_stack_mapping() and just change it to directly bitwise
->     and VM_SHADOW_STACK.
+>  kernel/sched/core.c | 17 +++++++++++++++++
+>  1 file changed, 17 insertions(+)
 > 
-> Yu-cheng v26:
->   - Remove redundant #ifdef CONFIG_MMU.
-> 
-> Yu-cheng v25:
->   - Remove #ifdef CONFIG_ARCH_HAS_SHADOW_STACK for is_shadow_stack_mapping().
-> ---
->   mm/mmap.c | 2 ++
->   1 file changed, 2 insertions(+)
-> 
-> diff --git a/mm/mmap.c b/mm/mmap.c
-> index 425a9349e610..9f85596cce31 100644
-> --- a/mm/mmap.c
-> +++ b/mm/mmap.c
-> @@ -3290,6 +3290,8 @@ void vm_stat_account(struct mm_struct *mm, vm_flags_t flags, long npages)
->   		mm->exec_vm += npages;
->   	else if (is_stack_mapping(flags))
->   		mm->stack_vm += npages;
-> +	else if (flags & VM_SHADOW_STACK)
-> +		mm->stack_vm += npages;
+> diff --git a/kernel/sched/core.c b/kernel/sched/core.c
+> index e838feb6adc5..16a33e5adb77 100644
+> --- a/kernel/sched/core.c
+> +++ b/kernel/sched/core.c
+> @@ -427,11 +427,27 @@ void sched_core_put(void)
+>  		schedule_work(&_work);
+>  }
+>  
+> +static inline void sched_core_rq_clock_clear_update(struct rq *rq)
+> +{
+> +#ifdef CONFIG_SCHED_DEBUG
+> +	const struct cpumask *smt_mask;
+> +	int i;
+> +
+> +	if (rq->core_enabled) {
+> +		smt_mask = cpu_smt_mask(rq->cpu);
+> +		for_each_cpu(i, smt_mask) {
+> +			if (rq->cpu != i)
+> +				cpu_rq(i)->clock_update_flags &= (RQCF_REQ_SKIP|RQCF_ACT_SKIP);
+> +		}
+> +	}
+> +#endif
 
-Why not modify is_stack_mapping() ?
+So sort of ok, but that function name.... so long :/
 
--- 
-Thanks,
+> +}
+>  #else /* !CONFIG_SCHED_CORE */
+>  
+>  static inline void sched_core_enqueue(struct rq *rq, struct task_struct *p) { }
+>  static inline void
+>  sched_core_dequeue(struct rq *rq, struct task_struct *p, int flags) { }
+> +static inline void sched_core_rq_clock_clear_update(struct rq *rq) { }
+>  
+>  #endif /* CONFIG_SCHED_CORE */
+>  
+> @@ -546,6 +562,7 @@ void raw_spin_rq_lock_nested(struct rq *rq, int subclass)
+>  		if (likely(lock == __rq_lockp(rq))) {
+>  			/* preempt_count *MUST* be > 1 */
+>  			preempt_enable_no_resched();
+> +			sched_core_rq_clock_clear_update(rq);
+>  			return;
+>  		}
+>  		raw_spin_unlock(lock);
 
-David / dhildenb
+This otoh don't make much sense. Why put it here and not extend
+rq_pin_lock()?
 
+That is, what's wrong with something like so?
+
+---
+
+diff --git a/kernel/sched/sched.h b/kernel/sched/sched.h
+index 771f8ddb7053..c1a92eced930 100644
+--- a/kernel/sched/sched.h
++++ b/kernel/sched/sched.h
+@@ -1571,11 +1571,18 @@ static inline void rq_pin_lock(struct rq *rq, struct rq_flags *rf)
+ 	rf->cookie = lockdep_pin_lock(__rq_lockp(rq));
+ 
+ #ifdef CONFIG_SCHED_DEBUG
+-	rq->clock_update_flags &= (RQCF_REQ_SKIP|RQCF_ACT_SKIP);
+-	rf->clock_update_flags = 0;
+ #ifdef CONFIG_SMP
+ 	SCHED_WARN_ON(rq->balance_callback && rq->balance_callback != &balance_push_callback);
+ #endif
++	rf->clock_update_flags = 0;
++	if (sched_core_enabled()) {
++		int i;
++
++		for_each_cpu(i, cpu_smt_mask(rq->cpu))
++			cpu_rq(i)->clock_update_flags &= (RQCF_REQ_SKIP|RQCF_ACT_SKIP);
++	} else {
++		rq->clock_update_flags &= (RQCF_REQ_SKIP|RQCF_ACT_SKIP);
++	}
+ #endif
+ }
+ 
