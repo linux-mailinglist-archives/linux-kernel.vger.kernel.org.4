@@ -2,76 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5325969E8E7
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 21:10:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 28D2069E8EE
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 21:13:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230159AbjBUUKj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Feb 2023 15:10:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59392 "EHLO
+        id S230010AbjBUUNU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Feb 2023 15:13:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33416 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230149AbjBUUKh (ORCPT
+        with ESMTP id S229530AbjBUUNR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Feb 2023 15:10:37 -0500
-Received: from mail-qt1-x82b.google.com (mail-qt1-x82b.google.com [IPv6:2607:f8b0:4864:20::82b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F9402D15A;
-        Tue, 21 Feb 2023 12:10:24 -0800 (PST)
-Received: by mail-qt1-x82b.google.com with SMTP id h19so2858686qtk.7;
-        Tue, 21 Feb 2023 12:10:24 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=vVNMp/uOSdgm3aiZQpiwOdbJXNSKmy2btwUw+ZwEUns=;
-        b=n2rBr0dr2k+vbUeHlb52FLHaxupPq+nfLIDleIBQcCYsezWrsbl87kpa2d4bhHwy3g
-         WjcfbiABvUYySCkYnV9X19SH9+L3Ep5a2NDfeBErpfDqZ/oc7CGl4MLm/JdUgbLBX1tD
-         Lwk8Uzk5hDzX0CUGrmC/hEjOTQc8xppTEL/8ivfMZ3wPY6elhJWfhc3oBd5U2zcyKZmV
-         4pwJ777AhONrQ0UIcTbVSHpH+sLDNfAeVZdpasaqJoB43WOeGiqZ/9MCmTZjakh/WA/H
-         dyiRpWOvg+p8bIqkxjGQ9QYk26JVUupWjEFZp6WN9g/ozXQR3Riq3rzsZ88HUIRScmMO
-         uKBg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=vVNMp/uOSdgm3aiZQpiwOdbJXNSKmy2btwUw+ZwEUns=;
-        b=mUpmVMBfyv3xHJYzFyHxV6PsUGtspI8tWonyCLTlUveqcf4c1wJ92rgQaRIOLS4HyF
-         COd/uHWq5OdX+barlczI9V0cItnz2sMQM8c+JJyXPj4RA8wj0e14ad/u1/so/L7jg2At
-         kwpikWjf/42bljhrB1lK0RCfPS34rNB/7w37SXCccQc/irWb+eU4GaOmimZCmcXv45Hj
-         /1QQeaD1hO8LLNU2tZbE99Na0Q1WyOLlo/6C//yKtPAiBQQbkVcZY4qkn4rlcERztVVQ
-         NwWy20f9hTShIDyTcS8fC7ACJeQPi9RM/YF/Ld2TcihzS5hsLH+T19slyPXbiYC6EP8Z
-         +xSw==
-X-Gm-Message-State: AO0yUKUv7O/DmUqYztPv4j7XL0vEF2eIC+sfunSkkEvwwz6LRY2VIDZR
-        H7tWldV3ZY3NBbqQo5p/1po=
-X-Google-Smtp-Source: AK7set+J50IPVaJ5yju0iO32/mGE6EcOt40t3k9qF6lUmEXOQ25ZiGXGO2yKwFdvHWFeLTrOIRdrTw==
-X-Received: by 2002:a05:622a:1a86:b0:3bb:7702:97f5 with SMTP id s6-20020a05622a1a8600b003bb770297f5mr11745606qtc.15.1677010223102;
-        Tue, 21 Feb 2023 12:10:23 -0800 (PST)
-Received: from [10.67.48.245] ([192.19.223.252])
-        by smtp.googlemail.com with ESMTPSA id fw13-20020a05622a4a8d00b003b86b962030sm9273726qtb.72.2023.02.21.12.10.20
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 21 Feb 2023 12:10:22 -0800 (PST)
-Message-ID: <10d63bb2-6d49-d7a2-a5e8-d9114efb72d9@gmail.com>
-Date:   Tue, 21 Feb 2023 12:10:19 -0800
+        Tue, 21 Feb 2023 15:13:17 -0500
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8D5D2B606;
+        Tue, 21 Feb 2023 12:13:16 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1677010396; x=1708546396;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=NJyEmmJTi85dEzw1H0KZyFiIO8Eg6LC6xyGz3CsKF1Q=;
+  b=EZ/XudnBqAYkWY6iOhiGZ9C19z2QBKaZ2OjNBa8H6GXpmG0syNeOkxiu
+   LcOtCbKi9WDjmCF8CKfczuWXqZQ5RGDHk+irGlCDwFPV7qHGCb+GXhl5u
+   +wxzjZIw6XQ64w8i+EO8soYVzpJPB/LFNT71H4dVMOPqc/D6ZapzfEGkq
+   HjcrcokBopT7we2cNZRJbc4/3Ntqh8Ax5AiD9YVJvYS+otdV2BObDCc+3
+   x437QA2yJrsrbte0DEMdDcGcp73Q1FYzNVJ9pymphJa8cq8kTFX9lVrsW
+   +9qKyW8zJcss8d4a67riAGQkRXQcYyVD/3+dvMvOtYbQQj/Vszoizh0mE
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10628"; a="395226205"
+X-IronPort-AV: E=Sophos;i="5.97,315,1669104000"; 
+   d="scan'208";a="395226205"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Feb 2023 12:13:15 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10628"; a="665097572"
+X-IronPort-AV: E=Sophos;i="5.97,315,1669104000"; 
+   d="scan'208";a="665097572"
+Received: from dpunyamu-mobl.amr.corp.intel.com (HELO [10.255.228.245]) ([10.255.228.245])
+  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Feb 2023 12:13:14 -0800
+Message-ID: <273414f5-2a7c-3cc0-dc27-d07baaa5787b@intel.com>
+Date:   Tue, 21 Feb 2023 12:13:14 -0800
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.7.1
-Subject: Re: [PATCH 5.15 00/83] 5.15.95-rc1 review
+Subject: Re: [PATCH v6 14/41] x86/mm: Introduce _PAGE_SAVED_DIRTY
 Content-Language: en-US
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org
-Cc:     patches@lists.linux.dev, linux-kernel@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de
-References: <20230220133553.669025851@linuxfoundation.org>
-From:   Florian Fainelli <f.fainelli@gmail.com>
-In-Reply-To: <20230220133553.669025851@linuxfoundation.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+To:     David Hildenbrand <david@redhat.com>,
+        "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>,
+        "bsingharora@gmail.com" <bsingharora@gmail.com>,
+        "hpa@zytor.com" <hpa@zytor.com>,
+        "Syromiatnikov, Eugene" <esyr@redhat.com>,
+        "peterz@infradead.org" <peterz@infradead.org>,
+        "rdunlap@infradead.org" <rdunlap@infradead.org>,
+        "keescook@chromium.org" <keescook@chromium.org>,
+        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+        "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>,
+        "Eranian, Stephane" <eranian@google.com>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "fweimer@redhat.com" <fweimer@redhat.com>,
+        "nadav.amit@gmail.com" <nadav.amit@gmail.com>,
+        "jannh@google.com" <jannh@google.com>,
+        "dethoma@microsoft.com" <dethoma@microsoft.com>,
+        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
+        "kcc@google.com" <kcc@google.com>, "pavel@ucw.cz" <pavel@ucw.cz>,
+        "oleg@redhat.com" <oleg@redhat.com>,
+        "hjl.tools@gmail.com" <hjl.tools@gmail.com>,
+        "bp@alien8.de" <bp@alien8.de>,
+        "Lutomirski, Andy" <luto@kernel.org>,
+        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+        "arnd@arndb.de" <arnd@arndb.de>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "Schimpe, Christina" <christina.schimpe@intel.com>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "mike.kravetz@oracle.com" <mike.kravetz@oracle.com>,
+        "Yang, Weijiang" <weijiang.yang@intel.com>,
+        "debug@rivosinc.com" <debug@rivosinc.com>,
+        "jamorris@linux.microsoft.com" <jamorris@linux.microsoft.com>,
+        "john.allen@amd.com" <john.allen@amd.com>,
+        "rppt@kernel.org" <rppt@kernel.org>,
+        "andrew.cooper3@citrix.com" <andrew.cooper3@citrix.com>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "corbet@lwn.net" <corbet@lwn.net>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-api@vger.kernel.org" <linux-api@vger.kernel.org>,
+        "gorcunov@gmail.com" <gorcunov@gmail.com>,
+        "akpm@linux-foundation.org" <akpm@linux-foundation.org>
+Cc:     "Yu, Yu-cheng" <yu-cheng.yu@intel.com>
+References: <20230218211433.26859-1-rick.p.edgecombe@intel.com>
+ <20230218211433.26859-15-rick.p.edgecombe@intel.com>
+ <70681787-0d33-a9ed-7f2a-747be1490932@redhat.com>
+ <6f19d7c7ad9f61fa8f6c9bd09d24524dbe17463f.camel@intel.com>
+ <6e1201f5-da25-6040-8230-c84856221838@redhat.com>
+From:   Dave Hansen <dave.hansen@intel.com>
+In-Reply-To: <6e1201f5-da25-6040-8230-c84856221838@redhat.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -79,29 +105,12 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/20/23 05:35, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.15.95 release.
-> There are 83 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
-> 
-> Responses should be made by Wed, 22 Feb 2023 13:35:35 +0000.
-> Anything received after that time might be too late.
-> 
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.15.95-rc1.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.15.y
-> and the diffstat can be found below.
-> 
-> thanks,
-> 
-> greg k-h
+On 2/21/23 00:38, David Hildenbrand wrote:> Sure, for my taste this is
+(1) too repetitive (2) too verbose (3) to
+> specialized. But whatever x86 maintainers prefer.
 
-On ARCH_BRCMSTB using 32-bit and 64-bit kernels, build tested on 
-BMIPS_GENERIC:
+At this point, I'm not going to be too nitpicky.  I personally think we
+need to get _something_ merged.  We can then nitpick it to death once
+its in the tree.
 
-Tested-by: Florian Fainelli <f.fainelli@gmail.com>
--- 
-Florian
-
+So I prefer whatever will move the set along. ;)
