@@ -2,161 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 21A8269E556
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 17:59:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B54C869E448
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 17:11:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234662AbjBUQ7N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Feb 2023 11:59:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60630 "EHLO
+        id S234033AbjBUQLU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Feb 2023 11:11:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36830 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234946AbjBUQ67 (ORCPT
+        with ESMTP id S232317AbjBUQLR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Feb 2023 11:58:59 -0500
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CDBA1222E1
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Feb 2023 08:58:54 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1676998734; x=1708534734;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=GmFG1YKCb0Q/ommkmUjwup7T9MZg39/d3oY0mhMCpc0=;
-  b=VSAesB1QOEt1bk26BdAhuWxTi93l80KxZ8QwAPejiM5T99pXBfZMv1UU
-   Ti2Z1FtDNWw2/k1W1UwLnmN6ob6F3MiPKCjIUvh6y2teOKWo4cKKcsHcB
-   rmhm/Sd2LgOIhWKf3dH689sZwb/t7Ls/jLQzFaDRCxmnI0OMS9Fd7XOLd
-   WtPa64A7NU8cgWBezYapCbVyRucPuMflV1gXHVhje2XKBrAFowtOIzuxb
-   2QWZkwGYA3/tOZ+wGs9Qt4W4GpAP7UpXfztd+NSJKISFW3MIaXs3LM3LW
-   RMmI4M/GJOZgUe+PAsnmwu+eG7Tlh2AAMQNAohrAtCofz8mObFrsZuXxZ
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10628"; a="334884692"
-X-IronPort-AV: E=Sophos;i="5.97,315,1669104000"; 
-   d="scan'208";a="334884692"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Feb 2023 08:58:46 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10628"; a="814569114"
-X-IronPort-AV: E=Sophos;i="5.97,315,1669104000"; 
-   d="scan'208";a="814569114"
-Received: from taevough-mobl.amr.corp.intel.com (HELO [10.209.174.213]) ([10.209.174.213])
-  by fmsmga001-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Feb 2023 08:58:39 -0800
-Message-ID: <72b601b9-93bf-b9f5-c898-c63ad46e5167@linux.intel.com>
-Date:   Tue, 21 Feb 2023 11:10:30 -0500
+        Tue, 21 Feb 2023 11:11:17 -0500
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F4EA298FE;
+        Tue, 21 Feb 2023 08:11:17 -0800 (PST)
+Received: from pps.filterd (m0098399.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 31LFFXFC031431;
+        Tue, 21 Feb 2023 16:10:50 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
+ : date : message-id : mime-version : content-transfer-encoding; s=pp1;
+ bh=JymdbLQeTeDhlP2A/OsKh68JdIUnbSBDiFwxb0u8pO4=;
+ b=HGTQRnc/Tu1es4Vq1INy2HGCNlBNcEGMECB6ZHMbqbcKplRji4vtRk6/19RKLpzsxZnR
+ 98tt4kX6MR7a1t55ObvtY0nYmB3xVzFzN7UsvmbNqope53AzW5rMkBaJt7d+1yoqVZUk
+ EqNYBUipiCEBsg8emdkxoM3tOknFL+yQotpT+bSNTT1rlFIGAmNZJ2UmQ+v3/Bv+j8IS
+ nWYdwJfTyamZp7+FWmIDhC4HhxDroP8JZCymZrhCYF1mAqmFj7EMeRct1BaTzjgpn2La
+ WdUdX7kMF3v38nA9CQezRTfnZJKmFS+aJoWd0wsLrFOVqsZ2YaXgeo3zk3cr6QP73X54 Yg== 
+Received: from ppma05fra.de.ibm.com (6c.4a.5195.ip4.static.sl-reverse.com [149.81.74.108])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3nw0cp204j-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 21 Feb 2023 16:10:50 +0000
+Received: from pps.filterd (ppma05fra.de.ibm.com [127.0.0.1])
+        by ppma05fra.de.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 31LCVcXd031864;
+        Tue, 21 Feb 2023 16:10:48 GMT
+Received: from smtprelay01.fra02v.mail.ibm.com ([9.218.2.227])
+        by ppma05fra.de.ibm.com (PPS) with ESMTPS id 3ntpa6b6v5-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 21 Feb 2023 16:10:47 +0000
+Received: from smtpav05.fra02v.mail.ibm.com (smtpav05.fra02v.mail.ibm.com [10.20.54.104])
+        by smtprelay01.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 31LGAivC43909608
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 21 Feb 2023 16:10:44 GMT
+Received: from smtpav05.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 3FA732004D;
+        Tue, 21 Feb 2023 16:10:44 +0000 (GMT)
+Received: from smtpav05.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id CB7AC20043;
+        Tue, 21 Feb 2023 16:10:43 +0000 (GMT)
+Received: from tuxmaker.boeblingen.de.ibm.com (unknown [9.152.85.9])
+        by smtpav05.fra02v.mail.ibm.com (Postfix) with ESMTP;
+        Tue, 21 Feb 2023 16:10:43 +0000 (GMT)
+From:   Niklas Schnelle <schnelle@linux.ibm.com>
+To:     Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>
+Cc:     Matthew Rosato <mjrosato@linux.ibm.com>,
+        Gerd Bayer <gbayer@linux.ibm.com>,
+        Pierre Morel <pmorel@linux.ibm.com>, iommu@lists.linux.dev,
+        linux-s390@vger.kernel.org, borntraeger@linux.ibm.com,
+        hca@linux.ibm.com, gor@linux.ibm.com,
+        Gerald Schaefer <gerald.schaefer@linux.ibm.com>,
+        agordeev@linux.ibm.com, Sven Schnelle <svens@linux.ibm.com>,
+        Robin Murphy <robin.murphy@arm.com>,
+        linux-kernel@vger.kernel.org, Julian Ruess <julianr@linux.ibm.com>
+Subject: [PATCH] MAINTAINERS: Update s390-iommu driver maintainer information
+Date:   Tue, 21 Feb 2023 17:10:43 +0100
+Message-Id: <20230221161043.37065-1-schnelle@linux.ibm.com>
+X-Mailer: git-send-email 2.37.2
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Firefox/102.0 Thunderbird/102.7.1
-Subject: Re: [PATCH V3 6/8] soundwire: amd: add runtime pm ops for AMD
- SoundWire manager driver
-Content-Language: en-US
-To:     Vijendar Mukunda <Vijendar.Mukunda@amd.com>, vkoul@kernel.org
-Cc:     alsa-devel@alsa-project.org, amadeuszx.slawinski@linux.intel.com,
-        Mario.Limonciello@amd.com, Sunil-kumar.Dommati@amd.com,
-        Basavaraj.Hiregoudar@amd.com, Mastan.Katragadda@amd.com,
-        Arungopal.kondaveeti@amd.com,
-        Bard Liao <yung-chuan.liao@linux.intel.com>,
-        Sanyog Kale <sanyog.r.kale@intel.com>,
-        open list <linux-kernel@vger.kernel.org>
-References: <20230220100418.76754-1-Vijendar.Mukunda@amd.com>
- <20230220100418.76754-7-Vijendar.Mukunda@amd.com>
-From:   Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
-In-Reply-To: <20230220100418.76754-7-Vijendar.Mukunda@amd.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: inK0pKToyXumXYAitzx08cjAJ_52Mm3g
+X-Proofpoint-ORIG-GUID: inK0pKToyXumXYAitzx08cjAJ_52Mm3g
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.170.22
+ definitions=2023-02-21_08,2023-02-20_02,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 mlxlogscore=949
+ clxscore=1015 impostorscore=0 lowpriorityscore=0 malwarescore=0
+ bulkscore=0 mlxscore=0 spamscore=0 phishscore=0 suspectscore=0
+ priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2302210133
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+The s390 DMA API conversion changes currently under review will extend
+the use of the s390-iommu driver to the DMA API. With s390's mandatory
+use of an IOMMU this means all DMA for PCI devices will then use the
+s390-iommu driver. With this in mind and considering my involvement in
+these changes it makes sense to reflect this increased interdependence
+in the maintainer structure. Thus add myself as first maintainer and
+move Gerald to reviewer status.
 
-> +static int amd_deinit_sdw_manager(struct amd_sdw_manager *amd_manager)
-> +{
-> +	int ret;
-> +
-> +	amd_disable_sdw_interrupts(amd_manager);
-> +	ret = amd_disable_sdw_manager(amd_manager);
-> +	return ret;
+Reviewed-by: Gerald Schaefer <gerald.schaefer@linux.ibm.com>
+Reviewed-by: Matthew Rosato <mjrosato@linux.ibm.com>
+Acked-by: Peter Oberparleiter <oberpar@linux.ibm.com>
+Signed-off-by: Niklas Schnelle <schnelle@linux.ibm.com>
+---
+ MAINTAINERS | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-return amd_disable_sdw_manager(amd_manager); ?
-
-> +}
-
-> +static int amd_sdw_clock_stop(struct amd_sdw_manager *amd_manager)
-> +{
-> +	u32 val;
-> +	u32 retry_count = 0;
-> +	int ret;
-> +
-> +	ret = sdw_bus_prep_clk_stop(&amd_manager->bus);
-> +	if (ret < 0 && ret != -ENODATA) {
-> +		dev_err(amd_manager->dev, "prepare clock stop failed %d", ret);
-> +		return 0;
-> +	}
-> +	ret = sdw_bus_clk_stop(&amd_manager->bus);
-> +	if (ret < 0 && ret != -ENODATA) {
-> +		dev_err(amd_manager->dev, "bus clock stop failed %d", ret);
-> +		return 0;
-> +	}
-> +
-> +	do {
-> +		val = acp_reg_readl(amd_manager->mmio + ACP_SW_CLK_RESUME_CTRL);
-
-don't you need a minimal usleep_range to avoid re-reading the same
-register over and over?
-
-This is tied to the frame duration, isn't it? this is 20us typically.
-
-> +		if (val & AMD_SDW_CLK_STOP_DONE) {
-> +			amd_manager->clk_stopped = true;
-> +			break;
-> +		}
-> +	} while (retry_count++ < AMD_SDW_CLK_STOP_MAX_RETRY_COUNT);
-> +
-> +	if (!amd_manager->clk_stopped) {
-> +		dev_err(amd_manager->dev, "SDW%x clock stop failed\n", amd_manager->instance);
-> +		return 0;
-> +	}
-> +
-> +	if (amd_manager->wake_en_mask)
-> +		acp_reg_writel(0x01, amd_manager->acp_mmio + ACP_SW_WAKE_EN(amd_manager->instance));
-> +
-> +	dev_dbg(amd_manager->dev, "SDW%x clock stop successful\n", amd_manager->instance);
-> +	return 0;
-> +}
-> +
-> +static int amd_sdw_clock_stop_exit(struct amd_sdw_manager *amd_manager)
-> +{
-> +	int ret;
-> +	u32 val;
-> +	u32 retry_count = 0;
-> +
-> +	if (amd_manager->clk_stopped) {
-> +		val = acp_reg_readl(amd_manager->mmio + ACP_SW_CLK_RESUME_CTRL);
-> +		val |= AMD_SDW_CLK_RESUME_REQ;
-> +		acp_reg_writel(val, amd_manager->mmio + ACP_SW_CLK_RESUME_CTRL);
-> +		do {
-> +			val = acp_reg_readl(amd_manager->mmio + ACP_SW_CLK_RESUME_CTRL);
-> +			if (val & AMD_SDW_CLK_RESUME_DONE)
-> +				break;
-> +			usleep_range(10, 100);
-
-that's 10x range for sleep, that sounds a vague and suspicious, no?
-
-> +		} while (retry_count++ < AMD_SDW_CLK_STOP_MAX_RETRY_COUNT);
-> +		if (val & AMD_SDW_CLK_RESUME_DONE) {
-> +			acp_reg_writel(0, amd_manager->mmio + ACP_SW_CLK_RESUME_CTRL);
-> +			ret = sdw_bus_exit_clk_stop(&amd_manager->bus);
-> +			if (ret < 0)
-> +				dev_err(amd_manager->dev, "bus failed to exit clock stop %d\n",
-> +					ret);
-> +			amd_manager->clk_stopped = false;
-> +		}
-> +	}
-> +	if (amd_manager->clk_stopped) {
-> +		dev_err(amd_manager->dev, "SDW%x clock stop exit failed\n", amd_manager->instance);
-> +		return 0;
-> +	}
-> +	dev_dbg(amd_manager->dev, "SDW%x clock stop exit successful\n", amd_manager->instance);
-> +	return 0;
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 135d93368d36..ad6536817f88 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -18291,8 +18291,9 @@ F:	drivers/s390/block/dasd*
+ F:	include/linux/dasd_mod.h
+ 
+ S390 IOMMU (PCI)
++M:	Niklas Schnelle <schnelle@linux.ibm.com>
+ M:	Matthew Rosato <mjrosato@linux.ibm.com>
+-M:	Gerald Schaefer <gerald.schaefer@linux.ibm.com>
++R:	Gerald Schaefer <gerald.schaefer@linux.ibm.com>
+ L:	linux-s390@vger.kernel.org
+ S:	Supported
+ F:	drivers/iommu/s390-iommu.c
+-- 
+2.37.2
 
