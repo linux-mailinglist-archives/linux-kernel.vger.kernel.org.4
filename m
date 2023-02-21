@@ -2,144 +2,286 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AA86769E4BA
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 17:34:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E54AC69E4BC
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 17:36:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234445AbjBUQe0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Feb 2023 11:34:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60664 "EHLO
+        id S234615AbjBUQgs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Feb 2023 11:36:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34224 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234632AbjBUQeW (ORCPT
+        with ESMTP id S234231AbjBUQgr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Feb 2023 11:34:22 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C81AC13DD6;
-        Tue, 21 Feb 2023 08:34:18 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 555C36112D;
-        Tue, 21 Feb 2023 16:34:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4A406C433D2;
-        Tue, 21 Feb 2023 16:34:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1676997257;
-        bh=rScjK5VMyCZR5Ghp9Xxc1QS4YiviN+AcyuGZCuMiRvk=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=vBMq8NWq57Shnjk1qmarEq628THtxn2i9weKpl5EIslwqdTn0RISvGrycnu0NMX7D
-         NX4jLf0LWPPdx+gVdgfq2CbeWU11SEWV2rGpC5nUGS6smzJSnoXTsK5RoLKstj5h1c
-         yGLQp/4NJ9ITBs+TsO+x2U6jANTN++82vMCXCWJ8W5pfaVpSco8GMcUghkq+btNfYk
-         LakAdK2joxng/PVW5RWh3Hp/vJdM1+/Jw1kgIVrGDscMmUCdYNYTxZJp3Mb7S38SP4
-         9nleouZkPbo0xCQrwJe/l9vr/bRnKNtZnPbir2/ULiUu7RvVGkVobN8DCZKYK1cUa0
-         +M0PKpVMOLAqA==
-Date:   Tue, 21 Feb 2023 16:34:11 +0000
-From:   Conor Dooley <conor@kernel.org>
-To:     Emil Renner Berthing <emil.renner.berthing@canonical.com>
-Cc:     Hal Feng <hal.feng@starfivetech.com>, linux-clk@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-riscv@lists.infradead.org,
-        Stephen Boyd <sboyd@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Ben Dooks <ben.dooks@sifive.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v4 13/19] reset: starfive: Add StarFive JH7110 reset
- driver
-Message-ID: <Y/TygwbxyuhbDooX@spud>
-References: <20230221024645.127922-1-hal.feng@starfivetech.com>
- <20230221024645.127922-14-hal.feng@starfivetech.com>
- <CAJM55Z_O9K=sCRXga9pMOXk9YjXc1v_V0e5S-8xN9Mi8gvHzvg@mail.gmail.com>
+        Tue, 21 Feb 2023 11:36:47 -0500
+Received: from mail-vs1-xe33.google.com (mail-vs1-xe33.google.com [IPv6:2607:f8b0:4864:20::e33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97006279AB
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Feb 2023 08:36:45 -0800 (PST)
+Received: by mail-vs1-xe33.google.com with SMTP id g12so6992045vsf.12
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Feb 2023 08:36:45 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=LfMiwamrb5Hsn9MOJ+vir9DkXggh5+lNX55ws8jXDRc=;
+        b=FEKXutWwVJH+gZjAsYtZ+YPHAsGEVqh0mp0BUcTJow5DPClTHgz0sndSx5SLgvUQjT
+         MBCJ/JdLzDsqiZDu35321Yzn45QflkDayhknpswCH9+o193J4+SXxC36Zueqfnl1gmai
+         9jmjt2vIy4orkreW/GXWQgV0MSKCt1CyZff4SaC54zW9J4iALW1Yl+lawyvVtOS01fv8
+         h6EqKVR+hOn8MqZ+zh/G95IJaGJe4mSZS1sT2eJCRRzAxxVj/dGtGjG+9u4VW0ZblbiE
+         QpdjxqG7QXAXv9U7YacJFICiB4/iQ6a04o/USIyYPu12AecVLKTR4cgAn2B+1gBUO8ol
+         vGhw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=LfMiwamrb5Hsn9MOJ+vir9DkXggh5+lNX55ws8jXDRc=;
+        b=7XFPF6w7lQCtTfSDnyinl8ib0kVUvr2oma8SF9BZSq6+0fJT9afnwHq7gM7Q566Fpm
+         +ZHqiUcPQGhK1nxAaoU+xWV6ArlaDDXlmWEXbSPSeT2cfT8fqoytjCwvArTAfLyXylfs
+         oDpJ4b2gZ6SH7tNDDWJek2Aw0YaSX8yEsTFfm7N0aH0dkPgSz06Y+x33+xtBevAx2Pg5
+         NQH5W/yQoNO1fpb6Ui2b4PQjOYPGwKYQbWn3heZTUGw95QkmErwk0MtdJ72qeZboxG1p
+         irTmpZFLz7Bt+lwYVpXv4CLbXe7D7vOMTOU5mSHdLpCcVNrUazthVz0tnaZYbhjkap6c
+         cElg==
+X-Gm-Message-State: AO0yUKWWbCssz/gf6J9jeJhZgUviiss2u3wO4AjTfrMAvfSzQiW0bDRz
+        Y2lg9/A7kmT1O3KAhsuCw44dH8TXh37Jy0PF1ydoUw==
+X-Google-Smtp-Source: AK7set9c/bDAaKouOcrbgvzVfteiJt3VOJzqOkD1O6X8VuF5ny26eObWeXS7DM24YoOcPaRILLBjxOsIZznTqtHnM9c=
+X-Received: by 2002:a67:dc81:0:b0:41b:ed91:4d51 with SMTP id
+ g1-20020a67dc81000000b0041bed914d51mr1385589vsk.84.1676997404573; Tue, 21 Feb
+ 2023 08:36:44 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="di8SMzK5TxlOLwpm"
-Content-Disposition: inline
-In-Reply-To: <CAJM55Z_O9K=sCRXga9pMOXk9YjXc1v_V0e5S-8xN9Mi8gvHzvg@mail.gmail.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20230218002819.1486479-1-jthoughton@google.com>
+ <20230218002819.1486479-12-jthoughton@google.com> <CAHS8izMGR8MZW1dMCCWQagoCKBvHWBJNwvWZQyrCGzZAoQy0sw@mail.gmail.com>
+In-Reply-To: <CAHS8izMGR8MZW1dMCCWQagoCKBvHWBJNwvWZQyrCGzZAoQy0sw@mail.gmail.com>
+From:   James Houghton <jthoughton@google.com>
+Date:   Tue, 21 Feb 2023 08:36:08 -0800
+Message-ID: <CADrL8HVkrevuvUXLDJ9hvk4e+wnyQu3+z49rZjxg+=OB=KB_+Q@mail.gmail.com>
+Subject: Re: [PATCH v2 11/46] hugetlb: add hugetlb_pte to track HugeTLB page
+ table entries
+To:     Mina Almasry <almasrymina@google.com>
+Cc:     Mike Kravetz <mike.kravetz@oracle.com>,
+        Muchun Song <songmuchun@bytedance.com>,
+        Peter Xu <peterx@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        David Hildenbrand <david@redhat.com>,
+        David Rientjes <rientjes@google.com>,
+        Axel Rasmussen <axelrasmussen@google.com>,
+        "Zach O'Keefe" <zokeefe@google.com>,
+        Manish Mishra <manish.mishra@nutanix.com>,
+        Naoya Horiguchi <naoya.horiguchi@nec.com>,
+        "Dr . David Alan Gilbert" <dgilbert@redhat.com>,
+        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Baolin Wang <baolin.wang@linux.alibaba.com>,
+        Miaohe Lin <linmiaohe@huawei.com>,
+        Yang Shi <shy828301@gmail.com>,
+        Frank van der Linden <fvdl@google.com>,
+        Jiaqi Yan <jiaqiyan@google.com>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
---di8SMzK5TxlOLwpm
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-On Tue, Feb 21, 2023 at 04:33:09PM +0100, Emil Renner Berthing wrote:
-> On Tue, 21 Feb 2023 at 03:47, Hal Feng <hal.feng@starfivetech.com> wrote:
+On Fri, Feb 17, 2023 at 9:24 PM Mina Almasry <almasrymina@google.com> wrote=
+:
+>
+> On Fri, Feb 17, 2023 at 4:28=E2=80=AFPM James Houghton <jthoughton@google=
+.com> wrote:
 > >
-> > Add auxiliary driver to support StarFive JH7110 system
-> > and always-on resets.
+> > After high-granularity mapping, page table entries for HugeTLB pages ca=
+n
+> > be of any size/type. (For example, we can have a 1G page mapped with a
+> > mix of PMDs and PTEs.) This struct is to help keep track of a HugeTLB
+> > PTE after we have done a page table walk.
 > >
-> > Reported-by: kernel test robot <lkp@intel.com>
+> > Without this, we'd have to pass around the "size" of the PTE everywhere=
+.
+> > We effectively did this before; it could be fetched from the hstate,
+> > which we pass around pretty much everywhere.
+> >
+> > hugetlb_pte_present_leaf is included here as a helper function that wil=
+l
+> > be used frequently later on.
+> >
+> > Signed-off-by: James Houghton <jthoughton@google.com>
+> >
+>
+> Only nits.
+>
+> Reviewed-by: Mina Almasry <almasrymina@google.com>
 
-Drop the reported-by here too please Hal.
+Thanks Mina!
 
-> > Signed-off-by: Hal Feng <hal.feng@starfivetech.com>
-
-> > +static int jh7110_reset_probe(struct auxiliary_device *adev,
-> > +                             const struct auxiliary_device_id *id)
+>
+> > diff --git a/include/linux/hugetlb.h b/include/linux/hugetlb.h
+> > index a1ceb9417f01..eeacadf3272b 100644
+> > --- a/include/linux/hugetlb.h
+> > +++ b/include/linux/hugetlb.h
+> > @@ -26,6 +26,25 @@ typedef struct { unsigned long pd; } hugepd_t;
+> >  #define __hugepd(x) ((hugepd_t) { (x) })
+> >  #endif
+> >
+> > +enum hugetlb_level {
+> > +       HUGETLB_LEVEL_PTE =3D 1,
+> > +       /*
+> > +        * We always include PMD, PUD, and P4D in this enum definition =
+so that,
+> > +        * when logged as an integer, we can easily tell which level it=
+ is.
+> > +        */
+> > +       HUGETLB_LEVEL_PMD,
+> > +       HUGETLB_LEVEL_PUD,
+> > +       HUGETLB_LEVEL_P4D,
+> > +       HUGETLB_LEVEL_PGD,
+> > +};
+> > +
+> > +struct hugetlb_pte {
+> > +       pte_t *ptep;
+> > +       unsigned int shift;
+> > +       enum hugetlb_level level;
+> > +       spinlock_t *ptl;
+> > +};
+> > +
+> >  #ifdef CONFIG_HUGETLB_PAGE
+> >
+> >  #include <linux/mempolicy.h>
+> > @@ -39,6 +58,20 @@ typedef struct { unsigned long pd; } hugepd_t;
+> >   */
+> >  #define __NR_USED_SUBPAGE 3
+> >
+> > +static inline
+> > +unsigned long hugetlb_pte_size(const struct hugetlb_pte *hpte)
 > > +{
-> > +       struct reset_info *info =3D (struct reset_info *)(id->driver_da=
-ta);
-> > +       void __iomem **base =3D (void __iomem **)dev_get_drvdata(adev->=
-dev.parent);
->=20
-> Hi Hal,
->=20
-> I saw the kernel test robot complain about this, but I still wonder if
-> the extra level of indirection is really needed. Isn't it enough to
-> just add the explicit casts, so
->=20
-> dev_set_drvdata(priv->dev, (void *)priv->base);
->=20
-> in the clock drivers and here just
->=20
-> void __iomem *base =3D (void __iomem *)dev_get_drvdata(adev->dev.parent);
-
-I *think* if you do that, sparse will complain that you cast away the
-__iomem. The complaint is something like "cast removes address space
-qualifier from expression".
-
-The other option is, rather than set the base as the drvdata, just pass
-the whole priv struct. That's what I did for mpfs at least & I thought I
-had suggested it on v3, but must not have.
-It looks prettier than the casting madness at least ;)
-
-> > +
-> > +       if (!info || !base)
-> > +               return -ENODEV;
-> > +
-> > +       return reset_starfive_jh71x0_register(&adev->dev, adev->dev.par=
-ent->of_node,
-> > +                                             *base + info->assert_offs=
-et,
-> > +                                             *base + info->status_offs=
-et,
-> > +                                             NULL,
-> > +                                             info->nr_resets,
-> > +                                             NULL);
+> > +       return 1UL << hpte->shift;
 > > +}
+> > +
+> > +static inline
+> > +unsigned long hugetlb_pte_mask(const struct hugetlb_pte *hpte)
+> > +{
+> > +       return ~(hugetlb_pte_size(hpte) - 1);
+> > +}
+> > +
+> > +bool hugetlb_pte_present_leaf(const struct hugetlb_pte *hpte, pte_t pt=
+e);
+> > +
+> >  struct hugepage_subpool {
+> >         spinlock_t lock;
+> >         long count;
+> > @@ -1234,6 +1267,45 @@ static inline spinlock_t *huge_pte_lock(struct h=
+state *h,
+> >         return ptl;
+> >  }
+> >
+> > +static inline
+> > +spinlock_t *hugetlb_pte_lockptr(struct hugetlb_pte *hpte)
+> > +{
+> > +       return hpte->ptl;
+> > +}
+>
+> I find this helper unnecessary. I would remove it.
 
---di8SMzK5TxlOLwpm
-Content-Type: application/pgp-signature; name="signature.asc"
+Ok. Will do.
 
------BEGIN PGP SIGNATURE-----
+>
+> > +
+> > +static inline
+> > +spinlock_t *hugetlb_pte_lock(struct hugetlb_pte *hpte)
+> > +{
+> > +       spinlock_t *ptl =3D hugetlb_pte_lockptr(hpte);
+> > +
+> > +       spin_lock(ptl);
+>
+> Here 'spin_lock(hpte->ptl)' would be more immediately understandable
+> IMO, for example.
+>
+> > +       return ptl;
+> > +}
+> > +
+> > +static inline
+> > +void __hugetlb_pte_init(struct hugetlb_pte *hpte, pte_t *ptep,
+> > +                       unsigned int shift, enum hugetlb_level level,
+> > +                       spinlock_t *ptl)
+> > +{
+> > +       /*
+> > +        * If 'shift' indicates that this PTE is contiguous, then @ptep=
+ must
+> > +        * be the first pte of the contiguous bunch.
+> > +        */
+>
+> I would move the comment to above the function as a pseudo doc. It
+> seems to instruct the user of the function of how to use it.
 
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCY/TybAAKCRB4tDGHoIJi
-0pUxAQC1ZljYcv5/Q6mze0u0z96Oz5pkrLAITwYsm92VzYEYpAEAk6PbItP1RJvB
-MFzAwz5syZ6Y4U9Krg0CMdAnSOLNGQ8=
-=u5Rk
------END PGP SIGNATURE-----
+Right. Will do.
 
---di8SMzK5TxlOLwpm--
+>
+> > +       hpte->ptl =3D ptl;
+> > +       hpte->ptep =3D ptep;
+> > +       hpte->shift =3D shift;
+> > +       hpte->level =3D level;
+> > +}
+> > +
+> > +static inline
+> > +void hugetlb_pte_init(struct mm_struct *mm, struct hugetlb_pte *hpte,
+> > +                     pte_t *ptep, unsigned int shift,
+> > +                     enum hugetlb_level level)
+> > +{
+> > +       __hugetlb_pte_init(hpte, ptep, shift, level,
+> > +                          huge_pte_lockptr(shift, mm, ptep));
+> > +}
+> > +
+> >  #if defined(CONFIG_HUGETLB_PAGE) && defined(CONFIG_CMA)
+> >  extern void __init hugetlb_cma_reserve(int order);
+> >  #else
+> > diff --git a/mm/hugetlb.c b/mm/hugetlb.c
+> > index 5ca9eae0ac42..6c74adff43b6 100644
+> > --- a/mm/hugetlb.c
+> > +++ b/mm/hugetlb.c
+> > @@ -1269,6 +1269,35 @@ static bool vma_has_reserves(struct vm_area_stru=
+ct *vma, long chg)
+> >         return false;
+> >  }
+> >
+> > +bool hugetlb_pte_present_leaf(const struct hugetlb_pte *hpte, pte_t pt=
+e)
+> > +{
+> > +       pgd_t pgd;
+> > +       p4d_t p4d;
+> > +       pud_t pud;
+> > +       pmd_t pmd;
+> > +
+> > +       switch (hpte->level) {
+> > +       case HUGETLB_LEVEL_PGD:
+> > +               pgd =3D __pgd(pte_val(pte));
+> > +               return pgd_present(pgd) && pgd_leaf(pgd);
+> > +       case HUGETLB_LEVEL_P4D:
+> > +               p4d =3D __p4d(pte_val(pte));
+> > +               return p4d_present(p4d) && p4d_leaf(p4d);
+> > +       case HUGETLB_LEVEL_PUD:
+> > +               pud =3D __pud(pte_val(pte));
+> > +               return pud_present(pud) && pud_leaf(pud);
+> > +       case HUGETLB_LEVEL_PMD:
+> > +               pmd =3D __pmd(pte_val(pte));
+> > +               return pmd_present(pmd) && pmd_leaf(pmd);
+> > +       case HUGETLB_LEVEL_PTE:
+> > +               return pte_present(pte);
+> > +       default:
+> > +               WARN_ON_ONCE(1);
+> > +               return false;
+> > +       }
+> > +}
+> > +
+> > +
+> >  static void enqueue_hugetlb_folio(struct hstate *h, struct folio *foli=
+o)
+> >  {
+> >         int nid =3D folio_nid(folio);
+> > --
+> > 2.39.2.637.g21b0678d19-goog
+> >
