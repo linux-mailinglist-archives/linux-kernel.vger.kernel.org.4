@@ -2,174 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8935169DB2C
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 08:27:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A4F9969DB2E
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 08:27:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233615AbjBUH1I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Feb 2023 02:27:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57236 "EHLO
+        id S233630AbjBUH1Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Feb 2023 02:27:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57848 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232640AbjBUH1G (ORCPT
+        with ESMTP id S232946AbjBUH1X (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Feb 2023 02:27:06 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C40DC2596A
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Feb 2023 23:25:54 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1676964353;
+        Tue, 21 Feb 2023 02:27:23 -0500
+Received: from vulcan.natalenko.name (vulcan.natalenko.name [104.207.131.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9D07244BC;
+        Mon, 20 Feb 2023 23:27:16 -0800 (PST)
+Received: from mail.natalenko.name (vulcan.natalenko.name [IPv6:2001:19f0:6c00:8846:5400:ff:fe0c:dfa0])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by vulcan.natalenko.name (Postfix) with ESMTPSA id 71BE4123AAF7;
+        Tue, 21 Feb 2023 08:27:13 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=natalenko.name;
+        s=dkim-20170712; t=1676964433;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=JPIAZdGy9OlnE1O1SS60YxZ8brGuCruddGUDSBr1OzI=;
-        b=GnnTik2VVl3csxoA4i5D7J+rKeSoAiQI37DfqlJ/Y65MNdb5UmMDBF1ZtsP1LfS/QUUbj4
-        7F6Uo/L0aR6WymXc4zvoX4kfesNb+P+cHyAOS33EZHE0ec8a/slHWwY/kYc9yF9SKHjvAy
-        gnNo5+NsCpb3kvKTPOM4jqp0uftCQp8=
-Received: from mail-vs1-f70.google.com (mail-vs1-f70.google.com
- [209.85.217.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-10-oiyqS_rYPjKd1N4SjulwEw-1; Tue, 21 Feb 2023 02:25:52 -0500
-X-MC-Unique: oiyqS_rYPjKd1N4SjulwEw-1
-Received: by mail-vs1-f70.google.com with SMTP id a15-20020a056102024f00b004121e7acf38so364452vsq.19
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Feb 2023 23:25:52 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=JPIAZdGy9OlnE1O1SS60YxZ8brGuCruddGUDSBr1OzI=;
-        b=WUX7SxnN5aJzs5CYHtk82H3eU93GfoBNOg/I5P2QDSToGImWy9diKC8IEMzi4PeIQl
-         qQN3KNsY/k660wrh+NLYS0r99XxopdF01dkW9PUjJcYvzAmr9af1jbHHMrcR9NoYxvH7
-         pCsilrfiQqPZBeRse0LWgQ3ipvmZHTVRkvmx0nv1K/9ZyPG7pg3FUh8aKPgSMrhHZkNG
-         HBmgjo/Nq6ePgXsaGmhVageJoxFLS2XZkSEj0tv1xN7hY/utLhxSgzvIaS+J8XfHR//F
-         xutyeBrvUllXdUyV0Ta+O8+yVT0AFrJMe6Jm2jSNYndtlGBKlaVwgKVJEU25Xry0m+ZR
-         d4vQ==
-X-Gm-Message-State: AO0yUKVtOnRxazIlLmywgAl1NmtQfuaUFbRHVfHTaM9QYxPkJryvLLTT
-        P+ZSeCCR5nirbo0wR/eS/wyWtBE8N4JLaemELogn0oTSQ8ETLc4oGe16I8YjvZ90cO9I4q3ncu7
-        Q8enJjKRJ910/g9cUjlX2NFKTkhBgyEBSfuZzP5Ku
-X-Received: by 2002:a05:6102:f0a:b0:411:bd2e:11ac with SMTP id v10-20020a0561020f0a00b00411bd2e11acmr748823vss.75.1676964351943;
-        Mon, 20 Feb 2023 23:25:51 -0800 (PST)
-X-Google-Smtp-Source: AK7set+QzMJrGZDcal2v3DamPgxlNnPNto6IxZHAfuHD9KBnKa+B4kexA0i1IiOd075Fe4xK51ciiQNNhbdDUty1Qpc=
-X-Received: by 2002:a05:6102:f0a:b0:411:bd2e:11ac with SMTP id
- v10-20020a0561020f0a00b00411bd2e11acmr748816vss.75.1676964351730; Mon, 20 Feb
- 2023 23:25:51 -0800 (PST)
+        bh=UktBiYkkeez87hMqM48Li63kPXU3FfbLk8UmzQ2RKWw=;
+        b=QZC4Pw9o8MidWlTN/5L02j+LoMK6F2ufXZBjCK4usO7euEBOakN9aSoXgJap+ITrXS+acc
+        rKXItmNG7yzx3G4PdBlbSCKQZpp9pjxSJOLXeyxUbu6xwHtgoNVIhJiqHouMgFXRfE2TkY
+        EZyNZ8kvJVi7N//V3luu7IT/3pqfezc=
 MIME-Version: 1.0
-References: <20230221-gpu-up-time-v1-1-bf8fe74b7f55@asahilina.net>
-In-Reply-To: <20230221-gpu-up-time-v1-1-bf8fe74b7f55@asahilina.net>
-From:   Eric Curtin <ecurtin@redhat.com>
-Date:   Tue, 21 Feb 2023 07:25:35 +0000
-Message-ID: <CAOgh=Fw634rgNCzx+mMEQayhGKgUiBYsqpF7rFOz+q4DS1_kag@mail.gmail.com>
-Subject: Re: [PATCH] rust: time: New module for timekeeping functions
-To:     Asahi Lina <lina@asahilina.net>
-Cc:     Miguel Ojeda <ojeda@kernel.org>,
-        Alex Gaynor <alex.gaynor@gmail.com>,
-        Wedson Almeida Filho <wedsonaf@gmail.com>,
-        Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
-        =?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
-        John Stultz <jstultz@google.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Stephen Boyd <sboyd@kernel.org>, linux-kernel@vger.kernel.org,
-        rust-for-linux@vger.kernel.org, asahi@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Date:   Tue, 21 Feb 2023 08:27:13 +0100
+From:   Oleksandr Natalenko <oleksandr@natalenko.name>
+To:     David Woodhouse <dwmw2@infradead.org>
+Cc:     Kim Phillips <kim.phillips@amd.com>, tglx@linutronix.de,
+        Usama Arif <usama.arif@bytedance.com>, arjan@linux.intel.com,
+        mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
+        hpa@zytor.com, x86@kernel.org, pbonzini@redhat.com,
+        paulmck@kernel.org, linux-kernel@vger.kernel.org,
+        kvm@vger.kernel.org, rcu@vger.kernel.org, mimoja@mimoja.de,
+        hewenliang4@huawei.com, thomas.lendacky@amd.com, seanjc@google.com,
+        pmenzel@molgen.mpg.de, fam.zheng@bytedance.com,
+        punit.agrawal@bytedance.com, simon.evans@bytedance.com,
+        liangma@liangbit.com, Piotr Gorski <lucjan.lucjanov@gmail.com>,
+        "Limonciello, Mario" <Mario.Limonciello@amd.com>
+Subject: Re: [PATCH v9 0/8] Parallel CPU bringup for x86_64
+In-Reply-To: <42dc683e2846ae8fc1e09715aaf7884660e1a386.camel@infradead.org>
+References: <20230215145425.420125-1-usama.arif@bytedance.com>
+ <2668799.mvXUDI8C0e@natalenko.name>
+ <ed8d662351cfe5793f8cc7e7e8c514d05d16c501.camel@infradead.org>
+ <2668869.mvXUDI8C0e@natalenko.name>
+ <2a67f6cf18dd2c1879fad9fd8a28242918d3e5d2.camel@infradead.org>
+ <982e1d6140705414e8fd60b990bd259a@natalenko.name>
+ <715CBABF-4017-4784-8F30-5386F1524830@infradead.org>
+ <67dbc69f-b712-8971-f1c9-5d07f506a19c@amd.com>
+ <42dc683e2846ae8fc1e09715aaf7884660e1a386.camel@infradead.org>
+Message-ID: <37c18c3aeea2e558633b6da6886111d0@natalenko.name>
+X-Sender: oleksandr@natalenko.name
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 21 Feb 2023 at 07:16, Asahi Lina <lina@asahilina.net> wrote:
->
-> This module is intended to contain functions related to kernel
-> timekeeping and time. Initially, this just wraps ktime_get() and
-> ktime_get_boottime() and returns them as core::time::Duration instances.
-> This is useful for drivers that need to implement simple retry loops and
-> timeouts.
->
-> Signed-off-by: Asahi Lina <lina@asahilina.net>
-> ---
+On 21.02.2023 00:30, David Woodhouse wrote:
+> Oleksandr, please could you show the output of 'cpuid' after a
+> successful resume?  I'm particularly looking for this part...
+> 
+> 
+> $ sudo cpuid | grep -A1 1/ebx
+>    miscellaneous (1/ebx):
+>       process local APIC physical ID = 0x0 (0)
+> --
+>    miscellaneous (1/ebx):
+>       process local APIC physical ID = 0x2 (2)
+> ...
 
-Nice and simple C interface to create Rust abstractions for.
+For me this command doesn't produce any output. Also, no output from the 
+command Kim used in response to you. With no `grep` it just dumps a 
+table of raw hex data.
 
-Reviewed-by: Eric Curtin <ecurtin@redhat.com>
+It's `msr-tools` 1.3-4 from Arch. Should I run this command on a patched 
+kernel booted with `no_parallel_bringup`, or on unpatched kernel (if 
+that makes any difference)?
 
-Is mise le meas/Regards,
-
-Eric Curtin
-
->  rust/bindings/bindings_helper.h |  4 +++-
->  rust/kernel/lib.rs              |  1 +
->  rust/kernel/time.rs             | 25 +++++++++++++++++++++++++
->  3 files changed, 29 insertions(+), 1 deletion(-)
->
-> diff --git a/rust/bindings/bindings_helper.h b/rust/bindings/bindings_helper.h
-> index 75d85bd6c592..587f3d1c0c9f 100644
-> --- a/rust/bindings/bindings_helper.h
-> +++ b/rust/bindings/bindings_helper.h
-> @@ -6,8 +6,10 @@
->   * Sorted alphabetically.
->   */
->
-> -#include <linux/slab.h>
-> +#include <linux/ktime.h>
->  #include <linux/refcount.h>
-> +#include <linux/slab.h>
-> +#include <linux/timekeeping.h>
->
->  /* `bindgen` gets confused at certain things. */
->  const gfp_t BINDINGS_GFP_KERNEL = GFP_KERNEL;
-> diff --git a/rust/kernel/lib.rs b/rust/kernel/lib.rs
-> index 223564f9f0cc..371b1b17570e 100644
-> --- a/rust/kernel/lib.rs
-> +++ b/rust/kernel/lib.rs
-> @@ -37,6 +37,7 @@ mod static_assert;
->  pub mod std_vendor;
->  pub mod str;
->  pub mod sync;
-> +pub mod time;
->  pub mod types;
->
->  #[doc(hidden)]
-> diff --git a/rust/kernel/time.rs b/rust/kernel/time.rs
-> new file mode 100644
-> index 000000000000..02844db47d34
-> --- /dev/null
-> +++ b/rust/kernel/time.rs
-> @@ -0,0 +1,25 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +
-> +//! Timekeeping functions.
-> +//!
-> +//! C header: [`include/linux/ktime.h`](../../../../include/linux/ktime.h)
-> +//! C header: [`include/linux/timekeeping.h`](../../../../include/linux/timekeeping.h)
-> +
-> +use crate::bindings;
-> +use core::time::Duration;
-> +
-> +/// Returns the kernel time elapsed since boot, excluding time spent sleeping, as a [`Duration`].
-> +pub fn ktime_get() -> Duration {
-> +    // SAFETY: Function has no side effects and no inputs.
-> +    Duration::from_nanos(unsafe { bindings::ktime_get() }.try_into().unwrap())
-> +}
-> +
-> +/// Returns the kernel time elapsed since boot, including time spent sleeping, as a [`Duration`].
-> +pub fn ktime_get_boottime() -> Duration {
-> +    Duration::from_nanos(
-> +        // SAFETY: Function has no side effects and no variable inputs.
-> +        unsafe { bindings::ktime_get_with_offset(bindings::tk_offsets_TK_OFFS_BOOT) }
-> +            .try_into()
-> +            .unwrap(),
-> +    )
-> +}
->
-> ---
-> base-commit: 89f5349e0673322857bd432fa23113af56673739
-> change-id: 20230221-gpu-up-time-ea9412204c3b
->
-> Thank you,
-> ~~ Lina
->
->
-
+-- 
+   Oleksandr Natalenko (post-factum)
