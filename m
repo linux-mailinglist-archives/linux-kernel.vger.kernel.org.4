@@ -2,117 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7210A69E3C6
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 16:42:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DFF5469E3CA
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 16:43:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234138AbjBUPmG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Feb 2023 10:42:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37220 "EHLO
+        id S234465AbjBUPnM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Feb 2023 10:43:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38478 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234645AbjBUPlq (ORCPT
+        with ESMTP id S234560AbjBUPmw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Feb 2023 10:41:46 -0500
-Received: from mail-oo1-f53.google.com (mail-oo1-f53.google.com [209.85.161.53])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08DC793EC;
-        Tue, 21 Feb 2023 07:41:27 -0800 (PST)
-Received: by mail-oo1-f53.google.com with SMTP id r34-20020a4a9665000000b0051abd9835d4so472034ooi.1;
-        Tue, 21 Feb 2023 07:41:27 -0800 (PST)
+        Tue, 21 Feb 2023 10:42:52 -0500
+Received: from mail-pf1-x42f.google.com (mail-pf1-x42f.google.com [IPv6:2607:f8b0:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8580A2717
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Feb 2023 07:42:50 -0800 (PST)
+Received: by mail-pf1-x42f.google.com with SMTP id cb13so2709703pfb.5
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Feb 2023 07:42:50 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=pgJoew5uSEhDOZSrg2jVXTz7ZRs9T5t38ejwKJjnfNc=;
+        b=vRuRw5Ip1otM+28WxOzAbghLRjYEHZe4RWCNG7lf98qoXAKX0zLO5rRroIHpTA8tCW
+         cidxPyx4eumCtj3ns4zK3AB4YSqL8rusHgjnG1O6cXngiSERzr5ReARfFOIMud8JBr9s
+         4ZLtqam/3ItxgRS2GEoRDZsamVjWTagDE0EZ4Yna2QAxEp2tIuTgJkAtMNXsdJJF4hAe
+         dwEdodqsbiQEhYaGGdXryLnumt7MYgqzPo/qnqwJAXvqXGUqa2fS/CzOzYJITAk+a+Mu
+         lH70xu4ZNSpWSsZ2tDnb3WWX6jx83qZUMl8gLqlsgIyUkhRpG3Q6EcitnziuodUyVmpL
+         J/kg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=yAmFGspOZMSPZfnaoWYmVR2MjZajqXp66cfwHSIQL14=;
-        b=cKR6OCPXE1mHANDV7mSCN1O2DpE54R56M3ldb70/ej4Z6tmRe7bhfV2CsmBG1FzRtO
-         2XqOypGCfT5mCs6obivqusneMqxxdqvYHT57MOypYXZHaf+xGiOz10aP9TjKWZIldTp0
-         0pz8j4RSw2HAEQrzOH1PVFWFZ424yI90sMifKoISRK8sEe10PrHOSbQK8/Jx8U5JfE1D
-         jOQv1+3If/vzUQjoTK5pQjMUOgNjZQa5l9Avzsw+dGs0G+EQo3i0C2TznoEy7p+TEuzQ
-         W2CHmVAWRYJw8JO9D03t1fYmHoKPmKogshrNR2dtQtvAYhT37NXA99qYXg3fxmalxU3R
-         1tJg==
-X-Gm-Message-State: AO0yUKWKoNsdRymbG4K42OMu+aQMeJ2SpcwBEiUKqEOEb4JMwkpYjQa9
-        41Xi2ZSHkXQcumkYxAQk1A==
-X-Google-Smtp-Source: AK7set85VAFntiNHIDjGtfCC2oOT1/ixiwDzGmV6KZlRV3vcVPs11dYw0ZIvaGYFHStwN8BXxG0AZg==
-X-Received: by 2002:a4a:b6c3:0:b0:51f:e966:e3b7 with SMTP id w3-20020a4ab6c3000000b0051fe966e3b7mr1792287ooo.3.1676994086229;
-        Tue, 21 Feb 2023 07:41:26 -0800 (PST)
-Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id bf7-20020a056820174700b0051ff746e2b2sm293867oob.8.2023.02.21.07.41.25
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 21 Feb 2023 07:41:25 -0800 (PST)
-Received: (nullmailer pid 2586813 invoked by uid 1000);
-        Tue, 21 Feb 2023 15:41:24 -0000
-Date:   Tue, 21 Feb 2023 09:41:24 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Pin-yen Lin <treapking@chromium.org>
-Cc:     Andrzej Hajda <andrzej.hajda@intel.com>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Robert Foss <rfoss@kernel.org>,
-        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
-        Jonas Karlman <jonas@kwiboo.se>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Benson Leung <bleung@chromium.org>,
-        Chun-Kuang Hu <chunkuang.hu@kernel.org>,
-        devicetree@vger.kernel.org,
-        Nicolas Boichat <drinkcat@chromium.org>,
-        chrome-platform@lists.linux.dev, linux-kernel@vger.kernel.org,
-        Guenter Roeck <groeck@chromium.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        dri-devel@lists.freedesktop.org,
-        linux-mediatek@lists.infradead.org,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH v3 1/5] dt-bindings: display: bridge: Add ddc-i2c-bus for
- anx7688
-Message-ID: <20230221154124.GA2584323-robh@kernel.org>
-References: <20230218111712.2380225-1-treapking@chromium.org>
- <20230218111712.2380225-2-treapking@chromium.org>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=pgJoew5uSEhDOZSrg2jVXTz7ZRs9T5t38ejwKJjnfNc=;
+        b=1ytMuC0jB24inNNVkAg86gEa0Qul10PJHH6mxlZwgKvKvWw2GbTzI5WZFY9nIik3hW
+         qMCRZsd9a/Gii6NazF/UskgExANgE1knpo2USauAzoIVtGCEd4kUIncGE+wfbKiXfF9y
+         o2+rOJIz5T0XPiuCSDncR4kcLxJx4IU4tGYBBQxspgLuNstv7R8bJywLZGghGdkpSiE0
+         SSenFkwJIG8B7fN47sZ7t0daDparRi06ou76/P8mdI7do1Jh5p5+j+truLyQQqSQNyJL
+         KAjC/ojoDF/lHe2fQ2QJLC0S7H/EDoibTtq6yWROtDUZOGpvOzB+gGRTjaA341XiOl9d
+         VlBw==
+X-Gm-Message-State: AO0yUKXspyMuLWky4aSCrF2VrBhkeIcxpPGcvD4qhCezjWUocZcUlwTN
+        rN2fqxOhKl5Q1qzLvrSeVRWwevhscB1IsaGBNsR6Ow==
+X-Google-Smtp-Source: AK7set9ZWcKrK/yqSYv3MTq11vSyKz6NPMDcJAwxQs3l7xKPnC7GulnYeMRfW4THqcKMIzQUAjtCjl4HLPDxs1ENHgk=
+X-Received: by 2002:a63:368b:0:b0:4fb:d4d1:c320 with SMTP id
+ d133-20020a63368b000000b004fbd4d1c320mr661707pga.11.1676994169985; Tue, 21
+ Feb 2023 07:42:49 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230218111712.2380225-2-treapking@chromium.org>
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+References: <20230113141234.260128-1-vincent.guittot@linaro.org>
+ <20230113141234.260128-9-vincent.guittot@linaro.org> <Y/TfN1upxApdSERP@hirez.programming.kicks-ass.net>
+In-Reply-To: <Y/TfN1upxApdSERP@hirez.programming.kicks-ass.net>
+From:   Vincent Guittot <vincent.guittot@linaro.org>
+Date:   Tue, 21 Feb 2023 16:42:38 +0100
+Message-ID: <CAKfTPtDQ0hgiqdO7ywUEw3htpiBS3NxWMxXL9LqmBpA8E25quw@mail.gmail.com>
+Subject: Re: [PATCH v10 8/9] sched/fair: Add latency list
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     mingo@redhat.com, juri.lelli@redhat.com, dietmar.eggemann@arm.com,
+        rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de,
+        bristot@redhat.com, vschneid@redhat.com,
+        linux-kernel@vger.kernel.org, parth@linux.ibm.com,
+        cgroups@vger.kernel.org, qyousef@layalina.io,
+        chris.hyser@oracle.com, patrick.bellasi@matbug.net,
+        David.Laight@aculab.com, pjt@google.com, pavel@ucw.cz,
+        tj@kernel.org, qperret@google.com, tim.c.chen@linux.intel.com,
+        joshdon@google.com, timj@gnu.org, kprateek.nayak@amd.com,
+        yu.c.chen@intel.com, youssefesmat@chromium.org,
+        joel@joelfernandes.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Feb 18, 2023 at 07:17:08PM +0800, Pin-yen Lin wrote:
-> Introduce a optional "ddc-i2c-bus" property for anx7688 bridge. This
-> allows the bridge to register a .get_edid callback.
+On Tue, 21 Feb 2023 at 16:12, Peter Zijlstra <peterz@infradead.org> wrote:
+>
+> On Fri, Jan 13, 2023 at 03:12:33PM +0100, Vincent Guittot wrote:
+> > @@ -12552,8 +12634,15 @@ int sched_group_set_latency(struct task_group *tg, s64 latency)
+> >
+> >       for_each_possible_cpu(i) {
+> >               struct sched_entity *se = tg->se[i];
+> > +             struct rq *rq = cpu_rq(i);
+> > +             struct rq_flags rf;
+> > +
+> > +             rq_lock_irqsave(rq, &rf);
+> >
+> > +             __dequeue_latency(se->cfs_rq, se);
+> >               WRITE_ONCE(se->latency_offset, latency);
+> > +
+> > +             rq_unlock_irqrestore(rq, &rf);
+> >       }
+>
+> This seems asymmetric; maybe something like:
+>
+>         queued = __dequeue_latency(..);
+>         WRITE_ONCE(...);
+>         if (queued)
+>                 __enqueue_latency(...);
+>
+> ?
 
-What's .get_edid? This is a binding and is independent of Linux.
-
-> 
-> Signed-off-by: Pin-yen Lin <treapking@chromium.org>
-> ---
-> 
-> Changes in v3:
-> - New in v3
-> 
->  .../bindings/display/bridge/google,cros-ec-anx7688.yaml      | 5 +++++
->  1 file changed, 5 insertions(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/display/bridge/google,cros-ec-anx7688.yaml b/Documentation/devicetree/bindings/display/bridge/google,cros-ec-anx7688.yaml
-> index a44d025d33bd..9d5ce8172e88 100644
-> --- a/Documentation/devicetree/bindings/display/bridge/google,cros-ec-anx7688.yaml
-> +++ b/Documentation/devicetree/bindings/display/bridge/google,cros-ec-anx7688.yaml
-> @@ -25,6 +25,10 @@ properties:
->      maxItems: 1
->      description: I2C address of the device.
->  
-> +  ddc-i2c-bus:
-> +    description: phandle link to the I2C controller used for DDC EDID probing
-> +    $ref: /schemas/types.yaml#/definitions/phandle
-> +
-
-No, this belongs in the connector node. The DDC signals are routed to 
-the connector, not the bridge chip.
-
-Rob
+Fair enough
