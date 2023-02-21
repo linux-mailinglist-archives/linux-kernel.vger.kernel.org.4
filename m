@@ -2,170 +2,230 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A7BF069E18C
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 14:43:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C12A569E192
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 14:44:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234081AbjBUNm6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Feb 2023 08:42:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32972 "EHLO
+        id S234099AbjBUNoN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Feb 2023 08:44:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34110 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234090AbjBUNm4 (ORCPT
+        with ESMTP id S233226AbjBUNoM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Feb 2023 08:42:56 -0500
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E8F8170A
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Feb 2023 05:42:55 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1676986975; x=1708522975;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=7hNWcojp5W2U9hZRNmXQmRA9fxvEreTv/MsDdmwKkTM=;
-  b=nP+yJofG5TPxvfNIkr+ZqSuzvNZrZpqs+hL7e2o396Q3Zsm9mRvYlmZY
-   GaEku5e7fYXQ4BRz0bdxhLX4JIpexEWh0j19Wo5/mZJqavORfxM5Tq4HC
-   jyWTRQOMhQneBbZ/uA1P3+Ke26N5UgPDs7G8jSmpjd94Q3xQr/3jPZ32w
-   uBRi/Wfw56uyKnMU72J3l67p3ZWQoseooj9xHPvvbMprIkf6Rt+0NTcXs
-   oT04MOr/yrrsr1V4zSmqfjpkKmtDJ3asZ5R5Mj73hFlvYDh2NJoc5eFgw
-   dAoCX5OE4bYXUEZ/1vMefJOrhKn1Wu7pc5LbcTNaBKo6oHVeH2Ye8OsAC
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10627"; a="316353737"
-X-IronPort-AV: E=Sophos;i="5.97,315,1669104000"; 
-   d="scan'208";a="316353737"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Feb 2023 05:42:54 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10627"; a="673679994"
-X-IronPort-AV: E=Sophos;i="5.97,315,1669104000"; 
-   d="scan'208";a="673679994"
-Received: from stinkpipe.fi.intel.com (HELO stinkbox) ([10.237.72.70])
-  by fmsmga007.fm.intel.com with SMTP; 21 Feb 2023 05:42:50 -0800
-Received: by stinkbox (sSMTP sendmail emulation); Tue, 21 Feb 2023 15:42:49 +0200
-Date:   Tue, 21 Feb 2023 15:42:49 +0200
-From:   Ville =?iso-8859-1?Q?Syrj=E4l=E4?= <ville.syrjala@linux.intel.com>
-To:     Pekka Paalanen <ppaalanen@gmail.com>
-Cc:     Rob Clark <robdclark@gmail.com>,
-        Rob Clark <robdclark@chromium.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Tvrtko Ursulin <tvrtko.ursulin@intel.com>,
-        Christian =?iso-8859-1?Q?K=F6nig?= 
-        <ckoenig.leichtzumerken@gmail.com>,
-        Michel =?iso-8859-1?Q?D=E4nzer?= <michel@daenzer.net>,
-        open list <linux-kernel@vger.kernel.org>,
-        dri-devel@lists.freedesktop.org,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        freedreno@lists.freedesktop.org
-Subject: Re: [PATCH v4 10/14] drm/vblank: Add helper to get next vblank time
-Message-ID: <Y/TKWRNXvRo6seKK@intel.com>
-References: <20230218211608.1630586-1-robdclark@gmail.com>
- <20230218211608.1630586-11-robdclark@gmail.com>
- <20230220110820.595cfa37@eldfell>
- <CAF6AEGuo-vmW4Va9=RH+kH9KgNvR2vzjJ8meO-oty56xjDhjgg@mail.gmail.com>
- <20230221104551.60d44d1c@eldfell>
- <Y/TAr64SpxO712RB@intel.com>
- <20230221151133.6392c521@eldfell>
+        Tue, 21 Feb 2023 08:44:12 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F64C65B6;
+        Tue, 21 Feb 2023 05:44:10 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 9E7DDCE19E6;
+        Tue, 21 Feb 2023 13:44:08 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 69B7EC433D2;
+        Tue, 21 Feb 2023 13:44:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1676987046;
+        bh=GzTJZs4LkVCiRQZTfYHn1K5tMQfcfIKi4fqDp/wozwM=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=WDct35pXKMDFI/inzGiFPLZoCif0IrzusYonBXqlrN6LumxQx0q0lmsfLI18trZiw
+         SH+mrcESPiUGz2bMvUQR/dGobex9EesYDALvAzXXQYFWxXen1EBYnGTiPJfz/P9ffq
+         Ee5nBNNEFk25spv1B07LI+0H22O0p0b3jtwFFC3JLLEDUMn9MokOAFVM3+RpLRmatG
+         FUDzZ5UHydkFgktVmR751zUgzGGKKtvMwtFaPpJMRZbOrD5gl7GRhDZYfpZcfpzTMu
+         GpyGr6F2GeTX37FL4WB1y8We0D1dPW5dci/sHp/0jhxhH5K3/Bm2LAywyzqFimcgKI
+         DT6udz5i30bUQ==
+Message-ID: <c38afa67-d24f-0390-f18a-81bee15b7eca@kernel.org>
+Date:   Tue, 21 Feb 2023 14:44:00 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230221151133.6392c521@eldfell>
-X-Patchwork-Hint: comment
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH v1 1/2] dt-bindings: iio: adc: adding dt-bindings for
+ PAC193X
+Content-Language: en-US
+To:     marius.cristea@microchip.com, jic23@kernel.org, lars@metafoo.de,
+        robh+dt@kernel.org
+Cc:     linux-iio@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20230220123232.413029-1-marius.cristea@microchip.com>
+ <20230220123232.413029-2-marius.cristea@microchip.com>
+From:   Krzysztof Kozlowski <krzk@kernel.org>
+In-Reply-To: <20230220123232.413029-2-marius.cristea@microchip.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 21, 2023 at 03:11:33PM +0200, Pekka Paalanen wrote:
-> On Tue, 21 Feb 2023 15:01:35 +0200
-> Ville Syrjälä <ville.syrjala@linux.intel.com> wrote:
-> 
-> > On Tue, Feb 21, 2023 at 10:45:51AM +0200, Pekka Paalanen wrote:
-> > > On Mon, 20 Feb 2023 07:55:41 -0800
-> > > Rob Clark <robdclark@gmail.com> wrote:
-> > >   
-> > > > On Mon, Feb 20, 2023 at 1:08 AM Pekka Paalanen <ppaalanen@gmail.com> wrote:  
-> > > > >
-> > > > > On Sat, 18 Feb 2023 13:15:53 -0800
-> > > > > Rob Clark <robdclark@gmail.com> wrote:
-> > > > >    
-> > > > > > From: Rob Clark <robdclark@chromium.org>
-> > > > > >
-> > > > > > Will be used in the next commit to set a deadline on fences that an
-> > > > > > atomic update is waiting on.
-> > > > > >
-> > > > > > Signed-off-by: Rob Clark <robdclark@chromium.org>
-> > > > > > ---
-> > > > > >  drivers/gpu/drm/drm_vblank.c | 32 ++++++++++++++++++++++++++++++++
-> > > > > >  include/drm/drm_vblank.h     |  1 +
-> > > > > >  2 files changed, 33 insertions(+)
-> > > > > >
-> > > > > > diff --git a/drivers/gpu/drm/drm_vblank.c b/drivers/gpu/drm/drm_vblank.c
-> > > > > > index 2ff31717a3de..caf25ebb34c5 100644
-> > > > > > --- a/drivers/gpu/drm/drm_vblank.c
-> > > > > > +++ b/drivers/gpu/drm/drm_vblank.c
-> > > > > > @@ -980,6 +980,38 @@ u64 drm_crtc_vblank_count_and_time(struct drm_crtc *crtc,
-> > > > > >  }
-> > > > > >  EXPORT_SYMBOL(drm_crtc_vblank_count_and_time);
-> > > > > >
-> > > > > > +/**
-> > > > > > + * drm_crtc_next_vblank_time - calculate the time of the next vblank
-> > > > > > + * @crtc: the crtc for which to calculate next vblank time
-> > > > > > + * @vblanktime: pointer to time to receive the next vblank timestamp.
-> > > > > > + *
-> > > > > > + * Calculate the expected time of the next vblank based on time of previous
-> > > > > > + * vblank and frame duration    
-> > > > >
-> > > > > Hi,
-> > > > >
-> > > > > for VRR this targets the highest frame rate possible for the current
-> > > > > VRR mode, right?
-> > > > >    
-> > > > 
-> > > > It is based on vblank->framedur_ns which is in turn based on
-> > > > mode->crtc_clock.  Presumably for VRR that ends up being a maximum?  
-> > > 
-> > > I don't know. :-)  
-> > 
-> > At least for i915 this will give you the maximum frame
-> > duration.
-> 
-> Really maximum duration? So minimum VRR frequency?
+On 20/02/2023 13:32, marius.cristea@microchip.com wrote:
+> From: Marius Cristea <marius.cristea@microchip.com>
 
-Yes. Doing otherwise would complicate the actual
-timestamp calculation even further.
-
-The actual timestamps i915 generates will however match
-the start of active video, regardless of how long vblank
-was extended.
-
-The only exception might be if you query the timestamp
-during vblank but VRR exit has not yet been triggered,
-ie. not commit has been made during the frame. In that
-case the timestamp will correspond to the max frame
-duration, which may or may not end up being the case.
-Depends totally whether a commit will still happen
-during the vblank to trigger an early vblank exit.
+Subject: drop second/last, redundant "dt-bindings for". The
+"dt-bindings" prefix is already stating that these are bindings.
 
 > 
-> > Also this does not calculate the the start of vblank, it
-> > calculates the start of active video.
+> This is the device tree schema for iio driver for
+> Microchip PAC193X series of Power Monitors with Accumulator.
+
+Do not use "This commit/patch".
+https://elixir.bootlin.com/linux/v5.17.1/source/Documentation/process/submitting-patches.rst#L95
+
+Use imperative - also for subject.
+
+Please use scripts/get_maintainers.pl to get a list of necessary people
+and lists to CC.  It might happen, that command when run on an older
+kernel, gives you outdated entries.  Therefore please be sure you base
+your patches on recent Linux kernel.
+
+
 > 
-> Oh indeed, so it's too late. What one would actually need for the
-> deadline is the driver's deadline to present for the immediately next
-> start of active video.
+> Signed-off-by: Marius Cristea <marius.cristea@microchip.com>
+> ---
+>  .../bindings/iio/adc/microchip,pac193x.yaml   | 122 ++++++++++++++++++
+>  1 file changed, 122 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/iio/adc/microchip,pac193x.yaml
 > 
-> And with VRR that should probably aim for the maximum frame frequency,
-> not minimum?
+> diff --git a/Documentation/devicetree/bindings/iio/adc/microchip,pac193x.yaml b/Documentation/devicetree/bindings/iio/adc/microchip,pac193x.yaml
+> new file mode 100644
+> index 000000000000..e4ea560991e9
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/iio/adc/microchip,pac193x.yaml
+> @@ -0,0 +1,122 @@
+> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/iio/adc/microchip,pac193x.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Microchip PAC193X Power Monitors with Accumulator
+> +
+> +maintainers:
+> +  - Marius Cristea <marius.cristea@microchip.com>
+> +
+> +properties:
+> +  compatible:
+> +    enum:
+> +      - microchip,pac1934
+> +      - microchip,pac1933
+> +      - microchip,pac1932
+> +      - microchip,pac1931
 
-Yeah, max frame rate seems like the easiest thing to use there.
+Maybe order these numerically (ascending)?
 
-The other option might be some average value based on recent
-history, but figuring tht out would seem like a lot more work.
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  "#address-cells":
+> +    const: 1
+> +
+> +  "#size-cells":
+> +    const: 0
+> +
+> +  microchip,samp-rate:
+> +    $ref: /schemas/types.yaml#/definitions/uint32
+> +    description: Sampling rate for all device's channels.
 
--- 
-Ville Syrjälä
-Intel
+What are the units? rate is usually in hz, which should be expressed in
+unit suffix (property name)
+
+> +    enum: [8, 64, 256, 1024]
+> +    default: 1024
+> +
+> +required:
+
+required goes after all properties, so after patternProperties
+
+> +  - compatible
+> +  - reg
+> +  - microchip,samp-rate
+> +  - "#address-cells"
+> +  - "#size-cells"
+> +
+> +patternProperties:
+> +  "^channel([1-4])@[1-4]+$":
+
+Why first reg-pattern ([1-4])? For what do you need it?
+
+> +    $ref: "adc.yaml"
+
+Drop quotes
+
+> +    type: object
+> +    description: Represents the external channels which are connected to the ADC.
+> +
+> +    properties:
+> +      reg:
+> +        description: The channel number.
+> +          It can have up to 4 channels, numbered from 1 to 4.
+> +        items:
+> +          - minimum: 1
+> +            maximum: 4
+> +
+> +      microchip,uohms-shunt-res:
+
+Not a correct unit suffix. Use standard properties:
+git grep shunt -- Documentation/devicetree/
+
+
+> +        $ref: /schemas/types.yaml#/definitions/uint32
+> +        description: |
+> +          Value in micro Ohms of the shunt resistor connected between
+> +          the SENSE+ and SENSE- inputs, across which the current is measured. Value
+> +          is needed to compute the scaling of the measured current.
+> +
+> +      microchip,rail-name:
+> +        $ref: /schemas/types.yaml#/definitions/string
+> +        description: Name of the monitored power rail.
+
+Why do you need it? Why this is a property of DT? Aren't you now
+duplicating label?
+
+> +
+> +      microchip,bi-directional:
+> +        description: Whether the channel is bi-directional.
+
+Describe here what is a "bi-directional" channel for ADC... Maybe it is
+obvious, maybe not. For me it is not and none of other devices have it.
+
+> +        type: boolean
+> +
+> +    required:
+> +      - reg
+> +      - microchip,uohms-shunt-res
+> +      - microchip,rail-name
+> +
+> +    additionalProperties: false
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    i2c {
+> +        #address-cells = <1>;
+> +        #size-cells = <0>;
+> +
+> +        pac193x: pac193x@10 {
+
+Node names should be generic.
+https://devicetree-specification.readthedocs.io/en/latest/chapter2-devicetree-basics.html#generic-names-recommendation
+
+> +            compatible = "microchip,pac1934";
+> +            reg = <0x10>;
+> +
+> +            #address-cells = <1>;
+> +            #size-cells = <0>;
+> +            microchip,samp-rate = <64>;
+> +
+> +            channel1@1 {
+
+1@1 is for sure not generic...
+
+
+
+Best regards,
+Krzysztof
+
