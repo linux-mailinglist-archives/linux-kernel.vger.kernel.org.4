@@ -2,139 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6225069DE2D
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 11:50:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DDE8E69DE30
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 11:50:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233805AbjBUKui (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Feb 2023 05:50:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50106 "EHLO
+        id S233834AbjBUKut (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Feb 2023 05:50:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50446 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232686AbjBUKuh (ORCPT
+        with ESMTP id S233825AbjBUKur (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Feb 2023 05:50:37 -0500
-Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EDF0A1CF7D;
-        Tue, 21 Feb 2023 02:50:35 -0800 (PST)
-Received: by mail-ed1-x52f.google.com with SMTP id ec43so14842392edb.8;
-        Tue, 21 Feb 2023 02:50:35 -0800 (PST)
+        Tue, 21 Feb 2023 05:50:47 -0500
+Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8348C21A25
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Feb 2023 02:50:44 -0800 (PST)
+Received: by mail-ed1-x531.google.com with SMTP id h16so15530176edz.10
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Feb 2023 02:50:44 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=Ti7UZf6h2PEzAVjtyfvwktB9sdr7x+Jsk9SvJUAXHH8=;
-        b=Odw06A7IWOgv1wMzR/k2gi2d/wgwWDDyoTVtlceNORqLIOi3lr+YBBcmQQ+1i5H5mS
-         GF/rnZCC5D5YLctdcDpf7H46AIwLAIBDxX+baW9xbFjw0wc+uQCG1WMa4usFssR7kcv/
-         adXn7BUMq5kM3W7uYFMl8JV9aGL8jKMOkv/Qk/KFLBO5zbCNxZKbQa3MjVfup0mjcq2r
-         xvqrL+jFm9TfGI1woYL4tNj37KQyZULDu2xYUZDlPpYgu7waQPUZDk01+ooVrsLM7c8Q
-         yOnc16Ge5WPsfzlHNqy/gyFWBiajTYwHTy0bskOh0OUEesmaXhCfjm8nSdmyizGR9kPX
-         CxLQ==
+        d=sartura.hr; s=sartura;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=pYjWLgQYUyf0rfB+O28fl3yoRQb/M04CEuNH5hkz1cs=;
+        b=p2wzYBo3W+HrqRwhYizv8ezrYEbXHvTHEGP4HDkZqnrL1td9lLY1poI37muWJ7sd3y
+         Bd24g575XQwvAkILeyYn1CiV7LmkE+VFqxzYM8GiLqM3nPNvVOE2MTvW+j6Uf+petFQV
+         /fL4aVnW6Awf9JyCMGMvLK/ckLO2+5LEFuVgo1wLs5cAY3yPZ+PoRu73RTIa/sfZJYxP
+         vwZv0CpqP0copFJkNX++pG1KyBQarJ1StdWJlc+fh/vsDYKyjAhOSV/ZrQAPiQbQdXLQ
+         v5eA2Qr9dqfCgE2gdryWm2viN/kqaT7cnzY9+2w7KioLjpVxTe90Et9jd6dIgH/ieg83
+         9hGw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=Ti7UZf6h2PEzAVjtyfvwktB9sdr7x+Jsk9SvJUAXHH8=;
-        b=mZt/d59Y+t4GvxSc14H5u1LCvTQbvOt0NRgGpFMM0NzcSYlg+hsSSR60XAmWDERiRI
-         mIS/IYzd8zM6z9nbM7OyeksjeJhsDq9KvBLISBf1P7Suip02UoIE7kt+2m8OA/hx7dfs
-         yO6f4QTV1geMAMY/vbk4IccGZyX3XoqKt73T5EJqDBvuxf3M1ws1qwZzc+u/pCfW9iKf
-         h1dCS3+pn81Rk4W18Yfc7M33nFI+hCFEH3e/fUJdiS1vZziJHJM7upM6OeLQnmDxgJcG
-         GxHaAIcEapIIWcAE+pNOTKOEamS2SDoP8KC3+qnUPHngXoQcUeiY6RITugev9QVrw7EJ
-         NMFw==
-X-Gm-Message-State: AO0yUKXEEnHVkQKrM6l18kFO6kGPgS1LBpax7YMkNE6eVdsChkxNfR5s
-        7S9Qce7xBF5J4aCsJUZnzXzsuR/Y8eQH/fWgXPA=
-X-Google-Smtp-Source: AK7set9GOkHPo3E6kkUlfj38iSQDlt4z0IpFgJqNIOaMXIzjnIbbkvBbwZsMSETWjyfpaKmlsqbmIGKCnJvJTM45mWY=
-X-Received: by 2002:a17:906:a292:b0:8b1:28e5:a1bc with SMTP id
- i18-20020a170906a29200b008b128e5a1bcmr5601187ejz.5.1676976634408; Tue, 21 Feb
- 2023 02:50:34 -0800 (PST)
+        bh=pYjWLgQYUyf0rfB+O28fl3yoRQb/M04CEuNH5hkz1cs=;
+        b=rGUDbPn2J00tTtF03gnNxud8+CCVH/xmgUnzoSik6+6sx+bDzSvUFQvAPPfWdHYoPA
+         JddRGm5QsfSu7YvJknTaUv9VCfKr+n9176l1Tgp6kxZrctxyy5J//JT1AlgaweNJxrLv
+         IlDcp4NB/3MIp7VFDgV+4UHIpvDSF7fmOuipOyGowBMF3uEQD3KkxOBuas9jVcTGurJu
+         lWqxwPSGHYIUSHlVZ3Lc1xfscsPwhXOoAsfyGImAwvd/4m6nY5nbMgmsVRQJmt10H+Lz
+         MTYAL32smfmPbNF3NvB36fl6hfI6DJyfLjZBAfc4z5fQZ1BGldZl3h20ADnMxkTzNk4+
+         M/DQ==
+X-Gm-Message-State: AO0yUKWzvr6UZnoldca59gvCaD45ix1m/Xc9bvnRaCF2ERJA7FL7SbE7
+        phgwIOPVuBDHtoFeDdHHQZx6Zg==
+X-Google-Smtp-Source: AK7set+cFpf8rY+4xMoIg5FcZ+hPP4nkQ6KLR86qzt/E74X3ahuDQFPJBCZTgVf2Pbt3I5AlZXx3Cg==
+X-Received: by 2002:a17:907:e8d:b0:8b1:2e8f:d524 with SMTP id ho13-20020a1709070e8d00b008b12e8fd524mr19296846ejc.27.1676976642934;
+        Tue, 21 Feb 2023 02:50:42 -0800 (PST)
+Received: from fedora.. (dh207-97-58.xnet.hr. [88.207.97.58])
+        by smtp.googlemail.com with ESMTPSA id bk26-20020a170906b0da00b0089d5aaf85besm6955802ejb.219.2023.02.21.02.50.41
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 21 Feb 2023 02:50:42 -0800 (PST)
+From:   Robert Marko <robert.marko@sartura.hr>
+To:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        lars.povlsen@microchip.com, Steen.Hegelund@microchip.com,
+        daniel.machon@microchip.com, UNGLinuxDriver@microchip.com,
+        arnd@arndb.de, alexandre.belloni@bootlin.com,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Cc:     luka.perkov@sartura.hr, Robert Marko <robert.marko@sartura.hr>
+Subject: [PATCH v2 1/3] arm64: dts: microchip: sparx5: do not use PSCI on reference boards
+Date:   Tue, 21 Feb 2023 11:50:37 +0100
+Message-Id: <20230221105039.316819-1-robert.marko@sartura.hr>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-References: <20230221102605.2103657-1-keguang.zhang@gmail.com> <cc0c458c-8c4b-c187-8b65-5943499ddf94@linaro.org>
-In-Reply-To: <cc0c458c-8c4b-c187-8b65-5943499ddf94@linaro.org>
-From:   Kelvin Cheung <keguang.zhang@gmail.com>
-Date:   Tue, 21 Feb 2023 18:50:18 +0800
-Message-ID: <CAJhJPsV87yw3HkagW3c_q4tTBFeTE-5sAQ2_OT9=4Eyq+Bb-2A@mail.gmail.com>
-Subject: Re: [PATCH v2] dt-bindings: mips: loongson: Add Loongson-1 based boards
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     linux-mips@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 21, 2023 at 6:36 PM Krzysztof Kozlowski
-<krzysztof.kozlowski@linaro.org> wrote:
->
-> On 21/02/2023 11:26, Keguang Zhang wrote:
-> > Add two Loongson-1 based boards: LSGZ 1B and Smartloong 1C.
-> >
-> > Signed-off-by: Keguang Zhang <keguang.zhang@gmail.com>
-> > ---
-> > V1 -> V2: Add the according vendor prefix
-> >           Change the board string to enum
-> >           Modify the board description
->
-> Thank you for your patch. There is something to discuss/improve.
->
-> > ---
-> >  .../devicetree/bindings/mips/loongson/devices.yaml   | 12 ++++++++++++
-> >  .../devicetree/bindings/vendor-prefixes.yaml         |  2 ++
-> >  2 files changed, 14 insertions(+)
-> >
-> > diff --git a/Documentation/devicetree/bindings/mips/loongson/devices.yaml b/Documentation/devicetree/bindings/mips/loongson/devices.yaml
-> > index f13ce386f42c..15a43ce51bbf 100644
-> > --- a/Documentation/devicetree/bindings/mips/loongson/devices.yaml
-> > +++ b/Documentation/devicetree/bindings/mips/loongson/devices.yaml
-> > @@ -37,6 +37,18 @@ properties:
-> >          items:
-> >            - const: loongson,loongson64v-4core-virtio
-> >
-> > +      - description: LS1B based boards
-> > +        items:
-> > +          - enum:
-> > +              - loongson,lsgz-1b-dev
-> > +          - const: loongson,ls1b
-> > +
-> > +      - description: LS1C based boards
-> > +        items:
-> > +          - enum:
-> > +              - loongsonclub,smartloong-1c
-> > +          - const: loongson,ls1c
-> > +
-> >  additionalProperties: true
-> >
-> >  ...
-> > diff --git a/Documentation/devicetree/bindings/vendor-prefixes.yaml b/Documentation/devicetree/bindings/vendor-prefixes.yaml
-> > index 0e57ae744199..47565ebae4d1 100644
-> > --- a/Documentation/devicetree/bindings/vendor-prefixes.yaml
-> > +++ b/Documentation/devicetree/bindings/vendor-prefixes.yaml
-> > @@ -757,6 +757,8 @@ patternProperties:
-> >      description: Lontium Semiconductor Corporation
-> >    "^loongson,.*":
-> >      description: Loongson Technology Corporation Limited
-> > +  "^loongsonclub,.*":
-> > +    description: Loongson Club
->
-> Are you sure that this is a board manufacturer?
->
-Sorry, that's inaccurate.
-Let me update the manufacturer later.
+PSCI is not implemented on SparX-5 at all, there is no ATF and U-boot that
+is shipped does not implement it as well.
 
-> Best regards,
-> Krzysztof
->
+I have tried flashing the latest BSP 2022.12 U-boot which did not work.
+After contacting Microchip, they confirmed that there is no ATF for the
+SoC nor PSCI implementation which is unfortunate in 2023.
 
+So, disable PSCI as otherwise kernel crashes as soon as it tries probing
+PSCI with, and the crash is only visible if earlycon is used.
 
+Since PSCI is not implemented, switch core bringup to use spin-tables
+which are implemented in the vendor U-boot and actually work.
+
+Tested on PCB134 with eMMC (VSC5640EV).
+
+Fixes: 6694aee00a4b ("arm64: dts: sparx5: Add basic cpu support")
+Signed-off-by: Robert Marko <robert.marko@sartura.hr>
+---
+Changes in v2:
+* As suggested by Arnd, disable PSCI only on reference boards
+---
+ arch/arm64/boot/dts/microchip/sparx5.dtsi            |  2 +-
+ arch/arm64/boot/dts/microchip/sparx5_pcb_common.dtsi | 12 ++++++++++++
+ 2 files changed, 13 insertions(+), 1 deletion(-)
+
+diff --git a/arch/arm64/boot/dts/microchip/sparx5.dtsi b/arch/arm64/boot/dts/microchip/sparx5.dtsi
+index 0367a00a269b3..5eae6e7fd248e 100644
+--- a/arch/arm64/boot/dts/microchip/sparx5.dtsi
++++ b/arch/arm64/boot/dts/microchip/sparx5.dtsi
+@@ -61,7 +61,7 @@ arm-pmu {
+ 		interrupt-affinity = <&cpu0>, <&cpu1>;
+ 	};
+ 
+-	psci {
++	psci: psci {
+ 		compatible = "arm,psci-0.2";
+ 		method = "smc";
+ 	};
+diff --git a/arch/arm64/boot/dts/microchip/sparx5_pcb_common.dtsi b/arch/arm64/boot/dts/microchip/sparx5_pcb_common.dtsi
+index 9d1a082de3e29..32bb76b3202a0 100644
+--- a/arch/arm64/boot/dts/microchip/sparx5_pcb_common.dtsi
++++ b/arch/arm64/boot/dts/microchip/sparx5_pcb_common.dtsi
+@@ -6,6 +6,18 @@
+ /dts-v1/;
+ #include "sparx5.dtsi"
+ 
++&psci {
++	status = "disabled";
++};
++
++&cpu0 {
++	enable-method = "spin-table";
++};
++
++&cpu1 {
++	enable-method = "spin-table";
++};
++
+ &uart0 {
+ 	status = "okay";
+ };
 -- 
-Best regards,
+2.39.2
 
-Kelvin Cheung
