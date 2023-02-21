@@ -2,98 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 549E569E8CD
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 21:04:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ED25B69E8CF
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 21:06:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230091AbjBUUE3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Feb 2023 15:04:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53182 "EHLO
+        id S230104AbjBUUGE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Feb 2023 15:06:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54986 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229576AbjBUUE1 (ORCPT
+        with ESMTP id S229931AbjBUUGC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Feb 2023 15:04:27 -0500
-Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 680A321A29
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Feb 2023 12:04:25 -0800 (PST)
-Received: by mail-wr1-x42e.google.com with SMTP id t13so5623178wrv.13
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Feb 2023 12:04:25 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=EIb2flwMflqFym3iTYzvFjM/prFop9ypIVwQwGI/2Aw=;
-        b=m9k35q0U65PVXWlf0RAcVdHkw968UFoeZUUNEsFwhXdKsZV1N51O59YraeHSpefpwX
-         OoOkEgzVEq2YiBQNLnp9lp1vRQdtT5TLuq3gCgL6hBsiPMk2NQS+yUeSzMXmfX+q9R07
-         jEAw4IH+m4PYq2MRbgaV8qigfz8XkdrPM1ISUEB7DFs0YHEC7v5liiuSNfAZVPHYxVKS
-         EQ3xJ5Mfj9z/INdXng/xuEkWYqSeTbj9JWcsWs5hffUxyY32TOKsHX+AqNDKs/0bg/uy
-         aKss3vqE7njgtfy5R0WKVWWdjvAnlzEhXwUNL3XGiteWity77ETTTqiEnFOd07t9s2S0
-         ib3w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=EIb2flwMflqFym3iTYzvFjM/prFop9ypIVwQwGI/2Aw=;
-        b=y68hwuGVFwD20SfZIvhUsoD1l1//DxZxDHO56G4m1L6wT4T9c6OvuatwdNIdQtIKNw
-         PHzGQsY6bHgPVFqwk/8DV7uO0ueCtMby/FgWfHaarKnmuBs0s4i2bsuUafmC+FhYUgP8
-         008HJy9S52cbS+gg/jzASvDk1mKmAyAsAnL5x5eptj0DKNHJndqHXUZIe0KUNxnbqh+8
-         VapaYIKU6pzx/ZWnINcgYDBTNuIs13KM5QiuTuXAFbxBSf8O+7D9lpCE6ttLh+OSrL80
-         nGVjwIE5J5EGV8Rq92OKn0A8fad94p4lH+/CO+wJLXEprbquKpSUOH4NOl8LEmFLIDed
-         bSrA==
-X-Gm-Message-State: AO0yUKXX8hl/y1xqozqb6ft3ywzml5ovD9wTMtBDc4TSahihOrsnZGH1
-        c2T7sf4bOGMDySYic7/A/Ff/Gw==
-X-Google-Smtp-Source: AK7set/YVRsOSZcF1OgUYNXH/U5F94pPl7UST7vpCkjPcwkP41OV1DDZZDVFktbMuczhP52/fsVb2w==
-X-Received: by 2002:a5d:5087:0:b0:2c5:60a9:9cd2 with SMTP id a7-20020a5d5087000000b002c560a99cd2mr4266245wrt.28.1677009863796;
-        Tue, 21 Feb 2023 12:04:23 -0800 (PST)
-Received: from ?IPV6:2a02:6b6a:b566:0:1a14:8be6:b3a9:a95e? ([2a02:6b6a:b566:0:1a14:8be6:b3a9:a95e])
-        by smtp.gmail.com with ESMTPSA id i8-20020a5d5228000000b002c70851bfcasm818024wra.28.2023.02.21.12.04.22
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 21 Feb 2023 12:04:23 -0800 (PST)
-Message-ID: <538080af-b876-6462-c591-be66dceb4b8d@bytedance.com>
-Date:   Tue, 21 Feb 2023 20:04:22 +0000
+        Tue, 21 Feb 2023 15:06:02 -0500
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 133E12B628
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Feb 2023 12:06:00 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1677009961; x=1708545961;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=xgS7PVJCPZJ+//xyj4OSmQvPnD+TakDYc2ICsvn/8wM=;
+  b=V5ntS0vTaK5HDksoYql19iZasKzxVZ5ZNQa+tiZEtRlGR6vdH96IDTFN
+   w6F/GWyu7eWbZzC/qtmGb/eys+Y7RURJbqLVQb/6iOkMxluWlTDnAO/+W
+   QfavCLxU9rbTTgmluBM70hntLb0Ll9R0wlKDu7LjO4zSjWe609FlVTTvd
+   Ep8hjkHvfx0y0gCPXjQ32yQToZtbK5I56umOmGaWOzoRMnFxytpJu3UZe
+   BfWXTcxRRANBnjw9m0D/X/4L4RI+T+OBepYAzenZvmyI18j28POzpiNG2
+   soB2aVVcroaSkjeO5SBabe8xuMzWpXb65wOWiTZ55UVhrAfa1uF+Ib+c7
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10628"; a="334100045"
+X-IronPort-AV: E=Sophos;i="5.97,315,1669104000"; 
+   d="scan'208";a="334100045"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Feb 2023 12:05:41 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10628"; a="917317158"
+X-IronPort-AV: E=Sophos;i="5.97,315,1669104000"; 
+   d="scan'208";a="917317158"
+Received: from lkp-server01.sh.intel.com (HELO eac18b5d7d93) ([10.239.97.150])
+  by fmsmga006.fm.intel.com with ESMTP; 21 Feb 2023 12:05:39 -0800
+Received: from kbuild by eac18b5d7d93 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pUYtO-0000Cr-2Q;
+        Tue, 21 Feb 2023 20:05:38 +0000
+Date:   Wed, 22 Feb 2023 04:05:21 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Paul Cercueil <paul@crapouillou.net>
+Cc:     llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+        linux-kernel@vger.kernel.org,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Subject: drivers/input/touchscreen/sun4i-ts.c:392:34: warning: unused
+ variable 'sun4i_ts_of_match'
+Message-ID: <202302220342.AqAtycBB-lkp@intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [External] Re: [PATCH v9 0/8] Parallel CPU bringup for x86_64
-Content-Language: en-US
-To:     David Woodhouse <dwmw2@infradead.org>,
-        Oleksandr Natalenko <oleksandr@natalenko.name>
-Cc:     Kim Phillips <kim.phillips@amd.com>, tglx@linutronix.de,
-        arjan@linux.intel.com, mingo@redhat.com, bp@alien8.de,
-        dave.hansen@linux.intel.com, hpa@zytor.com, x86@kernel.org,
-        pbonzini@redhat.com, paulmck@kernel.org,
-        linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        rcu@vger.kernel.org, mimoja@mimoja.de, hewenliang4@huawei.com,
-        thomas.lendacky@amd.com, seanjc@google.com, pmenzel@molgen.mpg.de,
-        fam.zheng@bytedance.com, punit.agrawal@bytedance.com,
-        simon.evans@bytedance.com, liangma@liangbit.com,
-        "Limonciello, Mario" <Mario.Limonciello@amd.com>,
-        Piotr Gorski <piotrgorski@cachyos.org>
-References: <20230215145425.420125-1-usama.arif@bytedance.com>
- <715CBABF-4017-4784-8F30-5386F1524830@infradead.org>
- <67dbc69f-b712-8971-f1c9-5d07f506a19c@amd.com>
- <42dc683e2846ae8fc1e09715aaf7884660e1a386.camel@infradead.org>
- <37c18c3aeea2e558633b6da6886111d0@natalenko.name>
- <5A3B7074-0C6D-472B-803B-D76541828C1F@infradead.org>
- <3d8ed6e157df10c5175c636de0e21849@natalenko.name>
- <5c557f9b6f55dc2a612ee89142971298e6ae12d8.camel@infradead.org>
- <ee0d0d971a3095d6a1e96ad4f1ba32d2@natalenko.name>
- <5b8f9c89f7015fa80c966c6c7f6fa259db6744f8.camel@infradead.org>
- <ce731b5a4a53680b4840467977b33d9a@natalenko.name>
- <85ceb3f92abf3c013924de2f025517372bed19c0.camel@infradead.org>
- <3e5944de08ef0d23584d19bad7bae66c@natalenko.name>
- <26E5DC9C-0F19-4E4F-9076-04506A197374@infradead.org>
- <f71275dc809cfb32df513023786c3faa@natalenko.name>
- <10CA27BB-ADC6-4421-86D2-A83BD7FA12E0@infradead.org>
- <9153284c37a79d303aa79dbf07c10329@natalenko.name>
- <e2e6616f691f1822035be245ec847f7c86a26367.camel@infradead.org>
-From:   Usama Arif <usama.arif@bytedance.com>
-In-Reply-To: <e2e6616f691f1822035be245ec847f7c86a26367.camel@infradead.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -101,62 +64,59 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Paul,
+
+FYI, the error/warning was bisected to this commit, please ignore it if it's irrelevant.
+
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   9e58df973d2272e6e558965e7cb32453a4b380ff
+commit: c434b9f80b0923e6460031b0fd964f8b0bf3c6a6 MIPS: Kconfig: add MIPS_GENERIC_KERNEL symbol
+date:   2 years, 5 months ago
+config: mips-randconfig-c004-20230217 (https://download.01.org/0day-ci/archive/20230222/202302220342.AqAtycBB-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project db89896bbbd2251fff457699635acbbedeead27f)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install mips cross compiling tool for clang build
+        # apt-get install binutils-mipsel-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=c434b9f80b0923e6460031b0fd964f8b0bf3c6a6
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout c434b9f80b0923e6460031b0fd964f8b0bf3c6a6
+        # save the config file
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross  olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross 
+
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202302220342.AqAtycBB-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+>> drivers/input/touchscreen/sun4i-ts.c:392:34: warning: unused variable 'sun4i_ts_of_match' [-Wunused-const-variable]
+   static const struct of_device_id sun4i_ts_of_match[] = {
+                                    ^
+   1 warning generated.
 
 
-On 21/02/2023 19:10, David Woodhouse wrote:
-> On Tue, 2023-02-21 at 13:14 +0100, Oleksandr Natalenko wrote:
->>
->> With this in place:
->>
->> ```
->>          early_gdt_descr.address = (unsigned long)get_cpu_gdt_rw(0);
->>          initial_gs = per_cpu_offset(0);
->>          smpboot_control = 0;
->> ```
->>
->> the resume does not work.
-> 
-> Yeah, I think it's always running on CPU0 after the other CPUs are
-> taken down anyway.
-> 
-> We definitely *do* need to clear smpboot_control because we absolutely
-> want it using the temp_stack we explicitly put into initial_stack, not
-> finding its own idle thread.
-> 
-> The problem was that it was never being restored to STARTUP_SECONDARY
-> in the parallel modes, because that's a one-time setup in
-> native_smp_prepare_cpus(). So we can just restore it in
-> arch_thaw_secondary_cpus_begin() too, by working this into patch 6 of
-> the series.
-> 
-> (Usama, I think my tree is fairly out of date now so I'll let you do
-> that? Thanks!).
->Sounds good! Will send out the next revision with below diff, checkpatch 
-fixes and rebased to 6.2 (testing it now). The below fix looks good! 
-Oleksandr, would you mind testing out suspend/resume with the below diff 
-on your AMD machine just to make sure it fixes the issue before I send 
-out the next revision with it. Thanks!
+vim +/sun4i_ts_of_match +392 drivers/input/touchscreen/sun4i-ts.c
 
-> diff --git a/arch/x86/kernel/smpboot.c b/arch/x86/kernel/smpboot.c
-> index 50621793671d..3db77a257ae2 100644
-> --- a/arch/x86/kernel/smpboot.c
-> +++ b/arch/x86/kernel/smpboot.c
-> @@ -1571,6 +1571,17 @@ void __init native_smp_prepare_cpus(unsigned int max_cpus)
->   
->   void arch_thaw_secondary_cpus_begin(void)
->   {
-> +	/*
-> +	 * On suspend, smpboot_control will have been zeroed to allow the
-> +	 * boot CPU to use explicitly passed values including a temporary
-> +	 * stack. Since native_smp_prepare_cpus() won't be called again,
-> +	 * restore the appropriate value for the parallel startup modes.
-> +	 */
-> +	if (do_parallel_bringup) {
-> +		smpboot_control = STARTUP_SECONDARY |
-> +			(x2apic_mode ? STARTUP_APICID_CPUID_0B : STARTUP_APICID_CPUID_01);
-> +	}
-> +
->   	set_cache_aps_delayed_init(true);
->   }
->   
-> 
+f09f98d3240b7e Hans de Goede 2014-05-14  391  
+6decea7c5438e2 Hans de Goede 2014-05-14 @392  static const struct of_device_id sun4i_ts_of_match[] = {
+6decea7c5438e2 Hans de Goede 2014-05-14  393  	{ .compatible = "allwinner,sun4i-a10-ts", },
+91c68a7c1d92b4 Hans de Goede 2015-03-08  394  	{ .compatible = "allwinner,sun5i-a13-ts", },
+43c0e2234021d7 Chen-Yu Tsai  2015-01-26  395  	{ .compatible = "allwinner,sun6i-a31-ts", },
+6decea7c5438e2 Hans de Goede 2014-05-14  396  	{ /* sentinel */ }
+6decea7c5438e2 Hans de Goede 2014-05-14  397  };
+6decea7c5438e2 Hans de Goede 2014-05-14  398  MODULE_DEVICE_TABLE(of, sun4i_ts_of_match);
+6decea7c5438e2 Hans de Goede 2014-05-14  399  
+
+:::::: The code at line 392 was first introduced by commit
+:::::: 6decea7c5438e2955f64e2513ec9a2fac7602a7d Input: add driver for Allwinner sunxi SoC's rtp controller
+
+:::::: TO: Hans de Goede <hdegoede@redhat.com>
+:::::: CC: Dmitry Torokhov <dmitry.torokhov@gmail.com>
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
