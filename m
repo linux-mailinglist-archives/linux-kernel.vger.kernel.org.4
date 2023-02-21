@@ -2,102 +2,241 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B09E669E05A
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 13:28:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 09CA669E058
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 13:28:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234010AbjBUM2c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Feb 2023 07:28:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51202 "EHLO
+        id S233450AbjBUM2L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Feb 2023 07:28:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51768 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234352AbjBUM23 (ORCPT
+        with ESMTP id S233590AbjBUM2I (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Feb 2023 07:28:29 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D3AD40FA
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Feb 2023 04:27:44 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1676982463;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=aH9Zs3Ynup8QEj3M7umA2rpBmSqMBswm4cOHxTio+fY=;
-        b=VJJzrzLtUARcIFj80xfTHV1Xzo/bOXFXMKDTBDfx4cdqO9aPIddkyGfLE28Y0DOZTMye3Q
-        cZnr+k/UGauUVwAQXWGvnKsE32NZW4AvdOe3OzUDp6c4ktQSYUDTw0duQXJK34aKa3MTnj
-        Zgv/RI88ika21aAxy29vuUoa0B8FcU4=
-Received: from mail-wr1-f69.google.com (mail-wr1-f69.google.com
- [209.85.221.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-649-ziB41gpAPEO1KCL2H5WAeA-1; Tue, 21 Feb 2023 07:27:42 -0500
-X-MC-Unique: ziB41gpAPEO1KCL2H5WAeA-1
-Received: by mail-wr1-f69.google.com with SMTP id bt1-20020a056000080100b002c557db0e0fso909206wrb.11
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Feb 2023 04:27:42 -0800 (PST)
+        Tue, 21 Feb 2023 07:28:08 -0500
+Received: from mail-vs1-xe2e.google.com (mail-vs1-xe2e.google.com [IPv6:2607:f8b0:4864:20::e2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB5209759
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Feb 2023 04:28:06 -0800 (PST)
+Received: by mail-vs1-xe2e.google.com with SMTP id j14so4263185vse.3
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Feb 2023 04:28:06 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1676982486;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=6s881pmuKwph24asBcE5u5JIORQ5AHE6gdovKQqgyMs=;
+        b=TPOMTNt0WiYkI2y93B0i8TZbPyD1GxgQWEaxNLI/oi8xc6ywzhHKusXaxgiez+3awM
+         Bl/u0wNJ6PtNG2ofV2jsAyaqRlCKAJ3KEKh3SID1aEizECMvXv8J58p2sdbhq5vsy4iM
+         gsevlU7g/a2qo41pKK3rCRGvv4BZ82on+Z/8t353kwfpEWO46veyFtWNVjkPStNCsGVS
+         rRDp3qMyAKuAnRXw6k9+qgHWNr5yaSBaJxKgtmMTTNuZPNKlMaJT/DIos2Vsvi4FWfoq
+         Iym2Wvoq+yx45h/2XAX2BH1s2LJaWu8Ucvsn8JsCP5t7XP3E7Tox045R43wvQJ6ytfvn
+         hwDA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1676982461;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=aH9Zs3Ynup8QEj3M7umA2rpBmSqMBswm4cOHxTio+fY=;
-        b=erB5nXwLquN28QKEXeS0fJhEs3TV17DdtBaiPCOK3wlwO5Er25q0mfb0VZ6cl6ClKX
-         hPJsTeNAkefWkWKjEMIRvVnhazL+w7wR21IqOLZhWQMeFbL91kbhhX01vJwNNFLQI5V+
-         f+WKIRNHGHH27j6dXE+WFqm9gv9fSTZ00xCXbrax66s75ob5yz+Rdqguu7CpEdqw1TK+
-         GbCY3HXYeiVnvAsE7ngfPG28n4dfUgFDsWiDldYIrwckWYVVHtRJgZk5NlhEZBvAqnnn
-         iEQyhgdXcbQqsxBT+mk0dvFzf5Ny86gg9IRQMKZUncagrp1JcUKUNyzPe99PNAM/zUF0
-         kydQ==
-X-Gm-Message-State: AO0yUKVOY97fY7C80v3yZKafFu/fSTSzbbhCPG2NLHdZuw7v4IhgHc56
-        m77LeA21iOVar8yRMUxCAKTK000rqr1jZ1xz/V3imUC1Oi+PbI+pl28VfNb+zMbl/7GLVRi9PJt
-        JOdcEH0akNt37NYjdcqOK2B6v
-X-Received: by 2002:a5d:5956:0:b0:2c5:595a:1c92 with SMTP id e22-20020a5d5956000000b002c5595a1c92mr2875377wri.6.1676982461555;
-        Tue, 21 Feb 2023 04:27:41 -0800 (PST)
-X-Google-Smtp-Source: AK7set9a3kH8ia6rTQ7nRpyFWjsQn3JJlzvkPw+s98kN7nZ74eIb64/SpsJ2QhQdjDYzZAo5zrZSiA==
-X-Received: by 2002:a5d:5956:0:b0:2c5:595a:1c92 with SMTP id e22-20020a5d5956000000b002c5595a1c92mr2875370wri.6.1676982461215;
-        Tue, 21 Feb 2023 04:27:41 -0800 (PST)
-Received: from gerbillo.redhat.com (146-241-121-8.dyn.eolo.it. [146.241.121.8])
-        by smtp.gmail.com with ESMTPSA id e16-20020adfe390000000b002c54c8e70b1sm4705292wrm.9.2023.02.21.04.27.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 21 Feb 2023 04:27:40 -0800 (PST)
-Message-ID: <48429c16fdaee59867df5ef487e73d4b1bf099af.camel@redhat.com>
-Subject: Re: [PATCH net] udp: fix memory schedule error
-From:   Paolo Abeni <pabeni@redhat.com>
-To:     Jason Xing <kerneljasonxing@gmail.com>,
-        willemdebruijn.kernel@gmail.com, davem@davemloft.net,
-        dsahern@kernel.org, edumazet@google.com, kuba@kernel.org
-Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        bpf@vger.kernel.org, Jason Xing <kernelxing@tencent.com>
-Date:   Tue, 21 Feb 2023 13:27:39 +0100
-In-Reply-To: <20230221110344.82818-1-kerneljasonxing@gmail.com>
-References: <20230221110344.82818-1-kerneljasonxing@gmail.com>
+        d=1e100.net; s=20210112; t=1676982486;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=6s881pmuKwph24asBcE5u5JIORQ5AHE6gdovKQqgyMs=;
+        b=SsDfTndNKPZsNwYdqdDUNY73zDvukGxP7OdMP5BlwMMkCycbHGr14gJtR/JsZ5qM4M
+         f3kPgK4KrV81H87aMGYiVfX1Px10zauqy8qQ/rNPVmJAV7aWtnHY/yWRvHgJD5keS3Nz
+         msKBp25zjFBeA6OrpgySz7VnTvjMHtGiL84wI1X8pdcMdc8hpslw402ZjZ1K8OMSyF0h
+         nlYh0NN5MkAXGe9QcfzXA1eqlPpoa4mXNEtQgWvrk4nIL503LTSscSGq4Re6FKR7vG/1
+         RIvS0vXTPtfdK8JbiICyE5dmsE4mM5LvtMoJ9Qv2LoAbtSzGlpZGLXr+Ctmw6BjtYrAu
+         r/ZA==
+X-Gm-Message-State: AO0yUKVXwuFpO4sC1JERkq+fBwvMoKMzzciVroCT39BLh52sXWVTmlYt
+        mAbuQELX1ycsgiYHitfHWErMEZ4d8qv/NAq+xWU/9A==
+X-Google-Smtp-Source: AK7set9CgFAXa8X0dpmM5jq8DddbwBC8HpXgS0UKe/A1/EqRqLiIunwYtMqRjMGQ2584zHktQaX59LdgAs5TVJ0D6Jo=
+X-Received: by 2002:a05:6102:a24:b0:41e:991d:8814 with SMTP id
+ 4-20020a0561020a2400b0041e991d8814mr223496vsb.71.1676982485594; Tue, 21 Feb
+ 2023 04:28:05 -0800 (PST)
+MIME-Version: 1.0
+References: <20230220133553.066768704@linuxfoundation.org>
+In-Reply-To: <20230220133553.066768704@linuxfoundation.org>
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Tue, 21 Feb 2023 17:57:54 +0530
+Message-ID: <CA+G9fYuXJVQK-a-EVR+Z=ihgEwQPsaF9kafW=JYWpY3JztsYRA@mail.gmail.com>
+Subject: Re: [PATCH 4.19 00/89] 4.19.273-rc1 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
+        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, f.fainelli@gmail.com,
+        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.46.4 (3.46.4-1.fc37) 
-MIME-Version: 1.0
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 2023-02-21 at 19:03 +0800, Jason Xing wrote:
-> From: Jason Xing <kernelxing@tencent.com>
->=20
-> Quoting from the commit 7c80b038d23e ("net: fix sk_wmem_schedule()
-> and sk_rmem_schedule() errors"):
->=20
-> "If sk->sk_forward_alloc is 150000, and we need to schedule 150001 bytes,
-> we want to allocate 1 byte more (rounded up to one page),
-> instead of 150001"
+On Mon, 20 Feb 2023 at 19:10, Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
+>
+> This is the start of the stable review cycle for the 4.19.273 release.
+> There are 89 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+>
+> Responses should be made by Wed, 22 Feb 2023 13:35:35 +0000.
+> Anything received after that time might be too late.
+>
+> The whole patch series can be found in one patch at:
+>         https://www.kernel.org/pub/linux/kernel/v4.x/stable-review/patch-=
+4.19.273-rc1.gz
+> or in the git tree and branch at:
+>         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable=
+-rc.git linux-4.19.y
+> and the diffstat can be found below.
+>
+> thanks,
+>
+> greg k-h
 
-I'm wondering if this would cause measurable (even small) performance
-regression? Specifically under high packet rate, with BH and user-space
-processing happening on different CPUs.
 
-Could you please provide the relevant performance figures?
+Results from Linaro=E2=80=99s test farm.
+No regressions on arm64, arm, x86_64, and i386.
 
-Thanks!
+Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
 
-Paolo
+## Build
+* kernel: 4.19.273-rc1
+* git: https://gitlab.com/Linaro/lkft/mirrors/stable/linux-stable-rc
+* git branch: linux-4.19.y
+* git commit: 717ab64d0adf6544c30105e64d851b388324c7ef
+* git describe: v4.19.272-90-g717ab64d0adf
+* test details:
+https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-4.19.y/build/v4.19=
+.272-90-g717ab64d0adf
 
+## Test Regressions (compared to v4.19.272)
+
+## Metric Regressions (compared to v4.19.272)
+
+## Test Fixes (compared to v4.19.272)
+
+## Metric Fixes (compared to v4.19.272)
+
+## Test result summary
+total: 108520, pass: 84162, fail: 3369, skip: 20591, xfail: 398
+
+## Build Summary
+* arc: 10 total, 10 passed, 0 failed
+* arm: 232 total, 230 passed, 2 failed
+* arm64: 48 total, 47 passed, 1 failed
+* i386: 29 total, 28 passed, 1 failed
+* mips: 43 total, 43 passed, 0 failed
+* parisc: 12 total, 12 passed, 0 failed
+* powerpc: 57 total, 57 passed, 0 failed
+* s390: 15 total, 15 passed, 0 failed
+* sh: 24 total, 24 passed, 0 failed
+* sparc: 12 total, 12 passed, 0 failed
+* x86_64: 42 total, 41 passed, 1 failed
+
+## Test suites summary
+* boot
+* fwts
+* igt-gpu-tools
+* kselftest-android
+* kselftest-arm64
+* kselftest-breakpoints
+* kselftest-capabilities
+* kselftest-cgroup
+* kselftest-clone3
+* kselftest-core
+* kselftest-cpu-hotplug
+* kselftest-cpufreq
+* kselftest-drivers-dma-buf
+* kselftest-efivarfs
+* kselftest-filesystems
+* kselftest-filesystems-binderfs
+* kselftest-firmware
+* kselftest-fpu
+* kselftest-futex
+* kselftest-gpio
+* kselftest-intel_pstate
+* kselftest-ipc
+* kselftest-ir
+* kselftest-kcmp
+* kselftest-kexec
+* kselftest-kvm
+* kselftest-lib
+* kselftest-livepatch
+* kselftest-membarrier
+* kselftest-memfd
+* kselftest-memory-hotplug
+* kselftest-mincore
+* kselftest-mount
+* kselftest-mqueue
+* kselftest-net
+* kselftest-net-forwarding
+* kselftest-net-mptcp
+* kselftest-netfilter
+* kselftest-nsfs
+* kselftest-openat2
+* kselftest-pid_namespace
+* kselftest-pidfd
+* kselftest-proc
+* kselftest-pstore
+* kselftest-ptrace
+* kselftest-rseq
+* kselftest-rtc
+* kselftest-seccomp
+* kselftest-sigaltstack
+* kselftest-size
+* kselftest-splice
+* kselftest-static_keys
+* kselftest-sync
+* kselftest-sysctl
+* kselftest-tc-testing
+* kselftest-timens
+* kselftest-timers
+* kselftest-tmpfs
+* kselftest-tpm2
+* kselftest-user
+* kselftest-vm
+* kselftest-x86
+* kselftest-zram
+* kunit
+* kvm-unit-tests
+* libhugetlbfs
+* log-parser-boot
+* log-parser-test
+* ltp-cap_bounds
+* ltp-commands
+* ltp-containers
+* ltp-controllers
+* ltp-cpuhotplug
+* ltp-crypto
+* ltp-cve
+* ltp-dio
+* ltp-fcntl-locktests
+* ltp-filecaps
+* ltp-fs
+* ltp-fs_bind
+* ltp-fs_perms_simple
+* ltp-fsx
+* ltp-hugetlb
+* ltp-io
+* ltp-ipc
+* ltp-math
+* ltp-mm
+* ltp-nptl
+* ltp-open-posix-tests
+* ltp-pty
+* ltp-sched
+* ltp-securebits
+* ltp-smoke
+* ltp-syscalls
+* ltp-tracing
+* network-basic-tests
+* packetdrill
+* rcutorture
+* v4l2-compliance
+* vdso
+
+--
+Linaro LKFT
+https://lkft.linaro.org
