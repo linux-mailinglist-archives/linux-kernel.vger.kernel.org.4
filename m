@@ -2,109 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B546469E86A
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 20:38:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 403D969E866
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 20:35:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229845AbjBUTh7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Feb 2023 14:37:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57484 "EHLO
+        id S229495AbjBUTfv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Feb 2023 14:35:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55698 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229545AbjBUTh5 (ORCPT
+        with ESMTP id S229845AbjBUTft (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Feb 2023 14:37:57 -0500
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C1ED1556B;
-        Tue, 21 Feb 2023 11:37:55 -0800 (PST)
-Received: from maxwell ([109.42.115.188]) by mrelayeu.kundenserver.de
- (mreue011 [213.165.67.97]) with ESMTPSA (Nemesis) id
- 1MLRDv-1pDIgO3GwF-00ITDs; Tue, 21 Feb 2023 20:37:27 +0100
-References: <87fsaz6smr.fsf@henneberg-systemdesign.com>
- <Y/T0NRtorZn74EH3@corigine.com>
-User-agent: mu4e 1.8.14; emacs 28.2
-From:   Jochen Henneberg <jh@henneberg-systemdesign.com>
-To:     Simon Horman <simon.horman@corigine.com>
-Cc:     Giuseppe Cavallaro <peppe.cavallaro@st.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Jose Abreu <joabreu@synopsys.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        netdev@vger.kernel.org, linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH net V2] net: stmmac: Premature loop termination check
- was ignored
-Date:   Tue, 21 Feb 2023 20:35:25 +0100
-In-reply-to: <Y/T0NRtorZn74EH3@corigine.com>
-Message-ID: <877cwa7qtm.fsf@henneberg-systemdesign.com>
+        Tue, 21 Feb 2023 14:35:49 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C7792E0E5
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Feb 2023 11:35:43 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A94B2611AF
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Feb 2023 19:35:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1DF94C4339B
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Feb 2023 19:35:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1677008142;
+        bh=gihScliDYCA7ShI1M3RnyVH99dXA4xhil44xklbmE6M=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=Bl764SPN0ShNUXyzrzjW04s2PxfIvL3Ew59b38yd5zM5dOuvKTVmGj+2DOYZYayKi
+         zFyd74xiS/BX0+M04bkW7iIFiujuhZwv+tdAWxVQx8Igqs2iL0llW44apsPmXb/Dbb
+         Vo3RPPASvAWbA8CP+8zj1LOxP1d9HfgQMnEJP5o4FTpfoXLGNol31VF0+1aH6c5ZoK
+         pUVVqzY61nv8yxKbQQkFqRla2OrRsYcRa2GHahSk1vzzBwdqSZ03DC5hmG8uqFWVZs
+         1S0kQ4QG/ThnHClECrubGKRZERJgz5tHLwlf74vxrhpWXrAPaKf5VQ4ZAgZ6hysofc
+         1MCGPAdWzM4UA==
+Received: by mail-ed1-f41.google.com with SMTP id ec43so21132636edb.8
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Feb 2023 11:35:42 -0800 (PST)
+X-Gm-Message-State: AO0yUKWVFXBOaPOxXhar2/VZrx47tnvN6MCmlUpHUazojWhiZeMTNRlz
+        31RwRdrWojhaMPiv8BMQiL0MqC2yNxeBaiRjUeFKkQ==
+X-Google-Smtp-Source: AK7set/zg2dm0oZVcnbW8qXyngwNC4dMlaIq364k9b8EUXUZy0ZD5M9avqN21XBqoDA8VXmbX6iAgL2u9ZHhZkCuh3I=
+X-Received: by 2002:a17:906:13d9:b0:8de:c6a6:5134 with SMTP id
+ g25-20020a17090613d900b008dec6a65134mr1698483ejc.15.1677008140357; Tue, 21
+ Feb 2023 11:35:40 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Provags-ID: V03:K1:0u8rYgmp9bhY/iDXFU3B1tZaxQ+5aTcRHMJgkC1asXab22AA2cm
- 8hNer//gFftW5zMJmS0OGwIMpVmCTrizh0H9L7v95+b+qKKQIXQxeBWrT8uTSD+BPaqAsZ2
- SxpUfRjtKZBOv9NvrIxikRZPsOt3MdG22XqRtXcn3osuHorBmsP0oeG8JViiLDRR5g39qnP
- Y9CIhIWvKmgS59PBH2A5Q==
-UI-OutboundReport: notjunk:1;M01:P0:Mg6DrOlZEeI=;wZAdP1leOOBHltclXahfqutetpA
- k3esz5E4vIKMIvnehBqXryrzJzasNZLFQfRiUvZIxEN+44508EOhukCXdJgDZa38zZ/Z01QCI
- J4z0CEPs/6pq4Fxd1RkrfuPit8ZFXUq5QmhI53VVd4FUJRCQjROm4qrj4hLIZ55B/ihXl+Iv0
- XKvtYqn7jy8AXO8sxx+oOdSEiHNZmCx4LA5XaE+ULW59pqsYDQo6mSi+PBF950VvTCUKFsJ9s
- wgI42mvtJACdznjnOC3Byxc7XZ8zfhU27J8CE3RPvtv2IvTcJDrtkeQ5PUpegRmYMzMbrWQd1
- D/7bY/aMkWo0nAbMyUS0YprMZMi4dz5rmZPd0F+FYUGQgvRMOI5jZWD7URhIdXeG5fDYWFC6I
- cfsH8xvpxptlbLsZ09Xx4GUr2MrqfWUK4hQ2G2SS0WZNpQai3InKMwN7XUx2ivq9pL3/0AktW
- I9crEuzHvWuJvfqLXARoFJLslSCkiy/fZ+6piB7q6628CwZ3oe4lld6tccTP2vlqaMhzq2ff0
- uIUlqojMk7OKdPPiLEyp1XtgVFnIpptuGxqN/z4XOo0jQYZsKzZbsJu9WxQIHVM1BlfRjc8uC
- kJJaX7RUDf7klge2dMUEe1sh9uN9ETGLVkXWEAQU8DuqIbsrDzHbHDfZ98tTlk/zxx4jDfas6
- 7boqcOChDavFIJ6hLzDL1Au3beYFhEFyj+82aAcCUQ==
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20230221184908.2349578-1-kpsingh@kernel.org> <Y/UbqiHQ2/aczPzg@kroah.com>
+In-Reply-To: <Y/UbqiHQ2/aczPzg@kroah.com>
+From:   KP Singh <kpsingh@kernel.org>
+Date:   Tue, 21 Feb 2023 11:35:29 -0800
+X-Gmail-Original-Message-ID: <CACYkzJ7pLhJ+NfUq36PaMxadkgv-cPtO60TW=g_Nh7vU1vEWqA@mail.gmail.com>
+Message-ID: <CACYkzJ7pLhJ+NfUq36PaMxadkgv-cPtO60TW=g_Nh7vU1vEWqA@mail.gmail.com>
+Subject: Re: [PATCH v2 1/2] x86/speculation: Allow enabling STIBP with legacy IBRS
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, pjt@google.com, evn@google.com,
+        jpoimboe@kernel.org, tglx@linutronix.de, x86@kernel.org,
+        hpa@zytor.com, peterz@infradead.org,
+        pawan.kumar.gupta@linux.intel.com, kim.phillips@amd.com,
+        alexandre.chartre@oracle.com, daniel.sneddon@linux.intel.com,
+        corbet@lwn.net, bp@suse.de, linyujun809@huawei.com,
+        jmattson@google.com,
+        =?UTF-8?Q?Jos=C3=A9_Oliveira?= <joseloliveira11@gmail.com>,
+        Rodrigo Branco <rodrigo@kernelhacking.com>,
+        Alexandra Sandulescu <aesa@google.com>, stable@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Tue, Feb 21, 2023 at 11:29 AM Greg KH <gregkh@linuxfoundation.org> wrote=
+:
+>
+> On Tue, Feb 21, 2023 at 07:49:07PM +0100, KP Singh wrote:
+> > Setting the IBRS bit implicitly enables STIBP to protect against
+> > cross-thread branch target injection. With enhanced IBRS, the bit it se=
+t
+> > once and is not cleared again. However, on CPUs with just legacy IBRS,
+> > IBRS bit set on user -> kernel and cleared on kernel -> user (a.k.a
+> > KERNEL_IBRS). Clearing this bit also disables the implicitly enabled
+> > STIBP, thus requiring some form of cross-thread protection in userspace=
+.
+> >
+> > Enable STIBP, either opt-in via prctl or seccomp, or always on dependin=
+g
+> > on the choice of mitigation selected via spectre_v2_user.
+> >
+> > Reported-by: Jos=C3=A9 Oliveira <joseloliveira11@gmail.com>
+> > Reported-by: Rodrigo Branco <rodrigo@kernelhacking.com>
+> > Reviewed-by: Alexandra Sandulescu <aesa@google.com>
+> > Fixes: 7c693f54c873 ("x86/speculation: Add spectre_v2=3Dibrs option to =
+support Kernel IBRS")
+> > Cc: stable@vger.kernel.org
+> > Signed-off-by: KP Singh <kpsingh@kernel.org>
+> > ---
+> >  arch/x86/kernel/cpu/bugs.c | 33 ++++++++++++++++++++++-----------
+> >  1 file changed, 22 insertions(+), 11 deletions(-)
+>
+> Why isn't patch 2/2 for stable as well?
 
-The premature loop termination check makes sense only in case of the
-jump to read_again where the count may have been updated. But
-read_again did not include the check.
+It should be. I actually forgot to remove stable from the first one as
+there are still ongoing discussions and people kept having to "drop
+stable".  I can send a v3 with stable Cc'ed. Should it have a fixes
+tag too?
 
-Fixes: bba2556efad6 (net: stmmac: Enable RX via AF_XDP zero-copy)
-Fixes: ec222003bd94 (net: stmmac: Prepare to add Split Header support)
-Signed-off-by: Jochen Henneberg <jh@henneberg-systemdesign.com>
----
-V2: Added fixes tags for both commits that introduced the issue
-
- drivers/net/ethernet/stmicro/stmmac/stmmac_main.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
-index 1a5b8dab5e9b..de98c009866a 100644
---- a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
-+++ b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
-@@ -5031,10 +5031,10 @@ static int stmmac_rx_zc(struct stmmac_priv *priv, int limit, u32 queue)
- 			len = 0;
- 		}
- 
-+read_again:
- 		if (count >= limit)
- 			break;
- 
--read_again:
- 		buf1_len = 0;
- 		entry = next_entry;
- 		buf = &rx_q->buf_pool[entry];
-@@ -5221,10 +5221,10 @@ static int stmmac_rx(struct stmmac_priv *priv, int limit, u32 queue)
- 			len = 0;
- 		}
- 
-+read_again:
- 		if (count >= limit)
- 			break;
- 
--read_again:
- 		buf1_len = 0;
- 		buf2_len = 0;
- 		entry = next_entry;
--- 
-2.39.2
+>
+> thanks,
+>
+> greg k-h
