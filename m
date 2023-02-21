@@ -2,60 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 334B769E350
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 16:24:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3ED2669E357
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 16:26:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233908AbjBUPX5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Feb 2023 10:23:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45324 "EHLO
+        id S234009AbjBUP0t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Feb 2023 10:26:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47490 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233828AbjBUPXz (ORCPT
+        with ESMTP id S229945AbjBUP0s (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Feb 2023 10:23:55 -0500
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA8809EC3;
-        Tue, 21 Feb 2023 07:23:54 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1676993034; x=1708529034;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=Z6M0/vKzo30bTTnXTPEnegNDD/JsCsXi5PT8Dy1dSkI=;
-  b=XA+ZAL+OCm1sY3hfP+5I2hE/CIDHVtrjp06dshf6AVT6mI1sQZFX9RFS
-   1VKntG9FK364aAq4GbVptfXpLm9ox0bsqEmI41rrAOaWEeZHjJUcl2Fp4
-   yEz1VpycJ91RSxp4cosi5fisiRI0dMwbSTZrm8BQYQYpdUariSRyOTqdd
-   /vbFvRwPFVE4o9qOG63RBdgPKZYvwacq8wfAkJzKruwcKDxYPxUkwtu5y
-   bvguybtddysIBDARdAXQGfuvUHYHYyBXjOC87Qd7WUBpzHOdAt+dB5FLH
-   nLf5M3IStZOKQ2l8siW06YPF9q7v6vkg2jybwHMY7/3KNhftxNdLHvQPp
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10628"; a="313028857"
-X-IronPort-AV: E=Sophos;i="5.97,315,1669104000"; 
-   d="scan'208";a="313028857"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Feb 2023 07:23:54 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10628"; a="917225773"
-X-IronPort-AV: E=Sophos;i="5.97,315,1669104000"; 
-   d="scan'208";a="917225773"
-Received: from yichaohu-mobl.ccr.corp.intel.com (HELO localhost) ([10.254.208.83])
-  by fmsmga006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Feb 2023 07:23:52 -0800
-Date:   Tue, 21 Feb 2023 23:23:49 +0800
-From:   Yu Zhang <yu.c.zhang@linux.intel.com>
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 08/12] KVM: nSVM: Use KVM-governed feature framework to
- track "vVM{SAVE,LOAD} enabled"
-Message-ID: <20230221152349.ulcjtbnvziair7ff@linux.intel.com>
-References: <20230217231022.816138-1-seanjc@google.com>
- <20230217231022.816138-9-seanjc@google.com>
+        Tue, 21 Feb 2023 10:26:48 -0500
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8375E2A981;
+        Tue, 21 Feb 2023 07:26:47 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=jd0s7AFEKjvijVoKSZyi5x9Rh1J1ZEczZM+5fLYNmzs=; b=LMJ0Mht8d1yYYLCKIVjISd8rEN
+        ngx6STsoHcE/i4dCteGFgovzjx+TEwOadldsErJprBffg9xiCxSiz57k5Mm7pvC+3bdXHOdUZEGVg
+        S6b5sfU+9lHhyhWtk71f8YVjQ8a0wezcU2rXra+Itt4JCmtjZv73mlThwwFuDfvGd/5XwfXB9UZjH
+        pywwLKTy7/CQna0VturjYQW6BafXsM56h/znMxr2kkAMdzJV/NWNP5vl3JMrZ3sP/4qnOYJN8nc64
+        Rl1WpPU/mVKgar4hYHOnR1npCXhtD05b6OQB8ZUBgQu1kPTwQPH5pDyb73CIPe6W7lZe7JrieGoll
+        8smevjZw==;
+Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1pUUXM-00Chyg-34; Tue, 21 Feb 2023 15:26:36 +0000
+Date:   Tue, 21 Feb 2023 15:26:36 +0000
+From:   Matthew Wilcox <willy@infradead.org>
+To:     David Howells <dhowells@redhat.com>
+Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        "Vishal Moola (Oracle)" <vishal.moola@gmail.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Steve French <smfrench@gmail.com>,
+        Steve French <stfrench@microsoft.com>,
+        Shyam Prasad N <nspmangalore@gmail.com>,
+        Rohith Surabattula <rohiths.msft@gmail.com>,
+        Tom Talpey <tom@talpey.com>, Paulo Alcantara <pc@cjr.nz>,
+        Jeff Layton <jlayton@kernel.org>, linux-cifs@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-next@vger.kernel.org
+Subject: Re: linux-next: manual merge of the mm-stable tree with the cifs tree
+Message-ID: <Y/TirOtSETOvh2py@casper.infradead.org>
+References: <Y/TbYGXC4HKunymf@casper.infradead.org>
+ <20230221184225.0e734f0e@canb.auug.org.au>
+ <20230221174401.7198357d@canb.auug.org.au>
+ <20230220152933.1ab8fa4a@canb.auug.org.au>
+ <Y/N8hVWeR3AjssUC@casper.infradead.org>
+ <20230220190157.3b43b9a7@canb.auug.org.au>
+ <Y/Pe2xHklSr1hDtz@casper.infradead.org>
+ <2351091.1676963957@warthog.procyon.org.uk>
+ <2885897.1676990364@warthog.procyon.org.uk>
+ <2887475.1676991926@warthog.procyon.org.uk>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230217231022.816138-9-seanjc@google.com>
-User-Agent: NeoMutt/20171215
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+In-Reply-To: <2887475.1676991926@warthog.procyon.org.uk>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
         SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -63,71 +65,32 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Feb 17, 2023 at 03:10:18PM -0800, Sean Christopherson wrote:
-> Track "virtual VMSAVE/VMLOAD exposed to L1" via a governed feature flag
-> instead of using a dedicated bit/flag in vcpu_svm.
+On Tue, Feb 21, 2023 at 03:05:26PM +0000, David Howells wrote:
+> Matthew Wilcox <willy@infradead.org> wrote:
 > 
-> No functional change intended.
+> > > +			start = folio_pos(folio); /* May regress with THPs */
+> > 
+> > What does this comment mean?
 > 
-> Signed-off-by: Sean Christopherson <seanjc@google.com>
-> ---
->  arch/x86/kvm/governed_features.h | 1 +
->  arch/x86/kvm/svm/nested.c        | 2 +-
->  arch/x86/kvm/svm/svm.c           | 5 ++---
->  arch/x86/kvm/svm/svm.h           | 1 -
->  4 files changed, 4 insertions(+), 5 deletions(-)
+> "start" may end up going backwards if it's pointing to the middle of a folio.
+
+So that's "regress" in the sense of "May point earlier in the file",
+rather than "May cause a bug" (which was how I read it)?
+
+> > > +			/* At this point we hold neither the i_pages lock nor the
+> > > +			 * page lock: the page may be truncated or invalidated
+> > > +			 * (changing page->mapping to NULL), or even swizzled
+> > > +			 * back from swapper_space to tmpfs file mapping
+> > 
+> > Where does this comment come from?  This is cifs, not tmpfs.  You'll
+> > never be asked to writeback a page from the swap cache.  Dirty pages
+> > can be truncated, so the first half of the comment is still accurate.
+> > I'd rather it moved down to below the folio lock, and was rephrased
+> > so it described why we're checking everything again.
 > 
-> diff --git a/arch/x86/kvm/governed_features.h b/arch/x86/kvm/governed_features.h
-> index 0335576a80a8..b66b9d550f33 100644
-> --- a/arch/x86/kvm/governed_features.h
-> +++ b/arch/x86/kvm/governed_features.h
-> @@ -9,6 +9,7 @@ KVM_GOVERNED_X86_FEATURE(GBPAGES)
->  KVM_GOVERNED_X86_FEATURE(XSAVES)
->  KVM_GOVERNED_X86_FEATURE(NRIPS)
->  KVM_GOVERNED_X86_FEATURE(TSCRATEMSR)
-> +KVM_GOVERNED_X86_FEATURE(V_VMSAVE_VMLOAD)
->  
->  #undef KVM_GOVERNED_X86_FEATURE
->  #undef KVM_GOVERNED_FEATURE
-> diff --git a/arch/x86/kvm/svm/nested.c b/arch/x86/kvm/svm/nested.c
-> index 30e00c4e07c7..6a96058c0e48 100644
-> --- a/arch/x86/kvm/svm/nested.c
-> +++ b/arch/x86/kvm/svm/nested.c
-> @@ -107,7 +107,7 @@ static void nested_svm_uninit_mmu_context(struct kvm_vcpu *vcpu)
->  
->  static bool nested_vmcb_needs_vls_intercept(struct vcpu_svm *svm)
->  {
-> -	if (!svm->v_vmload_vmsave_enabled)
-> +	if (!guest_can_use(&svm->vcpu, X86_FEATURE_V_VMSAVE_VMLOAD))
->  		return true;
->  
->  	if (!nested_npt_enabled(svm))
-> diff --git a/arch/x86/kvm/svm/svm.c b/arch/x86/kvm/svm/svm.c
-> index dd4aead5462c..b3f0271c73b9 100644
-> --- a/arch/x86/kvm/svm/svm.c
-> +++ b/arch/x86/kvm/svm/svm.c
-> @@ -1162,8 +1162,6 @@ static inline void init_vmcb_after_set_cpuid(struct kvm_vcpu *vcpu)
->  
->  		set_msr_interception(vcpu, svm->msrpm, MSR_IA32_SYSENTER_EIP, 0, 0);
->  		set_msr_interception(vcpu, svm->msrpm, MSR_IA32_SYSENTER_ESP, 0, 0);
-> -
-> -		svm->v_vmload_vmsave_enabled = false;
->  	} else {
->  		/*
->  		 * If hardware supports Virtual VMLOAD VMSAVE then enable it
-> @@ -4153,7 +4151,8 @@ static void svm_vcpu_after_set_cpuid(struct kvm_vcpu *vcpu)
->  
->  	svm->lbrv_enabled = lbrv && guest_cpuid_has(vcpu, X86_FEATURE_LBRV);
->  
-> -	svm->v_vmload_vmsave_enabled = vls && guest_cpuid_has(vcpu, X86_FEATURE_V_VMSAVE_VMLOAD);
-> +	if (vls && !guest_cpuid_is_intel(vcpu))
-> +		kvm_governed_feature_check_and_set(vcpu, X86_FEATURE_V_VMSAVE_VMLOAD);
+> I picked it up into afs from somewhere - nfs maybe?  The same comment is in
+> fs/btrfs/extent_io.c.  grep for 'swizzled' in fs/.  You modified the comment
+> in b93b016313b3ba8003c3b8bb71f569af91f19fc7 in 2018, so it's been around a
+> while.
 
-Sorry, why guest_cpuid_is_intel(vcpu)? Is it becasue that a AMD host with virtual
-VMSAVE/VMLOAD capability will always expose this feature for all AMD guests? 
-
-If yes, how about adding some comments? Thanks!
-
-B.R.
-Yu
-
+I was just removing references to ->tree_lock ;-)
