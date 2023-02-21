@@ -2,197 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0540A69DD16
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 10:43:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EF8B569DCBF
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 10:19:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234001AbjBUJnB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Feb 2023 04:43:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52836 "EHLO
+        id S233891AbjBUJTT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Feb 2023 04:19:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58644 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233988AbjBUJm6 (ORCPT
+        with ESMTP id S233551AbjBUJTR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Feb 2023 04:42:58 -0500
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D4CD30E9;
-        Tue, 21 Feb 2023 01:42:56 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1676972576; x=1708508576;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=VdRIV4wFzCNVr8yDuZx/Q+Vky4EpLNRgaQcQ7QQdiLY=;
-  b=EHh4QRy+q/XHg2kYtrkMvjVmpiv2Dzwu9X3DwiXIUxTNsI81JQGXN90n
-   /XlNI+5/QpYIkw9QLDmk/Og+K9MSTLWHaToGQGlHdthoxkh/szt4NMBeu
-   FGH3B16C3DBypfIlC2PSo9VhcNLIGl/07eJesEGCmL9KPjNaTdBBxVfi0
-   vax6puiiM214gGwsfcUj1jrCpc981m6fd1C8L3bzfUqETLmA+MFOgbjG3
-   dB31oPCq+C+lV07DM9uWT9njBjIxKce3krJiE+cAZHfsGEsqtZnFJx5er
-   tRzvjigLtPG/u6wBt6YOQUdKGgCmxmlGtjOt3Y8ZHYzrUn9uFarVSFO2H
-   Q==;
-X-IronPort-AV: E=Sophos;i="5.97,315,1669100400"; 
-   d="scan'208";a="138246831"
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa6.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 21 Feb 2023 02:42:55 -0700
-Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
- chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.16; Tue, 21 Feb 2023 02:42:54 -0700
-Received: from che-lt-i64410lx.microchip.com (10.10.115.15) by
- chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server id
- 15.1.2507.16 via Frontend Transport; Tue, 21 Feb 2023 02:42:49 -0700
-From:   Balamanikandan Gunasundar 
-        <balamanikandan.gunasundar@microchip.com>
-To:     <ludovic.desroches@microchip.com>, <nicolas.ferre@microchip.com>,
-        <alexandre.belloni@bootlin.com>, <linux-kernel@vger.kernel.org>,
-        <linux-mmc@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>, <linus.walleij@linaro.org>,
-        <dmitry.torokhov@gmail.com>, <ulf.hansson@linaro.org>
-CC:     <hari.prasathge@microchip.com>,
-        <balamanikandan.gunasundar@microchip.com>
-Subject: [PATCH v4 2/2] mmc: atmel-mci: move atmel MCI header file
-Date:   Tue, 21 Feb 2023 15:12:07 +0530
-Message-ID: <20230221094207.102006-3-balamanikandan.gunasundar@microchip.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20230221094207.102006-1-balamanikandan.gunasundar@microchip.com>
-References: <20230221094207.102006-1-balamanikandan.gunasundar@microchip.com>
+        Tue, 21 Feb 2023 04:19:17 -0500
+Received: from dggsgout12.his.huawei.com (dggsgout12.his.huawei.com [45.249.212.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75B1BB777;
+        Tue, 21 Feb 2023 01:19:16 -0800 (PST)
+Received: from mail02.huawei.com (unknown [172.30.67.143])
+        by dggsgout12.his.huawei.com (SkyGuard) with ESMTP id 4PLYdC3Qs1z4f3jHr;
+        Tue, 21 Feb 2023 17:19:11 +0800 (CST)
+Received: from huaweicloud.com (unknown [10.175.127.227])
+        by APP3 (Coremail) with SMTP id _Ch0CgBnFCKPjPRj+jbADg--.57503S4;
+        Tue, 21 Feb 2023 17:19:13 +0800 (CST)
+From:   Zhong Jinghua <zhongjinghua@huaweicloud.com>
+To:     axboe@kernel.dk, code@siddh.me, willy@infradead.org
+Cc:     linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
+        zhongjinghua@huawei.com, yi.zhang@huawei.com, yukuai3@huawei.com,
+        houtao1@huawei.com
+Subject: [PATCH-next v3] loop: loop_set_status_from_info() check before assignment
+Date:   Tue, 21 Feb 2023 17:42:44 +0800
+Message-Id: <20230221094244.3631986-1-zhongjinghua@huaweicloud.com>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-CM-TRANSID: _Ch0CgBnFCKPjPRj+jbADg--.57503S4
+X-Coremail-Antispam: 1UD129KBjvJXoW7Cr1Dtw4xtw18Wr45JFW3trb_yoW8Xw4DpF
+        sxWFyUC3yFgF4xKF4qv34kXay5G3ZrGry3CFW7KayrZryI9FnI9r9rGa45urZ5JrWxuFWY
+        gFn8JFykZF1UWr7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUgKb4IE77IF4wAFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k2
+        6cxKx2IYs7xG6r1S6rWUM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
+        vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_tr0E3s1l84ACjcxK6xIIjxv20xvEc7Cj
+        xVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x
+        0267AKxVW0oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG
+        6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFV
+        Cjc4AY6r1j6r4UM4x0Y48IcxkI7VAKI48JMxAIw28IcxkI7VAKI48JMxC20s026xCaFVCj
+        c4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4
+        CE17CEb7AF67AKxVWUtVW8ZwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1x
+        MIIF0xvE2Ix0cI8IcVCY1x0267AKxVWUJVW8JwCI42IY6xAIw20EY4v20xvaj40_WFyUJV
+        Cq3wCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r1j6r4UYxBI
+        daVFxhVjvjDU0xZFpf9x07UWE__UUUUU=
+X-CM-SenderInfo: x2kr0wpmlqwxtxd6x35dzhxuhorxvhhfrp/
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Move the contents of linux/atmel-mci.h into
-drivers/mmc/host/atmel-mci.c as it is only used in one file
+From: Zhong Jinghua <zhongjinghua@huawei.com>
 
-Signed-off-by: Balamanikandan Gunasundar <balamanikandan.gunasundar@microchip.com>
+In loop_set_status_from_info(), lo->lo_offset and lo->lo_sizelimit should
+be checked before reassignment, because if an overflow error occurs, the
+original correct value will be changed to the wrong value, and it will not
+be changed back.
+
+Modifying to the wrong value logic is always not quiet right, we hope to
+optimize this.
+
+loop_handle_cmd
+ do_req_filebacked
+  loff_t pos = ((loff_t) blk_rq_pos(rq) << 9) + lo->lo_offset;
+  lo_rw_aio
+   cmd->iocb.ki_pos = pos
+
+Fixes: c490a0b5a4f3 ("loop: Check for overflow while configuring loop")
+Signed-off-by: Zhong Jinghua <zhongjinghua@huawei.com>
 ---
- drivers/mmc/host/atmel-mci.c | 39 +++++++++++++++++++++++++++++-
- include/linux/atmel-mci.h    | 46 ------------------------------------
- 2 files changed, 38 insertions(+), 47 deletions(-)
- delete mode 100644 include/linux/atmel-mci.h
+ v2: Modify note: overflowing -> overflow
+ v3: Modify commit message
+ drivers/block/loop.c | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/mmc/host/atmel-mci.c b/drivers/mmc/host/atmel-mci.c
-index ddad5a929634..8b5116d7ae74 100644
---- a/drivers/mmc/host/atmel-mci.c
-+++ b/drivers/mmc/host/atmel-mci.c
-@@ -30,7 +30,6 @@
- #include <linux/mmc/host.h>
- #include <linux/mmc/sdio.h>
+diff --git a/drivers/block/loop.c b/drivers/block/loop.c
+index 1518a6423279..1b35cbd029c7 100644
+--- a/drivers/block/loop.c
++++ b/drivers/block/loop.c
+@@ -977,13 +977,13 @@ loop_set_status_from_info(struct loop_device *lo,
+ 		return -EINVAL;
+ 	}
  
--#include <linux/atmel-mci.h>
- #include <linux/atmel_pdc.h>
- #include <linux/pm.h>
- #include <linux/pm_runtime.h>
-@@ -40,6 +39,8 @@
- #include <asm/io.h>
- #include <asm/unaligned.h>
++	/* Avoid assigning overflow values */
++	if (info->lo_offset > LLONG_MAX || info->lo_sizelimit > LLONG_MAX)
++		return -EOVERFLOW;
++
+ 	lo->lo_offset = info->lo_offset;
+ 	lo->lo_sizelimit = info->lo_sizelimit;
  
-+#define ATMCI_MAX_NR_SLOTS	2
-+
- /*
-  * Superset of MCI IP registers integrated in Atmel AT91 Processor
-  * Registers and bitfields marked with [2] are only available in MCI2
-@@ -201,6 +202,42 @@ enum atmci_pdc_buf {
- 	PDC_SECOND_BUF,
- };
- 
-+/**
-+ * struct mci_slot_pdata - board-specific per-slot configuration
-+ * @bus_width: Number of data lines wired up the slot
-+ * @detect_pin: GPIO pin wired to the card detect switch
-+ * @wp_pin: GPIO pin wired to the write protect sensor
-+ * @detect_is_active_high: The state of the detect pin when it is active
-+ * @non_removable: The slot is not removable, only detect once
-+ *
-+ * If a given slot is not present on the board, @bus_width should be
-+ * set to 0. The other fields are ignored in this case.
-+ *
-+ * Any pins that aren't available should be set to a negative value.
-+ *
-+ * Note that support for multiple slots is experimental -- some cards
-+ * might get upset if we don't get the clock management exactly right.
-+ * But in most cases, it should work just fine.
-+ */
-+struct mci_slot_pdata {
-+	unsigned int		bus_width;
-+	struct gpio_desc        *detect_pin;
-+	struct gpio_desc	*wp_pin;
-+	bool			detect_is_active_high;
-+	bool			non_removable;
-+};
-+
-+/**
-+ * struct mci_platform_data - board-specific MMC/SDcard configuration
-+ * @dma_slave: DMA slave interface to use in data transfers.
-+ * @slot: Per-slot configuration data.
-+ */
-+struct mci_platform_data {
-+	void			*dma_slave;
-+	dma_filter_fn		dma_filter;
-+	struct mci_slot_pdata	slot[ATMCI_MAX_NR_SLOTS];
-+};
-+
- struct atmel_mci_caps {
- 	bool    has_dma_conf_reg;
- 	bool    has_pdc;
-diff --git a/include/linux/atmel-mci.h b/include/linux/atmel-mci.h
-deleted file mode 100644
-index 017e7d8f6126..000000000000
---- a/include/linux/atmel-mci.h
-+++ /dev/null
-@@ -1,46 +0,0 @@
--/* SPDX-License-Identifier: GPL-2.0 */
--#ifndef __LINUX_ATMEL_MCI_H
--#define __LINUX_ATMEL_MCI_H
+-	/* loff_t vars have been assigned __u64 */
+-	if (lo->lo_offset < 0 || lo->lo_sizelimit < 0)
+-		return -EOVERFLOW;
 -
--#include <linux/types.h>
--#include <linux/dmaengine.h>
--
--#define ATMCI_MAX_NR_SLOTS	2
--
--/**
-- * struct mci_slot_pdata - board-specific per-slot configuration
-- * @bus_width: Number of data lines wired up the slot
-- * @detect_pin: GPIO pin wired to the card detect switch
-- * @wp_pin: GPIO pin wired to the write protect sensor
-- * @detect_is_active_high: The state of the detect pin when it is active
-- * @non_removable: The slot is not removable, only detect once
-- *
-- * If a given slot is not present on the board, @bus_width should be
-- * set to 0. The other fields are ignored in this case.
-- *
-- * Any pins that aren't available should be set to a negative value.
-- *
-- * Note that support for multiple slots is experimental -- some cards
-- * might get upset if we don't get the clock management exactly right.
-- * But in most cases, it should work just fine.
-- */
--struct mci_slot_pdata {
--	unsigned int		bus_width;
--	struct gpio_desc        *detect_pin;
--	struct gpio_desc	*wp_pin;
--	bool			detect_is_active_high;
--	bool			non_removable;
--};
--
--/**
-- * struct mci_platform_data - board-specific MMC/SDcard configuration
-- * @dma_slave: DMA slave interface to use in data transfers.
-- * @slot: Per-slot configuration data.
-- */
--struct mci_platform_data {
--	void			*dma_slave;
--	dma_filter_fn		dma_filter;
--	struct mci_slot_pdata	slot[ATMCI_MAX_NR_SLOTS];
--};
--
--#endif /* __LINUX_ATMEL_MCI_H */
+ 	memcpy(lo->lo_file_name, info->lo_file_name, LO_NAME_SIZE);
+ 	lo->lo_file_name[LO_NAME_SIZE-1] = 0;
+ 	lo->lo_flags = info->lo_flags;
 -- 
-2.25.1
+2.31.1
 
