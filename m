@@ -2,91 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4BD5369E517
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 17:48:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B77B69E4FE
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 17:44:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234871AbjBUQsR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Feb 2023 11:48:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51640 "EHLO
+        id S234186AbjBUQoN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Feb 2023 11:44:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46648 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234890AbjBUQsO (ORCPT
+        with ESMTP id S234122AbjBUQoL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Feb 2023 11:48:14 -0500
-Received: from mail.marcansoft.com (marcansoft.com [212.63.210.85])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 107A32BF3E;
-        Tue, 21 Feb 2023 08:48:09 -0800 (PST)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (No client certificate requested)
-        (Authenticated sender: lina@asahilina.net)
-        by mail.marcansoft.com (Postfix) with ESMTPSA id 4B918419B4;
-        Tue, 21 Feb 2023 16:37:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=asahilina.net;
-        s=default; t=1676997469;
-        bh=q6BVFwfAIWk2OOLv8SyurVmk8P7KEbhEcGD+6P4fo20=;
-        h=Date:Subject:From:To:Cc:References:In-Reply-To;
-        b=w0kjcj7XYcDPhignP+eQ2qVh5HGJmQQ5Rx8/rTVI+M3XKsWAVsJgXHLtFC6yA7tdh
-         1mIlDwj1XY5GuRUas5orrfa/hBoUc0ADGq41U82jJOlxSw8vTBpQRjsqjTBq8jyQ5E
-         /vBGrRmen+YGGa5UjbgtXO91BRGyQYlx8DW01OuJgHxVPTTOvnknbJUvH6Je39VRVW
-         cmgoUfjK/Mc7kcdUZcltbB2VzQ43KtxNNhOUmqPv7ztXJhMD/8h0Jd6QG9Us0HYhva
-         4GUPYxJXK3f/KF9DcuZmb9kAJh4m6UI/dPxGruORvMh9yk6x/wvYF3ncnGJCXKMBnL
-         dJ+sO2KR8E6Pw==
-Message-ID: <25f16677-8633-8c06-cf67-8024fae7854f@asahilina.net>
-Date:   Wed, 22 Feb 2023 01:37:44 +0900
+        Tue, 21 Feb 2023 11:44:11 -0500
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD6702A6FE;
+        Tue, 21 Feb 2023 08:43:36 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1676997816; x=1708533816;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=GEqS54iOqnAwTwLmO/BPPAys2FtJiNPO2POhdEFOgNM=;
+  b=AxDXen8nKZf+I5Av5//a+oAcrOVh4MxOoHoCrKKO99ljfuWnycO2rrPq
+   9XsjegMZ0IPOdrxkmwVvvQIbly52ZkkKevtGghbM1Udt5H+dbBr0jlwZe
+   U5nPX4nuNFoMR7RgfG4M9mwufJKD+Rl4Ww+6IXoJbeRjyz5/pZd1jykm7
+   acR2q/3J5gK1YA273pXhKhoIwRvCo8zA+/XaWKVnAq4z2xh/BhfOjOPUI
+   +kK3V2nwSC+je+M6xbArAsSGhNbR/p286FdIVu2/SHkuDX+9EO4GRrg2A
+   nO2iYLZ/Raj2HMuqIrH1RPaCPZHuCmYR8cTApKe3zOf5KWKkOe1KTPpe9
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10628"; a="334877889"
+X-IronPort-AV: E=Sophos;i="5.97,315,1669104000"; 
+   d="scan'208";a="334877889"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Feb 2023 08:39:30 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10628"; a="814564772"
+X-IronPort-AV: E=Sophos;i="5.97,315,1669104000"; 
+   d="scan'208";a="814564772"
+Received: from lkp-server01.sh.intel.com (HELO eac18b5d7d93) ([10.239.97.150])
+  by fmsmga001.fm.intel.com with ESMTP; 21 Feb 2023 08:39:28 -0800
+Received: from kbuild by eac18b5d7d93 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pUVfr-00002h-1W;
+        Tue, 21 Feb 2023 16:39:27 +0000
+Date:   Wed, 22 Feb 2023 00:39:12 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Breno Leitao <leitao@debian.org>, axboe@kernel.dk,
+        asml.silence@gmail.com, io-uring@vger.kernel.org
+Cc:     oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
+        gustavold@meta.com, leit@meta.com
+Subject: Re: [PATCH 2/2] io_uring: Add KASAN support for alloc_caches
+Message-ID: <202302220015.B4dQkwgA-lkp@intel.com>
+References: <20230221135721.3230763-2-leitao@debian.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH] rust: time: New module for timekeeping functions
-Content-Language: en-US
-From:   Asahi Lina <lina@asahilina.net>
-To:     Boqun Feng <boqun.feng@gmail.com>,
-        Thomas Gleixner <tglx@linutronix.de>
-Cc:     Miguel Ojeda <ojeda@kernel.org>,
-        Alex Gaynor <alex.gaynor@gmail.com>,
-        Wedson Almeida Filho <wedsonaf@gmail.com>,
-        Gary Guo <gary@garyguo.net>,
-        =?UTF-8?Q?Bj=c3=b6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
-        John Stultz <jstultz@google.com>,
-        Stephen Boyd <sboyd@kernel.org>, linux-kernel@vger.kernel.org,
-        rust-for-linux@vger.kernel.org, asahi@lists.linux.dev
-References: <20230221-gpu-up-time-v1-1-bf8fe74b7f55@asahilina.net>
- <87v8jvnqq4.ffs@tglx> <Y/TP6as7qqwfcI42@boqun-archlinux>
- <6aa15295-219b-225c-607d-e87e3d51d048@asahilina.net>
-In-Reply-To: <6aa15295-219b-225c-607d-e87e3d51d048@asahilina.net>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230221135721.3230763-2-leitao@debian.org>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 22/02/2023 01.27, Asahi Lina wrote:
-> I think that's the better approach, but I was hoping to leave that for a
-> future patch, especially since right now I'm the only user of this API
-> in the upcoming Apple GPU driver and it only uses it to implement some
-> really simple timeouts for polled operations, which isn't much API
-> coverage... I figured we might get a better idea for what to do once a
-> second user comes along. For example, do we want straight methods like
-> that or std::ops trait impls? And do we make everything fallible or
-> panic on overflow or just wrap?
+Hi Breno,
 
-Also, it's probably worth mentioning that this kind of refactor can be
-done without rewriting all the user code. For example, here is how I use
-the APIs:
+Thank you for the patch! Yet something to improve:
 
-    let timeout = time::ktime_get() + Duration::from_millis(...);
-    while time::ktime_get() < timeout {
-        [...]
-    }
+[auto build test ERROR on linus/master]
+[also build test ERROR on v6.2 next-20230221]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-Even if ktime_get() starts returning another type, as long as it can
-interoperate with core::time::Duration the same way, it will continue to
-compile (and if it only interoperates with a new kernel-specific
-Duration, you'd only have to change the `use` statement at the top).
+url:    https://github.com/intel-lab-lkp/linux/commits/Breno-Leitao/io_uring-Add-KASAN-support-for-alloc_caches/20230221-220039
+patch link:    https://lore.kernel.org/r/20230221135721.3230763-2-leitao%40debian.org
+patch subject: [PATCH 2/2] io_uring: Add KASAN support for alloc_caches
+config: powerpc-allnoconfig (https://download.01.org/0day-ci/archive/20230222/202302220015.B4dQkwgA-lkp@intel.com/config)
+compiler: powerpc-linux-gcc (GCC) 12.1.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/d909e43a1659897df77bc1373d3c24cc0d9129cf
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Breno-Leitao/io_uring-Add-KASAN-support-for-alloc_caches/20230221-220039
+        git checkout d909e43a1659897df77bc1373d3c24cc0d9129cf
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=powerpc olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=powerpc SHELL=/bin/bash
 
-~~ Lina
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202302220015.B4dQkwgA-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+   io_uring/io_uring.c: In function '__io_submit_flush_completions':
+   io_uring/io_uring.c:1502:40: warning: variable 'prev' set but not used [-Wunused-but-set-variable]
+    1502 |         struct io_wq_work_node *node, *prev;
+         |                                        ^~~~
+   io_uring/io_uring.c: In function 'io_uring_acache_free':
+>> io_uring/io_uring.c:2781:36: error: invalid application of 'sizeof' to incomplete type 'struct io_async_msghdr'
+    2781 |                             sizeof(struct io_async_msghdr));
+         |                                    ^~~~~~
+
+
+vim +2781 io_uring/io_uring.c
+
+  2777	
+  2778		io_alloc_cache_free(&ctx->apoll_cache, io_apoll_cache_free,
+  2779				    sizeof(struct async_poll));
+  2780		io_alloc_cache_free(&ctx->netmsg_cache, io_netmsg_cache_free,
+> 2781				    sizeof(struct io_async_msghdr));
+  2782	}
+  2783	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
