@@ -2,165 +2,162 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A15069E5FB
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 18:28:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A669269E5E0
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 18:23:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233989AbjBUR2p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Feb 2023 12:28:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44680 "EHLO
+        id S234509AbjBURXq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Feb 2023 12:23:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37384 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229876AbjBUR2n (ORCPT
+        with ESMTP id S233746AbjBURXp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Feb 2023 12:28:43 -0500
-Received: from bird.elm.relay.mailchannels.net (bird.elm.relay.mailchannels.net [23.83.212.17])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 783087AAA
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Feb 2023 09:27:57 -0800 (PST)
-X-Sender-Id: dreamhost|x-authsender|kjlx@templeofstupid.com
-Received: from relay.mailchannels.net (localhost [127.0.0.1])
-        by relay.mailchannels.net (Postfix) with ESMTP id 2BE176C1DB6
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Feb 2023 17:22:06 +0000 (UTC)
-Received: from pdx1-sub0-mail-a305.dreamhost.com (unknown [127.0.0.6])
-        (Authenticated sender: dreamhost)
-        by relay.mailchannels.net (Postfix) with ESMTPA id A009A6C1DE0
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Feb 2023 17:22:05 +0000 (UTC)
-ARC-Seal: i=1; s=arc-2022; d=mailchannels.net; t=1677000125; a=rsa-sha256;
-        cv=none;
-        b=VCaO+SqLxLYZsHGRDLjXP2mj6QxwFXRre6qoC6b1BHWJCP0Bw7Sgo7XpDnoHn3vRF6JzEE
-        MFWiS8Sd2EEGHaDXv2Rn/7JGXiQPAoh/buI2iK9aDUCO8/MEXy2QTo54D2kN9esscWaW31
-        8rOM/SnmmffqFu9CaRJdxd+WI4laRqr0SHRLAN/wEt4Y7k+vDzF6NLqsdbqOE8++7p31EA
-        Cp6Ybvjkl2m8EtetWDNjV5Hw6eD4+qrVPSwQB/DujzCwqQ3bHnHIkvefWvp6YYuqze0gPc
-        3iOGyKQXLaKiBn87t7P3aF5HaCdaMyzbM14Ry4GmgEanjXmuZHod9xGTXH36RQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mailchannels.net;
-        s=arc-2022; t=1677000125;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references:dkim-signature;
-        bh=V/XcrwQCic125n2lnngmDNOBHq5WbsWAtWXZs/Ki6+I=;
-        b=1X/V0cdKSyXKznrvzxPUyPKrvoTej7rXzAGBTNwuiraGZHnzOtroUg12UASkzmm+dwk+5f
-        bl4WCDYGky7++GbzFcgH76Na4AAaV3+FkzzacTotFCAEjjRn1G/MBWwtwntv9UVXy+z6wk
-        4Sg9GqEUU2LlyfKecRWmQ5o9jt/ywjvyWbSuCKOa8kkEhezfwtmHIGrhfTrl3xEByK7dq6
-        /QFGSjnnrlUEcDLJHx38FTUB9exQug/1SnsWA7AnNAew4an5r0whJ9R6HKToQ4bOgvCFcv
-        YtYYKvK137h76jGzGtkTp3Wg1IdpqwmLTNZKsCVW/d7RFmFTP0Bt4EfNCGiHhQ==
-ARC-Authentication-Results: i=1;
-        rspamd-5db48964c-h5x86;
-        auth=pass smtp.auth=dreamhost smtp.mailfrom=kjlx@templeofstupid.com
-X-Sender-Id: dreamhost|x-authsender|kjlx@templeofstupid.com
-X-MC-Relay: Neutral
-X-MailChannels-SenderId: dreamhost|x-authsender|kjlx@templeofstupid.com
-X-MailChannels-Auth-Id: dreamhost
-X-Celery-Desert: 0271dbc06f45e987_1677000125967_4182954317
-X-MC-Loop-Signature: 1677000125967:1643486477
-X-MC-Ingress-Time: 1677000125967
-Received: from pdx1-sub0-mail-a305.dreamhost.com (pop.dreamhost.com
- [64.90.62.162])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384)
-        by 100.120.227.140 (trex/6.7.1);
-        Tue, 21 Feb 2023 17:22:05 +0000
-Received: from kmjvbox (c-76-102-200-71.hsd1.ca.comcast.net [76.102.200.71])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        Tue, 21 Feb 2023 12:23:45 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBB29FD;
+        Tue, 21 Feb 2023 09:23:43 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        (Authenticated sender: kjlx@templeofstupid.com)
-        by pdx1-sub0-mail-a305.dreamhost.com (Postfix) with ESMTPSA id 4PLmLM6xH0zdR
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Feb 2023 09:22:03 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=templeofstupid.com;
-        s=dreamhost; t=1677000124;
-        bh=V/XcrwQCic125n2lnngmDNOBHq5WbsWAtWXZs/Ki6+I=;
-        h=Date:From:To:Cc:Subject:Content-Type;
-        b=t38e3ebH6n0d5KAs1qjo+n9b7yYz904DV8k7Xm4gfAeAvlRyaKDDgF5f5myB4DFNz
-         GW/e+O3i5YqMryRYNEMlfdLI1G8jHb8ihCRKW5zanR4jwJU2dynL91n7DmCWMgQWcL
-         uJvrwUpSBfmIbAhMqrx8ptJvUv1RXb6kjneLFU9o=
-Received: from johansen (uid 1000)
-        (envelope-from kjlx@templeofstupid.com)
-        id e0049
-        by kmjvbox (DragonFly Mail Agent v0.12);
-        Tue, 21 Feb 2023 09:22:00 -0800
-Date:   Tue, 21 Feb 2023 09:22:00 -0800
-From:   Krister Johansen <kjlx@templeofstupid.com>
-To:     Juergen Gross <jgross@suse.com>
-Cc:     Krister Johansen <kjlx@templeofstupid.com>,
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 86F2A610A0;
+        Tue, 21 Feb 2023 17:23:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 65FD5C4339C;
+        Tue, 21 Feb 2023 17:23:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1677000222;
+        bh=Pl03WP9pz1cQTTx/VsalIyGu1+sZ9/CZMBhlsy+Pc0A=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=ZW7tDNOashB0Kv+TDpNQFEyvqNaTUZg/H1F524al5ypnIaxXNFxL5wXCstQSnehc/
+         88n2kAios7WCSwxef2XI3HUS0hWu5STws51g0jbgFfToXi/vBjelqlAvasfBUYoee5
+         KsGD4PYYyNOM5i5YJs9FVHCG7HlynXXig/IdJKA9Xhkizxaem5mNN9W6KoZFrhkNaq
+         rmOc+RIGgi7NN0KkbLGmHQnblhdBmKa+aSyUEWu5biKRO9S/cf0/DoeiCBARCPccaO
+         wVRG90y7YbI2ZvXmVjenZP+agf+uoUfzcF3dgUby5nT9iC07nL1Uh62S8z8HxQxFDD
+         mOqtVkiP4ZyCw==
+Date:   Tue, 21 Feb 2023 17:23:36 +0000
+From:   Conor Dooley <conor@kernel.org>
+To:     Hal Feng <hal.feng@starfivetech.com>
+Cc:     linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-riscv@lists.infradead.org, Stephen Boyd <sboyd@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Ben Dooks <ben.dooks@sifive.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
         Thomas Gleixner <tglx@linutronix.de>,
-        xen-devel@lists.xenproject.org, linux-kernel@vger.kernel.org,
-        Jan Beulich <jbeulich@suse.com>,
-        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Marcelo Tosatti <mtosatti@redhat.com>,
-        Anthony Liguori <aliguori@amazon.com>,
-        David Reaver <me@davidreaver.com>,
-        Brendan Gregg <brendan@intel.com>
-Subject: Re: [PATCH linux-next 2/2] x86/xen/time: cleanup
- xen_tsc_safe_clocksource
-Message-ID: <20230221172200.GB1958@templeofstupid.com>
-References: <cover.1676610413.git.kjlx@templeofstupid.com>
- <f6bab47230b00cecb67f2c5d94716c8236609967.1676610413.git.kjlx@templeofstupid.com>
- <87h6vgov2p.ffs@tglx>
- <20230221041440.GA1934@templeofstupid.com>
- <20230221055117.GA1934@templeofstupid.com>
- <cd9acc63-c352-93c8-56bf-52ef69e5e124@suse.com>
+        Marc Zyngier <maz@kernel.org>,
+        Emil Renner Berthing <emil.renner.berthing@canonical.com>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v4 09/19] dt-bindings: clock: Add StarFive JH7110 system
+ clock and reset generator
+Message-ID: <Y/T+GNQAXLGyUtCH@spud>
+References: <20230221024645.127922-1-hal.feng@starfivetech.com>
+ <20230221024645.127922-10-hal.feng@starfivetech.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="5z4OmeN+mDwxYA7S"
 Content-Disposition: inline
-In-Reply-To: <cd9acc63-c352-93c8-56bf-52ef69e5e124@suse.com>
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
-        DKIM_SIGNED,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS,UNPARSEABLE_RELAY autolearn=no autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20230221024645.127922-10-hal.feng@starfivetech.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 21, 2023 at 09:47:24AM +0100, Juergen Gross wrote:
-> On 21.02.23 06:51, Krister Johansen wrote:
-> > On Mon, Feb 20, 2023 at 08:14:40PM -0800, Krister Johansen wrote:
-> > > On Mon, Feb 20, 2023 at 11:01:18PM +0100, Thomas Gleixner wrote:
-> > > > On Mon, Feb 20 2023 at 09:17, Krister Johansen wrote:
-> > > > > @@ -495,8 +496,7 @@ static int __init xen_tsc_safe_clocksource(void)
-> > > > >   	/* Leaf 4, sub-leaf 0 (0x40000x03) */
-> > > > >   	cpuid_count(xen_cpuid_base() + 3, 0, &eax, &ebx, &ecx, &edx);
-> > > > > -	/* tsc_mode = no_emulate (2) */
-> > > > > -	if (ebx != 2)
-> > > > > +	if (ebx != XEN_CPUID_TSC_MODE_NEVER_EMULATE)
-> > > > >   		return 0;
-> > > > >   	return 1;
-> > > > 
-> > > > What about removing more stupidity from that function?
-> > > > 
-> > > > static bool __init xen_tsc_safe_clocksource(void)
-> > > > {
-> > > > 	u32 eax, ebx. ecx, edx;
-> > > > 	/* Leaf 4, sub-leaf 0 (0x40000x03) */
-> > > > 	cpuid_count(xen_cpuid_base() + 3, 0, &eax, &ebx, &ecx, &edx);
-> > > > 
-> > > > 	return ebx == XEN_CPUID_TSC_MODE_NEVER_EMULATE;
-> > > > }
-> > > 
-> > > I'm all for simplifying.  I'm happy to clean up that return to be more
-> > > idiomatic.  I was under the impression, perhaps mistaken, though, that
-> > > the X86_FEATURE_CONSTANT_TSC, X86_FEATURE_NONSTOP_TSC, and
-> > > check_tsc_unstable() checks were actually serving a purpose: to ensure
-> > > that we don't rely on the tsc in environments where it's being emulated
-> > > and the OS would be better served by using a PV clock.  Specifically,
-> > > kvmclock_init() makes a very similar set of checks that I also thought
-> > > were load-bearing.
-> > 
-> > Bah, what I meant to say was emulated, unstable, or otherwise unsuitable
-> > for use as a clocksource.  IOW, even if TSC_MODE_NEVER_EMULATE is
-> > set, it's possible that a user is attempting a migration from a cpu
-> > that's not invariant, and we'd still want to check for that case and
-> > fall back to a PV clocksource, correct?
-> 
-> But Thomas' suggestion wasn't changing any behavior compared to your
-> patch. It just makes it easier to read.
-> 
-> If you are unsure your patch is correct, please verify the correctness
-> before sending it.
 
-Thanks, and apologies. I misunderstood and thought a more complex change
-was requested.
+--5z4OmeN+mDwxYA7S
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
--K
+Hey Hal,
+
+On Tue, Feb 21, 2023 at 10:46:35AM +0800, Hal Feng wrote:
+> From: Emil Renner Berthing <kernel@esmil.dk>
+>=20
+> Add bindings for the system clock and reset generator (SYSCRG) on the
+> JH7110 RISC-V SoC by StarFive Ltd.
+>=20
+> Reviewed-by: Rob Herring <robh@kernel.org>
+> Signed-off-by: Emil Renner Berthing <kernel@esmil.dk>
+> Signed-off-by: Hal Feng <hal.feng@starfivetech.com>
+
+> diff --git a/Documentation/devicetree/bindings/clock/starfive,jh7110-sysc=
+rg.yaml b/Documentation/devicetree/bindings/clock/starfive,jh7110-syscrg.ya=
+ml
+> new file mode 100644
+> index 000000000000..ec81504dcb27
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/clock/starfive,jh7110-syscrg.yaml
+> @@ -0,0 +1,80 @@
+> +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/clock/starfive,jh7110-syscrg.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: StarFive JH7110 System Clock and Reset Generator
+> +
+> +maintainers:
+> +  - Emil Renner Berthing <kernel@esmil.dk>
+> +
+> +properties:
+> +  compatible:
+> +    const: starfive,jh7110-syscrg
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  clocks:
+> +    items:
+> +      - description: Main Oscillator (24 MHz)
+> +      - description: GMAC1 RMII reference
+> +      - description: GMAC1 RGMII RX
+> +      - description: External I2S TX bit clock
+> +      - description: External I2S TX left/right channel clock
+> +      - description: External I2S RX bit clock
+> +      - description: External I2S RX left/right channel clock
+> +      - description: External TDM clock
+> +      - description: External audio master clock
+
+You didn't reply to the conversation I had with Krzysztof about how to
+represent the optional nature of some of these clocks, contained in this
+thread here:
+https://lore.kernel.org/all/7a7bccb1-4d47-3d32-36e6-4aab7b5b8dad@starfivete=
+ch.com/
+
+What happens to the gmac1 mux if only one of the input clocks is
+provided?
+And I mean what does the hardware do, not the software representation of
+that mux in the driver.
+
+> +
+> +  clock-names:
+> +    items:
+> +      - const: osc
+> +      - const: gmac1_rmii_refin
+> +      - const: gmac1_rgmii_rxin
+> +      - const: i2stx_bclk_ext
+> +      - const: i2stx_lrck_ext
+> +      - const: i2srx_bclk_ext
+> +      - const: i2srx_lrck_ext
+> +      - const: tdm_ext
+> +      - const: mclk_ext
+
+--5z4OmeN+mDwxYA7S
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCY/T+GAAKCRB4tDGHoIJi
+0pRkAQC6ht/DbBLlbYtspRHjx7cCxZOkTEjjNHlLyj+f8sZeswD8C+0TU6D7Ciun
+VaHOn1Vw8T9AeqqwUsyerL6bkIj/+QA=
+=ZCkp
+-----END PGP SIGNATURE-----
+
+--5z4OmeN+mDwxYA7S--
