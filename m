@@ -2,104 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 174E069E09F
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 13:44:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4A8CC69E0A3
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 13:45:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234785AbjBUMor (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Feb 2023 07:44:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41374 "EHLO
+        id S234800AbjBUMpc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Feb 2023 07:45:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42376 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234272AbjBUMop (ORCPT
+        with ESMTP id S234664AbjBUMpa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Feb 2023 07:44:45 -0500
-Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA1191ADF4
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Feb 2023 04:44:35 -0800 (PST)
-Received: from [2a02:8108:8980:2478:8cde:aa2c:f324:937e]; authenticated
-        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        id 1pUS0T-0002pQ-0B; Tue, 21 Feb 2023 13:44:29 +0100
-Message-ID: <698e7bfa-09dc-ad74-3eba-ceacd7a29f18@leemhuis.info>
-Date:   Tue, 21 Feb 2023 13:44:28 +0100
+        Tue, 21 Feb 2023 07:45:30 -0500
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01A59E8;
+        Tue, 21 Feb 2023 04:45:29 -0800 (PST)
+Received: from pps.filterd (m0279862.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 31LCa3mM020813;
+        Tue, 21 Feb 2023 12:45:12 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=date : from : to :
+ cc : subject : message-id : reply-to : references : mime-version :
+ content-type : in-reply-to; s=qcppdkim1;
+ bh=x3stg8zJRtXCGXEKmbrGIt8ho9ZieFxJLhwP/0UeaeA=;
+ b=V5zVcAZDNq0vH53WmIAnNTuMqsXb3brM+lQtpDZF3RxA9k33s6rXBmYDI0Bybed+DY4M
+ K8r99GaL1xJhawxLblMF2hVzEx18rN2oEb3XSQQXR5ZK/aWR+is0ghZky4o2cJwh+EoX
+ gUJz7ra1HHmDwOXSWktW2lB+IgiBqF6yWHHiiDQfeTFeAnmWHFOOOMAsSRUvg3uKr1r2
+ u90DedTkIHPDJqsDyN4VPZhe2znPRJ+2u3zDVd/RmnKlQ+vQ6WTwcD3eCL17J03zBsgC
+ UYSckh7AmeNx5tRROqE2jGJ/R8oYiTtmFE9igHZtFt4dl8dKSyjEZXTQYXPwDlQCp2wA Ug== 
+Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3nvp4v13cg-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 21 Feb 2023 12:45:12 +0000
+Received: from nalasex01b.na.qualcomm.com (nalasex01b.na.qualcomm.com [10.47.209.197])
+        by NALASPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 31LCjBjD029154
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 21 Feb 2023 12:45:11 GMT
+Received: from quicinc.com (10.80.80.8) by nalasex01b.na.qualcomm.com
+ (10.47.209.197) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.41; Tue, 21 Feb
+ 2023 04:45:04 -0800
+Date:   Tue, 21 Feb 2023 18:15:00 +0530
+From:   Srivatsa Vaddagiri <quic_svaddagi@quicinc.com>
+To:     Elliot Berman <quic_eberman@quicinc.com>
+CC:     Alex Elder <elder@linaro.org>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Prakruthi Deepak Heragu <quic_pheragu@quicinc.com>,
+        Murali Nalajala <quic_mnalajal@quicinc.com>,
+        Trilok Soni <quic_tsoni@quicinc.com>,
+        Carl van Schaik <quic_cvanscha@quicinc.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        "Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Bagas Sanjaya <bagasdotme@gmail.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Jassi Brar <jassisinghbrar@gmail.com>,
+        <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-doc@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>
+Subject: Re: [PATCH v10 12/26] gunyah: vm_mgr: Add/remove user memory regions
+Message-ID: <20230221124500.GB1437176@quicinc.com>
+Reply-To: Srivatsa Vaddagiri <quic_svaddagi@quicinc.com>
+References: <20230214211229.3239350-1-quic_eberman@quicinc.com>
+ <20230214212417.3315422-1-quic_eberman@quicinc.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.2
-Content-Language: en-US, de-DE
-From:   "Linux regression tracking (Thorsten Leemhuis)" 
-        <regressions@leemhuis.info>
-To:     Mario Limonciello <mario.limonciello@amd.com>
-Cc:     Mark Brown <broonie@kernel.org>,
-        Joseph R <prosenfeld@Yuhsbstudents.org>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>, alsa-devel@alsa-project.org,
-        Linux kernel regressions list <regressions@lists.linux.dev>,
-        LKML <linux-kernel@vger.kernel.org>
-Reply-To: Linux regressions mailing list <regressions@lists.linux.dev>
-Subject: [regression] Bug 217063 - Commit 2232b2d breaks microphone on Lenovo
- "82SJ" Ideapad 14ARH7
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1676983476;f9ad0551;
-X-HE-SMSGID: 1pUS0T-0002pQ-0B
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Disposition: inline
+In-Reply-To: <20230214212417.3315422-1-quic_eberman@quicinc.com>
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01b.na.qualcomm.com (10.47.209.197)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: fFbo6RuodUEy2REFMkCBFIuWCSHvZEBC
+X-Proofpoint-GUID: fFbo6RuodUEy2REFMkCBFIuWCSHvZEBC
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.170.22
+ definitions=2023-02-21_08,2023-02-20_02,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 mlxlogscore=832
+ clxscore=1015 adultscore=0 spamscore=0 phishscore=0 suspectscore=0
+ bulkscore=0 impostorscore=0 lowpriorityscore=0 malwarescore=0
+ priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2302210108
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, this is your Linux kernel regression tracker.
+* Elliot Berman <quic_eberman@quicinc.com> [2023-02-14 13:24:16]:
 
-I noticed a regression report in bugzilla.kernel.org. As many (most?)
-kernel developer don't keep an eye on it, I decided to forward it by
-mail. Quoting from https://bugzilla.kernel.org/show_bug.cgi?id=217063 :
+> +int gh_vm_mem_alloc(struct gh_vm *ghvm, struct gh_userspace_memory_region *region)
+> +{
+> +	struct gh_vm_mem *mapping, *tmp_mapping;
+> +	struct gh_rm_mem_entry *mem_entries;
+> +	phys_addr_t curr_page, prev_page;
+> +	struct gh_rm_mem_parcel *parcel;
+> +	int i, j, pinned, ret = 0;
+> +	size_t entry_size;
+> +	u16 vmid;
+> +
+> +	if (!gh_api_has_feature(GH_API_FEATURE_MEMEXTENT))
+> +		return -EOPNOTSUPP;
+> +
+> +	if (!region->memory_size || !PAGE_ALIGNED(region->memory_size) ||
+> +		!PAGE_ALIGNED(region->userspace_addr) || !PAGE_ALIGNED(region->guest_phys_addr))
+> +		return -EINVAL;
 
-> [reply] [−] Description Joseph R 2023-02-21 00:35:34 UTC
-> 
-> Created attachment 303765 [details] lspci -vv
-> 
-> Commit 2232b2dd8cd4f1e6d554b2c3f6899ce36f791b67, intended to fix
-> sound on Lenovo Yoga Slim 7 Pro X, makes the microphone on Lenovo
-> Ideapad 14 14ARH7 with product code Lenovo "82SJ" unusable.
-> 
-> Simply removing the lines added by the commit make the microphone
-> work again without issues.
-> 
-> Attached is lspci on a kernel with the lines removed.
-> 
-> First kernel bug report, so please let me know how I can help get
-> this fixed!
+Check for wraps also:
 
+        region->guest_phys_addr + region->memory_size > region->guest_phys_addr
 
-See the ticket for more details.
-
-
-[TLDR for the rest of this mail: I'm adding this report to the list of
-tracked Linux kernel regressions; the text you find below is based on a
-few templates paragraphs you might have encountered already in similar
-form.]
-
-BTW, let me use this mail to also add the report to the list of tracked
-regressions to ensure it's doesn't fall through the cracks:
-
-#regzbot introduced: 2232b2dd8cd4f1e6d5
-https://bugzilla.kernel.org/show_bug.cgi?id=217063
-#regzbot title: alsa/asoc: microphone on Lenovo "82SJ" Ideapad 14ARH7 broken
-#regzbot ignore-activity
-
-This isn't a regression? This issue or a fix for it are already
-discussed somewhere else? It was fixed already? You want to clarify when
-the regression started to happen? Or point out I got the title or
-something else totally wrong? Then just reply and tell me -- ideally
-while also telling regzbot about it, as explained by the page listed in
-the footer of this mail.
-
-Developers: When fixing the issue, remember to add 'Link:' tags pointing
-to the report (e.g. the buzgzilla ticket and maybe this mail as well, if
-this thread sees some discussion). See page linked in footer for details.
-
-Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
---
-Everything you wanna know about Linux kernel regression tracking:
-https://linux-regtracking.leemhuis.info/about/#tldr
-If I did something stupid, please tell me, as explained on that page.
