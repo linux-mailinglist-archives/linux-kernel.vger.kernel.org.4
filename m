@@ -2,82 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0504F69E2DF
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 16:00:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F6F769E28C
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 15:40:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234229AbjBUPA1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Feb 2023 10:00:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51072 "EHLO
+        id S234041AbjBUOkg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Feb 2023 09:40:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60016 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233992AbjBUPAZ (ORCPT
+        with ESMTP id S234582AbjBUOkT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Feb 2023 10:00:25 -0500
+        Tue, 21 Feb 2023 09:40:19 -0500
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE6CCB461
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Feb 2023 06:59:42 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3325A26CD1
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Feb 2023 06:39:34 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1676991582;
+        s=mimecast20190719; t=1676990373;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=zR01m6f0KMxaCdW6/9YON73JqwNOZ58NWx14UlZixkQ=;
-        b=HFlgERdKH3B4MUQw8XNh3AuhtaJqo+v4PT/KUtsoYR+HYujvs0a4nwOmGeO5q4jO7b5uiX
-        LE+FVwrlIbxxOYYUkscDCc+cBabBQADPp1HYFQWwdjesGpvxMcU/WrarWbhWx0lxf276Nn
-        pX7wTgwvnb9jRIDhgNVZnnCAT2o3m6s=
-Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com
- [209.85.208.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-562-O8EkeY_RMWO3f6sJMwo9mQ-1; Tue, 21 Feb 2023 09:59:40 -0500
-X-MC-Unique: O8EkeY_RMWO3f6sJMwo9mQ-1
-Received: by mail-ed1-f71.google.com with SMTP id cz22-20020a0564021cb600b004a245f58006so6768167edb.12
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Feb 2023 06:59:40 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=zR01m6f0KMxaCdW6/9YON73JqwNOZ58NWx14UlZixkQ=;
-        b=Yf1CGX7Hfm5XMBf+q4Ln74HCyudV9Mo1eXX3aPnc7zmNv/QdZG4OfTl9M4U6D+5kep
-         v4NHkmABX3bZiQIA3AREc+dvxeunO1lb6+/wK9P23F6l0+xDRExmRDj2GVPayIigHzuY
-         VOayqItfc5AlzD6bdDeL1ZnHomqaWigBFhwRCDcRmnWS68FIg1LABxeXNu3UEkimfnF5
-         SNK56ffvZFRwVW1lrc61z61K1Cf+mvTbJ46Ve7oFSenRADF8nR7VJacepA3sx/NEo+l0
-         Vv3If1YLn+9W3eodUWFSKgSOoSfGsPGn3IZQcvDI/dv+fDDSdjIPaLej6AZ+bCKXUNrX
-         HbWQ==
-X-Gm-Message-State: AO0yUKWc2dI/tLlK7NgYrN+5AcA7fwRGIHnVs3X8e+FY4jgRWus7bzKM
-        HcV+cAbEYZwClrm/2u8GRp6vwZ48AK9Usk6IWcQwbLhW48jvm00OMSDpYVcZEynfs3mFsXrfr9R
-        Nng6rsxzqd/JMqQsJA51ugoSR
-X-Received: by 2002:a17:906:f298:b0:877:8ae7:2e44 with SMTP id gu24-20020a170906f29800b008778ae72e44mr10449574ejb.5.1676991579519;
-        Tue, 21 Feb 2023 06:59:39 -0800 (PST)
-X-Google-Smtp-Source: AK7set/rd+60WkR9Pb5ZCfi4/q+0aDmwntl5Cr4CAeiqkkwHXnHhiHRgUbf3dBpXyGaefcHcmhtyMQ==
-X-Received: by 2002:a17:906:f298:b0:877:8ae7:2e44 with SMTP id gu24-20020a170906f29800b008778ae72e44mr10449559ejb.5.1676991579247;
-        Tue, 21 Feb 2023 06:59:39 -0800 (PST)
-Received: from pollux ([2a02:810d:4b3f:de78:642:1aff:fe31:a15c])
-        by smtp.gmail.com with ESMTPSA id dt23-20020a170906b79700b00889db195470sm7194952ejb.82.2023.02.21.06.59.37
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 21 Feb 2023 06:59:38 -0800 (PST)
-Date:   Tue, 21 Feb 2023 15:37:49 +0100
-From:   Danilo Krummrich <dakr@redhat.com>
-To:     Matthew Wilcox <willy@infradead.org>
-Cc:     matthew.brost@intel.com, dri-devel@lists.freedesktop.org,
-        corbet@lwn.net, nouveau@lists.freedesktop.org, ogabbay@kernel.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, boris.brezillon@collabora.com,
-        bskeggs@redhat.com, tzimmermann@suse.de, Liam.Howlett@oracle.com,
-        bagasdotme@gmail.com, christian.koenig@amd.com,
-        jason@jlekstrand.net
-Subject: Re: [PATCH drm-next v2 04/16] maple_tree: add flag MT_FLAGS_LOCK_NONE
-Message-ID: <Y/TXPasvkhtGiR+w@pollux>
-References: <20230217134422.14116-1-dakr@redhat.com>
- <20230217134422.14116-5-dakr@redhat.com>
- <Y+/Xn11dfdn7SfBD@casper.infradead.org>
- <3bb02ec3-4d19-9135-cabc-26ed210f7396@redhat.com>
- <Y/ONYhyDCPEYH1ml@casper.infradead.org>
- <e43f6acc-175d-1031-c4a2-67a6f1741866@redhat.com>
- <Y/PZH/q2Xsr3od9m@casper.infradead.org>
+        bh=Zny8KiMYb1HNZkaNKN8BQ6gfmEmcu946THplslfDzwM=;
+        b=Cgoaf/W7I3Fmero396K6e3uAYwWMZe4smipuest0JPp/GC546+7c9d3u86bHa5lYRehpKa
+        TLk+d4OsrVOjgc+0ffH94QOAeggODUCdCr/1TKZVxdv2+2BZce3QdZKJI7MpXFo2niMZOK
+        HqvZuJhautp7TQc1IhtcB5sU8SfI1Ps=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-28-6yaa8cDXPqSRA91NVmOFQQ-1; Tue, 21 Feb 2023 09:39:28 -0500
+X-MC-Unique: 6yaa8cDXPqSRA91NVmOFQQ-1
+Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 7266E1C04195;
+        Tue, 21 Feb 2023 14:39:27 +0000 (UTC)
+Received: from warthog.procyon.org.uk (unknown [10.33.36.18])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 755DF40B4138;
+        Tue, 21 Feb 2023 14:39:25 +0000 (UTC)
+Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
+        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
+        Kingdom.
+        Registered in England and Wales under Company Registration No. 3798903
+From:   David Howells <dhowells@redhat.com>
+In-Reply-To: <20230221184225.0e734f0e@canb.auug.org.au>
+References: <20230221184225.0e734f0e@canb.auug.org.au> <20230221174401.7198357d@canb.auug.org.au> <20230220152933.1ab8fa4a@canb.auug.org.au> <Y/N8hVWeR3AjssUC@casper.infradead.org> <20230220190157.3b43b9a7@canb.auug.org.au> <Y/Pe2xHklSr1hDtz@casper.infradead.org> <2351091.1676963957@warthog.procyon.org.uk>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     dhowells@redhat.com, Matthew Wilcox <willy@infradead.org>,
+        "Vishal Moola (Oracle)" <vishal.moola@gmail.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Steve French <smfrench@gmail.com>,
+        Steve French <stfrench@microsoft.com>,
+        Shyam Prasad N <nspmangalore@gmail.com>,
+        Rohith Surabattula <rohiths.msft@gmail.com>,
+        Tom Talpey <tom@talpey.com>, Paulo Alcantara <pc@cjr.nz>,
+        Jeff Layton <jlayton@kernel.org>, linux-cifs@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-next@vger.kernel.org
+Subject: Re: linux-next: manual merge of the mm-stable tree with the cifs tree
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y/PZH/q2Xsr3od9m@casper.infradead.org>
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <2885896.1676990364.1@warthog.procyon.org.uk>
+Content-Transfer-Encoding: quoted-printable
+Date:   Tue, 21 Feb 2023 14:39:24 +0000
+Message-ID: <2885897.1676990364@warthog.procyon.org.uk>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.1
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
@@ -88,98 +74,229 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 20, 2023 at 08:33:35PM +0000, Matthew Wilcox wrote:
-> On Mon, Feb 20, 2023 at 06:06:03PM +0100, Danilo Krummrich wrote:
-> > On 2/20/23 16:10, Matthew Wilcox wrote:
-> > > This is why we like people to use the spinlock embedded in the tree.
-> > > There's nothing for the user to care about.  If the access really is
-> > > serialised, acquiring/releasing the uncontended spinlock is a minimal
-> > > cost compared to all the other things that will happen while modifying
-> > > the tree.
-> > 
-> > I think as for the users of the GPUVA manager we'd have two cases:
-> > 
-> > 1) Accesses to the manager (and hence the tree) are serialized, no lock
-> > needed.
-> > 
-> > 2) Multiple operations on the tree must be locked in order to make them
-> > appear atomic.
-> 
-> Could you give an example here of what you'd like to do?  Ideally
-> something complicated so I don't say "Oh, you can just do this" when
-> there's a more complex example for which "this" won't work.  I'm sure
-> that's embedded somewhere in the next 20-odd patches, but it's probably
-> quicker for you to describe in terms of tree operations that have to
-> appear atomic than for me to try to figure it out.
-> 
+Stephen Rothwell <sfr@canb.auug.org.au> wrote:
 
-Absolutely, not gonna ask you to read all of that. :-)
+> Andrew has already asked for it to be merged, so its up to Linus.
+> =
 
-One thing the GPUVA manager does is to provide drivers the (sub-)operations
-that need to be processed in order to fulfill a map or unmap request from
-userspace. For instance, when userspace asks the driver to map some memory
-the GPUVA manager calculates which existing mappings must be removed, split up
-or can be merged with the newly requested mapping.
+> You could fetch it yourself and do a trial merge and send me your
+> resolution ..
+> =
 
-A driver has two ways to fetch those operations from the GPUVA manager. It can
-either obtain a list of operations or receive a callback for each operation
-generated by the GPUVA manager.
+> git://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm tags/mm-stable-202=
+3-02-20-13-37
 
-In both cases the GPUVA manager walks the maple tree, which keeps track of
-existing mappings, for the given range in __drm_gpuva_sm_map() (only considering
-the map case, since the unmap case is a subset basically). For each mapping
-found in the given range the driver, as mentioned, either receives a callback or
-a list entry is added to the list of operations.
+Okay, did that.  See attached.  Also here:
 
-Typically, for each operation / callback one entry within the maple tree is
-removed and, optionally at the beginning and end of a new mapping's range, a
-new entry is inserted. An of course, as the last operation, there is the new
-mapping itself to insert.
+https://git.kernel.org/pub/scm/linux/kernel/git/dhowells/linux-fs.git/log/=
+?h=3Diov-cifs-mm
 
-The GPUVA manager delegates locking responsibility to the drivers. Typically,
-a driver either serializes access to the VA space managed by the GPUVA manager
-(no lock needed) or need to lock the processing of a full set of operations
-generated by the GPUVA manager.
+David
+---
+commit 71ad4f67439e60fe04bbf7aed8870e6f83a5d15e
+Author: David Howells <dhowells@redhat.com>
+Date:   Tue Feb 21 13:23:05 2023 +0000
 
-> > In either case the embedded spinlock wouldn't be useful, we'd either need an
-> > external lock or no lock at all.
-> > 
-> > If there are any internal reasons why specific tree operations must be
-> > mutually excluded (such as those you explain below), wouldn't it make more
-> > sense to always have the internal lock and, optionally, allow users to
-> > specify an external lock additionally?
-> 
-> So the way this works for the XArray, which is a little older than the
-> Maple tree, is that we always use the internal spinlock for
-> modifications (possibly BH or IRQ safe), and if someone wants to
-> use an external mutex to make some callers atomic with respect to each
-> other, they're free to do so.  In that case, the XArray doesn't check
-> the user's external locking at all, because it really can't know.
-> 
-> I'd advise taking that approach; if there's really no way to use the
-> internal spinlock to make your complicated updates appear atomic
-> then just let the maple tree use its internal spinlock, and you can
-> also use your external mutex however you like.
-> 
+    cifs: Handle transition to filemap_get_folios_tag()
+    =
 
-That sounds like the right thing to do.
+    filemap_get_folios_tag() is being added and find_get_pages_range_tag()=
+ is
+    being removed in effectively a single event.  This causes a problem fo=
+r
+    the:
+    =
 
-However, I'm using the advanced API of the maple tree (and that's the reason
-why the above example appears a little more detailed than needed) because I
-think with the normal API I can't insert / remove tree entries while walking
-the tree, right?
+        cifs: Change the I/O paths to use an iterator rather than a page l=
+ist
+    =
 
-As by the documentation the advanced API, however, doesn't take care of locking
-itself, hence just letting the maple tree use its internal spinlock doesn't
-really work - I need to take care of that myself, right?
+    patch[1] on the cifs/for-next branch as it's adding a new user of the
+    latter (which is going away), but can't yet be converted to using the
+    former (which doesn't yet exist upstream).
+    =
 
-It feels a bit weird that I, as a user of the API, would need to lock certain
-(or all?) mas_*() functions with the internal spinlock in order to protect
-(future) internal features of the tree, such as the slab cache defragmentation
-you mentioned. Because from my perspective, as the generic component that tells
-it's users (the drivers) to take care of locking VA space operations (and hence
-tree operations) I don't have an own purpose of this internal spinlock, right?
+    Here's a conversion patch that could be applied at merge time to deal =
+with
+    this.  The new cifs_writepages_region() is based directly on
+    afs_writepages_region() and the AFS changes in the mm tree[2]:
+    =
 
-Also I'm a little confused how I'd know where to take the spinlock? E.g. for
-inserting entries in the tree I use mas_store_gfp() with GFP_KERNEL.
+        commit acc8d8588cb7e3e64b0d2fa611dad06574cd67b1
+        Author: Vishal Moola (Oracle) <vishal.moola@gmail.com>
+        afs: convert afs_writepages_region() to use filemap_get_folios_tag=
+()
+    =
+
+    can be replicated in cifs almost exactly.
+    =
+
+    Signed-off-by: David Howells <dhowells@redhat.com>
+    cc: Stephen Rothwell <sfr@canb.auug.org.au>
+    cc: Steve French <sfrench@samba.org>
+    cc: Shyam Prasad N <nspmangalore@gmail.com>
+    cc: Rohith Surabattula <rohiths.msft@gmail.com>
+    cc: Tom Talpey <tom@talpey.com>
+    cc: Paulo Alcantara <pc@cjr.nz>
+    cc: Jeff Layton <jlayton@kernel.org>
+    cc: linux-cifs@vger.kernel.org
+    cc: Vishal Moola (Oracle) <vishal.moola@gmail.com>
+    Link: https://lore.kernel.org/r/20230216214745.3985496-15-dhowells@red=
+hat.com/ [1]
+    Link: https://lore.kernel.org/r/20230104211448.4804-6-vishal.moola@gma=
+il.com/ [2]
+
+diff --git a/fs/cifs/file.c b/fs/cifs/file.c
+index 58801d39213a..52af9cf93c65 100644
+--- a/fs/cifs/file.c
++++ b/fs/cifs/file.c
+@@ -2856,78 +2856,85 @@ static int cifs_writepages_region(struct address_s=
+pace *mapping,
+ 				  struct writeback_control *wbc,
+ 				  loff_t start, loff_t end, loff_t *_next)
+ {
++	struct folio_batch fbatch;
+ 	struct folio *folio;
+-	struct page *head_page;
++	unsigned int i;
+ 	ssize_t ret;
+ 	int n, skips =3D 0;
+ =
+
++	folio_batch_init(&fbatch);
++
+ 	do {
+ 		pgoff_t index =3D start / PAGE_SIZE;
+ =
+
+-		n =3D find_get_pages_range_tag(mapping, &index, end / PAGE_SIZE,
+-					     PAGECACHE_TAG_DIRTY, 1, &head_page);
++		n =3D filemap_get_folios_tag(mapping, &index, end / PAGE_SIZE,
++					   PAGECACHE_TAG_DIRTY, &fbatch);
+ 		if (!n)
+ 			break;
+ =
+
+-		folio =3D page_folio(head_page);
+-		start =3D folio_pos(folio); /* May regress with THPs */
++		for (i =3D 0; i < n; i++) {
++			folio =3D fbatch.folios[i];
++			start =3D folio_pos(folio); /* May regress with THPs */
+ =
+
+-		/* At this point we hold neither the i_pages lock nor the
+-		 * page lock: the page may be truncated or invalidated
+-		 * (changing page->mapping to NULL), or even swizzled
+-		 * back from swapper_space to tmpfs file mapping
+-		 */
+-		if (wbc->sync_mode !=3D WB_SYNC_NONE) {
+-			ret =3D folio_lock_killable(folio);
+-			if (ret < 0) {
+-				folio_put(folio);
+-				return ret;
+-			}
+-		} else {
+-			if (!folio_trylock(folio)) {
+-				folio_put(folio);
+-				return 0;
++			/* At this point we hold neither the i_pages lock nor the
++			 * page lock: the page may be truncated or invalidated
++			 * (changing page->mapping to NULL), or even swizzled
++			 * back from swapper_space to tmpfs file mapping
++			 */
++			if (wbc->sync_mode !=3D WB_SYNC_NONE) {
++				ret =3D folio_lock_killable(folio);
++				if (ret < 0) {
++					folio_batch_release(&fbatch);
++					return ret;
++				}
++			} else {
++				if (!folio_trylock(folio))
++					continue;
+ 			}
+-		}
+ =
+
+-		if (folio_mapping(folio) !=3D mapping ||
+-		    !folio_test_dirty(folio)) {
+-			start +=3D folio_size(folio);
+-			folio_unlock(folio);
+-			folio_put(folio);
+-			continue;
+-		}
++			if (folio->mapping !=3D mapping ||
++			    !folio_test_dirty(folio)) {
++				start +=3D folio_size(folio);
++				folio_unlock(folio);
++				continue;
++			}
+ =
+
+-		if (folio_test_writeback(folio) ||
+-		    folio_test_fscache(folio)) {
+-			folio_unlock(folio);
+-			if (wbc->sync_mode !=3D WB_SYNC_NONE) {
+-				folio_wait_writeback(folio);
++			if (folio_test_writeback(folio) ||
++			    folio_test_fscache(folio)) {
++				folio_unlock(folio);
++				if (wbc->sync_mode !=3D WB_SYNC_NONE) {
++					folio_wait_writeback(folio);
+ #ifdef CONFIG_CIFS_FSCACHE
+-				folio_wait_fscache(folio);
++					folio_wait_fscache(folio);
+ #endif
+-			} else {
+-				start +=3D folio_size(folio);
+-			}
+-			folio_put(folio);
+-			if (wbc->sync_mode =3D=3D WB_SYNC_NONE) {
+-				if (skips >=3D 5 || need_resched())
+-					break;
+-				skips++;
++				} else {
++					start +=3D folio_size(folio);
++				}
++				if (wbc->sync_mode =3D=3D WB_SYNC_NONE) {
++					if (skips >=3D 5 || need_resched()) {
++						*_next =3D start;
++						return 0;
++					}
++					skips++;
++				}
++				continue;
+ 			}
+-			continue;
+-		}
+ =
+
+-		if (!folio_clear_dirty_for_io(folio))
+-			/* We hold the page lock - it should've been dirty. */
+-			WARN_ON(1);
++			if (!folio_clear_dirty_for_io(folio))
++				/* We hold the page lock - it should've been dirty. */
++				WARN_ON(1);
+ =
+
+-		ret =3D cifs_write_back_from_locked_folio(mapping, wbc, folio, start, e=
+nd);
+-		folio_put(folio);
+-		if (ret < 0)
+-			return ret;
++			ret =3D cifs_write_back_from_locked_folio(mapping, wbc,
++								folio, start, end);
++			if (ret < 0) {
++				folio_batch_release(&fbatch);
++				return ret;
++			}
++
++			start +=3D ret;
++		}
+ =
+
+-		start +=3D ret;
++		folio_batch_release(&fbatch);
+ 		cond_resched();
+ 	} while (wbc->nr_to_write > 0);
+ =
 
