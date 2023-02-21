@@ -2,59 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E5BF69E4C7
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 17:37:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9279569E4CB
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 17:37:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234726AbjBUQhb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Feb 2023 11:37:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35112 "EHLO
+        id S234805AbjBUQhd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Feb 2023 11:37:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35114 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234508AbjBUQh1 (ORCPT
+        with ESMTP id S234742AbjBUQh3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Feb 2023 11:37:27 -0500
-Received: from mail-pj1-x1049.google.com (mail-pj1-x1049.google.com [IPv6:2607:f8b0:4864:20::1049])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 797432CC67
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Feb 2023 08:37:21 -0800 (PST)
-Received: by mail-pj1-x1049.google.com with SMTP id cx12-20020a17090afd8c00b002366e47e91bso2384017pjb.7
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Feb 2023 08:37:21 -0800 (PST)
+        Tue, 21 Feb 2023 11:37:29 -0500
+Received: from mail-pj1-x104a.google.com (mail-pj1-x104a.google.com [IPv6:2607:f8b0:4864:20::104a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2EC26279AA
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Feb 2023 08:37:23 -0800 (PST)
+Received: by mail-pj1-x104a.google.com with SMTP id d5-20020a17090a6a4500b00233fbf2cc15so2585268pjm.3
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Feb 2023 08:37:23 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:reply-to:from:to:cc:subject:date:message-id:reply-to;
-        bh=CDOmnOlE8Y16AZivwv4VrFjTYze8Lvbli++k4cFr8iw=;
-        b=PAhlZ3TH/qi87Rr35Iq03hgqMaNyTkBefespOAIKOR/aUKjLdJ5kjRUHll7B1SOPRP
-         caqMqqEaoONZstLTVWne2rgdF7JqpXohyWkg8KiM6ga+4pg31UD/3Cy1IV4e153IF8O4
-         CTbMT7hYH07pc+exh90qXksXCE7KWlUOajHS6W/SoG+BtS0ENgjnEFBKI8GM2EdZ/uai
-         2nkqhBr70racrzPMN0lpvzrhC6P7WB50lH5b8H2C53mPkX3xwEBdoCMPyHV1JWUM5FSV
-         sHoE4/Zem+o5Bb4PpV672rHwIQ7Ggdn1D+8Qorn7Dfozq/9s3VP+OVk4vc93j+4aUypw
-         kTXw==
+        bh=AyHb4Yx7urg+Zx7LCzA3DPIwt3rV/2dFui2+3APs9Tw=;
+        b=rJnHYpiq5KubUJYTSiL6hLKa3WdBN7dObACs3EooXynZnDtSUFMMac+rcUMHzOwXan
+         N1auXr5kJDb0xBpddo87Mu10IQGJR64S8FHMz7w2VZCZrOABJv8RJQfeccvr41wzKuom
+         CcPj7lu4XfpGMjIfHZj+AZxChF9kGaoUu1jJT6X6HY6KZdk9lD/y8fCAy9NdLTQ8U65X
+         zFbtEdVVKjkf9uhBse6jbZoYCl5miFUFGutHh65L/bFqbxAsG3kbRVKbd+BUT/X+7qyw
+         k4CuWZv7SUWSuzzMxtGskoyZqxq30YuNSC4xEkZuIFkGG0liJhveNy5yECEk8jlwxhMu
+         w4yQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:reply-to:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=CDOmnOlE8Y16AZivwv4VrFjTYze8Lvbli++k4cFr8iw=;
-        b=6d8KgGPQFqeMDMKIM+1+hWQGyTnJlJ6HjrkHkypEkpmi1kAsiU3glq6PbDRbiysiPR
-         H4le+wJPh9tJYCPfWuwqGuNFcW/8bhfJRULyTsvRX2NlVMjllNc8vRlH1oeXuQ+TgF0C
-         rNanyx8Zhzi58+nCef/6lLiZDzfQK5+lA8cNz1V1YdgcDkz0Pe0+v+52oUfLbPetJblx
-         SeEf3LCUGOEcytzoT3QWyCWUAgYskq5tYDpQKSe8aVa/3gzoxkCPoHL0L86wG0ai//F7
-         OJaJKwMtHEvZ5qGlC5t5ybEOWQ0sKX3/GOkGeAS7RjqDcc1mdtNCjMy7nR3/mtepyPrt
-         tDDw==
-X-Gm-Message-State: AO0yUKUiAHz7v1KnpGA7zM0mB4dqj0+KMvyMpGBV5IOVRZPTtdb5ZEfc
-        QHBAoLJ7h7c3DiwmtoSEgq8r5gGBy+C7
-X-Google-Smtp-Source: AK7set9AbFU6MwOpGnqsU4KVjGfpEIXXqS1rDAeVKZ15ImsolzbD3XEA4itgbEXg6SUnKjup0K78dciNs0gt
+        bh=AyHb4Yx7urg+Zx7LCzA3DPIwt3rV/2dFui2+3APs9Tw=;
+        b=hpixdgmMC0Kd6kLDPfg/rBK+2eLQr46rB5ewugd9b8VwlMDkOidLq9jpm7iyZ27oq7
+         acsR2dU6bWzOkqxKK8VOOv1rw6o47+gSVc7i6i/e2UmYAUsRWMmEJzRWEE8z40KN+9IL
+         sBMr0KmioJkonFLnOKC9LNyl2O2xYCf/Pd0KYg2wB1Z3IyBQIjT2mEge1/APYfTKnqF9
+         Wgydebp9J6Wvm/cIDUASy1B5QAJSYY4U4MdT9lnuTdou1ytlGy95dJm5XYT40C+gRfJf
+         DEYeptpnv+gvomuVSXPSWvZEBpkU3cvWgjs8wyx/Qv56dxSIdP8slHNbtPqqwChtmGRT
+         r2Tg==
+X-Gm-Message-State: AO0yUKWn5nFtw10w//lehmramwZi3ovu2VSdWl5zJLU1KpRawmEbDAP7
+        kEry15SR4R0E+GWjYXiprWAXvO1kaDaF
+X-Google-Smtp-Source: AK7set+WXUie8cV2x/2H7NwHmU008RDRGepmXDcXx6OTSn+v7LisP2WwfmcqvY9as4zuGcs0HwwzGct/WAfm
 X-Received: from mizhang-super.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:1071])
- (user=mizhang job=sendgmr) by 2002:a17:903:2651:b0:19b:8cbb:30fe with SMTP id
- je17-20020a170903265100b0019b8cbb30femr708174plb.13.1676997440971; Tue, 21
- Feb 2023 08:37:20 -0800 (PST)
+ (user=mizhang job=sendgmr) by 2002:a62:de44:0:b0:5a8:670c:c94e with SMTP id
+ h65-20020a62de44000000b005a8670cc94emr859351pfg.12.1676997442517; Tue, 21 Feb
+ 2023 08:37:22 -0800 (PST)
 Reply-To: Mingwei Zhang <mizhang@google.com>
-Date:   Tue, 21 Feb 2023 16:36:44 +0000
+Date:   Tue, 21 Feb 2023 16:36:45 +0000
 In-Reply-To: <20230221163655.920289-1-mizhang@google.com>
 Mime-Version: 1.0
 References: <20230221163655.920289-1-mizhang@google.com>
 X-Mailer: git-send-email 2.39.2.637.g21b0678d19-goog
-Message-ID: <20230221163655.920289-3-mizhang@google.com>
-Subject: [PATCH v3 02/13] KVM: selftests: x86: Add a working xstate data structure
+Message-ID: <20230221163655.920289-4-mizhang@google.com>
+Subject: [PATCH v3 03/13] KVM: selftests: x86: Fix an error in comment of amx_test
 From:   Mingwei Zhang <mizhang@google.com>
 To:     Sean Christopherson <seanjc@google.com>,
         Paolo Bonzini <pbonzini@redhat.com>,
@@ -70,7 +70,7 @@ Cc:     "H. Peter Anvin" <hpa@zytor.com>, linux-kernel@vger.kernel.org,
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,137 +78,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add a working xstate data structure for the usage of AMX and potential
-future usage on other xstate components. AMX selftest requires checking
-both the xstate_bv and xcomp_bv. Existing code relies on pointer
-arithmetics to fetch xstate_bv and does not support xcomp_bv.
+After the execution of __tilerelease(), AMX component will be in INIT
+state. Therefore, execution of XSAVEC saving the AMX state into memory will
+cause the xstate_bv[18] cleared in xheader. However, the xcomp_bv[18] will
+remain set. Fix the error in comment. Also, update xsavec() to XSAVEC
+because xcomp_bv[18] is set due to the instruction, not the function.
+Finally, use XTILEDATA instead 'bit 18' in comments.
 
-So, add a working xstate data structure into processor.h for x86.
-
-Suggested-by: Sean Christopherson <seanjc@google.com>
+Cc: Jim Mattson <jmattson@google.com>
+Cc: Venkatesh Srinivas <venkateshs@google.com>
+Cc: Aaron Lewis <aaronlewis@google.com>
 Signed-off-by: Mingwei Zhang <mizhang@google.com>
 ---
- .../selftests/kvm/include/x86_64/processor.h  | 12 +++++++
- tools/testing/selftests/kvm/x86_64/amx_test.c | 36 ++++++-------------
- 2 files changed, 23 insertions(+), 25 deletions(-)
+ tools/testing/selftests/kvm/x86_64/amx_test.c | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
-diff --git a/tools/testing/selftests/kvm/include/x86_64/processor.h b/tools/testing/selftests/kvm/include/x86_64/processor.h
-index b1a31de7108a..5cfd7ef40d78 100644
---- a/tools/testing/selftests/kvm/include/x86_64/processor.h
-+++ b/tools/testing/selftests/kvm/include/x86_64/processor.h
-@@ -45,6 +45,18 @@
- #define X86_CR4_SMAP		(1ul << 21)
- #define X86_CR4_PKE		(1ul << 22)
- 
-+struct xstate_header {
-+	u64				xstate_bv;
-+	u64				xcomp_bv;
-+	u64				reserved[6];
-+} __attribute__((packed));
-+
-+struct xstate {
-+	u8				i387[512];
-+	struct xstate_header		header;
-+	u8				extended_state_area[0];
-+} __attribute__ ((packed, aligned (64)));
-+
- /* Note, these are ordered alphabetically to match kvm_cpuid_entry2.  Eww. */
- enum cpuid_output_regs {
- 	KVM_CPUID_EAX,
 diff --git a/tools/testing/selftests/kvm/x86_64/amx_test.c b/tools/testing/selftests/kvm/x86_64/amx_test.c
-index bd72c6eb3b67..bb9dc0008f43 100644
+index bb9dc0008f43..16c857c1052e 100644
 --- a/tools/testing/selftests/kvm/x86_64/amx_test.c
 +++ b/tools/testing/selftests/kvm/x86_64/amx_test.c
-@@ -41,10 +41,6 @@
- 
- #define XSAVE_HDR_OFFSET		512
- 
--struct xsave_data {
--	u8 area[XSAVE_SIZE];
--} __aligned(64);
--
- struct tile_config {
- 	u8  palette_id;
- 	u8  start_row;
-@@ -103,13 +99,13 @@ static inline void __tilerelease(void)
- 	asm volatile(".byte 0xc4, 0xe2, 0x78, 0x49, 0xc0" ::);
- }
- 
--static inline void __xsavec(struct xsave_data *data, uint64_t rfbm)
-+static inline void __xsavec(struct xstate *xstate, uint64_t rfbm)
- {
- 	uint32_t rfbm_lo = rfbm;
- 	uint32_t rfbm_hi = rfbm >> 32;
- 
- 	asm volatile("xsavec (%%rdi)"
--		     : : "D" (data), "a" (rfbm_lo), "d" (rfbm_hi)
-+		     : : "D" (xstate), "a" (rfbm_lo), "d" (rfbm_hi)
- 		     : "memory");
- }
- 
-@@ -158,16 +154,6 @@ static void set_tilecfg(struct tile_config *cfg)
- 	}
- }
- 
--static void set_xstatebv(void *data, uint64_t bv)
--{
--	*(uint64_t *)(data + XSAVE_HDR_OFFSET) = bv;
--}
--
--static u64 get_xstatebv(void *data)
--{
--	return *(u64 *)(data + XSAVE_HDR_OFFSET);
--}
--
- static void init_regs(void)
- {
- 	uint64_t cr4, xcr0;
-@@ -184,7 +170,7 @@ static void init_regs(void)
- 
- static void __attribute__((__flatten__)) guest_code(struct tile_config *amx_cfg,
- 						    struct tile_data *tiledata,
--						    struct xsave_data *xsave_data)
-+						    struct xstate *xstate)
- {
- 	init_regs();
- 	check_cpuid_xsave();
-@@ -205,9 +191,9 @@ static void __attribute__((__flatten__)) guest_code(struct tile_config *amx_cfg,
+@@ -190,7 +190,10 @@ static void __attribute__((__flatten__)) guest_code(struct tile_config *amx_cfg,
+ 	GUEST_SYNC(4);
  	__tilerelease();
  	GUEST_SYNC(5);
- 	/* bit 18 not in the XCOMP_BV after xsavec() */
--	set_xstatebv(xsave_data, XFEATURE_MASK_XTILEDATA);
--	__xsavec(xsave_data, XFEATURE_MASK_XTILEDATA);
--	GUEST_ASSERT((get_xstatebv(xsave_data) & XFEATURE_MASK_XTILEDATA) == 0);
-+	xstate->header.xstate_bv = XFEATURE_MASK_XTILEDATA;
-+	__xsavec(xstate, XFEATURE_MASK_XTILEDATA);
-+	GUEST_ASSERT(!(xstate->header.xstate_bv & XFEATURE_MASK_XTILEDATA));
- 
- 	/* xfd=0x40000, disable amx tiledata */
- 	wrmsr(MSR_IA32_XFD, XFEATURE_MASK_XTILEDATA);
-@@ -244,7 +230,7 @@ int main(int argc, char *argv[])
- 	struct kvm_run *run;
- 	struct kvm_x86_state *state;
- 	int xsave_restore_size;
--	vm_vaddr_t amx_cfg, tiledata, xsavedata;
-+	vm_vaddr_t amx_cfg, tiledata, xstate;
- 	struct ucall uc;
- 	u32 amx_offset;
- 	int stage, ret;
-@@ -284,10 +270,10 @@ int main(int argc, char *argv[])
- 	tiledata = vm_vaddr_alloc_pages(vm, 2);
- 	memset(addr_gva2hva(vm, tiledata), rand() | 1, 2 * getpagesize());
- 
--	/* xsave data for guest_code */
--	xsavedata = vm_vaddr_alloc_pages(vm, 3);
--	memset(addr_gva2hva(vm, xsavedata), 0, 3 * getpagesize());
--	vcpu_args_set(vcpu, 3, amx_cfg, tiledata, xsavedata);
-+	/* XSAVE state for guest_code */
-+	xstate = vm_vaddr_alloc_pages(vm, DIV_ROUND_UP(XSAVE_SIZE, PAGE_SIZE));
-+	memset(addr_gva2hva(vm, xstate), 0, PAGE_SIZE * DIV_ROUND_UP(XSAVE_SIZE, PAGE_SIZE));
-+	vcpu_args_set(vcpu, 3, amx_cfg, tiledata, xstate);
- 
- 	for (stage = 1; ; stage++) {
- 		vcpu_run(vcpu);
+-	/* bit 18 not in the XCOMP_BV after xsavec() */
++	/*
++	 * After XSAVEC, XTILEDATA is cleared in the xstate_bv but is set in
++	 * the xcomp_bv.
++	 */
+ 	xstate->header.xstate_bv = XFEATURE_MASK_XTILEDATA;
+ 	__xsavec(xstate, XFEATURE_MASK_XTILEDATA);
+ 	GUEST_ASSERT(!(xstate->header.xstate_bv & XFEATURE_MASK_XTILEDATA));
 -- 
 2.39.2.637.g21b0678d19-goog
 
