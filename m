@@ -2,64 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 39CA369EB52
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Feb 2023 00:39:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1AB1369EB58
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Feb 2023 00:40:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230467AbjBUXjL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Feb 2023 18:39:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52008 "EHLO
+        id S231285AbjBUXkj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Feb 2023 18:40:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54976 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230372AbjBUXi3 (ORCPT
+        with ESMTP id S231171AbjBUXkd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Feb 2023 18:38:29 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9E0527D54;
-        Tue, 21 Feb 2023 15:38:27 -0800 (PST)
+        Tue, 21 Feb 2023 18:40:33 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56DEF3400F;
+        Tue, 21 Feb 2023 15:40:21 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 94DDFB810A2;
-        Tue, 21 Feb 2023 23:38:26 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 47446C4339B;
-        Tue, 21 Feb 2023 23:38:25 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B748B61298;
+        Tue, 21 Feb 2023 23:39:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 305F4C433D2;
+        Tue, 21 Feb 2023 23:39:34 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1677022705;
-        bh=YC2cKPAIdiP72jz3kueKr+ivgSgpcT42R6071kn+pqk=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=PXcWPlPjCh1klB6LcXlRN66knyftqtpw2w/ZHa2HmJvDNuFjsMWNCTl5tHTxB27Hm
-         ksSDOyf8f0femr7ntrXehQZ0u+8U7zE5CXPqMZ/H+S5/8HNC1eoGNAqEn9GL+KZdUX
-         /JmBTFAqWWHQqKyYmN/COvP1RH6+bHao7R3Ge1dn8VPjPo9OH4i0ytVm8UWTRH0887
-         jV8CFZ/pPRatqpcvp8eLq3YTM2jaZWO6QRK/pXzpsgkYBwG1j3YqK/fLGo+Up6cQDd
-         W2wdFKyDaPt0AzVQIPMd/U/kKzGsNibmedFSZRsabj7z+AmG+rOc2Leum5XbWKfPuy
-         W0yyXJoynbOEQ==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id F22DD5C065D; Tue, 21 Feb 2023 15:38:24 -0800 (PST)
-Date:   Tue, 21 Feb 2023 15:38:24 -0800
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     Shakeel Butt <shakeelb@google.com>
-Cc:     Roman Gushchin <roman.gushchin@linux.dev>,
-        Matthew Wilcox <willy@infradead.org>,
-        Marco Elver <elver@google.com>, Yue Zhao <findns94@gmail.com>,
-        linux-mm@kvack.org, akpm@linux-foundation.org, hannes@cmpxchg.org,
-        mhocko@kernel.org, muchun.song@linux.dev, cgroups@vger.kernel.org,
+        s=k20201202; t=1677022777;
+        bh=ie0GAExwZPpmXLWLkpfA8sVNwYvYbybeiZNOj6h8WEI=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=tTbwBBUEzXr2PONY2NQhckcJSZb82zbvfiyxjZ989wicvTS9uHXoL9n7squ+tJaFi
+         Rouxs8i5zSa0M1wYR92LiOH5C6E9wC4iK/ghvVBJTdGrEwM6TO8ODO9MUrCtqy0j7x
+         c/4fwKmmUVG7w7uqupmuclAqb1eKDGoaBnQ8xOAtgrKM9Q3WXGI65AviknIZe99KZg
+         KJVDEnwkYoUYrpbt5/o9fr84D6a3Q2ETfDQILnspFjB1FwYJedXAvtQvLFffhms53q
+         UAnpaPrXmOf9gpsekw7ZkA7NYRE//ho1Y2Pdwx8GzGOAt4kYPP9m35PfOzPOamTTa5
+         8ZzXBju3bxPig==
+Date:   Tue, 21 Feb 2023 23:39:32 +0000
+From:   Conor Dooley <conor@kernel.org>
+To:     Stephen Boyd <sboyd@kernel.org>
+Cc:     Hal Feng <hal.feng@starfivetech.com>,
+        linux-riscv@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-clk@vger.kernel.org, Palmer Dabbelt <palmer@dabbelt.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Emil Renner Berthing <emil.renner.berthing@canonical.com>,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] mm: change memcg->oom_group access with atomic operations
-Message-ID: <20230221233824.GM2948950@paulmck-ThinkPad-P17-Gen-1>
-Reply-To: paulmck@kernel.org
-References: <20230220230624.lkobqeagycx7bi7p@google.com>
- <6563189C-7765-4FFA-A8F2-A5CC4860A1EF@linux.dev>
- <CALvZod55K5zbbVYptq8ud=nKVyU1xceGVf6UcambBZ3BA2TZqA@mail.gmail.com>
- <Y/TMYa8DrocppXRu@casper.infradead.org>
- <CALvZod6UM1E6nGgfdORri90m3ju+yYeSeHBqyqutCP2A94WNKg@mail.gmail.com>
- <20230221182359.GJ2948950@paulmck-ThinkPad-P17-Gen-1>
- <Y/VEY2myhfWvB64+@P9FQF9L96D.corp.robot.car>
- <20230221223811.GK2948950@paulmck-ThinkPad-P17-Gen-1>
- <CALvZod7DaFeXFjYpnuP8U3QOjsQmKFHDMruB1-cm3Ly0HOH2FQ@mail.gmail.com>
+Subject: Re: [PATCH v3 07/11] dt-bindings: clock: Add StarFive JH7110 system
+ clock and reset generator
+Message-ID: <Y/VWNPfApsfm3/UD@spud>
+References: <20221220005054.34518-1-hal.feng@starfivetech.com>
+ <20221220005054.34518-8-hal.feng@starfivetech.com>
+ <Y6JB37Pd5TZoGMy4@spud>
+ <7a7bccb1-4d47-3d32-36e6-4aab7b5b8dad@starfivetech.com>
+ <Y6tSWB2+98a8k9Qw@spud>
+ <5cf0fe71-fd17-fb28-c01e-28356081ba76@starfivetech.com>
+ <Y+5z8skN2DuvxDEL@spud>
+ <72953dc9371b87da8d03c63633d7d9dd.sboyd@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="VknuSA68ljcWlQyJ"
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CALvZod7DaFeXFjYpnuP8U3QOjsQmKFHDMruB1-cm3Ly0HOH2FQ@mail.gmail.com>
+In-Reply-To: <72953dc9371b87da8d03c63633d7d9dd.sboyd@kernel.org>
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -69,131 +69,104 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 21, 2023 at 03:13:36PM -0800, Shakeel Butt wrote:
-> On Tue, Feb 21, 2023 at 2:38 PM Paul E. McKenney <paulmck@kernel.org> wrote:
-> >
-> > On Tue, Feb 21, 2023 at 02:23:31PM -0800, Roman Gushchin wrote:
-> > > On Tue, Feb 21, 2023 at 10:23:59AM -0800, Paul E. McKenney wrote:
-> > > > On Tue, Feb 21, 2023 at 08:56:59AM -0800, Shakeel Butt wrote:
-> > > > > +Paul & Marco
-> > > > >
-> > > > > On Tue, Feb 21, 2023 at 5:51 AM Matthew Wilcox <willy@infradead.org> wrote:
-> > > > > >
-> > > > > > On Mon, Feb 20, 2023 at 10:52:10PM -0800, Shakeel Butt wrote:
-> > > > > > > On Mon, Feb 20, 2023 at 9:17 PM Roman Gushchin <roman.gushchin@linux.dev> wrote:
-> > > > > > > > > On Feb 20, 2023, at 3:06 PM, Shakeel Butt <shakeelb@google.com> wrote:
-> > > > > > > > >
-> > > > > > > > > ﻿On Mon, Feb 20, 2023 at 01:09:44PM -0800, Roman Gushchin wrote:
-> > > > > > > > >>> On Mon, Feb 20, 2023 at 11:16:38PM +0800, Yue Zhao wrote:
-> > > > > > > > >>> The knob for cgroup v2 memory controller: memory.oom.group
-> > > > > > > > >>> will be read and written simultaneously by user space
-> > > > > > > > >>> programs, thus we'd better change memcg->oom_group access
-> > > > > > > > >>> with atomic operations to avoid concurrency problems.
-> > > > > > > > >>>
-> > > > > > > > >>> Signed-off-by: Yue Zhao <findns94@gmail.com>
-> > > > > > > > >>
-> > > > > > > > >> Hi Yue!
-> > > > > > > > >>
-> > > > > > > > >> I'm curious, have any seen any real issues which your patch is solving?
-> > > > > > > > >> Can you, please, provide a bit more details.
-> > > > > > > > >>
-> > > > > > > > >
-> > > > > > > > > IMHO such details are not needed. oom_group is being accessed
-> > > > > > > > > concurrently and one of them can be a write access. At least
-> > > > > > > > > READ_ONCE/WRITE_ONCE is needed here.
-> > > > > > > >
-> > > > > > > > Needed for what?
-> > > > > > >
-> > > > > > > For this particular case, documenting such an access. Though I don't
-> > > > > > > think there are any architectures which may tear a one byte read/write
-> > > > > > > and merging/refetching is not an issue for this.
-> > > > > >
-> > > > > > Wouldn't a compiler be within its rights to implement a one byte store as:
-> > > > > >
-> > > > > >         load-word
-> > > > > >         modify-byte-in-word
-> > > > > >         store-word
-> > > > > >
-> > > > > > and if this is a lockless store to a word which has an adjacent byte also
-> > > > > > being modified by another CPU, one of those CPUs can lose its store?
-> > > > > > And WRITE_ONCE would prevent the compiler from implementing the store
-> > > > > > in that way.
-> > > > >
-> > > > > Thanks Willy for pointing this out. If the compiler can really do this
-> > > > > then [READ|WRITE]_ONCE are required here. I always have big bad
-> > > > > compiler lwn article open in a tab. I couldn't map this transformation
-> > > > > to ones mentioned in that article. Do we have name of this one?
-> > > >
-> > > > No, recent compilers are absolutely forbidden from doing this sort of
-> > > > thing except under very special circumstances.
-> > > >
-> > > > Before C11, compilers could and in fact did do things like this.  This is
-> > > > after all a great way to keep the CPU's vector unit from getting bored.
-> > > > Unfortunately for those who prize optimization above all else, doing
-> > > > this can introduce data races, for example:
-> > > >
-> > > >     char a;
-> > > >     char b;
-> > > >     spin_lock la;
-> > > >     spin_lock lb;
-> > > >
-> > > >     void change_a(char new_a)
-> > > >     {
-> > > >             spin_lock(&la);
-> > > >             a = new_a;
-> > > >             spin_unlock(&la);
-> > > >     }
-> > > >
-> > > >     void change_b(char new_b)
-> > > >     {
-> > > >             spin_lock(&lb);
-> > > >             b = new_b;
-> > > >             spin_unlock(&lb);
-> > > >     }
-> > > >
-> > > > If the compiler "optimized" that "a = new_a" so as to produce a non-atomic
-> > > > read-modify-write sequence, it would be introducing a data race.
-> > > > And since C11, the compiler is absolutely forbidden from introducing
-> > > > data races.  So, again, no, the compiler cannot invent writes to
-> > > > variables.
-> > > >
-> > > > What are those very special circumstances?
-> > > >
-> > > > 1.  The other variables were going to be written to anyway, and
-> > > >     none of the writes was non-volatile and there was no ordering
-> > > >     directive between any of those writes.
-> > > >
-> > > > 2.  The other variables are dead, as in there are no subsequent
-> > > >     reads from them anywhere in the program.  Of course in that case,
-> > > >     there is no need to read the prior values of those variables.
-> > > >
-> > > > 3.  All accesses to all of the variables are visible to the compiler,
-> > > >     and the compiler can prove that there are no concurrent accesses
-> > > >     to any of them.  For example, all of the variables are on-stack
-> > > >     variables whose addresses are never taken.
-> > > >
-> > > > Does that help, or am I misunderstanding the question?
-> > >
-> > > Thank you, Paul!
-> > >
-> > > So it seems like READ_ONCE()/WRITE_ONCE() are totally useless here.
-> > > Or I still miss something?
-> >
-> > Yes, given that the compiler will already avoid inventing data-race-prone
-> > C-language accesses to shared variables, so if that was the only reason
-> > that you were using READ_ONCE() or WRITE_ONCE(), then READ_ONCE() and
-> > WRITE_ONCE() won't be helping you.
-> >
-> > Or perhaps better to put it a different way...  The fact that the compiler
-> > is not permitted to invent data-racy reads and writes is exactly why
-> > you do not normally need READ_ONCE() and WRITE_ONCE() for accesses in
-> > lock-based critical sections.  Instead, you only need READ_ONCE() and
-> > WRITE_ONCE() when you have lockless accesses to the same shared variables.
-> 
-> This is lockless access to memcg->oom_group potentially from multiple
-> CPUs, so, READ_ONCE() and WRITE_ONCE() are needed, right?
 
-Agreed, lockless concurrent accesses should use READ_ONCE() and WRITE_ONCE().
-And if either conflicting access is lockless, it is lockless.  ;-)
+--VknuSA68ljcWlQyJ
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-							Thanx, Paul
+On Tue, Feb 21, 2023 at 02:17:17PM -0800, Stephen Boyd wrote:
+> Quoting Conor Dooley (2023-02-16 10:20:34)
+> > On Thu, Feb 16, 2023 at 10:42:20PM +0800, Hal Feng wrote:
+> > > On Tue, 27 Dec 2022 20:15:20 +0000, Conor Dooley wrote:
+> > > > On Mon, Dec 26, 2022 at 12:26:32AM +0800, Hal Feng wrote:
+> > > Please see the picture of these external clocks in clock tree.
+> > >=20
+> > > # mount -t debugfs none /mnt
+> > > # cat /mnt/clk/clk_summary
+> > >                                  enable  prepare  protect            =
+                    duty  hardware
+> > >    clock                          count    count    count        rate=
+   accuracy phase  cycle    enable
+> > > ---------------------------------------------------------------------=
+----------------------------------
+> > >  *mclk_ext*                             0        0        0    122880=
+00          0     0  50000         Y
+> > >  *tdm_ext*                              0        0        0    491520=
+00          0     0  50000         Y
+> > >  *i2srx_lrck_ext*                       0        0        0      1920=
+00          0     0  50000         Y
+> > >  *i2srx_bclk_ext*                       0        0        0    122880=
+00          0     0  50000         Y
+> > >  *i2stx_lrck_ext*                       0        0        0      1920=
+00          0     0  50000         Y
+> > >  *i2stx_bclk_ext*                       0        0        0    122880=
+00          0     0  50000         Y
+> > >  *gmac1_rgmii_rxin*                     0        0        0   1250000=
+00          0     0  50000         Y
+> > >     gmac1_rx                          0        0        0   125000000=
+          0     0  50000         Y
+> > >        gmac1_rx_inv                   0        0        0   125000000=
+          0   180  50000         Y
+> > >  *gmac1_rmii_refin*                     0        0        0    500000=
+00          0     0  50000         Y
+> > >     gmac1_rmii_rtx                    0        0        0    50000000=
+          0     0  50000         Y
+> > >        gmac1_tx                       0        0        0    50000000=
+          0     0  50000         N
+> > >           gmac1_tx_inv                0        0        0    50000000=
+          0   180  50000         Y
+> > >  *osc*                                  4        4        0    240000=
+00          0     0  50000         Y
+> > >     apb_func                          0        0        0    24000000=
+          0     0  50000         Y
+> > >  ...
+> > >=20
+> > > The clock "gmac1_rgmii_rxin" and the clock "gmac1_rmii_refin" are
+> > > actually used as the parent of other clocks.
+> >=20
+> > > The "dummy" clocks
+> > > you said are all internal clocks.
+> >=20
+> > No, what I meant by "dummy" clocks is that if you make clocks "required"
+> > in the binding that are not needed by the hardware for operation a
+> > customer of yours might have to add "dummy" clocks to their devicetree
+> > to pass dtbs_check.
+>=20
+> They can set the phandle specifier to '<0>' to fill in the required
+> property when there isn't anything there. If this is inside an SoC, it
+> is always connected because silicon can't change after it is made
+> (unless this is an FPGA). Therefore, any and all input clocks should be
+> listed as required.
+
+> If the clk controller has inputs that are
+> pads/balls/pins on the SoC then they can be optional if a valid design
+> can leave those pins not connected.
+
+=46rom the discussion on the dts patches, where the clocks have been put
+(intentionally) into board.dts, I've been under the impression that we
+are in this situation.
+Up to Hal to tell us if the hardware is capable of having those inputs
+left unfilled!
+
+FWIW, there's a v4 [1] of this series - but the question has yet to be
+resolved.
+
+Thanks,
+Conor.
+
+1 - https://lore.kernel.org/all/20230221024645.127922-1-hal.feng@starfivete=
+ch.com/
+
+--VknuSA68ljcWlQyJ
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCY/VWMAAKCRB4tDGHoIJi
+0vMnAP9+HziqXbEJ1GX8HIr5jD+lzSjYpeu8k3IfZk1pte1WdAEAwNfSAKDpB2Sz
+rYa+dCvHzPRG/YzqUU8wOHnRfqNDxQw=
+=9xTC
+-----END PGP SIGNATURE-----
+
+--VknuSA68ljcWlQyJ--
