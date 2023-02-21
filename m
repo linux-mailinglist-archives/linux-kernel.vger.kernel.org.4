@@ -2,48 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0B69369E1A9
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 14:48:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CD0B169E1AB
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 14:48:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233860AbjBUNsB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Feb 2023 08:48:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38230 "EHLO
+        id S233722AbjBUNsx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Feb 2023 08:48:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39102 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229696AbjBUNr7 (ORCPT
+        with ESMTP id S233681AbjBUNsv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Feb 2023 08:47:59 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4EF144481;
-        Tue, 21 Feb 2023 05:47:53 -0800 (PST)
+        Tue, 21 Feb 2023 08:48:51 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 019EA55B6;
+        Tue, 21 Feb 2023 05:48:49 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id DAE0E61024;
-        Tue, 21 Feb 2023 13:47:52 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C991CC433EF;
-        Tue, 21 Feb 2023 13:47:51 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id A6D2BB80EA4;
+        Tue, 21 Feb 2023 13:48:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 00B51C433EF;
+        Tue, 21 Feb 2023 13:48:46 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1676987272;
-        bh=kpxjgpaaaRf2zMk0yeRbw+GgXWLONOewym7s4Jab0ic=;
+        s=korg; t=1676987327;
+        bh=2TM8cD39FcqW3UyP2lWEFylxG1JRyg7YkP7CzvuECJ4=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=sdfMbIIQntXwdBTJbkAtGZoBjKHLEBaFw6uYvN4AeJ39CdoWc8pMWm7hs7N8kkOB2
-         JfRQddA4nTsWvfolX6jh3dZSs7dxB7/gf7asgt6LzhqFabvsjsOoacVmFoVwVWP48D
-         0VwaroPXM1/3GQ9pDp+4QngL5wTFPDR+fHB59iwQ=
-Date:   Tue, 21 Feb 2023 14:47:49 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Geert Uytterhoeven <geert+renesas@glider.be>
-Cc:     "Rafael J . Wysocki" <rafael@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>, Lee Jones <lee@kernel.org>,
-        linux-kernel@vger.kernel.org, linux-renesas-soc@vger.kernel.org
-Subject: Re: [PATCH] driver core: bus: Handle early calls to bus_to_subsys()
-Message-ID: <Y/TLhUewwDJ+RGXd@kroah.com>
-References: <0a92979f6e790737544638e8a4c19b0564e660a2.1676983596.git.geert+renesas@glider.be>
+        b=fozNm5rFYq3oCk4d5IStZhRPm4Rqil7tkfa2ClSpJE0arhrmEELp3lwRXs1n7Hnc3
+         N7FGVhjQD8elI9Dyd0ZuVhLlA7iYa2/UYTGTZeTzuasrFW2me7Dipunld+r/zB0cbd
+         KAwh9Kr84w/SC9IwYyvTtr8kabbjDv6ZWXYvr/sI=
+Date:   Tue, 21 Feb 2023 14:48:45 +0100
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Ziyang Huang <hzyitc@outlook.com>
+Cc:     hminas@synopsys.com, fabrice.gasnier@foss.st.com,
+        amelie.delaunay@foss.st.com, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] usb: dwc2: drd: fix inconsistent mode if
+ role-switch-default-mode="host"
+Message-ID: <Y/TLvbMPfiBC2ujE@kroah.com>
+References: <SG2PR01MB204837BF68EDB0E343D2A375C9A59@SG2PR01MB2048.apcprd01.prod.exchangelabs.com>
+ <Y/Sf8j5y+DJ9L4fY@kroah.com>
+ <SG2PR01MB2048B375B64A96654FA20DABC9A59@SG2PR01MB2048.apcprd01.prod.exchangelabs.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <0a92979f6e790737544638e8a4c19b0564e660a2.1676983596.git.geert+renesas@glider.be>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <SG2PR01MB2048B375B64A96654FA20DABC9A59@SG2PR01MB2048.apcprd01.prod.exchangelabs.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -51,49 +55,51 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 21, 2023 at 01:53:51PM +0100, Geert Uytterhoeven wrote:
-> When calling soc_device_match() from early_initcall(), bus_kset is still
-> NULL, causing a crash:
+On Tue, Feb 21, 2023 at 08:33:32PM +0800, Ziyang Huang wrote:
 > 
->     Unable to handle kernel NULL pointer dereference at virtual address 0000000000000028
->     ...
->     Call trace:
->      __lock_acquire+0x530/0x20f0
->      lock_acquire.part.0+0xc8/0x210
->      lock_acquire+0x64/0x80
->      _raw_spin_lock+0x4c/0x60
->      bus_to_subsys+0x24/0xac
->      bus_for_each_dev+0x30/0xcc
->      soc_device_match+0x4c/0xe0
->      r8a7795_sysc_init+0x18/0x60
->      rcar_sysc_pd_init+0xb0/0x33c
->      do_one_initcall+0x128/0x2bc
+> 在 2023/2/21 18:41, Greg KH 写道:
+> > On Tue, Feb 21, 2023 at 06:30:04PM +0800, Ziyang Huang wrote:
+> > > Some boards might use USB-A female connector for USB ports, however,
+> > > the port could be connected to a dual-mode USB controller, making it
+> > > also behaves as a peripheral device if male-to-male cable is connected.
+> > > 
+> > > In this case, the dts looks like this:
+> > > 
+> > > 	&usb0 {
+> > > 		status = "okay";
+> > > 		dr_mode = "otg";
+> > > 		usb-role-switch;
+> > > 		role-switch-default-mode = "host";
+> > > 	};
+> > > 
+> > > After boot, dwc2_ovr_init() sets GOTGCTL to GOTGCTL_AVALOVAL and call
+> > > dwc2_force_mode() with parameter host=false, which causes inconsistent
+> > > mode - The hardware is in peripheral mode while the kernel status is
+> > > in host mode.
+> > > 
+> > > What we can do now is to call dwc2_drd_role_sw_set() to switch to
+> > > device mode, and everything should work just fine now, even switching
+> > > back to none(default) mode afterwards.
+> > > 
+> > > Fixes: e14acb876985 ("usb: dwc2: drd: add role-switch-default-node support")
+> > > Signed-off-by: Ziyang Huang <hzyitc@outlook.com>
+> > > ---
+> > > Changes since v1
+> > > - Use corrent name in Signed-off-by
+> > Nope, still incorrect, please use your synopsys address.
+> > 
+> > thanks,
+> > 
+> > greg k-h
 > 
-> Before, bus_for_each_dev() handled this gracefully by checking that
-> the back-pointer to the private structure was valid.
 > 
-> Fix this by adding a NULL check for bus_kset to bus_to_subsys().
-> 
-> Fixes: 83b9148df2c95e23 ("driver core: bus: bus iterator cleanups")
-> Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
-> ---
->  drivers/base/bus.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/base/bus.c b/drivers/base/bus.c
-> index cfe8615d5106f030..dd4b82d7510f68fb 100644
-> --- a/drivers/base/bus.c
-> +++ b/drivers/base/bus.c
-> @@ -62,7 +62,7 @@ static struct subsys_private *bus_to_subsys(const struct bus_type *bus)
->  	struct subsys_private *sp = NULL;
->  	struct kobject *kobj;
->  
-> -	if (!bus)
-> +	if (!bus || !bus_kset)
->  		return NULL;
->  
->  	spin_lock(&bus_kset->list_lock);
+> Oh, I'm not a Synopsys employee but a free developer. This is my first time
+> submitting a kernel patch, please excuse me. Thank you.
 
-Thanks for this, I'll queue it up after my patches get sent to Linus.
+Ah, my fault, sorry, I saw the synopsys email on the to: line and
+thought it was you.  Nevermind then, sorry, this will be reviewed once
+6.3-rc1 is out.
+
+thanks,
 
 greg k-h
