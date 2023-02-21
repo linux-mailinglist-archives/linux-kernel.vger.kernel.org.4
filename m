@@ -2,64 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CEED569DAFC
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 08:13:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C61C69DAFE
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 08:13:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232682AbjBUHNQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Feb 2023 02:13:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46994 "EHLO
+        id S233522AbjBUHNa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Feb 2023 02:13:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47382 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232622AbjBUHNO (ORCPT
+        with ESMTP id S233504AbjBUHN1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Feb 2023 02:13:14 -0500
-Received: from mail-vs1-xe2f.google.com (mail-vs1-xe2f.google.com [IPv6:2607:f8b0:4864:20::e2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CF9824104
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Feb 2023 23:12:59 -0800 (PST)
-Received: by mail-vs1-xe2f.google.com with SMTP id 6so3458530vsv.7
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Feb 2023 23:12:59 -0800 (PST)
+        Tue, 21 Feb 2023 02:13:27 -0500
+Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C432976BC
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Feb 2023 23:13:13 -0800 (PST)
+Received: by mail-wm1-x32a.google.com with SMTP id m25-20020a7bcb99000000b003e7842b75f2so623517wmi.3
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Feb 2023 23:13:13 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1676963578;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=HdJzFq7jufeOqCgSl9+xQrgy1RmhMxPxNMg0cBhlhbs=;
-        b=QTtP++qdraIvmGcDg/G0yedBnkO5aUr696nf4kJjEqynqHqqP1t1I/p6IiZYtEH0iP
-         VEp0HA85edRMoW1PVhjW9VC9yXpFVoON2oi71egsP3qCJFyVBnQXc0U2LfolYtbmKL+D
-         kqRBypDclfnAfqZYidJkUoJrXGOFeBpLaxeC0=
+        d=vrull.eu; s=google;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=PKUefFK9SiP/kDBGD+FrqYGyTRY+XtYHTqFfXzLRCic=;
+        b=Wn/WwmyzxpAuhNVifq3JYfnKu8T/n2i/txGrpukajWWRJwYuCjQT2rjWs04z7XGtUx
+         V5hazoONpR83YdFjd4oPC7KhWET8tvlpNJyz0kdw4Vd50KxRh0f3WNePwGB+tUdsZ4W/
+         oLhrGc4DhkqoT93Hp5b3zyWPTYhOYyiPmLjDRLi6RTjwBM6JsPPTIrXaG2HP2Ot5yCmC
+         h9HjtQBpH4iXY8GdIzaPeJ5olenWTLIoCktzV8KXLKw1yx/kOtjBght0vm2QuGDXNGwW
+         7HrkSDSPEw22C2medMeG4ERmJkjkWpprGX1CSci82dWL/FM35rI8vH9Hj3F+Y4THzQYK
+         N3Sw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1676963578;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=HdJzFq7jufeOqCgSl9+xQrgy1RmhMxPxNMg0cBhlhbs=;
-        b=d90n0Ry2i4XJceA+tk/7BSWnPRP+PmT+j+LO3hKkJGF6GceRaBzVx7tQIwK7w96TyF
-         Evs2StnKx++honKBsOdzc7VKyshebCIfQG08WSxhY261hs2Dnm94oGN6h92C/nTnC2Bx
-         wN6JCo35DUaHv2TXQuE2yPu4TPFPeM93iyIn/ARwxx3zsPcMaRmMy0T7CeXCewqzDIzN
-         fXv32PnpOODzwdgFIg7pwBqU3zUE4kq4t5CKU/61Xn9Sc+Q/qLRXltxEGszblAG/16Yw
-         HrcwXcReWlOdrMWge3xixwDovzEX+WlVajO7DzAbOLeIeY2BryYb8Z2ZuCWq3CxPrA5p
-         yGoA==
-X-Gm-Message-State: AO0yUKXODux4ErCcRf+zDt0MLhu8/cidCsJ4sirCgoAYzajP4IGdy/3V
-        rnA+muVT3zGy7huxz4lNHm7T4W85LERSgMMmNvqRtQ==
-X-Google-Smtp-Source: AK7set9LDiQDEkH3XQ+jZqO1icouR/ex+tykAQ7KVNOAzfsDipi4GTynjIqgeAiSU3oARM6Z7LKriycFiF6nuUE0L+4=
-X-Received: by 2002:a67:f6c1:0:b0:411:a14d:6bac with SMTP id
- v1-20020a67f6c1000000b00411a14d6bacmr907948vso.44.1676963578806; Mon, 20 Feb
- 2023 23:12:58 -0800 (PST)
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=PKUefFK9SiP/kDBGD+FrqYGyTRY+XtYHTqFfXzLRCic=;
+        b=3Rmz1yPwathnA33MRKWsdRxtqoOO4lO02pLddq1VOlrEgh0VSvIRuQ9yC7n9Jed68k
+         0WYjozbvK8QgqOBSj7dWQbainfZXjU6Q2iNtpat868Wvd7OUHct7F/gvhG1QYcQNpB0m
+         6AhrZ9x8UbhfkelTk6dtZN6kn9x+WbvqAIqNgTx27StLeKksxWL6ZAR378vxkGwSYfdL
+         m/B36Q5CZJ1PJ8bWboEGH79W1/X0P7ICCOZ+aZgoFZ6HZ3e5wl9fVAzMboTzULBx0QeI
+         7KNYqqs+bCIcWL/9/ljNmx+3uQhqYrGuJjfXOdEmcHFY0fn9ZrRsR6xiN9pmo9jlvbJz
+         GJfw==
+X-Gm-Message-State: AO0yUKVn5EAyv4R3pfMiKbek9drZrqTnkMMUxs7gUTlB7Y/YzWulsvh3
+        /TDVuewqOXps3rDRI4xgg9jmABzbTtLSfAxk59+2kA==
+X-Google-Smtp-Source: AK7set+H1FIoSX3EEh1yGR9n51hoiM91i0p+8wSWyTcgIW4iRjlyf1gAZ3YDv3sxlv0ULcTUiG4yHijCYkpJw3gnib8=
+X-Received: by 2002:a05:600c:600a:b0:3e4:2f8d:ae35 with SMTP id
+ az10-20020a05600c600a00b003e42f8dae35mr386805wmb.185.1676963592042; Mon, 20
+ Feb 2023 23:13:12 -0800 (PST)
 MIME-Version: 1.0
-References: <20230216130021.64875-1-angelogioacchino.delregno@collabora.com> <20230216130021.64875-8-angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20230216130021.64875-8-angelogioacchino.delregno@collabora.com>
-From:   Chen-Yu Tsai <wenst@chromium.org>
-Date:   Tue, 21 Feb 2023 15:12:47 +0800
-Message-ID: <CAGXv+5ELyqF+p1Z-m52CkV92nQ26Y_-uvBx_BetiFU4X4oyt_A@mail.gmail.com>
-Subject: Re: [PATCH v1 7/9] soc: mediatek: mtk-mutex: Use module_platform_driver()
- macro
-To:     AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-Cc:     matthias.bgg@gmail.com, jason-jh.lin@mediatek.com,
-        chunkuang.hu@kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org
+References: <20230128072737.2995881-3-apatel@ventanamicro.com>
+ <mhng-0f9bdf58-5289-4db4-8fd7-38898824c44f@palmer-ri-x1c9> <CAEg0e7hrQFu+cdZy+3QO1ML9FNTPBehZwOOBnr1F-5ABYDnkGg@mail.gmail.com>
+In-Reply-To: <CAEg0e7hrQFu+cdZy+3QO1ML9FNTPBehZwOOBnr1F-5ABYDnkGg@mail.gmail.com>
+From:   =?UTF-8?Q?Christoph_M=C3=BCllner?= <christoph.muellner@vrull.eu>
+Date:   Tue, 21 Feb 2023 08:12:58 +0100
+Message-ID: <CAEg0e7hRjMSgYZbPTQztbQ3bGZf-r8wAfCK5ZnDXOcx27HcTCA@mail.gmail.com>
+Subject: Re: [PATCH v2 2/7] RISC-V: Detect AIA CSRs from ISA string
+To:     Palmer Dabbelt <palmer@dabbelt.com>
+Cc:     apatel@ventanamicro.com, pbonzini@redhat.com,
+        atishp@atishpatra.org, Paul Walmsley <paul.walmsley@sifive.com>,
+        ajones@ventanamicro.com, anup@brainfault.org, kvm@vger.kernel.org,
+        kvm-riscv@lists.infradead.org, linux-riscv@lists.infradead.org,
+        linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -67,12 +72,155 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 16, 2023 at 9:02 PM AngeloGioacchino Del Regno
-<angelogioacchino.delregno@collabora.com> wrote:
->
-> Replace open-coded init/exit calls with the module_platform_driver()
-> macro being equivalent.
->
-> Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+Hi all,
 
-Reviewed-by: Chen-Yu Tsai <wenst@chromium.org>
+The RISC-V Architectural Review Committee has discussed the concerns
+regarding the non-ratified chapters in the AIA specification.
+
+Here is the relevant quote from the meeting minutes:
+"""
+Although the Advanced Interrupt Architecture (AIA) has already passed
+Architecture Review (with a minor edit still pending), the committee
+has some suggestions about its final steps to ratification, to avoid
+the AIA document having a mixture of ratified and non-ratified content:
+
+- The AIA document's remaining draft chapter on the Duo-PLIC, which is
+  not currently on a path to ratification, can be removed to a separate
+  document.
+
+- Ratification of the full AIA (without Duo-PLIC) can be postponed to
+  coincide with ratification of the IOMMU specification, given that
+  the latter is now expected in a reasonable time, and the AIA's last
+  chapter concerning IOMMUs is already scheduled to go through public
+  review and be ratified only together with the IOMMU specification.
+"""
+
+The full meeting minutes can be found here:
+  https://lists.riscv.org/g/tech-chairs/message/1381
+
+BR
+Christoph
+
+On Wed, Feb 15, 2023 at 4:41 PM Christoph M=C3=BCllner
+<christoph.muellner@vrull.eu> wrote:
+>
+> On Fri, Feb 3, 2023 at 1:25 AM Palmer Dabbelt <palmer@dabbelt.com> wrote:
+> >
+> > On Fri, 27 Jan 2023 23:27:32 PST (-0800), apatel@ventanamicro.com wrote=
+:
+> > > We have two extension names for AIA ISA support: Smaia (M-mode AIA CS=
+Rs)
+> > > and Ssaia (S-mode AIA CSRs).
+> >
+> > This has pretty much the same problem that we had with the other
+> > AIA-related ISA string patches, where there's that ambiguity with the
+> > non-ratified chapters.  IIRC when this came up in GCC the rough idea wa=
+s
+> > to try and document that we're going to interpret the standard ISA
+> > strings that way, but now that we're doing custom ISA extensions it
+> > seems saner to just define on here that removes the ambiguity.
+>
+>
+> To avoid the impression that I did not work on that, here is the v2
+> from November,
+> that attempts to document this:
+>   https://gcc.gnu.org/pipermail/gcc-patches/2022-November/607326.html
+>
+> My proposed text was:
+> +Note, that AIA support (@samp{Smaia} and @samp{Ssaia}) is based on an AI=
+A
+> +specification, which is frozen but contains draft chapters ("Duo-PLIC" a=
+nd
+> +"IOMMU Support").
+>
+> Btw, I did not get any feedback on that patch.
+>
+> I also tried to address this on spec level (the PR has been linked) and r=
+aised
+> that to tech-aia (the conversation has been linked).
+>
+> Another thing that I want to highlight, since it was discussed a lot rece=
+ntly
+> (e.g. just a few minutes ago in tech-chairs).
+> There is a chance of a last-minute spec change of AIA:
+>   https://github.com/riscv/riscv-aia/pull/37
+>
+> BR
+> Christoph
+>
+>
+>
+> >
+> >
+> > I just sent
+> > <https://lore.kernel.org/r/20230203001201.14770-1-palmer@rivosinc.com/>
+> > which documents that.
+> >
+> > > We extend the ISA string parsing to detect Smaia and Ssaia extensions=
+.
+> > >
+> > > Signed-off-by: Anup Patel <apatel@ventanamicro.com>
+> > > Reviewed-by: Andrew Jones <ajones@ventanamicro.com>
+> > > ---
+> > >  arch/riscv/include/asm/hwcap.h | 2 ++
+> > >  arch/riscv/kernel/cpu.c        | 2 ++
+> > >  arch/riscv/kernel/cpufeature.c | 2 ++
+> > >  3 files changed, 6 insertions(+)
+> > >
+> > > diff --git a/arch/riscv/include/asm/hwcap.h b/arch/riscv/include/asm/=
+hwcap.h
+> > > index 86328e3acb02..341ef30a3718 100644
+> > > --- a/arch/riscv/include/asm/hwcap.h
+> > > +++ b/arch/riscv/include/asm/hwcap.h
+> > > @@ -59,6 +59,8 @@ enum riscv_isa_ext_id {
+> > >       RISCV_ISA_EXT_ZIHINTPAUSE,
+> > >       RISCV_ISA_EXT_SSTC,
+> > >       RISCV_ISA_EXT_SVINVAL,
+> > > +     RISCV_ISA_EXT_SMAIA,
+> > > +     RISCV_ISA_EXT_SSAIA,
+> > >       RISCV_ISA_EXT_ID_MAX
+> > >  };
+> > >  static_assert(RISCV_ISA_EXT_ID_MAX <=3D RISCV_ISA_EXT_MAX);
+> > > diff --git a/arch/riscv/kernel/cpu.c b/arch/riscv/kernel/cpu.c
+> > > index 1b9a5a66e55a..a215ec929160 100644
+> > > --- a/arch/riscv/kernel/cpu.c
+> > > +++ b/arch/riscv/kernel/cpu.c
+> > > @@ -162,6 +162,8 @@ arch_initcall(riscv_cpuinfo_init);
+> > >   *    extensions by an underscore.
+> > >   */
+> > >  static struct riscv_isa_ext_data isa_ext_arr[] =3D {
+> > > +     __RISCV_ISA_EXT_DATA(smaia, RISCV_ISA_EXT_SMAIA),
+> > > +     __RISCV_ISA_EXT_DATA(ssaia, RISCV_ISA_EXT_SSAIA),
+> >
+> > This will conflict with that ISA string refactoring I just merged.  It
+> > should be a pretty mechanical merge conflict, but if you want we can do
+> > a shared tag with the first few patches and I can handle the merge
+> > conflict locally.
+> >
+> > >       __RISCV_ISA_EXT_DATA(sscofpmf, RISCV_ISA_EXT_SSCOFPMF),
+> > >       __RISCV_ISA_EXT_DATA(sstc, RISCV_ISA_EXT_SSTC),
+> > >       __RISCV_ISA_EXT_DATA(svinval, RISCV_ISA_EXT_SVINVAL),
+> > > diff --git a/arch/riscv/kernel/cpufeature.c b/arch/riscv/kernel/cpufe=
+ature.c
+> > > index 93e45560af30..3c5b51f519d5 100644
+> > > --- a/arch/riscv/kernel/cpufeature.c
+> > > +++ b/arch/riscv/kernel/cpufeature.c
+> > > @@ -228,6 +228,8 @@ void __init riscv_fill_hwcap(void)
+> > >                               SET_ISA_EXT_MAP("zihintpause", RISCV_IS=
+A_EXT_ZIHINTPAUSE);
+> > >                               SET_ISA_EXT_MAP("sstc", RISCV_ISA_EXT_S=
+STC);
+> > >                               SET_ISA_EXT_MAP("svinval", RISCV_ISA_EX=
+T_SVINVAL);
+> > > +                             SET_ISA_EXT_MAP("smaia", RISCV_ISA_EXT_=
+SMAIA);
+> > > +                             SET_ISA_EXT_MAP("ssaia", RISCV_ISA_EXT_=
+SSAIA);
+> > >                       }
+> > >  #undef SET_ISA_EXT_MAP
+> > >               }
+> >
+> > _______________________________________________
+> > linux-riscv mailing list
+> > linux-riscv@lists.infradead.org
+> > http://lists.infradead.org/mailman/listinfo/linux-riscv
