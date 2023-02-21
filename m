@@ -2,62 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6571D69E924
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 21:52:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4BBDB69E925
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 21:53:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229872AbjBUUwv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Feb 2023 15:52:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57632 "EHLO
+        id S229499AbjBUUxD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Feb 2023 15:53:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58054 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229724AbjBUUwt (ORCPT
+        with ESMTP id S229880AbjBUUxA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Feb 2023 15:52:49 -0500
-Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 131B2BB
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Feb 2023 12:52:48 -0800 (PST)
-Received: by mail-ed1-x52f.google.com with SMTP id ck15so23599142edb.0
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Feb 2023 12:52:47 -0800 (PST)
+        Tue, 21 Feb 2023 15:53:00 -0500
+Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CEA07A83
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Feb 2023 12:52:59 -0800 (PST)
+Received: by mail-ed1-x531.google.com with SMTP id cq23so22108894edb.1
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Feb 2023 12:52:59 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1677012766;
-        h=content-disposition:mime-version:message-id:subject:to:from:date
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=ME8MmTL9+xojo7h0KQk1KDfx29xTX9q7Bc+zC3HoTX4=;
-        b=IAc2VZ7fVro0mazMsBITGoh0A+rYarGL+Mq/INZe/ug+CaZUIkAg1pR58RfjtzLSxb
-         v4msx0AzIcb8LG9n1aTEDxzVdzKj4vZYummLfGlFgPA4NLCX70vLeYwb8s7I6jKpQgDN
-         c8DlpHtR12o5K9S5sHZZ7wswSmPBP5jzPjveI0TyRnznQg5VIxT5q60PhG3taZuSVKnd
-         pMxY6n/FgEnGdFAAhN6IAlorhrLS+6ti4mjZdCT4LOuVWd+r/8zfl/ZuSxbcBH3yoXrf
-         Hz59dqjnD5FV8kgsErStepARRrPN09Wp7FoRvGBbnq9NDRVa+VAMDDKwCNX7QBxnlYFw
-         vyDQ==
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=YFBycE3+qKbCLQPSVLOwBIegJGdnIvZfudlDEkXTW5g=;
+        b=if/4EqmsonJ9Hkxtynct98Ox97fFgHN59xfvkwrWqJVR3DYxx2TAiiLitQfA4uun3e
+         YZ0ioqFBrYPGAAmsRgLZEwowPhKb5a3fvaVqEV7NE/DK28Xh94yi2Z3wk8GAEcPm7cFt
+         crQLQJgPRMG9DuzzcJhDFZFFfGgUAWSY/IX+/uPO9C935YhFX356+3tBbhLLInRYCedS
+         MiGNSJmmLnCjrIQUZq3cbzh9qUltIcgdD/TS2qdSWDm/KaUeGHCAcTlWo5G2+MJpx+s0
+         mWHcgoJjVsY4BwxCHyTH29T+yu02IIvhPsDUE3el8rt5Y8o817F8N65gb3IHVVY0Oehh
+         wfgQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1677012766;
-        h=content-disposition:mime-version:message-id:subject:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ME8MmTL9+xojo7h0KQk1KDfx29xTX9q7Bc+zC3HoTX4=;
-        b=A5N9NqwURnJ2n6a8wJ1GZeKwz9vZno4m5RH/aOhODbWH4chIteOicyEzf0n9STynIN
-         Zl2TrXV0QwbDeuZ08czk/k+ESFOgaxH/7CNRrkCom2MOu2XTrcS1q7OC1GcuUjFUoG91
-         nKpZq6NjXZCLAZnE2M9WvoW1k9v2wZfPgudFC3l2ugKXBHfR1hei4cekXlq3NZ2A2YOF
-         ndHo2SC96OOZUS0sncIraSL7a03Std1q13hdTuFoyWXlmQ71AMPBYx5mubHz0sEDzIXy
-         1XYFcxg5IwFtaoFJROarjpaLdQItUU1YXbR0ykVbIecDqJWfYyETJasKWgWjTNCpJG7m
-         gTtA==
-X-Gm-Message-State: AO0yUKXeu/04fSWW5dHoIpaQrPU83iuQQouJqRdeIcUZz6zfFua2ksBS
-        72Gca+ubUjBjgbt/ntVktzY=
-X-Google-Smtp-Source: AK7set8caNMFM8ZxDaaL67ZSIP4ulVMYEfysOtSt/1Lciwb+IbUD5p8JRlUy+A2D96xM9n+K3uqbMQ==
-X-Received: by 2002:a05:6402:268e:b0:4ab:178f:e2fe with SMTP id w14-20020a056402268e00b004ab178fe2femr4989935edd.0.1677012766390;
-        Tue, 21 Feb 2023 12:52:46 -0800 (PST)
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=YFBycE3+qKbCLQPSVLOwBIegJGdnIvZfudlDEkXTW5g=;
+        b=StHBCECcBrpFkBFRkCRXsi8cyU+F7+CBvgGj/H1ebDjWPz/9eep/Wwqw7RusLXszzF
+         waQ9WOwFElO8bxYGVIM+ds9k5t119WUmjiPpUwdLAuykKVvEAQ/bXCjaFtYi+u41pNXa
+         ch5xaIeZGlm3LFtIsLE6H+4IRwrhQ1FBI4h+HYtwc6XT+zMyifGEsxa6rkWMzrj+7/vP
+         4NAjNOcM4WHHtbGegFpDv96NEiULhrAh42AThmjAsShLIps06qEi5smBLj6kTKNXDHpZ
+         kDel0hZbJEJHWhdCX3CZcdLXesODU9KORa/L+7/I/4SjpFlJM8cGPBCC/ick54OTsu1u
+         8How==
+X-Gm-Message-State: AO0yUKV2JkBNSZCMMA60CvnELKgiNBst12CvaY8CNYDhs9JLzINcOyDC
+        O7oWPKd2EivWmLCNRDzvMFo=
+X-Google-Smtp-Source: AK7set+ZMQPYEVVFdv/LXr0buAiwb27Dgltwb/3VATRV0i61jDtiKeGG31e2iZsA760ScdDlkDyzlg==
+X-Received: by 2002:a17:906:5352:b0:8dd:76d5:dbc with SMTP id j18-20020a170906535200b008dd76d50dbcmr4122624ejo.0.1677012777724;
+        Tue, 21 Feb 2023 12:52:57 -0800 (PST)
 Received: from matrix-ESPRIMO-P710 (p57935146.dip0.t-ipconnect.de. [87.147.81.70])
-        by smtp.gmail.com with ESMTPSA id f4-20020a170906738400b008e40853a712sm496113ejl.97.2023.02.21.12.52.45
+        by smtp.gmail.com with ESMTPSA id u23-20020a509517000000b004ad61135698sm2060099eda.13.2023.02.21.12.52.56
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 21 Feb 2023 12:52:45 -0800 (PST)
-Date:   Tue, 21 Feb 2023 21:52:44 +0100
+        Tue, 21 Feb 2023 12:52:57 -0800 (PST)
+Date:   Tue, 21 Feb 2023 21:52:55 +0100
 From:   Philipp Hortmann <philipp.g.hortmann@gmail.com>
 To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: [PATCH 0/7] staging: rtl8192e: Remove entries from struct
- rtl819x_ops start with .tx_enable
-Message-ID: <cover.1677010997.git.philipp.g.hortmann@gmail.com>
+Subject: [PATCH 1/7] staging: rtl8192e: Remove entry .tx_enable from struct
+ rtl819x_ops
+Message-ID: <76955e787fd161dea83d10e81054fafb3b334b5c.1677010997.git.philipp.g.hortmann@gmail.com>
+References: <cover.1677010997.git.philipp.g.hortmann@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <cover.1677010997.git.philipp.g.hortmann@gmail.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
@@ -68,35 +71,48 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Remove unnecessary entries from rtl819x_ops and replace them with
-function names when required. This increases readability of the code as
-the reader does not always need to look up the corresponding function
-name. One patch just removes dead code which increases also readability.
+Remove entry .tx_enable and replace it with function name
+rtl92e_enable_tx. This increases readability of the code.
 
-Tested with rtl8192e
-Transferred this patch over wlan connection of rtl8192e
+Signed-off-by: Philipp Hortmann <philipp.g.hortmann@gmail.com>
+---
+ drivers/staging/rtl8192e/rtl8192e/rtl_core.c | 3 +--
+ drivers/staging/rtl8192e/rtl8192e/rtl_core.h | 1 -
+ 2 files changed, 1 insertion(+), 3 deletions(-)
 
-This patch series requires the this patch series:
-"[PATCH 00/11] staging: rtl8192e: Remove entries from struct rtl819x_ops
-start with .get_eeprom_size"
-
-Philipp Hortmann (7):
-  staging: rtl8192e: Remove entry .tx_enable from struct rtl819x_ops
-  staging: rtl8192e: Remove entry .interrupt_re.. from struct
-    rtl819x_ops
-  staging: rtl8192e: Remove entry .tx_check_stuc.. from struct
-    rtl819x_ops
-  staging: rtl8192e: Remove entry .rx_check_stuc.. from struct
-    rtl819x_ops
-  staging: rtl8192e: Remove dead code from struct rtl819x_ops
-  staging: rtl8192e: Remove entry .link_change from struct rtl819x_ops
-  staging: rtl8192e: Remove entry .nic_type from struct rtl819x_ops
-
- drivers/staging/rtl8192e/rtl8192e/rtl_core.c | 20 +++++---------------
- drivers/staging/rtl8192e/rtl8192e/rtl_core.h | 12 ------------
- drivers/staging/rtl8192e/rtl8192e/rtl_pci.c  |  6 +++---
- 3 files changed, 8 insertions(+), 30 deletions(-)
-
+diff --git a/drivers/staging/rtl8192e/rtl8192e/rtl_core.c b/drivers/staging/rtl8192e/rtl8192e/rtl_core.c
+index aa0456931b09..f1cde3fc8634 100644
+--- a/drivers/staging/rtl8192e/rtl8192e/rtl_core.c
++++ b/drivers/staging/rtl8192e/rtl8192e/rtl_core.c
+@@ -30,7 +30,6 @@ static const struct rtl819x_ops rtl819xp_ops = {
+ 	.link_change			= rtl92e_link_change,
+ 	.rx_command_packet_handler = NULL,
+ 	.irq_clear			= rtl92e_clear_irq,
+-	.tx_enable			= rtl92e_enable_tx,
+ 	.interrupt_recognized		= rtl92e_ack_irq,
+ 	.tx_check_stuck_handler	= rtl92e_is_tx_stuck,
+ 	.rx_check_stuck_handler	= rtl92e_is_rx_stuck,
+@@ -1406,7 +1405,7 @@ void rtl92e_tx_enable(struct net_device *dev)
+ {
+ 	struct r8192_priv *priv = rtllib_priv(dev);
+ 
+-	priv->ops->tx_enable(dev);
++	rtl92e_enable_tx(dev);
+ 
+ 	rtllib_reset_queue(priv->rtllib);
+ }
+diff --git a/drivers/staging/rtl8192e/rtl8192e/rtl_core.h b/drivers/staging/rtl8192e/rtl8192e/rtl_core.h
+index 71958c7a4cbf..79281c077182 100644
+--- a/drivers/staging/rtl8192e/rtl8192e/rtl_core.h
++++ b/drivers/staging/rtl8192e/rtl8192e/rtl_core.h
+@@ -211,7 +211,6 @@ struct rtl819x_ops {
+ 					  struct sk_buff *skb,
+ 					  struct rx_desc *pdesc);
+ 	void (*irq_clear)(struct net_device *dev);
+-	void (*tx_enable)(struct net_device *dev);
+ 	void (*interrupt_recognized)(struct net_device *dev,
+ 				     u32 *p_inta, u32 *p_intb);
+ 	bool (*tx_check_stuck_handler)(struct net_device *dev);
 -- 
 2.39.2
 
