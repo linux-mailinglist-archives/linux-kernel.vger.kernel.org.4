@@ -2,104 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C4DE69E1B0
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 14:50:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2142969E1B3
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 14:51:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234159AbjBUNuc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Feb 2023 08:50:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40812 "EHLO
+        id S233732AbjBUNvM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Feb 2023 08:51:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41460 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234153AbjBUNua (ORCPT
+        with ESMTP id S232317AbjBUNvL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Feb 2023 08:50:30 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D291C28D2B;
-        Tue, 21 Feb 2023 05:50:26 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6D9DE61029;
-        Tue, 21 Feb 2023 13:50:26 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 83B19C433EF;
-        Tue, 21 Feb 2023 13:50:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1676987425;
-        bh=Z4aish3Apqp64SElU/yyo7PrgTh1M116rVxHyOgx8Lg=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=z9iqgYk5Zv3oYRnYuVa4qZl34aqIJ9IZXL9I8ukVUkG7uPM6/t1Spj07z3JCqCRCS
-         mO8m/u+h2MoiszeuplYv9TGtKU6TRTiIbovZc9yjRbFjI1ytKB2wnTWDllkQBIcyYK
-         ecmpMUbSFNYxMdPtuCstA5t7menm8Y2ck/94+uw4=
-Date:   Tue, 21 Feb 2023 14:50:23 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     George Kennedy <george.kennedy@oracle.com>
-Cc:     Thomas =?iso-8859-1?Q?Wei=DFschuh?= <linux@weissschuh.net>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        linux-kernel@vger.kernel.org, Randy Dunlap <rdunlap@infradead.org>,
-        Storm Dragon <stormdragon2976@gmail.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        sfr@canb.auug.org.au, akpm@linux-foundation.org,
-        linux-serial@vger.kernel.org
-Subject: Re: [PATCH] vc_screen: don't clobber return value in vcs_read
-Message-ID: <Y/TMH8Hf6zBrC3yc@kroah.com>
-References: <Y/KtG9vK0oz0nQrN@hotmail.com>
- <20230220064612.1783-1-linux@weissschuh.net>
- <dcaaf7d5-b2d5-dbb9-f3fe-2232ee525cc8@kernel.org>
- <2094ecec-f63c-4e8a-ba97-da77c5266da1@t-8ch.de>
- <2941c2b9-5fa5-e25c-dcd0-ab9c9c0f143e@oracle.com>
+        Tue, 21 Feb 2023 08:51:11 -0500
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A174D28D2B;
+        Tue, 21 Feb 2023 05:51:08 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1676987468; x=1708523468;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=KS5B5YypziseZpu2NX+1cRUwnfO8HNyoE9eh8q4E50Q=;
+  b=mH4jkyT9QpuTfCVyfT/J0w0ukpdw6Uc3X6oeCfSJhyZRp0QV68I2xhBo
+   Yf9mR5dOF5XDaHBR+eM7r4/ZpJC7fEIzZ+1t7XhomL/3OXObHBvNr8gIL
+   uvvZbZRRi5tNr75WEYYxhKAbPGJCw/fzftue70Lt06yQ2a2F6XOkFeO/+
+   vxT7w1F2p0GEdrNUif2E2ufwolCGnl85RYWH4Y7jF3hpt6+ueS5VBneIv
+   dyYc1fPKuFZALYzQ7WzZU0SnJvBbPyKz6xOvrJlZ8Wc34kVlZEfBg7YTy
+   dLW4SkQOeDXUZUpr8xuuYFFDHhSlhcsM3G8Sqx8T3e03HaB6b8u7mD3Ja
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10627"; a="331300203"
+X-IronPort-AV: E=Sophos;i="5.97,315,1669104000"; 
+   d="scan'208";a="331300203"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Feb 2023 05:51:08 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10627"; a="740413736"
+X-IronPort-AV: E=Sophos;i="5.97,315,1669104000"; 
+   d="scan'208";a="740413736"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by fmsmga004.fm.intel.com with ESMTP; 21 Feb 2023 05:51:06 -0800
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1pUT2u-009yR9-0X;
+        Tue, 21 Feb 2023 15:51:04 +0200
+Date:   Tue, 21 Feb 2023 15:51:03 +0200
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Henning Schild <henning.schild@siemens.com>
+Cc:     Pavel Machek <pavel@ucw.cz>, Lee Jones <lee@kernel.org>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Mark Gross <markgross@kernel.org>,
+        linux-kernel@vger.kernel.org, linux-leds@vger.kernel.org,
+        platform-driver-x86@vger.kernel.org
+Subject: Re: [PATCH 2/3] leds: simatic-ipc-leds-gpio: split up into multiple
+ drivers
+Message-ID: <Y/TMR0GBUr69KiQ5@smile.fi.intel.com>
+References: <20230221122414.24874-1-henning.schild@siemens.com>
+ <20230221122414.24874-3-henning.schild@siemens.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <2941c2b9-5fa5-e25c-dcd0-ab9c9c0f143e@oracle.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230221122414.24874-3-henning.schild@siemens.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 21, 2023 at 08:30:11AM -0500, George Kennedy wrote:
-> 
-> 
-> On 2/20/2023 11:34 AM, Thomas Weiﬂschuh wrote:
-> > +Cc people who were involved in the original thread.
-> > 
-> > On Mon, Feb 20, 2023 at 12:48:59PM +0100, Jiri Slaby wrote:
-> > > On 20. 02. 23, 7:46, linux@weissschuh.net wrote:
-> > > > From: Thomas Weiﬂschuh <linux@weissschuh.net>
-> > > > 
-> > > > Commit 226fae124b2d
-> > > > ("vc_screen: move load of struct vc_data pointer in vcs_read() to avoid UAF")
-> > > > moved the call to vcs_vc() into the loop.
-> > > > While doing this it also moved the unconditional assignment of
-> > > > "ret = -ENXIO".
-> > > > This unconditional assignment was valid outside the loop but within it
-> > > > it clobbers the actual value of ret.
-> > > > 
-> > > > To avoid this only assign "ret = -ENXIO" when actually needed.
-> > > Not sure -- I cannot find it -- but hasn't George fixed this yet?
-> > Indeed there was a proposed fix at
-> > https://lore.kernel.org/lkml/1675704844-17228-1-git-send-email-george.kennedy@oracle.com/
-> > 
-> > Linus had some suggestions so it was not applied as is.
-> > 
-> > I'm not sure what the current state is.
-> > George, do you have something in the pipeline?
-> 
-> Yes, that is in the pipeline:
-> https://lore.kernel.org/lkml/1675774098-17722-1-git-send-email-george.kennedy@oracle.com/
-> 
-> Linus suggested the fix, which was tested and submitted.
-> 
-> Jiri commented on the patch, which I believe was directed at Linus as he
-> suggested the fix.
+On Tue, Feb 21, 2023 at 01:24:13PM +0100, Henning Schild wrote:
+> In order to clearly describe the dependencies between the gpio
 
-And I was waiting for a new version from you based on those comments :(
+GPIO
 
-Can you fix that up and send?
+> controller drivers and the users the driver is split up into two and one
 
-thanks,
+one --> a
 
-greg k-h
+> common header.
+
+...
+
+> + * Authors:
+
+(everywhere where it is a single author, 's' is redundant)
+
+...
+
+> +#ifndef __DRIVERS_LEDS_SIMPLE_SIMATIC_IPC_LEDS_GPIO
+> +#define __DRIVERS_LEDS_SIMPLE_SIMATIC_IPC_LEDS_GPIO
+
+> +#endif /* __DRIVERS_LEDS_SIMPLE_SIMATIC_IPC_LEDS_GPIO */
+
+This header doesn't look right.
+
+Have you run `make W=1 ...` against your patches?
+Even if it doesn't show defined but unused errors
+the idea is that this should be a C-file, called,
+let's say, ...-core.c.
+
+-- 
+With Best Regards,
+Andy Shevchenko
+
+
