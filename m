@@ -2,97 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E8DF169E471
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 17:22:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8905769E477
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 17:25:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234412AbjBUQWH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Feb 2023 11:22:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47174 "EHLO
+        id S233804AbjBUQZo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Feb 2023 11:25:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50194 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233709AbjBUQWE (ORCPT
+        with ESMTP id S229518AbjBUQZm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Feb 2023 11:22:04 -0500
-Received: from mail-io1-xd30.google.com (mail-io1-xd30.google.com [IPv6:2607:f8b0:4864:20::d30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4FEBB1CF52;
-        Tue, 21 Feb 2023 08:22:03 -0800 (PST)
-Received: by mail-io1-xd30.google.com with SMTP id b16so1370047iof.11;
-        Tue, 21 Feb 2023 08:22:03 -0800 (PST)
+        Tue, 21 Feb 2023 11:25:42 -0500
+Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 215C023126
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Feb 2023 08:25:40 -0800 (PST)
+Received: by mail-ed1-x52c.google.com with SMTP id cq23so19163036edb.1
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Feb 2023 08:25:40 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=1GJtP+8RjhN3ucRBaCvPm/TRUilYHvgTU8JtJej4p/U=;
-        b=qU59TttVz/e/wcOYB1SJLUkVQYB53HqGeelzg7cEIMsNsM26BkE5+15f+XpWxsfnBo
-         0uhG4siyjADlAJl5wtonvS+OhaMge2/AbYWSF0jzU0qqt4kvO4+Meb88yeX2Dy0BGY8g
-         0RMXs2Zo7E6a3xgIEaCtVTjALrgGgkqpD04VHO8mMvXxjvn9R24kxwjGUi6PN69i18+G
-         HX62k1EysSqrYvREhC0gurx6kgBz3wDxZswimZI0qbeYxBqGBEtYAnrynRgrx4OEQ/F0
-         3sInRtlPSdg1MwVWu00O49W3G7qnuKQcFKEOt9GEckTwj253AYBveIf373B5dKNwmAde
-         fNnw==
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=EmtAropobHH5jGpYqAHqkULaNt2W7gxQm/IEh3Ch+0Y=;
+        b=ymFAFLnesLHd3HEddgDcOcWsL0flQAAZA4gDciZdrxtkrcefcGweSrVJ4qhYOcwOeZ
+         MVCLVkipshGbYLo/4KYCTNIfk7ZDN9iy+EtCP3r5XAQD5lvORlFfNLgLLXeA2Ef8FHwH
+         IuuU/7AceKQUboT1MBCoYwRga7Yjx3Z3aNbQ+hL25XWv6A16GoEaPoUdKUon6w7rAmgq
+         hOgEzc/S7Lcm1tj1nCNdrCRWMN5g0qVmOAAZmBlJqP0OizXVzLjJqgnxpkaSZkhxJoIw
+         qp20qb71pTnS2wcIDpQdsO3LQAtrmK3WT5JMj+en1hDA0VYPNXbFhJmppQizoDSBL5sv
+         8aEQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=1GJtP+8RjhN3ucRBaCvPm/TRUilYHvgTU8JtJej4p/U=;
-        b=dHWl5wQUxO16+fwvSsNWTb/LV/5YlXjB/ZY7JG0DI39kwDQDRq7vj/yaTPTzNW1T39
-         ND2WKY5dtPomubMPYjt8a+H4FjEjJ5y/TLzWpCFqg+ZmpreWy16ishCMBuRD0Z94rcET
-         OJ2EWuaRw1A0iOTNm+NmKruw+WnBLK5VNiy4kjIxmLjD5yyS6vIKfykfs2ap1eH9w6Dh
-         RjPh9PXOmzdLERYLtVAxIDKsyRNnEG4KccoxI1nk81iEysDdwR7WXVUPWxtl4VTGGzEw
-         Ul/W9RzBYPxDjjlM3VvLGkhubyigSqnxtxywfkVaHxCHxMapKxQN4jObgkwZwSzzIq5M
-         K5/w==
-X-Gm-Message-State: AO0yUKX5Nq3I7DLbbV49lTFb+pxjflbgsIYGellULFf4BC5Mju5EACtU
-        QWpWU/oGLiWO241pvWOS+/4=
-X-Google-Smtp-Source: AK7set8v2GVvSmrxflWjovVDNlprtI4a06+8hyX4uRMnTXqRcyFjwtGAKfHtNz03vKC1YuM+Sg/a6w==
-X-Received: by 2002:a6b:590a:0:b0:71e:ea4a:cad2 with SMTP id n10-20020a6b590a000000b0071eea4acad2mr10831301iob.21.1676996522661;
-        Tue, 21 Feb 2023 08:22:02 -0800 (PST)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id w3-20020a5d8443000000b00745bc07f527sm1027464ior.10.2023.02.21.08.22.01
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 21 Feb 2023 08:22:02 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Tue, 21 Feb 2023 08:22:01 -0800
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
-        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        srw@sladewatkins.net, rwarsow@gmx.de
-Subject: Re: [PATCH 6.1 000/118] 6.1.13-rc1 review
-Message-ID: <20230221162201.GF1588041@roeck-us.net>
-References: <20230220133600.368809650@linuxfoundation.org>
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=EmtAropobHH5jGpYqAHqkULaNt2W7gxQm/IEh3Ch+0Y=;
+        b=PmB68d8v0AP9d8b/ZlkK17iYKBBD0rmZfflQi3cUMPf98Q0HtCSXUzw+chrdgO9wOC
+         NZnKZmOTHGWdV3XAkbA4kDW2TENRhSGI1PZqzosQTZNWZGevuYG1fvtOKt1uYUQGzd5H
+         QflQk6aE2Ht3EcRTAGGAzF929QnNJme+NCuiaj43arTpZSuFIN/i/82e7kkdapsA6TB7
+         ImSGh2KROqg4jt2Nk40VCO5aT6agmFFemi0cs3Iird245DI2uBQa+wrtSUyEj/NVvMct
+         peLyd1vh1XTLLtco3aft4q00HEYsWRrRtMt0cfjykSrpsB4dz/fkqCreuDXZprVY4Stg
+         COrg==
+X-Gm-Message-State: AO0yUKX+I+ycSZvw8V7NDyPAx3ENYwvKlGEVOVeaN3ennS5DRjcmwt7G
+        l0xaBhut+0fRwUFq507NLZxhqw==
+X-Google-Smtp-Source: AK7set/mkLPXdZ5zUCcZhfGhJur4lYeYl9s3OmjcVyHcjZbvltRDLZAFJc+mDfFL8V3WjDaEXgdVpw==
+X-Received: by 2002:aa7:d88f:0:b0:4ac:cb71:42c with SMTP id u15-20020aa7d88f000000b004accb71042cmr6004659edq.37.1676996738520;
+        Tue, 21 Feb 2023 08:25:38 -0800 (PST)
+Received: from [192.168.1.109] ([178.197.216.144])
+        by smtp.gmail.com with ESMTPSA id t21-20020a50ab55000000b004acce817ab7sm2119014edc.2.2023.02.21.08.25.36
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 21 Feb 2023 08:25:38 -0800 (PST)
+Message-ID: <1c5eae73-04fa-722c-b6b2-8a39576ad1c5@linaro.org>
+Date:   Tue, 21 Feb 2023 17:25:36 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230220133600.368809650@linuxfoundation.org>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [Patch v3 01/15] dt-bindings: media: s5p-mfc: Add new DT schema
+ for MFC
+Content-Language: en-US
+To:     aakarsh jain <aakarsh.jain@samsung.com>,
+        linux-arm-kernel@lists.infradead.org, linux-media@vger.kernel.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
+Cc:     m.szyprowski@samsung.com, andrzej.hajda@intel.com,
+        mchehab@kernel.org, hverkuil-cisco@xs4all.nl,
+        ezequiel@vanguardiasur.com.ar, jernej.skrabec@gmail.com,
+        benjamin.gaignard@collabora.com, stanimir.varbanov@linaro.org,
+        dillon.minfei@gmail.com, david.plowman@raspberrypi.com,
+        mark.rutland@arm.com, robh+dt@kernel.org, krzk+dt@kernel.org,
+        andi@etezian.org, alim.akhtar@samsung.com,
+        aswani.reddy@samsung.com, pankaj.dubey@samsung.com,
+        linux-fsd@tesla.com, smitha.t@samsung.com
+References: <20221011122516.32135-1-aakarsh.jain@samsung.com>
+ <CGME20221011125142epcas5p13c858a5f27830fb1de50fa51e9730eca@epcas5p1.samsung.com>
+ <20221011122516.32135-2-aakarsh.jain@samsung.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20221011122516.32135-2-aakarsh.jain@samsung.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 20, 2023 at 02:35:16PM +0100, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 6.1.13 release.
-> There are 118 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
+On 11/10/2022 14:25, aakarsh jain wrote:
+> From: Smitha T Murthy <smitha.t@samsung.com>
 > 
-> Responses should be made by Wed, 22 Feb 2023 13:35:35 +0000.
-> Anything received after that time might be too late.
+> Convert DT schema for s5p-mfc in yaml format
 > 
+> Cc: linux-fsd@tesla.com
+> Signed-off-by: Smitha T Murthy <smitha.t@samsung.com>
+> Signed-off-by: Aakarsh Jain <aakarsh.jain@samsung.com>
+> ---
+>  .../devicetree/bindings/media/s5p-mfc.txt     |  75 --------
+>  .../bindings/media/samsung,s5p-mfc.yaml       | 163 ++++++++++++++++++
 
-Build results:
-	total: 155 pass: 155 fail: 0
-Qemu test results:
-	total: 503 pass: 503 fail: 0
+Hi Aakarsh,
 
-Tested-by: Guenter Roeck <linux@roeck-us.net>
+Any plans for new version of this DT schema conversion? The Samsung MFC
+is one of last remaining bigger pieces for conversion. We already have
+100% bindings compliance for ARM64 but the MFC is missing for ARMv7:
 
-Guenter
+https://pastebin.com/D8jXnjEe
+(that's on my pending branch with all patches from LKML collected).
+
+Best regards,
+Krzysztof
+
