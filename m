@@ -2,199 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 06E2D69D913
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 03:57:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 08BE269D915
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 03:57:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233163AbjBUC5T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Feb 2023 21:57:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36212 "EHLO
+        id S233357AbjBUC5v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Feb 2023 21:57:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36998 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232789AbjBUC5S (ORCPT
+        with ESMTP id S233284AbjBUC5t (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Feb 2023 21:57:18 -0500
-Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 5C8D824129;
-        Mon, 20 Feb 2023 18:56:47 -0800 (PST)
-Received: from loongson.cn (unknown [10.20.42.120])
-        by gateway (Coremail) with SMTP id _____8AxlF3cMvRj0gUDAA--.657S3;
-        Tue, 21 Feb 2023 10:56:28 +0800 (CST)
-Received: from [10.20.42.120] (unknown [10.20.42.120])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8CxG77ZMvRj3343AA--.35199S3;
-        Tue, 21 Feb 2023 10:56:25 +0800 (CST)
-Subject: Re: [PATCH v2 01/29] LoongArch: KVM: Add kvm related header files
-To:     Paolo Bonzini <pbonzini@redhat.com>
-References: <20230220065735.1282809-1-zhaotianrui@loongson.cn>
- <20230220065735.1282809-2-zhaotianrui@loongson.cn>
- <2b047b75-7397-0cce-e7af-ebba67ae2561@redhat.com>
-Cc:     Huacai Chen <chenhuacai@kernel.org>,
-        WANG Xuerui <kernel@xen0n.name>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        loongarch@lists.linux.dev, linux-kernel@vger.kernel.org,
-        kvm@vger.kernel.org, Jens Axboe <axboe@kernel.dk>,
-        Mark Brown <broonie@kernel.org>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        Oliver Upton <oliver.upton@linux.dev>, maobibo@loongson.cn
-From:   Tianrui Zhao <zhaotianrui@loongson.cn>
-Message-ID: <c9dada46-829c-d3cd-c3b6-68a570552e84@loongson.cn>
-Date:   Tue, 21 Feb 2023 10:56:25 +0800
-User-Agent: Mozilla/5.0 (X11; Linux mips64; rv:45.0) Gecko/20100101
- Thunderbird/45.4.0
+        Mon, 20 Feb 2023 21:57:49 -0500
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70FA92139;
+        Mon, 20 Feb 2023 18:57:36 -0800 (PST)
+Received: from pps.filterd (m0098396.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 31L0x4TK006750;
+        Tue, 21 Feb 2023 02:57:28 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=Qt5A8aL5VkNz/RvRzAD7hRDQ3ubedALcRRkudlM+bJM=;
+ b=Cu4xUF6T+XdWVQ0Pbp2RhwPALBzUDRgpetzjNWCVxOpuVTAhNKBoEgfjjgcsmLuZBmKq
+ 5pjTeTfpl3FpT08ymMRRM1Kcqsho6O75Bp0FUr+DWxlPHecsFl8AEuYooi/61iAyLTBG
+ gnWvvWpsZ2HYxrEMsVTKBQhI27LaP/iXR782O7NssCf6qU6sJIP20HXLSN3d8cGDTS/g
+ C4PUGNghyZbEHVxHeYOe/a5pf3VSnFxh+apBlPXFrRdFqBtsCukoBJg3WpfurQI1CLVn
+ uRly3AuHdj6l3MfowMo+p5RuFPIXsovSDTOhet31sxoMHgNt3nuCbEfTSILMWQzctMxG Bw== 
+Received: from ppma04dal.us.ibm.com (7a.29.35a9.ip4.static.sl-reverse.com [169.53.41.122])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3nvknya4b8-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 21 Feb 2023 02:57:28 +0000
+Received: from pps.filterd (ppma04dal.us.ibm.com [127.0.0.1])
+        by ppma04dal.us.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 31L0Y6WL000573;
+        Tue, 21 Feb 2023 02:57:27 GMT
+Received: from smtprelay06.wdc07v.mail.ibm.com ([9.208.129.118])
+        by ppma04dal.us.ibm.com (PPS) with ESMTPS id 3ntpa74h9g-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 21 Feb 2023 02:57:27 +0000
+Received: from smtpav06.dal12v.mail.ibm.com (smtpav06.dal12v.mail.ibm.com [10.241.53.105])
+        by smtprelay06.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 31L2vPu466191640
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 21 Feb 2023 02:57:25 GMT
+Received: from smtpav06.dal12v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 215CF5805E;
+        Tue, 21 Feb 2023 02:57:25 +0000 (GMT)
+Received: from smtpav06.dal12v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id CFFD058043;
+        Tue, 21 Feb 2023 02:57:24 +0000 (GMT)
+Received: from [9.163.84.166] (unknown [9.163.84.166])
+        by smtpav06.dal12v.mail.ibm.com (Postfix) with ESMTP;
+        Tue, 21 Feb 2023 02:57:24 +0000 (GMT)
+Message-ID: <b79673c7-a626-22e0-3e21-fc3e425f153f@linux.ibm.com>
+Date:   Mon, 20 Feb 2023 20:57:24 -0600
 MIME-Version: 1.0
-In-Reply-To: <2b047b75-7397-0cce-e7af-ebba67ae2561@redhat.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.7.2
+Subject: Re: [PATCH v4 1/6] Update Kconfig and Makefile.
+Content-Language: en-US
+To:     Herbert Xu <herbert@gondor.apana.org.au>
+Cc:     linux-crypto@vger.kernel.org, leitao@debian.org,
+        nayna@linux.ibm.com, appro@cryptogams.org,
+        linux-kernel@vger.kernel.org, ltcgcw@linux.vnet.ibm.com,
+        dtsen@us.ibm.com
+References: <20230220204224.4907-1-dtsen@linux.ibm.com>
+ <20230220204224.4907-2-dtsen@linux.ibm.com>
+ <Y/QwUWVhaUZ8fjO7@gondor.apana.org.au>
+From:   Danny Tsen <dtsen@linux.ibm.com>
+In-Reply-To: <Y/QwUWVhaUZ8fjO7@gondor.apana.org.au>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf8CxG77ZMvRj3343AA--.35199S3
-X-CM-SenderInfo: p2kd03xldq233l6o00pqjv00gofq/
-X-Coremail-Antispam: 1Uk129KBjvJXoWxGF13Gw1xZF1DJw1kKryUJrb_yoW5ZFWkpa
-        48Cw4xKr4UXryUKr1xXrn5XasIqrZrtr1ayFsxt3W3Ja4q93W8Cr4kGa4UuF4xJrykXa17
-        Aa4UKrnxuFs8ta7anT9S1TB71UUUUjJqnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
-        qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
-        bqxYFVCjjxCrM7AC8VAFwI0_Jr0_Gr1l1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s
-        1l1IIY67AEw4v_Jrv_JF1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xv
-        wVC0I7IYx2IY67AKxVW8JVW5JwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwA2z4
-        x0Y4vEx4A2jsIE14v26r4UJVWxJr1l84ACjcxK6I8E87Iv6xkF7I0E14v26r4UJVWxJr1l
-        n4kS14v26r126r1DM2AIxVAIcxkEcVAq07x20xvEncxIr21l57IF6xkI12xvs2x26I8E6x
-        ACxx1l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r126r1DMcIj6I8E
-        87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lc7I2V7IY0V
-        AS07AlzVAYIcxG8wCY1x0262kKe7AKxVWUAVWUtwCF04k20xvY0x0EwIxGrwCFx2IqxVCF
-        s4IE7xkEbVWUJVW8JwCFI7km07C267AKxVWUAVWUtwC20s026c02F40E14v26r1j6r18MI
-        8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41l
-        IxAIcVC0I7IYx2IY67AKxVWUCVW8JwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr0_Gr1lIx
-        AIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2
-        jsIEc7CjxVAFwI0_Jr0_GrUvcSsGvfC2KfnxnUUI43ZEXa7IU8Dl1DUUUUU==
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: FIDKi037QG-6C44K3j7NIbwO7V6hjcnl
+X-Proofpoint-ORIG-GUID: FIDKi037QG-6C44K3j7NIbwO7V6hjcnl
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.170.22
+ definitions=2023-02-20_19,2023-02-20_02,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 phishscore=0
+ mlxlogscore=999 lowpriorityscore=0 impostorscore=0 priorityscore=1501
+ spamscore=0 mlxscore=0 malwarescore=0 adultscore=0 clxscore=1015
+ bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2302210021
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Herbert,
 
+I am not sure why my patch has to build one-by-one?  I compiled with one 
+make.  Here is the output.
 
-在 2023年02月21日 02:22, Paolo Bonzini 写道:
-> On 2/20/23 07:57, Tianrui Zhao wrote:
->> +
->> +/* Resume Flags */
->> +#define RESUME_FLAG_DR        (1<<0)    /* Reload guest nonvolatile 
->> state? */
->> +#define RESUME_FLAG_HOST    (1<<1)    /* Resume host? */
->> +
->> +#define RESUME_GUEST        0
->> +#define RESUME_GUEST_DR        RESUME_FLAG_DR
->> +#define RESUME_HOST        RESUME_FLAG_HOST
->> +
+   CALL    scripts/checksyscalls.sh
+   DESCEND objtool
+   CC [M]  arch/powerpc/crypto/aes-gcm-p10-glue.o
+   AS [M]  arch/powerpc/crypto/aes-gcm-p10.o
+   AS [M]  arch/powerpc/crypto/ghashp8-ppc.o
+   AS [M]  arch/powerpc/crypto/aesp8-ppc.o
+   LD [M]  arch/powerpc/crypto/aes-gcm-p10-crypto.o
+   CHK     kernel/kheaders_data.tar.xz
+   MODPOST Module.symvers
+   CC [M]  arch/powerpc/crypto/aes-gcm-p10-crypto.mod.o
+   LD [M]  arch/powerpc/crypto/aes-gcm-p10-crypto.ko
+
+Can Stephen explain why he is compiling one-by-one?  Any output I can see.
+
+Thanks.
+
+-Danny
+
+On 2/20/23 8:45 PM, Herbert Xu wrote:
+> On Mon, Feb 20, 2023 at 03:42:19PM -0500, Danny Tsen wrote:
+>> Defined CRYPTO_AES_GCM_P10 in Kconfig to support AES/GCM
+>> stitched implementation for Power10 or later CPU.
+>>
+>> Added a new module driver aes-gcm-p10-crypto.
+>>
+>> Signed-off-by: Danny Tsen <dtsen@linux.ibm.com>
+>> ---
+>>   arch/powerpc/crypto/Kconfig  | 17 +++++++++++++++++
+>>   arch/powerpc/crypto/Makefile | 13 +++++++++++++
+>>   2 files changed, 30 insertions(+)
+> Stephen mentioned this before, your patches must compile one-by-one.
+> This patch doesn't build by itself so you should fix it.
 >
-> Most of this code is dead, I'll give more instructions in a reply to 
-> patch 8.
->
->> +    unsigned long guest_eentry;
->> +    unsigned long host_eentry;
->> +    int (*vcpu_run)(struct kvm_run *run, struct kvm_vcpu *vcpu);
->> +    int (*handle_exit)(struct kvm_run *run, struct kvm_vcpu *vcpu);
->> +
->> +    /* Host registers preserved across guest mode execution */
->> +    unsigned long host_stack;
->> +    unsigned long host_gp;
->> +    unsigned long host_pgd;
->> +    unsigned long host_pgdhi;
->> +    unsigned long host_entryhi;
->> +
->> +    /* Host CSR registers used when handling exits from guest */
->> +    unsigned long badv;
->> +    unsigned long host_estat;
->> +    unsigned long badi;
->> +    unsigned long host_ecfg;
->> +    unsigned long host_percpu;
->> +
->> +    /* GPRS */
->> +    unsigned long gprs[32];
->> +    unsigned long pc;
->> +
->> +    /* FPU State */
->> +    struct loongarch_fpu fpu FPU_ALIGN;
->> +    /* Which auxiliary state is loaded (KVM_LOONGARCH_AUX_*) */
->> +    unsigned int aux_inuse;
->> +
->> +    /* CSR State */
->> +    struct loongarch_csrs *csr;
->> +
->> +    /* GPR used as IO source/target */
->> +    u32 io_gpr;
->> +
->> +    struct hrtimer swtimer;
->> +    /* Count timer control KVM register */
->> +    u32 count_ctl;
->> +
->> +    /* Bitmask of exceptions that are pending */
->> +    unsigned long irq_pending;
->> +    /* Bitmask of pending exceptions to be cleared */
->> +    unsigned long irq_clear;
->> +
->> +    /* Cache some mmu pages needed inside spinlock regions */
->> +    struct kvm_mmu_memory_cache mmu_page_cache;
->> +
->> +    /* vcpu's vpid is different on each host cpu in an smp system */
->> +    u64 vpid[NR_CPUS];
->
-> In _kvm_check_vmid(), you already have
->
-> +    if (migrated || (ver != old)) {
-> +        _kvm_update_vpid(vcpu, cpu);
-> +        trace_kvm_vpid_change(vcpu, vcpu->arch.vpid[cpu]);
-> +    }
->
-> so a vpid will never be recycled if a vCPU migrates from physical CPU 
-> A to B and back to A.
->
-> So please keep the current VPID in the per-cpu struct vmcs, and you 
-> can just copy it from there in _kvm_check_vmid().
-
-Thanks,  that is to say we should remove the vpid[NR_CPUS] array and it 
-is enough to use only one vpid variable?
-
-Thanks
-Tianrui Zhao
-
->
->> +    /* Period of stable timer tick in ns */
->> +    u64 timer_period;
->> +    /* Frequency of stable timer in Hz */
->> +    u64 timer_mhz;
->> +    /* Stable bias from the raw time */
->> +    u64 timer_bias;
->> +    /* Dynamic nanosecond bias (multiple of timer_period) to avoid 
->> overflow */
->> +    s64 timer_dyn_bias;
->> +    /* Save ktime */
->> +    ktime_t stable_ktime_saved;
->> +
->> +    u64 core_ext_ioisr[4];
->> +
->> +    /* Last CPU the VCPU state was loaded on */
->> +    int last_sched_cpu;
->> +    /* Last CPU the VCPU actually executed guest code on */
->> +    int last_exec_cpu;
->> +
->> +    u8 fpu_enabled;
->
-> This field is always true, please remove it.
-
-Thanks, i will remove this variable.
-
-Thanks
-Tianrui Zhao
-
->
->> +    struct kvm_guest_debug_arch guest_debug;
->
-> This struct is empty, please remove it.
-
-Ok, I will remove it.
-
-Thanks
-Tianrui Zhao
-
->
-> Paolo
-
+> Thanks,
