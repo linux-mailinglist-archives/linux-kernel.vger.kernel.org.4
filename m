@@ -2,117 +2,163 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F20A69E4B1
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 17:31:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A077269E4B7
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 17:33:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234470AbjBUQbt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Feb 2023 11:31:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58186 "EHLO
+        id S234589AbjBUQd5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Feb 2023 11:33:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59982 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234165AbjBUQbn (ORCPT
+        with ESMTP id S234406AbjBUQdy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Feb 2023 11:31:43 -0500
-Received: from mail.marcansoft.com (marcansoft.com [212.63.210.85])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 964A62D56;
-        Tue, 21 Feb 2023 08:31:34 -0800 (PST)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (No client certificate requested)
-        (Authenticated sender: lina@asahilina.net)
-        by mail.marcansoft.com (Postfix) with ESMTPSA id 092973FA55;
-        Tue, 21 Feb 2023 16:31:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=asahilina.net;
-        s=default; t=1676997093;
-        bh=jy36nlq0P5xs/QWgM6Zr80oO0jn/1vgYkz1bjKsF2gI=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To;
-        b=F4qDXdqKF6MZKkXDlcljLC80li+ZPN1ugbdvCvR9PgxTp1Y/4GpXP/kUMmnR/agKB
-         ZX+FgF7Ab3G5sx//saRUW3rfz7gStFjI544Wzk1+fLkYN9IoRnPfjfpIOdbLLlcbui
-         535lHeME192rwIDJ2kkpZAecsJn8pQvofTevWVEthoUakqWiqRlQqckSpY5OHWwX2p
-         ydD2RB3GHkf2xKvgERWFKovlYqqVYngN7d+dlZ1u+Zz1sOhB/i0f59S5/9SFXX0A0l
-         JeKyijG13bYiXTFFj2o4+RKs98rV+602tr1NqqpyBSUTn3+sIsCbJARNBGIwRs2tyO
-         m+i+sVGqI1xIQ==
-Message-ID: <7b93bf74-abdc-f8c1-9a12-7c7f080f9e19@asahilina.net>
-Date:   Wed, 22 Feb 2023 01:31:28 +0900
+        Tue, 21 Feb 2023 11:33:54 -0500
+Received: from mail-ua1-x934.google.com (mail-ua1-x934.google.com [IPv6:2607:f8b0:4864:20::934])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B21E31C58F
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Feb 2023 08:33:52 -0800 (PST)
+Received: by mail-ua1-x934.google.com with SMTP id f20so935735uam.3
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Feb 2023 08:33:52 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112; t=1676997232;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=P5QwKbkm/iOD0eivN0JrThpRZ2kVJDMNRvNnQDn2lDA=;
+        b=bLISuwzeGIS8YsfOGNVhMY7o3t/I8jG9xLtk8algVvWbUp3rqa3pSHW3El2RyqBzx8
+         mzx5XDR+nbzv97GJujE0YSjGSkoUeLpBvCItgnLFo7AdALEccac+WdfHxj8iNuG45FXO
+         80iupZjQuzPUN7pzHKFrizo6Q9X+Cs3TSBw4Wr9W3WuuQX5H+waoDql8MJwXdyV5bbyK
+         CIsWz8J2MkN+qftTf6w9SXxP9XQexWox+oGSZd2Avfq3NzXlI9pazULMf6Krc1cVrM8k
+         YvGzh4r3cClx/jLw2xBf9uXbxm5dwD75OzNSb7LRAd2sM7I3v0YnBQN5p0EkdQNN6oeB
+         idLg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1676997232;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=P5QwKbkm/iOD0eivN0JrThpRZ2kVJDMNRvNnQDn2lDA=;
+        b=M8v9spwX5d4GaHywU1YAyW/3AryzC7B0/o02ilKv2KiGMORiDMzexahBiYXUScZeJ/
+         LlhS6UsyiNJ3T0ojN64DP6h9RRSm582qrVx0viJZKdFI2M+eXTM480PEJXeYD0+dovKE
+         8ET9i/zZARae1RdDM4MykwbzJqY/7dHYjff+2qM4ZDkZxoZYeBM5i2aq/XQNEBm1RKdA
+         CjzJBgoXl0GAS0s5KpQkTYk2z7EihvQROaWlB8LPNNSipoZ422XFOd6Rv/T3+7CxKPyW
+         R58SGGMU/AcyA5xQMmhVhe00GzvtYtmK4xqblacHHNL2sDYcyHuP24bckkAop+R/34eg
+         G4Tw==
+X-Gm-Message-State: AO0yUKUluH+Wmz85bmQHWQUsFUn9vW+zCmVclChSw8MZBImN91Qd8YLn
+        0XF+ppMmE2dOnT8A+Jb6kWSC9hm5eGrSjeQkzSkxlQ==
+X-Google-Smtp-Source: AK7set+E3SnRZ3Fn68UCuWNhXRHpJ+sjMpQ0ZiyBUMfYfhAN6dSMGYPcTe2Jov2CFDVOkG1EKEXhmFzlvD0AhbEKhuw=
+X-Received: by 2002:a05:6122:71b:b0:401:72fb:a212 with SMTP id
+ 27-20020a056122071b00b0040172fba212mr1118157vki.27.1676997231766; Tue, 21 Feb
+ 2023 08:33:51 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH] rust: time: New module for timekeeping functions
-Content-Language: en-US
-To:     Thomas Gleixner <tglx@linutronix.de>,
-        Boqun Feng <boqun.feng@gmail.com>
-Cc:     Miguel Ojeda <ojeda@kernel.org>,
-        Alex Gaynor <alex.gaynor@gmail.com>,
-        Wedson Almeida Filho <wedsonaf@gmail.com>,
-        Gary Guo <gary@garyguo.net>,
-        =?UTF-8?Q?Bj=c3=b6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
-        John Stultz <jstultz@google.com>,
-        Stephen Boyd <sboyd@kernel.org>, linux-kernel@vger.kernel.org,
-        rust-for-linux@vger.kernel.org, asahi@lists.linux.dev
-References: <20230221-gpu-up-time-v1-1-bf8fe74b7f55@asahilina.net>
- <87v8jvnqq4.ffs@tglx> <Y/TP6as7qqwfcI42@boqun-archlinux>
- <87h6vfnh0f.ffs@tglx>
-From:   Asahi Lina <lina@asahilina.net>
-In-Reply-To: <87h6vfnh0f.ffs@tglx>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20230218002819.1486479-1-jthoughton@google.com>
+ <20230218002819.1486479-10-jthoughton@google.com> <CAHS8izPDXHan7bwaiLO6mfNgjVMm=LRqUcuaCJbu8Wb_NN7kTw@mail.gmail.com>
+In-Reply-To: <CAHS8izPDXHan7bwaiLO6mfNgjVMm=LRqUcuaCJbu8Wb_NN7kTw@mail.gmail.com>
+From:   James Houghton <jthoughton@google.com>
+Date:   Tue, 21 Feb 2023 08:33:15 -0800
+Message-ID: <CADrL8HXCopaYXZz_PO-6k4xnER+fAUjiNBu2=qp6NUyN1XeDBg@mail.gmail.com>
+Subject: Re: [PATCH v2 09/46] mm: add MADV_SPLIT to enable HugeTLB HGM
+To:     Mina Almasry <almasrymina@google.com>
+Cc:     Mike Kravetz <mike.kravetz@oracle.com>,
+        Muchun Song <songmuchun@bytedance.com>,
+        Peter Xu <peterx@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        David Hildenbrand <david@redhat.com>,
+        David Rientjes <rientjes@google.com>,
+        Axel Rasmussen <axelrasmussen@google.com>,
+        "Zach O'Keefe" <zokeefe@google.com>,
+        Manish Mishra <manish.mishra@nutanix.com>,
+        Naoya Horiguchi <naoya.horiguchi@nec.com>,
+        "Dr . David Alan Gilbert" <dgilbert@redhat.com>,
+        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Baolin Wang <baolin.wang@linux.alibaba.com>,
+        Miaohe Lin <linmiaohe@huawei.com>,
+        Yang Shi <shy828301@gmail.com>,
+        Frank van der Linden <fvdl@google.com>,
+        Jiaqi Yan <jiaqiyan@google.com>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 22/02/2023 01.02, Thomas Gleixner wrote:
-> On Tue, Feb 21 2023 at 06:06, Boqun Feng wrote:
->> To me, there seems two options to provide Rust types for kernel time
->> management:
->>
->> *	Use KTime which maps to ktime_t, then we have the similar
->> 	semantics around it: sometimes it's a duration, sometimes it's
->> 	a point of time.. but I know "this is a safe language, you
->> 	should do more" ;-)
->>
->> *	Introduce kernel's own types, e.g. BootTime, RawTime, TAI,
->> 	RealTime, and make them play with Duration (actually I'd prefer
->> 	we have own Duration, because Rust core::time::Duration takes
->> 	more than u64), something like below:
->>
->>
->> 	pub struct BootTime {
->> 	    d: Duration
->> 	}
->>
->> 	impl BootTime {
->> 	    fn now() -> Self {
->> 	        unsafe { BootTime { d: ktime_to_duration(ktime_get_boottime())} }
->> 	    }
->> 	    fn add(self, d: Duration) -> Self {
->> 	        <Add a duration, similar to ktime_add>
->> 	    }
->> 	    fn sub(self, other: Self) -> Duration {
->> 	        ...
->> 	    }
-> 
-> I'm not rusty enough, but you really want two types:
-> 
->     timestamp and timedelta
-> 
-> timestamp is an absolute time on a specific clock which is read via
-> now() and you can add time deltas to it. The latter is required for
-> arming an absolute timer on the clock.
-> 
-> timedelta is a relative time and completely independent of any
-> clock. That's what you get when you subtract two timestamps, but you can
-> also initialize it from a constant or some other source. timedelta can
-> be used to arm a relative timer on any clock.
+On Fri, Feb 17, 2023 at 5:58 PM Mina Almasry <almasrymina@google.com> wrote=
+:
+>
+> On Fri, Feb 17, 2023 at 4:28=E2=80=AFPM James Houghton <jthoughton@google=
+.com> wrote:
+> >
+> > Issuing ioctl(MADV_SPLIT) on a HugeTLB address range will enable
+> > HugeTLB HGM. MADV_SPLIT was chosen for the name so that this API can be
+> > applied to non-HugeTLB memory in the future, if such an application is
+> > to arise.
+> >
+> > MADV_SPLIT provides several API changes for some syscalls on HugeTLB
+> > address ranges:
+> > 1. UFFDIO_CONTINUE is allowed for MAP_SHARED VMAs at PAGE_SIZE
+> >    alignment.
+> > 2. read()ing a page fault event from a userfaultfd will yield a
+> >    PAGE_SIZE-rounded address, instead of a huge-page-size-rounded
+> >    address (unless UFFD_FEATURE_EXACT_ADDRESS is used).
+> >
+> > There is no way to disable the API changes that come with issuing
+> > MADV_SPLIT. MADV_COLLAPSE can be used to collapse high-granularity page
+> > table mappings that come from the extended functionality that comes wit=
+h
+> > using MADV_SPLIT.
+> >
+>
+> So is a hugetlb page or VMA that has been MADV_SPLIT + MADV_COLLAPSE
+> distinct from a hugetlb page or vma that has not been? I thought
+> COLLAPSE would reverse the effects on SPLIT completely.
 
-If all clocks end up as the same `timestamp` though, then this isn't
-fully safe, because you could subtract `timestamp`s that came from
-different clocks and the result would be meaningless. That's why the
-Rust std Instant is specifically tied to one and only one system clock
-on each platform.
+Right now, MADV_COLLAPSE does *not* completely undo the effects of an
+MADV_SPLIT. The API changes that come from MADV_SPLIT aren't undone
+with an MADV_COLLAPSE.
 
-~~ Lina
+>
+> > For post-copy live migration, the expected use-case is:
+> > 1. mmap(MAP_SHARED, some_fd) primary mapping
+> > 2. mmap(MAP_SHARED, some_fd) alias mapping
+> > 3. MADV_SPLIT the primary mapping
+> > 4. UFFDIO_REGISTER/etc. the primary mapping
+> > 5. Copy memory contents into alias mapping and UFFDIO_CONTINUE the
+> >    corresponding PAGE_SIZE sections in the primary mapping.
+> >
+>
+> Huh, so MADV_SPLIT doesn't actually split an existing PMD mapping into
+> high granularity mappings. Instead it says that future mappings may be
+> high granularity? I assume they may not even be high granularity, like
+> if the alias mapping faulted in a full hugetlb page (without
+> UFFDIO_CONTINUE) that page would be regular mapped not high
+> granularity mapped.
+
+MADV_SPLIT just means "userspace is aware that they are able to start
+mapping HugeTLB pages at high-granularity". Right now the only way to
+get high-granularity mappings is with UFFDIO_CONTINUE, but there may
+be other ways in the future.
+
+As of this series, if you MADV_SPLIT a HugeTLB VMA and you aren't
+using userfaultfd minor faults, it's basically a no-op. The mappings
+that are created will still be huge. I could change this, but I don't
+really see a reason to right now.
+
+>
+> This may be bikeshedding but I do think a clearer name is warranted.
+> Maybe MADV_MAY_SPLIT or something.
+
+I agree -- MADV_MAY_SPLIT more accurately describes the HugeTLB
+functionality. I really don't mind what the MADV is called.
+
+I think enabling the high-granularity userfaultfd bits with a
+userfaultfd feature[1] worked reasonably well. There is some API
+discussion in that thread[1].
+
+[1]: https://lore.kernel.org/linux-mm/20221021163703.3218176-34-jthoughton@=
+google.com/
