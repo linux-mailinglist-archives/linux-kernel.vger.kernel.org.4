@@ -2,154 +2,210 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 13B3B69DE43
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 11:55:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 40AD169DE46
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 11:55:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233886AbjBUKzD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Feb 2023 05:55:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54688 "EHLO
+        id S233908AbjBUKzj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Feb 2023 05:55:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55168 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233085AbjBUKzA (ORCPT
+        with ESMTP id S233085AbjBUKzh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Feb 2023 05:55:00 -0500
-Received: from sender4-op-o14.zoho.com (sender4-op-o14.zoho.com [136.143.188.14])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E54522DD9;
-        Tue, 21 Feb 2023 02:54:59 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1676976888; cv=none; 
-        d=zohomail.com; s=zohoarc; 
-        b=KjPMeoyqZu4ErEypKV+XJEq7SuWGgDzzP8XEsMvJlnjUl5PgSP8+YeXekiswzGaK1pKuJt1TqndiJ8OMwTf37dE2B4tK8N1LbVrR12PpuRTe/e99AbOyCJZMDAK45sVpiKNpKE4OBxhIU03RZ4TgU8cRo6ZAdTmOY0kH0EixsXo=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
-        t=1676976888; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:To; 
-        bh=+kAe8bhUK7GfO+tPODkq1rfj3mCfxHEC3ZKDGaPAiLk=; 
-        b=j0in2oaFknUWsrI5/CV/nx7NQ8z5ipesvl2mV5n+Gpx5OXzkHZ4YaFlChTeCkFL5/jTuNUkP+SxCXzFJMBWI2y0e5/GTofVlMhimkNwQJofElC/v2fSXpnj5FJrQUVoMbeR+yqO5qyNu40pODUFmjNSuL9FfpIJ6XJCFZNeL8x4=
-ARC-Authentication-Results: i=1; mx.zohomail.com;
-        dkim=pass  header.i=arinc9.com;
-        spf=pass  smtp.mailfrom=arinc.unal@arinc9.com;
-        dmarc=pass header.from=<arinc.unal@arinc9.com>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1676976888;
-        s=zmail; d=arinc9.com; i=arinc.unal@arinc9.com;
-        h=Message-ID:Date:Date:MIME-Version:Subject:Subject:To:To:Cc:Cc:References:From:From:In-Reply-To:Content-Type:Content-Transfer-Encoding:Message-Id:Reply-To;
-        bh=+kAe8bhUK7GfO+tPODkq1rfj3mCfxHEC3ZKDGaPAiLk=;
-        b=IhdUcjKEHHREgfODat6WKVHP8Ibx8hW9c52OifGmJ4mnA+gfpYq8bkB3Qg1mEVKp
-        BwZP3VTiEgHGKiKdDJ8uroki5eQ8zVsN9/ueCaRqMUXvzLgPqjeZBfna5X1SyXxCfG1
-        D4QqZUX1vh+xPFdMVkQmyvT574CFPDd4ocYxIOYI=
-Received: from [10.10.10.3] (37.120.152.236 [37.120.152.236]) by mx.zohomail.com
-        with SMTPS id 1676976886766984.3835080966479; Tue, 21 Feb 2023 02:54:46 -0800 (PST)
-Message-ID: <03ae6aab-1492-f8df-2432-cfca52a44131@arinc9.com>
-Date:   Tue, 21 Feb 2023 13:54:43 +0300
+        Tue, 21 Feb 2023 05:55:37 -0500
+Received: from esa4.hgst.iphmx.com (esa4.hgst.iphmx.com [216.71.154.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BAB6022DFF
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Feb 2023 02:55:35 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
+  t=1676976935; x=1708512935;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=dottw58DX6NpLcrIxoBfsO6WcV5uJQI3WvU4f4U5ZFg=;
+  b=XSJPVxhTKnDHw5a/i/BWirym4bDLhWG7FuyEVvwAz7cCjhPMlfIaBe2S
+   KmZxJDQLLxxDtz44F0Y0AM8TiRL/ooBxIn9m2b5eTtG63qMtqOld0f/+9
+   qKiSxgYlLa6UeBz0PR6ATfTRqKMGOSWdlbQfqxDYxamL9OImN+0tWaUDD
+   MynWk8ujp7DH0NQy5Bvhb+0JjuFw2YO82S+X4RvbO+jQiqJ4Hs7mnw/ZF
+   QHA+R06/faW1+txnl7wdHFqnipwx11/YDpQ1GkXOAc4ENeB2E0e1wuMkx
+   jyDT2UowVuZVDQE8YELfOnNeuYpvQauAmSL75lVystIsFF8DKze2xcZ6o
+   Q==;
+X-IronPort-AV: E=Sophos;i="5.97,315,1669046400"; 
+   d="scan'208";a="222092270"
+Received: from h199-255-45-14.hgst.com (HELO uls-op-cesaep01.wdc.com) ([199.255.45.14])
+  by ob1.hgst.iphmx.com with ESMTP; 21 Feb 2023 18:55:33 +0800
+IronPort-SDR: 9okhnv44RoUVcSz5LbqDEwwaSBrXVXhCQWpENTst6ltr7s+8WnuaP9nL/e1AVJ0jqbT0kAW7+Z
+ krQsjmpimkFliHOEpnYw4HKSoINR8v85k5IA1/TilFbOaHFfdGdJbfpqINLtAFTKwvpamHQVz6
+ m/pB+MhVTAxeXKocuC6+m15edARKWb5wM7lXPpZVRI3vAg0kS75fTPXxJhrUjHuTbC8IKvzGae
+ PwqaTumpQMrMzkJakdtxUytFpCWPTmX5LvyW3WJKl2oaNVOcnzgaXnaxLuN9vfA0v1pFKqtNQX
+ 6Zk=
+Received: from uls-op-cesaip01.wdc.com ([10.248.3.36])
+  by uls-op-cesaep01.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 21 Feb 2023 02:12:33 -0800
+IronPort-SDR: R2TXYUA1RIFeSbmCyz9If4UpXZyk4D3MyMgWFn0h9aDmNoJz2GHRGZWv8xBoBuneK2kuxnxRfh
+ SUgCbM1rNxADB+Q/XZ2cYybNiQvrmvLpI0B+QN2KcrNNCW1igTTyCYzhGpBKQTSvbjfrrcYNPE
+ avZNwiqJje4k6qMp7lwvKlA32Sa/ewFYoLTDyjjbIqGjL4L5aRegX7h7FkllYYvkEsfYmcedtS
+ miVOj+MAp7esRFPGTNX7OwvAQj9kbHsmoyrgdhAaM9WLJAda1nFpUFmCYh67+4Czzj+veVdvx9
+ lus=
+WDCIronportException: Internal
+Received: from usg-ed-osssrv.wdc.com ([10.3.10.180])
+  by uls-op-cesaip01.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 21 Feb 2023 02:55:34 -0800
+Received: from usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1])
+        by usg-ed-osssrv.wdc.com (Postfix) with ESMTP id 4PLbmP1zRvz1RvTr
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Feb 2023 02:55:33 -0800 (PST)
+Authentication-Results: usg-ed-osssrv.wdc.com (amavisd-new); dkim=pass
+        reason="pass (just generated, assumed good)"
+        header.d=opensource.wdc.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=
+        opensource.wdc.com; h=content-transfer-encoding:content-type
+        :in-reply-to:organization:from:references:to:content-language
+        :subject:user-agent:mime-version:date:message-id; s=dkim; t=
+        1676976931; x=1679568932; bh=dottw58DX6NpLcrIxoBfsO6WcV5uJQI3WvU
+        4f4U5ZFg=; b=RqStWAGmwTKsaOFcjGMNiMQAycpsAdG0h/DujjZpLQIKf7RN8AR
+        hlck4UC7t3C4HPOTq6dLYjS83znf9raxBpss1R2Imt+mIRvlo37r/LQaFFafom5m
+        fo1dC3WtrmO8LIVKFXaK8WrSvCKPTEsrWfq30tZ2bZVawdtnF2tH6XJ5zzWCDyX3
+        FyGgmFhMi+FcqWn0qU+cpNQ5JO6xC5eKzPQvEmLDA5i/SsuzQ71rt1xFWu4jTwU6
+        n5xK/cgsCi+LGWrEf+BFxlmMWE3QUntug+ym4lBV+Wg0DoLwkxOTdwavBF3ruDie
+        jvTKml0nhnsb97bbB1ki8MpDlF0E85A0Gpw==
+X-Virus-Scanned: amavisd-new at usg-ed-osssrv.wdc.com
+Received: from usg-ed-osssrv.wdc.com ([127.0.0.1])
+        by usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id vn5yIggRSsa0 for <linux-kernel@vger.kernel.org>;
+        Tue, 21 Feb 2023 02:55:31 -0800 (PST)
+Received: from [10.225.163.9] (unknown [10.225.163.9])
+        by usg-ed-osssrv.wdc.com (Postfix) with ESMTPSA id 4PLbmJ0q4rz1RvLy;
+        Tue, 21 Feb 2023 02:55:27 -0800 (PST)
+Message-ID: <38ae72c9-0f0b-1a94-d2e0-f4ea80e94705@opensource.wdc.com>
+Date:   Tue, 21 Feb 2023 19:55:26 +0900
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH 2/2] mips: ralink: make SOC_MT7621 select PINCTRL
-To:     Sergio Paracuellos <sergio.paracuellos@gmail.com>
-Cc:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        John Crispin <john@phrozen.org>, linux-mips@vger.kernel.org,
-        linux-kernel@vger.kernel.org, erkin.bozoglu@xeront.com
-References: <20230221092435.22069-1-arinc.unal@arinc9.com>
- <20230221092435.22069-2-arinc.unal@arinc9.com>
- <CAMhs-H9qLw6uhjPnFWovQBMFe38y95Q_VvG8Bj9wovSR+1J_2g@mail.gmail.com>
- <85a39e81-51a3-e90f-622e-f2cc7528aa92@arinc9.com>
- <CAMhs-H_eLwxjA7-EKGSyKOZLQF05N-FNASZWtGgsV2S=txU=yQ@mail.gmail.com>
+ Thunderbird/102.7.2
+Subject: Re: [PATCH v2 9/9] PCI: rockchip: Add parameter check for RK3399 PCIe
+ endpoint core set_msi()
 Content-Language: en-US
-From:   =?UTF-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>
-In-Reply-To: <CAMhs-H_eLwxjA7-EKGSyKOZLQF05N-FNASZWtGgsV2S=txU=yQ@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-ZohoMailClient: External
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+To:     Rick Wertenbroek <rick.wertenbroek@gmail.com>
+Cc:     alberto.dassatti@heig-vd.ch, xxm@rock-chips.com,
+        rick.wertenbroek@heig-vd.ch, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Shawn Lin <shawn.lin@rock-chips.com>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        =?UTF-8?Q?Krzysztof_Wilczy=c5=84ski?= <kw@linux.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Jani Nikula <jani.nikula@intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Mikko Kovanen <mikko.kovanen@aavamobile.com>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-pci@vger.kernel.org
+References: <20230214140858.1133292-1-rick.wertenbroek@gmail.com>
+ <20230214140858.1133292-10-rick.wertenbroek@gmail.com>
+ <ebbddcfa-99e5-efda-0eab-fbd61a33e2c3@opensource.wdc.com>
+ <CAAEEuhpDTmAvBZhC9RCueOvqbLb=AttV1KxJrOUBcjHQrpVXmA@mail.gmail.com>
+From:   Damien Le Moal <damien.lemoal@opensource.wdc.com>
+Organization: Western Digital Research
+In-Reply-To: <CAAEEuhpDTmAvBZhC9RCueOvqbLb=AttV1KxJrOUBcjHQrpVXmA@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 21.02.2023 13:21, Sergio Paracuellos wrote:
-> On Tue, Feb 21, 2023 at 11:09 AM Arınç ÜNAL <arinc.unal@arinc9.com> wrote:
+On 2/21/23 19:47, Rick Wertenbroek wrote:
+> On Wed, Feb 15, 2023 at 2:39 AM Damien Le Moal
+> <damien.lemoal@opensource.wdc.com> wrote:
 >>
->> On 21.02.2023 12:38, Sergio Paracuellos wrote:
->>> Hi Arınç,
+>> On 2/14/23 23:08, Rick Wertenbroek wrote:
+>>> The RK3399 PCIe endpoint core supports only a single PCIe physcial
+>>> function (function number 0), therefore return -EINVAL if set_msi() is
+>>> called with a function number greater than 0.
+>>> The PCIe standard only allows the multi message capability (MMC) value
+>>> to be up to 0x5 (32 messages), therefore return -EINVAL if set_msi() is
+>>> called with a MMC value of over 0x5.
 >>>
->>> On Tue, Feb 21, 2023 at 10:24 AM <arinc9.unal@gmail.com> wrote:
->>>>
->>>> From: Arınç ÜNAL <arinc.unal@arinc9.com>
->>>>
->>>> Currently, out of every Ralink SoC, only the dt-binding of the MT7621 SoC
->>>> uses pinctrl. Because of this, PINCTRL is not selected at all. Make
->>>> SOC_MT7621 select PINCTRL.
->>>>
->>>> Remove PINCTRL_MT7621, enabling it for the MT7621 SoC will be handled under
->>>> the PINCTRL_MT7621 option.
->>>>
->>>> Signed-off-by: Arınç ÜNAL <arinc.unal@arinc9.com>
->>>> ---
->>>>    arch/mips/ralink/Kconfig | 2 +-
->>>>    1 file changed, 1 insertion(+), 1 deletion(-)
->>>>
->>>> diff --git a/arch/mips/ralink/Kconfig b/arch/mips/ralink/Kconfig
->>>> index 06031796c87b..83e61e147b90 100644
->>>> --- a/arch/mips/ralink/Kconfig
->>>> +++ b/arch/mips/ralink/Kconfig
->>>> @@ -54,7 +54,7 @@ choice
->>>>                   select HAVE_PCI
->>>>                   select PCI_DRIVERS_GENERIC
->>>>                   select SOC_BUS
->>>> -               select PINCTRL_MT7621
->>>> +               select PINCTRL
->>>>
->>>>                   help
->>>>                     The MT7621 system-on-a-chip includes an 880 MHz MIPS1004Kc
->>>> --
->>>> 2.37.2
->>>>
+>>> Signed-off-by: Rick Wertenbroek <rick.wertenbroek@gmail.com>
+>>> ---
+>>>  drivers/pci/controller/pcie-rockchip-ep.c | 10 ++++++++++
+>>>  1 file changed, 10 insertions(+)
 >>>
->>> Which git tree are you working against? CONFIG_SOC_MT7621 is not
->>> selecting PINCTRL_MT7621 at all in v6.2 [0]. I think it should select
+>>> diff --git a/drivers/pci/controller/pcie-rockchip-ep.c b/drivers/pci/controller/pcie-rockchip-ep.c
+>>> index b7865a94e..80634b690 100644
+>>> --- a/drivers/pci/controller/pcie-rockchip-ep.c
+>>> +++ b/drivers/pci/controller/pcie-rockchip-ep.c
+>>> @@ -294,6 +294,16 @@ static int rockchip_pcie_ep_set_msi(struct pci_epc *epc, u8 fn, u8 vfn,
+>>>       struct rockchip_pcie *rockchip = &ep->rockchip;
+>>>       u32 flags;
+>>>
+>>> +     if (fn) {
+>>> +             dev_err(&epc->dev, "This endpoint controller only supports a single physical function\n");
+>>> +             return -EINVAL;
+>>> +     }
 >>
->> mips/linux.git mips-next tree.
+>> Checking this here is late... Given that at most only one physical
+>> function is supported, the check should be in rockchip_pcie_parse_ep_dt().
+>> Something like:
 >>
->> https://git.kernel.org/pub/scm/linux/kernel/git/mips/linux.git/log/
-> 
-> I see :). Thanks!
-> 
+>>         err = of_property_read_u8(dev->of_node, "max-functions",
+>>                                   &ep->epc->max_functions);
 >>
->>> 'PINCTRL_MT7621' and the 'select PINCTRL' stuff added inside the
->>> PINCTRL_RALINK option in [1].
+>>         if (err < 0 || ep->epc->max_functions > 1)
 >>
->> I'm working on that, although not exactly the way you describe here, on
->> this branch of mine.
-> 
-> So, in which way do you get PINCTRL_MT7621 automatically selected for
-> this SoC now? I think looking into the Kconfig for ralink pinctrl [0]
-> all of them at the end need the missing PINCTRL option to be added and
-> all of them are currently selecting PINCTRL_RALINK . Hence just adding
-> the PINCTRL option inside PINCTRL_RALINK looks convenient.
-
-PINCTRL_RALINK won't appear on the menuconfig unless PINCTRL is enabled. 
-So this'd be pointless.
-
- From what I see on other MIPS and ARM platforms, PINCTRL is supposed to 
-be enabled at the platform option, like CONFIG_RALINK. However, the 
-Ralink SoCs except MT7621, or rather the DTs for them, do not use the 
-pinctrl driver so I only enable it for MT7621, and keep it optional for 
-the remaining SoCs.
-
-MediaTek pinctrl kconfig enables the pinctrl driver specific to the SoC 
-by default, if the said SoC is enabled. I'm keeping this method when 
-moving ralink pinctrl to mediatek with the series below.
-
-So once the pinctrl driver is defined on the DTs for the remaining SoCs, 
-we can just put PINCTRL under CONFIG_RALINK and everything will work fine.
-
-> 
+>>                 ep->epc->max_functions = 1;
 >>
->> https://github.com/arinc9/linux/commits/ralink-pinctrl
 > 
-> Wow! Tons of changes here ;-). Keep going!!
+> Yes, this could be moved to the probe, thanks.
+> 
+>> And all the macros with the (fn) argument could also be simplified
+>> (argument fn removed) since fn will always be 0.
+> 
+> These functions cannot be simplified because they have to follow the signature
+> given by "pci_epc_ops" (include/linux/pci-epc.h). And this signature has the
+> function number as a parameter. If we change the function signature we won't
+> be able to assign these functions to the pc_epc_ops structure
 
-Thanks a lot, I've started to refactor everything Ralink. With this 
-series, I finalise the work on pinctrl.
+I was not suggesting to change the functions signature. I was suggesting
+dropping the fn argument for the *macros*, e.g.
 
-Arınç
+ROCKCHIP_PCIE_EP_FUNC_BASE(fn) -> ROCKCHIP_PCIE_EP_FUNC_BASE
+
+since fn is always 0.
+
+That said, I am not entirely sure if the limit really is 1 function at most. The
+TRM seems to be suggesting that up to 4 functions can be supported...
+
+[...]
+
+>> Another nice cleanup: define ROCKCHIP_PCIE_EP_MSI_CTRL_REG to include the
+>> ROCKCHIP_PCIE_EP_FUNC_BASE(fn) addition so that we do not have to do it
+>> here all the time.
+> 
+> Yes, this could be an improvement but this is the way it is written
+> everywhere in this
+> driver, I chose to keep it so as to remain coherent with the rest of the driver.
+> Cleaning this is not so important since this code will not be
+> rewritten / changed so
+> often. But I agree that it might be nicer. But, on the other side if
+> at some point
+> support for virtual functions would be added, the offsets would need
+> to be computed
+> based on the virtual function number and the code would be written
+> like it is now,
+> so I suggest keeping this the way it is for now.
+
+Yes, sure, this can be cleaned later.
+
+A more pressing problem is the lack of support for MSIX despite the fact that
+the controller supports that *and* advertize it as a capability. That is what
+was causing my problem with the Linux nvme driver and my prototype nvme epf
+function driver: the host driver was seeing MSIX support (1 vector supported by
+default), and so was allocating one MSIX for the device probe. But on the EP
+end, it is MSI or INTX only... Working on adding that to solve this issue.
+
+-- 
+Damien Le Moal
+Western Digital Research
+
