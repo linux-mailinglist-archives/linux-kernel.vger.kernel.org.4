@@ -2,75 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 39F6169DD8D
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 11:07:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 394D669DD91
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 11:09:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233836AbjBUKHy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Feb 2023 05:07:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44512 "EHLO
+        id S234128AbjBUKJc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Feb 2023 05:09:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45360 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232995AbjBUKHw (ORCPT
+        with ESMTP id S232995AbjBUKJa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Feb 2023 05:07:52 -0500
-Received: from mx.sberdevices.ru (mx.sberdevices.ru [45.89.227.171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05E38196
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Feb 2023 02:07:48 -0800 (PST)
-Received: from s-lin-edge02.sberdevices.ru (localhost [127.0.0.1])
-        by mx.sberdevices.ru (Postfix) with ESMTP id 12C785FD49;
-        Tue, 21 Feb 2023 13:07:46 +0300 (MSK)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sberdevices.ru;
-        s=mail; t=1676974066;
-        bh=kCGIEEIrOqEx79jHMP9Gmz2sP9t0agLEDmq0KjBVZP8=;
-        h=From:To:Subject:Date:Message-ID:Content-Type:MIME-Version;
-        b=lN5oUYhBnOQUvyJHNQazaB5dKKD0r8t8gxpRFP65kc5bGf+zY2d5efjKJPf4iG0aO
-         yrzzfWzxuOXhufqAnb0+mjzMKhb8V7sAFSJfe3+WRodzGRfacSS83nPJDn85d/ThRZ
-         zF3senP2ZZ1BZt+ET9K+N5BDbQfYORKbgJqSdGzEqVUoqe4hpkrU5tgIkhlLCHeq0V
-         XLh3fWyZ5FTHBOoaFUvwMzIfcnw7YoR/0YfDsWs89ypKeRZk/O2X5fOMQ9uhWn9dX2
-         3CxS4+IAC680lZuxOkDWSStBpV6WI7Kq+qwrGRt0GwQJGn6O+CYyjuZm3hgsA2vN78
-         PE+V5bRB2E86w==
-Received: from S-MS-EXCH01.sberdevices.ru (S-MS-EXCH01.sberdevices.ru [172.16.1.4])
-        by mx.sberdevices.ru (Postfix) with ESMTP;
-        Tue, 21 Feb 2023 13:07:44 +0300 (MSK)
-From:   Arseniy Krasnov <AVKrasnov@sberdevices.ru>
-To:     Liang Yang <liang.yang@amlogic.com>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Richard Weinberger <richard@nod.at>,
-        "Vignesh Raghavendra" <vigneshr@ti.com>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-CC:     "linux-mtd@lists.infradead.org" <linux-mtd@lists.infradead.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-amlogic@lists.infradead.org" 
-        <linux-amlogic@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        kernel <kernel@sberdevices.ru>,
-        "Krasnov Arseniy" <oxffffaa@gmail.com>
-Subject: [PATCH v2] mtd: rawnand: meson: initialize struct with zeroes
-Thread-Topic: [PATCH v2] mtd: rawnand: meson: initialize struct with zeroes
-Thread-Index: AQHZRdxXC52Hg9QgTkGFFc963YCP5A==
-Date:   Tue, 21 Feb 2023 10:07:44 +0000
-Message-ID: <6474e163-e61a-e04c-590d-60c674dc7ed9@sberdevices.ru>
-Accept-Language: en-US, ru-RU
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [172.16.1.12]
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <90BD33636B30B148A690A4B10727C254@sberdevices.ru>
-Content-Transfer-Encoding: base64
+        Tue, 21 Feb 2023 05:09:30 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A74988695
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Feb 2023 02:08:43 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1676974122;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=bQngTxIAa7bq5F++Qt1+J5qF8M9CFcFTXwihCMqwxiU=;
+        b=LXYefHCvgn3T8u3hrl1REa7QUrtDqiQN2MhHNZEmr5+d09NFedHeB4dxMuHYax3B2t15tA
+        FjFGWRIrdGJfBoov4P8YzRtcuPtrHVdKuStcmh1ys/uWi6N0HRVdpJmdYdz/mfGPJNN+6x
+        unOX0OwkZ8+AjeIQrx4r5VmTL1N0J+0=
+Received: from mail-wr1-f70.google.com (mail-wr1-f70.google.com
+ [209.85.221.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-358-ogdzya5EMHuhjAhlrgFI6A-1; Tue, 21 Feb 2023 05:08:41 -0500
+X-MC-Unique: ogdzya5EMHuhjAhlrgFI6A-1
+Received: by mail-wr1-f70.google.com with SMTP id n14-20020a5d67ce000000b002bfc2f61048so907625wrw.23
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Feb 2023 02:08:41 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:subject:organization:from
+         :references:cc:to:content-language:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=bQngTxIAa7bq5F++Qt1+J5qF8M9CFcFTXwihCMqwxiU=;
+        b=zkW/CfI34gSch5SkiEO3cIRDPBVLXwDRuzqCi4hehMJs51rtb7D67X0wPk2eMKt2Rm
+         HtOI5TjVkyzxY9FnzwvQ6FoyDNhVCXo2Fg8odO7LsNnZEgTaw+3wZg9JG0OaI3xlz82u
+         XT6KjBHbPtDWd67GbfeaugH62Bjevv2olCPPo6FgZlQ7YCh1ZQFpwMoRyOtgFkXjTIgu
+         QRTu3c6Z97feqhK0Wg54lrVDnROt5NTDaTnV2ocMi0w8hVi5Wp9S0C0k4eYigva0Dm28
+         w07yK0X/ig77/2qrTaC2OJH5R+yJ6qdG4Jx7FPzIXHetI2/mKz8lIV5nL5RFYsX7Lge2
+         HrtA==
+X-Gm-Message-State: AO0yUKXKNxouNzwCzKkFUOm+oDTV8cb1A3EYXZzzpB/93S709g5+G6v9
+        +vXTz66lyQjB5rfFNVcFaTvM9BjmC4l/04DvjIqztJ60Eh/akOszP7q7j3RseM2WnkBzhwAx1r/
+        TgLAzq3Nm3wh4vMrUllhXwXYO
+X-Received: by 2002:adf:fbc8:0:b0:2c5:5ff8:93e5 with SMTP id d8-20020adffbc8000000b002c55ff893e5mr3060436wrs.44.1676974120107;
+        Tue, 21 Feb 2023 02:08:40 -0800 (PST)
+X-Google-Smtp-Source: AK7set+yvZn9hxlDINT7LN34Sejar7rKnrWklRGP11gcX16WuW5/FXenaqtVUV1kKpqHEv+TURtHBg==
+X-Received: by 2002:adf:fbc8:0:b0:2c5:5ff8:93e5 with SMTP id d8-20020adffbc8000000b002c55ff893e5mr3060418wrs.44.1676974119708;
+        Tue, 21 Feb 2023 02:08:39 -0800 (PST)
+Received: from ?IPV6:2003:cb:c707:4800:aecc:dadb:40a8:ce81? (p200300cbc7074800aeccdadb40a8ce81.dip0.t-ipconnect.de. [2003:cb:c707:4800:aecc:dadb:40a8:ce81])
+        by smtp.gmail.com with ESMTPSA id f21-20020a7bcc15000000b003dfdeb57027sm3086701wmh.38.2023.02.21.02.08.38
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 21 Feb 2023 02:08:39 -0800 (PST)
+Message-ID: <1b3e8e88-ed5c-7302-553f-4ddb3400d466@redhat.com>
+Date:   Tue, 21 Feb 2023 11:08:38 +0100
 MIME-Version: 1.0
-X-KSMG-Rule-ID: 4
-X-KSMG-Message-Action: clean
-X-KSMG-AntiSpam-Status: not scanned, disabled by settings
-X-KSMG-AntiSpam-Interceptor-Info: not scanned
-X-KSMG-AntiPhishing: not scanned, disabled by settings
-X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 1.1.2.30, bases: 2023/02/21 02:56:00 #20885447
-X-KSMG-AntiVirus-Status: Clean, skipped
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.2
+Content-Language: en-US
+To:     Andrew Yang <andrew.yang@mediatek.com>,
+        SeongJae Park <sj@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+Cc:     wsd_upstream@mediatek.com, casper.lin@mediatek.com,
+        damon@lists.linux.dev, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org
+References: <20230221090313.15396-1-andrew.yang@mediatek.com>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+Subject: Re: [PATCH] mm/damon/paddr: fix pin page problem
+In-Reply-To: <20230221090313.15396-1-andrew.yang@mediatek.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,36 +90,55 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-VGhpcyBzdHJ1Y3R1cmUgbXVzdCBiZSB6ZXJvZWQsIGJlY2F1c2UgaXQncyBmaWVsZCAnaHctPmNv
-cmUnIGlzIHVzZWQgYXMNCidwYXJlbnQnIGluICdjbGtfY29yZV9maWxsX3BhcmVudF9pbmRleCgp
-JywgYnV0IGl0IHdpbGwgYmUgdW5pbml0aWFsaXplZC4NClRoaXMgaGFwcGVucywgYmVjYXVzZSB3
-aGVuIHRoaXMgc3RydWN0IGlzIG5vdCB6ZXJvZWQsIHBvaW50ZXIgJ2h3JyBpcw0KImluaXRpYWxp
-emVkIiBieSBnYXJiYWdlLCB3aGljaCBpcyB2YWxpZCBwb2ludGVyLCBidXQgcG9pbnRzIHRvIHNv
-bWUNCmdhcmJhZ2UuIFNvICdodycgd2lsbCBiZSBkZXJlZmVyZW5jZWQsIGJ1dCAnY29yZScgY29u
-dGFpbnMgc29tZSByYW5kb20NCmRhdGEgd2hpY2ggd2lsbCBiZSBpbnRlcnByZXRlZCBhcyBwb2lu
-dGVyLiBUaGUgZm9sbG93aW5nIGJhY2t0cmFjZSBpcw0KcmVzdWx0IG9mIGRlcmVmZXJlbmNlIG9m
-IHN1Y2ggcG9pbnRlcjoNCg0KWyAgICAxLjA4MTMxOV0gIF9fY2xrX3JlZ2lzdGVyKzB4NDE0LzB4
-ODIwDQpbICAgIDEuMDg1MTEzXSAgZGV2bV9jbGtfcmVnaXN0ZXIrMHg2NC8weGQwDQpbICAgIDEu
-MDg4OTk1XSAgbWVzb25fbmZjX3Byb2JlKzB4MjU4LzB4NmVjDQpbICAgIDEuMDkyODc1XSAgcGxh
-dGZvcm1fcHJvYmUrMHg3MC8weGYwDQpbICAgIDEuMDk2NDk4XSAgcmVhbGx5X3Byb2JlKzB4Yzgv
-MHgzZTANClsgICAgMS4xMDAwMzRdICBfX2RyaXZlcl9wcm9iZV9kZXZpY2UrMHg4NC8weDE5MA0K
-WyAgICAxLjEwNDM0Nl0gIGRyaXZlcl9wcm9iZV9kZXZpY2UrMHg0NC8weDEyMA0KWyAgICAxLjEw
-ODQ4N10gIF9fZHJpdmVyX2F0dGFjaCsweGI0LzB4MjIwDQpbICAgIDEuMTEyMjgyXSAgYnVzX2Zv
-cl9lYWNoX2RldisweDc4LzB4ZDANClsgICAgMS4xMTYwNzddICBkcml2ZXJfYXR0YWNoKzB4MmMv
-MHg0MA0KWyAgICAxLjExOTYxM10gIGJ1c19hZGRfZHJpdmVyKzB4MTg0LzB4MjQwDQpbICAgIDEu
-MTIzNDA4XSAgZHJpdmVyX3JlZ2lzdGVyKzB4ODAvMHgxNDANClsgICAgMS4xMjcyMDNdICBfX3Bs
-YXRmb3JtX2RyaXZlcl9yZWdpc3RlcisweDMwLzB4NDANClsgICAgMS4xMzE4NjBdICBtZXNvbl9u
-ZmNfZHJpdmVyX2luaXQrMHgyNC8weDMwDQoNCkZpeGVzOiAxZTRkM2JhNjY4ODggKCJtdGQ6IHJh
-d25hbmQ6IG1lc29uOiBmaXggdGhlIGNsb2NrIikNClNpZ25lZC1vZmYtYnk6IEFyc2VuaXkgS3Jh
-c25vdiA8QVZLcmFzbm92QHNiZXJkZXZpY2VzLnJ1Pg0KLS0tDQogZHJpdmVycy9tdGQvbmFuZC9y
-YXcvbWVzb25fbmFuZC5jIHwgMiArLQ0KIDEgZmlsZSBjaGFuZ2VkLCAxIGluc2VydGlvbigrKSwg
-MSBkZWxldGlvbigtKQ0KDQpkaWZmIC0tZ2l0IGEvZHJpdmVycy9tdGQvbmFuZC9yYXcvbWVzb25f
-bmFuZC5jIGIvZHJpdmVycy9tdGQvbmFuZC9yYXcvbWVzb25fbmFuZC5jDQppbmRleCA1ZWUwMTIz
-MWFjNGMuLjMwZTMyNmFkYWJmYyAxMDA2NDQNCi0tLSBhL2RyaXZlcnMvbXRkL25hbmQvcmF3L21l
-c29uX25hbmQuYw0KKysrIGIvZHJpdmVycy9tdGQvbmFuZC9yYXcvbWVzb25fbmFuZC5jDQpAQCAt
-OTkxLDcgKzk5MSw3IEBAIHN0YXRpYyBjb25zdCBzdHJ1Y3QgbXRkX29vYmxheW91dF9vcHMgbWVz
-b25fb29ibGF5b3V0X29wcyA9IHsNCiANCiBzdGF0aWMgaW50IG1lc29uX25mY19jbGtfaW5pdChz
-dHJ1Y3QgbWVzb25fbmZjICpuZmMpDQogew0KLQlzdHJ1Y3QgY2xrX3BhcmVudF9kYXRhIG5mY19k
-aXZpZGVyX3BhcmVudF9kYXRhWzFdOw0KKwlzdHJ1Y3QgY2xrX3BhcmVudF9kYXRhIG5mY19kaXZp
-ZGVyX3BhcmVudF9kYXRhWzFdID0gezB9Ow0KIAlzdHJ1Y3QgY2xrX2luaXRfZGF0YSBpbml0ID0g
-ezB9Ow0KIAlpbnQgcmV0Ow0KIA0KLS0gDQoyLjM1LjANCg==
+On 21.02.23 10:03, Andrew Yang wrote:
+> From: "andrew.yang" <andrew.yang@mediatek.com>
+
+Nit: I'd suggest a different subject
+
+"mm/damon/paddr: fix missing put_page()"
+
+
+Fixes: ?
+Cc: stable ?
+
+
+I think a patch from Willy is queued that converts this code into folios.
+
+> 
+> damon_get_page() would always increase page _refcount and
+> isolate_lru_page() would increase page _refcount if the page's lru
+> flag is set.
+> 
+> If a unevictable page isolated successfully, there will be two more
+> _refcount. The one from isolate_lru_page() will be decreased in
+> putback_lru_page(), but the other one from damon_get_page() will be
+> left behind. This causes a pin page.
+> 
+> Whatever the case, the _refcount from damon_get_page() should be
+> decreased.
+> 
+> Signed-off-by: andrew.yang <andrew.yang@mediatek.com>
+> ---
+>   mm/damon/paddr.c | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/mm/damon/paddr.c b/mm/damon/paddr.c
+> index e1a4315c4be6..56d8abd08fb1 100644
+> --- a/mm/damon/paddr.c
+> +++ b/mm/damon/paddr.c
+> @@ -223,8 +223,8 @@ static unsigned long damon_pa_pageout(struct damon_region *r)
+>   			putback_lru_page(page);
+>   		} else {
+>   			list_add(&page->lru, &page_list);
+> -			put_page(page);
+>   		}
+> +		put_page(page);
+>   	}
+>   	applied = reclaim_pages(&page_list);
+>   	cond_resched();
+
+-- 
+Thanks,
+
+David / dhildenb
+
