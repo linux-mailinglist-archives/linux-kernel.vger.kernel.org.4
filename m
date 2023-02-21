@@ -2,122 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E07B369DCCA
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 10:22:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E3F1269DCD1
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 10:23:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233913AbjBUJW0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Feb 2023 04:22:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33366 "EHLO
+        id S233912AbjBUJXm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Feb 2023 04:23:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34878 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233293AbjBUJWY (ORCPT
+        with ESMTP id S232116AbjBUJXl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Feb 2023 04:22:24 -0500
-Received: from mail-pg1-x542.google.com (mail-pg1-x542.google.com [IPv6:2607:f8b0:4864:20::542])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 269F6244BE;
-        Tue, 21 Feb 2023 01:22:19 -0800 (PST)
-Received: by mail-pg1-x542.google.com with SMTP id p6so2063743pga.0;
-        Tue, 21 Feb 2023 01:22:19 -0800 (PST)
+        Tue, 21 Feb 2023 04:23:41 -0500
+Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B89A38A54
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Feb 2023 01:23:39 -0800 (PST)
+Received: by mail-ed1-x531.google.com with SMTP id cq23so14076439edb.1
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Feb 2023 01:23:39 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=/EZWnYloDEoaRjV5o/SIy5u/G2zUnoLIr0TqDfT5RpQ=;
-        b=Xky1+2wQA6KguiQ8P+DYx0pRguZw34/LiAMMWbHyyHMhijzxuvuAt6p2cQYIfBJRGG
-         C9v3dRenEZmhmvrllDxMl0TjZq7s2Z33T+b8NLFsQGSvnp5PmJvJM9pTzYr7ckH4cUJw
-         Pf+t6FsdLOi43jmQ/CqQjpsc4UPfMF7dMVb2668NQC72nTZ2/jhMNE38HDsKDtK6lX+L
-         8hIL4nb2MlNDqN3W5fju80jqUnRogl702pfQdo7DNBZIMLMffIpBofwtKyNsyvcdKVcL
-         V6xeF4f9K0bmEfdjIIlJSN52UEo5Q6wOuCdQ2MNALbnq2rUxsuPinTh2GfjOLD/MXLYA
-         CYJA==
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=fbTzQmBbVkw2WG9RX4zaVnIA7NHcDhVJSDn4uazMha8=;
+        b=WcNxXJgOyoqCc67id0lYZ4CTspgI/DMh4vHE66IHil5A1QL/Sws+BnpfRV8jnxR9Ix
+         HK1DyCxKbxDj3p/MPxe0HIHIElhmfM9FClpRwSk8aLLoHV7oL0H+2xqa0mUaaf964fB/
+         +VcavxxMzJaSWGpXxpyABv2JYSLsr8mItxmRGKfSybSiFENIP6xIbQLGQQzeWw6DzP4t
+         RqOJLhdxMEYBZf34IhVkppik8aRYEyzDm7cr4jOjS4tbK6gM8JRCyD7EWR3OdqfSq1Nd
+         WZ40bXgSeB35rPZq7T5g3SlA4q3d2jc1AoTcoOlIZcfbh12J2jbDKkfk0tXb4J1JmlQS
+         AJFA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=/EZWnYloDEoaRjV5o/SIy5u/G2zUnoLIr0TqDfT5RpQ=;
-        b=0XwoW6j0M8O0kK8l637sy9Sef4s81lgkMsG4jVCCUZ5DliMBwP03gX/jLtfrB1VbZL
-         mikWK/SU2pQctPG72q/C9ba1xE+IaEBk/kqFk8vNldie8kS05u1Mu+wuv0N9qhLlxTGo
-         neWwltY+es6rBVI+c6732CcgSwPTjLjiYk0n+0q5wqyOvgg68aNFawcL4DHFjTWS8Q/G
-         G4gXd9N1J7PJz0A27b+gfQyolj5kyTXI5LX5z7AS5toLYuEWD/uvVFcuXvd8SootC4u2
-         aiPU5+Sm+ngOzfK5UeMsIT2e919AxqbEp7MckdiN2m8oVKEy68dclbEQehzYfThzCd7e
-         29cA==
-X-Gm-Message-State: AO0yUKXBz9gle4w+7GEjBrXCWkNxxJdfjAQOpVYW0DhDiTL9Q+1h/STL
-        +e81BHEYDOEvXchNpwcN/LI=
-X-Google-Smtp-Source: AK7set9cP8GvUo69qyyw/g8sVHn8jKd/r1RXBIAtu8FyjXYOxxxDneoD53Tdr5lGXeTmFwGoKJr+qQ==
-X-Received: by 2002:a05:6a00:1804:b0:5b2:5466:34e1 with SMTP id y4-20020a056a00180400b005b2546634e1mr3783781pfa.3.1676971338564;
-        Tue, 21 Feb 2023 01:22:18 -0800 (PST)
-Received: from hbh25y.. ([129.227.150.140])
-        by smtp.gmail.com with ESMTPSA id x15-20020a62fb0f000000b0058bf2ae9694sm9013971pfm.156.2023.02.21.01.22.15
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 21 Feb 2023 01:22:18 -0800 (PST)
-From:   Hangyu Hua <hbh25y@gmail.com>
-To:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, ian.mcdonald@jandi.co.nz, gerrit@erg.abdn.ac.uk
-Cc:     dccp@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Hangyu Hua <hbh25y@gmail.com>
-Subject: [PATCH] net: dccp: delete redundant ackvec record in dccp_insert_options()
-Date:   Tue, 21 Feb 2023 17:22:06 +0800
-Message-Id: <20230221092206.39741-1-hbh25y@gmail.com>
-X-Mailer: git-send-email 2.34.1
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=fbTzQmBbVkw2WG9RX4zaVnIA7NHcDhVJSDn4uazMha8=;
+        b=qoveVOuXfJ8CLTSSY/5RmHLAtenBeCGfNPYjfZekMoYrvlz88eev1akYn+9U00dKZa
+         rrGBsB/3HUMRfLjdROn1H00wyzGIS7wEWU5p6EoKAGZXJUivZ53YL/FXddIYk0uT6FnX
+         GrXxKZhFeQrbf10dSwnN5GCMDjQQVSG45Aj8FFcqd1Pn3cbeIKCSINAwttspySfFCpFF
+         DFnQpSNN55OOx1up3p2uuP8Chh8j4UKYG2uWxB7Fw494mtpYDCeL4Fu8wGWVarBkTSRE
+         NruGlCkRzSuFjNBsi5vQciRBLZ9hZMjawNJpj2TLEEgs60MpqC7e9QxRwc0UgYli4EWm
+         QmNQ==
+X-Gm-Message-State: AO0yUKWNmBIG5G0PrvODcJaKAV/0JrNiTn5zZ175tRFmuQa6mXCckGHu
+        W/sU7UTjWjtfTIp5YPJVKmk94g==
+X-Google-Smtp-Source: AK7set8KQ6AMSa9DTyyfQ/QxgDiwki3JQ/hgmlwOWKJPZgURwegSKc0oEy44DyZ6U98clGYb22w9bQ==
+X-Received: by 2002:aa7:c552:0:b0:4a0:e305:a0de with SMTP id s18-20020aa7c552000000b004a0e305a0demr4899297edr.19.1676971418212;
+        Tue, 21 Feb 2023 01:23:38 -0800 (PST)
+Received: from [192.168.1.109] ([178.197.216.144])
+        by smtp.gmail.com with ESMTPSA id t21-20020a50ab55000000b004acce817ab7sm1624262edc.2.2023.02.21.01.23.36
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 21 Feb 2023 01:23:37 -0800 (PST)
+Message-ID: <cbe2e397-7044-277d-08a8-93010de339ad@linaro.org>
+Date:   Tue, 21 Feb 2023 10:23:35 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH v2 2/3] ASoC: dt-bindings: sama7g5-pdmc: add
+ microchip,startup-delay-us binding
+To:     Claudiu.Beznea@microchip.com, robh@kernel.org
+Cc:     lgirdwood@gmail.com, broonie@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, perex@perex.cz, tiwai@suse.com,
+        Nicolas.Ferre@microchip.com, alexandre.belloni@bootlin.com,
+        alsa-devel@alsa-project.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+References: <20230217124151.236216-1-claudiu.beznea@microchip.com>
+ <20230217124151.236216-3-claudiu.beznea@microchip.com>
+ <20230220225601.GA545317-robh@kernel.org>
+ <69c4eccd-9d81-ac0b-802a-8e4e0d57589a@microchip.com>
+Content-Language: en-US
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <69c4eccd-9d81-ac0b-802a-8e4e0d57589a@microchip.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-A useless record can be insert into av_records when dccp_insert_options()
-fails after dccp_insert_option_ackvec(). Repeated triggering may cause
-av_records to have a lot of useless record with the same avr_ack_seqno.
+On 21/02/2023 09:10, Claudiu.Beznea@microchip.com wrote:
+> On 21.02.2023 00:56, Rob Herring wrote:
+>> EXTERNAL EMAIL: Do not click links or open attachments unless you know the content is safe
+>>
+>> On Fri, Feb 17, 2023 at 02:41:50PM +0200, Claudiu Beznea wrote:
+>>> Add microchip,startup-delay-us binding to let PDMC users to specify
+>>> startup delay.
+>>
+>> The diff tells me all this. Why does this need to be per platform?
+> 
+> PDMC can work with different kind of microphones, thus different boards
+> could have different microphones. Depending on microphone type the PDMC
+> would need to wait longer or shorter period than the default chosen period
+> to filter unwanted noise. Thus the need of having this specified though
+> device tree. Would you prefer to have this in commit message?
 
-Fixes: 8b7b6c75c638 ("dccp: Integrate feature-negotiation insertion code")
-Signed-off-by: Hangyu Hua <hbh25y@gmail.com>
----
- net/dccp/options.c | 12 ++++++++++--
- 1 file changed, 10 insertions(+), 2 deletions(-)
+I believe you also had explain it to me, thus as you can see having it
+in commit msg would spare you two questions...
 
-diff --git a/net/dccp/options.c b/net/dccp/options.c
-index d24cad05001e..8aa4abeb15ea 100644
---- a/net/dccp/options.c
-+++ b/net/dccp/options.c
-@@ -549,6 +549,8 @@ static void dccp_insert_option_padding(struct sk_buff *skb)
- int dccp_insert_options(struct sock *sk, struct sk_buff *skb)
- {
- 	struct dccp_sock *dp = dccp_sk(sk);
-+	struct dccp_ackvec *av = dp->dccps_hc_rx_ackvec;
-+	struct dccp_ackvec_record *avr;
- 
- 	DCCP_SKB_CB(skb)->dccpd_opt_len = 0;
- 
-@@ -577,16 +579,22 @@ int dccp_insert_options(struct sock *sk, struct sk_buff *skb)
- 
- 	if (dp->dccps_hc_rx_insert_options) {
- 		if (ccid_hc_rx_insert_options(dp->dccps_hc_rx_ccid, sk, skb))
--			return -1;
-+			goto delete_ackvec;
- 		dp->dccps_hc_rx_insert_options = 0;
- 	}
- 
- 	if (dp->dccps_timestamp_echo != 0 &&
- 	    dccp_insert_option_timestamp_echo(dp, NULL, skb))
--		return -1;
-+		goto delete_ackvec;
- 
- 	dccp_insert_option_padding(skb);
- 	return 0;
-+
-+delete_ackvec:
-+	avr = dccp_ackvec_lookup(&av->av_records, DCCP_SKB_CB(skb)->dccpd_seq);
-+	list_del(&avr->avr_node);
-+	kmem_cache_free(dccp_ackvec_record_slab, avr);
-+	return -1;
- }
- 
- int dccp_insert_options_rsk(struct dccp_request_sock *dreq, struct sk_buff *skb)
--- 
-2.34.1
+Best regards,
+Krzysztof
 
