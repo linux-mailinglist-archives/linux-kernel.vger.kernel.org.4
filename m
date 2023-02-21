@@ -2,250 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EA71269E9C8
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 22:58:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F199269E9CE
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 22:59:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230197AbjBUV6L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Feb 2023 16:58:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57478 "EHLO
+        id S230208AbjBUV7k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Feb 2023 16:59:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58974 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229609AbjBUV6J (ORCPT
+        with ESMTP id S229612AbjBUV7i (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Feb 2023 16:58:09 -0500
-Received: from esa4.hgst.iphmx.com (esa4.hgst.iphmx.com [216.71.154.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CDD951A660
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Feb 2023 13:58:07 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
-  t=1677016687; x=1708552687;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=g9TnFRqAZqcDsGZcV1iYV9pTjzWi1/1bs6SxLfEGNWA=;
-  b=GH6weQ0NW5KgMS7uGJDvXxM4E3VZIWdghXkd9Nuf04WbSQT7mluqk8rv
-   GkBOk7jrVDYYzZQW4t4xuEvwW7o+q3FmWsyowYfzkuayBhYV6jWDF+DhU
-   bs2MDdM7xJhT1EO4AMrwLfKK0wrNOQ5fvIpkxH8Mh6OtxI/saJV72ZRLJ
-   xHIgdDeTytQB3p9oNcbBVma5ms366aSXeu9JwJeJKdWOQVWWorchpBNQu
-   G8vbRR/YGxhvAqBm08E+2trwhwv1QZIymAlr4VY5beD7X1/1a3p+p7+nb
-   WqiNMlD4ZbvwZebrbk68c4ScvEKREgmrGaNWLqe3ywiuklQZR0pXysDzo
-   w==;
-X-IronPort-AV: E=Sophos;i="5.97,317,1669046400"; 
-   d="scan'208";a="222134151"
-Received: from h199-255-45-14.hgst.com (HELO uls-op-cesaep01.wdc.com) ([199.255.45.14])
-  by ob1.hgst.iphmx.com with ESMTP; 22 Feb 2023 05:58:05 +0800
-IronPort-SDR: 23gX0CiCXRv+oV8g6GXeUZ84XAPyhkZhoURaTwPZ88iGwYJdRDCJZPfgqOofG+AbCEv4tjNk+N
- 0aaVKlR7lSCtkiDvM0p4mJOb5faL4MhGrAJzHUSjniDKaRlh7GK/Z6ZbynMR/V1yd2ujUNQh3A
- Ws5OEQTgL+h7LHccBOHMNw7Eq2VPPC2N1iBFSZ7Xdp8s1QdjbmC+P6xQ5URBgt1FwOyoBsQ5Ya
- BgRUOr+VSiLIvg5IYLfwqbLPlsgvWnLQoey++fdT8ugpyD0DwaFZ6f24m2CKZSBspMPJppwz9K
- +WE=
-Received: from uls-op-cesaip02.wdc.com ([10.248.3.37])
-  by uls-op-cesaep01.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 21 Feb 2023 13:15:04 -0800
-IronPort-SDR: kQ+yMtLI48zFBeJ3aydaC8LN9eJhZN/nHZEnvu51ItVfGy1EwCtWarR142WRkFUa0LopVx8Eqv
- abWyhdmxCjJMeoCf2n+/ARKS3D3HE4ShBoLs00irfDgHZE2N8Rfve9g0e8KSLH5mrkZfBJc+bl
- +LHQVAEtmJPmrTfqwp2a0qK8wYr0NETQMfMyW/v3GfKZS0GDzCwVq8TQXDSGiPAaUdRqW+2WYe
- e1gb3nPQ8uEzP+VeeNWeWlSkP5gNyeJdkO5ywPtzimk2ssiSeCidQYHrVPUGqI82bGqbzGYmov
- 4Mc=
-WDCIronportException: Internal
-Received: from usg-ed-osssrv.wdc.com ([10.3.10.180])
-  by uls-op-cesaip02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 21 Feb 2023 13:58:05 -0800
-Received: from usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1])
-        by usg-ed-osssrv.wdc.com (Postfix) with ESMTP id 4PLtSr52lWz1Rwtm
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Feb 2023 13:58:04 -0800 (PST)
-Authentication-Results: usg-ed-osssrv.wdc.com (amavisd-new); dkim=pass
-        reason="pass (just generated, assumed good)"
-        header.d=opensource.wdc.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=
-        opensource.wdc.com; h=content-transfer-encoding:content-type
-        :in-reply-to:organization:from:content-language:references:to
-        :subject:user-agent:mime-version:date:message-id; s=dkim; t=
-        1677016682; x=1679608683; bh=g9TnFRqAZqcDsGZcV1iYV9pTjzWi1/1bs6S
-        xLfEGNWA=; b=Rb9/RTEigoXlpl3/WTaPyfgRujxS0dNLPQlHHKqTpzdykTvexkm
-        mK+7rSBYPQchCE4X3iRubIdTVA1kuy2s3/s3FL3IymSUduI/0C8ClvciOyDM8gqy
-        nThhdHRXBkRNWw68JXTvoGQluphxoEZ+yvmpAAIMCjrncML4W8JH3FV3E3nQyyDG
-        j/xPAI2U+cEZqSkvYKF1xEXUxe0bhttNRB1cf4Vb6tlHY++EsL3TP/kw1vlBMCnB
-        emJm1kL5Pd/hvTIfCk01L9mRDeWcf9IBkZLlW/d4hgwTSMDu8fM8TVnrkkUyQ2zL
-        cfzPhfLndTkVUweNAu5WFR+P0WGYENfno1g==
-X-Virus-Scanned: amavisd-new at usg-ed-osssrv.wdc.com
-Received: from usg-ed-osssrv.wdc.com ([127.0.0.1])
-        by usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id q801533stxnd for <linux-kernel@vger.kernel.org>;
-        Tue, 21 Feb 2023 13:58:02 -0800 (PST)
-Received: from [10.225.163.21] (unknown [10.225.163.21])
-        by usg-ed-osssrv.wdc.com (Postfix) with ESMTPSA id 4PLtSk5wLTz1RvLy;
-        Tue, 21 Feb 2023 13:57:58 -0800 (PST)
-Message-ID: <a524ec1c-68ee-e20e-683a-40822b2235fd@opensource.wdc.com>
-Date:   Wed, 22 Feb 2023 06:57:57 +0900
+        Tue, 21 Feb 2023 16:59:38 -0500
+Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78AFA2943D
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Feb 2023 13:59:35 -0800 (PST)
+Received: by mail-pj1-x1035.google.com with SMTP id y2so2370928pjg.3
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Feb 2023 13:59:35 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=w8nlKpp35nn9JzalqXxXLH1RLec6Phwv+6bb+CkAiUk=;
+        b=GdtNqbO3Xu8NdkzgHYnnfXNT85SaWtyxMEnDDIg4nY5BVZ5CYd+0JypQETc6oVPpFH
+         WSW0pZP9v0OgYpC+b4f/6lP323U/3mTUKeAgfIQ5yYnBI2T8/Cc2C56zeAWOqa9Ef0tj
+         vfCzTdF+lkX4v01eTRfNAxvyIPFE2uM4VlC0s=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=w8nlKpp35nn9JzalqXxXLH1RLec6Phwv+6bb+CkAiUk=;
+        b=6MbVkENk60UqJrkGvXXs1fjl7dy/UZwT/eHhJxS+kM5aJ7B7tvEJ7sIPJnRzNCfQyN
+         fgtA4538bMlrRx/l5I3ykNLalRGCqGPkM/e1FLK75Y7elPH2TEE+7Dwm2ol9t6Si787U
+         gawSF7hL0TkzVWlIpiBS8Is1GWSok0xd6dtbzVufP/LEFKKP33mH6mmRDz9CZhvYJJ+s
+         kq+T1CkDqRpvsmRhqTSBUF7M/7HYohUF1qfI29kMleCtcOOUYI9cNzk5OpuJRknSlGAB
+         BMvKHAT7ntCTq+tl3EKY8rIGIREfufhKZDzWHTtvXnJDPBrgtHkqSX8M0iv7mZiMXNvX
+         BSzg==
+X-Gm-Message-State: AO0yUKUFWlTQwJqCYeiKvvJ/mHjihnTSQDcwGZHXLjleBjjPs5ZHUcq7
+        bKfQjynpir09+BbU4hUd9iB1pw==
+X-Google-Smtp-Source: AK7set8xaHBfij1BcBNgP3pSnANTBddwCKQT6aCBEmQSiLb+A1IwDxkH/8AlgsMHgRV7qJLG6U99nQ==
+X-Received: by 2002:a17:90a:10d6:b0:237:1d83:3d97 with SMTP id b22-20020a17090a10d600b002371d833d97mr4562075pje.21.1677016774968;
+        Tue, 21 Feb 2023 13:59:34 -0800 (PST)
+Received: from google.com ([2620:15c:9d:2:f0a9:384c:abd0:d6ba])
+        by smtp.gmail.com with ESMTPSA id k7-20020a17090a3cc700b002348bfd3799sm3093038pjd.39.2023.02.21.13.59.33
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 21 Feb 2023 13:59:34 -0800 (PST)
+Date:   Tue, 21 Feb 2023 13:59:31 -0800
+From:   Brian Norris <briannorris@chromium.org>
+To:     Zheng Wang <zyytlz.wz@163.com>
+Cc:     ganapathi017@gmail.com, alex000young@gmail.com,
+        amitkarwar@gmail.com, sharvari.harisangam@nxp.com,
+        huxinming820@gmail.com, kvalo@kernel.org, davem@davemloft.net,
+        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
+        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] mwifiex: Fix use-after-free bug due to race condition
+ between main thread thread and timer thread
+Message-ID: <Y/U+w7aMc+BttZwl@google.com>
+References: <20230218075956.1563118-1-zyytlz.wz@163.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH v2 9/9] PCI: rockchip: Add parameter check for RK3399 PCIe
- endpoint core set_msi()
-To:     Rick Wertenbroek <rick.wertenbroek@gmail.com>
-Cc:     alberto.dassatti@heig-vd.ch, xxm@rock-chips.com,
-        rick.wertenbroek@heig-vd.ch, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Shawn Lin <shawn.lin@rock-chips.com>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        =?UTF-8?Q?Krzysztof_Wilczy=c5=84ski?= <kw@linux.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Jani Nikula <jani.nikula@intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Mikko Kovanen <mikko.kovanen@aavamobile.com>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-pci@vger.kernel.org
-References: <20230214140858.1133292-1-rick.wertenbroek@gmail.com>
- <20230214140858.1133292-10-rick.wertenbroek@gmail.com>
- <ebbddcfa-99e5-efda-0eab-fbd61a33e2c3@opensource.wdc.com>
- <CAAEEuhpDTmAvBZhC9RCueOvqbLb=AttV1KxJrOUBcjHQrpVXmA@mail.gmail.com>
- <38ae72c9-0f0b-1a94-d2e0-f4ea80e94705@opensource.wdc.com>
- <CAAEEuhoQV1A8o_2jb1Qfq5d7dj9HpHL+mkDs8K4vs8v=-81zng@mail.gmail.com>
-Content-Language: en-US
-From:   Damien Le Moal <damien.lemoal@opensource.wdc.com>
-Organization: Western Digital Research
-In-Reply-To: <CAAEEuhoQV1A8o_2jb1Qfq5d7dj9HpHL+mkDs8K4vs8v=-81zng@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230218075956.1563118-1-zyytlz.wz@163.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/21/23 22:19, Rick Wertenbroek wrote:
-> On Tue, Feb 21, 2023 at 11:55 AM Damien Le Moal
-> <damien.lemoal@opensource.wdc.com> wrote:
->>
->> On 2/21/23 19:47, Rick Wertenbroek wrote:
->>> On Wed, Feb 15, 2023 at 2:39 AM Damien Le Moal
->>> <damien.lemoal@opensource.wdc.com> wrote:
->>>>
->>>> On 2/14/23 23:08, Rick Wertenbroek wrote:
->>>>> The RK3399 PCIe endpoint core supports only a single PCIe physcial
->>>>> function (function number 0), therefore return -EINVAL if set_msi() is
->>>>> called with a function number greater than 0.
->>>>> The PCIe standard only allows the multi message capability (MMC) value
->>>>> to be up to 0x5 (32 messages), therefore return -EINVAL if set_msi() is
->>>>> called with a MMC value of over 0x5.
->>>>>
->>>>> Signed-off-by: Rick Wertenbroek <rick.wertenbroek@gmail.com>
->>>>> ---
->>>>>  drivers/pci/controller/pcie-rockchip-ep.c | 10 ++++++++++
->>>>>  1 file changed, 10 insertions(+)
->>>>>
->>>>> diff --git a/drivers/pci/controller/pcie-rockchip-ep.c b/drivers/pci/controller/pcie-rockchip-ep.c
->>>>> index b7865a94e..80634b690 100644
->>>>> --- a/drivers/pci/controller/pcie-rockchip-ep.c
->>>>> +++ b/drivers/pci/controller/pcie-rockchip-ep.c
->>>>> @@ -294,6 +294,16 @@ static int rockchip_pcie_ep_set_msi(struct pci_epc *epc, u8 fn, u8 vfn,
->>>>>       struct rockchip_pcie *rockchip = &ep->rockchip;
->>>>>       u32 flags;
->>>>>
->>>>> +     if (fn) {
->>>>> +             dev_err(&epc->dev, "This endpoint controller only supports a single physical function\n");
->>>>> +             return -EINVAL;
->>>>> +     }
->>>>
->>>> Checking this here is late... Given that at most only one physical
->>>> function is supported, the check should be in rockchip_pcie_parse_ep_dt().
->>>> Something like:
->>>>
->>>>         err = of_property_read_u8(dev->of_node, "max-functions",
->>>>                                   &ep->epc->max_functions);
->>>>
->>>>         if (err < 0 || ep->epc->max_functions > 1)
->>>>
->>>>                 ep->epc->max_functions = 1;
->>>>
->>>
->>> Yes, this could be moved to the probe, thanks.
->>>
->>>> And all the macros with the (fn) argument could also be simplified
->>>> (argument fn removed) since fn will always be 0.
->>>
->>> These functions cannot be simplified because they have to follow the signature
->>> given by "pci_epc_ops" (include/linux/pci-epc.h). And this signature has the
->>> function number as a parameter. If we change the function signature we won't
->>> be able to assign these functions to the pc_epc_ops structure
->>
->> I was not suggesting to change the functions signature. I was suggesting
->> dropping the fn argument for the *macros*, e.g.
->>
->> ROCKCHIP_PCIE_EP_FUNC_BASE(fn) -> ROCKCHIP_PCIE_EP_FUNC_BASE
->>
->> since fn is always 0.
->>
->> That said, I am not entirely sure if the limit really is 1 function at most. The
->> TRM seems to be suggesting that up to 4 functions can be supported...
->>
->> [...]
->>
->>>> Another nice cleanup: define ROCKCHIP_PCIE_EP_MSI_CTRL_REG to include the
->>>> ROCKCHIP_PCIE_EP_FUNC_BASE(fn) addition so that we do not have to do it
->>>> here all the time.
->>>
->>> Yes, this could be an improvement but this is the way it is written
->>> everywhere in this
->>> driver, I chose to keep it so as to remain coherent with the rest of the driver.
->>> Cleaning this is not so important since this code will not be
->>> rewritten / changed so
->>> often. But I agree that it might be nicer. But, on the other side if
->>> at some point
->>> support for virtual functions would be added, the offsets would need
->>> to be computed
->>> based on the virtual function number and the code would be written
->>> like it is now,
->>> so I suggest keeping this the way it is for now.
->>
->> Yes, sure, this can be cleaned later.
->>
->> A more pressing problem is the lack of support for MSIX despite the fact that
->> the controller supports that *and* advertize it as a capability. That is what
->> was causing my problem with the Linux nvme driver and my prototype nvme epf
->> function driver: the host driver was seeing MSIX support (1 vector supported by
->> default), and so was allocating one MSIX for the device probe. But on the EP
->> end, it is MSI or INTX only... Working on adding that to solve this issue.
->>
-> 
-> I have seen this too, the controller advertises the capability. However, the TRM
-> (section 17.5.9) says that MSI-X is not supported (MSI / INTx only as you said).
-> So the solution should be to modify the probe function of the endpoint
-> controller
-> so that the MSI-X capability would not be advertised, this should fix
-> your problem.
+On Sat, Feb 18, 2023 at 03:59:56PM +0800, Zheng Wang wrote:
+> Note that, this bug is found by static analysis, it could be wrong. We
+> could discuss that before writing the fix.
 
-Yep, that is what I did for now: write 0 in the capability ID of the MSIX
-capability list entry. A cleaner solution would be to change the next entry
-pointer of the entry preceding the MSIX entry. Will send a patch for that.
+Yeah, please don't accept this patch. It deserves an "RFC" in the title
+at best. Sure, it's an identified race condition, but the cure here
+(deleting all possible recovery from firmware crashes) is worse than the
+disease.
 
-> 
-> I wonder if one could still implement MSI-X because from the endpoint we would
-> just need to implement it as a message (TLP) over PCIe (because the space for
-> the vectors is allocated and written, so that part should be ok). I am
-> not an expert
-> on MSI-X, but the reason the endpoint cannot send them could be because MSI-X
-> requires some fields in the PCIe header descriptor to be filled with values that
-> cannot be set through the "desc0-3" registers of the RK3399 PCIe endpoint core.
-> 
-> Anyways, the endpoint should not advertise the MSI-X capabilities when it cannot
-> send such interrupts. Once this is fixed you should be able to have your NVMe
-> function running.
-> 
-> Regards.
-> Rick
-> 
-> 
->> --
->> Damien Le Moal
->> Western Digital Research
->>
+There's no real attempt at analyzing the race or providing solutions, so
+there's not much to discuss yet.
 
--- 
-Damien Le Moal
-Western Digital Research
-
+Brian
