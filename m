@@ -2,111 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DB69B69E2EA
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 16:01:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5345C69E2F1
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 16:02:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233992AbjBUPBF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Feb 2023 10:01:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52516 "EHLO
+        id S234627AbjBUPCM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Feb 2023 10:02:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53538 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234603AbjBUPBB (ORCPT
+        with ESMTP id S234651AbjBUPCG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Feb 2023 10:01:01 -0500
-Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7499C2B61F;
-        Tue, 21 Feb 2023 07:00:58 -0800 (PST)
-Received: by mail-wr1-x42b.google.com with SMTP id o4so4761692wrs.4;
-        Tue, 21 Feb 2023 07:00:58 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=bOHnaqumSzvCkeAdCi/JvKB/RmaESjli5/JpvR7XJaQ=;
-        b=TJRIv4K9Y005WXgOmnzBfsBi7OZwRev7SsWnoqIIMZI33gso2oXRcs0dYcOwFnWHdH
-         N0mY6OOkGZypHI36Fcn24ElYS1uvVSKQk2MiemFhUArVR/2TDjaY5FJtoC2QdZ2mjyl8
-         MImTvpNTk4pqSFb5dV+VmXiBOQ58urpu6ufQ+O0piYHURbkLX/EPMPEhw4buag9z/6mM
-         fTb33CbMcYcemO+6KsNc5uGyxHC59jorV4xcgJTtY4kIxpaldWM+QesELmndD4eYcHuU
-         EMIdwUTC9q/l0xnBPPpD16ajIwZKb7U22twdSgzDkteJuif4LUbPoAqzoCkzzgGeeOFN
-         jAbA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=bOHnaqumSzvCkeAdCi/JvKB/RmaESjli5/JpvR7XJaQ=;
-        b=egBaA8k6DAhCKsv8aOuXXwxeiWFBuZd+tRJRS2XbQaAa0c2DliDq0efrY6j3VB93kX
-         JQ9coGVSHo0etRiq1Qzx1UY/hW9zcTZ250prqqTvHlT6mb9SE4sAzhDgAHVlg2uLYmgE
-         FJxchepjRT5G1cyr3b/H4DJIpw77KTHNEpK/VuZ89MsAmmVDj5Lw+swBBaxu+wq3A0kh
-         xbcpseUx4Dh0r9Eu4akRsQxQx2LKrjQm7cHfobKmVM2n7UpT+2H+ozBEhPGtrmIkvcZh
-         2qBwJtKvUE2UBrUYSU0QbYejMRpTG85Lb4/7m5OW/B9a1bdDthtt9FaRpkj6vuRXMocW
-         lUNQ==
-X-Gm-Message-State: AO0yUKXwj2aNH9VPb+47UuXlHW9E7y/c4CHNLRHgJmJA6aW5WEYDJPjd
-        /VLrVa3rTRaX1dfa7aT2D2I=
-X-Google-Smtp-Source: AK7set8fOwARuarbsrKvPo0bsg1/oz8pvXlTOLIEu/dsO0MVjoWl03a9N2+ebT9YQI6DQ59mNfAErg==
-X-Received: by 2002:a05:6000:110d:b0:2c5:5d18:4311 with SMTP id z13-20020a056000110d00b002c55d184311mr4537306wrw.21.1676991656918;
-        Tue, 21 Feb 2023 07:00:56 -0800 (PST)
-Received: from debian ([63.135.72.41])
-        by smtp.gmail.com with ESMTPSA id d18-20020a5d6452000000b002c54f4d0f71sm6098316wrw.38.2023.02.21.07.00.56
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 21 Feb 2023 07:00:56 -0800 (PST)
-Date:   Tue, 21 Feb 2023 15:00:54 +0000
-From:   "Sudip Mukherjee (Codethink)" <sudipm.mukherjee@gmail.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
-        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, f.fainelli@gmail.com, srw@sladewatkins.net,
-        rwarsow@gmx.de
-Subject: Re: [PATCH 5.4 000/156] 5.4.232-rc1 review
-Message-ID: <Y/TcpkAHqW4+n++/@debian>
-References: <20230220133602.515342638@linuxfoundation.org>
+        Tue, 21 Feb 2023 10:02:06 -0500
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39C892B628;
+        Tue, 21 Feb 2023 07:02:01 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=bCEktfZQBYOidtJzxUm4n6P8jzrl5z+36FM412yPsqs=; b=JDpD0PpWH3pnX8EYDtfDPUDLIy
+        S10rBhUk23wKDrJcvT4gwTBjEdQTEO8uKioDDQMoHCwBLn3wlR476k9xVsrPQKWksABn/2jpJ7R4w
+        aPbh/wOeH17i+dXF6Adx64cKbCrkz18407TYKbZn7U8vkTXkOtqi374xKlqiF0ra5RjDIbuSPOM70
+        6DelKoWS68hL6HpdwmIstsS/hXfpR8N301EpkJ++hWFXgZztyyV9tvQ4ILrVoPRAjwLvYIeKBwW9R
+        kVnvhJmGZU1oAwH9+P+00TX9twcvYMbmkfzBR6yZ+6ulIy60wp/Q7BKKcereIOrFkKYtQnv0mPFD+
+        zyRULY4A==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1pUU8z-00Ch0m-0F; Tue, 21 Feb 2023 15:01:25 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 49EA430020B;
+        Tue, 21 Feb 2023 16:01:22 +0100 (CET)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 3107F2007A8C6; Tue, 21 Feb 2023 16:01:22 +0100 (CET)
+Date:   Tue, 21 Feb 2023 16:01:22 +0100
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Vincent Guittot <vincent.guittot@linaro.org>
+Cc:     mingo@redhat.com, juri.lelli@redhat.com, dietmar.eggemann@arm.com,
+        rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de,
+        bristot@redhat.com, vschneid@redhat.com,
+        linux-kernel@vger.kernel.org, parth@linux.ibm.com,
+        cgroups@vger.kernel.org, qyousef@layalina.io,
+        chris.hyser@oracle.com, patrick.bellasi@matbug.net,
+        David.Laight@aculab.com, pjt@google.com, pavel@ucw.cz,
+        tj@kernel.org, qperret@google.com, tim.c.chen@linux.intel.com,
+        joshdon@google.com, timj@gnu.org, kprateek.nayak@amd.com,
+        yu.c.chen@intel.com, youssefesmat@chromium.org,
+        joel@joelfernandes.org
+Subject: Re: [PATCH v10 6/9] sched/fair: Add sched group latency support
+Message-ID: <Y/TcwkmiVXJmQ9nw@hirez.programming.kicks-ass.net>
+References: <20230113141234.260128-1-vincent.guittot@linaro.org>
+ <20230113141234.260128-7-vincent.guittot@linaro.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230220133602.515342638@linuxfoundation.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20230113141234.260128-7-vincent.guittot@linaro.org>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Greg,
+On Fri, Jan 13, 2023 at 03:12:31PM +0100, Vincent Guittot wrote:
 
-On Mon, Feb 20, 2023 at 02:34:04PM +0100, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.4.232 release.
-> There are 156 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
-> 
-> Responses should be made by Wed, 22 Feb 2023 13:35:35 +0000.
-> Anything received after that time might be too late.
+> +static s64 cpu_latency_nice_read_s64(struct cgroup_subsys_state *css,
+> +				    struct cftype *cft)
+> +{
+> +	int prio, delta, last_delta = INT_MAX;
+> +	s64 weight;
+> +
+> +	weight = css_tg(css)->latency_offset * NICE_LATENCY_WEIGHT_MAX;
+> +	weight = div_s64(weight, get_sleep_latency(false));
+> +
+> +	/* Find the closest nice value to the current weight */
 
-Build test (gcc version 11.3.1 20230210):
-mips: 65 configs -> no failure
-arm: 106 configs -> no failure
-arm64: 2 configs -> no failure
-x86_64: 4 configs -> no failure
-alpha allmodconfig -> no failure
-powerpc allmodconfig -> no failure
-riscv allmodconfig -> no failure
-s390 allmodconfig -> no failure
-xtensa allmodconfig -> no failure
+This comment isn't entirely accurate, since we only have the nice_write
+interface below, this will be an exact match. The thing with weight is
+that we first had the raw weight value interface and then the nice
+interface had to map random values back to a 'nice' value.
 
+Arguably we can simply store the raw nice value in write and print it
+out again here.
 
-Boot test:
-x86_64: Booted on my test laptop. No regression.
-x86_64: Booted on qemu. No regression. [1]
-
-[1]. https://openqa.qa.codethink.co.uk/tests/2905
-
-
-Tested-by: Sudip Mukherjee <sudip.mukherjee@codethink.co.uk>
-
---
-Regards
-Sudip
+> +	for (prio = 0; prio < ARRAY_SIZE(sched_latency_to_weight); prio++) {
+> +		delta = abs(sched_latency_to_weight[prio] - weight);
+> +		if (delta >= last_delta)
+> +			break;
+> +		last_delta = delta;
+> +	}
+> +
+> +	return LATENCY_TO_NICE(prio-1);
+> +}
+> +
+> +static int cpu_latency_nice_write_s64(struct cgroup_subsys_state *css,
+> +				     struct cftype *cft, s64 nice)
+> +{
+> +	s64 latency_offset;
+> +	long weight;
+> +	int idx;
+> +
+> +	if (nice < MIN_LATENCY_NICE || nice > MAX_LATENCY_NICE)
+> +		return -ERANGE;
+> +
+> +	idx = NICE_TO_LATENCY(nice);
+> +	idx = array_index_nospec(idx, LATENCY_NICE_WIDTH);
+> +	weight = sched_latency_to_weight[idx];
+> +
+> +	latency_offset = weight * get_sleep_latency(false);
+> +	latency_offset = div_s64(latency_offset, NICE_LATENCY_WEIGHT_MAX);
+> +
+> +	return sched_group_set_latency(css_tg(css), latency_offset);
+> +}
