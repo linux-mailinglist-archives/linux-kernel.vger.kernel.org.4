@@ -2,104 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EE09A69E88E
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 20:50:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1566069E897
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 20:54:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229890AbjBUTuI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Feb 2023 14:50:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40194 "EHLO
+        id S229703AbjBUTyn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Feb 2023 14:54:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42510 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229737AbjBUTuG (ORCPT
+        with ESMTP id S229498AbjBUTyl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Feb 2023 14:50:06 -0500
-Received: from mail-qv1-xf33.google.com (mail-qv1-xf33.google.com [IPv6:2607:f8b0:4864:20::f33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9004828866;
-        Tue, 21 Feb 2023 11:50:05 -0800 (PST)
-Received: by mail-qv1-xf33.google.com with SMTP id ks17so6069648qvb.6;
-        Tue, 21 Feb 2023 11:50:05 -0800 (PST)
+        Tue, 21 Feb 2023 14:54:41 -0500
+Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com [IPv6:2607:f8b0:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C2F0233CE;
+        Tue, 21 Feb 2023 11:54:41 -0800 (PST)
+Received: by mail-pl1-x631.google.com with SMTP id bh1so6299868plb.11;
+        Tue, 21 Feb 2023 11:54:41 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:feedback-id:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=EePYiMegOTciLAZsPnWcxPxhjZ6l+MFlb+BerAyQPY8=;
-        b=kFp77tZGRapMD/xntIodwnN0agkk46bzra9O2hXBMMrCYeKHh2cRc2dTdnWGIGw1Yx
-         vNF1cbac8R2OumH0fYsvcLY9xTmoNqAdZlmzedoKjxXUj+M42WQfnFbH6ZC4Dl3Xvszw
-         FR8aUfTEZMQWhG4JPs/JGGUUcCU0pqQUFK7IxeUH2B1YA7HBkpwHsqdrkl4lAe666khi
-         ecYr9fghfUS+HTxbbO3V6C/FK/gcPj5wNFkWzU9hOvsG8TwbiQUUXJO/73G0hGc6VWEp
-         NlcBTDtp+1H+l5MNtwrXEwCfW2XNdITk188yJVV7CDcAk608F7se2NWabQo+C/+4wnOn
-         z1QA==
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=LZtNabuOvExClcgrEORVynQKjs6pL5On5aAsfoAimgY=;
+        b=p90O1ZeAb1UYj8T/WpScu661Zg+VzE8FqonKvjoB2r25obADJcLUHO5p8ZLaTfvnRg
+         3s9zt83iBNXvEXzLsgtPojneV6fMEZaaa6a8AP1ygVmnH/MrPyEcMXWyI954KMxvL/9w
+         0+ouQEr34e52yAYRyTNA9RA1wYlhIGT7d0pdR0iBn/BXV1jrCqnjevMOgWdGcaH1RisF
+         EOl0MBGlxCUSZml5Mh0lkTH1YRsL9aDojIRxTFMx1akxnXjU4XnKbi4IJcaPFfjjL+TO
+         gF49O/KrTF3JmAuE75UAWbzyakqKCT5AN33i4mcCD5ppkjwUUNI6/J8GRUfgG7YhBEtC
+         W1Bg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:feedback-id:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=EePYiMegOTciLAZsPnWcxPxhjZ6l+MFlb+BerAyQPY8=;
-        b=c/C7As/ZdE/GlW2ZIS7oryNWh+wLtJ50HND4TlQnaLwZpeliyydQRFH1qdYIJoJHhh
-         dWSaiI2xFs3GRzEG0S6KFUyD4xgzRG4gjvzDR3Vzcph3WJbtMBdnVAEVB+3FHU/ocIQ6
-         3qdrkODlx5kgC4kWsiIOV7ENqsm4LiGTeyfZH9P5Bj858bWjZBaNHyvm8srbKmueJ1Qe
-         Fs2QKmddOmXdssT1b1RopxLBuYhwh33JTQUTKNDr/X4b7YytFk7GVRzHAqEMBl08j2yd
-         NOPgC94aw/f3UeCyXODuJSWpruar5e8Q5tlCS3CqiBpZGIwIr2mUeyw/d8ePNLbcjZdL
-         YwzQ==
-X-Gm-Message-State: AO0yUKVui/W503QCc7C57Moy8vBI/46K8MWcE5MrKb54/Fr+cLsBP7OX
-        J26cQIT8Gn2Tr4qCHF/6tUU=
-X-Google-Smtp-Source: AK7set8esdN/bnRslH1891GxUxa8gviTZZGZhxV0W0+1ckhCH9sYqIOsZewRRN/M3UiQ1rqYsDqnUA==
-X-Received: by 2002:ad4:5946:0:b0:56c:37d:51e with SMTP id eo6-20020ad45946000000b0056c037d051emr6687421qvb.22.1677009004676;
-        Tue, 21 Feb 2023 11:50:04 -0800 (PST)
-Received: from auth1-smtp.messagingengine.com (auth1-smtp.messagingengine.com. [66.111.4.227])
-        by smtp.gmail.com with ESMTPSA id d123-20020a37b481000000b0071f0d0aaef7sm11459343qkf.80.2023.02.21.11.50.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 21 Feb 2023 11:50:03 -0800 (PST)
-Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
-        by mailauth.nyi.internal (Postfix) with ESMTP id 8C0DD27C0054;
-        Tue, 21 Feb 2023 14:50:03 -0500 (EST)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute4.internal (MEProxy); Tue, 21 Feb 2023 14:50:03 -0500
-X-ME-Sender: <xms:aiD1Y9gEFM7el3iJ9B9u1EzTFpWZ9Qw0WCZaW205Zbqqa4Wc3qcygA>
-    <xme:aiD1YyA89slgzPereN_JmbS0K6LM2SAEAmjIUHx14gXXw7OF1cc7LrSX1aWnTq9ze
-    w52ZlAgA_ZY5TP_uw>
-X-ME-Received: <xmr:aiD1Y9GxvFy0QSiZ9n8-mw4xZJKm7Bjb38JqleA5twS-gx04eSEOPTwadGM>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrudejjedguddvjecutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
-    enucfjughrpeffhffvvefukfhfgggtuggjsehttdertddttddvnecuhfhrohhmpeeuohhq
-    uhhnucfhvghnghcuoegsohhquhhnrdhfvghnghesghhmrghilhdrtghomheqnecuggftrf
-    grthhtvghrnhephedugfduffffteeutddvheeuveelvdfhleelieevtdeguefhgeeuveei
-    udffiedvnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomh
-    epsghoqhhunhdomhgvshhmthhprghuthhhphgvrhhsohhnrghlihhthidqieelvdeghedt
-    ieegqddujeejkeehheehvddqsghoqhhunhdrfhgvnhhgpeepghhmrghilhdrtghomhesfh
-    higihmvgdrnhgrmhgv
-X-ME-Proxy: <xmx:aiD1YyToqHNBnJHE9PT4ZjinnWR3Hs7t-qpcQ_L7DyfOONVW9-iBHw>
-    <xmx:aiD1Y6zz7nSTRr34or559lYqOFthl45--qqwHsuvo62O1oh4Q_h_kg>
-    <xmx:aiD1Y47kIMRE-isf2Wl7b7elVCBAaDIld6lJVIQoRI-8VaqKKT-g8g>
-    <xmx:ayD1Y842ER2ErNK2ZbIHCPbyMOIfsMc_doaTAstyH1bJGRXDFD5xrA>
-Feedback-ID: iad51458e:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
- 21 Feb 2023 14:50:02 -0500 (EST)
-Date:   Tue, 21 Feb 2023 11:49:46 -0800
-From:   Boqun Feng <boqun.feng@gmail.com>
-To:     Thomas Gleixner <tglx@linutronix.de>
-Cc:     Asahi Lina <lina@asahilina.net>, Miguel Ojeda <ojeda@kernel.org>,
-        Alex Gaynor <alex.gaynor@gmail.com>,
-        Wedson Almeida Filho <wedsonaf@gmail.com>,
-        Gary Guo <gary@garyguo.net>,
-        =?iso-8859-1?Q?Bj=F6rn?= Roy Baron <bjorn3_gh@protonmail.com>,
-        John Stultz <jstultz@google.com>,
-        Stephen Boyd <sboyd@kernel.org>, linux-kernel@vger.kernel.org,
-        rust-for-linux@vger.kernel.org, asahi@lists.linux.dev
-Subject: Re: [PATCH] rust: time: New module for timekeeping functions
-Message-ID: <Y/UgWqgRz2QxUT+t@boqun-archlinux>
-References: <20230221-gpu-up-time-v1-1-bf8fe74b7f55@asahilina.net>
- <87v8jvnqq4.ffs@tglx>
- <Y/TP6as7qqwfcI42@boqun-archlinux>
- <6aa15295-219b-225c-607d-e87e3d51d048@asahilina.net>
- <87bklmonbv.ffs@tglx>
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=LZtNabuOvExClcgrEORVynQKjs6pL5On5aAsfoAimgY=;
+        b=8RBcuOnEtBpT/oU9I+URBYzqTTK+zbSYxM7vlPtffCI7mS1re0YBHPCCV5IxcwLw9d
+         7FJF4Dg+OyXHqb/P0JPsl9rQkUl248UzhWkmkJWfoq7UuAV28aeQ8rZxx0zEinhcG04V
+         uwCBUJ2o4OYkOen16kzZXuk2y3XDRQFCb+03mZzBVHR6hsSRdGe1MvcY2LNR2Q9zEGMr
+         WLu6hvh/syKlLpmqgIfwZWKYsYpv5qkWklLE5zTwLC5EPW9BA3KXlD4dwj8rgY3YNym0
+         b/DHEVSCvnMkMWq2r8+H+/Py2l3Po2YucOVDOkJVXqajYXm+rgYSni828Vd2eetdxPFq
+         Tt/g==
+X-Gm-Message-State: AO0yUKUUIUZYz6x1l/1hBE2FK1RRUyG4GBJSi1k9qSxO54I8vl8j/wmW
+        4gptITgNkjJ/U5dmVL6S5O4=
+X-Google-Smtp-Source: AK7set+EE/QTqyCHYl/k12767u5WxM16+kd38JN563JeBglbAAGpuXwHqBzwmxyTPB30cyB9KQ5sQQ==
+X-Received: by 2002:a05:6a20:3d0c:b0:c7:1bac:6ef9 with SMTP id y12-20020a056a203d0c00b000c71bac6ef9mr3901987pzi.46.1677009280586;
+        Tue, 21 Feb 2023 11:54:40 -0800 (PST)
+Received: from [10.69.33.24] ([192.19.223.252])
+        by smtp.gmail.com with ESMTPSA id k17-20020a170902761100b0019a8468cbedsm276464pll.226.2023.02.21.11.53.57
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 21 Feb 2023 11:54:40 -0800 (PST)
+Message-ID: <33198e39-8c86-85db-76c2-c5ce18dee290@gmail.com>
+Date:   Tue, 21 Feb 2023 11:53:43 -0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <87bklmonbv.ffs@tglx>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.1.2
+Subject: Re: BCM54220: After the BCM54220 closes the auto-negotiation, the
+ configuration forces the 1000M network port to be linked down all the time.
+Content-Language: en-US
+To:     Andrew Lunn <andrew@lunn.ch>
+Cc:     "Wang, Xiaolei" <Xiaolei.Wang@windriver.com>,
+        "f.fainelli@gmail.com" <f.fainelli@gmail.com>,
+        "bcm-kernel-feedback-list@broadcom.com" 
+        <bcm-kernel-feedback-list@broadcom.com>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        "pabeni@redhat.com" <pabeni@redhat.com>,
+        "richardcochran@gmail.com" <richardcochran@gmail.com>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+References: <MW5PR11MB5764F9734ACFED2EF390DFF795A19@MW5PR11MB5764.namprd11.prod.outlook.com>
+ <ae617cad-63dc-333f-c4c4-5266de88e4f8@gmail.com> <Y/UehVXRNHuRprAv@lunn.ch>
+From:   Doug Berger <opendmb@gmail.com>
+In-Reply-To: <Y/UehVXRNHuRprAv@lunn.ch>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -108,106 +88,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 21, 2023 at 08:00:52PM +0100, Thomas Gleixner wrote:
-[...]
-> > I figured we might get a better idea for what to do once a
-> > second user comes along. For example, do we want straight methods like
-> > that or std::ops trait impls? And do we make everything fallible or
-> > panic on overflow or just wrap?
-> >
-> > It also means we basically have to reimplement all of
-> > core::time::Duration if we want to offer an equally ergonomic API with a
-> > 64-bit type (for reference, Duration is a struct with u64 secs and u32
-> > nanoseconds).
+On 2/21/2023 11:41 AM, Andrew Lunn wrote:
+> On Tue, Feb 21, 2023 at 10:44:44AM -0800, Doug Berger wrote:
+>> On 2/17/2023 12:06 AM, Wang, Xiaolei wrote:
+>>> hi
+>>>
+>>>       When I use the nxp-imx7 board, eth0 is connected to the PC, eth0 is turned off the auto-negotiation mode, and the configuration is forced to 10M, 100M, 1000M. When configured to force 1000M，
+>>>       The link status of phy status reg(0x1) is always 0, and the chip of phy is BCM54220, but I did not find the relevant datasheet on BCM official website, does anyone have any suggestions or the datasheet of BCM54220?
+>>>
+>>> thanks
+>>> xiaolei
+>>>
+>> It is my understanding that the 1000BASE-T PHY requires peers to take on
+>> asymmetric roles and that establishment of these roles requires negotiation
+>> which occurs during auto-negotiation. Some PHYs may allow manual programming
+>> of these roles, but it is not standardized and tools like ethtool do not
+>> support manual specification of such details.
 > 
-> As you said yourself: The kernel can't use Rust std lib. So you better
-> implement sensible interfaces which are straight forward and simple to
-> use in the context you are aiming for.
+> Are you talking about ethtool -s [master-slave|preferred-master|preferred-slave|forced-master|forced-slave]
 > 
+I am, though I was not aware of their addition to ethtool and I avoided 
+referencing them by name out of an overabundance of political 
+correctness ;).
 
-Agreed!
+Thanks for bringing this to my attention.
 
-Lina, my suggestion is just to go ahead and add the minimal timestamp
-abstraction, surely you may make some bad decisions about APIs (e.g.
-panic vs returning a Result), but kernel doesn't have a stable internal
-API, so we can always fix things later.
+> The broadcom PHYs call genphy_config_aneg() -> __genphy_config_aneg()
+> -> genphy_setup_master_slave() which should configure this, even when
+> auto-neg is off.
+Yes, this sounds good. Perhaps Xiaolei is not setting these properly 
+when forcing 1000.
 
-Myself actually do something like below based on your patch, because
-nothing like `now()` ;-)
-
-I'm sure you can do better because as you said, you're the first user
-;-)
-
-Regards,
-Boqun
-
----------->8
-diff --git a/rust/kernel/time.rs b/rust/kernel/time.rs
-index 02844db47d34..3398388de0e1 100644
---- a/rust/kernel/time.rs
-+++ b/rust/kernel/time.rs
-@@ -6,16 +6,61 @@
- //! C header: [`include/linux/timekeeping.h`](../../../../include/linux/timekeeping.h)
- 
- use crate::bindings;
--use core::time::Duration;
-+// Re-exports [`Duration`], so that it's easy to provide kernel's own implemention in the future.
-+pub use core::time::Duration;
-+
-+/// A timestamp
-+pub trait TimeStamp: Copy {
-+    /// Gets the current stamp.
-+    fn now() -> Self;
-+
-+    /// Calculates the passed duration since `another`.
-+    fn duration_since(&self, another: Self) -> Duration;
-+
-+
-+    /// Return the duration passed since this stamp was created.
-+    fn elapsed(&self) -> Duration {
-+        let created = self.clone();
-+        self.duration_since(created)
-+    }
-+}
-+
-+/// CLOCK_MONOTONIC timestamps.
-+#[derive(Clone, Copy)]
-+pub struct MonoTime(Duration);
-+
-+impl TimeStamp for MonoTime {
-+    fn now() -> Self {
-+        Self(ktime_get())
-+    }
-+
-+    fn duration_since(&self, another: Self) -> Duration {
-+        ktime_get() - another.0
-+    }
-+}
-+
-+/// CLOCK_BOOTTIME timestamps.
-+#[derive(Clone, Copy)]
-+pub struct BootTime(Duration);
-+
-+impl TimeStamp for BootTime {
-+    fn now() -> Self {
-+        Self(ktime_get_boottime())
-+    }
-+
-+    fn duration_since(&self, another: Self) -> Duration {
-+        ktime_get_boottime() - another.0
-+    }
-+}
- 
- /// Returns the kernel time elapsed since boot, excluding time spent sleeping, as a [`Duration`].
--pub fn ktime_get() -> Duration {
-+fn ktime_get() -> Duration {
-     // SAFETY: Function has no side effects and no inputs.
-     Duration::from_nanos(unsafe { bindings::ktime_get() }.try_into().unwrap())
- }
- 
- /// Returns the kernel time elapsed since boot, including time spent sleeping, as a [`Duration`].
--pub fn ktime_get_boottime() -> Duration {
-+fn ktime_get_boottime() -> Duration {
-     Duration::from_nanos(
-         // SAFETY: Function has no side effects and no variable inputs.
-         unsafe { bindings::ktime_get_with_offset(bindings::tk_offsets_TK_OFFS_BOOT) }
+> 
+> 	 Andrew
+Thanks again!
+     Doug
