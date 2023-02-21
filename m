@@ -2,351 +2,199 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0497369D90B
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 03:55:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 06E2D69D913
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 03:57:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233195AbjBUCzV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Feb 2023 21:55:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32840 "EHLO
+        id S233163AbjBUC5T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Feb 2023 21:57:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36212 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233470AbjBUCzD (ORCPT
+        with ESMTP id S232789AbjBUC5S (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Feb 2023 21:55:03 -0500
-Received: from mail-pj1-x1042.google.com (mail-pj1-x1042.google.com [IPv6:2607:f8b0:4864:20::1042])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 474991B300;
-        Mon, 20 Feb 2023 18:54:40 -0800 (PST)
-Received: by mail-pj1-x1042.google.com with SMTP id i1-20020a17090ad34100b00234463de251so3201579pjx.3;
-        Mon, 20 Feb 2023 18:54:40 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=HvPIsy8SH2IRGr58SOz+sqiEbtzVAf9Sko8zRYehlzM=;
-        b=mcLlsHX5xxUVohAatV9QdZqvGMtW+ohpid0E6f4heBJsryqeZ70Y+3rjUrL1PzjU4I
-         Qdlo5tLKC6ekvXOnuMDgTXpKL7yqlRGoKtFIPluD9/FVx0o+lH20DNomQuu9wJx/SotV
-         RzQP03W7wIJQxpFskcOKSJ4NCSuz4d5hjTd3WookuqxHoI6hKvcDgLX9PMCx9Cpj/ptb
-         T5v3qPoyac5XaCtqG5bhwXkJ7cL/htf7uxI2tuwOC2ZXnSba8AbwXn8nDyE05TQoW2uy
-         IPt/K/cRyKYzyWA4+PgIKDU0GoTwiiCx0AMYh5jUpYmdUMp4YkUpJ8e+II1SM8/nwHa2
-         ouug==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=HvPIsy8SH2IRGr58SOz+sqiEbtzVAf9Sko8zRYehlzM=;
-        b=uxr8yTjjNRCnijGAztb+XGuUGuOpGRLsVPyOq69NAbFPqLTj2uY3bsmWSpz7wEdpfy
-         vMbRIbwPtQrCzXfvkKFJCnHlvvCKCjCDtq/OiSqilmJ6Dv/Nkgkyp4tz8C1eSuQxzND3
-         A32clBxJkc+m3re0+Qxc1Zq3/LwJI795hEdXhrRCJAigE+qdLNhHX8KYvCsprCJvhzQ9
-         qr6CjO7D3eIIMcFFdRjuKTnE8+AB8RRvFSVsRzmOO4+EhMzdy/sA3fW/9SAs13RhVzmG
-         7M27w8il+crj+5fOwcRVxQ4aIfgSKERQM6lk6sZ1rD9AyYdYesvmnVyAJKjIYT6li4uQ
-         /E+A==
-X-Gm-Message-State: AO0yUKXioXmO1s2wtSX1RsmmI5LSRzV19oec0Vk7MVNoDS6I2IzxMRWK
-        KRhiolGPd4HCLKYgwINkT456629WcNHATXhZ
-X-Google-Smtp-Source: AK7set9cEvB8W+yti+i3PfCxh6gv1aCVw2iOFtZYdT3SUoQppnpG9pJAo1sIawwe4M+teMk2QDR20g==
-X-Received: by 2002:a17:903:687:b0:196:5f76:1e51 with SMTP id ki7-20020a170903068700b001965f761e51mr4333897plb.64.1676948079671;
-        Mon, 20 Feb 2023 18:54:39 -0800 (PST)
-Received: from localhost.localdomain ([203.205.141.16])
-        by smtp.gmail.com with ESMTPSA id k3-20020a170902e90300b0019a837be977sm8590156pld.271.2023.02.20.18.54.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 20 Feb 2023 18:54:39 -0800 (PST)
-From:   menglong8.dong@gmail.com
-X-Google-Original-From: imagedong@tencent.com
-To:     andrii.nakryiko@gmail.com, alan.maguire@oracle.com
-Cc:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
-        martin.lau@linux.dev, song@kernel.org, yhs@fb.com,
-        john.fastabend@gmail.com, kpsingh@kernel.org, sdf@google.com,
-        haoluo@google.com, jolsa@kernel.org, benbjiang@tencent.com,
-        bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Menglong Dong <imagedong@tencent.com>
-Subject: [PATCH bpf-next v3 3/3] selftests/bpf: add test for legacy/perf kprobe/uprobe attach mode
-Date:   Tue, 21 Feb 2023 10:53:47 +0800
-Message-Id: <20230221025347.389047-4-imagedong@tencent.com>
-X-Mailer: git-send-email 2.39.0
-In-Reply-To: <20230221025347.389047-1-imagedong@tencent.com>
-References: <20230221025347.389047-1-imagedong@tencent.com>
+        Mon, 20 Feb 2023 21:57:18 -0500
+Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 5C8D824129;
+        Mon, 20 Feb 2023 18:56:47 -0800 (PST)
+Received: from loongson.cn (unknown [10.20.42.120])
+        by gateway (Coremail) with SMTP id _____8AxlF3cMvRj0gUDAA--.657S3;
+        Tue, 21 Feb 2023 10:56:28 +0800 (CST)
+Received: from [10.20.42.120] (unknown [10.20.42.120])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8CxG77ZMvRj3343AA--.35199S3;
+        Tue, 21 Feb 2023 10:56:25 +0800 (CST)
+Subject: Re: [PATCH v2 01/29] LoongArch: KVM: Add kvm related header files
+To:     Paolo Bonzini <pbonzini@redhat.com>
+References: <20230220065735.1282809-1-zhaotianrui@loongson.cn>
+ <20230220065735.1282809-2-zhaotianrui@loongson.cn>
+ <2b047b75-7397-0cce-e7af-ebba67ae2561@redhat.com>
+Cc:     Huacai Chen <chenhuacai@kernel.org>,
+        WANG Xuerui <kernel@xen0n.name>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        loongarch@lists.linux.dev, linux-kernel@vger.kernel.org,
+        kvm@vger.kernel.org, Jens Axboe <axboe@kernel.dk>,
+        Mark Brown <broonie@kernel.org>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        Oliver Upton <oliver.upton@linux.dev>, maobibo@loongson.cn
+From:   Tianrui Zhao <zhaotianrui@loongson.cn>
+Message-ID: <c9dada46-829c-d3cd-c3b6-68a570552e84@loongson.cn>
+Date:   Tue, 21 Feb 2023 10:56:25 +0800
+User-Agent: Mozilla/5.0 (X11; Linux mips64; rv:45.0) Gecko/20100101
+ Thunderbird/45.4.0
 MIME-Version: 1.0
+In-Reply-To: <2b047b75-7397-0cce-e7af-ebba67ae2561@redhat.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-CM-TRANSID: AQAAf8CxG77ZMvRj3343AA--.35199S3
+X-CM-SenderInfo: p2kd03xldq233l6o00pqjv00gofq/
+X-Coremail-Antispam: 1Uk129KBjvJXoWxGF13Gw1xZF1DJw1kKryUJrb_yoW5ZFWkpa
+        48Cw4xKr4UXryUKr1xXrn5XasIqrZrtr1ayFsxt3W3Ja4q93W8Cr4kGa4UuF4xJrykXa17
+        Aa4UKrnxuFs8ta7anT9S1TB71UUUUjJqnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
+        qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
+        bqxYFVCjjxCrM7AC8VAFwI0_Jr0_Gr1l1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s
+        1l1IIY67AEw4v_Jrv_JF1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xv
+        wVC0I7IYx2IY67AKxVW8JVW5JwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwA2z4
+        x0Y4vEx4A2jsIE14v26r4UJVWxJr1l84ACjcxK6I8E87Iv6xkF7I0E14v26r4UJVWxJr1l
+        n4kS14v26r126r1DM2AIxVAIcxkEcVAq07x20xvEncxIr21l57IF6xkI12xvs2x26I8E6x
+        ACxx1l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r126r1DMcIj6I8E
+        87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lc7I2V7IY0V
+        AS07AlzVAYIcxG8wCY1x0262kKe7AKxVWUAVWUtwCF04k20xvY0x0EwIxGrwCFx2IqxVCF
+        s4IE7xkEbVWUJVW8JwCFI7km07C267AKxVWUAVWUtwC20s026c02F40E14v26r1j6r18MI
+        8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41l
+        IxAIcVC0I7IYx2IY67AKxVWUCVW8JwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr0_Gr1lIx
+        AIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2
+        jsIEc7CjxVAFwI0_Jr0_GrUvcSsGvfC2KfnxnUUI43ZEXa7IU8Dl1DUUUUU==
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Menglong Dong <imagedong@tencent.com>
 
-Add the testing for kprobe/uprobe attaching in default, legacy, perf and
-link mode. And the testing passed:
 
-./test_progs -t attach_probe
-$5/1     attach_probe/manual-default:OK
-$5/2     attach_probe/manual-legacy:OK
-$5/3     attach_probe/manual-perf:OK
-$5/4     attach_probe/manual-link:OK
-$5/5     attach_probe/auto:OK
-$5/6     attach_probe/kprobe-sleepable:OK
-$5/7     attach_probe/uprobe-lib:OK
-$5/8     attach_probe/uprobe-sleepable:OK
-$5/9     attach_probe/uprobe-ref_ctr:OK
-$5       attach_probe:OK
-Summary: 1/9 PASSED, 0 SKIPPED, 0 FAILED
+在 2023年02月21日 02:22, Paolo Bonzini 写道:
+> On 2/20/23 07:57, Tianrui Zhao wrote:
+>> +
+>> +/* Resume Flags */
+>> +#define RESUME_FLAG_DR        (1<<0)    /* Reload guest nonvolatile 
+>> state? */
+>> +#define RESUME_FLAG_HOST    (1<<1)    /* Resume host? */
+>> +
+>> +#define RESUME_GUEST        0
+>> +#define RESUME_GUEST_DR        RESUME_FLAG_DR
+>> +#define RESUME_HOST        RESUME_FLAG_HOST
+>> +
+>
+> Most of this code is dead, I'll give more instructions in a reply to 
+> patch 8.
+>
+>> +    unsigned long guest_eentry;
+>> +    unsigned long host_eentry;
+>> +    int (*vcpu_run)(struct kvm_run *run, struct kvm_vcpu *vcpu);
+>> +    int (*handle_exit)(struct kvm_run *run, struct kvm_vcpu *vcpu);
+>> +
+>> +    /* Host registers preserved across guest mode execution */
+>> +    unsigned long host_stack;
+>> +    unsigned long host_gp;
+>> +    unsigned long host_pgd;
+>> +    unsigned long host_pgdhi;
+>> +    unsigned long host_entryhi;
+>> +
+>> +    /* Host CSR registers used when handling exits from guest */
+>> +    unsigned long badv;
+>> +    unsigned long host_estat;
+>> +    unsigned long badi;
+>> +    unsigned long host_ecfg;
+>> +    unsigned long host_percpu;
+>> +
+>> +    /* GPRS */
+>> +    unsigned long gprs[32];
+>> +    unsigned long pc;
+>> +
+>> +    /* FPU State */
+>> +    struct loongarch_fpu fpu FPU_ALIGN;
+>> +    /* Which auxiliary state is loaded (KVM_LOONGARCH_AUX_*) */
+>> +    unsigned int aux_inuse;
+>> +
+>> +    /* CSR State */
+>> +    struct loongarch_csrs *csr;
+>> +
+>> +    /* GPR used as IO source/target */
+>> +    u32 io_gpr;
+>> +
+>> +    struct hrtimer swtimer;
+>> +    /* Count timer control KVM register */
+>> +    u32 count_ctl;
+>> +
+>> +    /* Bitmask of exceptions that are pending */
+>> +    unsigned long irq_pending;
+>> +    /* Bitmask of pending exceptions to be cleared */
+>> +    unsigned long irq_clear;
+>> +
+>> +    /* Cache some mmu pages needed inside spinlock regions */
+>> +    struct kvm_mmu_memory_cache mmu_page_cache;
+>> +
+>> +    /* vcpu's vpid is different on each host cpu in an smp system */
+>> +    u64 vpid[NR_CPUS];
+>
+> In _kvm_check_vmid(), you already have
+>
+> +    if (migrated || (ver != old)) {
+> +        _kvm_update_vpid(vcpu, cpu);
+> +        trace_kvm_vpid_change(vcpu, vcpu->arch.vpid[cpu]);
+> +    }
+>
+> so a vpid will never be recycled if a vCPU migrates from physical CPU 
+> A to B and back to A.
+>
+> So please keep the current VPID in the per-cpu struct vmcs, and you 
+> can just copy it from there in _kvm_check_vmid().
 
-Reviewed-by: Biao Jiang <benbjiang@tencent.com>
-Signed-off-by: Menglong Dong <imagedong@tencent.com>
-Reviewed-by: Alan Maguire <alan.maguire@oracle.com>
----
- .../selftests/bpf/prog_tests/attach_probe.c   | 54 ++++++++++++++-----
- .../selftests/bpf/progs/test_attach_probe.c   | 32 -----------
- .../bpf/progs/test_attach_probe_manual.c      | 53 ++++++++++++++++++
- 3 files changed, 93 insertions(+), 46 deletions(-)
- create mode 100644 tools/testing/selftests/bpf/progs/test_attach_probe_manual.c
+Thanks,  that is to say we should remove the vpid[NR_CPUS] array and it 
+is enough to use only one vpid variable?
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/attach_probe.c b/tools/testing/selftests/bpf/prog_tests/attach_probe.c
-index 8afd3e6066b8..e71cb44bf2e7 100644
---- a/tools/testing/selftests/bpf/prog_tests/attach_probe.c
-+++ b/tools/testing/selftests/bpf/prog_tests/attach_probe.c
-@@ -1,6 +1,7 @@
- // SPDX-License-Identifier: GPL-2.0
- #include <test_progs.h>
- #include "test_attach_kprobe_sleepable.skel.h"
-+#include "test_attach_probe_manual.skel.h"
- #include "test_attach_probe.skel.h"
- 
- /* this is how USDT semaphore is actually defined, except volatile modifier */
-@@ -33,33 +34,48 @@ static noinline void trigger_func4(void)
- static char test_data[] = "test_data";
- 
- /* manual attach kprobe/kretprobe/uprobe/uretprobe testings */
--static void test_attach_probe_manual(struct test_attach_probe *skel)
-+static void test_attach_probe_manual(enum probe_attach_mode attach_mode)
- {
- 	DECLARE_LIBBPF_OPTS(bpf_uprobe_opts, uprobe_opts);
-+	DECLARE_LIBBPF_OPTS(bpf_kprobe_opts, kprobe_opts);
- 	struct bpf_link *kprobe_link, *kretprobe_link;
- 	struct bpf_link *uprobe_link, *uretprobe_link;
-+	struct test_attach_probe_manual *skel;
- 	ssize_t uprobe_offset;
- 
-+	skel = test_attach_probe_manual__open();
-+	if (!ASSERT_OK_PTR(skel, "skel_kprobe_manual_open"))
-+		return;
-+
-+	if (!ASSERT_OK(test_attach_probe_manual__load(skel), "skel_manual_load"))
-+		goto cleanup;
-+	if (!ASSERT_OK_PTR(skel->bss, "manual_check_bss"))
-+		goto cleanup;
-+
- 	uprobe_offset = get_uprobe_offset(&trigger_func);
- 	if (!ASSERT_GE(uprobe_offset, 0, "uprobe_offset"))
--		return;
-+		goto cleanup;
- 
- 	/* manual-attach kprobe/kretprobe */
--	kprobe_link = bpf_program__attach_kprobe(skel->progs.handle_kprobe,
--						 false /* retprobe */,
--						 SYS_NANOSLEEP_KPROBE_NAME);
-+	kprobe_opts.attach_mode = attach_mode;
-+	kprobe_opts.retprobe = false;
-+	kprobe_link = bpf_program__attach_kprobe_opts(skel->progs.handle_kprobe,
-+						      SYS_NANOSLEEP_KPROBE_NAME,
-+						      &kprobe_opts);
- 	if (!ASSERT_OK_PTR(kprobe_link, "attach_kprobe"))
--		return;
-+		goto cleanup;
- 	skel->links.handle_kprobe = kprobe_link;
- 
--	kretprobe_link = bpf_program__attach_kprobe(skel->progs.handle_kretprobe,
--						    true /* retprobe */,
--						    SYS_NANOSLEEP_KPROBE_NAME);
-+	kprobe_opts.retprobe = true;
-+	kretprobe_link = bpf_program__attach_kprobe_opts(skel->progs.handle_kretprobe,
-+							 SYS_NANOSLEEP_KPROBE_NAME,
-+							 &kprobe_opts);
- 	if (!ASSERT_OK_PTR(kretprobe_link, "attach_kretprobe"))
--		return;
-+		goto cleanup;
- 	skel->links.handle_kretprobe = kretprobe_link;
- 
- 	/* manual-attach uprobe/uretprobe */
-+	uprobe_opts.attach_mode = attach_mode;
- 	uprobe_opts.ref_ctr_offset = 0;
- 	uprobe_opts.retprobe = false;
- 	uprobe_link = bpf_program__attach_uprobe_opts(skel->progs.handle_uprobe,
-@@ -68,7 +84,7 @@ static void test_attach_probe_manual(struct test_attach_probe *skel)
- 						      uprobe_offset,
- 						      &uprobe_opts);
- 	if (!ASSERT_OK_PTR(uprobe_link, "attach_uprobe"))
--		return;
-+		goto cleanup;
- 	skel->links.handle_uprobe = uprobe_link;
- 
- 	uprobe_opts.retprobe = true;
-@@ -77,7 +93,7 @@ static void test_attach_probe_manual(struct test_attach_probe *skel)
- 							 "/proc/self/exe",
- 							 uprobe_offset, &uprobe_opts);
- 	if (!ASSERT_OK_PTR(uretprobe_link, "attach_uretprobe"))
--		return;
-+		goto cleanup;
- 	skel->links.handle_uretprobe = uretprobe_link;
- 
- 	/* attach uprobe by function name manually */
-@@ -106,6 +122,9 @@ static void test_attach_probe_manual(struct test_attach_probe *skel)
- 	ASSERT_EQ(skel->bss->uprobe_res, 3, "check_uprobe_res");
- 	ASSERT_EQ(skel->bss->uretprobe_res, 4, "check_uretprobe_res");
- 	ASSERT_EQ(skel->bss->uprobe_byname_res, 5, "check_uprobe_byname_res");
-+
-+cleanup:
-+	test_attach_probe_manual__destroy(skel);
- }
- 
- static void test_attach_probe_auto(struct test_attach_probe *skel)
-@@ -287,8 +306,15 @@ void test_attach_probe(void)
- 	if (!ASSERT_OK_PTR(skel->bss, "check_bss"))
- 		goto cleanup;
- 
--	if (test__start_subtest("manual"))
--		test_attach_probe_manual(skel);
-+	if (test__start_subtest("manual-default"))
-+		test_attach_probe_manual(PROBE_ATTACH_MODE_DEFAULT);
-+	if (test__start_subtest("manual-legacy"))
-+		test_attach_probe_manual(PROBE_ATTACH_MODE_LEGACY);
-+	if (test__start_subtest("manual-perf"))
-+		test_attach_probe_manual(PROBE_ATTACH_MODE_PERF);
-+	if (test__start_subtest("manual-link"))
-+		test_attach_probe_manual(PROBE_ATTACH_MODE_LINK);
-+
- 	if (test__start_subtest("auto"))
- 		test_attach_probe_auto(skel);
- 	if (test__start_subtest("kprobe-sleepable"))
-diff --git a/tools/testing/selftests/bpf/progs/test_attach_probe.c b/tools/testing/selftests/bpf/progs/test_attach_probe.c
-index 9e1e7163bb67..68466a6ad18c 100644
---- a/tools/testing/selftests/bpf/progs/test_attach_probe.c
-+++ b/tools/testing/selftests/bpf/progs/test_attach_probe.c
-@@ -7,12 +7,8 @@
- #include <bpf/bpf_core_read.h>
- #include "bpf_misc.h"
- 
--int kprobe_res = 0;
- int kprobe2_res = 0;
--int kretprobe_res = 0;
- int kretprobe2_res = 0;
--int uprobe_res = 0;
--int uretprobe_res = 0;
- int uprobe_byname_res = 0;
- int uretprobe_byname_res = 0;
- int uprobe_byname2_res = 0;
-@@ -23,13 +19,6 @@ int uretprobe_byname3_sleepable_res = 0;
- int uretprobe_byname3_res = 0;
- void *user_ptr = 0;
- 
--SEC("kprobe")
--int handle_kprobe(struct pt_regs *ctx)
--{
--	kprobe_res = 1;
--	return 0;
--}
--
- SEC("ksyscall/nanosleep")
- int BPF_KSYSCALL(handle_kprobe_auto, struct __kernel_timespec *req, struct __kernel_timespec *rem)
- {
-@@ -37,13 +26,6 @@ int BPF_KSYSCALL(handle_kprobe_auto, struct __kernel_timespec *req, struct __ker
- 	return 0;
- }
- 
--SEC("kretprobe")
--int handle_kretprobe(struct pt_regs *ctx)
--{
--	kretprobe_res = 2;
--	return 0;
--}
--
- SEC("kretsyscall/nanosleep")
- int BPF_KRETPROBE(handle_kretprobe_auto, int ret)
- {
-@@ -51,20 +33,6 @@ int BPF_KRETPROBE(handle_kretprobe_auto, int ret)
- 	return ret;
- }
- 
--SEC("uprobe")
--int handle_uprobe(struct pt_regs *ctx)
--{
--	uprobe_res = 3;
--	return 0;
--}
--
--SEC("uretprobe")
--int handle_uretprobe(struct pt_regs *ctx)
--{
--	uretprobe_res = 4;
--	return 0;
--}
--
- SEC("uprobe")
- int handle_uprobe_ref_ctr(struct pt_regs *ctx)
- {
-diff --git a/tools/testing/selftests/bpf/progs/test_attach_probe_manual.c b/tools/testing/selftests/bpf/progs/test_attach_probe_manual.c
-new file mode 100644
-index 000000000000..7f08bce94596
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/test_attach_probe_manual.c
-@@ -0,0 +1,53 @@
-+// SPDX-License-Identifier: GPL-2.0
-+// Copyright (c) 2017 Facebook
-+
-+#include "vmlinux.h"
-+#include <bpf/bpf_helpers.h>
-+#include <bpf/bpf_tracing.h>
-+#include <bpf/bpf_core_read.h>
-+#include "bpf_misc.h"
-+
-+int kprobe_res = 0;
-+int kretprobe_res = 0;
-+int uprobe_res = 0;
-+int uretprobe_res = 0;
-+int uprobe_byname_res = 0;
-+void *user_ptr = 0;
-+
-+SEC("kprobe")
-+int handle_kprobe(struct pt_regs *ctx)
-+{
-+	kprobe_res = 1;
-+	return 0;
-+}
-+
-+SEC("kretprobe")
-+int handle_kretprobe(struct pt_regs *ctx)
-+{
-+	kretprobe_res = 2;
-+	return 0;
-+}
-+
-+SEC("uprobe")
-+int handle_uprobe(struct pt_regs *ctx)
-+{
-+	uprobe_res = 3;
-+	return 0;
-+}
-+
-+SEC("uretprobe")
-+int handle_uretprobe(struct pt_regs *ctx)
-+{
-+	uretprobe_res = 4;
-+	return 0;
-+}
-+
-+SEC("uprobe")
-+int handle_uprobe_byname(struct pt_regs *ctx)
-+{
-+	uprobe_byname_res = 5;
-+	return 0;
-+}
-+
-+
-+char _license[] SEC("license") = "GPL";
--- 
-2.39.0
+Thanks
+Tianrui Zhao
+
+>
+>> +    /* Period of stable timer tick in ns */
+>> +    u64 timer_period;
+>> +    /* Frequency of stable timer in Hz */
+>> +    u64 timer_mhz;
+>> +    /* Stable bias from the raw time */
+>> +    u64 timer_bias;
+>> +    /* Dynamic nanosecond bias (multiple of timer_period) to avoid 
+>> overflow */
+>> +    s64 timer_dyn_bias;
+>> +    /* Save ktime */
+>> +    ktime_t stable_ktime_saved;
+>> +
+>> +    u64 core_ext_ioisr[4];
+>> +
+>> +    /* Last CPU the VCPU state was loaded on */
+>> +    int last_sched_cpu;
+>> +    /* Last CPU the VCPU actually executed guest code on */
+>> +    int last_exec_cpu;
+>> +
+>> +    u8 fpu_enabled;
+>
+> This field is always true, please remove it.
+
+Thanks, i will remove this variable.
+
+Thanks
+Tianrui Zhao
+
+>
+>> +    struct kvm_guest_debug_arch guest_debug;
+>
+> This struct is empty, please remove it.
+
+Ok, I will remove it.
+
+Thanks
+Tianrui Zhao
+
+>
+> Paolo
 
