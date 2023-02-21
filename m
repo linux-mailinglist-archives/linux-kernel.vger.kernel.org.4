@@ -2,108 +2,263 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1133869E112
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 14:09:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5947569E117
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 14:11:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233828AbjBUNJk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Feb 2023 08:09:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36498 "EHLO
+        id S233865AbjBUNLu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Feb 2023 08:11:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37894 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230027AbjBUNJi (ORCPT
+        with ESMTP id S230027AbjBUNLs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Feb 2023 08:09:38 -0500
-Received: from mail-lj1-x236.google.com (mail-lj1-x236.google.com [IPv6:2a00:1450:4864:20::236])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6CA028844
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Feb 2023 05:09:35 -0800 (PST)
-Received: by mail-lj1-x236.google.com with SMTP id a30so4437428ljr.0
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Feb 2023 05:09:35 -0800 (PST)
+        Tue, 21 Feb 2023 08:11:48 -0500
+Received: from mail-lj1-x230.google.com (mail-lj1-x230.google.com [IPv6:2a00:1450:4864:20::230])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82ED1279AF
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Feb 2023 05:11:47 -0800 (PST)
+Received: by mail-lj1-x230.google.com with SMTP id z5so4329811ljc.8
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Feb 2023 05:11:47 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=vojoAcfUuZFzbZ4NXFeMzemBjeLJC5XF1afZIyyXCcc=;
-        b=BKvymr7g7GtkBXmqCdpf/taKauloWxanij5lD1QUkDuOXbN3q8I7hNjzkWkFm7ja8h
-         Lnv2HREXgop8r40ION5WEA6Zi/+O3RgLnI7/3sfev+alJRvJZ5aMTiCnN61I/jDHorLq
-         odm0eVnkpaDmzp9cLHu1OU2KWZaJe12e39Pnf5N7zQu96Jc11a6nqXWAgmCghuEGfQai
-         ueFL7fttwW+lRhhuD8xLhXGhzrd64LCI3NjqhNh5SjTDrDJYNgGiisTXiAiIxaF2rJVN
-         9M34OhMjzFLkd4ibj6gFxHGYm+v/0fWa/fRsAYYsomY5t70qQVWzyIoHe7AgIYh7+mQl
-         3gNg==
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:message-id:subject:cc:to:from
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=cNhimdyNaKAc11JJ6Ns7s8JMD6xxwBN60jrdYrS/jXY=;
+        b=fwLwQ2U/UKjLvDSXZ6xR1gULG/ceO9m8grYQzVyTqMeC80dDl6gsswDequn8FGdCAc
+         lochhyGoORy7f9nAwzVM/M93dWm7z6232v3kVT1i28Hhqe7l+8aGZQsehqbhqcsKK3xP
+         2L02UCJpYlyqu/OJMnQyFTHfEwTZ9E3L0WPJ+8xOx+tsTFMVxRpcMWP5mBF74oDvft5f
+         Bbx4Mk6YWgZjAs9NJX2vcV71TiQfSvvMMQBcWpGht2FjH/s/EuURZZUlH2wnKadNJFOB
+         mOti4WCk2/EkqBuQbg4ffRWXl1jF6kLtPbP20A96Ucc4B9zpiXfrH+SHjJzgb6j5jHGx
+         7xiQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=vojoAcfUuZFzbZ4NXFeMzemBjeLJC5XF1afZIyyXCcc=;
-        b=UZJcG1HwMGWgQWq41WQ/HO62YkOU5vvlMai19MIYXyT8pE7EfTO1b0M9zp9a7FpA9/
-         OUzD7y8Jx/X4QD+SULwdPG/hFmMD+tkqUstcGfyUw5NsMBr+i3T1IzbZNRQNd4OWXKfR
-         BsqvVrWiK2nzPN3mY6LnZNDZhcYv5C0DF8AkAZwQbdIBE61YrDi5foEHBUbATNWSS565
-         NAJ4S21Nyouw08D+SHvl/KzSlZ0pYvP6LWh/hTwKVWSHlibcbiGTzItzJvtz3SLZRykR
-         b0VaHS5XnbyfzGgu5X2CNPHQalKegNXbuxwPypC1hqUNdnBBXTyrg/jtJkCCA4T7GNC2
-         qcuA==
-X-Gm-Message-State: AO0yUKUyqE2NodEkJZYz5Iz2jsOTA6nWPY4u8L5R66YVjZaJRgFRvuaH
-        K0Pwz6T21qA0cgpRH/p8pp8pnA==
-X-Google-Smtp-Source: AK7set/C1Ntt5qOJwBdZyOdjVB+T9JCWwDKooUuf7BcTZANWTJhOWEj0TcTgLQr3gPVK3+7TOeiEZQ==
-X-Received: by 2002:a2e:7c18:0:b0:293:464f:feda with SMTP id x24-20020a2e7c18000000b00293464ffedamr1729099ljc.16.1676984973385;
-        Tue, 21 Feb 2023 05:09:33 -0800 (PST)
-Received: from [192.168.1.101] (abxi151.neoplus.adsl.tpnet.pl. [83.9.2.151])
-        by smtp.gmail.com with ESMTPSA id f22-20020a2e6a16000000b0029353201fddsm773835ljc.129.2023.02.21.05.09.32
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 21 Feb 2023 05:09:33 -0800 (PST)
-Message-ID: <efdd3472-57cf-6022-2cfa-53a2fd86c2f2@linaro.org>
-Date:   Tue, 21 Feb 2023 14:09:31 +0100
+        h=mime-version:references:in-reply-to:message-id:subject:cc:to:from
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=cNhimdyNaKAc11JJ6Ns7s8JMD6xxwBN60jrdYrS/jXY=;
+        b=PFYVO5pEm+ZA1/QwXQF1CWOe0jE14nRcrVniO64rCiJHUAhwYdaIEcHRQVtq14VpfA
+         GDVUkqpVrGIJWX7M6oHVlWWtwlYXBaA01qfn56Iozm8zCu3uvwIvPEu9nDf88RKuympB
+         VBLi6YM6iQMHmhFVaLwJPP+GZkCRn7ZrPd+9ySZP3MmReTlMcQ2Ca4g1st+EFiYbUWYt
+         3fiPsMdft9WwrAhXKvkvNaK6NCc4MDGNNvK65Vaw5zEyRAbxpcqgnfI+Xup2V+o7tobi
+         O7PUG53eejDUcJzO0G82DBVl5MQK6/KLCBS37PDCjbszVszW+IbkSigDCsytqhDB8mUU
+         iSCQ==
+X-Gm-Message-State: AO0yUKXCTit8zPfzbWD2s5/oiOpq0bEJzdhg29wdYoxnHKV5PBnB+f31
+        0i86GvzNoFJBnnwluOrhRek=
+X-Google-Smtp-Source: AK7set/r4gLYYZSEaRA0c5Ez9U9QB0NSc1DB+jLvctnSx6QhLli4WRi6ifgxcWuxUnGYTMsrLHo1kg==
+X-Received: by 2002:a05:651c:1987:b0:293:5360:162b with SMTP id bx7-20020a05651c198700b002935360162bmr1153760ljb.11.1676985105596;
+        Tue, 21 Feb 2023 05:11:45 -0800 (PST)
+Received: from eldfell ([194.136.85.206])
+        by smtp.gmail.com with ESMTPSA id u9-20020a2eb809000000b00295765966d9sm719189ljo.86.2023.02.21.05.11.44
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 21 Feb 2023 05:11:45 -0800 (PST)
+Date:   Tue, 21 Feb 2023 15:11:33 +0200
+From:   Pekka Paalanen <ppaalanen@gmail.com>
+To:     Ville =?UTF-8?B?U3lyasOkbMOk?= <ville.syrjala@linux.intel.com>
+Cc:     Rob Clark <robdclark@gmail.com>,
+        Rob Clark <robdclark@chromium.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Tvrtko Ursulin <tvrtko.ursulin@intel.com>,
+        Christian =?UTF-8?B?S8O2bmln?= <ckoenig.leichtzumerken@gmail.com>,
+        Michel =?UTF-8?B?RMOkbnplcg==?= <michel@daenzer.net>,
+        open list <linux-kernel@vger.kernel.org>,
+        dri-devel@lists.freedesktop.org,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        freedreno@lists.freedesktop.org
+Subject: Re: [PATCH v4 10/14] drm/vblank: Add helper to get next vblank time
+Message-ID: <20230221151133.6392c521@eldfell>
+In-Reply-To: <Y/TAr64SpxO712RB@intel.com>
+References: <20230218211608.1630586-1-robdclark@gmail.com>
+        <20230218211608.1630586-11-robdclark@gmail.com>
+        <20230220110820.595cfa37@eldfell>
+        <CAF6AEGuo-vmW4Va9=RH+kH9KgNvR2vzjJ8meO-oty56xjDhjgg@mail.gmail.com>
+        <20230221104551.60d44d1c@eldfell>
+        <Y/TAr64SpxO712RB@intel.com>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH] arm64: dts: qcom: sm8250-xiaomi-elish: Correct venus
- firmware path
-To:     Jianhua Lu <lujianhua000@gmail.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc:     linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org
-References: <20230221123633.25145-1-lujianhua000@gmail.com>
-Content-Language: en-US
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <20230221123633.25145-1-lujianhua000@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/Yl_frWmpDj_N_KKHgXd/ud5";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+--Sig_/Yl_frWmpDj_N_KKHgXd/ud5
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+
+On Tue, 21 Feb 2023 15:01:35 +0200
+Ville Syrj=C3=A4l=C3=A4 <ville.syrjala@linux.intel.com> wrote:
+
+> On Tue, Feb 21, 2023 at 10:45:51AM +0200, Pekka Paalanen wrote:
+> > On Mon, 20 Feb 2023 07:55:41 -0800
+> > Rob Clark <robdclark@gmail.com> wrote:
+> >  =20
+> > > On Mon, Feb 20, 2023 at 1:08 AM Pekka Paalanen <ppaalanen@gmail.com> =
+wrote: =20
+> > > >
+> > > > On Sat, 18 Feb 2023 13:15:53 -0800
+> > > > Rob Clark <robdclark@gmail.com> wrote:
+> > > >   =20
+> > > > > From: Rob Clark <robdclark@chromium.org>
+> > > > >
+> > > > > Will be used in the next commit to set a deadline on fences that =
+an
+> > > > > atomic update is waiting on.
+> > > > >
+> > > > > Signed-off-by: Rob Clark <robdclark@chromium.org>
+> > > > > ---
+> > > > >  drivers/gpu/drm/drm_vblank.c | 32 ++++++++++++++++++++++++++++++=
+++
+> > > > >  include/drm/drm_vblank.h     |  1 +
+> > > > >  2 files changed, 33 insertions(+)
+> > > > >
+> > > > > diff --git a/drivers/gpu/drm/drm_vblank.c b/drivers/gpu/drm/drm_v=
+blank.c
+> > > > > index 2ff31717a3de..caf25ebb34c5 100644
+> > > > > --- a/drivers/gpu/drm/drm_vblank.c
+> > > > > +++ b/drivers/gpu/drm/drm_vblank.c
+> > > > > @@ -980,6 +980,38 @@ u64 drm_crtc_vblank_count_and_time(struct dr=
+m_crtc *crtc,
+> > > > >  }
+> > > > >  EXPORT_SYMBOL(drm_crtc_vblank_count_and_time);
+> > > > >
+> > > > > +/**
+> > > > > + * drm_crtc_next_vblank_time - calculate the time of the next vb=
+lank
+> > > > > + * @crtc: the crtc for which to calculate next vblank time
+> > > > > + * @vblanktime: pointer to time to receive the next vblank times=
+tamp.
+> > > > > + *
+> > > > > + * Calculate the expected time of the next vblank based on time =
+of previous
+> > > > > + * vblank and frame duration   =20
+> > > >
+> > > > Hi,
+> > > >
+> > > > for VRR this targets the highest frame rate possible for the current
+> > > > VRR mode, right?
+> > > >   =20
+> > >=20
+> > > It is based on vblank->framedur_ns which is in turn based on
+> > > mode->crtc_clock.  Presumably for VRR that ends up being a maximum? =
+=20
+> >=20
+> > I don't know. :-) =20
+>=20
+> At least for i915 this will give you the maximum frame
+> duration.
+
+Really maximum duration? So minimum VRR frequency?
+
+> Also this does not calculate the the start of vblank, it
+> calculates the start of active video.
+
+Oh indeed, so it's too late. What one would actually need for the
+deadline is the driver's deadline to present for the immediately next
+start of active video.
+
+And with VRR that should probably aim for the maximum frame frequency,
+not minimum?
 
 
-On 21.02.2023 13:36, Jianhua Lu wrote:
-> Missing vendor name for venus firmware path. Add it.
-> 
-> Fixes: a41b617530bf ("arm64: dts: qcom: sm8250: Add device tree for Xiaomi Mi Pad 5 Pro")
-> Signed-off-by: Jianhua Lu <lujianhua000@gmail.com>
-> ---
-Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
 
-Konrad
->  arch/arm64/boot/dts/qcom/sm8250-xiaomi-elish.dts | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/arch/arm64/boot/dts/qcom/sm8250-xiaomi-elish.dts b/arch/arm64/boot/dts/qcom/sm8250-xiaomi-elish.dts
-> index acaa99c5ff8b..a85d47f7a9e8 100644
-> --- a/arch/arm64/boot/dts/qcom/sm8250-xiaomi-elish.dts
-> +++ b/arch/arm64/boot/dts/qcom/sm8250-xiaomi-elish.dts
-> @@ -625,6 +625,6 @@ &ufs_mem_phy {
->  };
->  
->  &venus {
-> -	firmware-name = "qcom/sm8250/elish/venus.mbn";
-> +	firmware-name = "qcom/sm8250/xiaomi/elish/venus.mbn";
->  	status = "okay";
->  };
+Thanks,
+pq
+
+>=20
+> >=20
+> > You need a number of clock cycles in addition to the clock frequency,
+> > and that could still be minimum, maximum, the last realized one, ...
+> >=20
+> > VRR works by adjusting the front porch length IIRC.
+> >=20
+> >=20
+> > Thanks,
+> > pq
+> >  =20
+> > > BR,
+> > > -R
+> > >=20
+> > >  =20
+> > > >
+> > > > Thanks,
+> > > > pq
+> > > >   =20
+> > > > > + */
+> > > > > +int drm_crtc_next_vblank_time(struct drm_crtc *crtc, ktime_t *vb=
+lanktime)
+> > > > > +{
+> > > > > +     unsigned int pipe =3D drm_crtc_index(crtc);
+> > > > > +     struct drm_vblank_crtc *vblank =3D &crtc->dev->vblank[pipe];
+> > > > > +     u64 count;
+> > > > > +
+> > > > > +     if (!vblank->framedur_ns)
+> > > > > +             return -EINVAL;
+> > > > > +
+> > > > > +     count =3D drm_vblank_count_and_time(crtc->dev, pipe, vblank=
+time);
+> > > > > +
+> > > > > +     /*
+> > > > > +      * If we don't get a valid count, then we probably also don=
+'t
+> > > > > +      * have a valid time:
+> > > > > +      */
+> > > > > +     if (!count)
+> > > > > +             return -EINVAL;
+> > > > > +
+> > > > > +     *vblanktime =3D ktime_add(*vblanktime, ns_to_ktime(vblank->=
+framedur_ns));
+> > > > > +
+> > > > > +     return 0;
+> > > > > +}
+> > > > > +EXPORT_SYMBOL(drm_crtc_next_vblank_time);
+> > > > > +
+> > > > >  static void send_vblank_event(struct drm_device *dev,
+> > > > >               struct drm_pending_vblank_event *e,
+> > > > >               u64 seq, ktime_t now)
+> > > > > diff --git a/include/drm/drm_vblank.h b/include/drm/drm_vblank.h
+> > > > > index 733a3e2d1d10..a63bc2c92f3c 100644
+> > > > > --- a/include/drm/drm_vblank.h
+> > > > > +++ b/include/drm/drm_vblank.h
+> > > > > @@ -230,6 +230,7 @@ bool drm_dev_has_vblank(const struct drm_devi=
+ce *dev);
+> > > > >  u64 drm_crtc_vblank_count(struct drm_crtc *crtc);
+> > > > >  u64 drm_crtc_vblank_count_and_time(struct drm_crtc *crtc,
+> > > > >                                  ktime_t *vblanktime);
+> > > > > +int drm_crtc_next_vblank_time(struct drm_crtc *crtc, ktime_t *vb=
+lanktime);
+> > > > >  void drm_crtc_send_vblank_event(struct drm_crtc *crtc,
+> > > > >                              struct drm_pending_vblank_event *e);
+> > > > >  void drm_crtc_arm_vblank_event(struct drm_crtc *crtc,   =20
+> > > >   =20
+> >  =20
+>=20
+>=20
+>=20
+
+
+--Sig_/Yl_frWmpDj_N_KKHgXd/ud5
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAEBCAAdFiEEJQjwWQChkWOYOIONI1/ltBGqqqcFAmP0wwUACgkQI1/ltBGq
+qqcZkA/8Cxrs2faxApuOpiVvmEfxySmnnriqWQvI73A1Rr/BzSKXolQsb1ZRq86W
+dMq+pc4YmDY3E3ffoZpMSDaQEcl9FxGx6It1FeqV0eSEHV2cmWidGNFi50+s0Wzj
+KXU2DNlNwG8bFaMEM0d3G1pIpV46sV4jCEBZ5cl4qVuNpJuFu3TGHzdD3ZvL/MhT
+gAyVyEj7cocuTFFEAezd2evkbyRdRUsXX98hjPoJuVi8L9Rz0WRc0FcFgucZNcEt
+Y72QQgsyjEzmXsO1M0oX/5hNEWAHlp/hMOjgXT35d7ud4NLpn4cUNeegkR2jqjKu
+V4MbaufRxZLBnAF77IJHdD1UsymLisA/CVTw9xBgtjgB7WKBS+9x6676cr0amWZV
+tZRoSbnPf32EHIWiTDgSvCfVopE2WvIoCnHbhBwpLI4Lza4oI9QnZWItMK9c5m2k
+/ilaB6X/rEPtd+NOcZL2bO/3nTFOdcM9ipWwd/Jquj/9apIA8hoMa2Fw5HZqjiym
+VmY7/itis8iR6EB8vy48e45GrY+RcpLRT3BCHTG7XJ1PuQna2uWME5eBGe3dNISu
+5ZDXtfk/O02jXWpMaV9jEbIIShqjQIwKaApYfOrgIDGswogZiua8l8A54xoO5R0E
+qmKdiaN9VnADXv1SoykOo61fGro8pY0Q64wk8iSn1GGdq5XTWOo=
+=LgjZ
+-----END PGP SIGNATURE-----
+
+--Sig_/Yl_frWmpDj_N_KKHgXd/ud5--
