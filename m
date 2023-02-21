@@ -2,141 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DE80969DAB2
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 07:44:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 118EC69DAB5
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 07:44:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233221AbjBUGoI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Feb 2023 01:44:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49986 "EHLO
+        id S233254AbjBUGoa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Feb 2023 01:44:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50448 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233134AbjBUGoG (ORCPT
+        with ESMTP id S233134AbjBUGo2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Feb 2023 01:44:06 -0500
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 997021ABDC;
-        Mon, 20 Feb 2023 22:44:04 -0800 (PST)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4PLVBB4Kzxz4x5c;
-        Tue, 21 Feb 2023 17:44:02 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1676961842;
-        bh=WdReY2/wAVvJYZnti5npjpayWKfRwp+N3NvydloCdGA=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=VVNPkztK7UUoW8RuPRS8gWwL6B6iA5X+TrFeqkH9TpEtoui13sr+MOF7eIEH1ZhCD
-         xCAeK2GX3jE3nCZ4TvJiTFcLWCtUgJbCPnKAcB+ox8q0LQoz4TssmvvB3t8o1WGouB
-         ItK0bMJmyd20husqzbaPXOrjX80xh45mny8j6CQwGr+CEd2wMnh0HLEQQpRuLRh//O
-         64MKGCX0Hj8FgBTmHvDYfxgv5xp9+BNa9bpxqYuoi2AdkrspTjt/ZRuNoGgF0FqIR/
-         J3yFl1cZeE2HPTBzn4roo81+GIcIwEmLizEBE2p7Vjt/8mP4xghd5Jahk2XbxDDfy7
-         vhqF4Os7xR1Qw==
-Date:   Tue, 21 Feb 2023 17:44:01 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Matthew Wilcox <willy@infradead.org>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Steve French <smfrench@gmail.com>,
-        CIFS <linux-cifs@vger.kernel.org>,
-        David Howells <dhowells@redhat.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Steve French <stfrench@microsoft.com>,
-        "Vishal Moola (Oracle)" <vishal.moola@gmail.com>
-Subject: Re: linux-next: manual merge of the mm-stable tree with the cifs
- tree
-Message-ID: <20230221174401.7198357d@canb.auug.org.au>
-In-Reply-To: <Y/Pe2xHklSr1hDtz@casper.infradead.org>
-References: <20230220152933.1ab8fa4a@canb.auug.org.au>
-        <Y/N8hVWeR3AjssUC@casper.infradead.org>
-        <20230220190157.3b43b9a7@canb.auug.org.au>
-        <Y/Pe2xHklSr1hDtz@casper.infradead.org>
+        Tue, 21 Feb 2023 01:44:28 -0500
+Received: from fd01.gateway.ufhost.com (fd01.gateway.ufhost.com [61.152.239.71])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F7661C7FA;
+        Mon, 20 Feb 2023 22:44:19 -0800 (PST)
+Received: from EXMBX165.cuchost.com (unknown [175.102.18.54])
+        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
+        (Client CN "EXMBX165", Issuer "EXMBX165" (not verified))
+        by fd01.gateway.ufhost.com (Postfix) with ESMTP id 4757F24E31E;
+        Tue, 21 Feb 2023 14:44:12 +0800 (CST)
+Received: from EXMBX172.cuchost.com (172.16.6.92) by EXMBX165.cuchost.com
+ (172.16.6.75) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Tue, 21 Feb
+ 2023 14:44:12 +0800
+Received: from [192.168.125.82] (183.27.98.67) by EXMBX172.cuchost.com
+ (172.16.6.92) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Tue, 21 Feb
+ 2023 14:44:11 +0800
+Message-ID: <d7880fbb-ee6a-751b-4372-9d3154257c6c@starfivetech.com>
+Date:   Tue, 21 Feb 2023 14:44:10 +0800
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/Ki1YF7XklYAV5e=2qQ+JFWu";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.2
+Subject: Re: [PATCH v3 09/11] clk: starfive: Add StarFive JH7110 system clock
+ driver
+Content-Language: en-US
+To:     Emil Renner Berthing <emil.renner.berthing@canonical.com>
+CC:     <linux-riscv@lists.infradead.org>, <devicetree@vger.kernel.org>,
+        <linux-clk@vger.kernel.org>, Conor Dooley <conor@kernel.org>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Stephen Boyd <sboyd@kernel.org>,
+        "Michael Turquette" <mturquette@baylibre.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        <linux-kernel@vger.kernel.org>
+References: <20221220005054.34518-1-hal.feng@starfivetech.com>
+ <20221220005054.34518-10-hal.feng@starfivetech.com>
+ <CAJM55Z-qpQkLjSFN33ELGE8DtoygY+vL6zi2raPh6POJ69pjbg@mail.gmail.com>
+From:   Hal Feng <hal.feng@starfivetech.com>
+In-Reply-To: <CAJM55Z-qpQkLjSFN33ELGE8DtoygY+vL6zi2raPh6POJ69pjbg@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [183.27.98.67]
+X-ClientProxiedBy: EXCAS061.cuchost.com (172.16.6.21) To EXMBX172.cuchost.com
+ (172.16.6.92)
+X-YovoleRuleAgent: yovoleflag
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/Ki1YF7XklYAV5e=2qQ+JFWu
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On Sun, 19 Feb 2023 22:23:39 +0100, Emil Renner Berthing wrote:
+> On Tue, 20 Dec 2022 at 01:51, Hal Feng <hal.feng@starfivetech.com> wrote:
+>> diff --git a/drivers/clk/starfive/clk-starfive-jh7110-sys.c b/drivers/clk/starfive/clk-starfive-jh7110-sys.c
+>> new file mode 100644
+>> index 000000000000..abc1c280bbe3
+>> --- /dev/null
+>> +++ b/drivers/clk/starfive/clk-starfive-jh7110-sys.c
+>> @@ -0,0 +1,448 @@
+>> +// SPDX-License-Identifier: GPL-2.0
+>> +/*
+>> + * StarFive JH7110 System Clock Driver
+[...]
+>> +static int __init jh7110_syscrg_probe(struct platform_device *pdev)
+>> +{
+>> +       struct jh71x0_clk_priv *priv;
+>> +       unsigned int idx;
+>> +       int ret;
+>> +
+>> +       priv = devm_kzalloc(&pdev->dev,
+>> +                           struct_size(priv, reg, JH7110_SYSCLK_PLL0_OUT),
+>> +                           GFP_KERNEL);
+>> +       if (!priv)
+>> +               return -ENOMEM;
+>> +
+>> +       spin_lock_init(&priv->rmw_lock);
+>> +       priv->dev = &pdev->dev;
+>> +       priv->base = devm_platform_ioremap_resource(pdev, 0);
+>> +       if (IS_ERR(priv->base))
+>> +               return PTR_ERR(priv->base);
+>> +
+>> +       dev_set_drvdata(priv->dev, priv->base);
+>> +
+>> +       /* 24MHz -> 1250.0MHz */
+>> +       priv->pll[0] = devm_clk_hw_register_fixed_factor(priv->dev, "pll0_out",
+>> +                                                        "osc", 0, 625, 12);
+>> +       if (IS_ERR(priv->pll[0]))
+>> +               return PTR_ERR(priv->pll[0]);
+> 
+> Hi Hal,
+> 
+> Are you sure this should be 1.25GHz and not 1GHz? I can't seem to make
+> the ethernet driver work unless I set it to 1GHz. This also makes
+> other derived clocks that should be 125MHz show up as such in the
+> clock tree. Eg. "usb_125m".
+> 
+> Perhaps it's because I updated my board to the latest u-boot
+> release[1]. I know these PLLs are just placeholders until you add
+> proper code to control them, but until then it's important that these
+> values match the defaults or whatever the latest u-boot sets them to.
+> Please check the PLLs below with the latest u-boot too.
+> 
+> /Emil
+> 
+> [1]: https://github.com/starfive-tech/VisionFive2/releases
 
-Hi Matthew,
+After this series sent out, we found a bug in the u-boot when cpu
+running at 1.25 GHz, so now the cpu runs at 1GHz in the latest
+u-boot. I have updated it in v4. Thanks for reminding.
+What's more, we will support adjusting the cpu frequency in the
+future, so the cpu can run at a higher frequency.
 
-On Mon, 20 Feb 2023 20:58:03 +0000 Matthew Wilcox <willy@infradead.org> wro=
-te:
->
-> On Mon, Feb 20, 2023 at 07:01:57PM +1100, Stephen Rothwell wrote:
-> > Hi Matthew,
-> >=20
-> > On Mon, 20 Feb 2023 13:58:29 +0000 Matthew Wilcox <willy@infradead.org>=
- wrote: =20
-> > >
-> > > On Mon, Feb 20, 2023 at 03:29:33PM +1100, Stephen Rothwell wrote: =20
-> > > >=20
-> > > > Today's linux-next merge of the mm-stable tree got a conflict in:
-> > > >=20
-> > > >   fs/cifs/file.c
-> > > >=20
-> > > > between commit:
-> > > >=20
-> > > >   c8859bc0c129 ("cifs: Remove unused code")
-> > > >=20
-> > > > from the cifs tree and commits:
-> > > >=20
-> > > >   4cda80f3a7a5 ("cifs: convert wdata_alloc_and_fillpages() to use f=
-ilemap_get_folios_tag()")
-> > > >   d585bdbeb79a ("fs: convert writepage_t callback to pass a folio")
-> > > >=20
-> > > > from the mm-stable tree.
-> > > >=20
-> > > > This is a real mess :-(   =20
-> > >=20
-> > > Doesn't look too bad to me.  Dave's commit is just removing the
-> > > functions, so it doesn't matter how they're being changed. =20
-> >=20
-> > The problem I see is that an earlier commit in the cifs tree moves the
-> > use of find_get_pages_range_tag() to another function and 4cda80f3a7a5
-> > then removes find_get_pages_range_tag(). =20
->=20
-> Ah.  Just removing all traces of it should be fine.  As long as there
-> are no remaining callers of find_get_pages_range_tag() after the merge,
-> it's good from my point of view.
+Best regards,
+Hal
 
-But I can't do that since commit
+> 
+>> +       /* 24MHz -> 1066.0MHz */
+>> +       priv->pll[1] = devm_clk_hw_register_fixed_factor(priv->dev, "pll1_out",
+>> +                                                        "osc", 0, 533, 12);
+>> +       if (IS_ERR(priv->pll[1]))
+>> +               return PTR_ERR(priv->pll[1]);
+>> +
+>> +       /* 24MHz -> 1188.0MHz */
+>> +       priv->pll[2] = devm_clk_hw_register_fixed_factor(priv->dev, "pll2_out",
+>> +                                                        "osc", 0, 99, 2);
+>> +       if (IS_ERR(priv->pll[2]))
+>> +               return PTR_ERR(priv->pll[2]);
 
-  d08089f649a0 ("cifs: Change the I/O paths to use an iterator rather than =
-a page list")
-
-in the cifs tree introduces a new usage of it in code that is used in
-the cifs code ... so someone has to figure out what the merge
-resolution is between the 2 trees (how to replace that new usage) and
-let me know and then we need to test that combination for a while
-before asking Linus to take it.
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/Ki1YF7XklYAV5e=2qQ+JFWu
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmP0aDEACgkQAVBC80lX
-0GzEzAf/YEhRpepelO04fFm7U1b3tHAO6/WzX3JlWR6VZev2gVRN8/tbz4UK59/0
-7G2ocGc10R8Jb2/DFt+715oav9juyL3OaZXo5H8q1wCwK26KkEerDEhDdJFyfFQy
-5GLcR4pwbZAPpZoY+sfvLRACSylYUkDrSjAWLv1cwCJ+zYSIg6kcajPBFdIW5Nss
-cg4rS4HTI4bJmnhwfSsQXFTKwEpE2TIloD3tLtbu9xLLtAl9fhSrdFCM7vCYglT2
-rz1tCB+k8nPDWZ89jlh4X7pL2/oXr18OP1p9eRo2zvBSHSutJ/w9ce1piY3sphVT
-GenksRz1QDHakejMYo/xeb5NB+ykFA==
-=2mN+
------END PGP SIGNATURE-----
-
---Sig_/Ki1YF7XklYAV5e=2qQ+JFWu--
