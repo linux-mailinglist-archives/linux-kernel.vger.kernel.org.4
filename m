@@ -2,357 +2,182 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1275B69DC68
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 09:51:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BDC9669DC6A
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 09:53:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233786AbjBUIvY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Feb 2023 03:51:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40878 "EHLO
+        id S233819AbjBUIxP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Feb 2023 03:53:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41912 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231546AbjBUIvW (ORCPT
+        with ESMTP id S231546AbjBUIxO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Feb 2023 03:51:22 -0500
-Received: from mail.8bytes.org (mail.8bytes.org [IPv6:2a01:238:42d9:3f00:e505:6202:4f0c:f051])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D3EA023D82
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Feb 2023 00:51:15 -0800 (PST)
-Received: from 8bytes.org (p200300c27714bc0086ad4f9d2505dd0d.dip0.t-ipconnect.de [IPv6:2003:c2:7714:bc00:86ad:4f9d:2505:dd0d])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.8bytes.org (Postfix) with ESMTPSA id 62D2522425A;
-        Tue, 21 Feb 2023 09:51:14 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=8bytes.org;
-        s=default; t=1676969474;
-        bh=x9WsyvGJ/BNVAAqSwl4JpFU98i9nTyZlPjeRW5BWdAs=;
-        h=Date:From:To:Cc:Subject:From;
-        b=wOskxfsHpgJ/Y+YcSSENztXPQwss70bg5LTENfzI6IVvvnY//6ErdWaZsi7ZqxipX
-         m+2s6hlilRw2oRBdKvdnPYJTDDmQTcM8oeSZ3BSJPSMOaVdfFLmOTGK7jA0b7Kvgfy
-         C0qsPuxrtepL1XmUxwiEIWPGm/kZkTjSkfrCZEtSq7Fe5F16OlnWm6NJ0xzzb7jLm9
-         JOdMDrSo0yCymzUK1soaHaduB8CQDKbH365luFRoBq84detggTXMpqFrIq/hcJypxS
-         RRqaoUgWpo/bkigFkUjnIR0Ab7ga8QqknXjyEurbGRaHVAjXJrq11v9d7RB+3W476P
-         92Hk6WwMYHl2g==
-Date:   Tue, 21 Feb 2023 09:51:13 +0100
-From:   Joerg Roedel <joro@8bytes.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Will Deacon <will@kernel.org>, linux-kernel@vger.kernel.org,
-        iommu@lists.linux.dev
-Subject: [git pull] IOMMU Updates for Linux v6.3
-Message-ID: <Y/SGAafMEGBn4fWy@8bytes.org>
+        Tue, 21 Feb 2023 03:53:14 -0500
+Received: from mail-lj1-x230.google.com (mail-lj1-x230.google.com [IPv6:2a00:1450:4864:20::230])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC16786AF
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Feb 2023 00:53:12 -0800 (PST)
+Received: by mail-lj1-x230.google.com with SMTP id a10so3599326ljq.1
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Feb 2023 00:53:12 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:message-id:subject:cc:to:from
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=AEjLrRbU07wQYZ0ZI67ekCMILBl/5v5EYiKgA6Atj1I=;
+        b=OVcGbtcbYkdrGKtGhQBFsP0w5w/MddBCfR+Oi+1FcIh2wngBwYVt6+VXfhsLFM1sxa
+         OxQje6gm9Px25K0Rq3g1iRha+Eg2g7KL4mM//Ue2pFmIeCKMtjiEsBZSJAI5i8EkbF32
+         XvH22XwW+lzji4G3uwAJ+JNW3vyChKVaJ5Ko2Oezv9pDpOsAymoNmU2oUgXEEnIFzj/P
+         YnqKognbT6DjykjRfmP/dmNa3rYzWzSZ56IZQi173OzomQThTRHlfpshNAoej1uTGqzy
+         UVUpLghCWlg6o82EIf4RRSjZ58QYUuO6X0O3A6YdBMXwIwdJ51xJHVriUbpbwvDtN5Bk
+         MgBQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=mime-version:references:in-reply-to:message-id:subject:cc:to:from
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=AEjLrRbU07wQYZ0ZI67ekCMILBl/5v5EYiKgA6Atj1I=;
+        b=stpZBh5u29xU4ahkQReK/JfbAyKvHGvtW18Nqap4hiIyxM2j3uYo2dEUEjMOJY6/BT
+         FvHKzzZjDwRjOc6KB9TGdkdFLppPQiuDPgmu95A+NiQod/swHSOKaBQMWcjKa9eRvuop
+         yk09TlNH4i4I+BLDFg+I6oLVTcdQ2J2Zy1BMiuofzR5bFcIq/Gw78opr7dtuI/R+UWlP
+         gKpCmoORssnDlJ0hvxbsrK7ey2qalIZpWbhXE4ekEFngcwIoovqdeqwWFn9Z7+a5aUiW
+         uQ6xU5aLr97sZWBonvQ65+c9fVn3xiEwotWl6Ff9c+7ZcgsXT+zqRVoqHSnPlZlZDh4C
+         p/Zg==
+X-Gm-Message-State: AO0yUKUfhA8HJq66JrbnkY6uKQO2YyHMzkqyDPBp3bDbEfmycXuqEaD7
+        1efpkb3iOYMpc1msb+Wes6k=
+X-Google-Smtp-Source: AK7set8nMhagnPVfESv/9ZlPIxiZKwBCDck0xrEjqBAmURev2zAHQajnYN10WtnCqkHPBcVmZFZvOg==
+X-Received: by 2002:a2e:8e72:0:b0:293:5c90:8517 with SMTP id t18-20020a2e8e72000000b002935c908517mr1246405ljk.15.1676969590834;
+        Tue, 21 Feb 2023 00:53:10 -0800 (PST)
+Received: from eldfell ([194.136.85.206])
+        by smtp.gmail.com with ESMTPSA id d17-20020a2e3611000000b00293524fb6b1sm355733lja.74.2023.02.21.00.53.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 21 Feb 2023 00:53:10 -0800 (PST)
+Date:   Tue, 21 Feb 2023 10:53:07 +0200
+From:   Pekka Paalanen <ppaalanen@gmail.com>
+To:     Rob Clark <robdclark@gmail.com>
+Cc:     dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Christian =?UTF-8?B?S8O2bmln?= <ckoenig.leichtzumerken@gmail.com>,
+        Michel =?UTF-8?B?RMOkbnplcg==?= <michel@daenzer.net>,
+        Tvrtko Ursulin <tvrtko.ursulin@intel.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        Simon Ser <contact@emersion.fr>,
+        Rob Clark <robdclark@chromium.org>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        David Airlie <airlied@gmail.com>,
+        linux-kernel@vger.kernel.org (open list)
+Subject: Re: [PATCH v5 09/14] drm/syncobj: Add deadline support for syncobj
+ waits
+Message-ID: <20230221105307.7430c301@eldfell>
+In-Reply-To: <20230220201916.1822214-10-robdclark@gmail.com>
+References: <20230220201916.1822214-1-robdclark@gmail.com>
+        <20230220201916.1822214-10-robdclark@gmail.com>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="xsEv6tzStRkCI0Br"
-Content-Disposition: inline
+Content-Type: multipart/signed; boundary="Sig_/VSEM3Sqv+X/GOgQntXXiV/x";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+--Sig_/VSEM3Sqv+X/GOgQntXXiV/x
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
---xsEv6tzStRkCI0Br
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+On Mon, 20 Feb 2023 12:18:56 -0800
+Rob Clark <robdclark@gmail.com> wrote:
 
-Hi Linus,
+> From: Rob Clark <robdclark@chromium.org>
+>=20
+> Add a new flag to let userspace provide a deadline as a hint for syncobj
+> and timeline waits.  This gives a hint to the driver signaling the
+> backing fences about how soon userspace needs it to compete work, so it
+> can addjust GPU frequency accordingly.  An immediate deadline can be
+> given to provide something equivalent to i915 "wait boost".
+>=20
+> v2: Use absolute u64 ns value for deadline hint, drop cap and driver
+>     feature flag in favor of allowing count_handles=3D=3D0 as a way for
+>     userspace to probe kernel for support of new flag
+>=20
+> Signed-off-by: Rob Clark <robdclark@chromium.org>
+> ---
+>  drivers/gpu/drm/drm_syncobj.c | 59 +++++++++++++++++++++++++++--------
+>  include/uapi/drm/drm.h        |  5 +++
+>  2 files changed, 51 insertions(+), 13 deletions(-)
 
-Please note the first item in the tag-message, there is some potential
-for conflicts between these changes and other trees due to changed
-function signatures.
+...
 
-With that in mind, please consider:
+> diff --git a/include/uapi/drm/drm.h b/include/uapi/drm/drm.h
+> index 642808520d92..aefc8cc743e0 100644
+> --- a/include/uapi/drm/drm.h
+> +++ b/include/uapi/drm/drm.h
+> @@ -887,6 +887,7 @@ struct drm_syncobj_transfer {
+>  #define DRM_SYNCOBJ_WAIT_FLAGS_WAIT_ALL (1 << 0)
+>  #define DRM_SYNCOBJ_WAIT_FLAGS_WAIT_FOR_SUBMIT (1 << 1)
+>  #define DRM_SYNCOBJ_WAIT_FLAGS_WAIT_AVAILABLE (1 << 2) /* wait for time =
+point to become available */
+> +#define DRM_SYNCOBJ_WAIT_FLAGS_WAIT_DEADLINE (1 << 3) /* set fence deadl=
+ine based to deadline_nsec/sec */
 
-The following changes since commit ceaa837f96adb69c0df0397937cd74991d5d821a:
+Hi,
 
-  Linux 6.2-rc8 (2023-02-12 14:10:17 -0800)
+where is the UAPI documentation explaining what is a "fence deadline"
+and what setting it does here?
 
-are available in the Git repository at:
+btw. no nsec/sec anymore.
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/joro/iommu.git tags/iommu-updates-v6.3
-
-for you to fetch changes up to bedd29d793da3312e1350a56245c4971a38d4453:
-
-  Merge branches 'apple/dart', 'arm/exynos', 'arm/renesas', 'arm/smmu', 'x86/vt-d', 'x86/amd' and 'core' into next (2023-02-18 15:43:04 +0100)
-
-----------------------------------------------------------------
-IOMMU Updates for Linux v6.3:
-
-Including:
-
-	- Consolidate iommu_map/unmap functions. There have been
-	  blocking and atomic variants so far, but that was problematic
-	  as this approach does not scale with required new variants
-	  which just differ in the GFP flags used.
-	  So Jason consolidated this back into single functions that
-	  take a GFP parameter. This has the potential to cause
-	  conflicts with other trees, as they introduce new call-sites
-	  for the changed functions. I offered them to pull in the
-	  branch containing these changes and resolve it, but I am not
-	  sure everyone did that. The conflicts this caused with
-	  upstream up to v6.2-rc8 are resolved in the final merge
-	  commit.
-
-	- Retire the detach_dev() call-back in iommu_ops
-
-	- Arm SMMU updates from Will:
-	  - Device-tree binding updates:
-	    * Cater for three power domains on SM6375
-	    * Document existing compatible strings for Qualcomm SoCs
-	    * Tighten up clocks description for platform-specific compatible strings
-	  - Enable Qualcomm workarounds for some additional platforms that need them
-
-	- Intel VT-d updates from Lu Baolu:
-	  - Add Intel IOMMU performance monitoring support
-	  - Set No Execute Enable bit in PASID table entry
-	  - Two performance optimizations
-	  - Fix PASID directory pointer coherency
-	  - Fix missed rollbacks in error path
-	  - Cleanups
-
-	- Apple t8110 DART support
-
-	- Exynos IOMMU:
-	  - Implement better fault handling
-	  - Error handling fixes
-
-	- Renesas IPMMU:
-	  - Add device tree bindings for r8a779g0
-
-	- AMD IOMMU:
-	  - Various fixes for handling on SNP-enabled systems and
-	    handling of faults with unknown request-ids
-	  - Cleanups and other small fixes
-
-	- Various other smaller fixes and cleanups
-
-----------------------------------------------------------------
-Bartosz Golaszewski (1):
-      dt-bindings: arm-smmu: document the smmu on Qualcomm SA8775P
-
-Bjorn Andersson (1):
-      iommu/arm-smmu-qcom: Select identity domain for sc8280xp MDSS
-
-Eric Curtin (1):
-      iommu: dart: DART_T8110_ERROR range should be 0 to 5
-
-Gavrilov Ilia (1):
-      iommu/amd: Add a length limitation for the ivrs_acpihid command-line parameter
-
-Hector Martin (7):
-      dt-bindings: iommu: dart: add t8110 compatible
-      iommu: dart: Add suspend/resume support
-      iommu: dart: Support >64 stream IDs
-      iommu: dart: Support a variable number of TTBRs per stream
-      iommu: dart: Fix DART_PARAMS1/2 bit define names
-      iommu: dart: Support different variants with different registers
-      iommu: dart: Add t8110 DART support
-
-Jacob Pan (2):
-      iommu/vt-d: Avoid superfluous IOTLB tracking in lazy mode
-      iommu/vt-d: Fix PASID directory pointer coherency
-
-Jason Gunthorpe (12):
-      iommu: Remove deferred attach check from __iommu_detach_device()
-      iommu: Add a gfp parameter to iommu_map()
-      iommu: Remove iommu_map_atomic()
-      iommu: Add a gfp parameter to iommu_map_sg()
-      iommu/dma: Use the gfp parameter in __iommu_dma_alloc_noncontiguous()
-      iommufd: Use GFP_KERNEL_ACCOUNT for iommu_map()
-      iommu/intel: Add a gfp parameter to alloc_pgtable_page()
-      iommu/intel: Support the gfp argument to the map_pages op
-      iommu/intel: Use GFP_KERNEL in sleepable contexts
-      iommu/s390: Push the gfp parameter to the kmem_cache_alloc()'s
-      iommu/s390: Use GFP_KERNEL in sleepable contexts
-      iommu: Fix error unwind in iommu_group_alloc()
-
-Joerg Roedel (5):
-      iommu/ipmmu-vmsa: Remove ipmmu_utlb_disable()
-      iommu/fsl_pamu: Fix compile error after adding set_platform_dma_ops
-      Merge tag 'arm-smmu-updates' of git://git.kernel.org/pub/scm/linux/kernel/git/will/linux into arm/smmu
-      Merge branch 'iommu-memory-accounting' into core
-      Merge branches 'apple/dart', 'arm/exynos', 'arm/renesas', 'arm/smmu', 'x86/vt-d', 'x86/amd' and 'core' into next
-
-Kan Liang (7):
-      iommu/vt-d: Support size of the register set in DRHD
-      iommu/vt-d: Retrieve IOMMU perfmon capability information
-      iommu/vt-d: Support Enhanced Command Interface
-      iommu/vt-d: Add IOMMU perfmon support
-      iommu/vt-d: Support cpumask for IOMMU perfmon
-      iommu/vt-d: Add IOMMU perfmon overflow handler support
-      iommu/vt-d: Enable IOMMU perfmon support
-
-Konrad Dybcio (1):
-      dt-bindings: arm-smmu: Allow 3 power domains on SM6375 MMU500
-
-Krzysztof Kozlowski (1):
-      dt-bindings: arm-smmu: disallow clocks when not used
-
-Lu Baolu (10):
-      iommu: Remove detach_dev callbacks
-      iommu: Add set_platform_dma_ops iommu ops
-      iommu: Add set_platform_dma_ops callbacks
-      iommu: Remove detach_dev callback
-      iommu/vt-d: Remove include/linux/intel-svm.h
-      iommu/vt-d: Remove unused fields in svm structures
-      iommu/vt-d: Remove users from intel_svm_dev
-      iommu/vt-d: Remove sva from intel_svm_dev
-      iommu/vt-d: Set No Execute Enable bit in PASID table entry
-      iommu/vt-d: Fix error handling in sva enable/disable paths
-
-Luca Weiss (1):
-      dt-bindings: iommu: qcom: Add Qualcomm MSM8953 compatible
-
-Manivannan Sadhasivam (1):
-      dt-bindings: arm-smmu: Fix binding for SDX55 and SDX65
-
-Marek Szyprowski (1):
-      iommu/exynos: Add missing set_platform_dma_ops callback
-
-Marijn Suijten (2):
-      dt-bindings: arm-smmu: Add sm8150-smmu-500 to the list of Adreno smmus
-      iommu/arm-smmu-qcom: Add SM8150 DPU compatible
-
-Martin Botka (1):
-      dt-bindings: arm-smmu: Document smmu-500 binding for SM6125
-
-Randy Dunlap (1):
-      iommu/of: mark an unused function as __maybe_unused
-
-Robin Murphy (1):
-      iommu: Tidy up io-pgtable dependencies
-
-Sam Protsenko (2):
-      iommu/exynos: Abstract getting the fault info
-      iommu/exynos: Implement fault handling on SysMMU v7
-
-Sven Peter (1):
-      iommu/dart: Fix apple_dart_device_group for PCI groups
-
-Thierry Reding (4):
-      of: Introduce of_translate_dma_region()
-      dt-bindings: reserved-memory: Document iommu-addresses
-      iommu: Implement of_iommu_get_resv_regions()
-      iommu: dma: Use of_iommu_get_resv_regions()
-
-Tina Zhang (1):
-      iommu/vt-d: Allow to use flush-queue when first level is default
-
-Tom Lendacky (1):
-      iommu/amd: Do not clear event/ppr log buffer when snp is enabled
-
-Vasant Hegde (6):
-      iommu/amd: Do not allocate io_pgtable_ops for passthrough domain
-      iommu/amd: Fix error handling for pdev_pri_ats_enable()
-      iommu/amd: Do not identity map v2 capable device when snp is enabled
-      iommu/amd: Improve page fault error reporting
-      iommu: Attach device group to old domain in error path
-      iommu/amd: Skip attach device domain is same as new domain
-
-Will Deacon (1):
-      Merge branch 'for-joerg/arm-smmu/bindings' into for-joerg/arm-smmu/updates
-
-Yang Yingliang (1):
-      iommu/exynos: Fix error handling in exynos_iommu_init()
-
-Yoshihiro Shimoda (1):
-      dt-bindings: iommu: renesas,ipmmu-vmsa: add r8a779g0 support
-
- .../testing/sysfs-bus-event_source-devices-iommu   |  37 +
- .../devicetree/bindings/iommu/apple,dart.yaml      |   1 +
- .../devicetree/bindings/iommu/arm,smmu.yaml        |  66 +-
- .../devicetree/bindings/iommu/qcom,iommu.txt       |   1 +
- .../bindings/iommu/renesas,ipmmu-vmsa.yaml         |   1 +
- .../bindings/reserved-memory/reserved-memory.yaml  |  89 ++-
- MAINTAINERS                                        |   1 -
- arch/arm/mm/dma-mapping.c                          |  11 +-
- arch/s390/include/asm/pci_dma.h                    |   5 +-
- arch/s390/pci/pci_dma.c                            |  31 +-
- .../gpu/drm/nouveau/nvkm/subdev/instmem/gk20a.c    |   3 +-
- drivers/gpu/drm/tegra/drm.c                        |   2 +-
- drivers/gpu/host1x/cdma.c                          |   2 +-
- drivers/infiniband/hw/usnic/usnic_uiom.c           |   8 +-
- drivers/iommu/Kconfig                              |  18 +-
- drivers/iommu/amd/init.c                           |  16 +-
- drivers/iommu/amd/iommu.c                          |  89 ++-
- drivers/iommu/apple-dart.c                         | 632 +++++++++++----
- drivers/iommu/arm/arm-smmu/arm-smmu-qcom.c         |   2 +
- drivers/iommu/arm/arm-smmu/qcom_iommu.c            |  23 -
- drivers/iommu/dma-iommu.c                          |  21 +-
- drivers/iommu/exynos-iommu.c                       | 216 +++--
- drivers/iommu/fsl_pamu_domain.c                    |   6 +-
- drivers/iommu/intel/Kconfig                        |  11 +
- drivers/iommu/intel/Makefile                       |   1 +
- drivers/iommu/intel/dmar.c                         |  33 +-
- drivers/iommu/intel/iommu.c                        | 122 ++-
- drivers/iommu/intel/iommu.h                        | 115 ++-
- drivers/iommu/intel/pasid.c                        |  20 +-
- drivers/iommu/intel/perfmon.c                      | 877 +++++++++++++++++++++
- drivers/iommu/intel/perfmon.h                      |  64 ++
- drivers/iommu/intel/svm.c                          |  90 +--
- drivers/iommu/iommu-traces.c                       |   1 -
- drivers/iommu/iommu.c                              | 171 ++--
- drivers/iommu/iommufd/pages.c                      |   6 +-
- drivers/iommu/ipmmu-vmsa.c                         |  28 -
- drivers/iommu/msm_iommu.c                          |   6 +-
- drivers/iommu/mtk_iommu.c                          |   9 -
- drivers/iommu/mtk_iommu_v1.c                       |   4 +-
- drivers/iommu/of_iommu.c                           |  96 +++
- drivers/iommu/omap-iommu.c                         |   6 +-
- drivers/iommu/rockchip-iommu.c                     |   1 -
- drivers/iommu/s390-iommu.c                         |  22 +-
- drivers/iommu/sprd-iommu.c                         |  16 -
- drivers/iommu/sun50i-iommu.c                       |   1 -
- drivers/iommu/tegra-gart.c                         |   6 +-
- drivers/iommu/tegra-smmu.c                         |   5 +-
- drivers/media/platform/qcom/venus/firmware.c       |   2 +-
- drivers/net/ipa/ipa_mem.c                          |   6 +-
- drivers/net/wireless/ath/ath10k/snoc.c             |   2 +-
- drivers/net/wireless/ath/ath11k/ahb.c              |   4 +-
- drivers/of/address.c                               |  41 +
- drivers/remoteproc/remoteproc_core.c               |   5 +-
- drivers/vfio/vfio_iommu_type1.c                    |   9 +-
- drivers/vhost/vdpa.c                               |   2 +-
- include/acpi/actbl1.h                              |   2 +-
- include/linux/cpuhotplug.h                         |   1 +
- include/linux/dmar.h                               |   1 +
- include/linux/intel-svm.h                          |  16 -
- include/linux/iommu.h                              |  39 +-
- include/linux/of_address.h                         |   2 +
- include/linux/of_iommu.h                           |   8 +
- include/trace/events/iommu.h                       |   7 -
- 63 files changed, 2493 insertions(+), 646 deletions(-)
- create mode 100644 Documentation/ABI/testing/sysfs-bus-event_source-devices-iommu
- create mode 100644 drivers/iommu/intel/perfmon.c
- create mode 100644 drivers/iommu/intel/perfmon.h
- delete mode 100644 include/linux/intel-svm.h
-
-Please pull.
 
 Thanks,
+pq
 
-	Joerg
 
---xsEv6tzStRkCI0Br
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-Description: Digital signature
+>  struct drm_syncobj_wait {
+>  	__u64 handles;
+>  	/* absolute timeout */
+> @@ -895,6 +896,8 @@ struct drm_syncobj_wait {
+>  	__u32 flags;
+>  	__u32 first_signaled; /* only valid when not waiting all */
+>  	__u32 pad;
+> +	/* Deadline hint to set on backing fence(s) in CLOCK_MONOTONIC: */
+> +	__u64 deadline_ns;
+>  };
+> =20
+>  struct drm_syncobj_timeline_wait {
+> @@ -907,6 +910,8 @@ struct drm_syncobj_timeline_wait {
+>  	__u32 flags;
+>  	__u32 first_signaled; /* only valid when not waiting all */
+>  	__u32 pad;
+> +	/* Deadline hint to set on backing fence(s) in CLOCK_MONOTONIC: */
+> +	__u64 deadline_ns;
+>  };
+> =20
+> =20
+
+
+--Sig_/VSEM3Sqv+X/GOgQntXXiV/x
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAEBCAAdFiEEr9jSbILcajRFYWYyK/BELZcBGuMFAmP0hgEACgkQK/BELZcB
-GuOQdA//aUZOy5xpupEcBRTk5WYrnrDkYVMkgKF22iDqLnZxI6eWkXt5sYATODoe
-sMlCekV6cZT6AdGWI091jt2+ZlagH9vywZpkzHMhBhsFZdtcsDGHsdKDrxZsA2dd
-IWU4YCIuxNVgQufoNYBmU1D43IG5rCWc9rm0z3n+7bqzkTmBlv3+F4yoXixIKYpX
-5LeNK7zRvtyru1HgZ6xJh5iiqRdMLkqu5mwvx0Bo5Qvkhs/zIilkdz7RO5c4T7ZI
-lsP+5fO9rCpwMTQ0ju/GahSgOCWY8vONY3Vb1OcbrhKW6bwoVhpInh1YdNlywpBI
-FDaxYPyZq5CphZdKNttz+iYb5Yfm0OGxcQREQD40zEE7bdLS+mgzwHBlgh2f+l1s
-MHt9WYrmPavWR+1h9W/7Eggng1j40jjBP20Wbm6VrU9Y9/bpWRHj8f5A+FUSPt/l
-tjxpU+hnUUcWtHbB6ciC18+fLTG9/Qjl79XwPUCvcJ1j6b/aig4nylG2tMgsV7y7
-dxbANTF7gfsBb1MWTG6OGC5f5KqLTQHb/qn6gmRJFpyQPS0fHwB7sTkdBDvLBBx1
-m2ujGQGJLsWLlaA9wm8SThvedxkVpDET5Q4f+28o6tGqkkc1TXcTzwYsYSNCpWOS
-/6kaalkrsSO6kX/Uz6JFaqrLrhlYQLl+OxK2seMJrLN33VfqV6E=
-=5tBc
+iQIzBAEBCAAdFiEEJQjwWQChkWOYOIONI1/ltBGqqqcFAmP0hnMACgkQI1/ltBGq
+qqfUUw//XVeqgeDOtw8oq6xuKdBjOAqnRwLjkzvWi/88co80qy2LH+hR4CUskUUz
+G28RzH6tjsu2yM/WTAs2zpzFWmTC5R0d5pfQytNoqPwXpWsjE3AJdDeT5DYI2b6N
+HTy3B1G23/CmVdky2sl29T/ZUGNXHZdOiZMTEa6pve9l6XGVa3vhZD8+ezOkSTHB
+B8DGAkFnkSXcIaAB9Cr0TBhWvh/vbGhvlcal2WTBJEdD29miP+s1G3GCwCckJ8Ul
+Ruj9+Sj8UjgytllWZld0iIcptQnf2yOrjb2vHb5G5chCHXe4sSDJZJvo3FxV0tdp
+6qMmV7ECTTyX4IJDxU1l0FY6NZLIUV1HYsjRfj3sNKbbJOh4BBWss8dLl3nfiUtF
+4TOqxDohFjaI1EroIrTzmreN5qtDEFEkWc+Kg+0z8qTQXeSWxXn8yAj8AZpoEtZP
+eRm372Z2c0PGjXKIE5PZ5W/KtDaD5JynRHI3ZsK777qkDYzqopuD3/TcC0AU5VyP
+XtFEbUsm9yRGCQNR2qwJrFxDrgKIoHRC2fmAvLxjGK37XtsVD1XYSX0cBWsOqw2s
+jzguoe3iTuwH9o/1fqXvCNzyCtuRB3KsdioQHfxsPr4JulocwkAdwFatQQA9n90v
+kwOZoREmqbO1h1/V1+jz0/Ta7ExkSQdZYZgBaG2u0aeDRHfI6L8=
+=hlmI
 -----END PGP SIGNATURE-----
 
---xsEv6tzStRkCI0Br--
+--Sig_/VSEM3Sqv+X/GOgQntXXiV/x--
