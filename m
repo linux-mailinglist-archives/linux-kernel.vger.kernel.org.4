@@ -2,198 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C54BF69E0F8
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 14:01:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 062F669E0F5
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 14:01:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233728AbjBUNBw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Feb 2023 08:01:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58496 "EHLO
+        id S233605AbjBUNBd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Feb 2023 08:01:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58158 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233618AbjBUNBo (ORCPT
+        with ESMTP id S230155AbjBUNBa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Feb 2023 08:01:44 -0500
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1AA92940E
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Feb 2023 05:01:42 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1676984502; x=1708520502;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=acdczu8sh+vl0KUoF5rFum01VLOZMhQ4SRvqf3KdLIY=;
-  b=JQV15dWTFBlrGzw7cLL1DxnllghTcRMVpMpMxVsimCKyNAx4B4zttW0C
-   zZNOcBz2Vzmjg/QT5wTArWoAWmXER9gSOgizbMdMgfwT4iza+yvmaMYrP
-   h6o3gvQSUTz3giFICuC4C7lsCQ1FYn0KiJvG1WRcFN63AelF77vRHHYjI
-   +NwTkXmkCFfvQI1/2nXi9DjHhl0V2XlQaDeF68PYJGlkIjjZq3Oa9yL2e
-   W6mrL5df33gw0ZdV6vcNCTfrgETH5lf6FCT7uH50BZutDdI9IWnv0YVLz
-   zeMy9BExeBC0JchPhUHGFLJb8UV7/UMsgbddqGSuGEz7LDeO3WNRCncin
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10627"; a="333983817"
-X-IronPort-AV: E=Sophos;i="5.97,315,1669104000"; 
-   d="scan'208";a="333983817"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Feb 2023 05:01:41 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10627"; a="845666450"
-X-IronPort-AV: E=Sophos;i="5.97,315,1669104000"; 
-   d="scan'208";a="845666450"
-Received: from stinkpipe.fi.intel.com (HELO stinkbox) ([10.237.72.70])
-  by orsmga005.jf.intel.com with SMTP; 21 Feb 2023 05:01:36 -0800
-Received: by stinkbox (sSMTP sendmail emulation); Tue, 21 Feb 2023 15:01:35 +0200
-Date:   Tue, 21 Feb 2023 15:01:35 +0200
-From:   Ville =?iso-8859-1?Q?Syrj=E4l=E4?= <ville.syrjala@linux.intel.com>
-To:     Pekka Paalanen <ppaalanen@gmail.com>
-Cc:     Rob Clark <robdclark@gmail.com>,
-        Rob Clark <robdclark@chromium.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Tvrtko Ursulin <tvrtko.ursulin@intel.com>,
-        Christian =?iso-8859-1?Q?K=F6nig?= 
-        <ckoenig.leichtzumerken@gmail.com>,
-        Michel =?iso-8859-1?Q?D=E4nzer?= <michel@daenzer.net>,
-        open list <linux-kernel@vger.kernel.org>,
-        dri-devel@lists.freedesktop.org,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        freedreno@lists.freedesktop.org
-Subject: Re: [PATCH v4 10/14] drm/vblank: Add helper to get next vblank time
-Message-ID: <Y/TAr64SpxO712RB@intel.com>
-References: <20230218211608.1630586-1-robdclark@gmail.com>
- <20230218211608.1630586-11-robdclark@gmail.com>
- <20230220110820.595cfa37@eldfell>
- <CAF6AEGuo-vmW4Va9=RH+kH9KgNvR2vzjJ8meO-oty56xjDhjgg@mail.gmail.com>
- <20230221104551.60d44d1c@eldfell>
+        Tue, 21 Feb 2023 08:01:30 -0500
+Received: from fd01.gateway.ufhost.com (fd01.gateway.ufhost.com [61.152.239.71])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7AF9D17CE9;
+        Tue, 21 Feb 2023 05:01:27 -0800 (PST)
+Received: from EXMBX165.cuchost.com (unknown [175.102.18.54])
+        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
+        (Client CN "EXMBX165", Issuer "EXMBX165" (not verified))
+        by fd01.gateway.ufhost.com (Postfix) with ESMTP id 9CEF624E2AE;
+        Tue, 21 Feb 2023 21:01:19 +0800 (CST)
+Received: from EXMBX061.cuchost.com (172.16.6.61) by EXMBX165.cuchost.com
+ (172.16.6.75) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Tue, 21 Feb
+ 2023 21:01:19 +0800
+Received: from [192.168.125.128] (183.27.98.67) by EXMBX061.cuchost.com
+ (172.16.6.61) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Tue, 21 Feb
+ 2023 21:01:18 +0800
+Message-ID: <43d00fd9-ab24-442e-3f82-208edaf399d0@starfivetech.com>
+Date:   Tue, 21 Feb 2023 21:01:40 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230221104551.60d44d1c@eldfell>
-X-Patchwork-Hint: comment
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH v2 01/11] dt-bindings: clock: Add StarFive JH7110
+ System-Top-Group clock and reset generator
+Content-Language: en-US
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+CC:     <linux-riscv@lists.infradead.org>, <devicetree@vger.kernel.org>,
+        "Michael Turquette" <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Emil Renner Berthing <kernel@esmil.dk>,
+        Rob Herring <robh+dt@kernel.org>,
+        Conor Dooley <conor@kernel.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Hal Feng <hal.feng@starfivetech.com>,
+        <linux-kernel@vger.kernel.org>, <linux-clk@vger.kernel.org>
+References: <20230221083323.302471-1-xingyu.wu@starfivetech.com>
+ <20230221083323.302471-2-xingyu.wu@starfivetech.com>
+ <430318ed-5b30-e549-a5ce-df83aa18adf9@linaro.org>
+From:   Xingyu Wu <xingyu.wu@starfivetech.com>
+In-Reply-To: <430318ed-5b30-e549-a5ce-df83aa18adf9@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [183.27.98.67]
+X-ClientProxiedBy: EXCAS066.cuchost.com (172.16.6.26) To EXMBX061.cuchost.com
+ (172.16.6.61)
+X-YovoleRuleAgent: yovoleflag
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 21, 2023 at 10:45:51AM +0200, Pekka Paalanen wrote:
-> On Mon, 20 Feb 2023 07:55:41 -0800
-> Rob Clark <robdclark@gmail.com> wrote:
-> 
-> > On Mon, Feb 20, 2023 at 1:08 AM Pekka Paalanen <ppaalanen@gmail.com> wrote:
-> > >
-> > > On Sat, 18 Feb 2023 13:15:53 -0800
-> > > Rob Clark <robdclark@gmail.com> wrote:
-> > >  
-> > > > From: Rob Clark <robdclark@chromium.org>
-> > > >
-> > > > Will be used in the next commit to set a deadline on fences that an
-> > > > atomic update is waiting on.
-> > > >
-> > > > Signed-off-by: Rob Clark <robdclark@chromium.org>
-> > > > ---
-> > > >  drivers/gpu/drm/drm_vblank.c | 32 ++++++++++++++++++++++++++++++++
-> > > >  include/drm/drm_vblank.h     |  1 +
-> > > >  2 files changed, 33 insertions(+)
-> > > >
-> > > > diff --git a/drivers/gpu/drm/drm_vblank.c b/drivers/gpu/drm/drm_vblank.c
-> > > > index 2ff31717a3de..caf25ebb34c5 100644
-> > > > --- a/drivers/gpu/drm/drm_vblank.c
-> > > > +++ b/drivers/gpu/drm/drm_vblank.c
-> > > > @@ -980,6 +980,38 @@ u64 drm_crtc_vblank_count_and_time(struct drm_crtc *crtc,
-> > > >  }
-> > > >  EXPORT_SYMBOL(drm_crtc_vblank_count_and_time);
-> > > >
-> > > > +/**
-> > > > + * drm_crtc_next_vblank_time - calculate the time of the next vblank
-> > > > + * @crtc: the crtc for which to calculate next vblank time
-> > > > + * @vblanktime: pointer to time to receive the next vblank timestamp.
-> > > > + *
-> > > > + * Calculate the expected time of the next vblank based on time of previous
-> > > > + * vblank and frame duration  
-> > >
-> > > Hi,
-> > >
-> > > for VRR this targets the highest frame rate possible for the current
-> > > VRR mode, right?
-> > >  
-> > 
-> > It is based on vblank->framedur_ns which is in turn based on
-> > mode->crtc_clock.  Presumably for VRR that ends up being a maximum?
-> 
-> I don't know. :-)
-
-At least for i915 this will give you the maximum frame
-duration.
-
-Also this does not calculate the the start of vblank, it
-calculates the start of active video.
-
-> 
-> You need a number of clock cycles in addition to the clock frequency,
-> and that could still be minimum, maximum, the last realized one, ...
-> 
-> VRR works by adjusting the front porch length IIRC.
+On 2023/2/21 19:25, Krzysztof Kozlowski wrote:
+> On 21/02/2023 09:33, Xingyu Wu wrote:
+>> Add bindings for the System-Top-Group clock and reset generator (STGCRG)
+>> on the JH7110 RISC-V SoC by StarFive Ltd.
+>> 
+>> Signed-off-by: Xingyu Wu <xingyu.wu@starfivetech.com>
 > 
 > 
-> Thanks,
-> pq
+>> +    };
+>> diff --git a/MAINTAINERS b/MAINTAINERS
+>> index 93eb504c3b21..2e70c9f21989 100644
+>> --- a/MAINTAINERS
+>> +++ b/MAINTAINERS
+>> @@ -19914,6 +19914,7 @@ F:	arch/riscv/boot/dts/starfive/
+>>  STARFIVE JH71X0 CLOCK DRIVERS
+>>  M:	Emil Renner Berthing <kernel@esmil.dk>
+>>  M:	Hal Feng <hal.feng@starfivetech.com>
+>> +M:	Xingyu Wu <xingyu.wu@starfivetech.com>
 > 
-> > BR,
-> > -R
-> > 
-> > 
-> > >
-> > > Thanks,
-> > > pq
-> > >  
-> > > > + */
-> > > > +int drm_crtc_next_vblank_time(struct drm_crtc *crtc, ktime_t *vblanktime)
-> > > > +{
-> > > > +     unsigned int pipe = drm_crtc_index(crtc);
-> > > > +     struct drm_vblank_crtc *vblank = &crtc->dev->vblank[pipe];
-> > > > +     u64 count;
-> > > > +
-> > > > +     if (!vblank->framedur_ns)
-> > > > +             return -EINVAL;
-> > > > +
-> > > > +     count = drm_vblank_count_and_time(crtc->dev, pipe, vblanktime);
-> > > > +
-> > > > +     /*
-> > > > +      * If we don't get a valid count, then we probably also don't
-> > > > +      * have a valid time:
-> > > > +      */
-> > > > +     if (!count)
-> > > > +             return -EINVAL;
-> > > > +
-> > > > +     *vblanktime = ktime_add(*vblanktime, ns_to_ktime(vblank->framedur_ns));
-> > > > +
-> > > > +     return 0;
-> > > > +}
-> > > > +EXPORT_SYMBOL(drm_crtc_next_vblank_time);
-> > > > +
-> > > >  static void send_vblank_event(struct drm_device *dev,
-> > > >               struct drm_pending_vblank_event *e,
-> > > >               u64 seq, ktime_t now)
-> > > > diff --git a/include/drm/drm_vblank.h b/include/drm/drm_vblank.h
-> > > > index 733a3e2d1d10..a63bc2c92f3c 100644
-> > > > --- a/include/drm/drm_vblank.h
-> > > > +++ b/include/drm/drm_vblank.h
-> > > > @@ -230,6 +230,7 @@ bool drm_dev_has_vblank(const struct drm_device *dev);
-> > > >  u64 drm_crtc_vblank_count(struct drm_crtc *crtc);
-> > > >  u64 drm_crtc_vblank_count_and_time(struct drm_crtc *crtc,
-> > > >                                  ktime_t *vblanktime);
-> > > > +int drm_crtc_next_vblank_time(struct drm_crtc *crtc, ktime_t *vblanktime);
-> > > >  void drm_crtc_send_vblank_event(struct drm_crtc *crtc,
-> > > >                              struct drm_pending_vblank_event *e);
-> > > >  void drm_crtc_arm_vblank_event(struct drm_crtc *crtc,  
-> > >  
+> No improvements here. You add here new bindings for one device and then
+> - without explanation - add yourself to all Starfive clock bindings.
+> Either explain it or drop it or move it to separate patch.
+> 
+> You already got comment for this.
 > 
 
+Sorry, I didn't understand what you meant before. Now my understanding is that, 
+If I improvements JH71X0 driver no JH7110 driver, I could add this here. Right?
+
+Is it OK if I do it this way to move it to separate patch like this?:
++STARFIVE JH7110 STG CLOCK DRIVERS
++M:	Xingyu Wu <xingyu.wu@starfivetech.com>
 
 
--- 
-Ville Syrjälä
-Intel
+Best Regards,
+Xingyu Wu
