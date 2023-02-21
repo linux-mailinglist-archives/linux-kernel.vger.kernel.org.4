@@ -2,71 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9828469DBDA
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 09:25:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5501D69DBDD
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 09:26:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229643AbjBUIZQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Feb 2023 03:25:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40948 "EHLO
+        id S233253AbjBUI0M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Feb 2023 03:26:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41956 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232115AbjBUIZO (ORCPT
+        with ESMTP id S231755AbjBUI0K (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Feb 2023 03:25:14 -0500
-Received: from vulcan.natalenko.name (vulcan.natalenko.name [IPv6:2001:19f0:6c00:8846:5400:ff:fe0c:dfa0])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3356D20059;
-        Tue, 21 Feb 2023 00:25:13 -0800 (PST)
-Received: from mail.natalenko.name (vulcan.natalenko.name [IPv6:2001:19f0:6c00:8846:5400:ff:fe0c:dfa0])
+        Tue, 21 Feb 2023 03:26:10 -0500
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CDE8322DCB;
+        Tue, 21 Feb 2023 00:26:07 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by vulcan.natalenko.name (Postfix) with ESMTPSA id 9F46E123AC91;
-        Tue, 21 Feb 2023 09:25:08 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=natalenko.name;
-        s=dkim-20170712; t=1676967908;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 64C7D34636;
+        Tue, 21 Feb 2023 08:26:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1676967966; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=RlDwttwnbhqYBrOWhJDWVTjB+F85C40HjekkKQ5uE7s=;
-        b=nSmMILXUq9FQJPXkCEz31jy6cxHVR1YFkZ8DuL2k928cguoQYftMmkn7J63/KU+cmKI4Zw
-        dzARuBiFv2pKO6zVJSVegBG4PzFG0jxVDBWP9ssV0YmH3lHfW+Hl+dm6Wi1boquFKR0vB8
-        rrmq66EqbZC+MB9FVOCwnuK+qOUTfBY=
+        bh=64nOhdqsrfC+GQvY/2yDtSkhDgrub/IRKe6PuUtaoTA=;
+        b=gL/+k88YS+b45aJgVurrBUpl0g1ZFiyovTv6aHjfZ9jSBCOegm2/HVLZmSevsnN8c27HXc
+        qiKMeeqh92MmoN1xTCabTZIByhEkYtbvvgvTGShcDF2NbBr69DSWBVaLW+5RnkbEYyf7y/
+        zzDrC4knnc0O1PBH8hBci/5ov6RFTh0=
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 4802213223;
+        Tue, 21 Feb 2023 08:26:06 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id DqbQDh6A9GNCCAAAMHmgww
+        (envelope-from <mhocko@suse.com>); Tue, 21 Feb 2023 08:26:06 +0000
+Date:   Tue, 21 Feb 2023 09:26:05 +0100
+From:   Michal Hocko <mhocko@suse.com>
+To:     Shakeel Butt <shakeelb@google.com>
+Cc:     Roman Gushchin <roman.gushchin@linux.dev>,
+        Yue Zhao <findns94@gmail.com>, linux-mm@kvack.org,
+        akpm@linux-foundation.org, hannes@cmpxchg.org,
+        muchun.song@linux.dev, cgroups@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] mm: change memcg->oom_group access with atomic operations
+Message-ID: <Y/SAHfHsljuIRBJm@dhcp22.suse.cz>
+References: <20230220151638.1371-1-findns94@gmail.com>
+ <Y/PhmEPc/qYeZ52T@P9FQF9L96D>
+ <20230220230624.lkobqeagycx7bi7p@google.com>
 MIME-Version: 1.0
-Date:   Tue, 21 Feb 2023 09:25:08 +0100
-From:   Oleksandr Natalenko <oleksandr@natalenko.name>
-To:     David Woodhouse <dwmw2@infradead.org>
-Cc:     Kim Phillips <kim.phillips@amd.com>, tglx@linutronix.de,
-        Usama Arif <usama.arif@bytedance.com>, arjan@linux.intel.com,
-        mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
-        hpa@zytor.com, x86@kernel.org, pbonzini@redhat.com,
-        paulmck@kernel.org, linux-kernel@vger.kernel.org,
-        kvm@vger.kernel.org, rcu@vger.kernel.org, mimoja@mimoja.de,
-        hewenliang4@huawei.com, thomas.lendacky@amd.com, seanjc@google.com,
-        pmenzel@molgen.mpg.de, fam.zheng@bytedance.com,
-        punit.agrawal@bytedance.com, simon.evans@bytedance.com,
-        liangma@liangbit.com,
-        "Limonciello, Mario" <Mario.Limonciello@amd.com>,
-        Piotr Gorski <piotrgorski@cachyos.org>
-Subject: Re: [PATCH v9 0/8] Parallel CPU bringup for x86_64
-In-Reply-To: <5c557f9b6f55dc2a612ee89142971298e6ae12d8.camel@infradead.org>
-References: <20230215145425.420125-1-usama.arif@bytedance.com>
- <2668799.mvXUDI8C0e@natalenko.name>
- <ed8d662351cfe5793f8cc7e7e8c514d05d16c501.camel@infradead.org>
- <2668869.mvXUDI8C0e@natalenko.name>
- <2a67f6cf18dd2c1879fad9fd8a28242918d3e5d2.camel@infradead.org>
- <982e1d6140705414e8fd60b990bd259a@natalenko.name>
- <715CBABF-4017-4784-8F30-5386F1524830@infradead.org>
- <67dbc69f-b712-8971-f1c9-5d07f506a19c@amd.com>
- <42dc683e2846ae8fc1e09715aaf7884660e1a386.camel@infradead.org>
- <37c18c3aeea2e558633b6da6886111d0@natalenko.name>
- <5A3B7074-0C6D-472B-803B-D76541828C1F@infradead.org>
- <3d8ed6e157df10c5175c636de0e21849@natalenko.name>
- <5c557f9b6f55dc2a612ee89142971298e6ae12d8.camel@infradead.org>
-Message-ID: <ee0d0d971a3095d6a1e96ad4f1ba32d2@natalenko.name>
-X-Sender: oleksandr@natalenko.name
-Content-Type: text/plain; charset=UTF-8;
- format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230220230624.lkobqeagycx7bi7p@google.com>
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
         SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -76,76 +65,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 21.02.2023 09:17, David Woodhouse wrote:
-> On Tue, 2023-02-21 at 09:05 +0100, Oleksandr Natalenko wrote:
->> 
->> Please see here: http://ix.io/4oLm
+On Mon 20-02-23 23:06:24, Shakeel Butt wrote:
+> On Mon, Feb 20, 2023 at 01:09:44PM -0800, Roman Gushchin wrote:
+> > On Mon, Feb 20, 2023 at 11:16:38PM +0800, Yue Zhao wrote:
+> > > The knob for cgroup v2 memory controller: memory.oom.group
+> > > will be read and written simultaneously by user space
+> > > programs, thus we'd better change memcg->oom_group access
+> > > with atomic operations to avoid concurrency problems.
+> > > 
+> > > Signed-off-by: Yue Zhao <findns94@gmail.com>
+> > 
+> > Hi Yue!
+> > 
+> > I'm curious, have any seen any real issues which your patch is solving?
+> > Can you, please, provide a bit more details.
+> > 
 > 
-> Was that just for one CPU? Can we have them all please?
-> 
-> The interesting part is the line starting 00000001. We're looking at
-> the top 8 bits of EBX:
-> 
-> Leaf     Subleaf    EAX            EBX            ECX            EDX
-> 00000000 00000000:  00000010 ....  68747541 Auth  444d4163 cAMD  
-> 69746e65 enti
-> 00000001 00000000:  00a20f12 ....  00200800 .. .  7ef8320b .2.~  
-> 178bfbff ....
->                                    ↑↑
-> 
-> So the first CPU is CPU0. Could have told you that... what about the 
-> others? :)
+> IMHO such details are not needed. oom_group is being accessed
+> concurrently and one of them can be a write access. At least
+> READ_ONCE/WRITE_ONCE is needed here. Most probably syzbot didn't
+> catch this race because it does not know about the memory.oom.group
+> interface.
 
-Right, sorry. Here it is: http://ix.io/4oLq
+I do agree with Roman here. It is _always_ good to mention whether this
+is a tool/review or actual bug triggered fix. Also {READ,WRITE}_ONCE doesn't
+guarantee atomicity so it would be good to rephrase the changelog.
+Something like:
+The knob for cgroup v2 memory controller: memory.oom.group
+is not protected by any locking so it can be modified while it is used.
+This is not an actual problem because races are unlikely (the knob is
+usually configured long before any workloads hits actual memcg oom)
+but it is better to use READ_ONCE/WRITE_ONCE to prevent compiler from
+doing anything funky.
 
-> If anyone can reproduce this with a serial port, can you try this?
-> 
-> From 98ad11d0fb88f081f49f7b1496420dbfbeff8833 Mon Sep 17 00:00:00 2001
-> From: David Woodhouse <dwmw@amazon.co.uk>
-> Date: Sat, 4 Feb 2023 15:20:24 +0000
-> Subject: [PATCH] parallel debug
-> 
-> ---
->  arch/x86/kernel/head_64.S | 17 +++++++++++++++++
->  1 file changed, 17 insertions(+)
-> 
-> diff --git a/arch/x86/kernel/head_64.S b/arch/x86/kernel/head_64.S
-> index 0e4e53d231db..da7f4d2d9951 100644
-> --- a/arch/x86/kernel/head_64.S
-> +++ b/arch/x86/kernel/head_64.S
-> @@ -281,6 +281,15 @@ SYM_INNER_LABEL(secondary_startup_64_no_verify, 
-> SYM_L_GLOBAL)
-> 
->  .Lsetup_AP:
->  	/* EDX contains the APIC ID of the current CPU */
-> +#if 1
-> +	/* Test hack: Print APIC ID and then CPU# when we find it. */
-> +	mov	%edx, %ecx
-> +	mov	%edx, %eax
-> +	addb	$'A', %al
-> +	mov	$0x3f8, %dx
-> +	outb    %al, %dx
-> +	mov	%ecx, %edx
-> +#endif
->  	xorq	%rcx, %rcx
->  	leaq	cpuid_to_apicid(%rip), %rbx
-> 
-> @@ -302,6 +311,14 @@ SYM_INNER_LABEL(secondary_startup_64_no_verify, 
-> SYM_L_GLOBAL)
-> 
->  .Linit_cpu_data:
->  	/* Get the per cpu offset for the given CPU# which is in ECX */
-> +#if 1
-> +	mov	%rcx, %rax
-> +	shr	$3, %rax
-> +	addb	$'a', %al
-> +
-> +	mov	$0x3f8, %dx
-> +	outb    %al, %dx
-> +#endif
->  	leaq	__per_cpu_offset(%rip), %rbx
->  	movq	(%rbx,%rcx,8), %rbx
->  	/* Save it for GS BASE setup */
-
+This patch is not fixing any actual user visible bug but it is in line
+of a standard practice.
 -- 
-   Oleksandr Natalenko (post-factum)
+Michal Hocko
+SUSE Labs
