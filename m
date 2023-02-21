@@ -2,113 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C864E69DAAE
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 07:40:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DE80969DAB2
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 07:44:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233186AbjBUGkr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Feb 2023 01:40:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48558 "EHLO
+        id S233221AbjBUGoI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Feb 2023 01:44:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49986 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233134AbjBUGkp (ORCPT
+        with ESMTP id S233134AbjBUGoG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Feb 2023 01:40:45 -0500
-Received: from mail-qt1-x82e.google.com (mail-qt1-x82e.google.com [IPv6:2607:f8b0:4864:20::82e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0DC3E23842;
-        Mon, 20 Feb 2023 22:40:44 -0800 (PST)
-Received: by mail-qt1-x82e.google.com with SMTP id ay9so3476479qtb.9;
-        Mon, 20 Feb 2023 22:40:44 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=KtphWG8mjar6FBzUoxvyO95vbNktxFoV51fuM/VjW2k=;
-        b=gAP5K75UCNv8MTFyCc20NLeoIae5pB1JNHI7y0vLkWDp3h8tdr/XrO1iva30aK/QIu
-         74c0w5L8Rq9iTf7HIxgWKj0kB6ofiCp9HttnkLLndPn6PCDKlpXS3KGUaAiJlaSCZTw7
-         R94SRYaXirwIjGcbYk9W5Dvs1GBb+MN2Ynczl7ShOwlF8ZkAmluSs5ORHCYQzcSy+pI8
-         QobeLQ/kDL+pYSKBTVWPy4QjbbuDu6Z1/C3nYcDFkHtIjCa3KVtXnofg+a3nijJwLYYr
-         XUiTEoxzH/u/1PUz+DBpoybGFp2TxxlkFJq8vT0fNDPACogpFhdbdYHmH0T/WH5VM5Ru
-         Mxxg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=KtphWG8mjar6FBzUoxvyO95vbNktxFoV51fuM/VjW2k=;
-        b=CXIsidvEUgXq8TuJhkiSQHlxlIzGChOfYPux7I8D9Uk7JwGw5eqlKRra5/mQnuzmvT
-         vvfyQd7UtKwaOnpuvZm+MNC0CQGguwBWaPjEIybxMazs02OMqHQspXgwVH6KlOl6dnc4
-         Iew8ZmzKEsMk+hO8UNQ5aSm/aD9hr4JjpcU9/uuAuPG3NAWa/YFlFuj9pF8HhkiVRbcf
-         QNtkzhjE9P5sPJMTL6Ilsux+wA3Z9YYGri7SrDFaMR26y15yomZnxWR2OboyDrh5GhnX
-         KZUpgWjvbQ5QGm3OVSUMFcfgvwZ19rf6IlBHigadPC6PE2jwFzOiLn+wCK+W8hm1ipns
-         cR4g==
-X-Gm-Message-State: AO0yUKUPTSWbCwphGoev1NMY2oPXMzIhQX3rIjj0azOnREZ3hs7T67Q9
-        OSSU/iCN4zoarymTg+gAjnd9i8JZoXXcMQ==
-X-Google-Smtp-Source: AK7set8y2Omc1I1QaWR0VQdWU6j8EBUXUauLFtuHv6i/6Nbe3hIiVJ74Z1ePcJmniR9tcvCr1QK1+A==
-X-Received: by 2002:a05:622a:118a:b0:3b2:1003:37e5 with SMTP id m10-20020a05622a118a00b003b2100337e5mr6162788qtk.55.1676961642436;
-        Mon, 20 Feb 2023 22:40:42 -0800 (PST)
-Received: from ?IPV6:2600:4040:2025:5900:5493:aa3e:bfa4:8653? ([2600:4040:2025:5900:5493:aa3e:bfa4:8653])
-        by smtp.gmail.com with ESMTPSA id fz9-20020a05622a5a8900b003b34650039bsm330286qtb.76.2023.02.20.22.40.41
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 20 Feb 2023 22:40:41 -0800 (PST)
-Message-ID: <4778cc0a-77ad-b28f-bbf5-6247d26f81b4@gmail.com>
-Date:   Tue, 21 Feb 2023 01:40:40 -0500
+        Tue, 21 Feb 2023 01:44:06 -0500
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 997021ABDC;
+        Mon, 20 Feb 2023 22:44:04 -0800 (PST)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4PLVBB4Kzxz4x5c;
+        Tue, 21 Feb 2023 17:44:02 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1676961842;
+        bh=WdReY2/wAVvJYZnti5npjpayWKfRwp+N3NvydloCdGA=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=VVNPkztK7UUoW8RuPRS8gWwL6B6iA5X+TrFeqkH9TpEtoui13sr+MOF7eIEH1ZhCD
+         xCAeK2GX3jE3nCZ4TvJiTFcLWCtUgJbCPnKAcB+ox8q0LQoz4TssmvvB3t8o1WGouB
+         ItK0bMJmyd20husqzbaPXOrjX80xh45mny8j6CQwGr+CEd2wMnh0HLEQQpRuLRh//O
+         64MKGCX0Hj8FgBTmHvDYfxgv5xp9+BNa9bpxqYuoi2AdkrspTjt/ZRuNoGgF0FqIR/
+         J3yFl1cZeE2HPTBzn4roo81+GIcIwEmLizEBE2p7Vjt/8mP4xghd5Jahk2XbxDDfy7
+         vhqF4Os7xR1Qw==
+Date:   Tue, 21 Feb 2023 17:44:01 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Matthew Wilcox <willy@infradead.org>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Steve French <smfrench@gmail.com>,
+        CIFS <linux-cifs@vger.kernel.org>,
+        David Howells <dhowells@redhat.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Steve French <stfrench@microsoft.com>,
+        "Vishal Moola (Oracle)" <vishal.moola@gmail.com>
+Subject: Re: linux-next: manual merge of the mm-stable tree with the cifs
+ tree
+Message-ID: <20230221174401.7198357d@canb.auug.org.au>
+In-Reply-To: <Y/Pe2xHklSr1hDtz@casper.infradead.org>
+References: <20230220152933.1ab8fa4a@canb.auug.org.au>
+        <Y/N8hVWeR3AjssUC@casper.infradead.org>
+        <20230220190157.3b43b9a7@canb.auug.org.au>
+        <Y/Pe2xHklSr1hDtz@casper.infradead.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH v2 1/2] ARM: msm8960: Rename cxo_board to cxo-board and
- add alias
-To:     Bjorn Andersson <andersson@kernel.org>
-Cc:     Bjorn Andersson <bjorn.andersson@linaro.org>, agross@kernel.org,
-        david@ixit.cz, devicetree@vger.kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, robh+dt@kernel.org
-References: <20220808234723.5184-2-guptarud@gmail.com>
- <20220809000300.6384-1-guptarud@gmail.com> <YvQMyQLohqcc8Fug@ripper>
- <499c8b49-a09e-e775-3242-13d37a13877e@gmail.com>
- <20220829215443.dvc5xnmeqnhmxb2d@builder.lan>
-Content-Language: en-US
-From:   Rudraksha Gupta <guptarud@gmail.com>
-In-Reply-To: <20220829215443.dvc5xnmeqnhmxb2d@builder.lan>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/Ki1YF7XklYAV5e=2qQ+JFWu";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+--Sig_/Ki1YF7XklYAV5e=2qQ+JFWu
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
+Hi Matthew,
 
-So I'm trying to add a cxo-board node to my dts, however the current 
-implementation seems like it wants cxo_board. It was recommended a while 
-ago that I refactor gcc-msm8960.c to be more like 
-https://github.com/torvalds/linux/blob/master/drivers/clk/qcom/gcc-msm8996.c#L36 
-. However, I have a couple of questions:
+On Mon, 20 Feb 2023 20:58:03 +0000 Matthew Wilcox <willy@infradead.org> wro=
+te:
+>
+> On Mon, Feb 20, 2023 at 07:01:57PM +1100, Stephen Rothwell wrote:
+> > Hi Matthew,
+> >=20
+> > On Mon, 20 Feb 2023 13:58:29 +0000 Matthew Wilcox <willy@infradead.org>=
+ wrote: =20
+> > >
+> > > On Mon, Feb 20, 2023 at 03:29:33PM +1100, Stephen Rothwell wrote: =20
+> > > >=20
+> > > > Today's linux-next merge of the mm-stable tree got a conflict in:
+> > > >=20
+> > > >   fs/cifs/file.c
+> > > >=20
+> > > > between commit:
+> > > >=20
+> > > >   c8859bc0c129 ("cifs: Remove unused code")
+> > > >=20
+> > > > from the cifs tree and commits:
+> > > >=20
+> > > >   4cda80f3a7a5 ("cifs: convert wdata_alloc_and_fillpages() to use f=
+ilemap_get_folios_tag()")
+> > > >   d585bdbeb79a ("fs: convert writepage_t callback to pass a folio")
+> > > >=20
+> > > > from the mm-stable tree.
+> > > >=20
+> > > > This is a real mess :-(   =20
+> > >=20
+> > > Doesn't look too bad to me.  Dave's commit is just removing the
+> > > functions, so it doesn't matter how they're being changed. =20
+> >=20
+> > The problem I see is that an earlier commit in the cifs tree moves the
+> > use of find_get_pages_range_tag() to another function and 4cda80f3a7a5
+> > then removes find_get_pages_range_tag(). =20
+>=20
+> Ah.  Just removing all traces of it should be fine.  As long as there
+> are no remaining callers of find_get_pages_range_tag() after the merge,
+> it's good from my point of view.
 
-- The xo struct that I listed above is listed in another struct 
-https://github.com/torvalds/linux/blob/master/drivers/clk/qcom/gcc-msm8996.c#L3408 
-which is listed in the SoC desc struct 
-https://github.com/torvalds/linux/blob/master/drivers/clk/qcom/gcc-msm8996.c#L3818 
-. My question is that even though gcc-msm8960.c has an msm8960/apq8064 
-desc struct, it doesn't have anything like gcc_msm8996_hws. How would I 
-know what goes in a hypothetical gcc_(msm8960/apq8064)_hws struct? I'm 
-assuming that all I need in the hw struct is the pxo and cxo listed here 
-https://github.com/torvalds/linux/blob/master/drivers/clk/qcom/gcc-msm8960.c#L3727 
-however I'm not 100% sure how to verify this. Would anything else go 
-into a hypothetical gcc_(msm8960/apq8064)_hws struct?
+But I can't do that since commit
 
-- Is there documentation on how the gcc-<soc> files work? I'm still 
-quite new to contributing to the Linux kernel and would like to learn 
-more about the modern way to format these files and to learn more about 
-how they work in general
+  d08089f649a0 ("cifs: Change the I/O paths to use an iterator rather than =
+a page list")
 
+in the cifs tree introduces a new usage of it in code that is used in
+the cifs code ... so someone has to figure out what the merge
+resolution is between the 2 trees (how to replace that new usage) and
+let me know and then we need to test that combination for a while
+before asking Linus to take it.
 
-Thanks,
+--=20
+Cheers,
+Stephen Rothwell
 
-Rudraksha
+--Sig_/Ki1YF7XklYAV5e=2qQ+JFWu
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
 
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmP0aDEACgkQAVBC80lX
+0GzEzAf/YEhRpepelO04fFm7U1b3tHAO6/WzX3JlWR6VZev2gVRN8/tbz4UK59/0
+7G2ocGc10R8Jb2/DFt+715oav9juyL3OaZXo5H8q1wCwK26KkEerDEhDdJFyfFQy
+5GLcR4pwbZAPpZoY+sfvLRACSylYUkDrSjAWLv1cwCJ+zYSIg6kcajPBFdIW5Nss
+cg4rS4HTI4bJmnhwfSsQXFTKwEpE2TIloD3tLtbu9xLLtAl9fhSrdFCM7vCYglT2
+rz1tCB+k8nPDWZ89jlh4X7pL2/oXr18OP1p9eRo2zvBSHSutJ/w9ce1piY3sphVT
+GenksRz1QDHakejMYo/xeb5NB+ykFA==
+=2mN+
+-----END PGP SIGNATURE-----
+
+--Sig_/Ki1YF7XklYAV5e=2qQ+JFWu--
