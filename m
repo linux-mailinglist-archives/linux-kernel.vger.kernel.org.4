@@ -2,69 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4C9BC69EA2B
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 23:28:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4DE9969EA60
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 23:44:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229740AbjBUW2n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Feb 2023 17:28:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52666 "EHLO
+        id S230381AbjBUWoK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Feb 2023 17:44:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41182 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229900AbjBUW2l (ORCPT
+        with ESMTP id S230356AbjBUWoI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Feb 2023 17:28:41 -0500
-Received: from mail-pf1-x42c.google.com (mail-pf1-x42c.google.com [IPv6:2607:f8b0:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DD3D27D6A
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Feb 2023 14:28:36 -0800 (PST)
-Received: by mail-pf1-x42c.google.com with SMTP id a26so3454754pfo.9
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Feb 2023 14:28:36 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=acGnR7zCh6ECcT7oOcZq1a4dkWUWWWZOL9ziUjEaicY=;
-        b=mspeJSNVRBqIDXkMkTX1TDYD6a1Eo1IJp9bzYbQULUXd/gqBtnfSE8Rj+/URLcStAN
-         Hrz8XWNDV+puJljscApSmEJk6hOiKs82+OVRjRkSR3zEbbF4IyQWYlmN/HLnGc16DjQV
-         +wZL/USrDjeMup/N6aDm9dYRHI1OL+KBQRbheet/EmjwQqwmYNxOEQs7+WkhxnL0COmI
-         Yg6L/VVe+ISq6heE6JqAsrcugGTLKoJfj9OSsP8EiuITNPegh6/ZLHBhmML3H3MEKIHu
-         vFlBcMbofCxxpvBDNdcJosSezw4xeBVblKK7Xvn1PWIP32KcilIB5rQJtEXPYt95/PGT
-         8AeA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=acGnR7zCh6ECcT7oOcZq1a4dkWUWWWZOL9ziUjEaicY=;
-        b=aXmtR9Z+uDYVwVw16pkT1zaxlPtu4/6bmB+kXzYAUuYXdVH+ZNhja8bHq+AUvoTYLv
-         lmDAFGf6r8ldxXpo/84CtR+FNETITooIJEIIUzTsnmSqgM/kkjatgG/7kP+Xz2dDtgJE
-         CZFYCnTy8UKQC61lDkauMYeZj9p9HlrFF4Swsu6leHo7ZtZZaxk+S0vCiDK6sUNlBN7m
-         dYQU1sePESVXwHZI0NuOhYOzyKVGvoXr0WFxvuIBi1d6Nw6dndzbyH20QxAlndRqXi4b
-         Fx/bK18vU2bDQd914NEoo4yhiKu87I1B/en5SBvPw0LOFGxwrLNlPHvMH5CTKYaiZaXi
-         O3WQ==
-X-Gm-Message-State: AO0yUKUGBqu/wyGq/uEc/vdOmeXhFImSZV87km2zbsWXUHPfinQxAxv6
-        Q14WEnzHObeilJSH50Fa01/soZADFaqVdVEf3eMks7Qr
-X-Google-Smtp-Source: AK7set9Ohhg+8g9jUftr5yftEqHtU3m5cIwYcY9Lwgpz0yF0FzEY0VSzyo5BJ/HxuU7Unca1/oI0PLRMvsZt5jKNcwE=
-X-Received: by 2002:a63:7e55:0:b0:4fb:97bd:ac25 with SMTP id
- o21-20020a637e55000000b004fb97bdac25mr789368pgn.6.1677018515624; Tue, 21 Feb
- 2023 14:28:35 -0800 (PST)
+        Tue, 21 Feb 2023 17:44:08 -0500
+Received: from wout1-smtp.messagingengine.com (wout1-smtp.messagingengine.com [64.147.123.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A668CC670;
+        Tue, 21 Feb 2023 14:44:05 -0800 (PST)
+Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
+        by mailout.west.internal (Postfix) with ESMTP id 5F93232000D7;
+        Tue, 21 Feb 2023 17:44:02 -0500 (EST)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute2.internal (MEProxy); Tue, 21 Feb 2023 17:44:02 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alyssa.is; h=cc
+        :cc:content-transfer-encoding:content-type:date:date:from:from
+        :in-reply-to:message-id:mime-version:reply-to:sender:subject
+        :subject:to:to; s=fm3; t=1677019441; x=1677105841; bh=6ba+iTlkGR
+        nTAvHG6IlOQ+VtO9z8w6dNOvGsiQT6koA=; b=PK374boaIC2nboJQrGsdhl81Dw
+        oU5/zqSKJl9W5matBS/LbfAmOwGZOJgDTwy0OjhoZBc2M0P47naGcGNxOnYCBfBq
+        mD5Y+BHEJEbVtAxkeTPjOASjyMAmb8B7qJn+yWsyHJ6C22LgOvwwbzDq2vh9aiTl
+        sxR9yT1WJI2FNo/qrnxyY24hV+OGYXnUVpdfb+eby5ooz+pmN8IJgywAL12oCxJU
+        ACqYZGR30drFFRZ4avafQDFNuTLAlUptft1w6bq6pZMY18ggPCF6uMSVulFAyZci
+        hjVQJWFcttj4rcQR2whFB5pa5FiSMcyO9Mz+22f7OTJIKM/rNKVsg4HIbZiw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding
+        :content-type:date:date:feedback-id:feedback-id:from:from
+        :in-reply-to:message-id:mime-version:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm1; t=1677019441; x=1677105841; bh=6ba+iTlkGRnTA
+        vHG6IlOQ+VtO9z8w6dNOvGsiQT6koA=; b=Sc924GMUv02w4yXcaZIMHQNgWDhlS
+        RK+uEymWJfTATA8YF1ZCDeNySPdBJpcghFUVFFiDzI6X0zX0mnQZdNCI7qgbnijs
+        T0X8vKywP9Y0yXUA+5aSrgRcTgKTEZm0CY0+bEPASxF05HGzC87MC6q9gSPaYvEb
+        /yC2/grScwmipTN7QfGY8Y8I2UsQL89ALQR3ARSUK0IGjGQmhTvBEmYnaf5Ntlpw
+        1HpVhXnN2xEpplGtF0wn1K/ZjX82D/hv8upjKb5eCmZ55VwcXnKLKV59EqeeyfzX
+        YfxlCfySefTyg2y50WGDJRfZlO6AhgweUgbGvJysr4xPCfLBJxIun0fPg==
+X-ME-Sender: <xms:MUn1Y1VvNwc9YIgacLRyeJBUEM2CBE-9gyW8TpWGU7SQMhp665295A>
+    <xme:MUn1Y1nh8oDWSb6tcayhmA1t9O_bSgvoU2zipvWiFVPHqcaNz-2FquuYJZuoEN6-e
+    A0AA-k8r9Lpd79Xbg>
+X-ME-Received: <xmr:MUn1YxZBTAEY0tK3L32lmRl7mXz_lfo0-8cMmTCoyE1pZckrk7fQl5ol5WXLv-oUvLKeFdF41vHlbhoG2H1DnRT7HSPZe7gDLA>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrudejkedgtdduucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhephffvvefufffkofggtgfgsehtkeertdertdejnecuhfhrohhmpeetlhihshhs
+    rgcutfhoshhsuceohhhisegrlhihshhsrgdrihhsqeenucggtffrrghtthgvrhhnpeejfe
+    ehffehjeejgfdtffetkedtgfefgfefjeegffekjeejgedtveejleehleelhfenucevlhhu
+    shhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehhihesrghlhihssh
+    grrdhish
+X-ME-Proxy: <xmx:MUn1Y4XmHGk8HTvhiL3YLBwE__JNc08YF4mrxUzOFpqhJNTqaWzE6w>
+    <xmx:MUn1Y_loSc0B6Bumg8JqLZX5wf5dyo6rfbQ0hoHX98wJ2cBKtDyq5g>
+    <xmx:MUn1Y1cEBJHAy6tRW7SRgPcMC8aCdJzXpHDJ10ObJDsZmx4OhL5DWQ>
+    <xmx:MUn1Y0w8cZ6-KHaS6FVsFe5fqmAnZUQWaBye88zAC-PDwM0o_VMtfw>
+Feedback-ID: i12284293:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
+ 21 Feb 2023 17:44:01 -0500 (EST)
+Received: by x220.qyliss.net (Postfix, from userid 1000)
+        id 006241389C; Tue, 21 Feb 2023 22:43:58 +0000 (UTC)
+From:   Alyssa Ross <hi@alyssa.is>
+To:     Jens Axboe <axboe@kernel.dk>
+Cc:     linux-block@vger.kernel.org, Martijn Coenen <maco@android.com>,
+        Alyssa Ross <hi@alyssa.is>, linux-kernel@vger.kernel.org
+Subject: [RFC PATCH] loop: LOOP_CONFIGURE: send uevents for partitions
+Date:   Tue, 21 Feb 2023 22:28:51 +0000
+Message-Id: <20230221222847.607096-1-hi@alyssa.is>
+X-Mailer: git-send-email 2.37.1
 MIME-Version: 1.0
-References: <20230217085439.2826375-1-stevensd@google.com> <20230217085439.2826375-2-stevensd@google.com>
- <Y/U9fBxVJdhxiZ1v@x1n>
-In-Reply-To: <Y/U9fBxVJdhxiZ1v@x1n>
-From:   Yang Shi <shy828301@gmail.com>
-Date:   Tue, 21 Feb 2023 14:28:24 -0800
-Message-ID: <CAHbLzkrTHWit1-J4wQcohi2bLCwfQF3wEtnCWh9-NO7Xj1b5jA@mail.gmail.com>
-Subject: Re: [PATCH v4 1/3] mm/khugepaged: refactor collapse_file control flow
-To:     Peter Xu <peterx@redhat.com>
-Cc:     David Stevens <stevensd@chromium.org>, linux-mm@kvack.org,
-        Matthew Wilcox <willy@infradead.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        "Kirill A . Shutemov" <kirill@shutemov.name>,
-        David Hildenbrand <david@redhat.com>,
-        Hugh Dickins <hughd@google.com>, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,325 +84,88 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 21, 2023 at 1:54 PM Peter Xu <peterx@redhat.com> wrote:
->
-> On Fri, Feb 17, 2023 at 05:54:37PM +0900, David Stevens wrote:
-> > From: David Stevens <stevensd@chromium.org>
-> >
-> > Add a rollback label to deal with failure, instead of continuously
-> > checking for RESULT_SUCCESS, to make it easier to add more failure
-> > cases. The refactoring also allows the collapse_file tracepoint to
-> > include hpage on success (instead of NULL).
-> >
-> > Signed-off-by: David Stevens <stevensd@chromium.org>
-> > ---
-> >  mm/khugepaged.c | 223 ++++++++++++++++++++++++------------------------
-> >  1 file changed, 110 insertions(+), 113 deletions(-)
-> >
-> > diff --git a/mm/khugepaged.c b/mm/khugepaged.c
-> > index 8dbc39896811..6a3d6d2e25e0 100644
-> > --- a/mm/khugepaged.c
-> > +++ b/mm/khugepaged.c
-> > @@ -1885,6 +1885,12 @@ static int collapse_file(struct mm_struct *mm, unsigned long addr,
-> >       if (result != SCAN_SUCCEED)
-> >               goto out;
-> >
-> > +     __SetPageLocked(hpage);
-> > +     if (is_shmem)
-> > +             __SetPageSwapBacked(hpage);
-> > +     hpage->index = start;
-> > +     hpage->mapping = mapping;
-> > +
-> >       /*
-> >        * Ensure we have slots for all the pages in the range.  This is
-> >        * almost certainly a no-op because most of the pages must be present
-> > @@ -1897,16 +1903,10 @@ static int collapse_file(struct mm_struct *mm, unsigned long addr,
-> >               xas_unlock_irq(&xas);
-> >               if (!xas_nomem(&xas, GFP_KERNEL)) {
-> >                       result = SCAN_FAIL;
-> > -                     goto out;
-> > +                     goto rollback;
-> >               }
-> >       } while (1);
-> >
-> > -     __SetPageLocked(hpage);
-> > -     if (is_shmem)
-> > -             __SetPageSwapBacked(hpage);
-> > -     hpage->index = start;
-> > -     hpage->mapping = mapping;
-> > -
-> >       /*
-> >        * At this point the hpage is locked and not up-to-date.
-> >        * It's safe to insert it into the page cache, because nobody would
-> > @@ -2123,131 +2123,128 @@ static int collapse_file(struct mm_struct *mm, unsigned long addr,
-> >        */
-> >       try_to_unmap_flush();
-> >
-> > -     if (result == SCAN_SUCCEED) {
-> > -             /*
-> > -              * Replacing old pages with new one has succeeded, now we
-> > -              * attempt to copy the contents.
-> > -              */
-> > -             index = start;
-> > -             list_for_each_entry(page, &pagelist, lru) {
-> > -                     while (index < page->index) {
-> > -                             clear_highpage(hpage + (index % HPAGE_PMD_NR));
-> > -                             index++;
-> > -                     }
-> > -                     if (copy_mc_page(hpage + (page->index % HPAGE_PMD_NR),
-> > -                                      page) > 0) {
-> > -                             result = SCAN_COPY_MC;
-> > -                             break;
-> > -                     }
-> > -                     index++;
-> > -             }
-> > -             while (result == SCAN_SUCCEED && index < end) {
-> > +     if (result != SCAN_SUCCEED)
-> > +             goto rollback;
-> > +
-> > +     /*
-> > +      * Replacing old pages with new one has succeeded, now we
-> > +      * attempt to copy the contents.
-> > +      */
-> > +     index = start;
-> > +     list_for_each_entry(page, &pagelist, lru) {
-> > +             while (index < page->index) {
-> >                       clear_highpage(hpage + (index % HPAGE_PMD_NR));
-> >                       index++;
-> >               }
-> > +             if (copy_mc_page(hpage + (page->index % HPAGE_PMD_NR),
-> > +                              page) > 0) {
-> > +                     result = SCAN_COPY_MC;
-> > +                     goto rollback;
-> > +             }
-> > +             index++;
-> > +     }
-> > +     while (index < end) {
-> > +             clear_highpage(hpage + (index % HPAGE_PMD_NR));
-> > +             index++;
-> >       }
-> >
-> > -     if (result == SCAN_SUCCEED) {
-> > -             /*
-> > -              * Copying old pages to huge one has succeeded, now we
-> > -              * need to free the old pages.
-> > -              */
-> > -             list_for_each_entry_safe(page, tmp, &pagelist, lru) {
-> > -                     list_del(&page->lru);
-> > -                     page->mapping = NULL;
-> > -                     page_ref_unfreeze(page, 1);
-> > -                     ClearPageActive(page);
-> > -                     ClearPageUnevictable(page);
-> > -                     unlock_page(page);
-> > -                     put_page(page);
-> > -             }
-> > +     /*
-> > +      * Copying old pages to huge one has succeeded, now we
-> > +      * need to free the old pages.
-> > +      */
-> > +     list_for_each_entry_safe(page, tmp, &pagelist, lru) {
-> > +             list_del(&page->lru);
-> > +             page->mapping = NULL;
-> > +             page_ref_unfreeze(page, 1);
-> > +             ClearPageActive(page);
-> > +             ClearPageUnevictable(page);
-> > +             unlock_page(page);
-> > +             put_page(page);
-> > +     }
-> >
-> > -             xas_lock_irq(&xas);
-> > -             if (is_shmem)
-> > -                     __mod_lruvec_page_state(hpage, NR_SHMEM_THPS, nr);
-> > -             else
-> > -                     __mod_lruvec_page_state(hpage, NR_FILE_THPS, nr);
-> > +     xas_lock_irq(&xas);
-> > +     if (is_shmem)
-> > +             __mod_lruvec_page_state(hpage, NR_SHMEM_THPS, nr);
-> > +     else
-> > +             __mod_lruvec_page_state(hpage, NR_FILE_THPS, nr);
-> > +
-> > +     if (nr_none) {
-> > +             __mod_lruvec_page_state(hpage, NR_FILE_PAGES, nr_none);
-> > +             /* nr_none is always 0 for non-shmem. */
-> > +             __mod_lruvec_page_state(hpage, NR_SHMEM, nr_none);
-> > +     }
-> > +     /* Join all the small entries into a single multi-index entry. */
-> > +     xas_set_order(&xas, start, HPAGE_PMD_ORDER);
-> > +     xas_store(&xas, hpage);
-> > +     xas_unlock_irq(&xas);
-> >
-> > -             if (nr_none) {
-> > -                     __mod_lruvec_page_state(hpage, NR_FILE_PAGES, nr_none);
-> > -                     /* nr_none is always 0 for non-shmem. */
-> > -                     __mod_lruvec_page_state(hpage, NR_SHMEM, nr_none);
-> > -             }
-> > -             /* Join all the small entries into a single multi-index entry. */
-> > -             xas_set_order(&xas, start, HPAGE_PMD_ORDER);
-> > -             xas_store(&xas, hpage);
-> > -             xas_unlock_irq(&xas);
-> > +     folio = page_folio(hpage);
-> > +     folio_mark_uptodate(folio);
-> > +     folio_ref_add(folio, HPAGE_PMD_NR - 1);
-> >
-> > -             folio = page_folio(hpage);
-> > -             folio_mark_uptodate(folio);
-> > -             folio_ref_add(folio, HPAGE_PMD_NR - 1);
-> > +     if (is_shmem)
-> > +             folio_mark_dirty(folio);
-> > +     folio_add_lru(folio);
-> >
-> > -             if (is_shmem)
-> > -                     folio_mark_dirty(folio);
-> > -             folio_add_lru(folio);
-> > +     /*
-> > +      * Remove pte page tables, so we can re-fault the page as huge.
-> > +      */
-> > +     result = retract_page_tables(mapping, start, mm, addr, hpage,
-> > +                                  cc);
-> > +     unlock_page(hpage);
-> > +     goto out;
-> > +
-> > +rollback:
-> > +     /* Something went wrong: roll back page cache changes */
-> > +     xas_lock_irq(&xas);
-> > +     if (nr_none) {
-> > +             mapping->nrpages -= nr_none;
-> > +             shmem_uncharge(mapping->host, nr_none);
-> > +     }
-> >
-> > -             /*
-> > -              * Remove pte page tables, so we can re-fault the page as huge.
-> > -              */
-> > -             result = retract_page_tables(mapping, start, mm, addr, hpage,
-> > -                                          cc);
-> > -             unlock_page(hpage);
-> > -             hpage = NULL;
-> > -     } else {
-> > -             /* Something went wrong: roll back page cache changes */
-> > -             xas_lock_irq(&xas);
-> > -             if (nr_none) {
-> > -                     mapping->nrpages -= nr_none;
-> > -                     shmem_uncharge(mapping->host, nr_none);
-> > +     xas_set(&xas, start);
-> > +     xas_for_each(&xas, page, end - 1) {
-> > +             page = list_first_entry_or_null(&pagelist,
-> > +                             struct page, lru);
-> > +             if (!page || xas.xa_index < page->index) {
-> > +                     if (!nr_none)
-> > +                             break;
-> > +                     nr_none--;
-> > +                     /* Put holes back where they were */
-> > +                     xas_store(&xas, NULL);
-> > +                     continue;
-> >               }
-> >
-> > -             xas_set(&xas, start);
-> > -             xas_for_each(&xas, page, end - 1) {
-> > -                     page = list_first_entry_or_null(&pagelist,
-> > -                                     struct page, lru);
-> > -                     if (!page || xas.xa_index < page->index) {
-> > -                             if (!nr_none)
-> > -                                     break;
-> > -                             nr_none--;
-> > -                             /* Put holes back where they were */
-> > -                             xas_store(&xas, NULL);
-> > -                             continue;
-> > -                     }
-> > +             VM_BUG_ON_PAGE(page->index != xas.xa_index, page);
-> >
-> > -                     VM_BUG_ON_PAGE(page->index != xas.xa_index, page);
-> > +             /* Unfreeze the page. */
-> > +             list_del(&page->lru);
-> > +             page_ref_unfreeze(page, 2);
-> > +             xas_store(&xas, page);
-> > +             xas_pause(&xas);
-> > +             xas_unlock_irq(&xas);
-> > +             unlock_page(page);
-> > +             putback_lru_page(page);
-> > +             xas_lock_irq(&xas);
-> > +     }
-> > +     VM_BUG_ON(nr_none);
-> > +     /*
-> > +      * Undo the updates of filemap_nr_thps_inc for non-SHMEM file only.
-> > +      * This undo is not needed unless failure is due to SCAN_COPY_MC.
-> > +      */
-> > +     if (!is_shmem && result == SCAN_COPY_MC)
-> > +             filemap_nr_thps_dec(mapping);
-> >
-> > -                     /* Unfreeze the page. */
-> > -                     list_del(&page->lru);
-> > -                     page_ref_unfreeze(page, 2);
-> > -                     xas_store(&xas, page);
-> > -                     xas_pause(&xas);
-> > -                     xas_unlock_irq(&xas);
-> > -                     unlock_page(page);
-> > -                     putback_lru_page(page);
-> > -                     xas_lock_irq(&xas);
-> > -             }
-> > -             VM_BUG_ON(nr_none);
-> > -             /*
-> > -              * Undo the updates of filemap_nr_thps_inc for non-SHMEM file only.
-> > -              * This undo is not needed unless failure is due to SCAN_COPY_MC.
-> > -              */
-> > -             if (!is_shmem && result == SCAN_COPY_MC)
-> > -                     filemap_nr_thps_dec(mapping);
-> > +     xas_unlock_irq(&xas);
-> >
-> > -             xas_unlock_irq(&xas);
-> > +     hpage->mapping = NULL;
-> >
-> > -             hpage->mapping = NULL;
-> > -     }
-> > +     unlock_page(hpage);
-> > +     mem_cgroup_uncharge(page_folio(hpage));
-> > +     put_page(hpage);
-> >
-> > -     if (hpage)
-> > -             unlock_page(hpage);
-> >  out:
-> >       VM_BUG_ON(!list_empty(&pagelist));
-> > -     if (hpage) {
-> > -             mem_cgroup_uncharge(page_folio(hpage));
-> > -             put_page(hpage);
-> > -     }
->
-> Moving this chunk seems wrong, as it can leak the huge page if
-> alloc_charge_hpage() failed on mem charging, iiuc.
+LOOP_CONFIGURE is, as I understand it, supposed to be a way to combine
+LOOP_SET_FD and LOOP_SET_STATUS64 into a single syscall.  When using
+LOOP_SET_FD+LOOP_SET_STATUS64, a single uevent would be sent for each
+partition found on the loop device during LOOP_SET_STATUS64, but when
+using LOOP_CONFIGURE, no such uevent was being sent.
 
-Yeah, good catch.
+In the old setup, uevents are disabled for LOOP_SET_FD, but not for
+LOOP_SET_STATUS64.  This makes sense, as it prevents uevents being
+sent for a partially configured device during LOOP_SET_FD — they're
+only sent at the end of LOOP_SET_STATUS64.  But for LOOP_CONFIGURE,
+uevents were disabled for the entire operation, so that final
+notification was never issued.  To fix this, I've moved the
+loop_reread_partitions() call, which causes the uevents to be issued,
+to after uevents are re-enabled, matching the behaviour of the
+LOOP_SET_FD+LOOP_SET_STATUS64 combination.
 
->
-> And I found that keeping it seems wrong either, because if mem charge
-> failed we'll uncharge even without charging it before.  But that's nothing
-> about this patch alone.
+I noticed this because Busybox's losetup program recently changed from
+using LOOP_SET_FD+LOOP_SET_STATUS64 to LOOP_CONFIGURE, and this broke
+my setup, for which I want a notification from the kernel any time a
+new partition becomes available.
 
-We should be able to just simply check the return value. For example:
+Signed-off-by: Alyssa Ross <hi@alyssa.is>
+Fixes: 3448914e8cc5 ("loop: Add LOOP_CONFIGURE ioctl")
+---
 
-if (result == SCAN_CGROUP_CHARGE_FAIL)
-    put_page(hpage);
+I've marked this as an RFC because there's still a problem with this
+patch that I'd be grateful for advice on how to solve: this change
+accidentally makes LOOP_SET_FD emit uevents as well if max_part is
+configured.  There are a few ways I could imagine resolving this:
 
->
-> Posted a patch for this:
->
-> https://lore.kernel.org/all/20230221214344.609226-1-peterx@redhat.com/
->
-> I _think_ this patch will make sense after rebasing to that fix if that's
-> correct, but please review it and double check.
+ - Have loop_configure distinguish between LOOP_SET_FD and
+   LOOP_CONFIGURE somehow.
 
-It is ok too.
+ - Have loop_configure take a bool argument specifying whether uevents
+   should be reenabled before or after the loop_reread_partitions()
+   call.
 
+ - Move re-enabling the uevent and calling loop_reread_partitions()
+   out of loop_configure().
 
->
-> Thanks,
->
-> > -
-> >       trace_mm_khugepaged_collapse_file(mm, hpage, index, is_shmem, addr, file, nr, result);
-> >       return result;
-> >  }
-> > --
-> > 2.39.2.637.g21b0678d19-goog
-> >
->
-> --
-> Peter Xu
->
+All of these have drawbacks for the understandability of the code
+though, so I wanted to ask what the best way to proceed would be.
+
+ drivers/block/loop.c | 13 +++++++++----
+ 1 file changed, 9 insertions(+), 4 deletions(-)
+
+diff --git a/drivers/block/loop.c b/drivers/block/loop.c
+index 5f04235e4ff7..d8063dbf5ec1 100644
+--- a/drivers/block/loop.c
++++ b/drivers/block/loop.c
+@@ -1110,15 +1110,19 @@ static int loop_configure(struct loop_device *lo, fmode_t mode,
+ 		clear_bit(GD_SUPPRESS_PART_SCAN, &lo->lo_disk->state);
+ 
+ 	loop_global_unlock(lo, is_loop);
+-	if (partscan)
+-		loop_reread_partitions(lo);
+ 	if (!(mode & FMODE_EXCL))
+ 		bd_abort_claiming(bdev, loop_configure);
+ 
++	/*
++	 * Now that we are done, reread the partitions with uevent
++	 * re-enabled to let userspace know about the changes.
++	 */
++	dev_set_uevent_suppress(disk_to_dev(lo->lo_disk), 0);
++	if (partscan)
++		loop_reread_partitions(lo);
++
+ 	error = 0;
+ done:
+-	/* enable and uncork uevent now that we are done */
+-	dev_set_uevent_suppress(disk_to_dev(lo->lo_disk), 0);
+ 	return error;
+ 
+ out_unlock:
+@@ -1130,6 +1134,7 @@ static int loop_configure(struct loop_device *lo, fmode_t mode,
+ 	fput(file);
+ 	/* This is safe: open() is still holding a reference. */
+ 	module_put(THIS_MODULE);
++	dev_set_uevent_suppress(disk_to_dev(lo->lo_disk), 0);
+ 	goto done;
+ }
+ 
+-- 
+2.37.1
+
