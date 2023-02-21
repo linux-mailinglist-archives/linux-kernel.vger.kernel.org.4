@@ -2,36 +2,36 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F6E069DFCC
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 13:01:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 21C3E69DFC3
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 13:01:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234663AbjBUMB1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Feb 2023 07:01:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39392 "EHLO
+        id S234638AbjBUMAs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Feb 2023 07:00:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38048 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234725AbjBUMAe (ORCPT
+        with ESMTP id S234798AbjBUL7z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Feb 2023 07:00:34 -0500
+        Tue, 21 Feb 2023 06:59:55 -0500
 Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BB4E28870;
-        Tue, 21 Feb 2023 03:59:51 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 677042941F;
+        Tue, 21 Feb 2023 03:59:14 -0800 (PST)
 Received: from IcarusMOD.eternityproject.eu (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
         (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id E89A366021EA;
-        Tue, 21 Feb 2023 11:56:59 +0000 (GMT)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 3AA6766021EB;
+        Tue, 21 Feb 2023 11:57:01 +0000 (GMT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1676980621;
-        bh=t0BhqFhgFrOhfZhgO4PCkH5Vfx6Hcb7s3uSV/Xzx0PA=;
+        s=mail; t=1676980622;
+        bh=AFrBqX3aSG50jKfVypQ3ILkhU2AyHMutK80uXRkrRPQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Uq1D8AjF0R92Lpg2+1h0QjoRN2yER3k0vjfMyghk5+lcZVRKlmTd6XNNiLwc3Ehir
-         9mz3k/mkFEptoCTnk/Y1tFDG5RlBiepg8V7ImXwTqwFGn0vt+wAhKkTXGPAW8Aj0q/
-         IlA4MCLMnPkZ5m2igRV+a711m9TdbUlTVhamsAtHap1kdxjVox42n3O6kel5+733t8
-         uuF7YGzoGIHzgpKdDQvMl4ZXyhaEiAB4Z8LKpC+5STYPz6dQywiT7Lq3vVpOQZLc5u
-         bKpeyRF+Qo/QpRTRVQKAJiD1d6/QTVnhipedzuiSnX12l9Z2+YziQJpsifC+XFShpd
-         Fmz6V/Ysyewag==
+        b=V+RT5+sHkJ1IjRW6i03ABvfOoPK85LVHbYFCJR/cdQ1REwRnbp1NhirCSiCPad1vZ
+         1gpySaSqFCr3Z8iqb693/5G721zsF95UpwUYEQfc7zUZslzAk14aEaI8d072R0vLqK
+         28+ADEXDK35IFefNSt+lcM8B1BWS0eIBvDtLIG64FknHvjYB9OhZC6luA3E2PYlYop
+         IG3vnTdaCEgOW1x8mBa6TgUSk2AXm2JBgzNzqTrcmzG2KMqYYoi5LKCuhJwUCg7nMt
+         prueS46v2AriAErQ2BD+NLdBWIQmUHe+tKs1KiYoCiHSwqBZ5TV68IcPreXcpBE0Wt
+         eOP4sFCfa0cdg==
 From:   AngeloGioacchino Del Regno 
         <angelogioacchino.delregno@collabora.com>
 To:     mturquette@baylibre.com
@@ -47,9 +47,9 @@ Cc:     sboyd@kernel.org, matthias.bgg@gmail.com,
         chen.zhong@mediatek.com, linux-kernel@vger.kernel.org,
         linux-clk@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         linux-mediatek@lists.infradead.org
-Subject: [PATCH v4 50/54] clk: mediatek: mt8135: Move apmixedsys to its own file
-Date:   Tue, 21 Feb 2023 12:55:45 +0100
-Message-Id: <20230221115549.360132-51-angelogioacchino.delregno@collabora.com>
+Subject: [PATCH v4 51/54] clk: mediatek: mt8135: Properly use CLK_IS_CRITICAL flag
+Date:   Tue, 21 Feb 2023 12:55:46 +0100
+Message-Id: <20230221115549.360132-52-angelogioacchino.delregno@collabora.com>
 X-Mailer: git-send-email 2.39.1
 In-Reply-To: <20230221115549.360132-1-angelogioacchino.delregno@collabora.com>
 References: <20230221115549.360132-1-angelogioacchino.delregno@collabora.com>
@@ -64,154 +64,76 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In preparation for migrating mt8135 clocks to the common simple
-probe mechanism, move the apmixedsys clocks to a different file.
+Instead of calling clk_prepare_enable() for clocks that shall stay
+enabled, use the CLK_IS_CRITICAL flag, which purpose is exactly that.
 
+Fixes: a8aede794843 ("clk: mediatek: Add basic clocks for Mediatek MT8135.")
 Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 Reviewed-by: Chen-Yu Tsai <wenst@chromium.org>
 ---
- drivers/clk/mediatek/Makefile                |  2 +-
- drivers/clk/mediatek/clk-mt8135-apmixedsys.c | 62 ++++++++++++++++++++
- drivers/clk/mediatek/clk-mt8135.c            | 46 ---------------
- 3 files changed, 63 insertions(+), 47 deletions(-)
- create mode 100644 drivers/clk/mediatek/clk-mt8135-apmixedsys.c
+ drivers/clk/mediatek/clk-mt8135.c | 14 ++++++++------
+ 1 file changed, 8 insertions(+), 6 deletions(-)
 
-diff --git a/drivers/clk/mediatek/Makefile b/drivers/clk/mediatek/Makefile
-index 5facbe93141e..228cb3e3a4c4 100644
---- a/drivers/clk/mediatek/Makefile
-+++ b/drivers/clk/mediatek/Makefile
-@@ -62,7 +62,7 @@ obj-$(CONFIG_COMMON_CLK_MT7986) += clk-mt7986-apmixed.o
- obj-$(CONFIG_COMMON_CLK_MT7986) += clk-mt7986-topckgen.o
- obj-$(CONFIG_COMMON_CLK_MT7986) += clk-mt7986-infracfg.o
- obj-$(CONFIG_COMMON_CLK_MT7986_ETHSYS) += clk-mt7986-eth.o
--obj-$(CONFIG_COMMON_CLK_MT8135) += clk-mt8135.o
-+obj-$(CONFIG_COMMON_CLK_MT8135) += clk-mt8135-apmixedsys.o clk-mt8135.o
- obj-$(CONFIG_COMMON_CLK_MT8167) += clk-mt8167.o clk-mt8167-apmixedsys.o
- obj-$(CONFIG_COMMON_CLK_MT8167_AUDSYS) += clk-mt8167-aud.o
- obj-$(CONFIG_COMMON_CLK_MT8167_IMGSYS) += clk-mt8167-img.o
-diff --git a/drivers/clk/mediatek/clk-mt8135-apmixedsys.c b/drivers/clk/mediatek/clk-mt8135-apmixedsys.c
-new file mode 100644
-index 000000000000..2b4d379300fc
---- /dev/null
-+++ b/drivers/clk/mediatek/clk-mt8135-apmixedsys.c
-@@ -0,0 +1,62 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+/*
-+ * Copyright (c) 2014 MediaTek Inc.
-+ *               James Liao <jamesjj.liao@mediatek.com>
-+ * Copyright (c) 2023 Collabora, Ltd.
-+ *               AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-+ */
-+
-+#include <dt-bindings/clock/mt8135-clk.h>
-+#include <linux/clk.h>
-+#include <linux/of.h>
-+#include <linux/platform_device.h>
-+
-+#include "clk-mtk.h"
-+#include "clk-pll.h"
-+
-+#define MT8135_PLL_FMAX		(2000 * MHZ)
-+#define CON0_MT8135_RST_BAR	BIT(27)
-+
-+#define PLL(_id, _name, _reg, _pwr_reg, _en_mask, _flags, _pcwbits, _pd_reg, _pd_shift, _tuner_reg, _pcw_reg, _pcw_shift) { \
-+		.id = _id,						\
-+		.name = _name,						\
-+		.reg = _reg,						\
-+		.pwr_reg = _pwr_reg,					\
-+		.en_mask = _en_mask,					\
-+		.flags = _flags,					\
-+		.rst_bar_mask = CON0_MT8135_RST_BAR,			\
-+		.fmax = MT8135_PLL_FMAX,				\
-+		.pcwbits = _pcwbits,					\
-+		.pd_reg = _pd_reg,					\
-+		.pd_shift = _pd_shift,					\
-+		.tuner_reg = _tuner_reg,				\
-+		.pcw_reg = _pcw_reg,					\
-+		.pcw_shift = _pcw_shift,				\
-+	}
-+
-+static const struct mtk_pll_data plls[] = {
-+	PLL(CLK_APMIXED_ARMPLL1, "armpll1", 0x200, 0x218, 0x80000000, 0, 21, 0x204, 24, 0x0, 0x204, 0),
-+	PLL(CLK_APMIXED_ARMPLL2, "armpll2", 0x2cc, 0x2e4, 0x80000000, 0, 21, 0x2d0, 24, 0x0, 0x2d0, 0),
-+	PLL(CLK_APMIXED_MAINPLL, "mainpll", 0x21c, 0x234, 0xf0000000, HAVE_RST_BAR, 21, 0x21c, 6, 0x0, 0x220, 0),
-+	PLL(CLK_APMIXED_UNIVPLL, "univpll", 0x238, 0x250, 0xf3000000, HAVE_RST_BAR, 7, 0x238, 6, 0x0, 0x238, 9),
-+	PLL(CLK_APMIXED_MMPLL, "mmpll", 0x254, 0x26c, 0xf0000000, HAVE_RST_BAR, 21, 0x254, 6, 0x0, 0x258, 0),
-+	PLL(CLK_APMIXED_MSDCPLL, "msdcpll", 0x278, 0x290, 0x80000000, 0, 21, 0x278, 6, 0x0, 0x27c, 0),
-+	PLL(CLK_APMIXED_TVDPLL, "tvdpll", 0x294, 0x2ac, 0x80000000, 0, 31, 0x294, 6, 0x0, 0x298, 0),
-+	PLL(CLK_APMIXED_LVDSPLL, "lvdspll", 0x2b0, 0x2c8, 0x80000000, 0, 21, 0x2b0, 6, 0x0, 0x2b4, 0),
-+	PLL(CLK_APMIXED_AUDPLL, "audpll", 0x2e8, 0x300, 0x80000000, 0, 31, 0x2e8, 6, 0x2f8, 0x2ec, 0),
-+	PLL(CLK_APMIXED_VDECPLL, "vdecpll", 0x304, 0x31c, 0x80000000, 0, 21, 0x2b0, 6, 0x0, 0x308, 0),
-+};
-+
-+static void __init mtk_apmixedsys_init(struct device_node *node)
-+{
-+	struct clk_hw_onecell_data *clk_data;
-+
-+	clk_data = mtk_alloc_clk_data(CLK_APMIXED_NR_CLK);
-+	if (!clk_data)
-+		return;
-+
-+	mtk_clk_register_plls(node, plls, ARRAY_SIZE(plls), clk_data);
-+}
-+CLK_OF_DECLARE(mtk_apmixedsys, "mediatek,mt8135-apmixedsys",
-+		mtk_apmixedsys_init);
-+MODULE_LICENSE("GPL");
 diff --git a/drivers/clk/mediatek/clk-mt8135.c b/drivers/clk/mediatek/clk-mt8135.c
-index 98165b1f7c97..2a9405b552c6 100644
+index 2a9405b552c6..1c76c0003f99 100644
 --- a/drivers/clk/mediatek/clk-mt8135.c
 +++ b/drivers/clk/mediatek/clk-mt8135.c
-@@ -592,50 +592,4 @@ static void __init mtk_pericfg_init(struct device_node *node)
- 	mtk_register_reset_controller(node, &clk_rst_desc[1]);
- }
- CLK_OF_DECLARE(mtk_pericfg, "mediatek,mt8135-pericfg", mtk_pericfg_init);
+@@ -2,6 +2,8 @@
+ /*
+  * Copyright (c) 2014 MediaTek Inc.
+  * Author: James Liao <jamesjj.liao@mediatek.com>
++ * Copyright (c) 2023 Collabora, Ltd.
++ *               AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+  */
+ 
+ #include <linux/clk.h>
+@@ -390,7 +392,7 @@ static const struct mtk_composite top_muxes[] __initconst = {
+ 	MUX_GATE(CLK_TOP_GCPU_SEL, "gcpu_sel", gcpu_parents, 0x0164, 24, 3, 31),
+ 	/* CLK_CFG_9 */
+ 	MUX_GATE(CLK_TOP_DPI1_SEL, "dpi1_sel", dpi1_parents, 0x0168, 0, 2, 7),
+-	MUX_GATE(CLK_TOP_CCI_SEL, "cci_sel", cci_parents, 0x0168, 8, 3, 15),
++	MUX_GATE_FLAGS(CLK_TOP_CCI_SEL, "cci_sel", cci_parents, 0x0168, 8, 3, 15, CLK_IS_CRITICAL),
+ 	MUX_GATE(CLK_TOP_APLL_SEL, "apll_sel", apll_parents, 0x0168, 16, 3, 23),
+ 	MUX_GATE(CLK_TOP_HDMIPLL_SEL, "hdmipll_sel", hdmipll_parents, 0x0168, 24, 2, 31),
+ };
+@@ -404,6 +406,10 @@ static const struct mtk_gate_regs infra_cg_regs = {
+ #define GATE_ICG(_id, _name, _parent, _shift)	\
+ 	GATE_MTK(_id, _name, _parent, &infra_cg_regs, _shift, &mtk_clk_gate_ops_setclr)
+ 
++#define GATE_ICG_AO(_id, _name, _parent, _shift)	\
++	GATE_MTK_FLAGS(_id, _name, _parent, &infra_cg_regs, _shift,	\
++		       &mtk_clk_gate_ops_setclr, CLK_IS_CRITICAL)
++
+ static const struct mtk_gate infra_clks[] __initconst = {
+ 	GATE_ICG(CLK_INFRA_PMIC_WRAP, "pmic_wrap_ck", "axi_sel", 23),
+ 	GATE_ICG(CLK_INFRA_PMICSPI, "pmicspi_ck", "pmicspi_sel", 22),
+@@ -411,7 +417,7 @@ static const struct mtk_gate infra_clks[] __initconst = {
+ 	GATE_ICG(CLK_INFRA_CCIF0_AP_CTRL, "ccif0_ap_ctrl", "axi_sel", 20),
+ 	GATE_ICG(CLK_INFRA_KP, "kp_ck", "axi_sel", 16),
+ 	GATE_ICG(CLK_INFRA_CPUM, "cpum_ck", "cpum_tck_in", 15),
+-	GATE_ICG(CLK_INFRA_M4U, "m4u_ck", "mem_sel", 8),
++	GATE_ICG_AO(CLK_INFRA_M4U, "m4u_ck", "mem_sel", 8),
+ 	GATE_ICG(CLK_INFRA_MFGAXI, "mfgaxi_ck", "axi_sel", 7),
+ 	GATE_ICG(CLK_INFRA_DEVAPC, "devapc_ck", "axi_sel", 6),
+ 	GATE_ICG(CLK_INFRA_AUDIO, "audio_ck", "aud_intbus_sel", 5),
+@@ -534,8 +540,6 @@ static void __init mtk_topckgen_init(struct device_node *node)
+ 				    ARRAY_SIZE(top_muxes), base,
+ 				    &mt8135_clk_lock, clk_data);
+ 
+-	clk_prepare_enable(clk_data->hws[CLK_TOP_CCI_SEL]->clk);
 -
--#define MT8135_PLL_FMAX		(2000 * MHZ)
--#define CON0_MT8135_RST_BAR	BIT(27)
+ 	r = of_clk_add_hw_provider(node, of_clk_hw_onecell_get, clk_data);
+ 	if (r)
+ 		pr_err("%s(): could not register clock provider: %d\n",
+@@ -553,8 +557,6 @@ static void __init mtk_infrasys_init(struct device_node *node)
+ 	mtk_clk_register_gates(NULL, node, infra_clks,
+ 			       ARRAY_SIZE(infra_clks), clk_data);
+ 
+-	clk_prepare_enable(clk_data->hws[CLK_INFRA_M4U]->clk);
 -
--#define PLL(_id, _name, _reg, _pwr_reg, _en_mask, _flags, _pcwbits, _pd_reg, _pd_shift, _tuner_reg, _pcw_reg, _pcw_shift) { \
--		.id = _id,						\
--		.name = _name,						\
--		.reg = _reg,						\
--		.pwr_reg = _pwr_reg,					\
--		.en_mask = _en_mask,					\
--		.flags = _flags,					\
--		.rst_bar_mask = CON0_MT8135_RST_BAR,			\
--		.fmax = MT8135_PLL_FMAX,				\
--		.pcwbits = _pcwbits,					\
--		.pd_reg = _pd_reg,					\
--		.pd_shift = _pd_shift,					\
--		.tuner_reg = _tuner_reg,				\
--		.pcw_reg = _pcw_reg,					\
--		.pcw_shift = _pcw_shift,				\
--	}
--
--static const struct mtk_pll_data plls[] = {
--	PLL(CLK_APMIXED_ARMPLL1, "armpll1", 0x200, 0x218, 0x80000000, 0, 21, 0x204, 24, 0x0, 0x204, 0),
--	PLL(CLK_APMIXED_ARMPLL2, "armpll2", 0x2cc, 0x2e4, 0x80000000, 0, 21, 0x2d0, 24, 0x0, 0x2d0, 0),
--	PLL(CLK_APMIXED_MAINPLL, "mainpll", 0x21c, 0x234, 0xf0000000, HAVE_RST_BAR, 21, 0x21c, 6, 0x0, 0x220, 0),
--	PLL(CLK_APMIXED_UNIVPLL, "univpll", 0x238, 0x250, 0xf3000000, HAVE_RST_BAR, 7, 0x238, 6, 0x0, 0x238, 9),
--	PLL(CLK_APMIXED_MMPLL, "mmpll", 0x254, 0x26c, 0xf0000000, HAVE_RST_BAR, 21, 0x254, 6, 0x0, 0x258, 0),
--	PLL(CLK_APMIXED_MSDCPLL, "msdcpll", 0x278, 0x290, 0x80000000, 0, 21, 0x278, 6, 0x0, 0x27c, 0),
--	PLL(CLK_APMIXED_TVDPLL, "tvdpll", 0x294, 0x2ac, 0x80000000, 0, 31, 0x294, 6, 0x0, 0x298, 0),
--	PLL(CLK_APMIXED_LVDSPLL, "lvdspll", 0x2b0, 0x2c8, 0x80000000, 0, 21, 0x2b0, 6, 0x0, 0x2b4, 0),
--	PLL(CLK_APMIXED_AUDPLL, "audpll", 0x2e8, 0x300, 0x80000000, 0, 31, 0x2e8, 6, 0x2f8, 0x2ec, 0),
--	PLL(CLK_APMIXED_VDECPLL, "vdecpll", 0x304, 0x31c, 0x80000000, 0, 21, 0x2b0, 6, 0x0, 0x308, 0),
--};
--
--static void __init mtk_apmixedsys_init(struct device_node *node)
--{
--	struct clk_hw_onecell_data *clk_data;
--
--	clk_data = mtk_alloc_clk_data(CLK_APMIXED_NR_CLK);
--	if (!clk_data)
--		return;
--
--	mtk_clk_register_plls(node, plls, ARRAY_SIZE(plls), clk_data);
--}
--CLK_OF_DECLARE(mtk_apmixedsys, "mediatek,mt8135-apmixedsys",
--		mtk_apmixedsys_init);
- MODULE_LICENSE("GPL");
+ 	r = of_clk_add_hw_provider(node, of_clk_hw_onecell_get, clk_data);
+ 	if (r)
+ 		pr_err("%s(): could not register clock provider: %d\n",
 -- 
 2.39.1
 
