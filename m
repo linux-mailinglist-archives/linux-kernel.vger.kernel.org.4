@@ -2,100 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 39A5569DA43
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 06:04:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0718E69DA47
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 06:09:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233190AbjBUFEE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Feb 2023 00:04:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33142 "EHLO
+        id S232989AbjBUFJs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Feb 2023 00:09:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36454 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230114AbjBUFDv (ORCPT
+        with ESMTP id S229626AbjBUFJq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Feb 2023 00:03:51 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8C801F5D5
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Feb 2023 21:03:47 -0800 (PST)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ore@pengutronix.de>)
-        id 1pUKoU-0002zz-4E; Tue, 21 Feb 2023 06:03:38 +0100
-Received: from [2a0a:edc0:0:1101:1d::ac] (helo=dude04.red.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <ore@pengutronix.de>)
-        id 1pUKoR-006PyZ-K8; Tue, 21 Feb 2023 06:03:36 +0100
-Received: from ore by dude04.red.stw.pengutronix.de with local (Exim 4.94.2)
-        (envelope-from <ore@pengutronix.de>)
-        id 1pUKoR-002QOJ-QP; Tue, 21 Feb 2023 06:03:35 +0100
-From:   Oleksij Rempel <o.rempel@pengutronix.de>
-To:     Andrew Lunn <andrew@lunn.ch>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>
-Cc:     Oleksij Rempel <o.rempel@pengutronix.de>, kernel@pengutronix.de,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        Russell King <linux@armlinux.org.uk>
-Subject: [PATCH net-next v2 4/4] net: phy: c45: genphy_c45_ethtool_set_eee: validate EEE link modes
-Date:   Tue, 21 Feb 2023 06:03:34 +0100
-Message-Id: <20230221050334.578012-5-o.rempel@pengutronix.de>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20230221050334.578012-1-o.rempel@pengutronix.de>
-References: <20230221050334.578012-1-o.rempel@pengutronix.de>
+        Tue, 21 Feb 2023 00:09:46 -0500
+Received: from mail-il1-f208.google.com (mail-il1-f208.google.com [209.85.166.208])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D17B325B8E
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Feb 2023 21:09:45 -0800 (PST)
+Received: by mail-il1-f208.google.com with SMTP id m6-20020a056e020de600b0030f1b0dfa9dso1180260ilj.4
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Feb 2023 21:09:45 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:from:subject:message-id:in-reply-to:date:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=ht4YMZ9xHmCpd10L1Q7UoHoJ8sa6svP1SEn5xjqGq0c=;
+        b=hFEBNxXmAlKPs/FW9Z2PjXnm2EnbTesQfvoA2z/bNHaKHjwH2BvBKeleioZAbX7gkL
+         10OYxZjYpCJa/MeFVSKogbRFuARJ52YltlAdtydTlsakKepZCtqHPco8AbNtwVA81tPy
+         xWB3HkZ0YlO/Sk7D2IoPWPMEcfi8ux5Iar/cBwrfF/x8nYPBY6Tpt//mlfFVdXLZgLog
+         uIB6DkE8iEXDsdQp0EmgEInnbZ/cTADXL/SY419k8Dc34diZT2NniIZEeN2SSehAvarO
+         n/MbPr44Q5N9a0UZTTk80H1BXtQb9Fhva3QpGvQs6MB6OHpINl2VKfWa4e3TRzOR0/sB
+         ts7A==
+X-Gm-Message-State: AO0yUKWnTQaY5tYf2SSE705rxzybHdRmB3zqAVvLg3ntzkwQlqvMIBXO
+        rlzJ8ztXMFkOcW84c7kwtcdNdJOz7ScE/LtrFzeaBoTmkjX6
+X-Google-Smtp-Source: AK7set+nYB6MBJH2q9vy2jy1HaXut9lcchTCIZemyEmf468mV8xEhQUy37UkV8BT4h/E3z7e0+6QA+rW4tEAuSG85+ixcK/WjxGU
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ore@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Received: by 2002:a05:6638:1122:b0:3c5:1302:c88c with SMTP id
+ f2-20020a056638112200b003c51302c88cmr1562618jar.0.1676956185156; Mon, 20 Feb
+ 2023 21:09:45 -0800 (PST)
+Date:   Mon, 20 Feb 2023 21:09:45 -0800
+In-Reply-To: <000000000000ff304105f4d1cd36@google.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000b8643205f52ec9bf@google.com>
+Subject: Re: [syzbot] WARNING: can't access registers at entry_SYSCALL_64_after_hwframe
+From:   syzbot <syzbot+dac365e3ce07c3d0e496@syzkaller.appspotmail.com>
+To:     dvyukov@google.com, jpoimboe@kernel.org, jpoimboe@redhat.com,
+        linux-kernel@vger.kernel.org, mingo@kernel.org,
+        peterz@infradead.org, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SORTED_RECIPS,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Currently, it is possible to let some PHYs to advertise not supported
-EEE link modes. So, validate them before overwriting existing
-configuration.
+syzbot has found a reproducer for the following issue on:
 
-Signed-off-by: Oleksij Rempel <o.rempel@pengutronix.de>
----
- drivers/net/phy/phy-c45.c | 15 +++++++++++++--
- 1 file changed, 13 insertions(+), 2 deletions(-)
+HEAD commit:    d2af0fa4bfa4 Add linux-next specific files for 20230220
+git tree:       linux-next
+console output: https://syzkaller.appspot.com/x/log.txt?x=109146a0c80000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=594e1a56901fd35d
+dashboard link: https://syzkaller.appspot.com/bug?extid=dac365e3ce07c3d0e496
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=10b9f4d8c80000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=138179e8c80000
 
-diff --git a/drivers/net/phy/phy-c45.c b/drivers/net/phy/phy-c45.c
-index 71671a07175f..f595acd0a895 100644
---- a/drivers/net/phy/phy-c45.c
-+++ b/drivers/net/phy/phy-c45.c
-@@ -1439,12 +1439,23 @@ int genphy_c45_ethtool_set_eee(struct phy_device *phydev,
- 	int ret;
- 
- 	if (data->eee_enabled) {
--		if (data->advertised)
-+		if (data->advertised) {
-+			__ETHTOOL_DECLARE_LINK_MODE_MASK(adv);
-+
-+			ethtool_convert_legacy_u32_to_link_mode(adv,
-+								data->advertised);
-+			linkmode_andnot(adv, adv, phydev->supported_eee);
-+			if (!linkmode_empty(adv)) {
-+				phydev_warn(phydev, "At least some EEE link modes are not supported.\n");
-+				return -EINVAL;
-+			}
-+
- 			ethtool_convert_legacy_u32_to_link_mode(phydev->advertising_eee,
- 								data->advertised);
--		else
-+		} else {
- 			linkmode_copy(phydev->advertising_eee,
- 				      phydev->supported_eee);
-+		}
- 
- 		phydev->eee_enabled = true;
- 	} else {
--- 
-2.30.2
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/83b78c113e8e/disk-d2af0fa4.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/d59f9b2c9091/vmlinux-d2af0fa4.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/2726c16c1d3b/bzImage-d2af0fa4.xz
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+dac365e3ce07c3d0e496@syzkaller.appspotmail.com
+
+WARNING: can't access registers at entry_SYSCALL_64_after_hwframe+0x63/0xcd
 
