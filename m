@@ -2,167 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5BBED69DDE2
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 11:29:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C5F4369DDE6
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 11:29:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233632AbjBUK3F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Feb 2023 05:29:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59382 "EHLO
+        id S233689AbjBUK3t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Feb 2023 05:29:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60234 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233396AbjBUK3D (ORCPT
+        with ESMTP id S233396AbjBUK3q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Feb 2023 05:29:03 -0500
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23D28AD2D;
-        Tue, 21 Feb 2023 02:29:01 -0800 (PST)
-Received: from [192.168.10.12] (unknown [39.45.217.110])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: usama.anjum)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id E8FAB66021CA;
-        Tue, 21 Feb 2023 10:28:50 +0000 (GMT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1676975338;
-        bh=fxVmTBekLEao3S5bXJ02H7r4cVQUYDNCck3NzQOmT6Y=;
-        h=Date:Cc:Subject:To:References:From:In-Reply-To:From;
-        b=ZWkarKD+DUtaUi/POrJUturQZo0lgaUlOmMYr4PykO1GcCPQAJp7VVfql9GSK3sEs
-         1tw9rDjfq7uN8Dn4gacFid7lQzpRtR3MfQprnDJ1e0r3WT9LSdQ3fpHHUB72VS53zO
-         UYu0c46+iuprdeZh5O4b1OHcN8NL+1nwKFwXFLoJfcOAduwM7NZrxAgPOXwI0DnIMI
-         ZJX32mQekwmA1GV08U+D1V+C9H3vTsocHJesWWFhOoMXurRGZMVNB1bzITHONbU2VX
-         oLYUn3Hpft+uiO5rfFb9riWjedupvOHr6IQy8gnNlIj0q8iyIBGQ6dgDAhRmZKOZjo
-         QYTOpzL4QEnwA==
-Message-ID: <36ddfd75-5c58-197b-16c9-9f819099ea6d@collabora.com>
-Date:   Tue, 21 Feb 2023 15:28:46 +0500
+        Tue, 21 Feb 2023 05:29:46 -0500
+Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EEDE8AD3C
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Feb 2023 02:29:45 -0800 (PST)
+Received: by mail-pj1-x102f.google.com with SMTP id co23-20020a17090afe9700b002341fadc370so4342739pjb.1
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Feb 2023 02:29:45 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=shopee.com; s=shopee.com;
+        h=in-reply-to:from:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=A6bq0cNZ1AfAVAWRtxraIczrguYU6xxumxI1OimKFcQ=;
+        b=cTvBJZUXrr8VeSPaAd/OQA+aC9rJ1ogQGfjpWHh5OAYclK7SrwdWvEquQUueynfkvQ
+         a3efwTPEAnGZBc0WnVX/Sf/cIN+IQouc4MrvflZTyKcv7Wume1MEDzSGxZcZysDAl+sE
+         SVWMotA2T640xagoe44Qxr516z/1JAgBGMCO6Yp6ztVQcG3cGpzJlaeEmGcuk8WubaJW
+         M/ALr4Xy17oe3KDqnqcWC5HaLx4BGaYDFhLCc7a7Fnivk1b9R9AqoyS65x3kUBhySLhF
+         xVsCampZ1JzrKo55JLoUti7ABpU3exb9EdtbLC8mylSTrCs0xQaJfHgG7jYo3KA9dnEV
+         MzYg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:from:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=A6bq0cNZ1AfAVAWRtxraIczrguYU6xxumxI1OimKFcQ=;
+        b=madDFW1mdxBvNKfOB43spudZjQhJzTzqx3qN7NJb7HE2EKS2yMfuuR9Jq9xCva8VLz
+         x1YtrIUGVfdeTBYymXJnToDkyjdm5i5XxtZgIxnHL7rL7XpCiONK5UQORd6BvUlzEVXs
+         A/5TE3foH+e/SCV0xhbb0REoKdCjnicEYaJO+wKgzCe7jLokTMtCGMtPWMj0scKwTp5m
+         T83gUchtcPC7zY4jPwKGsNT0N8U1txojzUYuQz4ICr0uM7AKvHF2xDiVC0vy2P33fec6
+         KKI2HRNcf2OP/VHvU+sYNqrFu/R74CiHDgICXsBAqIXzjrASVW2842sBmz9nzxgw+hol
+         pAsg==
+X-Gm-Message-State: AO0yUKUbLERnZNkv0bwy+AZcor4eGVK5it5qRX/XOdITgeoPVUpwtQAS
+        O+ChrIxYrULin50/NuddHjmzow==
+X-Google-Smtp-Source: AK7set9wbCdH/nkJCOJHU3fJsl2GLKwTo19qpBlknnmESPkg0QqEOEjup5dFLBvBGufj4aVLSHmoEQ==
+X-Received: by 2002:a17:90b:4b86:b0:234:106a:34ab with SMTP id lr6-20020a17090b4b8600b00234106a34abmr6031142pjb.6.1676975385411;
+        Tue, 21 Feb 2023 02:29:45 -0800 (PST)
+Received: from [10.54.24.141] ([143.92.118.3])
+        by smtp.gmail.com with ESMTPSA id z4-20020a17090acb0400b00234a2f6d9c0sm2722126pjt.57.2023.02.21.02.29.42
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 21 Feb 2023 02:29:44 -0800 (PST)
+Content-Type: multipart/mixed; boundary="------------Spvi9DJXN5O0V9DKveeK2Vsh"
+Message-ID: <82918a12-d83e-10c0-0e04-eec26657b699@shopee.com>
+Date:   Tue, 21 Feb 2023 18:29:39 +0800
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Cc:     Muhammad Usama Anjum <usama.anjum@collabora.com>,
-        David Hildenbrand <david@redhat.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Paul Gofman <pgofman@codeweavers.com>,
-        Cyrill Gorcunov <gorcunov@gmail.com>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Shuah Khan <shuah@kernel.org>,
-        Christian Brauner <brauner@kernel.org>,
-        Yang Shi <shy828301@gmail.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        "Liam R . Howlett" <Liam.Howlett@oracle.com>,
-        Yun Zhou <yun.zhou@windriver.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Alex Sierra <alex.sierra@amd.com>,
-        Peter Xu <peterx@redhat.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Pasha Tatashin <pasha.tatashin@soleen.com>,
-        Nadav Amit <namit@vmware.com>,
-        Axel Rasmussen <axelrasmussen@google.com>,
-        "Gustavo A . R . Silva" <gustavoars@kernel.org>,
-        Dan Williams <dan.j.williams@intel.com>,
-        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
-        Greg KH <gregkh@linuxfoundation.org>, kernel@collabora.com,
-        Danylo Mocherniuk <mdanylo@google.com>
-Subject: Re: [PATCH v10 3/6] fs/proc/task_mmu: Implement IOCTL to get and/or
- the clear info about PTEs
-Content-Language: en-US
-To:     =?UTF-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <emmir@google.com>,
-        Andrei Vagin <avagin@gmail.com>,
-        Mike Rapoport <rppt@kernel.org>, Nadav Amit <namit@vmware.com>
-References: <20230202112915.867409-1-usama.anjum@collabora.com>
- <20230202112915.867409-4-usama.anjum@collabora.com>
- <CABb0KFEgsk+YidSXBYQ9mM8nVV6PuEOQf=bbNn7hsoG1hUeLZg@mail.gmail.com>
-From:   Muhammad Usama Anjum <usama.anjum@collabora.com>
-In-Reply-To: <CABb0KFEgsk+YidSXBYQ9mM8nVV6PuEOQf=bbNn7hsoG1hUeLZg@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.6.1
+Subject: Re: [PATCH] mm/memcg: Skip high limit check in root memcg
+To:     Michal Hocko <mhocko@suse.com>
+Cc:     hannes@cmpxchg.org, shakeelb@google.com, muchun.song@linux.dev,
+        akpm@linux-foundation.org, cgroups@vger.kernel.org,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org
+References: <20230210094550.5125-1-haifeng.xu@shopee.com>
+ <Y+uvRKo7OQ02yB4K@dhcp22.suse.cz>
+From:   Haifeng Xu <haifeng.xu@shopee.com>
+In-Reply-To: <Y+uvRKo7OQ02yB4K@dhcp22.suse.cz>
 X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Michał,
+This is a multi-part message in MIME format.
+--------------Spvi9DJXN5O0V9DKveeK2Vsh
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-Thank you so much for comment!
 
-On 2/17/23 8:18 PM, Michał Mirosław wrote:
-> On Thu, 2 Feb 2023 at 12:30, Muhammad Usama Anjum
-> <usama.anjum@collabora.com> wrote:
-> [...]
->> - The masks are specified in required_mask, anyof_mask, excluded_ mask
->>   and return_mask.
-> [...]
 
-The interface was suggested by Andrei back on the review of v3 [1]:
-> I mean we should be able to specify for what pages we need to get info
-> for. An ioctl argument can have these four fields:
-> * required bits (rmask & mask == mask) - all bits from this mask have to
-be set.
-> * any of these bits (amask & mask != 0) - any of these bits is set.
-> * exclude masks (emask & mask == 0) = none of these bits are set.
-> * return mask - bits that have to be reported to user.
-
+On 2023/2/14 23:56, Michal Hocko wrote:
+> On Fri 10-02-23 09:45:50, Haifeng Xu wrote:
+>> The high limit checks the memory usage from given memcg to root memcg.
+>> However, there is no limit in root memcg. So this check makes no sense
+>> and we can ignore it.
 > 
-> May I suggest a slightly modified interface for the flags?
-I've added everyone who may be interested in making interface better.
-
+> Is this check actually addining any benefit? Have you measured aby
+> performance gains by this change?
 > 
-> As I understand, the return_mask is what is applied to page flags to
-> aggregate the list.
-> This is a separate thing, and I think it doesn't need changes except
-> maybe an improvement
-> in the documentation and visual distinction.
+>> Signed-off-by: Haifeng Xu <haifeng.xu@shopee.com>
+>> ---
+>>  mm/memcontrol.c | 4 ++++
+>>  1 file changed, 4 insertions(+)
+>>
+>> diff --git a/mm/memcontrol.c b/mm/memcontrol.c
+>> index 73afff8062f9..a31a56598f29 100644
+>> --- a/mm/memcontrol.c
+>> +++ b/mm/memcontrol.c
+>> @@ -2780,6 +2780,10 @@ static int try_charge_memcg(struct mem_cgroup *memcg, gfp_t gfp_mask,
+>>  	do {
+>>  		bool mem_high, swap_high;
+>>  
+>> +		/* There is no need for root memcg to check high limit */
+>> +		if (mem_cgroup_is_root(memcg))
+>> +			break;
+>> +
+>>  		mem_high = page_counter_read(&memcg->memory) >
+>>  			READ_ONCE(memcg->memory.high);
+>>  		swap_high = page_counter_read(&memcg->swap) >
+>> -- 
+>> 2.25.1
 > 
-> For the page-selection mechanism, currently required_mask and
-> excluded_mask have conflicting
-They are opposite of each other:
-All the set bits in required_mask must be set for the page to be selected.
-All the set bits in excluded_mask must _not_ be set for the page to be
-selected.
 
-> responsibilities. I suggest to rework that to:
-> 1. negated_flags: page flags which are to be negated before applying
-> the page selection using following masks;
-Sorry I'm unable to understand the negation (which is XOR?). Lets look at
-the truth table:
-Page Flag	negated_flags		
-0		0			0
-0		1			1
-1		0			1
-1		1			0
+test steps:
+1. mkdir -p /sys/fs/cgroup/memory/test
+2. echo $$ > /sys/fs/cgroup/memory/test/cgroup.procs
+3. ./mmap_test
 
-If a page flag is 0 and negated_flag is 1, the result would be 1 which has
-changed the page flag. It isn't making sense to me. Why the page flag bit
-is being fliped?
+The test result show that with or without the patch, the time taken is almost the same.
+--------------Spvi9DJXN5O0V9DKveeK2Vsh
+Content-Type: text/plain; charset=UTF-8; name="mmap_test.c"
+Content-Disposition: attachment; filename="mmap_test.c"
+Content-Transfer-Encoding: base64
 
-When Anrdei had proposed these masks, they seemed like a fancy way of
-filtering inside kernel and it was straight forward to understand. These
-masks would help his use cases for CRIU. So I'd included it. Please can you
-elaborate what is the purpose of negation?
+I2luY2x1ZGUgPHN5cy9tbWFuLmg+CiNpbmNsdWRlIDxzeXMvdHlwZXMuaD4KI2luY2x1ZGUg
+PHVuaXN0ZC5oPgojaW5jbHVkZSA8c3RkbGliLmg+CiNpbmNsdWRlIDxzdGRpby5oPgojaW5j
+bHVkZSA8ZmNudGwuaD4KI2luY2x1ZGUgPGN0eXBlLmg+CiNpbmNsdWRlIDxzdHJpbmcuaD4K
+I2luY2x1ZGUgPGludHR5cGVzLmg+CgojZGVmaW5lIFNJWkUgKDUgKiAxMDI0ICogMTAyNCAq
+IDEwMjQpCgppbnQ2NF90IGN1cnJlbnRfdGltZV9tcygpIHsKICAgICBzdHJ1Y3QgdGltZXZh
+bCB0aW1lOwogICAgIGdldHRpbWVvZmRheSgmdGltZSwgTlVMTCk7CiAgICAgaW50NjRfdCBz
+MSA9IChpbnQ2NF90KSh0aW1lLnR2X3NlYykgKiAxMDAwOwogICAgIGludDY0X3QgczIgPSAo
+dGltZS50dl91c2VjIC8gMTAwMCk7CiAgICAgcmV0dXJuIHMxICsgczI7Cn0KCmludCBtYWlu
+KGludCBhcmdjLCBjaGFyKiBhcmd2W10pCnsKICAgICAgICB2b2lkICogYnVmOwogICAgICAg
+IHNpemVfdCBzaXplID0gU0laRTsKICAgICAgICBpbnQ2NF90IHN0YXJ0LCBjb3N0OwoKICAg
+ICAgICBidWYgPSBtbWFwKE5VTEwsIHNpemUsIFBST1RfUkVBRCB8IFBST1RfV1JJVEUsIE1B
+UF9QUklWQVRFIHwgTUFQX0FOT04sIDAsIDApOwogICAgICAgIGlmIChidWYgPCAwICkgewog
+ICAgICAgICAgICAgICAgcHJpbnRmKCJtbWFwIGZhaWxlZFxuIik7CiAgICAgICAgICAgICAg
+ICBleGl0KC0xKTsKICAgICAgICB9CgogICAgICAgIHN0YXJ0ID0gY3VycmVudF90aW1lX21z
+KCk7CgogICAgICAgIG1sb2NrKGJ1Ziwgc2l6ZSk7CgogICAgICAgIGNvc3QgPSBjdXJyZW50
+X3RpbWVfbXMoKSAtIHN0YXJ0OwogICAgICAgIHByaW50ZigiY29zdDogJSIgUFJJZDY0ICIg
+bXNcbiIsIGNvc3QpOwoKICAgICAgICBtdW5tYXAoYnVmLCBzaXplKTsKCiAgICAgICAgcmV0
+dXJuIDA7Cn0K
 
-> 2. required_flags: flags which all have to be set in the
-> (negation-applied) page flags;
-> 3. anyof_flags: flags of which at least one has to be set in the
-> (negation-applied) page flags;
-> 
-> IOW, the resulting algorithm would be:
-> 
-> tested_flags = page_flags ^ negated_flags;
-> if (~tested_flags & required_flags)
->   skip page;
-> if (!(tested_flags & anyof_flags))
->   skip_page;
-> 
-> aggregate_on(page_flags & return_flags);
-> 
-> Best Regards
-> Michał Mirosław
-
-[1] https://lore.kernel.org/all/YyiDg79flhWoMDZB@gmail.com
-
--- 
-BR,
-Muhammad Usama Anjum
+--------------Spvi9DJXN5O0V9DKveeK2Vsh--
