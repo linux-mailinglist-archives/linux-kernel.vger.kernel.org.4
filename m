@@ -2,124 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6881269DC95
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 10:11:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 088BF69DC9A
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 10:11:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233682AbjBUJLT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Feb 2023 04:11:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51564 "EHLO
+        id S233858AbjBUJLk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Feb 2023 04:11:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51956 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233070AbjBUJLS (ORCPT
+        with ESMTP id S233748AbjBUJLh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Feb 2023 04:11:18 -0500
-Received: from mail-qt1-f177.google.com (mail-qt1-f177.google.com [209.85.160.177])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F14AA23858;
-        Tue, 21 Feb 2023 01:11:16 -0800 (PST)
-Received: by mail-qt1-f177.google.com with SMTP id k20so428601qtj.5;
-        Tue, 21 Feb 2023 01:11:16 -0800 (PST)
+        Tue, 21 Feb 2023 04:11:37 -0500
+Received: from mail-pg1-x52f.google.com (mail-pg1-x52f.google.com [IPv6:2607:f8b0:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67CCE23858;
+        Tue, 21 Feb 2023 01:11:36 -0800 (PST)
+Received: by mail-pg1-x52f.google.com with SMTP id p6so2048195pga.0;
+        Tue, 21 Feb 2023 01:11:36 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=nCmHgfpMxViqDLmcKLWqNfQ12zWvq/2JIFuWMxvapXQ=;
+        b=MWkrpyphbx/NrCFrs5ZMCOvEEG5BIfRP8jMfr005eA2qt8qndOWDmCB8xLqi3f8r4w
+         zcsdehUJnwdujJWWg3iD1ZW2HJp6hbMzPsxwGMUy4+M4L8k2wTbYvNSFvKzvj/8ulcGJ
+         7XGJGT6yhcUFJ4fyH4yJb4ICj/54rpKbPxPNWjpm841PMtPMJKNh7bFPAH9NmD8lSidE
+         RZwOnc30LMMcrSt083cqsKj9MTuYtgTrkSKZeVc8qTYg7ISqkGeSR6B2eD0TTPZKGhb8
+         24+7s0GDV3o807NOSx4drLpjSF3k+GyZgFX5GZh8zSHr16tYqfpl7PPY6yz7FxjVdjGX
+         aFyg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=JT/nxkLUPPvSyT1XAkGQT7iXH75kIoeZitZQ4pmGywk=;
-        b=TYWQ5/3eY8ltI6iIel7iJ6Fh1xDGIQUZUkbIVkxzcoulo4BZTfsruH0nCzJjx/rPG2
-         k1XsDDsKxO3RHpY9YExfXYF2P25Bkrk9S6lVWbPSHpqeXMZcokgCzdyn9o51+mF63MHb
-         j2SLnPmeGfyxD3pcNJvgWHDf4H9yYHkCAwXw25k780Tm5Cp7k1xh6U2qt+J7ghBecWAZ
-         pZpobwwagNyaab2euGC1HONPRPgaso+zt+YSIKIouuD+ZP3mIXlbHzrqMpkweFds14Xi
-         m7yjgEsHLFNUDxoThoaTVCOBuLTOOTIKOYk2aePPyoF4POUipA1E64IQIwJTZ72+EPeQ
-         Xjkw==
-X-Gm-Message-State: AO0yUKUJaWoSkN3/ftTYuTfgZkjOA51r35a34enB1JUcerKVTH+HCYsL
-        SWUBaMSn6mmU0v7xjFhkizeKN+2a5Jg7ew==
-X-Google-Smtp-Source: AK7set/HIY58J0mczc0Kaeyq9M2m6fkGVtBFcOjNdRwbdOXwxI1/wiWc5rwHayj1TpXX0Yz1ZJQo/A==
-X-Received: by 2002:a05:622a:d1:b0:3ba:1c07:e472 with SMTP id p17-20020a05622a00d100b003ba1c07e472mr22965931qtw.51.1676970676004;
-        Tue, 21 Feb 2023 01:11:16 -0800 (PST)
-Received: from mail-yw1-f179.google.com (mail-yw1-f179.google.com. [209.85.128.179])
-        by smtp.gmail.com with ESMTPSA id cn6-20020a05622a248600b003b85ed59fa2sm780333qtb.50.2023.02.21.01.11.15
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 21 Feb 2023 01:11:15 -0800 (PST)
-Received: by mail-yw1-f179.google.com with SMTP id 00721157ae682-536bf92b55cso43588777b3.12;
-        Tue, 21 Feb 2023 01:11:15 -0800 (PST)
-X-Received: by 2002:a81:d351:0:b0:536:e16d:23ea with SMTP id
- d17-20020a81d351000000b00536e16d23eamr47472ywl.526.1676970674915; Tue, 21 Feb
- 2023 01:11:14 -0800 (PST)
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=nCmHgfpMxViqDLmcKLWqNfQ12zWvq/2JIFuWMxvapXQ=;
+        b=Opd6SlalzRiNz+UJcpCqvkwr36cYqd3FGcRrFSYoY3llni+WvqcNkIyn24bE6uxlLe
+         as0wrueFD4FyGjXXZNEnsoxlHu2jelsIC6IFOfbAfVxpBcSfxkoEVmkkukXD2sdMWFZZ
+         RFFPtP5tCAw3GGgGnQBroinY0agMJY8rvSKo6Wx0NXSB+NNVQ5BGvV+N9Lw5Zmm9i4Zk
+         BIf+N37Uqvmlyuo1X4/gZ+ThDcN5/IfRbaXWZVIqFfrIZ2YOt+isoJrHc/NIVPAXa1/m
+         tC2vOy5Y1pQlQfhi/9VA+ZhKZSXnyheaGyzQU4weGG8wWh7kOeWRYDPg+BVFJUM1YpUE
+         gDdQ==
+X-Gm-Message-State: AO0yUKVlhufLVvc+VAJLRc7FyQqetQPjQxWHVF1I7b43y8mafZvn79c9
+        Eh2MN69fWB4BDkg+kBCnDDU=
+X-Google-Smtp-Source: AK7set+QdnNzvwjiS0tviDr7Iw8v5hHFa9TJdJSdE7XorejlWIBvoeszUhC5GyqfQXAK8UpWQoJtnQ==
+X-Received: by 2002:aa7:8ecc:0:b0:5a9:b910:6d98 with SMTP id b12-20020aa78ecc000000b005a9b9106d98mr4648297pfr.13.1676970695558;
+        Tue, 21 Feb 2023 01:11:35 -0800 (PST)
+Received: from debian.me (subs02-180-214-232-76.three.co.id. [180.214.232.76])
+        by smtp.gmail.com with ESMTPSA id e1-20020a62ee01000000b00594235980e4sm1728168pfi.181.2023.02.21.01.11.34
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 21 Feb 2023 01:11:35 -0800 (PST)
+Received: by debian.me (Postfix, from userid 1000)
+        id 93421103DE1; Tue, 21 Feb 2023 16:11:29 +0700 (WIB)
+Date:   Tue, 21 Feb 2023 16:11:29 +0700
+From:   Bagas Sanjaya <bagasdotme@gmail.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        stable@vger.kernel.org
+Cc:     patches@lists.linux.dev, linux-kernel@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        srw@sladewatkins.net, rwarsow@gmx.de
+Subject: Re: [PATCH 6.1 000/118] 6.1.13-rc1 review
+Message-ID: <Y/SKwVOIgDUxcxyH@debian.me>
+References: <20230220133600.368809650@linuxfoundation.org>
 MIME-Version: 1.0
-References: <20230216113035.3050871a@canb.auug.org.au>
-In-Reply-To: <20230216113035.3050871a@canb.auug.org.au>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Tue, 21 Feb 2023 10:11:03 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdVuudSDrWguMJiHsZ3GJhs+muK566M5GqK2vfMyBeo2pQ@mail.gmail.com>
-Message-ID: <CAMuHMdVuudSDrWguMJiHsZ3GJhs+muK566M5GqK2vfMyBeo2pQ@mail.gmail.com>
-Subject: Re: linux-next: manual merge of the spi tree with the i2c tree
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Mark Brown <broonie@kernel.org>, Wolfram Sang <wsa@the-dreams.de>,
-        Alain Volmat <avolmat@me.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Wolfram Sang <wsa@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="VbTdTAdj2F7p+sKI"
+Content-Disposition: inline
+In-Reply-To: <20230220133600.368809650@linuxfoundation.org>
+X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Stephen,
 
-On Thu, Feb 16, 2023 at 1:37 AM Stephen Rothwell <sfr@canb.auug.org.au> wrote:
-> Today's linux-next merge of the spi tree got a conflict in:
->
->   MAINTAINERS
->
-> between commit:
->
->   b3de755d6041 ("dt-bindings: i2c: i2c-st: convert to DT schema")
->
-> from the i2c tree and commit:
->
->   7ec844a2c753 ("spi: spi-st-ssc: convert to DT schema")
->
-> from the spi tree.
->
-> I fixed it up (see below) and can carry the fix as necessary. This
-> is now fixed as far as linux-next is concerned, but any non trivial
-> conflicts should be mentioned to your upstream maintainer when your tree
-> is submitted for merging.  You may also want to consider cooperating
-> with the maintainer of the conflicting tree to minimise any particularly
-> complex conflicts.
->
-> --
-> Cheers,
-> Stephen Rothwell
->
-> diff --cc MAINTAINERS
-> index 71e92d3c51c6,daa33e7bb457..000000000000
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@@ -2791,7 -2925,8 +2791,8 @@@ M:      Patrice Chotard <patrice.chotard@fos
->   L:    linux-arm-kernel@lists.infradead.org (moderated for non-subscribers)
->   S:    Maintained
->   W:    http://www.stlinux.com
-> + F:    Documentation/devicetree/bindings/spi/st,ssc-spi.yaml
->  -F:    Documentation/devicetree/bindings/i2c/i2c-st.txt
->  +F:    Documentation/devicetree/bindings/i2c/st,sti-i2c.yaml
->   F:    arch/arm/boot/dts/sti*
->   F:    arch/arm/mach-sti/
->   F:    drivers/ata/ahci_st.c
+--VbTdTAdj2F7p+sKI
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Thanks, but please preserve sort order.
+On Mon, Feb 20, 2023 at 02:35:16PM +0100, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 6.1.13 release.
+> There are 118 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+>=20
 
-Gr{oetje,eeting}s,
+Successfully cross-compiled for arm64 (bcm2711_defconfig, GCC 10.2.0) and
+powerpc (ps3_defconfig, GCC 12.2.0).
 
-                        Geert
+Tested-by: Bagas Sanjaya <bagasdotme@gmail.com>
 
--- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+--=20
+An old man doll... just what I always wanted! - Clara
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+--VbTdTAdj2F7p+sKI
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYKAB0WIQSSYQ6Cy7oyFNCHrUH2uYlJVVFOowUCY/SKsAAKCRD2uYlJVVFO
+o9BKAP9QNyO0YV+M4mXbjoH+4Mszm/LoyYxVJYpVf+fEi7KbgQD/fgd1mnVA3URL
+PE2wFsr+sw5nAsb2trMBbRcz/mteLQs=
+=Osl3
+-----END PGP SIGNATURE-----
+
+--VbTdTAdj2F7p+sKI--
