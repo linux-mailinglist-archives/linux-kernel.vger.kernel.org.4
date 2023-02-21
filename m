@@ -2,146 +2,187 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AC80369E97E
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 22:27:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C0D469E981
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 22:30:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229596AbjBUV15 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Feb 2023 16:27:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59816 "EHLO
+        id S229839AbjBUVaT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Feb 2023 16:30:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34940 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229503AbjBUV1x (ORCPT
+        with ESMTP id S229772AbjBUVaO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Feb 2023 16:27:53 -0500
-Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A43232508
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Feb 2023 13:27:21 -0800 (PST)
-Received: by mail-pl1-x634.google.com with SMTP id ko13so7178314plb.13
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Feb 2023 13:27:21 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=OY49XJYkmM8JwgqMEdZVA4MqBlSEgJvqRRu26pssVSQ=;
-        b=MK1ZdFyoSgafsQYiNhM2z8RU8qST7kMFlVALVE84kW9msIKU4uzzNItmuVOIsYu9ka
-         nHpiR+GtxyydEbFK9iE9TeAMMJYXsmZOia/0H6JEW+UMyTAYZh71Rvzc+MZEmbsZ7nFy
-         LX3+qZ4aZFt1/nETKxIHJ4nSfNj/Gqm0XJI/+f70tv+RwGnYx4pNGQeLhmdp+BSAuJ5L
-         +972AzpiHg+DVaYuqwUtVr1ipToYs9cKZfYMAxvJ18lt3soz4ZxuWmHvvwS+/zJ43UqO
-         +2+JG7EqG94638AL6QxidFvaw+kzxYdkg0CLQzIK/9IkcIoRl2r5b0gZTsRvRSj/RWSb
-         KBxQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=OY49XJYkmM8JwgqMEdZVA4MqBlSEgJvqRRu26pssVSQ=;
-        b=6wL2cm9cwQMReVJL9zNdOdYRmOZ2hA5MldTvn8c8nxlez6QiEcua2ss6V02DxhPaTP
-         +MdGbA8fx8bBLqg7vvIyRiiRFeHDAbCoM9Semdf4cE5E+8sXaeMS2fzLsoYmMrFkKysn
-         UJb0cI/dlDqeJJ7IHNrzqBlP5/WnfE3BOg8SiqJu0PwqxyDpNx1mSQursPVTnell1lPw
-         c66D2zbJLhX8Nfm0VbZtBeEnNLnc3pJfEa7DAZiyEw3vUGkz/nOnCPrWp5XSQkPNC/YN
-         ijIhQPR0lPD/O6bzKG2te/5jjswZUl7cwpwvR2gGVzz5Pkrta0YQDVUce0DQgTLCRSwX
-         SpYQ==
-X-Gm-Message-State: AO0yUKUiqSSMwWcFFF7xXsSU1N+bt3R/ei4loA9cAyzU0U2iI/XrktYA
-        DwkIFvUprElJPLKeG48fi2UMLQHfLsLVr90DBhGvYw==
-X-Google-Smtp-Source: AK7set867sporZ6Oxux1gnqSqjH0N76mlhGVHkzYxRu5jfG0srUFnnFaMa832/+NgaXWwsI+EMVAy0m81JmVEZXbCL0=
-X-Received: by 2002:a17:90b:38c8:b0:230:8730:c1f7 with SMTP id
- nn8-20020a17090b38c800b002308730c1f7mr1659668pjb.27.1677014836106; Tue, 21
- Feb 2023 13:27:16 -0800 (PST)
+        Tue, 21 Feb 2023 16:30:14 -0500
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FCAD7EC8
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Feb 2023 13:30:09 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1677015009; x=1708551009;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=e1AvhqAmH47az8SqU2RGLxJvxgBybQJt540Qgkz6sK0=;
+  b=lpBwZ38RlPMqHBlwgsuEPg4dMs64p1O58M5U/qmyoZHt/hA16+yd83Ej
+   3La0kSZDeNLnr0lNa9mWmosHEG9p1v/JyfHsMGOBuJN6n0ugBRJVn43xD
+   xYCSfJARCsVT3kfbbTQy1sazeoJzSgFEu94dZT0ebLqnz5YnutI0aaxM9
+   aXDv7a80XlNVXRF+qwX1kpxqKvoI6Tc3Jn/vCdKLR95kwAI7Ju1lrjzwE
+   u/b2AqxkshInS4MkO1B/+tnGBzKbbQFBdCtORbym5UticJvtScZC6JuOf
+   jxWON1bbxG+7reMzeMmA1EHXmDjOk2dhDRims8zIMCjHrv4aKlPAqJ3JO
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10628"; a="332760687"
+X-IronPort-AV: E=Sophos;i="5.97,315,1669104000"; 
+   d="scan'208";a="332760687"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Feb 2023 13:28:44 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10628"; a="735627967"
+X-IronPort-AV: E=Sophos;i="5.97,315,1669104000"; 
+   d="scan'208";a="735627967"
+Received: from lkp-server01.sh.intel.com (HELO eac18b5d7d93) ([10.239.97.150])
+  by fmsmga008.fm.intel.com with ESMTP; 21 Feb 2023 13:28:42 -0800
+Received: from kbuild by eac18b5d7d93 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pUaBm-0000GH-0D;
+        Tue, 21 Feb 2023 21:28:42 +0000
+Date:   Wed, 22 Feb 2023 05:27:47 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Shibo Li <zzutcyha@163.com>,
+        Larry Finger <Larry.Finger@lwfinger.net>,
+        Florian Schilhabel <florian.c.schilhabel@googlemail.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
+Cc:     llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+        Shibo Li <zzutcyha@163.com>
+Subject: Re: [PATCH] staging: rtl8712: Fix Sparse warnings in
+ rtl871x_ioctl_linux.c
+Message-ID: <202302220531.dtbdFw8w-lkp@intel.com>
+References: <20230220143758.4396-1-zzutcyha@163.com>
 MIME-Version: 1.0
-References: <YO2S+C7Cw7AS7bsg@google.com> <cfd5cc6f-5943-2e06-1dbe-f4b4ad5c1fa1@canonical.com>
- <Y19GhTg8Q/3ym/VD@google.com> <dac1c2d5-367f-c8a7-c61e-c1774d98d602@canonical.com>
- <4595e7b4-ea31-5b01-f636-259e84737dfc@canonical.com> <Y+9aoFjrYkpFSvuE@linutronix.de>
- <f3fd5dd8-9d78-43be-fc5c-bf990ad3a64d@canonical.com>
-In-Reply-To: <f3fd5dd8-9d78-43be-fc5c-bf990ad3a64d@canonical.com>
-From:   Anil Altinay <aaltinay@google.com>
-Date:   Tue, 21 Feb 2023 13:27:03 -0800
-Message-ID: <CACCxZWOK6=mHNQrWEhjw4pC2i3qBKYdn9joiaaCNE7ge8FAz0A@mail.gmail.com>
-Subject: Re: [PATCH v3] apparmor: global buffers spin lock may get contended
-To:     John Johansen <john.johansen@canonical.com>
-Cc:     Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        LKLM <linux-kernel@vger.kernel.org>,
-        Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Tomasz Figa <tfiga@chromium.org>,
-        linux-security-module@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230220143758.4396-1-zzutcyha@163.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-I can test the patch with 5.10 and 5.15 kernels in different machines.
-Just let me know which machine types you would like me to test.
+Hi Shibo,
 
-On Mon, Feb 20, 2023 at 12:42 AM John Johansen
-<john.johansen@canonical.com> wrote:
->
-> On 2/17/23 02:44, Sebastian Andrzej Siewior wrote:
-> > On 2023-02-16 16:08:10 [-0800], John Johansen wrote:
-> >> --- a/security/apparmor/lsm.c
-> >> +++ b/security/apparmor/lsm.c
-> >> @@ -49,12 +49,19 @@ union aa_buffer {
-> >>      char buffer[1];
-> >>   };
-> >> +struct aa_local_cache {
-> >> +    unsigned int contention;
-> >> +    unsigned int hold;
-> >> +    struct list_head head;
-> >> +};
-> >
-> > if you stick a local_lock_t into that struct, then you could replace
-> >       cache = get_cpu_ptr(&aa_local_buffers);
-> > with
-> >       local_lock(&aa_local_buffers.lock);
-> >       cache = this_cpu_ptr(&aa_local_buffers);
-> >
-> > You would get the preempt_disable() based locking for the per-CPU
-> > variable (as with get_cpu_ptr()) and additionally some lockdep
-> > validation which would warn if it is used outside of task context (IRQ).
-> >
-> I did look at local_locks and there was a reason I didn't use them. I
-> can't recall as the original iteration of this is over a year old now.
-> I will have to dig into it again.
->
-> > I didn't parse completely the hold/contention logic but it seems to work
-> > ;)
-> > You check "cache->count >=  2" twice but I don't see an inc/ dec of it
-> > nor is it part of aa_local_cache.
-> >
-> sadly I messed up the reordering of this and the debug patch. This will be
-> fixed in v4.
->
-> > I can't parse how many items can end up on the local list if the global
-> > list is locked. My guess would be more than 2 due the ->hold parameter.
-> >
-> So this iteration, forces pushing back to global list if there are already
-> two on the local list. The hold parameter just affects how long the
-> buffers remain on the local list, before trying to place them back on
-> the global list.
->
-> Originally before the count was added more than 2 buffers could end up
-> on the local list, and having too many local buffers is a waste of
-> memory. The count got added to address this. The value of 2 (which should
-> be switched to a define) was chosen because no mediation routine currently
-> uses more than 2 buffers.
->
-> Note that this doesn't mean that more than two buffers can be allocated
-> to a tasks on a cpu. Its possible in some cases to have a task have
-> allocated buffers and to still have buffers on the local cache list.
->
-> > Do you have any numbers on the machine and performance it improved? It
-> > sure will be a good selling point.
-> >
->
-> I can include some supporting info, for a 16 core machine. But it will
-> take some time to for me to get access to a bigger machine, where this
-> is much more important. Hence the call for some of the other people
-> on this thread to test.
->
-> thanks for the feedback
->
+Thank you for the patch! Yet something to improve:
+
+[auto build test ERROR on staging/staging-testing]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Shibo-Li/staging-rtl8712-Fix-Sparse-warnings-in-rtl871x_ioctl_linux-c/20230220-224057
+patch link:    https://lore.kernel.org/r/20230220143758.4396-1-zzutcyha%40163.com
+patch subject: [PATCH] staging: rtl8712: Fix Sparse warnings in rtl871x_ioctl_linux.c
+config: i386-allyesconfig (https://download.01.org/0day-ci/archive/20230222/202302220531.dtbdFw8w-lkp@intel.com/config)
+compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/7117082894534ef14c409d6a9070fa051a84f619
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Shibo-Li/staging-rtl8712-Fix-Sparse-warnings-in-rtl871x_ioctl_linux-c/20230220-224057
+        git checkout 7117082894534ef14c409d6a9070fa051a84f619
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
+
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202302220531.dtbdFw8w-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+>> drivers/staging/rtl8712/rtl871x_ioctl_linux.c:1272:28: error: no member named 'configurationInfrastructureMode' in 'struct wlan_bssid_ex'
+                                           if (pnetwork->network.configurationInfrastructureMode
+                                               ~~~~~~~~~~~~~~~~~ ^
+>> drivers/staging/rtl8712/rtl871x_ioctl_linux.c:1274:39: error: member reference base type 'uint' (aka 'unsigned int') is not a structure or union
+                                                   padapter->mlmepriv.assoc_by_rssi.
+                                                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+   2 errors generated.
+
+
+vim +1272 drivers/staging/rtl8712/rtl871x_ioctl_linux.c
+
+  1218	
+  1219	/* set ssid flow
+  1220	 * s1. set_802_11_infrastructure_mode()
+  1221	 * s2. set_802_11_authenticaion_mode()
+  1222	 * s3. set_802_11_encryption_mode()
+  1223	 * s4. set_802_11_ssid()
+  1224	 *
+  1225	 * This function intends to handle the Set ESSID command.
+  1226	 * Currently, the request comes via the Wireless Extensions' SIOCSIWESSID ioctl.
+  1227	 *
+  1228	 * For this operation to succeed, there is no need for the interface to be Up.
+  1229	 *
+  1230	 */
+  1231	static int r8711_wx_set_essid(struct net_device *dev,
+  1232					struct iw_request_info *a,
+  1233					union iwreq_data *wrqu, char *extra)
+  1234	{
+  1235		struct _adapter *padapter = netdev_priv(dev);
+  1236		struct mlme_priv *pmlmepriv = &padapter->mlmepriv;
+  1237		struct  __queue *queue = &pmlmepriv->scanned_queue;
+  1238		struct wlan_network *pnetwork = NULL;
+  1239		enum NDIS_802_11_AUTHENTICATION_MODE	authmode;
+  1240		struct ndis_802_11_ssid ndis_ssid;
+  1241		u8 *dst_ssid, *src_ssid;
+  1242		struct list_head *phead;
+  1243		u32 len;
+  1244	
+  1245		if (check_fwstate(pmlmepriv, _FW_UNDER_SURVEY))
+  1246			return -EBUSY;
+  1247		if (check_fwstate(pmlmepriv, _FW_UNDER_LINKING))
+  1248			return 0;
+  1249		if (wrqu->essid.length > IW_ESSID_MAX_SIZE)
+  1250			return -E2BIG;
+  1251		authmode = padapter->securitypriv.ndisauthtype;
+  1252		if (wrqu->essid.flags && wrqu->essid.length) {
+  1253			len = (wrqu->essid.length < IW_ESSID_MAX_SIZE) ?
+  1254			       wrqu->essid.length : IW_ESSID_MAX_SIZE;
+  1255			memset(&ndis_ssid, 0, sizeof(struct ndis_802_11_ssid));
+  1256			ndis_ssid.SsidLength = len;
+  1257			memcpy(ndis_ssid.Ssid, extra, len);
+  1258			src_ssid = ndis_ssid.Ssid;
+  1259			phead = &queue->queue;
+  1260			pmlmepriv->pscanned = phead->next;
+  1261			while (1) {
+  1262				if (end_of_queue_search(phead, pmlmepriv->pscanned))
+  1263					break;
+  1264				pnetwork = container_of(pmlmepriv->pscanned,
+  1265							struct wlan_network, list);
+  1266				pmlmepriv->pscanned = pmlmepriv->pscanned->next;
+  1267				dst_ssid = pnetwork->network.Ssid.Ssid;
+  1268				if ((!memcmp(dst_ssid, src_ssid, ndis_ssid.SsidLength))
+  1269				    && (pnetwork->network.Ssid.SsidLength ==
+  1270				     ndis_ssid.SsidLength)) {
+  1271					if (check_fwstate(pmlmepriv, WIFI_ADHOC_STATE)) {
+> 1272						if (pnetwork->network.configurationInfrastructureMode
+  1273							!=
+> 1274							padapter->mlmepriv.assoc_by_rssi.
+  1275							cur_network.network.InfrastructureMode)
+  1276							continue;
+  1277					}
+  1278	
+  1279					r8712_set_802_11_infrastructure_mode(
+  1280					     padapter,
+  1281					     pnetwork->network.InfrastructureMode);
+  1282					break;
+  1283				}
+  1284			}
+  1285			r8712_set_802_11_authentication_mode(padapter, authmode);
+  1286			r8712_set_802_11_ssid(padapter, &ndis_ssid);
+  1287		}
+  1288		return -EINPROGRESS;
+  1289	}
+  1290	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
