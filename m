@@ -2,100 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 97EF069E2C9
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 15:56:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 13C3869E2CC
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 15:57:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234122AbjBUO4m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Feb 2023 09:56:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47938 "EHLO
+        id S234182AbjBUO5l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Feb 2023 09:57:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48626 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233919AbjBUO4j (ORCPT
+        with ESMTP id S230164AbjBUO5j (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Feb 2023 09:56:39 -0500
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC6B22A143;
-        Tue, 21 Feb 2023 06:56:37 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1676991397; x=1708527397;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=VE7TJfrm4RZ6eDfArZktuMj3vWfcIklvlSsBd6+oiXY=;
-  b=g6MfmMNvmil6qhPlX9QVLQZ+22eI5xKbogpSrOmRrLHsjIFIIPscsx3e
-   Bg0U9aWRUAnRCkjeJHo2bVULY0tG8lp2SJBVRSdnxtiz+T+IWhVWtn6qI
-   uEDelhDwEvZqa0kFx4MQyCiLilm4kzE/hGPioyxNWhPbG/HezzByDNO82
-   GhmSAz8wbQINXMQMC3wGk1OFP6a6sukhRRFI/I9v1s1RIJlBXeVCqrAqz
-   RPj8LlIM2Ub9/A+59DfeWZVgVg8eu7ATa0NZxqErbvaYrbhb0K+FV1IlO
-   ZwoKK3rZQD1F3ttr4I7pGXUuJSd+7jprZDDjScTNgrRJ5Cb4VDzf6gZ2s
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10627"; a="418870401"
-X-IronPort-AV: E=Sophos;i="5.97,315,1669104000"; 
-   d="scan'208";a="418870401"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Feb 2023 06:56:16 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10627"; a="704058316"
-X-IronPort-AV: E=Sophos;i="5.97,315,1669104000"; 
-   d="scan'208";a="704058316"
-Received: from yichaohu-mobl.ccr.corp.intel.com (HELO localhost) ([10.254.208.83])
-  by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Feb 2023 06:56:13 -0800
-Date:   Tue, 21 Feb 2023 22:56:10 +0800
-From:   Yu Zhang <yu.c.zhang@linux.intel.com>
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 05/12] KVM: x86: Use KVM-governed feature framework to
- track "XSAVES enabled"
-Message-ID: <20230221145610.ytlj5nkqsscc2yxo@linux.intel.com>
-References: <20230217231022.816138-1-seanjc@google.com>
- <20230217231022.816138-6-seanjc@google.com>
+        Tue, 21 Feb 2023 09:57:39 -0500
+Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C70532916A;
+        Tue, 21 Feb 2023 06:57:38 -0800 (PST)
+Received: by mail-wm1-x32c.google.com with SMTP id j3so1516252wms.2;
+        Tue, 21 Feb 2023 06:57:38 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=4H9Mx/yKZ3Hus53qi2wHVToOwmIjYjSCkNX7dVFqCwo=;
+        b=F2QVHq2MCLZT2G5xJA114eev7sGqCMrd7Io0D+KtpUjacTeZhDiQ9UixCwB1qbmptO
+         dWnBgzBbqEDLMGlhxBVmRgj7IcKcxRD39kHShMHrEzeXoYAo6wN4RKpKig9W6tqtNUTt
+         2UbDIjuwX5Tir3Q305RwQWwA5koLQAa4CMCpx3jKvGwFwHrPU6USlvVujdgJqP0DD4cK
+         VGB9Wk3iQV0WEmmPfqzCXdRAturixbDMT+U6x/0iH5nMDlSt0utdeASuG3ox7jX1RS+Q
+         WDqrHMWdipE2fhrI/Ku9CuzS8nE1ggzLRNisrzLwkqYWgoYo1w9KF8LfgwEjWY9O6+4x
+         DP1g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=4H9Mx/yKZ3Hus53qi2wHVToOwmIjYjSCkNX7dVFqCwo=;
+        b=rOQ+xAE/koDaQHA48JCgv9iCvgFXyUebbt/wqXwh1WCCE/+NbVe65YxyORGtFviexU
+         mzP7gTg72hmmnj0A5YAk+FIRtOVe6vIg2jZz2Xi6vN4UGPKJpuifXwM5y47xGgP5CLrW
+         qJ2KS3MIs5lFC7IfqLzn8AXRAdzKYSEXgE/AhgiET5Ypnum3Ym5WWK5PWkdACefMCh/I
+         CkTGpuE5U+Iejic+ockI+radKZQqF4fImFKSloDxBj0g0XpNYUnwvm15TNxnvemfK3oK
+         2Zt1MsDX0o3iylhgzpQ1zPtsAwM2aOyHW/uTR+l3cKCHiqmCtwSmmBDBlidpLMxg3NyR
+         whSg==
+X-Gm-Message-State: AO0yUKWhfJrlAFwOi1StIT7vGhPEYiMqaZGA7IYAho4fYIxHkFtCr8Gm
+        psc1McjxHm4HF4GhjPbiAkI=
+X-Google-Smtp-Source: AK7set/tts7I2v794GNeEU0xjDE4f5TUNTMY6f68NtdjKBIJ0UWaYFSZ0sj6Q7mjoYHCqSjqfrEI4g==
+X-Received: by 2002:a05:600c:3b11:b0:3e2:669:757 with SMTP id m17-20020a05600c3b1100b003e206690757mr3471234wms.10.1676991457308;
+        Tue, 21 Feb 2023 06:57:37 -0800 (PST)
+Received: from debian ([63.135.72.41])
+        by smtp.gmail.com with ESMTPSA id r18-20020a05600c459200b003dc433355aasm4595702wmo.18.2023.02.21.06.57.36
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 21 Feb 2023 06:57:37 -0800 (PST)
+Date:   Tue, 21 Feb 2023 14:57:35 +0000
+From:   "Sudip Mukherjee (Codethink)" <sudipm.mukherjee@gmail.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
+        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, f.fainelli@gmail.com, srw@sladewatkins.net,
+        rwarsow@gmx.de
+Subject: Re: [PATCH 5.15 00/83] 5.15.95-rc1 review
+Message-ID: <Y/Tb36aAXPJzbCAG@debian>
+References: <20230220133553.669025851@linuxfoundation.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230217231022.816138-6-seanjc@google.com>
-User-Agent: NeoMutt/20171215
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230220133553.669025851@linuxfoundation.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Feb 17, 2023 at 03:10:15PM -0800, Sean Christopherson wrote:
-> Use the governed feature framework to track if XSAVES is "enabled", i.e.
-> if XSAVES can be used by the guest.  Add a comment in the SVM code to
-> explain the very unintuitive logic of deliberately NOT checking if XSAVES
-> is enumerated in the guest CPUID model.
+Hi Greg,
+
+On Mon, Feb 20, 2023 at 02:35:33PM +0100, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.15.95 release.
+> There are 83 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
 > 
-> No functional change intended.
+> Responses should be made by Wed, 22 Feb 2023 13:35:35 +0000.
+> Anything received after that time might be too late.
 
-xsaves_enabled in struct kvm_vcpu_arch is no longer used. But instead of
-just deleting it, maybe we could move 'bool load_eoi_exitmap_pending' to
-its place, so 7 bytes can be saved for each struct kvm_vcpu_arch:
+Build test (gcc version 12.2.1 20230210):
+mips: 62 configs -> no failure
+arm: 99 configs -> no failure
+arm64: 3 configs -> no failure
+x86_64: 4 configs -> no failure
+alpha allmodconfig -> no failure
+csky allmodconfig -> no failure
+powerpc allmodconfig -> no failure
+riscv allmodconfig -> no failure
+s390 allmodconfig -> no failure
+xtensa allmodconfig -> no failure
 
-diff --git a/arch/x86/include/asm/kvm_host.h b/arch/x86/include/asm/kvm_host.h
-index cd660de02f7b..0eef5469c165 100644
---- a/arch/x86/include/asm/kvm_host.h
-+++ b/arch/x86/include/asm/kvm_host.h
-@@ -740,7 +740,6 @@ struct kvm_vcpu_arch {
-        u64 efer;
-        u64 apic_base;
-        struct kvm_lapic *apic;    /* kernel irqchip context */
--       bool load_eoi_exitmap_pending;
-        DECLARE_BITMAP(ioapic_handled_vectors, 256);
-        unsigned long apic_attention;
-        int32_t apic_arb_prio;
-@@ -750,7 +749,7 @@ struct kvm_vcpu_arch {
-        u64 smi_count;
-        bool at_instruction_boundary;
-        bool tpr_access_reporting;
--       bool xsaves_enabled;
-+       bool load_eoi_exitmap_pending;
-        bool xfd_no_write_intercept;
-        u64 ia32_xss;
-        u64 microcode_version;
+Boot test:
+x86_64: Booted on my test laptop. No regression.
+x86_64: Booted on qemu. No regression. [1]
+arm64: Booted on rpi4b (4GB model). No regression. [2]
+mips: Booted on ci20 board. No regression. [3]
 
-B.R.
-Yu
+[1]. https://openqa.qa.codethink.co.uk/tests/2907
+[2]. https://openqa.qa.codethink.co.uk/tests/2910
+[3]. https://openqa.qa.codethink.co.uk/tests/2912
+
+Tested-by: Sudip Mukherjee <sudip.mukherjee@codethink.co.uk>
+
+-- 
+Regards
+Sudip
