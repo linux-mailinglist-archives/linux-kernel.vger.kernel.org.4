@@ -2,133 +2,166 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3DED869EA05
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 23:23:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B99C269EA0B
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 23:24:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230141AbjBUWXU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Feb 2023 17:23:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47748 "EHLO
+        id S230202AbjBUWYF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Feb 2023 17:24:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48572 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229561AbjBUWXS (ORCPT
+        with ESMTP id S229560AbjBUWYD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Feb 2023 17:23:18 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D25461EBD1;
-        Tue, 21 Feb 2023 14:23:17 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 69674611EA;
-        Tue, 21 Feb 2023 22:23:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 57AF7C433EF;
-        Tue, 21 Feb 2023 22:23:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1677018196;
-        bh=m4xd55FJZ2TFrfhomdp1xq42bgvOVIIPvxwzKIFHpqc=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=sCoMWGucPwXtiWdo75mO0tuuTUAqauh3L7tVCTsdGBJFuFB0dUV62jsLgSirb42GP
-         QLSVWSCbNXE7HRdneHZj73PltQIr4NxcpIEKre2V9us7O4YNdhnQorIfGIlOSATfBt
-         pins3t/rfECz9Pk+IACulJ7DhTEfwbWFa+HJAhQCNV92YzSRlchDaATmvQyK2wKslC
-         XBDrVpsgHPYxPsF9p8njDWhYA16Lu8YZY1sG/kgr6t6W6HC0dh6aLMPobyCtKJaa0W
-         DhO+vOO9SLFWl42jsr+KtF25bxQLjzH90vvyW4mJ4FP6IODXxd1zyttNxIF0UsUEFA
-         JpZyb1/BB97AA==
-Date:   Tue, 21 Feb 2023 22:23:13 +0000
-From:   Mark Brown <broonie@kernel.org>
-To:     Svyatoslav Ryhel <clamor95@gmail.com>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>,
-        Maxim Schwalm <maxim.schwalm@gmail.com>,
-        Dmitry Osipenko <digetx@gmail.com>, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, alsa-devel@alsa-project.org,
-        linux-tegra@vger.kernel.org, linux-staging@lists.linux.dev
-Subject: Re: [PATCH v1 04/10] ASoC: tegra: Support RT5631 by machine driver
-Message-ID: <Y/VEUaOIE1mk1utt@sirena.org.uk>
-References: <20230221183211.21964-1-clamor95@gmail.com>
- <20230221183211.21964-5-clamor95@gmail.com>
+        Tue, 21 Feb 2023 17:24:03 -0500
+Received: from out-35.mta0.migadu.com (out-35.mta0.migadu.com [IPv6:2001:41d0:1004:224b::23])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F6BD265B6
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Feb 2023 14:24:01 -0800 (PST)
+Date:   Tue, 21 Feb 2023 14:23:31 -0800
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+        t=1677018239;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=UDfWngDlcfpQfS3lJyJErPkVc/zetFCIA0DaxdQx8j8=;
+        b=qqNpFu34+tok07/qJ6ppdjFXYB1QVP7gxaaGQKi3W4IgdsQwHf+s1amOT1lklN/0TMvdCH
+        r9OcEf07ib6npxvTrdXrmmf/QSomZkg9iPHy5I1pmP+q2LwT648nhR4teqyQfH4qMlfKTW
+        u08RfLlGhWIuN57NayTtJ/Bw02glWss=
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From:   Roman Gushchin <roman.gushchin@linux.dev>
+To:     "Paul E. McKenney" <paulmck@kernel.org>
+Cc:     Shakeel Butt <shakeelb@google.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Marco Elver <elver@google.com>, Yue Zhao <findns94@gmail.com>,
+        linux-mm@kvack.org, akpm@linux-foundation.org, hannes@cmpxchg.org,
+        mhocko@kernel.org, muchun.song@linux.dev, cgroups@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] mm: change memcg->oom_group access with atomic operations
+Message-ID: <Y/VEY2myhfWvB64+@P9FQF9L96D.corp.robot.car>
+References: <20230220230624.lkobqeagycx7bi7p@google.com>
+ <6563189C-7765-4FFA-A8F2-A5CC4860A1EF@linux.dev>
+ <CALvZod55K5zbbVYptq8ud=nKVyU1xceGVf6UcambBZ3BA2TZqA@mail.gmail.com>
+ <Y/TMYa8DrocppXRu@casper.infradead.org>
+ <CALvZod6UM1E6nGgfdORri90m3ju+yYeSeHBqyqutCP2A94WNKg@mail.gmail.com>
+ <20230221182359.GJ2948950@paulmck-ThinkPad-P17-Gen-1>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="tOijhv7Qqz92bCVE"
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20230221183211.21964-5-clamor95@gmail.com>
-X-Cookie: Serving suggestion.
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20230221182359.GJ2948950@paulmck-ThinkPad-P17-Gen-1>
+X-Migadu-Flow: FLOW_OUT
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Tue, Feb 21, 2023 at 10:23:59AM -0800, Paul E. McKenney wrote:
+> On Tue, Feb 21, 2023 at 08:56:59AM -0800, Shakeel Butt wrote:
+> > +Paul & Marco
+> > 
+> > On Tue, Feb 21, 2023 at 5:51 AM Matthew Wilcox <willy@infradead.org> wrote:
+> > >
+> > > On Mon, Feb 20, 2023 at 10:52:10PM -0800, Shakeel Butt wrote:
+> > > > On Mon, Feb 20, 2023 at 9:17 PM Roman Gushchin <roman.gushchin@linux.dev> wrote:
+> > > > > > On Feb 20, 2023, at 3:06 PM, Shakeel Butt <shakeelb@google.com> wrote:
+> > > > > >
+> > > > > > ﻿On Mon, Feb 20, 2023 at 01:09:44PM -0800, Roman Gushchin wrote:
+> > > > > >>> On Mon, Feb 20, 2023 at 11:16:38PM +0800, Yue Zhao wrote:
+> > > > > >>> The knob for cgroup v2 memory controller: memory.oom.group
+> > > > > >>> will be read and written simultaneously by user space
+> > > > > >>> programs, thus we'd better change memcg->oom_group access
+> > > > > >>> with atomic operations to avoid concurrency problems.
+> > > > > >>>
+> > > > > >>> Signed-off-by: Yue Zhao <findns94@gmail.com>
+> > > > > >>
+> > > > > >> Hi Yue!
+> > > > > >>
+> > > > > >> I'm curious, have any seen any real issues which your patch is solving?
+> > > > > >> Can you, please, provide a bit more details.
+> > > > > >>
+> > > > > >
+> > > > > > IMHO such details are not needed. oom_group is being accessed
+> > > > > > concurrently and one of them can be a write access. At least
+> > > > > > READ_ONCE/WRITE_ONCE is needed here.
+> > > > >
+> > > > > Needed for what?
+> > > >
+> > > > For this particular case, documenting such an access. Though I don't
+> > > > think there are any architectures which may tear a one byte read/write
+> > > > and merging/refetching is not an issue for this.
+> > >
+> > > Wouldn't a compiler be within its rights to implement a one byte store as:
+> > >
+> > >         load-word
+> > >         modify-byte-in-word
+> > >         store-word
+> > >
+> > > and if this is a lockless store to a word which has an adjacent byte also
+> > > being modified by another CPU, one of those CPUs can lose its store?
+> > > And WRITE_ONCE would prevent the compiler from implementing the store
+> > > in that way.
+> > 
+> > Thanks Willy for pointing this out. If the compiler can really do this
+> > then [READ|WRITE]_ONCE are required here. I always have big bad
+> > compiler lwn article open in a tab. I couldn't map this transformation
+> > to ones mentioned in that article. Do we have name of this one?
+> 
+> No, recent compilers are absolutely forbidden from doing this sort of
+> thing except under very special circumstances.
+> 
+> Before C11, compilers could and in fact did do things like this.  This is
+> after all a great way to keep the CPU's vector unit from getting bored.
+> Unfortunately for those who prize optimization above all else, doing
+> this can introduce data races, for example:
+> 
+> 	char a;
+> 	char b;
+> 	spin_lock la;
+> 	spin_lock lb;
+> 
+> 	void change_a(char new_a)
+> 	{
+> 		spin_lock(&la);
+> 		a = new_a;
+> 		spin_unlock(&la);
+> 	}
+> 
+> 	void change_b(char new_b)
+> 	{
+> 		spin_lock(&lb);
+> 		b = new_b;
+> 		spin_unlock(&lb);
+> 	}
+> 
+> If the compiler "optimized" that "a = new_a" so as to produce a non-atomic
+> read-modify-write sequence, it would be introducing a data race.
+> And since C11, the compiler is absolutely forbidden from introducing
+> data races.  So, again, no, the compiler cannot invent writes to
+> variables.
+> 
+> What are those very special circumstances?
+> 
+> 1.	The other variables were going to be written to anyway, and
+> 	none of the writes was non-volatile and there was no ordering
+> 	directive between any of those writes.
+> 
+> 2.	The other variables are dead, as in there are no subsequent
+> 	reads from them anywhere in the program.  Of course in that case,
+> 	there is no need to read the prior values of those variables.
+> 
+> 3.	All accesses to all of the variables are visible to the compiler,
+> 	and the compiler can prove that there are no concurrent accesses
+> 	to any of them.  For example, all of the variables are on-stack
+> 	variables whose addresses are never taken.
+> 
+> Does that help, or am I misunderstanding the question?
 
---tOijhv7Qqz92bCVE
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Thank you, Paul!
 
-On Tue, Feb 21, 2023 at 08:32:05PM +0200, Svyatoslav Ryhel wrote:
+So it seems like READ_ONCE()/WRITE_ONCE() are totally useless here.
+Or I still miss something?
 
-> Add Realtek ALC5631/RT5631 codec support to the Tegra ASoC machine driver.
-> The RT5631 codec is found on devices like ASUS Transformer TF201, TF700T
-> and other Tegra-based Android tablets.
->=20
-> Signed-off-by: Svyatoslav Ryhel <clamor95@gmail.com>
-> Signed-off-by: Ion Agorria <ion@agorria.com>
-
-Your signoff should be last if you're the one sending this.
-
-> +static unsigned int tegra_machine_mclk_rate_6mhz(unsigned int srate)
-> +{
-> +	unsigned int mclk;
-> +
-> +	switch (srate) {
-> +	case 64000:
-> +	case 88200:
-> +	case 96000:
-> +		mclk =3D 128 * srate;
-> +		break;
-> +	default:
-> +		mclk =3D 256 * srate;
-> +		break;
-> +	}
-> +	/* FIXME: Codec only requires >=3D 3MHz if OSR=3D=3D0 */
-> +	while (mclk < 6000000)
-> +		mclk *=3D 2;
-
-It feels like this is complicated enough and looks like the
-clocking is flexible enough that it might be easier to just have
-a table of values or otherwise enumerate standard rates, seeing
-the code I feel like I need to worry about what happens if we
-pick a clock rate over 6MHz (the loop could give a value over
-that), and it's not clear why we have the switch statement rather
-than just starting at a multiple of 128 and looping an extra time.
-
-I suspect there's going to be no meaningful downside for having
-the clock held at over 3MHz on a tablet form factor, the usual
-issue would be power consumption but between the larger battery
-size you tend to have on a tablet and the power draw of the
-screen if that's on it's likely to be into the noise practially
-speaking.
-
---tOijhv7Qqz92bCVE
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmP1RFEACgkQJNaLcl1U
-h9DpVAf+M2ffAYNVaX4PwMJKysdDwMn46T5Tf1y5pjJ3FoZjeN7IGuqSZ3iXo1WT
-ms1bDTeUvHNIIUkUj90R9j5az1vTLboWFwsQRSQmkPkhkE/pD/R9skhgEh0Z0Kb0
-zkXVEjEjtPddDwC8enKFqDqvNrcegZV9pOna2z21aG+Ao66HPQtayfuC8FblBS3m
-2vFLIM5zMvuBgyeuSB++5pqcCZAdli4nDxijZT7+wlqesNVsjqDX+V0kClN3lfoK
-nEpUH6u4MMmtcude37chUrPP0KKW/+h0dfgh3QG5C956xi8D9zo86q9q7B95MMPO
-v4a40jcUysWb/dQcogit1e2we4NNYw==
-=sbPL
------END PGP SIGNATURE-----
-
---tOijhv7Qqz92bCVE--
+Thanks!
