@@ -2,82 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AAE1469E711
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 19:09:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C40D69E719
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 19:09:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232771AbjBUSJO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Feb 2023 13:09:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59642 "EHLO
+        id S231934AbjBUSJe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Feb 2023 13:09:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59764 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232395AbjBUSIi (ORCPT
+        with ESMTP id S232425AbjBUSIl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Feb 2023 13:08:38 -0500
-Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 101302DE57
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Feb 2023 10:08:03 -0800 (PST)
-Received: by mail-wm1-x336.google.com with SMTP id az11-20020a05600c600b00b003dc4fd6e61dso4307366wmb.5
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Feb 2023 10:08:03 -0800 (PST)
+        Tue, 21 Feb 2023 13:08:41 -0500
+Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 214912F7B3
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Feb 2023 10:08:06 -0800 (PST)
+Received: by mail-wm1-x334.google.com with SMTP id l2-20020a05600c1d0200b003e1f6dff952so4272208wms.1
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Feb 2023 10:08:06 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=WxOjXV0BQvNs4//4eyybGdilzG1LzEaF0NAq/aqNM8Q=;
-        b=JT/vx6hFSQYN4c2jk7Stt6InjzZQMM0mhvzlKkKPuYT9DPtfKOsHXrx+sSqzXKmhV4
-         HN9xhbOFiCrS189gTkrTh3E/RW3s6hpY+u7m940QJwtr7wmvT2sHJgPehcPVIAtCT9Ar
-         UvMyL2S1IWn42TvYQkGPwwU2DBDYMgEKb20wEvg9ToEv2NoLp3mQIxqQuWfeiY3V5b/I
-         2zg1mNJz3D0JZ/hfVvnCeFQxlgDbwpf4fEKFFTn1Cai6l+oQ4gBe3C4iqhC5UlQd3siB
-         bXcwe4EyQwybr4voCX90kNGpz+328NTLLnNegXxxDf/8Vb5ETwX+XfqbHLZlVLoRRRe5
-         z12A==
+        bh=2PLESKqLcdlyFOxotfZU1hq7qJ9ZRCDMy4R1xbT74Go=;
+        b=IDkOMIXOnBC0YaKuJQVL1UzixxoNKs9qrgYjkKo6jDz2bLz5dLKXpdOwWvf1Rnx8DV
+         Kytrn1nswuJgwZ28jXJZJydBccH1zX36Szzwa5+upGUmf6eFJxqmZ+QBhiCLXiqGhpG2
+         0jMrOb3HXxthyJbfwlVNppr6h8HGAwcv62B/enXccgNycCjhFq8cIrTiJfbRg0rHem1D
+         hZmJmE2WGrMOkhTlg/HCLdvi5RzBY8rV8u4U99z/APmJEIf8u0laVLLxkmEejYSaukDK
+         Gh4mb2DkJ5xUj7I0hTcrs3TCJLkNSyctnLAhim/44C96NoHcQV/Mtr2JU+Zx7eBzN8SW
+         s8qQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=WxOjXV0BQvNs4//4eyybGdilzG1LzEaF0NAq/aqNM8Q=;
-        b=hoidkDlWKVp02Omaq4T6p5up3nkvt3K8lg/WPOKFZ6EOwlfHT0DHkiFIJfXfczaGkp
-         m46k9IdYVNC3TxMPeNAm8SOWBtDRbjiEuxKa68DVrbrUsszk+QVL/cBM4jnrmtQRVPem
-         ISMaJPy08feKTsFYFKmIO+leQzBjDtxgOiZf4t+2nwpzDtZGE7Uxh75o76sIkpXvtDzh
-         cDhc93agveVD0OfjtW10LSKQ8divr5ejOEQAe7fOpPpDk0doFfl7aaVSt+i+pYv5lUfw
-         3KCyUCH4iKEZRfONxmYse8C/wBcl0mqdJ2B19Uu6xooxi05hiZW27ob2zSWqrObDYY+v
-         4t4A==
-X-Gm-Message-State: AO0yUKU73yhyXjvcFjfAi7ydo7pI1HdG5xKfgXWG14I07qgI4N7c5jlk
-        wqhl+Rw0OEvYXt+fORqps6EQA8ou5TZoHcZXA1I=
-X-Google-Smtp-Source: AK7set+UvfuNbt1xzTlvl99AbwSUpW97o8x8EsfSehdVbZk/s/8pp5dlcoJQQ7YQr9U5gVjvwA4sTg==
-X-Received: by 2002:a05:600c:16d3:b0:3dc:5950:b358 with SMTP id l19-20020a05600c16d300b003dc5950b358mr10858363wmn.14.1677002883410;
-        Tue, 21 Feb 2023 10:08:03 -0800 (PST)
+        bh=2PLESKqLcdlyFOxotfZU1hq7qJ9ZRCDMy4R1xbT74Go=;
+        b=jLxLP3Tl13NX7mOiOi0+3y3ICkEdrF/dgSWe+jpXsd/Sw4PEpZKVOi/BvMKQshidLc
+         D8B6Jz1ydZVyATtIvEindmDMLnN4g9vMCMylfzc01zXsvtOU5FvZWX5H428h/PM5wpKy
+         Cd4ALhces35Mszx8qXkdv9fTnv1VAyO+f1ixFX5GW/96EHtZK+tIxqEZA0UxBejz8miL
+         2N0HiwXqNEMGDKX5e1Lobu3GUdg6A5QjG4zx0UwCfLgS3LiVgh1TORgkDCdrJya8u7A9
+         jKxT9nh37Tg0QVmAtUspLVEbbEcaALxvsJNb/VqVzAOXRmxk+BC1tHaCKQ5Yk9SAKis3
+         bRIg==
+X-Gm-Message-State: AO0yUKWpzOTicoyVLFYb1igszAG7SVngkHg+xgrnzQpLW5DYyBoTPrSA
+        ow7HOeSDtV0CTFQkebFuR9QBoe2qLUO/YXsY
+X-Google-Smtp-Source: AK7set8ruiUqU3jrcwlb8VAObzf+jUPiQQRUbmmbsRffwnPe5/KWjU2/Htpqbn26H5VSFApehTmg2Q==
+X-Received: by 2002:a05:600c:2a08:b0:3da:fb3c:c1ab with SMTP id w8-20020a05600c2a0800b003dafb3cc1abmr3758944wme.0.1677002884436;
+        Tue, 21 Feb 2023 10:08:04 -0800 (PST)
 Received: from mai.box.freepro.com ([2a05:6e02:1041:c10:1e9:315c:bb40:e382])
-        by smtp.gmail.com with ESMTPSA id c128-20020a1c3586000000b003e21558ee9dsm5107815wma.2.2023.02.21.10.08.01
+        by smtp.gmail.com with ESMTPSA id c128-20020a1c3586000000b003e21558ee9dsm5107815wma.2.2023.02.21.10.08.03
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 21 Feb 2023 10:08:03 -0800 (PST)
+        Tue, 21 Feb 2023 10:08:04 -0800 (PST)
 From:   Daniel Lezcano <daniel.lezcano@linaro.org>
 To:     rafael@kernel.org, daniel.lezcano@linaro.org
 Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Ido Schimmel <idosch@nvidia.com>,
-        Zhang Rui <rui.zhang@intel.com>, Len Brown <lenb@kernel.org>,
-        Petr Machata <petrm@nvidia.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
+        Support Opensource <support.opensource@diasemi.com>,
         Amit Kucheria <amitk@kernel.org>,
-        Eduardo Valentin <edubezval@gmail.com>,
-        Keerthy <j-keerthy@ti.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Balsam CHIHI <bchihi@baylibre.com>,
-        Baolin Wang <baolin.wang@linux.alibaba.com>,
-        linux-acpi@vger.kernel.org (open list:ACPI THERMAL DRIVER),
-        netdev@vger.kernel.org (open list:MELLANOX ETHERNET SWITCH DRIVERS),
-        linux-omap@vger.kernel.org (open list:TI BANDGAP AND THERMAL DRIVER),
-        linux-arm-kernel@lists.infradead.org (moderated list:ARM/Mediatek SoC
-        support),
-        linux-mediatek@lists.infradead.org (moderated list:ARM/Mediatek SoC
-        support)
-Subject: [PATCH v2 09/16] thermal: Do not access 'type' field, use the tz id instead
-Date:   Tue, 21 Feb 2023 19:07:03 +0100
-Message-Id: <20230221180710.2781027-10-daniel.lezcano@linaro.org>
+        Zhang Rui <rui.zhang@intel.com>
+Subject: [PATCH v2 10/16] thermal/drivers/da9062: Don't access the thermal zone device fields
+Date:   Tue, 21 Feb 2023 19:07:04 +0100
+Message-Id: <20230221180710.2781027-11-daniel.lezcano@linaro.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230221180710.2781027-1-daniel.lezcano@linaro.org>
 References: <20230221180710.2781027-1-daniel.lezcano@linaro.org>
@@ -93,91 +74,65 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The 'type' field is used as a name in the message. However we can have
-multiple thermal zone with the same type. The information is not
-accurate.
+The driver is reading the passive polling rate in the thermal zone
+structure. We want to prevent the drivers to rummage around in the
+thermal zone structure.
 
-Moreover, the thermal zone device structure is directly accessed while
-we want to improve the self-encapsulation of the code.
+On the other side, the delay is what the driver passed to the
+thermal_zone_device_register() function, so it has already the
+information.
 
-Replace the 'type' in the message by the thermal zone id.
+Reuse the information we have instead of reading the information we
+set.
 
 Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
-Reviewed-by: Ido Schimmel <idosch@nvidia.com> #mlxsw
 ---
- drivers/acpi/thermal.c                             | 2 +-
- drivers/net/ethernet/mellanox/mlxsw/core_thermal.c | 4 ++--
- drivers/thermal/mediatek/lvts_thermal.c            | 5 +----
- drivers/thermal/ti-soc-thermal/ti-thermal-common.c | 4 ++--
- 4 files changed, 6 insertions(+), 9 deletions(-)
+ drivers/thermal/da9062-thermal.c | 11 +++++++----
+ 1 file changed, 7 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/acpi/thermal.c b/drivers/acpi/thermal.c
-index 392b73b3e269..b55a3b0ad9ed 100644
---- a/drivers/acpi/thermal.c
-+++ b/drivers/acpi/thermal.c
-@@ -842,7 +842,7 @@ static int acpi_thermal_register_thermal_zone(struct acpi_thermal *tz)
- 		goto acpi_bus_detach;
+diff --git a/drivers/thermal/da9062-thermal.c b/drivers/thermal/da9062-thermal.c
+index e7097f354750..2d31b1f73423 100644
+--- a/drivers/thermal/da9062-thermal.c
++++ b/drivers/thermal/da9062-thermal.c
+@@ -41,6 +41,8 @@
  
- 	dev_info(&tz->device->dev, "registered as thermal_zone%d\n",
--		 tz->thermal_zone->id);
-+		 thermal_zone_device_get_id(tz->thermal_zone));
+ #define DA9062_MILLI_CELSIUS(t)			((t) * 1000)
  
- 	return 0;
++static unsigned int pp_tmp = DA9062_DEFAULT_POLLING_MS_PERIOD;
++
+ struct da9062_thermal_config {
+ 	const char *name;
+ };
+@@ -95,7 +97,10 @@ static void da9062_thermal_poll_on(struct work_struct *work)
+ 		thermal_zone_device_update(thermal->zone,
+ 					   THERMAL_EVENT_UNSPECIFIED);
  
-diff --git a/drivers/net/ethernet/mellanox/mlxsw/core_thermal.c b/drivers/net/ethernet/mellanox/mlxsw/core_thermal.c
-index 722e4a40afef..a997fca211ba 100644
---- a/drivers/net/ethernet/mellanox/mlxsw/core_thermal.c
-+++ b/drivers/net/ethernet/mellanox/mlxsw/core_thermal.c
-@@ -176,8 +176,8 @@ mlxsw_thermal_module_trips_update(struct device *dev, struct mlxsw_core *core,
+-		delay = thermal->zone->passive_delay_jiffies;
++		/*
++		 * pp_tmp is between 1s and 10s, so we can round the jiffies
++		 */
++		delay = round_jiffies(msecs_to_jiffies(pp_tmp));
+ 		queue_delayed_work(system_freezable_wq, &thermal->work, delay);
+ 		return;
+ 	}
+@@ -155,7 +160,6 @@ static int da9062_thermal_probe(struct platform_device *pdev)
+ {
+ 	struct da9062 *chip = dev_get_drvdata(pdev->dev.parent);
+ 	struct da9062_thermal *thermal;
+-	unsigned int pp_tmp = DA9062_DEFAULT_POLLING_MS_PERIOD;
+ 	const struct of_device_id *match;
+ 	int ret = 0;
+ 
+@@ -208,8 +212,7 @@ static int da9062_thermal_probe(struct platform_device *pdev)
  	}
  
- 	if (crit_temp > emerg_temp) {
--		dev_warn(dev, "%s : Critical threshold %d is above emergency threshold %d\n",
--			 tz->tzdev->type, crit_temp, emerg_temp);
-+		dev_warn(dev, "tz id %d: Critical threshold %d is above emergency threshold %d\n",
-+			 thermal_zone_device_get_id(tz->tzdev), crit_temp, emerg_temp);
- 		return 0;
- 	}
+ 	dev_dbg(&pdev->dev,
+-		"TJUNC temperature polling period set at %d ms\n",
+-		jiffies_to_msecs(thermal->zone->passive_delay_jiffies));
++		"TJUNC temperature polling period set at %d ms\n", pp_tmp);
  
-diff --git a/drivers/thermal/mediatek/lvts_thermal.c b/drivers/thermal/mediatek/lvts_thermal.c
-index beb835d644e2..155cef8ed3f5 100644
---- a/drivers/thermal/mediatek/lvts_thermal.c
-+++ b/drivers/thermal/mediatek/lvts_thermal.c
-@@ -304,10 +304,8 @@ static int lvts_set_trips(struct thermal_zone_device *tz, int low, int high)
- 	 *
- 	 * 14-0 : Raw temperature for threshold
- 	 */
--	if (low != -INT_MAX) {
--		pr_debug("%s: Setting low limit temperature interrupt: %d\n", tz->type, low);
-+	if (low != -INT_MAX)
- 		writel(raw_low, LVTS_H2NTHRE(base));
--	}
- 
- 	/*
- 	 * Hot temperature threshold
-@@ -318,7 +316,6 @@ static int lvts_set_trips(struct thermal_zone_device *tz, int low, int high)
- 	 *
- 	 * 14-0 : Raw temperature for threshold
- 	 */
--	pr_debug("%s: Setting high limit temperature interrupt: %d\n", tz->type, high);
- 	writel(raw_high, LVTS_HTHRE(base));
- 
- 	return 0;
-diff --git a/drivers/thermal/ti-soc-thermal/ti-thermal-common.c b/drivers/thermal/ti-soc-thermal/ti-thermal-common.c
-index 060f46cea5ff..488b08fc20e4 100644
---- a/drivers/thermal/ti-soc-thermal/ti-thermal-common.c
-+++ b/drivers/thermal/ti-soc-thermal/ti-thermal-common.c
-@@ -43,8 +43,8 @@ static void ti_thermal_work(struct work_struct *work)
- 
- 	thermal_zone_device_update(data->ti_thermal, THERMAL_EVENT_UNSPECIFIED);
- 
--	dev_dbg(data->bgp->dev, "updated thermal zone %s\n",
--		data->ti_thermal->type);
-+	dev_dbg(data->bgp->dev, "updated thermal zone id %d\n",
-+		thermal_zone_device_get_id(data->ti_thermal));
- }
- 
- /**
+ 	ret = platform_get_irq_byname(pdev, "THERMAL");
+ 	if (ret < 0)
 -- 
 2.34.1
 
