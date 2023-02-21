@@ -2,59 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 295A369DF25
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 12:43:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0E9C269DF29
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 12:43:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234330AbjBULnF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Feb 2023 06:43:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42712 "EHLO
+        id S234315AbjBULnW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Feb 2023 06:43:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43594 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234350AbjBULmw (ORCPT
+        with ESMTP id S234358AbjBULnI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Feb 2023 06:42:52 -0500
-Received: from fudo.makrotopia.org (fudo.makrotopia.org [IPv6:2a07:2ec0:3002::71])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83A4F1E5D9;
-        Tue, 21 Feb 2023 03:42:23 -0800 (PST)
-Received: from local
-        by fudo.makrotopia.org with esmtpsa (TLS1.3:TLS_AES_256_GCM_SHA384:256)
-         (Exim 4.96)
-        (envelope-from <daniel@makrotopia.org>)
-        id 1pUR2K-0001QA-2F;
-        Tue, 21 Feb 2023 12:42:21 +0100
-Date:   Tue, 21 Feb 2023 11:42:16 +0000
-From:   Daniel Golle <daniel@makrotopia.org>
-To:     netdev@vger.kernel.org, linux-mediatek@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Russell King <linux@armlinux.org.uk>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Lorenzo Bianconi <lorenzo@kernel.org>,
-        Mark Lee <Mark-MC.Lee@mediatek.com>,
-        John Crispin <john@phrozen.org>, Felix Fietkau <nbd@nbd.name>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        DENG Qingfang <dqfext@gmail.com>,
-        Landen Chao <Landen.Chao@mediatek.com>,
-        Sean Wang <sean.wang@mediatek.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Eric Dumazet <edumazet@google.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Andrew Lunn <andrew@lunn.ch>
-Cc:     Jianhui Zhao <zhaojh329@gmail.com>,
-        =?iso-8859-1?Q?Bj=F8rn?= Mork <bjorn@mork.no>
-Subject: [PATCH net-next v10 08/12] net: ethernet: mtk_eth_soc: fix RX data
- corruption issue
-Message-ID: <c9662d984008dcf08c5e17a44dbcb6644950e4f5.1676933805.git.daniel@makrotopia.org>
-References: <cover.1676933805.git.daniel@makrotopia.org>
+        Tue, 21 Feb 2023 06:43:08 -0500
+Received: from vulcan.natalenko.name (vulcan.natalenko.name [IPv6:2001:19f0:6c00:8846:5400:ff:fe0c:dfa0])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B5B127D59;
+        Tue, 21 Feb 2023 03:42:41 -0800 (PST)
+Received: from mail.natalenko.name (vulcan.natalenko.name [IPv6:2001:19f0:6c00:8846:5400:ff:fe0c:dfa0])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by vulcan.natalenko.name (Postfix) with ESMTPSA id 55E29123B26B;
+        Tue, 21 Feb 2023 12:42:36 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=natalenko.name;
+        s=dkim-20170712; t=1676979756;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=yiNWgaLBJ1ijIp+MAuTp36zukgy67HOKVlUc0Zj0QLo=;
+        b=OEMsaRuW9uHiIM+s4Q4DkWh6Qhf64il6GwoNPSK666mlwKu4tEC5VnJ3/CO5gN0ktdIXkp
+        19YZfIckc1AgRB1ZC09RMDxAGUrj4rJR+GYaOTnxkiZKLnu8rBtIbai8htONONgkjqejRo
+        6rJOcuNy0Tds4YNHOJeP9D/Cb4Chxdc=
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <cover.1676933805.git.daniel@makrotopia.org>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+Date:   Tue, 21 Feb 2023 12:42:36 +0100
+From:   Oleksandr Natalenko <oleksandr@natalenko.name>
+To:     Usama Arif <usama.arif@bytedance.com>
+Cc:     David Woodhouse <dwmw2@infradead.org>,
+        Kim Phillips <kim.phillips@amd.com>, tglx@linutronix.de,
+        arjan@linux.intel.com, mingo@redhat.com, bp@alien8.de,
+        dave.hansen@linux.intel.com, hpa@zytor.com, x86@kernel.org,
+        pbonzini@redhat.com, paulmck@kernel.org,
+        linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        rcu@vger.kernel.org, mimoja@mimoja.de, hewenliang4@huawei.com,
+        thomas.lendacky@amd.com, seanjc@google.com, pmenzel@molgen.mpg.de,
+        fam.zheng@bytedance.com, punit.agrawal@bytedance.com,
+        simon.evans@bytedance.com, liangma@liangbit.com,
+        "Limonciello, Mario" <Mario.Limonciello@amd.com>,
+        Piotr Gorski <piotrgorski@cachyos.org>
+Subject: Re: [External] Re: [PATCH v9 0/8] Parallel CPU bringup for x86_64
+In-Reply-To: <d91f96eb-86a1-c794-761d-a96e39076b13@bytedance.com>
+References: <20230215145425.420125-1-usama.arif@bytedance.com>
+ <ed8d662351cfe5793f8cc7e7e8c514d05d16c501.camel@infradead.org>
+ <2668869.mvXUDI8C0e@natalenko.name>
+ <2a67f6cf18dd2c1879fad9fd8a28242918d3e5d2.camel@infradead.org>
+ <982e1d6140705414e8fd60b990bd259a@natalenko.name>
+ <715CBABF-4017-4784-8F30-5386F1524830@infradead.org>
+ <67dbc69f-b712-8971-f1c9-5d07f506a19c@amd.com>
+ <42dc683e2846ae8fc1e09715aaf7884660e1a386.camel@infradead.org>
+ <37c18c3aeea2e558633b6da6886111d0@natalenko.name>
+ <5A3B7074-0C6D-472B-803B-D76541828C1F@infradead.org>
+ <3d8ed6e157df10c5175c636de0e21849@natalenko.name>
+ <5c557f9b6f55dc2a612ee89142971298e6ae12d8.camel@infradead.org>
+ <ee0d0d971a3095d6a1e96ad4f1ba32d2@natalenko.name>
+ <5b8f9c89f7015fa80c966c6c7f6fa259db6744f8.camel@infradead.org>
+ <ce731b5a4a53680b4840467977b33d9a@natalenko.name>
+ <85ceb3f92abf3c013924de2f025517372bed19c0.camel@infradead.org>
+ <3e5944de08ef0d23584d19bad7bae66c@natalenko.name>
+ <26E5DC9C-0F19-4E4F-9076-04506A197374@infradead.org>
+ <d91f96eb-86a1-c794-761d-a96e39076b13@bytedance.com>
+Message-ID: <6e7d75d98266ab68b57bf6db644ecc75@natalenko.name>
+X-Sender: oleksandr@natalenko.name
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
         SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -62,47 +82,27 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Also set bit 12 which disabled the RX FIDO clear function when setting up
-MAC MCR, as MediaTek SDK did the same change stating:
-"If without this patch, kernel might receive invalid packets that are
-corrupted by GMAC."[1]
-This fixes issues with <= 1G speed where we could previously observe
-about 30% packet loss while the bad packet counter was increasing.
+On 21.02.2023 11:47, Usama Arif wrote:
+> On 21/02/2023 10:27, David Woodhouse wrote:
+>> 
+>> On 21 February 2023 09:49:51 GMT, Oleksandr Natalenko 
+>> <oleksandr@natalenko.name> wrote:
+>>> On 21.02.2023 10:06, David Woodhouse wrote:
+>>>> Why does arch/x86/kernel/acpi/sleep.c::x86_acpi_suspend_lowlevel() 
+>>>> set
+>>>> 
+>>>>      initial_gs = per_cpu_offset(smp_processor_id()) ?
+>>>> 
+>>>> Would it not be CPU#0 that comes back up, and should it not get
+>>>> per_cpu_offset(0) ?
+>>> 
+>>> Wanna me try `initial_gs = per_cpu_offset(0);` too?
+>> 
+> 
+> I think it might be smp_processor_id() and not 0 incase CPU0 was 
+> offline at the point the system was suspended?
 
-[1]: https://git01.mediatek.com/plugins/gitiles/openwrt/feeds/mtk-openwrt-feeds/+/d8a2975939a12686c4a95c40db21efdc3f821f63
-Tested-by: Bjørn Mork <bjorn@mork.no>
-Signed-off-by: Daniel Golle <daniel@makrotopia.org>
----
- drivers/net/ethernet/mediatek/mtk_eth_soc.c | 3 ++-
- drivers/net/ethernet/mediatek/mtk_eth_soc.h | 1 +
- 2 files changed, 3 insertions(+), 1 deletion(-)
+Is it even possible for CPU 0 to be offline, at least on x86?
 
-diff --git a/drivers/net/ethernet/mediatek/mtk_eth_soc.c b/drivers/net/ethernet/mediatek/mtk_eth_soc.c
-index 030d87c42bd42..ed32a511adc30 100644
---- a/drivers/net/ethernet/mediatek/mtk_eth_soc.c
-+++ b/drivers/net/ethernet/mediatek/mtk_eth_soc.c
-@@ -616,7 +616,8 @@ static int mtk_mac_finish(struct phylink_config *config, unsigned int mode,
- 	mcr_cur = mtk_r32(mac->hw, MTK_MAC_MCR(mac->id));
- 	mcr_new = mcr_cur;
- 	mcr_new |= MAC_MCR_IPG_CFG | MAC_MCR_FORCE_MODE |
--		   MAC_MCR_BACKOFF_EN | MAC_MCR_BACKPR_EN | MAC_MCR_FORCE_LINK;
-+		   MAC_MCR_BACKOFF_EN | MAC_MCR_BACKPR_EN | MAC_MCR_FORCE_LINK |
-+		   MAC_MCR_RX_FIFO_CLR_DIS;
- 
- 	/* Only update control register when needed! */
- 	if (mcr_new != mcr_cur)
-diff --git a/drivers/net/ethernet/mediatek/mtk_eth_soc.h b/drivers/net/ethernet/mediatek/mtk_eth_soc.h
-index 142def8629c82..529c95c481b73 100644
---- a/drivers/net/ethernet/mediatek/mtk_eth_soc.h
-+++ b/drivers/net/ethernet/mediatek/mtk_eth_soc.h
-@@ -404,6 +404,7 @@
- #define MAC_MCR_FORCE_MODE	BIT(15)
- #define MAC_MCR_TX_EN		BIT(14)
- #define MAC_MCR_RX_EN		BIT(13)
-+#define MAC_MCR_RX_FIFO_CLR_DIS	BIT(12)
- #define MAC_MCR_BACKOFF_EN	BIT(9)
- #define MAC_MCR_BACKPR_EN	BIT(8)
- #define MAC_MCR_FORCE_RX_FC	BIT(5)
 -- 
-2.39.2
-
+   Oleksandr Natalenko (post-factum)
