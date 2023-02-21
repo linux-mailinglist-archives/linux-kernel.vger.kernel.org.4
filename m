@@ -2,208 +2,210 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2CE3669DC32
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 09:38:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EDABB69DC3D
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 09:40:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233208AbjBUIih (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Feb 2023 03:38:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56020 "EHLO
+        id S233236AbjBUIje (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Feb 2023 03:39:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56420 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229643AbjBUIif (ORCPT
+        with ESMTP id S232676AbjBUIjc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Feb 2023 03:38:35 -0500
-Received: from mail-lj1-x22e.google.com (mail-lj1-x22e.google.com [IPv6:2a00:1450:4864:20::22e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C293523858;
-        Tue, 21 Feb 2023 00:38:06 -0800 (PST)
-Received: by mail-lj1-x22e.google.com with SMTP id b18so3561625ljr.4;
-        Tue, 21 Feb 2023 00:38:06 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:message-id:subject:cc:to:from
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=oXmAWRuzmcV8Elsgdpg1EiI+Ar/Kv6HOxJGHhplNmBg=;
-        b=dacIh5Ip7zWYTo66VddkqH1AfAudtj7gH52ck6kXphg5LwhFeolG9qkrO5LWkYrWyf
-         GqvWuZ2hA54hvbMbl8tRU6otjWwAMQ6bvtvZh5kLtSS4eeg+CaW2UFF77WFdzDI2VO3Y
-         7jVrXjtT2juixcnwr1x5LiyFghiE/hjVahbY6+YD2FqqWhQD/Z5214mrmCUZvaicui0h
-         2rO+0B9/MP5IcWzLESsiPdMB/Q2Kus+ed5DtStRFYKTuUj+5PL7G6EstrxrT6Lpxufcs
-         mcutB/4bghXrgFem9w3UcAgEr32cDXDvGDD6JRLy0ibSiJ4WMe9ncBolo7MeuNu73vUq
-         ZFLg==
+        Tue, 21 Feb 2023 03:39:32 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8E5E234E2
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Feb 2023 00:38:33 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1676968713;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=Ka8yKsNqGuV7c8XzxIyetsQ+yohDTXMzd54elUnsMIg=;
+        b=alNBxmufDq0ncvjnzOZL3sLEvBqoOPu0Z20r9pRM2CN664Nfpx+8H6xviGVY8AQrGjT04k
+        uU0BsIY4z2mvifaNM12z4t7hct0zroL7LAgXmmHT89T5YsSFOYOgIfQdkhtfYuL+eu3EQk
+        xQt6KeNHPtpfbRai7wQzb+WsC+cEA48=
+Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
+ [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-10-5XIiEf32OvaCvB3dBvxvEw-1; Tue, 21 Feb 2023 03:38:31 -0500
+X-MC-Unique: 5XIiEf32OvaCvB3dBvxvEw-1
+Received: by mail-wm1-f69.google.com with SMTP id k20-20020a05600c1c9400b003e2249bd2b4so1795362wms.5
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Feb 2023 00:38:30 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=mime-version:references:in-reply-to:message-id:subject:cc:to:from
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=oXmAWRuzmcV8Elsgdpg1EiI+Ar/Kv6HOxJGHhplNmBg=;
-        b=zbCJ94i4j7inMvDxre54pPyQjvOnH66FF3sFP2pDzhv77kqitUFWy8jFmh+zygSg2g
-         JVn/YkOvY2JdmsoC4okmHTMm7deCOLM7ImYFxgqKb8bh4otYkgDp/FvyyOfSJb2nyDrk
-         OZ/K2ZEC3zrFYXp+wkewUYgI2fp8X34yKoXdVuYz4e4DoWp6UcnbKT1fGxxJvcC6/cG8
-         35UR0b0rHgkcf+7IHLF/F+mvK0Bptn08a1fT2Jdb628m8tLeHR5PSPudG/4L7c4qfsIH
-         chV6uUwTDxI8f78ejvVVSFu0c9lv2WePsiPL/UxRRM5+hnX22OkRzmXp6c2WFke5Gu9Z
-         XM2w==
-X-Gm-Message-State: AO0yUKVCYyeHitMir/RUzIiyNQ7s0cur6glFFGHm63v1CfnKoLzskGSp
-        EdZiALQnTtd4FD1BI020qrg=
-X-Google-Smtp-Source: AK7set+RqtfaOTqpjveAHIaH/mYBQDFd3HyzVq+YqARYpYETRDSQ5RKHLNE5xPgMIu7o4b3tO9CwXQ==
-X-Received: by 2002:a2e:a1c7:0:b0:293:6037:9850 with SMTP id c7-20020a2ea1c7000000b0029360379850mr1456739ljm.51.1676968683953;
-        Tue, 21 Feb 2023 00:38:03 -0800 (PST)
-Received: from eldfell ([194.136.85.206])
-        by smtp.gmail.com with ESMTPSA id bd17-20020a05651c169100b002934ed148afsm23315ljb.52.2023.02.21.00.38.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 21 Feb 2023 00:38:03 -0800 (PST)
-Date:   Tue, 21 Feb 2023 10:37:53 +0200
-From:   Pekka Paalanen <ppaalanen@gmail.com>
-To:     Rob Clark <robdclark@gmail.com>
-Cc:     dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Christian =?UTF-8?B?S8O2bmln?= <ckoenig.leichtzumerken@gmail.com>,
-        Michel =?UTF-8?B?RMOkbnplcg==?= <michel@daenzer.net>,
-        Tvrtko Ursulin <tvrtko.ursulin@intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        Simon Ser <contact@emersion.fr>,
-        Rob Clark <robdclark@chromium.org>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        Gustavo Padovan <gustavo@padovan.org>,
-        Christian =?UTF-8?B?S8O2bmln?= <christian.koenig@amd.com>,
-        "open list:SYNC FILE FRAMEWORK" <linux-media@vger.kernel.org>,
-        "moderated list:DMA BUFFER SHARING FRAMEWORK" 
-        <linaro-mm-sig@lists.linaro.org>,
-        open list <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v4 06/14] dma-buf/sync_file: Support (E)POLLPRI
-Message-ID: <20230221103753.205082d3@eldfell>
-In-Reply-To: <CAF6AEGv9fLQCD65ytRTGp=EkNB1QoZYH5ArphgGQALV9J08Cmw@mail.gmail.com>
-References: <20230218211608.1630586-1-robdclark@gmail.com>
-        <20230218211608.1630586-7-robdclark@gmail.com>
-        <20230220105345.70e46fa5@eldfell>
-        <CAF6AEGv9fLQCD65ytRTGp=EkNB1QoZYH5ArphgGQALV9J08Cmw@mail.gmail.com>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        h=content-transfer-encoding:in-reply-to:organization:from:references
+         :cc:to:content-language:subject:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Ka8yKsNqGuV7c8XzxIyetsQ+yohDTXMzd54elUnsMIg=;
+        b=uEMNo9xD0dPIvtFYqUwC+mwE5m470SQ9tav85HQMCcS8qS2Phn7nqhBcsb25lqjE0q
+         svWgtXbmOGgiaA7WJLQ8lYy1HKMwyF0oM1uCeAKR1P5q6uCv2E7PD3YguPjbzvnM9/ps
+         /1EtwrKxiW7KRW7VJCP1Vy7e8n9iqo6v4HaXJtkgsTFSKz8rhGHaApZjUz0ufwDLM/lW
+         BZ1/SW+k1Fc715CXncbSLyHjlwnR0JcOD0kzNO4J1wGW00213+daAlNgvY2nngtuUPsg
+         n17igcPycCHn3ehKxAOIooN6Bp7PWZOIIfh924xQwR3l2AfVDeQ6BkNbRuTCN/IKykMN
+         FiYQ==
+X-Gm-Message-State: AO0yUKWN9WspftpByFaEaC+5h6mjaEUmxUtveUgGybOblM6eFZ8hZHob
+        WHOy+N9h+rMofMlamd52KpmQRIpTyMMz9lKi4Bb65vyc/b3QLAwF5itcY+lrN8zvmnjM+M2Dpxr
+        u1rOaLrMQ4CqPEtpQkfg97ZQs
+X-Received: by 2002:a05:6000:1141:b0:2c5:a19e:6d16 with SMTP id d1-20020a056000114100b002c5a19e6d16mr2106356wrx.61.1676968709916;
+        Tue, 21 Feb 2023 00:38:29 -0800 (PST)
+X-Google-Smtp-Source: AK7set9xmVVeqlz0SJdIvYxvoGZ+QENG9hT6lVbWaYP3zkoQhjiyjPjHe9AF4f0plUey4v3xSojS0w==
+X-Received: by 2002:a05:6000:1141:b0:2c5:a19e:6d16 with SMTP id d1-20020a056000114100b002c5a19e6d16mr2106332wrx.61.1676968709569;
+        Tue, 21 Feb 2023 00:38:29 -0800 (PST)
+Received: from ?IPV6:2003:cb:c707:4800:aecc:dadb:40a8:ce81? (p200300cbc7074800aeccdadb40a8ce81.dip0.t-ipconnect.de. [2003:cb:c707:4800:aecc:dadb:40a8:ce81])
+        by smtp.gmail.com with ESMTPSA id u3-20020adff883000000b002c703d59fa7sm1615085wrp.12.2023.02.21.00.38.27
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 21 Feb 2023 00:38:28 -0800 (PST)
+Message-ID: <6e1201f5-da25-6040-8230-c84856221838@redhat.com>
+Date:   Tue, 21 Feb 2023 09:38:26 +0100
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/GOkb+s3y./0Y.sz97vQW68J";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.2
+Subject: Re: [PATCH v6 14/41] x86/mm: Introduce _PAGE_SAVED_DIRTY
+Content-Language: en-US
+To:     "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>,
+        "bsingharora@gmail.com" <bsingharora@gmail.com>,
+        "hpa@zytor.com" <hpa@zytor.com>,
+        "Syromiatnikov, Eugene" <esyr@redhat.com>,
+        "peterz@infradead.org" <peterz@infradead.org>,
+        "rdunlap@infradead.org" <rdunlap@infradead.org>,
+        "keescook@chromium.org" <keescook@chromium.org>,
+        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+        "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>,
+        "Eranian, Stephane" <eranian@google.com>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "fweimer@redhat.com" <fweimer@redhat.com>,
+        "nadav.amit@gmail.com" <nadav.amit@gmail.com>,
+        "jannh@google.com" <jannh@google.com>,
+        "dethoma@microsoft.com" <dethoma@microsoft.com>,
+        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
+        "kcc@google.com" <kcc@google.com>, "pavel@ucw.cz" <pavel@ucw.cz>,
+        "oleg@redhat.com" <oleg@redhat.com>,
+        "hjl.tools@gmail.com" <hjl.tools@gmail.com>,
+        "bp@alien8.de" <bp@alien8.de>,
+        "Lutomirski, Andy" <luto@kernel.org>,
+        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+        "arnd@arndb.de" <arnd@arndb.de>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "Schimpe, Christina" <christina.schimpe@intel.com>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "mike.kravetz@oracle.com" <mike.kravetz@oracle.com>,
+        "Yang, Weijiang" <weijiang.yang@intel.com>,
+        "debug@rivosinc.com" <debug@rivosinc.com>,
+        "jamorris@linux.microsoft.com" <jamorris@linux.microsoft.com>,
+        "john.allen@amd.com" <john.allen@amd.com>,
+        "rppt@kernel.org" <rppt@kernel.org>,
+        "andrew.cooper3@citrix.com" <andrew.cooper3@citrix.com>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "corbet@lwn.net" <corbet@lwn.net>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-api@vger.kernel.org" <linux-api@vger.kernel.org>,
+        "gorcunov@gmail.com" <gorcunov@gmail.com>,
+        "akpm@linux-foundation.org" <akpm@linux-foundation.org>
+Cc:     "Yu, Yu-cheng" <yu-cheng.yu@intel.com>
+References: <20230218211433.26859-1-rick.p.edgecombe@intel.com>
+ <20230218211433.26859-15-rick.p.edgecombe@intel.com>
+ <70681787-0d33-a9ed-7f2a-747be1490932@redhat.com>
+ <6f19d7c7ad9f61fa8f6c9bd09d24524dbe17463f.camel@intel.com>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+In-Reply-To: <6f19d7c7ad9f61fa8f6c9bd09d24524dbe17463f.camel@intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/GOkb+s3y./0Y.sz97vQW68J
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On 20.02.23 22:38, Edgecombe, Rick P wrote:
+> On Mon, 2023-02-20 at 12:32 +0100, David Hildenbrand wrote:
+>> On 18.02.23 22:14, Rick Edgecombe wrote:
+>>> Some OSes have a greater dependence on software available bits in
+>>> PTEs than
+>>> Linux. That left the hardware architects looking for a way to
+>>> represent a
+>>> new memory type (shadow stack) within the existing bits. They chose
+>>> to
+>>> repurpose a lightly-used state: Write=0,Dirty=1. So in order to
+>>> support
+>>> shadow stack memory, Linux should avoid creating memory with this
+>>> PTE bit
+>>> combination unless it intends for it to be shadow stack.
+>>>
+>>> The reason it's lightly used is that Dirty=1 is normally set by HW
+>>> _before_ a write. A write with a Write=0 PTE would typically only
+>>> generate
+>>> a fault, not set Dirty=1. Hardware can (rarely) both set Dirty=1
+>>> *and*
+>>> generate the fault, resulting in a Write=0,Dirty=1 PTE. Hardware
+>>> which
+>>> supports shadow stacks will no longer exhibit this oddity.
+>>>
+>>> So that leaves Write=0,Dirty=1 PTEs created in software. To achieve
+>>> this,
+>>> in places where Linux normally creates Write=0,Dirty=1, it can use
+>>> the
+>>> software-defined _PAGE_SAVED_DIRTY in place of the hardware
+>>> _PAGE_DIRTY.
+>>> In other words, whenever Linux needs to create Write=0,Dirty=1, it
+>>> instead
+>>> creates Write=0,SavedDirty=1 except for shadow stack, which is
+>>> Write=0,Dirty=1. Further differentiated by VMA flags, these PTE bit
+>>> combinations would be set as follows for various types of memory:
+>>
+>> I would simplify (see below) and not repeat what the patch contains
+>> as
+>> comments already that detailed.
+> 
+> This verbiage has had quite a bit of x86 maintainer attention already.
+> I hear what you are saying, but I'm a bit hesitant to take style
+> suggestions at this point for fear of the situation where people ask
+> for changes back and forth across different versions. Unless any x86
+> maintainers want to chime in again? More responses below.
 
-On Mon, 20 Feb 2023 08:14:47 -0800
-Rob Clark <robdclark@gmail.com> wrote:
+Sure, for my taste this is (1) too repetitive (2) too verbose (3) to 
+specialized. But whatever x86 maintainers prefer.
 
-> On Mon, Feb 20, 2023 at 12:53 AM Pekka Paalanen <ppaalanen@gmail.com> wro=
-te:
-> >
-> > On Sat, 18 Feb 2023 13:15:49 -0800
-> > Rob Clark <robdclark@gmail.com> wrote:
-> > =20
-> > > From: Rob Clark <robdclark@chromium.org>
-> > >
-> > > Allow userspace to use the EPOLLPRI/POLLPRI flag to indicate an urgent
-> > > wait (as opposed to a "housekeeping" wait to know when to cleanup aft=
-er
-> > > some work has completed).  Usermode components of GPU driver stacks
-> > > often poll() on fence fd's to know when it is safe to do things like
-> > > free or reuse a buffer, but they can also poll() on a fence fd when
-> > > waiting to read back results from the GPU.  The EPOLLPRI/POLLPRI flag
-> > > lets the kernel differentiate these two cases.
-> > >
-> > > Signed-off-by: Rob Clark <robdclark@chromium.org> =20
-> >
-> > Hi,
-> >
-> > where would the UAPI documentation of this go?
-> > It seems to be missing. =20
->=20
-> Good question, I am not sure.  The poll() man page has a description,
-> but my usage doesn't fit that _exactly_ (but OTOH the description is a
-> bit vague).
->=20
-> > If a Wayland compositor is polling application fences to know which
-> > client buffer to use in its rendering, should the compositor poll with
-> > PRI or not? If a compositor polls with PRI, then all fences from all
-> > applications would always be PRI. Would that be harmful somehow or
-> > would it be beneficial? =20
->=20
-> I think a compositor would rather use the deadline ioctl and then poll
-> without PRI.  Otherwise you are giving an urgency signal to the fence
-> signaller which might not necessarily be needed.
->=20
-> The places where I expect PRI to be useful is more in mesa (things
-> like glFinish(), readpix, and other similar sorts of blocking APIs)
+[...]
 
-Sounds good. Docs... ;-)
+>> "
+>> However, there are valid cases where the kernel might create read-
+>> only
+>> PTEs that are dirty (e.g., fork(), mprotect(), uffd-wp(), soft-dirty
+>> tracking). In this case, the _PAGE_SAVED_DIRTY bit is used instead
+>> of
+>> the HW-dirty bit, to avoid creating a wrong "shadow stack" PTEs.
+>> Such
+>> PTEs have (Write=0,SavedDirty=1,Dirty=0) set.
+>>
+>> Note that on processors without shadow stack support, the
+>> _PAGE_SAVED_DIRTY remains unused.
+>> "
+>>
+>> The I would simply drop below (which is also too COW-specific I
+>> think).
+> 
+> COW is the main situation where shadow stacks become read-only. So, as
+> an example it is nice in that COW covers all the scenarios discussed.
+> Again, do any x86 maintainers want to weigh in here?
 
-Hmm, so a compositor should set the deadline when it processes the
-wl_surface.commit, and not when it actually starts repainting, to give
-time for the driver to react and the GPU to do some more work. The
-deadline would be the time when the compositor starts its repaint, so
-it knows if the buffer is ready or not.
+Again, I'd not specialize on COW in all patches to much (IMHO, it 
+creates more confusion than it actually helps for understanding what's 
+happening) and just call it a read-only PTE that is dirty. Simple as 
+that. And it's easy to see why that's problematic, because read-only 
+PTEs that are dirty would be identified as shadow stack PTEs, which we 
+want to work around.
 
+Again, just my 2 cents. I'm not an x86 maintainer ;)
 
+-- 
 Thanks,
-pq
 
+David / dhildenb
 
->=20
-> BR,
-> -R
->=20
-> >
-> >
-> > Thanks,
-> > pq
-> > =20
-> > > ---
-> > >  drivers/dma-buf/sync_file.c | 8 ++++++++
-> > >  1 file changed, 8 insertions(+)
-> > >
-> > > diff --git a/drivers/dma-buf/sync_file.c b/drivers/dma-buf/sync_file.c
-> > > index fb6ca1032885..c30b2085ee0a 100644
-> > > --- a/drivers/dma-buf/sync_file.c
-> > > +++ b/drivers/dma-buf/sync_file.c
-> > > @@ -192,6 +192,14 @@ static __poll_t sync_file_poll(struct file *file=
-, poll_table *wait)
-> > >  {
-> > >       struct sync_file *sync_file =3D file->private_data;
-> > >
-> > > +     /*
-> > > +      * The POLLPRI/EPOLLPRI flag can be used to signal that
-> > > +      * userspace wants the fence to signal ASAP, express this
-> > > +      * as an immediate deadline.
-> > > +      */
-> > > +     if (poll_requested_events(wait) & EPOLLPRI)
-> > > +             dma_fence_set_deadline(sync_file->fence, ktime_get());
-> > > +
-> > >       poll_wait(file, &sync_file->wq, wait);
-> > >
-> > >       if (list_empty(&sync_file->cb.node) && =20
-> > =20
-
-
---Sig_/GOkb+s3y./0Y.sz97vQW68J
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAEBCAAdFiEEJQjwWQChkWOYOIONI1/ltBGqqqcFAmP0guEACgkQI1/ltBGq
-qqf13g//YJ2rnH+E++Hj+BIIexJyigGRb4u4jrJTM5mZ9F5IbwwlyPYI1ave26xA
-E2fQdmTIrob7UZDSU0pjl0rHfGvqDlZVZP8IdhAA1Qwvsw8JUZ8XknppQ4THxMPh
-RgR5+XExivkzqj5L7UZaPb4oYLlp5qCooiS6iIgCI0Dx+cov3zfOGL8DJOFQKGXV
-reume8wVPWdqLS85ALYVHVdiOgWdxd+kw/njtM6lc6DYj3JTmrlEXY5puS60bH9t
-uBbd9AZm+PCKWX3qbxKCxWK8W06xAqaR1ZiCuRMvxN7L4hEbTTrkTIgUEkM2W6cF
-ItT8wY83agbYcCNQJcQ7U3EOGoDY/CKsKAnXNrEKKh3Jpemn3sKwVkIk4KboT4Ke
-mBtKMFrB/DtBGQBSD4Vn2YFSBZg8R5fDlOoMZhbZUltzYBHDOs7U631uVEkia+Mp
-RU2hOSjThTwQpJTTzw6QzrXQdurSUMYP/Wub6jOEH0mTnkCr4ENuR+QfdVeHCt37
-AM0B7KHNlEn40Vn8dbGV7yzUIep87BJWOKFXWhXWIJKQQPW9R6TWms5Xx7c/QbYd
-iwbPR/DBfQb6Huz9Ls8WFN5o8VvAEKQGtjCRn33J35aQYFmDseUbVqCuDv0HIYI+
-fFaaFPBWL+1GhBlITlBWAq5/ow9vvif11bWzStLTowmvoivxyWU=
-=WDHn
------END PGP SIGNATURE-----
-
---Sig_/GOkb+s3y./0Y.sz97vQW68J--
