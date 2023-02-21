@@ -2,135 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8810469DE18
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 11:43:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 121E769DE24
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 11:46:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233803AbjBUKnH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Feb 2023 05:43:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44020 "EHLO
+        id S231755AbjBUKqN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Feb 2023 05:46:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46848 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231546AbjBUKnF (ORCPT
+        with ESMTP id S231546AbjBUKqL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Feb 2023 05:43:05 -0500
-Received: from APC01-SG2-obe.outbound.protection.outlook.com (mail-sgaapc01on2136.outbound.protection.outlook.com [40.107.215.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5BA32686C
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Feb 2023 02:42:28 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=fPYODId4Fh53vvzk75MwsBdWj9fJof6WLZYTpUAzrCkGEQcPDXfcXETXSCT5tatEANICUoNskoEEO+yalKgN6hU02LePrRZ0QfqO64xhFrVF2zWDwqVjotgiJiekePeYw5ca4Uz8FXngybl5rBgv8Cnim/wsCVeDeYdnDAG71HnbpjE0RwbkkhOp2dezWtkJ4uw2AUjCMNKKcBpwewdCgx0XH39q2abuLFPy9v3uG+kb4XCjC+XVyM3yJhpHoiilCd/89maka8mIh5jjxXT/FSesj8EXO7oEBR5cGJQ1weB3d6RS+QhJ3xU1qdSADY/CGgJLk443lypgdzyNe9nqfw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=5bNGzujxwwbpLiPKcvafJA8c8H2ws++mbDMZBgIJl1Q=;
- b=oEQVeSCWUmqQyRzPl6d9FlA0MMK0j73rILqtZ+NwY/lC9nYfgwWNblGsWNr+nYanfdBUNzS4nBYRsbgSzfi6YZ6HaYlM2V+wegJiTwKTOyIDr0FKh/pK6HBH1pzzGFHudDd7J9H/JcM1WaCUN+DouI3VIb5/2X7cqpn/k3AV5FvMZurb2IXRKBlNcYJFChjgVeqB91W0vRMlDrgqJxvJp+kRorsO3xo6vPnXzLokpAJlG3xWGaIQOS/eCc+c8Gx/gqEuvUklFXC2YOldebTNMcVUtQMNn1Q0hFwH5YykReAwdL/OO1AcgDXf9WncPKVFkCa0ZipwYWBBCgCAoAe6yQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=aspeedtech.com; dmarc=pass action=none
- header.from=aspeedtech.com; dkim=pass header.d=aspeedtech.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=aspeedtech.com;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=5bNGzujxwwbpLiPKcvafJA8c8H2ws++mbDMZBgIJl1Q=;
- b=I6D299XW7xNEX+uShJL9oB2frAJrdhnLSiVwkLd5VtH2XmW9ZIGOK2QPJA5klnGbwk46+n5UNNPCKs6FGIPrshbKhdkIRVzo0BvVne/bRTq5A5mwBPpwOnUXKZ4q+OSyWAnWOAWbSRw3opMnV/M1rm3YCgg6qFEDkKk819CU01CBBco0iCNwAVxktvcn8tj2SQp1KB0jC6l4N+zBXSJ1p8LvHkBCMHnj5B/BFIE+4bnJVuth0DCVLnkphKbNmgWPFAj9HfMfakURZVcXkGjeL7QgK0Il5wXtEWcfVhlqu5wIyf4jyR+hu4bIpfWmUiwMqO4UnkcTmocA9K8O/GWTDg==
-Received: from SEZPR06MB5269.apcprd06.prod.outlook.com (2603:1096:101:78::6)
- by TYUPR06MB6077.apcprd06.prod.outlook.com (2603:1096:400:353::11) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6111.12; Tue, 21 Feb
- 2023 10:42:22 +0000
-Received: from SEZPR06MB5269.apcprd06.prod.outlook.com
- ([fe80::daf6:5ebb:a93f:1869]) by SEZPR06MB5269.apcprd06.prod.outlook.com
- ([fe80::daf6:5ebb:a93f:1869%9]) with mapi id 15.20.6111.010; Tue, 21 Feb 2023
- 10:42:22 +0000
-From:   Ryan Chen <ryan_chen@aspeedtech.com>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Tue, 21 Feb 2023 05:46:11 -0500
+Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BE4922035
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Feb 2023 02:46:05 -0800 (PST)
+Received: by mail-wr1-x431.google.com with SMTP id t13so3829426wrv.13
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Feb 2023 02:46:05 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=sd64Vl/ocLQAKFinJVHc0nnXpTzTz1sxrsjUhCW8XzU=;
+        b=L9N2sMfCDxEftxrKDhPF1D+ULhkKs4Q2AAWmqm7xYVnceALrJIzy71bPm8Ez6au2Xc
+         9AAbIWDRAzGurAkO2p6OVW+rFbWjbkYf/icgXJrAYJPY79VYkbf5rQkT19zU7ISzecU5
+         XTGTUN1wx+v5rTmaZu2YFxOTqebZm5otCOmzrqhTYduAQD/FTNuxOcDQgz3i+Zvw/Hmo
+         sLiUIqIYM+q+3J6LYvVB9fAQyXlccBglUfhzrGZjYeI4l+150gPwfVnX4ts+x6vD97qX
+         dcouc+qNsXSAkVtrDlAJMSyxYBv2e2X5TrYQHQrQ5og/hGfC/hv6Qy8iy02/cp9rSIC4
+         U9ug==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=sd64Vl/ocLQAKFinJVHc0nnXpTzTz1sxrsjUhCW8XzU=;
+        b=ezAGHTjloHggIFJ3aeS4ueZR9+RvHhuAUohj1Bx3Gr2zPpBnIl3LbDB58tkuhZMVp2
+         Pm/u2sGLbqccVV1e3cUf/iPhnFuxeziyLctXS+Py/i2HCVE08gY6g8E4NPDUTnmtAyN2
+         VTyQuLQoofbqa5GExhAgIkuqX/tzSzQ5KxStKCERfls9EjLsspe++Zei5l3PEqSMePK6
+         nLgk4vClH3BBo9zpBU1HAndvz4JfhUjJNB6rjzNzvqB07qytGldSxLXBSzXH1xx0NQaj
+         kMsime6r/PktTS8QB4T3TBHIFvamW5MYWMP/Ec1kTj8gqpxZbZgPDv8efRMd4Et7bmtu
+         Zemw==
+X-Gm-Message-State: AO0yUKUW1QWhGGF5A4iDfL4ZpqE7rlEIc0ywg+2JBBtho4Y6FZtDwbAZ
+        5+gYGU7YD/eavjqOIh9Fhv4Aag==
+X-Google-Smtp-Source: AK7set+XHFJ83YZICxtjlFusD5HvFybIf677VpyIxQOkl2dZpiT7JLj7dxAXtacAQ+SLTQkTXaiE9w==
+X-Received: by 2002:a5d:4905:0:b0:2c6:e7f6:49af with SMTP id x5-20020a5d4905000000b002c6e7f649afmr2302205wrq.27.1676976363941;
+        Tue, 21 Feb 2023 02:46:03 -0800 (PST)
+Received: from [192.168.1.195] ([5.133.47.210])
+        by smtp.googlemail.com with ESMTPSA id q2-20020adff942000000b002c573778432sm7898257wrr.102.2023.02.21.02.46.02
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 21 Feb 2023 02:46:03 -0800 (PST)
+Message-ID: <dbcfa4e9-a1ad-0f24-77bf-05934ca26bb2@linaro.org>
+Date:   Tue, 21 Feb 2023 10:46:00 +0000
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH v10 10/26] gunyah: vm_mgr: Introduce basic VM Manager
+Content-Language: en-US
+To:     Elliot Berman <quic_eberman@quicinc.com>,
+        Alex Elder <elder@linaro.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Prakruthi Deepak Heragu <quic_pheragu@quicinc.com>
+Cc:     Murali Nalajala <quic_mnalajal@quicinc.com>,
+        Trilok Soni <quic_tsoni@quicinc.com>,
+        Srivatsa Vaddagiri <quic_svaddagi@quicinc.com>,
+        Carl van Schaik <quic_cvanscha@quicinc.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Joel Stanley <joel@jms.id.au>,
-        Andrew Jeffery <andrew@aj.id.au>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        "openbmc@lists.ozlabs.org" <openbmc@lists.ozlabs.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-aspeed@lists.ozlabs.org" <linux-aspeed@lists.ozlabs.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: RE: [PATCH v5 1/2] dt-bindings: i2c: Add support for ASPEED i2Cv2
-Thread-Topic: [PATCH v5 1/2] dt-bindings: i2c: Add support for ASPEED i2Cv2
-Thread-Index: AQHZRPMR/TOuXj0GdEGWPZ2JFslGsK7Xgo8AgAEkZWCAAIA2gIAABk2Q
-Date:   Tue, 21 Feb 2023 10:42:21 +0000
-Message-ID: <SEZPR06MB5269502D7CBCD5698B65FF9FF2A59@SEZPR06MB5269.apcprd06.prod.outlook.com>
-References: <20230220061745.1973981-1-ryan_chen@aspeedtech.com>
- <20230220061745.1973981-2-ryan_chen@aspeedtech.com>
- <676c7777-635c-cc1f-b919-d33e84a45442@linaro.org>
- <TYZPR06MB527427ADCCD29DFD77FB0EE3F2A59@TYZPR06MB5274.apcprd06.prod.outlook.com>
- <80d873d4-d813-6c25-8f47-f5ff9af718ec@linaro.org>
-In-Reply-To: <80d873d4-d813-6c25-8f47-f5ff9af718ec@linaro.org>
-Accept-Language: zh-TW, en-US
-Content-Language: zh-TW
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=aspeedtech.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: SEZPR06MB5269:EE_|TYUPR06MB6077:EE_
-x-ms-office365-filtering-correlation-id: 74d43244-b8f7-49bf-65a6-08db13f85019
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: fdW5PeVyenFy4G+JHMtmSn3m+yi0WVsA8ehX6gYRXgjv27AAbxjr2Lg55qBKxnXjE/Y9Mp42+0aus4XJupC5RAiL6qnLX1UTYVUidjFeecrPOKu7wDeT1xOgg6W7b9e8mUKbQXgq5s98TS6Z9JuzmWl7Scqu9BXsoM3hQUmB1ewudfmtOr+ypjuJuGLHaQ4EB92xqxAhCXNCuIeEFlxRa3LNkK5TtLA5ch5FrRUkkQdicxHXGWwdO26ASaMq/GNIryH/5AW4tf7iODsOCRePF9WPDXa0GtSCD0vxDRngjHdfXiYj9Vd7wqOOLX7oSP/qHMt7aiDd2rge5/DThZoBB3XfYS+DsAs/QxqLbLIUgQa6cwziGQGU4bSJUOnzGEK94Znj+sVO/4rXpFMPUyplZfbyIpcHQfKrWEYQ4ANPCxAwI26HWNJQ8Jnf+grQTedqzBGxxGFcR8x5fbFjv/NT0/NEe0JHZJDsfyTXYao4u02qSRRecw+V4vwtejrD/MeAVB8hHj4xtod9nFrrhBopYdVyu63T+E2L8Tg/TSxYndTvwlcJ/ldCId1XMEwQUpd0SbIJkyqHrEw+WPI22tFRSf60pnNCBhcf4UF+prvb1JVeUBVIQP4SYQU9BI1Ld01sxFHTsbSLqiVclGXAgFhVOJ2Ld+WnlNvZ3mNLbDXx7njvFMiQTi/7fc7PS6trgghSXYBPALkUDpAoejjhzf4K4QjCSSJmG5O7n886e7/itkwymG+5GxOL9Hlt7DiZ1hzr
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SEZPR06MB5269.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(346002)(366004)(39850400004)(376002)(396003)(136003)(451199018)(5660300002)(7416002)(52536014)(8676002)(2906002)(41300700001)(8936002)(38100700002)(122000001)(478600001)(110136005)(966005)(7696005)(86362001)(55016003)(83380400001)(33656002)(38070700005)(921005)(26005)(186003)(6506007)(64756008)(9686003)(66556008)(66446008)(76116006)(316002)(66476007)(66946007)(71200400001)(53546011);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?Znp5SHdaNm03aElYMEJub3E1RDM0U2dPc05MallkM1l4S1M4TDd0N0M5eXRG?=
- =?utf-8?B?bkovbXJVWDVRU3JDUWhhNkxoMGhYUlBheUI0TUtuTWhmRkdZZ1VFMU5yUyts?=
- =?utf-8?B?YjE3T1R2TTV4YW85RW1nVDhiek9vYXJScFpRaDZKZWl3RGFuN1VhbUhuNFh4?=
- =?utf-8?B?UkhPdFBMSGpWaWMycTdscjZZV0daU0pVbi9qcVJrNmYyNGxMQmJSdXU3eTNp?=
- =?utf-8?B?Sng0OHdCVEpDd0xFZ21aWjJYV0NIRDVtUmxVTDR3TnFQS1VWNkNMOGsrdHR3?=
- =?utf-8?B?L2lWcnpOOUp2QmljaGw0SzEydDBaNTRZalFnTk13MXBXekUxNCs5Q21MZitQ?=
- =?utf-8?B?VkhrbEtNYllqNVF1S1pRUW5sK2VHKytacUlESlpSVWhOQnRXKzJtRWhEaWRv?=
- =?utf-8?B?OGtHS3NHUWtyOXM2aVg1bHBPQTlrWFpnZHZJRDRROGRqV3RLWmNBSDZpVS9N?=
- =?utf-8?B?N0dIQXZ0ZG44LzhyUkxtekVCajI1YUtPbzRDNk0wTUJyS2tMbkFzemt6MWRu?=
- =?utf-8?B?WHo1Uy85WjRRcFJPU05mU08yNEJOMTlQeE1odFFJZHoxUklxZXNlbmk1bWpz?=
- =?utf-8?B?cXZGa0JyeTVVUGRrRXhWNVd3RDRMeDBTZllhRFdPbklTTVFKMEZZQ0h5YXlr?=
- =?utf-8?B?L2pBQzZTZHNRRmFIQnppMlFybnZ5M1QxR3pwSGYzVGRMM2s1cE1SR2ZPZXgr?=
- =?utf-8?B?YXhoSXNmZTF0eXFObGF1RU5YeHI2UldDYnYzemFuQUhrRVFyVGRPaEYxZEY4?=
- =?utf-8?B?dlo1bEttT1Y3QjNpdWZRb1NVcUp6WDFaUGNtK2ViT05CQTVUZmlOM0RtNFBG?=
- =?utf-8?B?VWpWZEdhS1RZY0dNTi9TRnRrUVl6SW5qQTV1eDdRZEt4UmxZc3hZRHZMUWhr?=
- =?utf-8?B?KzBNVXRBSmtSbnJpVzF3bjJrYTcvMmxscHdheE1LMnFrUW5Ba1hML3V2dWds?=
- =?utf-8?B?QnRIUWxSS2VYdGRlczJWaUpERzBqK25XZVhRZERPYnhXeWQ1Z2ZabUFRWWla?=
- =?utf-8?B?OTlqVi8yczlZTjlyMUNBNnBNNTVjaitYMVVaQ3R5UWFHY3I3RkwxWkJkc3lz?=
- =?utf-8?B?MnBWbjJNR1owZWZTdmpYaldrdlhvU29VNFBkS3dLY0ExbnpmYnNVRWJPT1dv?=
- =?utf-8?B?T2ZjQmQ4YWVHU2M2cGd6VFhLcUJ1NnRDNGlXQ09ZMENOSmlCWmFFSEdDREZj?=
- =?utf-8?B?VEE0QXE0Wk1QcnpRemp0TkZibzA5YXNHTTUvZVFPZ29jdktYYVV3YVh0WGw5?=
- =?utf-8?B?dTZ5NEpwalNkWkVKTkg4dnI2b2pqbnJiY1JQVWlWeHUrVmordmtVc3NsNlZZ?=
- =?utf-8?B?UzBrSWplNWJuWVFKWVZhMWZoVnZpK3hkbnBWZDJncXMyY2E5MU9Nc29rTXFE?=
- =?utf-8?B?VmhWZTBoeW9UTUxlWHhyVzBiQ2RQVEZzYUxnS0ROSjNCSGgvdGlLTVJqWUJD?=
- =?utf-8?B?YXJIbmZtWjZEZEVxZVBrSzVmcjVaamdURzljWTN6dGtrSVBIcHdWR0FMTHBs?=
- =?utf-8?B?TmRtdld0N1RnSGZPQk91cUJNTkJVaTZLa0lBazdxYVNlTENGYm8wMlhPMWZY?=
- =?utf-8?B?d3lWQUdKd1ZkLzI5cFlaWmN1aU9rdlk1RENYYzJUZndyZU9TazhIRTc4L0Q4?=
- =?utf-8?B?d3ZZVWNUVmM2VWc0QlBTVEZaMWF1TEVJRmh6NzI1dGZpVkZtUmRJRlpZWVBE?=
- =?utf-8?B?SHo2c3BEVURmT05XQ29pQmNybml3U0NlMTJIdGx3ZzFsYVZmOXlQZmMrczlI?=
- =?utf-8?B?L1VKb0Fzb1pqbUZST0dlUHdFT3haYW5zZ0F3MEIvNWJRaDNvMWt6aFNoc3RR?=
- =?utf-8?B?aWMzWmhIei9ITk5jSDRXR0tEOFdaejlUM09YdmJKN09MR1BSUVYyNk5GZWU4?=
- =?utf-8?B?MmlTTlA5ejNnZWp5WExkK05QRS96eFZTQUViOEl5V1ljOFRNTjVhZW5rcG9h?=
- =?utf-8?B?L21ON2lKN0ZJK3NGRG9PeXcxWk1tUXJRRE9nRDl1amxRdjIwRjM1c3pmVElj?=
- =?utf-8?B?Yld5aE4vVlVKbGk1alpyMmhUbVVKVG9Ud1RJTk5uTk5VNVZIQUNpdXRHM0ts?=
- =?utf-8?B?ZWEvSTNodjE0ZjFCRFd5T24rS1duMWtqTFFNeGdNN0VpYnFkNVFWNjBVSm52?=
- =?utf-8?B?T2FtZ1VjMlFsa0tTYzlONE5ENUpUVVd1VjhJTEllTG9tUEFWTlZYWUlwSVJa?=
- =?utf-8?B?UlE9PQ==?=
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
-MIME-Version: 1.0
-X-OriginatorOrg: aspeedtech.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: SEZPR06MB5269.apcprd06.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 74d43244-b8f7-49bf-65a6-08db13f85019
-X-MS-Exchange-CrossTenant-originalarrivaltime: 21 Feb 2023 10:42:21.9403
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 43d4aa98-e35b-4575-8939-080e90d5a249
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: dDzs6k8VPZaSDdH7huFqBMOLXfO4PPQCR9NNMAqPCAXaoXZoT/6tjZqmqwuDnR6VGsvtLms56wEL+ek3fYslHoHYD3Y6+GC0W9Ud7bSAlpI=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: TYUPR06MB6077
-X-Spam-Status: No, score=-0.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
-        DKIM_SIGNED,FORGED_SPF_HELO,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_PASS,T_SPF_TEMPERROR autolearn=no autolearn_force=no
+        Bagas Sanjaya <bagasdotme@gmail.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Jassi Brar <jassisinghbrar@gmail.com>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+References: <20230214211229.3239350-1-quic_eberman@quicinc.com>
+ <20230214212356.3313181-1-quic_eberman@quicinc.com>
+From:   Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+In-Reply-To: <20230214212356.3313181-1-quic_eberman@quicinc.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -138,120 +94,360 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-SGVsbG8gS3J6eXN6dG9mLA0KDQoNCj4gLS0tLS1PcmlnaW5hbCBNZXNzYWdlLS0tLS0NCj4gRnJv
-bTogS3J6eXN6dG9mIEtvemxvd3NraSA8a3J6eXN6dG9mLmtvemxvd3NraUBsaW5hcm8ub3JnPg0K
-PiBTZW50OiBUdWVzZGF5LCBGZWJydWFyeSAyMSwgMjAyMyA1OjQwIFBNDQo+IFRvOiBSeWFuIENo
-ZW4gPHJ5YW5fY2hlbkBhc3BlZWR0ZWNoLmNvbT47IFJvYiBIZXJyaW5nDQo+IDxyb2JoK2R0QGtl
-cm5lbC5vcmc+OyBLcnp5c3p0b2YgS296bG93c2tpDQo+IDxrcnp5c3p0b2Yua296bG93c2tpK2R0
-QGxpbmFyby5vcmc+OyBKb2VsIFN0YW5sZXkgPGpvZWxAam1zLmlkLmF1PjsgQW5kcmV3DQo+IEpl
-ZmZlcnkgPGFuZHJld0Bhai5pZC5hdT47IFBoaWxpcHAgWmFiZWwgPHAuemFiZWxAcGVuZ3V0cm9u
-aXguZGU+Ow0KPiBvcGVuYm1jQGxpc3RzLm96bGFicy5vcmc7IGxpbnV4LWFybS1rZXJuZWxAbGlz
-dHMuaW5mcmFkZWFkLm9yZzsNCj4gbGludXgtYXNwZWVkQGxpc3RzLm96bGFicy5vcmc7IGxpbnV4
-LWtlcm5lbEB2Z2VyLmtlcm5lbC5vcmcNCj4gU3ViamVjdDogUmU6IFtQQVRDSCB2NSAxLzJdIGR0
-LWJpbmRpbmdzOiBpMmM6IEFkZCBzdXBwb3J0IGZvciBBU1BFRUQgaTJDdjINCj4gDQo+IE9uIDIx
-LzAyLzIwMjMgMDM6NDMsIFJ5YW4gQ2hlbiB3cm90ZToNCj4gPiBIZWxsbyBLcnp5c3p0b2YsDQo+
-ID4NCj4gPj4gLS0tLS1PcmlnaW5hbCBNZXNzYWdlLS0tLS0NCj4gPj4gRnJvbTogS3J6eXN6dG9m
-IEtvemxvd3NraSA8a3J6eXN6dG9mLmtvemxvd3NraUBsaW5hcm8ub3JnPg0KPiA+PiBTZW50OiBN
-b25kYXksIEZlYnJ1YXJ5IDIwLCAyMDIzIDQ6MzUgUE0NCj4gPj4gVG86IFJ5YW4gQ2hlbiA8cnlh
-bl9jaGVuQGFzcGVlZHRlY2guY29tPjsgUm9iIEhlcnJpbmcNCj4gPj4gPHJvYmgrZHRAa2VybmVs
-Lm9yZz47IEtyenlzenRvZiBLb3psb3dza2kNCj4gPj4gPGtyenlzenRvZi5rb3psb3dza2krZHRA
-bGluYXJvLm9yZz47IEpvZWwgU3RhbmxleSA8am9lbEBqbXMuaWQuYXU+Ow0KPiA+PiBBbmRyZXcg
-SmVmZmVyeSA8YW5kcmV3QGFqLmlkLmF1PjsgUGhpbGlwcCBaYWJlbA0KPiA+PiA8cC56YWJlbEBw
-ZW5ndXRyb25peC5kZT47IG9wZW5ibWNAbGlzdHMub3psYWJzLm9yZzsNCj4gPj4gbGludXgtYXJt
-LWtlcm5lbEBsaXN0cy5pbmZyYWRlYWQub3JnOw0KPiA+PiBsaW51eC1hc3BlZWRAbGlzdHMub3ps
-YWJzLm9yZzsgbGludXgta2VybmVsQHZnZXIua2VybmVsLm9yZw0KPiA+PiBTdWJqZWN0OiBSZTog
-W1BBVENIIHY1IDEvMl0gZHQtYmluZGluZ3M6IGkyYzogQWRkIHN1cHBvcnQgZm9yIEFTUEVFRA0K
-PiA+PiBpMkN2Mg0KPiA+Pg0KPiA+PiBPbiAyMC8wMi8yMDIzIDA3OjE3LCBSeWFuIENoZW4gd3Jv
-dGU6DQo+ID4+PiBBU1QyNjAwIHN1cHBvcnQgbmV3IHJlZ2lzdGVyIHNldCBmb3IgSTJDdjIgY29u
-dHJvbGxlciwgYWRkIGJpbmRpbmdzDQo+ID4+PiBkb2N1bWVudCB0byBzdXBwb3J0IGRyaXZlciBv
-ZiBpMmN2MiBuZXcgcmVnaXN0ZXIgbW9kZSBjb250cm9sbGVyLg0KPiA+Pj4NCj4gPj4+IFNpZ25l
-ZC1vZmYtYnk6IFJ5YW4gQ2hlbiA8cnlhbl9jaGVuQGFzcGVlZHRlY2guY29tPg0KPiA+Pj4gLS0t
-DQo+ID4+PiAgLi4uL2RldmljZXRyZWUvYmluZGluZ3MvaTJjL2FzcGVlZCxpMmN2Mi55YW1sIHwg
-ODMNCj4gPj4+ICsrKysrKysrKysrKysrKysrKysNCj4gPj4+ICAxIGZpbGUgY2hhbmdlZCwgODMg
-aW5zZXJ0aW9ucygrKQ0KPiA+Pj4gIGNyZWF0ZSBtb2RlIDEwMDY0NA0KPiA+Pj4gRG9jdW1lbnRh
-dGlvbi9kZXZpY2V0cmVlL2JpbmRpbmdzL2kyYy9hc3BlZWQsaTJjdjIueWFtbA0KPiA+Pg0KPiA+
-PiBOZXcgY29tcGF0aWJsZSBpcyBva2F5LCBidXQgYXMgdGhpcyBpcyB0aGUgc2FtZSBjb250cm9s
-bGVyIGFzIG9sZA0KPiA+PiBvbmUsIHRoaXMgc2hvdWxkIGdvIHRvIG9sZCBiaW5kaW5nLg0KPiA+
-Pg0KPiA+PiBUaGVyZSBhcmUgc2V2ZXJhbCBpc3N1ZXMgYW55d2F5IGhlcmUsIGJ1dCBJIHdvbid0
-IHJldmlld2luZyBpdCBleGNlcHQNCj4gPj4gZmV3IG9idmlvdXMgY2FzZXMuDQo+ID4+DQo+ID4+
-Pg0KPiA+Pj4gZGlmZiAtLWdpdCBhL0RvY3VtZW50YXRpb24vZGV2aWNldHJlZS9iaW5kaW5ncy9p
-MmMvYXNwZWVkLGkyY3YyLnlhbWwNCj4gPj4+IGIvRG9jdW1lbnRhdGlvbi9kZXZpY2V0cmVlL2Jp
-bmRpbmdzL2kyYy9hc3BlZWQsaTJjdjIueWFtbA0KPiA+Pj4gbmV3IGZpbGUgbW9kZSAxMDA2NDQN
-Cj4gPj4+IGluZGV4IDAwMDAwMDAwMDAwMC4uOTEzZmI0NWQ1ZmJlDQo+ID4+PiAtLS0gL2Rldi9u
-dWxsDQo+ID4+PiArKysgYi9Eb2N1bWVudGF0aW9uL2RldmljZXRyZWUvYmluZGluZ3MvaTJjL2Fz
-cGVlZCxpMmN2Mi55YW1sDQo+ID4+PiBAQCAtMCwwICsxLDgzIEBADQo+ID4+PiArIyBTUERYLUxp
-Y2Vuc2UtSWRlbnRpZmllcjogKEdQTC0yLjAtb25seSBPUiBCU0QtMi1DbGF1c2UpICVZQU1MIDEu
-Mg0KPiA+Pj4gKy0tLQ0KPiA+Pj4gKyRpZDogaHR0cDovL2RldmljZXRyZWUub3JnL3NjaGVtYXMv
-aTJjL2FzcGVlZCxpMmN2Mi55YW1sIw0KPiA+Pj4gKyRzY2hlbWE6IGh0dHA6Ly9kZXZpY2V0cmVl
-Lm9yZy9tZXRhLXNjaGVtYXMvY29yZS55YW1sIw0KPiA+Pj4gKw0KPiA+Pj4gK3RpdGxlOiBBU1BF
-RUQgSTJDdjIgQ29udHJvbGxlciBvbiB0aGUgQVNUMjZYWCBTb0NzDQo+ID4+PiArDQo+ID4+PiAr
-bWFpbnRhaW5lcnM6DQo+ID4+PiArICAtIFJ5YW4gQ2hlbiA8cnlhbl9jaGVuQGFzcGVlZHRlY2gu
-Y29tPg0KPiA+Pj4gKw0KPiA+Pj4gK2FsbE9mOg0KPiA+Pj4gKyAgLSAkcmVmOiAvc2NoZW1hcy9p
-MmMvaTJjLWNvbnRyb2xsZXIueWFtbCMNCj4gPj4+ICsNCj4gPj4+ICtwcm9wZXJ0aWVzOg0KPiA+
-Pj4gKyAgY29tcGF0aWJsZToNCj4gPj4+ICsgICAgZW51bToNCj4gPj4+ICsgICAgICAtIGFzcGVl
-ZCxhc3QyNjAwLWkyY3YyDQo+ID4+PiArDQo+ID4+PiArICByZWc6DQo+ID4+PiArICAgIG1pbkl0
-ZW1zOiAxDQo+ID4+PiArICAgIGl0ZW1zOg0KPiA+Pj4gKyAgICAgIC0gZGVzY3JpcHRpb246IGFk
-ZHJlc3Mgb2Zmc2V0IGFuZCByYW5nZSBvZiByZWdpc3Rlcg0KPiA+Pj4gKyAgICAgIC0gZGVzY3Jp
-cHRpb246IGFkZHJlc3Mgb2Zmc2V0IGFuZCByYW5nZSBvZiBidWZmZXIgcmVnaXN0ZXINCj4gPj4N
-Cj4gPj4gV2h5IHRoaXMgaXMgb3B0aW9uYWw/DQo+ID4NCj4gPiBXaWxsIG1vZGlmeSBtaW5JdGVt
-czogMSB0byAyDQo+ID4+DQo+ID4+PiArDQo+ID4+PiArICBpbnRlcnJ1cHRzOg0KPiA+Pj4gKyAg
-ICBtYXhJdGVtczogMQ0KPiA+Pj4gKw0KPiA+Pj4gKyAgY2xvY2tzOg0KPiA+Pj4gKyAgICBtYXhJ
-dGVtczogMQ0KPiA+Pj4gKyAgICBkZXNjcmlwdGlvbjoNCj4gPj4+ICsgICAgICBSZWZlcmVuY2Ug
-Y2xvY2sgZm9yIHRoZSBJMkMgYnVzDQo+ID4+PiArDQo+ID4+PiArICByZXNldHM6DQo+ID4+PiAr
-ICAgIG1heEl0ZW1zOiAxDQo+ID4+PiArDQo+ID4+PiArICBjbG9jay1mcmVxdWVuY3k6DQo+ID4+
-PiArICAgIGRlc2NyaXB0aW9uOg0KPiA+Pj4gKyAgICAgIERlc2lyZWQgSTJDIGJ1cyBjbG9jayBm
-cmVxdWVuY3kgaW4gSHouIGRlZmF1bHQgMTAwa2h6Lg0KPiA+Pj4gKw0KPiA+Pj4gKyAgbXVsdGkt
-bWFzdGVyOg0KPiA+Pj4gKyAgICB0eXBlOiBib29sZWFuDQo+ID4+PiArICAgIGRlc2NyaXB0aW9u
-Og0KPiA+Pj4gKyAgICAgIHN0YXRlcyB0aGF0IHRoZXJlIGlzIGFub3RoZXIgbWFzdGVyIGFjdGl2
-ZSBvbiB0aGlzIGJ1cw0KPiA+Pg0KPiA+PiBEcm9wIGRlc2NyaXB0aW9uIGFuZCB0eXBlLiBKdXN0
-IDp0cnVlLg0KPiA+Pg0KPiA+IFNpbmNlIGkyYy50eHQgaGF2ZSBtdWx0aS1tYXN0ZXIgd2lsbCBk
-cm9wIGl0Lg0KPiA+Pj4gKw0KPiA+Pj4gKyAgdGltZW91dDoNCj4gPj4+ICsgICAgdHlwZTogYm9v
-bGVhbg0KPiA+Pj4gKyAgICBkZXNjcmlwdGlvbjogRW5hYmxlIGkyYyBidXMgdGltZW91dCBmb3Ig
-bWFzdGVyL3NsYXZlICgzNW1zKQ0KPiA+Pg0KPiA+PiBXaHkgdGhpcyBpcyBwcm9wZXJ0eSBmb3Ig
-RFQ/IEl0J3MgZm9yIHN1cmUgbm90IGJvb2wsIGJ1dCBwcm9wZXIgdHlwZQ0KPiA+PiBjb21pbmcg
-ZnJvbSB1bml0cy4NCj4gPiBUaGlzIGlzIGkyYyBjb250cm9sbGVyIGZlYXR1cmUgZm9yIGVuYWJs
-ZSBzbGF2ZSBtb2RlIGluYWN0aXZlIHRpbWVvdXQNCj4gPiBhbmQgYWxzbyBtYXN0ZXIgbW9kZSBz
-ZGEvc2NsIGF1dG8gcmVsZWFzZSB0aW1lb3V0Lg0KPiA+IFNvIEkgd2lsbCBtb2RpZnkgdG8NCj4g
-PiAgIGFzcGVlZCx0aW1lb3V0Og0KPiA+IAl0eXBlOiBib29sZWFuDQo+ID4gICAgIGRlc2NyaXB0
-aW9uOiBJMkMgYnVzIHRpbWVvdXQgZW5hYmxlIGZvciBtYXN0ZXIvc2xhdmUgbW9kZQ0KPiANCj4g
-VGhpcyBkb2VzIG5vdCBhbnN3ZXIgbXkgY29uY2VybnMuIFdoeSB0aGlzIGlzIGJvYXJkIHNwZWNp
-ZmljPw0KU29ycnksIGNhbuKAmXQgY2F0Y2ggeW91ciBwb2ludC4NCkl0IGlzIG5vdCBib2FyZCBz
-cGVjaWZpYy4gSXQgaXMgY29udHJvbGxlciBmZWF0dXJlLg0KQVNQRUVEIFNPQyBjaGlwIGlzIHNl
-cnZlciBwcm9kdWN0LCBtYXN0ZXIgY29ubmVjdCBtYXkgaGF2ZSBmaW5nZXJwcmludA0KY29ubmVj
-dCB0byBhbm90aGVyIGJvYXJkLiBBbmQgYWxzbyBzdXBwb3J0IGhvdHBsdWcuDQpGb3IgZXhhbXBs
-ZSBJMkMgY29udHJvbGxlciBhcyBzbGF2ZSBtb2RlLCBhbmQgc3VkZGVubHkgZGlzY29ubmVjdGVk
-Lg0KU2xhdmUgc3RhdGUgbWFjaGluZSB3aWxsIGtlZXAgd2FpdGluZyBmb3IgbWFzdGVyIGNsb2Nr
-IGluIGZvciByeC90eCB0cmFuc2Zlci4NClNvIGl0IG5lZWQgdGltZW91dCBzZXR0aW5nIHRvIGVu
-YWJsZSB0aW1lb3V0IHVubG9jayBjb250cm9sbGVyIHN0YXRlLg0KQW5kIGluIGFub3RoZXIgc2lk
-ZS4gQXMgbWFzdGVyIG1vZGUsIHNsYXZlIGlzIGNsb2NrIHN0cmV0Y2hpbmcuDQpUaGUgbWFzdGVy
-IHdpbGwgYmUga2VlcCB3YWl0aW5nLCB1bnRpbCBzbGF2ZSByZWxlYXNlIGNsbCBzdHJldGNoaW5n
-Lg0KDQpTbyBpbiB0aG9zZSByZWFzb24gYWRkIHRoaXMgdGltZW91dCBkZXNpZ24gaW4gY29udHJv
-bGxlci4gDQo+IA0KPiA+DQo+ID4+PiArDQo+ID4+PiArICBieXRlLW1vZGU6DQo+ID4+PiArICAg
-IHR5cGU6IGJvb2xlYW4NCj4gPj4+ICsgICAgZGVzY3JpcHRpb246IEZvcmNlIGkyYyBkcml2ZXIg
-dXNlIGJ5dGUgbW9kZSB0cmFuc21pdA0KPiA+Pg0KPiA+PiBEcm9wLCBub3QgYSBEVCBwcm9wZXJ0
-eS4NCj4gPj4NCj4gPj4+ICsNCj4gPj4+ICsgIGJ1ZmYtbW9kZToNCj4gPj4+ICsgICAgdHlwZTog
-Ym9vbGVhbg0KPiA+Pj4gKyAgICBkZXNjcmlwdGlvbjogRm9yY2UgaTJjIGRyaXZlciB1c2UgYnVm
-ZmVyIG1vZGUgdHJhbnNtaXQNCj4gPj4NCj4gPj4gRHJvcCwgbm90IGEgRFQgcHJvcGVydHkuDQo+
-ID4+DQo+ID4gVGhlIGNvbnRyb2xsZXIgc3VwcG9ydCAzIGRpZmZlcmVudCBmb3IgdHJhbnNmZXIu
-DQo+ID4gQnl0ZSBtb2RlOiBpdCBtZWFucyBzdGVwIGJ5IHN0ZXAgdG8gaXNzdWUgdHJhbnNmZXIu
-DQo+ID4gRXhhbXBsZSBpMmMgcmVhZCwgZWFjaCBzdGVwIHdpbGwgaXNzdWUgaW50ZXJydXB0IHRo
-ZW4gZW5hYmxlIG5leHQgc3RlcC4NCj4gPiBTciAoc3RhcnQgcmVhZCkgfCBEIHwgRCB8IEQgfCBQ
-DQo+ID4gQnVmZmVyIG1vZGU6IGl0IG1lYW5zLCB0aGUgZGF0YSBjYW4gcHJlcGFyZSBpbnRvIGJ1
-ZmZlciByZWdpc3RlciwgdGhlbg0KPiA+IFRyaWdnZXIgdHJhbnNmZXIuIFNvIFNyIEQgRCBEIFAs
-IG9ubHkgaGF2ZSBvbmx5IDEgaW50ZXJydXB0IGhhbmRsaW5nLg0KPiA+IFRoZSBETUEgbW9kZSBt
-b3N0IGxpa2Ugd2l0aCBidWZmZXIgbW9kZSwgVGhlIGRpZmZlciBpcyBkYXRhIHByZXBhcmUgaW4N
-Cj4gPiBEUkFNLCB0aGFuIHRyaWdnZXIgdHJhbnNmZXIuDQo+ID4NCj4gPiBTbywgc2hvdWxkIEkg
-bW9kaWZ5IHRvDQo+ID4gICBhc3BlZWQsYnl0ZToNCj4gPiAJdHlwZTogYm9vbGVhbg0KPiA+ICAg
-ICBkZXNjcmlwdGlvbjogRW5hYmxlIGkyYyBjb250cm9sbGVyIHRyYW5zZmVyIHdpdGggYnl0ZSBt
-b2RlDQo+ID4NCj4gPiAgIGFzcGVlZCxidWZmOg0KPiA+IAl0eXBlOiBib29sZWFuDQo+ID4gICAg
-IGRlc2NyaXB0aW9uOiBFbmFibGUgaTJjIGNvbnRyb2xsZXIgdHJhbnNmZXIgd2l0aCBidWZmIG1v
-ZGUNCj4gDQo+IDEuIE5vLCB0aGVzZSBhcmUgbm90IGJvb2xzIGJ1dCBlbnVtIGluIHN1Y2ggY2Fz
-ZS4NCg0KVGhhbmtzLCB3aWxsIG1vZGlmeSBmb2xsb3dpbmcuDQphc3BlZWQseGZlcl9tb2RlOg0K
-ICAgIGVudW06IFswLCAxLCAyXQ0KICAgIGRlc2NyaXB0aW9uOg0KICAgICAgMDogYnl0ZSBtb2Rl
-LCAxOiBidWZmX21vZGUsIDI6IGRtYV9tb2RlDQoNCj4gMi4gQW5kIHdoeSBleGFjdGx5IHRoaXMg
-aXMgYm9hcmQtc3BlY2lmaWM/DQoNCk5vLCBpdCBub3QgZGVwZW5kcyBvbiBib2FyZCBkZXNpZ24u
-IEl0IGlzIG9ubHkgZm9yIHJlZ2lzdGVyIGNvbnRyb2wgZm9yIGNvbnRyb2xsZXIgdHJhbnNmZXIg
-YmVoYXZlLg0KVGhlIGNvbnRyb2xsZXIgc3VwcG9ydCAzIGRpZmZlcmVudCB0cmlnZ2VyIG1vZGUg
-Zm9yIHRyYW5zZmVyLg0KQXNzaWduIGJ1cyMxIH4gMyA6IGRtYSB0cmFuZmVyIGFuZCBhc3NpZ24g
-YnVzIzQgfiA2IDogYnVmZmVyIG1vZGUgdHJhbnNmZXIsDQpUaGF0IGNhbiByZWR1Y2UgdGhlIGRy
-YW0gdXNhZ2UuIA0KDQpCZXN0IHJlZ2FyZHMsDQpSeWFuDQo=
+
+
+On 14/02/2023 21:23, Elliot Berman wrote:
+> 
+> Gunyah VM manager is a kernel moduel which exposes an interface to
+> Gunyah userspace to load, run, and interact with other Gunyah virtual
+> machines. The interface is a character device at /dev/gunyah.
+> 
+> Add a basic VM manager driver. Upcoming patches will add more ioctls
+> into this driver.
+> 
+> Co-developed-by: Prakruthi Deepak Heragu <quic_pheragu@quicinc.com>
+> Signed-off-by: Prakruthi Deepak Heragu <quic_pheragu@quicinc.com>
+> Signed-off-by: Elliot Berman <quic_eberman@quicinc.com>
+> ---
+>   .../userspace-api/ioctl/ioctl-number.rst      |   1 +
+>   drivers/virt/gunyah/Makefile                  |   2 +-
+>   drivers/virt/gunyah/rsc_mgr.c                 |  37 +++++-
+>   drivers/virt/gunyah/vm_mgr.c                  | 118 ++++++++++++++++++
+>   drivers/virt/gunyah/vm_mgr.h                  |  22 ++++
+>   include/uapi/linux/gunyah.h                   |  23 ++++
+>   6 files changed, 201 insertions(+), 2 deletions(-)
+>   create mode 100644 drivers/virt/gunyah/vm_mgr.c
+>   create mode 100644 drivers/virt/gunyah/vm_mgr.h
+>   create mode 100644 include/uapi/linux/gunyah.h
+> 
+> diff --git a/Documentation/userspace-api/ioctl/ioctl-number.rst b/Documentation/userspace-api/ioctl/ioctl-number.rst
+> index 0a1882e296ae..2513324ae7be 100644
+> --- a/Documentation/userspace-api/ioctl/ioctl-number.rst
+> +++ b/Documentation/userspace-api/ioctl/ioctl-number.rst
+> @@ -137,6 +137,7 @@ Code  Seq#    Include File                                           Comments
+>   'F'   DD     video/sstfb.h                                           conflict!
+>   'G'   00-3F  drivers/misc/sgi-gru/grulib.h                           conflict!
+>   'G'   00-0F  xen/gntalloc.h, xen/gntdev.h                            conflict!
+> +'G'   00-0f  linux/gunyah.h                                          conflict!
+>   'H'   00-7F  linux/hiddev.h                                          conflict!
+>   'H'   00-0F  linux/hidraw.h                                          conflict!
+>   'H'   01     linux/mei.h                                             conflict!
+> diff --git a/drivers/virt/gunyah/Makefile b/drivers/virt/gunyah/Makefile
+> index de29769f2f3f..03951cf82023 100644
+> --- a/drivers/virt/gunyah/Makefile
+> +++ b/drivers/virt/gunyah/Makefile
+> @@ -2,5 +2,5 @@
+>   
+>   obj-$(CONFIG_GUNYAH) += gunyah.o
+>   
+> -gunyah_rsc_mgr-y += rsc_mgr.o rsc_mgr_rpc.o
+> +gunyah_rsc_mgr-y += rsc_mgr.o rsc_mgr_rpc.o vm_mgr.o
+>   obj-$(CONFIG_GUNYAH) += gunyah_rsc_mgr.o
+> diff --git a/drivers/virt/gunyah/rsc_mgr.c b/drivers/virt/gunyah/rsc_mgr.c
+> index 2a47139873a8..73c5a6b7cbbc 100644
+> --- a/drivers/virt/gunyah/rsc_mgr.c
+> +++ b/drivers/virt/gunyah/rsc_mgr.c
+> @@ -16,8 +16,10 @@
+>   #include <linux/completion.h>
+>   #include <linux/gunyah_rsc_mgr.h>
+>   #include <linux/platform_device.h>
+> +#include <linux/miscdevice.h>
+>   
+>   #include "rsc_mgr.h"
+> +#include "vm_mgr.h"
+>   
+>   #define RM_RPC_API_VERSION_MASK		GENMASK(3, 0)
+>   #define RM_RPC_HEADER_WORDS_MASK	GENMASK(7, 4)
+> @@ -103,6 +105,8 @@ struct gh_rm {
+>   	struct kmem_cache *cache;
+>   	struct mutex send_lock;
+>   	struct blocking_notifier_head nh;
+> +
+> +	struct miscdevice miscdev;
+>   };
+>   
+>   static struct gh_rm_connection *gh_rm_alloc_connection(__le32 msg_id, u8 type)
+> @@ -509,6 +513,21 @@ void put_gh_rm(struct gh_rm *rm)
+>   }
+>   EXPORT_SYMBOL_GPL(put_gh_rm);
+>   
+> +static long gh_dev_ioctl(struct file *filp, unsigned int cmd, unsigned long arg)
+> +{
+> +	struct miscdevice *miscdev = filp->private_data;
+> +	struct gh_rm *rm = container_of(miscdev, struct gh_rm, miscdev);
+> +
+> +	return gh_dev_vm_mgr_ioctl(rm, cmd, arg);
+> +}
+> +
+> +static const struct file_operations gh_dev_fops = {
+> +	.owner		= THIS_MODULE,
+> +	.unlocked_ioctl	= gh_dev_ioctl,
+> +	.compat_ioctl	= compat_ptr_ioctl,
+> +	.llseek		= noop_llseek,
+> +};
+> +
+>   static int gh_msgq_platform_probe_direction(struct platform_device *pdev,
+>   					bool tx, int idx, struct gunyah_resource *ghrsc)
+>   {
+> @@ -567,7 +586,22 @@ static int gh_rm_drv_probe(struct platform_device *pdev)
+>   	rm->msgq_client.rx_callback = gh_rm_msgq_rx_data;
+>   	rm->msgq_client.tx_done = gh_rm_msgq_tx_done;
+>   
+> -	return gh_msgq_init(&pdev->dev, &rm->msgq, &rm->msgq_client, &rm->tx_ghrsc, &rm->rx_ghrsc);
+> +	ret = gh_msgq_init(&pdev->dev, &rm->msgq, &rm->msgq_client, &rm->tx_ghrsc, &rm->rx_ghrsc);
+> +	if (ret)
+> +		goto err_cache;
+> +
+> +	rm->miscdev.name = "gunyah";
+> +	rm->miscdev.minor = MISC_DYNAMIC_MINOR;
+> +	rm->miscdev.fops = &gh_dev_fops;
+> +
+> +	ret = misc_register(&rm->miscdev);
+> +	if (ret)
+> +		goto err_msgq;
+> +
+> +	return 0;
+> +err_msgq:
+> +	mbox_free_channel(gh_msgq_chan(&rm->msgq));
+> +	gh_msgq_remove(&rm->msgq);
+>   err_cache:
+>   	kmem_cache_destroy(rm->cache);
+>   	return ret;
+> @@ -577,6 +611,7 @@ static int gh_rm_drv_remove(struct platform_device *pdev)
+>   {
+>   	struct gh_rm *rm = platform_get_drvdata(pdev);
+>   
+> +	misc_deregister(&rm->miscdev);
+>   	mbox_free_channel(gh_msgq_chan(&rm->msgq));
+>   	gh_msgq_remove(&rm->msgq);
+>   	kmem_cache_destroy(rm->cache);
+> diff --git a/drivers/virt/gunyah/vm_mgr.c b/drivers/virt/gunyah/vm_mgr.c
+> new file mode 100644
+> index 000000000000..fd890a57172e
+> --- /dev/null
+> +++ b/drivers/virt/gunyah/vm_mgr.c
+> @@ -0,0 +1,118 @@
+> +// SPDX-License-Identifier: GPL-2.0-only
+> +/*
+> + * Copyright (c) 2022-2023 Qualcomm Innovation Center, Inc. All rights reserved.
+> + */
+> +
+> +#define pr_fmt(fmt) "gh_vm_mgr: " fmt
+> +
+> +#include <linux/anon_inodes.h>
+> +#include <linux/file.h>
+> +#include <linux/gunyah_rsc_mgr.h>
+> +#include <linux/miscdevice.h>
+> +#include <linux/module.h>
+> +
+> +#include <uapi/linux/gunyah.h>
+> +
+> +#include "vm_mgr.h"
+> +
+> +static void gh_vm_free(struct work_struct *work)
+> +{
+> +	struct gh_vm *ghvm = container_of(work, struct gh_vm, free_work);
+> +	int ret;
+> +
+> +	ret = gh_rm_dealloc_vmid(ghvm->rm, ghvm->vmid);
+> +	if (ret)
+> +		pr_warn("Failed to deallocate vmid: %d\n", ret);
+> +
+> +	put_gh_rm(ghvm->rm);
+> +	kfree(ghvm);
+> +}
+> +
+> +static __must_check struct gh_vm *gh_vm_alloc(struct gh_rm *rm)
+> +{
+> +	struct gh_vm *ghvm;
+> +	int vmid;
+> +
+> +	vmid = gh_rm_alloc_vmid(rm, 0);
+> +	if (vmid < 0)
+> +		return ERR_PTR(vmid);
+> +
+> +	ghvm = kzalloc(sizeof(*ghvm), GFP_KERNEL);
+> +	if (!ghvm) {
+> +		gh_rm_dealloc_vmid(rm, vmid);
+> +		return ERR_PTR(-ENOMEM);
+> +	}
+> +
+> +	get_gh_rm(rm);
+> +
+> +	ghvm->vmid = vmid;
+> +	ghvm->rm = rm;
+> +
+> +	INIT_WORK(&ghvm->free_work, gh_vm_free);
+> +
+> +	return ghvm;
+> +}
+> +
+> +static int gh_vm_release(struct inode *inode, struct file *filp)
+> +{
+> +	struct gh_vm *ghvm = filp->private_data;
+> +
+> +	/* VM will be reset and make RM calls which can interruptible sleep.
+> +	 * Defer to a work so this thread can receive signal.
+> +	 */
+> +	schedule_work(&ghvm->free_work);
+> +	return 0;
+> +}
+> +
+> +static const struct file_operations gh_vm_fops = {
+> +	.release = gh_vm_release,
+
+> +	.compat_ioctl	= compat_ptr_ioctl,
+
+This line should go with the patch that adds real ioctl
+
+> +	.llseek = noop_llseek,
+> +};
+> +
+> +static long gh_dev_ioctl_create_vm(struct gh_rm *rm, unsigned long arg)
+Not sure what is the gain of this multiple levels of redirection.
+
+How about
+
+long gh_dev_create_vm(struct gh_rm *rm, unsigned long arg)
+{
+...
+}
+
+and rsc_mgr just call it as part of its ioctl call
+
+static long gh_dev_ioctl(struct file *filp, unsigned int cmd, unsigned 
+long arg)
+{
+	struct miscdevice *miscdev = filp->private_data;
+	struct gh_rm *rm = container_of(miscdev, struct gh_rm, miscdev);
+
+	switch (cmd) {
+	case GH_CREATE_VM:
+		return gh_dev_create_vm(rm, arg);
+	default:
+		return -ENOIOCTLCMD;
+	}
+}
+
+
+> +{
+> +	struct gh_vm *ghvm;
+> +	struct file *file;
+> +	int fd, err;
+> +
+> +	/* arg reserved for future use. */
+> +	if (arg)
+> +		return -EINVAL;
+
+The only code path I see here is via GH_CREATE_VM ioctl which obviously 
+does not take any arguments, so if you are thinking of using the 
+argument for architecture-specific VM flags.  Then this needs to be 
+properly done by making the ABI aware of this.
+
+As you mentioned zero value arg imply an "unauthenticated VM" type, but 
+this was not properly encoded in the userspace ABI. Why not make it 
+future compatible. How about adding arguments to GH_CREATE_VM and pass 
+the required information correctly.
+Note that once the ABI is accepted then you will not be able to change 
+it, other than adding a new one.
+
+> +
+> +	ghvm = gh_vm_alloc(rm);
+> +	if (IS_ERR(ghvm))
+> +		return PTR_ERR(ghvm);
+> +
+> +	fd = get_unused_fd_flags(O_CLOEXEC);
+> +	if (fd < 0) {
+> +		err = fd;
+> +		goto err_destroy_vm;
+> +	}
+> +
+> +	file = anon_inode_getfile("gunyah-vm", &gh_vm_fops, ghvm, O_RDWR);
+> +	if (IS_ERR(file)) {
+> +		err = PTR_ERR(file);
+> +		goto err_put_fd;
+> +	}
+> +
+> +	fd_install(fd, file);
+> +
+> +	return fd;
+> +
+> +err_put_fd:
+> +	put_unused_fd(fd);
+> +err_destroy_vm:
+> +	kfree(ghvm);
+> +	return err;
+> +}
+> +
+> +long gh_dev_vm_mgr_ioctl(struct gh_rm *rm, unsigned int cmd, unsigned long arg)
+> +{
+> +	switch (cmd) {
+> +	case GH_CREATE_VM:
+> +		return gh_dev_ioctl_create_vm(rm, arg);
+> +	default:
+> +		return -ENOIOCTLCMD;
+> +	}
+> +}
+> diff --git a/drivers/virt/gunyah/vm_mgr.h b/drivers/virt/gunyah/vm_mgr.h
+> new file mode 100644
+> index 000000000000..76954da706e9
+> --- /dev/null
+> +++ b/drivers/virt/gunyah/vm_mgr.h
+> @@ -0,0 +1,22 @@
+> +/* SPDX-License-Identifier: GPL-2.0-only */
+> +/*
+> + * Copyright (c) 2022-2023 Qualcomm Innovation Center, Inc. All rights reserved.
+> + */
+> +
+> +#ifndef _GH_PRIV_VM_MGR_H
+> +#define _GH_PRIV_VM_MGR_H
+> +
+> +#include <linux/gunyah_rsc_mgr.h>
+> +
+> +#include <uapi/linux/gunyah.h>
+> +
+> +long gh_dev_vm_mgr_ioctl(struct gh_rm *rm, unsigned int cmd, unsigned long arg);
+> +
+> +struct gh_vm {
+> +	u16 vmid;
+> +	struct gh_rm *rm;
+> +
+> +	struct work_struct free_work;
+> +};
+> +
+> +#endif
+> diff --git a/include/uapi/linux/gunyah.h b/include/uapi/linux/gunyah.h
+> new file mode 100644
+> index 000000000000..10ba32d2b0a6
+> --- /dev/null
+> +++ b/include/uapi/linux/gunyah.h
+> @@ -0,0 +1,23 @@
+> +/* SPDX-License-Identifier: GPL-2.0-only WITH Linux-syscall-note */
+> +/*
+> + * Copyright (c) 2022-2023 Qualcomm Innovation Center, Inc. All rights reserved.
+> + */
+> +
+> +#ifndef _UAPI_LINUX_GUNYAH
+> +#define _UAPI_LINUX_GUNYAH
+> +
+> +/*
+> + * Userspace interface for /dev/gunyah - gunyah based virtual machine
+> + */
+> +
+> +#include <linux/types.h>
+> +#include <linux/ioctl.h>
+> +
+> +#define GH_IOCTL_TYPE			'G'
+> +
+> +/*
+> + * ioctls for /dev/gunyah fds:
+> + */
+> +#define GH_CREATE_VM			_IO(GH_IOCTL_TYPE, 0x0) /* Returns a Gunyah VM fd */
+
+Can HLOS forcefully destroy a VM?
+If so should we have a corresponding DESTROY IOCTL?
+
+--srini
+
+> +
+> +#endif
