@@ -2,117 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D9BDC69D7DA
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 02:04:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CE87B69D7E4
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 02:09:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232958AbjBUBD7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Feb 2023 20:03:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45830 "EHLO
+        id S232977AbjBUBJm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Feb 2023 20:09:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48168 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229560AbjBUBD6 (ORCPT
+        with ESMTP id S232969AbjBUBJj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Feb 2023 20:03:58 -0500
-Received: from mail-il1-x132.google.com (mail-il1-x132.google.com [IPv6:2607:f8b0:4864:20::132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59A2E1D93B;
-        Mon, 20 Feb 2023 17:03:57 -0800 (PST)
-Received: by mail-il1-x132.google.com with SMTP id u6so1069221ilk.12;
-        Mon, 20 Feb 2023 17:03:57 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=MSoAw1HAKXRXOgJTEME+O4818u/LTQvYW/6HrMBUD+I=;
-        b=XDEwTO+JGDej4hjSXoHQjZu2iP121FogSD2B1wPt2x9fOxRn/vSYiSHmYMVS+2MowE
-         cEbXM4taPto8BKWrFvMRQNUcYu6Q+bYVmLmfULueZh5FyFgzGaqIiYSOd4iCM4YMemF4
-         SqiNUyqzWJibIPUJb/Zbzkeiwk1PJb1rapYP6wzySxHuGgw0QzNWRZOTnuQSPsYr5OCT
-         DqEG51/HSvnzbzUpDOBXi8+TCVoREEO8Ah5ymxv//tvLCsK2zWow7jSsVOwWzm9dKLTD
-         Bbrf4CT/8G0GqFAzeJnZhCSPppbrZzkouuI70Ll4rMk885QgPW57p23vv5b4Rjq75UQX
-         rNCA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=MSoAw1HAKXRXOgJTEME+O4818u/LTQvYW/6HrMBUD+I=;
-        b=rHl4q9/vX380jrzL827y/edvazNPhGdLGONHlslgvBuHN0Bw+3uUBF3DgDPcHkNp3i
-         g8sLsKMwxU4eqB4cuKTHCN7tv1s7zWDxnclbws25VzxI/kRMSxpAv1i4GGA8VTpwk9S2
-         xQ5ck+3HggShl4YCJU68jmVSZfW6VXYiVs1D0FesnLCFyt61kCtaIddPV2Z2oHP6SHvO
-         6U2BLGSqdOu32EYKlJ913T4FXl00CGaPdCEEFAOnY+IKSGbrQUC02sOhDg+0GYqFx2Gd
-         wixnZMYV4dI+/JGgdlNdOuu5PsPMtJvcyBms9/LLbHtphGft4gg8Qrmk0vFjKMd4zOPn
-         2rpQ==
-X-Gm-Message-State: AO0yUKVZg0Z/4+wFk/Ro8xscjuYFD3LSYtP5UkwydjQY1D3IkfVbs7Ym
-        /Lo1XM6qnZCS32arOJt90Xo=
-X-Google-Smtp-Source: AK7set90a5jKbMQYwuP9wfiD3DNFkSxKJrZLqm5Ryud3NLvTwIBcg7MnYliVSvZV7aOBoSvVYJfnGQ==
-X-Received: by 2002:a92:7b12:0:b0:315:8f82:4d4 with SMTP id w18-20020a927b12000000b003158f8204d4mr2431967ilc.0.1676941436453;
-        Mon, 20 Feb 2023 17:03:56 -0800 (PST)
-Received: from localhost.localdomain (bras-base-toroon4321w-grc-52-76-71-25-91.dsl.bell.ca. [76.71.25.91])
-        by smtp.gmail.com with ESMTPSA id n13-20020a02cc0d000000b003bf35a3cc3bsm870882jap.85.2023.02.20.17.03.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 20 Feb 2023 17:03:56 -0800 (PST)
-From:   Mohammad Mahfooz <mohammadmahfoozpersonal@gmail.com>
-To:     jirislaby@kernel.org
-Cc:     alexander.vorwerk@stud.uni-goettingen.de,
-        gregkh@linuxfoundation.org, ilpo.jarvinen@linux.intel.com,
-        johan@kernel.org, linux-kernel@vger.kernel.org,
-        linux-serial@vger.kernel.org, mohammadmahfoozpersonal@gmail.com
-Subject: [PATCH] serial: jsm: Change n to unsigned int
-Date:   Mon, 20 Feb 2023 20:03:39 -0500
-Message-Id: <20230221010339.3032-1-mohammadmahfoozpersonal@gmail.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <70ea8ee5-3f92-fe1c-c59d-74040bd1e610@kernel.org>
-References: <70ea8ee5-3f92-fe1c-c59d-74040bd1e610@kernel.org>
+        Mon, 20 Feb 2023 20:09:39 -0500
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB05E9EF1;
+        Mon, 20 Feb 2023 17:09:38 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1676941778; x=1708477778;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=A+KGKw+5Btk54DfTXju4UW/yull7lBkhCraeVCjeaOk=;
+  b=esAWOV/HZGFA8osgRZUkJ6U9bdeZ06JH+HDXaogN7VQvGHE3XnesuRZi
+   Pg6BYKL9Cm+XjgRexIvDyJunKZebiiSo/c/8sY+8AcADGV9KGs5LGMoUa
+   6XePTB/kScsc1t7mSP8O58xVvKaeGgcGOQF+lqdz9kPRCKzyrUEmh/OXf
+   b7lSogEnNhnaJ9jUc9sUfmQwvCMsBNAvD59pZNbOOAQmQJglT8RL0WE6E
+   byo8m0GuZw1/f/rcNxYiS5oTCDhiWLwpYG4v9dgvxG1L29KN8Sa/qNDPv
+   T3mL8O4hDTb30Iu52J3YUKb30nkNiye4q0m1jf6FcwLtkoWy5D87rq2cX
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10627"; a="320644064"
+X-IronPort-AV: E=Sophos;i="5.97,314,1669104000"; 
+   d="scan'208";a="320644064"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Feb 2023 17:09:38 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10627"; a="795327514"
+X-IronPort-AV: E=Sophos;i="5.97,314,1669104000"; 
+   d="scan'208";a="795327514"
+Received: from lkp-server01.sh.intel.com (HELO 4455601a8d94) ([10.239.97.150])
+  by orsmga004.jf.intel.com with ESMTP; 20 Feb 2023 17:09:36 -0800
+Received: from kbuild by 4455601a8d94 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pUH9z-000EIL-2c;
+        Tue, 21 Feb 2023 01:09:35 +0000
+Date:   Tue, 21 Feb 2023 09:08:41 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Jeremi Piotrowski <jpiotrowski@linux.microsoft.com>,
+        linux-kernel@vger.kernel.org
+Cc:     oe-kbuild-all@lists.linux.dev,
+        Jeremi Piotrowski <jpiotrowski@linux.microsoft.com>,
+        netdev@vger.kernel.org, Richard Cochran <richardcochran@gmail.com>,
+        Christoph Hellwig <hch@lst.de>
+Subject: Re: [PATCH] ptp: kvm: Use decrypted memory in confidential guest on
+ x86
+Message-ID: <202302210943.Xq84rrhU-lkp@intel.com>
+References: <20230220130235.2603366-1-jpiotrowski@linux.microsoft.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230220130235.2603366-1-jpiotrowski@linux.microsoft.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Change n to an unsigned int and remove casts from min()s.
+Hi Jeremi,
 
-Signed-off-by: Mohammad Mahfooz <mohammadmahfoozpersonal@gmail.com>
----
- drivers/tty/serial/jsm/jsm_neo.c | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+Thank you for the patch! Perhaps something to improve:
 
-diff --git a/drivers/tty/serial/jsm/jsm_neo.c b/drivers/tty/serial/jsm/jsm_neo.c
-index 4cce1e423b06..394121870436 100644
---- a/drivers/tty/serial/jsm/jsm_neo.c
-+++ b/drivers/tty/serial/jsm/jsm_neo.c
-@@ -277,7 +277,7 @@ static void neo_copy_data_from_uart_to_queue(struct jsm_channel *ch)
- 	int qleft = 0;
- 	u8 linestatus = 0;
- 	u8 error_mask = 0;
--	int n = 0;
-+	u32 n = 0;
- 	int total = 0;
- 	u16 head;
- 	u16 tail;
-@@ -342,15 +342,15 @@ static void neo_copy_data_from_uart_to_queue(struct jsm_channel *ch)
- 			break;
- 
- 		/* Make sure we don't go over the end of our queue */
--		n = min(((u32) total), (RQUEUESIZE - (u32) head));
-+		n = min(total, RQUEUESIZE - head);
- 
- 		/*
- 		 * Cut down n even further if needed, this is to fix
- 		 * a problem with memcpy_fromio() with the Neo on the
- 		 * IBM pSeries platform.
--		 * 15 bytes max appears to be the magic number.
-+		 * 12 bytes max appears to be the magic number.
- 		 */
--		n = min_t(u32, n, 12);
-+		n = min(n, 12U);
- 
- 		/*
- 		 * Since we are grabbing the linestatus register, which
+[auto build test WARNING on horms-ipvs/master]
+[also build test WARNING on mst-vhost/linux-next net/master net-next/master linus/master v6.2]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Jeremi-Piotrowski/ptp-kvm-Use-decrypted-memory-in-confidential-guest-on-x86/20230220-210441
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/horms/ipvs.git master
+patch link:    https://lore.kernel.org/r/20230220130235.2603366-1-jpiotrowski%40linux.microsoft.com
+patch subject: [PATCH] ptp: kvm: Use decrypted memory in confidential guest on x86
+config: x86_64-allyesconfig (https://download.01.org/0day-ci/archive/20230221/202302210943.Xq84rrhU-lkp@intel.com/config)
+compiler: gcc-11 (Debian 11.3.0-8) 11.3.0
+reproduce (this is a W=1 build):
+        # https://github.com/intel-lab-lkp/linux/commit/0dd1701fd254692af3d0ca051e092e8dcef190c4
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Jeremi-Piotrowski/ptp-kvm-Use-decrypted-memory-in-confidential-guest-on-x86/20230220-210441
+        git checkout 0dd1701fd254692af3d0ca051e092e8dcef190c4
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        make W=1 O=build_dir ARCH=x86_64 olddefconfig
+        make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/
+
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202302210943.Xq84rrhU-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+   drivers/ptp/ptp_kvm_x86.c: In function 'kvm_arch_ptp_init':
+   drivers/ptp/ptp_kvm_x86.c:63:9: error: implicit declaration of function 'kvm_arch_ptp_exit'; did you mean 'kvm_arch_ptp_init'? [-Werror=implicit-function-declaration]
+      63 |         kvm_arch_ptp_exit();
+         |         ^~~~~~~~~~~~~~~~~
+         |         kvm_arch_ptp_init
+   drivers/ptp/ptp_kvm_x86.c: At top level:
+>> drivers/ptp/ptp_kvm_x86.c:68:6: warning: no previous prototype for 'kvm_arch_ptp_exit' [-Wmissing-prototypes]
+      68 | void kvm_arch_ptp_exit(void)
+         |      ^~~~~~~~~~~~~~~~~
+>> drivers/ptp/ptp_kvm_x86.c:68:6: warning: conflicting types for 'kvm_arch_ptp_exit'; have 'void(void)'
+   drivers/ptp/ptp_kvm_x86.c:63:9: note: previous implicit declaration of 'kvm_arch_ptp_exit' with type 'void(void)'
+      63 |         kvm_arch_ptp_exit();
+         |         ^~~~~~~~~~~~~~~~~
+   cc1: some warnings being treated as errors
+
+
+vim +/kvm_arch_ptp_exit +68 drivers/ptp/ptp_kvm_x86.c
+
+    67	
+  > 68	void kvm_arch_ptp_exit(void)
+    69	{
+    70		if (cc_platform_has(CC_ATTR_GUEST_MEM_ENCRYPT)) {
+    71			WARN_ON(set_memory_encrypted((unsigned long)clock_pair, 1));
+    72			free_page((unsigned long)clock_pair);
+    73			clock_pair = NULL;
+    74		}
+    75	}
+    76	
+
 -- 
-2.34.1
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
