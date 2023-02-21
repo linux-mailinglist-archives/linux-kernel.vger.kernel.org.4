@@ -2,78 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7619B69E9BB
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 22:48:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D16EC69E9BC
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 22:49:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230187AbjBUVsj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Feb 2023 16:48:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51462 "EHLO
+        id S230094AbjBUVtk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Feb 2023 16:49:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52434 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230163AbjBUVsg (ORCPT
+        with ESMTP id S229589AbjBUVth (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Feb 2023 16:48:36 -0500
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E419279B9;
-        Tue, 21 Feb 2023 13:48:34 -0800 (PST)
+        Tue, 21 Feb 2023 16:49:37 -0500
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 946B530B17
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Feb 2023 13:49:35 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=9wRyTrQMV/JTg5YpVENMGjnZWekiNX6igp9A3xduDzA=; b=Wk0SNPEDQo4F/o1PXV9LRYRXkD
-        yYE1HvlqaAYQgMElqRyy38wHa3mUpZChD2YsHuwAk4W66my+56RsNZGV17/f2MStXnznyjmfYky2z
-        GozltbUHR+P7mj9QmsKx2IB0Bkn8w7He77sd66RvJeAqIiYIjC5jtq+nJWTxP22FvSeJkCACvSE3/
-        1tMr/o0K7pemJlzvhKx4x+BYqjE/1L7wiBwgdlu5cHhGGFwiO4Tg/nWKCqueZTG4i4DxwMHFVITdB
-        +jvAlpzQTySYkjZlUsjkwZ+Fh9uopueEOEXQ2LbI21NggxnEvKClUWIin/gBKH52EJbUaq5NEz+tA
-        Gf+rkPUA==;
-Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1pUaV0-009sOz-7D; Tue, 21 Feb 2023 21:48:34 +0000
-Date:   Tue, 21 Feb 2023 13:48:34 -0800
-From:   Luis Chamberlain <mcgrof@kernel.org>
-To:     Nick Alcock <nick.alcock@oracle.com>
-Cc:     linux-modules@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, elena.zannoni@oracle.com
-Subject: Re: [PATCH modules-next v10 00/13] kallsyms: reliable
- symbol->address lookup with /proc/kallmodsyms
-Message-ID: <Y/U8MuL24OZzbIIp@bombadil.infradead.org>
-References: <20221205163157.269335-1-nick.alcock@oracle.com>
- <Y8b8TOJzd/RZXR8z@bombadil.infradead.org>
- <87r0uy3hkw.fsf@esperi.org.uk>
- <87bkm22y6e.fsf@esperi.org.uk>
+        d=infradead.org; s=casper.20170209; h=Content-Type:MIME-Version:Message-ID:
+        Subject:Cc:To:From:Date:Sender:Reply-To:Content-Transfer-Encoding:Content-ID:
+        Content-Description:In-Reply-To:References;
+        bh=tqUTdU7Oxabkpc2eX2yF/NoLMlUx0QIQ1Sh+WbBxTB0=; b=gFTVM+au7usG3SRVpcLGuZ0Jua
+        g2aPjaOkF6cMpH8l2keX0zC3RoATVpjJJP5mtxdn544c8Jy7oIUkTGfPMWueGme9uHfZ5tc4Oacyi
+        bSO5+jgwM+99YfnbzOYeQpd427DA4Gm6e1/3G+wqa5vkaYpvVL9XMrSa8/Z8gD2HCPNouQsY3WNwt
+        xzdtZDh+GDFug8xBmhcVQcz/1mBNjvYYk4NGd++LYQ6O7Ak3a/Q09A5KtiMtxx11SysOORiGSl601
+        q3YPqwAWZ3CwBjxHcYrPEsRGKtqIKjHtws6p2mpUx246N8Ok3LftlXFGmnGG/y8EmuIn8BWOre8B9
+        +JfY3BKA==;
+Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1pUaVx-00CweB-8t; Tue, 21 Feb 2023 21:49:33 +0000
+Date:   Tue, 21 Feb 2023 21:49:33 +0000
+From:   Matthew Wilcox <willy@infradead.org>
+To:     linux-mm@kvack.org
+Cc:     linux-kernel@vger.kernel.org
+Subject: What size anonymous folios should we allocate?
+Message-ID: <Y/U8bQd15aUO97vS@casper.infradead.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <87bkm22y6e.fsf@esperi.org.uk>
-Sender: Luis Chamberlain <mcgrof@infradead.org>
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 09, 2023 at 11:53:29PM +0000, Nick Alcock wrote:
-> [most people trimmed from the Cc: list for this procedural question]
-> 
-> On 9 Feb 2023, Nick Alcock outgrape:
-> > I am going to split this whole series into:
-> >
-> > 1. A series of patches (123 of them at present) Cc:ed to subsystem
-> > maintainers as well as you, to comment out the MODULE_LICENSE usage.
-> > These patches will have Suggested-by you. This series is rebased against
-> > the latest modules-next and revalidated, and is ready to be mailed out;
-> > will do so shortly.
-> 
-> One quick question: if/when you're happy with this series, are you
-> planning to take it yourself via modules-next?
+In a sense this question is premature, because we don't have any code
+in place to handle folios which are any size but PMD_SIZE or PAGE_SIZE,
+but let's pretend that code already exists and is just waiting for us
+to answer this policy question.
 
-It seems some maintainers are already taking patches in, so let's see
-what folks take in, then if there are not takers I can just take what is
-not merged on linux-next through modules-next.
+I'd like to reject three ideas up front: 1. a CONFIG option, 2. a boot
+option and 3. a sysfs tunable.  It is foolish to expect the distro
+packager or the sysadmin to be able to make such a decision.  The
+correct decision will depend upon the instantaneous workload of the
+entire machine and we'll want different answers for different VMAs.
 
-So try to get them into each subsystem tree, and around rc3 send the
-ones that are not merged and I'll just take them into modules-next.
+I'm open to applications having some kind of madvise() call they can
+use to specify hints, but I would prefer to handle memory efficiently
+for applications which do not.
 
-  Luis
+For pagecache memory, we use the per-fd readahead code; if readahead has
+been successful in the past we bump up the folio size until it reaches
+its maximum.  There is no equivalent for anonymous memory.
+
+I'm working my way towards a solution that looks a little like this:
+
+A. We modify khugepaged to quadruple the folio size each time it scans.
+   At the moment, it always attempts to promote straight from order 0
+   to PMD size.  Instead, if it finds four adjacent order-0 folios,
+   it will allocate an order-2 folio to replace them.  Next time it
+   scans, it finds four order-2 folios and replaces them with a single
+   order-4 folio.  And so on, up to PMD order.
+
+B. A further modification is that it will require three of the four
+   folios being combined to be on the active list.  If two (or more)
+   of the four folios are inactive, we should leave them alone; either
+   they will remain inactive and eventually be evicted, or they will be
+   activated and eligible for merging in a future pass of khugepaged.
+
+C. We add a new wrinkle to the LRU handling code.  When our scan of the
+   active list examines a folio, we look to see how many of the PTEs
+   mapping the folio have been accessed.  If it is fewer than half, and
+   those half are all in either the first or last half of the folio, we
+   split it.  The active half stays on the active list and the inactive
+   half is moved to the inactive list.
+
+I feel that these three changes should allow us to iterate towards a
+solution for any given VMA that is close to optimal, and adapts to a
+changing workload with no intervention from a sysadmin, or even hint
+from a program.
+
+There are three different circumstances where we currently allocate
+anonymous memory.  The first is for mmap(MAP_ANONYMOUS), the second is
+COW on a file-backed MAP_PRIVATE and the third is COW of a post-fork
+anonymous mapping.
+
+For the first option, the only hint we have is the size of the VMA.
+I'm tempted to suggest our initial guess at the right size folio to
+allocate should be scaled to that, although I don't have a clear idea
+about what the scale factor should be.
+
+For the second case, I want to strongly suggest that the size of the
+folio allocated by the page cache should be of no concern.  It is largely
+irrelevant to the application's usage pattern what size the page cache
+has chosen to cache the file.  I might start out very conservatively
+here with an order-0 allocation.
+
+For the third case, in contrast, the parent had already established
+an appropriate size folio to use for this VMA before calling fork().
+Whether it is the parent or the child causing the COW, it should probably
+inherit that choice and we should default to the same size folio that
+was already found.
+
+
+I don't stay current with the research literature, so if someone wants
+to point me to a well-studied algorithm and let me know that I can stop
+thinking about this, that'd be great.  And if anyone wants to start
+working on implementing this, that'd also be great.
+
+P.S. I didn't want to interrupt the flow of the above description to
+note that allocation of any high-order folio can and will fail, so
+there will definitely be fallback points to order-0 folios, which will
+be no different from today.  Except that maybe we'll be able to iterate
+towards the correct folio size in the new khugepaged.
+
+P.P.S. I still consider myself a bit of a novice in the handling of
+anonymous memory, so don't be shy to let me know what I got wrong.
