@@ -2,78 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C104B69D827
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 02:48:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7BCEF69D82C
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 02:51:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233035AbjBUBsc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Feb 2023 20:48:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37566 "EHLO
+        id S233043AbjBUBvA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Feb 2023 20:51:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38896 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232357AbjBUBsa (ORCPT
+        with ESMTP id S232357AbjBUBu7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Feb 2023 20:48:30 -0500
-Received: from mail-ot1-f51.google.com (mail-ot1-f51.google.com [209.85.210.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D4099EDA;
-        Mon, 20 Feb 2023 17:48:29 -0800 (PST)
-Received: by mail-ot1-f51.google.com with SMTP id bh19-20020a056830381300b00690bf2011b2so532580otb.6;
-        Mon, 20 Feb 2023 17:48:29 -0800 (PST)
+        Mon, 20 Feb 2023 20:50:59 -0500
+Received: from mail-ot1-f43.google.com (mail-ot1-f43.google.com [209.85.210.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DD0323304;
+        Mon, 20 Feb 2023 17:50:58 -0800 (PST)
+Received: by mail-ot1-f43.google.com with SMTP id v1-20020a9d6041000000b0068d4a8a8d2dso605293otj.12;
+        Mon, 20 Feb 2023 17:50:58 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=ccmohlnNuK61Zq2Pm+AusM0j8iaM96OwWbVNxMu3hkQ=;
-        b=yTDAcaW99eOWSlDGU/HK3rR57Ywc8D5FxsfXpIO5zP38/j0JFDrYyX9LsOYyxat1k9
-         CGZF9iaNcm4fl1i8dSyNXMhtcNz9UzFOsLms2D7CBHtvT7Y7OZd12mdp/Zv9e+DtYeY7
-         V6MwhIOEpwPTrmrnRp9/PHGf/Lp4602S3OngUQcXwyZ8YAC5QxkILLJLxLE3Iw1+AE64
-         fJ/67xaICvB2BqrHVJAreq25JEVaPNsjYNphW8e5wnLQ1EXkf2Kx6SVuUS8t5Kc7hxk+
-         3qtn6mBecjRyhlHE7Rompb4rfEH9qrhjHGQzDXjRTK5nr52LDAHNY3b2r0+gFNP6iK3X
-         Ic3Q==
-X-Gm-Message-State: AO0yUKX5URc66REuplorlBbsS3irp9E5D415xRfJ3y88nyPcoHTDr6sP
-        8HRAS3TbWaeLVGz07yCAng==
-X-Google-Smtp-Source: AK7set9YtYnryjeiLQnpZZHbAsYom5BpzmXxxi7u+CjIiNWfvZSix0P7dzN0AkCl9ByBwf/Vbv+A/w==
-X-Received: by 2002:a05:6830:2a11:b0:693:bdd8:62a9 with SMTP id y17-20020a0568302a1100b00693bdd862a9mr764204otu.7.1676944108672;
-        Mon, 20 Feb 2023 17:48:28 -0800 (PST)
+        bh=f7cw6r3h+sy92nVrOj9vtAg4F2Khjuuv4t+N6CSwXRw=;
+        b=owbrg46y5Ey1XM3xpG5D65lDBWw6Gq56HgBO9Bak5nL9b66HHVC1CpSlPPMwEq8alY
+         C3nXr06kLFZhVweqioiLSXSO47kKVukRXxdrVqYXwD/7xC3BwrYyemZCLzGpVZHjYotl
+         FDyoxrXZMA1MSg4AGz+WYhkTgYR1VsYibc97cFokVk0UHPqcRWyXEbQ1ODz8Qs5Hrvyk
+         i0gCOiL5jfbtlygwEeVl5Fe4AzcOP3MVP0/VLzLxKhCFYWwaSOxGIBftcivJmLp0ZHDQ
+         c2Njp/MrKhU+OGridMrE1HQMW1/dgQ6n4dYtkwC65XmUuSzatxCqgG57O74mSvM8N3C8
+         +lrA==
+X-Gm-Message-State: AO0yUKVRYS8eMmXXp0+WK2DWPusSAkQ8VhSxTFYowyohVLFDC9QJ8kVb
+        BmgRmFPbG4Vj2ighlkpoAQ==
+X-Google-Smtp-Source: AK7set+bB5699faE95OiA1q6FLdbO8PmTwz4O74GZEh5tvqsKPrHPS1v1Nen7kbUilHZqdN43Qwuqw==
+X-Received: by 2002:a05:6830:4125:b0:68f:339e:bb81 with SMTP id w37-20020a056830412500b0068f339ebb81mr1898079ott.30.1676944257616;
+        Mon, 20 Feb 2023 17:50:57 -0800 (PST)
 Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id l11-20020a9d7a8b000000b0068bd5af9b82sm5597945otn.43.2023.02.20.17.48.27
+        by smtp.gmail.com with ESMTPSA id s3-20020a9d58c3000000b00690dc5d9b9esm5267615oth.6.2023.02.20.17.50.56
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 20 Feb 2023 17:48:28 -0800 (PST)
-Received: (nullmailer pid 790312 invoked by uid 1000);
-        Tue, 21 Feb 2023 01:48:27 -0000
-Date:   Mon, 20 Feb 2023 19:48:27 -0600
+        Mon, 20 Feb 2023 17:50:57 -0800 (PST)
+Received: (nullmailer pid 793682 invoked by uid 1000);
+        Tue, 21 Feb 2023 01:50:56 -0000
+Date:   Mon, 20 Feb 2023 19:50:56 -0600
 From:   Rob Herring <robh@kernel.org>
-To:     Christian Marangi <ansuelsmth@gmail.com>
-Cc:     Pavel Machek <pavel@ucw.cz>, Lee Jones <lee@kernel.org>,
+To:     Konrad Dybcio <konrad.dybcio@linaro.org>
+Cc:     linux-arm-msm@vger.kernel.org, andersson@kernel.org,
+        agross@kernel.org, marijn.suijten@somainline.org,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Jonathan Corbet <corbet@lwn.net>,
-        "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>,
-        Jacek Anaszewski <jacek.anaszewski@gmail.com>,
-        John Crispin <john@phrozen.org>, linux-leds@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org, linux-doc@vger.kernel.org,
-        Tim Harvey <tharvey@gateworks.com>,
-        Alexander Stein <alexander.stein@ew.tq-group.com>,
-        Rasmus Villemoes <rasmus.villemoes@prevas.dk>,
-        Bagas Sanjaya <bagasdotme@gmail.com>,
-        Arun.Ramadoss@microchip.com
-Subject: Re: [PATCH v8 13/13] dt-bindings: net: dsa: qca8k: add LEDs
- definition example
-Message-ID: <20230221014827.GA784986-robh@kernel.org>
-References: <20230216013230.22978-1-ansuelsmth@gmail.com>
- <20230216013230.22978-14-ansuelsmth@gmail.com>
+        Stephen Boyd <sboyd@kernel.org>,
+        Conor Dooley <conor.dooley@microchip.com>,
+        Luca Weiss <luca@z3ntu.xyz>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 2/2] arm64: dts: qcom: sm8550: Use correct CPU compatibles
+Message-ID: <20230221015056.GA791166-robh@kernel.org>
+References: <20230216110803.3945747-1-konrad.dybcio@linaro.org>
+ <20230216110803.3945747-2-konrad.dybcio@linaro.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230216013230.22978-14-ansuelsmth@gmail.com>
+In-Reply-To: <20230216110803.3945747-2-konrad.dybcio@linaro.org>
 X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,
         FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
         HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
@@ -85,55 +70,31 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 16, 2023 at 02:32:30AM +0100, Christian Marangi wrote:
-> Add LEDs definition example for qca8k using the offload trigger as the
-> default trigger and add all the supported offload triggers by the
-> switch.
+On Thu, Feb 16, 2023 at 12:08:03PM +0100, Konrad Dybcio wrote:
+> Use the correct compatibles for the four kinds of CPU cores used on
+> SM8550, based on the value of their MIDR_EL1 registers:
 > 
-> Signed-off-by: Christian Marangi <ansuelsmth@gmail.com>
+> CPU7: 0x411fd4e0 - CX3 r1p1
+> CPU5-6: 0x412fd470 - CA710 r?p?
+> CPU3-4: 0x411fd4d0 - CA715 r?p?
+> CPU0-2: 0x411fd461 - CA510 r?p?
+> 
+> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
 > ---
->  .../devicetree/bindings/net/dsa/qca8k.yaml    | 24 +++++++++++++++++++
->  1 file changed, 24 insertions(+)
+>  arch/arm64/boot/dts/qcom/sm8550.dtsi | 16 ++++++++--------
+>  1 file changed, 8 insertions(+), 8 deletions(-)
 > 
-> diff --git a/Documentation/devicetree/bindings/net/dsa/qca8k.yaml b/Documentation/devicetree/bindings/net/dsa/qca8k.yaml
-> index 389892592aac..ba3821364039 100644
-> --- a/Documentation/devicetree/bindings/net/dsa/qca8k.yaml
-> +++ b/Documentation/devicetree/bindings/net/dsa/qca8k.yaml
-> @@ -18,6 +18,8 @@ description:
->    PHY it is connected to. In this config, an internal mdio-bus is registered and
->    the MDIO master is used for communication. Mixed external and internal
->    mdio-bus configurations are not supported by the hardware.
-> +  Each phy have at least 3 LEDs connected and can be declared
-> +  using the standard LEDs structure.
+> diff --git a/arch/arm64/boot/dts/qcom/sm8550.dtsi b/arch/arm64/boot/dts/qcom/sm8550.dtsi
+> index ff4d342c0725..a65c3151baf3 100644
+> --- a/arch/arm64/boot/dts/qcom/sm8550.dtsi
+> +++ b/arch/arm64/boot/dts/qcom/sm8550.dtsi
+> @@ -66,7 +66,7 @@ cpus {
 >  
->  properties:
->    compatible:
-> @@ -117,6 +119,7 @@ unevaluatedProperties: false
->  examples:
->    - |
->      #include <dt-bindings/gpio/gpio.h>
-> +    #include <dt-bindings/leds/common.h>
->  
->      mdio {
->          #address-cells = <1>;
-> @@ -276,6 +279,27 @@ examples:
->  
->                  internal_phy_port1: ethernet-phy@0 {
->                      reg = <0>;
-> +
-> +                    leds {
-> +                        #address-cells = <1>;
-> +                        #size-cells = <0>;
-> +
-> +                        led@0 {
-> +                            reg = <0>;
-> +                            color = <LED_COLOR_ID_WHITE>;
-> +                            function = LED_FUNCTION_LAN;
-> +                            function-enumerator = <1>;
-> +                            linux,default-trigger = "netdev";
+>  		CPU0: cpu@0 {
+>  			device_type = "cpu";
+> -			compatible = "qcom,kryo";
+> +			compatible = "arm,cortex-a510";
 
-Wouldn't the default for an ethernet phy controlled LED always be 
-"netdev"? If a PHY has LED nodes, then just always set it to "netdev" 
-unless something else is selected.
+Good. We should kill off the meaningless 'qcom,kryo'.
 
-Rob
+Acked-by: Rob Herring <robh@kernel.org>
