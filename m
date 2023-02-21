@@ -2,105 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5693269E1FF
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 15:08:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E7BB569E1F2
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 15:05:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234087AbjBUOIN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Feb 2023 09:08:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60242 "EHLO
+        id S234337AbjBUOFC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Feb 2023 09:05:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54906 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233656AbjBUOII (ORCPT
+        with ESMTP id S234296AbjBUOEp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Feb 2023 09:08:08 -0500
-Received: from msg-4.mailo.com (msg-4.mailo.com [213.182.54.15])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94CC82A99A;
-        Tue, 21 Feb 2023 06:07:42 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=mailo.com; s=mailo;
-        t=1676988418; bh=oLZwRpXxfR8jKepCYgBAd0gcxoO2D6bBAKStsCYFVz8=;
-        h=X-EA-Auth:Date:From:To:Cc:Subject:Message-ID:References:
-         MIME-Version:Content-Type:In-Reply-To;
-        b=ct/HGOoSPl2yfAJdpTmfbCK4kQ8qIvxaKs0L4O54Kib0xMGCCh0W34MpMfkFTJl8j
-         VOcr/oyOReG12/EEQ5gUPB3DGFW3K01KcX6ECXSJqTVFA0yZHWook5MYdkKBMhrspq
-         rPqb2ddx9urUVC9k78cNNCT253DHeqi8pEPTluaQ=
-Received: by b-3.in.mailobj.net [192.168.90.13] with ESMTP
-        via ip-206.mailobj.net [213.182.55.206]
-        Tue, 21 Feb 2023 15:06:58 +0100 (CET)
-X-EA-Auth: at9OF3ziCtOVa+pv6TzsuxHGTTSacIrTPKQNDcL9n3nWoXnaOhWUsf84g1TEAEzf2IJx/eMLezJ3x9Jg2DvqQbGUPd6TRiTO
-Date:   Tue, 21 Feb 2023 19:36:52 +0530
-From:   Deepak R Varma <drv@mailo.com>
-To:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>, linux-perf-users@vger.kernel.org,
+        Tue, 21 Feb 2023 09:04:45 -0500
+Received: from dggsgout12.his.huawei.com (dggsgout12.his.huawei.com [45.249.212.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0193D24CB7;
+        Tue, 21 Feb 2023 06:04:39 -0800 (PST)
+Received: from mail02.huawei.com (unknown [172.30.67.143])
+        by dggsgout12.his.huawei.com (SkyGuard) with ESMTP id 4PLgyP0dRVz4f3jJ0;
+        Tue, 21 Feb 2023 22:04:29 +0800 (CST)
+Received: from localhost.localdomain (unknown [10.67.175.61])
+        by APP2 (Coremail) with SMTP id Syh0CgAnFuRtz_Rj_qv6Dw--.43008S2;
+        Tue, 21 Feb 2023 22:04:31 +0800 (CST)
+From:   Pu Lehui <pulehui@huaweicloud.com>
+To:     bpf@vger.kernel.org, linux-riscv@lists.infradead.org,
         linux-kernel@vger.kernel.org
-Cc:     Saurabh Singh Sengar <ssengar@microsoft.com>,
-        Praveen Kumar <kumarpraveen@linux.microsoft.com>,
-        Deepak R Varma <drv@mailo.com>
-Subject: [PATCH v2 2/3] perf/x86/intel/pt: Use sysfs_emit() in show()
- callback function
-Message-ID: <54c16281234d057ebed1ef05bde20d2d57d70669.1676987821.git.drv@mailo.com>
-References: <cover.1676987821.git.drv@mailo.com>
+Cc:     =?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        Pu Lehui <pulehui@huawei.com>,
+        Pu Lehui <pulehui@huaweicloud.com>
+Subject: [PATCH bpf-next v3] riscv, bpf: Add kfunc support for RV64
+Date:   Tue, 21 Feb 2023 22:06:56 +0800
+Message-Id: <20230221140656.3480496-1-pulehui@huaweicloud.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <cover.1676987821.git.drv@mailo.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: Syh0CgAnFuRtz_Rj_qv6Dw--.43008S2
+X-Coremail-Antispam: 1UD129KBjvdXoWrury5AFWkAFy8Cr47Zr43Wrg_yoWDArg_Cr
+        Z7ta4Iy398Ja1xJF4j9r4fZrykG393WFy8Xrn7uryjywn8WF1Ut34kKr97Gry7Zr1FyrWx
+        Zrn3Ja92qw42qjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+        9fnUUIcSsGvfJTRUUUbxkFF20E14v26ryj6rWUM7CY07I20VC2zVCF04k26cxKx2IYs7xG
+        6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8w
+        A2z4x0Y4vE2Ix0cI8IcVAFwI0_Ar0_tr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Gr1j
+        6F4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x0267AKxVW0oV
+        Cq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0
+        I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r
+        4UM4x0Y48IcxkI7VAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwACI402YVCY1x02628v
+        n2kIc2xKxwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F4
+        0E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_GFv_Wryl
+        IxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxV
+        AFwI0_Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6rW3Jr0E3s1lIxAIcVC2z280aVAFwI0_
+        Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7VUb
+        QVy7UUUUU==
+X-CM-SenderInfo: psxovxtxl6x35dzhxuhorxvhhfrp/
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-As per C99 standard, snprintf() returns the number of bytes that would
-be encoded in the destination buffer when it is sufficiently large. This
-return value may be different from what the caller is expecting and hence
-may lead to potential errors in the program.
-Kernel release 2.6.2 introduced scnprintf() & vscnprintf() which precisely
-return the actual bytes encoded into the destination buffer.
+From: Pu Lehui <pulehui@huawei.com>
 
-For the sysfs attribute show() callback functions, which returns the number
-of bytes to the user space, a more recent recommendation is to use
-sysfs_emit() or sysfs_emit_at() instead of sprintf() family of functions.
-This is recorded in the Documentation/filesystems/sysfs.rst Kernel
-documentation file.
+This patch adds kernel function call support for RV64. Since the offset
+from RV64 kernel and module functions to bpf programs is almost within
+the range of s32, the current infrastructure of RV64 is already
+sufficient for kfunc, so let's turn it on.
 
-Issue identified using the coccinelle device_attr_show.cocci script.
-
-Signed-off-by: Deepak R Varma <drv@mailo.com>
+Suggested-by: Björn Töpel <bjorn@rivosinc.com>
+Signed-off-by: Pu Lehui <pulehui@huawei.com>
+Acked-by: Björn Töpel <bjorn@rivosinc.com>
 ---
-Changes in v2:
-   - Revise patch log message to include details on the potential issues with
-     current implementation and how the proposal is a better solution.
-     Feedback provided by Peter Zijlstra <peterz@infradead.org>
+v3:
+- rewrite commit message to make more sense.
+- Add Acked-by of Björn.
 
+ arch/riscv/net/bpf_jit_comp64.c | 5 +++++
+ 1 file changed, 5 insertions(+)
 
- arch/x86/events/intel/pt.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/arch/x86/events/intel/pt.c b/arch/x86/events/intel/pt.c
-index 42a55794004a..d9e6d771b458 100644
---- a/arch/x86/events/intel/pt.c
-+++ b/arch/x86/events/intel/pt.c
-@@ -96,7 +96,7 @@ static ssize_t pt_cap_show(struct device *cdev,
- 		container_of(attr, struct dev_ext_attribute, attr);
- 	enum pt_capabilities cap = (long)ea->var;
- 
--	return snprintf(buf, PAGE_SIZE, "%x\n", intel_pt_validate_hw_cap(cap));
-+	return sysfs_emit(buf, "%x\n", intel_pt_validate_hw_cap(cap));
+diff --git a/arch/riscv/net/bpf_jit_comp64.c b/arch/riscv/net/bpf_jit_comp64.c
+index f5a668736c79..a9270366dc57 100644
+--- a/arch/riscv/net/bpf_jit_comp64.c
++++ b/arch/riscv/net/bpf_jit_comp64.c
+@@ -1751,3 +1751,8 @@ void bpf_jit_build_epilogue(struct rv_jit_context *ctx)
+ {
+ 	__build_epilogue(false, ctx);
  }
- 
- static struct attribute_group pt_cap_group __ro_after_init = {
++
++bool bpf_jit_supports_kfunc_call(void)
++{
++	return true;
++}
 -- 
-2.34.1
-
-
+2.25.1
 
