@@ -2,95 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 96AFB69E1DE
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 15:02:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AD15269E1E1
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 15:03:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234233AbjBUOCN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Feb 2023 09:02:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52570 "EHLO
+        id S234248AbjBUODQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Feb 2023 09:03:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53464 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234187AbjBUOCJ (ORCPT
+        with ESMTP id S234187AbjBUODO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Feb 2023 09:02:09 -0500
-Received: from fllv0016.ext.ti.com (fllv0016.ext.ti.com [198.47.19.142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A06F52A6C9;
-        Tue, 21 Feb 2023 06:02:08 -0800 (PST)
-Received: from fllv0035.itg.ti.com ([10.64.41.0])
-        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 31LE1uZ9076966;
-        Tue, 21 Feb 2023 08:01:56 -0600
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1676988116;
-        bh=5HIcBVXU+K8mmgkfAM3rrTSW8a4UTl8+daYL2j36OY0=;
-        h=Date:From:To:CC:Subject:References:In-Reply-To;
-        b=QmJoE5ymGJJN8cIxtkm+pyIh8GGn6fRU8dpHzcqkY2EJjVFMYbCNymn6NPprTliO0
-         4v0AORyavJ9BNyqw4zjuapWQaRgSoTTfrsOhvfntol6g31VVSdtsQujbNpMAhjt5rt
-         zOB0fUPFBglQ7ctmWmJkDxDGAtbbysjDt56gX3i0=
-Received: from DLEE105.ent.ti.com (dlee105.ent.ti.com [157.170.170.35])
-        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 31LE1usp077379
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Tue, 21 Feb 2023 08:01:56 -0600
-Received: from DLEE114.ent.ti.com (157.170.170.25) by DLEE105.ent.ti.com
- (157.170.170.35) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Tue, 21
- Feb 2023 08:01:56 -0600
-Received: from lelv0326.itg.ti.com (10.180.67.84) by DLEE114.ent.ti.com
- (157.170.170.25) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
- Frontend Transport; Tue, 21 Feb 2023 08:01:56 -0600
-Received: from localhost (ileaxei01-snat.itg.ti.com [10.180.69.5])
-        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 31LE1u9p017874;
-        Tue, 21 Feb 2023 08:01:56 -0600
-Date:   Tue, 21 Feb 2023 08:01:56 -0600
-From:   Nishanth Menon <nm@ti.com>
-To:     Ravi Gunasekaran <r-gunasekaran@ti.com>
-CC:     <afd@ti.com>, <vigneshr@ti.com>, <kristo@kernel.org>,
-        <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
-        <s-vadapalli@ti.com>, <linux-arm-kernel@lists.infradead.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v10 3/9] arm64: dts: ti: k3-j721s2-main: Add SERDES and
- WIZ device tree node
-Message-ID: <20230221140156.ml6dlhqg3a7cxvac@squishy>
-References: <20230221120612.27366-1-r-gunasekaran@ti.com>
- <20230221120612.27366-4-r-gunasekaran@ti.com>
+        Tue, 21 Feb 2023 09:03:14 -0500
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0DA0040FE;
+        Tue, 21 Feb 2023 06:03:13 -0800 (PST)
+Date:   Tue, 21 Feb 2023 14:03:11 -0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1676988192;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=UMnIRuFdhYzLuCZJ0NnS3LeyrPS5DkHSs+EhmjHTZuY=;
+        b=fP1p12QJehd1VP58RW9lWFh5MMchsXM7XdLFkZQtbDhRSzkoddCFPAxb+zmCwEDUGeiYqJ
+        c0uy1uFBgfCzXUW+XmwmOXsl0HglsSoV4ZI/IiGhA9YfrWqXVr4Zmj/OgFQ7fm3z9FYEy/
+        OKwAN97dSyMnyLnQZogyxr4ogFlj04APhAfAcss/xkqAwP+NTQqP/GJOzM0uwCrG7M5xdl
+        1w0TbjiWsQnMjldsAXnh0Ufr+IZLw+xa4LPQ+uZEBWPKGYLZb4ch+vgbxHuTFNkLF6YVzM
+        h3iZHbQJ2HSH7av9t5ornTpkx5BcYu9SoT0Bl5PJmeN0cieo4c+1uDi47kMn6A==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1676988192;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=UMnIRuFdhYzLuCZJ0NnS3LeyrPS5DkHSs+EhmjHTZuY=;
+        b=p3tAXzAJX5QhYFIYu2RAa0aYxNgqJIiwpXr+no9JjT1M9T8tCnKeayfPQgk5et4W4lt80Q
+        KwLQd4SV6XGytjDg==
+From:   tip-bot2 for Thomas =?utf-8?q?Wei=C3=9Fschuh?= 
+        <tip-bot2@linutronix.de>
+Sender: tip-bot2@linutronix.de
+Reply-to: linux-kernel@vger.kernel.org
+To:     linux-tip-commits@vger.kernel.org
+Subject: [tip: irq/urgent] genirq/irqdesc: Make kobj_type structures constant
+Cc:     linux@weissschuh.net, Thomas Gleixner <tglx@linutronix.de>,
+        x86@kernel.org, linux-kernel@vger.kernel.org, maz@kernel.org
+In-Reply-To: <20230217-kobj_type-irq-v1-1-fedfacaf8cdb@weissschuh.net>
+References: <20230217-kobj_type-irq-v1-1-fedfacaf8cdb@weissschuh.net>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <20230221120612.27366-4-r-gunasekaran@ti.com>
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Message-ID: <167698819179.387.6141249909545840649.tip-bot2@tip-bot2>
+Robot-ID: <tip-bot2@linutronix.de>
+Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 17:36-20230221, Ravi Gunasekaran wrote:
-> From: Matt Ranostay <mranostay@ti.com>
-> 
-> Add dt node for the single instance of WIZ (SERDES wrapper) and
-> SERDES module shared by PCIe, eDP and USB.
+The following commit has been merged into the irq/urgent branch of tip:
 
-[...]
+Commit-ID:     ce7980ae9080f72f08d50355c4d9084d57aece63
+Gitweb:        https://git.kernel.org/tip/ce7980ae9080f72f08d50355c4d9084d57a=
+ece63
+Author:        Thomas Wei=C3=9Fschuh <linux@weissschuh.net>
+AuthorDate:    Fri, 17 Feb 2023 03:16:25=20
+Committer:     Thomas Gleixner <tglx@linutronix.de>
+CommitterDate: Tue, 21 Feb 2023 15:00:09 +01:00
 
-> 
-> diff --git a/arch/arm64/boot/dts/ti/k3-j721s2-main.dtsi b/arch/arm64/boot/dts/ti/k3-j721s2-main.dtsi
-> index 84e5689fff9f..af6c93f0a055 100644
-> --- a/arch/arm64/boot/dts/ti/k3-j721s2-main.dtsi
-> +++ b/arch/arm64/boot/dts/ti/k3-j721s2-main.dtsi
-[...]
-> @@ -33,11 +44,18 @@
->  		#size-cells = <1>;
->  		ranges = <0x00 0x00 0x00104000 0x18000>;
->  
-> -		usb_serdes_mux: mux-controller@0 {
-> +		usb_serdes_mux: mux-controller-0 {
+genirq/irqdesc: Make kobj_type structures constant
 
-was'nt this just introduced in the patch just prior, if so, NAK,
-do the changes where they are introduced.
+Since commit ee6d3dd4ed48 ("driver core: make kobj_type constant.")
+the driver core allows the usage of const struct kobj_type.
 
->  			compatible = "mmio-mux";
->  			#mux-control-cells = <1>;
->  			mux-reg-masks = <0x0 0x8000000>; /* USB0 to SERDES0 lane 1/3 mux */
->  		};
+Take advantage of this to constify the structure definitions which prevents
+modification at runtime.
+
+Signed-off-by: Thomas Wei=C3=9Fschuh <linux@weissschuh.net>
+Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
+Link: https://lore.kernel.org/r/20230217-kobj_type-irq-v1-1-fedfacaf8cdb@weis=
+sschuh.net
+
+---
+ kernel/irq/irqdesc.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/kernel/irq/irqdesc.c b/kernel/irq/irqdesc.c
+index fd09962..240e145 100644
+--- a/kernel/irq/irqdesc.c
++++ b/kernel/irq/irqdesc.c
+@@ -277,7 +277,7 @@ static struct attribute *irq_attrs[] =3D {
+ };
+ ATTRIBUTE_GROUPS(irq);
+=20
+-static struct kobj_type irq_kobj_type =3D {
++static const struct kobj_type irq_kobj_type =3D {
+ 	.release	=3D irq_kobj_release,
+ 	.sysfs_ops	=3D &kobj_sysfs_ops,
+ 	.default_groups =3D irq_groups,
+@@ -335,7 +335,7 @@ postcore_initcall(irq_sysfs_init);
+=20
+ #else /* !CONFIG_SYSFS */
+=20
+-static struct kobj_type irq_kobj_type =3D {
++static const struct kobj_type irq_kobj_type =3D {
+ 	.release	=3D irq_kobj_release,
+ };
+=20
