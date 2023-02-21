@@ -2,233 +2,175 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8FCBF69E093
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 13:42:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E1FBE69E098
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 13:42:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234743AbjBUMmD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Feb 2023 07:42:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37922 "EHLO
+        id S234758AbjBUMmq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Feb 2023 07:42:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38732 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234689AbjBUMl4 (ORCPT
+        with ESMTP id S234701AbjBUMmo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Feb 2023 07:41:56 -0500
-Received: from mail-vs1-xe30.google.com (mail-vs1-xe30.google.com [IPv6:2607:f8b0:4864:20::e30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4DCF29436
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Feb 2023 04:41:54 -0800 (PST)
-Received: by mail-vs1-xe30.google.com with SMTP id o6so4549472vsq.10
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Feb 2023 04:41:54 -0800 (PST)
+        Tue, 21 Feb 2023 07:42:44 -0500
+Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7ACC227483
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Feb 2023 04:42:42 -0800 (PST)
+Received: by mail-ed1-x536.google.com with SMTP id ec43so16153606edb.8
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Feb 2023 04:42:42 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1676983314;
+        d=google.com; s=20210112;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=+pSg+Hzb7t5dfpW1K0cuXfE/ecGC3GyQvKNw8DxtAc0=;
-        b=LPCQhSj4y91w98bW3FzXRlnAJehtmFOzLyD8zSPTuLSvCPLherrSl8rfnL0tEXZ/wU
-         GpqJaLKjexKt4G+dD/gCQ0sFN1n7pd9bb7/gL9Pu8VKsJH7J/+SYbxv/i51mQ27aYgN3
-         F3lyExPtlcdYMhg2vBrsI+wXwk+3SC18szDVHaZ0lgMKp6YYWAYXxvOYffRkdm9aXuL6
-         Y87G5OD26PtqHASgqkHsKwqsI0L5lclTds6Ojld6UUFUGKQ9ltdL1UBpXoiG4zQObJbC
-         XGbse2CJz22VYk736s/PARPa/xf9uGcRm9wroXYj1sAQn2l/JEW2i0GQyJ1nV1fC7upR
-         LGBQ==
+        bh=O6el+9joKyAhVr+TDn79fkuxzTiKR+SX0MO09engIhY=;
+        b=cLZLuL/REYI8EX3PmLJFdaF2YUd4XwINhRSVuCvmFL4aG05j7eoj6hTO6HsBms6J64
+         jI1aSNDMwXJlv7vMhzZCU57mo5E8++tN0wcL8Cp41JslegPSild6F+BHDEw87m7rLbEd
+         U2e/JwxkCaFBy2Wd5fsup2SUZJLAAQ9sQSgQQlRq2fkj0iZmeJnegXko/ihX0PNFLSWt
+         56urgBxOBm/Nqy0l4t3vVRSZ0GnyJ43fsmC2tam2hSOi32ZWoe/HgEX0sPnqpynLUEyv
+         fj0sbsXVvjHQ8Vh4esfPA0zpanqX1wvttZbt9RUFwrDvpKYVPp92lo7MQwxzTAdK/3p+
+         nTgQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1676983314;
+        d=1e100.net; s=20210112;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=+pSg+Hzb7t5dfpW1K0cuXfE/ecGC3GyQvKNw8DxtAc0=;
-        b=WGSDzskM8/CGvYvFKbDMk89vaGpHEzmVmlef72iAiyxXVRka8Kkl2kb60Xe3C/nKB2
-         UFnX+l4R83kyjMDZzRYr1ROofOsbiZZI5PZCWHUoMt4Hexg7hRE6zXWs8NBBr9sI54YD
-         OFjGwquqM7DMiHWEReDAFQf1y+g4ZI3nxhgeO0jWwPd/wL+rWXfqL2MZKd3F82Dsrxqo
-         1TuiDnNZ6kMCQ3cQF5sf0qLgk1YbHtbNDutw8JyXR75dFCm1V9AfXT2eNJTfQJzblsfE
-         arQk9ccxh5EVVuv8JNUlABBgKyRfUiVH8g28Kpg6NJv3h+ZNOC1pElQ9GKnexrFRBmT2
-         rbfQ==
-X-Gm-Message-State: AO0yUKXiYBpbOz349HtqHP8jXfYA2pZRDMmlCzrr1MHuunW1FfyzT+S5
-        4SxStmnEZUChwE86ErjsgtNvlIX2ltWwElV3rxJ2gOBaBjgcBcCu
-X-Google-Smtp-Source: AK7set+6S+M96c3GgrIEjh+AkXol3D62hQiJwDDVLEtX5+ypQvN+GhLJBK62qVPKJ+Pl91ZKgezK2UJErldDrk6xW1A=
-X-Received: by 2002:a05:6102:a24:b0:41e:991d:8814 with SMTP id
- 4-20020a0561020a2400b0041e991d8814mr228996vsb.71.1676983313635; Tue, 21 Feb
- 2023 04:41:53 -0800 (PST)
+        bh=O6el+9joKyAhVr+TDn79fkuxzTiKR+SX0MO09engIhY=;
+        b=qCUF2PB1ftUM/JwpvfRqbiC8cIjPmY+Cs/8Qxv72vvxPxJMx175AJjByZA/V0P72Le
+         dfwvhaNX+pGgagC68nzlu4yN8RH1wV1MGTGU/1lR0lfgzIeBapqKlas0RPy0y7Y+H4kV
+         L1j5ShJPbaNzpXWSsIgs/CMR13yPCvtItNo5pUaosvfrW0Z8cMqpH8/axp/QSG8x0hDe
+         g2wCY0Qq7tRwyPiVf8Wt+Eyt0Y/VvwUGcXYyuUAJg451w4ejV/w602TbAQ8x+EbrBkcr
+         te6cb/yyUH3rbepplBtTWujdDyKKV0FlcztzpMMOiepjBYd/LKjXMF1qIQDghIae066o
+         ePvQ==
+X-Gm-Message-State: AO0yUKXPTp0TO1uOFSZGBDTuKtUM34MAh959NW+3T2J6DQqWR64kqA88
+        zqG/G9rw208Ak45J6AzjajhDtPfRqeOfoFV0uf2hhw==
+X-Google-Smtp-Source: AK7set98YYMMSbNx2hRGaTKAwlPc630Vw/Ga3pJmq4lzKkS4okWIZvm2EzW2kFQ7OPb7yFK5K2hy0cNe5M/5DCpxx9U=
+X-Received: by 2002:a17:906:9499:b0:8b1:79ef:6923 with SMTP id
+ t25-20020a170906949900b008b179ef6923mr6794210ejx.15.1676983360819; Tue, 21
+ Feb 2023 04:42:40 -0800 (PST)
 MIME-Version: 1.0
-References: <20230220133548.158615609@linuxfoundation.org>
-In-Reply-To: <20230220133548.158615609@linuxfoundation.org>
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Tue, 21 Feb 2023 18:11:42 +0530
-Message-ID: <CA+G9fYuuKMfmiso193a+WAKBbgS1vtP_r7hKQPgpwEwNdr7v7w@mail.gmail.com>
-Subject: Re: [PATCH 4.14 00/53] 4.14.306-rc1 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
-        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, f.fainelli@gmail.com,
-        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de
+References: <20230202112915.867409-1-usama.anjum@collabora.com>
+ <20230202112915.867409-4-usama.anjum@collabora.com> <CABb0KFEgsk+YidSXBYQ9mM8nVV6PuEOQf=bbNn7hsoG1hUeLZg@mail.gmail.com>
+ <36ddfd75-5c58-197b-16c9-9f819099ea6d@collabora.com>
+In-Reply-To: <36ddfd75-5c58-197b-16c9-9f819099ea6d@collabora.com>
+From:   =?UTF-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <emmir@google.com>
+Date:   Tue, 21 Feb 2023 13:42:29 +0100
+Message-ID: <CABb0KFGWi0dtgXZ-AeUuHb55EgnwTu3JfJ9cW3ftCqezKi8dAQ@mail.gmail.com>
+Subject: Re: [PATCH v10 3/6] fs/proc/task_mmu: Implement IOCTL to get and/or
+ the clear info about PTEs
+To:     Muhammad Usama Anjum <usama.anjum@collabora.com>
+Cc:     Andrei Vagin <avagin@gmail.com>, Mike Rapoport <rppt@kernel.org>,
+        Nadav Amit <namit@vmware.com>,
+        David Hildenbrand <david@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Paul Gofman <pgofman@codeweavers.com>,
+        Cyrill Gorcunov <gorcunov@gmail.com>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Shuah Khan <shuah@kernel.org>,
+        Christian Brauner <brauner@kernel.org>,
+        Yang Shi <shy828301@gmail.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        "Liam R . Howlett" <Liam.Howlett@oracle.com>,
+        Yun Zhou <yun.zhou@windriver.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Alex Sierra <alex.sierra@amd.com>,
+        Peter Xu <peterx@redhat.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Pasha Tatashin <pasha.tatashin@soleen.com>,
+        Axel Rasmussen <axelrasmussen@google.com>,
+        "Gustavo A . R . Silva" <gustavoars@kernel.org>,
+        Dan Williams <dan.j.williams@intel.com>,
+        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
+        Greg KH <gregkh@linuxfoundation.org>, kernel@collabora.com,
+        Danylo Mocherniuk <mdanylo@google.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 20 Feb 2023 at 19:08, Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
+On Tue, 21 Feb 2023 at 11:28, Muhammad Usama Anjum
+<usama.anjum@collabora.com> wrote:
 >
-> This is the start of the stable review cycle for the 4.14.306 release.
-> There are 53 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
+> Hi Micha=C5=82,
 >
-> Responses should be made by Wed, 22 Feb 2023 13:35:35 +0000.
-> Anything received after that time might be too late.
+> Thank you so much for comment!
 >
-> The whole patch series can be found in one patch at:
->         https://www.kernel.org/pub/linux/kernel/v4.x/stable-review/patch-=
-4.14.306-rc1.gz
-> or in the git tree and branch at:
->         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable=
--rc.git linux-4.14.y
-> and the diffstat can be found below.
+> On 2/17/23 8:18=E2=80=AFPM, Micha=C5=82 Miros=C5=82aw wrote:
+[...]
+> > For the page-selection mechanism, currently required_mask and
+> > excluded_mask have conflicting
+> They are opposite of each other:
+> All the set bits in required_mask must be set for the page to be selected=
+.
+> All the set bits in excluded_mask must _not_ be set for the page to be
+> selected.
 >
-> thanks,
+> > responsibilities. I suggest to rework that to:
+> > 1. negated_flags: page flags which are to be negated before applying
+> > the page selection using following masks;
+> Sorry I'm unable to understand the negation (which is XOR?). Lets look at
+> the truth table:
+> Page Flag       negated_flags
+> 0               0                       0
+> 0               1                       1
+> 1               0                       1
+> 1               1                       0
 >
-> greg k-h
+> If a page flag is 0 and negated_flag is 1, the result would be 1 which ha=
+s
+> changed the page flag. It isn't making sense to me. Why the page flag bit
+> is being fliped?
+>
+> When Anrdei had proposed these masks, they seemed like a fancy way of
+> filtering inside kernel and it was straight forward to understand. These
+> masks would help his use cases for CRIU. So I'd included it. Please can y=
+ou
+> elaborate what is the purpose of negation?
+
+The XOR is a way to invert the tested value of a flag (from positive
+to negative and the other way) without having the API with invalid
+values (with required_flags and excluded_flags you need to define a
+rule about what happens if a flag is present in both of the masks -
+either prioritise one mask over the other or reject the call).
+(Note: the XOR is applied only to the value of the flags for the
+purpose of testing page-selection criteria.)
+
+So:
+1. if a flag is not set in negated_flags, but set in required_flags,
+then it means "this flag must be one" - equivalent to it being set in
+required_flag (in your current version of the API).
+2. if a flag is set in negated_flags and also in required_flags, then
+it means "this flag must be zero" - equivalent to it being set in
+excluded_flags.
+
+The same thing goes for anyof_flags: if a flag is set in anyof_flags,
+then for it to be considered matched:
+1. it must have a value of 1 if it is not set in negated_flags
+2. it must have a value of 0 if it is set in negated_flags
+
+BTW, I think I assumed that both conditions (all flags in
+required_flags and at least one in anyof_flags is present) need to be
+true for the page to be selected - is this your intention? The example
+code has a bug though, in that if anyof_flags is zero it will never
+match. Let me fix the selection part:
+
+// calc. a mask of flags that have expected ("active") values
+tested_flags =3D page_flags ^ negated_flags;
+// are all required flags in "active" state? [=3D=3D all zero when negated]
+if (~tested_flags & required_mask)
+  skip page;
+// is any extra flag "active"?
+if (anyof_flags && !(tested_flags & anyof_flags))
+  skip page;
 
 
-Results from Linaro=E2=80=99s test farm.
-No regressions on arm64, arm, x86_64, and i386.
-
-Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
-
-## Build
-* kernel: 4.14.306-rc1
-* git: https://gitlab.com/Linaro/lkft/mirrors/stable/linux-stable-rc
-* git branch: linux-4.14.y
-* git commit: 2fbaf74fe65717ef42f395575562c1f594810941
-* git describe: v4.14.305-54-g2fbaf74fe657
-* test details:
-https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-4.14.y/build/v4.14=
-.305-54-g2fbaf74fe657
-
-## Test Regressions (compared to v4.14.305)
-
-## Metric Regressions (compared to v4.14.305)
-
-## Test Fixes (compared to v4.14.305)
-
-## Metric Fixes (compared to v4.14.305)
-
-## Test result summary
-total: 92817, pass: 79357, fail: 3404, skip: 9909, xfail: 147
-
-## Build Summary
-* arc: 10 total, 10 passed, 0 failed
-* arm: 228 total, 225 passed, 3 failed
-* arm64: 42 total, 39 passed, 3 failed
-* i386: 29 total, 28 passed, 1 failed
-* mips: 41 total, 41 passed, 0 failed
-* parisc: 12 total, 12 passed, 0 failed
-* powerpc: 20 total, 19 passed, 1 failed
-* s390: 15 total, 11 passed, 4 failed
-* sh: 24 total, 24 passed, 0 failed
-* sparc: 12 total, 12 passed, 0 failed
-* x86_64: 38 total, 37 passed, 1 failed
-
-## Test suites summary
-* boot
-* fwts
-* igt-gpu-tools
-* kselftest-android
-* kselftest-arm64
-* kselftest-breakpoints
-* kselftest-capabilities
-* kselftest-cgroup
-* kselftest-clone3
-* kselftest-core
-* kselftest-cpu-hotplug
-* kselftest-cpufreq
-* kselftest-drivers-dma-buf
-* kselftest-efivarfs
-* kselftest-filesystems
-* kselftest-filesystems-binderfs
-* kselftest-firmware
-* kselftest-fpu
-* kselftest-futex
-* kselftest-gpio
-* kselftest-intel_pstate
-* kselftest-ipc
-* kselftest-ir
-* kselftest-kcmp
-* kselftest-kexec
-* kselftest-kvm
-* kselftest-lib
-* kselftest-livepatch
-* kselftest-membarrier
-* kselftest-net
-* kselftest-net-forwarding
-* kselftest-net-mptcp
-* kselftest-netfilter
-* kselftest-nsfs
-* kselftest-openat2
-* kselftest-pid_namespace
-* kselftest-pidfd
-* kselftest-proc
-* kselftest-pstore
-* kselftest-ptrace
-* kselftest-seccomp
-* kselftest-sigaltstack
-* kselftest-size
-* kselftest-splice
-* kselftest-static_keys
-* kselftest-sync
-* kselftest-sysctl
-* kselftest-tc-testing
-* kselftest-timens
-* kselftest-timers
-* kselftest-tmpfs
-* kselftest-tpm2
-* kselftest-user
-* kselftest-vm
-* kselftest-x86
-* kselftest-zram
-* kunit
-* kvm-unit-tests
-* libhugetlbfs
-* log-parser-boot
-* log-parser-test
-* ltp-cap_bounds
-* ltp-commands
-* ltp-containers
-* ltp-controllers
-* ltp-cpuhotplug
-* ltp-crypto
-* ltp-cve
-* ltp-dio
-* ltp-fcntl-locktests
-* ltp-filecaps
-* ltp-fs
-* ltp-fs_bind
-* ltp-fs_perms_simple
-* ltp-fsx
-* ltp-hugetlb
-* ltp-io
-* ltp-ipc
-* ltp-math
-* ltp-mm
-* ltp-nptl
-* ltp-open-posix-tests
-* ltp-pty
-* ltp-sched
-* ltp-securebits
-* ltp-smoke
-* ltp-syscalls
-* ltp-tracing
-* network-basic-tests
-* rcutorture
-* v4l2-compliance
-* vdso
-
---
-Linaro LKFT
-https://lkft.linaro.org
+Best Regards
+Micha=C5=82 Miros=C5=82aw
