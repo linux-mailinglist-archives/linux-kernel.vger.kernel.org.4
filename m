@@ -2,84 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F67F69E8FD
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 21:24:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2BE6C69E900
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 21:29:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230159AbjBUUYP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Feb 2023 15:24:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39926 "EHLO
+        id S229719AbjBUU3Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Feb 2023 15:29:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42276 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229539AbjBUUYN (ORCPT
+        with ESMTP id S229518AbjBUU3O (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Feb 2023 15:24:13 -0500
-Received: from mail-yb1-xb32.google.com (mail-yb1-xb32.google.com [IPv6:2607:f8b0:4864:20::b32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 918A813D50
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Feb 2023 12:24:12 -0800 (PST)
-Received: by mail-yb1-xb32.google.com with SMTP id j67so6796387yba.10
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Feb 2023 12:24:12 -0800 (PST)
+        Tue, 21 Feb 2023 15:29:14 -0500
+Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF93D2D159;
+        Tue, 21 Feb 2023 12:29:13 -0800 (PST)
+Received: by mail-pj1-x102c.google.com with SMTP id co23-20020a17090afe9700b002341fadc370so6241156pjb.1;
+        Tue, 21 Feb 2023 12:29:13 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=wg6wUsUBv3ps1Ea2+HUNQuXrVhFNTJMl9lhHXw/Jvb0=;
-        b=nA56w9lJfeCAomLkCbRMPdtRRrjoL4X0I5/+xx38tvWglZ/1guG9JLGO1FSTHHer+j
-         sB7x89i6j3LwSZ4OKkd1rsZ56hxUku9uVTV6jqHUnw++a6DDn38RDKeoL5bl9pWDD0sg
-         R4B0+cqCnXhTpq2BIas2Hc1LInctGertTcVdq4FiOAN4Agj42vF+3llQrbTslP6NtTsG
-         MkEmtwRivZWDkfYTEa3odMGvXNmsBLNUvaF+Ewhg01MvyWrISTw7DGE5BuJS39zSFHT+
-         Wj5Ocd4ws9qMmZXvpytzTrWIHo4Af0vDAisGngy9c77I+PKpnX9lp1YAlK2UiB0gqsf4
-         zlcA==
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=6ZBdxrcYvbI1Z3Ko4/Ygq22p0mSRneCJlicvJMQ62Kc=;
+        b=Jvz+wJA5yDvMdWAHjRTB1t5IO+pWd8B5VE3kh5OvwMSNITqrdXX4S5AG4+8B0dCW6K
+         4NlXKs2VU4tMme5Liv3qc2cFJLaWMSIuGw1aUC9eLMKi81zh/1Zar1Dp98/iIQo1nLZL
+         CmmbcGMNQKNRcXdonKRydfoGI5gHnCIzrFmdaPu2BpqoSiJ0us/boaAhZVJLRqVAWLSA
+         38F3y2ZnMxiZDuPDJqsJeYDndb75xIKeP7pR1Mmc4D6KVbzMHVqrSMa9qpD1LWQbeaDu
+         D9nmQJMLmfR9Jg9Ri9cmZIYcW+YSaVlOKbRD8xza6YZXG5VJnqMOGIhx1KdiRV5Ub90E
+         F50g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=wg6wUsUBv3ps1Ea2+HUNQuXrVhFNTJMl9lhHXw/Jvb0=;
-        b=MoT5KzsI924OvTSGccztk+eI+sxbLA7RA8F5a24oOX4ZmtlCF5nIVRrMhzUtUPYtfn
-         4Trn664S6AL/tsbIO1jd8iEOQ+H3Tn8keFbG8B9tlN9SEJGhtpW9wppZ5E6PqTnT7QKZ
-         aR9x5Bwf7jE2DburvHYNT2YKXr+4xzyTOQEbg8uv3UE87cz0Pkz8UmjIFn3Ev8Orygnc
-         oc+FZ6d2jJlq3SiZRw2a6BBW6FMyd03IwaNXDuBbGl5JeBUsxA9ETAgIVBl/2cZQbEdi
-         2v/6+kBtRvHfb9xNyRMlavg7YuLZukX3hsEnikOhfaYg8pCITYd+zu73sQQSxkp6TRIt
-         4NYQ==
-X-Gm-Message-State: AO0yUKWMOWIpJskum02SpDAsznM5WXSEx7JxeO7ScIRjXitmQjvIRN29
-        ZUGQcv7S6wPqxMGqcIBLTWQf0XxNSw+3qnO37Xpegg==
-X-Google-Smtp-Source: AK7set8tFfANC5MbpetJA0jL9tHvmdijSpG9DNOn2/nW/KMUbdcI25seKBHNiihBKKS26RpThhHHWCYHrT1gErUzopk=
-X-Received: by 2002:a5b:bc5:0:b0:96f:698f:6136 with SMTP id
- c5-20020a5b0bc5000000b0096f698f6136mr586144ybr.91.1677011051617; Tue, 21 Feb
- 2023 12:24:11 -0800 (PST)
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=6ZBdxrcYvbI1Z3Ko4/Ygq22p0mSRneCJlicvJMQ62Kc=;
+        b=bRnJlSLweMgqGD/plDoSS5RfZTEf3YtT7I2BqWNbDqgdG3cgOHQCsp+zSli0ygI0yq
+         nzm35nJ5WoEm2ca5Bq9zZXaGKZujiUpAYZV6G5uiMGYmd3wqJhqUi8PJGP4l2Cgk2pH1
+         KWr7gJLwDXrdXT5KLfeSyHX3XULzAOEMEWaCpf8pG25fzUVPDAcFIDpFmF+JRkBNVce4
+         EgZNvE8wYZj2Z74dqg233r7POjtfBoXeTG0FPzAgU+15MLB8yEbUEqNxRV8gUbuBvyuB
+         ou1ERRYPyBxZCuG18A+03pf2r4aeK87ghaf3U81ZS8LnXfq43288Y1ft93YNtFMTRyQR
+         jW2Q==
+X-Gm-Message-State: AO0yUKUe3MnkqAKm59Noon01uz7NdrAo1zkyhR6r67y1pD7lB4ZNiwtJ
+        fUiyK0aX8dyBfNzJkSqH2Fw=
+X-Google-Smtp-Source: AK7set8QdnIlUvdnGKNBL6HaRExsMpy3ecuBzjOW4TJDCCArDXbTrWZiABHdVxzQA2XS7dp56qHB3A==
+X-Received: by 2002:a17:902:ea07:b0:19a:887d:98ac with SMTP id s7-20020a170902ea0700b0019a887d98acmr8151056plg.46.1677011353003;
+        Tue, 21 Feb 2023 12:29:13 -0800 (PST)
+Received: from [10.67.48.245] ([192.19.223.252])
+        by smtp.googlemail.com with ESMTPSA id bf3-20020a170902b90300b0019adbef6a63sm10257324plb.235.2023.02.21.12.29.08
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 21 Feb 2023 12:29:12 -0800 (PST)
+Message-ID: <27de6440-c062-db02-7f46-78154de1dee9@gmail.com>
+Date:   Tue, 21 Feb 2023 12:29:06 -0800
 MIME-Version: 1.0
-References: <20230221102605.2007396-1-linus.walleij@linaro.org> <167698731618.2349693.5906822374742470475.robh@kernel.org>
-In-Reply-To: <167698731618.2349693.5906822374742470475.robh@kernel.org>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Tue, 21 Feb 2023 21:23:59 +0100
-Message-ID: <CACRpkdYqC0nk4J-9QJiTEX-9R9+SOJv-9sfXi32pfABZCTbGvg@mail.gmail.com>
-Subject: Re: [PATCH] dt-bindings: MFD: Convert STMPE to YAML schema
-To:     Rob Herring <robh@kernel.org>
-Cc:     Lee Jones <lee@kernel.org>, devicetree@vger.kernel.org,
-        Stefan Agner <stefan@agner.ch>,
-        Rob Herring <robh+dt@kernel.org>, Marek Vasut <marex@denx.de>,
-        linux-kernel@vger.kernel.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Philippe Schenker <philippe.schenker@toradex.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH 6.1 000/118] 6.1.13-rc1 review
+Content-Language: en-US
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        stable@vger.kernel.org
+Cc:     patches@lists.linux.dev, linux-kernel@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de
+References: <20230220133600.368809650@linuxfoundation.org>
+From:   Florian Fainelli <f.fainelli@gmail.com>
+In-Reply-To: <20230220133600.368809650@linuxfoundation.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 21, 2023 at 2:57 PM Rob Herring <robh@kernel.org> wrote:
+On 2/20/23 05:35, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 6.1.13 release.
+> There are 118 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+> 
+> Responses should be made by Wed, 22 Feb 2023 13:35:35 +0000.
+> Anything received after that time might be too late.
+> 
+> The whole patch series can be found in one patch at:
+> 	https://www.kernel.org/pub/linux/kernel/v6.x/stable-review/patch-6.1.13-rc1.gz
+> or in the git tree and branch at:
+> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-6.1.y
+> and the diffstat can be found below.
+> 
+> thanks,
+> 
+> greg k-h
 
-> Running 'make dtbs_check' with the schema in this patch gives the
-> following warnings. Consider if they are expected or the schema is
-> incorrect. These may not be new warnings.
+On ARCH_BRCMSTB using 32-bit and 64-bit kernels, build tested on 
+BMIPS_GENERIC:
 
-These are all expected. The DTSes have to be fixed, mostly
-sanitizing node names and removing the pointless "interrupt-controller"
-from the base MFD device, the only interrupt provider in this
-silicon is the GPIO sub-block.
+Tested-by: Florian Fainelli <f.fainelli@gmail.com>
+-- 
+Florian
 
-Yours,
-Linus Walleij
