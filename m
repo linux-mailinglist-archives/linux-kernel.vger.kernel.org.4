@@ -2,48 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1C6AC69E983
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 22:30:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CE2F869E987
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 22:31:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229890AbjBUVaV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Feb 2023 16:30:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34868 "EHLO
+        id S229880AbjBUVbs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Feb 2023 16:31:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36228 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229647AbjBUVaR (ORCPT
+        with ESMTP id S229872AbjBUVbn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Feb 2023 16:30:17 -0500
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 872461E5DC;
-        Tue, 21 Feb 2023 13:30:14 -0800 (PST)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4PLsrh53Xcz4x84;
-        Wed, 22 Feb 2023 08:30:12 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1677015012;
-        bh=GcdhFg/34oEPhninJe+vXf/3292ztoRJEUgvyOHE4qU=;
-        h=Date:From:To:Cc:Subject:From;
-        b=OTLG5EtdyygfU4afLEMBGrBAgbbWF5V3cT/wyK55niQEDOkpmVb2jBgHA0Xj7kfws
-         MTm2j0j8kPCQOrLZd3KqefDcdpsTTiJvXQTCRBwMQF2ukQMAJiPPqWjQJs5jIon/8d
-         y3/SVV9q0zhDQr98LRQf0Ys2WHBnFAccH5nPijKzf/Lo5gQQJW/NqV6DaQ4GuOlCDK
-         Gs22TmCCeWSXcLu4pOVm6af2HfxQv7nVAjjyFuMHNfaBT2TiBEVHSZJ5n1vF0kfnuy
-         D5g36u+1cCrzZjPUVRLwgnzdnkO3MTskF0+mYug6axE0TUeanSAiwzWYrQ7a5ibw5m
-         2yM5NNac9xCdA==
-Date:   Wed, 22 Feb 2023 08:29:56 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Theodore Ts'o <tytso@mit.edu>
-Cc:     Kees Cook <keescook@chromium.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: duplicate patch in the ext4 tree
-Message-ID: <20230222082956.019ed332@canb.auug.org.au>
+        Tue, 21 Feb 2023 16:31:43 -0500
+Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6EF521E5DC
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Feb 2023 13:31:42 -0800 (PST)
+Received: by mail-ed1-x533.google.com with SMTP id eg37so18893000edb.12
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Feb 2023 13:31:42 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=googlemail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=WokcBLUnLSvFGi3BJyxHBNtjfEojDdGdaUBZIAtdp4s=;
+        b=Z8fWeEjGHvPG6JVdryyxrCdAVI3nC1xgRLImgd5JYTLys0lbg6K9T9/bKIVU2pxAYq
+         buyL+iGVc8ZxTzavZWiNk2peOlZUn+afRv9/LAf7YibQppVfDrabdLNyPLBvNFEel7FG
+         Q6683yfIWP/EAL9pj4GrYv7q5bPSzT7lqTMMafhtQU2MAhzx+xlDm70LbkZOdMmpVm2k
+         63T8vwVi4R9kVuF/gjxJStgsO2uST8/J7saB2E3On0KG21kGz/Td1ul3t4QugFSxJ3O6
+         JUOMS8OtHGg9McIGMJlqhize/zO5ft2pWzH43XJAIYHPYhih0MCPIxu3IMjAu73RSUwI
+         AhNQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=WokcBLUnLSvFGi3BJyxHBNtjfEojDdGdaUBZIAtdp4s=;
+        b=pS2VuuxIvE36C4PkkV4OP5v+vJLiorrIsHgIv5JjyMoTd3bvTtBMNXnfOLwtDugyLk
+         nus3e29K9NmAu2M4nKzNKjD8ChFdjS07reGztzbIrSA/xVRizkTliP18e2ZPgiQseGUj
+         K1m4KdprZw2EMTco9rmfB4JI1cnNbQWPHsHclVEQwLcJk+Qbac44ac0XJZ0jDgD6BLnK
+         l2y8LCOU5pxP9+2kuEt0/yNAP3q2YpSZnNcdfwEtRDOyL6R0kcXLmtVAaZq52s2yOWH7
+         M8f6SjDd8vVwB/y/okxfvPctAiYNCGQtWzLm7gqnMkCMmPQyiOVtB0Z6Ghy7sjzW3DvY
+         3OJg==
+X-Gm-Message-State: AO0yUKVqWUaAU+XIrre9hD7ReAUjAppgoMUP6Zw/inMcZGTRtiPqiN4P
+        z6mdIjkVfpqY9HCi8Lgd1PkejP4/mzDKZrrsCUM5T5yx06w=
+X-Google-Smtp-Source: AK7set9vk9Xi3fa2gAaKh/M40NvhtCdUZG0stm4aPGsfWumGGlTYYztJ7TujIRU+FWLYsnYhvWwu8Kb2bpljPLahEZc=
+X-Received: by 2002:a17:906:8144:b0:8e3:da0f:f9b7 with SMTP id
+ z4-20020a170906814400b008e3da0ff9b7mr866379ejw.4.1677015100846; Tue, 21 Feb
+ 2023 13:31:40 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/c4UFk8H=0ya6HhILawxv1I+";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS autolearn=ham
+References: <6474e163-e61a-e04c-590d-60c674dc7ed9@sberdevices.ru>
+In-Reply-To: <6474e163-e61a-e04c-590d-60c674dc7ed9@sberdevices.ru>
+From:   Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+Date:   Tue, 21 Feb 2023 22:31:30 +0100
+Message-ID: <CAFBinCCaQ1fwFmV=CtihP+peFGTiHfVXtdKmQYJnX3a+-wNuzg@mail.gmail.com>
+Subject: Re: [PATCH v2] mtd: rawnand: meson: initialize struct with zeroes
+To:     Arseniy Krasnov <AVKrasnov@sberdevices.ru>
+Cc:     Liang Yang <liang.yang@amlogic.com>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        "linux-mtd@lists.infradead.org" <linux-mtd@lists.infradead.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-amlogic@lists.infradead.org" 
+        <linux-amlogic@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        kernel <kernel@sberdevices.ru>,
+        Krasnov Arseniy <oxffffaa@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -51,41 +80,27 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/c4UFk8H=0ya6HhILawxv1I+
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+Hello Arseniy,
 
-Hi all,
+On Tue, Feb 21, 2023 at 11:07 AM Arseniy Krasnov
+<AVKrasnov@sberdevices.ru> wrote:
+>
+> This structure must be zeroed, because it's field 'hw->core' is used as
+> 'parent' in 'clk_core_fill_parent_index()', but it will be uninitialized.
+> This happens, because when this struct is not zeroed, pointer 'hw' is
+> "initialized" by garbage, which is valid pointer, but points to some
+> garbage. So 'hw' will be dereferenced, but 'core' contains some random
+> data which will be interpreted as pointer.
+I think this should be written as "interpreted as a pointer". I'm not
+a native English speaker though, so I'm hoping that someone else can
+provide feedback as well.
 
-The following commit is also in Linus Torvalds' tree as a different commit
-(but the same patch):
+[...]
+> Fixes: 1e4d3ba66888 ("mtd: rawnand: meson: fix the clock")
+> Signed-off-by: Arseniy Krasnov <AVKrasnov@sberdevices.ru>
+Regardless of my comment above:
+Acked-by: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
 
-  d99a55a94a0d ("ext4: fix function prototype mismatch for ext4_feat_ktype")
 
-This is commit
-
-  118901ad1f25 ("ext4: Fix function prototype mismatch for ext4_feat_ktype")
-
-in Linus' tree.
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/c4UFk8H=0ya6HhILawxv1I+
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmP1N9QACgkQAVBC80lX
-0GwDywf/RqBPa2h+z6FGkyxkG4tlJNFnT0eckaVyvZkgwvi4Ur81xvRnQZveFt65
-q3h4e0PJoUN4XoD9z7h14rcI4JHpuwgtIQy04Fya7wbQ81JBcZ+uUDdL7cfLyVfO
-4N+JSQDtP1oKtwTBW9ClxLYvJbv+3ow2k2ze4zEGcsqMLGW/Ly78K+aLnLWtb8aT
-J7CMx1sQa2FdEWZnJrgiYnt9xiOr2KP+jywVxQGo2EgNqrG3d3KLN5F3+/bbgo/7
-+naXZkVbIM8PamP77u8YlXhk43iFOFW49xHlHhbWtpojCNvkejN1DUNLrDsmdQPm
-YzHj5Fllqpwl4khK5AWfFZIHW9As5w==
-=oPiU
------END PGP SIGNATURE-----
-
---Sig_/c4UFk8H=0ya6HhILawxv1I+--
+Best regards,
+Martin
