@@ -2,98 +2,256 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 14EC969DF44
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 12:50:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0837269DF46
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 12:50:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234378AbjBULuT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Feb 2023 06:50:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53638 "EHLO
+        id S234396AbjBULud (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Feb 2023 06:50:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54154 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233337AbjBULuQ (ORCPT
+        with ESMTP id S233481AbjBULub (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Feb 2023 06:50:16 -0500
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 397861D91D;
-        Tue, 21 Feb 2023 03:50:12 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=Content-Transfer-Encoding:Content-Type
-        :MIME-Version:Message-ID:References:In-Reply-To:Subject:CC:To:From:Date:
-        Sender:Reply-To:Content-ID:Content-Description;
-        bh=SmqBDrFVNi7bDzalXIywNqVEv5Rn8D6kI0AXH79nppo=; b=dSDtBbT2eWJ/HyjVdZciOgTGEH
-        SHAyzW9ThlbsRHtjTE9FkjwCFFHE4A0RE2/Qz8AYamWBkqwHejT5hRsiACdUac6Xpp/cqkcjHJMiK
-        NQDMbvvbBD4ijn8Czv1hdh5omALKrLYNOjF7VsOjazxDmNpBKD1FYQKVwSIFSUCEf2Ria9pAX/x7l
-        BjAXvZmFH/s5+QRBqV5G7bvew6LvV2jJ04Y0Jlfr3Aj3CyfX+5I4oNWK76pwU1/w6LDnsNcZGPD83
-        3yZBAWB53yg3Edj+AWeMNXt2wmIUuv0QuI6CaiEm8A7itre04Bpk+CvATphFEf0W8ONfQ92KluZFG
-        25iJfmwg==;
-Received: from [2a00:23ee:1409:22b9:5717:6ed9:7d1a:8d4f] (helo=[IPv6:::1])
-        by desiato.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
-        id 1pUR9E-00C9dP-2N;
-        Tue, 21 Feb 2023 11:49:29 +0000
-Date:   Tue, 21 Feb 2023 11:49:26 +0000
-From:   David Woodhouse <dwmw2@infradead.org>
-To:     Oleksandr Natalenko <oleksandr@natalenko.name>
-CC:     Kim Phillips <kim.phillips@amd.com>, tglx@linutronix.de,
-        Usama Arif <usama.arif@bytedance.com>, arjan@linux.intel.com,
-        mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
-        hpa@zytor.com, x86@kernel.org, pbonzini@redhat.com,
-        paulmck@kernel.org, linux-kernel@vger.kernel.org,
-        kvm@vger.kernel.org, rcu@vger.kernel.org, mimoja@mimoja.de,
-        hewenliang4@huawei.com, thomas.lendacky@amd.com, seanjc@google.com,
-        pmenzel@molgen.mpg.de, fam.zheng@bytedance.com,
-        punit.agrawal@bytedance.com, simon.evans@bytedance.com,
-        liangma@liangbit.com,
-        "Limonciello, Mario" <Mario.Limonciello@amd.com>,
-        Piotr Gorski <piotrgorski@cachyos.org>
-Subject: Re: [PATCH v9 0/8] Parallel CPU bringup for x86_64
-User-Agent: K-9 Mail for Android
-In-Reply-To: <f71275dc809cfb32df513023786c3faa@natalenko.name>
-References: <20230215145425.420125-1-usama.arif@bytedance.com> <2668869.mvXUDI8C0e@natalenko.name> <2a67f6cf18dd2c1879fad9fd8a28242918d3e5d2.camel@infradead.org> <982e1d6140705414e8fd60b990bd259a@natalenko.name> <715CBABF-4017-4784-8F30-5386F1524830@infradead.org> <67dbc69f-b712-8971-f1c9-5d07f506a19c@amd.com> <42dc683e2846ae8fc1e09715aaf7884660e1a386.camel@infradead.org> <37c18c3aeea2e558633b6da6886111d0@natalenko.name> <5A3B7074-0C6D-472B-803B-D76541828C1F@infradead.org> <3d8ed6e157df10c5175c636de0e21849@natalenko.name> <5c557f9b6f55dc2a612ee89142971298e6ae12d8.camel@infradead.org> <ee0d0d971a3095d6a1e96ad4f1ba32d2@natalenko.name> <5b8f9c89f7015fa80c966c6c7f6fa259db6744f8.camel@infradead.org> <ce731b5a4a53680b4840467977b33d9a@natalenko.name> <85ceb3f92abf3c013924de2f025517372bed19c0.camel@infradead.org> <3e5944de08ef0d23584d19bad7bae66c@natalenko.name> <26E5DC9C-0F19-4E4F-9076-04506A197374@infradead.org> <f71275dc809cfb32df513023786c3faa@natalenko.name>
-Message-ID: <10CA27BB-ADC6-4421-86D2-A83BD7FA12E0@infradead.org>
+        Tue, 21 Feb 2023 06:50:31 -0500
+Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2058.outbound.protection.outlook.com [40.107.93.58])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34C6310A8C;
+        Tue, 21 Feb 2023 03:50:27 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=VS+ka6xgzf86qDty9+/++EE2Qi5SgJNSCB2QDjmLaATTt+knlhKlbB5SXxj2XqHPsTufQDx420Bj9wzSxgNeOo3xoTJV+yPxYgdXMEJsX/Vz4ZUsr5bM3oXVHzDQaCLfrQCLAyANM3GI6R9DPpC9Hm/NREQclsiv4bOT6tlb8vpgLDE4AN6RZnayAumY5l1kPkhLpuuHOqUMMhz4BRo0E5GahjnxHS/Jr2Z4GMxhz52zBdzS0xT3WVbDGpEN4iaoosual+Zdwn1sOW17XbLEAkNIa6xgjwDpXN9tdGx8h6ak161cC1F9b0wUtBkhKCDvfTKhMmN1pGEOXmuhBMgQ2g==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=Yb0+XKgTmardZC+FWcj0k+gvbRMAEGIio0dawcg7wJc=;
+ b=oM+tYnUmbuekNQdU1X1LHMn2CqcQVT/17t2nlMkknG1kfCHmC0NFG4QLsQUqnveFEqJD4KLJdT0+ViHG61C3pZ0kRZBVY39APy0D43N36GTJwP5ln2FfvuGR/CGlzmhuVoUzp6W5ta+ONujK/jvwMTy31BkAf6iQG5qnSr+Y9GVrki07jhewf0xVrXqoYwkv5Nt01lWWLc+HMrQPlLOWsWf92lySUv7/mnKSo7DV9StyjC8DwyLlIVen7dyi79twMt0tcD9TOq7HwyNkh0YjrMliNnm+uqH48lqqRMCD+XgZ65oDoNfofoSCYAVX0+75QabOZsK2GFp7NedAaOOPHA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=kernel.org smtp.mailfrom=amd.com; dmarc=pass
+ (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=Yb0+XKgTmardZC+FWcj0k+gvbRMAEGIio0dawcg7wJc=;
+ b=317bAQWkYphKynhFhGQpp5X/LsVaJ2A4DbBBMOHdBtK/Vn69fZ7nUo8Mm/9gnZD6xkXBJydOuPol0ojJGll2nMnbrk8Ryij2bfsSQgYHw/+AK4PSukPers4uZkhzC6IIT+f/dBXJDeNnIX4lH5fx0NEuk9PKgzyftem9Ou8/6Ak=
+Received: from MN2PR10CA0015.namprd10.prod.outlook.com (2603:10b6:208:120::28)
+ by SA1PR12MB7224.namprd12.prod.outlook.com (2603:10b6:806:2bb::20) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6111.21; Tue, 21 Feb
+ 2023 11:50:17 +0000
+Received: from BL02EPF00010209.namprd05.prod.outlook.com
+ (2603:10b6:208:120:cafe::f4) by MN2PR10CA0015.outlook.office365.com
+ (2603:10b6:208:120::28) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6111.20 via Frontend
+ Transport; Tue, 21 Feb 2023 11:50:16 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ BL02EPF00010209.mail.protection.outlook.com (10.167.241.198) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.6134.14 via Frontend Transport; Tue, 21 Feb 2023 11:50:16 +0000
+Received: from localhost (10.180.168.240) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Tue, 21 Feb
+ 2023 05:50:14 -0600
+From:   Nava kishore Manne <nava.kishore.manne@amd.com>
+To:     <mdf@kernel.org>, <hao.wu@intel.com>, <yilun.xu@intel.com>,
+        <trix@redhat.com>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <michal.simek@xilinx.com>,
+        <nava.kishore.manne@amd.com>, <linux-fpga@vger.kernel.org>,
+        <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: [PATCH v2] dt-bindings: fpga: xilinx-pr-decoupler: convert bindings to json-schema
+Date:   Tue, 21 Feb 2023 17:20:12 +0530
+Message-ID: <20230221115012.3468798-1-nava.kishore.manne@amd.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-SRS-Rewrite: SMTP reverse-path rewritten from <dwmw2@infradead.org> by desiato.infradead.org. See http://www.infradead.org/rpr.html
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.180.168.240]
+X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
+ (10.181.40.145)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BL02EPF00010209:EE_|SA1PR12MB7224:EE_
+X-MS-Office365-Filtering-Correlation-Id: 2ba1ec0d-f742-4862-52e9-08db1401ccd5
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: U9YAZZ/drgXpU0hP7rTWTevMUZVxswcXUsNxGpGbogEI881Pxlyv2P+TM3EYiPC5LMbJ7jYdigUUUZ7EmturZ/ltBghu9gZ1d9ldQ71P5CzgvTCo8+ABdzs3uj2jZQ1RHa180nSzk5AsBsHeEhvRn8Huan1XpJ84VTktyfcDjartSpY3hmyN70AH7XgNAGoRORASIAPZRgpCEF+NAHAGeRgG2WTSEyqT4wR5NYSCDkBOKb3NXk6X7H6ok/loxYt58PGDb8buT2nG7qaDBQCLZPcFT/RRAoiVU+NTL3L4znbiE7UG1P6JFEAbXGzgvvo4XKu3BppmazOOrbsnY+XCXj3iW4LYFqP9t9X81ddsDA7dwzx1v0bk4U7C6gFd+OYmOS/6Yz3uJxo/qCx4wpdKgd/wyzmAYebpjUBaqlif5tVekk9K6LXloWzxK6q6BQC+3B5YouIPA8Nt9+kDOZWD7DAFKg+eBJgSuUvuQ5ZDFARt0WL+fM0O6oMhc3VRsRLR4oZcWBg27iaYD0BOcI3ol09JuS3TfiBnKLqdAGPRhuGLBr/QF2ik0B3J3p/QOY8eRkWitN3UkVwziov5FHjaiGBasUjyjldn2WCCnam6qm4bbai/f3UONFoAuw0Vd57+7dqrV4aHN/+Y3XXw5yNxuwvhdiF0mJVfSCND+QQJLPbZfzdx47W7oAW1ZYSs31vgmZ/mHU7cLBBQX5O+a/btjGgXr4DqsCIU65yMeR7DCrUaGtdDGmh1joBRZ6aXR7vUjTig1lBtOmgVbBb44mLuAPoUDfKI6193EKlptLQX91ql2B0YDECe+vLdRAHj+Hi86GEztO8m+SSfKpd2XwUAyA==
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230025)(4636009)(39860400002)(376002)(396003)(136003)(346002)(451199018)(46966006)(36840700001)(40470700004)(82740400003)(81166007)(82310400005)(2616005)(921005)(356005)(110136005)(86362001)(478600001)(36860700001)(83380400001)(70586007)(70206006)(5660300002)(2906002)(8676002)(41300700001)(8936002)(103116003)(26005)(1076003)(186003)(966005)(40480700001)(426003)(40460700003)(336012)(16526019)(316002)(7416002)(36756003)(47076005)(83996005)(2101003)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 21 Feb 2023 11:50:16.6643
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 2ba1ec0d-f742-4862-52e9-08db1401ccd5
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource: BL02EPF00010209.namprd05.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA1PR12MB7224
+X-Spam-Status: No, score=0.5 required=5.0 tests=AC_FROM_MANY_DOTS,BAYES_00,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Convert xilinx-pr-decoupler bindings to DT schema format using json-schema
 
+Signed-off-by: Nava kishore Manne <nava.kishore.manne@amd.com>
+---
+Changes for v2:
+              - Updated the description and addressed some minor comments
+                as suggested by Krzysztof.
 
-On 21 February 2023 11:46:04 GMT, Oleksandr Natalenko <oleksandr@natalenko=
-=2Ename> wrote:
->On 21=2E02=2E2023 11:27, David Woodhouse wrote:
->> On 21 February 2023 09:49:51 GMT, Oleksandr Natalenko <oleksandr@natale=
-nko=2Ename> wrote:
->>> On 21=2E02=2E2023 10:06, David Woodhouse wrote:
->>>> Why does arch/x86/kernel/acpi/sleep=2Ec::x86_acpi_suspend_lowlevel() =
-set
->>>>=20
->>>>     initial_gs =3D per_cpu_offset(smp_processor_id()) ?
->>>>=20
->>>> Would it not be CPU#0 that comes back up, and should it not get
->>>> per_cpu_offset(0) ?
->>>=20
->>> Wanna me try `initial_gs =3D per_cpu_offset(0);` too?
->>=20
->> Hm, yes please=2E There's another one to make zero on the next line up,=
- I think?
->
->So,
->
->```
->early_gdt_descr=2Eaddress =3D (unsigned long)get_cpu_gdt_rw(0);
->initial_gs =3D per_cpu_offset(0);
->```
->
->?
->
->Should I leave `smpboot_control =3D 0;` commented out, or I should uncomm=
-ent it back?
+ .../bindings/fpga/xilinx-pr-decoupler.txt     | 54 --------------
+ .../bindings/fpga/xlnx,pr-decoupler.yaml      | 71 +++++++++++++++++++
+ 2 files changed, 71 insertions(+), 54 deletions(-)
+ delete mode 100644 Documentation/devicetree/bindings/fpga/xilinx-pr-decoupler.txt
+ create mode 100644 Documentation/devicetree/bindings/fpga/xlnx,pr-decoupler.yaml
 
-Put it back, else those things don't matter=2E Thanks=2E
+diff --git a/Documentation/devicetree/bindings/fpga/xilinx-pr-decoupler.txt b/Documentation/devicetree/bindings/fpga/xilinx-pr-decoupler.txt
+deleted file mode 100644
+index 0acdfa6d62a4..000000000000
+--- a/Documentation/devicetree/bindings/fpga/xilinx-pr-decoupler.txt
++++ /dev/null
+@@ -1,54 +0,0 @@
+-Xilinx LogiCORE Partial Reconfig Decoupler Softcore
+-
+-The Xilinx LogiCORE Partial Reconfig Decoupler manages one or more
+-decouplers / fpga bridges.
+-The controller can decouple/disable the bridges which prevents signal
+-changes from passing through the bridge.  The controller can also
+-couple / enable the bridges which allows traffic to pass through the
+-bridge normally.
+-
+-Xilinx LogiCORE Dynamic Function eXchange(DFX) AXI shutdown manager
+-Softcore is compatible with the Xilinx LogiCORE pr-decoupler.
+-
+-The Dynamic Function eXchange AXI shutdown manager prevents AXI traffic
+-from passing through the bridge. The controller safely handles AXI4MM
+-and AXI4-Lite interfaces on a Reconfigurable Partition when it is
+-undergoing dynamic reconfiguration, preventing the system deadlock
+-that can occur if AXI transactions are interrupted by DFX
+-
+-The Driver supports only MMIO handling. A PR region can have multiple
+-PR Decouplers which can be handled independently or chained via decouple/
+-decouple_status signals.
+-
+-Required properties:
+-- compatible		: Should contain "xlnx,pr-decoupler-1.00" followed by
+-                          "xlnx,pr-decoupler" or
+-                          "xlnx,dfx-axi-shutdown-manager-1.00" followed by
+-                          "xlnx,dfx-axi-shutdown-manager"
+-- regs			: base address and size for decoupler module
+-- clocks		: input clock to IP
+-- clock-names		: should contain "aclk"
+-
+-See Documentation/devicetree/bindings/fpga/fpga-region.txt and
+-Documentation/devicetree/bindings/fpga/fpga-bridge.txt for generic bindings.
+-
+-Example:
+-Partial Reconfig Decoupler:
+-	fpga-bridge@100000450 {
+-		compatible = "xlnx,pr-decoupler-1.00",
+-			     "xlnx-pr-decoupler";
+-		regs = <0x10000045 0x10>;
+-		clocks = <&clkc 15>;
+-		clock-names = "aclk";
+-		bridge-enable = <0>;
+-	};
+-
+-Dynamic Function eXchange AXI shutdown manager:
+-	fpga-bridge@100000450 {
+-		compatible = "xlnx,dfx-axi-shutdown-manager-1.00",
+-			     "xlnx,dfx-axi-shutdown-manager";
+-		regs = <0x10000045 0x10>;
+-		clocks = <&clkc 15>;
+-		clock-names = "aclk";
+-		bridge-enable = <0>;
+-	};
+diff --git a/Documentation/devicetree/bindings/fpga/xlnx,pr-decoupler.yaml b/Documentation/devicetree/bindings/fpga/xlnx,pr-decoupler.yaml
+new file mode 100644
+index 000000000000..4a08d4bfa20d
+--- /dev/null
++++ b/Documentation/devicetree/bindings/fpga/xlnx,pr-decoupler.yaml
+@@ -0,0 +1,71 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/fpga/xlnx,pr-decoupler.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Xilinx LogiCORE Partial Reconfig Decoupler/AXI shutdown manager Softcore
++
++maintainers:
++  - Nava kishore Manne <nava.kishore.manne@amd.com>
++
++description: The Xilinx LogiCORE Partial Reconfig Decoupler manages one or more
++  decouplers / fpga bridges. The controller can decouple/disable the bridges
++  which prevents signal changes from passing through the bridge.  The controller
++  can also couple / enable the bridges which allows traffic to pass through the
++  bridge normally.
++  Xilinx LogiCORE Dynamic Function eXchange(DFX) AXI shutdown manager Softcore
++  is compatible with the Xilinx LogiCORE pr-decoupler. The Dynamic Function
++  eXchange AXI shutdown manager prevents AXI traffic from passing through the
++  bridge. The controller safely handles AXI4MM and AXI4-Lite interfaces on a
++  Reconfigurable Partition when it is undergoing dynamic reconfiguration,
++  preventing the system deadlock that can occur if AXI transactions are
++  interrupted by DFX.
++  Please refer to fpga-region.txt and fpga-bridge.txt in this directory for
++  common binding part and usage.
++
++properties:
++  compatible:
++    oneOf:
++      - items:
++          - const: xlnx,pr-decoupler-1.00 #For PR-Decoupler.
++          - const: xlnx,pr-decoupler
++      - items:
++          - const: xlnx,dfx-axi-shutdown-manager-1.00 #For AXI shutdown manager.
++          - const: xlnx,dfx-axi-shutdown-manager
++
++  reg:
++    maxItems: 1
++
++  clocks:
++    maxItems: 1
++
++  clock-names:
++    items:
++      - const: aclk
++
++  bridge-enable:
++    $ref: /schemas/types.yaml#/definitions/uint32
++    enum: [0, 1]
++    description:
++      Zero if driver should disable bridge at startup. One if driver should
++      enable bridge at startup. Default is to leave bridge in current state.
++
++required:
++  - compatible
++  - reg
++  - clocks
++  - clock-names
++
++additionalProperties: false
++
++examples:
++  - |
++    fpga-bridge@100000450 {
++      compatible = "xlnx,pr-decoupler-1.00", "xlnx,pr-decoupler";
++      reg = <0x10000045 0x10>;
++      clocks = <&clkc 15>;
++      clock-names = "aclk";
++      bridge-enable = <0>;
++    };
++...
+-- 
+2.25.1
+
