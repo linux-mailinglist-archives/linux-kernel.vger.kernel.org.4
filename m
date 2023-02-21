@@ -2,163 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E26C69E5B4
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 18:14:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 90C8D69E5AF
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 18:14:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234645AbjBUROt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Feb 2023 12:14:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54340 "EHLO
+        id S234326AbjBURN6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Feb 2023 12:13:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53034 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234873AbjBUROp (ORCPT
+        with ESMTP id S234644AbjBURN5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Feb 2023 12:14:45 -0500
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33AA91167E;
-        Tue, 21 Feb 2023 09:14:40 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1676999681; x=1708535681;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=KfbwTghgO0/3M+21sjRPn9tYjmtct1z1AlbCtPRgaz8=;
-  b=EnbSwDqp0WBmllxdsk04x5WVmDqD3MB4iwg0NwB1H0LCVCaYcPW5/ZSq
-   AbL+5f8GLJ/GpiHgKl5pBmtD4C4LikRTbnOKjte9IeN9tvE+mryzBpXav
-   KTiH+7rRHBobeKMvmQ8Z6TDH8ZTDt+XvZ4y81nCwZZZPXi71ONTbVtYmO
-   q5r4yMLYEJ2b9TyyDJRIdyUnlmuqiScwX0OIUA3Oa1uOmfySfG8amkvHL
-   8myucGRvzJb4D2XUUUaGda3b+7SWhNNzCqqF5ABA6o2N+gcbo05FYrShc
-   u6LBA3Eso6jCMBZWc6iB0uVIw7BNAPXembXKoVoYONwpJSRtjT4hyZAne
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10628"; a="418918247"
-X-IronPort-AV: E=Sophos;i="5.97,315,1669104000"; 
-   d="scan'208";a="418918247"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Feb 2023 09:13:35 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10628"; a="795587674"
-X-IronPort-AV: E=Sophos;i="5.97,315,1669104000"; 
-   d="scan'208";a="795587674"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by orsmga004.jf.intel.com with ESMTP; 21 Feb 2023 09:13:32 -0800
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1pUWCp-00A35j-07;
-        Tue, 21 Feb 2023 19:13:31 +0200
-Date:   Tue, 21 Feb 2023 19:13:30 +0200
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Naresh Kamboju <naresh.kamboju@linaro.org>
-Cc:     Linux Media Mailing List <linux-media@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        lkft-triage@lists.linaro.org, Bartosz Golaszewski <brgl@bgdev.pl>,
-        Ferry Toth <fntoth@gmail.com>,
-        Linus Walleij <linus.walleij@linaro.org>, warthog618@gmail.com,
-        Arnd Bergmann <arnd@arndb.de>
-Subject: Re: arm64: libgpiod: refcount_t: underflow; use-after-free.
-Message-ID: <Y/T7unUf10Wis59a@smile.fi.intel.com>
-References: <CA+G9fYs4JsmNxX4+W=wijfSPdDsOy=SWLBSitZper5ncPpdxqA@mail.gmail.com>
+        Tue, 21 Feb 2023 12:13:57 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C4DEDBD2;
+        Tue, 21 Feb 2023 09:13:54 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id C910DB81025;
+        Tue, 21 Feb 2023 17:13:52 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0598AC433EF;
+        Tue, 21 Feb 2023 17:13:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1676999631;
+        bh=UTWxdc56Bg+YO8XilIbhRusXF7346//1k4aqaSaRM1U=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=hP96ZN9UTZzYGWST0dk16C5FXdoBfma6+G541tCU9g3TeAa/+C3jXPvTUmrkL0JRP
+         jvDubqdRNPKR9UzaB5eeRgyRV48363T5k/9dGI63InzzBdoc5lcvzeCxlJt6Cuic8u
+         QgB4k8wmrEimyeZy3WiCAxO5F8Zbz95yucNyhtpvSb3w+hs3M3qMQfeWxAdO8B+DwA
+         w4CUO8CKCuJ7hEPg5kZYwGQS7YQr8QcYVSXgHRWhSD/tRA7u43xcIYOyMD6HocuuvU
+         4/5fu9X7jBAT+6388bZfC4zRc4q/2fFiMAoSD/VGzyLbnhTwQTCysKeziPxmCC9jKH
+         z16n1MbpmQJGQ==
+Date:   Tue, 21 Feb 2023 17:13:45 +0000
+From:   Conor Dooley <conor@kernel.org>
+To:     Hal Feng <hal.feng@starfivetech.com>
+Cc:     linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-riscv@lists.infradead.org, Stephen Boyd <sboyd@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Ben Dooks <ben.dooks@sifive.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Marc Zyngier <maz@kernel.org>,
+        Emil Renner Berthing <emil.renner.berthing@canonical.com>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v4 06/19] reset: starfive: Extract the common JH71X0
+ reset code
+Message-ID: <Y/T7yVD1mHLxoQ1a@spud>
+References: <20230221024645.127922-1-hal.feng@starfivetech.com>
+ <20230221024645.127922-7-hal.feng@starfivetech.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="aqcjb486AUxWSCDg"
 Content-Disposition: inline
-In-Reply-To: <CA+G9fYs4JsmNxX4+W=wijfSPdDsOy=SWLBSitZper5ncPpdxqA@mail.gmail.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230221024645.127922-7-hal.feng@starfivetech.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 20, 2023 at 08:29:27PM +0530, Naresh Kamboju wrote:
-> Following kernel warning notices on qemu-arm64, qemu-arm and also on devices
-> running Linux version v6.2.0 while running libgpiod tests.
-> 
-> + ./gpiod.sh /opt/libgpiod/bin/
->   [INFO]    libgpiod test suite
->   [INFO]    117 tests registered
->   [INFO]    checking the linux kernel version
->   [INFO]    kernel release is v6.2.0 - ok to run tests
->   [INFO]    using gpio-tools from '/usr/bin'
-> [   10.499036] ------------[ cut here ]------------
-> [   10.499656] refcount_t: underflow; use-after-free.
-> [   10.500264] WARNING: CPU: 2 PID: 291 at lib/refcount.c:28
-> refcount_warn_saturate+0xf4/0x144
-> [   10.501306] Modules linked in: gpio_mockup(-) cfg80211 bluetooth
-> rfkill crct10dif_ce fuse drm
-> [   10.502364] CPU: 2 PID: 291 Comm: gpiod-test Not tainted 6.2.0 #1
-> [   10.503229] Hardware name: linux,dummy-virt (DT)
-> [   10.503883] pstate: 60400005 (nZCv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
-> [   10.505331] pc : refcount_warn_saturate+0xf4/0x144
-> [   10.505723] lr : refcount_warn_saturate+0xf4/0x144
-> [   10.506115] sp : ffff800008983cd0
-> [   10.506391] x29: ffff800008983cd0 x28: ffff0000c4c4c100 x27: 0000000000000000
-> [   10.506961] x26: 0000000000000000 x25: 0000000000000000 x24: 0000000000000000
-> [   10.507533] x23: 0000000000000200 x22: ffff0000c4e66800 x21: ffff0000c7734640
-> [   10.508104] x20: 0000000000000001 x19: ffff0000c7734600 x18: ffffffffffffffff
-> [   10.508677] x17: 3d4d455453595342 x16: ffffcf0234432020 x15: ffff800088983957
-> [   10.509424] x14: 0000000000000000 x13: 2e656572662d7265 x12: 7466612d65737520
-> [   10.510003] x11: 3b776f6c66726564 x10: ffffcf02365db580 x9 : ffffcf0233b20138
-> [   10.510575] x8 : 00000000ffffefff x7 : ffffcf02365db580 x6 : 0000000000000001
-> [   10.511145] x5 : ffffcf023655f000 x4 : ffffcf023655f2e8 x3 : 0000000000000000
-> [   10.511721] x2 : 0000000000000000 x1 : 0000000000000000 x0 : ffff0000c4c4c100
-> [   10.512294] Call trace:
-> [   10.512494]  refcount_warn_saturate+0xf4/0x144
-> [   10.512971]  kobject_put+0x164/0x220
-> [   10.513224]  fwnode_remove_software_node+0x44/0x60
-> [   10.513554]  gpio_mockup_unregister_pdevs+0x54/0x70 [gpio_mockup]
-> [   10.513970]  gpio_mockup_exit+0x10/0x328 [gpio_mockup]
-> [   10.514322]  __arm64_sys_delete_module+0x190/0x2a0
-> [   10.514653]  invoke_syscall+0x50/0x120
-> [   10.514915]  el0_svc_common.constprop.0+0x104/0x124
-> [   10.515277]  do_el0_svc+0x44/0xcc
-> [   10.515541]  el0_svc+0x30/0x94
-> [   10.515788]  el0t_64_sync_handler+0xbc/0x13c
-> [   10.516126]  el0t_64_sync+0x190/0x194
-> [   10.516419] ---[ end trace 0000000000000000 ]---
-> 
-> 
-> Build and test logs,
-> https://qa-reports.linaro.org/lkft/linux-mainline-master/build/v6.2/testrun/14856342/suite/libgpiod/test/ctxless-get-value-single-line/log
-> https://qa-reports.linaro.org/lkft/linux-mainline-master/build/v6.2/testrun/14856342/suite/libgpiod/tests/
 
-Can you give a try of the patch below?
+--aqcjb486AUxWSCDg
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-diff --git a/drivers/base/platform.c b/drivers/base/platform.c
-index 77510e4f47de..1807678f032b 100644
---- a/drivers/base/platform.c
-+++ b/drivers/base/platform.c
-@@ -557,7 +557,7 @@ static void platform_device_release(struct device *dev)
- 	struct platform_object *pa = container_of(dev, struct platform_object,
- 						  pdev.dev);
- 
--	of_node_put(pa->pdev.dev.of_node);
-+	fwnode_handle_put(dev_fwnode(&pa->pdev.dev));
- 	kfree(pa->pdev.dev.platform_data);
- 	kfree(pa->pdev.mfd_cell);
- 	kfree(pa->pdev.resource);
-@@ -814,8 +814,7 @@ struct platform_device *platform_device_register_full(
- 		return ERR_PTR(-ENOMEM);
- 
- 	pdev->dev.parent = pdevinfo->parent;
--	pdev->dev.fwnode = pdevinfo->fwnode;
--	pdev->dev.of_node = of_node_get(to_of_node(pdev->dev.fwnode));
-+	device_set_node(&pdev->dev, fwnode_handle_get(pdevinfo->fwnode));
- 	pdev->dev.of_node_reused = pdevinfo->of_node_reused;
- 
- 	if (pdevinfo->dma_mask) {
-@@ -844,8 +843,8 @@ struct platform_device *platform_device_register_full(
- 	ret = platform_device_add(pdev);
- 	if (ret) {
- err:
--		ACPI_COMPANION_SET(&pdev->dev, NULL);
- 		platform_device_put(pdev);
-+		fwnode_handle_put(pdevinfo->fwnode);
- 		return ERR_PTR(ret);
- 	}
- 
--- 
-With Best Regards,
-Andy Shevchenko
+On Tue, Feb 21, 2023 at 10:46:32AM +0800, Hal Feng wrote:
+> From: Emil Renner Berthing <kernel@esmil.dk>
+>=20
+> Extract the common JH71X0 reset code for reusing them to
+> support JH7110 SoC.
+>=20
+> Signed-off-by: Emil Renner Berthing <kernel@esmil.dk>
+> Signed-off-by: Hal Feng <hal.feng@starfivetech.com>
 
+Split out makes it easier to follow, thanks.
+Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
 
+--aqcjb486AUxWSCDg
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCY/T7yQAKCRB4tDGHoIJi
+0mzCAQCzNX7ciETyNNPQvAwhWFyXvywt5DtH5jI3CcjZGeLMvgEAqU7NT1fMnV3w
+9ZxpB97C+S6RTgF9h6k1xLAmeb9rswA=
+=XwAV
+-----END PGP SIGNATURE-----
+
+--aqcjb486AUxWSCDg--
