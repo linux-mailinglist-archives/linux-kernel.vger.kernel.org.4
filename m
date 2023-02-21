@@ -2,93 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E1FBE69E098
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 13:42:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AE8D969E099
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 13:43:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234758AbjBUMmq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Feb 2023 07:42:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38732 "EHLO
+        id S234772AbjBUMn5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Feb 2023 07:43:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40094 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234701AbjBUMmo (ORCPT
+        with ESMTP id S233217AbjBUMnz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Feb 2023 07:42:44 -0500
-Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7ACC227483
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Feb 2023 04:42:42 -0800 (PST)
-Received: by mail-ed1-x536.google.com with SMTP id ec43so16153606edb.8
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Feb 2023 04:42:42 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=O6el+9joKyAhVr+TDn79fkuxzTiKR+SX0MO09engIhY=;
-        b=cLZLuL/REYI8EX3PmLJFdaF2YUd4XwINhRSVuCvmFL4aG05j7eoj6hTO6HsBms6J64
-         jI1aSNDMwXJlv7vMhzZCU57mo5E8++tN0wcL8Cp41JslegPSild6F+BHDEw87m7rLbEd
-         U2e/JwxkCaFBy2Wd5fsup2SUZJLAAQ9sQSgQQlRq2fkj0iZmeJnegXko/ihX0PNFLSWt
-         56urgBxOBm/Nqy0l4t3vVRSZ0GnyJ43fsmC2tam2hSOi32ZWoe/HgEX0sPnqpynLUEyv
-         fj0sbsXVvjHQ8Vh4esfPA0zpanqX1wvttZbt9RUFwrDvpKYVPp92lo7MQwxzTAdK/3p+
-         nTgQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=O6el+9joKyAhVr+TDn79fkuxzTiKR+SX0MO09engIhY=;
-        b=qCUF2PB1ftUM/JwpvfRqbiC8cIjPmY+Cs/8Qxv72vvxPxJMx175AJjByZA/V0P72Le
-         dfwvhaNX+pGgagC68nzlu4yN8RH1wV1MGTGU/1lR0lfgzIeBapqKlas0RPy0y7Y+H4kV
-         L1j5ShJPbaNzpXWSsIgs/CMR13yPCvtItNo5pUaosvfrW0Z8cMqpH8/axp/QSG8x0hDe
-         g2wCY0Qq7tRwyPiVf8Wt+Eyt0Y/VvwUGcXYyuUAJg451w4ejV/w602TbAQ8x+EbrBkcr
-         te6cb/yyUH3rbepplBtTWujdDyKKV0FlcztzpMMOiepjBYd/LKjXMF1qIQDghIae066o
-         ePvQ==
-X-Gm-Message-State: AO0yUKXPTp0TO1uOFSZGBDTuKtUM34MAh959NW+3T2J6DQqWR64kqA88
-        zqG/G9rw208Ak45J6AzjajhDtPfRqeOfoFV0uf2hhw==
-X-Google-Smtp-Source: AK7set98YYMMSbNx2hRGaTKAwlPc630Vw/Ga3pJmq4lzKkS4okWIZvm2EzW2kFQ7OPb7yFK5K2hy0cNe5M/5DCpxx9U=
-X-Received: by 2002:a17:906:9499:b0:8b1:79ef:6923 with SMTP id
- t25-20020a170906949900b008b179ef6923mr6794210ejx.15.1676983360819; Tue, 21
- Feb 2023 04:42:40 -0800 (PST)
-MIME-Version: 1.0
-References: <20230202112915.867409-1-usama.anjum@collabora.com>
- <20230202112915.867409-4-usama.anjum@collabora.com> <CABb0KFEgsk+YidSXBYQ9mM8nVV6PuEOQf=bbNn7hsoG1hUeLZg@mail.gmail.com>
- <36ddfd75-5c58-197b-16c9-9f819099ea6d@collabora.com>
-In-Reply-To: <36ddfd75-5c58-197b-16c9-9f819099ea6d@collabora.com>
-From:   =?UTF-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <emmir@google.com>
-Date:   Tue, 21 Feb 2023 13:42:29 +0100
-Message-ID: <CABb0KFGWi0dtgXZ-AeUuHb55EgnwTu3JfJ9cW3ftCqezKi8dAQ@mail.gmail.com>
-Subject: Re: [PATCH v10 3/6] fs/proc/task_mmu: Implement IOCTL to get and/or
- the clear info about PTEs
-To:     Muhammad Usama Anjum <usama.anjum@collabora.com>
-Cc:     Andrei Vagin <avagin@gmail.com>, Mike Rapoport <rppt@kernel.org>,
-        Nadav Amit <namit@vmware.com>,
-        David Hildenbrand <david@redhat.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Paul Gofman <pgofman@codeweavers.com>,
-        Cyrill Gorcunov <gorcunov@gmail.com>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Shuah Khan <shuah@kernel.org>,
-        Christian Brauner <brauner@kernel.org>,
-        Yang Shi <shy828301@gmail.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        "Liam R . Howlett" <Liam.Howlett@oracle.com>,
-        Yun Zhou <yun.zhou@windriver.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Alex Sierra <alex.sierra@amd.com>,
-        Peter Xu <peterx@redhat.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Pasha Tatashin <pasha.tatashin@soleen.com>,
-        Axel Rasmussen <axelrasmussen@google.com>,
-        "Gustavo A . R . Silva" <gustavoars@kernel.org>,
-        Dan Williams <dan.j.williams@intel.com>,
-        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
-        Greg KH <gregkh@linuxfoundation.org>, kernel@collabora.com,
-        Danylo Mocherniuk <mdanylo@google.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+        Tue, 21 Feb 2023 07:43:55 -0500
+Received: from out3-smtp.messagingengine.com (out3-smtp.messagingengine.com [66.111.4.27])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2BBB1166CB
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Feb 2023 04:43:54 -0800 (PST)
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
+        by mailout.nyi.internal (Postfix) with ESMTP id A1E035C00F3;
+        Tue, 21 Feb 2023 07:43:51 -0500 (EST)
+Received: from imap51 ([10.202.2.101])
+  by compute6.internal (MEProxy); Tue, 21 Feb 2023 07:43:51 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to; s=fm3; t=1676983431; x=1677069831; bh=OCmb1zkwyw
+        fNBZnkPA5iNKc7USKRqt6TZ0HAIFKkI28=; b=EUKrtYHrg6TpzedLk8CPS0y4JY
+        1wO+2pItgIlPLrYtgfn+LFvH566sFd8k7JolfSkXUE9BTZG0zMKCstHZ0agIjg0F
+        xi10sjrNTKIrNeIgNVnriX0A0t/A6Z3N/4mY5zsgYC+0S+RsmSMIc3ObMbnQyx3a
+        BJpiR7bx7n5SYgNo3/qN+8B2iFL7BsmBVVRfbsRMAFeCKbdaUM89Ve/wKawGDaZV
+        hi6GHLUdGpJejF1eohD2c/GxRKV/qY/S34SaAHOJT+QZsTr126R/qT/txm1ufgOC
+        AjOOa3M6HdyfFyHI716OqHqITVSpgsDC7LlcSJYBlgmJCcFGsBIDlbFeBlOw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm1; t=1676983431; x=1677069831; bh=OCmb1zkwywfNBZnkPA5iNKc7USKR
+        qt6TZ0HAIFKkI28=; b=Bd7bevbH8M7iko2LiurMUvMkEEOh3B75I1FDIf/q3oL7
+        BpJG7lFKGdPLFXVZqp6SWQSpw9iVRU7MWsmq3QaDs+A6XsC4w6nuRCTqHCcDVQRe
+        7Ly28p0hpyTqXlPTpGPdA1UvN+8FCJ6lPtNCjZKLwPDmd83ulwwYbPq/F+qSOktU
+        zlx/TIo5o+y2RS5knkyMMlCpsVbH+/SsIGa2xeW8zQIbL9iOqVUTew6x58IuM8Qa
+        osqxToxwB82ROsANLYU7qKAzEcLYe0/opaROa4jvY0oiRZGiyY97IjAFoKnilke7
+        oDTa1uHep2zIKFoTdDElrHnFM65m07i34vbZLQk0CA==
+X-ME-Sender: <xms:h7z0Y7c8UO27QRXOI9lar_Fy5FeYRm28Qe-XQ0P_0M_4wJZ-Kf03oQ>
+    <xme:h7z0YxNgYBRThGTB0t5l8SGI3JyOrZHzhuYsNNl_nqUOxVmcR7399H45XxwVZtiNc
+    z2w3T_mnL-uw7V0oNk>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrudejjedggedvucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehr
+    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
+    htvghrnhepvefhffeltdegheeffffhtdegvdehjedtgfekueevgfduffettedtkeekueef
+    hedunecuffhomhgrihhnpehkvghrnhgvlhdrohhrghenucevlhhushhtvghrufhiiigvpe
+    dtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegrrhhnugesrghrnhgusgdruggv
+X-ME-Proxy: <xmx:h7z0Y0hSPka87n6nXwyXW5lMivWuy1kSPmUnzmYDc84mYIvqBsYcJg>
+    <xmx:h7z0Y88kuXXxDmYX8hkMsdVPR9_6vjTCQDm22vrQQ8qlGfmFXEEReA>
+    <xmx:h7z0Y3tq_iOR690p-ZQ_u3PryDDpOeRNqJ05nvcqneSt0tw-UiGXAg>
+    <xmx:h7z0Y3JfDldYXm_jeCqiieXCnZgLqwwi8cLyNzFodjXMzGsvn4WB_g>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id 2F992B60086; Tue, 21 Feb 2023 07:43:51 -0500 (EST)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.9.0-alpha0-172-g9a2dae1853-fm-20230213.001-g9a2dae18
+Mime-Version: 1.0
+Message-Id: <c5b39544-a4fb-4796-a046-0b9be9853787@app.fastmail.com>
+In-Reply-To: <63030af8-5849-34b3-10e6-b6ce32c3a5bf@kernel.org>
+References: <20220919040701.GA302806@ubuntu>
+ <63030af8-5849-34b3-10e6-b6ce32c3a5bf@kernel.org>
+Date:   Tue, 21 Feb 2023 13:43:04 +0100
+From:   "Arnd Bergmann" <arnd@arndb.de>
+To:     "Jiri Slaby" <jirislaby@kernel.org>,
+        "Hyunwoo Kim" <imv4bel@gmail.com>,
+        "Harald Welte" <laforge@gnumonks.org>
+Cc:     linux-kernel@vger.kernel.org,
+        "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
+        "Dominik Brodowski" <linux@dominikbrodowski.net>
+Subject: Re: [PATCH v3] char: pcmcia: cm4000_cs: Fix use-after-free in cm4000_fops
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -96,81 +87,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 21 Feb 2023 at 11:28, Muhammad Usama Anjum
-<usama.anjum@collabora.com> wrote:
+On Tue, Feb 21, 2023, at 07:51, Jiri Slaby wrote:
+> Ping -- what's the status of these?
 >
-> Hi Micha=C5=82,
->
-> Thank you so much for comment!
->
-> On 2/17/23 8:18=E2=80=AFPM, Micha=C5=82 Miros=C5=82aw wrote:
-[...]
-> > For the page-selection mechanism, currently required_mask and
-> > excluded_mask have conflicting
-> They are opposite of each other:
-> All the set bits in required_mask must be set for the page to be selected=
-.
-> All the set bits in excluded_mask must _not_ be set for the page to be
-> selected.
->
-> > responsibilities. I suggest to rework that to:
-> > 1. negated_flags: page flags which are to be negated before applying
-> > the page selection using following masks;
-> Sorry I'm unable to understand the negation (which is XOR?). Lets look at
-> the truth table:
-> Page Flag       negated_flags
-> 0               0                       0
-> 0               1                       1
-> 1               0                       1
-> 1               1                       0
->
-> If a page flag is 0 and negated_flag is 1, the result would be 1 which ha=
-s
-> changed the page flag. It isn't making sense to me. Why the page flag bit
-> is being fliped?
->
-> When Anrdei had proposed these masks, they seemed like a fancy way of
-> filtering inside kernel and it was straight forward to understand. These
-> masks would help his use cases for CRIU. So I'd included it. Please can y=
-ou
-> elaborate what is the purpose of negation?
+> Should we mark cm4000_cs, cm4040_cs, and scr24x_cs as BROKEN instead?
 
-The XOR is a way to invert the tested value of a flag (from positive
-to negative and the other way) without having the API with invalid
-values (with required_flags and excluded_flags you need to define a
-rule about what happens if a flag is present in both of the masks -
-either prioritise one mask over the other or reject the call).
-(Note: the XOR is applied only to the value of the flags for the
-purpose of testing page-selection criteria.)
+A few bug fixes ago, I think we had all agreed that the drivers can
+just be removed immediately, without a grace period or going through
+drivers/staging [1]. We just need someone to send the corresponding
+patches.
 
-So:
-1. if a flag is not set in negated_flags, but set in required_flags,
-then it means "this flag must be one" - equivalent to it being set in
-required_flag (in your current version of the API).
-2. if a flag is set in negated_flags and also in required_flags, then
-it means "this flag must be zero" - equivalent to it being set in
-excluded_flags.
+While looking for those, I see that Dominik also asked the
+broader question about PCMCIA drivers in general [2] (sorry
+I missed that thread at the time), and Linus just merged my
+boardfile removal patches that ended up dropping half of the
+(arm32) soc or board specific socket back end drivers.
 
-The same thing goes for anyof_flags: if a flag is set in anyof_flags,
-then for it to be considered matched:
-1. it must have a value of 1 if it is not set in negated_flags
-2. it must have a value of 0 if it is set in negated_flags
+Among the options that Dominik proposed in that email, I would
+prefer we go ahead with b) and remove most of the drivers that
+have no known users. I think we can be more aggressive though,
+as most of the drivers that are listed as 'some activity in
+2020/21/22' seem to only be done to fix the same issues that
+were found in ISA or PCI drivers.
 
-BTW, I think I assumed that both conditions (all flags in
-required_flags and at least one in anyof_flags is present) need to be
-true for the page to be selected - is this your intention? The example
-code has a bug though, in that if anyof_flags is zero it will never
-match. Let me fix the selection part:
+The two important use cases that I see for drivers/pcmcia are
+cardbus devices on old laptops, which work with normal PCI
+device drivers, and CF card storage for embedded systems.
+If we can separate the two by moving native cardbus to
+drivers/pci/hotplug but drop support for 16-bit PCMCIA
+devices in cardbus slots, this will hopefully get a lot
+easier.
 
-// calc. a mask of flags that have expected ("active") values
-tested_flags =3D page_flags ^ negated_flags;
-// are all required flags in "active" state? [=3D=3D all zero when negated]
-if (~tested_flags & required_mask)
-  skip page;
-// is any extra flag "active"?
-if (anyof_flags && !(tested_flags & anyof_flags))
-  skip page;
+      Arnd
 
-
-Best Regards
-Micha=C5=82 Miros=C5=82aw
+[1] https://lore.kernel.org/all/YyLcG1hG5d6D4zNN@owl.dominikbrodowski.net/
+[2] https://lore.kernel.org/all/Y07d7rMvd5++85BJ@owl.dominikbrodowski.net/
