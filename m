@@ -2,116 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E7CEF69DDBD
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 11:18:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C285869DDC4
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 11:22:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233396AbjBUKSt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Feb 2023 05:18:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52292 "EHLO
+        id S233422AbjBUKWI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Feb 2023 05:22:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54130 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232640AbjBUKSo (ORCPT
+        with ESMTP id S232793AbjBUKWG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Feb 2023 05:18:44 -0500
-Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 829F4469C;
-        Tue, 21 Feb 2023 02:18:42 -0800 (PST)
-Received: from loongson.cn (unknown [10.20.42.170])
-        by gateway (Coremail) with SMTP id _____8BxedmBmvRj_x0DAA--.922S3;
-        Tue, 21 Feb 2023 18:18:41 +0800 (CST)
-Received: from [10.20.42.170] (unknown [10.20.42.170])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8Cx2r2AmvRj56s3AA--.36327S3;
-        Tue, 21 Feb 2023 18:18:40 +0800 (CST)
-Message-ID: <2875aa3f-0dc4-4e48-17ad-42c703e12063@loongson.cn>
-Date:   Tue, 21 Feb 2023 18:18:40 +0800
+        Tue, 21 Feb 2023 05:22:06 -0500
+Received: from mail-ot1-x32b.google.com (mail-ot1-x32b.google.com [IPv6:2607:f8b0:4864:20::32b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C81E10428;
+        Tue, 21 Feb 2023 02:22:05 -0800 (PST)
+Received: by mail-ot1-x32b.google.com with SMTP id h6-20020a9d7986000000b0068bd8c1e836so692213otm.3;
+        Tue, 21 Feb 2023 02:22:05 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=30shyJsOAw2zs6Sgq+PUulpeZPcaVAnq8cjIhLP8b54=;
+        b=elznRG7Pcy5Yc4r13B85Rv7Bb/wSbDxBrGsxqTtE4BDZkGHucYkpj4EOaS8TrEB40c
+         dbKiG2oMsgB4BbiurMCLRitbQ5qXrWR6DbFU3Bvd+CdQNdziLtEmGd5YRGPXoHSso1iu
+         0QDrBn1lhOWBp1ZbNiPHZGd+5rRKA018QmBLt+f4s5kY8sKfBEAYqEzv8J2OCGyNcl/g
+         Q521vs0aJoAI5Igv6eblmgFIuIMRGB/Ll7uw0OEbDJWIGEKBrQTrLg0hizAPniyazVqp
+         C4g//etSa4Mdiax2wpETKvZF3luMrTKZKr280C5koJ1mTRTbdkb5aRQz74QdcL9/YkVO
+         IYHA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=30shyJsOAw2zs6Sgq+PUulpeZPcaVAnq8cjIhLP8b54=;
+        b=HKSLjW3WoMvktonqxhl2xvDHOxnwvZf9Khhql7Lx42F8jwsk63SH2+Bdn8h5o9Pk+i
+         ErGh96uZAkqNU6KansRfyTQN2JAKDlnrNL0vM9i6aJsCTzWBT59r2M/cYoUOeJzZvjFv
+         3EGmDjuvd2AewaW19FLvTqUrXUtIIcs9XhL0JZF49K/nHrzJpNnKBYHpHXoWp5isUI6+
+         d1I6JtFM3V8oZYVOZx95L8CaVs6svB2pqYWK2MyFCUI9A6tQVfACdBzjkGwV0xR2Whaq
+         NJ/BbpBK/L/vx7VTjvzJluknP27SpA9KzdyHccp5GnLTEbQTsPja65jzCEUjZUBH/tlC
+         uVNw==
+X-Gm-Message-State: AO0yUKU703iE5q496UtJb7rjdvVp3WU6pnG/DU/uOUgD37YMKzjpLxN7
+        k9kxPwlSqyJGfTq6opEup8K4rBBHjkdkeyyr9lelzhk7tOA=
+X-Google-Smtp-Source: AK7set/LMCWIpWdHwoyBDJak/9l2Ne166sgq+MuWerSv36XxA3hiTz0NvEqvSSMqcauwSt0h4Cf6gjVyxOZc44SjW0g=
+X-Received: by 2002:a05:6830:30af:b0:690:f512:20a with SMTP id
+ g47-20020a05683030af00b00690f512020amr228730ots.3.1676974924525; Tue, 21 Feb
+ 2023 02:22:04 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: Re: [PATCH v2 02/29] LoongArch: KVM: Implement kvm module related
- interface
-To:     Paolo Bonzini <pbonzini@redhat.com>,
-        Tianrui Zhao <zhaotianrui@loongson.cn>
-Cc:     Huacai Chen <chenhuacai@kernel.org>,
-        WANG Xuerui <kernel@xen0n.name>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        loongarch@lists.linux.dev, linux-kernel@vger.kernel.org,
-        kvm@vger.kernel.org, Jens Axboe <axboe@kernel.dk>,
-        Mark Brown <broonie@kernel.org>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        Oliver Upton <oliver.upton@linux.dev>
-References: <20230220065735.1282809-1-zhaotianrui@loongson.cn>
- <20230220065735.1282809-3-zhaotianrui@loongson.cn>
- <bf4111f9-f722-1847-4f1d-964c5356f392@redhat.com>
- <0fa9c062-d3fc-61e5-4d54-6bc29f7c64cf@loongson.cn>
- <3f16a8e1-21d9-808e-aa1a-4f1d6f6f291b@redhat.com>
-Content-Language: en-US
-From:   maobibo <maobibo@loongson.cn>
-In-Reply-To: <3f16a8e1-21d9-808e-aa1a-4f1d6f6f291b@redhat.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf8Cx2r2AmvRj56s3AA--.36327S3
-X-CM-SenderInfo: xpdruxter6z05rqj20fqof0/
-X-Coremail-Antispam: 1Uk129KBjvJXoW7Zw1Uur15CF17Cw1UKw4fGrg_yoW8CrWfpa
-        ySyrW7Gr1vkr9Yka1kXw1v934IkFZYka15Jry7JFZYyws0grZIya40kry7AF98Cr4rXr1U
-        Zws0yaykCwn8Z37anT9S1TB71UUUUjDqnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
-        qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
-        bqxYFVCjjxCrM7AC8VAFwI0_Jr0_Gr1l1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s
-        1l1IIY67AEw4v_Jrv_JF1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xv
-        wVC0I7IYx2IY67AKxVWUCVW8JwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwA2z4
-        x0Y4vEx4A2jsIE14v26r4UJVWxJr1l84ACjcxK6I8E87Iv6xkF7I0E14v26F4UJVW0owAa
-        w2AFwI0_JF0_Jw1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqjxCEc2xF0cIa020Ex4CE44
-        I27wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_JF0_Jw1lYx0Ex4A2
-        jsIE14v26r4j6F4UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvEwIxGrwCYjI0SjxkI62
-        AI1cAE67vIY487MxkF7I0En4kS14v26r126r1DMxAIw28IcxkI7VAKI48JMxC20s026xCa
-        FVCjc4AY6r1j6r4UMxCIbckI1I0E14v26r126r1DMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2
-        IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUtVW8ZwCIc40Y0x0EwIxGrwCI
-        42IY6xIIjxv20xvE14v26r1I6r4UMIIF0xvE2Ix0cI8IcVCY1x0267AKxVWUJVW8JwCI42
-        IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Gr0_Cr1lIxAIcVC2z280
-        aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7IU8uc_3UUUUU==
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20230221092435.22069-1-arinc.unal@arinc9.com> <20230221092435.22069-2-arinc.unal@arinc9.com>
+ <CAMhs-H9qLw6uhjPnFWovQBMFe38y95Q_VvG8Bj9wovSR+1J_2g@mail.gmail.com> <85a39e81-51a3-e90f-622e-f2cc7528aa92@arinc9.com>
+In-Reply-To: <85a39e81-51a3-e90f-622e-f2cc7528aa92@arinc9.com>
+From:   Sergio Paracuellos <sergio.paracuellos@gmail.com>
+Date:   Tue, 21 Feb 2023 11:21:53 +0100
+Message-ID: <CAMhs-H_eLwxjA7-EKGSyKOZLQF05N-FNASZWtGgsV2S=txU=yQ@mail.gmail.com>
+Subject: Re: [PATCH 2/2] mips: ralink: make SOC_MT7621 select PINCTRL
+To:     =?UTF-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>
+Cc:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        John Crispin <john@phrozen.org>, linux-mips@vger.kernel.org,
+        linux-kernel@vger.kernel.org, erkin.bozoglu@xeront.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Tue, Feb 21, 2023 at 11:09 AM Ar=C4=B1n=C3=A7 =C3=9CNAL <arinc.unal@arin=
+c9.com> wrote:
+>
+> On 21.02.2023 12:38, Sergio Paracuellos wrote:
+> > Hi Ar=C4=B1n=C3=A7,
+> >
+> > On Tue, Feb 21, 2023 at 10:24 AM <arinc9.unal@gmail.com> wrote:
+> >>
+> >> From: Ar=C4=B1n=C3=A7 =C3=9CNAL <arinc.unal@arinc9.com>
+> >>
+> >> Currently, out of every Ralink SoC, only the dt-binding of the MT7621 =
+SoC
+> >> uses pinctrl. Because of this, PINCTRL is not selected at all. Make
+> >> SOC_MT7621 select PINCTRL.
+> >>
+> >> Remove PINCTRL_MT7621, enabling it for the MT7621 SoC will be handled =
+under
+> >> the PINCTRL_MT7621 option.
+> >>
+> >> Signed-off-by: Ar=C4=B1n=C3=A7 =C3=9CNAL <arinc.unal@arinc9.com>
+> >> ---
+> >>   arch/mips/ralink/Kconfig | 2 +-
+> >>   1 file changed, 1 insertion(+), 1 deletion(-)
+> >>
+> >> diff --git a/arch/mips/ralink/Kconfig b/arch/mips/ralink/Kconfig
+> >> index 06031796c87b..83e61e147b90 100644
+> >> --- a/arch/mips/ralink/Kconfig
+> >> +++ b/arch/mips/ralink/Kconfig
+> >> @@ -54,7 +54,7 @@ choice
+> >>                  select HAVE_PCI
+> >>                  select PCI_DRIVERS_GENERIC
+> >>                  select SOC_BUS
+> >> -               select PINCTRL_MT7621
+> >> +               select PINCTRL
+> >>
+> >>                  help
+> >>                    The MT7621 system-on-a-chip includes an 880 MHz MIP=
+S1004Kc
+> >> --
+> >> 2.37.2
+> >>
+> >
+> > Which git tree are you working against? CONFIG_SOC_MT7621 is not
+> > selecting PINCTRL_MT7621 at all in v6.2 [0]. I think it should select
+>
+> mips/linux.git mips-next tree.
+>
+> https://git.kernel.org/pub/scm/linux/kernel/git/mips/linux.git/log/
 
+I see :). Thanks!
 
-在 2023/2/21 16:14, Paolo Bonzini 写道:
-> On 2/21/23 07:59, maobibo wrote:
->>> Also, why does the world switch code need a copy?
->> There will be problem in world switch code if there is page fault reenter,
->> since pgd register is shared between root kernel and kvm hypervisor.
->> World switch entry need be unmapped area, cannot be tlb mapped area.
-> 
-> So if I understand correctly the processor is in direct address translation mode until the "csrwr t0, LOONGARCH_CSR_CRMD" instruction. Where does it leave paged mode?
-The processor still in paged mode during world switch context. For example
-when vm exits from guest mode to root mode, it executes world switch code
-from kvm_vector_entry, PC register points to HVA address, however vmid from
-LOONGARCH_CSR_GTLBC is not clear to root mode. If there is page fault
-exception, hardware treats it exception from GPA-->HPA rather than that
-from HVA --> HPA, since vmid info in CSR_GTLBC is not zero.
+>
+> > 'PINCTRL_MT7621' and the 'select PINCTRL' stuff added inside the
+> > PINCTRL_RALINK option in [1].
+>
+> I'm working on that, although not exactly the way you describe here, on
+> this branch of mine.
 
-In page mode, there are two kinds of address: unmapped address and 
-tlb mapped address. For unmapped address there is only cachable/uncachable
-attribution, but not RWX attr; and there is no tlb handling for it.
-For simplicity,  unmapped address can be treated as window filtered address.
+So, in which way do you get PINCTRL_MT7621 automatically selected for
+this SoC now? I think looking into the Kconfig for ralink pinctrl [0]
+all of them at the end need the missing PINCTRL option to be added and
+all of them are currently selecting PINCTRL_RALINK . Hence just adding
+the PINCTRL option inside PINCTRL_RALINK looks convenient.
 
-It will be fully root mode only after this piece of code is executed
-during world switch context; vmid is zero and PC points to HVA.
-        ori     t0, zero, CSR_GSTAT_PVM
-        csrxchg zero, t0, LOONGARCH_CSR_GSTAT
-        /* Clear GTLBC.TGID field */
-        csrrd   t0, LOONGARCH_CSR_GTLBC
-        bstrins.w       t0, zero, CSR_GTLBC_TGID_SHIFT_END, CSR_GTLBC_TGID_SHIFT
-        csrwr   t0, LOONGARCH_CSR_GTLBC
+>
+> https://github.com/arinc9/linux/commits/ralink-pinctrl
 
-> 
-> Can you please also add comments to kvm_vector_entry explaining the processor state after a VZ exception entry (interrupts, paging, ...)?
-Yeap, we will add more comments about these critical exception entry.
+Wow! Tons of changes here ;-). Keep going!!
 
-Regards
-Bibo, Mao
-> 
-> Paolo
+>
+> Ar=C4=B1n=C3=A7
 
+Best regards,
+    Sergio Paracuellos
+
+[0]: https://elixir.bootlin.com/linux/v6.2/source/drivers/pinctrl/ralink/Kc=
+onfig
