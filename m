@@ -2,60 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CEA4869E312
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 16:07:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7EFF769E318
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 16:08:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233752AbjBUPH0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Feb 2023 10:07:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59804 "EHLO
+        id S234135AbjBUPIn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Feb 2023 10:08:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60698 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232049AbjBUPHZ (ORCPT
+        with ESMTP id S234216AbjBUPIi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Feb 2023 10:07:25 -0500
+        Tue, 21 Feb 2023 10:08:38 -0500
 Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29D972118;
-        Tue, 21 Feb 2023 07:07:24 -0800 (PST)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id D0CBF34BC2;
-        Tue, 21 Feb 2023 15:07:22 +0000 (UTC)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6176435AF
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Feb 2023 07:08:37 -0800 (PST)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out1.suse.de (Postfix) with ESMTP id 223EE34BCA;
+        Tue, 21 Feb 2023 15:08:36 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1676992042; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+        t=1676992116; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
          mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=LuoQfbt2KTtRM14/DGy4Xw84gjAGRL7EtHDJyvKijkc=;
-        b=iEs5G9H0uW0SncqaXgoZdfWT5Nfcp7Jr/y+R0YLekUASyEbj+x2ZJWa0x7T3+cTqzqm68a
-        vjZkll0GSyPg7eRu6K3kjKzzR7q1W6ekeDrWrhAAWXYJoYEhC4aBeSt271xqMNzCFxvUTS
-        tTs1+DB01YF+v0vtUlJ/Xhl9CgrQXNc=
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        bh=Et1TqBVYxjAD/qvgRNl/niPQ2MyrbJSF9+LiI8hMeT4=;
+        b=CuwhRjQ7r4Oox3Tq1lbLKezRsSK5MERpwkXAK6mApalNxHSOcLyYHVQqH9hgZkJb9wNX2D
+        DXIzYtY2qaZvYeX+wwesukuyIWkj+kJRtzHzMzPp+xm3Z0tXwogEhBpoAYL3ockHjIGsPG
+        UWBYshC/ckit9EDy53QHKiYJNAdPeIM=
+Received: from suse.cz (pmladek.tcp.ovpn2.prg.suse.de [10.100.208.146])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id B193713223;
-        Tue, 21 Feb 2023 15:07:22 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id 34+2KCre9GM7aAAAMHmgww
-        (envelope-from <mhocko@suse.com>); Tue, 21 Feb 2023 15:07:22 +0000
-Date:   Tue, 21 Feb 2023 16:07:22 +0100
-From:   Michal Hocko <mhocko@suse.com>
-To:     Matthew Chae <matthew.chae@axis.com>
-Cc:     Johannes Weiner <hannes@cmpxchg.org>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Shakeel Butt <shakeelb@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>, kernel@axis.com,
-        christopher.wong@axis.com, Muchun Song <muchun.song@linux.dev>,
-        cgroups@vger.kernel.org, linux-mm@kvack.org,
+        by relay2.suse.de (Postfix) with ESMTPS id F3A2D2C141;
+        Tue, 21 Feb 2023 15:08:35 +0000 (UTC)
+Date:   Tue, 21 Feb 2023 16:08:31 +0100
+From:   Petr Mladek <pmladek@suse.com>
+To:     Marc =?iso-8859-1?Q?Aur=E8le?= La France <tsi@tuyoix.net>
+Cc:     John Ogness <john.ogness@linutronix.de>,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] mm/memcontrol: add memory.peak in cgroup root
-Message-ID: <Y/TeKkhQtV7Bck8P@dhcp22.suse.cz>
-References: <20230221143421.10385-1-matthew.chae@axis.com>
+Subject: Re: [PATCH] Remove orphaned CONFIG_PRINTK_SAFE_LOG_BUF_SHIFT
+Message-ID: <Y/Teb9QnY8DOihZ1@alley>
+References: <5c19e248-1b6b-330c-7c4c-a824688daefe@tuyoix.net>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <20230221143421.10385-1-matthew.chae@axis.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <5c19e248-1b6b-330c-7c4c-a824688daefe@tuyoix.net>
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
         SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -65,43 +54,20 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue 21-02-23 15:34:20, Matthew Chae wrote:
-> The kernel currently doesn't provide any method to show the overall
-> system's peak memory usage recorded. Instead, only each slice's peak
-> memory usage recorded except for cgroup root is shown through each
-> memory.peak.
+On Mon 2023-02-20 22:10:32, Marc Aurèle La France wrote:
+> After 93d102f094be9beab28e5afb656c188b16a3793b "printk: remove safe buffers",
+> CONFIG_PRINTK_SAFE_LOG_BUF_SHIFT is no longer useful.  Remove it.
 > 
-> Each slice might consume their peak memory at different time. This is
-> stored at memory.peak in each own slice. The sum of every memory.peak
-> doesn't mean the total system's peak memory usage recorded. The sum at
-> certain point without having a peak memory usage in their slice can have
-> the largest value.
+> This change is not eligible for stable@.
 > 
->        time |  slice1  |  slice2  |   sum
->       =======================================
->         t1  |    50    |   200    |   250
->       ---------------------------------------
->         t2  |   150    |   150    |   300
->       ---------------------------------------
->         t3  |   180    |    20    |   200
->       ---------------------------------------
->         t4  |    80    |    20    |   100
-> 
-> memory.peak value of slice1 is 180 and memory.peak value of slice2 is 200.
-> Only these information are provided through memory.peak value from each
-> slice without providing the overall system's peak memory usage. The total
-> sum of these two value is 380, but this doesn't represent the real peak
-> memory usage of the overall system. The peak value what we want to get is
-> shown in t2 as 300, which doesn't have any biggest number even in one
-> slice. Therefore the proper way to show the system's overall peak memory
-> usage recorded needs to be provided.
+> Please Reply-To-All.
 
-The problem I can see is that the root's peak value doesn't really
-represent the system peak memory usage because it only reflects memcg
-accounted memory. So there is plenty of memory consumption which is not
-covered. On top of that a lot of memory contributed to the root memcg is
-not accounted at all (see try_charge and its callers) so the cumulative
-hierarchical value is incomplete and I believe misleading as well.
--- 
-Michal Hocko
-SUSE Labs
+Great catch!
+
+Reviewed-by: Petr Mladek <pmladek@suse.com>
+
+I have already sent pull request with printk changes for 6.3.
+I am going to queue this patch either for 6.3-rc or 6.4.
+
+Best Regards,
+Petr
