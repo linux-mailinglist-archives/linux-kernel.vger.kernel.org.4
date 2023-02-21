@@ -2,30 +2,30 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 86D9F69E20B
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 15:12:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B553469E20F
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 15:12:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234139AbjBUOMA convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 21 Feb 2023 09:12:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35052 "EHLO
+        id S234265AbjBUOMH convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 21 Feb 2023 09:12:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35058 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233346AbjBUOL5 (ORCPT
+        with ESMTP id S233587AbjBUOL5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 21 Feb 2023 09:11:57 -0500
 Received: from ex01.ufhost.com (ex01.ufhost.com [61.152.239.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25659279B7;
-        Tue, 21 Feb 2023 06:11:53 -0800 (PST)
-Received: from EXMBX165.cuchost.com (unknown [175.102.18.54])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38333279BE;
+        Tue, 21 Feb 2023 06:11:54 -0800 (PST)
+Received: from EXMBX166.cuchost.com (unknown [175.102.18.54])
         (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
-        (Client CN "EXMBX165", Issuer "EXMBX165" (not verified))
-        by ex01.ufhost.com (Postfix) with ESMTP id F0ADC24E01A;
-        Tue, 21 Feb 2023 22:11:51 +0800 (CST)
-Received: from EXMBX061.cuchost.com (172.16.6.61) by EXMBX165.cuchost.com
- (172.16.6.75) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Tue, 21 Feb
- 2023 22:11:51 +0800
+        (Client CN "EXMBX166", Issuer "EXMBX166" (not verified))
+        by ex01.ufhost.com (Postfix) with ESMTP id DE73724E1C7;
+        Tue, 21 Feb 2023 22:11:52 +0800 (CST)
+Received: from EXMBX061.cuchost.com (172.16.6.61) by EXMBX166.cuchost.com
+ (172.16.6.76) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Tue, 21 Feb
+ 2023 22:11:52 +0800
 Received: from localhost.localdomain (183.27.98.67) by EXMBX061.cuchost.com
  (172.16.6.61) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Tue, 21 Feb
- 2023 22:11:50 +0800
+ 2023 22:11:51 +0800
 From:   Xingyu Wu <xingyu.wu@starfivetech.com>
 To:     <linux-riscv@lists.infradead.org>, <devicetree@vger.kernel.org>,
         "Michael Turquette" <mturquette@baylibre.com>,
@@ -40,10 +40,12 @@ CC:     Rob Herring <robh+dt@kernel.org>, Conor Dooley <conor@kernel.org>,
         Hal Feng <hal.feng@starfivetech.com>,
         Xingyu Wu <xingyu.wu@starfivetech.com>,
         <linux-kernel@vger.kernel.org>, <linux-clk@vger.kernel.org>
-Subject: [PATCH v1 0/3] Add PLL clocks driver for StarFive JH7110
-Date:   Tue, 21 Feb 2023 22:11:44 +0800
-Message-ID: <20230221141147.303642-1-xingyu.wu@starfivetech.com>
+Subject: [PATCH v1 1/3] dt-bindings: clock: Add StarFive JH7110 PLL clock generator
+Date:   Tue, 21 Feb 2023 22:11:45 +0800
+Message-ID: <20230221141147.303642-2-xingyu.wu@starfivetech.com>
 X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20230221141147.303642-1-xingyu.wu@starfivetech.com>
+References: <20230221141147.303642-1-xingyu.wu@starfivetech.com>
 MIME-Version: 1.0
 Content-Type: text/plain
 X-Originating-IP: [183.27.98.67]
@@ -59,72 +61,96 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This patch serises are to add PLL clocks driver and modify
-the system clock driver to depend on PLL clocks driver for the 
-StarFive JH7110 RISC-V SoC.
+Add bindings for the PLL clock generator on the JH7110 RISC-V SoC.
 
-PLL are high speed, low jitter frequency synthesizers in JH7110.
-Each PLL clocks work in integer mode or fraction mode by some dividers,
-and the dividers are set in several syscon registers.
-The formula for calculating frequency is: 
-Fvco = Fref * (NI + NF) / M / Q1
-
-The first patch adds docunmentation to describe PLL clock bindings,
-and the second patch adds driver to support PLL clocks for JH7110 and 
-modifies the system clock driver.
-
-This patchset should be applied after this patchset about JH71x0 clock
-driver:
-https://lore.kernel.org/all/20230221024645.127922-1-hal.feng@starfivetech.com/
-
-Xingyu Wu (3):
-  dt-bindings: clock: Add StarFive JH7110 PLL clock generator
-  clk: starfive: Add StarFive JH7110 PLL clock driver
-  riscv: dts: starfive: jh7110: Add PLL clock node
-
- .../bindings/clock/starfive,jh7110-pll.yaml   |  45 ++
- arch/riscv/boot/dts/starfive/jh7110.dtsi      |  15 +-
- drivers/clk/starfive/Kconfig                  |   9 +
- drivers/clk/starfive/Makefile                 |   1 +
- .../clk/starfive/clk-starfive-jh7110-pll.c    | 433 ++++++++++++++++++
- .../clk/starfive/clk-starfive-jh7110-pll.h    | 286 ++++++++++++
- .../clk/starfive/clk-starfive-jh7110-sys.c    |  40 +-
- .../dt-bindings/clock/starfive,jh7110-crg.h   |  12 +-
- 8 files changed, 807 insertions(+), 34 deletions(-)
+Signed-off-by: Xingyu Wu <xingyu.wu@starfivetech.com>
+---
+ .../bindings/clock/starfive,jh7110-pll.yaml   | 45 +++++++++++++++++++
+ .../dt-bindings/clock/starfive,jh7110-crg.h   | 12 ++---
+ 2 files changed, 52 insertions(+), 5 deletions(-)
  create mode 100644 Documentation/devicetree/bindings/clock/starfive,jh7110-pll.yaml
- create mode 100644 drivers/clk/starfive/clk-starfive-jh7110-pll.c
- create mode 100644 drivers/clk/starfive/clk-starfive-jh7110-pll.h
 
-
-base-commit: c9c3395d5e3dcc6daee66c6908354d47bf98cb0c
-prerequisite-patch-id: 4dc515731ce237184553c1606ffb3afaeb51c3d8
-prerequisite-patch-id: ac150a8c622e858e088df8121093d448df49c245
-prerequisite-patch-id: a4255724d4698f1238663443024de56de38d717b
-prerequisite-patch-id: a798370d170dc2bcc79ed86f741c21c1e6d87c78
-prerequisite-patch-id: 203d2500cadc112bd20fefc56eabf1470d3d2d2d
-prerequisite-patch-id: 315303931e4b6499de7127a88113763f86e97e16
-prerequisite-patch-id: 40cb8212ddb024c20593f73d8b87d9894877e172
-prerequisite-patch-id: a1673a9e9f19d6fab5a51abb721e54e36636f067
-prerequisite-patch-id: 94860423c7acc9025249d4bb36652a585bd0a797
-prerequisite-patch-id: b5084253283929d9a6d0e66c350400c7c85d034d
-prerequisite-patch-id: a428ed7a2aa45abab86923dc467e1e6b08427e85
-prerequisite-patch-id: d4f80829fca7ce370a6fad766593cdcb502fa245
-prerequisite-patch-id: e3490e19e089fe284334db300ee189b619a61628
-prerequisite-patch-id: 34298e3882261bc2d72955b1570cc9612ab7d662
-prerequisite-patch-id: 377c5c282a0776feee9acd10b565adbd5275a67e
-prerequisite-patch-id: 3ccee718de0750adbf8d0b77d553a2778a344f64
-prerequisite-patch-id: 4710f2ac22dca0bdd9ff5d744d2c37cab3c74515
-prerequisite-patch-id: 65f2aed865d88e6fa468d2923527b523d4313857
-prerequisite-patch-id: 258ea5f9b8bf41b6981345dcc81795f25865d38f
-prerequisite-patch-id: 8b6f2c9660c0ac0ee4e73e4c21aca8e6b75e81b9
-prerequisite-patch-id: e3b986b9c60b2b93b7812ec174c9e1b4cfb14c97
-prerequisite-patch-id: a2b3a9cff8a683422eb0ccf3a0850091401812d4
-prerequisite-patch-id: dbb0c0151b8bdf093e6ce79fd2fe3f60791a6e0b
-prerequisite-patch-id: ea9a6d0313dd3936c8de0239dc2072c3360a2f6b
-prerequisite-patch-id: d57e95d31686772abc4c4d5aa1cadc344dc293cd
-prerequisite-patch-id: 29aab7148bf56a20acddcb8a11f290705fcc97f6
-prerequisite-patch-id: 8adbb4af2c71fde6b8c795bde028157a69c51c31
-prerequisite-patch-id: a4689a8a4cc56984b5845b59f5a84e5214d91543
+diff --git a/Documentation/devicetree/bindings/clock/starfive,jh7110-pll.yaml b/Documentation/devicetree/bindings/clock/starfive,jh7110-pll.yaml
+new file mode 100644
+index 000000000000..8fd18e6c2e9b
+--- /dev/null
++++ b/Documentation/devicetree/bindings/clock/starfive,jh7110-pll.yaml
+@@ -0,0 +1,45 @@
++# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/clock/starfive,jh7110-pll.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: StarFive JH7110 PLL Clock Generator
++
++maintainers:
++  - Xingyu Wu <xingyu.wu@starfivetech.com>
++
++properties:
++  compatible:
++    const: starfive,jh7110-pll
++
++  clocks:
++    maxItems: 1
++      - description: Main Oscillator (24 MHz)
++
++  '#clock-cells':
++    const: 1
++    description:
++      See <dt-bindings/clock/starfive,jh7110-crg.h> for valid indices.
++
++  starfive,sysreg:
++    $ref: /schemas/types.yaml#/definitions/phandle-array
++    description:
++      the phandle to System Register Controller syscon node.
++
++required:
++  - compatible
++  - clocks
++  - '#clock-cells'
++  - starfive,sysreg
++
++additionalProperties: false
++
++examples:
++  - |
++    pllclk: pll-clock-controller {
++      compatible = "starfive,jh7110-pll";
++      clocks = <&osc>;
++      #clock-cells = <1>;
++      starfive,sysreg = <&sys_syscon>;
++    };
+diff --git a/include/dt-bindings/clock/starfive,jh7110-crg.h b/include/dt-bindings/clock/starfive,jh7110-crg.h
+index 5e4f21ca0642..086a6ddcf380 100644
+--- a/include/dt-bindings/clock/starfive,jh7110-crg.h
++++ b/include/dt-bindings/clock/starfive,jh7110-crg.h
+@@ -6,6 +6,12 @@
+ #ifndef __DT_BINDINGS_CLOCK_STARFIVE_JH7110_CRG_H__
+ #define __DT_BINDINGS_CLOCK_STARFIVE_JH7110_CRG_H__
+ 
++/* PLL clocks */
++#define JH7110_CLK_PLL0_OUT			0
++#define JH7110_CLK_PLL1_OUT			1
++#define JH7110_CLK_PLL2_OUT			2
++#define JH7110_PLLCLK_END			3
++
+ /* SYSCRG clocks */
+ #define JH7110_SYSCLK_CPU_ROOT			0
+ #define JH7110_SYSCLK_CPU_CORE			1
+@@ -198,11 +204,7 @@
+ #define JH7110_SYSCLK_TDM_TDM_INV		188
+ #define JH7110_SYSCLK_JTAG_CERTIFICATION_TRNG	189
+ 
+-#define JH7110_SYSCLK_PLL0_OUT			190
+-#define JH7110_SYSCLK_PLL1_OUT			191
+-#define JH7110_SYSCLK_PLL2_OUT			192
+-
+-#define JH7110_SYSCLK_END			193
++#define JH7110_SYSCLK_END			190
+ 
+ /* AONCRG clocks */
+ #define JH7110_AONCLK_OSC_DIV4			0
 -- 
 2.25.1
 
