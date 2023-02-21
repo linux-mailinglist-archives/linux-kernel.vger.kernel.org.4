@@ -2,323 +2,179 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C654C69E9EF
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 23:15:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DF9EB69E9F4
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 23:17:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229578AbjBUWPv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Feb 2023 17:15:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43538 "EHLO
+        id S229755AbjBUWRZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Feb 2023 17:17:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44122 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229462AbjBUWPt (ORCPT
+        with ESMTP id S229462AbjBUWRX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Feb 2023 17:15:49 -0500
-Received: from mail-qt1-x82f.google.com (mail-qt1-x82f.google.com [IPv6:2607:f8b0:4864:20::82f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E401F30B24
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Feb 2023 14:15:47 -0800 (PST)
-Received: by mail-qt1-x82f.google.com with SMTP id bt6so5972513qtb.4
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Feb 2023 14:15:47 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=lNLvNQaTgrkORnFNXM8YEI2NcwNcW8Au7p1vPa8WB6E=;
-        b=lIhneBlLmXwvnGxMh+jiKqoxkLkxAUgW1hje3OSv8bPScevVLnefuGDxJd323hVuoD
-         HeIcwrsH+AO9kEvn0qjDfUEjvszXdz8FhiTGdk4py+Mr43P7nND4Vx0y2xDEItGErJ6O
-         dxdtRXFnrNwyukfIAOZq/LqLWh7TqVOpV2YBIDMtmbomAPem5gtzXDtrSuAT4t+7cjfG
-         Sgi6NKkpyHDoSZEW7NEwiim8uzLUIbBHZNO1mfhiVzP8d9e1LC2Fw3qIq8ZoLIlzB2D4
-         XypjONyD99lwreFdAclC6QZQMlk4y1/fh3AgSzRdGf6RwbK+/hTxA/hTY5H3uHInksUo
-         m7YA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=lNLvNQaTgrkORnFNXM8YEI2NcwNcW8Au7p1vPa8WB6E=;
-        b=6IOzll6BylZF6DdBpuqFwXKtWoOoFS+KRSdwc/zmp5mcB3SOcY4ncnjyyr+0FOfBR1
-         YHI9ilr8PnzRb7XR36nCzRlPuP8aLSDM7lV7Bj/y5jkCc3pTkTVpFrtq5EpSRUxkPFtu
-         SIr6BlggDSZ3HR106UGqBu1aTUDk7+JM5SadARoQTRd89EbOSqDQtl9gsX7PpwzEzKjW
-         FIY3mSLQxS2SpAr20awK90SfTF71wEYoknv4BkY8io39BYQntPTk/Qa4kmVoM60Cv5iB
-         +TbO3jeVRzKeQDM4w0n5cXqF+t55DrUczk0hkHsstywrkHkZdMU0VPUrQiVUh8ZCj0IG
-         uX1Q==
-X-Gm-Message-State: AO0yUKXHbzlt06lMug/iQcEk/IT0wvT65QLgcm5PvPZMrrWa1J+C0F6o
-        GrTM0AoGY/GAgYxF4WobQlo3jw==
-X-Google-Smtp-Source: AK7set/21kKG9fza2q9rp0qzA8ORlS68fee/dgonLGBFNwAFp6xNp4KIdz+SPe4eIfjYsysMAbPrig==
-X-Received: by 2002:ac8:5f13:0:b0:3b9:abfb:61cd with SMTP id x19-20020ac85f13000000b003b9abfb61cdmr10668284qta.26.1677017746802;
-        Tue, 21 Feb 2023 14:15:46 -0800 (PST)
-Received: from ripple.attlocal.net (172-10-233-147.lightspeed.sntcca.sbcglobal.net. [172.10.233.147])
-        by smtp.gmail.com with ESMTPSA id bt11-20020ac8690b000000b003b635a5d56csm1153289qtb.30.2023.02.21.14.15.42
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 21 Feb 2023 14:15:44 -0800 (PST)
-Date:   Tue, 21 Feb 2023 14:15:33 -0800 (PST)
-From:   Hugh Dickins <hughd@google.com>
-X-X-Sender: hugh@ripple.attlocal.net
-To:     "Huang, Ying" <ying.huang@intel.com>
-cc:     Hugh Dickins <hughd@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Jan Kara <jack@suse.cz>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        Zi Yan <ziy@nvidia.com>, Yang Shi <shy828301@gmail.com>,
-        Baolin Wang <baolin.wang@linux.alibaba.com>,
-        Oscar Salvador <osalvador@suse.de>,
-        Matthew Wilcox <willy@infradead.org>,
-        Bharata B Rao <bharata@amd.com>,
-        Alistair Popple <apopple@nvidia.com>,
-        Xin Hao <xhao@linux.alibaba.com>,
-        Minchan Kim <minchan@kernel.org>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Hyeonggon Yoo <42.hyeyoo@gmail.com>,
-        "Xu, Pengfei" <pengfei.xu@intel.com>,
-        Christoph Hellwig <hch@lst.de>,
-        Stefan Roesch <shr@devkernel.io>, Tejun Heo <tj@kernel.org>
-Subject: Re: [PATCH -v5 0/9] migrate_pages(): batch TLB flushing
-In-Reply-To: <87a617eloc.fsf@yhuang6-desk2.ccr.corp.intel.com>
-Message-ID: <7de52ab4-ce76-12b-e6a6-c170f5d875d2@google.com>
-References: <20230213123444.155149-1-ying.huang@intel.com> <87a6c8c-c5c1-67dc-1e32-eb30831d6e3d@google.com> <874jrg7kke.fsf@yhuang6-desk2.ccr.corp.intel.com> <2ab4b33e-f570-a6ff-6315-7d5a4614a7bd@google.com>
- <87a617eloc.fsf@yhuang6-desk2.ccr.corp.intel.com>
+        Tue, 21 Feb 2023 17:17:23 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6600730B25;
+        Tue, 21 Feb 2023 14:17:22 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 18FA8B80EF7;
+        Tue, 21 Feb 2023 22:17:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id ABDBFC433EF;
+        Tue, 21 Feb 2023 22:17:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1677017839;
+        bh=bs1akhKjv3J4NmgD6apUPLidQ9TEW782FUgeyLThyxA=;
+        h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
+        b=C+6QWIYGa1uLXRUxWQg7WY9brhFOOPrRR8c9ih5Y6tzBubrze2OOYnpKlCp45vK4d
+         kFhnNQqNod0heMGMtlamwIfY1Q33DssADqtXcAOYAc/O7iyaaRmwZIb/Fxvi0utuy1
+         DkE2dL29TGy9GA80R9+GfHrQNeviPT8NQBNYrh1iWissJtOgff5AMtLpGsUl/sXZch
+         HRJz51hvEv0wqVF+gTuD/lrmw/z/eCLzNLt7BFxJD5r5TncYdKrgfNG2tyi2Re2SIz
+         ytkMmDBiJx62wHzB6DFj6r0ptT+huSMbu370vRq6dqKcZadSpCVaD/ChCte0A4ivVE
+         4tuolzr56XuJw==
+Message-ID: <72953dc9371b87da8d03c63633d7d9dd.sboyd@kernel.org>
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <Y+5z8skN2DuvxDEL@spud>
+References: <20221220005054.34518-1-hal.feng@starfivetech.com> <20221220005054.34518-8-hal.feng@starfivetech.com> <Y6JB37Pd5TZoGMy4@spud> <7a7bccb1-4d47-3d32-36e6-4aab7b5b8dad@starfivetech.com> <Y6tSWB2+98a8k9Qw@spud> <5cf0fe71-fd17-fb28-c01e-28356081ba76@starfivetech.com> <Y+5z8skN2DuvxDEL@spud>
+Subject: Re: [PATCH v3 07/11] dt-bindings: clock: Add StarFive JH7110 system clock and reset generator
+From:   Stephen Boyd <sboyd@kernel.org>
+Cc:     linux-riscv@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-clk@vger.kernel.org, Palmer Dabbelt <palmer@dabbelt.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Emil Renner Berthing <emil.renner.berthing@canonical.com>,
+        linux-kernel@vger.kernel.org
+To:     Conor Dooley <conor@kernel.org>,
+        Hal Feng <hal.feng@starfivetech.com>
+Date:   Tue, 21 Feb 2023 14:17:17 -0800
+User-Agent: alot/0.10
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 21 Feb 2023, Huang, Ying wrote:
-> Hugh Dickins <hughd@google.com> writes:
-> > On Mon, 20 Feb 2023, Huang, Ying wrote:
-> >
-> >> Hi, Hugh,
-> >> 
-> >> Hugh Dickins <hughd@google.com> writes:
-> >> 
-> >> > On Mon, 13 Feb 2023, Huang Ying wrote:
-> >> >
-> >> >> From: "Huang, Ying" <ying.huang@intel.com>
-> >> >> 
-> >> >> Now, migrate_pages() migrate folios one by one, like the fake code as
-> >> >> follows,
-> >> >> 
-> >> >>   for each folio
-> >> >>     unmap
-> >> >>     flush TLB
-> >> >>     copy
-> >> >>     restore map
-> >> >> 
-> >> >> If multiple folios are passed to migrate_pages(), there are
-> >> >> opportunities to batch the TLB flushing and copying.  That is, we can
-> >> >> change the code to something as follows,
-> >> >> 
-> >> >>   for each folio
-> >> >>     unmap
-> >> >>   for each folio
-> >> >>     flush TLB
-> >> >>   for each folio
-> >> >>     copy
-> >> >>   for each folio
-> >> >>     restore map
-> >> >> 
-> >> >> The total number of TLB flushing IPI can be reduced considerably.  And
-> >> >> we may use some hardware accelerator such as DSA to accelerate the
-> >> >> folio copying.
-> >> >> 
-> >> >> So in this patch, we refactor the migrate_pages() implementation and
-> >> >> implement the TLB flushing batching.  Base on this, hardware
-> >> >> accelerated folio copying can be implemented.
-> >> >> 
-> >> >> If too many folios are passed to migrate_pages(), in the naive batched
-> >> >> implementation, we may unmap too many folios at the same time.  The
-> >> >> possibility for a task to wait for the migrated folios to be mapped
-> >> >> again increases.  So the latency may be hurt.  To deal with this
-> >> >> issue, the max number of folios be unmapped in batch is restricted to
-> >> >> no more than HPAGE_PMD_NR in the unit of page.  That is, the influence
-> >> >> is at the same level of THP migration.
-> >> >> 
-> >> >> We use the following test to measure the performance impact of the
-> >> >> patchset,
-> >> >> 
-> >> >> On a 2-socket Intel server,
-> >> >> 
-> >> >>  - Run pmbench memory accessing benchmark
-> >> >> 
-> >> >>  - Run `migratepages` to migrate pages of pmbench between node 0 and
-> >> >>    node 1 back and forth.
-> >> >> 
-> >> >> With the patch, the TLB flushing IPI reduces 99.1% during the test and
-> >> >> the number of pages migrated successfully per second increases 291.7%.
-> >> >> 
-> >> >> Xin Hao helped to test the patchset on an ARM64 server with 128 cores,
-> >> >> 2 NUMA nodes.  Test results show that the page migration performance
-> >> >> increases up to 78%.
-> >> >> 
-> >> >> This patchset is based on mm-unstable 2023-02-10.
-> >> >
-> >> > And back in linux-next this week: I tried next-20230217 overnight.
-> >> >
-> >> > There is a deadlock in this patchset (and in previous versions: sorry
-> >> > it's taken me so long to report), but I think one that's easily solved.
-> >> >
-> >> > I've not bisected to precisely which patch (load can take several hours
-> >> > to hit the deadlock), but it doesn't really matter, and I expect that
-> >> > you can guess.
-> >> >
-> >> > My root and home filesystems are ext4 (4kB blocks with 4kB PAGE_SIZE),
-> >> > and so is the filesystem I'm testing, ext4 on /dev/loop0 on tmpfs.
-> >> > So, plenty of ext4 page cache and buffer_heads.
-> >> >
-> >> > Again and again, the deadlock is seen with buffer_migrate_folio_norefs(),
-> >> > either in kcompactd0 or in khugepaged trying to compact, or in both:
-> >> > it ends up calling __lock_buffer(), and that schedules away, waiting
-> >> > forever to get BH_lock.  I have not identified who is holding BH_lock,
-> >> > but I imagine a jbd2 journalling thread, and presume that it wants one
-> >> > of the folio locks which migrate_pages_batch() is already holding; or
-> >> > maybe it's all more convoluted than that.  Other tasks then back up
-> >> > waiting on those folio locks held in the batch.
-> >> >
-> >> > Never a problem with buffer_migrate_folio(), always with the "more
-> >> > careful" buffer_migrate_folio_norefs().  And the patch below fixes
-> >> > it for me: I've had enough hours with it now, on enough occasions,
-> >> > to be confident of that.
-> >> >
-> >> > Cc'ing Jan Kara, who knows buffer_migrate_folio_norefs() and jbd2
-> >> > very well, and I hope can assure us that there is an understandable
-> >> > deadlock here, from holding several random folio locks, then trying
-> >> > to lock buffers.  Cc'ing fsdevel, because there's a risk that mm
-> >> > folk think something is safe, when it's not sufficient to cope with
-> >> > the diversity of filesystems.  I hope nothing more than the below is
-> >> > needed (and I've had no other problems with the patchset: good job),
-> >> > but cannot be sure.
-> >> >
-> >> > [PATCH next] migrate_pages: fix deadlock on buffer heads
-> >> >
-> >> > When __buffer_migrate_folio() is called from buffer_migrate_folio_norefs(),
-> >> > force MIGRATE_ASYNC mode so that buffer_migrate_lock_buffers() will only
-> >> > trylock_buffer(), failing with -EAGAIN as usual if that does not succeed.
-> >> >
-> >> > Signed-off-by: Hugh Dickins <hughd@google.com>
-> >> >
-> >> > --- next-20230217/mm/migrate.c
-> >> > +++ fixed/mm/migrate.c
-> >> > @@ -748,7 +748,8 @@ static int __buffer_migrate_folio(struct
-> >> >  	if (folio_ref_count(src) != expected_count)
-> >> >  		return -EAGAIN;
-> >> >  
-> >> > -	if (!buffer_migrate_lock_buffers(head, mode))
-> >> > +	if (!buffer_migrate_lock_buffers(head,
-> >> > +			check_refs ? MIGRATE_ASYNC : mode))
-> >> >  		return -EAGAIN;
-> >> >  
-> >> >  	if (check_refs) {
-> >> 
-> >> Thank you very much for pointing this out and the fix patch.  Today, my
-> >> colleague Pengfei reported a deadlock bug to me.  It seems that we
-> >> cannot wait the writeback to complete when we have locked some folios.
-> >> Below patch can fix that deadlock.  I don't know whether this is related
-> >> to the deadlock you run into.  It appears that we should avoid to
-> >> lock/wait synchronously if we have locked more than one folios.
-> >
-> > Thanks, I've checked now, on next-20230217 without my patch but
-> > with your patch below: it took a few hours, but still deadlocks
-> > as I described above, so it's not the same issue.
-> >
-> > Yes, that's a good principle, that we should avoid to lock/wait
-> > synchronously once we have locked one folio (hmm, above you say
-> > "more than one": I think we mean the same thing, we're just
-> > stating it differently, given how the code runs at present).
-> >
-> > I'm not a great fan of migrate_folio_unmap()'s arguments,
-> > "force" followed by "oh, but don't force" (but applaud the recent
-> > "avoid_force_lock" as much better than the original "force_lock").
-> > I haven't tried, but I wonder if you can avoid both those arguments,
-> > and both of these patches, by passing down an adjusted mode (perhaps
-> > MIGRATE_ASYNC, or perhaps a new mode) to all callees, once the first
-> > folio of a batch has been acquired (then restore to the original mode
-> > when starting a new batch).
-> 
-> Thanks for suggestion!  I think it's a good idea, but it will take me
-> some time to think how to implement.
-> 
-> > (My patch is weak in that it trylocks for buffer_head even on the
-> > first folio of a MIGRATE_SYNC norefs batch, although that has never
-> > given a problem historically: adjusting the mode after acquiring
-> > the first folio would correct that weakness.)
-> 
-> Further digging shows that this is related to loop device.  That can be
-> shown in the following trace,
-> 
-> [  300.109786] INFO: task kworker/u4:0:9 blocked for more than 147 seconds.
-> [  300.110616]       Not tainted 6.2.0-rc4-kvm+ #1314
-> [  300.111143] "echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
-> [  300.111985] task:kworker/u4:0    state:D stack:0     pid:9     ppid:2      flags:0x00004000
-> [  300.112964] Workqueue: loop4 loop_rootcg_workfn
-> [  300.113658] Call Trace:
-> [  300.113996]  <TASK>
-> [  300.114315]  __schedule+0x43b/0xd00
-> [  300.114848]  schedule+0x6a/0xf0
-> [  300.115319]  io_schedule+0x4a/0x80
-> [  300.115860]  folio_wait_bit_common+0x1b5/0x4e0
-> [  300.116430]  ? __pfx_wake_page_function+0x10/0x10
-> [  300.116615]  __filemap_get_folio+0x73d/0x770
-> [  300.116790]  shmem_get_folio_gfp+0x1fd/0xc80
-> [  300.116963]  shmem_write_begin+0x91/0x220
-> [  300.117121]  generic_perform_write+0x10e/0x2e0
-> [  300.117312]  __generic_file_write_iter+0x17e/0x290
-> [  300.117498]  ? generic_write_checks+0x12b/0x1a0
-> [  300.117693]  generic_file_write_iter+0x97/0x180
-> [  300.117881]  ? __sanitizer_cov_trace_const_cmp4+0x1a/0x20
-> [  300.118087]  do_iter_readv_writev+0x13c/0x210
-> [  300.118256]  ? __sanitizer_cov_trace_const_cmp4+0x1a/0x20
-> [  300.118463]  do_iter_write+0xf6/0x330
-> [  300.118608]  vfs_iter_write+0x46/0x70
-> [  300.118754]  loop_process_work+0x723/0xfe0
-> [  300.118922]  loop_rootcg_workfn+0x28/0x40
-> [  300.119078]  process_one_work+0x3cc/0x8d0
-> [  300.119240]  worker_thread+0x66/0x630
-> [  300.119384]  ? __pfx_worker_thread+0x10/0x10
-> [  300.119551]  kthread+0x153/0x190
-> [  300.119681]  ? __pfx_kthread+0x10/0x10
-> [  300.119833]  ret_from_fork+0x29/0x50
-> [  300.119984]  </TASK>
-> 
-> When a folio of the loop device is written back, the underlying shmem
-> needs to be written back.  Which will acquire the lock of the folio of
-> shmem.  While that folio may be locked by migrate_pages_batch() already.
-> 
-> Your testing involves the loop device too.  So is it related to loop?
-> For example, after the buffer head was locked, is it possible to acquire
-> lock for folios of the underlying file system?
+Quoting Conor Dooley (2023-02-16 10:20:34)
+> Hey Hal!
+>=20
+> On Thu, Feb 16, 2023 at 10:42:20PM +0800, Hal Feng wrote:
+> > On Tue, 27 Dec 2022 20:15:20 +0000, Conor Dooley wrote:
+> > > On Mon, Dec 26, 2022 at 12:26:32AM +0800, Hal Feng wrote:
+> > >> On Tue, 20 Dec 2022 23:14:39 +0000, Conor Dooley wrote:
+> > >> > On Tue, Dec 20, 2022 at 08:50:50AM +0800, Hal Feng wrote:
+> > >> > > From: Emil Renner Berthing <kernel@esmil.dk>
+> > >> > >=20
+> > >> > > Add bindings for the system clock and reset generator (SYSCRG) o=
+n the
+> > >> > > JH7110 RISC-V SoC by StarFive Ltd.
+> > >> > >=20
+> > >> > > Signed-off-by: Emil Renner Berthing <kernel@esmil.dk>
+> > >> > > Signed-off-by: Hal Feng <hal.feng@starfivetech.com>
+> > >=20
+> > >> > > +  clocks:
+> > >> > > +    items:
+> > >> > > +      - description: Main Oscillator (24 MHz)
+> > >> > > +      - description: GMAC1 RMII reference
+> > >> > > +      - description: GMAC1 RGMII RX
+> > >> > > +      - description: External I2S TX bit clock
+> > >> > > +      - description: External I2S TX left/right channel clock
+> > >> > > +      - description: External I2S RX bit clock
+> > >> > > +      - description: External I2S RX left/right channel clock
+> > >> > > +      - description: External TDM clock
+> > >> > > +      - description: External audio master clock
+> > >> >=20
+> > >> > So, from peeking at the clock driver & the dt - it looks like a bu=
+nch of
+> > >> > these are not actually required?
+> > >>=20
+> > >> These clocks are used as root clocks or optional parent clocks in cl=
+ock tree.
+> > >> Some of them are optional, but they are required if we want to descr=
+ibe the
+> > >> complete clock tree of JH7110 SoC.
+> > >=20
+> > > Perhaps I have a misunderstand of what required means. To me, required
+> > > means "you must provide this clock for the SoC to operate in all
+> > > configurations".
+> > > Optional therefore would be for things that are needed only for some
+> > > configurations and may be omitted if not required.
+> > >=20
+> > > From your comment below, boards with a JH7110 may choose not to popul=
+ate
+> > > both external clock inputs to a mux. In that case, "dummy" clocks sho=
+uld
+> > > not have to be provided in the DT of such boards to satisfy this bind=
+ing
+> > > which seems wrong to me..
 
-To lock (other than trylock) a folio while holding a buffer head lock
-would violate lock ordering: they are both bit spin locks, so lockdep
-would not notice, but I'm sure any such violation would have been
-caught long ago (unless on some very unlikely path).
+I agree. We don't want there to be "dummy" clks in DT. It should never
+be required.
 
-There was nothing in the stack traces I looked at to implicate loop,
-though admittedly I paid much more attention to the kcompactd0 and
-khugepaged pattern which was emerging - the few times I looked at the
-loop0 thread, IIRC it was either idle or waiting on the lower level.
+> >=20
+> > Please see the picture of these external clocks in clock tree.
+> >=20
+> > # mount -t debugfs none /mnt
+> > # cat /mnt/clk/clk_summary
+> >                                  enable  prepare  protect              =
+                  duty  hardware
+> >    clock                          count    count    count        rate  =
+ accuracy phase  cycle    enable
+> > -----------------------------------------------------------------------=
+--------------------------------
+> >  *mclk_ext*                             0        0        0    12288000=
+          0     0  50000         Y
+> >  *tdm_ext*                              0        0        0    49152000=
+          0     0  50000         Y
+> >  *i2srx_lrck_ext*                       0        0        0      192000=
+          0     0  50000         Y
+> >  *i2srx_bclk_ext*                       0        0        0    12288000=
+          0     0  50000         Y
+> >  *i2stx_lrck_ext*                       0        0        0      192000=
+          0     0  50000         Y
+> >  *i2stx_bclk_ext*                       0        0        0    12288000=
+          0     0  50000         Y
+> >  *gmac1_rgmii_rxin*                     0        0        0   125000000=
+          0     0  50000         Y
+> >     gmac1_rx                          0        0        0   125000000  =
+        0     0  50000         Y
+> >        gmac1_rx_inv                   0        0        0   125000000  =
+        0   180  50000         Y
+> >  *gmac1_rmii_refin*                     0        0        0    50000000=
+          0     0  50000         Y
+> >     gmac1_rmii_rtx                    0        0        0    50000000  =
+        0     0  50000         Y
+> >        gmac1_tx                       0        0        0    50000000  =
+        0     0  50000         N
+> >           gmac1_tx_inv                0        0        0    50000000  =
+        0   180  50000         Y
+> >  *osc*                                  4        4        0    24000000=
+          0     0  50000         Y
+> >     apb_func                          0        0        0    24000000  =
+        0     0  50000         Y
+> >  ...
+> >=20
+> > The clock "gmac1_rgmii_rxin" and the clock "gmac1_rmii_refin" are
+> > actually used as the parent of other clocks.
+>=20
+> > The "dummy" clocks
+> > you said are all internal clocks.
+>=20
+> No, what I meant by "dummy" clocks is that if you make clocks "required"
+> in the binding that are not needed by the hardware for operation a
+> customer of yours might have to add "dummy" clocks to their devicetree
+> to pass dtbs_check.
 
-If it had a stack trace like you show above, I would just have ignored
-that as of little interest, as probably waiting on one of the migrate
-batch's locked folios, which were themselves waiting on a buffer_head
-lock somewhere.  (And shmem itself doesn't use buffer_heads.)
-
-But it's still an interesting idea that these deadlocks might be
-related to loop: loop by its nature certainly has a propensity for
-deadlocks, though I think those have all been ironed out years ago.
-
-I've run my load overnight using a small ext4 partition instead of
-ext4 on loop on tmpfs, and that has not deadlocked.  I hesitate to
-say that confirms your idea that loop is somehow causing the deadlock
-- the timings will have changed, so I've no idea how long such a
-modified load needs to run to give confidence; but it does suggest
-that you're right.
-
-Though I still think your principle, that we should avoid to lock/wait
-synchronously once the batch holds one folio, is the safe principle to
-follow anyway, whether or not the deadlocks can be pinned on loop.
-
-Hugh
+They can set the phandle specifier to '<0>' to fill in the required
+property when there isn't anything there. If this is inside an SoC, it
+is always connected because silicon can't change after it is made
+(unless this is an FPGA). Therefore, any and all input clocks should be
+listed as required. If the clk controller has inputs that are
+pads/balls/pins on the SoC then they can be optional if a valid design
+can leave those pins not connected.
