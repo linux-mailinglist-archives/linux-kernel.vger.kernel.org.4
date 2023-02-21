@@ -2,48 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AC61269D87D
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 03:33:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1A19E69D87F
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 03:33:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232795AbjBUCdm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Feb 2023 21:33:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34306 "EHLO
+        id S231806AbjBUCdu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Feb 2023 21:33:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34418 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231806AbjBUCdk (ORCPT
+        with ESMTP id S232613AbjBUCdp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Feb 2023 21:33:40 -0500
+        Mon, 20 Feb 2023 21:33:45 -0500
 Received: from smtp-relay-canonical-0.canonical.com (smtp-relay-canonical-0.canonical.com [185.125.188.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 726171024A;
-        Mon, 20 Feb 2023 18:33:39 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4413011EB7;
+        Mon, 20 Feb 2023 18:33:44 -0800 (PST)
 Received: from localhost.localdomain (unknown [10.101.196.174])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by smtp-relay-canonical-0.canonical.com (Postfix) with ESMTPSA id C5D77400DA;
-        Tue, 21 Feb 2023 02:33:33 +0000 (UTC)
+        by smtp-relay-canonical-0.canonical.com (Postfix) with ESMTPSA id 69D2E3F2FE;
+        Tue, 21 Feb 2023 02:33:39 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1676946817;
-        bh=jXActFRB2e7tUmIdxW8pUWDAQLwCu7muuixpsDg2eGI=;
+        s=20210705; t=1676946823;
+        bh=bhjZxuXkm1MHeyPMkpuHBbBuF0eWs3dLUcdK/gbm22M=;
         h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
          MIME-Version;
-        b=bkla3NDSVRSMJKGxQ0EgTPhyF9KwNUy+kcMeMfabd+tkZo0YkZXj6jBY1V+JAE8S6
-         VFySBuFqB4UGjrFQ/a1oS2sGQIpG0D3y1ce8DNsjDmK72BrJGKIYDRVOBTojBp5TNs
-         eE1ycHEQ23pOcP6okGTueNDwPgVAMdmM00QSs5G1eUcZeo/0QTC6VZ3oaNHA3CCI9+
-         9rADHa2w7KYo+wUrPFdfVYlV1RmwYl6cUUR0truAxUWFyv4HTmLFcXHTpwNmNSft89
-         whKu7fdib61D8FK6bndDnjegC94erC7cAUnor0xrVpo7224hM+WKPOuQlCelzWLgWY
-         YPFirF4lgybbw==
+        b=YjQUu37OAp54gmVSlP7VGLKSkWOe4FO1Su0AJpjcMvKoEUtDTZfGE+PQCb0LLfHsr
+         /t0VPD6CAwjGdb933ivrYfBPF1bj/Llyg8Iur8iLkQe+Ey3bTGabKz4Szr0WZ3DmhJ
+         45oCTewlyMBmgV9ZNdQKDFFp8bIT/4iJ7WGOCsLNC8vYoEUZfF7Iq60yS21nTsW+5S
+         R94/Yub7xZy9tIYWZrmMxLG2XD3+rF8Ns30y56cFzlBMMeLVb2ePkwxn32ksg7g17G
+         8H/qQwrm286j3uAQponaqPrTGg95QJcXOSsejGLXG+8FrFfE3ux9MsgBN7V0qJOI9H
+         ArXQefx+bXWZQ==
 From:   Kai-Heng Feng <kai.heng.feng@canonical.com>
 To:     hkallweit1@gmail.com, nic_swsd@realtek.com, bhelgaas@google.com
 Cc:     koba.ko@canonical.com, acelan.kao@canonical.com,
         Kai-Heng Feng <kai.heng.feng@canonical.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v8 1/6] r8169: Disable ASPM L1.1 on 8168h
-Date:   Tue, 21 Feb 2023 10:32:32 +0800
-Message-Id: <20230221023237.1905536-2-kai.heng.feng@canonical.com>
+        Kuppuswamy Sathyanarayanan 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        Vidya Sagar <vidyas@nvidia.com>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v8 2/6] Revert "PCI/ASPM: Unexport pcie_aspm_support_enabled()"
+Date:   Tue, 21 Feb 2023 10:32:33 +0800
+Message-Id: <20230221023237.1905536-3-kai.heng.feng@canonical.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230221023237.1905536-1-kai.heng.feng@canonical.com>
 References: <20230221023237.1905536-1-kai.heng.feng@canonical.com>
@@ -58,44 +58,27 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-ASPM L1/L1.1 gets enabled based on [0], but ASPM L1.1 was actually
-disabled too [1].
+This reverts commit ba13d4575da5e656a3cbc18583e0da5c5d865417.
 
-So also disable L1.1 for better compatibility.
-
-[0] https://bugs.launchpad.net/bugs/1942830
-[1] https://git.launchpad.net/~canonical-kernel/ubuntu/+source/linux-oem/+git/focal/commit/?id=c9b3736de48fd419d6699045d59a0dd1041da014
+This will be used by module once again.
 
 Signed-off-by: Kai-Heng Feng <kai.heng.feng@canonical.com>
 ---
 v8:
  - New patch.
 
- drivers/net/ethernet/realtek/r8169_main.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ drivers/pci/pcie/aspm.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-
-diff --git a/drivers/net/ethernet/realtek/r8169_main.c b/drivers/net/ethernet/realtek/r8169_main.c
-index 45147a1016bec..1c949822661ae 100644
---- a/drivers/net/ethernet/realtek/r8169_main.c
-+++ b/drivers/net/ethernet/realtek/r8169_main.c
-@@ -5224,13 +5224,13 @@ static int rtl_init_one(struct pci_dev *pdev, const struct pci_device_id *ent)
- 
- 	/* Disable ASPM L1 as that cause random device stop working
- 	 * problems as well as full system hangs for some PCIe devices users.
--	 * Chips from RTL8168h partially have issues with L1.2, but seem
--	 * to work fine with L1 and L1.1.
-+	 * Chips from RTL8168h partially have issues with L1.1 and L1.2, but
-+	 * seem to work fine with L1.
- 	 */
- 	if (rtl_aspm_is_safe(tp))
- 		rc = 0;
- 	else if (tp->mac_version >= RTL_GIGA_MAC_VER_46)
--		rc = pci_disable_link_state(pdev, PCIE_LINK_STATE_L1_2);
-+		rc = pci_disable_link_state(pdev, PCIE_LINK_STATE_L1_1 | PCIE_LINK_STATE_L1_2);
- 	else
- 		rc = pci_disable_link_state(pdev, PCIE_LINK_STATE_L1);
- 	tp->aspm_manageable = !rc;
+diff --git a/drivers/pci/pcie/aspm.c b/drivers/pci/pcie/aspm.c
+index 4b4184563a927..692d6953f0970 100644
+--- a/drivers/pci/pcie/aspm.c
++++ b/drivers/pci/pcie/aspm.c
+@@ -1372,3 +1372,4 @@ bool pcie_aspm_support_enabled(void)
+ {
+ 	return aspm_support_enabled;
+ }
++EXPORT_SYMBOL(pcie_aspm_support_enabled);
 -- 
 2.34.1
 
