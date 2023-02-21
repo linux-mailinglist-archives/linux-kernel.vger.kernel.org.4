@@ -2,125 +2,172 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B773A69EAD4
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Feb 2023 00:01:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E184469EAD6
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Feb 2023 00:02:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230010AbjBUXBB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Feb 2023 18:01:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52492 "EHLO
+        id S230083AbjBUXCe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Feb 2023 18:02:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53430 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229569AbjBUXA7 (ORCPT
+        with ESMTP id S230128AbjBUXCV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Feb 2023 18:00:59 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6CD2558A;
-        Tue, 21 Feb 2023 15:00:57 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 424CA6120E;
-        Tue, 21 Feb 2023 23:00:57 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6C303C433EF;
-        Tue, 21 Feb 2023 23:00:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1677020456;
-        bh=8bmVqzYdGSQJBrlI/va5oEWARaelMvmFIsQmXscWXQg=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=FhhSoLiOKfneaQLehBw4QHqvStnUSYRmqfUWsoDGeslX5+756eTVPXUDE2BT6NNQS
-         NR9a91w5naG9e2IqwUfg7gIIpmLGyeb1pDFDYAy3NqJtHSnXrY2o6SP2Ob46/55LaR
-         ip0j5QmOgvWYtj9nH7FDNcUsS6C+9doGAqrIWgmmUKDRrCKq97xFvAnub2hUFrn8zH
-         3STdD38F4JOaIdWhU+BQwxclp9sZC+RZ9Th6NWksBknbTxXsmPGBv7Od8TpZU4p1Ep
-         Y7fvGHKcXIBDd8nC8gx3u5TRwd2JtksKMaXKrWQXcurK6RFYUDf8fVY12VUeS7tEyb
-         oY9NjwWo3I+IA==
-Date:   Tue, 21 Feb 2023 17:00:54 -0600
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Vinod Koul <vkoul@kernel.org>
-Cc:     Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
-        Rob Herring <robh@kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Cai Huoqing <cai.huoqing@linux.dev>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Jingoo Han <jingoohan1@gmail.com>, Frank Li <Frank.Li@nxp.com>,
-        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-        Serge Semin <fancer.lancer@gmail.com>,
-        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
-        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        caihuoqing <caihuoqing@baidu.com>,
-        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
-        linux-pci@vger.kernel.org, dmaengine@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Serge Semin <Sergey.Semin@baikalelectronics.ru>
-Subject: Re: [PATCH v9 23/27] dmaengine: dw-edma: Add mem-mapped LL-entries
- support
-Message-ID: <20230221230054.GA3736402@bhelgaas>
+        Tue, 21 Feb 2023 18:02:21 -0500
+Received: from EUR01-DB5-obe.outbound.protection.outlook.com (mail-db5eur01on2043.outbound.protection.outlook.com [40.107.15.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60774558A;
+        Tue, 21 Feb 2023 15:02:20 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=WaxO0l0zgYUaZR1nVrdlLyEE+Nlj51F1mMYj1ANXWcjsUtdHwltf4hNu5e8Ffec+5GvdINMn+8kIzZe3WczfMloy2XvpakARa69q4jtvmpk1k8/R+gDmwJZkQfSP4Qz65EnH9zl5hlQBtYdlUujo2Dac23vB/pbjjtaW9rmF5kLp3OCMT7L+5sNQPF5q+Rw31rfWTBFOEcUvlwgIG6XrZmXTFwo0d/gSGPLrsnrVx55CgyJu8aXZslQoc/HI0NBhm/8NO+toW0pAksZUd/A1tFIklqOpVI7UL4Q3SFXCduZpWn7wrpZO2XhEYcbIzp8UTH2GwEXPBcVv2aogj16D+g==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=iXmTA4BheZqlCfkbAplov6D9X/sS3kkP+LN6VeoO85Q=;
+ b=lzph8WqoZ2ELIPm7odVsNBENIf3UK10kGj3d7N+izNEFLx1RaE1KId08+oo/SV+p9ow6cyT1UQWnzi0r65M7Dka1gEel2VrPRC2+BkzQDfXIcrG5yxynCJS2aglm6OvvMC4AXY6SsmB7HyrjHnx0nNRr0PUiJvIeLgjXtqpBQnOcz5imamk5GbRN0nHKnNR0AoQaX/FVnS/vbjQxOAKv67bdY30jXjM2J7xmH5VTrd6FoCrKueB13Ecic/h4CAdq2fg0k6RUiqSLjZq9/HqVmQturl56Ygrkgzq/roefo/gbQzD6qHsAf8iMHH0dfcwIpY7NBEe0Y/tpsSLNRJGr1w==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=iXmTA4BheZqlCfkbAplov6D9X/sS3kkP+LN6VeoO85Q=;
+ b=Das2A/bgtm5L92gwE0scK4mSmWDm8s5o+3RvI/yeKMR63C7CYbj+BBgv3dfF9ScZksfxrEOtrC7HKjn589TGhe6CJunEqeKxz4c+MAFLzF1Ikzvf0bbxH2V24DJWyqA7Ag/66zG1bVCDTcRgeYaHBvdLQvq8TmP9LqzwrwxkNpA=
+Received: from AM0PR04MB6289.eurprd04.prod.outlook.com (2603:10a6:208:145::23)
+ by AS8PR04MB7671.eurprd04.prod.outlook.com (2603:10a6:20b:299::6) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6111.21; Tue, 21 Feb
+ 2023 23:02:18 +0000
+Received: from AM0PR04MB6289.eurprd04.prod.outlook.com
+ ([fe80::509:96a2:4382:6b51]) by AM0PR04MB6289.eurprd04.prod.outlook.com
+ ([fe80::509:96a2:4382:6b51%4]) with mapi id 15.20.6111.021; Tue, 21 Feb 2023
+ 23:02:18 +0000
+From:   Leo Li <leoyang.li@nxp.com>
+To:     Andrew Lunn <andrew@lunn.ch>
+CC:     Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        "David S . Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Luo Jie <luoj@codeaurora.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Viorel Suman <viorel.suman@nxp.com>,
+        Wei Fang <wei.fang@nxp.com>
+Subject: RE: [PATCH] net: phy: at803x: fix the wol setting functions
+Thread-Topic: [PATCH] net: phy: at803x: fix the wol setting functions
+Thread-Index: AQHZRkWUuJYqptIixk63Rjx4R3ymc67aAv4AgAAA/hA=
+Date:   Tue, 21 Feb 2023 23:02:18 +0000
+Message-ID: <AM0PR04MB6289271A20D0FAA69F26D48A8FA59@AM0PR04MB6289.eurprd04.prod.outlook.com>
+References: <20230221224031.7244-1-leoyang.li@nxp.com>
+ <Y/VMLF0NGgO1F34K@lunn.ch>
+In-Reply-To: <Y/VMLF0NGgO1F34K@lunn.ch>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nxp.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: AM0PR04MB6289:EE_|AS8PR04MB7671:EE_
+x-ms-office365-filtering-correlation-id: 8045ebd4-f25f-499b-c295-08db145fae40
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: HKjg8b92dcfbgUbYNNKEEp7TJR7X6Xz9hjIBKOTFvek+nsYaPYWclQ9GSdnlrdjT8FC23uBfmEHogvijXQ4rXuWjJ7gT68zdcfNF84OnfssTlxTks57t0aBDRCyfS3lHmmGmHBHGyAeyw7mNBtBm2pSO2u/OCX9LH71a/Vytw3BqrYWe0XTTK6RQVd3WNaLjYp+b24zZFOmKjzGdUwiLATmvPDfAkQtizSk7cw4pv7qSSo9SJbFpRgXjaHHeUlGp59xTmdXlWVEmmUP+4tBHEKWqNSpyoJ4KzGCT4OuBUV6WOkfmbeoMvm8xpc3pHhHGzIUG1aoZVz4BEEPBVw6C9m98d86L3aav1PiLGhHsfYNEp9/XzOb82Tj1VEDh/bM5TPB64B0sgyhbcbTKCiERdBbvuqFHBcKHprzZmpPXoOddIO3fm8JOfrFZvyZP+cHsiMG1pGjixzqUZteoPvjUtHvTDUpaLyCHtear4VnS5Yznkrexv3RgDmA2CiGL70OMJa4Q39qD8CbiMyERv9aGf3GEFeP72ES2hv9HFNYYQtS5Bq6FaOF9/Ay3UXr8+AIsY4jZcbGP18BN8OASN3jyxplh92Ke0LL6XsneQKjPC7pLJc2orrrUKG+5+i4/HTuD/pZsfx0WRkb8n79BJX4HJ4nhyNnP7mU07Yc/baNOAotgjMdYx2sksiNFFS6gQm70NtLPY153/nkqrzgiDmygOw==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM0PR04MB6289.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(346002)(366004)(136003)(39860400002)(396003)(376002)(451199018)(2906002)(86362001)(38070700005)(33656002)(52536014)(41300700001)(5660300002)(8936002)(122000001)(38100700002)(83380400001)(66476007)(66556008)(66946007)(6916009)(8676002)(7696005)(76116006)(71200400001)(478600001)(54906003)(66446008)(64756008)(4326008)(9686003)(53546011)(55236004)(26005)(186003)(55016003)(6506007)(316002);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?SosovIyhB2jow/F0StUD4q8aStPu7todOhnBoGJ8bdFMDTsOIN5MtPUSIsqe?=
+ =?us-ascii?Q?jwZzHeKLsTMRV9ntTL3Vj+UNTVCL74U00ULlwiJPasR/7C+OPSICtKPnXwZM?=
+ =?us-ascii?Q?K3Sex450nIKsRekBppNissd1vsxfEeFBMsGBFrIEpeFr2OrtNJPL4UUGRMmJ?=
+ =?us-ascii?Q?XWuD6pBdSk6x661ksyB5KEs/wJ40i3qyhqSZwjLJy2KLhG9sEhvkT/tZYQiK?=
+ =?us-ascii?Q?1/Wgo9Hm+5x+KcT9dXNcIwluJMngg2AX/oLYHY+4BbFzM99fDPkR7VBV9Z1i?=
+ =?us-ascii?Q?uYzpBjAfmflaxrmC9V24HwNayiFTplyd1ZQznYfvh1M7rbnHQ3CO4nxhVtLN?=
+ =?us-ascii?Q?2+OMnnEHS7HCOL4FcuvBLWL/nl1wEVXciB6Eh1gSW6M8jx0l0CKPhgOBrWWJ?=
+ =?us-ascii?Q?iC2WTo8zlytHSCTsFkOEfiCeO/vpSx59Wc6ePlKJyiN+EpW1ZOJ+BHKZolkR?=
+ =?us-ascii?Q?JJj3UJ3lRpzqU35MHEJQM/LfX2ZrxNKPPLk3lkxrdW5qbMrsTh4TMdyqsYVw?=
+ =?us-ascii?Q?dnz3aZg1Xf+z+jtS14nL8FCBUoRraSe1JDRfCdYCXW32vgcI/2TOt8+2JDEY?=
+ =?us-ascii?Q?lZR84tq/dioY6CieklPMPEkfuToJZYKKp36Qbp4W6Hlufo7TbseI+XNEW3pb?=
+ =?us-ascii?Q?OjxItpxvvqtyqbEqyufYgL2qT0CnXnSO6q25k7hMZRo23BgDue70AzA+3ogs?=
+ =?us-ascii?Q?ln61KSmDGSd8Jzj9s+i7M/baLyPQzPNP3R1DOANgxoIL1b85eOie/uMa2FF5?=
+ =?us-ascii?Q?yK4P2n0blDsBjs2kTKwxmrB2Vf7qd50zXrJiQvMF8WVLfOzsZFIBGwyR3ZYX?=
+ =?us-ascii?Q?gnFcsPdOgfco9iJuL2NagM48By+3mnwUU37GMeNAd+IhxnZJyelIsyx2TUjK?=
+ =?us-ascii?Q?vfdYAEzn6DhFatAnSMNP3f9BW+dkgzwqVNT895r8veug0jwDiICHvc9hAzAh?=
+ =?us-ascii?Q?Qk7wTniFyEhnAZygKRXwkxp24DxRcBioqR/dDsm2Cs697Sicl8utGJA4+4zk?=
+ =?us-ascii?Q?BIAEVr1u/Ex6J9Sdy49Ai9lLGtU1O8y5EhUYIjCGXUK4p9meIcx59clN/Q4X?=
+ =?us-ascii?Q?kBNStGnoMQ76d2fsVPFJIeXoZB99HIiaj3UhrseB5CfmCveJtR31FQUi2BN5?=
+ =?us-ascii?Q?c5moKvcb5VZsK9a+8XIDqv8LYOmdRKfM9RmIxpAe65T8hgi8UpUlOz/i242t?=
+ =?us-ascii?Q?F40HG+E++qS2CqsBcrT2Yvt9/3Xzzi9SHunQOEys+eeo/fmBa2nCHYTYOaMg?=
+ =?us-ascii?Q?ZL46JA+6meOSUGGev5Kj4qja1jR92DWKbI1ayY2/gOGCCPBavPngg1P7r98q?=
+ =?us-ascii?Q?RV+xAOVeeXsjLR+7JSZuvMZc4EGMonyIss4mBCCDRNWv9EY0PGh1m4sKUXzs?=
+ =?us-ascii?Q?jwbmUg/a1rlnOlB1BPl3YXwr8cqRa6azjTQc4y0U6gjVDgkW/AnMYwxl09HO?=
+ =?us-ascii?Q?SQEnS+jqsnztrrsmlkx0WTGV9iqawiFWGedCphs6USpjBBcebcJdE1+8A+Zq?=
+ =?us-ascii?Q?X2Uc8ZNotihmu4oNziHWDq/Cb3UizIrOG7HJ73+zyfawCFL2X/07sc1h+NjA?=
+ =?us-ascii?Q?5el+0SrMb4qYoZGPCGgr1tGZKLr4F2mAQoUvTh9k?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230113171409.30470-24-Sergey.Semin@baikalelectronics.ru>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: AM0PR04MB6289.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 8045ebd4-f25f-499b-c295-08db145fae40
+X-MS-Exchange-CrossTenant-originalarrivaltime: 21 Feb 2023 23:02:18.0829
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: ru3ZQBmN+QwbTI/i1MXneqjMd/tIAjxAG1pejyszmXd9zHnLwINreluzq4WJQnxM5txbJOt81ciwRR00BRa2RQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AS8PR04MB7671
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 13, 2023 at 08:14:05PM +0300, Serge Semin wrote:
-> Currently the DW eDMA driver only supports the linked lists memory
-> allocated locally with respect to the remote eDMA engine setup. It means
-> the linked lists will be accessible by the CPU via the MMIO space only. If
-> eDMA is embedded into the DW PCIe Root Ports or local End-points (which
-> support will be added in one of the following up commits) the linked lists
-> are supposed to be allocated in the CPU memory. In that case the
-> LL-entries can be directly accessed meanwhile the former case implies
-> using the MMIO-accessors for that.
-> 
-> In order to have both cases supported by the driver the dw_edma_region
-> descriptor should be fixed to contain the MMIO-backed and just
-> memory-based virtual addresses. The linked lists initialization procedure
-> will use one of them depending on the eDMA device nature. If the eDMA
-> engine is embedded into the local DW PCIe RP/EP controllers then the list
-> entries will be directly accessed by referencing the corresponding
-> structure fields.  Otherwise the MMIO accessors usage will be preserved.
-> 
-> Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
 
-Hi Vinod, I just realized that I didn't solicit your ack for this
-patch and the following one (which I ended up splitting into two), and
-I hate to ask Linus to pull them without your OK.
 
-Here are the current versions in the PCI tree:
+> -----Original Message-----
+> From: Andrew Lunn <andrew@lunn.ch>
+> Sent: Tuesday, February 21, 2023 4:57 PM
+> To: Leo Li <leoyang.li@nxp.com>
+> Cc: Heiner Kallweit <hkallweit1@gmail.com>; Russell King
+> <linux@armlinux.org.uk>; David S . Miller <davem@davemloft.net>; Jakub
+> Kicinski <kuba@kernel.org>; Luo Jie <luoj@codeaurora.org>;
+> netdev@vger.kernel.org; linux-kernel@vger.kernel.org; Viorel Suman
+> <viorel.suman@nxp.com>; Wei Fang <wei.fang@nxp.com>
+> Subject: Re: [PATCH] net: phy: at803x: fix the wol setting functions
+>=20
+> On Tue, Feb 21, 2023 at 04:40:31PM -0600, Li Yang wrote:
+> > In 7beecaf7d507 ("net: phy: at803x: improve the WOL feature"), it
+> > seems not correct to use a wol_en bit in a 1588 Control Register which
+> > is only available on AR8031/AR8033(share the same phy_id) to determine
+> > if WoL is enabled.  Change it back to use AT803X_INTR_ENABLE_WOL for
+> > determining the WoL status which is applicable on all chips supporting
+> > wol. Also update the at803x_set_wol() function to only update the 1588
+> > register on chips having it.
+>=20
+> > After this change, disabling wol at probe from d7cd5e06c9dd ("net:
+> > phy: at803x: disable WOL at probe") is no longer needed.  So it is
+> > removed.
+>=20
+> Rather than remove it, please git revert it, and explain in the commit
+> message why.
 
-  https://git.kernel.org/pub/scm/linux/kernel/git/pci/pci.git/commit/?id=b47364a83054
-  https://git.kernel.org/pub/scm/linux/kernel/git/pci/pci.git/commit/?id=157ce95927c1
-  https://git.kernel.org/pub/scm/linux/kernel/git/pci/pci.git/commit/?id=536e6529e975
+Not all changes from that patch is removed.  The remaining part might still=
+ be useful.
 
-If you ack them, I will update them to reflect that.
+>=20
+> >
+> > Also remove the set_wol()/get_wol() callbacks from AR8032 which
+> > doesn't support WoL.
+>=20
+> This change was part of 5800091a2061 ("net: phy: at803x: add support for
+> AR8032 PHY")
+>=20
+> Please break this patch up into individual fixes. The different fixes mig=
+ht
+> need different levels of backporting etc.
 
-Thanks,
-  Bjorn
+Ok.  I can split this out.
 
-> Changelog v9:
-> - This is a new patch added on v9 stage of the series.
-> ---
->  drivers/dma/dw-edma/dw-edma-pcie.c    | 32 ++++++-------
->  drivers/dma/dw-edma/dw-edma-v0-core.c | 69 +++++++++++++++++----------
->  include/linux/dma/edma.h              |  5 +-
->  3 files changed, 64 insertions(+), 42 deletions(-)
-> 
-> diff --git a/drivers/dma/dw-edma/dw-edma-pcie.c b/drivers/dma/dw-edma/dw-edma-pcie.c
-> index 3f9dadc73854..2b40f2b44f5e 100644
-> --- a/drivers/dma/dw-edma/dw-edma-pcie.c
-> +++ b/drivers/dma/dw-edma/dw-edma-pcie.c
-> @@ -240,20 +240,20 @@ static int dw_edma_pcie_probe(struct pci_dev *pdev,
->  		struct dw_edma_block *ll_block = &vsec_data.ll_wr[i];
->  		struct dw_edma_block *dt_block = &vsec_data.dt_wr[i];
->  
-> -		ll_region->vaddr = pcim_iomap_table(pdev)[ll_block->bar];
-> -		if (!ll_region->vaddr)
-> +		ll_region->vaddr.io = pcim_iomap_table(pdev)[ll_block->bar];
-> +		if (!ll_region->vaddr.io)
-> ...
+Regards,
+Leo
