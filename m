@@ -2,57 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3966769E83E
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 20:27:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E03C269E841
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 20:29:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229665AbjBUT1x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Feb 2023 14:27:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46568 "EHLO
+        id S229686AbjBUT3T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Feb 2023 14:29:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47836 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229441AbjBUT1v (ORCPT
+        with ESMTP id S229441AbjBUT3S (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Feb 2023 14:27:51 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57EE23ABA;
-        Tue, 21 Feb 2023 11:27:49 -0800 (PST)
+        Tue, 21 Feb 2023 14:29:18 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D26565BE;
+        Tue, 21 Feb 2023 11:29:17 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 182A7B810A1;
-        Tue, 21 Feb 2023 19:27:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5FD5BC433EF;
-        Tue, 21 Feb 2023 19:27:46 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9DD32611B0;
+        Tue, 21 Feb 2023 19:29:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 907FDC433EF;
+        Tue, 21 Feb 2023 19:29:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1677007666;
-        bh=CW0TrnVYPmqzjtnakRU/aIYasnOG7MQ3x8BrFO+nk5E=;
+        s=korg; t=1677007756;
+        bh=sDkckEDYPe2T4IYT042I5oTejm2xLWpX6CyfhL+7BPs=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=q7O14rMgHPWK3ZL38sH6QN80+YfXUDY2bDXIlMYF0KJDtmtgzZg8jBegZT0X1wjc2
-         WPmb+F3Hn/55y/CyX/z+nSiTTXc+bjOjWjvGE422HatRrB1X93br7LSuJeGW7kGsqC
-         z6DsevUunCbLnOIrR7W2jMDDz8w8Maex76wL2SKo=
-Date:   Tue, 21 Feb 2023 20:27:44 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Svyatoslav Ryhel <clamor95@gmail.com>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>,
-        Maxim Schwalm <maxim.schwalm@gmail.com>,
-        Dmitry Osipenko <digetx@gmail.com>, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, alsa-devel@alsa-project.org,
-        linux-tegra@vger.kernel.org, linux-staging@lists.linux.dev
-Subject: Re: [PATCH v1 09/10] staging: dsp: add support for Fortemedia FM34NE
- DSP
-Message-ID: <Y/UbMH5tXDgsvSbD@kroah.com>
-References: <20230221183211.21964-1-clamor95@gmail.com>
- <20230221183211.21964-10-clamor95@gmail.com>
+        b=ZNSSlLEA/hq3+t9CR6zYzHdLAfBWlkRAXLv7eT7liibU6pJJwKtU6S+/wQp48YEup
+         t1mt0+D6Jm86wzOmwHgj5UPfcIMmDGHvpEy7NT7fXYoF9AHJCq/m6s9jrl9mKURcuK
+         FJOSnX5/Q7+qfo+K+2nV5u8OuqHnN/f47xQR9L68=
+Date:   Tue, 21 Feb 2023 20:29:13 +0100
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     KP Singh <kpsingh@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, pjt@google.com, evn@google.com,
+        jpoimboe@kernel.org, tglx@linutronix.de, x86@kernel.org,
+        hpa@zytor.com, peterz@infradead.org,
+        pawan.kumar.gupta@linux.intel.com, kim.phillips@amd.com,
+        alexandre.chartre@oracle.com, daniel.sneddon@linux.intel.com,
+        corbet@lwn.net, bp@suse.de, linyujun809@huawei.com,
+        jmattson@google.com,
+        =?iso-8859-1?Q?Jos=E9?= Oliveira <joseloliveira11@gmail.com>,
+        Rodrigo Branco <rodrigo@kernelhacking.com>,
+        Alexandra Sandulescu <aesa@google.com>, stable@vger.kernel.org
+Subject: Re: [PATCH v2 1/2] x86/speculation: Allow enabling STIBP with legacy
+ IBRS
+Message-ID: <Y/UbiZoR98xouEy5@kroah.com>
+References: <20230221184908.2349578-1-kpsingh@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <20230221183211.21964-10-clamor95@gmail.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20230221184908.2349578-1-kpsingh@kernel.org>
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -62,36 +60,52 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 21, 2023 at 08:32:10PM +0200, Svyatoslav Ryhel wrote:
-> FM34NE is digital sound processing chip used for active
-> noise suppression mainly on ASUS Transformers.
+On Tue, Feb 21, 2023 at 07:49:07PM +0100, KP Singh wrote:
+> Setting the IBRS bit implicitly enables STIBP to protect against
+> cross-thread branch target injection. With enhanced IBRS, the bit it set
+> once and is not cleared again. However, on CPUs with just legacy IBRS,
+> IBRS bit set on user -> kernel and cleared on kernel -> user (a.k.a
+> KERNEL_IBRS). Clearing this bit also disables the implicitly enabled
+> STIBP, thus requiring some form of cross-thread protection in userspace.
 > 
-> Signed-off-by: Svyatoslav Ryhel <clamor95@gmail.com>
+> Enable STIBP, either opt-in via prctl or seccomp, or always on depending
+> on the choice of mitigation selected via spectre_v2_user.
+> 
+> Reported-by: José Oliveira <joseloliveira11@gmail.com>
+> Reported-by: Rodrigo Branco <rodrigo@kernelhacking.com>
+> Reviewed-by: Alexandra Sandulescu <aesa@google.com>
+> Fixes: 7c693f54c873 ("x86/speculation: Add spectre_v2=ibrs option to support Kernel IBRS")
+> Cc: stable@vger.kernel.org
+> Signed-off-by: KP Singh <kpsingh@kernel.org>
 > ---
->  drivers/staging/Kconfig          |   2 +
->  drivers/staging/Makefile         |   1 +
->  drivers/staging/dsp/Kconfig      |   7 +
->  drivers/staging/dsp/Makefile     |   2 +
->  drivers/staging/dsp/dsp-fm34ne.c | 364 +++++++++++++
->  drivers/staging/dsp/dsp-fm34ne.h | 845 +++++++++++++++++++++++++++++++
->  6 files changed, 1221 insertions(+)
->  create mode 100644 drivers/staging/dsp/Kconfig
->  create mode 100644 drivers/staging/dsp/Makefile
->  create mode 100644 drivers/staging/dsp/dsp-fm34ne.c
->  create mode 100644 drivers/staging/dsp/dsp-fm34ne.h
+>  arch/x86/kernel/cpu/bugs.c | 33 ++++++++++++++++++++++-----------
+>  1 file changed, 22 insertions(+), 11 deletions(-)
+> 
 
+Hi,
 
-Sorry, but why is this going into drivers/staging/ at all?  What is
-needed to be done to get this out of staging?  Why not do that work
-right now?  At the least, we need a TODO file in the directory that
-lists what needs to be done and who is responsible for it.
+This is the friendly patch-bot of Greg Kroah-Hartman.  You have sent him
+a patch that has triggered this response.  He used to manually respond
+to these common problems, but in order to save his sanity (he kept
+writing the same thing over and over, yet to different people), I was
+created.  Hopefully you will not take offence and will fix the problem
+in your patch and resubmit it so that it can be accepted into the Linux
+kernel tree.
 
-But again, just do the work now, it's faster and simpler to do it before
-you submit it instead of waiting until after it is merged.
+You are receiving this message because of the following common error(s)
+as indicated below:
 
-Also, no need for a .h file when you only have one .c file.  Just put
-them all together into one file please.
+- This looks like a new version of a previously submitted patch, but you
+  did not list below the --- line any changes from the previous version.
+  Please read the section entitled "The canonical patch format" in the
+  kernel file, Documentation/process/submitting-patches.rst for what
+  needs to be done here to properly describe this.
+
+If you wish to discuss this problem further, or you have questions about
+how to resolve this issue, please feel free to respond to this email and
+Greg will reply once he has dug out from the pending patches received
+from other developers.
 
 thanks,
 
-greg k-h
+greg k-h's patch email bot
