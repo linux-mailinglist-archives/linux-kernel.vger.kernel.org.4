@@ -2,112 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5641F69E10F
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 14:08:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1133869E112
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 14:09:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233820AbjBUNIY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Feb 2023 08:08:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35460 "EHLO
+        id S233828AbjBUNJk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Feb 2023 08:09:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36498 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230027AbjBUNIW (ORCPT
+        with ESMTP id S230027AbjBUNJi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Feb 2023 08:08:22 -0500
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16D6923855;
-        Tue, 21 Feb 2023 05:08:22 -0800 (PST)
-Received: from pps.filterd (m0279862.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 31LCZLof020539;
-        Tue, 21 Feb 2023 13:08:10 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=date : from : to :
- cc : subject : message-id : reply-to : references : mime-version :
- content-type : in-reply-to; s=qcppdkim1;
- bh=YsTn5682VPeKYQOvhg9UTeIAdIIEB0SGI/B7LvZMpkU=;
- b=oZhG8odHywvBQqClVzfIhK2hq0wz6V7MAZzXi7Y5H4Ja2AijksZMCmdEiatYcvNijKep
- 1qa7G0CD7iP1V/SBfcRAdMv/OuJQRGRQX74O08zs1hk7AE/CwYJuwfyqDcnv+/elihOT
- /S31aZseWtatYsLbbTfinbyqvb1aOfhB/tKJMZwizTD6j/V7MCZ8VI8x3F2K2IzOey0f
- cSGDE08YPpepUDKkc6JBMIude9I821JZ4tQ5eBEAxJaB9UH1bAvF0K417EiSyG4Fst2W
- LMd4pHBRrjKxowkrbwRJ2nj+E99wZCAGq3j4fuYaBYJ6Hw3sDHl/ckaUtrBWS2hwalUZ 7g== 
-Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3nvp4v14yt-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 21 Feb 2023 13:08:10 +0000
-Received: from nalasex01b.na.qualcomm.com (nalasex01b.na.qualcomm.com [10.47.209.197])
-        by NALASPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 31LD892F025437
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 21 Feb 2023 13:08:09 GMT
-Received: from quicinc.com (10.80.80.8) by nalasex01b.na.qualcomm.com
- (10.47.209.197) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.41; Tue, 21 Feb
- 2023 05:08:02 -0800
-Date:   Tue, 21 Feb 2023 18:37:59 +0530
-From:   Srivatsa Vaddagiri <quic_svaddagi@quicinc.com>
-To:     Elliot Berman <quic_eberman@quicinc.com>
-CC:     Alex Elder <elder@linaro.org>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Prakruthi Deepak Heragu <quic_pheragu@quicinc.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Murali Nalajala <quic_mnalajal@quicinc.com>,
-        Trilok Soni <quic_tsoni@quicinc.com>,
-        "Carl van Schaik" <quic_cvanscha@quicinc.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        "Konrad Dybcio" <konrad.dybcio@linaro.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Bagas Sanjaya <bagasdotme@gmail.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Jassi Brar <jassisinghbrar@gmail.com>,
-        <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-doc@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>
-Subject: Re: [PATCH v10 19/26] gunyah: vm_mgr: Add framework to add VM
- Functions
-Message-ID: <20230221130759.GD787573@quicinc.com>
-Reply-To: Srivatsa Vaddagiri <quic_svaddagi@quicinc.com>
-References: <20230214211229.3239350-1-quic_eberman@quicinc.com>
- <20230214212531.3323284-1-quic_eberman@quicinc.com>
+        Tue, 21 Feb 2023 08:09:38 -0500
+Received: from mail-lj1-x236.google.com (mail-lj1-x236.google.com [IPv6:2a00:1450:4864:20::236])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6CA028844
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Feb 2023 05:09:35 -0800 (PST)
+Received: by mail-lj1-x236.google.com with SMTP id a30so4437428ljr.0
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Feb 2023 05:09:35 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=vojoAcfUuZFzbZ4NXFeMzemBjeLJC5XF1afZIyyXCcc=;
+        b=BKvymr7g7GtkBXmqCdpf/taKauloWxanij5lD1QUkDuOXbN3q8I7hNjzkWkFm7ja8h
+         Lnv2HREXgop8r40ION5WEA6Zi/+O3RgLnI7/3sfev+alJRvJZ5aMTiCnN61I/jDHorLq
+         odm0eVnkpaDmzp9cLHu1OU2KWZaJe12e39Pnf5N7zQu96Jc11a6nqXWAgmCghuEGfQai
+         ueFL7fttwW+lRhhuD8xLhXGhzrd64LCI3NjqhNh5SjTDrDJYNgGiisTXiAiIxaF2rJVN
+         9M34OhMjzFLkd4ibj6gFxHGYm+v/0fWa/fRsAYYsomY5t70qQVWzyIoHe7AgIYh7+mQl
+         3gNg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=vojoAcfUuZFzbZ4NXFeMzemBjeLJC5XF1afZIyyXCcc=;
+        b=UZJcG1HwMGWgQWq41WQ/HO62YkOU5vvlMai19MIYXyT8pE7EfTO1b0M9zp9a7FpA9/
+         OUzD7y8Jx/X4QD+SULwdPG/hFmMD+tkqUstcGfyUw5NsMBr+i3T1IzbZNRQNd4OWXKfR
+         BsqvVrWiK2nzPN3mY6LnZNDZhcYv5C0DF8AkAZwQbdIBE61YrDi5foEHBUbATNWSS565
+         NAJ4S21Nyouw08D+SHvl/KzSlZ0pYvP6LWh/hTwKVWSHlibcbiGTzItzJvtz3SLZRykR
+         b0VaHS5XnbyfzGgu5X2CNPHQalKegNXbuxwPypC1hqUNdnBBXTyrg/jtJkCCA4T7GNC2
+         qcuA==
+X-Gm-Message-State: AO0yUKUyqE2NodEkJZYz5Iz2jsOTA6nWPY4u8L5R66YVjZaJRgFRvuaH
+        K0Pwz6T21qA0cgpRH/p8pp8pnA==
+X-Google-Smtp-Source: AK7set/C1Ntt5qOJwBdZyOdjVB+T9JCWwDKooUuf7BcTZANWTJhOWEj0TcTgLQr3gPVK3+7TOeiEZQ==
+X-Received: by 2002:a2e:7c18:0:b0:293:464f:feda with SMTP id x24-20020a2e7c18000000b00293464ffedamr1729099ljc.16.1676984973385;
+        Tue, 21 Feb 2023 05:09:33 -0800 (PST)
+Received: from [192.168.1.101] (abxi151.neoplus.adsl.tpnet.pl. [83.9.2.151])
+        by smtp.gmail.com with ESMTPSA id f22-20020a2e6a16000000b0029353201fddsm773835ljc.129.2023.02.21.05.09.32
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 21 Feb 2023 05:09:33 -0800 (PST)
+Message-ID: <efdd3472-57cf-6022-2cfa-53a2fd86c2f2@linaro.org>
+Date:   Tue, 21 Feb 2023 14:09:31 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Disposition: inline
-In-Reply-To: <20230214212531.3323284-1-quic_eberman@quicinc.com>
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01b.na.qualcomm.com (10.47.209.197)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: PCVBBqpkzNXRtwELj_bTIkLM_0bCnG8W
-X-Proofpoint-GUID: PCVBBqpkzNXRtwELj_bTIkLM_0bCnG8W
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.170.22
- definitions=2023-02-21_08,2023-02-20_02,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 mlxlogscore=787
- clxscore=1015 adultscore=0 spamscore=0 phishscore=0 suspectscore=0
- bulkscore=0 impostorscore=0 lowpriorityscore=0 malwarescore=0
- priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2302210111
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH] arm64: dts: qcom: sm8250-xiaomi-elish: Correct venus
+ firmware path
+To:     Jianhua Lu <lujianhua000@gmail.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org
+References: <20230221123633.25145-1-lujianhua000@gmail.com>
+Content-Language: en-US
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+In-Reply-To: <20230221123633.25145-1-lujianhua000@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-* Elliot Berman <quic_eberman@quicinc.com> [2023-02-14 13:25:30]:
-
-> +int __must_check gh_vm_get(struct gh_vm *ghvm)
-
-Minor comment: 
-
-get_gh_rm vs gh_vm_get -> can follow some consistent convention I think.
-
-Perhaps get_gh_vm()?
 
 
-> +{
-> +	return kref_get_unless_zero(&ghvm->kref);
-> +}
-> +EXPORT_SYMBOL_GPL(gh_vm_get);
+On 21.02.2023 13:36, Jianhua Lu wrote:
+> Missing vendor name for venus firmware path. Add it.
+> 
+> Fixes: a41b617530bf ("arm64: dts: qcom: sm8250: Add device tree for Xiaomi Mi Pad 5 Pro")
+> Signed-off-by: Jianhua Lu <lujianhua000@gmail.com>
+> ---
+Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+
+Konrad
+>  arch/arm64/boot/dts/qcom/sm8250-xiaomi-elish.dts | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/arch/arm64/boot/dts/qcom/sm8250-xiaomi-elish.dts b/arch/arm64/boot/dts/qcom/sm8250-xiaomi-elish.dts
+> index acaa99c5ff8b..a85d47f7a9e8 100644
+> --- a/arch/arm64/boot/dts/qcom/sm8250-xiaomi-elish.dts
+> +++ b/arch/arm64/boot/dts/qcom/sm8250-xiaomi-elish.dts
+> @@ -625,6 +625,6 @@ &ufs_mem_phy {
+>  };
+>  
+>  &venus {
+> -	firmware-name = "qcom/sm8250/elish/venus.mbn";
+> +	firmware-name = "qcom/sm8250/xiaomi/elish/venus.mbn";
+>  	status = "okay";
+>  };
