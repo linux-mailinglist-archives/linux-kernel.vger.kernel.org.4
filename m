@@ -2,92 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5CC0B69E342
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 16:21:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 334B769E350
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 16:24:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234120AbjBUPVW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Feb 2023 10:21:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43048 "EHLO
+        id S233908AbjBUPX5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Feb 2023 10:23:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45324 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233810AbjBUPVU (ORCPT
+        with ESMTP id S233828AbjBUPXz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Feb 2023 10:21:20 -0500
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3971C25BB2;
-        Tue, 21 Feb 2023 07:21:19 -0800 (PST)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id EDEB234C14;
-        Tue, 21 Feb 2023 15:21:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1676992877; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=gzHiHoqH1FZ2e8or4vCjWdlBkU2/7QX1hNdRkugFVaM=;
-        b=LgKqeo2yQ2b1D0vJPE7Wjp9MTcodIdE2vXEn1gZ//a8FuhQ9ii4mh4H5rDAL/Tr1f9SzFB
-        sB8OPFP2fFPTN1KhtaaEvkMNx1gadQSAqlS9PRt1QrX4dncGI7ulO5iOTfM1uRSUZvsKU7
-        12M7ip+L/P6NrUrHbV8prJjVsYRv7Kk=
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id CD84313481;
-        Tue, 21 Feb 2023 15:21:17 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id o626L23h9GP7bwAAMHmgww
-        (envelope-from <mhocko@suse.com>); Tue, 21 Feb 2023 15:21:17 +0000
-Date:   Tue, 21 Feb 2023 16:21:17 +0100
-From:   Michal Hocko <mhocko@suse.com>
-To:     Haifeng Xu <haifeng.xu@shopee.com>
-Cc:     hannes@cmpxchg.org, shakeelb@google.com, muchun.song@linux.dev,
-        akpm@linux-foundation.org, cgroups@vger.kernel.org,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] mm/memcg: Skip high limit check in root memcg
-Message-ID: <Y/ThbQNqrdny4+Pf@dhcp22.suse.cz>
-References: <20230210094550.5125-1-haifeng.xu@shopee.com>
- <Y+uvRKo7OQ02yB4K@dhcp22.suse.cz>
- <82918a12-d83e-10c0-0e04-eec26657b699@shopee.com>
- <Y/S3GHT1P6awZaPb@dhcp22.suse.cz>
- <99bdfbec-2de4-b432-9649-09557d3f95d6@shopee.com>
+        Tue, 21 Feb 2023 10:23:55 -0500
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA8809EC3;
+        Tue, 21 Feb 2023 07:23:54 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1676993034; x=1708529034;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=Z6M0/vKzo30bTTnXTPEnegNDD/JsCsXi5PT8Dy1dSkI=;
+  b=XA+ZAL+OCm1sY3hfP+5I2hE/CIDHVtrjp06dshf6AVT6mI1sQZFX9RFS
+   1VKntG9FK364aAq4GbVptfXpLm9ox0bsqEmI41rrAOaWEeZHjJUcl2Fp4
+   yEz1VpycJ91RSxp4cosi5fisiRI0dMwbSTZrm8BQYQYpdUariSRyOTqdd
+   /vbFvRwPFVE4o9qOG63RBdgPKZYvwacq8wfAkJzKruwcKDxYPxUkwtu5y
+   bvguybtddysIBDARdAXQGfuvUHYHYyBXjOC87Qd7WUBpzHOdAt+dB5FLH
+   nLf5M3IStZOKQ2l8siW06YPF9q7v6vkg2jybwHMY7/3KNhftxNdLHvQPp
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10628"; a="313028857"
+X-IronPort-AV: E=Sophos;i="5.97,315,1669104000"; 
+   d="scan'208";a="313028857"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Feb 2023 07:23:54 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10628"; a="917225773"
+X-IronPort-AV: E=Sophos;i="5.97,315,1669104000"; 
+   d="scan'208";a="917225773"
+Received: from yichaohu-mobl.ccr.corp.intel.com (HELO localhost) ([10.254.208.83])
+  by fmsmga006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Feb 2023 07:23:52 -0800
+Date:   Tue, 21 Feb 2023 23:23:49 +0800
+From:   Yu Zhang <yu.c.zhang@linux.intel.com>
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 08/12] KVM: nSVM: Use KVM-governed feature framework to
+ track "vVM{SAVE,LOAD} enabled"
+Message-ID: <20230221152349.ulcjtbnvziair7ff@linux.intel.com>
+References: <20230217231022.816138-1-seanjc@google.com>
+ <20230217231022.816138-9-seanjc@google.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <99bdfbec-2de4-b432-9649-09557d3f95d6@shopee.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230217231022.816138-9-seanjc@google.com>
+User-Agent: NeoMutt/20171215
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue 21-02-23 22:21:45, Haifeng Xu wrote:
-[...]
-> >> The test result show that with or without the patch, the time taken is almost the same.
-> > 
-> > This is in line with my expectation. So the question is whether the
-> > additional check is really worth it. 
+On Fri, Feb 17, 2023 at 03:10:18PM -0800, Sean Christopherson wrote:
+> Track "virtual VMSAVE/VMLOAD exposed to L1" via a governed feature flag
+> instead of using a dedicated bit/flag in vcpu_svm.
 > 
-> This patch doesn't bring any obvious benifit or harm, but the high
-> limit check in root memcg seems a little weird.  Maybe we can add this
-> check
+> No functional change intended.
+> 
+> Signed-off-by: Sean Christopherson <seanjc@google.com>
+> ---
+>  arch/x86/kvm/governed_features.h | 1 +
+>  arch/x86/kvm/svm/nested.c        | 2 +-
+>  arch/x86/kvm/svm/svm.c           | 5 ++---
+>  arch/x86/kvm/svm/svm.h           | 1 -
+>  4 files changed, 4 insertions(+), 5 deletions(-)
+> 
+> diff --git a/arch/x86/kvm/governed_features.h b/arch/x86/kvm/governed_features.h
+> index 0335576a80a8..b66b9d550f33 100644
+> --- a/arch/x86/kvm/governed_features.h
+> +++ b/arch/x86/kvm/governed_features.h
+> @@ -9,6 +9,7 @@ KVM_GOVERNED_X86_FEATURE(GBPAGES)
+>  KVM_GOVERNED_X86_FEATURE(XSAVES)
+>  KVM_GOVERNED_X86_FEATURE(NRIPS)
+>  KVM_GOVERNED_X86_FEATURE(TSCRATEMSR)
+> +KVM_GOVERNED_X86_FEATURE(V_VMSAVE_VMLOAD)
+>  
+>  #undef KVM_GOVERNED_X86_FEATURE
+>  #undef KVM_GOVERNED_FEATURE
+> diff --git a/arch/x86/kvm/svm/nested.c b/arch/x86/kvm/svm/nested.c
+> index 30e00c4e07c7..6a96058c0e48 100644
+> --- a/arch/x86/kvm/svm/nested.c
+> +++ b/arch/x86/kvm/svm/nested.c
+> @@ -107,7 +107,7 @@ static void nested_svm_uninit_mmu_context(struct kvm_vcpu *vcpu)
+>  
+>  static bool nested_vmcb_needs_vls_intercept(struct vcpu_svm *svm)
+>  {
+> -	if (!svm->v_vmload_vmsave_enabled)
+> +	if (!guest_can_use(&svm->vcpu, X86_FEATURE_V_VMSAVE_VMLOAD))
+>  		return true;
+>  
+>  	if (!nested_npt_enabled(svm))
+> diff --git a/arch/x86/kvm/svm/svm.c b/arch/x86/kvm/svm/svm.c
+> index dd4aead5462c..b3f0271c73b9 100644
+> --- a/arch/x86/kvm/svm/svm.c
+> +++ b/arch/x86/kvm/svm/svm.c
+> @@ -1162,8 +1162,6 @@ static inline void init_vmcb_after_set_cpuid(struct kvm_vcpu *vcpu)
+>  
+>  		set_msr_interception(vcpu, svm->msrpm, MSR_IA32_SYSENTER_EIP, 0, 0);
+>  		set_msr_interception(vcpu, svm->msrpm, MSR_IA32_SYSENTER_ESP, 0, 0);
+> -
+> -		svm->v_vmload_vmsave_enabled = false;
+>  	} else {
+>  		/*
+>  		 * If hardware supports Virtual VMLOAD VMSAVE then enable it
+> @@ -4153,7 +4151,8 @@ static void svm_vcpu_after_set_cpuid(struct kvm_vcpu *vcpu)
+>  
+>  	svm->lbrv_enabled = lbrv && guest_cpuid_has(vcpu, X86_FEATURE_LBRV);
+>  
+> -	svm->v_vmload_vmsave_enabled = vls && guest_cpuid_has(vcpu, X86_FEATURE_V_VMSAVE_VMLOAD);
+> +	if (vls && !guest_cpuid_is_intel(vcpu))
+> +		kvm_governed_feature_check_and_set(vcpu, X86_FEATURE_V_VMSAVE_VMLOAD);
 
-Well, I do not see the code to look weird TBH. There is nothing wrong in
-doing the check for the root memcg. It is a bit pointless but it is not
-incorrect.
+Sorry, why guest_cpuid_is_intel(vcpu)? Is it becasue that a AMD host with virtual
+VMSAVE/VMLOAD capability will always expose this feature for all AMD guests? 
 
-> It all depends on your viewpoint.
+If yes, how about adding some comments? Thanks!
 
-From my POV, I prefer changes that either fix something (correctness
-issue or a performance issue/improvement) or improve readbility. The
-check doesn't fix anything and I am not convinced about an improved
-readabilit either.
+B.R.
+Yu
 
-Thanks for the patch anyway!
--- 
-Michal Hocko
-SUSE Labs
