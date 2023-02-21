@@ -2,136 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0446B69D76F
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 01:15:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8838E69D777
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 01:20:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233092AbjBUAO5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Feb 2023 19:14:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47366 "EHLO
+        id S232333AbjBUAUU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Feb 2023 19:20:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48558 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233483AbjBUAOz (ORCPT
+        with ESMTP id S231396AbjBUAUS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Feb 2023 19:14:55 -0500
-Received: from fudo.makrotopia.org (fudo.makrotopia.org [IPv6:2a07:2ec0:3002::71])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5B1B206B6;
-        Mon, 20 Feb 2023 16:14:53 -0800 (PST)
-Received: from local
-        by fudo.makrotopia.org with esmtpsa (TLS1.3:TLS_AES_256_GCM_SHA384:256)
-         (Exim 4.96)
-        (envelope-from <daniel@makrotopia.org>)
-        id 1pUGIh-0005aB-1e;
-        Tue, 21 Feb 2023 01:14:31 +0100
-Date:   Tue, 21 Feb 2023 00:14:25 +0000
-From:   Daniel Golle <daniel@makrotopia.org>
-To:     Rob Herring <robh@kernel.org>
-Cc:     Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Sean Wang <sean.wang@mediatek.com>,
-        Olivia Mackall <olivia@selenic.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Conor Dooley <conor.dooley@microchip.com>,
-        Mingming Su <Mingming.Su@mediatek.com>,
-        linux-crypto@vger.kernel.org, linux-mediatek@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/2] hwrng: add driver for MediaTek TRNG SMC
-Message-ID: <Y/QM4YtDWocpY9hb@makrotopia.org>
-References: <89865515728cb937b6591160ad9c30b4bcc8dd41.1676467500.git.daniel@makrotopia.org>
- <84de90f5-da77-d3f2-c14a-d2e5c53bbf1c@collabora.com>
- <0d5d5d00-8569-a642-cca7-798c8d24a986@gmail.com>
- <20230220235811.GA618419-robh@kernel.org>
+        Mon, 20 Feb 2023 19:20:18 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17FE62196A;
+        Mon, 20 Feb 2023 16:20:18 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A042260F53;
+        Tue, 21 Feb 2023 00:20:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 02130C4339C;
+        Tue, 21 Feb 2023 00:20:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1676938817;
+        bh=eoHQqHvYFQFCS0S+n7+j4PGFGtkiLOzxYGOfbYtGdHE=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=U7G0iyDhsAeV07i2t073kFXAP3+/N8JCsdls5iITk24JzM6rMjxgbECvIHPg8/n/B
+         unRCBa29e9gIqxSSuaauaVpoBhcQw9C9Dc6c6dSrfv3ou71fCudUVCv+ZgMwR03hv9
+         MhPjLOZ6Q8UaDb+0qeKjdnhrGzMQD2x4v19txa1z7/c2er0cIB6mfksN76S12EFWq6
+         Qt+vEox2Q3Y+CwP0Wj0zR+yRDdBR5CK/WVeYDG6A4djgTflRzJqm2DVQCMJbdw0KSO
+         cjGDP3PJdIF/Vn1ZU5gPawKcvNNwyD1+nA0/2qLbcPL6pZTyXa09YADl337V/MYsEO
+         uNRHtenySCeVw==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id DB990C59A4C;
+        Tue, 21 Feb 2023 00:20:16 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230220235811.GA618419-robh@kernel.org>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Subject: Re: [PATCH net 1/4] MAINTAINERS: Switch maintenance for cc2520 driver
+ over
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <167693881689.28142.16088356100266329670.git-patchwork-notify@kernel.org>
+Date:   Tue, 21 Feb 2023 00:20:16 +0000
+References: <20230218211317.284889-1-stefan@datenfreihafen.org>
+In-Reply-To: <20230218211317.284889-1-stefan@datenfreihafen.org>
+To:     Stefan Schmidt <stefan@datenfreihafen.org>
+Cc:     davem@davemloft.net, kuba@kernel.org, pabeni@redhat.com,
+        netdev@vger.kernel.org, linux-wpan@vger.kernel.org,
+        alex.aring@gmail.com, miquel.raynal@bootlin.com,
+        linux-kernel@vger.kernel.org, alan@signal11.us,
+        liuxuenetmail@gmail.com, varkabhadram@gmail.com
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 20, 2023 at 05:58:11PM -0600, Rob Herring wrote:
-> On Thu, Feb 16, 2023 at 12:32:10PM +0100, Matthias Brugger wrote:
-> > 
-> > 
-> > On 16/02/2023 11:03, AngeloGioacchino Del Regno wrote:
-> > > Il 15/02/23 14:27, Daniel Golle ha scritto:
-> > > > Add driver providing kernel-side support for the Random Number
-> > > > Generator hardware found on Mediatek SoCs which have a driver in ARM
-> > > > TrustedFirmware-A allowing Linux to read random numbers using a
-> > > > non-standard vendor-defined Secure Monitor Call.
-> > > > 
-> > > > Signed-off-by: Daniel Golle <daniel@makrotopia.org>
-> > > 
-> > > Hello Daniel,
-> > > 
-> > > incidentally, I've also done some research on this one some months ago, when
-> > > I was deep in adding support for the Helio X10 SoC (MT6795) on Xperia M5.
-> > > 
-> > > The rng-v2 is simply the same rng but hypervised by the TF-A... and the only
-> > > difference is, well, as you're also pointing out, that we're using secure
-> > > monitor calls instead of direct MMIO handling.
-> > > 
-> > > There's also not much more than what you've implemented here and the only kind
-> > > of addition that we will ever see on this one will be about changing the SIP
-> > > command (as some older SoCs use a different one)... so...
-> > > 
-> > > ...I don't think that adding an entirely new driver is worth the noise, hence
-> > > I propose to simply add handling for the Secure RNG to mtk-rng.c instead: it's
-> > > shorter and we would only need to address one if branch on that probe function
-> > > to set a different callback.
-> > > 
-> > > The clock should then be optional for *some* of those "v2 handling" devices,
-> > > as if I recall correctly, some do need the clock to be handled from Linux
-> > > anyway... otherwise this v2 driver will be "soon" looking bloody similar to
-> > > the "v1", adding a bit of code duplication around.
-> > > 
-> > > What do you think?
-> > > 
-> > 
-> > That was exactly what I was thinking as well when I had a look at the
-> > driver. I propose to add it to mtk-rng.c. I don't see any value having a
-> > second driver for this.
+Hello:
+
+This series was applied to netdev/net.git (master)
+by Jakub Kicinski <kuba@kernel.org>:
+
+On Sat, 18 Feb 2023 22:13:14 +0100 you wrote:
+> Varka Bhadram has not been actively working on the driver or reviewing
+> patches for several years. I have been taking odd fixes in through the
+> wpan/ieee802154 tree. Update the MAINTAINERS file to reflect this
+> reality. I wanted to thank Varka for his work on the driver.
 > 
-> Or fix the firmware to use the already defined SMC TRNG interface...
-
-I agree that this would obviously be the best solution of all, and it's
-also not completely impossible as TF-A for this platform can quite easily
-be built from source. However, for devices already out there it may still
-not be an option.
-
+> Signed-off-by: Stefan Schmidt <stefan@datenfreihafen.org>
 > 
-> In any case, like the SMC TRNG, you don't need a DT binding. The 
-> firmware interface is discoverable. Try the SMC call and if it succeeds, 
-> you have a TRNG.
+> [...]
 
-I'll try that and let you know how it goes ;)
+Here is the summary with links:
+  - [net,1/4] MAINTAINERS: Switch maintenance for cc2520 driver over
+    https://git.kernel.org/netdev/net/c/c551c569e388
+  - [net,2/4] MAINTAINERS: Switch maintenance for mcr20a driver over
+    https://git.kernel.org/netdev/net/c/d1b4b4117f89
+  - [net,3/4] MAINTAINERS: Switch maintenance for mrf24j40 driver over
+    https://git.kernel.org/netdev/net/c/6b441772854f
+  - [net,4/4] MAINTAINERS: Add Miquel Raynal as additional maintainer for ieee802154
+    https://git.kernel.org/netdev/net/c/195d6cc9c3d1
+
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
 
-Cheers
-
-
-Daniel
-
-> 
-> Rob
-> 
-> > 
-> > Regards,
-> > Matthias
-> > 
-> > > Regards,
-> > > Angelo
-> > > 
-> > > > ---
-> > > >   MAINTAINERS                         |  1 +
-> > > >   drivers/char/hw_random/Kconfig      | 16 +++++++
-> > > >   drivers/char/hw_random/Makefile     |  1 +
-> > > >   drivers/char/hw_random/mtk-rng-v2.c | 74 +++++++++++++++++++++++++++++
-> > > >   4 files changed, 92 insertions(+)
-> > > >   create mode 100644 drivers/char/hw_random/mtk-rng-v2.c
-> > > > 
-> > > 
