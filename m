@@ -2,67 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A98E669DAF1
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 08:08:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A9F5669DAF3
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 08:09:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233462AbjBUHIt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Feb 2023 02:08:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42308 "EHLO
+        id S233467AbjBUHJn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Feb 2023 02:09:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43474 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233159AbjBUHIr (ORCPT
+        with ESMTP id S233222AbjBUHJm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Feb 2023 02:08:47 -0500
-Received: from mail-lj1-x22f.google.com (mail-lj1-x22f.google.com [IPv6:2a00:1450:4864:20::22f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F178A5C2
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Feb 2023 23:08:45 -0800 (PST)
-Received: by mail-lj1-x22f.google.com with SMTP id h9so3187333ljq.2
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Feb 2023 23:08:45 -0800 (PST)
+        Tue, 21 Feb 2023 02:09:42 -0500
+Received: from mail-vk1-xa2c.google.com (mail-vk1-xa2c.google.com [IPv6:2607:f8b0:4864:20::a2c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8E84A279
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Feb 2023 23:09:40 -0800 (PST)
+Received: by mail-vk1-xa2c.google.com with SMTP id w126so1911728vkb.1
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Feb 2023 23:09:40 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+        d=linaro.org; s=google; t=1676963380;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=sW5OTipyHanuMGGEr19+SfAUNI4fh6TQoQ0SKxiVbds=;
-        b=xPFad2O3o2T7JjjqimSZr5bDzhsCKNA/ZkT84IvIGWjisfYMVY8ez3JcB+xGEpxfzH
-         gzirFObAQN+Ea1riiRgJJHdkV60VszkVhQ5ytQBgoncx5bHNah9foz2MkmgJvH9rJoiN
-         d6tn2jmty0h7uLUWzB07Njf46FAaTlNyEzn9BLtanEX3CXGHtAMFNsW1ruwFyhQ+KwDd
-         ygE+DhlYQOCkxiy7y5GaQpMsQYTHikXVAIBNl0xtMndF5GNCHqKtF9YGZzi0KBl+t0lG
-         bHzSDsMIdnKH9n22w8OfOrLDZgR4nTLts+MKO+3nKWe575Ub2BfB5D+IwyVIcN864IWy
-         i/iA==
+        bh=hscTzN5z8vrwaxFCI2AwVnHdibSXNak1jNv30h0DF0M=;
+        b=L3TayzkPFSd6FRAdKDo2fVYOHdhqA3sTljvEDI2pSceMmvPspKyDHzmuQIWvn50DQJ
+         WiKGKfRrYXPcreSOOzPs5b9F5sMeF0NyJV4526AHHN8njksAcoQKVll60g/x4QmLgrnR
+         g6Imw34SMEm29QAPG/xLoOXY+HdFb01fNGgEJdukgxbjxu4USnsp6FP0tXlGAXZpNdN9
+         5TUAFcnc1Z+xurL4UGPKAHDPuDW6N6BzHnCEWNXCK3sEnaU+3eaOFUj+H7UDQbqI3l5v
+         86QMrDpgIRU1P/X3AtgpcZQQUTf/2uuHP0qnH5Csr4xQLJEMTbYTgFzqZj3iCl6lzzJi
+         rJZg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+        d=1e100.net; s=20210112; t=1676963380;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=sW5OTipyHanuMGGEr19+SfAUNI4fh6TQoQ0SKxiVbds=;
-        b=tKvzFSn3XO7jAnSwT2UWBmjbEdPbmxq0qoGXkAcx0+4/R9LHIRrly1Pgt8LkeFENYA
-         8w1UhG6h7vZSkyowdtjypE/jlvcXKfQE4XSp4KAeGpvKD3HObCb+YMEPfE5IJhxPAQ0u
-         JjNZwiw3BgeXWxWihiDfq4FkHAKrocmOxEdRM+pKrt1rkJu4/OuARbk09beEJDb5bPL7
-         lJZ0WbwxpRHzcPIaJw7v1phfF7jNFylnIk1NsP70Xl+lPftIdq8/hGUuDU8Z4AqnR2Wo
-         ujkpBqsO2/Z+y0OMP0ALWGAPMDcwqdBldqZTmv+E0tnCtfYFtDrOFZmBmWa1TfDWFXaH
-         VZww==
-X-Gm-Message-State: AO0yUKWks4CNhZ9P77qF/41kF1xToLrl4CqnzMMCNN6SZ7PI4sa9lNxj
-        EHqE0mOEL1hIlIL5hm5apbfqdQ==
-X-Google-Smtp-Source: AK7set9MVl9dE0Gqmud9UHGJXFGDa+7JeOO8MZD8yAHqxQi9OKB89/YMGpoENiqGS13QSoc5sBuOfQ==
-X-Received: by 2002:a05:651c:1214:b0:293:5359:79e5 with SMTP id i20-20020a05651c121400b00293535979e5mr1539070lja.45.1676963323899;
-        Mon, 20 Feb 2023 23:08:43 -0800 (PST)
-Received: from localhost (c-9b0ee555.07-21-73746f28.bbcust.telenor.se. [85.229.14.155])
-        by smtp.gmail.com with ESMTPSA id v17-20020a2e9611000000b002934ed148afsm1809964ljh.52.2023.02.20.23.08.43
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 20 Feb 2023 23:08:43 -0800 (PST)
-From:   Anders Roxell <anders.roxell@linaro.org>
-To:     sj@kernel.org, shuah@kernel.org
-Cc:     linux-kernel@vger.kernel.org, damon@lists.linux.dev,
-        linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
-        Anders Roxell <anders.roxell@linaro.org>
-Subject: [PATCH 2/2] selftests: damon: change scripts to be executable
-Date:   Tue, 21 Feb 2023 08:08:37 +0100
-Message-Id: <20230221070837.1502935-2-anders.roxell@linaro.org>
-X-Mailer: git-send-email 2.39.1
-In-Reply-To: <20230221070837.1502935-1-anders.roxell@linaro.org>
-References: <20230221070837.1502935-1-anders.roxell@linaro.org>
+        bh=hscTzN5z8vrwaxFCI2AwVnHdibSXNak1jNv30h0DF0M=;
+        b=TkPIxcYuyD2dhv6aDBoJHfsOTNEoPdfeQKEzDfQO28GWaq+sfK4cbHf01dg/MD0MWb
+         mkpy7kbZZtH/Xyyq3ksqk3E8W+WrFCKhvlrbihFWt9k6WS/Du5TbhIRt3/ZQyDwxGrFU
+         bAGTUFswK2Y/w8Cae+/QU9zQR5k70u1k9x0tpxbnasMXHAwVGdedeNTcMbS+CmqOTE0/
+         JVoDa8VnI2SmW2wi89JteTWjRZUstRy9BC/MNJQGE42FgnmpLLZbBUVzOQTTsIVlpF8l
+         Ql0V9IOWnYW6bF6Tvfb3Bivq5B91j8vx8bvmtVqWoeCXenxOTLZCn912WPz7erwz/G+8
+         6F4Q==
+X-Gm-Message-State: AO0yUKUkmjI3m4GMONsHAcUKu1sOBMTeJWWDQOYo/ZZ5P2Uk7RaGDzJE
+        hDPHN1h2vvieZuqD/CGg00nIMPWXWqU0nZmbA6d6XikVBENz5NTG
+X-Google-Smtp-Source: AK7set/yyK2Bn0QuazJFmrgddEhbFT3efIywKuQmJ9a9uOWNyfUJd+HAEDQAOzn5iKLRbvlwT/WBycTLATI+WVzqO6k=
+X-Received: by 2002:a1f:2305:0:b0:40e:eec8:6523 with SMTP id
+ j5-20020a1f2305000000b0040eeec86523mr294673vkj.43.1676963379771; Mon, 20 Feb
+ 2023 23:09:39 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20230220133553.669025851@linuxfoundation.org>
+In-Reply-To: <20230220133553.669025851@linuxfoundation.org>
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Tue, 21 Feb 2023 12:39:28 +0530
+Message-ID: <CA+G9fYvczFS5Leb0wt-Bu089XxQ3GdZSjVcPQA5WXOCFnWMPGw@mail.gmail.com>
+Subject: Re: [PATCH 5.15 00/83] 5.15.95-rc1 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
+        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, f.fainelli@gmail.com,
+        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -72,81 +72,174 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When running kselftest-damon The following issues shows up:
+On Mon, 20 Feb 2023 at 19:21, Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
+>
+> This is the start of the stable review cycle for the 5.15.95 release.
+> There are 83 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+>
+> Responses should be made by Wed, 22 Feb 2023 13:35:35 +0000.
+> Anything received after that time might be too late.
+>
+> The whole patch series can be found in one patch at:
+>         https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-=
+5.15.95-rc1.gz
+> or in the git tree and branch at:
+>         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable=
+-rc.git linux-5.15.y
+> and the diffstat can be found below.
+>
+> thanks,
+>
+> greg k-h
 
-'# Warning: file debugfs_attrs.sh is not executable'
 
-Changing the scripts so they are executable.
+Results from Linaro=E2=80=99s test farm.
+No regressions on arm64, arm, x86_64, and i386.
 
-Signed-off-by: Anders Roxell <anders.roxell@linaro.org>
----
- tools/testing/selftests/damon/_chk_dependency.sh                  | 0
- tools/testing/selftests/damon/_debugfs_common.sh                  | 0
- tools/testing/selftests/damon/debugfs_attrs.sh                    | 0
- .../testing/selftests/damon/debugfs_duplicate_context_creation.sh | 0
- tools/testing/selftests/damon/debugfs_empty_targets.sh            | 0
- tools/testing/selftests/damon/debugfs_huge_count_read_write.sh    | 0
- tools/testing/selftests/damon/debugfs_rm_non_contexts.sh          | 0
- tools/testing/selftests/damon/debugfs_schemes.sh                  | 0
- tools/testing/selftests/damon/debugfs_target_ids.sh               | 0
- tools/testing/selftests/damon/lru_sort.sh                         | 0
- tools/testing/selftests/damon/reclaim.sh                          | 0
- tools/testing/selftests/damon/sysfs.sh                            | 0
- tools/testing/selftests/damon/sysfs_update_removed_scheme_dir.sh  | 0
- 13 files changed, 0 insertions(+), 0 deletions(-)
- mode change 100644 => 100755 tools/testing/selftests/damon/_chk_dependency.sh
- mode change 100644 => 100755 tools/testing/selftests/damon/_debugfs_common.sh
- mode change 100644 => 100755 tools/testing/selftests/damon/debugfs_attrs.sh
- mode change 100644 => 100755 tools/testing/selftests/damon/debugfs_duplicate_context_creation.sh
- mode change 100644 => 100755 tools/testing/selftests/damon/debugfs_empty_targets.sh
- mode change 100644 => 100755 tools/testing/selftests/damon/debugfs_huge_count_read_write.sh
- mode change 100644 => 100755 tools/testing/selftests/damon/debugfs_rm_non_contexts.sh
- mode change 100644 => 100755 tools/testing/selftests/damon/debugfs_schemes.sh
- mode change 100644 => 100755 tools/testing/selftests/damon/debugfs_target_ids.sh
- mode change 100644 => 100755 tools/testing/selftests/damon/lru_sort.sh
- mode change 100644 => 100755 tools/testing/selftests/damon/reclaim.sh
- mode change 100644 => 100755 tools/testing/selftests/damon/sysfs.sh
- mode change 100644 => 100755 tools/testing/selftests/damon/sysfs_update_removed_scheme_dir.sh
+Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
 
-diff --git a/tools/testing/selftests/damon/_chk_dependency.sh b/tools/testing/selftests/damon/_chk_dependency.sh
-old mode 100644
-new mode 100755
-diff --git a/tools/testing/selftests/damon/_debugfs_common.sh b/tools/testing/selftests/damon/_debugfs_common.sh
-old mode 100644
-new mode 100755
-diff --git a/tools/testing/selftests/damon/debugfs_attrs.sh b/tools/testing/selftests/damon/debugfs_attrs.sh
-old mode 100644
-new mode 100755
-diff --git a/tools/testing/selftests/damon/debugfs_duplicate_context_creation.sh b/tools/testing/selftests/damon/debugfs_duplicate_context_creation.sh
-old mode 100644
-new mode 100755
-diff --git a/tools/testing/selftests/damon/debugfs_empty_targets.sh b/tools/testing/selftests/damon/debugfs_empty_targets.sh
-old mode 100644
-new mode 100755
-diff --git a/tools/testing/selftests/damon/debugfs_huge_count_read_write.sh b/tools/testing/selftests/damon/debugfs_huge_count_read_write.sh
-old mode 100644
-new mode 100755
-diff --git a/tools/testing/selftests/damon/debugfs_rm_non_contexts.sh b/tools/testing/selftests/damon/debugfs_rm_non_contexts.sh
-old mode 100644
-new mode 100755
-diff --git a/tools/testing/selftests/damon/debugfs_schemes.sh b/tools/testing/selftests/damon/debugfs_schemes.sh
-old mode 100644
-new mode 100755
-diff --git a/tools/testing/selftests/damon/debugfs_target_ids.sh b/tools/testing/selftests/damon/debugfs_target_ids.sh
-old mode 100644
-new mode 100755
-diff --git a/tools/testing/selftests/damon/lru_sort.sh b/tools/testing/selftests/damon/lru_sort.sh
-old mode 100644
-new mode 100755
-diff --git a/tools/testing/selftests/damon/reclaim.sh b/tools/testing/selftests/damon/reclaim.sh
-old mode 100644
-new mode 100755
-diff --git a/tools/testing/selftests/damon/sysfs.sh b/tools/testing/selftests/damon/sysfs.sh
-old mode 100644
-new mode 100755
-diff --git a/tools/testing/selftests/damon/sysfs_update_removed_scheme_dir.sh b/tools/testing/selftests/damon/sysfs_update_removed_scheme_dir.sh
-old mode 100644
-new mode 100755
--- 
-2.39.1
+## Build
+* kernel: 5.15.95-rc1
+* git: https://gitlab.com/Linaro/lkft/mirrors/stable/linux-stable-rc
+* git branch: linux-5.15.y
+* git commit: 76543d843499bc53e1360720c61967de1d3e0ef0
+* git describe: v5.15.94-84-g76543d843499
+* test details:
+https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-5.15.y/build/v5.15=
+.94-84-g76543d843499
 
+## Test Regressions (compared to v5.15.90-205-g5605d15db022)
+
+## Metric Regressions (compared to v5.15.90-205-g5605d15db022)
+
+## Test Fixes (compared to v5.15.90-205-g5605d15db022)
+
+## Metric Fixes (compared to v5.15.90-205-g5605d15db022)
+
+## Test result summary
+total: 157706, pass: 133248, fail: 4182, skip: 19944, xfail: 332
+
+## Build Summary
+* arc: 5 total, 5 passed, 0 failed
+* arm: 149 total, 148 passed, 1 failed
+* arm64: 49 total, 47 passed, 2 failed
+* i386: 39 total, 35 passed, 4 failed
+* mips: 31 total, 29 passed, 2 failed
+* parisc: 8 total, 8 passed, 0 failed
+* powerpc: 34 total, 32 passed, 2 failed
+* riscv: 14 total, 14 passed, 0 failed
+* s390: 16 total, 14 passed, 2 failed
+* sh: 14 total, 12 passed, 2 failed
+* sparc: 8 total, 8 passed, 0 failed
+* x86_64: 42 total, 40 passed, 2 failed
+
+## Test suites summary
+* boot
+* fwts
+* kselftest-android
+* kselftest-arm64
+* kselftest-breakpoints
+* kselftest-capabilities
+* kselftest-cgroup
+* kselftest-clone3
+* kselftest-core
+* kselftest-cpu-hotplug
+* kselftest-cpufreq
+* kselftest-drivers-dma-buf
+* kselftest-efivarfs
+* kselftest-filesystems
+* kselftest-filesystems-binderfs
+* kselftest-firmware
+* kselftest-fpu
+* kselftest-futex
+* kselftest-gpio
+* kselftest-intel_pstate
+* kselftest-ipc
+* kselftest-ir
+* kselftest-kcmp
+* kselftest-kexec
+* kselftest-kvm
+* kselftest-lib
+* kselftest-livepatch
+* kselftest-membarrier
+* kselftest-memfd
+* kselftest-memory-hotplug
+* kselftest-mincore
+* kselftest-mount
+* kselftest-mqueue
+* kselftest-net
+* kselftest-net-forwarding
+* kselftest-net-mptcp
+* kselftest-netfilter
+* kselftest-nsfs
+* kselftest-openat2
+* kselftest-pid_namespace
+* kselftest-pidfd
+* kselftest-proc
+* kselftest-pstore
+* kselftest-ptrace
+* kselftest-rseq
+* kselftest-rtc
+* kselftest-seccomp
+* kselftest-sigaltstack
+* kselftest-size
+* kselftest-splice
+* kselftest-static_keys
+* kselftest-sync
+* kselftest-sysctl
+* kselftest-tc-testing
+* kselftest-timens
+* kselftest-timers
+* kselftest-tmpfs
+* kselftest-tpm2
+* kselftest-user
+* kselftest-vm
+* kselftest-x86
+* kselftest-zram
+* kunit
+* kvm-unit-tests
+* libgpiod
+* libhugetlbfs
+* log-parser-boot
+* log-parser-test
+* ltp-c
+* ltp-cap_bounds
+* ltp-commands
+* ltp-containers
+* ltp-controllers
+* ltp-cpuhotplug
+* ltp-crypto
+* ltp-cve
+* ltp-dio
+* ltp-fcntl-locktests
+* ltp-filecaps
+* ltp-fs
+* ltp-fs_bind
+* ltp-fs_perms_simple
+* ltp-fsx
+* ltp-hugetlb
+* ltp-io
+* ltp-ipc
+* ltp-math
+* ltp-mm
+* ltp-nptl
+* ltp-open-posix-tests
+* ltp-pty
+* ltp-sched
+* ltp-securebits
+* ltp-smoke
+* ltp-syscalls
+* ltp-tracing
+* network-basic-tests
+* packetdrill
+* perf
+* rcutorture
+* v4l2-compliance
+* vdso
+
+--
+Linaro LKFT
+https://lkft.linaro.org
