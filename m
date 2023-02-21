@@ -2,180 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A5CAC69E30F
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 16:06:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CEA4869E312
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 16:07:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234439AbjBUPF6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Feb 2023 10:05:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58258 "EHLO
+        id S233752AbjBUPH0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Feb 2023 10:07:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59804 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234436AbjBUPFz (ORCPT
+        with ESMTP id S232049AbjBUPHZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Feb 2023 10:05:55 -0500
-Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4E2CB763
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Feb 2023 07:05:53 -0800 (PST)
-Received: by mail-wm1-x32f.google.com with SMTP id o14so3808624wms.1
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Feb 2023 07:05:53 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bgdev-pl.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=l1i149aTLNTOLkmkyvTEcAaXgMJdiI2YD/KUpWRXaaA=;
-        b=nZImdhglNUEScK1GjzBwIFIncyE6SLWbEYg5kAfxR5dt/o6o3T53UL11KPwyLmN1Bs
-         ebCn35FX8cxCiSk8xT7aSiaL+r2C3tY2si8M+bLoP7Pjrx042y/pFpAMj00Kyzi9dLIr
-         N/V3qjYZTmP7jEO8Jyxb/Zvvsb3Hkz0bM/yGP/tuO3vldxIrUmONOBO5CSZY19CbdzBo
-         zGyZDidXxOmxH2DVSG56Lf4G7bD3oudCYtJtR8yql76sQOWET1YsUIdKzeE4nzIVR56n
-         WLLNElor9meGT8lXFAzeCP/1oWTNeXJ70lmNoU2JzogbX/hZDx/qyUT6MBdMO5H+rqfE
-         eTUg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=l1i149aTLNTOLkmkyvTEcAaXgMJdiI2YD/KUpWRXaaA=;
-        b=TKf1jnsWuHqgQKGRpTStmLYS1NXCTndUQWPRtTHdUKuEOV1aX1RRtuunfYLSH1Z7c4
-         1oMlZXxzSwcuDwxWYFrQB6GmVqNZaOeY5VUBFiC42iOgsRD9nb9SEuzL+OoyWPUkg9Iv
-         ffLZq/h3QtGWuiTZePUFwlJGxXNdiD3OiAD+GtTU89223I+igZbdqdJn8e6uL05rFRnd
-         dyha7XtgU4oLF6IuXrSZf7xVhKEhIDFS8PtzzguRM+aeqvcuuzEMJxGbGC0vmyF9ZGFl
-         ffhmJPjnQjjbA+GNtBS0ZXak6mXHEDtcOv3cwlpLEV3+RIBzrjGMisUwsU+TpUTIXws1
-         iJBg==
-X-Gm-Message-State: AO0yUKUDVdEIFyqKA0lzESHl6PhJwNWdsWWp+80JcoyyfJqla4R6jW+6
-        R0vdnrup5UTUlk13ApyX0wt8gA==
-X-Google-Smtp-Source: AK7set8Ntvu4HilU/sI4URZx0iaMNEdxXnAvFGiSMkOuQcwlad5ePdFRr1QT6eVqPEY8Zy7uXc4BjQ==
-X-Received: by 2002:a05:600c:448a:b0:3e1:97d:612e with SMTP id e10-20020a05600c448a00b003e1097d612emr9154458wmo.29.1676991952314;
-        Tue, 21 Feb 2023 07:05:52 -0800 (PST)
-Received: from brgl-uxlite.home ([2a01:cb1d:334:ac00:4c24:722f:312a:76c4])
-        by smtp.gmail.com with ESMTPSA id n30-20020a05600c3b9e00b003e206cc7237sm5331687wms.24.2023.02.21.07.05.51
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 21 Feb 2023 07:05:51 -0800 (PST)
-From:   Bartosz Golaszewski <brgl@bgdev.pl>
-To:     "Rafael J . Wysocki" <rafael@kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>
-Cc:     linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
-Subject: [PATCH 2/2] arm64: dts: qcom: sa8775p: add cpufreq node
-Date:   Tue, 21 Feb 2023 16:05:43 +0100
-Message-Id: <20230221150543.283487-3-brgl@bgdev.pl>
-X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20230221150543.283487-1-brgl@bgdev.pl>
-References: <20230221150543.283487-1-brgl@bgdev.pl>
+        Tue, 21 Feb 2023 10:07:25 -0500
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29D972118;
+        Tue, 21 Feb 2023 07:07:24 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id D0CBF34BC2;
+        Tue, 21 Feb 2023 15:07:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1676992042; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=LuoQfbt2KTtRM14/DGy4Xw84gjAGRL7EtHDJyvKijkc=;
+        b=iEs5G9H0uW0SncqaXgoZdfWT5Nfcp7Jr/y+R0YLekUASyEbj+x2ZJWa0x7T3+cTqzqm68a
+        vjZkll0GSyPg7eRu6K3kjKzzR7q1W6ekeDrWrhAAWXYJoYEhC4aBeSt271xqMNzCFxvUTS
+        tTs1+DB01YF+v0vtUlJ/Xhl9CgrQXNc=
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id B193713223;
+        Tue, 21 Feb 2023 15:07:22 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id 34+2KCre9GM7aAAAMHmgww
+        (envelope-from <mhocko@suse.com>); Tue, 21 Feb 2023 15:07:22 +0000
+Date:   Tue, 21 Feb 2023 16:07:22 +0100
+From:   Michal Hocko <mhocko@suse.com>
+To:     Matthew Chae <matthew.chae@axis.com>
+Cc:     Johannes Weiner <hannes@cmpxchg.org>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Shakeel Butt <shakeelb@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>, kernel@axis.com,
+        christopher.wong@axis.com, Muchun Song <muchun.song@linux.dev>,
+        cgroups@vger.kernel.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] mm/memcontrol: add memory.peak in cgroup root
+Message-ID: <Y/TeKkhQtV7Bck8P@dhcp22.suse.cz>
+References: <20230221143421.10385-1-matthew.chae@axis.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230221143421.10385-1-matthew.chae@axis.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+On Tue 21-02-23 15:34:20, Matthew Chae wrote:
+> The kernel currently doesn't provide any method to show the overall
+> system's peak memory usage recorded. Instead, only each slice's peak
+> memory usage recorded except for cgroup root is shown through each
+> memory.peak.
+> 
+> Each slice might consume their peak memory at different time. This is
+> stored at memory.peak in each own slice. The sum of every memory.peak
+> doesn't mean the total system's peak memory usage recorded. The sum at
+> certain point without having a peak memory usage in their slice can have
+> the largest value.
+> 
+>        time |  slice1  |  slice2  |   sum
+>       =======================================
+>         t1  |    50    |   200    |   250
+>       ---------------------------------------
+>         t2  |   150    |   150    |   300
+>       ---------------------------------------
+>         t3  |   180    |    20    |   200
+>       ---------------------------------------
+>         t4  |    80    |    20    |   100
+> 
+> memory.peak value of slice1 is 180 and memory.peak value of slice2 is 200.
+> Only these information are provided through memory.peak value from each
+> slice without providing the overall system's peak memory usage. The total
+> sum of these two value is 380, but this doesn't represent the real peak
+> memory usage of the overall system. The peak value what we want to get is
+> shown in t2 as 300, which doesn't have any biggest number even in one
+> slice. Therefore the proper way to show the system's overall peak memory
+> usage recorded needs to be provided.
 
-Add a node for the cpufreq engine and specify the frequency domains for
-all CPUs.
-
-Signed-off-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
----
- arch/arm64/boot/dts/qcom/sa8775p.dtsi | 21 +++++++++++++++++++++
- 1 file changed, 21 insertions(+)
-
-diff --git a/arch/arm64/boot/dts/qcom/sa8775p.dtsi b/arch/arm64/boot/dts/qcom/sa8775p.dtsi
-index ce5976e36aee..5e2bc67b3178 100644
---- a/arch/arm64/boot/dts/qcom/sa8775p.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sa8775p.dtsi
-@@ -37,6 +37,7 @@ CPU0: cpu@0 {
- 			compatible = "qcom,kryo";
- 			reg = <0x0 0x0>;
- 			enable-method = "psci";
-+			qcom,freq-domain = <&cpufreq_hw 0>;
- 			next-level-cache = <&L2_0>;
- 			L2_0: l2-cache {
- 				compatible = "cache";
-@@ -52,6 +53,7 @@ CPU1: cpu@100 {
- 			compatible = "qcom,kryo";
- 			reg = <0x0 0x100>;
- 			enable-method = "psci";
-+			qcom,freq-domain = <&cpufreq_hw 0>;
- 			next-level-cache = <&L2_1>;
- 			L2_1: l2-cache {
- 				compatible = "cache";
-@@ -64,6 +66,7 @@ CPU2: cpu@200 {
- 			compatible = "qcom,kryo";
- 			reg = <0x0 0x200>;
- 			enable-method = "psci";
-+			qcom,freq-domain = <&cpufreq_hw 0>;
- 			next-level-cache = <&L2_2>;
- 			L2_2: l2-cache {
- 				compatible = "cache";
-@@ -76,6 +79,7 @@ CPU3: cpu@300 {
- 			compatible = "qcom,kryo";
- 			reg = <0x0 0x300>;
- 			enable-method = "psci";
-+			qcom,freq-domain = <&cpufreq_hw 0>;
- 			next-level-cache = <&L2_3>;
- 			L2_3: l2-cache {
- 				compatible = "cache";
-@@ -88,6 +92,7 @@ CPU4: cpu@10000 {
- 			compatible = "qcom,kryo";
- 			reg = <0x0 0x10000>;
- 			enable-method = "psci";
-+			qcom,freq-domain = <&cpufreq_hw 1>;
- 			next-level-cache = <&L2_4>;
- 			L2_4: l2-cache {
- 				compatible = "cache";
-@@ -104,6 +109,7 @@ CPU5: cpu@10100 {
- 			compatible = "qcom,kryo";
- 			reg = <0x0 0x10100>;
- 			enable-method = "psci";
-+			qcom,freq-domain = <&cpufreq_hw 1>;
- 			next-level-cache = <&L2_5>;
- 			L2_5: l2-cache {
- 				compatible = "cache";
-@@ -116,6 +122,7 @@ CPU6: cpu@10200 {
- 			compatible = "qcom,kryo";
- 			reg = <0x0 0x10200>;
- 			enable-method = "psci";
-+			qcom,freq-domain = <&cpufreq_hw 1>;
- 			next-level-cache = <&L2_6>;
- 			L2_6: l2-cache {
- 				compatible = "cache";
-@@ -128,6 +135,7 @@ CPU7: cpu@10300 {
- 			compatible = "qcom,kryo";
- 			reg = <0x0 0x10300>;
- 			enable-method = "psci";
-+			qcom,freq-domain = <&cpufreq_hw 1>;
- 			next-level-cache = <&L2_7>;
- 			L2_7: l2-cache {
- 				compatible = "cache";
-@@ -731,6 +739,19 @@ tcsr_mutex: hwlock@1f40000 {
- 			#hwlock-cells = <1>;
- 		};
- 
-+		cpufreq_hw: cpufreq@18591000 {
-+			compatible = "qcom,sa8775p-cpufreq-epss",
-+				     "qcom,cpufreq-epss";
-+			reg = <0x0 0x18591000 0x0 0x1000>,
-+			      <0x0 0x18593000 0x0 0x1000>;
-+			reg-names = "freq-domain0", "freq-domain1";
-+
-+			clocks = <&rpmhcc RPMH_CXO_CLK>, <&gcc GCC_GPLL0>;
-+			clock-names = "xo", "alternate";
-+
-+			#freq-domain-cells = <1>;
-+		};
-+
- 		tlmm: pinctrl@f000000 {
- 			compatible = "qcom,sa8775p-tlmm";
- 			reg = <0x0 0xf000000 0x0 0x1000000>;
+The problem I can see is that the root's peak value doesn't really
+represent the system peak memory usage because it only reflects memcg
+accounted memory. So there is plenty of memory consumption which is not
+covered. On top of that a lot of memory contributed to the root memcg is
+not accounted at all (see try_charge and its callers) so the cumulative
+hierarchical value is incomplete and I believe misleading as well.
 -- 
-2.37.2
-
+Michal Hocko
+SUSE Labs
