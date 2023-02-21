@@ -2,86 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5445969E603
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 18:30:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C4CE269E609
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 18:32:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234243AbjBURaV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Feb 2023 12:30:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46726 "EHLO
+        id S234414AbjBURcW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Feb 2023 12:32:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47706 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233278AbjBURaT (ORCPT
+        with ESMTP id S233278AbjBURcU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Feb 2023 12:30:19 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2BE52D47;
-        Tue, 21 Feb 2023 09:30:18 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6BE8F6116C;
-        Tue, 21 Feb 2023 17:30:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id CB0B2C4339B;
-        Tue, 21 Feb 2023 17:30:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1677000617;
-        bh=m5EqS2hnbXfaW7CLmG0f6p125ejRG+Aqu9Q1yjEGSi8=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=l6nBXTFrxR2oqyEBsJX+URU9KCR7xj5d6MY4oQbLZP8b3UJt04c32TfNR8YvCU5Rm
-         z7MxSleJ1td4HEgCxkfjWj3Dvkjil2iez8F4g8Hf3XxPyaCcZ+WC4Yl1R2Ekm7kAlY
-         uPLY5Exm1Wxq38H9K4c+wyCY7+1D+ZILNTkBUuCewcTX+6BqGmI8Yk41unXMIOq3HH
-         9LrRurxI0UL0cVlKwJrWdz2WhufvEA/JZe6H+8UvizsqtN50LlxbhpTIdc9XU2F1nq
-         f2b8qIQgFxgZ3m4qwiKzyz3YASlZvSBEQA9YEUgShHH/KCvWCzOUZJMb3ikiry08QY
-         ynLlaGvfieyCg==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id ADFCBC43159;
-        Tue, 21 Feb 2023 17:30:17 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        Tue, 21 Feb 2023 12:32:20 -0500
+Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 5F1982C671;
+        Tue, 21 Feb 2023 09:32:19 -0800 (PST)
+Received: from [192.168.4.137] (cpe-70-95-196-11.san.res.rr.com [70.95.196.11])
+        by linux.microsoft.com (Postfix) with ESMTPSA id 1FFC8209A932;
+        Tue, 21 Feb 2023 09:32:18 -0800 (PST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 1FFC8209A932
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+        s=default; t=1677000738;
+        bh=UrXErgl/q/ax1SVIKnwoa08TmyMJOtQDMok5VA/M6Sw=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=k3pTi8NX9wO5r4pzZxU0++ohEaAlrEyi+Muy3e25ptfm6aZes6nq80+rWGybnaLbS
+         pEe0Aotu2C/gLZLqZYLy1buuEueITuqEywXTyJQXHHFefo1tng13mfTCQQlz+2Fpat
+         7JfhndNPP4okBGY1zaNrEoLyhNVQxI2TUIX8xhqA=
+Message-ID: <d253d5ba-8e57-dc20-dfb4-08aac9e92a4c@linux.microsoft.com>
+Date:   Tue, 21 Feb 2023 09:32:13 -0800
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH v3] page_pool: add a comment explaining the fragment counter
- usage
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <167700061770.3298.14628579257086462902.git-patchwork-notify@kernel.org>
-Date:   Tue, 21 Feb 2023 17:30:17 +0000
-References: <20230217222130.85205-1-ilias.apalodimas@linaro.org>
-In-Reply-To: <20230217222130.85205-1-ilias.apalodimas@linaro.org>
-To:     Ilias Apalodimas <ilias.apalodimas@linaro.org>
-Cc:     netdev@vger.kernel.org, alexander.duyck@gmail.com,
-        alexanderduyck@fb.com, hawk@kernel.org, davem@davemloft.net,
-        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
-        linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [PATCH] drivers: crypto: caam: jr: add .shutdown hook
+Content-Language: en-US
+To:     meenakshi.aggarwal@nxp.com, horia.geanta@nxp.com, V.sethi@nxp.com,
+        pankaj.gupta@nxp.com, gaurav.jain@nxp.com,
+        herbert@gondor.apana.org.au, davem@davemloft.net,
+        linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org,
+        franck.lenormand@nxp.com
+Cc:     code@tyhicks.com
+References: <20230220105033.1449263-1-meenakshi.aggarwal@nxp.com>
+ <20230221054047.2140558-1-meenakshi.aggarwal@nxp.com>
+From:   Vijay Balakrishna <vijayb@linux.microsoft.com>
+In-Reply-To: <20230221054047.2140558-1-meenakshi.aggarwal@nxp.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-19.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,USER_IN_DEF_DKIM_WL,
+        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
 
-This patch was applied to netdev/net-next.git (master)
-by Jakub Kicinski <kuba@kernel.org>:
 
-On Sat, 18 Feb 2023 00:21:30 +0200 you wrote:
-> When reading the page_pool code the first impression is that keeping
-> two separate counters, one being the page refcnt and the other being
-> fragment pp_frag_count, is counter-intuitive.
+On 2/20/2023 9:40 PM, meenakshi.aggarwal@nxp.com wrote:
+> From: Gaurav Jain <gaurav.jain@nxp.com>
 > 
-> However without that fragment counter we don't know when to reliably
-> destroy or sync the outstanding DMA mappings.  So let's add a comment
-> explaining this part.
+> add .shutdown hook in caam_jr driver to support kexec boot
 > 
-> [...]
+> Signed-off-by: Gaurav Jain <gaurav.jain@nxp.com>
 
-Here is the summary with links:
-  - [v3] page_pool: add a comment explaining the fragment counter usage
-    https://git.kernel.org/netdev/net-next/c/4d4266e3fd32
+Tested-by: Vijay Balakrishna <vijayb@linux.microsoft.com>
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+Thanks,
+Vijay
 
-
+> ---
+>   drivers/crypto/caam/jr.c | 6 ++++++
+>   1 file changed, 6 insertions(+)
+> 
+> diff --git a/drivers/crypto/caam/jr.c b/drivers/crypto/caam/jr.c
+> index 8745fe3cb575..a2a99d09b4ad 100644
+> --- a/drivers/crypto/caam/jr.c
+> +++ b/drivers/crypto/caam/jr.c
+> @@ -198,6 +198,11 @@ static int caam_jr_remove(struct platform_device *pdev)
+>   	return ret;
+>   }
+>   
+> +static void caam_jr_platform_shutdown(struct platform_device *pdev)
+> +{
+> +	caam_jr_remove(pdev);
+> +}
+> +
+>   /* Main per-ring interrupt handler */
+>   static irqreturn_t caam_jr_interrupt(int irq, void *st_dev)
+>   {
+> @@ -653,6 +658,7 @@ static struct platform_driver caam_jr_driver = {
+>   	},
+>   	.probe       = caam_jr_probe,
+>   	.remove      = caam_jr_remove,
+> +	.shutdown = caam_jr_platform_shutdown,
+>   };
+>   
+>   static int __init jr_driver_init(void)
