@@ -2,110 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0848569DD0A
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 10:39:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D5FDE69DD78
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 10:56:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233965AbjBUJjs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Feb 2023 04:39:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49188 "EHLO
+        id S234085AbjBUJ4l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Feb 2023 04:56:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37740 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233985AbjBUJjp (ORCPT
+        with ESMTP id S234058AbjBUJ4g (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Feb 2023 04:39:45 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97CDC2448D
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Feb 2023 01:38:59 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1676972338;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=T373vQv/bScNDxJBPlPsndv81C2bk1FJ2KP5pg5qs/Y=;
-        b=e07k5uclJjEfNEdvv9ao4d6rLvlBakLPL0FrKZ4Pn9qGPEh0LgK5UwM4CkliqJQ+w6GZOO
-        CRUflqomUQ92N9GGjdFqFea9MNb3LUnmOHOzfRct7+P/9wBnveaZ5UJM6NFqOqeSUPzPWO
-        XmldxTimxObG+Z7Hktw2fJdiYc2m4Pc=
-Received: from mail-qk1-f199.google.com (mail-qk1-f199.google.com
- [209.85.222.199]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-474-Y0hBm0jHOf6vNHZkGruFmQ-1; Tue, 21 Feb 2023 04:38:57 -0500
-X-MC-Unique: Y0hBm0jHOf6vNHZkGruFmQ-1
-Received: by mail-qk1-f199.google.com with SMTP id y1-20020a05620a09c100b0070630ecfd9bso1620189qky.20
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Feb 2023 01:38:57 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=T373vQv/bScNDxJBPlPsndv81C2bk1FJ2KP5pg5qs/Y=;
-        b=BRQB/FgcRg/thO4o5XoG3/eDqxKNCx6TatmuMzgdRnUHvldM2e8gZqq1oeb5FhRQ5i
-         CfVDWFaC/z/DCTdmFF+5oQX9IRZKW7tUf3+yGocPqiZ/Bv9Q5Zg1EZ0x44S6wABQW8aa
-         ZIri65y7nATMNKuwpKD7Wy4crU/JC4mY8AbcZ744wSNhRfSyKCf3TPFRUD1CR5fXdfbw
-         pne2PrFtTmYrySpgzr6iZmMDT8+/hyYVOwgJQ8iuKJI12pgCQe1ZBouMq+LI7vFipIB8
-         s0ARY1PZ6vCsP9OYbiA/Atj0OW1deQUA0v3QaU9cmoVFSOQSmI3A0Ekv+BP+lyyX+unm
-         JMkg==
-X-Gm-Message-State: AO0yUKWN2wPZxB1RV5qS8bMNQh9KGMVSy1V6eA6nRgUsdd+CcqcfOVB1
-        Zt93mDLVqyM+1Hd01sEyWrGdXemfP1i4yHmpu01TfP43RSDapTPPKEyWXtcGH+CB0kVJhQ2DBEt
-        FY+t6uYYE28okmsEGq/VEBzlr
-X-Received: by 2002:a05:622a:1a92:b0:3b6:309e:dfe1 with SMTP id s18-20020a05622a1a9200b003b6309edfe1mr8968770qtc.3.1676972337086;
-        Tue, 21 Feb 2023 01:38:57 -0800 (PST)
-X-Google-Smtp-Source: AK7set+p6Xvxm9V7AIYXQkW1fmOdaYaqQP1z96A/mL/2xugaW5HkHIJ/25vUgMZC9XoU5je+Jxh5mA==
-X-Received: by 2002:a05:622a:1a92:b0:3b6:309e:dfe1 with SMTP id s18-20020a05622a1a9200b003b6309edfe1mr8968754qtc.3.1676972336798;
-        Tue, 21 Feb 2023 01:38:56 -0800 (PST)
-Received: from gerbillo.redhat.com (146-241-121-8.dyn.eolo.it. [146.241.121.8])
-        by smtp.gmail.com with ESMTPSA id x191-20020a3763c8000000b007402fdda195sm2837520qkb.123.2023.02.21.01.38.54
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 21 Feb 2023 01:38:56 -0800 (PST)
-Message-ID: <35332e079ffea4cc91a4d21fdbf9d2ba244ac203.camel@redhat.com>
-Subject: Re: [PATCH v2] bnx2: remove deadcode in bnx2_init_cpus()
-From:   Paolo Abeni <pabeni@redhat.com>
-To:     Maxim Korotkov <korotkov.maxim.s@gmail.com>,
-        Rasesh Mody <rmody@marvell.com>
-Cc:     GR-Linux-NIC-Dev@marvell.com,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Michael Chan <mchan@broadcom.com>,
-        Vadim Fedorenko <vadim.fedorenko@linux.dev>,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        lvc-project@linuxtesting.org
-Date:   Tue, 21 Feb 2023 10:38:52 +0100
-In-Reply-To: <20230219152225.3339-1-korotkov.maxim.s@gmail.com>
-References: <20230219152225.3339-1-korotkov.maxim.s@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.46.4 (3.46.4-1.fc37) 
+        Tue, 21 Feb 2023 04:56:36 -0500
+Received: from m12.mail.163.com (m12.mail.163.com [220.181.12.199])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6DE164EF2;
+        Tue, 21 Feb 2023 01:56:30 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=siFiW
+        Ve+6dgr4X3pGDCiyuNPjBB9mzlfmDvd3HLozlA=; b=jkgBsycQNW3BalMlQERo0
+        +qh1B+v8HO+UymUHUAH1aEkHrDTYIZ7DA3bd2xprJ0qb6PD7R//raBLkAH91NOFV
+        el6Hu6xoDPdSKbLuVTFFNcmSEQphSwpRl7wBzItctG4ixAgW5GULhJyIuAktsuHP
+        Ms07/11UdlxDTvGUQbAyXk=
+Received: from leanderwang-LC2.localdomain (unknown [111.206.145.21])
+        by zwqz-smtp-mta-g2-0 (Coremail) with SMTP id _____wBH9pKDkfRjQ9J9Ag--.33381S2;
+        Tue, 21 Feb 2023 17:40:19 +0800 (CST)
+From:   Zheng Wang <zyytlz.wz@163.com>
+To:     mchehab@kernel.org
+Cc:     laurent.pinchart@ideasonboard.com, sakari.ailus@linux.intel.com,
+        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+        alex000young@gmail.com, hackerzheng666@gmail.com,
+        Zheng Wang <zyytlz.wz@163.com>
+Subject: [PATCH] media: bttv: fix use after free error due to btv->timeout timer
+Date:   Tue, 21 Feb 2023 17:40:18 +0800
+Message-Id: <20230221094018.19840-1-zyytlz.wz@163.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: _____wBH9pKDkfRjQ9J9Ag--.33381S2
+X-Coremail-Antispam: 1Uf129KBjvJXoW7ZFy7GF43Zr1xXFykur43Awb_yoW8CrWfpa
+        yI9asxArykXr4Utryjya1kWFWfJws5ZrWkKrW7Wa4SvF4fAF4IvF1jva9FvF12vr9rXrya
+        vas5WryfJ3WkCFJanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0ziaiiDUUUUU=
+X-Originating-IP: [111.206.145.21]
+X-CM-SenderInfo: h2113zf2oz6qqrwthudrp/xtbBzgsdU2I0XZinjwAAsw
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, 2023-02-19 at 18:22 +0300, Maxim Korotkov wrote:
-> The load_cpu_fw function has no error return code
-> and always returns zero. Checking the value returned by
-> this function does not make sense.
-> As a result, bnx2_init_cpus() will also return only zero
-> Therefore, it will be safe to change the type of functions
-> to void and remove checking
->=20
-> Found by Security Code and Linux Verification
-> Center (linuxtesting.org) with SVACE
->=20
-> Fixes: 57579f7629a3 ("bnx2: Use request_firmware()")
-> Signed-off-by: Maxim Korotkov <korotkov.maxim.s@gmail.com>
+There may be some a race condition between timer function
+bttv_irq_timeout and bttv_remove. The timer is setup in
+probe and there is no timer_delete operation in remove
+function. When it hit kfree btv, the function might still be
+invoked, which will cause use after free bug.
 
-I agree with Vadim, this looks like net-next material.
+This bug is found by static analysis, it may be false positive.
 
-The net-next tree is currently closed. Please re-post when net-next re-
-opens, in ~2 weeks, with the Fixes tag stripped.
+Fix it by adding del_timer_sync invoking to the remove function.
 
-Thanks!
+cpu0                cpu1
+                  bttv_probe
+                    ->timer_setup
+                      ->bttv_set_dma
+                        ->mod_timer;
+bttv_remove
+  ->kfree(btv);
+                  ->bttv_irq_timeout
+                    ->USE btv
 
-Paolo
+Signed-off-by: Zheng Wang <zyytlz.wz@163.com>
+---
+ drivers/media/pci/bt8xx/bttv-driver.c | 1 +
+ drivers/media/pci/bt8xx/bttv-risc.c   | 2 +-
+ 2 files changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/media/pci/bt8xx/bttv-driver.c b/drivers/media/pci/bt8xx/bttv-driver.c
+index d40b537f4e98..24ba5729969d 100644
+--- a/drivers/media/pci/bt8xx/bttv-driver.c
++++ b/drivers/media/pci/bt8xx/bttv-driver.c
+@@ -4248,6 +4248,7 @@ static void bttv_remove(struct pci_dev *pci_dev)
+ 
+ 	/* free resources */
+ 	free_irq(btv->c.pci->irq,btv);
++	del_timer_sync(&btv->timeout);
+ 	iounmap(btv->bt848_mmio);
+ 	release_mem_region(pci_resource_start(btv->c.pci,0),
+ 			   pci_resource_len(btv->c.pci,0));
+diff --git a/drivers/media/pci/bt8xx/bttv-risc.c b/drivers/media/pci/bt8xx/bttv-risc.c
+index 32fa4a7fe76f..ada469198645 100644
+--- a/drivers/media/pci/bt8xx/bttv-risc.c
++++ b/drivers/media/pci/bt8xx/bttv-risc.c
+@@ -481,7 +481,7 @@ bttv_set_dma(struct bttv *btv, int override)
+ 	if (btv->curr.frame_irq || btv->loop_irq || btv->cvbi) {
+ 		mod_timer(&btv->timeout, jiffies+BTTV_TIMEOUT);
+ 	} else {
+-		del_timer(&btv->timeout);
++		del_timer_sync(&btv->timeout);
+ 	}
+ 	btv->main.cpu[RISC_SLOT_LOOP] = cpu_to_le32(cmd);
+ 
+-- 
+2.25.1
 
