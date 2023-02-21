@@ -2,67 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B328C69E0B9
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 13:47:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ECD3169E0BC
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 13:48:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234840AbjBUMrL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Feb 2023 07:47:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43796 "EHLO
+        id S233543AbjBUMso (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Feb 2023 07:48:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47162 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234857AbjBUMq7 (ORCPT
+        with ESMTP id S233249AbjBUMsi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Feb 2023 07:46:59 -0500
-Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 801A32A99D
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Feb 2023 04:46:49 -0800 (PST)
-Received: by mail-wm1-x32f.google.com with SMTP id o14so3481412wms.1
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Feb 2023 04:46:49 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=ybKrLZSCk44MHga59kU0RPq8IbA+A4aFe7bhNo7YAzQ=;
-        b=iKDAMZcgDb+2QkFkc1NzWhF0nVpMsi5qKvRZoinCRkvtxyEpuOGyVCPcXg/6tYYwN4
-         C/qWLI/CZw96kY96p9b6bbgCIMraTvx/6kPVDCp9a6Rcu5IaXttkaJOJMPhuHgdMrfRA
-         biyf1XPFnmrKqthlcVlFFSf/k975EBPMPa67BL3C63QAom+PuhR7toy6WesIVEWxK4Og
-         gUOqcD0dKdAA9GcGhm4F6Xs6UWKZOkvTnQthSdfxT1OFJSiRVlG4+WV0+lwfxLhSPtXU
-         B3dvZ2nLL/fD38JKoNBJ0s5aseYmWjP98kFLh77bh10ed5LhfaT9bpbXGX/6oTXvLdqP
-         TU6Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=ybKrLZSCk44MHga59kU0RPq8IbA+A4aFe7bhNo7YAzQ=;
-        b=CRr/8akZ4IfOLvwTKhnXcvzX7AEOD/Kw0ToDh3juTSAUcW3vQpHmjC0mNrhwQd2Ewk
-         odUiuLYABXsXeK9zJdIUPuqZLyj2AR+aJm4DWYVBr9gXLnm2UFfgAqfIzyie8YK+L8FF
-         OI2my3omFeEtF2WRUcD8WEbgGjgOQReoUghYNOZ4954J5Wxnev1n6vBL1Aytc95aZoC1
-         2ZzT2fOkWOkjAQCtzRJ2CYROmnHLhTn6GPRDbgoeaDhmmwkp48NlTMbXOImJ3DwG9nVk
-         O24+qtbzMSq9Ga6BBi2Wk9VA3VswszcsgEun9Xdtz/4m3ZxHa5sJ1my7ajPU8OwuQrSt
-         aKsQ==
-X-Gm-Message-State: AO0yUKVUdkMX787rTw/rEZ9L2MruTKGn2VRSC76DYfcHUFW1dTLSeAck
-        EQv2zwWWqg60Yj6IoIML3lndIFx/PejWeEmjSpRUjg==
-X-Google-Smtp-Source: AK7set8rjazCUusnnN8KKIrmciOXTQqpp+fRA2IW8qCUcn2aoxJdfoyqsHpCwXEbL+w/1GOdqmDWaDBiTPOGbqb53Yo=
-X-Received: by 2002:a05:600c:4e44:b0:3df:f862:fe42 with SMTP id
- e4-20020a05600c4e4400b003dff862fe42mr1877312wmq.10.1676983607682; Tue, 21 Feb
- 2023 04:46:47 -0800 (PST)
+        Tue, 21 Feb 2023 07:48:38 -0500
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94AF120049
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Feb 2023 04:48:09 -0800 (PST)
+Received: from canpemm500005.china.huawei.com (unknown [172.30.72.54])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4PLfCJ5P3gznWTH;
+        Tue, 21 Feb 2023 20:45:32 +0800 (CST)
+Received: from [10.174.178.198] (10.174.178.198) by
+ canpemm500005.china.huawei.com (7.192.104.229) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.17; Tue, 21 Feb 2023 20:48:01 +0800
+Message-ID: <b6994af6-2274-4671-d156-1609f349804d@huawei.com>
+Date:   Tue, 21 Feb 2023 20:48:01 +0800
 MIME-Version: 1.0
-References: <20230221092206.39741-1-hbh25y@gmail.com>
-In-Reply-To: <20230221092206.39741-1-hbh25y@gmail.com>
-From:   Eric Dumazet <edumazet@google.com>
-Date:   Tue, 21 Feb 2023 13:46:36 +0100
-Message-ID: <CANn89iJmYoewECcRTDW-F5c=jJZRxwFGMMrOGYe6XBLOgohc6w@mail.gmail.com>
-Subject: Re: [PATCH] net: dccp: delete redundant ackvec record in dccp_insert_options()
-To:     Hangyu Hua <hbh25y@gmail.com>
-Cc:     davem@davemloft.net, kuba@kernel.org, pabeni@redhat.com,
-        ian.mcdonald@jandi.co.nz, gerrit@erg.abdn.ac.uk,
-        dccp@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.2
+Subject: Re: [PATCH v2] uio:uio_pci_generic:Don't clear master bit when the
+ process does not exit
+To:     Greg KH <gregkh@linuxfoundation.org>
+CC:     <mst@redhat.com>, <linux-kernel@vger.kernel.org>,
+        <shikemeng@huawei.com>, <liuzhiqiang26@huawei.com>,
+        <linfeilong@huawei.com>, <zhanghongtao22@huawei.com>
+References: <20230220171045.689736-1-suweifeng1@huawei.com>
+ <Y/O32v/KZt+RjoHQ@kroah.com>
+From:   Weifeng Su <suweifeng1@huawei.com>
+In-Reply-To: <Y/O32v/KZt+RjoHQ@kroah.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.174.178.198]
+X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
+ canpemm500005.china.huawei.com (7.192.104.229)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,62 +52,82 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 21, 2023 at 10:22 AM Hangyu Hua <hbh25y@gmail.com> wrote:
->
-> A useless record can be insert into av_records when dccp_insert_options()
-> fails after dccp_insert_option_ackvec(). Repeated triggering may cause
-> av_records to have a lot of useless record with the same avr_ack_seqno.
->
-> Fixes: 8b7b6c75c638 ("dccp: Integrate feature-negotiation insertion code")
-> Signed-off-by: Hangyu Hua <hbh25y@gmail.com>
-> ---
->  net/dccp/options.c | 12 ++++++++++--
->  1 file changed, 10 insertions(+), 2 deletions(-)
->
-> diff --git a/net/dccp/options.c b/net/dccp/options.c
-> index d24cad05001e..8aa4abeb15ea 100644
-> --- a/net/dccp/options.c
-> +++ b/net/dccp/options.c
-> @@ -549,6 +549,8 @@ static void dccp_insert_option_padding(struct sk_buff *skb)
->  int dccp_insert_options(struct sock *sk, struct sk_buff *skb)
->  {
->         struct dccp_sock *dp = dccp_sk(sk);
-> +       struct dccp_ackvec *av = dp->dccps_hc_rx_ackvec;
-> +       struct dccp_ackvec_record *avr;
->
->         DCCP_SKB_CB(skb)->dccpd_opt_len = 0;
->
-> @@ -577,16 +579,22 @@ int dccp_insert_options(struct sock *sk, struct sk_buff *skb)
->
->         if (dp->dccps_hc_rx_insert_options) {
->                 if (ccid_hc_rx_insert_options(dp->dccps_hc_rx_ccid, sk, skb))
-> -                       return -1;
-> +                       goto delete_ackvec;
->                 dp->dccps_hc_rx_insert_options = 0;
->         }
->
->         if (dp->dccps_timestamp_echo != 0 &&
->             dccp_insert_option_timestamp_echo(dp, NULL, skb))
-> -               return -1;
-> +               goto delete_ackvec;
->
->         dccp_insert_option_padding(skb);
->         return 0;
-> +
-> +delete_ackvec:
-> +       avr = dccp_ackvec_lookup(&av->av_records, DCCP_SKB_CB(skb)->dccpd_seq);
+On 2023/2/21 2:11, Greg KH wrote:
+> On Tue, Feb 21, 2023 at 01:10:44AM +0800, Su Weifeng wrote:
+>> From: Weifeng Su <suweifeng1@huawei.com>
+>>
+>> The /dev/uioX device has concurrent operations in a few scenarios.
+>>
+>> For example, when a process using the device exits abnormally,
+>> the management program starts the same process to operate the device.
+>> When the process exits and closes the /dev/uioX device,
+>> the master bit of the device is cleared. In this case, if the
+>> new process is issuing commands, I/Os are suspended and cannot be
+>> automatically recovered.
+>>
+>> Therefore, reference counting is added to clear the master bit
+>> only when the last process exits.
+>>
+>> Signed-off-by: Weifeng Su <suweifeng1@huawei.com>
+>> ---
+>> The difference between the first patch and the first patch is that
+>> the reference counting operation is performed using the atomic semantics,
+>> just like other drivers under UIO:
+>> cdfa835c6e5e87d145f("uio_hv_generic: defer opening vmbus until first use").
+> 
+> And I would claim that that change too is incorrect.
+> 
+> Did you test this with dup()?  Lots of open/close cycles on the same
+> device node?  Passing around the file descriptor?
+The patch is verified to be able to fix the low-probability problem in 
+our scenario. At the same time, we also perform the dup test on the 
+latest kernel(6.2.0-rc8-g0f5e65cd8f9b-dirty) based on your suggestions. 
+The test code model is as follows:
+...
+int main()
+{
+         int fd = open("/dev/uio0", O_RDWR);
+         if (fd < 0) {
+                 printf("error in open /dev/uio0\n");
+                 return -1;
+         }
+         int dup_fd = dup(fd);
+         while (true) {
+                 sleep(1);
+         }
+}
 
-Why avr would be not NULL ?
+After kill the process, The test results are as follows:
+[  335.730916] swf call uio open
+[  338.307306] swf call uio release
 
-> +       list_del(&avr->avr_node);
-> +       kmem_cache_free(dccp_ackvec_record_slab, avr);
-> +       return -1;
->  }
+dup does not cause uio_pci_generic.c:open or uio_pci_generic.c:release 
+reference counting exceptions.
+PS: In this example, a print is added to the entries of uio_open and 
+uio_release of the driver to confirm the function invoking status.
 
-Are you really using DCCP and/or how have you tested this patch ?
+After reading the "dup" code, we confirm that the struct file uses the 
+f_count protect the same file in the process. The file opened by the 
+"dup" only adds reference counting and does not invoke the open 
+operation of the driver. Disabling the fd only decrementes the f_count 
+count. The release function of the driver is invoked to clear resources 
+only when f_count is 0. Different processes use different struct files 
+to open the same file, and f_count cannot enable the constraint 
+function. In this case, the driver needs to handle the concurrency 
+problem of multiple processes,It's like this patch
+cdfa835c6e5e87d145f("uio_hv_generic: defer opening vmbus until first use")
+> 
+> Logically, this is identical to your previous change, so why should it
+> be accepted?
+> 
+> Again, why not just use a real PCI driver for your device?
+We use the uio_pci_generic driver because we use the DPDK, which is a 
+user-mode development platform on which you can develop the user-mode 
+driver.
+> 
+> thanks,
+> 
+> greg k-h
 
-net/dccp/ackvec.c:15:static struct kmem_cache *dccp_ackvec_record_slab;
-
-I doubt this patch has been compiled.
-
-I would rather mark DCCP deprecated and stop trying to fix it.
+Best regards,
+Weifeng Su
