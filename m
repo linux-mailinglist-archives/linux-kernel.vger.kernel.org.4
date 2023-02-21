@@ -2,130 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5421869E4AF
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 17:31:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F20A69E4B1
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 17:31:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234033AbjBUQbP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Feb 2023 11:31:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57706 "EHLO
+        id S234470AbjBUQbt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Feb 2023 11:31:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58186 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233404AbjBUQbM (ORCPT
+        with ESMTP id S234165AbjBUQbn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Feb 2023 11:31:12 -0500
-Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11on2100.outbound.protection.outlook.com [40.107.236.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35A382D56;
-        Tue, 21 Feb 2023 08:31:11 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=htxognJszwlKckjr5s7I0FhtdSNkq33U2woLPr4S0O1wvrg/3MlAq5yF2DJgWS48aOnCna+PTaCkxf2DthFiETdOgpib686ygAs9XRYRtVusaahCqB/hUdkn5hHTFpKbTINzlq9f/tm0/DR6L3pIJaHDL+7va6F+uhhWIPBAAAjHtbnV+e3/cWn1iV8jzaCJZMam8GOxo/UHdWy+nM3uLxN374Jsy8jyfQycb8XSz968ZZgbGLFyMHUeXVK/RISIE1plFNkaKtRbnXYF15pfNsFtMPLdKDjQnDtM0bjrnPqu93n0nrasmG4h2JLgHfRUgskXJexBakCRsAxZiEzK8Q==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=pHfcDVsBNAB/vvVkHf6mVchtYa4Ar9lQFZef5qbvSjo=;
- b=KKQheccips3j97I9qmLpRkhfX3n5Vn9VwJtsuQFg/kX3UKh+/d7552X6u7jGw9r1C3GdHBUAtgfK844sg6xWGl2XYeMTG/bMjT2qN7EeZYU0qtXds8BP7tf82z/AKSN/ciAVBiYucFy1pohO90Qbgo3rBSs+/b7MK+w8IVe7CzsadaYmYxAA1Gp2GufEmh9vPrF9BmlufXclI2blcZNa/pmtoCYNBDLh2QQYs3gtYlU65/28p/xSiWei3n1P9GSdZZrNdK7gwA2XnzCiFL+i5JigbYSzSAva32pN+lJDOg3qsPv1st0qL7ePXzsk/UiLeYOAOFdPMzfv1weu4sW+8g==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=corigine.com; dmarc=pass action=none header.from=corigine.com;
- dkim=pass header.d=corigine.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=corigine.onmicrosoft.com; s=selector2-corigine-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=pHfcDVsBNAB/vvVkHf6mVchtYa4Ar9lQFZef5qbvSjo=;
- b=GUMu/17jDpKWyP2VYKTLpQks9lOfq8L/epv+K/+Wfpl+VmduT1IJhwkIqnxutBzETD1EENd4EG2drEh4ov7D6E6cq1CU1A4tMnlM+W1QawXksSc4SL/uQIvNi6kyfQUfyfm9EVRp3dvDi0UpDDC17htfkxaxtJ7p+fyS0kZhQVs=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=corigine.com;
-Received: from PH0PR13MB4842.namprd13.prod.outlook.com (2603:10b6:510:78::6)
- by PH0PR13MB5668.namprd13.prod.outlook.com (2603:10b6:510:113::8) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6111.20; Tue, 21 Feb
- 2023 16:31:06 +0000
-Received: from PH0PR13MB4842.namprd13.prod.outlook.com
- ([fe80::85f5:bdb:fb9e:294c]) by PH0PR13MB4842.namprd13.prod.outlook.com
- ([fe80::85f5:bdb:fb9e:294c%9]) with mapi id 15.20.6111.021; Tue, 21 Feb 2023
- 16:31:06 +0000
-Date:   Tue, 21 Feb 2023 17:31:00 +0100
-From:   Simon Horman <simon.horman@corigine.com>
-To:     Bo Liu <liubo03@inspur.com>
-Cc:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, linux@rempel-privat.de, bagasdotme@gmail.com,
-        andrew@lunn.ch, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] ethtool: pse-pd: Fix double word in comments
-Message-ID: <Y/TxxBYvHrv1mZfJ@corigine.com>
-References: <20230221083036.2414-1-liubo03@inspur.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230221083036.2414-1-liubo03@inspur.com>
-X-ClientProxiedBy: AM3PR07CA0066.eurprd07.prod.outlook.com
- (2603:10a6:207:4::24) To PH0PR13MB4842.namprd13.prod.outlook.com
- (2603:10b6:510:78::6)
+        Tue, 21 Feb 2023 11:31:43 -0500
+Received: from mail.marcansoft.com (marcansoft.com [212.63.210.85])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 964A62D56;
+        Tue, 21 Feb 2023 08:31:34 -0800 (PST)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (No client certificate requested)
+        (Authenticated sender: lina@asahilina.net)
+        by mail.marcansoft.com (Postfix) with ESMTPSA id 092973FA55;
+        Tue, 21 Feb 2023 16:31:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=asahilina.net;
+        s=default; t=1676997093;
+        bh=jy36nlq0P5xs/QWgM6Zr80oO0jn/1vgYkz1bjKsF2gI=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To;
+        b=F4qDXdqKF6MZKkXDlcljLC80li+ZPN1ugbdvCvR9PgxTp1Y/4GpXP/kUMmnR/agKB
+         ZX+FgF7Ab3G5sx//saRUW3rfz7gStFjI544Wzk1+fLkYN9IoRnPfjfpIOdbLLlcbui
+         535lHeME192rwIDJ2kkpZAecsJn8pQvofTevWVEthoUakqWiqRlQqckSpY5OHWwX2p
+         ydD2RB3GHkf2xKvgERWFKovlYqqVYngN7d+dlZ1u+Zz1sOhB/i0f59S5/9SFXX0A0l
+         JeKyijG13bYiXTFFj2o4+RKs98rV+602tr1NqqpyBSUTn3+sIsCbJARNBGIwRs2tyO
+         m+i+sVGqI1xIQ==
+Message-ID: <7b93bf74-abdc-f8c1-9a12-7c7f080f9e19@asahilina.net>
+Date:   Wed, 22 Feb 2023 01:31:28 +0900
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: PH0PR13MB4842:EE_|PH0PR13MB5668:EE_
-X-MS-Office365-Filtering-Correlation-Id: 6f476955-2a3d-42ac-e7cc-08db142907ff
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: +1YYlYfUjgzSF1e8liryQnmgaP1TFzu5h+ZBHY709F0+shVD5JI4F+UnIiLsA9xhgGVNKErmBG+XVP94UUKLHKAggOMyPCOZghws8cqwy7hOmo+M84ef9zcdbgGS88NNMqsuaY8RiRJ+Y6u8cwQi3zgv42xvRfnt1hEwpjJAIFrsNeDaHploQh285jeM2+XJ2prSJJwyxjNiBfThhI2Bb+SAuG6TDWwTdRzzrwGYqUJlQypvBJ54jvVOk2k5k/+yCfaxkIQ0Qw7Ae2ERqztq6oBX42GIAFwz4zMf7te+vfzAXlGqEyjzFIoFiKUaDzHbe6BcYKLLZqM3X12MIaW53rl+Pl1XtCL2EyCXrmi1/vx/iMQImmUt/h0d6s6bgxvSQrsZ7CCUU+5SAhYJw50OHGaGCwgEAaeyTCAfqfugj+2pAFJOzBXZl0LDuLHgZOw/D1NrR0DUt0r5l4UIcLDMixqZXHVqzU9xhk/2qctXMgP0fBvbbgPbhcXsBITFMv3bKwJehXKPWW12Thi0fTB6GKOsTeW1pW3eaeRqsutzsZPFFSz7Z+KNguqo/DcbitNbS59db2sHOxZ+atoR5OqXMjD/GP+YVmJ7hQY2nIxudjlqu7l14MEiqXCIU6vXJggVmf97P/HvCHGqBfRpwkkoEC7eU67Qy0rp6FpPi1bGhv/AGQPA5KphOU/K9R/lunTS
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR13MB4842.namprd13.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(39840400004)(366004)(346002)(396003)(376002)(136003)(451199018)(36756003)(83380400001)(2906002)(38100700002)(4744005)(86362001)(2616005)(41300700001)(8936002)(44832011)(7416002)(5660300002)(8676002)(6916009)(4326008)(316002)(66476007)(66946007)(478600001)(66556008)(966005)(6486002)(6666004)(6506007)(6512007)(186003);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?kC5ze8+cFLhDaxIjlRjwrqASydTwgxzSpfAz3348+4EAOPXevtFwp2PzR8mx?=
- =?us-ascii?Q?Arxy7lQF/igpllVz1sbaMxp3w+XV9QfnNxWgBZes28BnFHbNxsneVhawf+5E?=
- =?us-ascii?Q?6fJUCrMqs++q9d/g06zLJq0BgD/LgUgd1n3ulYx3FJ1zbau5GytBvlikzsQp?=
- =?us-ascii?Q?xntuFymtSx25hLjSueKLRR0ZtM6dqVjxSFOcxK5KeAKl5Q36MfQ/IqZr2/O1?=
- =?us-ascii?Q?n+PYAznviSKR8xI97PhKcingPohiqyvkeT0Va39GVKjx48p7FXS2NUfhvVbw?=
- =?us-ascii?Q?INGFHcpeCAh402Mc+ieGSo1KXJE/kL8yCBtA4u5KdGKbTii5xq+FIxMa3DMY?=
- =?us-ascii?Q?v/Cs4MfpW76ABWDjMSC48bVMgGtDP74eUJ46u5mvvNXVXG1JE/bpK1uAUf1C?=
- =?us-ascii?Q?8BOgnkFFpNBkefkjBo9y8qfSyzZt+b4y6i/8hl51piWDGnyJI8BVhGcSs4ls?=
- =?us-ascii?Q?4J9EVbdnqpeA3OrW4cRtw+xUiV9takGgb+4nGKgBEBEVEd2HkgKJdvYMOqqs?=
- =?us-ascii?Q?bMJDAu3o9pAieY3UQ295xFfbiCIghOPqpbdqyI3nSgmF0/dDW+U7bA99jSkP?=
- =?us-ascii?Q?wfFJfjYfmufdlctDWsiNWTrpMH/gsQoGhmsNJqFn55NKcK6f49m0Lohnn+Jm?=
- =?us-ascii?Q?+9Xb13vBmB6ppZrjf6GmCbbkzx2wZUdarttrqnM9lcZfyFYgMx6H/kr7jz9w?=
- =?us-ascii?Q?kK4EsXSHWm0zhVmS9J6O9PmU+7gbyrz03+pNueKKjwU5/uN6AUTMnfy/b2N1?=
- =?us-ascii?Q?cKsU96Psak3I7c6K6Hd9pcOvXPfNpUdu+GpVmODilZFQIhiTBID7kNKUyhBj?=
- =?us-ascii?Q?mH0d+n7GSLh0CcIGaPXdMbySu/I2rISAoaYnB2lJgYDeuf2MvXqKjWFyMVHV?=
- =?us-ascii?Q?JEEDTKZvFvBTTM154nhZ4le1hhTT5dAB0jqG9xjAt3AH8Avzh5A52InTCPVO?=
- =?us-ascii?Q?m12TrFUTxulxS3K1FYEaF3Nol6aoqhKV9GO+0zioSgh4ttzyaRs9zVsGbGSe?=
- =?us-ascii?Q?F7CIrejzU29DqXjkbdLtNzpDx2CJoSvG9XT/LVhKATXIa6cyw6UgljaU6WsQ?=
- =?us-ascii?Q?KUfvhDhxC0wJTarTX4P3A+NNjcz5Iz+eauAFNzskvNld/UjcQ8AWZTmXMnpP?=
- =?us-ascii?Q?pq/pEmu+WIABrHf4nPiRllSF6qg1y1xPkrOCyptLyBg9GLwipz4IZmnMQzBj?=
- =?us-ascii?Q?T8J/3XRYhSkfS89mKuKORcWN0lKYHYWgOjgAhUIIufWEjPXnpl/xAn54WcSz?=
- =?us-ascii?Q?UltkTfl4u9BY1uEuwvAsvjU80zOETLGHbctF8EIDJtvHCXvO/Vkbtuvubl/6?=
- =?us-ascii?Q?yfUr2rIwTnhoOsNj7kbiybE4fySNJC3ifGic3w7deBkQ4kpJTX9pYJfT7ALm?=
- =?us-ascii?Q?ei4uCwNGOK4Swnh3e5OWzRToSv3Hm6hg/7aQzdBrf6H4tcv4OffdyzJ1pthQ?=
- =?us-ascii?Q?+k4f+7mQi/gm1hlhMedNtuMz1tZz343nCVqznASy/bFwmY1SByzULtOWLrVz?=
- =?us-ascii?Q?FtZEFHsgoEsxDTrI6qgTMnijBISASkgO9Fd2bPD+clCZpkEu+S+0Kd+xxOjw?=
- =?us-ascii?Q?EVh8ZwL2FCLFSx+q9gsspUVbU9B2nUQurQcSSMm0QcNsyi6Rv7ho2fI6busc?=
- =?us-ascii?Q?NWQch1E6HDCnBd4OvFkHgbkeTHQZUBQL2rje4LNvZwrrFp977ozdhOYSgBci?=
- =?us-ascii?Q?2D7Hmg=3D=3D?=
-X-OriginatorOrg: corigine.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 6f476955-2a3d-42ac-e7cc-08db142907ff
-X-MS-Exchange-CrossTenant-AuthSource: PH0PR13MB4842.namprd13.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 21 Feb 2023 16:31:06.5982
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: fe128f2c-073b-4c20-818e-7246a585940c
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: cqynvPWkDMMgKkhp7UkYbD3LGFqtFm9Gu3H5WUDLu5DqWv7G4SHtWbHSSABCJIoLrv95onJlR9BwLIU0Rm4pxdZoH/3525M7V1YbC30EfjI=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR13MB5668
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH] rust: time: New module for timekeeping functions
+Content-Language: en-US
+To:     Thomas Gleixner <tglx@linutronix.de>,
+        Boqun Feng <boqun.feng@gmail.com>
+Cc:     Miguel Ojeda <ojeda@kernel.org>,
+        Alex Gaynor <alex.gaynor@gmail.com>,
+        Wedson Almeida Filho <wedsonaf@gmail.com>,
+        Gary Guo <gary@garyguo.net>,
+        =?UTF-8?Q?Bj=c3=b6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
+        John Stultz <jstultz@google.com>,
+        Stephen Boyd <sboyd@kernel.org>, linux-kernel@vger.kernel.org,
+        rust-for-linux@vger.kernel.org, asahi@lists.linux.dev
+References: <20230221-gpu-up-time-v1-1-bf8fe74b7f55@asahilina.net>
+ <87v8jvnqq4.ffs@tglx> <Y/TP6as7qqwfcI42@boqun-archlinux>
+ <87h6vfnh0f.ffs@tglx>
+From:   Asahi Lina <lina@asahilina.net>
+In-Reply-To: <87h6vfnh0f.ffs@tglx>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 21, 2023 at 03:30:36AM -0500, Bo Liu wrote:
-> Remove the repeated word "for" in comments.
+On 22/02/2023 01.02, Thomas Gleixner wrote:
+> On Tue, Feb 21 2023 at 06:06, Boqun Feng wrote:
+>> To me, there seems two options to provide Rust types for kernel time
+>> management:
+>>
+>> *	Use KTime which maps to ktime_t, then we have the similar
+>> 	semantics around it: sometimes it's a duration, sometimes it's
+>> 	a point of time.. but I know "this is a safe language, you
+>> 	should do more" ;-)
+>>
+>> *	Introduce kernel's own types, e.g. BootTime, RawTime, TAI,
+>> 	RealTime, and make them play with Duration (actually I'd prefer
+>> 	we have own Duration, because Rust core::time::Duration takes
+>> 	more than u64), something like below:
+>>
+>>
+>> 	pub struct BootTime {
+>> 	    d: Duration
+>> 	}
+>>
+>> 	impl BootTime {
+>> 	    fn now() -> Self {
+>> 	        unsafe { BootTime { d: ktime_to_duration(ktime_get_boottime())} }
+>> 	    }
+>> 	    fn add(self, d: Duration) -> Self {
+>> 	        <Add a duration, similar to ktime_add>
+>> 	    }
+>> 	    fn sub(self, other: Self) -> Duration {
+>> 	        ...
+>> 	    }
 > 
-> Signed-off-by: Bo Liu <liubo03@inspur.com>
+> I'm not rusty enough, but you really want two types:
+> 
+>     timestamp and timedelta
+> 
+> timestamp is an absolute time on a specific clock which is read via
+> now() and you can add time deltas to it. The latter is required for
+> arming an absolute timer on the clock.
+> 
+> timedelta is a relative time and completely independent of any
+> clock. That's what you get when you subtract two timestamps, but you can
+> also initialize it from a constant or some other source. timedelta can
+> be used to arm a relative timer on any clock.
 
-net-next is closed.
+If all clocks end up as the same `timestamp` though, then this isn't
+fully safe, because you could subtract `timestamp`s that came from
+different clocks and the result would be meaningless. That's why the
+Rust std Instant is specifically tied to one and only one system clock
+on each platform.
 
-You'll need to repost this patch after v6.3-rc1 has been tagged.
-
-Also, when reposting please indicate that it is targeted
-at net-next by including [PATCH net-next] in the subject.
-
-Ref: https://www.kernel.org/doc/html/latest/process/maintainer-netdev.html
+~~ Lina
