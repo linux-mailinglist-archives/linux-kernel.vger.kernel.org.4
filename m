@@ -2,109 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D5F069E7E0
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 19:49:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 43F7069E7E1
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 19:49:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230022AbjBUStc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Feb 2023 13:49:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46794 "EHLO
+        id S230097AbjBUStf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Feb 2023 13:49:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46966 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229535AbjBUSt2 (ORCPT
+        with ESMTP id S230030AbjBUStc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Feb 2023 13:49:28 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D91D22A6C4
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Feb 2023 10:49:26 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 7C920B8109D
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Feb 2023 18:49:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E8665C433A0;
-        Tue, 21 Feb 2023 18:49:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1677005364;
-        bh=Pq1/EGne3LaGE8RJqGaU426y8oEgl4zvqIPCQIl6Ii8=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=cuQrnBTM6zmFnApUBUKl3tuyCnwcWoiMcvD6Jaj23nlDqxIUbYnYgaiL7M1s2pQVd
-         RPbx/e2zE8SFaBuwFa063d5141E+dQcajNGtR12wlIMM+olITT6pFJ3bT0oJnizKRO
-         JQWITQ/vklpjFWHvoNtVTNJeDPQB6/iwv+L3bcUbYMpbyBsr4VCEy0phVzL+lzcudy
-         JvNU7qiNy38PQnnKIXaWGxLG6y+mOI5X47Lu0IQKAZ4C0Ti8R+G2tLRdOMj7pzuXrv
-         w9BUJFnH/9QMvsXvOXR9VhEoIHSxGL7c7g9l+ib1keIJhRlBzC/wsZtu/bDOTg08fV
-         wHd8CXxFNOlYw==
-From:   KP Singh <kpsingh@kernel.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     pjt@google.com, evn@google.com, jpoimboe@kernel.org,
-        tglx@linutronix.de, x86@kernel.org, hpa@zytor.com,
-        peterz@infradead.org, pawan.kumar.gupta@linux.intel.com,
-        kim.phillips@amd.com, alexandre.chartre@oracle.com,
-        daniel.sneddon@linux.intel.com, corbet@lwn.net, bp@suse.de,
-        linyujun809@huawei.com, kpsingh@kernel.org, jmattson@google.com
-Subject: [PATCH v2 2/2] Documentation/hw-vuln: Document the interaction between IBRS and STIBP
-Date:   Tue, 21 Feb 2023 19:49:08 +0100
-Message-Id: <20230221184908.2349578-2-kpsingh@kernel.org>
-X-Mailer: git-send-email 2.39.2.637.g21b0678d19-goog
-In-Reply-To: <20230221184908.2349578-1-kpsingh@kernel.org>
-References: <20230221184908.2349578-1-kpsingh@kernel.org>
+        Tue, 21 Feb 2023 13:49:32 -0500
+Received: from mx0b-001ae601.pphosted.com (mx0b-001ae601.pphosted.com [67.231.152.168])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1DD52A6DB;
+        Tue, 21 Feb 2023 10:49:29 -0800 (PST)
+Received: from pps.filterd (m0077474.ppops.net [127.0.0.1])
+        by mx0b-001ae601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 31LHHMac001982;
+        Tue, 21 Feb 2023 12:49:18 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cirrus.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=PODMain02222019;
+ bh=2yIT5sQ3F8uH9sOOaYmVBC+bo+0d0nFSg4rXQhVBuT8=;
+ b=joYQ8WL637xlEGwSS/ZtKncTOn59Hg+pltTOUSJ2WA8bi1w4tMu+J5gatQU7/DvPvyw9
+ CtVqOfGOf/NK9gJ3TpBGEHlOaGG/HQUwvTgjk/iwK33pwZImOK3TybVc6xoTJUOF4zuu
+ tPSmkLkD2Qo6IAlGAQLw1NmgLygCTE3eZtoSp0dIyOTtM/G+NTAvqBf3saMBHPglNJHi
+ 0mUvweLcFuk2aHWXsbSxIcC8C8AECgv1hNyzjVvlz4CBARIbWMZUDDH644N35h/m3qsm
+ 1Omv+mYDjjQtjjCFXtAeqZYAFNN81szJqTdqioU7i0Fb5kZzxBXcaTJ6KNu/tmrT9X7B wQ== 
+Received: from ediex02.ad.cirrus.com ([84.19.233.68])
+        by mx0b-001ae601.pphosted.com (PPS) with ESMTPS id 3nvmnqs1xb-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 21 Feb 2023 12:49:18 -0600
+Received: from ediex02.ad.cirrus.com (198.61.84.81) by ediex02.ad.cirrus.com
+ (198.61.84.81) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.21; Tue, 21 Feb
+ 2023 12:49:16 -0600
+Received: from ediswmail.ad.cirrus.com (198.61.86.93) by
+ anon-ediex02.ad.cirrus.com (198.61.84.81) with Microsoft SMTP Server id
+ 15.2.1118.21 via Frontend Transport; Tue, 21 Feb 2023 12:49:16 -0600
+Received: from [141.131.215.58] (david-linux.ad.cirrus.com [141.131.215.58])
+        by ediswmail.ad.cirrus.com (Postfix) with ESMTP id B77EFB0E;
+        Tue, 21 Feb 2023 18:49:14 +0000 (UTC)
+Message-ID: <c09675da-5259-d8f3-77de-da54aef939d4@opensource.cirrus.com>
+Date:   Tue, 21 Feb 2023 12:49:14 -0600
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH v5 3/4] ALSA: cs35l41: Add shared boost feature
+Content-Language: en-US
+To:     Lucas Tanure <lucas.tanure@collabora.com>,
+        Charles Keepax <ckeepax@opensource.cirrus.com>
+CC:     David Rhodes <david.rhodes@cirrus.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Mark Brown <broonie@kernel.org>,
+        "Rob Herring" <robh+dt@kernel.org>, Takashi Iwai <tiwai@suse.com>,
+        <alsa-devel@alsa-project.org>, <devicetree@vger.kernel.org>,
+        <patches@opensource.cirrus.com>, <linux-kernel@vger.kernel.org>,
+        <kernel@collabora.com>
+References: <20230210091942.10866-1-lucas.tanure@collabora.com>
+ <20230210091942.10866-4-lucas.tanure@collabora.com>
+ <20230210134341.GF68926@ediswmail.ad.cirrus.com>
+ <cfacc3d6-2daa-6aa3-ba19-281b7e48bb47@collabora.com>
+ <20230211170638.GG68926@ediswmail.ad.cirrus.com>
+ <1e3ef067-9b39-dc19-5fbc-75436c67f206@collabora.com>
+ <d86d989b-0d82-74b3-a5da-9972324e9477@opensource.cirrus.com>
+ <09bf8e07-6275-654f-4a70-d46b54e9b853@collabora.com>
+From:   David Rhodes <drhodes@opensource.cirrus.com>
+In-Reply-To: <09bf8e07-6275-654f-4a70-d46b54e9b853@collabora.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Proofpoint-ORIG-GUID: lW4awi_3iOB0bT4v7fYDunC_lLoNfel_
+X-Proofpoint-GUID: lW4awi_3iOB0bT4v7fYDunC_lLoNfel_
+X-Proofpoint-Spam-Reason: safe
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Explain why STIBP is needed with legacy IBRS as currently implemented
-(KERNEL_IBRS) and why STIBP is not needed when enhanced IBRS is enabled.
+On 2/21/23 02:28, Lucas Tanure wrote:
+> David can you confirm that both sides should use MDSYNC for boost 
+> control source?
 
-Signed-off-by: KP Singh <kpsingh@kernel.org>
----
- Documentation/admin-guide/hw-vuln/spectre.rst | 22 ++++++++++++++-----
- 1 file changed, 17 insertions(+), 5 deletions(-)
+Both amps can use the value 'MDSYNC' for BST_CTL_SEL.
+The value for the passive amp does not affect the behavior because BST_EN=0.
 
-diff --git a/Documentation/admin-guide/hw-vuln/spectre.rst b/Documentation/admin-guide/hw-vuln/spectre.rst
-index c4dcdb3d0d45..e193ee13dc9a 100644
---- a/Documentation/admin-guide/hw-vuln/spectre.rst
-+++ b/Documentation/admin-guide/hw-vuln/spectre.rst
-@@ -479,8 +479,17 @@ Spectre variant 2
-    On Intel Skylake-era systems the mitigation covers most, but not all,
-    cases. See :ref:`[3] <spec_ref3>` for more details.
- 
--   On CPUs with hardware mitigation for Spectre variant 2 (e.g. Enhanced
--   IBRS on x86), retpoline is automatically disabled at run time.
-+   On CPUs with hardware mitigation for Spectre variant 2 (e.g. IBRS
-+   or enhanced IBRS on x86), retpoline is automatically disabled at run time.
-+
-+   Setting the IBRS bit implicitly enables STIBP which guards against
-+   cross-thread branch target injection on SMT systems. On systems with enhanced
-+   IBRS, the kernel sets the bit once, which keeps cross-thread protections
-+   always enabled, obviating the need for an explicit STIBP. On CPUs with legacy
-+   IBRS, the kernel clears the IBRS bit on returning to user-space, thus also
-+   disabling the implicit STIBP. Consequently, STIBP needs to be explicitly
-+   enabled to guard against cross-thread attacks in userspace.
-+
- 
-    The retpoline mitigation is turned on by default on vulnerable
-    CPUs. It can be forced on or off by the administrator
-@@ -504,9 +513,12 @@ Spectre variant 2
-    For Spectre variant 2 mitigation, individual user programs
-    can be compiled with return trampolines for indirect branches.
-    This protects them from consuming poisoned entries in the branch
--   target buffer left by malicious software.  Alternatively, the
--   programs can disable their indirect branch speculation via prctl()
--   (See :ref:`Documentation/userspace-api/spec_ctrl.rst <set_spec_ctrl>`).
-+   target buffer left by malicious software.
-+
-+   On legacy IBRS systems, at return to userspace, implicit STIBP is disabled
-+   because the kernel clears the IBRS bit. In this case, the userspace programs
-+   can disable indirect branch speculation via prctl() (See
-+   :ref:`Documentation/userspace-api/spec_ctrl.rst <set_spec_ctrl>`).
-    On x86, this will turn on STIBP to guard against attacks from the
-    sibling thread when the user program is running, and use IBPB to
-    flush the branch target buffer when switching to/from the program.
--- 
-2.39.2.637.g21b0678d19-goog
 
+On 2/21/23 02:28, Lucas Tanure wrote:
+ >> I believe there is another change needed for the Deck, to handle the
+ >> 'legacy' property names instead of bst-type?
+ > I am working with valve to update their bios.
+
+Great, I think that's a better solution.
+
+Thanks,
+David
