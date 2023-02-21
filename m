@@ -2,71 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4546369E814
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 20:09:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D5A6D69E81A
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 20:10:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229988AbjBUTJg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Feb 2023 14:09:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60752 "EHLO
+        id S230011AbjBUTKE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Feb 2023 14:10:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33266 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229975AbjBUTJb (ORCPT
+        with ESMTP id S230028AbjBUTJt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Feb 2023 14:09:31 -0500
-Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB8442A99E
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Feb 2023 11:09:29 -0800 (PST)
-Received: by mail-pj1-x1030.google.com with SMTP id d1-20020a17090a3b0100b00229ca6a4636so6251746pjc.0
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Feb 2023 11:09:29 -0800 (PST)
+        Tue, 21 Feb 2023 14:09:49 -0500
+Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DD862DE66
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Feb 2023 11:09:34 -0800 (PST)
+Received: by mail-pl1-x62a.google.com with SMTP id s5so6098543plg.0
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Feb 2023 11:09:34 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=rivosinc-com.20210112.gappssmtp.com; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=U7/hoqMIAepRETH3jO107eIeJ+UfvD3eJMNfG127+yc=;
-        b=ML/TqptG2y+VNZ2s/uAwCExQP7/61kxgdFtDZ8nEq3wGRDEc91VdXGlefahRUf+5Ev
-         D5bFiGPuRxXvq9M/OSE55rY7CFBgzaxJVRtT9+py7Pc7cumJvItPTNJ/4BiGcKB84xKG
-         K4WRVNELN9VHiSRbrqxnlpC7ffrBBrKfm3jMVlb4b9sATIkqgm/Wx5MlTmuotddpmRXa
-         S77iJPdrZqZeC86zfBY7ahCJ+ny1Jj+utqMW8rQjIehGx2eo5QX2S6H2jSJTrwDYZDNp
-         +3znT9hpdypBkXtX+sBYzU6Yywt8GM/ynhJBMJXRPoH2gkhEYk7iOImshHWzdxTykrFN
-         BvFQ==
+        bh=h4Uz8oInxrBVxdaNnCcRWzHNxIOpRGtwNCns0Csq24o=;
+        b=5CAoJgBaxdsOsjJt2ARXvUAXbErBCB8xjhCRl/00BIB0m+EhiyRU3XZSidGXeE83LK
+         +FRtmHOsemIRPQ/ytDa3xi5xQubu32PfYgOv1GgPMlj8GBuwVt+RKxxhFTTWQgWjLJbH
+         yVO3GZ6Dl6SpXYXL2PGhBsRPKRHAhmrU/mwngeMnCLv+FnBGjy3WnIrrSyPN0GYSZyeo
+         jlCTpaCtDtXLMs75oLfPUTbR6nm5b9ZUPk1JPx7ptYDFvYWEZy841oLGvuf8Tn0KoTed
+         qy2eDXvLc8W845c/ngN141rjsv76Zdue6P6r4RixeblK422nJLdTcHMc3EqqMVYNZDZP
+         9Iwg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=U7/hoqMIAepRETH3jO107eIeJ+UfvD3eJMNfG127+yc=;
-        b=MX4JVIAAO9Y7/i6bQwMmoCVr5sq0quHlDvQGt1RE5KYxWCIsblHfx0p/nTH7l2N5FL
-         Z8ozO4Jn9mcInZJzR/ASY2TDbDt5h8dO9NaowxVJLzJSbtElz5B/BU6IXAPYGyxde64I
-         5m+OjWcSlAK6sjRs8WvyVerEywQPyD4w7qTX3Z2jZdKQtva/6+V3m4+NwPbMVFP525vt
-         jHQFMOUFPNeaHA66s53mAS/BrTtqX+bwsmJ174M7l7XXt3AzqUz00vMObz2JO2x12ZsK
-         X65Jh3wr4OeMBsYnvYUr9G3fC/BLPrfdCchCHAzRr8uHzENbUlC00dOBte+fARTr+Vyt
-         Gyew==
-X-Gm-Message-State: AO0yUKVAOBo8grtEu8aZDiCI2m/wENnyKUDauQ9IKeaFtB+7JisIhhm5
-        f/d7kfsElNIc0BTCRkyl3yf6ig==
-X-Google-Smtp-Source: AK7set982kHyTiT0GJPk7lv5utET6rOdXXqJdN+FNbr7Y9VXQETYIeB8bJZmgEP2rHoVE/dpxgWkBg==
-X-Received: by 2002:a17:902:ecc1:b0:19a:8680:ba86 with SMTP id a1-20020a170902ecc100b0019a8680ba86mr6821900plh.50.1677006569611;
-        Tue, 21 Feb 2023 11:09:29 -0800 (PST)
+        bh=h4Uz8oInxrBVxdaNnCcRWzHNxIOpRGtwNCns0Csq24o=;
+        b=Vp34W06GSNyD/zmHwunKPd6cgF35xVGp5J0RhuXxiSG8oMj35VpId/4SOGI7e7/ew6
+         82NANWvExpj90NvgZh1jVlTl0ygOebY84eJDLFyMC2fMr0t9WUMSsQBZ/+lqsQgdtAbb
+         swSwsqwi9BT9e+hbib/vvAI2x+i5dVk4urVtuyzRVtGOCoduLT/g7g8Qw6iBcpZMQi3q
+         1+uUHtR/HjTCG22z766oitz1lcRtH9EUmk9g0660viX0UoLr0JE9ffJzGClklpIAnJN0
+         1U/WZOS/0Yd8iqo3KdGUUAvDNmCCWp3dof+96werth5QHSDFfLRgkIcni4/gDu8SpMMK
+         OYBQ==
+X-Gm-Message-State: AO0yUKUC584yszrDv7W5rRdQjiGPcQAOcI2Lle1n6EIeAzqS4j+R6pzp
+        SPxyC3ufxFj9EBZonhj9nm00/Q==
+X-Google-Smtp-Source: AK7set+it96+69j6MVRhBhTTnrkru5X6NVtEvUnH9vgxsurcSiwoU7po5lf6y/VdEVorq3aQjAMmjw==
+X-Received: by 2002:a17:902:c407:b0:19b:dbf7:f9d1 with SMTP id k7-20020a170902c40700b0019bdbf7f9d1mr6464689plk.37.1677006573615;
+        Tue, 21 Feb 2023 11:09:33 -0800 (PST)
 Received: from evan.ba.rivosinc.com ([66.220.2.162])
-        by smtp.gmail.com with ESMTPSA id b16-20020a170902b61000b0019602b2c00csm1583863pls.175.2023.02.21.11.09.28
+        by smtp.gmail.com with ESMTPSA id b16-20020a170902b61000b0019602b2c00csm1583863pls.175.2023.02.21.11.09.32
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 21 Feb 2023 11:09:29 -0800 (PST)
+        Tue, 21 Feb 2023 11:09:33 -0800 (PST)
 From:   Evan Green <evan@rivosinc.com>
 To:     Palmer Dabbelt <palmer@rivosinc.com>
 Cc:     heiko@sntech.de, Conor Dooley <conor@kernel.org>,
         slewis@rivosinc.com, vineetg@rivosinc.com,
         Evan Green <evan@rivosinc.com>,
         Albert Ou <aou@eecs.berkeley.edu>,
-        Andrew Bresticker <abrestic@rivosinc.com>,
-        Atish Patra <atishp@rivosinc.com>,
-        Celeste Liu <coelacanthus@outlook.com>,
-        Guo Ren <guoren@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         Palmer Dabbelt <palmer@dabbelt.com>,
         Paul Walmsley <paul.walmsley@sifive.com>,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-riscv@lists.infradead.org
-Subject: [PATCH v3 3/7] RISC-V: hwprobe: Add support for RISCV_HWPROBE_BASE_BEHAVIOR_IMA
-Date:   Tue, 21 Feb 2023 11:08:54 -0800
-Message-Id: <20230221190858.3159617-4-evan@rivosinc.com>
+        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org
+Subject: [PATCH v3 4/7] dt-bindings: Add RISC-V misaligned access performance
+Date:   Tue, 21 Feb 2023 11:08:55 -0800
+Message-Id: <20230221190858.3159617-5-evan@rivosinc.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20230221190858.3159617-1-evan@rivosinc.com>
 References: <20230221190858.3159617-1-evan@rivosinc.com>
@@ -81,120 +78,47 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-We have an implicit set of base behaviors that userspace depends on,
-which are mostly defined in various ISA specifications.
+From: Palmer Dabbelt <palmer@rivosinc.com>
 
-Co-developed-by: Palmer Dabbelt <palmer@rivosinc.com>
+This key allows device trees to specify the performance of misaligned
+accesses to main memory regions from each CPU in the system.
+
 Signed-off-by: Palmer Dabbelt <palmer@rivosinc.com>
 Signed-off-by: Evan Green <evan@rivosinc.com>
 ---
 
 Changes in v3:
- - Refactored base ISA behavior probe to allow kernel probing as well,
-   in prep for vDSO data initialization.
- - Fixed doc warnings in IMA text list, use :c:macro:.
+ - Added | to description: to make dt-checker happy.
 
- Documentation/riscv/hwprobe.rst       | 21 +++++++++++++++++++++
- arch/riscv/include/asm/hwprobe.h      |  2 +-
- arch/riscv/include/uapi/asm/hwprobe.h |  5 +++++
- arch/riscv/kernel/sys_riscv.c         | 20 ++++++++++++++++++++
- 4 files changed, 47 insertions(+), 1 deletion(-)
+ Documentation/devicetree/bindings/riscv/cpus.yaml | 15 +++++++++++++++
+ 1 file changed, 15 insertions(+)
 
-diff --git a/Documentation/riscv/hwprobe.rst b/Documentation/riscv/hwprobe.rst
-index 88b015a2026e..9f2da414fbf8 100644
---- a/Documentation/riscv/hwprobe.rst
-+++ b/Documentation/riscv/hwprobe.rst
-@@ -37,3 +37,24 @@ The following keys are defined:
-   defined by the RISC-V privileged architecture specification.
- * :c:macro:`RISCV_HWPROBE_KEY_MIMPLID`: Contains the value of ``mimplid``, as
-   defined by the RISC-V privileged architecture specification.
-+* :c:macro:`RISCV_HWPROBE_KEY_BASE_BEHAVIOR`: A bitmask containing the base
-+  user-visible behavior that this kernel supports.  The following base user ABIs
-+  are defined:
-+
-+  * :c:macro:`RISCV_HWPROBE_BASE_BEHAVIOR_IMA`: Support for rv32ima or
-+    rv64ima, as defined by version 2.2 of the user ISA and version 1.10 of the
-+    privileged ISA, with the following known exceptions (more exceptions may be
-+    added, but only if it can be demonstrated that the user ABI is not broken):
-+
-+    * The :fence.i: instruction cannot be directly executed by userspace
-+      programs (it may still be executed in userspace via a
-+      kernel-controlled mechanism such as the vDSO).
-+* :c:macro:`RISCV_HWPROBE_KEY_IMA_EXT_0`: A bitmask containing the extensions
-+  that are compatible with the :c:macro:`RISCV_HWPROBE_BASE_BEHAVIOR_IMA`:
-+  base system behavior.
-+
-+  * :c:macro:`RISCV_HWPROBE_IMA_FD`: The F and D extensions are supported, as
-+    defined by commit cd20cee ("FMIN/FMAX now implement
-+    minimumNumber/maximumNumber, not minNum/maxNum") of the RISC-V ISA manual.
-+  * :c:macro:`RISCV_HWPROBE_IMA_C`: The C extension is supported, as defined
-+    by version 2.2 of the RISC-V ISA manual.
-diff --git a/arch/riscv/include/asm/hwprobe.h b/arch/riscv/include/asm/hwprobe.h
-index 08d1c3bdd78a..7e52f1e1fe10 100644
---- a/arch/riscv/include/asm/hwprobe.h
-+++ b/arch/riscv/include/asm/hwprobe.h
-@@ -8,6 +8,6 @@
+diff --git a/Documentation/devicetree/bindings/riscv/cpus.yaml b/Documentation/devicetree/bindings/riscv/cpus.yaml
+index c6720764e765..f79e9e5c5ee9 100644
+--- a/Documentation/devicetree/bindings/riscv/cpus.yaml
++++ b/Documentation/devicetree/bindings/riscv/cpus.yaml
+@@ -85,6 +85,21 @@ properties:
+     $ref: "/schemas/types.yaml#/definitions/string"
+     pattern: ^rv(?:64|32)imaf?d?q?c?b?v?k?h?(?:_[hsxz](?:[a-z])+)*$
  
- #include <uapi/asm/hwprobe.h>
- 
--#define RISCV_HWPROBE_MAX_KEY 2
-+#define RISCV_HWPROBE_MAX_KEY 4
- 
- #endif
-diff --git a/arch/riscv/include/uapi/asm/hwprobe.h b/arch/riscv/include/uapi/asm/hwprobe.h
-index 591802047460..fc5665411782 100644
---- a/arch/riscv/include/uapi/asm/hwprobe.h
-+++ b/arch/riscv/include/uapi/asm/hwprobe.h
-@@ -20,6 +20,11 @@ struct riscv_hwprobe {
- #define RISCV_HWPROBE_KEY_MVENDORID	0
- #define RISCV_HWPROBE_KEY_MARCHID	1
- #define RISCV_HWPROBE_KEY_MIMPID	2
-+#define RISCV_HWPROBE_KEY_BASE_BEHAVIOR	3
-+#define		RISCV_HWPROBE_BASE_BEHAVIOR_IMA	(1 << 0)
-+#define RISCV_HWPROBE_KEY_IMA_EXT_0	4
-+#define		RISCV_HWPROBE_IMA_FD		(1 << 0)
-+#define		RISCV_HWPROBE_IMA_C		(1 << 1)
- /* Increase RISCV_HWPROBE_MAX_KEY when adding items. */
- 
- #endif
-diff --git a/arch/riscv/kernel/sys_riscv.c b/arch/riscv/kernel/sys_riscv.c
-index 02c2f1f7417e..f2b224550923 100644
---- a/arch/riscv/kernel/sys_riscv.c
-+++ b/arch/riscv/kernel/sys_riscv.c
-@@ -9,6 +9,7 @@
- #include <asm/cacheflush.h>
- #include <asm/hwprobe.h>
- #include <asm/sbi.h>
-+#include <asm/switch_to.h>
- #include <asm/uaccess.h>
- #include <asm/unistd.h>
- #include <asm-generic/mman-common.h>
-@@ -124,6 +125,25 @@ static void hwprobe_one_pair(struct riscv_hwprobe *pair,
- 	case RISCV_HWPROBE_KEY_MIMPID:
- 		hwprobe_arch_id(pair, cpus);
- 		break;
-+	/*
-+	 * The kernel already assumes that the base single-letter ISA
-+	 * extensions are supported on all harts, and only supports the
-+	 * IMA base, so just cheat a bit here and tell that to
-+	 * userspace.
-+	 */
-+	case RISCV_HWPROBE_KEY_BASE_BEHAVIOR:
-+		pair->value = RISCV_HWPROBE_BASE_BEHAVIOR_IMA;
-+		break;
++  riscv,misaligned-access-performance:
++    description: |
++      Identifies the performance of misaligned memory accesses to main memory
++      regions.  There are three flavors of unaligned access performance: "emulated"
++      means that misaligned accesses are emulated via software and thus
++      extremely slow, "slow" means that misaligned accesses are supported by
++      hardware but still slower that aligned accesses sequences, and "fast"
++      means that misaligned accesses are as fast or faster than the
++      cooresponding aligned accesses sequences.
++    $ref: "/schemas/types.yaml#/definitions/string"
++    enum:
++      - emulated
++      - slow
++      - fast
 +
-+	case RISCV_HWPROBE_KEY_IMA_EXT_0:
-+		pair->value = 0;
-+		if (has_fpu())
-+			pair->value |= RISCV_HWPROBE_IMA_FD;
-+
-+		if (elf_hwcap & RISCV_ISA_EXT_c)
-+			pair->value |= RISCV_HWPROBE_IMA_C;
-+
-+		break;
+   # RISC-V requires 'timebase-frequency' in /cpus, so disallow it here
+   timebase-frequency: false
  
- 	/*
- 	 * For forward compatibility, unknown keys don't fail the whole
 -- 
 2.25.1
 
