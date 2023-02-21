@@ -2,309 +2,385 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AA6B169DCE2
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 10:25:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 55B2369DCEE
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 10:28:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233979AbjBUJZk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Feb 2023 04:25:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37684 "EHLO
+        id S233756AbjBUJ2b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Feb 2023 04:28:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41322 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233976AbjBUJZd (ORCPT
+        with ESMTP id S233215AbjBUJ23 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Feb 2023 04:25:33 -0500
-Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::226])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0B851E2AD;
-        Tue, 21 Feb 2023 01:25:10 -0800 (PST)
-Received: (Authenticated sender: clement.leger@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id 9FB05C0018;
-        Tue, 21 Feb 2023 09:25:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1676971509;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=j90yhV+x+elKOsWBRA3Lnw3dkuBFcUHDxfTXDFjhB3k=;
-        b=DTqIqNA7bNlIaGhoD1AC87HAvTrTaRZljw1H9Br5H8eLtu8FVNI8/7JYxbRzqNThXnuwA8
-        pzZfTd6TkVO3MGiOkjih9cL+wxsdqeEG/pIUk4CXHb8eJcMGMqzPBSJLRXXZP/Yjqe5fU7
-        25PQy8aMU9QRDYf0hnJtw6ID5j9IQVi2D+vYUmRp6MFZkjzlzNPRMuGgJBceA/AJxcswwI
-        oi3mivTNMFW86o1XozCceYhuCXl+S1a1xhtUi5WjG6tkp4XJ/iOXkfVIwXG30aMupQ139y
-        hNfGmbU+e1SNdPamEVhJB3lFOdA6+JjtTkPepjDuQ261v05ydk9ZmksbX2ZY3Q==
-From:   =?UTF-8?q?Cl=C3=A9ment=20L=C3=A9ger?= <clement.leger@bootlin.com>
-To:     Andrew Lunn <andrew@lunn.ch>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>
-Cc:     =?UTF-8?q?Cl=C3=A9ment=20L=C3=A9ger?= <clement.leger@bootlin.com>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        Herve Codina <herve.codina@bootlin.com>,
-        =?UTF-8?q?Miqu=C3=A8l=20Raynal?= <miquel.raynal@bootlin.com>,
-        Milan Stevanovic <milan.stevanovic@se.com>,
-        Jimmy Lalande <jimmy.lalande@se.com>,
-        Pascal Eberhard <pascal.eberhard@se.com>,
-        Arun Ramadoss <Arun.Ramadoss@microchip.com>,
-        linux-renesas-soc@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH net-next v4 3/3] net: dsa: rzn1-a5psw: add vlan support
-Date:   Tue, 21 Feb 2023 10:26:26 +0100
-Message-Id: <20230221092626.57019-4-clement.leger@bootlin.com>
-X-Mailer: git-send-email 2.39.0
-In-Reply-To: <20230221092626.57019-1-clement.leger@bootlin.com>
-References: <20230221092626.57019-1-clement.leger@bootlin.com>
+        Tue, 21 Feb 2023 04:28:29 -0500
+Received: from mail-lj1-x236.google.com (mail-lj1-x236.google.com [IPv6:2a00:1450:4864:20::236])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8CE8B443;
+        Tue, 21 Feb 2023 01:28:27 -0800 (PST)
+Received: by mail-lj1-x236.google.com with SMTP id y44so3760293ljq.7;
+        Tue, 21 Feb 2023 01:28:27 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=7cMvEWx93T+DKuH/EfNzVMzxjU3ZfkiKTGej0rtS7XU=;
+        b=h/MKpwswKXFMPyFd7oBDdGwT1y9EKS9WAjFXU+U9BdYQN554vMrvq7yaIJ2bISdl5q
+         68rK/XqSK0ZTzubookOAKlQiRkh/Qb+Y8NhBvjuVdNePw8caYBX8chcYUBHO+Txivp94
+         styxcRkySeYlHXAer1Fcb1AVJGRFD8XAwBVbdMhmVttT+M1PksmkX6OnEr+7/MJxcciD
+         sdGiFEPtgOoRpI9UQnVRKTdt7WL8TCV/H0zeJTdw3HvdESLUNxvHPOInJrwl6qHi9tcH
+         Ks92c0JaxDH8N94zNzsfA/+AuA3X+OhIFaa51UecB9hENAWk21HAG3e29iK6ok7jWNio
+         Fi+g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=7cMvEWx93T+DKuH/EfNzVMzxjU3ZfkiKTGej0rtS7XU=;
+        b=7xW7yq8zHv0lAC78SI0VDzfbXrZNO+AaJi4vhiewGaTRwasK9fVmj9pKkFgUH1e5Ka
+         ONWEZM5I6aQmzAMj3af1mCOYZhZGQ6vQCTDRH4fFAAvvmOOn3jauomDsNFU0Gq3ijfbL
+         izIhmeDFGtim28Q0QIoXf25uWlUpqIz0hqQPEGpa716coCCTCyEkHzj7IAhXJyHoCfer
+         ZMNs0toS7lNoIYb0ogR0BFD0wxbpuds89d0BZJcldxGyMRKFZUymBl4nWQbBHbpZTDJD
+         ReraNKJhM1vRtmsSXsYU/LYCS5zWPow6DA0mwfY60/jQJUawKPMexKbbuJPTHHlbDrmT
+         MDGg==
+X-Gm-Message-State: AO0yUKVfLVTVluJ/9WXIH01Nn4TbS8bPLkRLgWlzgUSDgPSj2DVetw5o
+        jI9gv0A4hNDsnLokq0g30ZA=
+X-Google-Smtp-Source: AK7set84dqJj7wcs9uzj2n8kT//QPqBDPmWF+AwkpmwrrrE3ZAh41j4XgidURaSXeFVF8sErCcmqqw==
+X-Received: by 2002:a05:651c:897:b0:295:90b2:da6b with SMTP id d23-20020a05651c089700b0029590b2da6bmr206314ljq.0.1676971705705;
+        Tue, 21 Feb 2023 01:28:25 -0800 (PST)
+Received: from localhost (88-115-161-74.elisa-laajakaista.fi. [88.115.161.74])
+        by smtp.gmail.com with ESMTPSA id o16-20020a2e9b50000000b002958bb2deacsm123022ljj.46.2023.02.21.01.28.24
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 21 Feb 2023 01:28:25 -0800 (PST)
+Date:   Tue, 21 Feb 2023 11:28:23 +0200
+From:   Zhi Wang <zhi.wang.linux@gmail.com>
+To:     Michael Roth <michael.roth@amd.com>
+Cc:     <kvm@vger.kernel.org>, <linux-coco@lists.linux.dev>,
+        <linux-mm@kvack.org>, <linux-crypto@vger.kernel.org>,
+        <x86@kernel.org>, <linux-kernel@vger.kernel.org>,
+        <tglx@linutronix.de>, <mingo@redhat.com>, <jroedel@suse.de>,
+        <thomas.lendacky@amd.com>, <hpa@zytor.com>, <ardb@kernel.org>,
+        <pbonzini@redhat.com>, <seanjc@google.com>, <vkuznets@redhat.com>,
+        <jmattson@google.com>, <luto@kernel.org>,
+        <dave.hansen@linux.intel.com>, <slp@redhat.com>,
+        <pgonda@google.com>, <peterz@infradead.org>,
+        <srinivas.pandruvada@linux.intel.com>, <rientjes@google.com>,
+        <dovmurik@linux.ibm.com>, <tobin@ibm.com>, <bp@alien8.de>,
+        <vbabka@suse.cz>, <kirill@shutemov.name>, <ak@linux.intel.com>,
+        <tony.luck@intel.com>, <marcorr@google.com>,
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        <alpergun@google.com>, <dgilbert@redhat.com>, <jarkko@kernel.org>,
+        <ashish.kalra@amd.com>, <nikunj.dadhania@amd.com>,
+        Brijesh Singh <brijesh.singh@amd.com>
+Subject: Re: [PATCH RFC v8 24/56] crypto: ccp: Handle the legacy TMR
+ allocation when SNP is enabled
+Message-ID: <20230221112823.000063e4@gmail.com>
+In-Reply-To: <20230220183847.59159-25-michael.roth@amd.com>
+References: <20230220183847.59159-1-michael.roth@amd.com>
+        <20230220183847.59159-25-michael.roth@amd.com>
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.33; x86_64-w64-mingw32)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add support for vlan operation (add, del, filtering) on the RZN1
-driver. The a5psw switch supports up to 32 VLAN IDs with filtering,
-tagged/untagged VLANs and PVID for each ports.
+On Mon, 20 Feb 2023 12:38:15 -0600
+Michael Roth <michael.roth@amd.com> wrote:
 
-Signed-off-by: Clément Léger <clement.leger@bootlin.com>
----
- drivers/net/dsa/rzn1_a5psw.c | 164 +++++++++++++++++++++++++++++++++++
- drivers/net/dsa/rzn1_a5psw.h |   8 +-
- 2 files changed, 169 insertions(+), 3 deletions(-)
+> From: Brijesh Singh <brijesh.singh@amd.com>
+> 
+> The behavior and requirement for the SEV-legacy command is altered when
+> the SNP firmware is in the INIT state. See SEV-SNP firmware specification
+> for more details.
+> 
+> Allocate the Trusted Memory Region (TMR) as a 2mb sized/aligned region
+> when SNP is enabled to satisfy new requirements for the SNP. Continue
+> allocating a 1mb region for !SNP configuration.
+> 
+> While at it, provide API that can be used by others to allocate a page
+> that can be used by the firmware. The immediate user for this API will
+> be the KVM driver. The KVM driver to need to allocate a firmware context
+> page during the guest creation. The context page need to be updated
+> by the firmware. See the SEV-SNP specification for further details.
+> 
+> Co-developed-by: Ashish Kalra <ashish.kalra@amd.com>
+> Signed-off-by: Ashish Kalra <ashish.kalra@amd.com>
+> Signed-off-by: Brijesh Singh <brijesh.singh@amd.com>
+> Signed-off-by: Michael Roth <michael.roth@amd.com>
+> ---
+>  drivers/crypto/ccp/sev-dev.c | 148 +++++++++++++++++++++++++++++++++--
+>  include/linux/psp-sev.h      |   9 +++
+>  2 files changed, 149 insertions(+), 8 deletions(-)
+> 
+> diff --git a/drivers/crypto/ccp/sev-dev.c b/drivers/crypto/ccp/sev-dev.c
+> index eca4e59b0f44..4c12e98a1219 100644
+> --- a/drivers/crypto/ccp/sev-dev.c
+> +++ b/drivers/crypto/ccp/sev-dev.c
+> @@ -94,6 +94,13 @@ static void *sev_init_ex_buffer;
+>   */
+>  struct sev_data_range_list *snp_range_list;
+>  
+> +/* When SEV-SNP is enabled the TMR needs to be 2MB aligned and 2MB size. */
+> +#define SEV_SNP_ES_TMR_SIZE	(2 * 1024 * 1024)
 
-diff --git a/drivers/net/dsa/rzn1_a5psw.c b/drivers/net/dsa/rzn1_a5psw.c
-index 5059b2814cdd..a9a42a8bc7e3 100644
---- a/drivers/net/dsa/rzn1_a5psw.c
-+++ b/drivers/net/dsa/rzn1_a5psw.c
-@@ -583,6 +583,144 @@ static int a5psw_port_fdb_dump(struct dsa_switch *ds, int port,
- 	return ret;
- }
- 
-+static int a5psw_port_vlan_filtering(struct dsa_switch *ds, int port,
-+				     bool vlan_filtering,
-+				     struct netlink_ext_ack *extack)
-+{
-+	u32 mask = BIT(port + A5PSW_VLAN_VERI_SHIFT) |
-+		   BIT(port + A5PSW_VLAN_DISC_SHIFT);
-+	u32 val = vlan_filtering ? mask : 0;
-+	struct a5psw *a5psw = ds->priv;
-+
-+	a5psw_reg_rmw(a5psw, A5PSW_VLAN_VERIFY, mask, val);
-+
-+	return 0;
-+}
-+
-+static int a5psw_find_vlan_entry(struct a5psw *a5psw, u16 vid)
-+{
-+	u32 vlan_res;
-+	int i;
-+
-+	/* Find vlan for this port */
-+	for (i = 0; i < A5PSW_VLAN_COUNT; i++) {
-+		vlan_res = a5psw_reg_readl(a5psw, A5PSW_VLAN_RES(i));
-+		if (FIELD_GET(A5PSW_VLAN_RES_VLANID, vlan_res) == vid)
-+			return i;
-+	}
-+
-+	return -1;
-+}
-+
-+static int a5psw_new_vlan_res_entry(struct a5psw *a5psw, u16 newvid)
-+{
-+	u32 vlan_res;
-+	int i;
-+
-+	/* Find a free VLAN entry */
-+	for (i = 0; i < A5PSW_VLAN_COUNT; i++) {
-+		vlan_res = a5psw_reg_readl(a5psw, A5PSW_VLAN_RES(i));
-+		if (!(FIELD_GET(A5PSW_VLAN_RES_PORTMASK, vlan_res))) {
-+			vlan_res = FIELD_PREP(A5PSW_VLAN_RES_VLANID, newvid);
-+			a5psw_reg_writel(a5psw, A5PSW_VLAN_RES(i), vlan_res);
-+			return i;
-+		}
-+	}
-+
-+	return -1;
-+}
-+
-+static void a5psw_port_vlan_tagged_cfg(struct a5psw *a5psw,
-+				       unsigned int vlan_res_id, int port,
-+				       bool set)
-+{
-+	u32 mask = A5PSW_VLAN_RES_WR_PORTMASK | A5PSW_VLAN_RES_RD_TAGMASK |
-+		   BIT(port);
-+	u32 vlan_res_off = A5PSW_VLAN_RES(vlan_res_id);
-+	u32 val = A5PSW_VLAN_RES_WR_TAGMASK, reg;
-+
-+	if (set)
-+		val |= BIT(port);
-+
-+	/* Toggle tag mask read */
-+	a5psw_reg_writel(a5psw, vlan_res_off, A5PSW_VLAN_RES_RD_TAGMASK);
-+	reg = a5psw_reg_readl(a5psw, vlan_res_off);
-+	a5psw_reg_writel(a5psw, vlan_res_off, A5PSW_VLAN_RES_RD_TAGMASK);
-+
-+	reg &= ~mask;
-+	reg |= val;
-+	a5psw_reg_writel(a5psw, vlan_res_off, reg);
-+}
-+
-+static void a5psw_port_vlan_cfg(struct a5psw *a5psw, unsigned int vlan_res_id,
-+				int port, bool set)
-+{
-+	u32 mask = A5PSW_VLAN_RES_WR_TAGMASK | BIT(port);
-+	u32 reg = A5PSW_VLAN_RES_WR_PORTMASK;
-+
-+	if (set)
-+		reg |= BIT(port);
-+
-+	a5psw_reg_rmw(a5psw, A5PSW_VLAN_RES(vlan_res_id), mask, reg);
-+}
-+
-+static int a5psw_port_vlan_add(struct dsa_switch *ds, int port,
-+			       const struct switchdev_obj_port_vlan *vlan,
-+			       struct netlink_ext_ack *extack)
-+{
-+	bool tagged = !(vlan->flags & BRIDGE_VLAN_INFO_UNTAGGED);
-+	bool pvid = vlan->flags & BRIDGE_VLAN_INFO_PVID;
-+	struct a5psw *a5psw = ds->priv;
-+	u16 vid = vlan->vid;
-+	int vlan_res_id;
-+
-+	dev_dbg(a5psw->dev, "Add VLAN %d on port %d, %s, %s\n",
-+		vid, port, tagged ? "tagged" : "untagged",
-+		pvid ? "PVID" : "no PVID");
-+
-+	vlan_res_id = a5psw_find_vlan_entry(a5psw, vid);
-+	if (vlan_res_id < 0) {
-+		vlan_res_id = a5psw_new_vlan_res_entry(a5psw, vid);
-+		if (vlan_res_id < 0)
-+			return -ENOSPC;
-+	}
-+
-+	a5psw_port_vlan_cfg(a5psw, vlan_res_id, port, true);
-+	if (tagged)
-+		a5psw_port_vlan_tagged_cfg(a5psw, vlan_res_id, port, true);
-+
-+	if (pvid) {
-+		a5psw_reg_rmw(a5psw, A5PSW_VLAN_IN_MODE_ENA, BIT(port),
-+			      BIT(port));
-+		a5psw_reg_writel(a5psw, A5PSW_SYSTEM_TAGINFO(port), vid);
-+	}
-+
-+	return 0;
-+}
-+
-+static int a5psw_port_vlan_del(struct dsa_switch *ds, int port,
-+			       const struct switchdev_obj_port_vlan *vlan)
-+{
-+	struct a5psw *a5psw = ds->priv;
-+	u16 vid = vlan->vid;
-+	int vlan_res_id;
-+
-+	dev_dbg(a5psw->dev, "Removing VLAN %d on port %d\n", vid, port);
-+
-+	vlan_res_id = a5psw_find_vlan_entry(a5psw, vid);
-+	if (vlan_res_id < 0)
-+		return -EINVAL;
-+
-+	a5psw_port_vlan_cfg(a5psw, vlan_res_id, port, false);
-+	a5psw_port_vlan_tagged_cfg(a5psw, vlan_res_id, port, false);
-+
-+	/* Disable PVID if the vid is matching the port one */
-+	if (vid == a5psw_reg_readl(a5psw, A5PSW_SYSTEM_TAGINFO(port)))
-+		a5psw_reg_rmw(a5psw, A5PSW_VLAN_IN_MODE_ENA, BIT(port), 0);
-+
-+	return 0;
-+}
-+
- static u64 a5psw_read_stat(struct a5psw *a5psw, u32 offset, int port)
- {
- 	u32 reg_lo, reg_hi;
-@@ -700,6 +838,27 @@ static void a5psw_get_eth_ctrl_stats(struct dsa_switch *ds, int port,
- 	ctrl_stats->MACControlFramesReceived = stat;
- }
- 
-+static void a5psw_vlan_setup(struct a5psw *a5psw, int port)
-+{
-+	u32 reg;
-+
-+	/* Enable TAG always mode for the port, this is actually controlled
-+	 * by VLAN_IN_MODE_ENA field which will be used for PVID insertion
-+	 */
-+	reg = A5PSW_VLAN_IN_MODE_TAG_ALWAYS;
-+	reg <<= A5PSW_VLAN_IN_MODE_PORT_SHIFT(port);
-+	a5psw_reg_rmw(a5psw, A5PSW_VLAN_IN_MODE, A5PSW_VLAN_IN_MODE_PORT(port),
-+		      reg);
-+
-+	/* Set transparent mode for output frame manipulation, this will depend
-+	 * on the VLAN_RES configuration mode
-+	 */
-+	reg = A5PSW_VLAN_OUT_MODE_TRANSPARENT;
-+	reg <<= A5PSW_VLAN_OUT_MODE_PORT_SHIFT(port);
-+	a5psw_reg_rmw(a5psw, A5PSW_VLAN_OUT_MODE,
-+		      A5PSW_VLAN_OUT_MODE_PORT(port), reg);
-+}
-+
- static int a5psw_setup(struct dsa_switch *ds)
- {
- 	struct a5psw *a5psw = ds->priv;
-@@ -772,6 +931,8 @@ static int a5psw_setup(struct dsa_switch *ds)
- 		/* Enable management forward only for user ports */
- 		if (dsa_port_is_user(dp))
- 			a5psw_port_mgmtfwd_set(a5psw, port, true);
-+
-+		a5psw_vlan_setup(a5psw, port);
- 	}
- 
- 	return 0;
-@@ -801,6 +962,9 @@ static const struct dsa_switch_ops a5psw_switch_ops = {
- 	.port_bridge_flags = a5psw_port_bridge_flags,
- 	.port_stp_state_set = a5psw_port_stp_state_set,
- 	.port_fast_age = a5psw_port_fast_age,
-+	.port_vlan_filtering = a5psw_port_vlan_filtering,
-+	.port_vlan_add = a5psw_port_vlan_add,
-+	.port_vlan_del = a5psw_port_vlan_del,
- 	.port_fdb_add = a5psw_port_fdb_add,
- 	.port_fdb_del = a5psw_port_fdb_del,
- 	.port_fdb_dump = a5psw_port_fdb_dump,
-diff --git a/drivers/net/dsa/rzn1_a5psw.h b/drivers/net/dsa/rzn1_a5psw.h
-index c67abd49c013..2bad2e3edc2a 100644
---- a/drivers/net/dsa/rzn1_a5psw.h
-+++ b/drivers/net/dsa/rzn1_a5psw.h
-@@ -50,7 +50,9 @@
- #define A5PSW_VLAN_IN_MODE_TAG_ALWAYS		0x2
- 
- #define A5PSW_VLAN_OUT_MODE		0x2C
--#define A5PSW_VLAN_OUT_MODE_PORT(port)	(GENMASK(1, 0) << ((port) * 2))
-+#define A5PSW_VLAN_OUT_MODE_PORT_SHIFT(port)	((port) * 2)
-+#define A5PSW_VLAN_OUT_MODE_PORT(port)	(GENMASK(1, 0) << \
-+					A5PSW_VLAN_OUT_MODE_PORT_SHIFT(port))
- #define A5PSW_VLAN_OUT_MODE_DIS		0x0
- #define A5PSW_VLAN_OUT_MODE_STRIP	0x1
- #define A5PSW_VLAN_OUT_MODE_TAG_THROUGH	0x2
-@@ -59,7 +61,7 @@
- #define A5PSW_VLAN_IN_MODE_ENA		0x30
- #define A5PSW_VLAN_TAG_ID		0x34
- 
--#define A5PSW_SYSTEM_TAGINFO(port)	(0x200 + A5PSW_PORT_OFFSET(port))
-+#define A5PSW_SYSTEM_TAGINFO(port)	(0x200 + 4 * (port))
- 
- #define A5PSW_AUTH_PORT(port)		(0x240 + 4 * (port))
- #define A5PSW_AUTH_PORT_AUTHORIZED	BIT(0)
-@@ -68,7 +70,7 @@
- #define A5PSW_VLAN_RES_WR_PORTMASK	BIT(30)
- #define A5PSW_VLAN_RES_WR_TAGMASK	BIT(29)
- #define A5PSW_VLAN_RES_RD_TAGMASK	BIT(28)
--#define A5PSW_VLAN_RES_ID		GENMASK(16, 5)
-+#define A5PSW_VLAN_RES_VLANID		GENMASK(16, 5)
- #define A5PSW_VLAN_RES_PORTMASK		GENMASK(4, 0)
- 
- #define A5PSW_RXMATCH_CONFIG(port)	(0x3e80 + 4 * (port))
--- 
-2.39.0
+It would be better to re-use the kernel size definition macros. E.g. SZ_2MB.
+
+> +
+> +static size_t sev_es_tmr_size = SEV_ES_TMR_SIZE;
+> +
+> +static int __sev_do_cmd_locked(int cmd, void *data, int *psp_ret);
+> +
+>  static inline bool sev_version_greater_or_equal(u8 maj, u8 min)
+>  {
+>  	struct sev_device *sev = psp_master->sev_data;
+> @@ -216,11 +223,134 @@ void snp_mark_pages_offline(unsigned long pfn, unsigned int npages)
+>  }
+>  EXPORT_SYMBOL_GPL(snp_mark_pages_offline);
+>  
+> +static int snp_reclaim_pages(unsigned long paddr, unsigned int npages, bool locked)
+> +{
+> +	/* Cbit maybe set in the paddr */
+
+This is confusing.
+
+I suppose C-bit is treated as a attribute of PTE in the kernel not part of the
+PA. It means only a PTE might carry a C-bit. 
+
+The paddr is from __pa(page_address()). It is not extracted from a PTE. Thus, the
+return from them should never have a C-bit.
+
+BTW: Wouldn't it be better to have pfn as input param instead of paddr?
+
+The caller has struct page, calling snp_reclaim_pages(page_to_pfn(page), xxxxx)
+would be much clearer than the current conversion:
+page_address() (struct page is converted to VA), __pa() (VA is converted to PA)
+in the caller and then PA is converted to pfn here.
+
+> +	unsigned long pfn = __sme_clr(paddr) >> PAGE_SHIFT;
+> +	int ret, err, i, n = 0;
+> +
+
+should be unsigned int i, n; as the input param npage is unsigned int.
+
+> +	if (!pfn_valid(pfn)) {
+> +		pr_err("%s: Invalid PFN %lx\n", __func__, pfn);
+> +		return 0;
+> +	}
+> +
+> +	for (i = 0; i < npages; i++, pfn++, n++) {
+> +		paddr = pfn << PAGE_SHIFT;
+> +
+> +		if (locked)
+> +			ret = __sev_do_cmd_locked(SEV_CMD_SNP_PAGE_RECLAIM, &paddr, &err);
+> +		else
+> +			ret = sev_do_cmd(SEV_CMD_SNP_PAGE_RECLAIM, &paddr, &err);
+> +
+> +		if (ret)
+> +			goto cleanup;
+> +
+> +		ret = rmp_make_shared(pfn, PG_LEVEL_4K);
+> +		if (ret)
+> +			goto cleanup;
+> +	}
+> +
+> +	return 0;
+> +
+> +cleanup:
+> +	/*
+> +	 * If failed to reclaim the page then page is no longer safe to
+> +	 * be release back to the system, leak it.
+> +	 */
+> +	snp_mark_pages_offline(pfn, npages - n);
+> +	return ret;
+> +}
+> +
+> +static int rmp_mark_pages_firmware(unsigned long paddr, unsigned int npages, bool locked)
+
+The same comment as above. Better take pfn or page instead of paddr with
+redundant conversions.
+
+> +{
+> +	/* Cbit maybe set in the paddr */
+> +	unsigned long pfn = __sme_clr(paddr) >> PAGE_SHIFT;
+> +	int rc, n = 0, i;
+> +
+> +	for (i = 0; i < npages; i++, n++, pfn++) {
+> +		rc = rmp_make_private(pfn, 0, PG_LEVEL_4K, 0, true);
+> +		if (rc)
+> +			goto cleanup;
+> +	}
+> +
+> +	return 0;
+> +
+> +cleanup:
+> +	/*
+> +	 * Try unrolling the firmware state changes by
+> +	 * reclaiming the pages which were already changed to the
+> +	 * firmware state.
+> +	 */
+> +	snp_reclaim_pages(paddr, n, locked);
+> +
+> +	return rc;
+> +}
+> +
+> +static struct page *__snp_alloc_firmware_pages(gfp_t gfp_mask, int order, bool locked)
+> +{
+> +	unsigned long npages = 1ul << order, paddr;
+> +	struct sev_device *sev;
+> +	struct page *page;
+> +
+> +	if (!psp_master || !psp_master->sev_data)
+> +		return NULL;
+> +
+> +	page = alloc_pages(gfp_mask, order);
+> +	if (!page)
+> +		return NULL;
+> +
+> +	/* If SEV-SNP is initialized then add the page in RMP table. */
+> +	sev = psp_master->sev_data;
+> +	if (!sev->snp_initialized)
+> +		return page;
+> +
+> +	paddr = __pa((unsigned long)page_address(page));
+> +	if (rmp_mark_pages_firmware(paddr, npages, locked))
+> +		return NULL;
+> +
+> +	return page;
+> +}
+> +
+> +void *snp_alloc_firmware_page(gfp_t gfp_mask)
+> +{
+> +	struct page *page;
+> +
+> +	page = __snp_alloc_firmware_pages(gfp_mask, 0, false);
+> +
+> +	return page ? page_address(page) : NULL;
+> +}
+> +EXPORT_SYMBOL_GPL(snp_alloc_firmware_page);
+> +
+> +static void __snp_free_firmware_pages(struct page *page, int order, bool locked)
+> +{
+> +	struct sev_device *sev = psp_master->sev_data;
+> +	unsigned long paddr, npages = 1ul << order;
+> +
+> +	if (!page)
+> +		return;
+> +
+> +	paddr = __pa((unsigned long)page_address(page));
+> +	if (sev->snp_initialized &&
+> +	    snp_reclaim_pages(paddr, npages, locked))
+> +		return;
+> +
+> +	__free_pages(page, order);
+> +}
+> +
+> +void snp_free_firmware_page(void *addr)
+> +{
+> +	if (!addr)
+> +		return;
+> +
+> +	__snp_free_firmware_pages(virt_to_page(addr), 0, false);
+> +}
+> +EXPORT_SYMBOL_GPL(snp_free_firmware_page);
+> +
+>  static void *sev_fw_alloc(unsigned long len)
+>  {
+>  	struct page *page;
+>  
+> -	page = alloc_pages(GFP_KERNEL, get_order(len));
+> +	page = __snp_alloc_firmware_pages(GFP_KERNEL, get_order(len), false);
+>  	if (!page)
+>  		return NULL;
+>  
+> @@ -468,7 +598,7 @@ static int __sev_init_locked(int *error)
+>  		data.tmr_address = __pa(sev_es_tmr);
+>  
+>  		data.flags |= SEV_INIT_FLAGS_SEV_ES;
+> -		data.tmr_len = SEV_ES_TMR_SIZE;
+> +		data.tmr_len = sev_es_tmr_size;
+>  	}
+>  
+>  	return __sev_do_cmd_locked(SEV_CMD_INIT, &data, error);
+> @@ -491,7 +621,7 @@ static int __sev_init_ex_locked(int *error)
+>  		data.tmr_address = __pa(sev_es_tmr);
+>  
+>  		data.flags |= SEV_INIT_FLAGS_SEV_ES;
+> -		data.tmr_len = SEV_ES_TMR_SIZE;
+> +		data.tmr_len = sev_es_tmr_size;
+>  	}
+>  
+>  	return __sev_do_cmd_locked(SEV_CMD_INIT_EX, &data, error);
+> @@ -982,6 +1112,8 @@ static int __sev_snp_init_locked(int *error)
+>  	sev->snp_initialized = true;
+>  	dev_dbg(sev->dev, "SEV-SNP firmware initialized\n");
+>  
+> +	sev_es_tmr_size = SEV_SNP_ES_TMR_SIZE;
+> +
+>  	return rc;
+>  }
+>  
+> @@ -1499,8 +1631,9 @@ static void sev_firmware_shutdown(struct sev_device *sev)
+>  		/* The TMR area was encrypted, flush it from the cache */
+>  		wbinvd_on_all_cpus();
+>  
+> -		free_pages((unsigned long)sev_es_tmr,
+> -			   get_order(SEV_ES_TMR_SIZE));
+> +		__snp_free_firmware_pages(virt_to_page(sev_es_tmr),
+> +					  get_order(sev_es_tmr_size),
+> +					  false);
+>  		sev_es_tmr = NULL;
+>  	}
+>  
+> @@ -1511,8 +1644,7 @@ static void sev_firmware_shutdown(struct sev_device *sev)
+>  	}
+>  
+>  	if (snp_range_list) {
+> -		free_pages((unsigned long)snp_range_list,
+> -			   get_order(PAGE_SIZE));
+> +		snp_free_firmware_page(snp_range_list);
+>  		snp_range_list = NULL;
+>  	}
+>  
+> @@ -1593,7 +1725,7 @@ void sev_pci_init(void)
+>  	}
+>  
+>  	/* Obtain the TMR memory area for SEV-ES use */
+> -	sev_es_tmr = sev_fw_alloc(SEV_ES_TMR_SIZE);
+> +	sev_es_tmr = sev_fw_alloc(sev_es_tmr_size);
+>  	if (!sev_es_tmr)
+>  		dev_warn(sev->dev,
+>  			 "SEV: TMR allocation failed, SEV-ES support unavailable\n");
+> diff --git a/include/linux/psp-sev.h b/include/linux/psp-sev.h
+> index 8edf5c548fbf..d19744807471 100644
+> --- a/include/linux/psp-sev.h
+> +++ b/include/linux/psp-sev.h
+> @@ -922,6 +922,8 @@ int sev_guest_decommission(struct sev_data_decommission *data, int *error);
+>  int sev_do_cmd(int cmd, void *data, int *psp_ret);
+>  
+>  void *psp_copy_user_blob(u64 uaddr, u32 len);
+> +void *snp_alloc_firmware_page(gfp_t mask);
+> +void snp_free_firmware_page(void *addr);
+>  
+>  /**
+>   * sev_mark_pages_offline - insert non-reclaimed firmware/guest pages
+> @@ -959,6 +961,13 @@ static inline void *psp_copy_user_blob(u64 __user uaddr, u32 len) { return ERR_P
+>  
+>  void snp_mark_pages_offline(unsigned long pfn, unsigned int npages) {}
+>  
+> +static inline void *snp_alloc_firmware_page(gfp_t mask)
+> +{
+> +	return NULL;
+> +}
+> +
+> +static inline void snp_free_firmware_page(void *addr) { }
+> +
+>  #endif	/* CONFIG_CRYPTO_DEV_SP_PSP */
+>  
+>  #endif	/* __PSP_SEV_H__ */
 
