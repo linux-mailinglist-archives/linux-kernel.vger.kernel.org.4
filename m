@@ -2,95 +2,167 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7DF2569DDDE
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 11:28:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5BBED69DDE2
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 11:29:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233534AbjBUK2e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Feb 2023 05:28:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58670 "EHLO
+        id S233632AbjBUK3F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Feb 2023 05:29:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59382 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232813AbjBUK2c (ORCPT
+        with ESMTP id S233396AbjBUK3D (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Feb 2023 05:28:32 -0500
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E45FE93F3;
-        Tue, 21 Feb 2023 02:28:29 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=Content-Transfer-Encoding:Content-Type
-        :MIME-Version:Message-ID:References:In-Reply-To:Subject:CC:To:From:Date:
-        Sender:Reply-To:Content-ID:Content-Description;
-        bh=+sCcPb6CoQW8fiM+WtJ9OnVrOM9cdW0QiHpN7tuGwAc=; b=K5XYLaRZRy0wFMI6ziCeJrG0rH
-        L/95c6x6ZiC/iZeslQqtjbsC/gWpbRqtlR6Azt+Gc9wBIVOT9xUA4Z9lIYCBf7XqsMAe0Gz6gxvK1
-        X43o1AYzLNqWjysW4ZrelUFy1LIItuLFZgUQtpwfqzZdv163exENK1kCmcPx7ZZFjYmdSfT7ir4LY
-        5PsC3Y7MayUtA8edLCzEgbXDHXe9v1V6+aq6D+OuyhVmD8ci4+gqwvu6gHka//J4t8CPLg85OdHod
-        LSi/JMh6m3PN5PKI4mJpMpSIreWmeoEmpX2dP1P3ERPocWncDyPCmSBJRml99tBhnMHeO+MbC1O6X
-        krnINRGg==;
-Received: from [2a00:23ee:1409:22b9:5717:6ed9:7d1a:8d4f] (helo=[IPv6:::1])
-        by desiato.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
-        id 1pUPs2-00C85k-2f;
-        Tue, 21 Feb 2023 10:27:39 +0000
-Date:   Tue, 21 Feb 2023 10:27:31 +0000
-From:   David Woodhouse <dwmw2@infradead.org>
-To:     Oleksandr Natalenko <oleksandr@natalenko.name>
-CC:     Kim Phillips <kim.phillips@amd.com>, tglx@linutronix.de,
-        Usama Arif <usama.arif@bytedance.com>, arjan@linux.intel.com,
-        mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
-        hpa@zytor.com, x86@kernel.org, pbonzini@redhat.com,
-        paulmck@kernel.org, linux-kernel@vger.kernel.org,
-        kvm@vger.kernel.org, rcu@vger.kernel.org, mimoja@mimoja.de,
-        hewenliang4@huawei.com, thomas.lendacky@amd.com, seanjc@google.com,
-        pmenzel@molgen.mpg.de, fam.zheng@bytedance.com,
-        punit.agrawal@bytedance.com, simon.evans@bytedance.com,
-        liangma@liangbit.com,
-        "Limonciello, Mario" <Mario.Limonciello@amd.com>,
-        Piotr Gorski <piotrgorski@cachyos.org>
-Subject: Re: [PATCH v9 0/8] Parallel CPU bringup for x86_64
-User-Agent: K-9 Mail for Android
-In-Reply-To: <3e5944de08ef0d23584d19bad7bae66c@natalenko.name>
-References: <20230215145425.420125-1-usama.arif@bytedance.com> <2668799.mvXUDI8C0e@natalenko.name> <ed8d662351cfe5793f8cc7e7e8c514d05d16c501.camel@infradead.org> <2668869.mvXUDI8C0e@natalenko.name> <2a67f6cf18dd2c1879fad9fd8a28242918d3e5d2.camel@infradead.org> <982e1d6140705414e8fd60b990bd259a@natalenko.name> <715CBABF-4017-4784-8F30-5386F1524830@infradead.org> <67dbc69f-b712-8971-f1c9-5d07f506a19c@amd.com> <42dc683e2846ae8fc1e09715aaf7884660e1a386.camel@infradead.org> <37c18c3aeea2e558633b6da6886111d0@natalenko.name> <5A3B7074-0C6D-472B-803B-D76541828C1F@infradead.org> <3d8ed6e157df10c5175c636de0e21849@natalenko.name> <5c557f9b6f55dc2a612ee89142971298e6ae12d8.camel@infradead.org> <ee0d0d971a3095d6a1e96ad4f1ba32d2@natalenko.name> <5b8f9c89f7015fa80c966c6c7f6fa259db6744f8.camel@infradead.org> <ce731b5a4a53680b4840467977b33d9a@natalenko.name> <85ceb3f92abf3c013924de2f025517372bed19c0.camel@infradead.org> <3e5944de08ef0d23584d19bad7bae66c@natalenko.name>
-Message-ID: <26E5DC9C-0F19-4E4F-9076-04506A197374@infradead.org>
+        Tue, 21 Feb 2023 05:29:03 -0500
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23D28AD2D;
+        Tue, 21 Feb 2023 02:29:01 -0800 (PST)
+Received: from [192.168.10.12] (unknown [39.45.217.110])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: usama.anjum)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id E8FAB66021CA;
+        Tue, 21 Feb 2023 10:28:50 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1676975338;
+        bh=fxVmTBekLEao3S5bXJ02H7r4cVQUYDNCck3NzQOmT6Y=;
+        h=Date:Cc:Subject:To:References:From:In-Reply-To:From;
+        b=ZWkarKD+DUtaUi/POrJUturQZo0lgaUlOmMYr4PykO1GcCPQAJp7VVfql9GSK3sEs
+         1tw9rDjfq7uN8Dn4gacFid7lQzpRtR3MfQprnDJ1e0r3WT9LSdQ3fpHHUB72VS53zO
+         UYu0c46+iuprdeZh5O4b1OHcN8NL+1nwKFwXFLoJfcOAduwM7NZrxAgPOXwI0DnIMI
+         ZJX32mQekwmA1GV08U+D1V+C9H3vTsocHJesWWFhOoMXurRGZMVNB1bzITHONbU2VX
+         oLYUn3Hpft+uiO5rfFb9riWjedupvOHr6IQy8gnNlIj0q8iyIBGQ6dgDAhRmZKOZjo
+         QYTOpzL4QEnwA==
+Message-ID: <36ddfd75-5c58-197b-16c9-9f819099ea6d@collabora.com>
+Date:   Tue, 21 Feb 2023 15:28:46 +0500
 MIME-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-SRS-Rewrite: SMTP reverse-path rewritten from <dwmw2@infradead.org> by desiato.infradead.org. See http://www.infradead.org/rpr.html
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Cc:     Muhammad Usama Anjum <usama.anjum@collabora.com>,
+        David Hildenbrand <david@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Paul Gofman <pgofman@codeweavers.com>,
+        Cyrill Gorcunov <gorcunov@gmail.com>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Shuah Khan <shuah@kernel.org>,
+        Christian Brauner <brauner@kernel.org>,
+        Yang Shi <shy828301@gmail.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        "Liam R . Howlett" <Liam.Howlett@oracle.com>,
+        Yun Zhou <yun.zhou@windriver.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Alex Sierra <alex.sierra@amd.com>,
+        Peter Xu <peterx@redhat.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Pasha Tatashin <pasha.tatashin@soleen.com>,
+        Nadav Amit <namit@vmware.com>,
+        Axel Rasmussen <axelrasmussen@google.com>,
+        "Gustavo A . R . Silva" <gustavoars@kernel.org>,
+        Dan Williams <dan.j.williams@intel.com>,
+        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
+        Greg KH <gregkh@linuxfoundation.org>, kernel@collabora.com,
+        Danylo Mocherniuk <mdanylo@google.com>
+Subject: Re: [PATCH v10 3/6] fs/proc/task_mmu: Implement IOCTL to get and/or
+ the clear info about PTEs
+Content-Language: en-US
+To:     =?UTF-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <emmir@google.com>,
+        Andrei Vagin <avagin@gmail.com>,
+        Mike Rapoport <rppt@kernel.org>, Nadav Amit <namit@vmware.com>
+References: <20230202112915.867409-1-usama.anjum@collabora.com>
+ <20230202112915.867409-4-usama.anjum@collabora.com>
+ <CABb0KFEgsk+YidSXBYQ9mM8nVV6PuEOQf=bbNn7hsoG1hUeLZg@mail.gmail.com>
+From:   Muhammad Usama Anjum <usama.anjum@collabora.com>
+In-Reply-To: <CABb0KFEgsk+YidSXBYQ9mM8nVV6PuEOQf=bbNn7hsoG1hUeLZg@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Michał,
 
+Thank you so much for comment!
 
-On 21 February 2023 09:49:51 GMT, Oleksandr Natalenko <oleksandr@natalenko=
-=2Ename> wrote:
->On 21=2E02=2E2023 10:06, David Woodhouse wrote:
->> Why does arch/x86/kernel/acpi/sleep=2Ec::x86_acpi_suspend_lowlevel() se=
-t
->>=20
->>     initial_gs =3D per_cpu_offset(smp_processor_id()) ?
->>=20
->> Would it not be CPU#0 that comes back up, and should it not get
->> per_cpu_offset(0) ?
->
->Wanna me try `initial_gs =3D per_cpu_offset(0);` too?
+On 2/17/23 8:18 PM, Michał Mirosław wrote:
+> On Thu, 2 Feb 2023 at 12:30, Muhammad Usama Anjum
+> <usama.anjum@collabora.com> wrote:
+> [...]
+>> - The masks are specified in required_mask, anyof_mask, excluded_ mask
+>>   and return_mask.
+> [...]
 
-Hm, yes please=2E There's another one to make zero on the next line up, I =
-think?
+The interface was suggested by Andrei back on the review of v3 [1]:
+> I mean we should be able to specify for what pages we need to get info
+> for. An ioctl argument can have these four fields:
+> * required bits (rmask & mask == mask) - all bits from this mask have to
+be set.
+> * any of these bits (amask & mask != 0) - any of these bits is set.
+> * exclude masks (emask & mask == 0) = none of these bits are set.
+> * return mask - bits that have to be reported to user.
 
->> Or maybe we should just set up smpboot_control for the CPU to find its
->> own stuff, *even* on waking=2E Since the structures are already set up,
->> it isn't like a clean boot=2E
->>=20
->> If you let it boot in parallel mode, what if you just *remove* the line
->> that sets smpboot_control=3D0 ?
->
->If the `smpboot_control =3D 0;` line in arch/x86/kernel/acpi/sleep=2Ec::x=
-86_acpi_suspend_lowlevel() is commented out, and the system is booted in pa=
-rallel mode, then suspend/resume works=2E
+> 
+> May I suggest a slightly modified interface for the flags?
+I've added everyone who may be interested in making interface better.
 
-Well that's entertaining=2E Now, can we come up with any theory which does=
-n't leave us wondering why it ever worked in the first place=2E=2E=2E?
+> 
+> As I understand, the return_mask is what is applied to page flags to
+> aggregate the list.
+> This is a separate thing, and I think it doesn't need changes except
+> maybe an improvement
+> in the documentation and visual distinction.
+> 
+> For the page-selection mechanism, currently required_mask and
+> excluded_mask have conflicting
+They are opposite of each other:
+All the set bits in required_mask must be set for the page to be selected.
+All the set bits in excluded_mask must _not_ be set for the page to be
+selected.
+
+> responsibilities. I suggest to rework that to:
+> 1. negated_flags: page flags which are to be negated before applying
+> the page selection using following masks;
+Sorry I'm unable to understand the negation (which is XOR?). Lets look at
+the truth table:
+Page Flag	negated_flags		
+0		0			0
+0		1			1
+1		0			1
+1		1			0
+
+If a page flag is 0 and negated_flag is 1, the result would be 1 which has
+changed the page flag. It isn't making sense to me. Why the page flag bit
+is being fliped?
+
+When Anrdei had proposed these masks, they seemed like a fancy way of
+filtering inside kernel and it was straight forward to understand. These
+masks would help his use cases for CRIU. So I'd included it. Please can you
+elaborate what is the purpose of negation?
+
+> 2. required_flags: flags which all have to be set in the
+> (negation-applied) page flags;
+> 3. anyof_flags: flags of which at least one has to be set in the
+> (negation-applied) page flags;
+> 
+> IOW, the resulting algorithm would be:
+> 
+> tested_flags = page_flags ^ negated_flags;
+> if (~tested_flags & required_flags)
+>   skip page;
+> if (!(tested_flags & anyof_flags))
+>   skip_page;
+> 
+> aggregate_on(page_flags & return_flags);
+> 
+> Best Regards
+> Michał Mirosław
+
+[1] https://lore.kernel.org/all/YyiDg79flhWoMDZB@gmail.com
+
+-- 
+BR,
+Muhammad Usama Anjum
