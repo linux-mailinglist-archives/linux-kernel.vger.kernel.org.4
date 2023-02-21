@@ -2,197 +2,212 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6326A69DC2B
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 09:37:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EB28869DC24
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 09:36:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233304AbjBUIh2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Feb 2023 03:37:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53302 "EHLO
+        id S233745AbjBUIgq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Feb 2023 03:36:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53326 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233208AbjBUIhZ (ORCPT
+        with ESMTP id S233725AbjBUIgo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Feb 2023 03:37:25 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D17C7234CC
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Feb 2023 00:36:00 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1676968481;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=s3hA7io5oEGOw3xKaHyd+KsM6je8a9BDLLtnwSNoTqc=;
-        b=GtvOw71B/sdc67NR8XisOqariHMAhHWxiWTJVzcXx6qp4/JY0zNUrcyvZk61XCqoMDsGrI
-        53Q4ibc3t4wq6DZufYV7T7Glcz0mWVIksbadTIX4EboTRbD5xhxgYdteENVsBxzqhwe7/0
-        XZDRpRpDk3sISiwPyEKAw9JFnWOR0Eg=
-Received: from mail-wr1-f70.google.com (mail-wr1-f70.google.com
- [209.85.221.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-556-f2PAe-2ANCOw_YHyfw52mA-1; Tue, 21 Feb 2023 03:34:39 -0500
-X-MC-Unique: f2PAe-2ANCOw_YHyfw52mA-1
-Received: by mail-wr1-f70.google.com with SMTP id j9-20020a5d4529000000b002c5588d962fso770288wra.10
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Feb 2023 00:34:39 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:organization:from:references
-         :cc:to:content-language:subject:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=s3hA7io5oEGOw3xKaHyd+KsM6je8a9BDLLtnwSNoTqc=;
-        b=Clfi5Y+E+15p5ykMA7zRmbf+YBgn2WMc7J3rWvaWjTdrvALyKGfm2qoK8akxStkkek
-         tId0aG3ilaGnkKYVCvIhWSUtWut0KWbnClViYNUJLx1UIfL08pbGOyHlpYtdgqkbNIYJ
-         Z+C38hYNcvtE48GYIa06AWNX8sehKcH4kLGWa5xLmgmomlvhbK5BsnDDeJdJqyCz4QF6
-         S+hcEcDuZejk4w4vvsSoGOhFWX9Kwi0gdDzLLV9xJ5UVLot4m01a4qivgztoK+CZnyXN
-         wN7e6CAbBhlh63p2nlkCWeQ5i0QWp1XMX4LeAjIWV0/9lRECu4DZH1ZQU73lAD9P0hMG
-         Q2QQ==
-X-Gm-Message-State: AO0yUKWGLxwxuAkNQo+7iBqyudLaStjoRi01RheHGQtWS2Y3nO9A/hVQ
-        jcEhZknQrh9mAIgaGzFekeNe06RX+ZZx6MGGQn1yePTzz0fXTWnuKFtRYEF0EJkP/WzLWhjoNru
-        KdE41fRgiQA6v5j4p8jDo/CV8
-X-Received: by 2002:adf:f883:0:b0:2c7:3f9:7053 with SMTP id u3-20020adff883000000b002c703f97053mr1601044wrp.52.1676968478703;
-        Tue, 21 Feb 2023 00:34:38 -0800 (PST)
-X-Google-Smtp-Source: AK7set/VzopSRLbEFNZlfiqKhL0ooGf/sc8yqRhmWuymXLlPTJDz78LKcQjIJ00MRvJ21tbfpizkTg==
-X-Received: by 2002:adf:f883:0:b0:2c7:3f9:7053 with SMTP id u3-20020adff883000000b002c703f97053mr1601006wrp.52.1676968478294;
-        Tue, 21 Feb 2023 00:34:38 -0800 (PST)
-Received: from ?IPV6:2003:cb:c707:4800:aecc:dadb:40a8:ce81? (p200300cbc7074800aeccdadb40a8ce81.dip0.t-ipconnect.de. [2003:cb:c707:4800:aecc:dadb:40a8:ce81])
-        by smtp.gmail.com with ESMTPSA id a15-20020adffb8f000000b002c3f03d8851sm3539769wrr.16.2023.02.21.00.34.36
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 21 Feb 2023 00:34:37 -0800 (PST)
-Message-ID: <ef855af5-6a77-55d4-6e54-1e83d2e112a0@redhat.com>
-Date:   Tue, 21 Feb 2023 09:34:35 +0100
+        Tue, 21 Feb 2023 03:36:44 -0500
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 783C8241E9;
+        Tue, 21 Feb 2023 00:36:02 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=MIME-Version:Content-Type:References:
+        In-Reply-To:Date:Cc:To:From:Subject:Message-ID:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=gxKFHmliVF0h2YkucJ5dErrsDDGckhz84mfmpxo+Pls=; b=on9YVBA6ns7e4mnS0y1fQrALj9
+        ig9+3VwJ/s5tyUPZH3pyyDIXtk5FFZ6B9VpEDS/bQOsNXNkPwPeQ4lJ8SY+wKTZd/LRMq7HS+av0I
+        JD1FIhtGKF3uTrUhN6//H2EjfN0OkLw1vuxvooIMtJx258UxwbhsXLEN8rv6Hq/hqZLGixwSuYL1e
+        RMy8v9ExqVSiSQuNN2fLlaBVPKSKRqQ9ES5V13bk4sUdPv8osPGItfIpfveiILY0bTcEWdZdwKO+A
+        OcMt/1lcsnw2K2us6Evwns7ryrQ6Wlax2a3BUnrUnTCGrkAtOfIMkfXcYb8dv+xzYfApv89bF9LlJ
+        bCmyeJHw==;
+Received: from [2001:8b0:10b:5::bb3] (helo=u3832b3a9db3152.ant.amazon.com)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1pUO78-00CS4x-Jw; Tue, 21 Feb 2023 08:35:08 +0000
+Message-ID: <5b8f9c89f7015fa80c966c6c7f6fa259db6744f8.camel@infradead.org>
+Subject: Re: [PATCH v9 0/8] Parallel CPU bringup for x86_64
+From:   David Woodhouse <dwmw2@infradead.org>
+To:     Oleksandr Natalenko <oleksandr@natalenko.name>
+Cc:     Kim Phillips <kim.phillips@amd.com>, tglx@linutronix.de,
+        Usama Arif <usama.arif@bytedance.com>, arjan@linux.intel.com,
+        mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
+        hpa@zytor.com, x86@kernel.org, pbonzini@redhat.com,
+        paulmck@kernel.org, linux-kernel@vger.kernel.org,
+        kvm@vger.kernel.org, rcu@vger.kernel.org, mimoja@mimoja.de,
+        hewenliang4@huawei.com, thomas.lendacky@amd.com, seanjc@google.com,
+        pmenzel@molgen.mpg.de, fam.zheng@bytedance.com,
+        punit.agrawal@bytedance.com, simon.evans@bytedance.com,
+        liangma@liangbit.com,
+        "Limonciello, Mario" <Mario.Limonciello@amd.com>,
+        Piotr Gorski <piotrgorski@cachyos.org>
+Date:   Tue, 21 Feb 2023 08:35:05 +0000
+In-Reply-To: <ee0d0d971a3095d6a1e96ad4f1ba32d2@natalenko.name>
+References: <20230215145425.420125-1-usama.arif@bytedance.com>
+         <2668799.mvXUDI8C0e@natalenko.name>
+         <ed8d662351cfe5793f8cc7e7e8c514d05d16c501.camel@infradead.org>
+         <2668869.mvXUDI8C0e@natalenko.name>
+         <2a67f6cf18dd2c1879fad9fd8a28242918d3e5d2.camel@infradead.org>
+         <982e1d6140705414e8fd60b990bd259a@natalenko.name>
+         <715CBABF-4017-4784-8F30-5386F1524830@infradead.org>
+         <67dbc69f-b712-8971-f1c9-5d07f506a19c@amd.com>
+         <42dc683e2846ae8fc1e09715aaf7884660e1a386.camel@infradead.org>
+         <37c18c3aeea2e558633b6da6886111d0@natalenko.name>
+         <5A3B7074-0C6D-472B-803B-D76541828C1F@infradead.org>
+         <3d8ed6e157df10c5175c636de0e21849@natalenko.name>
+         <5c557f9b6f55dc2a612ee89142971298e6ae12d8.camel@infradead.org>
+         <ee0d0d971a3095d6a1e96ad4f1ba32d2@natalenko.name>
+Content-Type: multipart/signed; micalg="sha-256"; protocol="application/pkcs7-signature";
+        boundary="=-E6DKm/8hJVYBL4w3eCDg"
+User-Agent: Evolution 3.44.4-0ubuntu1 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.2
-Subject: Re: [PATCH v6 18/41] mm: Introduce VM_SHADOW_STACK for shadow stack
- memory
-Content-Language: en-US
-To:     "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>,
-        "bsingharora@gmail.com" <bsingharora@gmail.com>,
-        "hpa@zytor.com" <hpa@zytor.com>,
-        "Syromiatnikov, Eugene" <esyr@redhat.com>,
-        "peterz@infradead.org" <peterz@infradead.org>,
-        "rdunlap@infradead.org" <rdunlap@infradead.org>,
-        "keescook@chromium.org" <keescook@chromium.org>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>,
-        "Eranian, Stephane" <eranian@google.com>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "fweimer@redhat.com" <fweimer@redhat.com>,
-        "nadav.amit@gmail.com" <nadav.amit@gmail.com>,
-        "jannh@google.com" <jannh@google.com>,
-        "dethoma@microsoft.com" <dethoma@microsoft.com>,
-        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
-        "kcc@google.com" <kcc@google.com>, "pavel@ucw.cz" <pavel@ucw.cz>,
-        "oleg@redhat.com" <oleg@redhat.com>,
-        "hjl.tools@gmail.com" <hjl.tools@gmail.com>,
-        "bp@alien8.de" <bp@alien8.de>,
-        "Lutomirski, Andy" <luto@kernel.org>,
-        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-        "arnd@arndb.de" <arnd@arndb.de>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "Schimpe, Christina" <christina.schimpe@intel.com>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "mike.kravetz@oracle.com" <mike.kravetz@oracle.com>,
-        "Yang, Weijiang" <weijiang.yang@intel.com>,
-        "debug@rivosinc.com" <debug@rivosinc.com>,
-        "jamorris@linux.microsoft.com" <jamorris@linux.microsoft.com>,
-        "john.allen@amd.com" <john.allen@amd.com>,
-        "rppt@kernel.org" <rppt@kernel.org>,
-        "andrew.cooper3@citrix.com" <andrew.cooper3@citrix.com>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "corbet@lwn.net" <corbet@lwn.net>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-api@vger.kernel.org" <linux-api@vger.kernel.org>,
-        "gorcunov@gmail.com" <gorcunov@gmail.com>,
-        "akpm@linux-foundation.org" <akpm@linux-foundation.org>
-Cc:     "Yu, Yu-cheng" <yu-cheng.yu@intel.com>
-References: <20230218211433.26859-1-rick.p.edgecombe@intel.com>
- <20230218211433.26859-19-rick.p.edgecombe@intel.com>
- <366c0af9-850f-24b1-3133-976fa92c51e2@redhat.com>
- <9e25a24f3783f3960e2c1e5e68a6c6fdf3d89442.camel@intel.com>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-In-Reply-To: <9e25a24f3783f3960e2c1e5e68a6c6fdf3d89442.camel@intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-SRS-Rewrite: SMTP reverse-path rewritten from <dwmw2@infradead.org> by casper.infradead.org. See http://www.infradead.org/rpr.html
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 20.02.23 23:08, Edgecombe, Rick P wrote:
-> On Mon, 2023-02-20 at 13:56 +0100, David Hildenbrand wrote:
->> On 18.02.23 22:14, Rick Edgecombe wrote:
->>> From: Yu-cheng Yu <yu-cheng.yu@intel.com>
->>>
->>> The x86 Control-flow Enforcement Technology (CET) feature includes
->>> a new
->>> type of memory called shadow stack. This shadow stack memory has
->>> some
->>> unusual properties, which requires some core mm changes to function
->>> properly.
->>>
->>> A shadow stack PTE must be read-only and have _PAGE_DIRTY set.
->>> However,
->>> read-only and Dirty PTEs also exist for copy-on-write (COW) pages.
->>> These
->>> two cases are handled differently for page faults. Introduce
->>> VM_SHADOW_STACK to track shadow stack VMAs.
->>
->> I suggest simplifying and abstracting that description.
->>
->> "New hardware extensions implement support for shadow stack memory,
->> such
->> as x86 Control-flow Enforcement Technology (CET). Let's add a new VM
->> flag to identify these areas, for example, to be used to properly
->> indicate shadow stack PTEs to the hardware."
-> 
-> Ah yea, that top blurb was added to all the non-x86 arch patches after
-> some feedback from Andrew Morton. He had said basically (in some more
-> colorful language) that the changelogs (at the time) were written
-> assuming the reader knows what a shadow stack is.
 
-Okay. It's a bit repetitive, though.
+--=-E6DKm/8hJVYBL4w3eCDg
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Ideally, we'd just explain it in the cover letter in detail and 
-Andrews's script would include the cover letter in the first commit. 
-IIRC, that's what usually happens.
+On Tue, 2023-02-21 at 09:25 +0100, Oleksandr Natalenko wrote:
+>=20
+>=20
+> Right, sorry. Here it is: http://ix.io/4oLq
 
-> 
-> So it might be worth keeping a little more info in the log?
+$ echo `grep ^00000001 4oLq  | cut -c36-37`
+00 02 04 06 08 0a 0c 0e 10 12 14 16 18 1a 1c 1e 01 03 05 07 09 0b 0d 0f
+11 13 15 17 19 1b 1d 1f
 
-Copying the same paragraph into each commit is IMHO a bit repetitive. 
-But these are just my 2 cents.
+Well they look sane enough. All even APIC IDs and then all the odd ones
+is a topology that isn't massively surprising.
 
-[...]
+Does it match what you get *before* suspend/resume?
 
->> Should we abstract this to CONFIG_ARCH_USER_SHADOW_STACK, seeing
->> that
->> other architectures might similarly need it?
-> 
-> There was an ARCH_HAS_SHADOW_STACK but it got removed following this
-> discussion:
-> 
-> https://lore.kernel.org/lkml/d09e952d8ae696f687f0787dfeb7be7699c02913.camel@intel.com/
-> 
-> Now we have this new RFC for riscv as potentially a second
-> implementation. But it is still very early, and I'm not sure anyone
-> knows exactly what the similarities will be in a mature version. So I
-> think it would be better to refactor in an ARCH_HAS_SHADOW_STACK later
-> (and similar abstractions) once that series is more mature and we have
-> an idea of what pieces will be shared. I don't have a problem in
-> principle with an ARCH config, just don't think we should do it yet.
+Obviously we could stick our fingers in our ears and go "la la la" and
+just disable it for non-X2APIC, for AMD without X2APIC, or perhaps
+disable it on *resume* but still use it at boot. But I'd really like to
+understand what's going on and not do voodoo. Thanks for helping!
 
-Okay, easy to factor out later.
+--=-E6DKm/8hJVYBL4w3eCDg
+Content-Type: application/pkcs7-signature; name="smime.p7s"
+Content-Disposition: attachment; filename="smime.p7s"
+Content-Transfer-Encoding: base64
 
-Acked-by: David Hildenbrand <david@redhat.com>
+MIAGCSqGSIb3DQEHAqCAMIACAQExDzANBglghkgBZQMEAgEFADCABgkqhkiG9w0BBwEAAKCCEkQw
+ggYQMIID+KADAgECAhBNlCwQ1DvglAnFgS06KwZPMA0GCSqGSIb3DQEBDAUAMIGIMQswCQYDVQQG
+EwJVUzETMBEGA1UECBMKTmV3IEplcnNleTEUMBIGA1UEBxMLSmVyc2V5IENpdHkxHjAcBgNVBAoT
+FVRoZSBVU0VSVFJVU1QgTmV0d29yazEuMCwGA1UEAxMlVVNFUlRydXN0IFJTQSBDZXJ0aWZpY2F0
+aW9uIEF1dGhvcml0eTAeFw0xODExMDIwMDAwMDBaFw0zMDEyMzEyMzU5NTlaMIGWMQswCQYDVQQG
+EwJHQjEbMBkGA1UECBMSR3JlYXRlciBNYW5jaGVzdGVyMRAwDgYDVQQHEwdTYWxmb3JkMRgwFgYD
+VQQKEw9TZWN0aWdvIExpbWl0ZWQxPjA8BgNVBAMTNVNlY3RpZ28gUlNBIENsaWVudCBBdXRoZW50
+aWNhdGlvbiBhbmQgU2VjdXJlIEVtYWlsIENBMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKC
+AQEAyjztlApB/975Rrno1jvm2pK/KxBOqhq8gr2+JhwpKirSzZxQgT9tlC7zl6hn1fXjSo5MqXUf
+ItMltrMaXqcESJuK8dtK56NCSrq4iDKaKq9NxOXFmqXX2zN8HHGjQ2b2Xv0v1L5Nk1MQPKA19xeW
+QcpGEGFUUd0kN+oHox+L9aV1rjfNiCj3bJk6kJaOPabPi2503nn/ITX5e8WfPnGw4VuZ79Khj1YB
+rf24k5Ee1sLTHsLtpiK9OjG4iQRBdq6Z/TlVx/hGAez5h36bBJMxqdHLpdwIUkTqT8se3ed0PewD
+ch/8kHPo5fZl5u1B0ecpq/sDN/5sCG52Ds+QU5O5EwIDAQABo4IBZDCCAWAwHwYDVR0jBBgwFoAU
+U3m/WqorSs9UgOHYm8Cd8rIDZsswHQYDVR0OBBYEFAnA8vwL2pTbX/4r36iZQs/J4K0AMA4GA1Ud
+DwEB/wQEAwIBhjASBgNVHRMBAf8ECDAGAQH/AgEAMB0GA1UdJQQWMBQGCCsGAQUFBwMCBggrBgEF
+BQcDBDARBgNVHSAECjAIMAYGBFUdIAAwUAYDVR0fBEkwRzBFoEOgQYY/aHR0cDovL2NybC51c2Vy
+dHJ1c3QuY29tL1VTRVJUcnVzdFJTQUNlcnRpZmljYXRpb25BdXRob3JpdHkuY3JsMHYGCCsGAQUF
+BwEBBGowaDA/BggrBgEFBQcwAoYzaHR0cDovL2NydC51c2VydHJ1c3QuY29tL1VTRVJUcnVzdFJT
+QUFkZFRydXN0Q0EuY3J0MCUGCCsGAQUFBzABhhlodHRwOi8vb2NzcC51c2VydHJ1c3QuY29tMA0G
+CSqGSIb3DQEBDAUAA4ICAQBBRHUAqznCFfXejpVtMnFojADdF9d6HBA4kMjjsb0XMZHztuOCtKF+
+xswhh2GqkW5JQrM8zVlU+A2VP72Ky2nlRA1GwmIPgou74TZ/XTarHG8zdMSgaDrkVYzz1g3nIVO9
+IHk96VwsacIvBF8JfqIs+8aWH2PfSUrNxP6Ys7U0sZYx4rXD6+cqFq/ZW5BUfClN/rhk2ddQXyn7
+kkmka2RQb9d90nmNHdgKrwfQ49mQ2hWQNDkJJIXwKjYA6VUR/fZUFeCUisdDe/0ABLTI+jheXUV1
+eoYV7lNwNBKpeHdNuO6Aacb533JlfeUHxvBz9OfYWUiXu09sMAviM11Q0DuMZ5760CdO2VnpsXP4
+KxaYIhvqPqUMWqRdWyn7crItNkZeroXaecG03i3mM7dkiPaCkgocBg0EBYsbZDZ8bsG3a08LwEsL
+1Ygz3SBsyECa0waq4hOf/Z85F2w2ZpXfP+w8q4ifwO90SGZZV+HR/Jh6rEaVPDRF/CEGVqR1hiuQ
+OZ1YL5ezMTX0ZSLwrymUE0pwi/KDaiYB15uswgeIAcA6JzPFf9pLkAFFWs1QNyN++niFhsM47qod
+x/PL+5jR87myx5uYdBEQkkDc+lKB1Wct6ucXqm2EmsaQ0M95QjTmy+rDWjkDYdw3Ms6mSWE3Bn7i
+5ZgtwCLXgAIe5W8mybM2JzCCBhQwggT8oAMCAQICEQDGvhmWZ0DEAx0oURL6O6l+MA0GCSqGSIb3
+DQEBCwUAMIGWMQswCQYDVQQGEwJHQjEbMBkGA1UECBMSR3JlYXRlciBNYW5jaGVzdGVyMRAwDgYD
+VQQHEwdTYWxmb3JkMRgwFgYDVQQKEw9TZWN0aWdvIExpbWl0ZWQxPjA8BgNVBAMTNVNlY3RpZ28g
+UlNBIENsaWVudCBBdXRoZW50aWNhdGlvbiBhbmQgU2VjdXJlIEVtYWlsIENBMB4XDTIyMDEwNzAw
+MDAwMFoXDTI1MDEwNjIzNTk1OVowJDEiMCAGCSqGSIb3DQEJARYTZHdtdzJAaW5mcmFkZWFkLm9y
+ZzCCAiIwDQYJKoZIhvcNAQEBBQADggIPADCCAgoCggIBALQ3GpC2bomUqk+91wLYBzDMcCj5C9m6
+oZaHwvmIdXftOgTbCJXADo6G9T7BBAebw2JV38EINgKpy/ZHh7htyAkWYVoFsFPrwHounto8xTsy
+SSePMiPlmIdQ10BcVSXMUJ3Juu16GlWOnAMJY2oYfEzmE7uT9YgcBqKCo65pTFmOnR/VVbjJk4K2
+xE34GC2nAdUQkPFuyaFisicc6HRMOYXPuF0DuwITEKnjxgNjP+qDrh0db7PAjO1D4d5ftfrsf+kd
+RR4gKVGSk8Tz2WwvtLAroJM4nXjNPIBJNT4w/FWWc/5qPHJy2U+eITZ5LLE5s45mX2oPFknWqxBo
+bQZ8a9dsZ3dSPZBvE9ZrmtFLrVrN4eo1jsXgAp1+p7bkfqd3BgBEmfsYWlBXO8rVXfvPgLs32VdV
+NZxb/CDWPqBsiYv0Hv3HPsz07j5b+/cVoWqyHDKzkaVbxfq/7auNVRmPB3v5SWEsH8xi4Bez2V9U
+KxfYCnqsjp8RaC2/khxKt0A552Eaxnz/4ly/2C7wkwTQnBmdlFYhAflWKQ03Ufiu8t3iBE3VJbc2
+5oMrglj7TRZrmKq3CkbFnX0fyulB+kHimrt6PIWn7kgyl9aelIl6vtbhMA+l0nfrsORMa4kobqQ5
+C5rveVgmcIad67EDa+UqEKy/GltUwlSh6xy+TrK1tzDvAgMBAAGjggHMMIIByDAfBgNVHSMEGDAW
+gBQJwPL8C9qU21/+K9+omULPyeCtADAdBgNVHQ4EFgQUzMeDMcimo0oz8o1R1Nver3ZVpSkwDgYD
+VR0PAQH/BAQDAgWgMAwGA1UdEwEB/wQCMAAwHQYDVR0lBBYwFAYIKwYBBQUHAwQGCCsGAQUFBwMC
+MEAGA1UdIAQ5MDcwNQYMKwYBBAGyMQECAQEBMCUwIwYIKwYBBQUHAgEWF2h0dHBzOi8vc2VjdGln
+by5jb20vQ1BTMFoGA1UdHwRTMFEwT6BNoEuGSWh0dHA6Ly9jcmwuc2VjdGlnby5jb20vU2VjdGln
+b1JTQUNsaWVudEF1dGhlbnRpY2F0aW9uYW5kU2VjdXJlRW1haWxDQS5jcmwwgYoGCCsGAQUFBwEB
+BH4wfDBVBggrBgEFBQcwAoZJaHR0cDovL2NydC5zZWN0aWdvLmNvbS9TZWN0aWdvUlNBQ2xpZW50
+QXV0aGVudGljYXRpb25hbmRTZWN1cmVFbWFpbENBLmNydDAjBggrBgEFBQcwAYYXaHR0cDovL29j
+c3Auc2VjdGlnby5jb20wHgYDVR0RBBcwFYETZHdtdzJAaW5mcmFkZWFkLm9yZzANBgkqhkiG9w0B
+AQsFAAOCAQEAyW6MUir5dm495teKqAQjDJwuFCi35h4xgnQvQ/fzPXmtR9t54rpmI2TfyvcKgOXp
+qa7BGXNFfh1JsqexVkIqZP9uWB2J+uVMD+XZEs/KYNNX2PvIlSPrzIB4Z2wyIGQpaPLlYflrrVFK
+v9CjT2zdqvy2maK7HKOQRt3BiJbVG5lRiwbbygldcALEV9ChWFfgSXvrWDZspnU3Gjw/rMHrGnql
+Htlyebp3pf3fSS9kzQ1FVtVIDrL6eqhTwJxe+pXSMMqFiN0whpBtXdyDjzBtQTaZJ7zTT/vlehc/
+tDuqZwGHm/YJy883Ll+GP3NvOkgaRGWEuYWJJ6hFCkXYjyR9IzCCBhQwggT8oAMCAQICEQDGvhmW
+Z0DEAx0oURL6O6l+MA0GCSqGSIb3DQEBCwUAMIGWMQswCQYDVQQGEwJHQjEbMBkGA1UECBMSR3Jl
+YXRlciBNYW5jaGVzdGVyMRAwDgYDVQQHEwdTYWxmb3JkMRgwFgYDVQQKEw9TZWN0aWdvIExpbWl0
+ZWQxPjA8BgNVBAMTNVNlY3RpZ28gUlNBIENsaWVudCBBdXRoZW50aWNhdGlvbiBhbmQgU2VjdXJl
+IEVtYWlsIENBMB4XDTIyMDEwNzAwMDAwMFoXDTI1MDEwNjIzNTk1OVowJDEiMCAGCSqGSIb3DQEJ
+ARYTZHdtdzJAaW5mcmFkZWFkLm9yZzCCAiIwDQYJKoZIhvcNAQEBBQADggIPADCCAgoCggIBALQ3
+GpC2bomUqk+91wLYBzDMcCj5C9m6oZaHwvmIdXftOgTbCJXADo6G9T7BBAebw2JV38EINgKpy/ZH
+h7htyAkWYVoFsFPrwHounto8xTsySSePMiPlmIdQ10BcVSXMUJ3Juu16GlWOnAMJY2oYfEzmE7uT
+9YgcBqKCo65pTFmOnR/VVbjJk4K2xE34GC2nAdUQkPFuyaFisicc6HRMOYXPuF0DuwITEKnjxgNj
+P+qDrh0db7PAjO1D4d5ftfrsf+kdRR4gKVGSk8Tz2WwvtLAroJM4nXjNPIBJNT4w/FWWc/5qPHJy
+2U+eITZ5LLE5s45mX2oPFknWqxBobQZ8a9dsZ3dSPZBvE9ZrmtFLrVrN4eo1jsXgAp1+p7bkfqd3
+BgBEmfsYWlBXO8rVXfvPgLs32VdVNZxb/CDWPqBsiYv0Hv3HPsz07j5b+/cVoWqyHDKzkaVbxfq/
+7auNVRmPB3v5SWEsH8xi4Bez2V9UKxfYCnqsjp8RaC2/khxKt0A552Eaxnz/4ly/2C7wkwTQnBmd
+lFYhAflWKQ03Ufiu8t3iBE3VJbc25oMrglj7TRZrmKq3CkbFnX0fyulB+kHimrt6PIWn7kgyl9ae
+lIl6vtbhMA+l0nfrsORMa4kobqQ5C5rveVgmcIad67EDa+UqEKy/GltUwlSh6xy+TrK1tzDvAgMB
+AAGjggHMMIIByDAfBgNVHSMEGDAWgBQJwPL8C9qU21/+K9+omULPyeCtADAdBgNVHQ4EFgQUzMeD
+Mcimo0oz8o1R1Nver3ZVpSkwDgYDVR0PAQH/BAQDAgWgMAwGA1UdEwEB/wQCMAAwHQYDVR0lBBYw
+FAYIKwYBBQUHAwQGCCsGAQUFBwMCMEAGA1UdIAQ5MDcwNQYMKwYBBAGyMQECAQEBMCUwIwYIKwYB
+BQUHAgEWF2h0dHBzOi8vc2VjdGlnby5jb20vQ1BTMFoGA1UdHwRTMFEwT6BNoEuGSWh0dHA6Ly9j
+cmwuc2VjdGlnby5jb20vU2VjdGlnb1JTQUNsaWVudEF1dGhlbnRpY2F0aW9uYW5kU2VjdXJlRW1h
+aWxDQS5jcmwwgYoGCCsGAQUFBwEBBH4wfDBVBggrBgEFBQcwAoZJaHR0cDovL2NydC5zZWN0aWdv
+LmNvbS9TZWN0aWdvUlNBQ2xpZW50QXV0aGVudGljYXRpb25hbmRTZWN1cmVFbWFpbENBLmNydDAj
+BggrBgEFBQcwAYYXaHR0cDovL29jc3Auc2VjdGlnby5jb20wHgYDVR0RBBcwFYETZHdtdzJAaW5m
+cmFkZWFkLm9yZzANBgkqhkiG9w0BAQsFAAOCAQEAyW6MUir5dm495teKqAQjDJwuFCi35h4xgnQv
+Q/fzPXmtR9t54rpmI2TfyvcKgOXpqa7BGXNFfh1JsqexVkIqZP9uWB2J+uVMD+XZEs/KYNNX2PvI
+lSPrzIB4Z2wyIGQpaPLlYflrrVFKv9CjT2zdqvy2maK7HKOQRt3BiJbVG5lRiwbbygldcALEV9Ch
+WFfgSXvrWDZspnU3Gjw/rMHrGnqlHtlyebp3pf3fSS9kzQ1FVtVIDrL6eqhTwJxe+pXSMMqFiN0w
+hpBtXdyDjzBtQTaZJ7zTT/vlehc/tDuqZwGHm/YJy883Ll+GP3NvOkgaRGWEuYWJJ6hFCkXYjyR9
+IzGCBMcwggTDAgEBMIGsMIGWMQswCQYDVQQGEwJHQjEbMBkGA1UECBMSR3JlYXRlciBNYW5jaGVz
+dGVyMRAwDgYDVQQHEwdTYWxmb3JkMRgwFgYDVQQKEw9TZWN0aWdvIExpbWl0ZWQxPjA8BgNVBAMT
+NVNlY3RpZ28gUlNBIENsaWVudCBBdXRoZW50aWNhdGlvbiBhbmQgU2VjdXJlIEVtYWlsIENBAhEA
+xr4ZlmdAxAMdKFES+jupfjANBglghkgBZQMEAgEFAKCCAeswGAYJKoZIhvcNAQkDMQsGCSqGSIb3
+DQEHATAcBgkqhkiG9w0BCQUxDxcNMjMwMjIxMDgzNTA1WjAvBgkqhkiG9w0BCQQxIgQgZZoUxyui
+KpRHl0qUsyyqAN/Tw6nKl5VA30k5kap6bC0wgb0GCSsGAQQBgjcQBDGBrzCBrDCBljELMAkGA1UE
+BhMCR0IxGzAZBgNVBAgTEkdyZWF0ZXIgTWFuY2hlc3RlcjEQMA4GA1UEBxMHU2FsZm9yZDEYMBYG
+A1UEChMPU2VjdGlnbyBMaW1pdGVkMT4wPAYDVQQDEzVTZWN0aWdvIFJTQSBDbGllbnQgQXV0aGVu
+dGljYXRpb24gYW5kIFNlY3VyZSBFbWFpbCBDQQIRAMa+GZZnQMQDHShREvo7qX4wgb8GCyqGSIb3
+DQEJEAILMYGvoIGsMIGWMQswCQYDVQQGEwJHQjEbMBkGA1UECBMSR3JlYXRlciBNYW5jaGVzdGVy
+MRAwDgYDVQQHEwdTYWxmb3JkMRgwFgYDVQQKEw9TZWN0aWdvIExpbWl0ZWQxPjA8BgNVBAMTNVNl
+Y3RpZ28gUlNBIENsaWVudCBBdXRoZW50aWNhdGlvbiBhbmQgU2VjdXJlIEVtYWlsIENBAhEAxr4Z
+lmdAxAMdKFES+jupfjANBgkqhkiG9w0BAQEFAASCAgB61t9EfDPwGKwAWzejVtA9yKScmEGyw6ol
+jMy/F8qtPmBCyMFRpu9r1CjXTuwxraOEIu+lguzPihQ0xwxI3aXqt6l/ESI1b7d7B1Ov1I+0sY+D
+yLwQ9TbAfwyEaYqN19io8Lb8LxUn14omc7VhkZVXcr6ApDDchLnYAqGoIfLbkWMHf7n7MTmQ47Wf
+iydoA5cGgCDdQ3ljmGc0JhAsLR561YOX47U6OMhPstovxZqMneOogymgfwuQoVyd9rfutPhm7TAk
+3TPCWrjfPY5/FSTPSsstvw2fG0x2Ee7Tvop6xDhUxeLNl3Nd5CI/n0hIzUbTiri4UmX8S16RYvc8
+MmlVMmj3RyI9pK8YVtosLMF2h/IXoJ4j1s3AAUSk9bP3nZ6tjFxHE54/ksIdI2Pzw95sg1UKQEw4
+9GS+gpdkeEII3eAqwvJdsoTBTqISRCS6wolSuLMyD9KS37nd6+LdiPObOYRNfr34unasVaTDBoc3
+SV5OufmupBznsU+K/4ahbz2DHGcAFfv0ttsdIedKrShwgYg4x8+LlzADkHJ/0uR5LNDE/EfBEeNt
+CS4hDzx/bm2/fmKw/NGOalo9F1SXqXKYy2+54Zl13o3RWDBxBksqXDvaxSRCHG/GRltU4q0w29z1
+9KLl/8vT7u5AI6TnQobd7EuVAddKk4rA+flg08HiNwAAAAAAAA==
 
--- 
-Thanks,
 
-David / dhildenb
-
+--=-E6DKm/8hJVYBL4w3eCDg--
