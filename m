@@ -2,204 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6CA9369DECB
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 12:27:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CD71069DEB1
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 12:25:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233549AbjBUL1U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Feb 2023 06:27:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51462 "EHLO
+        id S234078AbjBULZs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Feb 2023 06:25:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49606 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234187AbjBUL1L (ORCPT
+        with ESMTP id S233656AbjBULZq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Feb 2023 06:27:11 -0500
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E788926867;
-        Tue, 21 Feb 2023 03:26:47 -0800 (PST)
-Received: from pps.filterd (m0279862.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 31L9lasu013842;
-        Tue, 21 Feb 2023 11:26:32 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-type; s=qcppdkim1;
- bh=YGKDvxRdX84ObfDEJmxXQZDtKg1Ik+7klLgTt5oEQtQ=;
- b=LjyjvlpZlRzKYIUGjHL7VuoOEEQ7aFYV72x7RtmeCIBWY+0JVEqzYknqYaxDCbuE2enw
- yoFHdjqgjmjhUNStY0qKj510XV3VpQRfP3aAl6A4qWHE6A1oJFFbBLWAk02Ayau81fWc
- 5ZxTd5po3nq+VYTN/X6zZSdR2fJUjloWBYbTyzDiGk1QJahHEi6+aIbGObfA3viSi8Xe
- HMY5FOES/Ox1Rn/+ZATXMdhfLpuWeZEgHccEVjVJ82t59WepnaBBQS8bpV9IOVTcXVIS
- Q0IacJXl5LnXRi0NA07oYv9xy9XvNVYoNPoE4LvOV+IgULYywNiH0i1qcZL/fB4O7Df8 dw== 
-Received: from nasanppmta01.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3nvp4v0y6y-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 21 Feb 2023 11:26:32 +0000
-Received: from nasanex01c.na.qualcomm.com (nasanex01c.na.qualcomm.com [10.45.79.139])
-        by NASANPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 31LBQWqE019224
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 21 Feb 2023 11:26:32 GMT
-Received: from hu-mojha-hyd.qualcomm.com (10.80.80.8) by
- nasanex01c.na.qualcomm.com (10.45.79.139) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.41; Tue, 21 Feb 2023 03:26:27 -0800
-From:   Mukesh Ojha <quic_mojha@quicinc.com>
-To:     <agross@kernel.org>, <andersson@kernel.org>,
-        <konrad.dybcio@linaro.org>, <keescook@chromium.org>,
-        <tony.luck@intel.com>, <gpiccoli@igalia.com>,
-        <catalin.marinas@arm.com>, <will@kernel.org>
-CC:     <linux-arm-msm@vger.kernel.org>,
-        <linux-remoteproc@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-hardening@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        Mukesh Ojha <quic_mojha@quicinc.com>
-Subject: [RFC PATCH 6/6] pstore/ram: Register context with minidump
-Date:   Tue, 21 Feb 2023 16:55:13 +0530
-Message-ID: <1676978713-7394-7-git-send-email-quic_mojha@quicinc.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1676978713-7394-1-git-send-email-quic_mojha@quicinc.com>
-References: <1676978713-7394-1-git-send-email-quic_mojha@quicinc.com>
+        Tue, 21 Feb 2023 06:25:46 -0500
+Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63F8922DE6
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Feb 2023 03:25:45 -0800 (PST)
+Received: by mail-ed1-x52f.google.com with SMTP id x10so14969969edd.13
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Feb 2023 03:25:45 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=GS/FuJCPhQ1uOLyGjkR0iAM8SEKwfPpWzwME5MLPJhM=;
+        b=e7Loni/yJXd48Da9Dl6Q0CN99QB8bdYlsJD9tqOTTTgROY9tjFa+mhRq4YeAqspbmh
+         1UcUCGn9b283dP37/+guJd1qaK1O+5ojvaIHvB4vIL3rK2Rc0fdR3rblSSO+BTAvv8Zc
+         dFoTk/29lWYc+RuNNuJzSoYizvCuYLZMg7EehNrJXDD0Vb3mk52amkM5DbQsUkrYI3Wh
+         TpJNHS8s1EQEo0vhBvuuVDguD46CYhOnQ3fj5/ReU4+7VgKymiF5PSe2YkuC/vVdGBfA
+         9/BtrpQQZ9TutamhoSH6bn2CqdHy3FR+1pIp3tfsBxw1gkqyu5DAsTN4MqONTlmaBjhZ
+         f0ug==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=GS/FuJCPhQ1uOLyGjkR0iAM8SEKwfPpWzwME5MLPJhM=;
+        b=0Op/e5jaTdSb8nPSWnal29RhdvyaKsTwRRGYF6rkFGjBP2JUxbMD4lBkFwglh8ofmb
+         TcCNYf9GRdi3pkjOrKFKdK0wUbSRHGmKOwz3JnngLvknwUjj3RyeEDRZtg5fhMH4h4NT
+         gFpA9ooPWlL6EC/hGErnoqGGaQwcsSMZc+1/lztHzSZlIg+5RikJRp5pbbm3pweiKknZ
+         rc9WdCK1EiJsrzi/W9ozQ/upAMTtlpLKFtDdhkDVP6JinQLzMtdtsFaTJaCKpqUeWJMa
+         /Ct/2o5FWaw0xcvmffoHwPkBxAGsfzVIYUw4gzgxV8STT8qQJYMLvNBsoEXJ86HsLN7Z
+         ZXXQ==
+X-Gm-Message-State: AO0yUKVW7A/+RlZLZrIllzuj8/l6yXDGm9FyOtmqoLwqmpUIh5WLKC0M
+        Gcnpe4HaVQLQdm0pZbyxzhJWiJgjw2/n7TdA
+X-Google-Smtp-Source: AK7set9i7iCdrmNLxS44tLm4Cod1bYIxstYUo7G3Yv7gMOYC2J4cFKB4FWle3mr9SoLL129HeBZZlg==
+X-Received: by 2002:a50:ee01:0:b0:4ae:eb0f:892e with SMTP id g1-20020a50ee01000000b004aeeb0f892emr4242179eds.20.1676978743932;
+        Tue, 21 Feb 2023 03:25:43 -0800 (PST)
+Received: from [192.168.1.109] ([178.197.216.144])
+        by smtp.gmail.com with ESMTPSA id t10-20020a50c24a000000b004aeeb476c5bsm2040071edf.24.2023.02.21.03.25.42
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 21 Feb 2023 03:25:43 -0800 (PST)
+Message-ID: <430318ed-5b30-e549-a5ce-df83aa18adf9@linaro.org>
+Date:   Tue, 21 Feb 2023 12:25:41 +0100
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nasanex01c.na.qualcomm.com (10.45.79.139)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: 39Q1ejLA4uIACmh6IhozW6TddRXj8vlA
-X-Proofpoint-GUID: 39Q1ejLA4uIACmh6IhozW6TddRXj8vlA
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.170.22
- definitions=2023-02-21_06,2023-02-20_02,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 mlxlogscore=999
- clxscore=1015 adultscore=0 spamscore=0 phishscore=0 suspectscore=0
- bulkscore=0 impostorscore=0 lowpriorityscore=0 malwarescore=0
- priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2302210098
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH v2 01/11] dt-bindings: clock: Add StarFive JH7110
+ System-Top-Group clock and reset generator
+Content-Language: en-US
+To:     Xingyu Wu <xingyu.wu@starfivetech.com>,
+        linux-riscv@lists.infradead.org, devicetree@vger.kernel.org,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Emil Renner Berthing <kernel@esmil.dk>
+Cc:     Rob Herring <robh+dt@kernel.org>, Conor Dooley <conor@kernel.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Hal Feng <hal.feng@starfivetech.com>,
+        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org
+References: <20230221083323.302471-1-xingyu.wu@starfivetech.com>
+ <20230221083323.302471-2-xingyu.wu@starfivetech.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230221083323.302471-2-xingyu.wu@starfivetech.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-There are system which does not uses pstore directly but
-may have the interest in the context saved by pstore.
-Register pstore regions with minidump so that it get
-dumped on minidump collection.
+On 21/02/2023 09:33, Xingyu Wu wrote:
+> Add bindings for the System-Top-Group clock and reset generator (STGCRG)
+> on the JH7110 RISC-V SoC by StarFive Ltd.
+> 
+> Signed-off-by: Xingyu Wu <xingyu.wu@starfivetech.com>
 
-Signed-off-by: Mukesh Ojha <quic_mojha@quicinc.com>
----
- fs/pstore/ram.c | 77 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++
- 1 file changed, 77 insertions(+)
 
-diff --git a/fs/pstore/ram.c b/fs/pstore/ram.c
-index ade66db..038da1a 100644
---- a/fs/pstore/ram.c
-+++ b/fs/pstore/ram.c
-@@ -20,6 +20,7 @@
- #include <linux/compiler.h>
- #include <linux/of.h>
- #include <linux/of_address.h>
-+#include <soc/qcom/minidump.h>
- 
- #include "internal.h"
- #include "ram_internal.h"
-@@ -714,6 +715,74 @@ static int ramoops_parse_dt(struct platform_device *pdev,
- 	return 0;
- }
- 
-+#if IS_ENABLED(CONFIG_QCOM_MINIDUMP)
-+static int ramoops_qcom_minidump_register(struct ramoops_context *cxt)
-+{
-+	struct qcom_minidump_region pstore_entry;
-+	struct persistent_ram_zone *prz;
-+	int ret = 0;
-+	int i;
-+
-+	for (i = 0; i < cxt->max_dump_cnt; i++) {
-+		prz = cxt->dprzs[i];
-+		scnprintf(pstore_entry.name, sizeof(pstore_entry.name),
-+				"KDMESG%d", i);
-+		pstore_entry.virt_addr = prz->vaddr;
-+		pstore_entry.phys_addr = prz->paddr;
-+		pstore_entry.size = prz->size;
-+		ret = qcom_minidump_region_register(&pstore_entry);
-+		if (ret < 0) {
-+			pr_err("failed to add dmesg in minidump: err: %d\n", ret);
-+			return ret;
-+		}
-+	}
-+
-+	if (cxt->console_size) {
-+		prz = cxt->cprz;
-+		strlcpy(pstore_entry.name, "KCONSOLE", sizeof(pstore_entry.name));
-+		pstore_entry.virt_addr = prz->vaddr;
-+		pstore_entry.phys_addr = prz->paddr;
-+		pstore_entry.size = prz->size;
-+		ret = qcom_minidump_region_register(&pstore_entry);
-+		if (ret < 0) {
-+			pr_err("failed to add console in minidump: err: %d\n", ret);
-+			return ret;
-+		}
-+	}
-+
-+	for (i = 0; i < cxt->max_ftrace_cnt; i++) {
-+		prz = cxt->fprzs[i];
-+		scnprintf(pstore_entry.name, sizeof(pstore_entry.name),
-+					"KFTRACE%d", i);
-+		pstore_entry.virt_addr = prz->vaddr;
-+		pstore_entry.phys_addr = prz->paddr;
-+		pstore_entry.size = prz->size;
-+		ret = qcom_minidump_region_register(&pstore_entry);
-+		if (ret < 0) {
-+			pr_err("failed to add ftrace in minidump: err: %d\n", ret);
-+			return ret;
-+		}
-+	}
-+
-+	if (cxt->pmsg_size) {
-+		prz = cxt->mprz;
-+		strlcpy(pstore_entry.name, "KPMSG", sizeof(pstore_entry.name));
-+		pstore_entry.virt_addr = prz->vaddr;
-+		pstore_entry.phys_addr = prz->paddr;
-+		pstore_entry.size = prz->size;
-+		ret = qcom_minidump_region_register(&pstore_entry);
-+		if (ret < 0) {
-+			pr_err("failed to add pmsg in minidump: err: %d\n", ret);
-+			return ret;
-+		}
-+	}
-+
-+	return ret;
-+}
-+#else
-+static int ramoops_qcom_minidump_register(struct ramoops_context *cxt) { return 0; }
-+#endif
-+
- static int ramoops_probe(struct platform_device *pdev)
- {
- 	struct device *dev = &pdev->dev;
-@@ -724,6 +793,10 @@ static int ramoops_probe(struct platform_device *pdev)
- 	phys_addr_t paddr;
- 	int err = -EINVAL;
- 
-+	err = qcom_minidump_ready();
-+	if (err && err != -ENODEV)
-+		return -EPROBE_DEFER;
-+
- 	/*
- 	 * Only a single ramoops area allowed at a time, so fail extra
- 	 * probes.
-@@ -841,6 +914,10 @@ static int ramoops_probe(struct platform_device *pdev)
- 		}
- 	}
- 
-+	err = ramoops_qcom_minidump_register(cxt);
-+	if (err < 0)
-+		goto fail_buf;
-+
- 	err = pstore_register(&cxt->pstore);
- 	if (err) {
- 		pr_err("registering with pstore failed\n");
--- 
-2.7.4
+> +    };
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index 93eb504c3b21..2e70c9f21989 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -19914,6 +19914,7 @@ F:	arch/riscv/boot/dts/starfive/
+>  STARFIVE JH71X0 CLOCK DRIVERS
+>  M:	Emil Renner Berthing <kernel@esmil.dk>
+>  M:	Hal Feng <hal.feng@starfivetech.com>
+> +M:	Xingyu Wu <xingyu.wu@starfivetech.com>
+
+No improvements here. You add here new bindings for one device and then
+- without explanation - add yourself to all Starfive clock bindings.
+Either explain it or drop it or move it to separate patch.
+
+You already got comment for this.
+
+Best regards,
+Krzysztof
 
