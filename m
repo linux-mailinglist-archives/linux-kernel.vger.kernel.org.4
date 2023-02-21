@@ -2,68 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2751769DA5D
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 06:28:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C871E69DAE1
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 08:02:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233236AbjBUF1U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Feb 2023 00:27:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43720 "EHLO
+        id S233427AbjBUHC5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Feb 2023 02:02:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36370 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232556AbjBUF1S (ORCPT
+        with ESMTP id S232589AbjBUHCx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Feb 2023 00:27:18 -0500
-Received: from mail.nfschina.com (unknown [42.101.60.237])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B09A1C7FF;
-        Mon, 20 Feb 2023 21:27:17 -0800 (PST)
-Received: from localhost (unknown [127.0.0.1])
-        by mail.nfschina.com (Postfix) with ESMTP id CD4D81A009F1;
-        Tue, 21 Feb 2023 13:27:54 +0800 (CST)
-X-Virus-Scanned: amavisd-new at nfschina.com
-Received: from mail.nfschina.com ([127.0.0.1])
-        by localhost (localhost.localdomain [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id wRel6M8OWtfb; Tue, 21 Feb 2023 13:27:54 +0800 (CST)
-Received: from localhost.localdomain (unknown [219.141.250.2])
-        (Authenticated sender: zeming@nfschina.com)
-        by mail.nfschina.com (Postfix) with ESMTPA id EB0271A009BB;
-        Tue, 21 Feb 2023 13:27:53 +0800 (CST)
-From:   Li zeming <zeming@nfschina.com>
-To:     mturquette@baylibre.com, sboyd@kernel.org, michal.simek@xilinx.com
-Cc:     linux-clk@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, Li zeming <zeming@nfschina.com>
-Subject: [PATCH] zynq: clkc: Add kmalloc allocation flag
-Date:   Thu, 23 Feb 2023 05:58:34 +0800
-Message-Id: <20230222215834.3507-1-zeming@nfschina.com>
-X-Mailer: git-send-email 2.18.2
-X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_00,DATE_IN_FUTURE_24_48,
-        RDNS_NONE,SPF_HELO_NONE,SPF_NONE autolearn=no autolearn_force=no
-        version=3.4.6
+        Tue, 21 Feb 2023 02:02:53 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CF77252B6;
+        Mon, 20 Feb 2023 23:02:47 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id ABE9C60F06;
+        Tue, 21 Feb 2023 07:02:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9FED7C433D2;
+        Tue, 21 Feb 2023 07:02:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1676962966;
+        bh=KHMXE/LYnRNjuYWIFxQpGNwDw4WhCf5BXnM9jJyFYKc=;
+        h=From:To:Cc:Subject:In-Reply-To:Date:From;
+        b=Yhirujjn3Gs86md/vNl+4XmkPPjo94SNOAaKFnOQXjQX0yv6l93XMl4Rob/1p9Mz1
+         BildrxHwu/yefVQiDMIl7NerNxFloHYRyqcm2B4R4tbghBYAkiMhmCNPjpT1Od05VX
+         amluMYPMkNK+MpZbAwYf/8YLhEMvqDTzgSe3GeTjwLDOTUyttUSxZ7IKckID//bHdy
+         law45gIPLx1cUA8MzcuejYCUYm9QgN6v3pwGQeyhnP2oWDTUQKixA934HlVQ9vrnV2
+         eAmVeCjUaOlME832YphdHzsDFaUFjXu0u2WRsFWYtK5D31ISj2b1xYR7ciu0peUqlW
+         v7vDwyZ5fr6JQ==
+From:   =?utf-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>
+To:     Pu Lehui <pulehui@huaweicloud.com>, bpf@vger.kernel.org,
+        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org
+Cc:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        Pu Lehui <pulehui@huawei.com>
+Subject: Re: [PATCH bpf-next v2] riscv, bpf: Add kfunc support for RV64
+In-Reply-To: <80e69e73-b873-6717-fe45-a854dbdd5476@huaweicloud.com>
+Date:   Tue, 21 Feb 2023 08:02:43 +0100
+Message-ID: <87h6vffqlo.fsf@all.your.base.are.belong.to.us>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The kmalloc could crash if allocation fails. Add the __GFP_NOFAIL flag
-to ensure that allocation succeeds every time.
+Pu Lehui <pulehui@huaweicloud.com> writes:
 
-Signed-off-by: Li zeming <zeming@nfschina.com>
----
- drivers/clk/zynq/clkc.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+> On 2023/2/20 22:34, Bj=C3=B6rn T=C3=B6pel wrote:
+>> Pu Lehui <pulehui@huaweicloud.com> writes:
+>>=20
+>>> From: Pu Lehui <pulehui@huawei.com>
+>>>
+>>> As another important missing piece of RV64 JIT, kfunc allow bpf programs
+>>> call kernel functions. For now, RV64 is sufficient to enable it.
+>>=20
+>> Thanks Lehui!
+>>=20
+>> Maybe we can reword/massage the commit message a bit? What do you think
+>> about something like:
+>>=20
+>> "Now that the BPF trampoline is supported by RISC-V, it is possible to
+>> use BPF programs with kfunc calls.
+>>=20
+>
+> kfunc and bpf trampoline are functionally independent. kfunc [1], like=20
+> bpf helper functions, allows bpf programs to call exported kernel=20
+> functions, while bpf trampoline provides a more efficient way than=20
+> kprobe to act as a mediator between kernel functions and bpf programs,=20
+> and between bpf programs.
+>
+> In fact, it was already supported before the bpf trampoline=20
+> implementation, I just turned it on.
 
-diff --git a/drivers/clk/zynq/clkc.c b/drivers/clk/zynq/clkc.c
-index 7bdeaff2bfd6..7621c2f00468 100644
---- a/drivers/clk/zynq/clkc.c
-+++ b/drivers/clk/zynq/clkc.c
-@@ -427,7 +427,7 @@ static void __init zynq_clk_setup(struct device_node *np)
- 			SLCR_GEM1_CLK_CTRL, 0, 0, &gem1clk_lock);
- 
- 	tmp = strlen("mio_clk_00x");
--	clk_name = kmalloc(tmp, GFP_KERNEL);
-+	clk_name = kmalloc(tmp, GFP_KERNEL | __GFP_NOFAIL);
- 	for (i = 0; i < NUM_MIO_PINS; i++) {
- 		int idx;
- 
--- 
-2.18.2
+Good point. I guess my (incorrect) kfunc mental model was that
+struct_ops and kfunc were tightly coupled. (Then again, w/o struct_ops
+working kfunc is a bit half-working in my view.)
 
+Fair enough. I'm still a bit confused about the commit message, but
+happy with the patch.
+
+Acked-by: Bj=C3=B6rn T=C3=B6pel <bjorn@rivosinc.com>
