@@ -2,143 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AD4CB69E3E8
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 16:47:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4BB4169E3F2
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 16:50:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234712AbjBUPr3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Feb 2023 10:47:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44672 "EHLO
+        id S234726AbjBUPuo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Feb 2023 10:50:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47284 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230115AbjBUPr2 (ORCPT
+        with ESMTP id S234246AbjBUPum (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Feb 2023 10:47:28 -0500
-Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C4FA265B2;
-        Tue, 21 Feb 2023 07:47:27 -0800 (PST)
-Received: by mail-ed1-x52b.google.com with SMTP id x10so18135015edd.13;
-        Tue, 21 Feb 2023 07:47:27 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=scM9oYCSR1ND5NiwNb6ID5TUnyh6Ib6071WzOSOrsT4=;
-        b=d0B6JhmUt4j5p3PHPLbXlteRY5kSw721PyQ1UDfSQYlq0razfwkmUCEPG544F9j4SF
-         ZjBazQTGkCMhVyF/bp1NcvTD1EmyKaIVpJkSbZqIEcGsSGXLFqVvFOPWV9BKElhqOrnN
-         CpytSaVygN02dpjIfbr6KZJBAn3P1InfeSYO9aETjq2eIgIiPWJ1/Ai3W39WmHNIgNnI
-         juJE6vv+YXo+r4ewJrFbOnbSBhFXaVbKAob0vxjmw+uhxidsxxacg5zK+uaY9TMXwRbr
-         fIs5HR3yFLofEc9sk8R4fqfFmOY/Wn/FG4+d5aQ/9YBkEoqk5G+si4QaEGwxFNn/Twk0
-         YG6Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=scM9oYCSR1ND5NiwNb6ID5TUnyh6Ib6071WzOSOrsT4=;
-        b=2XciQtcJySXy5LOiLEHpASVygKRy8GsVDmunABmqiTJPpDcaPD3F71bzD5z2SfZcS4
-         G48Qqgm/FEQICYjkVJ5KnWUevycLCk12lcRnHhDzYpWsf/V1pTvaUFshNINtkseekYNA
-         JWCmolIe12Gir9rXHwFKVAdO/xiLaT50mzTnMliv2cjLYupHHn61F6Na35yO1saov3dZ
-         UuMWvyDB4XFdEefAe9pPOBmj0xZsIT7DJng+eFIAXkQEel1IX8ZYNDL3abZHPIR+fAya
-         Z1uKrjnK+M6b4wTrLWcboeR8KGKT/Pk6AzXKGZxSEZFW7ML86QxXcU/dOCSD3olYkbfA
-         4uxA==
-X-Gm-Message-State: AO0yUKUp9E/WFO4crMYMwablsQfCjQKgB1fhh7/d5D7DvKAQPKgWnOje
-        W9cIIjUTM4LQxO1l6HnEbxbpy5A87NLZDluW4ec=
-X-Google-Smtp-Source: AK7set9hq6lHx/3D/Eckys2B7FbwUbl4sjrwQyeG1UCSJlPURRvP/Mqbbu+8eLZrnD9uJ7HJEJJZ1Q8g4zlgrUZSIGw=
-X-Received: by 2002:a17:907:1dda:b0:878:b86b:de15 with SMTP id
- og26-20020a1709071dda00b00878b86bde15mr6383597ejc.11.1676994445630; Tue, 21
- Feb 2023 07:47:25 -0800 (PST)
+        Tue, 21 Feb 2023 10:50:42 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96B942684B;
+        Tue, 21 Feb 2023 07:50:41 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 22DCAB80F03;
+        Tue, 21 Feb 2023 15:50:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 62303C433D2;
+        Tue, 21 Feb 2023 15:50:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1676994638;
+        bh=mz1tP6BevVUDwP7gGFCXZ6st2qmh6ulbhacqzwUvUso=;
+        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+        b=GBgce3wlKR5rpfnz/ODQ0zKLchmDKoi2uiK6MkclthkVW7rUR/b0V8MXCYj6wrIiD
+         V/lZbK5MeV07fqkb+EHzIP0wW+rTmvtDsIpbSLtHUf9Tc75UK9YYj7wqCWlyH9u9Fw
+         X7Y0kxQll0sSTor+6HssmDImeEoQXk4RIiIp4cTXOiOfYxIv4TOWCJasfcrGtsZVri
+         6GJl5n+t3WDeVtcz+YqMxWs3Xfzs7QGek1ngsZnUb0Z3QB0gy63MghJFdy66j/6muU
+         r+Q059k6Ov+NN9fgSbCbmkujKargusrMpITLkizyFvGsdsSWu5khC1Qvpn5/Lr1+pM
+         Z4mHNBdvkQhog==
+From:   =?utf-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>
+To:     Alexandre Ghiti <alexghiti@rivosinc.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-efi@vger.kernel.org
+Cc:     Alexandre Ghiti <alexghiti@rivosinc.com>
+Subject: Re: [PATCH 0/4] riscv: Introduce KASLR
+In-Reply-To: <20230215145113.465558-1-alexghiti@rivosinc.com>
+References: <20230215145113.465558-1-alexghiti@rivosinc.com>
+Date:   Tue, 21 Feb 2023 16:50:36 +0100
+Message-ID: <878rgrqapf.fsf@all.your.base.are.belong.to.us>
 MIME-Version: 1.0
-References: <20230221110344.82818-1-kerneljasonxing@gmail.com>
- <48429c16fdaee59867df5ef487e73d4b1bf099af.camel@redhat.com>
- <CAL+tcoD8PzL4khHq44z27qSHHGkcC4YUa91E3h+ki7O0u3SshQ@mail.gmail.com> <aaf3d11ea5b247ab03d117dadae682fe2180d38a.camel@redhat.com>
-In-Reply-To: <aaf3d11ea5b247ab03d117dadae682fe2180d38a.camel@redhat.com>
-From:   Jason Xing <kerneljasonxing@gmail.com>
-Date:   Tue, 21 Feb 2023 23:46:49 +0800
-Message-ID: <CAL+tcoBZFFwOnUqzcDtSsNyfPgHENAOv0bPcvncxuMPwCn40+Q@mail.gmail.com>
-Subject: Re: [PATCH net] udp: fix memory schedule error
-To:     Paolo Abeni <pabeni@redhat.com>
-Cc:     willemdebruijn.kernel@gmail.com, davem@davemloft.net,
-        dsahern@kernel.org, edumazet@google.com, kuba@kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        bpf@vger.kernel.org, Jason Xing <kernelxing@tencent.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 21, 2023 at 10:46 PM Paolo Abeni <pabeni@redhat.com> wrote:
->
-> On Tue, 2023-02-21 at 21:39 +0800, Jason Xing wrote:
-> > On Tue, Feb 21, 2023 at 8:27 PM Paolo Abeni <pabeni@redhat.com> wrote:
-> > >
-> > > On Tue, 2023-02-21 at 19:03 +0800, Jason Xing wrote:
-> > > > From: Jason Xing <kernelxing@tencent.com>
-> > > >
-> > > > Quoting from the commit 7c80b038d23e ("net: fix sk_wmem_schedule()
-> > > > and sk_rmem_schedule() errors"):
-> > > >
-> > > > "If sk->sk_forward_alloc is 150000, and we need to schedule 150001 bytes,
-> > > > we want to allocate 1 byte more (rounded up to one page),
-> > > > instead of 150001"
-> > >
-> > > I'm wondering if this would cause measurable (even small) performance
-> > > regression? Specifically under high packet rate, with BH and user-space
-> > > processing happening on different CPUs.
-> > >
-> > > Could you please provide the relevant performance figures?
-> >
-> > Sure, I've done some basic tests on my machine as below.
-> >
-> > Environment: 16 cpus, 60G memory
-> > Server: run "iperf3 -s -p [port]" command and start 500 processes.
-> > Client: run "iperf3 -u -c 127.0.0.1 -p [port]" command and start 500 processes.
->
-> Just for the records, with the above command each process will send
-> pkts at 1mbs - not very relevant performance wise.
->
-> Instead you could do:
->
+Alexandre Ghiti <alexghiti@rivosinc.com> writes:
 
-> taskset 0x2 iperf -s &
-> iperf -u -c 127.0.0.1 -b 0 -l 64
+> The following KASLR implementation allows to randomize the kernel mapping:
 >
-
-Thanks for your guidance.
-
-Here're some numbers according to what you suggested, which I tested
-several times.
-----------|IFACE   rxpck/s   txpck/s    rxkB/s    txkB/s
-Before: lo 411073.41 411073.41  36932.38  36932.38
-After:   lo 410308.73 410308.73  36863.81  36863.81
-
-Above is one of many results which does not mean that the original
-code absolutely outperforms.
-The output is not that constant and stable, I think.
-
-Please help me review those numbers.
-
+> - virtually: we expect the bootloader to provide a seed in the device-tree
+> - physically: only implemented in the EFI stub, it relies on the firmware=
+ to
+>   provide a seed using EFI_RNG_PROTOCOL. arm64 has a similar implementati=
+on
+>   hence the patch 3 factorizes KASLR related functions for riscv to take
+>   advantage.
 >
-> > In theory, I have no clue about why it could cause some regression?
-> > Maybe the memory allocation is not that enough compared to the
-> > original code?
+> The new virtual kernel location is limited by the early page table that o=
+nly
+> has one PUD and with the PMD alignment constraint, the kernel can only ta=
+ke
+> < 512 positions.
 >
-> As Eric noted, for UDP traffic, due to the expected average packet
-> size, sk_forward_alloc is touched quite frequently, both with and
-> without this patch, so there is little chance it will have any
-> performance impact.
+> Note that the patch "riscv: Use PUD/P4D/PGD pages for the linear
+> mapping" is necessary to retrieve the memory below the physical kernel
+> address, so that the EFI stub does not have to try to relocate the kernel
+> as close as possible to the start of dram.
+>
+> This patchset is rebased on top of:
+>
+> Introduce 64b relocatable kernel (https://lore.kernel.org/lkml/2023021514=
+3626.453491-1-alexghiti@rivosinc.com/)
+> RISC-V kasan rework (https://lore.kernel.org/lkml/Y6TTvku%2FyuSjm42j@spud=
+/T/)
+> riscv: Use PUD/P4D/PGD pages for the linear mapping (https://lore.kernel.=
+org/lkml/20230125114229.hrhsyw4aegrnmoau@orel/T/)
+> riscv: Allow to downgrade paging mode from the command line (https://lore=
+.kernel.org/lkml/CAHVXubjeSMvfTPnvrnYRupOGx6+vUvUGfRS3piTeo=3DTH2cHKNg@mail=
+.gmail.com/)
+> base-commit-tag: v6.2-rc7
+>
+> This patchset was tested with u-boot boottime service for the seed on:
+> - ubuntu defconfig + kasan outline (sv39, sv48, sv57): OK
+> - ubuntu defconfig + kasan inline (sv39, sv48, sv57): OK
+> - ubuntu defconfg (sv39, sv48, sv57): OK
 
-Well, I see.
+I've taken the series for a spin (qemu u-boot UEFI, and qemu non-UEFI),
+on-top of the patches outline above, but with 6.2 proper.
 
-Thanks,
-Jason
-
->
-> Cheers,
->
-> Paolo
->
+For the series:
+Reviewed-by: Bj=C3=B6rn T=C3=B6pel <bjorn@rivosinc.com>
+Tested-by: Bj=C3=B6rn T=C3=B6pel <bjorn@rivosinc.com>
