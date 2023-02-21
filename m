@@ -2,90 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D731569DFE9
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 13:07:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 836FD69E06D
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 13:31:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234152AbjBUMHM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Feb 2023 07:07:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49620 "EHLO
+        id S234544AbjBUMbT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Feb 2023 07:31:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56996 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233736AbjBUMHK (ORCPT
+        with ESMTP id S233217AbjBUMbP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Feb 2023 07:07:10 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EDF4527D68
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Feb 2023 04:05:52 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1676981071;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=ZEuOkrsozFdoPORVuJE/m8NTeHtX1hbGyE+AebQNhhw=;
-        b=KBb42NhMnZWA9eeKDxKWnJFzpj/qovwE1N1DhsBLPV0CHSnNi/tSAp65amMay/vwfG8ib1
-        n5XxlmSZkjschnTfK4Ga7Bbr58ah3/zFLdgxWdgVdgt75LK365KGSbt51r/AL7IW33pOvA
-        MLWNV0oyEyf7WpB3qeAywQxgZBFohwg=
-Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
- [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-369-ndd75cF9PdGTfbiIghnA5g-1; Tue, 21 Feb 2023 07:01:13 -0500
-X-MC-Unique: ndd75cF9PdGTfbiIghnA5g-1
-Received: by mail-wm1-f69.google.com with SMTP id o35-20020a05600c512300b003dc5cb10dcfso1902605wms.9
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Feb 2023 04:01:13 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1676980872;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=ZEuOkrsozFdoPORVuJE/m8NTeHtX1hbGyE+AebQNhhw=;
-        b=snrbNGo+e5JVuRpOcUy82vHKe7pLW2eZoCRArW7gEvFF43yOgpPKQpZnnWdHqqG5Eb
-         ERihxLPZ2vfG26teGMIb+HIC45IgIZvMWpN2sb9rr9q2tdlspBI51bR0ORstiHfQ5DwF
-         I64Iq4cVXy31oe1/GaYWQ9zLWiKxEGgeJCif7CTuYQvmLtjTYLWJpbDvogpI1A5Dhcx0
-         dsknJqInVVu4ANsnS0skSo9MYmIejZVo8ynhg9bRw5uDnNuYP5CzuFuGTSBvVrr9HL45
-         yGCOia2Z2FxhSuBcsxyLHW8GwE+vBjCnaioGGCZOzhP7LA+FhjoDEZlfZ1UNXIaccv0b
-         7ywg==
-X-Gm-Message-State: AO0yUKWHhtuT2XXnQ4oG5HelJyKkRvdQWcVS2nfk2FUAK1ePEqk1YgSn
-        qs16qqQm4u3Yyi1BQV2eS0uyAbZxnK7kYs13BCfcXrM8aWW6YxmGRJTxMSXYyYMLrh+XDDOFuIA
-        rIpVSVz5fw3/xwdcoRxmf4T7J
-X-Received: by 2002:a7b:c842:0:b0:3db:2063:425e with SMTP id c2-20020a7bc842000000b003db2063425emr4040504wml.1.1676980872505;
-        Tue, 21 Feb 2023 04:01:12 -0800 (PST)
-X-Google-Smtp-Source: AK7set8PaVDhgVo1lgR0da8lUdHjH25R3LyU28rdPMhylHxaJZIJiB/EWk7MyM/lSUZca+9Qs3BwKw==
-X-Received: by 2002:a7b:c842:0:b0:3db:2063:425e with SMTP id c2-20020a7bc842000000b003db2063425emr4040459wml.1.1676980872120;
-        Tue, 21 Feb 2023 04:01:12 -0800 (PST)
-Received: from gerbillo.redhat.com (146-241-121-8.dyn.eolo.it. [146.241.121.8])
-        by smtp.gmail.com with ESMTPSA id b3-20020a05600010c300b002c57475c375sm6910399wrx.110.2023.02.21.04.01.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 21 Feb 2023 04:01:11 -0800 (PST)
-Message-ID: <d5ea4ad402f78e538a2566e0109b8216af32edbf.camel@redhat.com>
-Subject: Re: [PATCH net-next v4 0/3] net: dsa: rzn1-a5psw: add support for
- vlan and .port_bridge_flags
-From:   Paolo Abeni <pabeni@redhat.com>
-To:     =?ISO-8859-1?Q?Cl=E9ment_L=E9ger?= <clement.leger@bootlin.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>
-Cc:     Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        Herve Codina <herve.codina@bootlin.com>,
-        =?ISO-8859-1?Q?Miqu=E8l?= Raynal <miquel.raynal@bootlin.com>,
-        Milan Stevanovic <milan.stevanovic@se.com>,
-        Jimmy Lalande <jimmy.lalande@se.com>,
-        Pascal Eberhard <pascal.eberhard@se.com>,
-        Arun Ramadoss <Arun.Ramadoss@microchip.com>,
-        linux-renesas-soc@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Date:   Tue, 21 Feb 2023 13:01:09 +0100
-In-Reply-To: <20230221092626.57019-1-clement.leger@bootlin.com>
-References: <20230221092626.57019-1-clement.leger@bootlin.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.46.4 (3.46.4-1.fc37) 
+        Tue, 21 Feb 2023 07:31:15 -0500
+Received: from qproxy3-pub.mail.unifiedlayer.com (qproxy3-pub.mail.unifiedlayer.com [67.222.38.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B39DA2312E
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Feb 2023 04:31:05 -0800 (PST)
+Received: from outbound-ss-820.bluehost.com (outbound-ss-820.bluehost.com [69.89.24.241])
+        by qproxy3.mail.unifiedlayer.com (Postfix) with ESMTP id 9B016803E631
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Feb 2023 12:05:24 +0000 (UTC)
+Received: from cmgw15.mail.unifiedlayer.com (unknown [10.0.90.130])
+        by progateway2.mail.pro1.eigbox.com (Postfix) with ESMTP id 70BAB10046B3A
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Feb 2023 12:04:53 +0000 (UTC)
+Received: from box5620.bluehost.com ([162.241.219.59])
+        by cmsmtp with ESMTP
+        id URO9pXcWrTQEGURO9ptG1C; Tue, 21 Feb 2023 12:04:53 +0000
+X-Authority-Reason: nr=8
+X-Authority-Analysis: v=2.4 cv=N7Tsq0xB c=1 sm=1 tr=0 ts=63f4b365
+ a=30941lsx5skRcbJ0JMGu9A==:117 a=30941lsx5skRcbJ0JMGu9A==:17
+ a=dLZJa+xiwSxG16/P+YVxDGlgEgI=:19 a=IkcTkHD0fZMA:10:nop_charset_1
+ a=m04uMKEZRckA:10:nop_rcvd_month_year
+ a=-Ou01B_BuAIA:10:endurance_base64_authed_username_1 a=VwQbUJbxAAAA:8
+ a=HaFmDPmJAAAA:8 a=uxFE05t1smjoYJzm71MA:9 a=QEXdDO2ut3YA:10:nop_charset_2
+ a=AjGcO6oz07-iQ99wixmX:22 a=nmWuMzfKamIsx3l42hEX:22
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=w6rz.net;
+        s=default; h=Content-Transfer-Encoding:Content-Type:MIME-Version:Date:
+        Message-ID:From:In-Reply-To:References:Cc:To:Subject:Sender:Reply-To:
+        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=uvdH9O8aRSS2swu6O+2f26TYC25W6Qbvl/Ip7NiYIME=; b=DGw63laGUlsM9LEM9l58N6j8MZ
+        RkN7EXYkHJl6nK8hD1CsCL04mX8K3cKTjaq4d0iYtylmp/TbIEXXAnP6/NyLu1GE5n1FVPMChaJi/
+        H2gu8SoE7oG+5oBo/5+61U7CFxEg5oDGP2OQdPT7bE8c9mvcV4V5M3/r2Y+Xq0eJdGC2GPb7TMV5t
+        EIwg0u3qFY0sGd9lbnUny61pqrRSud3/H1O4vLGgbj6SVUBFkpX3ni8gEf+nONeicaiAq8bNi6ju5
+        F7QO4gw1qLSZNze5FmYUA3caYo7qnq7xmPkYqWrCdebJoFP+5D1ICpgMavVLBI6oVtLTNqPPNqOwd
+        tjFejCtA==;
+Received: from c-73-162-232-9.hsd1.ca.comcast.net ([73.162.232.9]:54820 helo=[10.0.1.47])
+        by box5620.bluehost.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+        (Exim 4.95)
+        (envelope-from <re@w6rz.net>)
+        id 1pURO8-001aaW-L6;
+        Tue, 21 Feb 2023 05:04:52 -0700
+Subject: Re: [PATCH 5.15 00/83] 5.15.95-rc1 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        stable@vger.kernel.org
+Cc:     patches@lists.linux.dev, linux-kernel@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        srw@sladewatkins.net, rwarsow@gmx.de
+References: <20230220133553.669025851@linuxfoundation.org>
+In-Reply-To: <20230220133553.669025851@linuxfoundation.org>
+From:   Ron Economos <re@w6rz.net>
+Message-ID: <b105df91-1739-fd6b-c05b-6bad08a4d9d4@w6rz.net>
+Date:   Tue, 21 Feb 2023 04:04:48 -0800
+User-Agent: Mozilla/5.0 (X11; Linux armv7l; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - box5620.bluehost.com
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - w6rz.net
+X-BWhitelist: no
+X-Source-IP: 73.162.232.9
+X-Source-L: No
+X-Exim-ID: 1pURO8-001aaW-L6
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
+X-Source-Sender: c-73-162-232-9.hsd1.ca.comcast.net ([10.0.1.47]) [73.162.232.9]:54820
+X-Source-Auth: re@w6rz.net
+X-Email-Count: 4
+X-Source-Cap: d3NpeHJ6bmU7d3NpeHJ6bmU7Ym94NTYyMC5ibHVlaG9zdC5jb20=
+X-Local-Domain: yes
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -93,44 +97,26 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 2023-02-21 at 10:26 +0100, Cl=C3=A9ment L=C3=A9ger wrote:
-> While adding support for VLAN, bridge_vlan_unaware.sh and
-> bridge_vlan_aware.sh were executed and requires .port_bridge_flags
-> to disable flooding on some specific port. Thus, this series adds
-> both vlan support and .port_bridge_flags.
->=20
-> ----
-> V4:
->  - Fix missing CPU port bit in a5psw->bridged_ports
->  - Use unsigned int for vlan_res_id parameters
->  - Rename a5psw_get_vlan_res_entry() to a5psw_new_vlan_res_entry()
->  - In a5psw_port_vlan_add(), return -ENOSPC when no VLAN entry is found
->  - In a5psw_port_vlan_filtering(), compute "val" from "mask"
->=20
-> V3:
->  - Target net-next tree and correct version...
->=20
-> V2:
->  - Fixed a few formatting errors
->  - Add .port_bridge_flags implementation
->=20
-> Cl=C3=A9ment L=C3=A9ger (3):
->   net: dsa: rzn1-a5psw: use a5psw_reg_rmw() to modify flooding
->     resolution
->   net: dsa: rzn1-a5psw: add support for .port_bridge_flags
->   net: dsa: rzn1-a5psw: add vlan support
->=20
->  drivers/net/dsa/rzn1_a5psw.c | 223 ++++++++++++++++++++++++++++++++++-
->  drivers/net/dsa/rzn1_a5psw.h |   8 +-
->  2 files changed, 222 insertions(+), 9 deletions(-)
+On 2/20/23 5:35 AM, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.15.95 release.
+> There are 83 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+>
+> Responses should be made by Wed, 22 Feb 2023 13:35:35 +0000.
+> Anything received after that time might be too late.
+>
+> The whole patch series can be found in one patch at:
+> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.15.95-rc1.gz
+> or in the git tree and branch at:
+> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.15.y
+> and the diffstat can be found below.
+>
+> thanks,
+>
+> greg k-h
 
-# Form letter - net-next is closed
+Built and booted successfully on RISC-V RV64 (HiFive Unmatched).
 
-The merge window for v6.3 has begun and therefore net-next is closed
-for new drivers, features, code refactoring and optimizations.
-We are currently accepting bug fixes only.
-
-Please repost when net-next reopens after Mar 6th.
-
-RFC patches sent for review only are obviously welcome at any time.
+Tested-by: Ron Economos <re@w6rz.net>
 
