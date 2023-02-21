@@ -2,102 +2,199 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 06CCB69E940
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 22:06:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9095169E945
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 22:11:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230146AbjBUVGU convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 21 Feb 2023 16:06:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40712 "EHLO
+        id S229763AbjBUVLw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Feb 2023 16:11:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43364 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229529AbjBUVGS (ORCPT
+        with ESMTP id S229491AbjBUVLu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Feb 2023 16:06:18 -0500
-Received: from mail-qv1-f45.google.com (mail-qv1-f45.google.com [209.85.219.45])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63B11301A0;
-        Tue, 21 Feb 2023 13:06:17 -0800 (PST)
-Received: by mail-qv1-f45.google.com with SMTP id op8so6770978qvb.11;
-        Tue, 21 Feb 2023 13:06:17 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=nGc2n13Qzq9F45b7/zTwEGlcQ+HxwWUoXW7d4uMT/QI=;
-        b=Xjo3V26+NAx8G2ShHt+g/Cq1PWaVa+GgvEQBCvcDHL+wEvMdwNDFiNjtESrceoqU2P
-         cTQXs7GMtwO8cPH1b+QOHnqgpXtnBLpIv9MYlfXafm2yf6oLeISwduyZS/0Vg9Cd6NmL
-         skGZpciyIJj/fP7IgfgbGnDF+6K+SNUExisxV+5SVsncDNGj9RuuqdAeeAlN8mAg++n9
-         Ea2JX2bVe2Yum2aWX8sULKMxMKvmjt7+1IsC2EqXrsrX7ShLw8ARPPV1GQqJAitfcZS6
-         iJ0KM37sJFDi4kWsXXHscvPjsO/GQwVEtYO1KyZaDd1tvBVyQAo93d8xJdeKyq3Km0pB
-         wTUQ==
-X-Gm-Message-State: AO0yUKXpzrW/uNshd8Vv+DnrADgS/BrxHOnml7QfR2ftUBmzU8K+Z2Z0
-        0IlYB3EK0iPgeN+x9AWQDOLFrTRacMELxw==
-X-Google-Smtp-Source: AK7set9UlqzCqu7npSle/AH15xlkzr+lPO8TtEjrUR2VUu07Y77NkRYBTExDcV1rfyOFGjZN3OhcnA==
-X-Received: by 2002:ad4:5ae4:0:b0:568:c5e3:a0ce with SMTP id c4-20020ad45ae4000000b00568c5e3a0cemr14912589qvh.20.1677013576300;
-        Tue, 21 Feb 2023 13:06:16 -0800 (PST)
-Received: from mail-yw1-f170.google.com (mail-yw1-f170.google.com. [209.85.128.170])
-        by smtp.gmail.com with ESMTPSA id 21-20020a370315000000b0073b7889590dsm1574942qkd.111.2023.02.21.13.06.15
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 21 Feb 2023 13:06:15 -0800 (PST)
-Received: by mail-yw1-f170.google.com with SMTP id 00721157ae682-536b7ffdd34so78784247b3.6;
-        Tue, 21 Feb 2023 13:06:15 -0800 (PST)
-X-Received: by 2002:a81:ae0c:0:b0:52e:cacb:d7c4 with SMTP id
- m12-20020a81ae0c000000b0052ecacbd7c4mr575233ywh.5.1677013574811; Tue, 21 Feb
- 2023 13:06:14 -0800 (PST)
+        Tue, 21 Feb 2023 16:11:50 -0500
+Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 21B37302A7;
+        Tue, 21 Feb 2023 13:11:49 -0800 (PST)
+Received: from W11-BEAU-MD.localdomain (unknown [76.135.27.212])
+        by linux.microsoft.com (Postfix) with ESMTPSA id 39C88209A937;
+        Tue, 21 Feb 2023 13:11:48 -0800 (PST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 39C88209A937
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+        s=default; t=1677013908;
+        bh=6DfHL2KoYBA2K083It1LMylkskpnT03m4dr6OvVR/Vw=;
+        h=From:To:Cc:Subject:Date:From;
+        b=Z8CViwO4x9Ok0IaQSZ69KnUH+jmVl5Dj7stIXOUzD5EbY9YoYapKSYla13WOb/JpA
+         p7cazizOUVQYZeruEXBC6CH9xraO37omG5u23nx88bkUi3yxSMrfjMOi+BIU21vJtT
+         yyODw13kvt0dfjJXWmygVgikBj7C058Iw9uTocZo=
+From:   Beau Belgrave <beaub@linux.microsoft.com>
+To:     rostedt@goodmis.org, mhiramat@kernel.org,
+        mathieu.desnoyers@efficios.com, dcook@linux.microsoft.com,
+        alanau@linux.microsoft.com, brauner@kernel.org,
+        akpm@linux-foundation.org, ebiederm@xmission.com,
+        keescook@chromium.org, tglx@linutronix.de
+Cc:     linux-trace-devel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org
+Subject: [PATCH v8 00/11] tracing/user_events: Remote write ABI
+Date:   Tue, 21 Feb 2023 13:11:32 -0800
+Message-Id: <20230221211143.574-1-beaub@linux.microsoft.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <1675969514-3137-1-git-send-email-lizhi.hou@amd.com>
- <1675969514-3137-2-git-send-email-lizhi.hou@amd.com> <CAMuHMdXsUPAW5zKrsaTR9Tgv7kFdkz8s_QUjLXq6zDpoo47fRA@mail.gmail.com>
- <0f1aafa2-7495-163b-523a-f634bacc4b1f@gpxsee.org>
-In-Reply-To: <0f1aafa2-7495-163b-523a-f634bacc4b1f@gpxsee.org>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Tue, 21 Feb 2023 22:06:02 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdUVkbPf1a8cW+zY1HwD83tm_m0L7Ufy=GO-RQB-AF_15A@mail.gmail.com>
-Message-ID: <CAMuHMdUVkbPf1a8cW+zY1HwD83tm_m0L7Ufy=GO-RQB-AF_15A@mail.gmail.com>
-Subject: Re: [RESEND PATCH V12 XDMA 1/2] dmaengine: xilinx: xdma: Add xilinx
- xdma driver
-To:     =?UTF-8?B?TWFydGluIFTFr21h?= <tumic@gpxsee.org>
-Cc:     Lizhi Hou <lizhi.hou@amd.com>, vkoul@kernel.org,
-        dmaengine@vger.kernel.org, linux-kernel@vger.kernel.org,
-        max.zhen@amd.com, sonal.santan@amd.com, larry.liu@amd.com,
-        brian.xu@amd.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-19.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Martin,
+As part of the discussions for user_events aligned with user space
+tracers, it was determined that user programs should register a aligned
+value to set or clear a bit when an event becomes enabled. Currently a
+shared page is being used that requires mmap(). Remove the shared page
+implementation and move to a user registered address implementation.
 
-On Tue, Feb 21, 2023 at 9:45 PM Martin Tůma <tumic@gpxsee.org> wrote:
-> On 21. 02. 23 14:25, Geert Uytterhoeven wrote:
-> > No platform dependencies at all, while this is a platform driver that
-> > relies on some other not-yet-existing driver creating an "xdma"
-> > platform device?
->
-> There is at least one "already-existing" driver based on this driver
-> that is waiting in the v4l2 queue for xdma - our MGB4 driver:
-> https://patchwork.kernel.org/project/linux-media/patch/20230207150119.5542-2-tumic@gpxsee.org/
+In this new model during the event registration from user programs 3 new
+values are specified. The first is the address to update when the event
+is either enabled or disabled. The second is the bit to set/clear to
+reflect the event being enabled. The third is the size of the value at
+the specified address.
 
-Thanks for the link!
+This allows for a local 32/64-bit value in user programs to support
+both kernel and user tracers. As an example, setting bit 31 for kernel
+tracers when the event becomes enabled allows for user tracers to use
+the other bits for ref counts or other flags. The kernel side updates
+the bit atomically, user programs need to also update these values
+atomically.
 
-As VIDEO_MGB4 selects XILINX_XDMA, perhaps XILINX_XDMA
-can be made invisible, unless compile-testing?
+User provided addresses must be aligned on a natural boundary, this
+allows for single page checking and prevents odd behaviors such as a
+enable value straddling 2 pages instead of a single page.
 
-    config XILINX_XDMA
-        tristate "Xilinx DMA/Bridge Subsystem DMA Engine" if COMPILE_TEST
+When page faults are encountered they are done asyncly via a workqueue.
+If the page faults back in, the write update is attempted again. If the
+page cannot fault-in, then we log and wait until the next time the event
+is enabled/disabled. This is to prevent possible infinite loops resulting
+from bad user processes unmapping or changing protection values after
+registering the address.
 
-Gr{oetje,eeting}s,
+Change history
 
-                        Geert
+V8:
+Rebase to 6.2-rc8.
 
+V7:
+Rebase to 6.2-rc4.
+
+Added flags to register ioctl, validates it's 0 for now. Future patches
+will enable other types of formats/options as needed.
+
+V6:
+Rebase to 6.2-rc2.
+
+Fixed small typos, code style.
+
+Changed from synchronize_rcu() to queue_rcu_work() to allow an rcu
+delay asyncly when mm is being removed and in an appropriate context
+for mmdrop().
+
+V5:
+GFP_NOWAIT is still needed in user_event_enabler_dup(), due to rcu lock.
+
+V4:
+Rebase to 6.1-rc7.
+
+Moved user_events_fork() out of task signal lock and dropped use of
+GFP_NOWAIT. All allocations are now GFP_KERNEL or GFP_KERNEL_ACCOUNT.
+
+Added boot parameter user_events_max= to limit global events.
+
+Added sysctl value kernel.user_events_max to limit global events.
+
+Added cgroup tracking of memory allocated for events.
+
+V3:
+Rebase to 6.1-rc6.
+
+Removed RFC tag on series.
+
+Updated documentation to reflect ABI changes.
+
+Added self-test for ABI specific clone/fork cases.
+
+Moved user_event_mm removal into do_exit() to ensure RSS task accounting
+is done properly in async fault paths. Also lets us remove the delayed
+mmdrop(), saving memory in each user_event_mm struct.
+
+Fixed timing window where task exits, but write could be in-progress.
+During exit we now take mmap_write_lock to ensure we drain writes.
+
+V2:
+Rebase to 6.1-rc5.
+
+Added various comments based on feedback.
+
+Added enable_size to register struct, allows 32/64 bit addresses
+as long as the enable_bit fits and the address is naturally aligned.
+
+Changed user_event_enabler_write to accept a new flag indicating if a
+fault fixup should be done or not. This allows user_event_enabler_create
+to return back failures to the user ioctl reg call and retry to fault
+in data.
+
+Added tracking fork/exec/exit of tasks to have the user_event_mm lifetime
+tied more to the task than the file. This came with extra requirements
+around when you can lock, such as softirq cases, as well as a RCU
+pattern to ensure fork/exec/exit take minimal lock times.
+
+Changed enablers to use a single word-aligned value for saving the bit
+to set and any flags, such as faulting asyncly or being freed. This was
+required to ensure atomic bit set/test for fork cases where taking the
+event_mutex is not a good scalability decision.
+
+Added unregister IOCTL, since file lifetime no longer limits the enable
+time for any events (the mm does).
+
+Updated sample code to reflect the new remote write based ABI.
+
+Updated self-test code to reflect the new remote write based ABI.
+
+Beau Belgrave (11):
+  tracing/user_events: Split header into uapi and kernel
+  tracing/user_events: Track fork/exec/exit for mm lifetime
+  tracing/user_events: Use remote writes for event enablement
+  tracing/user_events: Fixup enable faults asyncly
+  tracing/user_events: Add ioctl for disabling addresses
+  tracing/user_events: Update self-tests to write ABI
+  tracing/user_events: Add ABI self-test
+  tracing/user_events: Use write ABI in example
+  tracing/user_events: Update documentation for ABI
+  tracing/user_events: Charge event allocs to cgroups
+  tracing/user_events: Limit global user_event count
+
+ Documentation/trace/user_events.rst           | 177 ++--
+ fs/exec.c                                     |   2 +
+ include/linux/sched.h                         |   5 +
+ include/linux/user_events.h                   | 101 +-
+ include/uapi/linux/user_events.h              |  81 ++
+ kernel/exit.c                                 |   2 +
+ kernel/fork.c                                 |   2 +
+ kernel/trace/Kconfig                          |   5 +-
+ kernel/trace/trace_events_user.c              | 863 +++++++++++++++---
+ samples/user_events/example.c                 |  47 +-
+ tools/testing/selftests/user_events/Makefile  |   2 +-
+ .../testing/selftests/user_events/abi_test.c  | 226 +++++
+ .../testing/selftests/user_events/dyn_test.c  |   2 +-
+ .../selftests/user_events/ftrace_test.c       | 162 ++--
+ .../testing/selftests/user_events/perf_test.c |  39 +-
+ 15 files changed, 1317 insertions(+), 399 deletions(-)
+ create mode 100644 include/uapi/linux/user_events.h
+ create mode 100644 tools/testing/selftests/user_events/abi_test.c
+
+
+base-commit: ceaa837f96adb69c0df0397937cd74991d5d821a
 -- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+2.25.1
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
