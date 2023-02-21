@@ -2,103 +2,265 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 80E5569DF02
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 12:38:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0829669DF0F
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 12:40:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234225AbjBULi4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Feb 2023 06:38:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36628 "EHLO
+        id S234267AbjBULkx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Feb 2023 06:40:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38470 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234201AbjBULiv (ORCPT
+        with ESMTP id S234257AbjBULkk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Feb 2023 06:38:51 -0500
-Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 816E6E39A
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Feb 2023 03:38:48 -0800 (PST)
-Received: by mail-ed1-x52e.google.com with SMTP id f13so15378508edz.6
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Feb 2023 03:38:48 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=7tq51gAJIQj2Xs1ZKNGqnu4NrUprTsJTQmSC0ttvYNI=;
-        b=K2xiRBkU6h0mnBM8imm/VCEbhvLY/ceuXzgd14FpbsVy0S3mv6rsKv3gJBSV8yB1xw
-         snQXZsLf/yLPCLdeWUkY8GKMzivAvGnCroU1GodSQ18ZKIGfMfwzU7tnoJRxj93qykbY
-         WQAFgcT/x3hJIPTx88Bjc+BbZDK7stwk7udrkieVBM7wukU4ki+ksjHqT8ua0u0whs6N
-         mYnuTGmVBEQT2GKu8Vud0p4X5B/7gvnBOu7FvCj3GOytHEYr8kESWejcP2tvYuO9IyvI
-         PgMH9egv5fQJ90Jy43/FFzeZKGMluW16mAucPJp++5Cs/bVQP2jzdLmXkHKa5Kp7I2qO
-         BwVA==
+        Tue, 21 Feb 2023 06:40:40 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6F7E1F917
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Feb 2023 03:39:38 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1676979577;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=5OAU4IRwSccFaTfTbhJfWFHAd4qx5D6vbydzjPOhVbc=;
+        b=efrvrk0dc6pT82Fbo4o4vZr9Coo5q6p8kH5Kg9T0AulJttPCh+PjSN6tqSQeU4Z3pL5jOZ
+        m8pNw7CoVpp7bh8bdpKtwKWMcM1mWT/5czvLbnFShLun+dzZpJDHXkCfkAHpsu0Y8IhH94
+        cQRaZuk6Hg9RGjcK3lTm8pEa36ZuoCc=
+Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
+ [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-384-_XGFFngJNW-f7RTOqJ0FkA-1; Tue, 21 Feb 2023 06:39:36 -0500
+X-MC-Unique: _XGFFngJNW-f7RTOqJ0FkA-1
+Received: by mail-wm1-f72.google.com with SMTP id bg26-20020a05600c3c9a00b003e21a3f4e84so1558629wmb.8
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Feb 2023 03:39:36 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=7tq51gAJIQj2Xs1ZKNGqnu4NrUprTsJTQmSC0ttvYNI=;
-        b=qqG7+fHKMA/yfsMuWy06lZNkCJoi+3EFy78GhbC1BSarNvwKGS5jQwhPWofLFFj//2
-         LAOe6xYqXz+s4foR5qUjdKKuyLHekB8paBDJY1kDiQ08e6iDX0N/lHPW+ci3wDM7vhMi
-         OuJMt39/eIhm6twLNSXzpMiY5/+raAquaWZbxWxf0IYqAImdo73QUU5r8gBOHTRtUB1f
-         50O0cTWj/IGCb/Jthw8HiblfASVAR8j6rmh0e3kZH38PqrVXOvgOon9/m5xQY4mGfIdc
-         N5oL5vGKRRt7QK0SuvPozenhAR8SBut/vpgUaGyt1drRNXYj92joX/Pgo1o+PY3xWQ0x
-         hvQg==
-X-Gm-Message-State: AO0yUKV2IqplGpL4tuFiPqmxPXYJHbeJOrU41O1+Gj8dTiAthpPXgDZm
-        zSuVqC4faqx5PSEoMjVJhmgYzA==
-X-Google-Smtp-Source: AK7set/3gIbpZCbGX8KRPqHk4leYzTL0UBaiSORTZuYQavAfonAT7E7VUPDVMnim+cH7HYssAsE26Q==
-X-Received: by 2002:a05:6402:1203:b0:4ac:c1bf:2a26 with SMTP id c3-20020a056402120300b004acc1bf2a26mr5378277edw.12.1676979527040;
-        Tue, 21 Feb 2023 03:38:47 -0800 (PST)
-Received: from [192.168.1.109] ([178.197.216.144])
-        by smtp.gmail.com with ESMTPSA id q18-20020a50c352000000b004ad601533a3sm1483381edb.55.2023.02.21.03.38.45
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 21 Feb 2023 03:38:46 -0800 (PST)
-Message-ID: <f21e19d9-206e-31b5-0287-0dff6ccd6c6d@linaro.org>
-Date:   Tue, 21 Feb 2023 12:38:44 +0100
+        d=1e100.net; s=20210112; t=1676979575;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=5OAU4IRwSccFaTfTbhJfWFHAd4qx5D6vbydzjPOhVbc=;
+        b=rCeyCkkN/ZKwXpn5sex3bxjD6xBbi7vUSKh3uwhaccWelsunV3aswoWYVDOV0bkosB
+         KjcTDIc0YE71kroRwWKxK+vEa0Nn9se9knqzERVSj0bmVIY56/lrX6CgP9EsLVZ4AXRI
+         R5hzXp5lq7tf8qBg9MNMynUEBd56JrfKMXXafAWe6nk/K4WhJqf7FwNNaLyTV2OQ08rr
+         nGhFuQGNJqHi/i6amCH3XkMuLnMvXs/JSYgOPub1MuY+6IjIQGqxkee77zr+in6Ct8Xu
+         Dd22T5HADJdly9sScelp+rCpnrLK57DTHQEOuU8Ju/ZchYSQi3NPTqcRQk1O4+HyLhyn
+         zmeA==
+X-Gm-Message-State: AO0yUKWEn+9mJn90f9J8YhGbIaK33YjzdVDg4T3C2DnivbyU9FZhkvBK
+        J0e5AHWVr7NcwLkY72njyp1U0CwBCHeGLUmPz7/3OPGkRkyEkFbE4T3ASGE5x6eeatNe57/SgOl
+        OVoGkNy7l5wJxzcxBEM1BzAAP
+X-Received: by 2002:a05:600c:4591:b0:3db:35e3:baf6 with SMTP id r17-20020a05600c459100b003db35e3baf6mr3911043wmo.4.1676979575090;
+        Tue, 21 Feb 2023 03:39:35 -0800 (PST)
+X-Google-Smtp-Source: AK7set+6hDRFKuK3Wd1zIqxXUkOnGEuvB4T0UyPLZC1a+QQIQsvl/35JR49aG8/tAkU3Uj3LGK45xQ==
+X-Received: by 2002:a05:600c:4591:b0:3db:35e3:baf6 with SMTP id r17-20020a05600c459100b003db35e3baf6mr3911026wmo.4.1676979574785;
+        Tue, 21 Feb 2023 03:39:34 -0800 (PST)
+Received: from gerbillo.redhat.com (146-241-121-8.dyn.eolo.it. [146.241.121.8])
+        by smtp.gmail.com with ESMTPSA id 15-20020a05600c020f00b003dfe5190376sm3398688wmi.35.2023.02.21.03.39.33
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 21 Feb 2023 03:39:34 -0800 (PST)
+Message-ID: <45b7c6a169dda4fab7e24a2a7e1b731dca1d9c0c.camel@redhat.com>
+Subject: Re: [net PATCH] octeontx2-pf: Recalculate UDP checksum for ptp
+ 1-step sync packet
+From:   Paolo Abeni <pabeni@redhat.com>
+To:     Sai Krishna <saikrishnag@marvell.com>, davem@davemloft.net,
+        edumazet@google.com, kuba@kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, sgoutham@marvell.com,
+        gakula@marvell.com, richardcochran@gmail.com
+Cc:     Hariprasad Kelam <hkelam@marvell.com>
+Date:   Tue, 21 Feb 2023 12:39:32 +0100
+In-Reply-To: <20230220122050.1639299-1-saikrishnag@marvell.com>
+References: <20230220122050.1639299-1-saikrishnag@marvell.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.46.4 (3.46.4-1.fc37) 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH v4 16/19] dt-bindings: riscv: Add SiFive S7 compatible
-Content-Language: en-US
-To:     Hal Feng <hal.feng@starfivetech.com>, linux-clk@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-riscv@lists.infradead.org
-Cc:     Stephen Boyd <sboyd@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor@kernel.org>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Ben Dooks <ben.dooks@sifive.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>,
-        Emil Renner Berthing <emil.renner.berthing@canonical.com>,
-        linux-kernel@vger.kernel.org
-References: <20230221024645.127922-1-hal.feng@starfivetech.com>
- <20230221024645.127922-17-hal.feng@starfivetech.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230221024645.127922-17-hal.feng@starfivetech.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 21/02/2023 03:46, Hal Feng wrote:
-> Add a new compatible string in cpu.yaml for SiFive S7 CPU
-> core which is used on SiFive U74-MC core complex etc.
-> 
-> Signed-off-by: Hal Feng <hal.feng@starfivetech.com>
+On Mon, 2023-02-20 at 17:50 +0530, Sai Krishna wrote:
+> From: Geetha sowjanya <gakula@marvell.com>
+>=20
+> When checksum offload is disabled in the driver via ethtool,
+> the PTP 1-step sync packets contain incorrect checksum, since
+> the stack calculates the checksum before driver updates
+> PTP timestamp field in the packet. This results in PTP packets
+> getting dropped at the other end. This patch fixes the issue by
+> re-calculating the UDP checksum after updating PTP
+> timestamp field in the driver.
+>=20
+> Fixes: 2958d17a8984 ("octeontx2-pf: Add support for ptp 1-step mode on CN=
+10K silicon")
+> Signed-off-by: Geetha sowjanya <gakula@marvell.com>
+> Signed-off-by: Hariprasad Kelam <hkelam@marvell.com>
+> Signed-off-by: Sunil Kovvuri Goutham <sgoutham@marvell.com>
+> Signed-off-by: Sai Krishna <saikrishnag@marvell.com>
 > ---
+>  .../marvell/octeontx2/nic/otx2_txrx.c         | 78 ++++++++++++++-----
+>  1 file changed, 59 insertions(+), 19 deletions(-)
+>=20
+> diff --git a/drivers/net/ethernet/marvell/octeontx2/nic/otx2_txrx.c b/dri=
+vers/net/ethernet/marvell/octeontx2/nic/otx2_txrx.c
+> index ef10aef3cda0..67345a3e2bba 100644
+> --- a/drivers/net/ethernet/marvell/octeontx2/nic/otx2_txrx.c
+> +++ b/drivers/net/ethernet/marvell/octeontx2/nic/otx2_txrx.c
+> @@ -10,6 +10,7 @@
+>  #include <net/tso.h>
+>  #include <linux/bpf.h>
+>  #include <linux/bpf_trace.h>
+> +#include <net/ip6_checksum.h>
+> =20
+>  #include "otx2_reg.h"
+>  #include "otx2_common.h"
+> @@ -699,7 +700,7 @@ static void otx2_sqe_add_ext(struct otx2_nic *pfvf, s=
+truct otx2_snd_queue *sq,
+> =20
+>  static void otx2_sqe_add_mem(struct otx2_snd_queue *sq, int *offset,
+>  			     int alg, u64 iova, int ptp_offset,
+> -			     u64 base_ns, int udp_csum)
+> +			     u64 base_ns, bool udp_csum_crt)
+>  {
+>  	struct nix_sqe_mem_s *mem;
+> =20
+> @@ -711,7 +712,7 @@ static void otx2_sqe_add_mem(struct otx2_snd_queue *s=
+q, int *offset,
+> =20
+>  	if (ptp_offset) {
+>  		mem->start_offset =3D ptp_offset;
+> -		mem->udp_csum_crt =3D udp_csum;
+> +		mem->udp_csum_crt =3D !!udp_csum_crt;
+>  		mem->base_ns =3D base_ns;
+>  		mem->step_type =3D 1;
+>  	}
+> @@ -986,10 +987,11 @@ static bool otx2_validate_network_transport(struct =
+sk_buff *skb)
+>  	return false;
+>  }
+> =20
+> -static bool otx2_ptp_is_sync(struct sk_buff *skb, int *offset, int *udp_=
+csum)
+> +static bool otx2_ptp_is_sync(struct sk_buff *skb, int *offset, bool *udp=
+_csum_crt)
+>  {
+>  	struct ethhdr *eth =3D (struct ethhdr *)(skb->data);
+>  	u16 nix_offload_hlen =3D 0, inner_vhlen =3D 0;
+> +	bool udp_hdr_present =3D false, is_sync;
+>  	u8 *data =3D skb->data, *msgtype;
+>  	__be16 proto =3D eth->h_proto;
+>  	int network_depth =3D 0;
+> @@ -1029,45 +1031,83 @@ static bool otx2_ptp_is_sync(struct sk_buff *skb,=
+ int *offset, int *udp_csum)
+>  		if (!otx2_validate_network_transport(skb))
+>  			return false;
+> =20
+> -		*udp_csum =3D 1;
+>  		*offset =3D nix_offload_hlen + skb_transport_offset(skb) +
+>  			  sizeof(struct udphdr);
+> +		udp_hdr_present =3D true;
+> +
+>  	}
+> =20
+>  	msgtype =3D data + *offset;
+> -
+>  	/* Check PTP messageId is SYNC or not */
+> -	return (*msgtype & 0xf) =3D=3D 0;
+> +	is_sync =3D  ((*msgtype & 0xf) =3D=3D 0) ? true : false;
 
+the above could be:
 
-Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+	is_sync =3D !(*msgtype & 0xf);
 
-Best regards,
-Krzysztof
+possibly more readable.
+
+> +	if (is_sync) {
+> +		if (udp_hdr_present)
+> +			*udp_csum_crt =3D true;
+
+or:
+		*udp_csum_crt =3D udp_hdr_present;
+
+that will make the code more compact.
+
+> +	} else {
+> +		*offset =3D 0;
+> +	}
+> +
+> +	return is_sync;
+>  }
+> =20
+>  static void otx2_set_txtstamp(struct otx2_nic *pfvf, struct sk_buff *skb=
+,
+>  			      struct otx2_snd_queue *sq, int *offset)
+>  {
+> +	struct ethhdr	*eth =3D (struct ethhdr *)(skb->data);
+>  	struct ptpv2_tstamp *origin_tstamp;
+> -	int ptp_offset =3D 0, udp_csum =3D 0;
+> +	bool udp_csum_crt =3D false;
+> +	unsigned int udphoff;
+>  	struct timespec64 ts;
+> +	int ptp_offset =3D 0;
+> +	__wsum skb_csum;
+>  	u64 iova;
+> =20
+>  	if (unlikely(!skb_shinfo(skb)->gso_size &&
+>  		     (skb_shinfo(skb)->tx_flags & SKBTX_HW_TSTAMP))) {
+> -		if (unlikely(pfvf->flags & OTX2_FLAG_PTP_ONESTEP_SYNC)) {
+> -			if (otx2_ptp_is_sync(skb, &ptp_offset, &udp_csum)) {
+> -				origin_tstamp =3D (struct ptpv2_tstamp *)
+> -						((u8 *)skb->data + ptp_offset +
+> -						 PTP_SYNC_SEC_OFFSET);
+> -				ts =3D ns_to_timespec64(pfvf->ptp->tstamp);
+> -				origin_tstamp->seconds_msb =3D htons((ts.tv_sec >> 32) & 0xffff);
+> -				origin_tstamp->seconds_lsb =3D htonl(ts.tv_sec & 0xffffffff);
+> -				origin_tstamp->nanoseconds =3D htonl(ts.tv_nsec);
+> -				/* Point to correction field in PTP packet */
+> -				ptp_offset +=3D 8;
+> +		if (unlikely(pfvf->flags & OTX2_FLAG_PTP_ONESTEP_SYNC &&
+> +			     otx2_ptp_is_sync(skb, &ptp_offset, &udp_csum_crt))) {
+> +			origin_tstamp =3D (struct ptpv2_tstamp *)
+> +					((u8 *)skb->data + ptp_offset +
+> +					 PTP_SYNC_SEC_OFFSET);
+> +			ts =3D ns_to_timespec64(pfvf->ptp->tstamp);
+> +			origin_tstamp->seconds_msb =3D htons((ts.tv_sec >> 32) & 0xffff);
+> +			origin_tstamp->seconds_lsb =3D htonl(ts.tv_sec & 0xffffffff);
+> +			origin_tstamp->nanoseconds =3D htonl(ts.tv_nsec);
+> +			/* Point to correction field in PTP packet */
+> +			ptp_offset +=3D 8;
+> +
+> +			/* When user disables hw checksum, stack calculates the csum,
+> +			 * but it does not cover ptp timestamp which is added later.
+> +			 * Recalculate the checksum manually considering the timestamp.
+> +			 */
+> +			if (udp_csum_crt) {
+> +				struct udphdr *uh =3D udp_hdr(skb);
+> +
+> +				if (skb->ip_summed !=3D CHECKSUM_PARTIAL && uh->check !=3D 0) {
+> +					udphoff =3D skb_transport_offset(skb);
+> +					uh->check =3D 0;
+> +					skb_csum =3D skb_checksum(skb, udphoff, skb->len - udphoff,
+> +								0);
+> +					if (ntohs(eth->h_proto) =3D=3D ETH_P_IPV6)
+> +						uh->check =3D csum_ipv6_magic(&ipv6_hdr(skb)->saddr,
+> +									    &ipv6_hdr(skb)->daddr,
+> +									    skb->len - udphoff,
+> +									    ipv6_hdr(skb)->nexthdr,
+> +									    skb_csum);
+> +					else
+> +						uh->check =3D csum_tcpudp_magic(ip_hdr(skb)->saddr,
+> +									      ip_hdr(skb)->daddr,
+> +									      skb->len - udphoff,
+> +									      IPPROTO_UDP,
+> +									      skb_csum);
+
+Have you considered incremental csum updates instead? Possibly the code
+could be simpler and likely faster - not sure if the latter part is
+relevant in this case.
+
+Cheers,
+
+Paolo
 
