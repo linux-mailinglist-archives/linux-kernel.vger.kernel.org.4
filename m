@@ -2,126 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2915069EA71
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 23:53:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1792769EA81
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 23:57:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230327AbjBUWxe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Feb 2023 17:53:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48016 "EHLO
+        id S230009AbjBUW47 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Feb 2023 17:56:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50012 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229829AbjBUWxc (ORCPT
+        with ESMTP id S229712AbjBUW45 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Feb 2023 17:53:32 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2DAC86B5;
-        Tue, 21 Feb 2023 14:53:28 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 49011B81109;
-        Tue, 21 Feb 2023 22:53:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 952D6C433EF;
-        Tue, 21 Feb 2023 22:53:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1677020006;
-        bh=+RX3JMZc7Nwd1iiFGuXMv1Hbhi6XEC4r9f2VtvnEioY=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=OdzKqXHWkBhzVd3VG2cZq2+iwt1+qtY/ba8tPrXhWOy3QFJopwOOQly+HP0fZY2aU
-         Wb4y3bm6oZhXa7I4JXtgsMwkxQi2uTji6UGwZxYOed87/RHHfFUU3GzP4it0oHRy7B
-         iQAuDi8tXn1bCj1SQVlczj9vIKNdqgRGxuzEDWEeN6+NHtNk1y69mfgR5Cy32l5DdQ
-         rm919dICI2cJPkXmMnGP5Cgjq1yNsZ3dPVkhbhcRwHBvSOQO1fzvnTOam2WESThn3M
-         hoZhRCV5JDlmjlLU2l+GEpCpz5BuqsJqQgn4bmoEBsk2oFiDAv6f7ZfDSFjdz4peCh
-         ntdiK+gb7LxdA==
-Date:   Wed, 22 Feb 2023 00:53:23 +0200
-From:   Jarkko Sakkinen <jarkko@kernel.org>
-To:     "Limonciello, Mario" <mario.limonciello@amd.com>
-Cc:     Thorsten Leemhuis <regressions@leemhuis.info>,
-        James Bottomley <James.Bottomley@hansenpartnership.com>,
-        Jason@zx2c4.com, linux-integrity@vger.kernel.org,
-        linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Linux kernel regressions list <regressions@lists.linux.dev>
-Subject: Re: [PATCH 1/1] tpm: disable hwrng for fTPM on some AMD designs
-Message-ID: <Y/VLYxAqmlF8nbw3@kernel.org>
-References: <20230214201955.7461-1-mario.limonciello@amd.com>
- <20230214201955.7461-2-mario.limonciello@amd.com>
- <50b5498c-38fb-e2e8-63f0-3d5bbc047737@leemhuis.info>
- <Y/ABPhpMQrQgQ72l@kernel.org>
- <03c045b5-73f8-0522-9966-472404068949@amd.com>
+        Tue, 21 Feb 2023 17:56:57 -0500
+Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B5F4305E3;
+        Tue, 21 Feb 2023 14:56:55 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
+        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
+        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
+        bh=3Um0gYxCLjjbUMnFCJsEhD54ZTYx7XMQAgQMesWXaJo=; b=gF1ZnA2Yrkkx0yVu72vo8HjfMa
+        RlNnuDDEUzpY3sQZ/SHRIyhIVmIcnND2fqwvGs3e5y8xs6S1fihHuBtL0iQjdozHYG07XrAY9lTBQ
+        HaLiJTmHQrhN/i8qRjLw2b6bsKRKq2bZd71d8uCjDw+CrTQ6RGsI8k9DT8kZKzg/3Bw8=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+        (envelope-from <andrew@lunn.ch>)
+        id 1pUbYy-005doV-9k; Tue, 21 Feb 2023 23:56:44 +0100
+Date:   Tue, 21 Feb 2023 23:56:44 +0100
+From:   Andrew Lunn <andrew@lunn.ch>
+To:     Li Yang <leoyang.li@nxp.com>
+Cc:     Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        "David S . Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Luo Jie <luoj@codeaurora.org>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Viorel Suman <viorel.suman@nxp.com>,
+        Wei Fang <wei.fang@nxp.com>
+Subject: Re: [PATCH] net: phy: at803x: fix the wol setting functions
+Message-ID: <Y/VMLF0NGgO1F34K@lunn.ch>
+References: <20230221224031.7244-1-leoyang.li@nxp.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <03c045b5-73f8-0522-9966-472404068949@amd.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230221224031.7244-1-leoyang.li@nxp.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Feb 17, 2023 at 08:25:56PM -0600, Limonciello, Mario wrote:
-> On 2/17/2023 16:05, Jarkko Sakkinen wrote:
-> 
-> > Perhaps tpm_amd_* ?
-> 
-> When Jason first proposed this patch I feel the intent was it could cover
-> multiple deficiencies.
-> But as this is the only one for now, sure re-naming it is fine.
-> 
-> >
-> > Also, just a question: is there any legit use for fTPM's, which are not
-> > updated? I.e. why would want tpm_crb to initialize with a dysfunctional
-> > firmware?>
-> > I.e. the existential question is: is it better to workaround the issue and
-> > let pass through, or make the user aware that the firmware would really
-> > need an update.
-> >
-> 
-> On 2/17/2023 16:35, Jarkko Sakkinen wrote:
-> > > 
-> > > Hmm, no reply since Mario posted this.
-> > > 
-> > > Jarkko, James, what's your stance on this? Does the patch look fine from
-> > > your point of view? And does the situation justify merging this on the
-> > > last minute for 6.2? Or should we merge it early for 6.3 and then
-> > > backport to stable?
-> > > 
-> > > Ciao, Thorsten
-> > 
-> > As I stated in earlier response: do we want to forbid tpm_crb in this case
-> > or do we want to pass-through with a faulty firmware?
-> > 
-> > Not weighting either choice here I just don't see any motivating points
-> > in the commit message to pick either, that's all.
-> > 
-> > BR, Jarkko
-> 
-> Even if you're not using RNG functionality you can still do plenty of other
-> things with the TPM.  The RNG functionality is what tripped up this issue
-> though.  All of these issues were only raised because the kernel started
-> using it by default for RNG and userspace wants random numbers all the time.
-> 
-> If the firmware was easily updatable from all the OEMs I would lean on
-> trying to encourage people to update.  But alas this has been available for
-> over a year and a sizable number of OEMs haven't distributed a fix.
-> 
-> The major issue I see with forbidding tpm_crb is that users may have been
-> using the fTPM for something and taking it away in an update could lead to a
-> no-boot scenario if they're (for example) tying a policy to PCR values and
-> can no longer access those.
-> 
-> If the consensus were to go that direction instead I would want to see a
-> module parameter that lets users turn on the fTPM even knowing this problem
-> exists so they could recover.  That all seems pretty expensive to me for
-> this problem.
+On Tue, Feb 21, 2023 at 04:40:31PM -0600, Li Yang wrote:
+> In 7beecaf7d507 ("net: phy: at803x: improve the WOL feature"), it seems
+> not correct to use a wol_en bit in a 1588 Control Register which is only
+> available on AR8031/AR8033(share the same phy_id) to determine if WoL is
+> enabled.  Change it back to use AT803X_INTR_ENABLE_WOL for determining
+> the WoL status which is applicable on all chips supporting wol. Also
+> update the at803x_set_wol() function to only update the 1588 register on
+> chips having it.
 
-I agree with the last argument.
+> After this change, disabling wol at probe from
+> d7cd5e06c9dd ("net: phy: at803x: disable WOL at probe") is no longer
+> needed.  So it is removed.
 
-I re-read the commit message and https://www.amd.com/en/support/kb/faq/pa-410.
+Rather than remove it, please git revert it, and explain in the commit
+message why.
 
-Why this scopes down to only rng? Should TPM2_CC_GET_RANDOM also blocked
-from /dev/tpm0?
+> 
+> Also remove the set_wol()/get_wol() callbacks from AR8032 which doesn't
+> support WoL.
 
-BR, Jarkko
+This change was part of 5800091a2061 ("net: phy: at803x: add support for AR8032 PHY")
+
+Please break this patch up into individual fixes. The different fixes
+might need different levels of backporting etc.
+
+      Andrew
