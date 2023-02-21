@@ -2,126 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A34E69DAD1
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 07:54:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 65C2069DAD9
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 08:00:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233387AbjBUGym (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Feb 2023 01:54:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59806 "EHLO
+        id S233391AbjBUHAA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Feb 2023 02:00:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34074 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232813AbjBUGyk (ORCPT
+        with ESMTP id S233427AbjBUG76 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Feb 2023 01:54:40 -0500
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5546610A94;
-        Mon, 20 Feb 2023 22:54:39 -0800 (PST)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4PLVQP0gHCz4x7y;
-        Tue, 21 Feb 2023 17:54:37 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1676962478;
-        bh=G8olMEdik0DV14GvEjp3yAT6sZDj7bSrz5TYC0i36M4=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=TdxxTI+2WbIVVYd9B/s0PSUahGguGd60/Pr/XtrjfRtFWgzxR3KdBclxm18l8ZcTQ
-         cMN2G6a/yZWh9fBI/y1tp/xSMHi27wrnaYzd/pDhBRm1+NxXH8RcfsKrpU5xwXtn+I
-         /gR1ih26bd8EB84yOaclTlzz/1rz09wTZB6de518hPuvkZyNgnvA1t9QPO7hb4PfDQ
-         cE0BdePN7u3joro0yzC2/rhhXN55S9PLF7WuJ8TscVOm9kAZP1uf2n6jWN/5dshP8f
-         DB/M8hRnXf6trQcqm8Ci2xFewHg0PI7jbDv4rayvYp13fWWpwITFBgb8qJx5eBGh61
-         zsZY8Q3DcwGcw==
-Date:   Tue, 21 Feb 2023 17:54:36 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Andrew Morton <akpm@linux-foundation.org>,
-        Theodore Ts'o <tytso@mit.edu>
-Cc:     Matthew Wilcox <willy@infradead.org>, Jan Kara <jack@suse.cz>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        "Vishal Moola (Oracle)" <vishal.moola@gmail.com>
-Subject: Re: linux-next: manual merge of the mm-stable tree with the ext4
- tree
-Message-ID: <20230221175436.599166f9@canb.auug.org.au>
-In-Reply-To: <Y/ODNJ3MfoD6dUru@casper.infradead.org>
-References: <20230220152938.45f62d5a@canb.auug.org.au>
-        <Y/ODNJ3MfoD6dUru@casper.infradead.org>
+        Tue, 21 Feb 2023 01:59:58 -0500
+Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 03C891EBD0;
+        Mon, 20 Feb 2023 22:59:55 -0800 (PST)
+Received: from loongson.cn (unknown [10.20.42.170])
+        by gateway (Coremail) with SMTP id _____8Bx783qa_RjxxEDAA--.750S3;
+        Tue, 21 Feb 2023 14:59:54 +0800 (CST)
+Received: from [10.20.42.170] (unknown [10.20.42.170])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8BxC77oa_RjDJM3AA--.35779S3;
+        Tue, 21 Feb 2023 14:59:52 +0800 (CST)
+Message-ID: <0fa9c062-d3fc-61e5-4d54-6bc29f7c64cf@loongson.cn>
+Date:   Tue, 21 Feb 2023 14:59:52 +0800
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/1R0P7KsQsElWG=mbcRYf/DB";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Subject: Re: [PATCH v2 02/29] LoongArch: KVM: Implement kvm module related
+ interface
+Content-Language: en-US
+To:     Paolo Bonzini <pbonzini@redhat.com>,
+        Tianrui Zhao <zhaotianrui@loongson.cn>
+Cc:     Huacai Chen <chenhuacai@kernel.org>,
+        WANG Xuerui <kernel@xen0n.name>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        loongarch@lists.linux.dev, linux-kernel@vger.kernel.org,
+        kvm@vger.kernel.org, Jens Axboe <axboe@kernel.dk>,
+        Mark Brown <broonie@kernel.org>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        Oliver Upton <oliver.upton@linux.dev>
+References: <20230220065735.1282809-1-zhaotianrui@loongson.cn>
+ <20230220065735.1282809-3-zhaotianrui@loongson.cn>
+ <bf4111f9-f722-1847-4f1d-964c5356f392@redhat.com>
+From:   maobibo <maobibo@loongson.cn>
+In-Reply-To: <bf4111f9-f722-1847-4f1d-964c5356f392@redhat.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: AQAAf8BxC77oa_RjDJM3AA--.35779S3
+X-CM-SenderInfo: xpdruxter6z05rqj20fqof0/
+X-Coremail-Antispam: 1Uk129KBjvJXoWxJrWDGr1kCw4DKryDKF17ZFb_yoW8KryDpF
+        1kJrWkJrWkJrn5Xwn0yw1DXFy5ZrykJ3WUKw18ZF1YkFZrAry2gr4kXr1q9FyxZrs3Jr1j
+        yw4jgrsrZwnrXrJanT9S1TB71UUUUjJqnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
+        qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
+        bqkYFVCjjxCrM7AC8VAFwI0_Jr0_Gr1l1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s
+        1l1IIY67AEw4v_Jrv_JF1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xv
+        wVC0I7IYx2IY67AKxVW5JVW7JwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwA2z4
+        x0Y4vEx4A2jsIE14v26r4UJVWxJr1l84ACjcxK6I8E87Iv6xkF7I0E14v26r4UJVWxJr1l
+        n4kS14v26r126r1DM2AIxVAIcxkEcVAq07x20xvEncxIr21l57IF6xkI12xvs2x26I8E6x
+        ACxx1l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r1q6rW5McIj6I8E
+        87Iv67AKxVW8JVWxJwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lc7I2V7IY0V
+        AS07AlzVAYIcxG8wCY1x0262kKe7AKxVWUAVWUtwCF04k20xvY0x0EwIxGrwCFx2IqxVCF
+        s4IE7xkEbVWUJVW8JwCFI7km07C267AKxVWUAVWUtwC20s026c02F40E14v26r1j6r18MI
+        8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41l
+        IxAIcVC0I7IYx2IY67AKxVW8JVW5JwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1lIx
+        AIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r4j6F4UMIIF0xvEx4A2
+        jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07jz5lbUUUUU=
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/1R0P7KsQsElWG=mbcRYf/DB
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
 
-Hi all,
 
-On Mon, 20 Feb 2023 14:27:00 +0000 Matthew Wilcox <willy@infradead.org> wro=
-te:
->
-> On Mon, Feb 20, 2023 at 03:29:38PM +1100, Stephen Rothwell wrote:
-> > Hi all,
-> >=20
-> > Today's linux-next merge of the mm-stable tree got a conflict in:
-> >=20
-> >   fs/ext4/inode.c
-> >=20
-> > between commits:
-> >=20
-> >   726432969963 ("ext4: use nr_to_write directly in mpage_prepare_extent=
-_to_map()")
-> >   9ff6a9153c8f ("ext4: move page unlocking out of mpage_submit_page()")
-> >   b4d26e70a755 ("ext4: move mpage_page_done() calls after error handlin=
-g")
-> >   9b18c23c131a ("ext4: convert data=3Djournal writeback to use ext4_wri=
-tepages()")
-> >=20
-> > from the ext4 tree and commits:
-> >=20
-> >   50ead2537441 ("ext4: convert mpage_prepare_extent_to_map() to use fil=
-emap_get_folios_tag()")
-> >   d585bdbeb79a ("fs: convert writepage_t callback to pass a folio")
-> >=20
-> > from the mm-stable tree.
-> >=20
-> > I have no idea how to fix this up, so I have used the ext4 tree from
-> > next-20230217 for today. =20
->=20
-> Yeah, this one's a mess.  Probably the easiest solution is for Ted to
-> pull in 247f9e1feef4 and 50ead2537441 and then redo Jan's patches on
-> top of them.
+在 2023/2/21 01:46, Paolo Bonzini 写道:
+> On 2/20/23 07:57, Tianrui Zhao wrote:
+>> +    order = get_order(kvm_vector_size + kvm_enter_guest_size);
+>> +    addr = (void *)__get_free_pages(GFP_KERNEL, order);
+>> +    if (!addr) {
+>> +        free_percpu(vmcs);
+>> +        return -ENOMEM;
+>> +    }
+>> +
+>> +    memcpy(addr, kvm_vector_entry, kvm_vector_size);
+>> +    memcpy(addr + kvm_vector_size, kvm_enter_guest, kvm_enter_guest_size);
+>> +    flush_icache_range((unsigned long)addr, (unsigned long)addr +
+>> +                kvm_vector_size + kvm_enter_guest_size);
+>> +
+>> +    vpid_mask = read_csr_gstat();
+>> +    vpid_mask = (vpid_mask & CSR_GSTAT_GIDBIT) >> CSR_GSTAT_GIDBIT_SHIFT;
+>> +    if (vpid_mask)
+>> +        vpid_mask = GENMASK(vpid_mask - 1, 0);
+>> +
+>> +    for_each_possible_cpu(cpu) {
+>> +        context = per_cpu_ptr(vmcs, cpu);
+>> +        context->vpid_mask = vpid_mask;
+>> +        context->vpid_cache = context->vpid_mask + 1;
+>> +        context->last_vcpu = NULL;
+>> +        context->kvm_eentry = addr;
+>> +        context->kvm_enter_guest = addr + kvm_vector_size;
+>> +        context->page_order = order;
+>> +    }
+> 
+> A lot of these variables are constant across all pCPUs, any reason to have them in a per-CPU variable?  Likewise, since they are all the same as the constant global vmcs variable, why make them part of struct kvm_context instead of just making them globals?
+> 
+Paolo,
 
-I am still using the ext4 tree from next-20230217 (which was empty
-relative to Linus' tree).
+Thanks for reviewing these patches.
 
-So, I have to ask why all these commits were only published to
-linux-next over the weekend?
+Originally we think that global variables make c files depending with
+each other, and global variables is not faster than percpu, so that
+we removes global variables. we are ok to make them globals.
 
---=20
-Cheers,
-Stephen Rothwell
+> Also, why does the world switch code need a copy?
+There will be problem in world switch code if there is page fault reenter,
+since pgd register is shared between root kernel and kvm hypervisor. 
+World switch entry need be unmapped area, cannot be tlb mapped area.
 
---Sig_/1R0P7KsQsElWG=mbcRYf/DB
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
+In future if hw pagetable walking is supported, or there is separate pgd
+registers between root kernel and kvm hypervisor, copying about world switch
+code will not be used.
 
------BEGIN PGP SIGNATURE-----
+Regards
+Bibo, Mao
+> 
+> Paolo
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmP0aqwACgkQAVBC80lX
-0Gz3IQf/fIehq13N+cYwUhgaVJex9+WYP7YNREEKObBRbAEQsMk8G4H759Cz+ZQr
-29CWAX8tYxecRhSE+6yVUO3Qsu1n/5ev7znMgbf9AGdjOLRp5CySnH55QPas2Xk3
-VsZO4FqhKamrapa282RJ3ltgaBVmgqfFICZxKnmrwTy1H0jgZ+AiqGiGY8E0ysds
-O5kYTAo8QGkgVYSf/uiRalXnTQQJJ9vu3fu4wC8tg4TG9zTgWJvFEGQFSdL9vp+L
-Tu7o/TdjTGj048cxUa2IngrT49/g3pZQFPZ/a6cXgtsl/Yts8q2sRVlbw5woNQeD
-PTbdUZAw/DBZwJdxKSw9+pPf8ExK2w==
-=yC5D
------END PGP SIGNATURE-----
-
---Sig_/1R0P7KsQsElWG=mbcRYf/DB--
