@@ -2,174 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2FB5E69E773
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 19:31:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EC5AA69E77D
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 19:32:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229668AbjBUSbX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Feb 2023 13:31:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56396 "EHLO
+        id S229997AbjBUSca (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Feb 2023 13:32:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57074 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229497AbjBUSbV (ORCPT
+        with ESMTP id S229609AbjBUSc2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Feb 2023 13:31:21 -0500
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32F022A6C6;
-        Tue, 21 Feb 2023 10:31:20 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=HO/sO06nwJ3/iRAiyzjaJOZuTgokxo8tpPL41c5SK5Q=; b=Q9Cq6aHTWzEEGgoTNdY1hf3KLa
-        o0WY13fylo6qvdOn0sdUEioo2h/AVFvjcp3k8pdsapV8O5ZxZkohUFFam7oaNfcOEXzBIdU18dNxv
-        VR+LSOa43ZtTE9OYgrt15Kyik25w4RGnIYnfODOJcLk/EDneVLlmA21Gim7ib+5cG9ZScVmLW78pX
-        eLGfOAfv6Aipb2fQaFMP9WEgPUeuOpUnZ8BDSmNuTsqbru4Al65Haw2qDGbTPUzLOmAkc+LdawiHE
-        O0b3TNKJLALv8v5J8Y3W3pDEuLQb7y1T3bykAn/sN3lOz725fm1i2JGLU2LPtEk32zqPNE4P8motc
-        BAWRvULA==;
-Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1pUXPr-00Cp3B-UF; Tue, 21 Feb 2023 18:31:04 +0000
-Date:   Tue, 21 Feb 2023 18:31:03 +0000
-From:   Matthew Wilcox <willy@infradead.org>
-To:     Danilo Krummrich <dakr@redhat.com>
-Cc:     matthew.brost@intel.com, dri-devel@lists.freedesktop.org,
-        corbet@lwn.net, nouveau@lists.freedesktop.org, ogabbay@kernel.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, boris.brezillon@collabora.com,
-        bskeggs@redhat.com, tzimmermann@suse.de, Liam.Howlett@oracle.com,
-        bagasdotme@gmail.com, christian.koenig@amd.com,
-        jason@jlekstrand.net
-Subject: Re: [PATCH drm-next v2 04/16] maple_tree: add flag MT_FLAGS_LOCK_NONE
-Message-ID: <Y/UN50hCaRe+8ZCg@casper.infradead.org>
-References: <20230217134422.14116-1-dakr@redhat.com>
- <20230217134422.14116-5-dakr@redhat.com>
- <Y+/Xn11dfdn7SfBD@casper.infradead.org>
- <3bb02ec3-4d19-9135-cabc-26ed210f7396@redhat.com>
- <Y/ONYhyDCPEYH1ml@casper.infradead.org>
- <e43f6acc-175d-1031-c4a2-67a6f1741866@redhat.com>
- <Y/PZH/q2Xsr3od9m@casper.infradead.org>
- <Y/TXPasvkhtGiR+w@pollux>
+        Tue, 21 Feb 2023 13:32:28 -0500
+Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D6622FCED;
+        Tue, 21 Feb 2023 10:32:24 -0800 (PST)
+Received: by mail-ed1-x529.google.com with SMTP id o12so21423849edb.9;
+        Tue, 21 Feb 2023 10:32:24 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=0EeJlO8QUl1DZMAlcd+EODPEJDc+DBbZZnZ+JDzoEdg=;
+        b=kWq4ecHFuWXMSQZOzGBaSB3TZctWJCNGUWIu8P3VK24KihWheD/Hkgnz3BhcjBm+Ov
+         z8eahBqmrp2SwL0wBFOCTd+8Knk4Nx90ZwYEY03DeTfn6M/VqR6QPOqhy5+242r9yDzt
+         Ebj1teN7A4oA8YgIQe8byK5O6YanmP4Rk4ZeqmJR7xKaFSbu8E7tfn3utJjUFoZ988os
+         QEbB2xHc3wW1X2WPp4qC8P+OOaY4c9nDtBXBo3LdSxRv8OmHfXrfBf1SVw9icnA4wePn
+         SA8PnAH5xFwF8CR18LYgwYpvbCp28OMh9f4PgaM5DxNZ/D9Fk68DmsvDr2FtOiXzVAsJ
+         Jbqg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=0EeJlO8QUl1DZMAlcd+EODPEJDc+DBbZZnZ+JDzoEdg=;
+        b=haj3XIK9QmQYf397q3VNAnMiKOI9SppFXpCrNZdMY1XGktlxx3rQ/krFkgsI7gEgQC
+         R9YrtgCRpiJE3hH4wKWUSzFTBlc4QV4sv9/+MXsEaFwIVi7qH+SHmNCvDle+qLXAGRQj
+         g6JIEk1L+4t7O9EcEsh9TsXq3B3QlUGKz0TP8j/AdhrFJO8++zFRx/YMfsSl1WVHm1Vj
+         7BBcQ0J28+geKX9a1HGJ+uKSzzXbCXUyvGdaJ6AQ2/NkvrPMyt9Q7ooYQzT6o0gBbpo5
+         FjxRbPoOuTPX14XD/JSBuP4lZ4C9ze59EPUgUtY33EMmaGnN1n38LEINvPqQ5AImCZs9
+         KxCQ==
+X-Gm-Message-State: AO0yUKXvgzHCGnOPIicAWWXOzzY+digl3Of82Qw+sWihRKxphmJV6Hx/
+        73NohiDQfNngYiNtEpZUfGE=
+X-Google-Smtp-Source: AK7set86GBsI14U6VEaKmjm3BNimI8/ZzoK6Ek4xMuPyAJKltWK2m8xRKjLbpVGkaLUsc2k/7+79Yw==
+X-Received: by 2002:a05:6402:215:b0:4af:515d:5658 with SMTP id t21-20020a056402021500b004af515d5658mr2968051edv.35.1677004342754;
+        Tue, 21 Feb 2023 10:32:22 -0800 (PST)
+Received: from xeon.. ([188.163.112.76])
+        by smtp.gmail.com with ESMTPSA id i3-20020a50c3c3000000b004af5aa16fcasm169102edf.66.2023.02.21.10.32.21
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 21 Feb 2023 10:32:22 -0800 (PST)
+From:   Svyatoslav Ryhel <clamor95@gmail.com>
+To:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>,
+        Svyatoslav Ryhel <clamor95@gmail.com>,
+        Maxim Schwalm <maxim.schwalm@gmail.com>,
+        Dmitry Osipenko <digetx@gmail.com>
+Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        alsa-devel@alsa-project.org, linux-tegra@vger.kernel.org,
+        linux-staging@lists.linux.dev
+Subject: [PATCH v1 00/10] Fix sound on ASUS Transformers
+Date:   Tue, 21 Feb 2023 20:32:01 +0200
+Message-Id: <20230221183211.21964-1-clamor95@gmail.com>
+X-Mailer: git-send-email 2.37.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y/TXPasvkhtGiR+w@pollux>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 21, 2023 at 03:37:49PM +0100, Danilo Krummrich wrote:
-> On Mon, Feb 20, 2023 at 08:33:35PM +0000, Matthew Wilcox wrote:
-> > On Mon, Feb 20, 2023 at 06:06:03PM +0100, Danilo Krummrich wrote:
-> > > On 2/20/23 16:10, Matthew Wilcox wrote:
-> > > > This is why we like people to use the spinlock embedded in the tree.
-> > > > There's nothing for the user to care about.  If the access really is
-> > > > serialised, acquiring/releasing the uncontended spinlock is a minimal
-> > > > cost compared to all the other things that will happen while modifying
-> > > > the tree.
-> > > 
-> > > I think as for the users of the GPUVA manager we'd have two cases:
-> > > 
-> > > 1) Accesses to the manager (and hence the tree) are serialized, no lock
-> > > needed.
-> > > 
-> > > 2) Multiple operations on the tree must be locked in order to make them
-> > > appear atomic.
-> > 
-> > Could you give an example here of what you'd like to do?  Ideally
-> > something complicated so I don't say "Oh, you can just do this" when
-> > there's a more complex example for which "this" won't work.  I'm sure
-> > that's embedded somewhere in the next 20-odd patches, but it's probably
-> > quicker for you to describe in terms of tree operations that have to
-> > appear atomic than for me to try to figure it out.
-> > 
-> 
-> Absolutely, not gonna ask you to read all of that. :-)
-> 
-> One thing the GPUVA manager does is to provide drivers the (sub-)operations
-> that need to be processed in order to fulfill a map or unmap request from
-> userspace. For instance, when userspace asks the driver to map some memory
-> the GPUVA manager calculates which existing mappings must be removed, split up
-> or can be merged with the newly requested mapping.
-> 
-> A driver has two ways to fetch those operations from the GPUVA manager. It can
-> either obtain a list of operations or receive a callback for each operation
-> generated by the GPUVA manager.
-> 
-> In both cases the GPUVA manager walks the maple tree, which keeps track of
-> existing mappings, for the given range in __drm_gpuva_sm_map() (only considering
-> the map case, since the unmap case is a subset basically). For each mapping
-> found in the given range the driver, as mentioned, either receives a callback or
-> a list entry is added to the list of operations.
-> 
-> Typically, for each operation / callback one entry within the maple tree is
-> removed and, optionally at the beginning and end of a new mapping's range, a
-> new entry is inserted. An of course, as the last operation, there is the new
-> mapping itself to insert.
-> 
-> The GPUVA manager delegates locking responsibility to the drivers. Typically,
-> a driver either serializes access to the VA space managed by the GPUVA manager
-> (no lock needed) or need to lock the processing of a full set of operations
-> generated by the GPUVA manager.
+- add quirk for headset detection used by some T30 devices
+  (ASUS Transformers, LG Optimus 4X HD and Vu);
+- add RT5631 and MAX9808x machine drivers
+- add Fortemedia FM34NE DSP driver used by ASUS Transformers
+  and mandatory for correct sound work
+- bind everything into working configuration
 
-OK, that all makes sense.  It does make sense to have the driver use its
-own mutex and then take the spinlock inside the maple tree code.  It
-shouldn't ever be contended.
+David Heidelberg (1):
+  dt-bindings: sound: nvidia,tegra-audio: add RT5631 CODEC
 
-> > > In either case the embedded spinlock wouldn't be useful, we'd either need an
-> > > external lock or no lock at all.
-> > > 
-> > > If there are any internal reasons why specific tree operations must be
-> > > mutually excluded (such as those you explain below), wouldn't it make more
-> > > sense to always have the internal lock and, optionally, allow users to
-> > > specify an external lock additionally?
-> > 
-> > So the way this works for the XArray, which is a little older than the
-> > Maple tree, is that we always use the internal spinlock for
-> > modifications (possibly BH or IRQ safe), and if someone wants to
-> > use an external mutex to make some callers atomic with respect to each
-> > other, they're free to do so.  In that case, the XArray doesn't check
-> > the user's external locking at all, because it really can't know.
-> > 
-> > I'd advise taking that approach; if there's really no way to use the
-> > internal spinlock to make your complicated updates appear atomic
-> > then just let the maple tree use its internal spinlock, and you can
-> > also use your external mutex however you like.
-> > 
-> 
-> That sounds like the right thing to do.
-> 
-> However, I'm using the advanced API of the maple tree (and that's the reason
-> why the above example appears a little more detailed than needed) because I
-> think with the normal API I can't insert / remove tree entries while walking
-> the tree, right?
+Svyatoslav Ryhel (9):
+  dt-bindings: sound: nvidia,tegra-audio-common: add new property
+  sound: soc: jack: allow multiple interrupt per gpio
+  ASoC: tegra: Support RT5631 by machine driver
+  dt-bindings: sound: nvidia,tegra-audio: add MAX9808x CODEC
+  ASoC: tegra: Support MAX9808x by machine driver
+  ARM: tegra: transformers: update bindings of sound graph
+  dt-bindings: dsp: add Fortemedia FM34 DSP
+  staging: dsp: add support for Fortemedia FM34NE DSP
+  ARM: tegra: transformers: bind FM34NE DSP on supported devices
 
-Right.  The normal API is for simple operations while the advanced API
-is for doing compound operations.
+ .../bindings/dsp/fortemedia,dsp.yaml          |  95 ++
+ .../sound/nvidia,tegra-audio-common.yaml      |   4 +
+ .../sound/nvidia,tegra-audio-max9808x.yaml    |  93 ++
+ .../sound/nvidia,tegra-audio-rt5631.yaml      |  88 ++
+ arch/arm/boot/dts/tegra20-asus-tf101.dts      |  22 +-
+ arch/arm/boot/dts/tegra30-asus-tf201.dts      |  46 +
+ arch/arm/boot/dts/tegra30-asus-tf300t.dts     |  34 +-
+ arch/arm/boot/dts/tegra30-asus-tf300tg.dts    |  36 +
+ arch/arm/boot/dts/tegra30-asus-tf700t.dts     |  36 +
+ .../dts/tegra30-asus-transformer-common.dtsi  |   9 +-
+ .../arm/boot/dts/tegra30-pegatron-chagall.dts |  29 +-
+ drivers/staging/Kconfig                       |   2 +
+ drivers/staging/Makefile                      |   1 +
+ drivers/staging/dsp/Kconfig                   |   7 +
+ drivers/staging/dsp/Makefile                  |   2 +
+ drivers/staging/dsp/dsp-fm34ne.c              | 364 ++++++++
+ drivers/staging/dsp/dsp-fm34ne.h              | 845 ++++++++++++++++++
+ sound/soc/soc-jack.c                          |   1 +
+ sound/soc/tegra/Kconfig                       |  18 +
+ sound/soc/tegra/tegra_asoc_machine.c          | 120 ++-
+ 20 files changed, 1837 insertions(+), 15 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/dsp/fortemedia,dsp.yaml
+ create mode 100644 Documentation/devicetree/bindings/sound/nvidia,tegra-audio-max9808x.yaml
+ create mode 100644 Documentation/devicetree/bindings/sound/nvidia,tegra-audio-rt5631.yaml
+ create mode 100644 drivers/staging/dsp/Kconfig
+ create mode 100644 drivers/staging/dsp/Makefile
+ create mode 100644 drivers/staging/dsp/dsp-fm34ne.c
+ create mode 100644 drivers/staging/dsp/dsp-fm34ne.h
 
-> As by the documentation the advanced API, however, doesn't take care of locking
-> itself, hence just letting the maple tree use its internal spinlock doesn't
-> really work - I need to take care of that myself, right?
+-- 
+2.37.2
 
-Yes; once you're using the advanced API, you get to compose the entire
-operation yourself.
-
-> It feels a bit weird that I, as a user of the API, would need to lock certain
-> (or all?) mas_*() functions with the internal spinlock in order to protect
-> (future) internal features of the tree, such as the slab cache defragmentation
-> you mentioned. Because from my perspective, as the generic component that tells
-> it's users (the drivers) to take care of locking VA space operations (and hence
-> tree operations) I don't have an own purpose of this internal spinlock, right?
-
-You don't ... but we can't know that.
-
-> Also I'm a little confused how I'd know where to take the spinlock? E.g. for
-> inserting entries in the tree I use mas_store_gfp() with GFP_KERNEL.
-
-Lockdep will shout at you if you get it wrong ;-)  But you can safely
-take the spinlock before calling mas_store_gfp(GFP_KERNEL) because
-mas_nomem() knows to drop the lock before doing a sleeping allocation.
-Essentially you're open-coding mtree_store_range() but doing your own
-thing in addition to the store.
