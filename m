@@ -2,108 +2,182 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EF8B569DCBF
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 10:19:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A741769DD18
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 10:44:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233891AbjBUJTT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Feb 2023 04:19:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58644 "EHLO
+        id S233998AbjBUJoB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Feb 2023 04:44:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54166 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233551AbjBUJTR (ORCPT
+        with ESMTP id S233441AbjBUJn7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Feb 2023 04:19:17 -0500
-Received: from dggsgout12.his.huawei.com (dggsgout12.his.huawei.com [45.249.212.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75B1BB777;
-        Tue, 21 Feb 2023 01:19:16 -0800 (PST)
-Received: from mail02.huawei.com (unknown [172.30.67.143])
-        by dggsgout12.his.huawei.com (SkyGuard) with ESMTP id 4PLYdC3Qs1z4f3jHr;
-        Tue, 21 Feb 2023 17:19:11 +0800 (CST)
-Received: from huaweicloud.com (unknown [10.175.127.227])
-        by APP3 (Coremail) with SMTP id _Ch0CgBnFCKPjPRj+jbADg--.57503S4;
-        Tue, 21 Feb 2023 17:19:13 +0800 (CST)
-From:   Zhong Jinghua <zhongjinghua@huaweicloud.com>
-To:     axboe@kernel.dk, code@siddh.me, willy@infradead.org
-Cc:     linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
-        zhongjinghua@huawei.com, yi.zhang@huawei.com, yukuai3@huawei.com,
-        houtao1@huawei.com
-Subject: [PATCH-next v3] loop: loop_set_status_from_info() check before assignment
-Date:   Tue, 21 Feb 2023 17:42:44 +0800
-Message-Id: <20230221094244.3631986-1-zhongjinghua@huaweicloud.com>
-X-Mailer: git-send-email 2.31.1
+        Tue, 21 Feb 2023 04:43:59 -0500
+Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16FCD2D5D
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Feb 2023 01:43:58 -0800 (PST)
+Received: by mail-ed1-x532.google.com with SMTP id h32so14806044eda.2
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Feb 2023 01:43:58 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=IyKGI0nCGNiU3s1gpibfntG06MqeP3FH0OEDkylMToM=;
+        b=n4wLVR8b4XV16OwzuC3dPqrraVOgyrp/pXNgwKTvXIzlL7MBtCjyVIN3twUx1diVwS
+         vFyiJwlDaLHlgFb/TdGsmT0gRaUHNzD3eGVyA79dYHlOBmbzN7blYIrQiv5meUgHQENL
+         SnutbpAZUP/ZKzY6LPan1UvbggVYU2rGhJP2guN4L+rI4snem+JvuyZEdHwdNiJ/DaT8
+         CgUU1EniLLfPZdMGQ9VD4Z5q9YGRC0AhcuEnpgxY0HQQJppYOMUwbzwNUpnro9W+PKe9
+         3l/w4XKLJSi6yUbkCfxmYfiulxMXjTkJ8P2rJNK52EOWdCi/dX2jvQtHi2YFygJqCbmO
+         Y3hQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=IyKGI0nCGNiU3s1gpibfntG06MqeP3FH0OEDkylMToM=;
+        b=tA7ASLUNebbI/Oy+ctx5gaDGIGVPD6xkCheQ68zrhsQTOdQ5Z4MoRXLnL0N6vhpc78
+         5c3Mu/cnaWZMLha/QUje+rbEnCbQ4d4RxqdWyNv5l71gSwEVyjbJRJSZ/VjI/d/QMQ16
+         IYvyu7IJ3Yo1ZOIiWRoqXDem+nUH4O0PfINdluLjukeQq7ESZzjSCNOLklldZc9VTzrl
+         B96Rx1++8lBvHBm5hbKSbh6GcS/VfabbAo4HXDHjMYG5yWnd4tkFjBdlR1QvJfiKlcgq
+         rLbsJJEpjxumBZH4F6bWCdjkZe/wDq47NzGirBHZtYgyDuuEgOVV8KHGdua7SP9lRaZN
+         8zLg==
+X-Gm-Message-State: AO0yUKVUC029sTzHzvDEKaRRsA3e7GefQiNB5iYBTvc5CwwCJlffafFU
+        fj4rIreRWK+27Emn/O0pSfEaxA==
+X-Google-Smtp-Source: AK7set/YK40uzvhDahUih9uXPhcgv8EqyGGtNljX8QGKFaGfGBjTWJ9JDHZ9qMx/PoBQ85Hrk3fboQ==
+X-Received: by 2002:a17:907:f99:b0:8b1:3b96:3fe8 with SMTP id kb25-20020a1709070f9900b008b13b963fe8mr11514916ejc.52.1676972636608;
+        Tue, 21 Feb 2023 01:43:56 -0800 (PST)
+Received: from [192.168.1.109] ([178.197.216.144])
+        by smtp.gmail.com with ESMTPSA id se11-20020a170906ce4b00b008cecb8f374asm2824876ejb.0.2023.02.21.01.43.55
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 21 Feb 2023 01:43:56 -0800 (PST)
+Message-ID: <6fd971de-19f6-84e4-154f-bd3117483881@linaro.org>
+Date:   Tue, 21 Feb 2023 10:43:54 +0100
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH v5 1/2] dt-bindings: i2c: Add support for ASPEED i2Cv2
+Content-Language: en-US
+To:     Ryan Chen <ryan_chen@aspeedtech.com>,
+        Jeremy Kerr <jk@codeconstruct.com.au>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Joel Stanley <joel@jms.id.au>,
+        Andrew Jeffery <andrew@aj.id.au>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        "openbmc@lists.ozlabs.org" <openbmc@lists.ozlabs.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-aspeed@lists.ozlabs.org" <linux-aspeed@lists.ozlabs.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+References: <20230220061745.1973981-1-ryan_chen@aspeedtech.com>
+ <20230220061745.1973981-2-ryan_chen@aspeedtech.com>
+ <2141e513acc750bf26775f5b435f4dccd41244aa.camel@codeconstruct.com.au>
+ <TYZPR06MB5274714E58C319B4FE3B6E1BF2A49@TYZPR06MB5274.apcprd06.prod.outlook.com>
+ <dfc2c2c442af55f64e147c920585cb7e6a74939f.camel@codeconstruct.com.au>
+ <TYZPR06MB527469EBE6A18B897D2C1F6CF2A59@TYZPR06MB5274.apcprd06.prod.outlook.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <TYZPR06MB527469EBE6A18B897D2C1F6CF2A59@TYZPR06MB5274.apcprd06.prod.outlook.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: _Ch0CgBnFCKPjPRj+jbADg--.57503S4
-X-Coremail-Antispam: 1UD129KBjvJXoW7Cr1Dtw4xtw18Wr45JFW3trb_yoW8Xw4DpF
-        sxWFyUC3yFgF4xKF4qv34kXay5G3ZrGry3CFW7KayrZryI9FnI9r9rGa45urZ5JrWxuFWY
-        gFn8JFykZF1UWr7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUgKb4IE77IF4wAFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k2
-        6cxKx2IYs7xG6r1S6rWUM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
-        vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_tr0E3s1l84ACjcxK6xIIjxv20xvEc7Cj
-        xVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x
-        0267AKxVW0oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG
-        6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFV
-        Cjc4AY6r1j6r4UM4x0Y48IcxkI7VAKI48JMxAIw28IcxkI7VAKI48JMxC20s026xCaFVCj
-        c4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4
-        CE17CEb7AF67AKxVWUtVW8ZwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1x
-        MIIF0xvE2Ix0cI8IcVCY1x0267AKxVWUJVW8JwCI42IY6xAIw20EY4v20xvaj40_WFyUJV
-        Cq3wCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r1j6r4UYxBI
-        daVFxhVjvjDU0xZFpf9x07UWE__UUUUU=
-X-CM-SenderInfo: x2kr0wpmlqwxtxd6x35dzhxuhorxvhhfrp/
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Zhong Jinghua <zhongjinghua@huawei.com>
+On 21/02/2023 04:32, Ryan Chen wrote:
+> Hello Jeremy,
+> 
+>> -----Original Message-----
+>> From: Jeremy Kerr <jk@codeconstruct.com.au>
+>> Sent: Monday, February 20, 2023 7:24 PM
+>> To: Ryan Chen <ryan_chen@aspeedtech.com>; Rob Herring
+>> <robh+dt@kernel.org>; Krzysztof Kozlowski
+>> <krzysztof.kozlowski+dt@linaro.org>; Joel Stanley <joel@jms.id.au>; Andrew
+>> Jeffery <andrew@aj.id.au>; Philipp Zabel <p.zabel@pengutronix.de>;
+>> openbmc@lists.ozlabs.org; linux-arm-kernel@lists.infradead.org;
+>> linux-aspeed@lists.ozlabs.org; linux-kernel@vger.kernel.org
+>> Subject: Re: [PATCH v5 1/2] dt-bindings: i2c: Add support for ASPEED i2Cv2
+>>
+>> Hi Ryan,
+>>
+>>>>> +  clock-frequency:
+>>>>> +    description:
+>>>>> +      Desired I2C bus clock frequency in Hz. default 100khz.
+>>>>> +
+>>>>> +  multi-master:
+>>>>> +    type: boolean
+>>>>> +    description:
+>>>>> +      states that there is another master active on this bus
+>>>>
+>>>> These are common to all i2c controllers, but I see that
+>>>> i2c-controller.yaml doesn't include them (while i2c.text does).
+>>>>
+>>>> I assume we're OK to include these in the device bindings in the meantime.
+>>>> But in that case, you may also want to include the common "smbus-alert"
+>>>> property, which you consume in your driver.
+>>>>
+>>> Since i2c.text have multi-master, smbus-alert. I don't need those two right?
+>>
+>> Depends whether the maintainers consider i2c.text as part of the schema, I
+>> figure. Might be best to get their input on this.
+> 
+> 
+> Yes, I will drop this, also integrate into aspeed,i2c.yaml file.
+> 
+>>>>> +  timeout:
+>>>>> +    type: boolean
+>>>>> +    description: Enable i2c bus timeout for master/slave (35ms)
+>>>>> +
+>>>>> +  byte-mode:
+>>>>> +    type: boolean
+>>>>> +    description: Force i2c driver use byte mode transmit
+>>>>> +
+>>>>> +  buff-mode:
+>>>>> +    type: boolean
+>>>>> +    description: Force i2c driver use buffer mode transmit
+>>>>
+>>>> These three aren't really a property of the hardware, more of the
+>>>> intended driver configuration. Do they really belong in the DT?
+>>>>
+>>> Sorry, I am confused.
+>>> This is hardware controller mode setting for each i2c transfer.
+>>> So I add it in property for change different i2c transfer mode.
+>>> Is my mis-understand the property setting?
+>>
+>> It depends what this is configuration is for.
+>>
+>> Would you set the transfer mode based on the design of the board? Is there
+>> something about the physical i2c bus wiring (or some other hardware design
+>> choice) that would mean you use one setting over another?
+>>
+> No, it not depend on board design. It is only for register control for controller transfer behave.
 
-In loop_set_status_from_info(), lo->lo_offset and lo->lo_sizelimit should
-be checked before reassignment, because if an overflow error occurs, the
-original correct value will be changed to the wrong value, and it will not
-be changed back.
+Then DT does not look like suitable place for it. Drop the property.
 
-Modifying to the wrong value logic is always not quiet right, we hope to
-optimize this.
 
-loop_handle_cmd
- do_req_filebacked
-  loff_t pos = ((loff_t) blk_rq_pos(rq) << 9) + lo->lo_offset;
-  lo_rw_aio
-   cmd->iocb.ki_pos = pos
+> The controller support 3 different trigger mode for transfer.
+> Byte mode: it means step by step to issue transfer.
+> Example i2c read, each step will issue interrupt then driver need trigger for next step.
+> Sr (start read) | D | D | D | P
+> Buffer mode: it means, the data can prepare into buffer register, then Trigger transfer. So Sr D D D P, only have only 1 interrupt handling. 
+> The DMA mode most like with buffer mode, The differ is data prepare in DRAM, than trigger transfer. 
+> 
+> 
+>> On the other hand, if it's just because of OS behaviour, then this doesn't belong
+>> in the DT.
+>>
+>> Maybe to help us understand: why would you ever *not* want DMA mode?
+>> Isn't that always preferable?
+> In AST SOC i2c design is 16 i2c bus share one dma engine. 
+> It can be switch setting by dts setting. Otherwise driver by default probe is DMA mode.
 
-Fixes: c490a0b5a4f3 ("loop: Check for overflow while configuring loop")
-Signed-off-by: Zhong Jinghua <zhongjinghua@huawei.com>
----
- v2: Modify note: overflowing -> overflow
- v3: Modify commit message
- drivers/block/loop.c | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+DMA mode is chosen by existence (or lack) of dmas property, isn't it?
+Why do you need separate property instead of using the standard one?
 
-diff --git a/drivers/block/loop.c b/drivers/block/loop.c
-index 1518a6423279..1b35cbd029c7 100644
---- a/drivers/block/loop.c
-+++ b/drivers/block/loop.c
-@@ -977,13 +977,13 @@ loop_set_status_from_info(struct loop_device *lo,
- 		return -EINVAL;
- 	}
- 
-+	/* Avoid assigning overflow values */
-+	if (info->lo_offset > LLONG_MAX || info->lo_sizelimit > LLONG_MAX)
-+		return -EOVERFLOW;
-+
- 	lo->lo_offset = info->lo_offset;
- 	lo->lo_sizelimit = info->lo_sizelimit;
- 
--	/* loff_t vars have been assigned __u64 */
--	if (lo->lo_offset < 0 || lo->lo_sizelimit < 0)
--		return -EOVERFLOW;
--
- 	memcpy(lo->lo_file_name, info->lo_file_name, LO_NAME_SIZE);
- 	lo->lo_file_name[LO_NAME_SIZE-1] = 0;
- 	lo->lo_flags = info->lo_flags;
--- 
-2.31.1
+Best regards,
+Krzysztof
 
