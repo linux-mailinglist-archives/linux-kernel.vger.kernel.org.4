@@ -2,156 +2,229 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D7CB69E89B
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 20:55:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 40A2069E89E
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 20:55:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229869AbjBUTzA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Feb 2023 14:55:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43002 "EHLO
+        id S229708AbjBUTza (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Feb 2023 14:55:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43966 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229498AbjBUTy5 (ORCPT
+        with ESMTP id S229550AbjBUTz2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Feb 2023 14:54:57 -0500
-Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D24D32E0C6
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Feb 2023 11:54:55 -0800 (PST)
-Received: by mail-yb1-xb4a.google.com with SMTP id r13-20020a25760d000000b0096c886848c9so6342465ybc.3
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Feb 2023 11:54:55 -0800 (PST)
+        Tue, 21 Feb 2023 14:55:28 -0500
+Received: from mail-io1-xd2e.google.com (mail-io1-xd2e.google.com [IPv6:2607:f8b0:4864:20::d2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A25FC2CFD6
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Feb 2023 11:55:10 -0800 (PST)
+Received: by mail-io1-xd2e.google.com with SMTP id i202so2354656ioa.3
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Feb 2023 11:55:10 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=content-transfer-encoding:cc:to:from:subject:message-id:references
-         :mime-version:in-reply-to:date:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=GMjxnmNbo7rccpb3LScr9ujBgQh2usRmHS4Hjb61AYU=;
-        b=W3m1ryuQRSJ/wYmcUFTAGHVOjOvkuwmFZa/ATJ+Zhl/q1P2zmd10Ky8I3U1Vi1jVqR
-         Os1Xiszxq8Jllg7eyTjkmmRjSqfVy79uWshm5fsRPEAriZzx1mYbDCOao9Z1j8GPHsBM
-         aIs9zpNlhcVAeolxzUaQIVtzV5YSJ8tncE5Civm4cwQUrM8xkKmAeMZlFpJXrOZXgtkn
-         1mvgoO8re73Ud6HQHBKoH6/MRalLky5o4OVLLIoRMvvuJsCdHoTUmf6aCBrIfn2weR92
-         cg8IO7eUD8MOgHbG6ABDrrKoq1wr706owPdWp+QXVVxDQNRPZphya0n0LZFFdPJicJ+a
-         zhwQ==
+        d=chromium.org; s=google;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=eRYWJJCENa9rPwW/TxtFvE/+1aUPU+VLJ48+b5eakXA=;
+        b=HYpvSiiTpTlEbP+d72xPTFxz0Y5boODfa2Unjr2AFinan9k/Rc1cjs757XVmQXuHSV
+         XD8jC9LvBytNQwALMSgJ4kPe4E1AS+ubLYplmQrqC6/+wMYzYzpZ4+yjwVzIQlTDeTce
+         x6KfUIH1/yToVqW5UffBOm+0ZcuKVISPhUtQQ=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:from:subject:message-id:references
-         :mime-version:in-reply-to:date:x-gm-message-state:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=GMjxnmNbo7rccpb3LScr9ujBgQh2usRmHS4Hjb61AYU=;
-        b=LhMv3hXGYdaULv8/UH5Ta0WD2Xf9eO4HN4cBv6YaMdoXUssi2M3bDVMCo3B8rEfxFu
-         AH4UIfnjR0/1l39o25ZqLgWlfMytw351tH8D6VdG0z+Lqqmik9A185LL35/p138hsaDa
-         E8gKmHMKCtcD6PF3ioGodOYopDPOzgKqNyrOEauObCaJg7hz9thzxsPJcMPsCIhxgcZo
-         ETMGuZFgsOqETzo1sh9G33uKW6x0mroFJKETB+AahkRHGjf4eVddiidITKFG1fA1bWhq
-         CJz0hrM77g/Y7cjIzGux0JkzDKdhoPFN9Ci354E2G8pafEv7D3hLqCVndN+FylwTqI6O
-         auGw==
-X-Gm-Message-State: AO0yUKXBSqbAAarhHlr4se9a0bCZ0/+onrFwV3Ss+2HAmWRim8lO7GPV
-        a0kDyY3GUZRY7XdxY+Qh8fHslvHbHHM=
-X-Google-Smtp-Source: AK7set8SUgSmPQqcX51dDTTA7kwYC3V/xXsn0t8KiCr3/EMtaWiikm+Eb2d/F51tnqvIdchYqAwoXH4D0NE=
-X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
- (user=seanjc job=sendgmr) by 2002:a05:6902:1024:b0:8da:3163:224 with SMTP id
- x4-20020a056902102400b008da31630224mr681511ybt.0.1677009294961; Tue, 21 Feb
- 2023 11:54:54 -0800 (PST)
-Date:   Tue, 21 Feb 2023 11:54:53 -0800
-In-Reply-To: <b58da4e7c95f8771dd96a14914c9ead077ff2b3f.camel@infradead.org>
-Mime-Version: 1.0
-References: <20230217225449.811957-1-seanjc@google.com> <20230217225449.811957-3-seanjc@google.com>
- <b58da4e7c95f8771dd96a14914c9ead077ff2b3f.camel@infradead.org>
-Message-ID: <Y/UhjRe4jcM+BXt+@google.com>
-Subject: Re: [PATCH 2/2] Documentation/process: Add a maintainer handbook for
- KVM x86
-From:   Sean Christopherson <seanjc@google.com>
-To:     David Woodhouse <dwmw2@infradead.org>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Sagi Shahar <sagis@google.com>,
-        Erdem Aktas <erdemaktas@google.com>,
-        Peter Shier <pshier@google.com>,
-        Anish Ghulati <aghulati@google.com>,
-        Oliver Upton <oliver.upton@linux.dev>,
-        James Houghton <jthoughton@google.com>,
-        Anish Moorthy <amoorthy@google.com>,
-        Ben Gardon <bgardon@google.com>,
-        David Matlack <dmatlack@google.com>,
-        Ricardo Koller <ricarkol@google.com>,
-        Axel Rasmussen <axelrasmussen@google.com>,
-        Aaron Lewis <aaronlewis@google.com>,
-        Ashish Kalra <ashish.kalra@amd.com>,
-        Babu Moger <babu.moger@amd.com>, Chao Gao <chao.gao@intel.com>,
-        Chao Peng <chao.p.peng@linux.intel.com>,
-        Chenyi Qiang <chenyi.qiang@intel.com>,
-        Emanuele Giuseppe Esposito <eesposit@redhat.com>,
-        Gavin Shan <gshan@redhat.com>,
-        Guang Zeng <guang.zeng@intel.com>,
-        Hou Wenlong <houwenlong.hwl@antgroup.com>,
-        Jiaxi Chen <jiaxi.chen@linux.intel.com>,
-        Jim Mattson <jmattson@google.com>,
-        Jing Liu <jing2.liu@intel.com>,
-        Junaid Shahid <junaids@google.com>,
-        Kai Huang <kai.huang@intel.com>,
-        Leonardo Bras <leobras@redhat.com>,
-        Like Xu <like.xu.linux@gmail.com>,
-        Li RongQing <lirongqing@baidu.com>,
-        "Maciej S . Szmigiero" <maciej.szmigiero@oracle.com>,
-        Maxim Levitsky <mlevitsk@redhat.com>,
-        Michael Roth <michael.roth@amd.com>,
-        Michal Luczaj <mhal@rbox.co>,
-        Mingwei Zhang <mizhang@google.com>,
-        Nikunj A Dadhania <nikunj@amd.com>,
-        Paul Durrant <pdurrant@amazon.com>,
-        Peng Hao <flyingpenghao@gmail.com>,
-        Peter Gonda <pgonda@google.com>, Peter Xu <peterx@redhat.com>,
-        Robert Hoo <robert.hu@linux.intel.com>,
-        Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        Vipin Sharma <vipinsh@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Wei Wang <wei.w.wang@intel.com>,
-        Xiaoyao Li <xiaoyao.li@intel.com>,
-        Yu Zhang <yu.c.zhang@linux.intel.com>,
-        Zhenzhong Duan <zhenzhong.duan@intel.com>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="utf-8"
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=eRYWJJCENa9rPwW/TxtFvE/+1aUPU+VLJ48+b5eakXA=;
+        b=Sw7Fyb+lifa7XwKHjrWphegB/6MV4GYJ+Kn2DR+PAr1uDhpK/Ac33C/GZgJbM8krDW
+         sI1YGAU+wJAsq4VZET57Mlo1tpgwrlDofZfZGz+4DGu9i1jAkIQYfVly2yG62qLTUHbs
+         L4D3FSfNM2d8ep4hxlL93SOcTTBbacSO7Fqn2V5qmyy3UXff82cXvEE/yzdkkWlhrvao
+         maFM6PMGX5+uu2tu2JYnolhN+ZsjhiTTDLvGeDlpE3KMPD2ZuNyTjvfTwDyZ6T/GHiqZ
+         rjselVWfmOP+uRe6n/Oz3JaGGQO5iNMgx/gtET7CkkPAMBMg0KFynOyvWkFW5H/KATy9
+         w/Pg==
+X-Gm-Message-State: AO0yUKUQRr+xbJxqVXQJL5t6JXvjoqXPUhoKoOYTf4FWJ5mBf3NgXB0i
+        A5iXKm80e0KF9DGYP0i4CW7YBmN/cBr6YYtgDunFbw==
+X-Google-Smtp-Source: AK7set/w700ouJyUYiXM9kt1jbCAA2NUhIQI8F+mlpYikAHFpTJ67qOvGV3wQETjTP2ci+5CpwYaIYNCoOXnjHtIN2Q=
+X-Received: by 2002:a5e:a916:0:b0:71b:df97:1d95 with SMTP id
+ c22-20020a5ea916000000b0071bdf971d95mr3705480iod.80.1677009305527; Tue, 21
+ Feb 2023 11:55:05 -0800 (PST)
+MIME-Version: 1.0
+References: <20230218211608.1630586-1-robdclark@gmail.com> <20230218211608.1630586-11-robdclark@gmail.com>
+ <20230220110820.595cfa37@eldfell> <CAF6AEGuo-vmW4Va9=RH+kH9KgNvR2vzjJ8meO-oty56xjDhjgg@mail.gmail.com>
+ <20230221104551.60d44d1c@eldfell> <Y/TAr64SpxO712RB@intel.com>
+In-Reply-To: <Y/TAr64SpxO712RB@intel.com>
+From:   Rob Clark <robdclark@chromium.org>
+Date:   Tue, 21 Feb 2023 11:54:55 -0800
+Message-ID: <CAJs_Fx7n3QrzusdX5yD=39YZ8MzjuwZTriWz8hVxNYGHO=sJ_Q@mail.gmail.com>
+Subject: Re: [PATCH v4 10/14] drm/vblank: Add helper to get next vblank time
+To:     =?UTF-8?B?VmlsbGUgU3lyasOkbMOk?= <ville.syrjala@linux.intel.com>
+Cc:     Pekka Paalanen <ppaalanen@gmail.com>,
+        Rob Clark <robdclark@gmail.com>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Tvrtko Ursulin <tvrtko.ursulin@intel.com>,
+        =?UTF-8?Q?Christian_K=C3=B6nig?= <ckoenig.leichtzumerken@gmail.com>,
+        =?UTF-8?Q?Michel_D=C3=A4nzer?= <michel@daenzer.net>,
+        open list <linux-kernel@vger.kernel.org>,
+        dri-devel@lists.freedesktop.org,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        freedreno@lists.freedesktop.org
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 20, 2023, David Woodhouse wrote:
-> On Fri, 2023-02-17 at 14:54 -0800, Sean Christopherson wrote:
-> >=20
-> > +All topic branches, except for ``next`` and ``fixes``, are rolled into=
- ``next``
-> > +via a cthulu merge on an as-needed basis, i.e. when a topic branch is =
-updated.
-> > +As a result, force pushes to ``next`` are common.
-> > +
->=20
-> This makes 'next' an unfortunate name, doesn't it? Since branches
-> destined for "linux-next", which has been using that name for far
-> longer, have exactly the opposite expectation =E2=80=94 that they have st=
-able
-> commit IDs.
+On Tue, Feb 21, 2023 at 5:01 AM Ville Syrj=C3=A4l=C3=A4
+<ville.syrjala@linux.intel.com> wrote:
+>
+> On Tue, Feb 21, 2023 at 10:45:51AM +0200, Pekka Paalanen wrote:
+> > On Mon, 20 Feb 2023 07:55:41 -0800
+> > Rob Clark <robdclark@gmail.com> wrote:
+> >
+> > > On Mon, Feb 20, 2023 at 1:08 AM Pekka Paalanen <ppaalanen@gmail.com> =
+wrote:
+> > > >
+> > > > On Sat, 18 Feb 2023 13:15:53 -0800
+> > > > Rob Clark <robdclark@gmail.com> wrote:
+> > > >
+> > > > > From: Rob Clark <robdclark@chromium.org>
+> > > > >
+> > > > > Will be used in the next commit to set a deadline on fences that =
+an
+> > > > > atomic update is waiting on.
+> > > > >
+> > > > > Signed-off-by: Rob Clark <robdclark@chromium.org>
+> > > > > ---
+> > > > >  drivers/gpu/drm/drm_vblank.c | 32 ++++++++++++++++++++++++++++++=
+++
+> > > > >  include/drm/drm_vblank.h     |  1 +
+> > > > >  2 files changed, 33 insertions(+)
+> > > > >
+> > > > > diff --git a/drivers/gpu/drm/drm_vblank.c b/drivers/gpu/drm/drm_v=
+blank.c
+> > > > > index 2ff31717a3de..caf25ebb34c5 100644
+> > > > > --- a/drivers/gpu/drm/drm_vblank.c
+> > > > > +++ b/drivers/gpu/drm/drm_vblank.c
+> > > > > @@ -980,6 +980,38 @@ u64 drm_crtc_vblank_count_and_time(struct dr=
+m_crtc *crtc,
+> > > > >  }
+> > > > >  EXPORT_SYMBOL(drm_crtc_vblank_count_and_time);
+> > > > >
+> > > > > +/**
+> > > > > + * drm_crtc_next_vblank_time - calculate the time of the next vb=
+lank
+> > > > > + * @crtc: the crtc for which to calculate next vblank time
+> > > > > + * @vblanktime: pointer to time to receive the next vblank times=
+tamp.
+> > > > > + *
+> > > > > + * Calculate the expected time of the next vblank based on time =
+of previous
+> > > > > + * vblank and frame duration
+> > > >
+> > > > Hi,
+> > > >
+> > > > for VRR this targets the highest frame rate possible for the curren=
+t
+> > > > VRR mode, right?
+> > > >
+> > >
+> > > It is based on vblank->framedur_ns which is in turn based on
+> > > mode->crtc_clock.  Presumably for VRR that ends up being a maximum?
+> >
+> > I don't know. :-)
+>
+> At least for i915 this will give you the maximum frame
+> duration.
+>
+> Also this does not calculate the the start of vblank, it
+> calculates the start of active video.
 
-I was coming at it from the viewpoint of linux-next itself, where HEAD is r=
-ebuilt
-nightly and thus is not stable.  The inputs are stable, just not the merge =
-commit.
+AFAIU, vsync_end/vsync_start are in units of line, so I could do something =
+like:
 
-> Would 'staging' not be more conventional for the branch you describe?
+  vsync_lines =3D vblank->hwmode.vsync_end - vblank->hwmode.vsync_start;
+  vsyncdur =3D ns_to_ktime(vblank->linedur_ns * vsync_lines);
+  framedur =3D ns_to_ktime(vblank->framedur_ns);
+  *vblanktime =3D ktime_add(*vblanktime, ktime_sub(framedur, vsyncdur));
 
-Not really?  It's not a staging area, it really is the branch that contains=
- the
-changes for the "next" kernel.
+?
 
-What if I drop the above guidance and instead push a date-stamped tag when =
-pushing
-to 'next'?  That should ensure the base is reachable for everyone, and woul=
-d also
-provide a paper trail for what I've done, which is probably a good idea reg=
-ardless.
+BR,
+-R
+
+>
+> >
+> > You need a number of clock cycles in addition to the clock frequency,
+> > and that could still be minimum, maximum, the last realized one, ...
+> >
+> > VRR works by adjusting the front porch length IIRC.
+> >
+> >
+> > Thanks,
+> > pq
+> >
+> > > BR,
+> > > -R
+> > >
+> > >
+> > > >
+> > > > Thanks,
+> > > > pq
+> > > >
+> > > > > + */
+> > > > > +int drm_crtc_next_vblank_time(struct drm_crtc *crtc, ktime_t *vb=
+lanktime)
+> > > > > +{
+> > > > > +     unsigned int pipe =3D drm_crtc_index(crtc);
+> > > > > +     struct drm_vblank_crtc *vblank =3D &crtc->dev->vblank[pipe]=
+;
+> > > > > +     u64 count;
+> > > > > +
+> > > > > +     if (!vblank->framedur_ns)
+> > > > > +             return -EINVAL;
+> > > > > +
+> > > > > +     count =3D drm_vblank_count_and_time(crtc->dev, pipe, vblank=
+time);
+> > > > > +
+> > > > > +     /*
+> > > > > +      * If we don't get a valid count, then we probably also don=
+'t
+> > > > > +      * have a valid time:
+> > > > > +      */
+> > > > > +     if (!count)
+> > > > > +             return -EINVAL;
+> > > > > +
+> > > > > +     *vblanktime =3D ktime_add(*vblanktime, ns_to_ktime(vblank->=
+framedur_ns));
+> > > > > +
+> > > > > +     return 0;
+> > > > > +}
+> > > > > +EXPORT_SYMBOL(drm_crtc_next_vblank_time);
+> > > > > +
+> > > > >  static void send_vblank_event(struct drm_device *dev,
+> > > > >               struct drm_pending_vblank_event *e,
+> > > > >               u64 seq, ktime_t now)
+> > > > > diff --git a/include/drm/drm_vblank.h b/include/drm/drm_vblank.h
+> > > > > index 733a3e2d1d10..a63bc2c92f3c 100644
+> > > > > --- a/include/drm/drm_vblank.h
+> > > > > +++ b/include/drm/drm_vblank.h
+> > > > > @@ -230,6 +230,7 @@ bool drm_dev_has_vblank(const struct drm_devi=
+ce *dev);
+> > > > >  u64 drm_crtc_vblank_count(struct drm_crtc *crtc);
+> > > > >  u64 drm_crtc_vblank_count_and_time(struct drm_crtc *crtc,
+> > > > >                                  ktime_t *vblanktime);
+> > > > > +int drm_crtc_next_vblank_time(struct drm_crtc *crtc, ktime_t *vb=
+lanktime);
+> > > > >  void drm_crtc_send_vblank_event(struct drm_crtc *crtc,
+> > > > >                              struct drm_pending_vblank_event *e);
+> > > > >  void drm_crtc_arm_vblank_event(struct drm_crtc *crtc,
+> > > >
+> >
+>
+>
+>
+> --
+> Ville Syrj=C3=A4l=C3=A4
+> Intel
