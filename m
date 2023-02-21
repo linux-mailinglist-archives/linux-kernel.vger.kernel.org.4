@@ -2,114 +2,158 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 13C3869E2CC
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 15:57:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AB67169E2CD
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 15:57:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234182AbjBUO5l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Feb 2023 09:57:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48626 "EHLO
+        id S234406AbjBUO5x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Feb 2023 09:57:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49000 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230164AbjBUO5j (ORCPT
+        with ESMTP id S230164AbjBUO5v (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Feb 2023 09:57:39 -0500
-Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C70532916A;
-        Tue, 21 Feb 2023 06:57:38 -0800 (PST)
-Received: by mail-wm1-x32c.google.com with SMTP id j3so1516252wms.2;
-        Tue, 21 Feb 2023 06:57:38 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=4H9Mx/yKZ3Hus53qi2wHVToOwmIjYjSCkNX7dVFqCwo=;
-        b=F2QVHq2MCLZT2G5xJA114eev7sGqCMrd7Io0D+KtpUjacTeZhDiQ9UixCwB1qbmptO
-         dWnBgzBbqEDLMGlhxBVmRgj7IcKcxRD39kHShMHrEzeXoYAo6wN4RKpKig9W6tqtNUTt
-         2UbDIjuwX5Tir3Q305RwQWwA5koLQAa4CMCpx3jKvGwFwHrPU6USlvVujdgJqP0DD4cK
-         VGB9Wk3iQV0WEmmPfqzCXdRAturixbDMT+U6x/0iH5nMDlSt0utdeASuG3ox7jX1RS+Q
-         WDqrHMWdipE2fhrI/Ku9CuzS8nE1ggzLRNisrzLwkqYWgoYo1w9KF8LfgwEjWY9O6+4x
-         DP1g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=4H9Mx/yKZ3Hus53qi2wHVToOwmIjYjSCkNX7dVFqCwo=;
-        b=rOQ+xAE/koDaQHA48JCgv9iCvgFXyUebbt/wqXwh1WCCE/+NbVe65YxyORGtFviexU
-         mzP7gTg72hmmnj0A5YAk+FIRtOVe6vIg2jZz2Xi6vN4UGPKJpuifXwM5y47xGgP5CLrW
-         qJ2KS3MIs5lFC7IfqLzn8AXRAdzKYSEXgE/AhgiET5Ypnum3Ym5WWK5PWkdACefMCh/I
-         CkTGpuE5U+Iejic+ockI+radKZQqF4fImFKSloDxBj0g0XpNYUnwvm15TNxnvemfK3oK
-         2Zt1MsDX0o3iylhgzpQ1zPtsAwM2aOyHW/uTR+l3cKCHiqmCtwSmmBDBlidpLMxg3NyR
-         whSg==
-X-Gm-Message-State: AO0yUKWhfJrlAFwOi1StIT7vGhPEYiMqaZGA7IYAho4fYIxHkFtCr8Gm
-        psc1McjxHm4HF4GhjPbiAkI=
-X-Google-Smtp-Source: AK7set/tts7I2v794GNeEU0xjDE4f5TUNTMY6f68NtdjKBIJ0UWaYFSZ0sj6Q7mjoYHCqSjqfrEI4g==
-X-Received: by 2002:a05:600c:3b11:b0:3e2:669:757 with SMTP id m17-20020a05600c3b1100b003e206690757mr3471234wms.10.1676991457308;
-        Tue, 21 Feb 2023 06:57:37 -0800 (PST)
-Received: from debian ([63.135.72.41])
-        by smtp.gmail.com with ESMTPSA id r18-20020a05600c459200b003dc433355aasm4595702wmo.18.2023.02.21.06.57.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 21 Feb 2023 06:57:37 -0800 (PST)
-Date:   Tue, 21 Feb 2023 14:57:35 +0000
-From:   "Sudip Mukherjee (Codethink)" <sudipm.mukherjee@gmail.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
-        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, f.fainelli@gmail.com, srw@sladewatkins.net,
-        rwarsow@gmx.de
-Subject: Re: [PATCH 5.15 00/83] 5.15.95-rc1 review
-Message-ID: <Y/Tb36aAXPJzbCAG@debian>
-References: <20230220133553.669025851@linuxfoundation.org>
+        Tue, 21 Feb 2023 09:57:51 -0500
+Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A95F52B2BB
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Feb 2023 06:57:47 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=YZVoitn0OFerkZtEiNKLmfmcZma5QZExWfyuh2Zh4dU=; b=o1yCex2N6LhDp7LJNRbO1V6Ym+
+        mDXJPQOhxIzXe8yEgo6HyxydRsqxzar/1cK72N5sAn0YBgt4oBz6V5zOXYzkoD4eXl3iF9FWHBxGx
+        VU/3COTFMnIGExQJ72zXYxZmWGBj5Kkqsj6XKQWuR88C2000S1TEJVtRjSVGS2P1zGUvn6IP3k1Ri
+        hWLpGJet4BuwVQ7JzYCP0PFBjJ+gm0hJaYOPs/KAvnZ5p2k5PX7q0MvGRBcLXfuSzX9LFC2svwJFO
+        6ZXkHeF0QfUa9Parh0zHIoQb7WpCHrmO4GoXrOHmd/vjofp5dmvW8rLssa7guLAYoTD6AzIRarSyR
+        SfPa5X7g==;
+Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:47190)
+        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <linux@armlinux.org.uk>)
+        id 1pUU5R-0005zE-2g; Tue, 21 Feb 2023 14:57:45 +0000
+Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
+        (envelope-from <linux@shell.armlinux.org.uk>)
+        id 1pUU5Q-0002JJ-5Q; Tue, 21 Feb 2023 14:57:44 +0000
+Date:   Tue, 21 Feb 2023 14:57:44 +0000
+From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
+To:     Andrew Lunn <andrew@lunn.ch>
+Cc:     Marc Zyngier <maz@kernel.org>, LKML <linux-kernel@vger.kernel.org>
+Subject: Re: phylib locking (was: Re: [REGRESSION] Re: [patch V3 09/33]
+ genirq/msi: Add range checking) to msi_insert_desc()
+Message-ID: <Y/Tb6E3BaC7qSAMa@shell.armlinux.org.uk>
+References: <20221124230505.073418677@linutronix.de>
+ <20221124232325.798556374@linutronix.de>
+ <Y/Opu6ETe3ZzZ/8E@shell.armlinux.org.uk>
+ <86fsb0xkaa.wl-maz@kernel.org>
+ <Y/PHN+0nETV3o1pQ@shell.armlinux.org.uk>
+ <Y/PNcLACXSN2X/F/@lunn.ch>
+ <Y/PU/9zTLxIJyWkz@shell.armlinux.org.uk>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230220133553.669025851@linuxfoundation.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <Y/PU/9zTLxIJyWkz@shell.armlinux.org.uk>
+Sender: Russell King (Oracle) <linux@armlinux.org.uk>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Greg,
-
-On Mon, Feb 20, 2023 at 02:35:33PM +0100, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.15.95 release.
-> There are 83 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
+On Mon, Feb 20, 2023 at 08:15:59PM +0000, Russell King (Oracle) wrote:
+> [dropped most on the Cc as this has probably deviated off topic for
+> them... and changed the subject]
 > 
-> Responses should be made by Wed, 22 Feb 2023 13:35:35 +0000.
-> Anything received after that time might be too late.
+> On Mon, Feb 20, 2023 at 08:43:44PM +0100, Andrew Lunn wrote:
+> > On Mon, Feb 20, 2023 at 07:17:11PM +0000, Russell King (Oracle) wrote:
+> > > On Mon, Feb 20, 2023 at 06:29:33PM +0000, Marc Zyngier wrote:
+> > > > Lockdep also reports[1] a possible circular locking dependency between
+> > > > phy_attach_direct() and rtnetlink_rcv_msg(), which looks interesting.
+> > > > 
+> > > > [1] https://paste.debian.net/1271454/
+> > > 
+> > > Adding Andrew, but really this should be in a separate thread, since
+> > > this has nothing to do with MSI.
+> > > 
+> > > It looks like the open path takes the RTNL lock followed by the phydev
+> > > lock, whereas the PHY probe path takes the phydev lock, and then if
+> > > there's a SFP attached to the PHY, we end up taking the RTNL lock.
+> > > That's going to be utterly horrid to try and solve, and isn't going
+> > > to be quick to fix.
+> > 
+> > What are we actually trying to protect in phy_probe() when we take the
+> > lock and call phydev->drv->probe(phydev) ?
+> > 
+> > The main purpose of the lock is to protect members of phydev, such as
+> > link, speed, duplex, which can be inconsistent when the lock is not
+> > held. But the PHY is not attached to a MAC yet, so a MAC cannot be
+> > using it, and those members of phydev are not valid yet anyway.
+> > 
+> > The lock also prevents parallel operation on the device by phylib, but
+> > i cannot think of how that could happen at this early stage in the
+> > life of the PHY.
+> > 
+> > So maybe we can move the mutex_lock() after the call to
+> > phydev->drv->probe()?
+> 
+> That's what I've been thinking too - I dug back in the history, and
+> it was a spin_lock_bh(), and before that it was a spin_lock().
+> 
+> The patch that converted it to a spin_lock_bh() is a brilliant
+> example of a poor commit message "Lock debugging finds a problem"
+> but doesn't say _what_ the problem was! Going back further still, the
+> spin_lock() was there from the very beginnings of PHYLIB. So the
+> reasoning for having a lock here has been lost in the depths of time.
+> 
+> The lock certainly doesn't prevent any interaction with
+> phy_attach_direct(), so it seems to be utterly pointless to take
+> the lock in the probe() function.
+> 
+> So yes, I agree, we can move the lock - and I wonder whether we
+> could just get rid of it completely in phy_probe().
 
-Build test (gcc version 12.2.1 20230210):
-mips: 62 configs -> no failure
-arm: 99 configs -> no failure
-arm64: 3 configs -> no failure
-x86_64: 4 configs -> no failure
-alpha allmodconfig -> no failure
-csky allmodconfig -> no failure
-powerpc allmodconfig -> no failure
-riscv allmodconfig -> no failure
-s390 allmodconfig -> no failure
-xtensa allmodconfig -> no failure
+Thinking about this more, I think taking phydev->lock in both
+phy_probe() and phy_remove() are both entirely pointless, so I think
+we should remove both and be done with this. As I note above, it does
+nothing to stop a race between phy_attach_direct() and phy_probe() or
+even phy_remove(). So, I think this is entirely sensible:
 
-Boot test:
-x86_64: Booted on my test laptop. No regression.
-x86_64: Booted on qemu. No regression. [1]
-arm64: Booted on rpi4b (4GB model). No regression. [2]
-mips: Booted on ci20 board. No regression. [3]
-
-[1]. https://openqa.qa.codethink.co.uk/tests/2907
-[2]. https://openqa.qa.codethink.co.uk/tests/2910
-[3]. https://openqa.qa.codethink.co.uk/tests/2912
-
-Tested-by: Sudip Mukherjee <sudip.mukherjee@codethink.co.uk>
+diff --git a/drivers/net/phy/phy_device.c b/drivers/net/phy/phy_device.c
+index 71becceb8764..b46a074b27e4 100644
+--- a/drivers/net/phy/phy_device.c
++++ b/drivers/net/phy/phy_device.c
+@@ -3098,8 +3098,6 @@ static int phy_probe(struct device *dev)
+ 	if (phydrv->flags & PHY_IS_INTERNAL)
+ 		phydev->is_internal = true;
+ 
+-	mutex_lock(&phydev->lock);
+-
+ 	/* Deassert the reset signal */
+ 	phy_device_reset(phydev, 0);
+ 
+@@ -3173,8 +3171,6 @@ static int phy_probe(struct device *dev)
+ 	if (err)
+ 		phy_device_reset(phydev, 1);
+ 
+-	mutex_unlock(&phydev->lock);
+-
+ 	return err;
+ }
+ 
+@@ -3184,9 +3180,7 @@ static int phy_remove(struct device *dev)
+ 
+ 	cancel_delayed_work_sync(&phydev->state_queue);
+ 
+-	mutex_lock(&phydev->lock);
+ 	phydev->state = PHY_DOWN;
+-	mutex_unlock(&phydev->lock);
+ 
+ 	sfp_bus_del_upstream(phydev->sfp_bus);
+ 	phydev->sfp_bus = NULL;
 
 -- 
-Regards
-Sudip
+RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
+FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!
