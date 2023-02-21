@@ -2,191 +2,164 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7F42F69E62F
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 18:45:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4FD4E69E631
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 18:46:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234697AbjBURpJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Feb 2023 12:45:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57966 "EHLO
+        id S234090AbjBURqj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Feb 2023 12:46:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59488 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234688AbjBURpE (ORCPT
+        with ESMTP id S233902AbjBURqK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Feb 2023 12:45:04 -0500
-Received: from mail-lj1-x22f.google.com (mail-lj1-x22f.google.com [IPv6:2a00:1450:4864:20::22f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A36FB22798
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Feb 2023 09:44:59 -0800 (PST)
-Received: by mail-lj1-x22f.google.com with SMTP id l8so5246597ljq.3
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Feb 2023 09:44:59 -0800 (PST)
+        Tue, 21 Feb 2023 12:46:10 -0500
+Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A43F2ED78;
+        Tue, 21 Feb 2023 09:46:02 -0800 (PST)
+Received: by mail-wm1-x333.google.com with SMTP id l2-20020a05600c1d0200b003e1f6dff952so4220630wms.1;
+        Tue, 21 Feb 2023 09:46:02 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=SbC5sP3V4tvxg8poITPffqeiBSYf5mTki8iUVO0MfTU=;
-        b=YTuHJO/cT2gzfESi8zNm1cF+ovCWeN4ypblfk5i+cUWaymjSHjwTVGENfflTPwgw/T
-         2jCWWzKseuNBuyC/Tk9vhGo1dUvXleGiFQ95CIiy6BnFeEvyWHFAJRycHFVRIr4Y6JsI
-         AHsKo6s8kWq/nYKntu4cod1qq2zjgp+OEW1IJBPaRIycWp1M+iPr7edsvTf5ZYkj8onV
-         eaQK3aMZ+FlgS/E9/ixd/Hn/2fS8tI7Vz4vaHoX9Vl9pVW3XR/WF64sF8YnyJd+TJRHo
-         jSOERGvg8xMKmHWzB+xmBmQJoIAOaC0P92nl51T18x7P0XfK3jsXExOBFmc5Ske5Gt+Y
-         YaEQ==
+        bh=uDnRax3P8Rqyh+vEDtWbnJmJDAGSHfiJk1QrjFoAGQc=;
+        b=WYc7k04yz2ZCvvMTcnhKsFBcv+CqQzwr+5b7uAUlygEzihNPlXdKwMVllYB+Zul2FX
+         IhcJ+BTDKGcqsDTn4lMAFm/wcM8v+VatLVVYRUjOupeeTx8CZC6kHkqIAMUdPrNKB6gC
+         Td7K0ZKkxg1X11OaGqpbXThYpVUJPGseC8jG9AO+x8LSbF0c0ztFQOPC8nNPveeu+Yhf
+         Wh1ApK61O2XF3F+OaEnPn/rgWj2YuQcBA935UNUn6tJzV234AVwK+z9cR27K3LfbI2Zr
+         YIV8aFk/PokCdnwzkavxEPfwwP/+kOaC0OEnZJk7Wf9CR1jZ1gdtwt3IuVtmzRd1RqQ1
+         5gRA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=SbC5sP3V4tvxg8poITPffqeiBSYf5mTki8iUVO0MfTU=;
-        b=lDUe3iuCz2UIExECUslNgzfOwacdAW4MFkB/ljbkhUmMkBIDlD2nS8T4ddBj/uzVEB
-         5rtwozySmimB7nY94uR5YtV79l+jKzfBpgLGsUzlVcTJJGf9ZaAv/vm3i/ZxumLHQ8PC
-         cfVshjF9eOSMNhWAd6y4KL4nDR95LXjzPs/+h4xwuOLXz5VOazPJC6XOFFbfjL6wu//y
-         Xp7fsh3L6GKY4aoiQ+Vawz9HsE8l1zngvnNHV/GogFwuDHwHpRQYCDtfEs9bDEtj3jaX
-         b6RVb/91kcYl7DjKE1Wx93lFa4Eha6SLWpTXliR5l3BGErUusw4vbCtDg2lQLlGi6p2C
-         DrAg==
-X-Gm-Message-State: AO0yUKXF4qF0YtFlkKuJ2J3023aYsYUguNHCWRBAWl4OBjCaekf7jrb5
-        57HkZIuB+Xj+pWEIIryVQHWUrg==
-X-Google-Smtp-Source: AK7set879K1Vi+y3/+uZVasOTDhk1xxr/cHP8DNMLeLPuEKpxk6lQ/H0S5WhJxZ4r3G8sI0qOtKB7g==
-X-Received: by 2002:a05:651c:b0d:b0:293:7bce:2374 with SMTP id b13-20020a05651c0b0d00b002937bce2374mr2608864ljr.33.1677001497854;
-        Tue, 21 Feb 2023 09:44:57 -0800 (PST)
-Received: from [192.168.1.101] (abxi151.neoplus.adsl.tpnet.pl. [83.9.2.151])
-        by smtp.gmail.com with ESMTPSA id k16-20020a05651c10b000b00290517c661asm203301ljn.40.2023.02.21.09.44.56
+        bh=uDnRax3P8Rqyh+vEDtWbnJmJDAGSHfiJk1QrjFoAGQc=;
+        b=5szQ1uBkXP20Dy/795s3LjRw1VCoyD1UHLsidGXQ+xxxQ3r4h8CrJJm11cPseXlnO4
+         /76sDMPO3dekauo7EtMCdm0OPaC2D+rkNvtkYPQknG8DkUU7yk750Ob7iemgx2oA7UJu
+         CQsh9ohIUcG1IeUyK93mhe7ZQZHAczgDBZ6Q8ylDgaMgfhkFmWTYM2sOdE1QC/ei5Av4
+         yubltWzsKFt82BQMCVup+84hBB1/cKQ46rNcVGIp+gRjM0EWQx8bGpM6YTNrp6uLSZ5I
+         7yk/5Z0aiv48RsRJoxExhJhVMBE0QoWrLCBIgpLEeeHadsrsd9Nf6HYnN2FTS2jKsrs2
+         92KA==
+X-Gm-Message-State: AO0yUKVVulTNWI/F7mpNybAda3OG4EiJIbM3CbO32ZmDNErb+Ax/80FG
+        EdjA45+l5jwMRJsk8DU1Iek=
+X-Google-Smtp-Source: AK7set8pjNw1NwJOpBnT1vnsx7fpIowFzjMraxEwg1udWoNXFw7O2fPzZBbXCRSfLOKzUIJXjW+A/w==
+X-Received: by 2002:a05:600c:4496:b0:3d9:fb89:4e3d with SMTP id e22-20020a05600c449600b003d9fb894e3dmr4959116wmo.28.1677001560784;
+        Tue, 21 Feb 2023 09:46:00 -0800 (PST)
+Received: from [192.168.8.100] (94.196.95.64.threembb.co.uk. [94.196.95.64])
+        by smtp.gmail.com with ESMTPSA id g4-20020a056000118400b002c5544b3a69sm2095891wrx.89.2023.02.21.09.46.00
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 21 Feb 2023 09:44:57 -0800 (PST)
-Message-ID: <9a3e9c76-ba70-6ccc-3ade-fa08cdff571e@linaro.org>
-Date:   Tue, 21 Feb 2023 18:44:55 +0100
+        Tue, 21 Feb 2023 09:46:00 -0800 (PST)
+Message-ID: <782b4b43-790c-6e89-ea74-aac1fd4ff1e2@gmail.com>
+Date:   Tue, 21 Feb 2023 17:45:02 +0000
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH 2/2] arm64: dts: qcom: sa8775p: add cpufreq node
-To:     Bartosz Golaszewski <brgl@bgdev.pl>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>
-Cc:     linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
-References: <20230221150543.283487-1-brgl@bgdev.pl>
- <20230221150543.283487-3-brgl@bgdev.pl>
+ Thunderbird/102.7.2
+Subject: Re: [PATCH 1/2] io_uring: Move from hlist to io_wq_work_node
 Content-Language: en-US
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <20230221150543.283487-3-brgl@bgdev.pl>
-Content-Type: text/plain; charset=UTF-8
+To:     Breno Leitao <leitao@debian.org>, axboe@kernel.dk,
+        io-uring@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org, gustavold@meta.com, leit@meta.com
+References: <20230221135721.3230763-1-leitao@debian.org>
+From:   Pavel Begunkov <asml.silence@gmail.com>
+In-Reply-To: <20230221135721.3230763-1-leitao@debian.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 21.02.2023 16:05, Bartosz Golaszewski wrote:
-> From: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+On 2/21/23 13:57, Breno Leitao wrote:
+> Having cache entries linked using the hlist format brings no benefit, and
+> also requires an unnecessary extra pointer address per cache entry.
 > 
-> Add a node for the cpufreq engine and specify the frequency domains for
-> all CPUs.
+> Use the internal io_wq_work_node single-linked list for the internal
+> alloc caches (async_msghdr and async_poll)
 > 
-> Signed-off-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+> This is required to be able to use KASAN on cache entries, since we do
+> not need to touch unused (and poisoned) cache entries when adding more
+> entries to the list.
+
+Looks good, a few nits
+
+> 
+> Suggested-by: Pavel Begunkov <asml.silence@gmail.com>
+> Signed-off-by: Breno Leitao <leitao@debian.org>
 > ---
->  arch/arm64/boot/dts/qcom/sa8775p.dtsi | 21 +++++++++++++++++++++
->  1 file changed, 21 insertions(+)
+>   include/linux/io_uring_types.h |  2 +-
+>   io_uring/alloc_cache.h         | 27 +++++++++++++++------------
+>   2 files changed, 16 insertions(+), 13 deletions(-)
 > 
-> diff --git a/arch/arm64/boot/dts/qcom/sa8775p.dtsi b/arch/arm64/boot/dts/qcom/sa8775p.dtsi
-> index ce5976e36aee..5e2bc67b3178 100644
-> --- a/arch/arm64/boot/dts/qcom/sa8775p.dtsi
-> +++ b/arch/arm64/boot/dts/qcom/sa8775p.dtsi
-> @@ -37,6 +37,7 @@ CPU0: cpu@0 {
->  			compatible = "qcom,kryo";
->  			reg = <0x0 0x0>;
->  			enable-method = "psci";
-> +			qcom,freq-domain = <&cpufreq_hw 0>;
->  			next-level-cache = <&L2_0>;
->  			L2_0: l2-cache {
->  				compatible = "cache";
-> @@ -52,6 +53,7 @@ CPU1: cpu@100 {
->  			compatible = "qcom,kryo";
->  			reg = <0x0 0x100>;
->  			enable-method = "psci";
-> +			qcom,freq-domain = <&cpufreq_hw 0>;
->  			next-level-cache = <&L2_1>;
->  			L2_1: l2-cache {
->  				compatible = "cache";
-> @@ -64,6 +66,7 @@ CPU2: cpu@200 {
->  			compatible = "qcom,kryo";
->  			reg = <0x0 0x200>;
->  			enable-method = "psci";
-> +			qcom,freq-domain = <&cpufreq_hw 0>;
->  			next-level-cache = <&L2_2>;
->  			L2_2: l2-cache {
->  				compatible = "cache";
-> @@ -76,6 +79,7 @@ CPU3: cpu@300 {
->  			compatible = "qcom,kryo";
->  			reg = <0x0 0x300>;
->  			enable-method = "psci";
-> +			qcom,freq-domain = <&cpufreq_hw 0>;
->  			next-level-cache = <&L2_3>;
->  			L2_3: l2-cache {
->  				compatible = "cache";
-> @@ -88,6 +92,7 @@ CPU4: cpu@10000 {
->  			compatible = "qcom,kryo";
->  			reg = <0x0 0x10000>;
->  			enable-method = "psci";
-> +			qcom,freq-domain = <&cpufreq_hw 1>;
->  			next-level-cache = <&L2_4>;
->  			L2_4: l2-cache {
->  				compatible = "cache";
-> @@ -104,6 +109,7 @@ CPU5: cpu@10100 {
->  			compatible = "qcom,kryo";
->  			reg = <0x0 0x10100>;
->  			enable-method = "psci";
-> +			qcom,freq-domain = <&cpufreq_hw 1>;
->  			next-level-cache = <&L2_5>;
->  			L2_5: l2-cache {
->  				compatible = "cache";
-> @@ -116,6 +122,7 @@ CPU6: cpu@10200 {
->  			compatible = "qcom,kryo";
->  			reg = <0x0 0x10200>;
->  			enable-method = "psci";
-> +			qcom,freq-domain = <&cpufreq_hw 1>;
->  			next-level-cache = <&L2_6>;
->  			L2_6: l2-cache {
->  				compatible = "cache";
-> @@ -128,6 +135,7 @@ CPU7: cpu@10300 {
->  			compatible = "qcom,kryo";
->  			reg = <0x0 0x10300>;
->  			enable-method = "psci";
-> +			qcom,freq-domain = <&cpufreq_hw 1>;
->  			next-level-cache = <&L2_7>;
->  			L2_7: l2-cache {
->  				compatible = "cache";
-> @@ -731,6 +739,19 @@ tcsr_mutex: hwlock@1f40000 {
->  			#hwlock-cells = <1>;
->  		};
->  
-> +		cpufreq_hw: cpufreq@18591000 {
-> +			compatible = "qcom,sa8775p-cpufreq-epss",
-> +				     "qcom,cpufreq-epss";
-That's some very aggressive wrapping! :P
-
-Nevertheless,
-
-Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
-
-Konrad
-> +			reg = <0x0 0x18591000 0x0 0x1000>,
-> +			      <0x0 0x18593000 0x0 0x1000>;
-> +			reg-names = "freq-domain0", "freq-domain1";
+> diff --git a/include/linux/io_uring_types.h b/include/linux/io_uring_types.h
+> index 0efe4d784358..efa66b6c32c9 100644
+> --- a/include/linux/io_uring_types.h
+> +++ b/include/linux/io_uring_types.h
+> @@ -188,7 +188,7 @@ struct io_ev_fd {
+>   };
+>   
+[...]
+> -	if (!hlist_empty(&cache->list)) {
+> -		struct hlist_node *node = cache->list.first;
+> -
+> -		hlist_del(node);
+> -		return container_of(node, struct io_cache_entry, node);
+> +	struct io_wq_work_node *node;
+> +	struct io_cache_entry *entry;
 > +
-> +			clocks = <&rpmhcc RPMH_CXO_CLK>, <&gcc GCC_GPLL0>;
-> +			clock-names = "xo", "alternate";
-> +
-> +			#freq-domain-cells = <1>;
-> +		};
-> +
->  		tlmm: pinctrl@f000000 {
->  			compatible = "qcom,sa8775p-tlmm";
->  			reg = <0x0 0xf000000 0x0 0x1000000>;
+> +	if (cache->list.next) {
+> +		node = cache->list.next;
+> +		entry = container_of(node, struct io_cache_entry, node);
+
+I'd prefer to get rid of the node var, it'd be a bit cleaner
+than keeping two pointers to the same chunk.
+
+entry = container_of(node, struct io_cache_entry,
+                      cache->list.next);
+
+> +		cache->list.next = node->next;
+> +		return entry;
+>   	}
+>   
+>   	return NULL;
+> @@ -35,19 +38,19 @@ static inline struct io_cache_entry *io_alloc_cache_get(struct io_alloc_cache *c
+>   
+>   static inline void io_alloc_cache_init(struct io_alloc_cache *cache)
+>   {
+> -	INIT_HLIST_HEAD(&cache->list);
+> +	cache->list.next = NULL;
+>   	cache->nr_cached = 0;
+>   }
+>   
+>   static inline void io_alloc_cache_free(struct io_alloc_cache *cache,
+>   					void (*free)(struct io_cache_entry *))
+>   {
+> -	while (!hlist_empty(&cache->list)) {
+> -		struct hlist_node *node = cache->list.first;
+> +	struct io_cache_entry *entry;
+>   
+> -		hlist_del(node);
+> -		free(container_of(node, struct io_cache_entry, node));
+> +	while ((entry = io_alloc_cache_get(cache))) {
+> +		free(entry);
+
+We don't need brackets here. Personally, I don't have anything
+against assignments in if, but it's probably better to avoid them,
+or there will be a patch in a couple of months based on a random
+code analysis report as happened many times before.
+
+while (1) {
+	struct io_cache_entry *entry = get();
+
+	if (!entry)
+		break;
+	free(entry);
+}	
+
+-- 
+Pavel Begunkov
