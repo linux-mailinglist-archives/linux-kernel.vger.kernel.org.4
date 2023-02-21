@@ -2,123 +2,178 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 867F869DBD6
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 09:22:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9049869DBD7
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 09:24:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233236AbjBUIWx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Feb 2023 03:22:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38902 "EHLO
+        id S233319AbjBUIYo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Feb 2023 03:24:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40228 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229835AbjBUIWv (ORCPT
+        with ESMTP id S229835AbjBUIYm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Feb 2023 03:22:51 -0500
-Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 24BBC10CB;
-        Tue, 21 Feb 2023 00:22:49 -0800 (PST)
-Received: from [192.168.178.43] (dynamic-adsl-94-34-19-170.clienti.tiscali.it [94.34.19.170])
-        by linux.microsoft.com (Postfix) with ESMTPSA id A7416209A89A;
-        Tue, 21 Feb 2023 00:22:46 -0800 (PST)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com A7416209A89A
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1676967768;
-        bh=oB6XZJNuRNsKWddqARPVPvSPJ4dG7fYOorsslLvoIwk=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=OSpF73HaNhkK604LDLNwPikfdAo38G0qWmAg4MS+6/jkKwJb7ihtGvY4ZmuIyWOuT
-         /RYnp24ac9YMLE+RH+ls7P5xr/2hkHJAYjF1efRpm2kP9IUaaJDlJJdoeX+QzVoSG3
-         N5dqVhlvZaot+SywMXJxKLbDJMbBV49+yJhthiyA=
-Message-ID: <1dcc9919-3d92-f9cc-7274-f12e5186a66e@linux.microsoft.com>
-Date:   Tue, 21 Feb 2023 09:22:44 +0100
+        Tue, 21 Feb 2023 03:24:42 -0500
+Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0681C1EFF4
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Feb 2023 00:24:41 -0800 (PST)
+Received: by mail-ed1-x52c.google.com with SMTP id o12so14171479edb.9
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Feb 2023 00:24:40 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=oPBARR1XQLY58c737UTH5eoRSYkaY0yhf7AxAKsB3Ys=;
+        b=FTilw8opE7NXkwjgsqlx6udSECCNGFBY5jaRwzj4cGQKeJb5vWv+kxlubSWOd+ugd3
+         YUoiba4n0y27qNw2IG7TyFincOVCdOnSS5o8Yt1r6jLDQ5C8uD/cOa/FWgdTkS9ZXfok
+         0Vvy9OT547060nJLz8ilID+aiMbTrxQlPVicHnmM06nMDACwhPUPfzJAIymM56uUXkX+
+         dI9ixC3Q47KBiisYcvISlL28WTmCHZS2MXFAB87dPSsWVA9CXUtTFR9LRuuwcMtXqet4
+         Gvpy0DSSTvGany6XHc+Fn2uEUf/Jdn8z8BXax70b58KSU+SHVNnvXaVDYMvhemsre1kM
+         PITw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=oPBARR1XQLY58c737UTH5eoRSYkaY0yhf7AxAKsB3Ys=;
+        b=GJAXKdGMS+9Ems/DSAHBjx7eBa1ZIFPCD1kyWhd5eOF/ScnfA6tM3RBjWOpcaCp/Uy
+         Mg4DQchM+oqaRt1lEkdFHxWqZ6V5vXqvvgoilzjnBV79D3tNLxUcv88usIqq5fROTYQq
+         yoEy3dhbwBOpcwmOGnm8w6haPfH3x+XynJzWC+H1q4LwSRPb7ySLBzNEmLAebuYn8ktO
+         NKhHr+D3Lzsk0HPlr2R5Nev8boWjPT+/28EfgjGjYuamhrFfD0RS40g8h95TBVJyMVl6
+         Y84U/NMQd6yg+G+41YmEneAhfhp6tSa9LCiTnpIxdxXdhZxDC3EHEj/M0wDmz495znSc
+         SyAQ==
+X-Gm-Message-State: AO0yUKWJqOL5D4/NSVN4e9eZ4oHO5d6JQRksKGwDoHvxz2Y37ycTrpLY
+        lTI9kigtewpSmhzRlUcxvGDG51GVYbbauOu8jwRg4Fhgu6A=
+X-Google-Smtp-Source: AK7set92wsZHs0StkibTXHBpXgiS8paznGlOif4P/bhC35luKsT8XnDF1ma7j/vFpwvdwEWrkJLvTn4C10ASjMixMm4=
+X-Received: by 2002:a17:906:d966:b0:889:8b2f:75d1 with SMTP id
+ rp6-20020a170906d96600b008898b2f75d1mr5350016ejb.10.1676967879345; Tue, 21
+ Feb 2023 00:24:39 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.2
-Subject: Re: [PATCH] ptp: kvm: Use decrypted memory in confidential guest on
- x86
-To:     kernel test robot <lkp@intel.com>, linux-kernel@vger.kernel.org
-Cc:     oe-kbuild-all@lists.linux.dev, netdev@vger.kernel.org,
-        Richard Cochran <richardcochran@gmail.com>,
-        Christoph Hellwig <hch@lst.de>
-References: <20230220130235.2603366-1-jpiotrowski@linux.microsoft.com>
- <202302210943.Xq84rrhU-lkp@intel.com>
-Content-Language: en-US
-From:   Jeremi Piotrowski <jpiotrowski@linux.microsoft.com>
-In-Reply-To: <202302210943.Xq84rrhU-lkp@intel.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-19.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,USER_IN_DEF_DKIM_WL,
-        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
+From:   JaeJoon Jung <rgbi3307@gmail.com>
+Date:   Tue, 21 Feb 2023 17:24:27 +0900
+Message-ID: <CAHOvCC7yjceArav9Ps0v1EP4CjfkrxbfXFgABK54cdFKNoE8iw@mail.gmail.com>
+Subject: [PATCH] kernel/sched/core.c: Modified prio_less().
+To:     Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>
+Cc:     linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 21/02/2023 02:08, kernel test robot wrote:
-> Hi Jeremi,
-> 
-> Thank you for the patch! Perhaps something to improve:
-> 
-> [auto build test WARNING on horms-ipvs/master]
-> [also build test WARNING on mst-vhost/linux-next net/master net-next/master linus/master v6.2]
-> [If your patch is applied to the wrong git tree, kindly drop us a note.
-> And when submitting patch, we suggest to use '--base' as documented in
-> https://git-scm.com/docs/git-format-patch#_base_tree_information]
-> 
-> url:    https://github.com/intel-lab-lkp/linux/commits/Jeremi-Piotrowski/ptp-kvm-Use-decrypted-memory-in-confidential-guest-on-x86/20230220-210441
-> base:   https://git.kernel.org/pub/scm/linux/kernel/git/horms/ipvs.git master
-> patch link:    https://lore.kernel.org/r/20230220130235.2603366-1-jpiotrowski%40linux.microsoft.com
-> patch subject: [PATCH] ptp: kvm: Use decrypted memory in confidential guest on x86
-> config: x86_64-allyesconfig (https://download.01.org/0day-ci/archive/20230221/202302210943.Xq84rrhU-lkp@intel.com/config)
-> compiler: gcc-11 (Debian 11.3.0-8) 11.3.0
-> reproduce (this is a W=1 build):
->         # https://github.com/intel-lab-lkp/linux/commit/0dd1701fd254692af3d0ca051e092e8dcef190c4
->         git remote add linux-review https://github.com/intel-lab-lkp/linux
->         git fetch --no-tags linux-review Jeremi-Piotrowski/ptp-kvm-Use-decrypted-memory-in-confidential-guest-on-x86/20230220-210441
->         git checkout 0dd1701fd254692af3d0ca051e092e8dcef190c4
->         # save the config file
->         mkdir build_dir && cp config build_dir/.config
->         make W=1 O=build_dir ARCH=x86_64 olddefconfig
->         make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/
-> 
-> If you fix the issue, kindly add following tag where applicable
-> | Reported-by: kernel test robot <lkp@intel.com>
-> | Link: https://lore.kernel.org/oe-kbuild-all/202302210943.Xq84rrhU-lkp@intel.com/
-> 
-> All warnings (new ones prefixed by >>):
-> 
->    drivers/ptp/ptp_kvm_x86.c: In function 'kvm_arch_ptp_init':
->    drivers/ptp/ptp_kvm_x86.c:63:9: error: implicit declaration of function 'kvm_arch_ptp_exit'; did you mean 'kvm_arch_ptp_init'? [-Werror=implicit-function-declaration]
->       63 |         kvm_arch_ptp_exit();
->          |         ^~~~~~~~~~~~~~~~~
->          |         kvm_arch_ptp_init
->    drivers/ptp/ptp_kvm_x86.c: At top level:
->>> drivers/ptp/ptp_kvm_x86.c:68:6: warning: no previous prototype for 'kvm_arch_ptp_exit' [-Wmissing-prototypes]
->       68 | void kvm_arch_ptp_exit(void)
->          |      ^~~~~~~~~~~~~~~~~
->>> drivers/ptp/ptp_kvm_x86.c:68:6: warning: conflicting types for 'kvm_arch_ptp_exit'; have 'void(void)'
->    drivers/ptp/ptp_kvm_x86.c:63:9: note: previous implicit declaration of 'kvm_arch_ptp_exit' with type 'void(void)'
->       63 |         kvm_arch_ptp_exit();
->          |         ^~~~~~~~~~~~~~~~~
->    cc1: some warnings being treated as errors
-> 
-> 
-> vim +/kvm_arch_ptp_exit +68 drivers/ptp/ptp_kvm_x86.c
-> 
->     67	
->   > 68	void kvm_arch_ptp_exit(void)
->     69	{
->     70		if (cc_platform_has(CC_ATTR_GUEST_MEM_ENCRYPT)) {
->     71			WARN_ON(set_memory_encrypted((unsigned long)clock_pair, 1));
->     72			free_page((unsigned long)clock_pair);
->     73			clock_pair = NULL;
->     74		}
->     75	}
->     76	
-> 
+The sched_class structure is defined to be sorted by pointer size.
+You can see it in the macro definition like this:
 
-My bad - forgot to include changes to include/linux/ptp_kvm.h in the commit.
-Will fix in v2, but will hold off a day or two in case someone has a suggestion
-on how to reduce the allocation.
+kernel/sched/sched.h
+#define DEFINE_SCHED_CLASS(name)
+const struct sched_class name##_sched_class \
+        __aligned(__alignof__(struct sched_class)) \
+        __section("__" #name "_sched_class")
 
-Jeremi
+include/asm-generic/vmlinux.lds.h
+#define SCHED_DATA \
+STRUCT_ALIGN(); \
+__sched_class_highest = .; \
+*(__stop_sched_class) \
+*(__dl_sched_class) \
+*(__rt_sched_class) \
+*(__fair_sched_class) \
+*(__idle_sched_class) \
+__sched_class_lowest = .;
+
+And in the System.map file,
+you can see that they are arranged in memory address order.
+
+System.map
+----------------------------------------------------------------
+ffffffff8260d520 R __sched_class_highest
+ffffffff8260d520 R stop_sched_class
+ffffffff8260d5f0 R dl_sched_class
+ffffffff8260d6c0 R rt_sched_class
+ffffffff8260d790 R fair_sched_class
+ffffffff8260d860 R idle_sched_class
+ffffffff8260d930 R __sched_class_lowest
+----------------------------------------------------------------
+
+This matches the sched class priority.
+In the prio_less() function in kernel/sched/core.c,
+the less value can be determined by pointer operation as follows.
+
+If the prio_less() function is modified as follows,
+the __task_prio() function is not required.
+
+Thanks,
+
+
+Signed-off-by: JaeJoon Jung <rgbi3307@gmail.com>
+---
+ kernel/sched/core.c | 42 +++++++++++-------------------------------
+ 1 file changed, 11 insertions(+), 31 deletions(-)
+
+diff --git a/kernel/sched/core.c b/kernel/sched/core.c
+index 2a4918a1faa9..75075d92a198 100644
+--- a/kernel/sched/core.c
++++ b/kernel/sched/core.c
+@@ -151,21 +151,6 @@ __read_mostly int scheduler_running;
+
+ DEFINE_STATIC_KEY_FALSE(__sched_core_enabled);
+
+-/* kernel prio, less is more */
+-static inline int __task_prio(struct task_struct *p)
+-{
+- if (p->sched_class == &stop_sched_class) /* trumps deadline */
+- return -2;
+-
+- if (rt_prio(p->prio)) /* includes deadline */
+- return p->prio; /* [-1, 99] */
+-
+- if (p->sched_class == &idle_sched_class)
+- return MAX_RT_PRIO + NICE_WIDTH; /* 140 */
+-
+- return MAX_RT_PRIO + MAX_NICE; /* 120, squash fair */
+-}
+-
+ /*
+  * l(a,b)
+  * le(a,b) := !l(b,a)
+@@ -176,22 +161,17 @@ static inline int __task_prio(struct task_struct *p)
+ /* real prio, less is less */
+ static inline bool prio_less(struct task_struct *a, struct
+task_struct *b, bool in_fi)
+ {
+-
+- int pa = __task_prio(a), pb = __task_prio(b);
+-
+- if (-pa < -pb)
+- return true;
+-
+- if (-pb < -pa)
+- return false;
+-
+- if (pa == -1) /* dl_prio() doesn't work because of stop_class above */
+- return !dl_time_before(a->dl.deadline, b->dl.deadline);
+-
+- if (pa == MAX_RT_PRIO + MAX_NICE) /* fair */
+- return cfs_prio_less(a, b, in_fi);
+-
+- return false;
++        int less = a->sched_class - b->sched_class;
++        if (less == 0) {
++                if (a->sched_class == &dl_sched_class)
++                        return !dl_time_before(a->dl.deadline, b->dl.deadline);
++
++                else if (a->sched_class == &fair_sched_class)
++                        return cfs_prio_less(a, b, in_fi);
++                else
++                        return false;
++        } else
++                return (less > 0) ? true : false;
+ }
+
+ static inline bool __sched_core_less(struct task_struct *a, struct
+task_struct *b)
+-- 
+2.17.1
