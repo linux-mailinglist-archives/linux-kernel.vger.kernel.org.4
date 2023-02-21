@@ -2,58 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E33E169E79F
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 19:36:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 084D269E79C
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 19:35:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229862AbjBUSf7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Feb 2023 13:35:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34512 "EHLO
+        id S229541AbjBUSfy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Feb 2023 13:35:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34428 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229679AbjBUSfz (ORCPT
+        with ESMTP id S229540AbjBUSfv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Feb 2023 13:35:55 -0500
-Received: from mail-yw1-x1132.google.com (mail-yw1-x1132.google.com [IPv6:2607:f8b0:4864:20::1132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E78262E0EC
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Feb 2023 10:35:07 -0800 (PST)
-Received: by mail-yw1-x1132.google.com with SMTP id 00721157ae682-536e10ae021so29625237b3.7
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Feb 2023 10:35:07 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=jp-hosting.net; s=google;
-        h=to:subject:message-id:date:from:mime-version:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=Q43YMjfgsdyDVzOYcF56Bu/Nx3l2GHgFlcMIt46mPYc=;
-        b=XxpvHumA2VhkZIiAzz4Mx4qvyPphUN54WPkZ3D3g+CXN+CKMLbJ8fhuYcRcO2bcMtL
-         cNMGRQ+v6z7aLScvs9nxy5rQBaDBYuiMJUw+63ziDa/eirlcsCCUHDoheU+2iUhsT+/t
-         JKwMtslNSsDM590E1d+lpZo8MVHsuIvKqRSdtnnIY1c9/FXRVANk8f16QcROsQel423m
-         +/7q2nSzbw29Op3owhqLpxc0/No9HCgp8YC/rNLXYuN96K5hU0IWf6+bWtsNB002C4GS
-         IScbffO2GDyX1Aji1Hdjfp+NRVkYm/tY4E9RGKFpYRNmjQ3cJu0LBcG4/FBp9LM6ky/0
-         R7Zw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:subject:message-id:date:from:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=Q43YMjfgsdyDVzOYcF56Bu/Nx3l2GHgFlcMIt46mPYc=;
-        b=QPfRN/ByQnQlgnKk8Gjte5lRWMTYaiyfm1cF9ChptNLHbm9HwobP4eAwnx/eFGVHnd
-         Ry1tQ1o50EK9pJNNmRSaH4JUyKAVGsl8ScuqosoQkNQVHck+o3ZeW8yJu3JUviqTO+UP
-         8waVTtKscSOu3iuZZWWJOBGPYy+t6L1OKsKS/Jh1yaMt4l9Rnv4lgycUaeHy39iyAqgT
-         kQ2rzNgSb8u2f+yGECLTZfDZKr530SbhsG5014BbblAGq9VfdG0kPxa4qbbLLrOdiJUl
-         769e65nrIdiyGVfg/20T7dqX1I5mP2uUQFa+SSSJJlMKYzMqlgIeNhIjbklg+TCVHPeW
-         Ig1w==
-X-Gm-Message-State: AO0yUKUBFhjJqfDMYtKUij4f7YlxZfiZlku5u8iHIXz6lsrgQRaXFQlO
-        RHVde2nPpXo+y5kAvZzSBXraQQVK99KEljFgCtpLnmV143aHIS66
-X-Google-Smtp-Source: AK7set/dM+9tYmmMEoUXVLSmkQE/i04t4tXye1IwL5UJcWA9OT6rW9Uq+DyA8tc+AQtfPwZKTgcCt2Vi8Sqi/+Zko/o=
-X-Received: by 2002:a0d:d952:0:b0:534:389:6b6f with SMTP id
- b79-20020a0dd952000000b0053403896b6fmr48734ywe.347.1677004506817; Tue, 21 Feb
- 2023 10:35:06 -0800 (PST)
+        Tue, 21 Feb 2023 13:35:51 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48CEF305F2;
+        Tue, 21 Feb 2023 10:35:07 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 7960EB81049;
+        Tue, 21 Feb 2023 18:35:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 44575C433D2;
+        Tue, 21 Feb 2023 18:35:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1677004504;
+        bh=dgnjcSUG5w1/UXY20oy7pA67rk5DpCFG+LKqSztlm2U=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=JaHaknMQH94f0Ouz7x7+bJIIjbqP/1A+lf0z1r07/7u31jA6NOMhkjW7+NQyvj35e
+         r/jQRM84dkmgFx+I10T1+lXThjNBjateNxycYIcs8ndkx+83AY7RtGGDH1RDlxKsfx
+         F0ElKYH0Wx72EtvnPAl2tSazAPHRHXzUqgYigzELtugc3AHpiPANpZvByCujdPkOTF
+         w0dPFwyDldQNFWCLQNnI2VnKaMG/a15VZoIU6XlPnNlL9JqQDQxANx9QltdGXZU71M
+         Dl2ye6B6QBHGkFlvvHhMbYXijeMmxJYK1eg3IOhRUo8lxsPqfw5aljOdgLV50q/zFN
+         Y/WQZlhgK3iOA==
+From:   SeongJae Park <sj@kernel.org>
+To:     Andrew Yang <andrew.yang@mediatek.com>
+Cc:     SeongJae Park <sj@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        wsd_upstream@mediatek.com, casper.lin@mediatek.com,
+        damon@lists.linux.dev, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, stable@vger.kernel.org
+Subject: Re: [PATCH] mm/damon/paddr: fix pin page problem
+Date:   Tue, 21 Feb 2023 18:35:01 +0000
+Message-Id: <20230221183501.132024-1-sj@kernel.org>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20230221090313.15396-1-andrew.yang@mediatek.com>
+References: 
 MIME-Version: 1.0
-From:   James Addison <jay@jp-hosting.net>
-Date:   Tue, 21 Feb 2023 18:34:55 +0000
-Message-ID: <CALDQ5Nwfz6z_BxCJnMdTP76M0Y3b9+aSXNjZ04MZisEwSTB-cg@mail.gmail.com>
-Subject: [PATCH] Documentation: update kernel parameter limit notes
-To:     linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -61,30 +60,66 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-There does appear to be a limit on the number of parameters accepted by the
-kernel at boot-time, so this changeset updates the kernel-parameters.rst
-documentation to reflect that.
+Hi Andrew,
 
-Signed-off-by: James Addison <jay@jp-hosting.net>
----
- Documentation/admin-guide/kernel-parameters.rst | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/Documentation/admin-guide/kernel-parameters.rst
-b/Documentation/admin-guide/kernel-parameters.rst
-index 959f73a32..12cbf46b6 100644
---- a/Documentation/admin-guide/kernel-parameters.rst
-+++ b/Documentation/admin-guide/kernel-parameters.rst
-@@ -204,7 +204,8 @@ be entered as an environment variable, whereas its
-absence indicates that
- it will appear as a kernel argument readable via /proc/cmdline by programs
- running once the system is up.
+On Tue, 21 Feb 2023 17:03:13 +0800 Andrew Yang <andrew.yang@mediatek.com> wrote:
 
--The number of kernel parameters is not limited, but the length of the
-+The number of kernel parameters is limited to 32 by default (128 in User Mode
-+Linux), and is defined in ./init/main.c as MAX_INIT_ARGS. The length of the
- complete command line (parameters including spaces etc.) is limited to
- a fixed number of characters. This limit depends on the architecture
- and is between 256 and 4096 characters. It is defined in the file
--- 
-2.39.1
+> From: "andrew.yang" <andrew.yang@mediatek.com>
+> 
+> damon_get_page() would always increase page _refcount and
+> isolate_lru_page() would increase page _refcount if the page's lru
+> flag is set.
+> 
+> If a unevictable page isolated successfully, there will be two more
+> _refcount. The one from isolate_lru_page() will be decreased in
+> putback_lru_page(), but the other one from damon_get_page() will be
+> left behind. This causes a pin page.
+> 
+> Whatever the case, the _refcount from damon_get_page() should be
+> decreased.
+
+Thank you for finding this issue!  I think the David suggested subject[1] is
+better, though.
+
+I think we could add below Fixes: and Cc: tags?
+
+Fixes: 57223ac29584 ("mm/damon/paddr: support the pageout scheme")
+Cc: <stable@vger.kernel.org> # 5.16.x
+
+> 
+> Signed-off-by: andrew.yang <andrew.yang@mediatek.com>
+> ---
+>  mm/damon/paddr.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/mm/damon/paddr.c b/mm/damon/paddr.c
+> index e1a4315c4be6..56d8abd08fb1 100644
+> --- a/mm/damon/paddr.c
+> +++ b/mm/damon/paddr.c
+> @@ -223,8 +223,8 @@ static unsigned long damon_pa_pageout(struct damon_region *r)
+>  			putback_lru_page(page);
+>  		} else {
+>  			list_add(&page->lru, &page_list);
+> -			put_page(page);
+>  		}
+> +		put_page(page);
+
+Seems your patch is not based on mm-unstable tree[2].  Could you please rebase
+on it?
+
+Also, let's remove the braces for the single statements[3].
+
+[1] https://lore.kernel.org/damon/1b3e8e88-ed5c-7302-553f-4ddb3400d466@redhat.com/
+[2] https://docs.kernel.org/next/mm/damon/maintainer-profile.html#scm-trees
+[3] https://docs.kernel.org/process/coding-style.html?highlight=coding+style#placing-braces-and-spaces
+
+
+Thanks,
+SJ
+
+>  	}
+>  	applied = reclaim_pages(&page_list);
+>  	cond_resched();
+> -- 
+> 2.18.0
