@@ -2,111 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D0E969DAF9
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 08:12:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0DF7F69DAFA
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 08:12:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233490AbjBUHMj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Feb 2023 02:12:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45640 "EHLO
+        id S233492AbjBUHMs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Feb 2023 02:12:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45924 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232229AbjBUHMh (ORCPT
+        with ESMTP id S232229AbjBUHMr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Feb 2023 02:12:37 -0500
-Received: from xry111.site (xry111.site [IPv6:2001:470:683e::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 142F022DE0;
-        Mon, 20 Feb 2023 23:12:36 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=xry111.site;
-        s=default; t=1676963552;
-        bh=NT/bxUyjuTgTucQjfscaHAPS7A8qYlPCOPobgEa3YIs=;
-        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-        b=Gb7iilyha/kuE2nXkDzG9kS3IfmZjb72Z9KoFm0gVyIRfrwlhx+sOSIInvQtmNVXK
-         H/SWHKGu0s89aHQBuuDJ+vvmQVYXQ8r3GO43D2HnQCjgHaURn+378TDcUfFIODg1Pj
-         Swic/omrgdMn8TyrUlLh73lzVmCHq/AO3sKDj7/o=
-Received: from [IPv6:240e:457:1010:6c8d:9501:85b0:822b:e7ed] (unknown [IPv6:240e:457:1010:6c8d:9501:85b0:822b:e7ed])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature ECDSA (P-384) server-digest SHA384)
-        (Client did not present a certificate)
-        (Authenticated sender: xry111@xry111.site)
-        by xry111.site (Postfix) with ESMTPSA id 78D4E66B3F;
-        Tue, 21 Feb 2023 02:12:22 -0500 (EST)
-Message-ID: <4cd00b5cdc78da6357d2d326e607b169faee34a8.camel@xry111.site>
-Subject: Re: [PATCH v2 05/29] LoongArch: KVM: Add vcpu related header files
-From:   Xi Ruoyao <xry111@xry111.site>
-To:     maobibo <maobibo@loongson.cn>,
-        Tianrui Zhao <zhaotianrui@loongson.cn>,
-        Paolo Bonzini <pbonzini@redhat.com>
-Cc:     Huacai Chen <chenhuacai@kernel.org>,
-        WANG Xuerui <kernel@xen0n.name>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        loongarch@lists.linux.dev, linux-kernel@vger.kernel.org,
-        kvm@vger.kernel.org, Jens Axboe <axboe@kernel.dk>,
-        Mark Brown <broonie@kernel.org>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        Oliver Upton <oliver.upton@linux.dev>
-Date:   Tue, 21 Feb 2023 15:12:16 +0800
-In-Reply-To: <7d6125dd-29e8-14d8-b1d7-d8c14d7bec80@loongson.cn>
-References: <20230220065735.1282809-1-zhaotianrui@loongson.cn>
-         <20230220065735.1282809-6-zhaotianrui@loongson.cn>
-         <497693ca2cbc443c1d9f796c3aace6c9987bec72.camel@xry111.site>
-         <7d6125dd-29e8-14d8-b1d7-d8c14d7bec80@loongson.cn>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.46.4 
+        Tue, 21 Feb 2023 02:12:47 -0500
+Received: from mail-vs1-xe2f.google.com (mail-vs1-xe2f.google.com [IPv6:2607:f8b0:4864:20::e2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF027252BE
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Feb 2023 23:12:45 -0800 (PST)
+Received: by mail-vs1-xe2f.google.com with SMTP id 6so3457971vsv.7
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Feb 2023 23:12:45 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1676963565;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=yEsysSVdP9APPHINfBx/6hl5qqV1XS6eh2AICs0D4uM=;
+        b=A25P4uxQE8wBG3G636S1q2+aUl/olyQCRf4NJKo1bLX2wwYXD8iLC4QbRq/t9170V2
+         /LKCz5/t+oR3mw0UFfObs2RXCJp/roLc240TL00dkaTUS0STVi7/Sy9u6wCSNP8FS1ER
+         DL+nihKO4Hn9T5sBZzhBhukAg+Gh6zEntL128=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1676963565;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=yEsysSVdP9APPHINfBx/6hl5qqV1XS6eh2AICs0D4uM=;
+        b=scvgMjxAcjjKM1aMannygBjcjdf/6lVad+9j8mlDsHLAFsBgIVEhhqx2Km6xRwVxjn
+         eeQA87pbfq4PJM5ggqehs7TjEkLZoNreIXC2jdISrUtuL4GkLRLwZQToOYT7ayxYjPhP
+         bNOby2kDTQAZ3DI1KL8YH1vSp7xERL7i4aEo+9UstaXOClUhdi/htyQzleY+OVhhCupe
+         0U0pAWb7hlClA1ZCZcaseAcMxYlXvcMLaP+AD4tS2zo3t5Yyil6PFC96keSSgQmUcAV/
+         T+bMpnhPIjWwn4UKGuE0Qh1DOE0q9fgplPbMIPKTnAIDYXioYsJIh8CBXbOx/X0IiHFq
+         TCiw==
+X-Gm-Message-State: AO0yUKUDNXCtn/JWqGZlCM3ivCG9Utym14Pnvf/CVKU0EntmsENxJJXw
+        fMWaN6hHXOxZyPFRiGg1C9ru5MjN5cBU9DBfNNdpnA==
+X-Google-Smtp-Source: AK7set9U5LpZut3M2xqQTP9wK+Ik2Kq8zvDWC/9/TGGzH1/TbpTw+vR6hl9/c3FS7oWZdtisaP0IzOu712pE1N5C55M=
+X-Received: by 2002:a67:f6c1:0:b0:411:a14d:6bac with SMTP id
+ v1-20020a67f6c1000000b00411a14d6bacmr907848vso.44.1676963564997; Mon, 20 Feb
+ 2023 23:12:44 -0800 (PST)
 MIME-Version: 1.0
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20230216130021.64875-1-angelogioacchino.delregno@collabora.com> <20230216130021.64875-7-angelogioacchino.delregno@collabora.com>
+In-Reply-To: <20230216130021.64875-7-angelogioacchino.delregno@collabora.com>
+From:   Chen-Yu Tsai <wenst@chromium.org>
+Date:   Tue, 21 Feb 2023 15:12:34 +0800
+Message-ID: <CAGXv+5EwqokPe_DOoNJ7QaCUt3phhnc_+2vDBi-atjYzs4kVtQ@mail.gmail.com>
+Subject: Re: [PATCH v1 6/9] soc: mediatek: mtk-mutex: Replace max handles
+ number with definition
+To:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+Cc:     matthias.bgg@gmail.com, jason-jh.lin@mediatek.com,
+        chunkuang.hu@kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 2023-02-21 at 14:46 +0800, maobibo wrote:
-> > On Mon, 2023-02-20 at 14:57 +0800, Tianrui Zhao wrote:
-> > > +/* GCSR */
-> > > +static inline u64 gcsr_read(u32 reg)
-> > > +{
-> > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0u64 val =3D 0;
-> > > +
-> > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0asm volatile (
-> > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0"parse_r __reg, %[val]\n\t"
-> > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0".word 0x5 << 24 | %[reg] << 10 | 0 << 5 | __reg\n\=
-t"
-> >=20
-> > Don't do this.=C2=A0 You should add the instruction to binutils first, =
-then
-> > make CONFIG_KVM depend on the assembler supporting this instruction.
-> > This is completely unreadable and only fine for an internal PoC.
->=20
-> We are preparing to submit these instruction support for binutils,
-> however it is still necessary. Supposing that it is supported in future
-> gcc version, we can not drop existing gcc 12/13 supporting to compiling
-> kernel with LoongArch architecture.
+On Thu, Feb 16, 2023 at 9:02 PM AngeloGioacchino Del Regno
+<angelogioacchino.delregno@collabora.com> wrote:
+>
+> Replace the magic number "10", defining the maximum number of supported
+> handles with a MTK_MUTEX_MAX_HANDLES definition.
+> While at it, also change the type for `id` from a signed integer to
+> a unsigned 8 bits integer to save some (small) memory footprint, as
+> this number is never higher than 10.
 
-You can drop the support for KVM with less capable Binutils versions,
-like:
+Depending on alignment of bool, we might not get that saving.
 
-config AS_HAS_LVZ
-    def_bool $(as-instr some_gcsr_insn \$r0, \$gcsr0)
+> This cleanup brings no functional changes.
+>
+> Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 
-config KVM
-    depends on AS_HAS_LVZ
-
->=20
-> Maybe there will be human readable code like this:
-> #if GCC_SUPPORT_KVM_INSTR
-> =C2=A0 ...
-> #else
-> =C2=A0 asm volatile (".word=C2=A0=C2=A0 "
-> =C2=A0 ...
-> #endif
->=20
-> Regards
-> Bibo, Mao
-
---=20
-Xi Ruoyao <xry111@xry111.site>
-School of Aerospace Science and Technology, Xidian University
+Reviewed-by: Chen-Yu Tsai <wenst@chromium.org>
