@@ -2,63 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AC57969E581
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 18:04:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 568D769E584
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 18:05:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234604AbjBUREm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Feb 2023 12:04:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41744 "EHLO
+        id S234594AbjBURFX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Feb 2023 12:05:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43312 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234069AbjBUREi (ORCPT
+        with ESMTP id S234187AbjBURFV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Feb 2023 12:04:38 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1DA326A3;
-        Tue, 21 Feb 2023 09:04:29 -0800 (PST)
+        Tue, 21 Feb 2023 12:05:21 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D9942A6E1;
+        Tue, 21 Feb 2023 09:04:59 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 6DBF8B80F9E;
-        Tue, 21 Feb 2023 17:04:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 35B04C433EF;
-        Tue, 21 Feb 2023 17:04:27 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9415360F82;
+        Tue, 21 Feb 2023 17:04:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 911F4C433EF;
+        Tue, 21 Feb 2023 17:04:56 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1676999067;
-        bh=9GGa3LfIZFLMfyC93YamuPJ+m0MPY0JXS8yoYYlRNcw=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=oj40XnSwOXRCPsxVHExRWHuzJ0nTqBUJid+xyEKffs5V5m4NV6yX0jdysXLJ5tbo1
-         HS3alv74qAEOVzlOjPSzhL72l34bSyJBt3VYCkYhTUpfe+trW4VhZrszS78SIAmbjj
-         GNiyhXbANzSUOZubhVyfS2NCDQgn3IoV9VC89hDwe1dQt2ii+0obXC5/Vfu61NMkeM
-         on10EQXMnq63fTaxFXMD92am7fCY2O2zJw974K59P8Vkz1tF01dqqvwKGy2iJ60u4r
-         aVkua3U3foDPH0AsWmC5eRGC/3aL+8zqmAAkGkmtS08fO4w2uGZr3wWyJQ9BgSryoM
-         HEAr+BDPN9rRA==
-Received: by mail-vs1-f45.google.com with SMTP id v3so4998773vse.0;
-        Tue, 21 Feb 2023 09:04:27 -0800 (PST)
-X-Gm-Message-State: AO0yUKVrtW3Sk52LIOYzAhN/Yn/M07No8m7DyxcZMxIphWGFDvpqc7L6
-        N5GAdyXmzTi3hp9IaaSHqOwikLQ3746yirz5pw==
-X-Google-Smtp-Source: AK7set8RExnAumdfrmnLc73JH0r49w5gketyb+VaMFd10K+FqxZ4TgZPrnaat/PrIDrRENGFveQK8OSCvev++hvJ4Ag=
-X-Received: by 2002:a05:6102:1270:b0:414:cd37:4da8 with SMTP id
- q16-20020a056102127000b00414cd374da8mr952787vsg.83.1676999066215; Tue, 21 Feb
- 2023 09:04:26 -0800 (PST)
+        s=k20201202; t=1676999098;
+        bh=hAEQa0Cu32XX4S5t98j4S5gV6lruGeDQSN/4bgvhn/A=;
+        h=Date:From:To:Subject:References:In-Reply-To:From;
+        b=Ww6WfLdupADK0MXFIBnDSmjGalJXiMhimIkN+R4Rkl1zvQcxVgkl9l6c0/DzjWE/n
+         TDhyDNklDu3+5PlyMk98AAFHGbmbMwwSNVSo+/EQ08lSPLGKpeH5rsv0DzsJAa+z8y
+         ch+3PaKDBB8al2GFd/mpDBmvuJIuteHClzR3TKr5oIYBL5rsx8ET3NftGmBASbxFsj
+         IglR6c560Ivtx+lMiux+/35+/J4m2COluMH0OHby9txUMP9GKvT0iNpCSSetJvoEZS
+         X/R04jVPJbBc0rMJV8k336bpWY8+Atc9NAZ6AdoWkalqWbq26D5OqxEeh8c+ynKHlF
+         iJjP3bda0I3TA==
+Date:   Tue, 21 Feb 2023 17:04:53 +0000
+From:   Mark Brown <broonie@kernel.org>
+To:     Wolfram Sang <wsa@the-dreams.de>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Wolfram Sang <wsa@kernel.org>
+Subject: Re: linux-next: manual merge of the spi tree with the i2c tree
+Message-ID: <Y/T5tevqPapMy/g6@sirena.org.uk>
+References: <20230216113035.3050871a@canb.auug.org.au>
+ <CAMuHMdVuudSDrWguMJiHsZ3GJhs+muK566M5GqK2vfMyBeo2pQ@mail.gmail.com>
+ <Y/T4BTCCzIWzE1oe@imac101>
 MIME-Version: 1.0
-References: <20230221120612.27366-1-r-gunasekaran@ti.com> <20230221120612.27366-2-r-gunasekaran@ti.com>
- <fa789c44-d9b9-92a6-00f4-7bc2410c7642@ti.com>
-In-Reply-To: <fa789c44-d9b9-92a6-00f4-7bc2410c7642@ti.com>
-From:   Rob Herring <robh+dt@kernel.org>
-Date:   Tue, 21 Feb 2023 11:04:13 -0600
-X-Gmail-Original-Message-ID: <CAL_JsqKcktHkexxPaneZjaUt=XwLA_5ypZxSZKnX5TozdgJ+Kg@mail.gmail.com>
-Message-ID: <CAL_JsqKcktHkexxPaneZjaUt=XwLA_5ypZxSZKnX5TozdgJ+Kg@mail.gmail.com>
-Subject: Re: [PATCH v10 1/9] dt-bindings: mfd: ti,j721e-system-controller: Fix
- mux node regex
-To:     Vignesh Raghavendra <vigneshr@ti.com>,
-        Ravi Gunasekaran <r-gunasekaran@ti.com>
-Cc:     nm@ti.com, afd@ti.com, kristo@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, s-vadapalli@ti.com,
-        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="KAJzZplwoo3a+Wx5"
+Content-Disposition: inline
+In-Reply-To: <Y/T4BTCCzIWzE1oe@imac101>
+X-Cookie: MOUNT TAPE U1439 ON B3, NO RING
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -66,33 +60,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 21, 2023 at 8:00 AM Vignesh Raghavendra <vigneshr@ti.com> wrote:
-> On 21/02/23 5:36 pm, Ravi Gunasekaran wrote:
-> > mux-controller nodes may not have "reg" property. Update the regex
-> > for such nodes to resolve the dtbs warnings
-> >
-> > Signed-off-by: Ravi Gunasekaran <r-gunasekaran@ti.com>
-> > ---
 
-Where's the change history? I doubt I ignored the last 9 versions...
+--KAJzZplwoo3a+Wx5
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-> >  .../bindings/mfd/ti,j721e-system-controller.yaml          | 8 +++++++-
-> >  1 file changed, 7 insertions(+), 1 deletion(-)
-> >
-> > diff --git a/Documentation/devicetree/bindings/mfd/ti,j721e-system-controller.yaml b/Documentation/devicetree/bindings/mfd/ti,j721e-system-controller.yaml
-> > index 76ef4352e13c..532bfa45e6a0 100644
-> > --- a/Documentation/devicetree/bindings/mfd/ti,j721e-system-controller.yaml
-> > +++ b/Documentation/devicetree/bindings/mfd/ti,j721e-system-controller.yaml
-> > @@ -45,7 +45,7 @@ properties:
-> >
-> >  patternProperties:
-> >    # Optional children
-> > -  "^mux-controller@[0-9a-f]+$":
-> > +  "^mux-controller(@|-)[0-9a-f]+$":
->
-> Hmm. mmio-mux bindings allow reg property. Why can't we add the same to
-> mux-controller node in 2/9 ?
+On Tue, Feb 21, 2023 at 05:57:41PM +0100, Alain Volmat wrote:
 
-Yes, do that.
+> should I update something to avoid this conflict before you push the
+> pull request for v6.3 ?
 
-Rob
+No, it's fine.
+
+Please don't top post, reply in line with needed context.  This allows
+readers to readily follow the flow of conversation and understand what
+you are talking about and also helps ensure that everything in the
+discussion is being addressed.
+
+--KAJzZplwoo3a+Wx5
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmP0+bQACgkQJNaLcl1U
+h9Dwjgf+JImyOC1iwoQTkysyQOyUpH4SoFTff9yxJz8dB6gDovtG4b5qktoSO29W
+sx7F8yYiri0iZSccTA+uaO6OpTVZa+Wnna+zN4EgTBoC00uGhWP/Xo7iutX7O1p3
+MQ8dYev2imIAH+SfddS67eP11OxfNvV3bLYCwGiWWYJ3bxHDGpBqm44o/vOoy5UD
+LLQAYFlgDJdJl0z8w9saRiiCRPDfh1xhyEFc2rMQtu2AulDX5H2+7yKSA44vbLy9
+V2ukLqNOXfNTOzkVMZCeKMmJYlY/vc72p+3ndFJqT3J+/XinNVKUJUud1psC6WFF
+r4gDQgKjVx4RD9GYJvJ+JkPI3c6M5w==
+=gK+/
+-----END PGP SIGNATURE-----
+
+--KAJzZplwoo3a+Wx5--
