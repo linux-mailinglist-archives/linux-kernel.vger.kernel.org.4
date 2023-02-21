@@ -2,147 +2,205 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D96869E236
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 15:21:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D14B969E232
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 15:21:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234445AbjBUOVf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Feb 2023 09:21:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45116 "EHLO
+        id S233863AbjBUOVM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Feb 2023 09:21:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44692 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233944AbjBUOV0 (ORCPT
+        with ESMTP id S233765AbjBUOVJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Feb 2023 09:21:26 -0500
-Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2066.outbound.protection.outlook.com [40.107.244.66])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC9412B61A;
-        Tue, 21 Feb 2023 06:20:58 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=I7opcA2Tkkvfy754T4tcT5EfVWEvtSplvZICGVyIXAQME3u6fjCpYWhU4hateHlxHMnQkkN0R59nfHCGwIP0A3NuCvs2U8WQxpQy3vpwfdRkNFQoiz9KOQCFVDaw94P6FzxVb8NwXe0cxi/SSCicl1r4HuCT0K875AfFb56x9f2xsV5jpCBloBaaF8KJD0H1toPDOV/ttnO1FrjjIWx/7+vm+cMsSUMp2MGVO3UXT9lB1dCmW7S72okEyJ6GObbsPBQG9V/RAGGcBmbccEk/f5jviY4d10Bv9pV7s2VaJTJrySGOzwyzP1YI+MAV3/5RDh93oyw4Jr1XgW21YGYssA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=Csa5VaSUFyB3nkmpzRp/CL5iX88xIjB2lUGXVsitlsI=;
- b=HeUg4yrLIqNlJx5/zxx/09FmKdTljWUNnT6bJJJnIGDwaPKACDqImJdcS+AXJ5eV2Yc5pVMWNA7p8ok3tIcVJBg1PicCCWK+scqwk90URkrjlAxFOPdwi9YWVv/RQFj5oaVjReMWlM0gIm1+fxQhXDtIXa79tRVNd+oEqGEpNlnSZ8s/0H9EkUyoIBEfiKX/NloP+YBulNigsJT8W3veR1jbmyPQPDH3DsmNxeHeHq1R9pyQf2aXRgx3cf4dyaGrBnpU+0Ud7WrlQxU4U870xNgq/dFtpXcW9Dazve1fWKCSZj6v8WxJU+MA2DW58PCIrTK45gbsMLiXc7RrGjpzjg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 216.228.117.160) smtp.rcpttodomain=linuxfoundation.org
- smtp.mailfrom=nvidia.com; dmarc=pass (p=reject sp=reject pct=100) action=none
- header.from=nvidia.com; dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Csa5VaSUFyB3nkmpzRp/CL5iX88xIjB2lUGXVsitlsI=;
- b=KkUEwjtLKiWMrwgLMZHJ22t9k/rIdxB8OzeB0Nod2m23Nf543oYV/NnzwX+XSHZmZWyl+NapHEHy8T7YFjz/yKwtS6Gxfs85aaEFpUmRxmSzQ+eqcinqvMVg5pgTGWvpOoex3uyOQAvtj9FBzvngYMpdEz+2CxfmyGioz5Fibx5xLNdJlFV/4rh94O5voZmc2l3srvgfM3l+s0jQVhYttZknO8vh3JuXFLJ13UEmNJG8UWBFvbS6HDeeRc04M4lF8uDuiHZFviGydjk1XwSEZCbAVthNNxAj1aGK9mzSK10174O5BwC5ZHfP9b0GNPjKewyeF+JeF1HW37GtJqzLqg==
-Received: from BL1PR13CA0273.namprd13.prod.outlook.com (2603:10b6:208:2bc::8)
- by PH7PR12MB5904.namprd12.prod.outlook.com (2603:10b6:510:1d8::19) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6111.21; Tue, 21 Feb
- 2023 14:20:56 +0000
-Received: from BL02EPF0000C404.namprd05.prod.outlook.com
- (2603:10b6:208:2bc:cafe::ff) by BL1PR13CA0273.outlook.office365.com
- (2603:10b6:208:2bc::8) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6134.17 via Frontend
- Transport; Tue, 21 Feb 2023 14:20:56 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.160)
- smtp.mailfrom=nvidia.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nvidia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 216.228.117.160 as permitted sender) receiver=protection.outlook.com;
- client-ip=216.228.117.160; helo=mail.nvidia.com; pr=C
-Received: from mail.nvidia.com (216.228.117.160) by
- BL02EPF0000C404.mail.protection.outlook.com (10.167.241.6) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.6134.14 via Frontend Transport; Tue, 21 Feb 2023 14:20:55 +0000
-Received: from rnnvmail205.nvidia.com (10.129.68.10) by mail.nvidia.com
- (10.129.200.66) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Tue, 21 Feb
- 2023 06:20:38 -0800
-Received: from rnnvmail203.nvidia.com (10.129.68.9) by rnnvmail205.nvidia.com
- (10.129.68.10) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Tue, 21 Feb
- 2023 06:20:38 -0800
-Received: from jonathanh-vm-01.nvidia.com (10.127.8.9) by mail.nvidia.com
- (10.129.68.9) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36 via Frontend
- Transport; Tue, 21 Feb 2023 06:20:37 -0800
-From:   Jon Hunter <jonathanh@nvidia.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-CC:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        <patches@lists.linux.dev>, <linux-kernel@vger.kernel.org>,
-        <torvalds@linux-foundation.org>, <akpm@linux-foundation.org>,
-        <linux@roeck-us.net>, <shuah@kernel.org>, <patches@kernelci.org>,
-        <lkft-triage@lists.linaro.org>, <pavel@denx.de>,
-        <jonathanh@nvidia.com>, <f.fainelli@gmail.com>,
-        <sudipm.mukherjee@gmail.com>, <srw@sladewatkins.net>,
-        <rwarsow@gmx.de>, <linux-tegra@vger.kernel.org>
-Subject: Re: [PATCH 6.1 000/118] 6.1.13-rc1 review
-In-Reply-To: <20230220133600.368809650@linuxfoundation.org>
-References: <20230220133600.368809650@linuxfoundation.org>
-X-NVConfidentiality: public
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
+        Tue, 21 Feb 2023 09:21:09 -0500
+Received: from domac.alu.hr (domac.alu.unizg.hr [IPv6:2001:b68:2:2800::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B91FC2B638;
+        Tue, 21 Feb 2023 06:20:46 -0800 (PST)
+Received: from localhost (localhost [127.0.0.1])
+        by domac.alu.hr (Postfix) with ESMTP id 59241604EA;
+        Tue, 21 Feb 2023 15:20:45 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.unizg.hr; s=mail;
+        t=1676989245; bh=clxP60L1+OIEoYFohn5RZNOjOraRP9gmFMcOQWqrREI=;
+        h=Date:Subject:From:To:Cc:References:In-Reply-To:From;
+        b=DtEKoY703G2bxn/iZ5zA0cMF9DRBrxE8NczSwFe4Eu3fIQyLmHou7iQ/MMBaDKPeI
+         wdHJNVW/NsVV5pdavjy2nNQNuQssy8OHaKbdglG4gYwNiv8+KNo6nGRQmoFX+pZ9xX
+         d37kNpx2cd0ogX677JZvf5uMA1zPMeEoiCC86sJZ1H7sni6nPo0EulcevNUi5zsiyV
+         NyurI/rtEY14J4F7J6gxuM+BnCr6UW3z20mipK4qVQqau4RqS2bTA0J0KxQ1kJecru
+         sZf4nHY3Wh5++xkcEmJmNnS+4X20zBWHvozplIF2V4G6Ui6b6CQV822jmqyZw8BHci
+         zXBUBo6e+dtaA==
+X-Virus-Scanned: Debian amavisd-new at domac.alu.hr
+Received: from domac.alu.hr ([127.0.0.1])
+        by localhost (domac.alu.hr [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id d4PeUR4Z1clD; Tue, 21 Feb 2023 15:20:42 +0100 (CET)
+Received: from [10.0.1.16] (grf-nat.grf.hr [161.53.83.23])
+        by domac.alu.hr (Postfix) with ESMTPSA id D6911604ED;
+        Tue, 21 Feb 2023 15:20:41 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.unizg.hr; s=mail;
+        t=1676989242; bh=clxP60L1+OIEoYFohn5RZNOjOraRP9gmFMcOQWqrREI=;
+        h=Date:Subject:From:To:Cc:References:In-Reply-To:From;
+        b=f9O9nwoL0KIV99Q+DA9vVawQMv7i8QZR/dYpkmUtiY3XJC+8VizU8c2qdz0gOA+LC
+         +U04KBAWz8Pju32OkGQm0ZvZbmXDG46nGDpZJvRbHYOF4dWpIeFWNfmz1MArpEiEoD
+         NbSbE4BbnhNV/NfEZxBl/q434LrM0+Nuj7MPn90iyYc2mzWrFm79KhCMxid5Kj01YA
+         vfwxRuyKsnlvd/6zAtLEp4FmbkAC/BCvG/20klNL/JXWpz9MdtKOYgEy5zmv1FqhP5
+         hTcEojKqN6qVjb15fdHJ0+idOkfi+17KDk2dQSQKS77yP+Olz1p9vGhJ1X583ekUrH
+         vcxGqOLn15HqQ==
+Message-ID: <1e559ca6-4f77-8b48-e53e-12a8b498920d@alu.unizg.hr>
+Date:   Tue, 21 Feb 2023 15:20:41 +0100
 MIME-Version: 1.0
-Message-ID: <89060917-e8b4-4753-a6e5-b6e5a0e0d410@rnnvmail203.nvidia.com>
-Date:   Tue, 21 Feb 2023 06:20:37 -0800
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BL02EPF0000C404:EE_|PH7PR12MB5904:EE_
-X-MS-Office365-Filtering-Correlation-Id: bfd1d36e-1c62-4265-432d-08db1416d8ab
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: x5N14Jf9ktZW7K0709wH+vaZVZ+kde66BzEJuQbjqGQYkOdYhMKv7NhM9jxTmoHirIBf2TnJOYj0N29xT26y1FaDKWlTfbmTMUPtUkL1l/tkptwSNrU+xC2QyrWNx/gmawgx0hivwKrHrEQI5jDa5RQ5XW6/ywXucsqI1G+mWxmdXXZxZFo+V+SIl6A0mSpMCvIyl0udxlflwmB6+NKIMgNkV1ZMAKvJyWWV2uhtr7/w7TRpMxy09GKJDqdyn48iTzJd1cBpH95mq+wyRLNcXlIwNfMf3ZrktWjMCYHoywSGYQKg2qrS9ud0LR5ptebPpBawCkDTggzuQPlOBYtcF7M/MAfuEt31xzkcNQNgVsugQ/kxQvPz6Bp0JUFHaxSOLVYqd3BeJwRLa/hE5tMwxeseIRGLoYiegEECfpkrzbyVqMdLPe4uln8qRrNTHq517WR34UfeaAEF+pOYMtIR3iXJrs4XESE6L190jbEd5g/WV3FegN0d1Ewyq3FM9cuGuCAS8IenMtOtB7vCczM4d0MgTupFDPnnLEECqph67VCfAK0Jk3KhpomQiXUZz6GPZB59+jgcovyyPhITPYhyWgxiCoVcA8JCZxNhneTBwAFkSDwXlB8vuqwpo6rWQyZER40H5uyvPh8CgY8ocnl3hXnlPpbz5PBMEF/OB3Wkv7niRqer9rLwth5KJ9J9fY9eP96epfZajFa4WdWv9R7UeDCJfL3iFBwMxZPqveOXxoNn0R3rS4GqFC4wCu2ACcHT
-X-Forefront-Antispam-Report: CIP:216.228.117.160;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge1.nvidia.com;CAT:NONE;SFS:(13230025)(4636009)(346002)(39860400002)(376002)(396003)(136003)(451199018)(36840700001)(46966006)(40470700004)(336012)(31686004)(966005)(5660300002)(36860700001)(7416002)(26005)(186003)(426003)(47076005)(478600001)(316002)(356005)(8676002)(6916009)(41300700001)(8936002)(40480700001)(4326008)(40460700003)(70206006)(70586007)(7636003)(54906003)(82310400005)(86362001)(31696002)(82740400003)(2906002);DIR:OUT;SFP:1101;
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 21 Feb 2023 14:20:55.7964
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: bfd1d36e-1c62-4265-432d-08db1416d8ab
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.160];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource: BL02EPF0000C404.namprd05.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR12MB5904
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
-        autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.2
+Subject: Re: INFO: REPRODUCED: memory leak in gpio device in 6.2-rc6
+Content-Language: en-US
+From:   Mirsad Goran Todorovac <mirsad.todorovac@alu.unizg.hr>
+To:     Andy Shevchenko <andriy.shevchenko@intel.com>
+Cc:     Bartosz Golaszewski <brgl@bgdev.pl>, linux-gpio@vger.kernel.org,
+        Linus Walleij <linus.walleij@linaro.org>,
+        linux-kernel@vger.kernel.org,
+        Thorsten Leemhuis <regressions@leemhuis.info>
+References: <cdb562c5-040e-687f-a61f-4273fc356ff3@alu.unizg.hr>
+ <fb12086b-ff5f-333a-3199-a8690c4d4bdf@alu.unizg.hr>
+ <Y+j1dbZ0A1mndwXp@smile.fi.intel.com>
+ <36d8e761-58e2-2515-fd1a-65a11731d1b1@alu.unizg.hr>
+ <Y+y5nZJwZ6ykf0Fz@smile.fi.intel.com>
+ <3d96e50b-ed17-9bf5-149b-8a50c7b4cca2@alu.unizg.hr>
+ <CAMRc=Mcx=Ko5H_c1YGzA5Jfu3KJqx1pfL3RZuMrV6oTObnUrhQ@mail.gmail.com>
+ <4b001ce6-b35d-3ad1-b757-f5f6baca7b51@alu.unizg.hr>
+ <Y/N5Dt6G397rkfBd@smile.fi.intel.com>
+ <d7762f6f-5b58-cf71-3400-557799de43c0@alu.unizg.hr>
+In-Reply-To: <d7762f6f-5b58-cf71-3400-557799de43c0@alu.unizg.hr>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 20 Feb 2023 14:35:16 +0100, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 6.1.13 release.
-> There are 118 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
-> 
-> Responses should be made by Wed, 22 Feb 2023 13:35:35 +0000.
-> Anything received after that time might be too late.
-> 
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v6.x/stable-review/patch-6.1.13-rc1.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-6.1.y
-> and the diffstat can be found below.
-> 
-> thanks,
-> 
-> greg k-h
+On 21.2.2023. 14:52, Mirsad Goran Todorovac wrote:
+> On 20. 02. 2023. 14:43, Andy Shevchenko wrote:
+>> On Mon, Feb 20, 2023 at 02:10:00PM +0100, Mirsad Todorovac wrote:
+>>> On 2/16/23 15:16, Bartosz Golaszewski wrote:
+>>
+>> ...
+>>
+>>> As Mr. McKenney once said, a bunch of monkeys with keyboard could
+>>> have done it in a considerable number of trials and errors ;-)
+>>>
+>>> But here I have something that could potentially leak as well. I could not devise a
+>>> reproducer due to the leak being lightly triggered only in extreme memory contention.
+>>>
+>>> See it for yourself:
+>>>
+>>> drivers/gpio/gpio-sim.c:
+>>>  301 static int gpio_sim_setup_sysfs(struct gpio_sim_chip *chip)
+>>>  302 {
+>>>  303         struct device_attribute *val_dev_attr, *pull_dev_attr;
+>>>  304         struct gpio_sim_attribute *val_attr, *pull_attr;
+>>>  305         unsigned int num_lines = chip->gc.ngpio;
+>>>  306         struct device *dev = chip->gc.parent;
+>>>  307         struct attribute_group *attr_group;
+>>>  308         struct attribute **attrs;
+>>>  309         int i, ret;
+>>>  310
+>>>  311         chip->attr_groups = devm_kcalloc(dev, sizeof(*chip->attr_groups),
+>>>  312                                          num_lines + 1, GFP_KERNEL);
+>>>  313         if (!chip->attr_groups)
+>>>  314                 return -ENOMEM;
+>>>  315
+>>>  316         for (i = 0; i < num_lines; i++) {
+>>>  317                 attr_group = devm_kzalloc(dev, sizeof(*attr_group), GFP_KERNEL);
+>>>  318                 attrs = devm_kcalloc(dev, GPIO_SIM_NUM_ATTRS, sizeof(*attrs),
+>>>  319                                      GFP_KERNEL);
+>>>  320                 val_attr = devm_kzalloc(dev, sizeof(*val_attr), GFP_KERNEL);
+>>>  321                 pull_attr = devm_kzalloc(dev, sizeof(*pull_attr), GFP_KERNEL);
+>>>  322                 if (!attr_group || !attrs || !val_attr || !pull_attr)
+>>>  323                         return -ENOMEM;
+>>>  324
+>>>  325                 attr_group->name = devm_kasprintf(dev, GFP_KERNEL,
+>>>  326 "sim_gpio%u", i);
+>>>  327                 if (!attr_group->name)
+>>>  328                         return -ENOMEM;
+>>>
+>>> Apparently, if the memory allocation only partially succeeds, in the theoretical case
+>>> that the system is close to its kernel memory exhaustion, `return -ENOMEM` would not
+>>> free the partially succeeded allocs, would it?
+>>>
+>>> To explain it better, I tried a version that is not yet full doing "all or nothing"
+>>> memory allocation for the gpio-sim driver, because I am not that familiar with the
+>>> driver internals.
+>>
+>> devm_*() mean that the resource allocation is made in a managed manner, so when
+>> it's done, it will be freed automatically.
+>
+> Didn't see that one coming ... :-/ "buzzing though the bush ..."
+>
+>> The question is: is the lifetime of the attr_groups should be lesser or the
+>> same as chip->gc.parent? Maybe it's incorrect to call devm_*() in the first place?
+>
+> Bona fide said, I hope that automatic deallocation does things in the right order.
+> I've realised that devm_kzalloc() calls devm_kmalloc() that registers allocations on
+> a per driver list. But I am not sure how chip->gc was allocated?
+>
+> Here is said it is allocated in drivers/gpio/gpio-sim.c:386 in gpio_sim_add_bank(), as a part of
+> struct gpio_sim_chip *chip;
+>     struct gpio_chip *gc;
+>
+>     gc = &chip->gc;
+>
+> and gc->parent is set to
+>
+>     gc->parent = dev;
+>
+> in line 420, which appears called before gpio_sim_setup_sysfs() and the lines above.
 
-All tests passing for Tegra ...
+P.S.
 
-Test results for stable-v6.1:
-    11 builds:	11 pass, 0 fail
-    28 boots:	28 pass, 0 fail
-    130 tests:	130 pass, 0 fail
+The exact line is:
 
-Linux version:	6.1.13-rc1-gfc84fcf24fda
-Boards tested:	tegra124-jetson-tk1, tegra186-p2771-0000,
-                tegra194-p2972-0000, tegra194-p3509-0000+p3668-0000,
-                tegra20-ventana, tegra210-p2371-2180,
-                tegra210-p3450-0000, tegra30-cardhu-a04
+	chip  =  devm_kzalloc <https://elixir.bootlin.com/linux/latest/C/ident/devm_kzalloc>(dev,  sizeof(*chip),  GFP_KERNEL <https://elixir.bootlin.com/linux/latest/C/ident/GFP_KERNEL>); so I guess it is reasonable to assume that chip will also 
+be deallocated after attr_groups. chip->gc.parent appears to be a mere pointer to dev parameter in static  int  gpio_sim_add_bank <https://elixir.bootlin.com/linux/latest/C/ident/gpio_sim_add_bank>(struct  fwnode_handle <https://elixir.bootlin.com/linux/latest/C/ident/fwnode_handle>  *swnode <https://elixir.bootlin.com/linux/latest/C/ident/swnode>,  struct  device <https://elixir.bootlin.com/linux/latest/C/ident/device>  *dev) This is OTOH called from: static  int  gpio_sim_probe <https://elixir.bootlin.com/linux/latest/C/ident/gpio_sim_probe>(struct  platform_device <https://elixir.bootlin.com/linux/latest/C/ident/platform_device>  *pdev)
+{
+	struct  device <https://elixir.bootlin.com/linux/latest/C/ident/device>  *dev  =  &pdev->dev;
+	struct  fwnode_handle <https://elixir.bootlin.com/linux/latest/C/ident/fwnode_handle>  *swnode <https://elixir.bootlin.com/linux/latest/C/ident/swnode>;
+	int  ret;
 
-Tested-by: Jon Hunter <jonathanh@nvidia.com>
+	device_for_each_child_node <https://elixir.bootlin.com/linux/latest/C/ident/device_for_each_child_node>(dev,  swnode <https://elixir.bootlin.com/linux/latest/C/ident/swnode>)  {
+		ret  =  gpio_sim_add_bank <https://elixir.bootlin.com/linux/latest/C/ident/gpio_sim_add_bank>(swnode 
+<https://elixir.bootlin.com/linux/latest/C/ident/swnode>,  dev); Which means dev passed to chip->gc.parent is initialised with &pdev->dev from pdev parm of gpio_sim_probe(). This is OTOH 
+referenced from the very:
+static struct platform_driver <https://elixir.bootlin.com/linux/latest/C/ident/platform_driver> gpio_sim_driver 
+<https://elixir.bootlin.com/linux/latest/C/ident/gpio_sim_driver> = { .driver = { .name = "gpio-sim", .of_match_table 
+<https://elixir.bootlin.com/linux/latest/C/ident/of_match_table> = gpio_sim_of_match 
+<https://elixir.bootlin.com/linux/latest/C/ident/gpio_sim_of_match>, }, .probe 
+<https://elixir.bootlin.com/linux/latest/C/ident/probe> = gpio_sim_probe 
+<https://elixir.bootlin.com/linux/latest/C/ident/gpio_sim_probe>, }; Hope this helps. There's more to this than meets the eye, but 
+this is really an idiot's attempt to analyse a Linux kernel driver. :-)
 
-Jon
+> If I understood well, automatic deallocation on unloading the driver goes
+> in the reverse order, so lifetime of chip appears to be longer than attr_groups,
+> but I am really not that good at this ...
+>
+>> Or maybe the chip->gc.parent should be changed to something else (actual GPIO
+>> device, but then it's unclear how to provide the attributes in non-racy way
+> Really, dunno. I have to repeat that my learning curve cannot adapt so quickly.
+>
+> I merely gave the report of KMEMLEAK, otherwise I am not a Linux kernel
+> device expert nor would be appropriate to try the craft not earned ;-) 
+
+Regards,
+
+Mirsad
+
+-- 
+Mirsad Todorovac
+System engineer
+Faculty of Graphic Arts | Academy of Fine Arts
+University of Zagreb
+Republic of Croatia, the European Union
+
+Sistem inženjer
+Grafički fakultet | Akademija likovnih umjetnosti
+Sveučilište u Zagrebu
+
