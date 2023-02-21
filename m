@@ -2,97 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 31E6169DD68
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 10:53:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6964569DD6C
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 10:54:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234194AbjBUJxh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Feb 2023 04:53:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33030 "EHLO
+        id S234066AbjBUJyc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Feb 2023 04:54:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34846 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234168AbjBUJxF (ORCPT
+        with ESMTP id S234001AbjBUJy3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Feb 2023 04:53:05 -0500
-Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA8B62658A;
-        Tue, 21 Feb 2023 01:52:35 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=7IhbMrpB1x7JbHpi0+5qsoFoROWCWYrh9Y+lOe8gXRw=; b=CejrUhXgN6Gc0Su5jF/GfaAu1U
-        S6KvX+DzCkG/pRNfXTVtG7Hm4joM37ZDQ9FTHNE4nqY/2FWRUp12QrA/c8xNv9wDywB8llSDmTE0n
-        7JU2oQh4uO1XNaED2y334EkA9GX6YhgQdfeddxpTs3PnrphYwSn9WruG1GsoxSF4LCPOEh4Fm2oOR
-        wtRA5qBaBjk7i+cehlP6DSRzChf2zIpTiflIJDy4tGNusxL+zR9xoqOj1O+ulKC2W1FoYyppI/jyy
-        ecEomALojhI5eHA2yJM5iPcKtBXzlyG0HOgVEnBVBGaOMbpGJBC42O7lZDlWXeOBfMZiiqKh0ZAD8
-        Ir1YZEvg==;
-Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:48488)
-        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <linux@armlinux.org.uk>)
-        id 1pUPK1-0005aj-8I; Tue, 21 Feb 2023 09:52:29 +0000
-Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
-        (envelope-from <linux@shell.armlinux.org.uk>)
-        id 1pUPK0-00027d-2Q; Tue, 21 Feb 2023 09:52:28 +0000
-Date:   Tue, 21 Feb 2023 09:52:28 +0000
-From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
-To:     Oleksij Rempel <o.rempel@pengutronix.de>
-Cc:     Andrew Lunn <andrew@lunn.ch>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, kernel@pengutronix.de,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org
-Subject: Re: [PATCH net-next v2 0/4] net: phy: EEE fixes
-Message-ID: <Y/SUXDlB6TlBbZMI@shell.armlinux.org.uk>
-References: <20230221050334.578012-1-o.rempel@pengutronix.de>
- <Y/SQo20Qes2GpoeM@shell.armlinux.org.uk>
- <20230221094809.GF19238@pengutronix.de>
+        Tue, 21 Feb 2023 04:54:29 -0500
+Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C22F33AB9
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Feb 2023 01:53:51 -0800 (PST)
+Received: by mail-ed1-x533.google.com with SMTP id x10so13914719edd.13
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Feb 2023 01:53:51 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=nLkpu34r64N6jTLmLzho5Nqw5btLUj/JsxhXvl09Gow=;
+        b=iIs+osXHST4BSB1VRkciVNfR2QxsLxB22NvNRR4LCA89NAJaCCbT7PMh5Rg0aLNEn1
+         YpOeN5hELT024Q6stpE44PP6NIZBhxTgdYiXAju7e0aXYV7l7kBontbTlG4t5Zc7RGFt
+         jlZ9E/qLjHaVTHvoY7DorKkAN9TZzpLQZqaEykmmj9yMpz77nQpjm+PL9FTLOwlPavA7
+         JBCDAIdSbvc6rGx4AfCEpTHpv1NztVp/gT9XXj5R3KpjXoSOJtbfsdYCLiJtfXu/mh80
+         oa6HeP0G6XMIbJmxfrm7JZUsL7xYXs/OpVHjxI5C9h9YUSEZcfeR3714bflhRJZYfKm0
+         1dpg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=nLkpu34r64N6jTLmLzho5Nqw5btLUj/JsxhXvl09Gow=;
+        b=K1jqlax6mcHUXiruAFh0CwPrrJTeBGS3r6FAWEctFOx7m4FRTjlTSJhW8JJ+9rWZ+C
+         R8HUoINC7JqvrlY+CI6PL8TQpOV9YbWTW3UzljBo0Fu2IVAK5DoDdimnLKZ/XCipQquC
+         jXfF2kmIRqNGi6i2fst93GdM7DcZEWPo+65ffGxyQXzzp7ivwE5WjZr7gHYhoDIoJEyf
+         yq2q+l6yAx2zWIoKIGmvUSSWr1wiys7RSrxycAOtZGBaUtY1WUK6lyaPDhezHqe8QD8Q
+         N7sFZQ3UfIAUg+1G3aCnBZnMb+hIEgfLEQd+hmP7F5gC8sAUD4sXcRChmk9Vf9vdpKKf
+         fC3Q==
+X-Gm-Message-State: AO0yUKUZEfDWuiarixh86pPNVkYsZLJBJfyIshfiJlKKLuaqM1laZLyb
+        8xn2+HXU5YXULlxH/6T0x3NRug==
+X-Google-Smtp-Source: AK7set/xuAnKadPghcifDKVyD2HY7jmzCcqJBp4Wcvun7a7JGIOi97uDS7Yos61WL+UHeRgVTRUciw==
+X-Received: by 2002:a17:906:518:b0:8b1:3554:25 with SMTP id j24-20020a170906051800b008b135540025mr11134918eja.61.1676973221885;
+        Tue, 21 Feb 2023 01:53:41 -0800 (PST)
+Received: from krzk-bin.. ([178.197.216.144])
+        by smtp.gmail.com with ESMTPSA id 10-20020a170906328a00b008b147e4204dsm6912388ejw.32.2023.02.21.01.53.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 21 Feb 2023 01:53:41 -0800 (PST)
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+To:     Olof Johansson <olof@lixom.net>, Arnd Bergmann <arnd@arndb.de>,
+        arm@kernel.org, soc@kernel.org
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Krzysztof Kozlowski <krzk@kernel.org>
+Subject: [GIT PULL] fixes: ARM: dts: samsung: Fixes for v6.3
+Date:   Tue, 21 Feb 2023 10:53:37 +0100
+Message-Id: <20230221095337.9453-1-krzysztof.kozlowski@linaro.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230221094809.GF19238@pengutronix.de>
-Sender: Russell King (Oracle) <linux@armlinux.org.uk>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 21, 2023 at 10:48:09AM +0100, Oleksij Rempel wrote:
-> On Tue, Feb 21, 2023 at 09:36:35AM +0000, Russell King (Oracle) wrote:
-> > On Tue, Feb 21, 2023 at 06:03:30AM +0100, Oleksij Rempel wrote:
-> > > changes v2:
-> > > - restore previous ethtool set logic for the case where advertisements
-> > >   are not provided by user space.
-> > 
-> > I don't think the _kernel_ should be doing this - this introduces a
-> > different behaviour to the kernel. As I already said, setting the
-> > default advertisement in the case of ethtool -s is done by userspace
-> > not by the kernel.
-> > 
-> > In fact, the kernel explicitly rejects an attempt to have autoneg
-> > enabled with a zero advertising mask:
-> > 
-> >         linkmode_copy(advertising, cmd->link_modes.advertising);
-> >         linkmode_and(advertising, advertising, phydev->supported);
-> >         if (autoneg == AUTONEG_ENABLE && linkmode_empty(advertising))
-> >                 return -EINVAL;
-> > 
-> > and I think we should have a uniform behaviour with the same API,
-> > rather than different behaviours, as that becomes quite messy.
-> 
-> I decided to revert this part to not mix different issue. This logic
-> existed before my refactoring. So, it is better to handle it as
-> different patch. Current patch set should address only regressions.
+Hi,
 
-Okay, let's keep it like that then. Thanks.
+Fixes for ciritical issue broken around v6.1-rc1.  Actually the issue (DTS
+mistake) existed before, but in v6.1-rc1 it started to be visible and affect
+thermal zones.
 
--- 
-RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
-FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!
+Best regards,
+Krzysztof
+
+
+The following changes since commit ceaa837f96adb69c0df0397937cd74991d5d821a:
+
+  Linux 6.2-rc8 (2023-02-12 14:10:17 -0800)
+
+are available in the Git repository at:
+
+  https://git.kernel.org/pub/scm/linux/kernel/git/krzk/linux.git tags/samsung-dt-fixes-6.3
+
+for you to fetch changes up to a3583e92d188ec6c58c7f603ac5e72dd8a11c21a:
+
+  ARM: dts: exynos: correct TMU phandle in Odroid XU3 family (2023-02-17 10:27:28 +0100)
+
+----------------------------------------------------------------
+Fixes for Samsung DTS ARM for v6.3
+
+Thermal framework commit 3fd6d6e2b4e8 ("thermal/of: Rework the thermal
+device tree initialization") merged in v6.1-rc1, exposed
+misconfiguration of Exynos Thermal Monitoring Unit (TMU) thermal-sensors
+property in DTS.  This misconfiguration in DTS was working fine before
+that Thermal commit, but now all thermal zones fail to register except
+the first one (CPU).  This can lead to missing cooling of a board and
+eventually either emergency shutdown or damaged board.
+
+----------------------------------------------------------------
+Krzysztof Kozlowski (6):
+      ARM: dts: exynos: correct TMU phandle in Exynos4
+      ARM: dts: exynos: correct TMU phandle in Exynos4210
+      ARM: dts: exynos: correct TMU phandle in Exynos5250
+      ARM: dts: exynos: correct TMU phandle in Odroid XU
+      ARM: dts: exynos: correct TMU phandle in Odroid HC1
+      ARM: dts: exynos: correct TMU phandle in Odroid XU3 family
+
+ arch/arm/boot/dts/exynos4-cpu-thermal.dtsi         |  2 +-
+ arch/arm/boot/dts/exynos4210.dtsi                  |  1 -
+ arch/arm/boot/dts/exynos5250.dtsi                  |  2 +-
+ arch/arm/boot/dts/exynos5410-odroidxu.dts          |  1 -
+ arch/arm/boot/dts/exynos5422-odroidhc1.dts         | 10 +++++-----
+ arch/arm/boot/dts/exynos5422-odroidxu3-common.dtsi | 10 +++++-----
+ 6 files changed, 12 insertions(+), 14 deletions(-)
