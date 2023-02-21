@@ -2,106 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2BE6C69E900
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 21:29:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EF5E769E90B
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 21:39:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229719AbjBUU3Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Feb 2023 15:29:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42276 "EHLO
+        id S229661AbjBUUjV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Feb 2023 15:39:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47156 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229518AbjBUU3O (ORCPT
+        with ESMTP id S230225AbjBUUjO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Feb 2023 15:29:14 -0500
-Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF93D2D159;
-        Tue, 21 Feb 2023 12:29:13 -0800 (PST)
-Received: by mail-pj1-x102c.google.com with SMTP id co23-20020a17090afe9700b002341fadc370so6241156pjb.1;
-        Tue, 21 Feb 2023 12:29:13 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=6ZBdxrcYvbI1Z3Ko4/Ygq22p0mSRneCJlicvJMQ62Kc=;
-        b=Jvz+wJA5yDvMdWAHjRTB1t5IO+pWd8B5VE3kh5OvwMSNITqrdXX4S5AG4+8B0dCW6K
-         4NlXKs2VU4tMme5Liv3qc2cFJLaWMSIuGw1aUC9eLMKi81zh/1Zar1Dp98/iIQo1nLZL
-         CmmbcGMNQKNRcXdonKRydfoGI5gHnCIzrFmdaPu2BpqoSiJ0us/boaAhZVJLRqVAWLSA
-         38F3y2ZnMxiZDuPDJqsJeYDndb75xIKeP7pR1Mmc4D6KVbzMHVqrSMa9qpD1LWQbeaDu
-         D9nmQJMLmfR9Jg9Ri9cmZIYcW+YSaVlOKbRD8xza6YZXG5VJnqMOGIhx1KdiRV5Ub90E
-         F50g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=6ZBdxrcYvbI1Z3Ko4/Ygq22p0mSRneCJlicvJMQ62Kc=;
-        b=bRnJlSLweMgqGD/plDoSS5RfZTEf3YtT7I2BqWNbDqgdG3cgOHQCsp+zSli0ygI0yq
-         nzm35nJ5WoEm2ca5Bq9zZXaGKZujiUpAYZV6G5uiMGYmd3wqJhqUi8PJGP4l2Cgk2pH1
-         KWr7gJLwDXrdXT5KLfeSyHX3XULzAOEMEWaCpf8pG25fzUVPDAcFIDpFmF+JRkBNVce4
-         EgZNvE8wYZj2Z74dqg233r7POjtfBoXeTG0FPzAgU+15MLB8yEbUEqNxRV8gUbuBvyuB
-         ou1ERRYPyBxZCuG18A+03pf2r4aeK87ghaf3U81ZS8LnXfq43288Y1ft93YNtFMTRyQR
-         jW2Q==
-X-Gm-Message-State: AO0yUKUe3MnkqAKm59Noon01uz7NdrAo1zkyhR6r67y1pD7lB4ZNiwtJ
-        fUiyK0aX8dyBfNzJkSqH2Fw=
-X-Google-Smtp-Source: AK7set8QdnIlUvdnGKNBL6HaRExsMpy3ecuBzjOW4TJDCCArDXbTrWZiABHdVxzQA2XS7dp56qHB3A==
-X-Received: by 2002:a17:902:ea07:b0:19a:887d:98ac with SMTP id s7-20020a170902ea0700b0019a887d98acmr8151056plg.46.1677011353003;
-        Tue, 21 Feb 2023 12:29:13 -0800 (PST)
-Received: from [10.67.48.245] ([192.19.223.252])
-        by smtp.googlemail.com with ESMTPSA id bf3-20020a170902b90300b0019adbef6a63sm10257324plb.235.2023.02.21.12.29.08
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 21 Feb 2023 12:29:12 -0800 (PST)
-Message-ID: <27de6440-c062-db02-7f46-78154de1dee9@gmail.com>
-Date:   Tue, 21 Feb 2023 12:29:06 -0800
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH 6.1 000/118] 6.1.13-rc1 review
-Content-Language: en-US
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org
-Cc:     patches@lists.linux.dev, linux-kernel@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de
-References: <20230220133600.368809650@linuxfoundation.org>
-From:   Florian Fainelli <f.fainelli@gmail.com>
-In-Reply-To: <20230220133600.368809650@linuxfoundation.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        Tue, 21 Feb 2023 15:39:14 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F399302B0;
+        Tue, 21 Feb 2023 12:39:02 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id D45A6B810C6;
+        Tue, 21 Feb 2023 20:39:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 82B31C4339E;
+        Tue, 21 Feb 2023 20:39:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1677011940;
+        bh=QNtiWG7LnZ/oZkA84pBoLudNRf596An+hPKcjDTqEII=;
+        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+        b=jLFiVIXL/VC1j80R0fu9sbXFpQN+FBFL+iyNccVIy6WKn4iGiwRS/LH7drgN1x3xq
+         Cw1cl+lKTaMmJO2Q3zdoVLFgXaCf7Hf4vvnrqxA1fR9DlTUlAhpxb1ZBHVBZSOJp9d
+         i4i8IAw758YodgVexJyvQbbefhTaqL7XiclxMpFAwHEonft9EATL42lUhXg/64fMxG
+         yKl2AZEkSRhog6u+/cuwguMKIw3P1u/j61cHmI7ABpB3fUVB5Vqn30dbl26Q9ynZiZ
+         nf64CwiklM3hwwnhg3gECGnP+Hv6zqrX/perLlk97DyLI+FErnYo1Xsc9/wGCUKqxO
+         +Itl8aErRFCeg==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 63EEDC43151;
+        Tue, 21 Feb 2023 20:39:00 +0000 (UTC)
+Subject: Re: [GIT PULL] Thermal control updates for v6.3-rc1
+From:   pr-tracker-bot@kernel.org
+In-Reply-To: <CAJZ5v0jXnjq+zRcsvUfuS=-5brPEdXw-BrFvkD8jR7kQ_ob_ww@mail.gmail.com>
+References: <CAJZ5v0jXnjq+zRcsvUfuS=-5brPEdXw-BrFvkD8jR7kQ_ob_ww@mail.gmail.com>
+X-PR-Tracked-List-Id: <linux-acpi.vger.kernel.org>
+X-PR-Tracked-Message-Id: <CAJZ5v0jXnjq+zRcsvUfuS=-5brPEdXw-BrFvkD8jR7kQ_ob_ww@mail.gmail.com>
+X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git thermal-6.3-rc1
+X-PR-Tracked-Commit-Id: 6828e402d06f7c574430b61c05db784cd847b19f
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: 1b72607d7321e66829e11148712b3a2ba1dc83e7
+Message-Id: <167701194040.12980.17324492209369764610.pr-tracker-bot@kernel.org>
+Date:   Tue, 21 Feb 2023 20:39:00 +0000
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/20/23 05:35, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 6.1.13 release.
-> There are 118 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
-> 
-> Responses should be made by Wed, 22 Feb 2023 13:35:35 +0000.
-> Anything received after that time might be too late.
-> 
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v6.x/stable-review/patch-6.1.13-rc1.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-6.1.y
-> and the diffstat can be found below.
-> 
-> thanks,
-> 
-> greg k-h
+The pull request you sent on Thu, 16 Feb 2023 14:45:38 +0100:
 
-On ARCH_BRCMSTB using 32-bit and 64-bit kernels, build tested on 
-BMIPS_GENERIC:
+> git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git thermal-6.3-rc1
 
-Tested-by: Florian Fainelli <f.fainelli@gmail.com>
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/1b72607d7321e66829e11148712b3a2ba1dc83e7
+
+Thank you!
+
 -- 
-Florian
-
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html
