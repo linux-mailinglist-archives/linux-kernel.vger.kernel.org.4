@@ -2,69 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 15BB669D903
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 03:52:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C18FE69D90F
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 03:55:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233151AbjBUCwu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Feb 2023 21:52:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57474 "EHLO
+        id S233409AbjBUCz3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Feb 2023 21:55:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60930 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233288AbjBUCws (ORCPT
+        with ESMTP id S233451AbjBUCzA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Feb 2023 21:52:48 -0500
-Received: from mail-pf1-x434.google.com (mail-pf1-x434.google.com [IPv6:2607:f8b0:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0407124107;
-        Mon, 20 Feb 2023 18:52:14 -0800 (PST)
-Received: by mail-pf1-x434.google.com with SMTP id g12so1599884pfi.0;
-        Mon, 20 Feb 2023 18:52:13 -0800 (PST)
+        Mon, 20 Feb 2023 21:55:00 -0500
+Received: from mail-pj1-x1044.google.com (mail-pj1-x1044.google.com [IPv6:2607:f8b0:4864:20::1044])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 658562724;
+        Mon, 20 Feb 2023 18:54:36 -0800 (PST)
+Received: by mail-pj1-x1044.google.com with SMTP id u10so3224896pjc.5;
+        Mon, 20 Feb 2023 18:54:36 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=TtGcBjSMD0TPpnUy4pzgFNIJ5eKnUntLrojcStRDYvY=;
-        b=TISNllblHWF13weS2bgeSF1ImCiREcvaXpiF/CreaEjt0LoXeoVQI0oV+1LALsnTMv
-         4wduhGF2Jo4vqYZbUPq97QLzuL6OLTPET8UzQiCzqdkuI1TK3LhExuFufxKFLSFxiR+N
-         ThCXAgT68zYCVbKn1grxyUPK4rQBV5HvP+yhKP86Tj0Sjwb3hB0s/h+JaxOY2qyZ5MDc
-         5vRdcIDFJLN4lnqakNRvCz4oRteJ0lsbuojFn7n/xCixggNN48+ux9uEuzAZfJePKv9U
-         uHVhXZlGHvE/z8NhvJCad44OEvTsNRW6MDCYqHJazhZM9ZtbwCYMCW9zD+AbwG/QeKlq
-         3xCA==
+        bh=PYRU/rOAadesjlu86+EoUO57rm+/qhq46aQQu1E8Ap0=;
+        b=MVw0JTjA+bXaSMXGXE6cojjE+JiwSNEeBmDvFtWzVdbC09tcaAP3Pdkdnas42RKohp
+         mC6o0CYGdyOaBKVsdQyt9Ov7Z2TZ/PefDq+Qee6te51UvKHSdHSLCOMz0lWkjADO2xoO
+         r0DZYPxAnMS5H3zxx6qRLzgmf1hwmgbkKaZXPIaTYKho3TggLOmuLOfQRhBcurVmbDQC
+         LpRNnAXaKOTQNE2sl44ML0USuVbULWv92HWzoVDAOTLnz954z3chCv8oBo26pZCP3lNh
+         CZ4Q8bEDDOuIwBCmHRciE9UNvBOTM3qBRbClpd1QUz1mNi0/iz39jdLJ5QyZNzfdnNrI
+         TuZg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=TtGcBjSMD0TPpnUy4pzgFNIJ5eKnUntLrojcStRDYvY=;
-        b=2lvPIb56s43W34eEd3Tr4cpB8OOMX84oDd/OkMIA6CFyZFf2SNpYMXLnThrtRPS1m8
-         OkDiog5sGpLDEnX9AeBtyd180eAQJ319tvSZreRftyyCgDX0yMI6LMZTsVF89XyFk+nj
-         7UD8m65ZfFyZjGzMrbPEZgtCKKpqG5e8QK2RTRLmLtTs23+1ukaCQOf6BFR5zB0QOd+K
-         sBX0rDJ7tnAnoMqh5dew7LV46V0S/7i3ObnEMsv3wx4MbrLWdfn0wkeoMeGCBbjVw/42
-         xofUVa8T8NqgraOqyo5/4BP3TTufkv06qI3vmWwjXt51HSgt7AtonQkETfJiI82JVMTa
-         JCsg==
-X-Gm-Message-State: AO0yUKWk6ztN1cz061frK3wLJkqePeU+sietLwkc3kgadHGQL2vfI49q
-        CXAo5jMWJpdvw5rDeC7orA8=
-X-Google-Smtp-Source: AK7set8+e5eaqDbJ9WaXabjF/wktK7ZqA2lJP1Q1QeyCNfHcTThHtXLt0gc8UdQC0C9xGffblwQhrg==
-X-Received: by 2002:a05:6a00:2ea8:b0:5a8:9858:750a with SMTP id fd40-20020a056a002ea800b005a89858750amr4423750pfb.13.1676947863789;
-        Mon, 20 Feb 2023 18:51:03 -0800 (PST)
-Received: from localhost.localdomain ([2407:cdc0:a091:5a10:3275:3446:a72b:eccd])
-        by smtp.gmail.com with ESMTPSA id s4-20020a62e704000000b0059442ec49a2sm8603427pfh.146.2023.02.20.18.51.00
+        bh=PYRU/rOAadesjlu86+EoUO57rm+/qhq46aQQu1E8Ap0=;
+        b=Tiv6rtfoSwIQkhWbRGH4AVawjyDBdwh6EaOkkBnfpBjqlBfyNFuL9bS3qkhlyzzcr5
+         8MKzLBitDdGoJ7YUo0a48PnFFWAv34T8JrelRLIKrueRtK13eT5v+4wPIg7jDND48VQt
+         fEdZAyypOw1cvOoMHlRvuv0uxd+N80/o4HuPdoE2hW2dtHqWYzjfE80dIOgYHpoz9UbK
+         yT8MLflMDm8T/fcn7eU4DNrK/1+FwrNhiicNxX44RyjQCMy4qFynXtZanAdOhHru0mul
+         V67FXfKelDeBtUwbdQFLEjqVyNMdyjChHVGEnXjUfFCFU8ZJuBxE6xS+hpAPu0G1owNv
+         o43g==
+X-Gm-Message-State: AO0yUKVoZCeF0rQavcEZL+rmI9i4458FfNpIIgat2pgem6ZRJ7geeMz9
+        p+Lii4rKIuaerOlyCqq1aRFctC8v3BkklCVJ
+X-Google-Smtp-Source: AK7set8Nut7yeFFwYSaODhm/sNgK4Y4oFA/oTbVii6xWm3Z70gsQK42x3x1H/e4TRqxd3SULm2JPHg==
+X-Received: by 2002:a17:903:1205:b0:19a:b151:bf68 with SMTP id l5-20020a170903120500b0019ab151bf68mr2964627plh.38.1676948067813;
+        Mon, 20 Feb 2023 18:54:27 -0800 (PST)
+Received: from localhost.localdomain ([203.205.141.16])
+        by smtp.gmail.com with ESMTPSA id k3-20020a170902e90300b0019a837be977sm8590156pld.271.2023.02.20.18.54.23
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 20 Feb 2023 18:51:03 -0800 (PST)
-From:   Stephen Zhang <starzhangzsd@gmail.com>
-X-Google-Original-From: Stephen Zhang <zhangshida@kylinos.cn>
-To:     jejb@linux.ibm.com, artin.petersen@oracle.com,
-        matthias.bgg@gmail.com, angelogioacchino.delregno@collabora.com,
-        beanhuo@micron.com, bvanassche@acm.org, avri.altman@wdc.com,
-        yoshihiro.shimoda.uh@renesas.com
-Cc:     linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, zhangshida@kylinos.cn,
-        starzhangzsd@gmail.com, k2ci <kernel-bot@kylinos.cn>
-Subject: [PATCH v2] scsi: ufs: Guard the ufs_mtk_runtime_suspend and ufs_mtk_runtime_resume with CONFIG_PM
-Date:   Tue, 21 Feb 2023 10:50:55 +0800
-Message-Id: <20230221025055.1031342-1-zhangshida@kylinos.cn>
-X-Mailer: git-send-email 2.25.1
+        Mon, 20 Feb 2023 18:54:27 -0800 (PST)
+From:   menglong8.dong@gmail.com
+X-Google-Original-From: imagedong@tencent.com
+To:     andrii.nakryiko@gmail.com, alan.maguire@oracle.com
+Cc:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+        martin.lau@linux.dev, song@kernel.org, yhs@fb.com,
+        john.fastabend@gmail.com, kpsingh@kernel.org, sdf@google.com,
+        haoluo@google.com, jolsa@kernel.org, benbjiang@tencent.com,
+        bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Menglong Dong <imagedong@tencent.com>
+Subject: [PATCH bpf-next v3 0/3] libbpf: allow users to set kprobe/uprobe attach mode
+Date:   Tue, 21 Feb 2023 10:53:44 +0800
+Message-Id: <20230221025347.389047-1-imagedong@tencent.com>
+X-Mailer: git-send-email 2.39.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
@@ -76,49 +74,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Shida Zhang <zhangshida@kylinos.cn>
+From: Menglong Dong <imagedong@tencent.com>
 
-In a configuration with CONFIG_SCSI_UFS_MEDIATEK set to 'm' and
-CONFIG_PM set to 'n', errors occur at compile time:
+By default, libbpf will attach the kprobe/uprobe eBPF program in the
+latest mode that supported by kernel. In this series, we add the support
+to let users manually attach kprobe/uprobe in legacy/perf/link mode in
+the 1th patch.
 
-====
-../drivers/ufs/host/ufs-mediatek.c: In function ‘ufs_mtk_runtime_suspend’:
-../drivers/ufs/host/ufs-mediatek.c:1621:8: error: implicit declaration of function ‘ufshcd_runtime_suspend’; did you mean ‘ufs_mtk_runtime_suspend’? [-Werror=implicit-function-declaration]
-../drivers/ufs/host/ufs-mediatek.c: In function ‘ufs_mtk_runtime_resume’:
-../drivers/ufs/host/ufs-mediatek.c:1636:9: error: implicit declaration of function ‘ufshcd_runtime_resume’; did you mean ‘ufs_mtk_runtime_resume’? [-Werror=implicit-function-declaration]
-====
+And in the 2th patch, we split the testing 'attach_probe' into multi
+subtests, as Andrii suggested.
 
-This patch fixes these by guarding these functions with CONFIG_PM.
+In the 3th patch, we add the testings for loading kprobe/uprobe in
+different mode.
 
-Reported-by: k2ci <kernel-bot@kylinos.cn>
-Signed-off-by: Shida Zhang <zhangshida@kylinos.cn>
----
-Changes in v2:
-  Guarding these functions with CONFIG_PM instead of selecting the config.
+Changes since v2:
+- fix the typo in the 2th patch
 
- drivers/ufs/host/ufs-mediatek.c | 2 ++
- 1 file changed, 2 insertions(+)
+Changes since v1:
+- some small changes in the 1th patch, as Andrii suggested
+- split 'attach_probe' into multi subtests
 
-diff --git a/drivers/ufs/host/ufs-mediatek.c b/drivers/ufs/host/ufs-mediatek.c
-index 21d9b047539f..73e217260390 100644
---- a/drivers/ufs/host/ufs-mediatek.c
-+++ b/drivers/ufs/host/ufs-mediatek.c
-@@ -1613,6 +1613,7 @@ static int ufs_mtk_system_resume(struct device *dev)
- }
- #endif
- 
-+#ifdef CONFIG_PM
- static int ufs_mtk_runtime_suspend(struct device *dev)
- {
- 	struct ufs_hba *hba = dev_get_drvdata(dev);
-@@ -1635,6 +1636,7 @@ static int ufs_mtk_runtime_resume(struct device *dev)
- 
- 	return ufshcd_runtime_resume(dev);
- }
-+#endif
- 
- static const struct dev_pm_ops ufs_mtk_pm_ops = {
- 	SET_SYSTEM_SLEEP_PM_OPS(ufs_mtk_system_suspend,
+Menglong Dong (3):
+  libbpf: add support to set kprobe/uprobe attach mode
+  selftests/bpf: split test_attach_probe into multi subtests
+  selftests/bpf: add test for legacy/perf kprobe/uprobe attach mode
+
+ tools/lib/bpf/libbpf.c                        |  42 ++-
+ tools/lib/bpf/libbpf.h                        |  31 +-
+ .../selftests/bpf/prog_tests/attach_probe.c   | 283 ++++++++++++------
+ .../bpf/progs/test_attach_kprobe_sleepable.c  |  23 ++
+ .../selftests/bpf/progs/test_attach_probe.c   |  45 +--
+ .../bpf/progs/test_attach_probe_manual.c      |  53 ++++
+ 6 files changed, 337 insertions(+), 140 deletions(-)
+ create mode 100644 tools/testing/selftests/bpf/progs/test_attach_kprobe_sleepable.c
+ create mode 100644 tools/testing/selftests/bpf/progs/test_attach_probe_manual.c
+
 -- 
-2.27.0
+2.39.0
 
