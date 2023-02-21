@@ -2,109 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 94D1B69DA77
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 06:41:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6BB4869DA7B
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 06:42:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233166AbjBUFlV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Feb 2023 00:41:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49578 "EHLO
+        id S233247AbjBUFms (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Feb 2023 00:42:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50062 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232324AbjBUFlT (ORCPT
+        with ESMTP id S232324AbjBUFmq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Feb 2023 00:41:19 -0500
-Received: from EUR05-DB8-obe.outbound.protection.outlook.com (mail-db8eur05on2088.outbound.protection.outlook.com [40.107.20.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C68851D93C;
-        Mon, 20 Feb 2023 21:41:17 -0800 (PST)
+        Tue, 21 Feb 2023 00:42:46 -0500
+Received: from EUR04-DB3-obe.outbound.protection.outlook.com (mail-db3eur04on2076.outbound.protection.outlook.com [40.107.6.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 434B01D93C;
+        Mon, 20 Feb 2023 21:42:45 -0800 (PST)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=LHvDTJveeyR1ESbhsQ7qbj/B8zMw6SlgO11K3DWydcLaBHXFahTMGZ2kyxAByjUcvjdrjPJzianOh4dga57ZduPiQENutTP5XsDNlMydmULubO1yP/C1ke2XP4YfYa06FwyfPAP69YTh1Q4cRrBD3oESaMPHsaAXi6TcG/aUDF3ROSnvnCl9mkksOUGP61guodvi3JtnOsdHyscvu0/vqjijFRhQ92dLLgZqXzn8eYHxvxTEiJJlXvyMUP87BizQW79nx5lOaNbgx2FMFPwNFjvCdsz/bljHdVJd0KEf6Mrz0mdTvWUfYbZitRtzxYqs90DJSTEscMQkhZCaXDRkiQ==
+ b=KHSsvWtrwf+XzOf/1cVhYJfpCM0NpfhXgdaQsOfURreQ9kBJDMqZDt/kPawz5Gari+iUBZcrJeXiXAQ3zYRwzLBoFF9MalMsdt4W7cZ/o3FY7RNxtyBbqs9sJjZET8eFrRrttoYur9zorVxK7h/2Skngs0+8S/7rUkMPAQTYCBfKrwtY09WYjSxeREXGNN8yWuGQqokefL3EHbvdOMyMF+4vkO7lRvGf1u5/JbE+DcOIsBu6SN59Qg+3O83Q0RvVWDLHKjd/lEVN77OxAoygfGBIktD1GtwIcQsYuH1lG9pAL6tHlVbiuWs8f09ZMdZFU8Znl05OOOgb1ws2yv/0Ug==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=h7jBEZCklkP/XzXteWJEE6Cz47LBC6NYxQELvdV7c7c=;
- b=C1tfio1uEBxXaA8YflvXojow8xhS01b2yThbOB1BS3HVc0Ai/gDZx1dhgLmGgKDcACHKzS7EN5pnYg1CABqSJNlxbv8k+af1gtOgS0sk8v+jppgkCHb3MoBivicwbTDePdEEs9aXMzWKRWTvhB6/asBdj57CQEMft7LffxT/kpL3dCp4B8DNtKTNm7XQQTvFgyk57w29MBq7zy2tNhdjDwkLjf4xxWycRNcD58CFCwLbmciw1wYjy6XXwetPDc9Oz0p3E8PfL7FlNb1z1lp4WQtVlrw7gITnvLXXnjXwz3sqtjNpS1TuPiLctxw2yTwcJg+ngt78alO8WQbXuc26jA==
+ bh=4iw3bARIXB9Ci0V10LB5HCq4NgPDxUJAqpA8Y4ZkJIA=;
+ b=mvBw9gw2Ymgp5RW6AJXOUbmppxxAuef+K5Q+myCUL0e3+Z0qi7+QzSiJUK4O2mBmbyQINRYqySdVHFp7FQEM76/I3GlsAFcncas7PJ6xKY7ZDKc+0y12YReD35jmtGBtwQpYbFkFD96gXOvNTVE9/y5iN9PTXRooSIQ/8khVVYnWnYq1sIOQqqlkvRzkvfdF5sJu8EcF3yHFSIgb+83MAJurNnzYbn5U1B3BFRImyxSzAbb0UDAr6e8/wJ1ymXEQV97n+EIm2Xha+qWihp8fWWEXvJBb+2+8qDsVq+AUEdhCYAgqw4p4QntY54absHAd1Fo1LtRDdbhfKdx5mXf2+w==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
  header.d=nxp.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=h7jBEZCklkP/XzXteWJEE6Cz47LBC6NYxQELvdV7c7c=;
- b=d8oMQry5LBUIcR2KvPf5/jHfX73w5yxQGiDxG1i1QmL2WWdn9yAgKleOsNTQuhz/QeMyGP1nVlPsFthvonSMGDjo+Fxg1wELb7fdRHMtGRM+QToqbJdsf6qcAqznuaTt9GHkTNW1NbYELUBHKb3Vs4nlt7Fx68gilDAYVtaQqgc=
+ bh=4iw3bARIXB9Ci0V10LB5HCq4NgPDxUJAqpA8Y4ZkJIA=;
+ b=c/u502TmUrl5Q4gB7pm5YCvhxx706b2ozo+GSncv7ymE4j17pj168ArdrokiA1HUyMLqF21OlwPSgoA6YDTlkK6+Wx2hf//67TN+SvGUhcxx6Uyv3ZAg8Hen0b4ZMDGkFudb9jZzPmu//9h/qEivP583PDLbvwR9RuGJoAdpr5I=
 Authentication-Results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=nxp.com;
 Received: from DU0PR04MB9563.eurprd04.prod.outlook.com (2603:10a6:10:314::7)
  by AS8PR04MB8577.eurprd04.prod.outlook.com (2603:10a6:20b:424::10) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6111.21; Tue, 21 Feb
- 2023 05:41:15 +0000
+ 2023 05:42:43 +0000
 Received: from DU0PR04MB9563.eurprd04.prod.outlook.com
  ([fe80::a518:512c:4af1:276e]) by DU0PR04MB9563.eurprd04.prod.outlook.com
  ([fe80::a518:512c:4af1:276e%5]) with mapi id 15.20.6111.021; Tue, 21 Feb 2023
- 05:41:15 +0000
+ 05:42:43 +0000
 From:   meenakshi.aggarwal@nxp.com
 To:     horia.geanta@nxp.com, V.sethi@nxp.com, pankaj.gupta@nxp.com,
         gaurav.jain@nxp.com, herbert@gondor.apana.org.au,
         davem@davemloft.net, linux-crypto@vger.kernel.org,
         linux-kernel@vger.kernel.org, franck.lenormand@nxp.com
 Cc:     vijayb@linux.microsoft.com, code@tyhicks.com
-Subject: [PATCH] drivers: crypto: caam: jr: add .shutdown hook
-Date:   Tue, 21 Feb 2023 11:10:47 +0530
-Message-Id: <20230221054047.2140558-1-meenakshi.aggarwal@nxp.com>
+Subject: [PATCH] drivers: crypto: caam: jr: Allow quiesce when quiesced
+Date:   Tue, 21 Feb 2023 11:12:19 +0530
+Message-Id: <20230221054219.2142012-1-meenakshi.aggarwal@nxp.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20230220105033.1449263-1-meenakshi.aggarwal@nxp.com>
 References: <20230220105033.1449263-1-meenakshi.aggarwal@nxp.com>
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
-X-ClientProxiedBy: SI2PR02CA0032.apcprd02.prod.outlook.com
- (2603:1096:4:195::12) To DU0PR04MB9563.eurprd04.prod.outlook.com
+X-ClientProxiedBy: SI2P153CA0030.APCP153.PROD.OUTLOOK.COM
+ (2603:1096:4:190::15) To DU0PR04MB9563.eurprd04.prod.outlook.com
  (2603:10a6:10:314::7)
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
 X-MS-TrafficTypeDiagnostic: DU0PR04MB9563:EE_|AS8PR04MB8577:EE_
-X-MS-Office365-Filtering-Correlation-Id: 5ee0cfab-15e1-49f8-3db6-08db13ce3f5a
+X-MS-Office365-Filtering-Correlation-Id: ed3689e2-60c4-49fa-590e-08db13ce73b2
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: t+7UVPuyrnO+Yptn49OzoOgzPh7fJNKKqWg3Zg8crIRth6bYVg8aSSXGQtnuri/aGXWbiKsFm1Nn3A3DpkqhwVPC0Qf62VI3im3vDjzHzdSxd2ZF4MVSU2vTn/oSuCxntXLWsPGOnIKy3q/YAI079Ly0ZmolWDksjUK2fnYHmwlowCsBqgpDKOoVf0lOeTT3DepqeND6ORiRFQbv/g6rz23/yWnHq1axJtYoFw/UcF8nofBxbgFhcIXvL1U8oW9OyFp5vkCAM4SPwUa5l1R8VnjzmiYVI5gl79ptVug/JIApJAviHQWgpWw6aAsLKgWzicAoa6DNi039zm6qk0HnUlxonFhILT1xyWumi6r0l4VZLcaOITiFizbRRg3IE1nSlrCjjnlzwD8M+XcMEekLmuvhKEsttPpVsyKmI09wlkUVQoyLumInjba61LqfWISpasjNWCaKxqtR6DtYv6RwHQyXXkUGDY0RACP9F6o3v0fIFzK5p04GGhqAha4A2zLE9q16BWO3y5e+ygzn507UL5XvgC/JRyMzeuHkCeE8u7xGUCH15yj2GWxYVEpwG07v/yPIS6FQViG1FPH8bSbGn3ykvctX1Cq1RG9TWsjyT4Ixw2LLGz4+5PeyjmSB6wkXZaXxbNeWzidGIxVSneMg9TVQ+tEQkg8dDi3EoflDVzeuM2OIUAEY2Fbnm83Mrf2pHxHWrmx04f1q5w3tsXYRoCFgtlBI06YHTAY4dsF/v24=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DU0PR04MB9563.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(366004)(346002)(376002)(136003)(39860400002)(396003)(451199018)(38100700002)(38350700002)(2906002)(8936002)(5660300002)(4744005)(6512007)(26005)(9686003)(186003)(41300700001)(2616005)(36756003)(8676002)(66476007)(66556008)(66946007)(4326008)(6486002)(52116002)(86362001)(6506007)(478600001)(6666004)(316002)(1076003)(142923001);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: BJJRHnB1Sl8V4phE3CCG+BZAa4DED7leGX5u5Yl36pIzjXuyJZgBUkN0eiX124ke/5/35SgeOs0qhsgK4BbalsUsSxb07hFdo0AbVd79Pn3krtDSaJY7WuMvFtqlb31BCMRZZxCcbV/nIZsrZmtA7H7Gq2lIIRCMP8B8m7WYHhxsOTHdsWuhuCbMkX0PfkruU9qoIfSoXBaSCmzdT8cbVDxfnfxKNZQejPZQUbcRJQo029CIMTc7sj1j2BfPaSGeCg39zVWUEPbtw/CAfc8O1fM1p5wt7erP8xu7jY7lIZudhYD6hJXz/8MsxNX3R/WEMkpPWOt7dYPk6+ho8Q/+6pHboKoGiRIK9NG0vGxREKlJrfd8VCqatUmboNnFTDZe2P4lqpMexOCz79z6Uu+RHFJww/yV5Y40U2omaQfBZQ9qu5snTkFSY+Tu3YNTFHMrKJTdR5/47RrWjqQhn5wQ9yZNxTNNPaWZQA40jnOiVS4P3SIwttOmIuYUwP/RXAAeJqoQ7FhyFQqzuORsp0vlOh6Ip/Z3JoIWvXNNRECKjqw7t8Avn0DG7j5HOuPmtzxVM5T25fWw1fOtclEIJVgLn+qy71JYHiTvuhiMB2TFAiDxXlQaUecQyfFyzM/DChBVLt5V26knypGioug7dkpVh3k2cPeyQxH/dCWxGkjwdIVndOa5gpDcpK+z0Tku7Qli93HwNOY59T92iZMYCgs5sg==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DU0PR04MB9563.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(366004)(346002)(376002)(136003)(39860400002)(396003)(451199018)(38100700002)(38350700002)(2906002)(8936002)(5660300002)(6512007)(26005)(9686003)(186003)(41300700001)(83380400001)(2616005)(36756003)(8676002)(66476007)(66556008)(66946007)(4326008)(6486002)(52116002)(86362001)(6506007)(478600001)(6666004)(316002)(1076003);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?30Leq90Zle+MeIiwfqfyf38aXb7l10EmGJbvNhqDRKa0OZeACbkHIm+nxW6E?=
- =?us-ascii?Q?lrlJbCF0JSjeF71/SaG2DnSQ9Q8AoUgyj8fv7225AW3wcw1GwXBjXXQ69edO?=
- =?us-ascii?Q?PPFfzYxRZiLXqJd0aImIs/wGhJJZN8KPKr+aDETtQ1IvVUZ6YtPVEuGI9QZu?=
- =?us-ascii?Q?WFkOlNdNppdarLno83+HrZvWF43ozrzTJ6GO9MNHctoCgLD1mGmswbVcHUQO?=
- =?us-ascii?Q?APpKw+aJLXwNHbm9203ZlCPDZ+d7GAum6OCVXeqwxIfqH4HO7aL+c1uNOVUT?=
- =?us-ascii?Q?Cqe4a9uSNcRDAxsipkzDPYA+DeHZ3bHFQgSSH3xWLDASiOEjL1qhHdf3g9z8?=
- =?us-ascii?Q?XAfNcPV6tD746a+e62TIPt/6E3djMSoiUWyWebsT1Joz4lF0fdxTVXovt3Si?=
- =?us-ascii?Q?xLusb2pJMB5zWRvn+PU0R8hk6PdvG050rliDsIoq8+zAlbtJiX4JAq8aFPZa?=
- =?us-ascii?Q?HGEulRQ00SEyy7kjYcRTAVp7PeUwyBb1hha+pecWIuXufvhzdZLiqo7CvtmX?=
- =?us-ascii?Q?9I5WlVColpQAzqJldWAv4q5kzeh999GB6acD6aBuLh7h6SERJzwiIEEaIoXD?=
- =?us-ascii?Q?ELvbujEb72A/7XeycRIw/8u6Im04veBpJNCtsZVklIJje7BAWc/dqbwbTUMG?=
- =?us-ascii?Q?B/iZT7rVrIlGoJjfalKZU96+M+5nSxNuSznoPkxYiy05fBEvYNqVgkCGdqQZ?=
- =?us-ascii?Q?BhR1DVoCtz6faIap7VtFF211hNJJTea/hbcqn2Y6tcK3WzsdFhg7HWKxQ1as?=
- =?us-ascii?Q?AeXgtv5rEmp8O2b8ZiXzCrCNwDpBUJbKnEb4ZU8/GSHj0Q0DUPAnnb+JtFdc?=
- =?us-ascii?Q?oT3+taXiqV/+eSCj/kOCsTlUJ3OQLkX86Cd/L470zYPiuswyfF5W3GfMHK5o?=
- =?us-ascii?Q?Us6J+mBjtOvLUas1YunJPF0lMHcFMxEeXOUSam4otXTtIPK6Om+zdcWS7lHF?=
- =?us-ascii?Q?IXlR30EQRW2pGj2fIhFEinvhFhJzh7aAB98gXYJUTKn5A7cTZIUZYNsnLaCG?=
- =?us-ascii?Q?W6anPlD9CHmHZBw1w+85n0aejrjoyfTpPVlOh1PxYf1l713A9PxqU1WsZdIr?=
- =?us-ascii?Q?fyIYjPfzwu1HNRmdzs/kN/ceeaF1AvVUsnjtA0WY/a8VKvB8aNfSHYud8Yeb?=
- =?us-ascii?Q?RQXjTysXKKuo28ZvULHGcqVWc4rjqy6lSWqoamrghZ9FTxd4bN7yhEz0vpUU?=
- =?us-ascii?Q?yn3VMHpCvcNMZRg0kcIUjWVimD9T1YvqE2Wnphg9QUgX+hDb/HY1MB1qJJPF?=
- =?us-ascii?Q?K7JjHoi4oPlv5KwetV8vRZU8UFQwX/dMRs0yPTVwWOQPd5ZZFLfamVyo1bcR?=
- =?us-ascii?Q?PK4yhIwt/jbrdC1VotlYRn8p5ssky4oBUXpMEs8U86cm5y1jG8PzXTQBKyMs?=
- =?us-ascii?Q?Sj5wIt0vBup932Mt1shdR+/bSlEBfPegX3N6jyzaSQjwalDG1zhx0FgrhMnt?=
- =?us-ascii?Q?4iFL8n1Wn1Nd/TuUHYk7noowwelBng/TIvxR2f82utTVg1OVy6ABXpfL3+a0?=
- =?us-ascii?Q?k+YVFmP0y/Wh404XoZKMG3CkkoGzWOFxetuws5ukDKz8dJqxhc9Tm1VgOy05?=
- =?us-ascii?Q?f8GuuQhCpRcFKyE6EIHYEgqXKwc8l1IwLSI6oN6K/XTY+Mra7A3MgJ5Ytf6n?=
- =?us-ascii?Q?ow=3D=3D?=
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?ZzNdzTvhUfVEOSuE4yTmtW51IqOnVqxvXAb6aI6hNfhl93E+IvLwkbxTzlol?=
+ =?us-ascii?Q?UyWTKBBBEkLyYJoZdwApzhZXrlgw48nPZ2h33mn4hAGSjfBUTNN3fSOFO9Xb?=
+ =?us-ascii?Q?vB/PSZ2sAZwS1ZhjbdcKkhooQbYY9Mss72gMMytDW7BW1NJcTbigpgcNG186?=
+ =?us-ascii?Q?IQIqVEzC7KHLRek/U4FMamnE6h780EeEmusrLl+YRqhbaeTRcqejKSN2NmYX?=
+ =?us-ascii?Q?iIWmPhFaduhJ5SfqidjFXOyl3WLiNOiBT/1wPVmIC6LUkctpurLJJiA4jSrz?=
+ =?us-ascii?Q?IqG2PgnoECMDBqZHqRNMRgTPrW2WgDPonu3DxyyRaIK/Qm0EuEtvfqitxy8t?=
+ =?us-ascii?Q?zsvYN8jFzav6srGeL9hMHSSy3NeJ20KNiLRH+Uxk8MBowAeEzeR2PQ+zQYSN?=
+ =?us-ascii?Q?95EPjJYsDHFzS4fXVrKdKl7+Oo3RWr22n6V5lUiw8gVdvZ7Cbb2R27DsTrd3?=
+ =?us-ascii?Q?UCBLn8AmzWopGYQzZX7LCQ2EEI3WKChqAup0qGJmc1wB33mfLQ1tGWf3pVp0?=
+ =?us-ascii?Q?V4IGYCK3Ui6vaAKaQbSk8pElESqqQc2+MlKeNpS2h2J0zXu/12tN9hjIMNCr?=
+ =?us-ascii?Q?8Qv3Zh4RMEozbLKLBIdMzZgQyTQUg8EpDwfbY5uQqqQ2pmomO2FaonOT3Esl?=
+ =?us-ascii?Q?gNNb1kLHnk3yal7XgAO4HfIpzllIthkphzer66j6Z9qK4pI0yoNJxvjsLQMx?=
+ =?us-ascii?Q?2QOZub3C7RW97aUXiqNRlOPMANf82skLDHegYFU+YEdQmZ8oKBtQMExNGGQU?=
+ =?us-ascii?Q?l8ZaWdRAEfI++X6y0rI96elGqA2C1jQzi8OFygn6iTe6I+12xHsxhvJ2ahc8?=
+ =?us-ascii?Q?ndO8RBbgl/8enn2eGkH+nx8kHgkIuonZZBkI57/BK36sruqOVticGf7+8sSn?=
+ =?us-ascii?Q?FKwnK8tN8aIEBB3L6WLvANqnRwfhma5CmYGI86tZP/C0/OpYvTIJ5BKp8F0w?=
+ =?us-ascii?Q?On/qEE6FSUcz0OnVH/ZjHJOEgPLb2OaSGH/zJeZ61nFN6TD1HqoEqRWDiwSg?=
+ =?us-ascii?Q?abbR60//dNyJa3bOedV53pDVxRXDBfNYQ5YIRI4a6yUf1LqRcZQYURcABCDQ?=
+ =?us-ascii?Q?f7kgkxZomTPXPPlxqqur1H0w3y8Rl75Nkqs8EDp2s4zJSEZccjkV9Fj7jzWs?=
+ =?us-ascii?Q?CgAlSQMSDt6J66EI5aMMGTf+dnyNH/68w/27hyU6O3RsHxFo4oTweaR/Gu8j?=
+ =?us-ascii?Q?3zemXD8TwjXbT0mvHKdtS6L+arUDRnV//djcrvTvhdELYzs386sE6y76mAS9?=
+ =?us-ascii?Q?9EWm+aYHgJwT7X9THYp376/TFEVY+IYRm20igzzLzMWqxbfOTYKBd8f9KnHI?=
+ =?us-ascii?Q?HbYTyB2risyEPtTPjqc/7v3OXXvUe46vjeIG24zm9ls2OwojU+g2MVTmKvBF?=
+ =?us-ascii?Q?sVK6zvq2HICYhReiQoc+a3oe16JdgN/rB+N/vxbIG0EibJsF1SVbUJvKAkfv?=
+ =?us-ascii?Q?oeUlIhUADxgaDuuVKGggBagrP3Dy3+r3swypw+5W9Ncp9v63a8Ss9F/C+geD?=
+ =?us-ascii?Q?GvBv2qQAvHK3ich4VTegTBkWJIc/OKCF7kMfszIB3enpFq/jadipWK4n/xc9?=
+ =?us-ascii?Q?VJIVf5UeWzPLgrvEH4QEYlWLV6ajFcyA8Cda7KHG6Zkmu+PQN51ss5wa6JYp?=
+ =?us-ascii?Q?qA=3D=3D?=
 X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 5ee0cfab-15e1-49f8-3db6-08db13ce3f5a
+X-MS-Exchange-CrossTenant-Network-Message-Id: ed3689e2-60c4-49fa-590e-08db13ce73b2
 X-MS-Exchange-CrossTenant-AuthSource: DU0PR04MB9563.eurprd04.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 21 Feb 2023 05:41:15.3875
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 21 Feb 2023 05:42:42.9721
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 3eZogWMf3FlLt9istdMM98N6WgqvBmrvoWSZhaRj+YLyrWYYqfWLoss5zOiJ1OkY78USLH7kP5iYhNZgy43pBGX5kKsNrE6rtVcpngZPMNI=
+X-MS-Exchange-CrossTenant-UserPrincipalName: lgagWgsk09e5Q763S4/0J4Tuh8Fv1DiBYW1fdWNr2VkApbfc+7qGxTNg5R7alwNbrfSlCvABYfOvYvGYIc7CdW5zh6WnXZT7W9fQmG0lAVs=
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: AS8PR04MB8577
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
@@ -116,39 +116,98 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Gaurav Jain <gaurav.jain@nxp.com>
+From: Horia Geanta <horia.geanta@nxp.com>
 
-add .shutdown hook in caam_jr driver to support kexec boot
+Issues:
+- Job ring device is busy when do kexec reboot
+- Failed to flush job ring when do system suspend-resume
 
-Signed-off-by: Gaurav Jain <gaurav.jain@nxp.com>
+Fix:
+Flush the job ring to stop the running jobs.
+
+Signed-off-by: Horia Geanta <horia.geanta@nxp.com>
+Signed-off-by: Franck LENORMAND <franck.lenormand@nxp.com>
 ---
- drivers/crypto/caam/jr.c | 6 ++++++
- 1 file changed, 6 insertions(+)
+ drivers/crypto/caam/jr.c | 53 +++++++++++++++++++++++++++++++++-------
+ 1 file changed, 44 insertions(+), 9 deletions(-)
 
 diff --git a/drivers/crypto/caam/jr.c b/drivers/crypto/caam/jr.c
-index 8745fe3cb575..a2a99d09b4ad 100644
+index 724fdec18bf9..8745fe3cb575 100644
 --- a/drivers/crypto/caam/jr.c
 +++ b/drivers/crypto/caam/jr.c
-@@ -198,6 +198,11 @@ static int caam_jr_remove(struct platform_device *pdev)
- 	return ret;
+@@ -72,19 +72,27 @@ static void caam_jr_crypto_engine_exit(void *data)
+ 	crypto_engine_exit(jrpriv->engine);
  }
  
-+static void caam_jr_platform_shutdown(struct platform_device *pdev)
-+{
-+	caam_jr_remove(pdev);
+-static int caam_reset_hw_jr(struct device *dev)
++/*
++ * Put the CAAM in quiesce, ie stop
++ *
++ * Must be called with itr disabled
++ */
++static int caam_jr_stop_processing(struct device *dev, u32 jrcr_bits)
+ {
+ 	struct caam_drv_private_jr *jrp = dev_get_drvdata(dev);
+ 	unsigned int timeout = 100000;
+ 
+-	/*
+-	 * mask interrupts since we are going to poll
+-	 * for reset completion status
+-	 */
+-	clrsetbits_32(&jrp->rregs->rconfig_lo, 0, JRCFG_IMSK);
++	/* Check the current status */
++	if (rd_reg32(&jrp->rregs->jrintstatus) & JRINT_ERR_HALT_INPROGRESS)
++		goto wait_quiesce_completion;
+ 
+-	/* initiate flush (required prior to reset) */
+-	wr_reg32(&jrp->rregs->jrcommand, JRCR_RESET);
++	/* Reset the field */
++	clrsetbits_32(&jrp->rregs->jrintstatus, JRINT_ERR_HALT_MASK, 0);
++
++	/* initiate flush / park (required prior to reset) */
++	wr_reg32(&jrp->rregs->jrcommand, jrcr_bits);
++
++wait_quiesce_completion:
+ 	while (((rd_reg32(&jrp->rregs->jrintstatus) & JRINT_ERR_HALT_MASK) ==
+ 		JRINT_ERR_HALT_INPROGRESS) && --timeout)
+ 		cpu_relax();
+@@ -95,8 +103,35 @@ static int caam_reset_hw_jr(struct device *dev)
+ 		return -EIO;
+ 	}
+ 
++	return 0;
 +}
 +
- /* Main per-ring interrupt handler */
- static irqreturn_t caam_jr_interrupt(int irq, void *st_dev)
- {
-@@ -653,6 +658,7 @@ static struct platform_driver caam_jr_driver = {
- 	},
- 	.probe       = caam_jr_probe,
- 	.remove      = caam_jr_remove,
-+	.shutdown = caam_jr_platform_shutdown,
- };
- 
- static int __init jr_driver_init(void)
++/*
++ * Flush the job ring, so the jobs running will be stopped, jobs queued will be
++ * invalidated and the CAAM will no longer fetch fron input ring.
++ *
++ * Must be called with itr disabled
++ */
++static int caam_jr_flush(struct device *dev)
++{
++	return caam_jr_stop_processing(dev, JRCR_RESET);
++}
++
++static int caam_reset_hw_jr(struct device *dev)
++{
++	struct caam_drv_private_jr *jrp = dev_get_drvdata(dev);
++	unsigned int timeout = 100000;
++	int err;
++	/*
++	 * mask interrupts since we are going to poll
++	 * for reset completion status
++	 */
++	clrsetbits_32(&jrp->rregs->rconfig_lo, 0, JRCFG_IMSK);
++	err = caam_jr_flush(dev);
++	if (err)
++		return err;
++
+ 	/* initiate reset */
+-	timeout = 100000;
+ 	wr_reg32(&jrp->rregs->jrcommand, JRCR_RESET);
+ 	while ((rd_reg32(&jrp->rregs->jrcommand) & JRCR_RESET) && --timeout)
+ 		cpu_relax();
 -- 
 2.25.1
 
