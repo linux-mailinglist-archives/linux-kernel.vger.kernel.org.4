@@ -2,196 +2,185 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 53F2369E48C
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 17:26:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0001269E4A2
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 17:28:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234586AbjBUQ0z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Feb 2023 11:26:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52020 "EHLO
+        id S234527AbjBUQ2S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Feb 2023 11:28:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54360 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233266AbjBUQ0v (ORCPT
+        with ESMTP id S233285AbjBUQ2Q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Feb 2023 11:26:51 -0500
-Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2043.outbound.protection.outlook.com [40.107.223.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BF1F2BEC8
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Feb 2023 08:26:42 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=AAj9cfD6Wui8jvtsdUuG5GHEdpMaluGkB85BjkfxNd5qCCs3GsZ5a2Zk26Jv2JAVhen+0qms6zPxnwnHdq64P2sio9NIjgXDK6bv/s+mj5IjY1gwfKl5n8n51Tz1Z1O9knLnCGka2msWHBAJrAS9tgyeAFvJEs5Knud1XqIEOnh/jHcGXIkZefcWQiCAQEnJCiWFWRC648CBkg63hOBAIZvY2Q2sfNEt7TLSd3xOJ2mkz02DSoUJokoI7ZqahdcPcRFXe8vDoNq9eTJpeacWsT+O4PW7TZ/ozOS6TYANezbqc/DrWX3vKt2Oyb4XtcFgt5jPybRFmlbJg5QLy4Sedw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=vl9hI/8i/Gyx0uJOfs16WFqki5J76hnlaHtU0cFiNf8=;
- b=FURkbv5Zad1YSKCGGCOjw8cRTzgfh6DwNcQ84JeSF8h7ltqWgm0yivq9f7Mk3GeMLubmppPRyi2uTPoPWaaAB3duL/8RgsRo3alNK4UdiM0PAVqm5RfNTjx0KqrSJ+k63WQa7mnvRjY+I9aqT7UQOTE3RIM824seZLuP0YY1C0UkILjTfX8npAQLD6AxoF3bI5yx8j5fxQkHVHmFrpp88noyReUv5Vu4VRpTq9XR2cJsmsaQyNjKlZ5pQo0B9if9La07b91r7FP7fkye+soYDNfJFHh53ZYxDlgPvLgcUFpViCfs6ph4W8fhgihboGp7TWTm9xXlVifd/py35fzMXw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=vl9hI/8i/Gyx0uJOfs16WFqki5J76hnlaHtU0cFiNf8=;
- b=HezfDbQtj15ps6fg56uuhF9BXFVOclqqr1butuK/FxM/GQwBP9OVmKPu7uNJSxWFDcKCD8hpr4d4RW2z1HDWkspu8saq5kh12w4acYfgbQlHxIjFAOQr4aPQmv0OyrNiKx/nXLRyV3mO7R6f1HxzOO6Fm7hQhVFH5SMcuIAPV3A=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from BN9PR12MB5115.namprd12.prod.outlook.com (2603:10b6:408:118::14)
- by DM4PR12MB6472.namprd12.prod.outlook.com (2603:10b6:8:bc::7) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.6111.20; Tue, 21 Feb 2023 16:26:40 +0000
-Received: from BN9PR12MB5115.namprd12.prod.outlook.com
- ([fe80::e6ea:9231:6d39:93da]) by BN9PR12MB5115.namprd12.prod.outlook.com
- ([fe80::e6ea:9231:6d39:93da%5]) with mapi id 15.20.6111.021; Tue, 21 Feb 2023
- 16:26:40 +0000
-Message-ID: <48e5eae7-4848-3aa2-2cb4-5c7ba32a9848@amd.com>
-Date:   Tue, 21 Feb 2023 11:26:37 -0500
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH] drm/amdkfd: Fix an illegal memory access
-Content-Language: en-US
-To:     qu.huang@linux.dev, alexander.deucher@amd.com,
-        christian.koenig@amd.com, Xinhui.Pan@amd.com, airlied@gmail.com,
-        daniel@ffwll.ch
-Cc:     amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org
-References: <eb49be7c44ae95c4d18e66b59874ef1c@linux.dev>
-From:   Felix Kuehling <felix.kuehling@amd.com>
-Organization: AMD Inc.
-In-Reply-To: <eb49be7c44ae95c4d18e66b59874ef1c@linux.dev>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: QB1P288CA0027.CANP288.PROD.OUTLOOK.COM
- (2603:10b6:c00:2d::40) To BN9PR12MB5115.namprd12.prod.outlook.com
- (2603:10b6:408:118::14)
+        Tue, 21 Feb 2023 11:28:16 -0500
+Received: from mail.marcansoft.com (marcansoft.com [212.63.210.85])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B21DD2D14E;
+        Tue, 21 Feb 2023 08:27:31 -0800 (PST)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: lina@asahilina.net)
+        by mail.marcansoft.com (Postfix) with ESMTPSA id A3FD13FA55;
+        Tue, 21 Feb 2023 16:27:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=asahilina.net;
+        s=default; t=1676996847;
+        bh=1Qmc+N085tR+w7y6RozOctPj3HPL1Q8tU2am4x/B8n0=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To;
+        b=TwXd7BZkxOFVCVkp6+1oDEHP/hT3TJVJYd5MQdbcXKadi1zNVDYEUu2iraf+l1QMB
+         C6LCeCHrdCCLoe8B5sK3VEGvRU8ODKjgiV8N6Au6w/vRQHUJCvy4xqng84q4rSbq/p
+         lWExjsNChrZjSYZzsZ0vRj5HSdS2qKtXQ56Bv9gchZLc57JtbQCucLlRAvYQ4gm1CQ
+         A7OcZOELDb4K1QsOa5+mShj5CvrKcU9caSDSSaLU0A9DDiuOdEWS6Tw0/el98MZEVR
+         DxeKYmzSl7QQWW54J+CX7DfEOAB4jeDA7bzS1gK++r6DcI6PAeMxkZeKTLW1FsFQJI
+         x1QzCnCov7b7g==
+Message-ID: <6aa15295-219b-225c-607d-e87e3d51d048@asahilina.net>
+Date:   Wed, 22 Feb 2023 01:27:22 +0900
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BN9PR12MB5115:EE_|DM4PR12MB6472:EE_
-X-MS-Office365-Filtering-Correlation-Id: f801e6a0-1f98-461c-b5f2-08db1428694d
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: IPyLFqR7mRtTae4r+vZf6U78sHu6hiD1IWNBaSWl9aKgGcQp2UyFY7H7T/LTK6YxReI8r1oVT959azkKyJ4F+ouXd+oFZ8Y6xcarcaOMYsGVkrSes4dPu5WNzcBTY7IhSyre1HBHzFDdzwwfQtsVIzc80O4bosoU5/ZFSjodF2Fp7S76vFiWXBwtOaMRQsTtnFBjfAPB77mirdd3JevLJrjq0NzAPUbrPgJnClbPmJqejVns9g37xq1wC8+o8SeoMjlK3j+2HCdyrLpoVRHnAo346KWyH2pOw6IV2I8q5rTIjDVppr3V+4ZbtTWBuZwgxrml1Kozi+jDda93m/NIbMBDUp2AC84zKNv9khgUjRsxuuZl0H9ZB3CFA0hfX4B7PXCMvMqrqdmbIRkLt4HCEOxItnKseq+E63hQ4b71PB5++0QDteOGOQwmnoamlNmdm/kV0UxZpoa9c2RNmqhOIAO+YkjCEzKKJ3f6VxOHXdCPQ06hqQ2t6C0uMt9RbrB3gd6gNnggIZ0Bhwfps5noGef0uoO3l2kWkiN4/lZ98uFhBLxvgduX51Old5vV5djQmnQTw5MhixMRaBsAia6aRKQzsb38drFqvAGsiUUTmpjrahHsehMjAwlYeHT83j0p9KUhd3MruGvZsicAPsYNngvrUHJUsOHZSVGikDAcdxgHPBM8g4WWw/wRna0Hl+XwbHL1J1hm0PjOynvPTHYhGyh54uIVtPMgyuvoc4TaLqM=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN9PR12MB5115.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(396003)(346002)(376002)(366004)(39860400002)(136003)(451199018)(6512007)(8936002)(186003)(5660300002)(26005)(2906002)(6506007)(2616005)(38100700002)(53546011)(44832011)(31686004)(41300700001)(6666004)(8676002)(6486002)(66476007)(4326008)(86362001)(316002)(83380400001)(66946007)(66556008)(36916002)(478600001)(31696002)(36756003)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?M2N5dkFVL1BLMENIcXlwMEVFdEgyN2V0VVFJdG5jRkZMa0RpamJzRU9oUmU0?=
- =?utf-8?B?anhxeS9DRVBucXRLNVFMNGJna1p3dmJkYWVxMjZHQUgveU5mR2xRN05WTndn?=
- =?utf-8?B?ZGNOVWRiMllEYXdybTgvVVBRVmZjZncxUmM5eUxReHA1QVhSajF1ZER1Nmdi?=
- =?utf-8?B?NVp3a2dsNmlxdW9JS1FKcXZQNitBMmVzNXlZYlBXaUIwYVRid05uVVErcnJB?=
- =?utf-8?B?NEJORVVWWlBPa1pBZU9nRnRSV1ZJU1ZpRFdqVk8zT1Z2ZDJFWjY3dUh3cU9J?=
- =?utf-8?B?TkkzZERIL3FCOWc1bWZua08rQVBDT3ZUK3FyMFhpWDRYR2xqOW9ORGR2bnNo?=
- =?utf-8?B?aUd2a2Y2UXRCanhxbDJVRkRpeCtaM2JkL3RDUENnNGxsTUd3WkZWK1NweXZu?=
- =?utf-8?B?TnB3R2Y5QjBHRGVsSEY0VW16NDcwSmpSVXg1SWxUOGtTa0JEK0NHNU9iZUxL?=
- =?utf-8?B?UitXT2F0eTU1Wnd3QTZPQzV0NFd2azFnMngvem01ZVlWZHlQUmlSeEl0UXlT?=
- =?utf-8?B?cm5HeUF5VmZ4WXNvaXdrbXViNnFPUzM4cUtWRTkzOENLUnF4c2dpeVRwU1Nj?=
- =?utf-8?B?WnFrUURZRnpDRVZMYlpmSHlUTTBTdElBaHlmdHBIVkFqbHhYZ0JwTzlvWmUz?=
- =?utf-8?B?RjVTNWxocm03aUVpRGsyeTlpeWIrVEtleHRydlZoTG9GbDJ4TFR0R09ML0N5?=
- =?utf-8?B?V2xqbGsydi90c251T1hyYzNYOEw1aE9Fd2RSd3QwTGtMakdZbGM0ajZDU2ZR?=
- =?utf-8?B?dXc3Z0ZIc2JFK05YL3RIbHYwZzVyYVlzU0lKa3BJMXJUYnh3STRGeWh6eFlI?=
- =?utf-8?B?Wk9qM0lCL2J1VmF2RkZEbVc1a3habUp5THVjNDRobHZ4a0o2cHVNMFFqcTV3?=
- =?utf-8?B?cUN1WkxXTHJqWmFtV3cxUlpxUDh5UTlLKzVRcnAwRlBQRFpaSEwxQVl0WTVq?=
- =?utf-8?B?YktwSUY2MzZLRjJNS0xSKy81L1luVzZDQjN6TGJ3VG1sRDc5cGlKM01HS3Fz?=
- =?utf-8?B?WmFlcFl3aGU3Z3ZWczIvTlZEbmVTTE1sYnY0TEoyR3NTM2FvZzFZRXZVTFYz?=
- =?utf-8?B?QkJMRGs3R1JvTzRvS2FtUmtNaVdsWk9OaUVvYWxhQ0NKZXlmclBWazFVNmQx?=
- =?utf-8?B?SjcxY0RJQTRONWRneHRMTFR6cVhKeGYrRHJUbStCbExzS2UxeW81V0htTUFw?=
- =?utf-8?B?cnNLSFRGZmxKZG0vSm92UjcyWmJ5TGFLMjE2cWNNOHQvdHlyQ3o2M0thZlM5?=
- =?utf-8?B?MDdWaVRiMXNBalVmOTNUamFjcjB5eGwwb210V3hWZy9yT1dGM3BGR25CamFY?=
- =?utf-8?B?NWlOVEp5aWFBTy9ydGJrcDVLWjM0Q1QvcGxoemk0Vkg4VTNpcGJ6cnVGMUVa?=
- =?utf-8?B?U0F2S3hsQ2FpenplWjhjZzBORzcvdEd5eEY5Y1FGWm9ndmZDQ3dub0pBaG1D?=
- =?utf-8?B?d2tYbk01QTJQdnFHYkw3eHlKOHBMRFRiZ3o4TEIwNXR5cSs3L1Mxd0ViYVRN?=
- =?utf-8?B?V2x3dWFtalUzREEvV3JSc2RWKy8zRUZ1RzBOUkdJZ2JrVlVQYkxzNktZOEU1?=
- =?utf-8?B?eWxHc1hHRWhmU2E0MXQ3U3NocmY0NDJzT08vRWpydU5jM2NWWjVGcUE4dE1q?=
- =?utf-8?B?dXBQVWlXVDE5aGF1OHc3ZlRBTXdmVkJvYU4wZkFlbmlIV29SSWRCSWN1ano4?=
- =?utf-8?B?b2hJQ3owVDlxc0Z0TzFBY002N00xSHNMQVRtRTh4N2NGK2dPWS8vdkoxZFg3?=
- =?utf-8?B?ekZUM3A0a2tGZE1RcHlncUh5WTZEME91ZmN2L3ZEaTh3UmRvVFhxSGloc2tp?=
- =?utf-8?B?SjNJTTJtQjlaSVM4MVZ2djJuT1d1Y2JjdFozMkt2QmU1UkFWQU1RMWxCczVu?=
- =?utf-8?B?QTFSWFJuNFVLczFuc0NBeU5xUUlSUXlQTXkrL2R6MkVSeFdUV3pHanFrZm11?=
- =?utf-8?B?dUFGOTVxdXd2NWZicWVyYzBGZ0gzdllyeVpqd3JINEQ5aUtJaDFTN2JsZWZD?=
- =?utf-8?B?WGErMVpjSFpxYUdzdC9pNitFVG1CQWZjOWtsVi9HUjhjeE5HRXFndmMrODlS?=
- =?utf-8?B?VFZKZkRReU1pVWhqNWU1a21ObGlPc3NxdHVBMGFUTDRlaHVWdzA0bmFKWk5P?=
- =?utf-8?Q?L5Sz7jaCY6bR1ZP/GF9/yLy9e?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: f801e6a0-1f98-461c-b5f2-08db1428694d
-X-MS-Exchange-CrossTenant-AuthSource: BN9PR12MB5115.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 21 Feb 2023 16:26:40.2254
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: PidKQ5k5LHq3cNKz5qvmhUN7bJDoWzOfxHh5bc4fZgZwfIcoevctXRJ24KK+fPDR6AycV+ad3aCZnq1s3uKysQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR12MB6472
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
-        autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH] rust: time: New module for timekeeping functions
+Content-Language: en-US
+To:     Boqun Feng <boqun.feng@gmail.com>,
+        Thomas Gleixner <tglx@linutronix.de>
+Cc:     Miguel Ojeda <ojeda@kernel.org>,
+        Alex Gaynor <alex.gaynor@gmail.com>,
+        Wedson Almeida Filho <wedsonaf@gmail.com>,
+        Gary Guo <gary@garyguo.net>,
+        =?UTF-8?Q?Bj=c3=b6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
+        John Stultz <jstultz@google.com>,
+        Stephen Boyd <sboyd@kernel.org>, linux-kernel@vger.kernel.org,
+        rust-for-linux@vger.kernel.org, asahi@lists.linux.dev
+References: <20230221-gpu-up-time-v1-1-bf8fe74b7f55@asahilina.net>
+ <87v8jvnqq4.ffs@tglx> <Y/TP6as7qqwfcI42@boqun-archlinux>
+From:   Asahi Lina <lina@asahilina.net>
+In-Reply-To: <Y/TP6as7qqwfcI42@boqun-archlinux>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 21/02/2023 23.06, Boqun Feng wrote:
+> On Tue, Feb 21, 2023 at 01:32:51PM +0100, Thomas Gleixner wrote:
+>> On Tue, Feb 21 2023 at 16:06, Asahi Lina wrote:
+>>> +
+>>> +use crate::bindings;
+>>> +use core::time::Duration;
+>>> +
+>>> +/// Returns the kernel time elapsed since boot, excluding time spent sleeping, as a [`Duration`].
+>>> +pub fn ktime_get() -> Duration {
+>>> +    // SAFETY: Function has no side effects and no inputs.
+>>> +    Duration::from_nanos(unsafe { bindings::ktime_get() }.try_into().unwrap())
+>>
+>> Why is this a Duration? From the spec:
+>>
+> 
+> I agree that returning a Duration may not be ideal, but..
 
-On 2023-02-21 06:35, qu.huang@linux.dev wrote:
-> From: Qu Huang <qu.huang@linux.dev>
->
-> In the kfd_wait_on_events() function, the kfd_event_waiter structure is
-> allocated by alloc_event_waiters(), but the event field of the waiter
-> structure is not initialized; When copy_from_user() fails in the
-> kfd_wait_on_events() function, it will enter exception handling to
-> release the previously allocated memory of the waiter structure;
-> Due to the event field of the waiters structure being accessed
-> in the free_waiters() function, this results in illegal memory access
-> and system crash, here is the crash log:
->
-> localhost kernel: RIP: 0010:native_queued_spin_lock_slowpath+0x185/0x1e0
-> localhost kernel: RSP: 0018:ffffaa53c362bd60 EFLAGS: 00010082
-> localhost kernel: RAX: ff3d3d6bff4007cb RBX: 0000000000000282 RCX: 00000000002c0000
-> localhost kernel: RDX: ffff9e855eeacb80 RSI: 000000000000279c RDI: ffffe7088f6a21d0
-> localhost kernel: RBP: ffffe7088f6a21d0 R08: 00000000002c0000 R09: ffffaa53c362be64
-> localhost kernel: R10: ffffaa53c362bbd8 R11: 0000000000000001 R12: 0000000000000002
-> localhost kernel: R13: ffff9e7ead15d600 R14: 0000000000000000 R15: ffff9e7ead15d698
-> localhost kernel: FS:  0000152a3d111700(0000) GS:ffff9e855ee80000(0000) knlGS:0000000000000000
-> localhost kernel: CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> localhost kernel: CR2: 0000152938000010 CR3: 000000044d7a4000 CR4: 00000000003506e0
-> localhost kernel: Call Trace:
-> localhost kernel: _raw_spin_lock_irqsave+0x30/0x40
-> localhost kernel: remove_wait_queue+0x12/0x50
-> localhost kernel: kfd_wait_on_events+0x1b6/0x490 [hydcu]
-> localhost kernel: ? ftrace_graph_caller+0xa0/0xa0
-> localhost kernel: kfd_ioctl+0x38c/0x4a0 [hydcu]
-> localhost kernel: ? kfd_ioctl_set_trap_handler+0x70/0x70 [hydcu]
-> localhost kernel: ? kfd_ioctl_create_queue+0x5a0/0x5a0 [hydcu]
-> localhost kernel: ? ftrace_graph_caller+0xa0/0xa0
-> localhost kernel: __x64_sys_ioctl+0x8e/0xd0
-> localhost kernel: ? syscall_trace_enter.isra.18+0x143/0x1b0
-> localhost kernel: do_syscall_64+0x33/0x80
-> localhost kernel: entry_SYSCALL_64_after_hwframe+0x44/0xa9
-> localhost kernel: RIP: 0033:0x152a4dff68d7
->
-> Signed-off-by: Qu Huang <qu.huang@linux.dev>
-> ---
->   drivers/gpu/drm/amd/amdkfd/kfd_events.c | 1 +
->   1 file changed, 1 insertion(+)
->
-> diff --git a/drivers/gpu/drm/amd/amdkfd/kfd_events.c b/drivers/gpu/drm/amd/amdkfd/kfd_events.c
-> index 729d26d..e5faaad 100644
-> --- a/drivers/gpu/drm/amd/amdkfd/kfd_events.c
-> +++ b/drivers/gpu/drm/amd/amdkfd/kfd_events.c
-> @@ -787,6 +787,7 @@ static struct kfd_event_waiter *alloc_event_waiters(uint32_t num_events)
->   	for (i = 0; (event_waiters) && (i < num_events) ; i++) {
->   		init_wait(&event_waiters[i].wait);
->   		event_waiters[i].activated = false;
-> +		event_waiters[i].event = NULL;
+>> In my understanding 'Duration' is a time span between two points, while
+>> ktime_get() and ktime_get_boottime() return the current time of
+>> monotonically nondecreasing clocks, i.e. they fall into the 'Instant'
+>> category.
 
-Thank you for catching this. We're often lazy about initializing things 
-to NULL or 0 because most of our data structures are allocated with 
-kzalloc or similar. I'm not sure why we're not doing this here. If we 
-allocated event_waiters with kcalloc, we could also remove the 
-initialization of activated. I think that would be the cleaner and safer 
-solution.
+The return values are analogous to `Instant` (which is not available in
+the kernel, so we can't use it anyway), but they can't be the same type
+in that case. `Instant` in std refers to a specific clock and its
+invariants only hold if all instances of the type refer to the same
+clock. So if we want to do something analogous here, we need separate
+types for each clock as Boqun mentioned...
 
-Regards,
-   Felix
+>> Now the problem is that 'Instant' in it's specification is bound to
+>> CLOCK_MONOTONIC and there is no way to express CLOCK_BOOTTIME, but
+>> that's a shortcoming of the spec which ignores CLOCK_BOOTTIME
+>> completely. IOW, that's also a problem for user space.
 
+It's sort of inherent in the idea that all `Instant` instances must
+share the same clock, so there can only be one canonical clock on any
+given platform that is represented by `Instant`.
 
->   	}
->
->   	return event_waiters;
-> --
-> 1.8.3.1
+Of course std could have separate types to support more than one clock,
+but then you'd end up with platform-specific variants... and I don't
+think the goal was to support all possible platform-specific clocks in
+that std API.
+
+That's also why I went with Duration, since that doesn't try to claim
+those invariants and represents "a time duration since boot" in this
+case (measured according to different rules depending on what API you
+call). Basically it punts the problem of not mixing clocks to the API
+user...  which is not ideal, but it's exactly what the C API does.
+ktime_t naturally maps well to Duration since it does not encode any
+clock/epoch information in the type.
+
+> To me, there seems
+> two options to provide Rust types for kernel time management:
+> 
+> *	Use KTime which maps to ktime_t, then we have the similar
+> 	semantics around it: sometimes it's a duration, sometimes it's
+> 	a point of time.. but I know "this is a safe language, you
+> 	should do more" ;-)
+> 
+> *	Introduce kernel's own types, e.g. BootTime, RawTime, TAI,
+> 	RealTime, and make them play with Duration (actually I'd prefer
+> 	we have own Duration, because Rust core::time::Duration takes
+> 	more than u64), something like below:
+> 
+> 
+> 	pub struct BootTime {
+> 	    d: Duration
+> 	}
+> 
+> 	impl BootTime {
+> 	    fn now() -> Self {
+> 	        unsafe { BootTime { d: ktime_to_duration(ktime_get_boottime())} }
+> 	    }
+> 	    fn add(self, d: Duration) -> Self {
+> 	        <Add a duration, similar to ktime_add>
+> 	    }
+> 	    fn sub(self, other: Self) -> Duration {
+> 	        ...
+> 	    }
+> 	...
+> 	}
+> 
+> Thoughts?
+
+I think that's the better approach, but I was hoping to leave that for a
+future patch, especially since right now I'm the only user of this API
+in the upcoming Apple GPU driver and it only uses it to implement some
+really simple timeouts for polled operations, which isn't much API
+coverage... I figured we might get a better idea for what to do once a
+second user comes along. For example, do we want straight methods like
+that or std::ops trait impls? And do we make everything fallible or
+panic on overflow or just wrap?
+
+It also means we basically have to reimplement all of
+core::time::Duration if we want to offer an equally ergonomic API with a
+64-bit type (for reference, Duration is a struct with u64 secs and u32
+nanoseconds).
+
+>>> +}
+>>> +
+>>> +/// Returns the kernel time elapsed since boot, including time spent sleeping, as a [`Duration`].
+>>> +pub fn ktime_get_boottime() -> Duration {
+>>> +    Duration::from_nanos(
+>>> +        // SAFETY: Function has no side effects and no variable inputs.
+>>> +        unsafe { bindings::ktime_get_with_offset(bindings::tk_offsets_TK_OFFS_BOOT) }
+>>
+>> No. Please use ktime_get_boottime() and not the timekeeping internal function.
+
+`ktime_get_boottime()` is static inline, so it will need a manual helper
+wrapper to be callable from Rust (at least until bindgen implements
+automatic helper generation, which I hear is coming soon). I was trying
+to avoid introducing even more helpers, since helpers.c is kind of
+already getting out of hand in my branch with all the stuff that's
+getting added... but I can add it if you don't want me to use
+ktime_get_with_offset(). It'll also be slower this way though (since the
+helper introduces another layer of function calling), and I figured of
+all things we probably want time functions to be fast, since they tend
+to get called a lot...
+
+~~ Lina
