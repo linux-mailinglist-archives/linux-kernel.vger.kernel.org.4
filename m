@@ -2,89 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D6D6069DE35
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 11:51:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 77EEC69DE38
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 11:51:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233853AbjBUKvk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Feb 2023 05:51:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51818 "EHLO
+        id S233222AbjBUKvy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Feb 2023 05:51:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52022 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233809AbjBUKvi (ORCPT
+        with ESMTP id S233816AbjBUKvu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Feb 2023 05:51:38 -0500
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 136EF2686C;
-        Tue, 21 Feb 2023 02:51:08 -0800 (PST)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4PLbg953Jmz4x84;
-        Tue, 21 Feb 2023 21:51:01 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ellerman.id.au;
-        s=201909; t=1676976661;
-        bh=xxgisTBsLq1Il2r7exlEIFfuUgeu19ZFyGDQMu1Uymo=;
-        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=qxwzVNlOLonPby8HMI4Uk4h2fbdciIoGSLYXWvO8ezp2YwZzclmuFVIwLigdj//i4
-         kRzj09bqOzSiYkymEBlsHyFJFdVtUwhkBHfDNRDZQ30y2Ddjf0i4UeNutMRKwIBdck
-         LBREbVgzrmKQaaSZj0kk+w6AijCfcmRZqAc3WNyN5zJu+yZ/H63xwHNJchJrwECr/F
-         Mu36YLLS47u51Pn387IjiYZNSpIncZTJWlwIHEyoIB4fkS4/Zb/yrumtN+AURsCiab
-         7qzR25TfrivvhqUALNfv0aUWIC5OiqLRJHi1GqLbe7WAwa+ejsnwIOxe/xetZOl+l1
-         jE9uil3dxfyXQ==
-From:   Michael Ellerman <mpe@ellerman.id.au>
-To:     Amit Kumar Mahapatra <amit.kumar-mahapatra@amd.com>,
-        broonie@kernel.org
-Cc:     linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org
-Subject: Re: [PATCH v4 07/15] powerpc/83xx/mpc832x_rdb: Replace all
- spi->chip_select references with function call
-In-Reply-To: <20230210193647.4159467-8-amit.kumar-mahapatra@amd.com>
-References: <20230210193647.4159467-1-amit.kumar-mahapatra@amd.com>
- <20230210193647.4159467-8-amit.kumar-mahapatra@amd.com>
-Date:   Tue, 21 Feb 2023 21:50:58 +1100
-Message-ID: <87ilfvb8bx.fsf@mpe.ellerman.id.au>
-MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Tue, 21 Feb 2023 05:51:50 -0500
+Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35DBD22DD9
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Feb 2023 02:51:16 -0800 (PST)
+Received: by mail-wr1-x430.google.com with SMTP id z8so3644850wrm.8
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Feb 2023 02:51:16 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=jrtc27.com; s=gmail.jrtc27.user;
+        h=to:references:message-id:content-transfer-encoding:cc:date
+         :in-reply-to:from:subject:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=9w7XobGmqoHAIzgD6LtsFXauMIPw7dVC/9cFUkEqxAg=;
+        b=AXBF51TxVmSaVNE/WJ8amku2KSqvbxFUmsYKA0gXCvXJqgyKiBQs9uEXObAlXXO/7f
+         /l+eZ4zLmdc1I4b9hsiZ/twLu7qAVcd8EfZA4oho/t2X1ZdAzrR7SiGiYVu2aFezzqJm
+         +df4yR61596wmZ5fi9d9AocUK64Oe7O14BjlKLmzHvbUcGvMVAzvQ6/XVHgpna5C2jOL
+         umPOhgxAOtOgrzSyfHnsPud0NAy8QPEfUyToiLcecoc667tm7GRghydN6Y98YF7nzUNv
+         3lmdApV/CvnwmL6AZZl/38AEFazpjx8ROWgcWSGfrA+FeK/lQUEq5lYzMmSfW0kByN7z
+         Ic3w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:references:message-id:content-transfer-encoding:cc:date
+         :in-reply-to:from:subject:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=9w7XobGmqoHAIzgD6LtsFXauMIPw7dVC/9cFUkEqxAg=;
+        b=c6Zd+HAJgFa+iwviQ5pM9B0R+GSSSnDpdgMd59S481JC74wymQElylUzSE755PLAPG
+         yv7pap8S7xK0CN5rYWfLULy9Uq8eKv1hmOQTud/Kgl0+9m3gMWO5y0dm9CaeUSrCGZ/p
+         OGQ7ECpMN1DUPnnYXVgAwXmSqsXMynSAexMwr+xVLcAbdap+PX8LY/vd75B++LCieWbA
+         HOWhVVRfSwfgUzSGPRHZ3qFp4QQ+039pe1NjC8CXf9rQoJVE4DFKQBeni0LBJLk49wPk
+         QCdodT5/ry6/wnuVztU7UnGjMW+zPgYMCsqhBmMMrP4bcbR4MiZ0N85MCWPaZKfN4X+X
+         3ZtA==
+X-Gm-Message-State: AO0yUKVcirUn5jV8J6ICTj21nu/0M5sqHLIPc/pSJ/kyafi0Ylv1kToD
+        hAMnmC/SyLPOOy5leXFJW88h7g==
+X-Google-Smtp-Source: AK7set8U0nwW6pymToKnj0QWWxsDXX4OES4HSyFf1ItR+ya7bj1YlMfmMfNBNYEKfrx1VuPwLLXTgg==
+X-Received: by 2002:a5d:65c6:0:b0:2c5:7c7a:78f7 with SMTP id e6-20020a5d65c6000000b002c57c7a78f7mr2849679wrw.45.1676976674381;
+        Tue, 21 Feb 2023 02:51:14 -0800 (PST)
+Received: from smtpclient.apple (global-5-143.n-2.net.cam.ac.uk. [131.111.5.143])
+        by smtp.gmail.com with ESMTPSA id d1-20020a5d4f81000000b002c5526234d2sm3656584wru.8.2023.02.21.02.51.13
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Tue, 21 Feb 2023 02:51:13 -0800 (PST)
+Content-Type: text/plain;
+        charset=utf-8
+Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3696.120.41.1.1\))
+Subject: Re: [PATCH v2 2/7] RISC-V: Detect AIA CSRs from ISA string
+From:   Jessica Clarke <jrtc27@jrtc27.com>
+In-Reply-To: <Y/Sfpb2c/LS0LCiA@wendy>
+Date:   Tue, 21 Feb 2023 10:51:13 +0000
+Cc:     =?utf-8?Q?Christoph_M=C3=BCllner?= <christoph.muellner@vrull.eu>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Anup Patel <apatel@ventanamicro.com>, pbonzini@redhat.com,
+        Atish Patra <atishp@atishpatra.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Andrew Jones <ajones@ventanamicro.com>,
+        Anup Patel <anup@brainfault.org>, kvm@vger.kernel.org,
+        kvm-riscv@lists.infradead.org,
+        linux-riscv <linux-riscv@lists.infradead.org>,
+        linux-kernel@vger.kernel.org
+Content-Transfer-Encoding: quoted-printable
+Message-Id: <F80EBB4C-29C4-472D-B213-EFD220EF9B1F@jrtc27.com>
+References: <20230128072737.2995881-3-apatel@ventanamicro.com>
+ <mhng-0f9bdf58-5289-4db4-8fd7-38898824c44f@palmer-ri-x1c9>
+ <CAEg0e7hrQFu+cdZy+3QO1ML9FNTPBehZwOOBnr1F-5ABYDnkGg@mail.gmail.com>
+ <CAEg0e7hRjMSgYZbPTQztbQ3bGZf-r8wAfCK5ZnDXOcx27HcTCA@mail.gmail.com>
+ <Y/Sfpb2c/LS0LCiA@wendy>
+To:     Conor Dooley <conor.dooley@microchip.com>
+X-Mailer: Apple Mail (2.3696.120.41.1.1)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Amit Kumar Mahapatra <amit.kumar-mahapatra@amd.com> writes:
-> Supporting multi-cs in spi drivers would require the chip_select & cs_gpiod
-> members of struct spi_device to be an array. But changing the type of these
-> members to array would break the spi driver functionality. To make the
-> transition smoother introduced four new APIs to get/set the
-> spi->chip_select & spi->cs_gpiod and replaced all spi->chip_select and
-> spi->cs_gpiod references with get or set API calls.
-> While adding multi-cs support in further patches the chip_select & cs_gpiod
-> members of the spi_device structure would be converted to arrays & the
-> "idx" parameter of the APIs would be used as array index i.e.,
-> spi->chip_select[idx] & spi->cs_gpiod[idx] respectively.
->
-> Signed-off-by: Amit Kumar Mahapatra <amit.kumar-mahapatra@amd.com>
-> ---
->  arch/powerpc/platforms/83xx/mpc832x_rdb.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/arch/powerpc/platforms/83xx/mpc832x_rdb.c b/arch/powerpc/platforms/83xx/mpc832x_rdb.c
-> index caa96edf0e72..4ab1d48cd229 100644
-> --- a/arch/powerpc/platforms/83xx/mpc832x_rdb.c
-> +++ b/arch/powerpc/platforms/83xx/mpc832x_rdb.c
-> @@ -144,7 +144,7 @@ static int __init fsl_spi_init(struct spi_board_info *board_infos,
->  
->  static void mpc83xx_spi_cs_control(struct spi_device *spi, bool on)
->  {
-> -	pr_debug("%s %d %d\n", __func__, spi->chip_select, on);
-> +	pr_debug("%s %d %d\n", __func__, spi_get_chipselect(spi, 0), on);
->  	par_io_data_set(3, 13, on);
->  }
-  
-Better to just delete the pr_debug(), it's disabled by default and I
-doubt anyone will ever enable it again in code that old.
+On 21 Feb 2023, at 10:40, Conor Dooley <conor.dooley@microchip.com> =
+wrote:
+>=20
+> Hey Christoph,
+>=20
+> On Tue, Feb 21, 2023 at 08:12:58AM +0100, Christoph M=C3=BCllner =
+wrote:
+>> Hi all,
+>>=20
+>> The RISC-V Architectural Review Committee has discussed the concerns
+>> regarding the non-ratified chapters in the AIA specification.
+>=20
+> Thanks for the update!
+>=20
+>> Here is the relevant quote from the meeting minutes:
+>> """
+>> Although the Advanced Interrupt Architecture (AIA) has already passed
+>> Architecture Review (with a minor edit still pending), the committee
+>> has some suggestions about its final steps to ratification, to avoid
+>> the AIA document having a mixture of ratified and non-ratified =
+content:
+>=20
+>> - The AIA document's remaining draft chapter on the Duo-PLIC, which =
+is
+>>  not currently on a path to ratification, can be removed to a =
+separate
+>>  document.
+>=20
+> That sounds promising...
+>=20
+>> - Ratification of the full AIA (without Duo-PLIC) can be postponed to
+>>  coincide with ratification of the IOMMU specification, given that
+>>  the latter is now expected in a reasonable time, and the AIA's last
+>>  chapter concerning IOMMUs is already scheduled to go through public
+>>  review and be ratified only together with the IOMMU specification.
+>> """
+>=20
+> ...and so does this. AIA stuff's acceptability only depending on the
+> IOMMU spec's freeze (and thus Chapter 9's) seems like a vast =
+improvement
+> on the status quo to me!
+>=20
+>> The full meeting minutes can be found here:
+>>  https://lists.riscv.org/g/tech-chairs/message/1381
+>=20
+> This link is non functional unfortunately :/
 
-cheers
+tech-chairs is private, for (co-)chairs only... not sure why it went
+there rather than tech-privileged.
+
+Jess
+
+> Cheers,
+> Conor.
+>=20
+> _______________________________________________
+> linux-riscv mailing list
+> linux-riscv@lists.infradead.org
+> http://lists.infradead.org/mailman/listinfo/linux-riscv
+
