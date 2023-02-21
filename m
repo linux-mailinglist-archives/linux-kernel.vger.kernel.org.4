@@ -2,64 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E73A69E71F
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 19:10:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D767769E71E
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 19:10:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230123AbjBUSJm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Feb 2023 13:09:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57942 "EHLO
+        id S231535AbjBUSJk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Feb 2023 13:09:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60386 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230374AbjBUSI4 (ORCPT
+        with ESMTP id S230262AbjBUSI4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 21 Feb 2023 13:08:56 -0500
-Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1890D2E81A
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Feb 2023 10:08:08 -0800 (PST)
-Received: by mail-wm1-x335.google.com with SMTP id m25-20020a7bcb99000000b003e7842b75f2so1877208wmi.3
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Feb 2023 10:08:08 -0800 (PST)
+Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF9FA2E0C3
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Feb 2023 10:08:07 -0800 (PST)
+Received: by mail-wm1-x32e.google.com with SMTP id l7-20020a05600c1d0700b003dc4050c94aso3719477wms.4
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Feb 2023 10:08:07 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=xj/XCNr0kaZT/9prwrgZXIPale3VaDSnJ0X65XmdswI=;
-        b=XwmPT1cE2nvf4O6nZ7Jcn9NWxEhhKq8cES62hT/lwPGstslb7e+KXTwdtqLIpS/oC9
-         85BpYqEiZBeZHZcLH3oDkBHB77rm1rcgoF8CPMGd1vqjzf2HmY0WbRObqvA1GKetsFX7
-         izGoLCvgO6LkZOue/YiPaKJFl4kXbNjk1b/MUA4aNu7wSa2Xafu+eZ8lMIFPiGal752x
-         dRrg5LduwxleF3zrr3rduwHRbuPJUM1WBmo29emhxCpGPaGqmBKQ8KD3cpePQh1rEpWO
-         X6uA95V4i+ZcxitasUAd0mJyjKOHgGqmTvQIkOEmcuUY1uD7XVlA8LuRnXTbtecaWvUx
-         dsMw==
+        bh=pyXE7dTHWFCFp1MXqwgdHIOsHgvb6Bb+CE7d2W8RwzE=;
+        b=VnoikhGoavCAJuf2ydSEiBwyVw9h/xyylr0SIVyNnZO5gDGPX2QC4hWwzud5yCwDKU
+         UrYNKjlpGaPx8a8A6yQp5uf+s+1v77lRFz1e1QJ2sl2iJIv386XMi13WpWDuSBEaJUf8
+         Y4kWrGIybrzff4xV7XTfYHeQTEeBPaQv8tNKUise0uog0OXD/FrzLj9olNr1bTRsuE/v
+         9BGCcklp5Z8fspWR1OZu7V2/UG15GSRQQkK+t8VdcWxg8W05ZIHhNiyZ6u7gGlAiUHRr
+         cypNwmJrLnQdXv70AZOaRLJR0tkG2FGWgiqnDrwdQS1ak5XluLbiqqV4vnvMInUvgxxt
+         6jug==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=xj/XCNr0kaZT/9prwrgZXIPale3VaDSnJ0X65XmdswI=;
-        b=XuxWK0y2eYDuNo83e0VnekyxBQqBytSaCI6CIW54sC8WfxQtsAQJ0fW4VmBxtTkQ+c
-         O9+UMDyuOlVNpChTwIwK7DkrZAb4TlVkUwx2XrGfiQAhO0yrI9RJ7cidGx9/QdPYXPTN
-         MehUr1NJOtd6O0G8Mh3vlm183crqQJvPt2ZN4KSNqUNfatPh1k9wH/7hTV8MmWbS6k1i
-         zq3W9Fcw0AHWZ2VuGQIcM1JlS9+chlMbipKuLHIN1b/e74FlqUeC9MkDeHw0o9wb3qmU
-         zKDlzwSqzQ8HLlV9dx24KYIzYmHKay6JjbG+h1YdTTvBkyOyTfZpYFhuV4Kou6aLsICI
-         HUyA==
-X-Gm-Message-State: AO0yUKW9VhX0mvuQ0cw/gULQL/DOaw+pzoTOK366Ehux7HprnN4BwOQh
-        krQjxDdLgAoFXQ0aj1xkkVMX6g==
-X-Google-Smtp-Source: AK7set+3j0fBOa8sEmacj7NTkstFaKrp6ySEpStMKmFaiEaZ62EbWgZAb8XrU6TzB+fa7X3/JWwQlA==
-X-Received: by 2002:a05:600c:1652:b0:3e1:12d1:fde0 with SMTP id o18-20020a05600c165200b003e112d1fde0mr4218250wmn.6.1677002885486;
-        Tue, 21 Feb 2023 10:08:05 -0800 (PST)
+        bh=pyXE7dTHWFCFp1MXqwgdHIOsHgvb6Bb+CE7d2W8RwzE=;
+        b=J+Ziao9yzkBI6pHVUHpFaak2bH59sH6pWqioUCjMfb6QTayeXUEHUwWp0GWrxA7WmD
+         uY94I2C7ZE7YkUQE8pLktYghcmz02wNf1QM6qqkUaSUkzMwB2R6CCO4vQeCosFV4ebjK
+         brMCU7QFD1o6OIEGlPZIYBx+VvRshOMs54sjdI7POYihpdUefm5miDQF3Ru7p/khzh6m
+         e3/nEwzlG6Y6C68pXvRzvvvTmqaUebYWlOUkjMuF1z1FqkaHSyqecXNZBLDPSzTloE9K
+         XzCImNffprmEAzHMg/TwfkGftJ/xQNImE/FGakWymeqDwvLkNpV/s3dMum6keeKyza7/
+         cIug==
+X-Gm-Message-State: AO0yUKX98VuiI5esuHgBY3CClYn3gMeOco6ecsSdSuiJ5+TEsYsnAd6D
+        UuhdvGkQm7F93OwyuY1I13Cnpg==
+X-Google-Smtp-Source: AK7set8F4G22Oy+oAsm0sMRDvyftq/VUaX4DNaWPoaDFSj2XbAYcpOfOcR3l4xQNpw/lcjEAGYwOtQ==
+X-Received: by 2002:a05:600c:3196:b0:3df:e468:17dc with SMTP id s22-20020a05600c319600b003dfe46817dcmr3998250wmp.40.1677002887449;
+        Tue, 21 Feb 2023 10:08:07 -0800 (PST)
 Received: from mai.box.freepro.com ([2a05:6e02:1041:c10:1e9:315c:bb40:e382])
-        by smtp.gmail.com with ESMTPSA id c128-20020a1c3586000000b003e21558ee9dsm5107815wma.2.2023.02.21.10.08.04
+        by smtp.gmail.com with ESMTPSA id c128-20020a1c3586000000b003e21558ee9dsm5107815wma.2.2023.02.21.10.08.06
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 21 Feb 2023 10:08:05 -0800 (PST)
+        Tue, 21 Feb 2023 10:08:07 -0800 (PST)
 From:   Daniel Lezcano <daniel.lezcano@linaro.org>
 To:     rafael@kernel.org, daniel.lezcano@linaro.org
 Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
         Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>
-Subject: [PATCH v2 11/16] thermal/hwmon: Use the thermal_core.h header
-Date:   Tue, 21 Feb 2023 19:07:05 +0100
-Message-Id: <20230221180710.2781027-12-daniel.lezcano@linaro.org>
+        Zhang Rui <rui.zhang@intel.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        =?UTF-8?q?Niklas=20S=C3=B6derlund?= 
+        <niklas.soderlund+renesas@ragnatech.se>,
+        Baolin Wang <baolin.wang@linux.alibaba.com>,
+        Gregory Greenman <gregory.greenman@intel.com>,
+        Kunihiko Hayashi <hayashi.kunihiko@socionext.com>,
+        linux-tegra@vger.kernel.org (open list:TEGRA ARCHITECTURE SUPPORT)
+Subject: [PATCH v2 12/16] thermal/drivers/tegra: Remove unneeded lock when setting a trip point
+Date:   Tue, 21 Feb 2023 19:07:06 +0100
+Message-Id: <20230221180710.2781027-13-daniel.lezcano@linaro.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230221180710.2781027-1-daniel.lezcano@linaro.org>
 References: <20230221180710.2781027-1-daniel.lezcano@linaro.org>
@@ -67,43 +73,102 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The thermal_hwmon is playing with the thermal core code
-internals. Changing the code would be too invasive for now.
+The function tegra_tsensor_enable_hw_channel() takes the thermal zone
+lock to prevent "a potential" race with a call to set_trips()
+callback.
 
-We can consider the thermal_hwmon.c is part of the thermal core code
-as it provides a glue to tie the hwmon and the thermal zones.
+The driver must not play with the thermal framework core code
+internals.
 
-Let's include the thermal_core.h header.
+The tegra_tsensor_enable_hw_channel() is called by:
 
-No functional change intended.
+ - the suspend / resume callbacks
+ - the probe function after the thermal zones are registered
 
-Cc: Jean Delvare <jdelvare@suse.com>
-Cc: Guenter Roeck <linux@roeck-us.net>
+The thermal zone lock taken in this function is supposed to protect
+from a call to the set_trips() callback which writes in the same
+register.
+
+The potential race is when suspend / resume are called at the same
+time as set_trips. This one is called only in
+thermal_zone_device_update().
+
+ - At suspend time, the 'in_suspend' is set, thus the
+   thermal_zone_device_update() bails out immediately and set_trips is
+   not called during this moment.
+
+ - At resume time, the thermal zone is updated at PM_POST_SUSPEND,
+   thus the driver has already set the TH2 temperature.
+
+ - At probe time, we register the thermal zone and then we set the
+   TH2. The only scenario I can see so far is the interrupt fires, the
+   thermal_zone_update() is called exactly at the moment
+   tegra_tsensor_enable_hw_channel() a few lines after registering it.
+
+Disable the interrupt before setting up the hw channels and then
+enable it. We close the potential race window without using the
+thermal zone's lock.
+
 Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
 ---
- drivers/thermal/thermal_hwmon.c | 1 +
- 1 file changed, 1 insertion(+)
+ drivers/thermal/tegra/tegra30-tsensor.c | 17 ++++++++++++-----
+ 1 file changed, 12 insertions(+), 5 deletions(-)
 
-diff --git a/drivers/thermal/thermal_hwmon.c b/drivers/thermal/thermal_hwmon.c
-index bc02095b314c..c59db17dddd6 100644
---- a/drivers/thermal/thermal_hwmon.c
-+++ b/drivers/thermal/thermal_hwmon.c
-@@ -17,6 +17,7 @@
- #include <linux/thermal.h>
+diff --git a/drivers/thermal/tegra/tegra30-tsensor.c b/drivers/thermal/tegra/tegra30-tsensor.c
+index 4b2ea17910cd..3506c3f3c474 100644
+--- a/drivers/thermal/tegra/tegra30-tsensor.c
++++ b/drivers/thermal/tegra/tegra30-tsensor.c
+@@ -359,9 +359,6 @@ static int tegra_tsensor_enable_hw_channel(const struct tegra_tsensor *ts,
  
- #include "thermal_hwmon.h"
-+#include "thermal_core.h"
+ 	tegra_tsensor_get_hw_channel_trips(tzd, &hot_trip, &crit_trip);
  
- /* hwmon sys I/F */
- /* thermal zone devices with the same type share one hwmon device */
+-	/* prevent potential racing with tegra_tsensor_set_trips() */
+-	mutex_lock(&tzd->lock);
+-
+ 	dev_info_once(ts->dev, "ch%u: PMC emergency shutdown trip set to %dC\n",
+ 		      id, DIV_ROUND_CLOSEST(crit_trip, 1000));
+ 
+@@ -404,8 +401,6 @@ static int tegra_tsensor_enable_hw_channel(const struct tegra_tsensor *ts,
+ 	val |= FIELD_PREP(TSENSOR_SENSOR0_CONFIG0_INTR_THERMAL_RST_EN, 1);
+ 	writel_relaxed(val, tsc->regs + TSENSOR_SENSOR0_CONFIG0);
+ 
+-	mutex_unlock(&tzd->lock);
+-
+ 	err = thermal_zone_device_enable(tzd);
+ 	if (err) {
+ 		dev_err(ts->dev, "ch%u: failed to enable zone: %d\n", id, err);
+@@ -592,12 +587,24 @@ static int tegra_tsensor_probe(struct platform_device *pdev)
+ 		return dev_err_probe(&pdev->dev, err,
+ 				     "failed to request interrupt\n");
+ 
++	/*
++	 * Disable the interrupt so set_trips() can not be called
++	 * while we are setting up the register
++	 * TSENSOR_SENSOR0_CONFIG1. With this we close a potential
++	 * race window where we are setting up the TH2 and the
++	 * temperature hits TH1 resulting to an update of the
++	 * TSENSOR_SENSOR0_CONFIG1 register in the ISR.
++	 */
++	disable_irq(irq);
++
+ 	for (i = 0; i < ARRAY_SIZE(ts->ch); i++) {
+ 		err = tegra_tsensor_enable_hw_channel(ts, i);
+ 		if (err)
+ 			return err;
+ 	}
+ 
++	enable_irq(irq);
++
+ 	return 0;
+ }
+ 
 -- 
 2.34.1
 
