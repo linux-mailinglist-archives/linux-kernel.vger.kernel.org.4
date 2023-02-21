@@ -2,141 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EB5CC69DDF9
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 11:37:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 32E4A69DDFE
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 11:37:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233281AbjBUKhG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Feb 2023 05:37:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37264 "EHLO
+        id S233753AbjBUKhj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Feb 2023 05:37:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37884 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232813AbjBUKhF (ORCPT
+        with ESMTP id S233754AbjBUKhh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Feb 2023 05:37:05 -0500
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id AFF92252AF
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Feb 2023 02:37:03 -0800 (PST)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id D716DFEC;
-        Tue, 21 Feb 2023 02:37:45 -0800 (PST)
-Received: from FVFF77S0Q05N (unknown [10.57.16.87])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 723183F703;
-        Tue, 21 Feb 2023 02:37:00 -0800 (PST)
-Date:   Tue, 21 Feb 2023 10:36:53 +0000
-From:   Mark Rutland <mark.rutland@arm.com>
-To:     Lin Yujun <linyujun809@huawei.com>
-Cc:     catalin.marinas@arm.com, will@kernel.org, broonie@kernel.org,
-        kristina.martsenko@arm.com, james.morse@arm.com, maz@kernel.org,
-        ardb@kernel.org, samitolvanen@google.com, andreyknvl@gmail.com,
-        masahiroy@kernel.org, joey.gouly@arm.com,
-        anshuman.khandual@arm.com, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, wanghai38@huawei.com
-Subject: Re: [PATCH -next] arm64: Optimize the comparison of unsigned
- expressions to avoid compiling error
-Message-ID: <Y/SewFthY/rGct7C@FVFF77S0Q05N>
-References: <20230221012740.2929481-1-linyujun809@huawei.com>
+        Tue, 21 Feb 2023 05:37:37 -0500
+Received: from mailbox.box.xen0n.name (mail.xen0n.name [115.28.160.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D769F25E11;
+        Tue, 21 Feb 2023 02:37:31 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=xen0n.name; s=mail;
+        t=1676975848; bh=kttlikzHwisAM0E2qY/d8RHeLStCZm5KlaC55tFr4CU=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=A4g5I85hUYVQJ4SHKWhlfMQrRbyItlwUavJVuBjGob+k8vmVXjA7H6nNXFrV49req
+         7zjwdT3tnAEserZ62WFgSVtsO+wfG2cz7p7Hla51+t7h0OBdtuXiOR1EtR41O6m/oS
+         4iGCHu89NLXDtXQBWSc3x/5mAupivdX9iD64G4XI=
+Received: from [100.100.57.122] (unknown [58.34.185.106])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mailbox.box.xen0n.name (Postfix) with ESMTPSA id A5054600BD;
+        Tue, 21 Feb 2023 18:37:27 +0800 (CST)
+Message-ID: <35d54051-3876-4fb7-d1c8-d1c605420962@xen0n.name>
+Date:   Tue, 21 Feb 2023 18:37:27 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.8.0
+Subject: Re: [PATCH v2 02/29] LoongArch: KVM: Implement kvm module related
+ interface
+To:     maobibo <maobibo@loongson.cn>, Paolo Bonzini <pbonzini@redhat.com>,
+        Tianrui Zhao <zhaotianrui@loongson.cn>
+Cc:     Huacai Chen <chenhuacai@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        loongarch@lists.linux.dev, linux-kernel@vger.kernel.org,
+        kvm@vger.kernel.org, Jens Axboe <axboe@kernel.dk>,
+        Mark Brown <broonie@kernel.org>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        Oliver Upton <oliver.upton@linux.dev>
+References: <20230220065735.1282809-1-zhaotianrui@loongson.cn>
+ <20230220065735.1282809-3-zhaotianrui@loongson.cn>
+ <bf4111f9-f722-1847-4f1d-964c5356f392@redhat.com>
+ <0fa9c062-d3fc-61e5-4d54-6bc29f7c64cf@loongson.cn>
+ <3f16a8e1-21d9-808e-aa1a-4f1d6f6f291b@redhat.com>
+ <2875aa3f-0dc4-4e48-17ad-42c703e12063@loongson.cn>
+Content-Language: en-US
+From:   WANG Xuerui <kernel@xen0n.name>
+In-Reply-To: <2875aa3f-0dc4-4e48-17ad-42c703e12063@loongson.cn>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230221012740.2929481-1-linyujun809@huawei.com>
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 21, 2023 at 09:27:40AM +0800, Lin Yujun wrote:
-> while compile arch/arm64/include/asm/cpufeature.h with
-> -Werror=type-limits enabled, errors shown as below:
+On 2023/2/21 18:18, maobibo wrote:
 > 
-> ./arch/arm64/include/asm/cpufeature.h: In function 'system_supports_4kb_granule':
-> ./arch/arm64/include/asm/cpufeature.h:653:14: error: comparison of unsigned expression >= 0 is always true [-Werror=type-limits]
->   return (val >= ID_AA64MMFR0_TGRAN4_SUPPORTED_MIN) &&
->               ^~
-> ./arch/arm64/include/asm/cpufeature.h: In function 'system_supports_64kb_granule':
-> ./arch/arm64/include/asm/cpufeature.h:666:14: error: comparison of unsigned expression >= 0 is always true [-Werror=type-limits]
->   return (val >= ID_AA64MMFR0_TGRAN64_SUPPORTED_MIN) &&
->               ^~
-
-When is the `-Werror=type-limits` flag enabled by the build system?
-
-We have patterns like this all over the kernel, and I don't think this is
-indicative of a real problem, and I don't think that we need to change code to
-make this warning disappear.
-
-> Modify the return judgment statement, use
-> "((val - min) < (val - max - 1))" to confirm that returns
-> true in “min <= val <= max” cases, false in other cases.
-
-That expression is far less clear than the existing code, so I do not think
-that is a good idea.
-
-> Fixes: 79d82cbcbb3d ("arm64/kexec: Test page size support with new TGRAN range values")
-
-What functional error does this fix?
-
-What configuration is broken?
-
-Thanks,
-Mark.
-
-> Signed-off-by: Lin Yujun <linyujun809@huawei.com>
-> ---
->  arch/arm64/include/asm/cpufeature.h | 18 ++++++++++++------
->  1 file changed, 12 insertions(+), 6 deletions(-)
 > 
-> diff --git a/arch/arm64/include/asm/cpufeature.h b/arch/arm64/include/asm/cpufeature.h
-> index 03d1c9d7af82..0a6bda025141 100644
-> --- a/arch/arm64/include/asm/cpufeature.h
-> +++ b/arch/arm64/include/asm/cpufeature.h
-> @@ -54,6 +54,9 @@ enum ftr_type {
->  #define FTR_VISIBLE_IF_IS_ENABLED(config)		\
->  	(IS_ENABLED(config) ? FTR_VISIBLE : FTR_HIDDEN)
->  
-> +#define IN_RANGE_INCLUSIVE(val, min, max)		\
-> +	(((val) - (min)) < ((val) - (max) - 1))
-> +
->  struct arm64_ftr_bits {
->  	bool		sign;	/* Value is signed ? */
->  	bool		visible;
-> @@ -693,8 +696,9 @@ static inline bool system_supports_4kb_granule(void)
->  	val = cpuid_feature_extract_unsigned_field(mmfr0,
->  						ID_AA64MMFR0_EL1_TGRAN4_SHIFT);
->  
-> -	return (val >= ID_AA64MMFR0_EL1_TGRAN4_SUPPORTED_MIN) &&
-> -	       (val <= ID_AA64MMFR0_EL1_TGRAN4_SUPPORTED_MAX);
-> +	return IN_RANGE_INCLUSIVE(val,
-> +		ID_AA64MMFR0_EL1_TGRAN4_SUPPORTED_MIN,
-> +		ID_AA64MMFR0_EL1_TGRAN4_SUPPORTED_MAX);
->  }
->  
->  static inline bool system_supports_64kb_granule(void)
-> @@ -706,8 +710,9 @@ static inline bool system_supports_64kb_granule(void)
->  	val = cpuid_feature_extract_unsigned_field(mmfr0,
->  						ID_AA64MMFR0_EL1_TGRAN64_SHIFT);
->  
-> -	return (val >= ID_AA64MMFR0_EL1_TGRAN64_SUPPORTED_MIN) &&
-> -	       (val <= ID_AA64MMFR0_EL1_TGRAN64_SUPPORTED_MAX);
-> +	return IN_RANGE_INCLUSIVE(val,
-> +		ID_AA64MMFR0_EL1_TGRAN64_SUPPORTED_MIN,
-> +		ID_AA64MMFR0_EL1_TGRAN64_SUPPORTED_MAX);
->  }
->  
->  static inline bool system_supports_16kb_granule(void)
-> @@ -719,8 +724,9 @@ static inline bool system_supports_16kb_granule(void)
->  	val = cpuid_feature_extract_unsigned_field(mmfr0,
->  						ID_AA64MMFR0_EL1_TGRAN16_SHIFT);
->  
-> -	return (val >= ID_AA64MMFR0_EL1_TGRAN16_SUPPORTED_MIN) &&
-> -	       (val <= ID_AA64MMFR0_EL1_TGRAN16_SUPPORTED_MAX);
-> +	return IN_RANGE_INCLUSIVE(val,
-> +		ID_AA64MMFR0_EL1_TGRAN16_SUPPORTED_MIN,
-> +		ID_AA64MMFR0_EL1_TGRAN16_SUPPORTED_MAX);
->  }
->  
->  static inline bool system_supports_mixed_endian_el0(void)
-> -- 
-> 2.34.1
+> 在 2023/2/21 16:14, Paolo Bonzini 写道:
+>> On 2/21/23 07:59, maobibo wrote:
+>>>> Also, why does the world switch code need a copy?
+>>> There will be problem in world switch code if there is page fault reenter,
+>>> since pgd register is shared between root kernel and kvm hypervisor.
+>>> World switch entry need be unmapped area, cannot be tlb mapped area.
+>>
+>> So if I understand correctly the processor is in direct address translation mode until the "csrwr t0, LOONGARCH_CSR_CRMD" instruction. Where does it leave paged mode?
+> The processor still in paged mode during world switch context. For example
+> when vm exits from guest mode to root mode, it executes world switch code
+> from kvm_vector_entry, PC register points to HVA address, however vmid from
+> LOONGARCH_CSR_GTLBC is not clear to root mode. If there is page fault
+> exception, hardware treats it exception from GPA-->HPA rather than that
+> from HVA --> HPA, since vmid info in CSR_GTLBC is not zero.
 > 
+> In page mode, there are two kinds of address: unmapped address and
+> tlb mapped address. For unmapped address there is only cachable/uncachable
+> attribution, but not RWX attr; and there is no tlb handling for it.
+> For simplicity,  unmapped address can be treated as window filtered address.
+> 
+> It will be fully root mode only after this piece of code is executed
+> during world switch context; vmid is zero and PC points to HVA.
+>          ori     t0, zero, CSR_GSTAT_PVM
+>          csrxchg zero, t0, LOONGARCH_CSR_GSTAT
+>          /* Clear GTLBC.TGID field */
+>          csrrd   t0, LOONGARCH_CSR_GTLBC
+>          bstrins.w       t0, zero, CSR_GTLBC_TGID_SHIFT_END, CSR_GTLBC_TGID_SHIFT
+>          csrwr   t0, LOONGARCH_CSR_GTLBC
+
+AFAIK all of these is probably coming from Volume 3 of LoongArch ISA 
+Manual, which is unfortunately not publicly available at the moment. For 
+sake of meaningful reviews, when can we expect to get our hands on the 
+manuals?
+
+-- 
+WANG "xen0n" Xuerui
+
+Linux/LoongArch mailing list: https://lore.kernel.org/loongarch/
+
