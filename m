@@ -2,182 +2,200 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0DFFA69DE68
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 12:05:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CC0D669DE6A
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 12:06:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233959AbjBULFK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Feb 2023 06:05:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60520 "EHLO
+        id S233756AbjBULGf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Feb 2023 06:06:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34208 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233923AbjBULFA (ORCPT
+        with ESMTP id S229732AbjBULGa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Feb 2023 06:05:00 -0500
-Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C19EE24CB1
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Feb 2023 03:04:42 -0800 (PST)
-Received: by mail-ed1-x52d.google.com with SMTP id ec43so15013310edb.8
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Feb 2023 03:04:42 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=dyofFYAHde+sYhK5cCQMoTBZJv121KLcv8Iwe1/b2n0=;
-        b=P42RwhbEv/opgjVo8yyGM/qLLW+JRqgnrwzTqZc8CA026XfDkNzZ0XSbiBpBd5Iwj6
-         na0Vy34uEpQA3qQVEJKthCmBgjhscjjPfdm/m4lP8D2R85SeaSVn4IL0QxhGZVNNYPFM
-         nu60i09iyBOKaLhDlj0FzsRqIQTjgwZskZ3thccZkpLEdsFYLNJPMIDaZm4AxDXMRVy6
-         9cZyoCF2hlupgkDAwcf1h0c7NLRveiIf3R0fk9N7vl9rtswGaQjZbS0gEZPubwzX4g3F
-         r3EpfR4Qs2x8Z3sUZgSZ7aUMj+3agqqU91iBZ2Og3Y6k1a5k/K9UVmB5ymBP2xj9SHU9
-         Lspg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=dyofFYAHde+sYhK5cCQMoTBZJv121KLcv8Iwe1/b2n0=;
-        b=kzYihDUpCJk/7ghR2d83LPoPcM2dIvl1ch/6XBCoJu7VteJO6cyB3GZBGWNg7vLZdU
-         oFNQsk648bLs02q56TXIgtyKNsTgYEJOcxbCJOXJdJdkN9TSfy9FRZ6auHY14GrvqAp8
-         mAA2T7s503J5JM8TlQWXGmWBi6ALtIlDLyiF4AEII9NMQEKFo9hZmIv1kjSXx16lVayK
-         RjuTxHlwbCLNjAvb77Yv/75Ng/BPGdTkBsWF9DB19XQ+hDc3a9Dyi+NoUgHidlNLDIky
-         CP6WTftNhC0PbderV30g4xRW/bnofMdh+yCBDx0stto8rAPBbmPj4cJalYywkniE+ePS
-         SgXQ==
-X-Gm-Message-State: AO0yUKVPNw6PLROUdzCLtHnkzxkFZMl8tXjHVAEZcn18zzU24vtGnDba
-        bRjOF+gKAp/aSGshcFaG/Hm5Sw==
-X-Google-Smtp-Source: AK7set9p7Oag1CegdVPeq33yIBspBrLGpmAMNHGT27KC89UEsFbVDhLyehQcfuvWJUxjZQGKDHgnlw==
-X-Received: by 2002:a17:906:e59:b0:88e:2ff5:85d2 with SMTP id q25-20020a1709060e5900b0088e2ff585d2mr12026500eji.25.1676977481191;
-        Tue, 21 Feb 2023 03:04:41 -0800 (PST)
-Received: from [192.168.1.109] ([178.197.216.144])
-        by smtp.gmail.com with ESMTPSA id f21-20020a170906049500b008e36f9b2308sm48028eja.43.2023.02.21.03.04.39
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 21 Feb 2023 03:04:40 -0800 (PST)
-Message-ID: <c0ac0ab3-87fc-e74a-b4e2-3cf1b3a8a5e2@linaro.org>
-Date:   Tue, 21 Feb 2023 12:04:38 +0100
+        Tue, 21 Feb 2023 06:06:30 -0500
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D71D22DC1;
+        Tue, 21 Feb 2023 03:06:29 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1676977589; x=1708513589;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=2CjPQ/miNwaYKFFDt9yQwTps+fh10MwgTpKNxPViTwE=;
+  b=ac+1NntqHQ8yjBatGK70H/cuYXYqF9aoqRgt2ZFwW4wYsNm00aTVwvua
+   57Vr4s7KWpl4QNnQCnVdiyeYDmRBXfT510AMhXk6lxiN0SY7kmZoMLelb
+   Sw2Apu2gWnWsr/u//YFPhAnYOIVGaER7Jp6q/pkxeS+EMpvIZA/DDw2OR
+   HneDGVfQSM/2Ab5xPGWKeYctu6OeywgP8B3+RvT/7nZUQszQlI+ULleMV
+   ZE90pfTTVI6tn+fiA26lqpkiiKEBSO7rVEp+dS3h5nwChSLDaTebXsLyE
+   TJ6gS5MglZr0APrrBUG4iWyJIO/GHyrut1OqNylpE761yNo71MJN1oC8k
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10627"; a="331270069"
+X-IronPort-AV: E=Sophos;i="5.97,315,1669104000"; 
+   d="scan'208";a="331270069"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Feb 2023 03:06:28 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10627"; a="703993147"
+X-IronPort-AV: E=Sophos;i="5.97,315,1669104000"; 
+   d="scan'208";a="703993147"
+Received: from yichaohu-mobl.ccr.corp.intel.com (HELO localhost) ([10.254.208.83])
+  by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Feb 2023 03:06:10 -0800
+Date:   Tue, 21 Feb 2023 19:06:07 +0800
+From:   Yu Zhang <yu.c.zhang@linux.intel.com>
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Sagi Shahar <sagis@google.com>,
+        Erdem Aktas <erdemaktas@google.com>,
+        Peter Shier <pshier@google.com>,
+        Anish Ghulati <aghulati@google.com>,
+        Oliver Upton <oliver.upton@linux.dev>,
+        James Houghton <jthoughton@google.com>,
+        Anish Moorthy <amoorthy@google.com>,
+        Ben Gardon <bgardon@google.com>,
+        David Matlack <dmatlack@google.com>,
+        Ricardo Koller <ricarkol@google.com>,
+        Axel Rasmussen <axelrasmussen@google.com>,
+        Aaron Lewis <aaronlewis@google.com>,
+        Ashish Kalra <ashish.kalra@amd.com>,
+        Babu Moger <babu.moger@amd.com>, Chao Gao <chao.gao@intel.com>,
+        Chao Peng <chao.p.peng@linux.intel.com>,
+        Chenyi Qiang <chenyi.qiang@intel.com>,
+        David Woodhouse <dwmw@amazon.co.uk>,
+        Emanuele Giuseppe Esposito <eesposit@redhat.com>,
+        Gavin Shan <gshan@redhat.com>,
+        Guang Zeng <guang.zeng@intel.com>,
+        Hou Wenlong <houwenlong.hwl@antgroup.com>,
+        Jiaxi Chen <jiaxi.chen@linux.intel.com>,
+        Jim Mattson <jmattson@google.com>,
+        Jing Liu <jing2.liu@intel.com>,
+        Junaid Shahid <junaids@google.com>,
+        Kai Huang <kai.huang@intel.com>,
+        Leonardo Bras <leobras@redhat.com>,
+        Like Xu <like.xu.linux@gmail.com>,
+        Li RongQing <lirongqing@baidu.com>,
+        "Maciej S . Szmigiero" <maciej.szmigiero@oracle.com>,
+        Maxim Levitsky <mlevitsk@redhat.com>,
+        Michael Roth <michael.roth@amd.com>,
+        Michal Luczaj <mhal@rbox.co>,
+        Mingwei Zhang <mizhang@google.com>,
+        Nikunj A Dadhania <nikunj@amd.com>,
+        Paul Durrant <pdurrant@amazon.com>,
+        Peng Hao <flyingpenghao@gmail.com>,
+        Peter Gonda <pgonda@google.com>, Peter Xu <peterx@redhat.com>,
+        Robert Hoo <robert.hu@linux.intel.com>,
+        Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        Vipin Sharma <vipinsh@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Wei Wang <wei.w.wang@intel.com>,
+        Xiaoyao Li <xiaoyao.li@intel.com>,
+        Zhenzhong Duan <zhenzhong.duan@intel.com>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 2/2] Documentation/process: Add a maintainer handbook for
+ KVM x86
+Message-ID: <20230221110607.6wvrgpqip3njrkwu@linux.intel.com>
+References: <20230217225449.811957-1-seanjc@google.com>
+ <20230217225449.811957-3-seanjc@google.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH v5 1/2] dt-bindings: i2c: Add support for ASPEED i2Cv2
-Content-Language: en-US
-To:     Ryan Chen <ryan_chen@aspeedtech.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Joel Stanley <joel@jms.id.au>,
-        Andrew Jeffery <andrew@aj.id.au>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        "openbmc@lists.ozlabs.org" <openbmc@lists.ozlabs.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-aspeed@lists.ozlabs.org" <linux-aspeed@lists.ozlabs.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-References: <20230220061745.1973981-1-ryan_chen@aspeedtech.com>
- <20230220061745.1973981-2-ryan_chen@aspeedtech.com>
- <676c7777-635c-cc1f-b919-d33e84a45442@linaro.org>
- <TYZPR06MB527427ADCCD29DFD77FB0EE3F2A59@TYZPR06MB5274.apcprd06.prod.outlook.com>
- <80d873d4-d813-6c25-8f47-f5ff9af718ec@linaro.org>
- <SEZPR06MB5269502D7CBCD5698B65FF9FF2A59@SEZPR06MB5269.apcprd06.prod.outlook.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <SEZPR06MB5269502D7CBCD5698B65FF9FF2A59@SEZPR06MB5269.apcprd06.prod.outlook.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230217225449.811957-3-seanjc@google.com>
+User-Agent: NeoMutt/20171215
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 21/02/2023 11:42, Ryan Chen wrote:
->>>>> +    type: boolean
->>>>> +    description: Enable i2c bus timeout for master/slave (35ms)
->>>>
->>>> Why this is property for DT? It's for sure not bool, but proper type
->>>> coming from units.
->>> This is i2c controller feature for enable slave mode inactive timeout
->>> and also master mode sda/scl auto release timeout.
->>> So I will modify to
->>>   aspeed,timeout:
->>> 	type: boolean
->>>     description: I2C bus timeout enable for master/slave mode
->>
->> This does not answer my concerns. Why this is board specific?
-> Sorry, can’t catch your point.
-> It is not board specific. It is controller feature.
-> ASPEED SOC chip is server product, master connect may have fingerprint
-> connect to another board. And also support hotplug.
-> For example I2C controller as slave mode, and suddenly disconnected.
-> Slave state machine will keep waiting for master clock in for rx/tx transfer.
-> So it need timeout setting to enable timeout unlock controller state.
-> And in another side. As master mode, slave is clock stretching.
-> The master will be keep waiting, until slave release cll stretching.
+Thank you so much, Sean, for such a detailed guidance!
 
-OK, thanks for describing the feature. I still do not see how this is DT
-related.
+Some questions below:
 
+On Fri, Feb 17, 2023 at 02:54:49PM -0800, Sean Christopherson wrote:
+> Add a KVM x86 doc to the subsystem/maintainer handbook section to explain
+> how KVM x86 (currently) operates as a sub-subsystem, and to soapbox on
+> the rules and expectations for contributing to KVM x86.
+
+It's a fantastic doc! Also, many good requirements can be common in KVM, not
+just KVM x86(e.g. the comment, changelog format, the testing requirement
+etc.). Could we be greedier to ask our KVM maintainers for a generic handbook
+of KVM, and maybe different sections for specific arches, which describe their
+specific requirements(the base trees and branches, the maintaining processes
+etc.)? :)
 > 
-> So in those reason add this timeout design in controller. 
-
-You need to justify why DT is correct place for this property. DT is not
-for configuring OS, but to describe hardware. I gave you one possibility
-- why different boards would like to set this property. You said it is
-not board specific, thus all boards will have it (or none of them).
-Without any other reason, this is not a DT property. Drop.
-
->>
->>>
->>>>> +
->>>>> +  byte-mode:
->>>>> +    type: boolean
->>>>> +    description: Force i2c driver use byte mode transmit
->>>>
->>>> Drop, not a DT property.
->>>>
->>>>> +
->>>>> +  buff-mode:
->>>>> +    type: boolean
->>>>> +    description: Force i2c driver use buffer mode transmit
->>>>
->>>> Drop, not a DT property.
->>>>
->>> The controller support 3 different for transfer.
->>> Byte mode: it means step by step to issue transfer.
->>> Example i2c read, each step will issue interrupt then enable next step.
->>> Sr (start read) | D | D | D | P
->>> Buffer mode: it means, the data can prepare into buffer register, then
->>> Trigger transfer. So Sr D D D P, only have only 1 interrupt handling.
->>> The DMA mode most like with buffer mode, The differ is data prepare in
->>> DRAM, than trigger transfer.
->>>
->>> So, should I modify to
->>>   aspeed,byte:
->>> 	type: boolean
->>>     description: Enable i2c controller transfer with byte mode
->>>
->>>   aspeed,buff:
->>> 	type: boolean
->>>     description: Enable i2c controller transfer with buff mode
->>
->> 1. No, these are not bools but enum in such case.
+> Signed-off-by: Sean Christopherson <seanjc@google.com>
+> ---
+>  .../process/maintainer-handbooks.rst          |   1 +
+>  Documentation/process/maintainer-kvm-x86.rst  | 347 ++++++++++++++++++
+>  MAINTAINERS                                   |   1 +
+>  3 files changed, 349 insertions(+)
+>  create mode 100644 Documentation/process/maintainer-kvm-x86.rst
 > 
-> Thanks, will modify following.
-> aspeed,xfer_mode:
->     enum: [0, 1, 2]
->     description:
->       0: byte mode, 1: buff_mode, 2: dma_mode
+> diff --git a/Documentation/process/maintainer-handbooks.rst b/Documentation/process/maintainer-handbooks.rst
+> index d783060b4cc6..d12cbbe2b7df 100644
+> --- a/Documentation/process/maintainer-handbooks.rst
+> +++ b/Documentation/process/maintainer-handbooks.rst
+> @@ -17,3 +17,4 @@ Contents:
+>  
+>     maintainer-tip
+>     maintainer-netdev
+> +   maintainer-kvm-x86
+> diff --git a/Documentation/process/maintainer-kvm-x86.rst b/Documentation/process/maintainer-kvm-x86.rst
+> new file mode 100644
+> index 000000000000..ac81a42a32a3
+> --- /dev/null
+> +++ b/Documentation/process/maintainer-kvm-x86.rst
+> @@ -0,0 +1,347 @@
+> +.. SPDX-License-Identifier: GPL-2.0
+> +
+> +KVM x86
+> +=======
+> +
+> +TL;DR
+> +-----
+> +Testing is mandatory.  Be consistent with established styles and patterns.
+> +
+> +Trees
+> +-----
+> +KVM x86 is currently in a transition period from being part of the main KVM
+> +tree, to being "just another KVM arch".  As such, KVM x86 is split across the
+> +main KVM tree, ``git.kernel.org/pub/scm/virt/kvm/kvm.git``, and a KVM x86
+> +specific tree, ``github.com/kvm-x86/linux.git``.
 
-Just keep it text - byte, buffered, dma
+Does other arch also have a specific tree? If a patch series touches multiple
+archs(though the chance could be very low), I guess that patch set should still
+be based on the main KVM tree? The master branch or the next branch?
 
-> 
->> 2. And why exactly this is board-specific?
-> 
-> No, it not depends on board design. It is only for register control for controller transfer behave.
-> The controller support 3 different trigger mode for transfer.
-> Assign bus#1 ~ 3 : dma tranfer and assign bus#4 ~ 6 : buffer mode transfer,
-> That can reduce the dram usage. 
+...
+> +Co-Posting Tests
+> +~~~~~~~~~~~~~~~~
+> +KVM selftests that are associated with KVM changes, e.g. regression tests for
+> +bug fixes, should be posted along with the KVM changes as a single series.
+> +
+> +KVM-unit-tests should *always* be posted separately.  Tools, e.g. b4 am, don't
+> +know that KVM-unit-tests is a separate repository and get confused when patches
+> +in a series apply on different trees.  To tie KVM-unit-tests patches back to
+> +KVM patches, first post the KVM changes and then provide a lore Link: to the
+> +KVM patch/series in the KVM-unit-tests patch(es).
 
-Then anyway it does not look like property for Devicetree. DT describes
-hardware, not OS behavior.
+I wonder, for KVM bugzilla to report a bug, or for our QAs to perform regular
+tests using KVM selftests/KVM-unit-tests, which tree/branch is more reasonable
+to be based on?
 
-Best regards,
-Krzysztof
+E.g., I saw some bugzilla issues earlier, reporting failures of some unit tests,
+did some investigation, yet to find those failures were just because the corresponding
+KVM patches had not been merged yet. 
 
+Maybe we also should take care of the timings of the merging of KVM patches and
+the test patches? Two examples(I'm sure there're more :)): 
+1> https://bugzilla.kernel.org/show_bug.cgi?id=216812
+2> https://bugzilla.kernel.org/show_bug.cgi?id=216725
+
+
+B.R.
+Yu
