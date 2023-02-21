@@ -2,113 +2,170 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 80BC669E7BA
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 19:43:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A186E69E7CC
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 19:44:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229982AbjBUSnE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Feb 2023 13:43:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41310 "EHLO
+        id S230030AbjBUSoO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Feb 2023 13:44:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42314 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229636AbjBUSnC (ORCPT
+        with ESMTP id S230017AbjBUSoI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Feb 2023 13:43:02 -0500
-Received: from smtpout.efficios.com (unknown [IPv6:2607:5300:203:b2ee::31e5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1FA63C17
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Feb 2023 10:42:58 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=efficios.com;
-        s=smtpout1; t=1677004977;
-        bh=Znw52qcnJnwY4/xsyU5WdpWB9lDTZqUikI6qs38e/7c=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=hFk9WHd5QCv9ZI/tmAKTb5pZVV2siIJAdr0vEikXtwaqIpRPKuPL7jfk8fBmcYjFc
-         VB1+MHm3Qo5QAtGi+3XYXqV+cyZBr+9vEfJx5Wy8Q6Vt6b87EUt/0q43u6hvaqcSuM
-         GCU7670eVnRrripTQv1y0+GcVVZLFKoz1Vsf195MyBRfxxrjWVpkmv94/cd2TNxuC6
-         cww8hQtHyhan/db+Gy8Nv/RiItB0iuv+N3Iq8/g0ndEx2Ejo4l19uorm+OMunDlWuX
-         ea6MtqLqMbxXGAv5r9aB+LvMezMkuyu7A6cllRcrwCZ3VBDdcoK0KjkAIj01L249gP
-         pdGXyL0yWNp4w==
-Received: from [172.16.0.188] (192-222-180-24.qc.cable.ebox.net [192.222.180.24])
-        by smtpout.efficios.com (Postfix) with ESMTPSA id 4PLp7j5B3cznDG;
-        Tue, 21 Feb 2023 13:42:57 -0500 (EST)
-Message-ID: <5774aace-23f3-c53d-8e65-b90b588dbbe3@efficios.com>
-Date:   Tue, 21 Feb 2023 13:42:58 -0500
+        Tue, 21 Feb 2023 13:44:08 -0500
+Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59E781D922;
+        Tue, 21 Feb 2023 10:44:06 -0800 (PST)
+Received: by mail-wm1-x32b.google.com with SMTP id o14so4312615wms.1;
+        Tue, 21 Feb 2023 10:44:06 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=1gzuCAVz6kfv/0+vDaFZ6agJKGlpUGSwLCeHL3z5J7I=;
+        b=nAdcMw/CepSBBTS7InlcuvR+eNMiu3Jm7KJ/K4TeArF7yN1WRFN0AeJnBozRCvJaGy
+         QQuj4NwpL3A0CsUigZ0FnR5r035n9RsWKCb5FyNH7C1ufQcbeSPZlk8oFrawdXzQdtnZ
+         eI2CZ3qoDNkUTRGohNCAgfSB1FzJyfjd48sjE6MD1vM6JCR9fh3kpm7nteY/Co+fhEAf
+         u52dBc5izliljGjYPSEygtqAddvPCRwG8sZpRy4T2nD9rFtRnsZqQ9M/suzLKHdgXD6b
+         vwRLP93wOx4ZtAQL6rrMc2NBwY8Qw07t0A8GHy+xy4MUoFwuM9XXAhJa3lyiHZf1kXob
+         Aeyw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=1gzuCAVz6kfv/0+vDaFZ6agJKGlpUGSwLCeHL3z5J7I=;
+        b=TGK2BiY8q7M0yaooqm9Mylao6Gg8EzhScuYQLYFxAGChv6JxLKfqSHwgfhCi3rsSEF
+         lzy9Hl0OeM/X0gs9206qGPJqSBv8nzVLSI7x6Zhogw5xAtSWTN9xfhlfaGitzf8nZCgA
+         FFtECKFPUPPb3OBatulM8hcI6d/DXR+wGbyEhMQIQXeh5aQmoTv5JOist1nzn5YFBEIk
+         SqfwSe2wUU8x2qwlraugqfsES6dGs6cdLhweEF5JZscxjYqMlZXW8s20ghB8eMBfNLTH
+         selXntJa5WoU9uMOyOHwEWms0GyYZwXuPh0ein6S9nIDa90YqTolKudyTkAVofSVo3NV
+         x1sg==
+X-Gm-Message-State: AO0yUKXQnwqfYNvBuUPXVHWOy6IdgIKeK1wqg6DytQReKhymKdJeHGfh
+        LuaER3+wFFMqnwDN0GzYra8=
+X-Google-Smtp-Source: AK7set+aQZ5ClLvJ7Yr+tnUsa+QNwEnjjXNSGyFn9dvH2Eq+a8SkJO5FTLwM3D0Qscb4uKw42pYbhw==
+X-Received: by 2002:a05:600c:600f:b0:3dc:4316:52be with SMTP id az15-20020a05600c600f00b003dc431652bemr4699506wmb.10.1677005044869;
+        Tue, 21 Feb 2023 10:44:04 -0800 (PST)
+Received: from [192.168.8.100] (94.196.95.64.threembb.co.uk. [94.196.95.64])
+        by smtp.gmail.com with ESMTPSA id p13-20020a05600c1d8d00b003e1f6e18c95sm5169561wms.21.2023.02.21.10.44.04
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 21 Feb 2023 10:44:04 -0800 (PST)
+Message-ID: <657a599e-6ac1-610c-db15-04f428dbb5eb@gmail.com>
+Date:   Tue, 21 Feb 2023 18:43:02 +0000
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: Re: Official documentation from Intel stating that poking INT3
- (single-byte) concurrently is OK ?
+ Thunderbird/102.7.2
+Subject: Re: [PATCH 1/2] io_uring: Move from hlist to io_wq_work_node
 Content-Language: en-US
-To:     Steven Rostedt <rostedt@goodmis.org>
-Cc:     "H . Peter Anvin" <hpa@zytor.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Olivier Dion <odion@efficios.com>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        Jiri Kosina <jkosina@suse.cz>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>
-References: <786f4aed-2c30-806b-409b-23a60b3d7571@efficios.com>
- <20230221125032.0b02d309@gandalf.local.home>
-From:   Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-In-Reply-To: <20230221125032.0b02d309@gandalf.local.home>
+To:     Breno Leitao <leitao@debian.org>, axboe@kernel.dk,
+        io-uring@vger.kernel.org
+Cc:     leit@meta.com, linux-kernel@vger.kernel.org, gustavold@meta.com
+References: <20230221135721.3230763-1-leitao@debian.org>
+ <782b4b43-790c-6e89-ea74-aac1fd4ff1e2@gmail.com>
+ <b04b7d5d-582f-1b45-efa3-6e951dfc3cbf@debian.org>
+From:   Pavel Begunkov <asml.silence@gmail.com>
+In-Reply-To: <b04b7d5d-582f-1b45-efa3-6e951dfc3cbf@debian.org>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RDNS_NONE,
-        SPF_HELO_NONE,SPF_PASS,URI_DOTEDU autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023-02-21 12:50, Steven Rostedt wrote:
-> On Tue, 21 Feb 2023 11:44:42 -0500
-> Mathieu Desnoyers <mathieu.desnoyers@efficios.com> wrote:
+On 2/21/23 18:38, Breno Leitao wrote:
+> On 21/02/2023 17:45, Pavel Begunkov wrote:
+>> On 2/21/23 13:57, Breno Leitao wrote:
+>>> Having cache entries linked using the hlist format brings no benefit, and
+>>> also requires an unnecessary extra pointer address per cache entry.
+>>>
+>>> Use the internal io_wq_work_node single-linked list for the internal
+>>> alloc caches (async_msghdr and async_poll)
+>>>
+>>> This is required to be able to use KASAN on cache entries, since we do
+>>> not need to touch unused (and poisoned) cache entries when adding more
+>>> entries to the list.
+>>
+>> Looks good, a few nits
+>>
+>>>
+>>> Suggested-by: Pavel Begunkov <asml.silence@gmail.com>
+>>> Signed-off-by: Breno Leitao <leitao@debian.org>
+>>> ---
+>>>    include/linux/io_uring_types.h |  2 +-
+>>>    io_uring/alloc_cache.h         | 27 +++++++++++++++------------
+>>>    2 files changed, 16 insertions(+), 13 deletions(-)
+>>>
+>>> diff --git a/include/linux/io_uring_types.h
+>>> b/include/linux/io_uring_types.h
+>>> index 0efe4d784358..efa66b6c32c9 100644
+>>> --- a/include/linux/io_uring_types.h
+>>> +++ b/include/linux/io_uring_types.h
+>>> @@ -188,7 +188,7 @@ struct io_ev_fd {
+>>>    };
+>>>    
+>> [...]
+>>> -    if (!hlist_empty(&cache->list)) {
+>>> -        struct hlist_node *node = cache->list.first;
+>>> -
+>>> -        hlist_del(node);
+>>> -        return container_of(node, struct io_cache_entry, node);
+>>> +    struct io_wq_work_node *node;
+>>> +    struct io_cache_entry *entry;
+>>> +
+>>> +    if (cache->list.next) {
+>>> +        node = cache->list.next;
+>>> +        entry = container_of(node, struct io_cache_entry, node);
+>>
+>> I'd prefer to get rid of the node var, it'd be a bit cleaner
+>> than keeping two pointers to the same chunk.
+>>
+>> entry = container_of(node, struct io_cache_entry,
+>>                       cache->list.next);
+>>
+>>> +        cache->list.next = node->next;
+>>> +        return entry;
+>>>        }
+>>>          return NULL;
+>>> @@ -35,19 +38,19 @@ static inline struct io_cache_entry
+>>> *io_alloc_cache_get(struct io_alloc_cache *c
+>>>      static inline void io_alloc_cache_init(struct io_alloc_cache *cache)
+>>>    {
+>>> -    INIT_HLIST_HEAD(&cache->list);
+>>> +    cache->list.next = NULL;
+>>>        cache->nr_cached = 0;
+>>>    }
+>>>      static inline void io_alloc_cache_free(struct io_alloc_cache *cache,
+>>>                        void (*free)(struct io_cache_entry *))
+>>>    {
+>>> -    while (!hlist_empty(&cache->list)) {
+>>> -        struct hlist_node *node = cache->list.first;
+>>> +    struct io_cache_entry *entry;
+>>>    -        hlist_del(node);
+>>> -        free(container_of(node, struct io_cache_entry, node));
+>>> +    while ((entry = io_alloc_cache_get(cache))) {
+>>> +        free(entry);
+>>
+>> We don't need brackets here.
 > 
->> Hi Peter,
->>
->> I have emails from you dating from a few years back unofficially stating
->> that it's OK to update the first byte of an instruction with a single-byte
->> int3 concurrently:
->>
->> https://lkml.indiana.edu/hypermail/linux/kernel/1001.1/01530.html
->>
->> It is referred in the original implementation of text_poke_bp():
->> commit fd4363fff3d9 ("x86: Introduce int3 (breakpoint)-based instruction patching")
->>
->> Olivier Dion is working on the libpatch [1,2] project aiming to use this
->> property for low-latency/low-overhead live code patching in user-space as
->> well, but we cannot find an official statement from Intel that guarantees
->> this breakpoint-bypass technique is indeed OK without stopping the world
->> while patching.
->>
->> Do you know where I could find an official statement of this guarantee ?
->>
+> The extra brackets are required if we are assignments in if, otherwise
+> the compiler raises a warning (bugprone-assignment-in-if-condition)
+
+I mean braces / curly brackets.
+>> Personally, I don't have anything
+>> against assignments in if, but it's probably better to avoid them
 > 
-> The fact that we have been using it for over 10 years without issue should
-> be a good guarantee ;-)
+> Sure. I will remove the assignents in "if" part and maybe replicate what
+> we have
+> in io_alloc_cache_get(). Something as:
+>         if (cache->list.next) {
+>                 node = cache->list.next;
 > 
-> I know you probably prefer an official statement, and I thought they
-> actually gave one, but can't seem to find it.
-
-I recall an in-person discussion with Peter Anvin shortly after he got 
-the official confirmation, but I cannot find any public trace of it. I 
-suspect Intel may have documented this internally only.
-
-  Anyway. how does the dynamic
-> linker do this? Doesn't it update code on the fly as well?
-
-The dynamic linker is similar to the module loader in the kernel: the 
-code modification is done before the loaded code is ever executed, and 
-is therefore inherently safe with respect to cross-modification of 
-concurrently executing code.
-
-Thanks,
-
-Mathieu
+> Thanks for the review!
 
 -- 
-Mathieu Desnoyers
-EfficiOS Inc.
-https://www.efficios.com
-
+Pavel Begunkov
