@@ -2,130 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BD75969E53D
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 17:56:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A32FA69E542
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 17:57:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234895AbjBUQ45 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Feb 2023 11:56:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57896 "EHLO
+        id S234890AbjBUQ5W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Feb 2023 11:57:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58492 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234081AbjBUQ4z (ORCPT
+        with ESMTP id S234321AbjBUQ5U (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Feb 2023 11:56:55 -0500
-Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 975292C658
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Feb 2023 08:56:53 -0800 (PST)
-Received: by mail-ed1-x530.google.com with SMTP id b12so19821183edd.4
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Feb 2023 08:56:53 -0800 (PST)
+        Tue, 21 Feb 2023 11:57:20 -0500
+Received: from mail-yb1-xb36.google.com (mail-yb1-xb36.google.com [IPv6:2607:f8b0:4864:20::b36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 302CF2C673
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Feb 2023 08:57:11 -0800 (PST)
+Received: by mail-yb1-xb36.google.com with SMTP id k199so2081187ybf.4
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Feb 2023 08:57:11 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=aCU6SPAFZVv6VrbiMY/N7BZbYYEaRXFZQb7KA4W8RVo=;
-        b=lKw4QodbdDMkDON5+34Zsg2fW6BQUEa2d+bZoarpRELg92X9u9882K/pe/HdFj3huM
-         6Lc1FGAQOGl2+g2eNBp4hLPPUc159jfqYetPDRRGOx+PfHrpa75zdoZOVko23d+DNsx7
-         bJMjyXLEHWXAgpH4l9oLRg+9/Nyyfdqn8Bf03IQaFqlL24+BjhWhC8oDFC9XznL3Zj6B
-         ProL6idqXQw/7zoq4/44IhfKpGd2J22IMD7LU9BKwvIKO27RiActjOIBqzuJGyhivbAh
-         moM2bqoVWcHjGqcVn78k7heXQSuKtbmvJWLati5vrlghaIxvtYV8SNZQqt8wkYhjz+PD
-         kj6g==
+        d=google.com; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=TfWrKhC0Efcbpjp7w2MXsBIaeBw0Ifz30UZjyvdXZU8=;
+        b=T+TvPcrcFUKrIua4z6RQ1S+jaZ0P9bUBa/CVTFhVVu5KyCr2lY+itYJuXh8njQZOyO
+         TUsUmevowwVhXmxwvkBfVYi4nDHO1oA2g+YerK6gzZS5pU2VFYt8ub8vt9ZyYGFjnrH2
+         BOrqE4LH8nzrr2/mPQjW5Pi3d+T+crSDuEBRGZUqTN4t/YDHoOFMc4hU5knIy8DCk5sG
+         TK/8HYz2FnR8oiJTGrdxBzlfnXICjNhWuJ+hau8wiabqlvl5Vl5+YhyfvV1gwnO33QCd
+         R1ndg/MrlKjhTox2ibB+MD0EEzL2tNw4kRxtG7WhMsfdIW/GaPcCH/P/HmSKpv1fwzPM
+         +lCQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=aCU6SPAFZVv6VrbiMY/N7BZbYYEaRXFZQb7KA4W8RVo=;
-        b=a3LKkqGKHv+lHx/vw98Of7Q6x0DZIvruQMUIxIpkUk93HDNivyc/IFQemGZAbnPmm7
-         492rRR4WP8c/5Giq35XGnRMiZLR0ETP0YYx23ZIudgzA21ucfK7O22IKN+/u5JRvuqX6
-         wSzLR2AlgyTFpG7TzBPO5l4PibBhV4c3V8eeiVAwA20avSQ91NeH3kOCDqWUP6599hlT
-         zrV5dz2U/TlGV8lW24O5Lwz4uBV2z/Vk+4MUUJdNQl4EFvvPXA+TrmG6bPkFpnXWJZFp
-         fcPpdz6jURn9LBBLleBoyGZrkzjTOjesZq6C0OVETQvXzh2I6JqTeG0f1Ga0ecDLgdym
-         RivA==
-X-Gm-Message-State: AO0yUKUaltePpRzsqVoPt+BlqSTYXIm5cylQhYMHLeD8c74C5fV+DSZz
-        b868qtF6/u1dwjsbwp2a4XvE8A==
-X-Google-Smtp-Source: AK7set/vywrHZuTi6XuUog062h/Qf6hzYttHgoOMW0LLI9sVJlPsm0rv0sXGCDZ0eASaCbRg2wq0Iw==
-X-Received: by 2002:a17:907:2128:b0:8af:54d0:181d with SMTP id qo8-20020a170907212800b008af54d0181dmr12541426ejb.35.1676998612081;
-        Tue, 21 Feb 2023 08:56:52 -0800 (PST)
-Received: from [192.168.1.109] ([178.197.216.144])
-        by smtp.gmail.com with ESMTPSA id me19-20020a170906aed300b008b17662e1f7sm6816234ejb.53.2023.02.21.08.56.50
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 21 Feb 2023 08:56:51 -0800 (PST)
-Message-ID: <764cf3a6-abcc-5c43-606f-10248c6fd0bf@linaro.org>
-Date:   Tue, 21 Feb 2023 17:56:49 +0100
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=TfWrKhC0Efcbpjp7w2MXsBIaeBw0Ifz30UZjyvdXZU8=;
+        b=66QI8+FLoKl0RK65j7dDKNCIxqKvYejYdhfTI6KhUcCiDwpa/GGB3RNZBKfGbY9mYP
+         71egEtjcra291oyHlvtfS4WtPx9RHir9XQGByRwE9VrUOfrbIUAKRDHwroq1Se/zhylT
+         rRV8KcIoBvwEN5qXUrTgM1Hn0eU9JQXrfaXDbwVLiTuXpx4BgNztmGG2MGdFtNxzrv1J
+         SD0Ogu4yPjCaZ/26tP3iY0+5XAq5y6SCCwdbhh2cKYRbmUdtNvI7pRMPlX9CUn/xQvIJ
+         rZWmQplG/hp+kYVIGqCMbhiuIuSxk29OOP+edGRFVjgG9FvQpmlZSLPfUsEGkx5Z+skI
+         BXGQ==
+X-Gm-Message-State: AO0yUKW5kp7OMpoVtEtDhU5Yn+0ZURTXymJCVYAxvups7YkJ1rYqU73L
+        dakpCTCdxCPsWz+CfmrPB8oLH11Xpe/p9BbCTFVSuQ==
+X-Google-Smtp-Source: AK7set9A8u6VEqmytgi8+HBZJmlK4fLnoUHs+bnR0vNjMgaTc5H7RcLClklBqNhakQilr9QwcNWjLCWtW/zyQdkNp/Y=
+X-Received: by 2002:a5b:691:0:b0:902:535c:8399 with SMTP id
+ j17-20020a5b0691000000b00902535c8399mr191198ybq.461.1676998630231; Tue, 21
+ Feb 2023 08:57:10 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH v3 2/3] dt-bindings: net: bluetooth: Add NXP bluetooth
- support
-Content-Language: en-US
-To:     Neeraj sanjay kale <neeraj.sanjaykale@nxp.com>,
-        "davem@davemloft.net" <davem@davemloft.net>,
-        "edumazet@google.com" <edumazet@google.com>,
-        "kuba@kernel.org" <kuba@kernel.org>,
-        "pabeni@redhat.com" <pabeni@redhat.com>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "krzysztof.kozlowski+dt@linaro.org" 
-        <krzysztof.kozlowski+dt@linaro.org>,
-        "marcel@holtmann.org" <marcel@holtmann.org>,
-        "johan.hedberg@gmail.com" <johan.hedberg@gmail.com>,
-        "luiz.dentz@gmail.com" <luiz.dentz@gmail.com>,
-        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-        "jirislaby@kernel.org" <jirislaby@kernel.org>,
-        "alok.a.tiwari@oracle.com" <alok.a.tiwari@oracle.com>,
-        "hdanton@sina.com" <hdanton@sina.com>,
-        "ilpo.jarvinen@linux.intel.com" <ilpo.jarvinen@linux.intel.com>,
-        "leon@kernel.org" <leon@kernel.org>
-Cc:     "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-bluetooth@vger.kernel.org" <linux-bluetooth@vger.kernel.org>,
-        "linux-serial@vger.kernel.org" <linux-serial@vger.kernel.org>,
-        Amitkumar Karwar <amitkumar.karwar@nxp.com>,
-        Rohit Fule <rohit.fule@nxp.com>,
-        Sherry Sun <sherry.sun@nxp.com>
-References: <20230213145432.1192911-1-neeraj.sanjaykale@nxp.com>
- <20230213145432.1192911-3-neeraj.sanjaykale@nxp.com>
- <60928656-c565-773d-52e6-2142e997eee4@linaro.org>
- <DU2PR04MB8600F997FCED520DCBAB2330E7A59@DU2PR04MB8600.eurprd04.prod.outlook.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <DU2PR04MB8600F997FCED520DCBAB2330E7A59@DU2PR04MB8600.eurprd04.prod.outlook.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20230220230624.lkobqeagycx7bi7p@google.com> <6563189C-7765-4FFA-A8F2-A5CC4860A1EF@linux.dev>
+ <CALvZod55K5zbbVYptq8ud=nKVyU1xceGVf6UcambBZ3BA2TZqA@mail.gmail.com> <Y/TMYa8DrocppXRu@casper.infradead.org>
+In-Reply-To: <Y/TMYa8DrocppXRu@casper.infradead.org>
+From:   Shakeel Butt <shakeelb@google.com>
+Date:   Tue, 21 Feb 2023 08:56:59 -0800
+Message-ID: <CALvZod6UM1E6nGgfdORri90m3ju+yYeSeHBqyqutCP2A94WNKg@mail.gmail.com>
+Subject: Re: [PATCH] mm: change memcg->oom_group access with atomic operations
+To:     Matthew Wilcox <willy@infradead.org>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Marco Elver <elver@google.com>
+Cc:     Roman Gushchin <roman.gushchin@linux.dev>,
+        Yue Zhao <findns94@gmail.com>, linux-mm@kvack.org,
+        akpm@linux-foundation.org, hannes@cmpxchg.org, mhocko@kernel.org,
+        muchun.song@linux.dev, cgroups@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 21/02/2023 17:40, Neeraj sanjay kale wrote:
-> Hi Krzysztof,
-> 
-> Thank you for reviewing this patch. I have fixed all the review comments in this document.
-> Please let me know if you have any more comments or suggestions on the new v4 patch.
-> 
->>>  .../bindings/net/bluetooth/nxp,w8xxx-bt.yaml  | 44
->>> +++++++++++++++++++
->>
->> I don't think I proposed such filename.
-> Renamed file to nxp,w8987-bt.yaml
-> 
-> 
->>> +examples:
->>> +  - |
->>> +    uart2 {
->>
->> This is a friendly reminder during the review process.
->>
->> It seems my previous comments were not fully addressed. Maybe my
->> feedback got lost between the quotes, maybe you just forgot to apply it.
->> Please go back to the previous discussion and either implement all requested
->> changes or keep discussing them.
++Paul & Marco
 
-And how did you fix this one?
+On Tue, Feb 21, 2023 at 5:51 AM Matthew Wilcox <willy@infradead.org> wrote:
+>
+> On Mon, Feb 20, 2023 at 10:52:10PM -0800, Shakeel Butt wrote:
+> > On Mon, Feb 20, 2023 at 9:17 PM Roman Gushchin <roman.gushchin@linux.de=
+v> wrote:
+> > > > On Feb 20, 2023, at 3:06 PM, Shakeel Butt <shakeelb@google.com> wro=
+te:
+> > > >
+> > > > =EF=BB=BFOn Mon, Feb 20, 2023 at 01:09:44PM -0800, Roman Gushchin w=
+rote:
+> > > >>> On Mon, Feb 20, 2023 at 11:16:38PM +0800, Yue Zhao wrote:
+> > > >>> The knob for cgroup v2 memory controller: memory.oom.group
+> > > >>> will be read and written simultaneously by user space
+> > > >>> programs, thus we'd better change memcg->oom_group access
+> > > >>> with atomic operations to avoid concurrency problems.
+> > > >>>
+> > > >>> Signed-off-by: Yue Zhao <findns94@gmail.com>
+> > > >>
+> > > >> Hi Yue!
+> > > >>
+> > > >> I'm curious, have any seen any real issues which your patch is sol=
+ving?
+> > > >> Can you, please, provide a bit more details.
+> > > >>
+> > > >
+> > > > IMHO such details are not needed. oom_group is being accessed
+> > > > concurrently and one of them can be a write access. At least
+> > > > READ_ONCE/WRITE_ONCE is needed here.
+> > >
+> > > Needed for what?
+> >
+> > For this particular case, documenting such an access. Though I don't
+> > think there are any architectures which may tear a one byte read/write
+> > and merging/refetching is not an issue for this.
+>
+> Wouldn't a compiler be within its rights to implement a one byte store as=
+:
+>
+>         load-word
+>         modify-byte-in-word
+>         store-word
+>
+> and if this is a lockless store to a word which has an adjacent byte also
+> being modified by another CPU, one of those CPUs can lose its store?
+> And WRITE_ONCE would prevent the compiler from implementing the store
+> in that way.
+>
 
-Best regards,
-Krzysztof
+Thanks Willy for pointing this out. If the compiler can really do this
+then [READ|WRITE]_ONCE are required here. I always have big bad
+compiler lwn article open in a tab. I couldn't map this transformation
+to ones mentioned in that article. Do we have name of this one?
 
+thanks,
+Shakeel
