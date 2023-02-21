@@ -2,136 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E07B169E2B9
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 15:52:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8DFF169E2BB
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 15:53:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234212AbjBUOwp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Feb 2023 09:52:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43298 "EHLO
+        id S234558AbjBUOxS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Feb 2023 09:53:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44158 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233783AbjBUOwn (ORCPT
+        with ESMTP id S234597AbjBUOxJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Feb 2023 09:52:43 -0500
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A78BA2B2B0;
-        Tue, 21 Feb 2023 06:52:24 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=4gjS0VL1c7Mf2LU1z+Upr3IT88WAxIkZvxMIbrGmLPY=; b=oyOZjduCHNsxUeSdEagS2UwE71
-        ext/glsIX86ijI7qxlwzONE6+w1cbGtZyzR1pucDbVilbs+3Lwj/cmdXmQ22UVbOWZdlQb65Abd+4
-        VUGfW7gO6uvbDfqMLSqyv7b+yYPKWIsOZkHJuHqGmucs2RLbnsmo9WSwJUX5d5N2BTb4j+gr5iSZz
-        Q3PL75Ufn4wb00eQE8paWHDRNO4n3Yw8RuQhKjZwOrzyXsZ5SWOEcRLBldWP4ZaeZ+v6Zq5c7jaaB
-        PWun1btc4VXh+WP0ZOySQem8d/EE7t/WFJMG+f6wySepeAV6qhZCEE2fwRVRGLk05eKOm1DjqjCCI
-        TRRgSwrw==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
-        id 1pUTzk-00CByA-2t;
-        Tue, 21 Feb 2023 14:51:53 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 5897B3003E1;
-        Tue, 21 Feb 2023 15:51:51 +0100 (CET)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 3E09B20D8CD90; Tue, 21 Feb 2023 15:51:51 +0100 (CET)
-Date:   Tue, 21 Feb 2023 15:51:51 +0100
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Vincent Guittot <vincent.guittot@linaro.org>
-Cc:     mingo@redhat.com, juri.lelli@redhat.com, dietmar.eggemann@arm.com,
-        rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de,
-        bristot@redhat.com, vschneid@redhat.com,
-        linux-kernel@vger.kernel.org, parth@linux.ibm.com,
-        cgroups@vger.kernel.org, qyousef@layalina.io,
-        chris.hyser@oracle.com, patrick.bellasi@matbug.net,
-        David.Laight@aculab.com, pjt@google.com, pavel@ucw.cz,
-        tj@kernel.org, qperret@google.com, tim.c.chen@linux.intel.com,
-        joshdon@google.com, timj@gnu.org, kprateek.nayak@amd.com,
-        yu.c.chen@intel.com, youssefesmat@chromium.org,
-        joel@joelfernandes.org
-Subject: Re: [PATCH v10 5/9] sched/fair: Take into account latency priority
- at wakeup
-Message-ID: <Y/Tah7zRSqAH6IRP@hirez.programming.kicks-ass.net>
-References: <20230113141234.260128-1-vincent.guittot@linaro.org>
- <20230113141234.260128-6-vincent.guittot@linaro.org>
- <Y/TBdB23akBbUjqd@hirez.programming.kicks-ass.net>
- <CAKfTPtAk2A8zPgOfpbN0s4LZv+d7ABB9=5tAEMCbVrf263XtjA@mail.gmail.com>
+        Tue, 21 Feb 2023 09:53:09 -0500
+Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D9FEE059
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Feb 2023 06:52:58 -0800 (PST)
+Received: by mail-wm1-x32b.google.com with SMTP id o4-20020a05600c4fc400b003e1f5f2a29cso3827647wmq.4
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Feb 2023 06:52:58 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=arista.com; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=4flrelf56q/oJe/E7sU2PM2CO001TFeEynbBfVMOqMI=;
+        b=TW4K5RWWKJ3o5Vx79Kq3QzNBAAIz5xgZ5XFegj8oUmvhpe72VJ45FRDjWQ8vobE6Fp
+         B8XtcbwbqOzf8sXQeMps5N4cQMHG4GhGrhQzu49+nna+GVNLPh5vX/YPj5sE4tB68cA3
+         mYUwX1wvTdPzy04ZNbvIkH/BJrRTkzTHFNuPclm+p095AyHFcuPPOTZlW4ANHoipa1TS
+         tuAN1P1aFuDBfQTN7PKmUNCQfbiGSqKB0rnEe/r/6Wjy40+b4YE2F/RMbeW8EYdRW4ZV
+         IO2fpMF/mXs9ma0lXrwyFhUD6PYdI0yVXRzXBwiMzhNrMkWB+qeiVbR2wKDqFdbYn/QL
+         DLpg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=4flrelf56q/oJe/E7sU2PM2CO001TFeEynbBfVMOqMI=;
+        b=B3JhXHkMTajQ67b9hDxrhq2e6Ny46beuUXD0+Hsv6DY3tw1kLH64HRcFO7UEeLnlZ2
+         rOnEK0T1JhmdPzitSdna6Oy8Lz7E1TsKRjokcAGlOVvGWVJc3ZKZkiblWwGhamh/aPNN
+         dcWc+nnmtH6TblwJC+Ow5x7nd1GkWTLF/GXfdJ3N8TBpIqOE3oOQ0jsfd871w5qi/7Gt
+         XvFrBidtlpHX0jzlyYr21GfG3+PFUAMclk+i6zLuStdRr8Lg587fEGzJ9lWDsMay8qAf
+         MNc1erv8VR6I1qRzJfHVHtWIrUt07Z9Ya6inXfJPYexyiTaukqujlLYEHCMMsxqjR6Ck
+         i4Pg==
+X-Gm-Message-State: AO0yUKWLm1epWAnJtYmjvmM2NrHfGR32+6WiNsqHXOODhlkW/DPzachF
+        81sGj2ZGFFqI505wuxzX9y3Uqw==
+X-Google-Smtp-Source: AK7set/xqZCuwDpnjxxc1vPFmsVK2UHSxoaT6SmGE+l6AjtIshfzen7HC5pVbj8Hsj/HDQPViIh30A==
+X-Received: by 2002:a05:600c:2ad6:b0:3df:eb5d:fbf with SMTP id t22-20020a05600c2ad600b003dfeb5d0fbfmr3336047wme.38.1676991176778;
+        Tue, 21 Feb 2023 06:52:56 -0800 (PST)
+Received: from [10.83.37.24] ([217.173.96.166])
+        by smtp.gmail.com with ESMTPSA id j16-20020a056000125000b002c5706f7c6dsm1686184wrx.94.2023.02.21.06.52.55
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 21 Feb 2023 06:52:55 -0800 (PST)
+Message-ID: <c4224fa7-c206-17d3-641b-6f3f53dd813d@arista.com>
+Date:   Tue, 21 Feb 2023 14:52:49 +0000
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAKfTPtAk2A8zPgOfpbN0s4LZv+d7ABB9=5tAEMCbVrf263XtjA@mail.gmail.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.2
+Subject: Re: [PATCH v4 01/21] net/tcp: Prepare tcp_md5sig_pool for TCP-AO
+Content-Language: en-US
+To:     Herbert Xu <herbert@gondor.apana.org.au>
+Cc:     linux-kernel@vger.kernel.org, David Ahern <dsahern@kernel.org>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Andy Lutomirski <luto@amacapital.net>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Bob Gilligan <gilligan@arista.com>,
+        David Laight <David.Laight@aculab.com>,
+        Dmitry Safonov <0x7f454c46@gmail.com>,
+        Eric Biggers <ebiggers@kernel.org>,
+        "Eric W. Biederman" <ebiederm@xmission.com>,
+        Francesco Ruggeri <fruggeri05@gmail.com>,
+        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
+        Ivan Delalande <colona@arista.com>,
+        Leonard Crestez <cdleonard@gmail.com>,
+        Salam Noureddine <noureddine@arista.com>,
+        netdev@vger.kernel.org
+References: <20230215183335.800122-1-dima@arista.com>
+ <20230215183335.800122-2-dima@arista.com>
+ <Y/NAXtPrOkzjLewO@gondor.apana.org.au>
+ <bd40ff2f-b015-4ed4-7755-f9d547c8b868@arista.com>
+ <Y/Qv3eEk+1zytBGG@gondor.apana.org.au>
+From:   Dmitry Safonov <dima@arista.com>
+In-Reply-To: <Y/Qv3eEk+1zytBGG@gondor.apana.org.au>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 21, 2023 at 03:21:54PM +0100, Vincent Guittot wrote:
-> On Tue, 21 Feb 2023 at 14:05, Peter Zijlstra <peterz@infradead.org> wrote:
-> >
-> > On Fri, Jan 13, 2023 at 03:12:30PM +0100, Vincent Guittot wrote:
-> > > @@ -6155,6 +6159,35 @@ static int sched_idle_cpu(int cpu)
-> > >  }
-> > >  #endif
-> > >
-> > > +static void set_next_buddy(struct sched_entity *se);
-> > > +
-> > > +static void check_preempt_from_others(struct cfs_rq *cfs, struct sched_entity *se)
-> > > +{
-> > > +     struct sched_entity *next;
-> > > +
-> > > +     if (se->latency_offset >= 0)
-> > > +             return;
-> > > +
-> > > +     if (cfs->nr_running <= 1)
-> > > +             return;
-> > > +     /*
-> > > +      * When waking from another class, we don't need to check to preempt at
-> > > +      * wakeup and don't set next buddy as a candidate for being picked in
-> > > +      * priority.
-> > > +      * In case of simultaneous wakeup when current is another class, the
-> > > +      * latency sensitive tasks lost opportunity to preempt non sensitive
-> > > +      * tasks which woke up simultaneously.
-> > > +      */
-> > > +
-> > > +     if (cfs->next)
-> > > +             next = cfs->next;
-> > > +     else
-> > > +             next = __pick_first_entity(cfs);
-> > > +
-> > > +     if (next && wakeup_preempt_entity(next, se) == 1)
-> > > +             set_next_buddy(se);
-> > > +}
-> > > +
-> > >  /*
-> > >   * The enqueue_task method is called before nr_running is
-> > >   * increased. Here we update the fair scheduling stats and
-> > > @@ -6241,14 +6274,15 @@ enqueue_task_fair(struct rq *rq, struct task_struct *p, int flags)
-> > >       if (!task_new)
-> > >               update_overutilized_status(rq);
-> > >
-> > > +     if (rq->curr->sched_class != &fair_sched_class)
-> > > +             check_preempt_from_others(cfs_rq_of(&p->se), &p->se);
-> > > +
-> > >  enqueue_throttle:
-> > >       assert_list_leaf_cfs_rq(rq);
-> > >
-> > >       hrtick_update(rq);
-> > >  }
-> >
-> > Hmm.. This sets a next selection when the task gets enqueued while not
-> > running a fair task -- and looses a wakeup preemption opportunity.
-> >
-> > Should we perhaps also do this for latency_nice == 0?, in any case I
-> > think this can be moved to its own patch to avoid doing too much in the
-> > one patch. It seems fairly self contained.
+On 2/21/23 02:43, Herbert Xu wrote:
+> On Mon, Feb 20, 2023 at 04:57:20PM +0000, Dmitry Safonov wrote:
+> . 
+>> Do you have a timeline for that work?
+>> And if you don't mind I keep re-iterating, as I'm trying to address TCP
+>> reviews and missed functionality/selftests.
 > 
-> This function is then removed by patch 9 as the additional rb tree
-> fixes all cases
+> I'm hoping to get it ready for the next merge window.
 
-Ah, I'm currently 'stuck' at 8.. I'll get there :-)
+Nice! I'll mark this 1/21 patch as [draft], mentioning your work as it
+will need to be re-made using per-request keys.
+Still, I will keep iterating TCP-AO patches set during 6.3 RCs in order
+to get more reviews/suggestions related to TCP changes.
+
+>> 1) before your per-request key patches - it's not possible.
+>> 2) after your patches - my question would be: "is it better to
+>> kmalloc(GFP_ATOMIC) in RX/TX for every signed TCP segment, rather than
+>> pre-allocate it?"
+>>
+>> The price of (2) may just well be negligible, but worth measuring before
+>> switching.
+> 
+> Please keep in mind that you're already performing crypto which
+> is usually a lot slower than a kmalloc.  In any case, if there is
+> any optimisation to be done to make the kmalloc faster by using
+> pools, then that optimisation should go into mm.
+
+Fair point. Probably, kmalloc() is negligible. I'll measure as I have a
+patch for iperf for TCP-MD5/TCP-AO measurements.
+
+Thanks,
+          Dmitry
