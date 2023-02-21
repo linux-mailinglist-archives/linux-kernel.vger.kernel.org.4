@@ -2,126 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D4C9E69E65C
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 18:53:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D94DC69E667
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 18:54:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234508AbjBURxH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Feb 2023 12:53:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39290 "EHLO
+        id S230215AbjBURyT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Feb 2023 12:54:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40782 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232813AbjBURxE (ORCPT
+        with ESMTP id S232613AbjBURyQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Feb 2023 12:53:04 -0500
-Received: from out-14.mta0.migadu.com (out-14.mta0.migadu.com [IPv6:2001:41d0:1004:224b::e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA17DAD27
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Feb 2023 09:53:02 -0800 (PST)
-Message-ID: <d6388f1d-13d3-d844-eca2-a4874e5c70cb@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1677001979;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=d4IpaySF9btFuOu7iV7zMDJ1p1BXvgvQZ9/y209N9C0=;
-        b=XxwE2tUtRadHJwiW8hA67MXHh9/YL9UIORTVQNb7CwuftV6QIdrv0yKhBlrLRoUcaEYQke
-        J+tUHlbZ4Wkj4MDADti/xttWsNV/lwbdzclZOYnrgiAw6yVNLv5SZoxuTRG0srsHgcN9lz
-        XOgfdmltzZcFV4dqRfSzrZrKzH/QwvA=
-Date:   Tue, 21 Feb 2023 09:52:52 -0800
+        Tue, 21 Feb 2023 12:54:16 -0500
+Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8488427D5E;
+        Tue, 21 Feb 2023 09:54:14 -0800 (PST)
+Received: by mail-ed1-x529.google.com with SMTP id eg37so16753832edb.12;
+        Tue, 21 Feb 2023 09:54:14 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=46MKtm0kEaNdnFxLw+ZVHv2iv3ITk3WR03ilOnM6pwU=;
+        b=Kd+69eaZ2bJTiRkyKmAigUMZCBdzCQD2rVVxf9CPntK22hwx9suVaCXJLY7pJzCGJ7
+         /r1CY3HbkOKPd2os0QifPWgd3MNc9b5uQgORUWUBkUoLxF6e2+WxyzZlh0aN7fIeGT12
+         d1xJTPJErkh1PPwm+kBjxOHC6Usoesl71sPdc9fg1Cv+FWPGOO0Wxf85HIC6oNo8heSA
+         WK03Uzxz3k1Y+iS8fxFoO7gqo2wCRyN6kkV5prhtwH9XRV3nb9I3PFEOsCKvzFM28zht
+         RfoWU3nQrlDO4SjH/k1/4Bs88LjtJRU6eEYiUqIvKjsR6gnaK3emDWfsqznz0g5615ID
+         nhUA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=46MKtm0kEaNdnFxLw+ZVHv2iv3ITk3WR03ilOnM6pwU=;
+        b=ShY0Zm9FCqDTlTUrDL5CfPb7lIwt/SQXRkuKjIrzPm6Rb5/7u/2pMBpDTvDWwinVZy
+         vygP8pYkkT+mg65j18VFDqOs+CgSpNlasydXxcwxj9SHptOBdTY+USpQgHVzBnTdLxw4
+         GK4qmDfRzKjj6FRDvPpPjhTnD4n9IFNNAvBV3KlujfTp3ah3CkWKU8v09rNXnGQCWora
+         5g14iIOZdYaAdGIP3xqqCtq+bPoQh5YTsjJqF21FOToYKYFpceNjNPcAmaAy1pJnma7U
+         jqSsj2wFPZr3TD4FT+/hsIO4RCZZJ8tSPEV9GvQonwiR4SrUzWxI5WOa3+CLZyMq5pp+
+         TK0w==
+X-Gm-Message-State: AO0yUKV1IC1+dD4/mYhUrQY21osQHlEyyLWXGbHqWBQJdXvTuwQBTcu5
+        WbV0rPMv2+pGtSyegzXg8pKJU6tMt4g=
+X-Google-Smtp-Source: AK7set+kfU5i6pU775JGjcMKazmOfY2wNZ3dsTzE9nZckGPyQ7xnFbfyyUVq+VMoTwoEcpgfz2tvGA==
+X-Received: by 2002:a17:906:847a:b0:885:6a2e:f941 with SMTP id hx26-20020a170906847a00b008856a2ef941mr11858743ejc.54.1677002052882;
+        Tue, 21 Feb 2023 09:54:12 -0800 (PST)
+Received: from xeon.. ([188.163.112.76])
+        by smtp.gmail.com with ESMTPSA id b3-20020a170906660300b008e493b7bb61sm236357ejp.153.2023.02.21.09.54.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 21 Feb 2023 09:54:12 -0800 (PST)
+From:   Svyatoslav Ryhel <clamor95@gmail.com>
+To:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Svyatoslav Ryhel <clamor95@gmail.com>,
+        Maxim Schwalm <maxim.schwalm@gmail.com>,
+        Dmitry Osipenko <digetx@gmail.com>
+Cc:     devicetree@vger.kernel.org, linux-tegra@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v1 0/5] Tegra DTS improvements
+Date:   Tue, 21 Feb 2023 19:53:43 +0200
+Message-Id: <20230221175348.15681-1-clamor95@gmail.com>
+X-Mailer: git-send-email 2.37.2
 MIME-Version: 1.0
-Subject: Re: [PATCH bpf-next v5] bpf, test_run: fix &xdp_frame misplacement
- for LIVE_FRAMES
-Content-Language: en-US
-To:     Alexander Lobakin <aleksander.lobakin@intel.com>
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        =?UTF-8?Q?Toke_H=c3=b8iland-J=c3=b8rgensen?= <toke@redhat.com>,
-        Song Liu <song@kernel.org>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        bpf@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Martin KaFai Lau <martin.lau@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>
-References: <20230220154627.72267-1-aleksander.lobakin@intel.com>
- <36538615-7768-bdea-7829-6349729ab7cc@intel.com>
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From:   Martin KaFai Lau <martin.lau@linux.dev>
-In-Reply-To: <36538615-7768-bdea-7829-6349729ab7cc@intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/21/23 4:35 AM, Alexander Lobakin wrote:
-> From: Alexander Lobakin <aleksander.lobakin@intel.com>
-> Date: Mon, 20 Feb 2023 16:46:27 +0100
-> 
->> &xdp_buff and &xdp_frame are bound in a way that
->>
->> xdp_buff->data_hard_start == xdp_frame
->>
->> It's always the case and e.g. xdp_convert_buff_to_frame() relies on
->> this.
->> IOW, the following:
->>
->> 	for (u32 i = 0; i < 0xdead; i++) {
->> 		xdpf = xdp_convert_buff_to_frame(&xdp);
->> 		xdp_convert_frame_to_buff(xdpf, &xdp);
->> 	}
->>
->> shouldn't ever modify @xdpf's contents or the pointer itself.
->> However, "live packet" code wrongly treats &xdp_frame as part of its
->> context placed *before* the data_hard_start. With such flow,
->> data_hard_start is sizeof(*xdpf) off to the right and no longer points
->> to the XDP frame.
->>
->> Instead of replacing `sizeof(ctx)` with `offsetof(ctx, xdpf)` in several
->> places and praying that there are no more miscalcs left somewhere in the
->> code, unionize ::frm with ::data in a flex array, so that both starts
->> pointing to the actual data_hard_start and the XDP frame actually starts
->> being a part of it, i.e. a part of the headroom, not the context.
->> A nice side effect is that the maximum frame size for this mode gets
->> increased by 40 bytes, as xdp_buff::frame_sz includes everything from
->> data_hard_start (-> includes xdpf already) to the end of XDP/skb shared
->> info.
->> Also update %MAX_PKT_SIZE accordingly in the selftests code. Leave it
->> hardcoded for 64 bit && 4k pages, it can be made more flexible later on.
->>
->> Minor: align `&head->data` with how `head->frm` is assigned for
->> consistency.
->> Minor #2: rename 'frm' to 'frame' in &xdp_page_head while at it for
->> clarity.
->>
->> (was found while testing XDP traffic generator on ice, which calls
->>   xdp_convert_frame_to_buff() for each XDP frame)
-> 
-> Sorry, maybe this could be taken directly to net-next while it's still
-> open? It was tested and then reverted from bpf-next only due to not 100%
-> compile-time assertion, which I removed in this version. No more
-> changes. I doubt there'll be a second PR from bpf and would like this to
-> hit mainline before RC1 :s
+Patches add labels into t30 and t114 dtsi for easier
+node referencing. Quotes for mmc devices are replaced
+with labels for better tree comprehension. Fixed 
+accelerometer mount matrix for TF101. Added 266.5MHz
+peripheral opp node for devices which may need it.
 
-I think this could go to bpf soon instead of bpf-next. The change is specific to 
-the bpf selftest. It is better to go through bpf to get bpf CI coverage.
+Anton Bambura (1):
+  ARM: tegra: Add labels to tegra114.dtsi
 
-> 
->>
->> Fixes: b530e9e1063e ("bpf: Add "live packet" mode for XDP in BPF_PROG_RUN")
->> Acked-by: Toke Høiland-Jørgensen <toke@redhat.com>
->> Signed-off-by: Alexander Lobakin <aleksander.lobakin@intel.com>
->> Link: https://lore.kernel.org/r/20230215185440.4126672-1-aleksander.lobakin@intel.com
->> Signed-off-by: Martin KaFai Lau <martin.lau@kernel.org>
-> (>_< those two last tags are incorrect, lemme know if I should resubmit
->   it without them or you could do it if ok with taking it now)
+Michał Mirosław (1):
+  ARM: tegra: Add labels to tegra30.dtsi
 
-Please respin when it can be landed to the bpf tree on top of the s390 changes.
+Svyatoslav Ryhel (3):
+  ARM: tegra: transformer: use labels for mmc in aliases
+  ARM: tegra: asus-tf101: fix accelerometer mount matrix
+  tegra30: peripherals: add 266.5MHz nodes
+
+ arch/arm/boot/dts/tegra114.dtsi               | 48 +++++++++----------
+ arch/arm/boot/dts/tegra20-asus-tf101.dts      |  6 +--
+ .../dts/tegra30-asus-transformer-common.dtsi  |  6 +--
+ .../arm/boot/dts/tegra30-peripherals-opp.dtsi | 20 ++++++++
+ arch/arm/boot/dts/tegra30.dtsi                | 36 +++++++-------
+ 5 files changed, 68 insertions(+), 48 deletions(-)
+
+-- 
+2.37.2
+
