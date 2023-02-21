@@ -2,163 +2,300 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3CABA69E9A7
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 22:41:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BE53069E9A9
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 22:43:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229769AbjBUVlh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Feb 2023 16:41:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44236 "EHLO
+        id S229779AbjBUVnS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Feb 2023 16:43:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45454 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229567AbjBUVlf (ORCPT
+        with ESMTP id S229704AbjBUVnP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Feb 2023 16:41:35 -0500
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B6E82FCCC;
-        Tue, 21 Feb 2023 13:41:34 -0800 (PST)
-From:   Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1677015693;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=2fzZWgj3EgPur0gBH+Eh3AUzBsWUv3V8wkByGQcQZQo=;
-        b=V64+K99vkA8eopGHFkYFH3YcKvPLeVZGt3S8Mr+dqi7IeSNEBmkueT1xDVjae9oID4l1nZ
-        vMhPwVDwb3XTiYZYqSDfpBWOioB7X0PNMSIN3aEAxIh737LqpKTclVYFOcQW/BnlFHC70I
-        ZyIStxoDDt7aA160jIuH9a0p0iWOU+gZUDWxnJW5bHgsc5dobHQtN2Opo4YleW5edvk0D9
-        O9DRj4icFj8gpyCFTt8zz+hKDuuqecCJxb6O7AdLWr6+dJ1NxnWmXkAkRZO0RLbEZhM+FH
-        5+Jw0zv/4ggMpMpx6FVg3DoE7Ih3ZtMF0ILccmr1UbmyqUFIYx4rXWut8L/7Tg==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1677015693;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=2fzZWgj3EgPur0gBH+Eh3AUzBsWUv3V8wkByGQcQZQo=;
-        b=jqUZGiR+kD1/71tIkOkW4UWt2pRAnJv517JDzotCmipTM/SnWMHds7nTFmaby08zFiYg0X
-        hEsCwswkOubJHAAA==
-To:     David Woodhouse <dwmw2@infradead.org>,
-        Oleksandr Natalenko <oleksandr@natalenko.name>
-Cc:     Kim Phillips <kim.phillips@amd.com>,
-        Usama Arif <usama.arif@bytedance.com>, arjan@linux.intel.com,
-        mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
-        hpa@zytor.com, x86@kernel.org, pbonzini@redhat.com,
-        paulmck@kernel.org, linux-kernel@vger.kernel.org,
-        kvm@vger.kernel.org, rcu@vger.kernel.org, mimoja@mimoja.de,
-        hewenliang4@huawei.com, thomas.lendacky@amd.com, seanjc@google.com,
-        pmenzel@molgen.mpg.de, fam.zheng@bytedance.com,
-        punit.agrawal@bytedance.com, simon.evans@bytedance.com,
-        liangma@liangbit.com,
-        "Limonciello, Mario" <Mario.Limonciello@amd.com>,
-        Piotr Gorski <piotrgorski@cachyos.org>
-Subject: Re: [PATCH v9 0/8] Parallel CPU bringup for x86_64
-In-Reply-To: <e2e6616f691f1822035be245ec847f7c86a26367.camel@infradead.org>
-References: <20230215145425.420125-1-usama.arif@bytedance.com>
- <2668869.mvXUDI8C0e@natalenko.name>
- <2a67f6cf18dd2c1879fad9fd8a28242918d3e5d2.camel@infradead.org>
- <982e1d6140705414e8fd60b990bd259a@natalenko.name>
- <715CBABF-4017-4784-8F30-5386F1524830@infradead.org>
- <67dbc69f-b712-8971-f1c9-5d07f506a19c@amd.com>
- <42dc683e2846ae8fc1e09715aaf7884660e1a386.camel@infradead.org>
- <37c18c3aeea2e558633b6da6886111d0@natalenko.name>
- <5A3B7074-0C6D-472B-803B-D76541828C1F@infradead.org>
- <3d8ed6e157df10c5175c636de0e21849@natalenko.name>
- <5c557f9b6f55dc2a612ee89142971298e6ae12d8.camel@infradead.org>
- <ee0d0d971a3095d6a1e96ad4f1ba32d2@natalenko.name>
- <5b8f9c89f7015fa80c966c6c7f6fa259db6744f8.camel@infradead.org>
- <ce731b5a4a53680b4840467977b33d9a@natalenko.name>
- <85ceb3f92abf3c013924de2f025517372bed19c0.camel@infradead.org>
- <3e5944de08ef0d23584d19bad7bae66c@natalenko.name>
- <26E5DC9C-0F19-4E4F-9076-04506A197374@infradead.org>
- <f71275dc809cfb32df513023786c3faa@natalenko.name>
- <10CA27BB-ADC6-4421-86D2-A83BD7FA12E0@infradead.org>
- <9153284c37a79d303aa79dbf07c10329@natalenko.name>
- <e2e6616f691f1822035be245ec847f7c86a26367.camel@infradead.org>
-Date:   Tue, 21 Feb 2023 22:41:32 +0100
-Message-ID: <87356yofw3.ffs@tglx>
+        Tue, 21 Feb 2023 16:43:15 -0500
+Received: from forward501c.mail.yandex.net (forward501c.mail.yandex.net [178.154.239.209])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5792E13531
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Feb 2023 13:43:14 -0800 (PST)
+Received: from iva8-4b0477eb80e1.qloud-c.yandex.net (iva8-4b0477eb80e1.qloud-c.yandex.net [IPv6:2a02:6b8:c0c:77a0:0:640:4b04:77eb])
+        by forward501c.mail.yandex.net (Yandex) with ESMTP id 4AF535F21B;
+        Wed, 22 Feb 2023 00:43:12 +0300 (MSK)
+Received: by iva8-4b0477eb80e1.qloud-c.yandex.net (smtp/Yandex) with ESMTPSA id 8h0Gn7qZT0U1-T0guPg09;
+        Wed, 22 Feb 2023 00:43:11 +0300
+X-Yandex-Fwd: 1
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ya.ru; s=mail; t=1677015791;
+        bh=M5n7hxG8rqSZzlJ5gYoNsEFwQqw42nKDSzu3D5Gerus=;
+        h=From:In-Reply-To:Cc:Date:References:To:Subject:Message-ID;
+        b=LQlaA59p0RbFCQ+olIIBiXGZIDresS0uWxVGYxPN8SOMdc7xn9U2SqSdmwz1bqoYi
+         gcMeS4VQergPZHp8RW1jmdmom6w04Wkt42k22EVanarpVQuTUuyQ5o4jgPs0NJiAwM
+         TgktLjqxlpKXX04FelV9QUZRz8YNlyUqpqK3rDSI=
+Authentication-Results: iva8-4b0477eb80e1.qloud-c.yandex.net; dkim=pass header.i=@ya.ru
+Message-ID: <dc279728-4cd4-0453-1a28-fe076f254641@ya.ru>
+Date:   Wed, 22 Feb 2023 00:43:08 +0300
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH 2/5] mm: vmscan: make memcg slab shrink lockless
+Content-Language: en-US
+To:     Qi Zheng <zhengqi.arch@bytedance.com>, akpm@linux-foundation.org,
+        hannes@cmpxchg.org, shakeelb@google.com, mhocko@kernel.org,
+        roman.gushchin@linux.dev, muchun.song@linux.dev, david@redhat.com,
+        shy828301@gmail.com
+Cc:     sultan@kerneltoast.com, dave@stgolabs.net,
+        penguin-kernel@I-love.SAKURA.ne.jp, paulmck@kernel.org,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org
+References: <20230220091637.64865-1-zhengqi.arch@bytedance.com>
+ <20230220091637.64865-3-zhengqi.arch@bytedance.com>
+From:   Kirill Tkhai <tkhai@ya.ru>
+In-Reply-To: <20230220091637.64865-3-zhengqi.arch@bytedance.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-David!
-
-On Tue, Feb 21 2023 at 19:10, David Woodhouse wrote:
-> On Tue, 2023-02-21 at 13:14 +0100, Oleksandr Natalenko wrote:
-> (Usama, I think my tree is fairly out of date now so I'll let you do
-> that? Thanks!).
->
-> diff --git a/arch/x86/kernel/smpboot.c b/arch/x86/kernel/smpboot.c
-> index 50621793671d..3db77a257ae2 100644
-> --- a/arch/x86/kernel/smpboot.c
-> +++ b/arch/x86/kernel/smpboot.c
-> @@ -1571,6 +1571,17 @@ void __init native_smp_prepare_cpus(unsigned int max_cpus)
+On 20.02.2023 12:16, Qi Zheng wrote:
+> Like global slab shrink, since commit 1cd0bd06093c
+> ("rcu: Remove CONFIG_SRCU"), it's time to use SRCU
+> to protect readers who previously held shrinker_rwsem.
+> 
+> We can test with the following script:
+> 
+> ```
+> DIR="/root/shrinker/memcg/mnt"
+> 
+> do_create()
+> {
+>         mkdir /sys/fs/cgroup/memory/test
+>         echo 200M > /sys/fs/cgroup/memory/test/memory.limit_in_bytes
+>         for i in `seq 0 $1`;
+>         do
+>                 mkdir /sys/fs/cgroup/memory/test/$i;
+>                 echo $$ > /sys/fs/cgroup/memory/test/$i/cgroup.procs;
+>                 mkdir -p $DIR/$i;
+>         done
+> }
+> 
+> do_mount()
+> {
+>         for i in `seq $1 $2`;
+>         do
+>                 mount -t tmpfs $i $DIR/$i;
+>         done
+> }
+> 
+> do_touch()
+> {
+>         for i in `seq $1 $2`;
+>         do
+>                 echo $$ > /sys/fs/cgroup/memory/test/$i/cgroup.procs;
+>                 dd if=/dev/zero of=$DIR/$i/file$i bs=1M count=1 &
+>         done
+> }
+> 
+> do_create 2000
+> do_mount 0 2000
+> do_touch 0 1000
+> ```
+> 
+> Before applying:
+> 
+>   46.60%  [kernel]  [k] down_read_trylock
+>   18.70%  [kernel]  [k] up_read
+>   15.44%  [kernel]  [k] shrink_slab
+>    4.37%  [kernel]  [k] _find_next_bit
+>    2.75%  [kernel]  [k] xa_load
+>    2.07%  [kernel]  [k] idr_find
+>    1.73%  [kernel]  [k] do_shrink_slab
+>    1.42%  [kernel]  [k] shrink_lruvec
+>    0.74%  [kernel]  [k] shrink_node
+>    0.60%  [kernel]  [k] list_lru_count_one
+> 
+> After applying:
+> 
+>   19.53%  [kernel]  [k] _find_next_bit
+>   14.63%  [kernel]  [k] do_shrink_slab
+>   14.58%  [kernel]  [k] shrink_slab
+>   11.83%  [kernel]  [k] shrink_lruvec
+>    9.33%  [kernel]  [k] __blk_flush_plug
+>    6.67%  [kernel]  [k] mem_cgroup_iter
+>    3.73%  [kernel]  [k] list_lru_count_one
+>    2.43%  [kernel]  [k] shrink_node
+>    1.96%  [kernel]  [k] super_cache_count
+>    1.78%  [kernel]  [k] __rcu_read_unlock
+>    1.38%  [kernel]  [k] __srcu_read_lock
+>    1.30%  [kernel]  [k] xas_descend
+> 
+> We can see that the readers is no longer blocked.
+> 
+> Signed-off-by: Qi Zheng <zhengqi.arch@bytedance.com>
+> ---
+>  mm/vmscan.c | 56 ++++++++++++++++++++++++++++++-----------------------
+>  1 file changed, 32 insertions(+), 24 deletions(-)
+> 
+> diff --git a/mm/vmscan.c b/mm/vmscan.c
+> index 95a3d6ddc6c1..dc47396ecd0e 100644
+> --- a/mm/vmscan.c
+> +++ b/mm/vmscan.c
+> @@ -57,6 +57,7 @@
+>  #include <linux/khugepaged.h>
+>  #include <linux/rculist_nulls.h>
+>  #include <linux/random.h>
+> +#include <linux/srcu.h>
 >  
->  void arch_thaw_secondary_cpus_begin(void)
+>  #include <asm/tlbflush.h>
+>  #include <asm/div64.h>
+> @@ -221,8 +222,21 @@ static inline int shrinker_defer_size(int nr_items)
+>  static struct shrinker_info *shrinker_info_protected(struct mem_cgroup *memcg,
+>  						     int nid)
 >  {
-> +	/*
-> +	 * On suspend, smpboot_control will have been zeroed to allow the
-> +	 * boot CPU to use explicitly passed values including a temporary
-> +	 * stack. Since native_smp_prepare_cpus() won't be called again,
-> +	 * restore the appropriate value for the parallel startup modes.
-> +	 */
-> +	if (do_parallel_bringup) {
-> +		smpboot_control = STARTUP_SECONDARY |
-> +			(x2apic_mode ? STARTUP_APICID_CPUID_0B : STARTUP_APICID_CPUID_01);
-> +	}
+> -	return rcu_dereference_protected(memcg->nodeinfo[nid]->shrinker_info,
+> -					 lockdep_is_held(&shrinker_rwsem));
+> +	return srcu_dereference_check(memcg->nodeinfo[nid]->shrinker_info,
+> +				      &shrinker_srcu,
+> +				      lockdep_is_held(&shrinker_rwsem));
+> +}
+> +
+> +static struct shrinker_info *shrinker_info_srcu(struct mem_cgroup *memcg,
+> +						     int nid)
+> +{
+> +	return srcu_dereference(memcg->nodeinfo[nid]->shrinker_info,
+> +				&shrinker_srcu);
+> +}
+> +
+> +static void free_shrinker_info_rcu(struct rcu_head *head)
+> +{
+> +	kvfree(container_of(head, struct shrinker_info, rcu));
+>  }
+>  
+>  static int expand_one_shrinker_info(struct mem_cgroup *memcg,
+> @@ -257,7 +271,7 @@ static int expand_one_shrinker_info(struct mem_cgroup *memcg,
+>  		       defer_size - old_defer_size);
+>  
+>  		rcu_assign_pointer(pn->shrinker_info, new);
+> -		kvfree_rcu(old, rcu);
+> +		call_srcu(&shrinker_srcu, &old->rcu, free_shrinker_info_rcu);
+>  	}
+>  
+>  	return 0;
+> @@ -350,13 +364,14 @@ void set_shrinker_bit(struct mem_cgroup *memcg, int nid, int shrinker_id)
+>  {
+>  	if (shrinker_id >= 0 && memcg && !mem_cgroup_is_root(memcg)) {
+>  		struct shrinker_info *info;
+> +		int srcu_idx;
+>  
+> -		rcu_read_lock();
+> -		info = rcu_dereference(memcg->nodeinfo[nid]->shrinker_info);
+> +		srcu_idx = srcu_read_lock(&shrinker_srcu);
+> +		info = shrinker_info_srcu(memcg, nid);
+>  		/* Pairs with smp mb in shrink_slab() */
+>  		smp_mb__before_atomic();
+>  		set_bit(shrinker_id, info->map);
+> -		rcu_read_unlock();
+> +		srcu_read_unlock(&shrinker_srcu, srcu_idx);
+>  	}
+>  }
+>  
+> @@ -370,7 +385,6 @@ static int prealloc_memcg_shrinker(struct shrinker *shrinker)
+>  		return -ENOSYS;
+>  
+>  	down_write(&shrinker_rwsem);
+> -	/* This may call shrinker, so it must use down_read_trylock() */
+>  	id = idr_alloc(&shrinker_idr, shrinker, 0, 0, GFP_KERNEL);
+>  	if (id < 0)
+>  		goto unlock;
+> @@ -404,7 +418,7 @@ static long xchg_nr_deferred_memcg(int nid, struct shrinker *shrinker,
+>  {
+>  	struct shrinker_info *info;
+>  
+> -	info = shrinker_info_protected(memcg, nid);
+> +	info = shrinker_info_srcu(memcg, nid);
+>  	return atomic_long_xchg(&info->nr_deferred[shrinker->id], 0);
+>  }
+>  
+> @@ -413,13 +427,13 @@ static long add_nr_deferred_memcg(long nr, int nid, struct shrinker *shrinker,
+>  {
+>  	struct shrinker_info *info;
+>  
+> -	info = shrinker_info_protected(memcg, nid);
+> +	info = shrinker_info_srcu(memcg, nid);
+>  	return atomic_long_add_return(nr, &info->nr_deferred[shrinker->id]);
+>  }
+>  
+>  void reparent_shrinker_deferred(struct mem_cgroup *memcg)
+>  {
+> -	int i, nid;
+> +	int i, nid, srcu_idx;
+>  	long nr;
+>  	struct mem_cgroup *parent;
+>  	struct shrinker_info *child_info, *parent_info;
+> @@ -429,16 +443,16 @@ void reparent_shrinker_deferred(struct mem_cgroup *memcg)
+>  		parent = root_mem_cgroup;
+>  
+>  	/* Prevent from concurrent shrinker_info expand */
+> -	down_read(&shrinker_rwsem);
+> +	srcu_idx = srcu_read_lock(&shrinker_srcu);
+>  	for_each_node(nid) {
+> -		child_info = shrinker_info_protected(memcg, nid);
+> -		parent_info = shrinker_info_protected(parent, nid);
+> +		child_info = shrinker_info_srcu(memcg, nid);
+> +		parent_info = shrinker_info_srcu(parent, nid);
+>  		for (i = 0; i < shrinker_nr_max; i++) {
+>  			nr = atomic_long_read(&child_info->nr_deferred[i]);
+>  			atomic_long_add(nr, &parent_info->nr_deferred[i]);
+>  		}
+>  	}
+> -	up_read(&shrinker_rwsem);
+> +	srcu_read_unlock(&shrinker_srcu, srcu_idx);
+>  }
+>  
+>  static bool cgroup_reclaim(struct scan_control *sc)
+> @@ -891,15 +905,14 @@ static unsigned long shrink_slab_memcg(gfp_t gfp_mask, int nid,
+>  {
+>  	struct shrinker_info *info;
+>  	unsigned long ret, freed = 0;
+> +	int srcu_idx;
+>  	int i;
+>  
+>  	if (!mem_cgroup_online(memcg))
+>  		return 0;
+>  
+> -	if (!down_read_trylock(&shrinker_rwsem))
+> -		return 0;
+> -
+> -	info = shrinker_info_protected(memcg, nid);
+> +	srcu_idx = srcu_read_lock(&shrinker_srcu);
+> +	info = shrinker_info_srcu(memcg, nid);
+>  	if (unlikely(!info))
+>  		goto unlock;
 
-My bad taste sensor reports: "Out of effective range"
+There is shrinker_nr_max dereference under this hunk. It's not in the patch:
 
-Why on earth can't you fix the wreckage exactly where it happens,
-i.e. in x86_acpi_suspend_lowlevel() ?
+        for_each_set_bit(i, info->map, shrinker_nr_max) {
 
---- a/arch/x86/kernel/acpi/sleep.c
-+++ b/arch/x86/kernel/acpi/sleep.c
-@@ -16,6 +16,7 @@
- #include <asm/cacheflush.h>
- #include <asm/realmode.h>
- #include <asm/hypervisor.h>
-+#include <asm/smp.h>
- 
- #include <linux/ftrace.h>
- #include "../../realmode/rm/wakeup.h"
-@@ -57,6 +58,7 @@ asmlinkage acpi_status __visible x86_acp
-  */
- int x86_acpi_suspend_lowlevel(void)
- {
-+	unsigned int __maybe_unused saved_smpboot_ctrl;
- 	struct wakeup_header *header =
- 		(struct wakeup_header *) __va(real_mode_header->wakeup_header);
- 
-@@ -115,7 +117,8 @@ int x86_acpi_suspend_lowlevel(void)
- 	early_gdt_descr.address =
- 			(unsigned long)get_cpu_gdt_rw(smp_processor_id());
- 	initial_gs = per_cpu_offset(smp_processor_id());
--	smpboot_control = 0;
-+	/* Force the startup into boot mode */
-+	saved_smpboot_ctrl = xchg(&smpboot_control, 0);
- #endif
- 	initial_code = (unsigned long)wakeup_long64;
-        saved_magic = 0x123456789abcdef0L;
-@@ -128,6 +131,9 @@ int x86_acpi_suspend_lowlevel(void)
- 	pause_graph_tracing();
- 	do_suspend_lowlevel();
- 	unpause_graph_tracing();
-+
-+	if (IS_ENABLED(CONFIG_64BIT) && IS_ENABLED(CONFIG_SMP))
-+		smpboot_control = saved_smpboot_ctrl;
- 	return 0;
- }
- 
+Since shrinker_nr_max may grow in parallel, this leads to access beyond allocated memory :(
 
-That's too bloody obvious, too self explaining, not enough duplicated
-code and does not need any fixups when the smpboot_control bits are
-changed later, right?
+It looks like we should save size of info->map as a new member of struct shrinker_info.
 
-Thanks,
+>  
+> @@ -949,14 +962,9 @@ static unsigned long shrink_slab_memcg(gfp_t gfp_mask, int nid,
+>  				set_shrinker_bit(memcg, nid, i);
+>  		}
+>  		freed += ret;
+> -
+> -		if (rwsem_is_contended(&shrinker_rwsem)) {
+> -			freed = freed ? : 1;
+> -			break;
+> -		}
+>  	}
+>  unlock:
+> -	up_read(&shrinker_rwsem);
+> +	srcu_read_unlock(&shrinker_srcu, srcu_idx);
+>  	return freed;
+>  }
+>  #else /* CONFIG_MEMCG */
 
-        tglx
