@@ -2,146 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EBB3D69DF59
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 12:54:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 00D2D69DF5B
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 12:55:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233871AbjBULy6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Feb 2023 06:54:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59004 "EHLO
+        id S233833AbjBULzY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Feb 2023 06:55:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59794 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233646AbjBULyt (ORCPT
+        with ESMTP id S234417AbjBULzK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Feb 2023 06:54:49 -0500
-Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7ED8E22018;
-        Tue, 21 Feb 2023 03:54:40 -0800 (PST)
-Received: by mail-ed1-x52a.google.com with SMTP id o12so16520629edb.9;
-        Tue, 21 Feb 2023 03:54:40 -0800 (PST)
+        Tue, 21 Feb 2023 06:55:10 -0500
+Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC6EE22793
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Feb 2023 03:54:52 -0800 (PST)
+Received: by mail-wr1-x42a.google.com with SMTP id bo30so3572390wrb.0
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Feb 2023 03:54:52 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=DTe8w2Mu6IFu1qfOCr6RAIZxVkPkGvhO9qq+1dA1D+g=;
-        b=di0kkbeWcnUXsfPLDd7d8jWp0B5VvuE12Bp5jRLRVlS8nzcN405crfm5JYYl3GYEN9
-         jcIRoW8ztg2zb7SB8JtGeC7QN6DCLx/lmBtqwp3OplmDzpVN4cyQuy2104AYg+BtOqIx
-         RevDfYnoEOW6OPmMzv23cCTtGVe51l5oHB0OMC7z/dsJrVIuuFVUhcPijIGHcG9zL4o/
-         Mkl5PJ0oMkXyaTvgnhh6WQewaxwuc+7vrC/JdvWnX4aXfZnM7qfmBCF4511GSaAcr9h8
-         6bGB4Kvyq6oeOGDbQEz5DR676kIVkkTawCTVftwY7Qns5+NbTzK1058A4aUuSy5B5r2g
-         qpWA==
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=8lzq9naJ5Gwo2WGrWv0NYN2BRYvpnbF1Pf8MG1ViESI=;
+        b=1vfskNEeBw11/q2YRjmKPk9C/aSwz5XfH6BYxqXucGqTi4LHziHOgmd0nJ9Dk4Anbr
+         VBr5j9XrjyJMeMJwlYhgeUXkA6MdK1+6FQX+Y+ebvbU+Dj/SW9QfoPeZYuZxuFwzxjqs
+         4LWrdfFIHxqUYv7H2wOq6RAQrCLCWWowh0m5UwgoRXHAXjL9p8nJVr/gRTesH7Saz7Yy
+         mv6sG6L9jcerch+b8Gj7j+6nFABtDFOAaXXiOA+0Yh9wWhgYAIC043KkH1hjlQdJAY8e
+         WNXsUFD/pW4PoK+rVdIFJyB4ouNed3pJb5P4dy+KaxWxhaqWYjPIR47rNG/LR30Ot8Nv
+         pFpw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=DTe8w2Mu6IFu1qfOCr6RAIZxVkPkGvhO9qq+1dA1D+g=;
-        b=UbxU8un5H752iDkjuHp1Xt0vz7PzdXPeUnJrTZF9Vo5x5o58tj5L4jN7gdK3V7mG2U
-         2ciBw+iud0SfrpIlqT2DKAs/t00JbLpNlWhNixbY2OQxUEh2TL9NNngdK1qoVnuB5Zlb
-         DfeXueJNtcEhKWiSP/s57dFBdOW9FE37IXoWP3owdpf4l610ukY9SXURxsryXv4CTS6o
-         HLAv1EE6Qv7zFrOGxahkIN8iN95tCKbcT+g44uGucyVNGN8VnpSh11R/Ppwcko5P+tZK
-         9RUO2TbPEE8l4Av4w0p4Upps+MLU2PSrkWCSxLx020F7qpvs8Q0tERANDtv3YahxhQAn
-         KDtw==
-X-Gm-Message-State: AO0yUKWo1RyNR0UjrRLcoLYdu1wEithQ4pdT1GKEWd8L17/TUEVUpjTl
-        MgWb0XHuXfxzha4WgkYzj4w=
-X-Google-Smtp-Source: AK7set+TpnDRd5Ij1SkE2P58yfgSGqSHJaJ/klSqdNy3MZnqNVmt9BcYBtUzrJ0hjRStF7VDBFQXCQ==
-X-Received: by 2002:a17:907:2147:b0:8b1:3a18:9daf with SMTP id rk7-20020a170907214700b008b13a189dafmr11303826ejb.74.1676980479054;
-        Tue, 21 Feb 2023 03:54:39 -0800 (PST)
-Received: from krava (2001-1ae9-1c2-4c00-726e-c10f-8833-ff22.ip6.tmcz.cz. [2001:1ae9:1c2:4c00:726e:c10f:8833:ff22])
-        by smtp.gmail.com with ESMTPSA id h20-20020a1709070b1400b008b907006d5dsm5025677ejl.173.2023.02.21.03.54.37
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 21 Feb 2023 03:54:38 -0800 (PST)
-From:   Jiri Olsa <olsajiri@gmail.com>
-X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
-Date:   Tue, 21 Feb 2023 12:54:36 +0100
-To:     Namhyung Kim <namhyung@kernel.org>
-Cc:     Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@kernel.org>,
-        Ian Rogers <irogers@google.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Andi Kleen <ak@linux.intel.com>,
-        Kan Liang <kan.liang@linux.intel.com>,
-        Song Liu <song@kernel.org>,
-        Stephane Eranian <eranian@google.com>,
-        Ravi Bangoria <ravi.bangoria@amd.com>,
-        Leo Yan <leo.yan@linaro.org>,
-        James Clark <james.clark@arm.com>, Hao Luo <haoluo@google.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        linux-perf-users@vger.kernel.org, bpf@vger.kernel.org
-Subject: Re: [PATCH 2/8] perf bpf filter: Implement event sample filtering
-Message-ID: <Y/Sw/NGEvPJ9XdtN@krava>
-References: <20230219061329.1001079-1-namhyung@kernel.org>
- <20230219061329.1001079-3-namhyung@kernel.org>
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=8lzq9naJ5Gwo2WGrWv0NYN2BRYvpnbF1Pf8MG1ViESI=;
+        b=Ihp2OTRTTgRmNctVgxfmkuFASoWl/9GxLH9hs1yHzZEMTDaHRgMj6cQSn5ZWTf5QRl
+         jKyhYk/9fpfkbpW+Z3o0fj6aZPO4csK304oUAFLGBleFbTXZ+nP0rypzJlUwd8J67tQd
+         So9/Pn9XaHtfOfnKSp2tgpRfWVhvhNRoLt8idRytOXvFiyJu5DyMVDGCJ17L0KxVqjXG
+         yX3WB7CI8Pa4IQ965plf/ovnL4WZiralsrT4wFPSR8fwOfjlj9qmIdGFS+NDIIejUYCW
+         Qwaxom1hDOEGmX6ja7N6wRf/9Ks7omz8NfnPLJuwQRk/T9g3FXif7LiQ7RXrLTzP3iq7
+         mY6A==
+X-Gm-Message-State: AO0yUKUC6NiuLD3BqQ7xuU9b1J3G5Dw6yeyWd5bAcfR2p8G1Schc4Spf
+        1+/CP1yLcyN6T68X+1VHOF1vYQ==
+X-Google-Smtp-Source: AK7set9w+obqnpH8kQtyt0L04B6t2sN1mCYhzDOdSVFbeQypoWXmVKBW+GEhamKB9CPiWpe2+7NXYQ==
+X-Received: by 2002:a5d:6f0c:0:b0:2c5:55c3:d18d with SMTP id ay12-20020a5d6f0c000000b002c555c3d18dmr2588566wrb.9.1676980491294;
+        Tue, 21 Feb 2023 03:54:51 -0800 (PST)
+Received: from ?IPV6:2a02:6b6a:b566:0:8498:f303:14d8:47b5? ([2a02:6b6a:b566:0:8498:f303:14d8:47b5])
+        by smtp.gmail.com with ESMTPSA id n13-20020a5d4c4d000000b002c55de1c72bsm8090429wrt.62.2023.02.21.03.54.50
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 21 Feb 2023 03:54:50 -0800 (PST)
+Message-ID: <049adfae-f4a0-349e-323a-52299969ef99@bytedance.com>
+Date:   Tue, 21 Feb 2023 11:54:50 +0000
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230219061329.1001079-3-namhyung@kernel.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [External] Re: [PATCH v9 0/8] Parallel CPU bringup for x86_64
+Content-Language: en-US
+To:     Oleksandr Natalenko <oleksandr@natalenko.name>
+Cc:     David Woodhouse <dwmw2@infradead.org>,
+        Kim Phillips <kim.phillips@amd.com>, tglx@linutronix.de,
+        arjan@linux.intel.com, mingo@redhat.com, bp@alien8.de,
+        dave.hansen@linux.intel.com, hpa@zytor.com, x86@kernel.org,
+        pbonzini@redhat.com, paulmck@kernel.org,
+        linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        rcu@vger.kernel.org, mimoja@mimoja.de, hewenliang4@huawei.com,
+        thomas.lendacky@amd.com, seanjc@google.com, pmenzel@molgen.mpg.de,
+        fam.zheng@bytedance.com, punit.agrawal@bytedance.com,
+        simon.evans@bytedance.com, liangma@liangbit.com,
+        "Limonciello, Mario" <Mario.Limonciello@amd.com>,
+        Piotr Gorski <piotrgorski@cachyos.org>
+References: <20230215145425.420125-1-usama.arif@bytedance.com>
+ <2a67f6cf18dd2c1879fad9fd8a28242918d3e5d2.camel@infradead.org>
+ <982e1d6140705414e8fd60b990bd259a@natalenko.name>
+ <715CBABF-4017-4784-8F30-5386F1524830@infradead.org>
+ <67dbc69f-b712-8971-f1c9-5d07f506a19c@amd.com>
+ <42dc683e2846ae8fc1e09715aaf7884660e1a386.camel@infradead.org>
+ <37c18c3aeea2e558633b6da6886111d0@natalenko.name>
+ <5A3B7074-0C6D-472B-803B-D76541828C1F@infradead.org>
+ <3d8ed6e157df10c5175c636de0e21849@natalenko.name>
+ <5c557f9b6f55dc2a612ee89142971298e6ae12d8.camel@infradead.org>
+ <ee0d0d971a3095d6a1e96ad4f1ba32d2@natalenko.name>
+ <5b8f9c89f7015fa80c966c6c7f6fa259db6744f8.camel@infradead.org>
+ <ce731b5a4a53680b4840467977b33d9a@natalenko.name>
+ <85ceb3f92abf3c013924de2f025517372bed19c0.camel@infradead.org>
+ <3e5944de08ef0d23584d19bad7bae66c@natalenko.name>
+ <26E5DC9C-0F19-4E4F-9076-04506A197374@infradead.org>
+ <d91f96eb-86a1-c794-761d-a96e39076b13@bytedance.com>
+ <6e7d75d98266ab68b57bf6db644ecc75@natalenko.name>
+From:   Usama Arif <usama.arif@bytedance.com>
+In-Reply-To: <6e7d75d98266ab68b57bf6db644ecc75@natalenko.name>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Feb 18, 2023 at 10:13:23PM -0800, Namhyung Kim wrote:
 
-SNIP
 
-> +#define FD(e, x, y) (*(int *)xyarray__entry(e->core.fd, x, y))
-> +
-> +int perf_bpf_filter__prepare(struct evsel *evsel)
-> +{
-> +	int i, x, y, fd;
-> +	struct sample_filter_bpf *skel;
-> +	struct bpf_program *prog;
-> +	struct bpf_link *link;
-> +	struct perf_bpf_filter_expr *expr;
-> +
-> +	skel = sample_filter_bpf__open();
-> +	if (!skel) {
-> +		pr_err("Failed to open perf sample-filter BPF skeleton\n");
-> +		return -1;
-> +	}
-> +
-> +	bpf_map__set_max_entries(skel->maps.filters, MAX_FILTERS);
+On 21/02/2023 11:42, Oleksandr Natalenko wrote:
+> On 21.02.2023 11:47, Usama Arif wrote:
+>> On 21/02/2023 10:27, David Woodhouse wrote:
+>>>
+>>> On 21 February 2023 09:49:51 GMT, Oleksandr Natalenko 
+>>> <oleksandr@natalenko.name> wrote:
+>>>> On 21.02.2023 10:06, David Woodhouse wrote:
+>>>>> Why does arch/x86/kernel/acpi/sleep.c::x86_acpi_suspend_lowlevel() set
+>>>>>
+>>>>>      initial_gs = per_cpu_offset(smp_processor_id()) ?
+>>>>>
+>>>>> Would it not be CPU#0 that comes back up, and should it not get
+>>>>> per_cpu_offset(0) ?
+>>>>
+>>>> Wanna me try `initial_gs = per_cpu_offset(0);` too?
+>>>
+>>
+>> I think it might be smp_processor_id() and not 0 incase CPU0 was 
+>> offline at the point the system was suspended?
+> 
+> Is it even possible for CPU 0 to be offline, at least on x86?
+> 
 
-is this needed? max_entries is defined in the bpf object
+It is possible on x86 (using BOOTPARAM_HOTPLUG_CPU0), but I just read 
+the Kconfig option and it says:
 
-jirka
+"resume from hibernate or suspend always starts from CPU0.
+So hibernate and suspend are prevented if CPU0 is offline."
 
-> +
-> +	if (sample_filter_bpf__load(skel) < 0) {
-> +		pr_err("Failed to load perf sample-filter BPF skeleton\n");
-> +		return -1;
-> +	}
-> +
-> +	i = 0;
-> +	fd = bpf_map__fd(skel->maps.filters);
-> +	list_for_each_entry(expr, &evsel->bpf_filters, list) {
-> +		struct perf_bpf_filter_entry entry = {
-> +			.op = expr->op,
-> +			.flags = expr->sample_flags,
-> +			.value = expr->val,
-> +		};
-> +		bpf_map_update_elem(fd, &i, &entry, BPF_ANY);
-> +		i++;
-> +	}
-> +
-> +	prog = skel->progs.perf_sample_filter;
-> +	for (x = 0; x < xyarray__max_x(evsel->core.fd); x++) {
-> +		for (y = 0; y < xyarray__max_y(evsel->core.fd); y++) {
-> +			link = bpf_program__attach_perf_event(prog, FD(evsel, x, y));
-> +			if (IS_ERR(link)) {
-> +				pr_err("Failed to attach perf sample-filter program\n");
-> +				return PTR_ERR(link);
-> +			}
-> +		}
-> +	}
-> +	evsel->bpf_skel = skel;
-> +	return 0;
-> +}
-> +
-
-SNIP
+so I guess switching to 0 should be ok.
