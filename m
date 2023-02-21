@@ -2,114 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 55CA569E2C5
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 15:55:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 97EF069E2C9
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 15:56:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234026AbjBUOz4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Feb 2023 09:55:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46842 "EHLO
+        id S234122AbjBUO4m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Feb 2023 09:56:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47938 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229518AbjBUOzx (ORCPT
+        with ESMTP id S233919AbjBUO4j (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Feb 2023 09:55:53 -0500
-Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7482229E1E;
-        Tue, 21 Feb 2023 06:55:50 -0800 (PST)
-Received: by mail-wm1-x333.google.com with SMTP id o4-20020a05600c4fc400b003e1f5f2a29cso3834125wmq.4;
-        Tue, 21 Feb 2023 06:55:50 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=8vYRFHb5gDoOeQ2hkB+dfrhYaR6Ydea8qkg1cZhOWzc=;
-        b=lvxEljblJo9Jo181FYE8il3d92+hS0T8dT8u9x0DYyJStvlwt2pKXD6zPrqJUACQ3F
-         tSBwjvhf6nFjb3FVoSPs3yP1CmG5vr5yOLUx8X+C3hVu0ZZFTQeKbORg9ERmPomKvKxE
-         g6aTjUN5lcPsFXdRCOC34vXqAfeix3awzqB3rwYZArkSVIJGQbcl7+f3Oo9n8he0E98p
-         ewcfFdI8swRlRNuCYP+6KuTUu92zTP/naZk+rvUyM9Dr2cd9eHmvzSpALbGahrw+wcyD
-         P/moPXt7+3Zv2PCC2O1iGd7OGRNf/KWjaDNNE+Y7O7fPHk0uTAN2TOB3yWTB/NhxSskm
-         XZig==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=8vYRFHb5gDoOeQ2hkB+dfrhYaR6Ydea8qkg1cZhOWzc=;
-        b=zlGIRTnFk5Npri8Dm83/BZ94xiS+2HwdpLpOdObsOAPIMf++hYyMvldn5pX88Ggk0q
-         GYmoMixh22HGA83ZTgB6nkvyjbo/80pNAQ/3eZjv/3aGvhcgZWi1PcJZqFRO7mGbp8hN
-         POCHXx/IL+R2cxRV23MhtGJLH1edsNHh5M3EDafUR7hkK3fFIaPkuXTybazU+i30eLmH
-         O2b61UE/htp1mhL2TQDk1V/KIhTQ/YIAjCBikGtKL6gxPdNkTVjqOgBc49TMCulvrfFq
-         URcu2RUieOO2pEnxjb0u5QS/krwW6vxJybwdiFSKYdU1Nzo6Z8vdDvpiDgrygJwkooSW
-         dO+w==
-X-Gm-Message-State: AO0yUKWvjzQts8gjG7JONOrntnPMgJ5VBY6Mtb1shGJMzs7eXErUDOAP
-        TME0LP0oEzjD1MRWxom65wI=
-X-Google-Smtp-Source: AK7set/MZNh28mUW9Q1w3BRd3cchiTogA9C/ej/PjXNZC4RJo8QJtcCwQ3D1mrJLg9RW6seDVj6hyQ==
-X-Received: by 2002:a05:600c:1616:b0:3e0:1a9:b1d7 with SMTP id m22-20020a05600c161600b003e001a9b1d7mr3017853wmn.19.1676991348802;
-        Tue, 21 Feb 2023 06:55:48 -0800 (PST)
-Received: from debian ([63.135.72.41])
-        by smtp.gmail.com with ESMTPSA id o11-20020a05600c510b00b003e1f2e43a1csm4670984wms.48.2023.02.21.06.55.48
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 21 Feb 2023 06:55:48 -0800 (PST)
-Date:   Tue, 21 Feb 2023 14:55:46 +0000
-From:   "Sudip Mukherjee (Codethink)" <sudipm.mukherjee@gmail.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
-        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, f.fainelli@gmail.com, srw@sladewatkins.net,
-        rwarsow@gmx.de
-Subject: Re: [PATCH 6.1 000/118] 6.1.13-rc1 review
-Message-ID: <Y/Tbcr5YIocnnFQB@debian>
-References: <20230220133600.368809650@linuxfoundation.org>
+        Tue, 21 Feb 2023 09:56:39 -0500
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC6B22A143;
+        Tue, 21 Feb 2023 06:56:37 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1676991397; x=1708527397;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=VE7TJfrm4RZ6eDfArZktuMj3vWfcIklvlSsBd6+oiXY=;
+  b=g6MfmMNvmil6qhPlX9QVLQZ+22eI5xKbogpSrOmRrLHsjIFIIPscsx3e
+   Bg0U9aWRUAnRCkjeJHo2bVULY0tG8lp2SJBVRSdnxtiz+T+IWhVWtn6qI
+   uEDelhDwEvZqa0kFx4MQyCiLilm4kzE/hGPioyxNWhPbG/HezzByDNO82
+   GhmSAz8wbQINXMQMC3wGk1OFP6a6sukhRRFI/I9v1s1RIJlBXeVCqrAqz
+   RPj8LlIM2Ub9/A+59DfeWZVgVg8eu7ATa0NZxqErbvaYrbhb0K+FV1IlO
+   ZwoKK3rZQD1F3ttr4I7pGXUuJSd+7jprZDDjScTNgrRJ5Cb4VDzf6gZ2s
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10627"; a="418870401"
+X-IronPort-AV: E=Sophos;i="5.97,315,1669104000"; 
+   d="scan'208";a="418870401"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Feb 2023 06:56:16 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10627"; a="704058316"
+X-IronPort-AV: E=Sophos;i="5.97,315,1669104000"; 
+   d="scan'208";a="704058316"
+Received: from yichaohu-mobl.ccr.corp.intel.com (HELO localhost) ([10.254.208.83])
+  by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Feb 2023 06:56:13 -0800
+Date:   Tue, 21 Feb 2023 22:56:10 +0800
+From:   Yu Zhang <yu.c.zhang@linux.intel.com>
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 05/12] KVM: x86: Use KVM-governed feature framework to
+ track "XSAVES enabled"
+Message-ID: <20230221145610.ytlj5nkqsscc2yxo@linux.intel.com>
+References: <20230217231022.816138-1-seanjc@google.com>
+ <20230217231022.816138-6-seanjc@google.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230220133600.368809650@linuxfoundation.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20230217231022.816138-6-seanjc@google.com>
+User-Agent: NeoMutt/20171215
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Greg,
-
-On Mon, Feb 20, 2023 at 02:35:16PM +0100, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 6.1.13 release.
-> There are 118 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
+On Fri, Feb 17, 2023 at 03:10:15PM -0800, Sean Christopherson wrote:
+> Use the governed feature framework to track if XSAVES is "enabled", i.e.
+> if XSAVES can be used by the guest.  Add a comment in the SVM code to
+> explain the very unintuitive logic of deliberately NOT checking if XSAVES
+> is enumerated in the guest CPUID model.
 > 
-> Responses should be made by Wed, 22 Feb 2023 13:35:35 +0000.
-> Anything received after that time might be too late.
+> No functional change intended.
 
-Build test (gcc version 12.2.1 20230210):
-mips: 52 configs -> no failure
-arm: 100 configs -> no failure
-arm64: 3 configs -> no failure
-x86_64: 4 configs -> no failure
-alpha allmodconfig -> no failure
-csky allmodconfig -> no failure
-powerpc allmodconfig -> no failure
-riscv allmodconfig -> no failure
-s390 allmodconfig -> no failure
-xtensa allmodconfig -> no failure
+xsaves_enabled in struct kvm_vcpu_arch is no longer used. But instead of
+just deleting it, maybe we could move 'bool load_eoi_exitmap_pending' to
+its place, so 7 bytes can be saved for each struct kvm_vcpu_arch:
 
-Boot test:
-x86_64: Booted on my test laptop. No regression.
-x86_64: Booted on qemu. No regression. [1]
-arm64: Booted on rpi4b (4GB model). No regression. [2]
-mips: Booted on ci20 board. No regression. [3]
+diff --git a/arch/x86/include/asm/kvm_host.h b/arch/x86/include/asm/kvm_host.h
+index cd660de02f7b..0eef5469c165 100644
+--- a/arch/x86/include/asm/kvm_host.h
++++ b/arch/x86/include/asm/kvm_host.h
+@@ -740,7 +740,6 @@ struct kvm_vcpu_arch {
+        u64 efer;
+        u64 apic_base;
+        struct kvm_lapic *apic;    /* kernel irqchip context */
+-       bool load_eoi_exitmap_pending;
+        DECLARE_BITMAP(ioapic_handled_vectors, 256);
+        unsigned long apic_attention;
+        int32_t apic_arb_prio;
+@@ -750,7 +749,7 @@ struct kvm_vcpu_arch {
+        u64 smi_count;
+        bool at_instruction_boundary;
+        bool tpr_access_reporting;
+-       bool xsaves_enabled;
++       bool load_eoi_exitmap_pending;
+        bool xfd_no_write_intercept;
+        u64 ia32_xss;
+        u64 microcode_version;
 
-[1]. https://openqa.qa.codethink.co.uk/tests/2908
-[2]. https://openqa.qa.codethink.co.uk/tests/2911
-[3]. https://openqa.qa.codethink.co.uk/tests/2913
-
-Tested-by: Sudip Mukherjee <sudip.mukherjee@codethink.co.uk>
-
--- 
-Regards
-Sudip
+B.R.
+Yu
