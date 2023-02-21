@@ -2,101 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A320169E1C5
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 14:57:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 31F1B69E17A
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 14:38:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233777AbjBUN50 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Feb 2023 08:57:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46596 "EHLO
+        id S233922AbjBUNi5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Feb 2023 08:38:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56610 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233202AbjBUN5Y (ORCPT
+        with ESMTP id S233032AbjBUNiy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Feb 2023 08:57:24 -0500
-X-Greylist: delayed 474 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 21 Feb 2023 05:57:23 PST
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C00529E0B;
-        Tue, 21 Feb 2023 05:57:23 -0800 (PST)
-Received: from maxwell ([109.42.115.188]) by mrelayeu.kundenserver.de
- (mreue010 [213.165.67.97]) with ESMTPSA (Nemesis) id
- 1MLAAs-1pDLWN3diM-00IDz4; Tue, 21 Feb 2023 14:43:46 +0100
-User-agent: mu4e 1.8.14; emacs 28.2
-From:   Jochen Henneberg <jh@henneberg-systemdesign.com>
-To:     Giuseppe Cavallaro <peppe.cavallaro@st.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Jose Abreu <joabreu@synopsys.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        netdev@vger.kernel.org, linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [PATCH net] net: stmmac: Premature loop termination check was ignored
-Date:   Tue, 21 Feb 2023 14:38:27 +0100
-Message-ID: <87fsaz6smr.fsf@henneberg-systemdesign.com>
+        Tue, 21 Feb 2023 08:38:54 -0500
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14DAA4688;
+        Tue, 21 Feb 2023 05:38:53 -0800 (PST)
+Received: from pps.filterd (m0279864.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 31LCaYfB011019;
+        Tue, 21 Feb 2023 13:38:50 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=occJZu2ZQyxtcntETgct/ixL3bzBb7hQ7vMRVwxAEAE=;
+ b=CguiNXsjLOCgpR3xe30gWB9ryd5KZ4MkTyCbUPE+pw/6lZ0UiLpHIKYFRDdwiqCf/MWN
+ qFYEIAkIkEXmKeJehPydE5/UawA3nhfsiKMDxakXFXCAie2pV/G96DcI8gZwAErQSiHK
+ fNQxWnjbaRb8rBW3JjqSSk7kSrQvcqdSOR2n5O7TXE5SzGTxdtfGmImMMdAjEJdW/Xv7
+ MPFl48sqR8L27dOTEmFeelZb7t0CpaaUvinm7uvLIIu0P5WqNsA79gdFKIpVA0yOeqV4
+ rn+L/nxMtp78q9tCqA4ULsoPpBlGUceB89adw7KVnUC6ePJD0dXn0MTt1W8HzW14NSdE EQ== 
+Received: from nasanppmta01.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3nubb1wths-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 21 Feb 2023 13:38:50 +0000
+Received: from nasanex01c.na.qualcomm.com (nasanex01c.na.qualcomm.com [10.45.79.139])
+        by NASANPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 31LDcnIb001528
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 21 Feb 2023 13:38:49 GMT
+Received: from [10.214.66.81] (10.80.80.8) by nasanex01c.na.qualcomm.com
+ (10.45.79.139) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.41; Tue, 21 Feb
+ 2023 05:38:46 -0800
+Message-ID: <c8c1ae71-a85f-18cb-780d-fd2e055f8e26@quicinc.com>
+Date:   Tue, 21 Feb 2023 19:08:38 +0530
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Provags-ID: V03:K1:UEjmjts8a3oTdsLqA0rvc+/8E/eBATSNya9dC/1ORtjI2CTbQIV
- 026feQLR23g4KIE8KNi+xOP9CLdOH2OCXKfaoWA6GH2HDSTi19nBIPyzmtVl2wMYrIjCvH3
- isHWzjznLhletxDQAJCJ3eXjglO8hIlRuBFGx4NH3AuMwGPmeL/2W7tTxG5se50qeIZyDWM
- nhIs4cPTID5tfbZgbCH5A==
-UI-OutboundReport: notjunk:1;M01:P0:79SNAF3zbgU=;7BTpu1ExYbUPqF6rtfvH5lDXt/J
- NT0fvRBvpIQUM5STLjEuwwmcZGT4vQmo1uXjoJMPYCUiZrcc7kOXrvBp7h4kT+x0m66Q1aH71
- yI35iuUMYsnM463ryPftmPmMhxQ1cmad14kILcxOUnOLYOj1MrMmdtR/FVOqKn+VwcTCFLjza
- oxQc4KfxLEvPkUkZgUAKFtCyCxs8TER87FCLjBed5R27v53ulkefkXRvQyY0+X5TMyJ6poR0e
- p/PmuYoEvQmI9qPry+Tavq/tJ84ed0sO4Xa1AEwC/0SuHEbG89pZH4eCKyJfQtBPLvuKexcgu
- 8IcN8bsOytvxbtgm+C0fq3g5vSzapRG4iLB8ATi/xfo69hvSRh3voJU5Qk3eNQhErwUPf0MXS
- JOkQplpxNwcVKNUHJMzVmZpNnrIo8qO9lE+c7comhdH3oWQ30KeomxMfjdMFohwnROIpQtFEr
- Px+8Nwt+A6Ni5IG+4ZFJDGN5T/uQasrM1xeE6B55+lA1R9WDh+c0DMIm+duKLenyeo34Zuodo
- nrcX+qy8gCF1MYo7E/JOMQVa8iDyt1n7G9PBOqK2yik97wL6vgSMClcgn7XunLmAM4K3zPPbo
- J92wJ5WtFMIeIEWoJA8NqoxyhH46110VatzbOzPSw0k86yCKSr/Omvlzv7N3Q1WHD/JaedFPX
- VV8ITVl8gYeP7cFaRzMT2YNt+g11n1X7LSIQzXzIsw==
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [PATCH v4] dt-bindings: mfd: qcom,tcsr: Add compatible for sm8450
+To:     <agross@kernel.org>, <andersson@kernel.org>,
+        <konrad.dybcio@linaro.org>, <lee@kernel.org>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>
+CC:     <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+References: <1675336284-548-1-git-send-email-quic_mojha@quicinc.com>
+Content-Language: en-US
+From:   Mukesh Ojha <quic_mojha@quicinc.com>
+In-Reply-To: <1675336284-548-1-git-send-email-quic_mojha@quicinc.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nasanex01c.na.qualcomm.com (10.45.79.139)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: TJEINiM2hSKkxPPcpAIyVxpiDdWrtSkw
+X-Proofpoint-GUID: TJEINiM2hSKkxPPcpAIyVxpiDdWrtSkw
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.170.22
+ definitions=2023-02-21_08,2023-02-20_02,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 impostorscore=0
+ suspectscore=0 adultscore=0 lowpriorityscore=0 spamscore=0 bulkscore=0
+ mlxlogscore=679 malwarescore=0 priorityscore=1501 mlxscore=0 phishscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2212070000
+ definitions=main-2302210116
+X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+friendly reminder.
 
-The premature loop termination check makes sense only in case of the
-jump to read_again where the count may have been updated. But
-read_again did not include the check.
-
-Signed-off-by: Jochen Henneberg <jh@henneberg-systemdesign.com>
----
- drivers/net/ethernet/stmicro/stmmac/stmmac_main.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
-index 1a5b8dab5e9b..de98c009866a 100644
---- a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
-+++ b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
-@@ -5031,10 +5031,10 @@ static int stmmac_rx_zc(struct stmmac_priv *priv, int limit, u32 queue)
- 			len = 0;
- 		}
- 
-+read_again:
- 		if (count >= limit)
- 			break;
- 
--read_again:
- 		buf1_len = 0;
- 		entry = next_entry;
- 		buf = &rx_q->buf_pool[entry];
-@@ -5221,10 +5221,10 @@ static int stmmac_rx(struct stmmac_priv *priv, int limit, u32 queue)
- 			len = 0;
- 		}
- 
-+read_again:
- 		if (count >= limit)
- 			break;
- 
--read_again:
- 		buf1_len = 0;
- 		buf2_len = 0;
- 		entry = next_entry;
--- 
-2.39.2
+-Mukesh
+On 2/2/2023 4:41 PM, Mukesh Ojha wrote:
+> Document the qcom,sm8450-tcsr compatible.
+> 
+> Signed-off-by: Mukesh Ojha <quic_mojha@quicinc.com>
+> Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> ---
+> Change in v4:
+>    - added Acked-by.
+> 
+> Change in v3:
+>    - Align with new format mentioned at
+>      Documentation/devicetree/bindings/arm/qcom-soc.yaml
+> 
+> Change in v2:
+>    - Considering here it as v2 as this patch came out from comment
+>      made on its v1 https://lore.kernel.org/lkml/c5dc8042-717b-22eb-79f6-d18ab10d6685@linaro.org/
+> 
+> 
+>   Documentation/devicetree/bindings/mfd/qcom,tcsr.yaml | 1 +
+>   1 file changed, 1 insertion(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/mfd/qcom,tcsr.yaml b/Documentation/devicetree/bindings/mfd/qcom,tcsr.yaml
+> index adcae6c..4290062 100644
+> --- a/Documentation/devicetree/bindings/mfd/qcom,tcsr.yaml
+> +++ b/Documentation/devicetree/bindings/mfd/qcom,tcsr.yaml
+> @@ -26,6 +26,7 @@ properties:
+>             - qcom,sdm630-tcsr
+>             - qcom,sdm845-tcsr
+>             - qcom,sm8150-tcsr
+> +          - qcom,sm8450-tcsr
+>             - qcom,tcsr-apq8064
+>             - qcom,tcsr-apq8084
+>             - qcom,tcsr-ipq6018
