@@ -2,71 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BD95A69E73B
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 19:15:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7027569E73E
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 19:16:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230007AbjBUSPn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Feb 2023 13:15:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42762 "EHLO
+        id S229884AbjBUSQi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Feb 2023 13:16:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43116 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229836AbjBUSPi (ORCPT
+        with ESMTP id S229550AbjBUSQf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Feb 2023 13:15:38 -0500
-Received: from mail-yb1-xb33.google.com (mail-yb1-xb33.google.com [IPv6:2607:f8b0:4864:20::b33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ECB4F1F917
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Feb 2023 10:15:36 -0800 (PST)
-Received: by mail-yb1-xb33.google.com with SMTP id v78so5958752ybe.3
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Feb 2023 10:15:36 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=pOgO/w06KVBEyUXIMY7wyQCGQx5gFUoRCVeioCjbV5M=;
-        b=YGdztCTlaHrRbsKTCaOZcHg4zoVQf9sO6DhN0S+s8gLe9egkas2r1pR7vjCXOgIDck
-         NJWuc3v0C6KuSOJmV2M0Eg8v2xOsHEgfWvu8vifqTwy0xOPsd33J5Lss/yNGsDerodKO
-         Zh8QCfkTre3S5aJ58OkBgvlwhc9zeduIYtTYNB6un1RFp/q5lf/26EkHnKZ2HBzPVttS
-         MMC13lP+IWG1Xi7/wGG7sA95MqHpkkZRUq3zHeGYfSGnijOLMz+IoUN1/nwRAayGCORs
-         iJTF04oB/MCC31ZJoQseePfV43knWNWbVLcgUsyfFIAqowZPp/hixJziw4kKmA52WjFn
-         LPwA==
+        Tue, 21 Feb 2023 13:16:35 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA4B52E0D8
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Feb 2023 10:15:41 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1677003341;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=7gsp6c5zC+n8RdVfxNnpTz1aW0fmy91m04gbSxIcYaY=;
+        b=f/FwpVtIW7OnOXV20Dzdr5Bb0pLww7M+DSGv0YLrpk/zqKB9e3YjzWfswVoUa5Pk3MKku7
+        wSrfOEbuKK75L1Q9j9elpgndG74TMDX5tidAFuxMARk3pK11JUkgNTNCKzABxxEw5VoFfE
+        RW92zhRW7zax8a8TGhF58oNt++/MHIA=
+Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
+ [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-582-qvwLPZBNOW-ZLPX5W6FTJA-1; Tue, 21 Feb 2023 13:15:38 -0500
+X-MC-Unique: qvwLPZBNOW-ZLPX5W6FTJA-1
+Received: by mail-wm1-f71.google.com with SMTP id bg26-20020a05600c3c9a00b003e21a3f4e84so2001254wmb.8
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Feb 2023 10:15:38 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=pOgO/w06KVBEyUXIMY7wyQCGQx5gFUoRCVeioCjbV5M=;
-        b=nNk0a1O6Okzu/Xnb2XIJYfpkw88k+7xDeaFjNYYAbdxv0Rh/DnVZLSCt75rRvDOfG5
-         GbgbkNiU42rqEU1qnjqgzlkTVf7KDHkF1vf8N9yXQoMu3HLwJ7KXZ4O/wF1eGqiiz/CX
-         7lsEh9qUvq3t1xX7ktg/bdY0EDTSe59teAlFKzpX0ov3Xov/QzGgl2PNKYt+4Ibz8GKF
-         A6EvteB80sF3YTY8VocT+RkNYPZlK0xw17oCfgFOn6630+fJsWHyGt3MDkc4ZmCoj782
-         ogLcrjpQAXNOt1TpFX9aEdgXfXoPvSzq+C9NL1jAnpv5h0SeWUb0fY+HLY1OLAnLsnkJ
-         yvgw==
-X-Gm-Message-State: AO0yUKXsqQaXkOGyHP92rHmumAR05ID78uwJ52tMIMYeUZ+yUeWevVk8
-        3eaDfoWab+ewWUhId8D6fs48WVAw2jLdwS3g4/twQQ==
-X-Google-Smtp-Source: AK7set9LH96P4CUu3oy9ckxPmJKWvYmcMNfbFLClOPwWL6qNKvmP55A/US6aPp8rCqa3Yk0nA4nUomosALyKjNV9efU=
-X-Received: by 2002:a5b:cc:0:b0:966:a047:4ce4 with SMTP id d12-20020a5b00cc000000b00966a0474ce4mr555033ybp.10.1677003335981;
- Tue, 21 Feb 2023 10:15:35 -0800 (PST)
+        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
+         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=7gsp6c5zC+n8RdVfxNnpTz1aW0fmy91m04gbSxIcYaY=;
+        b=AFfiaAPYXYMHUrhYLcQZ0UZWSd64ztyyTWMIHDsK9mkV0dyZHtAL6WSDiGoxqd1nDe
+         5Orlq9oNk9vgY/7caFUSrxoR6pObFTn0bJkUJ2/oR65rWsKN/0+Ez0WDByFrVWO256Pr
+         fNtgCRp5irQXFJcmpIHaiyTmDsR3Kr1oIRyxAvsDjVoGXWuTj6/66LtW6iUqLulCISGc
+         cGOKueU0KqDD+8EYTVHYF7az6ClVEQPh/Wi4D6wPUP/3sQbUf4Schtb8+2H/L7IqIKYX
+         SLZzbviZfL2VdTwAfhpFY1WX7DAoDMDgxTA9GhK5op3SdcRsyg+V7XfUs9/3QiD3tvlF
+         rkHA==
+X-Gm-Message-State: AO0yUKUKR+7H3gqTvLvud8yyhl2iCOeYk9eGeb0PO4BZxbDkkikEWfRR
+        Y0sqGYe4v9X793JraH90cq1lOn8jUDSe5wyQkhAR4vRPy8af5zphd15Xt7GYyU8sVkO6SwjJK7b
+        T4IjWzvNtBVpK2N6bExw5FzKq
+X-Received: by 2002:a05:600c:4b28:b0:3e2:9b4:4303 with SMTP id i40-20020a05600c4b2800b003e209b44303mr3598101wmp.19.1677003337667;
+        Tue, 21 Feb 2023 10:15:37 -0800 (PST)
+X-Google-Smtp-Source: AK7set8O4E4dOLUoULcTz2JAxG5OwJjd8ems/WBAnuxq0Oi5RF8s5cxsUvpQuFeERCpIG6csS53cpQ==
+X-Received: by 2002:a05:600c:4b28:b0:3e2:9b4:4303 with SMTP id i40-20020a05600c4b2800b003e209b44303mr3598077wmp.19.1677003337374;
+        Tue, 21 Feb 2023 10:15:37 -0800 (PST)
+Received: from vschneid.remote.csb ([154.57.232.159])
+        by smtp.gmail.com with ESMTPSA id s14-20020a5d510e000000b002c569acab1esm5494874wrt.73.2023.02.21.10.15.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 21 Feb 2023 10:15:36 -0800 (PST)
+From:   Valentin Schneider <vschneid@redhat.com>
+To:     tmmdh <921889738@qq.com>, hupu <921889738@qq.com>,
+        peterz@infradead.org
+Cc:     bristot@redhat.com, bsegall@google.com, dietmar.eggemann@arm.com,
+        hupu@oppo.com, ionela.voinescu@arm.com, juri.lelli@redhat.com,
+        len.brown@intel.com, linux-kernel@vger.kernel.org, mgorman@suse.de,
+        rafael.j.wysocki@intel.com, ravi.v.shankar@intel.com,
+        ricardo.neri-calderon@linux.intel.com, ricardo.neri@intel.com,
+        rostedt@goodmis.org, srinivas.pandruvada@linux.intel.com,
+        tim.c.chen@intel.com, tim.c.chen@linux.intel.com,
+        vincent.guittot@linaro.org, x86@kernel.org
+Subject: Re: [PATCH v3 06/10] sched/fair: Use the prefer_sibling flag of the
+ current sched domain
+In-Reply-To: <tencent_6C38D389245FD03C6E1312999FEDD394F606@qq.com>
+References: <xhsmh1qmkr7pa.mognet@vschneid.remote.csb>
+ <tencent_6C38D389245FD03C6E1312999FEDD394F606@qq.com>
+Date:   Tue, 21 Feb 2023 18:15:34 +0000
+Message-ID: <xhsmhttzeq3zt.mognet@vschneid.remote.csb>
 MIME-Version: 1.0
-References: <20230220230624.lkobqeagycx7bi7p@google.com> <6563189C-7765-4FFA-A8F2-A5CC4860A1EF@linux.dev>
- <CALvZod55K5zbbVYptq8ud=nKVyU1xceGVf6UcambBZ3BA2TZqA@mail.gmail.com>
- <Y/TMYa8DrocppXRu@casper.infradead.org> <Y/UDmc3+uIErpanS@P9FQF9L96D.corp.robot.car>
-In-Reply-To: <Y/UDmc3+uIErpanS@P9FQF9L96D.corp.robot.car>
-From:   Shakeel Butt <shakeelb@google.com>
-Date:   Tue, 21 Feb 2023 10:15:24 -0800
-Message-ID: <CALvZod6692L-mteZ9r+0Q1EZc_V7ZSQSwNtz+AbunFXZPKeUgg@mail.gmail.com>
-Subject: Re: [PATCH] mm: change memcg->oom_group access with atomic operations
-To:     Roman Gushchin <roman.gushchin@linux.dev>
-Cc:     Matthew Wilcox <willy@infradead.org>,
-        Yue Zhao <findns94@gmail.com>, linux-mm@kvack.org,
-        akpm@linux-foundation.org, hannes@cmpxchg.org, mhocko@kernel.org,
-        muchun.song@linux.dev, cgroups@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,62 +84,27 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 21, 2023 at 9:47 AM Roman Gushchin <roman.gushchin@linux.dev> w=
-rote:
+On 21/02/23 17:49, tmmdh wrote:
+> From: Valentin Schneider <vschneid@redhat.com>
+> But I am still confused by Peter's description about prefer_sibling in the last email, linked at
+> https://lore.kernel.org/all/Y+Z2b%2FOtZDk9cT53@hirez.programming.kicks-ass.net/
+>> this morning -- conceptually, prefer siblings says you want to try
+>> sibling domains before filling up your current domain.
 >
-> On Tue, Feb 21, 2023 at 01:51:29PM +0000, Matthew Wilcox wrote:
-> > On Mon, Feb 20, 2023 at 10:52:10PM -0800, Shakeel Butt wrote:
-> > > On Mon, Feb 20, 2023 at 9:17 PM Roman Gushchin <roman.gushchin@linux.=
-dev> wrote:
-> > > > > On Feb 20, 2023, at 3:06 PM, Shakeel Butt <shakeelb@google.com> w=
-rote:
-> > > > >
-> > > > > =EF=BB=BFOn Mon, Feb 20, 2023 at 01:09:44PM -0800, Roman Gushchin=
- wrote:
-> > > > >>> On Mon, Feb 20, 2023 at 11:16:38PM +0800, Yue Zhao wrote:
-> > > > >>> The knob for cgroup v2 memory controller: memory.oom.group
-> > > > >>> will be read and written simultaneously by user space
-> > > > >>> programs, thus we'd better change memcg->oom_group access
-> > > > >>> with atomic operations to avoid concurrency problems.
-> > > > >>>
-> > > > >>> Signed-off-by: Yue Zhao <findns94@gmail.com>
-> > > > >>
-> > > > >> Hi Yue!
-> > > > >>
-> > > > >> I'm curious, have any seen any real issues which your patch is s=
-olving?
-> > > > >> Can you, please, provide a bit more details.
-> > > > >>
-> > > > >
-> > > > > IMHO such details are not needed. oom_group is being accessed
-> > > > > concurrently and one of them can be a write access. At least
-> > > > > READ_ONCE/WRITE_ONCE is needed here.
-> > > >
-> > > > Needed for what?
-> > >
-> > > For this particular case, documenting such an access. Though I don't
-> > > think there are any architectures which may tear a one byte read/writ=
-e
-> > > and merging/refetching is not an issue for this.
-> >
-> > Wouldn't a compiler be within its rights to implement a one byte store =
-as:
-> >
-> >       load-word
-> >       modify-byte-in-word
-> >       store-word
-> >
-> > and if this is a lockless store to a word which has an adjacent byte al=
-so
-> > being modified by another CPU, one of those CPUs can lose its store?
-> > And WRITE_ONCE would prevent the compiler from implementing the store
-> > in that way.
->
-> Even then it's not an issue in this case, as we end up with either 0 or 1=
-,
-> I don't see how we can screw things up here.
+> Why should we try sibling domains before filling up your current domain? Why does Peter think that sibling domains is better than current domain.
+> My understanding about this problem is described as follows, but I am not
+> sure if it is correct. I think the sibling domain is a domain lower than
+> the current level. Just like SMT is the sibling of MC, while DIE is the
+> sibling of NUMA.
+
+That's the wrong way around; going up (or down) the sched_domain hierarchy is
+done via parent (or child) pointers. Sibling means going sideways (i.e. the
+same topology level but viewed from a different CPU)
+
+> Is it because the cpus covered by sibling domains share more resources (such as cache), which can improve the performance of task running?
 >
 
-What do you mean by this is not an issue in this case? Yes, the
-oom_group usage will be ok but we can not say anything about the
-adjacent byte/fields.
+If sibling domains are in same cache hierarchy then spreading tasks between
+them can improve overall performance. That doesn't work with NUMA or
+big.LITTLE domains, so we don't have the flag on those.
+
