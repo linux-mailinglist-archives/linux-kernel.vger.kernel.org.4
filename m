@@ -2,114 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7488369E7A3
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 19:37:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 89BF369E7A5
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 19:38:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229669AbjBUShm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Feb 2023 13:37:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36488 "EHLO
+        id S229825AbjBUSiL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Feb 2023 13:38:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37266 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229491AbjBUShj (ORCPT
+        with ESMTP id S229742AbjBUSiJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Feb 2023 13:37:39 -0500
-Received: from mail-il1-x135.google.com (mail-il1-x135.google.com [IPv6:2607:f8b0:4864:20::135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7823CFD;
-        Tue, 21 Feb 2023 10:37:34 -0800 (PST)
-Received: by mail-il1-x135.google.com with SMTP id e10so2150262ilu.4;
-        Tue, 21 Feb 2023 10:37:34 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=NDKdFfMckTVPhjv2RYXqg2o5W2mzsKTKPjeXzQMcsDk=;
-        b=P7WlENnHLWHn9WkAgRfC0KOOEcp1e5g8Oow5qF02P3MI1ALPAE2pJmzGMBBJ+dg6Cx
-         hECVPyX9d1uoA9f5BM5AA+u+2M9r8mfF6LImqnYPSfKVz8KwPPv1FxRGtHBJ0VdR2hFb
-         JfOZbo5YoYqLF445lgvdna34fvyv4NtYrcAAr385NYOUsa3AWj4fbP7eNzRhAlwaZrce
-         y+cMNChsPOPb60opuSnAlOSa6YfjQYEpQIcF8WIXnee2mCz7kvGPodkuaTvi/zQVPxb9
-         m4E3SoZKfqA8orHV3OCh/vjFoU/et34QVo1R4/tCVShXaLGeHZCXG/6zlWEKMW03O7EI
-         uTbA==
+        Tue, 21 Feb 2023 13:38:09 -0500
+Received: from mail-wr1-f50.google.com (mail-wr1-f50.google.com [209.85.221.50])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81C3C212E;
+        Tue, 21 Feb 2023 10:38:07 -0800 (PST)
+Received: by mail-wr1-f50.google.com with SMTP id j2so5314427wrh.9;
+        Tue, 21 Feb 2023 10:38:07 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=NDKdFfMckTVPhjv2RYXqg2o5W2mzsKTKPjeXzQMcsDk=;
-        b=WaPAgUzhMDtnZRH/azNxTIJSim0oX86VNeGwgLqJwUG+0jkCDvPepImIWyG84xZ+wq
-         nZlaC72DexnAfzi9VWyvSt9JDa0YeA68yiC4M9fSv5nJsmQY1JBTu0MAhZD7No7NRw+y
-         Kl9Sqq6khwpL6NLtgFhjCr2j567xrT0BCsHESrstJrtW+cYNnoJ1wyPzHbNPPddUajMz
-         5Oyg5vzPumVy1qQ9tFziTpkHpePupNvVgKvPssI2UXJpDJPtKjBNU4V8zK3hXObT8V0v
-         /Udy/6z2GW87s3imFtxu+FN3CpFNHT9liCAtKZ3fe5vy4PRRZWnmk81l3UnO0HiQ0g6r
-         stIg==
-X-Gm-Message-State: AO0yUKXUA42FJ0cYyf4zJ9nUsVeqRCdoqvLNgRqDtXYs6avNHcXBlAoF
-        qB5AIRXNXdDv3g3QDMhc8y0729OASpU=
-X-Google-Smtp-Source: AK7set8jCsQBtIRn5GPmTglMopkDBMQZUIZxvDW5n+RtcDg4CK4l2oKtA2gUFXvACcR9jriWz6wIeg==
-X-Received: by 2002:a92:1a0a:0:b0:316:b0b2:bf26 with SMTP id a10-20020a921a0a000000b00316b0b2bf26mr5530025ila.28.1677004653877;
-        Tue, 21 Feb 2023 10:37:33 -0800 (PST)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id f23-20020a02b797000000b003b0bd93117esm1338839jam.40.2023.02.21.10.37.32
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 21 Feb 2023 10:37:33 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Tue, 21 Feb 2023 10:37:31 -0800
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc:     rafael@kernel.org, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Jean Delvare <jdelvare@suse.com>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>
-Subject: Re: [PATCH v2 11/16] thermal/hwmon: Use the thermal_core.h header
-Message-ID: <20230221183731.GA1606246@roeck-us.net>
-References: <20230221180710.2781027-1-daniel.lezcano@linaro.org>
- <20230221180710.2781027-12-daniel.lezcano@linaro.org>
+        h=content-transfer-encoding:in-reply-to:from:references:to:subject:cc
+         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=erB3/GtUGm9+YBWIftw38TCv2hPM2fpW+cbxQs8tCIg=;
+        b=c88npd80hGOgqXa33VdVD0SIN32Ov5zDYi1VmpZ4G2rgTynDuRi4UXLpNezWtj0GXV
+         D3n0JgqAHA+kRHgyMbU1vEvpg8e3h6bvdLVKkcvIUNxhwN/7prgb4aCOWp8q11nPe5Bw
+         p5l5rYIqseQFDtZKNci52IaMl4zaXcYZ9s2aFCmS70hYt3RskXGmFvlxswyqWyVs1F1r
+         0oMyIrx+7y4owu/I3RU9IJCMJ8hlDGAPkKe7um0Ru38ok1oRskj80B93VT4SC4TD9/Y/
+         Kvb4ajZpHL70o+nVyedyLnaRhkYzfRbb/SYgnOJraLM4f9q/Rt0PxgJRUcHme8QVaTWr
+         lS7w==
+X-Gm-Message-State: AO0yUKXalclRBV5olvLTDO599qIJyHaXwX+DQpdXc/JAcUOEyeywdiSi
+        HMnd20gs66IrF68a1V5GQDs=
+X-Google-Smtp-Source: AK7set+QiVgzPQAzplKfJJnBHmZzm/XiWqW3q+r9FthIfUSfZTLEANmj1ddlDL/JoIXL3kxJQfr7Sw==
+X-Received: by 2002:a05:6000:cd:b0:2c5:ab27:d344 with SMTP id q13-20020a05600000cd00b002c5ab27d344mr4209573wrx.20.1677004685946;
+        Tue, 21 Feb 2023 10:38:05 -0800 (PST)
+Received: from ?IPV6:2620:10d:c0c3:1136:1486:5f6c:3f1:4b78? ([2620:10d:c092:400::5:543])
+        by smtp.gmail.com with ESMTPSA id o24-20020a5d58d8000000b002c7066a6f77sm2056204wrf.31.2023.02.21.10.38.05
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 21 Feb 2023 10:38:05 -0800 (PST)
+Message-ID: <b04b7d5d-582f-1b45-efa3-6e951dfc3cbf@debian.org>
+Date:   Tue, 21 Feb 2023 18:38:03 +0000
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230221180710.2781027-12-daniel.lezcano@linaro.org>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.7.2
+Cc:     leit@meta.com, linux-kernel@vger.kernel.org, gustavold@meta.com
+Subject: Re: [PATCH 1/2] io_uring: Move from hlist to io_wq_work_node
+To:     Pavel Begunkov <asml.silence@gmail.com>, axboe@kernel.dk,
+        io-uring@vger.kernel.org
+References: <20230221135721.3230763-1-leitao@debian.org>
+ <782b4b43-790c-6e89-ea74-aac1fd4ff1e2@gmail.com>
+From:   Breno Leitao <leitao@debian.org>
+In-Reply-To: <782b4b43-790c-6e89-ea74-aac1fd4ff1e2@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,
         FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 21, 2023 at 07:07:05PM +0100, Daniel Lezcano wrote:
-> The thermal_hwmon is playing with the thermal core code
-> internals. Changing the code would be too invasive for now.
+On 21/02/2023 17:45, Pavel Begunkov wrote:
+> On 2/21/23 13:57, Breno Leitao wrote:
+>> Having cache entries linked using the hlist format brings no benefit, and
+>> also requires an unnecessary extra pointer address per cache entry.
+>>
+>> Use the internal io_wq_work_node single-linked list for the internal
+>> alloc caches (async_msghdr and async_poll)
+>>
+>> This is required to be able to use KASAN on cache entries, since we do
+>> not need to touch unused (and poisoned) cache entries when adding more
+>> entries to the list.
 > 
-> We can consider the thermal_hwmon.c is part of the thermal core code
-> as it provides a glue to tie the hwmon and the thermal zones.
+> Looks good, a few nits
 > 
-> Let's include the thermal_core.h header.
+>>
+>> Suggested-by: Pavel Begunkov <asml.silence@gmail.com>
+>> Signed-off-by: Breno Leitao <leitao@debian.org>
+>> ---
+>>   include/linux/io_uring_types.h |  2 +-
+>>   io_uring/alloc_cache.h         | 27 +++++++++++++++------------
+>>   2 files changed, 16 insertions(+), 13 deletions(-)
+>>
+>> diff --git a/include/linux/io_uring_types.h
+>> b/include/linux/io_uring_types.h
+>> index 0efe4d784358..efa66b6c32c9 100644
+>> --- a/include/linux/io_uring_types.h
+>> +++ b/include/linux/io_uring_types.h
+>> @@ -188,7 +188,7 @@ struct io_ev_fd {
+>>   };
+>>   
+> [...]
+>> -    if (!hlist_empty(&cache->list)) {
+>> -        struct hlist_node *node = cache->list.first;
+>> -
+>> -        hlist_del(node);
+>> -        return container_of(node, struct io_cache_entry, node);
+>> +    struct io_wq_work_node *node;
+>> +    struct io_cache_entry *entry;
+>> +
+>> +    if (cache->list.next) {
+>> +        node = cache->list.next;
+>> +        entry = container_of(node, struct io_cache_entry, node);
 > 
-> No functional change intended.
+> I'd prefer to get rid of the node var, it'd be a bit cleaner
+> than keeping two pointers to the same chunk.
 > 
-> Cc: Jean Delvare <jdelvare@suse.com>
-> Cc: Guenter Roeck <linux@roeck-us.net>
-> Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
+> entry = container_of(node, struct io_cache_entry,
+>                      cache->list.next);
+> 
+>> +        cache->list.next = node->next;
+>> +        return entry;
+>>       }
+>>         return NULL;
+>> @@ -35,19 +38,19 @@ static inline struct io_cache_entry
+>> *io_alloc_cache_get(struct io_alloc_cache *c
+>>     static inline void io_alloc_cache_init(struct io_alloc_cache *cache)
+>>   {
+>> -    INIT_HLIST_HEAD(&cache->list);
+>> +    cache->list.next = NULL;
+>>       cache->nr_cached = 0;
+>>   }
+>>     static inline void io_alloc_cache_free(struct io_alloc_cache *cache,
+>>                       void (*free)(struct io_cache_entry *))
+>>   {
+>> -    while (!hlist_empty(&cache->list)) {
+>> -        struct hlist_node *node = cache->list.first;
+>> +    struct io_cache_entry *entry;
+>>   -        hlist_del(node);
+>> -        free(container_of(node, struct io_cache_entry, node));
+>> +    while ((entry = io_alloc_cache_get(cache))) {
+>> +        free(entry);
+> 
+> We don't need brackets here.
 
-Acked-by: Guenter Roeck <linux@roeck-us.net>
+The extra brackets are required if we are assignments in if, otherwise
+the compiler raises a warning (bugprone-assignment-in-if-condition)
 
-> ---
->  drivers/thermal/thermal_hwmon.c | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/drivers/thermal/thermal_hwmon.c b/drivers/thermal/thermal_hwmon.c
-> index bc02095b314c..c59db17dddd6 100644
-> --- a/drivers/thermal/thermal_hwmon.c
-> +++ b/drivers/thermal/thermal_hwmon.c
-> @@ -17,6 +17,7 @@
->  #include <linux/thermal.h>
->  
->  #include "thermal_hwmon.h"
-> +#include "thermal_core.h"
->  
->  /* hwmon sys I/F */
->  /* thermal zone devices with the same type share one hwmon device */
-> -- 
-> 2.34.1
-> 
+> Personally, I don't have anything
+> against assignments in if, but it's probably better to avoid them
+
+Sure. I will remove the assignents in "if" part and maybe replicate what
+we have
+in io_alloc_cache_get(). Something as:
+       if (cache->list.next) {
+               node = cache->list.next;
+
+Thanks for the review!
