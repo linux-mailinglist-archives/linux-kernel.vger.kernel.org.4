@@ -2,139 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 90C4369EA56
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 23:41:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8AFF169EA59
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 23:41:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230341AbjBUWli (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Feb 2023 17:41:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38076 "EHLO
+        id S230364AbjBUWl4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Feb 2023 17:41:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38474 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230324AbjBUWlg (ORCPT
+        with ESMTP id S230324AbjBUWly (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Feb 2023 17:41:36 -0500
-Received: from mail-ot1-x335.google.com (mail-ot1-x335.google.com [IPv6:2607:f8b0:4864:20::335])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 585625BB6
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Feb 2023 14:41:26 -0800 (PST)
-Received: by mail-ot1-x335.google.com with SMTP id bh19-20020a056830381300b00690bf2011b2so1091404otb.6
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Feb 2023 14:41:26 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=70NEIG7dPw85xNyUz123aLCI747RTlD28I7LT+LO0Ps=;
-        b=X+gpWh9hVizU+OWsUyVnNUVUVTmPeV0hBctGB1PvqmF80bWtEXX1f+f4fTD39NqUKT
-         bbFY2lWtMLQW6UfKLLkVCd0wJFCApjco9te6jcLWrfvvYsRocUHbSkm6fK5Xg0tXV+zp
-         uHwtMDu8uYGFa1kT/XtLF5iAI9Zg4WIxBIZOqn1IvlR039dgkyK02ltpARk8wovafWXk
-         OuD/GFzBRo+/yY9iR2dvtZvw4UfYy6qEbfXnKfcKfCz/2wIf+8muOucw9zVLkiWxCooT
-         9/UcsEMTQqcrrl/sTpDW6M9G39g37ON4UPOUyi5hcoALDeQKhPx4UH0IZLTk0mUy2HJB
-         jlfg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=70NEIG7dPw85xNyUz123aLCI747RTlD28I7LT+LO0Ps=;
-        b=i9/Ynxj0DIPdxnhuwXlN0svz9MPImaZ02EPo+YrmWc1o6JN21lWxadZj0wNylm6nLE
-         A7txUdEKnKTrUE7ugvE3c+PvErbChoFJC5rzxMP9DA885mv1hC4sWoj6crDXNwXldTen
-         tXuWqEOqA4Kso+Xz+735zxa3GCiNOuRrT5GEgKXdO8XZWE8YjnZRET8nABKw/vrt5QB0
-         Wv/Xte1ro+q1cwt7epkpR27viP+E0D16QXgEZmxpmWVFVeNDzHcVn68Nnkm/oqah+Igw
-         h5QBy1e+duxiihBAzVIywpJp/UfGE7D4RYD8ySR2F90XaSLRrx6EGI5Defv4IUZXvTqi
-         mIhA==
-X-Gm-Message-State: AO0yUKWwcSm9cVcQ6z+EMVPXTAJHFBxdpD/yVZb3b6KnRZ+3xmpJhlw+
-        vasAORoI5sVEWjXiQt9zazFCGQ==
-X-Google-Smtp-Source: AK7set+cWw0qeWzPMZvc8FYPF6bi/aMCuY0gsP24wf9X7ofAlNJlaLtoyNGQu8obXk8S53OWK/qwUQ==
-X-Received: by 2002:a05:6830:3116:b0:68b:bb82:a937 with SMTP id b22-20020a056830311600b0068bbb82a937mr7731121ots.34.1677019285376;
-        Tue, 21 Feb 2023 14:41:25 -0800 (PST)
-Received: from ripple.attlocal.net (172-10-233-147.lightspeed.sntcca.sbcglobal.net. [172.10.233.147])
-        by smtp.gmail.com with ESMTPSA id 90-20020a9d06e3000000b0068abc8e786fsm145511otx.10.2023.02.21.14.41.21
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 21 Feb 2023 14:41:23 -0800 (PST)
-Date:   Tue, 21 Feb 2023 14:41:21 -0800 (PST)
-From:   Hugh Dickins <hughd@google.com>
-X-X-Sender: hugh@ripple.attlocal.net
-To:     David Howells <dhowells@redhat.com>
-cc:     Matthew Wilcox <willy@infradead.org>,
-        Hugh Dickins <hughd@google.com>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        "Vishal Moola (Oracle)" <vishal.moola@gmail.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Steve French <smfrench@gmail.com>,
-        Steve French <stfrench@microsoft.com>,
-        Shyam Prasad N <nspmangalore@gmail.com>,
-        Rohith Surabattula <rohiths.msft@gmail.com>,
-        Tom Talpey <tom@talpey.com>, Paulo Alcantara <pc@cjr.nz>,
-        Jeff Layton <jlayton@kernel.org>, linux-cifs@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-next@vger.kernel.org
-Subject: Re: Obsolete comment on page swizzling (written by Hugh)?
-In-Reply-To: <2890066.1676993700@warthog.procyon.org.uk>
-Message-ID: <ec3b5661-e99-fb46-b678-66a7daf43d82@google.com>
-References: <2888446.1676992843@warthog.procyon.org.uk> <Y/TbYGXC4HKunymf@casper.infradead.org> <20230221184225.0e734f0e@canb.auug.org.au> <20230221174401.7198357d@canb.auug.org.au> <20230220152933.1ab8fa4a@canb.auug.org.au> <Y/N8hVWeR3AjssUC@casper.infradead.org>
- <20230220190157.3b43b9a7@canb.auug.org.au> <Y/Pe2xHklSr1hDtz@casper.infradead.org> <2351091.1676963957@warthog.procyon.org.uk> <2885897.1676990364@warthog.procyon.org.uk> <2890066.1676993700@warthog.procyon.org.uk>
+        Tue, 21 Feb 2023 17:41:54 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2C7823858;
+        Tue, 21 Feb 2023 14:41:50 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5C41E611F8;
+        Tue, 21 Feb 2023 22:41:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 53B47C433EF;
+        Tue, 21 Feb 2023 22:41:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1677019309;
+        bh=0jWSrZiIEN4x32uRTklDrYs3W6jpjgamnp/3khg4KpM=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=a8Cw740x+y9QfrLGKgcC2J8j48ETLPsHL6ZB57DG9jiyQejRF3aPx3uXfKG+AU76M
+         hnEJ0G5VrTVkQ15o8E626ubweoVSpx19c1CYVkf/krW0rlN98dt/3C0pgS7KX/tEG3
+         7oWCM/2NtObu8QWigvFXcAeaOLQ6sAo3Ic+2IJLuQhbQq9c8LuzZJUvfg9LfSDQF3U
+         8vlM3KCInnerWHFqeQcH6FNaC2JdIu+9jVf3T36nMAsvVHrZgK/IbyY4PnpSWqxE6l
+         2FVrtdTK+JWX33aOgsPTLmQVrrQX7OJXBzfQATXkeyxcFA5Vg/EkntAj9oOuZvNN+9
+         vekCI7YvuWHfw==
+Date:   Tue, 21 Feb 2023 22:41:41 +0000
+From:   Mark Brown <broonie@kernel.org>
+To:     Svyatoslav Ryhel <clamor95@gmail.com>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>,
+        Maxim Schwalm <maxim.schwalm@gmail.com>,
+        Dmitry Osipenko <digetx@gmail.com>, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, alsa-devel@alsa-project.org,
+        linux-tegra@vger.kernel.org, linux-staging@lists.linux.dev
+Subject: Re: [PATCH v1 09/10] staging: dsp: add support for Fortemedia FM34NE
+ DSP
+Message-ID: <Y/VIpVwFu5gUUcsz@sirena.org.uk>
+References: <20230221183211.21964-1-clamor95@gmail.com>
+ <20230221183211.21964-10-clamor95@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="t+XYRlFjbWnfVnHi"
+Content-Disposition: inline
+In-Reply-To: <20230221183211.21964-10-clamor95@gmail.com>
+X-Cookie: Serving suggestion.
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 21 Feb 2023, David Howells wrote:
-> David Howells <dhowells@redhat.com> wrote:
-> 
-> > > > +			/* At this point we hold neither the i_pages lock nor the
-> > > > +			 * page lock: the page may be truncated or invalidated
-> > > > +			 * (changing page->mapping to NULL), or even swizzled
-> > > > +			 * back from swapper_space to tmpfs file mapping
-> > > 
-> > > Where does this comment come from?  This is cifs, not tmpfs.  You'll
-> > > never be asked to writeback a page from the swap cache.  Dirty pages
-> > > can be truncated, so the first half of the comment is still accurate.
-> > > I'd rather it moved down to below the folio lock, and was rephrased
-> > > so it described why we're checking everything again.
-> > 
-> > Actually, it's in v6.2 cifs and I just move it in the patch where I copy the
-> > afs writepages implementation into cifs.  afs got it in 2007 when I added
-> > write support[1] and I suspect I copied it from cifs.  cifs got it in 2005
-> > when Steve added writepages support[2].  I think he must've got it from
-> > fs/mpage.c and the comment there is prehistoric.
-> 
-> The ultimate source is Hugh Dickins, it would seem:
-> 
-> 	commit 820ef9df32856bb54fe5bc995153feb276420e15
-> 	Author: Andrew Morton <akpm@digeo.com>
-> 	Date:   Fri Nov 15 18:52:38 2002 -0800
-> 
-> 	[PATCH] handle pages which alter their ->mapping
-> 
-> 	Patch from Hugh Dickins <hugh@veritas.com>
-> 
-> 	tmpfs failed fsx+swapout tests after many hours, a page found zeroed.
-> 	Not a truncate problem, but mirror image of earlier truncate problems:
-> 	swap goes through mpage_writepages, which must therefore allow for a
-> 	sudden swizzle back to file identity.
-> 
-> 	Second time this caught us, so I've audited the tree for other places
-> 	which might be surprised by such swizzling.  The only others I found
-> 	were (perhaps) in the parisc and sparc64 flush_dcache_page called
-> 	from do_generic_mapping_read on a looped tmpfs file which is also
-> 	mmapped; but that's a very marginal case, I wanted to understand it
-> 	better before making any edit, and now realize that hch's sendfile
-> 	in loop eliminates it (now go through do_shmem_file_read instead:
-> 	similar but crucially this locks the page when raising its count,
-> 	which is enough to keep vmscan from interfering).
-> 
-> Maybe we should delete or amend the comment now?
 
-Yes, that comment does not belong in afs or btrfs or cifs - though it
-does explain why we have sometimes chosen to compare folio_mapping(folio)
-with expected mapping, rather than against NULL.
+--t+XYRlFjbWnfVnHi
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-But "now" is not the moment to amend it: it looks like these sources
-are in flux at present.  And truncate_cleanup_folio() has a "swizzles"
-comment without even a mapping to compare with.
+On Tue, Feb 21, 2023 at 08:32:10PM +0200, Svyatoslav Ryhel wrote:
+> FM34NE is digital sound processing chip used for active
+> noise suppression mainly on ASUS Transformers.
 
-Hugh
+This looks like it should be fairly straightforward to support
+within ASoC without too much work, and since it's in the audio
+path it should probably be referenced from the sound card it'll
+end up having an ABI impact on the card.  Take a look at wm9090
+for a moderately complex example of an analogue only device
+(which this appears to be in terms of system integration).
+
+--t+XYRlFjbWnfVnHi
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmP1SKQACgkQJNaLcl1U
+h9DDVwf+K70Y1qVzg5TOp77al5H538FgUpnrUexBgtqevxsnf2pfTG1u1FhzAIPx
+ailEywGHqikGuQiQnRlJ7QJ/nq2PVnZ48f+yjdRrvE5Y6gPfuVAVaXMUlO0cVF+g
+gHuBj6tIxjz+ovqg9plyLwp0+6Pq2hkBOfMgRLU5YrfK2uUa991io9enHztwPJ1K
+EDBwItdOm7Z7rA3eYR6SYwDaA/DrGoqcrZkj4JCsOYi6yxHUyoXWeRKUQUcC9G8b
+KBTABkNAykYsDQpp1ePy5k3DNPeTzWCTlnp6FkEeVI2CSbiCO2WCNUamZR+LPS9o
+DHJiBUmskQVX14bLBWBufAXsfXgFsw==
+=ItYQ
+-----END PGP SIGNATURE-----
+
+--t+XYRlFjbWnfVnHi--
