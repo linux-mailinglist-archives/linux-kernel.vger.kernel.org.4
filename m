@@ -2,90 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D45F769DD25
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 10:48:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8594B69DD2A
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 10:48:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234010AbjBUJsU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Feb 2023 04:48:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55874 "EHLO
+        id S234018AbjBUJsy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Feb 2023 04:48:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56588 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232845AbjBUJsT (ORCPT
+        with ESMTP id S234019AbjBUJst (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Feb 2023 04:48:19 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56BD335BB
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Feb 2023 01:48:18 -0800 (PST)
-Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ore@pengutronix.de>)
-        id 1pUPFr-0004SR-FZ; Tue, 21 Feb 2023 10:48:11 +0100
-Received: from ore by ptx.hi.pengutronix.de with local (Exim 4.92)
-        (envelope-from <ore@pengutronix.de>)
-        id 1pUPFp-0000B0-Jj; Tue, 21 Feb 2023 10:48:09 +0100
-Date:   Tue, 21 Feb 2023 10:48:09 +0100
-From:   Oleksij Rempel <o.rempel@pengutronix.de>
-To:     "Russell King (Oracle)" <linux@armlinux.org.uk>
-Cc:     Andrew Lunn <andrew@lunn.ch>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, kernel@pengutronix.de,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org
-Subject: Re: [PATCH net-next v2 0/4] net: phy: EEE fixes
-Message-ID: <20230221094809.GF19238@pengutronix.de>
-References: <20230221050334.578012-1-o.rempel@pengutronix.de>
- <Y/SQo20Qes2GpoeM@shell.armlinux.org.uk>
+        Tue, 21 Feb 2023 04:48:49 -0500
+Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 800C2233C5;
+        Tue, 21 Feb 2023 01:48:46 -0800 (PST)
+Received: from loongson.cn (unknown [10.20.42.120])
+        by gateway (Coremail) with SMTP id _____8AxIMx8k_RjNBwDAA--.834S3;
+        Tue, 21 Feb 2023 17:48:44 +0800 (CST)
+Received: from [10.20.42.120] (unknown [10.20.42.120])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8Dx6r14k_RjH6g3AA--.36064S3;
+        Tue, 21 Feb 2023 17:48:40 +0800 (CST)
+Subject: Re: [PATCH v2 22/29] LoongArch: KVM: Implement handle idle exception
+To:     Paolo Bonzini <pbonzini@redhat.com>
+References: <20230220065735.1282809-1-zhaotianrui@loongson.cn>
+ <20230220065735.1282809-23-zhaotianrui@loongson.cn>
+ <06d61407-00b9-812c-e5b3-de585c47ae6b@redhat.com>
+Cc:     Huacai Chen <chenhuacai@kernel.org>,
+        WANG Xuerui <kernel@xen0n.name>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        loongarch@lists.linux.dev, linux-kernel@vger.kernel.org,
+        kvm@vger.kernel.org, Jens Axboe <axboe@kernel.dk>,
+        Mark Brown <broonie@kernel.org>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        Oliver Upton <oliver.upton@linux.dev>, maobibo@loongson.cn
+From:   Tianrui Zhao <zhaotianrui@loongson.cn>
+Message-ID: <5d7fe795-66b9-7a07-b754-77327886c6c6@loongson.cn>
+Date:   Tue, 21 Feb 2023 17:48:40 +0800
+User-Agent: Mozilla/5.0 (X11; Linux mips64; rv:45.0) Gecko/20100101
+ Thunderbird/45.4.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <Y/SQo20Qes2GpoeM@shell.armlinux.org.uk>
-X-Sent-From: Pengutronix Hildesheim
-X-URL:  http://www.pengutronix.de/
-X-Accept-Language: de,en
-X-Accept-Content-Type: text/plain
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
-X-SA-Exim-Mail-From: ore@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <06d61407-00b9-812c-e5b3-de585c47ae6b@redhat.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: AQAAf8Dx6r14k_RjH6g3AA--.36064S3
+X-CM-SenderInfo: p2kd03xldq233l6o00pqjv00gofq/
+X-Coremail-Antispam: 1Uk129KBjvdXoWrZrWDJw1ruFyxWr4DCryxAFb_yoWxurg_Ww
+        s3X3Z2kw4UWFsrt3W3CwnIgF43Ga1vqF98urWj9FyUWFnFqFWUWanFg397u397twsxZFZI
+        9r18A342kr17XjkaLaAFLSUrUUUUeb8apTn2vfkv8UJUUUU8wcxFpf9Il3svdxBIdaVrn0
+        xqx4xG64xvF2IEw4CE5I8CrVC2j2Jv73VFW2AGmfu7bjvjm3AaLaJ3UjIYCTnIWjp_UUUO
+        07kC6x804xWl14x267AKxVWUJVW8JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0rVWrJVCq3w
+        AFIxvE14AKwVWUXVWUAwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK021l84ACjcxK
+        6xIIjxv20xvE14v26r4j6ryUM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4j6F4UM28EF7
+        xvwVC2z280aVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Cr1j6rxdM2kK
+        e7AKxVWUAVWUtwAS0I0E0xvYzxvE52x082IY62kv0487Mc804VCY07AIYIkI8VC2zVCFFI
+        0UMc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUAVWUtwAv7VC2z280
+        aVAFwI0_Gr0_Cr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcVAKI48JMxk0xIA0c2IEe2
+        xFo4CEbIxvr21lc7CjxVAaw2AFwI0_JF0_Jw1l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC
+        6x0Yz7v_Jr0_Gr1l4IxYO2xFxVAFwI0_JF0_Jw1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s
+        026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43MIIYrxkI7VAKI48JMIIF
+        0xvE2Ix0cI8IcVAFwI0_JFI_Gr1lIxAIcVC0I7IYx2IY6xkF7I0E14v26r1j6r4UMIIF0x
+        vE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVW8JVWxJwCI42IY6I8E87Iv
+        6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjxU4SoGDUUUU
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 21, 2023 at 09:36:35AM +0000, Russell King (Oracle) wrote:
-> On Tue, Feb 21, 2023 at 06:03:30AM +0100, Oleksij Rempel wrote:
-> > changes v2:
-> > - restore previous ethtool set logic for the case where advertisements
-> >   are not provided by user space.
-> 
-> I don't think the _kernel_ should be doing this - this introduces a
-> different behaviour to the kernel. As I already said, setting the
-> default advertisement in the case of ethtool -s is done by userspace
-> not by the kernel.
-> 
-> In fact, the kernel explicitly rejects an attempt to have autoneg
-> enabled with a zero advertising mask:
-> 
->         linkmode_copy(advertising, cmd->link_modes.advertising);
->         linkmode_and(advertising, advertising, phydev->supported);
->         if (autoneg == AUTONEG_ENABLE && linkmode_empty(advertising))
->                 return -EINVAL;
-> 
-> and I think we should have a uniform behaviour with the same API,
-> rather than different behaviours, as that becomes quite messy.
 
-I decided to revert this part to not mix different issue. This logic
-existed before my refactoring. So, it is better to handle it as
-different patch. Current patch set should address only regressions.
 
--- 
-Pengutronix e.K.                           |                             |
-Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
-31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
-Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
+在 2023年02月21日 02:40, Paolo Bonzini 写道:
+> On 2/20/23 07:57, Tianrui Zhao wrote:
+>> +int _kvm_emu_idle(struct kvm_vcpu *vcpu)
+>> +{
+>> +    ++vcpu->stat.idle_exits;
+>> +    trace_kvm_exit(vcpu, KVM_TRACE_EXIT_IDLE);
+>
+> Please add a separate tracepoint, don't overload trace_kvm_exit().
+>
+> Likewise for _kvm_trap_handle_gspr().
+>
+> I think _kvm_trap_handle_gspr() should have a tracepoint whose 
+> parameter is inst.word.
+
+Thanks, I will add the tracepoint for _kvm_emu_idle and 
+_kvm_trap_handle_gspr.
+
+Thanks
+Tianrui Zhao
+
+>
+> Paolo
+>
+>> +    if (!vcpu->arch.irq_pending) {
+>> +        kvm_save_timer(vcpu);
+>> +        kvm_vcpu_block(vcpu);
+>> +    }
+>> +
+>> +    return EMULATE_DONE;
+
