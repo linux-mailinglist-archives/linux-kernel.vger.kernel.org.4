@@ -2,100 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3395169E23F
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 15:25:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E607769E241
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 15:25:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234187AbjBUOZE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Feb 2023 09:25:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48694 "EHLO
+        id S233959AbjBUOZw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Feb 2023 09:25:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49640 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234199AbjBUOY5 (ORCPT
+        with ESMTP id S233358AbjBUOZt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Feb 2023 09:24:57 -0500
-Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 810AC10269;
-        Tue, 21 Feb 2023 06:24:55 -0800 (PST)
-Received: from [2a02:8108:8980:2478:8cde:aa2c:f324:937e]; authenticated
-        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        id 1pUTZc-0002EL-Pt; Tue, 21 Feb 2023 15:24:52 +0100
-Message-ID: <9dda9e11-565f-8725-6d15-803a66782753@leemhuis.info>
-Date:   Tue, 21 Feb 2023 15:24:52 +0100
+        Tue, 21 Feb 2023 09:25:49 -0500
+Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF0392B289
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Feb 2023 06:25:47 -0800 (PST)
+Received: by mail-pj1-x102f.google.com with SMTP id g14so5100565pjb.2
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Feb 2023 06:25:47 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=TQtwfob29dO020xR+nsdt79jc/m4GepwvY587uLem6Q=;
+        b=Qwe+BLDHlhASfFsqXwjp1sJ8Ka1JNGxR4jj5LwZCeb2yjfO7BvpBfDcIjgM3ln+WeI
+         kpKHI1DZzTnzmJLWe2O5CUhvT7nXmB7aBsEet8Tdc8gzMKdbZj1IFOzZUCIWB2XlIZux
+         dg9nOb+XQYteg6LRyLscYg9Azo4dMplNRPqA28Xugg4oJ6H6EDQpgbOVXcTy1hWC3uPp
+         yGffdErgwCUTq/1l0Xc68O15BgW3vIFTF/CnWJJC4SmbTlMIGefK7SBUlzkQFO41CFPY
+         sDMwd9U5R5r1sA88LcQruESocHnpGHkIUPYmpb6yi5t+0OVhz6uS50ACwxuZeG9aNPD1
+         rzOA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=TQtwfob29dO020xR+nsdt79jc/m4GepwvY587uLem6Q=;
+        b=2otRPd+VQsOHwFUifahtw7/rMi+ivoOqpdyOPn5/pkvZurTKnbW3RtheWcoPVkyvDu
+         pzictAZER5C6DOBxUssjmutpA1j+e9OodLL12kKGGKwrLSE5W9RBiMQ1cBcs2iIRwvdn
+         aSic3kZcPwiYMequ7Q41FhsRjf6JrXBgrrtsNfkQIbmVWZvXBRfTx3WoVcnH5vUKs0ME
+         E5BIoXr/3cEYc4fihKdopS45rfcilLfHlDsA0J3rs1yXtYnqeFND+n58963MxwBZ8/2J
+         xKFDG4mohKrrwS26TNGQCL80oe47EwUJrMXWVQA1Wrum1yjrfEipvda6QY7MItJo90Gm
+         wKAg==
+X-Gm-Message-State: AO0yUKW9GZwmpS7WhjSmAyqsiRTnmpa8O6sQ/z0RY4YL5NuhmwVOxe2y
+        OOYQ8vDXAubzNXApw67PJlHiWkCh2mxp9mAhMT+10Q==
+X-Google-Smtp-Source: AK7set+YPslisVvXbDS80tJo5Qxl3/PELiXL8jZS8ZOeSMNaPgZ+EmecEkpv4R84I/CVFT5j62Ea0venY47uPYLcw0M=
+X-Received: by 2002:a17:90b:3946:b0:233:f98e:3a37 with SMTP id
+ oe6-20020a17090b394600b00233f98e3a37mr1152541pjb.15.1676989547358; Tue, 21
+ Feb 2023 06:25:47 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.2
-From:   "Linux regression tracking (Thorsten Leemhuis)" 
-        <regressions@leemhuis.info>
-Subject: Re: Regression: NULL pointer dereference after NFS_V4_2_READ_PLUS
- (commit 7fd461c47)
-Reply-To: Linux regressions mailing list <regressions@lists.linux.dev>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Linux regressions mailing list <regressions@lists.linux.dev>,
-        Anna Schumaker <Anna.Schumaker@Netapp.com>,
-        Trond Myklebust <trond.myklebust@hammerspace.com>
-Cc:     linux-nfs@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-References: <f591b13c-4600-e2a4-8efa-aac6ad828dd1@linaro.org>
- <65ae10cd-a086-47c6-c881-d1385d7fcf42@leemhuis.info>
- <5150343c-e13d-ed15-e59a-bc14f0db89da@leemhuis.info>
- <78806040-5725-103f-fe55-8c6d9ced6e63@linaro.org>
-Content-Language: en-US, de-DE
-In-Reply-To: <78806040-5725-103f-fe55-8c6d9ced6e63@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1676989495;a5a7c7ef;
-X-HE-SMSGID: 1pUTZc-0002EL-Pt
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20230113141234.260128-1-vincent.guittot@linaro.org>
+ <20230113141234.260128-6-vincent.guittot@linaro.org> <Y/S+qrschy+N+QCQ@hirez.programming.kicks-ass.net>
+ <Y/TSAivRWwm2LaPh@hirez.programming.kicks-ass.net>
+In-Reply-To: <Y/TSAivRWwm2LaPh@hirez.programming.kicks-ass.net>
+From:   Vincent Guittot <vincent.guittot@linaro.org>
+Date:   Tue, 21 Feb 2023 15:25:36 +0100
+Message-ID: <CAKfTPtAHuVFx=5w0p5DBShx42eEPCPXJ+DLc3z3_3yFv9jJWeA@mail.gmail.com>
+Subject: Re: [PATCH v10 5/9] sched/fair: Take into account latency priority at wakeup
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     mingo@redhat.com, juri.lelli@redhat.com, dietmar.eggemann@arm.com,
+        rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de,
+        bristot@redhat.com, vschneid@redhat.com,
+        linux-kernel@vger.kernel.org, parth@linux.ibm.com,
+        cgroups@vger.kernel.org, qyousef@layalina.io,
+        chris.hyser@oracle.com, patrick.bellasi@matbug.net,
+        David.Laight@aculab.com, pjt@google.com, pavel@ucw.cz,
+        tj@kernel.org, qperret@google.com, tim.c.chen@linux.intel.com,
+        joshdon@google.com, timj@gnu.org, kprateek.nayak@amd.com,
+        yu.c.chen@intel.com, youssefesmat@chromium.org,
+        joel@joelfernandes.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 18.02.23 16:09, Krzysztof Kozlowski wrote:
-> On 18/02/2023 05:42, Linux regression tracking #update (Thorsten
-> Leemhuis) wrote:
->> [TLDR: This mail in primarily relevant for Linux regression tracking. A
->> change or fix related to the regression discussed in this thread was
->> posted or applied, but it did not use a Link: tag to point to the
->> report, as Linus and the documentation call for. Things happen, no
->> worries -- but now the regression tracking bot needs to be told manually
->> about the fix. See link in footer if these mails annoy you.]
->>
->> On 08.01.23 09:52, Linux kernel regression tracking (#adding) wrote:
->>> On 07.01.23 16:44, Krzysztof Kozlowski wrote:
->>>>
->>>> Bisect identified commit 7fd461c47c6c ("NFSv4.2: Change the default
->>>> KConfig value for READ_PLUS") as one leading to NULL pointer exception
->>>> when mounting NFS root on NFSv4 client:
->>> [...]
->>> Thanks for the report. To be sure the issue doesn't fall through the
->>> cracks unnoticed, I'm adding it to regzbot, the Linux kernel regression
->>> tracking bot:
->>>
->>> #regzbot ^introduced 7fd461c47
->>> #regzbot title nfs: NULL pointer dereference since NFS_V4_2_READ_PLUS is
->>> enabled by default
->>> #regzbot ignore-activity
->>
->> #regzbot fix: 896e090eefedeb8a715ea19938a2791c32679
-> 
-> I see it was posted and merged as "Revert "NFSv4.2: Change the default
-> KConfig value for READ_PLUS"". It's nice to give credits to people who
-> report bugs with "Reported-by" tag.
+On Tue, 21 Feb 2023 at 15:15, Peter Zijlstra <peterz@infradead.org> wrote:
+>
+> On Tue, Feb 21, 2023 at 01:52:58PM +0100, Peter Zijlstra wrote:
+> > On Fri, Jan 13, 2023 at 03:12:30PM +0100, Vincent Guittot wrote:
+> >
+> > > diff --git a/include/linux/sched.h b/include/linux/sched.h
+> > > index 6c61bde49152..38decae3e156 100644
+> > > --- a/include/linux/sched.h
+> > > +++ b/include/linux/sched.h
+> > > @@ -568,6 +568,8 @@ struct sched_entity {
+> > >     /* cached value of my_q->h_nr_running */
+> > >     unsigned long                   runnable_weight;
+> > >  #endif
+> > > +   /* preemption offset in ns */
+> > > +   long                            latency_offset;
+> >
+> > I wonder about the type here; does it make sense to have it depend on
+> > the bitness; that is if s32 is big enough on 32bit then surely it is so
+> > too on 64bit, and if not, then it should be unconditionally s64.
+> >
+>
+> The cgroup patch has this as 'int'. I'm thinking we ought to be
+> consistent :-)
 
-Yup. And a "Link:" with the url to the report is missing as well (Linus
-wants those, automatic regression tracking needs those [IOW: if they are
-missing it causes me trouble, that's why I care], and the docs explain
-this as well).
-
-That's why I asked for those two tags, but I didn't even get a reply:
-
-https://lore.kernel.org/all/8d26e819-a3a5-7ae1-bb9e-56bacfa7f65b@leemhuis.info/
-
-Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
---
-Everything you wanna know about Linux kernel regression tracking:
-https://linux-regtracking.leemhuis.info/about/#tldr
-If I did something stupid, please tell me, as explained on that page.
+Yes, good point
