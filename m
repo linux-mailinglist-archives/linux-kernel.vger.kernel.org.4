@@ -2,129 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5704169E009
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 13:15:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DB5B269E00B
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 13:15:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234076AbjBUMPW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Feb 2023 07:15:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33226 "EHLO
+        id S234265AbjBUMP0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Feb 2023 07:15:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33364 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233620AbjBUMPN (ORCPT
+        with ESMTP id S234468AbjBUMPQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Feb 2023 07:15:13 -0500
-Received: from vulcan.natalenko.name (vulcan.natalenko.name [IPv6:2001:19f0:6c00:8846:5400:ff:fe0c:dfa0])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 318422940B;
-        Tue, 21 Feb 2023 04:14:43 -0800 (PST)
-Received: from mail.natalenko.name (vulcan.natalenko.name [IPv6:2001:19f0:6c00:8846:5400:ff:fe0c:dfa0])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        Tue, 21 Feb 2023 07:15:16 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 375D325B90
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Feb 2023 04:14:48 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by vulcan.natalenko.name (Postfix) with ESMTPSA id 1CE96123B37F;
-        Tue, 21 Feb 2023 13:14:08 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=natalenko.name;
-        s=dkim-20170712; t=1676981648;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=/RWUNzQLEBE9u2F8wn2satmN3srBwLaHuS4Q7HMGKbo=;
-        b=VwZXAjkqGtqMGn1icUJj/vivF6SJ93Jv20aLZdqaQVgHviA3cET6SvwM2c6BWKE9ixlR/J
-        yoUrrEUkUmI2xgPcs818Y6N61rd7B5JYHy0s2KlFTU6mT0jC2nCmKpai9J+UuieNp9fkuV
-        4VsIlClF1Qc9IyhvxVJscXAgkMADK3w=
-MIME-Version: 1.0
-Date:   Tue, 21 Feb 2023 13:14:07 +0100
-From:   Oleksandr Natalenko <oleksandr@natalenko.name>
-To:     David Woodhouse <dwmw2@infradead.org>
-Cc:     Kim Phillips <kim.phillips@amd.com>, tglx@linutronix.de,
-        Usama Arif <usama.arif@bytedance.com>, arjan@linux.intel.com,
-        mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
-        hpa@zytor.com, x86@kernel.org, pbonzini@redhat.com,
-        paulmck@kernel.org, linux-kernel@vger.kernel.org,
-        kvm@vger.kernel.org, rcu@vger.kernel.org, mimoja@mimoja.de,
-        hewenliang4@huawei.com, thomas.lendacky@amd.com, seanjc@google.com,
-        pmenzel@molgen.mpg.de, fam.zheng@bytedance.com,
-        punit.agrawal@bytedance.com, simon.evans@bytedance.com,
-        liangma@liangbit.com,
-        "Limonciello, Mario" <Mario.Limonciello@amd.com>,
-        Piotr Gorski <piotrgorski@cachyos.org>
-Subject: Re: [PATCH v9 0/8] Parallel CPU bringup for x86_64
-In-Reply-To: <10CA27BB-ADC6-4421-86D2-A83BD7FA12E0@infradead.org>
-References: <20230215145425.420125-1-usama.arif@bytedance.com>
- <2668869.mvXUDI8C0e@natalenko.name>
- <2a67f6cf18dd2c1879fad9fd8a28242918d3e5d2.camel@infradead.org>
- <982e1d6140705414e8fd60b990bd259a@natalenko.name>
- <715CBABF-4017-4784-8F30-5386F1524830@infradead.org>
- <67dbc69f-b712-8971-f1c9-5d07f506a19c@amd.com>
- <42dc683e2846ae8fc1e09715aaf7884660e1a386.camel@infradead.org>
- <37c18c3aeea2e558633b6da6886111d0@natalenko.name>
- <5A3B7074-0C6D-472B-803B-D76541828C1F@infradead.org>
- <3d8ed6e157df10c5175c636de0e21849@natalenko.name>
- <5c557f9b6f55dc2a612ee89142971298e6ae12d8.camel@infradead.org>
- <ee0d0d971a3095d6a1e96ad4f1ba32d2@natalenko.name>
- <5b8f9c89f7015fa80c966c6c7f6fa259db6744f8.camel@infradead.org>
- <ce731b5a4a53680b4840467977b33d9a@natalenko.name>
- <85ceb3f92abf3c013924de2f025517372bed19c0.camel@infradead.org>
- <3e5944de08ef0d23584d19bad7bae66c@natalenko.name>
- <26E5DC9C-0F19-4E4F-9076-04506A197374@infradead.org>
- <f71275dc809cfb32df513023786c3faa@natalenko.name>
- <10CA27BB-ADC6-4421-86D2-A83BD7FA12E0@infradead.org>
-Message-ID: <9153284c37a79d303aa79dbf07c10329@natalenko.name>
-X-Sender: oleksandr@natalenko.name
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 22CBC60FE9
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Feb 2023 12:14:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2D3C2C433D2;
+        Tue, 21 Feb 2023 12:14:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1676981651;
+        bh=2qsJdfbDVAPOImoyJDFbsExM45F/EPoTWXpuNj4khiQ=;
+        h=Date:From:To:Cc:Subject:From;
+        b=fx5k+nRLXOL3D67pNCjCKXjhhSg3WapgX4YiFKvVqWIiNHTKWDd2E3o95GTcg4F9R
+         sj6+Fa9A6jLxdXiGkwbf6KVSequuTCXDSwISdECZZc7nRU8P9ImZlqYVZQjoqCq5r5
+         S0/DPLTYPFqINJhyWvhZcQZQwDlR+5Fw6zm/LaY0LHkhQ+11mVLZ9EHp0XO6YdhAsF
+         4ch24h4PHPM66/xIU/iop00J6KageDYCpc7KyIebawXs3GINL5Hp9y/1U6ezpTAK4C
+         amMNQgORqot5AWhOTAkbtKsf03e0EJUSwstTy+3CdjmwHwKyqDTqK0miCfXzl7cbho
+         KJDwA0RrLhQ3Q==
+Date:   Tue, 21 Feb 2023 21:14:08 +0900
+From:   Masami Hiramatsu (Google) <mhiramat@kernel.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Donglin Peng <dolinux.peng@gmail.com>,
+        Masami Hiramatsu (Google) <mhiramat@kernel.org>,
+        Quanfa Fu <quanfafu@gmail.com>,
+        Yang Jihong <yangjihong1@huawei.com>,
+        Steven Rostedt <rostedt@goodmis.org>
+Subject: [GIT PULL] probes: Updates for 6.3
+Message-Id: <20230221211408.6fa4bb5868cda7d506a00c61@kernel.org>
+X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 21.02.2023 12:49, David Woodhouse wrote:
-> On 21 February 2023 11:46:04 GMT, Oleksandr Natalenko 
-> <oleksandr@natalenko.name> wrote:
->> On 21.02.2023 11:27, David Woodhouse wrote:
->>> On 21 February 2023 09:49:51 GMT, Oleksandr Natalenko 
->>> <oleksandr@natalenko.name> wrote:
->>>> On 21.02.2023 10:06, David Woodhouse wrote:
->>>>> Why does arch/x86/kernel/acpi/sleep.c::x86_acpi_suspend_lowlevel() 
->>>>> set
->>>>> 
->>>>>     initial_gs = per_cpu_offset(smp_processor_id()) ?
->>>>> 
->>>>> Would it not be CPU#0 that comes back up, and should it not get
->>>>> per_cpu_offset(0) ?
->>>> 
->>>> Wanna me try `initial_gs = per_cpu_offset(0);` too?
->>> 
->>> Hm, yes please. There's another one to make zero on the next line up, 
->>> I think?
->> 
->> So,
->> 
->> ```
->> early_gdt_descr.address = (unsigned long)get_cpu_gdt_rw(0);
->> initial_gs = per_cpu_offset(0);
->> ```
->> 
->> ?
->> 
->> Should I leave `smpboot_control = 0;` commented out, or I should 
->> uncomment it back?
-> 
-> Put it back, else those things don't matter. Thanks.
 
-With this in place:
+Hi Linus,
 
-```
-	early_gdt_descr.address = (unsigned long)get_cpu_gdt_rw(0);
-	initial_gs = per_cpu_offset(0);
-	smpboot_control = 0;
-```
+probes updates for 6.3:
 
-the resume does not work.
+- Skip negative return code check for snprintf in eprobe.
+
+- Add recursive call test cases for kprobe unit test
+
+- Add 'char' type to probe events to show it as the character instead of value.
+
+- Update kselftest kprobe-event testcase to ignore '__pfx_' symbols.
+
+- Fix kselftest to check filter on eprobe event correctly.
+
+- Add filter on eprobe to the README file in tracefs.
+
+- Fix optprobes to check whether there is 'under unoptimizing' optprobe when optimizing another kprobe correctly.
+
+- Fix optprobe to check whether there is 'under unoptimizing' optprobe when fetching the original instruction correctly.
+
+- Fix optprobe to free 'forcibly unoptimized' optprobe correctly.
+
+
+Please pull the latest probes-v6.3 tree, which can be found at:
+
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/trace/linux-trace.git
+probes-v6.3
+
+Tag SHA1: 7aa067de8b9767c68e828eabb15b830175dc0325
+Head SHA1: c96abaec78f34366b3ddf1c6be52ca5c1241e15b
+
+
+Donglin Peng (1):
+      tracing/probe: add a char type to show the character value of traced arguments
+
+Masami Hiramatsu (Google) (5):
+      kprobes: Fix to handle forcibly unoptimized kprobes on freeing_list
+      tracing/eprobe: Fix to add filter on eprobe description in README file
+      selftests/ftrace: Fix eprobe syntax test case to check filter support
+      selftests/ftrace: Fix probepoint testcase to ignore __pfx_* symbols
+      test_kprobes: Add recursed kprobe test case
+
+Quanfa Fu (1):
+      tracing/eprobe: no need to check for negative ret value for snprintf
+
+Yang Jihong (2):
+      x86/kprobes: Fix __recover_optprobed_insn check optimizing logic
+      x86/kprobes: Fix arch_check_optimized_kprobe check within optimized_kprobe range
+
+----
+ Documentation/trace/kprobetrace.rst                |  3 +-
+ arch/x86/kernel/kprobes/opt.c                      |  6 +--
+ include/linux/kprobes.h                            |  2 +
+ kernel/kprobes.c                                   | 27 ++++++-------
+ kernel/trace/trace.c                               |  4 +-
+ kernel/trace/trace_eprobe.c                        | 12 ++----
+ kernel/trace/trace_probe.c                         |  2 +
+ kernel/trace/trace_probe.h                         |  1 +
+ lib/test_kprobes.c                                 | 39 +++++++++++++++++-
+ .../test.d/dynevent/eprobes_syntax_errors.tc       |  4 +-
+ .../ftrace/test.d/kprobe/kprobe_args_char.tc       | 47 ++++++++++++++++++++++
+ .../selftests/ftrace/test.d/kprobe/probepoint.tc   |  2 +-
+ 12 files changed, 116 insertions(+), 33 deletions(-)
+ create mode 100644 tools/testing/selftests/ftrace/test.d/kprobe/kprobe_args_char.tc
+---------------------------
 
 -- 
-   Oleksandr Natalenko (post-factum)
+Masami Hiramatsu (Google) <mhiramat@kernel.org>
