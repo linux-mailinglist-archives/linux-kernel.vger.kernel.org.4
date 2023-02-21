@@ -2,121 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C73E069D920
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 04:02:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B4F0269D922
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 04:05:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233382AbjBUDCt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Feb 2023 22:02:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40234 "EHLO
+        id S233414AbjBUDFf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Feb 2023 22:05:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42706 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231708AbjBUDCq (ORCPT
+        with ESMTP id S231708AbjBUDFd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Feb 2023 22:02:46 -0500
-Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B9A3F1A49C;
-        Mon, 20 Feb 2023 19:02:44 -0800 (PST)
-Received: from loongson.cn (unknown [10.20.42.120])
-        by gateway (Coremail) with SMTP id _____8DxEzRMNPRjjAYDAA--.753S3;
-        Tue, 21 Feb 2023 11:02:36 +0800 (CST)
-Received: from [10.20.42.120] (unknown [10.20.42.120])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8BxsOQwNPRjrH83AA--.783S3;
-        Tue, 21 Feb 2023 11:02:09 +0800 (CST)
-Subject: Re: [PATCH v2 02/29] LoongArch: KVM: Implement kvm module related
- interface
-To:     Paolo Bonzini <pbonzini@redhat.com>
-References: <20230220065735.1282809-1-zhaotianrui@loongson.cn>
- <20230220065735.1282809-3-zhaotianrui@loongson.cn>
- <bf4111f9-f722-1847-4f1d-964c5356f392@redhat.com>
-Cc:     Huacai Chen <chenhuacai@kernel.org>,
-        WANG Xuerui <kernel@xen0n.name>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        loongarch@lists.linux.dev, linux-kernel@vger.kernel.org,
-        kvm@vger.kernel.org, Jens Axboe <axboe@kernel.dk>,
-        Mark Brown <broonie@kernel.org>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        Oliver Upton <oliver.upton@linux.dev>, maobibo@loongson.cn
-From:   Tianrui Zhao <zhaotianrui@loongson.cn>
-Message-ID: <708f97e8-0501-a4d4-2c33-7f4c41339d6b@loongson.cn>
-Date:   Tue, 21 Feb 2023 11:02:08 +0800
-User-Agent: Mozilla/5.0 (X11; Linux mips64; rv:45.0) Gecko/20100101
- Thunderbird/45.4.0
+        Mon, 20 Feb 2023 22:05:33 -0500
+Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65017233F8;
+        Mon, 20 Feb 2023 19:05:30 -0800 (PST)
+Received: from pps.filterd (m0098419.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 31L2hmLs015917;
+        Tue, 21 Feb 2023 03:05:19 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=O07ApxOOjxYzE6kswAFlfApRGRGaC9bTfX01xlm9QgA=;
+ b=mfWMmCaBxlb/dXPtgnRLhzXVwXLgpccNquFG2aKI8YH2UpRLceJ7vgqESzEVJjVcoKH1
+ GRrurmwDudYfK6zTDp+44EfSHJT2TItq/YRNZkx9LjdfVLvUqD83uXogBkz30+CdFf9v
+ NhqbAAfnZnxTvOg1si7LV/qp4tPoM12Fmza3w7+rrlnYQtvABMHr2Lf4sHzq9lVRyaAP
+ 1/Jb164lGUk7F58p+lmgyFMH5pR3PmZxtZ8jZ9FkzoDwksA3eLoTSIqSFcRPocPQ2AeU
+ UFRXEB9s/Rw+RuGknlune7OTsaXQdKaSfRl7zJhib3V5ja39m4ML8ECg59IOY59eiWQh Pg== 
+Received: from ppma01dal.us.ibm.com (83.d6.3fa9.ip4.static.sl-reverse.com [169.63.214.131])
+        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3nvjbcc3hf-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 21 Feb 2023 03:05:18 +0000
+Received: from pps.filterd (ppma01dal.us.ibm.com [127.0.0.1])
+        by ppma01dal.us.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 31L0Hdao011396;
+        Tue, 21 Feb 2023 03:05:18 GMT
+Received: from smtprelay03.dal12v.mail.ibm.com ([9.208.130.98])
+        by ppma01dal.us.ibm.com (PPS) with ESMTPS id 3ntpa7chuq-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 21 Feb 2023 03:05:17 +0000
+Received: from smtpav06.dal12v.mail.ibm.com (smtpav06.dal12v.mail.ibm.com [10.241.53.105])
+        by smtprelay03.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 31L35GWA61079810
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 21 Feb 2023 03:05:16 GMT
+Received: from smtpav06.dal12v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 74A0358065;
+        Tue, 21 Feb 2023 03:05:16 +0000 (GMT)
+Received: from smtpav06.dal12v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 3F15F58060;
+        Tue, 21 Feb 2023 03:05:16 +0000 (GMT)
+Received: from [9.163.84.166] (unknown [9.163.84.166])
+        by smtpav06.dal12v.mail.ibm.com (Postfix) with ESMTP;
+        Tue, 21 Feb 2023 03:05:16 +0000 (GMT)
+Message-ID: <72d189d2-f5d9-f268-4ccd-4f213a7b99e8@linux.ibm.com>
+Date:   Mon, 20 Feb 2023 21:05:16 -0600
 MIME-Version: 1.0
-In-Reply-To: <bf4111f9-f722-1847-4f1d-964c5356f392@redhat.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.7.2
+Subject: Re: [PATCH v4 1/6] Update Kconfig and Makefile.
+Content-Language: en-US
+To:     Herbert Xu <herbert@gondor.apana.org.au>
+Cc:     linux-crypto@vger.kernel.org, leitao@debian.org,
+        nayna@linux.ibm.com, appro@cryptogams.org,
+        linux-kernel@vger.kernel.org, ltcgcw@linux.vnet.ibm.com,
+        dtsen@us.ibm.com
+References: <20230220204224.4907-1-dtsen@linux.ibm.com>
+ <20230220204224.4907-2-dtsen@linux.ibm.com>
+ <Y/QwUWVhaUZ8fjO7@gondor.apana.org.au>
+ <b79673c7-a626-22e0-3e21-fc3e425f153f@linux.ibm.com>
+ <Y/QzjvCSgmGKPjD8@gondor.apana.org.au>
+From:   Danny Tsen <dtsen@linux.ibm.com>
+In-Reply-To: <Y/QzjvCSgmGKPjD8@gondor.apana.org.au>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf8BxsOQwNPRjrH83AA--.783S3
-X-CM-SenderInfo: p2kd03xldq233l6o00pqjv00gofq/
-X-Coremail-Antispam: 1Uk129KBjvJXoW7tw1UuF45KFWfCrykXw4xWFg_yoW8XF4Upa
-        4DCFn5Ar4UJFyfXwn0ya1vq3WFq3ykK3W2k3W0k3WYk3srurna9rs7Jr4j9F97Zrn3AF4v
-        va1YgrsxXrn0qFJanT9S1TB71UUUUjJqnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
-        qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
-        bqkYFVCjjxCrM7AC8VAFwI0_Jr0_Gr1l1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s
-        1l1IIY67AEw4v_Jrv_JF1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xv
-        wVC0I7IYx2IY67AKxVW5JVW7JwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwA2z4
-        x0Y4vEx4A2jsIE14v26r4UJVWxJr1l84ACjcxK6I8E87Iv6xkF7I0E14v26r4UJVWxJr1l
-        n4kS14v26r126r1DM2AIxVAIcxkEcVAq07x20xvEncxIr21l57IF6xkI12xvs2x26I8E6x
-        ACxx1l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r1q6rW5McIj6I8E
-        87Iv67AKxVW8JVWxJwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lc7I2V7IY0V
-        AS07AlzVAYIcxG8wCY1x0262kKe7AKxVWUAVWUtwCF04k20xvY0x0EwIxGrwCFx2IqxVCF
-        s4IE7xkEbVWUJVW8JwCFI7km07C267AKxVWUAVWUtwC20s026c02F40E14v26r1j6r18MI
-        8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41l
-        IxAIcVC0I7IYx2IY67AKxVW8JVW5JwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1lIx
-        AIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r4j6F4UMIIF0xvEx4A2
-        jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07jz5lbUUUUU=
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: 8p21Zx1121T4Bm4YQtK4rMFyvbk7DB4M
+X-Proofpoint-ORIG-GUID: 8p21Zx1121T4Bm4YQtK4rMFyvbk7DB4M
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.170.22
+ definitions=2023-02-20_19,2023-02-20_02,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ malwarescore=0 phishscore=0 spamscore=0 clxscore=1015 suspectscore=0
+ adultscore=0 mlxlogscore=919 lowpriorityscore=0 impostorscore=0 mlxscore=0
+ bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2302210026
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Herbert,
 
+Thanks for the explanation.  Will re-post the patch series.
 
-在 2023年02月21日 01:46, Paolo Bonzini 写道:
-> On 2/20/23 07:57, Tianrui Zhao wrote:
->> +    order = get_order(kvm_vector_size + kvm_enter_guest_size);
->> +    addr = (void *)__get_free_pages(GFP_KERNEL, order);
->> +    if (!addr) {
->> +        free_percpu(vmcs);
->> +        return -ENOMEM;
->> +    }
->> +
->> +    memcpy(addr, kvm_vector_entry, kvm_vector_size);
->> +    memcpy(addr + kvm_vector_size, kvm_enter_guest, 
->> kvm_enter_guest_size);
->> +    flush_icache_range((unsigned long)addr, (unsigned long)addr +
->> +                kvm_vector_size + kvm_enter_guest_size);
->> +
->> +    vpid_mask = read_csr_gstat();
->> +    vpid_mask = (vpid_mask & CSR_GSTAT_GIDBIT) >> 
->> CSR_GSTAT_GIDBIT_SHIFT;
->> +    if (vpid_mask)
->> +        vpid_mask = GENMASK(vpid_mask - 1, 0);
->> +
->> +    for_each_possible_cpu(cpu) {
->> +        context = per_cpu_ptr(vmcs, cpu);
->> +        context->vpid_mask = vpid_mask;
->> +        context->vpid_cache = context->vpid_mask + 1;
->> +        context->last_vcpu = NULL;
->> +        context->kvm_eentry = addr;
->> +        context->kvm_enter_guest = addr + kvm_vector_size;
->> +        context->page_order = order;
->> +    }
+Thanks.
+
+-Danny
+
+On 2/20/23 8:59 PM, Herbert Xu wrote:
+> On Mon, Feb 20, 2023 at 08:57:24PM -0600, Danny Tsen wrote:
+>> Hi Herbert,
+>>
+>> I am not sure why my patch has to build one-by-one?  I compiled with one
+>> make.  Here is the output.
+>>
+>>    CALL    scripts/checksyscalls.sh
+>>    DESCEND objtool
+>>    CC [M]  arch/powerpc/crypto/aes-gcm-p10-glue.o
+>>    AS [M]  arch/powerpc/crypto/aes-gcm-p10.o
+>>    AS [M]  arch/powerpc/crypto/ghashp8-ppc.o
+>>    AS [M]  arch/powerpc/crypto/aesp8-ppc.o
+>>    LD [M]  arch/powerpc/crypto/aes-gcm-p10-crypto.o
+>>    CHK     kernel/kheaders_data.tar.xz
+>>    MODPOST Module.symvers
+>>    CC [M]  arch/powerpc/crypto/aes-gcm-p10-crypto.mod.o
+>>    LD [M]  arch/powerpc/crypto/aes-gcm-p10-crypto.ko
+>>
+>> Can Stephen explain why he is compiling one-by-one?  Any output I can see.
+> Your patch-series should be bisectable.  That is, if I apply
+> only the first patch, it should still build in all configurations.
 >
-> A lot of these variables are constant across all pCPUs, any reason to 
-> have them in a per-CPU variable?  Likewise, since they are all the 
-> same as the constant global vmcs variable, why make them part of 
-> struct kvm_context instead of just making them globals?
-
-Ok thanks, it is more appropriate to use global variables to save those 
-information.
-
-Thanks
-Tianrui Zhao
-
+> Your first patch only adds the Kconfig option and Makefile rules
+> without any actual code.  So it will fail to build because the
+> code is simply not there.
 >
-> Also, why does the world switch code need a copy?
+> Normally we put the Kconfig/Makefile update at the end of the
+> series to prevent this.
 >
-> Paolo
-
+> Cheers,
