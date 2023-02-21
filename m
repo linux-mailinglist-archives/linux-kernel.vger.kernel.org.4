@@ -2,256 +2,199 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0837269DF46
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 12:50:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 014E469DF47
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 12:51:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234396AbjBULud (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Feb 2023 06:50:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54154 "EHLO
+        id S234397AbjBULu6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Feb 2023 06:50:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54814 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233481AbjBULub (ORCPT
+        with ESMTP id S233481AbjBULuz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Feb 2023 06:50:31 -0500
-Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2058.outbound.protection.outlook.com [40.107.93.58])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34C6310A8C;
-        Tue, 21 Feb 2023 03:50:27 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=VS+ka6xgzf86qDty9+/++EE2Qi5SgJNSCB2QDjmLaATTt+knlhKlbB5SXxj2XqHPsTufQDx420Bj9wzSxgNeOo3xoTJV+yPxYgdXMEJsX/Vz4ZUsr5bM3oXVHzDQaCLfrQCLAyANM3GI6R9DPpC9Hm/NREQclsiv4bOT6tlb8vpgLDE4AN6RZnayAumY5l1kPkhLpuuHOqUMMhz4BRo0E5GahjnxHS/Jr2Z4GMxhz52zBdzS0xT3WVbDGpEN4iaoosual+Zdwn1sOW17XbLEAkNIa6xgjwDpXN9tdGx8h6ak161cC1F9b0wUtBkhKCDvfTKhMmN1pGEOXmuhBMgQ2g==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=Yb0+XKgTmardZC+FWcj0k+gvbRMAEGIio0dawcg7wJc=;
- b=oM+tYnUmbuekNQdU1X1LHMn2CqcQVT/17t2nlMkknG1kfCHmC0NFG4QLsQUqnveFEqJD4KLJdT0+ViHG61C3pZ0kRZBVY39APy0D43N36GTJwP5ln2FfvuGR/CGlzmhuVoUzp6W5ta+ONujK/jvwMTy31BkAf6iQG5qnSr+Y9GVrki07jhewf0xVrXqoYwkv5Nt01lWWLc+HMrQPlLOWsWf92lySUv7/mnKSo7DV9StyjC8DwyLlIVen7dyi79twMt0tcD9TOq7HwyNkh0YjrMliNnm+uqH48lqqRMCD+XgZ65oDoNfofoSCYAVX0+75QabOZsK2GFp7NedAaOOPHA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=kernel.org smtp.mailfrom=amd.com; dmarc=pass
- (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Yb0+XKgTmardZC+FWcj0k+gvbRMAEGIio0dawcg7wJc=;
- b=317bAQWkYphKynhFhGQpp5X/LsVaJ2A4DbBBMOHdBtK/Vn69fZ7nUo8Mm/9gnZD6xkXBJydOuPol0ojJGll2nMnbrk8Ryij2bfsSQgYHw/+AK4PSukPers4uZkhzC6IIT+f/dBXJDeNnIX4lH5fx0NEuk9PKgzyftem9Ou8/6Ak=
-Received: from MN2PR10CA0015.namprd10.prod.outlook.com (2603:10b6:208:120::28)
- by SA1PR12MB7224.namprd12.prod.outlook.com (2603:10b6:806:2bb::20) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6111.21; Tue, 21 Feb
- 2023 11:50:17 +0000
-Received: from BL02EPF00010209.namprd05.prod.outlook.com
- (2603:10b6:208:120:cafe::f4) by MN2PR10CA0015.outlook.office365.com
- (2603:10b6:208:120::28) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6111.20 via Frontend
- Transport; Tue, 21 Feb 2023 11:50:16 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- BL02EPF00010209.mail.protection.outlook.com (10.167.241.198) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.6134.14 via Frontend Transport; Tue, 21 Feb 2023 11:50:16 +0000
-Received: from localhost (10.180.168.240) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Tue, 21 Feb
- 2023 05:50:14 -0600
-From:   Nava kishore Manne <nava.kishore.manne@amd.com>
-To:     <mdf@kernel.org>, <hao.wu@intel.com>, <yilun.xu@intel.com>,
-        <trix@redhat.com>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>, <michal.simek@xilinx.com>,
-        <nava.kishore.manne@amd.com>, <linux-fpga@vger.kernel.org>,
-        <devicetree@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: [PATCH v2] dt-bindings: fpga: xilinx-pr-decoupler: convert bindings to json-schema
-Date:   Tue, 21 Feb 2023 17:20:12 +0530
-Message-ID: <20230221115012.3468798-1-nava.kishore.manne@amd.com>
-X-Mailer: git-send-email 2.25.1
+        Tue, 21 Feb 2023 06:50:55 -0500
+Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CB4F1DBA0
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Feb 2023 03:50:43 -0800 (PST)
+Received: by mail-ed1-x535.google.com with SMTP id cq23so15769617edb.1
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Feb 2023 03:50:43 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=amarulasolutions.com; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=CN3GzQINLFm94ksBgPRU/qGo/8CYxVnDo+RMNdlhnSs=;
+        b=BTJ5utKqiQs0uhE6pxTm7Fzmq+6lEzD82D+d30nAIVEka7SdcOgP4CsJPwKylHRO3t
+         Ym8BrPBB9GWhpAfy2LW/T+QbjvPNJCf77rQnbzfRprmIlDPWw8ovcZoyNJu4jcJR7L8Q
+         Jh9SKWS2h8RSJjZSafndFyAUICXeYgWzmZIgM=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=CN3GzQINLFm94ksBgPRU/qGo/8CYxVnDo+RMNdlhnSs=;
+        b=RmmuTplHLdpFbKQEojSpSeGYbupTBwpHd/f45OLSszV3ozij7fmU1HLoJZ4VwB2yZi
+         tilr9a9Biij2Np7NyyPapkDaBTDIm3Z+A7kuTpmliglUOuSdys9Tnd8J4EgBVtoYuIcP
+         6JvxdSTShkJx3Bn/Yr67i4qS41/qs0zNVYEvK7hR3c35I/evwxZvAoZy4awbIKmcxP6Y
+         V4+SXHCLeJo7kHZKhNz5FDCBNEcbQPSNEzg8eo2iC8GlCnHx3fPjDpRfIsvE7oFX+S4/
+         Z5pd/k+8ruxyI3CfQyiHHbP5L7D1WKS8DVuRPO1l1Q9qFZGs5jlE4Ko7yjYZoZlS9UTW
+         +H9g==
+X-Gm-Message-State: AO0yUKUXnhaFqZs+zLLrX81OpWNQjh2rf6FamRSpqueDIY7AZMrKFjqm
+        5ioeogSh3z31t6O9Dj5twH+xHZ+A8H3jUXhU6GLyvw==
+X-Google-Smtp-Source: AK7set/2GluXaE6a8VqN9Pjft7IHfni6ZpsR3CyRQ6esRy8l60KMMVdGxtMhIyyNDVaqcP9uCsKwdL3+3K/ESEGguXo=
+X-Received: by 2002:a50:d64b:0:b0:4ae:e5d8:f9ab with SMTP id
+ c11-20020a50d64b000000b004aee5d8f9abmr1528708edj.6.1676980241910; Tue, 21 Feb
+ 2023 03:50:41 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.180.168.240]
-X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
- (10.181.40.145)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BL02EPF00010209:EE_|SA1PR12MB7224:EE_
-X-MS-Office365-Filtering-Correlation-Id: 2ba1ec0d-f742-4862-52e9-08db1401ccd5
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: U9YAZZ/drgXpU0hP7rTWTevMUZVxswcXUsNxGpGbogEI881Pxlyv2P+TM3EYiPC5LMbJ7jYdigUUUZ7EmturZ/ltBghu9gZ1d9ldQ71P5CzgvTCo8+ABdzs3uj2jZQ1RHa180nSzk5AsBsHeEhvRn8Huan1XpJ84VTktyfcDjartSpY3hmyN70AH7XgNAGoRORASIAPZRgpCEF+NAHAGeRgG2WTSEyqT4wR5NYSCDkBOKb3NXk6X7H6ok/loxYt58PGDb8buT2nG7qaDBQCLZPcFT/RRAoiVU+NTL3L4znbiE7UG1P6JFEAbXGzgvvo4XKu3BppmazOOrbsnY+XCXj3iW4LYFqP9t9X81ddsDA7dwzx1v0bk4U7C6gFd+OYmOS/6Yz3uJxo/qCx4wpdKgd/wyzmAYebpjUBaqlif5tVekk9K6LXloWzxK6q6BQC+3B5YouIPA8Nt9+kDOZWD7DAFKg+eBJgSuUvuQ5ZDFARt0WL+fM0O6oMhc3VRsRLR4oZcWBg27iaYD0BOcI3ol09JuS3TfiBnKLqdAGPRhuGLBr/QF2ik0B3J3p/QOY8eRkWitN3UkVwziov5FHjaiGBasUjyjldn2WCCnam6qm4bbai/f3UONFoAuw0Vd57+7dqrV4aHN/+Y3XXw5yNxuwvhdiF0mJVfSCND+QQJLPbZfzdx47W7oAW1ZYSs31vgmZ/mHU7cLBBQX5O+a/btjGgXr4DqsCIU65yMeR7DCrUaGtdDGmh1joBRZ6aXR7vUjTig1lBtOmgVbBb44mLuAPoUDfKI6193EKlptLQX91ql2B0YDECe+vLdRAHj+Hi86GEztO8m+SSfKpd2XwUAyA==
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230025)(4636009)(39860400002)(376002)(396003)(136003)(346002)(451199018)(46966006)(36840700001)(40470700004)(82740400003)(81166007)(82310400005)(2616005)(921005)(356005)(110136005)(86362001)(478600001)(36860700001)(83380400001)(70586007)(70206006)(5660300002)(2906002)(8676002)(41300700001)(8936002)(103116003)(26005)(1076003)(186003)(966005)(40480700001)(426003)(40460700003)(336012)(16526019)(316002)(7416002)(36756003)(47076005)(83996005)(2101003)(36900700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 21 Feb 2023 11:50:16.6643
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 2ba1ec0d-f742-4862-52e9-08db1401ccd5
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: BL02EPF00010209.namprd05.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA1PR12MB7224
-X-Spam-Status: No, score=0.5 required=5.0 tests=AC_FROM_MANY_DOTS,BAYES_00,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
-        autolearn=no autolearn_force=no version=3.4.6
+References: <20230211064527.3481754-1-jstultz@google.com> <20230211064527.3481754-2-jstultz@google.com>
+In-Reply-To: <20230211064527.3481754-2-jstultz@google.com>
+From:   Michael Nazzareno Trimarchi <michael@amarulasolutions.com>
+Date:   Tue, 21 Feb 2023 12:50:30 +0100
+Message-ID: <CAOf5uwk8O=jdNNM97XkFRqXm6i1j-z3miRvDEm=Ju0Cf6yUemw@mail.gmail.com>
+Subject: Re: [RFC][PATCH 2/2] time: alarmtimer: Use TASK_FREEZABLE to cleanup
+ freezer handling
+To:     John Stultz <jstultz@google.com>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Stephen Boyd <sboyd@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+        Michael <michael@mipisi.de>, kernel-team@android.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Convert xilinx-pr-decoupler bindings to DT schema format using json-schema
+Hi John
 
-Signed-off-by: Nava kishore Manne <nava.kishore.manne@amd.com>
----
-Changes for v2:
-              - Updated the description and addressed some minor comments
-                as suggested by Krzysztof.
+On Sat, Feb 11, 2023 at 7:45 AM John Stultz <jstultz@google.com> wrote:
+>
+> Instead of trying to handle the freezer waking up tasks from
+> schedule() in nanosleep on alarmtimers explicitly, use
+> TASK_FREEZABLE which marks the task freezable when it goes
+> to schedule, which prevents the signal wakeup.
+>
+> This allows for the freezer handling to be removed, simplifying
+> the code.
+>
+> Cc: Thomas Gleixner <tglx@linutronix.de>
+> Cc: Stephen Boyd <sboyd@kernel.org>
+> Cc: Arnd Bergmann <arnd@arndb.de>
+> Cc: Michael <michael@mipisi.de>
+> Cc: Michael Trimarchi <michael@amarulasolutions.com>
+> Cc: kernel-team@android.com
+> Originally-by: Thomas Gleixner <tglx@linutronix.de>
+> Link: https://lore.kernel.org/lkml/alpine.DEB.2.21.1909021247250.3955@nanos.tec.linutronix.de/
+> [jstultz: Forward ported to 6.2-rc and split out from a separate
+>           fix.]
+> Signed-off-by: John Stultz <jstultz@google.com>
+> ---
+>  kernel/time/alarmtimer.c | 53 ++--------------------------------------
+>  1 file changed, 2 insertions(+), 51 deletions(-)
+>
+> diff --git a/kernel/time/alarmtimer.c b/kernel/time/alarmtimer.c
+> index f7b2128f64e2..15ecde8fcc1b 100644
+> --- a/kernel/time/alarmtimer.c
+> +++ b/kernel/time/alarmtimer.c
+> @@ -49,14 +49,6 @@ static struct alarm_base {
+>         clockid_t               base_clockid;
+>  } alarm_bases[ALARM_NUMTYPE];
+>
+> -#if defined(CONFIG_POSIX_TIMERS) || defined(CONFIG_RTC_CLASS)
+> -/* freezer information to handle clock_nanosleep triggered wakeups */
+> -static enum alarmtimer_type freezer_alarmtype;
+> -static ktime_t freezer_expires;
+> -static ktime_t freezer_delta;
+> -static DEFINE_SPINLOCK(freezer_delta_lock);
+> -#endif
+> -
+>  #ifdef CONFIG_RTC_CLASS
+>  /* rtc timer and device for setting alarm wakeups at suspend */
+>  static struct rtc_timer                rtctimer;
+> @@ -241,19 +233,12 @@ EXPORT_SYMBOL_GPL(alarm_expires_remaining);
+>   */
+>  static int alarmtimer_suspend(struct device *dev)
+>  {
+> -       ktime_t min, now, expires;
+> +       ktime_t now, expires, min = KTIME_MAX;
+>         int i, ret, type;
+>         struct rtc_device *rtc;
+>         unsigned long flags;
+>         struct rtc_time tm;
+>
+> -       spin_lock_irqsave(&freezer_delta_lock, flags);
+> -       min = freezer_delta;
+> -       expires = freezer_expires;
+> -       type = freezer_alarmtype;
+> -       freezer_delta = KTIME_MAX;
+> -       spin_unlock_irqrestore(&freezer_delta_lock, flags);
+> -
+>         rtc = alarmtimer_get_rtcdev();
+>         /* If we have no rtcdev, just return */
+>         if (!rtc)
+> @@ -480,38 +465,6 @@ u64 alarm_forward_now(struct alarm *alarm, ktime_t interval)
+>  EXPORT_SYMBOL_GPL(alarm_forward_now);
+>
+>  #ifdef CONFIG_POSIX_TIMERS
+> -
+> -static void alarmtimer_freezerset(ktime_t absexp, enum alarmtimer_type type)
+> -{
+> -       struct alarm_base *base;
+> -       unsigned long flags;
+> -       ktime_t delta;
+> -
+> -       switch(type) {
+> -       case ALARM_REALTIME:
+> -               base = &alarm_bases[ALARM_REALTIME];
+> -               type = ALARM_REALTIME_FREEZER;
+> -               break;
+> -       case ALARM_BOOTTIME:
+> -               base = &alarm_bases[ALARM_BOOTTIME];
+> -               type = ALARM_BOOTTIME_FREEZER;
+> -               break;
+> -       default:
+> -               WARN_ONCE(1, "Invalid alarm type: %d\n", type);
+> -               return;
+> -       }
+> -
+> -       delta = ktime_sub(absexp, base->get_ktime());
+> -
+> -       spin_lock_irqsave(&freezer_delta_lock, flags);
+> -       if (delta < freezer_delta) {
+> -               freezer_delta = delta;
+> -               freezer_expires = absexp;
+> -               freezer_alarmtype = type;
+> -       }
+> -       spin_unlock_irqrestore(&freezer_delta_lock, flags);
+> -}
+> -
+>  /**
+>   * clock2alarm - helper that converts from clockid to alarmtypes
+>   * @clockid: clockid.
+> @@ -750,7 +703,7 @@ static int alarmtimer_do_nsleep(struct alarm *alarm, ktime_t absexp,
+>         struct restart_block *restart;
+>         alarm->data = (void *)current;
+>         do {
+> -               set_current_state(TASK_INTERRUPTIBLE);
+> +               set_current_state(TASK_INTERRUPTIBLE | TASK_FREEZABLE);
+>                 alarm_start(alarm, absexp);
+>                 if (likely(alarm->data))
+>                         schedule();
+> @@ -765,8 +718,6 @@ static int alarmtimer_do_nsleep(struct alarm *alarm, ktime_t absexp,
+>         if (!alarm->data)
+>                 return 0;
+>
+> -       if (freezing(current))
+> -               alarmtimer_freezerset(absexp, type);
+>         restart = &current->restart_block;
+>         if (restart->nanosleep.type != TT_NONE) {
+>                 struct timespec64 rmt;
+> --
+> 2.39.1.581.gbfd45094c4-goog
+>
+Tested-by: Michael Trimarchi <michael@amarulasolutions.com>
 
- .../bindings/fpga/xilinx-pr-decoupler.txt     | 54 --------------
- .../bindings/fpga/xlnx,pr-decoupler.yaml      | 71 +++++++++++++++++++
- 2 files changed, 71 insertions(+), 54 deletions(-)
- delete mode 100644 Documentation/devicetree/bindings/fpga/xilinx-pr-decoupler.txt
- create mode 100644 Documentation/devicetree/bindings/fpga/xlnx,pr-decoupler.yaml
+I will test Thomas patch soon
 
-diff --git a/Documentation/devicetree/bindings/fpga/xilinx-pr-decoupler.txt b/Documentation/devicetree/bindings/fpga/xilinx-pr-decoupler.txt
-deleted file mode 100644
-index 0acdfa6d62a4..000000000000
---- a/Documentation/devicetree/bindings/fpga/xilinx-pr-decoupler.txt
-+++ /dev/null
-@@ -1,54 +0,0 @@
--Xilinx LogiCORE Partial Reconfig Decoupler Softcore
--
--The Xilinx LogiCORE Partial Reconfig Decoupler manages one or more
--decouplers / fpga bridges.
--The controller can decouple/disable the bridges which prevents signal
--changes from passing through the bridge.  The controller can also
--couple / enable the bridges which allows traffic to pass through the
--bridge normally.
--
--Xilinx LogiCORE Dynamic Function eXchange(DFX) AXI shutdown manager
--Softcore is compatible with the Xilinx LogiCORE pr-decoupler.
--
--The Dynamic Function eXchange AXI shutdown manager prevents AXI traffic
--from passing through the bridge. The controller safely handles AXI4MM
--and AXI4-Lite interfaces on a Reconfigurable Partition when it is
--undergoing dynamic reconfiguration, preventing the system deadlock
--that can occur if AXI transactions are interrupted by DFX
--
--The Driver supports only MMIO handling. A PR region can have multiple
--PR Decouplers which can be handled independently or chained via decouple/
--decouple_status signals.
--
--Required properties:
--- compatible		: Should contain "xlnx,pr-decoupler-1.00" followed by
--                          "xlnx,pr-decoupler" or
--                          "xlnx,dfx-axi-shutdown-manager-1.00" followed by
--                          "xlnx,dfx-axi-shutdown-manager"
--- regs			: base address and size for decoupler module
--- clocks		: input clock to IP
--- clock-names		: should contain "aclk"
--
--See Documentation/devicetree/bindings/fpga/fpga-region.txt and
--Documentation/devicetree/bindings/fpga/fpga-bridge.txt for generic bindings.
--
--Example:
--Partial Reconfig Decoupler:
--	fpga-bridge@100000450 {
--		compatible = "xlnx,pr-decoupler-1.00",
--			     "xlnx-pr-decoupler";
--		regs = <0x10000045 0x10>;
--		clocks = <&clkc 15>;
--		clock-names = "aclk";
--		bridge-enable = <0>;
--	};
--
--Dynamic Function eXchange AXI shutdown manager:
--	fpga-bridge@100000450 {
--		compatible = "xlnx,dfx-axi-shutdown-manager-1.00",
--			     "xlnx,dfx-axi-shutdown-manager";
--		regs = <0x10000045 0x10>;
--		clocks = <&clkc 15>;
--		clock-names = "aclk";
--		bridge-enable = <0>;
--	};
-diff --git a/Documentation/devicetree/bindings/fpga/xlnx,pr-decoupler.yaml b/Documentation/devicetree/bindings/fpga/xlnx,pr-decoupler.yaml
-new file mode 100644
-index 000000000000..4a08d4bfa20d
---- /dev/null
-+++ b/Documentation/devicetree/bindings/fpga/xlnx,pr-decoupler.yaml
-@@ -0,0 +1,71 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/fpga/xlnx,pr-decoupler.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Xilinx LogiCORE Partial Reconfig Decoupler/AXI shutdown manager Softcore
-+
-+maintainers:
-+  - Nava kishore Manne <nava.kishore.manne@amd.com>
-+
-+description: The Xilinx LogiCORE Partial Reconfig Decoupler manages one or more
-+  decouplers / fpga bridges. The controller can decouple/disable the bridges
-+  which prevents signal changes from passing through the bridge.  The controller
-+  can also couple / enable the bridges which allows traffic to pass through the
-+  bridge normally.
-+  Xilinx LogiCORE Dynamic Function eXchange(DFX) AXI shutdown manager Softcore
-+  is compatible with the Xilinx LogiCORE pr-decoupler. The Dynamic Function
-+  eXchange AXI shutdown manager prevents AXI traffic from passing through the
-+  bridge. The controller safely handles AXI4MM and AXI4-Lite interfaces on a
-+  Reconfigurable Partition when it is undergoing dynamic reconfiguration,
-+  preventing the system deadlock that can occur if AXI transactions are
-+  interrupted by DFX.
-+  Please refer to fpga-region.txt and fpga-bridge.txt in this directory for
-+  common binding part and usage.
-+
-+properties:
-+  compatible:
-+    oneOf:
-+      - items:
-+          - const: xlnx,pr-decoupler-1.00 #For PR-Decoupler.
-+          - const: xlnx,pr-decoupler
-+      - items:
-+          - const: xlnx,dfx-axi-shutdown-manager-1.00 #For AXI shutdown manager.
-+          - const: xlnx,dfx-axi-shutdown-manager
-+
-+  reg:
-+    maxItems: 1
-+
-+  clocks:
-+    maxItems: 1
-+
-+  clock-names:
-+    items:
-+      - const: aclk
-+
-+  bridge-enable:
-+    $ref: /schemas/types.yaml#/definitions/uint32
-+    enum: [0, 1]
-+    description:
-+      Zero if driver should disable bridge at startup. One if driver should
-+      enable bridge at startup. Default is to leave bridge in current state.
-+
-+required:
-+  - compatible
-+  - reg
-+  - clocks
-+  - clock-names
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    fpga-bridge@100000450 {
-+      compatible = "xlnx,pr-decoupler-1.00", "xlnx,pr-decoupler";
-+      reg = <0x10000045 0x10>;
-+      clocks = <&clkc 15>;
-+      clock-names = "aclk";
-+      bridge-enable = <0>;
-+    };
-+...
--- 
-2.25.1
-
+Michael
