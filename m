@@ -2,155 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CE64E69DAA5
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 07:31:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D512869DAA8
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 07:33:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233109AbjBUGby (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Feb 2023 01:31:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44466 "EHLO
+        id S233147AbjBUGdq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Feb 2023 01:33:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45552 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229643AbjBUGbw (ORCPT
+        with ESMTP id S229643AbjBUGdo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Feb 2023 01:31:52 -0500
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F004241C0;
-        Mon, 20 Feb 2023 22:31:51 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1676961110; x=1708497110;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=+hYUCXryiM4L3qab7cv2qTNgu2EnjgadpYPHNseM+KU=;
-  b=O8vmlOTAAnNuOI3ud4H2c3nHw7l+4vJlFdKvfjyNVhsFJNcRPnPkppBt
-   3AzUYcCEiiVJHl1BBoHyCVfU28WCfXEt5nALq9XXQp16GXzh1/lSp1cXf
-   aLHHOVXrXQgnjTuKTpy/Se7DKKukTN4r7W7gw2hH0rrcpAP4wVQY8ZRCL
-   0fHCt4wym01DKOZ3IlmyTU2EDtxo17BF0bTSdhuTteFot/Mn+VbGCowxV
-   YO/F+G8aLBUgbzgOoLSlnTfz3vw62+WQGk2ka0iBesXt5JJnXSinAg5mA
-   DMj2zDxeGg0JVI+yLM2AQf9H7wjnWTB5RJhTkVpVrNgCbO7QwZhEezNvb
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10627"; a="332563874"
-X-IronPort-AV: E=Sophos;i="5.97,314,1669104000"; 
-   d="scan'208";a="332563874"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Feb 2023 22:31:50 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10627"; a="703923205"
-X-IronPort-AV: E=Sophos;i="5.97,314,1669104000"; 
-   d="scan'208";a="703923205"
-Received: from lkp-server01.sh.intel.com (HELO 4455601a8d94) ([10.239.97.150])
-  by orsmga001.jf.intel.com with ESMTP; 20 Feb 2023 22:31:48 -0800
-Received: from kbuild by 4455601a8d94 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pUMBn-000EWM-2Q;
-        Tue, 21 Feb 2023 06:31:47 +0000
-Date:   Tue, 21 Feb 2023 14:31:36 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Yang Li <yang.lee@linux.alibaba.com>,
-        damien.lemoal@opensource.wdc.com
-Cc:     oe-kbuild-all@lists.linux.dev, s.shtylyov@omp.ru,
-        linux-ide@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Yang Li <yang.lee@linux.alibaba.com>
-Subject: Re: [PATCH -next] ata: pata_macio: Use of_property_present() helper
-Message-ID: <202302211458.tgO9izcv-lkp@intel.com>
-References: <20230221023634.87925-1-yang.lee@linux.alibaba.com>
+        Tue, 21 Feb 2023 01:33:44 -0500
+Received: from mx.sberdevices.ru (mx.sberdevices.ru [45.89.227.171])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 166A01116A
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Feb 2023 22:33:43 -0800 (PST)
+Received: from s-lin-edge02.sberdevices.ru (localhost [127.0.0.1])
+        by mx.sberdevices.ru (Postfix) with ESMTP id 736BB5FD4A;
+        Tue, 21 Feb 2023 09:33:41 +0300 (MSK)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sberdevices.ru;
+        s=mail; t=1676961221;
+        bh=J4GGD+2l/dLrAC7SommQy5cNs2a8BqaY2AypKovMSnw=;
+        h=From:To:Subject:Date:Message-ID:Content-Type:MIME-Version;
+        b=H5mWv+a4/3PrOU5+6r/HWaHqjlghL3+HU74g0ctMEHN3mho1SxruF31ruNO1VxZMk
+         sB0/GB+XlkCEmw/2H8rcZza/BqO8s0DAgRiLYlJxMeD4vAc9enKve7P2jBBYC7vzlL
+         yoc84zuACIZKQsKbMVdDcMzJzpb9phq52zJV/CBDxrL52FqSDgdtD1dCZWzlzNvaiY
+         Tl5Ovq3zroo7TBRyl0nJu+1ZOA6n1s1Zxxe43Wlbx8EIRoLZjMYcWLp6GfDlnFKMgv
+         E7aSbSBp+edvh8fPZkYVUEF3MlsxY6BKbNl77v8zzZQ/7dFrprBSsuuewuemYLk/jL
+         +lCDG44njt/8Q==
+Received: from S-MS-EXCH01.sberdevices.ru (S-MS-EXCH01.sberdevices.ru [172.16.1.4])
+        by mx.sberdevices.ru (Postfix) with ESMTP;
+        Tue, 21 Feb 2023 09:33:41 +0300 (MSK)
+From:   Arseniy Krasnov <AVKrasnov@sberdevices.ru>
+To:     Liang Yang <liang.yang@amlogic.com>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        "Vignesh Raghavendra" <vigneshr@ti.com>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+CC:     "linux-mtd@lists.infradead.org" <linux-mtd@lists.infradead.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-amlogic@lists.infradead.org" 
+        <linux-amlogic@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        kernel <kernel@sberdevices.ru>,
+        "Krasnov Arseniy" <oxffffaa@gmail.com>
+Subject: [PATCH] mtd: rawnand: meson: initialize struct with zeroes
+Thread-Topic: [PATCH] mtd: rawnand: meson: initialize struct with zeroes
+Thread-Index: AQHZRb5vNxURJELs6U2kTl21bK7YBg==
+Date:   Tue, 21 Feb 2023 06:33:40 +0000
+Message-ID: <688e481f-5273-e74a-3349-cbf8de73e791@sberdevices.ru>
+Accept-Language: en-US, ru-RU
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [172.16.1.12]
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <7E6F31EA176CE44E979062A9F4E1BC7F@sberdevices.ru>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230221023634.87925-1-yang.lee@linux.alibaba.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-KSMG-Rule-ID: 4
+X-KSMG-Message-Action: clean
+X-KSMG-AntiSpam-Status: not scanned, disabled by settings
+X-KSMG-AntiSpam-Interceptor-Info: not scanned
+X-KSMG-AntiPhishing: not scanned, disabled by settings
+X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 1.1.2.30, bases: 2023/02/21 02:56:00 #20885447
+X-KSMG-AntiVirus-Status: Clean, skipped
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Yang,
-
-Thank you for the patch! Yet something to improve:
-
-[auto build test ERROR on next-20230220]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Yang-Li/ata-pata_macio-Use-of_property_present-helper/20230221-103834
-patch link:    https://lore.kernel.org/r/20230221023634.87925-1-yang.lee%40linux.alibaba.com
-patch subject: [PATCH -next] ata: pata_macio: Use of_property_present() helper
-config: powerpc-allyesconfig (https://download.01.org/0day-ci/archive/20230221/202302211458.tgO9izcv-lkp@intel.com/config)
-compiler: powerpc-linux-gcc (GCC) 12.1.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/257ef88e819f378a5925cd9a44857f4591d860e9
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Yang-Li/ata-pata_macio-Use-of_property_present-helper/20230221-103834
-        git checkout 257ef88e819f378a5925cd9a44857f4591d860e9
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=powerpc olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=powerpc SHELL=/bin/bash drivers/
-
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202302211458.tgO9izcv-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
-   drivers/ata/pata_macio.c: In function 'pata_macio_cable_detect':
->> drivers/ata/pata_macio.c:482:37: error: incompatible types when initializing type 'const char *' using type 'bool' {aka '_Bool'}
-     482 |                 const char *cable = of_property_present(priv->node, "cable-type");
-         |                                     ^~~~~~~~~~~~~~~~~~~
-   drivers/ata/pata_macio.c:484:37: error: incompatible types when initializing type 'const char *' using type 'bool' {aka '_Bool'}
-     484 |                 const char *model = of_property_present(root, "model");
-         |                                     ^~~~~~~~~~~~~~~~~~~
-   drivers/ata/pata_macio.c: In function 'pata_macio_invariants':
->> drivers/ata/pata_macio.c:975:16: error: incompatible types when assigning to type 'const int *' from type 'bool' {aka '_Bool'}
-     975 |         bidp = of_property_present(priv->node, "AAPL,bus-id");
-         |                ^~~~~~~~~~~~~~~~~~~
-
-
-vim +482 drivers/ata/pata_macio.c
-
-   472	
-   473	static int pata_macio_cable_detect(struct ata_port *ap)
-   474	{
-   475		struct pata_macio_priv *priv = ap->private_data;
-   476	
-   477		/* Get cable type from device-tree */
-   478		if (priv->kind == controller_kl_ata4 ||
-   479		    priv->kind == controller_un_ata6 ||
-   480		    priv->kind == controller_k2_ata6 ||
-   481		    priv->kind == controller_sh_ata6) {
- > 482			const char *cable = of_property_present(priv->node, "cable-type");
-   483			struct device_node *root = of_find_node_by_path("/");
-   484			const char *model = of_property_present(root, "model");
-   485	
-   486			of_node_put(root);
-   487	
-   488			if (cable && !strncmp(cable, "80-", 3)) {
-   489				/* Some drives fail to detect 80c cable in PowerBook
-   490				 * These machine use proprietary short IDE cable
-   491				 * anyway
-   492				 */
-   493				if (!strncmp(model, "PowerBook", 9))
-   494					return ATA_CBL_PATA40_SHORT;
-   495				else
-   496					return ATA_CBL_PATA80;
-   497			}
-   498		}
-   499	
-   500		/* G5's seem to have incorrect cable type in device-tree.
-   501		 * Let's assume they always have a 80 conductor cable, this seem to
-   502		 * be always the case unless the user mucked around
-   503		 */
-   504		if (of_device_is_compatible(priv->node, "K2-UATA") ||
-   505		    of_device_is_compatible(priv->node, "shasta-ata"))
-   506			return ATA_CBL_PATA80;
-   507	
-   508		/* Anything else is 40 connectors */
-   509		return ATA_CBL_PATA40;
-   510	}
-   511	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+VGhpcyBzdHJ1Y3R1cmUgbXVzdCBiZSB6ZXJvZWQsIGJlY2F1c2UgaXQncyBmaWVsZCAnaHctPmNv
+cmUnIGlzIHVzZWQgYXMNCidwYXJlbnQnIGluICdjbGtfY29yZV9maWxsX3BhcmVudF9pbmRleCgp
+JywgYnV0IGl0IHdpbGwgYmUgdW5pbml0aWFsaXplZC4NClRoaXMgaGFwcGVucywgYmVjYXVzZSB3
+aGVuIHRoaXMgc3RydWN0IGlzIG5vdCB6ZXJvZWQsIHBvaW50ZXIgJ2h3JyBpcw0KImluaXRpYWxp
+emVkIiBieSBnYXJiYWdlLCB3aGljaCBpcyB2YWxpZCBwb2ludGVyLCBidXQgcG9pbnRzIHRvIHNv
+bWUNCmdhcmJhZ2UuIFNvICdodycgd2lsbCBiZSBkZXJlZmVyZW5jZWQsIGJ1dCAnY29yZScgY29u
+dGFpbnMgc29tZSByYW5kb20NCmRhdGEgd2hpY2ggd2lsbCBiZSBpbnRlcnByZXRlZCBhcyBwb2lu
+dGVyLiBUaGUgZm9sbG93aW5nIGJhY2t0cmFjZSBpcw0KcmVzdWx0IG9mIGRlcmVmZXJlbmNlIG9m
+IHN1Y2ggcG9pbnRlcjoNCg0KWyAgICAxLjA4MTMxOV0gIF9fY2xrX3JlZ2lzdGVyKzB4NDE0LzB4
+ODIwDQpbICAgIDEuMDg1MTEzXSAgZGV2bV9jbGtfcmVnaXN0ZXIrMHg2NC8weGQwDQpbICAgIDEu
+MDg4OTk1XSAgbWVzb25fbmZjX3Byb2JlKzB4MjU4LzB4NmVjDQpbICAgIDEuMDkyODc1XSAgcGxh
+dGZvcm1fcHJvYmUrMHg3MC8weGYwDQpbICAgIDEuMDk2NDk4XSAgcmVhbGx5X3Byb2JlKzB4Yzgv
+MHgzZTANClsgICAgMS4xMDAwMzRdICBfX2RyaXZlcl9wcm9iZV9kZXZpY2UrMHg4NC8weDE5MA0K
+WyAgICAxLjEwNDM0Nl0gIGRyaXZlcl9wcm9iZV9kZXZpY2UrMHg0NC8weDEyMA0KWyAgICAxLjEw
+ODQ4N10gIF9fZHJpdmVyX2F0dGFjaCsweGI0LzB4MjIwDQpbICAgIDEuMTEyMjgyXSAgYnVzX2Zv
+cl9lYWNoX2RldisweDc4LzB4ZDANClsgICAgMS4xMTYwNzddICBkcml2ZXJfYXR0YWNoKzB4MmMv
+MHg0MA0KWyAgICAxLjExOTYxM10gIGJ1c19hZGRfZHJpdmVyKzB4MTg0LzB4MjQwDQpbICAgIDEu
+MTIzNDA4XSAgZHJpdmVyX3JlZ2lzdGVyKzB4ODAvMHgxNDANClsgICAgMS4xMjcyMDNdICBfX3Bs
+YXRmb3JtX2RyaXZlcl9yZWdpc3RlcisweDMwLzB4NDANClsgICAgMS4xMzE4NjBdICBtZXNvbl9u
+ZmNfZHJpdmVyX2luaXQrMHgyNC8weDMwDQoNClNpZ25lZC1vZmYtYnk6IEFyc2VuaXkgS3Jhc25v
+diA8QVZLcmFzbm92QHNiZXJkZXZpY2VzLnJ1Pg0KLS0tDQogZHJpdmVycy9tdGQvbmFuZC9yYXcv
+bWVzb25fbmFuZC5jIHwgMiArLQ0KIDEgZmlsZSBjaGFuZ2VkLCAxIGluc2VydGlvbigrKSwgMSBk
+ZWxldGlvbigtKQ0KDQpkaWZmIC0tZ2l0IGEvZHJpdmVycy9tdGQvbmFuZC9yYXcvbWVzb25fbmFu
+ZC5jIGIvZHJpdmVycy9tdGQvbmFuZC9yYXcvbWVzb25fbmFuZC5jDQppbmRleCA1ZWUwMTIzMWFj
+NGMuLjMwZTMyNmFkYWJmYyAxMDA2NDQNCi0tLSBhL2RyaXZlcnMvbXRkL25hbmQvcmF3L21lc29u
+X25hbmQuYw0KKysrIGIvZHJpdmVycy9tdGQvbmFuZC9yYXcvbWVzb25fbmFuZC5jDQpAQCAtOTkx
+LDcgKzk5MSw3IEBAIHN0YXRpYyBjb25zdCBzdHJ1Y3QgbXRkX29vYmxheW91dF9vcHMgbWVzb25f
+b29ibGF5b3V0X29wcyA9IHsNCiANCiBzdGF0aWMgaW50IG1lc29uX25mY19jbGtfaW5pdChzdHJ1
+Y3QgbWVzb25fbmZjICpuZmMpDQogew0KLQlzdHJ1Y3QgY2xrX3BhcmVudF9kYXRhIG5mY19kaXZp
+ZGVyX3BhcmVudF9kYXRhWzFdOw0KKwlzdHJ1Y3QgY2xrX3BhcmVudF9kYXRhIG5mY19kaXZpZGVy
+X3BhcmVudF9kYXRhWzFdID0gezB9Ow0KIAlzdHJ1Y3QgY2xrX2luaXRfZGF0YSBpbml0ID0gezB9
+Ow0KIAlpbnQgcmV0Ow0KIA0KLS0gDQoyLjM1LjANCg==
