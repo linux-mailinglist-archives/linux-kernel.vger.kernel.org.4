@@ -2,216 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0029969E5A8
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 18:13:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B8B6B69E5B0
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 18:14:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233902AbjBURND (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Feb 2023 12:13:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51546 "EHLO
+        id S234348AbjBUROV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Feb 2023 12:14:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52648 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234116AbjBURM7 (ORCPT
+        with ESMTP id S234572AbjBUROO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Feb 2023 12:12:59 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F77386A8
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Feb 2023 09:12:18 -0800 (PST)
+        Tue, 21 Feb 2023 12:14:14 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75E77A276
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Feb 2023 09:13:29 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1676999537;
+        s=mimecast20190719; t=1676999608;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=edLx7W3/VFCMaXQVPtkyXo91gMty4IjMAMHHKfDppU4=;
-        b=fDr9h0gEEkNWxrfiuqZaMtJOpFIL4oJg+O5GpBDWmToaVkTz22fO4KTflOAvc56Temw4jD
-        Mh8aZHc6vFNMPSD4H3/WzuMOtAaSTv/TngWrVBLdqfp10txQr26o3Uau9vM/DmSVLE0ZtC
-        nxNLCeHvOufHdbnrFpdffdNHFpLsBJw=
-Received: from mail-qt1-f200.google.com (mail-qt1-f200.google.com
- [209.85.160.200]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=1yPp4giTefdhMbNYiavZiH2cm1Lod+7F0kuDYxzrSTg=;
+        b=NeijGzuJtNC0ZIV9fuMs2qvqXyXPKpFQKRZGoULNNJ0BaQsHYuBSkMF0jysNRshCFKixPX
+        WgVRq5n4+REYFJW9EW3/emAjtA5PUBiMEDZzsN6N1J/cx6Sb570YY0405nqwPU3MYpXR/L
+        n05Jn5ZpU6U1kyXznAuOw5rFsFYkhQQ=
+Received: from mail-pg1-f197.google.com (mail-pg1-f197.google.com
+ [209.85.215.197]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-589-MC06AzdzP2iaJajhMR7QUQ-1; Tue, 21 Feb 2023 12:12:15 -0500
-X-MC-Unique: MC06AzdzP2iaJajhMR7QUQ-1
-Received: by mail-qt1-f200.google.com with SMTP id a18-20020ac84d92000000b003bd0eb1b44fso1844551qtw.6
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Feb 2023 09:12:15 -0800 (PST)
+ us-mta-142-j1_-vkezOquDanEaRbFKRQ-1; Tue, 21 Feb 2023 12:13:27 -0500
+X-MC-Unique: j1_-vkezOquDanEaRbFKRQ-1
+Received: by mail-pg1-f197.google.com with SMTP id 10-20020a63030a000000b004fb64e929f2so1804410pgd.7
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Feb 2023 09:13:27 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
-         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=edLx7W3/VFCMaXQVPtkyXo91gMty4IjMAMHHKfDppU4=;
-        b=k1SIvQQ2Rpi7TVE9S7S71BjBzPTTx5KGcV0n1E2cDJjlvuHBqRSsFZB5Y94AY4i6y9
-         4/GAs6Ae9KDDEQu0xtaFEbLZiLr55URVAA2weyCzCoUOElHbe7v01rn8upjX5/Z7Z/5k
-         Gf2crkAGKqivipAal0t3oZ3ZnQjc0WqSKjNOvzS0AGABlZ//ZFtQZgKU9sPj5X8Q5oNZ
-         YF8QXzfrm6KK8F2wQ/ybEKuBdc7MQ9zKV4nq3RUCB4U2aEE4uNWHEd6+TiFCm9SbxrgC
-         kC+XUpt5ZRXOomyf8LBVywaKp86RwHt6a4aJI6O+FN5Auxs1n0S+UVTc1CjQHIULyLDL
-         ap4g==
-X-Gm-Message-State: AO0yUKUGqeYpAsxtdIOEQs3gr9epqNErv4XFBE0QO+p2pqlhA1AMuXM7
-        Z1A0VjzrBflNlBO0ENXZ631Q8AIuhVBFoMNFashN3+zpV/n+rnAIoBqZR7c9ru5dgk0ztQGfv4G
-        Mzj51YrI1MDK0T0gpgExrwKx2tefgVQ==
-X-Received: by 2002:ac8:5945:0:b0:3b9:bc8c:c1f6 with SMTP id 5-20020ac85945000000b003b9bc8cc1f6mr9658900qtz.1.1676999534948;
-        Tue, 21 Feb 2023 09:12:14 -0800 (PST)
-X-Google-Smtp-Source: AK7set9r3Ttk9u6duwnXzToceWkAcPYXSIBUmyDX7UOiz82jmIX7qjrlNzg7U1AV9gE7opO/I3yjig==
-X-Received: by 2002:ac8:5945:0:b0:3b9:bc8c:c1f6 with SMTP id 5-20020ac85945000000b003b9bc8cc1f6mr9658857qtz.1.1676999534609;
-        Tue, 21 Feb 2023 09:12:14 -0800 (PST)
-Received: from fedora (nat-2.ign.cz. [91.219.240.2])
-        by smtp.gmail.com with ESMTPSA id cf7-20020a05622a400700b003bfa52112f9sm856400qtb.4.2023.02.21.09.12.12
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 21 Feb 2023 09:12:14 -0800 (PST)
-From:   Vitaly Kuznetsov <vkuznets@redhat.com>
-To:     Sean Christopherson <seanjc@google.com>,
-        Paolo Bonzini <pbonzini@redhat.com>
-Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Sean Christopherson <seanjc@google.com>
-Subject: Re: [PATCH 01/12] KVM: x86: Add a framework for enabling
- KVM-governed x86 features
-In-Reply-To: <20230217231022.816138-2-seanjc@google.com>
-References: <20230217231022.816138-1-seanjc@google.com>
- <20230217231022.816138-2-seanjc@google.com>
-Date:   Tue, 21 Feb 2023 18:12:11 +0100
-Message-ID: <87zg973puc.fsf@redhat.com>
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=1yPp4giTefdhMbNYiavZiH2cm1Lod+7F0kuDYxzrSTg=;
+        b=4NDj64KegSbPLMez+kdZEKi5vMFMrwpzysQNs7uyVPva6m5EgD4ZQbDaF0RkXu3qWX
+         SKkTDbqr/lBiA8CwJ8Cjkf2S1YDuYOcVK0lZaKhJ5rpA4FvFOjAf5aPkkq6ACnXgtygk
+         6iX/jLvqfIUpwlTJ7rk1XQbQXfjkibpdzplTh/+cVRAM7QI4NDL8S+H2n2sP7TdydBnX
+         MMN4S+oRWOFf1mh4mxe8vPxhX/WVHKVvv/txt9zfR+aBJ1LJ8F8kq+HHVu2Wj/85xSRl
+         pfwxJ9JJH+PbXTw6vj/3cGJ8c6wDQKUlw/u/MCS/87j8zAGoQilCDQTJ0T8oy8nKGim3
+         IZBA==
+X-Gm-Message-State: AO0yUKXt3VygMqvkH8Ne8Do3Qiac24tX2yY6zhK9j5zYhMshuVJrDNLm
+        QXz5yzOihRPYfFEt1MRlTt9lOIT0YhXUaSgkT+HOffuahWMUEz7gJLw8Npp7dS4krBoD2VTfL9b
+        2S/AWUNPTAQzKSHJr85lHhM4D
+X-Received: by 2002:a17:902:8b85:b0:19a:b74a:7f7e with SMTP id ay5-20020a1709028b8500b0019ab74a7f7emr5874049plb.28.1676999606334;
+        Tue, 21 Feb 2023 09:13:26 -0800 (PST)
+X-Google-Smtp-Source: AK7set+RtL9IAIPXYJCcn8MrIbfJVmPzlVV8mepNgQVRI7RPXIX1+E4Kx9H9UE8S/26bkU9BkRgtWw==
+X-Received: by 2002:a17:902:8b85:b0:19a:b74a:7f7e with SMTP id ay5-20020a1709028b8500b0019ab74a7f7emr5874025plb.28.1676999606000;
+        Tue, 21 Feb 2023 09:13:26 -0800 (PST)
+Received: from ?IPV6:2601:1c0:4680:5870:8add:adee:83ef:b4f3? ([2601:1c0:4680:5870:8add:adee:83ef:b4f3])
+        by smtp.gmail.com with ESMTPSA id v10-20020a1709029a0a00b0019abb539cddsm10112124plp.10.2023.02.21.09.13.24
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 21 Feb 2023 09:13:25 -0800 (PST)
+Message-ID: <65ab5cb1-2dbe-e853-48ea-d1df87706cf0@redhat.com>
+Date:   Tue, 21 Feb 2023 09:13:24 -0800
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH] rust: time: New module for timekeeping functions
+Content-Language: en-US
+To:     Thomas Gleixner <tglx@linutronix.de>,
+        Asahi Lina <lina@asahilina.net>,
+        Miguel Ojeda <ojeda@kernel.org>,
+        Alex Gaynor <alex.gaynor@gmail.com>,
+        Wedson Almeida Filho <wedsonaf@gmail.com>,
+        Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
+        =?UTF-8?Q?Bj=c3=b6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
+        John Stultz <jstultz@google.com>,
+        Stephen Boyd <sboyd@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, rust-for-linux@vger.kernel.org,
+        asahi@lists.linux.dev
+References: <20230221-gpu-up-time-v1-1-bf8fe74b7f55@asahilina.net>
+ <87v8jvnqq4.ffs@tglx>
+From:   Josh Stone <jistone@redhat.com>
+In-Reply-To: <87v8jvnqq4.ffs@tglx>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Sean Christopherson <seanjc@google.com> writes:
+On 2/21/23 4:32 AM, Thomas Gleixner wrote:
+> Now the problem is that 'Instant' in it's specification is bound to
+> CLOCK_MONOTONIC and there is no way to express CLOCK_BOOTTIME, but
+> that's a shortcoming of the spec which ignores CLOCK_BOOTTIME
+> completely. IOW, that's also a problem for user space.
 
-> Introduce yet another X86_FEATURE flag framework to manage and cache KVM
-> governed features (for lack of a better term).  "Governed" in this case
-> means that KVM has some level of involvement and/or vested interest in
-> whether or not an X86_FEATURE can be used by the guest.  The intent of the
-> framework is twofold: to simplify caching of guest CPUID flags that KVM
-> needs to frequently query, and to add clarity to such caching, e.g. it
-> isn't immediately obvious that SVM's bundle of flags for "optional nested]
+That's not exactly *specified* -- it's meant to be opaque time. It is
+documented that this currently uses clock_gettime monotonic on unix
+targets, but "Disclaimer: These system calls might change over time."
+CLOCK_MONOTONIC isn't even consistent across unix targets whether that
+counts suspended time. It's been debated if we should switch to
+CLOCK_BOOTTIME on Linux, but for now we're sticking to monotonic:
 
-Nit: unneeded ']'
+https://github.com/rust-lang/rust/pull/88714
 
-> SVM features" track whether or not a flag is exposed to L1.
->
-> Signed-off-by: Sean Christopherson <seanjc@google.com>
-> ---
->  arch/x86/include/asm/kvm_host.h  | 11 +++++++
->  arch/x86/kvm/cpuid.c             |  2 ++
->  arch/x86/kvm/cpuid.h             | 51 ++++++++++++++++++++++++++++++++
->  arch/x86/kvm/governed_features.h |  9 ++++++
->  4 files changed, 73 insertions(+)
->  create mode 100644 arch/x86/kvm/governed_features.h
->
-> diff --git a/arch/x86/include/asm/kvm_host.h b/arch/x86/include/asm/kvm_host.h
-> index 792a6037047a..cd660de02f7b 100644
-> --- a/arch/x86/include/asm/kvm_host.h
-> +++ b/arch/x86/include/asm/kvm_host.h
-> @@ -835,6 +835,17 @@ struct kvm_vcpu_arch {
->  	struct kvm_cpuid_entry2 *cpuid_entries;
->  	struct kvm_hypervisor_cpuid kvm_cpuid;
->  
-> +	/*
-> +	 * Track whether or not the guest is allowed to use features that are
-> +	 * governed by KVM, where "governed" means KVM needs to manage state
-> +	 * and/or explicitly enable the feature in hardware.  Typically, but
-> +	 * not always, governed features can be used by the guest if and only
-> +	 * if both KVM and userspace want to expose the feature to the guest.
-> +	 */
-> +	struct {
-> +		u32 enabled;
-> +	} governed_features;
-> +
->  	u64 reserved_gpa_bits;
->  	int maxphyaddr;
->  
-> diff --git a/arch/x86/kvm/cpuid.c b/arch/x86/kvm/cpuid.c
-> index 8f8edeaf8177..013fdc27fc8f 100644
-> --- a/arch/x86/kvm/cpuid.c
-> +++ b/arch/x86/kvm/cpuid.c
-> @@ -335,6 +335,8 @@ static void kvm_vcpu_after_set_cpuid(struct kvm_vcpu *vcpu)
->  	struct kvm_lapic *apic = vcpu->arch.apic;
->  	struct kvm_cpuid_entry2 *best;
->  
-> +	vcpu->arch.governed_features.enabled = 0;
-> +
->  	best = kvm_find_cpuid_entry(vcpu, 1);
->  	if (best && apic) {
->  		if (cpuid_entry_has(best, X86_FEATURE_TSC_DEADLINE_TIMER))
-> diff --git a/arch/x86/kvm/cpuid.h b/arch/x86/kvm/cpuid.h
-> index b1658c0de847..f61a2106ba90 100644
-> --- a/arch/x86/kvm/cpuid.h
-> +++ b/arch/x86/kvm/cpuid.h
-> @@ -232,4 +232,55 @@ static __always_inline bool guest_pv_has(struct kvm_vcpu *vcpu,
->  	return vcpu->arch.pv_cpuid.features & (1u << kvm_feature);
->  }
->  
-> +enum kvm_governed_features {
-> +#define KVM_GOVERNED_FEATURE(x) KVM_GOVERNED_##x,
-> +#include "governed_features.h"
-> +	KVM_NR_GOVERNED_FEATURES
-> +};
-> +
-> +static __always_inline int kvm_governed_feature_index(unsigned int x86_feature)
-> +{
-> +	switch (x86_feature) {
-> +#define KVM_GOVERNED_FEATURE(x) case x: return KVM_GOVERNED_##x;
-> +#include "governed_features.h"
-> +	default:
-> +		return -1;
-> +	}
-> +}
-> +
-> +static __always_inline int kvm_is_governed_feature(unsigned int x86_feature)
-> +{
-> +	return kvm_governed_feature_index(x86_feature) >= 0;
-> +}
-> +
-> +static __always_inline u32 kvm_governed_feature_bit(unsigned int x86_feature)
-> +{
-> +	int index = kvm_governed_feature_index(x86_feature);
-> +
-> +	BUILD_BUG_ON(index < 0);
-> +	return BIT(index);
-> +}
-> +
-> +static __always_inline void kvm_governed_feature_set(struct kvm_vcpu *vcpu,
-> +						     unsigned int x86_feature)
-> +{
-> +	BUILD_BUG_ON(KVM_NR_GOVERNED_FEATURES >
-> +		     sizeof(vcpu->arch.governed_features.enabled) * BITS_PER_BYTE);
-> +
-> +	vcpu->arch.governed_features.enabled |= kvm_governed_feature_bit(x86_feature);
-> +}
-> +
-> +static __always_inline void kvm_governed_feature_check_and_set(struct kvm_vcpu *vcpu,
-> +							       unsigned int x86_feature)
-> +{
-> +	if (guest_cpuid_has(vcpu, x86_feature))
-> +		kvm_governed_feature_set(vcpu, x86_feature);
-> +}
-> +
-> +static __always_inline bool guest_can_use(struct kvm_vcpu *vcpu,
-> +					  unsigned int x86_feature)
-> +{
-> +	return vcpu->arch.governed_features.enabled & kvm_governed_feature_bit(x86_feature);
-> +}
-> +
->  #endif
-> diff --git a/arch/x86/kvm/governed_features.h b/arch/x86/kvm/governed_features.h
-> new file mode 100644
-> index 000000000000..40ce8e6608cd
-> --- /dev/null
-> +++ b/arch/x86/kvm/governed_features.h
-> @@ -0,0 +1,9 @@
-> +/* SPDX-License-Identifier: GPL-2.0 */
-> +#if !defined(KVM_GOVERNED_FEATURE) || defined(KVM_GOVERNED_X86_FEATURE)
-> +BUILD_BUG()
-> +#endif
-> +
-> +#define KVM_GOVERNED_X86_FEATURE(x) KVM_GOVERNED_FEATURE(X86_FEATURE_##x)
-> +
-> +#undef KVM_GOVERNED_X86_FEATURE
-> +#undef KVM_GOVERNED_FEATURE
-
--- 
-Vitaly
+But as others mentioned, this is in the std crate which isn't used by
+the kernel. You could absolutely define your own with more specificity,
+like kernel::time::BootTime, and copy an API similar to Instant's.
 
