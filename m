@@ -2,182 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AA6D269DA1E
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 05:36:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 772D969DA20
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 05:37:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232317AbjBUEgO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Feb 2023 23:36:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47876 "EHLO
+        id S232965AbjBUEhB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Feb 2023 23:37:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48432 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232116AbjBUEgJ (ORCPT
+        with ESMTP id S232116AbjBUEg7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Feb 2023 23:36:09 -0500
-Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EEA43252AB
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Feb 2023 20:36:03 -0800 (PST)
-Received: by mail-pj1-x1030.google.com with SMTP id nw10-20020a17090b254a00b00233d7314c1cso3591844pjb.5
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Feb 2023 20:36:03 -0800 (PST)
+        Mon, 20 Feb 2023 23:36:59 -0500
+Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5969223DA3
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Feb 2023 20:36:57 -0800 (PST)
+Received: by mail-pl1-x634.google.com with SMTP id q5so3697197plh.9
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Feb 2023 20:36:57 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=broadcom.com; s=google; t=1676954163;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=PpvZuV3Te97jvS0LrHKxROD9h9JezRR9UnEbNBd/nZY=;
-        b=H+GyxhUyjs3EXrS7or6rd8DSi3LgrinNT38Ak/JpILE2qc1+yBEJeZevlSDLYCaTO4
-         kkouyTxmU8xHK9naep3lwq7cFFHFOBFfcTz8qXdk7esyxZxNJoL839o6vLAQnytGaifW
-         2L974SfcqnLF+2QdJfQybqY7ptBtlxHhw5iDU=
+        d=linaro.org; s=google;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=iOetp7KOSbS2oHA8GhFHZWh0mINOTnZj7zT+8oUIWQU=;
+        b=LeGzq7wdURi8StllD8CXn4PTHiv8on5YA1SC5gwdZ4SBHsTsWu/1dJTjbhdlo7V0rw
+         fgECr/Lb/1yjzNoX9aYkkEtB+I4sQEHv8F+sg4bI7E2IPQSekoJprOzC3eCS+ihbPJWr
+         DNNde0Nj0m8b/dgMwPHEJR6yK9mFKKYO7J6iVkrfx6vmXzv10V7R7ibpx9q3a+etJVE8
+         Xx7G91M76MaKboniTZt38IN0v3Hm4gtdQfDC0enpGjTqfnJHhF4vmMbpAw8TX3PEUOQ1
+         5ddLzG4X2wKO7ivTajzY1AuZdZjHcsUZ22R+y8z+sjRo6S/8oes7rbjG6OzbbQjQ/0C1
+         kKoQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1676954163;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=PpvZuV3Te97jvS0LrHKxROD9h9JezRR9UnEbNBd/nZY=;
-        b=dDaO3Ch5OIRki9q1Zj1ccYtdCMAnfOrAqpb89W9M/T5/1394eXITAzRp2VvwKmkXQw
-         q+zQ4JrzjcX8kw4LZtLa+HYwuHwWu/FBM+0DcVbv8heBY2PuR85Js5x7qKUGQVlt78AD
-         APJNhSWA6Ym8YGXRnst1XI3XwiFtSasNyhoWw+Bbx4FsCtwmzrB9RPSxTJCWfKV2WO3O
-         hAtUnFIq20rH9CWZ3pz+POO9kPToylUUk/gTrGlqYE233B5zIuofRlmiAKFDd977Fi4U
-         3eOGvX5gxQV/jmh8wEH1l6mqx3mOx+sF3dlTBSz5enCS/q3fan1rL5cGJSb81t/et5VB
-         t10A==
-X-Gm-Message-State: AO0yUKU23JaBtNoZYlA1Yezhxxfs2fjq3iAaAxNpBCUer/jgbH/Zc2YW
-        L2PGa3bWC0+WL3IPjmD9nq9crBRmgoyAu26qKf23sg==
-X-Google-Smtp-Source: AK7set+cIxLNhtuArkfV7IAaLnmnGdNvWEHrGlpv5AtSVcsY3baiWip0421/80UPVIh/xFmTf91jfWixKcz0kPHyrwI=
-X-Received: by 2002:a17:903:2283:b0:196:7587:5d64 with SMTP id
- b3-20020a170903228300b0019675875d64mr425311plh.24.1676954162992; Mon, 20 Feb
- 2023 20:36:02 -0800 (PST)
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=iOetp7KOSbS2oHA8GhFHZWh0mINOTnZj7zT+8oUIWQU=;
+        b=PoLoDK+SI12YGe43gRlvyLiN8Dtnj/2QRt4K4ZC+n5MP1CCHNvgDD4pLv1Nhpvr3ra
+         GnFA/AkD+Ro2aqRjd62VG0Gz9SrIXsvleTT77Zp8cyTzDTKc3N3C6jNJ4DtqFcVS0vYZ
+         gkLN9FDoL+yO4u7SSe2kdI47swQ5ErnSMh4qn9zPmqFyxpIlcmZvroN3yzUXIMI0VcyI
+         mtd68J27PxkP18hZek5tkjPGIKIm86yqnYXUvz8uh9NAjPreHInNeZnxHNjHEzSBrTri
+         F5YOakTnCmmguByT76hS0m2nXYmj5bkPG4h2eaOn0Gmec/WonA5CdxR+jqyYFJn5e8GT
+         IRnQ==
+X-Gm-Message-State: AO0yUKW5nDNF8mMksxTJGSidWdLuwl27faZ7i+6mTQrP1yiLr4/w2lNl
+        h5eEzc6mPnrDf8M8T4Nk7e2NkQ==
+X-Google-Smtp-Source: AK7set9AN8D6LRbWqAZjj5540we9C+jh+Tg3R+bard1qHizJkTgty0GMqzWrXdz6oj06C3+bZqzO2g==
+X-Received: by 2002:a17:90a:4b4a:b0:234:9fa0:300b with SMTP id o10-20020a17090a4b4a00b002349fa0300bmr3822338pjl.13.1676954216837;
+        Mon, 20 Feb 2023 20:36:56 -0800 (PST)
+Received: from localhost ([122.172.83.155])
+        by smtp.gmail.com with ESMTPSA id 69-20020a17090a0fcb00b00234ba1cfacbsm930680pjz.17.2023.02.20.20.36.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 20 Feb 2023 20:36:56 -0800 (PST)
+Date:   Tue, 21 Feb 2023 10:06:54 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <linux@weissschuh.net>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Valentin Schneider <vschneid@redhat.com>,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] cpufreq: schedutil: make kobj_type structure constant
+Message-ID: <20230221043654.6gb454cabnjfg44k@vireshk-i7>
+References: <20230220-kobj_type-cpufreq-schedutil-v1-1-7d1c92293457@weissschuh.net>
 MIME-Version: 1.0
-References: <20230221024541.105199-1-yang.lee@linux.alibaba.com>
-In-Reply-To: <20230221024541.105199-1-yang.lee@linux.alibaba.com>
-From:   Pavan Chebbi <pavan.chebbi@broadcom.com>
-Date:   Tue, 21 Feb 2023 10:05:50 +0530
-Message-ID: <CALs4sv3-4_oMt412b8p1HfYrFfCV0eXq1KChTi7gx1brzRaBNg@mail.gmail.com>
-Subject: Re: [PATCH -next] can: mscan: mpc5xxx: Use of_property_present() helper
-To:     Yang Li <yang.lee@linux.alibaba.com>
-Cc:     kuba@kernel.org, davem@davemloft.net, wg@grandegger.com,
-        mkl@pengutronix.de, edumazet@google.com, pabeni@redhat.com,
-        linux-can@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-        boundary="00000000000038d55905f52e5147"
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20230220-kobj_type-cpufreq-schedutil-v1-1-7d1c92293457@weissschuh.net>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---00000000000038d55905f52e5147
-Content-Type: text/plain; charset="UTF-8"
-
-On Tue, Feb 21, 2023 at 8:15 AM Yang Li <yang.lee@linux.alibaba.com> wrote:
->
-> Use of_property_present() instead of of_get_property/of_find_property()
-> in places where we just need to test presence of a property.
->
-
-Please fix the subject and make sure validation is done. I doubt this will pass.
-What problem is the patch trying to solve?
-
-> Signed-off-by: Yang Li <yang.lee@linux.alibaba.com>
+On 20-02-23, 23:28, Thomas Weiﬂschuh wrote:
+> Since commit ee6d3dd4ed48 ("driver core: make kobj_type constant.")
+> the driver core allows the usage of const struct kobj_type.
+> 
+> Take advantage of this to constify the structure definition to prevent
+> modification at runtime.
+> 
+> Signed-off-by: Thomas Weiﬂschuh <linux@weissschuh.net>
 > ---
->  drivers/net/can/mscan/mpc5xxx_can.c | 2 +-
+>  kernel/sched/cpufreq_schedutil.c | 2 +-
 >  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/drivers/net/can/mscan/mpc5xxx_can.c b/drivers/net/can/mscan/mpc5xxx_can.c
-> index b0ed798ae70f..8981c223181f 100644
-> --- a/drivers/net/can/mscan/mpc5xxx_can.c
-> +++ b/drivers/net/can/mscan/mpc5xxx_can.c
-> @@ -315,7 +315,7 @@ static int mpc5xxx_can_probe(struct platform_device *ofdev)
->         priv->reg_base = base;
->         dev->irq = irq;
->
-> -       clock_name = of_get_property(np, "fsl,mscan-clock-source", NULL);
-> +       clock_name = of_property_present(np, "fsl,mscan-clock-source");
->
->         priv->type = data->type;
->         priv->can.clock.freq = data->get_clock(ofdev, clock_name,
-> --
-> 2.20.1.7.g153144c
->
+> 
+> diff --git a/kernel/sched/cpufreq_schedutil.c b/kernel/sched/cpufreq_schedutil.c
+> index 1207c78f85c1..4c073bd9b001 100644
+> --- a/kernel/sched/cpufreq_schedutil.c
+> +++ b/kernel/sched/cpufreq_schedutil.c
+> @@ -543,7 +543,7 @@ static void sugov_tunables_free(struct kobject *kobj)
+>  	kfree(to_sugov_tunables(attr_set));
+>  }
+>  
+> -static struct kobj_type sugov_tunables_ktype = {
+> +static const struct kobj_type sugov_tunables_ktype = {
+>  	.default_groups = sugov_groups,
+>  	.sysfs_ops = &governor_sysfs_ops,
+>  	.release = &sugov_tunables_free,
+> 
+> ---
+> base-commit: 5b0ed5964928b0aaf0d644c17c886c7f5ea4bb3f
+> change-id: 20230220-kobj_type-cpufreq-schedutil-783c6be6ff14
 
---00000000000038d55905f52e5147
-Content-Type: application/pkcs7-signature; name="smime.p7s"
-Content-Transfer-Encoding: base64
-Content-Disposition: attachment; filename="smime.p7s"
-Content-Description: S/MIME Cryptographic Signature
+Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
 
-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
-OltyqaGBuzv+bJTUL+bmV7E4QBLIqGt4jVr1R9hJdH6KxXwJdyfHZ9C6qXmoe2NQhiFUyBOJ0wgk
-dB9Z1IU7nCwvNKYg2JMoJs93tIgbhPJg/D7pqW8gabkCAwEAAaOCAdowggHWMA4GA1UdDwEB/wQE
-AwIFoDCBowYIKwYBBQUHAQEEgZYwgZMwTgYIKwYBBQUHMAKGQmh0dHA6Ly9zZWN1cmUuZ2xvYmFs
-c2lnbi5jb20vY2FjZXJ0L2dzZ2NjcjNwZXJzb25hbHNpZ24yY2EyMDIwLmNydDBBBggrBgEFBQcw
-AYY1aHR0cDovL29jc3AuZ2xvYmFsc2lnbi5jb20vZ3NnY2NyM3BlcnNvbmFsc2lnbjJjYTIwMjAw
-TQYDVR0gBEYwRDBCBgorBgEEAaAyASgKMDQwMgYIKwYBBQUHAgEWJmh0dHBzOi8vd3d3Lmdsb2Jh
-bHNpZ24uY29tL3JlcG9zaXRvcnkvMAkGA1UdEwQCMAAwSQYDVR0fBEIwQDA+oDygOoY4aHR0cDov
-L2NybC5nbG9iYWxzaWduLmNvbS9nc2djY3IzcGVyc29uYWxzaWduMmNhMjAyMC5jcmwwJAYDVR0R
-BB0wG4EZcGF2YW4uY2hlYmJpQGJyb2FkY29tLmNvbTATBgNVHSUEDDAKBggrBgEFBQcDBDAfBgNV
-HSMEGDAWgBSWM9HmWBdbNHWKgVZk1b5I3qGPzzAdBgNVHQ4EFgQUEV6y/89alKPoFbKUaJXsvWu5
-fdowDQYJKoZIhvcNAQELBQADggEBAEHSIB6g652wVb+r2YCmfHW47Jo+5TuCBD99Hla8PYhaWGkd
-9HIyD3NPhb6Vb6vtMWJW4MFGQF42xYRrAS4LZj072DuMotr79rI09pbOiWg0FlRRFt6R9vgUgebu
-pWSH7kmwVXcPtY94XSMMak4b7RSKig2mKbHDpD4bC7eGlwl5RxzYkgrHtMNRmHmQor5Nvqe52cFJ
-25Azqtwvjt5nbrEd81iBmboNTEnLaKuxbbCtLaMEP8xKeDjAKnNOqHUMps0AsQT8c0EGq39YHpjp
-Wn1l67VU0rMShbEFsiUf9WYgE677oinpdm0t2mdCjxr35tryxptoTZXKHDxr/Yy6l6ExggJtMIIC
-aQIBATBrMFsxCzAJBgNVBAYTAkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMTEwLwYDVQQD
-EyhHbG9iYWxTaWduIEdDQyBSMyBQZXJzb25hbFNpZ24gMiBDQSAyMDIwAgwV/XkICjVscn4SNZMw
-DQYJYIZIAWUDBAIBBQCggdQwLwYJKoZIhvcNAQkEMSIEINEUdJQiiMSb+v/lqdSqPW9KeTtUiLZ8
-3YG7g2OQIhPfMBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJKoZIhvcNAQkFMQ8XDTIzMDIy
-MTA0MzYwM1owaQYJKoZIhvcNAQkPMVwwWjALBglghkgBZQMEASowCwYJYIZIAWUDBAEWMAsGCWCG
-SAFlAwQBAjAKBggqhkiG9w0DBzALBgkqhkiG9w0BAQowCwYJKoZIhvcNAQEHMAsGCWCGSAFlAwQC
-ATANBgkqhkiG9w0BAQEFAASCAQAU36NZ/2U+a/BZZZbPDXW7A/od4N2+HSchMpTfIIwNxyAcYsg2
-R7G4pNGqoDq7gv+ZpdjVB8047P2zlDYmpYQ0p7rfkHNv1U8Os9DsKycNbAEjHNe6EMpyCuWWsT3n
-Ux71m5mn8JknhSuxr1rBEFSjKvondDV0Kveiya2HSr5iMhDs2T0q2eWW4brZBLyZgEJ/HD+99nGS
-Qs0dtLTSCb2h7/iCQ+YKVff+iCUuGHByt454akeCpXQqZoTADjiwZrlw8W7pfN1vyJSrwSv9RJOu
-ijU7SaPU/6K8xL79kkv8lmkcG1D3kqXEEcAk4EeJtnLuDWxcf7l2mZ8Y2h4yv6Ju
---00000000000038d55905f52e5147--
+-- 
+viresh
