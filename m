@@ -2,237 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 86A8769DDEA
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 11:31:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 51EF569DDED
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 11:33:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233713AbjBUKbh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Feb 2023 05:31:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33552 "EHLO
+        id S233749AbjBUKdY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Feb 2023 05:33:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34578 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233701AbjBUKbf (ORCPT
+        with ESMTP id S233175AbjBUKdV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Feb 2023 05:31:35 -0500
-Received: from mail-ua1-x92a.google.com (mail-ua1-x92a.google.com [IPv6:2607:f8b0:4864:20::92a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD04A2413E
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Feb 2023 02:31:31 -0800 (PST)
-Received: by mail-ua1-x92a.google.com with SMTP id f20so224917uam.3
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Feb 2023 02:31:31 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1676975491;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=vUPlnNPnOuO97v5YoHv4MkQhOnpL4HqARBldqt6DP4g=;
-        b=HdTZ9FqqxjGxhFkROovTkkDW0quKKCuY/jFFGL18+08pEKDaXmZl/oLERPWpKDHC2e
-         9MfnX/rKyPrVoYPDmkBij10OEBTUWLFLOJYXGVwVf4odeuydc6gEOq5ILAR1KwLuMhXa
-         zPgQnsag/izgOjA7zyh5EtsaES9IAILo2gGRMrej2ex5K+eNOiLT8vOqMZIMUC2qHK8F
-         CftS73UKLzBWN/7SQNDSK6XkohSwCIQCNNc4Ttr1juH3Q27EXE5F6FCRZ/GVfxsO12UM
-         zwSit6SIdEE2XIUgZUzNH7OPIAScSBzpMTtuHnldevj569WTOf5TcWdlAjygNlwTPVNO
-         kNkw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1676975491;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=vUPlnNPnOuO97v5YoHv4MkQhOnpL4HqARBldqt6DP4g=;
-        b=PyZ1+wJWoCmmAeFSRsKuLOq+rcIrHtVwknGpTWALxDUPsD8zdlXkBpvms66icDC0mw
-         Hfj3NswvM1y5fKRspOFh3GQY4565oQQjDfp1pcyr7ScrVjBzx3mrMqyznv1VQPwyIHtS
-         XuWs7ymqnH2mntJFpLauZp59pA9jwlAAiuQrO+0lVmK7AAUGryIYLmpZ3/ceLBkUkEBn
-         Gd424xYBEd1xvAtCoLCqLJ9rIpX6AuX44X37fKXqgWUH1MeRCjMvJeX4/6qSmMQZOtv9
-         yB7kxz4nbwyNa0VrCURN3SMBE+pRXJ+h4dqUn0ZfxFroHK0veVyyIDviJIhHkZDbXe1y
-         xJNw==
-X-Gm-Message-State: AO0yUKWV3zBcSY4/jHpAhcKA1Lzjkqp4mUcB2KHYC3vBHlywJTWXixnP
-        gOx9QLolkoSje1hB/XbanAmdzCmE3n3v3HoAi4fDfA==
-X-Google-Smtp-Source: AK7set/8ow8BBI26zb3f2MdJCsGM3iec2NgvV5nC/+qPeXI9rPI3T/7lke/rwLN3XVKKqTCRlsBX3KDGom9BCpvi+l0=
-X-Received: by 2002:a1f:2305:0:b0:40e:eec8:6523 with SMTP id
- j5-20020a1f2305000000b0040eeec86523mr369162vkj.43.1676975490651; Tue, 21 Feb
- 2023 02:31:30 -0800 (PST)
+        Tue, 21 Feb 2023 05:33:21 -0500
+Received: from out30-100.freemail.mail.aliyun.com (out30-100.freemail.mail.aliyun.com [115.124.30.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8A9D7EE7
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Feb 2023 02:33:16 -0800 (PST)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R131e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045176;MF=jefflexu@linux.alibaba.com;NM=1;PH=DS;RN=3;SR=0;TI=SMTPD_---0VcC.gMp_1676975593;
+Received: from localhost(mailfrom:jefflexu@linux.alibaba.com fp:SMTPD_---0VcC.gMp_1676975593)
+          by smtp.aliyun-inc.com;
+          Tue, 21 Feb 2023 18:33:14 +0800
+From:   Jingbo Xu <jefflexu@linux.alibaba.com>
+To:     dhowells@redhat.com, linux-cachefs@redhat.com
+Cc:     linux-kernel@vger.kernel.org
+Subject: [PATCH 0/2] fscache/cachefiles: some work for on-demand mode
+Date:   Tue, 21 Feb 2023 18:33:11 +0800
+Message-Id: <20230221103313.120834-1-jefflexu@linux.alibaba.com>
+X-Mailer: git-send-email 2.19.1.6.gb485710b
 MIME-Version: 1.0
-References: <20230220133602.515342638@linuxfoundation.org>
-In-Reply-To: <20230220133602.515342638@linuxfoundation.org>
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Tue, 21 Feb 2023 16:01:19 +0530
-Message-ID: <CA+G9fYsXwWBUBkvP4kYejJOqwOoS5n+DtoAsb5WUUtRmh774qA@mail.gmail.com>
-Subject: Re: [PATCH 5.4 000/156] 5.4.232-rc1 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
-        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, f.fainelli@gmail.com,
-        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 20 Feb 2023 at 19:14, Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
->
-> This is the start of the stable review cycle for the 5.4.232 release.
-> There are 156 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
->
-> Responses should be made by Wed, 22 Feb 2023 13:35:35 +0000.
-> Anything received after that time might be too late.
->
-> The whole patch series can be found in one patch at:
->         https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-=
-5.4.232-rc1.gz
-> or in the git tree and branch at:
->         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable=
--rc.git linux-5.4.y
-> and the diffstat can be found below.
->
-> thanks,
->
-> greg k-h
+Hi there's some work to make users of fscache on-demand mode support
+PAGE_SIZE larger than 4KB (e.g. 16/64KB in aarch64) [1].  I think they
+may be also useful for other users of fscache/cachefiles.
 
-Results from Linaro=E2=80=99s test farm.
-No regressions on arm64, arm, x86_64, and i386.
 
-Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
+Strictly speacking, patch 1 is a bug fix though the issue doesn't cause
+serious harm when erofs doesn't support large PAGE_SIZE (other than
+4KB).
 
-## Build
-* kernel: 5.4.232-rc1
-* git: https://gitlab.com/Linaro/lkft/mirrors/stable/linux-stable-rc
-* git branch: linux-5.4.y
-* git commit: 01caaff111842f1fb3c245d4387cb2ba7aed627c
-* git describe: v5.4.231-157-g01caaff11184
-* test details:
-https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-5.4.y/build/v5.4.2=
-31-157-g01caaff11184
+__cachefiles_prepare_write() will align the requested file range to
+PAGE_SIZE boundary.  This is reasonable for libnetfs as libnetfs will
+construct an iter with the aligned file range from the ground.
 
-## Test Regressions (compared to v5.4.231)
+While for fscache on-demand mode, cachefiles_ondemand_fd_write_iter() is
+called by the user daemon, and thus it is unexpected to align the file
+range to PAGE_SIZE boundary, as the iov_iter/kiocb is given by the user
+daemon.  If the given file range is not aligned with the block size of
+the backing filesystem, let's fail the write directly.
 
-## Metric Regressions (compared to v5.4.231)
 
-## Test Fixes (compared to v5.4.231)
+Patch 2 adds a new helper, by which users of fscache on-demand mode
+could wait for the wrangling of the cache object and then derive the
+object size (set in cachefiles_ondemand_copen()).
+fscache_begin_read_operation() is not feasible for this purpose as
+in this case @want_state is FSCACHE_WANT_PARAMS and it will not wait
+there for object wrangling when cookie is in
+FSCACHE_COOKIE_STATE_CREATING state.  An example use case of this helper
+is illustrated in [2].
 
-## Metric Fixes (compared to v5.4.231)
 
-## Test result summary
-total: 128121, pass: 104609, fail: 3232, skip: 19905, xfail: 375
+Any comment is welcomed.
 
-## Build Summary
-* arc: 5 total, 5 passed, 0 failed
-* arm: 148 total, 147 passed, 1 failed
-* arm64: 48 total, 44 passed, 4 failed
-* i386: 28 total, 22 passed, 6 failed
-* mips: 31 total, 29 passed, 2 failed
-* parisc: 8 total, 8 passed, 0 failed
-* powerpc: 34 total, 32 passed, 2 failed
-* riscv: 16 total, 12 passed, 4 failed
-* s390: 8 total, 8 passed, 0 failed
-* sh: 14 total, 12 passed, 2 failed
-* sparc: 8 total, 8 passed, 0 failed
-* x86_64: 41 total, 39 passed, 2 failed
 
-## Test suites summary
-* boot
-* fwts
-* igt-gpu-tools
-* kselftest-android
-* kselftest-arm64
-* kselftest-breakpoints
-* kselftest-capabilities
-* kselftest-cgroup
-* kselftest-clone3
-* kselftest-core
-* kselftest-cpu-hotplug
-* kselftest-cpufreq
-* kselftest-drivers-dma-buf
-* kselftest-efivarfs
-* kselftest-filesystems
-* kselftest-filesystems-binderfs
-* kselftest-firmware
-* kselftest-fpu
-* kselftest-futex
-* kselftest-gpio
-* kselftest-intel_pstate
-* kselftest-ipc
-* kselftest-ir
-* kselftest-kcmp
-* kselftest-kexec
-* kselftest-kvm
-* kselftest-lib
-* kselftest-livepatch
-* kselftest-membarrier
-* kselftest-memfd
-* kselftest-memory-hotplug
-* kselftest-mincore
-* kselftest-mount
-* kselftest-mqueue
-* kselftest-net
-* kselftest-net-forwarding
-* kselftest-net-mptcp
-* kselftest-netfilter
-* kselftest-nsfs
-* kselftest-openat2
-* kselftest-pid_namespace
-* kselftest-pidfd
-* kselftest-proc
-* kselftest-pstore
-* kselftest-ptrace
-* kselftest-rseq
-* kselftest-rtc
-* kselftest-seccomp
-* kselftest-tc-testing
-* kselftest-timens
-* kselftest-timers
-* kselftest-tmpfs
-* kselftest-tpm2
-* kselftest-user
-* kselftest-vm
-* kselftest-x86
-* kselftest-zram
-* kunit
-* kvm-unit-tests
-* libgpiod
-* libhugetlbfs
-* log-parser-boot
-* log-parser-test
-* ltp-cap_bounds
-* ltp-commands
-* ltp-containers
-* ltp-controllers
-* ltp-cpuhotplug
-* ltp-crypto
-* ltp-cve
-* ltp-dio
-* ltp-fcntl-locktests
-* ltp-filecaps
-* ltp-fs
-* ltp-fs_bind
-* ltp-fs_perms_simple
-* ltp-fsx
-* ltp-hugetlb
-* ltp-io
-* ltp-ipc
-* ltp-math
-* ltp-mm
-* ltp-nptl
-* ltp-open-posix-tests
-* ltp-pty
-* ltp-sched
-* ltp-securebits
-* ltp-smoke
-* ltp-syscalls
-* ltp-tracing
-* network-basic-tests
-* packetdrill
-* perf
-* rcutorture
-* v4l2-compliance
-* vdso
+[1] https://lore.kernel.org/all/20230221091719.126127-1-jefflexu@linux.alibaba.com/
+[2] https://lore.kernel.org/all/20230221091719.126127-2-jefflexu@linux.alibaba.com/
 
---
-Linaro LKFT
-https://lkft.linaro.org
+Jingbo Xu (2):
+  cachefiles: don't align the write IO in ondemand mode
+  fscache: introduce fscache_begin_wait_operation() helper
+
+ fs/cachefiles/ondemand.c |  3 ++-
+ fs/fscache/io.c          |  9 +++++++++
+ include/linux/fscache.h  | 22 ++++++++++++++++++++++
+ 3 files changed, 33 insertions(+), 1 deletion(-)
+
+-- 
+2.19.1.6.gb485710b
+
