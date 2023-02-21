@@ -2,113 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AA87B69DC4E
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 09:43:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D3E7169DC55
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 09:44:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233549AbjBUImt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Feb 2023 03:42:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60024 "EHLO
+        id S233646AbjBUIoY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Feb 2023 03:44:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34622 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233858AbjBUImo (ORCPT
+        with ESMTP id S233560AbjBUIoV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Feb 2023 03:42:44 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C59386E87
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Feb 2023 00:42:38 -0800 (PST)
-Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1pUOE5-0003GS-Lg; Tue, 21 Feb 2023 09:42:17 +0100
-Received: from pengutronix.de (unknown [IPv6:2a03:f580:87bc:d400:27e2:f49:4c60:b961])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        (Authenticated sender: mkl-all@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id 816B117E52E;
-        Tue, 21 Feb 2023 08:42:16 +0000 (UTC)
-Date:   Tue, 21 Feb 2023 09:42:06 +0100
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     Yang Li <yang.lee@linux.alibaba.com>
-Cc:     kuba@kernel.org, davem@davemloft.net, wg@grandegger.com,
-        edumazet@google.com, pabeni@redhat.com, linux-can@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH -next] can: mscan: mpc5xxx: Use of_property_present()
- helper
-Message-ID: <20230221084206.zxnyanfoox4gqghm@pengutronix.de>
-References: <20230221024541.105199-1-yang.lee@linux.alibaba.com>
+        Tue, 21 Feb 2023 03:44:21 -0500
+Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62846E5;
+        Tue, 21 Feb 2023 00:44:20 -0800 (PST)
+Received: by mail-pj1-x1036.google.com with SMTP id x34so519027pjj.0;
+        Tue, 21 Feb 2023 00:44:20 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=iAdVpmaUtP1sMiKhdmhcYrJ4v5VDK3Of4Da2QjdRn/Q=;
+        b=Axa5vyTi9T3TZzw9+JqrNW3qQhqWqtKfNCffJfbjHIyhbcSPOZkXTMWHfVvnWZUC0J
+         JOjXFBVgQhLmqT3vRwFsU3odpuVFnR868Mhnw1VPL6cNPk8ZAj80BHy30hrZMK7Ur6A4
+         29LM1BWubPuS2nd7ll3oX0FtTqJEW0n9xSe2A4w/SlpRV1A9jJ4ZZtGmmEqCncj/lAa7
+         9uAty/F/vQDgIEQwfv6Thpis7Q70NkbYxAVaKl9dqSYVKOsCG3pAV/lwQV+9CZg1sxuW
+         OkbQxr5Ht3fE2KRnYLWSbSLHp4z1Heo4Z99+3WTX1txFCG0BMBN2gOUF/h/0nGioazht
+         oFKw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=iAdVpmaUtP1sMiKhdmhcYrJ4v5VDK3Of4Da2QjdRn/Q=;
+        b=0cs+oQNBJIoAtdn/o6bK1nKo9JdQk1tm6K55PXxJ/a/HAduRxarZCakSrv4xydfa/e
+         JDfCAKWpRScZiue8yzGpOhcynqDeZdIiQQyo/7f32U2068pt63D7d3qCoQpY56z9sMii
+         RuU7s9kJemi9mTBxRp1zfKZ9/itRsGZNfZ9xw8BsQlMo9G4UAKW3gXOaLB/eh8zuUpqt
+         Mvt9Gvv+jIDtnFFM9vxw4SxWnLmgYmAngCeQ22BNRdeTqxjgGUloH6MXtXMfJmcqIgzl
+         OCzTyCptHaAqcU4RXZRov7XcFK2WF8ddmVGTEh8JRyWuePHR2I7ty3C1Bcs5KnrZ3fQk
+         Ob7w==
+X-Gm-Message-State: AO0yUKVsyt+ePYXuhgkxJ2ULhce5urnA+FaNL0jwW4ayKXN3r+vp1vrj
+        mhIP1l3nNDU3L3ETtzeSefo=
+X-Google-Smtp-Source: AK7set95lmiuGKXHxsdQZVMTkvrgvbizW4Z6wpHIxl4NR3tCfQ3bzPRMG7GqShrz2JAV4Ib9oUukpg==
+X-Received: by 2002:a17:90b:4a03:b0:236:6dea:87b4 with SMTP id kk3-20020a17090b4a0300b002366dea87b4mr4580538pjb.39.1676969059844;
+        Tue, 21 Feb 2023 00:44:19 -0800 (PST)
+Received: from [192.168.255.10] ([103.7.29.32])
+        by smtp.gmail.com with ESMTPSA id t21-20020a17090b019500b002311ae14a01sm2669907pjs.11.2023.02.21.00.44.17
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 21 Feb 2023 00:44:19 -0800 (PST)
+Message-ID: <3e0f74af-772b-547b-18a9-7ac5c325dd35@gmail.com>
+Date:   Tue, 21 Feb 2023 16:44:10 +0800
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="hrfcdqcbjtwwh3d5"
-Content-Disposition: inline
-In-Reply-To: <20230221024541.105199-1-yang.lee@linux.alibaba.com>
-X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.8.0
+Subject: Re: [PATCH v4 02/12] KVM: VMX: Refactor intel_pmu_set_msr() to align
+ with other set_msr() helpers
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20230214050757.9623-1-likexu@tencent.com>
+ <20230214050757.9623-3-likexu@tencent.com> <Y+6cfen/CpO3/dLO@google.com>
+Content-Language: en-US
+From:   Like Xu <like.xu.linux@gmail.com>
+In-Reply-To: <Y+6cfen/CpO3/dLO@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 17/2/2023 5:13 am, Sean Christopherson wrote:
+> Gah, I forgot to post a patch that gives intel_pmu_get_msr() the same treatment.
+> I'll replace this patch with the combined version below when applying, or will
+> post it separately if a v5 is needed.
 
---hrfcdqcbjtwwh3d5
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+It's fine for me to apply this new patch first and then apply the remaining
+patches with only a tiny rebase effort (tests still remains healthy). More, if
+you have more comments on any other patches that need changing after
+the radio silence, please roar at me on this version.
 
-On 21.02.2023 10:45:41, Yang Li wrote:
-> Use of_property_present() instead of of_get_property/of_find_property()
-> in places where we just need to test presence of a property.
->=20
-> Signed-off-by: Yang Li <yang.lee@linux.alibaba.com>
-
-NAK!
-
-Besides the things Pavan Chebbi says, this is not even compile:
-
-| drivers/net/can/mscan/mpc5xxx_can.c: In function =E2=80=98mpc5xxx_can_pro=
-be=E2=80=99:
-| drivers/net/can/mscan/mpc5xxx_can.c:318:22: error: implicit declaration o=
-f function =E2=80=98of_property_present=E2=80=99; did you mean =E2=80=98fwn=
-ode_property_present=E2=80=99? [-Werror=3Dimplicit-function-declaration]
-|   318 |         clock_name =3D of_property_present(np, "fsl,mscan-clock-s=
-ource");
-|       |                      ^~~~~~~~~~~~~~~~~~~
-|       |                      fwnode_property_present
-| drivers/net/can/mscan/mpc5xxx_can.c:318:20: error: assignment to =E2=80=
-=98const char *=E2=80=99 from =E2=80=98int=E2=80=99 makes pointer from inte=
-ger without a cast [-Werror=3Dint-conversion]
-|   318 |         clock_name =3D of_property_present(np, "fsl,mscan-clock-s=
-ource");
-|       |                    ^
-| cc1: all warnings being treated as errors
-
-Marc
-
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde           |
-Embedded Linux                   | https://www.pengutronix.de  |
-Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
-
---hrfcdqcbjtwwh3d5
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEDs2BvajyNKlf9TJQvlAcSiqKBOgFAmP0g9oACgkQvlAcSiqK
-BOhvUQf/awzwQM9W9569EDy3SCHweMikyRD4Gh2zYeaayAxKMr4y9Sd7P3XhLDy3
-RpUPH1KiYHdhGKogTU0bQ6zIMt+l+pWe0HL1YQtb7EcIpyMOCl276QfDTOH+nE0W
-X4OCmwQkZwtHDo09cKsw9YpZroqBMV0/fZhD0QO/71aiLqBYE/TLQ1gKndWwTI9T
-gyl5v30P3BFIlLvKHMNQ7fGC31A1qiIjpJrz59AZydNj92pY89nyy0FXf6kewuRP
-Es4dZZxnGF0OexUeEJJS2xeccBzxaE9z3OpKu7pRK/H1QdTcY59FbzuRUE5WPk2t
-wXTPxV/51pr82Hr59Clrcg0lmPDNcA==
-=yKkm
------END PGP SIGNATURE-----
-
---hrfcdqcbjtwwh3d5--
+> 
+> From: Sean Christopherson<seanjc@google.com>
+> Date: Thu, 26 Jan 2023 17:08:03 -0800
+> Subject: [PATCH] KVM: VMX: Refactor intel_pmu_{g,}set_msr() to align with
+>   other helpers
