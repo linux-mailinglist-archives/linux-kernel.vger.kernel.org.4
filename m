@@ -2,113 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 088BF69DC9A
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 10:11:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 40ECB69DCA4
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 10:13:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233858AbjBUJLk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Feb 2023 04:11:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51956 "EHLO
+        id S233868AbjBUJNv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Feb 2023 04:13:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52684 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233748AbjBUJLh (ORCPT
+        with ESMTP id S233863AbjBUJNt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Feb 2023 04:11:37 -0500
-Received: from mail-pg1-x52f.google.com (mail-pg1-x52f.google.com [IPv6:2607:f8b0:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67CCE23858;
-        Tue, 21 Feb 2023 01:11:36 -0800 (PST)
-Received: by mail-pg1-x52f.google.com with SMTP id p6so2048195pga.0;
-        Tue, 21 Feb 2023 01:11:36 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=nCmHgfpMxViqDLmcKLWqNfQ12zWvq/2JIFuWMxvapXQ=;
-        b=MWkrpyphbx/NrCFrs5ZMCOvEEG5BIfRP8jMfr005eA2qt8qndOWDmCB8xLqi3f8r4w
-         zcsdehUJnwdujJWWg3iD1ZW2HJp6hbMzPsxwGMUy4+M4L8k2wTbYvNSFvKzvj/8ulcGJ
-         7XGJGT6yhcUFJ4fyH4yJb4ICj/54rpKbPxPNWjpm841PMtPMJKNh7bFPAH9NmD8lSidE
-         RZwOnc30LMMcrSt083cqsKj9MTuYtgTrkSKZeVc8qTYg7ISqkGeSR6B2eD0TTPZKGhb8
-         24+7s0GDV3o807NOSx4drLpjSF3k+GyZgFX5GZh8zSHr16tYqfpl7PPY6yz7FxjVdjGX
-         aFyg==
+        Tue, 21 Feb 2023 04:13:49 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BAA84449A
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Feb 2023 01:13:02 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1676970782;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=u9qPgJ9YfQaIBYxPeu9q0HF9PJcAGNOnIB/vKwxuzMc=;
+        b=FXoGwlqvceIhU2EV6rhRmsmg54rAveasbGQYAwu0WX0XPlmJRyI5fJohkZGfwqJnr1TLEr
+        exJjpmiX/5NGNuVI0zqvq6TQCvBCshnWxfTwMJL/EQCENUKIHLquAXUep47NZ97oA5ri8/
+        rJShg3nV3UJmqlV3DuOIqYGuoIsXHdc=
+Received: from mail-qt1-f200.google.com (mail-qt1-f200.google.com
+ [209.85.160.200]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-222-gmJVqY7pOiemci-roDbbfw-1; Tue, 21 Feb 2023 04:13:00 -0500
+X-MC-Unique: gmJVqY7pOiemci-roDbbfw-1
+Received: by mail-qt1-f200.google.com with SMTP id e17-20020ac85dd1000000b003ba2d72f98aso1807054qtx.10
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Feb 2023 01:13:00 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=nCmHgfpMxViqDLmcKLWqNfQ12zWvq/2JIFuWMxvapXQ=;
-        b=Opd6SlalzRiNz+UJcpCqvkwr36cYqd3FGcRrFSYoY3llni+WvqcNkIyn24bE6uxlLe
-         as0wrueFD4FyGjXXZNEnsoxlHu2jelsIC6IFOfbAfVxpBcSfxkoEVmkkukXD2sdMWFZZ
-         RFFPtP5tCAw3GGgGnQBroinY0agMJY8rvSKo6Wx0NXSB+NNVQ5BGvV+N9Lw5Zmm9i4Zk
-         BIf+N37Uqvmlyuo1X4/gZ+ThDcN5/IfRbaXWZVIqFfrIZ2YOt+isoJrHc/NIVPAXa1/m
-         tC2vOy5Y1pQlQfhi/9VA+ZhKZSXnyheaGyzQU4weGG8wWh7kOeWRYDPg+BVFJUM1YpUE
-         gDdQ==
-X-Gm-Message-State: AO0yUKVlhufLVvc+VAJLRc7FyQqetQPjQxWHVF1I7b43y8mafZvn79c9
-        Eh2MN69fWB4BDkg+kBCnDDU=
-X-Google-Smtp-Source: AK7set+QdnNzvwjiS0tviDr7Iw8v5hHFa9TJdJSdE7XorejlWIBvoeszUhC5GyqfQXAK8UpWQoJtnQ==
-X-Received: by 2002:aa7:8ecc:0:b0:5a9:b910:6d98 with SMTP id b12-20020aa78ecc000000b005a9b9106d98mr4648297pfr.13.1676970695558;
-        Tue, 21 Feb 2023 01:11:35 -0800 (PST)
-Received: from debian.me (subs02-180-214-232-76.three.co.id. [180.214.232.76])
-        by smtp.gmail.com with ESMTPSA id e1-20020a62ee01000000b00594235980e4sm1728168pfi.181.2023.02.21.01.11.34
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=u9qPgJ9YfQaIBYxPeu9q0HF9PJcAGNOnIB/vKwxuzMc=;
+        b=mbed7GAscQGObwBEMJw1vs+5Xc6nhnk160Ai4YiD70VuE8zSAEKI8TBOzNbAi250JZ
+         pvg9v3Goo1/p0nZ4EEKy4qrgMEBNM4vaL6CMLCupx2R4sQkZ73m13KeWhXUqpIMo51lX
+         QFU7lySYJ8XvRY9n7UiNmXyrfIdU7fkw3h2CuvvDNw8jvHdI8SPQPa7S+xqTWXwrd+s7
+         fz0cW4oF2I4pdw70/0I1MDTgfzhWxZzt9kP2UB28mTFNpQ/P+yy0rEWbYyqScKG2XPSA
+         lasW9OdxzK9A2DIHAT/nUP/GscU0yJ7VsdlFqRXzT6e8uqJIG/gKbgIupFZSBMPPLARz
+         aapQ==
+X-Gm-Message-State: AO0yUKWK7pgX7Kl7vaa5CWqz1SfzvckWU0IIfr3uzJMW+i6M22fk0Ek4
+        AUg5vyXNX8vfvOPBujFqR1bbs7p5NGOtuuf9ol28hIn2Q5vexcbb20gVOK+v36ucFphDLuh/6J5
+        1v2TbnwlRUAfTJXJ3EGTBBAtr
+X-Received: by 2002:a05:622a:1387:b0:3b6:8ece:cab9 with SMTP id o7-20020a05622a138700b003b68ececab9mr9007220qtk.2.1676970780247;
+        Tue, 21 Feb 2023 01:13:00 -0800 (PST)
+X-Google-Smtp-Source: AK7set8kiVEBhsNJv0mZoYrOBkHxRKdqQSfVZHQqIki9/aW5Lspjg93ps58VyJ2p0giooT1AijNf/w==
+X-Received: by 2002:a05:622a:1387:b0:3b6:8ece:cab9 with SMTP id o7-20020a05622a138700b003b68ececab9mr9007188qtk.2.1676970779965;
+        Tue, 21 Feb 2023 01:12:59 -0800 (PST)
+Received: from gerbillo.redhat.com (146-241-121-8.dyn.eolo.it. [146.241.121.8])
+        by smtp.gmail.com with ESMTPSA id y6-20020ac87086000000b003be56bdd3b1sm1966046qto.92.2023.02.21.01.12.57
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 21 Feb 2023 01:11:35 -0800 (PST)
-Received: by debian.me (Postfix, from userid 1000)
-        id 93421103DE1; Tue, 21 Feb 2023 16:11:29 +0700 (WIB)
-Date:   Tue, 21 Feb 2023 16:11:29 +0700
-From:   Bagas Sanjaya <bagasdotme@gmail.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org
-Cc:     patches@lists.linux.dev, linux-kernel@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        srw@sladewatkins.net, rwarsow@gmx.de
-Subject: Re: [PATCH 6.1 000/118] 6.1.13-rc1 review
-Message-ID: <Y/SKwVOIgDUxcxyH@debian.me>
-References: <20230220133600.368809650@linuxfoundation.org>
+        Tue, 21 Feb 2023 01:12:59 -0800 (PST)
+Message-ID: <815485547a20f80f6dce991b76a7b60aebf1a716.camel@redhat.com>
+Subject: Re: [PATCH v3] page_pool: add a comment explaining the fragment
+ counter usage
+From:   Paolo Abeni <pabeni@redhat.com>
+To:     Ilias Apalodimas <ilias.apalodimas@linaro.org>,
+        netdev@vger.kernel.org
+Cc:     alexander.duyck@gmail.com, Alexander Duyck <alexanderduyck@fb.com>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>, linux-kernel@vger.kernel.org
+Date:   Tue, 21 Feb 2023 10:12:56 +0100
+In-Reply-To: <20230217222130.85205-1-ilias.apalodimas@linaro.org>
+References: <20230217222130.85205-1-ilias.apalodimas@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.46.4 (3.46.4-1.fc37) 
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="VbTdTAdj2F7p+sKI"
-Content-Disposition: inline
-In-Reply-To: <20230220133600.368809650@linuxfoundation.org>
-X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
---VbTdTAdj2F7p+sKI
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-On Mon, Feb 20, 2023 at 02:35:16PM +0100, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 6.1.13 release.
-> There are 118 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
+On Sat, 2023-02-18 at 00:21 +0200, Ilias Apalodimas wrote:
+> When reading the page_pool code the first impression is that keeping
+> two separate counters, one being the page refcnt and the other being
+> fragment pp_frag_count, is counter-intuitive.
 >=20
+> However without that fragment counter we don't know when to reliably
+> destroy or sync the outstanding DMA mappings.  So let's add a comment
+> explaining this part.
+>=20
+> Reviewed-by: Alexander Duyck <alexanderduyck@fb.com>
+> Signed-off-by: Ilias Apalodimas <ilias.apalodimas@linaro.org>
 
-Successfully cross-compiled for arm64 (bcm2711_defconfig, GCC 10.2.0) and
-powerpc (ps3_defconfig, GCC 12.2.0).
+# Form letter - net-next is closed
 
-Tested-by: Bagas Sanjaya <bagasdotme@gmail.com>
+The merge window for v6.3 has begun and therefore net-next is closed
+for new drivers, features, code refactoring and optimizations.
+We are currently accepting bug fixes only.
 
---=20
-An old man doll... just what I always wanted! - Clara
+Please repost when net-next reopens after Mar 6th.
 
---VbTdTAdj2F7p+sKI
-Content-Type: application/pgp-signature; name="signature.asc"
+RFC patches sent for review only are obviously welcome at any time.
 
------BEGIN PGP SIGNATURE-----
-
-iHUEABYKAB0WIQSSYQ6Cy7oyFNCHrUH2uYlJVVFOowUCY/SKsAAKCRD2uYlJVVFO
-o9BKAP9QNyO0YV+M4mXbjoH+4Mszm/LoyYxVJYpVf+fEi7KbgQD/fgd1mnVA3URL
-PE2wFsr+sw5nAsb2trMBbRcz/mteLQs=
-=Osl3
------END PGP SIGNATURE-----
-
---VbTdTAdj2F7p+sKI--
