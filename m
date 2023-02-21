@@ -2,105 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D1FD169EB7A
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Feb 2023 00:53:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 02A2E69EB7C
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Feb 2023 00:53:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229674AbjBUXxB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Feb 2023 18:53:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36972 "EHLO
+        id S229840AbjBUXxg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Feb 2023 18:53:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37104 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229769AbjBUXwz (ORCPT
+        with ESMTP id S229820AbjBUXxF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Feb 2023 18:52:55 -0500
-Received: from mail-il1-x133.google.com (mail-il1-x133.google.com [IPv6:2607:f8b0:4864:20::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D62C94EE4
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Feb 2023 15:52:53 -0800 (PST)
-Received: by mail-il1-x133.google.com with SMTP id y3so2698909ilb.6
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Feb 2023 15:52:53 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=JtxbGmpRXGP5UT9vivOAauqxrXOfSxdlO9oNFYJkrvU=;
-        b=VeYVI3vOli00dAdnbyDsGIOz0PzOTmTxOr2wosdBOkL7d2QGbVl58hxpQbIPw5FDMj
-         Z2pldzCxEIgxcV4w3eDwJ2Hzu65PujM3TMWtLoBhxBjcAlsTQuLBUD0FOBYwerCSk+rB
-         md38G5IX3EOD8cue9hcTWywwz2p8ePJYMIgJU=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=JtxbGmpRXGP5UT9vivOAauqxrXOfSxdlO9oNFYJkrvU=;
-        b=amQ5Nm0HAKgWbRXCmb0PRM1O5BHdWQvIgf3DUFFeWG/m5rj0ZsWpKwwOZfIpRkYp1g
-         vHKVuQVYtSPubp3rnACtsNhPvKXPZv4yZ8KcLtFezN7l0D/+fFaXnEb3H4yw+0jBg5Nz
-         sBkSEVtX5zmKfp+nYGeQIHtnLYep6Vd8InAr3KB1+wNmBd6nS6mAqzBBJqKGvoEqWzCX
-         W2RpjRpH8Pv5VXZxsfx4mjVM4YnwF2HHjml6tQKPL4tDSbLkKLEIHkdWjsxnqaOeAzJr
-         to2fzTBy9n1og2z7nFe4J2PtU9w5yNXp9r7SeYdaCNwxyvNr5rqoz153juMhzoPshoD2
-         /+/A==
-X-Gm-Message-State: AO0yUKVDcIE9Pc8iBRLwhLdeSH2Znl3VGRw+BKU1bjJQC0hk/N2n0pyd
-        nMga874edonJC53wGNCLKntyow==
-X-Google-Smtp-Source: AK7set/JE+8ksW+C5Uh7uxrvoQ8I21RBYceGnUP6xDBNQzjMl8gph078tMFbjEeysOHvvBFnTxJR/g==
-X-Received: by 2002:a05:6e02:174f:b0:315:e673:e7d6 with SMTP id y15-20020a056e02174f00b00315e673e7d6mr4135976ill.0.1677023573217;
-        Tue, 21 Feb 2023 15:52:53 -0800 (PST)
-Received: from [192.168.1.128] ([38.15.45.1])
-        by smtp.gmail.com with ESMTPSA id r5-20020a02c845000000b003c4f7c419dasm1678549jao.128.2023.02.21.15.52.52
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 21 Feb 2023 15:52:52 -0800 (PST)
-Message-ID: <4e0583d2-d7d1-9e35-37c7-34c9a64b3707@linuxfoundation.org>
-Date:   Tue, 21 Feb 2023 16:52:51 -0700
+        Tue, 21 Feb 2023 18:53:05 -0500
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D00619EDB
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Feb 2023 15:53:03 -0800 (PST)
+From:   Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1677023582;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=mIO1r/3ZO0mEIHPOBsExgUVNpkwixfQnURK9KwDNb6s=;
+        b=f8IFJUhnwIKLQZXUSoYTYqrz5trH9We+5C9XHZOGIMlTpCjI2z8ArQG8NdDT0T7VHwseXW
+        rvzczwm8G3SazKVimlp3Ly40NMK+KwcZuXJw5aBYTAepOOV6uhuH5WzDzG3xtZf6j9IV8Z
+        pURQWvXv3sLhlvxaGXXAgVBcubBckCjQ4S3av6ACpvT8ffjM8TpDXQ3FDzg+ME2YqxG/WB
+        NlqkEc7ZoTNYiuXEYDNwYGucpjZfk4gZqEOPZz+rJN/yqQkM9nzsfUiWF1BUBfNGR8cl+z
+        qy074ydC+I3lzsEVjnXT+j+7cQbeSEWcUS4vWs5mOyV25eK057b23UR+4dF0NA==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1677023582;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=mIO1r/3ZO0mEIHPOBsExgUVNpkwixfQnURK9KwDNb6s=;
+        b=tJQM1+rKZv8XNNBu/gMWEWOBSkHqPNzhHJylukMoaapJItXymlnKOI4dtfoFScLZaR3ZGi
+        thyG0QeK0wyutHCQ==
+To:     Rob Landley <rob@landley.net>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Cc:     Masahiro Yamada <masahiroy@kernel.org>,
+        Nicolas Schier <nicolas@fjasle.eu>
+Subject: Re: [PATCH 4/5] Replace timeconst.bc with mktimeconst.c
+In-Reply-To: <9b8ce4db-9e1b-32b6-f749-94e4decc032e@landley.net>
+References: <b455394f-9faa-1f1a-f171-0b9d5e9ada35@landley.net>
+ <9b8ce4db-9e1b-32b6-f749-94e4decc032e@landley.net>
+Date:   Wed, 22 Feb 2023 00:53:01 +0100
+Message-ID: <87ttzemv8i.ffs@tglx>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH 5.4 000/156] 5.4.232-rc1 review
-Content-Language: en-US
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org
-Cc:     patches@lists.linux.dev, linux-kernel@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        srw@sladewatkins.net, rwarsow@gmx.de,
-        Shuah Khan <skhan@linuxfoundation.org>
-References: <20230220133602.515342638@linuxfoundation.org>
-From:   Shuah Khan <skhan@linuxfoundation.org>
-In-Reply-To: <20230220133602.515342638@linuxfoundation.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,URI_DOTEDU autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/20/23 06:34, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.4.232 release.
-> There are 156 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
-> 
-> Responses should be made by Wed, 22 Feb 2023 13:35:35 +0000.
-> Anything received after that time might be too late.
-> 
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.4.232-rc1.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.4.y
-> and the diffstat can be found below.
-> 
-> thanks,
-> 
-> greg k-h
-> 
+Rob!
 
-Compiled and booted on my test system. No dmesg regressions.
+On Tue, Feb 21 2023 at 15:00, Rob Landley wrote:
 
-Tested-by: Shuah Khan <skhan@linuxfoundation.org>
+See my previous comment about Documentation. This time you even failed
+to CC the maintainer of this code.
 
-thanks,
--- Shuah
+> Update of my decade-old patch replacing timeconst.pl with mktimeconst.c,
+> still removing the only user of "bc" from the build.
+
+How is 'decade-old patch' relevant changelog information?
+
+> All that's changed since the 2015 version at:
+> https://github.com/landley/aboriginal/blob/master/sources/patches/linux-noperl-timeconst.patch
+
+That's neither interesting.
+
+> Is one extra iteration of the loop for nanoseconds and different
+> makefile plumbing calling it. In theory this could calculate the values
+> at runtime in a small _init function and eliminate the header or even
+> allow HZ to change at runtime.
+
+In theory we can also build a compiler into the decompressor which
+compiles and bootstraps the kernel itself, right?
+
+> See https://lkml.iu.edu/hypermail/linux/kernel/2211.0/02589.html
+
+I haven't seen a changelog in a while, which provides so much useless
+information and lacks any content which justifies and documents the
+proposed change.
+
+>  Kbuild                    |   7 ++-
+>  kernel/time/mktimeconst.c | 111 ++++++++++++++++++++++++++++++++++++
+>  kernel/time/timeconst.bc  | 117 --------------------------------------
+
+Clearly you provided evidence that the output of both tools is identical
+and because you decided to reorder the defines it's not even verifyable
+with diff.
+
+But I don't even need diff to figure out that the results are not
+identical:
+
+# grep -c '#define' orig.h
+25
+
+# grep -c '#define' patched.h
+31
+
+Which means this adds 6 more unused defines to the already 8 unused
+defines of today.
+
+You clearly spent a lot of time to make this palatable to the people who
+are responsible for this code.
+
+That said, I'm not completely opposed to get rid of the bc dependency,
+but if you want to sell this, then follow the documented process and
+present it in a form which is acceptable.
+
+Thanks,
+
+        tglx
+
+
+
+
