@@ -2,229 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 40A2069E89E
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 20:55:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7965369E8A0
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 20:55:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229708AbjBUTza (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Feb 2023 14:55:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43966 "EHLO
+        id S229959AbjBUTzq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Feb 2023 14:55:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44410 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229550AbjBUTz2 (ORCPT
+        with ESMTP id S229917AbjBUTzo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Feb 2023 14:55:28 -0500
-Received: from mail-io1-xd2e.google.com (mail-io1-xd2e.google.com [IPv6:2607:f8b0:4864:20::d2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A25FC2CFD6
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Feb 2023 11:55:10 -0800 (PST)
-Received: by mail-io1-xd2e.google.com with SMTP id i202so2354656ioa.3
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Feb 2023 11:55:10 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=eRYWJJCENa9rPwW/TxtFvE/+1aUPU+VLJ48+b5eakXA=;
-        b=HYpvSiiTpTlEbP+d72xPTFxz0Y5boODfa2Unjr2AFinan9k/Rc1cjs757XVmQXuHSV
-         XD8jC9LvBytNQwALMSgJ4kPe4E1AS+ubLYplmQrqC6/+wMYzYzpZ4+yjwVzIQlTDeTce
-         x6KfUIH1/yToVqW5UffBOm+0ZcuKVISPhUtQQ=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=eRYWJJCENa9rPwW/TxtFvE/+1aUPU+VLJ48+b5eakXA=;
-        b=Sw7Fyb+lifa7XwKHjrWphegB/6MV4GYJ+Kn2DR+PAr1uDhpK/Ac33C/GZgJbM8krDW
-         sI1YGAU+wJAsq4VZET57Mlo1tpgwrlDofZfZGz+4DGu9i1jAkIQYfVly2yG62qLTUHbs
-         L4D3FSfNM2d8ep4hxlL93SOcTTBbacSO7Fqn2V5qmyy3UXff82cXvEE/yzdkkWlhrvao
-         maFM6PMGX5+uu2tu2JYnolhN+ZsjhiTTDLvGeDlpE3KMPD2ZuNyTjvfTwDyZ6T/GHiqZ
-         rjselVWfmOP+uRe6n/Oz3JaGGQO5iNMgx/gtET7CkkPAMBMg0KFynOyvWkFW5H/KATy9
-         w/Pg==
-X-Gm-Message-State: AO0yUKUQRr+xbJxqVXQJL5t6JXvjoqXPUhoKoOYTf4FWJ5mBf3NgXB0i
-        A5iXKm80e0KF9DGYP0i4CW7YBmN/cBr6YYtgDunFbw==
-X-Google-Smtp-Source: AK7set/w700ouJyUYiXM9kt1jbCAA2NUhIQI8F+mlpYikAHFpTJ67qOvGV3wQETjTP2ci+5CpwYaIYNCoOXnjHtIN2Q=
-X-Received: by 2002:a5e:a916:0:b0:71b:df97:1d95 with SMTP id
- c22-20020a5ea916000000b0071bdf971d95mr3705480iod.80.1677009305527; Tue, 21
- Feb 2023 11:55:05 -0800 (PST)
-MIME-Version: 1.0
-References: <20230218211608.1630586-1-robdclark@gmail.com> <20230218211608.1630586-11-robdclark@gmail.com>
- <20230220110820.595cfa37@eldfell> <CAF6AEGuo-vmW4Va9=RH+kH9KgNvR2vzjJ8meO-oty56xjDhjgg@mail.gmail.com>
- <20230221104551.60d44d1c@eldfell> <Y/TAr64SpxO712RB@intel.com>
-In-Reply-To: <Y/TAr64SpxO712RB@intel.com>
-From:   Rob Clark <robdclark@chromium.org>
-Date:   Tue, 21 Feb 2023 11:54:55 -0800
-Message-ID: <CAJs_Fx7n3QrzusdX5yD=39YZ8MzjuwZTriWz8hVxNYGHO=sJ_Q@mail.gmail.com>
-Subject: Re: [PATCH v4 10/14] drm/vblank: Add helper to get next vblank time
-To:     =?UTF-8?B?VmlsbGUgU3lyasOkbMOk?= <ville.syrjala@linux.intel.com>
-Cc:     Pekka Paalanen <ppaalanen@gmail.com>,
-        Rob Clark <robdclark@gmail.com>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Tvrtko Ursulin <tvrtko.ursulin@intel.com>,
-        =?UTF-8?Q?Christian_K=C3=B6nig?= <ckoenig.leichtzumerken@gmail.com>,
-        =?UTF-8?Q?Michel_D=C3=A4nzer?= <michel@daenzer.net>,
-        open list <linux-kernel@vger.kernel.org>,
-        dri-devel@lists.freedesktop.org,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        freedreno@lists.freedesktop.org
-Content-Type: text/plain; charset="UTF-8"
+        Tue, 21 Feb 2023 14:55:44 -0500
+Received: from wout3-smtp.messagingengine.com (wout3-smtp.messagingengine.com [64.147.123.19])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 144B630E8A;
+        Tue, 21 Feb 2023 11:55:23 -0800 (PST)
+Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
+        by mailout.west.internal (Postfix) with ESMTP id 08A23320039A;
+        Tue, 21 Feb 2023 14:55:18 -0500 (EST)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute2.internal (MEProxy); Tue, 21 Feb 2023 14:55:19 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; h=
+        cc:cc:content-transfer-encoding:content-type:date:date:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to; s=fm2; t=1677009318; x=
+        1677095718; bh=y16mUyYY2SPoAJ9bLdflgrytvoVfCX/ep0VQgXN5o5A=; b=m
+        IM2d1Srzk3jwEXOtZsU0KtjDQC7KYclazQ/9X11OUF9uqhwl7hg3htlpSLNUPeF8
+        fKRLP4nJ68xh+/Sm+1iOGyuleT35dp3i/2Uzkf0ldCc40StoG+t/FawpzAuwsIGQ
+        zEexqCT/MMT4QNTJ4IixHg8+AxJy7v6Yb9tGJa8tnC1usbSxpTWxUTnGwO6EPs8s
+        BfUKBzde4RUxxSMOfgB0UXciHueqRPij9DZT1t6HAoIxreCkhyzmc3aZAF2suh++
+        aOGhUcDodJ0vCE6nJSGwrxI3nFuUaROb1ncls0ovoUQv6CD3aMEcYVy00cMtUNub
+        P4iTjGYTaDpfOjUg0rC0w==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding
+        :content-type:date:date:feedback-id:feedback-id:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
+        :x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1677009318; x=
+        1677095718; bh=y16mUyYY2SPoAJ9bLdflgrytvoVfCX/ep0VQgXN5o5A=; b=X
+        RowmVbE5gWK9sma5PPmAPczS/CY4vUALCT9yG/TTg5/6YTXJYYt7xXvUngHhWs/T
+        pMOXlzLHVcl/MR2Mr7YJ5AASX6sXx+IdBrAvrlOcO6azxjro3Y6mnNwAn6ZPjJKF
+        0Z1ZuroOmO7oE43YoCJw4gdsS54EhczHaRoKbVfvQezPgr6pP9EL2IUnpIuw0ffB
+        cpau4NcvuZig8/A5iO3zisGShRZe5HEKBbQ8GALwCWIXVWJAO7TFKpMNU+/NGmMR
+        LS89fWBEOIPdhhybnYYM7bMRw1c84CrKupRFynbdmpD5+zsy2yRRQ9qm/sww0Z3Y
+        MDErqk3Xmp6Hj0VqXwbKw==
+X-ME-Sender: <xms:pSH1Yy5rfz2qINRajm2z9_YewJ9Q9YDLpKBVxfaicG75io5ihzi73A>
+    <xme:pSH1Y74S6qP1DGlBu6p3bn5f2OYwjDzx4UuRoOw1nBuRZLyhrZEKaFklHRJnvtv6A
+    a9bVok57rTxVF6gWzM>
+X-ME-Received: <xmr:pSH1YxcHCRpQJwCABE79MLRLdvrYpvAg20pAsQzP1lV00LX-UvBXf46gkGlV1zvfv6ET>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrudejjedguddvkecutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
+    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
+    enucfjughrpegtggfuhfgjffevgffkfhfvofesthhqmhdthhdtjeenucfhrhhomheplfhi
+    rgiguhhnucgjrghnghcuoehjihgrgihunhdrhigrnhhgsehflhihghhorghtrdgtohhmqe
+    enucggtffrrghtthgvrhhnpedutdejffetteefkeejieehfeeuieeguedtveeijeeviefh
+    ffelvdfgudeihfdvtdenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrih
+    hlfhhrohhmpehjihgrgihunhdrhigrnhhgsehflhihghhorghtrdgtohhm
+X-ME-Proxy: <xmx:pSH1Y_IaTvKu817HkRx4BUY6TtRM4SPQQBgb4Sr1Vh7pLCKHWQtWyw>
+    <xmx:pSH1Y2Kp0kZTLSaQcZvJu-VI9X200qzPUKJujJ5QdNb1_hKIZagW9g>
+    <xmx:pSH1YwzHHg_LKHOIJSqLIsP3taZf0Or0UkGEytMI-kY-_rov4eys-w>
+    <xmx:piH1YzXcxzQeyYk5RvVeorpluWte_iVN60Z3b2TLH04us1Iaq_MbEw>
+Feedback-ID: ifd894703:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
+ 21 Feb 2023 14:55:16 -0500 (EST)
+Content-Type: text/plain;
+        charset=utf-8
+Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3731.300.101.1.3\))
+Subject: Re: [PATCH 0/7] MIPS DMA coherence fixes
+From:   Jiaxun Yang <jiaxun.yang@flygoat.com>
+In-Reply-To: <ed2d7750-786d-82a1-5e79-1f216a682b20@arm.com>
+Date:   Tue, 21 Feb 2023 19:55:05 +0000
+Cc:     Christoph Hellwig <hch@lst.de>,
+        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
+        linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        mpe@ellerman.id.au, paul.walmsley@sifive.com, palmer@dabbelt.com,
+        Rob Herring <robh+dt@kernel.org>, m.szyprowski@samsung.com
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Message-Id: <34578218-DC7A-4C8B-A01A-AD64831CCB43@flygoat.com>
+References: <20230221124613.2859-1-jiaxun.yang@flygoat.com>
+ <20230221175423.GA15247@lst.de>
+ <A8AC22A0-E883-4D9B-A629-5A3721B976C5@flygoat.com>
+ <ed2d7750-786d-82a1-5e79-1f216a682b20@arm.com>
+To:     Robin Murphy <robin.murphy@arm.com>
+X-Mailer: Apple Mail (2.3731.300.101.1.3)
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 21, 2023 at 5:01 AM Ville Syrj=C3=A4l=C3=A4
-<ville.syrjala@linux.intel.com> wrote:
->
-> On Tue, Feb 21, 2023 at 10:45:51AM +0200, Pekka Paalanen wrote:
-> > On Mon, 20 Feb 2023 07:55:41 -0800
-> > Rob Clark <robdclark@gmail.com> wrote:
-> >
-> > > On Mon, Feb 20, 2023 at 1:08 AM Pekka Paalanen <ppaalanen@gmail.com> =
-wrote:
-> > > >
-> > > > On Sat, 18 Feb 2023 13:15:53 -0800
-> > > > Rob Clark <robdclark@gmail.com> wrote:
-> > > >
-> > > > > From: Rob Clark <robdclark@chromium.org>
-> > > > >
-> > > > > Will be used in the next commit to set a deadline on fences that =
-an
-> > > > > atomic update is waiting on.
-> > > > >
-> > > > > Signed-off-by: Rob Clark <robdclark@chromium.org>
-> > > > > ---
-> > > > >  drivers/gpu/drm/drm_vblank.c | 32 ++++++++++++++++++++++++++++++=
-++
-> > > > >  include/drm/drm_vblank.h     |  1 +
-> > > > >  2 files changed, 33 insertions(+)
-> > > > >
-> > > > > diff --git a/drivers/gpu/drm/drm_vblank.c b/drivers/gpu/drm/drm_v=
-blank.c
-> > > > > index 2ff31717a3de..caf25ebb34c5 100644
-> > > > > --- a/drivers/gpu/drm/drm_vblank.c
-> > > > > +++ b/drivers/gpu/drm/drm_vblank.c
-> > > > > @@ -980,6 +980,38 @@ u64 drm_crtc_vblank_count_and_time(struct dr=
-m_crtc *crtc,
-> > > > >  }
-> > > > >  EXPORT_SYMBOL(drm_crtc_vblank_count_and_time);
-> > > > >
-> > > > > +/**
-> > > > > + * drm_crtc_next_vblank_time - calculate the time of the next vb=
-lank
-> > > > > + * @crtc: the crtc for which to calculate next vblank time
-> > > > > + * @vblanktime: pointer to time to receive the next vblank times=
-tamp.
-> > > > > + *
-> > > > > + * Calculate the expected time of the next vblank based on time =
-of previous
-> > > > > + * vblank and frame duration
-> > > >
-> > > > Hi,
-> > > >
-> > > > for VRR this targets the highest frame rate possible for the curren=
-t
-> > > > VRR mode, right?
-> > > >
-> > >
-> > > It is based on vblank->framedur_ns which is in turn based on
-> > > mode->crtc_clock.  Presumably for VRR that ends up being a maximum?
-> >
-> > I don't know. :-)
->
-> At least for i915 this will give you the maximum frame
-> duration.
->
-> Also this does not calculate the the start of vblank, it
-> calculates the start of active video.
 
-AFAIU, vsync_end/vsync_start are in units of line, so I could do something =
-like:
 
-  vsync_lines =3D vblank->hwmode.vsync_end - vblank->hwmode.vsync_start;
-  vsyncdur =3D ns_to_ktime(vblank->linedur_ns * vsync_lines);
-  framedur =3D ns_to_ktime(vblank->framedur_ns);
-  *vblanktime =3D ktime_add(*vblanktime, ktime_sub(framedur, vsyncdur));
+> 2023=E5=B9=B42=E6=9C=8821=E6=97=A5 19:46=EF=BC=8CRobin Murphy =
+<robin.murphy@arm.com> =E5=86=99=E9=81=93=EF=BC=9A
+>=20
+> On 2023-02-21 18:15, Jiaxun Yang wrote:
+>>> 2023=E5=B9=B42=E6=9C=8821=E6=97=A5 17:54=EF=BC=8CChristoph Hellwig =
+<hch@lst.de> =E5=86=99=E9=81=93=EF=BC=9A
+>>>=20
+>>> Can you explain the motivation here?  Also why riscv patches are at
+>>> the end of a mips f=D1=96xes series?
+>> Ah sorry for any confusion.
+>> So the main purpose of this patch is to fix MIPS=E2=80=99s broken =
+per-device coherency.
+>> To be more precise, we want to be able to control the default =
+coherency for all devices probed from
+>> devicetree in early boot code.
+>=20
+> Including the patch which actually does that would be helpful. As it =
+is, patches 4-7 here just appear to be moving an option around for no =
+practical effect.
 
-?
+Well the affect is default coherency of devicetree probed devices are =
+now following dma_default_coherent
+instead of a static Kconfig option. For MIPS platform, =
+dma_default_coherent will be determined by boot code.
 
-BR,
--R
+Thanks
+- Jiaxun
 
->
-> >
-> > You need a number of clock cycles in addition to the clock frequency,
-> > and that could still be minimum, maximum, the last realized one, ...
-> >
-> > VRR works by adjusting the front porch length IIRC.
-> >
-> >
-> > Thanks,
-> > pq
-> >
-> > > BR,
-> > > -R
-> > >
-> > >
-> > > >
-> > > > Thanks,
-> > > > pq
-> > > >
-> > > > > + */
-> > > > > +int drm_crtc_next_vblank_time(struct drm_crtc *crtc, ktime_t *vb=
-lanktime)
-> > > > > +{
-> > > > > +     unsigned int pipe =3D drm_crtc_index(crtc);
-> > > > > +     struct drm_vblank_crtc *vblank =3D &crtc->dev->vblank[pipe]=
-;
-> > > > > +     u64 count;
-> > > > > +
-> > > > > +     if (!vblank->framedur_ns)
-> > > > > +             return -EINVAL;
-> > > > > +
-> > > > > +     count =3D drm_vblank_count_and_time(crtc->dev, pipe, vblank=
-time);
-> > > > > +
-> > > > > +     /*
-> > > > > +      * If we don't get a valid count, then we probably also don=
-'t
-> > > > > +      * have a valid time:
-> > > > > +      */
-> > > > > +     if (!count)
-> > > > > +             return -EINVAL;
-> > > > > +
-> > > > > +     *vblanktime =3D ktime_add(*vblanktime, ns_to_ktime(vblank->=
-framedur_ns));
-> > > > > +
-> > > > > +     return 0;
-> > > > > +}
-> > > > > +EXPORT_SYMBOL(drm_crtc_next_vblank_time);
-> > > > > +
-> > > > >  static void send_vblank_event(struct drm_device *dev,
-> > > > >               struct drm_pending_vblank_event *e,
-> > > > >               u64 seq, ktime_t now)
-> > > > > diff --git a/include/drm/drm_vblank.h b/include/drm/drm_vblank.h
-> > > > > index 733a3e2d1d10..a63bc2c92f3c 100644
-> > > > > --- a/include/drm/drm_vblank.h
-> > > > > +++ b/include/drm/drm_vblank.h
-> > > > > @@ -230,6 +230,7 @@ bool drm_dev_has_vblank(const struct drm_devi=
-ce *dev);
-> > > > >  u64 drm_crtc_vblank_count(struct drm_crtc *crtc);
-> > > > >  u64 drm_crtc_vblank_count_and_time(struct drm_crtc *crtc,
-> > > > >                                  ktime_t *vblanktime);
-> > > > > +int drm_crtc_next_vblank_time(struct drm_crtc *crtc, ktime_t *vb=
-lanktime);
-> > > > >  void drm_crtc_send_vblank_event(struct drm_crtc *crtc,
-> > > > >                              struct drm_pending_vblank_event *e);
-> > > > >  void drm_crtc_arm_vblank_event(struct drm_crtc *crtc,
-> > > >
-> >
->
->
->
-> --
-> Ville Syrj=C3=A4l=C3=A4
-> Intel
