@@ -2,104 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E956269E6BC
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 19:03:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0113569E6C8
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 19:04:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229976AbjBUSDO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Feb 2023 13:03:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53058 "EHLO
+        id S231454AbjBUSEx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Feb 2023 13:04:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54972 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229626AbjBUSDM (ORCPT
+        with ESMTP id S230303AbjBUSEu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Feb 2023 13:03:12 -0500
-Received: from out-12.mta1.migadu.com (out-12.mta1.migadu.com [95.215.58.12])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3833AFF11
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Feb 2023 10:03:11 -0800 (PST)
-Date:   Tue, 21 Feb 2023 10:02:51 -0800
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1677002589;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=sMsd45Umu3YuXLOVUwNN2b4uIloC4nQS/PME1ZUx4QY=;
-        b=SHxsvZwyD5BmnUlPUsuusjZp3+TIl7ZqP0jdYYQwCKbWrkJ5vCHsFzPZQfPOB9oXXIDMOY
-        YDC9T3cOn/usAilO1GAUxTsMoEZsSW9jal21ISKN04+sEI1olhWLV+lwwVv3QF5kklCJF+
-        Q210mi7PR6nlOH1EM4T9+fTSiLRE8gA=
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From:   Roman Gushchin <roman.gushchin@linux.dev>
-To:     Martin Zhao <findns94@gmail.com>
-Cc:     Shakeel Butt <shakeelb@google.com>, linux-mm@kvack.org,
-        akpm@linux-foundation.org, hannes@cmpxchg.org, mhocko@kernel.org,
-        muchun.song@linux.dev, cgroups@vger.kernel.org,
-        linux-kernel@vger.kernel.org, tangyeechou@gmail.com
-Subject: Re: [PATCH] mm: change memcg->oom_group access with atomic operations
-Message-ID: <Y/UHS0QYWoBmVrR9@P9FQF9L96D.corp.robot.car>
-References: <20230220230624.lkobqeagycx7bi7p@google.com>
- <6563189C-7765-4FFA-A8F2-A5CC4860A1EF@linux.dev>
- <CADfL_jBDNZiEWbnn+w9+FhSRPzVwP872XBbhYTZwny8Jzr4bDw@mail.gmail.com>
+        Tue, 21 Feb 2023 13:04:50 -0500
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7974A2F783
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Feb 2023 10:04:48 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1677002688; x=1708538688;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=ihZKaLNGSWG3qNYgbisyi+AvTv2NlMGpvPTE2WUE7c0=;
+  b=TQcTg/a07lC+b0DZXNVyH/XEAwCkZg9QfGSiHxrks+hsYpaZ2VZHhoZh
+   /fmElOlGfM21NCoGLfdpeibMVecTR+JDEbzbaHEg9/Nk+mL4KajNe5Y4C
+   K8o8khKke2FuuEXYekkkQMvKuq3YFdT2YU7DjHIhfRpNRfx0aXsFMvPQP
+   DH53Mrt5d4CNDp6UPHvl442Qs45gPFbALTJA9IXZEdB9nl5U5llLf5fYT
+   EdRmmn8agbtiitOrmGNuoYM1dl3Jqy9SfQJFkdPd/9j2r57LV7xskOmAo
+   9HZ+AU3xMwyJm2WxZnHRx+evwUdgXbVly86CucTK1OPoTfTuvVEAQlBM/
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10628"; a="397398176"
+X-IronPort-AV: E=Sophos;i="5.97,315,1669104000"; 
+   d="scan'208";a="397398176"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Feb 2023 10:04:17 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10628"; a="740501480"
+X-IronPort-AV: E=Sophos;i="5.97,315,1669104000"; 
+   d="scan'208";a="740501480"
+Received: from taevough-mobl.amr.corp.intel.com (HELO [10.209.174.213]) ([10.209.174.213])
+  by fmsmga004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Feb 2023 10:04:16 -0800
+Message-ID: <273e1484-0285-29b6-4852-9f5bc2d24e2a@linux.intel.com>
+Date:   Tue, 21 Feb 2023 13:03:12 -0500
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Firefox/102.0 Thunderbird/102.7.1
+Subject: Re: [PATCH 09/10] ASoC: Intel: sof_sdw: Add support for Cirrus Logic
+ CS35L56
+Content-Language: en-US
+To:     Richard Fitzgerald <rf@opensource.cirrus.com>, broonie@kernel.org,
+        cezary.rojewski@intel.com, peter.ujfalusi@linux.intel.com,
+        yung-chuan.liao@linux.intel.com, kai.vehmanen@linux.intel.com
+Cc:     alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org,
+        patches@opensource.cirrus.com
+References: <20230217161410.915202-1-rf@opensource.cirrus.com>
+ <20230217161410.915202-10-rf@opensource.cirrus.com>
+ <dfebabad-4777-b5e3-8f58-1301faf97f7e@linux.intel.com>
+ <f3d70939-49e5-1da2-c104-11b370888d7c@opensource.cirrus.com>
+From:   Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
+In-Reply-To: <f3d70939-49e5-1da2-c104-11b370888d7c@opensource.cirrus.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <CADfL_jBDNZiEWbnn+w9+FhSRPzVwP872XBbhYTZwny8Jzr4bDw@mail.gmail.com>
-X-Migadu-Flow: FLOW_OUT
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Feb 22, 2023 at 01:00:00AM +0800, Martin Zhao wrote:
-> On Tue, Feb 21, 2023 at 1:17 PM Roman Gushchin <roman.gushchin@linux.dev> wrote:
-> >
-> > > On Feb 20, 2023, at 3:06 PM, Shakeel Butt <shakeelb@google.com> wrote:
-> > >
-> > > ﻿On Mon, Feb 20, 2023 at 01:09:44PM -0800, Roman Gushchin wrote:
-> > >>> On Mon, Feb 20, 2023 at 11:16:38PM +0800, Yue Zhao wrote:
-> > >>> The knob for cgroup v2 memory controller: memory.oom.group
-> > >>> will be read and written simultaneously by user space
-> > >>> programs, thus we'd better change memcg->oom_group access
-> > >>> with atomic operations to avoid concurrency problems.
-> > >>>
-> > >>> Signed-off-by: Yue Zhao <findns94@gmail.com>
-> > >>
-> > >> Hi Yue!
-> > >>
-> > >> I'm curious, have any seen any real issues which your patch is solving?
-> > >> Can you, please, provide a bit more details.
-> > >>
-> > >
-> > > IMHO such details are not needed. oom_group is being accessed
-> > > concurrently and one of them can be a write access. At least
-> > > READ_ONCE/WRITE_ONCE is needed here.
-> >
-> > Needed for what?
-> >
-> > I mean it’s obviously not a big deal to put READ_ONCE()/WRITE_ONCE() here, but I struggle to imagine a scenario when it will make any difference. IMHO it’s easier to justify a proper atomic operation here, even if it’s most likely an overkill.
-> >
-> > My question is very simple: the commit log mentions “… to avoid concurrency problems”, so I wonder what problems are these.
+
+>>> +                      card->components);
+>>> +    if (!card->components)
+>>> +        return -ENOMEM;
+>>> +
+>>> +    ret = snd_soc_dapm_new_controls(&card->dapm,
+>>> +                    cs35l56_sof_widgets,
+>>> ARRAY_SIZE(cs35l56_sof_widgets));
+>>> +    if (ret) {
+>>> +        dev_err(card->dev, "Widgets add failed: %d\n", ret);
+>>> +        return ret;
+>>> +    }
+>>> +
+>>> +    ret = snd_soc_dapm_add_routes(&card->dapm, cs35l56_sof_map, count);
+>>> +    if (ret) {
+>>> +        dev_err(card->dev, "Map add %d failed: %d\n", count, ret);
+>>> +        return ret;
+>>> +    }
+>>> +
+>>> +    /* Enable one feedback TX per amp on different slots */
+>>> +    for_each_rtd_codec_dais(rtd, i, codec_dai) {
+>>> +        ret = snd_soc_dai_set_tdm_slot(codec_dai, 0x3, 1 << i, 4, 16);
+>>
+>> TDM slots? Not getting how this would work with SoundWire?
+>>
 > 
-> Thanks for your watching!
-> This topic is found in code review by coincidence, so no real issues
-> recorded for now. I checked other read/write callbacks about other knobs,
-> most of them use READ_ONCE/WRITE_ONCE on the user setting variable.
+> Strictly speaking Soundwire is TDM (the frame time is divided up into
+> slots for each sample...).
+> 
+> The problem is if you have N amps on the dailink all feeding back audio
+> on the same bus. Their DP slots are all programmed to the same positions
+> in the frame, same as for the playback. So you have 4 amps all trying to
+> send 6 audio channels in the same positions in the frame and you'll just
+> get a ton of bus clash interrupts.
+> 
+> So we use the set_tdm_slot() like we do with I2S TDM to set which slots
+> are active for each amp.
+> 
+> I can't see that there's any obvious "generic" way that the manager code
+> can automatically figure out how many channels to enable on each amp and
+> what order to map them, so we do it here. Just as with I2S TDM - you
+> have many slots and many codecs but the machine driver has to tell it
+> how to map those.
 
-Sorry, which knobs are you talking about? I actually don't see any user knobs
-in mm/memcontrol.c which are using WRITE_ONCE(). I see some of them using
-xchg(), but it's a different thing.
+IIRC Bard did the same thing recently, and the order of the feedback
+channels is really defined by the order in which the peripheral devices
+are added in the dailink. See
+https://github.com/thesofproject/linux/pull/4108
 
-> Actually I am curious as well why this interface doesn't use
-> READ_ONCE/WRITE_ONCE, is there any other synchronization mechanism I
-> didn't notice yet?
-
-Because nobody saw any issues with the current code?
-
-And again if it's something that makes any automated verifiers/tooling unhappy,
-I'm totally fine for fixing it, just let make it clear (and also fix the commit
-title, which is not true).
-
-Thanks!
+There's also another open related to the number of channels, we need to
+patch what the CPU DAI can handle, see
+https://github.com/thesofproject/linux/pull/4136 or
+https://github.com/thesofproject/linux/pull/4134
