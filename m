@@ -2,53 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 936D969DCD7
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 10:24:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7DD6769DCD8
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 10:25:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233929AbjBUJYp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Feb 2023 04:24:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35866 "EHLO
+        id S233944AbjBUJYu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Feb 2023 04:24:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35878 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233181AbjBUJYm (ORCPT
+        with ESMTP id S233921AbjBUJYn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Feb 2023 04:24:42 -0500
-Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1EDD51A495;
-        Tue, 21 Feb 2023 01:24:41 -0800 (PST)
-Received: by mail-wr1-x436.google.com with SMTP id l1so3358298wry.10;
-        Tue, 21 Feb 2023 01:24:41 -0800 (PST)
+        Tue, 21 Feb 2023 04:24:43 -0500
+Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 309501A67E;
+        Tue, 21 Feb 2023 01:24:42 -0800 (PST)
+Received: by mail-wr1-x42c.google.com with SMTP id c12so3636255wrw.1;
+        Tue, 21 Feb 2023 01:24:42 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=JLu8BAlgI+WIHMoE24yhy4uizQcXzvZPeYYNkmurpEY=;
-        b=jo7F1ZZBWvqv8QLrf5wk7dhFktSC9S8/P/W1hifkRtCX+oPAfT0HQ2+dms6OlYM21g
-         rOgBa0tra7S9tj+MvFG2DNLLSJJFV+c3RpOf0oiAUcFohM2RK6/bvhEsPYGD/EKPxCuY
-         fdKXEANJmTA38ICI3sYfbIWoDwHKF8tLShTL/CVYJWCXuuCqZ3sVtgb+VnTSXZpZw0jh
-         9s3JCCXOCFaJDYpoX8/WMBpKiXZmD/q9/CUGRbgeVFN2s3RBWsd4zFhxCMOSrx5jX4mt
-         69LwdDZz4yHPmdjBEw1XyHd3Wx69pI3f3XgyXe8oDB0ZCY2HRI89/OCYlqrnYWHNQDN3
-         VmWA==
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Zj1tWf52J//HqTj7v4fnk+SHbatlNJyYhDkNDwjnWLI=;
+        b=jQPWrwJ9BFRMxt4ko0FDpUzvVxLURzjsioTAtz0Q13xhHZhYNfKaldXSsd21hvu3dl
+         SdLhg/NZaqSpS6E8Kf6M+UoEsXfFV4sPLh63XeUU468wGmN7WARp8iBdX0mrK83yWLxt
+         hcdCavCWDXqptZaQAju7QCSb95MMG5J/xVoAZy9wJxBSClFbX5//uHxCVQ6fcXdO4Yhu
+         CS6uNwH7DAASJhm0ra+PtXFiFhThCrCLLKCeptxESIUWD2iMjR7R454OalqvSJTaqsUi
+         zb4TTvYqx6LzsZF7hr/0++aflYP+VOjtmGFxgaUQkyqcK2tn9fobYgFZ3y1IIlFAPb9G
+         mF7A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=JLu8BAlgI+WIHMoE24yhy4uizQcXzvZPeYYNkmurpEY=;
-        b=l5/qjMXt9GzwkJC2GMCDMsQC5cki0mMg1SLpKeNCC0I3uZjWJCioz0iP55WOPdQVJQ
-         w7j8OmcjD3ipxSmJ7cmI2j3xJ2QBGZy/E28DmkRxQfolo/PNpzrjuJQl30/4oZ5yRW1X
-         cUBSuX2UsQ2YaOaq1wn96OGxPr3aYliAaTCVaoz28QFVah3p8kzDJ4E0l/DAcn5tGp6W
-         h+8xiSL8s6vbT8X2IYNSt0j3IVzUKWSLFCc5zixZTc+uJ/m8/Eo6DVAYkrExpw7Ujrjs
-         yjlxM3MtX5OUFFgKcK/j8P7Bt54RW9bjgI5mg5g54yEkCG31JxsHBbClypVDNPj7Vqdu
-         bGTA==
-X-Gm-Message-State: AO0yUKUcgAbageYrdyirWG5pY4MrtanLydAinRYFrLhw8YMYnzlJCWt+
-        hayv9ooy0tbpyAR1oZzzOAsDbnlSQwl9n606
-X-Google-Smtp-Source: AK7set/6t+7Br79GBudhEtbOxGJOEHMxW+14bTe+NLfFGJglW223EOybF9tkF/XntutQdUoAjj2syA==
-X-Received: by 2002:a05:6000:1252:b0:2c5:505d:9078 with SMTP id j18-20020a056000125200b002c5505d9078mr2164411wrx.31.1676971479469;
-        Tue, 21 Feb 2023 01:24:39 -0800 (PST)
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Zj1tWf52J//HqTj7v4fnk+SHbatlNJyYhDkNDwjnWLI=;
+        b=gYKsB9zKaU9UKkD6PKM6XbmpzREpaub2LFrppyXMnuViXfIXqvEJlHGzJo5NSRW/0n
+         /9CW23yLu2fNWNp3+cKvShuUsX6lbVvy56KGiyWB4+Ad4OfGC8ZsvMZ6Lts8eNZ/QrxV
+         cJl1aaYrVM/fGgD/F3r1+lHmY94zxO/DZeGk4w9cBoicW0hVJfDN95iYczG8ajnMmRyz
+         msHqrw6vKuH+/x/5PpJ8NRV95wDa18CZtDP0cdPZfYIjd0A0zjZRvQf6JDeGpxRtVhoN
+         VKeQcao2lszaK5mqGnmN89dZaBw1NIdxBdVEmF6AZ7XlNVUGECx04nyGitDlPhI9HwZA
+         l2gg==
+X-Gm-Message-State: AO0yUKWAknYruhOj3wEOUR5kFyHs6VI0t5Xe0uPHOn9XabzmOjWrPljy
+        OFpVH8bqmFplUUqd+JNglDo=
+X-Google-Smtp-Source: AK7set8CJ8+KKQtN0pDVYaDjnrpvJDbxFT9JF1rviXW2IefJQ2QpZNM0gQKqZxbGcBAjzKvxbXZxLw==
+X-Received: by 2002:adf:ea83:0:b0:2c5:6180:516e with SMTP id s3-20020adfea83000000b002c56180516emr2254316wrm.39.1676971480545;
+        Tue, 21 Feb 2023 01:24:40 -0800 (PST)
 Received: from arinc9-PC.lan ([37.120.152.236])
-        by smtp.gmail.com with ESMTPSA id i18-20020adfe492000000b002c56287bd2csm4272573wrm.114.2023.02.21.01.24.38
+        by smtp.gmail.com with ESMTPSA id i18-20020adfe492000000b002c56287bd2csm4272573wrm.114.2023.02.21.01.24.39
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 21 Feb 2023 01:24:38 -0800 (PST)
+        Tue, 21 Feb 2023 01:24:40 -0800 (PST)
 From:   arinc9.unal@gmail.com
 X-Google-Original-From: arinc.unal@arinc9.com
 To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
@@ -57,10 +58,12 @@ Cc:     =?UTF-8?q?Ar=C4=B1n=C3=A7=20=C3=9CNAL?= <arinc.unal@arinc9.com>,
         linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
         Sergio Paracuellos <sergio.paracuellos@gmail.com>,
         erkin.bozoglu@xeront.com
-Subject: [PATCH 1/2] mips: remove SYS_HAS_CPU_MIPS32_R1 from RALINK
-Date:   Tue, 21 Feb 2023 12:24:34 +0300
-Message-Id: <20230221092435.22069-1-arinc.unal@arinc9.com>
+Subject: [PATCH 2/2] mips: ralink: make SOC_MT7621 select PINCTRL
+Date:   Tue, 21 Feb 2023 12:24:35 +0300
+Message-Id: <20230221092435.22069-2-arinc.unal@arinc9.com>
 X-Mailer: git-send-email 2.37.2
+In-Reply-To: <20230221092435.22069-1-arinc.unal@arinc9.com>
+References: <20230221092435.22069-1-arinc.unal@arinc9.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
@@ -76,33 +79,31 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Arınç ÜNAL <arinc.unal@arinc9.com>
 
-All MIPS processors on the Ralink SoCs implement the MIPS32 Release 2
-Architecture. Remove SYS_HAS_CPU_MIPS32_R1.
+Currently, out of every Ralink SoC, only the dt-binding of the MT7621 SoC
+uses pinctrl. Because of this, PINCTRL is not selected at all. Make
+SOC_MT7621 select PINCTRL.
+
+Remove PINCTRL_MT7621, enabling it for the MT7621 SoC will be handled under
+the PINCTRL_MT7621 option.
 
 Signed-off-by: Arınç ÜNAL <arinc.unal@arinc9.com>
 ---
+ arch/mips/ralink/Kconfig | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-The RT2880 SoC is MIPS 4KEc, the remaining SoCs are MIPS 24KEc. All of
-which implement the MIPS32 Release 2 Architecture, if I understand
-correctly. My incentive for this is to automatically have MIPS32R2 selected
-as the CPU type.
-
----
- arch/mips/Kconfig | 1 -
- 1 file changed, 1 deletion(-)
-
-diff --git a/arch/mips/Kconfig b/arch/mips/Kconfig
-index 37072e15b263..0e8dab9a57de 100644
---- a/arch/mips/Kconfig
-+++ b/arch/mips/Kconfig
-@@ -610,7 +610,6 @@ config RALINK
- 	select DMA_NONCOHERENT
- 	select IRQ_MIPS_CPU
- 	select USE_OF
--	select SYS_HAS_CPU_MIPS32_R1
- 	select SYS_HAS_CPU_MIPS32_R2
- 	select SYS_SUPPORTS_32BIT_KERNEL
- 	select SYS_SUPPORTS_LITTLE_ENDIAN
+diff --git a/arch/mips/ralink/Kconfig b/arch/mips/ralink/Kconfig
+index 06031796c87b..83e61e147b90 100644
+--- a/arch/mips/ralink/Kconfig
++++ b/arch/mips/ralink/Kconfig
+@@ -54,7 +54,7 @@ choice
+ 		select HAVE_PCI
+ 		select PCI_DRIVERS_GENERIC
+ 		select SOC_BUS
+-		select PINCTRL_MT7621
++		select PINCTRL
+ 
+ 		help
+ 		  The MT7621 system-on-a-chip includes an 880 MHz MIPS1004Kc
 -- 
 2.37.2
 
