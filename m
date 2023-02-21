@@ -2,190 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 04C5C69E94E
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 22:12:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0129069E955
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 22:16:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229891AbjBUVMS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Feb 2023 16:12:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43432 "EHLO
+        id S229609AbjBUVQE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Feb 2023 16:16:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49282 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230010AbjBUVLy (ORCPT
+        with ESMTP id S229468AbjBUVPw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Feb 2023 16:11:54 -0500
-Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3C98A30E8A;
-        Tue, 21 Feb 2023 13:11:53 -0800 (PST)
-Received: from W11-BEAU-MD.localdomain (unknown [76.135.27.212])
-        by linux.microsoft.com (Postfix) with ESMTPSA id BEE1620BC5E7;
-        Tue, 21 Feb 2023 13:11:52 -0800 (PST)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com BEE1620BC5E7
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1677013913;
-        bh=I/N19C63THCRBfckR+N4mJDWmIQC1iuXco7+RGR9L6U=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=dCRzQGcIfvRpOp9kpdwMTF1aaihpuvaIfHxS1euR/JCwnaOjxQUy3XkUPyUcF+G0t
-         U2AkicFcPC9hBHiH7CZP+EKRF6aPM1gjYIrEUJz8BSq2VL0LT7plTe302im6xToFwl
-         QP9/1kHRZa3txCLzPg3NMGhV5c8lGlBU2QrG8+Po=
-From:   Beau Belgrave <beaub@linux.microsoft.com>
-To:     rostedt@goodmis.org, mhiramat@kernel.org,
-        mathieu.desnoyers@efficios.com, dcook@linux.microsoft.com,
-        alanau@linux.microsoft.com, brauner@kernel.org,
-        akpm@linux-foundation.org, ebiederm@xmission.com,
-        keescook@chromium.org, tglx@linutronix.de
-Cc:     linux-trace-devel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org
-Subject: [PATCH v8 11/11] tracing/user_events: Limit global user_event count
-Date:   Tue, 21 Feb 2023 13:11:43 -0800
-Message-Id: <20230221211143.574-12-beaub@linux.microsoft.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20230221211143.574-1-beaub@linux.microsoft.com>
-References: <20230221211143.574-1-beaub@linux.microsoft.com>
+        Tue, 21 Feb 2023 16:15:52 -0500
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E933E902C;
+        Tue, 21 Feb 2023 13:15:17 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:
+        Content-Transfer-Encoding:Content-Type:MIME-Version:References:Message-ID:
+        Subject:Cc:To:From:Date:Reply-To:Content-ID:Content-Description;
+        bh=fX7hqjeUd0YzfAq3xRrkecSpMHe7OU08C0EZ3+Rklzs=; b=XoTM0PsPJR2mQk4wVdx++GTVcr
+        oJbaz1o/QiDf9cWsNNfTq9jw47lc5RkKzDvc+II3K8DFKVAR3Ulo5F1Z38khdoMIAd5yYtmUmAy/g
+        Tx/wNs7dbVqPRA+/qd5cTPILlgU/Wr3/lyzhtaTzbqTFVG4CYsn9DHC7Ds6tb1YnGEsvqlVT00t+6
+        6Mn3Jnj3LOrzhnryUm0wZFv5OSZPXrzjPQg3QuvdoGIjSKtCjy4PNgq+iLXyoRp0o6ePxoTxKTecS
+        zz9Bz+j2x9VkYGxKDKVOZMfleWdJBI793CDISBu8EWRHqJiREAa1bsQhLqrYZVwg/GZMA6B/6ve0Y
+        KiKfGEtQ==;
+Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1pUZyj-009nHM-M5; Tue, 21 Feb 2023 21:15:13 +0000
+Date:   Tue, 21 Feb 2023 13:15:13 -0800
+From:   Luis Chamberlain <mcgrof@kernel.org>
+To:     Christophe Leroy <christophe.leroy@csgroup.eu>
+Cc:     Song Liu <song@kernel.org>,
+        "linux-modules@vger.kernel.org" <linux-modules@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "hch@lst.de" <hch@lst.de>,
+        "kernel-team@meta.com" <kernel-team@meta.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Guenter Roeck <linux@roeck-us.net>
+Subject: Re: [PATCH] module: clean-up for module_memory
+Message-ID: <Y/U0YfGH44dRpkXp@bombadil.infradead.org>
+References: <20230209175653.2275559-1-song@kernel.org>
+ <a89af714-b9ee-1efa-d21d-92ffc690a7e7@csgroup.eu>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-19.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <a89af714-b9ee-1efa-d21d-92ffc690a7e7@csgroup.eu>
+Sender: Luis Chamberlain <mcgrof@infradead.org>
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Operators want to be able to ensure enough tracepoints exist on the
-system for kernel components as well as for user components. Since there
-are only up to 64K events, by default allow up to half to be used by
-user events.
+On Thu, Feb 09, 2023 at 07:43:23PM +0000, Christophe Leroy wrote:
+> 
+> 
+> Le 09/02/2023 à 18:56, Song Liu a écrit :
+> > Three changes here:
+> > 
+> > 1. Shorter variable names in arch/arc/kernel/unwind.c:unwind_add_table, to
+> >     make it easier to read.
+> > 2. Rewrite free_mod_mem() so it is more obvious that MOD_DATA need to be
+> >     freed last.
+> > 3. Clean up the use of CONFIG_ARCH_WANTS_MODULES_DATA_IN_VMALLOC.
+> > 
+> > Cc: Luis Chamberlain <mcgrof@kernel.org>
+> > Cc: Thomas Gleixner <tglx@linutronix.de>
+> > Cc: Peter Zijlstra <peterz@infradead.org>
+> > Cc: Guenter Roeck <linux@roeck-us.net>
+> > Cc: Christophe Leroy <christophe.leroy@csgroup.eu>
+> > Signed-off-by: Song Liu <song@kernel.org>
+> > 
+> > ---
+> > 
+> > This is the follow up patch on top of [1]. I would recommend fold this
+> > into [1].
+> 
+> With this patch folded into [1],
+> 
+> Reviewed-by: Christophe Leroy <christophe.leroy@csgroup.eu>
 
-Add a boot parameter (user_events_max=%d) and a kernel sysctl parameter
-(kernel.user_events_max) to set a global limit that is honored among all
-groups on the system. This ensures hard limits can be setup to prevent
-user processes from consuming all event IDs on the system.
+I've squashed this into the last patch from Song and added your
+Reviewed-by tag, and pushed to modules-next. That'll sit there
+for a full cycle for testing.
 
-Signed-off-by: Beau Belgrave <beaub@linux.microsoft.com>
----
- kernel/trace/trace_events_user.c | 59 ++++++++++++++++++++++++++++++++
- 1 file changed, 59 insertions(+)
-
-diff --git a/kernel/trace/trace_events_user.c b/kernel/trace/trace_events_user.c
-index 222f2eb59c7c..6a5ebe243999 100644
---- a/kernel/trace/trace_events_user.c
-+++ b/kernel/trace/trace_events_user.c
-@@ -20,6 +20,7 @@
- #include <linux/types.h>
- #include <linux/uaccess.h>
- #include <linux/highmem.h>
-+#include <linux/init.h>
- #include <linux/user_events.h>
- #include "trace.h"
- #include "trace_dynevent.h"
-@@ -61,6 +62,12 @@ struct user_event_group {
- /* Group for init_user_ns mapping, top-most group */
- static struct user_event_group *init_group;
- 
-+/* Max allowed events for the whole system */
-+static unsigned int max_user_events = 32768;
-+
-+/* Current number of events on the whole system */
-+static unsigned int current_user_events;
-+
- /*
-  * Stores per-event properties, as users register events
-  * within a file a user_event might be created if it does not
-@@ -1241,6 +1248,8 @@ static int destroy_user_event(struct user_event *user)
- {
- 	int ret = 0;
- 
-+	lockdep_assert_held(&event_mutex);
-+
- 	/* Must destroy fields before call removal */
- 	user_event_destroy_fields(user);
- 
-@@ -1257,6 +1266,11 @@ static int destroy_user_event(struct user_event *user)
- 	kfree(EVENT_NAME(user));
- 	kfree(user);
- 
-+	if (current_user_events > 0)
-+		current_user_events--;
-+	else
-+		pr_alert("BUG: Bad current_user_events\n");
-+
- 	return ret;
- }
- 
-@@ -1744,6 +1758,11 @@ static int user_event_parse(struct user_event_group *group, char *name,
- 
- 	mutex_lock(&event_mutex);
- 
-+	if (current_user_events >= max_user_events) {
-+		ret = -EMFILE;
-+		goto put_user_lock;
-+	}
-+
- 	ret = user_event_trace_register(user);
- 
- 	if (ret)
-@@ -1755,6 +1774,7 @@ static int user_event_parse(struct user_event_group *group, char *name,
- 	dyn_event_init(&user->devent, &user_event_dops);
- 	dyn_event_add(&user->devent, &user->call);
- 	hash_add(group->register_table, &user->node, key);
-+	current_user_events++;
- 
- 	mutex_unlock(&event_mutex);
- 
-@@ -2386,6 +2406,43 @@ static int create_user_tracefs(void)
- 	return -ENODEV;
- }
- 
-+static int __init set_max_user_events(char *str)
-+{
-+	if (!str)
-+		return 0;
-+
-+	if (kstrtouint(str, 0, &max_user_events))
-+		return 0;
-+
-+	return 1;
-+}
-+__setup("user_events_max=", set_max_user_events);
-+
-+static int set_max_user_events_sysctl(struct ctl_table *table, int write,
-+				      void *buffer, size_t *lenp, loff_t *ppos)
-+{
-+	int ret;
-+
-+	mutex_lock(&event_mutex);
-+
-+	ret = proc_douintvec(table, write, buffer, lenp, ppos);
-+
-+	mutex_unlock(&event_mutex);
-+
-+	return ret;
-+}
-+
-+static struct ctl_table user_event_sysctls[] = {
-+	{
-+		.procname	= "user_events_max",
-+		.data		= &max_user_events,
-+		.maxlen		= sizeof(unsigned int),
-+		.mode		= 0644,
-+		.proc_handler	= set_max_user_events_sysctl,
-+	},
-+	{}
-+};
-+
- static int __init trace_events_user_init(void)
- {
- 	int ret;
-@@ -2415,6 +2472,8 @@ static int __init trace_events_user_init(void)
- 	if (dyn_event_register(&user_event_dops))
- 		pr_warn("user_events could not register with dyn_events\n");
- 
-+	register_sysctl_init("kernel", user_event_sysctls);
-+
- 	return 0;
- }
- 
--- 
-2.25.1
-
+  Luis
