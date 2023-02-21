@@ -2,112 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5EB9C69E9F8
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 23:19:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3DED869EA05
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 23:23:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229944AbjBUWTN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Feb 2023 17:19:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45496 "EHLO
+        id S230141AbjBUWXU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Feb 2023 17:23:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47748 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229561AbjBUWTL (ORCPT
+        with ESMTP id S229561AbjBUWXS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Feb 2023 17:19:11 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EEFF1E076
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Feb 2023 14:18:28 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1677017908;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=FMP74qjrWS/RnxRgCif5/ytCoK1M+dLaO1HQufl21IU=;
-        b=X1OHcp5wFVF7/U0lSQmLTZrchVh0+psNGxtTwSQxNIv8tjfnYLzEzNtMB37WkJtXx0HJ9Q
-        Uf9j4E0UWkX63hpR5fFG4usaKX9D9/mpWhpZj+v85fXbItDenLr7KwvcrGs8ShLqCYUmqk
-        oECcVZkqFi230DZ7gviJRs8ym3j/5FE=
-Received: from mail-qv1-f70.google.com (mail-qv1-f70.google.com
- [209.85.219.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-22-qt8Ho-d_MwS6odLYImY8Zw-1; Tue, 21 Feb 2023 17:18:25 -0500
-X-MC-Unique: qt8Ho-d_MwS6odLYImY8Zw-1
-Received: by mail-qv1-f70.google.com with SMTP id y3-20020a0cec03000000b0056ee5b123bbso2782648qvo.7
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Feb 2023 14:18:25 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=FMP74qjrWS/RnxRgCif5/ytCoK1M+dLaO1HQufl21IU=;
-        b=XON+TpPj3Wxun7iW6xJ2bm3g1MRdkwrpMH1Jq1KKswlELXE7LcLgNG4QDClYbqwYUh
-         BYSRubEbCRQBtxp/KWTEEql0wwTGGH2YKdJWZtKI+KWKOMmwUXzKXVelCbJamL80t95I
-         cH7eG7LIO0mGttX3Q/iKk3/jFaNpPiCcJgSWsKgEpsgh9umK5Qm0pa9QLyUwfD73RLuP
-         1vIXJYYibzoE5W8kvTjESMt1VhkERS9/JgvktUlJ/qfhQJe3ktAzJXIXXSWa/X2Qq9PA
-         O5hUG68WqOvHG79S1Z3hGDvzFUXE8pChb/rdv/r81SWgKNwjWyh6EyIPiUFWKeTg8wk9
-         bPCQ==
-X-Gm-Message-State: AO0yUKWMxWVuLaRsgGdrnD9AtbtD2dWXK/8RP9BRwma2NtQ6889emBIc
-        aKH65MBd1iw729dK4aUiNaWNWlBtBJ1rOqs2xtwYmN2jS14arUcLAfrffwElbSb2g9UJpm4TsU2
-        PI0YirbsYxo6PRPoyLjq2BbB3
-X-Received: by 2002:a05:622a:19a8:b0:3b8:6d44:ca7e with SMTP id u40-20020a05622a19a800b003b86d44ca7emr12833855qtc.4.1677017904624;
-        Tue, 21 Feb 2023 14:18:24 -0800 (PST)
-X-Google-Smtp-Source: AK7set+wmjGEyaT6rSowNRC8r+xsf3YRukGF6Utxm0Nxjz2Mf+0NQiX0ieQ6jI/aZsENjm4cnmXEJA==
-X-Received: by 2002:a05:622a:19a8:b0:3b8:6d44:ca7e with SMTP id u40-20020a05622a19a800b003b86d44ca7emr12833819qtc.4.1677017904370;
-        Tue, 21 Feb 2023 14:18:24 -0800 (PST)
-Received: from x1n (bras-base-aurron9127w-grc-56-70-30-145-63.dsl.bell.ca. [70.30.145.63])
-        by smtp.gmail.com with ESMTPSA id d65-20020a37b444000000b0073b3316bbd0sm2697192qkf.29.2023.02.21.14.18.23
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 21 Feb 2023 14:18:23 -0800 (PST)
-Date:   Tue, 21 Feb 2023 17:18:22 -0500
-From:   Peter Xu <peterx@redhat.com>
-To:     David Stevens <stevensd@chromium.org>
-Cc:     linux-mm@kvack.org, Matthew Wilcox <willy@infradead.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        "Kirill A . Shutemov" <kirill@shutemov.name>,
-        Yang Shi <shy828301@gmail.com>,
-        David Hildenbrand <david@redhat.com>,
-        Hugh Dickins <hughd@google.com>, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v4 3/3] mm/khugepaged: maintain page cache uptodate flag
-Message-ID: <Y/VDLvLpiHkRgVjs@x1n>
-References: <20230217085439.2826375-1-stevensd@google.com>
- <20230217085439.2826375-4-stevensd@google.com>
+        Tue, 21 Feb 2023 17:23:18 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D25461EBD1;
+        Tue, 21 Feb 2023 14:23:17 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 69674611EA;
+        Tue, 21 Feb 2023 22:23:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 57AF7C433EF;
+        Tue, 21 Feb 2023 22:23:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1677018196;
+        bh=m4xd55FJZ2TFrfhomdp1xq42bgvOVIIPvxwzKIFHpqc=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=sCoMWGucPwXtiWdo75mO0tuuTUAqauh3L7tVCTsdGBJFuFB0dUV62jsLgSirb42GP
+         QLSVWSCbNXE7HRdneHZj73PltQIr4NxcpIEKre2V9us7O4YNdhnQorIfGIlOSATfBt
+         pins3t/rfECz9Pk+IACulJ7DhTEfwbWFa+HJAhQCNV92YzSRlchDaATmvQyK2wKslC
+         XBDrVpsgHPYxPsF9p8njDWhYA16Lu8YZY1sG/kgr6t6W6HC0dh6aLMPobyCtKJaa0W
+         DhO+vOO9SLFWl42jsr+KtF25bxQLjzH90vvyW4mJ4FP6IODXxd1zyttNxIF0UsUEFA
+         JpZyb1/BB97AA==
+Date:   Tue, 21 Feb 2023 22:23:13 +0000
+From:   Mark Brown <broonie@kernel.org>
+To:     Svyatoslav Ryhel <clamor95@gmail.com>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>,
+        Maxim Schwalm <maxim.schwalm@gmail.com>,
+        Dmitry Osipenko <digetx@gmail.com>, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, alsa-devel@alsa-project.org,
+        linux-tegra@vger.kernel.org, linux-staging@lists.linux.dev
+Subject: Re: [PATCH v1 04/10] ASoC: tegra: Support RT5631 by machine driver
+Message-ID: <Y/VEUaOIE1mk1utt@sirena.org.uk>
+References: <20230221183211.21964-1-clamor95@gmail.com>
+ <20230221183211.21964-5-clamor95@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="tOijhv7Qqz92bCVE"
 Content-Disposition: inline
-In-Reply-To: <20230217085439.2826375-4-stevensd@google.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20230221183211.21964-5-clamor95@gmail.com>
+X-Cookie: Serving suggestion.
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Feb 17, 2023 at 05:54:39PM +0900, David Stevens wrote:
-> From: David Stevens <stevensd@chromium.org>
-> 
-> Make sure that collapse_file doesn't interfere with checking the
-> uptodate flag in the page cache by only inserting hpage into the page
-> cache after it has been updated and marked uptodate. This is achieved by
-> simply not replacing present pages with hpage when iterating over them
-> target range. The present pages are already locked, so replacing the
-> with the locked hpage before the collapse is finalized is unnecessary.
-> 
-> This fixes a race where folio_seek_hole_data would mistake hpage for
-> an fallocated but unwritten page. This race is visible to userspace via
-> data temporarily disappearing from SEEK_DATA/SEEK_HOLE.
-> 
-> Fixes: f3f0e1d2150b ("khugepaged: add support of collapse for tmpfs/shmem pages")
-> Signed-off-by: David Stevens <stevensd@chromium.org>
 
-Per my knowledge, this one looks all correct too.
+--tOijhv7Qqz92bCVE
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Acked-by: Peter Xu <peterx@redhat.com>
+On Tue, Feb 21, 2023 at 08:32:05PM +0200, Svyatoslav Ryhel wrote:
 
-So at least to me the whole set looks mostly good except patch 1 needs some
-confirmation.
+> Add Realtek ALC5631/RT5631 codec support to the Tegra ASoC machine driver.
+> The RT5631 codec is found on devices like ASUS Transformer TF201, TF700T
+> and other Tegra-based Android tablets.
+>=20
+> Signed-off-by: Svyatoslav Ryhel <clamor95@gmail.com>
+> Signed-off-by: Ion Agorria <ion@agorria.com>
 
-Thanks,
+Your signoff should be last if you're the one sending this.
 
--- 
-Peter Xu
+> +static unsigned int tegra_machine_mclk_rate_6mhz(unsigned int srate)
+> +{
+> +	unsigned int mclk;
+> +
+> +	switch (srate) {
+> +	case 64000:
+> +	case 88200:
+> +	case 96000:
+> +		mclk =3D 128 * srate;
+> +		break;
+> +	default:
+> +		mclk =3D 256 * srate;
+> +		break;
+> +	}
+> +	/* FIXME: Codec only requires >=3D 3MHz if OSR=3D=3D0 */
+> +	while (mclk < 6000000)
+> +		mclk *=3D 2;
 
+It feels like this is complicated enough and looks like the
+clocking is flexible enough that it might be easier to just have
+a table of values or otherwise enumerate standard rates, seeing
+the code I feel like I need to worry about what happens if we
+pick a clock rate over 6MHz (the loop could give a value over
+that), and it's not clear why we have the switch statement rather
+than just starting at a multiple of 128 and looping an extra time.
+
+I suspect there's going to be no meaningful downside for having
+the clock held at over 3MHz on a tablet form factor, the usual
+issue would be power consumption but between the larger battery
+size you tend to have on a tablet and the power draw of the
+screen if that's on it's likely to be into the noise practially
+speaking.
+
+--tOijhv7Qqz92bCVE
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmP1RFEACgkQJNaLcl1U
+h9DpVAf+M2ffAYNVaX4PwMJKysdDwMn46T5Tf1y5pjJ3FoZjeN7IGuqSZ3iXo1WT
+ms1bDTeUvHNIIUkUj90R9j5az1vTLboWFwsQRSQmkPkhkE/pD/R9skhgEh0Z0Kb0
+zkXVEjEjtPddDwC8enKFqDqvNrcegZV9pOna2z21aG+Ao66HPQtayfuC8FblBS3m
+2vFLIM5zMvuBgyeuSB++5pqcCZAdli4nDxijZT7+wlqesNVsjqDX+V0kClN3lfoK
+nEpUH6u4MMmtcude37chUrPP0KKW/+h0dfgh3QG5C956xi8D9zo86q9q7B95MMPO
+v4a40jcUysWb/dQcogit1e2we4NNYw==
+=sbPL
+-----END PGP SIGNATURE-----
+
+--tOijhv7Qqz92bCVE--
