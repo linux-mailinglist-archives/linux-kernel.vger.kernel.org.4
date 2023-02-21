@@ -2,79 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 66F4569E93C
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 22:04:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 557D069E93E
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 22:05:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230088AbjBUVEk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Feb 2023 16:04:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39070 "EHLO
+        id S229703AbjBUVFm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Feb 2023 16:05:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40146 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229529AbjBUVEi (ORCPT
+        with ESMTP id S229529AbjBUVFk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Feb 2023 16:04:38 -0500
-Received: from vulcan.natalenko.name (vulcan.natalenko.name [IPv6:2001:19f0:6c00:8846:5400:ff:fe0c:dfa0])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62477211CE;
-        Tue, 21 Feb 2023 13:04:36 -0800 (PST)
-Received: from mail.natalenko.name (vulcan.natalenko.name [IPv6:2001:19f0:6c00:8846:5400:ff:fe0c:dfa0])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by vulcan.natalenko.name (Postfix) with ESMTPSA id 5EF15123EB3E;
-        Tue, 21 Feb 2023 22:04:30 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=natalenko.name;
-        s=dkim-20170712; t=1677013470;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=n28t+E/zsRch9sqsWc1BHYuL8WoSmgCVYrF30WLVYb4=;
-        b=MKFrQZKJL8ZLgiAnersYOYTjnK2mguewyPOdPtKRnvRkZrpJW/xegt7MB6ViyC3+iDNBjn
-        n9kgpxgMm+eIuMdrv1EfQUgNcG7F0pnkSkBCi6sDX/I2d7Khw/XXosDzoNVgrjBYgBKLOi
-        4VVqOjbyFF9VI/oEu0KW6s3hMBmb+xw=
+        Tue, 21 Feb 2023 16:05:40 -0500
+Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36E1A21A24;
+        Tue, 21 Feb 2023 13:05:39 -0800 (PST)
+Received: from pps.filterd (m0098416.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 31LIi2PQ016966;
+        Tue, 21 Feb 2023 21:05:24 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=l89w9hTDLGhdANTTPiC9rJMAvvdMVotwgL6kR6zoB54=;
+ b=VKlsqfwTzV/QGnxmJ+3NvXb47SUtRmNeu9pS7Pb1mZ4PJNI9AOX8SOCrh079Ha/GsZ3c
+ L/mIpKU7R4NjBe7F41EY2bXu1zPMbnxLO1Hc+JaGhqRLgIIaTbkYbFVhRoOoI8VvlBy0
+ PGJomREdn41Sd1jw9DsQK7zWAcU4aUtkxuhrjG9m1B4CKAJdAKb+PxC8i7QOF8J9GGKr
+ hPvvun0HGi7xz7lx86tpAghwrVwJPvq97eoiBKevhvvLNtzZ5dhCB7qOlH/lLoyRi8ce
+ tZ00axE/C5++wupERXKHULpOalXXcn3CSq8nP2i2Ic3MGIvGvAgd5tPNrEbnYv1oHwI9 Uw== 
+Received: from ppma04dal.us.ibm.com (7a.29.35a9.ip4.static.sl-reverse.com [169.53.41.122])
+        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3nw3amu1mc-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 21 Feb 2023 21:05:24 +0000
+Received: from pps.filterd (ppma04dal.us.ibm.com [127.0.0.1])
+        by ppma04dal.us.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 31LIXw5n000579;
+        Tue, 21 Feb 2023 21:05:23 GMT
+Received: from smtprelay04.dal12v.mail.ibm.com ([9.208.130.102])
+        by ppma04dal.us.ibm.com (PPS) with ESMTPS id 3ntpa79uxn-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 21 Feb 2023 21:05:23 +0000
+Received: from smtpav01.dal12v.mail.ibm.com (smtpav01.dal12v.mail.ibm.com [10.241.53.100])
+        by smtprelay04.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 31LL5MST4129402
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 21 Feb 2023 21:05:22 GMT
+Received: from smtpav01.dal12v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 2908D58063;
+        Tue, 21 Feb 2023 21:05:22 +0000 (GMT)
+Received: from smtpav01.dal12v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id D1C405805D;
+        Tue, 21 Feb 2023 21:05:20 +0000 (GMT)
+Received: from [9.60.89.243] (unknown [9.60.89.243])
+        by smtpav01.dal12v.mail.ibm.com (Postfix) with ESMTP;
+        Tue, 21 Feb 2023 21:05:20 +0000 (GMT)
+Message-ID: <ace6750d-c2ff-dffa-ef0a-3face3f17f28@linux.ibm.com>
+Date:   Tue, 21 Feb 2023 16:05:20 -0500
 MIME-Version: 1.0
-Date:   Tue, 21 Feb 2023 22:04:29 +0100
-From:   Oleksandr Natalenko <oleksandr@natalenko.name>
-To:     Usama Arif <usama.arif@bytedance.com>
-Cc:     David Woodhouse <dwmw2@infradead.org>,
-        Kim Phillips <kim.phillips@amd.com>, tglx@linutronix.de,
-        arjan@linux.intel.com, mingo@redhat.com, bp@alien8.de,
-        dave.hansen@linux.intel.com, hpa@zytor.com, x86@kernel.org,
-        pbonzini@redhat.com, paulmck@kernel.org,
-        linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        rcu@vger.kernel.org, mimoja@mimoja.de, hewenliang4@huawei.com,
-        thomas.lendacky@amd.com, seanjc@google.com, pmenzel@molgen.mpg.de,
-        fam.zheng@bytedance.com, punit.agrawal@bytedance.com,
-        simon.evans@bytedance.com, liangma@liangbit.com,
-        "Limonciello, Mario" <Mario.Limonciello@amd.com>,
-        Piotr Gorski <piotrgorski@cachyos.org>
-Subject: Re: [External] Re: [PATCH v9 0/8] Parallel CPU bringup for x86_64
-In-Reply-To: <538080af-b876-6462-c591-be66dceb4b8d@bytedance.com>
-References: <20230215145425.420125-1-usama.arif@bytedance.com>
- <715CBABF-4017-4784-8F30-5386F1524830@infradead.org>
- <67dbc69f-b712-8971-f1c9-5d07f506a19c@amd.com>
- <42dc683e2846ae8fc1e09715aaf7884660e1a386.camel@infradead.org>
- <37c18c3aeea2e558633b6da6886111d0@natalenko.name>
- <5A3B7074-0C6D-472B-803B-D76541828C1F@infradead.org>
- <3d8ed6e157df10c5175c636de0e21849@natalenko.name>
- <5c557f9b6f55dc2a612ee89142971298e6ae12d8.camel@infradead.org>
- <ee0d0d971a3095d6a1e96ad4f1ba32d2@natalenko.name>
- <5b8f9c89f7015fa80c966c6c7f6fa259db6744f8.camel@infradead.org>
- <ce731b5a4a53680b4840467977b33d9a@natalenko.name>
- <85ceb3f92abf3c013924de2f025517372bed19c0.camel@infradead.org>
- <3e5944de08ef0d23584d19bad7bae66c@natalenko.name>
- <26E5DC9C-0F19-4E4F-9076-04506A197374@infradead.org>
- <f71275dc809cfb32df513023786c3faa@natalenko.name>
- <10CA27BB-ADC6-4421-86D2-A83BD7FA12E0@infradead.org>
- <9153284c37a79d303aa79dbf07c10329@natalenko.name>
- <e2e6616f691f1822035be245ec847f7c86a26367.camel@infradead.org>
- <538080af-b876-6462-c591-be66dceb4b8d@bytedance.com>
-Message-ID: <056c22523573943347906d0235708d2a@natalenko.name>
-X-Sender: oleksandr@natalenko.name
-Content-Type: text/plain; charset=UTF-8;
- format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH v7 4/6] s390/pci: Use dma-iommu layer
+Content-Language: en-US
+To:     Niklas Schnelle <schnelle@linux.ibm.com>,
+        Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        Wenjia Zhang <wenjia@linux.ibm.com>
+Cc:     Gerd Bayer <gbayer@linux.ibm.com>,
+        Pierre Morel <pmorel@linux.ibm.com>, iommu@lists.linux.dev,
+        linux-s390@vger.kernel.org, borntraeger@linux.ibm.com,
+        hca@linux.ibm.com, gor@linux.ibm.com,
+        gerald.schaefer@linux.ibm.com, agordeev@linux.ibm.com,
+        svens@linux.ibm.com, linux-kernel@vger.kernel.org,
+        Julian Ruess <julianr@linux.ibm.com>
+References: <20230220152222.1818344-1-schnelle@linux.ibm.com>
+ <20230220152222.1818344-5-schnelle@linux.ibm.com>
+From:   Matthew Rosato <mjrosato@linux.ibm.com>
+In-Reply-To: <20230220152222.1818344-5-schnelle@linux.ibm.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: N_92_8Yv43Xoo772wijkO5u1DJuRd871
+X-Proofpoint-ORIG-GUID: N_92_8Yv43Xoo772wijkO5u1DJuRd871
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.170.22
+ definitions=2023-02-21_12,2023-02-20_02,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501 mlxscore=0
+ bulkscore=0 malwarescore=0 suspectscore=0 phishscore=0 spamscore=0
+ lowpriorityscore=0 clxscore=1015 impostorscore=0 mlxlogscore=595
+ adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2302210182
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
         SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -82,75 +96,19 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 21.02.2023 21:04, Usama Arif wrote:
-> On 21/02/2023 19:10, David Woodhouse wrote:
->> On Tue, 2023-02-21 at 13:14 +0100, Oleksandr Natalenko wrote:
->>> 
->>> With this in place:
->>> 
->>> ```
->>>          early_gdt_descr.address = (unsigned long)get_cpu_gdt_rw(0);
->>>          initial_gs = per_cpu_offset(0);
->>>          smpboot_control = 0;
->>> ```
->>> 
->>> the resume does not work.
->> 
->> Yeah, I think it's always running on CPU0 after the other CPUs are
->> taken down anyway.
->> 
->> We definitely *do* need to clear smpboot_control because we absolutely
->> want it using the temp_stack we explicitly put into initial_stack, not
->> finding its own idle thread.
->> 
->> The problem was that it was never being restored to STARTUP_SECONDARY
->> in the parallel modes, because that's a one-time setup in
->> native_smp_prepare_cpus(). So we can just restore it in
->> arch_thaw_secondary_cpus_begin() too, by working this into patch 6 of
->> the series.
->> 
->> (Usama, I think my tree is fairly out of date now so I'll let you do
->> that? Thanks!).
+On 2/20/23 10:22 AM, Niklas Schnelle wrote:
+> While s390 already has a standard IOMMU driver and previous changes have
+> added I/O TLB flushing operations this driver is currently only used for
+> user-space PCI access such as vfio-pci. For the DMA API s390 instead
+> utilizes its own implementation in arch/s390/pci/pci_dma.c which drives
+> the same hardware and shares some code but requires a complex and
+> fragile hand over between DMA API and IOMMU API use of a device and
+> despite code sharing still leads to significant duplication and
+> maintenance effort. Let's utilize the common code DMAP API
+> implementation from drivers/iommu/dma-iommu.c instead allowing us to
+> get rid of arch/s390/pci/pci_dma.c.
 > 
-> Sounds good! Will send out the next revision with below diff, 
-> checkpatch
-> fixes and rebased to 6.2 (testing it now). The below fix looks good! 
-> Oleksandr, would you mind testing out suspend/resume with the below 
-> diff on your AMD machine just to make sure it fixes the issue before I 
-> send out the next revision with it. Thanks!
+> Signed-off-by: Niklas Schnelle <schnelle@linux.ibm.com>
 
-Right, so I applied the whole series + this fix, and the suspend/resume 
-works. Thanks!
+Reviewed-by: Matthew Rosato <mjrosato@linux.ibm.com>
 
-Reported-by: Oleksandr Natalenko <oleksandr@natalenko.name>
-Tested-by: Oleksandr Natalenko <oleksandr@natalenko.name>
-
-There's another open question pending though: why would this series 
-cause booting up one CPU only on an older AMD CPU. But I'd expect 
-Piotr's fellow to chime in occasionally.
-
->> diff --git a/arch/x86/kernel/smpboot.c b/arch/x86/kernel/smpboot.c
->> index 50621793671d..3db77a257ae2 100644
->> --- a/arch/x86/kernel/smpboot.c
->> +++ b/arch/x86/kernel/smpboot.c
->> @@ -1571,6 +1571,17 @@ void __init native_smp_prepare_cpus(unsigned 
->> int max_cpus)
->>     void arch_thaw_secondary_cpus_begin(void)
->>   {
->> +	/*
->> +	 * On suspend, smpboot_control will have been zeroed to allow the
->> +	 * boot CPU to use explicitly passed values including a temporary
->> +	 * stack. Since native_smp_prepare_cpus() won't be called again,
->> +	 * restore the appropriate value for the parallel startup modes.
->> +	 */
->> +	if (do_parallel_bringup) {
->> +		smpboot_control = STARTUP_SECONDARY |
->> +			(x2apic_mode ? STARTUP_APICID_CPUID_0B : STARTUP_APICID_CPUID_01);
->> +	}
->> +
->>   	set_cache_aps_delayed_init(true);
->>   }
->> 
-
--- 
-   Oleksandr Natalenko (post-factum)
