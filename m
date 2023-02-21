@@ -2,93 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B0A369DD82
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 11:00:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 095C669DD84
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 11:03:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234105AbjBUKAZ convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 21 Feb 2023 05:00:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40964 "EHLO
+        id S234105AbjBUKDb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Feb 2023 05:03:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42382 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234059AbjBUKAX (ORCPT
+        with ESMTP id S233236AbjBUKD3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Feb 2023 05:00:23 -0500
-Received: from outpost1.zedat.fu-berlin.de (outpost1.zedat.fu-berlin.de [130.133.4.66])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 085BF2311D;
-        Tue, 21 Feb 2023 02:00:17 -0800 (PST)
-Received: from inpost2.zedat.fu-berlin.de ([130.133.4.69])
-          by outpost.zedat.fu-berlin.de (Exim 4.95)
-          with esmtps (TLS1.3)
-          tls TLS_AES_256_GCM_SHA384
-          (envelope-from <glaubitz@zedat.fu-berlin.de>)
-          id 1pUPRU-002FOl-1x; Tue, 21 Feb 2023 11:00:12 +0100
-Received: from tmo-082-88.customers.d1-online.com ([80.187.82.88] helo=[IPv6:2a01:598:b9a2:3fca:fe76:4b76:93a9:5dda])
-          by inpost2.zedat.fu-berlin.de (Exim 4.95)
-          with esmtpsa (TLS1.3)
-          tls TLS_AES_256_GCM_SHA384
-          (envelope-from <glaubitz@physik.fu-berlin.de>)
-          id 1pUPRT-0039a5-P6; Tue, 21 Feb 2023 11:00:12 +0100
-Message-ID: <7c95eaf44dc59f10c563d2088cb446a277a5ac73.camel@physik.fu-berlin.de>
-Subject: Re: [PATCH] sh: SH2007: drop the bad URL info
-From:   John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
-To:     Randy Dunlap <rdunlap@infradead.org>, linux-kernel@vger.kernel.org
-Cc:     Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Rich Felker <dalias@libc.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Hitoshi Mitake <mitake@dcl.info.waseda.ac.jp>,
-        Paul Mundt <lethal@linux-sh.org>, linux-sh@vger.kernel.org
-Date:   Tue, 21 Feb 2023 11:00:10 +0100
-In-Reply-To: <20230221031004.18910-1-rdunlap@infradead.org>
-References: <20230221031004.18910-1-rdunlap@infradead.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-User-Agent: Evolution 3.46.4 
+        Tue, 21 Feb 2023 05:03:29 -0500
+Received: from mail-qt1-f174.google.com (mail-qt1-f174.google.com [209.85.160.174])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89DBCAD2C
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Feb 2023 02:03:27 -0800 (PST)
+Received: by mail-qt1-f174.google.com with SMTP id h19so1057349qtk.7
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Feb 2023 02:03:27 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=8IkLkYW3Mrz4W4E6CahA4nVgDfr/jjbUUP9owXsZ0sQ=;
+        b=dQDSba9616M4Jg0F4wduILT+SPTnV74M79S0iglzJVpgOpz0WEKv6/65dI6sPQrQ/E
+         851rJnVSqzUh81g5bnoexzUGwPdzGWdN3eGk2AUWb0zM26d4w3FOVdekDpEB18tAs2sz
+         +LNnM6dR8EOUymnVqrFPhwSeYo0/kz5PmkFEBVF7yMEPtci2W7qeMZGZ17FhISOj2B53
+         0yZx3iroDm9fAae+hFmV54tMA4BpWr3PklNTJYqZxR/54HY3Fcm5MNRptAXNskIkKeTq
+         VNIO3zfO6MttmMZkjWF/3hDD4aewTpmI44DvlqY2oBCtxAaAsdUwVJ+GqiBbfS/yRFWy
+         LSBA==
+X-Gm-Message-State: AO0yUKV9El7B5wlSev4TVUgn57kiT18H4QKuNa0osGkzdZOqIft/V/sR
+        o0VOIDu4nmg7BJMo3s+XXt+xa2UnK/M00w==
+X-Google-Smtp-Source: AK7set+QrKQeEW6csqqCSxAqijGPDFkARU0piSpDpXZg7CstSE7agy9owfJUyJ8nUgey13/Zc0dHvg==
+X-Received: by 2002:a05:622a:1793:b0:3bd:1a07:2086 with SMTP id s19-20020a05622a179300b003bd1a072086mr6290608qtk.36.1676973806317;
+        Tue, 21 Feb 2023 02:03:26 -0800 (PST)
+Received: from mail-yb1-f178.google.com (mail-yb1-f178.google.com. [209.85.219.178])
+        by smtp.gmail.com with ESMTPSA id 16-20020ac85950000000b003b82489d8acsm1751245qtz.21.2023.02.21.02.03.25
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 21 Feb 2023 02:03:26 -0800 (PST)
+Received: by mail-yb1-f178.google.com with SMTP id cf8so3791023ybb.11
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Feb 2023 02:03:25 -0800 (PST)
+X-Received: by 2002:a25:e206:0:b0:95b:7778:5158 with SMTP id
+ h6-20020a25e206000000b0095b77785158mr440109ybe.12.1676973805392; Tue, 21 Feb
+ 2023 02:03:25 -0800 (PST)
 MIME-Version: 1.0
-X-Original-Sender: glaubitz@physik.fu-berlin.de
-X-Originating-IP: 80.187.82.88
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20230221060723.26291-1-bhe@redhat.com> <20230221060723.26291-3-bhe@redhat.com>
+In-Reply-To: <20230221060723.26291-3-bhe@redhat.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Tue, 21 Feb 2023 11:03:14 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdV4efVX8X1KoLJ-3pmzsxnU6TODw3b_37ZK771rfrqi7A@mail.gmail.com>
+Message-ID: <CAMuHMdV4efVX8X1KoLJ-3pmzsxnU6TODw3b_37ZK771rfrqi7A@mail.gmail.com>
+Subject: Re: [RFC PATCH 2/2] arch/*/io.h: remove ioremap_uc in some architectures
+To:     Baoquan He <bhe@redhat.com>
+Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org, arnd@arndb.de,
+        hch@infradead.org, mcgrof@kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 2023-02-20 at 19:10 -0800, Randy Dunlap wrote:
-> This URL provided is no longer functional, so drop it.
-> 
-> Fixes: 3a598264436e ("sh: SH-2007 board support.")
-> Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
-> Cc: John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
-> Cc: Yoshinori Sato <ysato@users.sourceforge.jp>
-> Cc: Rich Felker <dalias@libc.org>
-> Cc: Geert Uytterhoeven <geert+renesas@glider.be>
-> Cc: Hitoshi Mitake <mitake@dcl.info.waseda.ac.jp>
-> Cc: Paul Mundt <lethal@linux-sh.org>
-> Cc: linux-sh@vger.kernel.org
-> ---
->  arch/sh/boards/Kconfig |    1 -
->  1 file changed, 1 deletion(-)
-> 
-> diff -- a/arch/sh/boards/Kconfig b/arch/sh/boards/Kconfig
-> --- a/arch/sh/boards/Kconfig
-> +++ b/arch/sh/boards/Kconfig
-> @@ -358,7 +358,6 @@ config SH_SH2007
->  	  intended for embedded applications.
->  	  It has an Ethernet interface (SMC9118), direct connected
->  	  Compact Flash socket, two serial ports and PC-104 bus.
-> -	  More information at <http://sh2000.sh-linux.org>.
->  
->  config SH_APSH4A3A
->  	bool "AP-SH4A-3A"
+Hi Baoquan,
 
-Thanks, Randy! I will pick this one up as soon as my kernel.org account
-is ready, so I can set up my SH tree.
+Thanks for your patch!
 
-Adrian
+On Tue, Feb 21, 2023 at 7:36 AM Baoquan He <bhe@redhat.com> wrote:
+> ioremap_uc() is only meaningful on old x86-32 systems with the PAT
+> extension, and on ia64 with its slightly unconventional ioremap()
+> behavior, everywhere else this is the same as ioremap() anyway.
+>
+> So here, remove the ioremap_uc() definition in architecutures other
+> than x86 and ia64. These architectures all have asm-generic/io.h
+> included and will have the default ioremap_uc() definition which
+> returns NULL. If any ARCH really needs a specific ioremap_uc() for
+
+Please make it very clear that this changes existing behavior.
+At first, I had completely missed that.
+
+And of course the documentation should be updated to reflect that.
+
+> its own usage, one ioremap_uc() can be added in the ARH.
+
+s/ARH/ARCH/
+
+>  arch/m68k/include/asm/kmap.h   | 1 -
+
+Acked-by: Geert Uytterhoeven <geert@linux-m68k.org>
+
+Gr{oetje,eeting}s,
+
+                        Geert
 
 -- 
- .''`.  John Paul Adrian Glaubitz
-: :' :  Debian Developer
-`. `'   Physicist
-  `-    GPG: 62FF 8A75 84E0 2956 9546  0006 7426 3B37 F5B5 F913
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
