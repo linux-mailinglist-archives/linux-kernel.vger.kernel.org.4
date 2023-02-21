@@ -2,105 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 062F669E0F5
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 14:01:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 63A3769E05E
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 13:29:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233605AbjBUNBd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Feb 2023 08:01:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58158 "EHLO
+        id S234517AbjBUM3E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Feb 2023 07:29:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53218 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230155AbjBUNBa (ORCPT
+        with ESMTP id S233756AbjBUM3B (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Feb 2023 08:01:30 -0500
-Received: from fd01.gateway.ufhost.com (fd01.gateway.ufhost.com [61.152.239.71])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7AF9D17CE9;
-        Tue, 21 Feb 2023 05:01:27 -0800 (PST)
-Received: from EXMBX165.cuchost.com (unknown [175.102.18.54])
-        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
-        (Client CN "EXMBX165", Issuer "EXMBX165" (not verified))
-        by fd01.gateway.ufhost.com (Postfix) with ESMTP id 9CEF624E2AE;
-        Tue, 21 Feb 2023 21:01:19 +0800 (CST)
-Received: from EXMBX061.cuchost.com (172.16.6.61) by EXMBX165.cuchost.com
- (172.16.6.75) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Tue, 21 Feb
- 2023 21:01:19 +0800
-Received: from [192.168.125.128] (183.27.98.67) by EXMBX061.cuchost.com
- (172.16.6.61) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Tue, 21 Feb
- 2023 21:01:18 +0800
-Message-ID: <43d00fd9-ab24-442e-3f82-208edaf399d0@starfivetech.com>
-Date:   Tue, 21 Feb 2023 21:01:40 +0800
+        Tue, 21 Feb 2023 07:29:01 -0500
+Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 380BBA5EA;
+        Tue, 21 Feb 2023 04:28:47 -0800 (PST)
+Received: from mail02.huawei.com (unknown [172.30.67.143])
+        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4PLdqs0Dyyz4f3xbX;
+        Tue, 21 Feb 2023 20:28:41 +0800 (CST)
+Received: from huaweicloud.com (unknown [10.175.124.27])
+        by APP2 (Coremail) with SMTP id Syh0CgAXC+n5uPRj1aP2Dw--.36592S2;
+        Tue, 21 Feb 2023 20:28:42 +0800 (CST)
+From:   Kemeng Shi <shikemeng@huaweicloud.com>
+To:     tytso@mit.edu, adilger.kernel@dilger.ca
+Cc:     linux-ext4@vger.kernel.org, linux-kernel@vger.kernel.org,
+        shikemeng@huaweicloud.com, linfeilong@huawei.com
+Subject: [PATCH 0/4] Remove unused group parameter in bitmap checksum
+Date:   Wed, 22 Feb 2023 04:30:23 +0800
+Message-Id: <20230221203027.2359920-1-shikemeng@huaweicloud.com>
+X-Mailer: git-send-email 2.30.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH v2 01/11] dt-bindings: clock: Add StarFive JH7110
- System-Top-Group clock and reset generator
-Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-CC:     <linux-riscv@lists.infradead.org>, <devicetree@vger.kernel.org>,
-        "Michael Turquette" <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Emil Renner Berthing <kernel@esmil.dk>,
-        Rob Herring <robh+dt@kernel.org>,
-        Conor Dooley <conor@kernel.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Hal Feng <hal.feng@starfivetech.com>,
-        <linux-kernel@vger.kernel.org>, <linux-clk@vger.kernel.org>
-References: <20230221083323.302471-1-xingyu.wu@starfivetech.com>
- <20230221083323.302471-2-xingyu.wu@starfivetech.com>
- <430318ed-5b30-e549-a5ce-df83aa18adf9@linaro.org>
-From:   Xingyu Wu <xingyu.wu@starfivetech.com>
-In-Reply-To: <430318ed-5b30-e549-a5ce-df83aa18adf9@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [183.27.98.67]
-X-ClientProxiedBy: EXCAS066.cuchost.com (172.16.6.26) To EXMBX061.cuchost.com
- (172.16.6.61)
-X-YovoleRuleAgent: yovoleflag
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: Syh0CgAXC+n5uPRj1aP2Dw--.36592S2
+X-Coremail-Antispam: 1UD129KBjvdXoWrKFyDGr4fJF1rCw4xGF43Awb_yoWxtwcEqa
+        97Z34rtrW3JFyfCF47Kws0yF4qqa10qF1YvF92qr1rZF1Utay8Can7ZrWS9F45uF45C3Z8
+        AFy2qryvyF13WjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+        9fnUUIcSsGvfJTRUUUbxkFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2IYs7xG
+        6rWj6s0DM7CIcVAFz4kK6r1j6r18M280x2IEY4vEnII2IxkI6r1a6r45M28lY4IEw2IIxx
+        k0rwA2F7IY1VAKz4vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Ar0_tr1l84ACjcxK
+        6xIIjxv20xvEc7CjxVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7
+        xvwVC2z280aVCY1x0267AKxVW0oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40E
+        FcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr
+        0_Gr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcxkI7VAKI48JM4x0x7Aq67IIx4CEVc8v
+        x2IErcIFxwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F4
+        0E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_JF0_Jw1l
+        IxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxV
+        AFwI0_Jr0_Gr1lIxAIcVCF04k26cxKx2IYs7xG6rW3Jr0E3s1lIxAIcVC2z280aVAFwI0_
+        Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7sRE
+        SoGDUUUUU==
+X-CM-SenderInfo: 5vklyvpphqwq5kxd4v5lfo033gof0z/
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=0.0 required=5.0 tests=BAYES_00,DATE_IN_FUTURE_06_12,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023/2/21 19:25, Krzysztof Kozlowski wrote:
-> On 21/02/2023 09:33, Xingyu Wu wrote:
->> Add bindings for the System-Top-Group clock and reset generator (STGCRG)
->> on the JH7110 RISC-V SoC by StarFive Ltd.
->> 
->> Signed-off-by: Xingyu Wu <xingyu.wu@starfivetech.com>
-> 
-> 
->> +    };
->> diff --git a/MAINTAINERS b/MAINTAINERS
->> index 93eb504c3b21..2e70c9f21989 100644
->> --- a/MAINTAINERS
->> +++ b/MAINTAINERS
->> @@ -19914,6 +19914,7 @@ F:	arch/riscv/boot/dts/starfive/
->>  STARFIVE JH71X0 CLOCK DRIVERS
->>  M:	Emil Renner Berthing <kernel@esmil.dk>
->>  M:	Hal Feng <hal.feng@starfivetech.com>
->> +M:	Xingyu Wu <xingyu.wu@starfivetech.com>
-> 
-> No improvements here. You add here new bindings for one device and then
-> - without explanation - add yourself to all Starfive clock bindings.
-> Either explain it or drop it or move it to separate patch.
-> 
-> You already got comment for this.
-> 
+Hi all, this series try to remove unused group parameter in four bitmap
+checksum functions. Each function is cleaned in a separated patch.
+Thanks!
 
-Sorry, I didn't understand what you meant before. Now my understanding is that, 
-If I improvements JH71X0 driver no JH7110 driver, I could add this here. Right?
+Kemeng Shi (4):
+  ext4: remove unused group parameter in ext4_inode_bitmap_csum_verify
+  ext4: remove unused group parameter in ext4_inode_bitmap_csum_set
+  ext4: remove unused group parameter in ext4_block_bitmap_csum_verify
+  ext4: remove unused group parameter in ext4_block_bitmap_csum_set
 
-Is it OK if I do it this way to move it to separate patch like this?:
-+STARFIVE JH7110 STG CLOCK DRIVERS
-+M:	Xingyu Wu <xingyu.wu@starfivetech.com>
+ fs/ext4/balloc.c  |  3 +--
+ fs/ext4/bitmap.c  |  8 ++++----
+ fs/ext4/ext4.h    |  8 ++++----
+ fs/ext4/ialloc.c  | 14 ++++++--------
+ fs/ext4/mballoc.c | 10 +++++-----
+ fs/ext4/resize.c  |  7 +++----
+ 6 files changed, 23 insertions(+), 27 deletions(-)
 
+-- 
+2.30.0
 
-Best Regards,
-Xingyu Wu
