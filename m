@@ -2,117 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7580069DF39
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 12:47:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 260B669DF35
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 12:46:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234329AbjBULrW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Feb 2023 06:47:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49040 "EHLO
+        id S234364AbjBULqi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Feb 2023 06:46:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48992 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233941AbjBULrT (ORCPT
+        with ESMTP id S234354AbjBULqe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Feb 2023 06:47:19 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63B452006B
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Feb 2023 03:46:11 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1676979940;
+        Tue, 21 Feb 2023 06:46:34 -0500
+Received: from vulcan.natalenko.name (vulcan.natalenko.name [IPv6:2001:19f0:6c00:8846:5400:ff:fe0c:dfa0])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24F1F3A9C;
+        Tue, 21 Feb 2023 03:46:09 -0800 (PST)
+Received: from mail.natalenko.name (vulcan.natalenko.name [IPv6:2001:19f0:6c00:8846:5400:ff:fe0c:dfa0])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by vulcan.natalenko.name (Postfix) with ESMTPSA id 55E8C123B284;
+        Tue, 21 Feb 2023 12:46:04 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=natalenko.name;
+        s=dkim-20170712; t=1676979964;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=xdkixFVFU82nxRe/Neoo7hq2DbG+6O5CGX+XkYGCaSA=;
-        b=Hj3ciMkK30o0nyFEmvcPZvTdeypNGNntmfyfki6giDR6JRNfq9gIqE4S1lwQiKO05Yj6qN
-        10yMsjA7vEVP7joW7Qe+xOZZ8yGKBOxPpoPH1bo0wu6ZAcVod/TYx9jb6/luPtbSDiPE+p
-        wJAea3Y7zxueJ3ybVdCbmRE79KEgdB0=
-Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
- [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-315-d5Oo71VFNk-FQ2w5KKae3w-1; Tue, 21 Feb 2023 06:45:39 -0500
-X-MC-Unique: d5Oo71VFNk-FQ2w5KKae3w-1
-Received: by mail-wm1-f69.google.com with SMTP id p22-20020a7bcc96000000b003e2036a1516so1899188wma.7
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Feb 2023 03:45:38 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1676979938;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=xdkixFVFU82nxRe/Neoo7hq2DbG+6O5CGX+XkYGCaSA=;
-        b=yftcLdWdDtToS1bsdMzYgJO4/4n8w8lq4zt6voDciMwFzz3nUj2ZdZT2z85dje1qP9
-         YGutkWXhEmjmtEsYTE3/4O66AF59TWNcVtL+M3ZtxYOAAAf1EeXVPE3Q2lGGZSsNugaq
-         EG8Qw3k2dKnj63gxC/sZiitaMCGYJUcOPXIqd/kQWUJhjKSxBiooRnKmBufUpmoOy++K
-         K+k6ifkTU6gSgoVRLQe2pq8oCNbwEiwJ4bXAgHZqgUBps2DNPQEVe5M2+pgygGCtaJUE
-         W54qCZ8hXXltq/FoHuNDfYgd01ggrRYmI0tKMfxgviTh/1HXTCPB6admXWpnX9ju9tkN
-         O+GQ==
-X-Gm-Message-State: AO0yUKWy5+/QsC9MR+j1sILLr8IQbWeE+GA8OTbKSabkjn1VAwXCIDmd
-        A1ljHnd07stfJy3S5JMPNOgB1ciP9XkC0DQtNGTOMvu5nx3DmiZV7eYmQpDq5F2SxStIzf15+sP
-        76Zcouisb+vJh8aAs/UYIV9e7
-X-Received: by 2002:a5d:58c6:0:b0:2c5:4da3:4e10 with SMTP id o6-20020a5d58c6000000b002c54da34e10mr3083597wrf.4.1676979937983;
-        Tue, 21 Feb 2023 03:45:37 -0800 (PST)
-X-Google-Smtp-Source: AK7set9imgO7JIMPr+1oBS/NAm2w2BrZ9NYRoob1y00QMEggrPckyI+6L++7LS88bTdC32slUAg6rw==
-X-Received: by 2002:a5d:58c6:0:b0:2c5:4da3:4e10 with SMTP id o6-20020a5d58c6000000b002c54da34e10mr3083578wrf.4.1676979937640;
-        Tue, 21 Feb 2023 03:45:37 -0800 (PST)
-Received: from gerbillo.redhat.com (146-241-121-8.dyn.eolo.it. [146.241.121.8])
-        by smtp.gmail.com with ESMTPSA id h11-20020adff18b000000b002c567b58e9asm6055855wro.56.2023.02.21.03.45.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 21 Feb 2023 03:45:37 -0800 (PST)
-Message-ID: <feb4388052a3f55a869704f204faa7ad39aeff1d.camel@redhat.com>
-Subject: Re: [PATCH net-next v2 0/4] net: phy: EEE fixes
-From:   Paolo Abeni <pabeni@redhat.com>
-To:     Oleksij Rempel <o.rempel@pengutronix.de>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>
-Cc:     kernel@pengutronix.de, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org, Russell King <linux@armlinux.org.uk>
-Date:   Tue, 21 Feb 2023 12:45:35 +0100
-In-Reply-To: <20230221050334.578012-1-o.rempel@pengutronix.de>
-References: <20230221050334.578012-1-o.rempel@pengutronix.de>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.46.4 (3.46.4-1.fc37) 
+        bh=N3EcJLkkpFXEjVsUhJ5jv8Pk2NrjylK079SpcTCEruM=;
+        b=bWoA12ZWAsn+IqTms8zliAKukC41nS8LLIcb8va1tuDJnCQhnnyjJ5kmMCUXNXZCUBjh2g
+        HawQUPVdQYTfV1GvNzVusPFGJWgmUl7Nux9hXjDD2OyU9cNvZiVj3Po7lix3jO1e30PmOB
+        PRZxDgHQAH2NUBY1h4Xo1JqzvO9TPY4=
 MIME-Version: 1.0
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Date:   Tue, 21 Feb 2023 12:46:04 +0100
+From:   Oleksandr Natalenko <oleksandr@natalenko.name>
+To:     David Woodhouse <dwmw2@infradead.org>
+Cc:     Kim Phillips <kim.phillips@amd.com>, tglx@linutronix.de,
+        Usama Arif <usama.arif@bytedance.com>, arjan@linux.intel.com,
+        mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
+        hpa@zytor.com, x86@kernel.org, pbonzini@redhat.com,
+        paulmck@kernel.org, linux-kernel@vger.kernel.org,
+        kvm@vger.kernel.org, rcu@vger.kernel.org, mimoja@mimoja.de,
+        hewenliang4@huawei.com, thomas.lendacky@amd.com, seanjc@google.com,
+        pmenzel@molgen.mpg.de, fam.zheng@bytedance.com,
+        punit.agrawal@bytedance.com, simon.evans@bytedance.com,
+        liangma@liangbit.com,
+        "Limonciello, Mario" <Mario.Limonciello@amd.com>,
+        Piotr Gorski <piotrgorski@cachyos.org>
+Subject: Re: [PATCH v9 0/8] Parallel CPU bringup for x86_64
+In-Reply-To: <26E5DC9C-0F19-4E4F-9076-04506A197374@infradead.org>
+References: <20230215145425.420125-1-usama.arif@bytedance.com>
+ <2668799.mvXUDI8C0e@natalenko.name>
+ <ed8d662351cfe5793f8cc7e7e8c514d05d16c501.camel@infradead.org>
+ <2668869.mvXUDI8C0e@natalenko.name>
+ <2a67f6cf18dd2c1879fad9fd8a28242918d3e5d2.camel@infradead.org>
+ <982e1d6140705414e8fd60b990bd259a@natalenko.name>
+ <715CBABF-4017-4784-8F30-5386F1524830@infradead.org>
+ <67dbc69f-b712-8971-f1c9-5d07f506a19c@amd.com>
+ <42dc683e2846ae8fc1e09715aaf7884660e1a386.camel@infradead.org>
+ <37c18c3aeea2e558633b6da6886111d0@natalenko.name>
+ <5A3B7074-0C6D-472B-803B-D76541828C1F@infradead.org>
+ <3d8ed6e157df10c5175c636de0e21849@natalenko.name>
+ <5c557f9b6f55dc2a612ee89142971298e6ae12d8.camel@infradead.org>
+ <ee0d0d971a3095d6a1e96ad4f1ba32d2@natalenko.name>
+ <5b8f9c89f7015fa80c966c6c7f6fa259db6744f8.camel@infradead.org>
+ <ce731b5a4a53680b4840467977b33d9a@natalenko.name>
+ <85ceb3f92abf3c013924de2f025517372bed19c0.camel@infradead.org>
+ <3e5944de08ef0d23584d19bad7bae66c@natalenko.name>
+ <26E5DC9C-0F19-4E4F-9076-04506A197374@infradead.org>
+Message-ID: <f71275dc809cfb32df513023786c3faa@natalenko.name>
+X-Sender: oleksandr@natalenko.name
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 2023-02-21 at 06:03 +0100, Oleksij Rempel wrote:
-> changes v2:
-> - restore previous ethtool set logic for the case where advertisements
->   are not provided by user space.
-> - use ethtool_convert_legacy_u32_to_link_mode() where possible
-> - genphy_c45_an_config_eee_aneg(): move adv initialization in to the if
->   scope.
->=20
-> Different EEE related fixes.
->=20
-> Oleksij Rempel (4):
->   net: phy: c45: use "supported_eee" instead of supported for access
->     validation
->   net: phy: c45: add genphy_c45_an_config_eee_aneg() function
->   net: phy: do not force EEE support
->   net: phy: c45: genphy_c45_ethtool_set_eee: validate EEE link modes
->=20
->  drivers/net/phy/phy-c45.c    | 55 ++++++++++++++++++++++++++++--------
->  drivers/net/phy/phy_device.c | 21 +++++++++++++-
->  include/linux/phy.h          |  6 ++++
->  3 files changed, 69 insertions(+), 13 deletions(-)
->=20
-# Form letter - net-next is closed
+On 21.02.2023 11:27, David Woodhouse wrote:
+> On 21 February 2023 09:49:51 GMT, Oleksandr Natalenko 
+> <oleksandr@natalenko.name> wrote:
+>> On 21.02.2023 10:06, David Woodhouse wrote:
+>>> Why does arch/x86/kernel/acpi/sleep.c::x86_acpi_suspend_lowlevel() 
+>>> set
+>>> 
+>>>     initial_gs = per_cpu_offset(smp_processor_id()) ?
+>>> 
+>>> Would it not be CPU#0 that comes back up, and should it not get
+>>> per_cpu_offset(0) ?
+>> 
+>> Wanna me try `initial_gs = per_cpu_offset(0);` too?
+> 
+> Hm, yes please. There's another one to make zero on the next line up, I 
+> think?
 
-The merge window for v6.3 has begun and therefore net-next is closed
-for new drivers, features, code refactoring and optimizations.
-We are currently accepting bug fixes only.
+So,
 
-Please repost when net-next reopens after Mar 6th.
+```
+early_gdt_descr.address = (unsigned long)get_cpu_gdt_rw(0);
+initial_gs = per_cpu_offset(0);
+```
 
-RFC patches sent for review only are obviously welcome at any time.
+?
 
+Should I leave `smpboot_control = 0;` commented out, or I should 
+uncomment it back?
+
+-- 
+   Oleksandr Natalenko (post-factum)
