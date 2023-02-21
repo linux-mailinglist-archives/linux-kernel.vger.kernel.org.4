@@ -2,178 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9049869DBD7
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 09:24:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9828469DBDA
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 09:25:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233319AbjBUIYo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Feb 2023 03:24:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40228 "EHLO
+        id S229643AbjBUIZQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Feb 2023 03:25:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40948 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229835AbjBUIYm (ORCPT
+        with ESMTP id S232115AbjBUIZO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Feb 2023 03:24:42 -0500
-Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0681C1EFF4
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Feb 2023 00:24:41 -0800 (PST)
-Received: by mail-ed1-x52c.google.com with SMTP id o12so14171479edb.9
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Feb 2023 00:24:40 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=oPBARR1XQLY58c737UTH5eoRSYkaY0yhf7AxAKsB3Ys=;
-        b=FTilw8opE7NXkwjgsqlx6udSECCNGFBY5jaRwzj4cGQKeJb5vWv+kxlubSWOd+ugd3
-         YUoiba4n0y27qNw2IG7TyFincOVCdOnSS5o8Yt1r6jLDQ5C8uD/cOa/FWgdTkS9ZXfok
-         0Vvy9OT547060nJLz8ilID+aiMbTrxQlPVicHnmM06nMDACwhPUPfzJAIymM56uUXkX+
-         dI9ixC3Q47KBiisYcvISlL28WTmCHZS2MXFAB87dPSsWVA9CXUtTFR9LRuuwcMtXqet4
-         Gvpy0DSSTvGany6XHc+Fn2uEUf/Jdn8z8BXax70b58KSU+SHVNnvXaVDYMvhemsre1kM
-         PITw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=oPBARR1XQLY58c737UTH5eoRSYkaY0yhf7AxAKsB3Ys=;
-        b=GJAXKdGMS+9Ems/DSAHBjx7eBa1ZIFPCD1kyWhd5eOF/ScnfA6tM3RBjWOpcaCp/Uy
-         Mg4DQchM+oqaRt1lEkdFHxWqZ6V5vXqvvgoilzjnBV79D3tNLxUcv88usIqq5fROTYQq
-         yoEy3dhbwBOpcwmOGnm8w6haPfH3x+XynJzWC+H1q4LwSRPb7ySLBzNEmLAebuYn8ktO
-         NKhHr+D3Lzsk0HPlr2R5Nev8boWjPT+/28EfgjGjYuamhrFfD0RS40g8h95TBVJyMVl6
-         Y84U/NMQd6yg+G+41YmEneAhfhp6tSa9LCiTnpIxdxXdhZxDC3EHEj/M0wDmz495znSc
-         SyAQ==
-X-Gm-Message-State: AO0yUKWJqOL5D4/NSVN4e9eZ4oHO5d6JQRksKGwDoHvxz2Y37ycTrpLY
-        lTI9kigtewpSmhzRlUcxvGDG51GVYbbauOu8jwRg4Fhgu6A=
-X-Google-Smtp-Source: AK7set92wsZHs0StkibTXHBpXgiS8paznGlOif4P/bhC35luKsT8XnDF1ma7j/vFpwvdwEWrkJLvTn4C10ASjMixMm4=
-X-Received: by 2002:a17:906:d966:b0:889:8b2f:75d1 with SMTP id
- rp6-20020a170906d96600b008898b2f75d1mr5350016ejb.10.1676967879345; Tue, 21
- Feb 2023 00:24:39 -0800 (PST)
+        Tue, 21 Feb 2023 03:25:14 -0500
+Received: from vulcan.natalenko.name (vulcan.natalenko.name [IPv6:2001:19f0:6c00:8846:5400:ff:fe0c:dfa0])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3356D20059;
+        Tue, 21 Feb 2023 00:25:13 -0800 (PST)
+Received: from mail.natalenko.name (vulcan.natalenko.name [IPv6:2001:19f0:6c00:8846:5400:ff:fe0c:dfa0])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by vulcan.natalenko.name (Postfix) with ESMTPSA id 9F46E123AC91;
+        Tue, 21 Feb 2023 09:25:08 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=natalenko.name;
+        s=dkim-20170712; t=1676967908;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=RlDwttwnbhqYBrOWhJDWVTjB+F85C40HjekkKQ5uE7s=;
+        b=nSmMILXUq9FQJPXkCEz31jy6cxHVR1YFkZ8DuL2k928cguoQYftMmkn7J63/KU+cmKI4Zw
+        dzARuBiFv2pKO6zVJSVegBG4PzFG0jxVDBWP9ssV0YmH3lHfW+Hl+dm6Wi1boquFKR0vB8
+        rrmq66EqbZC+MB9FVOCwnuK+qOUTfBY=
 MIME-Version: 1.0
-From:   JaeJoon Jung <rgbi3307@gmail.com>
-Date:   Tue, 21 Feb 2023 17:24:27 +0900
-Message-ID: <CAHOvCC7yjceArav9Ps0v1EP4CjfkrxbfXFgABK54cdFKNoE8iw@mail.gmail.com>
-Subject: [PATCH] kernel/sched/core.c: Modified prio_less().
-To:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>
-Cc:     linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Date:   Tue, 21 Feb 2023 09:25:08 +0100
+From:   Oleksandr Natalenko <oleksandr@natalenko.name>
+To:     David Woodhouse <dwmw2@infradead.org>
+Cc:     Kim Phillips <kim.phillips@amd.com>, tglx@linutronix.de,
+        Usama Arif <usama.arif@bytedance.com>, arjan@linux.intel.com,
+        mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
+        hpa@zytor.com, x86@kernel.org, pbonzini@redhat.com,
+        paulmck@kernel.org, linux-kernel@vger.kernel.org,
+        kvm@vger.kernel.org, rcu@vger.kernel.org, mimoja@mimoja.de,
+        hewenliang4@huawei.com, thomas.lendacky@amd.com, seanjc@google.com,
+        pmenzel@molgen.mpg.de, fam.zheng@bytedance.com,
+        punit.agrawal@bytedance.com, simon.evans@bytedance.com,
+        liangma@liangbit.com,
+        "Limonciello, Mario" <Mario.Limonciello@amd.com>,
+        Piotr Gorski <piotrgorski@cachyos.org>
+Subject: Re: [PATCH v9 0/8] Parallel CPU bringup for x86_64
+In-Reply-To: <5c557f9b6f55dc2a612ee89142971298e6ae12d8.camel@infradead.org>
+References: <20230215145425.420125-1-usama.arif@bytedance.com>
+ <2668799.mvXUDI8C0e@natalenko.name>
+ <ed8d662351cfe5793f8cc7e7e8c514d05d16c501.camel@infradead.org>
+ <2668869.mvXUDI8C0e@natalenko.name>
+ <2a67f6cf18dd2c1879fad9fd8a28242918d3e5d2.camel@infradead.org>
+ <982e1d6140705414e8fd60b990bd259a@natalenko.name>
+ <715CBABF-4017-4784-8F30-5386F1524830@infradead.org>
+ <67dbc69f-b712-8971-f1c9-5d07f506a19c@amd.com>
+ <42dc683e2846ae8fc1e09715aaf7884660e1a386.camel@infradead.org>
+ <37c18c3aeea2e558633b6da6886111d0@natalenko.name>
+ <5A3B7074-0C6D-472B-803B-D76541828C1F@infradead.org>
+ <3d8ed6e157df10c5175c636de0e21849@natalenko.name>
+ <5c557f9b6f55dc2a612ee89142971298e6ae12d8.camel@infradead.org>
+Message-ID: <ee0d0d971a3095d6a1e96ad4f1ba32d2@natalenko.name>
+X-Sender: oleksandr@natalenko.name
+Content-Type: text/plain; charset=UTF-8;
+ format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The sched_class structure is defined to be sorted by pointer size.
-You can see it in the macro definition like this:
+On 21.02.2023 09:17, David Woodhouse wrote:
+> On Tue, 2023-02-21 at 09:05 +0100, Oleksandr Natalenko wrote:
+>> 
+>> Please see here: http://ix.io/4oLm
+> 
+> Was that just for one CPU? Can we have them all please?
+> 
+> The interesting part is the line starting 00000001. We're looking at
+> the top 8 bits of EBX:
+> 
+> Leaf     Subleaf    EAX            EBX            ECX            EDX
+> 00000000 00000000:  00000010 ....  68747541 Auth  444d4163 cAMD  
+> 69746e65 enti
+> 00000001 00000000:  00a20f12 ....  00200800 .. .  7ef8320b .2.~  
+> 178bfbff ....
+>                                    ↑↑
+> 
+> So the first CPU is CPU0. Could have told you that... what about the 
+> others? :)
 
-kernel/sched/sched.h
-#define DEFINE_SCHED_CLASS(name)
-const struct sched_class name##_sched_class \
-        __aligned(__alignof__(struct sched_class)) \
-        __section("__" #name "_sched_class")
+Right, sorry. Here it is: http://ix.io/4oLq
 
-include/asm-generic/vmlinux.lds.h
-#define SCHED_DATA \
-STRUCT_ALIGN(); \
-__sched_class_highest = .; \
-*(__stop_sched_class) \
-*(__dl_sched_class) \
-*(__rt_sched_class) \
-*(__fair_sched_class) \
-*(__idle_sched_class) \
-__sched_class_lowest = .;
+> If anyone can reproduce this with a serial port, can you try this?
+> 
+> From 98ad11d0fb88f081f49f7b1496420dbfbeff8833 Mon Sep 17 00:00:00 2001
+> From: David Woodhouse <dwmw@amazon.co.uk>
+> Date: Sat, 4 Feb 2023 15:20:24 +0000
+> Subject: [PATCH] parallel debug
+> 
+> ---
+>  arch/x86/kernel/head_64.S | 17 +++++++++++++++++
+>  1 file changed, 17 insertions(+)
+> 
+> diff --git a/arch/x86/kernel/head_64.S b/arch/x86/kernel/head_64.S
+> index 0e4e53d231db..da7f4d2d9951 100644
+> --- a/arch/x86/kernel/head_64.S
+> +++ b/arch/x86/kernel/head_64.S
+> @@ -281,6 +281,15 @@ SYM_INNER_LABEL(secondary_startup_64_no_verify, 
+> SYM_L_GLOBAL)
+> 
+>  .Lsetup_AP:
+>  	/* EDX contains the APIC ID of the current CPU */
+> +#if 1
+> +	/* Test hack: Print APIC ID and then CPU# when we find it. */
+> +	mov	%edx, %ecx
+> +	mov	%edx, %eax
+> +	addb	$'A', %al
+> +	mov	$0x3f8, %dx
+> +	outb    %al, %dx
+> +	mov	%ecx, %edx
+> +#endif
+>  	xorq	%rcx, %rcx
+>  	leaq	cpuid_to_apicid(%rip), %rbx
+> 
+> @@ -302,6 +311,14 @@ SYM_INNER_LABEL(secondary_startup_64_no_verify, 
+> SYM_L_GLOBAL)
+> 
+>  .Linit_cpu_data:
+>  	/* Get the per cpu offset for the given CPU# which is in ECX */
+> +#if 1
+> +	mov	%rcx, %rax
+> +	shr	$3, %rax
+> +	addb	$'a', %al
+> +
+> +	mov	$0x3f8, %dx
+> +	outb    %al, %dx
+> +#endif
+>  	leaq	__per_cpu_offset(%rip), %rbx
+>  	movq	(%rbx,%rcx,8), %rbx
+>  	/* Save it for GS BASE setup */
 
-And in the System.map file,
-you can see that they are arranged in memory address order.
-
-System.map
-----------------------------------------------------------------
-ffffffff8260d520 R __sched_class_highest
-ffffffff8260d520 R stop_sched_class
-ffffffff8260d5f0 R dl_sched_class
-ffffffff8260d6c0 R rt_sched_class
-ffffffff8260d790 R fair_sched_class
-ffffffff8260d860 R idle_sched_class
-ffffffff8260d930 R __sched_class_lowest
-----------------------------------------------------------------
-
-This matches the sched class priority.
-In the prio_less() function in kernel/sched/core.c,
-the less value can be determined by pointer operation as follows.
-
-If the prio_less() function is modified as follows,
-the __task_prio() function is not required.
-
-Thanks,
-
-
-Signed-off-by: JaeJoon Jung <rgbi3307@gmail.com>
----
- kernel/sched/core.c | 42 +++++++++++-------------------------------
- 1 file changed, 11 insertions(+), 31 deletions(-)
-
-diff --git a/kernel/sched/core.c b/kernel/sched/core.c
-index 2a4918a1faa9..75075d92a198 100644
---- a/kernel/sched/core.c
-+++ b/kernel/sched/core.c
-@@ -151,21 +151,6 @@ __read_mostly int scheduler_running;
-
- DEFINE_STATIC_KEY_FALSE(__sched_core_enabled);
-
--/* kernel prio, less is more */
--static inline int __task_prio(struct task_struct *p)
--{
-- if (p->sched_class == &stop_sched_class) /* trumps deadline */
-- return -2;
--
-- if (rt_prio(p->prio)) /* includes deadline */
-- return p->prio; /* [-1, 99] */
--
-- if (p->sched_class == &idle_sched_class)
-- return MAX_RT_PRIO + NICE_WIDTH; /* 140 */
--
-- return MAX_RT_PRIO + MAX_NICE; /* 120, squash fair */
--}
--
- /*
-  * l(a,b)
-  * le(a,b) := !l(b,a)
-@@ -176,22 +161,17 @@ static inline int __task_prio(struct task_struct *p)
- /* real prio, less is less */
- static inline bool prio_less(struct task_struct *a, struct
-task_struct *b, bool in_fi)
- {
--
-- int pa = __task_prio(a), pb = __task_prio(b);
--
-- if (-pa < -pb)
-- return true;
--
-- if (-pb < -pa)
-- return false;
--
-- if (pa == -1) /* dl_prio() doesn't work because of stop_class above */
-- return !dl_time_before(a->dl.deadline, b->dl.deadline);
--
-- if (pa == MAX_RT_PRIO + MAX_NICE) /* fair */
-- return cfs_prio_less(a, b, in_fi);
--
-- return false;
-+        int less = a->sched_class - b->sched_class;
-+        if (less == 0) {
-+                if (a->sched_class == &dl_sched_class)
-+                        return !dl_time_before(a->dl.deadline, b->dl.deadline);
-+
-+                else if (a->sched_class == &fair_sched_class)
-+                        return cfs_prio_less(a, b, in_fi);
-+                else
-+                        return false;
-+        } else
-+                return (less > 0) ? true : false;
- }
-
- static inline bool __sched_core_less(struct task_struct *a, struct
-task_struct *b)
 -- 
-2.17.1
+   Oleksandr Natalenko (post-factum)
