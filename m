@@ -2,135 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DD0EC69DDF7
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 11:37:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EB5CC69DDF9
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 11:37:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233689AbjBUKg7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Feb 2023 05:36:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37056 "EHLO
+        id S233281AbjBUKhG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Feb 2023 05:37:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37264 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232813AbjBUKg5 (ORCPT
+        with ESMTP id S232813AbjBUKhF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Feb 2023 05:36:57 -0500
-Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C787252AF
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Feb 2023 02:36:56 -0800 (PST)
-Received: by mail-ed1-x529.google.com with SMTP id o12so15618145edb.9
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Feb 2023 02:36:56 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=j8j7KTBK9Rfc7IY0LrJUgT9g3CY++MiN0OpCXK6gjow=;
-        b=a1zO2uUkn8gyZgBynjbVl/d9OE9Y50Z3oEMzWjIWEanGIRTKhUdNVAAUBdM6Km9RkS
-         CjtWeaCO2DJvIP6n2CuyCUFkpYCeYjKPQva0wK9WM4WGknT/Ng94yS5LqWqxS++LW7Sm
-         ZFAQJOkQjw9CccDIIHqpt6/tsS+2RWE4pBLhE2QdJYo1+sm25qkD8d3g4F5wq7vfGB/Q
-         LT4Ka6CNiWWPDmNnL1E/stYA6Jwv+EeSy+rvzBtFixj6fP54rQXN0pvNrBkRj7KpAZQn
-         e1nfz93VAK+763heL8/iudj+lZvQ6THrxdFuo8m3A4lGEmRsLY51TJMruVzr4Qtgg1hj
-         F3aA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=j8j7KTBK9Rfc7IY0LrJUgT9g3CY++MiN0OpCXK6gjow=;
-        b=Gmb4RFTWwmsu1uVtC+XnfO+rgcdatsxgQUViT4UCBCmS0d/5KhUxGMqbLpIzR/weVw
-         DBxAFtU2BTyV8SUDnVaiBX8KrznxiVbRyioTTxrtUtgWon+jIJhXQoYWGAUrrHocJQZb
-         dN5X9EZKqWWaiU8QhP/g57mNlTvENfaRq8iJ+mGRJVZtAHA6WJFKUcR06+OYrSs6Lf72
-         Pk6ZspuFuQ5//MdFOhz8eyOpxPz8COvzYncw7esmMEq5JUUnXHjlhVbiswEf1O5+XigO
-         s+6dGXYwv5Jkonmpa1IGyjXRQS8sW49PvAsKvt1FwNfK9VKV1OffuxFKM7gLz6pVxsUo
-         xG3A==
-X-Gm-Message-State: AO0yUKVGPeK435wDL2zeSu/34vM723awLmQYmawRl9VaZeAvIBwRpYVb
-        4N9YtY42gw2LqcwITgCG7YUvsQ==
-X-Google-Smtp-Source: AK7set+fclxknO6q+GhGGpmhl8PRP6hAQGRweZutdt7Q+px+bFZr/53+/bfmjE2zzKXpIn4koakKwA==
-X-Received: by 2002:a05:6402:1a32:b0:4a0:e31a:434 with SMTP id be18-20020a0564021a3200b004a0e31a0434mr4536646edb.27.1676975814933;
-        Tue, 21 Feb 2023 02:36:54 -0800 (PST)
-Received: from [192.168.1.109] ([178.197.216.144])
-        by smtp.gmail.com with ESMTPSA id v18-20020a509552000000b004a23558f01fsm2034046eda.43.2023.02.21.02.36.53
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 21 Feb 2023 02:36:54 -0800 (PST)
-Message-ID: <cc0c458c-8c4b-c187-8b65-5943499ddf94@linaro.org>
-Date:   Tue, 21 Feb 2023 11:36:52 +0100
+        Tue, 21 Feb 2023 05:37:05 -0500
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id AFF92252AF
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Feb 2023 02:37:03 -0800 (PST)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id D716DFEC;
+        Tue, 21 Feb 2023 02:37:45 -0800 (PST)
+Received: from FVFF77S0Q05N (unknown [10.57.16.87])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 723183F703;
+        Tue, 21 Feb 2023 02:37:00 -0800 (PST)
+Date:   Tue, 21 Feb 2023 10:36:53 +0000
+From:   Mark Rutland <mark.rutland@arm.com>
+To:     Lin Yujun <linyujun809@huawei.com>
+Cc:     catalin.marinas@arm.com, will@kernel.org, broonie@kernel.org,
+        kristina.martsenko@arm.com, james.morse@arm.com, maz@kernel.org,
+        ardb@kernel.org, samitolvanen@google.com, andreyknvl@gmail.com,
+        masahiroy@kernel.org, joey.gouly@arm.com,
+        anshuman.khandual@arm.com, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, wanghai38@huawei.com
+Subject: Re: [PATCH -next] arm64: Optimize the comparison of unsigned
+ expressions to avoid compiling error
+Message-ID: <Y/SewFthY/rGct7C@FVFF77S0Q05N>
+References: <20230221012740.2929481-1-linyujun809@huawei.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH v2] dt-bindings: mips: loongson: Add Loongson-1 based
- boards
-Content-Language: en-US
-To:     Keguang Zhang <keguang.zhang@gmail.com>,
-        linux-mips@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>
-References: <20230221102605.2103657-1-keguang.zhang@gmail.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230221102605.2103657-1-keguang.zhang@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20230221012740.2929481-1-linyujun809@huawei.com>
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 21/02/2023 11:26, Keguang Zhang wrote:
-> Add two Loongson-1 based boards: LSGZ 1B and Smartloong 1C.
+On Tue, Feb 21, 2023 at 09:27:40AM +0800, Lin Yujun wrote:
+> while compile arch/arm64/include/asm/cpufeature.h with
+> -Werror=type-limits enabled, errors shown as below:
 > 
-> Signed-off-by: Keguang Zhang <keguang.zhang@gmail.com>
-> ---
-> V1 -> V2: Add the according vendor prefix
->           Change the board string to enum
->           Modify the board description
+> ./arch/arm64/include/asm/cpufeature.h: In function 'system_supports_4kb_granule':
+> ./arch/arm64/include/asm/cpufeature.h:653:14: error: comparison of unsigned expression >= 0 is always true [-Werror=type-limits]
+>   return (val >= ID_AA64MMFR0_TGRAN4_SUPPORTED_MIN) &&
+>               ^~
+> ./arch/arm64/include/asm/cpufeature.h: In function 'system_supports_64kb_granule':
+> ./arch/arm64/include/asm/cpufeature.h:666:14: error: comparison of unsigned expression >= 0 is always true [-Werror=type-limits]
+>   return (val >= ID_AA64MMFR0_TGRAN64_SUPPORTED_MIN) &&
+>               ^~
 
-Thank you for your patch. There is something to discuss/improve.
+When is the `-Werror=type-limits` flag enabled by the build system?
 
+We have patterns like this all over the kernel, and I don't think this is
+indicative of a real problem, and I don't think that we need to change code to
+make this warning disappear.
+
+> Modify the return judgment statement, use
+> "((val - min) < (val - max - 1))" to confirm that returns
+> true in “min <= val <= max” cases, false in other cases.
+
+That expression is far less clear than the existing code, so I do not think
+that is a good idea.
+
+> Fixes: 79d82cbcbb3d ("arm64/kexec: Test page size support with new TGRAN range values")
+
+What functional error does this fix?
+
+What configuration is broken?
+
+Thanks,
+Mark.
+
+> Signed-off-by: Lin Yujun <linyujun809@huawei.com>
 > ---
->  .../devicetree/bindings/mips/loongson/devices.yaml   | 12 ++++++++++++
->  .../devicetree/bindings/vendor-prefixes.yaml         |  2 ++
->  2 files changed, 14 insertions(+)
+>  arch/arm64/include/asm/cpufeature.h | 18 ++++++++++++------
+>  1 file changed, 12 insertions(+), 6 deletions(-)
 > 
-> diff --git a/Documentation/devicetree/bindings/mips/loongson/devices.yaml b/Documentation/devicetree/bindings/mips/loongson/devices.yaml
-> index f13ce386f42c..15a43ce51bbf 100644
-> --- a/Documentation/devicetree/bindings/mips/loongson/devices.yaml
-> +++ b/Documentation/devicetree/bindings/mips/loongson/devices.yaml
-> @@ -37,6 +37,18 @@ properties:
->          items:
->            - const: loongson,loongson64v-4core-virtio
+> diff --git a/arch/arm64/include/asm/cpufeature.h b/arch/arm64/include/asm/cpufeature.h
+> index 03d1c9d7af82..0a6bda025141 100644
+> --- a/arch/arm64/include/asm/cpufeature.h
+> +++ b/arch/arm64/include/asm/cpufeature.h
+> @@ -54,6 +54,9 @@ enum ftr_type {
+>  #define FTR_VISIBLE_IF_IS_ENABLED(config)		\
+>  	(IS_ENABLED(config) ? FTR_VISIBLE : FTR_HIDDEN)
 >  
-> +      - description: LS1B based boards
-> +        items:
-> +          - enum:
-> +              - loongson,lsgz-1b-dev
-> +          - const: loongson,ls1b
+> +#define IN_RANGE_INCLUSIVE(val, min, max)		\
+> +	(((val) - (min)) < ((val) - (max) - 1))
 > +
-> +      - description: LS1C based boards
-> +        items:
-> +          - enum:
-> +              - loongsonclub,smartloong-1c
-> +          - const: loongson,ls1c
-> +
->  additionalProperties: true
+>  struct arm64_ftr_bits {
+>  	bool		sign;	/* Value is signed ? */
+>  	bool		visible;
+> @@ -693,8 +696,9 @@ static inline bool system_supports_4kb_granule(void)
+>  	val = cpuid_feature_extract_unsigned_field(mmfr0,
+>  						ID_AA64MMFR0_EL1_TGRAN4_SHIFT);
 >  
->  ...
-> diff --git a/Documentation/devicetree/bindings/vendor-prefixes.yaml b/Documentation/devicetree/bindings/vendor-prefixes.yaml
-> index 0e57ae744199..47565ebae4d1 100644
-> --- a/Documentation/devicetree/bindings/vendor-prefixes.yaml
-> +++ b/Documentation/devicetree/bindings/vendor-prefixes.yaml
-> @@ -757,6 +757,8 @@ patternProperties:
->      description: Lontium Semiconductor Corporation
->    "^loongson,.*":
->      description: Loongson Technology Corporation Limited
-> +  "^loongsonclub,.*":
-> +    description: Loongson Club
-
-Are you sure that this is a board manufacturer?
-
-Best regards,
-Krzysztof
-
+> -	return (val >= ID_AA64MMFR0_EL1_TGRAN4_SUPPORTED_MIN) &&
+> -	       (val <= ID_AA64MMFR0_EL1_TGRAN4_SUPPORTED_MAX);
+> +	return IN_RANGE_INCLUSIVE(val,
+> +		ID_AA64MMFR0_EL1_TGRAN4_SUPPORTED_MIN,
+> +		ID_AA64MMFR0_EL1_TGRAN4_SUPPORTED_MAX);
+>  }
+>  
+>  static inline bool system_supports_64kb_granule(void)
+> @@ -706,8 +710,9 @@ static inline bool system_supports_64kb_granule(void)
+>  	val = cpuid_feature_extract_unsigned_field(mmfr0,
+>  						ID_AA64MMFR0_EL1_TGRAN64_SHIFT);
+>  
+> -	return (val >= ID_AA64MMFR0_EL1_TGRAN64_SUPPORTED_MIN) &&
+> -	       (val <= ID_AA64MMFR0_EL1_TGRAN64_SUPPORTED_MAX);
+> +	return IN_RANGE_INCLUSIVE(val,
+> +		ID_AA64MMFR0_EL1_TGRAN64_SUPPORTED_MIN,
+> +		ID_AA64MMFR0_EL1_TGRAN64_SUPPORTED_MAX);
+>  }
+>  
+>  static inline bool system_supports_16kb_granule(void)
+> @@ -719,8 +724,9 @@ static inline bool system_supports_16kb_granule(void)
+>  	val = cpuid_feature_extract_unsigned_field(mmfr0,
+>  						ID_AA64MMFR0_EL1_TGRAN16_SHIFT);
+>  
+> -	return (val >= ID_AA64MMFR0_EL1_TGRAN16_SUPPORTED_MIN) &&
+> -	       (val <= ID_AA64MMFR0_EL1_TGRAN16_SUPPORTED_MAX);
+> +	return IN_RANGE_INCLUSIVE(val,
+> +		ID_AA64MMFR0_EL1_TGRAN16_SUPPORTED_MIN,
+> +		ID_AA64MMFR0_EL1_TGRAN16_SUPPORTED_MAX);
+>  }
+>  
+>  static inline bool system_supports_mixed_endian_el0(void)
+> -- 
+> 2.34.1
+> 
