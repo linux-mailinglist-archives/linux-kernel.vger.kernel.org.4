@@ -2,54 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3449169DFEE
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 13:08:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C01669E00D
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 13:15:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234669AbjBUMIT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Feb 2023 07:08:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52122 "EHLO
+        id S234267AbjBUMPi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Feb 2023 07:15:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34102 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234675AbjBUMIQ (ORCPT
+        with ESMTP id S234429AbjBUMP1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Feb 2023 07:08:16 -0500
-Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A9947D84;
-        Tue, 21 Feb 2023 04:07:38 -0800 (PST)
+        Tue, 21 Feb 2023 07:15:27 -0500
+Received: from lelv0143.ext.ti.com (lelv0143.ext.ti.com [198.47.23.248])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74F2E4499;
+        Tue, 21 Feb 2023 04:14:59 -0800 (PST)
 Received: from fllv0035.itg.ti.com ([10.64.41.0])
-        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 31LC6HXw044705;
-        Tue, 21 Feb 2023 06:06:17 -0600
+        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 31LC6KHE021153;
+        Tue, 21 Feb 2023 06:06:20 -0600
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1676981177;
-        bh=nKb9BMtjlsv//lqkpvMaFi9UhdglRUvYrX81wVjf+Qk=;
-        h=From:To:CC:Subject:Date;
-        b=V1HpjwXqr3yI6FNOpRlYUvJrn1k8WnUo9WF2cLC75BZnTsldJsEc29TFqZrCbapbN
-         yCPWmZMkgy1q0UobTo/dOpz1I2esTZW4ffLL1m6MLfohVF/I9BIxJyvzvDUzfqE7ko
-         9KXyUeRh/j3zySRHNaQbIBuQjLXc+XdnEDPgBSDc=
-Received: from DFLE104.ent.ti.com (dfle104.ent.ti.com [10.64.6.25])
-        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 31LC6H0Z125608
+        s=ti-com-17Q1; t=1676981180;
+        bh=ZgK1Q7UxoYFIJ7lBntlYuht9796aFLvImb8AVSWmmFs=;
+        h=From:To:CC:Subject:Date:In-Reply-To:References;
+        b=HwuVv2cyqpPmMR792sSOZiB4KU1SyyzuTj/QvWNO/GyaZXqToyzUT7mDWfFNz3lL5
+         ztkAtJEK/DzETm2cUC/sFplXZEyxsbUoPhVPwVSGQsge4SNmvrkSZRpgVY7JIf2rVI
+         LqWS575u6e0U/gzyV4LR3IHPk5+k00EFNJnbuW0A=
+Received: from DLEE105.ent.ti.com (dlee105.ent.ti.com [157.170.170.35])
+        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 31LC6KuV125664
         (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Tue, 21 Feb 2023 06:06:17 -0600
-Received: from DFLE113.ent.ti.com (10.64.6.34) by DFLE104.ent.ti.com
- (10.64.6.25) with Microsoft SMTP Server (version=TLS1_2,
+        Tue, 21 Feb 2023 06:06:20 -0600
+Received: from DLEE110.ent.ti.com (157.170.170.21) by DLEE105.ent.ti.com
+ (157.170.170.35) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Tue, 21
- Feb 2023 06:06:16 -0600
-Received: from lelv0326.itg.ti.com (10.180.67.84) by DFLE113.ent.ti.com
- (10.64.6.34) with Microsoft SMTP Server (version=TLS1_2,
+ Feb 2023 06:06:20 -0600
+Received: from lelv0326.itg.ti.com (10.180.67.84) by DLEE110.ent.ti.com
+ (157.170.170.21) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
- Frontend Transport; Tue, 21 Feb 2023 06:06:16 -0600
+ Frontend Transport; Tue, 21 Feb 2023 06:06:20 -0600
 Received: from uda0500640.dal.design.ti.com (ileaxei01-snat.itg.ti.com [10.180.69.5])
-        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 31LC6CbN030829;
-        Tue, 21 Feb 2023 06:06:13 -0600
+        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 31LC6CbO030829;
+        Tue, 21 Feb 2023 06:06:17 -0600
 From:   Ravi Gunasekaran <r-gunasekaran@ti.com>
 To:     <nm@ti.com>, <afd@ti.com>, <vigneshr@ti.com>, <kristo@kernel.org>,
         <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
         <s-vadapalli@ti.com>, <r-gunasekaran@ti.com>
 CC:     <linux-arm-kernel@lists.infradead.org>,
         <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: [PATCH v10 0/9] arm64: j721s2: Add support for additional IPs
-Date:   Tue, 21 Feb 2023 17:36:03 +0530
-Message-ID: <20230221120612.27366-1-r-gunasekaran@ti.com>
+Subject: [PATCH v10 1/9] dt-bindings: mfd: ti,j721e-system-controller: Fix mux node regex
+Date:   Tue, 21 Feb 2023 17:36:04 +0530
+Message-ID: <20230221120612.27366-2-r-gunasekaran@ti.com>
 X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20230221120612.27366-1-r-gunasekaran@ti.com>
+References: <20230221120612.27366-1-r-gunasekaran@ti.com>
 MIME-Version: 1.0
 Content-Type: text/plain
 X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
@@ -62,80 +64,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following series of patches add support for the following
-on J721S2 common processor board,
+mux-controller nodes may not have "reg" property. Update the regex
+for such nodes to resolve the dtbs warnings
 
-- USB
-- SerDes
-- OSPI
-- PCIe
+Signed-off-by: Ravi Gunasekaran <r-gunasekaran@ti.com>
+---
+ .../bindings/mfd/ti,j721e-system-controller.yaml          | 8 +++++++-
+ 1 file changed, 7 insertions(+), 1 deletion(-)
 
-Changes from v1:
-* Resolve issues with dt schema reporting
-* Minor changes related to consistency on node naming and value
-
-Changes from v2:
-* Added PCIe RC + EP enablement patchsets
-* Added device-id for j722s2 PCIe host in dt documentation
-* Reworked SERDES + WIZ enablement patchset to use properies for clocks
-  defines versus entire devicetree nodes. Results in cleaner code that
-  doesn't break dt-schema or the driver functionality.
-
-Changes from v3:
-* Rebased changes on top of '[PATCH 00/12] TI J7x Disable Incomplete DT Nodes'
-* Removed "dt-bindings: PCI: Add host mode device-id for j721s2 platform" patch and
-  send it own series to avoid a dependency that would hold up other patches in this
-  series
-
-Changes from v4:
-* Add my Signed-off-by lines to all patchsets
-
-Changes from v5:
-* Removed Cc from commit messages to reduce clutter
-* Squashed changes for device tree nodes that get modified latter in the patchset
-  series
-
-Changes from v6:
-* Changes to ti,j721s2-wiz-10g compatible string from ti,am64-wiz-10g but
-  requires this series to be merged first
-  Ref: https://lore.kernel.org/linux-arm-kernel/20221122092203.762308-1-mranostay@ti.com/
-* Removed unused pcie1_ep based on feedback
-* Switch from incorrect "ti,j721e-system-controller", "syscon", "simple-mfd" compatible for
-  SPI node to "simple-bus"
-
-Changes from v7:
-* Fix node names as per bindings document
-
-Changes from v8:
-* Update the ti,j721e-system-controller bindings document
-* Fix dtbs warnings
-
-Changes from v9:
-* Disable nodes in main.dtsi and enable them in the board
-  specific DT file
-
-Aswath Govindraju (7):
-  arm64: dts: ti: k3-j721s2-main: Add support for USB
-  arm64: dts: ti: k3-j721s2-mcu-wakeup: Add support of OSPI
-  arm64: dts: ti: k3-j721s2-common-proc-board: Enable SERDES0
-  arm64: dts: ti: k3-j721s2-common-proc-board: Add USB support
-  arm64: dts: ti: k3-j721s2: Add support for OSPI Flashes
-  arm64: dts: ti: k3-j721s2-main: Add PCIe device tree node
-  arm64: dts: ti: k3-j721s2-common-proc-board: Enable PCIe
-
-Matt Ranostay (1):
-  arm64: dts: ti: k3-j721s2-main: Add SERDES and WIZ device tree node
-
-Ravi Gunasekaran (1):
-  dt-bindings: mfd: ti,j721e-system-controller: Fix mux node regex
-
- .../mfd/ti,j721e-system-controller.yaml       |   8 +-
- .../dts/ti/k3-j721s2-common-proc-board.dts    |  98 ++++++++++++
- arch/arm64/boot/dts/ti/k3-j721s2-main.dtsi    | 147 ++++++++++++++++++
- .../boot/dts/ti/k3-j721s2-mcu-wakeup.dtsi     |  47 ++++++
- arch/arm64/boot/dts/ti/k3-j721s2-som-p0.dtsi  |  43 +++++
- 5 files changed, 342 insertions(+), 1 deletion(-)
-
+diff --git a/Documentation/devicetree/bindings/mfd/ti,j721e-system-controller.yaml b/Documentation/devicetree/bindings/mfd/ti,j721e-system-controller.yaml
+index 76ef4352e13c..532bfa45e6a0 100644
+--- a/Documentation/devicetree/bindings/mfd/ti,j721e-system-controller.yaml
++++ b/Documentation/devicetree/bindings/mfd/ti,j721e-system-controller.yaml
+@@ -45,7 +45,7 @@ properties:
+ 
+ patternProperties:
+   # Optional children
+-  "^mux-controller@[0-9a-f]+$":
++  "^mux-controller(@|-)[0-9a-f]+$":
+     type: object
+     description:
+       This is the SERDES lane control mux.
+@@ -94,6 +94,12 @@ examples:
+                 /* SERDES4 lane0/1/2/3 select */
+         };
+ 
++        usb_serdes_mux: mux-controller-80 {
++                compatible = "mmio-mux";
++                #mux-control-cells = <1>;
++                mux-reg-masks = <0x0 0x8000000>;
++        };
++
+         clock-controller@4140 {
+             compatible = "ti,am654-ehrpwm-tbclk", "syscon";
+             reg = <0x4140 0x18>;
 -- 
 2.17.1
 
