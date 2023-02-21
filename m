@@ -2,56 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D2D5F69EB59
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Feb 2023 00:40:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DDD6169EB5C
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Feb 2023 00:42:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231305AbjBUXkl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Feb 2023 18:40:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54990 "EHLO
+        id S231206AbjBUXmP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Feb 2023 18:42:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57146 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231237AbjBUXke (ORCPT
+        with ESMTP id S231173AbjBUXmJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Feb 2023 18:40:34 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 894AA32E65
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Feb 2023 15:40:23 -0800 (PST)
+        Tue, 21 Feb 2023 18:42:09 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7C282BEF2
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Feb 2023 15:41:57 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 66EF3B81188
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Feb 2023 23:40:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 0DC6CC4339B;
-        Tue, 21 Feb 2023 23:40:19 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D7EC861232
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Feb 2023 23:40:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 41926C433EF;
+        Tue, 21 Feb 2023 23:40:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1677022819;
-        bh=mjgQQqSyKo4Bng+jun4gvTZp22RPLgDQqVYgUO42VM8=;
+        s=k20201202; t=1677022821;
+        bh=2OtDQiZxcF1YCa/ESz5+akJbkS1dDfqmQVBE88DAOns=;
         h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=FBbsc+/JyU3NB+kRdMr3Z2UxHC88afYytEF7r+98cI+xZE4XFrcy/aIXK5r7xoCCy
-         7FzghL3b804De/0rCq/9yYULkTC6kAZLePJrV/cfmzs1LEGbyGZ5pZjjz82Brjnk6h
-         kyjqIJDDQnpF9j9SZVqXGjDcay6l8NXQFDlUHunVlD69wZovyMdyEivKzvLNTZeiQC
-         fiR3dbABrnq6R0FHAYXBd846EcPEp4mU214Xi5hRRlNOHwZ4RGqx0Kl6dXu07Vw9c+
-         gIHWGpLZulc6TOUDN2aUlkSD56/b6jvxCyhH/WIaD2TwQsQA3Xql1IPuUo658C99gD
-         AOGFLO10Eb04g==
+        b=qQNGfsPLG6ZGS2TMqidEw//iIYgBJJk7p5DwPEd6+TZNr97wU73gwW48PnZxk3jzi
+         JX0ltFS07zfrrLLM/oVc7NgopBLwrvCKT+cNSHW0IYzc0bEKATosPq7NGV7ZCdA1u6
+         Nn7lbJ1IL13IcDFc7EHw7OlNex3z0zwjQUizPe7or4LHGvyYStjb1iAHCh4xc3IOfl
+         KhDQ1z12VwHlLlPt/bhJSeRIJTB8wAI72D2obXeARh3XmsobdD7P9VJ1PfgtfMYC54
+         sCPArW46HmR3agc0dtYwmsv98rqh5BpX2WBA0MeU8RZV55LK88Ubetppfri7i8L2TJ
+         Lk+9D+6dMzjCw==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id F0042C43159;
-        Tue, 21 Feb 2023 23:40:18 +0000 (UTC)
-Subject: Re: [GIT PULL] arm64 updates for 6.3
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 2DD78C43151;
+        Tue, 21 Feb 2023 23:40:21 +0000 (UTC)
+Subject: Re: [GIT PULL] x86/cpu for v6.3-rc1
 From:   pr-tracker-bot@kernel.org
-In-Reply-To: <20230221174653.872251-1-catalin.marinas@arm.com>
-References: <20230221174653.872251-1-catalin.marinas@arm.com>
-X-PR-Tracked-List-Id: <linux-arm-kernel.lists.infradead.org>
-X-PR-Tracked-Message-Id: <20230221174653.872251-1-catalin.marinas@arm.com>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux tags/arm64-upstream
-X-PR-Tracked-Commit-Id: d54170812ef1c80e0fa3ed3e554a0bbfc2920d9d
+In-Reply-To: <Y/VGorWUI7I6AhL7@zn.tnic>
+References: <Y/VGorWUI7I6AhL7@zn.tnic>
+X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
+X-PR-Tracked-Message-Id: <Y/VGorWUI7I6AhL7@zn.tnic>
+X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git tags/x86_cpu_for_v6.3_rc1
+X-PR-Tracked-Commit-Id: 7914695743d598b189d549f2f57af24aa5633705
 X-PR-Merge-Tree: torvalds/linux.git
 X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 8bf1a529cd664c8e5268381f1e24fe67aa611dd3
-Message-Id: <167702281897.12607.13721618511460624379.pr-tracker-bot@kernel.org>
-Date:   Tue, 21 Feb 2023 23:40:18 +0000
-To:     Catalin Marinas <catalin.marinas@arm.com>
+X-PR-Merge-Commit-Id: 877934769e5b91798d304d4641647900ee614ce8
+Message-Id: <167702282118.12607.15799097574432974715.pr-tracker-bot@kernel.org>
+Date:   Tue, 21 Feb 2023 23:40:21 +0000
+To:     Borislav Petkov <bp@alien8.de>
 Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Will Deacon <will@kernel.org>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+        x86-ml <x86@kernel.org>, lkml <linux-kernel@vger.kernel.org>
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -61,12 +60,12 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The pull request you sent on Tue, 21 Feb 2023 17:46:53 +0000:
+The pull request you sent on Tue, 21 Feb 2023 23:33:06 +0100:
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux tags/arm64-upstream
+> git://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git tags/x86_cpu_for_v6.3_rc1
 
 has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/8bf1a529cd664c8e5268381f1e24fe67aa611dd3
+https://git.kernel.org/torvalds/c/877934769e5b91798d304d4641647900ee614ce8
 
 Thank you!
 
