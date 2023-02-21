@@ -2,109 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7027569E73E
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 19:16:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CB86B69E73D
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 19:16:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229884AbjBUSQi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Feb 2023 13:16:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43116 "EHLO
+        id S230374AbjBUSQW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Feb 2023 13:16:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43668 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229550AbjBUSQf (ORCPT
+        with ESMTP id S229836AbjBUSQU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Feb 2023 13:16:35 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA4B52E0D8
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Feb 2023 10:15:41 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1677003341;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=7gsp6c5zC+n8RdVfxNnpTz1aW0fmy91m04gbSxIcYaY=;
-        b=f/FwpVtIW7OnOXV20Dzdr5Bb0pLww7M+DSGv0YLrpk/zqKB9e3YjzWfswVoUa5Pk3MKku7
-        wSrfOEbuKK75L1Q9j9elpgndG74TMDX5tidAFuxMARk3pK11JUkgNTNCKzABxxEw5VoFfE
-        RW92zhRW7zax8a8TGhF58oNt++/MHIA=
-Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
- [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-582-qvwLPZBNOW-ZLPX5W6FTJA-1; Tue, 21 Feb 2023 13:15:38 -0500
-X-MC-Unique: qvwLPZBNOW-ZLPX5W6FTJA-1
-Received: by mail-wm1-f71.google.com with SMTP id bg26-20020a05600c3c9a00b003e21a3f4e84so2001254wmb.8
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Feb 2023 10:15:38 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
-         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=7gsp6c5zC+n8RdVfxNnpTz1aW0fmy91m04gbSxIcYaY=;
-        b=AFfiaAPYXYMHUrhYLcQZ0UZWSd64ztyyTWMIHDsK9mkV0dyZHtAL6WSDiGoxqd1nDe
-         5Orlq9oNk9vgY/7caFUSrxoR6pObFTn0bJkUJ2/oR65rWsKN/0+Ez0WDByFrVWO256Pr
-         fNtgCRp5irQXFJcmpIHaiyTmDsR3Kr1oIRyxAvsDjVoGXWuTj6/66LtW6iUqLulCISGc
-         cGOKueU0KqDD+8EYTVHYF7az6ClVEQPh/Wi4D6wPUP/3sQbUf4Schtb8+2H/L7IqIKYX
-         SLZzbviZfL2VdTwAfhpFY1WX7DAoDMDgxTA9GhK5op3SdcRsyg+V7XfUs9/3QiD3tvlF
-         rkHA==
-X-Gm-Message-State: AO0yUKUKR+7H3gqTvLvud8yyhl2iCOeYk9eGeb0PO4BZxbDkkikEWfRR
-        Y0sqGYe4v9X793JraH90cq1lOn8jUDSe5wyQkhAR4vRPy8af5zphd15Xt7GYyU8sVkO6SwjJK7b
-        T4IjWzvNtBVpK2N6bExw5FzKq
-X-Received: by 2002:a05:600c:4b28:b0:3e2:9b4:4303 with SMTP id i40-20020a05600c4b2800b003e209b44303mr3598101wmp.19.1677003337667;
-        Tue, 21 Feb 2023 10:15:37 -0800 (PST)
-X-Google-Smtp-Source: AK7set8O4E4dOLUoULcTz2JAxG5OwJjd8ems/WBAnuxq0Oi5RF8s5cxsUvpQuFeERCpIG6csS53cpQ==
-X-Received: by 2002:a05:600c:4b28:b0:3e2:9b4:4303 with SMTP id i40-20020a05600c4b2800b003e209b44303mr3598077wmp.19.1677003337374;
-        Tue, 21 Feb 2023 10:15:37 -0800 (PST)
-Received: from vschneid.remote.csb ([154.57.232.159])
-        by smtp.gmail.com with ESMTPSA id s14-20020a5d510e000000b002c569acab1esm5494874wrt.73.2023.02.21.10.15.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 21 Feb 2023 10:15:36 -0800 (PST)
-From:   Valentin Schneider <vschneid@redhat.com>
-To:     tmmdh <921889738@qq.com>, hupu <921889738@qq.com>,
-        peterz@infradead.org
-Cc:     bristot@redhat.com, bsegall@google.com, dietmar.eggemann@arm.com,
-        hupu@oppo.com, ionela.voinescu@arm.com, juri.lelli@redhat.com,
-        len.brown@intel.com, linux-kernel@vger.kernel.org, mgorman@suse.de,
-        rafael.j.wysocki@intel.com, ravi.v.shankar@intel.com,
-        ricardo.neri-calderon@linux.intel.com, ricardo.neri@intel.com,
-        rostedt@goodmis.org, srinivas.pandruvada@linux.intel.com,
-        tim.c.chen@intel.com, tim.c.chen@linux.intel.com,
-        vincent.guittot@linaro.org, x86@kernel.org
-Subject: Re: [PATCH v3 06/10] sched/fair: Use the prefer_sibling flag of the
- current sched domain
-In-Reply-To: <tencent_6C38D389245FD03C6E1312999FEDD394F606@qq.com>
-References: <xhsmh1qmkr7pa.mognet@vschneid.remote.csb>
- <tencent_6C38D389245FD03C6E1312999FEDD394F606@qq.com>
-Date:   Tue, 21 Feb 2023 18:15:34 +0000
-Message-ID: <xhsmhttzeq3zt.mognet@vschneid.remote.csb>
-MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Tue, 21 Feb 2023 13:16:20 -0500
+Received: from wout4-smtp.messagingengine.com (wout4-smtp.messagingengine.com [64.147.123.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F958303C0;
+        Tue, 21 Feb 2023 10:16:06 -0800 (PST)
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+        by mailout.west.internal (Postfix) with ESMTP id 883A73200583;
+        Tue, 21 Feb 2023 13:16:04 -0500 (EST)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute3.internal (MEProxy); Tue, 21 Feb 2023 13:16:05 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; h=
+        cc:cc:content-transfer-encoding:content-type:date:date:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to; s=fm2; t=1677003364; x=
+        1677089764; bh=PWhQBSMVu5KO9I1pjFrMlWxr95gEQWCuCEkhO0i7Pj8=; b=W
+        vhaJyeREx3qhPmQ57x06QaQcSEJIePk7CC8TQ0zNCoL7/z9+rER9OtZqUNgt0qFg
+        ae1VRs5Tt26IK2jdKRm4qCLfuQTiKtv1mmyGsW9dDsvXhX9E9M53au6us03hlzTE
+        Y0INbzFqJ5fgG/OripkdmsOuIgtu5JlYAZgpzyIgMatCNo4MUPZ8jXCqeVFrNtTA
+        oIGiENiwuz3mJ4JrNmyXcPlRY/eIwGm3cSSRbIqnx5knlsA+xd4FIFJjsk/v9OWk
+        ZRo/sQrUs5zb4nQLnTULWO3y0yv1RU/9q4skRIxa4dJ+uCXcEOyST+QArNpDDOfp
+        APPV3K10YnemVD9tR3KgQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding
+        :content-type:date:date:feedback-id:feedback-id:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
+        :x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1677003364; x=
+        1677089764; bh=PWhQBSMVu5KO9I1pjFrMlWxr95gEQWCuCEkhO0i7Pj8=; b=W
+        VuBiv/6/SG05/hERpvME8PBkQKO1KFO8KcpmNMy8UGX3qtvA44pF8d19s3ZzhsyP
+        FCsV9iq91c5iYCvI9r/LpwHhuIy/t9/QjOc7UgOHfmg7Gh+NwTlUVzJR9d8QNM1S
+        ISkjNqZBkXlwTxdq9q3yXfea7NPbVrYe3vW6JglLb54IFTcibOqqxKQFfdGofWyu
+        BTBgCVMeiIfX3hh6ZVTIlNiQp7NEFGPAHTDJvfOwrljGhPUDF6Qrp4r268PDS+Og
+        P6AeCwdKJzD0rlWvnlwJGVxYwCzj8JFkOgDDnT6dRd7HbhPYC++IhLjdGNUF2LOB
+        5QpRyEkudF35OfAOFrWbg==
+X-ME-Sender: <xms:Ywr1Y8RGAKBMLjwk0mu11hSNQwYZ87lh5wQJepoYi4bPFAVQ49Byow>
+    <xme:Ywr1Y5xVWNxoVdavI5vAIBGkNGs1O9po4WcQSsH7ARiVPesTRjIyop68MjevTTWDO
+    uAlVb66XnsVlXqDKdc>
+X-ME-Received: <xmr:Ywr1Y53ztllrWakiqY12lKASHyGzL5I3oIVVna-LIr5izIOk_zWgW1fz2zgLlkVqeYAA>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrudejjedguddtlecutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
+    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
+    enucfjughrpegtggfuhfgjffevgffkfhfvofesthhqmhdthhdtjeenucfhrhhomheplfhi
+    rgiguhhnucgjrghnghcuoehjihgrgihunhdrhigrnhhgsehflhihghhorghtrdgtohhmqe
+    enucggtffrrghtthgvrhhnpedutdejffetteefkeejieehfeeuieeguedtveeijeeviefh
+    ffelvdfgudeihfdvtdenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrih
+    hlfhhrohhmpehjihgrgihunhdrhigrnhhgsehflhihghhorghtrdgtohhm
+X-ME-Proxy: <xmx:Ywr1YwA0ZJHy7yLpeVmnXSoNgU_tiR6b7BLED_iseegdMzXiOA39Kw>
+    <xmx:Ywr1Y1jopRraqHOFjy7UECXAfJ8JvZby0TmgVGBx45mQ3n3Le4-aWA>
+    <xmx:Ywr1Y8qZaWkTXliwjZncDEf15PToRzy5cv2SxJobnp4gm1FjFGX-2w>
+    <xmx:ZAr1Y8NU7l_wRJ9UrOAYhZCmIW34ogQZ4a-S5J7kXHE6eYiXmqbkCg>
+Feedback-ID: ifd894703:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
+ 21 Feb 2023 13:16:02 -0500 (EST)
+Content-Type: text/plain;
+        charset=utf-8
+Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3731.300.101.1.3\))
+Subject: Re: [PATCH 0/7] MIPS DMA coherence fixes
+From:   Jiaxun Yang <jiaxun.yang@flygoat.com>
+In-Reply-To: <20230221175423.GA15247@lst.de>
+Date:   Tue, 21 Feb 2023 18:15:51 +0000
+Cc:     "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
+        linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        mpe@ellerman.id.au, paul.walmsley@sifive.com, palmer@dabbelt.com,
+        Rob Herring <robh+dt@kernel.org>, m.szyprowski@samsung.com,
+        robin.murphy@arm.com
+Content-Transfer-Encoding: quoted-printable
+Message-Id: <A8AC22A0-E883-4D9B-A629-5A3721B976C5@flygoat.com>
+References: <20230221124613.2859-1-jiaxun.yang@flygoat.com>
+ <20230221175423.GA15247@lst.de>
+To:     Christoph Hellwig <hch@lst.de>
+X-Mailer: Apple Mail (2.3731.300.101.1.3)
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 21/02/23 17:49, tmmdh wrote:
-> From: Valentin Schneider <vschneid@redhat.com>
-> But I am still confused by Peter's description about prefer_sibling in the last email, linked at
-> https://lore.kernel.org/all/Y+Z2b%2FOtZDk9cT53@hirez.programming.kicks-ass.net/
->> this morning -- conceptually, prefer siblings says you want to try
->> sibling domains before filling up your current domain.
->
-> Why should we try sibling domains before filling up your current domain? Why does Peter think that sibling domains is better than current domain.
-> My understanding about this problem is described as follows, but I am not
-> sure if it is correct. I think the sibling domain is a domain lower than
-> the current level. Just like SMT is the sibling of MC, while DIE is the
-> sibling of NUMA.
 
-That's the wrong way around; going up (or down) the sched_domain hierarchy is
-done via parent (or child) pointers. Sibling means going sideways (i.e. the
-same topology level but viewed from a different CPU)
 
-> Is it because the cpus covered by sibling domains share more resources (such as cache), which can improve the performance of task running?
->
+> 2023=E5=B9=B42=E6=9C=8821=E6=97=A5 17:54=EF=BC=8CChristoph Hellwig =
+<hch@lst.de> =E5=86=99=E9=81=93=EF=BC=9A
+>=20
+> Can you explain the motivation here?  Also why riscv patches are at
+> the end of a mips f=D1=96xes series?
 
-If sibling domains are in same cache hierarchy then spreading tasks between
-them can improve overall performance. That doesn't work with NUMA or
-big.LITTLE domains, so we don't have the flag on those.
+Ah sorry for any confusion.
 
+So the main purpose of this patch is to fix MIPS=E2=80=99s broken =
+per-device coherency.
+To be more precise, we want to be able to control the default coherency =
+for all devices probed from
+devicetree in early boot code.
+
+To achieve that I decided to reuse dma_default_coherent to set default =
+coherency for devicetree.
+And all later patches are severing for this purpose.
+
+Thanks
+- Jiaxun=
