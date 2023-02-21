@@ -2,114 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CB86B69E73D
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 19:16:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 75BCA69E743
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 19:18:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230374AbjBUSQW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Feb 2023 13:16:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43668 "EHLO
+        id S229854AbjBUSSR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Feb 2023 13:18:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45596 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229836AbjBUSQU (ORCPT
+        with ESMTP id S229578AbjBUSSP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Feb 2023 13:16:20 -0500
-Received: from wout4-smtp.messagingengine.com (wout4-smtp.messagingengine.com [64.147.123.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F958303C0;
-        Tue, 21 Feb 2023 10:16:06 -0800 (PST)
-Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
-        by mailout.west.internal (Postfix) with ESMTP id 883A73200583;
-        Tue, 21 Feb 2023 13:16:04 -0500 (EST)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute3.internal (MEProxy); Tue, 21 Feb 2023 13:16:05 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; h=
-        cc:cc:content-transfer-encoding:content-type:date:date:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to; s=fm2; t=1677003364; x=
-        1677089764; bh=PWhQBSMVu5KO9I1pjFrMlWxr95gEQWCuCEkhO0i7Pj8=; b=W
-        vhaJyeREx3qhPmQ57x06QaQcSEJIePk7CC8TQ0zNCoL7/z9+rER9OtZqUNgt0qFg
-        ae1VRs5Tt26IK2jdKRm4qCLfuQTiKtv1mmyGsW9dDsvXhX9E9M53au6us03hlzTE
-        Y0INbzFqJ5fgG/OripkdmsOuIgtu5JlYAZgpzyIgMatCNo4MUPZ8jXCqeVFrNtTA
-        oIGiENiwuz3mJ4JrNmyXcPlRY/eIwGm3cSSRbIqnx5knlsA+xd4FIFJjsk/v9OWk
-        ZRo/sQrUs5zb4nQLnTULWO3y0yv1RU/9q4skRIxa4dJ+uCXcEOyST+QArNpDDOfp
-        APPV3K10YnemVD9tR3KgQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding
-        :content-type:date:date:feedback-id:feedback-id:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
-        :x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1677003364; x=
-        1677089764; bh=PWhQBSMVu5KO9I1pjFrMlWxr95gEQWCuCEkhO0i7Pj8=; b=W
-        VuBiv/6/SG05/hERpvME8PBkQKO1KFO8KcpmNMy8UGX3qtvA44pF8d19s3ZzhsyP
-        FCsV9iq91c5iYCvI9r/LpwHhuIy/t9/QjOc7UgOHfmg7Gh+NwTlUVzJR9d8QNM1S
-        ISkjNqZBkXlwTxdq9q3yXfea7NPbVrYe3vW6JglLb54IFTcibOqqxKQFfdGofWyu
-        BTBgCVMeiIfX3hh6ZVTIlNiQp7NEFGPAHTDJvfOwrljGhPUDF6Qrp4r268PDS+Og
-        P6AeCwdKJzD0rlWvnlwJGVxYwCzj8JFkOgDDnT6dRd7HbhPYC++IhLjdGNUF2LOB
-        5QpRyEkudF35OfAOFrWbg==
-X-ME-Sender: <xms:Ywr1Y8RGAKBMLjwk0mu11hSNQwYZ87lh5wQJepoYi4bPFAVQ49Byow>
-    <xme:Ywr1Y5xVWNxoVdavI5vAIBGkNGs1O9po4WcQSsH7ARiVPesTRjIyop68MjevTTWDO
-    uAlVb66XnsVlXqDKdc>
-X-ME-Received: <xmr:Ywr1Y53ztllrWakiqY12lKASHyGzL5I3oIVVna-LIr5izIOk_zWgW1fz2zgLlkVqeYAA>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrudejjedguddtlecutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
-    enucfjughrpegtggfuhfgjffevgffkfhfvofesthhqmhdthhdtjeenucfhrhhomheplfhi
-    rgiguhhnucgjrghnghcuoehjihgrgihunhdrhigrnhhgsehflhihghhorghtrdgtohhmqe
-    enucggtffrrghtthgvrhhnpedutdejffetteefkeejieehfeeuieeguedtveeijeeviefh
-    ffelvdfgudeihfdvtdenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrih
-    hlfhhrohhmpehjihgrgihunhdrhigrnhhgsehflhihghhorghtrdgtohhm
-X-ME-Proxy: <xmx:Ywr1YwA0ZJHy7yLpeVmnXSoNgU_tiR6b7BLED_iseegdMzXiOA39Kw>
-    <xmx:Ywr1Y1jopRraqHOFjy7UECXAfJ8JvZby0TmgVGBx45mQ3n3Le4-aWA>
-    <xmx:Ywr1Y8qZaWkTXliwjZncDEf15PToRzy5cv2SxJobnp4gm1FjFGX-2w>
-    <xmx:ZAr1Y8NU7l_wRJ9UrOAYhZCmIW34ogQZ4a-S5J7kXHE6eYiXmqbkCg>
-Feedback-ID: ifd894703:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
- 21 Feb 2023 13:16:02 -0500 (EST)
-Content-Type: text/plain;
-        charset=utf-8
-Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3731.300.101.1.3\))
-Subject: Re: [PATCH 0/7] MIPS DMA coherence fixes
-From:   Jiaxun Yang <jiaxun.yang@flygoat.com>
-In-Reply-To: <20230221175423.GA15247@lst.de>
-Date:   Tue, 21 Feb 2023 18:15:51 +0000
-Cc:     "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
-        linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        mpe@ellerman.id.au, paul.walmsley@sifive.com, palmer@dabbelt.com,
-        Rob Herring <robh+dt@kernel.org>, m.szyprowski@samsung.com,
-        robin.murphy@arm.com
-Content-Transfer-Encoding: quoted-printable
-Message-Id: <A8AC22A0-E883-4D9B-A629-5A3721B976C5@flygoat.com>
-References: <20230221124613.2859-1-jiaxun.yang@flygoat.com>
- <20230221175423.GA15247@lst.de>
-To:     Christoph Hellwig <hch@lst.de>
-X-Mailer: Apple Mail (2.3731.300.101.1.3)
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Tue, 21 Feb 2023 13:18:15 -0500
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED3F9B744;
+        Tue, 21 Feb 2023 10:18:13 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=tTqyemmz1pSv74LR4HajXP0tRM9VnFXvQ4hZwbauJIY=; b=aTHEWPY/BN+r5noMxZCmo9iSA1
+        Z9IeoyW/C1dX8qm5tPsU2u5j+AQ/AEhI+yMzMaNWzFE1cwZXzPuTpDM2a3cpTh+rJ9tg53kLukUWa
+        1Raq91MM6pgzQ18B3/7w2dnnQ/4vw7VRe3x3ALCx09tzgnM7YKGmSNjPqvYGrmmRZDG+B2EfthaKX
+        fNj/RnFy+ub0fsZpl6t42kQ5htBwnbD8RQiyCn5tLpfTkOa9cTy6ZTVDCx8QIeUx/6Xdl6chkrflk
+        F0Ixpvhu+kwgmwoFV6hu+MTaFi1VQjGIUecpBZdG5kpmzPyzvWpcSpPfnK9smVbeMgkCEVcxswtPw
+        zEfhVeDw==;
+Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1pUXDH-00CoXT-Io; Tue, 21 Feb 2023 18:18:04 +0000
+Date:   Tue, 21 Feb 2023 18:18:03 +0000
+From:   Matthew Wilcox <willy@infradead.org>
+To:     Roman Gushchin <roman.gushchin@linux.dev>
+Cc:     Shakeel Butt <shakeelb@google.com>, Yue Zhao <findns94@gmail.com>,
+        linux-mm@kvack.org, akpm@linux-foundation.org, hannes@cmpxchg.org,
+        mhocko@kernel.org, muchun.song@linux.dev, cgroups@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] mm: change memcg->oom_group access with atomic operations
+Message-ID: <Y/UK2zRi+WNGrWEs@casper.infradead.org>
+References: <20230220230624.lkobqeagycx7bi7p@google.com>
+ <6563189C-7765-4FFA-A8F2-A5CC4860A1EF@linux.dev>
+ <CALvZod55K5zbbVYptq8ud=nKVyU1xceGVf6UcambBZ3BA2TZqA@mail.gmail.com>
+ <Y/TMYa8DrocppXRu@casper.infradead.org>
+ <Y/UDmc3+uIErpanS@P9FQF9L96D.corp.robot.car>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y/UDmc3+uIErpanS@P9FQF9L96D.corp.robot.car>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Tue, Feb 21, 2023 at 09:47:05AM -0800, Roman Gushchin wrote:
+> > Wouldn't a compiler be within its rights to implement a one byte store as:
+> > 
+> > 	load-word
+> > 	modify-byte-in-word
+> > 	store-word
+> > 
+> > and if this is a lockless store to a word which has an adjacent byte also
+> > being modified by another CPU, one of those CPUs can lose its store?
+> > And WRITE_ONCE would prevent the compiler from implementing the store
+> > in that way.
+> 
+> Even then it's not an issue in this case, as we end up with either 0 or 1,
+> I don't see how we can screw things up here.
 
+Thread 1:
+	load word containing oom_group and oom_lock
 
-> 2023=E5=B9=B42=E6=9C=8821=E6=97=A5 17:54=EF=BC=8CChristoph Hellwig =
-<hch@lst.de> =E5=86=99=E9=81=93=EF=BC=9A
->=20
-> Can you explain the motivation here?  Also why riscv patches are at
-> the end of a mips f=D1=96xes series?
+Thread 2:
+	store to oom_lock
 
-Ah sorry for any confusion.
+Thread 1:
+	store word containing oom_group and oom_lock
 
-So the main purpose of this patch is to fix MIPS=E2=80=99s broken =
-per-device coherency.
-To be more precise, we want to be able to control the default coherency =
-for all devices probed from
-devicetree in early boot code.
-
-To achieve that I decided to reuse dma_default_coherent to set default =
-coherency for devicetree.
-And all later patches are severing for this purpose.
-
-Thanks
-- Jiaxun=
+Thread 2's store has been lost.
