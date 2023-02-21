@@ -2,113 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C6C369DDA3
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 11:16:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E7CEF69DDBD
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 11:18:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233460AbjBUKQZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Feb 2023 05:16:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49482 "EHLO
+        id S233396AbjBUKSt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Feb 2023 05:18:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52292 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232324AbjBUKQY (ORCPT
+        with ESMTP id S232640AbjBUKSo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Feb 2023 05:16:24 -0500
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 508BA2332E;
-        Tue, 21 Feb 2023 02:16:23 -0800 (PST)
-Received: from pps.filterd (m0279873.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 31L4nAhC002765;
-        Tue, 21 Feb 2023 10:15:38 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id; s=qcppdkim1;
- bh=qdbXu/6GSiYehzlR/tNVrIZ+hGSIO6ZKXmP6HjimlZA=;
- b=JC0EIYZS822uY0Re7HrTcgXX1TxSV7sqivTqskuoAPANYMCXlA94+u5xL7m8uKQGqGt8
- CqRxIRC7Sva2io8MgLKTHaX0H4JyAuxkAXVS/J8Qhcbj1/9VyLnqyS1rPDDl3MWqKIVU
- syPaTdd090FWPCIcsHbGyj3pnXQniRnVgO0K35+WxmDWqsZJZ6BQhyqEK+7J9jI6OGO5
- RfTX2fnAPXzz2cFIJ0MDlwjxwZYbCi9uto67evNOqmNcsU7r8DYmeV8iVDLMFGXXHeYj
- lk5x49mUejv2xdc40yVAWuo9yuD5U6irtugL293DRAKIRX7dONYK16yAWK7OXFdUiJXP QQ== 
-Received: from apblrppmta01.qualcomm.com (blr-bdr-fw-01_GlobalNAT_AllZones-Outside.qualcomm.com [103.229.18.19])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3nvprgrrag-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 21 Feb 2023 10:15:38 +0000
-Received: from pps.filterd (APBLRPPMTA01.qualcomm.com [127.0.0.1])
-        by APBLRPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTP id 31LAFX4S032311;
-        Tue, 21 Feb 2023 10:15:33 GMT
-Received: from pps.reinject (localhost [127.0.0.1])
-        by APBLRPPMTA01.qualcomm.com (PPS) with ESMTP id 3ntqrkdvcj-1;
-        Tue, 21 Feb 2023 10:15:33 +0000
-Received: from APBLRPPMTA01.qualcomm.com (APBLRPPMTA01.qualcomm.com [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 31LAFXet032306;
-        Tue, 21 Feb 2023 10:15:33 GMT
-Received: from hu-sgudaval-hyd.qualcomm.com (hu-vpernami-hyd.qualcomm.com [10.213.107.240])
-        by APBLRPPMTA01.qualcomm.com (PPS) with ESMTP id 31LAFWpQ032305;
-        Tue, 21 Feb 2023 10:15:33 +0000
-Received: by hu-sgudaval-hyd.qualcomm.com (Postfix, from userid 2370923)
-        id 2ADE5144; Tue, 21 Feb 2023 15:45:32 +0530 (+0530)
-From:   Vivek Pernamitta <quic_vpernami@quicinc.com>
-To:     mhi@lists.linux.dev
-Cc:     quic_qianyu@quicinc.com, manivannan.sadhasivam@linaro.org,
-        Vivek Pernamitta <quic_vpernami@quicinc.com>,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        Alex Elder <elder@linaro.org>,
+        Tue, 21 Feb 2023 05:18:44 -0500
+Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 829F4469C;
+        Tue, 21 Feb 2023 02:18:42 -0800 (PST)
+Received: from loongson.cn (unknown [10.20.42.170])
+        by gateway (Coremail) with SMTP id _____8BxedmBmvRj_x0DAA--.922S3;
+        Tue, 21 Feb 2023 18:18:41 +0800 (CST)
+Received: from [10.20.42.170] (unknown [10.20.42.170])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8Cx2r2AmvRj56s3AA--.36327S3;
+        Tue, 21 Feb 2023 18:18:40 +0800 (CST)
+Message-ID: <2875aa3f-0dc4-4e48-17ad-42c703e12063@loongson.cn>
+Date:   Tue, 21 Feb 2023 18:18:40 +0800
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Subject: Re: [PATCH v2 02/29] LoongArch: KVM: Implement kvm module related
+ interface
+To:     Paolo Bonzini <pbonzini@redhat.com>,
+        Tianrui Zhao <zhaotianrui@loongson.cn>
+Cc:     Huacai Chen <chenhuacai@kernel.org>,
+        WANG Xuerui <kernel@xen0n.name>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Hemant Kumar <hemantk@codeaurora.org>,
-        Jeffrey Hugo <quic_jhugo@quicinc.com>,
-        Bhaumik Bhatt <bbhatt@codeaurora.org>,
-        Paul Davey <paul.davey@alliedtelesis.co.nz>,
-        linux-arm-msm@vger.kernel.org (open list:MHI BUS),
-        linux-kernel@vger.kernel.org (open list)
-Subject: [PATCH V1] bus: mhi: host: Avoid ringing EV DB if there is no elements to process
-Date:   Tue, 21 Feb 2023 15:45:26 +0530
-Message-Id: <1676974528-963-1-git-send-email-quic_vpernami@quicinc.com>
-X-Mailer: git-send-email 2.7.4
-X-QCInternal: smtphost
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: _BVtSdKrkcnAKnkM2mcngA9V1xbI7XFz
-X-Proofpoint-ORIG-GUID: _BVtSdKrkcnAKnkM2mcngA9V1xbI7XFz
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.170.22
- definitions=2023-02-21_06,2023-02-20_02,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1011 bulkscore=0
- mlxlogscore=473 lowpriorityscore=0 spamscore=0 priorityscore=1501
- impostorscore=0 adultscore=0 phishscore=0 mlxscore=0 suspectscore=0
- malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2302210087
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_NONE,
-        SPF_NONE autolearn=no autolearn_force=no version=3.4.6
+        loongarch@lists.linux.dev, linux-kernel@vger.kernel.org,
+        kvm@vger.kernel.org, Jens Axboe <axboe@kernel.dk>,
+        Mark Brown <broonie@kernel.org>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        Oliver Upton <oliver.upton@linux.dev>
+References: <20230220065735.1282809-1-zhaotianrui@loongson.cn>
+ <20230220065735.1282809-3-zhaotianrui@loongson.cn>
+ <bf4111f9-f722-1847-4f1d-964c5356f392@redhat.com>
+ <0fa9c062-d3fc-61e5-4d54-6bc29f7c64cf@loongson.cn>
+ <3f16a8e1-21d9-808e-aa1a-4f1d6f6f291b@redhat.com>
+Content-Language: en-US
+From:   maobibo <maobibo@loongson.cn>
+In-Reply-To: <3f16a8e1-21d9-808e-aa1a-4f1d6f6f291b@redhat.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: AQAAf8Cx2r2AmvRj56s3AA--.36327S3
+X-CM-SenderInfo: xpdruxter6z05rqj20fqof0/
+X-Coremail-Antispam: 1Uk129KBjvJXoW7Zw1Uur15CF17Cw1UKw4fGrg_yoW8CrWfpa
+        ySyrW7Gr1vkr9Yka1kXw1v934IkFZYka15Jry7JFZYyws0grZIya40kry7AF98Cr4rXr1U
+        Zws0yaykCwn8Z37anT9S1TB71UUUUjDqnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
+        qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
+        bqxYFVCjjxCrM7AC8VAFwI0_Jr0_Gr1l1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s
+        1l1IIY67AEw4v_Jrv_JF1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xv
+        wVC0I7IYx2IY67AKxVWUCVW8JwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwA2z4
+        x0Y4vEx4A2jsIE14v26r4UJVWxJr1l84ACjcxK6I8E87Iv6xkF7I0E14v26F4UJVW0owAa
+        w2AFwI0_JF0_Jw1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqjxCEc2xF0cIa020Ex4CE44
+        I27wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_JF0_Jw1lYx0Ex4A2
+        jsIE14v26r4j6F4UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvEwIxGrwCYjI0SjxkI62
+        AI1cAE67vIY487MxkF7I0En4kS14v26r126r1DMxAIw28IcxkI7VAKI48JMxC20s026xCa
+        FVCjc4AY6r1j6r4UMxCIbckI1I0E14v26r126r1DMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2
+        IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUtVW8ZwCIc40Y0x0EwIxGrwCI
+        42IY6xIIjxv20xvE14v26r1I6r4UMIIF0xvE2Ix0cI8IcVCY1x0267AKxVWUJVW8JwCI42
+        IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Gr0_Cr1lIxAIcVC2z280
+        aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7IU8uc_3UUUUU==
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Avoid ringing Event DB if there is no elements to process.
-As mhi_poll function can be called by mhi client drivers
-which will call process_event, which will ring DB even if
-there no ring elements to process.
 
-Signed-off-by: Vivek Pernamitta <quic_vpernami@quicinc.com>
----
- drivers/bus/mhi/host/main.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/bus/mhi/host/main.c b/drivers/bus/mhi/host/main.c
-index df0fbfe..8bf8394 100644
---- a/drivers/bus/mhi/host/main.c
-+++ b/drivers/bus/mhi/host/main.c
-@@ -1031,7 +1031,9 @@ int mhi_process_data_event_ring(struct mhi_controller *mhi_cntrl,
- 		count++;
- 	}
- 	read_lock_bh(&mhi_cntrl->pm_lock);
--	if (likely(MHI_DB_ACCESS_VALID(mhi_cntrl)))
-+
-+	/* Ring EV DB only if there is any pending element to process */
-+	if (likely(MHI_DB_ACCESS_VALID(mhi_cntrl)) && count)
- 		mhi_ring_er_db(mhi_event);
- 	read_unlock_bh(&mhi_cntrl->pm_lock);
- 
--- 
-2.7.4
+在 2023/2/21 16:14, Paolo Bonzini 写道:
+> On 2/21/23 07:59, maobibo wrote:
+>>> Also, why does the world switch code need a copy?
+>> There will be problem in world switch code if there is page fault reenter,
+>> since pgd register is shared between root kernel and kvm hypervisor.
+>> World switch entry need be unmapped area, cannot be tlb mapped area.
+> 
+> So if I understand correctly the processor is in direct address translation mode until the "csrwr t0, LOONGARCH_CSR_CRMD" instruction. Where does it leave paged mode?
+The processor still in paged mode during world switch context. For example
+when vm exits from guest mode to root mode, it executes world switch code
+from kvm_vector_entry, PC register points to HVA address, however vmid from
+LOONGARCH_CSR_GTLBC is not clear to root mode. If there is page fault
+exception, hardware treats it exception from GPA-->HPA rather than that
+from HVA --> HPA, since vmid info in CSR_GTLBC is not zero.
+
+In page mode, there are two kinds of address: unmapped address and 
+tlb mapped address. For unmapped address there is only cachable/uncachable
+attribution, but not RWX attr; and there is no tlb handling for it.
+For simplicity,  unmapped address can be treated as window filtered address.
+
+It will be fully root mode only after this piece of code is executed
+during world switch context; vmid is zero and PC points to HVA.
+        ori     t0, zero, CSR_GSTAT_PVM
+        csrxchg zero, t0, LOONGARCH_CSR_GSTAT
+        /* Clear GTLBC.TGID field */
+        csrrd   t0, LOONGARCH_CSR_GTLBC
+        bstrins.w       t0, zero, CSR_GTLBC_TGID_SHIFT_END, CSR_GTLBC_TGID_SHIFT
+        csrwr   t0, LOONGARCH_CSR_GTLBC
+
+> 
+> Can you please also add comments to kvm_vector_entry explaining the processor state after a VZ exception entry (interrupts, paging, ...)?
+Yeap, we will add more comments about these critical exception entry.
+
+Regards
+Bibo, Mao
+> 
+> Paolo
 
