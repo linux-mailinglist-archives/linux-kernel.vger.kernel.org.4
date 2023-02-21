@@ -2,72 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BCF3569E5CB
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 18:20:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C72369E5CD
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 18:20:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234918AbjBURUR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Feb 2023 12:20:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32830 "EHLO
+        id S234982AbjBURUZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Feb 2023 12:20:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33016 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234687AbjBURUP (ORCPT
+        with ESMTP id S234991AbjBURUW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Feb 2023 12:20:15 -0500
-Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B81E92A9B5
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Feb 2023 09:20:12 -0800 (PST)
-Received: by mail-wm1-x32a.google.com with SMTP id p26so3805617wmc.4
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Feb 2023 09:20:12 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=nBDm/V3dOWX3/jbMdcOmbJM4gblLKGXoKOJqVmsjPyY=;
-        b=GGz+dY3TWr9J0BySMRAJ2PTAtOwbyQMqwUq0/t8IvXtzw03OYWepV6UXPwrbvvcjLy
-         zfVbuJScDsKnqcoZpcdJIpWKoB8Ggh+iNi0pdVNT2jWISEgblEYzKOI8YY3ugU1Aqnmj
-         EEwuPxANdRTW2CDMVKU8kImLc0QHaSHAdIEu8AQcH0z//lQm7U3F88XGu5xteVrSM7Bx
-         XaesGqOGc7wAXQPluOZK6SihHN+9K51iKlbu1bT3n3dEQ+txfQTFuSUlGvflLM9/Mk8y
-         3VdNwtFfxs7lgQsBqoooKCT/5UdgJsw1vOH1xCMg6sHvHttq1SB/C2fwVBVdsG0JXJih
-         AuEQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=nBDm/V3dOWX3/jbMdcOmbJM4gblLKGXoKOJqVmsjPyY=;
-        b=fKzYHVnj7YIvQi10BhZVyD+pEgR8fxKDAp/ogNEFd3nljTCaggTOn0EDyylEZQzbFa
-         aHpAyukdnGyluQvGYSyYgh/eXGVEi9rFzGCwVSddTI1QE1RLPiclnTINFzgq/ww2O/00
-         oFtF+KgJvN1RQWvZsPY5QYWIyTZiYImQtqLIxCSPSXm0Z13F3Lx9YINeAXlgYtJJlw6H
-         SHzNawpOioZWPHfkv1PRLARhShFeI1Kl2egAPDhnmMervl0GndegG+G9QEtRqZN/Cvva
-         0cAOAU8jbKc+xBELtXWg16a4CZ5g9o+mgpOYPguxLcuTyJ+ojSqacq2XYUe++gFdde45
-         UlFg==
-X-Gm-Message-State: AO0yUKV77obJiNJU9vMepXMGdAcmfmE2C0EAUy1os33bAh241EMQoe5x
-        +bWeHP5IxxBud58h+2WUTZrPP8MjSPQ7UlFj
-X-Google-Smtp-Source: AK7set8DyLazVtnc2FLAraCTGUGoNqce6M08sargmcE4R2NZf5mqmLWzZiIIRdsuW2MVyyTZllj+PQ==
-X-Received: by 2002:a05:600c:3298:b0:3dc:5674:66e6 with SMTP id t24-20020a05600c329800b003dc567466e6mr3796772wmp.25.1677000011167;
-        Tue, 21 Feb 2023 09:20:11 -0800 (PST)
-Received: from [192.168.0.162] (188-141-3-169.dynamic.upc.ie. [188.141.3.169])
-        by smtp.gmail.com with ESMTPSA id u18-20020a05600c211200b003dc4fd6e624sm5364696wml.19.2023.02.21.09.20.10
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 21 Feb 2023 09:20:10 -0800 (PST)
-Message-ID: <78dfd8ec-967e-2bd2-9b8c-b7338ed62049@linaro.org>
-Date:   Tue, 21 Feb 2023 17:20:10 +0000
+        Tue, 21 Feb 2023 12:20:22 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1886229424;
+        Tue, 21 Feb 2023 09:20:21 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id C9EDFB8101B;
+        Tue, 21 Feb 2023 17:20:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 739B9C433A0;
+        Tue, 21 Feb 2023 17:20:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1677000018;
+        bh=BGwB3PgVPJkWobVgXlphApLFPUCac4tlUtWhL3DXGN8=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=nucwBI0u2dYSlHqc8voK4JM5nYqZ3jtd/hhCWeWYknF//hi3RNB//KkMhbESkMguK
+         9C6fLfvnc+ng/cnHIljiQM2wzfzMkWg1HxD9IHV5e0pYYKP63+/4TvRLpxKEPUc6FL
+         EJNRtsdt8tLAFF531VaTADH/yq+WeJbsngyXRVCY28MeckpW3ZSx9cN4YRz1qx4SAx
+         LpoMPhjXt5UjBKr/G+5k+dxg9AMXO7aed0aHZPCN0IW5bMDWJBbNWDvKLfVnUHJ3JQ
+         cu+fnxb7mKl4MJh3aBxAlRQV+0wVHsLP0lzIMAAZZr6EZbAj2kg73WO85IkZQLVz6S
+         Lfj9Pj5cz0A1Q==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 57465C43159;
+        Tue, 21 Feb 2023 17:20:18 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.0
-Subject: Re: [PATCH] dmapool: push new blocks in ascending order
-Content-Language: en-US
-To:     Keith Busch <kbusch@meta.com>,
-        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH v3 net-next 00/13] Add tc-mqprio and tc-taprio support for
+ preemptible traffic classes
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <167700001835.28414.2332953868494324085.git-patchwork-notify@kernel.org>
+Date:   Tue, 21 Feb 2023 17:20:18 +0000
+References: <20230220122343.1156614-1-vladimir.oltean@nxp.com>
+In-Reply-To: <20230220122343.1156614-1-vladimir.oltean@nxp.com>
+To:     Vladimir Oltean <vladimir.oltean@nxp.com>
+Cc:     netdev@vger.kernel.org, davem@davemloft.net, edumazet@google.com,
+        kuba@kernel.org, pabeni@redhat.com, jhs@mojatatu.com,
+        xiyou.wangcong@gmail.com, jiri@resnulli.us,
+        vinicius.gomes@intel.com, kurt@linutronix.de,
+        gerhard@engleder-embedded.com, amritha.nambiar@intel.com,
+        claudiu.manoil@nxp.com, alexandre.belloni@bootlin.com,
+        UNGLinuxDriver@microchip.com, andrew@lunn.ch, f.fainelli@gmail.com,
+        ferenc.fejes@ericsson.com, xiaoliang.yang_1@nxp.com,
+        rogerq@kernel.org, pranavi.somisetty@amd.com,
+        harini.katakam@amd.com, peppe.cavallaro@st.com,
+        alexandre.torgue@foss.st.com, michael.wei.hong.sit@intel.com,
+        mohammad.athari.ismail@intel.com, jacob.e.keller@intel.com,
         linux-kernel@vger.kernel.org
-Cc:     Keith Busch <kbusch@kernel.org>
-References: <20230221165400.1595247-1-kbusch@meta.com>
-From:   Bryan O'Donoghue <bryan.odonoghue@linaro.org>
-In-Reply-To: <20230221165400.1595247-1-kbusch@meta.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,17 +68,55 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 21/02/2023 16:54, Keith Busch wrote:
-> From: Keith Busch <kbusch@kernel.org>
-> 
-> Some users of the dmapool need their allocations to happen in ascending
-> order. The recent optimizations pushed the blocks in reverse order, so
-> restore the previous behavior by linking the next available block from
-> low-to-high.
-> 
-> Fixes: ced6d06a81fb69 ("dmapool: link blocks across pages")
-> Reported-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
-> Signed-off-by: Keith Busch <kbusch@kernel.org>
+Hello:
 
-Tested-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+This series was applied to netdev/net-next.git (master)
+by Jakub Kicinski <kuba@kernel.org>:
+
+On Mon, 20 Feb 2023 14:23:30 +0200 you wrote:
+> The last RFC in August 2022 contained a proposal for the UAPI of both
+> TSN standards which together form Frame Preemption (802.1Q and 802.3):
+> https://lore.kernel.org/netdev/20220816222920.1952936-1-vladimir.oltean@nxp.com/
+> 
+> It wasn't clear at the time whether the 802.1Q portion of Frame Preemption
+> should be exposed via the tc qdisc (mqprio, taprio) or via some other
+> layer (perhaps also ethtool like the 802.3 portion, or dcbnl), even
+> though the options were discussed extensively, with pros and cons:
+> https://lore.kernel.org/netdev/20220816222920.1952936-3-vladimir.oltean@nxp.com/
+> 
+> [...]
+
+Here is the summary with links:
+  - [v3,net-next,01/13] net: ethtool: fix __ethtool_dev_mm_supported() implementation
+    https://git.kernel.org/netdev/net-next/c/a00da30c052f
+  - [v3,net-next,02/13] net: ethtool: create and export ethtool_dev_mm_supported()
+    (no matching commit)
+  - [v3,net-next,03/13] net/sched: mqprio: simplify handling of nlattr portion of TCA_OPTIONS
+    (no matching commit)
+  - [v3,net-next,04/13] net/sched: mqprio: add extack to mqprio_parse_nlattr()
+    (no matching commit)
+  - [v3,net-next,05/13] net/sched: mqprio: add an extack message to mqprio_parse_opt()
+    (no matching commit)
+  - [v3,net-next,06/13] net/sched: pass netlink extack to mqprio and taprio offload
+    (no matching commit)
+  - [v3,net-next,07/13] net/sched: mqprio: allow per-TC user input of FP adminStatus
+    (no matching commit)
+  - [v3,net-next,08/13] net/sched: taprio: allow per-TC user input of FP adminStatus
+    (no matching commit)
+  - [v3,net-next,09/13] net: enetc: rename "mqprio" to "qopt"
+    (no matching commit)
+  - [v3,net-next,10/13] net: mscc: ocelot: add support for mqprio offload
+    (no matching commit)
+  - [v3,net-next,11/13] net: dsa: felix: act upon the mqprio qopt in taprio offload
+    (no matching commit)
+  - [v3,net-next,12/13] net: mscc: ocelot: add support for preemptible traffic classes
+    (no matching commit)
+  - [v3,net-next,13/13] net: enetc: add support for preemptible traffic classes
+    (no matching commit)
+
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
 
