@@ -2,114 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 900B869D821
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 02:47:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C104B69D827
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 02:48:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233009AbjBUBrM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Feb 2023 20:47:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36542 "EHLO
+        id S233035AbjBUBsc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Feb 2023 20:48:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37566 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232357AbjBUBrK (ORCPT
+        with ESMTP id S232357AbjBUBsa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Feb 2023 20:47:10 -0500
-Received: from dggsgout11.his.huawei.com (unknown [45.249.212.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DE4F23130;
-        Mon, 20 Feb 2023 17:47:09 -0800 (PST)
-Received: from mail02.huawei.com (unknown [172.30.67.143])
-        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4PLMbW57JZz4f3kpw;
-        Tue, 21 Feb 2023 09:47:03 +0800 (CST)
-Received: from [10.67.109.184] (unknown [10.67.109.184])
-        by APP3 (Coremail) with SMTP id _Ch0CgDXzBqXIvRjpZ2tDg--.32789S2;
-        Tue, 21 Feb 2023 09:47:04 +0800 (CST)
-Message-ID: <80e69e73-b873-6717-fe45-a854dbdd5476@huaweicloud.com>
-Date:   Tue, 21 Feb 2023 09:47:03 +0800
+        Mon, 20 Feb 2023 20:48:30 -0500
+Received: from mail-ot1-f51.google.com (mail-ot1-f51.google.com [209.85.210.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D4099EDA;
+        Mon, 20 Feb 2023 17:48:29 -0800 (PST)
+Received: by mail-ot1-f51.google.com with SMTP id bh19-20020a056830381300b00690bf2011b2so532580otb.6;
+        Mon, 20 Feb 2023 17:48:29 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ccmohlnNuK61Zq2Pm+AusM0j8iaM96OwWbVNxMu3hkQ=;
+        b=yTDAcaW99eOWSlDGU/HK3rR57Ywc8D5FxsfXpIO5zP38/j0JFDrYyX9LsOYyxat1k9
+         CGZF9iaNcm4fl1i8dSyNXMhtcNz9UzFOsLms2D7CBHtvT7Y7OZd12mdp/Zv9e+DtYeY7
+         V6MwhIOEpwPTrmrnRp9/PHGf/Lp4602S3OngUQcXwyZ8YAC5QxkILLJLxLE3Iw1+AE64
+         fJ/67xaICvB2BqrHVJAreq25JEVaPNsjYNphW8e5wnLQ1EXkf2Kx6SVuUS8t5Kc7hxk+
+         3qtn6mBecjRyhlHE7Rompb4rfEH9qrhjHGQzDXjRTK5nr52LDAHNY3b2r0+gFNP6iK3X
+         Ic3Q==
+X-Gm-Message-State: AO0yUKX5URc66REuplorlBbsS3irp9E5D415xRfJ3y88nyPcoHTDr6sP
+        8HRAS3TbWaeLVGz07yCAng==
+X-Google-Smtp-Source: AK7set9YtYnryjeiLQnpZZHbAsYom5BpzmXxxi7u+CjIiNWfvZSix0P7dzN0AkCl9ByBwf/Vbv+A/w==
+X-Received: by 2002:a05:6830:2a11:b0:693:bdd8:62a9 with SMTP id y17-20020a0568302a1100b00693bdd862a9mr764204otu.7.1676944108672;
+        Mon, 20 Feb 2023 17:48:28 -0800 (PST)
+Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id l11-20020a9d7a8b000000b0068bd5af9b82sm5597945otn.43.2023.02.20.17.48.27
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 20 Feb 2023 17:48:28 -0800 (PST)
+Received: (nullmailer pid 790312 invoked by uid 1000);
+        Tue, 21 Feb 2023 01:48:27 -0000
+Date:   Mon, 20 Feb 2023 19:48:27 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Christian Marangi <ansuelsmth@gmail.com>
+Cc:     Pavel Machek <pavel@ucw.cz>, Lee Jones <lee@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Jonathan Corbet <corbet@lwn.net>,
+        "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>,
+        Jacek Anaszewski <jacek.anaszewski@gmail.com>,
+        John Crispin <john@phrozen.org>, linux-leds@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, linux-doc@vger.kernel.org,
+        Tim Harvey <tharvey@gateworks.com>,
+        Alexander Stein <alexander.stein@ew.tq-group.com>,
+        Rasmus Villemoes <rasmus.villemoes@prevas.dk>,
+        Bagas Sanjaya <bagasdotme@gmail.com>,
+        Arun.Ramadoss@microchip.com
+Subject: Re: [PATCH v8 13/13] dt-bindings: net: dsa: qca8k: add LEDs
+ definition example
+Message-ID: <20230221014827.GA784986-robh@kernel.org>
+References: <20230216013230.22978-1-ansuelsmth@gmail.com>
+ <20230216013230.22978-14-ansuelsmth@gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.0
-Subject: Re: [PATCH bpf-next v2] riscv, bpf: Add kfunc support for RV64
-Content-Language: en-US
-To:     =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>,
-        bpf@vger.kernel.org, linux-riscv@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        Pu Lehui <pulehui@huawei.com>
-References: <20230220083203.2988238-1-pulehui@huaweicloud.com>
- <874jrg76dc.fsf@all.your.base.are.belong.to.us>
-From:   Pu Lehui <pulehui@huaweicloud.com>
-In-Reply-To: <874jrg76dc.fsf@all.your.base.are.belong.to.us>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: _Ch0CgDXzBqXIvRjpZ2tDg--.32789S2
-X-Coremail-Antispam: 1UD129KBjvdXoW7XrW3Jr45Kw47Zr1DtF1fWFg_yoWktFcEkr
-        s7tF92q34rJ3W7J3W2kwsIkrWDGws7XFy0q3yjgr4Skr95Xa9rWasYkr9aqw4xXFyfZrsI
-        qrW5X3ZxA347ujkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-        9fnUUIcSsGvfJTRUUUbI8YFVCjjxCrM7AC8VAFwI0_Gr0_Xr1l1xkIjI8I6I8E6xAIw20E
-        Y4v20xvaj40_Wr0E3s1l1IIY67AEw4v_Jr0_Jr4l8cAvFVAK0II2c7xJM28CjxkF64kEwV
-        A0rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVW7JVWDJwA2z4x0Y4vE2Ix0cI8IcVCY1x02
-        67AKxVWxJVW8Jr1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7CjxV
-        AFwI0_GcCE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2
-        j2WlYx0E2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7x
-        kEbVWUJVW8JwACjcxG0xvEwIxGrwACI402YVCY1x02628vn2kIc2xKxwCYjI0SjxkI62AI
-        1cAE67vIY487MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I
-        8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVW8ZVWr
-        XwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x
-        0267AKxVW8JVWxJwCI42IY6xAIw20EY4v20xvaj40_WFyUJVCq3wCI42IY6I8E87Iv67AK
-        xVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvj
-        xUrR6zUUUUU
-X-CM-SenderInfo: psxovxtxl6x35dzhxuhorxvhhfrp/
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,KHOP_HELO_FCRDNS,
-        NICE_REPLY_A,SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230216013230.22978-14-ansuelsmth@gmail.com>
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Thu, Feb 16, 2023 at 02:32:30AM +0100, Christian Marangi wrote:
+> Add LEDs definition example for qca8k using the offload trigger as the
+> default trigger and add all the supported offload triggers by the
+> switch.
+> 
+> Signed-off-by: Christian Marangi <ansuelsmth@gmail.com>
+> ---
+>  .../devicetree/bindings/net/dsa/qca8k.yaml    | 24 +++++++++++++++++++
+>  1 file changed, 24 insertions(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/net/dsa/qca8k.yaml b/Documentation/devicetree/bindings/net/dsa/qca8k.yaml
+> index 389892592aac..ba3821364039 100644
+> --- a/Documentation/devicetree/bindings/net/dsa/qca8k.yaml
+> +++ b/Documentation/devicetree/bindings/net/dsa/qca8k.yaml
+> @@ -18,6 +18,8 @@ description:
+>    PHY it is connected to. In this config, an internal mdio-bus is registered and
+>    the MDIO master is used for communication. Mixed external and internal
+>    mdio-bus configurations are not supported by the hardware.
+> +  Each phy have at least 3 LEDs connected and can be declared
+> +  using the standard LEDs structure.
+>  
+>  properties:
+>    compatible:
+> @@ -117,6 +119,7 @@ unevaluatedProperties: false
+>  examples:
+>    - |
+>      #include <dt-bindings/gpio/gpio.h>
+> +    #include <dt-bindings/leds/common.h>
+>  
+>      mdio {
+>          #address-cells = <1>;
+> @@ -276,6 +279,27 @@ examples:
+>  
+>                  internal_phy_port1: ethernet-phy@0 {
+>                      reg = <0>;
+> +
+> +                    leds {
+> +                        #address-cells = <1>;
+> +                        #size-cells = <0>;
+> +
+> +                        led@0 {
+> +                            reg = <0>;
+> +                            color = <LED_COLOR_ID_WHITE>;
+> +                            function = LED_FUNCTION_LAN;
+> +                            function-enumerator = <1>;
+> +                            linux,default-trigger = "netdev";
 
+Wouldn't the default for an ethernet phy controlled LED always be 
+"netdev"? If a PHY has LED nodes, then just always set it to "netdev" 
+unless something else is selected.
 
-On 2023/2/20 22:34, Björn Töpel wrote:
-> Pu Lehui <pulehui@huaweicloud.com> writes:
-> 
->> From: Pu Lehui <pulehui@huawei.com>
->>
->> As another important missing piece of RV64 JIT, kfunc allow bpf programs
->> call kernel functions. For now, RV64 is sufficient to enable it.
-> 
-> Thanks Lehui!
-> 
-> Maybe we can reword/massage the commit message a bit? What do you think
-> about something like:
-> 
-> "Now that the BPF trampoline is supported by RISC-V, it is possible to
-> use BPF programs with kfunc calls.
-> 
-
-kfunc and bpf trampoline are functionally independent. kfunc [1], like 
-bpf helper functions, allows bpf programs to call exported kernel 
-functions, while bpf trampoline provides a more efficient way than 
-kprobe to act as a mediator between kernel functions and bpf programs, 
-and between bpf programs.
-
-In fact, it was already supported before the bpf trampoline 
-implementation, I just turned it on. As for RV32 kfunc, it needs to do 
-some registers parsing.
-
-[1] https://lore.kernel.org/bpf/20210325015124.1543397-1-kafai@fb.com/
-
-> Note that the trampoline functionality is only supported by RV64.
-> 
-> Add bpf_jit_supports_kfunc_call() to the 64-bit JIT."
-> 
-> 
-> Björn
-
+Rob
