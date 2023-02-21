@@ -2,119 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A8CC69E0A3
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 13:45:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4804569E0A6
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 13:46:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234800AbjBUMpc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Feb 2023 07:45:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42376 "EHLO
+        id S234806AbjBUMqZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Feb 2023 07:46:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43380 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234664AbjBUMpa (ORCPT
+        with ESMTP id S233939AbjBUMqY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Feb 2023 07:45:30 -0500
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01A59E8;
-        Tue, 21 Feb 2023 04:45:29 -0800 (PST)
-Received: from pps.filterd (m0279862.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 31LCa3mM020813;
-        Tue, 21 Feb 2023 12:45:12 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=date : from : to :
- cc : subject : message-id : reply-to : references : mime-version :
- content-type : in-reply-to; s=qcppdkim1;
- bh=x3stg8zJRtXCGXEKmbrGIt8ho9ZieFxJLhwP/0UeaeA=;
- b=V5zVcAZDNq0vH53WmIAnNTuMqsXb3brM+lQtpDZF3RxA9k33s6rXBmYDI0Bybed+DY4M
- K8r99GaL1xJhawxLblMF2hVzEx18rN2oEb3XSQQXR5ZK/aWR+is0ghZky4o2cJwh+EoX
- gUJz7ra1HHmDwOXSWktW2lB+IgiBqF6yWHHiiDQfeTFeAnmWHFOOOMAsSRUvg3uKr1r2
- u90DedTkIHPDJqsDyN4VPZhe2znPRJ+2u3zDVd/RmnKlQ+vQ6WTwcD3eCL17J03zBsgC
- UYSckh7AmeNx5tRROqE2jGJ/R8oYiTtmFE9igHZtFt4dl8dKSyjEZXTQYXPwDlQCp2wA Ug== 
-Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3nvp4v13cg-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 21 Feb 2023 12:45:12 +0000
-Received: from nalasex01b.na.qualcomm.com (nalasex01b.na.qualcomm.com [10.47.209.197])
-        by NALASPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 31LCjBjD029154
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 21 Feb 2023 12:45:11 GMT
-Received: from quicinc.com (10.80.80.8) by nalasex01b.na.qualcomm.com
- (10.47.209.197) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.41; Tue, 21 Feb
- 2023 04:45:04 -0800
-Date:   Tue, 21 Feb 2023 18:15:00 +0530
-From:   Srivatsa Vaddagiri <quic_svaddagi@quicinc.com>
-To:     Elliot Berman <quic_eberman@quicinc.com>
-CC:     Alex Elder <elder@linaro.org>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Prakruthi Deepak Heragu <quic_pheragu@quicinc.com>,
-        Murali Nalajala <quic_mnalajal@quicinc.com>,
-        Trilok Soni <quic_tsoni@quicinc.com>,
-        Carl van Schaik <quic_cvanscha@quicinc.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        "Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Bagas Sanjaya <bagasdotme@gmail.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Jassi Brar <jassisinghbrar@gmail.com>,
-        <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-doc@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>
-Subject: Re: [PATCH v10 12/26] gunyah: vm_mgr: Add/remove user memory regions
-Message-ID: <20230221124500.GB1437176@quicinc.com>
-Reply-To: Srivatsa Vaddagiri <quic_svaddagi@quicinc.com>
-References: <20230214211229.3239350-1-quic_eberman@quicinc.com>
- <20230214212417.3315422-1-quic_eberman@quicinc.com>
+        Tue, 21 Feb 2023 07:46:24 -0500
+Received: from wout2-smtp.messagingengine.com (wout2-smtp.messagingengine.com [64.147.123.25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D240B12F0C;
+        Tue, 21 Feb 2023 04:46:22 -0800 (PST)
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+        by mailout.west.internal (Postfix) with ESMTP id 45DF23200929;
+        Tue, 21 Feb 2023 07:46:21 -0500 (EST)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute3.internal (MEProxy); Tue, 21 Feb 2023 07:46:22 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; h=
+        cc:cc:content-transfer-encoding:date:date:from:from:in-reply-to
+        :message-id:mime-version:reply-to:sender:subject:subject:to:to;
+         s=fm2; t=1676983580; x=1677069980; bh=o1ZGzAY+2IAq6iM9F+Xf8a1cE
+        huTp9TD8y5vFZAwf2Y=; b=EMJBt3zyvDdk72wNVD6Rp0MSRXuNpRO1l4RTro2Bm
+        Q68vwd6ylAHTjrNFljCyq/JBIn3lPPXfgc4/6kk8pQgPkHmUfQCfVhmtTjfoAUiq
+        E/1Z2y3iMjQZb/AYwTUje2WUwJPnsW8dGeROQUPzZMMapCpNieebulQ6b1s5lOgS
+        LsUuGRK/I5d2SJ4y4WrcSJPckasYkpldbLC2L/xjAJasWeEQOnOy2/fv6z6QdazG
+        0CV9dHfdja/HMB+EHvRjIXBskQYkKM8Cr3uY3SLxOq0hcNokeOxDrhxM0XZPuvTO
+        HuWtbpT/vjLX4Qq5womPSW0644hrxyBElJ44X/bD6TpwA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding:date:date
+        :feedback-id:feedback-id:from:from:in-reply-to:message-id
+        :mime-version:reply-to:sender:subject:subject:to:to:x-me-proxy
+        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=
+        1676983580; x=1677069980; bh=o1ZGzAY+2IAq6iM9F+Xf8a1cEhuTp9TD8y5
+        vFZAwf2Y=; b=th8zsIYP60+WQlHRLMTjitDNcmVVDGTJ4WbmTbjgZDhRpdcEwlE
+        aCund/RrXSmSkquNlWkBr2iMp0JV5Mm+P3VNM29fo27vJM/A4nzKB4CevyDHad2J
+        djFJxRQhZHNRUSRui7eG0RgbSYGhXbPbvdKUr0VjPNaZggFS+fMolbh72aV8uyI0
+        hHatvxsKUdaK10Q7JbiQHjloeYstWVihqVySVTiuHHwHxi5ZbeiX8esoglNsHTSp
+        A+K0VLkheajhYIwiap8e8HA+U850GivU0NLEI6wpmTCGdBRiQFVW87ycfljjvf9i
+        hofR4SCjfv1ATpwx0NjJq6viCycYj/SCpsA==
+X-ME-Sender: <xms:G730YyDtoU_NWr-nX8omgYp9iWEj_Cpb88tfMFG7GUF6i_qqaeMpsg>
+    <xme:G730Y8jScgS-F_7op8B22ovm68GLn8BL6vO8AryrQRCvto2J2QuiFdFn-oTd1ADFM
+    -RIkx4qSaRWuSc4ifk>
+X-ME-Received: <xmr:G730Y1nHA8Z1dGd7OMFxUBeSeLbmsED_OBnzecdttXlDAJIOTc0UGAsii8Lx>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrudejjedggeefucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucenucfjughrpefhvfevufffkffoggfgsedtkeertd
+    ertddtnecuhfhrohhmpeflihgrgihunhcujggrnhhguceojhhirgiguhhnrdihrghnghes
+    fhhlhihgohgrthdrtghomheqnecuggftrfgrthhtvghrnhephfetuddtudevieeljeejte
+    ffheeujeduhefgffejudfhueelleduffefgfffveeknecuvehluhhsthgvrhfuihiivgep
+    tdenucfrrghrrghmpehmrghilhhfrhhomhepjhhirgiguhhnrdihrghnghesfhhlhihgoh
+    grthdrtghomh
+X-ME-Proxy: <xmx:G730YwxDpe2tLRi9YpZeLRv_SsYUczt_Urwj0V4BSAXYzA3yHIJG_w>
+    <xmx:G730Y3QY7hzjzjJ6ucBUr7Fv_xJmTC1vaxZ7xNPsrtwTXLSaCN9l0A>
+    <xmx:G730Y7Y9L98rNX2KaPH3_pmFqXa3yTp3iFs8SR4cGFrKqw-5p3Xx1Q>
+    <xmx:HL30Y8Kvm1mRR7-cnzS-00Ff_ZzvPWOsyBWtSIbb2hjIGU1m7Ec61A>
+Feedback-ID: ifd894703:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
+ 21 Feb 2023 07:46:17 -0500 (EST)
+From:   Jiaxun Yang <jiaxun.yang@flygoat.com>
+To:     linux-mips@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        tsbogend@alpha.franken.de, mpe@ellerman.id.au,
+        paul.walmsley@sifive.com, palmer@dabbelt.com, robh+dt@kernel.org,
+        hch@lst.de, m.szyprowski@samsung.com, robin.murphy@arm.com,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>
+Subject: [PATCH 0/7] MIPS DMA coherence fixes
+Date:   Tue, 21 Feb 2023 12:46:06 +0000
+Message-Id: <20230221124613.2859-1-jiaxun.yang@flygoat.com>
+X-Mailer: git-send-email 2.37.1 (Apple Git-137.1)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Disposition: inline
-In-Reply-To: <20230214212417.3315422-1-quic_eberman@quicinc.com>
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01b.na.qualcomm.com (10.47.209.197)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: fFbo6RuodUEy2REFMkCBFIuWCSHvZEBC
-X-Proofpoint-GUID: fFbo6RuodUEy2REFMkCBFIuWCSHvZEBC
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.170.22
- definitions=2023-02-21_08,2023-02-20_02,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 mlxlogscore=832
- clxscore=1015 adultscore=0 spamscore=0 phishscore=0 suspectscore=0
- bulkscore=0 impostorscore=0 lowpriorityscore=0 malwarescore=0
- priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2302210108
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-* Elliot Berman <quic_eberman@quicinc.com> [2023-02-14 13:24:16]:
 
-> +int gh_vm_mem_alloc(struct gh_vm *ghvm, struct gh_userspace_memory_region *region)
-> +{
-> +	struct gh_vm_mem *mapping, *tmp_mapping;
-> +	struct gh_rm_mem_entry *mem_entries;
-> +	phys_addr_t curr_page, prev_page;
-> +	struct gh_rm_mem_parcel *parcel;
-> +	int i, j, pinned, ret = 0;
-> +	size_t entry_size;
-> +	u16 vmid;
-> +
-> +	if (!gh_api_has_feature(GH_API_FEATURE_MEMEXTENT))
-> +		return -EOPNOTSUPP;
-> +
-> +	if (!region->memory_size || !PAGE_ALIGNED(region->memory_size) ||
-> +		!PAGE_ALIGNED(region->userspace_addr) || !PAGE_ALIGNED(region->guest_phys_addr))
-> +		return -EINVAL;
+Jiaxun Yang (7):
+  MIPS: Remove DMA_PERDEV_COHERENT
+  MIPS: Always select ARCH_HAS_SYNC_DMA_FOR_CPU for noncoherent
+    platforms
+  MIPS: c-r4k: Always install dma flush functions
+  dma-mapping: Always provide dma_default_coherent
+  dma-mapping: Provide CONFIG_ARCH_DMA_DEFAULT_COHERENT
+  riscv: Select ARCH_DMA_DEFAULT_COHERENT
+  of: address: Use dma_default_coherent to determine default coherency
 
-Check for wraps also:
+ arch/mips/Kconfig           | 16 ++--------------
+ arch/mips/mm/c-r4k.c        | 12 +++---------
+ arch/powerpc/Kconfig        |  1 -
+ arch/riscv/Kconfig          |  2 +-
+ drivers/of/Kconfig          |  4 ----
+ drivers/of/address.c        |  2 +-
+ include/linux/dma-map-ops.h |  1 +
+ kernel/dma/Kconfig          |  3 +++
+ kernel/dma/mapping.c        |  6 +++++-
+ 9 files changed, 16 insertions(+), 31 deletions(-)
 
-        region->guest_phys_addr + region->memory_size > region->guest_phys_addr
+-- 
+2.37.1 (Apple Git-137.1)
 
