@@ -2,166 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1C66969E6D6
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 19:07:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3EA4469E6E9
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 19:08:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229840AbjBUSHT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Feb 2023 13:07:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57486 "EHLO
+        id S229451AbjBUSID (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Feb 2023 13:08:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57744 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229451AbjBUSHR (ORCPT
+        with ESMTP id S231927AbjBUSH5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Feb 2023 13:07:17 -0500
-Received: from mail-pf1-x42c.google.com (mail-pf1-x42c.google.com [IPv6:2607:f8b0:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92D8B2F7BA;
-        Tue, 21 Feb 2023 10:07:16 -0800 (PST)
-Received: by mail-pf1-x42c.google.com with SMTP id g12so3029798pfi.0;
-        Tue, 21 Feb 2023 10:07:16 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=iC2+JAOPJ7xBzI8XxPV50aOEhLdtaBVXx3tgIqcIDA8=;
-        b=JxVgPwFf7PjLbqHyg/KF/bgcZTQyoMGHvbtVxDqt6yOY9aGl+AvfLI1AXDxz/r1wvV
-         S+BrCUA9rK42zdI/Nzsaw//jN1f4IG1/si+33bGh8BWt8Ya1CJR38YIebWuF1Mo07cb9
-         ir4sJZrHHOcDWDDxAfugg9OaOSg8y43jssvNXjnAXq2byO9AFBVugRCbXUVssSAMabAd
-         ekkiFJCsuLfKBpDbCzzRVEUuCoCPKn5Hleyy6/LRtTHq0QLWEKOURXVW89vZ9P0Hnt+Y
-         ISdL8k+PVv40iT4STlT7TM32PbUzIoMuXdCOzE+L4zMeW65sJG/C04HXNTUu9KSvEhAu
-         UuPg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=iC2+JAOPJ7xBzI8XxPV50aOEhLdtaBVXx3tgIqcIDA8=;
-        b=DbDDIMgj3MtsnnCBCel6Nmkq2pGYEn8w7hmzU8vqogti8ytO3caYTZsqW1cvj+uHf4
-         KuRJSyVnO3WmtPzqckrwmws3R2KYM2rqKtjkYKEHdPbKeU0E+2kGNng/YQWUPqRRiQXu
-         Uuo5mP3UvtQ5+xbLt78nta7xZ7l9Q7S55ZgvVOwAZmC2Lk60L/3JAFGzzVTCINWlfPU0
-         c+/vXliLSiIYu0IrN7NZdWn1CQpiE0l/+reVKmyWJPSbGDKVDq9E3DIxkxD1TIJtV4h2
-         5ZgcJXIvO5KRw/BuAFDdkU9iT7miDODGzaT7CPLfxgJlC8bgDqorKoquqChwTkq8O81o
-         QVPQ==
-X-Gm-Message-State: AO0yUKX2O3nom/L1fFiVf6VsZ+PGZIPxhwi3MpLv/SkNPXks27kFI2Hc
-        GwkYrUkTKtCtrBUAvx34UyA=
-X-Google-Smtp-Source: AK7set/sIEbxQwDSsYKcsiPToHrtUeG4U2oC9f/kXGSXecReTeGpfnX+J9vcCz1UZmzqM7677z82eQ==
-X-Received: by 2002:a62:174a:0:b0:5a8:bd14:d6f1 with SMTP id 71-20020a62174a000000b005a8bd14d6f1mr6422099pfx.7.1677002835751;
-        Tue, 21 Feb 2023 10:07:15 -0800 (PST)
-Received: from localhost (2603-800c-1a02-1bae-a7fa-157f-969a-4cde.res6.spectrum.com. [2603:800c:1a02:1bae:a7fa:157f:969a:4cde])
-        by smtp.gmail.com with ESMTPSA id i13-20020aa7908d000000b005abc30d9445sm6746645pfa.180.2023.02.21.10.07.14
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 21 Feb 2023 10:07:15 -0800 (PST)
-Sender: Tejun Heo <htejun@gmail.com>
-Date:   Tue, 21 Feb 2023 08:07:13 -1000
-From:   Tejun Heo <tj@kernel.org>
-To:     Jason Gunthorpe <jgg@nvidia.com>
-Cc:     Michal Hocko <mhocko@suse.com>,
-        Yosry Ahmed <yosryahmed@google.com>,
-        Alistair Popple <apopple@nvidia.com>, linux-mm@kvack.org,
-        cgroups@vger.kernel.org, linux-kernel@vger.kernel.org,
-        jhubbard@nvidia.com, tjmercier@google.com, hannes@cmpxchg.org,
-        surenb@google.com, mkoutny@suse.com, daniel@ffwll.ch,
-        "Daniel P . Berrange" <berrange@redhat.com>,
-        Alex Williamson <alex.williamson@redhat.com>,
-        Zefan Li <lizefan.x@bytedance.com>,
-        Andrew Morton <akpm@linux-foundation.org>
-Subject: Re: [PATCH 14/19] mm: Introduce a cgroup for pinned memory
-Message-ID: <Y/UIURDjR9pv+gzx@slm.duckdns.org>
-References: <Y+GQB9I6MFN6BOFw@nvidia.com>
- <Y+GcJQRhvjqFaaSp@mtj.duckdns.org>
- <Y+0rxoM4w9nilUMZ@dhcp22.suse.cz>
- <Y+0tWZxMUx/NZ3Ne@nvidia.com>
- <Y+3jcw9vo4ml5p0M@dhcp22.suse.cz>
- <Y+4lcq4Fge27TQIn@nvidia.com>
- <Y/T2pNQ70eMAl1sX@slm.duckdns.org>
- <Y/T+pw25oGmKqz1k@nvidia.com>
- <Y/T/bkcYc9Krw4rE@slm.duckdns.org>
- <Y/UEkNn0O65Pfi4e@nvidia.com>
+        Tue, 21 Feb 2023 13:07:57 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39B0030292
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Feb 2023 10:07:38 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id EE538B80FA7
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Feb 2023 18:07:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3DE90C433D2;
+        Tue, 21 Feb 2023 18:07:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1677002855;
+        bh=inZczsHsYNaB8VKdgJwc3kO+Gw7OxcbGlqiKZIegzf4=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=GgT9u5AsvrvQUMJGcCHyMcQV1lZHxpzuCak/p36lArw5KxSKkV7KRrw2x7+30NoTI
+         qJqOILMqrZnuwLysM2/BOEq4ArVad09Rh/Pn/sO/iTNEwAefTYJh3F5vvM/cZm/KFI
+         YvFj/0MSG0w5kJ8HPYjYBg0BjqRu3U/fhuJr19/lFsYcJLCsWIICa6YF4nM41oT+Jg
+         72n3gv1hRI7yQB8kAgByQlH2U0wMe8qzlQNKOVm1KeOHkfBDRkHZTnBVh0yuSH7jcU
+         adu48etsnWkEfy9kTGEPPmCpSqjQryhyLwCs8H36LaUWN+h14n8pb7l1FpWwKmkhlG
+         cJPwmbGbm5X2A==
+Date:   Tue, 21 Feb 2023 11:07:32 -0700
+From:   Keith Busch <kbusch@kernel.org>
+To:     Christoph Hellwig <hch@infradead.org>
+Cc:     Keith Busch <kbusch@meta.com>,
+        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org,
+        Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+Subject: Re: [PATCH] dmapool: push new blocks in ascending order
+Message-ID: <Y/UIZC+plt9Y0nr1@kbusch-mbp>
+References: <20230221165400.1595247-1-kbusch@meta.com>
+ <Y/UHOohEMg+oyO8j@infradead.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Y/UEkNn0O65Pfi4e@nvidia.com>
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <Y/UHOohEMg+oyO8j@infradead.org>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
-
-On Tue, Feb 21, 2023 at 01:51:12PM -0400, Jason Gunthorpe wrote:
-> > Yeah, so, what I'm trying to say is that that might be the source of the
-> > problem. Is the current page ownership attribution correct 
+On Tue, Feb 21, 2023 at 10:02:34AM -0800, Christoph Hellwig wrote:
+> On Tue, Feb 21, 2023 at 08:54:00AM -0800, Keith Busch wrote:
+> > From: Keith Busch <kbusch@kernel.org>
+> > 
+> > Some users of the dmapool need their allocations to happen in ascending
+> > order. The recent optimizations pushed the blocks in reverse order, so
+> > restore the previous behavior by linking the next available block from
+> > low-to-high.
 > 
-> It should be correct.
+> Who are those users?
 > 
-> This mechanism is driven by pin_user_page(), (as it is the only API
-> that can actually create a pin) so the cgroup owner of the page is
-> broadly related to the "owner" of the VMA's inode.
-> 
-> The owner of the pin is the caller of pin_user_page(), which is
-> initated by some FD/proces that is not necessarily related to the
-> VMA's inode.
-> 
-> Eg concretely, something like io_uring will do something like:
->   buffer = mmap()     <- Charge memcg for the pages
->   fd = io_uring_setup(..)
->   io_uring_register(fd,xx,buffer,..);   <- Charge the pincg for the pin
-> 
-> If mmap is a private anonymous VMA created by the same process then it
-> is likely the pages will have the same cgroup as io_uring_register and
-> the FD.
-> 
-> Otherwise the page cgroup is unconstrained. MAP_SHARED mappings will
-> have the page cgroup point at whatever cgroup was first to allocate
-> the page for the VMA's inode.
-> 
-> AFAIK there are few real use cases to establish a pin on MAP_SHARED
-> mappings outside your cgroup. However, it is possible, the APIs allow
-> it, and for security sandbox purposes we can't allow a process inside
-> a cgroup to triger a charge on a different cgroup. That breaks the
-> sandbox goal.
+> Also should we document this behavior somewhere so that it isn't
+> accidentally changed again some time in the future?
 
-It seems broken anyway. Please consider the following scenario:
-
-1. A is a tiny cgroup which only does streaming IOs and has memory.high of
-   128M which is more than sufficient for IO window. The last file it
-   streamed happened to be F which was about 256M.
-
-2. B is an a lot larger cgroup w/ pin limit way above 256M. B pins the
-   entirety of F.
-
-3. A now tries to stream another file but F is almost fully occupying its
-   memory allowance and can't be evicted. A keeps thrashing due to lack of
-   memory and isolation is completely broken.
-
-This stems directly from page ownership and pin accounting discrepancy.
-
-> If memcg could support multiple owners then it would be logical that
-> the pinner would be one of the memcg owners.
-> 
-> > for whatever reason is determining the pinning ownership or should the page
-> > ownership be attributed the same way too? If they indeed need to differ,
-> > that probably would need pretty strong justifications.
-> 
-> It is inherent to how pin_user_pages() works. It is an API that
-> establishs pins on existing pages. There is nothing about it that says
-> who the page's memcg owner is.
-> 
-> I don't think we can do anything about this without breaking things.
-
-That's a discrepancy in an internal interface and we don't wanna codify
-something like that into userspace interface. Semantially, it seems like if
-pin_user_pages() wanna charge pinning to the cgroup associated with an fd
-(or whatever), it should also claim the ownership of the pages themselves. I
-have no idea how feasiable that'd be from memcg POV tho. Given that this
-would be a fairly cold path (in most cases, the ownership should already
-match), maybe it won't be too bad?
-
-Thanks.
-
--- 
-tejun
+usb/chipidea/udc.c qh_pool called "ci_hw_qh". My initial thought was dmapool
+isn't the right API if you need a specific order when allocating from it, but I
+can't readily test any changes to that driver. Restoring the previous behavior
+is easy enough.
