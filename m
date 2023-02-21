@@ -2,297 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B11E69E990
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 22:37:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C6AC69E983
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 22:30:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229963AbjBUVhe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Feb 2023 16:37:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39990 "EHLO
+        id S229890AbjBUVaV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Feb 2023 16:30:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34868 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229557AbjBUVhd (ORCPT
+        with ESMTP id S229647AbjBUVaR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Feb 2023 16:37:33 -0500
-X-Greylist: delayed 459 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 21 Feb 2023 13:37:28 PST
-Received: from forward502b.mail.yandex.net (forward502b.mail.yandex.net [178.154.239.146])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B43C228D1A
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Feb 2023 13:37:28 -0800 (PST)
-Received: from sas8-d2832c3b6ed7.qloud-c.yandex.net (sas8-d2832c3b6ed7.qloud-c.yandex.net [IPv6:2a02:6b8:c1b:2a09:0:640:d283:2c3b])
-        by forward502b.mail.yandex.net (Yandex) with ESMTP id 2C77C5F18D;
-        Wed, 22 Feb 2023 00:29:45 +0300 (MSK)
-Received: by sas8-d2832c3b6ed7.qloud-c.yandex.net (smtp/Yandex) with ESMTPSA id nS0vS3maT8c1-LA2Hqo4l;
-        Wed, 22 Feb 2023 00:29:44 +0300
-X-Yandex-Fwd: 1
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ya.ru; s=mail; t=1677014984;
-        bh=jhdQEoeR7T+njwKzfUcMQWP7jPNishtRbKu6wgeeUC8=;
-        h=From:In-Reply-To:Cc:Date:References:To:Subject:Message-ID;
-        b=POeu30lqyqW0/IdThHWzC+wbzHHj3e8CVa1AAS+rcugsx4q3Mtivy3P2ro649qxJU
-         WULUvu/b9lBm0uLqETLWtSPNkaDsCXULB5E341VTezw1qAUbOi7fb7veZ6hRGfmOAU
-         5TS6JsCk7QJxU5zPpAhzIV+jC7Qphzmxr82cDB7E=
-Authentication-Results: sas8-d2832c3b6ed7.qloud-c.yandex.net; dkim=pass header.i=@ya.ru
-Message-ID: <8733cb3c-7a6a-33c4-b84e-4fb981dae765@ya.ru>
-Date:   Wed, 22 Feb 2023 00:28:49 +0300
+        Tue, 21 Feb 2023 16:30:17 -0500
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 872461E5DC;
+        Tue, 21 Feb 2023 13:30:14 -0800 (PST)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4PLsrh53Xcz4x84;
+        Wed, 22 Feb 2023 08:30:12 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1677015012;
+        bh=GcdhFg/34oEPhninJe+vXf/3292ztoRJEUgvyOHE4qU=;
+        h=Date:From:To:Cc:Subject:From;
+        b=OTLG5EtdyygfU4afLEMBGrBAgbbWF5V3cT/wyK55niQEDOkpmVb2jBgHA0Xj7kfws
+         MTm2j0j8kPCQOrLZd3KqefDcdpsTTiJvXQTCRBwMQF2ukQMAJiPPqWjQJs5jIon/8d
+         y3/SVV9q0zhDQr98LRQf0Ys2WHBnFAccH5nPijKzf/Lo5gQQJW/NqV6DaQ4GuOlCDK
+         Gs22TmCCeWSXcLu4pOVm6af2HfxQv7nVAjjyFuMHNfaBT2TiBEVHSZJ5n1vF0kfnuy
+         D5g36u+1cCrzZjPUVRLwgnzdnkO3MTskF0+mYug6axE0TUeanSAiwzWYrQ7a5ibw5m
+         2yM5NNac9xCdA==
+Date:   Wed, 22 Feb 2023 08:29:56 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Theodore Ts'o <tytso@mit.edu>
+Cc:     Kees Cook <keescook@chromium.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: duplicate patch in the ext4 tree
+Message-ID: <20230222082956.019ed332@canb.auug.org.au>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH 2/5] mm: vmscan: make memcg slab shrink lockless
-To:     Qi Zheng <zhengqi.arch@bytedance.com>, akpm@linux-foundation.org,
-        hannes@cmpxchg.org, shakeelb@google.com, mhocko@kernel.org,
-        roman.gushchin@linux.dev, muchun.song@linux.dev, david@redhat.com,
-        shy828301@gmail.com
-Cc:     sultan@kerneltoast.com, dave@stgolabs.net,
-        penguin-kernel@I-love.SAKURA.ne.jp, paulmck@kernel.org,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org
-References: <20230220091637.64865-1-zhengqi.arch@bytedance.com>
- <20230220091637.64865-3-zhengqi.arch@bytedance.com>
-Content-Language: en-US
-From:   Kirill Tkhai <tkhai@ya.ru>
-In-Reply-To: <20230220091637.64865-3-zhengqi.arch@bytedance.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/c4UFk8H=0ya6HhILawxv1I+";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 20.02.2023 12:16, Qi Zheng wrote:
-> Like global slab shrink, since commit 1cd0bd06093c
-> ("rcu: Remove CONFIG_SRCU"), it's time to use SRCU
-> to protect readers who previously held shrinker_rwsem.
-> 
-> We can test with the following script:
-> 
-> ```
-> DIR="/root/shrinker/memcg/mnt"
-> 
-> do_create()
-> {
->         mkdir /sys/fs/cgroup/memory/test
->         echo 200M > /sys/fs/cgroup/memory/test/memory.limit_in_bytes
->         for i in `seq 0 $1`;
->         do
->                 mkdir /sys/fs/cgroup/memory/test/$i;
->                 echo $$ > /sys/fs/cgroup/memory/test/$i/cgroup.procs;
->                 mkdir -p $DIR/$i;
->         done
-> }
-> 
-> do_mount()
-> {
->         for i in `seq $1 $2`;
->         do
->                 mount -t tmpfs $i $DIR/$i;
->         done
-> }
-> 
-> do_touch()
-> {
->         for i in `seq $1 $2`;
->         do
->                 echo $$ > /sys/fs/cgroup/memory/test/$i/cgroup.procs;
->                 dd if=/dev/zero of=$DIR/$i/file$i bs=1M count=1 &
->         done
-> }
-> 
-> do_create 2000
-> do_mount 0 2000
-> do_touch 0 1000
-> ```
-> 
-> Before applying:
-> 
->   46.60%  [kernel]  [k] down_read_trylock
->   18.70%  [kernel]  [k] up_read
->   15.44%  [kernel]  [k] shrink_slab
->    4.37%  [kernel]  [k] _find_next_bit
->    2.75%  [kernel]  [k] xa_load
->    2.07%  [kernel]  [k] idr_find
->    1.73%  [kernel]  [k] do_shrink_slab
->    1.42%  [kernel]  [k] shrink_lruvec
->    0.74%  [kernel]  [k] shrink_node
->    0.60%  [kernel]  [k] list_lru_count_one
-> 
-> After applying:
-> 
->   19.53%  [kernel]  [k] _find_next_bit
->   14.63%  [kernel]  [k] do_shrink_slab
->   14.58%  [kernel]  [k] shrink_slab
->   11.83%  [kernel]  [k] shrink_lruvec
->    9.33%  [kernel]  [k] __blk_flush_plug
->    6.67%  [kernel]  [k] mem_cgroup_iter
->    3.73%  [kernel]  [k] list_lru_count_one
->    2.43%  [kernel]  [k] shrink_node
->    1.96%  [kernel]  [k] super_cache_count
->    1.78%  [kernel]  [k] __rcu_read_unlock
->    1.38%  [kernel]  [k] __srcu_read_lock
->    1.30%  [kernel]  [k] xas_descend
-> 
-> We can see that the readers is no longer blocked.
-> 
-> Signed-off-by: Qi Zheng <zhengqi.arch@bytedance.com>
-> ---
->  mm/vmscan.c | 56 ++++++++++++++++++++++++++++++-----------------------
->  1 file changed, 32 insertions(+), 24 deletions(-)
-> 
-> diff --git a/mm/vmscan.c b/mm/vmscan.c
-> index 95a3d6ddc6c1..dc47396ecd0e 100644
-> --- a/mm/vmscan.c
-> +++ b/mm/vmscan.c
-> @@ -57,6 +57,7 @@
->  #include <linux/khugepaged.h>
->  #include <linux/rculist_nulls.h>
->  #include <linux/random.h>
-> +#include <linux/srcu.h>
->  
->  #include <asm/tlbflush.h>
->  #include <asm/div64.h>
-> @@ -221,8 +222,21 @@ static inline int shrinker_defer_size(int nr_items)
->  static struct shrinker_info *shrinker_info_protected(struct mem_cgroup *memcg,
->  						     int nid)
->  {
-> -	return rcu_dereference_protected(memcg->nodeinfo[nid]->shrinker_info,
-> -					 lockdep_is_held(&shrinker_rwsem));
-> +	return srcu_dereference_check(memcg->nodeinfo[nid]->shrinker_info,
-> +				      &shrinker_srcu,
-> +				      lockdep_is_held(&shrinker_rwsem));
-> +}
-> +
-> +static struct shrinker_info *shrinker_info_srcu(struct mem_cgroup *memcg,
-> +						     int nid)
-> +{
-> +	return srcu_dereference(memcg->nodeinfo[nid]->shrinker_info,
-> +				&shrinker_srcu);
-> +}
-> +
-> +static void free_shrinker_info_rcu(struct rcu_head *head)
-> +{
-> +	kvfree(container_of(head, struct shrinker_info, rcu));
->  }
->  
->  static int expand_one_shrinker_info(struct mem_cgroup *memcg,
-> @@ -257,7 +271,7 @@ static int expand_one_shrinker_info(struct mem_cgroup *memcg,
->  		       defer_size - old_defer_size);
->  
->  		rcu_assign_pointer(pn->shrinker_info, new);
-> -		kvfree_rcu(old, rcu);
-> +		call_srcu(&shrinker_srcu, &old->rcu, free_shrinker_info_rcu);
->  	}
->  
->  	return 0;
-> @@ -350,13 +364,14 @@ void set_shrinker_bit(struct mem_cgroup *memcg, int nid, int shrinker_id)
->  {
->  	if (shrinker_id >= 0 && memcg && !mem_cgroup_is_root(memcg)) {
->  		struct shrinker_info *info;
-> +		int srcu_idx;
->  
-> -		rcu_read_lock();
-> -		info = rcu_dereference(memcg->nodeinfo[nid]->shrinker_info);
-> +		srcu_idx = srcu_read_lock(&shrinker_srcu);
-> +		info = shrinker_info_srcu(memcg, nid);
->  		/* Pairs with smp mb in shrink_slab() */
->  		smp_mb__before_atomic();
->  		set_bit(shrinker_id, info->map);
-> -		rcu_read_unlock();
-> +		srcu_read_unlock(&shrinker_srcu, srcu_idx);
->  	}
->  }
->  
-> @@ -370,7 +385,6 @@ static int prealloc_memcg_shrinker(struct shrinker *shrinker)
->  		return -ENOSYS;
->  
->  	down_write(&shrinker_rwsem);
-> -	/* This may call shrinker, so it must use down_read_trylock() */
->  	id = idr_alloc(&shrinker_idr, shrinker, 0, 0, GFP_KERNEL);
->  	if (id < 0)
->  		goto unlock;
-> @@ -404,7 +418,7 @@ static long xchg_nr_deferred_memcg(int nid, struct shrinker *shrinker,
->  {
->  	struct shrinker_info *info;
->  
-> -	info = shrinker_info_protected(memcg, nid);
-> +	info = shrinker_info_srcu(memcg, nid);
->  	return atomic_long_xchg(&info->nr_deferred[shrinker->id], 0);
->  }
->  
-> @@ -413,13 +427,13 @@ static long add_nr_deferred_memcg(long nr, int nid, struct shrinker *shrinker,
->  {
->  	struct shrinker_info *info;
->  
-> -	info = shrinker_info_protected(memcg, nid);
-> +	info = shrinker_info_srcu(memcg, nid);
->  	return atomic_long_add_return(nr, &info->nr_deferred[shrinker->id]);
->  }
->  
->  void reparent_shrinker_deferred(struct mem_cgroup *memcg)
->  {
-> -	int i, nid;
-> +	int i, nid, srcu_idx;
->  	long nr;
->  	struct mem_cgroup *parent;
->  	struct shrinker_info *child_info, *parent_info;
-> @@ -429,16 +443,16 @@ void reparent_shrinker_deferred(struct mem_cgroup *memcg)
->  		parent = root_mem_cgroup;
->  
->  	/* Prevent from concurrent shrinker_info expand */
-> -	down_read(&shrinker_rwsem);
-> +	srcu_idx = srcu_read_lock(&shrinker_srcu);
+--Sig_/c4UFk8H=0ya6HhILawxv1I+
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Don't we still have to be protected against parallel expand_one_shrinker_info()?
+Hi all,
 
-It looks like parent->nodeinfo[nid]->shrinker_info pointer may be changed in expand*
-right after we've dereferenced it here.
+The following commit is also in Linus Torvalds' tree as a different commit
+(but the same patch):
 
->  	for_each_node(nid) {
-> -		child_info = shrinker_info_protected(memcg, nid);
-> -		parent_info = shrinker_info_protected(parent, nid);
-> +		child_info = shrinker_info_srcu(memcg, nid);
-> +		parent_info = shrinker_info_srcu(parent, nid);
->  		for (i = 0; i < shrinker_nr_max; i++) {
->  			nr = atomic_long_read(&child_info->nr_deferred[i]);
->  			atomic_long_add(nr, &parent_info->nr_deferred[i]);
->  		}
->  	}
-> -	up_read(&shrinker_rwsem);
-> +	srcu_read_unlock(&shrinker_srcu, srcu_idx);
->  }
->  
->  static bool cgroup_reclaim(struct scan_control *sc)
-> @@ -891,15 +905,14 @@ static unsigned long shrink_slab_memcg(gfp_t gfp_mask, int nid,
->  {
->  	struct shrinker_info *info;
->  	unsigned long ret, freed = 0;
-> +	int srcu_idx;
->  	int i;
->  
->  	if (!mem_cgroup_online(memcg))
->  		return 0;
->  
-> -	if (!down_read_trylock(&shrinker_rwsem))
-> -		return 0;
-> -
-> -	info = shrinker_info_protected(memcg, nid);
-> +	srcu_idx = srcu_read_lock(&shrinker_srcu);
-> +	info = shrinker_info_srcu(memcg, nid);
->  	if (unlikely(!info))
->  		goto unlock;
->  
-> @@ -949,14 +962,9 @@ static unsigned long shrink_slab_memcg(gfp_t gfp_mask, int nid,
->  				set_shrinker_bit(memcg, nid, i);
->  		}
->  		freed += ret;
-> -
-> -		if (rwsem_is_contended(&shrinker_rwsem)) {
-> -			freed = freed ? : 1;
-> -			break;
-> -		}
->  	}
->  unlock:
-> -	up_read(&shrinker_rwsem);
-> +	srcu_read_unlock(&shrinker_srcu, srcu_idx);
->  	return freed;
->  }
->  #else /* CONFIG_MEMCG */
+  d99a55a94a0d ("ext4: fix function prototype mismatch for ext4_feat_ktype")
 
+This is commit
+
+  118901ad1f25 ("ext4: Fix function prototype mismatch for ext4_feat_ktype")
+
+in Linus' tree.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/c4UFk8H=0ya6HhILawxv1I+
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmP1N9QACgkQAVBC80lX
+0GwDywf/RqBPa2h+z6FGkyxkG4tlJNFnT0eckaVyvZkgwvi4Ur81xvRnQZveFt65
+q3h4e0PJoUN4XoD9z7h14rcI4JHpuwgtIQy04Fya7wbQ81JBcZ+uUDdL7cfLyVfO
+4N+JSQDtP1oKtwTBW9ClxLYvJbv+3ow2k2ze4zEGcsqMLGW/Ly78K+aLnLWtb8aT
+J7CMx1sQa2FdEWZnJrgiYnt9xiOr2KP+jywVxQGo2EgNqrG3d3KLN5F3+/bbgo/7
++naXZkVbIM8PamP77u8YlXhk43iFOFW49xHlHhbWtpojCNvkejN1DUNLrDsmdQPm
+YzHj5Fllqpwl4khK5AWfFZIHW9As5w==
+=oPiU
+-----END PGP SIGNATURE-----
+
+--Sig_/c4UFk8H=0ya6HhILawxv1I+--
