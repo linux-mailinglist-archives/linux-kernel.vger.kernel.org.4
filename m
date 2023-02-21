@@ -2,59 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F03E69E886
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 20:47:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E62F369E88A
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 20:49:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229779AbjBUTrr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Feb 2023 14:47:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37484 "EHLO
+        id S229618AbjBUTtH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Feb 2023 14:49:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38802 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229484AbjBUTrp (ORCPT
+        with ESMTP id S229702AbjBUTtF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Feb 2023 14:47:45 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11D37303CC;
-        Tue, 21 Feb 2023 11:47:44 -0800 (PST)
+        Tue, 21 Feb 2023 14:49:05 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A02F42D46;
+        Tue, 21 Feb 2023 11:49:04 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id BEC7DB810A4;
-        Tue, 21 Feb 2023 19:47:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E4C49C433D2;
-        Tue, 21 Feb 2023 19:47:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1677008861;
-        bh=dFJujgGhJc0Dq/uIoVccF/BUH6VHAfRXVK8D80Q1u9o=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=BuXIklKN1RYioLhEdFwc1TLkN7Ze0a91qLkRJqC2nS0ajD6OOo3JVLcM1qjTTp+bR
-         DEhU61Ly5DcqyH8zNJeFZEZCb1w8GVsQFdsw8zkGdtkaa6+pciB5Do01CqSRU7Yo9r
-         AQvC6fxZQYUajmrA8G6qQkjXVuSA3qo7jVIXAF10=
-Date:   Tue, 21 Feb 2023 20:47:38 +0100
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     KP Singh <kpsingh@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, pjt@google.com, evn@google.com,
-        jpoimboe@kernel.org, tglx@linutronix.de, x86@kernel.org,
-        hpa@zytor.com, peterz@infradead.org,
-        pawan.kumar.gupta@linux.intel.com, kim.phillips@amd.com,
-        alexandre.chartre@oracle.com, daniel.sneddon@linux.intel.com,
-        corbet@lwn.net, bp@suse.de, linyujun809@huawei.com,
-        jmattson@google.com,
-        =?iso-8859-1?Q?Jos=E9?= Oliveira <joseloliveira11@gmail.com>,
-        Rodrigo Branco <rodrigo@kernelhacking.com>,
-        Alexandra Sandulescu <aesa@google.com>, stable@vger.kernel.org
-Subject: Re: [PATCH v2 1/2] x86/speculation: Allow enabling STIBP with legacy
- IBRS
-Message-ID: <Y/Uf2lnU/VcsFs1O@kroah.com>
-References: <20230221184908.2349578-1-kpsingh@kernel.org>
- <Y/UbqiHQ2/aczPzg@kroah.com>
- <CACYkzJ7pLhJ+NfUq36PaMxadkgv-cPtO60TW=g_Nh7vU1vEWqA@mail.gmail.com>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2EA986119A;
+        Tue, 21 Feb 2023 19:49:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 76FCFC433EF;
+        Tue, 21 Feb 2023 19:49:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1677008943;
+        bh=RupYw2DGR5V306vxxYF2YLT8KFlxHxLPTkxqfdOg4gA=;
+        h=Date:From:To:CC:Subject:In-Reply-To:References:From;
+        b=rtj4TWz4tw8KQOaANUPD4QAcyVf8cMOEtBOlk0RoMFLej/IVe9dW/etu+1jWqART7
+         EcaCQu0LSkFsJ9Rjc30+4RoVuRdaQPQ9uRM2EVNrxHN8u2D8l3oRwwZyZkJ/xwTKxN
+         Rb+f9iZ6GfhOlky5+V/bw0461ETn+85p3fzx5Scv3cMDJoLzHKZnAGq1RcoOjqeRzI
+         DLENNP2bKQfkRiGnl0iuFSpotMukYQ3qCCbkF0k7SRiZCCs+uyXfhfmIuiDDPMAu/X
+         m984Lb1QnQk+3Emni6IEaNnaRLQ6YvhRa+zoewb4QDrmWBSunYEr12L3AavYWxYSfV
+         ZMcW78LArfl1g==
+Date:   Tue, 21 Feb 2023 11:49:00 -0800
+From:   Kees Cook <kees@kernel.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Kees Cook <keescook@chromium.org>
+CC:     linux-kernel@vger.kernel.org,
+        Paulo Miguel Almeida <paulo.miguel.almeida.rodenas@gmail.com>,
+        Sam James <sam@gentoo.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Eric Biggers <ebiggers@kernel.org>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        linux-hardening@vger.kernel.org
+Subject: Re: [GIT PULL] hardening updates for v6.3-rc1
+User-Agent: K-9 Mail for Android
+In-Reply-To: <CAHk-=wgw++ccN-Pd1npZsBSDD3z6EGUSKsWuAEh5YC-TmfJAug@mail.gmail.com>
+References: <63efd7ab.170a0220.3442b.6609@mx.google.com> <CAHk-=wgw++ccN-Pd1npZsBSDD3z6EGUSKsWuAEh5YC-TmfJAug@mail.gmail.com>
+Message-ID: <F522EBF9-9BB9-4258-B614-1BB87455B4F5@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CACYkzJ7pLhJ+NfUq36PaMxadkgv-cPtO60TW=g_Nh7vU1vEWqA@mail.gmail.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+Content-Type: text/plain;
+ charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -62,44 +61,28 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 21, 2023 at 11:35:29AM -0800, KP Singh wrote:
-> On Tue, Feb 21, 2023 at 11:29 AM Greg KH <gregkh@linuxfoundation.org> wrote:
-> >
-> > On Tue, Feb 21, 2023 at 07:49:07PM +0100, KP Singh wrote:
-> > > Setting the IBRS bit implicitly enables STIBP to protect against
-> > > cross-thread branch target injection. With enhanced IBRS, the bit it set
-> > > once and is not cleared again. However, on CPUs with just legacy IBRS,
-> > > IBRS bit set on user -> kernel and cleared on kernel -> user (a.k.a
-> > > KERNEL_IBRS). Clearing this bit also disables the implicitly enabled
-> > > STIBP, thus requiring some form of cross-thread protection in userspace.
-> > >
-> > > Enable STIBP, either opt-in via prctl or seccomp, or always on depending
-> > > on the choice of mitigation selected via spectre_v2_user.
-> > >
-> > > Reported-by: José Oliveira <joseloliveira11@gmail.com>
-> > > Reported-by: Rodrigo Branco <rodrigo@kernelhacking.com>
-> > > Reviewed-by: Alexandra Sandulescu <aesa@google.com>
-> > > Fixes: 7c693f54c873 ("x86/speculation: Add spectre_v2=ibrs option to support Kernel IBRS")
-> > > Cc: stable@vger.kernel.org
-> > > Signed-off-by: KP Singh <kpsingh@kernel.org>
-> > > ---
-> > >  arch/x86/kernel/cpu/bugs.c | 33 ++++++++++++++++++++++-----------
-> > >  1 file changed, 22 insertions(+), 11 deletions(-)
-> >
-> > Why isn't patch 2/2 for stable as well?
-> 
-> It should be. I actually forgot to remove stable from the first one as
-> there are still ongoing discussions and people kept having to "drop
-> stable".  I can send a v3 with stable Cc'ed. Should it have a fixes
-> tag too?
+On February 21, 2023 11:16:33 AM PST, Linus Torvalds <torvalds@linux-founda=
+tion=2Eorg> wrote:
+>On Fri, Feb 17, 2023 at 11:38 AM Kees Cook <keescook@chromium=2Eorg> wrot=
+e:
+>>
+>> Please pull these hardening updates for v6=2E3-rc1=2E
+>
+>So I've pulled this, but while looking at it, I see commit
+>5c0f220e1b2d ("Merge branch 'for-linus/hardening' into
+>for-next/hardening")=2E
+>
+>And that one-liner shortlog part is literally the whole commit message=2E
+>
+>I've said this before, and apparently I need to say this again: if you
+>cannot be bothered to explain *WHY* a merge exists, then that merge is
+>buggy garbage by definition=2E
 
-Why does anyone need to "drop stable" from a patch discussion?  That's
-not a problem, we _WANT_ to see the patch review and discussion also
-copied there to be aware of what is coming down the pipeline.  So
-whomever said that is not correct, sorry.
+Okay, understood=2E This was a merge of the fixes for v6=2E2=2E I'll expla=
+in that more clearly in the log from now on=2E :)
 
-And yes, a fixes: tag would be nice.
+-Kees
 
-thanks,
 
-greg k-h
+--=20
+Kees Cook
