@@ -2,79 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DDC7969E163
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 14:36:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C4AA69E169
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 14:37:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233820AbjBUNgE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Feb 2023 08:36:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53440 "EHLO
+        id S233590AbjBUNhE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Feb 2023 08:37:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54152 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233032AbjBUNgC (ORCPT
+        with ESMTP id S232116AbjBUNhC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Feb 2023 08:36:02 -0500
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 303312333C
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Feb 2023 05:36:01 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=ob2cxxBdXr81LLPpENIwzSSrtJCmjBBJ5S46KOzsjZw=; b=no6zPNoy3SCqUF7vV0UdJg0nL2
-        w7r3zESpgB4xoxy1RNWEvXGqevOZ90Gfv0aB0hSEVvBtJYCV/RvZWLO8cDKIQhtUqpzMVqSAykrTi
-        l9RZY11PLwH+psnpcg+/zD9S1TGrnvsQgy+7OVI4fAV5t0K7S2jaPx712hfTXmGhicy4sk36r/rIR
-        gLxHLoBYRetJKSH8uskNRKXnneTkXRGD9virQC4qe3euX4I4+fO7/OC78MWW13P0t20FDowcU+JeK
-        kit1Fm6hw9RMcsfbBFJNazrxREh/nqjPhY4aLXA6sIiJoduqYpr6t5R+8QoQQRfOJZJWrZgBanpci
-        afzWEhvQ==;
-Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1pUSnz-00Ce2L-I6; Tue, 21 Feb 2023 13:35:39 +0000
-Date:   Tue, 21 Feb 2023 13:35:39 +0000
-From:   Matthew Wilcox <willy@infradead.org>
-To:     Naoya Horiguchi <naoya.horiguchi@linux.dev>
-Cc:     linux-mm@kvack.org, Andrew Morton <akpm@linux-foundation.org>,
-        Miaohe Lin <linmiaohe@huawei.com>,
-        David Hildenbrand <david@redhat.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Hugh Dickins <hughd@google.com>,
-        Minchan Kim <minchan@kernel.org>,
-        Naoya Horiguchi <naoya.horiguchi@nec.com>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v1] mm/hwpoison: convert TTU_IGNORE_HWPOISON to
- TTU_HWPOISON
-Message-ID: <Y/TIq05CjrMyg7f0@casper.infradead.org>
-References: <20230221085905.1465385-1-naoya.horiguchi@linux.dev>
+        Tue, 21 Feb 2023 08:37:02 -0500
+Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0581F23334;
+        Tue, 21 Feb 2023 05:37:00 -0800 (PST)
+Received: from mail02.huawei.com (unknown [172.30.67.143])
+        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4PLgLY60p7z4f3jLy;
+        Tue, 21 Feb 2023 21:36:53 +0800 (CST)
+Received: from [10.174.176.73] (unknown [10.174.176.73])
+        by APP3 (Coremail) with SMTP id _Ch0CgC3YiD2yPRjJ5HKDg--.22816S3;
+        Tue, 21 Feb 2023 21:36:55 +0800 (CST)
+Subject: Re: [PATCH] block, bfq: fix uaf for bfqq in bic_set_bfqq()
+To:     =?UTF-8?Q?Holger_Hoffst=c3=a4tte?= <holger@applied-asynchrony.com>,
+        Yu Kuai <yukuai1@huaweicloud.com>, jack@suse.cz, tj@kernel.org,
+        josef@toxicpanda.com, axboe@kernel.dk, paolo.valente@linaro.org,
+        shinichiro.kawasaki@wdc.com
+Cc:     cgroups@vger.kernel.org, linux-block@vger.kernel.org,
+        linux-kernel@vger.kernel.org, yi.zhang@huawei.com,
+        yangerkun@huawei.com, "yukuai (C)" <yukuai3@huawei.com>
+References: <20230113094410.2907223-1-yukuai3@huawei.com>
+ <ca9fefd4-7109-042c-3b25-9eb795141145@huaweicloud.com>
+ <3e8c8567-f41d-66ae-0633-dcdbed007228@applied-asynchrony.com>
+From:   Yu Kuai <yukuai1@huaweicloud.com>
+Message-ID: <cb420c07-8143-2ff7-f6eb-57f9d9fda5aa@huaweicloud.com>
+Date:   Tue, 21 Feb 2023 21:36:53 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.8.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230221085905.1465385-1-naoya.horiguchi@linux.dev>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <3e8c8567-f41d-66ae-0633-dcdbed007228@applied-asynchrony.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: _Ch0CgC3YiD2yPRjJ5HKDg--.22816S3
+X-Coremail-Antispam: 1UD129KBjvJXoW7tF15ZrWxZw4UXFWUtFWDurg_yoW8CFy8pF
+        s2gF4YgryUJFykWr1Ut3WjqFyrtr4rJ34DKryjq3WxZry3Jr1IgF1j9rs09ryvqrWrGw47
+        ury5C3y3Zr1jg37anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUU9214x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
+        1l84ACjcxK6xIIjxv20xvE14v26F1j6w1UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4U
+        JVWxJr1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gc
+        CE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E
+        2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJV
+        W8JwACjcxG0xvEwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lFIxGxcIEc7CjxVA2Y2ka
+        0xkIwI1lc7I2V7IY0VAS07AlzVAYIcxG8wCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7x
+        kEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E
+        67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCw
+        CI42IY6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6rWUJVWr
+        Zr1UMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYx
+        BIdaVFxhVjvjDU0xZFpf9x0JUdHUDUUUUU=
+X-CM-SenderInfo: 51xn3trlr6x35dzhxuhorxvhhfrp/
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 21, 2023 at 05:59:05PM +0900, Naoya Horiguchi wrote:
-> After a memory error happens on a clean folio, a process unexpectedly
-> receives SIGBUS when it accesses to the error page.  This SIGBUS killing
-> is pointless and simply degrades the level of RAS of the system, because
-> the clean folio can be dropped without any data lost on memory error
-> handling as we do for a clean pagecache.
-> 
-> When memory_failure() is called on a clean folio, try_to_unmap() is called
-> twice (one from split_huge_page() and one from hwpoison_user_mappings()).
-> The root cause of the issue is that pte conversion to hwpoisoned entry is
-> now done in the first call of try_to_unmap() because PageHWPoison is already
-> set at this point, while it's actually expected to be done in the second
-> call.  This behavior disturbs the error handling operation like removing
-> pagecache, which results in the malfunction described above.
-> 
-> So convert TTU_IGNORE_HWPOISON into TTU_HWPOISON and set TTU_HWPOISON only
-> when we really intend to convert pte to hwpoison entry.  This can prevent
-> other callers of try_to_unmap() from accidentally converting to hwpoison
-> entries.
-> 
-> Fixes: a42634a6c07d ("readahead: Use a folio in read_pages()")
+Hi,
 
-How did you choose this Fixes tag?
+在 2023/02/21 18:19, Holger Hoffstätte 写道:
+> On 2023-02-21 08:04, Yu Kuai wrote:
+>> Hi, Jens
+>>
+>> 在 2023/01/13 17:44, Yu Kuai 写道:
+>>> After commit 64dc8c732f5c ("block, bfq: fix possible uaf for 
+>>> 'bfqq->bic'"),
+>>> bic->bfqq will be accessed in bic_set_bfqq(), however, in some context
+>>> bic->bfqq will be freed first, and bic_set_bfqq() is called with the 
+>>> freed
+>>> bic->bfqq.
+>>>
+>>> Fix the problem by always freeing bfqq after bic_set_bfqq().
+>>>
+>>> Fixes: 64dc8c732f5c ("block, bfq: fix possible uaf for 'bfqq->bic'")
+>>> Reported-and-tested-by: Shinichiro Kawasaki 
+>>> <shinichiro.kawasaki@wdc.com>
+>>> Signed-off-by: Yu Kuai <yukuai3@huawei.com>
+>>> ---
+>>>   block/bfq-cgroup.c  | 2 +-
+>>>   block/bfq-iosched.c | 4 +++-
+>>>   2 files changed, 4 insertions(+), 2 deletions(-)
+>>>
+>>> diff --git a/block/bfq-cgroup.c b/block/bfq-cgroup.c
+>>> index a6e8da5f5cfd..feb13ac25557 100644
+>>> --- a/block/bfq-cgroup.c
+>>> +++ b/block/bfq-cgroup.c
+>>> @@ -749,8 +749,8 @@ static void bfq_sync_bfqq_move(struct bfq_data 
+>>> *bfqd,
+>>>            * old cgroup.
+>>>            */
+>>>           bfq_put_cooperator(sync_bfqq);
+>>> -        bfq_release_process_ref(bfqd, sync_bfqq);
+>>>           bic_set_bfqq(bic, NULL, true, act_idx);
+>>> +        bfq_release_process_ref(bfqd, sync_bfqq);
+>>>       }
+>>>   }
+>>>
+>>
+>> It seems this change is missed in GIT PULL for-6.3. I'll send a seperate
+>> patch to fix this...
+>>
+> 
+> It was already applied in time for 6.2 as 
+> b600de2d7d3a16f9007fad1bdae82a3951a26af2
+> and also already merged to 6.1-stable.
+
+Yes, 6.2 and 6.1 doesn't have such problem because bfq_sync_bfqq_move()
+doesn't exist. The problem only exist in master branch currently.
+
+Thanks,
+Kuai
+> 
+> cheers
+> Holger
+> 
+> .
+> 
+
