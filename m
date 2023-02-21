@@ -2,119 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 050CC69D9FE
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 04:59:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2BE6A69D9FC
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 04:59:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233034AbjBUD7l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Feb 2023 22:59:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58312 "EHLO
+        id S232861AbjBUD7M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Feb 2023 22:59:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57088 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229643AbjBUD7j (ORCPT
+        with ESMTP id S233329AbjBUD7G (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Feb 2023 22:59:39 -0500
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 095C72597D;
-        Mon, 20 Feb 2023 19:59:13 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1676951953; x=1708487953;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=FrNLG+QvfuWYkv9Cmz8YtxcFaAnsx1lXVXu7DFcfMr8=;
-  b=VXs4Je6S40fpwsfG4LTTVHKGREG/VUA+Y/CwRdOrVZ1Hd1zytpkrNztM
-   6+fVpUMOvTlJ6RREB2QQUbGCaqVSw+a0gNSsIHPDXQZ7ZcXsobBbEiB8d
-   qz2OKmlmgE0l7b8XuDJ9ptRixoohH2YvRUxEnHnHJE1Kclblok+lsa7Co
-   iLrHU18F5Ya5C11RCbPK9zKP1KvXzoqkbFyfQ2dYEGfbImCS+E92zWRUK
-   vXL9/ntza/QEANew7SIubPkrIRar96CoIvmXVOAjgEV3e5CpChIm/7Ts8
-   0UMabFLiyf45UwRBAO52T8qEiaf8l1ti8qwqtJqSmTK+FZzfwa+/NDyPi
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10627"; a="334733486"
-X-IronPort-AV: E=Sophos;i="5.97,314,1669104000"; 
-   d="scan'208";a="334733486"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Feb 2023 19:58:43 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10627"; a="740253832"
-X-IronPort-AV: E=Sophos;i="5.97,314,1669104000"; 
-   d="scan'208";a="740253832"
-Received: from lkp-server01.sh.intel.com (HELO 4455601a8d94) ([10.239.97.150])
-  by fmsmga004.fm.intel.com with ESMTP; 20 Feb 2023 19:58:41 -0800
-Received: from kbuild by 4455601a8d94 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pUJnd-000EQ9-14;
-        Tue, 21 Feb 2023 03:58:41 +0000
-Date:   Tue, 21 Feb 2023 11:58:07 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Jeremi Piotrowski <jpiotrowski@linux.microsoft.com>,
-        linux-kernel@vger.kernel.org
-Cc:     oe-kbuild-all@lists.linux.dev,
-        Jeremi Piotrowski <jpiotrowski@linux.microsoft.com>,
-        netdev@vger.kernel.org, Richard Cochran <richardcochran@gmail.com>,
-        Christoph Hellwig <hch@lst.de>
-Subject: Re: [PATCH] ptp: kvm: Use decrypted memory in confidential guest on
- x86
-Message-ID: <202302211153.uvDZ9eZu-lkp@intel.com>
-References: <20230220130235.2603366-1-jpiotrowski@linux.microsoft.com>
+        Mon, 20 Feb 2023 22:59:06 -0500
+Received: from mail-vs1-xe2d.google.com (mail-vs1-xe2d.google.com [IPv6:2607:f8b0:4864:20::e2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1EB4225940
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Feb 2023 19:58:39 -0800 (PST)
+Received: by mail-vs1-xe2d.google.com with SMTP id g12so4711629vsf.12
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Feb 2023 19:58:39 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1676951913;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=L7Tcyr5dOvP+6P4gxGkarZtN6wcj1ZBVjR/UVVwdfS8=;
+        b=IGCWsSkkutgh0okrfT7uNFy1RET6SsVtvhWs/LxdEJVE8B7tM6E3UEw//b+M/52lAZ
+         l66CsyZgEsgVv0gZWtiop9xYWuA1CQw/7tUTKesUiToMpqgi57toBLVQOxWgj787HSjH
+         MS6+Q7uiQAejEqu1bQJqsIfCOQQWiq1wvAvRw=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1676951913;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=L7Tcyr5dOvP+6P4gxGkarZtN6wcj1ZBVjR/UVVwdfS8=;
+        b=3t6cNnhruHZdqeEagQVsjYk2s/eUoVYUIevofdNew1X3hZo8XxIzMC8zcVeS0nOvgV
+         xijwSdezV47VKW42994sGtGqMbos+a7YWk7tAtR2+tVrwQ30iHOyx0CsFXUIgC3pSf2P
+         nv+xHv14BwX1/24IeO3lPP71rPldp4g4q2Be+0iJ+G5CcZZv/tSplENpRPoj8P6GfZyK
+         cDdJljQvlH8fXWMoBHZMKu5Pcm99XuHIXKjUV6Xg0ufVD0dmm1RBi3g7XbVLLHxDQXXK
+         92F+5vo6aemk15F98YsKOEy3IW5an5fDg++ZlKrdP4OMiyU5g2QJ4vcVWjfwPyC21UPE
+         7fQQ==
+X-Gm-Message-State: AO0yUKXqZGVhL4qUPU3WIvdwU8FkuCYNlzxL8rdwKpo5K0K/C1Oht9Bb
+        1OsvEP6T+AojbRKJm6uGx4gXDOM42BS0HcLhOmLQLQ==
+X-Google-Smtp-Source: AK7set/CV/ZM7hd/l3fjmImnECupChh8gWI0Feh0+HOI2S1BX5lITZZjvlZgjwhlppcpeUrVOzbCiYwLLNVX2ZFcm+U=
+X-Received: by 2002:a67:f6c1:0:b0:411:a14d:6bac with SMTP id
+ v1-20020a67f6c1000000b00411a14d6bacmr834615vso.44.1676951912861; Mon, 20 Feb
+ 2023 19:58:32 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230220130235.2603366-1-jpiotrowski@linux.microsoft.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+References: <20230220150111.77897-1-angelogioacchino.delregno@collabora.com> <20230220150111.77897-54-angelogioacchino.delregno@collabora.com>
+In-Reply-To: <20230220150111.77897-54-angelogioacchino.delregno@collabora.com>
+From:   Chen-Yu Tsai <wenst@chromium.org>
+Date:   Tue, 21 Feb 2023 11:58:21 +0800
+Message-ID: <CAGXv+5Ge2aLLTLHajzdwRYtWU3akcZuo8e8z2niVqKMhzR4x5Q@mail.gmail.com>
+Subject: Re: [PATCH v3 53/55] clk: mediatek: mt8135: Join root_clk_alias and
+ top_divs arrays
+To:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+Cc:     mturquette@baylibre.com, sboyd@kernel.org, matthias.bgg@gmail.com,
+        johnson.wang@mediatek.com, miles.chen@mediatek.com,
+        chun-jie.chen@mediatek.com, daniel@makrotopia.org,
+        fparent@baylibre.com, msp@baylibre.com, nfraprado@collabora.com,
+        rex-bc.chen@mediatek.com, zhaojh329@gmail.com,
+        sam.shih@mediatek.com, edward-jw.yang@mediatek.com,
+        yangyingliang@huawei.com, granquet@baylibre.com,
+        pablo.sun@mediatek.com, sean.wang@mediatek.com,
+        chen.zhong@mediatek.com, linux-kernel@vger.kernel.org,
+        linux-clk@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Jeremi,
+On Mon, Feb 20, 2023 at 11:02 PM AngeloGioacchino Del Regno
+<angelogioacchino.delregno@collabora.com> wrote:
+>
+> In preparation for converting this driver to the common simple probe
+> mechanism, join the root_clk_alias and top_divs mtk_fixed_factor
+> arrays.
+>
+> This commit brings no functional change.
+>
+> Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 
-Thank you for the patch! Perhaps something to improve:
-
-[auto build test WARNING on horms-ipvs/master]
-[also build test WARNING on mst-vhost/linux-next net/master net-next/master linus/master v6.2]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Jeremi-Piotrowski/ptp-kvm-Use-decrypted-memory-in-confidential-guest-on-x86/20230220-210441
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/horms/ipvs.git master
-patch link:    https://lore.kernel.org/r/20230220130235.2603366-1-jpiotrowski%40linux.microsoft.com
-patch subject: [PATCH] ptp: kvm: Use decrypted memory in confidential guest on x86
-config: arm-allyesconfig (https://download.01.org/0day-ci/archive/20230221/202302211153.uvDZ9eZu-lkp@intel.com/config)
-compiler: arm-linux-gnueabi-gcc (GCC) 12.1.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/0dd1701fd254692af3d0ca051e092e8dcef190c4
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Jeremi-Piotrowski/ptp-kvm-Use-decrypted-memory-in-confidential-guest-on-x86/20230220-210441
-        git checkout 0dd1701fd254692af3d0ca051e092e8dcef190c4
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=arm olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash drivers/ptp/
-
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202302211153.uvDZ9eZu-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
->> drivers/ptp/ptp_kvm_arm.c:25:6: warning: no previous prototype for 'kvm_arch_ptp_exit' [-Wmissing-prototypes]
-      25 | void kvm_arch_ptp_exit(void)
-         |      ^~~~~~~~~~~~~~~~~
-
-
-vim +/kvm_arch_ptp_exit +25 drivers/ptp/ptp_kvm_arm.c
-
-    24	
-  > 25	void kvm_arch_ptp_exit(void)
-    26	{
-    27	}
-    28	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+Reviewed-by: Chen-Yu Tsai <wenst@chromium.org>
