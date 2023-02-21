@@ -2,114 +2,170 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3273F69E188
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 14:41:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A7BF069E18C
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 14:43:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233930AbjBUNlf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Feb 2023 08:41:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59880 "EHLO
+        id S234081AbjBUNm6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Feb 2023 08:42:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32972 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233032AbjBUNlc (ORCPT
+        with ESMTP id S234090AbjBUNm4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Feb 2023 08:41:32 -0500
-Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF067298D5;
-        Tue, 21 Feb 2023 05:41:30 -0800 (PST)
-Received: from lelv0266.itg.ti.com ([10.180.67.225])
-        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 31LDfK8p064523;
-        Tue, 21 Feb 2023 07:41:20 -0600
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1676986880;
-        bh=BfsIZOIC/YfpvyPq0ogn3Gds2Miyyt1nc9Drj/TyLj8=;
-        h=Date:From:To:CC:Subject:References:In-Reply-To;
-        b=mZayAV4d2omFG9e4qWxnKDY6SdR5RYiuKrhaCmIGp8rhkDmI4hz4HZCH4EUqk4WkT
-         WdKdw0zca4XOkge/NYJu0Xds2GKXCxVfQDl2eWOykc8N4JV0arJCBVrOwZSOgKE+be
-         xnig5qVdpRJjd8D8MlTJJb+KZWGuFVsmb5qRJZpU=
-Received: from DLEE114.ent.ti.com (dlee114.ent.ti.com [157.170.170.25])
-        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 31LDfKvi123012
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Tue, 21 Feb 2023 07:41:20 -0600
-Received: from DLEE110.ent.ti.com (157.170.170.21) by DLEE114.ent.ti.com
- (157.170.170.25) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Tue, 21
- Feb 2023 07:41:20 -0600
-Received: from lelv0327.itg.ti.com (10.180.67.183) by DLEE110.ent.ti.com
- (157.170.170.21) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
- Frontend Transport; Tue, 21 Feb 2023 07:41:20 -0600
-Received: from localhost (ileaxei01-snat.itg.ti.com [10.180.69.5])
-        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 31LDfKBe119197;
-        Tue, 21 Feb 2023 07:41:20 -0600
-Date:   Tue, 21 Feb 2023 07:41:20 -0600
-From:   Nishanth Menon <nm@ti.com>
-To:     Ravi Gunasekaran <r-gunasekaran@ti.com>
-CC:     <afd@ti.com>, <vigneshr@ti.com>, <kristo@kernel.org>,
-        <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
-        <s-vadapalli@ti.com>, <linux-arm-kernel@lists.infradead.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v10 1/9] dt-bindings: mfd: ti,j721e-system-controller:
- Fix mux node regex
-Message-ID: <20230221134120.hveyczujflmfjbsz@matted>
-References: <20230221120612.27366-1-r-gunasekaran@ti.com>
- <20230221120612.27366-2-r-gunasekaran@ti.com>
+        Tue, 21 Feb 2023 08:42:56 -0500
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E8F8170A
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Feb 2023 05:42:55 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1676986975; x=1708522975;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=7hNWcojp5W2U9hZRNmXQmRA9fxvEreTv/MsDdmwKkTM=;
+  b=nP+yJofG5TPxvfNIkr+ZqSuzvNZrZpqs+hL7e2o396Q3Zsm9mRvYlmZY
+   GaEku5e7fYXQ4BRz0bdxhLX4JIpexEWh0j19Wo5/mZJqavORfxM5Tq4HC
+   jyWTRQOMhQneBbZ/uA1P3+Ke26N5UgPDs7G8jSmpjd94Q3xQr/3jPZ32w
+   uBRi/Wfw56uyKnMU72J3l67p3ZWQoseooj9xHPvvbMprIkf6Rt+0NTcXs
+   oT04MOr/yrrsr1V4zSmqfjpkKmtDJ3asZ5R5Mj73hFlvYDh2NJoc5eFgw
+   dAoCX5OE4bYXUEZ/1vMefJOrhKn1Wu7pc5LbcTNaBKo6oHVeH2Ye8OsAC
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10627"; a="316353737"
+X-IronPort-AV: E=Sophos;i="5.97,315,1669104000"; 
+   d="scan'208";a="316353737"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Feb 2023 05:42:54 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10627"; a="673679994"
+X-IronPort-AV: E=Sophos;i="5.97,315,1669104000"; 
+   d="scan'208";a="673679994"
+Received: from stinkpipe.fi.intel.com (HELO stinkbox) ([10.237.72.70])
+  by fmsmga007.fm.intel.com with SMTP; 21 Feb 2023 05:42:50 -0800
+Received: by stinkbox (sSMTP sendmail emulation); Tue, 21 Feb 2023 15:42:49 +0200
+Date:   Tue, 21 Feb 2023 15:42:49 +0200
+From:   Ville =?iso-8859-1?Q?Syrj=E4l=E4?= <ville.syrjala@linux.intel.com>
+To:     Pekka Paalanen <ppaalanen@gmail.com>
+Cc:     Rob Clark <robdclark@gmail.com>,
+        Rob Clark <robdclark@chromium.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Tvrtko Ursulin <tvrtko.ursulin@intel.com>,
+        Christian =?iso-8859-1?Q?K=F6nig?= 
+        <ckoenig.leichtzumerken@gmail.com>,
+        Michel =?iso-8859-1?Q?D=E4nzer?= <michel@daenzer.net>,
+        open list <linux-kernel@vger.kernel.org>,
+        dri-devel@lists.freedesktop.org,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        freedreno@lists.freedesktop.org
+Subject: Re: [PATCH v4 10/14] drm/vblank: Add helper to get next vblank time
+Message-ID: <Y/TKWRNXvRo6seKK@intel.com>
+References: <20230218211608.1630586-1-robdclark@gmail.com>
+ <20230218211608.1630586-11-robdclark@gmail.com>
+ <20230220110820.595cfa37@eldfell>
+ <CAF6AEGuo-vmW4Va9=RH+kH9KgNvR2vzjJ8meO-oty56xjDhjgg@mail.gmail.com>
+ <20230221104551.60d44d1c@eldfell>
+ <Y/TAr64SpxO712RB@intel.com>
+ <20230221151133.6392c521@eldfell>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <20230221120612.27366-2-r-gunasekaran@ti.com>
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20230221151133.6392c521@eldfell>
+X-Patchwork-Hint: comment
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 17:36-20230221, Ravi Gunasekaran wrote:
-> mux-controller nodes may not have "reg" property. Update the regex
-> for such nodes to resolve the dtbs warnings
+On Tue, Feb 21, 2023 at 03:11:33PM +0200, Pekka Paalanen wrote:
+> On Tue, 21 Feb 2023 15:01:35 +0200
+> Ville Syrjälä <ville.syrjala@linux.intel.com> wrote:
 > 
-> Signed-off-by: Ravi Gunasekaran <r-gunasekaran@ti.com>
-> ---
->  .../bindings/mfd/ti,j721e-system-controller.yaml          | 8 +++++++-
->  1 file changed, 7 insertions(+), 1 deletion(-)
+> > On Tue, Feb 21, 2023 at 10:45:51AM +0200, Pekka Paalanen wrote:
+> > > On Mon, 20 Feb 2023 07:55:41 -0800
+> > > Rob Clark <robdclark@gmail.com> wrote:
+> > >   
+> > > > On Mon, Feb 20, 2023 at 1:08 AM Pekka Paalanen <ppaalanen@gmail.com> wrote:  
+> > > > >
+> > > > > On Sat, 18 Feb 2023 13:15:53 -0800
+> > > > > Rob Clark <robdclark@gmail.com> wrote:
+> > > > >    
+> > > > > > From: Rob Clark <robdclark@chromium.org>
+> > > > > >
+> > > > > > Will be used in the next commit to set a deadline on fences that an
+> > > > > > atomic update is waiting on.
+> > > > > >
+> > > > > > Signed-off-by: Rob Clark <robdclark@chromium.org>
+> > > > > > ---
+> > > > > >  drivers/gpu/drm/drm_vblank.c | 32 ++++++++++++++++++++++++++++++++
+> > > > > >  include/drm/drm_vblank.h     |  1 +
+> > > > > >  2 files changed, 33 insertions(+)
+> > > > > >
+> > > > > > diff --git a/drivers/gpu/drm/drm_vblank.c b/drivers/gpu/drm/drm_vblank.c
+> > > > > > index 2ff31717a3de..caf25ebb34c5 100644
+> > > > > > --- a/drivers/gpu/drm/drm_vblank.c
+> > > > > > +++ b/drivers/gpu/drm/drm_vblank.c
+> > > > > > @@ -980,6 +980,38 @@ u64 drm_crtc_vblank_count_and_time(struct drm_crtc *crtc,
+> > > > > >  }
+> > > > > >  EXPORT_SYMBOL(drm_crtc_vblank_count_and_time);
+> > > > > >
+> > > > > > +/**
+> > > > > > + * drm_crtc_next_vblank_time - calculate the time of the next vblank
+> > > > > > + * @crtc: the crtc for which to calculate next vblank time
+> > > > > > + * @vblanktime: pointer to time to receive the next vblank timestamp.
+> > > > > > + *
+> > > > > > + * Calculate the expected time of the next vblank based on time of previous
+> > > > > > + * vblank and frame duration    
+> > > > >
+> > > > > Hi,
+> > > > >
+> > > > > for VRR this targets the highest frame rate possible for the current
+> > > > > VRR mode, right?
+> > > > >    
+> > > > 
+> > > > It is based on vblank->framedur_ns which is in turn based on
+> > > > mode->crtc_clock.  Presumably for VRR that ends up being a maximum?  
+> > > 
+> > > I don't know. :-)  
+> > 
+> > At least for i915 this will give you the maximum frame
+> > duration.
+> 
+> Really maximum duration? So minimum VRR frequency?
 
+Yes. Doing otherwise would complicate the actual
+timestamp calculation even further.
 
-Are you expecting for me to pick this up? Looks like something
-Lee Jones needs to pick up? He is'nt in the CC either?
+The actual timestamps i915 generates will however match
+the start of active video, regardless of how long vblank
+was extended.
 
-If Lee Jones is willing to give me an immutable tag, I can pick the same
-up and pick up dependent patches. Else, please split the series for each
-of the maintainers to pick up without dependency.
+The only exception might be if you query the timestamp
+during vblank but VRR exit has not yet been triggered,
+ie. not commit has been made during the frame. In that
+case the timestamp will correspond to the max frame
+duration, which may or may not end up being the case.
+Depends totally whether a commit will still happen
+during the vblank to trigger an early vblank exit.
 
 > 
-> diff --git a/Documentation/devicetree/bindings/mfd/ti,j721e-system-controller.yaml b/Documentation/devicetree/bindings/mfd/ti,j721e-system-controller.yaml
-> index 76ef4352e13c..532bfa45e6a0 100644
-> --- a/Documentation/devicetree/bindings/mfd/ti,j721e-system-controller.yaml
-> +++ b/Documentation/devicetree/bindings/mfd/ti,j721e-system-controller.yaml
-> @@ -45,7 +45,7 @@ properties:
->  
->  patternProperties:
->    # Optional children
-> -  "^mux-controller@[0-9a-f]+$":
-> +  "^mux-controller(@|-)[0-9a-f]+$":
->      type: object
->      description:
->        This is the SERDES lane control mux.
-> @@ -94,6 +94,12 @@ examples:
->                  /* SERDES4 lane0/1/2/3 select */
->          };
->  
-> +        usb_serdes_mux: mux-controller-80 {
-> +                compatible = "mmio-mux";
-> +                #mux-control-cells = <1>;
-> +                mux-reg-masks = <0x0 0x8000000>;
-> +        };
-> +
->          clock-controller@4140 {
->              compatible = "ti,am654-ehrpwm-tbclk", "syscon";
->              reg = <0x4140 0x18>;
-> -- 
-> 2.17.1
+> > Also this does not calculate the the start of vblank, it
+> > calculates the start of active video.
 > 
+> Oh indeed, so it's too late. What one would actually need for the
+> deadline is the driver's deadline to present for the immediately next
+> start of active video.
+> 
+> And with VRR that should probably aim for the maximum frame frequency,
+> not minimum?
+
+Yeah, max frame rate seems like the easiest thing to use there.
+
+The other option might be some average value based on recent
+history, but figuring tht out would seem like a lot more work.
+
+-- 
+Ville Syrjälä
+Intel
