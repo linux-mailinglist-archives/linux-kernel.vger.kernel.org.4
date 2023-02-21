@@ -2,118 +2,188 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4663369E036
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 13:21:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0334569E030
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 13:20:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234497AbjBUMVj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Feb 2023 07:21:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42988 "EHLO
+        id S234369AbjBUMUL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Feb 2023 07:20:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40950 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234009AbjBUMVg (ORCPT
+        with ESMTP id S234267AbjBUMUE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Feb 2023 07:21:36 -0500
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9EC5F29E3C
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Feb 2023 04:21:11 -0800 (PST)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 71695FEC;
-        Tue, 21 Feb 2023 04:11:27 -0800 (PST)
-Received: from [10.57.14.135] (unknown [10.57.14.135])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id B1F263F703;
-        Tue, 21 Feb 2023 04:10:42 -0800 (PST)
-Message-ID: <c61990d8-cdc5-2b70-178d-694c187afd45@arm.com>
-Date:   Tue, 21 Feb 2023 12:10:41 +0000
+        Tue, 21 Feb 2023 07:20:04 -0500
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73788298FB;
+        Tue, 21 Feb 2023 04:19:39 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1676981979; x=1708517979;
+  h=date:from:to:cc:subject:message-id:reply-to:references:
+   mime-version:in-reply-to;
+  bh=rNp1uu81FPNgOnZRpB88mbF0GVkK0krzknn+hkCEz0w=;
+  b=ky4+DfEmHijY+TsNIKQ/6ZIY75zcG1IX82m1I20l3iA4dy2gV0fis//W
+   J8r78r++jjJC4aFUjdNbsw/+NsCmf5joNSJuORUxKR0Q49cKdkEUsuw9B
+   ZJCxTqpt1jPJIUoE/KnNYxsHRulAt4hxSWB48OJn4wUqe9SnsnWloAadg
+   F4dsp1MsislcvI+/SKheGhgG5MyzyYiRR2Xa+8oLXajguWG+4LGUzRusg
+   iw418CG0J4RdeLwNN1qKv7SD009uOAnMhH1+kSjXBL3nO6MjRtkcDgVUZ
+   488MgEAZIAvJdaFgzq3shtjOdk2Dq9twq0ugaIAXrdkf4EOpLkMXNpBMU
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10627"; a="316337822"
+X-IronPort-AV: E=Sophos;i="5.97,315,1669104000"; 
+   d="scan'208";a="316337822"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Feb 2023 04:19:26 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10627"; a="917165304"
+X-IronPort-AV: E=Sophos;i="5.97,315,1669104000"; 
+   d="scan'208";a="917165304"
+Received: from chaop.bj.intel.com (HELO localhost) ([10.240.192.105])
+  by fmsmga006.fm.intel.com with ESMTP; 21 Feb 2023 04:19:16 -0800
+Date:   Tue, 21 Feb 2023 20:11:35 +0800
+From:   Chao Peng <chao.p.peng@linux.intel.com>
+To:     Michael Roth <michael.roth@amd.com>
+Cc:     Sean Christopherson <seanjc@google.com>,
+        Isaku Yamahata <isaku.yamahata@gmail.com>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        linux-fsdevel@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-api@vger.kernel.org, linux-doc@vger.kernel.org,
+        qemu-devel@nongnu.org, Paolo Bonzini <pbonzini@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Naoya Horiguchi <naoya.horiguchi@nec.com>,
+        Miaohe Lin <linmiaohe@huawei.com>, x86@kernel.org,
+        "H . Peter Anvin" <hpa@zytor.com>, Hugh Dickins <hughd@google.com>,
+        Jeff Layton <jlayton@kernel.org>,
+        "J . Bruce Fields" <bfields@fieldses.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Shuah Khan <shuah@kernel.org>, Mike Rapoport <rppt@kernel.org>,
+        Steven Price <steven.price@arm.com>,
+        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Vishal Annapurve <vannapurve@google.com>,
+        Yu Zhang <yu.c.zhang@linux.intel.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        luto@kernel.org, jun.nakajima@intel.com, dave.hansen@intel.com,
+        ak@linux.intel.com, david@redhat.com, aarcange@redhat.com,
+        ddutile@redhat.com, dhildenb@redhat.com,
+        Quentin Perret <qperret@google.com>, tabba@google.com,
+        mhocko@suse.com, wei.w.wang@intel.com
+Subject: Re: [PATCH v10 0/9] KVM: mm: fd-based approach for supporting KVM
+Message-ID: <20230221121135.GA1595130@chaop.bj.intel.com>
+Reply-To: Chao Peng <chao.p.peng@linux.intel.com>
+References: <20221202061347.1070246-1-chao.p.peng@linux.intel.com>
+ <Y8H5Z3e4hZkFxAVS@google.com>
+ <20230119111308.GC2976263@ls.amr.corp.intel.com>
+ <Y8lg1G2lRIrI/hld@google.com>
+ <20230119223704.GD2976263@ls.amr.corp.intel.com>
+ <Y880FiYF7YCtsw/i@google.com>
+ <20230213130102.two7q3kkcf254uof@amd.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH v2 3/3] sched/tp: Add new tracepoint to track compute
- energy computation
-Content-Language: en-US
-To:     Qais Yousef <qyousef@layalina.io>
-Cc:     linux-kernel@vger.kernel.org, Wei Wang <wvw@google.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Xuewen Yan <xuewen.yan94@gmail.com>,
-        Hank <han.lin@mediatek.com>,
-        Jonathan JMChen <Jonathan.JMChen@mediatek.com>,
-        Ingo Molnar <mingo@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>
-References: <20230205224318.2035646-1-qyousef@layalina.io>
- <20230205224318.2035646-4-qyousef@layalina.io>
- <d99b1097-1d77-1547-30bf-860756d4952f@arm.com>
- <20230221120832.x642tqohxv5nascr@airbuntu>
-From:   Lukasz Luba <lukasz.luba@arm.com>
-In-Reply-To: <20230221120832.x642tqohxv5nascr@airbuntu>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230213130102.two7q3kkcf254uof@amd.com>
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 2/21/23 12:08, Qais Yousef wrote:
-> On 02/20/23 11:22, Lukasz Luba wrote:
->> Hi Qais,
->>
->> On 2/5/23 22:43, Qais Yousef wrote:
->>> It was useful to track feec() placement decision and debug the spare
->>> capacity and optimization issues vs uclamp_max.
->>>
->>> Signed-off-by: Qais Yousef <qyousef@layalina.io>
->>> ---
->>>    include/trace/events/sched.h | 4 ++++
->>>    kernel/sched/core.c          | 1 +
->>>    kernel/sched/fair.c          | 7 ++++++-
->>>    3 files changed, 11 insertions(+), 1 deletion(-)
->>>
->>> diff --git a/include/trace/events/sched.h b/include/trace/events/sched.h
->>> index fbb99a61f714..20cc884f72ff 100644
->>> --- a/include/trace/events/sched.h
->>> +++ b/include/trace/events/sched.h
->>> @@ -735,6 +735,10 @@ DECLARE_TRACE(sched_update_nr_running_tp,
->>>    	TP_PROTO(struct rq *rq, int change),
->>>    	TP_ARGS(rq, change));
->>> +DECLARE_TRACE(sched_compute_energy_tp,
->>> +	TP_PROTO(struct task_struct *p, int dst_cpu, unsigned long energy),
->>> +	TP_ARGS(p, dst_cpu, energy));
->>> +
->>>    #endif /* _TRACE_SCHED_H */
->>>    /* This part must be outside protection */
->>> diff --git a/kernel/sched/core.c b/kernel/sched/core.c
->>> index 4580fe3e1d0c..5f6dde9b892b 100644
->>> --- a/kernel/sched/core.c
->>> +++ b/kernel/sched/core.c
->>> @@ -110,6 +110,7 @@ EXPORT_TRACEPOINT_SYMBOL_GPL(sched_overutilized_tp);
->>>    EXPORT_TRACEPOINT_SYMBOL_GPL(sched_util_est_cfs_tp);
->>>    EXPORT_TRACEPOINT_SYMBOL_GPL(sched_util_est_se_tp);
->>>    EXPORT_TRACEPOINT_SYMBOL_GPL(sched_update_nr_running_tp);
->>> +EXPORT_TRACEPOINT_SYMBOL_GPL(sched_compute_energy_tp);
->>>    DEFINE_PER_CPU_SHARED_ALIGNED(struct rq, runqueues);
->>> diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
->>> index a8c3d92ff3f6..801e903c4307 100644
->>> --- a/kernel/sched/fair.c
->>> +++ b/kernel/sched/fair.c
->>> @@ -7295,11 +7295,16 @@ compute_energy(struct energy_env *eenv, struct perf_domain *pd,
->>>    {
->>>    	unsigned long max_util = eenv_pd_max_util(eenv, pd_cpus, p, dst_cpu);
->>>    	unsigned long busy_time = eenv->pd_busy_time;
->>> +	unsigned long energy;
->>>    	if (dst_cpu >= 0)
->>>    		busy_time = min(eenv->pd_cap, busy_time + eenv->task_busy_time);
->>> -	return em_cpu_energy(pd->em_pd, max_util, busy_time, eenv->cpu_cap);
->>> +	energy = em_cpu_energy(pd->em_pd, max_util, busy_time, eenv->cpu_cap);
->>> +
->>> +	trace_sched_compute_energy_tp(p, dst_cpu, energy);
->>
->> Could we also dump the max_util and busy_time?
+> Hi Sean,
 > 
-> We certainly can :)
+> We've rebased the SEV+SNP support onto your updated UPM base support
+> tree and things seem to be working okay, but we needed some fixups on
+> top of the base support get things working, along with 1 workaround
+> for an issue that hasn't been root-caused yet:
+> 
+>   https://github.com/mdroth/linux/commits/upmv10b-host-snp-v8-wip
+> 
+>   *stash (upm_base_support): mm: restrictedmem: Kirill's pinning implementation
+>   *workaround (use_base_support): mm: restrictedmem: loosen exclusivity check
 
-Great, thanks!
+What I'm seeing is Slot#3 gets added first and then deleted. When it's
+gets added, Slot#0 already has the same range bound to restrictedmem so
+trigger the exclusive check. This check is exactly the current code for.
 
+>   *fixup (upm_base_support): KVM: use inclusive ranges for restrictedmem binding/unbinding
+>   *fixup (upm_base_support): mm: restrictedmem: use inclusive ranges for issuing invalidations
+
+As many kernel APIs treat 'end' as exclusive, I would rather keep using
+exclusive 'end' for these APIs(restrictedmem_bind/restrictedmem_unbind
+and notifier callbacks) but fix it internally in the restrictedmem. E.g.
+all the places where xarray API needs a 'last'/'max' we use 'end - 1'.
+See below for the change.
+
+>   *fixup (upm_base_support): KVM: fix restrictedmem GFN range calculations
+
+Subtracting slot->restrictedmem.index for start/end in
+restrictedmem_get_gfn_range() is the correct fix.
+
+>   *fixup (upm_base_support): KVM: selftests: CoCo compilation fixes
+> 
+> We plan to post an updated RFC for v8 soon, but also wanted to share
+> the staging tree in case you end up looking at the UPM integration aspects
+> before then.
+> 
+> -Mike
+
+This is the restrictedmem fix to solve 'end' being stored and checked in xarray:
+
+--- a/mm/restrictedmem.c
++++ b/mm/restrictedmem.c
+@@ -46,12 +46,12 @@ static long restrictedmem_punch_hole(struct restrictedmem *rm, int mode,
+         */
+        down_read(&rm->lock);
+ 
+-       xa_for_each_range(&rm->bindings, index, notifier, start, end)
++       xa_for_each_range(&rm->bindings, index, notifier, start, end - 1)
+                notifier->ops->invalidate_start(notifier, start, end);
+ 
+        ret = memfd->f_op->fallocate(memfd, mode, offset, len);
+ 
+-       xa_for_each_range(&rm->bindings, index, notifier, start, end)
++       xa_for_each_range(&rm->bindings, index, notifier, start, end - 1)
+                notifier->ops->invalidate_end(notifier, start, end);
+ 
+        up_read(&rm->lock);
+@@ -224,7 +224,7 @@ static int restricted_error_remove_page(struct address_space *mapping,
+                }
+                spin_unlock(&inode->i_lock);
+ 
+-               xa_for_each_range(&rm->bindings, index, notifier, start, end)
++               xa_for_each_range(&rm->bindings, index, notifier, start, end - 1)
+                        notifier->ops->error(notifier, start, end);
+                break;
+        }
+@@ -301,11 +301,12 @@ int restrictedmem_bind(struct file *file, pgoff_t start, pgoff_t end,
+                if (exclusive != rm->exclusive)
+                        goto out_unlock;
+ 
+-               if (exclusive && xa_find(&rm->bindings, &start, end, XA_PRESENT))
++               if (exclusive &&
++                   xa_find(&rm->bindings, &start, end - 1, XA_PRESENT))
+                        goto out_unlock;
+        }
+ 
+-       xa_store_range(&rm->bindings, start, end, notifier, GFP_KERNEL);
++       xa_store_range(&rm->bindings, start, end - 1, notifier, GFP_KERNEL);
+        rm->exclusive = exclusive;
+        ret = 0;
+ out_unlock:
+@@ -320,7 +321,7 @@ void restrictedmem_unbind(struct file *file, pgoff_t start, pgoff_t end,
+        struct restrictedmem *rm = file->f_mapping->private_data;
+ 
+        down_write(&rm->lock);
+-       xa_store_range(&rm->bindings, start, end, NULL, GFP_KERNEL);
++       xa_store_range(&rm->bindings, start, end - 1, NULL, GFP_KERNEL);
+        synchronize_rcu();
+        up_write(&rm->lock);
+ }
