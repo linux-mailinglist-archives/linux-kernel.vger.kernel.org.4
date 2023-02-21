@@ -2,134 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1CBFF69DB6C
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 08:46:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4EEE669DB72
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 08:50:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232875AbjBUHqo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Feb 2023 02:46:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41452 "EHLO
+        id S233271AbjBUHuT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Feb 2023 02:50:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43646 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229697AbjBUHql (ORCPT
+        with ESMTP id S229697AbjBUHuR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Feb 2023 02:46:41 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD1FA1B31E
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Feb 2023 23:46:01 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1676965561;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=fMy5UNnfOflKNYu2v+qdc7M5+Dbw9HBEzHEBe6W2kQU=;
-        b=Hz1vTFEKSUYSBuVLxNJC2Lic/2bjMIp5mNU+/8aej5cZ7YNnDvztnktzgEVqoCHv2pOK2f
-        eWsjmoK1FIln4fiTHnlmBYwSylPYXsZiruaFfU2zA7s/xIokwAXsfNI+5ndNixZ95aWw50
-        s3fRnLE+V0ngzfIqzv3V1yWppuMLu+o=
-Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com
- [209.85.208.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-479-eKzQv_fYPC-nM00TtxZbEA-1; Tue, 21 Feb 2023 02:45:59 -0500
-X-MC-Unique: eKzQv_fYPC-nM00TtxZbEA-1
-Received: by mail-ed1-f70.google.com with SMTP id eh16-20020a0564020f9000b004acc4f8aa3fso4764399edb.3
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Feb 2023 23:45:59 -0800 (PST)
+        Tue, 21 Feb 2023 02:50:17 -0500
+Received: from mail-qv1-f42.google.com (mail-qv1-f42.google.com [209.85.219.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 967631C7FF;
+        Mon, 20 Feb 2023 23:50:16 -0800 (PST)
+Received: by mail-qv1-f42.google.com with SMTP id y3so3818614qvn.4;
+        Mon, 20 Feb 2023 23:50:16 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=fMy5UNnfOflKNYu2v+qdc7M5+Dbw9HBEzHEBe6W2kQU=;
-        b=INW1sGmD/YZczgPhJrGipHiDvCbYMYtRldrU5V1254i/ln2RTeDxScJEUGYyH0Wt3Z
-         D6Oqy0/6B93NsyxDfAAAj3A7RI/6JMjnvoq1Uqf2K3A8rYlbXNTTdRqgeLqyARf1Dukc
-         T2sZJg2weqjJ9rn3kH/+yZfJS/ZtCCltBJ31gfuqTQ5pahdpklaY3Ur0fwny3jun+DRG
-         VnJ2pPyTndOFSawcfyDeJ6QakguvVaWIWDnHnnRe1gAvnjkCHW/Z1OU0RSyYp0Q2Bfy8
-         EFVRzRVk1n0JGOW00U3uCIFxt8OETcRy8xzB9g7fboJn8RJP5Yy5mnRz0Vf9Gx/D1naW
-         VTgQ==
-X-Gm-Message-State: AO0yUKU7vQMxVPrQcVMMBgFh5ZyTWn2n1gM0wB2wxfId2cNcsp7ES2jG
-        nNW05aY2nPrT+EoTo2QubxhaXqNs1aPNy1NK1TvUwbekQAFkSb+3VQvBFKZY+bWZAApou/+kffO
-        DoUpzBPUtrMmZS9u/61YpIbIy
-X-Received: by 2002:a17:906:9f25:b0:8b1:4d5f:fb83 with SMTP id fy37-20020a1709069f2500b008b14d5ffb83mr11855606ejc.15.1676965558363;
-        Mon, 20 Feb 2023 23:45:58 -0800 (PST)
-X-Google-Smtp-Source: AK7set9vghZQIt75cz8byQ+eUxaqXScW0PwKtItzq1+Ju4htLOU5T5BIIbIDPeiHMzCc1djkwXl0yg==
-X-Received: by 2002:a17:906:9f25:b0:8b1:4d5f:fb83 with SMTP id fy37-20020a1709069f2500b008b14d5ffb83mr11855591ejc.15.1676965558066;
-        Mon, 20 Feb 2023 23:45:58 -0800 (PST)
-Received: from ?IPV6:2001:b07:6468:f312:63a7:c72e:ea0e:6045? ([2001:b07:6468:f312:63a7:c72e:ea0e:6045])
-        by smtp.googlemail.com with ESMTPSA id uj9-20020a170907c98900b008deba75e89csm559987ejc.66.2023.02.20.23.45.56
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=72BbxXH9r6ZaV+Z3o0wggC7oh2JqeBASrvlOQHb29P8=;
+        b=kXp8LcGpgDqRoQEEPzlMqENl0VKJRiLPvrD6WNuila+R9wRsfe8haPGT6//rNXvn8j
+         JfAUIVrOSyThgjirX/cdKfKm8XPQp0+Igiwl1ybiU1ThEGzb42U17CHInSlR0SUxz6eK
+         rdi2BOI/MX4/hBbC3hYAxwYpJf7JtBmdEmDPKkNmqI5X0T6xWjGoQJBe8PMjyj5iDRYS
+         mZJ5oayXZKxmGDkjoFvMce7YCn7sDl4AodZoD1M8Cb5h88wYVQVBbqsGQXdv1kFpTdQR
+         gAJwaG9gBqtTJoqzNcsKSzXoKMxBArMUffINIcHQAUJV33VAU7CZkDXEYE2JxOY6dbkI
+         z/KA==
+X-Gm-Message-State: AO0yUKUjCmHpVsIF44eTJLLn+5gKoiWu4H3+QSIUc+MseRJquzWIlXIB
+        sKjtxX26ZjvcTNodsARYFH3AFb3cqZq56Q==
+X-Google-Smtp-Source: AK7set/M897JumuS5a49usxHVIHjusAqEICwTJdwt3boOOrlIgsRSGA2KBeB+O2fOlCcphUwhFNkeg==
+X-Received: by 2002:a05:6214:2021:b0:56f:8a99:1a82 with SMTP id 1-20020a056214202100b0056f8a991a82mr7314494qvf.27.1676965815442;
+        Mon, 20 Feb 2023 23:50:15 -0800 (PST)
+Received: from mail-yb1-f179.google.com (mail-yb1-f179.google.com. [209.85.219.179])
+        by smtp.gmail.com with ESMTPSA id r196-20020a37a8cd000000b00729a26e836esm7940309qke.84.2023.02.20.23.50.14
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 20 Feb 2023 23:45:57 -0800 (PST)
-Message-ID: <50575db8-efb8-2d56-5dd9-fe4318db2af3@redhat.com>
-Date:   Tue, 21 Feb 2023 08:45:56 +0100
+        Mon, 20 Feb 2023 23:50:14 -0800 (PST)
+Received: by mail-yb1-f179.google.com with SMTP id i7so4292264ybu.6;
+        Mon, 20 Feb 2023 23:50:14 -0800 (PST)
+X-Received: by 2002:a05:6902:2d0:b0:920:2b79:84b4 with SMTP id
+ w16-20020a05690202d000b009202b7984b4mr1006883ybh.386.1676965814482; Mon, 20
+ Feb 2023 23:50:14 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH v2 27/29] LoongArch: KVM: Implement vcpu world switch
-Content-Language: en-US
-To:     Tianrui Zhao <zhaotianrui@loongson.cn>
-Cc:     Huacai Chen <chenhuacai@kernel.org>,
-        WANG Xuerui <kernel@xen0n.name>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        loongarch@lists.linux.dev, linux-kernel@vger.kernel.org,
-        kvm@vger.kernel.org, Jens Axboe <axboe@kernel.dk>,
-        Mark Brown <broonie@kernel.org>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        Oliver Upton <oliver.upton@linux.dev>, maobibo@loongson.cn
-References: <20230220065735.1282809-1-zhaotianrui@loongson.cn>
- <20230220065735.1282809-28-zhaotianrui@loongson.cn>
-From:   Paolo Bonzini <pbonzini@redhat.com>
-In-Reply-To: <20230220065735.1282809-28-zhaotianrui@loongson.cn>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,
-        UPPERCASE_50_75 autolearn=no autolearn_force=no version=3.4.6
+References: <20230221031004.18910-1-rdunlap@infradead.org>
+In-Reply-To: <20230221031004.18910-1-rdunlap@infradead.org>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Tue, 21 Feb 2023 08:50:02 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdVcEL7vkiH8wTOH1R6vvyce9MXVg3X52UzB5sXj4RydJA@mail.gmail.com>
+Message-ID: <CAMuHMdVcEL7vkiH8wTOH1R6vvyce9MXVg3X52UzB5sXj4RydJA@mail.gmail.com>
+Subject: Re: [PATCH] sh: SH2007: drop the bad URL info
+To:     Randy Dunlap <rdunlap@infradead.org>
+Cc:     linux-kernel@vger.kernel.org,
+        John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Rich Felker <dalias@libc.org>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Hitoshi Mitake <mitake@dcl.info.waseda.ac.jp>,
+        Paul Mundt <lethal@linux-sh.org>, linux-sh@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/20/23 07:57, Tianrui Zhao wrote:
-> +	/* Load Guest gprs */
-> +	ld.d    $r1,   \KVM_ARCH,  (KVM_ARCH_GGPR + 8 * 1)
-> +	ld.d    $r2,   \KVM_ARCH,  (KVM_ARCH_GGPR + 8 * 2)
-> +	ld.d    $r3,   \KVM_ARCH,  (KVM_ARCH_GGPR + 8 * 3)
-> +	ld.d    $r4,   \KVM_ARCH,  (KVM_ARCH_GGPR + 8 * 4)
-> +	ld.d    $r5,   \KVM_ARCH,  (KVM_ARCH_GGPR + 8 * 5)
-> +	ld.d    $r7,   \KVM_ARCH,  (KVM_ARCH_GGPR + 8 * 7)
-> +	ld.d    $r8,   \KVM_ARCH,  (KVM_ARCH_GGPR + 8 * 8)
-> +	ld.d    $r9,   \KVM_ARCH,  (KVM_ARCH_GGPR + 8 * 9)
-> +	ld.d    $r10,  \KVM_ARCH,  (KVM_ARCH_GGPR + 8 * 10)
-> +	ld.d    $r11,  \KVM_ARCH,  (KVM_ARCH_GGPR + 8 * 11)
-> +	ld.d    $r12,  \KVM_ARCH,  (KVM_ARCH_GGPR + 8 * 12)
-> +	ld.d    $r13,  \KVM_ARCH,  (KVM_ARCH_GGPR + 8 * 13)
-> +	ld.d    $r14,  \KVM_ARCH,  (KVM_ARCH_GGPR + 8 * 14)
-> +	ld.d    $r15,  \KVM_ARCH,  (KVM_ARCH_GGPR + 8 * 15)
-> +	ld.d    $r16,  \KVM_ARCH,  (KVM_ARCH_GGPR + 8 * 16)
-> +	ld.d    $r17,  \KVM_ARCH,  (KVM_ARCH_GGPR + 8 * 17)
-> +	ld.d    $r18,  \KVM_ARCH,  (KVM_ARCH_GGPR + 8 * 18)
-> +	ld.d    $r19,  \KVM_ARCH,  (KVM_ARCH_GGPR + 8 * 19)
-> +	ld.d    $r20,  \KVM_ARCH,  (KVM_ARCH_GGPR + 8 * 20)
-> +	ld.d    $r21,  \KVM_ARCH,  (KVM_ARCH_GGPR + 8 * 21)
-> +	ld.d    $r22,  \KVM_ARCH,  (KVM_ARCH_GGPR + 8 * 22)
-> +	ld.d    $r23,  \KVM_ARCH,  (KVM_ARCH_GGPR + 8 * 23)
-> +	ld.d    $r24,  \KVM_ARCH,  (KVM_ARCH_GGPR + 8 * 24)
-> +	ld.d    $r25,  \KVM_ARCH,  (KVM_ARCH_GGPR + 8 * 25)
-> +	ld.d    $r26,  \KVM_ARCH,  (KVM_ARCH_GGPR + 8 * 26)
-> +	ld.d    $r27,  \KVM_ARCH,  (KVM_ARCH_GGPR + 8 * 27)
-> +	ld.d    $r28,  \KVM_ARCH,  (KVM_ARCH_GGPR + 8 * 28)
-> +	ld.d    $r29,  \KVM_ARCH,  (KVM_ARCH_GGPR + 8 * 29)
-> +	ld.d    $r30,  \KVM_ARCH,  (KVM_ARCH_GGPR + 8 * 30)
-> +	ld.d    $r31,  \KVM_ARCH,  (KVM_ARCH_GGPR + 8 * 31)
-> +	/* Load KVM_ARCH register */
-> +	ld.d	\KVM_ARCH, \KVM_ARCH, (KVM_ARCH_GGPR + 8 * \GPRNUM)
+On Tue, Feb 21, 2023 at 4:10 AM Randy Dunlap <rdunlap@infradead.org> wrote:
+> This URL provided is no longer functional, so drop it.
+>
+> Fixes: 3a598264436e ("sh: SH-2007 board support.")
+> Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
 
-This in practice relies on KVM_ARCH being a2 so please remove the 
-KVM_ARCH and GPRNUM arguments from the macro; just replace \KVM_ARCH 
-with a2 as needed.
+Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
 
-Also, in these ld.d and st.d sequences you may want to use the ABI names 
-instead of the rNN names, so it's clearer that you are skipping the 
-KVM_ARCH register.
+Gr{oetje,eeting}s,
 
-Paolo
+                        Geert
 
+-- 
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
