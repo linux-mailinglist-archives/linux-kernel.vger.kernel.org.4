@@ -2,187 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5072E69E01A
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 13:17:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5704169E009
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 13:15:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234409AbjBUMRs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Feb 2023 07:17:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36480 "EHLO
+        id S234076AbjBUMPW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Feb 2023 07:15:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33226 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234299AbjBUMRq (ORCPT
+        with ESMTP id S233620AbjBUMPN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Feb 2023 07:17:46 -0500
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C16429E32;
-        Tue, 21 Feb 2023 04:17:10 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1676981830; x=1708517830;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=uzVFzirXSv25kiPnI1/UuQaCx9NtBbad4el4UtQ8pe0=;
-  b=nNgqwfG71vygG0xR+spoLVmsHWlB17enGDm6wnZdvPJHxTE+Ti7i7zjh
-   1/suefmJ9z+XRW2m+cWYtNgpBDy1k7f1d73uNndXyIKpb+fX1fEc79GmJ
-   Zri72FeIDqZQ7tBqtT2t997Vvr/99+ClP2FDH3es5dCh7W0XSGvEcL0dm
-   rD+UW5y1boQ7Y+d/IHVO7V6x/WhHYcW5jWpcsbIe7w7afb0sKGcySuu4S
-   1KL6ZUwrhxP0bwypYqaiE0rhalrfdPNKIL7EnXpv8K9lTQKXDHjkBLRU1
-   iS761+5TLLqydDRCQD8x9w1/ca37rHomvOz4B+Gcc3076aE4dyGI2OceH
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10627"; a="331281052"
-X-IronPort-AV: E=Sophos;i="5.97,315,1669104000"; 
-   d="scan'208";a="331281052"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Feb 2023 04:13:58 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10627"; a="664957815"
-X-IronPort-AV: E=Sophos;i="5.97,315,1669104000"; 
-   d="scan'208";a="664957815"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by orsmga007.jf.intel.com with ESMTP; 21 Feb 2023 04:13:52 -0800
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1pURWo-009wk6-2R;
-        Tue, 21 Feb 2023 14:13:50 +0200
-Date:   Tue, 21 Feb 2023 14:13:50 +0200
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Okan Sahin <okan.sahin@analog.com>
-Cc:     Lee Jones <lee@kernel.org>, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        ChiYuan Huang <cy_huang@richtek.com>,
-        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        William Breathitt Gray <william.gray@linaro.org>,
-        Ramona Bolboaca <ramona.bolboaca@analog.com>,
-        Caleb Connolly <caleb.connolly@linaro.org>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-iio@vger.kernel.org
-Subject: Re: [PATCH v5 5/5]  mfd: max77541: Add ADI MAX77541/MAX77540 PMIC
- Support
-Message-ID: <Y/S1ftKmV92TL8VO@smile.fi.intel.com>
-References: <20230221103926.49597-1-okan.sahin@analog.com>
- <20230221103926.49597-6-okan.sahin@analog.com>
+        Tue, 21 Feb 2023 07:15:13 -0500
+Received: from vulcan.natalenko.name (vulcan.natalenko.name [IPv6:2001:19f0:6c00:8846:5400:ff:fe0c:dfa0])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 318422940B;
+        Tue, 21 Feb 2023 04:14:43 -0800 (PST)
+Received: from mail.natalenko.name (vulcan.natalenko.name [IPv6:2001:19f0:6c00:8846:5400:ff:fe0c:dfa0])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by vulcan.natalenko.name (Postfix) with ESMTPSA id 1CE96123B37F;
+        Tue, 21 Feb 2023 13:14:08 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=natalenko.name;
+        s=dkim-20170712; t=1676981648;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=/RWUNzQLEBE9u2F8wn2satmN3srBwLaHuS4Q7HMGKbo=;
+        b=VwZXAjkqGtqMGn1icUJj/vivF6SJ93Jv20aLZdqaQVgHviA3cET6SvwM2c6BWKE9ixlR/J
+        yoUrrEUkUmI2xgPcs818Y6N61rd7B5JYHy0s2KlFTU6mT0jC2nCmKpai9J+UuieNp9fkuV
+        4VsIlClF1Qc9IyhvxVJscXAgkMADK3w=
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230221103926.49597-6-okan.sahin@analog.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Date:   Tue, 21 Feb 2023 13:14:07 +0100
+From:   Oleksandr Natalenko <oleksandr@natalenko.name>
+To:     David Woodhouse <dwmw2@infradead.org>
+Cc:     Kim Phillips <kim.phillips@amd.com>, tglx@linutronix.de,
+        Usama Arif <usama.arif@bytedance.com>, arjan@linux.intel.com,
+        mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
+        hpa@zytor.com, x86@kernel.org, pbonzini@redhat.com,
+        paulmck@kernel.org, linux-kernel@vger.kernel.org,
+        kvm@vger.kernel.org, rcu@vger.kernel.org, mimoja@mimoja.de,
+        hewenliang4@huawei.com, thomas.lendacky@amd.com, seanjc@google.com,
+        pmenzel@molgen.mpg.de, fam.zheng@bytedance.com,
+        punit.agrawal@bytedance.com, simon.evans@bytedance.com,
+        liangma@liangbit.com,
+        "Limonciello, Mario" <Mario.Limonciello@amd.com>,
+        Piotr Gorski <piotrgorski@cachyos.org>
+Subject: Re: [PATCH v9 0/8] Parallel CPU bringup for x86_64
+In-Reply-To: <10CA27BB-ADC6-4421-86D2-A83BD7FA12E0@infradead.org>
+References: <20230215145425.420125-1-usama.arif@bytedance.com>
+ <2668869.mvXUDI8C0e@natalenko.name>
+ <2a67f6cf18dd2c1879fad9fd8a28242918d3e5d2.camel@infradead.org>
+ <982e1d6140705414e8fd60b990bd259a@natalenko.name>
+ <715CBABF-4017-4784-8F30-5386F1524830@infradead.org>
+ <67dbc69f-b712-8971-f1c9-5d07f506a19c@amd.com>
+ <42dc683e2846ae8fc1e09715aaf7884660e1a386.camel@infradead.org>
+ <37c18c3aeea2e558633b6da6886111d0@natalenko.name>
+ <5A3B7074-0C6D-472B-803B-D76541828C1F@infradead.org>
+ <3d8ed6e157df10c5175c636de0e21849@natalenko.name>
+ <5c557f9b6f55dc2a612ee89142971298e6ae12d8.camel@infradead.org>
+ <ee0d0d971a3095d6a1e96ad4f1ba32d2@natalenko.name>
+ <5b8f9c89f7015fa80c966c6c7f6fa259db6744f8.camel@infradead.org>
+ <ce731b5a4a53680b4840467977b33d9a@natalenko.name>
+ <85ceb3f92abf3c013924de2f025517372bed19c0.camel@infradead.org>
+ <3e5944de08ef0d23584d19bad7bae66c@natalenko.name>
+ <26E5DC9C-0F19-4E4F-9076-04506A197374@infradead.org>
+ <f71275dc809cfb32df513023786c3faa@natalenko.name>
+ <10CA27BB-ADC6-4421-86D2-A83BD7FA12E0@infradead.org>
+Message-ID: <9153284c37a79d303aa79dbf07c10329@natalenko.name>
+X-Sender: oleksandr@natalenko.name
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 21, 2023 at 01:39:13PM +0300, Okan Sahin wrote:
-> MFD driver for MAX77541/MAX77540 to enable its sub
-> devices.
+On 21.02.2023 12:49, David Woodhouse wrote:
+> On 21 February 2023 11:46:04 GMT, Oleksandr Natalenko 
+> <oleksandr@natalenko.name> wrote:
+>> On 21.02.2023 11:27, David Woodhouse wrote:
+>>> On 21 February 2023 09:49:51 GMT, Oleksandr Natalenko 
+>>> <oleksandr@natalenko.name> wrote:
+>>>> On 21.02.2023 10:06, David Woodhouse wrote:
+>>>>> Why does arch/x86/kernel/acpi/sleep.c::x86_acpi_suspend_lowlevel() 
+>>>>> set
+>>>>> 
+>>>>>     initial_gs = per_cpu_offset(smp_processor_id()) ?
+>>>>> 
+>>>>> Would it not be CPU#0 that comes back up, and should it not get
+>>>>> per_cpu_offset(0) ?
+>>>> 
+>>>> Wanna me try `initial_gs = per_cpu_offset(0);` too?
+>>> 
+>>> Hm, yes please. There's another one to make zero on the next line up, 
+>>> I think?
+>> 
+>> So,
+>> 
+>> ```
+>> early_gdt_descr.address = (unsigned long)get_cpu_gdt_rw(0);
+>> initial_gs = per_cpu_offset(0);
+>> ```
+>> 
+>> ?
+>> 
+>> Should I leave `smpboot_control = 0;` commented out, or I should 
+>> uncomment it back?
 > 
-> The MAX77541 is a multi-function devices. It includes
-> buck converter and ADC.
-> 
-> The MAX77540 is a high-efficiency buck converter
-> with two 3A switching phases.
-> 
-> They have same regmap except for ADC part of MAX77541.
+> Put it back, else those things don't matter. Thanks.
 
-Extra space in the Subject.
+With this in place:
 
-...
+```
+	early_gdt_descr.address = (unsigned long)get_cpu_gdt_rw(0);
+	initial_gs = per_cpu_offset(0);
+	smpboot_control = 0;
+```
 
-> +#include <linux/of_device.h>
-
-Why?
-
-...
-
-> +static const struct regmap_config max77541_regmap_config = {
-> +	.reg_bits   = 8,
-> +	.val_bits   = 8,
-
-Do you need lock of regmap?
-
-> +};
-
-...
-
-> +static const struct mfd_cell max77540_devs[] = {
-
-> +	MFD_CELL_OF("max77540-regulator", NULL, NULL, 0, 0,
-> +		    NULL),
-
-Perfectly one line.
-
-> +};
-
-> +static const struct mfd_cell max77541_devs[] = {
-> +	MFD_CELL_OF("max77541-regulator", NULL, NULL, 0, 0,
-> +		    NULL),
-> +	MFD_CELL_OF("max77541-adc", NULL, NULL, 0, 0,
-> +		    NULL),
-
-Ditto.
-
-> +};
-
-...
-
-> +	if (max77541->chip->id == MAX77541) {
-> +		ret = devm_regmap_add_irq_chip(dev, max77541->regmap, irq,
-> +					       IRQF_ONESHOT | IRQF_SHARED, 0,
-> +					       &max77541_adc_irq_chip,
-> +					       &max77541->irq_adc);
-> +		if (ret)
-> +			return ret;
-> +	}
-
-> +	return ret;
-
-return 0;
-
-...
-
-> +static const struct i2c_device_id max77541_i2c_id[];
-
-What for?
-
-...
-
-> +	if (dev->of_node)
-> +		max77541->chip  = of_device_get_match_data(dev);
-> +	else
-> +		max77541->chip  = (struct chip_info *)
-> +					i2c_match_id(max77541_i2c_id,
-> +						     client)->driver_data;
-
-Oh. Please use
-
-	const struct i2c_device_id *id = i2c_client_get_device_id(client);
-	...
-	max77541->chip  = device_get_match_data(dev); // needs property.h
-	if (!max77541->chip)
-		max77541->chip  = (struct chip_info *)id->driver_data;
-
-> +	if (!max77541->chip)
-> +		return -EINVAL;
-
-...
-
-> +#ifndef __MAX77541_MFD_H__
-> +#define __MAX77541_MFD_H__
-
-Can we go towards consistency in this?
-Seems to me the most used patter so far is
-
-#ifndef __LINUX_MFD_MAX77541_H
+the resume does not work.
 
 -- 
-With Best Regards,
-Andy Shevchenko
-
-
+   Oleksandr Natalenko (post-factum)
