@@ -2,40 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F3B8F69E621
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 18:40:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 470A869E625
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 18:42:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234490AbjBURkK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Feb 2023 12:40:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54164 "EHLO
+        id S234471AbjBURmj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Feb 2023 12:42:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55554 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234212AbjBURkJ (ORCPT
+        with ESMTP id S233564AbjBURmh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Feb 2023 12:40:09 -0500
-Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B415B2A6F4
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Feb 2023 09:40:07 -0800 (PST)
-Date:   Tue, 21 Feb 2023 17:40:03 +0000
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=t-8ch.de; s=mail;
-        t=1677001205; bh=ij4GSueVQMFyDGUOlZ/XLmtQ92yrwr9I25ysgY1p4fo=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Snt4sQO04bKvR5QLTXebiSr81wNxgBNlo79RZsVRwgZiAJgXhBNW9SNuiIBv4+T7f
-         I5Yzf5OXJLUuCVGOH27/FjxiMpWcENkgGXsztnuUvZD2riyorPUThagvXUmxJ39c9e
-         ARqLvYVdrVBSNoHYJxFRrXBQY30g5tfN3IlpB7b0=
-From:   Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <thomas@t-8ch.de>
-To:     Vincent Dagonneau <v@vda.io>
-Cc:     linux-kernel@vger.kernel.org, w@1wt.eu
-Subject: Re: [PATCH v5 2/4] tools/nolibc: add integer types and integer limit
- macros
-Message-ID: <78f08587-7719-40fa-a676-2ba6c4b39b42@t-8ch.de>
-References: <20230220202010.37475-1-v@vda.io>
- <20230220202010.37475-3-v@vda.io>
+        Tue, 21 Feb 2023 12:42:37 -0500
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62F462D14C;
+        Tue, 21 Feb 2023 09:42:35 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1677001355; x=1708537355;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=kBBoBZu1FD2rTBEFA0gVprbFv3kOigQKo3h0nWRaWas=;
+  b=KhIkTaDcYBT9+GpneMVNXU5+ZjF7kVksUuBPAsWJhY9enhTdgzYVzO4V
+   bTNnqSK4mYd0lY5kwRovdAA0jWRNe9xynHg74p2cD7Rox+MWJGMV5dMj8
+   kOdwBULFCS5VkgLDW02AuW4EXDr9Nwx5bDmrzV6jIQ16L8Urzha/i4rbc
+   554o69dkgl4PMFMd9auHzHtt+2pbMSYHNYyiHXD7GsZJgv6d0qcC+HtYH
+   oKiRrrLwtnkxwiqWGnLx/aoyRpwLh+ivyxha6Bj35zdoF2/JJ06u0T83h
+   zurbMlUIsDKQ25A1syMBjaiPO/Ly0qUoA0aADjzzoOPJlu3qbXGvJk5ej
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10628"; a="320839368"
+X-IronPort-AV: E=Sophos;i="5.97,315,1669104000"; 
+   d="scan'208";a="320839368"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Feb 2023 09:42:34 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10628"; a="1000689706"
+X-IronPort-AV: E=Sophos;i="5.97,315,1669104000"; 
+   d="scan'208";a="1000689706"
+Received: from lkp-server01.sh.intel.com (HELO eac18b5d7d93) ([10.239.97.150])
+  by fmsmga005.fm.intel.com with ESMTP; 21 Feb 2023 09:42:31 -0800
+Received: from kbuild by eac18b5d7d93 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pUWes-00005l-2S;
+        Tue, 21 Feb 2023 17:42:30 +0000
+Date:   Wed, 22 Feb 2023 01:41:56 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Akhil R <akhilrajeev@nvidia.com>, christian.koenig@amd.com,
+        digetx@gmail.com, jonathanh@nvidia.com, ldewangan@nvidia.com,
+        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-tegra@vger.kernel.org, sumit.semwal@linaro.org,
+        thierry.reding@gmail.com, wsa@kernel.org, robh+dt@kernel.org,
+        devicetree@vger.kernel.org
+Cc:     oe-kbuild-all@lists.linux.dev, akhilrajeev@nvidia.com
+Subject: Re: [PATCH] i2c: tegra: Share same DMA channel for Rx and Tx
+Message-ID: <202302220130.flKenlan-lkp@intel.com>
+References: <20230221135726.40720-1-akhilrajeev@nvidia.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230220202010.37475-3-v@vda.io>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+In-Reply-To: <20230221135726.40720-1-akhilrajeev@nvidia.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -43,150 +69,142 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 20, 2023 at 03:20:08PM -0500, Vincent Dagonneau wrote:
-> This commit adds some of the missing integer types to stdint.h and adds
-> limit macros (e.g. INTN_{MIN,MAX}).
-> 
-> The reference used for adding these types is
-> https://pubs.opengroup.org/onlinepubs/009695399/basedefs/stdint.h.html.
-> 
-> We rely on the compiler-defined __LONG_MAX__ to get the right limits for
-> ssize_t, size_t, intptr_t, uintptr_t and ptrdiff_t. This compiler
-> constant seem to have been defined at least since GCC 4.1.2 and clang
-> 3.0.0 on x86_64. It is also defined on ARM (32&64), mips and RISC-V.
-> 
-> Note that the maximum size of size_t is implementation-defined (>65535),
-> in this case I chose to go with unsigned long on all platforms since
-> unsigned long == unsigned int on all the platforms we care about. Note
-> that the kernel uses either unsigned int or unsigned long in
-> linux/include/uapi/asm-generic/posix_types.h. These should be equivalent
-> for the plaforms we are targeting.
-> 
-> Also note that the 'fast*' flavor of the types have been chosen to be
-> always 1 byte for '*fast8*' and always long (a.k.a. size_t/ssize_t) for
-> the other variants. I have never seen the 'fast*' types in use in the wild
-> but that seems to be what glibc does.
-> 
-> Signed-off-by: Vincent Dagonneau <v@vda.io>
-> Signed-off-by: Willy Tarreau <w@1wt.eu>
-> ---
->  tools/include/nolibc/stdint.h | 77 +++++++++++++++++++++++++++++++++++
->  1 file changed, 77 insertions(+)
-> 
-> diff --git a/tools/include/nolibc/stdint.h b/tools/include/nolibc/stdint.h
-> index 4ba264031df9..f7179a583f61 100644
-> --- a/tools/include/nolibc/stdint.h
-> +++ b/tools/include/nolibc/stdint.h
-> @@ -21,4 +21,81 @@ typedef unsigned long     uintptr_t;
->  typedef   signed long      intptr_t;
->  typedef   signed long     ptrdiff_t;
->  
-> +typedef   int8_t       int_least8_t;
-> +typedef  uint8_t      uint_least8_t;
-> +typedef  int16_t      int_least16_t;
-> +typedef uint16_t     uint_least16_t;
-> +typedef  int32_t      int_least32_t;
-> +typedef uint32_t     uint_least32_t;
-> +typedef  int64_t      int_least64_t;
-> +typedef uint64_t     uint_least64_t;
-> +
-> +typedef   int8_t        int_fast8_t;
-> +typedef  uint8_t       uint_fast8_t;
-> +typedef  ssize_t       int_fast16_t;
-> +typedef   size_t      uint_fast16_t;
-> +typedef  ssize_t       int_fast32_t;
-> +typedef   size_t      uint_fast32_t;
-> +typedef  ssize_t       int_fast64_t;
-> +typedef   size_t      uint_fast64_t;
-> +
-> +typedef  int64_t           intmax_t;
-> +typedef uint64_t          uintmax_t;
-> +
-> +/* limits of integral types */
-> +
-> +#define        INT8_MIN  (-128)
-> +#define       INT16_MIN  (-32767-1)
-> +#define       INT32_MIN  (-2147483647-1)
-> +#define       INT64_MIN  (-9223372036854775807LL-1)
-> +
-> +#define        INT8_MAX  (127)
-> +#define       INT16_MAX  (32767)
-> +#define       INT32_MAX  (2147483647)
-> +#define       INT64_MAX  (9223372036854775807LL)
-> +
-> +#define       UINT8_MAX  (255)
-> +#define      UINT16_MAX  (65535)
-> +#define      UINT32_MAX  (4294967295U)
-> +#define      UINT64_MAX  (18446744073709551615ULL)
-> +
-> +#define  INT_LEAST8_MIN  INT8_MIN
-> +#define INT_LEAST16_MIN  INT16_MIN
-> +#define INT_LEAST32_MIN  INT32_MIN
-> +#define INT_LEAST64_MIN  INT64_MIN
-> +
-> +#define  INT_LEAST8_MAX  INT8_MAX
-> +#define INT_LEAST16_MAX  INT16_MAX
-> +#define INT_LEAST32_MAX  INT32_MAX
-> +#define INT_LEAST64_MAX  INT64_MAX
-> +
-> +#define  UINT_LEAST8_MAX UINT8_MAX
-> +#define UINT_LEAST16_MAX UINT16_MAX
-> +#define UINT_LEAST32_MAX UINT32_MAX
-> +#define UINT_LEAST64_MAX UINT64_MAX
-> +
-> +#define SIZE_MAX         ((size_t)(__LONG_MAX__) * 2 + 1)
-> +#define SSIZE_MIN        (-__LONG_MAX__ - 1)
+Hi Akhil,
 
-SSIZE_MIN is not defined by a standard.
-It also doesn't really make sense to have, as ssize_t is only supposed
-to store [-1,SSIZE_MAX].
+Thank you for the patch! Yet something to improve:
 
-> +#define SSIZE_MAX        __LONG_MAX__
+[auto build test ERROR on tegra/for-next]
+[also build test ERROR on linus/master v6.2 next-20230221]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-Apparently SSIZE_MAX can also defined via the compilers <limits.h> as
-used by nolibc-test.c leading to a warning.
-Maybe wrap it in #ifndef SSIZE_MAX.
+url:    https://github.com/intel-lab-lkp/linux/commits/Akhil-R/i2c-tegra-Share-same-DMA-channel-for-Rx-and-Tx/20230221-215924
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/tegra/linux.git for-next
+patch link:    https://lore.kernel.org/r/20230221135726.40720-1-akhilrajeev%40nvidia.com
+patch subject: [PATCH] i2c: tegra: Share same DMA channel for Rx and Tx
+config: m68k-allmodconfig (https://download.01.org/0day-ci/archive/20230222/202302220130.flKenlan-lkp@intel.com/config)
+compiler: m68k-linux-gcc (GCC) 12.1.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/643ca30fdac50b54b2ee65f97e6e2eda9974dd3c
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Akhil-R/i2c-tegra-Share-same-DMA-channel-for-Rx-and-Tx/20230221-215924
+        git checkout 643ca30fdac50b54b2ee65f97e6e2eda9974dd3c
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=m68k olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=m68k SHELL=/bin/bash drivers/i2c/
 
-    In file included from sysroot/x86/include/std.h:21,
-		     from sysroot/x86/include/stdio.h:12,
-		     from nolibc-test.c:15:
-    sysroot/x86/include/stdint.h:79: warning: "SSIZE_MAX" redefined
-       79 | #define SSIZE_MAX        __LONG_MAX__
-	  | 
-    In file included from /usr/include/limits.h:195,
-		     from /usr/lib/gcc/x86_64-pc-linux-gnu/12.2.1/include-fixed/limits.h:203,
-		     from /usr/lib/gcc/x86_64-pc-linux-gnu/12.2.1/include-fixed/syslimits.h:7,
-		     from /usr/lib/gcc/x86_64-pc-linux-gnu/12.2.1/include-fixed/limits.h:34,
-		     from nolibc-test.c:6:
-    /usr/include/bits/posix1_lim.h:169: note: this is the location of the previous definition
-      169 | #  define SSIZE_MAX     LONG_MAX
-	  | 
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202302220130.flKenlan-lkp@intel.com/
 
-> +#define INTPTR_MIN       SSIZE_MIN
-> +#define INTPTR_MAX       SSIZE_MAX
-> +#define PTRDIFF_MIN      SSIZE_MIN
-> +#define PTRDIFF_MAX      SSIZE_MAX
-> +#define UINTPTR_MAX       SIZE_MAX
-> +
-> +#define  INT_FAST8_MIN  INT8_MIN
-> +#define INT_FAST16_MIN  SSIZE_MIN
-> +#define INT_FAST32_MIN  SSIZE_MIN
-> +#define INT_FAST64_MIN  SSIZE_MIN
-> +
-> +#define  INT_FAST8_MAX  INT8_MAX
-> +#define INT_FAST16_MAX  SSIZE_MAX
-> +#define INT_FAST32_MAX  SSIZE_MAX
-> +#define INT_FAST64_MAX  SSIZE_MAX
-> +
-> +#define  UINT_FAST8_MAX UINT8_MAX
-> +#define UINT_FAST16_MAX SIZE_MAX
-> +#define UINT_FAST32_MAX SIZE_MAX
-> +#define UINT_FAST64_MAX SIZE_MAX
+All errors (new ones prefixed by >>):
 
-Alignment of values within lines is inconsistent.
+   In file included from arch/m68k/include/asm/bug.h:32,
+                    from include/linux/bug.h:5,
+                    from include/linux/thread_info.h:13,
+                    from include/asm-generic/preempt.h:5,
+                    from ./arch/m68k/include/generated/asm/preempt.h:1,
+                    from include/linux/preempt.h:78,
+                    from arch/m68k/include/asm/irqflags.h:6,
+                    from include/linux/irqflags.h:16,
+                    from arch/m68k/include/asm/atomic.h:6,
+                    from include/linux/atomic.h:7,
+                    from include/linux/cpumask.h:13,
+                    from include/linux/smp.h:13,
+                    from include/linux/lockdep.h:14,
+                    from include/linux/mutex.h:17,
+                    from include/linux/kernfs.h:11,
+                    from include/linux/sysfs.h:16,
+                    from include/linux/kobject.h:20,
+                    from include/linux/of.h:17,
+                    from include/linux/irqdomain.h:36,
+                    from include/linux/acpi.h:13,
+                    from drivers/i2c/busses/i2c-tegra.c:9:
+   drivers/i2c/busses/i2c-tegra.c: In function 'tegra_i2c_init_dma':
+>> drivers/i2c/busses/i2c-tegra.c:465:26: error: 'struct tegra_i2c_dev' has no member named 'tx_dma_chan'; did you mean 'dma_chan'?
+     465 |         WARN_ON(i2c_dev->tx_dma_chan->device != i2c_dev->rx_dma_chan->device);
+         |                          ^~~~~~~~~~~
+   include/asm-generic/bug.h:122:32: note: in definition of macro 'WARN_ON'
+     122 |         int __ret_warn_on = !!(condition);                              \
+         |                                ^~~~~~~~~
+>> drivers/i2c/busses/i2c-tegra.c:465:58: error: 'struct tegra_i2c_dev' has no member named 'rx_dma_chan'; did you mean 'dma_chan'?
+     465 |         WARN_ON(i2c_dev->tx_dma_chan->device != i2c_dev->rx_dma_chan->device);
+         |                                                          ^~~~~~~~~~~
+   include/asm-generic/bug.h:122:32: note: in definition of macro 'WARN_ON'
+     122 |         int __ret_warn_on = !!(condition);                              \
+         |                                ^~~~~~~~~
 
-> +
->  #endif /* _NOLIBC_STDINT_H */
-> -- 
-> 2.39.2
-> 
+
+vim +465 drivers/i2c/busses/i2c-tegra.c
+
+86c92b9965ff17 Sowjanya Komatineni 2019-02-12  432  
+86c92b9965ff17 Sowjanya Komatineni 2019-02-12  433  static int tegra_i2c_init_dma(struct tegra_i2c_dev *i2c_dev)
+86c92b9965ff17 Sowjanya Komatineni 2019-02-12  434  {
+86c92b9965ff17 Sowjanya Komatineni 2019-02-12  435  	struct dma_chan *chan;
+86c92b9965ff17 Sowjanya Komatineni 2019-02-12  436  	dma_addr_t dma_phys;
+89e3748acd0bf6 Dmitry Osipenko     2020-09-30  437  	u32 *dma_buf;
+86c92b9965ff17 Sowjanya Komatineni 2019-02-12  438  	int err;
+86c92b9965ff17 Sowjanya Komatineni 2019-02-12  439  
+48cb6356fae125 Akhil R             2022-09-06  440  	if (i2c_dev->is_vi)
+89328b1b81858f Jonathan Hunter     2019-02-21  441  		return 0;
+89328b1b81858f Jonathan Hunter     2019-02-21  442  
+48cb6356fae125 Akhil R             2022-09-06  443  	if (!i2c_dev->hw->has_apb_dma) {
+89328b1b81858f Jonathan Hunter     2019-02-21  444  		if (!IS_ENABLED(CONFIG_TEGRA20_APB_DMA)) {
+48cb6356fae125 Akhil R             2022-09-06  445  			dev_dbg(i2c_dev->dev, "APB DMA support not enabled\n");
+48cb6356fae125 Akhil R             2022-09-06  446  			return 0;
+48cb6356fae125 Akhil R             2022-09-06  447  		}
+48cb6356fae125 Akhil R             2022-09-06  448  	} else if (!IS_ENABLED(CONFIG_TEGRA186_GPC_DMA)) {
+48cb6356fae125 Akhil R             2022-09-06  449  		dev_dbg(i2c_dev->dev, "GPC DMA support not enabled\n");
+89328b1b81858f Jonathan Hunter     2019-02-21  450  		return 0;
+86c92b9965ff17 Sowjanya Komatineni 2019-02-12  451  	}
+86c92b9965ff17 Sowjanya Komatineni 2019-02-12  452  
+643ca30fdac50b Akhil R             2023-02-21  453  	/* The same channel will be used for both Rx and Tx.
+643ca30fdac50b Akhil R             2023-02-21  454  	 * Keeping the name as tx for backward compatibility with
+643ca30fdac50b Akhil R             2023-02-21  455  	 * existing devicetrees.
+643ca30fdac50b Akhil R             2023-02-21  456  	 */
+79e4be2c08bbbf Peter Ujfalusi      2019-11-13  457  	chan = dma_request_chan(i2c_dev->dev, "tx");
+86c92b9965ff17 Sowjanya Komatineni 2019-02-12  458  	if (IS_ERR(chan)) {
+86c92b9965ff17 Sowjanya Komatineni 2019-02-12  459  		err = PTR_ERR(chan);
+86c92b9965ff17 Sowjanya Komatineni 2019-02-12  460  		goto err_out;
+86c92b9965ff17 Sowjanya Komatineni 2019-02-12  461  	}
+86c92b9965ff17 Sowjanya Komatineni 2019-02-12  462  
+643ca30fdac50b Akhil R             2023-02-21  463  	i2c_dev->dma_chan = chan;
+86c92b9965ff17 Sowjanya Komatineni 2019-02-12  464  
+cdbf26251d3b35 Thierry Reding      2022-10-20 @465  	WARN_ON(i2c_dev->tx_dma_chan->device != i2c_dev->rx_dma_chan->device);
+cdbf26251d3b35 Thierry Reding      2022-10-20  466  	i2c_dev->dma_dev = chan->device->dev;
+cdbf26251d3b35 Thierry Reding      2022-10-20  467  
+55c52f16a017ca Dmitry Osipenko     2020-09-30  468  	i2c_dev->dma_buf_size = i2c_dev->hw->quirks->max_write_len +
+55c52f16a017ca Dmitry Osipenko     2020-09-30  469  				I2C_PACKET_HEADER_SIZE;
+55c52f16a017ca Dmitry Osipenko     2020-09-30  470  
+cdbf26251d3b35 Thierry Reding      2022-10-20  471  	dma_buf = dma_alloc_coherent(i2c_dev->dma_dev, i2c_dev->dma_buf_size,
+86c92b9965ff17 Sowjanya Komatineni 2019-02-12  472  				     &dma_phys, GFP_KERNEL | __GFP_NOWARN);
+86c92b9965ff17 Sowjanya Komatineni 2019-02-12  473  	if (!dma_buf) {
+76d06443cc5b37 Dmitry Osipenko     2020-09-30  474  		dev_err(i2c_dev->dev, "failed to allocate DMA buffer\n");
+86c92b9965ff17 Sowjanya Komatineni 2019-02-12  475  		err = -ENOMEM;
+86c92b9965ff17 Sowjanya Komatineni 2019-02-12  476  		goto err_out;
+86c92b9965ff17 Sowjanya Komatineni 2019-02-12  477  	}
+86c92b9965ff17 Sowjanya Komatineni 2019-02-12  478  
+86c92b9965ff17 Sowjanya Komatineni 2019-02-12  479  	i2c_dev->dma_buf = dma_buf;
+86c92b9965ff17 Sowjanya Komatineni 2019-02-12  480  	i2c_dev->dma_phys = dma_phys;
+c886a4a03a0155 Dmitry Osipenko     2020-09-30  481  
+86c92b9965ff17 Sowjanya Komatineni 2019-02-12  482  	return 0;
+86c92b9965ff17 Sowjanya Komatineni 2019-02-12  483  
+86c92b9965ff17 Sowjanya Komatineni 2019-02-12  484  err_out:
+86c92b9965ff17 Sowjanya Komatineni 2019-02-12  485  	tegra_i2c_release_dma(i2c_dev);
+86c92b9965ff17 Sowjanya Komatineni 2019-02-12  486  	if (err != -EPROBE_DEFER) {
+86c92b9965ff17 Sowjanya Komatineni 2019-02-12  487  		dev_err(i2c_dev->dev, "cannot use DMA: %d\n", err);
+bb0e9b1d2a1f93 Colin Ian King      2019-02-15  488  		dev_err(i2c_dev->dev, "falling back to PIO\n");
+86c92b9965ff17 Sowjanya Komatineni 2019-02-12  489  		return 0;
+86c92b9965ff17 Sowjanya Komatineni 2019-02-12  490  	}
+86c92b9965ff17 Sowjanya Komatineni 2019-02-12  491  
+86c92b9965ff17 Sowjanya Komatineni 2019-02-12  492  	return err;
+86c92b9965ff17 Sowjanya Komatineni 2019-02-12  493  }
+86c92b9965ff17 Sowjanya Komatineni 2019-02-12  494  
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
