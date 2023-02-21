@@ -2,87 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9ACA469E954
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 22:16:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 121B569E957
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 22:16:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229772AbjBUVQJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Feb 2023 16:16:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49352 "EHLO
+        id S229816AbjBUVQh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Feb 2023 16:16:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49724 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229639AbjBUVPz (ORCPT
+        with ESMTP id S230270AbjBUVQ0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Feb 2023 16:15:55 -0500
-Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED90330E96;
-        Tue, 21 Feb 2023 13:15:19 -0800 (PST)
-Received: by mail-lf1-x12d.google.com with SMTP id i9so7280746lfc.6;
-        Tue, 21 Feb 2023 13:15:19 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=gHZsoxAUB1qOQOkvHNT7weaGeMzKDk1Ga8sccYf8xcg=;
-        b=OrCTf5cZvZYUFHI/0GymXf51VnjzTEY6BgE6OrAmYOmm3bTTSSA/UOLWlCMCPQgC55
-         aq/YEqGEdbQYHMH3n0OOtLUx4JdtIzXhNaW/00LFoLB5SuhiiGu50b+Z01CJUMHv5p/4
-         NYLXgGXknyT5MCEWl49qH7N0/jJyC7vfTes8ZPD0yelwnYzHg1uB20y5h9njG0maWaBv
-         /g66EkEgzHXRbMhMWWYfDGeCcIN5xCebQHh1hIY7T+cZOXQ3CrYc+/9NCPUq2UhZvxYv
-         m43zjB2VgOxSsjzRswksXL8PVuUPSf74n7sRrPJFEMiAbtLH1ZcEF2jFhHBc/ZUjU8VN
-         ky8Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=gHZsoxAUB1qOQOkvHNT7weaGeMzKDk1Ga8sccYf8xcg=;
-        b=0oNBsFMoBEOmCH8ieJnGH6FT334nMAvq2hfrZ3IiRIH0DbPFuX2lerVdaMKzsEqkJ9
-         tzgs17UM6LbpP03MNN8eXNsTlr7IwgFKnMb+mYVU16zq2dyxaZRb+Pyxr7gZAG7me6dR
-         UX0KanHcTQt0Klj9W8LpfKFV/zFSnjiTEuDbDlyGZe+jZ4UfnbRS6NeCBENq9ZCW9flc
-         VPUmQ1rZh1H64glYv8YhWD4kzwbcmlMRD41mvE8EsZ4rrrIwofD85IW4TybulozR9qTQ
-         yPRaj0HqYIi9GHJZfeSXRM+8SHOSk1cO68f7J6JnYWeOpf9OFlPc/ewpwRaE7t/ImtT7
-         Ht5Q==
-X-Gm-Message-State: AO0yUKUpComk6+rfVBgncr8MZyxd6vSPj+MKeteiZWrtWH0JExT5zTEd
-        r8+MXYx0Yy05LL77A0YBn5E=
-X-Google-Smtp-Source: AK7set8NjTzhXspfN0nv7/0jUg0gxiYbQwoM+JmD4tCTFmj26oQh0HeivTpT3TU1zBHWBaGTqt8wqQ==
-X-Received: by 2002:a19:7014:0:b0:4d0:e044:f865 with SMTP id h20-20020a197014000000b004d0e044f865mr1873623lfc.6.1677014117822;
-        Tue, 21 Feb 2023 13:15:17 -0800 (PST)
-Received: from localhost (88-115-161-74.elisa-laajakaista.fi. [88.115.161.74])
-        by smtp.gmail.com with ESMTPSA id v23-20020a197417000000b004d23763fe96sm1941493lfe.72.2023.02.21.13.15.17
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 21 Feb 2023 13:15:17 -0800 (PST)
-Date:   Tue, 21 Feb 2023 23:15:14 +0200
-From:   Zhi Wang <zhi.wang.linux@gmail.com>
-To:     "Kalra, Ashish" <ashish.kalra@amd.com>
-Cc:     Michael Roth <michael.roth@amd.com>, kvm@vger.kernel.org,
-        linux-coco@lists.linux.dev, linux-mm@kvack.org,
-        linux-crypto@vger.kernel.org, x86@kernel.org,
-        linux-kernel@vger.kernel.org, tglx@linutronix.de, mingo@redhat.com,
-        jroedel@suse.de, thomas.lendacky@amd.com, hpa@zytor.com,
-        ardb@kernel.org, pbonzini@redhat.com, seanjc@google.com,
-        vkuznets@redhat.com, jmattson@google.com, luto@kernel.org,
-        dave.hansen@linux.intel.com, slp@redhat.com, pgonda@google.com,
-        peterz@infradead.org, srinivas.pandruvada@linux.intel.com,
-        rientjes@google.com, dovmurik@linux.ibm.com, tobin@ibm.com,
-        bp@alien8.de, vbabka@suse.cz, kirill@shutemov.name,
-        ak@linux.intel.com, tony.luck@intel.com, marcorr@google.com,
-        sathyanarayanan.kuppuswamy@linux.intel.com, alpergun@google.com,
-        dgilbert@redhat.com, jarkko@kernel.org, nikunj.dadhania@amd.com,
-        Brijesh Singh <brijesh.singh@amd.com>
-Subject: Re: [PATCH RFC v8 24/56] crypto: ccp: Handle the legacy TMR
- allocation when SNP is enabled
-Message-ID: <20230221231514.00004b27@gmail.com>
-In-Reply-To: <f70a2398-bd78-24aa-b0ae-9171465d50ff@amd.com>
-References: <20230220183847.59159-1-michael.roth@amd.com>
-        <20230220183847.59159-25-michael.roth@amd.com>
-        <20230221112823.000063e4@gmail.com>
-        <f70a2398-bd78-24aa-b0ae-9171465d50ff@amd.com>
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.33; x86_64-w64-mingw32)
+        Tue, 21 Feb 2023 16:16:26 -0500
+Received: from sonic314-27.consmr.mail.ne1.yahoo.com (sonic314-27.consmr.mail.ne1.yahoo.com [66.163.189.153])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E326B31E12
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Feb 2023 13:16:14 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1677014173; bh=Ib/cS2Qh96O4CctBXZz55Jmef1wJrs3tR80qdd/yMQA=; h=Date:To:Cc:From:Subject:References:From:Subject:Reply-To; b=EsVhkeSS3S7Y0pEjLub56SxG2hEUoh6SsgfBTc8EHc0tIKD0oGzF+6BRWoYGmoOtwTZ1mUJD1IvslYKTOE7TwTsiLzYEvUtjtbUIjIyL5bkvABAIWmQ4wj6acqOhU5/3m2BVQZ5IarPiU62pW2mqRFt1JZCknzkNCYDRbIjGj7E8AVSdnAAso15bpD+6Wf65PfpIPtaLrkap1RY8MZvtgWnvNSAoXhPZLIdprKyPziMJtZSBnGQP9zrLgjE+LL2jYGy5d2+tzLG+REotaJa5I+VK1ZsjAgArgVTqtr6FrKcrvW2T3NTs1LO8YlLvzqiX+tb8IjSMAEiZDc6DH6oC8g==
+X-SONIC-DKIM-SIGN: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1677014173; bh=k/U6JCZMbNT0GaMzBW3KRkb5Xs7xWlyZRig9JCC/SMN=; h=X-Sonic-MF:Date:To:From:Subject:From:Subject; b=hgMXRDvirL7iL9NJhzUAXb5av8gJEHXbGLy2heXy/eomgn7rY1+x7ut64M80iZDLcWnLQyQ6IkQUjp2t10YDNTCgzNset4z72ux9PiTszmUi38JceEVa5hCfY758brtVnrZnyNhHqKqJRJp6ubXLbpRR3kNvWm/fhCe23DJBYZqa0sU+s0ck1zDSIfiAnOJ8gl6YfCdMEwy7PU4Z+No+9wZWxl+1htuGUVI+ThqdXksxu272Gut96nUBQ/zVXkp9qp8wjbKSBYcp51L+gHd/JsLKpWCu7XkX5XBoM/IPzIh7bx7670JsKManuQHtV+zgr2t0EkUZtfQqNdON52KbgA==
+X-YMail-OSG: xTZfUWIVM1kvLp0Mm.eE.ZYGH1PBbal8O228UcE2YGRG92qqWMELk7Z_HBusKWG
+ je0TmCT5KkUJru5KzqXN4blalUCXZbjZBCAOU7CjjnW6rGHEIELItAachw3iqSMTzK5LZTAhNUok
+ XUHx0ninY48zOD7_Cdd.DssI5yZjXunyzask.IZub50pie6nov4IJyZsWTDHk6R3HbyfBlv4M29C
+ _GVo4B69CxwzmOQz3ugtF75uCbsECK7p4fx5MpVpOnt1xrgC0TF5Uj3x1nZ.FWyrxm4MGWeHpEsn
+ mXD410sZH0SemDRmK_ODRXvFYSVoCoPocF6C62JD0YhNiHytIft0Yi3lg_MXdUI9UDqpmS_WUoUt
+ fG.Xps1td_OPZzcLfxpRh41wCTLjHboiZUUwiI2O.ZDTcm5u0sgdEWZ759dCf.sDiXXSPUmZEdaQ
+ rUbLVx41fkp2c06.QKUrxZYgoDcm5H093APWGzTVcNLtegc1._1y2BShWjef8C9SR46Q1VtEDJCS
+ wkR.fJY_bT65OZI5fPWFM_EuAXps524yie.lHmIZnTyvgfsEHoOItoMXHWa7Xx80pcnKXtRgAG5Q
+ .sntnPK1MHx8w8QyNbOB5Pzjf1OnNLGL9a1pbxQKRqwlMIdq6GI5DEddnbEALfASMxNss80nBjky
+ yUXKJpIFtAmwB4OjrCf5iotLgbEqWNJRjGZrd.OKYjDkcexEBHPpS8B1YOlkv.__k_9r0n2GiZ0W
+ JKBjQ3b9WEe_2wS9HkzP_kDBDhEBdKLRClR_4kAQUvELsqHI_bhCvnPappwiIwD1pmkjI90mPvKC
+ Ts.8KSj4zNnGdzsfLGMO6rDO0ZMwL6LGc92IGxSz1lxxQ6r0JS_dpXm440BfUomcD6xAhtGt8CKW
+ 7yZJ_IZ_HkXdVowD8v..L.AwxmXaaXKEMjKY0USicuB_37VFRpbkODiWvQNZWFeUxgKZmw6hF3du
+ hozsEpmJ2c8GlhPNAMYcBw4qAHADiKB36eJbobt4Ixo7rm3a5ZqVmkaF1PnzSPPir92U_zAFYy_r
+ 1GWsUnqBo7_sBQX5qQo5h_t4C1wfbjFnFKjSYJz8x_f48qXHAlLLolMr_9cX.ruRa3tWBNMb_BI_
+ OR1IJfsVx_X6mYzep07W4q7pNNImuVsnWt0_NYOpPhBr.YFNtHW5t2dVmJxMLnhAVTqmg_Hsm2e0
+ mxHFyHtqcDa4QV0hpyFQVFQF5v8Mn8Ggk3vRBx8Pz7IVJ23CJOeHTe4G.OAQMEacio24BQn6Ku3.
+ NJuigqLnz3t861tkaPRvSFzTiGIDIZ_631JnTmi7RVquoIvHH2avA9cu4kiKB9U1owehxu6GWIui
+ eI28ZLhFZwLj1ZDLtmWoDPFNj336bPpbV9Pu5Y_cjj3Y2b2cak3FFy4AZPq.sP8bb9YTA9F.9SDe
+ dn6KdC1qqdR7ppqABP6vRvFDyC7qBnr0ouc5c6zzTkQl7ku5ZjMdvnmAB3MKnpnm7ZUS8Wgnpp7S
+ idlNOA4o2V58DTQvjH9LsiaHUS_D8R9YtxcxaqJRnrzaFkL.oqNjkei3jIyWbt3LWF7rQwbo7eEj
+ voi7xpzLhgYj7uykPkxH9hDVPTf3oHpYHnWgccCv8MU0vwgKgsmbyTAAP7jVDIobvZYp2KyWvUTb
+ 230doTm_dG_IxGyNYIfdFghGO_BcWDDN1sF.fEhIwXo.SeEBhADKI5z.a6OOcSUYowgfX4cMOzFP
+ D9qkOhTolY4GmS6OAbNbJCxWpnsP5aCsCRFy7U_7yipd4R6zcrfLI4OqiaK7hQswmyVtgnRU5l2p
+ kke5JbnfEMpvOmTCbhP5GMsZj_Tnb9WCa97Fgf_lkvQP08shVkgiqTF5sIbeslHVYXirqrSVXEpP
+ iocIPeRpnkiQN3zYGIEcY4fzK0YcPyNhboKe1VNy4rtSwxA5IXX0PECUlq5dJcHQ1AxdezHmO9yJ
+ Fjh5yz8N.90Er7Ij2aM5MVp45l4kie.ZzDKHWjzTAz1IVIMVUEe_YPYcpOEoLgK6NHZOQawHnm9u
+ IVIQHstaIcDOE8_mO6wF44ynAIeWuth2ZTExBpGmPLxM_kKMV6.B2eCv.Xfk.E7oJ5BWy2XSzaK8
+ RDXvgNH32ks61dLa59mqu59e6IOSwMvi2majgaM7fkE.HhW0gzPt9p6feoArhqLPHJzwSdBQNoCb
+ yD50rxah.9wIJsDEP64eUIwZWig6Gf9XthgxzK_tdg3aFL88iYI9T43JX0RmkgqgLGo9jRQdf4Jg
+ aIpCNHEYOqsn303NbqfUJ_IVmj8eJqPDP6GLJMqIaZPNt5xidbGNEl8WNxc2IwmZFfgS_LHBi
+X-Sonic-MF: <casey@schaufler-ca.com>
+Received: from sonic.gate.mail.ne1.yahoo.com by sonic314.consmr.mail.ne1.yahoo.com with HTTP; Tue, 21 Feb 2023 21:16:13 +0000
+Received: by hermes--production-ne1-746bc6c6c4-8sf8l (Yahoo Inc. Hermes SMTP Server) with ESMTPA ID 7427840e83a31f83050c1968654ec381;
+          Tue, 21 Feb 2023 21:16:09 +0000 (UTC)
+Message-ID: <5c203a3e-3f92-9e23-c2c2-8f82baed3a47@schaufler-ca.com>
+Date:   Tue, 21 Feb 2023 13:16:08 -0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.2
+Content-Language: en-US
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     LSM List <linux-security-module@vger.kernel.org>,
+        Linux kernel mailing list <linux-kernel@vger.kernel.org>,
+        casey@schaufler-ca.com
+From:   Casey Schaufler <casey@schaufler-ca.com>
+Subject: [GIT PULL] Smack patches for v6.3
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+References: <5c203a3e-3f92-9e23-c2c2-8f82baed3a47.ref@schaufler-ca.com>
+X-Mailer: WebService/1.1.21183 mail.backend.jedi.jws.acl:role.jedi.acl.token.atz.jws.hermes.yahoo
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -90,130 +77,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 21 Feb 2023 09:31:01 -0600
-"Kalra, Ashish" <ashish.kalra@amd.com> wrote:
+Hello Linus,
 
-> >> +static int snp_reclaim_pages(unsigned long paddr, unsigned int npages, bool locked)
-> >> +{
-> >> +	/* Cbit maybe set in the paddr */
-> > 
-> > This is confusing.
-> > 
-> > I suppose C-bit is treated as a attribute of PTE in the kernel not part of the
-> > PA. It means only a PTE might carry a C-bit.
-> > 
-> 
-> snp_reclaim_pages() is also called for reclaiming guest memory, in which 
-> case the (guest) paddr will have the C-bit set. Hence this C-bit 
-> handling is done within snp_reclaim_pages() so that the callers don't 
-> need to handle it explicitly.
+Here is the Smack pull request for v6.3.
 
-Thanks for the explanation.
+There is only one change, a fix for an edge case when
+resetting the CIPSO representation of a Smack label.
+The change has had a good spell in next and passes all
+tests. Thank you.
 
-Do you mean it will be used like that in the later patch? Sorry if it is in the
-later patch as I was making progress slowly. It is quite a big patch set.
+The following changes since commit 2241ab53cbb5cdb08a6b2d4688feb13971058f65:
 
-At least, I don't see that kind of usage in the current patch. Feel free to
-correct me if I am wrong.
+  Linux 6.2-rc5 (2023-01-21 16:27:01 -0800)
 
-The call chains:
+are available in the Git repository at:
 
-__snp_free_firmware_page()
-    snp_reclaim_pages();
+  https://github.com/cschaufler/smack-next tags/Smack-for-6.3
 
-As __snp_free_firmware_page() takes struct page*, all the follwing coversion
-from it would not carry C-bit.
+for you to fetch changes up to ccfd889acb06eab10b98deb4b5eef0ec74157ea0:
 
-__snp_alloc_firmware_pages()
-  rmp_mark_pages_firmware()
-    snp_reclaim_pages()
+  smackfs: Added check catlen (2023-02-21 11:22:02 -0800)
 
-As __snp_alloc_firmware_page() allocates page with struct page*, the same
-conclusion as above.
+----------------------------------------------------------------
+One fix for resetting CIPSO labeling.
 
-> 
-> 
-> > The paddr is from __pa(page_address()). It is not extracted from a PTE. Thus, the
-> > return from them should never have a C-bit.
-> > 
-> > BTW: Wouldn't it be better to have pfn as input param instead of paddr?
-> > 
-> > The caller has struct page, calling snp_reclaim_pages(page_to_pfn(page), xxxxx)
-> > would be much clearer than the current conversion:
-> > page_address() (struct page is converted to VA), __pa() (VA is converted to PA)
-> > in the caller and then PA is converted to pfn here.
-> > 
-> >> +	unsigned long pfn = __sme_clr(paddr) >> PAGE_SHIFT;
-> >> +	int ret, err, i, n = 0;
-> >> +
-> > 
-> > should be unsigned int i, n; as the input param npage is unsigned int.
-> > 
-> >> +	if (!pfn_valid(pfn)) {
-> >> +		pr_err("%s: Invalid PFN %lx\n", __func__, pfn);
-> >> +		return 0;
-> >> +	}
-> >> +
-> >> +	for (i = 0; i < npages; i++, pfn++, n++) {
-> >> +		paddr = pfn << PAGE_SHIFT;
-> >> +
-> >> +		if (locked)
-> >> +			ret = __sev_do_cmd_locked(SEV_CMD_SNP_PAGE_RECLAIM, &paddr, &err);
-> >> +		else
-> >> +			ret = sev_do_cmd(SEV_CMD_SNP_PAGE_RECLAIM, &paddr, &err);
-> >> +
-> >> +		if (ret)
-> >> +			goto cleanup;
-> >> +
-> >> +		ret = rmp_make_shared(pfn, PG_LEVEL_4K);
-> >> +		if (ret)
-> >> +			goto cleanup;
-> >> +	}
-> >> +
-> >> +	return 0;
-> >> +
-> >> +cleanup:
-> >> +	/*
-> >> +	 * If failed to reclaim the page then page is no longer safe to
-> >> +	 * be release back to the system, leak it.
-> >> +	 */
-> >> +	snp_mark_pages_offline(pfn, npages - n);
-> >> +	return ret;
-> >> +}
-> >> +
-> >> +static int rmp_mark_pages_firmware(unsigned long paddr, unsigned int npages, bool locked)
-> > 
-> > The same comment as above. Better take pfn or page instead of paddr with
-> > redundant conversions.
-> > 
-> 
-> Again, the paddr can point to guest memory so it can have C-bit set.
-> 
-> Thanks,
-> Ashish
-> 
-> >> +{
-> >> +	/* Cbit maybe set in the paddr */
-> >> +	unsigned long pfn = __sme_clr(paddr) >> PAGE_SHIFT;
-> >> +	int rc, n = 0, i;
-> >> +
-> >> +	for (i = 0; i < npages; i++, n++, pfn++) {
-> >> +		rc = rmp_make_private(pfn, 0, PG_LEVEL_4K, 0, true);
-> >> +		if (rc)
-> >> +			goto cleanup;
-> >> +	}
-> >> +
-> >> +	return 0;
-> >> +
-> >> +cleanup:
-> >> +	/*
-> >> +	 * Try unrolling the firmware state changes by
-> >> +	 * reclaiming the pages which were already changed to the
-> >> +	 * firmware state.
-> >> +	 */
-> >> +	snp_reclaim_pages(paddr, n, locked);
-> >> +
-> >> +	return rc;
-> >> +}
-> >> +
+----------------------------------------------------------------
+Denis Arefev (1):
+      smackfs: Added check catlen
+
+ security/smack/smackfs.c | 17 ++++++++++++++---
+ 1 file changed, 14 insertions(+), 3 deletions(-)
 
