@@ -2,219 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9600269DAC9
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 07:52:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B4F4469DACB
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 07:52:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233353AbjBUGwA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Feb 2023 01:52:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57188 "EHLO
+        id S233364AbjBUGw1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Feb 2023 01:52:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57710 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233343AbjBUGv5 (ORCPT
+        with ESMTP id S233343AbjBUGw0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Feb 2023 01:51:57 -0500
-Received: from mail-ed1-f53.google.com (mail-ed1-f53.google.com [209.85.208.53])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 632DBE39A
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Feb 2023 22:51:49 -0800 (PST)
-Received: by mail-ed1-f53.google.com with SMTP id s26so12962966edw.11
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Feb 2023 22:51:49 -0800 (PST)
+        Tue, 21 Feb 2023 01:52:26 -0500
+Received: from mail-yb1-xb31.google.com (mail-yb1-xb31.google.com [IPv6:2607:f8b0:4864:20::b31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9CA723117
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Feb 2023 22:52:22 -0800 (PST)
+Received: by mail-yb1-xb31.google.com with SMTP id v78so3815942ybe.3
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Feb 2023 22:52:22 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=3usF6y0jP8WdRmsHw7idRFJkuoGf3L15ygmJMO39Keg=;
+        b=Dxb4ANKUF876yt1r6rpWTEgOJzOrrCeT53AkedVhi1afGBbnTzly2/ntvJH0Wiy+Hs
+         A8OQ5p5sjhbAtVUpqM7cmdzqL5bAXHfW5c8tZcugAObcsO9l64l4BtXlkzQF9gXoO+e8
+         mXEErXvCDp3J+4kVqQxrCSgbr8SzEUNW2yq2PewEKlYBmdqY/Ec1iA0pLqpzXf+GdMYd
+         ex+6nV9pa+PGOgK3EJMTg0HTKEpG8mNdIyvFdBT12H/4m8b7fDXcGislJqneW+VG9SmR
+         KpRgA/xYhhbEecBbfZ8ywK/2eK1pkN7NSYzIWQn2BvvbBDuyFQOiNE/7ggzOGWbVypFx
+         CVsg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=tHvJThuyHv60xEKEP3DfLorIeDtDqqvbyGFySsMcxiI=;
-        b=QB8VDO9g6GZZF5/a+C5AwMnHXpNBFC9c4IJ6/w2bCA6RJwdMW6X7EX1ppYnhdrSMcf
-         xGgnV+2BSQB+vEUKykFCZj4JAoGoL+8ui7z/apJcRyInOlte46w/aJtVRNilqqOi6HtX
-         kfXsM2VOmoeutq7DMBkX/b843UsHJqCO44hM/BXPL4Z5ZGCRsB34/TJi+Ovf14YkLLTX
-         6zl5qQHlSYkp8GdvFZnAOo5HgNtIeGQ9LqgBxR9BJbF/W2CdrZ2gRY68sDuSyE+eIQgN
-         A01GcnRO891Xg4cH02JhA3B1pc6jUeLiy1M4vW7iN3etwULQSGCjCmF5S/Uagc/H2c4K
-         5cyQ==
-X-Gm-Message-State: AO0yUKX2Or9BDcQiR8T8azMEZAak1oUXzHzbDdGTrrA0PVU8mg/AmMCE
-        GlsaGaC9ew0j+YtAf3RtPL0=
-X-Google-Smtp-Source: AK7set/3MDVjo+Bx7Re7x8xD3Oys1QgCH2dbuDYKc77UUXx/xTXNU4VtM2+iSZKDVa8qeV4Z/p9YIQ==
-X-Received: by 2002:aa7:d703:0:b0:4ac:bdeb:6dce with SMTP id t3-20020aa7d703000000b004acbdeb6dcemr3990597edq.39.1676962307735;
-        Mon, 20 Feb 2023 22:51:47 -0800 (PST)
-Received: from ?IPV6:2a0b:e7c0:0:107::aaaa:49? ([2a0b:e7c0:0:107::aaaa:49])
-        by smtp.gmail.com with ESMTPSA id u13-20020aa7d88d000000b004ab4c28a967sm1485354edq.44.2023.02.20.22.51.46
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 20 Feb 2023 22:51:47 -0800 (PST)
-Message-ID: <63030af8-5849-34b3-10e6-b6ce32c3a5bf@kernel.org>
-Date:   Tue, 21 Feb 2023 07:51:46 +0100
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=3usF6y0jP8WdRmsHw7idRFJkuoGf3L15ygmJMO39Keg=;
+        b=KweqOSESw+eAYdf202cSZb6OVjNWBjYZpVb3kuWsOqH3q7xNO45/Jhuhi5IPkWxdpP
+         gLii6KKZP/1Ig8+6gCUx7fRDr1waAMoN0NalngxsfhZjtdJ/1VXncm0Q2ZndijLxQJwl
+         fM82GbfSpX8/ZOAw9pfUeTToY0IEAKRBGHLm8Nx55axqs7ZQiODM5ak82h4dg2pMZZ6k
+         O/7c5o934w8NFF50TENjn3scfaeD17NUtXwPa7imt5mX2n92M0xQldW+qFJCj+pfnAcP
+         iiKlCDsiTN3shPBHrGb9SjhKgi07USgm1Zc8BUs25+rGsuxTSLB7aqaTZ9iZ/uIoZX26
+         pnyA==
+X-Gm-Message-State: AO0yUKUk7TuwBFmjTXP8acqkC+Npx0LniNukTVmYRsp0cTjziFId8IwR
+        2K6DGU1rrBaQLjj7g7h1240+2ga612XoASehMs92vA==
+X-Google-Smtp-Source: AK7set/KssXsBw+UV6ZW5jaXWXgEk7m9tk+TPyEqax5PBIK816L+TDG+tB7u5x98cSyQtCNn8gMxbS2O6rpsFDVFbTk=
+X-Received: by 2002:a5b:691:0:b0:902:535c:8399 with SMTP id
+ j17-20020a5b0691000000b00902535c8399mr34958ybq.461.1676962341842; Mon, 20 Feb
+ 2023 22:52:21 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH v3] char: pcmcia: cm4000_cs: Fix use-after-free in
- cm4000_fops
-Content-Language: en-US
-To:     Hyunwoo Kim <imv4bel@gmail.com>, laforge@gnumonks.org
-Cc:     linux-kernel@vger.kernel.org, arnd@arndb.de,
-        gregkh@linuxfoundation.org, linux@dominikbrodowski.net
-References: <20220919040701.GA302806@ubuntu>
-From:   Jiri Slaby <jirislaby@kernel.org>
-In-Reply-To: <20220919040701.GA302806@ubuntu>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+References: <20230220230624.lkobqeagycx7bi7p@google.com> <6563189C-7765-4FFA-A8F2-A5CC4860A1EF@linux.dev>
+In-Reply-To: <6563189C-7765-4FFA-A8F2-A5CC4860A1EF@linux.dev>
+From:   Shakeel Butt <shakeelb@google.com>
+Date:   Mon, 20 Feb 2023 22:52:10 -0800
+Message-ID: <CALvZod55K5zbbVYptq8ud=nKVyU1xceGVf6UcambBZ3BA2TZqA@mail.gmail.com>
+Subject: Re: [PATCH] mm: change memcg->oom_group access with atomic operations
+To:     Roman Gushchin <roman.gushchin@linux.dev>
+Cc:     Yue Zhao <findns94@gmail.com>, linux-mm@kvack.org,
+        akpm@linux-foundation.org, hannes@cmpxchg.org, mhocko@kernel.org,
+        muchun.song@linux.dev, cgroups@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Ping -- what's the status of these?
+On Mon, Feb 20, 2023 at 9:17 PM Roman Gushchin <roman.gushchin@linux.dev> w=
+rote:
+>
+> > On Feb 20, 2023, at 3:06 PM, Shakeel Butt <shakeelb@google.com> wrote:
+> >
+> > =EF=BB=BFOn Mon, Feb 20, 2023 at 01:09:44PM -0800, Roman Gushchin wrote=
+:
+> >>> On Mon, Feb 20, 2023 at 11:16:38PM +0800, Yue Zhao wrote:
+> >>> The knob for cgroup v2 memory controller: memory.oom.group
+> >>> will be read and written simultaneously by user space
+> >>> programs, thus we'd better change memcg->oom_group access
+> >>> with atomic operations to avoid concurrency problems.
+> >>>
+> >>> Signed-off-by: Yue Zhao <findns94@gmail.com>
+> >>
+> >> Hi Yue!
+> >>
+> >> I'm curious, have any seen any real issues which your patch is solving=
+?
+> >> Can you, please, provide a bit more details.
+> >>
+> >
+> > IMHO such details are not needed. oom_group is being accessed
+> > concurrently and one of them can be a write access. At least
+> > READ_ONCE/WRITE_ONCE is needed here.
+>
+> Needed for what?
 
-Should we mark cm4000_cs, cm4040_cs, and scr24x_cs as BROKEN instead?
+For this particular case, documenting such an access. Though I don't
+think there are any architectures which may tear a one byte read/write
+and merging/refetching is not an issue for this.
 
-Thanks.
+>
+> I mean it=E2=80=99s obviously not a big deal to put READ_ONCE()/WRITE_ONC=
+E() here, but I struggle to imagine a scenario when it will make any differ=
+ence. IMHO it=E2=80=99s easier to justify a proper atomic operation here, e=
+ven if it=E2=80=99s most likely an overkill.
+>
+> My question is very simple: the commit log mentions =E2=80=9C=E2=80=A6 to=
+ avoid concurrency problems=E2=80=9D, so I wonder what problems are these.
+>
+> Also there are other similar cgroup interfaces without READ_ONCE()/WRITE_=
+ONCE()
 
-On 19. 09. 22, 6:07, Hyunwoo Kim wrote:
-> A race condition may occur if the user physically removes the pcmcia
-> device while calling open() for this char device node.
-> 
-> This is a race condition between the cmm_open() function and the
-> cm4000_detach() function, which may eventually result in UAF.
-> 
-> So, add a refcount check to cm4000_detach() to free the "dev" structure
-> after the char device node is close()d.
-> 
-> Signed-off-by: Hyunwoo Kim <imv4bel@gmail.com>
-> ---
->   drivers/char/pcmcia/cm4000_cs.c | 58 +++++++++++++++++++++++----------
->   1 file changed, 41 insertions(+), 17 deletions(-)
-> 
-> diff --git a/drivers/char/pcmcia/cm4000_cs.c b/drivers/char/pcmcia/cm4000_cs.c
-> index adaec8fd4b16..7103812b4019 100644
-> --- a/drivers/char/pcmcia/cm4000_cs.c
-> +++ b/drivers/char/pcmcia/cm4000_cs.c
-> @@ -55,6 +55,7 @@
->   	} while (0)
->   
->   static DEFINE_MUTEX(cmm_mutex);
-> +static DEFINE_MUTEX(remove_mutex);
->   
->   #define	T_1SEC		(HZ)
->   #define	T_10MSEC	msecs_to_jiffies(10)
-> @@ -103,7 +104,8 @@ static int major;		/* major number we get from the kernel */
->   #define REG_STOPBITS(x)		(x + 7)
->   
->   struct cm4000_dev {
-> -	struct pcmcia_device *p_dev;
-> +	struct pcmcia_device	*p_dev;
-> +	struct kref		refcnt;
->   
->   	unsigned char atr[MAX_ATR];
->   	unsigned char rbuf[512];
-> @@ -146,6 +148,9 @@ struct cm4000_dev {
->   
->   #define	ZERO_DEV(dev)	memset(&((dev)->init), 0, sizeof((dev)->init))
->   
-> +static void stop_monitor(struct cm4000_dev *dev);
-> +static void cm4000_delete(struct kref *kref);
-> +
->   static struct pcmcia_device *dev_table[CM4000_MAX_DEV];
->   static struct class *cmm_class;
->   
-> @@ -416,6 +421,30 @@ static struct card_fixup card_fixups[] = {
->   	},
->   };
->   
-> +
-> +static void cm4000_delete(struct kref *kref)
-> +{
-> +	struct cm4000_dev *dev = container_of(kref, struct cm4000_dev, refcnt);
-> +	struct pcmcia_device *link = dev->p_dev;
-> +	int devno;
-> +
-> +	/* find device */
-> +	for (devno = 0; devno < CM4000_MAX_DEV; devno++)
-> +		if (dev_table[devno] == link)
-> +			break;
-> +	if (devno == CM4000_MAX_DEV)
-> +		return;
-> +
-> +	stop_monitor(dev);
-> +
-> +	cm4000_release(link);
-> +
-> +	dev_table[devno] = NULL;
-> +	kfree(dev);
-> +
-> +	device_destroy(cmm_class, MKDEV(major, devno));
-> +}
-> +
->   static void set_cardparameter(struct cm4000_dev *dev)
->   {
->   	int i;
-> @@ -1629,6 +1658,7 @@ static int cmm_open(struct inode *inode, struct file *filp)
->   	if (minor >= CM4000_MAX_DEV)
->   		return -ENODEV;
->   
-> +	mutex_lock(&remove_mutex);
->   	mutex_lock(&cmm_mutex);
->   	link = dev_table[minor];
->   	if (link == NULL || !pcmcia_dev_present(link)) {
-> @@ -1673,8 +1703,12 @@ static int cmm_open(struct inode *inode, struct file *filp)
->   
->   	DEBUGP(2, dev, "<- cmm_open\n");
->   	ret = stream_open(inode, filp);
-> +
-> +	kref_get(&dev->refcnt);
->   out:
->   	mutex_unlock(&cmm_mutex);
-> +	mutex_unlock(&remove_mutex);
-> +
->   	return ret;
->   }
->   
-> @@ -1703,6 +1737,8 @@ static int cmm_close(struct inode *inode, struct file *filp)
->   	link->open = 0;		/* only one open per device */
->   	wake_up(&dev->devq);	/* socket removed? */
->   
-> +	kref_put(&dev->refcnt, cm4000_delete);
-> +
->   	DEBUGP(2, dev, "cmm_close\n");
->   	return 0;
->   }
-> @@ -1808,6 +1844,7 @@ static int cm4000_probe(struct pcmcia_device *link)
->   	init_waitqueue_head(&dev->ioq);
->   	init_waitqueue_head(&dev->atrq);
->   	init_waitqueue_head(&dev->readq);
-> +	kref_init(&dev->refcnt);
->   
->   	ret = cm4000_config(link, i);
->   	if (ret) {
-> @@ -1824,23 +1861,10 @@ static int cm4000_probe(struct pcmcia_device *link)
->   static void cm4000_detach(struct pcmcia_device *link)
->   {
->   	struct cm4000_dev *dev = link->priv;
-> -	int devno;
-> -
-> -	/* find device */
-> -	for (devno = 0; devno < CM4000_MAX_DEV; devno++)
-> -		if (dev_table[devno] == link)
-> -			break;
-> -	if (devno == CM4000_MAX_DEV)
-> -		return;
-> -
-> -	stop_monitor(dev);
-> -
-> -	cm4000_release(link);
->   
-> -	dev_table[devno] = NULL;
-> -	kfree(dev);
-> -
-> -	device_destroy(cmm_class, MKDEV(major, devno));
-> +	mutex_lock(&remove_mutex);
-> +	kref_put(&dev->refcnt, cm4000_delete);
-> +	mutex_unlock(&remove_mutex);
->   
->   	return;
->   }
+Yeah and those are v1 interfaces e.g. oom_kill_disable, swappiness,
+soft_limit. These definitely need [READ|WRITE]_ONCE primitive.
 
--- 
-js
-suse labs
-
+Yue, can you update your patch and convert all accesses to these
+fields through [READ|WRITE]_ONCE ?
