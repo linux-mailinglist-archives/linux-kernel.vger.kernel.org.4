@@ -2,104 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 095C669DD84
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 11:03:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9128C69DD87
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 11:04:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234105AbjBUKDb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Feb 2023 05:03:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42382 "EHLO
+        id S234116AbjBUKEB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Feb 2023 05:04:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42996 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233236AbjBUKD3 (ORCPT
+        with ESMTP id S233604AbjBUKD7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Feb 2023 05:03:29 -0500
-Received: from mail-qt1-f174.google.com (mail-qt1-f174.google.com [209.85.160.174])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89DBCAD2C
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Feb 2023 02:03:27 -0800 (PST)
-Received: by mail-qt1-f174.google.com with SMTP id h19so1057349qtk.7
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Feb 2023 02:03:27 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=8IkLkYW3Mrz4W4E6CahA4nVgDfr/jjbUUP9owXsZ0sQ=;
-        b=dQDSba9616M4Jg0F4wduILT+SPTnV74M79S0iglzJVpgOpz0WEKv6/65dI6sPQrQ/E
-         851rJnVSqzUh81g5bnoexzUGwPdzGWdN3eGk2AUWb0zM26d4w3FOVdekDpEB18tAs2sz
-         +LNnM6dR8EOUymnVqrFPhwSeYo0/kz5PmkFEBVF7yMEPtci2W7qeMZGZ17FhISOj2B53
-         0yZx3iroDm9fAae+hFmV54tMA4BpWr3PklNTJYqZxR/54HY3Fcm5MNRptAXNskIkKeTq
-         VNIO3zfO6MttmMZkjWF/3hDD4aewTpmI44DvlqY2oBCtxAaAsdUwVJ+GqiBbfS/yRFWy
-         LSBA==
-X-Gm-Message-State: AO0yUKV9El7B5wlSev4TVUgn57kiT18H4QKuNa0osGkzdZOqIft/V/sR
-        o0VOIDu4nmg7BJMo3s+XXt+xa2UnK/M00w==
-X-Google-Smtp-Source: AK7set+QrKQeEW6csqqCSxAqijGPDFkARU0piSpDpXZg7CstSE7agy9owfJUyJ8nUgey13/Zc0dHvg==
-X-Received: by 2002:a05:622a:1793:b0:3bd:1a07:2086 with SMTP id s19-20020a05622a179300b003bd1a072086mr6290608qtk.36.1676973806317;
-        Tue, 21 Feb 2023 02:03:26 -0800 (PST)
-Received: from mail-yb1-f178.google.com (mail-yb1-f178.google.com. [209.85.219.178])
-        by smtp.gmail.com with ESMTPSA id 16-20020ac85950000000b003b82489d8acsm1751245qtz.21.2023.02.21.02.03.25
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 21 Feb 2023 02:03:26 -0800 (PST)
-Received: by mail-yb1-f178.google.com with SMTP id cf8so3791023ybb.11
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Feb 2023 02:03:25 -0800 (PST)
-X-Received: by 2002:a25:e206:0:b0:95b:7778:5158 with SMTP id
- h6-20020a25e206000000b0095b77785158mr440109ybe.12.1676973805392; Tue, 21 Feb
- 2023 02:03:25 -0800 (PST)
+        Tue, 21 Feb 2023 05:03:59 -0500
+Received: from mx01.omp.ru (mx01.omp.ru [90.154.21.10])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42002BDEF;
+        Tue, 21 Feb 2023 02:03:58 -0800 (PST)
+Received: from [192.168.1.103] (178.176.76.192) by msexch01.omp.ru
+ (10.188.4.12) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.986.14; Tue, 21 Feb
+ 2023 13:03:48 +0300
+Subject: Re: [PATCH -next] ata: pata_macio: Use of_property_present() helper
+To:     Yang Li <yang.lee@linux.alibaba.com>,
+        <damien.lemoal@opensource.wdc.com>
+CC:     <linux-ide@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+References: <20230221023634.87925-1-yang.lee@linux.alibaba.com>
+From:   Sergey Shtylyov <s.shtylyov@omp.ru>
+Organization: Open Mobile Platform
+Message-ID: <2465c8aa-7098-e225-0b4c-c27f60a933b8@omp.ru>
+Date:   Tue, 21 Feb 2023 13:03:48 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.10.1
 MIME-Version: 1.0
-References: <20230221060723.26291-1-bhe@redhat.com> <20230221060723.26291-3-bhe@redhat.com>
-In-Reply-To: <20230221060723.26291-3-bhe@redhat.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Tue, 21 Feb 2023 11:03:14 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdV4efVX8X1KoLJ-3pmzsxnU6TODw3b_37ZK771rfrqi7A@mail.gmail.com>
-Message-ID: <CAMuHMdV4efVX8X1KoLJ-3pmzsxnU6TODw3b_37ZK771rfrqi7A@mail.gmail.com>
-Subject: Re: [RFC PATCH 2/2] arch/*/io.h: remove ioremap_uc in some architectures
-To:     Baoquan He <bhe@redhat.com>
-Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org, arnd@arndb.de,
-        hch@infradead.org, mcgrof@kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <20230221023634.87925-1-yang.lee@linux.alibaba.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [178.176.76.192]
+X-ClientProxiedBy: msexch01.omp.ru (10.188.4.12) To msexch01.omp.ru
+ (10.188.4.12)
+X-KSE-ServerInfo: msexch01.omp.ru, 9
+X-KSE-AntiSpam-Interceptor-Info: scan successful
+X-KSE-AntiSpam-Version: 5.9.59, Database issued on: 02/21/2023 09:40:53
+X-KSE-AntiSpam-Status: KAS_STATUS_NOT_DETECTED
+X-KSE-AntiSpam-Method: none
+X-KSE-AntiSpam-Rate: 59
+X-KSE-AntiSpam-Info: Lua profiles 175653 [Feb 21 2023]
+X-KSE-AntiSpam-Info: Version: 5.9.59.0
+X-KSE-AntiSpam-Info: Envelope from: s.shtylyov@omp.ru
+X-KSE-AntiSpam-Info: LuaCore: 504 504 dc137e1f9c062eb6c0671e7d509ab442ae395562
+X-KSE-AntiSpam-Info: {rep_avail}
+X-KSE-AntiSpam-Info: {Tracking_from_domain_doesnt_match_to}
+X-KSE-AntiSpam-Info: {relay has no DNS name}
+X-KSE-AntiSpam-Info: {SMTP from is not routable}
+X-KSE-AntiSpam-Info: {Found in DNSBL: 178.176.76.192 in (user)
+ b.barracudacentral.org}
+X-KSE-AntiSpam-Info: {Found in DNSBL: 178.176.76.192 in (user)
+ dbl.spamhaus.org}
+X-KSE-AntiSpam-Info: 127.0.0.199:7.1.2;omp.ru:7.1.1;d41d8cd98f00b204e9800998ecf8427e.com:7.1.1
+X-KSE-AntiSpam-Info: ApMailHostAddress: 178.176.76.192
+X-KSE-AntiSpam-Info: {DNS response errors}
+X-KSE-AntiSpam-Info: Rate: 59
+X-KSE-AntiSpam-Info: Status: not_detected
+X-KSE-AntiSpam-Info: Method: none
+X-KSE-AntiSpam-Info: Auth:dmarc=temperror header.from=omp.ru;spf=temperror
+ smtp.mailfrom=omp.ru;dkim=none
+X-KSE-Antiphishing-Info: Clean
+X-KSE-Antiphishing-ScanningType: Heuristic
+X-KSE-Antiphishing-Method: None
+X-KSE-Antiphishing-Bases: 02/21/2023 09:44:00
+X-KSE-AttachmentFiltering-Interceptor-Info: protection disabled
+X-KSE-Antivirus-Interceptor-Info: scan successful
+X-KSE-Antivirus-Info: Clean, bases: 2/21/2023 8:42:00 AM
+X-KSE-BulkMessagesFiltering-Scan-Result: InTheLimit
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Baoquan,
+Hello!
 
-Thanks for your patch!
+On 2/21/23 5:36 AM, Yang Li wrote:
 
-On Tue, Feb 21, 2023 at 7:36 AM Baoquan He <bhe@redhat.com> wrote:
-> ioremap_uc() is only meaningful on old x86-32 systems with the PAT
-> extension, and on ia64 with its slightly unconventional ioremap()
-> behavior, everywhere else this is the same as ioremap() anyway.
->
-> So here, remove the ioremap_uc() definition in architecutures other
-> than x86 and ia64. These architectures all have asm-generic/io.h
-> included and will have the default ioremap_uc() definition which
-> returns NULL. If any ARCH really needs a specific ioremap_uc() for
+> Use of_property_present() instead of of_get_property/of_find_property()
 
-Please make it very clear that this changes existing behavior.
-At first, I had completely missed that.
+   I'm not seeing of_property_present() anywhere (we have of_prperty_read_bool()
+though)... what repo was this patch done against?
 
-And of course the documentation should be updated to reflect that.
+> in places where we just need to test presence of a property.
+> 
+> Signed-off-by: Yang Li <yang.lee@linux.alibaba.com>
+> ---
+>  drivers/ata/pata_macio.c | 7 +++----
+>  1 file changed, 3 insertions(+), 4 deletions(-)
+> 
+> diff --git a/drivers/ata/pata_macio.c b/drivers/ata/pata_macio.c
+> index 9ccaac9e2bc3..f698d77e87e1 100644
+> --- a/drivers/ata/pata_macio.c
+> +++ b/drivers/ata/pata_macio.c
+> @@ -479,10 +479,9 @@ static int pata_macio_cable_detect(struct ata_port *ap)
+>  	    priv->kind == controller_un_ata6 ||
+>  	    priv->kind == controller_k2_ata6 ||
+>  	    priv->kind == controller_sh_ata6) {
+> -		const char* cable = of_get_property(priv->node, "cable-type",
+> -						    NULL);
+> +		const char *cable = of_property_present(priv->node, "cable-type");
+>  		struct device_node *root = of_find_node_by_path("/");
+> -		const char *model = of_get_property(root, "model", NULL);
+> +		const char *model = of_property_present(root, "model");
 
-> its own usage, one ioremap_uc() can be added in the ARH.
+   We use the values of these properties...
 
-s/ARH/ARCH/
+[...]
+> @@ -973,7 +972,7 @@ static void pata_macio_invariants(struct pata_macio_priv *priv)
+>  	/* XXX FIXME --- setup priv->mediabay here */
+>  
+>  	/* Get Apple bus ID (for clock and ASIC control) */
+> -	bidp = of_get_property(priv->node, "AAPL,bus-id", NULL);
+> +	bidp = of_property_present(priv->node, "AAPL,bus-id");
 
->  arch/m68k/include/asm/kmap.h   | 1 -
+   And this one too...
 
-Acked-by: Geert Uytterhoeven <geert@linux-m68k.org>
+[...]
 
-Gr{oetje,eeting}s,
-
-                        Geert
-
--- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+MBR, Sergey
