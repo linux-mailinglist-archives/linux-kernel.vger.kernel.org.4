@@ -2,108 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7DD6769DCD8
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 10:25:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 932D869DCDB
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 10:25:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233944AbjBUJYu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Feb 2023 04:24:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35878 "EHLO
+        id S233085AbjBUJZT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Feb 2023 04:25:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36978 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233921AbjBUJYn (ORCPT
+        with ESMTP id S233935AbjBUJZR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Feb 2023 04:24:43 -0500
-Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 309501A67E;
-        Tue, 21 Feb 2023 01:24:42 -0800 (PST)
-Received: by mail-wr1-x42c.google.com with SMTP id c12so3636255wrw.1;
-        Tue, 21 Feb 2023 01:24:42 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Zj1tWf52J//HqTj7v4fnk+SHbatlNJyYhDkNDwjnWLI=;
-        b=jQPWrwJ9BFRMxt4ko0FDpUzvVxLURzjsioTAtz0Q13xhHZhYNfKaldXSsd21hvu3dl
-         SdLhg/NZaqSpS6E8Kf6M+UoEsXfFV4sPLh63XeUU468wGmN7WARp8iBdX0mrK83yWLxt
-         hcdCavCWDXqptZaQAju7QCSb95MMG5J/xVoAZy9wJxBSClFbX5//uHxCVQ6fcXdO4Yhu
-         CS6uNwH7DAASJhm0ra+PtXFiFhThCrCLLKCeptxESIUWD2iMjR7R454OalqvSJTaqsUi
-         zb4TTvYqx6LzsZF7hr/0++aflYP+VOjtmGFxgaUQkyqcK2tn9fobYgFZ3y1IIlFAPb9G
-         mF7A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Zj1tWf52J//HqTj7v4fnk+SHbatlNJyYhDkNDwjnWLI=;
-        b=gYKsB9zKaU9UKkD6PKM6XbmpzREpaub2LFrppyXMnuViXfIXqvEJlHGzJo5NSRW/0n
-         /9CW23yLu2fNWNp3+cKvShuUsX6lbVvy56KGiyWB4+Ad4OfGC8ZsvMZ6Lts8eNZ/QrxV
-         cJl1aaYrVM/fGgD/F3r1+lHmY94zxO/DZeGk4w9cBoicW0hVJfDN95iYczG8ajnMmRyz
-         msHqrw6vKuH+/x/5PpJ8NRV95wDa18CZtDP0cdPZfYIjd0A0zjZRvQf6JDeGpxRtVhoN
-         VKeQcao2lszaK5mqGnmN89dZaBw1NIdxBdVEmF6AZ7XlNVUGECx04nyGitDlPhI9HwZA
-         l2gg==
-X-Gm-Message-State: AO0yUKWAknYruhOj3wEOUR5kFyHs6VI0t5Xe0uPHOn9XabzmOjWrPljy
-        OFpVH8bqmFplUUqd+JNglDo=
-X-Google-Smtp-Source: AK7set8CJ8+KKQtN0pDVYaDjnrpvJDbxFT9JF1rviXW2IefJQ2QpZNM0gQKqZxbGcBAjzKvxbXZxLw==
-X-Received: by 2002:adf:ea83:0:b0:2c5:6180:516e with SMTP id s3-20020adfea83000000b002c56180516emr2254316wrm.39.1676971480545;
-        Tue, 21 Feb 2023 01:24:40 -0800 (PST)
-Received: from arinc9-PC.lan ([37.120.152.236])
-        by smtp.gmail.com with ESMTPSA id i18-20020adfe492000000b002c56287bd2csm4272573wrm.114.2023.02.21.01.24.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 21 Feb 2023 01:24:40 -0800 (PST)
-From:   arinc9.unal@gmail.com
-X-Google-Original-From: arinc.unal@arinc9.com
-To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        John Crispin <john@phrozen.org>
-Cc:     =?UTF-8?q?Ar=C4=B1n=C3=A7=20=C3=9CNAL?= <arinc.unal@arinc9.com>,
-        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Sergio Paracuellos <sergio.paracuellos@gmail.com>,
-        erkin.bozoglu@xeront.com
-Subject: [PATCH 2/2] mips: ralink: make SOC_MT7621 select PINCTRL
-Date:   Tue, 21 Feb 2023 12:24:35 +0300
-Message-Id: <20230221092435.22069-2-arinc.unal@arinc9.com>
-X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20230221092435.22069-1-arinc.unal@arinc9.com>
-References: <20230221092435.22069-1-arinc.unal@arinc9.com>
+        Tue, 21 Feb 2023 04:25:17 -0500
+Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::226])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 292DA222ED;
+        Tue, 21 Feb 2023 01:24:59 -0800 (PST)
+Received: (Authenticated sender: clement.leger@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id 99E6BC0007;
+        Tue, 21 Feb 2023 09:24:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1676971498;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=sF6cTrmRbsTNZI9mfS1d6w4kuvwM4DluVhRpiXiPKYg=;
+        b=JOJfyebbXafvS+9Jf24BLnzMwI6Vm+P8p48Cwb5cP9cbkReOmVz42FK5n2btKD4tGtKN+4
+        3nRmRAnlBAg1K7vN8+9rVO79ZEfWku+WkRzc0qr4Ng5ORFmss2ewR7hyVFh69w6BmkbhiA
+        gT4MoFiSZsBiOl3rbJao18x+YVmVxgn22lajMe5TcYWAzREyhWqlxZb6EDj5bT+hVBDtbS
+        LaAk2SBNYFAioGDoMoV0AWKbchDwxnyDZZ2iYOwbqYFKbJeZZLkK27onxCYJWYkJTHcU+r
+        EAFT2WefHXNZ38+fbP8MuMC65nMr8JRNXFcOHhqajPRtoYq4TLBsjMM/0GhIwg==
+From:   =?UTF-8?q?Cl=C3=A9ment=20L=C3=A9ger?= <clement.leger@bootlin.com>
+To:     Andrew Lunn <andrew@lunn.ch>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>
+Cc:     =?UTF-8?q?Cl=C3=A9ment=20L=C3=A9ger?= <clement.leger@bootlin.com>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        Herve Codina <herve.codina@bootlin.com>,
+        =?UTF-8?q?Miqu=C3=A8l=20Raynal?= <miquel.raynal@bootlin.com>,
+        Milan Stevanovic <milan.stevanovic@se.com>,
+        Jimmy Lalande <jimmy.lalande@se.com>,
+        Pascal Eberhard <pascal.eberhard@se.com>,
+        Arun Ramadoss <Arun.Ramadoss@microchip.com>,
+        linux-renesas-soc@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH net-next v4 0/3] net: dsa: rzn1-a5psw: add support for vlan and .port_bridge_flags
+Date:   Tue, 21 Feb 2023 10:26:23 +0100
+Message-Id: <20230221092626.57019-1-clement.leger@bootlin.com>
+X-Mailer: git-send-email 2.39.0
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Arınç ÜNAL <arinc.unal@arinc9.com>
+While adding support for VLAN, bridge_vlan_unaware.sh and
+bridge_vlan_aware.sh were executed and requires .port_bridge_flags
+to disable flooding on some specific port. Thus, this series adds
+both vlan support and .port_bridge_flags.
 
-Currently, out of every Ralink SoC, only the dt-binding of the MT7621 SoC
-uses pinctrl. Because of this, PINCTRL is not selected at all. Make
-SOC_MT7621 select PINCTRL.
+----
+V4:
+ - Fix missing CPU port bit in a5psw->bridged_ports
+ - Use unsigned int for vlan_res_id parameters
+ - Rename a5psw_get_vlan_res_entry() to a5psw_new_vlan_res_entry()
+ - In a5psw_port_vlan_add(), return -ENOSPC when no VLAN entry is found
+ - In a5psw_port_vlan_filtering(), compute "val" from "mask"
 
-Remove PINCTRL_MT7621, enabling it for the MT7621 SoC will be handled under
-the PINCTRL_MT7621 option.
+V3:
+ - Target net-next tree and correct version...
 
-Signed-off-by: Arınç ÜNAL <arinc.unal@arinc9.com>
----
- arch/mips/ralink/Kconfig | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+V2:
+ - Fixed a few formatting errors
+ - Add .port_bridge_flags implementation
 
-diff --git a/arch/mips/ralink/Kconfig b/arch/mips/ralink/Kconfig
-index 06031796c87b..83e61e147b90 100644
---- a/arch/mips/ralink/Kconfig
-+++ b/arch/mips/ralink/Kconfig
-@@ -54,7 +54,7 @@ choice
- 		select HAVE_PCI
- 		select PCI_DRIVERS_GENERIC
- 		select SOC_BUS
--		select PINCTRL_MT7621
-+		select PINCTRL
- 
- 		help
- 		  The MT7621 system-on-a-chip includes an 880 MHz MIPS1004Kc
+Clément Léger (3):
+  net: dsa: rzn1-a5psw: use a5psw_reg_rmw() to modify flooding
+    resolution
+  net: dsa: rzn1-a5psw: add support for .port_bridge_flags
+  net: dsa: rzn1-a5psw: add vlan support
+
+ drivers/net/dsa/rzn1_a5psw.c | 223 ++++++++++++++++++++++++++++++++++-
+ drivers/net/dsa/rzn1_a5psw.h |   8 +-
+ 2 files changed, 222 insertions(+), 9 deletions(-)
+
 -- 
-2.37.2
+2.39.0
 
