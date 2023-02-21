@@ -2,58 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C871E69DAE1
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 08:02:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1302169DAE3
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 08:03:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233427AbjBUHC5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Feb 2023 02:02:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36370 "EHLO
+        id S233431AbjBUHD0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Feb 2023 02:03:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37030 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232589AbjBUHCx (ORCPT
+        with ESMTP id S233441AbjBUHDS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Feb 2023 02:02:53 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CF77252B6;
-        Mon, 20 Feb 2023 23:02:47 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id ABE9C60F06;
-        Tue, 21 Feb 2023 07:02:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9FED7C433D2;
-        Tue, 21 Feb 2023 07:02:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1676962966;
-        bh=KHMXE/LYnRNjuYWIFxQpGNwDw4WhCf5BXnM9jJyFYKc=;
-        h=From:To:Cc:Subject:In-Reply-To:Date:From;
-        b=Yhirujjn3Gs86md/vNl+4XmkPPjo94SNOAaKFnOQXjQX0yv6l93XMl4Rob/1p9Mz1
-         BildrxHwu/yefVQiDMIl7NerNxFloHYRyqcm2B4R4tbghBYAkiMhmCNPjpT1Od05VX
-         amluMYPMkNK+MpZbAwYf/8YLhEMvqDTzgSe3GeTjwLDOTUyttUSxZ7IKckID//bHdy
-         law45gIPLx1cUA8MzcuejYCUYm9QgN6v3pwGQeyhnP2oWDTUQKixA934HlVQ9vrnV2
-         eAmVeCjUaOlME832YphdHzsDFaUFjXu0u2WRsFWYtK5D31ISj2b1xYR7ciu0peUqlW
-         v7vDwyZ5fr6JQ==
-From:   =?utf-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>
-To:     Pu Lehui <pulehui@huaweicloud.com>, bpf@vger.kernel.org,
-        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        Pu Lehui <pulehui@huawei.com>
-Subject: Re: [PATCH bpf-next v2] riscv, bpf: Add kfunc support for RV64
-In-Reply-To: <80e69e73-b873-6717-fe45-a854dbdd5476@huaweicloud.com>
-Date:   Tue, 21 Feb 2023 08:02:43 +0100
-Message-ID: <87h6vffqlo.fsf@all.your.base.are.belong.to.us>
+        Tue, 21 Feb 2023 02:03:18 -0500
+Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD48E144AE
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Feb 2023 23:03:07 -0800 (PST)
+Received: by mail-lf1-x134.google.com with SMTP id bp25so4570687lfb.0
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Feb 2023 23:03:07 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=lPYFEzkWt45w45KoW6C4RDWljtvSD6NfX3uQqoyfGo0=;
+        b=PiEaUTyKR+BZV1KdOYGaOo0Uih1cIbaC9Lzaa5cF1VTZPWQp523PuApZ5xP3Gr8xjl
+         XEv87JwBL02FqisWBLvEd6ltv2bVAzwJPrKkVo4YABKyqaSYIvQyNWJj/vAPz5dara9M
+         /flcqnOCtP7fksSbz5LD4Y3B2c9BukcHkOQw+irxTStuFYXlcS5e6G+cnALknEX8/aev
+         gHrZol9o5+b0cOuWyl/zEYK7V9TJvVqGNNmc55dpxbE6wv2TTAQEkjPZayUGaEDFOTjb
+         Z9Zx+mMYLz/xPeJTLpmblhvolK5bKElXYxCQshoRvR4592QaFGyYbOLnvm3N/8YuhmKk
+         pG+A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=lPYFEzkWt45w45KoW6C4RDWljtvSD6NfX3uQqoyfGo0=;
+        b=2UmAW4/8+x4ksmGYKOxP45QPrZMs06acaJt7YkQ6DEzHiDHdLkUjKYbOCw3Gp+LVvF
+         qInjiF8egug0gzCFGWG+1JOUXpPdW+xUUp832B+2D0HOCmZo5V8ns9MnF9VgI9vOPp6m
+         +WAMqe6i91XSwB/1Yo3hQDymN+CK64eGmw3m7jJYVJqxNLNcQwqHpG/Bavp9+XWIFzfj
+         BI+2jVoS7fX/byeaVJ5orWcnMCNYle+2O5eKSQ3Wd1RAsJlBdu1s2vyJWV3h3GpcbJTL
+         5zNl0x/B3F+bukivdjsgTYYwZsZiUXhzGZoATytN7SFfOtgO3Aq2ccsHxAtpRbnTDmTT
+         TC+g==
+X-Gm-Message-State: AO0yUKVvnPnc3jr1vH7RQQctqzAtW2mO7zV+BSOVX+SEj2uPBSHh6+sa
+        iVZvZUevZVrsMpY4spP2XdihMw==
+X-Google-Smtp-Source: AK7set9mpDbHCk/AdCr+GQzVcUK6fnXr6VHd1TUSH9y7g/NxXBzMWCsg3GVkxAh76WxtgoJ6TmI2xA==
+X-Received: by 2002:ac2:5308:0:b0:4dc:8366:2ea0 with SMTP id c8-20020ac25308000000b004dc83662ea0mr968795lfh.5.1676962985988;
+        Mon, 20 Feb 2023 23:03:05 -0800 (PST)
+Received: from localhost (c-9b0ee555.07-21-73746f28.bbcust.telenor.se. [85.229.14.155])
+        by smtp.gmail.com with ESMTPSA id q6-20020a19a406000000b004cc800b1f2csm642432lfc.238.2023.02.20.23.03.04
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 20 Feb 2023 23:03:05 -0800 (PST)
+From:   Anders Roxell <anders.roxell@linaro.org>
+To:     shuah@kernel.org
+Cc:     linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        Anders Roxell <anders.roxell@linaro.org>,
+        Naresh Kamboju <naresh.kamboju@linaro.org>
+Subject: [PATCH] selftests: ir: add config file
+Date:   Tue, 21 Feb 2023 08:03:01 +0100
+Message-Id: <20230221070301.1323044-1-anders.roxell@linaro.org>
+X-Mailer: git-send-email 2.39.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -61,39 +69,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Pu Lehui <pulehui@huaweicloud.com> writes:
+Building and running the subsuite 'ir' of kselftest, shows the
+following issues:
+ ir_loopback: module rc-loopback is not found in /lib/modules/6.2.0-rc8-next-20230220 [SKIP]
 
-> On 2023/2/20 22:34, Bj=C3=B6rn T=C3=B6pel wrote:
->> Pu Lehui <pulehui@huaweicloud.com> writes:
->>=20
->>> From: Pu Lehui <pulehui@huawei.com>
->>>
->>> As another important missing piece of RV64 JIT, kfunc allow bpf programs
->>> call kernel functions. For now, RV64 is sufficient to enable it.
->>=20
->> Thanks Lehui!
->>=20
->> Maybe we can reword/massage the commit message a bit? What do you think
->> about something like:
->>=20
->> "Now that the BPF trampoline is supported by RISC-V, it is possible to
->> use BPF programs with kfunc calls.
->>=20
->
-> kfunc and bpf trampoline are functionally independent. kfunc [1], like=20
-> bpf helper functions, allows bpf programs to call exported kernel=20
-> functions, while bpf trampoline provides a more efficient way than=20
-> kprobe to act as a mediator between kernel functions and bpf programs,=20
-> and between bpf programs.
->
-> In fact, it was already supported before the bpf trampoline=20
-> implementation, I just turned it on.
+By creating a config file with RC_LOOPBACK=m, LIRC=y and a few
+IR_*DECODER=m in the selftests/ir/ directory the tests pass.
 
-Good point. I guess my (incorrect) kfunc mental model was that
-struct_ops and kfunc were tightly coupled. (Then again, w/o struct_ops
-working kfunc is a bit half-working in my view.)
+Reported-by: Naresh Kamboju <naresh.kamboju@linaro.org>
+Signed-off-by: Anders Roxell <anders.roxell@linaro.org>
+---
+ tools/testing/selftests/ir/config | 13 +++++++++++++
+ 1 file changed, 13 insertions(+)
+ create mode 100644 tools/testing/selftests/ir/config
 
-Fair enough. I'm still a bit confused about the commit message, but
-happy with the patch.
+diff --git a/tools/testing/selftests/ir/config b/tools/testing/selftests/ir/config
+new file mode 100644
+index 000000000000..a6031914fa3d
+--- /dev/null
++++ b/tools/testing/selftests/ir/config
+@@ -0,0 +1,13 @@
++CONFIG_LIRC=y
++CONFIG_IR_IMON_DECODER=m
++CONFIG_IR_JVC_DECODER=m
++CONFIG_IR_MCE_KBD_DECODER=m
++CONFIG_IR_NEC_DECODER=m
++CONFIG_IR_RC5_DECODER=m
++CONFIG_IR_RC6_DECODER=m
++CONFIG_IR_RCMM_DECODER=m
++CONFIG_IR_SANYO_DECODER=m
++CONFIG_IR_SHARP_DECODER=m
++CONFIG_IR_SONY_DECODER=m
++CONFIG_IR_XMP_DECODER=m
++CONFIG_RC_LOOPBACK=m
+-- 
+2.39.1
 
-Acked-by: Bj=C3=B6rn T=C3=B6pel <bjorn@rivosinc.com>
