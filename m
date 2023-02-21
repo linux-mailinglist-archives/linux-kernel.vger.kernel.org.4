@@ -2,238 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0CB2E69DBA0
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 09:04:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8803369DBB0
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 09:11:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232597AbjBUIEL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Feb 2023 03:04:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52432 "EHLO
+        id S233417AbjBUILz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Feb 2023 03:11:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57688 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233202AbjBUIEJ (ORCPT
+        with ESMTP id S229697AbjBUILx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Feb 2023 03:04:09 -0500
-Received: from mail-vk1-xa2a.google.com (mail-vk1-xa2a.google.com [IPv6:2607:f8b0:4864:20::a2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCDA913D48
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Feb 2023 00:04:07 -0800 (PST)
-Received: by mail-vk1-xa2a.google.com with SMTP id n140so2517303vkf.9
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Feb 2023 00:04:07 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1676966647;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=HmfqPmpMWyaMOcuYahSH/dCv2pAEW8+BXkyBTQ15vt0=;
-        b=oMIiqrvOFzGZlxiCakUf/YAbSwsGpp5dp7Fjk/ebmejBIv6llCgF6JFEMdaYGds+Jw
-         NoPRMv7pDthBtfifjrrs7aLB9LqHzWfwvWHVKqNWY0iZ/sUtGx4ppgpmYxf7bszfNrsH
-         dd+/hiI0hibMXLQuUROjl25CBDeM5pPstFbYgzvTK5C0irp4DpmTFtSRMneFc+gZm+0S
-         SbMspbTXQWtDJO0oiquH8jl7IRKfA9/g1muBlYX5P+0rXN/fk+MVbIWj6rH8jLvRw4h7
-         O/BDL5GEpkJIdpNl6+iD89EGUkPOcvdygdtiUxGYNEtKfEfSoaqkgOmufsSmII8MayyJ
-         hupA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1676966647;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=HmfqPmpMWyaMOcuYahSH/dCv2pAEW8+BXkyBTQ15vt0=;
-        b=DYarTvHCg62N7kIwYQQYNLkPygUybQqUvLCFiLOFKWS3+8eI2s0nA7lMxApoWfCDmr
-         D7Fsjv7Wbm1IYsvQGfyLLmPTGrOZFbyy/RoyxR/E31PEzbJ5/W5cniwdgNNcjq7CO7lU
-         99nbMPWrWBbQTTtmoDpawLzG9oWZ9DNopE9RbfT7La88fa7gwiDvhGDv/Jzgb+Y/fcI2
-         VmXixN/4Ayv2g6v0Bvd1G+xFwcoxiskldgRsP5DZKHzEWYJGOsiP+SsIU5ZG1iO9ijZq
-         iuZcawcS49YBDF22Jlu/rZMlHx5eLz2RUTT+Mx+kLxc17+BoDsvEWosUF6OmA4skbjjD
-         JBcA==
-X-Gm-Message-State: AO0yUKWNiMWtJk9vAlIvTjhfkbNDYDRbJI3KO4AsnFWlgNCnzDN/4Anc
-        fwvK5T7KYfU3YoGHwMfT+ZnvSxM7rLwIHyqtCN0v1w==
-X-Google-Smtp-Source: AK7set8yw25wraGSsxotVN40tBfgg33dL0WV5vojf1INXxEKrrvzXg7y3UeuYDxKCrT2dXOHll6aSF8wF7mpeGdEoVw=
-X-Received: by 2002:a1f:2305:0:b0:40e:eec8:6523 with SMTP id
- j5-20020a1f2305000000b0040eeec86523mr316005vkj.43.1676966646867; Tue, 21 Feb
- 2023 00:04:06 -0800 (PST)
+        Tue, 21 Feb 2023 03:11:53 -0500
+X-Greylist: delayed 356 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 21 Feb 2023 00:11:51 PST
+Received: from comms.puri.sm (comms.puri.sm [159.203.221.185])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA5F61E5F5;
+        Tue, 21 Feb 2023 00:11:51 -0800 (PST)
+Received: from localhost (localhost [127.0.0.1])
+        by comms.puri.sm (Postfix) with ESMTP id 774F1EC2E4;
+        Tue, 21 Feb 2023 00:05:25 -0800 (PST)
+Received: from comms.puri.sm ([127.0.0.1])
+        by localhost (comms.puri.sm [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id Q0nct-RgHC_R; Tue, 21 Feb 2023 00:05:24 -0800 (PST)
+From:   Sebastian Krzyszkowiak <sebastian.krzyszkowiak@puri.sm>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=puri.sm; s=comms;
+        t=1676966724; bh=Se6F2YYJAtfbSGMooDyWStbwzcGMZ2eMxI1WSnKB1CA=;
+        h=From:Date:Subject:To:Cc:From;
+        b=kvRhYjRHtGOak/iUWEzUAkJFm3o1zeiiDzpIqcUJkHOsvGvELWxqC7N1mUhcfkgcV
+         yHnVd0KWfHKkrsZtkipyrnd6QCPaDqQWVPnDh/ucXrsDjlFCLX9rYq+4aYOR65ecSM
+         vPnsvRMWtW14DZifSMYJGWddPPDntgdjlAqs+U64b5sawIsyZRVH4rsCj4Pt9ghmIp
+         6x7/9syDHQd+TzOPgaKVS3Jx+sN+lFpSOSu1Qh9Un2gYSZWpgPxmooVBxIYV2f+Td5
+         fx/jI2w6MpuNSA95S39sLItFPG88GAXQEM5/fMnMzJW++iOxsyLjNrARmH7hqK36bA
+         1BfYgS/n7g/BA==
+Date:   Tue, 21 Feb 2023 09:04:08 +0100
+Subject: [PATCH] arm64: dts: imx8mq: Add UART DMA support
 MIME-Version: 1.0
-References: <20230220133549.360169435@linuxfoundation.org>
-In-Reply-To: <20230220133549.360169435@linuxfoundation.org>
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Tue, 21 Feb 2023 13:33:55 +0530
-Message-ID: <CA+G9fYuYzuHXG9+MZofYziim-nXq6TCUtJ-GdoE5Jue-P1cQqg@mail.gmail.com>
-Subject: Re: [PATCH 5.10 00/57] 5.10.169-rc1 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
-        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, f.fainelli@gmail.com,
-        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20230221-uart-dma-v1-1-d20483bbd49d@puri.sm>
+X-B4-Tracking: v=1; b=H4sIAPd69GMC/x2MQQqDQAxFryJZN6DTOq29iriIM1EDOi0ZLQXx7
+ gaX7/P+2yGzCmd4Fzso/yTLJxlUtwLCRGlklGgMrnT30rkKN9IV40IYh9fD+zp4ap5gek+ZsVd
+ KYbJD2ubZxq/yIP+r33bHcQIRojjebwAAAA==
+To:     Rob Herring <robh@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>
+Cc:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, kernel@puri.sm,
+        Sebastian Krzyszkowiak <sebastian.krzyszkowiak@puri.sm>
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1804;
+ i=sebastian.krzyszkowiak@puri.sm; h=from:subject:message-id;
+ bh=Se6F2YYJAtfbSGMooDyWStbwzcGMZ2eMxI1WSnKB1CA=;
+ b=owEBbQKS/ZANAwAIAejyNc8728P/AcsmYgBj9HtAbFL8kqhRhjJB746FxPa/Rj8cmeBTkcxvv
+ 054XRHXIy6JAjMEAAEIAB0WIQQi3Z+uAGoRQ1g2YXzo8jXPO9vD/wUCY/R7QAAKCRDo8jXPO9vD
+ //rcD/9IsO3DwKBbrUAyfUH0VdPnDH3WcLPz+zCIL0FX3NkHkFyBcGAzijfBe+f75mVUFcjQzhp
+ bDFUUJUNLIdX/rZsXFD0D1j8tzdoNp+qVPCaaT+6/i8vHkEu+z6i32EoC0v1lxB4K/B1V0QOuhe
+ Z4euA1z1wvyYPYeilublNcjxNbOTHPv4J8ioh81KJ/yuhZ5hl8zGe18G9hFMAiSworsuqqb7laW
+ HPoxi3VAm3qrBYY6qlIcIpyP9CiyhVG60Np1/DA2DzWJA/qmPLxxYZc6z3KBkV0CcJk9mtriXm5
+ aciCAgo0Rwkut+Z9Gu92sxlxXr2zAR3You59Illc9zfZANbHVzCEGS1LCeMQvepopgGvMRdLCvk
+ Fb9z8H1eVAuadEVclmFLtvsRkD+zHMEFbIQEHVjzAy7wKwf+Any2nvWx+J4DOeXfnMuR9hpyEZf
+ 3NUT53OLGwbYdBYIMhBIzEmTGYuxEoD8gBAI2XavOJBShuDrH7OiVMgE30q282deule0dxIjceX
+ JDd8ByKjA/g3NxXACUP2zo6yunOiqjqspIUKlSphc5wOUtMJ5dYcJJ/JHVsJTivV2DZDVfIYJuQ
+ jaCQ3gx/NavlWHfCCqmK77GPtO3wmNlDrIMDrkWKJq6JerSkCcMX6M59p3Afv6g2125nFjmlhC8
+ yL4LojDT7lO52rQ==
+X-Developer-Key: i=sebastian.krzyszkowiak@puri.sm; a=openpgp;
+ fpr=22DD9FAE006A11435836617CE8F235CF3BDBC3FF
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
+        DKIM_SIGNED,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 20 Feb 2023 at 19:25, Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
->
-> This is the start of the stable review cycle for the 5.10.169 release.
-> There are 57 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
->
-> Responses should be made by Wed, 22 Feb 2023 13:35:35 +0000.
-> Anything received after that time might be too late.
->
-> The whole patch series can be found in one patch at:
->         https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-=
-5.10.169-rc1.gz
-> or in the git tree and branch at:
->         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable=
--rc.git linux-5.10.y
-> and the diffstat can be found below.
->
-> thanks,
->
-> greg k-h
+UART ports have DMA capability. Describe the UART DMA properties.
 
+Signed-off-by: Sebastian Krzyszkowiak <sebastian.krzyszkowiak@puri.sm>
+---
+ arch/arm64/boot/dts/freescale/imx8mq.dtsi | 8 ++++++++
+ 1 file changed, 8 insertions(+)
 
-Results from Linaro=E2=80=99s test farm.
-No regressions on arm64, arm, x86_64, and i386.
+diff --git a/arch/arm64/boot/dts/freescale/imx8mq.dtsi b/arch/arm64/boot/dts/freescale/imx8mq.dtsi
+index 98fbba4c99a9..142a5c894e1e 100644
+--- a/arch/arm64/boot/dts/freescale/imx8mq.dtsi
++++ b/arch/arm64/boot/dts/freescale/imx8mq.dtsi
+@@ -940,6 +940,8 @@ uart1: serial@30860000 {
+ 				clocks = <&clk IMX8MQ_CLK_UART1_ROOT>,
+ 				         <&clk IMX8MQ_CLK_UART1_ROOT>;
+ 				clock-names = "ipg", "per";
++				dmas = <&sdma1 22 4 0>, <&sdma1 23 4 0>;
++				dma-names = "rx", "tx";
+ 				status = "disabled";
+ 			};
+ 
+@@ -951,6 +953,8 @@ uart3: serial@30880000 {
+ 				clocks = <&clk IMX8MQ_CLK_UART3_ROOT>,
+ 				         <&clk IMX8MQ_CLK_UART3_ROOT>;
+ 				clock-names = "ipg", "per";
++				dmas = <&sdma1 26 4 0>, <&sdma1 27 4 0>;
++				dma-names = "rx", "tx";
+ 				status = "disabled";
+ 			};
+ 
+@@ -962,6 +966,8 @@ uart2: serial@30890000 {
+ 				clocks = <&clk IMX8MQ_CLK_UART2_ROOT>,
+ 				         <&clk IMX8MQ_CLK_UART2_ROOT>;
+ 				clock-names = "ipg", "per";
++				dmas = <&sdma1 24 4 0>, <&sdma1 25 4 0>;
++				dma-names = "rx", "tx";
+ 				status = "disabled";
+ 			};
+ 
+@@ -1157,6 +1163,8 @@ uart4: serial@30a60000 {
+ 				clocks = <&clk IMX8MQ_CLK_UART4_ROOT>,
+ 				         <&clk IMX8MQ_CLK_UART4_ROOT>;
+ 				clock-names = "ipg", "per";
++				dmas = <&sdma1 28 4 0>, <&sdma1 29 4 0>;
++				dma-names = "rx", "tx";
+ 				status = "disabled";
+ 			};
+ 
 
-Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
+---
+base-commit: 89f5349e0673322857bd432fa23113af56673739
+change-id: 20230221-uart-dma-df84665c6a97
 
-## Build
-* kernel: 5.10.169-rc1
-* git: https://gitlab.com/Linaro/lkft/mirrors/stable/linux-stable-rc
-* git branch: linux-5.10.y
-* git commit: 7d11e4c4fc56eb25c5b41da93748dbcf21956316
-* git describe: v5.10.168-58-g7d11e4c4fc56
-* test details:
-https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-5.10.y/build/v5.10=
-.168-58-g7d11e4c4fc56
+Best regards,
+-- 
+Sebastian Krzyszkowiak <sebastian.krzyszkowiak@puri.sm>
 
-## Test Regressions (compared to v5.10.168)
-
-## Metric Regressions (compared to v5.10.168)
-
-## Test Fixes (compared to v5.10.168)
-
-## Metric Fixes (compared to v5.10.168)
-
-## Test result summary
-total: 156525, pass: 130423, fail: 3439, skip: 22346, xfail: 317
-
-## Build Summary
-* arc: 5 total, 5 passed, 0 failed
-* arm: 149 total, 148 passed, 1 failed
-* arm64: 49 total, 46 passed, 3 failed
-* i386: 39 total, 37 passed, 2 failed
-* mips: 31 total, 29 passed, 2 failed
-* parisc: 8 total, 8 passed, 0 failed
-* powerpc: 32 total, 25 passed, 7 failed
-* riscv: 16 total, 11 passed, 5 failed
-* s390: 16 total, 16 passed, 0 failed
-* sh: 14 total, 12 passed, 2 failed
-* sparc: 8 total, 8 passed, 0 failed
-* x86_64: 42 total, 40 passed, 2 failed
-
-## Test suites summary
-* boot
-* fwts
-* igt-gpu-tools
-* kselftest-android
-* kselftest-arm64
-* kselftest-breakpoints
-* kselftest-capabilities
-* kselftest-cgroup
-* kselftest-clone3
-* kselftest-core
-* kselftest-cpu-hotplug
-* kselftest-cpufreq
-* kselftest-drivers-dma-buf
-* kselftest-efivarfs
-* kselftest-filesystems
-* kselftest-filesystems-binderfs
-* kselftest-firmware
-* kselftest-fpu
-* kselftest-futex
-* kselftest-gpio
-* kselftest-intel_pstate
-* kselftest-ipc
-* kselftest-ir
-* kselftest-kcmp
-* kselftest-kexec
-* kselftest-kvm
-* kselftest-lib
-* kselftest-livepatch
-* kselftest-membarrier
-* kselftest-memfd
-* kselftest-memory-hotplug
-* kselftest-mincore
-* kselftest-mount
-* kselftest-mqueue
-* kselftest-net
-* kselftest-net-forwarding
-* kselftest-net-mptcp
-* kselftest-netfilter
-* kselftest-nsfs
-* kselftest-openat2
-* kselftest-pid_namespace
-* kselftest-pidfd
-* kselftest-proc
-* kselftest-pstore
-* kselftest-ptrace
-* kselftest-rseq
-* kselftest-rtc
-* kselftest-seccomp
-* kselftest-tc-testing
-* kselftest-timens
-* kselftest-timers
-* kselftest-tmpfs
-* kselftest-tpm2
-* kselftest-user
-* kselftest-vm
-* kselftest-x86
-* kselftest-zram
-* kunit
-* kvm-unit-tests
-* libgpiod
-* libhugetlbfs
-* log-parser-boot
-* log-parser-test
-* ltp-cap_bounds
-* ltp-commands
-* ltp-containers
-* ltp-controllers
-* ltp-cpuhotplug
-* ltp-crypto
-* ltp-cve
-* ltp-dio
-* ltp-fcntl-locktests
-* ltp-filecaps
-* ltp-fs
-* ltp-fs_bind
-* ltp-fs_perms_simple
-* ltp-fsx
-* ltp-hugetlb
-* ltp-io
-* ltp-ipc
-* ltp-math
-* ltp-mm
-* ltp-nptl
-* ltp-open-posix-tests
-* ltp-pty
-* ltp-sched
-* ltp-securebits
-* ltp-smoke
-* ltp-syscalls
-* ltp-tracing
-* network-basic-tests
-* packetdrill
-* perf
-* rcutorture
-* v4l2-compliance
-* vdso
-
---
-Linaro LKFT
-https://lkft.linaro.org
