@@ -2,149 +2,183 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C285869DDC4
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 11:22:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3D93F69DDCD
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 11:26:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233422AbjBUKWI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Feb 2023 05:22:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54130 "EHLO
+        id S233416AbjBUKZ6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Feb 2023 05:25:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56306 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232793AbjBUKWG (ORCPT
+        with ESMTP id S232682AbjBUKZ5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Feb 2023 05:22:06 -0500
-Received: from mail-ot1-x32b.google.com (mail-ot1-x32b.google.com [IPv6:2607:f8b0:4864:20::32b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C81E10428;
-        Tue, 21 Feb 2023 02:22:05 -0800 (PST)
-Received: by mail-ot1-x32b.google.com with SMTP id h6-20020a9d7986000000b0068bd8c1e836so692213otm.3;
-        Tue, 21 Feb 2023 02:22:05 -0800 (PST)
+        Tue, 21 Feb 2023 05:25:57 -0500
+Received: from mail-pf1-x42c.google.com (mail-pf1-x42c.google.com [IPv6:2607:f8b0:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D2F2234E2;
+        Tue, 21 Feb 2023 02:25:56 -0800 (PST)
+Received: by mail-pf1-x42c.google.com with SMTP id f11so2195400pfe.2;
+        Tue, 21 Feb 2023 02:25:56 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=30shyJsOAw2zs6Sgq+PUulpeZPcaVAnq8cjIhLP8b54=;
-        b=elznRG7Pcy5Yc4r13B85Rv7Bb/wSbDxBrGsxqTtE4BDZkGHucYkpj4EOaS8TrEB40c
-         dbKiG2oMsgB4BbiurMCLRitbQ5qXrWR6DbFU3Bvd+CdQNdziLtEmGd5YRGPXoHSso1iu
-         0QDrBn1lhOWBp1ZbNiPHZGd+5rRKA018QmBLt+f4s5kY8sKfBEAYqEzv8J2OCGyNcl/g
-         Q521vs0aJoAI5Igv6eblmgFIuIMRGB/Ll7uw0OEbDJWIGEKBrQTrLg0hizAPniyazVqp
-         C4g//etSa4Mdiax2wpETKvZF3luMrTKZKr280C5koJ1mTRTbdkb5aRQz74QdcL9/YkVO
-         IYHA==
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=cdo1TKxpnar0eDh6W/ITmg9ZF6u597rrhRp3aGtHgvM=;
+        b=c44hfkTeZKC0LorwOQZXu0DwX1hFgI8Z7XtDx2l3FdBVYOBXvZmQqdC13YVhzGosuK
+         S+kN8IuAGyMGl4gIkDpu1kAmT74s9l4icI8ANo4OiNq+hVUCA7SSvReaBsKJ/71QvjCJ
+         yBTqNAEK0p2EdBTs7TwO81RjY6elrzwwmwU5tiDspeihP9USFbxaP8UUaUN4tetnxlx4
+         REZ28F/QyAOatJRVssqWUHK6cBNjIUHV39xb/1OzpNEcxAAFEhdKILFTVxk3t9Aadx1p
+         Q3AFtF9TBn/E6sRRPs8Hm3WqNNrRBgLcc/RJHBmkqqrbClaDUlcapXgnDROnAFKp3gf5
+         7keA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=30shyJsOAw2zs6Sgq+PUulpeZPcaVAnq8cjIhLP8b54=;
-        b=HKSLjW3WoMvktonqxhl2xvDHOxnwvZf9Khhql7Lx42F8jwsk63SH2+Bdn8h5o9Pk+i
-         ErGh96uZAkqNU6KansRfyTQN2JAKDlnrNL0vM9i6aJsCTzWBT59r2M/cYoUOeJzZvjFv
-         3EGmDjuvd2AewaW19FLvTqUrXUtIIcs9XhL0JZF49K/nHrzJpNnKBYHpHXoWp5isUI6+
-         d1I6JtFM3V8oZYVOZx95L8CaVs6svB2pqYWK2MyFCUI9A6tQVfACdBzjkGwV0xR2Whaq
-         NJ/BbpBK/L/vx7VTjvzJluknP27SpA9KzdyHccp5GnLTEbQTsPja65jzCEUjZUBH/tlC
-         uVNw==
-X-Gm-Message-State: AO0yUKU703iE5q496UtJb7rjdvVp3WU6pnG/DU/uOUgD37YMKzjpLxN7
-        k9kxPwlSqyJGfTq6opEup8K4rBBHjkdkeyyr9lelzhk7tOA=
-X-Google-Smtp-Source: AK7set/LMCWIpWdHwoyBDJak/9l2Ne166sgq+MuWerSv36XxA3hiTz0NvEqvSSMqcauwSt0h4Cf6gjVyxOZc44SjW0g=
-X-Received: by 2002:a05:6830:30af:b0:690:f512:20a with SMTP id
- g47-20020a05683030af00b00690f512020amr228730ots.3.1676974924525; Tue, 21 Feb
- 2023 02:22:04 -0800 (PST)
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=cdo1TKxpnar0eDh6W/ITmg9ZF6u597rrhRp3aGtHgvM=;
+        b=5UR8RNHsFwNZe/bczuq/zXdflwZz9pxb+EwG7zgDAGMeu4EFFy2rTTtHzKgr/NOsJQ
+         g8CVf6JpPFizn2GX+eSoUQDqjK4Wqqn+RcAuKUxeQsxSNPmL3Ia6yJm5v2N9JyiF4D3y
+         AXQyAs+al25jhkYYpy2lR1toMv46tJZd5U0pMr5qy8ZxUvYW3enb0o3rWOE7SNZthoye
+         U3LgszoYr9TEfPiBhWqjM/kulYrbd3Bw1u/Q0lngSHkf3Yd/5DVkIrhOttTTSCBhff0j
+         e1Ky8l0HJ3lDdpkpJ7jp8o5c7J4TfnAvKbWTqTABar6rUEcUIJAk5QI/AqmJpQaspOJv
+         7qzQ==
+X-Gm-Message-State: AO0yUKWafb6WnPHablb0VP1M/qo0cEnTh+hIdQytEEfv4A5C8xqmbnqO
+        EIqISXumBgXv+19rb8SaQmS0ZK79+BmpiA==
+X-Google-Smtp-Source: AK7set9uUETlDgoDpGfVQo9Kg75+1R/evX0Scz2Xn0VKJv52fGav1qtGcY2C3/0E+BKcQcuUpUMSZA==
+X-Received: by 2002:a62:17c6:0:b0:5a8:b6cf:1a74 with SMTP id 189-20020a6217c6000000b005a8b6cf1a74mr4554096pfx.18.1676975155155;
+        Tue, 21 Feb 2023 02:25:55 -0800 (PST)
+Received: from kelvin-ThinkPad-L14-Gen-1.. (94.130.220.35.bc.googleusercontent.com. [35.220.130.94])
+        by smtp.gmail.com with ESMTPSA id t22-20020aa79396000000b00580e3917af7sm7745786pfe.117.2023.02.21.02.25.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 21 Feb 2023 02:25:54 -0800 (PST)
+From:   Keguang Zhang <keguang.zhang@gmail.com>
+To:     linux-mips@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Marc Zyngier <maz@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Keguang Zhang <keguang.zhang@gmail.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: [PATCH v3] dt-bindings: interrupt-controller: convert loongson,ls1x-intc.txt to json-schema
+Date:   Tue, 21 Feb 2023 18:25:45 +0800
+Message-Id: <20230221102545.2103632-1-keguang.zhang@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-References: <20230221092435.22069-1-arinc.unal@arinc9.com> <20230221092435.22069-2-arinc.unal@arinc9.com>
- <CAMhs-H9qLw6uhjPnFWovQBMFe38y95Q_VvG8Bj9wovSR+1J_2g@mail.gmail.com> <85a39e81-51a3-e90f-622e-f2cc7528aa92@arinc9.com>
-In-Reply-To: <85a39e81-51a3-e90f-622e-f2cc7528aa92@arinc9.com>
-From:   Sergio Paracuellos <sergio.paracuellos@gmail.com>
-Date:   Tue, 21 Feb 2023 11:21:53 +0100
-Message-ID: <CAMhs-H_eLwxjA7-EKGSyKOZLQF05N-FNASZWtGgsV2S=txU=yQ@mail.gmail.com>
-Subject: Re: [PATCH 2/2] mips: ralink: make SOC_MT7621 select PINCTRL
-To:     =?UTF-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>
-Cc:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        John Crispin <john@phrozen.org>, linux-mips@vger.kernel.org,
-        linux-kernel@vger.kernel.org, erkin.bozoglu@xeront.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        RCVD_IN_DNSWL_NONE,RCVD_IN_SBL_CSS,SPF_HELO_NONE,SPF_PASS autolearn=no
         autolearn_force=no version=3.4.6
+X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 21, 2023 at 11:09 AM Ar=C4=B1n=C3=A7 =C3=9CNAL <arinc.unal@arin=
-c9.com> wrote:
->
-> On 21.02.2023 12:38, Sergio Paracuellos wrote:
-> > Hi Ar=C4=B1n=C3=A7,
-> >
-> > On Tue, Feb 21, 2023 at 10:24 AM <arinc9.unal@gmail.com> wrote:
-> >>
-> >> From: Ar=C4=B1n=C3=A7 =C3=9CNAL <arinc.unal@arinc9.com>
-> >>
-> >> Currently, out of every Ralink SoC, only the dt-binding of the MT7621 =
-SoC
-> >> uses pinctrl. Because of this, PINCTRL is not selected at all. Make
-> >> SOC_MT7621 select PINCTRL.
-> >>
-> >> Remove PINCTRL_MT7621, enabling it for the MT7621 SoC will be handled =
-under
-> >> the PINCTRL_MT7621 option.
-> >>
-> >> Signed-off-by: Ar=C4=B1n=C3=A7 =C3=9CNAL <arinc.unal@arinc9.com>
-> >> ---
-> >>   arch/mips/ralink/Kconfig | 2 +-
-> >>   1 file changed, 1 insertion(+), 1 deletion(-)
-> >>
-> >> diff --git a/arch/mips/ralink/Kconfig b/arch/mips/ralink/Kconfig
-> >> index 06031796c87b..83e61e147b90 100644
-> >> --- a/arch/mips/ralink/Kconfig
-> >> +++ b/arch/mips/ralink/Kconfig
-> >> @@ -54,7 +54,7 @@ choice
-> >>                  select HAVE_PCI
-> >>                  select PCI_DRIVERS_GENERIC
-> >>                  select SOC_BUS
-> >> -               select PINCTRL_MT7621
-> >> +               select PINCTRL
-> >>
-> >>                  help
-> >>                    The MT7621 system-on-a-chip includes an 880 MHz MIP=
-S1004Kc
-> >> --
-> >> 2.37.2
-> >>
-> >
-> > Which git tree are you working against? CONFIG_SOC_MT7621 is not
-> > selecting PINCTRL_MT7621 at all in v6.2 [0]. I think it should select
->
-> mips/linux.git mips-next tree.
->
-> https://git.kernel.org/pub/scm/linux/kernel/git/mips/linux.git/log/
+Convert the Loongson1 interrupt controller dt-bindings to json-schema.
 
-I see :). Thanks!
+Signed-off-by: Keguang Zhang <keguang.zhang@gmail.com>
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+---
+V2 -> V3: Fix the description
+V1 -> V2: Drop the description part
+---
+ .../loongson,ls1x-intc.txt                    | 24 ---------
+ .../loongson,ls1x-intc.yaml                   | 51 +++++++++++++++++++
+ 2 files changed, 51 insertions(+), 24 deletions(-)
+ delete mode 100644 Documentation/devicetree/bindings/interrupt-controller/loongson,ls1x-intc.txt
+ create mode 100644 Documentation/devicetree/bindings/interrupt-controller/loongson,ls1x-intc.yaml
 
->
-> > 'PINCTRL_MT7621' and the 'select PINCTRL' stuff added inside the
-> > PINCTRL_RALINK option in [1].
->
-> I'm working on that, although not exactly the way you describe here, on
-> this branch of mine.
+diff --git a/Documentation/devicetree/bindings/interrupt-controller/loongson,ls1x-intc.txt b/Documentation/devicetree/bindings/interrupt-controller/loongson,ls1x-intc.txt
+deleted file mode 100644
+index a63ed9fcb535..000000000000
+--- a/Documentation/devicetree/bindings/interrupt-controller/loongson,ls1x-intc.txt
++++ /dev/null
+@@ -1,24 +0,0 @@
+-Loongson ls1x Interrupt Controller
+-
+-Required properties:
+-
+-- compatible : should be "loongson,ls1x-intc". Valid strings are:
+-
+-- reg : Specifies base physical address and size of the registers.
+-- interrupt-controller : Identifies the node as an interrupt controller
+-- #interrupt-cells : Specifies the number of cells needed to encode an
+-  interrupt source. The value shall be 2.
+-- interrupts : Specifies the CPU interrupt the controller is connected to.
+-
+-Example:
+-
+-intc: interrupt-controller@1fd01040 {
+-	compatible = "loongson,ls1x-intc";
+-	reg = <0x1fd01040 0x18>;
+-
+-	interrupt-controller;
+-	#interrupt-cells = <2>;
+-
+-	interrupt-parent = <&cpu_intc>;
+-	interrupts = <2>;
+-};
+diff --git a/Documentation/devicetree/bindings/interrupt-controller/loongson,ls1x-intc.yaml b/Documentation/devicetree/bindings/interrupt-controller/loongson,ls1x-intc.yaml
+new file mode 100644
+index 000000000000..c60125fb1cbf
+--- /dev/null
++++ b/Documentation/devicetree/bindings/interrupt-controller/loongson,ls1x-intc.yaml
+@@ -0,0 +1,51 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/interrupt-controller/loongson,ls1x-intc.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Loongson-1 Interrupt Controller
++
++maintainers:
++  - Keguang Zhang <keguang.zhang@gmail.com>
++
++description:
++  Loongson-1 interrupt controller is connected to the MIPS core interrupt
++  controller, which controls several groups of interrupts.
++
++properties:
++  compatible:
++    const: loongson,ls1x-intc
++
++  reg:
++    maxItems: 1
++
++  interrupt-controller: true
++
++  '#interrupt-cells':
++    const: 2
++
++  interrupts:
++    maxItems: 1
++
++required:
++  - compatible
++  - reg
++  - interrupt-controller
++  - '#interrupt-cells'
++  - interrupts
++
++additionalProperties: false
++
++examples:
++  - |
++    intc0: interrupt-controller@1fd01040 {
++        compatible = "loongson,ls1x-intc";
++        reg = <0x1fd01040 0x18>;
++
++        interrupt-controller;
++        #interrupt-cells = <2>;
++
++        interrupt-parent = <&cpu_intc>;
++        interrupts = <2>;
++    };
 
-So, in which way do you get PINCTRL_MT7621 automatically selected for
-this SoC now? I think looking into the Kconfig for ralink pinctrl [0]
-all of them at the end need the missing PINCTRL option to be added and
-all of them are currently selecting PINCTRL_RALINK . Hence just adding
-the PINCTRL option inside PINCTRL_RALINK looks convenient.
+base-commit: 39459ce717b863556d7d75466fcbd904a6fbbbd8
+-- 
+2.34.1
 
->
-> https://github.com/arinc9/linux/commits/ralink-pinctrl
-
-Wow! Tons of changes here ;-). Keep going!!
-
->
-> Ar=C4=B1n=C3=A7
-
-Best regards,
-    Sergio Paracuellos
-
-[0]: https://elixir.bootlin.com/linux/v6.2/source/drivers/pinctrl/ralink/Kc=
-onfig
