@@ -2,116 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AE1DF69E197
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 14:45:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AF2FF69E19A
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 14:45:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234126AbjBUNpI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Feb 2023 08:45:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35026 "EHLO
+        id S233780AbjBUNpS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Feb 2023 08:45:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35366 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234081AbjBUNpF (ORCPT
+        with ESMTP id S234157AbjBUNpO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Feb 2023 08:45:05 -0500
-Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E595D1D92A;
-        Tue, 21 Feb 2023 05:45:02 -0800 (PST)
-Received: by mail-ed1-x536.google.com with SMTP id b12so17389517edd.4;
-        Tue, 21 Feb 2023 05:45:02 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=BPwLlLuY1FKXO4A9ZDz90DlqJ7cLNLdUerGapUJa9gU=;
-        b=aJwwRq2AZqVoYb4S5cgh9zg0KB/eBoVpq6yYEPRuMFEShiJ9+rm5Ddt1nUKN9nTtUo
-         soZ5Bddg38c8bJVtW9MVPr/89ASau8m4KN+vRyeJ5Qg+V+n6uTZEcDJRUw3553tGWbpx
-         Ywac+kcC6WOxXzOCkkpTZ66SyZBP0T0llTQFsKvRcRO8A2KCC9QJH9MKJ09IK59aMjNx
-         fGj7pcFQcwFxBRWQeM9e0F5D4UWImh6ct84Dis2m3WZl0bnCqZjJNHPRQNgQ8QVn0Vtt
-         uodCnY814hiXawBcKH2DbT+gDZY2kWxlMry5ZKWEZ0FKPk3rj6jYWuXFxmcjCjPSTLDn
-         +/0Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=BPwLlLuY1FKXO4A9ZDz90DlqJ7cLNLdUerGapUJa9gU=;
-        b=tRYRjdr5i/1yYEtmKxycArLFRHYHXIfpia9if7dalaJJJjeOXg3d+SQy2o0m05/Kup
-         +v5SmMorSdpEHLhKwdKgP0PuRbL2Wkp5Z9fkbUWyoPqkio13lE6HK5ZAPBlUL/CVTFhs
-         YotRwJHBGqdKdUWXew+sPSweYBsydNHyKmZwY82t0+/mSGn9GpnRjxNHGslNH00BvfPi
-         Ni+KwX5Y5niYSssC3v/nWqyExDWQUh4KtuhPRQNKT7NlY7b9PKQQu5Q0AG4w9rxGIZ+1
-         akOegyIc6DtJuNMMq41tS1XgHa8FgaaEuOf1psNjVNKUVYpIXhCHSdS4QitzW0Ntq1BV
-         vpuA==
-X-Gm-Message-State: AO0yUKW5p+ourVM7QZmRJKi2gi4PvMjxSZX0V/57Qs+E+drvIXyXPyMZ
-        //+aAymjbJZ0N4ayq0TdjDcPrUjp6wwPIr05iHY=
-X-Google-Smtp-Source: AK7set9xbFUj3ZmBDzg5UHj5LvyEdNutY/k8pkGpLbvIr6LYPYh+rw+c2EgdXEggmi+3a969dCfkYIB1Fkq0WCWVfIM=
-X-Received: by 2002:a17:906:9396:b0:8dd:70a:3a76 with SMTP id
- l22-20020a170906939600b008dd070a3a76mr1542482ejx.11.1676987101312; Tue, 21
- Feb 2023 05:45:01 -0800 (PST)
+        Tue, 21 Feb 2023 08:45:14 -0500
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76E091E1E0;
+        Tue, 21 Feb 2023 05:45:11 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1676987111; x=1708523111;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=23msXls3K1pf3326O/TTlUGpsqk4HGbdQVHDHS8vDSs=;
+  b=aqocSrKHTdqB93EvfJ0am4ibgCVsVkqxEdrINcN5a+Udj87nYmY7pO78
+   Wkkgerk2idWufpmocCux5dHlBLMLWtsR4XGFGA2UZbhvqk/fjUI1VLUgH
+   wjQZyA3Vx/hYzyxOwKPiJkZFJ1Ap2D9F91JMI80Zuv4riOch/eM6jfxly
+   mqCKJ1jbiBMt9fplsyKnxRsFd+SBZxyGgC1mwrzCcqCy7/BTbuRAMM1pl
+   8jPP9Y6+M0lW0INkOOOlQ4eiPjx+xEF30Af1HKYxA2rggguNQP5GHG4QS
+   tHVJ/2VpzjeM3n9r/s+eTn6PLNHQHPVXu6zDaumI9A2lIaNKP4j+GVoay
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10627"; a="418854521"
+X-IronPort-AV: E=Sophos;i="5.97,315,1669104000"; 
+   d="scan'208";a="418854521"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Feb 2023 05:45:10 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10627"; a="795525666"
+X-IronPort-AV: E=Sophos;i="5.97,315,1669104000"; 
+   d="scan'208";a="795525666"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by orsmga004.jf.intel.com with ESMTP; 21 Feb 2023 05:45:07 -0800
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1pUSx8-009yKY-1A;
+        Tue, 21 Feb 2023 15:45:06 +0200
+Date:   Tue, 21 Feb 2023 15:45:06 +0200
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Henning Schild <henning.schild@siemens.com>
+Cc:     Pavel Machek <pavel@ucw.cz>, Lee Jones <lee@kernel.org>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Mark Gross <markgross@kernel.org>,
+        linux-kernel@vger.kernel.org, linux-leds@vger.kernel.org,
+        platform-driver-x86@vger.kernel.org
+Subject: Re: [PATCH 1/3] leds: simatic-ipc-leds-gpio: move two extra gpio
+ pins into another table
+Message-ID: <Y/TK4tJZ5kmgsRNJ@smile.fi.intel.com>
+References: <20230221122414.24874-1-henning.schild@siemens.com>
+ <20230221122414.24874-2-henning.schild@siemens.com>
 MIME-Version: 1.0
-References: <20230221110344.82818-1-kerneljasonxing@gmail.com>
- <48429c16fdaee59867df5ef487e73d4b1bf099af.camel@redhat.com> <CANn89iJjCXfwUQ4XxtCrNFChdCHciBMuWcK=Az4X1acBeqVDiQ@mail.gmail.com>
-In-Reply-To: <CANn89iJjCXfwUQ4XxtCrNFChdCHciBMuWcK=Az4X1acBeqVDiQ@mail.gmail.com>
-From:   Jason Xing <kerneljasonxing@gmail.com>
-Date:   Tue, 21 Feb 2023 21:44:25 +0800
-Message-ID: <CAL+tcoAdYO_NnkWLYbxxRgw0=muhM0TJo3FBEeCBYtBmsnfWUw@mail.gmail.com>
-Subject: Re: [PATCH net] udp: fix memory schedule error
-To:     Eric Dumazet <edumazet@google.com>
-Cc:     Paolo Abeni <pabeni@redhat.com>, willemdebruijn.kernel@gmail.com,
-        davem@davemloft.net, dsahern@kernel.org, kuba@kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        bpf@vger.kernel.org, Jason Xing <kernelxing@tencent.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230221122414.24874-2-henning.schild@siemens.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 21, 2023 at 8:35 PM Eric Dumazet <edumazet@google.com> wrote:
->
-> On Tue, Feb 21, 2023 at 1:27 PM Paolo Abeni <pabeni@redhat.com> wrote:
-> >
-> > On Tue, 2023-02-21 at 19:03 +0800, Jason Xing wrote:
-> > > From: Jason Xing <kernelxing@tencent.com>
-> > >
-> > > Quoting from the commit 7c80b038d23e ("net: fix sk_wmem_schedule()
-> > > and sk_rmem_schedule() errors"):
-> > >
-> > > "If sk->sk_forward_alloc is 150000, and we need to schedule 150001 bytes,
-> > > we want to allocate 1 byte more (rounded up to one page),
-> > > instead of 150001"
-> >
-> > I'm wondering if this would cause measurable (even small) performance
-> > regression? Specifically under high packet rate, with BH and user-space
-> > processing happening on different CPUs.
-> >
-> > Could you please provide the relevant performance figures?
-> >
-> > Thanks!
-> >
-> > Paolo
-> >
->
-> Probably not a big deal.
->
+On Tue, Feb 21, 2023 at 01:24:12PM +0100, Henning Schild wrote:
+> There are two special pins needed to init the LEDs. We used to have them
+> at the end of the gpiod_lookup table to give to "leds-gpio". A cleaner
+> way is to have a dedicated table for the special pins.
 
-> TCP skb truesize can easily reach 180 KB, but for UDP it's 99% below
-> or close to a 4K page.
+...
 
-Yes.
+> +static struct gpiod_lookup_table simatic_ipc_led_gpio_table_127e_extra = {
 
->
-> I doubt this change makes any difference for UDP.
+> +	.dev_id = NULL,
 
-Based on my understanding of this part, it could not neither cause
-much regression nor improve much performance. I think what you've done
-to the TCP stack is the right way to go so the UDP can probably follow
-this.
-Calculating extra memory is a little bit odd because we actually don't
-need that much when receiving skb everytime.
+No need.
 
-Thanks,
-Jason
+...
+
+> +static struct gpiod_lookup_table simatic_ipc_led_gpio_table_227g_extra = {
+
+> +	.dev_id = NULL,
+
+Ditto.
+
+-- 
+With Best Regards,
+Andy Shevchenko
+
+
