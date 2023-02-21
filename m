@@ -2,117 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AA23069DC40
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 09:41:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 437E869DC4A
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 09:42:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233411AbjBUIkj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Feb 2023 03:40:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58278 "EHLO
+        id S233551AbjBUImR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Feb 2023 03:42:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58678 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233792AbjBUIk0 (ORCPT
+        with ESMTP id S233236AbjBUIlo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Feb 2023 03:40:26 -0500
-Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 927D223640;
-        Tue, 21 Feb 2023 00:39:51 -0800 (PST)
-Received: by mail-ed1-x535.google.com with SMTP id s26so13858261edw.11;
-        Tue, 21 Feb 2023 00:39:51 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=+s3LghqL/xNmAVCsHxyUzyrjEgIj+4vMZ5iip7icUXw=;
-        b=BeQAjFO9ydOReLQGkvdAAU/LRuf7WcC3QQk2V7giMfmBzOpAzm9xlK5CC7pqR25XYO
-         vlGacp8gx2xLItmgNYKS/IMUAEXYqgc+2k0Llwn68G+WN8w0cw1eIrlBvugyaO8H4lS/
-         BzIg3kd5h5tmPj7T9vF1Fs/6Dk+Iqc87s1guyXkDF9rMOCXyoQZIOv3D1LDA4GZHESE0
-         EYzFl3AVlvWz0sIpKB8UluoBij7uzBsbQK8gurSlP8igsiOZW6EplyCpUfnkjf9HNkcM
-         RlhbNcoeXHkIW/eq4lkUtsoDgBuMy/6lmqx1/QUZVYjWkOZ3D5R0BXviU0TBpy30MiOL
-         YvNQ==
+        Tue, 21 Feb 2023 03:41:44 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E1521E284
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Feb 2023 00:40:54 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1676968854;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=xXB0QqcA/xnbVHMNJUF4fAMOxD/knIqAfT0ePxSyKdM=;
+        b=bAVPM7XVDOhXp3CITtgVcxF9pDDrq6G0Vb/C0HHaEQlDW8R5y5NCo3+wom+FYpg9gmf/+r
+        6ICzDCoY85rMykB7jtuifV/HHQbAU36sgG+xIiESEETcQkbguSkK0MdbBr7L9gRhad/s7v
+        K41vaZ7F4Ji8LqXwfcunf8P2lbLoOeg=
+Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com
+ [209.85.208.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-517-9Ui3glkvNlOeRZZ4vke0tQ-1; Tue, 21 Feb 2023 03:40:53 -0500
+X-MC-Unique: 9Ui3glkvNlOeRZZ4vke0tQ-1
+Received: by mail-ed1-f71.google.com with SMTP id cf11-20020a0564020b8b00b0049ec3a108beso4816642edb.7
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Feb 2023 00:40:52 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=+s3LghqL/xNmAVCsHxyUzyrjEgIj+4vMZ5iip7icUXw=;
-        b=MS8fCp7itGrHuddGm4q613S5b1MRDvov8PPOx3deUmr+5BsVSDVynaLkCywW2dy0/D
-         qpRa5ia+zViGntKC4KNUiyXjRLinHq/NNrKdQR+ukcc+K+oVa9ykv/l/VFzMA5CKepvy
-         wh5upOY9W6hqmO8APryrQPPSaBfI8nuH1kpuSsJV86u9g2hIqRZ0yeInbqEgV2eDMJnn
-         S7scNu3aJx0GuyLWFXATQp+iZ3iexV/traygZjafQhBcjkxQ7I9sh8hxACUxPgkCJZWc
-         v9Wa3QkkfZIblnoEvXTh2qNu2emzixMYdkKeCs5TfdOMKuySE+jKNhb7apee/NzPVQ38
-         LqCA==
-X-Gm-Message-State: AO0yUKWXHcRHsPq40iKatsleJf4+N4gQm9ykotL4unEs5ai3+ZywfaY1
-        JtYTEHJaO86SDSkHAwcE2Po=
-X-Google-Smtp-Source: AK7set8zE5R9imDjkfkNuxiJSk0+e0JA3dNsTUxWIeITlzljnpOOVxOFMIa6S9dDuddJcALQVRJnQQ==
-X-Received: by 2002:a17:906:2358:b0:88d:d700:fe15 with SMTP id m24-20020a170906235800b0088dd700fe15mr10557817eja.0.1676968789991;
-        Tue, 21 Feb 2023 00:39:49 -0800 (PST)
-Received: from gmail.com (1F2EF163.nat.pool.telekom.hu. [31.46.241.99])
-        by smtp.gmail.com with ESMTPSA id g23-20020a170906539700b008b128106fc7sm6835503ejo.46.2023.02.21.00.39.48
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 21 Feb 2023 00:39:49 -0800 (PST)
-Sender: Ingo Molnar <mingo.kernel.org@gmail.com>
-Date:   Tue, 21 Feb 2023 09:39:47 +0100
-From:   Ingo Molnar <mingo@kernel.org>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Juergen Gross <jgross@suse.com>,
-        Konrad Rzeszutek Wilk <konrad.wilk@oracle.com>,
-        Stefano Stabellini <sstabellini@kernel.org>,
-        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Xen Devel <xen-devel@lists.xenproject.org>,
-        Per Bilse <per.bilse@citrix.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: duplicate patches in the xen-tip tree
-Message-ID: <Y/SDU7d2LS9ka1+a@gmail.com>
-References: <20230214124700.22f0a62e@canb.auug.org.au>
- <Y+tu6Xqqb6cdiDAA@hirez.programming.kicks-ass.net>
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=xXB0QqcA/xnbVHMNJUF4fAMOxD/knIqAfT0ePxSyKdM=;
+        b=baaa4VDppnNxcX7HXBXQKQQQPv2JmiqJZ+2mtwmpPuaDwhxQVMwffIp5maULp5zQo+
+         pzRjA21yUnAIn5kAwjaZyRa01Uxvf2W/plS4kRTdbfdz24cWrPXIdKdZQ87IjS6RjF26
+         Dasi/FEXAb3H1cyub7WRZtJJxxtDCGquewBqVEjNsDJQBXvmarui2KAobvShoOfHUr/i
+         IMabyY4I4rH/hbpZ44E+Rzb4K4yqfqzsHG4v5uZKJnbnHx2rwJk6u9la5AT6hLTlwL4V
+         tVy+UoXl8WgQUlRG8lIux3PIe3zgQQtWKa095XzVx23cKGosp22eDW7S5KwT1ls23sXo
+         YzJw==
+X-Gm-Message-State: AO0yUKX0GYK4V8Qe5/+iDoIH8Z9cXI7cbD4uxEVPCdvTOvjyRBNpq8gL
+        8DcNua1FVBX7x8EXYNztgufZuGjvO3/98+a4G2AVlaGkfd8p6zqiqLKNemtMpOgPEgSU0Ghc22A
+        p68oez609yWFrsjSotUmGCoRZ
+X-Received: by 2002:a05:6402:115a:b0:4ad:5220:79f0 with SMTP id g26-20020a056402115a00b004ad522079f0mr3434342edw.5.1676968851180;
+        Tue, 21 Feb 2023 00:40:51 -0800 (PST)
+X-Google-Smtp-Source: AK7set97fa+DxWfBZ3M2//mYdiUimfAg1GVrgdeq4FW2cI/iJAnXF+aAlhWP8k8/whF+2pquPCIPSA==
+X-Received: by 2002:a05:6402:115a:b0:4ad:5220:79f0 with SMTP id g26-20020a056402115a00b004ad522079f0mr3434323edw.5.1676968850900;
+        Tue, 21 Feb 2023 00:40:50 -0800 (PST)
+Received: from ?IPV6:2001:1c00:c32:7800:5bfa:a036:83f0:f9ec? (2001-1c00-0c32-7800-5bfa-a036-83f0-f9ec.cable.dynamic.v6.ziggo.nl. [2001:1c00:c32:7800:5bfa:a036:83f0:f9ec])
+        by smtp.gmail.com with ESMTPSA id c14-20020a50d64e000000b004a249a97d84sm2008282edj.23.2023.02.21.00.40.50
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 21 Feb 2023 00:40:50 -0800 (PST)
+Message-ID: <0e2b5e9d-d68f-59dd-6e9c-b5cdabc086c2@redhat.com>
+Date:   Tue, 21 Feb 2023 09:40:49 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y+tu6Xqqb6cdiDAA@hirez.programming.kicks-ass.net>
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH] Fix strange behavior of touchpad on Clevo NS70PU
+To:     Werner Sembach <wse@tuxedocomputers.com>,
+        dmitry.torokhov@gmail.com, mkorpershoek@baylibre.com,
+        chenhuacai@kernel.org, tiwai@suse.de,
+        wsa+renesas@sang-engineering.com, linux-input@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20230220183014.238432-1-wse@tuxedocomputers.com>
+Content-Language: en-US, nl
+From:   Hans de Goede <hdegoede@redhat.com>
+In-Reply-To: <20230220183014.238432-1-wse@tuxedocomputers.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi,
 
-* Peter Zijlstra <peterz@infradead.org> wrote:
-
-> On Tue, Feb 14, 2023 at 12:47:00PM +1100, Stephen Rothwell wrote:
-> > Hi all,
-> > 
-> > The following commits are also in the tip tree as different commits
-> > (but the same patches):
-> > 
-> >   415dab3c1796 ("drivers/xen/hypervisor: Expose Xen SIF flags to userspace")
-> >   336f560a8917 ("x86/xen: don't let xen_pv_play_dead() return")
-> >   f697cb00afa9 ("x86/xen: mark xen_pv_play_dead() as __noreturn")
-> > 
-> > These are commits
-> > 
-> >   859761e770f8 ("drivers/xen/hypervisor: Expose Xen SIF flags to userspace")
-> >   076cbf5d2163 ("x86/xen: don't let xen_pv_play_dead() return")
-> >   1aff0d2658e5 ("x86/xen: mark xen_pv_play_dead() as __noreturn")
-> > 
-> > in the tip tree.
+On 2/20/23 19:30, Werner Sembach wrote:
+> When closing the laptop lid with an external screen connected, the mouse
+> pointer has a constant movement to the lower right corner. Opening the
+> lid again stops this movement, but after that the touchpad does no longer
+> register clicks.
 > 
-> This was intentional (dependencies) and the plan is to only offer the
-> tip branch for merge after the Xen tree goes in.
+> The touchpad is connected both via i2c-hid and PS/2, the predecessor of
+> this device (NS70MU) has the same layout in this regard and also strange
+> behaviour caused by the psmouse and the i2c-hid driver fighting over
+> touchpad control. This fix is reusing the same workaround by just
+> disabling the PS/2 aux port, that is only used by the touchpad, to give the
+> i2c-hid driver the lone control over the touchpad.
+> 
+> Signed-off-by: Werner Sembach <wse@tuxedocomputers.com>
+> Cc: stable@vger.kernel.org
 
-The rebase & *duplication* was not intentional at all - I assumed 
-1aff0d2658e5 won't get rebased. :-/
+Thanks, patch looks good to me:
 
-We'll probably have to redo the objtool tree.
+Reviewed-by: Hans de Goede <hdegoede@redhat.com>
 
-Thanks,
+Regards,
 
-	Ingo
+Hans
+
+
+> ---
+>  drivers/input/serio/i8042-acpipnpio.h | 6 ++++++
+>  1 file changed, 6 insertions(+)
+> 
+> diff --git a/drivers/input/serio/i8042-acpipnpio.h b/drivers/input/serio/i8042-acpipnpio.h
+> index efc61736099b9..3a6640a11dd99 100644
+> --- a/drivers/input/serio/i8042-acpipnpio.h
+> +++ b/drivers/input/serio/i8042-acpipnpio.h
+> @@ -1156,6 +1156,12 @@ static const struct dmi_system_id i8042_dmi_quirk_table[] __initconst = {
+>  					SERIO_QUIRK_RESET_ALWAYS | SERIO_QUIRK_NOLOOP |
+>  					SERIO_QUIRK_NOPNP)
+>  	},
+> +	{
+> +		.matches = {
+> +			DMI_MATCH(DMI_BOARD_NAME, "NS5x_7xPU"),
+> +		},
+> +		.driver_data = (void *)(SERIO_QUIRK_NOAUX)
+> +	},
+>  	{
+>  		.matches = {
+>  			DMI_MATCH(DMI_BOARD_NAME, "NJ50_70CU"),
+
