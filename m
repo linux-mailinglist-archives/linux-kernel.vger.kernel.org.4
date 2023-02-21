@@ -2,68 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E7C269E07F
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 13:35:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 66CC569E087
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 13:36:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234315AbjBUMfx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Feb 2023 07:35:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33006 "EHLO
+        id S234544AbjBUMgw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Feb 2023 07:36:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34332 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233719AbjBUMfv (ORCPT
+        with ESMTP id S232317AbjBUMgu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Feb 2023 07:35:51 -0500
-Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7EC732331B
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Feb 2023 04:35:49 -0800 (PST)
-Received: by mail-wm1-x336.google.com with SMTP id j3so1187022wms.2
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Feb 2023 04:35:49 -0800 (PST)
+        Tue, 21 Feb 2023 07:36:50 -0500
+Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8B1C233D1;
+        Tue, 21 Feb 2023 04:36:49 -0800 (PST)
+Received: by mail-pj1-x102c.google.com with SMTP id g14so4690610pjb.2;
+        Tue, 21 Feb 2023 04:36:49 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=boB3QImnWTxd1SIqg7wv/Cf6QMLg6EWt7kIgnReisA8=;
-        b=DVivvD/m7YZayhczBWE6676/dMyJqp1+vNYIHHvo04Yagt83bWGSf4bD329CymKx50
-         rn60E3hgYG2iv7AYVxitlrWJsP2Rmj3O+cG/kc22XuCQfMuY0jIt5YzbGs2E5ylYI8AT
-         FYFju5Z/xI9LYZlcc0hgVd+Nc2mOtyGS0LGiuCV+YJMHO+J64HiEujm+YSHy6RGKGGJq
-         /37cifVvgUcBnOHTNkPYYfSbJ5KgA/eg10fkioQ97/sHQYpQM+Yw7Q6WCKle4QlLdRkr
-         oCr0yNFdnMtWl9QawT1zPx86o2R7F49BghGw+4LZiUv8Ta5V6oaORz/kVt3n5O392WHP
-         aWnQ==
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=5L3dF0JAJgBcduePLIvYCGmEEesF6lNT+h6CRgkwaQo=;
+        b=h/tOHFqk90X4NN1IPLfzidjqDpYazUZbvc7olKGdQb0DrlHH3KDj/GfgQbKuBpe5ZM
+         aHpFX1mwNg7ggmf34CFyOZgTXzmVAS8XrrIcCQQV4laUeg3Fkt2JGCiFI50QWYvbwgty
+         pA1lX/F47AN6VQ0qWZkX3MRD4xyc9SB5WqO/QyaA1bOkI/mdpo3F+L4ACEyGAlDtGySX
+         WoaPiDwvRr/7kpn1TVEfag0fPrvg/jhevaJJQg/R2KCAZ8xInewaZj/eOEbYImy0vcCr
+         Tea0w/LrQbgr2MBJKIM7cr96W4Q/lTZZQ/dU1MSVwqWNU7rg9NpB0h1n+BMoQI5Ax5xp
+         2UtA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=boB3QImnWTxd1SIqg7wv/Cf6QMLg6EWt7kIgnReisA8=;
-        b=nV09hYvvFsPd1mcDM6KnZv/3o3fCxz6jUBSMA7IX+MtHO8efcwrHZpzqp+HODeknsY
-         D2JgiZEQxg+XidPBsoXyN1lEyAr6hpHZHntHiCgkunirkMOTtOb/iWrjJNGJVr8IYZk4
-         cuSmz48K3GpWWdEQLi4bfU5NVFwDXxAdphO2pnkDTz68LZ5rb1GzgXhv0ieE4mwyToGI
-         hft0r9BYP5djHFOvVNH9pQHi9Nenabviv5daAkw1UMg+7poDyrLiOgB8+XbqCvXH1JO+
-         syfbfzPgWoF2pfTvCOdBCgRAzxstoCQyC6zUQzyeUcNfuRJMbS0ztjnc533YKQj+Yp2y
-         i56A==
-X-Gm-Message-State: AO0yUKVw7EuAXUHBg9MaqwWBq4p+nfLIHT9TwU1tCxyir4wD/6mrW1Qs
-        yf+NbYRIUZSAKgCIJF+iEganbGp/pwIghMVAsLARAA==
-X-Google-Smtp-Source: AK7set9nV+EK0TLUdzmV7Dwu03/Rt6FDG/VqUsQnuEfbjE6nlw5NgOvcGE2UwfzJhi0VA0xR7FmDfYru30Rv2bm+cMQ=
-X-Received: by 2002:a05:600c:4e44:b0:3df:f862:fe42 with SMTP id
- e4-20020a05600c4e4400b003dff862fe42mr1874542wmq.10.1676982947772; Tue, 21 Feb
- 2023 04:35:47 -0800 (PST)
+        bh=5L3dF0JAJgBcduePLIvYCGmEEesF6lNT+h6CRgkwaQo=;
+        b=LraeIrcq+RhXT+bDVhEQS58bJyyjIdzDJKU8JtaBoleQzdyyYFUHZYBf/TC7yYFkpS
+         Ow992IfsLYr0FZridNpSONfQgWc8InOhqTfDJE3lgvAhXTzk95MHnmrOsk7W48IhtCOw
+         mp/KGfMHh+VYrOiok3U4eIvTIX6oSez+ESzAUxV7hoQAM9A1bScHZWxXJ3ftCXCyS4/i
+         U1NAG+oz8iIsgCyZTO0s5botHZF1yBGMwE5WtquBTyuz/ngr2momecVEOr1+z+Fj8rwQ
+         s0WTIymZmZiIam5+/YrgQtlk/OR7Vunq0tWJPx251BcDrXQ/AINGbs0XvKK61OcLAVVR
+         ii8Q==
+X-Gm-Message-State: AO0yUKV3JQ9XS+gsVp/cXnPYCx8eae5ah82HzCoVZo8N5gfWYyhsXBGf
+        AjGMnRyo05q0QNkmXuGeSuyhXyiSbGf/zg==
+X-Google-Smtp-Source: AK7set929D4rdR6a3m0KR51+bCeLnOUOt0c95DWoOQbQcmYKwxoUEPNln6hcTz7Aw/ppGEy0brIzwQ==
+X-Received: by 2002:a17:902:d4ca:b0:19a:9880:175f with SMTP id o10-20020a170902d4ca00b0019a9880175fmr6088717plg.51.1676983009033;
+        Tue, 21 Feb 2023 04:36:49 -0800 (PST)
+Received: from localhost.localdomain (n220246252084.netvigator.com. [220.246.252.84])
+        by smtp.gmail.com with ESMTPSA id jd7-20020a170903260700b00194a297cb8esm9822879plb.191.2023.02.21.04.36.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 21 Feb 2023 04:36:48 -0800 (PST)
+From:   Jianhua Lu <lujianhua000@gmail.com>
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
+        Jianhua Lu <lujianhua000@gmail.com>
+Subject: [PATCH] arm64: dts: qcom: sm8250-xiaomi-elish: Correct venus firmware path
+Date:   Tue, 21 Feb 2023 20:36:33 +0800
+Message-Id: <20230221123633.25145-1-lujianhua000@gmail.com>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-References: <20230221110344.82818-1-kerneljasonxing@gmail.com> <48429c16fdaee59867df5ef487e73d4b1bf099af.camel@redhat.com>
-In-Reply-To: <48429c16fdaee59867df5ef487e73d4b1bf099af.camel@redhat.com>
-From:   Eric Dumazet <edumazet@google.com>
-Date:   Tue, 21 Feb 2023 13:35:35 +0100
-Message-ID: <CANn89iJjCXfwUQ4XxtCrNFChdCHciBMuWcK=Az4X1acBeqVDiQ@mail.gmail.com>
-Subject: Re: [PATCH net] udp: fix memory schedule error
-To:     Paolo Abeni <pabeni@redhat.com>
-Cc:     Jason Xing <kerneljasonxing@gmail.com>,
-        willemdebruijn.kernel@gmail.com, davem@davemloft.net,
-        dsahern@kernel.org, kuba@kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
-        Jason Xing <kernelxing@tencent.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,32 +75,26 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 21, 2023 at 1:27 PM Paolo Abeni <pabeni@redhat.com> wrote:
->
-> On Tue, 2023-02-21 at 19:03 +0800, Jason Xing wrote:
-> > From: Jason Xing <kernelxing@tencent.com>
-> >
-> > Quoting from the commit 7c80b038d23e ("net: fix sk_wmem_schedule()
-> > and sk_rmem_schedule() errors"):
-> >
-> > "If sk->sk_forward_alloc is 150000, and we need to schedule 150001 bytes,
-> > we want to allocate 1 byte more (rounded up to one page),
-> > instead of 150001"
->
-> I'm wondering if this would cause measurable (even small) performance
-> regression? Specifically under high packet rate, with BH and user-space
-> processing happening on different CPUs.
->
-> Could you please provide the relevant performance figures?
->
-> Thanks!
->
-> Paolo
->
+Missing vendor name for venus firmware path. Add it.
 
-Probably not a big deal.
+Fixes: a41b617530bf ("arm64: dts: qcom: sm8250: Add device tree for Xiaomi Mi Pad 5 Pro")
+Signed-off-by: Jianhua Lu <lujianhua000@gmail.com>
+---
+ arch/arm64/boot/dts/qcom/sm8250-xiaomi-elish.dts | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-TCP skb truesize can easily reach 180 KB, but for UDP it's 99% below
-or close to a 4K page.
+diff --git a/arch/arm64/boot/dts/qcom/sm8250-xiaomi-elish.dts b/arch/arm64/boot/dts/qcom/sm8250-xiaomi-elish.dts
+index acaa99c5ff8b..a85d47f7a9e8 100644
+--- a/arch/arm64/boot/dts/qcom/sm8250-xiaomi-elish.dts
++++ b/arch/arm64/boot/dts/qcom/sm8250-xiaomi-elish.dts
+@@ -625,6 +625,6 @@ &ufs_mem_phy {
+ };
+ 
+ &venus {
+-	firmware-name = "qcom/sm8250/elish/venus.mbn";
++	firmware-name = "qcom/sm8250/xiaomi/elish/venus.mbn";
+ 	status = "okay";
+ };
+-- 
+2.39.2
 
-I doubt this change makes any difference for UDP.
