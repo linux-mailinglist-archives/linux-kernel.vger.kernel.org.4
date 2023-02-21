@@ -2,313 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EF90869DBD2
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 09:19:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 867F869DBD6
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 09:22:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233697AbjBUITn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Feb 2023 03:19:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36132 "EHLO
+        id S233236AbjBUIWx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Feb 2023 03:22:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38902 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233305AbjBUITk (ORCPT
+        with ESMTP id S229835AbjBUIWv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Feb 2023 03:19:40 -0500
-Received: from mxout70.expurgate.net (mxout70.expurgate.net [194.37.255.70])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6E60A27B;
-        Tue, 21 Feb 2023 00:19:18 -0800 (PST)
-Received: from [127.0.0.1] (helo=localhost)
-        by relay.expurgate.net with smtp (Exim 4.92)
-        (envelope-from <prvs=943053c9ff=fe@dev.tdt.de>)
-        id 1pUNrj-000Y3U-JW; Tue, 21 Feb 2023 09:19:11 +0100
-Received: from [195.243.126.94] (helo=securemail.tdt.de)
-        by relay.expurgate.net with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <fe@dev.tdt.de>)
-        id 1pUNri-000WfJ-Rg; Tue, 21 Feb 2023 09:19:10 +0100
-Received: from securemail.tdt.de (localhost [127.0.0.1])
-        by securemail.tdt.de (Postfix) with ESMTP id 6392B240040;
-        Tue, 21 Feb 2023 09:19:10 +0100 (CET)
-Received: from mail.dev.tdt.de (unknown [10.2.4.42])
-        by securemail.tdt.de (Postfix) with ESMTP id B672324004B;
-        Tue, 21 Feb 2023 09:19:09 +0100 (CET)
-Received: from localhost.localdomain (unknown [10.2.3.40])
-        by mail.dev.tdt.de (Postfix) with ESMTPSA id 4FED52DC4D;
-        Tue, 21 Feb 2023 09:19:09 +0100 (CET)
-From:   Florian Eckert <fe@dev.tdt.de>
-To:     u.kleine-koenig@pengutronix.de, gregkh@linuxfoundation.org,
-        jirislaby@kernel.org, pavel@ucw.cz, lee@kernel.org
-Cc:     linux-kernel@vger.kernel.org, linux-leds@vger.kernel.org,
-        Eckert.Florian@googlemail.com
-Subject: [PATCH v5 2/2] trigger: ledtrig-tty: add additional modes
-Date:   Tue, 21 Feb 2023 09:19:01 +0100
-Message-ID: <20230221081901.15557-3-fe@dev.tdt.de>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20230221081901.15557-1-fe@dev.tdt.de>
-References: <20230221081901.15557-1-fe@dev.tdt.de>
+        Tue, 21 Feb 2023 03:22:51 -0500
+Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 24BBC10CB;
+        Tue, 21 Feb 2023 00:22:49 -0800 (PST)
+Received: from [192.168.178.43] (dynamic-adsl-94-34-19-170.clienti.tiscali.it [94.34.19.170])
+        by linux.microsoft.com (Postfix) with ESMTPSA id A7416209A89A;
+        Tue, 21 Feb 2023 00:22:46 -0800 (PST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com A7416209A89A
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+        s=default; t=1676967768;
+        bh=oB6XZJNuRNsKWddqARPVPvSPJ4dG7fYOorsslLvoIwk=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=OSpF73HaNhkK604LDLNwPikfdAo38G0qWmAg4MS+6/jkKwJb7ihtGvY4ZmuIyWOuT
+         /RYnp24ac9YMLE+RH+ls7P5xr/2hkHJAYjF1efRpm2kP9IUaaJDlJJdoeX+QzVoSG3
+         N5dqVhlvZaot+SywMXJxKLbDJMbBV49+yJhthiyA=
+Message-ID: <1dcc9919-3d92-f9cc-7274-f12e5186a66e@linux.microsoft.com>
+Date:   Tue, 21 Feb 2023 09:22:44 +0100
 MIME-Version: 1.0
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_PASS,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.2
+Subject: Re: [PATCH] ptp: kvm: Use decrypted memory in confidential guest on
+ x86
+To:     kernel test robot <lkp@intel.com>, linux-kernel@vger.kernel.org
+Cc:     oe-kbuild-all@lists.linux.dev, netdev@vger.kernel.org,
+        Richard Cochran <richardcochran@gmail.com>,
+        Christoph Hellwig <hch@lst.de>
+References: <20230220130235.2603366-1-jpiotrowski@linux.microsoft.com>
+ <202302210943.Xq84rrhU-lkp@intel.com>
+Content-Language: en-US
+From:   Jeremi Piotrowski <jpiotrowski@linux.microsoft.com>
+In-Reply-To: <202302210943.Xq84rrhU-lkp@intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-19.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,USER_IN_DEF_DKIM_WL,
+        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-Content-Transfer-Encoding: quoted-printable
-X-purgate-type: clean
-X-purgate: clean
-X-purgate-ID: 151534::1676967551-1EFFD8D8-546D3406/0/0
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add additional modes to trigger the selected LED.
-The following modes are supported:
+On 21/02/2023 02:08, kernel test robot wrote:
+> Hi Jeremi,
+> 
+> Thank you for the patch! Perhaps something to improve:
+> 
+> [auto build test WARNING on horms-ipvs/master]
+> [also build test WARNING on mst-vhost/linux-next net/master net-next/master linus/master v6.2]
+> [If your patch is applied to the wrong git tree, kindly drop us a note.
+> And when submitting patch, we suggest to use '--base' as documented in
+> https://git-scm.com/docs/git-format-patch#_base_tree_information]
+> 
+> url:    https://github.com/intel-lab-lkp/linux/commits/Jeremi-Piotrowski/ptp-kvm-Use-decrypted-memory-in-confidential-guest-on-x86/20230220-210441
+> base:   https://git.kernel.org/pub/scm/linux/kernel/git/horms/ipvs.git master
+> patch link:    https://lore.kernel.org/r/20230220130235.2603366-1-jpiotrowski%40linux.microsoft.com
+> patch subject: [PATCH] ptp: kvm: Use decrypted memory in confidential guest on x86
+> config: x86_64-allyesconfig (https://download.01.org/0day-ci/archive/20230221/202302210943.Xq84rrhU-lkp@intel.com/config)
+> compiler: gcc-11 (Debian 11.3.0-8) 11.3.0
+> reproduce (this is a W=1 build):
+>         # https://github.com/intel-lab-lkp/linux/commit/0dd1701fd254692af3d0ca051e092e8dcef190c4
+>         git remote add linux-review https://github.com/intel-lab-lkp/linux
+>         git fetch --no-tags linux-review Jeremi-Piotrowski/ptp-kvm-Use-decrypted-memory-in-confidential-guest-on-x86/20230220-210441
+>         git checkout 0dd1701fd254692af3d0ca051e092e8dcef190c4
+>         # save the config file
+>         mkdir build_dir && cp config build_dir/.config
+>         make W=1 O=build_dir ARCH=x86_64 olddefconfig
+>         make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/
+> 
+> If you fix the issue, kindly add following tag where applicable
+> | Reported-by: kernel test robot <lkp@intel.com>
+> | Link: https://lore.kernel.org/oe-kbuild-all/202302210943.Xq84rrhU-lkp@intel.com/
+> 
+> All warnings (new ones prefixed by >>):
+> 
+>    drivers/ptp/ptp_kvm_x86.c: In function 'kvm_arch_ptp_init':
+>    drivers/ptp/ptp_kvm_x86.c:63:9: error: implicit declaration of function 'kvm_arch_ptp_exit'; did you mean 'kvm_arch_ptp_init'? [-Werror=implicit-function-declaration]
+>       63 |         kvm_arch_ptp_exit();
+>          |         ^~~~~~~~~~~~~~~~~
+>          |         kvm_arch_ptp_init
+>    drivers/ptp/ptp_kvm_x86.c: At top level:
+>>> drivers/ptp/ptp_kvm_x86.c:68:6: warning: no previous prototype for 'kvm_arch_ptp_exit' [-Wmissing-prototypes]
+>       68 | void kvm_arch_ptp_exit(void)
+>          |      ^~~~~~~~~~~~~~~~~
+>>> drivers/ptp/ptp_kvm_x86.c:68:6: warning: conflicting types for 'kvm_arch_ptp_exit'; have 'void(void)'
+>    drivers/ptp/ptp_kvm_x86.c:63:9: note: previous implicit declaration of 'kvm_arch_ptp_exit' with type 'void(void)'
+>       63 |         kvm_arch_ptp_exit();
+>          |         ^~~~~~~~~~~~~~~~~
+>    cc1: some warnings being treated as errors
+> 
+> 
+> vim +/kvm_arch_ptp_exit +68 drivers/ptp/ptp_kvm_x86.c
+> 
+>     67	
+>   > 68	void kvm_arch_ptp_exit(void)
+>     69	{
+>     70		if (cc_platform_has(CC_ATTR_GUEST_MEM_ENCRYPT)) {
+>     71			WARN_ON(set_memory_encrypted((unsigned long)clock_pair, 1));
+>     72			free_page((unsigned long)clock_pair);
+>     73			clock_pair = NULL;
+>     74		}
+>     75	}
+>     76	
+> 
 
-Tx/Rx:	Flash LED on data transmission (default)
-CTS:	DCE Ready to accept data from the DTE.
-DSR:	DCE is ready to receive and send data.
-CAR:	DCE is receiving a carrier from a remote DTE.
-RNG:	DCE has detected an incoming ring signal.
+My bad - forgot to include changes to include/linux/ptp_kvm.h in the commit.
+Will fix in v2, but will hold off a day or two in case someone has a suggestion
+on how to reduce the allocation.
 
-The mode can be changed for example with the following command:
-echo "CTS" > /sys/class/leds/<led>/mode
-
-This would turn on the LED, when the DTE(modem) signals the DCE that it
-is ready to accept data.
-
-Signed-off-by: Florian Eckert <fe@dev.tdt.de>
----
- .../ABI/testing/sysfs-class-led-trigger-tty   |  16 ++
- drivers/leds/trigger/ledtrig-tty.c            | 145 ++++++++++++++++--
- 2 files changed, 146 insertions(+), 15 deletions(-)
-
-diff --git a/Documentation/ABI/testing/sysfs-class-led-trigger-tty b/Docu=
-mentation/ABI/testing/sysfs-class-led-trigger-tty
-index 2bf6b24e781b..31d62a5ae095 100644
---- a/Documentation/ABI/testing/sysfs-class-led-trigger-tty
-+++ b/Documentation/ABI/testing/sysfs-class-led-trigger-tty
-@@ -4,3 +4,19 @@ KernelVersion:	5.10
- Contact:	linux-leds@vger.kernel.org
- Description:
- 		Specifies the tty device name of the triggering tty
-+
-+What:		/sys/class/leds/<led>/mode
-+Date:		January 2023
-+KernelVersion:	6.3
-+Description:
-+		Specifies the operating to trigger the LED.
-+		The following operating modes are supported:
-+		Tx/Rx: Flash LED on data transmission (default)
-+		CTS:   DCE Ready to accept data from the DTE.
-+		       LED on if line is high.
-+		DSR:   DCE is ready to receive and send data.
-+		       LED on if line is high.
-+		CAR:   DCE is receiving a carrier from a remote DTE.
-+		       LED on if line is high.
-+		RNG:   DCE has detected an incoming ring signal.
-+		       LED on if line is high.
-diff --git a/drivers/leds/trigger/ledtrig-tty.c b/drivers/leds/trigger/le=
-dtrig-tty.c
-index f62db7e520b5..7c4c171c8745 100644
---- a/drivers/leds/trigger/ledtrig-tty.c
-+++ b/drivers/leds/trigger/ledtrig-tty.c
-@@ -7,6 +7,15 @@
- #include <linux/tty.h>
- #include <uapi/linux/serial.h>
-=20
-+enum tty_led_mode {
-+	TTY_LED_CNT,
-+	TTY_LED_CTS,
-+	TTY_LED_DSR,
-+	TTY_LED_CAR,
-+	TTY_LED_RNG,
-+	__TTY_LED_LAST =3D TTY_LED_RNG
-+};
-+
- struct ledtrig_tty_data {
- 	struct led_classdev *led_cdev;
- 	struct delayed_work dwork;
-@@ -14,6 +23,15 @@ struct ledtrig_tty_data {
- 	const char *ttyname;
- 	struct tty_struct *tty;
- 	int rx, tx;
-+	enum tty_led_mode mode;
-+};
-+
-+static const char * const mode[] =3D {
-+	[TTY_LED_CNT] =3D "Tx/Rx", // Trasmit Data / Receive Data
-+	[TTY_LED_CTS] =3D "CTS", // CTS Clear To Send
-+	[TTY_LED_DSR] =3D "DSR", // DSR Data Set Ready
-+	[TTY_LED_CAR] =3D "CAR", // CAR Data Carrier Detect (DCD)
-+	[TTY_LED_RNG] =3D "RNG", // RNG Ring Indicator (RI)
- };
-=20
- static void ledtrig_tty_restart(struct ledtrig_tty_data *trigger_data)
-@@ -21,6 +39,70 @@ static void ledtrig_tty_restart(struct ledtrig_tty_dat=
-a *trigger_data)
- 	schedule_delayed_work(&trigger_data->dwork, 0);
- }
-=20
-+static ssize_t ledtrig_tty_mode_show(char *buf, enum tty_led_mode tty_mo=
-de)
-+{
-+	int len =3D 0;
-+	int i;
-+
-+	for (i =3D 0; i <=3D __TTY_LED_LAST; i++) {
-+		bool hit =3D tty_mode =3D=3D i;
-+		bool last =3D i =3D=3D __TTY_LED_LAST;
-+
-+		len +=3D sysfs_emit_at(buf, len, "%s%s%s%s",
-+				  hit ? "[" : "",
-+				  mode[i],
-+				  hit ? "]" : "",
-+				  last ? "" : " ");
-+	}
-+
-+	len +=3D sysfs_emit_at(buf, len, "\n");
-+
-+	return len;
-+}
-+
-+static ssize_t tty_led_mode_show(struct device *dev,
-+			 struct device_attribute *attr, char *buf)
-+{
-+	struct ledtrig_tty_data *trigger_data =3D led_trigger_get_drvdata(dev);
-+	enum tty_led_mode tty_mode;
-+
-+	mutex_lock(&trigger_data->mutex);
-+	tty_mode =3D trigger_data->mode;
-+	mutex_unlock(&trigger_data->mutex);
-+
-+	return ledtrig_tty_mode_show(buf, tty_mode);
-+}
-+
-+static ssize_t tty_led_mode_store(struct device *dev,
-+			  struct device_attribute *attr, const char *buf,
-+			  size_t size)
-+{
-+	struct ledtrig_tty_data *trigger_data =3D led_trigger_get_drvdata(dev);
-+	ssize_t ret =3D size;
-+	enum tty_led_mode tty_mode =3D __TTY_LED_LAST;
-+	int i;
-+
-+	/* Check for new line in string*/
-+	if (size > 0 && buf[size - 1] =3D=3D '\n')
-+		size -=3D 1;
-+
-+	for (i =3D 0; i <=3D __TTY_LED_LAST; i++)
-+		if (strncmp(buf, mode[i], size) =3D=3D 0) {
-+			tty_mode =3D i;
-+			break;
-+		}
-+
-+	if (i > __TTY_LED_LAST)
-+		return -EINVAL;
-+
-+	mutex_lock(&trigger_data->mutex);
-+	trigger_data->mode =3D tty_mode;
-+	mutex_unlock(&trigger_data->mutex);
-+
-+	return ret;
-+}
-+static DEVICE_ATTR_RW(tty_led_mode);
-+
- static ssize_t ttyname_show(struct device *dev,
- 			    struct device_attribute *attr, char *buf)
- {
-@@ -76,6 +158,18 @@ static ssize_t ttyname_store(struct device *dev,
- }
- static DEVICE_ATTR_RW(ttyname);
-=20
-+static void ledtrig_tty_flags(struct ledtrig_tty_data *trigger_data,
-+		unsigned int flag)
-+{
-+	unsigned int status;
-+
-+	status =3D tty_get_mget(trigger_data->tty);
-+	if (status & flag)
-+		led_set_brightness_sync(trigger_data->led_cdev, LED_ON);
-+	else
-+		led_set_brightness_sync(trigger_data->led_cdev, LED_OFF);
-+}
-+
- static void ledtrig_tty_work(struct work_struct *work)
- {
- 	struct ledtrig_tty_data *trigger_data =3D
-@@ -113,21 +207,38 @@ static void ledtrig_tty_work(struct work_struct *wo=
-rk)
- 		trigger_data->tty =3D tty;
- 	}
-=20
--	ret =3D tty_get_icount(trigger_data->tty, &icount);
--	if (ret) {
--		dev_info(trigger_data->tty->dev, "Failed to get icount, stopped pollin=
-g\n");
--		mutex_unlock(&trigger_data->mutex);
--		return;
--	}
--
--	if (icount.rx !=3D trigger_data->rx ||
--	    icount.tx !=3D trigger_data->tx) {
--		led_set_brightness_sync(trigger_data->led_cdev, LED_ON);
--
--		trigger_data->rx =3D icount.rx;
--		trigger_data->tx =3D icount.tx;
--	} else {
--		led_set_brightness_sync(trigger_data->led_cdev, LED_OFF);
-+	switch (trigger_data->mode) {
-+	case TTY_LED_CTS:
-+		ledtrig_tty_flags(trigger_data, TIOCM_CTS);
-+		break;
-+	case TTY_LED_DSR:
-+		ledtrig_tty_flags(trigger_data, TIOCM_DSR);
-+		break;
-+	case TTY_LED_CAR:
-+		ledtrig_tty_flags(trigger_data, TIOCM_CAR);
-+		break;
-+	case TTY_LED_RNG:
-+		ledtrig_tty_flags(trigger_data, TIOCM_RNG);
-+		break;
-+	case TTY_LED_CNT:
-+	default:
-+		ret =3D tty_get_icount(trigger_data->tty, &icount);
-+		if (ret) {
-+			dev_info(trigger_data->tty->dev, "Failed to get icount, stopped polli=
-ng\n");
-+			mutex_unlock(&trigger_data->mutex);
-+			return;
-+		}
-+
-+		if (icount.rx !=3D trigger_data->rx ||
-+		    icount.tx !=3D trigger_data->tx) {
-+			led_set_brightness_sync(trigger_data->led_cdev, LED_ON);
-+
-+			trigger_data->rx =3D icount.rx;
-+			trigger_data->tx =3D icount.tx;
-+		} else {
-+			led_set_brightness_sync(trigger_data->led_cdev, LED_OFF);
-+		}
-+		break;
- 	}
-=20
- out:
-@@ -137,6 +248,7 @@ static void ledtrig_tty_work(struct work_struct *work=
-)
-=20
- static struct attribute *ledtrig_tty_attrs[] =3D {
- 	&dev_attr_ttyname.attr,
-+	&dev_attr_tty_led_mode.attr,
- 	NULL
- };
- ATTRIBUTE_GROUPS(ledtrig_tty);
-@@ -149,6 +261,9 @@ static int ledtrig_tty_activate(struct led_classdev *=
-led_cdev)
- 	if (!trigger_data)
- 		return -ENOMEM;
-=20
-+	/* set default mode */
-+	trigger_data->mode =3D TTY_LED_CNT;
-+
- 	led_set_trigger_data(led_cdev, trigger_data);
-=20
- 	INIT_DELAYED_WORK(&trigger_data->dwork, ledtrig_tty_work);
---=20
-2.30.2
-
+Jeremi
