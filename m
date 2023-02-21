@@ -2,125 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6ECA069D93D
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 04:22:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5643169D941
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 04:25:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233384AbjBUDWK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Feb 2023 22:22:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54428 "EHLO
+        id S233428AbjBUDZH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Feb 2023 22:25:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56312 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232873AbjBUDWI (ORCPT
+        with ESMTP id S232643AbjBUDZE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Feb 2023 22:22:08 -0500
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B483C23D90;
-        Mon, 20 Feb 2023 19:22:07 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1676949727; x=1708485727;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=nCueLugKj6AS1tNo11nKqAVGoXrrBxgB0PinJrUQ9SE=;
-  b=d6ZCXofXA8xGVPsO5PNdyezs9v/B+jfugLaeHaKc1lNd29uoNcWaEXpO
-   pOcLgSlKApT4h94x+T2DsKNafNDfn95u7G7tA9v2wbYDUgotIHtHcdbmZ
-   tzIFGSw4fc0HfZYXfCTNYBYgZAi89KgfDoskHCmmnjRXU6aj9XRAJLdo8
-   qN72+WYt8DrsdWxlvcEx8Lp+OIecJwpiHF0S3a2izCjdVPUqkFwexNb9I
-   LNZoFMX3UI/Lw3DXCxga0lvcxfFLSuxlC7G1/+PQPc9i+vSSfRUpUsQGp
-   +C9dyBB8mOE0WhQDmdLmpSs8ARROz5mxUyz/EJPbozEgpRTmNPX+rKrT7
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10627"; a="395012922"
-X-IronPort-AV: E=Sophos;i="5.97,314,1669104000"; 
-   d="scan'208";a="395012922"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Feb 2023 19:22:07 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10627"; a="780841410"
-X-IronPort-AV: E=Sophos;i="5.97,314,1669104000"; 
-   d="scan'208";a="780841410"
-Received: from binbinwu-mobl.ccr.corp.intel.com ([10.238.10.94])
-  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Feb 2023 19:22:05 -0800
-From:   Binbin Wu <binbin.wu@linux.intel.com>
-To:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org
-Cc:     seanjc@google.com, pbonzini@redhat.com,
-        Binbin Wu <binbin.wu@linux.intel.com>
-Subject: [PATCH] KVM: x86: Remove duplicated calls of reverse_cpuid_check()
-Date:   Tue, 21 Feb 2023 11:21:56 +0800
-Message-Id: <20230221032156.791-1-binbin.wu@linux.intel.com>
-X-Mailer: git-send-email 2.25.1
+        Mon, 20 Feb 2023 22:25:04 -0500
+Received: from mail-vs1-xe2a.google.com (mail-vs1-xe2a.google.com [IPv6:2607:f8b0:4864:20::e2a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1962F1E9C7
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Feb 2023 19:25:03 -0800 (PST)
+Received: by mail-vs1-xe2a.google.com with SMTP id g12so4655436vsf.12
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Feb 2023 19:25:03 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1676949902;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=+UR3Xvq78uQp5wq4siQlq6Jxdo9xg2xftO043/9/2BQ=;
+        b=ZQj3zbnB6E4cvZ4tXYCyS5ZTMxonUzLr/4MAMI/UltY1SuQc8DsxavGhftmcqqKLe8
+         x+SH6qeW2NyDf56WncpwNVMp9mZx3DckqQT+TVqegixj0bnIViRSmqfTFBRgLc01vBeD
+         iaVgezIc7Wb1uiurVTdMJbukTHOEXO4ohFGpI=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1676949902;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=+UR3Xvq78uQp5wq4siQlq6Jxdo9xg2xftO043/9/2BQ=;
+        b=534dy0PYq2K0AKtlD7VPwBItS3TRMIzeHQC3pj4qVMaS9pxYPc2V+RWZ5PRkINJIuZ
+         8fYYNRtrajQ04Ecc4v/NomQreief+IPGFr+FV4UnLp6jf1lS+7pSSYgAvGFlOTvQuDE4
+         rssKSubfUflWOHU60W+3kcyHue/OLNGRUQe+pb4iKdfULANb29JZnfA9LnXdivkovu5E
+         n5MAOkNUidkrLRGy6yrGtk2wLXh8R8VssUMAHGkyp0lc/LV+OmFayGTNfDseIgwp0pKJ
+         GriE59UwJCMMXurezGXAPeGXzHg9HEfpf0NzSZH/VXPUpWukR8gmlijarLpex5IfYaRs
+         TPyQ==
+X-Gm-Message-State: AO0yUKUrIgwoLuWsBVJFF8UzGkHirfTQPbJGof8Yg7Jszsmrwg8PYx7p
+        uXIbU7+oNhUSAopygmuxpprYZj63JiITgE46Fxgcpg==
+X-Google-Smtp-Source: AK7set+1aQzZuQeeKCDIsxkASzIMVCJfgtPqOEM4H6n/OAIRrb66ahir0RSw9gBclNHrmJwj6oTSGXqUKOxxpFXRqCE=
+X-Received: by 2002:a67:f6c1:0:b0:411:a14d:6bac with SMTP id
+ v1-20020a67f6c1000000b00411a14d6bacmr823493vso.44.1676949902247; Mon, 20 Feb
+ 2023 19:25:02 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+References: <20230220093343.3447381-1-hsinyi@chromium.org>
+In-Reply-To: <20230220093343.3447381-1-hsinyi@chromium.org>
+From:   Chen-Yu Tsai <wenst@chromium.org>
+Date:   Tue, 21 Feb 2023 11:24:51 +0800
+Message-ID: <CAGXv+5E4_k1jKTnninYkuT6Tf=skB00AowHpM+hc8j_VFM-RfQ@mail.gmail.com>
+Subject: Re: [PATCH] arm64: dts: mediatek: mt8183: kukui: Add scp firmware-name
+To:     Hsin-Yi Wang <hsinyi@chromium.org>
+Cc:     Matthias Brugger <matthias.bgg@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Remove duplicated calls of reverse_cpuid_check() in __kvm_cpu_cap_mask()
-and kvm_cpu_cap_{clear, set, get}().
+On Mon, Feb 20, 2023 at 5:34 PM Hsin-Yi Wang <hsinyi@chromium.org> wrote:
+>
+> The upstream SCP firmware path is /lib/firmware/mediatek/mt8183/scp.img
+>
+> Signed-off-by: Hsin-Yi Wang <hsinyi@chromium.org>
 
-reverse_cpuid_check() is directly called by:
- - feature_bit() / __feature_bit()
- - x86_feature_cpuid()
- - kvm_cpu_cap_{clear, set, get}()
- - __kvm_cpu_cap_mask()
-Also __kvm_cpu_cap_mask() calls x86_feature_cpuid(),
-and kvm_cpu_cap_{clear, set, get}() calls __feature_bit().
-It makes the direct call of reverse_cpuid_check() duplicated.
-
-For functions call reverse_cpuid_check() twice indirectly (e.g. cpuid_entry_get()
-calls both __feature_bit() and x86_feature_cpuid()), keep them as they are.
-
-Signed-off-by: Binbin Wu <binbin.wu@linux.intel.com>
----
- arch/x86/kvm/cpuid.c | 2 --
- arch/x86/kvm/cpuid.h | 3 ---
- 2 files changed, 5 deletions(-)
-
-diff --git a/arch/x86/kvm/cpuid.c b/arch/x86/kvm/cpuid.c
-index 8f8edeaf8177..f4089d7a7c4c 100644
---- a/arch/x86/kvm/cpuid.c
-+++ b/arch/x86/kvm/cpuid.c
-@@ -545,8 +545,6 @@ static __always_inline void __kvm_cpu_cap_mask(unsigned int leaf)
- 	const struct cpuid_reg cpuid = x86_feature_cpuid(leaf * 32);
- 	struct kvm_cpuid_entry2 entry;
- 
--	reverse_cpuid_check(leaf);
--
- 	cpuid_count(cpuid.function, cpuid.index,
- 		    &entry.eax, &entry.ebx, &entry.ecx, &entry.edx);
- 
-diff --git a/arch/x86/kvm/cpuid.h b/arch/x86/kvm/cpuid.h
-index b1658c0de847..d781372a01e8 100644
---- a/arch/x86/kvm/cpuid.h
-+++ b/arch/x86/kvm/cpuid.h
-@@ -192,7 +192,6 @@ static __always_inline void kvm_cpu_cap_clear(unsigned int x86_feature)
- {
- 	unsigned int x86_leaf = __feature_leaf(x86_feature);
- 
--	reverse_cpuid_check(x86_leaf);
- 	kvm_cpu_caps[x86_leaf] &= ~__feature_bit(x86_feature);
- }
- 
-@@ -200,7 +199,6 @@ static __always_inline void kvm_cpu_cap_set(unsigned int x86_feature)
- {
- 	unsigned int x86_leaf = __feature_leaf(x86_feature);
- 
--	reverse_cpuid_check(x86_leaf);
- 	kvm_cpu_caps[x86_leaf] |= __feature_bit(x86_feature);
- }
- 
-@@ -208,7 +206,6 @@ static __always_inline u32 kvm_cpu_cap_get(unsigned int x86_feature)
- {
- 	unsigned int x86_leaf = __feature_leaf(x86_feature);
- 
--	reverse_cpuid_check(x86_leaf);
- 	return kvm_cpu_caps[x86_leaf] & __feature_bit(x86_feature);
- }
- 
-
-base-commit: e73ba25fdc241c06ab48a1f708a30305d6036e66
--- 
-2.25.1
-
+Reviewed-by: Chen-Yu Tsai <wenst@chromium.org>
