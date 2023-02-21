@@ -2,295 +2,276 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D052B69E5C5
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 18:18:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D883469E5C6
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 18:19:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234876AbjBURSb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Feb 2023 12:18:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59074 "EHLO
+        id S234883AbjBURTT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Feb 2023 12:19:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59852 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233889AbjBURS3 (ORCPT
+        with ESMTP id S234642AbjBURTR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Feb 2023 12:18:29 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F1DD8A72
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Feb 2023 09:18:27 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 208AF6115C
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Feb 2023 17:18:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 32EEBC433D2;
-        Tue, 21 Feb 2023 17:18:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1676999906;
-        bh=jOWwYvnUv1u99ar4E3cDb23eVdnJ9cfJenGiLUt2XVg=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=ZOUtyc/kSn0/E9sH9/j+kS3t7jNSuMMMr2Lkt+RouLXawbrkSk3W6XKSbWAa/9LDX
-         r3NhfmuSk5i0fmGqWWZb7EV/gce59nDZTzhbq1fJXtrjsRTrAunPKpc3IivduPJQuw
-         APjAFgyo1/2cylPrHrDo14DzZI0mnf6HEn7ZX8S8=
-Date:   Tue, 21 Feb 2023 18:18:23 +0100
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Shreenidhi Shedi <yesshedi@gmail.com>
-Cc:     dhowells@redhat.com, dwmw2@infradead.org,
-        linux-kernel@vger.kernel.org, sshedi@vmware.com
-Subject: Re: [ PATCH v4 1/6] sign-file: refactor argument parsing logic
-Message-ID: <Y/T833JJr13U2f1T@kroah.com>
-References: <20230221170804.3267242-1-sshedi@vmware.com>
+        Tue, 21 Feb 2023 12:19:17 -0500
+Received: from mx0b-001ae601.pphosted.com (mx0b-001ae601.pphosted.com [67.231.152.168])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 320D122DCA
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Feb 2023 09:19:15 -0800 (PST)
+Received: from pps.filterd (m0077474.ppops.net [127.0.0.1])
+        by mx0b-001ae601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 31LHHMWQ001982;
+        Tue, 21 Feb 2023 11:18:57 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cirrus.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=PODMain02222019;
+ bh=4Uv4Wl3WLY+qPDivrAHO8fHuS3+FUjV+/MkHhUOl7OI=;
+ b=ZPni5iEWPK5r4B0Aj8AxmsY/sKhOQoOr78XXRZ4dLMuYSBoafe3YL/czh47sIxTCAzgv
+ f3cS+6pOursXv6PKOIbUVofnE9FACDeQhUxp281VD6SG0zhhGZCxv09Eyv9k5v2KE9rH
+ MQMQPwlF6jVxTagZCqAMaADXHe1w1VD7zseoLPJpN9bDcLLvKrMObLfA5yBJpN03hl3g
+ oZCzJX/NRderg4iz3W1hc3Oq5pxuqh41VXJO6+QZwIlknmRbIDZQP8OIGSNvdyn/FWI3
+ rCA3nOZq+NOHtp7cWnv6ewd3d+nALlv0+OwajlY+lYrNqragvHsp5kCte9aSWPjXscXs XA== 
+Received: from ediex02.ad.cirrus.com ([84.19.233.68])
+        by mx0b-001ae601.pphosted.com (PPS) with ESMTPS id 3nvmnqrxan-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 21 Feb 2023 11:18:49 -0600
+Received: from ediex02.ad.cirrus.com (198.61.84.81) by ediex02.ad.cirrus.com
+ (198.61.84.81) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.21; Tue, 21 Feb
+ 2023 11:18:47 -0600
+Received: from ediswmail.ad.cirrus.com (198.61.86.93) by
+ anon-ediex02.ad.cirrus.com (198.61.84.81) with Microsoft SMTP Server id
+ 15.2.1118.21 via Frontend Transport; Tue, 21 Feb 2023 11:18:47 -0600
+Received: from [198.90.251.127] (edi-sw-dsktp-006.ad.cirrus.com [198.90.251.127])
+        by ediswmail.ad.cirrus.com (Postfix) with ESMTP id 45FE1B0E;
+        Tue, 21 Feb 2023 17:18:47 +0000 (UTC)
+Message-ID: <59866a98-077a-4645-b85b-a18fc1d65a54@opensource.cirrus.com>
+Date:   Tue, 21 Feb 2023 17:18:47 +0000
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230221170804.3267242-1-sshedi@vmware.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Subject: Re: [PATCH 08/10] ASoC: cs35l56: Add driver for Cirrus Logic CS35L56
+To:     Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
+        <broonie@kernel.org>, <cezary.rojewski@intel.com>,
+        <peter.ujfalusi@linux.intel.com>,
+        <yung-chuan.liao@linux.intel.com>, <kai.vehmanen@linux.intel.com>
+CC:     <alsa-devel@alsa-project.org>, <linux-kernel@vger.kernel.org>,
+        <patches@opensource.cirrus.com>
+References: <20230217161410.915202-1-rf@opensource.cirrus.com>
+ <20230217161410.915202-9-rf@opensource.cirrus.com>
+ <2d55b8c9-e7f9-6b2e-aad8-5cc902d69000@linux.intel.com>
+Content-Language: en-US
+From:   Richard Fitzgerald <rf@opensource.cirrus.com>
+In-Reply-To: <2d55b8c9-e7f9-6b2e-aad8-5cc902d69000@linux.intel.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Proofpoint-ORIG-GUID: 2P-I37zqGJce2jihQR9oOCStcfnex5Ei
+X-Proofpoint-GUID: 2P-I37zqGJce2jihQR9oOCStcfnex5Ei
+X-Proofpoint-Spam-Reason: safe
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 21, 2023 at 10:37:59PM +0530, Shreenidhi Shedi wrote:
-> From: Shreenidhi Shedi <yesshedi@gmail.com>
+On 21/02/2023 16:45, Pierre-Louis Bossart wrote:
 > 
-> - Use getopt_long_only for parsing input args
-> - Use more easy to remember command line argument names
+>> +static int cs35l56_sdw_interrupt(struct sdw_slave *peripheral,
+>> +				 struct sdw_slave_intr_status *status)
+>> +{
+>> +	struct cs35l56_private *cs35l56 = dev_get_drvdata(&peripheral->dev);
+>> +
+>> +	/* SoundWire core holds our pm_runtime when calling this function. */
+>> +
+>> +	dev_dbg(cs35l56->dev, "int control_port=%#x\n", status->control_port);
+>> +
+>> +	if ((status->control_port & SDW_SCP_INT1_IMPL_DEF) == 0)
+>> +		return 0;
+>> +
+>> +	/* Prevent host controller suspending before we handle the interrupt */
+>> +	pm_runtime_get_noresume(cs35l56->dev);
 > 
-> Signed-off-by: Shreenidhi Shedi <yesshedi@gmail.com>
-> ---
->  scripts/sign-file.c | 156 ++++++++++++++++++++++++++++++++++----------
->  1 file changed, 122 insertions(+), 34 deletions(-)
+> can this happen that the manager suspends in this function?
 > 
-> diff --git a/scripts/sign-file.c b/scripts/sign-file.c
-> index 598ef5465f82..dbbde1aef3d9 100644
-> --- a/scripts/sign-file.c
-> +++ b/scripts/sign-file.c
-> @@ -213,15 +213,111 @@ static X509 *read_x509(const char *x509_name)
->  	return x509;
->  }
->  
-> +struct cmd_opts {
-> +	char *hash_algo;
-> +	char *dest_name;
-> +	char *private_key_name;
-> +	char *raw_sig_name;
-> +	char *x509_name;
-> +	char *module_name;
-> +	bool save_sig;
-> +	bool replace_orig;
-> +	bool raw_sig;
-> +	bool sign_only;
-> +
-> +#ifndef USE_PKCS7
-> +	unsigned int use_keyid;
-> +#endif
-> +};
-> +
-> +static void parse_args(int argc, char **argv, struct cmd_opts *opts)
-> +{
-> +	struct option cmd_options[] = {
-> +		/* These options set a flag. */
-> +		{"help", no_argument, 0, 'h'},
-> +		{"savesig", no_argument, 0, 's'},
-> +		{"signonly", no_argument, 0, 'o'},
-> +#ifndef USE_PKCS7
-> +		{"usekeyid", no_argument, 0, 'k'},
-> +#endif
-> +		{"rawsig", required_argument, 0, 'r'},
-> +		{"privkey", required_argument, 0, 'p'},
-> +		{"hashalgo", required_argument, 0, 'a'},
-> +		{"x509", required_argument, 0, 'x'},
-> +		{"dest", required_argument, 0, 'd'},
-> +		{"replaceorig", required_argument, 0, 'l'},
-> +		{0, 0, 0, 0}
-> +	};
-> +
-> +	int opt;
-> +	int opt_index = 0;
-> +
-> +	do {
-> +#ifndef USE_PKCS7
-> +		opt = getopt_long_only(argc, argv, "hsobr:p:a:x:d:l:",
-> +				cmd_options, &opt_index);
-> +#else
-> +		opt = getopt_long_only(argc, argv, "hsobkr:p:a:x:d:l:",
-> +				cmd_options, &opt_index);
-> +#endif
-> +		switch (opt) {
-> +		case 'h':
-> +			format();
-> +			break;
-> +
-> +		case 'r':
-> +			opts->raw_sig = true;
-> +			opts->raw_sig_name = optarg;
-> +			break;
-> +
-> +		case 's':
-> +			opts->save_sig = true;
-> +			break;
-> +
-> +		case 'o':
-> +			opts->sign_only = true;
-> +			opts->save_sig = true;
-> +			break;
-> +
-> +#ifndef USE_PKCS7
-> +		case 'k':
-> +			opts->use_keyid = CMS_USE_KEYID;
-> +			break;
-> +#endif
-> +
-> +		case 'p':
-> +			opts->private_key_name = optarg;
-> +			break;
-> +
-> +		case 'a':
-> +			opts->hash_algo = optarg;
-> +			break;
-> +
-> +		case 'x':
-> +			opts->x509_name = optarg;
-> +			break;
-> +
-> +		case 'd':
-> +			opts->dest_name = optarg;
-> +			break;
-> +
-> +		case 'l':
-> +			opts->replace_orig = true;
-> +			break;
-> +
-> +		case -1:
-> +			break;
-> +
-> +		default:
-> +			format();
-> +			break;
-> +		}
-> +	} while (opt != -1);
-> +}
-> +
->  int main(int argc, char **argv)
->  {
->  	struct module_signature sig_info = { .id_type = PKEY_ID_PKCS7 };
-> -	char *hash_algo = NULL;
-> -	char *private_key_name = NULL, *raw_sig_name = NULL;
-> -	char *x509_name, *module_name, *dest_name;
-> -	bool save_sig = false, replace_orig;
-> -	bool sign_only = false;
-> -	bool raw_sig = false;
->  	unsigned char buf[4096];
->  	unsigned long module_size, sig_size;
->  	unsigned int use_signed_attrs;
-> @@ -229,13 +325,14 @@ int main(int argc, char **argv)
->  	EVP_PKEY *private_key;
->  #ifndef USE_PKCS7
->  	CMS_ContentInfo *cms = NULL;
-> -	unsigned int use_keyid = 0;
->  #else
->  	PKCS7 *pkcs7 = NULL;
->  #endif
->  	X509 *x509;
->  	BIO *bd, *bm;
-> -	int opt, n;
-> +	int n;
-> +	struct cmd_opts opts = {0};
-> +
->  	OpenSSL_add_all_algorithms();
->  	ERR_load_crypto_strings();
->  	ERR_clear_error();
-> @@ -247,37 +344,29 @@ int main(int argc, char **argv)
->  #else
->  	use_signed_attrs = PKCS7_NOATTR;
->  #endif
-> +	parse_args(argc, argv, &opts);
-> +	argc -= optind;
-> +	argv += optind;
-> +
-> +	char *hash_algo = opts.hash_algo;
-> +	char *dest_name = opts.dest_name;
-> +	char *private_key_name = opts.private_key_name;
-> +	char *raw_sig_name = opts.raw_sig_name;
-> +	char *x509_name = opts.x509_name;
-> +	char *module_name = opts.module_name;
-> +	bool save_sig = opts.save_sig;
-> +	bool replace_orig = opts.replace_orig;
-> +	bool raw_sig = opts.raw_sig;
-> +	bool sign_only = opts.sign_only;
->  
-> -	do {
-> -		opt = getopt(argc, argv, "sdpk");
-> -		switch (opt) {
-> -		case 's': raw_sig = true; break;
-> -		case 'p': save_sig = true; break;
-> -		case 'd': sign_only = true; save_sig = true; break;
->  #ifndef USE_PKCS7
-> -		case 'k': use_keyid = CMS_USE_KEYID; break;
-> +	unsigned int use_keyid = opts.use_keyid;
->  #endif
-> -		case -1: break;
-> -		default: format();
-> -		}
-> -	} while (opt != -1);
->  
-> -	argc -= optind;
-> -	argv += optind;
-> -	if (argc < 4 || argc > 5)
-> +	if (!argv[0] || argc != 1)
->  		format();
->  
-> -	if (raw_sig) {
-> -		raw_sig_name = argv[0];
-> -		hash_algo = argv[1];
-> -	} else {
-> -		hash_algo = argv[0];
-> -		private_key_name = argv[1];
-> -	}
-> -	x509_name = argv[2];
-> -	module_name = argv[3];
-> -	if (argc == 5 && strcmp(argv[3], argv[4]) != 0) {
-> -		dest_name = argv[4];
-> +	if (dest_name && strcmp(argv[0], dest_name)) {
->  		replace_orig = false;
->  	} else {
->  		ERR(asprintf(&dest_name, "%s.~signed~", module_name) < 0,
-> @@ -292,7 +381,6 @@ int main(int argc, char **argv)
->  		exit(3);
->  	}
->  #endif
-> -
->  	/* Open the module file */
->  	bm = BIO_new_file(module_name, "rb");
->  	ERR(!bm, "%s", module_name);
-> -- 
-> 2.39.1
+> Or is this needed because of the queued work which the manager has no
+> knowledge of?
 > 
 
-Hi,
+Because you issue a Bus-Reset when you suspend and clock-stop, if we
+didn't take our pm_runtime there is a small window of time where we
+could be reset before we've handled the interrupt. It's unlikely to
+happen but better to be safe than to rely on autosuspend delays.
 
-This is the friendly patch-bot of Greg Kroah-Hartman.  You have sent him
-a patch that has triggered this response.  He used to manually respond
-to these common problems, but in order to save his sanity (he kept
-writing the same thing over and over, yet to different people), I was
-created.  Hopefully you will not take offence and will fix the problem
-in your patch and resubmit it so that it can be accepted into the Linux
-kernel tree.
+>> +
+>> +	/*
+>> +	 * Mask and clear until it has been handled. The read of GEN_INT_STAT_1
+>> +	 * is required as per the SoundWire spec for interrupt status bits
+>> +	 * to clear. GEN_INT_MASK_1 masks the _inputs_ to GEN_INT_STAT1.
+>> +	 * None of the interrupts are time-critical so use the
+>> +	 * power-efficient queue.
+>> +	 */
+>> +	sdw_write_no_pm(peripheral, CS35L56_SDW_GEN_INT_MASK_1, 0);
+>> +	sdw_read_no_pm(peripheral, CS35L56_SDW_GEN_INT_STAT_1);
+>> +	sdw_write_no_pm(peripheral, CS35L56_SDW_GEN_INT_STAT_1, 0xFF);
+>> +	queue_work(system_power_efficient_wq, &cs35l56->sdw_irq_work);
+>> +
+>> +	return 0;
+>> +}
+> 
+>> +static int __maybe_unused cs35l56_sdw_handle_unattach(struct cs35l56_private *cs35l56)
+>> +{
+>> +	struct sdw_slave *peripheral = cs35l56->sdw_peripheral;
+>> +
+>> +	if (peripheral->unattach_request) {
+>> +		/* Cannot access registers until master re-attaches. */
+> 
+> not sure what the comment means, the manager does not attach. did you
+> mean resume the bus?
+> 
 
-You are receiving this message because of the following common error(s)
-as indicated below:
+If the manager has forced us to reset we can't access the registers
+until the manager has recovered its state.
 
-- This looks like a new version of a previously submitted patch, but you
-  did not list below the --- line any changes from the previous version.
-  Please read the section entitled "The canonical patch format" in the
-  kernel file, Documentation/process/submitting-patches.rst for what
-  needs to be done here to properly describe this.
+>> +		dev_dbg(cs35l56->dev, "Wait for initialization_complete\n");
+>> +		if (!wait_for_completion_timeout(&peripheral->initialization_complete,
+>> +						 msecs_to_jiffies(5000))) {
+>> +			dev_err(cs35l56->dev, "initialization_complete timed out\n");
+>> +			return -ETIMEDOUT;
+>> +		}
+>> +
+>> +		peripheral->unattach_request = 0;
+>> +
+>> +		/*
+>> +		 * Don't call regcache_mark_dirty(), we can't be sure that the
+>> +		 * Manager really did issue a Bus Reset.
+>> +		 */
+>> +	}
+>> +
+>> +	return 0;
+>> +}
+> ...
+> 
+>> +static void cs35l56_dsp_work(struct work_struct *work)
+>> +{
+>> +	struct cs35l56_private *cs35l56 = container_of(work,
+>> +						       struct cs35l56_private,
+>> +						       dsp_work);
+>> +	unsigned int reg;
+>> +	unsigned int val;
+>> +	int ret = 0;
+>> +
+>> +	if (!wait_for_completion_timeout(&cs35l56->init_completion,
+>> +					 msecs_to_jiffies(5000))) {
+>> +		dev_err(cs35l56->dev, "%s: init_completion timed out\n", __func__);
+>> +		goto complete;
+>> +	}
+>> +
+>> +	if (!cs35l56->init_done || cs35l56->removing)
+>> +		goto complete;
+>> +
+>> +	cs35l56->dsp.part = devm_kasprintf(cs35l56->dev, GFP_KERNEL, "cs35l56%s-%02x",
+>> +					   cs35l56->secured ? "s" : "", cs35l56->rev);
+>> +
+>> +	if (!cs35l56->dsp.part)
+>> +		goto complete;
+>> +
+>> +	pm_runtime_get_sync(cs35l56->dev);
+> 
+> test that this is successful?
+> 
 
-If you wish to discuss this problem further, or you have questions about
-how to resolve this issue, please feel free to respond to this email and
-Greg will reply once he has dug out from the pending patches received
-from other developers.
+Could do. Wasn't really expecting it to fail unless the hardware is
+already broken.
 
-thanks,
+>> +
+>> +	/*
+>> +	 * Disable SoundWire interrupts to prevent race with IRQ work.
+>> +	 * Setting sdw_irq_no_unmask prevents the handler re-enabling
+>> +	 * the SoundWire interrupt.
+>> +	 */
+>> +	if (cs35l56->sdw_peripheral) {
+>> +		cs35l56->sdw_irq_no_unmask = true;
+>> +		cancel_work_sync(&cs35l56->sdw_irq_work);
+>> +		sdw_write_no_pm(cs35l56->sdw_peripheral, CS35L56_SDW_GEN_INT_MASK_1, 0);
+>> +		sdw_read_no_pm(cs35l56->sdw_peripheral, CS35L56_SDW_GEN_INT_STAT_1);
+>> +		sdw_write_no_pm(cs35l56->sdw_peripheral, CS35L56_SDW_GEN_INT_STAT_1, 0xFF);
+>> +	}
+>> +
+>> +	ret = cs35l56_mbox_send(cs35l56, CS35L56_MBOX_CMD_SHUTDOWN);
+>> +	if (ret) {
+>> +		dev_dbg(cs35l56->dev, "%s: CS35L56_MBOX_CMD_SHUTDOWN ret %d\n", __func__, ret);
+>> +		goto err;
+>> +	}
+>> +
+>> +	if (cs35l56->rev < CS35L56_REVID_B0)
+>> +		reg = CS35L56_DSP1_PM_CUR_STATE_A1;
+>> +	else
+>> +		reg = CS35L56_DSP1_PM_CUR_STATE;
+>> +
+>> +	ret = regmap_read_poll_timeout(cs35l56->regmap, reg,
+>> +				       val, (val == CS35L56_HALO_STATE_SHUTDOWN),
+>> +				       CS35L56_HALO_STATE_POLL_US,
+>> +				       CS35L56_HALO_STATE_TIMEOUT_US);
+>> +	if (ret < 0)
+>> +		dev_err(cs35l56->dev, "Failed to poll PM_CUR_STATE to 1 is %d (ret %d)\n",
+>> +			val, ret);
+>> +
+>> +	/* Use wm_adsp to load and apply the firmware patch and coefficient files */
+>> +	ret = wm_adsp_power_up(&cs35l56->dsp);
+>> +	if (ret) {
+>> +		dev_dbg(cs35l56->dev, "%s: wm_adsp_power_up ret %d\n", __func__, ret);
+>> +		goto err;
+>> +	}
+>> +
+>> +	if (cs35l56->removing)
+>> +		goto err;
+>> +
+>> +	mutex_lock(&cs35l56->irq_lock);
+>> +
+>> +	init_completion(&cs35l56->init_completion);
+>> +
+>> +	cs35l56_system_reset(cs35l56);
+>> +
+>> +	if (cs35l56->sdw_peripheral) {
+>> +		if (!wait_for_completion_timeout(&cs35l56->init_completion,
+>> +						 msecs_to_jiffies(5000))) {
+>> +			dev_err(cs35l56->dev, "%s: init_completion timed out (SDW)\n", __func__);
+> 
+> shouldn't do the same routine as for a regular pm_runtime resume,
+> including re-synching regmaps?
+> 
 
-greg k-h's patch email bot
+Not sure it would help. It's not the same as runtime_resume because
+we've changed the firmware and rebooted it (the firmware is retained
+in a runtime_suspend). We need to do some of the first-time init()
+code again, which we don't need to do in runtime_resume.
+
+Also would create a circular dependency between this driver and the
+cs35l56-sdw driver. (We _could_ call our dev->pm->runtime_resume pointer
+but that's a bit ugly)
+
+> 
+>> +			goto err_unlock;
+>> +		}
+>> +	} else {
+>> +		if (cs35l56_init(cs35l56))
+>> +			goto err_unlock;
+>> +	}
+>> +
+>> +	cs35l56->fw_patched = true;
+>> +
+>> +err_unlock:
+>> +	mutex_unlock(&cs35l56->irq_lock);
+>> +err:
+>> +	pm_runtime_mark_last_busy(cs35l56->dev);
+>> +	pm_runtime_put_autosuspend(cs35l56->dev);
+>> +
+>> +	/* Re-enable SoundWire interrupts */
+>> +	if (cs35l56->sdw_peripheral) {
+>> +		cs35l56->sdw_irq_no_unmask = false;
+>> +		sdw_write_no_pm(cs35l56->sdw_peripheral, CS35L56_SDW_GEN_INT_MASK_1,
+>> +				CS35L56_SDW_INT_MASK_CODEC_IRQ);
+>> +	}
+>> +
+>> +complete:
+>> +	complete_all(&cs35l56->dsp_ready_completion);
+>> +}
