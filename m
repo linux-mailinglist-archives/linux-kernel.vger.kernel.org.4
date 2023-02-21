@@ -2,54 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7535369DEA1
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 12:20:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 938FB69DEA6
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 12:21:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233673AbjBULUX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Feb 2023 06:20:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45540 "EHLO
+        id S233656AbjBULVr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Feb 2023 06:21:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46594 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233439AbjBULUV (ORCPT
+        with ESMTP id S233776AbjBULVo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Feb 2023 06:20:21 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 017221C5A9;
-        Tue, 21 Feb 2023 03:20:20 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 8A87BB80EA3;
-        Tue, 21 Feb 2023 11:20:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 1CD25C4339B;
-        Tue, 21 Feb 2023 11:20:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1676978418;
-        bh=z3v0BkjXRNKDmfVmm9V7eZM46F9Q2Kbmj0LCyBxPig0=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=STkzzgKE0hS3nI2M8pjI5MyjVuyqEAts+05JyV82btqYZvKLbWBP9hcbk2UmQmqn0
-         W6ZOpqLW76LUY6pO94GyGGcdL9sFs3Zo2kxhtr3fICAeAGtIcMOpZNXIxansPq4Ej8
-         Hl8YBybW9HjMG3j4RC1an2EDYcBQ85WdvVNe1xYaA8tDuBHvxfWXIz0TBsOAPhmI3i
-         gZwpdDYHrSslibgGTGO14KuhE3LhtB4H0tO/zLxTL+NG7o+0s/OaqJ1bB6tb4KWffj
-         TwBakV90H3PINEGG6uu3/ayGPWQ6qKfcjw9XnBEGZeUk+ml7300Xwy4E6Q2aMVB+8/
-         +CR9HkXkbUK4A==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 03052C43159;
-        Tue, 21 Feb 2023 11:20:18 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        Tue, 21 Feb 2023 06:21:44 -0500
+Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF5DA24CBC
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Feb 2023 03:21:43 -0800 (PST)
+Received: by mail-ed1-x535.google.com with SMTP id ck15so16965108edb.0
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Feb 2023 03:21:43 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=noPfk2rwggu5huHwxUZGbX0TMsiwuKiTUBy+RT3Rz6A=;
+        b=VjwbRKomHCvZ+MGkMFoewEedUzOPYXvN33MUH6rIekqig3OIk5pldz7zYkvM3WAJ/P
+         YiboPDeHhZAB8qHxSbRTBTTYKnQ1uN93W9irCZd8kqz6U0/lRj9nv3gUCDBtrJu2TK9e
+         ibwGkMgLncMHLSECuhb3pphBpOLh0SQpVOhVOq/N26mlCRE9cPjTTpeUeTN70r5NPse9
+         zrHTjuERSsvAO3EkDJ+uv19wHIbOHkzI1gyg2MmJTVoEvyQbYbwNkfD81ntHsurvm8D+
+         zjg6vlKc1jt2Yf0zuALyNeAIAOGrcNJyvg/+vvqkYzyLS1RtgEHcIUuLyvclY8E9g5D7
+         JzxQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=noPfk2rwggu5huHwxUZGbX0TMsiwuKiTUBy+RT3Rz6A=;
+        b=ugck54iJpJgITyHV9ZpW4mC48qrcByot1MXGNkG4+Rs0BZtcRcRpQtE7PCw8+1+C1v
+         7fn5kH7yeVHPSfLbkv+ojKC7sK7qL5YyK25PQ/GudnkcZJjIowNR3UG44RGYWGEG824A
+         GGjey5KZWrAcdWqP/p0iyFKWhCJE3CQ1bIFeq4uYLjtMueRejZUQkhU2l99T1IrBAq72
+         w0ygFdOlhvNTeXMVuko5uJdfAA9rJJjk+z098TG+3AwpuqVV2CNbMPIE4npsvSu25Yro
+         +PvomX1e6FP0YlHC/VBwkboc1SmM9PKmH6Rq8mOIJIBNQ6h3cpL2laIkDVw060/YJDN8
+         Bchw==
+X-Gm-Message-State: AO0yUKWD6/E4Yz3nljLOrwBH4cou6G95KGQEfYIWOQv3u08zLknIGg05
+        bNWwN9sEPdVrr3QF1+m15lom/A==
+X-Google-Smtp-Source: AK7set8oGKpHrhMVaiMqtVr6pgui92clofdHwPEnsWLKK2LoqZzlKa3a/asNJAkYU4RPkazVhdmRZw==
+X-Received: by 2002:a17:906:40d4:b0:8b1:781d:f9a8 with SMTP id a20-20020a17090640d400b008b1781df9a8mr14558837ejk.72.1676978502265;
+        Tue, 21 Feb 2023 03:21:42 -0800 (PST)
+Received: from [192.168.1.109] ([178.197.216.144])
+        by smtp.gmail.com with ESMTPSA id l27-20020a50d6db000000b004aab36ad060sm2230688edj.92.2023.02.21.03.21.40
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 21 Feb 2023 03:21:41 -0800 (PST)
+Message-ID: <cc9f67c2-1728-4299-4d59-d662c9abe8cc@linaro.org>
+Date:   Tue, 21 Feb 2023 12:21:40 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH 0/1] selftest: fib_tests: Always cleanup before exit
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <167697841800.23862.3511124706194686998.git-patchwork-notify@kernel.org>
-Date:   Tue, 21 Feb 2023 11:20:18 +0000
-References: <20230220110400.26737-1-roxana.nicolescu@canonical.com>
-In-Reply-To: <20230220110400.26737-1-roxana.nicolescu@canonical.com>
-To:     Roxana Nicolescu <roxana.nicolescu@canonical.com>
-Cc:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, shuah@kernel.org, netdev@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH v5 4/5] dt-bindings: mfd: max77541: Add ADI
+ MAX77541/MAX77540
+Content-Language: en-US
+To:     Okan Sahin <okan.sahin@analog.com>
+Cc:     Lee Jones <lee@kernel.org>, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Caleb Connolly <caleb.connolly@linaro.org>,
+        ChiYuan Huang <cy_huang@richtek.com>,
+        William Breathitt Gray <william.gray@linaro.org>,
+        Ramona Bolboaca <ramona.bolboaca@analog.com>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-iio@vger.kernel.org
+References: <20230221103926.49597-1-okan.sahin@analog.com>
+ <20230221103926.49597-5-okan.sahin@analog.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230221103926.49597-5-okan.sahin@analog.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -57,29 +87,14 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
-
-This patch was applied to netdev/net.git (master)
-by Paolo Abeni <pabeni@redhat.com>:
-
-On Mon, 20 Feb 2023 12:03:59 +0100 you wrote:
-> Usually when a subtest is executed, setup and cleanup functions
-> are linearly called at the beginning and end of it.
-> In some of them, `set -e` is used before executing commands.
-> If one of the commands returns a non zero code, the whole script exists
-> without cleaning up the resources allocated at setup.
-> This can affect the next tests that use the same resources,
-> leading to a chain of failures.
+On 21/02/2023 11:39, Okan Sahin wrote:
+> Add ADI MAX77541/MAX77540 devicetree document.
 > 
-> [...]
+> Signed-off-by: Okan Sahin <okan.sahin@analog.com>
 
-Here is the summary with links:
-  - [1/1] selftest: fib_tests: Always cleanup before exit
-    https://git.kernel.org/netdev/net/c/b60417a9f2b8
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
+Best regards,
+Krzysztof
 
