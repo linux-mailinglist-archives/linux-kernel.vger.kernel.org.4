@@ -2,124 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E568D69D888
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 03:34:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6EE8269D88A
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 03:36:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232930AbjBUCek (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Feb 2023 21:34:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36246 "EHLO
+        id S232650AbjBUCgK convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 20 Feb 2023 21:36:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38070 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232353AbjBUCej (ORCPT
+        with ESMTP id S232333AbjBUCgJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Feb 2023 21:34:39 -0500
-Received: from smtp-relay-canonical-0.canonical.com (smtp-relay-canonical-0.canonical.com [185.125.188.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43AC6233FD;
-        Mon, 20 Feb 2023 18:34:08 -0800 (PST)
-Received: from localhost.localdomain (unknown [10.101.196.174])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-canonical-0.canonical.com (Postfix) with ESMTPSA id 412E640640;
-        Tue, 21 Feb 2023 02:33:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1676946842;
-        bh=Y882fDTAJIgU0c6v4mvBEAwTf+dckq3a6RQpDpIIC1Y=;
-        h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-         MIME-Version;
-        b=GJIQpvkU8IWOBuM8p3T1pEqUyqO+e5VSEiLRv2+AHKjEmXQX0yoNBgSfUf+XkSBsV
-         Dz2tWOgh6ZBYm/Jeu83h5NrEb970O8gEIOe/Adn+oCzi8LynCOQgHa8SzPGRMjkWXY
-         5GMLV+HWvvTrZsZ8XwtztlwcyYVLEA7Zuu6eKXrmoy4j9cjew+DQy6ETk4W/CDj7tv
-         axRvqI0zLVLuwxHiwhGIu+K8FDT60ufINboN+HXNDeYda2Cz1nZcK7B2+GGcsOXbc2
-         uweYudGK/o1C5+xtJIZcepLHd7cf88b094SFglIfx4vf9UDAQ6VfE9azrIQOcm7lDk
-         Rs5mLchIdYZ2A==
-From:   Kai-Heng Feng <kai.heng.feng@canonical.com>
-To:     hkallweit1@gmail.com, nic_swsd@realtek.com, bhelgaas@google.com
-Cc:     koba.ko@canonical.com, acelan.kao@canonical.com,
-        Kai-Heng Feng <kai.heng.feng@canonical.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v8 6/6] r8169: Disable ASPM while doing NAPI poll
-Date:   Tue, 21 Feb 2023 10:32:37 +0800
-Message-Id: <20230221023237.1905536-7-kai.heng.feng@canonical.com>
+        Mon, 20 Feb 2023 21:36:09 -0500
+Received: from ex01.ufhost.com (ex01.ufhost.com [61.152.239.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 206A4234E0
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Feb 2023 18:35:35 -0800 (PST)
+Received: from EXMBX165.cuchost.com (unknown [175.102.18.54])
+        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
+        (Client CN "EXMBX165", Issuer "EXMBX165" (not verified))
+        by ex01.ufhost.com (Postfix) with ESMTP id 7B48D24E1E1;
+        Tue, 21 Feb 2023 10:35:30 +0800 (CST)
+Received: from EXMBX066.cuchost.com (172.16.7.66) by EXMBX165.cuchost.com
+ (172.16.6.75) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Tue, 21 Feb
+ 2023 10:35:30 +0800
+Received: from jsia-virtual-machine.localdomain (202.188.176.82) by
+ EXMBX066.cuchost.com (172.16.6.66) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.42; Tue, 21 Feb 2023 10:35:27 +0800
+From:   Sia Jee Heng <jeeheng.sia@starfivetech.com>
+To:     <paul.walmsley@sifive.com>, <palmer@dabbelt.com>,
+        <aou@eecs.berkeley.edu>
+CC:     <linux-riscv@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
+        <jeeheng.sia@starfivetech.com>, <leyfoon.tan@starfivetech.com>,
+        <mason.huo@starfivetech.com>
+Subject: [PATCH v4 0/4] RISC-V Hibernation Support
+Date:   Tue, 21 Feb 2023 10:35:19 +0800
+Message-ID: <20230221023523.1498500-1-jeeheng.sia@starfivetech.com>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230221023237.1905536-1-kai.heng.feng@canonical.com>
-References: <20230221023237.1905536-1-kai.heng.feng@canonical.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [202.188.176.82]
+X-ClientProxiedBy: EXCAS066.cuchost.com (172.16.6.26) To EXMBX066.cuchost.com
+ (172.16.6.66)
+X-YovoleRuleAgent: yovoleflag
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-NAPI poll of Realtek NICs don't seem to perform well ASPM is enabled.
-The vendor driver uses a mechanism called "dynamic ASPM" to toggle ASPM
-based on the packet number in given time period.
+This series adds RISC-V Hibernation/suspend to disk support.
+Low level Arch functions were created to support hibernation.
+swsusp_arch_suspend() relies code from __cpu_suspend_enter() to write
+cpu state onto the stack, then calling swsusp_save() to save the memory
+image.
 
-Instead of implementing "dynamic ASPM", use a more straightforward way
-by disabling ASPM during NAPI poll, as a similar approach was
-implemented to solve slow performance on Realtek wireless NIC, see
-commit 24f5e38a13b5 ("rtw88: Disable PCIe ASPM while doing NAPI poll on
-8821CE").
+Arch specific hibernation header is implemented and is utilized by the
+arch_hibernation_header_restore() and arch_hibernation_header_save()
+functions. The arch specific hibernation header consists of satp, hartid,
+and the cpu_resume address. The kernel built version is also need to be
+saved into the hibernation image header to making sure only the same
+kernel is restore when resume.
 
-Since NAPI poll should be handled as fast as possible, also remove the
-delay in rtl_hw_aspm_clkreq_enable() which was added by commit
-94235460f9ea ("r8169: Align ASPM/CLKREQ setting function with vendor
-driver").
+swsusp_arch_resume() creates a temporary page table that covering only
+the linear map. It copies the restore code to a 'safe' page, then start to
+restore the memory image. Once completed, it restores the original
+kernel's page table. It then calls into __hibernate_cpu_resume()
+to restore the CPU context. Finally, it follows the normal hibernation
+path back to the hibernation core.
 
-Signed-off-by: Kai-Heng Feng <kai.heng.feng@canonical.com>
----
-v8:
- - New patch.
+To enable hibernation/suspend to disk into RISCV, the below config
+need to be enabled:
+- CONFIG_ARCH_HIBERNATION_HEADER
+- CONFIG_ARCH_HIBERNATION_POSSIBLE
 
- drivers/net/ethernet/realtek/r8169_main.c | 14 ++++++++++++--
- 1 file changed, 12 insertions(+), 2 deletions(-)
+At high-level, this series includes the following changes:
+1) Change suspend_save_csrs() and suspend_restore_csrs()
+   to public function as these functions are common to
+   suspend/hibernation. (patch 1)
+2) Refactor the common code in the __cpu_resume_enter() function and
+   __hibernate_cpu_resume() function. The common code are used by
+   hibernation and suspend. (patch 2)
+3) Enhance kernel_page_present() function to support huge page. (patch 3)
+4) Add arch/riscv low level functions to support
+   hibernation/suspend to disk. (patch 4)
 
-diff --git a/drivers/net/ethernet/realtek/r8169_main.c b/drivers/net/ethernet/realtek/r8169_main.c
-index 897f90b48bba6..4d4a802346ae3 100644
---- a/drivers/net/ethernet/realtek/r8169_main.c
-+++ b/drivers/net/ethernet/realtek/r8169_main.c
-@@ -2711,8 +2711,6 @@ static void rtl_hw_aspm_clkreq_enable(struct rtl8169_private *tp, bool enable)
- 		RTL_W8(tp, Config2, RTL_R8(tp, Config2) & ~ClkReqEn);
- 		RTL_W8(tp, Config5, RTL_R8(tp, Config5) & ~ASPM_en);
- 	}
--
--	udelay(10);
- }
- 
- static void rtl_set_fifo_size(struct rtl8169_private *tp, u16 rx_stat,
-@@ -4577,6 +4575,12 @@ static int rtl8169_poll(struct napi_struct *napi, int budget)
- 	struct net_device *dev = tp->dev;
- 	int work_done;
- 
-+	if (tp->aspm_manageable) {
-+		rtl_unlock_config_regs(tp);
-+		rtl_hw_aspm_clkreq_enable(tp, false);
-+		rtl_lock_config_regs(tp);
-+	}
-+
- 	rtl_tx(dev, tp, budget);
- 
- 	work_done = rtl_rx(dev, tp, budget);
-@@ -4584,6 +4588,12 @@ static int rtl8169_poll(struct napi_struct *napi, int budget)
- 	if (work_done < budget && napi_complete_done(napi, work_done))
- 		rtl_irq_enable(tp);
- 
-+	if (tp->aspm_manageable) {
-+		rtl_unlock_config_regs(tp);
-+		rtl_hw_aspm_clkreq_enable(tp, true);
-+		rtl_lock_config_regs(tp);
-+	}
-+
- 	return work_done;
- }
- 
+The above patches are based on kernel v6.2 and are tested on
+StarFive VF2 SBC board and Qemu. 
+ACPI platform mode is not supported in this series.
+
+Changes since v3:
+- Rebased to kernel v6.2
+- Temporary page table code refactoring by reference to ARM64
+- Resolved typo(s) and grammars
+- Resolved documentation errors
+- Resolved clang build issue
+- Removed unnecessary comments
+- Used kzalloc instead of kcalloc
+
+Changes since v2:
+- Rebased to kernel v6.2-rc5
+- Refactor the common code used by hibernation and suspend
+- Create copy_page macro
+- Solved other comments from Andrew and Conor
+
+Changes since v1:
+- Rebased to kernel v6.2-rc3
+- Fixed bot's compilation error
+
+Sia Jee Heng (4):
+  RISC-V: Change suspend_save_csrs and suspend_restore_csrs to public
+    function
+  RISC-V: Factor out common code of __cpu_resume_enter()
+  RISC-V: mm: Enable huge page support to kernel_page_present() function
+  RISC-V: Add arch functions to support hibernation/suspend-to-disk
+
+ arch/riscv/Kconfig                 |   7 +
+ arch/riscv/include/asm/assembler.h |  82 ++++++
+ arch/riscv/include/asm/suspend.h   |  22 ++
+ arch/riscv/kernel/Makefile         |   1 +
+ arch/riscv/kernel/asm-offsets.c    |   5 +
+ arch/riscv/kernel/hibernate-asm.S  |  77 +++++
+ arch/riscv/kernel/hibernate.c      | 447 +++++++++++++++++++++++++++++
+ arch/riscv/kernel/suspend.c        |   4 +-
+ arch/riscv/kernel/suspend_entry.S  |  34 +--
+ arch/riscv/mm/pageattr.c           |   8 +
+ 10 files changed, 654 insertions(+), 33 deletions(-)
+ create mode 100644 arch/riscv/include/asm/assembler.h
+ create mode 100644 arch/riscv/kernel/hibernate-asm.S
+ create mode 100644 arch/riscv/kernel/hibernate.c
+
+
+base-commit: db77b8502a4071a59c9424d95f87fe20bdb52c3a
 -- 
 2.34.1
 
