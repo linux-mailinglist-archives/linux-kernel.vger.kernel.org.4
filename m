@@ -2,126 +2,159 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E815969DEA8
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 12:22:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D5E2669DEAC
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 12:23:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234064AbjBULWs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Feb 2023 06:22:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47052 "EHLO
+        id S233961AbjBULXd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Feb 2023 06:23:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48072 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233673AbjBULWp (ORCPT
+        with ESMTP id S233557AbjBULXb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Feb 2023 06:22:45 -0500
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EEF1E23849;
-        Tue, 21 Feb 2023 03:22:41 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1676978561; x=1708514561;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=xnVKZ8JYLPRVBwZVLXPtUJF2QZfME0M6oxa6WpSevws=;
-  b=wPVRFHvNZm8U+BzACWO1KzdPjrpDVSBNjCQYNWciLvR/QdKLdXQARr+o
-   EaL1d2YP5j8n4i6W+btiOcMkS06GmwfbJFmLfTmzdhslFWIdNcUstH3Vt
-   E2wW9uFhvN7TO7gjJvYm7cnsEDpKWqRB+rmTNd7ex1WJnhQyjBP3rHAYs
-   oX5CEQBCniyeTrAZ16i5AYHm1LFMrj5rm76KGEG9dhqKR/V9KMiAeFRh0
-   1M6vpWh0A84OjQDSwsKdiq41TSQOMf+69IxB95UVQvlneOWjWJV7XOIbH
-   vc3ewAYGAjOkTIl+69v91gw6myWSLn4cKmCmaVMkpub8UoAzWMx7CR/6X
-   w==;
-X-IronPort-AV: E=Sophos;i="5.97,315,1669100400"; 
-   d="asc'?scan'208";a="201608555"
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa2.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 21 Feb 2023 04:22:40 -0700
-Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
- chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.16; Tue, 21 Feb 2023 04:22:40 -0700
-Received: from wendy (10.10.115.15) by chn-vm-ex01.mchp-main.com
- (10.10.85.143) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.16 via Frontend
- Transport; Tue, 21 Feb 2023 04:22:38 -0700
-Date:   Tue, 21 Feb 2023 11:22:12 +0000
-From:   Conor Dooley <conor.dooley@microchip.com>
-To:     Christoph =?iso-8859-1?Q?M=FCllner?= <christoph.muellner@vrull.eu>
-CC:     Jessica Clarke <jrtc27@jrtc27.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Anup Patel <apatel@ventanamicro.com>, <pbonzini@redhat.com>,
-        Atish Patra <atishp@atishpatra.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Andrew Jones <ajones@ventanamicro.com>,
-        Anup Patel <anup@brainfault.org>, <kvm@vger.kernel.org>,
-        <kvm-riscv@lists.infradead.org>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v2 2/7] RISC-V: Detect AIA CSRs from ISA string
-Message-ID: <Y/SpZHRdUXCiV4KT@wendy>
-References: <20230128072737.2995881-3-apatel@ventanamicro.com>
- <mhng-0f9bdf58-5289-4db4-8fd7-38898824c44f@palmer-ri-x1c9>
- <CAEg0e7hrQFu+cdZy+3QO1ML9FNTPBehZwOOBnr1F-5ABYDnkGg@mail.gmail.com>
- <CAEg0e7hRjMSgYZbPTQztbQ3bGZf-r8wAfCK5ZnDXOcx27HcTCA@mail.gmail.com>
- <Y/Sfpb2c/LS0LCiA@wendy>
- <F80EBB4C-29C4-472D-B213-EFD220EF9B1F@jrtc27.com>
- <Y/SkES28TNBz02wM@wendy>
- <CAEg0e7i3=Zg5pxG4HCEfFkzpot5-u6yHoTSFKPBuCGU+djZ5uw@mail.gmail.com>
+        Tue, 21 Feb 2023 06:23:31 -0500
+Received: from mail-40132.protonmail.ch (mail-40132.protonmail.ch [185.70.40.132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C07D22734
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Feb 2023 03:23:26 -0800 (PST)
+Date:   Tue, 21 Feb 2023 11:23:09 +0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=protonmail.com;
+        s=protonmail3; t=1676978604; x=1677237804;
+        bh=FUM4YFfkGx1kmwu6CRIbJk59at5i8sgLaWNEBJR+WDE=;
+        h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
+         Feedback-ID:From:To:Cc:Date:Subject:Reply-To:Feedback-ID:
+         Message-ID:BIMI-Selector;
+        b=n+mPof8vZAPn1R4vMPLzY6/r82O2gsTgrqgI8Rx1hrgWwR6lhmpmoxgLbeKK+qD9d
+         H+DI9JWETLypUx/V5TJnrmg8sWC8X1/mRsI/iith226twKjfcdq8j78Ur2axJgQ6Bg
+         CL3P1WN1pHjsM9s4feA64hpnuT2sJhdDWIPj+pBizRsK0gf6O+3e68z6pgnFHKZW4B
+         SITHVBUP4M/5NwAdDv6tMvSSS1YxNpbUNCZSlCXhnH8g5wbUwve2T8X9g59RsI3nq+
+         GD1dNDET8SrOF9qHKR8cKhKgbp2/Q8VPnQTu/FgG9iFhUV261BdAsoHcS/oi5uV/rK
+         7XQk0k6rzI2RQ==
+To:     Asahi Lina <lina@asahilina.net>
+From:   =?utf-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>
+Cc:     Miguel Ojeda <ojeda@kernel.org>,
+        Alex Gaynor <alex.gaynor@gmail.com>,
+        Wedson Almeida Filho <wedsonaf@gmail.com>,
+        Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
+        John Stultz <jstultz@google.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Stephen Boyd <sboyd@kernel.org>, linux-kernel@vger.kernel.org,
+        rust-for-linux@vger.kernel.org, asahi@lists.linux.dev
+Subject: Re: [PATCH] rust: time: New module for timekeeping functions
+Message-ID: <cZTGCCR7h2Foi4V_jJVIBGj74UpVRYHnay_ia7nqy_1MBNIj8Ntlux3waD0xJAhvSp4wkBfZ_fo7t90PPfZdfzUIUTa2To27EMfLzY4qUTk=@protonmail.com>
+In-Reply-To: <20230221-gpu-up-time-v1-1-bf8fe74b7f55@asahilina.net>
+References: <20230221-gpu-up-time-v1-1-bf8fe74b7f55@asahilina.net>
+Feedback-ID: 27884398:user:proton
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="HQ7FIfEfxxoLIcym"
-Content-Disposition: inline
-In-Reply-To: <CAEg0e7i3=Zg5pxG4HCEfFkzpot5-u6yHoTSFKPBuCGU+djZ5uw@mail.gmail.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---HQ7FIfEfxxoLIcym
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-On Tue, Feb 21, 2023 at 12:03:45PM +0100, Christoph M=FCllner wrote:
-> On Tue, Feb 21, 2023 at 12:00 PM Conor Dooley
-> <conor.dooley@microchip.com> wrote:
-> >
-> > On Tue, Feb 21, 2023 at 10:51:13AM +0000, Jessica Clarke wrote:
-> > > On 21 Feb 2023, at 10:40, Conor Dooley <conor.dooley@microchip.com> w=
+On Tuesday, February 21st, 2023 at 08:06, Asahi Lina <lina@asahilina.net> w=
 rote:
-> > > > On Tue, Feb 21, 2023 at 08:12:58AM +0100, Christoph M=FCllner wrote:
-> > > >> The full meeting minutes can be found here:
-> > > >>  https://lists.riscv.org/g/tech-chairs/message/1381
-> > > >
-> > > > This link is non functional unfortunately :/
-> > >
-> > > tech-chairs is private, for (co-)chairs only... not sure why it went
-> > > there rather than tech-privileged.
-> >
-> > Yah, that's what I was getting at.. This is a conversation on a public
-> > ML, so it'd be annoying enough for some readers if it was gated around
-> > RVI membership, but gating on membership of the inner circle makes it
-> > kinda useless!
+
+> This module is intended to contain functions related to kernel
+> timekeeping and time. Initially, this just wraps ktime_get() and
+> ktime_get_boottime() and returns them as core::time::Duration instances.
+> This is useful for drivers that need to implement simple retry loops and
+> timeouts.
 >=20
-> The mail was forwarded there as well (and to tech-unprivileged):
->   https://lists.riscv.org/g/tech-privileged/message/1294
->   https://lists.riscv.org/g/tech-unprivileged/message/430
+> Signed-off-by: Asahi Lina lina@asahilina.net
+>=20
+> ---
+>  rust/bindings/bindings_helper.h |  4 +++-
+>  rust/kernel/lib.rs              |  1 +
+>  rust/kernel/time.rs             | 25 +++++++++++++++++++++++++
+>  3 files changed, 29 insertions(+), 1 deletion(-)
+>=20
+> diff --git a/rust/bindings/bindings_helper.h b/rust/bindings/bindings_hel=
+per.h
+> index 75d85bd6c592..587f3d1c0c9f 100644
+> --- a/rust/bindings/bindings_helper.h
+> +++ b/rust/bindings/bindings_helper.h
+> @@ -6,8 +6,10 @@
+>   * Sorted alphabetically.
+>   */
+>=20
+> -#include <linux/slab.h>
+> +#include <linux/ktime.h>
+>  #include <linux/refcount.h>
+> +#include <linux/slab.h>
+> +#include <linux/timekeeping.h>
+>=20
+>  /* `bindgen` gets confused at certain things. */
+>  const gfp_t BINDINGS_GFP_KERNEL =3D GFP_KERNEL;
+> diff --git a/rust/kernel/lib.rs b/rust/kernel/lib.rs
+> index 223564f9f0cc..371b1b17570e 100644
+> --- a/rust/kernel/lib.rs
+> +++ b/rust/kernel/lib.rs
+> @@ -37,6 +37,7 @@ mod static_assert;
+>  pub mod std_vendor;
+>  pub mod str;
+>  pub mod sync;
+> +pub mod time;
+>  pub mod types;
+>=20
+>  #[doc(hidden)]
+> diff --git a/rust/kernel/time.rs b/rust/kernel/time.rs
+> new file mode 100644
+> index 000000000000..02844db47d34
+> --- /dev/null
+> +++ b/rust/kernel/time.rs
+> @@ -0,0 +1,25 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +
+> +//! Timekeeping functions.
+> +//!
+> +//! C header: [`include/linux/ktime.h`](../../../../include/linux/ktime.=
+h)
+> +//! C header: [`include/linux/timekeeping.h`](../../../../include/linux/=
+timekeeping.h)
+> +
+> +use crate::bindings;
+> +use core::time::Duration;
+> +
+> +/// Returns the kernel time elapsed since boot, excluding time spent sle=
+eping, as a [`Duration`].
+> +pub fn ktime_get() -> Duration {
+> +    // SAFETY: Function has no side effects and no inputs.
+> +    Duration::from_nanos(unsafe { bindings::ktime_get() }.try_into().unw=
+rap())
 
-Great, those I can actually read. Thanks for sharing with the unwashed!
+ktime_t seems to be a signed 64bit int, while Duration::from_nanos expects =
+an unsigned 64bit int. Based on https://lore.kernel.org/all/alpine.DEB.2.21=
+.1903231125480.2157@nanos.tec.linutronix.de/T/#u I think it is fine to cast=
+ directly to u64 without doing the overflow check of try_into. This would e=
+liminate a potential BUG() call. I think it would be fine to keep as is if =
+you prefer though. As such:
 
-Conor.
+Reviewed-by: Bj=C3=B6rn Roy Baron <bjorn3_gh@protonmail.com>
 
+Cheers,
+Bjorn
 
---HQ7FIfEfxxoLIcym
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCY/SpZAAKCRB4tDGHoIJi
-0gOxAP449GebNOGwifeFqectIA3BJ265MzeJAYp+PoMgGSZ96wEA+vF3amkYJJTt
-36jS+BUDlwbiv7F/Px3wiehR/0FmNAU=
-=LI0o
------END PGP SIGNATURE-----
-
---HQ7FIfEfxxoLIcym--
+> +}
+> +
+> +/// Returns the kernel time elapsed since boot, including time spent sle=
+eping, as a [`Duration`].
+> +pub fn ktime_get_boottime() -> Duration {
+> +    Duration::from_nanos(
+> +        // SAFETY: Function has no side effects and no variable inputs.
+> +        unsafe { bindings::ktime_get_with_offset(bindings::tk_offsets_TK=
+_OFFS_BOOT) }
+> +            .try_into()
+> +            .unwrap(),
+> +    )
+> +}
+>=20
+> ---
+> base-commit: 89f5349e0673322857bd432fa23113af56673739
+> change-id: 20230221-gpu-up-time-ea9412204c3b
+>=20
+> Thank you,
+> ~~ Lina
