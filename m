@@ -2,82 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 93B2969E8B3
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 20:59:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A705E69E8B6
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 20:59:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230000AbjBUT7A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Feb 2023 14:59:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48272 "EHLO
+        id S230062AbjBUT7L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Feb 2023 14:59:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48462 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229584AbjBUT66 (ORCPT
+        with ESMTP id S230006AbjBUT7F (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Feb 2023 14:58:58 -0500
-Received: from mail-vs1-xe2b.google.com (mail-vs1-xe2b.google.com [IPv6:2607:f8b0:4864:20::e2b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F27564693
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Feb 2023 11:58:56 -0800 (PST)
-Received: by mail-vs1-xe2b.google.com with SMTP id f23so5643044vsa.13
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Feb 2023 11:58:56 -0800 (PST)
+        Tue, 21 Feb 2023 14:59:05 -0500
+Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com [IPv6:2607:f8b0:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6C922E80D
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Feb 2023 11:59:02 -0800 (PST)
+Received: by mail-pf1-x42e.google.com with SMTP id a7so3373726pfx.10
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Feb 2023 11:59:02 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1677009536;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=DF0KNJghjUV7wJh512cQZNMEw1nvR5xMFp/83eAe6+M=;
-        b=O7FR1DNzUbas3YRCPSnDIgVMvpW4evNW+U818zCom4X2UeJi0dgPlpatukFFI2jHgl
-         OLA0ICVxN68LNdowqQZRw6YHeqBtycyj86+YWkW+5KpqEnPFJt3igdN1lLkWng/LQsWW
-         0BOp77eVuiaBlAdmzWVcN2/3QK2Xzc5aJcA97ywETPAbbzdXmNdDIyvPYqMo66Exdsw+
-         5FQJdLLddxwcyJTQHWAU6PrsXeYpIZDtGdRow0xNfF47aCF4UvTARQb7JmKfrXpPIXtd
-         BbMClX41M3PoQ5RIR/L+eneSMsgJLXAbsESqIUDraACr5YEtlUBpSBXTCaUdbVOXyawZ
-         ze6Q==
+        d=google.com; s=20210112; t=1677009542;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=7eq+GLjk+av91BYy8K1H8/nqn9j1Ssh66EQWIUoWV8U=;
+        b=f4Rx0zt4bBRl99OfPGExycd3qJ0qO5L7Lz83N1qPPkG/HOjwjbaOgNNJ+L0PJJ1MG8
+         vAKh/dEeFSNmSHEzJzAI5nWPSMxbe7lwiV1eQl4UyJwtA0x/oAORYIE9Ny8nbubmlXs6
+         30rKoDWsAtTXIDCCWVQ35d61GZdJqCQmjCwL4WR+kX3sLL+yzjHWuRTdU4n8yCoWkhQQ
+         3QH4WALc7JnhQxpKiTu9uH76wrxcntaaEhxjU5ODdYAwMqy32CroPUcgnyBhKWJVQUdg
+         /KfUuzr1FDGy3zTGGzUapXit+d+3dQG6wFgyDl5QQ6TQai9azs+Hjs9pqV5LxSw3XsTK
+         5+Jg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1677009536;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=DF0KNJghjUV7wJh512cQZNMEw1nvR5xMFp/83eAe6+M=;
-        b=BlqaJi7HW9zcHPSayakojhBr14LWIqzoelTQ1I+xjqVuXnk83g4pqYg06GPiuYQFbh
-         XD7bI++o9i/L0CR8D0c5vF7ddbUn7XX5wwymoHuidxUjFaQIrhGx2nqZ6wd70nqEJSKj
-         99JGdl7hcFEcEYQlctI6enFAjm6xxeHSBdj5RUNJImNofG6jMykBDOZ8/FFHX8x682qL
-         IXQrR0ecxOED11M84NY3nSEJvT+k7OPhiEI2A/zwF48tjFS3osqjKs2ArgRbjSgnjPSk
-         R6X1ay4GI8hxrqEeTEoEC0FyXvqUOGp09xd/g2iYHJUCPWPtCQTqlqmygwKlUHA6G79j
-         f3sg==
-X-Gm-Message-State: AO0yUKUTZuiLuGQg/UfOciwnz7aGUH4p1K0lImfTDlbxFLusxJQLi9DK
-        nL/pu6QdXS7gFmw2DjgJ2xqiVck17cRWQnWpBd2NqQ==
-X-Google-Smtp-Source: AK7set/OBfSTihP3rfzNxKV6mPiXYOTPbFTsjj4Q9W0m/pL2cgeM0fB1vkcpq/SRM9VoGG1lEOcmqmbxlnCbND7aURk=
-X-Received: by 2002:a67:e081:0:b0:41e:910f:10ed with SMTP id
- f1-20020a67e081000000b0041e910f10edmr803070vsl.11.1677009535939; Tue, 21 Feb
- 2023 11:58:55 -0800 (PST)
+        d=1e100.net; s=20210112; t=1677009542;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=7eq+GLjk+av91BYy8K1H8/nqn9j1Ssh66EQWIUoWV8U=;
+        b=fZLjmVt25B29k0vv+CCKJiNUvOn2O9Dsp9BDbeJac/8OzWdQUnzp7OLBtIUqTWEXAf
+         o2xEQSs1wbBihaLzDolQkm3Q5JCcAOGTEpLC3YNVBcut7OqqQKYawSy/isZQcgYLwKdP
+         8vBSD3MSYm+XiQUjVybuundcD3RcQN0iP+lfAU602tvfoUhd/4p4TB/bkPprsl66+T0M
+         TyTf933JH7kIuCltZweVL2sPUcTBgD3XPmp1DaFH6B1KzS7OyePNLF+A2LZFgOxeuhEr
+         P7QLgyvIxy88OtAFZUtfkBhFDw+sI7iDlo3wVnf5Iz98mVTfa18iBWi2u05ZaMbwgx5t
+         VuEg==
+X-Gm-Message-State: AO0yUKUjlvexDRf3lbyS+udiA4t0TSB0tpEWYzPRrFp0SH0p91s9c2mr
+        aqV22ACMwPj0/8uK/oZIazJeXbw8GXpacIbpHUrVXQ==
+X-Google-Smtp-Source: AK7set/oKDe4l9jN3bUlPuAnUw9TY87yypO5sFUEynIDS3p3A4+Q5qMQivZkCgbUfGJcOBuP4O/WChZ8shBFhbRgMYo=
+X-Received: by 2002:a62:3103:0:b0:5a8:4dea:7015 with SMTP id
+ x3-20020a623103000000b005a84dea7015mr904607pfx.36.1677009541669; Tue, 21 Feb
+ 2023 11:59:01 -0800 (PST)
 MIME-Version: 1.0
-References: <20230218002819.1486479-1-jthoughton@google.com>
- <20230218002819.1486479-2-jthoughton@google.com> <CAHS8izM5Es+DMiOyPt93o6Xw+SeuOR45r+MMoeagiYN594NiyQ@mail.gmail.com>
- <CADrL8HWTe1b2UK4Ha6e=F_i+YSK_M4wXCQ-sxvYMkgR1EgaHpA@mail.gmail.com> <Y/UcorZlyHC44/T5@monkey>
-In-Reply-To: <Y/UcorZlyHC44/T5@monkey>
-From:   James Houghton <jthoughton@google.com>
-Date:   Tue, 21 Feb 2023 11:58:19 -0800
-Message-ID: <CADrL8HUXTOg+ZjOU=63M_iRn2Km0FVZ3atYBVsqaCap8ww8Sbg@mail.gmail.com>
-Subject: Re: [PATCH v2 01/46] hugetlb: don't set PageUptodate for UFFDIO_CONTINUE
-To:     Mike Kravetz <mike.kravetz@oracle.com>
-Cc:     Mina Almasry <almasrymina@google.com>,
-        Muchun Song <songmuchun@bytedance.com>,
-        Peter Xu <peterx@redhat.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        David Hildenbrand <david@redhat.com>,
-        David Rientjes <rientjes@google.com>,
-        Axel Rasmussen <axelrasmussen@google.com>,
-        "Zach O'Keefe" <zokeefe@google.com>,
-        Manish Mishra <manish.mishra@nutanix.com>,
-        Naoya Horiguchi <naoya.horiguchi@nec.com>,
-        "Dr . David Alan Gilbert" <dgilbert@redhat.com>,
-        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Baolin Wang <baolin.wang@linux.alibaba.com>,
-        Miaohe Lin <linmiaohe@huawei.com>,
-        Yang Shi <shy828301@gmail.com>,
-        Frank van der Linden <fvdl@google.com>,
-        Jiaqi Yan <jiaqiyan@google.com>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
+References: <20221227204528.1899863-1-abel.vesa@linaro.org>
+ <ebc257025ebd641e624ef506ea09c800.sboyd@kernel.org> <Y/OV3CF0ootyooDJ@linaro.org>
+ <Y/OfjbxI1tHYJHNv@linaro.org> <CAGETcx_mD3pbAmT5FDZaVAsKb_2PAnrHL8B_6gSR=+a0O4kHfQ@mail.gmail.com>
+ <Y/PALlrQpwPlum9M@linaro.org>
+In-Reply-To: <Y/PALlrQpwPlum9M@linaro.org>
+From:   Saravana Kannan <saravanak@google.com>
+Date:   Tue, 21 Feb 2023 11:58:24 -0800
+Message-ID: <CAGETcx_TZN3=GKrEf5fy_tA=JnOfw7m-N=+hD=qhe_yRRpngPw@mail.gmail.com>
+Subject: Re: [PATCH v3 1/2] clk: Add generic sync_state callback for disabling
+ unused clocks
+To:     Abel Vesa <abel.vesa@linaro.org>
+Cc:     Stephen Boyd <sboyd@kernel.org>, Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Mike Turquette <mturquette@baylibre.com>,
+        linux-clk@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-arm-msm@vger.kernel.org, mka@chromium.org
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
         ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
@@ -89,95 +78,197 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 21, 2023 at 11:34 AM Mike Kravetz <mike.kravetz@oracle.com> wro=
-te:
+On Mon, Feb 20, 2023 at 10:47 AM Abel Vesa <abel.vesa@linaro.org> wrote:
 >
-> On 02/21/23 07:59, James Houghton wrote:
-> > On Fri, Feb 17, 2023 at 4:42 PM Mina Almasry <almasrymina@google.com> w=
-rote:
+> On 23-02-20 09:51:55, Saravana Kannan wrote:
+> > On Mon, Feb 20, 2023 at 8:28 AM Abel Vesa <abel.vesa@linaro.org> wrote:
 > > >
-> > > On Fri, Feb 17, 2023 at 4:28=E2=80=AFPM James Houghton <jthoughton@go=
-ogle.com> wrote:
+> > > On 23-02-20 17:46:36, Abel Vesa wrote:
+> > > > On 23-02-17 21:38:22, Stephen Boyd wrote:
+> > > > > Quoting Abel Vesa (2022-12-27 12:45:27)
+> > > > > > There are unused clocks that need to remain untouched by clk_disable_unused,
+> > > > > > and most likely could be disabled later on sync_state. So provide a generic
+> > > > > > sync_state callback for the clock providers that register such clocks.
+> > > > > > Then, use the same mechanism as clk_disable_unused from that generic
+> > > > > > callback, but pass the device to make sure only the clocks belonging to
+> > > > > > the current clock provider get disabled, if unused. Also, during the
+> > > > > > default clk_disable_unused, if the driver that registered the clock has
+> > > > > > the generic clk_sync_state_disable_unused callback set for sync_state,
+> > > > > > skip disabling its clocks.
+> >
+> > Hi Abel,
+> >
+> > We have the day off today, so I'll respond more later. Also, please cc
+> > me on all sync_state() related patches in the future.
+> >
+>
+> Sure thing.
+>
+> > I haven't taken a close look at your series yet, but at a glance it
+> > seems incomplete.
+> >
+> > Any reason you didn't just try to revive my series[1] or nudge me?
+> > [1]- https://lore.kernel.org/lkml/20210407034456.516204-3-saravanak@google.com/
+>
+> This patchset is heavily reworked and much more simpler as it relies
+> strictly on the sync_state being registered by the clock provider.
+
+It's simpler because it's not complete. It for sure doesn't handle
+orphan-reparenting. It also doesn't make a lot of sense for only some
+clock providers registering for sync_state(). If CC-A is feeding a
+clock signal that's used as a root for clocks in CC-B, then what
+happens if only CC-B implements sync_state() but CC-A doesn't. The
+clocks from CC-B are still going to turn off when CC-A turns off its
+PLL before CC-B registers.
+
+Nack for this patch.
+
+Also, unless there's a strong objection, let's go back to my patch
+please. It's way more well tested and used across different SoCs than
+this patch. Also, I'm pretty sure the orphan handling is needed for
+qcom SoC's too.
+
+-Saravana
+
+>
+> I saw your patchset a few months ago but then forgot about its
+> existence. That's also why I forgot to nudge you. Sorry about that.
+>
+> >
+> > At the least, I know [1] works on all Android devices (including
+> > Qualcomm SoCs) released in the past 2-3 years or more. If [1] works
+> > for you, I'd rather land that after addressing Stephen's comments
+> > there (I remember them being fairly easy to address comments) instead
+> > of whipping up a new series that's not as well used. I just got busy
+> > with other things and addressing more fundamental fw_devlink TODOs
+> > before getting back to this.
+> >
+> > Hi Bjorn,
+> >
+> > I see in another reply you've said:
+> >
+> > Applied, thanks!
+> >
+> > [1/2] clk: Add generic sync_state callback for disabling unused clocks
+> >       commit: 26b36df7516692292312063ca6fd19e73c06d4e7
+> > [2/2] clk: qcom: sdm845: Use generic clk_sync_state_disable_unused callback
+> >       commit: 99c0f7d35c4b204dd95ba50e155f32c99695b445
+> >
+> > Where exactly have you applied them? I hope you haven't applied the
+> > clk.c changes to some tree that goes into 6.3.
+>
+> I think it is already part of Bjorn's Qualcomm clocks pull request.
+>
+> >
+> > -Saravana
+> >
+> > > > >
+> > > > > How does that avoid disabling clks randomly in the clk tree? I'm
+> > > > > concerned about disabling an unused clk in the middle of the tree
+> > > > > because it doesn't have a driver using sync state, while the clk is the
+> > > > > parent of an unused clk that is backed by sync state.
+> > > > >
+> > > > >    clk A -->  clk B
+> > > > >
+> > > > > clk A: No sync state
+> > > > > clk B: sync state
+> > > > >
+> > > > > clk B is left on by the bootloader. __clk_disable_unused(NULL) is called
+> > > > > from late init. Imagine clk A is the root of the tree.
+> > > > >
+> > > > >     clk_disable_unused_subtree(clk_core A)
+> > > > >       clk_disable_unused_subtree(clk_core B)
+> > > > >         if (from_sync_state && core->dev != dev)
+> > > > >           return;
+> > > > >       ...
+> > > > >       clk core A->ops->disable()
+> > > > >
+> > > > > clk core B is off now?
 > > > >
-> > > > If would be bad if we actually set PageUptodate with UFFDIO_CONTINU=
-E;
-> > > > PageUptodate indicates that the page has been zeroed, and we don't =
-want
-> > > > to give a non-zeroed page to the user.
+> > > > Yes, that is correct. But the same thing is happening currently if the
+> > > > clk_ignore_unused in not specified. At least with this new approach, we
+> > > > get to leave unused clocks enabled either until sync_state is called or forever.
+> > > > All the provider has to do is to implement a sync_state callback (or use
+> > > > the generic one provided). So the provider of clk A would obviously need
+> > > > a sync state callback registered.
 > > > >
-> > > > The reason this change is being made now is because UFFDIO_CONTINUE=
-s on
-> > > > subpages definitely shouldn't set this page flag on the head page.
+> > > > >
+> > > > > Also sync_state seems broken right now. I saw mka mentioned that if you
+> > > > > have a device node enabled in your DT but never enable a driver for it
+> > > > > in the kernel we'll never get sync_state called. This is another
+> > > > > problem, but it concerns me that sync_state would make the unused clk
+> > > > > disabling happen at some random time or not at all.
 > > > >
-> > > > Signed-off-by: James Houghton <jthoughton@google.com>
+> > > > Well, the fact that the sync state not being called because a driver for
+> > > > a consumer device doesn't probe does not really mean it is broken. Just
+> > > > because the consumer driver hasn't probed yet, doesn't mean it will
+> > > > not probe later on.
 > > > >
-> > > > diff --git a/mm/hugetlb.c b/mm/hugetlb.c
-> > > > index 07abcb6eb203..792cb2e67ce5 100644
-> > > > --- a/mm/hugetlb.c
-> > > > +++ b/mm/hugetlb.c
-> > > > @@ -6256,7 +6256,16 @@ int hugetlb_mcopy_atomic_pte(struct mm_struc=
-t *dst_mm,
-> > > >          * preceding stores to the page contents become visible bef=
-ore
-> > > >          * the set_pte_at() write.
-> > > >          */
-> > > > -       __folio_mark_uptodate(folio);
-> > > > +       if (!is_continue)
-> > > > +               __folio_mark_uptodate(folio);
-> > > > +       else if (!folio_test_uptodate(folio)) {
-> > > > +               /*
-> > > > +                * This should never happen; HugeTLB pages are alwa=
-ys Uptodate
-> > > > +                * as soon as they are allocated.
-> > > > +                */
 > > >
-> > > if (is_continue) then we grab a page from the page cache, no? Are
-> > > pages in page caches always uptodate? Why? I guess that means they're
-> > > mapped hence uptodate?
+> > > CC'ed Saravana
 > > >
-> > > Also this comment should explain why pages in the page cache are
-> > > always uptodate, no? Because this error branch is hit if (is_continue
-> > > && !folio_test_uptodate()), not when pages are freshly allocated.
-> >
-> > There was some discussion about it here[1].
-> >
-> > Without even thinking about how the pages become uptodate, I think
-> > this patch is justified like this: UFFDIO_CONTINUE =3D> we aren't
-> > actually changing the contents of the page, so we shouldn't be
-> > changing the uptodate-ness of the page.
->
-> Agree!
->
-> > HugeTLB pages in the page cache are always uptodate:
-> > 1. fallocate -- the page is allocated, zeroed, marked as uptodate, and
-> > then placed in the page cache.
-> > 2. hugetlb_no_page -- same as above.
-> >
-> > So uptodate <=3D> "the page has been zeroed", so it would be very bad i=
-f
-> > we gave a !uptodate page to userspace via UFFDIO_CONTINUE.
-> >
-> > I'll update the comment to something like:
-> >
-> > "HugeTLB pages are always Uptodate as soon as they are added to the
-> > page cache. Given that we aren't changing the contents of the page, we
-> > shouldn't be updating the Uptodate-ness of the page."
->
-> Perhaps a better way of saying is that hugetlb pages are marked uptodate
-> shortly after allocation when their contents are initialized.  Initialize=
-d
-> data could be zero, or it could be contents copied from another location
-> (such as in the UFFDIO_COPY case also handled in this routine).
-
-I'll write something like this. Thank you!
-
->
-> Saying "PageUptodate indicates that the page has been zeroed" as in the
-> commit message is technically not correct.
-
-And I'll make sure to update the commit description as well.
-
->
-> Ack to the patch.
-
-Thanks, Mike!
+> > > > That aside, rather than going with clk_ignore_unused all the time on
+> > > > qcom platforms, at least in a perfect scenario (where sync state is
+> > > > reached for all providers) the clocks get disabled.
+> > > >
+> > > > >
+> > > > > Can the problem be approached more directly? If this is about fixing
+> > > > > continuous splash screen, then I wonder why we can't list out the clks
+> > > > > that we know are enabled by the bootloader in some new DT binding, e.g.:
+> > > > >
+> > > > >     clock-controller {
+> > > > >             #clock-cells = <1>;
+> > > > >             boot-handoff-clocks = <&consumer_device "clock cells for this clk provider">;
+> > > > >     };
+> > > > >
+> > > > > Then mark those as "critical/don't turn off" all the way up the clk tree
+> > > > > when the clk driver probes by essentially incrementing the
+> > > > > prepare/enable count but not actually touching the hardware, and when
+> > > > > the clks are acquired by clk_get() for that device that's using them
+> > > > > from boot we make the first clk_prepare_enable() do nothing and not
+> > > > > increment the count at all. We can probably stick some flag into the
+> > > > > 'struct clk' for this when we create the handle in clk_get() so that the
+> > > > > prepare and enable functions can special case and skip over.
+> > > >
+> > > > Well, that means we need to play whack-a-mole by alsways adding such clocks to
+> > > > devicetree.
+> > > >
+> > > > >
+> > > > > The sync_state hook operates on a driver level, which is too large when
+> > > > > you consider that a single clk driver may register hundreds of clks that
+> > > > > are not related. We want to target a solution at the clk level so that
+> > > > > any damage from keeping on all the clks provided by the controller is
+> > > > > limited to just the drivers that aren't probed and ready to handle their
+> > > > > clks. If sync_state could be called whenever a clk consumer consumes a
+> > > > > clk it may work? Technically we already have that by the clk_hw_provider
+> > > > > function but there isn't enough information being passed there, like the
+> > > > > getting device.
+> > > >
+> > > > Actually, from the multitude of clocks registered by one provider, the
+> > > > ones already explicitely enabled (and obvisously their parents) by thier
+> > > > consumer are safe. The only ones we need to worry about are the ones that
+> > > > might be enabled by bootloader and need to remain on. With the sync state
+> > > > approach, the latter mentioned clocks will either remain on indefinitely
+> > > > or will be disabled on sync state. The provider driver is the only level
+> > > > that has a registered sync state callback.
+> > > >
+> > > > >
+> > > > > > diff --git a/include/linux/clk-provider.h b/include/linux/clk-provider.h
+> > > > > > index 842e72a5348f..cf1adfeaf257 100644
+> > > > > > --- a/include/linux/clk-provider.h
+> > > > > > +++ b/include/linux/clk-provider.h
+> > > > > > @@ -720,6 +720,7 @@ struct clk *clk_register_divider_table(struct device *dev, const char *name,
+> > > > > >                 void __iomem *reg, u8 shift, u8 width,
+> > > > > >                 u8 clk_divider_flags, const struct clk_div_table *table,
+> > > > > >                 spinlock_t *lock);
+> > > > > > +void clk_sync_state_disable_unused(struct device *dev);
+> > > > >
+> > > > > This is a weird place to put this. Why not in the helper functions
+> > > > > section?
+> > > >
+> > > > Sure this can be moved.
+> > > >
+> > > > >
+> > > > > >  /**
+> > > > > >   * clk_register_divider - register a divider clock with the clock framework
+> > > > > >   * @dev: device registering this clock
