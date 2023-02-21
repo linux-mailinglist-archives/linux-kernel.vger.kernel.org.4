@@ -2,138 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F156569E0D3
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 13:53:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A17769E0DA
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 13:54:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232589AbjBUMx0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Feb 2023 07:53:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49780 "EHLO
+        id S233226AbjBUMyC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Feb 2023 07:54:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51230 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229720AbjBUMxY (ORCPT
+        with ESMTP id S233396AbjBUMxw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Feb 2023 07:53:24 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9925626CDC
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Feb 2023 04:52:38 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1676983957;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=cim37CPurlllaqqM13IPZavfyIJo0MFG0mwjskCxTms=;
-        b=gb0VIzhfsiGk/m4877z188qaA3ca2RbuSYOvsFYyoo1g/3PjcbqM4WTjnW/KoWAni4yBAY
-        CVGV9I5n1Lpl6EhU0L9Z8SKNAPtZt/OQBGL1Gg5K1hoRC1jG0AIaXR4L/3v4MWekKDTEVV
-        YWVYCf6wuVRL1uT+ff8ofw51gtASV9I=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-327-SiXvUBB0N5SiMGhbDklnUA-1; Tue, 21 Feb 2023 07:52:32 -0500
-X-MC-Unique: SiXvUBB0N5SiMGhbDklnUA-1
-Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id C5FE385A5A3;
-        Tue, 21 Feb 2023 12:52:31 +0000 (UTC)
-Received: from localhost (ovpn-13-7.pek2.redhat.com [10.72.13.7])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id F08472166B26;
-        Tue, 21 Feb 2023 12:52:30 +0000 (UTC)
-Date:   Tue, 21 Feb 2023 20:52:27 +0800
-From:   Baoquan He <bhe@redhat.com>
-To:     Niklas Schnelle <schnelle@linux.ibm.com>
-Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        akpm@linux-foundation.org, christophe.leroy@csgroup.eu,
-        hch@infradead.org, agordeev@linux.ibm.com,
-        wangkefeng.wang@huawei.com, David.Laight@aculab.com,
-        shorne@gmail.com, arnd@arndb.de,
-        Gerald Schaefer <gerald.schaefer@linux.ibm.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Sven Schnelle <svens@linux.ibm.com>, linux-s390@vger.kernel.org
-Subject: Re: [PATCH v4 09/16] s390: mm: Convert to GENERIC_IOREMAP
-Message-ID: <Y/S+i5Rodai25HNS@MiWiFi-R3L-srv>
-References: <20230216123419.461016-1-bhe@redhat.com>
- <20230216123419.461016-10-bhe@redhat.com>
- <9bb1154b07dc21e5d3dda8cc5238c5385f32c2e0.camel@linux.ibm.com>
- <Y/SvqcWQ+5sgozX/@MiWiFi-R3L-srv>
- <a0502208452b40b17572d18891ffee94e42484fa.camel@linux.ibm.com>
+        Tue, 21 Feb 2023 07:53:52 -0500
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF19423DB3;
+        Tue, 21 Feb 2023 04:53:41 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=e9/aDKUyKuBkvQEPm0dRHwCaOcpHf48fdU5SrQYxTGU=; b=JzguKagadVRr3rixX4uXLHmau0
+        TQB4/qsx/1x8zlkUZ96fpp4lrLhNALumwpcOgnjtABhSK+Kz8vm/BSPvrOr+/PeOXoXsqqig167wU
+        vILS1G+iDltVxiZCQSG9QnXkFk9Xc1AcdDrNEVaDlEv8yzN7kjgY3GTwbxObgSiFULOVjbv3UIwSj
+        Fz8NtAhQtoKW6bbaBj7H1LczrWALWyAC+tcT0qRn+rIJTjJS8UcsnOeCRlRH2OYliM3k18wYcROdp
+        OT+rxrVI7PzhV6CXHz9NGhl6jkR2aPgNwPIILZMrUjZx5OUu2g5l2b9UU4t1+qjtqPpWHpOHpejT3
+        s3RNwmwQ==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1pUS8j-00Ccd5-7q; Tue, 21 Feb 2023 12:53:01 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 712E530036B;
+        Tue, 21 Feb 2023 13:52:58 +0100 (CET)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 467CD20243666; Tue, 21 Feb 2023 13:52:58 +0100 (CET)
+Date:   Tue, 21 Feb 2023 13:52:58 +0100
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Vincent Guittot <vincent.guittot@linaro.org>
+Cc:     mingo@redhat.com, juri.lelli@redhat.com, dietmar.eggemann@arm.com,
+        rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de,
+        bristot@redhat.com, vschneid@redhat.com,
+        linux-kernel@vger.kernel.org, parth@linux.ibm.com,
+        cgroups@vger.kernel.org, qyousef@layalina.io,
+        chris.hyser@oracle.com, patrick.bellasi@matbug.net,
+        David.Laight@aculab.com, pjt@google.com, pavel@ucw.cz,
+        tj@kernel.org, qperret@google.com, tim.c.chen@linux.intel.com,
+        joshdon@google.com, timj@gnu.org, kprateek.nayak@amd.com,
+        yu.c.chen@intel.com, youssefesmat@chromium.org,
+        joel@joelfernandes.org
+Subject: Re: [PATCH v10 5/9] sched/fair: Take into account latency priority
+ at wakeup
+Message-ID: <Y/S+qrschy+N+QCQ@hirez.programming.kicks-ass.net>
+References: <20230113141234.260128-1-vincent.guittot@linaro.org>
+ <20230113141234.260128-6-vincent.guittot@linaro.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <a0502208452b40b17572d18891ffee94e42484fa.camel@linux.ibm.com>
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.6
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20230113141234.260128-6-vincent.guittot@linaro.org>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 02/21/23 at 01:26pm, Niklas Schnelle wrote:
-> On Tue, 2023-02-21 at 19:48 +0800, Baoquan He wrote:
-> > On 02/16/23 at 05:21pm, Niklas Schnelle wrote:
-> > > On Thu, 2023-02-16 at 20:34 +0800, Baoquan He wrote:
-> > > > By taking GENERIC_IOREMAP method, the generic generic_ioremap_prot(),
-> > > > generic_iounmap(), and their generic wrapper ioremap_prot(), ioremap()
-> > > > and iounmap() are all visible and available to arch. Arch needs to
-> > > > provide wrapper functions to override the generic versions if there's
-> > > > arch specific handling in its ioremap_prot(), ioremap() or iounmap().
-> > > > This change will simplify implementation by removing duplicated codes
-> > > > with generic_ioremap_prot() and generic_iounmap(), and has the equivalent
-> > > > functioality as before.
-> > > > 
-> > > > Here, add wrapper functions ioremap_prot() and iounmap() for s390's
-> > > > special operation when ioremap() and iounmap().
-> > > > 
-> > > > Signed-off-by: Baoquan He <bhe@redhat.com>
-> > > > Cc: Niklas Schnelle <schnelle@linux.ibm.com>
-> > > > Cc: Gerald Schaefer <gerald.schaefer@linux.ibm.com>
-> > > > Cc: Heiko Carstens <hca@linux.ibm.com>
-> > > > Cc: Vasily Gorbik <gor@linux.ibm.com>
-> > > > Cc: Alexander Gordeev <agordeev@linux.ibm.com>
-> > > > Cc: Christian Borntraeger <borntraeger@linux.ibm.com>
-> > > > Cc: Sven Schnelle <svens@linux.ibm.com>
-> > > > Cc: linux-s390@vger.kernel.org
-> > > > ---
-> > > >  arch/s390/Kconfig          |  1 +
-> > > >  arch/s390/include/asm/io.h | 21 ++++++++------
-> > > >  arch/s390/pci/pci.c        | 57 +++++++-------------------------------
-> > > >  3 files changed, 23 insertions(+), 56 deletions(-)
-> > > 
-> > > Thanks for the patch. This is a very clear improvement for us! I tested
-> > > this series with s390 systems with and without the PCI memory-I/O (MIO)
-> > > support and everything works as expected.
-> > > 
-> > > One thing I did stumble upon but which is independent from this patch
-> > > is that I think memremap(…, MEMREMAP_WB) on system RAM outside the
-> > > direct map is broken for us. At least on systems without PCI memory-I/O
-> > > support. I think with this series it would be much easier to fix
-> > > though. Basically I think we would have to define arch_memremap_wb() to
-> > > generic_ioremap_prot(…, PAGE_KERNEL) and then have iounmap() check
-> > > is_ioremap_addr() to see if it is an actual mapping or an address
-> > > cookie. But again this is independent of this patch which doesn't
-> > > change the behavior in this area.
-> > 
-> > OK, I can check this after this patchset done.
-> 
-> Oh this wasn't meant as adding a task for you just a FYI. I'm already
-> experimenting with this and plan to possibly send a patch that fixes
-> the case of remapping system RAM once your series has landed. The thing
-> is that memremap() is quite tricky for us whichever way you look at
-> it. 
-> 
-> We don't have real MMIO on s390x and thus using memremap() for PCI MMIO
-> spaces doesn't really work as the void* returned can still only be
-> accessed using ioread()/iowrite() because only our special PCI access
-> instructions work on the pseudo-MMIO addresses (with PCI MIO)
-> respectively the address cookies. Obviously void* and memremap() really
-> isn't the right tool if you need to use ioread()/iowrite() to access it
-> and can't treat it as memory though.
+On Fri, Jan 13, 2023 at 03:12:30PM +0100, Vincent Guittot wrote:
 
-Ah, I misunderstood it. Thanks for sharing and expect to see your post.
+> diff --git a/include/linux/sched.h b/include/linux/sched.h
+> index 6c61bde49152..38decae3e156 100644
+> --- a/include/linux/sched.h
+> +++ b/include/linux/sched.h
+> @@ -568,6 +568,8 @@ struct sched_entity {
+>  	/* cached value of my_q->h_nr_running */
+>  	unsigned long			runnable_weight;
+>  #endif
+> +	/* preemption offset in ns */
+> +	long				latency_offset;
+
+I wonder about the type here; does it make sense to have it depend on
+the bitness; that is if s32 is big enough on 32bit then surely it is so
+too on 64bit, and if not, then it should be unconditionally s64.
+
+
+> +static void set_latency_offset(struct task_struct *p)
+> +{
+> +	long weight = sched_latency_to_weight[p->latency_prio];
+> +	s64 offset;
+> +
+> +	offset = weight * get_sleep_latency(false);
+> +	offset = div_s64(offset, NICE_LATENCY_WEIGHT_MAX);
+> +	p->se.latency_offset = (long)offset;
+> +}
+
+> +/*
+> + * latency weight for wakeup preemption
+> + */
+> +const int sched_latency_to_weight[40] = {
+> + /* -20 */     -1024,     -973,     -922,      -870,      -819,
+> + /* -15 */      -768,     -717,     -666,      -614,      -563,
+> + /* -10 */      -512,     -461,     -410,      -358,      -307,
+> + /*  -5 */      -256,     -205,     -154,      -102,       -51,
+> + /*   0 */         0,       51,      102,       154,       205,
+> + /*   5 */       256,      307,      358,       410,       461,
+> + /*  10 */       512,      563,      614,       666,       717,
+> + /*  15 */       768,      819,      870,       922,       973,
+> +};
+
+I'm slightly confused by this table, isn't that simply the linear
+function?
+
+Isn't all that the same as:
+
+	se->se.latency_offset = get_sleep_latency * nice / (NICE_LATENCY_WIDTH/2);
+
+? The reason we have prio_to_weight[] is because it's an exponential,
+which is a bit more cumbersome to calculate, but surely we can do a
+linear function at runtime.
+
 
