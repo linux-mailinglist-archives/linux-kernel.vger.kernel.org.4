@@ -2,93 +2,185 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 999B669EA62
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 23:45:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0343669EA69
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 23:46:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230337AbjBUWpM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Feb 2023 17:45:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42324 "EHLO
+        id S230011AbjBUWqT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Feb 2023 17:46:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43308 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229546AbjBUWpK (ORCPT
+        with ESMTP id S229812AbjBUWqQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Feb 2023 17:45:10 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7AF8E22DC1;
-        Tue, 21 Feb 2023 14:45:09 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 2E306B81107;
-        Tue, 21 Feb 2023 22:45:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4174CC433EF;
-        Tue, 21 Feb 2023 22:45:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1677019506;
-        bh=8SFKrp35fK6Dd8k0lr1dPRUo9rE3AzIz/CciN7T0U1M=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=utv7piB4pUX7N+bKFbfNKT3h3UFVgz0o9G0aQEt/8KQSoOwMOlTcFHA7SsBLvSzUQ
-         6nOTHlhVxnHY90bmwshQtB0qBjfgYlnagq0EmF/EGo2HU1xdMWuPD9NXFU9V4hTRIp
-         eRUzQge81LKi7K1/NjbHFSLxu7FKhsgiUwQNcLbcL9+27MYgeX19X7e8bKKC8e7Jen
-         zfKXF82FPxfC+lbeNMdZCPLQBAXgANCgKa7TeG0jKsU6pd3BJ2kjJODNoKYCfAu0uF
-         SAZ3wV+OwNPdUmEfHJ8rWOm9fEt79o4pTJQfLnEjwsnsr3x9pYas10veF89Z7gUO1E
-         aRlFI5uRJVVYg==
-Date:   Tue, 21 Feb 2023 22:45:03 +0000
-From:   Mark Brown <broonie@kernel.org>
-To:     Evan Green <evan@rivosinc.com>
-Cc:     Palmer Dabbelt <palmer@rivosinc.com>, heiko@sntech.de,
-        Conor Dooley <conor@kernel.org>, slewis@rivosinc.com,
-        vineetg@rivosinc.com, Albert Ou <aou@eecs.berkeley.edu>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-riscv@lists.infradead.org
-Subject: Re: [PATCH v3 6/7] selftests: Test the new RISC-V hwprobe interface
-Message-ID: <Y/VJb/Mz4OI09MEr@sirena.org.uk>
-References: <20230221190858.3159617-1-evan@rivosinc.com>
- <20230221190858.3159617-7-evan@rivosinc.com>
+        Tue, 21 Feb 2023 17:46:16 -0500
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0A09305EA
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Feb 2023 14:46:12 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1677019572; x=1708555572;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=vWyiKbDyhbM1nIyw60cC2OaM7L0o6qr4F6HOQJzNeAk=;
+  b=OBnvI+BZMZTWte6HzDLankKjKWqDH81HUTkZi2XdQP1v6R7I1xydmvoJ
+   5C538jGsc4AxOYFfThIjid4J5mo0KuAGqCk5JMof8EAsTSAWHrmIOajTc
+   Gw8W6Jfncu6aK6Qd0BMIbTrIAAFqRacRaVN7iBFNyY/aC+D7Huzz7NVBL
+   rwv4V9pG7gqmIB6mkNWwvih1w4oKC8e+rCP1qckCi2clVZSWUUr1KptGy
+   YoU7YpLqBW7GxOXorBz9AzD5eCLYkfjJIT82KX+hEby/Bv+7Z/PRqDY6o
+   MzJ0CHAfvQVjgiAdO3/R38QDEAZ2B5qOoBqlDy1GN2yOPhsIlSAQu4IZu
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10628"; a="330498081"
+X-IronPort-AV: E=Sophos;i="5.97,317,1669104000"; 
+   d="scan'208";a="330498081"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Feb 2023 14:46:09 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10628"; a="781174526"
+X-IronPort-AV: E=Sophos;i="5.97,317,1669104000"; 
+   d="scan'208";a="781174526"
+Received: from stinkpipe.fi.intel.com (HELO stinkbox) ([10.237.72.70])
+  by fmsmga002.fm.intel.com with SMTP; 21 Feb 2023 14:46:05 -0800
+Received: by stinkbox (sSMTP sendmail emulation); Wed, 22 Feb 2023 00:46:04 +0200
+Date:   Wed, 22 Feb 2023 00:46:04 +0200
+From:   Ville =?iso-8859-1?Q?Syrj=E4l=E4?= <ville.syrjala@linux.intel.com>
+To:     Rob Clark <robdclark@gmail.com>
+Cc:     Rob Clark <robdclark@chromium.org>,
+        Tvrtko Ursulin <tvrtko.ursulin@intel.com>,
+        Christian =?iso-8859-1?Q?K=F6nig?= 
+        <ckoenig.leichtzumerken@gmail.com>,
+        Michel =?iso-8859-1?Q?D=E4nzer?= <michel@daenzer.net>,
+        open list <linux-kernel@vger.kernel.org>,
+        dri-devel@lists.freedesktop.org,
+        Pekka Paalanen <ppaalanen@gmail.com>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        freedreno@lists.freedesktop.org
+Subject: Re: [Freedreno] [PATCH v4 10/14] drm/vblank: Add helper to get next
+ vblank time
+Message-ID: <Y/VJrNPX8EiwEyYt@intel.com>
+References: <20230218211608.1630586-1-robdclark@gmail.com>
+ <20230218211608.1630586-11-robdclark@gmail.com>
+ <20230220110820.595cfa37@eldfell>
+ <CAF6AEGuo-vmW4Va9=RH+kH9KgNvR2vzjJ8meO-oty56xjDhjgg@mail.gmail.com>
+ <20230221104551.60d44d1c@eldfell>
+ <Y/TAr64SpxO712RB@intel.com>
+ <CAJs_Fx7n3QrzusdX5yD=39YZ8MzjuwZTriWz8hVxNYGHO=sJ_Q@mail.gmail.com>
+ <Y/U6HKD2hbH4Sx1G@intel.com>
+ <Y/U8FcU4SXsJu1/q@intel.com>
+ <CAF6AEGtkgDNZTr-NS_rUuEDxPy5aoMycPDn2RXFEXfAiA7=E9A@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="3eeBJmjkOCU+EDTd"
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <20230221190858.3159617-7-evan@rivosinc.com>
-X-Cookie: Serving suggestion.
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAF6AEGtkgDNZTr-NS_rUuEDxPy5aoMycPDn2RXFEXfAiA7=E9A@mail.gmail.com>
+X-Patchwork-Hint: comment
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Tue, Feb 21, 2023 at 02:28:10PM -0800, Rob Clark wrote:
+> On Tue, Feb 21, 2023 at 1:48 PM Ville Syrjälä
+> <ville.syrjala@linux.intel.com> wrote:
+> >
+> > On Tue, Feb 21, 2023 at 11:39:40PM +0200, Ville Syrjälä wrote:
+> > > On Tue, Feb 21, 2023 at 11:54:55AM -0800, Rob Clark wrote:
+> > > > On Tue, Feb 21, 2023 at 5:01 AM Ville Syrjälä
+> > > > <ville.syrjala@linux.intel.com> wrote:
+> > > > >
+> > > > > On Tue, Feb 21, 2023 at 10:45:51AM +0200, Pekka Paalanen wrote:
+> > > > > > On Mon, 20 Feb 2023 07:55:41 -0800
+> > > > > > Rob Clark <robdclark@gmail.com> wrote:
+> > > > > >
+> > > > > > > On Mon, Feb 20, 2023 at 1:08 AM Pekka Paalanen <ppaalanen@gmail.com> wrote:
+> > > > > > > >
+> > > > > > > > On Sat, 18 Feb 2023 13:15:53 -0800
+> > > > > > > > Rob Clark <robdclark@gmail.com> wrote:
+> > > > > > > >
+> > > > > > > > > From: Rob Clark <robdclark@chromium.org>
+> > > > > > > > >
+> > > > > > > > > Will be used in the next commit to set a deadline on fences that an
+> > > > > > > > > atomic update is waiting on.
+> > > > > > > > >
+> > > > > > > > > Signed-off-by: Rob Clark <robdclark@chromium.org>
+> > > > > > > > > ---
+> > > > > > > > >  drivers/gpu/drm/drm_vblank.c | 32 ++++++++++++++++++++++++++++++++
+> > > > > > > > >  include/drm/drm_vblank.h     |  1 +
+> > > > > > > > >  2 files changed, 33 insertions(+)
+> > > > > > > > >
+> > > > > > > > > diff --git a/drivers/gpu/drm/drm_vblank.c b/drivers/gpu/drm/drm_vblank.c
+> > > > > > > > > index 2ff31717a3de..caf25ebb34c5 100644
+> > > > > > > > > --- a/drivers/gpu/drm/drm_vblank.c
+> > > > > > > > > +++ b/drivers/gpu/drm/drm_vblank.c
+> > > > > > > > > @@ -980,6 +980,38 @@ u64 drm_crtc_vblank_count_and_time(struct drm_crtc *crtc,
+> > > > > > > > >  }
+> > > > > > > > >  EXPORT_SYMBOL(drm_crtc_vblank_count_and_time);
+> > > > > > > > >
+> > > > > > > > > +/**
+> > > > > > > > > + * drm_crtc_next_vblank_time - calculate the time of the next vblank
+> > > > > > > > > + * @crtc: the crtc for which to calculate next vblank time
+> > > > > > > > > + * @vblanktime: pointer to time to receive the next vblank timestamp.
+> > > > > > > > > + *
+> > > > > > > > > + * Calculate the expected time of the next vblank based on time of previous
+> > > > > > > > > + * vblank and frame duration
+> > > > > > > >
+> > > > > > > > Hi,
+> > > > > > > >
+> > > > > > > > for VRR this targets the highest frame rate possible for the current
+> > > > > > > > VRR mode, right?
+> > > > > > > >
+> > > > > > >
+> > > > > > > It is based on vblank->framedur_ns which is in turn based on
+> > > > > > > mode->crtc_clock.  Presumably for VRR that ends up being a maximum?
+> > > > > >
+> > > > > > I don't know. :-)
+> > > > >
+> > > > > At least for i915 this will give you the maximum frame
+> > > > > duration.
+> > > > >
+> > > > > Also this does not calculate the the start of vblank, it
+> > > > > calculates the start of active video.
+> > > >
+> > > > AFAIU, vsync_end/vsync_start are in units of line, so I could do something like:
+> > > >
+> > > >   vsync_lines = vblank->hwmode.vsync_end - vblank->hwmode.vsync_start;
+> > > >   vsyncdur = ns_to_ktime(vblank->linedur_ns * vsync_lines);
+> > > >   framedur = ns_to_ktime(vblank->framedur_ns);
+> > > >   *vblanktime = ktime_add(*vblanktime, ktime_sub(framedur, vsyncdur));
+> > >
+> > > Something like this should work:
+> > >  vblank_start = framedur_ns * crtc_vblank_start / crtc_vtotal
+> > >  deadline = vblanktime + vblank_start
+> > >
+> > > That would be the expected time when the next start of vblank
+> > > happens.
+> >
+> > Except that drm_vblank_count_and_time() will give you the last
+> > sampled timestamp, which may be long ago in the past. Would
+> > need to add an _accurate version of that if we want to be
+> > guaranteed a fresh sample.
+> 
+> IIRC the only time we wouldn't have a fresh sample is if the screen
+> has been idle for some time?
 
---3eeBJmjkOCU+EDTd
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+IIRC "some time" == 1 idle frame, for any driver that sets
+vblank_disable_immediate.
 
-On Tue, Feb 21, 2023 at 11:08:57AM -0800, Evan Green wrote:
+> In which case, I think that doesn't
+> matter.
+> 
+> BR,
+> -R
+> 
+> >
+> > --
+> > Ville Syrjälä
+> > Intel
 
-> RISC-V, so I've added some infrastructure for those as well.  The build
-> stuff looks pretty straight-forward, but there's also  a tiny C library
-> to avoid coupling this to any userspace implementation.
-
-It looks like this has been updated to just use the normal system
-libc so the changelog isn't accurate any more?
-
---3eeBJmjkOCU+EDTd
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmP1SW4ACgkQJNaLcl1U
-h9AARQf+J6bTCIZaQ6XTb3NG4YC4SxstK3Mul0hg7r4uTMkxN5HWg3KMkEKSRKvv
-iw3J+4GuEAOoqUv9EIZ5tllsIvJMLMxrScHphIMXD3lDOmWZPQPgEbgec6QvpmZD
-EXkNIDDhcpqb7kxOwu5S7eObn9nAKYNpV70u75RADCxirW/IbWB2HXNYMKGfztl5
-kEQ80Xrxxx8I/eU6PJuohSsOm31e0yJCns9aWDpqtrBdvrCNwgicrVSGVg8s/EP6
-WwsiqINdzfgkYcSXfRDCzlpUZxoqIbXx8X89FvjiCGQrgZSChzHec8yRUSElg4gQ
-lL30KzIaj3ILRCoh4mrDu06OxKSxng==
-=Dcav
------END PGP SIGNATURE-----
-
---3eeBJmjkOCU+EDTd--
+-- 
+Ville Syrjälä
+Intel
