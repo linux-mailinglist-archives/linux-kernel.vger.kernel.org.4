@@ -2,118 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AF99F69D932
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 04:16:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C690469D935
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 04:16:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229545AbjBUDQd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Feb 2023 22:16:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50330 "EHLO
+        id S233427AbjBUDQz convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 20 Feb 2023 22:16:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50784 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232588AbjBUDQb (ORCPT
+        with ESMTP id S232588AbjBUDQx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Feb 2023 22:16:31 -0500
-Received: from progateway7-pub.mail.pro1.eigbox.com (gproxy5-pub.mail.unifiedlayer.com [67.222.38.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7AD7423138
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Feb 2023 19:16:30 -0800 (PST)
-Received: from cmgw12.mail.unifiedlayer.com (unknown [10.0.90.127])
-        by progateway7.mail.pro1.eigbox.com (Postfix) with ESMTP id DD793100471BE
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Feb 2023 03:16:29 +0000 (UTC)
-Received: from box5620.bluehost.com ([162.241.219.59])
-        by cmsmtp with ESMTP
-        id UJ8npGilNrt2IUJ8np4ZjY; Tue, 21 Feb 2023 03:16:29 +0000
-X-Authority-Reason: nr=8
-X-Authority-Analysis: v=2.4 cv=EfEN/NqC c=1 sm=1 tr=0 ts=63f4378d
- a=30941lsx5skRcbJ0JMGu9A==:117 a=30941lsx5skRcbJ0JMGu9A==:17
- a=dLZJa+xiwSxG16/P+YVxDGlgEgI=:19 a=IkcTkHD0fZMA:10:nop_charset_1
- a=m04uMKEZRckA:10:nop_rcvd_month_year
- a=-Ou01B_BuAIA:10:endurance_base64_authed_username_1 a=VwQbUJbxAAAA:8
- a=HaFmDPmJAAAA:8 a=uxFE05t1smjoYJzm71MA:9 a=QEXdDO2ut3YA:10:nop_charset_2
- a=AjGcO6oz07-iQ99wixmX:22 a=nmWuMzfKamIsx3l42hEX:22
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=w6rz.net;
-        s=default; h=Content-Transfer-Encoding:Content-Type:MIME-Version:Date:
-        Message-ID:From:In-Reply-To:References:Cc:To:Subject:Sender:Reply-To:
-        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=Un9x076h/rn4fMIFmEZ4fxZnFLRkkfrjeVzUKu+mjWc=; b=blNg9OUflKIMeTIGRTjD8WTFXe
-        Sx0EUJHryYdkplO3VKTS0BuFHsaGLWE4Sz/PlRQc8/Z0uKweEP0AJmFNOSorKrsiSxz/WULzSbKYR
-        jAEzd1g9AjWuO+BjU6zQ9quVYRLLgs1gmsTAyRpw4ui1endiZvrDg0tjA1QUV8vWmCTkyM1caI8fJ
-        NwbFdqkMupaRvtpjWCZiTdLych8tH/2fDOYkHk/7rn/LC+cS2F5+1kAoKgpH22MTlRoL1+zUideOU
-        lwRvXXyCTha+I5d44w47c64IjSSLfwEHrJwE/O6u+JOxqWkYMJpDNOHZf/aSkHRAeMAbOqoM4IR/q
-        rQGDtFrg==;
-Received: from c-73-162-232-9.hsd1.ca.comcast.net ([73.162.232.9]:54774 helo=[10.0.1.47])
-        by box5620.bluehost.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-        (Exim 4.95)
-        (envelope-from <re@w6rz.net>)
-        id 1pUJ8m-002nQW-AG;
-        Mon, 20 Feb 2023 20:16:28 -0700
-Subject: Re: [PATCH 6.1 000/118] 6.1.13-rc1 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org
-Cc:     patches@lists.linux.dev, linux-kernel@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        srw@sladewatkins.net, rwarsow@gmx.de
-References: <20230220133600.368809650@linuxfoundation.org>
-In-Reply-To: <20230220133600.368809650@linuxfoundation.org>
-From:   Ron Economos <re@w6rz.net>
-Message-ID: <fad3fedf-2422-fb7e-7a96-ba1ce6b46b78@w6rz.net>
-Date:   Mon, 20 Feb 2023 19:16:23 -0800
-User-Agent: Mozilla/5.0 (X11; Linux armv7l; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
+        Mon, 20 Feb 2023 22:16:53 -0500
+Received: from fd01.gateway.ufhost.com (fd01.gateway.ufhost.com [61.152.239.71])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9897C23C4D
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Feb 2023 19:16:50 -0800 (PST)
+Received: from EXMBX165.cuchost.com (unknown [175.102.18.54])
+        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
+        (Client CN "EXMBX165", Issuer "EXMBX165" (not verified))
+        by fd01.gateway.ufhost.com (Postfix) with ESMTP id 6CF6924DC13;
+        Tue, 21 Feb 2023 11:16:49 +0800 (CST)
+Received: from EXMBX163.cuchost.com (172.16.7.73) by EXMBX165.cuchost.com
+ (172.16.6.75) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Tue, 21 Feb
+ 2023 11:16:49 +0800
+Received: from EXMBX066.cuchost.com (172.16.7.66) by EXMBX163.cuchost.com
+ (172.16.7.73) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Tue, 21 Feb
+ 2023 11:16:49 +0800
+Received: from EXMBX066.cuchost.com ([fe80::5947:9245:907e:339f]) by
+ EXMBX066.cuchost.com ([fe80::5947:9245:907e:339f%17]) with mapi id
+ 15.00.1497.044; Tue, 21 Feb 2023 11:16:49 +0800
+From:   JeeHeng Sia <jeeheng.sia@starfivetech.com>
+To:     Pavel Machek <pavel@ucw.cz>
+CC:     "paul.walmsley@sifive.com" <paul.walmsley@sifive.com>,
+        "palmer@dabbelt.com" <palmer@dabbelt.com>,
+        "aou@eecs.berkeley.edu" <aou@eecs.berkeley.edu>,
+        "linux-riscv@lists.infradead.org" <linux-riscv@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Leyfoon Tan <leyfoon.tan@starfivetech.com>,
+        Mason Huo <mason.huo@starfivetech.com>
+Subject: RE: [PATCH 3/3] RISC-V: Add arch functions to support
+ hibernation/suspend-to-disk
+Thread-Topic: [PATCH 3/3] RISC-V: Add arch functions to support
+ hibernation/suspend-to-disk
+Thread-Index: AQHZIZTz+V7+Gz83+Eel+CLGjWDN767UeZmAgAMGpQCAAYIHUA==
+Date:   Tue, 21 Feb 2023 03:16:48 +0000
+Message-ID: <ed6ebf0e6cc146e8b01c543a2fbc6e76@EXMBX066.cuchost.com>
+References: <20230106060535.104321-1-jeeheng.sia@starfivetech.com>
+ <20230106060535.104321-4-jeeheng.sia@starfivetech.com>
+ <Y/DaH0vjMsln4Ghr@duo.ucw.cz>
+ <be39247014cd4e12b871ef0e40f09f12@EXMBX066.cuchost.com>
+In-Reply-To: <be39247014cd4e12b871ef0e40f09f12@EXMBX066.cuchost.com>
+Accept-Language: en-US, zh-CN
 Content-Language: en-US
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - box5620.bluehost.com
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - w6rz.net
-X-BWhitelist: no
-X-Source-IP: 73.162.232.9
-X-Source-L: No
-X-Exim-ID: 1pUJ8m-002nQW-AG
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
-X-Source-Sender: c-73-162-232-9.hsd1.ca.comcast.net ([10.0.1.47]) [73.162.232.9]:54774
-X-Source-Auth: re@w6rz.net
-X-Email-Count: 4
-X-Source-Cap: d3NpeHJ6bmU7d3NpeHJ6bmU7Ym94NTYyMC5ibHVlaG9zdC5jb20=
-X-Local-Domain: yes
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [202.188.176.82]
+x-yovoleruleagent: yovoleflag
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 8BIT
+MIME-Version: 1.0
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/20/23 5:35 AM, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 6.1.13 release.
-> There are 118 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
->
-> Responses should be made by Wed, 22 Feb 2023 13:35:35 +0000.
-> Anything received after that time might be too late.
->
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v6.x/stable-review/patch-6.1.13-rc1.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-6.1.y
-> and the diffstat can be found below.
->
-> thanks,
->
-> greg k-h
+Hi,
 
-Built and booted successfully on RISC-V RV64 (HiFive Unmatched).
+In case if you are not aware, the latest series (v4) can be found at: https://patchwork.kernel.org/project/linux-riscv/list/?series=723586
 
-Tested-by: Ron Economos <re@w6rz.net>
+Thanks
+Regards
+Jee Heng
 
+> -----Original Message-----
+> From: JeeHeng Sia
+> Sent: Monday, 20 February, 2023 12:22 PM
+> To: 'Pavel Machek' <pavel@ucw.cz>
+> Cc: paul.walmsley@sifive.com; palmer@dabbelt.com; aou@eecs.berkeley.edu; linux-riscv@lists.infradead.org; linux-
+> kernel@vger.kernel.org; Leyfoon Tan <leyfoon.tan@starfivetech.com>; Mason Huo <mason.huo@starfivetech.com>
+> Subject: RE: [PATCH 3/3] RISC-V: Add arch functions to support hibernation/suspend-to-disk
+> 
+> Hi,
+> 
+> This is the old series, could you review the latest series at: https://patchwork.kernel.org/project/linux-riscv/list/?series=716143 ?
+> 
+> > -----Original Message-----
+> > From: Pavel Machek <pavel@ucw.cz>
+> > Sent: Saturday, 18 February, 2023 10:01 PM
+> > To: JeeHeng Sia <jeeheng.sia@starfivetech.com>
+> > Cc: paul.walmsley@sifive.com; palmer@dabbelt.com; aou@eecs.berkeley.edu; linux-riscv@lists.infradead.org; linux-
+> > kernel@vger.kernel.org; Leyfoon Tan <leyfoon.tan@starfivetech.com>; Mason Huo <mason.huo@starfivetech.com>
+> > Subject: Re: [PATCH 3/3] RISC-V: Add arch functions to support hibernation/suspend-to-disk
+> >
+> > Hi!
+> >
+> > > @@ -21,6 +21,11 @@ struct suspend_context {
+> > >  #endif
+> > >  };
+> > >
+> > > +/* This parameter will be assigned to 0 during resume and will be used by
+> > > + * hibernation core for the subsequent resume sequence
+> > > + */
+> > > +extern int in_suspend;
+> >
+> > "/*" should be on separate line. (This occurs multiple times.)
+> already resolved in v3 series.
+> >
+> > > +ENTRY(core_restore_code)
+> > > +	/* switch to temp page table */
+> > > +	csrw satp, s1
+> > > +	sfence.vma
+> > > +	beqz	s4, done
+> > > +loop:
+> > > +	/* The below code will restore the hibernated image. */
+> > > +	ld	a1, HIBERN_PBE_ADDR(s4)
+> > > +	ld	a0, HIBERN_PBE_ORIG(s4)
+> > > +
+> > > +	lui     a4, 0x1
+> > > +	add     a4, a4, a0
+> >
+> > Do you have enough registers to move a4 = 0x1 assignment before the
+> > loop:?
+> I am sorry but I don't understand the question. Could you elaborate please?
+> >
+> > > +static int __init riscv_hibernate__init(void)
+> > > +{
+> > > +	hibernate_cpu_context = kcalloc(1, sizeof(struct suspend_context), GFP_KERNEL);
+> > > +
+> >
+> > kzalloc?
+> sure, will change it.
+> >
+> > > +	if (WARN_ON(!hibernate_cpu_context))
+> > > +		return -ENOMEM;
+> > > +
+> > > +	return 0;
+> > > +}
+> > > +
+> > > +early_initcall(riscv_hibernate__init);
+> >
+> > Does this really need to be done early?
+> yes. To make sure it is initialized before next resume.
+> >
+> > Best regards,
+> > 								Pavel
+> > --
+> > People of Russia, stop Putin before his war on Ukraine escalates.
