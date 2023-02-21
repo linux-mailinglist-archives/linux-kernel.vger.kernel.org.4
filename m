@@ -2,365 +2,233 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5AFE469E091
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 13:41:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8FCBF69E093
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 13:42:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234638AbjBUMlw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Feb 2023 07:41:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37760 "EHLO
+        id S234743AbjBUMmD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Feb 2023 07:42:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37922 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234798AbjBUMln (ORCPT
+        with ESMTP id S234689AbjBUMl4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Feb 2023 07:41:43 -0500
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1687D26853;
-        Tue, 21 Feb 2023 04:41:21 -0800 (PST)
-Received: from pps.filterd (m0098421.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 31LBUrG6007035;
-        Tue, 21 Feb 2023 12:40:33 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- subject : to : cc : references : from : in-reply-to : content-type :
- content-transfer-encoding : mime-version; s=pp1;
- bh=DtcPa1deaHe9WjwD+eJN66LKxf6T5OcN86NGAmtJUgc=;
- b=WK+uTj4nX2mwFnL2NrMD7tcoLlhhlJDVHSgWJrgGl6emBMH26xqSQcNr72fNok7XU3xB
- sNWj2f3kYGHKNd8gLak8tmBN0RMelckKaMQnKJr11yEi5HVh38cT+vLCZXafTp6/N+Fn
- TemTVkMWEvLHWNbVXw0r357MzdqMysXutULQzAG3E3D/qidvzRVya/bpcS56oXjQoZWp
- l/r3mf5ulCsKJWsRACxznBi8h7pHLP9Z5OlAFItbsENMUzaSVI/5bt1uRaOhloigSzxk
- 3mXbazkDXFjCD0RHbX92Xq2NVxXr5llXHXtk9TsiNxfECt1u57Y3CAlyZmpHAVLbSQ8I ZQ== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3nvh4fsqdp-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 21 Feb 2023 12:40:32 +0000
-Received: from m0098421.ppops.net (m0098421.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 31LCBIjF011033;
-        Tue, 21 Feb 2023 12:40:32 GMT
-Received: from ppma01dal.us.ibm.com (83.d6.3fa9.ip4.static.sl-reverse.com [169.63.214.131])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3nvh4fsqcr-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 21 Feb 2023 12:40:32 +0000
-Received: from pps.filterd (ppma01dal.us.ibm.com [127.0.0.1])
-        by ppma01dal.us.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 31L9u7SE011387;
-        Tue, 21 Feb 2023 12:40:30 GMT
-Received: from smtprelay06.wdc07v.mail.ibm.com ([9.208.129.118])
-        by ppma01dal.us.ibm.com (PPS) with ESMTPS id 3ntpa7f98w-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 21 Feb 2023 12:40:30 +0000
-Received: from smtpav06.dal12v.mail.ibm.com (smtpav06.dal12v.mail.ibm.com [10.241.53.105])
-        by smtprelay06.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 31LCeSwt1573484
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 21 Feb 2023 12:40:28 GMT
-Received: from smtpav06.dal12v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 2BE8458043;
-        Tue, 21 Feb 2023 12:40:28 +0000 (GMT)
-Received: from smtpav06.dal12v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id DD17858055;
-        Tue, 21 Feb 2023 12:40:18 +0000 (GMT)
-Received: from [9.160.173.144] (unknown [9.160.173.144])
-        by smtpav06.dal12v.mail.ibm.com (Postfix) with ESMTP;
-        Tue, 21 Feb 2023 12:40:18 +0000 (GMT)
-Message-ID: <ea3cbb15-99e1-827c-9602-f53f74f7e543@linux.ibm.com>
-Date:   Tue, 21 Feb 2023 14:40:17 +0200
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.2
-Subject: Re: [PATCH RFC v8 54/56] x86/sev: Add KVM commands for instance certs
-Content-Language: en-US
-To:     Michael Roth <michael.roth@amd.com>, kvm@vger.kernel.org
-Cc:     linux-coco@lists.linux.dev, linux-mm@kvack.org,
-        linux-crypto@vger.kernel.org, x86@kernel.org,
-        linux-kernel@vger.kernel.org, tglx@linutronix.de, mingo@redhat.com,
-        jroedel@suse.de, thomas.lendacky@amd.com, hpa@zytor.com,
-        ardb@kernel.org, pbonzini@redhat.com, seanjc@google.com,
-        vkuznets@redhat.com, jmattson@google.com, luto@kernel.org,
-        dave.hansen@linux.intel.com, slp@redhat.com, pgonda@google.com,
-        peterz@infradead.org, srinivas.pandruvada@linux.intel.com,
-        rientjes@google.com, tobin@ibm.com, bp@alien8.de, vbabka@suse.cz,
-        kirill@shutemov.name, ak@linux.intel.com, tony.luck@intel.com,
-        marcorr@google.com, sathyanarayanan.kuppuswamy@linux.intel.com,
-        alpergun@google.com, dgilbert@redhat.com, jarkko@kernel.org,
-        ashish.kalra@amd.com, nikunj.dadhania@amd.com,
-        Dionna Glaze <dionnaglaze@google.com>,
-        Dov Murik <dovmurik@linux.ibm.com>
-References: <20230220183847.59159-1-michael.roth@amd.com>
- <20230220183847.59159-55-michael.roth@amd.com>
-From:   Dov Murik <dovmurik@linux.ibm.com>
-In-Reply-To: <20230220183847.59159-55-michael.roth@amd.com>
-Content-Type: text/plain; charset=UTF-8
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: 9knr3ZYypeuFlhnNPJpBvrWYo4mzWRWd
-X-Proofpoint-GUID: b2MI_pUmnvqYKbcoJs3VcNLV8-inLHC1
-Content-Transfer-Encoding: 7bit
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+        Tue, 21 Feb 2023 07:41:56 -0500
+Received: from mail-vs1-xe30.google.com (mail-vs1-xe30.google.com [IPv6:2607:f8b0:4864:20::e30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4DCF29436
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Feb 2023 04:41:54 -0800 (PST)
+Received: by mail-vs1-xe30.google.com with SMTP id o6so4549472vsq.10
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Feb 2023 04:41:54 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1676983314;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=+pSg+Hzb7t5dfpW1K0cuXfE/ecGC3GyQvKNw8DxtAc0=;
+        b=LPCQhSj4y91w98bW3FzXRlnAJehtmFOzLyD8zSPTuLSvCPLherrSl8rfnL0tEXZ/wU
+         GpqJaLKjexKt4G+dD/gCQ0sFN1n7pd9bb7/gL9Pu8VKsJH7J/+SYbxv/i51mQ27aYgN3
+         F3lyExPtlcdYMhg2vBrsI+wXwk+3SC18szDVHaZ0lgMKp6YYWAYXxvOYffRkdm9aXuL6
+         Y87G5OD26PtqHASgqkHsKwqsI0L5lclTds6Ojld6UUFUGKQ9ltdL1UBpXoiG4zQObJbC
+         XGbse2CJz22VYk736s/PARPa/xf9uGcRm9wroXYj1sAQn2l/JEW2i0GQyJ1nV1fC7upR
+         LGBQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1676983314;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=+pSg+Hzb7t5dfpW1K0cuXfE/ecGC3GyQvKNw8DxtAc0=;
+        b=WGSDzskM8/CGvYvFKbDMk89vaGpHEzmVmlef72iAiyxXVRka8Kkl2kb60Xe3C/nKB2
+         UFnX+l4R83kyjMDZzRYr1ROofOsbiZZI5PZCWHUoMt4Hexg7hRE6zXWs8NBBr9sI54YD
+         OFjGwquqM7DMiHWEReDAFQf1y+g4ZI3nxhgeO0jWwPd/wL+rWXfqL2MZKd3F82Dsrxqo
+         1TuiDnNZ6kMCQ3cQF5sf0qLgk1YbHtbNDutw8JyXR75dFCm1V9AfXT2eNJTfQJzblsfE
+         arQk9ccxh5EVVuv8JNUlABBgKyRfUiVH8g28Kpg6NJv3h+ZNOC1pElQ9GKnexrFRBmT2
+         rbfQ==
+X-Gm-Message-State: AO0yUKXiYBpbOz349HtqHP8jXfYA2pZRDMmlCzrr1MHuunW1FfyzT+S5
+        4SxStmnEZUChwE86ErjsgtNvlIX2ltWwElV3rxJ2gOBaBjgcBcCu
+X-Google-Smtp-Source: AK7set+6S+M96c3GgrIEjh+AkXol3D62hQiJwDDVLEtX5+ypQvN+GhLJBK62qVPKJ+Pl91ZKgezK2UJErldDrk6xW1A=
+X-Received: by 2002:a05:6102:a24:b0:41e:991d:8814 with SMTP id
+ 4-20020a0561020a2400b0041e991d8814mr228996vsb.71.1676983313635; Tue, 21 Feb
+ 2023 04:41:53 -0800 (PST)
 MIME-Version: 1.0
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.170.22
- definitions=2023-02-21_07,2023-02-20_02,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
- phishscore=0 priorityscore=1501 clxscore=1011 mlxscore=0 adultscore=0
- mlxlogscore=999 spamscore=0 suspectscore=0 malwarescore=0 bulkscore=0
- impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2302210106
+References: <20230220133548.158615609@linuxfoundation.org>
+In-Reply-To: <20230220133548.158615609@linuxfoundation.org>
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Tue, 21 Feb 2023 18:11:42 +0530
+Message-ID: <CA+G9fYuuKMfmiso193a+WAKBbgS1vtP_r7hKQPgpwEwNdr7v7w@mail.gmail.com>
+Subject: Re: [PATCH 4.14 00/53] 4.14.306-rc1 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
+        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, f.fainelli@gmail.com,
+        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Mike,
-
-On 20/02/2023 20:38, Michael Roth wrote:
-> From: Dionna Glaze <dionnaglaze@google.com>
-> 
-> The /dev/sev device has the ability to store host-wide certificates for
-> the key used by the AMD-SP for SEV-SNP attestation report signing,
-> but for hosts that want to specify additional certificates that are
-> specific to the image launched in a VM, a different way is needed to
-> communicate those certificates.
-> 
-> Add two new KVM ioctl to handle this: KVM_SEV_SNP_{GET,SET}_CERTS
-> 
-> The certificates that are set with this command are expected to follow
-> the same format as the host certificates, but that format is opaque
-> to the kernel.
-> 
-> The new behavior for custom certificates is that the extended guest
-> request command will now return the overridden certificates if they
-> were installed for the instance. The error condition for a too small
-> data buffer is changed to return the overridden certificate data size
-> if there is an overridden certificate set installed.
-> 
-> Setting a 0 length certificate returns the system state to only return
-> the host certificates on an extended guest request.
-> 
-> Also increase the SEV_FW_BLOB_MAX_SIZE another 4K page to allow space
-> for an extra certificate.
-> 
-> Cc: Tom Lendacky <Thomas.Lendacky@amd.com>
-> Cc: Paolo Bonzini <pbonzini@redhat.com>
-> 
-> Signed-off-by: Dionna Glaze <dionnaglaze@google.com>
-> Signed-off-by: Ashish Kalra <ashish.kalra@amd.com>
-> [mdr: remove used of "we" and "this patch" in commit log]
-> Signed-off-by: Michael Roth <michael.roth@amd.com>
-> ---
->  arch/x86/kvm/svm/sev.c   | 111 ++++++++++++++++++++++++++++++++++++++-
->  arch/x86/kvm/svm/svm.h   |   1 +
->  include/linux/psp-sev.h  |   2 +-
->  include/uapi/linux/kvm.h |  12 +++++
->  4 files changed, 123 insertions(+), 3 deletions(-)
-> 
-> diff --git a/arch/x86/kvm/svm/sev.c b/arch/x86/kvm/svm/sev.c
-> index 70d5650d8d95..18b64b7005e7 100644
-> --- a/arch/x86/kvm/svm/sev.c
-> +++ b/arch/x86/kvm/svm/sev.c
-> @@ -2089,6 +2089,7 @@ static void *snp_context_create(struct kvm *kvm, struct kvm_sev_cmd *argp)
->  		goto e_free;
->  
->  	sev->snp_certs_data = certs_data;
-> +	sev->snp_certs_len = 0;
->  
->  	return context;
->  
-> @@ -2404,6 +2405,86 @@ static int snp_launch_finish(struct kvm *kvm, struct kvm_sev_cmd *argp)
->  	return ret;
->  }
->  
-> +static int snp_get_instance_certs(struct kvm *kvm, struct kvm_sev_cmd *argp)
-> +{
-> +	struct kvm_sev_info *sev = &to_kvm_svm(kvm)->sev_info;
-> +	struct kvm_sev_snp_get_certs params;
-> +
-> +	if (!sev_snp_guest(kvm))
-> +		return -ENOTTY;
-> +
-> +	if (!sev->snp_context)
-> +		return -EINVAL;
-> +
-> +	if (copy_from_user(&params, (void __user *)(uintptr_t)argp->data,
-> +			   sizeof(params)))
-> +		return -EFAULT;
-> +
-> +	/* No instance certs set. */
-> +	if (!sev->snp_certs_len)
-> +		return -ENOENT;
-> +
-> +	if (params.certs_len < sev->snp_certs_len) {
-> +		/* Output buffer too small. Return the required size. */
-> +		params.certs_len = sev->snp_certs_len;
-> +
-> +		if (copy_to_user((void __user *)(uintptr_t)argp->data, &params,
-> +				 sizeof(params)))
-> +			return -EFAULT;
-> +
-> +		return -EINVAL;
-> +	}
-> +
-> +	if (copy_to_user((void __user *)(uintptr_t)params.certs_uaddr,
-> +			 sev->snp_certs_data, sev->snp_certs_len))
-> +		return -EFAULT;
-> +
-> +	return 0;
-> +}
-> +
-> +static int snp_set_instance_certs(struct kvm *kvm, struct kvm_sev_cmd *argp)
-> +{
-> +	struct kvm_sev_info *sev = &to_kvm_svm(kvm)->sev_info;
-> +	unsigned long length = SEV_FW_BLOB_MAX_SIZE;
-> +	void *to_certs = sev->snp_certs_data;
-> +	struct kvm_sev_snp_set_certs params;
-> +
-> +	if (!sev_snp_guest(kvm))
-> +		return -ENOTTY;
-> +
-> +	if (!sev->snp_context)
-> +		return -EINVAL;
-> +
-> +	if (copy_from_user(&params, (void __user *)(uintptr_t)argp->data,
-> +			   sizeof(params)))
-> +		return -EFAULT;
-> +
-> +	if (params.certs_len > SEV_FW_BLOB_MAX_SIZE)
-> +		return -EINVAL;
-> +
-> +	/*
-> +	 * Setting a length of 0 is the same as "uninstalling" instance-
-> +	 * specific certificates.
-> +	 */
-> +	if (params.certs_len == 0) {
-> +		sev->snp_certs_len = 0;
-> +		return 0;
-> +	}
-> +
-> +	/* Page-align the length */
-> +	length = (params.certs_len + PAGE_SIZE - 1) & PAGE_MASK;
-> +
-
-In comments on v7 [1] Dionna agreed adding cleanup here:
-
-  /* The size could shrink and leave garbage at the end. */
-  memset(sev->snp_certs_data, 0, SEV_FW_BLOB_MAX_SIZE);
-
-(we can use 'to_certs' in the first argument)
-
-but it wasn't added in v8.
-
--Dov
-
-[1] https://lore.kernel.org/linux-coco/CAAH4kHYOtzgqSTZQFcRiZwPLCkLAThjsCMdjUCdsBTiP=W0Vxw@mail.gmail.com/
+On Mon, 20 Feb 2023 at 19:08, Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
+>
+> This is the start of the stable review cycle for the 4.14.306 release.
+> There are 53 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+>
+> Responses should be made by Wed, 22 Feb 2023 13:35:35 +0000.
+> Anything received after that time might be too late.
+>
+> The whole patch series can be found in one patch at:
+>         https://www.kernel.org/pub/linux/kernel/v4.x/stable-review/patch-=
+4.14.306-rc1.gz
+> or in the git tree and branch at:
+>         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable=
+-rc.git linux-4.14.y
+> and the diffstat can be found below.
+>
+> thanks,
+>
+> greg k-h
 
 
-> +	if (copy_from_user(to_certs,
-> +			   (void __user *)(uintptr_t)params.certs_uaddr,
-> +			   params.certs_len)) {
-> +		return -EFAULT;
-> +	}
-> +
-> +	sev->snp_certs_len = length;
-> +
-> +	return 0;
-> +}
-> +
->  int sev_mem_enc_ioctl(struct kvm *kvm, void __user *argp)
->  {
->  	struct kvm_sev_cmd sev_cmd;
-> @@ -2503,6 +2584,12 @@ int sev_mem_enc_ioctl(struct kvm *kvm, void __user *argp)
->  	case KVM_SEV_SNP_LAUNCH_FINISH:
->  		r = snp_launch_finish(kvm, &sev_cmd);
->  		break;
-> +	case KVM_SEV_SNP_GET_CERTS:
-> +		r = snp_get_instance_certs(kvm, &sev_cmd);
-> +		break;
-> +	case KVM_SEV_SNP_SET_CERTS:
-> +		r = snp_set_instance_certs(kvm, &sev_cmd);
-> +		break;
->  	default:
->  		r = -EINVAL;
->  		goto out;
-> @@ -3550,8 +3637,28 @@ static void snp_handle_ext_guest_request(struct vcpu_svm *svm, gpa_t req_gpa, gp
->  	if (rc)
->  		goto unlock;
->  
-> -	rc = snp_guest_ext_guest_request(&req, (unsigned long)sev->snp_certs_data,
-> -					 &data_npages, &err);
-> +	/*
-> +	 * If the VMM has overridden the certs, then change the error message
-> +	 * if the size is inappropriate for the override. Otherwise, use a
-> +	 * regular guest request and copy back the instance certs.
-> +	 */
-> +	if (sev->snp_certs_len) {
-> +		if ((data_npages << PAGE_SHIFT) < sev->snp_certs_len) {
-> +			rc = -EINVAL;
-> +			err = SNP_GUEST_REQ_INVALID_LEN;
-> +			goto datalen;
-> +		}
-> +		rc = sev_issue_cmd(kvm, SEV_CMD_SNP_GUEST_REQUEST, &req,
-> +				   (int *)&err);
-> +	} else {
-> +		rc = snp_guest_ext_guest_request(&req,
-> +						 (unsigned long)sev->snp_certs_data,
-> +						 &data_npages, &err);
-> +	}
-> +datalen:
-> +	if (sev->snp_certs_len)
-> +		data_npages = sev->snp_certs_len >> PAGE_SHIFT;
-> +
->  	if (rc) {
->  		/*
->  		 * If buffer length is small then return the expected
-> diff --git a/arch/x86/kvm/svm/svm.h b/arch/x86/kvm/svm/svm.h
-> index 221b38d3c845..dced46559508 100644
-> --- a/arch/x86/kvm/svm/svm.h
-> +++ b/arch/x86/kvm/svm/svm.h
-> @@ -94,6 +94,7 @@ struct kvm_sev_info {
->  	u64 snp_init_flags;
->  	void *snp_context;      /* SNP guest context page */
->  	void *snp_certs_data;
-> +	unsigned int snp_certs_len; /* Size of instance override for certs */
->  	struct mutex guest_req_lock; /* Lock for guest request handling */
->  
->  	u64 sev_features;	/* Features set at VMSA creation */
-> diff --git a/include/linux/psp-sev.h b/include/linux/psp-sev.h
-> index 92116e2b74fd..3b28b78938f6 100644
-> --- a/include/linux/psp-sev.h
-> +++ b/include/linux/psp-sev.h
-> @@ -22,7 +22,7 @@
->  #define __psp_pa(x)	__pa(x)
->  #endif
->  
-> -#define SEV_FW_BLOB_MAX_SIZE	0x4000	/* 16KB */
-> +#define SEV_FW_BLOB_MAX_SIZE	0x5000	/* 20KB */
->  
->  /**
->   * SEV platform state
-> diff --git a/include/uapi/linux/kvm.h b/include/uapi/linux/kvm.h
-> index 6e684bf5f723..ad7e24e43547 100644
-> --- a/include/uapi/linux/kvm.h
-> +++ b/include/uapi/linux/kvm.h
-> @@ -1928,6 +1928,8 @@ enum sev_cmd_id {
->  	KVM_SEV_SNP_LAUNCH_START,
->  	KVM_SEV_SNP_LAUNCH_UPDATE,
->  	KVM_SEV_SNP_LAUNCH_FINISH,
-> +	KVM_SEV_SNP_GET_CERTS,
-> +	KVM_SEV_SNP_SET_CERTS,
->  
->  	KVM_SEV_NR_MAX,
->  };
-> @@ -2075,6 +2077,16 @@ struct kvm_sev_snp_launch_finish {
->  	__u8 pad[6];
->  };
->  
-> +struct kvm_sev_snp_get_certs {
-> +	__u64 certs_uaddr;
-> +	__u64 certs_len;
-> +};
-> +
-> +struct kvm_sev_snp_set_certs {
-> +	__u64 certs_uaddr;
-> +	__u64 certs_len;
-> +};
-> +
->  #define KVM_DEV_ASSIGN_ENABLE_IOMMU	(1 << 0)
->  #define KVM_DEV_ASSIGN_PCI_2_3		(1 << 1)
->  #define KVM_DEV_ASSIGN_MASK_INTX	(1 << 2)
+Results from Linaro=E2=80=99s test farm.
+No regressions on arm64, arm, x86_64, and i386.
+
+Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
+
+## Build
+* kernel: 4.14.306-rc1
+* git: https://gitlab.com/Linaro/lkft/mirrors/stable/linux-stable-rc
+* git branch: linux-4.14.y
+* git commit: 2fbaf74fe65717ef42f395575562c1f594810941
+* git describe: v4.14.305-54-g2fbaf74fe657
+* test details:
+https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-4.14.y/build/v4.14=
+.305-54-g2fbaf74fe657
+
+## Test Regressions (compared to v4.14.305)
+
+## Metric Regressions (compared to v4.14.305)
+
+## Test Fixes (compared to v4.14.305)
+
+## Metric Fixes (compared to v4.14.305)
+
+## Test result summary
+total: 92817, pass: 79357, fail: 3404, skip: 9909, xfail: 147
+
+## Build Summary
+* arc: 10 total, 10 passed, 0 failed
+* arm: 228 total, 225 passed, 3 failed
+* arm64: 42 total, 39 passed, 3 failed
+* i386: 29 total, 28 passed, 1 failed
+* mips: 41 total, 41 passed, 0 failed
+* parisc: 12 total, 12 passed, 0 failed
+* powerpc: 20 total, 19 passed, 1 failed
+* s390: 15 total, 11 passed, 4 failed
+* sh: 24 total, 24 passed, 0 failed
+* sparc: 12 total, 12 passed, 0 failed
+* x86_64: 38 total, 37 passed, 1 failed
+
+## Test suites summary
+* boot
+* fwts
+* igt-gpu-tools
+* kselftest-android
+* kselftest-arm64
+* kselftest-breakpoints
+* kselftest-capabilities
+* kselftest-cgroup
+* kselftest-clone3
+* kselftest-core
+* kselftest-cpu-hotplug
+* kselftest-cpufreq
+* kselftest-drivers-dma-buf
+* kselftest-efivarfs
+* kselftest-filesystems
+* kselftest-filesystems-binderfs
+* kselftest-firmware
+* kselftest-fpu
+* kselftest-futex
+* kselftest-gpio
+* kselftest-intel_pstate
+* kselftest-ipc
+* kselftest-ir
+* kselftest-kcmp
+* kselftest-kexec
+* kselftest-kvm
+* kselftest-lib
+* kselftest-livepatch
+* kselftest-membarrier
+* kselftest-net
+* kselftest-net-forwarding
+* kselftest-net-mptcp
+* kselftest-netfilter
+* kselftest-nsfs
+* kselftest-openat2
+* kselftest-pid_namespace
+* kselftest-pidfd
+* kselftest-proc
+* kselftest-pstore
+* kselftest-ptrace
+* kselftest-seccomp
+* kselftest-sigaltstack
+* kselftest-size
+* kselftest-splice
+* kselftest-static_keys
+* kselftest-sync
+* kselftest-sysctl
+* kselftest-tc-testing
+* kselftest-timens
+* kselftest-timers
+* kselftest-tmpfs
+* kselftest-tpm2
+* kselftest-user
+* kselftest-vm
+* kselftest-x86
+* kselftest-zram
+* kunit
+* kvm-unit-tests
+* libhugetlbfs
+* log-parser-boot
+* log-parser-test
+* ltp-cap_bounds
+* ltp-commands
+* ltp-containers
+* ltp-controllers
+* ltp-cpuhotplug
+* ltp-crypto
+* ltp-cve
+* ltp-dio
+* ltp-fcntl-locktests
+* ltp-filecaps
+* ltp-fs
+* ltp-fs_bind
+* ltp-fs_perms_simple
+* ltp-fsx
+* ltp-hugetlb
+* ltp-io
+* ltp-ipc
+* ltp-math
+* ltp-mm
+* ltp-nptl
+* ltp-open-posix-tests
+* ltp-pty
+* ltp-sched
+* ltp-securebits
+* ltp-smoke
+* ltp-syscalls
+* ltp-tracing
+* network-basic-tests
+* rcutorture
+* v4l2-compliance
+* vdso
+
+--
+Linaro LKFT
+https://lkft.linaro.org
