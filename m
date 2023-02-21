@@ -2,122 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D30269E52E
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 17:54:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BD75969E53D
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 17:56:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234733AbjBUQyR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Feb 2023 11:54:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56510 "EHLO
+        id S234895AbjBUQ45 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Feb 2023 11:56:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57896 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234216AbjBUQyP (ORCPT
+        with ESMTP id S234081AbjBUQ4z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Feb 2023 11:54:15 -0500
-Received: from mx0b-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7034B10F6
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Feb 2023 08:54:14 -0800 (PST)
-Received: from pps.filterd (m0109332.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 31LDjqJD007138
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Feb 2023 08:54:13 -0800
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=meta.com; h=from : to : cc :
- subject : date : message-id : mime-version : content-transfer-encoding :
- content-type; s=s2048-2021-q4;
- bh=Lv9wtK+Nznn45ETj9R3Fhuj6gPKzD5SadJcUnBYgOLQ=;
- b=P0Ku8hmcIFQ1Qij/mJfUcp0QRf/3OcOzbXplOI8L34/kr6qJP8UQBK42btsF1JeovfM1
- 9UmSK1s6/sLzNce0o4/Ue3SDIbwfXh3zVEPPgq+FUzb2xePVm4Ol0NGkkJnO7bP8E81b
- kRlWlTnOcUZ+sARg9Nq2X9kJOSjg9/M0sbwxgMsyICxrhfsyZDp725XPqiuG56iGUA6Q
- 3IUBTnK1jrtnkqHr+UaAReODuNPfeXWWcG74ShAkvPnIQE4QkurJU/ae2isakwUeoOiC
- rw1XFmRAlZArLhRzs2mgecTepCIwdg+H3CUysNPwNHVRIIBbtVyFlqhJX5E+pyKywrGG cA== 
-Received: from maileast.thefacebook.com ([163.114.130.16])
-        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3nuf8xwnht-2
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Feb 2023 08:54:13 -0800
-Received: from twshared15216.17.frc2.facebook.com (2620:10d:c0a8:1b::d) by
- mail.thefacebook.com (2620:10d:c0a8:82::f) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.17; Tue, 21 Feb 2023 08:54:11 -0800
-Received: by devbig007.nao1.facebook.com (Postfix, from userid 544533)
-        id D5EF011DFBF75; Tue, 21 Feb 2023 08:54:00 -0800 (PST)
-From:   Keith Busch <kbusch@meta.com>
-To:     Andrew Morton <akpm@linux-foundation.org>, <linux-mm@kvack.org>,
-        <linux-kernel@vger.kernel.org>
-CC:     Keith Busch <kbusch@kernel.org>,
-        Bryan O'Donoghue <bryan.odonoghue@linaro.org>
-Subject: [PATCH] dmapool: push new blocks in ascending order
-Date:   Tue, 21 Feb 2023 08:54:00 -0800
-Message-ID: <20230221165400.1595247-1-kbusch@meta.com>
-X-Mailer: git-send-email 2.30.2
+        Tue, 21 Feb 2023 11:56:55 -0500
+Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 975292C658
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Feb 2023 08:56:53 -0800 (PST)
+Received: by mail-ed1-x530.google.com with SMTP id b12so19821183edd.4
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Feb 2023 08:56:53 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=aCU6SPAFZVv6VrbiMY/N7BZbYYEaRXFZQb7KA4W8RVo=;
+        b=lKw4QodbdDMkDON5+34Zsg2fW6BQUEa2d+bZoarpRELg92X9u9882K/pe/HdFj3huM
+         6Lc1FGAQOGl2+g2eNBp4hLPPUc159jfqYetPDRRGOx+PfHrpa75zdoZOVko23d+DNsx7
+         bJMjyXLEHWXAgpH4l9oLRg+9/Nyyfdqn8Bf03IQaFqlL24+BjhWhC8oDFC9XznL3Zj6B
+         ProL6idqXQw/7zoq4/44IhfKpGd2J22IMD7LU9BKwvIKO27RiActjOIBqzuJGyhivbAh
+         moM2bqoVWcHjGqcVn78k7heXQSuKtbmvJWLati5vrlghaIxvtYV8SNZQqt8wkYhjz+PD
+         kj6g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=aCU6SPAFZVv6VrbiMY/N7BZbYYEaRXFZQb7KA4W8RVo=;
+        b=a3LKkqGKHv+lHx/vw98Of7Q6x0DZIvruQMUIxIpkUk93HDNivyc/IFQemGZAbnPmm7
+         492rRR4WP8c/5Giq35XGnRMiZLR0ETP0YYx23ZIudgzA21ucfK7O22IKN+/u5JRvuqX6
+         wSzLR2AlgyTFpG7TzBPO5l4PibBhV4c3V8eeiVAwA20avSQ91NeH3kOCDqWUP6599hlT
+         zrV5dz2U/TlGV8lW24O5Lwz4uBV2z/Vk+4MUUJdNQl4EFvvPXA+TrmG6bPkFpnXWJZFp
+         fcPpdz6jURn9LBBLleBoyGZrkzjTOjesZq6C0OVETQvXzh2I6JqTeG0f1Ga0ecDLgdym
+         RivA==
+X-Gm-Message-State: AO0yUKUaltePpRzsqVoPt+BlqSTYXIm5cylQhYMHLeD8c74C5fV+DSZz
+        b868qtF6/u1dwjsbwp2a4XvE8A==
+X-Google-Smtp-Source: AK7set/vywrHZuTi6XuUog062h/Qf6hzYttHgoOMW0LLI9sVJlPsm0rv0sXGCDZ0eASaCbRg2wq0Iw==
+X-Received: by 2002:a17:907:2128:b0:8af:54d0:181d with SMTP id qo8-20020a170907212800b008af54d0181dmr12541426ejb.35.1676998612081;
+        Tue, 21 Feb 2023 08:56:52 -0800 (PST)
+Received: from [192.168.1.109] ([178.197.216.144])
+        by smtp.gmail.com with ESMTPSA id me19-20020a170906aed300b008b17662e1f7sm6816234ejb.53.2023.02.21.08.56.50
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 21 Feb 2023 08:56:51 -0800 (PST)
+Message-ID: <764cf3a6-abcc-5c43-606f-10248c6fd0bf@linaro.org>
+Date:   Tue, 21 Feb 2023 17:56:49 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-FB-Internal: Safe
-Content-Type: text/plain
-X-Proofpoint-GUID: JWZacyIf0A60AyEE_VpTanpdoMR3eHeA
-X-Proofpoint-ORIG-GUID: JWZacyIf0A60AyEE_VpTanpdoMR3eHeA
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.170.22
- definitions=2023-02-21_09,2023-02-20_02,2023-02-09_01
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH v3 2/3] dt-bindings: net: bluetooth: Add NXP bluetooth
+ support
+Content-Language: en-US
+To:     Neeraj sanjay kale <neeraj.sanjaykale@nxp.com>,
+        "davem@davemloft.net" <davem@davemloft.net>,
+        "edumazet@google.com" <edumazet@google.com>,
+        "kuba@kernel.org" <kuba@kernel.org>,
+        "pabeni@redhat.com" <pabeni@redhat.com>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "krzysztof.kozlowski+dt@linaro.org" 
+        <krzysztof.kozlowski+dt@linaro.org>,
+        "marcel@holtmann.org" <marcel@holtmann.org>,
+        "johan.hedberg@gmail.com" <johan.hedberg@gmail.com>,
+        "luiz.dentz@gmail.com" <luiz.dentz@gmail.com>,
+        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+        "jirislaby@kernel.org" <jirislaby@kernel.org>,
+        "alok.a.tiwari@oracle.com" <alok.a.tiwari@oracle.com>,
+        "hdanton@sina.com" <hdanton@sina.com>,
+        "ilpo.jarvinen@linux.intel.com" <ilpo.jarvinen@linux.intel.com>,
+        "leon@kernel.org" <leon@kernel.org>
+Cc:     "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-bluetooth@vger.kernel.org" <linux-bluetooth@vger.kernel.org>,
+        "linux-serial@vger.kernel.org" <linux-serial@vger.kernel.org>,
+        Amitkumar Karwar <amitkumar.karwar@nxp.com>,
+        Rohit Fule <rohit.fule@nxp.com>,
+        Sherry Sun <sherry.sun@nxp.com>
+References: <20230213145432.1192911-1-neeraj.sanjaykale@nxp.com>
+ <20230213145432.1192911-3-neeraj.sanjaykale@nxp.com>
+ <60928656-c565-773d-52e6-2142e997eee4@linaro.org>
+ <DU2PR04MB8600F997FCED520DCBAB2330E7A59@DU2PR04MB8600.eurprd04.prod.outlook.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <DU2PR04MB8600F997FCED520DCBAB2330E7A59@DU2PR04MB8600.eurprd04.prod.outlook.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Keith Busch <kbusch@kernel.org>
+On 21/02/2023 17:40, Neeraj sanjay kale wrote:
+> Hi Krzysztof,
+> 
+> Thank you for reviewing this patch. I have fixed all the review comments in this document.
+> Please let me know if you have any more comments or suggestions on the new v4 patch.
+> 
+>>>  .../bindings/net/bluetooth/nxp,w8xxx-bt.yaml  | 44
+>>> +++++++++++++++++++
+>>
+>> I don't think I proposed such filename.
+> Renamed file to nxp,w8987-bt.yaml
+> 
+> 
+>>> +examples:
+>>> +  - |
+>>> +    uart2 {
+>>
+>> This is a friendly reminder during the review process.
+>>
+>> It seems my previous comments were not fully addressed. Maybe my
+>> feedback got lost between the quotes, maybe you just forgot to apply it.
+>> Please go back to the previous discussion and either implement all requested
+>> changes or keep discussing them.
 
-Some users of the dmapool need their allocations to happen in ascending
-order. The recent optimizations pushed the blocks in reverse order, so
-restore the previous behavior by linking the next available block from
-low-to-high.
+And how did you fix this one?
 
-Fixes: ced6d06a81fb69 ("dmapool: link blocks across pages")
-Reported-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
-Signed-off-by: Keith Busch <kbusch@kernel.org>
----
- mm/dmapool.c | 15 +++++++++++++--
- 1 file changed, 13 insertions(+), 2 deletions(-)
-
-diff --git a/mm/dmapool.c b/mm/dmapool.c
-index 1920890ff8d3d..a151a21e571b7 100644
---- a/mm/dmapool.c
-+++ b/mm/dmapool.c
-@@ -300,7 +300,7 @@ EXPORT_SYMBOL(dma_pool_create);
- static void pool_initialise_page(struct dma_pool *pool, struct dma_page =
-*page)
- {
- 	unsigned int next_boundary =3D pool->boundary, offset =3D 0;
--	struct dma_block *block;
-+	struct dma_block *block, *first =3D NULL, *last =3D NULL;
-=20
- 	pool_init_page(pool, page);
- 	while (offset + pool->size <=3D pool->allocation) {
-@@ -311,11 +311,22 @@ static void pool_initialise_page(struct dma_pool *p=
-ool, struct dma_page *page)
- 		}
-=20
- 		block =3D page->vaddr + offset;
--		pool_block_push(pool, block, page->dma + offset);
-+		block->dma =3D page->dma + offset;
-+		block->next_block =3D NULL;
-+
-+		if (last)
-+			last->next_block =3D block;
-+		else
-+			first =3D block;
-+		last =3D block;
-+
- 		offset +=3D pool->size;
- 		pool->nr_blocks++;
- 	}
-=20
-+	last->next_block =3D pool->next_block;
-+	pool->next_block =3D first;
-+
- 	list_add(&page->page_list, &pool->page_list);
- 	pool->nr_pages++;
- }
---=20
-2.30.2
+Best regards,
+Krzysztof
 
