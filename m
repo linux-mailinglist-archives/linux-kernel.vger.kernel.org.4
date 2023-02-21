@@ -2,73 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 951AD69E262
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 15:33:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7453969E265
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 15:34:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234117AbjBUOdI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Feb 2023 09:33:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53906 "EHLO
+        id S234455AbjBUOea (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Feb 2023 09:34:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55030 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233049AbjBUOdG (ORCPT
+        with ESMTP id S233049AbjBUOe2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Feb 2023 09:33:06 -0500
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E19DB10C0
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Feb 2023 06:33:04 -0800 (PST)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 19FC15C77D;
-        Tue, 21 Feb 2023 14:33:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1676989983; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=eP5ocU6XXUYDRuHy9gjU+cH8b1jImnrk7y/3atb8yAk=;
-        b=2qX1BYT41Z5HLGBg+ZOFUSWk/W4yYC4+qRWmYA89gjUPOyUzYXzWfnrPKenl98Q5EXKwQ/
-        BpUYtE3YEvnu5Vyk/D3GgYN0JX61w+jvifITQrNGiuajK+7cRKFdT8l2EIAMO0TZtGxPAK
-        YYEg0hDLW81GWo/EHqXr/7nsjd/pI0M=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1676989983;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=eP5ocU6XXUYDRuHy9gjU+cH8b1jImnrk7y/3atb8yAk=;
-        b=Md3SGknNU1/bhKHlAq+TS8xJ5ojRG8s8wheQHY1rKc/qxMFy98dYcQ4g+GxdZurd+ZIUBO
-        /TsJ2YMFlwdCRZDg==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id E909713223;
-        Tue, 21 Feb 2023 14:33:02 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id dEZROB7W9GN6VAAAMHmgww
-        (envelope-from <vbabka@suse.cz>); Tue, 21 Feb 2023 14:33:02 +0000
-Message-ID: <0d7dde0e-ac9d-620a-cfe8-7897ed53be60@suse.cz>
-Date:   Tue, 21 Feb 2023 15:33:02 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-From:   Vlastimil Babka <vbabka@suse.cz>
-Subject: [GIT PULL] slab updates for 6.3-rc1
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     David Rientjes <rientjes@google.com>,
-        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
-        Christoph Lameter <cl@linux.com>,
-        Pekka Enberg <penberg@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        LKML <linux-kernel@vger.kernel.org>, patches@lists.linux.dev,
+        Tue, 21 Feb 2023 09:34:28 -0500
+Received: from smtp1.axis.com (smtp1.axis.com [195.60.68.17])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C07425FD7;
+        Tue, 21 Feb 2023 06:34:26 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=axis.com; q=dns/txt; s=axis-central1; t=1676990067;
+  x=1708526067;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=e0/vm795K+DdiwKlFn5UN5He4cprPggTB4iadCKSttU=;
+  b=c2aVEOSHIXeNdSzupVDL/Xc8tvIdiY1iEPB3wD22nysxQuqzPzWvAFkk
+   EtUY/zqyaVQcV85IbbrRn0YaUIfhGxuSdMBgHbjkz0vg8A4oKfeTF5uVe
+   iU1wbH4cRw0Xsk7biuXS0+p9yndMzFK0KAXqfstNh1Mgk0WIi/FCwsxL8
+   p6IyDUbqdIUAPpUa5dlcScQtobaf8nirsBro/83t4tGcZAX9B4tbbLJ0z
+   sApuKgesbLzq3pBghWxuahjG9JYBYY+2JNcSlfspPU2GzBbBhRmUTKnaC
+   1d1/Ozk/DziluuEgMpM+PtdZiC46C1xpBm4HANq0t+sca0F+xs71ADfCh
+   w==;
+From:   Matthew Chae <matthew.chae@axis.com>
+To:     Johannes Weiner <hannes@cmpxchg.org>,
+        Michal Hocko <mhocko@kernel.org>,
         Roman Gushchin <roman.gushchin@linux.dev>,
-        Hyeonggon Yoo <42.hyeyoo@gmail.com>
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+        Shakeel Butt <shakeelb@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>
+CC:     <kernel@axis.com>, <christopher.wong@axis.com>,
+        Matthew Chae <matthew.chae@axis.com>,
+        Muchun Song <muchun.song@linux.dev>, <cgroups@vger.kernel.org>,
+        <linux-mm@kvack.org>, <linux-kernel@vger.kernel.org>
+Subject: [PATCH] mm/memcontrol: add memory.peak in cgroup root
+Date:   Tue, 21 Feb 2023 15:34:20 +0100
+Message-ID: <20230221143421.10385-1-matthew.chae@axis.com>
+X-Mailer: git-send-email 2.20.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
         SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,47 +54,57 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Linus,
+The kernel currently doesn't provide any method to show the overall
+system's peak memory usage recorded. Instead, only each slice's peak
+memory usage recorded except for cgroup root is shown through each
+memory.peak.
 
-please pull the latest slab updates from:
+Each slice might consume their peak memory at different time. This is
+stored at memory.peak in each own slice. The sum of every memory.peak
+doesn't mean the total system's peak memory usage recorded. The sum at
+certain point without having a peak memory usage in their slice can have
+the largest value.
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/vbabka/slab.git tags/slab-for-6.3
+       time |  slice1  |  slice2  |   sum
+      =======================================
+        t1  |    50    |   200    |   250
+      ---------------------------------------
+        t2  |   150    |   150    |   300
+      ---------------------------------------
+        t3  |   180    |    20    |   200
+      ---------------------------------------
+        t4  |    80    |    20    |   100
 
-This time it's just a bunch of smaller cleanups and fixes for SLAB and SLUB:
+memory.peak value of slice1 is 180 and memory.peak value of slice2 is 200.
+Only these information are provided through memory.peak value from each
+slice without providing the overall system's peak memory usage. The total
+sum of these two value is 380, but this doesn't represent the real peak
+memory usage of the overall system. The peak value what we want to get is
+shown in t2 as 300, which doesn't have any biggest number even in one
+slice. Therefore the proper way to show the system's overall peak memory
+usage recorded needs to be provided.
 
-- Make it possible to use kmem_cache_alloc_bulk() early in boot when
-  interrupts are not yet enabled, as code doing that started to appear via
-  new maple tree users (by Thomas Gleixner).
+Hence, expose memory.peak in the cgrop root in order to allow this.
 
-- Fix debugfs-related memory leak in SLUB (by Greg Kroah-Hartman).
+Co-developed-by: Christopher Wong <christopher.wong@axis.com>
+Signed-off-by: Christopher Wong <christopher.wong@axis.com>
+Signed-off-by: Matthew Chae <matthew.chae@axis.com>
+---
+ mm/memcontrol.c | 1 -
+ 1 file changed, 1 deletion(-)
 
-- Use the standard idiom to get head page of folio (by SeongJae Park)
-
-- Simplify and inline is_debug_pagealloc_cache() in SLAB (by lvqian)
-
-- Remove unused variable in SLAB (by Gou Hao)
-
-----------------------------------------------------------------
-Gou Hao (1):
-      mm/slab: remove unused slab_early_init
-
-Greg Kroah-Hartman (1):
-      mm/slub: fix memory leak with using debugfs_lookup()
-
-SeongJae Park (1):
-      mm/sl{a,u}b: fix wrong usages of folio_page() for getting head pages
-
-Thomas Gleixner (1):
-      mm, slab/slub: Ensure kmem_cache_alloc_bulk() is available early
-
-Vlastimil Babka (2):
-      Merge branch 'slab/for-6.3/cleanups' into slab/for-linus
-      Merge branch 'slab/for-6.3/fixes' into slab/for-linus
-
-lvqian (1):
-      mm/slab.c: cleanup is_debug_pagealloc_cache()
-
- mm/slab.c | 34 +++++++++++++++-------------------
- mm/slub.c | 13 +++++++------
- 2 files changed, 22 insertions(+), 25 deletions(-)
+diff --git a/mm/memcontrol.c b/mm/memcontrol.c
+index 73afff8062f9..974fc044a7e7 100644
+--- a/mm/memcontrol.c
++++ b/mm/memcontrol.c
+@@ -6646,7 +6646,6 @@ static struct cftype memory_files[] = {
+ 	},
+ 	{
+ 		.name = "peak",
+-		.flags = CFTYPE_NOT_ON_ROOT,
+ 		.read_u64 = memory_peak_read,
+ 	},
+ 	{
+-- 
+2.20.1
 
