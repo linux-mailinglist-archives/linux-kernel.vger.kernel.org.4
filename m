@@ -2,46 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B78E969DEE9
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 12:35:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2DCA769DEEB
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 12:35:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234265AbjBULfE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Feb 2023 06:35:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58092 "EHLO
+        id S234025AbjBULfK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Feb 2023 06:35:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58152 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233794AbjBULem (ORCPT
+        with ESMTP id S233830AbjBULeo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Feb 2023 06:34:42 -0500
+        Tue, 21 Feb 2023 06:34:44 -0500
 Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3781925B93
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17A012686F
         for <linux-kernel@vger.kernel.org>; Tue, 21 Feb 2023 03:34:41 -0800 (PST)
 Received: from zn.tnic (p5de8e9fe.dip0.t-ipconnect.de [93.232.233.254])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id D64C31EC067E;
-        Tue, 21 Feb 2023 12:34:39 +0100 (CET)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 5D0451EC0681;
+        Tue, 21 Feb 2023 12:34:40 +0100 (CET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1676979279;
+        t=1676979280;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=IYyR0+BccWAZu5naODrqJjalGeVpYFKs8LsqRBbFls0=;
-        b=V/S64JpQrPEnqV250KVXVQRNMRPqMIqPonbf6qQxcaH8JO7DLiKIsClOy29TDN/QmOOIox
-        dA5CXj+2i+Q0g6if//P0LcCDz/y2m//YkAP2uGlgN+Kyk+FSgtHWjuib8dSB7QRuTqiPYU
-        oyRua31voVHEt79/UQyFo1pyY4gVakE=
+        bh=4IxoB32WLSIy6eV1NxkSejZghgVhKqORRCJKoMxnv/Y=;
+        b=EQmnfjWnpopJUzOwY9r1pP0A3wFv+y11v8GCohH+bsoxt5SLtvGLAT/k7wXTEH4xhgILVO
+        Vm/Z7MhxgfkbtpYoIM0X4Gh09S83Tja++c1nPixw+JcCERtjmKFiWdjJI+TiinWv2dQjBF
+        xHVpVl80ErSEKJFyVCHTVHK9zRCeoVo=
 From:   Borislav Petkov <bp@alien8.de>
 To:     LKML <linux-kernel@vger.kernel.org>
-Cc:     Dionna Glaze <dionnaglaze@google.com>,
+Cc:     Borislav Petkov <bp@alien8.de>,
+        Dionna Glaze <dionnaglaze@google.com>,
         Joerg Roedel <jroedel@suse.de>,
         Michael Roth <michael.roth@amd.com>,
         Nikunj A Dadhania <nikunj@amd.com>,
         Peter Gonda <pgonda@google.com>,
         Tom Lendacky <Thomas.Lendacky@amd.com>,
         linux-coco@lists.linux.dev, x86@kernel.org
-Subject: [PATCH -v2 08/11] crypto: ccp: Get rid of __sev_platform_init_locked()'s local function pointer
-Date:   Tue, 21 Feb 2023 12:34:25 +0100
-Message-Id: <20230221113428.19324-9-bp@alien8.de>
+Subject: [PATCH -v2 09/11] virt/coco/sev-guest: Add throttling awareness
+Date:   Tue, 21 Feb 2023 12:34:26 +0100
+Message-Id: <20230221113428.19324-10-bp@alien8.de>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20230221113428.19324-1-bp@alien8.de>
 References: <20230221113428.19324-1-bp@alien8.de>
@@ -56,67 +57,131 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: "Borislav Petkov (AMD)" <bp@alien8.de>
+From: Dionna Glaze <dionnaglaze@google.com>
 
-Add a wrapper instead.
+A potentially malicious SEV guest can constantly hammer the hypervisor
+using this driver to send down requests and thus prevent or at least
+considerably hinder other guests from issuing requests to the secure
+processor which is a shared platform resource.
 
-No functional changes.
+Therefore, the host is permitted and encouraged to throttle such guest
+requests.
 
+Add the capability to handle the case when the hypervisor throttles
+excessive numbers of requests issued by the guest. Otherwise, the VM
+platform communication key will be disabled, preventing the guest from
+attesting itself.
+
+Realistically speaking, a well-behaved guest should not even care about
+throttling. During its lifetime, it would end up issuing a handful of
+requests which the hardware can easily handle.
+
+This is more to address the case of a malicious guest. Such guest should
+get throttled and if its VMPCK gets disabled, then that's its own
+wrongdoing and perhaps that guest even deserves it.
+
+To the implementation: the hypervisor signals with SNP_GUEST_REQ_ERR_BUSY
+that the guest requests should be throttled. That error code is returned
+in the upper 32-bit half of exitinfo2 and this is part of the GHCB spec
+v2.
+
+So the guest is given a throttling period of 1 minute in which it
+retries the request every 2 seconds. This is a good default but if it
+turns out to not pan out in practice, it can be tweaked later.
+
+For safety, since the encryption algorithm in GHCBv2 is AES_GCM, control
+must remain in the kernel to complete the request with the current
+sequence number. Returning without finishing the request allows the
+guest to make another request but with different message contents. This
+is IV reuse, and breaks cryptographic protections.
+
+  [ bp: Rewrite commit message and do a simplified version. ]
+
+Fixes: d5af44dde546 ("x86/sev: Provide support for SNP guest request NAEs")
+Signed-off-by: Dionna Glaze <dionnaglaze@google.com>
+Co-developed-by: Borislav Petkov (AMD) <bp@alien8.de>
 Signed-off-by: Borislav Petkov (AMD) <bp@alien8.de>
+Link: https://lore.kernel.org/r/20230214164638.1189804-2-dionnaglaze@google.com
 ---
- drivers/crypto/ccp/sev-dev.c | 16 ++++++++++------
- 1 file changed, 10 insertions(+), 6 deletions(-)
+ arch/x86/include/asm/sev-common.h       |  3 ++-
+ arch/x86/kernel/sev.c                   |  4 ++++
+ drivers/virt/coco/sev-guest/sev-guest.c | 19 ++++++++++++++++++-
+ 3 files changed, 24 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/crypto/ccp/sev-dev.c b/drivers/crypto/ccp/sev-dev.c
-index f60bb73edfda..c54cc8f9a284 100644
---- a/drivers/crypto/ccp/sev-dev.c
-+++ b/drivers/crypto/ccp/sev-dev.c
-@@ -440,11 +440,18 @@ static int __sev_init_ex_locked(int *error)
- 	return __sev_do_cmd_locked(SEV_CMD_INIT_EX, &data, error);
- }
+diff --git a/arch/x86/include/asm/sev-common.h b/arch/x86/include/asm/sev-common.h
+index b8357d6ecd47..b63be696b776 100644
+--- a/arch/x86/include/asm/sev-common.h
++++ b/arch/x86/include/asm/sev-common.h
+@@ -128,8 +128,9 @@ struct snp_psc_desc {
+ 	struct psc_entry entries[VMGEXIT_PSC_MAX_ENTRY];
+ } __packed;
  
-+static inline int __sev_do_init_locked(int *psp_ret)
-+{
-+	if (sev_init_ex_buffer)
-+		return __sev_init_ex_locked(psp_ret);
-+	else
-+		return __sev_init_locked(psp_ret);
-+}
+-/* Guest message request error code */
++/* Guest message request error codes */
+ #define SNP_GUEST_REQ_INVALID_LEN	BIT_ULL(32)
++#define SNP_GUEST_REQ_ERR_BUSY		BIT_ULL(33)
+ 
+ #define GHCB_MSR_TERM_REQ		0x100
+ #define GHCB_MSR_TERM_REASON_SET_POS	12
+diff --git a/arch/x86/kernel/sev.c b/arch/x86/kernel/sev.c
+index d67884fb38c1..3f664ab277c4 100644
+--- a/arch/x86/kernel/sev.c
++++ b/arch/x86/kernel/sev.c
+@@ -2214,6 +2214,10 @@ int snp_issue_guest_request(u64 exit_code, struct snp_req_data *input, unsigned
+ 	case 0:
+ 		break;
+ 
++	case SNP_GUEST_REQ_ERR_BUSY:
++		ret = -EAGAIN;
++		break;
 +
- static int __sev_platform_init_locked(int *error)
+ 	case SNP_GUEST_REQ_INVALID_LEN:
+ 		/* Number of expected pages are returned in RBX */
+ 		if (exit_code == SVM_VMGEXIT_EXT_GUEST_REQUEST) {
+diff --git a/drivers/virt/coco/sev-guest/sev-guest.c b/drivers/virt/coco/sev-guest/sev-guest.c
+index d430e2be2a22..da4f6267baad 100644
+--- a/drivers/virt/coco/sev-guest/sev-guest.c
++++ b/drivers/virt/coco/sev-guest/sev-guest.c
+@@ -31,6 +31,9 @@
+ #define AAD_LEN		48
+ #define MSG_HDR_VER	1
+ 
++#define SNP_REQ_MAX_RETRY_DURATION	(60*HZ)
++#define SNP_REQ_RETRY_DELAY		(2*HZ)
++
+ struct snp_guest_crypto {
+ 	struct crypto_aead *tfm;
+ 	u8 *iv, *authtag;
+@@ -320,7 +323,8 @@ static int enc_payload(struct snp_guest_dev *snp_dev, u64 seqno, int version, u8
+ 
+ static int __handle_guest_request(struct snp_guest_dev *snp_dev, u64 exit_code, __u64 *fw_err)
  {
- 	int rc = 0, psp_ret = SEV_RET_NO_FW_CALL;
- 	struct psp_device *psp = psp_master;
--	int (*init_function)(int *error);
- 	struct sev_device *sev;
+-	unsigned long err, override_err = 0;
++	unsigned long err = 0xff, override_err = 0;
++	unsigned long req_start = jiffies;
+ 	unsigned int override_npages = 0;
+ 	int rc;
  
- 	if (!psp || !psp->sev_data)
-@@ -456,15 +463,12 @@ static int __sev_platform_init_locked(int *error)
- 		return 0;
- 
- 	if (sev_init_ex_buffer) {
--		init_function = __sev_init_ex_locked;
- 		rc = sev_read_init_ex_file();
- 		if (rc)
- 			return rc;
--	} else {
--		init_function = __sev_init_locked;
- 	}
- 
--	rc = init_function(&psp_ret);
-+	rc = __sev_do_init_locked(&psp_ret);
- 	if (rc && psp_ret == SEV_RET_SECURE_DATA_INVALID) {
- 		/*
- 		 * Initialization command returned an integrity check failure
-@@ -475,7 +479,7 @@ static int __sev_platform_init_locked(int *error)
+@@ -360,6 +364,19 @@ static int __handle_guest_request(struct snp_guest_dev *snp_dev, u64 exit_code,
+ 		 * user as an ioctl() return code.
  		 */
- 		dev_err(sev->dev,
- "SEV: retrying INIT command because of SECURE_DATA_INVALID error. Retrying once to reset PSP SEV state.");
--		rc = init_function(&psp_ret);
-+		rc = __sev_do_init_locked(&psp_ret);
+ 		goto retry_request;
++
++	/*
++	 * The host may return SNP_GUEST_REQ_ERR_EBUSY if the request has been
++	 * throttled. Retry in the driver to avoid returning and reusing the
++	 * message sequence number on a different message.
++	 */
++	case -EAGAIN:
++		if (jiffies - req_start > SNP_REQ_MAX_RETRY_DURATION) {
++			rc = -ETIMEDOUT;
++			break;
++		}
++		schedule_timeout_killable(SNP_REQ_RETRY_DELAY);
++		goto retry_request;
  	}
  
- 	if (error)
+ 	if (fw_err)
 -- 
 2.35.1
 
