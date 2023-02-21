@@ -2,80 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E15869D960
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 04:41:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0CFCD69D962
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 04:41:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233517AbjBUDk6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Feb 2023 22:40:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35216 "EHLO
+        id S233560AbjBUDlE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Feb 2023 22:41:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35706 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232116AbjBUDki (ORCPT
+        with ESMTP id S233512AbjBUDkt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Feb 2023 22:40:38 -0500
+        Mon, 20 Feb 2023 22:40:49 -0500
 Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9491023C5F;
-        Mon, 20 Feb 2023 19:40:35 -0800 (PST)
-Received: from pps.filterd (m0098410.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 31L3UCCh011217;
-        Tue, 21 Feb 2023 03:40:29 GMT
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD54E2413A;
+        Mon, 20 Feb 2023 19:40:37 -0800 (PST)
+Received: from pps.filterd (m0098409.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 31L2wsC1003730;
+        Tue, 21 Feb 2023 03:40:30 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
- : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding; s=pp1;
- bh=ecxk4qUHhcfyDq4/UvgC3XUBzVVl89HOpzHCEVSbIK0=;
- b=Ho6ocuD4udpRVmo74MHO4hE1+EgItzayOBtpwKoESS111unV91YnP/hL8IoUPP5LJa5r
- AXGhklRrqgzsqzfOMwIOpnPZlb2YF5nYmzGF5yNhsbYYKoOLJrz3TzUwdPNa4d4ytjqy
- LuuvnCZJfz5bI1L1/226vnEl1iZMJ8E3J18bJvgIPaEAb783jTFtL5vYRsPmpurtrTES
- /V/NrqfOL5jCYvJjhu6kanvvNkOyKolbRzgEozlin2QBdH85AAWbSlCDKnS9WJzg7j3s
- ivphqiGkWNG5/X1Sp6We/DHI9irzXG0IKZwAb/YeuIwkK8PHs5bpIZGs54opuTmSMNqk yw== 
-Received: from ppma03wdc.us.ibm.com (ba.79.3fa9.ip4.static.sl-reverse.com [169.63.121.186])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3nvp3rg5ma-1
+ : date : message-id : in-reply-to : references : content-transfer-encoding
+ : mime-version; s=pp1; bh=q2sRlkufa3bIZdUCXvmGmQAPqGsdWaVIMG/eH9asV/U=;
+ b=QlFzJHI0eBGL5PWMuT8UltikQBPHGLqxN7m0gEVEkLVSXvzxPPNjB9v7dtKCFMPFV8/+
+ C/2dUWrlP3lFivjDfgVQvc3tgPr2q2xirAucfQZGc5KGva2i/2sYuul1B4yZT5p39Vsr
+ QnoMKUFYXPW5t5xawKfZ+ffEZT6jOIW8axbjxnRX7UMXgJugG0Y8MKbXG6uX1QCttuQq
+ 5QQkv9qQk7ORj4WVPTyZnyu3iBDjztKbaWBdZCxKyDPRsyxC8koshNe/rd6q3GUjY/RK
+ SN+L8qyhP7JeYHDk5dv08aSp/2ZvSUDYo4iElGWAWMChA89plyf27fRylt1cvHP7TSxq 1g== 
+Received: from ppma02wdc.us.ibm.com (aa.5b.37a9.ip4.static.sl-reverse.com [169.55.91.170])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3nvnn98qha-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 21 Feb 2023 03:40:28 +0000
-Received: from pps.filterd (ppma03wdc.us.ibm.com [127.0.0.1])
-        by ppma03wdc.us.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 31L30SYT023057;
-        Tue, 21 Feb 2023 03:40:27 GMT
-Received: from smtprelay07.dal12v.mail.ibm.com ([9.208.130.99])
-        by ppma03wdc.us.ibm.com (PPS) with ESMTPS id 3ntpa6rnf8-1
+        Tue, 21 Feb 2023 03:40:30 +0000
+Received: from pps.filterd (ppma02wdc.us.ibm.com [127.0.0.1])
+        by ppma02wdc.us.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 31L2txRP016332;
+        Tue, 21 Feb 2023 03:40:29 GMT
+Received: from smtprelay01.wdc07v.mail.ibm.com ([9.208.129.119])
+        by ppma02wdc.us.ibm.com (PPS) with ESMTPS id 3ntpa78nu0-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 21 Feb 2023 03:40:27 +0000
+        Tue, 21 Feb 2023 03:40:29 +0000
 Received: from smtpav01.dal12v.mail.ibm.com (smtpav01.dal12v.mail.ibm.com [10.241.53.100])
-        by smtprelay07.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 31L3eQ0S31392138
+        by smtprelay01.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 31L3eRxl30474924
         (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 21 Feb 2023 03:40:26 GMT
+        Tue, 21 Feb 2023 03:40:27 GMT
 Received: from smtpav01.dal12v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 1E2B258058;
+        by IMSVA (Postfix) with ESMTP id 0F99B5805D;
+        Tue, 21 Feb 2023 03:40:27 +0000 (GMT)
+Received: from smtpav01.dal12v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id C946258059;
         Tue, 21 Feb 2023 03:40:26 +0000 (GMT)
-Received: from smtpav01.dal12v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id D780058057;
-        Tue, 21 Feb 2023 03:40:25 +0000 (GMT)
 Received: from ltcden12-lp3.aus.stglabs.ibm.com (unknown [9.40.195.53])
         by smtpav01.dal12v.mail.ibm.com (Postfix) with ESMTP;
-        Tue, 21 Feb 2023 03:40:25 +0000 (GMT)
+        Tue, 21 Feb 2023 03:40:26 +0000 (GMT)
 From:   Danny Tsen <dtsen@linux.ibm.com>
 To:     linux-crypto@vger.kernel.org
 Cc:     herbert@gondor.apana.org.au, leitao@debian.org,
         nayna@linux.ibm.com, appro@cryptogams.org,
         linux-kernel@vger.kernel.org, ltcgcw@linux.vnet.ibm.com,
         dtsen@us.ibm.com, Danny Tsen <dtsen@linux.ibm.com>
-Subject: [RESEND PATCH v4 2/6] An accelerated AES/GCM stitched implementation.
-Date:   Mon, 20 Feb 2023 22:40:17 -0500
-Message-Id: <20230221034021.15121-3-dtsen@linux.ibm.com>
+Subject: [RESEND PATCH v4 3/6] Supporting functions for AES.
+Date:   Mon, 20 Feb 2023 22:40:18 -0500
+Message-Id: <20230221034021.15121-4-dtsen@linux.ibm.com>
 X-Mailer: git-send-email 2.31.1
 In-Reply-To: <20230221034021.15121-1-dtsen@linux.ibm.com>
 References: <20230221034021.15121-1-dtsen@linux.ibm.com>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
 X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: 1m3jhljQxGJDJSvDSakqOkvJk2Vbl_kY
-X-Proofpoint-ORIG-GUID: 1m3jhljQxGJDJSvDSakqOkvJk2Vbl_kY
+X-Proofpoint-ORIG-GUID: wfncQbJ-S2DOK4uwMPlTSpJBOad6Pv39
+X-Proofpoint-GUID: wfncQbJ-S2DOK4uwMPlTSpJBOad6Pv39
+Content-Transfer-Encoding: 8bit
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+MIME-Version: 1.0
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.170.22
  definitions=2023-02-20_19,2023-02-20_02,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 malwarescore=0
- lowpriorityscore=0 priorityscore=1501 mlxscore=0 clxscore=1015 spamscore=0
- impostorscore=0 mlxlogscore=881 suspectscore=0 phishscore=0 adultscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2212070000
- definitions=main-2302210030
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0
+ lowpriorityscore=0 impostorscore=0 adultscore=0 mlxscore=0 mlxlogscore=999
+ priorityscore=1501 phishscore=0 bulkscore=0 clxscore=1015 malwarescore=0
+ suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2302210030
 X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
@@ -85,1542 +85,607 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Improve overall performance of AES/GCM encrypt and decrypt operations
-for Power10 or later CPU.
+This code is taken from CRYPTOGAMs[1].  The following functions are used,
+aes_p8_set_encrypt_key is used to generate AES round keys and aes_p8_encrypt is used
+to encrypt single block.
 
 Signed-off-by: Danny Tsen <dtsen@linux.ibm.com>
 ---
- arch/powerpc/crypto/aes-gcm-p10.S | 1521 +++++++++++++++++++++++++++++
- 1 file changed, 1521 insertions(+)
- create mode 100644 arch/powerpc/crypto/aes-gcm-p10.S
+ arch/powerpc/crypto/aesp8-ppc.pl | 585 +++++++++++++++++++++++++++++++
+ 1 file changed, 585 insertions(+)
+ create mode 100644 arch/powerpc/crypto/aesp8-ppc.pl
 
-diff --git a/arch/powerpc/crypto/aes-gcm-p10.S b/arch/powerpc/crypto/aes-gcm-p10.S
+diff --git a/arch/powerpc/crypto/aesp8-ppc.pl b/arch/powerpc/crypto/aesp8-ppc.pl
 new file mode 100644
-index 000000000000..a51f4b265308
+index 000000000000..1f22aec27d79
 --- /dev/null
-+++ b/arch/powerpc/crypto/aes-gcm-p10.S
-@@ -0,0 +1,1521 @@
-+/* SPDX-License-Identifier: GPL-2.0-or-later */
-+ #
-+ # Accelerated AES-GCM stitched implementation for ppc64le.
-+ #
-+ # Copyright 2022- IBM Inc. All rights reserved
-+ #
-+ #===================================================================================
-+ # Written by Danny Tsen <dtsen@linux.ibm.com>
-+ #
-+ # GHASH is based on the Karatsuba multiplication method.
-+ #
-+ #    Xi xor X1
-+ #
-+ #    X1 * H^4 + X2 * H^3 + x3 * H^2 + X4 * H =
-+ #      (X1.h * H4.h + xX.l * H4.l + X1 * H4) +
-+ #      (X2.h * H3.h + X2.l * H3.l + X2 * H3) +
-+ #      (X3.h * H2.h + X3.l * H2.l + X3 * H2) +
-+ #      (X4.h * H.h + X4.l * H.l + X4 * H)
-+ #
-+ # Xi = v0
-+ # H Poly = v2
-+ # Hash keys = v3 - v14
-+ #     ( H.l, H, H.h)
-+ #     ( H^2.l, H^2, H^2.h)
-+ #     ( H^3.l, H^3, H^3.h)
-+ #     ( H^4.l, H^4, H^4.h)
-+ #
-+ # v30 is IV
-+ # v31 - counter 1
-+ #
-+ # AES used,
-+ #     vs0 - vs14 for round keys
-+ #     v15, v16, v17, v18, v19, v20, v21, v22 for 8 blocks (encrypted)
-+ #
-+ # This implementation uses stitched AES-GCM approach to improve overall performance.
-+ # AES is implemented with 8x blocks and GHASH is using 2 4x blocks.
-+ #
-+ # ===================================================================================
-+ #
++++ b/arch/powerpc/crypto/aesp8-ppc.pl
+@@ -0,0 +1,585 @@
++#! /usr/bin/env perl
++# SPDX-License-Identifier: GPL-2.0
 +
-+#include <asm/ppc_asm.h>
-+#include <linux/linkage.h>
++# This code is taken from CRYPTOGAMs[1] and is included here using the option
++# in the license to distribute the code under the GPL. Therefore this program
++# is free software; you can redistribute it and/or modify it under the terms of
++# the GNU General Public License version 2 as published by the Free Software
++# Foundation.
++#
++# [1] https://www.openssl.org/~appro/cryptogams/
 +
-+.machine        "any"
++# Copyright (c) 2006-2017, CRYPTOGAMS by <appro@openssl.org>
++# All rights reserved.
++#
++# Redistribution and use in source and binary forms, with or without
++# modification, are permitted provided that the following conditions
++# are met:
++#
++#       * Redistributions of source code must retain copyright notices,
++#         this list of conditions and the following disclaimer.
++#
++#       * Redistributions in binary form must reproduce the above
++#         copyright notice, this list of conditions and the following
++#         disclaimer in the documentation and/or other materials
++#         provided with the distribution.
++#
++#       * Neither the name of the CRYPTOGAMS nor the names of its
++#         copyright holder and contributors may be used to endorse or
++#         promote products derived from this software without specific
++#         prior written permission.
++#
++# ALTERNATIVELY, provided that this notice is retained in full, this
++# product may be distributed under the terms of the GNU General Public
++# License (GPL), in which case the provisions of the GPL apply INSTEAD OF
++# those given above.
++#
++# THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDER AND CONTRIBUTORS
++# "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
++# LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
++# A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
++# OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
++# SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
++# LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
++# DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
++# THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
++# (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
++# OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
++
++# ====================================================================
++# Written by Andy Polyakov <appro@openssl.org> for the OpenSSL
++# project. The module is, however, dual licensed under OpenSSL and
++# CRYPTOGAMS licenses depending on where you obtain it. For further
++# details see https://www.openssl.org/~appro/cryptogams/.
++# ====================================================================
++#
++# This module implements support for AES instructions as per PowerISA
++# specification version 2.07, first implemented by POWER8 processor.
++# The module is endian-agnostic in sense that it supports both big-
++# and little-endian cases. Data alignment in parallelizable modes is
++# handled with VSX loads and stores, which implies MSR.VSX flag being
++# set. It should also be noted that ISA specification doesn't prohibit
++# alignment exceptions for these instructions on page boundaries.
++# Initially alignment was handled in pure AltiVec/VMX way [when data
++# is aligned programmatically, which in turn guarantees exception-
++# free execution], but it turned to hamper performance when vcipher
++# instructions are interleaved. It's reckoned that eventual
++# misalignment penalties at page boundaries are in average lower
++# than additional overhead in pure AltiVec approach.
++#
++# May 2016
++#
++# Add XTS subroutine, 9x on little- and 12x improvement on big-endian
++# systems were measured.
++#
++######################################################################
++# Current large-block performance in cycles per byte processed with
++# 128-bit key (less is better).
++#
++#		CBC en-/decrypt	CTR	XTS
++# POWER8[le]	3.96/0.72	0.74	1.1
++# POWER8[be]	3.75/0.65	0.66	1.0
++
++$flavour = shift;
++
++if ($flavour =~ /64/) {
++	$SIZE_T	=8;
++	$LRSAVE	=2*$SIZE_T;
++	$STU	="stdu";
++	$POP	="ld";
++	$PUSH	="std";
++	$UCMP	="cmpld";
++	$SHL	="sldi";
++} elsif ($flavour =~ /32/) {
++	$SIZE_T	=4;
++	$LRSAVE	=$SIZE_T;
++	$STU	="stwu";
++	$POP	="lwz";
++	$PUSH	="stw";
++	$UCMP	="cmplw";
++	$SHL	="slwi";
++} else { die "nonsense $flavour"; }
++
++$LITTLE_ENDIAN = ($flavour=~/le$/) ? $SIZE_T : 0;
++
++$0 =~ m/(.*[\/\\])[^\/\\]+$/; $dir=$1;
++( $xlate="${dir}ppc-xlate.pl" and -f $xlate ) or
++( $xlate="${dir}../../perlasm/ppc-xlate.pl" and -f $xlate) or
++die "can't locate ppc-xlate.pl";
++
++open STDOUT,"| $^X $xlate $flavour ".shift || die "can't call $xlate: $!";
++
++$FRAME=8*$SIZE_T;
++$prefix="aes_p8";
++
++$sp="r1";
++$vrsave="r12";
++
++#########################################################################
++{{{	# Key setup procedures						#
++my ($inp,$bits,$out,$ptr,$cnt,$rounds)=map("r$_",(3..8));
++my ($zero,$in0,$in1,$key,$rcon,$mask,$tmp)=map("v$_",(0..6));
++my ($stage,$outperm,$outmask,$outhead,$outtail)=map("v$_",(7..11));
++
++$code.=<<___;
++.machine	"any"
++
 +.text
 +
-+ # 4x loops
-+ # v15 - v18 - input states
-+ # vs1 - vs9 - round keys
-+ #
-+.macro Loop_aes_middle4x
-+	xxlor	19+32, 1, 1
-+	xxlor	20+32, 2, 2
-+	xxlor	21+32, 3, 3
-+	xxlor	22+32, 4, 4
-+
-+	vcipher	15, 15, 19
-+	vcipher	16, 16, 19
-+	vcipher	17, 17, 19
-+	vcipher	18, 18, 19
-+
-+	vcipher	15, 15, 20
-+	vcipher	16, 16, 20
-+	vcipher	17, 17, 20
-+	vcipher	18, 18, 20
-+
-+	vcipher	15, 15, 21
-+	vcipher	16, 16, 21
-+	vcipher	17, 17, 21
-+	vcipher	18, 18, 21
-+
-+	vcipher	15, 15, 22
-+	vcipher	16, 16, 22
-+	vcipher	17, 17, 22
-+	vcipher	18, 18, 22
-+
-+	xxlor	19+32, 5, 5
-+	xxlor	20+32, 6, 6
-+	xxlor	21+32, 7, 7
-+	xxlor	22+32, 8, 8
-+
-+	vcipher	15, 15, 19
-+	vcipher	16, 16, 19
-+	vcipher	17, 17, 19
-+	vcipher	18, 18, 19
-+
-+	vcipher	15, 15, 20
-+	vcipher	16, 16, 20
-+	vcipher	17, 17, 20
-+	vcipher	18, 18, 20
-+
-+	vcipher	15, 15, 21
-+	vcipher	16, 16, 21
-+	vcipher	17, 17, 21
-+	vcipher	18, 18, 21
-+
-+	vcipher	15, 15, 22
-+	vcipher	16, 16, 22
-+	vcipher	17, 17, 22
-+	vcipher	18, 18, 22
-+
-+	xxlor	23+32, 9, 9
-+	vcipher	15, 15, 23
-+	vcipher	16, 16, 23
-+	vcipher	17, 17, 23
-+	vcipher	18, 18, 23
-+.endm
-+
-+ # 8x loops
-+ # v15 - v22 - input states
-+ # vs1 - vs9 - round keys
-+ #
-+.macro Loop_aes_middle8x
-+	xxlor	23+32, 1, 1
-+	xxlor	24+32, 2, 2
-+	xxlor	25+32, 3, 3
-+	xxlor	26+32, 4, 4
-+
-+	vcipher	15, 15, 23
-+	vcipher	16, 16, 23
-+	vcipher	17, 17, 23
-+	vcipher	18, 18, 23
-+	vcipher	19, 19, 23
-+	vcipher	20, 20, 23
-+	vcipher	21, 21, 23
-+	vcipher	22, 22, 23
-+
-+	vcipher	15, 15, 24
-+	vcipher	16, 16, 24
-+	vcipher	17, 17, 24
-+	vcipher	18, 18, 24
-+	vcipher	19, 19, 24
-+	vcipher	20, 20, 24
-+	vcipher	21, 21, 24
-+	vcipher	22, 22, 24
-+
-+	vcipher	15, 15, 25
-+	vcipher	16, 16, 25
-+	vcipher	17, 17, 25
-+	vcipher	18, 18, 25
-+	vcipher	19, 19, 25
-+	vcipher	20, 20, 25
-+	vcipher	21, 21, 25
-+	vcipher	22, 22, 25
-+
-+	vcipher	15, 15, 26
-+	vcipher	16, 16, 26
-+	vcipher	17, 17, 26
-+	vcipher	18, 18, 26
-+	vcipher	19, 19, 26
-+	vcipher	20, 20, 26
-+	vcipher	21, 21, 26
-+	vcipher	22, 22, 26
-+
-+	xxlor	23+32, 5, 5
-+	xxlor	24+32, 6, 6
-+	xxlor	25+32, 7, 7
-+	xxlor	26+32, 8, 8
-+
-+	vcipher	15, 15, 23
-+	vcipher	16, 16, 23
-+	vcipher	17, 17, 23
-+	vcipher	18, 18, 23
-+	vcipher	19, 19, 23
-+	vcipher	20, 20, 23
-+	vcipher	21, 21, 23
-+	vcipher	22, 22, 23
-+
-+	vcipher	15, 15, 24
-+	vcipher	16, 16, 24
-+	vcipher	17, 17, 24
-+	vcipher	18, 18, 24
-+	vcipher	19, 19, 24
-+	vcipher	20, 20, 24
-+	vcipher	21, 21, 24
-+	vcipher	22, 22, 24
-+
-+	vcipher	15, 15, 25
-+	vcipher	16, 16, 25
-+	vcipher	17, 17, 25
-+	vcipher	18, 18, 25
-+	vcipher	19, 19, 25
-+	vcipher	20, 20, 25
-+	vcipher	21, 21, 25
-+	vcipher	22, 22, 25
-+
-+	vcipher	15, 15, 26
-+	vcipher	16, 16, 26
-+	vcipher	17, 17, 26
-+	vcipher	18, 18, 26
-+	vcipher	19, 19, 26
-+	vcipher	20, 20, 26
-+	vcipher	21, 21, 26
-+	vcipher	22, 22, 26
-+
-+	xxlor	23+32, 9, 9
-+	vcipher	15, 15, 23
-+	vcipher	16, 16, 23
-+	vcipher	17, 17, 23
-+	vcipher	18, 18, 23
-+	vcipher	19, 19, 23
-+	vcipher	20, 20, 23
-+	vcipher	21, 21, 23
-+	vcipher	22, 22, 23
-+.endm
-+
-+.macro Loop_aes_middle_1x
-+	xxlor	19+32, 1, 1
-+	xxlor	20+32, 2, 2
-+	xxlor	21+32, 3, 3
-+	xxlor	22+32, 4, 4
-+
-+	vcipher 15, 15, 19
-+	vcipher 15, 15, 20
-+	vcipher 15, 15, 21
-+	vcipher 15, 15, 22
-+
-+	xxlor	19+32, 5, 5
-+	xxlor	20+32, 6, 6
-+	xxlor	21+32, 7, 7
-+	xxlor	22+32, 8, 8
-+
-+	vcipher 15, 15, 19
-+	vcipher 15, 15, 20
-+	vcipher 15, 15, 21
-+	vcipher 15, 15, 22
-+
-+	xxlor	19+32, 9, 9
-+	vcipher 15, 15, 19
-+.endm
-+
-+ #
-+ # Compute 4x hash values based on Karatsuba method.
-+ #
-+.macro ppc_aes_gcm_ghash
-+	vxor		15, 15, 0
-+
-+	vpmsumd		23, 12, 15		# H4.L * X.L
-+	vpmsumd		24, 9, 16
-+	vpmsumd		25, 6, 17
-+	vpmsumd		26, 3, 18
-+
-+	vxor		23, 23, 24
-+	vxor		23, 23, 25
-+	vxor		23, 23, 26		# L
-+
-+	vpmsumd		24, 13, 15		# H4.L * X.H + H4.H * X.L
-+	vpmsumd		25, 10, 16		# H3.L * X1.H + H3.H * X1.L
-+	vpmsumd		26, 7, 17
-+	vpmsumd		27, 4, 18
-+
-+	vxor		24, 24, 25
-+	vxor		24, 24, 26
-+	vxor		24, 24, 27		# M
-+
-+	# sum hash and reduction with H Poly
-+	vpmsumd		28, 23, 2		# reduction
-+
-+	vxor		29, 29, 29
-+	vsldoi		26, 24, 29, 8		# mL
-+	vsldoi		29, 29, 24, 8		# mH
-+	vxor		23, 23, 26		# mL + L
-+
-+	vsldoi		23, 23, 23, 8		# swap
-+	vxor		23, 23, 28
-+
-+	vpmsumd		24, 14, 15		# H4.H * X.H
-+	vpmsumd		25, 11, 16
-+	vpmsumd		26, 8, 17
-+	vpmsumd		27, 5, 18
-+
-+	vxor		24, 24, 25
-+	vxor		24, 24, 26
-+	vxor		24, 24, 27
-+
-+	vxor		24, 24, 29
-+
-+	# sum hash and reduction with H Poly
-+	vsldoi		27, 23, 23, 8		# swap
-+	vpmsumd		23, 23, 2
-+	vxor		27, 27, 24
-+	vxor		23, 23, 27
-+
-+	xxlor		32, 23+32, 23+32		# update hash
-+
-+.endm
-+
-+ #
-+ # Combine two 4x ghash
-+ # v15 - v22 - input blocks
-+ #
-+.macro ppc_aes_gcm_ghash2_4x
-+	# first 4x hash
-+	vxor		15, 15, 0		# Xi + X
-+
-+	vpmsumd		23, 12, 15		# H4.L * X.L
-+	vpmsumd		24, 9, 16
-+	vpmsumd		25, 6, 17
-+	vpmsumd		26, 3, 18
-+
-+	vxor		23, 23, 24
-+	vxor		23, 23, 25
-+	vxor		23, 23, 26		# L
-+
-+	vpmsumd		24, 13, 15		# H4.L * X.H + H4.H * X.L
-+	vpmsumd		25, 10, 16		# H3.L * X1.H + H3.H * X1.L
-+	vpmsumd		26, 7, 17
-+	vpmsumd		27, 4, 18
-+
-+	vxor		24, 24, 25
-+	vxor		24, 24, 26
-+
-+	# sum hash and reduction with H Poly
-+	vpmsumd		28, 23, 2		# reduction
-+
-+	vxor		29, 29, 29
-+
-+	vxor		24, 24, 27		# M
-+	vsldoi		26, 24, 29, 8		# mL
-+	vsldoi		29, 29, 24, 8		# mH
-+	vxor		23, 23, 26		# mL + L
-+
-+	vsldoi		23, 23, 23, 8		# swap
-+	vxor		23, 23, 28
-+
-+	vpmsumd		24, 14, 15		# H4.H * X.H
-+	vpmsumd		25, 11, 16
-+	vpmsumd		26, 8, 17
-+	vpmsumd		27, 5, 18
-+
-+	vxor		24, 24, 25
-+	vxor		24, 24, 26
-+	vxor		24, 24, 27		# H
-+
-+	vxor		24, 24, 29		# H + mH
-+
-+	# sum hash and reduction with H Poly
-+	vsldoi		27, 23, 23, 8		# swap
-+	vpmsumd		23, 23, 2
-+	vxor		27, 27, 24
-+	vxor		27, 23, 27		# 1st Xi
-+
-+	# 2nd 4x hash
-+	vpmsumd		24, 9, 20
-+	vpmsumd		25, 6, 21
-+	vpmsumd		26, 3, 22
-+	vxor		19, 19, 27		# Xi + X
-+	vpmsumd		23, 12, 19		# H4.L * X.L
-+
-+	vxor		23, 23, 24
-+	vxor		23, 23, 25
-+	vxor		23, 23, 26		# L
-+
-+	vpmsumd		24, 13, 19		# H4.L * X.H + H4.H * X.L
-+	vpmsumd		25, 10, 20		# H3.L * X1.H + H3.H * X1.L
-+	vpmsumd		26, 7, 21
-+	vpmsumd		27, 4, 22
-+
-+	vxor		24, 24, 25
-+	vxor		24, 24, 26
-+
-+	# sum hash and reduction with H Poly
-+	vpmsumd		28, 23, 2		# reduction
-+
-+	vxor		29, 29, 29
-+
-+	vxor		24, 24, 27		# M
-+	vsldoi		26, 24, 29, 8		# mL
-+	vsldoi		29, 29, 24, 8		# mH
-+	vxor		23, 23, 26		# mL + L
-+
-+	vsldoi		23, 23, 23, 8		# swap
-+	vxor		23, 23, 28
-+
-+	vpmsumd		24, 14, 19		# H4.H * X.H
-+	vpmsumd		25, 11, 20
-+	vpmsumd		26, 8, 21
-+	vpmsumd		27, 5, 22
-+
-+	vxor		24, 24, 25
-+	vxor		24, 24, 26
-+	vxor		24, 24, 27		# H
-+
-+	vxor		24, 24, 29		# H + mH
-+
-+	# sum hash and reduction with H Poly
-+	vsldoi		27, 23, 23, 8		# swap
-+	vpmsumd		23, 23, 2
-+	vxor		27, 27, 24
-+	vxor		23, 23, 27
-+
-+	xxlor		32, 23+32, 23+32		# update hash
-+
-+.endm
-+
-+ #
-+ # Compute update single hash
-+ #
-+.macro ppc_update_hash_1x
-+	vxor		28, 28, 0
-+
-+	vxor		19, 19, 19
-+
-+	vpmsumd		22, 3, 28		# L
-+	vpmsumd		23, 4, 28		# M
-+	vpmsumd		24, 5, 28		# H
-+
-+	vpmsumd		27, 22, 2		# reduction
-+
-+	vsldoi		25, 23, 19, 8		# mL
-+	vsldoi		26, 19, 23, 8		# mH
-+	vxor		22, 22, 25		# LL + LL
-+	vxor		24, 24, 26		# HH + HH
-+
-+	vsldoi		22, 22, 22, 8		# swap
-+	vxor		22, 22, 27
-+
-+	vsldoi		20, 22, 22, 8		# swap
-+	vpmsumd		22, 22, 2		# reduction
-+	vxor		20, 20, 24
-+	vxor		22, 22, 20
-+
-+	vmr		0, 22			# update hash
-+
-+.endm
-+
-+.macro SAVE_REGS
-+	stdu 1,-640(1)
-+	mflr 0
-+
-+	std	14,112(1)
-+	std	15,120(1)
-+	std	16,128(1)
-+	std	17,136(1)
-+	std	18,144(1)
-+	std	19,152(1)
-+	std	20,160(1)
-+	std	21,168(1)
-+	li	9, 256
-+	stvx	20, 9, 1
-+	addi	9, 9, 16
-+	stvx	21, 9, 1
-+	addi	9, 9, 16
-+	stvx	22, 9, 1
-+	addi	9, 9, 16
-+	stvx	23, 9, 1
-+	addi	9, 9, 16
-+	stvx	24, 9, 1
-+	addi	9, 9, 16
-+	stvx	25, 9, 1
-+	addi	9, 9, 16
-+	stvx	26, 9, 1
-+	addi	9, 9, 16
-+	stvx	27, 9, 1
-+	addi	9, 9, 16
-+	stvx	28, 9, 1
-+	addi	9, 9, 16
-+	stvx	29, 9, 1
-+	addi	9, 9, 16
-+	stvx	30, 9, 1
-+	addi	9, 9, 16
-+	stvx	31, 9, 1
-+	stxv	14, 464(1)
-+	stxv	15, 480(1)
-+	stxv	16, 496(1)
-+	stxv	17, 512(1)
-+	stxv	18, 528(1)
-+	stxv	19, 544(1)
-+	stxv	20, 560(1)
-+	stxv	21, 576(1)
-+	stxv	22, 592(1)
-+	std	0, 656(1)
-+.endm
-+
-+.macro RESTORE_REGS
-+	lxv	14, 464(1)
-+	lxv	15, 480(1)
-+	lxv	16, 496(1)
-+	lxv	17, 512(1)
-+	lxv	18, 528(1)
-+	lxv	19, 544(1)
-+	lxv	20, 560(1)
-+	lxv	21, 576(1)
-+	lxv	22, 592(1)
-+	li	9, 256
-+	lvx	20, 9, 1
-+	addi	9, 9, 16
-+	lvx	21, 9, 1
-+	addi	9, 9, 16
-+	lvx	22, 9, 1
-+	addi	9, 9, 16
-+	lvx	23, 9, 1
-+	addi	9, 9, 16
-+	lvx	24, 9, 1
-+	addi	9, 9, 16
-+	lvx	25, 9, 1
-+	addi	9, 9, 16
-+	lvx	26, 9, 1
-+	addi	9, 9, 16
-+	lvx	27, 9, 1
-+	addi	9, 9, 16
-+	lvx	28, 9, 1
-+	addi	9, 9, 16
-+	lvx	29, 9, 1
-+	addi	9, 9, 16
-+	lvx	30, 9, 1
-+	addi	9, 9, 16
-+	lvx	31, 9, 1
-+
-+	ld	0, 656(1)
-+	ld      14,112(1)
-+	ld      15,120(1)
-+	ld      16,128(1)
-+	ld      17,136(1)
-+	ld      18,144(1)
-+	ld      19,152(1)
-+	ld      20,160(1)
-+	ld	21,168(1)
-+
-+	mtlr	0
-+	addi	1, 1, 640
-+.endm
-+
-+.macro LOAD_HASH_TABLE
-+	# Load Xi
-+	lxvb16x	32, 0, 8	# load Xi
-+
-+	# load Hash - h^4, h^3, h^2, h
-+	li	10, 32
-+	lxvd2x	2+32, 10, 8	# H Poli
-+	li	10, 48
-+	lxvd2x	3+32, 10, 8	# Hl
-+	li	10, 64
-+	lxvd2x	4+32, 10, 8	# H
-+	li	10, 80
-+	lxvd2x	5+32, 10, 8	# Hh
-+
-+	li	10, 96
-+	lxvd2x	6+32, 10, 8	# H^2l
-+	li	10, 112
-+	lxvd2x	7+32, 10, 8	# H^2
-+	li	10, 128
-+	lxvd2x	8+32, 10, 8	# H^2h
-+
-+	li	10, 144
-+	lxvd2x	9+32, 10, 8	# H^3l
-+	li	10, 160
-+	lxvd2x	10+32, 10, 8	# H^3
-+	li	10, 176
-+	lxvd2x	11+32, 10, 8	# H^3h
-+
-+	li	10, 192
-+	lxvd2x	12+32, 10, 8	# H^4l
-+	li	10, 208
-+	lxvd2x	13+32, 10, 8	# H^4
-+	li	10, 224
-+	lxvd2x	14+32, 10, 8	# H^4h
-+.endm
-+
-+ #
-+ # aes_p10_gcm_encrypt (const void *inp, void *out, size_t len,
-+ #               const char *rk, unsigned char iv[16], void *Xip);
-+ #
-+ #    r3 - inp
-+ #    r4 - out
-+ #    r5 - len
-+ #    r6 - AES round keys
-+ #    r7 - iv and other data
-+ #    r8 - Xi, HPoli, hash keys
-+ #
-+ #    rounds is at offset 240 in rk
-+ #    Xi is at 0 in gcm_table (Xip).
-+ #
-+_GLOBAL(aes_p10_gcm_encrypt)
-+.align 5
-+
-+	SAVE_REGS
-+
-+	LOAD_HASH_TABLE
-+
-+	# initialize ICB: GHASH( IV ), IV - r7
-+	lxvb16x	30+32, 0, 7	# load IV  - v30
-+
-+	mr	12, 5		# length
-+	li	11, 0		# block index
-+
-+	# counter 1
-+	vxor	31, 31, 31
-+	vspltisb 22, 1
-+	vsldoi	31, 31, 22,1	# counter 1
-+
-+	# load round key to VSR
-+	lxv	0, 0(6)
-+	lxv	1, 0x10(6)
-+	lxv	2, 0x20(6)
-+	lxv	3, 0x30(6)
-+	lxv	4, 0x40(6)
-+	lxv	5, 0x50(6)
-+	lxv	6, 0x60(6)
-+	lxv	7, 0x70(6)
-+	lxv	8, 0x80(6)
-+	lxv	9, 0x90(6)
-+	lxv	10, 0xa0(6)
-+
-+	# load rounds - 10 (128), 12 (192), 14 (256)
-+	lwz	9,240(6)
-+
-+	#
-+	# vxor	state, state, w # addroundkey
-+	xxlor	32+29, 0, 0
-+	vxor	15, 30, 29	# IV + round key - add round key 0
-+
-+	cmpdi	9, 10
-+	beq	Loop_aes_gcm_8x
-+
-+	# load 2 more round keys (v11, v12)
-+	lxv	11, 0xb0(6)
-+	lxv	12, 0xc0(6)
-+
-+	cmpdi	9, 12
-+	beq	Loop_aes_gcm_8x
-+
-+	# load 2 more round keys (v11, v12, v13, v14)
-+	lxv	13, 0xd0(6)
-+	lxv	14, 0xe0(6)
-+	cmpdi	9, 14
-+	beq	Loop_aes_gcm_8x
-+
-+	b	aes_gcm_out
-+
-+.align 5
-+Loop_aes_gcm_8x:
-+	mr	14, 3
-+	mr	9, 4
-+
-+	#
-+	# check partial block
-+	#
-+Continue_partial_check:
-+	ld	15, 56(7)
-+	cmpdi	15, 0
-+	beq	Continue
-+	bgt	Final_block
-+	cmpdi	15, 16
-+	blt	Final_block
-+
-+Continue:
-+	# n blcoks
-+	li	10, 128
-+	divdu	10, 12, 10	# n 128 bytes-blocks
-+	cmpdi	10, 0
-+	beq	Loop_last_block
-+
-+	vaddudm	30, 30, 31	# IV + counter
-+	vxor	16, 30, 29
-+	vaddudm	30, 30, 31
-+	vxor	17, 30, 29
-+	vaddudm	30, 30, 31
-+	vxor	18, 30, 29
-+	vaddudm	30, 30, 31
-+	vxor	19, 30, 29
-+	vaddudm	30, 30, 31
-+	vxor	20, 30, 29
-+	vaddudm	30, 30, 31
-+	vxor	21, 30, 29
-+	vaddudm	30, 30, 31
-+	vxor	22, 30, 29
-+
-+	mtctr	10
-+
-+	li	15, 16
-+	li	16, 32
-+	li	17, 48
-+	li	18, 64
-+	li	19, 80
-+	li	20, 96
-+	li	21, 112
-+
-+	lwz	10, 240(6)
-+
-+Loop_8x_block:
-+
-+	lxvb16x		15, 0, 14	# load block
-+	lxvb16x		16, 15, 14	# load block
-+	lxvb16x		17, 16, 14	# load block
-+	lxvb16x		18, 17, 14	# load block
-+	lxvb16x		19, 18, 14	# load block
-+	lxvb16x		20, 19, 14	# load block
-+	lxvb16x		21, 20, 14	# load block
-+	lxvb16x		22, 21, 14	# load block
-+	addi		14, 14, 128
-+
-+	Loop_aes_middle8x
-+
-+	xxlor	23+32, 10, 10
-+
-+	cmpdi	10, 10
-+	beq	Do_next_ghash
-+
-+	# 192 bits
-+	xxlor	24+32, 11, 11
-+
-+	vcipher	15, 15, 23
-+	vcipher	16, 16, 23
-+	vcipher	17, 17, 23
-+	vcipher	18, 18, 23
-+	vcipher	19, 19, 23
-+	vcipher	20, 20, 23
-+	vcipher	21, 21, 23
-+	vcipher	22, 22, 23
-+
-+	vcipher	15, 15, 24
-+	vcipher	16, 16, 24
-+	vcipher	17, 17, 24
-+	vcipher	18, 18, 24
-+	vcipher	19, 19, 24
-+	vcipher	20, 20, 24
-+	vcipher	21, 21, 24
-+	vcipher	22, 22, 24
-+
-+	xxlor	23+32, 12, 12
-+
-+	cmpdi	10, 12
-+	beq	Do_next_ghash
-+
-+	# 256 bits
-+	xxlor	24+32, 13, 13
-+
-+	vcipher	15, 15, 23
-+	vcipher	16, 16, 23
-+	vcipher	17, 17, 23
-+	vcipher	18, 18, 23
-+	vcipher	19, 19, 23
-+	vcipher	20, 20, 23
-+	vcipher	21, 21, 23
-+	vcipher	22, 22, 23
-+
-+	vcipher	15, 15, 24
-+	vcipher	16, 16, 24
-+	vcipher	17, 17, 24
-+	vcipher	18, 18, 24
-+	vcipher	19, 19, 24
-+	vcipher	20, 20, 24
-+	vcipher	21, 21, 24
-+	vcipher	22, 22, 24
-+
-+	xxlor	23+32, 14, 14
-+
-+	cmpdi	10, 14
-+	beq	Do_next_ghash
-+	b	aes_gcm_out
-+
-+Do_next_ghash:
-+
-+	#
-+	# last round
-+	vcipherlast     15, 15, 23
-+	vcipherlast     16, 16, 23
-+
-+	xxlxor		47, 47, 15
-+	stxvb16x        47, 0, 9	# store output
-+	xxlxor		48, 48, 16
-+	stxvb16x        48, 15, 9	# store output
-+
-+	vcipherlast     17, 17, 23
-+	vcipherlast     18, 18, 23
-+
-+	xxlxor		49, 49, 17
-+	stxvb16x        49, 16, 9	# store output
-+	xxlxor		50, 50, 18
-+	stxvb16x        50, 17, 9	# store output
-+
-+	vcipherlast     19, 19, 23
-+	vcipherlast     20, 20, 23
-+
-+	xxlxor		51, 51, 19
-+	stxvb16x        51, 18, 9	# store output
-+	xxlxor		52, 52, 20
-+	stxvb16x        52, 19, 9	# store output
-+
-+	vcipherlast     21, 21, 23
-+	vcipherlast     22, 22, 23
-+
-+	xxlxor		53, 53, 21
-+	stxvb16x        53, 20, 9	# store output
-+	xxlxor		54, 54, 22
-+	stxvb16x        54, 21, 9	# store output
-+
-+	addi		9, 9, 128
-+
-+	# ghash here
-+	ppc_aes_gcm_ghash2_4x
-+
-+	xxlor	27+32, 0, 0
-+	vaddudm 30, 30, 31		# IV + counter
-+	vmr	29, 30
-+	vxor    15, 30, 27		# add round key
-+	vaddudm 30, 30, 31
-+	vxor    16, 30, 27
-+	vaddudm 30, 30, 31
-+	vxor    17, 30, 27
-+	vaddudm 30, 30, 31
-+	vxor    18, 30, 27
-+	vaddudm 30, 30, 31
-+	vxor    19, 30, 27
-+	vaddudm 30, 30, 31
-+	vxor    20, 30, 27
-+	vaddudm 30, 30, 31
-+	vxor    21, 30, 27
-+	vaddudm 30, 30, 31
-+	vxor    22, 30, 27
-+
-+	addi    12, 12, -128
-+	addi    11, 11, 128
-+
-+	bdnz	Loop_8x_block
-+
-+	vmr	30, 29
-+	stxvb16x 30+32, 0, 7		# update IV
-+
-+Loop_last_block:
-+	cmpdi   12, 0
-+	beq     aes_gcm_out
-+
-+	# loop last few blocks
-+	li      10, 16
-+	divdu   10, 12, 10
-+
-+	mtctr   10
-+
-+	lwz	10, 240(6)
-+
-+	cmpdi   12, 16
-+	blt     Final_block
-+
-+Next_rem_block:
-+	lxvb16x 15, 0, 14		# load block
-+
-+	Loop_aes_middle_1x
-+
-+	xxlor	23+32, 10, 10
-+
-+	cmpdi	10, 10
-+	beq	Do_next_1x
-+
-+	# 192 bits
-+	xxlor	24+32, 11, 11
-+
-+	vcipher	15, 15, 23
-+	vcipher	15, 15, 24
-+
-+	xxlor	23+32, 12, 12
-+
-+	cmpdi	10, 12
-+	beq	Do_next_1x
-+
-+	# 256 bits
-+	xxlor	24+32, 13, 13
-+
-+	vcipher	15, 15, 23
-+	vcipher	15, 15, 24
-+
-+	xxlor	23+32, 14, 14
-+
-+	cmpdi	10, 14
-+	beq	Do_next_1x
-+
-+Do_next_1x:
-+	vcipherlast     15, 15, 23
-+
-+	xxlxor		47, 47, 15
-+	stxvb16x	47, 0, 9	# store output
-+	addi		14, 14, 16
-+	addi		9, 9, 16
-+
-+	vmr		28, 15
-+	ppc_update_hash_1x
-+
-+	addi		12, 12, -16
-+	addi		11, 11, 16
-+	xxlor		19+32, 0, 0
-+	vaddudm		30, 30, 31		# IV + counter
-+	vxor		15, 30, 19		# add round key
-+
-+	bdnz	Next_rem_block
-+
-+	li	15, 0
-+	std	15, 56(7)		# clear partial?
-+	stxvb16x 30+32, 0, 7		# update IV
-+	cmpdi	12, 0
-+	beq	aes_gcm_out
-+
-+Final_block:
-+	lwz	10, 240(6)
-+	Loop_aes_middle_1x
-+
-+	xxlor	23+32, 10, 10
-+
-+	cmpdi	10, 10
-+	beq	Do_final_1x
-+
-+	# 192 bits
-+	xxlor	24+32, 11, 11
-+
-+	vcipher	15, 15, 23
-+	vcipher	15, 15, 24
-+
-+	xxlor	23+32, 12, 12
-+
-+	cmpdi	10, 12
-+	beq	Do_final_1x
-+
-+	# 256 bits
-+	xxlor	24+32, 13, 13
-+
-+	vcipher	15, 15, 23
-+	vcipher	15, 15, 24
-+
-+	xxlor	23+32, 14, 14
-+
-+	cmpdi	10, 14
-+	beq	Do_final_1x
-+
-+Do_final_1x:
-+	vcipherlast     15, 15, 23
-+
-+	# check partial block
-+	li	21, 0			# encrypt
-+	ld	15, 56(7)		# partial?
-+	cmpdi	15, 0
-+	beq	Normal_block
-+	bl	Do_partial_block
-+
-+	cmpdi	12, 0
-+	ble aes_gcm_out
-+
-+	b Continue_partial_check
-+
-+Normal_block:
-+	lxvb16x	15, 0, 14		# load last block
-+	xxlxor	47, 47, 15
-+
-+	# create partial block mask
-+	li	15, 16
-+	sub	15, 15, 12		# index to the mask
-+
-+	vspltisb	16, -1		# first 16 bytes - 0xffff...ff
-+	vspltisb	17, 0		# second 16 bytes - 0x0000...00
-+	li	10, 192
-+	stvx	16, 10, 1
-+	addi	10, 10, 16
-+	stvx	17, 10, 1
-+
-+	addi	10, 1, 192
-+	lxvb16x	16, 15, 10		# load partial block mask
-+	xxland	47, 47, 16
-+
-+	vmr	28, 15
-+	ppc_update_hash_1x
-+
-+	# * should store only the remaining bytes.
-+	bl	Write_partial_block
-+
-+	stxvb16x 30+32, 0, 7		# update IV
-+	std	12, 56(7)		# update partial?
-+	li	16, 16
-+
-+	stxvb16x	32, 0, 8		# write out Xi
-+	stxvb16x	32, 16, 8		# write out Xi
-+	b aes_gcm_out
-+
-+ #
-+ # Compute data mask
-+ #
-+.macro GEN_MASK _mask _start _end
-+	vspltisb	16, -1		# first 16 bytes - 0xffff...ff
-+	vspltisb	17, 0		# second 16 bytes - 0x0000...00
-+	li	10, 192
-+	stxvb16x	17+32, 10, 1
-+	add	10, 10, \_start
-+	stxvb16x	16+32, 10, 1
-+	add	10, 10, \_end
-+	stxvb16x	17+32, 10, 1
-+
-+	addi	10, 1, 192
-+	lxvb16x	\_mask, 0, 10		# load partial block mask
-+.endm
-+
-+ #
-+ # Handle multiple partial blocks for encrypt and decrypt
-+ #   operations.
-+ #
-+SYM_FUNC_START_LOCAL(Do_partial_block)
-+	add	17, 15, 5
-+	cmpdi	17, 16
-+	bgt	Big_block
-+	GEN_MASK 18, 15, 5
-+	b	_Partial
-+SYM_FUNC_END(Do_partial_block)
-+Big_block:
-+	li	16, 16
-+	GEN_MASK 18, 15, 16
-+
-+_Partial:
-+	lxvb16x	17+32, 0, 14		# load last block
-+	sldi	16, 15, 3
-+	mtvsrdd	32+16, 0, 16
-+	vsro	17, 17, 16
-+	xxlxor	47, 47, 17+32
-+	xxland	47, 47, 18
-+
-+	vxor	0, 0, 0			# clear Xi
-+	vmr	28, 15
-+
-+	cmpdi	21, 0			# encrypt/decrypt ops?
-+	beq	Skip_decrypt
-+	xxland	32+28, 32+17, 18
-+
-+Skip_decrypt:
-+
-+	ppc_update_hash_1x
-+
-+	li	16, 16
-+	lxvb16x 32+29, 16, 8
-+	vxor	0, 0, 29
-+	stxvb16x 32, 0, 8		# save Xi
-+	stxvb16x 32, 16, 8		# save Xi
-+
-+	# store partial block
-+	# loop the rest of the stream if any
-+	sldi	16, 15, 3
-+	mtvsrdd	32+16, 0, 16
-+	vslo	15, 15, 16
-+	#stxvb16x 15+32, 0, 9		# last block
-+
-+	li	16, 16
-+	sub	17, 16, 15		# 16 - partial
-+
-+	add	16, 15, 5
-+	cmpdi	16, 16
-+	bgt	Larger_16
-+	mr	17, 5
-+Larger_16:
-+
-+	# write partial
-+	li		10, 192
-+	stxvb16x	15+32, 10, 1	# save current block
-+
-+	addi		10, 9, -1
-+	addi		16, 1, 191
-+	mtctr		17		# move partial byte count
-+
-+Write_last_partial:
-+        lbzu		18, 1(16)
-+	stbu		18, 1(10)
-+        bdnz		Write_last_partial
-+	# Complete loop partial
-+
-+	add	14, 14, 17
-+	add	9, 9, 17
-+	sub	12, 12, 17
-+	add	11, 11, 17
-+
-+	add	15, 15, 5
-+	cmpdi	15, 16
-+	blt	Save_partial
-+
-+	vaddudm	30, 30, 31
-+	stxvb16x 30+32, 0, 7		# update IV
-+	xxlor	32+29, 0, 0
-+	vxor	15, 30, 29		# IV + round key - add round key 0
-+	li	15, 0
-+	std	15, 56(7)		# partial done - clear
-+	b	Partial_done
-+Save_partial:
-+	std	15, 56(7)		# partial
-+
-+Partial_done:
++.align	7
++rcon:
++.long	0x01000000, 0x01000000, 0x01000000, 0x01000000	?rev
++.long	0x1b000000, 0x1b000000, 0x1b000000, 0x1b000000	?rev
++.long	0x0d0e0f0c, 0x0d0e0f0c, 0x0d0e0f0c, 0x0d0e0f0c	?rev
++.long	0,0,0,0						?asis
++Lconsts:
++	mflr	r0
++	bcl	20,31,\$+4
++	mflr	$ptr	 #vvvvv "distance between . and rcon
++	addi	$ptr,$ptr,-0x48
++	mtlr	r0
 +	blr
++	.long	0
++	.byte	0,12,0x14,0,0,0,0,0
++.asciz	"AES for PowerISA 2.07, CRYPTOGAMS by <appro\@openssl.org>"
 +
-+ #
-+ # Write partial block
-+ # r9 - output
-+ # r12 - remaining bytes
-+ # v15 - partial input data
-+ #
-+SYM_FUNC_START_LOCAL(Write_partial_block)
-+	li		10, 192
-+	stxvb16x	15+32, 10, 1		# last block
++.globl	.${prefix}_set_encrypt_key
++Lset_encrypt_key:
++	mflr		r11
++	$PUSH		r11,$LRSAVE($sp)
 +
-+	addi		10, 9, -1
-+	addi		16, 1, 191
++	li		$ptr,-1
++	${UCMP}i	$inp,0
++	beq-		Lenc_key_abort		# if ($inp==0) return -1;
++	${UCMP}i	$out,0
++	beq-		Lenc_key_abort		# if ($out==0) return -1;
++	li		$ptr,-2
++	cmpwi		$bits,128
++	blt-		Lenc_key_abort
++	cmpwi		$bits,256
++	bgt-		Lenc_key_abort
++	andi.		r0,$bits,0x3f
++	bne-		Lenc_key_abort
 +
-+        mtctr		12			# remaining bytes
-+	li		15, 0
++	lis		r0,0xfff0
++	mfspr		$vrsave,256
++	mtspr		256,r0
 +
-+Write_last_byte:
-+        lbzu		14, 1(16)
-+	stbu		14, 1(10)
-+        bdnz		Write_last_byte
++	bl		Lconsts
++	mtlr		r11
++
++	neg		r9,$inp
++	lvx		$in0,0,$inp
++	addi		$inp,$inp,15		# 15 is not typo
++	lvsr		$key,0,r9		# borrow $key
++	li		r8,0x20
++	cmpwi		$bits,192
++	lvx		$in1,0,$inp
++	le?vspltisb	$mask,0x0f		# borrow $mask
++	lvx		$rcon,0,$ptr
++	le?vxor		$key,$key,$mask		# adjust for byte swap
++	lvx		$mask,r8,$ptr
++	addi		$ptr,$ptr,0x10
++	vperm		$in0,$in0,$in1,$key	# align [and byte swap in LE]
++	li		$cnt,8
++	vxor		$zero,$zero,$zero
++	mtctr		$cnt
++
++	?lvsr		$outperm,0,$out
++	vspltisb	$outmask,-1
++	lvx		$outhead,0,$out
++	?vperm		$outmask,$zero,$outmask,$outperm
++
++	blt		Loop128
++	addi		$inp,$inp,8
++	beq		L192
++	addi		$inp,$inp,8
++	b		L256
++
++.align	4
++Loop128:
++	vperm		$key,$in0,$in0,$mask	# rotate-n-splat
++	vsldoi		$tmp,$zero,$in0,12	# >>32
++	 vperm		$outtail,$in0,$in0,$outperm	# rotate
++	 vsel		$stage,$outhead,$outtail,$outmask
++	 vmr		$outhead,$outtail
++	vcipherlast	$key,$key,$rcon
++	 stvx		$stage,0,$out
++	 addi		$out,$out,16
++
++	vxor		$in0,$in0,$tmp
++	vsldoi		$tmp,$zero,$tmp,12	# >>32
++	vxor		$in0,$in0,$tmp
++	vsldoi		$tmp,$zero,$tmp,12	# >>32
++	vxor		$in0,$in0,$tmp
++	 vadduwm	$rcon,$rcon,$rcon
++	vxor		$in0,$in0,$key
++	bdnz		Loop128
++
++	lvx		$rcon,0,$ptr		# last two round keys
++
++	vperm		$key,$in0,$in0,$mask	# rotate-n-splat
++	vsldoi		$tmp,$zero,$in0,12	# >>32
++	 vperm		$outtail,$in0,$in0,$outperm	# rotate
++	 vsel		$stage,$outhead,$outtail,$outmask
++	 vmr		$outhead,$outtail
++	vcipherlast	$key,$key,$rcon
++	 stvx		$stage,0,$out
++	 addi		$out,$out,16
++
++	vxor		$in0,$in0,$tmp
++	vsldoi		$tmp,$zero,$tmp,12	# >>32
++	vxor		$in0,$in0,$tmp
++	vsldoi		$tmp,$zero,$tmp,12	# >>32
++	vxor		$in0,$in0,$tmp
++	 vadduwm	$rcon,$rcon,$rcon
++	vxor		$in0,$in0,$key
++
++	vperm		$key,$in0,$in0,$mask	# rotate-n-splat
++	vsldoi		$tmp,$zero,$in0,12	# >>32
++	 vperm		$outtail,$in0,$in0,$outperm	# rotate
++	 vsel		$stage,$outhead,$outtail,$outmask
++	 vmr		$outhead,$outtail
++	vcipherlast	$key,$key,$rcon
++	 stvx		$stage,0,$out
++	 addi		$out,$out,16
++
++	vxor		$in0,$in0,$tmp
++	vsldoi		$tmp,$zero,$tmp,12	# >>32
++	vxor		$in0,$in0,$tmp
++	vsldoi		$tmp,$zero,$tmp,12	# >>32
++	vxor		$in0,$in0,$tmp
++	vxor		$in0,$in0,$key
++	 vperm		$outtail,$in0,$in0,$outperm	# rotate
++	 vsel		$stage,$outhead,$outtail,$outmask
++	 vmr		$outhead,$outtail
++	 stvx		$stage,0,$out
++
++	addi		$inp,$out,15		# 15 is not typo
++	addi		$out,$out,0x50
++
++	li		$rounds,10
++	b		Ldone
++
++.align	4
++L192:
++	lvx		$tmp,0,$inp
++	li		$cnt,4
++	 vperm		$outtail,$in0,$in0,$outperm	# rotate
++	 vsel		$stage,$outhead,$outtail,$outmask
++	 vmr		$outhead,$outtail
++	 stvx		$stage,0,$out
++	 addi		$out,$out,16
++	vperm		$in1,$in1,$tmp,$key	# align [and byte swap in LE]
++	vspltisb	$key,8			# borrow $key
++	mtctr		$cnt
++	vsububm		$mask,$mask,$key	# adjust the mask
++
++Loop192:
++	vperm		$key,$in1,$in1,$mask	# roate-n-splat
++	vsldoi		$tmp,$zero,$in0,12	# >>32
++	vcipherlast	$key,$key,$rcon
++
++	vxor		$in0,$in0,$tmp
++	vsldoi		$tmp,$zero,$tmp,12	# >>32
++	vxor		$in0,$in0,$tmp
++	vsldoi		$tmp,$zero,$tmp,12	# >>32
++	vxor		$in0,$in0,$tmp
++
++	 vsldoi		$stage,$zero,$in1,8
++	vspltw		$tmp,$in0,3
++	vxor		$tmp,$tmp,$in1
++	vsldoi		$in1,$zero,$in1,12	# >>32
++	 vadduwm	$rcon,$rcon,$rcon
++	vxor		$in1,$in1,$tmp
++	vxor		$in0,$in0,$key
++	vxor		$in1,$in1,$key
++	 vsldoi		$stage,$stage,$in0,8
++
++	vperm		$key,$in1,$in1,$mask	# rotate-n-splat
++	vsldoi		$tmp,$zero,$in0,12	# >>32
++	 vperm		$outtail,$stage,$stage,$outperm	# rotate
++	 vsel		$stage,$outhead,$outtail,$outmask
++	 vmr		$outhead,$outtail
++	vcipherlast	$key,$key,$rcon
++	 stvx		$stage,0,$out
++	 addi		$out,$out,16
++
++	 vsldoi		$stage,$in0,$in1,8
++	vxor		$in0,$in0,$tmp
++	vsldoi		$tmp,$zero,$tmp,12	# >>32
++	 vperm		$outtail,$stage,$stage,$outperm	# rotate
++	 vsel		$stage,$outhead,$outtail,$outmask
++	 vmr		$outhead,$outtail
++	vxor		$in0,$in0,$tmp
++	vsldoi		$tmp,$zero,$tmp,12	# >>32
++	vxor		$in0,$in0,$tmp
++	 stvx		$stage,0,$out
++	 addi		$out,$out,16
++
++	vspltw		$tmp,$in0,3
++	vxor		$tmp,$tmp,$in1
++	vsldoi		$in1,$zero,$in1,12	# >>32
++	 vadduwm	$rcon,$rcon,$rcon
++	vxor		$in1,$in1,$tmp
++	vxor		$in0,$in0,$key
++	vxor		$in1,$in1,$key
++	 vperm		$outtail,$in0,$in0,$outperm	# rotate
++	 vsel		$stage,$outhead,$outtail,$outmask
++	 vmr		$outhead,$outtail
++	 stvx		$stage,0,$out
++	 addi		$inp,$out,15		# 15 is not typo
++	 addi		$out,$out,16
++	bdnz		Loop192
++
++	li		$rounds,12
++	addi		$out,$out,0x20
++	b		Ldone
++
++.align	4
++L256:
++	lvx		$tmp,0,$inp
++	li		$cnt,7
++	li		$rounds,14
++	 vperm		$outtail,$in0,$in0,$outperm	# rotate
++	 vsel		$stage,$outhead,$outtail,$outmask
++	 vmr		$outhead,$outtail
++	 stvx		$stage,0,$out
++	 addi		$out,$out,16
++	vperm		$in1,$in1,$tmp,$key	# align [and byte swap in LE]
++	mtctr		$cnt
++
++Loop256:
++	vperm		$key,$in1,$in1,$mask	# rotate-n-splat
++	vsldoi		$tmp,$zero,$in0,12	# >>32
++	 vperm		$outtail,$in1,$in1,$outperm	# rotate
++	 vsel		$stage,$outhead,$outtail,$outmask
++	 vmr		$outhead,$outtail
++	vcipherlast	$key,$key,$rcon
++	 stvx		$stage,0,$out
++	 addi		$out,$out,16
++
++	vxor		$in0,$in0,$tmp
++	vsldoi		$tmp,$zero,$tmp,12	# >>32
++	vxor		$in0,$in0,$tmp
++	vsldoi		$tmp,$zero,$tmp,12	# >>32
++	vxor		$in0,$in0,$tmp
++	 vadduwm	$rcon,$rcon,$rcon
++	vxor		$in0,$in0,$key
++	 vperm		$outtail,$in0,$in0,$outperm	# rotate
++	 vsel		$stage,$outhead,$outtail,$outmask
++	 vmr		$outhead,$outtail
++	 stvx		$stage,0,$out
++	 addi		$inp,$out,15		# 15 is not typo
++	 addi		$out,$out,16
++	bdz		Ldone
++
++	vspltw		$key,$in0,3		# just splat
++	vsldoi		$tmp,$zero,$in1,12	# >>32
++	vsbox		$key,$key
++
++	vxor		$in1,$in1,$tmp
++	vsldoi		$tmp,$zero,$tmp,12	# >>32
++	vxor		$in1,$in1,$tmp
++	vsldoi		$tmp,$zero,$tmp,12	# >>32
++	vxor		$in1,$in1,$tmp
++
++	vxor		$in1,$in1,$key
++	b		Loop256
++
++.align	4
++Ldone:
++	lvx		$in1,0,$inp		# redundant in aligned case
++	vsel		$in1,$outhead,$in1,$outmask
++	stvx		$in1,0,$inp
++	li		$ptr,0
++	mtspr		256,$vrsave
++	stw		$rounds,0($out)
++
++Lenc_key_abort:
++	mr		r3,$ptr
 +	blr
-+SYM_FUNC_END(Write_partial_block)
++	.long		0
++	.byte		0,12,0x14,1,0,0,3,0
++	.long		0
++.size	.${prefix}_set_encrypt_key,.-.${prefix}_set_encrypt_key
 +
-+aes_gcm_out:
-+	# out = state
-+	stxvb16x	32, 0, 8		# write out Xi
-+	add	3, 11, 12		# return count
++.globl	.${prefix}_set_decrypt_key
++	$STU		$sp,-$FRAME($sp)
++	mflr		r10
++	$PUSH		r10,$FRAME+$LRSAVE($sp)
++	bl		Lset_encrypt_key
++	mtlr		r10
 +
-+	RESTORE_REGS
++	cmpwi		r3,0
++	bne-		Ldec_key_abort
++
++	slwi		$cnt,$rounds,4
++	subi		$inp,$out,240		# first round key
++	srwi		$rounds,$rounds,1
++	add		$out,$inp,$cnt		# last round key
++	mtctr		$rounds
++
++Ldeckey:
++	lwz		r0, 0($inp)
++	lwz		r6, 4($inp)
++	lwz		r7, 8($inp)
++	lwz		r8, 12($inp)
++	addi		$inp,$inp,16
++	lwz		r9, 0($out)
++	lwz		r10,4($out)
++	lwz		r11,8($out)
++	lwz		r12,12($out)
++	stw		r0, 0($out)
++	stw		r6, 4($out)
++	stw		r7, 8($out)
++	stw		r8, 12($out)
++	subi		$out,$out,16
++	stw		r9, -16($inp)
++	stw		r10,-12($inp)
++	stw		r11,-8($inp)
++	stw		r12,-4($inp)
++	bdnz		Ldeckey
++
++	xor		r3,r3,r3		# return value
++Ldec_key_abort:
++	addi		$sp,$sp,$FRAME
 +	blr
-+
-+ #
-+ # 8x Decrypt
-+ #
-+_GLOBAL(aes_p10_gcm_decrypt)
-+.align 5
-+
-+	SAVE_REGS
-+
-+	LOAD_HASH_TABLE
-+
-+	# initialize ICB: GHASH( IV ), IV - r7
-+	lxvb16x	30+32, 0, 7	# load IV  - v30
-+
-+	mr	12, 5		# length
-+	li	11, 0		# block index
-+
-+	# counter 1
-+	vxor	31, 31, 31
-+	vspltisb 22, 1
-+	vsldoi	31, 31, 22,1	# counter 1
-+
-+	# load round key to VSR
-+	lxv	0, 0(6)
-+	lxv	1, 0x10(6)
-+	lxv	2, 0x20(6)
-+	lxv	3, 0x30(6)
-+	lxv	4, 0x40(6)
-+	lxv	5, 0x50(6)
-+	lxv	6, 0x60(6)
-+	lxv	7, 0x70(6)
-+	lxv	8, 0x80(6)
-+	lxv	9, 0x90(6)
-+	lxv	10, 0xa0(6)
-+
-+	# load rounds - 10 (128), 12 (192), 14 (256)
-+	lwz	9,240(6)
-+
-+	#
-+	# vxor	state, state, w # addroundkey
-+	xxlor	32+29, 0, 0
-+	vxor	15, 30, 29	# IV + round key - add round key 0
-+
-+	cmpdi	9, 10
-+	beq	Loop_aes_gcm_8x_dec
-+
-+	# load 2 more round keys (v11, v12)
-+	lxv	11, 0xb0(6)
-+	lxv	12, 0xc0(6)
-+
-+	cmpdi	9, 12
-+	beq	Loop_aes_gcm_8x_dec
-+
-+	# load 2 more round keys (v11, v12, v13, v14)
-+	lxv	13, 0xd0(6)
-+	lxv	14, 0xe0(6)
-+	cmpdi	9, 14
-+	beq	Loop_aes_gcm_8x_dec
-+
-+	b	aes_gcm_out
-+
-+.align 5
-+Loop_aes_gcm_8x_dec:
-+	mr	14, 3
-+	mr	9, 4
-+
-+	#
-+	# check partial block
-+	#
-+Continue_partial_check_dec:
-+	ld	15, 56(7)
-+	cmpdi	15, 0
-+	beq	Continue_dec
-+	bgt	Final_block_dec
-+	cmpdi	15, 16
-+	blt	Final_block_dec
-+
-+Continue_dec:
-+	# n blcoks
-+	li	10, 128
-+	divdu	10, 12, 10	# n 128 bytes-blocks
-+	cmpdi	10, 0
-+	beq	Loop_last_block_dec
-+
-+	vaddudm	30, 30, 31	# IV + counter
-+	vxor	16, 30, 29
-+	vaddudm	30, 30, 31
-+	vxor	17, 30, 29
-+	vaddudm	30, 30, 31
-+	vxor	18, 30, 29
-+	vaddudm	30, 30, 31
-+	vxor	19, 30, 29
-+	vaddudm	30, 30, 31
-+	vxor	20, 30, 29
-+	vaddudm	30, 30, 31
-+	vxor	21, 30, 29
-+	vaddudm	30, 30, 31
-+	vxor	22, 30, 29
-+
-+	mtctr	10
-+
-+	li	15, 16
-+	li	16, 32
-+	li	17, 48
-+	li	18, 64
-+	li	19, 80
-+	li	20, 96
-+	li	21, 112
-+
-+	lwz	10, 240(6)
-+
-+Loop_8x_block_dec:
-+
-+	lxvb16x		15, 0, 14	# load block
-+	lxvb16x		16, 15, 14	# load block
-+	lxvb16x		17, 16, 14	# load block
-+	lxvb16x		18, 17, 14	# load block
-+	lxvb16x		19, 18, 14	# load block
-+	lxvb16x		20, 19, 14	# load block
-+	lxvb16x		21, 20, 14	# load block
-+	lxvb16x		22, 21, 14	# load block
-+	addi		14, 14, 128
-+
-+	Loop_aes_middle8x
-+
-+	xxlor	23+32, 10, 10
-+
-+	cmpdi	10, 10
-+	beq	Do_next_ghash_dec
-+
-+	# 192 bits
-+	xxlor	24+32, 11, 11
-+
-+	vcipher	15, 15, 23
-+	vcipher	16, 16, 23
-+	vcipher	17, 17, 23
-+	vcipher	18, 18, 23
-+	vcipher	19, 19, 23
-+	vcipher	20, 20, 23
-+	vcipher	21, 21, 23
-+	vcipher	22, 22, 23
-+
-+	vcipher	15, 15, 24
-+	vcipher	16, 16, 24
-+	vcipher	17, 17, 24
-+	vcipher	18, 18, 24
-+	vcipher	19, 19, 24
-+	vcipher	20, 20, 24
-+	vcipher	21, 21, 24
-+	vcipher	22, 22, 24
-+
-+	xxlor	23+32, 12, 12
-+
-+	cmpdi	10, 12
-+	beq	Do_next_ghash_dec
-+
-+	# 256 bits
-+	xxlor	24+32, 13, 13
-+
-+	vcipher	15, 15, 23
-+	vcipher	16, 16, 23
-+	vcipher	17, 17, 23
-+	vcipher	18, 18, 23
-+	vcipher	19, 19, 23
-+	vcipher	20, 20, 23
-+	vcipher	21, 21, 23
-+	vcipher	22, 22, 23
-+
-+	vcipher	15, 15, 24
-+	vcipher	16, 16, 24
-+	vcipher	17, 17, 24
-+	vcipher	18, 18, 24
-+	vcipher	19, 19, 24
-+	vcipher	20, 20, 24
-+	vcipher	21, 21, 24
-+	vcipher	22, 22, 24
-+
-+	xxlor	23+32, 14, 14
-+
-+	cmpdi	10, 14
-+	beq	Do_next_ghash_dec
-+	b	aes_gcm_out
-+
-+Do_next_ghash_dec:
-+
-+	#
-+	# last round
-+	vcipherlast     15, 15, 23
-+	vcipherlast     16, 16, 23
-+
-+	xxlxor		47, 47, 15
-+	stxvb16x        47, 0, 9	# store output
-+	xxlxor		48, 48, 16
-+	stxvb16x        48, 15, 9	# store output
-+
-+	vcipherlast     17, 17, 23
-+	vcipherlast     18, 18, 23
-+
-+	xxlxor		49, 49, 17
-+	stxvb16x        49, 16, 9	# store output
-+	xxlxor		50, 50, 18
-+	stxvb16x        50, 17, 9	# store output
-+
-+	vcipherlast     19, 19, 23
-+	vcipherlast     20, 20, 23
-+
-+	xxlxor		51, 51, 19
-+	stxvb16x        51, 18, 9	# store output
-+	xxlxor		52, 52, 20
-+	stxvb16x        52, 19, 9	# store output
-+
-+	vcipherlast     21, 21, 23
-+	vcipherlast     22, 22, 23
-+
-+	xxlxor		53, 53, 21
-+	stxvb16x        53, 20, 9	# store output
-+	xxlxor		54, 54, 22
-+	stxvb16x        54, 21, 9	# store output
-+
-+	addi		9, 9, 128
-+
-+	xxlor           15+32, 15, 15
-+	xxlor           16+32, 16, 16
-+	xxlor           17+32, 17, 17
-+	xxlor           18+32, 18, 18
-+	xxlor           19+32, 19, 19
-+	xxlor           20+32, 20, 20
-+	xxlor           21+32, 21, 21
-+	xxlor           22+32, 22, 22
-+
-+	# ghash here
-+	ppc_aes_gcm_ghash2_4x
-+
-+	xxlor	27+32, 0, 0
-+	vaddudm 30, 30, 31		# IV + counter
-+	vmr	29, 30
-+	vxor    15, 30, 27		# add round key
-+	vaddudm 30, 30, 31
-+	vxor    16, 30, 27
-+	vaddudm 30, 30, 31
-+	vxor    17, 30, 27
-+	vaddudm 30, 30, 31
-+	vxor    18, 30, 27
-+	vaddudm 30, 30, 31
-+	vxor    19, 30, 27
-+	vaddudm 30, 30, 31
-+	vxor    20, 30, 27
-+	vaddudm 30, 30, 31
-+	vxor    21, 30, 27
-+	vaddudm 30, 30, 31
-+	vxor    22, 30, 27
-+
-+	addi    12, 12, -128
-+	addi    11, 11, 128
-+
-+	bdnz	Loop_8x_block_dec
-+
-+	vmr	30, 29
-+	stxvb16x 30+32, 0, 7		# update IV
-+
-+Loop_last_block_dec:
-+	cmpdi   12, 0
-+	beq     aes_gcm_out
-+
-+	# loop last few blocks
-+	li      10, 16
-+	divdu   10, 12, 10
-+
-+	mtctr   10
-+
-+	lwz	10, 240(6)
-+
-+	cmpdi   12, 16
-+	blt     Final_block_dec
-+
-+Next_rem_block_dec:
-+	lxvb16x 15, 0, 14		# load block
-+
-+	Loop_aes_middle_1x
-+
-+	xxlor	23+32, 10, 10
-+
-+	cmpdi	10, 10
-+	beq	Do_next_1x_dec
-+
-+	# 192 bits
-+	xxlor	24+32, 11, 11
-+
-+	vcipher	15, 15, 23
-+	vcipher	15, 15, 24
-+
-+	xxlor	23+32, 12, 12
-+
-+	cmpdi	10, 12
-+	beq	Do_next_1x_dec
-+
-+	# 256 bits
-+	xxlor	24+32, 13, 13
-+
-+	vcipher	15, 15, 23
-+	vcipher	15, 15, 24
-+
-+	xxlor	23+32, 14, 14
-+
-+	cmpdi	10, 14
-+	beq	Do_next_1x_dec
-+
-+Do_next_1x_dec:
-+	vcipherlast     15, 15, 23
-+
-+	xxlxor		47, 47, 15
-+	stxvb16x	47, 0, 9	# store output
-+	addi		14, 14, 16
-+	addi		9, 9, 16
-+
-+	xxlor           28+32, 15, 15
-+	#vmr		28, 15
-+	ppc_update_hash_1x
-+
-+	addi		12, 12, -16
-+	addi		11, 11, 16
-+	xxlor		19+32, 0, 0
-+	vaddudm		30, 30, 31		# IV + counter
-+	vxor		15, 30, 19		# add round key
-+
-+	bdnz	Next_rem_block_dec
-+
-+	li	15, 0
-+	std	15, 56(7)		# clear partial?
-+	stxvb16x 30+32, 0, 7		# update IV
-+	cmpdi	12, 0
-+	beq	aes_gcm_out
-+
-+Final_block_dec:
-+	lwz	10, 240(6)
-+	Loop_aes_middle_1x
-+
-+	xxlor	23+32, 10, 10
-+
-+	cmpdi	10, 10
-+	beq	Do_final_1x_dec
-+
-+	# 192 bits
-+	xxlor	24+32, 11, 11
-+
-+	vcipher	15, 15, 23
-+	vcipher	15, 15, 24
-+
-+	xxlor	23+32, 12, 12
-+
-+	cmpdi	10, 12
-+	beq	Do_final_1x_dec
-+
-+	# 256 bits
-+	xxlor	24+32, 13, 13
-+
-+	vcipher	15, 15, 23
-+	vcipher	15, 15, 24
-+
-+	xxlor	23+32, 14, 14
-+
-+	cmpdi	10, 14
-+	beq	Do_final_1x_dec
-+
-+Do_final_1x_dec:
-+	vcipherlast     15, 15, 23
-+
-+	# check partial block
-+	li	21, 1			# decrypt
-+	ld	15, 56(7)		# partial?
-+	cmpdi	15, 0
-+	beq	Normal_block_dec
-+	bl	Do_partial_block
-+	cmpdi	12, 0
-+	ble aes_gcm_out
-+
-+	b Continue_partial_check_dec
-+
-+Normal_block_dec:
-+	lxvb16x	15, 0, 14		# load last block
-+	xxlxor	47, 47, 15
-+
-+	# create partial block mask
-+	li	15, 16
-+	sub	15, 15, 12		# index to the mask
-+
-+	vspltisb	16, -1		# first 16 bytes - 0xffff...ff
-+	vspltisb	17, 0		# second 16 bytes - 0x0000...00
-+	li	10, 192
-+	stvx	16, 10, 1
-+	addi	10, 10, 16
-+	stvx	17, 10, 1
-+
-+	addi	10, 1, 192
-+	lxvb16x	16, 15, 10		# load partial block mask
-+	xxland	47, 47, 16
-+
-+	xxland	32+28, 15, 16
-+	#vmr	28, 15
-+	ppc_update_hash_1x
-+
-+	# * should store only the remaining bytes.
-+	bl	Write_partial_block
-+
-+	stxvb16x 30+32, 0, 7		# update IV
-+	std	12, 56(7)		# update partial?
-+	li	16, 16
-+
-+	stxvb16x	32, 0, 8		# write out Xi
-+	stxvb16x	32, 16, 8		# write out Xi
-+	b aes_gcm_out
++	.long		0
++	.byte		0,12,4,1,0x80,0,3,0
++	.long		0
++.size	.${prefix}_set_decrypt_key,.-.${prefix}_set_decrypt_key
++___
++}}}
++#########################################################################
++{{{	# Single block en- and decrypt procedures			#
++sub gen_block () {
++my $dir = shift;
++my $n   = $dir eq "de" ? "n" : "";
++my ($inp,$out,$key,$rounds,$idx)=map("r$_",(3..7));
++
++$code.=<<___;
++.globl	.${prefix}_${dir}crypt
++	lwz		$rounds,240($key)
++	lis		r0,0xfc00
++	mfspr		$vrsave,256
++	li		$idx,15			# 15 is not typo
++	mtspr		256,r0
++
++	lvx		v0,0,$inp
++	neg		r11,$out
++	lvx		v1,$idx,$inp
++	lvsl		v2,0,$inp		# inpperm
++	le?vspltisb	v4,0x0f
++	?lvsl		v3,0,r11		# outperm
++	le?vxor		v2,v2,v4
++	li		$idx,16
++	vperm		v0,v0,v1,v2		# align [and byte swap in LE]
++	lvx		v1,0,$key
++	?lvsl		v5,0,$key		# keyperm
++	srwi		$rounds,$rounds,1
++	lvx		v2,$idx,$key
++	addi		$idx,$idx,16
++	subi		$rounds,$rounds,1
++	?vperm		v1,v1,v2,v5		# align round key
++
++	vxor		v0,v0,v1
++	lvx		v1,$idx,$key
++	addi		$idx,$idx,16
++	mtctr		$rounds
++
++Loop_${dir}c:
++	?vperm		v2,v2,v1,v5
++	v${n}cipher	v0,v0,v2
++	lvx		v2,$idx,$key
++	addi		$idx,$idx,16
++	?vperm		v1,v1,v2,v5
++	v${n}cipher	v0,v0,v1
++	lvx		v1,$idx,$key
++	addi		$idx,$idx,16
++	bdnz		Loop_${dir}c
++
++	?vperm		v2,v2,v1,v5
++	v${n}cipher	v0,v0,v2
++	lvx		v2,$idx,$key
++	?vperm		v1,v1,v2,v5
++	v${n}cipherlast	v0,v0,v1
++
++	vspltisb	v2,-1
++	vxor		v1,v1,v1
++	li		$idx,15			# 15 is not typo
++	?vperm		v2,v1,v2,v3		# outmask
++	le?vxor		v3,v3,v4
++	lvx		v1,0,$out		# outhead
++	vperm		v0,v0,v0,v3		# rotate [and byte swap in LE]
++	vsel		v1,v1,v0,v2
++	lvx		v4,$idx,$out
++	stvx		v1,0,$out
++	vsel		v0,v0,v4,v2
++	stvx		v0,$idx,$out
++
++	mtspr		256,$vrsave
++	blr
++	.long		0
++	.byte		0,12,0x14,0,0,0,3,0
++	.long		0
++.size	.${prefix}_${dir}crypt,.-.${prefix}_${dir}crypt
++___
++}
++&gen_block("en");
++&gen_block("de");
++}}}
++
++my $consts=1;
++foreach(split("\n",$code)) {
++        s/\`([^\`]*)\`/eval($1)/geo;
++
++	# constants table endian-specific conversion
++	if ($consts && m/\.(long|byte)\s+(.+)\s+(\?[a-z]*)$/o) {
++	    my $conv=$3;
++	    my @bytes=();
++
++	    # convert to endian-agnostic format
++	    if ($1 eq "long") {
++	      foreach (split(/,\s*/,$2)) {
++		my $l = /^0/?oct:int;
++		push @bytes,($l>>24)&0xff,($l>>16)&0xff,($l>>8)&0xff,$l&0xff;
++	      }
++	    } else {
++		@bytes = map(/^0/?oct:int,split(/,\s*/,$2));
++	    }
++
++	    # little-endian conversion
++	    if ($flavour =~ /le$/o) {
++		SWITCH: for($conv)  {
++		    /\?inv/ && do   { @bytes=map($_^0xf,@bytes); last; };
++		    /\?rev/ && do   { @bytes=reverse(@bytes);    last; };
++		}
++	    }
++
++	    #emit
++	    print ".byte\t",join(',',map (sprintf("0x%02x",$_),@bytes)),"\n";
++	    next;
++	}
++	$consts=0 if (m/Lconsts:/o);	# end of table
++
++	# instructions prefixed with '?' are endian-specific and need
++	# to be adjusted accordingly...
++	if ($flavour =~ /le$/o) {	# little-endian
++	    s/le\?//o		or
++	    s/be\?/#be#/o	or
++	    s/\?lvsr/lvsl/o	or
++	    s/\?lvsl/lvsr/o	or
++	    s/\?(vperm\s+v[0-9]+,\s*)(v[0-9]+,\s*)(v[0-9]+,\s*)(v[0-9]+)/$1$3$2$4/o or
++	    s/\?(vsldoi\s+v[0-9]+,\s*)(v[0-9]+,)\s*(v[0-9]+,\s*)([0-9]+)/$1$3$2 16-$4/o or
++	    s/\?(vspltw\s+v[0-9]+,\s*)(v[0-9]+,)\s*([0-9])/$1$2 3-$3/o;
++	} else {			# big-endian
++	    s/le\?/#le#/o	or
++	    s/be\?//o		or
++	    s/\?([a-z]+)/$1/o;
++	}
++
++        print $_,"\n";
++}
++
++close STDOUT;
 -- 
 2.31.1
 
