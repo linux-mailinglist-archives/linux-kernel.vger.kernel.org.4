@@ -2,390 +2,250 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F2C469E9C4
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 22:55:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EA71269E9C8
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 22:58:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230195AbjBUVzC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Feb 2023 16:55:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55180 "EHLO
+        id S230197AbjBUV6L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Feb 2023 16:58:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57478 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229514AbjBUVzA (ORCPT
+        with ESMTP id S229609AbjBUV6J (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Feb 2023 16:55:00 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97F28A5D8
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Feb 2023 13:54:11 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1677016450;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=Brdb9PCr7A23HeU1GuCqJ3BEfkvI1UmYfLnZWb/xXjo=;
-        b=FlNuAEy8p3ML/Diz8YAoSb7/jpgBbElb/RRQfDxzwUGrHKYsOIE4dHwqXVfRiR7Y5ID7CH
-        W88+VibbNpgRoBmA3kTUvtP+v3GFAa+PwTK/FtVqFdyLCtFI7HYPCWIRxsGdYMy2vXoaa4
-        uaseGnlsT4y+YK1ACEKchk29RFdGfEM=
-Received: from mail-qv1-f72.google.com (mail-qv1-f72.google.com
- [209.85.219.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-440-XDroegEJOWye0m9mECRdpg-1; Tue, 21 Feb 2023 16:54:07 -0500
-X-MC-Unique: XDroegEJOWye0m9mECRdpg-1
-Received: by mail-qv1-f72.google.com with SMTP id pp11-20020a056214138b00b0056c228fa15cso2477221qvb.4
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Feb 2023 13:54:07 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1677016447;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Brdb9PCr7A23HeU1GuCqJ3BEfkvI1UmYfLnZWb/xXjo=;
-        b=K3sgpyjpBDBHb/grAAMkSUaNABBlELoHdoYmSjj9YiMahjBV7qdQCEUDldZvA/10+5
-         fiZl5abpKTS3tVzF9oweMbuuKLwuup21ViRg81TWk3UR9yIYpb+4gOM644UDxnF5Vl7d
-         Hu1GB5jziNWNmGhKEa7usAs7k+sZubqGXboi7a2uQ3IdjOp9GBQ4DjDexz/2wW+LcwGh
-         u6HVOZ572r2tQFGMCZxYGQUciZnDm4tQPm7Ws3/M3JZzbX1TudEKtZwQERAqldZWgPMx
-         kZzn6vTqojmRUwl7GdS2Ng1E1k+/zeedCi58M4KAAbfQC2U6NEAQwk5Ne8KAPl5ksXph
-         0Ikg==
-X-Gm-Message-State: AO0yUKUdgPO1OtHCTmRpvLhA6oV54CZCgBU1OObzX+f1yJa5cNe02YTn
-        oNh9Y6Elftz7LcBihxGdKM7GCLLK7wKJnGLYwTLEDVFFv6CfZW/zJ2KKjuxa2xGn7rYtQE9x8xm
-        Mi7/b5SkfdM9eB1jf/YJeyKbn
-X-Received: by 2002:ac8:5a0c:0:b0:3bf:a60d:43b9 with SMTP id n12-20020ac85a0c000000b003bfa60d43b9mr4250918qta.4.1677016447106;
-        Tue, 21 Feb 2023 13:54:07 -0800 (PST)
-X-Google-Smtp-Source: AK7set/BI2njRIWRcNdTMIK1mpGmgjDnnY1Ek67y/6GmgbYqOGneFOtzdi5c7Fn+86kWeJ6FQr4ybg==
-X-Received: by 2002:ac8:5a0c:0:b0:3bf:a60d:43b9 with SMTP id n12-20020ac85a0c000000b003bfa60d43b9mr4250892qta.4.1677016446755;
-        Tue, 21 Feb 2023 13:54:06 -0800 (PST)
-Received: from x1n (bras-base-aurron9127w-grc-56-70-30-145-63.dsl.bell.ca. [70.30.145.63])
-        by smtp.gmail.com with ESMTPSA id z13-20020ac8430d000000b003b9a50c8fa1sm1200878qtm.87.2023.02.21.13.54.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 21 Feb 2023 13:54:05 -0800 (PST)
-Date:   Tue, 21 Feb 2023 16:54:04 -0500
-From:   Peter Xu <peterx@redhat.com>
-To:     David Stevens <stevensd@chromium.org>
-Cc:     linux-mm@kvack.org, Matthew Wilcox <willy@infradead.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        "Kirill A . Shutemov" <kirill@shutemov.name>,
-        Yang Shi <shy828301@gmail.com>,
-        David Hildenbrand <david@redhat.com>,
-        Hugh Dickins <hughd@google.com>, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v4 1/3] mm/khugepaged: refactor collapse_file control flow
-Message-ID: <Y/U9fBxVJdhxiZ1v@x1n>
-References: <20230217085439.2826375-1-stevensd@google.com>
- <20230217085439.2826375-2-stevensd@google.com>
+        Tue, 21 Feb 2023 16:58:09 -0500
+Received: from esa4.hgst.iphmx.com (esa4.hgst.iphmx.com [216.71.154.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CDD951A660
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Feb 2023 13:58:07 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
+  t=1677016687; x=1708552687;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=g9TnFRqAZqcDsGZcV1iYV9pTjzWi1/1bs6SxLfEGNWA=;
+  b=GH6weQ0NW5KgMS7uGJDvXxM4E3VZIWdghXkd9Nuf04WbSQT7mluqk8rv
+   GkBOk7jrVDYYzZQW4t4xuEvwW7o+q3FmWsyowYfzkuayBhYV6jWDF+DhU
+   bs2MDdM7xJhT1EO4AMrwLfKK0wrNOQ5fvIpkxH8Mh6OtxI/saJV72ZRLJ
+   xHIgdDeTytQB3p9oNcbBVma5ms366aSXeu9JwJeJKdWOQVWWorchpBNQu
+   G8vbRR/YGxhvAqBm08E+2trwhwv1QZIymAlr4VY5beD7X1/1a3p+p7+nb
+   WqiNMlD4ZbvwZebrbk68c4ScvEKREgmrGaNWLqe3ywiuklQZR0pXysDzo
+   w==;
+X-IronPort-AV: E=Sophos;i="5.97,317,1669046400"; 
+   d="scan'208";a="222134151"
+Received: from h199-255-45-14.hgst.com (HELO uls-op-cesaep01.wdc.com) ([199.255.45.14])
+  by ob1.hgst.iphmx.com with ESMTP; 22 Feb 2023 05:58:05 +0800
+IronPort-SDR: 23gX0CiCXRv+oV8g6GXeUZ84XAPyhkZhoURaTwPZ88iGwYJdRDCJZPfgqOofG+AbCEv4tjNk+N
+ 0aaVKlR7lSCtkiDvM0p4mJOb5faL4MhGrAJzHUSjniDKaRlh7GK/Z6ZbynMR/V1yd2ujUNQh3A
+ Ws5OEQTgL+h7LHccBOHMNw7Eq2VPPC2N1iBFSZ7Xdp8s1QdjbmC+P6xQ5URBgt1FwOyoBsQ5Ya
+ BgRUOr+VSiLIvg5IYLfwqbLPlsgvWnLQoey++fdT8ugpyD0DwaFZ6f24m2CKZSBspMPJppwz9K
+ +WE=
+Received: from uls-op-cesaip02.wdc.com ([10.248.3.37])
+  by uls-op-cesaep01.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 21 Feb 2023 13:15:04 -0800
+IronPort-SDR: kQ+yMtLI48zFBeJ3aydaC8LN9eJhZN/nHZEnvu51ItVfGy1EwCtWarR142WRkFUa0LopVx8Eqv
+ abWyhdmxCjJMeoCf2n+/ARKS3D3HE4ShBoLs00irfDgHZE2N8Rfve9g0e8KSLH5mrkZfBJc+bl
+ +LHQVAEtmJPmrTfqwp2a0qK8wYr0NETQMfMyW/v3GfKZS0GDzCwVq8TQXDSGiPAaUdRqW+2WYe
+ e1gb3nPQ8uEzP+VeeNWeWlSkP5gNyeJdkO5ywPtzimk2ssiSeCidQYHrVPUGqI82bGqbzGYmov
+ 4Mc=
+WDCIronportException: Internal
+Received: from usg-ed-osssrv.wdc.com ([10.3.10.180])
+  by uls-op-cesaip02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 21 Feb 2023 13:58:05 -0800
+Received: from usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1])
+        by usg-ed-osssrv.wdc.com (Postfix) with ESMTP id 4PLtSr52lWz1Rwtm
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Feb 2023 13:58:04 -0800 (PST)
+Authentication-Results: usg-ed-osssrv.wdc.com (amavisd-new); dkim=pass
+        reason="pass (just generated, assumed good)"
+        header.d=opensource.wdc.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=
+        opensource.wdc.com; h=content-transfer-encoding:content-type
+        :in-reply-to:organization:from:content-language:references:to
+        :subject:user-agent:mime-version:date:message-id; s=dkim; t=
+        1677016682; x=1679608683; bh=g9TnFRqAZqcDsGZcV1iYV9pTjzWi1/1bs6S
+        xLfEGNWA=; b=Rb9/RTEigoXlpl3/WTaPyfgRujxS0dNLPQlHHKqTpzdykTvexkm
+        mK+7rSBYPQchCE4X3iRubIdTVA1kuy2s3/s3FL3IymSUduI/0C8ClvciOyDM8gqy
+        nThhdHRXBkRNWw68JXTvoGQluphxoEZ+yvmpAAIMCjrncML4W8JH3FV3E3nQyyDG
+        j/xPAI2U+cEZqSkvYKF1xEXUxe0bhttNRB1cf4Vb6tlHY++EsL3TP/kw1vlBMCnB
+        emJm1kL5Pd/hvTIfCk01L9mRDeWcf9IBkZLlW/d4hgwTSMDu8fM8TVnrkkUyQ2zL
+        cfzPhfLndTkVUweNAu5WFR+P0WGYENfno1g==
+X-Virus-Scanned: amavisd-new at usg-ed-osssrv.wdc.com
+Received: from usg-ed-osssrv.wdc.com ([127.0.0.1])
+        by usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id q801533stxnd for <linux-kernel@vger.kernel.org>;
+        Tue, 21 Feb 2023 13:58:02 -0800 (PST)
+Received: from [10.225.163.21] (unknown [10.225.163.21])
+        by usg-ed-osssrv.wdc.com (Postfix) with ESMTPSA id 4PLtSk5wLTz1RvLy;
+        Tue, 21 Feb 2023 13:57:58 -0800 (PST)
+Message-ID: <a524ec1c-68ee-e20e-683a-40822b2235fd@opensource.wdc.com>
+Date:   Wed, 22 Feb 2023 06:57:57 +0900
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20230217085439.2826375-2-stevensd@google.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH v2 9/9] PCI: rockchip: Add parameter check for RK3399 PCIe
+ endpoint core set_msi()
+To:     Rick Wertenbroek <rick.wertenbroek@gmail.com>
+Cc:     alberto.dassatti@heig-vd.ch, xxm@rock-chips.com,
+        rick.wertenbroek@heig-vd.ch, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Shawn Lin <shawn.lin@rock-chips.com>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        =?UTF-8?Q?Krzysztof_Wilczy=c5=84ski?= <kw@linux.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Jani Nikula <jani.nikula@intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Mikko Kovanen <mikko.kovanen@aavamobile.com>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-pci@vger.kernel.org
+References: <20230214140858.1133292-1-rick.wertenbroek@gmail.com>
+ <20230214140858.1133292-10-rick.wertenbroek@gmail.com>
+ <ebbddcfa-99e5-efda-0eab-fbd61a33e2c3@opensource.wdc.com>
+ <CAAEEuhpDTmAvBZhC9RCueOvqbLb=AttV1KxJrOUBcjHQrpVXmA@mail.gmail.com>
+ <38ae72c9-0f0b-1a94-d2e0-f4ea80e94705@opensource.wdc.com>
+ <CAAEEuhoQV1A8o_2jb1Qfq5d7dj9HpHL+mkDs8K4vs8v=-81zng@mail.gmail.com>
+Content-Language: en-US
+From:   Damien Le Moal <damien.lemoal@opensource.wdc.com>
+Organization: Western Digital Research
+In-Reply-To: <CAAEEuhoQV1A8o_2jb1Qfq5d7dj9HpHL+mkDs8K4vs8v=-81zng@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Feb 17, 2023 at 05:54:37PM +0900, David Stevens wrote:
-> From: David Stevens <stevensd@chromium.org>
+On 2/21/23 22:19, Rick Wertenbroek wrote:
+> On Tue, Feb 21, 2023 at 11:55 AM Damien Le Moal
+> <damien.lemoal@opensource.wdc.com> wrote:
+>>
+>> On 2/21/23 19:47, Rick Wertenbroek wrote:
+>>> On Wed, Feb 15, 2023 at 2:39 AM Damien Le Moal
+>>> <damien.lemoal@opensource.wdc.com> wrote:
+>>>>
+>>>> On 2/14/23 23:08, Rick Wertenbroek wrote:
+>>>>> The RK3399 PCIe endpoint core supports only a single PCIe physcial
+>>>>> function (function number 0), therefore return -EINVAL if set_msi() is
+>>>>> called with a function number greater than 0.
+>>>>> The PCIe standard only allows the multi message capability (MMC) value
+>>>>> to be up to 0x5 (32 messages), therefore return -EINVAL if set_msi() is
+>>>>> called with a MMC value of over 0x5.
+>>>>>
+>>>>> Signed-off-by: Rick Wertenbroek <rick.wertenbroek@gmail.com>
+>>>>> ---
+>>>>>  drivers/pci/controller/pcie-rockchip-ep.c | 10 ++++++++++
+>>>>>  1 file changed, 10 insertions(+)
+>>>>>
+>>>>> diff --git a/drivers/pci/controller/pcie-rockchip-ep.c b/drivers/pci/controller/pcie-rockchip-ep.c
+>>>>> index b7865a94e..80634b690 100644
+>>>>> --- a/drivers/pci/controller/pcie-rockchip-ep.c
+>>>>> +++ b/drivers/pci/controller/pcie-rockchip-ep.c
+>>>>> @@ -294,6 +294,16 @@ static int rockchip_pcie_ep_set_msi(struct pci_epc *epc, u8 fn, u8 vfn,
+>>>>>       struct rockchip_pcie *rockchip = &ep->rockchip;
+>>>>>       u32 flags;
+>>>>>
+>>>>> +     if (fn) {
+>>>>> +             dev_err(&epc->dev, "This endpoint controller only supports a single physical function\n");
+>>>>> +             return -EINVAL;
+>>>>> +     }
+>>>>
+>>>> Checking this here is late... Given that at most only one physical
+>>>> function is supported, the check should be in rockchip_pcie_parse_ep_dt().
+>>>> Something like:
+>>>>
+>>>>         err = of_property_read_u8(dev->of_node, "max-functions",
+>>>>                                   &ep->epc->max_functions);
+>>>>
+>>>>         if (err < 0 || ep->epc->max_functions > 1)
+>>>>
+>>>>                 ep->epc->max_functions = 1;
+>>>>
+>>>
+>>> Yes, this could be moved to the probe, thanks.
+>>>
+>>>> And all the macros with the (fn) argument could also be simplified
+>>>> (argument fn removed) since fn will always be 0.
+>>>
+>>> These functions cannot be simplified because they have to follow the signature
+>>> given by "pci_epc_ops" (include/linux/pci-epc.h). And this signature has the
+>>> function number as a parameter. If we change the function signature we won't
+>>> be able to assign these functions to the pc_epc_ops structure
+>>
+>> I was not suggesting to change the functions signature. I was suggesting
+>> dropping the fn argument for the *macros*, e.g.
+>>
+>> ROCKCHIP_PCIE_EP_FUNC_BASE(fn) -> ROCKCHIP_PCIE_EP_FUNC_BASE
+>>
+>> since fn is always 0.
+>>
+>> That said, I am not entirely sure if the limit really is 1 function at most. The
+>> TRM seems to be suggesting that up to 4 functions can be supported...
+>>
+>> [...]
+>>
+>>>> Another nice cleanup: define ROCKCHIP_PCIE_EP_MSI_CTRL_REG to include the
+>>>> ROCKCHIP_PCIE_EP_FUNC_BASE(fn) addition so that we do not have to do it
+>>>> here all the time.
+>>>
+>>> Yes, this could be an improvement but this is the way it is written
+>>> everywhere in this
+>>> driver, I chose to keep it so as to remain coherent with the rest of the driver.
+>>> Cleaning this is not so important since this code will not be
+>>> rewritten / changed so
+>>> often. But I agree that it might be nicer. But, on the other side if
+>>> at some point
+>>> support for virtual functions would be added, the offsets would need
+>>> to be computed
+>>> based on the virtual function number and the code would be written
+>>> like it is now,
+>>> so I suggest keeping this the way it is for now.
+>>
+>> Yes, sure, this can be cleaned later.
+>>
+>> A more pressing problem is the lack of support for MSIX despite the fact that
+>> the controller supports that *and* advertize it as a capability. That is what
+>> was causing my problem with the Linux nvme driver and my prototype nvme epf
+>> function driver: the host driver was seeing MSIX support (1 vector supported by
+>> default), and so was allocating one MSIX for the device probe. But on the EP
+>> end, it is MSI or INTX only... Working on adding that to solve this issue.
+>>
 > 
-> Add a rollback label to deal with failure, instead of continuously
-> checking for RESULT_SUCCESS, to make it easier to add more failure
-> cases. The refactoring also allows the collapse_file tracepoint to
-> include hpage on success (instead of NULL).
+> I have seen this too, the controller advertises the capability. However, the TRM
+> (section 17.5.9) says that MSI-X is not supported (MSI / INTx only as you said).
+> So the solution should be to modify the probe function of the endpoint
+> controller
+> so that the MSI-X capability would not be advertised, this should fix
+> your problem.
+
+Yep, that is what I did for now: write 0 in the capability ID of the MSIX
+capability list entry. A cleaner solution would be to change the next entry
+pointer of the entry preceding the MSIX entry. Will send a patch for that.
+
 > 
-> Signed-off-by: David Stevens <stevensd@chromium.org>
-> ---
->  mm/khugepaged.c | 223 ++++++++++++++++++++++++------------------------
->  1 file changed, 110 insertions(+), 113 deletions(-)
+> I wonder if one could still implement MSI-X because from the endpoint we would
+> just need to implement it as a message (TLP) over PCIe (because the space for
+> the vectors is allocated and written, so that part should be ok). I am
+> not an expert
+> on MSI-X, but the reason the endpoint cannot send them could be because MSI-X
+> requires some fields in the PCIe header descriptor to be filled with values that
+> cannot be set through the "desc0-3" registers of the RK3399 PCIe endpoint core.
 > 
-> diff --git a/mm/khugepaged.c b/mm/khugepaged.c
-> index 8dbc39896811..6a3d6d2e25e0 100644
-> --- a/mm/khugepaged.c
-> +++ b/mm/khugepaged.c
-> @@ -1885,6 +1885,12 @@ static int collapse_file(struct mm_struct *mm, unsigned long addr,
->  	if (result != SCAN_SUCCEED)
->  		goto out;
->  
-> +	__SetPageLocked(hpage);
-> +	if (is_shmem)
-> +		__SetPageSwapBacked(hpage);
-> +	hpage->index = start;
-> +	hpage->mapping = mapping;
-> +
->  	/*
->  	 * Ensure we have slots for all the pages in the range.  This is
->  	 * almost certainly a no-op because most of the pages must be present
-> @@ -1897,16 +1903,10 @@ static int collapse_file(struct mm_struct *mm, unsigned long addr,
->  		xas_unlock_irq(&xas);
->  		if (!xas_nomem(&xas, GFP_KERNEL)) {
->  			result = SCAN_FAIL;
-> -			goto out;
-> +			goto rollback;
->  		}
->  	} while (1);
->  
-> -	__SetPageLocked(hpage);
-> -	if (is_shmem)
-> -		__SetPageSwapBacked(hpage);
-> -	hpage->index = start;
-> -	hpage->mapping = mapping;
-> -
->  	/*
->  	 * At this point the hpage is locked and not up-to-date.
->  	 * It's safe to insert it into the page cache, because nobody would
-> @@ -2123,131 +2123,128 @@ static int collapse_file(struct mm_struct *mm, unsigned long addr,
->  	 */
->  	try_to_unmap_flush();
->  
-> -	if (result == SCAN_SUCCEED) {
-> -		/*
-> -		 * Replacing old pages with new one has succeeded, now we
-> -		 * attempt to copy the contents.
-> -		 */
-> -		index = start;
-> -		list_for_each_entry(page, &pagelist, lru) {
-> -			while (index < page->index) {
-> -				clear_highpage(hpage + (index % HPAGE_PMD_NR));
-> -				index++;
-> -			}
-> -			if (copy_mc_page(hpage + (page->index % HPAGE_PMD_NR),
-> -					 page) > 0) {
-> -				result = SCAN_COPY_MC;
-> -				break;
-> -			}
-> -			index++;
-> -		}
-> -		while (result == SCAN_SUCCEED && index < end) {
-> +	if (result != SCAN_SUCCEED)
-> +		goto rollback;
-> +
-> +	/*
-> +	 * Replacing old pages with new one has succeeded, now we
-> +	 * attempt to copy the contents.
-> +	 */
-> +	index = start;
-> +	list_for_each_entry(page, &pagelist, lru) {
-> +		while (index < page->index) {
->  			clear_highpage(hpage + (index % HPAGE_PMD_NR));
->  			index++;
->  		}
-> +		if (copy_mc_page(hpage + (page->index % HPAGE_PMD_NR),
-> +				 page) > 0) {
-> +			result = SCAN_COPY_MC;
-> +			goto rollback;
-> +		}
-> +		index++;
-> +	}
-> +	while (index < end) {
-> +		clear_highpage(hpage + (index % HPAGE_PMD_NR));
-> +		index++;
->  	}
->  
-> -	if (result == SCAN_SUCCEED) {
-> -		/*
-> -		 * Copying old pages to huge one has succeeded, now we
-> -		 * need to free the old pages.
-> -		 */
-> -		list_for_each_entry_safe(page, tmp, &pagelist, lru) {
-> -			list_del(&page->lru);
-> -			page->mapping = NULL;
-> -			page_ref_unfreeze(page, 1);
-> -			ClearPageActive(page);
-> -			ClearPageUnevictable(page);
-> -			unlock_page(page);
-> -			put_page(page);
-> -		}
-> +	/*
-> +	 * Copying old pages to huge one has succeeded, now we
-> +	 * need to free the old pages.
-> +	 */
-> +	list_for_each_entry_safe(page, tmp, &pagelist, lru) {
-> +		list_del(&page->lru);
-> +		page->mapping = NULL;
-> +		page_ref_unfreeze(page, 1);
-> +		ClearPageActive(page);
-> +		ClearPageUnevictable(page);
-> +		unlock_page(page);
-> +		put_page(page);
-> +	}
->  
-> -		xas_lock_irq(&xas);
-> -		if (is_shmem)
-> -			__mod_lruvec_page_state(hpage, NR_SHMEM_THPS, nr);
-> -		else
-> -			__mod_lruvec_page_state(hpage, NR_FILE_THPS, nr);
-> +	xas_lock_irq(&xas);
-> +	if (is_shmem)
-> +		__mod_lruvec_page_state(hpage, NR_SHMEM_THPS, nr);
-> +	else
-> +		__mod_lruvec_page_state(hpage, NR_FILE_THPS, nr);
-> +
-> +	if (nr_none) {
-> +		__mod_lruvec_page_state(hpage, NR_FILE_PAGES, nr_none);
-> +		/* nr_none is always 0 for non-shmem. */
-> +		__mod_lruvec_page_state(hpage, NR_SHMEM, nr_none);
-> +	}
-> +	/* Join all the small entries into a single multi-index entry. */
-> +	xas_set_order(&xas, start, HPAGE_PMD_ORDER);
-> +	xas_store(&xas, hpage);
-> +	xas_unlock_irq(&xas);
->  
-> -		if (nr_none) {
-> -			__mod_lruvec_page_state(hpage, NR_FILE_PAGES, nr_none);
-> -			/* nr_none is always 0 for non-shmem. */
-> -			__mod_lruvec_page_state(hpage, NR_SHMEM, nr_none);
-> -		}
-> -		/* Join all the small entries into a single multi-index entry. */
-> -		xas_set_order(&xas, start, HPAGE_PMD_ORDER);
-> -		xas_store(&xas, hpage);
-> -		xas_unlock_irq(&xas);
-> +	folio = page_folio(hpage);
-> +	folio_mark_uptodate(folio);
-> +	folio_ref_add(folio, HPAGE_PMD_NR - 1);
->  
-> -		folio = page_folio(hpage);
-> -		folio_mark_uptodate(folio);
-> -		folio_ref_add(folio, HPAGE_PMD_NR - 1);
-> +	if (is_shmem)
-> +		folio_mark_dirty(folio);
-> +	folio_add_lru(folio);
->  
-> -		if (is_shmem)
-> -			folio_mark_dirty(folio);
-> -		folio_add_lru(folio);
-> +	/*
-> +	 * Remove pte page tables, so we can re-fault the page as huge.
-> +	 */
-> +	result = retract_page_tables(mapping, start, mm, addr, hpage,
-> +				     cc);
-> +	unlock_page(hpage);
-> +	goto out;
-> +
-> +rollback:
-> +	/* Something went wrong: roll back page cache changes */
-> +	xas_lock_irq(&xas);
-> +	if (nr_none) {
-> +		mapping->nrpages -= nr_none;
-> +		shmem_uncharge(mapping->host, nr_none);
-> +	}
->  
-> -		/*
-> -		 * Remove pte page tables, so we can re-fault the page as huge.
-> -		 */
-> -		result = retract_page_tables(mapping, start, mm, addr, hpage,
-> -					     cc);
-> -		unlock_page(hpage);
-> -		hpage = NULL;
-> -	} else {
-> -		/* Something went wrong: roll back page cache changes */
-> -		xas_lock_irq(&xas);
-> -		if (nr_none) {
-> -			mapping->nrpages -= nr_none;
-> -			shmem_uncharge(mapping->host, nr_none);
-> +	xas_set(&xas, start);
-> +	xas_for_each(&xas, page, end - 1) {
-> +		page = list_first_entry_or_null(&pagelist,
-> +				struct page, lru);
-> +		if (!page || xas.xa_index < page->index) {
-> +			if (!nr_none)
-> +				break;
-> +			nr_none--;
-> +			/* Put holes back where they were */
-> +			xas_store(&xas, NULL);
-> +			continue;
->  		}
->  
-> -		xas_set(&xas, start);
-> -		xas_for_each(&xas, page, end - 1) {
-> -			page = list_first_entry_or_null(&pagelist,
-> -					struct page, lru);
-> -			if (!page || xas.xa_index < page->index) {
-> -				if (!nr_none)
-> -					break;
-> -				nr_none--;
-> -				/* Put holes back where they were */
-> -				xas_store(&xas, NULL);
-> -				continue;
-> -			}
-> +		VM_BUG_ON_PAGE(page->index != xas.xa_index, page);
->  
-> -			VM_BUG_ON_PAGE(page->index != xas.xa_index, page);
-> +		/* Unfreeze the page. */
-> +		list_del(&page->lru);
-> +		page_ref_unfreeze(page, 2);
-> +		xas_store(&xas, page);
-> +		xas_pause(&xas);
-> +		xas_unlock_irq(&xas);
-> +		unlock_page(page);
-> +		putback_lru_page(page);
-> +		xas_lock_irq(&xas);
-> +	}
-> +	VM_BUG_ON(nr_none);
-> +	/*
-> +	 * Undo the updates of filemap_nr_thps_inc for non-SHMEM file only.
-> +	 * This undo is not needed unless failure is due to SCAN_COPY_MC.
-> +	 */
-> +	if (!is_shmem && result == SCAN_COPY_MC)
-> +		filemap_nr_thps_dec(mapping);
->  
-> -			/* Unfreeze the page. */
-> -			list_del(&page->lru);
-> -			page_ref_unfreeze(page, 2);
-> -			xas_store(&xas, page);
-> -			xas_pause(&xas);
-> -			xas_unlock_irq(&xas);
-> -			unlock_page(page);
-> -			putback_lru_page(page);
-> -			xas_lock_irq(&xas);
-> -		}
-> -		VM_BUG_ON(nr_none);
-> -		/*
-> -		 * Undo the updates of filemap_nr_thps_inc for non-SHMEM file only.
-> -		 * This undo is not needed unless failure is due to SCAN_COPY_MC.
-> -		 */
-> -		if (!is_shmem && result == SCAN_COPY_MC)
-> -			filemap_nr_thps_dec(mapping);
-> +	xas_unlock_irq(&xas);
->  
-> -		xas_unlock_irq(&xas);
-> +	hpage->mapping = NULL;
->  
-> -		hpage->mapping = NULL;
-> -	}
-> +	unlock_page(hpage);
-> +	mem_cgroup_uncharge(page_folio(hpage));
-> +	put_page(hpage);
->  
-> -	if (hpage)
-> -		unlock_page(hpage);
->  out:
->  	VM_BUG_ON(!list_empty(&pagelist));
-> -	if (hpage) {
-> -		mem_cgroup_uncharge(page_folio(hpage));
-> -		put_page(hpage);
-> -	}
-
-Moving this chunk seems wrong, as it can leak the huge page if
-alloc_charge_hpage() failed on mem charging, iiuc.
-
-And I found that keeping it seems wrong either, because if mem charge
-failed we'll uncharge even without charging it before.  But that's nothing
-about this patch alone.
-
-Posted a patch for this:
-
-https://lore.kernel.org/all/20230221214344.609226-1-peterx@redhat.com/
-
-I _think_ this patch will make sense after rebasing to that fix if that's
-correct, but please review it and double check.
-
-Thanks,
-
-> -
->  	trace_mm_khugepaged_collapse_file(mm, hpage, index, is_shmem, addr, file, nr, result);
->  	return result;
->  }
-> -- 
-> 2.39.2.637.g21b0678d19-goog
+> Anyways, the endpoint should not advertise the MSI-X capabilities when it cannot
+> send such interrupts. Once this is fixed you should be able to have your NVMe
+> function running.
 > 
+> Regards.
+> Rick
+> 
+> 
+>> --
+>> Damien Le Moal
+>> Western Digital Research
+>>
 
 -- 
-Peter Xu
+Damien Le Moal
+Western Digital Research
 
