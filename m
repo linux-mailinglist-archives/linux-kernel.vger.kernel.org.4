@@ -2,48 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 72D4E69E652
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 18:50:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 555C269E657
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 18:51:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234645AbjBURuk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Feb 2023 12:50:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36966 "EHLO
+        id S234801AbjBURvC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Feb 2023 12:51:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37584 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234590AbjBURuh (ORCPT
+        with ESMTP id S234590AbjBURu7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Feb 2023 12:50:37 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 908BA2F7A2
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Feb 2023 09:50:36 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1BED261172
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Feb 2023 17:50:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 697B8C433EF;
-        Tue, 21 Feb 2023 17:50:34 +0000 (UTC)
-Date:   Tue, 21 Feb 2023 12:50:32 -0500
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Cc:     "H . Peter Anvin" <hpa@zytor.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Olivier Dion <odion@efficios.com>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        Jiri Kosina <jkosina@suse.cz>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>
-Subject: Re: Official documentation from Intel stating that poking INT3
- (single-byte) concurrently is OK ?
-Message-ID: <20230221125032.0b02d309@gandalf.local.home>
-In-Reply-To: <786f4aed-2c30-806b-409b-23a60b3d7571@efficios.com>
-References: <786f4aed-2c30-806b-409b-23a60b3d7571@efficios.com>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        Tue, 21 Feb 2023 12:50:59 -0500
+Received: from todd.t-8ch.de (todd.t-8ch.de [IPv6:2a01:4f8:c010:41de::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6917C2F79F;
+        Tue, 21 Feb 2023 09:50:51 -0800 (PST)
+From:   =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=weissschuh.net;
+        s=mail; t=1677001849;
+        bh=qYdc7DlpEpf8tCeieSL3/L60TRqR0O1xN25nKYNUnoU=;
+        h=From:Date:Subject:To:Cc:From;
+        b=FjlUiy7Izav64r1ZX6b3DBb6CsEBVCzdymQJPcC5SQzAfwalmmFGneNHF8VqsZ0Oh
+         a9xIeaL4s/SM0GzBwmEZWehorIos5Pvd2V7K9Tp6IhtMDAMA9sXRIgNR1+eJa9eLK7
+         Z1aAI5kouNbg/dM32Qq5+J8A1+ffrSNfQU00hnVI=
+Date:   Tue, 21 Feb 2023 17:50:41 +0000
+Subject: [PATCH] tools/nolibc: always disable stack protector for tests
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+Message-Id: <20230221-nolibc-no-stack-protector-v1-1-4e6a42f969e2@weissschuh.net>
+X-B4-Tracking: v=1; b=H4sIAHAE9WMC/x2NwQrCQAxEf6XkbKC7th78FfGwm0YbXLIlu4pQ+
+ u8GT8MbeDM7NDbhBtdhB+OPNKnqEE4D0Jr0ySiLM8QxnscYA2otkskDW0/0ws1qZ+rVcM7ztMT
+ ME10CuJ9TY8yWlFZf0HcpXm7GD/n+D2/34/gB+jEODYAAAAA=
+To:     Willy Tarreau <w@1wt.eu>, Shuah Khan <shuah@kernel.org>
+Cc:     linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+        =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
+X-Mailer: b4 0.12.1
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1677001846; l=2095;
+ i=linux@weissschuh.net; s=20221212; h=from:subject:message-id;
+ bh=qYdc7DlpEpf8tCeieSL3/L60TRqR0O1xN25nKYNUnoU=;
+ b=9M4HAx084LW48vqDyzoUw9mHD/nV2nkd9lwSpHPxjWEKpEPhW1szbdgG8wcZKb8cS9UUc4Fx3
+ tcOJrqgoL2VA60v7Fip16dR0bPuMCy30H5qYM0bPKTHy9EANsU8nqH/
+X-Developer-Key: i=linux@weissschuh.net; a=ed25519;
+ pk=KcycQgFPX2wGR5azS7RhpBqedglOZVgRPfdFSPB1LNw=
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -51,35 +52,56 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 21 Feb 2023 11:44:42 -0500
-Mathieu Desnoyers <mathieu.desnoyers@efficios.com> wrote:
+Stack protectors need support from libc.
+This support is not provided by nolibc which leads to compiler errors
+when stack protectors are enabled by default in a compiler:
 
-> Hi Peter,
-> 
-> I have emails from you dating from a few years back unofficially stating
-> that it's OK to update the first byte of an instruction with a single-byte
-> int3 concurrently:
-> 
-> https://lkml.indiana.edu/hypermail/linux/kernel/1001.1/01530.html
-> 
-> It is referred in the original implementation of text_poke_bp():
-> commit fd4363fff3d9 ("x86: Introduce int3 (breakpoint)-based instruction patching")
-> 
-> Olivier Dion is working on the libpatch [1,2] project aiming to use this
-> property for low-latency/low-overhead live code patching in user-space as
-> well, but we cannot find an official statement from Intel that guarantees
-> this breakpoint-bypass technique is indeed OK without stopping the world
-> while patching.
-> 
-> Do you know where I could find an official statement of this guarantee ?
-> 
+      CC      nolibc-test
+    /usr/bin/ld: /tmp/ccqbHEPk.o: in function `stat':
+    nolibc-test.c:(.text+0x1d1): undefined reference to `__stack_chk_fail'
+    /usr/bin/ld: /tmp/ccqbHEPk.o: in function `poll.constprop.0':
+    nolibc-test.c:(.text+0x37b): undefined reference to `__stack_chk_fail'
+    /usr/bin/ld: /tmp/ccqbHEPk.o: in function `vfprintf.constprop.0':
+    nolibc-test.c:(.text+0x712): undefined reference to `__stack_chk_fail'
+    /usr/bin/ld: /tmp/ccqbHEPk.o: in function `pad_spc.constprop.0':
+    nolibc-test.c:(.text+0x80d): undefined reference to `__stack_chk_fail'
+    /usr/bin/ld: /tmp/ccqbHEPk.o: in function `printf':
+    nolibc-test.c:(.text+0x8c4): undefined reference to `__stack_chk_fail'
+    /usr/bin/ld: /tmp/ccqbHEPk.o:nolibc-test.c:(.text+0x12d4): more undefined references to `__stack_chk_fail' follow
+    collect2: error: ld returned 1 exit status
 
-The fact that we have been using it for over 10 years without issue should
-be a good guarantee ;-)
+Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
+---
+ tools/testing/selftests/nolibc/Makefile | 3 +++
+ 1 file changed, 3 insertions(+)
 
-I know you probably prefer an official statement, and I thought they
-actually gave one, but can't seem to find it. Anyway. how does the dynamic
-linker do this? Doesn't it update code on the fly as well?
+diff --git a/tools/testing/selftests/nolibc/Makefile b/tools/testing/selftests/nolibc/Makefile
+index 22f1e1d73fa8..ec724e445b5a 100644
+--- a/tools/testing/selftests/nolibc/Makefile
++++ b/tools/testing/selftests/nolibc/Makefile
+@@ -1,6 +1,8 @@
+ # SPDX-License-Identifier: GPL-2.0
+ # Makefile for nolibc tests
+ include ../../../scripts/Makefile.include
++# We need this for the "cc-option" macro.
++include ../../../build/Build.include
+ 
+ # we're in ".../tools/testing/selftests/nolibc"
+ ifeq ($(srctree),)
+@@ -63,6 +65,7 @@ Q=@
+ endif
+ 
+ CFLAGS  ?= -Os -fno-ident -fno-asynchronous-unwind-tables
++CFLAGS  += $(call cc-option,-fno-stack-protector)
+ LDFLAGS := -s
+ 
+ help:
 
--- Steve
+---
+base-commit: 3f0b0903fde584a7398f82fc00bf4f8138610b87
+change-id: 20230221-nolibc-no-stack-protector-5b54d2be4c61
+
+Best regards,
+-- 
+Thomas Weißschuh <linux@weissschuh.net>
 
