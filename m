@@ -2,99 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 66CC569E087
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 13:36:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7135F69E08C
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 13:40:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234544AbjBUMgw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Feb 2023 07:36:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34332 "EHLO
+        id S234840AbjBUMkZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Feb 2023 07:40:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36022 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232317AbjBUMgu (ORCPT
+        with ESMTP id S234813AbjBUMjH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Feb 2023 07:36:50 -0500
-Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8B1C233D1;
-        Tue, 21 Feb 2023 04:36:49 -0800 (PST)
-Received: by mail-pj1-x102c.google.com with SMTP id g14so4690610pjb.2;
-        Tue, 21 Feb 2023 04:36:49 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=5L3dF0JAJgBcduePLIvYCGmEEesF6lNT+h6CRgkwaQo=;
-        b=h/tOHFqk90X4NN1IPLfzidjqDpYazUZbvc7olKGdQb0DrlHH3KDj/GfgQbKuBpe5ZM
-         aHpFX1mwNg7ggmf34CFyOZgTXzmVAS8XrrIcCQQV4laUeg3Fkt2JGCiFI50QWYvbwgty
-         pA1lX/F47AN6VQ0qWZkX3MRD4xyc9SB5WqO/QyaA1bOkI/mdpo3F+L4ACEyGAlDtGySX
-         WoaPiDwvRr/7kpn1TVEfag0fPrvg/jhevaJJQg/R2KCAZ8xInewaZj/eOEbYImy0vcCr
-         Tea0w/LrQbgr2MBJKIM7cr96W4Q/lTZZQ/dU1MSVwqWNU7rg9NpB0h1n+BMoQI5Ax5xp
-         2UtA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=5L3dF0JAJgBcduePLIvYCGmEEesF6lNT+h6CRgkwaQo=;
-        b=LraeIrcq+RhXT+bDVhEQS58bJyyjIdzDJKU8JtaBoleQzdyyYFUHZYBf/TC7yYFkpS
-         Ow992IfsLYr0FZridNpSONfQgWc8InOhqTfDJE3lgvAhXTzk95MHnmrOsk7W48IhtCOw
-         mp/KGfMHh+VYrOiok3U4eIvTIX6oSez+ESzAUxV7hoQAM9A1bScHZWxXJ3ftCXCyS4/i
-         U1NAG+oz8iIsgCyZTO0s5botHZF1yBGMwE5WtquBTyuz/ngr2momecVEOr1+z+Fj8rwQ
-         s0WTIymZmZiIam5+/YrgQtlk/OR7Vunq0tWJPx251BcDrXQ/AINGbs0XvKK61OcLAVVR
-         ii8Q==
-X-Gm-Message-State: AO0yUKV3JQ9XS+gsVp/cXnPYCx8eae5ah82HzCoVZo8N5gfWYyhsXBGf
-        AjGMnRyo05q0QNkmXuGeSuyhXyiSbGf/zg==
-X-Google-Smtp-Source: AK7set929D4rdR6a3m0KR51+bCeLnOUOt0c95DWoOQbQcmYKwxoUEPNln6hcTz7Aw/ppGEy0brIzwQ==
-X-Received: by 2002:a17:902:d4ca:b0:19a:9880:175f with SMTP id o10-20020a170902d4ca00b0019a9880175fmr6088717plg.51.1676983009033;
-        Tue, 21 Feb 2023 04:36:49 -0800 (PST)
-Received: from localhost.localdomain (n220246252084.netvigator.com. [220.246.252.84])
-        by smtp.gmail.com with ESMTPSA id jd7-20020a170903260700b00194a297cb8esm9822879plb.191.2023.02.21.04.36.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 21 Feb 2023 04:36:48 -0800 (PST)
-From:   Jianhua Lu <lujianhua000@gmail.com>
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc:     linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
-        Jianhua Lu <lujianhua000@gmail.com>
-Subject: [PATCH] arm64: dts: qcom: sm8250-xiaomi-elish: Correct venus firmware path
-Date:   Tue, 21 Feb 2023 20:36:33 +0800
-Message-Id: <20230221123633.25145-1-lujianhua000@gmail.com>
-X-Mailer: git-send-email 2.39.2
+        Tue, 21 Feb 2023 07:39:07 -0500
+Received: from mailbox.box.xen0n.name (mail.xen0n.name [115.28.160.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0ABAF1BAF9;
+        Tue, 21 Feb 2023 04:38:43 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=xen0n.name; s=mail;
+        t=1676983119; bh=vuQJDZOyC+VqRHLB9Jp1+4uBliYdNBXXZ5+7kC0MrS0=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=vY49w2/XpeYKHqSeFvjtUqBYoLdgRC8TYQjBFvDTrBUKXIATwSHuCS173BChxlUWb
+         JwCJsaBWTY/kJ1C/U0e/+sls0+slZ0kXjQmMabW03ecazH+sm+NMq1N6PhZSRPKRhU
+         MtAA/7RLTloGXrbilYo4RWMBwM31PCCzGuj1jyTo=
+Received: from [100.100.57.122] (unknown [58.34.185.106])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mailbox.box.xen0n.name (Postfix) with ESMTPSA id 98700600BD;
+        Tue, 21 Feb 2023 20:38:39 +0800 (CST)
+Message-ID: <2666bd9a-1891-00b5-b195-6b35fc275ee5@xen0n.name>
+Date:   Tue, 21 Feb 2023 20:38:39 +0800
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.8.0
+Subject: Re: [PATCH v2 02/29] LoongArch: KVM: Implement kvm module related
+ interface
+Content-Language: en-US
+To:     maobibo <maobibo@loongson.cn>, Paolo Bonzini <pbonzini@redhat.com>,
+        Tianrui Zhao <zhaotianrui@loongson.cn>
+Cc:     Huacai Chen <chenhuacai@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        loongarch@lists.linux.dev, linux-kernel@vger.kernel.org,
+        kvm@vger.kernel.org, Jens Axboe <axboe@kernel.dk>,
+        Mark Brown <broonie@kernel.org>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        Oliver Upton <oliver.upton@linux.dev>
+References: <20230220065735.1282809-1-zhaotianrui@loongson.cn>
+ <20230220065735.1282809-3-zhaotianrui@loongson.cn>
+ <bf4111f9-f722-1847-4f1d-964c5356f392@redhat.com>
+ <0fa9c062-d3fc-61e5-4d54-6bc29f7c64cf@loongson.cn>
+ <3f16a8e1-21d9-808e-aa1a-4f1d6f6f291b@redhat.com>
+ <2875aa3f-0dc4-4e48-17ad-42c703e12063@loongson.cn>
+ <35d54051-3876-4fb7-d1c8-d1c605420962@xen0n.name>
+ <6eb868bb-2179-2cd7-7632-55e5244afb41@loongson.cn>
+From:   WANG Xuerui <kernel@xen0n.name>
+In-Reply-To: <6eb868bb-2179-2cd7-7632-55e5244afb41@loongson.cn>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Missing vendor name for venus firmware path. Add it.
+On 2023/2/21 19:39, maobibo wrote:
+> 
+> 
+> 在 2023/2/21 18:37, WANG Xuerui 写道:
+>> On 2023/2/21 18:18, maobibo wrote:
+>>>
+>>>
+>>> 在 2023/2/21 16:14, Paolo Bonzini 写道:
+>>>> On 2/21/23 07:59, maobibo wrote:
+>>>>>> Also, why does the world switch code need a copy?
+>>>>> There will be problem in world switch code if there is page fault reenter,
+>>>>> since pgd register is shared between root kernel and kvm hypervisor.
+>>>>> World switch entry need be unmapped area, cannot be tlb mapped area.
+>>>>
+>>>> So if I understand correctly the processor is in direct address translation mode until the "csrwr t0, LOONGARCH_CSR_CRMD" instruction. Where does it leave paged mode?
+>>> The processor still in paged mode during world switch context. For example
+>>> when vm exits from guest mode to root mode, it executes world switch code
+>>> from kvm_vector_entry, PC register points to HVA address, however vmid from
+>>> LOONGARCH_CSR_GTLBC is not clear to root mode. If there is page fault
+>>> exception, hardware treats it exception from GPA-->HPA rather than that
+>>> from HVA --> HPA, since vmid info in CSR_GTLBC is not zero.
+>>>
+>>> In page mode, there are two kinds of address: unmapped address and
+>>> tlb mapped address. For unmapped address there is only cachable/uncachable
+>>> attribution, but not RWX attr; and there is no tlb handling for it.
+>>> For simplicity,  unmapped address can be treated as window filtered address.
+>>>
+>>> It will be fully root mode only after this piece of code is executed
+>>> during world switch context; vmid is zero and PC points to HVA.
+>>>           ori     t0, zero, CSR_GSTAT_PVM
+>>>           csrxchg zero, t0, LOONGARCH_CSR_GSTAT
+>>>           /* Clear GTLBC.TGID field */
+>>>           csrrd   t0, LOONGARCH_CSR_GTLBC
+>>>           bstrins.w       t0, zero, CSR_GTLBC_TGID_SHIFT_END, CSR_GTLBC_TGID_SHIFT
+>>>           csrwr   t0, LOONGARCH_CSR_GTLBC
+>>
+>> AFAIK all of these is probably coming from Volume 3 of LoongArch ISA Manual, which is unfortunately not publicly available at the moment. For sake of meaningful reviews, when can we expect to get our hands on the manuals?
+> We are pushing to public the virtualization manual inside, it is convenient
+> to sw developer to review the code. However I am not sure about the date :(
 
-Fixes: a41b617530bf ("arm64: dts: qcom: sm8250: Add device tree for Xiaomi Mi Pad 5 Pro")
-Signed-off-by: Jianhua Lu <lujianhua000@gmail.com>
----
- arch/arm64/boot/dts/qcom/sm8250-xiaomi-elish.dts | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Well, that's kinda expected, but it's nice to see some progress and 
+certainly your open attitude to this matter is constructive. Thanks for 
+sharing this and looking forward to the eventual docs release then!
 
-diff --git a/arch/arm64/boot/dts/qcom/sm8250-xiaomi-elish.dts b/arch/arm64/boot/dts/qcom/sm8250-xiaomi-elish.dts
-index acaa99c5ff8b..a85d47f7a9e8 100644
---- a/arch/arm64/boot/dts/qcom/sm8250-xiaomi-elish.dts
-+++ b/arch/arm64/boot/dts/qcom/sm8250-xiaomi-elish.dts
-@@ -625,6 +625,6 @@ &ufs_mem_phy {
- };
- 
- &venus {
--	firmware-name = "qcom/sm8250/elish/venus.mbn";
-+	firmware-name = "qcom/sm8250/xiaomi/elish/venus.mbn";
- 	status = "okay";
- };
 -- 
-2.39.2
+WANG "xen0n" Xuerui
+
+Linux/LoongArch mailing list: https://lore.kernel.org/loongarch/
 
