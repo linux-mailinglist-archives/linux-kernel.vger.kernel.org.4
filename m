@@ -2,116 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C50DB69DB64
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 08:42:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1CBFF69DB6C
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 08:46:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233454AbjBUHmf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Feb 2023 02:42:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39278 "EHLO
+        id S232875AbjBUHqo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Feb 2023 02:46:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41452 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229697AbjBUHmd (ORCPT
+        with ESMTP id S229697AbjBUHql (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Feb 2023 02:42:33 -0500
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5B6C23313;
-        Mon, 20 Feb 2023 23:42:30 -0800 (PST)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4PLWTZ5DBWz4x7W;
-        Tue, 21 Feb 2023 18:42:26 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1676965347;
-        bh=NNJlaJnQ2uPkWB+DfoayA3t3cxA5NsFvq1iXGovK7i8=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=uEKYT9n5GowZYqmKQyQe7GLQWOMY5xtrsVELMLHUNRNdxVwa3+CNDrXH0pKuzxTrt
-         bn+2QDW0/uJikzxH/loMMRamEh4psbNsuE6JhXtN9VugqAngirjulmxi87bMMdv0KS
-         PQqaFbxDZ88IxhqWBlyaSsKJcHLae53X74wel273xx5/tWHtKzFnZSibV/U6wqJoGj
-         HSGvph8gBtmPn/WySkyIOrfsh0PUbmOgapsXadPJlWxSScBucwviFYUgw7ewfVPVNP
-         NV8pSIUGb1lnzYRbE7fjlNy0Dm7CGqOZF3bCbWh5trSN44hT4f85LyMNgFMLGWsu8r
-         7nJQOns+fm2Ug==
-Date:   Tue, 21 Feb 2023 18:42:25 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     David Howells <dhowells@redhat.com>
-Cc:     Matthew Wilcox <willy@infradead.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Steve French <smfrench@gmail.com>,
-        CIFS <linux-cifs@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Steve French <stfrench@microsoft.com>,
-        "Vishal Moola (Oracle)" <vishal.moola@gmail.com>
-Subject: Re: linux-next: manual merge of the mm-stable tree with the cifs
- tree
-Message-ID: <20230221184225.0e734f0e@canb.auug.org.au>
-In-Reply-To: <2351091.1676963957@warthog.procyon.org.uk>
-References: <20230221174401.7198357d@canb.auug.org.au>
-        <20230220152933.1ab8fa4a@canb.auug.org.au>
-        <Y/N8hVWeR3AjssUC@casper.infradead.org>
-        <20230220190157.3b43b9a7@canb.auug.org.au>
-        <Y/Pe2xHklSr1hDtz@casper.infradead.org>
-        <2351091.1676963957@warthog.procyon.org.uk>
+        Tue, 21 Feb 2023 02:46:41 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD1FA1B31E
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Feb 2023 23:46:01 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1676965561;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=fMy5UNnfOflKNYu2v+qdc7M5+Dbw9HBEzHEBe6W2kQU=;
+        b=Hz1vTFEKSUYSBuVLxNJC2Lic/2bjMIp5mNU+/8aej5cZ7YNnDvztnktzgEVqoCHv2pOK2f
+        eWsjmoK1FIln4fiTHnlmBYwSylPYXsZiruaFfU2zA7s/xIokwAXsfNI+5ndNixZ95aWw50
+        s3fRnLE+V0ngzfIqzv3V1yWppuMLu+o=
+Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com
+ [209.85.208.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-479-eKzQv_fYPC-nM00TtxZbEA-1; Tue, 21 Feb 2023 02:45:59 -0500
+X-MC-Unique: eKzQv_fYPC-nM00TtxZbEA-1
+Received: by mail-ed1-f70.google.com with SMTP id eh16-20020a0564020f9000b004acc4f8aa3fso4764399edb.3
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Feb 2023 23:45:59 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=fMy5UNnfOflKNYu2v+qdc7M5+Dbw9HBEzHEBe6W2kQU=;
+        b=INW1sGmD/YZczgPhJrGipHiDvCbYMYtRldrU5V1254i/ln2RTeDxScJEUGYyH0Wt3Z
+         D6Oqy0/6B93NsyxDfAAAj3A7RI/6JMjnvoq1Uqf2K3A8rYlbXNTTdRqgeLqyARf1Dukc
+         T2sZJg2weqjJ9rn3kH/+yZfJS/ZtCCltBJ31gfuqTQ5pahdpklaY3Ur0fwny3jun+DRG
+         VnJ2pPyTndOFSawcfyDeJ6QakguvVaWIWDnHnnRe1gAvnjkCHW/Z1OU0RSyYp0Q2Bfy8
+         EFVRzRVk1n0JGOW00U3uCIFxt8OETcRy8xzB9g7fboJn8RJP5Yy5mnRz0Vf9Gx/D1naW
+         VTgQ==
+X-Gm-Message-State: AO0yUKU7vQMxVPrQcVMMBgFh5ZyTWn2n1gM0wB2wxfId2cNcsp7ES2jG
+        nNW05aY2nPrT+EoTo2QubxhaXqNs1aPNy1NK1TvUwbekQAFkSb+3VQvBFKZY+bWZAApou/+kffO
+        DoUpzBPUtrMmZS9u/61YpIbIy
+X-Received: by 2002:a17:906:9f25:b0:8b1:4d5f:fb83 with SMTP id fy37-20020a1709069f2500b008b14d5ffb83mr11855606ejc.15.1676965558363;
+        Mon, 20 Feb 2023 23:45:58 -0800 (PST)
+X-Google-Smtp-Source: AK7set9vghZQIt75cz8byQ+eUxaqXScW0PwKtItzq1+Ju4htLOU5T5BIIbIDPeiHMzCc1djkwXl0yg==
+X-Received: by 2002:a17:906:9f25:b0:8b1:4d5f:fb83 with SMTP id fy37-20020a1709069f2500b008b14d5ffb83mr11855591ejc.15.1676965558066;
+        Mon, 20 Feb 2023 23:45:58 -0800 (PST)
+Received: from ?IPV6:2001:b07:6468:f312:63a7:c72e:ea0e:6045? ([2001:b07:6468:f312:63a7:c72e:ea0e:6045])
+        by smtp.googlemail.com with ESMTPSA id uj9-20020a170907c98900b008deba75e89csm559987ejc.66.2023.02.20.23.45.56
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 20 Feb 2023 23:45:57 -0800 (PST)
+Message-ID: <50575db8-efb8-2d56-5dd9-fe4318db2af3@redhat.com>
+Date:   Tue, 21 Feb 2023 08:45:56 +0100
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/BQfQQmO37yFZXaMtd6DZd.r";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH v2 27/29] LoongArch: KVM: Implement vcpu world switch
+Content-Language: en-US
+To:     Tianrui Zhao <zhaotianrui@loongson.cn>
+Cc:     Huacai Chen <chenhuacai@kernel.org>,
+        WANG Xuerui <kernel@xen0n.name>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        loongarch@lists.linux.dev, linux-kernel@vger.kernel.org,
+        kvm@vger.kernel.org, Jens Axboe <axboe@kernel.dk>,
+        Mark Brown <broonie@kernel.org>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        Oliver Upton <oliver.upton@linux.dev>, maobibo@loongson.cn
+References: <20230220065735.1282809-1-zhaotianrui@loongson.cn>
+ <20230220065735.1282809-28-zhaotianrui@loongson.cn>
+From:   Paolo Bonzini <pbonzini@redhat.com>
+In-Reply-To: <20230220065735.1282809-28-zhaotianrui@loongson.cn>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,
+        UPPERCASE_50_75 autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/BQfQQmO37yFZXaMtd6DZd.r
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On 2/20/23 07:57, Tianrui Zhao wrote:
+> +	/* Load Guest gprs */
+> +	ld.d    $r1,   \KVM_ARCH,  (KVM_ARCH_GGPR + 8 * 1)
+> +	ld.d    $r2,   \KVM_ARCH,  (KVM_ARCH_GGPR + 8 * 2)
+> +	ld.d    $r3,   \KVM_ARCH,  (KVM_ARCH_GGPR + 8 * 3)
+> +	ld.d    $r4,   \KVM_ARCH,  (KVM_ARCH_GGPR + 8 * 4)
+> +	ld.d    $r5,   \KVM_ARCH,  (KVM_ARCH_GGPR + 8 * 5)
+> +	ld.d    $r7,   \KVM_ARCH,  (KVM_ARCH_GGPR + 8 * 7)
+> +	ld.d    $r8,   \KVM_ARCH,  (KVM_ARCH_GGPR + 8 * 8)
+> +	ld.d    $r9,   \KVM_ARCH,  (KVM_ARCH_GGPR + 8 * 9)
+> +	ld.d    $r10,  \KVM_ARCH,  (KVM_ARCH_GGPR + 8 * 10)
+> +	ld.d    $r11,  \KVM_ARCH,  (KVM_ARCH_GGPR + 8 * 11)
+> +	ld.d    $r12,  \KVM_ARCH,  (KVM_ARCH_GGPR + 8 * 12)
+> +	ld.d    $r13,  \KVM_ARCH,  (KVM_ARCH_GGPR + 8 * 13)
+> +	ld.d    $r14,  \KVM_ARCH,  (KVM_ARCH_GGPR + 8 * 14)
+> +	ld.d    $r15,  \KVM_ARCH,  (KVM_ARCH_GGPR + 8 * 15)
+> +	ld.d    $r16,  \KVM_ARCH,  (KVM_ARCH_GGPR + 8 * 16)
+> +	ld.d    $r17,  \KVM_ARCH,  (KVM_ARCH_GGPR + 8 * 17)
+> +	ld.d    $r18,  \KVM_ARCH,  (KVM_ARCH_GGPR + 8 * 18)
+> +	ld.d    $r19,  \KVM_ARCH,  (KVM_ARCH_GGPR + 8 * 19)
+> +	ld.d    $r20,  \KVM_ARCH,  (KVM_ARCH_GGPR + 8 * 20)
+> +	ld.d    $r21,  \KVM_ARCH,  (KVM_ARCH_GGPR + 8 * 21)
+> +	ld.d    $r22,  \KVM_ARCH,  (KVM_ARCH_GGPR + 8 * 22)
+> +	ld.d    $r23,  \KVM_ARCH,  (KVM_ARCH_GGPR + 8 * 23)
+> +	ld.d    $r24,  \KVM_ARCH,  (KVM_ARCH_GGPR + 8 * 24)
+> +	ld.d    $r25,  \KVM_ARCH,  (KVM_ARCH_GGPR + 8 * 25)
+> +	ld.d    $r26,  \KVM_ARCH,  (KVM_ARCH_GGPR + 8 * 26)
+> +	ld.d    $r27,  \KVM_ARCH,  (KVM_ARCH_GGPR + 8 * 27)
+> +	ld.d    $r28,  \KVM_ARCH,  (KVM_ARCH_GGPR + 8 * 28)
+> +	ld.d    $r29,  \KVM_ARCH,  (KVM_ARCH_GGPR + 8 * 29)
+> +	ld.d    $r30,  \KVM_ARCH,  (KVM_ARCH_GGPR + 8 * 30)
+> +	ld.d    $r31,  \KVM_ARCH,  (KVM_ARCH_GGPR + 8 * 31)
+> +	/* Load KVM_ARCH register */
+> +	ld.d	\KVM_ARCH, \KVM_ARCH, (KVM_ARCH_GGPR + 8 * \GPRNUM)
 
-Hi David,
+This in practice relies on KVM_ARCH being a2 so please remove the 
+KVM_ARCH and GPRNUM arguments from the macro; just replace \KVM_ARCH 
+with a2 as needed.
 
-On Tue, 21 Feb 2023 07:19:17 +0000 David Howells <dhowells@redhat.com> wrot=
-e:
->
-> Stephen Rothwell <sfr@canb.auug.org.au> wrote:
->=20
-> > in the cifs tree introduces a new usage of it in code that is used in
-> > the cifs code ... so someone has to figure out what the merge
-> > resolution is between the 2 trees (how to replace that new usage) and
-> > let me know and then we need to test that combination for a while
-> > before asking Linus to take it. =20
->=20
-> It seems I can't fix my patch and give Steve a replacement patch because =
-the
-> new filemap_get_folios_tag() that I would need to use hasn't been added
-> upstream yet.  Do we have any idea when the mm tree might land?
+Also, in these ld.d and st.d sequences you may want to use the ABI names 
+instead of the rNN names, so it's clearer that you are skipping the 
+KVM_ARCH register.
 
-Andrew has already asked for it to be merged, so its up to Linus.
+Paolo
 
-You could fetch it yourself and do a trial merge and send me your
-resolution ..
-
-git://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm tags/mm-stable-2023-0=
-2-20-13-37
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/BQfQQmO37yFZXaMtd6DZd.r
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmP0deEACgkQAVBC80lX
-0Gy8agf+NF0EKA/5akG/J9oSYE2bLsctMt1AaZRa4fQtEEpPBmPM//r95sTGbIMd
-V/UnrtBpjAlI5ibR6MCMGFK2PpXYZEqgKhl02988ggKRhlwrN/AwuN+uEKzlY0Sd
-dAnQUW8RfqvgcwFmwD1tsxuJRM6HxXSccx8s8RGFaBlwzAhQiOh4/pyD0lsy/bhY
-NGQTDDzTniZ2naiXJPESWJ1l2jOr+qQWoZOuwbcFjOH1na/78RKX3LZPj2e6hZ0u
-Z0/foMjQiGmvfz0M5ulTghTkKEDOIiwpI33JYQsxKHypW2n76UTMMsrJkPnB3i5+
-5PiAoW4a6sugyxAB1lGMAvoc0FixJg==
-=gC/P
------END PGP SIGNATURE-----
-
---Sig_/BQfQQmO37yFZXaMtd6DZd.r--
