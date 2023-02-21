@@ -2,107 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C0BE69E23E
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 15:25:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3395169E23F
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 15:25:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233765AbjBUOY7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Feb 2023 09:24:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48652 "EHLO
+        id S234187AbjBUOZE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Feb 2023 09:25:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48694 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233340AbjBUOYv (ORCPT
+        with ESMTP id S234199AbjBUOY5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Feb 2023 09:24:51 -0500
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D3A128859
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Feb 2023 06:24:50 -0800 (PST)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out2.suse.de (Postfix) with ESMTP id D76465C754;
-        Tue, 21 Feb 2023 14:24:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1676989488; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type;
-        bh=IRGvBg4sT2XZjLD3W4d3/v2Een/gp6HPbAxpDUIztg4=;
-        b=Nj2o/zBRGr4HW/pVTpjSHtv9xeS17eTb7JWGo7yks/x5ijAjMwWt8OLPzki3Fd5FaEjnQm
-        wmON7KsV3L6OzRYMpCwY8rxPuf5HVX1YadB/YoWaj2UXoAAcJSR9T5Tu4go282bv3FZBOW
-        mN/3llOSBscxwsAXJqvN7phZmjwOPM4=
-Received: from suse.cz (pmladek.tcp.ovpn2.prg.suse.de [10.100.208.146])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id 31AFD2C141;
-        Tue, 21 Feb 2023 14:24:48 +0000 (UTC)
-Date:   Tue, 21 Feb 2023 15:24:44 +0100
-From:   Petr Mladek <pmladek@suse.com>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        John Ogness <john.ogness@linutronix.de>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Thomas Gleixner <tglx@linutronix.de>, Jan Kara <jack@suse.cz>,
-        Peter Zijlstra <peterz@infradead.org>,
-        linux-kernel@vger.kernel.org
-Subject: [GIT PULL] printk for 6.3
-Message-ID: <Y/TULJCcv0OlhIf1@alley>
+        Tue, 21 Feb 2023 09:24:57 -0500
+Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 810AC10269;
+        Tue, 21 Feb 2023 06:24:55 -0800 (PST)
+Received: from [2a02:8108:8980:2478:8cde:aa2c:f324:937e]; authenticated
+        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        id 1pUTZc-0002EL-Pt; Tue, 21 Feb 2023 15:24:52 +0100
+Message-ID: <9dda9e11-565f-8725-6d15-803a66782753@leemhuis.info>
+Date:   Tue, 21 Feb 2023 15:24:52 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.2
+From:   "Linux regression tracking (Thorsten Leemhuis)" 
+        <regressions@leemhuis.info>
+Subject: Re: Regression: NULL pointer dereference after NFS_V4_2_READ_PLUS
+ (commit 7fd461c47)
+Reply-To: Linux regressions mailing list <regressions@lists.linux.dev>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Linux regressions mailing list <regressions@lists.linux.dev>,
+        Anna Schumaker <Anna.Schumaker@Netapp.com>,
+        Trond Myklebust <trond.myklebust@hammerspace.com>
+Cc:     linux-nfs@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+References: <f591b13c-4600-e2a4-8efa-aac6ad828dd1@linaro.org>
+ <65ae10cd-a086-47c6-c881-d1385d7fcf42@leemhuis.info>
+ <5150343c-e13d-ed15-e59a-bc14f0db89da@leemhuis.info>
+ <78806040-5725-103f-fe55-8c6d9ced6e63@linaro.org>
+Content-Language: en-US, de-DE
+In-Reply-To: <78806040-5725-103f-fe55-8c6d9ced6e63@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1676989495;a5a7c7ef;
+X-HE-SMSGID: 1pUTZc-0002EL-Pt
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Linus,
+On 18.02.23 16:09, Krzysztof Kozlowski wrote:
+> On 18/02/2023 05:42, Linux regression tracking #update (Thorsten
+> Leemhuis) wrote:
+>> [TLDR: This mail in primarily relevant for Linux regression tracking. A
+>> change or fix related to the regression discussed in this thread was
+>> posted or applied, but it did not use a Link: tag to point to the
+>> report, as Linus and the documentation call for. Things happen, no
+>> worries -- but now the regression tracking bot needs to be told manually
+>> about the fix. See link in footer if these mails annoy you.]
+>>
+>> On 08.01.23 09:52, Linux kernel regression tracking (#adding) wrote:
+>>> On 07.01.23 16:44, Krzysztof Kozlowski wrote:
+>>>>
+>>>> Bisect identified commit 7fd461c47c6c ("NFSv4.2: Change the default
+>>>> KConfig value for READ_PLUS") as one leading to NULL pointer exception
+>>>> when mounting NFS root on NFSv4 client:
+>>> [...]
+>>> Thanks for the report. To be sure the issue doesn't fall through the
+>>> cracks unnoticed, I'm adding it to regzbot, the Linux kernel regression
+>>> tracking bot:
+>>>
+>>> #regzbot ^introduced 7fd461c47
+>>> #regzbot title nfs: NULL pointer dereference since NFS_V4_2_READ_PLUS is
+>>> enabled by default
+>>> #regzbot ignore-activity
+>>
+>> #regzbot fix: 896e090eefedeb8a715ea19938a2791c32679
+> 
+> I see it was posted and merged as "Revert "NFSv4.2: Change the default
+> KConfig value for READ_PLUS"". It's nice to give credits to people who
+> report bugs with "Reported-by" tag.
 
-please pull the latest printk changes from
+Yup. And a "Link:" with the url to the report is missing as well (Linus
+wants those, automatic regression tracking needs those [IOW: if they are
+missing it causes me trouble, that's why I care], and the docs explain
+this as well).
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/printk/linux.git tags/printk-for-6.3
+That's why I asked for those two tags, but I didn't even get a reply:
 
-=================================================
+https://lore.kernel.org/all/8d26e819-a3a5-7ae1-bb9e-56bacfa7f65b@leemhuis.info/
 
-- Refactor printk code for formatting messages that are shown on consoles.
-  It is a preparation step for introducing atomic consoles which could not
-  share the global buffers.
-
-- Prevent memory leak when removing printk index in debugfs.
-
-- Dump also the newest printk message by the sample gdbmacro.
-
-- Fix a compiler warning.
-
-----------------------------------------------------------------
-Arnd Bergmann (1):
-      printf: fix errname.c list
-
-Greg Kroah-Hartman (1):
-      kernel/printk/index.c: fix memory leak with using debugfs_lookup()
-
-John Ogness (7):
-      docs: gdbmacros: print newest record
-      printk: move size limit macros into internal.h
-      printk: introduce struct printk_buffers
-      printk: introduce printk_get_next_message() and printk_message
-      printk: introduce console_prepend_dropped() for dropped messages
-      printk: use printk_buffers for devkmsg
-      printk: adjust string limit macros
-
-Petr Mladek (2):
-      printk: Use scnprintf() to print the message about the dropped messages on a console
-      Merge branch 'rework/buffers-cleanup' into for-linus
-
-Thomas Gleixner (2):
-      console: Use BIT() macros for @flags values
-      console: Document struct console
-
- Documentation/admin-guide/kdump/gdbmacros.txt |   2 +-
- include/linux/console.h                       | 100 ++++++---
- include/linux/printk.h                        |   2 -
- kernel/printk/index.c                         |   2 +-
- kernel/printk/internal.h                      |  45 ++++
- kernel/printk/printk.c                        | 308 +++++++++++++++-----------
- lib/errname.c                                 |  22 +-
- 7 files changed, 313 insertions(+), 168 deletions(-)
+Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
+--
+Everything you wanna know about Linux kernel regression tracking:
+https://linux-regtracking.leemhuis.info/about/#tldr
+If I did something stupid, please tell me, as explained on that page.
