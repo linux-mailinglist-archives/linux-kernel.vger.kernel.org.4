@@ -2,136 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C744169E549
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 17:58:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BB55169E560
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 18:01:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234638AbjBUQ56 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Feb 2023 11:57:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59216 "EHLO
+        id S233771AbjBURBB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Feb 2023 12:01:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36602 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234912AbjBUQ5u (ORCPT
+        with ESMTP id S233396AbjBURA6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Feb 2023 11:57:50 -0500
-Received: from mr85p00im-zteg06011501.me.com (mr85p00im-zteg06011501.me.com [17.58.23.182])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C989211D
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Feb 2023 08:57:48 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=me.com; s=1a1hai;
-        t=1676998668; bh=LGdUnPSYhPebUFlFuinp+U3AI4mwBiZXzxkqFitQAjk=;
-        h=Date:From:To:Subject:Message-ID:MIME-Version:Content-Type;
-        b=Swhj8mQ9wIBGrCY8sF2EyX9wREfJ7P+x3YEQKj+cej3iKQSbGqeBCoUmlE3e8UguV
-         GVyY/2ZYM2bw1JBbe5VWcQVc2R/FVtJljf7RdydKwQaJUGA/XL3hhLdmOyxRywfmYX
-         fItFVXEcGbRAg6BAofVApAJpB0rq+t3wSBE518H7ShvJ8qV03Ka61wE1BEe4j5vvpU
-         GF8HzZA+B7LwdW/aCJ1F7dOuVRSdYPFDd/dkukd5R6r/1UoQVnn3WkESsaSRrjPMl0
-         DrF4bMLMi1IkoJihySaNDWt24ro4E47mGB45DzsycS1FYdz7dg5LgilHmh3RRoo1Yn
-         q5EHndMAu7pBw==
-Received: from imac101 (mr38p00im-dlb-asmtp-mailmevip.me.com [17.57.152.18])
-        by mr85p00im-zteg06011501.me.com (Postfix) with ESMTPSA id 7B190482315;
-        Tue, 21 Feb 2023 16:57:46 +0000 (UTC)
-Date:   Tue, 21 Feb 2023 17:57:41 +0100
-From:   Alain Volmat <avolmat@me.com>
-To:     Mark Brown <broonie@kernel.org>, Wolfram Sang <wsa@the-dreams.de>
-Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Wolfram Sang <wsa@kernel.org>
-Subject: Re: linux-next: manual merge of the spi tree with the i2c tree
-Message-ID: <Y/T4BTCCzIWzE1oe@imac101>
-Mail-Followup-To: Mark Brown <broonie@kernel.org>,
-        Wolfram Sang <wsa@the-dreams.de>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Wolfram Sang <wsa@kernel.org>
-References: <20230216113035.3050871a@canb.auug.org.au>
- <CAMuHMdVuudSDrWguMJiHsZ3GJhs+muK566M5GqK2vfMyBeo2pQ@mail.gmail.com>
+        Tue, 21 Feb 2023 12:00:58 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78B9B422B;
+        Tue, 21 Feb 2023 09:00:32 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 2B73DCE1B17;
+        Tue, 21 Feb 2023 16:59:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 05C72C4339B;
+        Tue, 21 Feb 2023 16:59:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1676998788;
+        bh=qnPzBu5Kq1bG0VJWxrFm9hT2MssTj7tUkyGFHcTRlks=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=04O5oeWJu8E2T4t6WAWZ6yClkJcQGDSp/jeKJphrAhMACn8zCQgmNpkC71CPSrJP8
+         wMj34MKshTod9h5u5IYw1T3zGxzVDMGm0fcST78n7qNTr/EXOHLFXvw46k/k9U3JeU
+         Gh/LyBCbHv3FuFwdZ/KLVN7Tj7kZK5MT/SS0HQ6Y=
+Date:   Tue, 21 Feb 2023 17:59:45 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Jon Hunter <jonathanh@nvidia.com>
+Cc:     Haotien Hsu <haotienh@nvidia.com>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Sing-Han Chen <singhanc@nvidia.com>,
+        Sanket Goswami <Sanket.Goswami@amd.com>,
+        Wayne Chang <waynec@nvidia.com>,
+        Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
+        <u.kleine-koenig@pengutronix.de>, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v4] ucsi_ccg: Refine the UCSI Interrupt handling
+Message-ID: <Y/T4gew0bBaCSZjz@kroah.com>
+References: <20230118061523.1537992-1-haotienh@nvidia.com>
+ <Y8k3XB53iHeE0XZF@kroah.com>
+ <40a2a0f3-a396-2a13-b7ce-514015ae3bab@nvidia.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAMuHMdVuudSDrWguMJiHsZ3GJhs+muK566M5GqK2vfMyBeo2pQ@mail.gmail.com>
-X-Proofpoint-ORIG-GUID: MeMvgzMQWiFnEy1KrMx2UW9R99Kz5wfG
-X-Proofpoint-GUID: MeMvgzMQWiFnEy1KrMx2UW9R99Kz5wfG
-X-Proofpoint-Virus-Version: =?UTF-8?Q?vendor=3Dfsecure_engine=3D1.1.170-22c6f66c430a71ce266a39bfe25bc?=
- =?UTF-8?Q?2903e8d5c8f:6.0.425,18.0.816,17.11.62.513.0000000_definitions?=
- =?UTF-8?Q?=3D2022-01-18=5F01:2022-01-14=5F01,2022-01-18=5F01,2021-12-02?=
- =?UTF-8?Q?=5F01_signatures=3D0?=
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxscore=0 bulkscore=0 suspectscore=0
- adultscore=0 phishscore=0 clxscore=1011 malwarescore=0 mlxlogscore=999
- spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2209130000 definitions=main-2302210142
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <40a2a0f3-a396-2a13-b7ce-514015ae3bab@nvidia.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Mark, Wolfram,
+On Tue, Feb 21, 2023 at 04:40:24PM +0000, Jon Hunter wrote:
+> Hi Greg,
+> 
+> On 19/01/2023 12:28, Greg Kroah-Hartman wrote:
+> > On Wed, Jan 18, 2023 at 02:15:23PM +0800, Haotien Hsu wrote:
+> > > From: Sing-Han Chen <singhanc@nvidia.com>
+> > > 
+> > > For the CCGx, when the OPM field in the INTR_REG is cleared, then the
+> > > CCI data in the PPM is reset.
+> > > 
+> > > To align with the CCGx UCSI interface guide, this patch updates the
+> > > driver to copy CCI and MESSAGE_IN before clearing UCSI interrupt.
+> > > When a new command is sent, the driver will clear the old CCI and
+> > > MESSAGE_IN copy.
+> > > 
+> > > Finally, clear UCSI_READ_INT before calling complete() to ensure that
+> > > the ucsi_ccg_sync_write() would wait for the interrupt handling to
+> > > complete.
+> > > It prevents the driver from resetting CCI prematurely.
+> > > 
+> > > Signed-off-by: Sing-Han Chen <singhanc@nvidia.com>
+> > > Signed-off-by: Haotien Hsu <haotienh@nvidia.com>
+> > > ---
+> > > V1->V2
+> > > - Fix uninitialized symbol 'cci'
+> > > v2->v3
+> > > - Remove misusing Reported-by tags
+> > > v3->v4
+> > > - Add comments for op_lock
+> > > ---
+> > >   drivers/usb/typec/ucsi/ucsi_ccg.c | 90 ++++++++++++++++++++++++++++---
+> > >   1 file changed, 83 insertions(+), 7 deletions(-)
+> > > 
+> > > diff --git a/drivers/usb/typec/ucsi/ucsi_ccg.c b/drivers/usb/typec/ucsi/ucsi_ccg.c
+> > > index eab3012e1b01..532813a32cc1 100644
+> > > --- a/drivers/usb/typec/ucsi/ucsi_ccg.c
+> > > +++ b/drivers/usb/typec/ucsi/ucsi_ccg.c
+> > > @@ -192,6 +192,12 @@ struct ucsi_ccg_altmode {
+> > >   	bool checked;
+> > >   } __packed;
+> > > +#define CCGX_MESSAGE_IN_MAX 4
+> > > +struct op_region {
+> > > +	u32 cci;
+> > 
+> > This is coming from hardware so you have to specify the endian-ness of
+> > it, right?
+> 
+> The current driver reads the 'cci' state in the ccg_irq_handler and here we
+> just pass a variable of type u32 for storing the state. We are just adding
+> variable of the same type to save the state. This value is returned to the
+> ucsi layer which does not specify the endian-ness either. I guess this
+> driver like many assume little endian. What is the guidance here? Should we
+> be adding __le32 here even if the upper layers don't?
 
-should I update something to avoid this conflict before you push the
-pull request for v6.3 ?
+Yes, set what you are reading from the hardware, and then do the proper
+transformation to the cpu native types for the upper layers where
+needed.
 
-Cheers,
-Alain
+> > Or why even clean this out at all, what happens if you do not?
+> 
+> 
+> I have been taking a look at this. If we don't clean the variable and
+> buffer, then the previous state could be incorrectly read again after the
+> next command has been sent.
+> 
+> Without this fix we occasionally see timeout errors such as ...
+> 
+>    ucsi_ccg 2-0008: error -ETIMEDOUT: PPM init failed (-110)
+> 
+> 
+> I tried not doing this at all, but then we see these timeout issues are
+> still seen.
 
+Then that means someone is not properly handling errors, and assuming
+that whatever data is in the buffer is correct?  Try fixing that bug :)
 
-On Tue, Feb 21, 2023 at 10:11:03AM +0100, Geert Uytterhoeven wrote:
-> Hi Stephen,
-> 
-> On Thu, Feb 16, 2023 at 1:37 AM Stephen Rothwell <sfr@canb.auug.org.au> wrote:
-> > Today's linux-next merge of the spi tree got a conflict in:
-> >
-> >   MAINTAINERS
-> >
-> > between commit:
-> >
-> >   b3de755d6041 ("dt-bindings: i2c: i2c-st: convert to DT schema")
-> >
-> > from the i2c tree and commit:
-> >
-> >   7ec844a2c753 ("spi: spi-st-ssc: convert to DT schema")
-> >
-> > from the spi tree.
-> >
-> > I fixed it up (see below) and can carry the fix as necessary. This
-> > is now fixed as far as linux-next is concerned, but any non trivial
-> > conflicts should be mentioned to your upstream maintainer when your tree
-> > is submitted for merging.  You may also want to consider cooperating
-> > with the maintainer of the conflicting tree to minimise any particularly
-> > complex conflicts.
-> >
-> > --
-> > Cheers,
-> > Stephen Rothwell
-> >
-> > diff --cc MAINTAINERS
-> > index 71e92d3c51c6,daa33e7bb457..000000000000
-> > --- a/MAINTAINERS
-> > +++ b/MAINTAINERS
-> > @@@ -2791,7 -2925,8 +2791,8 @@@ M:      Patrice Chotard <patrice.chotard@fos
-> >   L:    linux-arm-kernel@lists.infradead.org (moderated for non-subscribers)
-> >   S:    Maintained
-> >   W:    http://www.stlinux.com
-> > + F:    Documentation/devicetree/bindings/spi/st,ssc-spi.yaml
-> >  -F:    Documentation/devicetree/bindings/i2c/i2c-st.txt
-> >  +F:    Documentation/devicetree/bindings/i2c/st,sti-i2c.yaml
-> >   F:    arch/arm/boot/dts/sti*
-> >   F:    arch/arm/mach-sti/
-> >   F:    drivers/ata/ahci_st.c
-> 
-> Thanks, but please preserve sort order.
-> 
-> Gr{oetje,eeting}s,
-> 
->                         Geert
-> 
-> -- 
-> Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-> 
-> In personal conversations with technical people, I call myself a hacker. But
-> when I'm talking to journalists I just say "programmer" or something like that.
->                                 -- Linus Torvalds
+See my other comments about not handling errors, perhaps that is where
+the problem is.
+
+thanks,
+
+greg k-h
