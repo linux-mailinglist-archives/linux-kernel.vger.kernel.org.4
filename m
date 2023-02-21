@@ -2,138 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D03C069E0DE
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 13:54:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E091269E0E8
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 13:58:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232992AbjBUMys (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Feb 2023 07:54:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52534 "EHLO
+        id S233179AbjBUM62 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Feb 2023 07:58:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54740 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233249AbjBUMyq (ORCPT
+        with ESMTP id S232115AbjBUM61 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Feb 2023 07:54:46 -0500
-Received: from mail-qv1-f51.google.com (mail-qv1-f51.google.com [209.85.219.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6224924128;
-        Tue, 21 Feb 2023 04:54:37 -0800 (PST)
-Received: by mail-qv1-f51.google.com with SMTP id o3so4139182qvr.1;
-        Tue, 21 Feb 2023 04:54:37 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=//uXXWrfrL/IjKv8DHyIfqNi69QuZlv/CPgv9vyCTyo=;
-        b=2XyxEsIenDUif9ktZqZigdu3HzyCw3eVtHW+0nEP+SW7M/D1ioLiiGTfGI6SHfJ0Jg
-         UQhA2QV2rcFM8x9mThmvnWCryOQWlToB5M2puh/9559syyF75a/KpubJkaxLIqCvc/9c
-         mwJkTQqMn8/As0zFW8DN0MCn/i3HktbCBwrisNcJBdidJVPImCHEHIKj3setakEPXoo5
-         fgrppkjiRa8S2StIbG+Q36sb8Ct2Al040+Z2aJlKWP11PGIoU2c8oijaPiT8Gg6BlNfP
-         ltvTrAGBQ5c9h17kGLGQkODW3UffNjNW8YGFEklQ4R8ERYQqujvB04Yg5knA/lbhHj0j
-         6xfA==
-X-Gm-Message-State: AO0yUKUwVzG6pabAyrHH0GOPXDCgpd7sIFuf3pHgGSMwWWUTvEeBxuDZ
-        ZByNPtF9dLYPhW58AGCazVkLtQ0sPpj+Ng==
-X-Google-Smtp-Source: AK7set9JbXSLfibARf+xEIPK2avCUOOoqt3AM0dSA8D5EpGAVLFkFXTE4HDrh9FGN6ddsuHvrEw5xw==
-X-Received: by 2002:ad4:5d4c:0:b0:56b:ee5a:89eb with SMTP id jk12-20020ad45d4c000000b0056bee5a89ebmr7582724qvb.19.1676984076225;
-        Tue, 21 Feb 2023 04:54:36 -0800 (PST)
-Received: from mail-yw1-f172.google.com (mail-yw1-f172.google.com. [209.85.128.172])
-        by smtp.gmail.com with ESMTPSA id b6-20020ae9eb06000000b0073ba46a585asm9690342qkg.64.2023.02.21.04.54.35
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 21 Feb 2023 04:54:36 -0800 (PST)
-Received: by mail-yw1-f172.google.com with SMTP id 00721157ae682-536bfa306c1so51378637b3.3;
-        Tue, 21 Feb 2023 04:54:35 -0800 (PST)
-X-Received: by 2002:a81:ac07:0:b0:533:9252:32fa with SMTP id
- k7-20020a81ac07000000b00533925232famr537048ywh.4.1676984075461; Tue, 21 Feb
- 2023 04:54:35 -0800 (PST)
+        Tue, 21 Feb 2023 07:58:27 -0500
+Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 5784B9030;
+        Tue, 21 Feb 2023 04:58:24 -0800 (PST)
+Received: from loongson.cn (unknown [10.20.42.120])
+        by gateway (Coremail) with SMTP id _____8BxYU_tv_RjiSgDAA--.1046S3;
+        Tue, 21 Feb 2023 20:58:21 +0800 (CST)
+Received: from [10.20.42.120] (unknown [10.20.42.120])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8BxSL3sv_RjK8I3AA--.36234S3;
+        Tue, 21 Feb 2023 20:58:21 +0800 (CST)
+Subject: Re: [PATCH v2 27/29] LoongArch: KVM: Implement vcpu world switch
+To:     Paolo Bonzini <pbonzini@redhat.com>
+References: <20230220065735.1282809-1-zhaotianrui@loongson.cn>
+ <20230220065735.1282809-28-zhaotianrui@loongson.cn>
+ <884fdf34-e675-2ebe-e37f-6aeb696a0922@redhat.com>
+Cc:     Huacai Chen <chenhuacai@kernel.org>,
+        WANG Xuerui <kernel@xen0n.name>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        loongarch@lists.linux.dev, linux-kernel@vger.kernel.org,
+        kvm@vger.kernel.org, Jens Axboe <axboe@kernel.dk>,
+        Mark Brown <broonie@kernel.org>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        Oliver Upton <oliver.upton@linux.dev>, maobibo@loongson.cn
+From:   Tianrui Zhao <zhaotianrui@loongson.cn>
+Message-ID: <2a2d6a84-11cc-7a5b-5f1d-6660446b481c@loongson.cn>
+Date:   Tue, 21 Feb 2023 20:58:20 +0800
+User-Agent: Mozilla/5.0 (X11; Linux mips64; rv:45.0) Gecko/20100101
+ Thunderbird/45.4.0
 MIME-Version: 1.0
-References: <20230208111330.439504-1-gregkh@linuxfoundation.org> <20230208111330.439504-13-gregkh@linuxfoundation.org>
-In-Reply-To: <20230208111330.439504-13-gregkh@linuxfoundation.org>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Tue, 21 Feb 2023 13:54:23 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdUmn2NG-uf3UavgXdHC0ma+r8w+g7Bjn_PiVykHakzf1g@mail.gmail.com>
-Message-ID: <CAMuHMdUmn2NG-uf3UavgXdHC0ma+r8w+g7Bjn_PiVykHakzf1g@mail.gmail.com>
-Subject: Re: [PATCH 12/21] driver core: bus: bus iterator cleanups
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <884fdf34-e675-2ebe-e37f-6aeb696a0922@redhat.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: AQAAf8BxSL3sv_RjK8I3AA--.36234S3
+X-CM-SenderInfo: p2kd03xldq233l6o00pqjv00gofq/
+X-Coremail-Antispam: 1Uk129KBjvdXoW7XFyDCw1furyUXF4kKw4Durg_yoWxKFc_Wr
+        W0gFs7Cwn5Wws2vF4UGr9IvFs29ay5tayIq348Wr1qqFyfKrZrAw4DXr95ZayUJ3yYkrs8
+        WrZ8Wa45Cr4jgjkaLaAFLSUrUUUUnb8apTn2vfkv8UJUUUU8wcxFpf9Il3svdxBIdaVrn0
+        xqx4xG64xvF2IEw4CE5I8CrVC2j2Jv73VFW2AGmfu7bjvjm3AaLaJ3UjIYCTnIWjp_UUUO
+        e7kC6x804xWl14x267AKxVWUJVW8JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0rVWrJVCq3w
+        AFIxvE14AKwVWUXVWUAwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK021l84ACjcxK
+        6xIIjxv20xvE14v26r4j6ryUM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4j6F4UM28EF7
+        xvwVC2z280aVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Cr1j6rxdM2kK
+        e7AKxVWUAVWUtwAS0I0E0xvYzxvE52x082IY62kv0487Mc804VCY07AIYIkI8VC2zVCFFI
+        0UMc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUAVWUtwAv7VC2z280
+        aVAFwI0_Cr0_Gr1UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvEwIxGrwCYjI0SjxkI62
+        AI1cAE67vIY487MxkF7I0En4kS14v26r126r1DMxAIw28IcxkI7VAKI48JMxC20s026xCa
+        FVCjc4AY6r1j6r4UMxCIbckI1I0E14v26r126r1DMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2
+        IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUtVW8ZwCIc40Y0x0EwIxGrwCI
+        42IY6xIIjxv20xvE14v26r1I6r4UMIIF0xvE2Ix0cI8IcVCY1x0267AKxVWUJVW8JwCI42
+        IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Cr0_Gr1UMIIF0xvEx4A2
+        jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07jb_-PUUUUU=
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Greg,
 
-On Wed, Feb 8, 2023 at 12:15 PM Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
-> Convert the bus_for_each_dev(), bus_find_device, and bus_for_each_drv()
-> functions to use bus_to_subsys() and not use the back-pointer to the
-> private structure.
+
+在 2023年02月21日 16:18, Paolo Bonzini 写道:
+> On 2/20/23 07:57, Tianrui Zhao wrote:
+>> +    or    a0, s0, zero
+>> +    or    a1, s1, zero
+>> +    ld.d    t8, a2, KVM_ARCH_HANDLE_EXIT
+>> +    jirl    ra,t8, 0
+>> +    ori    t0, zero, CSR_CRMD_IE
+>> +    csrxchg    zero, t0, LOONGARCH_CSR_CRMD
 >
-> Cc: "Rafael J. Wysocki" <rafael@kernel.org>
-> Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-
-Thanks for your patch, which is now commit 83b9148df2c95e23 ("driver
-core: bus: bus iterator cleanups") in driver-core-next.
-
-I have bisected an early kernel crash on the Renesas Salvator-XS
-board to this commit:
-
-    Unable to handle kernel NULL pointer dereference at virtual
-address 0000000000000028
-    ...
-    Call trace:
-     __lock_acquire+0x530/0x20f0
-     lock_acquire.part.0+0xc8/0x210
-     lock_acquire+0x64/0x80
-     _raw_spin_lock+0x4c/0x60
-     bus_to_subsys+0x24/0xac
-     bus_for_each_dev+0x30/0xcc
-     soc_device_match+0x4c/0xe0
-     r8a7795_sysc_init+0x18/0x60
-     rcar_sysc_pd_init+0xb0/0x33c
-     do_one_initcall+0x128/0x2bc
-
-> --- a/drivers/base/bus.c
-> +++ b/drivers/base/bus.c
-> @@ -355,18 +355,20 @@ static struct device *next_device(struct klist_iter *i)
->  int bus_for_each_dev(const struct bus_type *bus, struct device *start,
->                      void *data, int (*fn)(struct device *, void *))
->  {
-> +       struct subsys_private *sp = bus_to_subsys(bus);
-
-If bus_to_subsys() is called from an early_initcall(), bus_kset is
-still NULL, causing a crash.
-
->         struct klist_iter i;
->         struct device *dev;
->         int error = 0;
+> _kvm_handle_exit returns with the interrupts disabled.
 >
-> -       if (!bus || !bus->p)
+> Can you please add a comment to explain why CRMD.IE needs to be 
+> cleared here, or remove these two instructions if unnecessary?
+>
+> Paolo
 
-Before, the !bus->sp check prevented the crash...
+Thanks,  the interrupts have already been disabled when _kvm_handle_exit 
+returns,  and I will remove the two instructions.
 
-> +       if (!sp)
->                 return -EINVAL;
+Thanks
+Tianrui Zhao
 
-... and instructed soc_device_match() to go into
-early_soc_dev_attr mode.
+>
+>> +    or    a2, s1, zero
+>> +    addi.d    a2, a2, KVM_VCPU_ARCH
+>> +
+>> +    andi    t0, a0, RESUME_HOST
+>> +    bnez    t0, ret_to_host
 
-I have sent a fix
-"[PATCH] driver core: bus: Handle early calls to bus_to_subsys()"
-https://lore.kernel.org/r/0a92979f6e790737544638e8a4c19b0564e660a2.1676983596.git.geert+renesas@glider.be
-
-Gr{oetje,eeting}s,
-
-                        Geert
-
--- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
