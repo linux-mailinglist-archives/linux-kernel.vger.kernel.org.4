@@ -2,120 +2,198 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A9C7469DBBB
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 09:16:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BB55469DBB3
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 09:12:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229518AbjBUIQo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Feb 2023 03:16:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32774 "EHLO
+        id S233499AbjBUIMl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Feb 2023 03:12:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58182 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232589AbjBUIQl (ORCPT
+        with ESMTP id S229697AbjBUIMj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Feb 2023 03:16:41 -0500
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94A3920062;
-        Tue, 21 Feb 2023 00:16:39 -0800 (PST)
-Received: from dggpemm500012.china.huawei.com (unknown [172.30.72.53])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4PLXBm2hMHzKq1X;
-        Tue, 21 Feb 2023 16:14:40 +0800 (CST)
-Received: from localhost.localdomain (10.50.163.32) by
- dggpemm500012.china.huawei.com (7.185.36.89) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.17; Tue, 21 Feb 2023 16:16:32 +0800
-From:   Xingui Yang <yangxingui@huawei.com>
-To:     <jejb@linux.ibm.com>, <martin.petersen@oracle.com>,
-        <john.g.garry@oracle.com>
-CC:     <linux-scsi@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linuxarm@huawei.com>, <yangxingui@huawei.com>,
-        <prime.zeng@hisilicon.com>, <kangfenglong@huawei.com>
-Subject: [PATCH RESEND] scsi: sd: Update dix config everytime sd_revalidate_disk is called
-Date:   Tue, 21 Feb 2023 08:10:26 +0000
-Message-ID: <20230221081026.24736-1-yangxingui@huawei.com>
-X-Mailer: git-send-email 2.17.1
+        Tue, 21 Feb 2023 03:12:39 -0500
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F950206BE
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Feb 2023 00:12:34 -0800 (PST)
+X-UUID: 7a616b12b1bf11ed945fc101203acc17-20230221
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Type:Content-Transfer-Encoding:MIME-Version:Message-ID:Date:Subject:CC:To:From; bh=s5ntdNJViarBOIsrCG6AA+XjorzK95FSO6RilAokGFU=;
+        b=HFSzPK+4WAkSDllWh8WDz5HFohDtOzwfOm045tiT5/AhAJyNQV6FeOHrOBS87A0JqK4afCI1f+uIMYrjSrI4e5TbcShuqKo6Q8pdxdomGNYe8uA3eHMygUgrUXv8u0P37zsw6K18dOu748ap1uCWbm+RBqI8on8w6ZkBCDN0mXg=;
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.20,REQID:3354b455-1b52-4855-9d50-4ea4f26792e6,IP:0,U
+        RL:0,TC:0,Content:0,EDM:0,RT:0,SF:95,FILE:0,BULK:0,RULE:Release_Ham,ACTION
+        :release,TS:95
+X-CID-INFO: VERSION:1.1.20,REQID:3354b455-1b52-4855-9d50-4ea4f26792e6,IP:0,URL
+        :0,TC:0,Content:0,EDM:0,RT:0,SF:95,FILE:0,BULK:0,RULE:Spam_GS981B3D,ACTION
+        :quarantine,TS:95
+X-CID-META: VersionHash:25b5999,CLOUDID:68cd3826-564d-42d9-9875-7c868ee415ec,B
+        ulkID:230221161228T7NPKBHX,BulkQuantity:0,Recheck:0,SF:38|29|28|17|19|48,T
+        C:nil,Content:0,EDM:-3,IP:nil,URL:0,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0
+        ,OSI:0,OSA:0,AV:0
+X-CID-BVR: 0,NGT
+X-UUID: 7a616b12b1bf11ed945fc101203acc17-20230221
+Received: from mtkmbs13n1.mediatek.inc [(172.21.101.193)] by mailgw02.mediatek.com
+        (envelope-from <yongqiang.niu@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 175560280; Tue, 21 Feb 2023 16:12:26 +0800
+Received: from mtkmbs11n2.mediatek.inc (172.21.101.187) by
+ mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.792.3;
+ Tue, 21 Feb 2023 16:12:26 +0800
+Received: from mhfsdcap04.gcn.mediatek.inc (10.17.3.154) by
+ mtkmbs11n2.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
+ 15.2.792.15 via Frontend Transport; Tue, 21 Feb 2023 16:12:25 +0800
+From:   Yongqiang Niu <yongqiang.niu@mediatek.com>
+To:     CK Hu <ck.hu@mediatek.com>, Chun-Kuang Hu <chunkuang.hu@kernel.org>
+CC:     Jassi Brar <jassisinghbrar@gmail.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
+        Hsin-Yi Wang <hsinyi@chromium.org>,
+        Yongqiang Niu <yongqiang.niu@mediatek.com>
+Subject: [PATCH v2] drm/mediatek: add dma buffer control for drm plane disable
+Date:   Tue, 21 Feb 2023 16:12:24 +0800
+Message-ID: <20230221081224.23017-1-yongqiang.niu@mediatek.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
-X-Originating-IP: [10.50.163.32]
-X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
- dggpemm500012.china.huawei.com (7.185.36.89)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-MTK:  N
+X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,RDNS_NONE,
+        SPF_HELO_PASS,SPF_PASS,UNPARSEABLE_RELAY autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When the host protection capabilities are 0x77 and a DIF disk is connected,
-the DIX and DIF of the disk are default enabled. Then if that DIF disk is
-reformatted as a non-DIF format, per the currently flow, the DIX is kept
-enabled which is not correct, which will cause the following errors when
-accessing the non-DIF disk:
-[root@localhost ~]# lsscsi -p
-[7:0:5:0]    disk    xxx    /dev/sdc   DIF/Type3  T10-DIF-TYPE3-CRC
-[root@localhost ~]# sg_format -F -s 512 /dev/sdc
-[root@localhost ~]# lsscsi -p
-[7:0:5:0]    disk    xxx    /dev/sdc   -          T10-DIF-TYPE3-CRC
+dma buffer release before overlay disable, that will cause
+m4u translation fault warning.
 
-[142829.032340] hisi_sas_v3_hw 0000:b4:04.0: erroneous completion iptt=2375 task=00000000bea0970c dev id=5 direct-attached phy4 addr=51c20dbaf642a000 CQ hdr: 0x1023 0x50947 0x0 0x20000 Error info: 0x0 0x0 0x4 0x0
-[142829.073883] sas: Enter sas_scsi_recover_host busy: 1 failed: 1
-[142829.079783] sas: sas_scsi_find_task: aborting task 0x00000000bea0970c
-[142829.102342] sas: Internal abort: task to dev 51c20dbaf642a000 response: 0x0 status 0x5
-[142829.110319] sas: sas_eh_handle_sas_errors: task 0x00000000bea0970c is done
-[142829.117275] sd 7:0:5:0: [sdc] tag#2375 UNKNOWN(0x2003) Result: hostbyte=0x05 driverbyte=DRIVER_OK cmd_age=0s
-[142829.127171] sd 7:0:5:0: [sdc] tag#2375 CDB: opcode=0x2a 2a 00 00 00 00 00 00 00 08 00
-[142829.135059] I/O error, dev sdc, sector 0 op 0x1:(WRITE) flags 0x18800 phys_seg 1 prio class 2
+add dma buffer control flow in mediatek driver:
+get dma buffer when drm plane disable
+put dma buffer when overlay really disable
 
-On the contrary, when a non-DIF disk is connected and formatted as a DIF
-disk, it is found that DIX is not enabled. Operation logs as follows:
-
-[root@localhost ~]# lsscsi -p
-[7:0:2:0]    disk    xxx    /dev/sdc   -          none
-[root@localhost ~]# sg_format --format --fmtpinfo=3 --pfu=1 /dev/sdc
-[root@localhost ~]# lsscsi -p
-[7:0:2:0]    disk    xxx    /dev/sdc   DIF/Type3  none
-
-This is because dix config is only updated when the first time a disk
-is connected. In this patch, we fix the issue by with changes:
-1. Remove check first_scan when call sd_config_protection().
-2. Unregister block integrity profile after DIX becomes to 0.
-
-Signed-off-by: Xingui Yang <yangxingui@huawei.com>
+Signed-off-by: Yongqiang Niu <yongqiang.niu@mediatek.com>
 ---
- drivers/scsi/sd.c     | 3 ---
- drivers/scsi/sd_dif.c | 4 +++-
- 2 files changed, 3 insertions(+), 4 deletions(-)
+ drivers/gpu/drm/mediatek/mtk_drm_crtc.c  | 19 +++++++++++++++++--
+ drivers/gpu/drm/mediatek/mtk_drm_plane.c | 12 ++++++++++++
+ drivers/gpu/drm/mediatek/mtk_drm_plane.h |  1 +
+ 3 files changed, 30 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/scsi/sd.c b/drivers/scsi/sd.c
-index 2aa3b0393b96..774414d129a4 100644
---- a/drivers/scsi/sd.c
-+++ b/drivers/scsi/sd.c
-@@ -2254,9 +2254,6 @@ static void sd_config_protection(struct scsi_disk *sdkp)
- {
- 	struct scsi_device *sdp = sdkp->device;
+diff --git a/drivers/gpu/drm/mediatek/mtk_drm_crtc.c b/drivers/gpu/drm/mediatek/mtk_drm_crtc.c
+index 5071f1263216..ff7924d8a167 100644
+--- a/drivers/gpu/drm/mediatek/mtk_drm_crtc.c
++++ b/drivers/gpu/drm/mediatek/mtk_drm_crtc.c
+@@ -4,6 +4,7 @@
+  */
  
--	if (!sdkp->first_scan)
--		return;
--
- 	sd_dif_config_host(sdkp);
+ #include <linux/clk.h>
++#include <linux/dma-buf.h>
+ #include <linux/dma-mapping.h>
+ #include <linux/mailbox_controller.h>
+ #include <linux/pm_runtime.h>
+@@ -282,6 +283,14 @@ struct mtk_ddp_comp *mtk_drm_ddp_comp_for_plane(struct drm_crtc *crtc,
+ 	return NULL;
+ }
  
- 	if (!sdkp->protection_type)
-diff --git a/drivers/scsi/sd_dif.c b/drivers/scsi/sd_dif.c
-index 968993ee6d5d..78db8d85f97e 100644
---- a/drivers/scsi/sd_dif.c
-+++ b/drivers/scsi/sd_dif.c
-@@ -39,8 +39,10 @@ void sd_dif_config_host(struct scsi_disk *sdkp)
- 		dif = 0; dix = 1;
- 	}
- 
--	if (!dix)
-+	if (!dix) {
-+		blk_integrity_unregister(disk);
- 		return;
++static void mtk_drm_dma_buf_put(struct mtk_plane_state *plane_state)
++{
++	if (plane_state && plane_state->pending.dma_buf) {
++		dma_buf_put(plane_state->pending.dma_buf);
++		plane_state->pending.dma_buf = NULL;
 +	}
++}
++
+ #if IS_REACHABLE(CONFIG_MTK_CMDQ)
+ static void ddp_cmdq_cb(struct mbox_client *cl, void *mssg)
+ {
+@@ -306,6 +315,7 @@ static void ddp_cmdq_cb(struct mbox_client *cl, void *mssg)
+ 			plane_state = to_mtk_plane_state(plane->state);
  
- 	memset(&bi, 0, sizeof(bi));
+ 			plane_state->pending.config = false;
++			mtk_drm_dma_buf_put(plane_state);
+ 		}
+ 		mtk_crtc->pending_planes = false;
+ 	}
+@@ -318,6 +328,7 @@ static void ddp_cmdq_cb(struct mbox_client *cl, void *mssg)
+ 			plane_state = to_mtk_plane_state(plane->state);
  
+ 			plane_state->pending.async_config = false;
++			mtk_drm_dma_buf_put(plane_state);
+ 		}
+ 		mtk_crtc->pending_async_planes = false;
+ 	}
+@@ -498,8 +509,10 @@ static void mtk_crtc_ddp_config(struct drm_crtc *crtc,
+ 				mtk_ddp_comp_layer_config(comp, local_layer,
+ 							  plane_state,
+ 							  cmdq_handle);
+-			if (!cmdq_handle)
++			if (!cmdq_handle) {
+ 				plane_state->pending.config = false;
++				mtk_drm_dma_buf_put(plane_state);
++			}
+ 		}
+ 
+ 		if (!cmdq_handle)
+@@ -523,8 +536,10 @@ static void mtk_crtc_ddp_config(struct drm_crtc *crtc,
+ 				mtk_ddp_comp_layer_config(comp, local_layer,
+ 							  plane_state,
+ 							  cmdq_handle);
+-			if (!cmdq_handle)
++			if (!cmdq_handle) {
+ 				plane_state->pending.async_config = false;
++				mtk_drm_dma_buf_put(plane_state);
++			}
+ 		}
+ 
+ 		if (!cmdq_handle)
+diff --git a/drivers/gpu/drm/mediatek/mtk_drm_plane.c b/drivers/gpu/drm/mediatek/mtk_drm_plane.c
+index d54fbf34b000..16495a057c42 100644
+--- a/drivers/gpu/drm/mediatek/mtk_drm_plane.c
++++ b/drivers/gpu/drm/mediatek/mtk_drm_plane.c
+@@ -12,6 +12,7 @@
+ #include <drm/drm_framebuffer.h>
+ #include <drm/drm_gem_atomic_helper.h>
+ #include <linux/align.h>
++#include <linux/dma-buf.h>
+ 
+ #include "mtk_drm_crtc.h"
+ #include "mtk_drm_ddp_comp.h"
+@@ -280,6 +281,17 @@ static void mtk_plane_atomic_disable(struct drm_plane *plane,
+ 	struct drm_plane_state *new_state = drm_atomic_get_new_plane_state(state,
+ 									   plane);
+ 	struct mtk_plane_state *mtk_plane_state = to_mtk_plane_state(new_state);
++	struct drm_plane_state *old_state = drm_atomic_get_old_plane_state(state,
++									   plane);
++
++	if (old_state && old_state->fb) {
++		struct drm_gem_object *gem = old_state->fb->obj[0];
++
++		if (gem && gem->dma_buf) {
++			get_dma_buf(gem->dma_buf);
++			mtk_plane_state->pending.dma_buf = gem->dma_buf;
++		}
++	}
+ 	mtk_plane_state->pending.enable = false;
+ 	wmb(); /* Make sure the above parameter is set before update */
+ 	mtk_plane_state->pending.dirty = true;
+diff --git a/drivers/gpu/drm/mediatek/mtk_drm_plane.h b/drivers/gpu/drm/mediatek/mtk_drm_plane.h
+index 8f39011cdbfc..b724e56b7283 100644
+--- a/drivers/gpu/drm/mediatek/mtk_drm_plane.h
++++ b/drivers/gpu/drm/mediatek/mtk_drm_plane.h
+@@ -33,6 +33,7 @@ struct mtk_plane_pending_state {
+ 	bool				async_dirty;
+ 	bool				async_config;
+ 	enum drm_color_encoding		color_encoding;
++	struct dma_buf			*dma_buf;
+ };
+ 
+ struct mtk_plane_state {
 -- 
-2.17.1
+2.25.1
 
