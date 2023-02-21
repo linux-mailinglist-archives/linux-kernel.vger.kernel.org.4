@@ -2,118 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3B53269DEFF
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 12:38:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 80E5569DF02
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 12:38:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234173AbjBULit (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Feb 2023 06:38:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36420 "EHLO
+        id S234225AbjBULi4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Feb 2023 06:38:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36628 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234201AbjBULin (ORCPT
+        with ESMTP id S234201AbjBULiv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Feb 2023 06:38:43 -0500
-Received: from out5-smtp.messagingengine.com (out5-smtp.messagingengine.com [66.111.4.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BAD98B44E
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Feb 2023 03:38:41 -0800 (PST)
-Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
-        by mailout.nyi.internal (Postfix) with ESMTP id 1F8D75C0196;
-        Tue, 21 Feb 2023 06:38:38 -0500 (EST)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute1.internal (MEProxy); Tue, 21 Feb 2023 06:38:38 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=cc
-        :cc:content-transfer-encoding:content-type:date:date:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to; s=fm2; t=1676979518; x=
-        1677065918; bh=f0q6/VIS/EDAASz/wLLcZiAjmhuxTz7A6V8IY7t66Yc=; b=p
-        A2OU+H+HOfI9IUp+LSwrVgR72ozeKu6R/zyeo6dbrO9FI68IVO4JbvnE5SDQp6Qa
-        bEWPbKtbrd4/N/WDjKmkI9JEWoZNqUNA9PRiwVdxX7tY4HUWa0U5S58MMl7IFSAM
-        R9nwv+GMK0p3ZuDJOj+iR2xgXJ+VS75LHz2PEcLITiq5kMQHb5kkzXfj9WO5vzAW
-        fiipUZagK0b9v6Mre0O6HUbbznVVyGK81YwmyW09iz1czFcjTNGH9adO1HbonSy4
-        gsG4UpAFWUvSNfEdtOv0CMgbDAQMIwVUPC0/LZWTi7sX4Eisr6UOL5y+6Oy2rg9S
-        Gw+8ZkfKxzx18fbIPsemQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding
-        :content-type:date:date:feedback-id:feedback-id:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
-        :x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1676979518; x=
-        1677065918; bh=f0q6/VIS/EDAASz/wLLcZiAjmhuxTz7A6V8IY7t66Yc=; b=m
-        CzQb66yUMbQ95HiOdj05fe871tKiiXyEhnXndz3xBASQWvYy2+0aIDn5CougZ5wp
-        Jg4b3aSTfN9pXl2ApNqsB4GwhAIvbrEOiVv+ztiQer7WxPI1yltCcXLOCUbwWBBd
-        +qRPrtGYD9VaAH6xxKtcquCVQ6bOjar/j28ZFYZ2RXwZXxdDVXivHJOUbXi0o40H
-        ajPb8HyTk0unQzC2SdvtLnKwcmg1Ubo7X3GJpoaPS7TwsqAfvJzfbr2/KKpuWm77
-        MSb5LEuCM1P1sAquPFtUbWRbsXWFygbx3KGRQzg21VgyWXNMo72r6EvZMB7J6SH8
-        BDHHgP0896CKymr6laBrQ==
-X-ME-Sender: <xms:Pa30Y88-9JxKSyL95yqp6h9OFzMcPXsAKBWXUhIW0hEgAmPLP20JWg>
-    <xme:Pa30Y0vUNvXDc-WKtOPrDKji1csejiyc0YggdFnKALN1cEVn3YG5aKTWMKRoqhl97
-    A2DHdmePQyYwF8UqoE>
-X-ME-Received: <xmr:Pa30YyAemGFDn54JE1uLtv8YuIfG0dOakoyTrIjeIOHP9J4Qioxx5H9c9XUaTsyG5PRns5cynC2E9MMp3p-_KMgHA2kGsLM>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrudejjedgvdelucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepfffhvfevuffkfhggtggugfgjsehtqhertddttddvnecuhfhrohhmpeforgig
-    ihhmvgcutfhiphgrrhguuceomhgrgihimhgvsegtvghrnhhordhtvggthheqnecuggftrf
-    grthhtvghrnheptefgleeggfegkeekgffgleduieduffejffegveevkeejudektdduueet
-    feetfefgnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomh
-    epmhgrgihimhgvsegtvghrnhhordhtvggthh
-X-ME-Proxy: <xmx:Pa30Y8f_OAOwdujjIgT5tBXlQI72zBP_in7MNwz4Gr90AXL0aytEkA>
-    <xmx:Pa30YxN2yS69ureMIgQ7o8cdPYG4QjO5pKUTccWLM2Skc5kkGMnY5g>
-    <xmx:Pa30Y2n0RsDdcK7VSOrBmSpoEg8GkunW9vaVaO1PdvI7bg8Ew5Cc-g>
-    <xmx:Pq30Y4nHyP4jNtyJ_NV8Ob2atwcs_reVNKG2qA8UkRHr_j5OM5Iq5g>
-Feedback-ID: i8771445c:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
- 21 Feb 2023 06:38:37 -0500 (EST)
-Date:   Tue, 21 Feb 2023 12:38:34 +0100
-From:   Maxime Ripard <maxime@cerno.tech>
-To:     Hans Verkuil <hverkuil@xs4all.nl>
-Cc:     Emma Anholt <emma@anholt.net>, David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        Dave Stevenson <dave.stevenson@raspberrypi.com>,
-        Thomas Zimmermann <tzimmermann@suse.de>
-Subject: Re: [PATCH v2 1/9] drm/vc4: Switch to container_of_const
-Message-ID: <20230221113834.i3nitxp4soev6cks@houat>
-References: <20221207-rpi-hdmi-improvements-v2-0-8ace2d8221ad@cerno.tech>
- <20221207-rpi-hdmi-improvements-v2-1-8ace2d8221ad@cerno.tech>
- <c70e40fe-6834-2382-ec89-28714a67fd1f@xs4all.nl>
+        Tue, 21 Feb 2023 06:38:51 -0500
+Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 816E6E39A
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Feb 2023 03:38:48 -0800 (PST)
+Received: by mail-ed1-x52e.google.com with SMTP id f13so15378508edz.6
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Feb 2023 03:38:48 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=7tq51gAJIQj2Xs1ZKNGqnu4NrUprTsJTQmSC0ttvYNI=;
+        b=K2xiRBkU6h0mnBM8imm/VCEbhvLY/ceuXzgd14FpbsVy0S3mv6rsKv3gJBSV8yB1xw
+         snQXZsLf/yLPCLdeWUkY8GKMzivAvGnCroU1GodSQ18ZKIGfMfwzU7tnoJRxj93qykbY
+         WQAFgcT/x3hJIPTx88Bjc+BbZDK7stwk7udrkieVBM7wukU4ki+ksjHqT8ua0u0whs6N
+         mYnuTGmVBEQT2GKu8Vud0p4X5B/7gvnBOu7FvCj3GOytHEYr8kESWejcP2tvYuO9IyvI
+         PgMH9egv5fQJ90Jy43/FFzeZKGMluW16mAucPJp++5Cs/bVQP2jzdLmXkHKa5Kp7I2qO
+         BwVA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=7tq51gAJIQj2Xs1ZKNGqnu4NrUprTsJTQmSC0ttvYNI=;
+        b=qqG7+fHKMA/yfsMuWy06lZNkCJoi+3EFy78GhbC1BSarNvwKGS5jQwhPWofLFFj//2
+         LAOe6xYqXz+s4foR5qUjdKKuyLHekB8paBDJY1kDiQ08e6iDX0N/lHPW+ci3wDM7vhMi
+         OuJMt39/eIhm6twLNSXzpMiY5/+raAquaWZbxWxf0IYqAImdo73QUU5r8gBOHTRtUB1f
+         50O0cTWj/IGCb/Jthw8HiblfASVAR8j6rmh0e3kZH38PqrVXOvgOon9/m5xQY4mGfIdc
+         N5oL5vGKRRt7QK0SuvPozenhAR8SBut/vpgUaGyt1drRNXYj92joX/Pgo1o+PY3xWQ0x
+         hvQg==
+X-Gm-Message-State: AO0yUKV2IqplGpL4tuFiPqmxPXYJHbeJOrU41O1+Gj8dTiAthpPXgDZm
+        zSuVqC4faqx5PSEoMjVJhmgYzA==
+X-Google-Smtp-Source: AK7set/3gIbpZCbGX8KRPqHk4leYzTL0UBaiSORTZuYQavAfonAT7E7VUPDVMnim+cH7HYssAsE26Q==
+X-Received: by 2002:a05:6402:1203:b0:4ac:c1bf:2a26 with SMTP id c3-20020a056402120300b004acc1bf2a26mr5378277edw.12.1676979527040;
+        Tue, 21 Feb 2023 03:38:47 -0800 (PST)
+Received: from [192.168.1.109] ([178.197.216.144])
+        by smtp.gmail.com with ESMTPSA id q18-20020a50c352000000b004ad601533a3sm1483381edb.55.2023.02.21.03.38.45
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 21 Feb 2023 03:38:46 -0800 (PST)
+Message-ID: <f21e19d9-206e-31b5-0287-0dff6ccd6c6d@linaro.org>
+Date:   Tue, 21 Feb 2023 12:38:44 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <c70e40fe-6834-2382-ec89-28714a67fd1f@xs4all.nl>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH v4 16/19] dt-bindings: riscv: Add SiFive S7 compatible
+Content-Language: en-US
+To:     Hal Feng <hal.feng@starfivetech.com>, linux-clk@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-riscv@lists.infradead.org
+Cc:     Stephen Boyd <sboyd@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor@kernel.org>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Ben Dooks <ben.dooks@sifive.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Marc Zyngier <maz@kernel.org>,
+        Emil Renner Berthing <emil.renner.berthing@canonical.com>,
+        linux-kernel@vger.kernel.org
+References: <20230221024645.127922-1-hal.feng@starfivetech.com>
+ <20230221024645.127922-17-hal.feng@starfivetech.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230221024645.127922-17-hal.feng@starfivetech.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Hans,
+On 21/02/2023 03:46, Hal Feng wrote:
+> Add a new compatible string in cpu.yaml for SiFive S7 CPU
+> core which is used on SiFive U74-MC core complex etc.
+> 
+> Signed-off-by: Hal Feng <hal.feng@starfivetech.com>
+> ---
 
-On Sat, Feb 18, 2023 at 11:45:04AM +0100, Hans Verkuil wrote:
-> > diff --git a/drivers/gpu/drm/vc4/vc4_bo.c b/drivers/gpu/drm/vc4/vc4_bo.c
-> > index 86d629e45307..d0a00ed42cb0 100644
-> > --- a/drivers/gpu/drm/vc4/vc4_bo.c
-> > +++ b/drivers/gpu/drm/vc4/vc4_bo.c
-> > @@ -609,7 +609,7 @@ static void vc4_free_object(struct drm_gem_object *=
-gem_bo)
-> >  static void vc4_bo_cache_time_work(struct work_struct *work)
-> >  {
-> >  	struct vc4_dev *vc4 =3D
-> > -		container_of(work, struct vc4_dev, bo_cache.time_work);
-> > +		container_of_const(work, struct vc4_dev, bo_cache.time_work);
->=20
-> ...I think this is misleading. It's definitely not const, so switching to
-> container_of_const suggests that there is some 'constness' involved, which
-> isn't the case. I'd leave this just as 'container_of'. This also reduces =
-the
-> size of the patch, since this is done in quite a few places.
 
-The name threw me off too, but it's supposed to keep the argument
-pointer constness, not always take and return a const pointer. I still
-believe that it's beneficial since, if the work pointer was ever to
-change constness, we would have that additional check.
+Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-Maxime
+Best regards,
+Krzysztof
+
