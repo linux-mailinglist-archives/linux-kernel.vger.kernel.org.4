@@ -2,211 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3170969DFF9
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 13:09:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8060669DFD2
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 13:01:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234735AbjBUMJR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Feb 2023 07:09:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52400 "EHLO
+        id S234699AbjBUMBp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Feb 2023 07:01:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39394 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234681AbjBUMJO (ORCPT
+        with ESMTP id S234827AbjBUMBE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Feb 2023 07:09:14 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22F325FDF
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Feb 2023 04:07:50 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1676981196;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=ueMcPyVImz9cpfurZM9ATdM8rr4FlZ3uotbL1JWr8HM=;
-        b=CWAtTj36hMvxGI6KmFUTzFh4iUiD0ROlRdGXeFEwYWiZfHLjIWejvQKH5qZ1gGA/rF04xw
-        x/oTFCCnVtWZRn3QQQhcDPF+HORBoxOFBFRCm6MEt34i97cda6eXULWnkVcK8E4Jkaq9ld
-        f5OKxqSvLoNgPcNC8ZWeBrWstDlpmdM=
-Received: from mail-wr1-f69.google.com (mail-wr1-f69.google.com
- [209.85.221.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-403-9sggQmHfNdiYz8KZ8a6vMg-1; Tue, 21 Feb 2023 06:59:29 -0500
-X-MC-Unique: 9sggQmHfNdiYz8KZ8a6vMg-1
-Received: by mail-wr1-f69.google.com with SMTP id l4-20020a5d6d84000000b002c54aaa28dcso692424wrs.16
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Feb 2023 03:59:28 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=ueMcPyVImz9cpfurZM9ATdM8rr4FlZ3uotbL1JWr8HM=;
-        b=xgPX5bl1qewbgVljRkDYsrv9CIA4FRdrmBcldxliunEzweRj2N+uR+uC2Ju/bifyiX
-         IB9KPK9w5bfzrdVsyUhWWlO6mgNYjAiCMmIgnVDfE08i8e0AUOU1O6GWq6wsTJKLJgEb
-         VKbY6v+u1GzofUk3DeR7bJEbzY1TcE6+RSC8aOqFA0YnCjqlallHZKivW+FAAxP88twU
-         pTLr01LCeghKgk6Q4rIkkZdxIO2PJ4geB3adtThHIWELqOeVqwSv5dv+EirrOTJimDcL
-         V7eqPe0gxb3+RTADP6ZlLE0OwM6TkivPCImAzHquD+g4rEEma/U35ocJln3NnjXY+baq
-         PXQQ==
-X-Gm-Message-State: AO0yUKV5bZ+6ACItcWe8PrDjkYzwU+TpTB5Qw/W/nqpeZuop6wAqxIb5
-        1QYYOqZIXJ8CDnj/d0teoeBovBLFBANudvtNuU5kf53ZXkWW4M606G9nigtGZ0EiFOqBfiIVhfa
-        I+EulKePtLZ+cy3XknKmohBxv
-X-Received: by 2002:a05:600c:319a:b0:3dc:5b88:e706 with SMTP id s26-20020a05600c319a00b003dc5b88e706mr3432738wmp.1.1676980768038;
-        Tue, 21 Feb 2023 03:59:28 -0800 (PST)
-X-Google-Smtp-Source: AK7set9/y3GWYFDjk83DDi2agWds5UsLqjyHuOZHo4YSWP+L1MT5uBLFjcUtMLjAIHbcdUqV8+nX8w==
-X-Received: by 2002:a05:600c:319a:b0:3dc:5b88:e706 with SMTP id s26-20020a05600c319a00b003dc5b88e706mr3432713wmp.1.1676980767741;
-        Tue, 21 Feb 2023 03:59:27 -0800 (PST)
-Received: from gerbillo.redhat.com (146-241-121-8.dyn.eolo.it. [146.241.121.8])
-        by smtp.gmail.com with ESMTPSA id ay14-20020a05600c1e0e00b003e20cf0408esm5177202wmb.40.2023.02.21.03.59.25
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 21 Feb 2023 03:59:27 -0800 (PST)
-Message-ID: <3cf5c962768651adb2c1a7fa95aff7517d821bd6.camel@redhat.com>
-Subject: Re: [PATCH net-next v10 00/12] net: ethernet: mtk_eth_soc: various
- enhancements
-From:   Paolo Abeni <pabeni@redhat.com>
-To:     Daniel Golle <daniel@makrotopia.org>, devicetree@vger.kernel.org,
-        Rob Herring <robh+dt@kernel.org>,
+        Tue, 21 Feb 2023 07:01:04 -0500
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21E0729419;
+        Tue, 21 Feb 2023 04:00:32 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1676980832; x=1708516832;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=RaLi51DyYBmxV5gHO49rYM3qINAD1mFdPqb9+oXxEmk=;
+  b=Dk7EkvDcciRfWwO0txtI+fZBOsqw1crTAZoREDm/j66dmq3/nGBHu9ZU
+   7QJtXN1tGmED1jYsREvR8/F/mMHjFkh1EksPX0mc1U2ald/37v7hX21id
+   VzY4s+ulkaIZZlV8KFnDYSlBqzHYTY1TE63ETq8mwDVAAudVDV9b5FoZh
+   44yYS104bU/h1UH5gC/T/jp2hF1ee2nhtEQVL+1uOhKD2utHUSFaNDcDl
+   sLdXConAjeBdT+YvPVH61hWpDxQ3ObkxljB96IVHwnNqaMz8pBvhl35tx
+   kWnT6BAXo+N7kwRGe3ypv+4kzBHxb3Hj6upIBmAuDqUGCE8/v4F9i/wL0
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10627"; a="397299078"
+X-IronPort-AV: E=Sophos;i="5.97,315,1669104000"; 
+   d="scan'208";a="397299078"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Feb 2023 03:59:54 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10627"; a="814484410"
+X-IronPort-AV: E=Sophos;i="5.97,315,1669104000"; 
+   d="scan'208";a="814484410"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by fmsmga001.fm.intel.com with ESMTP; 21 Feb 2023 03:59:50 -0800
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1pURJD-009wVc-2M;
+        Tue, 21 Feb 2023 13:59:47 +0200
+Date:   Tue, 21 Feb 2023 13:59:47 +0200
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Okan Sahin <okan.sahin@analog.com>
+Cc:     Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        Lee Jones <lee@kernel.org>, Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        netdev@vger.kernel.org, linux-mediatek@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Russell King <linux@armlinux.org.uk>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Lorenzo Bianconi <lorenzo@kernel.org>,
-        Mark Lee <Mark-MC.Lee@mediatek.com>,
-        John Crispin <john@phrozen.org>, Felix Fietkau <nbd@nbd.name>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        DENG Qingfang <dqfext@gmail.com>,
-        Landen Chao <Landen.Chao@mediatek.com>,
-        Sean Wang <sean.wang@mediatek.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Eric Dumazet <edumazet@google.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Andrew Lunn <andrew@lunn.ch>
-Cc:     Jianhui Zhao <zhaojh329@gmail.com>,
-        =?ISO-8859-1?Q?Bj=F8rn?= Mork <bjorn@mork.no>
-Date:   Tue, 21 Feb 2023 12:59:25 +0100
-In-Reply-To: <cover.1676933805.git.daniel@makrotopia.org>
-References: <cover.1676933805.git.daniel@makrotopia.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.46.4 (3.46.4-1.fc37) 
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Caleb Connolly <caleb.connolly@linaro.org>,
+        William Breathitt Gray <william.gray@linaro.org>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        ChiYuan Huang <cy_huang@richtek.com>,
+        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        Ramona Bolboaca <ramona.bolboaca@analog.com>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-iio@vger.kernel.org
+Subject: Re: [PATCH v5 3/5] iio: adc: max77541: Add ADI MAX77541 ADC Support
+Message-ID: <Y/SyM/r4BUiUivu5@smile.fi.intel.com>
+References: <20230221103926.49597-1-okan.sahin@analog.com>
+ <20230221103926.49597-4-okan.sahin@analog.com>
 MIME-Version: 1.0
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230221103926.49597-4-okan.sahin@analog.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 2023-02-21 at 11:39 +0000, Daniel Golle wrote:
-> This series brings a variety of fixes and enhancements for mtk_eth_soc,
-> adds support for the MT7981 SoC and facilitates sharing the SGMII PCS
-> code between mtk_eth_soc and mt7530.
->=20
-> Note that this series depends on commit 697c3892d825
-> ("regmap: apply reg_base and reg_downshift for single register ops") to
-> not break mt7530 pcs register access.
->=20
-> The whole series has been tested on MT7622+MT7531 (BPi-R64),
-> MT7623+MT7530 (BPi-R2) and MT7981+GPY211 (GL.iNet GL-MT3000).
->=20
-> Changes since v9:
->  * fix path in mediatek,sgmiisys dt-binding
->=20
-> Changes since v8:
->  * move mediatek,sgmiisys dt-bindings to correct net/pcs folder
->  * rebase on top of net-next/main so series applies cleanly again
->=20
-> Changes since v7:
->  * move mediatek,sgmiisys.yaml to more appropriate folder
->  * don't include <linux/phylink.h> twice in PCS driver, sort includes
->=20
-> Changes since v6:
->  * label MAC MCR bit 12 in 08/12, MediaTek replied explaining its functio=
-n
->=20
-> Changes since v5:
->  * drop dev pointer also from struct mtk_sgmii, pass it as function
->    parameter instead
->  * address comments left for dt-bindings
->  * minor improvements to commit messages
->=20
-> Changes since v4:
->  * remove unused dev pointer in struct pcs_mtk_lynxi
->  * squash link timer check into correct follow-up patch
->=20
-> Changes since v3:
->  * remove unused #define's
->  * use BMCR_* instead of #define'ing our own constants
->  * return before changing registers in case of invalid link timer
->=20
-> Changes since v2:
->  * improve dt-bindings, convert sgmisys bindings to dt-schema yaml
->  * fix typo
->=20
-> Changes since v1:
->  * apply reverse xmas tree everywhere
->  * improve commit descriptions
->  * add dt binding documentation
->  * various small changes addressing all comments received for v1
->=20
->=20
-> Daniel Golle (12):
->   net: ethernet: mtk_eth_soc: add support for MT7981 SoC
->   dt-bindings: net: mediatek,net: add mt7981-eth binding
->   dt-bindings: arm: mediatek: sgmiisys: Convert to DT schema
->   dt-bindings: arm: mediatek: sgmiisys: add MT7981 SoC
->   net: ethernet: mtk_eth_soc: set MDIO bus clock frequency
->   net: ethernet: mtk_eth_soc: reset PCS state
->   net: ethernet: mtk_eth_soc: only write values if needed
->   net: ethernet: mtk_eth_soc: fix RX data corruption issue
->   net: ethernet: mtk_eth_soc: ppe: add support for flow accounting
->   net: pcs: add driver for MediaTek SGMII PCS
->   net: ethernet: mtk_eth_soc: switch to external PCS driver
->   net: dsa: mt7530: use external PCS driver
->=20
->  .../arm/mediatek/mediatek,sgmiisys.txt        |  25 --
->  .../devicetree/bindings/net/mediatek,net.yaml |  52 ++-
->  .../bindings/net/pcs/mediatek,sgmiisys.yaml   |  55 ++++
->  MAINTAINERS                                   |   7 +
->  drivers/net/dsa/Kconfig                       |   1 +
->  drivers/net/dsa/mt7530.c                      | 277 ++++------------
->  drivers/net/dsa/mt7530.h                      |  47 +--
->  drivers/net/ethernet/mediatek/Kconfig         |   2 +
->  drivers/net/ethernet/mediatek/mtk_eth_path.c  |  14 +-
->  drivers/net/ethernet/mediatek/mtk_eth_soc.c   |  67 +++-
->  drivers/net/ethernet/mediatek/mtk_eth_soc.h   | 105 +++---
->  drivers/net/ethernet/mediatek/mtk_ppe.c       | 114 ++++++-
->  drivers/net/ethernet/mediatek/mtk_ppe.h       |  25 +-
->  .../net/ethernet/mediatek/mtk_ppe_debugfs.c   |   9 +-
->  .../net/ethernet/mediatek/mtk_ppe_offload.c   |   8 +
->  drivers/net/ethernet/mediatek/mtk_ppe_regs.h  |  14 +
->  drivers/net/ethernet/mediatek/mtk_sgmii.c     | 192 ++---------
->  drivers/net/pcs/Kconfig                       |   7 +
->  drivers/net/pcs/Makefile                      |   1 +
->  drivers/net/pcs/pcs-mtk-lynxi.c               | 302 ++++++++++++++++++
->  include/linux/pcs/pcs-mtk-lynxi.h             |  13 +
->  21 files changed, 801 insertions(+), 536 deletions(-)
->  delete mode 100644 Documentation/devicetree/bindings/arm/mediatek/mediat=
-ek,sgmiisys.txt
->  create mode 100644 Documentation/devicetree/bindings/net/pcs/mediatek,sg=
-miisys.yaml
->  create mode 100644 drivers/net/pcs/pcs-mtk-lynxi.c
->  create mode 100644 include/linux/pcs/pcs-mtk-lynxi.h
->=20
->=20
-> base-commit: 3fcdf2dfefb6313ea0395519d1784808c0b6559b
+On Tue, Feb 21, 2023 at 01:39:11PM +0300, Okan Sahin wrote:
+> The MAX77541 has an 8-bit Successive Approximation Register (SAR) ADC
+> with four multiplexers for supporting the telemetry feature.
 
-# Form letter - net-next is closed
+...
 
-The merge window for v6.3 has begun and therefore net-next is closed
-for new drivers, features, code refactoring and optimizations.
-We are currently accepting bug fixes only.
+> +#include <linux/bitfield.h>
 
-Please repost when net-next reopens after Mar 6th.
+> +#include <linux/i2c.h>
 
-RFC patches sent for review only are obviously welcome at any time.
+Unused header.
+
+> +#include <linux/iio/iio.h>
+> +#include <linux/mod_devicetable.h>
+> +#include <linux/platform_device.h>
+> +#include <linux/regmap.h>
+> +#include <linux/units.h>
+> +
+> +#include <linux/mfd/max77541.h>
+
+-- 
+With Best Regards,
+Andy Shevchenko
+
 
