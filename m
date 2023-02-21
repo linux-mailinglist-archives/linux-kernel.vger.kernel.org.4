@@ -2,60 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 27F7069E4D7
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 17:38:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F62969E4D9
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 17:38:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234736AbjBUQiF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Feb 2023 11:38:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35896 "EHLO
+        id S234917AbjBUQiI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Feb 2023 11:38:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35234 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234853AbjBUQhn (ORCPT
+        with ESMTP id S234862AbjBUQht (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Feb 2023 11:37:43 -0500
-Received: from mail-pf1-x449.google.com (mail-pf1-x449.google.com [IPv6:2607:f8b0:4864:20::449])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9DC22A6E0
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Feb 2023 08:37:31 -0800 (PST)
-Received: by mail-pf1-x449.google.com with SMTP id a23-20020a62bd17000000b0058db55a8d7aso2191386pff.21
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Feb 2023 08:37:31 -0800 (PST)
+        Tue, 21 Feb 2023 11:37:49 -0500
+Received: from mail-pg1-x549.google.com (mail-pg1-x549.google.com [IPv6:2607:f8b0:4864:20::549])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7DF12D14E
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Feb 2023 08:37:33 -0800 (PST)
+Received: by mail-pg1-x549.google.com with SMTP id q15-20020a63d60f000000b00502e1c551aaso265915pgg.21
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Feb 2023 08:37:33 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1676997451;
+        d=google.com; s=20210112;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:reply-to:from:to:cc:subject:date:message-id:reply-to;
-        bh=6eya8RvAso0oVSkPG+SqCdov6cQuqd8KcPbcmXzNxTo=;
-        b=TVd18GDSarLsA2/lPOgVrYfYPYZtvFYr4jPuI+f6by2zc3e5pGx1TLe7+8F/v5CLcD
-         C+ZUrDVI4U1jkWxXvQCJTohZULj91OSBWXga7XMNHoIQ3y9p1MLfmHOOfYPQREsSOSVx
-         g2LY0iK/jP8K4IOeK/N+J+awTSjk0wSuqNeNvwP34Qzf7NDM+YArW/aoRPdbQATy4QU1
-         iVfIDNRyN55PI5w/GyAPsWGgV/GAQlDYeyBx5D/HeDQ9QmeP44S8Gix/v/R9ZkOr8sJU
-         QoVSUyIk00vSaTEyVgZc4PCsBDX7yXWROpx9vZXMV81E9I5nSvgGpWREuTz/5ZJP9+KS
-         vIXg==
+        bh=iiRrB1La2XaBQ8X9jljAYPafLfxRlgHLwbfoJQq6vJc=;
+        b=fAH3hCUl7uqbwUtd34iFW4FxURELK93IK/02Vx0KEZ+6k0X581BSlqbabdxNOqoBgo
+         meEl6t2ZiDTIdhAK579ZxSCzIGixUue+EXZ/tFu3HlVbvdHU3QCq9IeS3SSra0MJxJ7i
+         nbq8TQ51m3339oT33ydPu9XaJMCzD1QjV689OxEdbjY4FRc7QacllNDSkJuhhi5eFXoL
+         TcOKXj4ubRAQ5sUHN9Y8qlxN5G8h5tss7+dpwoJDOirM9qLKmpDmS1YaqKN3XDYNUPCz
+         zOiltEGWXv2rsSRM7wh4fzWdgxRKe5qA04L0Htv1bI7O/TZF70MfnASoGoq6SDuVhfq9
+         FSxg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1676997451;
+        d=1e100.net; s=20210112;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:reply-to:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=6eya8RvAso0oVSkPG+SqCdov6cQuqd8KcPbcmXzNxTo=;
-        b=GBPQgzphgi14AnEwlWZp1BgaUpGYY2/+LqQv2j5mbHBtiEF0fp+wGCEi3qKGp+EVF2
-         giYo+DFSTyBk/yeq6WEL3as6j3WIJzMyfY3wR/v7y67iS+DpcLIiCIlMTOt7YqN1/OiN
-         hXzZkG+7c4j8LzJnQcHl0m0rV7iVfJMyQKxo+uPQaeLEaA+lvW5tveZwSgSzDmjctbG4
-         od8zkHciqaM6qhzGn/29/8uquirew9vSGcBe1OQfudfgCVl5YIakCNax7Fhod0steTF3
-         wuQXh28EczZqzvNNF6TxnJU4B0w7l2/01cDM4ictMqGd1yABu2eqZVDuRkA3gsQ+qUrF
-         XPvQ==
-X-Gm-Message-State: AO0yUKVp63UJaLjoVMqWhEyW/gfXyi8DO3RTq2fsYN+uVrB4/1X1qehX
-        5ReHEn0Q3xLyYNdts+IPvgik/TJtrjrd
-X-Google-Smtp-Source: AK7set9GqgvFSkGmlkChA0S8+JUftH2z6x67/RS3rMWptrG7AL4MP9X7ck4FrIKaNCD4eHIBUs6gU2jSXexQ
+        bh=iiRrB1La2XaBQ8X9jljAYPafLfxRlgHLwbfoJQq6vJc=;
+        b=DSXuOjbfRV4OxrVl5bY5NRiWWXx7/ZIRJEi0Ck7ThUP8EAuLs8Ytyxbj1NiJF83Hj2
+         qiBYJZO3ws/a/CpS1dU71SorTWi4j7IEDP530diLCCY5VNV89uFIkFwCHX1BG53P9ibg
+         77gwWtWMDEW7UgrynPJZiMflqVNn+FMAHRePvE0rLCU0q1jfPx62UI30WIvJNk9rMu4N
+         8xubFRAce5oFsZjte0KH/GGdzEpaH2BGNqIAIPAEXDjtZUwIxQWOMO2VxKLC9sDQaQYZ
+         4O1ADnIXoyKYpomQGsJQ58wljpnkH/Z++6Qrx4mRAaJKgJ1SyyvD5gTbQvS1oFj9lbVT
+         onYA==
+X-Gm-Message-State: AO0yUKXLSMpA/9cjxsjY7tSHhwmsq5f2tPA3Q4glp4Oiajk2imEqQlk8
+        qre3lJ0tPZVFrwZAxUcg4UBZ8EgilVfy
+X-Google-Smtp-Source: AK7set+yc+UPbgHRSjGfHtztbpCerRitgUNtWXsAYPaaIY95QIVoKUQZahzKckS3seET9A2paVtccvS0Jy9Q
 X-Received: from mizhang-super.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:1071])
- (user=mizhang job=sendgmr) by 2002:a62:c143:0:b0:593:d4cb:dba2 with SMTP id
- i64-20020a62c143000000b00593d4cbdba2mr655957pfg.13.1676997451249; Tue, 21 Feb
- 2023 08:37:31 -0800 (PST)
+ (user=mizhang job=sendgmr) by 2002:a63:7a56:0:b0:4fb:b88f:e98a with SMTP id
+ j22-20020a637a56000000b004fbb88fe98amr733518pgn.7.1676997453182; Tue, 21 Feb
+ 2023 08:37:33 -0800 (PST)
 Reply-To: Mingwei Zhang <mizhang@google.com>
-Date:   Tue, 21 Feb 2023 16:36:50 +0000
+Date:   Tue, 21 Feb 2023 16:36:51 +0000
 In-Reply-To: <20230221163655.920289-1-mizhang@google.com>
 Mime-Version: 1.0
 References: <20230221163655.920289-1-mizhang@google.com>
 X-Mailer: git-send-email 2.39.2.637.g21b0678d19-goog
-Message-ID: <20230221163655.920289-9-mizhang@google.com>
-Subject: [PATCH v3 08/13] KVM: selftests: x86: Repeat the checking of xheader
- when IA32_XFD[XTILEDATA] is set in amx_test
+Message-ID: <20230221163655.920289-10-mizhang@google.com>
+Subject: [PATCH v3 09/13] KVM: selftests: x86: Assert that XTILE is XSAVE-enabled
 From:   Mingwei Zhang <mizhang@google.com>
 To:     Sean Christopherson <seanjc@google.com>,
         Paolo Bonzini <pbonzini@redhat.com>,
@@ -79,38 +78,54 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Repeat the checking of AMX component in xheader after XSAVEC when
-IA32_XFD[XTILEDATA] is set. This check calibrates the functionality scope
-of IA32_XFD: it does not intercept the XSAVE state management. Regardless
-of the values in IA32_XFD, AMX component state will still be managed by
-XSAVE* and XRSTOR* as long as the corresponding bits are set XCR0.
+From: Aaron Lewis <aaronlewis@google.com>
 
+Assert that XTILE is XSAVE-enabled. check_xsave_supports_xtile() doesn't
+actually check anything since its return value is not used. Add the
+intended assert.
+
+Opportunistically, move the assert to a more appropriate location:
+immediately after XSETBV and remove check_xsave_supports_xtile().
+
+Fixes: 5dc19f1c7dd3 ("KVM: selftests: Convert AMX test to use X86_PROPRETY_XXX")
+Signed-off-by: Aaron Lewis <aaronlewis@google.com>
 Signed-off-by: Mingwei Zhang <mizhang@google.com>
 ---
- tools/testing/selftests/kvm/x86_64/amx_test.c | 10 ++++++++++
- 1 file changed, 10 insertions(+)
+ tools/testing/selftests/kvm/x86_64/amx_test.c | 7 +------
+ 1 file changed, 1 insertion(+), 6 deletions(-)
 
 diff --git a/tools/testing/selftests/kvm/x86_64/amx_test.c b/tools/testing/selftests/kvm/x86_64/amx_test.c
-index 62fff3363b3b..724e991ba814 100644
+index 724e991ba814..d1fbf8936192 100644
 --- a/tools/testing/selftests/kvm/x86_64/amx_test.c
 +++ b/tools/testing/selftests/kvm/x86_64/amx_test.c
-@@ -201,6 +201,16 @@ static void __attribute__((__flatten__)) guest_code(struct tile_config *amx_cfg,
+@@ -115,11 +115,6 @@ static inline void check_cpuid_xsave(void)
+ 	GUEST_ASSERT(this_cpu_has(X86_FEATURE_OSXSAVE));
+ }
  
- 	/* xfd=0x40000, disable amx tiledata */
- 	wrmsr(MSR_IA32_XFD, XFEATURE_MASK_XTILEDATA);
-+
-+	/*
-+	 * XTILEDATA is cleared in xstate_bv but set in xcomp_bv, this property
-+	 * remains the same even when amx tiledata is disabled by IA32_XFD.
-+	 */
-+	xstate->header.xstate_bv = XFEATURE_MASK_XTILEDATA;
-+	__xsavec(xstate, XFEATURE_MASK_XTILEDATA);
-+	GUEST_ASSERT(!(xstate->header.xstate_bv & XFEATURE_MASK_XTILEDATA));
-+	GUEST_ASSERT((xstate->header.xcomp_bv & XFEATURE_MASK_XTILEDATA));
-+
- 	GUEST_SYNC(6);
- 	GUEST_ASSERT(rdmsr(MSR_IA32_XFD) == XFEATURE_MASK_XTILEDATA);
- 	set_tilecfg(amx_cfg);
+-static bool check_xsave_supports_xtile(void)
+-{
+-	return __xgetbv(0) & XFEATURE_MASK_XTILE;
+-}
+-
+ static void check_xtile_info(void)
+ {
+ 	GUEST_ASSERT(this_cpu_has_p(X86_PROPERTY_XSTATE_MAX_SIZE_XCR0));
+@@ -166,6 +161,7 @@ static void init_regs(void)
+ 	xcr0 = __xgetbv(0);
+ 	xcr0 |= XFEATURE_MASK_XTILE;
+ 	__xsetbv(0x0, xcr0);
++	GUEST_ASSERT(__xgetbv(0) & XFEATURE_MASK_XTILE);
+ }
+ 
+ static void __attribute__((__flatten__)) guest_code(struct tile_config *amx_cfg,
+@@ -174,7 +170,6 @@ static void __attribute__((__flatten__)) guest_code(struct tile_config *amx_cfg,
+ {
+ 	init_regs();
+ 	check_cpuid_xsave();
+-	check_xsave_supports_xtile();
+ 	check_xtile_info();
+ 	GUEST_SYNC(1);
+ 
 -- 
 2.39.2.637.g21b0678d19-goog
 
