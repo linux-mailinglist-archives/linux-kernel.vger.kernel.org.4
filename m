@@ -2,106 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1302169DAE3
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 08:03:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7769E69DAE6
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 08:04:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233431AbjBUHD0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Feb 2023 02:03:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37030 "EHLO
+        id S233436AbjBUHES (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Feb 2023 02:04:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38018 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233441AbjBUHDS (ORCPT
+        with ESMTP id S232894AbjBUHEQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Feb 2023 02:03:18 -0500
-Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD48E144AE
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Feb 2023 23:03:07 -0800 (PST)
-Received: by mail-lf1-x134.google.com with SMTP id bp25so4570687lfb.0
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Feb 2023 23:03:07 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=lPYFEzkWt45w45KoW6C4RDWljtvSD6NfX3uQqoyfGo0=;
-        b=PiEaUTyKR+BZV1KdOYGaOo0Uih1cIbaC9Lzaa5cF1VTZPWQp523PuApZ5xP3Gr8xjl
-         XEv87JwBL02FqisWBLvEd6ltv2bVAzwJPrKkVo4YABKyqaSYIvQyNWJj/vAPz5dara9M
-         /flcqnOCtP7fksSbz5LD4Y3B2c9BukcHkOQw+irxTStuFYXlcS5e6G+cnALknEX8/aev
-         gHrZol9o5+b0cOuWyl/zEYK7V9TJvVqGNNmc55dpxbE6wv2TTAQEkjPZayUGaEDFOTjb
-         Z9Zx+mMYLz/xPeJTLpmblhvolK5bKElXYxCQshoRvR4592QaFGyYbOLnvm3N/8YuhmKk
-         pG+A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=lPYFEzkWt45w45KoW6C4RDWljtvSD6NfX3uQqoyfGo0=;
-        b=2UmAW4/8+x4ksmGYKOxP45QPrZMs06acaJt7YkQ6DEzHiDHdLkUjKYbOCw3Gp+LVvF
-         qInjiF8egug0gzCFGWG+1JOUXpPdW+xUUp832B+2D0HOCmZo5V8ns9MnF9VgI9vOPp6m
-         +WAMqe6i91XSwB/1Yo3hQDymN+CK64eGmw3m7jJYVJqxNLNcQwqHpG/Bavp9+XWIFzfj
-         BI+2jVoS7fX/byeaVJ5orWcnMCNYle+2O5eKSQ3Wd1RAsJlBdu1s2vyJWV3h3GpcbJTL
-         5zNl0x/B3F+bukivdjsgTYYwZsZiUXhzGZoATytN7SFfOtgO3Aq2ccsHxAtpRbnTDmTT
-         TC+g==
-X-Gm-Message-State: AO0yUKVvnPnc3jr1vH7RQQctqzAtW2mO7zV+BSOVX+SEj2uPBSHh6+sa
-        iVZvZUevZVrsMpY4spP2XdihMw==
-X-Google-Smtp-Source: AK7set9mpDbHCk/AdCr+GQzVcUK6fnXr6VHd1TUSH9y7g/NxXBzMWCsg3GVkxAh76WxtgoJ6TmI2xA==
-X-Received: by 2002:ac2:5308:0:b0:4dc:8366:2ea0 with SMTP id c8-20020ac25308000000b004dc83662ea0mr968795lfh.5.1676962985988;
-        Mon, 20 Feb 2023 23:03:05 -0800 (PST)
-Received: from localhost (c-9b0ee555.07-21-73746f28.bbcust.telenor.se. [85.229.14.155])
-        by smtp.gmail.com with ESMTPSA id q6-20020a19a406000000b004cc800b1f2csm642432lfc.238.2023.02.20.23.03.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 20 Feb 2023 23:03:05 -0800 (PST)
-From:   Anders Roxell <anders.roxell@linaro.org>
-To:     shuah@kernel.org
-Cc:     linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        Anders Roxell <anders.roxell@linaro.org>,
-        Naresh Kamboju <naresh.kamboju@linaro.org>
-Subject: [PATCH] selftests: ir: add config file
-Date:   Tue, 21 Feb 2023 08:03:01 +0100
-Message-Id: <20230221070301.1323044-1-anders.roxell@linaro.org>
-X-Mailer: git-send-email 2.39.1
+        Tue, 21 Feb 2023 02:04:16 -0500
+Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B4B3268B;
+        Mon, 20 Feb 2023 23:04:15 -0800 (PST)
+Received: from mail02.huawei.com (unknown [172.30.67.143])
+        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4PLVdN4mpvz4f3thg;
+        Tue, 21 Feb 2023 15:04:08 +0800 (CST)
+Received: from [10.174.176.73] (unknown [10.174.176.73])
+        by APP3 (Coremail) with SMTP id _Ch0CgCHgR_obPRjRLG6Dg--.9579S3;
+        Tue, 21 Feb 2023 15:04:10 +0800 (CST)
+Subject: Re: [PATCH] block, bfq: fix uaf for bfqq in bic_set_bfqq()
+To:     jack@suse.cz, tj@kernel.org, josef@toxicpanda.com, axboe@kernel.dk,
+        paolo.valente@linaro.org, shinichiro.kawasaki@wdc.com
+Cc:     cgroups@vger.kernel.org, linux-block@vger.kernel.org,
+        linux-kernel@vger.kernel.org, yukuai1@huaweicloud.com,
+        yi.zhang@huawei.com, yangerkun@huawei.com
+References: <20230113094410.2907223-1-yukuai3@huawei.com>
+From:   Yu Kuai <yukuai1@huaweicloud.com>
+Message-ID: <ca9fefd4-7109-042c-3b25-9eb795141145@huaweicloud.com>
+Date:   Tue, 21 Feb 2023 15:04:08 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.8.0
 MIME-Version: 1.0
+In-Reply-To: <20230113094410.2907223-1-yukuai3@huawei.com>
+Content-Type: text/plain; charset=gbk; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-CM-TRANSID: _Ch0CgCHgR_obPRjRLG6Dg--.9579S3
+X-Coremail-Antispam: 1UD129KBjvJXoWrKrW7CFyxAFyxXr1rtFyxZrb_yoW8Jrykpr
+        W2ga1jkrZrJrWDWa1UJ3W0qF4rXrs5CryDKryYgw12vry3JryIyFs0kws09ry0qFySkanx
+        uryY9FWDAr1jgrDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUU9214x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
+        1l84ACjcxK6xIIjxv20xvE14v26w1j6s0DM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4U
+        JVWxJr1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gc
+        CE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E
+        2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJV
+        W8JwACjcxG0xvEwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lFIxGxcIEc7CjxVA2Y2ka
+        0xkIwI1lc7I2V7IY0VAS07AlzVAYIcxG8wCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7x
+        kEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E
+        67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCw
+        CI42IY6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6rWUJVWr
+        Zr1UMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYx
+        BIdaVFxhVjvjDU0xZFpf9x0JUdHUDUUUUU=
+X-CM-SenderInfo: 51xn3trlr6x35dzhxuhorxvhhfrp/
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Building and running the subsuite 'ir' of kselftest, shows the
-following issues:
- ir_loopback: module rc-loopback is not found in /lib/modules/6.2.0-rc8-next-20230220 [SKIP]
+Hi, Jens
 
-By creating a config file with RC_LOOPBACK=m, LIRC=y and a few
-IR_*DECODER=m in the selftests/ir/ directory the tests pass.
+ÔÚ 2023/01/13 17:44, Yu Kuai Ð´µÀ:
+> After commit 64dc8c732f5c ("block, bfq: fix possible uaf for 'bfqq->bic'"),
+> bic->bfqq will be accessed in bic_set_bfqq(), however, in some context
+> bic->bfqq will be freed first, and bic_set_bfqq() is called with the freed
+> bic->bfqq.
+> 
+> Fix the problem by always freeing bfqq after bic_set_bfqq().
+> 
+> Fixes: 64dc8c732f5c ("block, bfq: fix possible uaf for 'bfqq->bic'")
+> Reported-and-tested-by: Shinichiro Kawasaki <shinichiro.kawasaki@wdc.com>
+> Signed-off-by: Yu Kuai <yukuai3@huawei.com>
+> ---
+>   block/bfq-cgroup.c  | 2 +-
+>   block/bfq-iosched.c | 4 +++-
+>   2 files changed, 4 insertions(+), 2 deletions(-)
+> 
+> diff --git a/block/bfq-cgroup.c b/block/bfq-cgroup.c
+> index a6e8da5f5cfd..feb13ac25557 100644
+> --- a/block/bfq-cgroup.c
+> +++ b/block/bfq-cgroup.c
+> @@ -749,8 +749,8 @@ static void bfq_sync_bfqq_move(struct bfq_data *bfqd,
+>   		 * old cgroup.
+>   		 */
+>   		bfq_put_cooperator(sync_bfqq);
+> -		bfq_release_process_ref(bfqd, sync_bfqq);
+>   		bic_set_bfqq(bic, NULL, true, act_idx);
+> +		bfq_release_process_ref(bfqd, sync_bfqq);
+>   	}
+>   }
+>  
 
-Reported-by: Naresh Kamboju <naresh.kamboju@linaro.org>
-Signed-off-by: Anders Roxell <anders.roxell@linaro.org>
----
- tools/testing/selftests/ir/config | 13 +++++++++++++
- 1 file changed, 13 insertions(+)
- create mode 100644 tools/testing/selftests/ir/config
+It seems this change is missed in GIT PULL for-6.3. I'll send a seperate
+patch to fix this...
 
-diff --git a/tools/testing/selftests/ir/config b/tools/testing/selftests/ir/config
-new file mode 100644
-index 000000000000..a6031914fa3d
---- /dev/null
-+++ b/tools/testing/selftests/ir/config
-@@ -0,0 +1,13 @@
-+CONFIG_LIRC=y
-+CONFIG_IR_IMON_DECODER=m
-+CONFIG_IR_JVC_DECODER=m
-+CONFIG_IR_MCE_KBD_DECODER=m
-+CONFIG_IR_NEC_DECODER=m
-+CONFIG_IR_RC5_DECODER=m
-+CONFIG_IR_RC6_DECODER=m
-+CONFIG_IR_RCMM_DECODER=m
-+CONFIG_IR_SANYO_DECODER=m
-+CONFIG_IR_SHARP_DECODER=m
-+CONFIG_IR_SONY_DECODER=m
-+CONFIG_IR_XMP_DECODER=m
-+CONFIG_RC_LOOPBACK=m
--- 
-2.39.1
+Thanks,
+Kuai
 
