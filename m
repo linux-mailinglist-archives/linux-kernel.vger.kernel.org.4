@@ -2,95 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A4F9969DB2E
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 08:27:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 50DF369DB30
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 08:28:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233630AbjBUH1Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Feb 2023 02:27:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57848 "EHLO
+        id S233313AbjBUH2h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Feb 2023 02:28:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59322 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232946AbjBUH1X (ORCPT
+        with ESMTP id S229545AbjBUH2e (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Feb 2023 02:27:23 -0500
-Received: from vulcan.natalenko.name (vulcan.natalenko.name [104.207.131.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9D07244BC;
-        Mon, 20 Feb 2023 23:27:16 -0800 (PST)
-Received: from mail.natalenko.name (vulcan.natalenko.name [IPv6:2001:19f0:6c00:8846:5400:ff:fe0c:dfa0])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        Tue, 21 Feb 2023 02:28:34 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C83B23678;
+        Mon, 20 Feb 2023 23:28:33 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by vulcan.natalenko.name (Postfix) with ESMTPSA id 71BE4123AAF7;
-        Tue, 21 Feb 2023 08:27:13 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=natalenko.name;
-        s=dkim-20170712; t=1676964433;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=UktBiYkkeez87hMqM48Li63kPXU3FfbLk8UmzQ2RKWw=;
-        b=QZC4Pw9o8MidWlTN/5L02j+LoMK6F2ufXZBjCK4usO7euEBOakN9aSoXgJap+ITrXS+acc
-        rKXItmNG7yzx3G4PdBlbSCKQZpp9pjxSJOLXeyxUbu6xwHtgoNVIhJiqHouMgFXRfE2TkY
-        EZyNZ8kvJVi7N//V3luu7IT/3pqfezc=
+        by dfw.source.kernel.org (Postfix) with ESMTPS id DE42160F97;
+        Tue, 21 Feb 2023 07:28:32 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3FC9AC433D2;
+        Tue, 21 Feb 2023 07:28:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1676964512;
+        bh=yrEXHlD+OGvdKZR47aQcY+a66pmfUFJm1C18b22BmkQ=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=pzq2UwLbV8oJcbduSvS38Q+3wATyxt1VIUgplYDzUNqQXXGRstOt80Khkd122WQPM
+         l4c985Od9zzW8xxGcWGhxG0SXqionhv68Ig5RYURlyo2c9IumK7ZeSBu0EjlXZjH8l
+         w3DXaIcGjFNcoNmE2z15twbFO7iYpjyAjheG7ZnY/0bEAevnDVw7oRD5H3NeLXY7WM
+         zPHyHkvTbf5F4aXB0V0TtGnkDZ438ZTOLaDIgkkS+fyz35J8knc1NVM+JRJ5aXhjxD
+         eA9boBX2iehs+wL7Oi7cuC6Exd0rKZK/fcTxXJZu9zxbcI1OgyF5KJAn3V+qTyMzCe
+         ySh7RPbMuc9Fw==
+Date:   Tue, 21 Feb 2023 12:58:22 +0530
+From:   Manivannan Sadhasivam <mani@kernel.org>
+To:     Stephen Zhang <starzhangzsd@gmail.com>
+Cc:     jejb@linux.ibm.com, artin.petersen@oracle.com,
+        matthias.bgg@gmail.com, angelogioacchino.delregno@collabora.com,
+        beanhuo@micron.com, bvanassche@acm.org, avri.altman@wdc.com,
+        yoshihiro.shimoda.uh@renesas.com, linux-scsi@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, zhangshida@kylinos.cn,
+        k2ci <kernel-bot@kylinos.cn>
+Subject: Re: [PATCH v2] scsi: ufs: Guard the ufs_mtk_runtime_suspend and
+ ufs_mtk_runtime_resume with CONFIG_PM
+Message-ID: <20230221072822.GA99958@thinkpad>
+References: <20230221025055.1031342-1-zhangshida@kylinos.cn>
 MIME-Version: 1.0
-Date:   Tue, 21 Feb 2023 08:27:13 +0100
-From:   Oleksandr Natalenko <oleksandr@natalenko.name>
-To:     David Woodhouse <dwmw2@infradead.org>
-Cc:     Kim Phillips <kim.phillips@amd.com>, tglx@linutronix.de,
-        Usama Arif <usama.arif@bytedance.com>, arjan@linux.intel.com,
-        mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
-        hpa@zytor.com, x86@kernel.org, pbonzini@redhat.com,
-        paulmck@kernel.org, linux-kernel@vger.kernel.org,
-        kvm@vger.kernel.org, rcu@vger.kernel.org, mimoja@mimoja.de,
-        hewenliang4@huawei.com, thomas.lendacky@amd.com, seanjc@google.com,
-        pmenzel@molgen.mpg.de, fam.zheng@bytedance.com,
-        punit.agrawal@bytedance.com, simon.evans@bytedance.com,
-        liangma@liangbit.com, Piotr Gorski <lucjan.lucjanov@gmail.com>,
-        "Limonciello, Mario" <Mario.Limonciello@amd.com>
-Subject: Re: [PATCH v9 0/8] Parallel CPU bringup for x86_64
-In-Reply-To: <42dc683e2846ae8fc1e09715aaf7884660e1a386.camel@infradead.org>
-References: <20230215145425.420125-1-usama.arif@bytedance.com>
- <2668799.mvXUDI8C0e@natalenko.name>
- <ed8d662351cfe5793f8cc7e7e8c514d05d16c501.camel@infradead.org>
- <2668869.mvXUDI8C0e@natalenko.name>
- <2a67f6cf18dd2c1879fad9fd8a28242918d3e5d2.camel@infradead.org>
- <982e1d6140705414e8fd60b990bd259a@natalenko.name>
- <715CBABF-4017-4784-8F30-5386F1524830@infradead.org>
- <67dbc69f-b712-8971-f1c9-5d07f506a19c@amd.com>
- <42dc683e2846ae8fc1e09715aaf7884660e1a386.camel@infradead.org>
-Message-ID: <37c18c3aeea2e558633b6da6886111d0@natalenko.name>
-X-Sender: oleksandr@natalenko.name
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20230221025055.1031342-1-zhangshida@kylinos.cn>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 21.02.2023 00:30, David Woodhouse wrote:
-> Oleksandr, please could you show the output of 'cpuid' after a
-> successful resume?  I'm particularly looking for this part...
+On Tue, Feb 21, 2023 at 10:50:55AM +0800, Stephen Zhang wrote:
+> From: Shida Zhang <zhangshida@kylinos.cn>
 > 
+
+Subject could be fixed as:
+
+"scsi: ufs: mediatek: Guard runtime PM functions"
+
+> In a configuration with CONFIG_SCSI_UFS_MEDIATEK set to 'm' and
+> CONFIG_PM set to 'n', errors occur at compile time:
 > 
-> $ sudo cpuid | grep -A1 1/ebx
->    miscellaneous (1/ebx):
->       process local APIC physical ID = 0x0 (0)
-> --
->    miscellaneous (1/ebx):
->       process local APIC physical ID = 0x2 (2)
-> ...
+> ====
+> ../drivers/ufs/host/ufs-mediatek.c: In function ‘ufs_mtk_runtime_suspend’:
+> ../drivers/ufs/host/ufs-mediatek.c:1621:8: error: implicit declaration of function ‘ufshcd_runtime_suspend’; did you mean ‘ufs_mtk_runtime_suspend’? [-Werror=implicit-function-declaration]
+> ../drivers/ufs/host/ufs-mediatek.c: In function ‘ufs_mtk_runtime_resume’:
+> ../drivers/ufs/host/ufs-mediatek.c:1636:9: error: implicit declaration of function ‘ufshcd_runtime_resume’; did you mean ‘ufs_mtk_runtime_resume’? [-Werror=implicit-function-declaration]
+> ====
+> 
+> This patch fixes these by guarding these functions with CONFIG_PM.
+> 
 
-For me this command doesn't produce any output. Also, no output from the 
-command Kim used in response to you. With no `grep` it just dumps a 
-table of raw hex data.
+Remove reference to "patch" in the commit message as it will be meaningless
+once merged. The line could be reworded as,
 
-It's `msr-tools` 1.3-4 from Arch. Should I run this command on a patched 
-kernel booted with `no_parallel_bringup`, or on unpatched kernel (if 
-that makes any difference)?
+"Fix these errors by guarding the runtime PM functions with CONFIG_PM"
+
+> Reported-by: k2ci <kernel-bot@kylinos.cn>
+> Signed-off-by: Shida Zhang <zhangshida@kylinos.cn>
+
+With the changes,
+
+Reviewed-by: Manivannan Sadhasivam <mani@kernel.org>
+
+Thanks,
+Mani
+
+> ---
+> Changes in v2:
+>   Guarding these functions with CONFIG_PM instead of selecting the config.
+> 
+>  drivers/ufs/host/ufs-mediatek.c | 2 ++
+>  1 file changed, 2 insertions(+)
+> 
+> diff --git a/drivers/ufs/host/ufs-mediatek.c b/drivers/ufs/host/ufs-mediatek.c
+> index 21d9b047539f..73e217260390 100644
+> --- a/drivers/ufs/host/ufs-mediatek.c
+> +++ b/drivers/ufs/host/ufs-mediatek.c
+> @@ -1613,6 +1613,7 @@ static int ufs_mtk_system_resume(struct device *dev)
+>  }
+>  #endif
+>  
+> +#ifdef CONFIG_PM
+>  static int ufs_mtk_runtime_suspend(struct device *dev)
+>  {
+>  	struct ufs_hba *hba = dev_get_drvdata(dev);
+> @@ -1635,6 +1636,7 @@ static int ufs_mtk_runtime_resume(struct device *dev)
+>  
+>  	return ufshcd_runtime_resume(dev);
+>  }
+> +#endif
+>  
+>  static const struct dev_pm_ops ufs_mtk_pm_ops = {
+>  	SET_SYSTEM_SLEEP_PM_OPS(ufs_mtk_system_suspend,
+> -- 
+> 2.27.0
+> 
 
 -- 
-   Oleksandr Natalenko (post-factum)
+மணிவண்ணன் சதாசிவம்
