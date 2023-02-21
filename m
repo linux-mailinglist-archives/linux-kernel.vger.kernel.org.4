@@ -2,160 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 53F4769E9B7
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 22:48:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7619B69E9BB
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 22:48:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230136AbjBUVsO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Feb 2023 16:48:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50890 "EHLO
+        id S230187AbjBUVsj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Feb 2023 16:48:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51462 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229581AbjBUVsM (ORCPT
+        with ESMTP id S230163AbjBUVsg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Feb 2023 16:48:12 -0500
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D506515CAB
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Feb 2023 13:48:10 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1677016090; x=1708552090;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=4HDSVe2cjaHzxh13lU3SRWv0R26BXpO/dpA9ELNQQ3c=;
-  b=VxvVBy3QtOCtqbvSpwtEqAQ/mnfSgeiuGdOmyNPsdFHcxWbYKzOTNAOi
-   TljuVPJWPVXISBHVpdzHtYbdWc9uZFVWSv/ullcEsbGc5puESVbQ3pSZz
-   Ry4O+4gt3r/UiGksrUhSOOPUxpBizKBedz/f24iqXTudtOGtnrBPHw4ZP
-   UPCcJWVY2hHFLV25inaVrTf5JMChah5Jcl+UR/uLDBCDFvtJ7lSOAuiQP
-   g7+RtDinrlXMt2GktwybxEvsP2sGBqsqRm3uMfT6rBe4WrEMGNog6G7eV
-   +NQ3KF0hJSHkcMgNAaKTFNZ0PCway3EVr3YK4v+mCmIhjtebNAUgdm52K
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10628"; a="332765046"
-X-IronPort-AV: E=Sophos;i="5.97,317,1669104000"; 
-   d="scan'208";a="332765046"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Feb 2023 13:48:10 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10628"; a="702165082"
-X-IronPort-AV: E=Sophos;i="5.97,317,1669104000"; 
-   d="scan'208";a="702165082"
-Received: from stinkpipe.fi.intel.com (HELO stinkbox) ([10.237.72.70])
-  by orsmga008.jf.intel.com with SMTP; 21 Feb 2023 13:48:06 -0800
-Received: by stinkbox (sSMTP sendmail emulation); Tue, 21 Feb 2023 23:48:05 +0200
-Date:   Tue, 21 Feb 2023 23:48:05 +0200
-From:   Ville =?iso-8859-1?Q?Syrj=E4l=E4?= <ville.syrjala@linux.intel.com>
-To:     Rob Clark <robdclark@chromium.org>
-Cc:     Tvrtko Ursulin <tvrtko.ursulin@intel.com>,
-        Christian =?iso-8859-1?Q?K=F6nig?= 
-        <ckoenig.leichtzumerken@gmail.com>,
-        Michel =?iso-8859-1?Q?D=E4nzer?= <michel@daenzer.net>,
-        dri-devel@lists.freedesktop.org,
-        open list <linux-kernel@vger.kernel.org>,
-        Pekka Paalanen <ppaalanen@gmail.com>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        freedreno@lists.freedesktop.org
-Subject: Re: [PATCH v4 10/14] drm/vblank: Add helper to get next vblank time
-Message-ID: <Y/U8FcU4SXsJu1/q@intel.com>
-References: <20230218211608.1630586-1-robdclark@gmail.com>
- <20230218211608.1630586-11-robdclark@gmail.com>
- <20230220110820.595cfa37@eldfell>
- <CAF6AEGuo-vmW4Va9=RH+kH9KgNvR2vzjJ8meO-oty56xjDhjgg@mail.gmail.com>
- <20230221104551.60d44d1c@eldfell>
- <Y/TAr64SpxO712RB@intel.com>
- <CAJs_Fx7n3QrzusdX5yD=39YZ8MzjuwZTriWz8hVxNYGHO=sJ_Q@mail.gmail.com>
- <Y/U6HKD2hbH4Sx1G@intel.com>
+        Tue, 21 Feb 2023 16:48:36 -0500
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E419279B9;
+        Tue, 21 Feb 2023 13:48:34 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=9wRyTrQMV/JTg5YpVENMGjnZWekiNX6igp9A3xduDzA=; b=Wk0SNPEDQo4F/o1PXV9LRYRXkD
+        yYE1HvlqaAYQgMElqRyy38wHa3mUpZChD2YsHuwAk4W66my+56RsNZGV17/f2MStXnznyjmfYky2z
+        GozltbUHR+P7mj9QmsKx2IB0Bkn8w7He77sd66RvJeAqIiYIjC5jtq+nJWTxP22FvSeJkCACvSE3/
+        1tMr/o0K7pemJlzvhKx4x+BYqjE/1L7wiBwgdlu5cHhGGFwiO4Tg/nWKCqueZTG4i4DxwMHFVITdB
+        +jvAlpzQTySYkjZlUsjkwZ+Fh9uopueEOEXQ2LbI21NggxnEvKClUWIin/gBKH52EJbUaq5NEz+tA
+        Gf+rkPUA==;
+Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1pUaV0-009sOz-7D; Tue, 21 Feb 2023 21:48:34 +0000
+Date:   Tue, 21 Feb 2023 13:48:34 -0800
+From:   Luis Chamberlain <mcgrof@kernel.org>
+To:     Nick Alcock <nick.alcock@oracle.com>
+Cc:     linux-modules@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, elena.zannoni@oracle.com
+Subject: Re: [PATCH modules-next v10 00/13] kallsyms: reliable
+ symbol->address lookup with /proc/kallmodsyms
+Message-ID: <Y/U8MuL24OZzbIIp@bombadil.infradead.org>
+References: <20221205163157.269335-1-nick.alcock@oracle.com>
+ <Y8b8TOJzd/RZXR8z@bombadil.infradead.org>
+ <87r0uy3hkw.fsf@esperi.org.uk>
+ <87bkm22y6e.fsf@esperi.org.uk>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <Y/U6HKD2hbH4Sx1G@intel.com>
-X-Patchwork-Hint: comment
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <87bkm22y6e.fsf@esperi.org.uk>
+Sender: Luis Chamberlain <mcgrof@infradead.org>
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 21, 2023 at 11:39:40PM +0200, Ville Syrjälä wrote:
-> On Tue, Feb 21, 2023 at 11:54:55AM -0800, Rob Clark wrote:
-> > On Tue, Feb 21, 2023 at 5:01 AM Ville Syrjälä
-> > <ville.syrjala@linux.intel.com> wrote:
-> > >
-> > > On Tue, Feb 21, 2023 at 10:45:51AM +0200, Pekka Paalanen wrote:
-> > > > On Mon, 20 Feb 2023 07:55:41 -0800
-> > > > Rob Clark <robdclark@gmail.com> wrote:
-> > > >
-> > > > > On Mon, Feb 20, 2023 at 1:08 AM Pekka Paalanen <ppaalanen@gmail.com> wrote:
-> > > > > >
-> > > > > > On Sat, 18 Feb 2023 13:15:53 -0800
-> > > > > > Rob Clark <robdclark@gmail.com> wrote:
-> > > > > >
-> > > > > > > From: Rob Clark <robdclark@chromium.org>
-> > > > > > >
-> > > > > > > Will be used in the next commit to set a deadline on fences that an
-> > > > > > > atomic update is waiting on.
-> > > > > > >
-> > > > > > > Signed-off-by: Rob Clark <robdclark@chromium.org>
-> > > > > > > ---
-> > > > > > >  drivers/gpu/drm/drm_vblank.c | 32 ++++++++++++++++++++++++++++++++
-> > > > > > >  include/drm/drm_vblank.h     |  1 +
-> > > > > > >  2 files changed, 33 insertions(+)
-> > > > > > >
-> > > > > > > diff --git a/drivers/gpu/drm/drm_vblank.c b/drivers/gpu/drm/drm_vblank.c
-> > > > > > > index 2ff31717a3de..caf25ebb34c5 100644
-> > > > > > > --- a/drivers/gpu/drm/drm_vblank.c
-> > > > > > > +++ b/drivers/gpu/drm/drm_vblank.c
-> > > > > > > @@ -980,6 +980,38 @@ u64 drm_crtc_vblank_count_and_time(struct drm_crtc *crtc,
-> > > > > > >  }
-> > > > > > >  EXPORT_SYMBOL(drm_crtc_vblank_count_and_time);
-> > > > > > >
-> > > > > > > +/**
-> > > > > > > + * drm_crtc_next_vblank_time - calculate the time of the next vblank
-> > > > > > > + * @crtc: the crtc for which to calculate next vblank time
-> > > > > > > + * @vblanktime: pointer to time to receive the next vblank timestamp.
-> > > > > > > + *
-> > > > > > > + * Calculate the expected time of the next vblank based on time of previous
-> > > > > > > + * vblank and frame duration
-> > > > > >
-> > > > > > Hi,
-> > > > > >
-> > > > > > for VRR this targets the highest frame rate possible for the current
-> > > > > > VRR mode, right?
-> > > > > >
-> > > > >
-> > > > > It is based on vblank->framedur_ns which is in turn based on
-> > > > > mode->crtc_clock.  Presumably for VRR that ends up being a maximum?
-> > > >
-> > > > I don't know. :-)
-> > >
-> > > At least for i915 this will give you the maximum frame
-> > > duration.
-> > >
-> > > Also this does not calculate the the start of vblank, it
-> > > calculates the start of active video.
-> > 
-> > AFAIU, vsync_end/vsync_start are in units of line, so I could do something like:
-> > 
-> >   vsync_lines = vblank->hwmode.vsync_end - vblank->hwmode.vsync_start;
-> >   vsyncdur = ns_to_ktime(vblank->linedur_ns * vsync_lines);
-> >   framedur = ns_to_ktime(vblank->framedur_ns);
-> >   *vblanktime = ktime_add(*vblanktime, ktime_sub(framedur, vsyncdur));
+On Thu, Feb 09, 2023 at 11:53:29PM +0000, Nick Alcock wrote:
+> [most people trimmed from the Cc: list for this procedural question]
 > 
-> Something like this should work:
->  vblank_start = framedur_ns * crtc_vblank_start / crtc_vtotal
->  deadline = vblanktime + vblank_start
+> On 9 Feb 2023, Nick Alcock outgrape:
+> > I am going to split this whole series into:
+> >
+> > 1. A series of patches (123 of them at present) Cc:ed to subsystem
+> > maintainers as well as you, to comment out the MODULE_LICENSE usage.
+> > These patches will have Suggested-by you. This series is rebased against
+> > the latest modules-next and revalidated, and is ready to be mailed out;
+> > will do so shortly.
 > 
-> That would be the expected time when the next start of vblank
-> happens.
+> One quick question: if/when you're happy with this series, are you
+> planning to take it yourself via modules-next?
 
-Except that drm_vblank_count_and_time() will give you the last
-sampled timestamp, which may be long ago in the past. Would
-need to add an _accurate version of that if we want to be
-guaranteed a fresh sample.
+It seems some maintainers are already taking patches in, so let's see
+what folks take in, then if there are not takers I can just take what is
+not merged on linux-next through modules-next.
 
--- 
-Ville Syrjälä
-Intel
+So try to get them into each subsystem tree, and around rc3 send the
+ones that are not merged and I'll just take them into modules-next.
+
+  Luis
