@@ -2,119 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4928369DB3D
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 08:33:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 241A169DB40
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 08:34:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233644AbjBUHc5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Feb 2023 02:32:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32790 "EHLO
+        id S233651AbjBUHeT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Feb 2023 02:34:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33838 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229545AbjBUHcz (ORCPT
+        with ESMTP id S229545AbjBUHeR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Feb 2023 02:32:55 -0500
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 630D2469D;
-        Mon, 20 Feb 2023 23:32:54 -0800 (PST)
-Date:   Tue, 21 Feb 2023 07:32:51 -0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1676964772;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
+        Tue, 21 Feb 2023 02:34:17 -0500
+Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net [217.70.183.200])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A6C4869D;
+        Mon, 20 Feb 2023 23:34:16 -0800 (PST)
+Received: (Authenticated sender: maxime.chevallier@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id F178220002;
+        Tue, 21 Feb 2023 07:34:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1676964855;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=sK/GFG6TYUaoyd+Hu4W1xz3mUYUg+OSib2U1QooR/hU=;
-        b=pgpVmXPLBaBQMKI1dxvWTGgMUL5JDGJGErOJihDeN0RU6+b3/jAPpSMxRa8ZD6/yv0y/h6
-        yt7C/Y5A1ZMR1p3BzYErhsy5ohWSDyVATx7W6V0/oKKjxWTOvhQ6NELuWd7gRrdDb54y2O
-        2yFCxQgP173S40t57TVuNgTrqYUR0bc5cmgWvlouab5RUx6o+FxGMlCe+Jp7rmqAGrfyi+
-        WZYXPA8zCGHra5z5UstPuNgeuPJ1Q+1gS4iLFSpPuXHQw6v4hgrdJ8YhLFT/ZikvEqWq7q
-        ivZMjDtET3oZEUkPqlPREO7AxsUv3+UiQiGy866lUmc5iDwQctKQLzl2wAP8Ew==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1676964772;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=sK/GFG6TYUaoyd+Hu4W1xz3mUYUg+OSib2U1QooR/hU=;
-        b=xl0ROWaldX359j0Ubv2eha0jFK6LXedn7duiUmuUnIQck/YDxzGrRbr1hn6IMybJvIQhqy
-        XD4bNyd2kRkk8FBw==
-From:   "tip-bot2 for Reinette Chatre" <tip-bot2@linutronix.de>
-Sender: tip-bot2@linutronix.de
-Reply-to: linux-kernel@vger.kernel.org
-To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: irq/urgent] PCI/MSI: Clarify usage of pci_msix_free_irq()
-Cc:     Reinette Chatre <reinette.chatre@intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Kevin Tian <kevin.tian@intel.com>, x86@kernel.org,
-        linux-kernel@vger.kernel.org, maz@kernel.org
-In-Reply-To: <87r0xsd8j4.ffs@tglx>
-References: <87r0xsd8j4.ffs@tglx>
+        bh=ofPSoPH7VZ0FWxUqGEHa/UVsnt2dfr9s7ihBxoDcPic=;
+        b=o7ndZ8vt0FQt1JKGfPvfP5kJdnULXs4WoDpkJ+6l0SDk1zp/RBR2YosPQ4kHr+StQlfoAQ
+        35fm0WUjJEkKKEvgoTQuHqok2wN2S53+y8kxrqGJr8nYBHZbSjBSVwdKPtnJqI+/rMj0B8
+        ii/F1/k+nz0GgHQ4Zz/g+x07zLx9phS5M4RVc0ldhnVOxZ3kWSNuB2lD5kxjyh3cEk747r
+        K2kKFj2du1t+0gksWZh2G3nW77jlRhEYeT/PRx7qcu+X8JX93NdLfj9DfSuI4fdcIunEOx
+        TlDXNrpkhgEd/GwLgQdKhqM6QEux51KXWUojVC/8pyIOLVjopZzxJCnrkwtQ8Q==
+Date:   Tue, 21 Feb 2023 08:34:12 +0100
+From:   Maxime Chevallier <maxime.chevallier@bootlin.com>
+To:     Andrew Lunn <andrew@lunn.ch>
+Cc:     Vladimir Oltean <vladimir.oltean@nxp.com>, davem@davemloft.net,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        thomas.petazzoni@bootlin.com, Jakub Kicinski <kuba@kernel.org>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        linux-arm-kernel@lists.infradead.org,
+        Ioana Ciornei <ioana.ciornei@nxp.com>
+Subject: Re: [PATCH net-next] net: pcs: tse: port to pcs-lynx
+Message-ID: <20230221083412.5e11db13@pc-7.home>
+In-Reply-To: <Y+ai3zHMUCDcxqxP@lunn.ch>
+References: <20230210190949.1115836-1-maxime.chevallier@bootlin.com>
+        <20230210190949.1115836-1-maxime.chevallier@bootlin.com>
+        <20230210193159.qmbtvwtx6kqagvxy@skbuf>
+        <Y+ai3zHMUCDcxqxP@lunn.ch>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.36; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-Message-ID: <167696477130.387.8165200996017804708.tip-bot2@tip-bot2>
-Robot-ID: <tip-bot2@linutronix.de>
-Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
-Content-Type: text/plain; charset="utf-8"
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following commit has been merged into the irq/urgent branch of tip:
+Hi Vlad, Andrew,
 
-Commit-ID:     e6cc6f175566dd21a3f6e384c24593b1c751dd74
-Gitweb:        https://git.kernel.org/tip/e6cc6f175566dd21a3f6e384c24593b1c751dd74
-Author:        Reinette Chatre <reinette.chatre@intel.com>
-AuthorDate:    Tue, 14 Feb 2023 13:13:20 -08:00
-Committer:     Thomas Gleixner <tglx@linutronix.de>
-CommitterDate: Tue, 21 Feb 2023 08:25:14 +01:00
+On Fri, 10 Feb 2023 21:02:39 +0100
+Andrew Lunn <andrew@lunn.ch> wrote:
 
-PCI/MSI: Clarify usage of pci_msix_free_irq()
+> On Fri, Feb 10, 2023 at 09:31:59PM +0200, Vladimir Oltean wrote:
+> > On Fri, Feb 10, 2023 at 08:09:49PM +0100, Maxime Chevallier wrote:  
+> > > When submitting the initial driver for the Altera TSE PCS,
+> > > Russell King noted that the register layout for the TSE PCS is
+> > > very similar to the Lynx PCS. The main difference being that TSE
+> > > PCS's register space is memory-mapped, whereas Lynx's is exposed
+> > > over MDIO.
+> > > 
+> > > Convert the TSE PCS to reuse the whole logic from Lynx, by
+> > > allowing the creation of a dummy MDIO bus, and a dummy MDIO
+> > > device located at address 0 on that bus. The MAC driver that uses
+> > > this PCS must provide callbacks to read/write the MMIO.
+> > > 
+> > > Also convert the Altera TSE MAC driver to this new way of using
+> > > the TSE PCS.
+> > > 
+> > > Signed-off-by: Maxime Chevallier <maxime.chevallier@bootlin.com>
+> > > ---
+> > >  drivers/net/ethernet/altera/altera_tse.h      |   2 +-
+> > >  drivers/net/ethernet/altera/altera_tse_main.c |  50 ++++-
+> > >  drivers/net/pcs/Kconfig                       |   4 +
+> > >  drivers/net/pcs/pcs-altera-tse.c              | 194
+> > > +++++++----------- include/linux/pcs-altera-tse.h
+> > > |  22 +- 5 files changed, 142 insertions(+), 130 deletions(-)  
+> > 
+> > The glue layer is larger than the duplicated PCS code? :(  
+> 
+> I was wondering if the glue could actually be made generic. The kernel
+> has a number of reasonably generic MMIO device drivers, which are just
+> given an address range and assume a logical mapping.
+> 
+> Could this be made into a generic MDIO MMIO bus driver, which just
+> gets configured with a base address, and maybe a stride between
+> registers?
 
-pci_msix_free_irq() is used to free an interrupt on a PCI/MSI-X interrupt
-domain.
+That would be ideal, I'll spin a new series prorotyping this, indeed
+that can be interesting for other devices.
 
-The API description specifies that the interrupt to be freed was allocated
-via pci_msix_alloc_irq_at().  This description limits the usage of
-pci_msix_free_irq() since pci_msix_free_irq() can also be used to free
-MSI-X interrupts allocated with, for example, pci_alloc_irq_vectors().
+Thanks for the review,
 
-Remove the text stating that the interrupt to be freed had to be allocated
-with pci_msix_alloc_irq_at(). The needed struct msi_map need not be from
-pci_msix_alloc_irq_at() but can be created from scratch using
-pci_irq_vector() to obtain the Linux IRQ number. Highlight that
-pci_msix_free_irq() cannot be used to disable MSI-X to guide users that,
-for example, pci_free_irq_vectors() remains to be needed.
+Maxime
 
-Signed-off-by: Reinette Chatre <reinette.chatre@intel.com>
-Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
-Reviewed-by: Kevin Tian <kevin.tian@intel.com>
-Link: https://lore.kernel.org/lkml/87r0xsd8j4.ffs@tglx
-Link: https://lore.kernel.org/r/4c3e7a50d6e70f408812cd7ab199c6b4b326f9de.1676408572.git.reinette.chatre@intel.com
----
- drivers/pci/msi/api.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+> 	Andrew
 
-diff --git a/drivers/pci/msi/api.c b/drivers/pci/msi/api.c
-index b8009aa..be679aa 100644
---- a/drivers/pci/msi/api.c
-+++ b/drivers/pci/msi/api.c
-@@ -163,11 +163,11 @@ EXPORT_SYMBOL_GPL(pci_msix_alloc_irq_at);
- 
- /**
-  * pci_msix_free_irq - Free an interrupt on a PCI/MSIX interrupt domain
-- *		      which was allocated via pci_msix_alloc_irq_at()
-  *
-  * @dev:	The PCI device to operate on
-  * @map:	A struct msi_map describing the interrupt to free
-- *		as returned from the allocation function.
-+ *
-+ * Undo an interrupt vector allocation. Does not disable MSI-X.
-  */
- void pci_msix_free_irq(struct pci_dev *dev, struct msi_map map)
- {
