@@ -2,123 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5A17769E0DA
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 13:54:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 137D969E0DC
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 13:54:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233226AbjBUMyC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Feb 2023 07:54:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51230 "EHLO
+        id S233090AbjBUMyU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Feb 2023 07:54:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51752 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233396AbjBUMxw (ORCPT
+        with ESMTP id S232986AbjBUMyR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Feb 2023 07:53:52 -0500
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF19423DB3;
-        Tue, 21 Feb 2023 04:53:41 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=e9/aDKUyKuBkvQEPm0dRHwCaOcpHf48fdU5SrQYxTGU=; b=JzguKagadVRr3rixX4uXLHmau0
-        TQB4/qsx/1x8zlkUZ96fpp4lrLhNALumwpcOgnjtABhSK+Kz8vm/BSPvrOr+/PeOXoXsqqig167wU
-        vILS1G+iDltVxiZCQSG9QnXkFk9Xc1AcdDrNEVaDlEv8yzN7kjgY3GTwbxObgSiFULOVjbv3UIwSj
-        Fz8NtAhQtoKW6bbaBj7H1LczrWALWyAC+tcT0qRn+rIJTjJS8UcsnOeCRlRH2OYliM3k18wYcROdp
-        OT+rxrVI7PzhV6CXHz9NGhl6jkR2aPgNwPIILZMrUjZx5OUu2g5l2b9UU4t1+qjtqPpWHpOHpejT3
-        s3RNwmwQ==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1pUS8j-00Ccd5-7q; Tue, 21 Feb 2023 12:53:01 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 712E530036B;
-        Tue, 21 Feb 2023 13:52:58 +0100 (CET)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 467CD20243666; Tue, 21 Feb 2023 13:52:58 +0100 (CET)
-Date:   Tue, 21 Feb 2023 13:52:58 +0100
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Vincent Guittot <vincent.guittot@linaro.org>
-Cc:     mingo@redhat.com, juri.lelli@redhat.com, dietmar.eggemann@arm.com,
-        rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de,
-        bristot@redhat.com, vschneid@redhat.com,
-        linux-kernel@vger.kernel.org, parth@linux.ibm.com,
-        cgroups@vger.kernel.org, qyousef@layalina.io,
-        chris.hyser@oracle.com, patrick.bellasi@matbug.net,
-        David.Laight@aculab.com, pjt@google.com, pavel@ucw.cz,
-        tj@kernel.org, qperret@google.com, tim.c.chen@linux.intel.com,
-        joshdon@google.com, timj@gnu.org, kprateek.nayak@amd.com,
-        yu.c.chen@intel.com, youssefesmat@chromium.org,
-        joel@joelfernandes.org
-Subject: Re: [PATCH v10 5/9] sched/fair: Take into account latency priority
- at wakeup
-Message-ID: <Y/S+qrschy+N+QCQ@hirez.programming.kicks-ass.net>
-References: <20230113141234.260128-1-vincent.guittot@linaro.org>
- <20230113141234.260128-6-vincent.guittot@linaro.org>
+        Tue, 21 Feb 2023 07:54:17 -0500
+Received: from andre.telenet-ops.be (andre.telenet-ops.be [IPv6:2a02:1800:120:4::f00:15])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D9D026CE5
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Feb 2023 04:54:02 -0800 (PST)
+Received: from ramsan.of.borg ([IPv6:2a02:1810:ac12:ed50:22fe:52b9:4e8:3dfc])
+        by andre.telenet-ops.be with bizsmtp
+        id Potz290011v1X7l01otzqD; Tue, 21 Feb 2023 13:53:59 +0100
+Received: from rox.of.borg ([192.168.97.57])
+        by ramsan.of.borg with esmtp (Exim 4.95)
+        (envelope-from <geert@linux-m68k.org>)
+        id 1pUS9G-009ce4-DU;
+        Tue, 21 Feb 2023 13:53:58 +0100
+Received: from geert by rox.of.borg with local (Exim 4.95)
+        (envelope-from <geert@linux-m68k.org>)
+        id 1pUS9e-00149K-Rt;
+        Tue, 21 Feb 2023 13:53:58 +0100
+From:   Geert Uytterhoeven <geert+renesas@glider.be>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J . Wysocki" <rafael@kernel.org>
+Cc:     Arnd Bergmann <arnd@arndb.de>, Lee Jones <lee@kernel.org>,
+        linux-kernel@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
+        Geert Uytterhoeven <geert+renesas@glider.be>
+Subject: [PATCH] driver core: bus: Handle early calls to bus_to_subsys()
+Date:   Tue, 21 Feb 2023 13:53:51 +0100
+Message-Id: <0a92979f6e790737544638e8a4c19b0564e660a2.1676983596.git.geert+renesas@glider.be>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230113141234.260128-6-vincent.guittot@linaro.org>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 13, 2023 at 03:12:30PM +0100, Vincent Guittot wrote:
+When calling soc_device_match() from early_initcall(), bus_kset is still
+NULL, causing a crash:
 
-> diff --git a/include/linux/sched.h b/include/linux/sched.h
-> index 6c61bde49152..38decae3e156 100644
-> --- a/include/linux/sched.h
-> +++ b/include/linux/sched.h
-> @@ -568,6 +568,8 @@ struct sched_entity {
->  	/* cached value of my_q->h_nr_running */
->  	unsigned long			runnable_weight;
->  #endif
-> +	/* preemption offset in ns */
-> +	long				latency_offset;
+    Unable to handle kernel NULL pointer dereference at virtual address 0000000000000028
+    ...
+    Call trace:
+     __lock_acquire+0x530/0x20f0
+     lock_acquire.part.0+0xc8/0x210
+     lock_acquire+0x64/0x80
+     _raw_spin_lock+0x4c/0x60
+     bus_to_subsys+0x24/0xac
+     bus_for_each_dev+0x30/0xcc
+     soc_device_match+0x4c/0xe0
+     r8a7795_sysc_init+0x18/0x60
+     rcar_sysc_pd_init+0xb0/0x33c
+     do_one_initcall+0x128/0x2bc
 
-I wonder about the type here; does it make sense to have it depend on
-the bitness; that is if s32 is big enough on 32bit then surely it is so
-too on 64bit, and if not, then it should be unconditionally s64.
+Before, bus_for_each_dev() handled this gracefully by checking that
+the back-pointer to the private structure was valid.
 
+Fix this by adding a NULL check for bus_kset to bus_to_subsys().
 
-> +static void set_latency_offset(struct task_struct *p)
-> +{
-> +	long weight = sched_latency_to_weight[p->latency_prio];
-> +	s64 offset;
-> +
-> +	offset = weight * get_sleep_latency(false);
-> +	offset = div_s64(offset, NICE_LATENCY_WEIGHT_MAX);
-> +	p->se.latency_offset = (long)offset;
-> +}
+Fixes: 83b9148df2c95e23 ("driver core: bus: bus iterator cleanups")
+Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
+---
+ drivers/base/bus.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-> +/*
-> + * latency weight for wakeup preemption
-> + */
-> +const int sched_latency_to_weight[40] = {
-> + /* -20 */     -1024,     -973,     -922,      -870,      -819,
-> + /* -15 */      -768,     -717,     -666,      -614,      -563,
-> + /* -10 */      -512,     -461,     -410,      -358,      -307,
-> + /*  -5 */      -256,     -205,     -154,      -102,       -51,
-> + /*   0 */         0,       51,      102,       154,       205,
-> + /*   5 */       256,      307,      358,       410,       461,
-> + /*  10 */       512,      563,      614,       666,       717,
-> + /*  15 */       768,      819,      870,       922,       973,
-> +};
-
-I'm slightly confused by this table, isn't that simply the linear
-function?
-
-Isn't all that the same as:
-
-	se->se.latency_offset = get_sleep_latency * nice / (NICE_LATENCY_WIDTH/2);
-
-? The reason we have prio_to_weight[] is because it's an exponential,
-which is a bit more cumbersome to calculate, but surely we can do a
-linear function at runtime.
-
+diff --git a/drivers/base/bus.c b/drivers/base/bus.c
+index cfe8615d5106f030..dd4b82d7510f68fb 100644
+--- a/drivers/base/bus.c
++++ b/drivers/base/bus.c
+@@ -62,7 +62,7 @@ static struct subsys_private *bus_to_subsys(const struct bus_type *bus)
+ 	struct subsys_private *sp = NULL;
+ 	struct kobject *kobj;
+ 
+-	if (!bus)
++	if (!bus || !bus_kset)
+ 		return NULL;
+ 
+ 	spin_lock(&bus_kset->list_lock);
+-- 
+2.34.1
 
