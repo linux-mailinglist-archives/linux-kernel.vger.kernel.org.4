@@ -2,75 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 51B8169E675
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 18:54:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 42AEE69E660
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 18:54:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234890AbjBURyc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Feb 2023 12:54:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40728 "EHLO
+        id S231559AbjBURyK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Feb 2023 12:54:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40520 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232222AbjBURyU (ORCPT
+        with ESMTP id S230215AbjBURyI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Feb 2023 12:54:20 -0500
-Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBD1F2F787;
-        Tue, 21 Feb 2023 09:54:18 -0800 (PST)
-Received: by mail-ed1-x532.google.com with SMTP id da10so21793554edb.3;
-        Tue, 21 Feb 2023 09:54:18 -0800 (PST)
+        Tue, 21 Feb 2023 12:54:08 -0500
+Received: from mail-oa1-x2a.google.com (mail-oa1-x2a.google.com [IPv6:2001:4860:4864:20::2a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 731AC2DE66;
+        Tue, 21 Feb 2023 09:54:07 -0800 (PST)
+Received: by mail-oa1-x2a.google.com with SMTP id 586e51a60fabf-1720887dfcdso6426368fac.6;
+        Tue, 21 Feb 2023 09:54:07 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=syuBBfuFNqUVEt5myTUHBWQU/zXBUecumwT+b6a2b1M=;
-        b=AGZu5gEIPSYKRYNzAgI8kqaU/PIpT5EgeijlR8isi/ANHPYmgW67diC/jEcjZDEWpt
-         E2dmehxpVEZKDz0KC23oqFrFjmrCjJNiIqouPGXqdgm5VkPmiSBk9mMCTDWvCFl5zOAI
-         2H5HEe1K6nei1UNg1NyoxqlCTZH4MKNN/AW8MZfid9KtlihlxCJYt2RI5lCwdVTzoJiX
-         BTMKogf3TPtRk01ks4ZNHGBshuIxOWkN0iI83rlGIf8W1W/VaIYvJiwYUEiMfGxbWox8
-         LLusaZJH6yDDaG3QALS1IKA3nf5O3T4VS50FLbBo8KAIxx5Mb0aZ8cfwVVePvLuEFufg
-         JZWw==
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=VMKhHmrd8lVSmliqVHExAgWorD/pXxkRRPzGvtF73wg=;
+        b=REEtn8PXtknW4y+6JwJtS9B4rLCRy5IdlJX8uMlYtB7FFFedOYzYTq/GgUwVy/bb7q
+         tM+1bwi/KgXmj/U4wkmFwrh6jpMQdVPSRCv1rQHKfu36P3M1/eOa38cAFmGo2HS0gDxt
+         TKgY4e2BnldR8TUtEEiyg55EEfDITdss4jIDSPFiJcBrU2AC/GKCR8JIMYvXjk2wBjk/
+         7hxcQLhU2Xnv3iOBkrK+cgRDzcopZztIJRh1q+Oly9r6yLK1vJjxaEqjnLA4EjvayWxf
+         zE23qNdSulwFR02SScgR9bvPvO/GTTzCEH8IrC6tm7VZgw1o0F/Rd3oae0/EgGp6KWwT
+         HfsQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=syuBBfuFNqUVEt5myTUHBWQU/zXBUecumwT+b6a2b1M=;
-        b=XgSiOlNyeLLNIAnqLWwonKIOVRMg7LllAR/3Lzpp4Au6KG6wkFTH1sI0DQkvG05Lev
-         lMt20eTkBDoI4FbLBcWIj7+s+Ftglzr6cvWiFrreCWg6t+U0luXAM5MgMKHG9qhcJKdk
-         Whl0Xff5LFOUUmd9cyilbAC7YmI68rD70xioQoWxI2lBBbUQYP1lu9kumh9GkyNoatzG
-         A1jUfazNU2E2Abdg8ZrEpxE1HAt5TmJ3r5CmxDqN+v4NlrR5ADMnj78aagE27VMLH4k5
-         Pd80/IhSJbicOxmXUxx86s53yYfV+pFH5kW0SPu5Hz+JOvbfOLbzTA6RdcqJ+Djzpk3T
-         rykA==
-X-Gm-Message-State: AO0yUKVJVt5NsrXjJZSXhMOxMGGWQwPkQGq4U5EFkUMoqH35rkWm/bgb
-        GPhepbYNkf9AjfZFerjz5ik=
-X-Google-Smtp-Source: AK7set846FyhuiAgWy0WS2GFPkCRZ5tlaV8I3dfbPtfUTgCpETfP8lkevOXLrTwB5EBNaoRNLtc0WA==
-X-Received: by 2002:a05:6402:2485:b0:4ad:52bc:2780 with SMTP id q5-20020a056402248500b004ad52bc2780mr4470118eda.2.1677002057503;
-        Tue, 21 Feb 2023 09:54:17 -0800 (PST)
-Received: from xeon.. ([188.163.112.76])
-        by smtp.gmail.com with ESMTPSA id b3-20020a170906660300b008e493b7bb61sm236357ejp.153.2023.02.21.09.54.16
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 21 Feb 2023 09:54:17 -0800 (PST)
-From:   Svyatoslav Ryhel <clamor95@gmail.com>
-To:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Svyatoslav Ryhel <clamor95@gmail.com>,
-        Maxim Schwalm <maxim.schwalm@gmail.com>,
-        Dmitry Osipenko <digetx@gmail.com>
-Cc:     devicetree@vger.kernel.org, linux-tegra@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v1 5/5] tegra30: peripherals: add 266.5MHz nodes
-Date:   Tue, 21 Feb 2023 19:53:48 +0200
-Message-Id: <20230221175348.15681-6-clamor95@gmail.com>
-X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20230221175348.15681-1-clamor95@gmail.com>
-References: <20230221175348.15681-1-clamor95@gmail.com>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=VMKhHmrd8lVSmliqVHExAgWorD/pXxkRRPzGvtF73wg=;
+        b=Eyzw7kvGNcMG8D6f5sacQqTueHdH1XsLvbiPeTryCwD97f5GylOi1Lo1EOjq+1TeIX
+         T6YA2vcN/7ILcLJDjEWhyHl71o7rYHuSS/a/ee+iUVK5HFa3K+4raCStTpNsI5jMFH+N
+         c3gB641ZBlPhvt+YxI2T7DUdGRtyprWeetYS+YBjHlCSRLLhPwanLvlrr+qyJbRnbFtR
+         HKDv6RjK8tWn1nnz9WuQwW8m3kABgY8JBdECwxHcO1F1MqITgvzX6SDb3fHFmYjSYtBr
+         ccVSt2WWObWN7pYFGfXpdq0T5pepsZIYmv8JLOOKyyhUBOlyL1gsL9OlqLUrGb/1piOf
+         R+LA==
+X-Gm-Message-State: AO0yUKVotCk/46gVXinYx3bswl0EVLQkHSNSInN5z6vSIu4ku4h2hOI8
+        K/Y6hvS/9hcPHb0iSxYdWOBuP+Rv/B6pQCUX/HY=
+X-Google-Smtp-Source: AK7set+Z+oPJUCqI/EoSMrVRlg+YMtuXgiK4i/ekz/43uKn112T5GqKqwizp2tik7ddFnI7qZP5oOWulwO0SuN2evZ4=
+X-Received: by 2002:a05:6870:32d4:b0:16e:5e5a:49da with SMTP id
+ r20-20020a05687032d400b0016e5e5a49damr1496718oac.58.1677002046702; Tue, 21
+ Feb 2023 09:54:06 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+References: <20230218211608.1630586-1-robdclark@gmail.com> <20230218211608.1630586-7-robdclark@gmail.com>
+ <20230220105345.70e46fa5@eldfell> <CAF6AEGv9fLQCD65ytRTGp=EkNB1QoZYH5ArphgGQALV9J08Cmw@mail.gmail.com>
+ <cdd5f892-49b9-1e22-4dc1-95a8a733c453@amd.com>
+In-Reply-To: <cdd5f892-49b9-1e22-4dc1-95a8a733c453@amd.com>
+From:   Rob Clark <robdclark@gmail.com>
+Date:   Tue, 21 Feb 2023 09:53:56 -0800
+Message-ID: <CAF6AEGuMn3FywPkEtfJ7oZ16A0Bk2aiaRvj4si4od1d3wzXkPw@mail.gmail.com>
+Subject: Re: [PATCH v4 06/14] dma-buf/sync_file: Support (E)POLLPRI
+To:     Luben Tuikov <luben.tuikov@amd.com>
+Cc:     Pekka Paalanen <ppaalanen@gmail.com>,
+        Rob Clark <robdclark@chromium.org>,
+        Gustavo Padovan <gustavo@padovan.org>,
+        Tvrtko Ursulin <tvrtko.ursulin@intel.com>,
+        =?UTF-8?Q?Christian_K=C3=B6nig?= <ckoenig.leichtzumerken@gmail.com>,
+        =?UTF-8?Q?Michel_D=C3=A4nzer?= <michel@daenzer.net>,
+        open list <linux-kernel@vger.kernel.org>,
+        dri-devel@lists.freedesktop.org,
+        =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
+        "moderated list:DMA BUFFER SHARING FRAMEWORK" 
+        <linaro-mm-sig@lists.linaro.org>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        freedreno@lists.freedesktop.org,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        "open list:SYNC FILE FRAMEWORK" <linux-media@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,51 +83,59 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Some devices may require this entry for proper work.
+On Tue, Feb 21, 2023 at 8:48 AM Luben Tuikov <luben.tuikov@amd.com> wrote:
+>
+> On 2023-02-20 11:14, Rob Clark wrote:
+> > On Mon, Feb 20, 2023 at 12:53 AM Pekka Paalanen <ppaalanen@gmail.com> wrote:
+> >>
+> >> On Sat, 18 Feb 2023 13:15:49 -0800
+> >> Rob Clark <robdclark@gmail.com> wrote:
+> >>
+> >>> From: Rob Clark <robdclark@chromium.org>
+> >>>
+> >>> Allow userspace to use the EPOLLPRI/POLLPRI flag to indicate an urgent
+> >>> wait (as opposed to a "housekeeping" wait to know when to cleanup after
+> >>> some work has completed).  Usermode components of GPU driver stacks
+> >>> often poll() on fence fd's to know when it is safe to do things like
+> >>> free or reuse a buffer, but they can also poll() on a fence fd when
+> >>> waiting to read back results from the GPU.  The EPOLLPRI/POLLPRI flag
+> >>> lets the kernel differentiate these two cases.
+> >>>
+> >>> Signed-off-by: Rob Clark <robdclark@chromium.org>
+> >>
+> >> Hi,
+> >>
+> >> where would the UAPI documentation of this go?
+> >> It seems to be missing.
+> >
+> > Good question, I am not sure.  The poll() man page has a description,
+> > but my usage doesn't fit that _exactly_ (but OTOH the description is a
+> > bit vague).
+> >
+> >> If a Wayland compositor is polling application fences to know which
+> >> client buffer to use in its rendering, should the compositor poll with
+> >> PRI or not? If a compositor polls with PRI, then all fences from all
+> >> applications would always be PRI. Would that be harmful somehow or
+> >> would it be beneficial?
+> >
+> > I think a compositor would rather use the deadline ioctl and then poll
+> > without PRI.  Otherwise you are giving an urgency signal to the fence
+> > signaller which might not necessarily be needed.
+> >
+> > The places where I expect PRI to be useful is more in mesa (things
+> > like glFinish(), readpix, and other similar sorts of blocking APIs)
+> Hi,
+>
+> Hmm, but then user-space could do the opposite, namely, submit work as usual--never
+> using the SET_DEADLINE ioctl, and then at the end, poll using (E)POLLPRI. That seems
+> like a possible usage pattern, unintended--maybe, but possible. Do we want to discourage
+> this? Wouldn't SET_DEADLINE be enough? I mean, one can call SET_DEADLINE with the current
+> time, and then wouldn't that be equivalent to (E)POLLPRI?
 
-Signed-off-by: Svyatoslav Ryhel <clamor95@gmail.com>
----
- .../arm/boot/dts/tegra30-peripherals-opp.dtsi | 20 +++++++++++++++++++
- 1 file changed, 20 insertions(+)
+Yeah, (E)POLLPRI isn't strictly needed if we have SET_DEADLINE.  It is
+slightly more convenient if you want an immediate deadline (single
+syscall instead of two), but not strictly needed.  OTOH it piggy-backs
+on existing UABI.
 
-diff --git a/arch/arm/boot/dts/tegra30-peripherals-opp.dtsi b/arch/arm/boot/dts/tegra30-peripherals-opp.dtsi
-index d100a1a8b705..a2d557155114 100644
---- a/arch/arm/boot/dts/tegra30-peripherals-opp.dtsi
-+++ b/arch/arm/boot/dts/tegra30-peripherals-opp.dtsi
-@@ -210,6 +210,20 @@ opp-204000000-1250 {
- 			opp-suspend;
- 		};
- 
-+		opp-266500000-1000 {
-+			opp-microvolt = <1000000 1000000 1350000>;
-+			opp-hz = /bits/ 64 <266500000>;
-+			opp-supported-hw = <0x0007>;
-+			required-opps = <&core_opp_1000>;
-+		};
-+
-+		opp-266500000-1250 {
-+			opp-microvolt = <1250000 1250000 1350000>;
-+			opp-hz = /bits/ 64 <266500000>;
-+			opp-supported-hw = <0x0008>;
-+			required-opps = <&core_opp_1250>;
-+		};
-+
- 		opp-333500000-1000 {
- 			opp-microvolt = <1000000 1000000 1350000>;
- 			opp-hz = /bits/ 64 <333500000>;
-@@ -424,6 +438,12 @@ opp-204000000 {
- 			opp-suspend;
- 		};
- 
-+		opp-266500000 {
-+			opp-hz = /bits/ 64 <266500000>;
-+			opp-supported-hw = <0x000F>;
-+			opp-peak-kBps = <2132000>;
-+		};
-+
- 		opp-333500000 {
- 			opp-hz = /bits/ 64 <333500000>;
- 			opp-supported-hw = <0x000F>;
--- 
-2.37.2
-
+BR,
+-R
