@@ -2,73 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A18A69E546
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 17:57:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C744169E549
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 17:58:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234923AbjBUQ5u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Feb 2023 11:57:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58994 "EHLO
+        id S234638AbjBUQ56 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Feb 2023 11:57:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59216 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234899AbjBUQ5r (ORCPT
+        with ESMTP id S234912AbjBUQ5u (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Feb 2023 11:57:47 -0500
-Received: from mail-il1-x130.google.com (mail-il1-x130.google.com [IPv6:2607:f8b0:4864:20::130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 534182C67A;
-        Tue, 21 Feb 2023 08:57:43 -0800 (PST)
-Received: by mail-il1-x130.google.com with SMTP id i4so517317ils.1;
-        Tue, 21 Feb 2023 08:57:43 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:content-language:references
-         :cc:to:from:subject:user-agent:mime-version:date:message-id:sender
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=JkSUsr7sEV0zMw0SDdpsmFb9iKPZTDAvp1jFrUn8SXE=;
-        b=TZaVUXjMl6ltndJXRsnFuHQreO9asrAUaPvfoLpCi9xSKjxfecW7xT/MnzZPfSYWKu
-         zqMRcLe0WwhZ3cD5fzmiJls3jWLFxDJi5TfbXcoj5LgcpcWimxbqMC50pqSHet6+S9cO
-         WXFfCUFamYS/aI2FLsALk++M+6/kCQZ3q1aB++C3hyRC90WRILo3JyHgoovmMHSvE8n1
-         l+VbvvejeMxDt1x143LcZOufKNlLyIeKV+QRIHp2Yl3d78O8TOaA5K72R3FHNQQXRZxu
-         u1s1oh1o/0JiHNWzfC+3HRd86bEVqATkYpmt6rIFm2EqynET+wciPjKlaMnvk14mqKd+
-         iAKQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:content-language:references
-         :cc:to:from:subject:user-agent:mime-version:date:message-id:sender
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=JkSUsr7sEV0zMw0SDdpsmFb9iKPZTDAvp1jFrUn8SXE=;
-        b=RPrHP2ncjtW42sFMu2ivSfhSt/3g7c1TQwpHZP7JEZztEGgthDsIibMSyFo0AJhxjK
-         NBz3AXusjW54AYN1P0nyGoqqEGo8riV/vzrili/S5Y4p4FkbgNy3Rw7DBISZZYNH2KsF
-         iz/UtIBGIH9yHy6rh8kkujDhuivsn+Gmscpuo70C2Ao3RvjHgcCwVqQ6eLWJXYxL0wSW
-         e1uROSAA5uPBAQKzJB4zO6iDUyVc7AmscIt3j9kADPXvKbl+l3vtw64wsxUd8ckPOfJy
-         ZM3HF8qUs/JCq+HIbGJTYMq/N2zsPmMYBu8bTMjDDEuGHHYt9jaY4Vh11IS6/AS2DG4M
-         vbog==
-X-Gm-Message-State: AO0yUKVKC/OzyKoQMT5HEidnBTkHRQ+6EjqCzoMRm7+zSJN2jlY9BgRE
-        Gj+hEG4Hs6qrtVnT5KX0C6m0jaIaQdU=
-X-Google-Smtp-Source: AK7set+enNvn/OSrnjK+V+wzQGA0dIvRczca4mbEf17YhiYCuzKYvMnj8UR5WSyGieFxolZBba9jWg==
-X-Received: by 2002:a05:6e02:1d8e:b0:313:d7fc:4c09 with SMTP id h14-20020a056e021d8e00b00313d7fc4c09mr4265304ila.18.1676998662692;
-        Tue, 21 Feb 2023 08:57:42 -0800 (PST)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id e23-20020a02a797000000b003a484df1652sm285792jaj.55.2023.02.21.08.57.41
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 21 Feb 2023 08:57:42 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <83eee1e3-a585-d92e-c27c-e8d89dd67e58@roeck-us.net>
-Date:   Tue, 21 Feb 2023 08:57:40 -0800
+        Tue, 21 Feb 2023 11:57:50 -0500
+Received: from mr85p00im-zteg06011501.me.com (mr85p00im-zteg06011501.me.com [17.58.23.182])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C989211D
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Feb 2023 08:57:48 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=me.com; s=1a1hai;
+        t=1676998668; bh=LGdUnPSYhPebUFlFuinp+U3AI4mwBiZXzxkqFitQAjk=;
+        h=Date:From:To:Subject:Message-ID:MIME-Version:Content-Type;
+        b=Swhj8mQ9wIBGrCY8sF2EyX9wREfJ7P+x3YEQKj+cej3iKQSbGqeBCoUmlE3e8UguV
+         GVyY/2ZYM2bw1JBbe5VWcQVc2R/FVtJljf7RdydKwQaJUGA/XL3hhLdmOyxRywfmYX
+         fItFVXEcGbRAg6BAofVApAJpB0rq+t3wSBE518H7ShvJ8qV03Ka61wE1BEe4j5vvpU
+         GF8HzZA+B7LwdW/aCJ1F7dOuVRSdYPFDd/dkukd5R6r/1UoQVnn3WkESsaSRrjPMl0
+         DrF4bMLMi1IkoJihySaNDWt24ro4E47mGB45DzsycS1FYdz7dg5LgilHmh3RRoo1Yn
+         q5EHndMAu7pBw==
+Received: from imac101 (mr38p00im-dlb-asmtp-mailmevip.me.com [17.57.152.18])
+        by mr85p00im-zteg06011501.me.com (Postfix) with ESMTPSA id 7B190482315;
+        Tue, 21 Feb 2023 16:57:46 +0000 (UTC)
+Date:   Tue, 21 Feb 2023 17:57:41 +0100
+From:   Alain Volmat <avolmat@me.com>
+To:     Mark Brown <broonie@kernel.org>, Wolfram Sang <wsa@the-dreams.de>
+Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Wolfram Sang <wsa@kernel.org>
+Subject: Re: linux-next: manual merge of the spi tree with the i2c tree
+Message-ID: <Y/T4BTCCzIWzE1oe@imac101>
+Mail-Followup-To: Mark Brown <broonie@kernel.org>,
+        Wolfram Sang <wsa@the-dreams.de>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Wolfram Sang <wsa@kernel.org>
+References: <20230216113035.3050871a@canb.auug.org.au>
+ <CAMuHMdVuudSDrWguMJiHsZ3GJhs+muK566M5GqK2vfMyBeo2pQ@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [GIT PULL] hwmon updates for v6.2
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20230221164510.1589058-1-linux@roeck-us.net>
-Content-Language: en-US
-In-Reply-To: <20230221164510.1589058-1-linux@roeck-us.net>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAMuHMdVuudSDrWguMJiHsZ3GJhs+muK566M5GqK2vfMyBeo2pQ@mail.gmail.com>
+X-Proofpoint-ORIG-GUID: MeMvgzMQWiFnEy1KrMx2UW9R99Kz5wfG
+X-Proofpoint-GUID: MeMvgzMQWiFnEy1KrMx2UW9R99Kz5wfG
+X-Proofpoint-Virus-Version: =?UTF-8?Q?vendor=3Dfsecure_engine=3D1.1.170-22c6f66c430a71ce266a39bfe25bc?=
+ =?UTF-8?Q?2903e8d5c8f:6.0.425,18.0.816,17.11.62.513.0000000_definitions?=
+ =?UTF-8?Q?=3D2022-01-18=5F01:2022-01-14=5F01,2022-01-18=5F01,2021-12-02?=
+ =?UTF-8?Q?=5F01_signatures=3D0?=
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxscore=0 bulkscore=0 suspectscore=0
+ adultscore=0 phishscore=0 clxscore=1011 malwarescore=0 mlxlogscore=999
+ spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2209130000 definitions=main-2302210142
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,15 +70,68 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/21/23 08:45, Guenter Roeck wrote:
-> Hi Linus,
+Hi Mark, Wolfram,
+
+should I update something to avoid this conflict before you push the
+pull request for v6.3 ?
+
+Cheers,
+Alain
+
+
+On Tue, Feb 21, 2023 at 10:11:03AM +0100, Geert Uytterhoeven wrote:
+> Hi Stephen,
 > 
-> Please pull hwmon updates for Linux v6.2 from signed tag:
+> On Thu, Feb 16, 2023 at 1:37 AM Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+> > Today's linux-next merge of the spi tree got a conflict in:
+> >
+> >   MAINTAINERS
+> >
+> > between commit:
+> >
+> >   b3de755d6041 ("dt-bindings: i2c: i2c-st: convert to DT schema")
+> >
+> > from the i2c tree and commit:
+> >
+> >   7ec844a2c753 ("spi: spi-st-ssc: convert to DT schema")
+> >
+> > from the spi tree.
+> >
+> > I fixed it up (see below) and can carry the fix as necessary. This
+> > is now fixed as far as linux-next is concerned, but any non trivial
+> > conflicts should be mentioned to your upstream maintainer when your tree
+> > is submitted for merging.  You may also want to consider cooperating
+> > with the maintainer of the conflicting tree to minimise any particularly
+> > complex conflicts.
+> >
+> > --
+> > Cheers,
+> > Stephen Rothwell
+> >
+> > diff --cc MAINTAINERS
+> > index 71e92d3c51c6,daa33e7bb457..000000000000
+> > --- a/MAINTAINERS
+> > +++ b/MAINTAINERS
+> > @@@ -2791,7 -2925,8 +2791,8 @@@ M:      Patrice Chotard <patrice.chotard@fos
+> >   L:    linux-arm-kernel@lists.infradead.org (moderated for non-subscribers)
+> >   S:    Maintained
+> >   W:    http://www.stlinux.com
+> > + F:    Documentation/devicetree/bindings/spi/st,ssc-spi.yaml
+> >  -F:    Documentation/devicetree/bindings/i2c/i2c-st.txt
+> >  +F:    Documentation/devicetree/bindings/i2c/st,sti-i2c.yaml
+> >   F:    arch/arm/boot/dts/sti*
+> >   F:    arch/arm/mach-sti/
+> >   F:    drivers/ata/ahci_st.c
 > 
->      git://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-for-v6.2
-
-Oops. I am apparently living a release in the past. Sorry for the noise.
-I sent another pull request with the correct version and tag.
-
-Guenter
-
+> Thanks, but please preserve sort order.
+> 
+> Gr{oetje,eeting}s,
+> 
+>                         Geert
+> 
+> -- 
+> Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+> 
+> In personal conversations with technical people, I call myself a hacker. But
+> when I'm talking to journalists I just say "programmer" or something like that.
+>                                 -- Linus Torvalds
