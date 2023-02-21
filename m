@@ -2,151 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E954669DC71
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 09:59:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EED6F69DC77
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 10:01:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233202AbjBUI7d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Feb 2023 03:59:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44426 "EHLO
+        id S233830AbjBUJBV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Feb 2023 04:01:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45640 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231546AbjBUI7b (ORCPT
+        with ESMTP id S231546AbjBUJBT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Feb 2023 03:59:31 -0500
-Received: from out-59.mta0.migadu.com (out-59.mta0.migadu.com [91.218.175.59])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6212D1B31E
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Feb 2023 00:59:29 -0800 (PST)
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1676969967;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=6LLYYj+4EDN3EITgWE7yjfrzPho+WEZBUlLZnSwu/kU=;
-        b=N6pZTSQsdS1lgxPbuJr6cw74S1jUDX7OaVOdQgqLVqmX4TaUynhrwNlmKqJgUSACVY47YS
-        F11eSK3d0sFA0ug7RsY1LN471LEX3Tfg/3Ii4+ARjCTRjfliiaY4kTwdld5LaODJCEL4LN
-        n7NU9atHzol5IMTGSJbpe5D2joEA0ys=
-From:   Naoya Horiguchi <naoya.horiguchi@linux.dev>
-To:     linux-mm@kvack.org
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Miaohe Lin <linmiaohe@huawei.com>,
-        David Hildenbrand <david@redhat.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Hugh Dickins <hughd@google.com>,
-        Minchan Kim <minchan@kernel.org>,
-        Naoya Horiguchi <naoya.horiguchi@nec.com>,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v1] mm/hwpoison: convert TTU_IGNORE_HWPOISON to TTU_HWPOISON
-Date:   Tue, 21 Feb 2023 17:59:05 +0900
-Message-Id: <20230221085905.1465385-1-naoya.horiguchi@linux.dev>
+        Tue, 21 Feb 2023 04:01:19 -0500
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2009A23D84
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Feb 2023 01:01:17 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=hGvA+hE+XScDWPe/15r8RAKfRJCxS3MB1AB8lNkzZFE=; b=NsjZU8xTHk8ps1LCbAPOxwdHpc
+        y7VWHwQNMM456P0tPKxAIMg9TCFaiKywlDMJfzwipJhl1OvVZDgadL0defwpFHLHSDC0IeGVpjPr/
+        qfMPw09vUgyCzJvE6E4Clkv4ymHyXwIWQbDduozafjC7skrBvRZ3J3/9OjJtlnfApXQoivYjvkqCS
+        TCUwgAYyrZhkMFq968xF9Fi+x7Ug6MpHwfoB8LpR4+r+3dSnoJduxZDCkp3k9NBcQFvarXOtFriKo
+        zGtjhSkbeUd4GBHbR4TIu8bVkVvLWfTQKYO9cgnNRwDePlgPfgPbRJ9Z/T1WE6koI3dwPNJ9wmF7/
+        FHLxln/A==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1pUOW7-00CSyZ-Qz; Tue, 21 Feb 2023 09:00:56 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 610E2300472;
+        Tue, 21 Feb 2023 10:00:54 +0100 (CET)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 43FCF2024966D; Tue, 21 Feb 2023 10:00:54 +0100 (CET)
+Date:   Tue, 21 Feb 2023 10:00:54 +0100
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Thomas Gleixner <tglx@linutronix.de>
+Cc:     "Zhang, Rui" <rui.zhang@intel.com>,
+        "Brown, Len" <len.brown@intel.com>,
+        "zhang.jia@linux.alibaba.com" <zhang.jia@linux.alibaba.com>,
+        "bp@alien8.de" <bp@alien8.de>,
+        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+        "hpa@zytor.com" <hpa@zytor.com>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [RFC PATCH V2 0/1] x86: cpu topology fix and question on
+ x86_max_cores
+Message-ID: <Y/SIRmCE1KJdsRBT@hirez.programming.kicks-ass.net>
+References: <20230220032856.661884-1-rui.zhang@intel.com>
+ <Y/NUni00nDuURT1H@hirez.programming.kicks-ass.net>
+ <fe5059317c4f3cabeb86c388d547504b9b6ea581.camel@intel.com>
+ <87edqkosty.ffs@tglx>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <87edqkosty.ffs@tglx>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Naoya Horiguchi <naoya.horiguchi@nec.com>
+On Mon, Feb 20, 2023 at 11:49:45PM +0100, Thomas Gleixner wrote:
 
-After a memory error happens on a clean folio, a process unexpectedly
-receives SIGBUS when it accesses to the error page.  This SIGBUS killing
-is pointless and simply degrades the level of RAS of the system, because
-the clean folio can be dropped without any data lost on memory error
-handling as we do for a clean pagecache.
+> > I thought of improving this by parsing all the valid APIC-IDs in MADT
+> > during BSP bootup, and get such information by decoding the APIC-IDs
+> > using the APIC-ID layout information retrieved from BSP. But this is
+> > likely to be a fertile new source of bugs as Dave concerned.
+> 
+> The APIC-IDs are only usefull if there is an architected scheme how they
+> are assigned. Is there such a thing?
 
-When memory_failure() is called on a clean folio, try_to_unmap() is called
-twice (one from split_huge_page() and one from hwpoison_user_mappings()).
-The root cause of the issue is that pte conversion to hwpoisoned entry is
-now done in the first call of try_to_unmap() because PageHWPoison is already
-set at this point, while it's actually expected to be done in the second
-call.  This behavior disturbs the error handling operation like removing
-pagecache, which results in the malfunction described above.
+Isn't that given through CPUID? Or are we worried each CPU will have
+different values in the topology leafs?
 
-So convert TTU_IGNORE_HWPOISON into TTU_HWPOISON and set TTU_HWPOISON only
-when we really intend to convert pte to hwpoison entry.  This can prevent
-other callers of try_to_unmap() from accidentally converting to hwpoison
-entries.
-
-Fixes: a42634a6c07d ("readahead: Use a folio in read_pages()")
-Signed-off-by: Naoya Horiguchi <naoya.horiguchi@nec.com>
-Cc: stable@vger.kernel.org # 5.18+
----
- include/linux/rmap.h | 2 +-
- mm/memory-failure.c  | 8 ++++----
- mm/rmap.c            | 2 +-
- 3 files changed, 6 insertions(+), 6 deletions(-)
-
-diff --git a/include/linux/rmap.h b/include/linux/rmap.h
-index a4570da03e58..b87d01660412 100644
---- a/include/linux/rmap.h
-+++ b/include/linux/rmap.h
-@@ -94,7 +94,7 @@ enum ttu_flags {
- 	TTU_SPLIT_HUGE_PMD	= 0x4,	/* split huge PMD if any */
- 	TTU_IGNORE_MLOCK	= 0x8,	/* ignore mlock */
- 	TTU_SYNC		= 0x10,	/* avoid racy checks with PVMW_SYNC */
--	TTU_IGNORE_HWPOISON	= 0x20,	/* corrupted page is recoverable */
-+	TTU_HWPOISON		= 0x20,	/* do convert pte to hwpoison entry */
- 	TTU_BATCH_FLUSH		= 0x40,	/* Batch TLB flushes where possible
- 					 * and caller guarantees they will
- 					 * do a final flush if necessary */
-diff --git a/mm/memory-failure.c b/mm/memory-failure.c
-index a1ede7bdce95..fae9baf3be16 100644
---- a/mm/memory-failure.c
-+++ b/mm/memory-failure.c
-@@ -1069,7 +1069,7 @@ static int me_pagecache_dirty(struct page_state *ps, struct page *p)
-  * cache and swap cache(ie. page is freshly swapped in). So it could be
-  * referenced concurrently by 2 types of PTEs:
-  * normal PTEs and swap PTEs. We try to handle them consistently by calling
-- * try_to_unmap(TTU_IGNORE_HWPOISON) to convert the normal PTEs to swap PTEs,
-+ * try_to_unmap(!TTU_HWPOISON) to convert the normal PTEs to swap PTEs,
-  * and then
-  *      - clear dirty bit to prevent IO
-  *      - remove from LRU
-@@ -1486,7 +1486,7 @@ static bool hwpoison_user_mappings(struct page *p, unsigned long pfn,
- 				  int flags, struct page *hpage)
- {
- 	struct folio *folio = page_folio(hpage);
--	enum ttu_flags ttu = TTU_IGNORE_MLOCK | TTU_SYNC;
-+	enum ttu_flags ttu = TTU_IGNORE_MLOCK | TTU_SYNC | TTU_HWPOISON;
- 	struct address_space *mapping;
- 	LIST_HEAD(tokill);
- 	bool unmap_success;
-@@ -1516,7 +1516,7 @@ static bool hwpoison_user_mappings(struct page *p, unsigned long pfn,
- 
- 	if (PageSwapCache(p)) {
- 		pr_err("%#lx: keeping poisoned page in swap cache\n", pfn);
--		ttu |= TTU_IGNORE_HWPOISON;
-+		ttu &= ~TTU_HWPOISON;
- 	}
- 
- 	/*
-@@ -1531,7 +1531,7 @@ static bool hwpoison_user_mappings(struct page *p, unsigned long pfn,
- 		if (page_mkclean(hpage)) {
- 			SetPageDirty(hpage);
- 		} else {
--			ttu |= TTU_IGNORE_HWPOISON;
-+			ttu &= ~TTU_HWPOISON;
- 			pr_info("%#lx: corrupted page was clean: dropped without side effects\n",
- 				pfn);
- 		}
-diff --git a/mm/rmap.c b/mm/rmap.c
-index 15ae24585fc4..8632e02661ac 100644
---- a/mm/rmap.c
-+++ b/mm/rmap.c
-@@ -1602,7 +1602,7 @@ static bool try_to_unmap_one(struct folio *folio, struct vm_area_struct *vma,
- 		/* Update high watermark before we lower rss */
- 		update_hiwater_rss(mm);
- 
--		if (PageHWPoison(subpage) && !(flags & TTU_IGNORE_HWPOISON)) {
-+		if (PageHWPoison(subpage) && (flags & TTU_HWPOISON)) {
- 			pteval = swp_entry_to_pte(make_hwpoison_entry(subpage));
- 			if (folio_test_hugetlb(folio)) {
- 				hugetlb_count_sub(folio_nr_pages(folio), mm);
--- 
-2.25.1
-
+We really should have added that CPUID uniformity sanity check a long
+while ago :-(
