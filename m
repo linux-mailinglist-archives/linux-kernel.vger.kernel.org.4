@@ -2,265 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0829669DF0F
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 12:40:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E7E869DF0A
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 12:40:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234267AbjBULkx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Feb 2023 06:40:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38470 "EHLO
+        id S234244AbjBULkY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Feb 2023 06:40:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38958 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234257AbjBULkk (ORCPT
+        with ESMTP id S234216AbjBULkV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Feb 2023 06:40:40 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6F7E1F917
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Feb 2023 03:39:38 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1676979577;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=5OAU4IRwSccFaTfTbhJfWFHAd4qx5D6vbydzjPOhVbc=;
-        b=efrvrk0dc6pT82Fbo4o4vZr9Coo5q6p8kH5Kg9T0AulJttPCh+PjSN6tqSQeU4Z3pL5jOZ
-        m8pNw7CoVpp7bh8bdpKtwKWMcM1mWT/5czvLbnFShLun+dzZpJDHXkCfkAHpsu0Y8IhH94
-        cQRaZuk6Hg9RGjcK3lTm8pEa36ZuoCc=
-Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
- [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-384-_XGFFngJNW-f7RTOqJ0FkA-1; Tue, 21 Feb 2023 06:39:36 -0500
-X-MC-Unique: _XGFFngJNW-f7RTOqJ0FkA-1
-Received: by mail-wm1-f72.google.com with SMTP id bg26-20020a05600c3c9a00b003e21a3f4e84so1558629wmb.8
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Feb 2023 03:39:36 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1676979575;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=5OAU4IRwSccFaTfTbhJfWFHAd4qx5D6vbydzjPOhVbc=;
-        b=rCeyCkkN/ZKwXpn5sex3bxjD6xBbi7vUSKh3uwhaccWelsunV3aswoWYVDOV0bkosB
-         KjcTDIc0YE71kroRwWKxK+vEa0Nn9se9knqzERVSj0bmVIY56/lrX6CgP9EsLVZ4AXRI
-         R5hzXp5lq7tf8qBg9MNMynUEBd56JrfKMXXafAWe6nk/K4WhJqf7FwNNaLyTV2OQ08rr
-         nGhFuQGNJqHi/i6amCH3XkMuLnMvXs/JSYgOPub1MuY+6IjIQGqxkee77zr+in6Ct8Xu
-         Dd22T5HADJdly9sScelp+rCpnrLK57DTHQEOuU8Ju/ZchYSQi3NPTqcRQk1O4+HyLhyn
-         zmeA==
-X-Gm-Message-State: AO0yUKWEn+9mJn90f9J8YhGbIaK33YjzdVDg4T3C2DnivbyU9FZhkvBK
-        J0e5AHWVr7NcwLkY72njyp1U0CwBCHeGLUmPz7/3OPGkRkyEkFbE4T3ASGE5x6eeatNe57/SgOl
-        OVoGkNy7l5wJxzcxBEM1BzAAP
-X-Received: by 2002:a05:600c:4591:b0:3db:35e3:baf6 with SMTP id r17-20020a05600c459100b003db35e3baf6mr3911043wmo.4.1676979575090;
-        Tue, 21 Feb 2023 03:39:35 -0800 (PST)
-X-Google-Smtp-Source: AK7set+6hDRFKuK3Wd1zIqxXUkOnGEuvB4T0UyPLZC1a+QQIQsvl/35JR49aG8/tAkU3Uj3LGK45xQ==
-X-Received: by 2002:a05:600c:4591:b0:3db:35e3:baf6 with SMTP id r17-20020a05600c459100b003db35e3baf6mr3911026wmo.4.1676979574785;
-        Tue, 21 Feb 2023 03:39:34 -0800 (PST)
-Received: from gerbillo.redhat.com (146-241-121-8.dyn.eolo.it. [146.241.121.8])
-        by smtp.gmail.com with ESMTPSA id 15-20020a05600c020f00b003dfe5190376sm3398688wmi.35.2023.02.21.03.39.33
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 21 Feb 2023 03:39:34 -0800 (PST)
-Message-ID: <45b7c6a169dda4fab7e24a2a7e1b731dca1d9c0c.camel@redhat.com>
-Subject: Re: [net PATCH] octeontx2-pf: Recalculate UDP checksum for ptp
- 1-step sync packet
-From:   Paolo Abeni <pabeni@redhat.com>
-To:     Sai Krishna <saikrishnag@marvell.com>, davem@davemloft.net,
-        edumazet@google.com, kuba@kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, sgoutham@marvell.com,
-        gakula@marvell.com, richardcochran@gmail.com
-Cc:     Hariprasad Kelam <hkelam@marvell.com>
-Date:   Tue, 21 Feb 2023 12:39:32 +0100
-In-Reply-To: <20230220122050.1639299-1-saikrishnag@marvell.com>
-References: <20230220122050.1639299-1-saikrishnag@marvell.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.46.4 (3.46.4-1.fc37) 
+        Tue, 21 Feb 2023 06:40:21 -0500
+Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7CB131E9C0;
+        Tue, 21 Feb 2023 03:39:55 -0800 (PST)
+Received: from loongson.cn (unknown [10.20.42.170])
+        by gateway (Coremail) with SMTP id _____8CxhdiIrfRj5yIDAA--.874S3;
+        Tue, 21 Feb 2023 19:39:52 +0800 (CST)
+Received: from [10.20.42.170] (unknown [10.20.42.170])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8Cx2r2HrfRjo7c3AA--.36404S3;
+        Tue, 21 Feb 2023 19:39:52 +0800 (CST)
+Message-ID: <6eb868bb-2179-2cd7-7632-55e5244afb41@loongson.cn>
+Date:   Tue, 21 Feb 2023 19:39:51 +0800
 MIME-Version: 1.0
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Subject: Re: [PATCH v2 02/29] LoongArch: KVM: Implement kvm module related
+ interface
+Content-Language: en-US
+To:     WANG Xuerui <kernel@xen0n.name>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Tianrui Zhao <zhaotianrui@loongson.cn>
+Cc:     Huacai Chen <chenhuacai@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        loongarch@lists.linux.dev, linux-kernel@vger.kernel.org,
+        kvm@vger.kernel.org, Jens Axboe <axboe@kernel.dk>,
+        Mark Brown <broonie@kernel.org>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        Oliver Upton <oliver.upton@linux.dev>
+References: <20230220065735.1282809-1-zhaotianrui@loongson.cn>
+ <20230220065735.1282809-3-zhaotianrui@loongson.cn>
+ <bf4111f9-f722-1847-4f1d-964c5356f392@redhat.com>
+ <0fa9c062-d3fc-61e5-4d54-6bc29f7c64cf@loongson.cn>
+ <3f16a8e1-21d9-808e-aa1a-4f1d6f6f291b@redhat.com>
+ <2875aa3f-0dc4-4e48-17ad-42c703e12063@loongson.cn>
+ <35d54051-3876-4fb7-d1c8-d1c605420962@xen0n.name>
+From:   maobibo <maobibo@loongson.cn>
+In-Reply-To: <35d54051-3876-4fb7-d1c8-d1c605420962@xen0n.name>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: AQAAf8Cx2r2HrfRjo7c3AA--.36404S3
+X-CM-SenderInfo: xpdruxter6z05rqj20fqof0/
+X-Coremail-Antispam: 1Uk129KBjvJXoW7Zw1UCFWfAr15JFyrKFW7Arb_yoW8Kr4rpF
+        WFyFyUGrykCFyvyw4kuw1v934UtF4fta1UJr1xJFWFywn0gryav3Wj9r1Y9Fy3Cr4fXr1U
+        Zr4Yya18uwnxZ37anT9S1TB71UUUUjDqnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
+        qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
+        bqxYFVCjjxCrM7AC8VAFwI0_Jr0_Gr1l1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s
+        1l1IIY67AEw4v_Jrv_JF1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xv
+        wVC0I7IYx2IY67AKxVWUCVW8JwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVWUJVW8JwA2z4
+        x0Y4vEx4A2jsIE14v26r4UJVWxJr1l84ACjcxK6I8E87Iv6xkF7I0E14v26F4UJVW0owAa
+        w2AFwI0_JF0_Jw1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqjxCEc2xF0cIa020Ex4CE44
+        I27wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_JF0_Jw1lYx0Ex4A2
+        jsIE14v26r4j6F4UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvEwIxGrwCYjI0SjxkI62
+        AI1cAE67vIY487MxkF7I0En4kS14v26r126r1DMxAIw28IcxkI7VAKI48JMxC20s026xCa
+        FVCjc4AY6r1j6r4UMxCIbckI1I0E14v26r1q6r43MI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2
+        IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUtVW8ZwCIc40Y0x0EwIxGrwCI
+        42IY6xIIjxv20xvE14v26r1I6r4UMIIF0xvE2Ix0cI8IcVCY1x0267AKxVWUJVW8JwCI42
+        IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Gr0_Cr1lIxAIcVC2z280
+        aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7IU8uc_3UUUUU==
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 2023-02-20 at 17:50 +0530, Sai Krishna wrote:
-> From: Geetha sowjanya <gakula@marvell.com>
->=20
-> When checksum offload is disabled in the driver via ethtool,
-> the PTP 1-step sync packets contain incorrect checksum, since
-> the stack calculates the checksum before driver updates
-> PTP timestamp field in the packet. This results in PTP packets
-> getting dropped at the other end. This patch fixes the issue by
-> re-calculating the UDP checksum after updating PTP
-> timestamp field in the driver.
->=20
-> Fixes: 2958d17a8984 ("octeontx2-pf: Add support for ptp 1-step mode on CN=
-10K silicon")
-> Signed-off-by: Geetha sowjanya <gakula@marvell.com>
-> Signed-off-by: Hariprasad Kelam <hkelam@marvell.com>
-> Signed-off-by: Sunil Kovvuri Goutham <sgoutham@marvell.com>
-> Signed-off-by: Sai Krishna <saikrishnag@marvell.com>
-> ---
->  .../marvell/octeontx2/nic/otx2_txrx.c         | 78 ++++++++++++++-----
->  1 file changed, 59 insertions(+), 19 deletions(-)
->=20
-> diff --git a/drivers/net/ethernet/marvell/octeontx2/nic/otx2_txrx.c b/dri=
-vers/net/ethernet/marvell/octeontx2/nic/otx2_txrx.c
-> index ef10aef3cda0..67345a3e2bba 100644
-> --- a/drivers/net/ethernet/marvell/octeontx2/nic/otx2_txrx.c
-> +++ b/drivers/net/ethernet/marvell/octeontx2/nic/otx2_txrx.c
-> @@ -10,6 +10,7 @@
->  #include <net/tso.h>
->  #include <linux/bpf.h>
->  #include <linux/bpf_trace.h>
-> +#include <net/ip6_checksum.h>
-> =20
->  #include "otx2_reg.h"
->  #include "otx2_common.h"
-> @@ -699,7 +700,7 @@ static void otx2_sqe_add_ext(struct otx2_nic *pfvf, s=
-truct otx2_snd_queue *sq,
-> =20
->  static void otx2_sqe_add_mem(struct otx2_snd_queue *sq, int *offset,
->  			     int alg, u64 iova, int ptp_offset,
-> -			     u64 base_ns, int udp_csum)
-> +			     u64 base_ns, bool udp_csum_crt)
->  {
->  	struct nix_sqe_mem_s *mem;
-> =20
-> @@ -711,7 +712,7 @@ static void otx2_sqe_add_mem(struct otx2_snd_queue *s=
-q, int *offset,
-> =20
->  	if (ptp_offset) {
->  		mem->start_offset =3D ptp_offset;
-> -		mem->udp_csum_crt =3D udp_csum;
-> +		mem->udp_csum_crt =3D !!udp_csum_crt;
->  		mem->base_ns =3D base_ns;
->  		mem->step_type =3D 1;
->  	}
-> @@ -986,10 +987,11 @@ static bool otx2_validate_network_transport(struct =
-sk_buff *skb)
->  	return false;
->  }
-> =20
-> -static bool otx2_ptp_is_sync(struct sk_buff *skb, int *offset, int *udp_=
-csum)
-> +static bool otx2_ptp_is_sync(struct sk_buff *skb, int *offset, bool *udp=
-_csum_crt)
->  {
->  	struct ethhdr *eth =3D (struct ethhdr *)(skb->data);
->  	u16 nix_offload_hlen =3D 0, inner_vhlen =3D 0;
-> +	bool udp_hdr_present =3D false, is_sync;
->  	u8 *data =3D skb->data, *msgtype;
->  	__be16 proto =3D eth->h_proto;
->  	int network_depth =3D 0;
-> @@ -1029,45 +1031,83 @@ static bool otx2_ptp_is_sync(struct sk_buff *skb,=
- int *offset, int *udp_csum)
->  		if (!otx2_validate_network_transport(skb))
->  			return false;
-> =20
-> -		*udp_csum =3D 1;
->  		*offset =3D nix_offload_hlen + skb_transport_offset(skb) +
->  			  sizeof(struct udphdr);
-> +		udp_hdr_present =3D true;
-> +
->  	}
-> =20
->  	msgtype =3D data + *offset;
-> -
->  	/* Check PTP messageId is SYNC or not */
-> -	return (*msgtype & 0xf) =3D=3D 0;
-> +	is_sync =3D  ((*msgtype & 0xf) =3D=3D 0) ? true : false;
 
-the above could be:
 
-	is_sync =3D !(*msgtype & 0xf);
+在 2023/2/21 18:37, WANG Xuerui 写道:
+> On 2023/2/21 18:18, maobibo wrote:
+>>
+>>
+>> 在 2023/2/21 16:14, Paolo Bonzini 写道:
+>>> On 2/21/23 07:59, maobibo wrote:
+>>>>> Also, why does the world switch code need a copy?
+>>>> There will be problem in world switch code if there is page fault reenter,
+>>>> since pgd register is shared between root kernel and kvm hypervisor.
+>>>> World switch entry need be unmapped area, cannot be tlb mapped area.
+>>>
+>>> So if I understand correctly the processor is in direct address translation mode until the "csrwr t0, LOONGARCH_CSR_CRMD" instruction. Where does it leave paged mode?
+>> The processor still in paged mode during world switch context. For example
+>> when vm exits from guest mode to root mode, it executes world switch code
+>> from kvm_vector_entry, PC register points to HVA address, however vmid from
+>> LOONGARCH_CSR_GTLBC is not clear to root mode. If there is page fault
+>> exception, hardware treats it exception from GPA-->HPA rather than that
+>> from HVA --> HPA, since vmid info in CSR_GTLBC is not zero.
+>>
+>> In page mode, there are two kinds of address: unmapped address and
+>> tlb mapped address. For unmapped address there is only cachable/uncachable
+>> attribution, but not RWX attr; and there is no tlb handling for it.
+>> For simplicity,  unmapped address can be treated as window filtered address.
+>>
+>> It will be fully root mode only after this piece of code is executed
+>> during world switch context; vmid is zero and PC points to HVA.
+>>          ori     t0, zero, CSR_GSTAT_PVM
+>>          csrxchg zero, t0, LOONGARCH_CSR_GSTAT
+>>          /* Clear GTLBC.TGID field */
+>>          csrrd   t0, LOONGARCH_CSR_GTLBC
+>>          bstrins.w       t0, zero, CSR_GTLBC_TGID_SHIFT_END, CSR_GTLBC_TGID_SHIFT
+>>          csrwr   t0, LOONGARCH_CSR_GTLBC
+> 
+> AFAIK all of these is probably coming from Volume 3 of LoongArch ISA Manual, which is unfortunately not publicly available at the moment. For sake of meaningful reviews, when can we expect to get our hands on the manuals?
+We are pushing to public the virtualization manual inside, it is convenient
+to sw developer to review the code. However I am not sure about the date :(
 
-possibly more readable.
-
-> +	if (is_sync) {
-> +		if (udp_hdr_present)
-> +			*udp_csum_crt =3D true;
-
-or:
-		*udp_csum_crt =3D udp_hdr_present;
-
-that will make the code more compact.
-
-> +	} else {
-> +		*offset =3D 0;
-> +	}
-> +
-> +	return is_sync;
->  }
-> =20
->  static void otx2_set_txtstamp(struct otx2_nic *pfvf, struct sk_buff *skb=
-,
->  			      struct otx2_snd_queue *sq, int *offset)
->  {
-> +	struct ethhdr	*eth =3D (struct ethhdr *)(skb->data);
->  	struct ptpv2_tstamp *origin_tstamp;
-> -	int ptp_offset =3D 0, udp_csum =3D 0;
-> +	bool udp_csum_crt =3D false;
-> +	unsigned int udphoff;
->  	struct timespec64 ts;
-> +	int ptp_offset =3D 0;
-> +	__wsum skb_csum;
->  	u64 iova;
-> =20
->  	if (unlikely(!skb_shinfo(skb)->gso_size &&
->  		     (skb_shinfo(skb)->tx_flags & SKBTX_HW_TSTAMP))) {
-> -		if (unlikely(pfvf->flags & OTX2_FLAG_PTP_ONESTEP_SYNC)) {
-> -			if (otx2_ptp_is_sync(skb, &ptp_offset, &udp_csum)) {
-> -				origin_tstamp =3D (struct ptpv2_tstamp *)
-> -						((u8 *)skb->data + ptp_offset +
-> -						 PTP_SYNC_SEC_OFFSET);
-> -				ts =3D ns_to_timespec64(pfvf->ptp->tstamp);
-> -				origin_tstamp->seconds_msb =3D htons((ts.tv_sec >> 32) & 0xffff);
-> -				origin_tstamp->seconds_lsb =3D htonl(ts.tv_sec & 0xffffffff);
-> -				origin_tstamp->nanoseconds =3D htonl(ts.tv_nsec);
-> -				/* Point to correction field in PTP packet */
-> -				ptp_offset +=3D 8;
-> +		if (unlikely(pfvf->flags & OTX2_FLAG_PTP_ONESTEP_SYNC &&
-> +			     otx2_ptp_is_sync(skb, &ptp_offset, &udp_csum_crt))) {
-> +			origin_tstamp =3D (struct ptpv2_tstamp *)
-> +					((u8 *)skb->data + ptp_offset +
-> +					 PTP_SYNC_SEC_OFFSET);
-> +			ts =3D ns_to_timespec64(pfvf->ptp->tstamp);
-> +			origin_tstamp->seconds_msb =3D htons((ts.tv_sec >> 32) & 0xffff);
-> +			origin_tstamp->seconds_lsb =3D htonl(ts.tv_sec & 0xffffffff);
-> +			origin_tstamp->nanoseconds =3D htonl(ts.tv_nsec);
-> +			/* Point to correction field in PTP packet */
-> +			ptp_offset +=3D 8;
-> +
-> +			/* When user disables hw checksum, stack calculates the csum,
-> +			 * but it does not cover ptp timestamp which is added later.
-> +			 * Recalculate the checksum manually considering the timestamp.
-> +			 */
-> +			if (udp_csum_crt) {
-> +				struct udphdr *uh =3D udp_hdr(skb);
-> +
-> +				if (skb->ip_summed !=3D CHECKSUM_PARTIAL && uh->check !=3D 0) {
-> +					udphoff =3D skb_transport_offset(skb);
-> +					uh->check =3D 0;
-> +					skb_csum =3D skb_checksum(skb, udphoff, skb->len - udphoff,
-> +								0);
-> +					if (ntohs(eth->h_proto) =3D=3D ETH_P_IPV6)
-> +						uh->check =3D csum_ipv6_magic(&ipv6_hdr(skb)->saddr,
-> +									    &ipv6_hdr(skb)->daddr,
-> +									    skb->len - udphoff,
-> +									    ipv6_hdr(skb)->nexthdr,
-> +									    skb_csum);
-> +					else
-> +						uh->check =3D csum_tcpudp_magic(ip_hdr(skb)->saddr,
-> +									      ip_hdr(skb)->daddr,
-> +									      skb->len - udphoff,
-> +									      IPPROTO_UDP,
-> +									      skb_csum);
-
-Have you considered incremental csum updates instead? Possibly the code
-could be simpler and likely faster - not sure if the latter part is
-relevant in this case.
-
-Cheers,
-
-Paolo
+Regards
+Bibo, Mao
+> 
 
