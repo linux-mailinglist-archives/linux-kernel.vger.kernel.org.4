@@ -2,162 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6004769E97B
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 22:27:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AC80369E97E
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 22:27:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230128AbjBUV1K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Feb 2023 16:27:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58458 "EHLO
+        id S229596AbjBUV15 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Feb 2023 16:27:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59816 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230011AbjBUV07 (ORCPT
+        with ESMTP id S229503AbjBUV1x (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Feb 2023 16:26:59 -0500
-Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5AD872F7B4;
-        Tue, 21 Feb 2023 13:26:54 -0800 (PST)
-Received: from pps.filterd (m0098419.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 31LLHN7G023259;
-        Tue, 21 Feb 2023 21:26:39 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
- : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding; s=pp1;
- bh=s4kIBTdwHgvnp0JR5GqHrVoFL9IUarVdZp5dipeTXo0=;
- b=DluUQDQWj2sgykOJqjN8JGeE5QqY6md6BHJyyXvwm/IMFOb79NtUVqm8M0O+HAsOSS+K
- ba5GvHZE1BcPtdcojbx17V5A7ufMq4k9yTUaBpyj3CqYA2IP0zztzqDS1FoIKgB/dfH6
- fTMJJPCYmFxURZawQPa4EdoSZqYYZ/JwDACdOzLAmcvHMME97u0N0rlY2TmpcvyJ2ug1
- 3sFpfvwPdbZI2IFgS5p/qpNu1mEnEAFpxi/uPXnymbXtXxy3ti2SGblkkFYZTZ11slRd
- peHXUl8UdLSF/JVjSItm9jtA5dPRNWhoGJcUs3EuL8/i+hpJKQJRjBF5oEFUQrUII9Np 3g== 
-Received: from ppma04dal.us.ibm.com (7a.29.35a9.ip4.static.sl-reverse.com [169.53.41.122])
-        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3nw5he0f4y-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 21 Feb 2023 21:26:39 +0000
-Received: from pps.filterd (ppma04dal.us.ibm.com [127.0.0.1])
-        by ppma04dal.us.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 31LIV1Qr000567;
-        Tue, 21 Feb 2023 21:26:38 GMT
-Received: from smtprelay05.dal12v.mail.ibm.com ([9.208.130.101])
-        by ppma04dal.us.ibm.com (PPS) with ESMTPS id 3ntpa79y63-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 21 Feb 2023 21:26:38 +0000
-Received: from smtpav02.wdc07v.mail.ibm.com (smtpav02.wdc07v.mail.ibm.com [10.39.53.229])
-        by smtprelay05.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 31LLQb5f58065286
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 21 Feb 2023 21:26:37 GMT
-Received: from smtpav02.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 3081D58059;
-        Tue, 21 Feb 2023 21:26:37 +0000 (GMT)
-Received: from smtpav02.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 6374658058;
-        Tue, 21 Feb 2023 21:26:35 +0000 (GMT)
-Received: from slate16.aus.stglabs.ibm.com (unknown [9.65.223.120])
-        by smtpav02.wdc07v.mail.ibm.com (Postfix) with ESMTP;
-        Tue, 21 Feb 2023 21:26:35 +0000 (GMT)
-From:   Eddie James <eajames@linux.ibm.com>
-To:     linux-fsi@lists.ozlabs.org
-Cc:     rostedt@goodmis.org, linux-trace-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        mhiramat@kernel.org, alistair@popple.id.au, joel@jms.id.au,
-        jk@ozlabs.org, andrew@aj.id.au, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, eajames@linux.ibm.com
-Subject: [PATCH v5 6/6] fsi: Use of_match_table for bus matching if specified
-Date:   Tue, 21 Feb 2023 15:26:22 -0600
-Message-Id: <20230221212622.3897097-7-eajames@linux.ibm.com>
-X-Mailer: git-send-email 2.31.1
-In-Reply-To: <20230221212622.3897097-1-eajames@linux.ibm.com>
-References: <20230221212622.3897097-1-eajames@linux.ibm.com>
+        Tue, 21 Feb 2023 16:27:53 -0500
+Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A43232508
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Feb 2023 13:27:21 -0800 (PST)
+Received: by mail-pl1-x634.google.com with SMTP id ko13so7178314plb.13
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Feb 2023 13:27:21 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=OY49XJYkmM8JwgqMEdZVA4MqBlSEgJvqRRu26pssVSQ=;
+        b=MK1ZdFyoSgafsQYiNhM2z8RU8qST7kMFlVALVE84kW9msIKU4uzzNItmuVOIsYu9ka
+         nHpiR+GtxyydEbFK9iE9TeAMMJYXsmZOia/0H6JEW+UMyTAYZh71Rvzc+MZEmbsZ7nFy
+         LX3+qZ4aZFt1/nETKxIHJ4nSfNj/Gqm0XJI/+f70tv+RwGnYx4pNGQeLhmdp+BSAuJ5L
+         +972AzpiHg+DVaYuqwUtVr1ipToYs9cKZfYMAxvJ18lt3soz4ZxuWmHvvwS+/zJ43UqO
+         +2+JG7EqG94638AL6QxidFvaw+kzxYdkg0CLQzIK/9IkcIoRl2r5b0gZTsRvRSj/RWSb
+         KBxQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=OY49XJYkmM8JwgqMEdZVA4MqBlSEgJvqRRu26pssVSQ=;
+        b=6wL2cm9cwQMReVJL9zNdOdYRmOZ2hA5MldTvn8c8nxlez6QiEcua2ss6V02DxhPaTP
+         +MdGbA8fx8bBLqg7vvIyRiiRFeHDAbCoM9Semdf4cE5E+8sXaeMS2fzLsoYmMrFkKysn
+         UJb0cI/dlDqeJJ7IHNrzqBlP5/WnfE3BOg8SiqJu0PwqxyDpNx1mSQursPVTnell1lPw
+         c66D2zbJLhX8Nfm0VbZtBeEnNLnc3pJfEa7DAZiyEw3vUGkz/nOnCPrWp5XSQkPNC/YN
+         ijIhQPR0lPD/O6bzKG2te/5jjswZUl7cwpwvR2gGVzz5Pkrta0YQDVUce0DQgTLCRSwX
+         SpYQ==
+X-Gm-Message-State: AO0yUKUiqSSMwWcFFF7xXsSU1N+bt3R/ei4loA9cAyzU0U2iI/XrktYA
+        DwkIFvUprElJPLKeG48fi2UMLQHfLsLVr90DBhGvYw==
+X-Google-Smtp-Source: AK7set867sporZ6Oxux1gnqSqjH0N76mlhGVHkzYxRu5jfG0srUFnnFaMa832/+NgaXWwsI+EMVAy0m81JmVEZXbCL0=
+X-Received: by 2002:a17:90b:38c8:b0:230:8730:c1f7 with SMTP id
+ nn8-20020a17090b38c800b002308730c1f7mr1659668pjb.27.1677014836106; Tue, 21
+ Feb 2023 13:27:16 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: KdM53zcmLUr04hQaxmdWtxUPecESYjsk
-X-Proofpoint-GUID: KdM53zcmLUr04hQaxmdWtxUPecESYjsk
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.170.22
- definitions=2023-02-21_12,2023-02-20_02,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 mlxscore=0
- mlxlogscore=999 bulkscore=0 phishscore=0 suspectscore=0 priorityscore=1501
- lowpriorityscore=0 adultscore=0 spamscore=0 clxscore=1015 malwarescore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2212070000
- definitions=main-2302210182
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <YO2S+C7Cw7AS7bsg@google.com> <cfd5cc6f-5943-2e06-1dbe-f4b4ad5c1fa1@canonical.com>
+ <Y19GhTg8Q/3ym/VD@google.com> <dac1c2d5-367f-c8a7-c61e-c1774d98d602@canonical.com>
+ <4595e7b4-ea31-5b01-f636-259e84737dfc@canonical.com> <Y+9aoFjrYkpFSvuE@linutronix.de>
+ <f3fd5dd8-9d78-43be-fc5c-bf990ad3a64d@canonical.com>
+In-Reply-To: <f3fd5dd8-9d78-43be-fc5c-bf990ad3a64d@canonical.com>
+From:   Anil Altinay <aaltinay@google.com>
+Date:   Tue, 21 Feb 2023 13:27:03 -0800
+Message-ID: <CACCxZWOK6=mHNQrWEhjw4pC2i3qBKYdn9joiaaCNE7ge8FAz0A@mail.gmail.com>
+Subject: Re: [PATCH v3] apparmor: global buffers spin lock may get contended
+To:     John Johansen <john.johansen@canonical.com>
+Cc:     Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        LKLM <linux-kernel@vger.kernel.org>,
+        Sergey Senozhatsky <senozhatsky@chromium.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Tomasz Figa <tfiga@chromium.org>,
+        linux-security-module@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Since we have two scom drivers, use the standard of matching if
-the driver specifies a table so that the right devices go to the
-right driver.
+I can test the patch with 5.10 and 5.15 kernels in different machines.
+Just let me know which machine types you would like me to test.
 
-Signed-off-by: Eddie James <eajames@linux.ibm.com>
----
- drivers/fsi/fsi-core.c | 11 +++++++++--
- drivers/fsi/fsi-scom.c |  8 ++++++++
- 2 files changed, 17 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/fsi/fsi-core.c b/drivers/fsi/fsi-core.c
-index b77013b9d8a7..ca4a9634fbc3 100644
---- a/drivers/fsi/fsi-core.c
-+++ b/drivers/fsi/fsi-core.c
-@@ -16,6 +16,7 @@
- #include <linux/idr.h>
- #include <linux/module.h>
- #include <linux/of.h>
-+#include <linux/of_device.h>
- #include <linux/slab.h>
- #include <linux/bitops.h>
- #include <linux/cdev.h>
-@@ -1375,8 +1376,14 @@ static int fsi_bus_match(struct device *dev, struct device_driver *drv)
- 		if (id->engine_type != fsi_dev->engine_type)
- 			continue;
- 		if (id->version == FSI_VERSION_ANY ||
--				id->version == fsi_dev->version)
--			return 1;
-+		    id->version == fsi_dev->version) {
-+			if (drv->of_match_table) {
-+				if (of_driver_match_device(dev, drv))
-+					return 1;
-+			} else {
-+				return 1;
-+			}
-+		}
- 	}
- 
- 	return 0;
-diff --git a/drivers/fsi/fsi-scom.c b/drivers/fsi/fsi-scom.c
-index bcb756dc9866..61dbda9dbe2b 100644
---- a/drivers/fsi/fsi-scom.c
-+++ b/drivers/fsi/fsi-scom.c
-@@ -10,6 +10,7 @@
- #include <linux/cdev.h>
- #include <linux/delay.h>
- #include <linux/fs.h>
-+#include <linux/mod_devicetable.h>
- #include <linux/uaccess.h>
- #include <linux/slab.h>
- #include <linux/list.h>
-@@ -587,6 +588,12 @@ static int scom_remove(struct device *dev)
- 	return 0;
- }
- 
-+static const struct of_device_id scom_of_ids[] = {
-+	{ .compatible = "ibm,fsi2pib" },
-+	{ }
-+};
-+MODULE_DEVICE_TABLE(of, scom_of_ids);
-+
- static const struct fsi_device_id scom_ids[] = {
- 	{
- 		.engine_type = FSI_ENGID_SCOM,
-@@ -600,6 +607,7 @@ static struct fsi_driver scom_drv = {
- 	.drv = {
- 		.name = "scom",
- 		.bus = &fsi_bus_type,
-+		.of_match_table = scom_of_ids,
- 		.probe = scom_probe,
- 		.remove = scom_remove,
- 	}
--- 
-2.31.1
-
+On Mon, Feb 20, 2023 at 12:42 AM John Johansen
+<john.johansen@canonical.com> wrote:
+>
+> On 2/17/23 02:44, Sebastian Andrzej Siewior wrote:
+> > On 2023-02-16 16:08:10 [-0800], John Johansen wrote:
+> >> --- a/security/apparmor/lsm.c
+> >> +++ b/security/apparmor/lsm.c
+> >> @@ -49,12 +49,19 @@ union aa_buffer {
+> >>      char buffer[1];
+> >>   };
+> >> +struct aa_local_cache {
+> >> +    unsigned int contention;
+> >> +    unsigned int hold;
+> >> +    struct list_head head;
+> >> +};
+> >
+> > if you stick a local_lock_t into that struct, then you could replace
+> >       cache = get_cpu_ptr(&aa_local_buffers);
+> > with
+> >       local_lock(&aa_local_buffers.lock);
+> >       cache = this_cpu_ptr(&aa_local_buffers);
+> >
+> > You would get the preempt_disable() based locking for the per-CPU
+> > variable (as with get_cpu_ptr()) and additionally some lockdep
+> > validation which would warn if it is used outside of task context (IRQ).
+> >
+> I did look at local_locks and there was a reason I didn't use them. I
+> can't recall as the original iteration of this is over a year old now.
+> I will have to dig into it again.
+>
+> > I didn't parse completely the hold/contention logic but it seems to work
+> > ;)
+> > You check "cache->count >=  2" twice but I don't see an inc/ dec of it
+> > nor is it part of aa_local_cache.
+> >
+> sadly I messed up the reordering of this and the debug patch. This will be
+> fixed in v4.
+>
+> > I can't parse how many items can end up on the local list if the global
+> > list is locked. My guess would be more than 2 due the ->hold parameter.
+> >
+> So this iteration, forces pushing back to global list if there are already
+> two on the local list. The hold parameter just affects how long the
+> buffers remain on the local list, before trying to place them back on
+> the global list.
+>
+> Originally before the count was added more than 2 buffers could end up
+> on the local list, and having too many local buffers is a waste of
+> memory. The count got added to address this. The value of 2 (which should
+> be switched to a define) was chosen because no mediation routine currently
+> uses more than 2 buffers.
+>
+> Note that this doesn't mean that more than two buffers can be allocated
+> to a tasks on a cpu. Its possible in some cases to have a task have
+> allocated buffers and to still have buffers on the local cache list.
+>
+> > Do you have any numbers on the machine and performance it improved? It
+> > sure will be a good selling point.
+> >
+>
+> I can include some supporting info, for a 16 core machine. But it will
+> take some time to for me to get access to a bigger machine, where this
+> is much more important. Hence the call for some of the other people
+> on this thread to test.
+>
+> thanks for the feedback
+>
