@@ -2,92 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 01E7F69DE8E
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 12:14:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9FCED69DE78
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 12:09:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233769AbjBULOg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Feb 2023 06:14:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41750 "EHLO
+        id S233969AbjBULJI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Feb 2023 06:09:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36442 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233848AbjBULO0 (ORCPT
+        with ESMTP id S233015AbjBULJG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Feb 2023 06:14:26 -0500
-X-Greylist: delayed 1798 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 21 Feb 2023 03:14:25 PST
-Received: from mail.itouring.de (mail.itouring.de [85.10.202.141])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 913381043D;
-        Tue, 21 Feb 2023 03:14:25 -0800 (PST)
-Received: from tux.applied-asynchrony.com (p5b2e8d56.dip0.t-ipconnect.de [91.46.141.86])
-        by mail.itouring.de (Postfix) with ESMTPSA id 0C56CCF1AAE;
-        Tue, 21 Feb 2023 11:19:25 +0100 (CET)
-Received: from [192.168.100.221] (hho.applied-asynchrony.com [192.168.100.221])
-        by tux.applied-asynchrony.com (Postfix) with ESMTP id A6BE8F01602;
-        Tue, 21 Feb 2023 11:19:21 +0100 (CET)
-Subject: Re: [PATCH] block, bfq: fix uaf for bfqq in bic_set_bfqq()
-To:     Yu Kuai <yukuai1@huaweicloud.com>, jack@suse.cz, tj@kernel.org,
-        josef@toxicpanda.com, axboe@kernel.dk, paolo.valente@linaro.org,
-        shinichiro.kawasaki@wdc.com
-Cc:     cgroups@vger.kernel.org, linux-block@vger.kernel.org,
-        linux-kernel@vger.kernel.org, yi.zhang@huawei.com,
-        yangerkun@huawei.com
-References: <20230113094410.2907223-1-yukuai3@huawei.com>
- <ca9fefd4-7109-042c-3b25-9eb795141145@huaweicloud.com>
-From:   =?UTF-8?Q?Holger_Hoffst=c3=a4tte?= <holger@applied-asynchrony.com>
-Organization: Applied Asynchrony, Inc.
-Message-ID: <3e8c8567-f41d-66ae-0633-dcdbed007228@applied-asynchrony.com>
-Date:   Tue, 21 Feb 2023 11:19:21 +0100
+        Tue, 21 Feb 2023 06:09:06 -0500
+Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48348199D6;
+        Tue, 21 Feb 2023 03:09:05 -0800 (PST)
+Received: by mail-wr1-x434.google.com with SMTP id c5so4671490wrr.5;
+        Tue, 21 Feb 2023 03:09:05 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=TWKnaBniQXPyP/0jLOxUcGL9VMvje6381rzZYK4wJ/U=;
+        b=dc6iQN5wbuqJ440ThKhrbs4Ler3siZkFj27xcjQtbJZz7l1PUegbIQ6GqpcPnfhxMJ
+         b9GIYbeV9eZQ4vs61qn+uqnXytjFGnpqcbouVwcDQsgmZdfZtWN4YO3JyjTTHo+QlYTA
+         /ys7UpNiJ2CYw0siIT9j/gFbBoiUR/AiXo8PWHdGsdeMJjC6YCixniPzMHJkpSywg7tS
+         m7IHD/huZGRNgpFRUOGlNfTTd0y3iRrdKfVxUy+8/FKsumJozfouOBc9tF4AcYEgojQL
+         dDBCrBUX+V0VW+eYq7r7LFl4VV/GMISyVTehBZj5Li9YmLRdrlhHCTfxrMc8sOWD/MPl
+         bI9g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=TWKnaBniQXPyP/0jLOxUcGL9VMvje6381rzZYK4wJ/U=;
+        b=p1jjO71WMlTkW1mvjp9nZytgGzcZ1hrux8yHrJO2JiOKFN/h1iNUht1hKOFA5tjcbA
+         DXH3aMVl8U+kYLGiuyMmBJLQh0pm6S/EJYpFTxPOy7z/ADry8JaZqOu3brjuaJxfQEJX
+         G505iwXJoitjxKYei2Du6xD0enwSuC2PKa1mvoKip+RCIVWNZmZR4uErp7cGUnAonJ57
+         Fxca8AgGDfNqkgH5IUOtnIyPxIZxbZUehM622CIIRQUON7wJtjij8wptLCi2ZIhOKFRu
+         WutzzAEAsXBnwit3jB0GsxNFh7Xdfrt5fLCZyx5x/AzJ/FFtKYhVOgjJV4/q1TXtSz7n
+         UciA==
+X-Gm-Message-State: AO0yUKUZNpBwUpKfxWzpFeISjXgrK/2KuvmND5+oNjwSvWiAtnYLpUET
+        bTlhNvLJygXRRFL3Cd2D5ZE=
+X-Google-Smtp-Source: AK7set/+2xlogQZWgFspeDKERePjRFiu+jh9WWWSCfUl8J1LIB1T3dg8Rp2j+x6HwVJRLexwM7AtPw==
+X-Received: by 2002:a5d:4d01:0:b0:2c5:4ca0:1abb with SMTP id z1-20020a5d4d01000000b002c54ca01abbmr4490403wrt.60.1676977743566;
+        Tue, 21 Feb 2023 03:09:03 -0800 (PST)
+Received: from ?IPV6:2a01:c22:6e4d:5f00:c8b7:365d:f8a9:9c38? (dynamic-2a01-0c22-6e4d-5f00-c8b7-365d-f8a9-9c38.c22.pool.telefonica.de. [2a01:c22:6e4d:5f00:c8b7:365d:f8a9:9c38])
+        by smtp.googlemail.com with ESMTPSA id a16-20020adffb90000000b002c54c92e125sm3275933wrr.46.2023.02.21.03.09.01
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 21 Feb 2023 03:09:02 -0800 (PST)
+Message-ID: <c21a3f74-871c-8726-f078-b4c2c3414ebd@gmail.com>
+Date:   Tue, 21 Feb 2023 11:48:47 +0100
 MIME-Version: 1.0
-In-Reply-To: <ca9fefd4-7109-042c-3b25-9eb795141145@huaweicloud.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH v8 RESEND 0/6] r8169: Enable ASPM for recent 1.0/2.5Gbps
+ Realtek NICs
+To:     Kai-Heng Feng <kai.heng.feng@canonical.com>, nic_swsd@realtek.com,
+        bhelgaas@google.com
+Cc:     koba.ko@canonical.com, acelan.kao@canonical.com,
+        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, sathyanarayanan.kuppuswamy@linux.intel.com,
+        vidyas@nvidia.com, rafael.j.wysocki@intel.com,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-pci@vger.kernel.org
+References: <20230221023849.1906728-1-kai.heng.feng@canonical.com>
 Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+From:   Heiner Kallweit <hkallweit1@gmail.com>
+In-Reply-To: <20230221023849.1906728-1-kai.heng.feng@canonical.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023-02-21 08:04, Yu Kuai wrote:
-> Hi, Jens
+On 21.02.2023 03:38, Kai-Heng Feng wrote:
+> The series is to enable ASPM on more r8169 supported devices, if
+> available.
 > 
-> 在 2023/01/13 17:44, Yu Kuai 写道:
->> After commit 64dc8c732f5c ("block, bfq: fix possible uaf for 'bfqq->bic'"),
->> bic->bfqq will be accessed in bic_set_bfqq(), however, in some context
->> bic->bfqq will be freed first, and bic_set_bfqq() is called with the freed
->> bic->bfqq.
->>
->> Fix the problem by always freeing bfqq after bic_set_bfqq().
->>
->> Fixes: 64dc8c732f5c ("block, bfq: fix possible uaf for 'bfqq->bic'")
->> Reported-and-tested-by: Shinichiro Kawasaki <shinichiro.kawasaki@wdc.com>
->> Signed-off-by: Yu Kuai <yukuai3@huawei.com>
->> ---
->>   block/bfq-cgroup.c  | 2 +-
->>   block/bfq-iosched.c | 4 +++-
->>   2 files changed, 4 insertions(+), 2 deletions(-)
->>
->> diff --git a/block/bfq-cgroup.c b/block/bfq-cgroup.c
->> index a6e8da5f5cfd..feb13ac25557 100644
->> --- a/block/bfq-cgroup.c
->> +++ b/block/bfq-cgroup.c
->> @@ -749,8 +749,8 @@ static void bfq_sync_bfqq_move(struct bfq_data *bfqd,
->>            * old cgroup.
->>            */
->>           bfq_put_cooperator(sync_bfqq);
->> -        bfq_release_process_ref(bfqd, sync_bfqq);
->>           bic_set_bfqq(bic, NULL, true, act_idx);
->> +        bfq_release_process_ref(bfqd, sync_bfqq);
->>       }
->>   }
->>
+> The latest Realtek vendor driver and its Windows driver implements a
+> feature called "dynamic ASPM" which can improve performance on it's
+> ethernet NICs.
 > 
-> It seems this change is missed in GIT PULL for-6.3. I'll send a seperate
-> patch to fix this...
+> We have "dynamic ASPM" mechanism in Ubuntu 22.04 LTS kernel for quite a
+> while, and AFAIK it hasn't introduced any regression so far. 
+> 
+> A very similar issue was observed on Realtek wireless NIC, and it was
+> resolved by disabling ASPM during NAPI poll. So in v8, we use the same
+> approach, which is more straightforward, instead of toggling ASPM based
+> on packet count.
+> 
+> v7:
+> https://lore.kernel.org/netdev/20211016075442.650311-1-kai.heng.feng@canonical.com/
+> 
+> v6:
+> https://lore.kernel.org/netdev/20211007161552.272771-1-kai.heng.feng@canonical.com/
+> 
+> v5:
+> https://lore.kernel.org/netdev/20210916154417.664323-1-kai.heng.feng@canonical.com/
+> 
+> v4:
+> https://lore.kernel.org/netdev/20210827171452.217123-1-kai.heng.feng@canonical.com/
+> 
+> v3:
+> https://lore.kernel.org/netdev/20210819054542.608745-1-kai.heng.feng@canonical.com/
+> 
+> v2:
+> https://lore.kernel.org/netdev/20210812155341.817031-1-kai.heng.feng@canonical.com/
+> 
+> v1:
+> https://lore.kernel.org/netdev/20210803152823.515849-1-kai.heng.feng@canonical.com/
+> 
+> Kai-Heng Feng (6):
+>   r8169: Disable ASPM L1.1 on 8168h
+>   Revert "PCI/ASPM: Unexport pcie_aspm_support_enabled()"
+>   PCI/ASPM: Add pcie_aspm_capable() helper
+>   r8169: Consider chip-specific ASPM can be enabled on more cases
+>   r8169: Use mutex to guard config register locking
+>   r8169: Disable ASPM while doing NAPI poll
+> 
+>  drivers/net/ethernet/realtek/r8169_main.c | 48 ++++++++++++++++++-----
+>  drivers/pci/pcie/aspm.c                   | 12 ++++++
+>  include/linux/pci.h                       |  2 +
+>  3 files changed, 53 insertions(+), 9 deletions(-)
 > 
 
-It was already applied in time for 6.2 as b600de2d7d3a16f9007fad1bdae82a3951a26af2
-and also already merged to 6.1-stable.
-
-cheers
-Holger
+Note that net-next is closed during merge window.
+Formal aspect: Your patches miss the net/net-next annotation.
+The title of the series may be an old one. Actually most ASPM
+states are enabled, you add to disable ASPM temporarily.
