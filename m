@@ -2,80 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 32BFA69DD90
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 11:09:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C15269DDA7
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 11:16:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234123AbjBUKJY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Feb 2023 05:09:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45640 "EHLO
+        id S233874AbjBUKQt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Feb 2023 05:16:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49828 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232995AbjBUKJW (ORCPT
+        with ESMTP id S233675AbjBUKQr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Feb 2023 05:09:22 -0500
-Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E40645B8E
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Feb 2023 02:09:21 -0800 (PST)
-Received: from zn.tnic (p5de8e9fe.dip0.t-ipconnect.de [93.232.233.254])
+        Tue, 21 Feb 2023 05:16:47 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E31C23334;
+        Tue, 21 Feb 2023 02:16:46 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 4FAD11EC04CC;
-        Tue, 21 Feb 2023 11:09:20 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1676974160;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=jmxwxQ1kZ55yZkvtYfwEj6OMScS2SXYuu3Eo2bePkoE=;
-        b=P+DBGiaYCUgdj3qp/PZScXDbRfwUDti5yRNyYS3f/FA9GJ3YvXJx/sBs+lsPg+hkCqI2p2
-        5i+3p0JA0r0rB9Nr0A4oPWFRh9i/yPU6F14qe55NvsXO+5rWYORpR97kTwgcN6vCsZ3wcA
-        3Hljh1tyEVcZ/N9qh3UI9YDbPuQ+t1c=
-Date:   Tue, 21 Feb 2023 11:09:15 +0100
-From:   Borislav Petkov <bp@alien8.de>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        "Zhang, Rui" <rui.zhang@intel.com>,
-        "Brown, Len" <len.brown@intel.com>,
-        "zhang.jia@linux.alibaba.com" <zhang.jia@linux.alibaba.com>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        "hpa@zytor.com" <hpa@zytor.com>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [RFC PATCH V2 0/1] x86: cpu topology fix and question on
- x86_max_cores
-Message-ID: <Y/SYS+LiPVKit4PR@zn.tnic>
-References: <20230220032856.661884-1-rui.zhang@intel.com>
- <Y/NUni00nDuURT1H@hirez.programming.kicks-ass.net>
- <fe5059317c4f3cabeb86c388d547504b9b6ea581.camel@intel.com>
- <87edqkosty.ffs@tglx>
- <Y/SIRmCE1KJdsRBT@hirez.programming.kicks-ass.net>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 01A0B60FC8;
+        Tue, 21 Feb 2023 10:16:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5799BC4339C;
+        Tue, 21 Feb 2023 10:16:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1676974605;
+        bh=LUsoC6iSVQT5Y3MM/3YfkP1p/LvHRVSyJ+N/makA+N8=;
+        h=From:To:Cc:Subject:Date:From;
+        b=rcXnBgvhaj6iNKopEWQjVQr3aV4U3Ca/n+r22TxKwIJyrYcLABchJSvyK9nBAxfbh
+         DT6GvN7i1hDH4Cc70yAAUXa1+Taa5/TYX6qjZiahdTllrZP10/EtnE0k4FtOTxBFPz
+         Ghh1zezU4xyboYI4ZUFnPT2DS610X3SRE5NeqUUpdt3WdD5HTjnDO59YAEmybpZNxE
+         4mjUudbWBy1BTeN0v6GSsiN9bIFAPlNhzKjOj62RtwjbS9TioWGvSKZ6iaQ9pc9CRW
+         G6q6etakyCVKw4RXU6XcrJfZ2bgC2Dtq8ur+JnI9q6KsgywauRm7YpdnVmW6caiNSj
+         eTrgbD87u43gg==
+Received: from johan by xi.lan with local (Exim 4.94.2)
+        (envelope-from <johan+linaro@kernel.org>)
+        id 1pUPhX-0003oD-5w; Tue, 21 Feb 2023 11:16:47 +0100
+From:   Johan Hovold <johan+linaro@kernel.org>
+To:     Rob Clark <robdclark@gmail.com>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Cc:     Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Bjorn Andersson <andersson@kernel.org>,
+        linux-arm-msm@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        freedreno@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        Johan Hovold <johan+linaro@kernel.org>
+Subject: [PATCH 0/4] drm/msm/adreno: fix runtime PM imbalance at unbind
+Date:   Tue, 21 Feb 2023 11:14:26 +0100
+Message-Id: <20230221101430.14546-1-johan+linaro@kernel.org>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <Y/SIRmCE1KJdsRBT@hirez.programming.kicks-ass.net>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 21, 2023 at 10:00:54AM +0100, Peter Zijlstra wrote:
-> We really should have added that CPUID uniformity sanity check a long
-> while ago :-(
+As reported by Bjorn, we can end up with an unbalanced runtime PM
+disable count if unbind() is called before the drm device is opened
+(e.g. if component bind fails due to the panel driver not having been
+loaded yet).
 
-We're pretty much there:
+As runtime PM must currently stay disabled until the firmware has been
+loaded, fix this by making the runtime PM disable call at unbind()
+conditional.
 
-c0dd9245aa9e ("x86/microcode: Check CPU capabilities after late microcode update correctly")
+The rest of the series removes a bogus pm_runtime_set_active() call and
+drops the redundant pm_runtime_disable() from adreno_gpu_cleanup().
+Included is also a related indentation cleanup.
 
-(in tip currently)
+Johan
 
-It would need to get extended to do it on each CPU during SMP boot.
+
+Johan Hovold (4):
+  drm/msm/adreno: fix runtime PM imbalance at unbind
+  drm/msm/adreno: drop bogus pm_runtime_set_active()
+  drm/msm/adreno: drop redundant pm_runtime_disable()
+  drm/msm/adreno: clean up component ops indentation
+
+ drivers/gpu/drm/msm/adreno/adreno_device.c | 10 ++++------
+ drivers/gpu/drm/msm/adreno/adreno_gpu.c    |  5 -----
+ 2 files changed, 4 insertions(+), 11 deletions(-)
 
 -- 
-Regards/Gruss,
-    Boris.
+2.39.2
 
-https://people.kernel.org/tglx/notes-about-netiquette
