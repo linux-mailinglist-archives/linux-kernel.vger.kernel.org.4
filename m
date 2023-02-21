@@ -2,192 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1175369E51A
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 17:48:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 340A369E558
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 17:59:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234877AbjBUQsq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Feb 2023 11:48:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52542 "EHLO
+        id S234983AbjBUQ7U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Feb 2023 11:59:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32994 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233940AbjBUQsp (ORCPT
+        with ESMTP id S234968AbjBUQ7A (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Feb 2023 11:48:45 -0500
-Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2045.outbound.protection.outlook.com [40.107.223.45])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 017042823A;
-        Tue, 21 Feb 2023 08:48:40 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=FuClGxJ0ESJBHYMhb3Lk28AUn8H29k6ztdCS/GkVboq9tjSZgHcZcHOzi1/JW/dCHhD1XFuvWHoaj5OvOG148+WOq9ml7OHykZVNUjcPIZEafI5GIGVmJ7NieNgcOyLUf5mEyaGl9mtYdi9pJa/n9dFn3mwdoFyB6V9DwPCvdWVS7eyTi7qsJI2hpSYgEoIkI2+JexMyQ/z6ijepYefegyMu0qlrGYsYXdJYvNih5MTsQ8lYS1v7H/SlqrZWqRpQb+VE7UXF55QpVdhL236CJQYrGiyslauC7kEl2uDG55IGG36to6eDFKEcIXDTLdkw2vZkUPJHqgahU7yXX97T5w==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=CJZHDkctBifI3hhpp9wotdwYZQaCyl+N2Ft0yK0J29o=;
- b=de6VjBL+g/XFtKikUQtd++ZZrwh1cwuycksC4gO0/dlg+++2y/bOF5CNEQPJ6phyDMlSyT47M0eGQnH8mlUsEGHGaoh+d07VnUy0WQ+1wq/LMGr5+cO9DwCcKhATgf4rh/QGDwstyoCoKTOQYPH2DQaF3hEH8kRcjmWVF8otu7Zrjou+WTa67p9EoSs8ClZhwMZmDbBzMnhc1gk9VBxZzgX7WQQ8bQpB9eFxq4N3GU5xMjrbBnCZp2CWxczVEnMyKAccGJa5tT6zdqFEgVsxAIlPEDShFouP7MGEw3Fk5tApFTdf6rP205biVG7SM9Io1FSgUO3qcnmwhdVoBnuuFQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=CJZHDkctBifI3hhpp9wotdwYZQaCyl+N2Ft0yK0J29o=;
- b=QACBvZ0PdzmpbbozXQXIW8eV9pHWCFIXOCQl2126Urdnv1P/VlJ+GvBF1VD+5XbS/f25rZvdTwasIso++fKM7vNQvDfHkSr6myh+8+z6dASXN2EaCrMIt53KSE7sEGa8D+K+QeqzPsKz+kolcKn6vn4rYyKDvA0MOjFYXyKLdHY=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from DM6PR12MB3370.namprd12.prod.outlook.com (2603:10b6:5:38::25) by
- PH7PR12MB6588.namprd12.prod.outlook.com (2603:10b6:510:210::10) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6111.20; Tue, 21 Feb
- 2023 16:48:38 +0000
-Received: from DM6PR12MB3370.namprd12.prod.outlook.com
- ([fe80::4df2:b32a:e628:c57e]) by DM6PR12MB3370.namprd12.prod.outlook.com
- ([fe80::4df2:b32a:e628:c57e%7]) with mapi id 15.20.6111.021; Tue, 21 Feb 2023
- 16:48:38 +0000
-Message-ID: <cdd5f892-49b9-1e22-4dc1-95a8a733c453@amd.com>
-Date:   Tue, 21 Feb 2023 11:48:35 -0500
+        Tue, 21 Feb 2023 11:59:00 -0500
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20C3A61A8
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Feb 2023 08:58:58 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1676998738; x=1708534738;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=WTbh+QTltW9ZxDQGN6CN4UCm0JeOXBIFh/h0RJ+P5Jc=;
+  b=HgNyMciIF2zx/6GbTWdBnhfR7xY3aYtj6Sar5kADmvGoWkXWU719BMDr
+   vpvhRGPlDkxNA0i0J+ycqzT2LLPMMCYgFm3L1fgFESWm3/6Q6jhsfm035
+   JMPxAFazVJ9TOFzZlvGzoTz/qCjQs/JWwHLPI/B3K7ZEM/XLH/fTV6Pdp
+   aotYIxwbi6oduJa8eeuPze3dELbtUhThvV5ZDUWtPqCtyX+7+Ys4hQfW0
+   crtDp7jXPEQueyCm9xuVCNe4JmDfrK/eqgpH0JaKZFm2pfRlKQmHAq7LL
+   4kUjxjR5Nsz4B9YyTrFDg4JSjGyzs85vTPPnKgGkBPbFQCXnLmNT0Lu4+
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10628"; a="334884715"
+X-IronPort-AV: E=Sophos;i="5.97,315,1669104000"; 
+   d="scan'208";a="334884715"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Feb 2023 08:58:47 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10628"; a="814569137"
+X-IronPort-AV: E=Sophos;i="5.97,315,1669104000"; 
+   d="scan'208";a="814569137"
+Received: from taevough-mobl.amr.corp.intel.com (HELO [10.209.174.213]) ([10.209.174.213])
+  by fmsmga001-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Feb 2023 08:58:45 -0800
+Message-ID: <dfebabad-4777-b5e3-8f58-1301faf97f7e@linux.intel.com>
+Date:   Tue, 21 Feb 2023 11:49:53 -0500
+MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.2
-Content-Language: en-CA
-To:     Rob Clark <robdclark@gmail.com>,
-        Pekka Paalanen <ppaalanen@gmail.com>
-Cc:     Rob Clark <robdclark@chromium.org>,
-        Gustavo Padovan <gustavo@padovan.org>,
-        Tvrtko Ursulin <tvrtko.ursulin@intel.com>,
-        =?UTF-8?Q?Christian_K=c3=b6nig?= <ckoenig.leichtzumerken@gmail.com>,
-        =?UTF-8?Q?Michel_D=c3=a4nzer?= <michel@daenzer.net>,
-        open list <linux-kernel@vger.kernel.org>,
-        dri-devel@lists.freedesktop.org,
-        =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
-        "moderated list:DMA BUFFER SHARING FRAMEWORK" 
-        <linaro-mm-sig@lists.linaro.org>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        freedreno@lists.freedesktop.org,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        "open list:SYNC FILE FRAMEWORK" <linux-media@vger.kernel.org>
-References: <20230218211608.1630586-1-robdclark@gmail.com>
- <20230218211608.1630586-7-robdclark@gmail.com>
- <20230220105345.70e46fa5@eldfell>
- <CAF6AEGv9fLQCD65ytRTGp=EkNB1QoZYH5ArphgGQALV9J08Cmw@mail.gmail.com>
-From:   Luben Tuikov <luben.tuikov@amd.com>
-Subject: Re: [PATCH v4 06/14] dma-buf/sync_file: Support (E)POLLPRI
-In-Reply-To: <CAF6AEGv9fLQCD65ytRTGp=EkNB1QoZYH5ArphgGQALV9J08Cmw@mail.gmail.com>
+ Firefox/102.0 Thunderbird/102.7.1
+Subject: Re: [PATCH 09/10] ASoC: Intel: sof_sdw: Add support for Cirrus Logic
+ CS35L56
+Content-Language: en-US
+To:     Richard Fitzgerald <rf@opensource.cirrus.com>, broonie@kernel.org,
+        cezary.rojewski@intel.com, peter.ujfalusi@linux.intel.com,
+        yung-chuan.liao@linux.intel.com, kai.vehmanen@linux.intel.com
+Cc:     alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org,
+        patches@opensource.cirrus.com
+References: <20230217161410.915202-1-rf@opensource.cirrus.com>
+ <20230217161410.915202-10-rf@opensource.cirrus.com>
+From:   Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
+In-Reply-To: <20230217161410.915202-10-rf@opensource.cirrus.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: YT4PR01CA0150.CANPRD01.PROD.OUTLOOK.COM
- (2603:10b6:b01:ac::17) To DM6PR12MB3370.namprd12.prod.outlook.com
- (2603:10b6:5:38::25)
-MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DM6PR12MB3370:EE_|PH7PR12MB6588:EE_
-X-MS-Office365-Filtering-Correlation-Id: 30f2e10b-1160-409b-e4ee-08db142b7afc
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: yFQNF+rv4rOPDu6B024wjoayrum8XLyq97vPc0HNATPwpKJ32dfIHc3mkDZ5brZfZF4ObsfdCg1I9IiLfYDquzgi0ZLO+arENpfkoGzERby0EQzF5BlnAMj4Xe4yirmYlMd2cwq0kV22RmkHduaY9U084Egkyqm6ZJ/jo0sF+oYWh4IFXHTGV7r+Qg3TRAJtTm/VkEWwc6olOe6EGNCECUD0JcmdoIKRc0MFpdEGHVV4oOh/gnATXM6y3CR3ilOcrPdLkB6MT9Ni3iR6Rr0CKQ7nsgNWsdqe9a1O3kwkjJJjrBFqWgeLrSdJiXdOfSEzNhQSN2ucjuXfMawL5ZphKL2Jt10lYe/t4B5TMHJtPw46w2f7S8neiJbnZ0wvtW9ABVKTq4GwYK31EMjFn9DwRWDizj7EdnZnw+3mj6Cxdr9UN1+Jbi/dGZjIPQiOk4BNaxJkGZdjmvrAWiHZArNH+ZCCZ4l3oTKnxMkq+W5f7uwlNRoUJbpczxRce11JnJWkAXpRS9ea4hYUMggGADlK9P4VAYbhWm5ZJyHwSslo0p/iEluZ5zRu5X2xcGvlsoQnYPIAPFEcd6dm+YztE80tzUPTUd74lqBQPloz4MazAbvSF8uZtpAIMHIdZYJW/EtaG9yD4/xmPXhySnwpli7QK2oLUSDtZbLFINuFNEbmF9jW8tAx8LTWbjJD8NgMhjbvNgMxbJlY2PZh4p/pHO5shdV8vXAqlLkgaOWePK2W83Y=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR12MB3370.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(39860400002)(346002)(396003)(366004)(376002)(136003)(451199018)(6486002)(36756003)(316002)(54906003)(110136005)(186003)(478600001)(8936002)(2616005)(26005)(7416002)(2906002)(5660300002)(44832011)(41300700001)(86362001)(6506007)(66946007)(53546011)(6666004)(4326008)(83380400001)(31696002)(8676002)(66476007)(55236004)(66556008)(38100700002)(6512007)(31686004)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?a09JSE5XRGMrUFNySDlFeHRVTkhoYVdiaUJqeGxndUpLOTU5YVM0eXM4TDlz?=
- =?utf-8?B?MEpxTlRFdndNSnJ3ZmZFM3RSWVo4WXVpMGFJcUMzOEdTMmNwZVF4U0pWa2VX?=
- =?utf-8?B?ZVdyS25vb2Q3RW14VkIweHlLVnJEWVRGV0hpcHVESWV3Wlh1ZUZ3WVZTd1JJ?=
- =?utf-8?B?RndGcGY3dmdKUG5NUDJzRmtlQmxtMGVVczUwZUQ3SVJJNmhqQWRlK3hhOERx?=
- =?utf-8?B?VnZ0dDRubGhoaDQwSXpvT3N1THlTVk1jMGhOcnpEeks5cmprdVlUYks0UE9X?=
- =?utf-8?B?bjMwQWtENFZrYlFGRnY1eHhHU05yaWNKa2NpZDQrWGU2a2w0Z0ppK3N4RWhk?=
- =?utf-8?B?QkNFWkNnSVN3K21IRE42bndpeXU2U0I5SCtLMXRmTm4wc0RreS9ZbkZxYTI3?=
- =?utf-8?B?eEw0TjRWamhsVXl0MktmTVhWbVRaN3VlM2FaRHZ3UnlWT2IzUjhFYjFSOFow?=
- =?utf-8?B?V2tyMUlMMWU4WktESlJVbGNJeVVPdHYwQW5yMUxDYjg5NGZ1S25iTGZnTzlX?=
- =?utf-8?B?MmZvMFVQY3lpamliNkMwd09WU24vSXFEOXlwdHp1OXRTWmRZUmFqR0hjNzBC?=
- =?utf-8?B?K2hBVEw0ajRveko5ckpyeS9ld1JnVlp2YUQ0R0wydzlvRVFxVTdkY1NrY2xa?=
- =?utf-8?B?RVFSQnpZVVllZmM3R3Q5MFd1QU9LSnVvZlR0aXlLaWlxN2o1NzZOUnVZMmdo?=
- =?utf-8?B?Y0lWVkM4MkhkWUk0anRETXAwNmhoYTVSM1hQa3NwQmp6TkhsdW5oc2Y4cE9s?=
- =?utf-8?B?aTRiRkVyUlRPY1VLc3VlSjFhSy9GUkx1eHM2RzUzL1JxMks2ZVZOYmpRdlE4?=
- =?utf-8?B?ODJ1VDc3enhTRy9HZnp1eGlmVlIwSHYyN1hRUnViOUh3OXJ1dGM2OXlaeXd2?=
- =?utf-8?B?eFdFSWd1aWNxS3M1Qmc5dGtKMGRJTHFxcXhGaUtRUm5POExqZFhVanZUY0hz?=
- =?utf-8?B?RnJjMlNyVVV1T0JRWW1COUpxL0ljU2ZBeWZSanBxTTBEMi95RWJEOHR0OWYx?=
- =?utf-8?B?bkdjQmhiVDhyNnRaTmx6YlYwNTY1V0JPdmRvNzRHUVRveW80Q3UzSnlLWGNu?=
- =?utf-8?B?YTVoTW9TVU0yaUtKaWFBdW1uck5zbVBJN2M5ZUtaRjdtcFNGYWN4Q0VTMCtQ?=
- =?utf-8?B?aW52ZSs3WkRuamV3UzRaNldHZyttdGNiaEZJbWVQbFByblhjWW40bFM3TE9H?=
- =?utf-8?B?Q2pmblRDeU1qblZqdVhFemdrby95T1I0TTF4YnVJUlFXSmtza0doNE9hYjdX?=
- =?utf-8?B?VW5QU09TQTlNakRqaUpVNjdZell1SU9uN1NQQ2NaZW5OTndEK01xeFlTdC9t?=
- =?utf-8?B?V2k3OU9XWjdxNlFGRERyK3pjRzhjeDNHc2ZpRzZFbm1GTVpMRXBwY2VCY3FK?=
- =?utf-8?B?NkoxMmk5aU9tVDZEcTQvR1VKM0ZGSDJsTTJQVXc3MTBFQU9qUTBObWczSHdO?=
- =?utf-8?B?Z1RQd2tSUzRsUnlaQ1NTVUQraTM1TEhDc1dtamxYY2FVekpadjJwaUZrRFJ3?=
- =?utf-8?B?WG52b0c0Nmd0aGRVUnBHTDN6U05oazIxMjd4RWo0R2l2R1U0RXNDU3hpQjdQ?=
- =?utf-8?B?dnZwVzRuR0JSZXFZLzEwUjlGK2NxTnBLc0ZaVXpKRGtPaFhqSmZtNWEwNDlM?=
- =?utf-8?B?dms5dGtmOWpFeGRwWjZJVHBHdTZFRFM3VVFyeGsxSkh1QVFZZTI3THphMDZO?=
- =?utf-8?B?UGtMeTVuUzlvR21NYUV2bHFOUU04WG8vb1d1bDdiZHRwTlFaK2MxQ1JaUXlF?=
- =?utf-8?B?SDI3d2ZJcmFzNTRHVmVhcDB3OUtqVVBubm5NTEt0Q0JBK3hhWTVCekhMSjRm?=
- =?utf-8?B?N1pKV0lVUjJJVy9KeC9UeXRicnFmZXhGYlZxNHFGU25xYUd0dHpBazFZNmhm?=
- =?utf-8?B?WDRSSEh1Q3ZYbDQ2TEt3NUNWS2dybTljb0w0ZjhnMUsvRENMYmF2dnNXMnJy?=
- =?utf-8?B?Y1ZxYXlpWUJxbTN3NS92YjdDLzBKb0w4MlI4bWJubTNaS2I3NDg1cXcxNUxF?=
- =?utf-8?B?NlhUYVBBenlPa3kyQ2dBR0VURS9TVndOTVBGaTBZS2llQnpRdmdoLy9iN3V2?=
- =?utf-8?B?NUNtWHlJbnJkTjEvTlpDM3J6WnRBTHZ6a29lZlBPMFA0aGpUdlBWTGRCN21l?=
- =?utf-8?Q?vTG0E68I6Xlabs/t1i4PUtOf3?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 30f2e10b-1160-409b-e4ee-08db142b7afc
-X-MS-Exchange-CrossTenant-AuthSource: DM6PR12MB3370.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 21 Feb 2023 16:48:38.4475
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: nmR+XZqpMTaH2HfQJs0XGtHIDK2e8/0jDJNHjCwiQcYNU9EtwM44lbfglsB0pDpT
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR12MB6588
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
-        autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023-02-20 11:14, Rob Clark wrote:
-> On Mon, Feb 20, 2023 at 12:53 AM Pekka Paalanen <ppaalanen@gmail.com> wrote:
->>
->> On Sat, 18 Feb 2023 13:15:49 -0800
->> Rob Clark <robdclark@gmail.com> wrote:
->>
->>> From: Rob Clark <robdclark@chromium.org>
->>>
->>> Allow userspace to use the EPOLLPRI/POLLPRI flag to indicate an urgent
->>> wait (as opposed to a "housekeeping" wait to know when to cleanup after
->>> some work has completed).  Usermode components of GPU driver stacks
->>> often poll() on fence fd's to know when it is safe to do things like
->>> free or reuse a buffer, but they can also poll() on a fence fd when
->>> waiting to read back results from the GPU.  The EPOLLPRI/POLLPRI flag
->>> lets the kernel differentiate these two cases.
->>>
->>> Signed-off-by: Rob Clark <robdclark@chromium.org>
->>
->> Hi,
->>
->> where would the UAPI documentation of this go?
->> It seems to be missing.
-> 
-> Good question, I am not sure.  The poll() man page has a description,
-> but my usage doesn't fit that _exactly_ (but OTOH the description is a
-> bit vague).
-> 
->> If a Wayland compositor is polling application fences to know which
->> client buffer to use in its rendering, should the compositor poll with
->> PRI or not? If a compositor polls with PRI, then all fences from all
->> applications would always be PRI. Would that be harmful somehow or
->> would it be beneficial?
-> 
-> I think a compositor would rather use the deadline ioctl and then poll
-> without PRI.  Otherwise you are giving an urgency signal to the fence
-> signaller which might not necessarily be needed.
-> 
-> The places where I expect PRI to be useful is more in mesa (things
-> like glFinish(), readpix, and other similar sorts of blocking APIs)
-Hi,
 
-Hmm, but then user-space could do the opposite, namely, submit work as usual--never 
-using the SET_DEADLINE ioctl, and then at the end, poll using (E)POLLPRI. That seems
-like a possible usage pattern, unintended--maybe, but possible. Do we want to discourage
-this? Wouldn't SET_DEADLINE be enough? I mean, one can call SET_DEADLINE with the current
-time, and then wouldn't that be equivalent to (E)POLLPRI?
--- 
-Regards,
-Luben
+> +static int cs35l56_init_multiple(struct snd_soc_pcm_runtime *rtd, int count)
+> +{
+> +	struct snd_soc_card *card = rtd->card;
+> +	struct snd_soc_dai *codec_dai;
+> +	int i, ret;
+> +
+> +	card->components = devm_kasprintf(card->dev, GFP_KERNEL,
+> +					  "%s hs:cs35l56",
 
+the string is wrong here, this is an amplifier so it should be
+amp:cs35l56 or spk:cs36l56 (not sure which of the two we ended-up using).
+
+> +					  card->components);
+> +	if (!card->components)
+> +		return -ENOMEM;
+> +
+> +	ret = snd_soc_dapm_new_controls(&card->dapm,
+> +					cs35l56_sof_widgets, ARRAY_SIZE(cs35l56_sof_widgets));
+> +	if (ret) {
+> +		dev_err(card->dev, "Widgets add failed: %d\n", ret);
+> +		return ret;
+> +	}
+> +
+> +	ret = snd_soc_dapm_add_routes(&card->dapm, cs35l56_sof_map, count);
+> +	if (ret) {
+> +		dev_err(card->dev, "Map add %d failed: %d\n", count, ret);
+> +		return ret;
+> +	}
+> +
+> +	/* Enable one feedback TX per amp on different slots */
+> +	for_each_rtd_codec_dais(rtd, i, codec_dai) {
+> +		ret = snd_soc_dai_set_tdm_slot(codec_dai, 0x3, 1 << i, 4, 16);
+
+TDM slots? Not getting how this would work with SoundWire?
+
+> +		if (ret < 0)
+> +			return ret;
+> +	}
+> +
+> +	return 0;
+> +}
