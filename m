@@ -2,110 +2,241 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 168E469DBCD
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 09:19:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D622969DBC8
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 09:19:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233423AbjBUITU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Feb 2023 03:19:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34412 "EHLO
+        id S233453AbjBUIS6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Feb 2023 03:18:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34878 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232682AbjBUITR (ORCPT
+        with ESMTP id S233685AbjBUISy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Feb 2023 03:19:17 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB1787DB9
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Feb 2023 00:18:29 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1676967509;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=8Q9DXR9c/98x6MLgurW6BjSZNM+15j/q21SM5lNGnmM=;
-        b=TboTGe2NG80DFGVP/j+KzmA87fTj11mFPHxcVK0r5xxcYefe6EcY9dKeZFMF2/q/pnsLO5
-        hkJO8NnXCi75rXrobubObJFBUIIV1M07imCBXd1HRWVUPv9WuMHDmD+sYnBRT+yPqVNqwY
-        8iToiu5UpdCwYtNUlLkmYXSV3nyoElY=
-Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com
- [209.85.208.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-528-D7qu8ONdOMaQuiw-G9-aDw-1; Tue, 21 Feb 2023 03:18:28 -0500
-X-MC-Unique: D7qu8ONdOMaQuiw-G9-aDw-1
-Received: by mail-ed1-f70.google.com with SMTP id ck7-20020a0564021c0700b004a25d8d7593so4294935edb.0
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Feb 2023 00:18:27 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=8Q9DXR9c/98x6MLgurW6BjSZNM+15j/q21SM5lNGnmM=;
-        b=Sg/r+I0rGb7z3Uzco/bd/9itnER1zgJyOVCqbaFsZQPfbZjIBUKkTSVPbapn9hFqe8
-         Nzc96I3m8sGSt/Vx7Bmj/7yaw13jIyoRFIB4LrLJadmxxjQMAIBqiDqX9GaMixCEDiJQ
-         S0c+iOcAD+RUioe9CFogro5vA51mtDQhe2sWa2nwZy6WWNxZDuMQGKLd/EoWfsFWId6f
-         kI1a2YSwkUKXxXioIvwCEDOKXty7IOjibq2axi1tgHuEfc5+BbuQJZRMvhgsLaG/lc1P
-         usbKXoZpQloApAV/NgF8zbl6cUJh/xd5L0qsPIpG6bI8azdGNKQsAhXbgZBjtN4Gcfa4
-         vbww==
-X-Gm-Message-State: AO0yUKV/7hq5YAcCctc7xaqvizE1UUhgeQY7xY0+T23GG85jD7XqtZU1
-        qnK0z5zYD6HV6C3/d0uWeaoOQLBnZZo/LQBEzQfd4V809qZCL5Rf63Eg+pOUyLvaOuqA9DyUbPd
-        +tYiqkgcB/CA5a2wDUeCo8yOCk9TZzg==
-X-Received: by 2002:a05:6402:4d7:b0:4aa:a4e6:249b with SMTP id n23-20020a05640204d700b004aaa4e6249bmr3187527edw.7.1676967506599;
-        Tue, 21 Feb 2023 00:18:26 -0800 (PST)
-X-Google-Smtp-Source: AK7set8xPE7WF5tDEzWbZK1Iiga5OQ9VlwlnqkIhKs0RrfYvTje5J5MCyKIkQTgUywWNW3v04H6uPQ==
-X-Received: by 2002:a05:6402:4d7:b0:4aa:a4e6:249b with SMTP id n23-20020a05640204d700b004aaa4e6249bmr3187517edw.7.1676967506319;
-        Tue, 21 Feb 2023 00:18:26 -0800 (PST)
-Received: from ?IPV6:2001:b07:6468:f312:63a7:c72e:ea0e:6045? ([2001:b07:6468:f312:63a7:c72e:ea0e:6045])
-        by smtp.googlemail.com with ESMTPSA id f7-20020a50d547000000b00488117821ffsm1415752edj.31.2023.02.21.00.18.23
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 21 Feb 2023 00:18:25 -0800 (PST)
-Message-ID: <884fdf34-e675-2ebe-e37f-6aeb696a0922@redhat.com>
-Date:   Tue, 21 Feb 2023 09:18:23 +0100
+        Tue, 21 Feb 2023 03:18:54 -0500
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47DC1A5C5;
+        Tue, 21 Feb 2023 00:18:48 -0800 (PST)
+Received: from [IPV6:2a01:e0a:120:3210:5bf1:85e7:c290:7d2f] (unknown [IPv6:2a01:e0a:120:3210:5bf1:85e7:c290:7d2f])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: benjamin.gaignard)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 135A166021C4;
+        Tue, 21 Feb 2023 08:18:46 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1676967526;
+        bh=VL8H78+sZVJfJRLBdoM9mZC6818cM0JqQgnY2sYTasY=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=mKZTFibTyi8wSSWgu9OcDdYKiDKhA9svv69EnAopMqYQHnHd2qqX+LQYsoVbnnCkn
+         3lLDtXMX6uy66c9AxYt76+DeZpYwAezdiT7Mlg0bgppqp6WxywoV+ysuAqXx8X7VpF
+         VFWxDXUduy8GtpURk3rKfnjY/sA2tnbA4LDA4Mf/NAi28abN/27g9IeuWajwGQifrE
+         WHB/vCPNwzv3M24yxUuo8hd+OeNsOfMVQa0KoIk+stTYkhIJ26EnJ7qiIy46iqs7f5
+         qNAYhHU5DdZ9vy3Y+C0HSxhk8ft2iLfiBdfjA4+5RSUsFiAb9ShlMZB9a3s2/fjPLO
+         rmXP8aC+1DOMg==
+Message-ID: <a5e8a6c5-531a-1c4c-4235-e8cf7a68d96d@collabora.com>
+Date:   Tue, 21 Feb 2023 09:18:43 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.7.1
-Subject: Re: [PATCH v2 27/29] LoongArch: KVM: Implement vcpu world switch
+Subject: Re: [PATCH v4 06/12] media: verisilicon: Check AV1 bitstreams bit
+ depth
+To:     Nicolas Dufresne <nicolas.dufresne@collabora.com>,
+        Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
+Cc:     p.zabel@pengutronix.de, mchehab@kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, heiko@sntech.de,
+        hverkuil@xs4all.nl, jernej.skrabec@gmail.com,
+        linux-media@vger.kernel.org, linux-rockchip@lists.infradead.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, kernel@collabora.com
+References: <20230214140557.537984-1-benjamin.gaignard@collabora.com>
+ <20230214140557.537984-7-benjamin.gaignard@collabora.com>
+ <CAAEAJfDihZND+1FSzFxT86j9u6h-wH6uMMNh7BiaEWQWtSpk=Q@mail.gmail.com>
+ <c4d355d5-5e14-8eba-1944-fc26b1050cf5@collabora.com>
+ <6997fe5cbcfef626340ce4d85095eadb7bc63067.camel@collabora.com>
 Content-Language: en-US
-To:     Tianrui Zhao <zhaotianrui@loongson.cn>
-Cc:     Huacai Chen <chenhuacai@kernel.org>,
-        WANG Xuerui <kernel@xen0n.name>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        loongarch@lists.linux.dev, linux-kernel@vger.kernel.org,
-        kvm@vger.kernel.org, Jens Axboe <axboe@kernel.dk>,
-        Mark Brown <broonie@kernel.org>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        Oliver Upton <oliver.upton@linux.dev>, maobibo@loongson.cn
-References: <20230220065735.1282809-1-zhaotianrui@loongson.cn>
- <20230220065735.1282809-28-zhaotianrui@loongson.cn>
-From:   Paolo Bonzini <pbonzini@redhat.com>
-In-Reply-To: <20230220065735.1282809-28-zhaotianrui@loongson.cn>
+From:   Benjamin Gaignard <benjamin.gaignard@collabora.com>
+In-Reply-To: <6997fe5cbcfef626340ce4d85095eadb7bc63067.camel@collabora.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/20/23 07:57, Tianrui Zhao wrote:
-> +	or	a0, s0, zero
-> +	or	a1, s1, zero
-> +	ld.d	t8, a2, KVM_ARCH_HANDLE_EXIT
-> +	jirl	ra,t8, 0
-> +	ori	t0, zero, CSR_CRMD_IE
-> +	csrxchg	zero, t0, LOONGARCH_CSR_CRMD
 
-_kvm_handle_exit returns with the interrupts disabled.
+Le 20/02/2023 à 20:00, Nicolas Dufresne a écrit :
+> Le lundi 20 février 2023 à 17:24 +0100, Benjamin Gaignard a écrit :
+>> Le 18/02/2023 à 14:11, Ezequiel Garcia a écrit :
+>>> On Tue, Feb 14, 2023 at 11:06 AM Benjamin Gaignard
+>>> <benjamin.gaignard@collabora.com> wrote:
+>>>> The driver supports 8 and 10 bits bitstreams, make sure to discard
+>>>> other cases.
+>>>> It could happens that userland test if V4L2_CID_STATELESS_AV1_SEQUENCE
+>>>> exists without setting bit_depth field in this case use
+>>>> HANTRO_DEFAULT_BIT_DEPTH value.
+>>>>
+>>> This shouldn't happen.
+>>>
+>>> If the bit_depth argument in hantro_check_depth_match()
+>>> can be set unchecked by userspace, we have done something wrong!!
+>>>
+>>> Are you sure that userspace can do a S_CTRL with an invalid bit-depth?
+>>> The try_or_set_cluster() function seems to always call try_ctrl before s_ctrl.
+>> I have dump the stack when AV1 sequence bit depth = 0 in s_ctrl.
+>> It is happening when opening the driver, v4l2 setup the ctrls by calling __v4l2_ctrl_handler_setup()
+>> this led to call hantro_av1_s_ctrl() with empty structure.
+>>
+>> For other codecs isn't a problem because bit depth is coded with a minus 8 value (ie: 8 bits = 0)
+>> while for AV1 it is the real value (ie: 8 bits = 8).
+> Shouldn't this be fixed in v4l2-ctrls-core.c / std_init_compound() ? This is
+> what we do for VP9:
+>
+>
+> 	case V4L2_CTRL_TYPE_VP9_FRAME:
+> 		p_vp9_frame = p;
+> 		p_vp9_frame->profile = 0;
+> 		p_vp9_frame->bit_depth = 8;
+> 		p_vp9_frame->flags |= V4L2_VP9_FRAME_FLAG_X_SUBSAMPLING |
+> 			V4L2_VP9_FRAME_FLAG_Y_SUBSAMPLING;
+> 		break;
 
-Can you please add a comment to explain why CRMD.IE needs to be cleared 
-here, or remove these two instructions if unnecessary?
+That is indeed a better solution.
+I will add in my series has a fix of Daniel's series about AV1 uAPI.
 
-Paolo
+Thanks,
+Benjamin
 
-> +	or	a2, s1, zero
-> +	addi.d	a2, a2, KVM_VCPU_ARCH
-> +
-> +	andi	t0, a0, RESUME_HOST
-> +	bnez	t0, ret_to_host
-
+>
+>
+>> [   88.478751] Hardware name: Radxa Rock 5A Board (DT)
+>> [   88.479184] Call trace:
+>> [   88.479406]  dump_backtrace.part.0+0xdc/0xf0
+>> [   88.479796]  show_stack+0x18/0x30
+>> [   88.480099]  dump_stack_lvl+0x68/0x84
+>> [   88.480431]  dump_stack+0x18/0x34
+>> [   88.480732]  hantro_av1_s_ctrl+0x7c/0xcc [hantro_vpu]
+>> [   88.481211]  __v4l2_ctrl_handler_setup+0x120/0x154
+>> [   88.481643]  v4l2_ctrl_handler_setup+0x2c/0x50
+>> [   88.482043]  hantro_open+0x138/0x204 [hantro_vpu]
+>> [   88.482490]  v4l2_open+0xa8/0x124
+>> [   88.482794]  chrdev_open+0xc0/0x22c
+>> [   88.483114]  do_dentry_open+0x13c/0x490
+>> [   88.483464]  vfs_open+0x2c/0x40
+>> [   88.483749]  path_openat+0x878/0xe50
+>> [   88.484074]  do_filp_open+0x80/0x130
+>> [   88.484399]  do_sys_openat2+0xb4/0x170
+>> [   88.484736]  __arm64_sys_openat+0x60/0xb0
+>> [   88.485097]  invoke_syscall+0x48/0x114
+>> [   88.485437]  el0_svc_common.constprop.0+0x44/0xfc
+>> [   88.485860]  do_el0_svc+0x3c/0xc0
+>> [   88.486163]  el0_svc+0x2c/0x84
+>> [   88.486441]  el0t_64_sync_handler+0xbc/0x140
+>> [   88.486826]  el0t_64_sync+0x190/0x194
+>>
+>> Regards,
+>> Benjamin
+>>
+>>> Thanks,
+>>> Ezequiel
+>>>
+>>>> Signed-off-by: Benjamin Gaignard <benjamin.gaignard@collabora.com>
+>>>> ---
+>>>> version 4:
+>>>> - This patch is the result of squashing "Save bit depth for AV1 decoder"
+>>>>     and "Check AV1 bitstreams bit depth" of version 3 + adapation to
+>>>>     "[PATCH v8 0/6] media: verisilicon: HEVC: fix 10bits handling" series.
+>>>>
+>>>>    .../media/platform/verisilicon/hantro_drv.c   | 36 +++++++++++++++++++
+>>>>    .../media/platform/verisilicon/hantro_v4l2.c  |  4 +++
+>>>>    2 files changed, 40 insertions(+)
+>>>>
+>>>> diff --git a/drivers/media/platform/verisilicon/hantro_drv.c b/drivers/media/platform/verisilicon/hantro_drv.c
+>>>> index bc1a85456142..666cd46902da 100644
+>>>> --- a/drivers/media/platform/verisilicon/hantro_drv.c
+>>>> +++ b/drivers/media/platform/verisilicon/hantro_drv.c
+>>>> @@ -275,7 +275,13 @@ static int hantro_try_ctrl(struct v4l2_ctrl *ctrl)
+>>>>                   /* We only support profile 0 */
+>>>>                   if (dec_params->profile != 0)
+>>>>                           return -EINVAL;
+>>>> +       } else if (ctrl->id == V4L2_CID_STATELESS_AV1_SEQUENCE) {
+>>>> +               const struct v4l2_ctrl_av1_sequence *sequence = ctrl->p_new.p_av1_sequence;
+>>>> +
+>>>> +               if (sequence->bit_depth != 8 && sequence->bit_depth != 10)
+>>>> +                       return -EINVAL;
+>>>>           }
+>>>> +
+>>>>           return 0;
+>>>>    }
+>>>>
+>>>> @@ -348,6 +354,30 @@ static int hantro_hevc_s_ctrl(struct v4l2_ctrl *ctrl)
+>>>>           return 0;
+>>>>    }
+>>>>
+>>>> +static int hantro_av1_s_ctrl(struct v4l2_ctrl *ctrl)
+>>>> +{
+>>>> +       struct hantro_ctx *ctx;
+>>>> +
+>>>> +       ctx = container_of(ctrl->handler,
+>>>> +                          struct hantro_ctx, ctrl_handler);
+>>>> +
+>>>> +       switch (ctrl->id) {
+>>>> +       case V4L2_CID_STATELESS_AV1_SEQUENCE:
+>>>> +       {
+>>>> +               int bit_depth = ctrl->p_new.p_av1_sequence->bit_depth;
+>>>> +
+>>>> +               if (ctx->bit_depth == bit_depth)
+>>>> +                       return 0;
+>>>> +
+>>>> +               return hantro_reset_raw_fmt(ctx, bit_depth);
+>>>> +       }
+>>>> +       default:
+>>>> +               return -EINVAL;
+>>>> +       }
+>>>> +
+>>>> +       return 0;
+>>>> +}
+>>>> +
+>>>>    static const struct v4l2_ctrl_ops hantro_ctrl_ops = {
+>>>>           .try_ctrl = hantro_try_ctrl,
+>>>>    };
+>>>> @@ -365,6 +395,11 @@ static const struct v4l2_ctrl_ops hantro_hevc_ctrl_ops = {
+>>>>           .s_ctrl = hantro_hevc_s_ctrl,
+>>>>    };
+>>>>
+>>>> +static const struct v4l2_ctrl_ops hantro_av1_ctrl_ops = {
+>>>> +       .try_ctrl = hantro_try_ctrl,
+>>>> +       .s_ctrl = hantro_av1_s_ctrl,
+>>>> +};
+>>>> +
+>>>>    #define HANTRO_JPEG_ACTIVE_MARKERS     (V4L2_JPEG_ACTIVE_MARKER_APP0 | \
+>>>>                                            V4L2_JPEG_ACTIVE_MARKER_COM | \
+>>>>                                            V4L2_JPEG_ACTIVE_MARKER_DQT | \
+>>>> @@ -542,6 +577,7 @@ static const struct hantro_ctrl controls[] = {
+>>>>                   .codec = HANTRO_AV1_DECODER,
+>>>>                   .cfg = {
+>>>>                           .id = V4L2_CID_STATELESS_AV1_SEQUENCE,
+>>>> +                       .ops = &hantro_av1_ctrl_ops,
+>>>>                   },
+>>>>           }, {
+>>>>                   .codec = HANTRO_AV1_DECODER,
+>>>> diff --git a/drivers/media/platform/verisilicon/hantro_v4l2.c b/drivers/media/platform/verisilicon/hantro_v4l2.c
+>>>> index 992c5baa929f..7e74e47c9a89 100644
+>>>> --- a/drivers/media/platform/verisilicon/hantro_v4l2.c
+>>>> +++ b/drivers/media/platform/verisilicon/hantro_v4l2.c
+>>>> @@ -86,6 +86,10 @@ hantro_check_depth_match(const struct hantro_fmt *fmt, int bit_depth)
+>>>>           if (!fmt->match_depth && !fmt->postprocessed)
+>>>>                   return true;
+>>>>
+>>>> +       /* 0 means default depth, which is 8 */
+>>>> +       if (!bit_depth)
+>>>> +               bit_depth = HANTRO_DEFAULT_BIT_DEPTH;
+>>>> +
+>>>>           fmt_depth = hantro_get_format_depth(fmt->fourcc);
+>>>>
+>>>>           /*
+>>>> --
+>>>> 2.34.1
+>>>>
