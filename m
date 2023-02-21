@@ -2,23 +2,23 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2DCA769DEEB
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 12:35:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E5E4669DEEC
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Feb 2023 12:35:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234025AbjBULfK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Feb 2023 06:35:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58152 "EHLO
+        id S234125AbjBULfN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Feb 2023 06:35:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58154 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233830AbjBULeo (ORCPT
+        with ESMTP id S233832AbjBULeo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 21 Feb 2023 06:34:44 -0500
 Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17A012686F
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Feb 2023 03:34:41 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7757526CEC
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Feb 2023 03:34:42 -0800 (PST)
 Received: from zn.tnic (p5de8e9fe.dip0.t-ipconnect.de [93.232.233.254])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 5D0451EC0681;
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id CF1FA1EC0682;
         Tue, 21 Feb 2023 12:34:40 +0100 (CET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
         t=1676979280;
@@ -26,23 +26,22 @@ DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
          to:to:cc:cc:mime-version:mime-version:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=4IxoB32WLSIy6eV1NxkSejZghgVhKqORRCJKoMxnv/Y=;
-        b=EQmnfjWnpopJUzOwY9r1pP0A3wFv+y11v8GCohH+bsoxt5SLtvGLAT/k7wXTEH4xhgILVO
-        Vm/Z7MhxgfkbtpYoIM0X4Gh09S83Tja++c1nPixw+JcCERtjmKFiWdjJI+TiinWv2dQjBF
-        xHVpVl80ErSEKJFyVCHTVHK9zRCeoVo=
+        bh=dWHBIgi4/PPHoVD+CngkvEQZ9VAcHNq+ytmZl53I++c=;
+        b=Pa3GQzNpCEz5RIlXXbe112ECZiXJnWwMhmAnOK0IZbYyETMd8xNqbPoBdNZ7z7ZtQpZci4
+        xu457d3A+pT/QFBpwL3XB/XLxKeBhMGkAQdnSTIu9tV0VcMvYZZhhKDHbSkDF0CbU6GS5f
+        ikY0Z0bUIxYDKFvwapn2qeTqIOZqvLc=
 From:   Borislav Petkov <bp@alien8.de>
 To:     LKML <linux-kernel@vger.kernel.org>
-Cc:     Borislav Petkov <bp@alien8.de>,
-        Dionna Glaze <dionnaglaze@google.com>,
+Cc:     Dionna Glaze <dionnaglaze@google.com>,
         Joerg Roedel <jroedel@suse.de>,
         Michael Roth <michael.roth@amd.com>,
         Nikunj A Dadhania <nikunj@amd.com>,
         Peter Gonda <pgonda@google.com>,
         Tom Lendacky <Thomas.Lendacky@amd.com>,
         linux-coco@lists.linux.dev, x86@kernel.org
-Subject: [PATCH -v2 09/11] virt/coco/sev-guest: Add throttling awareness
-Date:   Tue, 21 Feb 2023 12:34:26 +0100
-Message-Id: <20230221113428.19324-10-bp@alien8.de>
+Subject: [PATCH -v2 10/11] virt/coco/sev-guest: Double-buffer messages
+Date:   Tue, 21 Feb 2023 12:34:27 +0100
+Message-Id: <20230221113428.19324-11-bp@alien8.de>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20230221113428.19324-1-bp@alien8.de>
 References: <20230221113428.19324-1-bp@alien8.de>
@@ -59,129 +58,91 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Dionna Glaze <dionnaglaze@google.com>
 
-A potentially malicious SEV guest can constantly hammer the hypervisor
-using this driver to send down requests and thus prevent or at least
-considerably hinder other guests from issuing requests to the secure
-processor which is a shared platform resource.
-
-Therefore, the host is permitted and encouraged to throttle such guest
-requests.
-
-Add the capability to handle the case when the hypervisor throttles
-excessive numbers of requests issued by the guest. Otherwise, the VM
-platform communication key will be disabled, preventing the guest from
-attesting itself.
-
-Realistically speaking, a well-behaved guest should not even care about
-throttling. During its lifetime, it would end up issuing a handful of
-requests which the hardware can easily handle.
-
-This is more to address the case of a malicious guest. Such guest should
-get throttled and if its VMPCK gets disabled, then that's its own
-wrongdoing and perhaps that guest even deserves it.
-
-To the implementation: the hypervisor signals with SNP_GUEST_REQ_ERR_BUSY
-that the guest requests should be throttled. That error code is returned
-in the upper 32-bit half of exitinfo2 and this is part of the GHCB spec
-v2.
-
-So the guest is given a throttling period of 1 minute in which it
-retries the request every 2 seconds. This is a good default but if it
-turns out to not pan out in practice, it can be tweaked later.
-
-For safety, since the encryption algorithm in GHCBv2 is AES_GCM, control
-must remain in the kernel to complete the request with the current
-sequence number. Returning without finishing the request allows the
-guest to make another request but with different message contents. This
-is IV reuse, and breaks cryptographic protections.
-
-  [ bp: Rewrite commit message and do a simplified version. ]
+The encryption algorithms read and write directly to shared unencrypted
+memory, which may leak information as well as permit the host to tamper
+with the message integrity. Instead, copy whole messages in or out as
+needed before doing any computation on them.
 
 Fixes: d5af44dde546 ("x86/sev: Provide support for SNP guest request NAEs")
 Signed-off-by: Dionna Glaze <dionnaglaze@google.com>
-Co-developed-by: Borislav Petkov (AMD) <bp@alien8.de>
 Signed-off-by: Borislav Petkov (AMD) <bp@alien8.de>
-Link: https://lore.kernel.org/r/20230214164638.1189804-2-dionnaglaze@google.com
+Link: https://lore.kernel.org/r/20230214164638.1189804-3-dionnaglaze@google.com
 ---
- arch/x86/include/asm/sev-common.h       |  3 ++-
- arch/x86/kernel/sev.c                   |  4 ++++
- drivers/virt/coco/sev-guest/sev-guest.c | 19 ++++++++++++++++++-
- 3 files changed, 24 insertions(+), 2 deletions(-)
+ drivers/virt/coco/sev-guest/sev-guest.c | 27 +++++++++++++++++++++----
+ 1 file changed, 23 insertions(+), 4 deletions(-)
 
-diff --git a/arch/x86/include/asm/sev-common.h b/arch/x86/include/asm/sev-common.h
-index b8357d6ecd47..b63be696b776 100644
---- a/arch/x86/include/asm/sev-common.h
-+++ b/arch/x86/include/asm/sev-common.h
-@@ -128,8 +128,9 @@ struct snp_psc_desc {
- 	struct psc_entry entries[VMGEXIT_PSC_MAX_ENTRY];
- } __packed;
- 
--/* Guest message request error code */
-+/* Guest message request error codes */
- #define SNP_GUEST_REQ_INVALID_LEN	BIT_ULL(32)
-+#define SNP_GUEST_REQ_ERR_BUSY		BIT_ULL(33)
- 
- #define GHCB_MSR_TERM_REQ		0x100
- #define GHCB_MSR_TERM_REASON_SET_POS	12
-diff --git a/arch/x86/kernel/sev.c b/arch/x86/kernel/sev.c
-index d67884fb38c1..3f664ab277c4 100644
---- a/arch/x86/kernel/sev.c
-+++ b/arch/x86/kernel/sev.c
-@@ -2214,6 +2214,10 @@ int snp_issue_guest_request(u64 exit_code, struct snp_req_data *input, unsigned
- 	case 0:
- 		break;
- 
-+	case SNP_GUEST_REQ_ERR_BUSY:
-+		ret = -EAGAIN;
-+		break;
-+
- 	case SNP_GUEST_REQ_INVALID_LEN:
- 		/* Number of expected pages are returned in RBX */
- 		if (exit_code == SVM_VMGEXIT_EXT_GUEST_REQUEST) {
 diff --git a/drivers/virt/coco/sev-guest/sev-guest.c b/drivers/virt/coco/sev-guest/sev-guest.c
-index d430e2be2a22..da4f6267baad 100644
+index da4f6267baad..6bc1390b54e8 100644
 --- a/drivers/virt/coco/sev-guest/sev-guest.c
 +++ b/drivers/virt/coco/sev-guest/sev-guest.c
-@@ -31,6 +31,9 @@
- #define AAD_LEN		48
- #define MSG_HDR_VER	1
+@@ -46,7 +46,15 @@ struct snp_guest_dev {
  
-+#define SNP_REQ_MAX_RETRY_DURATION	(60*HZ)
-+#define SNP_REQ_RETRY_DELAY		(2*HZ)
-+
- struct snp_guest_crypto {
- 	struct crypto_aead *tfm;
- 	u8 *iv, *authtag;
-@@ -320,7 +323,8 @@ static int enc_payload(struct snp_guest_dev *snp_dev, u64 seqno, int version, u8
- 
- static int __handle_guest_request(struct snp_guest_dev *snp_dev, u64 exit_code, __u64 *fw_err)
- {
--	unsigned long err, override_err = 0;
-+	unsigned long err = 0xff, override_err = 0;
-+	unsigned long req_start = jiffies;
- 	unsigned int override_npages = 0;
- 	int rc;
- 
-@@ -360,6 +364,19 @@ static int __handle_guest_request(struct snp_guest_dev *snp_dev, u64 exit_code,
- 		 * user as an ioctl() return code.
- 		 */
- 		goto retry_request;
+ 	void *certs_data;
+ 	struct snp_guest_crypto *crypto;
++	/* request and response are in unencrypted memory */
+ 	struct snp_guest_msg *request, *response;
 +
 +	/*
-+	 * The host may return SNP_GUEST_REQ_ERR_EBUSY if the request has been
-+	 * throttled. Retry in the driver to avoid returning and reusing the
-+	 * message sequence number on a different message.
++	 * Avoid information leakage by double-buffering shared messages
++	 * in fields that are in regular encrypted memory.
 +	 */
-+	case -EAGAIN:
-+		if (jiffies - req_start > SNP_REQ_MAX_RETRY_DURATION) {
-+			rc = -ETIMEDOUT;
-+			break;
-+		}
-+		schedule_timeout_killable(SNP_REQ_RETRY_DELAY);
-+		goto retry_request;
- 	}
++	struct snp_guest_msg secret_request, secret_response;
++
+ 	struct snp_secrets_page_layout *layout;
+ 	struct snp_req_data input;
+ 	u32 *os_area_msg_seqno;
+@@ -266,14 +274,17 @@ static int dec_payload(struct snp_guest_dev *snp_dev, struct snp_guest_msg *msg,
+ static int verify_and_dec_payload(struct snp_guest_dev *snp_dev, void *payload, u32 sz)
+ {
+ 	struct snp_guest_crypto *crypto = snp_dev->crypto;
+-	struct snp_guest_msg *resp = snp_dev->response;
+-	struct snp_guest_msg *req = snp_dev->request;
++	struct snp_guest_msg *resp = &snp_dev->secret_response;
++	struct snp_guest_msg *req = &snp_dev->secret_request;
+ 	struct snp_guest_msg_hdr *req_hdr = &req->hdr;
+ 	struct snp_guest_msg_hdr *resp_hdr = &resp->hdr;
  
- 	if (fw_err)
+ 	dev_dbg(snp_dev->dev, "response [seqno %lld type %d version %d sz %d]\n",
+ 		resp_hdr->msg_seqno, resp_hdr->msg_type, resp_hdr->msg_version, resp_hdr->msg_sz);
+ 
++	/* Copy response from shared memory to encrypted memory. */
++	memcpy(resp, snp_dev->response, sizeof(*resp));
++
+ 	/* Verify that the sequence counter is incremented by 1 */
+ 	if (unlikely(resp_hdr->msg_seqno != (req_hdr->msg_seqno + 1)))
+ 		return -EBADMSG;
+@@ -297,7 +308,7 @@ static int verify_and_dec_payload(struct snp_guest_dev *snp_dev, void *payload,
+ static int enc_payload(struct snp_guest_dev *snp_dev, u64 seqno, int version, u8 type,
+ 			void *payload, size_t sz)
+ {
+-	struct snp_guest_msg *req = snp_dev->request;
++	struct snp_guest_msg *req = &snp_dev->secret_request;
+ 	struct snp_guest_msg_hdr *hdr = &req->hdr;
+ 
+ 	memset(req, 0, sizeof(*req));
+@@ -400,13 +411,21 @@ static int handle_guest_request(struct snp_guest_dev *snp_dev, u64 exit_code, in
+ 	if (!seqno)
+ 		return -EIO;
+ 
++	/* Clear shared memory's response for the host to populate. */
+ 	memset(snp_dev->response, 0, sizeof(struct snp_guest_msg));
+ 
+-	/* Encrypt the userspace provided payload */
++	/* Encrypt the userspace provided payload in snp_dev->secret_request. */
+ 	rc = enc_payload(snp_dev, seqno, msg_ver, type, req_buf, req_sz);
+ 	if (rc)
+ 		return rc;
+ 
++	/*
++	 * Write the fully encrypted request to the shared unencrypted
++	 * request page.
++	 */
++	memcpy(snp_dev->request, &snp_dev->secret_request,
++	       sizeof(snp_dev->secret_request));
++
+ 	rc = __handle_guest_request(snp_dev, exit_code, fw_err);
+ 	if (rc) {
+ 		dev_alert(snp_dev->dev, "Detected error from ASP request. rc: %d, fw_err: %llu\n", rc, *fw_err);
 -- 
 2.35.1
 
