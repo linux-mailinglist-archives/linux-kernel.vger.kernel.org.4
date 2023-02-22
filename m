@@ -2,60 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5598E69F88A
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Feb 2023 17:02:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6945D69F890
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Feb 2023 17:03:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231765AbjBVQCs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Feb 2023 11:02:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52136 "EHLO
+        id S232045AbjBVQDg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Feb 2023 11:03:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53408 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231897AbjBVQCo (ORCPT
+        with ESMTP id S231622AbjBVQDe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Feb 2023 11:02:44 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DC653D0AC;
-        Wed, 22 Feb 2023 08:02:35 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8B99E6149A;
-        Wed, 22 Feb 2023 16:02:34 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 613AEC433D2;
-        Wed, 22 Feb 2023 16:02:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1677081754;
-        bh=6LGlHzxZNINwfMiEzngNCsuQZ1HqkPO0BsKe3s0szao=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=HIVk4q5LZm7TsKDuXXBajKwEN9fw/fFUM3LecOh4kXVxpn2xmb5M131vgL3gcAkRB
-         1ja/SlxSEy90e7kKb+Sn2/hCog4FmEhUJvh4ZHJAz6COcqDyAiKS92gh02pB9YRGWR
-         IKPoL01U9IKBJXJd5ZEPRvqM59lLavHTKYEGiZN6g+IG2Khk1j+75/KOEoj29VutiT
-         B0dpQDoQ6qWi95cpgcOwhzxUq29TpOz1aJ6y0PuBv1S+NUqiYyAmC6ShpEKg1/A39l
-         TvGPLDiPNRoMQ6JyYOZ2nBFgbAR7nTVZh7yPyusmjdlSUmlL9SS3sY0K/9jzRACKz4
-         2lX12kySD7TTw==
-Date:   Wed, 22 Feb 2023 16:02:28 +0000
-From:   Conor Dooley <conor@kernel.org>
-To:     Jiaxun Yang <jiaxun.yang@flygoat.com>
-Cc:     "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
-        linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        mpe@ellerman.id.au, paul.walmsley@sifive.com, palmer@dabbelt.com,
-        Rob Herring <robh+dt@kernel.org>,
-        Christoph Hellwig <hch@lst.de>, m.szyprowski@samsung.com,
-        robin.murphy@arm.com, linux-riscv@lists.infradead.org
-Subject: Re: [PATCH 2/3] riscv: Set dma_default_coherent to true
-Message-ID: <Y/Y8lEndecMfD+Ur@spud>
-References: <20230222133712.8079-1-jiaxun.yang@flygoat.com>
- <20230222133712.8079-3-jiaxun.yang@flygoat.com>
- <Y/YrvDBJcYUQt4WC@spud>
- <6BBA7BEA-8595-436D-B4BF-D7DB95069C53@flygoat.com>
+        Wed, 22 Feb 2023 11:03:34 -0500
+Received: from mail-lj1-x22d.google.com (mail-lj1-x22d.google.com [IPv6:2a00:1450:4864:20::22d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D55118B
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Feb 2023 08:03:32 -0800 (PST)
+Received: by mail-lj1-x22d.google.com with SMTP id t14so5600002ljd.5
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Feb 2023 08:03:32 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=NR4JoHyWqAKZMIzu2agHedJCOBnxsQp20MwXG8k1Puk=;
+        b=XoG4ZrzArjsq7Gys9DInrt0BXC6yUUa10LZOtyr+49aL9ySph3lolrX2018HGVKZ9c
+         qpO4Zw147BmOkwfn3oe/5r5a2jMqswgJfQ6lc2FJVRQip4Tlur8ueAu7BRXziLZR5BnA
+         YaEtQuPRDbDg5adgJk3lciWCNJyQJ4F7uqiB45adtPy/eLy05Oh4/VucXwDka7SohsyD
+         rvg51xSyI3BYAGvYEs++gjFIErrDcqvXXP/sg+tAnG5tw29R3eSfrFdSmgZyRHR0wJlQ
+         l4n+fUfJP0VKZHUvQwUgVnZ4yOsfwhFEDU7snyW6nNoaNKBtAUWvJXb+FqySPKFPo/Z9
+         S9Dg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=NR4JoHyWqAKZMIzu2agHedJCOBnxsQp20MwXG8k1Puk=;
+        b=ge/sCXqntysaLWdFRjuk5KO9aZHV16AeE+MQCwuPRxN8qaBGLwuaQ0YYU7xLXVAmCM
+         0/yg9tQiJ8TKbUn9YzBRIS4cC2U61avNWtSoAqy5wpMBjZAbrTc+2nf+PynhnXy97Ja/
+         FcWlhnJ50n4fjf4unLnuCLvWdwWcndbEjQ1FreZ1WXDRDCrzwtgsU1YXtjLRcp+SqqHo
+         yTp/noJ6X/eFL2gOxaxKeZgYh0vL/pro6zWppnR8X61IVnZVyHlCjLURFXba9erVUufU
+         AiKlFFlRszc4bBA0hUJMbiTjZws58kBYBxDos5fUGSfb5pM9nCgXE+ipJWC0EgRYQWUy
+         Os3w==
+X-Gm-Message-State: AO0yUKVoESGkgHAOXUarxb5kbNMuZYmucpk1G0d+VF5QDtQP3UjPyEm0
+        yxxHouf8OeNO4UEww537km35Iw==
+X-Google-Smtp-Source: AK7set+XvU2ChKqYyJqbPojwoDwwVPSMVn2b5ntpK4liomhLzTsVlLZCbwsFo/R0S13FKVlsQeiasg==
+X-Received: by 2002:a05:651c:4c6:b0:294:751d:d734 with SMTP id e6-20020a05651c04c600b00294751dd734mr4567535lji.31.1677081810317;
+        Wed, 22 Feb 2023 08:03:30 -0800 (PST)
+Received: from [192.168.1.101] (abxi151.neoplus.adsl.tpnet.pl. [83.9.2.151])
+        by smtp.gmail.com with ESMTPSA id j16-20020a2e3c10000000b0029352e4ba6esm834767lja.90.2023.02.22.08.03.28
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 22 Feb 2023 08:03:29 -0800 (PST)
+Message-ID: <8881b90c-f276-6f14-e161-f07630845257@linaro.org>
+Date:   Wed, 22 Feb 2023 17:03:28 +0100
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="8CVdK4UNNn5wJH7y"
-Content-Disposition: inline
-In-Reply-To: <6BBA7BEA-8595-436D-B4BF-D7DB95069C53@flygoat.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH 07/11] ARM: dts: qcom: sdx55: Add support for PCIe RC
+ controller
+Content-Language: en-US
+To:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+        andersson@kernel.org, lpieralisi@kernel.org, robh@kernel.org,
+        kw@linux.com, krzysztof.kozlowski+dt@linaro.org, vkoul@kernel.org
+Cc:     bhelgaas@google.com, kishon@kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-pci@vger.kernel.org,
+        devicetree@vger.kernel.org
+References: <20230222153251.254492-1-manivannan.sadhasivam@linaro.org>
+ <20230222153251.254492-8-manivannan.sadhasivam@linaro.org>
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+In-Reply-To: <20230222153251.254492-8-manivannan.sadhasivam@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -63,81 +82,102 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
---8CVdK4UNNn5wJH7y
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
 
-On Wed, Feb 22, 2023 at 03:55:19PM +0000, Jiaxun Yang wrote:
->=20
->=20
-> > 2023=E5=B9=B42=E6=9C=8822=E6=97=A5 14:50=EF=BC=8CConor Dooley <conor@ke=
-rnel.org> =E5=86=99=E9=81=93=EF=BC=9A
-> >=20
-> > On Wed, Feb 22, 2023 at 01:37:11PM +0000, Jiaxun Yang wrote:
-> >> For riscv our assumption is unless a device states it is non-coherent,
-> >> we take it to be DMA coherent.
-> >>=20
-> >> For devicetree probed devices that have been true since very begining
-> >> with OF_DMA_DEFAULT_COHERENT selected.
-> >>=20
-> >> Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
-> >> ---
-> >> arch/riscv/kernel/setup.c | 3 +++
-> >> 1 file changed, 3 insertions(+)
-> >>=20
-> >> diff --git a/arch/riscv/kernel/setup.c b/arch/riscv/kernel/setup.c
-> >> index 376d2827e736..34b371180976 100644
-> >> --- a/arch/riscv/kernel/setup.c
-> >> +++ b/arch/riscv/kernel/setup.c
-> >> @@ -300,6 +300,9 @@ void __init setup_arch(char **cmdline_p)
-> >> riscv_init_cbom_blocksize();
-> >> riscv_fill_hwcap();
-> >> apply_boot_alternatives();
-> >> +#ifdef CONFIG_RISCV_DMA_NONCOHERENT
-> >> + dma_default_coherent =3D true;
-> >> +#endif
-> >=20
-> > Do we really need to add ifdeffery for this here?
-> > It's always coherent by default, so why do we need to say set it in
-> > setup_arch() when we know that, regardless of options, it is true?
->=20
-> Because this symbol is only a variable when:
->=20
-> defined(CONFIG_ARCH_HAS_SYNC_DMA_FOR_DEVICE) || \
-> defined(CONFIG_ARCH_HAS_SYNC_DMA_FOR_CPU) || \
-> defined(CONFIG_ARCH_HAS_SYNC_DMA_FOR_CPU_ALL)
->=20
-> Which is only true if  CONFIG_RISCV_DMA_NONCOHERENT is selected.
->=20
-> Otherwise this symbol is defined to true and we can=E2=80=99t make a assi=
-gnment to it.
+On 22.02.2023 16:32, Manivannan Sadhasivam wrote:
+> The PCIe controller in SDX55 can act as the RC controller also. Let's
+> add support for it.
+> 
+> Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+> ---
+>  arch/arm/boot/dts/qcom-sdx55.dtsi | 72 +++++++++++++++++++++++++++++++
+>  1 file changed, 72 insertions(+)
+> 
+> diff --git a/arch/arm/boot/dts/qcom-sdx55.dtsi b/arch/arm/boot/dts/qcom-sdx55.dtsi
+> index a1f4a7b0904a..768d7d7f6335 100644
+> --- a/arch/arm/boot/dts/qcom-sdx55.dtsi
+> +++ b/arch/arm/boot/dts/qcom-sdx55.dtsi
+> @@ -303,6 +303,78 @@ qpic_nand: nand-controller@1b30000 {
+>  			status = "disabled";
+>  		};
+>  
+> +		pcie_rc: pcie@1c00000 {
+> +			compatible = "qcom,pcie-sdx55";
+> +			reg = <0x01c00000 0x3000>,
+> +			      <0x40000000 0xf1d>,
+> +			      <0x40000f20 0xc8>,
+> +			      <0x40001000 0x1000>,
+> +			      <0x40100000 0x100000>;
+> +			reg-names = "parf", "dbi", "elbi", "atu", "config";
+It'd be nice if this and interrupt-names could be turned into
+a vertical list of entries, sort of like you have in clock-
+names. And it'd be even nicer if you could fix that up in
+both PCIe nodes.
 
-Maybe I am just slow today, but I don't get why you need to add
-ifdeffery to setup_arch() to do something that is always true.
-Why can't you just set this in riscv/mm/dma-noncoherent.c? What am I
-missing?
-
-Cheers,
-Conor.
-
-> >> if (IS_ENABLED(CONFIG_RISCV_ISA_ZICBOM) &&
-> >>     riscv_isa_extension_available(NULL, ZICBOM))
-> >> riscv_noncoherent_supported();
-> >> --=20
-> >> 2.37.1 (Apple Git-137.1)
->=20
->=20
-
---8CVdK4UNNn5wJH7y
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCY/Y8lAAKCRB4tDGHoIJi
-0oePAP42rA2ROm6m4zS7iIWPZsgocfrVux+zYLf1x32I0aaNfgEA0pHQJ6qmRcbp
-jMVC52QsYSdhJDdgid2lUqBOpWTfbwo=
-=hwwY
------END PGP SIGNATURE-----
-
---8CVdK4UNNn5wJH7y--
+Konrad
+> +			device_type = "pci";
+> +			linux,pci-domain = <0>;
+> +			bus-range = <0x00 0xff>;
+> +			num-lanes = <1>;
+> +
+> +			#address-cells = <3>;
+> +			#size-cells = <2>;
+> +
+> +			ranges = <0x01000000 0x0 0x40200000 0x40200000 0x0 0x100000>,
+> +				 <0x02000000 0x0 0x40300000 0x40300000 0x0 0x3fd00000>;
+> +
+> +			interrupts = <GIC_SPI 119 IRQ_TYPE_LEVEL_HIGH>,
+> +				     <GIC_SPI 120 IRQ_TYPE_LEVEL_HIGH>,
+> +				     <GIC_SPI 121 IRQ_TYPE_LEVEL_HIGH>,
+> +				     <GIC_SPI 122 IRQ_TYPE_LEVEL_HIGH>,
+> +				     <GIC_SPI 123 IRQ_TYPE_LEVEL_HIGH>,
+> +				     <GIC_SPI 124 IRQ_TYPE_LEVEL_HIGH>,
+> +				     <GIC_SPI 125 IRQ_TYPE_LEVEL_HIGH>,
+> +				     <GIC_SPI 126 IRQ_TYPE_LEVEL_HIGH>;
+> +			interrupt-names = "msi", "msi2", "msi3", "msi4",
+> +					  "msi5", "msi6", "msi7", "msi8";
+> +			#interrupt-cells = <1>;
+> +			interrupt-map-mask = <0 0 0 0x7>;
+> +			interrupt-map = <0 0 0 1 &intc 0 0 0 141 IRQ_TYPE_LEVEL_HIGH>, /* int_a */
+> +					<0 0 0 2 &intc 0 0 0 142 IRQ_TYPE_LEVEL_HIGH>, /* int_b */
+> +					<0 0 0 3 &intc 0 0 0 143 IRQ_TYPE_LEVEL_HIGH>, /* int_c */
+> +					<0 0 0 4 &intc 0 0 0 144 IRQ_TYPE_LEVEL_HIGH>; /* int_d */
+> +
+> +			clocks = <&gcc GCC_PCIE_PIPE_CLK>,
+> +				 <&gcc GCC_PCIE_AUX_CLK>,
+> +				 <&gcc GCC_PCIE_CFG_AHB_CLK>,
+> +				 <&gcc GCC_PCIE_MSTR_AXI_CLK>,
+> +				 <&gcc GCC_PCIE_SLV_AXI_CLK>,
+> +				 <&gcc GCC_PCIE_SLV_Q2A_AXI_CLK>,
+> +				 <&gcc GCC_PCIE_SLEEP_CLK>;
+> +			clock-names = "pipe",
+> +				      "aux",
+> +				      "cfg",
+> +				      "bus_master",
+> +				      "bus_slave",
+> +				      "slave_q2a",
+> +				      "sleep";
+> +
+> +			assigned-clocks = <&gcc GCC_PCIE_AUX_CLK>;
+> +			assigned-clock-rates = <19200000>;
+> +
+> +			iommus = <&apps_smmu 0x0200 0x0f>;
+> +			iommu-map = <0x0   &apps_smmu 0x0200 0x1>,
+> +				    <0x100 &apps_smmu 0x0201 0x1>,
+> +				    <0x200 &apps_smmu 0x0202 0x1>,
+> +				    <0x300 &apps_smmu 0x0203 0x1>,
+> +				    <0x400 &apps_smmu 0x0204 0x1>;
+> +
+> +			resets = <&gcc GCC_PCIE_BCR>;
+> +			reset-names = "pci";
+> +
+> +			power-domains = <&gcc PCIE_GDSC>;
+> +
+> +			phys = <&pcie_lane>;
+> +			phy-names = "pciephy";
+> +
+> +			status = "disabled";
+> +		};
+> +
+>  		pcie_ep: pcie-ep@1c00000 {
+>  			compatible = "qcom,sdx55-pcie-ep";
+>  			reg = <0x01c00000 0x3000>,
