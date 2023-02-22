@@ -2,179 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1EDBC69F7DE
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Feb 2023 16:33:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 273EA69F821
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Feb 2023 16:34:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232480AbjBVPdH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Feb 2023 10:33:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51572 "EHLO
+        id S232645AbjBVPec (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Feb 2023 10:34:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53970 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231494AbjBVPdE (ORCPT
+        with ESMTP id S232571AbjBVPe0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Feb 2023 10:33:04 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 410152A17E;
-        Wed, 22 Feb 2023 07:33:03 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id AB35D614AA;
-        Wed, 22 Feb 2023 15:33:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BAC8AC433EF;
-        Wed, 22 Feb 2023 15:32:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1677079982;
-        bh=txryyDE2882BFByD8yhgCuBO2UJpM5MCFYWdzJfIfD0=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=M+wtjBbZgEuC6t8L9rjCGlgp0JEKiSfbAi6PQx2k4O6aZhjJP5KVaHDju87nwePzp
-         /ogARUEAAg50VOb0iCz/JZUt/DUvJo6lOecQS50bok4S6sC7kKpxWerumU9XG1qopj
-         UmYdSjm0yVn7iAxAfXys2VbHFPYii5+kENcvnkBI0wzvyYmc5LT+70oH6LsAggaQze
-         VlT7i689GGPsxp3pLAnkzvzOsGA4zU5xW9HOyGbnMPFAOJ+K/P5PXvE76IpxiLYLiy
-         iVqrObHU7N+qHoAnLzpa5ys8XPHR1yDlJFzXzjdj33ly1EZKLgDAV7C+tNp2Dj/CSn
-         ikC/0Kms3aTPw==
-Date:   Wed, 22 Feb 2023 15:32:55 +0000
-From:   Lee Jones <lee@kernel.org>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     Okan Sahin <okan.sahin@analog.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        ChiYuan Huang <cy_huang@richtek.com>,
-        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        William Breathitt Gray <william.gray@linaro.org>,
-        Ramona Bolboaca <ramona.bolboaca@analog.com>,
-        Caleb Connolly <caleb.connolly@linaro.org>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-iio@vger.kernel.org
-Subject: Re: [PATCH v5 5/5]  mfd: max77541: Add ADI MAX77541/MAX77540 PMIC
- Support
-Message-ID: <Y/Y1p/4Mc1Oy4dWl@google.com>
-References: <20230221103926.49597-1-okan.sahin@analog.com>
- <20230221103926.49597-6-okan.sahin@analog.com>
- <Y/S1ftKmV92TL8VO@smile.fi.intel.com>
+        Wed, 22 Feb 2023 10:34:26 -0500
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B72A63B852;
+        Wed, 22 Feb 2023 07:33:56 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1677080036; x=1708616036;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=+FuP9Tnn9stvSO6EVtOlDZOoca9s1FRRhxzWrUFgceE=;
+  b=IdzvlGImJqcZHZRtp3I+Lxme9/LYjMezCjhz0gd4ARPF0C+V/rj/Ovuz
+   Rwqq0LFUAGJyWB1UKdbRiQE15IZyzYQIcVYmYmCzJdyM+hh74Cgk3CVXa
+   Tw7R/WUasVju+CnDl4Th07Gh/1Aa4yg7vp+OmLzlbu4M0lERq/67ihdDa
+   yoH2Bm6r5JrxzPr/7I/wQOOHD9Iq/SGihfQ81QMU0iiTmMkP2s6/pKzPU
+   1zb2vfoVWYbIFCVx/3PNMyB6L3rSxFRz2wbD+uRXB6TfiqvNLmWEdcuP6
+   yR7UWiqnPPMGYChQPAroggbMTv0WIW1MA5uwAVA/THKUTwgZESVOg9jhi
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10629"; a="332954584"
+X-IronPort-AV: E=Sophos;i="5.97,319,1669104000"; 
+   d="scan'208";a="332954584"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Feb 2023 07:33:36 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10629"; a="781478044"
+X-IronPort-AV: E=Sophos;i="5.97,319,1669104000"; 
+   d="scan'208";a="781478044"
+Received: from tzinser-mobl.amr.corp.intel.com (HELO [10.209.49.182]) ([10.209.49.182])
+  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Feb 2023 07:33:35 -0800
+Message-ID: <7189da9a-f634-01ae-194d-a4d14a319a1c@intel.com>
+Date:   Wed, 22 Feb 2023 07:33:34 -0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH] bpf: Fix undeclared function 'barrier_nospec' warning
+Content-Language: en-US
+To:     Geert Uytterhoeven <geert@linux-m68k.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>
+Cc:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        bpf@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <9c476aa64c9588205817833dbaa622f87c0e0081.1677051600.git.viresh.kumar@linaro.org>
+ <CAMuHMdXd3876o+petD51xfnJRBOOg=oqkO_pdsmcr8=Uec2KDg@mail.gmail.com>
+From:   Dave Hansen <dave.hansen@intel.com>
+In-Reply-To: <CAMuHMdXd3876o+petD51xfnJRBOOg=oqkO_pdsmcr8=Uec2KDg@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <Y/S1ftKmV92TL8VO@smile.fi.intel.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 21 Feb 2023, Andy Shevchenko wrote:
+On 2/22/23 07:03, Geert Uytterhoeven wrote:
+> On Wed, Feb 22, 2023 at 9:26 AM Viresh Kumar <viresh.kumar@linaro.org> wrote:
+>> Add the missing header for architectures that don't define
+>> the barrier_nospec() macro. The nospec.h header is added after the
+>> inclusion of barrier.h to avoid redefining the macro for architectures
+>> that already define barrier_nospec() in their respective barrier.h
+>> headers.
+>>
+>> Fixes: 74e19ef0ff80 ("uaccess: Add speculation barrier to copy_from_user()")
+>> Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
+>> ---
+>> Linus's master branch fails currently to build for arm64 without this commit.
+> Not just arm64 🙁
+> http://kisskb.ellerman.id.au/kisskb/head/5b7c4cabbb65f5c469464da6c5f614cbd7f730f2
 
-> On Tue, Feb 21, 2023 at 01:39:13PM +0300, Okan Sahin wrote:
-> > MFD driver for MAX77541/MAX77540 to enable its sub
-> > devices.
-> > 
-> > The MAX77541 is a multi-function devices. It includes
-> > buck converter and ADC.
-> > 
-> > The MAX77540 is a high-efficiency buck converter
-> > with two 3A switching phases.
-> > 
-> > They have same regmap except for ADC part of MAX77541.
-> 
-> Extra space in the Subject.
-> 
-> ...
-> 
-> > +#include <linux/of_device.h>
-> 
-> Why?
-> 
-> ...
-> 
-> > +static const struct regmap_config max77541_regmap_config = {
-> > +	.reg_bits   = 8,
-> > +	.val_bits   = 8,
-> 
-> Do you need lock of regmap?
-> 
-> > +};
-> 
-> ...
-> 
-> > +static const struct mfd_cell max77540_devs[] = {
-> 
-> > +	MFD_CELL_OF("max77540-regulator", NULL, NULL, 0, 0,
-> > +		    NULL),
-> 
-> Perfectly one line.
-> 
-> > +};
-> 
-> > +static const struct mfd_cell max77541_devs[] = {
-> > +	MFD_CELL_OF("max77541-regulator", NULL, NULL, 0, 0,
-> > +		    NULL),
-> > +	MFD_CELL_OF("max77541-adc", NULL, NULL, 0, 0,
-> > +		    NULL),
-> 
-> Ditto.
-> 
-> > +};
-> 
-> ...
-> 
-> > +	if (max77541->chip->id == MAX77541) {
-> > +		ret = devm_regmap_add_irq_chip(dev, max77541->regmap, irq,
-> > +					       IRQF_ONESHOT | IRQF_SHARED, 0,
-> > +					       &max77541_adc_irq_chip,
-> > +					       &max77541->irq_adc);
-> > +		if (ret)
-> > +			return ret;
-> > +	}
-> 
-> > +	return ret;
-> 
-> return 0;
-> 
-> ...
-> 
-> > +static const struct i2c_device_id max77541_i2c_id[];
-> 
-> What for?
-> 
-> ...
-> 
-> > +	if (dev->of_node)
-> > +		max77541->chip  = of_device_get_match_data(dev);
-> > +	else
-> > +		max77541->chip  = (struct chip_info *)
-> > +					i2c_match_id(max77541_i2c_id,
-> > +						     client)->driver_data;
-> 
-> Oh. Please use
-> 
-> 	const struct i2c_device_id *id = i2c_client_get_device_id(client);
-> 	...
-> 	max77541->chip  = device_get_match_data(dev); // needs property.h
-> 	if (!max77541->chip)
-> 		max77541->chip  = (struct chip_info *)id->driver_data;
-> 
-> > +	if (!max77541->chip)
-> > +		return -EINVAL;
-> 
-> ...
-> 
-> > +#ifndef __MAX77541_MFD_H__
-> > +#define __MAX77541_MFD_H__
-> 
-> Can we go towards consistency in this?
-> Seems to me the most used patter so far is
-> 
-> #ifndef __LINUX_MFD_MAX77541_H
+Thanks for the fix, and sorry for the breakage, folks!  Obviously:
 
-Drop the LINUX_ part please.
+Tested-by: Dave Hansen <dave.hansen@linux.intel.com>
 
--- 
-Lee Jones [李琼斯]
+Now time to go make sure I have bpf turned on in all my cross builds.
+
+
