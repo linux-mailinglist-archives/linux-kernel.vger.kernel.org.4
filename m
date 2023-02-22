@@ -2,36 +2,36 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0FBFD69F702
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Feb 2023 15:47:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D499669F6FF
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Feb 2023 15:47:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232139AbjBVOro (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Feb 2023 09:47:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59772 "EHLO
+        id S232260AbjBVOrg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Feb 2023 09:47:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59486 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232216AbjBVOre (ORCPT
+        with ESMTP id S232169AbjBVOrZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Feb 2023 09:47:34 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D17A938E80
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Feb 2023 06:47:16 -0800 (PST)
+        Wed, 22 Feb 2023 09:47:25 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF94E3BDAF
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Feb 2023 06:47:02 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id D07D8CE1DDE
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Feb 2023 14:47:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DA38CC433D2;
-        Wed, 22 Feb 2023 14:46:56 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3544661464
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Feb 2023 14:47:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 819ADC4339B;
+        Wed, 22 Feb 2023 14:46:59 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1677077219;
-        bh=i0suEjF1OVttZE4v7oGGN5lbF5fnEyMlbmcS3axNMpQ=;
+        s=k20201202; t=1677077221;
+        bh=Wy5hbT4ewIbxtuRGZo3BNmMi3nK/RbjQJn9sH1g4yFs=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Z5Oy+8JBnQ3KrQ1WgxmB3G+kQ2Y6XPmfVa9zlkxOvp3QAq/WCcKocc7sjnmbc8B3k
-         +khwBCnBJdm3akmYQFadw/1DzXGAwLiQtC/qoljoKBPsFOfe8/ND0ia7HReSer0+k4
-         Gsn/HLGMxQI0/k7aqeLmW1f2RTrTbwa7ORJ3QM6TL4sskFilRwRdYyo7EhdYH6MYmS
-         puc7pu/xTxbTrPQQsfSW3aBx+ug28InqceUeXhHH4InCIa0HcdN6zdvPxFc40wlM8H
-         0H4MMEew3ljsRgT1V22HOodaHm8KCkWJip4gvKy5tMbYyaNeKNiBCkQTzRa2vTfIip
-         LsDHF+CUO6qOg==
+        b=FDmOTfUDDAvB318Tim6Svmwl4prd0CvCrO2yMhterj811AW25jGCizagfRmMU3PuO
+         TtwrV6OOwv0mDAN5hY6twOv0xbamI50e31QG5hOBllfU0tfy1WiuNPI1PFNylJku9E
+         QN4/p1q4Mkdo26fnClKlfGr9+zZk2dvpCo1jxbOYzQ+c677jHx0+V9SrSnUeintpfl
+         JfyivG+S4iGlZNMP70TqKR+DSDUdc7Wbb+gTYayl3WGKBFkf2IXoLn4WuTbr4EivDM
+         MdnybAwi2AGGOFmy382kl+pG1nF6aGuLLq2BGD/GXMWKOpgw5S3CvPPD7yfdLzqFb8
+         UabOOMYAYTN6w==
 From:   Frederic Weisbecker <frederic@kernel.org>
 To:     Thomas Gleixner <tglx@linutronix.de>
 Cc:     LKML <linux-kernel@vger.kernel.org>,
@@ -42,16 +42,16 @@ Cc:     LKML <linux-kernel@vger.kernel.org>,
         Mirsad Goran Todorovac <mirsad.todorovac@alu.unizg.hr>,
         Yu Liao <liaoyu15@huawei.com>, Hillf Danton <hdanton@sina.com>,
         Ingo Molnar <mingo@kernel.org>
-Subject: [PATCH 1/8] timers/nohz: Restructure and reshuffle struct tick_sched
-Date:   Wed, 22 Feb 2023 15:46:42 +0100
-Message-Id: <20230222144649.624380-2-frederic@kernel.org>
+Subject: [PATCH 2/8] timers/nohz: Only ever update sleeptime from idle exit
+Date:   Wed, 22 Feb 2023 15:46:43 +0100
+Message-Id: <20230222144649.624380-3-frederic@kernel.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230222144649.624380-1-frederic@kernel.org>
 References: <20230222144649.624380-1-frederic@kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -59,134 +59,174 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Restructure and group fields by access in order to optimize cache
-layout. While at it, also add missing kernel doc for two fields:
-@last_jiffies and @idle_expires.
+The idle and io sleeptime statistics appearing in /proc/stat can be
+currently updated from two sites: locally on idle exit and remotely
+by cpufreq. However there is no synchronization mechanism protecting
+concurrent updates. It is therefore possible to account the sleeptime
+twice, among all the possible broken scenarios.
 
-Reported-by: Thomas Gleixner <tglx@linutronix.de>
+To prevent from breaking the sleeptime accounting source, restrict the
+sleeptime updates to the local idle exit site. If there is a delta to
+add since the last update, IO/Idle sleep time readers will now only
+compute the delta without actually writing it back to the internal idle
+statistic fields.
+
+This fixes a writer VS writer race. Note there are still two known
+reader VS writer races to handle. A subsequent patch will fix one.
+
+Reported-by: Yu Liao <liaoyu15@huawei.com>
 Acked-by: Peter Zijlstra (Intel) <peterz@infradead.org>
 Cc: Hillf Danton <hdanton@sina.com>
 Cc: Yu Liao <liaoyu15@huawei.com>
 Cc: Ingo Molnar <mingo@kernel.org>
+Cc: Thomas Gleixner <tglx@linutronix.de>
 Cc: Wei Li <liwei391@huawei.com>
 Cc: Alexey Dobriyan <adobriyan@gmail.com>
 Cc: Mirsad Goran Todorovac <mirsad.todorovac@alu.unizg.hr>
 Signed-off-by: Frederic Weisbecker <frederic@kernel.org>
 ---
- kernel/time/tick-sched.h | 66 +++++++++++++++++++++++++---------------
- 1 file changed, 41 insertions(+), 25 deletions(-)
+ kernel/time/tick-sched.c | 103 ++++++++++++++++-----------------------
+ 1 file changed, 41 insertions(+), 62 deletions(-)
 
-diff --git a/kernel/time/tick-sched.h b/kernel/time/tick-sched.h
-index 504649513399..c6663254d17d 100644
---- a/kernel/time/tick-sched.h
-+++ b/kernel/time/tick-sched.h
-@@ -22,65 +22,81 @@ enum tick_nohz_mode {
+diff --git a/kernel/time/tick-sched.c b/kernel/time/tick-sched.c
+index b0e3c9205946..9058b9eb8bc1 100644
+--- a/kernel/time/tick-sched.c
++++ b/kernel/time/tick-sched.c
+@@ -637,31 +637,21 @@ static void tick_nohz_update_jiffies(ktime_t now)
+ 	touch_softlockup_watchdog_sched();
+ }
  
- /**
-  * struct tick_sched - sched tick emulation and no idle tick control/stats
-- * @sched_timer:	hrtimer to schedule the periodic tick in high
-- *			resolution mode
-- * @check_clocks:	Notification mechanism about clocksource changes
-- * @nohz_mode:		Mode - one state of tick_nohz_mode
-+ *
-  * @inidle:		Indicator that the CPU is in the tick idle mode
-  * @tick_stopped:	Indicator that the idle tick has been stopped
-  * @idle_active:	Indicator that the CPU is actively in the tick idle mode;
-  *			it is reset during irq handling phases.
-- * @do_timer_lst:	CPU was the last one doing do_timer before going idle
-+ * @do_timer_last:	CPU was the last one doing do_timer before going idle
-  * @got_idle_tick:	Tick timer function has run with @inidle set
-+ * @stalled_jiffies:	Number of stalled jiffies detected across ticks
-+ * @last_tick_jiffies:	Value of jiffies seen on last tick
-+ * @sched_timer:	hrtimer to schedule the periodic tick in high
-+ *			resolution mode
-  * @last_tick:		Store the last tick expiry time when the tick
-  *			timer is modified for nohz sleeps. This is necessary
-  *			to resume the tick timer operation in the timeline
-  *			when the CPU returns from nohz sleep.
-  * @next_tick:		Next tick to be fired when in dynticks mode.
-  * @idle_jiffies:	jiffies at the entry to idle for idle time accounting
-+ * @idle_waketime:	Time when the idle was interrupted
-+ * @idle_entrytime:	Time when the idle call was entered
-+ * @nohz_mode:		Mode - one state of tick_nohz_mode
-+ * @last_jiffies:	Base jiffies snapshot when next event was last computed
-+ * @timer_expires_base:	Base time clock monotonic for @timer_expires
-+ * @timer_expires:	Anticipated timer expiration time (in case sched tick is stopped)
-+ * @next_timer:		Expiry time of next expiring timer for debugging purpose only
-+ * @idle_expires:	Next tick in idle, for debugging purpose only
-  * @idle_calls:		Total number of idle calls
-  * @idle_sleeps:	Number of idle calls, where the sched tick was stopped
-- * @idle_entrytime:	Time when the idle call was entered
-- * @idle_waketime:	Time when the idle was interrupted
-  * @idle_exittime:	Time when the idle state was left
-  * @idle_sleeptime:	Sum of the time slept in idle with sched tick stopped
-  * @iowait_sleeptime:	Sum of the time slept in idle with sched tick stopped, with IO outstanding
-- * @timer_expires:	Anticipated timer expiration time (in case sched tick is stopped)
-- * @timer_expires_base:	Base time clock monotonic for @timer_expires
-- * @next_timer:		Expiry time of next expiring timer for debugging purpose only
-  * @tick_dep_mask:	Tick dependency mask - is set, if someone needs the tick
-- * @last_tick_jiffies:	Value of jiffies seen on last tick
-- * @stalled_jiffies:	Number of stalled jiffies detected across ticks
-+ * @check_clocks:	Notification mechanism about clocksource changes
-  */
- struct tick_sched {
--	struct hrtimer			sched_timer;
--	unsigned long			check_clocks;
--	enum tick_nohz_mode		nohz_mode;
+-/*
+- * Updates the per-CPU time idle statistics counters
+- */
+-static void
+-update_ts_time_stats(int cpu, struct tick_sched *ts, ktime_t now, u64 *last_update_time)
+-{
+-	ktime_t delta;
 -
-+	/* Common flags */
- 	unsigned int			inidle		: 1;
- 	unsigned int			tick_stopped	: 1;
- 	unsigned int			idle_active	: 1;
- 	unsigned int			do_timer_last	: 1;
- 	unsigned int			got_idle_tick	: 1;
+-	if (ts->idle_active) {
+-		delta = ktime_sub(now, ts->idle_entrytime);
+-		if (nr_iowait_cpu(cpu) > 0)
+-			ts->iowait_sleeptime = ktime_add(ts->iowait_sleeptime, delta);
+-		else
+-			ts->idle_sleeptime = ktime_add(ts->idle_sleeptime, delta);
+-		ts->idle_entrytime = now;
+-	}
+-
+-	if (last_update_time)
+-		*last_update_time = ktime_to_us(now);
+-
+-}
+-
+ static void tick_nohz_stop_idle(struct tick_sched *ts, ktime_t now)
+ {
+-	update_ts_time_stats(smp_processor_id(), ts, now, NULL);
++	ktime_t delta;
++
++	if (WARN_ON_ONCE(!ts->idle_active))
++		return;
++
++	delta = ktime_sub(now, ts->idle_entrytime);
++
++	if (nr_iowait_cpu(smp_processor_id()) > 0)
++		ts->iowait_sleeptime = ktime_add(ts->iowait_sleeptime, delta);
++	else
++		ts->idle_sleeptime = ktime_add(ts->idle_sleeptime, delta);
++
++	ts->idle_entrytime = now;
+ 	ts->idle_active = 0;
  
-+	/* Tick handling: jiffies stall check */
-+	unsigned int			stalled_jiffies;
-+	unsigned long			last_tick_jiffies;
-+
-+	/* Tick handling */
-+	struct hrtimer			sched_timer;
- 	ktime_t				last_tick;
- 	ktime_t				next_tick;
- 	unsigned long			idle_jiffies;
--	unsigned long			idle_calls;
--	unsigned long			idle_sleeps;
--	ktime_t				idle_entrytime;
- 	ktime_t				idle_waketime;
--	ktime_t				idle_exittime;
--	ktime_t				idle_sleeptime;
--	ktime_t				iowait_sleeptime;
-+
-+	/* Idle entry */
-+	ktime_t				idle_entrytime;
-+
-+	/* Tick stop */
-+	enum tick_nohz_mode		nohz_mode;
- 	unsigned long			last_jiffies;
--	u64				timer_expires;
- 	u64				timer_expires_base;
-+	u64				timer_expires;
- 	u64				next_timer;
- 	ktime_t				idle_expires;
-+	unsigned long			idle_calls;
-+	unsigned long			idle_sleeps;
-+
-+	/* Idle exit */
-+	ktime_t				idle_exittime;
-+	ktime_t				idle_sleeptime;
-+	ktime_t				iowait_sleeptime;
-+
-+	/* Full dynticks handling */
- 	atomic_t			tick_dep_mask;
--	unsigned long			last_tick_jiffies;
--	unsigned int			stalled_jiffies;
-+
-+	/* Clocksource changes */
-+	unsigned long			check_clocks;
- };
+ 	sched_clock_idle_wakeup_event();
+@@ -674,6 +664,30 @@ static void tick_nohz_start_idle(struct tick_sched *ts)
+ 	sched_clock_idle_sleep_event();
+ }
  
- extern struct tick_sched *tick_get_tick_sched(int cpu);
++static u64 get_cpu_sleep_time_us(struct tick_sched *ts, ktime_t *sleeptime,
++				 bool compute_delta, u64 *last_update_time)
++{
++	ktime_t now, idle;
++
++	if (!tick_nohz_active)
++		return -1;
++
++	now = ktime_get();
++	if (last_update_time)
++		*last_update_time = ktime_to_us(now);
++
++	if (ts->idle_active && compute_delta) {
++		ktime_t delta = ktime_sub(now, ts->idle_entrytime);
++
++		idle = ktime_add(*sleeptime, delta);
++	} else {
++		idle = *sleeptime;
++	}
++
++	return ktime_to_us(idle);
++
++}
++
+ /**
+  * get_cpu_idle_time_us - get the total idle time of a CPU
+  * @cpu: CPU number to query
+@@ -691,27 +705,9 @@ static void tick_nohz_start_idle(struct tick_sched *ts)
+ u64 get_cpu_idle_time_us(int cpu, u64 *last_update_time)
+ {
+ 	struct tick_sched *ts = &per_cpu(tick_cpu_sched, cpu);
+-	ktime_t now, idle;
+-
+-	if (!tick_nohz_active)
+-		return -1;
+-
+-	now = ktime_get();
+-	if (last_update_time) {
+-		update_ts_time_stats(cpu, ts, now, last_update_time);
+-		idle = ts->idle_sleeptime;
+-	} else {
+-		if (ts->idle_active && !nr_iowait_cpu(cpu)) {
+-			ktime_t delta = ktime_sub(now, ts->idle_entrytime);
+-
+-			idle = ktime_add(ts->idle_sleeptime, delta);
+-		} else {
+-			idle = ts->idle_sleeptime;
+-		}
+-	}
+-
+-	return ktime_to_us(idle);
+ 
++	return get_cpu_sleep_time_us(ts, &ts->idle_sleeptime,
++				     !nr_iowait_cpu(cpu), last_update_time);
+ }
+ EXPORT_SYMBOL_GPL(get_cpu_idle_time_us);
+ 
+@@ -732,26 +728,9 @@ EXPORT_SYMBOL_GPL(get_cpu_idle_time_us);
+ u64 get_cpu_iowait_time_us(int cpu, u64 *last_update_time)
+ {
+ 	struct tick_sched *ts = &per_cpu(tick_cpu_sched, cpu);
+-	ktime_t now, iowait;
+ 
+-	if (!tick_nohz_active)
+-		return -1;
+-
+-	now = ktime_get();
+-	if (last_update_time) {
+-		update_ts_time_stats(cpu, ts, now, last_update_time);
+-		iowait = ts->iowait_sleeptime;
+-	} else {
+-		if (ts->idle_active && nr_iowait_cpu(cpu) > 0) {
+-			ktime_t delta = ktime_sub(now, ts->idle_entrytime);
+-
+-			iowait = ktime_add(ts->iowait_sleeptime, delta);
+-		} else {
+-			iowait = ts->iowait_sleeptime;
+-		}
+-	}
+-
+-	return ktime_to_us(iowait);
++	return get_cpu_sleep_time_us(ts, &ts->iowait_sleeptime,
++				     nr_iowait_cpu(cpu), last_update_time);
+ }
+ EXPORT_SYMBOL_GPL(get_cpu_iowait_time_us);
+ 
 -- 
 2.34.1
 
