@@ -2,158 +2,187 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4317669F0EC
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Feb 2023 10:06:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CD86269F0E6
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Feb 2023 10:05:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231575AbjBVJGO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Feb 2023 04:06:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53100 "EHLO
+        id S231545AbjBVJFj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Feb 2023 04:05:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53172 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231584AbjBVJGK (ORCPT
+        with ESMTP id S231468AbjBVJFi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Feb 2023 04:06:10 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB66234308
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Feb 2023 01:05:24 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1677056724;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=9LjUQ9O0HnvcxKh2XAsUTz7YC8LaZ/FmXdZBrCkpK+Q=;
-        b=gp94UvynWjLHKaBrvchyc7+0jNIWaXfVsyUoZe+0HrLxvZDW6icMi8B5lqfXnHTp2HwoSt
-        31iELknuxqb5AXtQ8vroImlZRnR0e1GaaUgaXc5hrEw+SUtX/ve8b96TqxwWwoiO+8jAmA
-        aMB4I8ShVpIg3+mqck9S/jrBPrZ7QBk=
-Received: from mail-wr1-f69.google.com (mail-wr1-f69.google.com
- [209.85.221.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-135-ky8IuXp8MY-8eQHrTAqPxA-1; Wed, 22 Feb 2023 04:05:22 -0500
-X-MC-Unique: ky8IuXp8MY-8eQHrTAqPxA-1
-Received: by mail-wr1-f69.google.com with SMTP id g6-20020adfa486000000b002c55ef1ec94so1444349wrb.0
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Feb 2023 01:05:22 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:subject:organization:from
-         :content-language:references:cc:to:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=9LjUQ9O0HnvcxKh2XAsUTz7YC8LaZ/FmXdZBrCkpK+Q=;
-        b=Cpn0hzdC04PM7MW4Tj+nHXUHmbgFmCURoD3rB5UyJYP15SH5JLQG7DLpSxgtygQGSi
-         q861qGBRZixK6E6Gke9MXyOJxgrOZOI7Bg8ttIuM39Fbl7FMKKc2jbl549FzEMX5LYM5
-         B+qZPyFwIrRd2C7c42p92pITwpK3FrQPGL+07evYZz/05z7Zos/o6Vc7uvFBsHMEScoU
-         I54aPP4pBAv/7Z4nnto6VKPOlJH7m72K7Tirse9+yIDCJ7q7cAm6q0qYc9IpCmSVzI+g
-         LERkgHOuujU0+InwCSeh5g3tv/dLPZ8MyFFbq1uzoTTp1FBIBb/1GYEOGdSsehQ6Y8M6
-         vCzA==
-X-Gm-Message-State: AO0yUKWpSyHtD9vPRWjHn8WypY08Nq2ikOw2yTB0n8fuaAx5xTs7r87r
-        UNVYTLvjEskL4ytA7jgkEu7cToJuz8g3OzY1x+ksVOoZC/OrznkjZe04G0ghQ4DbPD1kAP+eAos
-        Jrd7JnaKkGBFj9u4sSP2/vFFI
-X-Received: by 2002:a05:600c:80f:b0:3db:fc3:6de4 with SMTP id k15-20020a05600c080f00b003db0fc36de4mr5069690wmp.35.1677056721235;
-        Wed, 22 Feb 2023 01:05:21 -0800 (PST)
-X-Google-Smtp-Source: AK7set9SGBIryzMFukKmMVx5ow2JjCNOU/7I00r/woNcU3wsCpyUfsO529XXrVJjBQAVq81y0YSzRQ==
-X-Received: by 2002:a05:600c:80f:b0:3db:fc3:6de4 with SMTP id k15-20020a05600c080f00b003db0fc36de4mr5069668wmp.35.1677056720798;
-        Wed, 22 Feb 2023 01:05:20 -0800 (PST)
-Received: from ?IPV6:2003:cb:c704:a100:95ad:6325:131:6b1d? (p200300cbc704a10095ad632501316b1d.dip0.t-ipconnect.de. [2003:cb:c704:a100:95ad:6325:131:6b1d])
-        by smtp.gmail.com with ESMTPSA id c22-20020a7bc856000000b003e01493b136sm7194166wml.43.2023.02.22.01.05.18
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 22 Feb 2023 01:05:20 -0800 (PST)
-Message-ID: <52f001ef-a409-4f33-f28f-02e806ef305a@redhat.com>
-Date:   Wed, 22 Feb 2023 10:05:18 +0100
+        Wed, 22 Feb 2023 04:05:38 -0500
+Received: from mailbox.box.xen0n.name (mail.xen0n.name [115.28.160.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6389634C35
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Feb 2023 01:05:35 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=xen0n.name; s=mail;
+        t=1677056732; bh=doLFNBfQZMguCbeNzfwuDelzgMYN2in0OqoSTR/dzs8=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=Ieg+1+oj7bvZxBgU6vXwqlH66nTwwWaeqofYOlvDzl0kJ5vACan5Nf4WMbRqHu/kd
+         cWaiKmakQ4rSVOdP7SXNUC316DhzO5PXwduBIKxsh8f1X4OPpAzghMZGeBKrUzZkDx
+         Ga9xNsGIvuCd4XkJUu8kYh7c+9IDU6OIoKokIq2Y=
+Received: from [100.100.57.122] (unknown [58.34.185.106])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mailbox.box.xen0n.name (Postfix) with ESMTPSA id 27EB9600DA;
+        Wed, 22 Feb 2023 17:05:32 +0800 (CST)
+Message-ID: <6d71e063-8e18-dd08-ac40-36b41ccfcfdb@xen0n.name>
+Date:   Wed, 22 Feb 2023 17:05:31 +0800
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.2
-To:     Dave Hansen <dave.hansen@intel.com>,
-        "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>,
-        "bsingharora@gmail.com" <bsingharora@gmail.com>,
-        "hpa@zytor.com" <hpa@zytor.com>,
-        "Syromiatnikov, Eugene" <esyr@redhat.com>,
-        "peterz@infradead.org" <peterz@infradead.org>,
-        "rdunlap@infradead.org" <rdunlap@infradead.org>,
-        "keescook@chromium.org" <keescook@chromium.org>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>,
-        "Eranian, Stephane" <eranian@google.com>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "fweimer@redhat.com" <fweimer@redhat.com>,
-        "nadav.amit@gmail.com" <nadav.amit@gmail.com>,
-        "jannh@google.com" <jannh@google.com>,
-        "dethoma@microsoft.com" <dethoma@microsoft.com>,
-        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
-        "kcc@google.com" <kcc@google.com>, "pavel@ucw.cz" <pavel@ucw.cz>,
-        "oleg@redhat.com" <oleg@redhat.com>,
-        "hjl.tools@gmail.com" <hjl.tools@gmail.com>,
-        "bp@alien8.de" <bp@alien8.de>,
-        "Lutomirski, Andy" <luto@kernel.org>,
-        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-        "arnd@arndb.de" <arnd@arndb.de>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "Schimpe, Christina" <christina.schimpe@intel.com>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "mike.kravetz@oracle.com" <mike.kravetz@oracle.com>,
-        "Yang, Weijiang" <weijiang.yang@intel.com>,
-        "debug@rivosinc.com" <debug@rivosinc.com>,
-        "jamorris@linux.microsoft.com" <jamorris@linux.microsoft.com>,
-        "john.allen@amd.com" <john.allen@amd.com>,
-        "rppt@kernel.org" <rppt@kernel.org>,
-        "andrew.cooper3@citrix.com" <andrew.cooper3@citrix.com>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "corbet@lwn.net" <corbet@lwn.net>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-api@vger.kernel.org" <linux-api@vger.kernel.org>,
-        "gorcunov@gmail.com" <gorcunov@gmail.com>,
-        "akpm@linux-foundation.org" <akpm@linux-foundation.org>
-Cc:     "Yu, Yu-cheng" <yu-cheng.yu@intel.com>
-References: <20230218211433.26859-1-rick.p.edgecombe@intel.com>
- <20230218211433.26859-15-rick.p.edgecombe@intel.com>
- <70681787-0d33-a9ed-7f2a-747be1490932@redhat.com>
- <6f19d7c7ad9f61fa8f6c9bd09d24524dbe17463f.camel@intel.com>
- <6e1201f5-da25-6040-8230-c84856221838@redhat.com>
- <273414f5-2a7c-3cc0-dc27-d07baaa5787b@intel.com>
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.8.0
+Subject: Re: [PATCH 1/2] LoongArch: kdump: Add the same binary implementation
+To:     Youling Tang <tangyouling@loongson.cn>,
+        Huacai Chen <chenhuacai@kernel.org>
+Cc:     loongarch@lists.linux.dev, linux-kernel@vger.kernel.org
+References: <1677048791-26951-1-git-send-email-tangyouling@loongson.cn>
+ <1677048791-26951-2-git-send-email-tangyouling@loongson.cn>
 Content-Language: en-US
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-Subject: Re: [PATCH v6 14/41] x86/mm: Introduce _PAGE_SAVED_DIRTY
-In-Reply-To: <273414f5-2a7c-3cc0-dc27-d07baaa5787b@intel.com>
+From:   WANG Xuerui <kernel@xen0n.name>
+In-Reply-To: <1677048791-26951-2-git-send-email-tangyouling@loongson.cn>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 21.02.23 21:13, Dave Hansen wrote:
-> On 2/21/23 00:38, David Hildenbrand wrote:> Sure, for my taste this is
-> (1) too repetitive (2) too verbose (3) to
->> specialized. But whatever x86 maintainers prefer.
-> 
-> At this point, I'm not going to be too nitpicky.  I personally think we
-> need to get _something_ merged.  We can then nitpick it to death once
-> its in the tree.
+On 2023/2/22 14:53, Youling Tang wrote:
+> This feature depends on the relocation function, so the relocation configuration
+> CONFIG_RELOCATABLE will be enabled.
 
-Yes, but ... do we have to rush right now?
-
-This series wasn't in -next and we're in the merge window. Is the plan 
-to still include it into this merge window?
-
-Also, I think concise patch descriptions and comments are not 
-necessarily nitpicking like "please rename that variable".
+In general try to describe things briefly: "This depends on the kernel 
+being relocatable" would be enough in this case.
 
 > 
-> So I prefer whatever will move the set along. ;)
+> Add the same set of binary implementations for kdump, and then no longer need to
+> compile two kernels (the production kernel and the capture kernel share the same
+> binary).
 
-If the plan is to merge it in the next merge window (which I suspect, 
-but I might be wrong), I suggest including it in -next fairly soonish, 
-and in the meantime, polish the remaining bits.
+Sorry but what do you mean by "same set of binary implementation", 
+where's the "first set of binary implementation"?
 
-Knowing the plan would be good ;)
+Judging from the patch content, I guess it's kinda wrong translation, 
+and what you actually mean is something like "enable using the same 
+image for crashkernel"?
+
+> 
+> CONFIG_CRASH_DUMP is enabled by default (CONFIG_RELOCATABLE is also enabled).
+
+No it's not: you didn't add "default y" anywhere. What you actually did 
+is to enable it *in the defconfig*. And the latter part about 
+CONFIG_RELOCATABLE shouldn't be necessary, it's implementation detail 
+after all, and the users likely don't have to be aware of it.
+
+Better reword a little bit, like "Also enable CONFIG_CRASH_DUMP in 
+loongson3_defconfig".
+
+> 
+> Signed-off-by: Youling Tang <tangyouling@loongson.cn>
+> ---
+>   arch/loongarch/Kconfig                     | 12 +-----------
+>   arch/loongarch/Makefile                    |  4 ----
+>   arch/loongarch/configs/loongson3_defconfig |  1 +
+>   arch/loongarch/include/asm/addrspace.h     |  2 ++
+>   arch/loongarch/kernel/head.S               |  2 +-
+>   5 files changed, 5 insertions(+), 16 deletions(-)
+> 
+> diff --git a/arch/loongarch/Kconfig b/arch/loongarch/Kconfig
+> index ab4c2ab146ab..84f220273296 100644
+> --- a/arch/loongarch/Kconfig
+> +++ b/arch/loongarch/Kconfig
+> @@ -502,6 +502,7 @@ config KEXEC
+>   
+>   config CRASH_DUMP
+>   	bool "Build kdump crash kernel"
+> +	select RELOCATABLE
+>   	help
+>   	  Generate crash dump after being started by kexec. This should
+>   	  be normally only set in special crash dump kernels which are
+> @@ -511,17 +512,6 @@ config CRASH_DUMP
+>   
+>   	  For more details see Documentation/admin-guide/kdump/kdump.rst
+>   
+> -config PHYSICAL_START
+> -	hex "Physical address where the kernel is loaded"
+> -	default "0x90000000a0000000"
+> -	depends on CRASH_DUMP
+> -	help
+> -	  This gives the XKPRANGE address where the kernel is loaded.
+> -	  If you plan to use kernel for capturing the crash dump change
+> -	  this value to start of the reserved region (the "X" value as
+> -	  specified in the "crashkernel=YM@XM" command line boot parameter
+> -	  passed to the panic-ed kernel).
+> -
+>   config RELOCATABLE
+>   	bool "Relocatable kernel"
+>   	help
+> diff --git a/arch/loongarch/Makefile b/arch/loongarch/Makefile
+> index 2aba6ff30436..8304fed7aa42 100644
+> --- a/arch/loongarch/Makefile
+> +++ b/arch/loongarch/Makefile
+> @@ -79,11 +79,7 @@ endif
+>   cflags-y += -ffreestanding
+>   cflags-y += $(call cc-option, -mno-check-zero-division)
+>   
+> -ifndef CONFIG_PHYSICAL_START
+>   load-y		= 0x9000000000200000
+> -else
+> -load-y		= $(CONFIG_PHYSICAL_START)
+> -endif
+>   bootvars-y	= VMLINUX_LOAD_ADDRESS=$(load-y)
+
+Both load-y and VMLINUX_LOAD_ADDRESS are kinda LoongArch-ism (stemming 
+from similar usage in arch/mips apparently), so why not just drop load-y 
+and fold the constant into the bootvars-y definition? So we have one 
+piece of "special" definition instead of two.
+
+>   
+>   drivers-$(CONFIG_PCI)		+= arch/loongarch/pci/
+> diff --git a/arch/loongarch/configs/loongson3_defconfig b/arch/loongarch/configs/loongson3_defconfig
+> index cb52774c80e8..7885f6e5de93 100644
+> --- a/arch/loongarch/configs/loongson3_defconfig
+> +++ b/arch/loongarch/configs/loongson3_defconfig
+> @@ -48,6 +48,7 @@ CONFIG_HOTPLUG_CPU=y
+>   CONFIG_NR_CPUS=64
+>   CONFIG_NUMA=y
+>   CONFIG_KEXEC=y
+> +CONFIG_CRASH_DUMP=y
+>   CONFIG_SUSPEND=y
+>   CONFIG_HIBERNATION=y
+>   CONFIG_ACPI=y
+> diff --git a/arch/loongarch/include/asm/addrspace.h b/arch/loongarch/include/asm/addrspace.h
+> index d342935e5a72..4edcb3c21cf5 100644
+> --- a/arch/loongarch/include/asm/addrspace.h
+> +++ b/arch/loongarch/include/asm/addrspace.h
+> @@ -125,4 +125,6 @@ extern unsigned long vm_map_base;
+>   #define ISA_IOSIZE	SZ_16K
+>   #define IO_SPACE_LIMIT	(PCI_IOSIZE - 1)
+>   
+> +#define PHYS_LINK_ADDR	PHYSADDR(VMLINUX_LOAD_ADDRESS)
+> +
+>   #endif /* _ASM_ADDRSPACE_H */
+> diff --git a/arch/loongarch/kernel/head.S b/arch/loongarch/kernel/head.S
+> index b12f459ad73a..57962ff08f6d 100644
+> --- a/arch/loongarch/kernel/head.S
+> +++ b/arch/loongarch/kernel/head.S
+> @@ -24,7 +24,7 @@ _head:
+>   	.org	0x8
+>   	.dword	kernel_entry		/* Kernel entry point */
+>   	.dword	_end - _text		/* Kernel image effective size */
+> -	.quad	0			/* Kernel image load offset from start of RAM */
+> +	.quad	PHYS_LINK_ADDR		/* Kernel image load offset from start of RAM */
+>   	.org	0x38			/* 0x20 ~ 0x37 reserved */
+>   	.long	LINUX_PE_MAGIC
+>   	.long	pe_header - _head	/* Offset to the PE header */
 
 -- 
-Thanks,
+WANG "xen0n" Xuerui
 
-David / dhildenb
+Linux/LoongArch mailing list: https://lore.kernel.org/loongarch/
 
