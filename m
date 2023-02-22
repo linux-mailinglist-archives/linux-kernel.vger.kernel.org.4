@@ -2,91 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AFEA769FE71
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Feb 2023 23:25:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2DA5D69FE73
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Feb 2023 23:25:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232788AbjBVWZM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Feb 2023 17:25:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51162 "EHLO
+        id S232877AbjBVWZb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Feb 2023 17:25:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51566 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232817AbjBVWZJ (ORCPT
+        with ESMTP id S232817AbjBVWZ0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Feb 2023 17:25:09 -0500
-Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C49A61EFE1
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Feb 2023 14:25:07 -0800 (PST)
-Received: from zn.tnic (p5de8e9fe.dip0.t-ipconnect.de [93.232.233.254])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 2277A1EC068E;
-        Wed, 22 Feb 2023 23:25:06 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1677104706;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=rqGuUfYzE+6s5Qo15bNdnzyu2OPEKbVmumKdBGdNFOo=;
-        b=Kuj0hV6gT7zw+6q2hzz4LCbXJ3ETg1TiYkKvUJgwh3Hb9H3vgIaVutSbIa3UGUlRCNNqyz
-        PUaTKe8CEoCOZLZ6uBTMmEBDiPnIcBv1Mxv1Ch1e7soQdoSqONTC42Z2A+FU5eKe9EoF3c
-        C6Di4UeBMPHFqdqVGMi4u/WHmaqzJc8=
-Date:   Wed, 22 Feb 2023 23:25:02 +0100
-From:   Borislav Petkov <bp@alien8.de>
-To:     Tavis Ormandy <taviso@gmail.com>
-Cc:     Andrew Cooper <andrew.cooper3@citrix.com>,
-        linux-kernel@vger.kernel.org, x86@kernel.org
-Subject: Re: x86: AMD Zen2 ymm registers rolling back
-Message-ID: <Y/aWPuo2MNrl7RXB@zn.tnic>
-References: <Y/W4x7/KFqmDmmR7@thinkstation.cmpxchg8b.net>
- <Y/XTT59OrLw2as4R@zn.tnic>
- <Y/Xc+yMzI83WZ4V1@zn.tnic>
- <0371ec3d-0899-f94a-7f21-21d805df2927@citrix.com>
- <Y/Xp73KJe3c/1jrn@zn.tnic>
- <Y/aIjUr78yd9U+wl@thinkstation.cmpxchg8b.net>
+        Wed, 22 Feb 2023 17:25:26 -0500
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A7DD41B57;
+        Wed, 22 Feb 2023 14:25:24 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=L3thRE4eX8buSCZPs0bA9NvffhgYCEzUstyMSlWVQD0=; b=GntIox46Bim6bb6wBspzGRIGNv
+        sVv8CifGU+deMJGnTQRtHGjCahRLKszq7hnLyXd9mTpc5Y2yU0w+kz1cS6/yuX5UC/na1hxObERUP
+        umdcD70GPfLDwexs2OgxSF5ffpkp8bG5dq/jne4D6jAIbmDJ7S0SKhNayY5frmIgje+Kw7kl0tjie
+        q8rr4iPj/fXpXYnFnKW719VhpUoUrrDHBJf9wwVOIvHr5GNzX9kUchWiyjDv3rgyf3fzAofuA33qc
+        pj55hnm1o3IZaZdJPiZRtHZnVhxreRTmfDVDBWacEgojr5ECZM5Lr4XypDN2BL2Dp6SId9RhcQ0Oo
+        tfEW0WtQ==;
+Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1pUxYB-00EId5-IQ; Wed, 22 Feb 2023 22:25:23 +0000
+Date:   Wed, 22 Feb 2023 14:25:23 -0800
+From:   Luis Chamberlain <mcgrof@kernel.org>
+To:     Nick Alcock <nick.alcock@oracle.com>
+Cc:     linux-modules@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, elena.zannoni@oracle.com
+Subject: Re: [PATCH modules-next v10 00/13] kallsyms: reliable
+ symbol->address lookup with /proc/kallmodsyms
+Message-ID: <Y/aWU9VzkZcRyf/k@bombadil.infradead.org>
+References: <20221205163157.269335-1-nick.alcock@oracle.com>
+ <Y8b8TOJzd/RZXR8z@bombadil.infradead.org>
+ <87r0uy3hkw.fsf@esperi.org.uk>
+ <87bkm22y6e.fsf@esperi.org.uk>
+ <Y/U8MuL24OZzbIIp@bombadil.infradead.org>
+ <87edqhsy1f.fsf@esperi.org.uk>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Y/aIjUr78yd9U+wl@thinkstation.cmpxchg8b.net>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <87edqhsy1f.fsf@esperi.org.uk>
+Sender: Luis Chamberlain <mcgrof@infradead.org>
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Feb 22, 2023 at 01:26:37PM -0800, Tavis Ormandy wrote:
-> Thanks - confirmed, it *doesn't* repro with 0x8301055, but does repro
-> with 0x830104d.
+On Wed, Feb 22, 2023 at 12:08:12PM +0000, Nick Alcock wrote:
+> On 21 Feb 2023, Luis Chamberlain stated:
+> 
+> > On Thu, Feb 09, 2023 at 11:53:29PM +0000, Nick Alcock wrote:
+> >> [most people trimmed from the Cc: list for this procedural question]
+> >> 
+> >> On 9 Feb 2023, Nick Alcock outgrape:
+> >> > I am going to split this whole series into:
+> >> >
+> >> > 1. A series of patches (123 of them at present) Cc:ed to subsystem
+> >> > maintainers as well as you, to comment out the MODULE_LICENSE usage.
+> >> > These patches will have Suggested-by you. This series is rebased against
+> >> > the latest modules-next and revalidated, and is ready to be mailed out;
+> >> > will do so shortly.
+> >> 
+> >> One quick question: if/when you're happy with this series, are you
+> >> planning to take it yourself via modules-next?
+> >
+> > It seems some maintainers are already taking patches in, so let's see
+> > what folks take in, then if there are not takers I can just take what is
+> > not merged on linux-next through modules-next.
+> > 
+> > So try to get them into each subsystem tree, and around rc3 send the
+> > ones that are not merged and I'll just take them into modules-next.
+> 
+> Sounds good! I can trivially regenerate a new patch series containing
+> only the still-missing bits without needing to do anything like track
+> who took things, because nearly all of this is automated anyway.
 
-Good.
+Fantastic.
 
-> Annoyingly, I thought I was using the most recent microcode, but it seems
-> like there is some bug and debian wasn't applying it at boot.
+> ... at least I can if I can figure out where all the subsystem trees
+> that people took them into are (not everyone might mention when they
+> take one).
 
-Well, actually, microcode loading is so simple - you don't absolutely
-need to rely on the distros to do it for ya.
+This is why I use linux-next. It represents all the latest trees merged.
 
-You simply get it from
+> I might miss a few, but I suspect that's not a problem:
+> taking the same commit by two different routes does not constitute a
+> conflict, at least on its own.
 
-git://git.kernel.org/pub/scm/linux/kernel/git/firmware/linux-firmware.git
+Right.
 
-and copy all the bin files from amd-ucode/ into /lib/firmware/amd-ucode/
-
-Technically, you'd need only the one for your family but the tools can
-deal with multiple files in there.
-
-And then you're all set - dracut or whatever creates your initrd will
-add it. You can even add it by hand, see
-
-Documentation/x86/microcode.rst
-
-> That seems like a scary errata :-/
-
-Yeah, modern x86 hardware is crazy complex. And we've had worse. :-\
-
--- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette
+  Luis
