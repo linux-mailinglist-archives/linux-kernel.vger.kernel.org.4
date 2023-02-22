@@ -2,105 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F168269F245
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Feb 2023 10:54:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E9A9F69F246
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Feb 2023 10:55:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232298AbjBVJyA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Feb 2023 04:54:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56580 "EHLO
+        id S231495AbjBVJzL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Feb 2023 04:55:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56752 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231263AbjBVJxb (ORCPT
+        with ESMTP id S232327AbjBVJyp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Feb 2023 04:53:31 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7A17305CA;
-        Wed, 22 Feb 2023 01:52:01 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id BDF66B81218;
-        Wed, 22 Feb 2023 09:51:57 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6649CC433D2;
-        Wed, 22 Feb 2023 09:51:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1677059516;
-        bh=PyUDgmO8GAvIrVIlTy6DR+3I37FfQ9drabu8uH/vTLU=;
-        h=Subject:From:In-Reply-To:References:To:Cc:Date:From;
-        b=f+/ukOx2KzvGnXjS/bxr1wPEjhw6z37QZrpnv0SwajPPUQ1ZHAKYXHtBPSLDScMqw
-         PkxpaO60xDNd6ttMJ7M8TZpa9YSbEVCMGathT54evZ//094i4gNguukSXdBzv1xPDD
-         xcteuIeJWzI6KMgel7MWe/0VD5zesSPl6wUP7mc6aNFskGi7befFGCoYEgTVjC1j1X
-         YJ7oZVG1Bk2LexqTt6AqItVUW0m27B0mDth/9GrVa+k9Eb95zhzaB6UJ5EMo39c/KJ
-         M0XxMzjqqivo+aob78SL6f72gJGW+dtERSPQ0bMS3zVcWI72fHQxI8hqE/D3rWpyI4
-         2Qz59+Q1vZmCQ==
-Content-Type: text/plain; charset="utf-8"
+        Wed, 22 Feb 2023 04:54:45 -0500
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F0F42DE53
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Feb 2023 01:53:05 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1677059585; x=1708595585;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=2RqkXhBHRqKKh7yKN8gC72GWgC3HgxWAprIYnydv3Fc=;
+  b=k12CXiv5PZXLzST1G/IRv/MCc+8pdsZQI0wKIZLDgmdTCwHTr3WR7sgc
+   f3mbyRV/nkZcJ2F4Zv+w5apf4Tc8/ueq7hvvQCpX6XJXHWrl9StfH+Skf
+   py3X2p8sSRJ4zxdGTE1QwCJBg/OYzmXRlKWsH3oWAQqMEvSsaWKV0cvNK
+   mQUaAAwCx8pjj4OnQAp8KF7jYYs11NzYxelrz/27U+5pH7+2pFmZ0YQbn
+   E2B6v3546cyNWaAeF1CTCHD8N6Sk9lCbzWPhaNtHgwce+Dk+FamJodMhH
+   0HwT9QrxYuShoUdrp6MWD42tDTod/1aA3RhoYOP9AuLscNjNyfKuXaYff
+   A==;
+X-IronPort-AV: E=Sophos;i="5.97,318,1669100400"; 
+   d="asc'?scan'208";a="201788162"
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa2.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 22 Feb 2023 02:52:58 -0700
+Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
+ chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.16; Wed, 22 Feb 2023 02:52:55 -0700
+Received: from wendy (10.10.115.15) by chn-vm-ex03.mchp-main.com
+ (10.10.85.151) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.16 via Frontend
+ Transport; Wed, 22 Feb 2023 02:52:53 -0700
+Date:   Wed, 22 Feb 2023 09:52:27 +0000
+From:   Conor Dooley <conor.dooley@microchip.com>
+To:     Song Shuai <suagrfillet@gmail.com>
+CC:     <jan.kiszka@siemens.com>, <kbingham@kernel.org>,
+        <paul.walmsley@sifive.com>, <palmer@dabbelt.com>,
+        <aou@eecs.berkeley.edu>, <linux-kernel@vger.kernel.org>,
+        <linux-riscv@lists.infradead.org>, <akpm@linux-foundation.org>
+Subject: Re: [PATCH RESEND] scripts/gdb: add lx_current support for riscv
+Message-ID: <Y/Xl2/pfGYq5e89y@wendy>
+References: <20230222093730.1826523-1-suagrfillet@gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Subject: Re: [PATCH v2 1/2] wifi: ath11k: Use platform_get_irq() to get the
- interrupt
-From:   Kalle Valo <kvalo@kernel.org>
-In-Reply-To: <20230201084131.v2.1.I69cf3d56c97098287fe3a70084ee515098390b70@changeid>
-References: <20230201084131.v2.1.I69cf3d56c97098287fe3a70084ee515098390b70@changeid>
-To:     Douglas Anderson <dianders@chromium.org>
-Cc:     ath11k@lists.infradead.org, linux-wireless@vger.kernel.org,
-        junyuu@chromium.org,
-        Youghandhar Chintala <quic_youghand@quicinc.com>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        Nick Kossifidis <mickflemm@gmail.com>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Douglas Anderson <dianders@chromium.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        Manikanta Pubbisetty <quic_mpubbise@quicinc.com>,
-        Marc Zyngier <maz@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-        Rob Herring <robh@kernel.org>, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org
-User-Agent: pwcli/0.1.1-git (https://github.com/kvalo/pwcli/) Python/3.7.3
-Message-ID: <167705951022.25767.9800855263902793000.kvalo@kernel.org>
-Date:   Wed, 22 Feb 2023 09:51:52 +0000 (UTC)
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="aifrjwnhPlKH9ODp"
+Content-Disposition: inline
+In-Reply-To: <20230222093730.1826523-1-suagrfillet@gmail.com>
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Douglas Anderson <dianders@chromium.org> wrote:
+--aifrjwnhPlKH9ODp
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-> As of commit a1a2b7125e10 ("of/platform: Drop static setup of IRQ
-> resource from DT core"), we need to use platform_get_irq() instead of
-> platform_get_resource() to get our IRQs because
-> platform_get_resource() simply won't get them anymore.
-> 
-> This was already fixed in several other Atheros WiFi drivers,
-> apparently in response to Zeal Robot reports. An example of another
-> fix is commit 9503a1fc123d ("ath9k: Use platform_get_irq() to get the
-> interrupt"). ath11k seems to have been missed in this effort, though.
-> 
-> Without this change, WiFi wasn't coming up on my Qualcomm sc7280-based
-> hardware. Specifically, "platform_get_resource(pdev, IORESOURCE_IRQ,
-> i)" was failing even for i=0.
-> 
-> Tested-on: WCN6750 hw1.0 AHB WLAN.MSL.1.0.1-00887-QCAMSLSWPLZ-1
-> 
-> Fixes: a1a2b7125e10 ("of/platform: Drop static setup of IRQ resource from DT core")
-> Fixes: 00402f49d26f ("ath11k: Add support for WCN6750 device")
-> Signed-off-by: Douglas Anderson <dianders@chromium.org>
-> Tested-by: Jun Yu <junyuu@chromium.org>
-> Reviewed-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-> Signed-off-by: Kalle Valo <quic_kvalo@quicinc.com>
+Hey Song
 
-2 patches applied to ath-next branch of ath.git, thanks.
+On Wed, Feb 22, 2023 at 05:37:30PM +0800, Song Shuai wrote:
+> RISC-V uses the tp register to save the current task_struct address
+> as its current() defines. So lx_current() of riscv just returns the
+> dereference of the address cast via task_ptr_type.
 
-f117276638b7 wifi: ath11k: Use platform_get_irq() to get the interrupt
-95c95251d054 wifi: ath5k: Use platform_get_irq() to get the interrupt
+FYI, there's already been some patches posted for this:
+https://lore.kernel.org/all/mhng-bdcd75a5-e6d6-4090-8292-a32eb46e4464@palme=
+r-ri-x1c9a/
 
--- 
-https://patchwork.kernel.org/project/linux-wireless/patch/20230201084131.v2.1.I69cf3d56c97098287fe3a70084ee515098390b70@changeid/
+That version already has review and ack tags from Palmer and others.
+It seems to me that Andrew is the usual applier of patches for this
+script, so I'm gonna add him to CC here so he is aware - but as it is
+the middle of the merge window the best course of action might just be
+reposting that patch, CCing Andrew, after v6.3-rc1.
 
-https://wireless.wiki.kernel.org/en/developers/documentation/submittingpatches
+Cheers,
+Conor.
 
+>=20
+> Signed-off-by: Song Shuai <suagrfillet@gmail.com>
+> ---
+>  scripts/gdb/linux/cpus.py | 3 +++
+>  1 file changed, 3 insertions(+)
+>=20
+> diff --git a/scripts/gdb/linux/cpus.py b/scripts/gdb/linux/cpus.py
+> index 15fc4626d236..6825a9834394 100644
+> --- a/scripts/gdb/linux/cpus.py
+> +++ b/scripts/gdb/linux/cpus.py
+> @@ -173,6 +173,9 @@ def get_current_task(cpu):
+>           else:
+>               raise gdb.GdbError("Sorry, obtaining the current task is no=
+t allowed "
+>                                  "while running in userspace(EL0)")
+> +    elif utils.is_target_arch("riscv"):
+> +         current_task_addr =3D gdb.parse_and_eval("$tp")
+> +         return current_task_addr.cast(task_ptr_type).dereference()
+>      else:
+>          raise gdb.GdbError("Sorry, obtaining the current task is not yet=
+ "
+>                             "supported with this arch")
+> --=20
+> 2.20.1
+>=20
+>=20
+
+--aifrjwnhPlKH9ODp
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCY/XlzQAKCRB4tDGHoIJi
+0tRLAQDG1U1qHvLWSIibUh10+p//HtrVXBHL8Wyta+Zbs0vsfgD/XVcfoiveLvdP
+UT1+3Dmz6nKcFKElg0//KE/+lJOAtgw=
+=5ZMg
+-----END PGP SIGNATURE-----
+
+--aifrjwnhPlKH9ODp--
