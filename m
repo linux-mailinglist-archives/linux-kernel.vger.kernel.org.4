@@ -2,147 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EB52669FA90
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Feb 2023 18:55:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C5E8069FA9A
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Feb 2023 18:58:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232029AbjBVRzR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Feb 2023 12:55:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34936 "EHLO
+        id S231822AbjBVR6D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Feb 2023 12:58:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37412 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231236AbjBVRzO (ORCPT
+        with ESMTP id S230048AbjBVR6B (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Feb 2023 12:55:14 -0500
-Received: from cheetah.elm.relay.mailchannels.net (cheetah.elm.relay.mailchannels.net [23.83.212.34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B062F3E629
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Feb 2023 09:55:05 -0800 (PST)
-X-Sender-Id: dreamhost|x-authsender|kjlx@templeofstupid.com
-Received: from relay.mailchannels.net (localhost [127.0.0.1])
-        by relay.mailchannels.net (Postfix) with ESMTP id 8BCFA6C0D80
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Feb 2023 17:55:03 +0000 (UTC)
-Received: from pdx1-sub0-mail-a306.dreamhost.com (unknown [127.0.0.6])
-        (Authenticated sender: dreamhost)
-        by relay.mailchannels.net (Postfix) with ESMTPA id 1315D6C0FED
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Feb 2023 17:55:03 +0000 (UTC)
-ARC-Seal: i=1; s=arc-2022; d=mailchannels.net; t=1677088503; a=rsa-sha256;
-        cv=none;
-        b=oUdm9hPUqOZPk3vnqDVNvwRGFiGgkP3riHS/4KnKqpryF5x9+kDQ1ctioBviUfZRAx6eBR
-        +1YUfEM9AqlqHDHbiQNSC/cVdzRSg9357PvAdzLD6LnFk0l6xPWHuh6wYka8sRakgD9Gye
-        NCbWybR9dO+RLH+EceZFA4qEuYHe9kVo4D0LDicI5GOW/yNHb/G6tMlfB/o/niJcsAPnDR
-        KeYBueEw/M1qzfDILMnGssRbRinNxXpaKcIiuPrtKQQobQ+FFkEPsfWSCNqFoK9qEGp83N
-        VYbQphexIc82r8gaZO0VYRPxt+vBwqq6tvxAjWfAXyDCShk1Zvl3e6gePesWag==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mailchannels.net;
-        s=arc-2022; t=1677088503;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references:dkim-signature;
-        bh=SFO62oAKLgPH71Y0Xq/5Q3j7DH6Nq6RDi9wLwjcluGc=;
-        b=2nnWgivDo+ddQX4rXiVJFmvq/Lt3TNfeg2LRMvHtY8AiKcE+pzC/vycn8nbgRTl7yPqU0A
-        LT/Ue7aCX26pdUYZpg8/T907x83j0NB0X77V0Zk/w/Lt/NewKyOi1AZBUDrB8nh/OsCD5m
-        HLa5K/EScxZ4ixB3H6zxM9odvnD5LnsIgpOKu1EYrpFfqh0tRvGIZWjR8Zaa6FmS2WpxET
-        9Obv94jt83r9628x9ZYi78/eUFyTxuKtrO+5Ggpj+crL88aSqbkbFXYCY303AIyq0ac9zp
-        1VJc4xeHA2JSG18pZqwu1Vg20wGjC8JwjVjnC0S1/V3OC5PDSEo8GxFUsYNG0Q==
-ARC-Authentication-Results: i=1;
-        rspamd-5db48964c-tlhbm;
-        auth=pass smtp.auth=dreamhost smtp.mailfrom=kjlx@templeofstupid.com
-X-Sender-Id: dreamhost|x-authsender|kjlx@templeofstupid.com
-X-MC-Relay: Good
-X-MailChannels-SenderId: dreamhost|x-authsender|kjlx@templeofstupid.com
-X-MailChannels-Auth-Id: dreamhost
-X-Whispering-Imminent: 6e390c0c2f524750_1677088503372_3885356842
-X-MC-Loop-Signature: 1677088503372:3174618892
-X-MC-Ingress-Time: 1677088503372
-Received: from pdx1-sub0-mail-a306.dreamhost.com (pop.dreamhost.com
- [64.90.62.162])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384)
-        by 100.120.227.140 (trex/6.7.1);
-        Wed, 22 Feb 2023 17:55:03 +0000
-Received: from kmjvbox (c-76-102-200-71.hsd1.ca.comcast.net [76.102.200.71])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: kjlx@templeofstupid.com)
-        by pdx1-sub0-mail-a306.dreamhost.com (Postfix) with ESMTPSA id 4PMP1x5cvdz3L
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Feb 2023 09:55:00 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=templeofstupid.com;
-        s=dreamhost; t=1677088502;
-        bh=SFO62oAKLgPH71Y0Xq/5Q3j7DH6Nq6RDi9wLwjcluGc=;
-        h=Date:From:To:Cc:Subject:Content-Type;
-        b=eeNdy4H+j7lG6Sne8OpERURhOxfjYoo41SOiAGXZQlESWISax/NRObaYPfTyzFJF7
-         js3TD4KnZUKPTPauRebQivsARvaC2EYQAHbTJ8toeSAPHu1bDB4FuINUhD1dt/rflX
-         6+D3NX4iCssGRBTfJ7L/G8wVVzNoKOJmCStUVLb0=
-Received: from johansen (uid 1000)
-        (envelope-from kjlx@templeofstupid.com)
-        id e004a
-        by kmjvbox (DragonFly Mail Agent v0.12);
-        Wed, 22 Feb 2023 09:54:56 -0800
-Date:   Wed, 22 Feb 2023 09:54:56 -0800
-From:   Krister Johansen <kjlx@templeofstupid.com>
-To:     xen-devel@lists.xenproject.org, linux-kernel@vger.kernel.org
-Cc:     Juergen Gross <jgross@suse.com>, Jan Beulich <jbeulich@suse.com>,
-        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Marcelo Tosatti <mtosatti@redhat.com>,
-        Anthony Liguori <aliguori@amazon.com>,
-        David Reaver <me@davidreaver.com>,
-        Brendan Gregg <brendan@intel.com>
-Subject: [PATCH linux-next v2 2/2] x86/xen/time: cleanup
- xen_tsc_safe_clocksource
-Message-ID: <a69ca370fecf85d312d2db633d9438ace2af6e5b.1677038165.git.kjlx@templeofstupid.com>
-References: <cover.1677038165.git.kjlx@templeofstupid.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <cover.1677038165.git.kjlx@templeofstupid.com>
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
-        DKIM_SIGNED,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        UNPARSEABLE_RELAY autolearn=no autolearn_force=no version=3.4.6
+        Wed, 22 Feb 2023 12:58:01 -0500
+Received: from out5-smtp.messagingengine.com (out5-smtp.messagingengine.com [66.111.4.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D013F241E8;
+        Wed, 22 Feb 2023 09:58:00 -0800 (PST)
+Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
+        by mailout.nyi.internal (Postfix) with ESMTP id 774765C0179;
+        Wed, 22 Feb 2023 12:57:58 -0500 (EST)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute1.internal (MEProxy); Wed, 22 Feb 2023 12:57:58 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; h=
+        cc:cc:content-transfer-encoding:content-type:date:date:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to; s=fm2; t=1677088678; x=
+        1677175078; bh=nwLpEjWmPs3D70+3STrydy7bvzs4kmjkM2HWhBxwqA4=; b=j
+        ikmgFtpuxcvGFE3qLG9zGDa67/AhicEIaxG3nROOylRG77UraKUHrKHE4w0DkqCN
+        juLgoFbkmxEUvlgTPLkhRcIfocLwQ6rYblkMYvB767KjwC2R72bJ/mntoP7Mu06U
+        01SVQ7azBcy8yh8Usc3r4O9rM+5y8iSk4FjpTjK9OUET8LAT2jgNVFhkVNd2bFpG
+        WtAHzyW3z+GpKcPVxYEwL6fKI3djbcCtCB+1407xPzdsqdCqpqo4JjTvWKTYZovZ
+        D/ynxL5ek8xImyl1sMZv1P4tydrJoM9BGbMP6AQ+90SlNhjqGx3nkxYVSvtRJaSX
+        a09azk2gcGDSrgt4qacaA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding
+        :content-type:date:date:feedback-id:feedback-id:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
+        :x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1677088678; x=
+        1677175078; bh=nwLpEjWmPs3D70+3STrydy7bvzs4kmjkM2HWhBxwqA4=; b=F
+        1WqK9/ULyFs4gxOGhyvCmiJIQB3mGUP18D7cWzo1zWxHL1pWVzaBXJQBpP2/pYVw
+        mmt2W9b6KHDtXmOC7SmwehKJO4vQKLiA8J33wetjZme0BDi6w8GTTFW6YnLp8jOv
+        Z5bvi7H8rtZDtMsGxQurQZMQzpbD6ysgyuJgbt5nRJKkmAPByAlbi249wFnGjk1e
+        st0tyo6nbYf5TAkZXd59fuvxuOUasD7yQJyMkPlI4wyvKnu/DLCt7VFJU1b15rmE
+        yzi0lZA00myG3rVP44ujENo9lFlCJMLct6pPu3EgEU84xGSdrZRPIXeeA+xnCwVC
+        WRD4q2Egwg2PXv4La+Ewg==
+X-ME-Sender: <xms:pVf2Yzx8OrQqCZ0sOnDXREkTOheOAE0JcfVq1ZutGu1XPMZnuzSGWw>
+    <xme:pVf2Y7Tpyh8Ajut76gG4bVgfgl2kyimD5FMoTAJchnC78gsU6Avt3cN9Gy62Vsu07
+    vLH7onUHnxeqj30AGo>
+X-ME-Received: <xmr:pVf2Y9WRrVgvM0qGmbtV2Tdkf6Z_FgWSLNhnBkLRdSo_LxZidN0vUJQ7fb9fGL4lF-3_>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrudejledguddthecutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
+    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
+    enucfjughrpegtggfuhfgjffevgffkfhfvofesthhqmhdthhdtjeenucfhrhhomheplfhi
+    rgiguhhnucgjrghnghcuoehjihgrgihunhdrhigrnhhgsehflhihghhorghtrdgtohhmqe
+    enucggtffrrghtthgvrhhnpedutdejffetteefkeejieehfeeuieeguedtveeijeeviefh
+    ffelvdfgudeihfdvtdenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrih
+    hlfhhrohhmpehjihgrgihunhdrhigrnhhgsehflhihghhorghtrdgtohhm
+X-ME-Proxy: <xmx:pVf2Y9jhKx6uMWMcE7nOTDP86zbRG4nuGBKhwOTVk-hAypdTn0-d7A>
+    <xmx:pVf2Y1D9-gQ2sodvvOhtRVec4qTLdZ-EYxDa1iDfW1muxI-TTh9E5w>
+    <xmx:pVf2Y2JXGgWxYdnIBo1a9TApluAVvgnGtcOCiKd4dMOrAK0SEp3lZg>
+    <xmx:plf2Y56DW5KT5B5mFPh4C-TOYY2smqCXhc4nxf8Om2SRBXv__88Xxg>
+Feedback-ID: ifd894703:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
+ 22 Feb 2023 12:57:55 -0500 (EST)
+Content-Type: text/plain;
+        charset=utf-8
+Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3731.300.101.1.3\))
+Subject: Re: [PATCH 3/3] of: address: Use dma_default_coherent to determine
+ default coherency
+From:   Jiaxun Yang <jiaxun.yang@flygoat.com>
+In-Reply-To: <e9d882f4-d57d-f6b4-7ae0-bbfea0f5aa59@arm.com>
+Date:   Wed, 22 Feb 2023 17:57:44 +0000
+Cc:     "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
+        linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        mpe@ellerman.id.au, paul.walmsley@sifive.com, palmer@dabbelt.com,
+        Rob Herring <robh+dt@kernel.org>,
+        Christoph Hellwig <hch@lst.de>, m.szyprowski@samsung.com,
+        linux-riscv@lists.infradead.org
+Content-Transfer-Encoding: quoted-printable
+Message-Id: <3E55E1F7-7A34-4165-9BF4-C2AAF6A6CFC1@flygoat.com>
+References: <20230222133712.8079-1-jiaxun.yang@flygoat.com>
+ <20230222133712.8079-4-jiaxun.yang@flygoat.com>
+ <e9d882f4-d57d-f6b4-7ae0-bbfea0f5aa59@arm.com>
+To:     Robin Murphy <robin.murphy@arm.com>
+X-Mailer: Apple Mail (2.3731.300.101.1.3)
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Modifies xen_tsc_safe_clocksource() to use newly defined constants from
-arch/x86/include/asm/xen/cpuid.h.  This replaces a numeric value with
-XEN_CPUID_TSC_MODE_NEVER_EMULATE, and deletes a comment that is now self
-explanatory.
 
-There should be no change in the function's behavior.
 
-Signed-off-by: Krister Johansen <kjlx@templeofstupid.com>
----
- arch/x86/xen/time.c | 7 ++-----
- 1 file changed, 2 insertions(+), 5 deletions(-)
+> 2023=E5=B9=B42=E6=9C=8822=E6=97=A5 17:24=EF=BC=8CRobin Murphy =
+<robin.murphy@arm.com> =E5=86=99=E9=81=93=EF=BC=9A
 
-diff --git a/arch/x86/xen/time.c b/arch/x86/xen/time.c
-index 95140609c8a8..94056013a2a4 100644
---- a/arch/x86/xen/time.c
-+++ b/arch/x86/xen/time.c
-@@ -20,6 +20,7 @@
- #include <asm/pvclock.h>
- #include <asm/xen/hypervisor.h>
- #include <asm/xen/hypercall.h>
-+#include <asm/xen/cpuid.h>
- 
- #include <xen/events.h>
- #include <xen/features.h>
-@@ -495,11 +496,7 @@ static int __init xen_tsc_safe_clocksource(void)
- 	/* Leaf 4, sub-leaf 0 (0x40000x03) */
- 	cpuid_count(xen_cpuid_base() + 3, 0, &eax, &ebx, &ecx, &edx);
- 
--	/* tsc_mode = no_emulate (2) */
--	if (ebx != 2)
--		return 0;
--
--	return 1;
-+	return ebx == XEN_CPUID_TSC_MODE_NEVER_EMULATE;
- }
- 
- static void __init xen_time_init(void)
--- 
-2.25.1
+[...]
+
+>=20
+> AFAICS, all you should actually need is a single self-contained =
+addition here, something like:
+>=20
+> + /*
+> +  * DT-based MIPS doesn't use OF_DMA_DEFAULT_COHERENT, but
+> +  * might override the system-wide default at runtime.
+> +  */
+> +#if defined(CONFIG_ARCH_HAS_SYNC_DMA_FOR_DEVICE) || \
+> + defined(CONFIG_ARCH_HAS_SYNC_DMA_FOR_CPU) || \
+> + defined(CONFIG_ARCH_HAS_SYNC_DMA_FOR_CPU_ALL)
+> + is_coherent =3D dma_default_coherent;
+> +#endif
+
+That makes more sense, thanks.
+I=E2=80=99ll append CONFIG_MIPS as a condition here as well because it =
+may break RISC-V whose dma_default_coherent
+is not set to true from very beginning.
+
+>=20
+>>     node =3D of_node_get(np);
+>> =20
+>=20
+> Then *after* that's fixed, we can do a more comprehensive refactoring =
+to merge the two mechanisms properly. FWIW I think I'd prefer an =
+approach closer to the first one, where config options control the =
+initial value of dma_default_coherent rather than architectures having =
+to override it unconditionally (and TBH I'd also like to have a generic =
+config symbol for whether an arch supports per-device coherency or not).
+
+Ok I=E2=80=99ll try to revert to the initial way.
+Is there any reason that an arch can=E2=80=99t support per-device =
+coherency?
+
+Thanks
+- Jiaxun
+
+
+>=20
+> Thanks,
+> Robin.
+
 
