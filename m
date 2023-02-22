@@ -2,100 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E82F69EE80
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Feb 2023 06:51:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5453B69EE8A
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Feb 2023 06:56:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230334AbjBVFvA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Feb 2023 00:51:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49866 "EHLO
+        id S230409AbjBVF4C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Feb 2023 00:56:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54246 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229561AbjBVFu7 (ORCPT
+        with ESMTP id S229499AbjBVF4A (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Feb 2023 00:50:59 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF4EE311E1
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Feb 2023 21:50:57 -0800 (PST)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ore@pengutronix.de>)
-        id 1pUi1g-000606-6Q; Wed, 22 Feb 2023 06:50:48 +0100
-Received: from [2a0a:edc0:0:1101:1d::ac] (helo=dude04.red.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <ore@pengutronix.de>)
-        id 1pUi1d-006efV-80; Wed, 22 Feb 2023 06:50:46 +0100
-Received: from ore by dude04.red.stw.pengutronix.de with local (Exim 4.94.2)
-        (envelope-from <ore@pengutronix.de>)
-        id 1pUi1d-000Tba-IY; Wed, 22 Feb 2023 06:50:45 +0100
-From:   Oleksij Rempel <o.rempel@pengutronix.de>
-To:     Andrew Lunn <andrew@lunn.ch>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>
-Cc:     Oleksij Rempel <o.rempel@pengutronix.de>, kernel@pengutronix.de,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        Russell King <linux@armlinux.org.uk>
-Subject: [PATCH net v3 4/4] net: phy: c45: genphy_c45_ethtool_set_eee: validate EEE link modes
-Date:   Wed, 22 Feb 2023 06:50:43 +0100
-Message-Id: <20230222055043.113711-5-o.rempel@pengutronix.de>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20230222055043.113711-1-o.rempel@pengutronix.de>
-References: <20230222055043.113711-1-o.rempel@pengutronix.de>
+        Wed, 22 Feb 2023 00:56:00 -0500
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FA0C3346B
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Feb 2023 21:55:59 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1677045359; x=1708581359;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=NlB455V1nbWXJtyJI69HAU0gYPgx+bRXboiMHriICfA=;
+  b=l2M+rc5/CcK5PL0a2vEvGROkCGMFN7894rKMoKRZwvAE7koXC9GcVnoh
+   ZCldZIYxB8F57Cvc0y+u1QgGkMUa0A1nEhMro6AlFnX6aBIH+Pqs668B7
+   LnUS6jWUPrb+4Z1cbARzhQaOEte2v9kznHmS2Q9rRaYIKOywfxB3ewDSC
+   5YO33F97AMG4ahTMTEM+T+WoOp4p3YPYgqesoV2dbx04YpmkaqUurMzOm
+   rXV8wJTpHbB4RH7ymUig3juxZeaxSXapXL0e8IlDU9sdEJBq1iafVASo7
+   h4VkUgzBt6SvAkNtVwNxLXrWGBYfZ0zAmZhlfo262Y9YP7ayID86G7Fax
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10628"; a="397529907"
+X-IronPort-AV: E=Sophos;i="5.97,318,1669104000"; 
+   d="scan'208";a="397529907"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Feb 2023 21:55:58 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10628"; a="814795099"
+X-IronPort-AV: E=Sophos;i="5.97,318,1669104000"; 
+   d="scan'208";a="814795099"
+Received: from lkp-server01.sh.intel.com (HELO 3895f5c55ead) ([10.239.97.150])
+  by fmsmga001.fm.intel.com with ESMTP; 21 Feb 2023 21:55:57 -0800
+Received: from kbuild by 3895f5c55ead with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pUi6e-00002v-2i;
+        Wed, 22 Feb 2023 05:55:56 +0000
+Date:   Wed, 22 Feb 2023 13:54:58 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Huazhong Tan <tanhuazhong@huawei.com>
+Cc:     oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org
+Subject: drivers/net/ethernet/hisilicon/hns3/hns3pf/hclge_debugfs.c:90:25:
+ warning: 'strncpy' specified bound depends on the length of the source
+ argument
+Message-ID: <202302221354.9qkB7bev-lkp@intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ore@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Currently, it is possible to let some PHYs to advertise not supported
-EEE link modes. So, validate them before overwriting existing
-configuration.
+Hi Huazhong,
 
-Signed-off-by: Oleksij Rempel <o.rempel@pengutronix.de>
----
- drivers/net/phy/phy-c45.c | 15 +++++++++++++--
- 1 file changed, 13 insertions(+), 2 deletions(-)
+FYI, the error/warning still remains.
 
-diff --git a/drivers/net/phy/phy-c45.c b/drivers/net/phy/phy-c45.c
-index 8717c122e2f3..3813b86689d0 100644
---- a/drivers/net/phy/phy-c45.c
-+++ b/drivers/net/phy/phy-c45.c
-@@ -1438,12 +1438,23 @@ int genphy_c45_ethtool_set_eee(struct phy_device *phydev,
- 	int ret;
- 
- 	if (data->eee_enabled) {
--		if (data->advertised)
-+		if (data->advertised) {
-+			__ETHTOOL_DECLARE_LINK_MODE_MASK(adv);
-+
-+			ethtool_convert_legacy_u32_to_link_mode(adv,
-+								data->advertised);
-+			linkmode_andnot(adv, adv, phydev->supported_eee);
-+			if (!linkmode_empty(adv)) {
-+				phydev_warn(phydev, "At least some EEE link modes are not supported.\n");
-+				return -EINVAL;
-+			}
-+
- 			ethtool_convert_legacy_u32_to_link_mode(phydev->advertising_eee,
- 								data->advertised);
--		else
-+		} else {
- 			linkmode_copy(phydev->advertising_eee,
- 				      phydev->supported_eee);
-+		}
- 
- 		phydev->eee_enabled = true;
- 	} else {
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   5b7c4cabbb65f5c469464da6c5f614cbd7f730f2
+commit: 1556ea9120ffcf4faf7ac6b62a6e28216f260a23 net: hns3: refactor dump mac list of debugfs
+date:   1 year, 9 months ago
+config: ia64-randconfig-r024-20230222 (https://download.01.org/0day-ci/archive/20230222/202302221354.9qkB7bev-lkp@intel.com/config)
+compiler: ia64-linux-gcc (GCC) 12.1.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=1556ea9120ffcf4faf7ac6b62a6e28216f260a23
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout 1556ea9120ffcf4faf7ac6b62a6e28216f260a23
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=ia64 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=ia64 SHELL=/bin/bash drivers/net/ethernet/hisilicon/hns3/hns3pf/
+
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202302221354.9qkB7bev-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+   In file included from arch/ia64/include/asm/pgtable.h:154,
+                    from include/linux/pgtable.h:6,
+                    from include/linux/mm.h:33,
+                    from include/linux/bvec.h:14,
+                    from include/linux/skbuff.h:17,
+                    from include/linux/if_ether.h:19,
+                    from include/linux/etherdevice.h:20,
+                    from drivers/net/ethernet/hisilicon/hns3/hns3pf/hclge_debugfs.h:7,
+                    from drivers/net/ethernet/hisilicon/hns3/hns3pf/hclge_debugfs.c:6:
+   arch/ia64/include/asm/mmu_context.h: In function 'reload_context':
+   arch/ia64/include/asm/mmu_context.h:127:48: warning: variable 'old_rr4' set but not used [-Wunused-but-set-variable]
+     127 |         unsigned long rr0, rr1, rr2, rr3, rr4, old_rr4;
+         |                                                ^~~~~~~
+   drivers/net/ethernet/hisilicon/hns3/hns3pf/hclge_debugfs.c: In function 'hclge_dbg_fill_content.constprop':
+>> drivers/net/ethernet/hisilicon/hns3/hns3pf/hclge_debugfs.c:90:25: warning: 'strncpy' specified bound depends on the length of the source argument [-Wstringop-truncation]
+      90 |                         strncpy(pos, items[i].name, strlen(items[i].name));
+         |                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/net/ethernet/hisilicon/hns3/hns3pf/hclge_debugfs.c:88:25: warning: 'strncpy' specified bound depends on the length of the source argument [-Wstringop-truncation]
+      88 |                         strncpy(pos, result[i], strlen(result[i]));
+         |                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+vim +/strncpy +90 drivers/net/ethernet/hisilicon/hns3/hns3pf/hclge_debugfs.c
+
+    77	
+    78	static void hclge_dbg_fill_content(char *content, u16 len,
+    79					   const struct hclge_dbg_item *items,
+    80					   const char **result, u16 size)
+    81	{
+    82		char *pos = content;
+    83		u16 i;
+    84	
+    85		memset(content, ' ', len);
+    86		for (i = 0; i < size; i++) {
+    87			if (result)
+    88				strncpy(pos, result[i], strlen(result[i]));
+    89			else
+  > 90				strncpy(pos, items[i].name, strlen(items[i].name));
+    91			pos += strlen(items[i].name) + items[i].interval;
+    92		}
+    93		*pos++ = '\n';
+    94		*pos++ = '\0';
+    95	}
+    96	
+
 -- 
-2.30.2
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
