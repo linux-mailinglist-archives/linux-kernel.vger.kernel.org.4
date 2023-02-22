@@ -2,164 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9669C69F064
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Feb 2023 09:36:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AE79969F060
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Feb 2023 09:36:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229726AbjBVIgd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Feb 2023 03:36:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53256 "EHLO
+        id S231290AbjBVIgD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Feb 2023 03:36:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53342 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230207AbjBVIga (ORCPT
+        with ESMTP id S229560AbjBVIf6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Feb 2023 03:36:30 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 357352C64F
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Feb 2023 00:35:20 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1677054919;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=rmxOmW2Bi0X9FdGRBJxRliQUyu7bX3a5ch+5lNPbh68=;
-        b=ftydmFf1zAW3bh4a9vHDTgHxHxO899wVd0EjTomSQaj6pi9Q1TM10xAbA5znv5Gfijy6IW
-        QExuS3RsTkucEANXmQYejmShEn8fEr3tVZ+U6d5pVxMsLqQbV2LhI6zaQ2Cp/yqJrYZJTM
-        kdyNmeKB/XDBQdDSFTs8O7s4T3wr4UQ=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-3-MmktJbUpMh-UegbYJy6C9Q-1; Wed, 22 Feb 2023 03:35:14 -0500
-X-MC-Unique: MmktJbUpMh-UegbYJy6C9Q-1
-Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 39BDD858F0E;
-        Wed, 22 Feb 2023 08:35:13 +0000 (UTC)
-Received: from localhost (ovpn-13-7.pek2.redhat.com [10.72.13.7])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 223FB440D9;
-        Wed, 22 Feb 2023 08:35:11 +0000 (UTC)
-Date:   Wed, 22 Feb 2023 16:35:08 +0800
-From:   Baoquan He <bhe@redhat.com>
-To:     Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Arnd Bergmann <arnd@arndb.de>
-Cc:     Matthew Wilcox <willy@infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Christoph Hellwig <hch@infradead.org>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Kefeng Wang <wangkefeng.wang@huawei.com>,
-        Niklas Schnelle <schnelle@linux.ibm.com>,
-        David Laight <David.Laight@aculab.com>,
-        Stafford Horne <shorne@gmail.com>,
-        "James E . J . Bottomley" <James.Bottomley@hansenpartnership.com>,
-        Helge Deller <deller@gmx.de>,
-        "linux-parisc@vger.kernel.org" <linux-parisc@vger.kernel.org>
-Subject: Re: [PATCH v4 12/16] parisc: mm: Convert to GENERIC_IOREMAP
-Message-ID: <Y/XTvJRtZXKa6b/M@MiWiFi-R3L-srv>
-References: <20230216123419.461016-1-bhe@redhat.com>
- <20230216123419.461016-13-bhe@redhat.com>
- <Y+40p3oegc2Of9w2@casper.infradead.org>
- <Y+5Fcc6wsbr0qmoN@MiWiFi-R3L-srv>
- <bff4f286-ccf8-40bc-8fe5-d4041adf89f5@app.fastmail.com>
- <Y++Bypsg9YCmUEcd@MiWiFi-R3L-srv>
- <107be2c9-021b-85f6-d32d-ddb9e75ce24f@csgroup.eu>
+        Wed, 22 Feb 2023 03:35:58 -0500
+Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7300230B36;
+        Wed, 22 Feb 2023 00:35:47 -0800 (PST)
+Received: by mail-pl1-x633.google.com with SMTP id e5so8994287plg.8;
+        Wed, 22 Feb 2023 00:35:47 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=kti8JgugRVGLXizNka/HYINXfKruoK/QDuSJAx3hfIU=;
+        b=qdPdPA9JC+RKYJV7GtxPcqGD/C42MNquMUh00lproMLqkg1EfHKK4IPtgQTB6Eb+Be
+         o1LU7+BR/OvnFKnaTp0QAY9U/Zq34ORx+2G/P745uFNHO2cJNY9kmZzfQuux1E5D+5h0
+         9abp6IzWr24g78juJ/xxxfzKmJDhr80FPO/YRyCrflB/fWWq5urnxa6yfC2AGbHNXaGB
+         MwpV/UujEw054q7l+nXMuJvyl6rkdV4ecJohC5aHnfHuxM2davf5Im7cWXKplAgODbtU
+         B79KVhfLgcp3m+nWVuqFmRqWoDJksVOAnJ6Ae7RlnGK22903KXwiNxcFN4kdNvwqJCTN
+         Lqyg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=kti8JgugRVGLXizNka/HYINXfKruoK/QDuSJAx3hfIU=;
+        b=S3CjmHXsOnfYbL1McN1lmoM86flahpBcBGwRr7Nx8j71aK6aeprjfpCJmL0HNJ2eQI
+         43aKjfh8Ety6Mkf+ffadEwWpQ3HBjKe4YlNsP+xzxVxMdRqXCZGI3yIxMnMGhWCYcEH2
+         fjoqnM6/K3pUleWxHhRALn1SF4Cgez2VBvGajwDfdA9edvnYCbOep6pNtxrY3LHY7F/W
+         xoux7KMqMsuWwU1/CEub8O4whX4nHjODUdc9vVERGU2f9w1ji1AK5cm3GNK8ztoSfoll
+         c3XOIRrAkDNCFHY86xiT/jjwc7F9wW48lIRLNIyqJH8rw3aN8lq4K2Gdl1drupJW6UbQ
+         u9Rg==
+X-Gm-Message-State: AO0yUKUuQzDFxrG2EmEJl6D2hg1EsbvU0G19drwI4ra7qKr45MraFRlx
+        47serhQgI30F7tX5HgC0Rtw=
+X-Google-Smtp-Source: AK7set+8KuBgbHI7br2D4+Z0RBwGinzpSWzxE0w3j++VzmdMaJuJkqx+d+nEga9GuWIKz/GhtDCPYA==
+X-Received: by 2002:a17:902:dad1:b0:196:5839:b374 with SMTP id q17-20020a170902dad100b001965839b374mr8650865plx.9.1677054946877;
+        Wed, 22 Feb 2023 00:35:46 -0800 (PST)
+Received: from debian.me (subs02-180-214-232-84.three.co.id. [180.214.232.84])
+        by smtp.gmail.com with ESMTPSA id o4-20020a170902bcc400b0019c901b35ecsm3014759pls.106.2023.02.22.00.35.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 22 Feb 2023 00:35:46 -0800 (PST)
+Received: by debian.me (Postfix, from userid 1000)
+        id B9D1C10658F; Wed, 22 Feb 2023 15:35:41 +0700 (WIB)
+From:   Bagas Sanjaya <bagasdotme@gmail.com>
+To:     Linux BPF <bpf@vger.kernel.org>,
+        Linux Documentation <linux-doc@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Cc:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Alan Maguire <alan.maguire@oracle.com>,
+        Bagas Sanjaya <bagasdotme@gmail.com>,
+        Ross Zwisler <zwisler@google.com>
+Subject: [PATCH v2] Documentation: bpf: Fix link to BTF doc
+Date:   Wed, 22 Feb 2023 15:35:30 +0700
+Message-Id: <20230222083530.26136-1-bagasdotme@gmail.com>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2388; i=bagasdotme@gmail.com; h=from:subject; bh=oKNgKZHFEdu2il286nEDO6UrFE9zRMlSbKSG+cvR994=; b=owGbwMvMwCX2bWenZ2ig32LG02pJDMlfL5+UnMD7bZ4JX0R8Rd6uJfcmic/bz/2MU0Zb5O/aJS21 iU7TOkpZGMS4GGTFFFkmJfI1nd5lJHKhfa0jzBxWJpAhDFycAjCRxFcM/7RfcHwX4sh31Q79d2nOSk HuwCWPVPaYJV9LDuPbYheVpcfIsOun+eOuy0q3glztHxs6H+vl98nYtlfD6n2xS6fOwqvVHAA=
+X-Developer-Key: i=bagasdotme@gmail.com; a=openpgp; fpr=701B806FDCA5D3A58FFB8F7D7C276C64A5E44A1D
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <107be2c9-021b-85f6-d32d-ddb9e75ce24f@csgroup.eu>
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.5
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Christophe, Arnd,
+Ross reported broken link to BTF documentation
+(Documentation/bpf/btf.rst) in Documentation/bpf/bpf_devel_QA.rst. The
+link in question is written using external link syntax, with the target
+refers to BTF doc in reST source (btf.rst), which doesn't exist in
+resulting HTML output.
 
-On 02/17/23 at 01:46pm, Christophe Leroy wrote:
-> 
-> 
-> Le 17/02/2023 à 14:31, Baoquan He a écrit :
-> > On 02/16/23 at 04:18pm, Arnd Bergmann wrote:
-> >> On Thu, Feb 16, 2023, at 16:02, Baoquan He wrote:
-> >>> On 02/16/23 at 01:50pm, Matthew Wilcox wrote:
-> >>> It's not if including asm-generic/iomap.h. The ARCH_HAS_IOREMAP_xx is to
-> >>> avoid redefinition there.
-> >>>
-> >>> include/asm-generic/iomap.h:
-> >>> ----
-> >>> #ifndef ARCH_HAS_IOREMAP_WC
-> >>> #define ioremap_wc ioremap
-> >>> #endif
-> >>
-> >> I'd change that to the usual '#ifndef ioremap_wc' in that case.
-> > 
-> > Not sure if I got you. Kill all ARCH_HAS_IOREMAP_xxx in kernel? If yes,
-> > sounds like a good idea.
-> > 
-> 
-> At least kill that one at the first place in your series, and then the 
-> other ones in a follow-up series maybe.
+Fix the link by replacing external link syntax with simply writing out
+the target doc, which the link will be generated to the correct HTML doc
+target.
 
-I made a patch to remove all ARCH_HAS_IOREMAP_xx macros in architectures
-and the ifdeffery of ARCH_HAS_IOREMAP_xx in asm-generic/iomap.h.
-But the change will cause building error as below. Becuase we usually
-have '#include <asm-generic/iomap.h>' at the beginning of
-arch/xx/include/asm/io.h, and have '#include <asm-generic/io.h>' at the
-end of arch/xx/include/asm/io.h. For architecutres which has
-ARCH_HAS_IOREMAP_xx defining, we need move ''#include <asm-generic/iomap.h>
-dowe to below '#include <asm-generic/io.h>'. Please help check if it's
-still worth doing.
+Link: https://lore.kernel.org/linux-doc/Y++09LKx25dtR4Ow@google.com/
+Fixes: 6736aa793c2b5f ("selftests/bpf: Add general instructions for test execution")
+Reported-by: Ross Zwisler <zwisler@google.com>
+Signed-off-by: Bagas Sanjaya <bagasdotme@gmail.com>
+---
+Changes since v1 [1]:
 
+  * Reword patch description (I don't see external link semantics on
+    Sphinx documentation [2] when I submit v1).
+  * Drop the corresponding orphan target definition.
+  * Rebase on top of current bpf tree.
 
-***move '#include <asm-generic/iomap.h>' below '#include <asm-generic/io.h>' 
-***
-diff --git a/arch/x86/include/asm/io.h b/arch/x86/include/asm/io.h
-index 8ab68cde1f13..a8d55fc62959 100644
---- a/arch/x86/include/asm/io.h
-+++ b/arch/x86/include/asm/io.h
-@@ -209,8 +209,6 @@ void memset_io(volatile void __iomem *, int, size_t);
- #define memcpy_toio memcpy_toio
- #define memset_io memset_io
+Ross, do you want to give a Reviewed-by or Acked-by?
+
+[1]: https://lore.kernel.org/linux-doc/20230219030956.22662-1-bagasdotme@gmail.com/ 
+[2]: https://www.sphinx-doc.org/en/master/usage/restructuredtext/basics.html#external-links
+
+ Documentation/bpf/bpf_devel_QA.rst | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
+
+diff --git a/Documentation/bpf/bpf_devel_QA.rst b/Documentation/bpf/bpf_devel_QA.rst
+index 03d4993eda6f05..715f7321020f27 100644
+--- a/Documentation/bpf/bpf_devel_QA.rst
++++ b/Documentation/bpf/bpf_devel_QA.rst
+@@ -469,7 +469,7 @@ under test should match the config file fragment in
+ tools/testing/selftests/bpf as closely as possible.
  
--#include <asm-generic/iomap.h>
--
- /*
-  * ISA space is 'always mapped' on a typical x86 system, no need to
-  * explicitly ioremap() it. The fact that the ISA IO space is mapped
-@@ -329,6 +327,8 @@ extern bool is_early_ioremap_ptep(pte_t *ptep);
- #include <asm-generic/io.h>
- #undef PCI_IOBASE
+ Finally to ensure support for latest BPF Type Format features -
+-discussed in `Documentation/bpf/btf.rst`_ - pahole version 1.16
++discussed in Documentation/bpf/btf.rst - pahole version 1.16
+ is required for kernels built with CONFIG_DEBUG_INFO_BTF=y.
+ pahole is delivered in the dwarves package or can be built
+ from source at
+@@ -690,6 +690,5 @@ when:
+    https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/tools/testing/selftests/bpf/
+ .. _Documentation/dev-tools/kselftest.rst:
+    https://www.kernel.org/doc/html/latest/dev-tools/kselftest.html
+-.. _Documentation/bpf/btf.rst: btf.rst
  
-+#include <asm-generic/iomap.h>
-+
- #ifdef CONFIG_MTRR
- extern int __must_check arch_phys_wc_index(int handle);
- #define arch_phys_wc_index arch_phys_wc_index
+ Happy BPF hacking!
 
-
-***Building error after removing ARCH_HAS_IOREMAP_xx
-***
-In file included from ./include/linux/io.h:13,
-                 from ./include/linux/irq.h:20,
-                 from ./include/xen/events.h:6,
-                 from arch/x86/entry/common.c:25:
-./arch/x86/include/asm/io.h:321: warning: "ioremap_wc" redefined
-  321 | #define ioremap_wc ioremap_wc
-      | 
-In file included from ./arch/x86/include/asm/io.h:212:
-./include/asm-generic/iomap.h:97: note: this is the location of the previous definition
-   97 | #define ioremap_wc ioremap
-      | 
-./arch/x86/include/asm/io.h:323: warning: "ioremap_wt" redefined
-  323 | #define ioremap_wt ioremap_wt
-      | 
-./include/asm-generic/iomap.h:101: note: this is the location of the previous definition
-  101 | #define ioremap_wt ioremap
+base-commit: 345d24a91c79f408e355c8b7e873ccde0f097eea
+-- 
+An old man doll... just what I always wanted! - Clara
 
