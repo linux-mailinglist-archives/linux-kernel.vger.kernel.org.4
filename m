@@ -2,71 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 286E869FD6D
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Feb 2023 22:05:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9DA8A69FD70
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Feb 2023 22:05:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232457AbjBVVE5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Feb 2023 16:04:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37356 "EHLO
+        id S232524AbjBVVFg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Feb 2023 16:05:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39062 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232464AbjBVVE0 (ORCPT
+        with ESMTP id S232523AbjBVVFX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Feb 2023 16:04:26 -0500
-Received: from mail-qt1-x832.google.com (mail-qt1-x832.google.com [IPv6:2607:f8b0:4864:20::832])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C686D43904;
-        Wed, 22 Feb 2023 13:04:13 -0800 (PST)
-Received: by mail-qt1-x832.google.com with SMTP id s12so8996579qtq.11;
-        Wed, 22 Feb 2023 13:04:13 -0800 (PST)
+        Wed, 22 Feb 2023 16:05:23 -0500
+Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C7EC43904;
+        Wed, 22 Feb 2023 13:04:50 -0800 (PST)
+Received: by mail-ed1-x52c.google.com with SMTP id b12so35740875edd.4;
+        Wed, 22 Feb 2023 13:04:50 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=yXr/s2TKmMBOXDm6+X+zKiZZwzkCCBL69oZT8Z4557o=;
-        b=cjpu0YUr+1xre38DZlqX8caGfg+da0ZwHYzXFm+ZjG1KVnYEifsRIS3XRX/n8hD/Mw
-         fh1YmB65VElEoVx0X8MSj6F3V1YAa8JO0zAz8weXmMHaaOzelVk+4yhpWvSM0ei6ZXW+
-         IpmImj8uHsdehlSoPusBziGC1xswNPCWaI631bX0/pq6RXIcAdjEMxC8FBwcKK52J24W
-         UcTkf6UY1rUeJHFus/DGsFkUPvUFo5c+XQSGdDgWo42UfsSALgYREO+BmX0pxcXZBReW
-         Zf0Yqgqxa8eU41O0+ZziIYRx2uEaSdTjFNpL6fV0dTb1UGYKiyu3WylTO0TFYKZrbT61
-         mtag==
+        d=googlemail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=jHzJivt9HpdLxfhNJzT2EOfp00j8BcuasYYwqjK38/E=;
+        b=kZTwyGEiPrvsEohuvq8Lu5GaxX8jse1emt8D2g/FYBDH1UIDsSTs323t9g12L1xCjB
+         PZ8uINek2hJc+PBs5jvn3GhmdNZEJ8FpkQCxwdTVA6ny16ddgi73/FYftBpvJSlg35xr
+         xfJlNpj2ZhMhUDVDiF4wdMq83VupBzVujksL/ELDgq5pQ7CCzT5NqWC7ydCQT3TuCmEL
+         Ou2tKRIKMiET2bbGDKfhkMN+jzsuqELy834V0nYHbuh/Z65UBDN/TTvaohmku/wWujdQ
+         BHcbXcglk57Pgx6bY6e9TdKV05ilK0jpkY6JemEFdYUtubrYtAjx/w/WFr1/KiDFKtkW
+         novg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=yXr/s2TKmMBOXDm6+X+zKiZZwzkCCBL69oZT8Z4557o=;
-        b=d6k6LFlEMZdPWybnb1OjIiYSQYBCbOnIUsKJq5cfbAHRZQ0ymgkDjDW3ltx0qoZJNd
-         cJpkKzy89H613bOScNoJ5pU3+RSJYbOZDGxIs9TYZ9aALcGB01BnoF0jRquZXTto3DBF
-         oMnIST9TsKROMPqwFoUdnKxkUxaXLRCcnD10dkbbo6idn4QPh+MIH/2tL4EdBEeqB9A3
-         EGZSFHB4ZlIYmVnllWbH+5vLFsvTLR48AP2najPrXGdQJeCNe4q2WWWjsbRdmt4NOZIZ
-         yOFazvqe/q5WeuwD1mf2BghMxIuE6fzsnT2f9rVt7mLZYbN+ABsRYwVWJRZAf9Jl/0Kt
-         IPeg==
-X-Gm-Message-State: AO0yUKX0kBhlKoyNxjEZGDcBBhopZ2eBXchDGS1tRhIXkKnppCeO5OKo
-        ZlpJQXRjVWCwuKmbFT/rfZ+uG8u+P6HD+w==
-X-Google-Smtp-Source: AK7set/ZHzosCWfS0spg7U1MCGDHbCSuXbfAPCJEnEdiTUU3ew9wsp2pQfwtl0izCtH318LmF7P9Rg==
-X-Received: by 2002:ac8:59cc:0:b0:3b7:ed2c:fbb7 with SMTP id f12-20020ac859cc000000b003b7ed2cfbb7mr18187799qtf.0.1677099852766;
-        Wed, 22 Feb 2023 13:04:12 -0800 (PST)
-Received: from localhost (pool-173-73-95-180.washdc.fios.verizon.net. [173.73.95.180])
-        by smtp.gmail.com with UTF8SMTPSA id 128-20020a370b86000000b0073b59128298sm5138439qkl.48.2023.02.22.13.04.12
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 22 Feb 2023 13:04:12 -0800 (PST)
-From:   Sean Anderson <seanga2@gmail.com>
-To:     "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, Sean Anderson <seanga2@gmail.com>
-Subject: [RFC PATCH net-next 7/7] net: sunhme: Consolidate common probe tasks
-Date:   Wed, 22 Feb 2023 16:03:55 -0500
-Message-Id: <20230222210355.2741485-8-seanga2@gmail.com>
-X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20230222210355.2741485-1-seanga2@gmail.com>
-References: <20230222210355.2741485-1-seanga2@gmail.com>
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=jHzJivt9HpdLxfhNJzT2EOfp00j8BcuasYYwqjK38/E=;
+        b=uTcL1tjCJIYp5sf5PYAYQqJYQugCYy9oPZw1+raVtBfDjvISqnCMcrPm/dHcDdeb3H
+         8kwbItIw1dBC1+PgtWde3NYn0FNrnlvmgQUmZf4Pz0cTa2TZnJJrQ+6G3+WS5QFxtM+k
+         1022S+iMUw2ws3Ua9IPa9HqZId1YHSlD3X1/0pJYBT88a3Pgv2TpSebuIAgTfyLT8m9K
+         XT6yBhayIB3rD+NZeQ0nVEW3WAu2HbGrjV6b1eoQeXL5FxR3RxbUP/pRZw66jzXvxf6h
+         FaQTIWCt8iU2lWOl9YNCxcD6DMevAbrGYgCmMkI9uuZAzlLKJTWai1+TLGisB6WvmK/c
+         2O1A==
+X-Gm-Message-State: AO0yUKXDoG6QTLn6RO4gAM25dE3AymoYnTrA+UBSK2FKoei5j1SfAnh/
+        FcBAwezENqzD0qk0se+B22b4QtfPmbNnDg==
+X-Google-Smtp-Source: AK7set8hkdfsi2LjDwLjtOhQuQIIFKuh9ziV22wwpO8xn5kqBWL0aL5POTZXLTeWhP0ZvK2q9sOm/A==
+X-Received: by 2002:aa7:cf03:0:b0:4ab:4d3c:7e99 with SMTP id a3-20020aa7cf03000000b004ab4d3c7e99mr10214265edy.2.1677099879661;
+        Wed, 22 Feb 2023 13:04:39 -0800 (PST)
+Received: from localhost.localdomain (dynamic-2a01-0c22-76c9-eb00-0000-0000-0000-0e63.c22.pool.telefonica.de. [2a01:c22:76c9:eb00::e63])
+        by smtp.googlemail.com with ESMTPSA id m17-20020a50c191000000b004af6a840f21sm209208edf.15.2023.02.22.13.04.38
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 22 Feb 2023 13:04:39 -0800 (PST)
+From:   Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+To:     linux-amlogic@lists.infradead.org, devicetree@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        jirislaby@kernel.org, neil.armstrong@linaro.org,
+        krzysztof.kozlowski+dt@linaro.org, robh+dt@kernel.org,
+        gregkh@linuxfoundation.org,
+        Christian Hewitt <christianshewitt@gmail.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+Subject: [PATCH v1 RFC 0/3] meson-uart: Use "divide XTAL by 2" bit on G12A
+Date:   Wed, 22 Feb 2023 22:04:22 +0100
+Message-Id: <20230222210425.626474-1-martin.blumenstingl@googlemail.com>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,241 +73,45 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Most of the second half of the PCI/SBUS probe functions are the same.
-Consolidate them into a common function.
+This series improves support for UART attached Bluetooth modules on
+Amlogic Meson G12A and newer SoCs. These SoCs also support the "divide
+XTAL by 2" bit which (greatly) reduces jitter when generating baud
+rates such as 1500000 (which is used by the Bluetooth part of the
+RTL8822CS SDIO WiFi and UART Bluetooth combo chip).
 
-Signed-off-by: Sean Anderson <seanga2@gmail.com>
----
+Without this the baud rate calculation is based on the XTAL clock
+(running at 24MHz) divided by 3 (meaning: 8MHz). 8MHz cannot be divided
+with integer division to a 1500000 baud rate. Using the "divide XTAL
+by 2" bit however means that we can achieve 1500000 cleanly, without any
+jitter.
 
- drivers/net/ethernet/sun/sunhme.c | 183 ++++++++++++------------------
- 1 file changed, 71 insertions(+), 112 deletions(-)
+In future we should allow dynamic switching of these UART controller
+internal dividers to pick the best divider automatically for the
+requested baud rate. This however still requires the new compatible
+string - which is added by this series - to enable the "divide XTAL
+by 2" logic on SoCs that support it (G12A and newer).
 
-diff --git a/drivers/net/ethernet/sun/sunhme.c b/drivers/net/ethernet/sun/sunhme.c
-index 9b55adbe61df..9404dd4b1023 100644
---- a/drivers/net/ethernet/sun/sunhme.c
-+++ b/drivers/net/ethernet/sun/sunhme.c
-@@ -2440,6 +2440,71 @@ static void happy_meal_addr_init(struct happy_meal *hp,
- 	}
- }
- 
-+static int happy_meal_common_probe(struct happy_meal *hp,
-+				   struct device_node *dp, int minor_rev)
-+{
-+	struct net_device *dev = hp->dev;
-+	int err;
-+
-+#ifdef CONFIG_SPARC
-+	hp->hm_revision = of_getintprop_default(dp, "hm-rev", 0xff);
-+	if (hp->hm_revision == 0xff)
-+		hp->hm_revision = 0xc0 | minor_rev;
-+#else
-+	/* works with this on non-sparc hosts */
-+	hp->hm_revision = 0x20;
-+#endif
-+
-+	/* Now enable the feature flags we can. */
-+	if (hp->hm_revision == 0x20 || hp->hm_revision == 0x21)
-+		hp->happy_flags |= HFLAG_20_21;
-+	else if (hp->hm_revision != 0xa0)
-+		hp->happy_flags |= HFLAG_NOT_A0;
-+
-+	hp->happy_block = dmam_alloc_coherent(hp->dma_dev, PAGE_SIZE,
-+					      &hp->hblock_dvma, GFP_KERNEL);
-+	if (!hp->happy_block)
-+		return -ENOMEM;
-+
-+	/* Force check of the link first time we are brought up. */
-+	hp->linkcheck = 0;
-+
-+	/* Force timer state to 'asleep' with count of zero. */
-+	hp->timer_state = asleep;
-+	hp->timer_ticks = 0;
-+
-+	timer_setup(&hp->happy_timer, happy_meal_timer, 0);
-+
-+	dev->netdev_ops = &hme_netdev_ops;
-+	dev->watchdog_timeo = 5 * HZ;
-+	dev->ethtool_ops = &hme_ethtool_ops;
-+
-+	/* Happy Meal can do it all... */
-+	dev->hw_features = NETIF_F_SG | NETIF_F_HW_CSUM;
-+	dev->features |= dev->hw_features | NETIF_F_RXCSUM;
-+
-+#if defined(CONFIG_SBUS) && defined(CONFIG_PCI)
-+	/* Hook up SBUS register/descriptor accessors. */
-+	hp->read_desc32 = sbus_hme_read_desc32;
-+	hp->write_txd = sbus_hme_write_txd;
-+	hp->write_rxd = sbus_hme_write_rxd;
-+	hp->read32 = sbus_hme_read32;
-+	hp->write32 = sbus_hme_write32;
-+#endif
-+
-+	/* Grrr, Happy Meal comes up by default not advertising
-+	 * full duplex 100baseT capabilities, fix this.
-+	 */
-+	spin_lock_irq(&hp->happy_lock);
-+	happy_meal_set_initial_advertisement(hp);
-+	spin_unlock_irq(&hp->happy_lock);
-+
-+	err = devm_register_netdev(hp->dma_dev, dev);
-+	if (err)
-+		dev_err(hp->dma_dev, "Cannot register net device, aborting.\n");
-+	return err;
-+}
-+
- #ifdef CONFIG_SBUS
- static int happy_meal_sbus_probe_one(struct platform_device *op, int is_qfe)
- {
-@@ -2521,70 +2586,18 @@ static int happy_meal_sbus_probe_one(struct platform_device *op, int is_qfe)
- 		goto err_out_clear_quattro;
- 	}
- 
--	hp->hm_revision = of_getintprop_default(dp, "hm-rev", 0xff);
--	if (hp->hm_revision == 0xff)
--		hp->hm_revision = 0xa0;
--
--	/* Now enable the feature flags we can. */
--	if (hp->hm_revision == 0x20 || hp->hm_revision == 0x21)
--		hp->happy_flags = HFLAG_20_21;
--	else if (hp->hm_revision != 0xa0)
--		hp->happy_flags = HFLAG_NOT_A0;
--
- 	if (qp != NULL)
- 		hp->happy_flags |= HFLAG_QUATTRO;
- 
-+	hp->irq = op->archdata.irqs[0];
-+
- 	/* Get the supported DVMA burst sizes from our Happy SBUS. */
- 	hp->happy_bursts = of_getintprop_default(sbus_dp,
- 						 "burst-sizes", 0x00);
- 
--	hp->happy_block = dmam_alloc_coherent(&op->dev, PAGE_SIZE,
--					      &hp->hblock_dvma, GFP_KERNEL);
--	if (!hp->happy_block) {
--		err = -ENOMEM;
-+	err = happy_meal_common_probe(hp, dp, 0);
-+	if (err)
- 		goto err_out_clear_quattro;
--	}
--
--	/* Force check of the link first time we are brought up. */
--	hp->linkcheck = 0;
--
--	/* Force timer state to 'asleep' with count of zero. */
--	hp->timer_state = asleep;
--	hp->timer_ticks = 0;
--
--	timer_setup(&hp->happy_timer, happy_meal_timer, 0);
--
--	dev->netdev_ops = &hme_netdev_ops;
--	dev->watchdog_timeo = 5*HZ;
--	dev->ethtool_ops = &hme_ethtool_ops;
--
--	/* Happy Meal can do it all... */
--	dev->hw_features = NETIF_F_SG | NETIF_F_HW_CSUM;
--	dev->features |= dev->hw_features | NETIF_F_RXCSUM;
--
--	hp->irq = op->archdata.irqs[0];
--
--#if defined(CONFIG_SBUS) && defined(CONFIG_PCI)
--	/* Hook up SBUS register/descriptor accessors. */
--	hp->read_desc32 = sbus_hme_read_desc32;
--	hp->write_txd = sbus_hme_write_txd;
--	hp->write_rxd = sbus_hme_write_rxd;
--	hp->read32 = sbus_hme_read32;
--	hp->write32 = sbus_hme_write32;
--#endif
--
--	/* Grrr, Happy Meal comes up by default not advertising
--	 * full duplex 100baseT capabilities, fix this.
--	 */
--	spin_lock_irq(&hp->happy_lock);
--	happy_meal_set_initial_advertisement(hp);
--	spin_unlock_irq(&hp->happy_lock);
--
--	err = devm_register_netdev(&op->dev, dev);
--	if (err) {
--		dev_err(&op->dev, "Cannot register net device, aborting.\n");
--		goto err_out_clear_quattro;
--	}
- 
- 	platform_set_drvdata(op, hp);
- 
-@@ -2704,21 +2717,6 @@ static int happy_meal_pci_probe(struct pci_dev *pdev,
- 	hp->bigmacregs = (hpreg_base + 0x6000UL);
- 	hp->tcvregs    = (hpreg_base + 0x7000UL);
- 
--#ifdef CONFIG_SPARC
--	hp->hm_revision = of_getintprop_default(dp, "hm-rev", 0xff);
--	if (hp->hm_revision == 0xff)
--		hp->hm_revision = 0xc0 | (pdev->revision & 0x0f);
--#else
--	/* works with this on non-sparc hosts */
--	hp->hm_revision = 0x20;
--#endif
--
--	/* Now enable the feature flags we can. */
--	if (hp->hm_revision == 0x20 || hp->hm_revision == 0x21)
--		hp->happy_flags = HFLAG_20_21;
--	else if (hp->hm_revision != 0xa0 && hp->hm_revision != 0xc0)
--		hp->happy_flags = HFLAG_NOT_A0;
--
- 	if (qp != NULL)
- 		hp->happy_flags |= HFLAG_QUATTRO;
- 
-@@ -2729,50 +2727,11 @@ static int happy_meal_pci_probe(struct pci_dev *pdev,
- 	/* Assume PCI happy meals can handle all burst sizes. */
- 	hp->happy_bursts = DMA_BURSTBITS;
- #endif
--
--	hp->happy_block = dmam_alloc_coherent(&pdev->dev, PAGE_SIZE,
--					      &hp->hblock_dvma, GFP_KERNEL);
--	if (!hp->happy_block) {
--		err = -ENOMEM;
--		goto err_out_clear_quattro;
--	}
--
--	hp->linkcheck = 0;
--	hp->timer_state = asleep;
--	hp->timer_ticks = 0;
--
--	timer_setup(&hp->happy_timer, happy_meal_timer, 0);
--
- 	hp->irq = pdev->irq;
--	dev->netdev_ops = &hme_netdev_ops;
--	dev->watchdog_timeo = 5*HZ;
--	dev->ethtool_ops = &hme_ethtool_ops;
- 
--	/* Happy Meal can do it all... */
--	dev->hw_features = NETIF_F_SG | NETIF_F_HW_CSUM;
--	dev->features |= dev->hw_features | NETIF_F_RXCSUM;
--
--#if defined(CONFIG_SBUS) && defined(CONFIG_PCI)
--	/* Hook up PCI register/descriptor accessors. */
--	hp->read_desc32 = pci_hme_read_desc32;
--	hp->write_txd = pci_hme_write_txd;
--	hp->write_rxd = pci_hme_write_rxd;
--	hp->read32 = pci_hme_read32;
--	hp->write32 = pci_hme_write32;
--#endif
--
--	/* Grrr, Happy Meal comes up by default not advertising
--	 * full duplex 100baseT capabilities, fix this.
--	 */
--	spin_lock_irq(&hp->happy_lock);
--	happy_meal_set_initial_advertisement(hp);
--	spin_unlock_irq(&hp->happy_lock);
--
--	err = devm_register_netdev(&pdev->dev, dev);
--	if (err) {
--		dev_err(&pdev->dev, "Cannot register net device, aborting.\n");
-+	err = happy_meal_common_probe(hp, dp, pdev->revision & 0x0f);
-+	if (err)
- 		goto err_out_clear_quattro;
--	}
- 
- 	pci_set_drvdata(pdev, hp);
- 
+Why am I sending this as RFC? The last change in this series means
+that the resulting .dtbs are not compatible with old kernels anymore.
+My understanding is that this is fine and only the opposite case (using
+old .dtbs on new kernels) has to be supported (which is still the case
+with this series). I'd like to get some confirmation for this.
+
+
+[0] https://lore.kernel.org/linux-bluetooth/3B9D4DB2-D2CD-44FE-817A-F6EA8A0AD734@gmail.com/
+
+
+Martin Blumenstingl (3):
+  dt-bindings: serial: amlogic,meson-uart: Add compatible string for
+    G12A
+  tty: serial: meson: Add a new compatible string for the G12A SoC
+  arm64: dts: meson-g12-common: Use the G12A UART compatible string
+
+ .../devicetree/bindings/serial/amlogic,meson-uart.yaml |  2 ++
+ arch/arm64/boot/dts/amlogic/meson-g12-common.dtsi      | 10 +++++-----
+ drivers/tty/serial/meson_uart.c                        |  8 ++++++--
+ 3 files changed, 13 insertions(+), 7 deletions(-)
+
 -- 
-2.37.1
+2.39.2
 
