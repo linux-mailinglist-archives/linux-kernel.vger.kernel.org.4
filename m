@@ -2,95 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2ECAC69F0D3
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Feb 2023 10:01:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BED7869F0D8
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Feb 2023 10:02:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231490AbjBVJBS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Feb 2023 04:01:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48408 "EHLO
+        id S231508AbjBVJCk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Feb 2023 04:02:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49568 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229975AbjBVJBR (ORCPT
+        with ESMTP id S230457AbjBVJCi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Feb 2023 04:01:17 -0500
-Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.86.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D14C3367F2
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Feb 2023 01:01:15 -0800 (PST)
-Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
- relay.mimecast.com with ESMTP with both STARTTLS and AUTH (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- uk-mta-143-23q2w5B5PN6fPRJeaTFZqg-1; Wed, 22 Feb 2023 09:01:11 +0000
-X-MC-Unique: 23q2w5B5PN6fPRJeaTFZqg-1
-Received: from AcuMS.Aculab.com (10.202.163.4) by AcuMS.aculab.com
- (10.202.163.4) with Microsoft SMTP Server (TLS) id 15.0.1497.47; Wed, 22 Feb
- 2023 09:01:05 +0000
-Received: from AcuMS.Aculab.com ([::1]) by AcuMS.aculab.com ([::1]) with mapi
- id 15.00.1497.047; Wed, 22 Feb 2023 09:01:05 +0000
-From:   David Laight <David.Laight@ACULAB.COM>
-To:     'Matthew Wilcox' <willy@infradead.org>,
-        Shakeel Butt <shakeelb@google.com>
-CC:     Roman Gushchin <roman.gushchin@linux.dev>,
-        Yue Zhao <findns94@gmail.com>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
-        "hannes@cmpxchg.org" <hannes@cmpxchg.org>,
-        "mhocko@kernel.org" <mhocko@kernel.org>,
-        "muchun.song@linux.dev" <muchun.song@linux.dev>,
-        "cgroups@vger.kernel.org" <cgroups@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: RE: [PATCH] mm: change memcg->oom_group access with atomic operations
-Thread-Topic: [PATCH] mm: change memcg->oom_group access with atomic
- operations
-Thread-Index: AQHZRfujbWkXm/SALUSQLx6HdIkuPa7ap5/g
-Date:   Wed, 22 Feb 2023 09:01:05 +0000
-Message-ID: <e7f5f9686a5d4872a2e530550228718f@AcuMS.aculab.com>
-References: <20230220230624.lkobqeagycx7bi7p@google.com>
- <6563189C-7765-4FFA-A8F2-A5CC4860A1EF@linux.dev>
- <CALvZod55K5zbbVYptq8ud=nKVyU1xceGVf6UcambBZ3BA2TZqA@mail.gmail.com>
- <Y/TMYa8DrocppXRu@casper.infradead.org>
-In-Reply-To: <Y/TMYa8DrocppXRu@casper.infradead.org>
-Accept-Language: en-GB, en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
+        Wed, 22 Feb 2023 04:02:38 -0500
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F83334F49
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Feb 2023 01:02:33 -0800 (PST)
+Received: from pps.filterd (m0098404.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 31M8QXUq027042;
+        Wed, 22 Feb 2023 09:02:23 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
+ : date : message-id : mime-version : content-transfer-encoding; s=pp1;
+ bh=Wcw5U9usVW0jSpUTwgc+fcPdSplu62KQeKvS/wONcM8=;
+ b=pbHHtrECsXb9y2BUnOMKh1X9REHJK02Zx8DjXES8efOlWFlTllOLHtBVtBik/Qn9R0Cl
+ Itawjj7+onswD5JPLBr+B8bVyoBjQmHavk1y94M/tmfhhg7vaAc84p2AGtbCn+5j3SqO
+ HBw7467JMun2EAzm3SLP8uR+EKN5deZYx+WYQkdDKoBluI5Ad61VL4Fw2YXdqC/Zcygw
+ tE/gzJArsiFji4/QHh8Q+LAvS1VDQMMWMbTIxm1Y5RuR53ZfasqxLF2kwLPNbFdKwpiM
+ Hsa6RJfmSILefiTmvd2XqNbXd6/jJ+QU8QqNHPnW182TXCvWIR/Zz5aK/1Eq3SrhH9IL 7g== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3nwfhvgsns-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 22 Feb 2023 09:02:23 +0000
+Received: from m0098404.ppops.net (m0098404.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 31M8bVc9001222;
+        Wed, 22 Feb 2023 09:02:22 GMT
+Received: from ppma01fra.de.ibm.com (46.49.7a9f.ip4.static.sl-reverse.com [159.122.73.70])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3nwfhvgs6s-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 22 Feb 2023 09:02:22 +0000
+Received: from pps.filterd (ppma01fra.de.ibm.com [127.0.0.1])
+        by ppma01fra.de.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 31LDHs8u020937;
+        Wed, 22 Feb 2023 09:01:27 GMT
+Received: from smtprelay06.fra02v.mail.ibm.com ([9.218.2.230])
+        by ppma01fra.de.ibm.com (PPS) with ESMTPS id 3ntpa6buq6-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 22 Feb 2023 09:01:26 +0000
+Received: from smtpav04.fra02v.mail.ibm.com (smtpav04.fra02v.mail.ibm.com [10.20.54.103])
+        by smtprelay06.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 31M91O6226280682
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 22 Feb 2023 09:01:24 GMT
+Received: from smtpav04.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 5CDA12004B;
+        Wed, 22 Feb 2023 09:01:23 +0000 (GMT)
+Received: from smtpav04.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 5C24F20040;
+        Wed, 22 Feb 2023 09:01:20 +0000 (GMT)
+Received: from li-a450e7cc-27df-11b2-a85c-b5a9ac31e8ef.ibm.com (unknown [9.43.123.148])
+        by smtpav04.fra02v.mail.ibm.com (Postfix) with ESMTP;
+        Wed, 22 Feb 2023 09:01:19 +0000 (GMT)
+From:   Kautuk Consul <kconsul@linux.vnet.ibm.com>
+To:     Michael Ellerman <mpe@ellerman.id.au>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Rohan McLure <rmclure@linux.ibm.com>
+Cc:     linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org,
+        Kautuk Consul <kconsul@linux.vnet.ibm.com>
+Subject: [PATCH] arch/powerpc/include/asm/barrier.h: redefine rmb and wmb to lwsync
+Date:   Wed, 22 Feb 2023 14:31:12 +0530
+Message-Id: <20230222090112.187583-1-kconsul@linux.vnet.ibm.com>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: aculab.com
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: base64
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: QSyD09S1KL2OukIdwsFLPU76kYkEd2ei
+X-Proofpoint-ORIG-GUID: zGfMT4bp9Ocw1RK_BS4iUcheaR5QJK7k
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.170.22
+ definitions=2023-02-22_04,2023-02-20_02,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
+ clxscore=1015 malwarescore=0 adultscore=0 phishscore=0 suspectscore=0
+ mlxlogscore=774 impostorscore=0 mlxscore=0 bulkscore=0 priorityscore=1501
+ spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2302220078
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-RnJvbTogTWF0dGhldyBXaWxjb3gNCj4gU2VudDogMjEgRmVicnVhcnkgMjAyMyAxMzo1MQ0KLi4u
-DQo+ID4gRm9yIHRoaXMgcGFydGljdWxhciBjYXNlLCBkb2N1bWVudGluZyBzdWNoIGFuIGFjY2Vz
-cy4gVGhvdWdoIEkgZG9uJ3QNCj4gPiB0aGluayB0aGVyZSBhcmUgYW55IGFyY2hpdGVjdHVyZXMg
-d2hpY2ggbWF5IHRlYXIgYSBvbmUgYnl0ZSByZWFkL3dyaXRlDQo+ID4gYW5kIG1lcmdpbmcvcmVm
-ZXRjaGluZyBpcyBub3QgYW4gaXNzdWUgZm9yIHRoaXMuDQo+IA0KPiBXb3VsZG4ndCBhIGNvbXBp
-bGVyIGJlIHdpdGhpbiBpdHMgcmlnaHRzIHRvIGltcGxlbWVudCBhIG9uZSBieXRlIHN0b3JlIGFz
-Og0KPiANCj4gCWxvYWQtd29yZA0KPiAJbW9kaWZ5LWJ5dGUtaW4td29yZA0KPiAJc3RvcmUtd29y
-ZA0KPiANCj4gYW5kIGlmIHRoaXMgaXMgYSBsb2NrbGVzcyBzdG9yZSB0byBhIHdvcmQgd2hpY2gg
-aGFzIGFuIGFkamFjZW50IGJ5dGUgYWxzbw0KPiBiZWluZyBtb2RpZmllZCBieSBhbm90aGVyIENQ
-VSwgb25lIG9mIHRob3NlIENQVXMgY2FuIGxvc2UgaXRzIHN0b3JlPw0KPiBBbmQgV1JJVEVfT05D
-RSB3b3VsZCBwcmV2ZW50IHRoZSBjb21waWxlciBmcm9tIGltcGxlbWVudGluZyB0aGUgc3RvcmUN
-Cj4gaW4gdGhhdCB3YXkuDQoNClNvbWUgYWxwaGEgY3B1IGNvdWxkbid0IGRvIGJ5dGUgbWVtb3J5
-IGFjY2Vzc2VzIC0gc28gYWx3YXlzDQpkaWQgMzJiaXQgcmVhZC1tb2RpZnktd3JpdGUuIEJ1dCBM
-aW51eCBkb2Vzbid0IHN1cHBvcnQgdGhvc2UNCm9uZXMgYW55IG1vcmUuDQoNCk9uIGFybSAxNmJp
-dCBzdHJ1Y3R1cmUgbWVtYmVycyBjYW4gYmUgYWNjZXNzZWQgd2l0aCAzMmJpdA0KaW5zdHJ1Y3Rp
-b25zIGJlY2F1c2UgdGhlIDE2Yml0IG9uZXMgaGF2ZSBhIHNtYWxsZXIgb2Zmc2V0Lg0KDQpPbiB4
-ODYgdGhlIGJpdCBvcGVyYXRpb25zIG1pZ2h0IGFjY2VzcyB0aGUgKHBvc3NpYmx5IG1pc2FsaWdu
-ZWQpDQozMmJpdCB3b3JkIGNvbnRhaW5pbmcgdGhlIHJlcXVpcmVkIGJpdCAtIGJ1dCB0aGV5IGFy
-ZSBsb2NrZWQuDQoNCklTVFIgYSBwcm9ibGVtIHdoZXJlIGdjYyB3YXMgdXNpbmcgd2lkZXIgaW5z
-dHJ1Y3Rpb25zIGFuZA0KZG9pbmcgYSBSTVcgb24gYW4gYWRqYWNlbnQgdm9sYXRpbGUgZmllbGQu
-DQoNCkkgcmVhbGx5IGNhbid0IHJlbWVtYmVyIHRoZSBqdXN0aWZpY2F0aW9uIGZvciBub3QgbWFy
-a2luZw0KZmllbGRzIHRoYXQgaGF2ZSB1bmxvY2tlZCBhY2Nlc3NlcyAndm9sYXRpbGUnIGluc3Rl
-YWQgb2YNCnJlcXVpcmluZyBhbGwgdGhlIGFjY2Vzc2VzIGJlIGRvbmUgYXMgZXhwbGljaXQgdm9s
-YXRpbGUgb25lcy4NCg0KCURhdmlkDQoNCi0NClJlZ2lzdGVyZWQgQWRkcmVzcyBMYWtlc2lkZSwg
-QnJhbWxleSBSb2FkLCBNb3VudCBGYXJtLCBNaWx0b24gS2V5bmVzLCBNSzEgMVBULCBVSw0KUmVn
-aXN0cmF0aW9uIE5vOiAxMzk3Mzg2IChXYWxlcykNCg==
+A link from ibm.com states:
+"Ensures that all instructions preceding the call to __lwsync
+ complete before any subsequent store instructions can be executed
+ on the processor that executed the function. Also, it ensures that
+ all load instructions preceding the call to __lwsync complete before
+ any subsequent load instructions can be executed on the processor
+ that executed the function. This allows you to synchronize between
+ multiple processors with minimal performance impact, as __lwsync
+ does not wait for confirmation from each processor."
+
+Thats why smp_rmb() and smp_wmb() are defined to lwsync.
+But this same understanding applies to parallel pipeline
+execution on each PowerPC processor.
+So, use the lwsync instruction for rmb() and wmb() on the PPC
+architectures that support it.
+
+Also removed some useless spaces.
+
+Signed-off-by: Kautuk Consul <kconsul@linux.vnet.ibm.com>
+---
+ arch/powerpc/include/asm/barrier.h | 12 +++++++++---
+ 1 file changed, 9 insertions(+), 3 deletions(-)
+
+diff --git a/arch/powerpc/include/asm/barrier.h b/arch/powerpc/include/asm/barrier.h
+index e80b2c0e9315..553f5a5d20bd 100644
+--- a/arch/powerpc/include/asm/barrier.h
++++ b/arch/powerpc/include/asm/barrier.h
+@@ -41,11 +41,17 @@
+ 
+ /* The sub-arch has lwsync */
+ #if defined(CONFIG_PPC64) || defined(CONFIG_PPC_E500MC)
+-#    define SMPWMB      LWSYNC
++#undef rmb
++#undef wmb
++/* Redefine rmb() to lwsync. */
++#define rmb()	({__asm__ __volatile__ ("lwsync" : : : "memory"); })
++/* Redefine wmb() to lwsync. */
++#define wmb()	({__asm__ __volatile__ ("lwsync" : : : "memory"); })
++#define SMPWMB      LWSYNC
+ #elif defined(CONFIG_BOOKE)
+-#    define SMPWMB      mbar
++#define SMPWMB      mbar
+ #else
+-#    define SMPWMB      eieio
++#define SMPWMB      eieio
+ #endif
+ 
+ /* clang defines this macro for a builtin, which will not work with runtime patching */
+-- 
+2.31.1
 
