@@ -2,133 +2,231 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A38769F399
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Feb 2023 12:44:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9033169F39F
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Feb 2023 12:48:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231258AbjBVLov (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Feb 2023 06:44:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35204 "EHLO
+        id S231267AbjBVLsc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Feb 2023 06:48:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36774 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231618AbjBVLor (ORCPT
+        with ESMTP id S231551AbjBVLs2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Feb 2023 06:44:47 -0500
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 051E725E34;
-        Wed, 22 Feb 2023 03:44:46 -0800 (PST)
-Received: from pps.filterd (m0279872.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 31MBEI2H011797;
-        Wed, 22 Feb 2023 11:43:59 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id; s=qcppdkim1;
- bh=6Jb/HhgDkTHs53HEkoSPSvpG8IYEg7M1HjhELiPXmTU=;
- b=cx+ntzwnNGXtaZmwHvYrvuFGr7YyPkdxZEXeqt0KNuhBs6F5pIoHxCZkddy7jb+Rljsi
- kj6Kb8WJzAUKnKd6GAjFpvp4lbHYlT0l6FiWPq5NugaoJDukob8ElI5HiTRdSyVwEvbA
- nmN3u41AB86djjQweJ7d+/c/iLu+2WAydbfT5KeOTJRnlJ+itKiExnZIYNbByG0pwPue
- MybDXPJ7q5D8VJNILzL4UAYA2VuOanK5UlzsNssL9JE0XPOE9JPHsr7Qcp8dJhKW2VZ1
- pwXt7vPRjdMOy98NWjjWLi/HynvOWKh4GEV4iYSAq4wOwdLN9H2eGr0E6VTVkmRnRu1P SA== 
-Received: from apblrppmta02.qualcomm.com (blr-bdr-fw-01_GlobalNAT_AllZones-Outside.qualcomm.com [103.229.18.19])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3nvn8rc94x-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 22 Feb 2023 11:43:58 +0000
-Received: from pps.filterd (APBLRPPMTA02.qualcomm.com [127.0.0.1])
-        by APBLRPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTP id 31MBhtDO018205;
-        Wed, 22 Feb 2023 11:43:55 GMT
-Received: from pps.reinject (localhost [127.0.0.1])
-        by APBLRPPMTA02.qualcomm.com (PPS) with ESMTP id 3ntqrkwas7-1;
-        Wed, 22 Feb 2023 11:43:55 +0000
-Received: from APBLRPPMTA02.qualcomm.com (APBLRPPMTA02.qualcomm.com [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 31MBhsTG018200;
-        Wed, 22 Feb 2023 11:43:54 GMT
-Received: from hu-sgudaval-hyd.qualcomm.com (hu-vpernami-hyd.qualcomm.com [10.213.107.240])
-        by APBLRPPMTA02.qualcomm.com (PPS) with ESMTP id 31MBhsQp018199;
-        Wed, 22 Feb 2023 11:43:54 +0000
-Received: by hu-sgudaval-hyd.qualcomm.com (Postfix, from userid 2370923)
-        id DB3541570; Wed, 22 Feb 2023 17:13:53 +0530 (+0530)
-From:   Vivek Pernamitta <quic_vpernami@quicinc.com>
-To:     mhi@lists.linux.dev
-Cc:     quic_qianyu@quicinc.com, manivannan.sadhasivam@linaro.org,
-        quic_vbadigan@quicinc.com, quic_krichai@quicinc.com,
-        quic_skananth@quicinc.com,
-        Vivek Pernamitta <quic_vpernami@quicinc.com>,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        Alex Elder <elder@linaro.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Hemant Kumar <hemantk@codeaurora.org>,
-        Jeffrey Hugo <quic_jhugo@quicinc.com>,
-        Paul Davey <paul.davey@alliedtelesis.co.nz>,
-        linux-arm-msm@vger.kernel.org (open list:MHI BUS),
-        linux-kernel@vger.kernel.org (open list)
-Subject: [PATCH v4] bus: mhi: host: Avoid ringing EV DB if there is no elements to process
-Date:   Wed, 22 Feb 2023 17:13:49 +0530
-Message-Id: <1677066231-14931-1-git-send-email-quic_vpernami@quicinc.com>
-X-Mailer: git-send-email 2.7.4
-X-QCInternal: smtphost
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: tWF58_1seZiuV5KdiCYtrfrZ7Niq6o7B
-X-Proofpoint-ORIG-GUID: tWF58_1seZiuV5KdiCYtrfrZ7Niq6o7B
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.170.22
- definitions=2023-02-22_05,2023-02-22_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 phishscore=0
- mlxlogscore=696 bulkscore=0 adultscore=0 mlxscore=0 clxscore=1015
- impostorscore=0 spamscore=0 priorityscore=1501 lowpriorityscore=0
- malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2302220103
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_NONE,
-        SPF_NONE autolearn=no autolearn_force=no version=3.4.6
+        Wed, 22 Feb 2023 06:48:28 -0500
+Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59FA334038
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Feb 2023 03:48:27 -0800 (PST)
+Received: by mail-ed1-x52c.google.com with SMTP id ee7so14140227edb.2
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Feb 2023 03:48:27 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=u0SkOKRxQb31uA959ab+LjFmT74FnfTe8YzbdQveaiY=;
+        b=UqDS+6tqNYyjqohkN0RYnKWLUOdzlgyc8hyv0ooxuSLy2PIILQb1K4desrZLIb09DP
+         MZVlPweGs4gOkRLk8WL/QYenJ4HLb3H7CtMPHKaTcuBXkzLmXH1Qa+wDP0wsqhAcRzco
+         r1K2i0iPhcZbgToPRI4vyBH6sO8JggrUXhuS5ISy03nEazNH9t/MQRFYmU7lkHV2E0rL
+         KoOgG2YEoYcAptDBxjJCyy1TDAo8OXHo/Q/mPZ7YncRmGQL/quWx3FlKCvlr8IZ/2oCX
+         OjsCCtkkOKtFrAR6GvA//DLeDNTUotumhmaBWsa2KXYn9wcuEvePHKi20W1yQXRLwOiv
+         tGbg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=u0SkOKRxQb31uA959ab+LjFmT74FnfTe8YzbdQveaiY=;
+        b=Ik6pfugocaJMPLRzNzDjmcqTBdPaBBEU7iDPNXYH/mHO8iDASvoe/531/umfzmBfpe
+         X74w6Q7qxzIFy6KLhRm9Sn7lRvN1AYg6bJ9KrMmNgA9TDEXORzIaSGThRE6viIb5G3Lm
+         nAGqIGTTscA0qMjF2bLVg8bwS7VUxUERb4bDE3eTuZ7Iq9zEIAaHn//m7g7zKFK5r0Zk
+         FThy4koOQ57NO8zrXInHdSeeAJcO3EO80oDVpLT66nosZdjlt2be9qkx0GKt6tgw4DLT
+         ZseGC0Wqj2zGvP95dbkiTac+kIHag/Q3lsoAMn+5AIkD1APp1pF+rh6Isdb2iAXDOVRN
+         5/DA==
+X-Gm-Message-State: AO0yUKXMnH4k5fRu3eNjRuVoanHvrnuUhZMZ0OjE9LXomwJzykOXj/OU
+        64D9z7qd6JKXRdH69xVhZAPDAltuPV5hy5oTatVL7w==
+X-Google-Smtp-Source: AK7set+7jDBY525NdRoBeszWKhBVRicR26iUfAdJlIK3aE5RKh3n+8X38UCVRCGGxqOdSWAvqZonp5dnF09jL/p8IDM=
+X-Received: by 2002:a17:906:eb4d:b0:87b:dce7:c245 with SMTP id
+ mc13-20020a170906eb4d00b0087bdce7c245mr7249278ejb.3.1677066505580; Wed, 22
+ Feb 2023 03:48:25 -0800 (PST)
+MIME-Version: 1.0
+References: <20230202112915.867409-1-usama.anjum@collabora.com>
+ <20230202112915.867409-4-usama.anjum@collabora.com> <CABb0KFEgsk+YidSXBYQ9mM8nVV6PuEOQf=bbNn7hsoG1hUeLZg@mail.gmail.com>
+ <36ddfd75-5c58-197b-16c9-9f819099ea6d@collabora.com> <CABb0KFGWi0dtgXZ-AeUuHb55EgnwTu3JfJ9cW3ftCqezKi8dAQ@mail.gmail.com>
+ <6d2b40c6-bed9-69a6-e198-537b50953acd@collabora.com> <CABb0KFF+AEKijaXMjDpQLKyAdueJ93kf9QLfOouKHaPPwvfw_w@mail.gmail.com>
+ <a212c91e-b22a-c080-40ac-d2e909bb51c2@collabora.com>
+In-Reply-To: <a212c91e-b22a-c080-40ac-d2e909bb51c2@collabora.com>
+From:   =?UTF-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <emmir@google.com>
+Date:   Wed, 22 Feb 2023 12:48:13 +0100
+Message-ID: <CABb0KFEBpJTNF7V0XfuvbtaHUiN0Zpx6FqD+BRyXf2gjxiVgTA@mail.gmail.com>
+Subject: Re: [PATCH v10 3/6] fs/proc/task_mmu: Implement IOCTL to get and/or
+ the clear info about PTEs
+To:     Muhammad Usama Anjum <usama.anjum@collabora.com>
+Cc:     Andrei Vagin <avagin@gmail.com>, Mike Rapoport <rppt@kernel.org>,
+        Nadav Amit <namit@vmware.com>,
+        David Hildenbrand <david@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Paul Gofman <pgofman@codeweavers.com>,
+        Cyrill Gorcunov <gorcunov@gmail.com>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Shuah Khan <shuah@kernel.org>,
+        Christian Brauner <brauner@kernel.org>,
+        Yang Shi <shy828301@gmail.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        "Liam R . Howlett" <Liam.Howlett@oracle.com>,
+        Yun Zhou <yun.zhou@windriver.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Alex Sierra <alex.sierra@amd.com>,
+        Peter Xu <peterx@redhat.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Pasha Tatashin <pasha.tatashin@soleen.com>,
+        Axel Rasmussen <axelrasmussen@google.com>,
+        "Gustavo A . R . Silva" <gustavoars@kernel.org>,
+        Dan Williams <dan.j.williams@intel.com>,
+        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
+        Greg KH <gregkh@linuxfoundation.org>, kernel@collabora.com,
+        Danylo Mocherniuk <mdanylo@google.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Avoid ringing Event DB if there is no elements to process.
-As mhi_poll function can be called by mhi client drivers
-which will call process_event, which will ring DB even if
-there no ring elements to process.
+On Wed, 22 Feb 2023 at 12:06, Muhammad Usama Anjum
+<usama.anjum@collabora.com> wrote:
+>
+> On 2/22/23 3:44=E2=80=AFPM, Micha=C5=82 Miros=C5=82aw wrote:
+> > On Wed, 22 Feb 2023 at 11:11, Muhammad Usama Anjum
+> > <usama.anjum@collabora.com> wrote:
+> >> On 2/21/23 5:42=E2=80=AFPM, Micha=C5=82 Miros=C5=82aw wrote:
+> >>> On Tue, 21 Feb 2023 at 11:28, Muhammad Usama Anjum
+> >>> <usama.anjum@collabora.com> wrote:
+> >>>>
+> >>>> Hi Micha=C5=82,
+> >>>>
+> >>>> Thank you so much for comment!
+> >>>>
+> >>>> On 2/17/23 8:18=E2=80=AFPM, Micha=C5=82 Miros=C5=82aw wrote:
+> >>> [...]
+> >>>>> For the page-selection mechanism, currently required_mask and
+> >>>>> excluded_mask have conflicting
+> >>>> They are opposite of each other:
+> >>>> All the set bits in required_mask must be set for the page to be sel=
+ected.
+> >>>> All the set bits in excluded_mask must _not_ be set for the page to =
+be
+> >>>> selected.
+> >>>>
+> >>>>> responsibilities. I suggest to rework that to:
+> >>>>> 1. negated_flags: page flags which are to be negated before applyin=
+g
+> >>>>> the page selection using following masks;
+> >>>> Sorry I'm unable to understand the negation (which is XOR?). Lets lo=
+ok at
+> >>>> the truth table:
+> >>>> Page Flag       negated_flags
+> >>>> 0               0                       0
+> >>>> 0               1                       1
+> >>>> 1               0                       1
+> >>>> 1               1                       0
+> >>>>
+> >>>> If a page flag is 0 and negated_flag is 1, the result would be 1 whi=
+ch has
+> >>>> changed the page flag. It isn't making sense to me. Why the page fla=
+g bit
+> >>>> is being fliped?
+> >>>>
+> >>>> When Anrdei had proposed these masks, they seemed like a fancy way o=
+f
+> >>>> filtering inside kernel and it was straight forward to understand. T=
+hese
+> >>>> masks would help his use cases for CRIU. So I'd included it. Please =
+can you
+> >>>> elaborate what is the purpose of negation?
+> >>>
+> >>> The XOR is a way to invert the tested value of a flag (from positive
+> >>> to negative and the other way) without having the API with invalid
+> >>> values (with required_flags and excluded_flags you need to define a
+> >>> rule about what happens if a flag is present in both of the masks -
+> >>> either prioritise one mask over the other or reject the call).
+> >> At minimum, one mask (required, any or excluded) must be specified. Fo=
+r a
+> >> page to get selected, the page flags must fulfill the criterion of all=
+ the
+> >> specified masks.
+> >
+> > [Please see the comment below.]
+> >
+> > [...]
+> >> Lets translate words into table:
+> > [Yes, those tables captured the intent correctly.]
+> >
+> >>> BTW, I think I assumed that both conditions (all flags in
+> >>> required_flags and at least one in anyof_flags is present) need to be
+> >>> true for the page to be selected - is this your intention?
+> >> All the masks are optional. If all or any of the 3 masks are specified=
+, the
+> >> page flags must pass these masks to get selected.
+> >
+> > This explanation contradicts in part the introductory paragraph, but
+> > this version seems more useful as you can pass all masks zero to have
+> > all pages selected.
+> Sorry, I wrote it wrongly. (All the masks are not optional.) Let me
+> rephrase. All or at least any 1 of the 3 masks (required, any, exclude)
+> must be specified. The return_mask must always be specified. Error is
+> returned if all 3 masks (required, anyof, exclude) are zero or return_mas=
+k
+> is zero.
 
-Signed-off-by: Vivek Pernamitta <quic_vpernami@quicinc.com>
+Why do you need those restrictions? I'd guess it is valid to request a
+list of all pages with zero return_mask - this will return a compact
+list of used ranges of the virtual address space.
 
----
-changes since v3:
-	- Updating commit text for multiple versions of patches.
-changes since v2:
-	- Updated comments in code.
-changes since v1:
-	- Add an check to avoid ringing EV DB in mhi_process_ctrl_ev_ring().
----
- drivers/bus/mhi/host/main.c | 8 ++++++--
- 1 file changed, 6 insertions(+), 2 deletions(-)
+> >> After taking a while to understand this and compare with already prese=
+nt
+> >> flag system, `negated flags` is comparatively difficult to understand =
+while
+> >> already present flags seem easier.
+> >
+> > Maybe replacing negated_flags in the API with matched_values =3D
+> > ~negated_flags would make this better?
+> >
+> > We compare having to understand XOR vs having to understand ordering
+> > of required_flags and excluded_flags.
+> There is no ordering in current masks scheme. No mask is preferable. For =
+a
+> page to get selected, all the definitions of the masks must be fulfilled.
+> You have come up with good example that what if required_mask =3D
+> exclude_mask. In this case, no page will fulfill the criterion and hence =
+no
+> page would be selected. It is user's fault that he isn't understanding th=
+e
+> definitions of these masks correctly.
+>
+> Now thinking about it, I can add a error check which would return error i=
+f
+> a bit in required and excluded masks matches. Would you like it? Lets put
+> this check in place.
+> (Previously I'd left it for user's wisdom not to do this. If he'll specif=
+y
+> same masks in them, he'll get no addresses out of the syscall.)
 
-diff --git a/drivers/bus/mhi/host/main.c b/drivers/bus/mhi/host/main.c
-index df0fbfe..1bbdb75 100644
---- a/drivers/bus/mhi/host/main.c
-+++ b/drivers/bus/mhi/host/main.c
-@@ -961,7 +961,9 @@ int mhi_process_ctrl_ev_ring(struct mhi_controller *mhi_cntrl,
- 	}
- 
- 	read_lock_bh(&mhi_cntrl->pm_lock);
--	if (likely(MHI_DB_ACCESS_VALID(mhi_cntrl)))
-+
-+	/* Ring EV DB only if there is any pending element to process */
-+	if (likely(MHI_DB_ACCESS_VALID(mhi_cntrl)) && count)
- 		mhi_ring_er_db(mhi_event);
- 	read_unlock_bh(&mhi_cntrl->pm_lock);
- 
-@@ -1031,7 +1033,9 @@ int mhi_process_data_event_ring(struct mhi_controller *mhi_cntrl,
- 		count++;
- 	}
- 	read_lock_bh(&mhi_cntrl->pm_lock);
--	if (likely(MHI_DB_ACCESS_VALID(mhi_cntrl)))
-+
-+	/* Ring EV DB only if there is any pending element to process */
-+	if (likely(MHI_DB_ACCESS_VALID(mhi_cntrl)) && count)
- 		mhi_ring_er_db(mhi_event);
- 	read_unlock_bh(&mhi_cntrl->pm_lock);
- 
--- 
-2.7.4
+This error case is (one of) the problems I propose avoiding. You also
+need much more text to describe the requred/excluded flags
+interactions and edge cases than saying that a flag must have a value
+equal to corresponding bit in ~negated_flags to be matched by
+requried/anyof masks.
 
+> > IOW my proposal is to replace branches in the masks interpretation (if
+> > in one set then matches but if in another set then doesn't; if flags
+> > match ... ) with plain calculation (flag is matching when equals
+> > ~negated_flags; if flags match the masks ...).
+
+Best Regards
+Micha=C5=82 Miros=C5=82aw
