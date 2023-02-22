@@ -2,133 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9365669FB68
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Feb 2023 19:48:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 45AAE69FB78
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Feb 2023 19:52:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232277AbjBVSrg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Feb 2023 13:47:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54490 "EHLO
+        id S232165AbjBVSvm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Feb 2023 13:51:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60030 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230310AbjBVSre (ORCPT
+        with ESMTP id S230435AbjBVSvk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Feb 2023 13:47:34 -0500
-Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D719741B67
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Feb 2023 10:46:55 -0800 (PST)
-Received: by mail-wm1-x335.google.com with SMTP id d41-20020a05600c4c2900b003e9e066550fso635543wmp.4
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Feb 2023 10:46:55 -0800 (PST)
+        Wed, 22 Feb 2023 13:51:40 -0500
+Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B10F3C18
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Feb 2023 10:51:39 -0800 (PST)
+Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-536a545bfbaso102690837b3.20
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Feb 2023 10:51:39 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=skuCIMzdXVRwoYI+VmugGgits0upO5wf/eyqFb3T6p0=;
-        b=ZRVz9U8eOgOEdv9yLJQJC9zAil69EdrhWJT9TuFbvf8r9kE2tIwdmF5Oy5d98mYnXa
-         sDK1BjxsSP49nTHhvFlr/fwV0qcVQbYE1u/VuKH1u4LHc4WwDN8SdtRsbdFT+ijVXE04
-         4k8fEfWO8SByWXviMlERIjWJF/ud+GOHUNvaV6ld5W0TkbMleggjJj+zkOxxSazNW5E4
-         3br8kRp+aasBSQOyuG2fyjee+po5ajeuLg094pyZg14QcXc4RckisHauGy9z7uh9nI+W
-         ac/wja/VbT1+vECtjfCyDLTaF8P3Ia1ncXCa/wjRQNrbGZALuYIkwDWFyzrnBA+/0zCH
-         1UWA==
+        d=google.com; s=20210112;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=yqEECA7T14uUEIASP+IpGDgg85ZCOvdRmhNcjI3Iles=;
+        b=qFu2nZFTrTIDgiui6Mnc8nAfWXy3MGuClnECitY08YuGQQb9v6QJj0VhQlA1Hne1PX
+         jwbFjOAh23hL3XupWMXZLLCXKP4THYXpwTr42U1/q1g/QQfC4G2UWmMJyoEBLapf31zr
+         9fMEjCBZJjzx/JmpivZXbiOKlQHgUAMx6sN9r3/FCL+Jj7XJGZLGZQ97FlgwMMVBEVNM
+         9fIitAEtjpeHnK+4ww/FLrj3EscM62WsIQie3jEK2g6DQO1Xip7pL3Yng35IBOv/bAxe
+         x4u6XdkQANWQh3E7/i3BPLdBdEkQDUHrPuK+JE1eZA6241r6sMUD9BLBydK2LBAn6kE5
+         6Qpw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=skuCIMzdXVRwoYI+VmugGgits0upO5wf/eyqFb3T6p0=;
-        b=Es53ZIwsDAh0DkWQdha/XfzTahetpbE4FSYs1j2Q5hIbU3ae4wOiE/kBfhywrSvHkE
-         M5Nze0Q8dJXck9HXbFU6EQC5AEEX83k4C4SBLulO7sbQmG/swIou6vLKH1KjYG1rgwlk
-         xsMdqBBNZw6TPStLfuJ/qKK74mYo1L/VBAfmj7IjK+JxtS225Ol7hn59SMYzmsioXGqD
-         YLrngQFzIos9bdanhQ+5vLccSYXAPZDXdDLuqoND1Td84zQ6ObLvUpmfTpn5CiMDW7H7
-         zA/ac8jI/RTsqvK0XNJnfqYj2PjZJFgsgn9Ue4FQ8C0wyjNaIAmPkNEMGqs+hDEMqrq7
-         cVAg==
-X-Gm-Message-State: AO0yUKV9PGBKwR2dIFKlho9I3VXCRfvUJRUx3/R/YJr5Vi8KcHOsRAmd
-        AEsQA4sYsVCqi+kfqnJC6blgEQ==
-X-Google-Smtp-Source: AK7set9+LFmeEbLy5YAz6Ze7EnEQPH7JVkRV7xkmNU+cJ2jCtT0NaFWu+u650El0GShdrYOP4Dz91A==
-X-Received: by 2002:a05:600c:3196:b0:3da:acb1:2f09 with SMTP id s22-20020a05600c319600b003daacb12f09mr6996815wmp.19.1677091587670;
-        Wed, 22 Feb 2023 10:46:27 -0800 (PST)
-Received: from [192.168.1.109] ([178.197.216.144])
-        by smtp.gmail.com with ESMTPSA id e7-20020adffc47000000b002c70f5627d5sm210876wrs.63.2023.02.22.10.46.26
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 22 Feb 2023 10:46:27 -0800 (PST)
-Message-ID: <06f29d66-f16a-039c-ecd0-155bdcce00c1@linaro.org>
-Date:   Wed, 22 Feb 2023 19:46:25 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH v1 2/3] auxdisplay: ht16k33: Make use of
- device_get_match_data()
-Content-Language: en-US
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Robin van der Gracht <robin@protonic.nl>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc:     "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>,
-        Raul E Rangel <rrangel@chromium.org>,
-        Wolfram Sang <wsa@kernel.org>, linux-kernel@vger.kernel.org,
-        linux-i2c@vger.kernel.org, linux-usb@vger.kernel.org,
-        Miguel Ojeda <ojeda@kernel.org>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        devicetree@vger.kernel.org
-References: <20230221133307.20287-1-andriy.shevchenko@linux.intel.com>
- <20230221133307.20287-3-andriy.shevchenko@linux.intel.com>
- <Y/TJs+Arban0ats8@smile.fi.intel.com>
- <be203dfd290e67c8ce74d11c5c9478a4@protonic.nl>
- <Y/UD3HWNy8uKYShC@smile.fi.intel.com>
- <0235f0fed989a8b027db720663699f5d@protonic.nl>
- <Y/ZKdN4nuHcL4DgE@smile.fi.intel.com> <Y/ZOyGo8X7r258EC@smile.fi.intel.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <Y/ZOyGo8X7r258EC@smile.fi.intel.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=yqEECA7T14uUEIASP+IpGDgg85ZCOvdRmhNcjI3Iles=;
+        b=EdPCd1AsqXWGUvdQ8zTcGRJsrPJjkL3DpVja2faw1y/BXLHORME2yzB9Yrh8JjjA0w
+         4DlvP0TmJejcr673YXDOSAMAkCSeLL4b4QbsoZ0QU/X/2vbEOBPTFC/YW+Yn496+QlAp
+         ilTB+FnpGr35c+IR8DQIT/+3JfWw0i1gxuQc9a9hOlTwVh0uUaCiX3aa2woiXFvRH4F2
+         c2zUKZUO+csvx5d5ONzbzB03fXIHmoJfSoXKMKCdj18o3AKBfCZyCllqTpRP94kepada
+         MsHcYcQkO7igRkgaouX+sKDxAKFFkQVuYMvTzGiVENGyaJO5kEr4kHiu4lBDeZCWGAbz
+         9Wvg==
+X-Gm-Message-State: AO0yUKUD/THWVn9pBIoC87CsVgMpj/c3xW7o/EfQswJgCDosqrKVCPZb
+        8iqmkuW7RtRYGj0fs028vS/3KqQIaRM=
+X-Google-Smtp-Source: AK7set+8IP+LPPuvRfdebQR1ad4tDs9Va9qipjTvwoCKkZH0ygi5W3DkzGpQdJCQHMTdaByTbpW1nzgLFfc=
+X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
+ (user=seanjc job=sendgmr) by 2002:a05:6902:1:b0:a27:40c4:e12c with SMTP id
+ l1-20020a056902000100b00a2740c4e12cmr54899ybh.2.1677091898129; Wed, 22 Feb
+ 2023 10:51:38 -0800 (PST)
+Date:   Wed, 22 Feb 2023 10:51:36 -0800
+In-Reply-To: <20230220034910.11024-1-shahuang@redhat.com>
+Mime-Version: 1.0
+References: <20230220034910.11024-1-shahuang@redhat.com>
+Message-ID: <Y/ZkOFL0O5szHsYP@google.com>
+Subject: Re: [PATCH] KVM: Add the missed title format
+From:   Sean Christopherson <seanjc@google.com>
+To:     Shaoqin Huang <shahuang@redhat.com>
+Cc:     kvm@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 22/02/2023 18:20, Andy Shevchenko wrote:
->>
->>> Which effectively breaks i.e. user-space instantiation for other display
->>> types which now do work due to i2c_of_match_device().
->>> (so my suggestion above is not sufficient).
->>>
->>> Are you proposing extending and searching the I2C ID table to work around
->>> that?
->>
->> See (1) above. This is the downside I have noticed after sending this series.
->> So, the I²C ID table match has to be restored, but the above mentioned issues
->> with existing table are not gone, hence they need to be addressed in the next
->> version.
+On Mon, Feb 20, 2023, Shaoqin Huang wrote:
+> The 7.18 KVM_CAP_MANUAL_DIRTY_LOG_PROTECT2 now is not a title, make it
+> as a title to keep the format consistent.
 > 
-> I see now what you mean. So, we have even more issues in this driver:
-> - I²C table is not in sync with all devices supported
+> Signed-off-by: Shaoqin Huang <shahuang@redhat.com>
 
-Does anything actually rely on i2c_device_id table? ACPI would match
-either via ACPI or OF tables. All modern ARM systems (e.g. imx6) are
-DT-based. Maybe just drop the I2C ID table?
+Looks like it simply got missed by the ReST conversion.
 
-> - the OF ID table seems has something really badly formed for adafruit
->   (just a number after a comma)
-
-Maybe it is a model number? It was documented:
-Documentation/devicetree/bindings/auxdisplay/holtek,ht16k33.yaml
-
-> 
-> The latter shows how broken it is. The I²C ID table mechanism is used as
-> a backward compatibility to the OF. Unfortunately, user space may not provide
-> the data except in form of DT overlays, so for the legacy enumeration we
-> have only device name, which is a set of 4 digits for adafruit case.
-> 
-> Now imagine if by some reason we will get adafruit2 (you name it) with
-> the same schema. How I²C framework can understand that you meant adafruit
-> and not adafruit2? Or did I miss something?
-> 
-
-Best regards,
-Krzysztof
-
+Fixes: 106ee47dc633 ("docs: kvm: Convert api.txt to ReST format")
+Reviewed-by: Sean Christopherson <seanjc@google.com>
