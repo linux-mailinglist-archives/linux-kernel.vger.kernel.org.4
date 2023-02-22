@@ -2,173 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 21CC369ED4A
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Feb 2023 04:09:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C5AEA69ED47
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Feb 2023 04:09:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231526AbjBVDJT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Feb 2023 22:09:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36184 "EHLO
+        id S231558AbjBVDIr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Feb 2023 22:08:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35882 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232062AbjBVDIu (ORCPT
+        with ESMTP id S232218AbjBVDIg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Feb 2023 22:08:50 -0500
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BA283C29
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Feb 2023 19:08:49 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1677035329; x=1708571329;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=QwVSWHDC2uZI2bebwrxtdJXCdoGjlN9bIdhCwhiKPB4=;
-  b=bueUeQU8ELNuyfPsGKvqG91PUwgVsJrqw6/ZOqoFpwHYci4HCHIUvzb1
-   ijXP8BaKnJAchEanqdYtrJMCA23EnT6onMQ7U3M2vgUtntas6+J2riy0C
-   i/9I/ochZtD9pYNPPwIWLacYmU567YYhKb7Ji6Em8BwCExfTteUzDUMht
-   4zmpHFjNn3EyYhX5X4YEhWDQPQVqfRo5EOluSH1LBYx5y5a+CtpZRt901
-   e9hRQiTTTQvtBSTm94fxsj9Tn7H2IqAGPdadnn1w4obPDeRWc4FopQ8/Q
-   aAj4JbYbh90vK1f3y9ewoVZUixmfMJU9y38FIErh8Jz6Hd28TRqE2uNpV
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10628"; a="332823662"
-X-IronPort-AV: E=Sophos;i="5.97,317,1669104000"; 
-   d="scan'208";a="332823662"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Feb 2023 19:07:58 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10628"; a="845960298"
-X-IronPort-AV: E=Sophos;i="5.97,317,1669104000"; 
-   d="scan'208";a="845960298"
-Received: from lkp-server01.sh.intel.com (HELO eac18b5d7d93) ([10.239.97.150])
-  by orsmga005.jf.intel.com with ESMTP; 21 Feb 2023 19:07:57 -0800
-Received: from kbuild by eac18b5d7d93 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pUfU4-0000Wl-2a;
-        Wed, 22 Feb 2023 03:07:56 +0000
-Date:   Wed, 22 Feb 2023 11:07:44 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "x86-ml" <x86@kernel.org>
-Cc:     linux-kernel@vger.kernel.org
-Subject: [tip:irq/urgent] BUILD SUCCESS
- ce7980ae9080f72f08d50355c4d9084d57aece63
-Message-ID: <63f58700.4bj1OtCmGsp81TAd%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        Tue, 21 Feb 2023 22:08:36 -0500
+Received: from out-21.mta1.migadu.com (out-21.mta1.migadu.com [IPv6:2001:41d0:203:375::15])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A49842799C
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Feb 2023 19:08:06 -0800 (PST)
+Date:   Tue, 21 Feb 2023 22:08:01 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+        t=1677035284;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=fh+ZWupQZLC960FUtMOl+KhoqTzp8W4OBFpCPFVSY8g=;
+        b=pJ7n8xcP3A9T8tZjf80xmcq102eUtVS/EpajkfOeF5d6nJYCbEGJPE//No+GSJLwD7eZaV
+        Sgs97WX3MuZL+6uxHL2ubR0U0WPVBeutZZYqC1BfULQOQpZSq7EiLP+/x1UWtv0NvjBGpl
+        gTEbcN+Y8sVp7TUBe6Uo7Ph2xjeSkJk=
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From:   Kent Overstreet <kent.overstreet@linux.dev>
+To:     Yang Shi <shy828301@gmail.com>
+Cc:     Matthew Wilcox <willy@infradead.org>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: What size anonymous folios should we allocate?
+Message-ID: <Y/WHEWnr6MyNd6jP@moria.home.lan>
+References: <Y/U8bQd15aUO97vS@casper.infradead.org>
+ <CAHbLzkrkZmbVMkh-Y-bDxgy0T0ZRRd+T+o5y5-wKmjKmhN0NmA@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,LONGWORDS,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Disposition: inline
+In-Reply-To: <CAHbLzkrkZmbVMkh-Y-bDxgy0T0ZRRd+T+o5y5-wKmjKmhN0NmA@mail.gmail.com>
+X-Migadu-Flow: FLOW_OUT
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git irq/urgent
-branch HEAD: ce7980ae9080f72f08d50355c4d9084d57aece63  genirq/irqdesc: Make kobj_type structures constant
+On Tue, Feb 21, 2023 at 03:05:33PM -0800, Yang Shi wrote:
+> On Tue, Feb 21, 2023 at 1:49 PM Matthew Wilcox <willy@infradead.org> wrote:
+> >
+> > In a sense this question is premature, because we don't have any code
+> > in place to handle folios which are any size but PMD_SIZE or PAGE_SIZE,
+> > but let's pretend that code already exists and is just waiting for us
+> > to answer this policy question.
+> >
+> > I'd like to reject three ideas up front: 1. a CONFIG option, 2. a boot
+> > option and 3. a sysfs tunable.  It is foolish to expect the distro
+> > packager or the sysadmin to be able to make such a decision.  The
+> > correct decision will depend upon the instantaneous workload of the
+> > entire machine and we'll want different answers for different VMAs.
+> 
+> Yeah, I agree those 3 options should be avoided. For some
+> architectures, there are a or multiple sweet size(s) benefiting from
+> hardware. For example, ARM64 contiguous PTE supports up to 16
+> consecutive 4K pages to form a 64K entry in TLB instead of 16 4K
+> entries. Some implementations may support intermediate sizes (for
+> example, 8K, 16K and 32K, but this may make the hardware design
+> harder), but some may not. AMD's coalesce PTE supports a different
+> size (128K if I remember correctly). So the multiple of the size
+> supported by hardware (64K or 128K) seems like the common ground from
+> maximizing hardware benefit point of view. Of course, nothing prevents
+> the kernel from allocating other orders.
+> 
+> ARM even supports contiguous PMD, but that would be too big to
+> allocate by buddy allocator.
 
-elapsed time: 764m
+Every time this discussion comes up it seems like MM people have a major
+blind spot, where they're only thinking about PTE looking and TLB
+overhead and forgetting every other codepath in the kernel that deals
+with cached data - historically one physical page at a time.
 
-configs tested: 90
-configs skipped: 3
+By framing the discussion in terms of what's best for the hardware,
+you're screwing over all the pure software codepaths. This stupity has
+gone on for long enough with the ridicurous normalpage/hugepage split,
+let's not continue it.
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+Talk to any filesystem person, you don't want to fragment data
+unnecessarily. That's effectively what you're advocating for, by
+continuing to talk about hardware page sizes.
 
-gcc tested configs:
-alpha                            allyesconfig
-alpha                               defconfig
-arc                              allyesconfig
-arc                                 defconfig
-arc                  randconfig-r043-20230219
-arc                  randconfig-r043-20230220
-arm                              allmodconfig
-arm                              allyesconfig
-arm                         at91_dt_defconfig
-arm                                 defconfig
-arm                           h3600_defconfig
-arm                  randconfig-r046-20230220
-arm64                            allyesconfig
-arm64                               defconfig
-csky                                defconfig
-i386                             allyesconfig
-i386                              debian-10.3
-i386                                defconfig
-i386                 randconfig-a001-20230220
-i386                 randconfig-a002-20230220
-i386                 randconfig-a003-20230220
-i386                 randconfig-a004-20230220
-i386                 randconfig-a005-20230220
-i386                 randconfig-a006-20230220
-ia64                             allmodconfig
-ia64                                defconfig
-loongarch                        allmodconfig
-loongarch                         allnoconfig
-loongarch                           defconfig
-m68k                             allmodconfig
-m68k                                defconfig
-mips                             allmodconfig
-mips                             allyesconfig
-nios2                               defconfig
-parisc                              defconfig
-parisc                generic-32bit_defconfig
-parisc64                            defconfig
-powerpc                          allmodconfig
-powerpc                           allnoconfig
-riscv                            allmodconfig
-riscv                             allnoconfig
-riscv                               defconfig
-riscv             nommu_k210_sdcard_defconfig
-riscv                randconfig-r042-20230219
-riscv                          rv32_defconfig
-s390                             allmodconfig
-s390                             allyesconfig
-s390                                defconfig
-s390                 randconfig-r044-20230219
-sh                               allmodconfig
-sh                      rts7751r2d1_defconfig
-sparc                               defconfig
-sparc                       sparc32_defconfig
-um                             i386_defconfig
-um                           x86_64_defconfig
-x86_64                            allnoconfig
-x86_64                           allyesconfig
-x86_64                              defconfig
-x86_64                                  kexec
-x86_64               randconfig-a001-20230220
-x86_64                        randconfig-a002
-x86_64               randconfig-a002-20230220
-x86_64               randconfig-a003-20230220
-x86_64                        randconfig-a004
-x86_64               randconfig-a004-20230220
-x86_64               randconfig-a005-20230220
-x86_64               randconfig-a006-20230220
-x86_64                               rhel-8.3
-
-clang tested configs:
-arm                  randconfig-r046-20230219
-hexagon              randconfig-r041-20230219
-hexagon              randconfig-r041-20230220
-hexagon              randconfig-r045-20230219
-hexagon              randconfig-r045-20230220
-i386                 randconfig-a011-20230220
-i386                 randconfig-a012-20230220
-i386                 randconfig-a013-20230220
-i386                 randconfig-a014-20230220
-i386                 randconfig-a015-20230220
-i386                 randconfig-a016-20230220
-powerpc                     ksi8560_defconfig
-riscv                randconfig-r042-20230220
-s390                 randconfig-r044-20230220
-x86_64                        randconfig-a001
-x86_64                        randconfig-a003
-x86_64               randconfig-a011-20230220
-x86_64               randconfig-a012-20230220
-x86_64               randconfig-a013-20230220
-x86_64               randconfig-a014-20230220
-x86_64               randconfig-a015-20230220
-x86_64               randconfig-a016-20230220
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+You need to get away from designing things around hardware limitations
+and think in more general terms. The correct answer is "anonymous pages
+should be any power of two size".
