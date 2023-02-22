@@ -2,227 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DC8B669F7C9
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Feb 2023 16:29:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E0FC169F7D7
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Feb 2023 16:31:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232457AbjBVP34 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Feb 2023 10:29:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48262 "EHLO
+        id S231786AbjBVPbc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Feb 2023 10:31:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49854 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232377AbjBVP3z (ORCPT
+        with ESMTP id S232489AbjBVPb3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Feb 2023 10:29:55 -0500
-Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C1586A72
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Feb 2023 07:29:53 -0800 (PST)
-Received: by mail-ed1-x532.google.com with SMTP id f13so31406243edz.6
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Feb 2023 07:29:53 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:references:cc:to:from
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=YRpTGuARTRBMn36r7tlXq3qs+CoLxHqb66PgbsuqrJE=;
-        b=aFfhi1Q8liHmCDttqXt4BsRE4pKOyZ0BsLYT1rHW4sAf2cDnZaVnaOcNi9Srhgcri4
-         2weua2b9PjnHvF7A69aGjDs61at2sWlxZmigpK+jmJ4eCpM7a7WEeWr+XpLtekbFlpbZ
-         wRsPek9Mr2Mh4aACdHW4f4dYR9reJpqp5g2cvHoquprU9j2kexlgxVaQLFxX0aPfDcJ/
-         xMs3kLPlD6FGyc3s412vZaYpD2CCj1M4dXX7kW28PTf1/pEVmY66qa0XpVEqfzrfeqbr
-         MM00XJKfXUwonXSrZZNSoc1vDYVIQKUK8Cgw8EeZLsxrZVDuYVUSQ9F6Pdv0lPPvT1Fo
-         EAkQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:references:cc:to:from
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=YRpTGuARTRBMn36r7tlXq3qs+CoLxHqb66PgbsuqrJE=;
-        b=NKkppYZvgTQv/25jpsUe28Ld6g6Cit7LJ9C/i+E6nzf2lSdkJWAGZphDs2nbNgv0AN
-         ETDAxzoX3eY9yUZIswpHOd9e8X8/uRneyWBxZvOhP5+QuZ6lSIMKYPK/svBDfw9OqNmg
-         yK7R6vdfQh0IBSeqrCLnn0ldw7BZQRhQtCybMXez9aL2+b1kJQcVXwrZVISKUal1n73r
-         kTVpQWkppxn+4/eZnmCJEVFGnT1wn93iEO7ic1UlLiyl1gIsdCOaSfbMsQOSWEgAHgMA
-         rjOXdNjIcgQRxtiLeX1U1xUP8OkK9uQTiAjjzwuUv6lGKvD8ltEka8SXoijhdyADVkia
-         Pqdw==
-X-Gm-Message-State: AO0yUKXIar/+W5UtfBH+8PE29JRt6SZL9/rkaS1WRZJBKNTA0jdMPP9r
-        PAnHKkGF3UOymZC6cI4nnsWgYA==
-X-Google-Smtp-Source: AK7set8PzT2qWIgKTOfPggUjC00P2pwJYwx3QVR25wRd+rFFsKXlbkH/ugDvhVjFizuu6pcEOnFeaQ==
-X-Received: by 2002:aa7:c054:0:b0:4ae:f496:f32 with SMTP id k20-20020aa7c054000000b004aef4960f32mr10274813edo.26.1677079791760;
-        Wed, 22 Feb 2023 07:29:51 -0800 (PST)
-Received: from [192.168.0.109] ([82.77.80.204])
-        by smtp.gmail.com with ESMTPSA id c23-20020a50f617000000b004acde0a1ae5sm3650529edn.89.2023.02.22.07.29.50
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 22 Feb 2023 07:29:51 -0800 (PST)
-Message-ID: <68ed0578-f4e9-250d-9742-cbb7815b1d61@linaro.org>
-Date:   Wed, 22 Feb 2023 15:29:49 +0000
+        Wed, 22 Feb 2023 10:31:29 -0500
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F36437737;
+        Wed, 22 Feb 2023 07:31:28 -0800 (PST)
+Received: from pps.filterd (m0279866.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 31MDhds4009847;
+        Wed, 22 Feb 2023 15:31:20 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-type; s=qcppdkim1;
+ bh=dAOCZOsYVVepy4K+yZq5topHeb+2XsuowkObHwWs6hM=;
+ b=mAVwliA2R3alNzvFS4QxEinFX9bpe5hQVE+0tf1yQfmGPme3ZV1vIhjxpSCUO9CsoQ0a
+ wgK7X3yLqXxN4dCt32KS9k8I5i9BBGOYVis59k7wDWXCkOr8TFecN5N7+UvnCCwJtk9W
+ TSKQgZLlkIUTW62bhvKg0d4Pl7+eXQst5REyr0dePBhsjRWYcvOIt+pwrcaKj0lNW/G/
+ /AtRucA28gF6cZsWkN1J9NQuS6Y2vM0QCW7WwmZXveNxo9YAA5xL6QfjSuTFjGDI1IX+
+ bQDZGOuZ9/dzL8am1ZbUTg7qG5QKe8mODVv/BNlZuzYOPA4oQRbBBUDd3dmgG523cGW7 0A== 
+Received: from nasanppmta02.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3nwfh011ux-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 22 Feb 2023 15:31:20 +0000
+Received: from nasanex01c.na.qualcomm.com (nasanex01c.na.qualcomm.com [10.45.79.139])
+        by NASANPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 31MFVJ4O003953
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 22 Feb 2023 15:31:19 GMT
+Received: from hu-mojha-hyd.qualcomm.com (10.80.80.8) by
+ nasanex01c.na.qualcomm.com (10.45.79.139) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.41; Wed, 22 Feb 2023 07:31:16 -0800
+From:   Mukesh Ojha <quic_mojha@quicinc.com>
+To:     <agross@kernel.org>, <andersson@kernel.org>,
+        <konrad.dybcio@linaro.org>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <elder@linaro.org>
+CC:     <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        Mukesh Ojha <quic_mojha@quicinc.com>
+Subject: [PATCH v3] arm64: dts: qcom: sm8450: Add IMEM and PIL info region
+Date:   Wed, 22 Feb 2023 21:00:45 +0530
+Message-ID: <1677079845-17650-1-git-send-email-quic_mojha@quicinc.com>
+X-Mailer: git-send-email 2.7.4
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH] ext4: fix another off-by-one fsmap error on 1k block
- filesystems
-Content-Language: en-US
-From:   Tudor Ambarus <tudor.ambarus@linaro.org>
-To:     "Darrick J. Wong" <djwong@kernel.org>,
-        Theodore Ts'o <tytso@mit.edu>
-Cc:     Jun Nie <jun.nie@linaro.org>, adilger.kernel@dilger.ca,
-        linux-ext4@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Lee Jones <joneslee@google.com>
-References: <Y+58NPTH7VNGgzdd@magnolia>
- <5da85766-65c7-107f-e525-2ae75b04750a@linaro.org>
-In-Reply-To: <5da85766-65c7-107f-e525-2ae75b04750a@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nasanex01c.na.qualcomm.com (10.45.79.139)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: jiOSnL87XoKb1ecIFxT3SJgq3fC4X-gb
+X-Proofpoint-GUID: jiOSnL87XoKb1ecIFxT3SJgq3fC4X-gb
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.170.22
+ definitions=2023-02-22_05,2023-02-22_02,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015
+ priorityscore=1501 bulkscore=0 mlxlogscore=555 phishscore=0
+ impostorscore=0 mlxscore=0 adultscore=0 suspectscore=0 lowpriorityscore=0
+ spamscore=0 malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2302220135
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, Darrick,
+Add a simple-mfd representing IMEM on SM8450 and define the PIL
+relocation info region, so that post mortem tools will be able
+to locate the loaded remoteprocs.
 
-On 2/17/23 08:10, Tudor Ambarus wrote:
-> Hi, Darrick,
-> 
-> On 2/16/23 18:55, Darrick J. Wong wrote:
->> From: Darrick J. Wong <djwong@kernel.org>
->>
->> Apparently syzbot figured out that issuing this FSMAP call:
->>
->> struct fsmap_head cmd = {
->>     .fmh_count    = ...;
->>     .fmh_keys    = {
->>         { .fmr_device = /* ext4 dev */, .fmr_physical = 0, },
->>         { .fmr_device = /* ext4 dev */, .fmr_physical = 0, },
->>     },
->> ...
->> };
->> ret = ioctl(fd, FS_IOC_GETFSMAP, &cmd);
->>
->> Produces this crash if the underlying filesystem is a 1k-block ext4
->> filesystem:
->>
->> kernel BUG at fs/ext4/ext4.h:3331!
->> invalid opcode: 0000 [#1] PREEMPT SMP
->> CPU: 3 PID: 3227965 Comm: xfs_io Tainted: G        W  O       
->> 6.2.0-rc8-achx
->> Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS 1.15.0-1 
->> 04/01/2014
->> RIP: 0010:ext4_mb_load_buddy_gfp+0x47c/0x570 [ext4]
->> RSP: 0018:ffffc90007c03998 EFLAGS: 00010246
->> RAX: ffff888004978000 RBX: ffffc90007c03a20 RCX: ffff888041618000
->> RDX: 0000000000000000 RSI: 00000000000005a4 RDI: ffffffffa0c99b11
->> RBP: ffff888012330000 R08: ffffffffa0c2b7d0 R09: 0000000000000400
->> R10: ffffc90007c03950 R11: 0000000000000000 R12: 0000000000000001
->> R13: 00000000ffffffff R14: 0000000000000c40 R15: ffff88802678c398
->> FS:  00007fdf2020c880(0000) GS:ffff88807e100000(0000) 
->> knlGS:0000000000000000
->> CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
->> CR2: 00007ffd318a5fe8 CR3: 000000007f80f001 CR4: 00000000001706e0
->> Call Trace:
->>   <TASK>
->>   ext4_mballoc_query_range+0x4b/0x210 [ext4 
->> dfa189daddffe8fecd3cdfd00564e0f265a8ab80]
->>   ext4_getfsmap_datadev+0x713/0x890 [ext4 
->> dfa189daddffe8fecd3cdfd00564e0f265a8ab80]
->>   ext4_getfsmap+0x2b7/0x330 [ext4 
->> dfa189daddffe8fecd3cdfd00564e0f265a8ab80]
->>   ext4_ioc_getfsmap+0x153/0x2b0 [ext4 
->> dfa189daddffe8fecd3cdfd00564e0f265a8ab80]
->>   __ext4_ioctl+0x2a7/0x17e0 [ext4 
->> dfa189daddffe8fecd3cdfd00564e0f265a8ab80]
->>   __x64_sys_ioctl+0x82/0xa0
->>   do_syscall_64+0x2b/0x80
->>   entry_SYSCALL_64_after_hwframe+0x46/0xb0
->> RIP: 0033:0x7fdf20558aff
->> RSP: 002b:00007ffd318a9e30 EFLAGS: 00000246 ORIG_RAX: 0000000000000010
->> RAX: ffffffffffffffda RBX: 00000000000200c0 RCX: 00007fdf20558aff
->> RDX: 00007fdf1feb2010 RSI: 00000000c0c0583b RDI: 0000000000000003
->> RBP: 00005625c0634be0 R08: 00005625c0634c40 R09: 0000000000000001
->> R10: 0000000000000000 R11: 0000000000000246 R12: 00007fdf1feb2010
->> R13: 00005625be70d994 R14: 0000000000000800 R15: 0000000000000000
->>
->> For GETFSMAP calls, the caller selects a physical block device by
->> writing its block number into fsmap_head.fmh_keys[01].fmr_device.
->> To query mappings for a subrange of the device, the starting byte of the
->> range is written to fsmap_head.fmh_keys[0].fmr_physical and the last
->> byte of the range goes in fsmap_head.fmh_keys[1].fmr_physical.
->>
->> IOWs, to query what mappings overlap with bytes 3-14 of /dev/sda, you'd
->> set the inputs as follows:
->>
->>     fmh_keys[0] = { .fmr_device = major(8, 0), .fmr_physical = 3},
->>     fmh_keys[1] = { .fmr_device = major(8, 0), .fmr_physical = 14},
->>
->> Which would return you whatever is mapped in the 12 bytes starting at
->> physical offset 3.
->>
->> The crash is due to insufficient range validation of keys[1] in
->> ext4_getfsmap_datadev.  On 1k-block filesystems, block 0 is not part of
->> the filesystem, which means that s_first_data_block is nonzero.
->> ext4_get_group_no_and_offset subtracts this quantity from the blocknr
->> argument before cracking it into a group number and a block number
->> within a group.  IOWs, block group 0 spans blocks 1-8192 (1-based)
->> instead of 0-8191 (0-based) like what happens with larger blocksizes.
->>
->> The net result of this encoding is that blocknr < s_first_data_block is
->> not a valid input to this function.  The end_fsb variable is set from
->> the keys that are copied from userspace, which means that in the above
->> example, its value is zero.  That leads to an underflow here:
->>
->>     blocknr = blocknr - le32_to_cpu(es->s_first_data_block);
->>
->> The division then operates on -1:
->>
->>     offset = do_div(blocknr, EXT4_BLOCKS_PER_GROUP(sb)) >>
->>         EXT4_SB(sb)->s_cluster_bits;
->>
->> Leaving an impossibly large group number (2^32-1) in blocknr.
->> ext4_getfsmap_check_keys checked that keys[0].fmr_physical and
->> keys[1].fmr_physical are in increasing order, but
->> ext4_getfsmap_datadev adjusts keys[0].fmr_physical to be at least
->> s_first_data_block.  This implies that we have to check it again after
->> the adjustment, which is the piece that I forgot.
->>
->> Fixes: 4a4956249dac ("ext4: fix off-by-one fsmap error on 1k block 
->> filesystems")
->> Link: 
->> https://syzkaller.appspot.com/bug?id=79d5768e9bfe362911ac1a5057a36fc6b5c30002
->> Signed-off-by: Darrick J. Wong <djwong@kernel.org>
->> ---
->>   fs/ext4/fsmap.c |    2 ++
->>   1 file changed, 2 insertions(+)
->>
->> diff --git a/fs/ext4/fsmap.c b/fs/ext4/fsmap.c
->> index 4493ef0c715e..cdf9bfe10137 100644
->> --- a/fs/ext4/fsmap.c
->> +++ b/fs/ext4/fsmap.c
->> @@ -486,6 +486,8 @@ static int ext4_getfsmap_datadev(struct 
->> super_block *sb,
->>           keys[0].fmr_physical = bofs;
->>       if (keys[1].fmr_physical >= eofs)
->>           keys[1].fmr_physical = eofs - 1;
->> +    if (keys[1].fmr_physical < keys[0].fmr_physical)
->> +        return 0;
-> 
-> This is an indirect implication, we can be more straightforward. Also we
-> should stop the execution when high_key->fmr_physical == bofs. So maybe:
-> 
-> --- a/fs/ext4/fsmap.c
-> +++ b/fs/ext4/fsmap.c
-> @@ -479,6 +479,8 @@ static int ext4_getfsmap_datadev(struct super_block 
-> *sb,
->          int error = 0;
-> 
->          bofs = le32_to_cpu(sbi->s_es->s_first_data_block);
-> +       if (keys[1].fmr_physical <= bofs)
-> +               return 0;
->          eofs = ext4_blocks_count(sbi->s_es);
->          if (keys[0].fmr_physical >= eofs)
->                  return 0;
+Signed-off-by: Mukesh Ojha <quic_mojha@quicinc.com>
+---
+Change in v3:
+ - Sorted by address.
 
-Just wanted to let you know that I sent this patch together with two 
-others at:
-https://lore.kernel.org/linux-ext4/20230222131211.3898066-1-tudor.ambarus@linaro.org/T/
+Changes in v2:
+ -  put ranges after regs and corrected the sram node position.
 
-Cheers,
-ta
+ arch/arm64/boot/dts/qcom/sm8450.dtsi | 14 ++++++++++++++
+ 1 file changed, 14 insertions(+)
+
+diff --git a/arch/arm64/boot/dts/qcom/sm8450.dtsi b/arch/arm64/boot/dts/qcom/sm8450.dtsi
+index 1a744a3..7671f15 100644
+--- a/arch/arm64/boot/dts/qcom/sm8450.dtsi
++++ b/arch/arm64/boot/dts/qcom/sm8450.dtsi
+@@ -3689,6 +3689,20 @@
+ 			};
+ 		};
+ 
++		sram@146aa000 {
++			compatible = "qcom,sm8450-imem", "syscon", "simple-mfd";
++			reg = <0 0x146aa000 0 0x1000>;
++			ranges = <0 0 0x146aa000 0x1000>;
++
++			#address-cells = <1>;
++			#size-cells = <1>;
++
++			pil-reloc@94c {
++				compatible = "qcom,pil-reloc-info";
++				reg = <0x94c 0xc8>;
++			};
++		};
++
+ 		apps_smmu: iommu@15000000 {
+ 			compatible = "qcom,sm8450-smmu-500", "arm,mmu-500";
+ 			reg = <0 0x15000000 0 0x100000>;
+-- 
+2.7.4
+
