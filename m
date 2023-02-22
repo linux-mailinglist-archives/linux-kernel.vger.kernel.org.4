@@ -2,71 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4455569F282
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Feb 2023 11:10:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D06C769F286
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Feb 2023 11:10:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232071AbjBVKJ7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Feb 2023 05:09:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48798 "EHLO
+        id S232321AbjBVKKW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Feb 2023 05:10:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49348 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231135AbjBVKJ6 (ORCPT
+        with ESMTP id S231135AbjBVKKU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Feb 2023 05:09:58 -0500
-Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 764492E0C6
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Feb 2023 02:09:57 -0800 (PST)
-Received: from zn.tnic (p5de8e9fe.dip0.t-ipconnect.de [93.232.233.254])
+        Wed, 22 Feb 2023 05:10:20 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6903931E1D;
+        Wed, 22 Feb 2023 02:10:13 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 092521EC0622;
-        Wed, 22 Feb 2023 11:09:56 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1677060596;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=efmGMNG9B+mdqMf7s/t0MQIi1wPRwzoJkvLtSbsvMt4=;
-        b=TdG0IIN2Alqhrg53rQNmyPwAWswElPOPjVdW2xTC5Ls/U1W+H6QMMG/SWARbkcWGZiCeIz
-        vyMHtdK7R67rbjlPbVTYINcl8aTuyiZE3jDIccbtWNb8s6pZ6PTgZa4Kr6keEiZCCwbaGs
-        lUYnGRSamTer5pW+0/fjvanDac/IJMw=
-Date:   Wed, 22 Feb 2023 11:09:51 +0100
-From:   Borislav Petkov <bp@alien8.de>
-To:     Andrew Cooper <andrew.cooper3@citrix.com>
-Cc:     Tavis Ormandy <taviso@gmail.com>, linux-kernel@vger.kernel.org,
-        x86@kernel.org
-Subject: Re: x86: AMD Zen2 ymm registers rolling back
-Message-ID: <Y/Xp73KJe3c/1jrn@zn.tnic>
-References: <Y/W4x7/KFqmDmmR7@thinkstation.cmpxchg8b.net>
- <Y/XTT59OrLw2as4R@zn.tnic>
- <Y/Xc+yMzI83WZ4V1@zn.tnic>
- <0371ec3d-0899-f94a-7f21-21d805df2927@citrix.com>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id EF5B561313;
+        Wed, 22 Feb 2023 10:10:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1593BC433D2;
+        Wed, 22 Feb 2023 10:10:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1677060612;
+        bh=0EjWaW8FZbf/rs4S89php6TeZDRc/tzK7/iJgWJKpSk=;
+        h=Subject:From:In-Reply-To:References:To:Cc:Date:From;
+        b=G2CGdBU8wgzdtt3+iOQ/BysR27IMxblAj4vBx7/K3cM2RgQCcsnyeJFoQfitdFtld
+         0eIWMniczTdNmkRxFePeBRRDJNMdenaM3sRERb6ZcEpPcz8qebzYq0RhiiCfEkc1n5
+         53j3nhK62MNAsYMIAe7BL2+FcuOcfOmzkGgpp+koYU5xNpxBjVhhHo2cdRQyYiKu05
+         SpnYw0CM1ls7Lx7Vh1Jy60l3y73aAeePkGGeiysQERp3uH+1EkPNtPlfU2jGF52o4T
+         aveZENp3vK2h9i72bHf/m5akqCFrtjMiemvCJ5CxgSKJnaxLRroyOEdy2RQ6jjdtQ4
+         B7RgacBZppUOQ==
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <0371ec3d-0899-f94a-7f21-21d805df2927@citrix.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+Subject: Re: [PATCH] wifi: ath11k: fix SAC bug on peer addition with sta band
+ migration
+From:   Kalle Valo <kvalo@kernel.org>
+In-Reply-To: <20230209222622.1751-1-ansuelsmth@gmail.com>
+References: <20230209222622.1751-1-ansuelsmth@gmail.com>
+To:     Christian Marangi <ansuelsmth@gmail.com>
+Cc:     "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Christian Marangi <ansuelsmth@gmail.com>,
+        ath11k@lists.infradead.org, linux-wireless@vger.kernel.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Dan Carpenter <error27@gmail.com>
+User-Agent: pwcli/0.1.1-git (https://github.com/kvalo/pwcli/) Python/3.7.3
+Message-ID: <167706060829.17720.10858738686921337257.kvalo@kernel.org>
+Date:   Wed, 22 Feb 2023 10:10:09 +0000 (UTC)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Feb 22, 2023 at 09:38:09AM +0000, Andrew Cooper wrote:
-> This sounds suspiciously like an errata which was fixed with a ucode
-> update last year.
+Christian Marangi <ansuelsmth@gmail.com> wrote:
 
-Yes, it looks like it.
+> Fix sleep in atomic context warning detected by Smatch static checker
+> analyzer.
+> 
+> Following the locking pattern for peer_rhash_add lock tbl_mtx_lock mutex
+> always even if sta is not transitioning to another band.
+> This is peer_add function and a more secure locking should not cause
+> performance regression.
+> 
+> Tested-on: IPQ8074 hw2.0 AHB WLAN.HK.2.5.0.1-01208-QCAHKSWPL_SILICONZ-1
+> 
+> Fixes: d673cb6fe6c0 ("wifi: ath11k: fix peer addition/deletion error on sta band migration")
+> Reported-by: Dan Carpenter <error27@gmail.com>
+> Signed-off-by: Christian Marangi <ansuelsmth@gmail.com>
+> Signed-off-by: Kalle Valo <quic_kvalo@quicinc.com>
 
-Alternatively, you can try booting with "clearcpuid=xsaves" - that
-should take care of your observation too but yeah, you should rather
-update your microcode.
+Patch applied to ath-next branch of ath.git, thanks.
 
-HTH.
+60b7d62ba8cd wifi: ath11k: fix SAC bug on peer addition with sta band migration
 
 -- 
-Regards/Gruss,
-    Boris.
+https://patchwork.kernel.org/project/linux-wireless/patch/20230209222622.1751-1-ansuelsmth@gmail.com/
 
-https://people.kernel.org/tglx/notes-about-netiquette
+https://wireless.wiki.kernel.org/en/developers/documentation/submittingpatches
+
