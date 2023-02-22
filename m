@@ -2,99 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1EDFC69F1E4
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Feb 2023 10:37:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F93C69F1E8
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Feb 2023 10:37:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231971AbjBVJhG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Feb 2023 04:37:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54662 "EHLO
+        id S229901AbjBVJhV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Feb 2023 04:37:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55548 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231856AbjBVJgX (ORCPT
+        with ESMTP id S232090AbjBVJgk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Feb 2023 04:36:23 -0500
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 158853B67C;
-        Wed, 22 Feb 2023 01:34:15 -0800 (PST)
-Received: from cryzen.lan (cpc87451-finc19-2-0-cust61.4-2.cable.virginm.net [82.11.51.62])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: tanureal)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id DB06366021E0;
-        Wed, 22 Feb 2023 09:32:52 +0000 (GMT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1677058373;
-        bh=ULUS8juqT9D663UOmoNu1JrQcrXe/fPV+74I8cFGkeE=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=RrUk0TBxvnA0BpQ4L31srmAgbzC/CyhcBvigVXojG8MA5WLRzvN4S64739nI5CcXb
-         dxHYkNp9AXhtef7qzSgCc2qAso5TySgCu7R7jZNUH/WgUKuISRytvcMgGC80cMVcHv
-         p8g468XO6djB8ErYQUQiuCgzOC9k4BHfkdvqzev6qNRTko3GdGZVFIviUcgrf3Csrv
-         Ptnryjg74q2lRRh/8wg4NwDBuU9cVTPKg3KjER7SuBMtE7QhIACqCq6KDnr574As2m
-         cgSq2bHHxmiDzs1DlTZuUpDETv3n30Vw8iwFWTj8qJwHYik4THh/58uH7H7WZ7GBbb
-         EySbKuc/BbYmA==
-From:   Lucas Tanure <lucas.tanure@collabora.com>
-To:     David Rhodes <david.rhodes@cirrus.com>,
-        Charles Keepax <ckeepax@opensource.cirrus.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Mark Brown <broonie@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>
-Cc:     alsa-devel@alsa-project.org, devicetree@vger.kernel.org,
-        patches@opensource.cirrus.com, linux-kernel@vger.kernel.org,
-        kernel@collabora.com, Lucas Tanure <lucas.tanure@collabora.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH v6 4/4] ASoC: dt-bindings: cirrus,cs35l41: Document CS35l41 shared boost
-Date:   Wed, 22 Feb 2023 09:32:44 +0000
-Message-Id: <20230222093244.938156-5-lucas.tanure@collabora.com>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230222093244.938156-1-lucas.tanure@collabora.com>
-References: <20230222093244.938156-1-lucas.tanure@collabora.com>
+        Wed, 22 Feb 2023 04:36:40 -0500
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 04E5739BB7
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Feb 2023 01:34:22 -0800 (PST)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 91E9C1650;
+        Wed, 22 Feb 2023 01:33:48 -0800 (PST)
+Received: from [10.57.90.101] (unknown [10.57.90.101])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 5FDC03F703;
+        Wed, 22 Feb 2023 01:33:04 -0800 (PST)
+Message-ID: <7ad38cc7-d2f7-b282-ac37-25e56e0d6c47@arm.com>
+Date:   Wed, 22 Feb 2023 09:33:02 +0000
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.7.2
+Subject: Re: [PATCH] coresight: tmc-etr: Handle enable failure in
+ tmc_read_unprepare_etr
+To:     Yabin Cui <yabinc@google.com>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Mike Leach <mike.leach@linaro.org>,
+        Leo Yan <leo.yan@linaro.org>, James Clark <james.clark@arm.com>
+Cc:     coresight@lists.linaro.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+References: <77bd4509-bd8b-3bcc-e94a-7593505e27c0@arm.com>
+ <20230210234311.1661312-1-yabinc@google.com>
+ <CALJ9ZPM_78fNKcyUn=NvrqYLxcSCNsKp2HNUXU+DwZoC1MhFvA@mail.gmail.com>
+From:   Suzuki K Poulose <suzuki.poulose@arm.com>
+In-Reply-To: <CALJ9ZPM_78fNKcyUn=NvrqYLxcSCNsKp2HNUXU+DwZoC1MhFvA@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Describe the properties used for shared boost configuration.
-Based on David Rhodes shared boost patches.
+On 21/02/2023 18:38, Yabin Cui wrote:
+> Ping for review?
+> 
+> On Fri, Feb 10, 2023 at 11:43 PM Yabin Cui <yabinc@google.com> wrote:
+>>
+>> It's similar to what we did in tmc_read_unprepare_etb.
+>>
+>> Signed-off-by: Yabin Cui <yabinc@google.com>
+>> ---
 
-Signed-off-by: Lucas Tanure <lucas.tanure@collabora.com>
-Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
----
- .../devicetree/bindings/sound/cirrus,cs35l41.yaml      | 10 +++++++++-
- 1 file changed, 9 insertions(+), 1 deletion(-)
+Thanks Yabin for the patch, will queue this at rc1
 
-diff --git a/Documentation/devicetree/bindings/sound/cirrus,cs35l41.yaml b/Documentation/devicetree/bindings/sound/cirrus,cs35l41.yaml
-index 18fb471aa891..14dea1feefc5 100644
---- a/Documentation/devicetree/bindings/sound/cirrus,cs35l41.yaml
-+++ b/Documentation/devicetree/bindings/sound/cirrus,cs35l41.yaml
-@@ -85,11 +85,19 @@ properties:
-       boost-cap-microfarad.
-       External Boost must have GPIO1 as GPIO output. GPIO1 will be set high to
-       enable boost voltage.
-+      Shared boost allows two amplifiers to share a single boost circuit by
-+      communicating on the MDSYNC bus. The active amplifier controls the boost
-+      circuit using combined data from both amplifiers. GPIO1 should be
-+      configured for Sync when shared boost is used. Shared boost is not
-+      compatible with External boost. Active amplifier requires
-+      boost-peak-milliamp, boost-ind-nanohenry and boost-cap-microfarad.
-       0 = Internal Boost
-       1 = External Boost
-+      2 = Shared Boost Active
-+      3 = Shared Boost Passive
-     $ref: /schemas/types.yaml#/definitions/uint32
-     minimum: 0
--    maximum: 1
-+    maximum: 3
- 
-   cirrus,gpio1-polarity-invert:
-     description:
--- 
-2.39.2
+Suzuki
+
+>>   drivers/hwtracing/coresight/coresight-tmc-etr.c | 7 ++++++-
+>>   1 file changed, 6 insertions(+), 1 deletion(-)
+>>
+>> diff --git a/drivers/hwtracing/coresight/coresight-tmc-etr.c b/drivers/hwtracing/coresight/coresight-tmc-etr.c
+>> index 918d461fcf4a..b04f12079efd 100644
+>> --- a/drivers/hwtracing/coresight/coresight-tmc-etr.c
+>> +++ b/drivers/hwtracing/coresight/coresight-tmc-etr.c
+>> @@ -1763,6 +1763,7 @@ int tmc_read_unprepare_etr(struct tmc_drvdata *drvdata)
+>>   {
+>>          unsigned long flags;
+>>          struct etr_buf *sysfs_buf = NULL;
+>> +       int rc = 0;
+>>
+>>          /* config types are set a boot time and never change */
+>>          if (WARN_ON_ONCE(drvdata->config_type != TMC_CONFIG_TYPE_ETR))
+>> @@ -1777,7 +1778,11 @@ int tmc_read_unprepare_etr(struct tmc_drvdata *drvdata)
+>>                   * buffer. Since the tracer is still enabled drvdata::buf can't
+>>                   * be NULL.
+>>                   */
+>> -               __tmc_etr_enable_hw(drvdata);
+>> +               rc = __tmc_etr_enable_hw(drvdata);
+>> +               if (rc) {
+>> +                       spin_unlock_irqrestore(&drvdata->spinlock, flags);
+>> +                       return rc;
+>> +               }
+>>          } else {
+>>                  /*
+>>                   * The ETR is not tracing and the buffer was just read.
+>> --
+>> 2.39.1.581.gbfd45094c4-goog
+>>
 
