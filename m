@@ -2,53 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E0C0569EE6E
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Feb 2023 06:39:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DA1AD69EE70
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Feb 2023 06:39:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230334AbjBVFjP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Feb 2023 00:39:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43060 "EHLO
+        id S230374AbjBVFjW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Feb 2023 00:39:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43184 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229546AbjBVFjO (ORCPT
+        with ESMTP id S230356AbjBVFjT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Feb 2023 00:39:14 -0500
-Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com [IPv6:2607:f8b0:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CFB8528D19
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Feb 2023 21:39:12 -0800 (PST)
-Received: by mail-pl1-x631.google.com with SMTP id bh1so7562454plb.11
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Feb 2023 21:39:12 -0800 (PST)
+        Wed, 22 Feb 2023 00:39:19 -0500
+Received: from mail-pf1-x435.google.com (mail-pf1-x435.google.com [IPv6:2607:f8b0:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA8963608D
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Feb 2023 21:39:17 -0800 (PST)
+Received: by mail-pf1-x435.google.com with SMTP id b20so4532647pfo.6
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Feb 2023 21:39:17 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=emZcX0exsXWMNu2WtKZos0anmdtCl/O+H+3q40s/XQU=;
-        b=fzgyZlAlM6sjZ4AraJ1T1vEKvI77yHDLcd5KhVKJBZhjVv8x5pd6Hq963x0ca12tw7
-         uMQTh1Q4yAKtJH9aecr0fC944ZymmdMYdU2Sd2n+Dj00FHm/brqlLJMzDf0yr03wphqY
-         9mrQcW1uuFsx4O4iWmTb/CHjlv6lewstIzsopfxgkgpw/Mca8hSdj+c42kMbIJvZTyls
-         WjE/EtbS6PthK2ctuM6BP1dLh3HDVVbpiTK4R5hP76D9CPJz1SKHswF78Z4X5MUOTAIB
-         23npEXGwVidDk62KxzAZLpZ/S5nnFI9d0nA9x5Ms6Ikq0sFOSphUQ45AnywPGheD668O
-         /Rgg==
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=0sLDMeC85ViUoFkMg7Sog4nZA2hj3556Fo2Z4Pqw9Sk=;
+        b=BHjb8C4cHgLz1HzRO4VRGO4k2QJsmCcNyEiNkq5lTCjvUq4Di7IseU1UwO7tNyTVdj
+         bNEEKDEY0Aw2GKO6qxiKJKBRbvt/AfOjMdlcHCZzBNPecKAgK66/x/gS1gCDLo0gdd2m
+         e2vUnqYhNa90mSxJwFLv/n7qZmAxRemoxMO/Pl0FzRAEcuStnKQPzJAaYmZjDBAYEEst
+         NpUW0QCDOwGJVOLdDZqQaTFGy7xMhLj2XcUq9rOCqTjYbiQDIKGRNMnWwjnIni0ytVSf
+         TLU+DBGdE1UdYcMyeq+X65AhUJ1LHkRdhexcoI7y4hDd5vx/xiRKEBu9LUbZwQYp89eh
+         fgSg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=emZcX0exsXWMNu2WtKZos0anmdtCl/O+H+3q40s/XQU=;
-        b=zGVF3TAexq+Zoa3pHkmoaEBKRzFU+VTgsVhenDaVNHtmIfshfuk82rUHhnBJoSHrZA
-         V9f5rsmtHtrRXnVngo6rwfoqCM8NSn2aXZkBMUIdo5OIt80xuMFL0qYevIqmW/Rwmjt0
-         qVvkhjMfCXLBCJKqMxXpM32ya5NHBAq6Y+4yqbZ5AVoNUUPpgs2RqMbWHx9jdoD2G/nI
-         qselbcANBftzbhSnEZdFS1CpzjZ0czlFMngilVDuGj9o3KA1wnexQQN2UGyrauHNrXK9
-         vEbyKFGbN8PktcDhYhzsv0QtT/3eOyG0R+ccIxjXBfGsPdGw+BwH9rpkVGBoe1wGCDF5
-         Y9Dg==
-X-Gm-Message-State: AO0yUKW5Dgcf8awDhSLANz9ARdUkH7DvmXfrNiuQ6CuDiDtxjFe16yHb
-        JRVpEuX0Lnl5Azm56iZJy1q+XQ==
-X-Google-Smtp-Source: AK7set/bs4zGW8QMHc9/c7VtL4J5ZuxMFHdBWeh0lyWFl+RPoKUnLbAUKaMjBJVRDQ2aGShVyJVlrA==
-X-Received: by 2002:a05:6a20:12c3:b0:bf:6cd3:954a with SMTP id v3-20020a056a2012c300b000bf6cd3954amr7421487pzg.42.1677044352245;
-        Tue, 21 Feb 2023 21:39:12 -0800 (PST)
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=0sLDMeC85ViUoFkMg7Sog4nZA2hj3556Fo2Z4Pqw9Sk=;
+        b=ETbFbLC3wAM5XfwYntlj5jbIUlJ7/iK1dzal5UykjqMecy0q/1z5FcU7Sh8V/vVzXQ
+         3Vvd83HxOnESZ17kw3ynlGqyOb5C/0h0GOblMv/2guRrpIH/MxrF++NTe7+miu8lIToK
+         7P9aiNKG6If9BkHXuhhFrN4GPYFvAxgEMS0UJxC3ropo2okH4QAhSOoQxMbQgtLSUVg3
+         wQbuMSD4QovV0+gQihM2eMC40Eo+mWWPBQQ/1ohLsp+2YQXIE+/fidkbI0KFamRDbdC3
+         zqtSdEekbaInXhQJNReSgk5kWGnVEFFVG7ZzmIHKqG0olEFK10IT/V2IwH8099G89d/6
+         SRlw==
+X-Gm-Message-State: AO0yUKVb8uOs4gLDgPDiCY/yFWsrbtgga1uQUcMREc3ZVoYNVyz+RaWx
+        ybRwxKvtYCpduXvbFRn5dk3clg==
+X-Google-Smtp-Source: AK7set8Is8WfXxn4KLyxy71JFEQc6uUnlBzTLEDzAxwg1ERJzQ9z/z1GHMb0j65/shf8yNvouxYAwQ==
+X-Received: by 2002:a62:52d7:0:b0:5a9:d4fa:d3c7 with SMTP id g206-20020a6252d7000000b005a9d4fad3c7mr6353164pfb.7.1677044357377;
+        Tue, 21 Feb 2023 21:39:17 -0800 (PST)
 Received: from localhost.localdomain (fp9875a45d.knge128.ap.nuro.jp. [152.117.164.93])
-        by smtp.gmail.com with ESMTPSA id 3-20020aa79203000000b005931a44a239sm1107130pfo.112.2023.02.21.21.39.09
+        by smtp.gmail.com with ESMTPSA id 3-20020aa79203000000b005931a44a239sm1107130pfo.112.2023.02.21.21.39.14
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 21 Feb 2023 21:39:11 -0800 (PST)
+        Tue, 21 Feb 2023 21:39:16 -0800 (PST)
 From:   Masahisa Kojima <masahisa.kojima@linaro.org>
 To:     Ard Biesheuvel <ardb@kernel.org>,
         Jens Wiklander <jens.wiklander@linaro.org>,
@@ -56,68 +57,75 @@ To:     Ard Biesheuvel <ardb@kernel.org>,
         linux-kernel@vger.kernel.org, op-tee@lists.trustedfirmware.org
 Cc:     Ilias Apalodimas <ilias.apalodimas@linaro.org>,
         Johan Hovold <johan+linaro@kernel.org>,
-        Masahisa Kojima <masahisa.kojima@linaro.org>
-Subject: [PATCH v3 0/3] introduce tee-based EFI Runtime Variable Service
-Date:   Wed, 22 Feb 2023 14:38:21 +0900
-Message-Id: <20230222053825.992-1-masahisa.kojima@linaro.org>
+        Masahisa Kojima <masahisa.kojima@linaro.org>,
+        linux-efi@vger.kernel.org
+Subject: [PATCH v3 1/3] efi: expose efivar generic ops register function
+Date:   Wed, 22 Feb 2023 14:38:22 +0900
+Message-Id: <20230222053825.992-2-masahisa.kojima@linaro.org>
 X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20230222053825.992-1-masahisa.kojima@linaro.org>
+References: <20230222053825.992-1-masahisa.kojima@linaro.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This series introduces the tee based EFI Runtime Variable Service.
+This is a preparation for supporting efivar operations
+provided by other than efi subsystem.
+Both register and unregister functions are exposed
+so that non-efi subsystem can revert the efi generic
+operation.
 
-The eMMC device is typically owned by the non-secure world(linux in
-this case). There is an existing solution utilizing eMMC RPMB partition
-for EFI Variables, it is implemented by interacting with
-OP-TEE, StandaloneMM(as EFI Variable Service Pseudo TA), eMMC driver
-and tee-supplicant. The last piece is the tee-based variable access
-driver to interact with OP-TEE and StandaloneMM.
+Co-developed-by: Ilias Apalodimas <ilias.apalodimas@linaro.org>
+Signed-off-by: Ilias Apalodimas <ilias.apalodimas@linaro.org>
+Signed-off-by: Masahisa Kojima <masahisa.kojima@linaro.org>
+---
+ drivers/firmware/efi/efi.c | 12 ++++++++++++
+ include/linux/efi.h        |  3 +++
+ 2 files changed, 15 insertions(+)
 
-Changelog:
-v2 -> v3:
-- add CONFIG_EFI dependency to TEE_STMM_EFI
-- add missing return code check for tee_client_invoke_func()
-- directly call efivars_register/unregister from tee_stmm_efi.c
-
-rfc v1 -> v2:
-- split patch into three patches, one for drivers/tee,
-  one for include/linux/efi.h, and one for the driver/firmware/efi/stmm
-- context/session management into probe() and remove() same as other tee
-client driver
-- StMM variable driver is moved from driver/tee/optee to driver/firmware/efi
-- use "tee" prefix instead of "optee" in driver/firmware/efi/stmm/tee_stmm_efi.c,
-  this file does not contain op-tee specific code, abstracted by tee layer and
-  StMM variable driver will work on other tee implementation.
-- PTA_STMM_CMD_COMMUNICATE -> PTA_STMM_CMD_COMMUNICATE
-- implement query_variable_store() but currently not used
-- no use of TEEC_SUCCESS, it is defined in driver/tee/optee/optee_private.h.
-  Other tee client drivers use 0 instead of using TEEC_SUCCESS
-- remove TEEC_ERROR_EXCESS_DATA status, it is refered just to output
-error message
-
-Masahisa Kojima (3):
-  efi: expose efivar generic ops register function
-  efi: Add EFI_ACCESS_DENIED status code
-  efi: Add tee-based EFI variable driver
-
- drivers/firmware/efi/Kconfig                 |  15 +
- drivers/firmware/efi/Makefile                |   1 +
- drivers/firmware/efi/efi.c                   |  12 +
- drivers/firmware/efi/stmm/mm_communication.h | 249 ++++++++
- drivers/firmware/efi/stmm/tee_stmm_efi.c     | 626 +++++++++++++++++++
- include/linux/efi.h                          |   4 +
- 6 files changed, 907 insertions(+)
- create mode 100644 drivers/firmware/efi/stmm/mm_communication.h
- create mode 100644 drivers/firmware/efi/stmm/tee_stmm_efi.c
-
+diff --git a/drivers/firmware/efi/efi.c b/drivers/firmware/efi/efi.c
+index 4bb30434ee4a..abaf77773bdd 100644
+--- a/drivers/firmware/efi/efi.c
++++ b/drivers/firmware/efi/efi.c
+@@ -227,6 +227,18 @@ static void generic_ops_unregister(void)
+ 	efivars_unregister(&generic_efivars);
+ }
+ 
++void efivars_generic_ops_register(void)
++{
++	generic_ops_register();
++}
++EXPORT_SYMBOL_GPL(efivars_generic_ops_register);
++
++void efivars_generic_ops_unregister(void)
++{
++	generic_ops_unregister();
++}
++EXPORT_SYMBOL_GPL(efivars_generic_ops_unregister);
++
+ #ifdef CONFIG_EFI_CUSTOM_SSDT_OVERLAYS
+ #define EFIVAR_SSDT_NAME_MAX	16UL
+ static char efivar_ssdt[EFIVAR_SSDT_NAME_MAX] __initdata;
+diff --git a/include/linux/efi.h b/include/linux/efi.h
+index df88786b5947..7e5239da87bf 100644
+--- a/include/linux/efi.h
++++ b/include/linux/efi.h
+@@ -1336,4 +1336,7 @@ bool efi_config_table_is_usable(const efi_guid_t *guid, unsigned long table)
+ 	return xen_efi_config_table_is_usable(guid, table);
+ }
+ 
++void efivars_generic_ops_register(void);
++void efivars_generic_ops_unregister(void);
++
+ #endif /* _LINUX_EFI_H */
 -- 
 2.30.2
 
