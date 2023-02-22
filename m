@@ -2,102 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 35F9D69F3C4
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Feb 2023 12:55:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A1EC069F3C7
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Feb 2023 12:56:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231476AbjBVLzd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Feb 2023 06:55:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43292 "EHLO
+        id S231382AbjBVL4s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Feb 2023 06:56:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45426 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231341AbjBVLz0 (ORCPT
+        with ESMTP id S231219AbjBVL4q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Feb 2023 06:55:26 -0500
-Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 349612822E;
-        Wed, 22 Feb 2023 03:55:22 -0800 (PST)
-Received: from loongson.cn (unknown [113.200.148.30])
-        by gateway (Coremail) with SMTP id _____8DxUOWpAvZj8ZEDAA--.1698S3;
-        Wed, 22 Feb 2023 19:55:21 +0800 (CST)
-Received: from linux.localdomain (unknown [113.200.148.30])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8Cx2r2nAvZjar04AA--.38065S5;
-        Wed, 22 Feb 2023 19:55:21 +0800 (CST)
-From:   Tiezhu Yang <yangtiezhu@loongson.cn>
-To:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>
-Cc:     bpf@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH bpf-next 3/3] selftests/bpf: Check __ARCH_WANT_SET_GET_RLIMIT before syscall(__NR_getrlimit)
-Date:   Wed, 22 Feb 2023 19:55:08 +0800
-Message-Id: <1677066908-15224-4-git-send-email-yangtiezhu@loongson.cn>
-X-Mailer: git-send-email 2.1.0
-In-Reply-To: <1677066908-15224-1-git-send-email-yangtiezhu@loongson.cn>
-References: <1677066908-15224-1-git-send-email-yangtiezhu@loongson.cn>
-X-CM-TRANSID: AQAAf8Cx2r2nAvZjar04AA--.38065S5
-X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
-X-Coremail-Antispam: 1Uk129KBjvJXoW7KF4kJw15ArW8ury3tw47Jwb_yoW8Aw17pa
-        yrJa4Utr1SyF17tw10krW7ZryfJrs7ZFWFkF48Jr95Zw1DXa9aqryIgF4YgrsxKrZaqrsY
-        v348Kas7Zr4UA37anT9S1TB71UUUUUDqnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
-        qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
-        b7AYFVCjjxCrM7AC8VAFwI0_Jr0_Gr1l1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s
-        1l1IIY67AEw4v_Jrv_JF1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xv
-        wVC0I7IYx2IY67AKxVW8JVW5JwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwA2z4
-        x0Y4vEx4A2jsIE14v26F4UJVW0owA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Cr1j6rxdM2AI
-        xVAIcxkEcVAq07x20xvEncxIr21l57IF6xkI12xvs2x26I8E6xACxx1l5I8CrVACY4xI64
-        kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r1q6rW5McIj6I8E87Iv67AKxVWxJVW8Jr1l
-        Ox8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcxkI7VAKI48JMxAIw28IcxkI7VAKI48JMxC20s
-        026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_
-        JrI_JrWlx4CE17CEb7AF67AKxVWUAVWUtwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14
-        v26r4j6ryUMIIF0xvE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwCI42IY6xAIw20EY4v20xva
-        j40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Gr0_Cr1lIxAIcVC2z280aVCY1x0267AKxVW8JV
-        W8JrUvcSsGvfC2KfnxnUUI43ZEXa7IU8jZX5UUUUU==
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Wed, 22 Feb 2023 06:56:46 -0500
+Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F0123800A
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Feb 2023 03:56:21 -0800 (PST)
+Received: by mail-pl1-x62f.google.com with SMTP id e9so3448238plh.2
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Feb 2023 03:56:21 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Xm6mGYVm8lDp5WZDtqiGoAqVDkUuzuiLY5VqbWrdasU=;
+        b=MpE1tKaMFgBI5+RIIjVVHOq+Uy59ZC2NTA1o9Hkfals4fn1uuz/icKZFisLU7E45UJ
+         j0nFHYP8PJGVPI2B0+i7T0oJi6KRVRWMwNaVy/DQ5w1UyXPPo9XwYvaeAloK4CzgG6kk
+         +vUeL+SuE4EyqpSNJJFGGVxWa4ZfiHKCbGlEs/Y3CE6i+akT8hxer2aeuVeXY1vVX7Pa
+         +Gg8MZ+HloQp+zGtgMShn6+Q0scDpdWWcKLe3YI2+dIbbTasey+Har/erWEAjgRSJJuV
+         tlhtGyrsG46k0tiu4vyP9pgEKeuYcIq7LDkfOkliAVzyOu+0PdkXsztBfXwbwaxcxoA8
+         S9CA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:subject:message-id:date:from:reply-to:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Xm6mGYVm8lDp5WZDtqiGoAqVDkUuzuiLY5VqbWrdasU=;
+        b=SQz0bc33fqHIUwr3dhl7MuycErhpSWMlLsazh+/YYNInMk3fjoKs4N9PFfx+Tz6cfa
+         QCaaI4YpyJDOyEkShfwrnPpKOUjJlnMY/HYr983WBaKywlgsgxx1L/zBxoyGpftppuSk
+         p42EdClvSMWkwerikOfHQSzzb+R21M8aKjr6DbSMWNydrXybsNGpRs3o2jnwtw7k0ILP
+         poit+L7NQIJdOChkV1tah6O122NOB1cVZf4DT0X62XkPzzSvSAtUAdaAu1XCMSfuBz64
+         5NB5W1DjhyZ/2mXojkSh41eDH6hfqwoBmVMzPri5SZUM3ClQC/LWHyns0vHuHoGO6TBd
+         gOLg==
+X-Gm-Message-State: AO0yUKV5NXqr5La6TbGVzTAnNOD8vVILmahMzh4n+EIxY8ST0fpPOhVs
+        zRNw4Tv7xM7qqUOg4kk+wOiKZrVemzi2we+tLuY=
+X-Google-Smtp-Source: AK7set/JeJq+/eZqi7CMpPgQAuHl4qSxleu0oLTMZM8u1KU7Oj5D2FbxBKzn+LL5ohqdbRHsup3IkYz4DMynbFHtKL8=
+X-Received: by 2002:a17:903:2986:b0:199:6e3:187a with SMTP id
+ lm6-20020a170903298600b0019906e3187amr1606663plb.6.1677066980534; Wed, 22 Feb
+ 2023 03:56:20 -0800 (PST)
+MIME-Version: 1.0
+Received: by 2002:a05:7022:60e:b0:5e:684:c3d4 with HTTP; Wed, 22 Feb 2023
+ 03:56:19 -0800 (PST)
+Reply-To: ronaldtyler35@aol.com
+From:   ronald <konekabiru4@gmail.com>
+Date:   Wed, 22 Feb 2023 11:56:19 +0000
+Message-ID: <CAEnOMeSUYAfOkezuhqs_2kf_-y-76Nn4hry0ZSsP4GAypxv1Ag@mail.gmail.com>
+Subject: =?UTF-8?B?ZsOkaGln?=
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: Yes, score=5.1 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,UNDISC_FREEM autolearn=no
+        autolearn_force=no version=3.4.6
+X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
+        *      https://www.dnswl.org/, no trust
+        *      [2607:f8b0:4864:20:0:0:0:62f listed in]
+        [list.dnswl.org]
+        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.5016]
+        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
+        *      provider
+        *      [konekabiru4[at]gmail.com]
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
+        *      digit
+        *      [ronaldtyler35[at]aol.com]
+        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
+        *       in digit
+        *      [konekabiru4[at]gmail.com]
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        *  3.0 UNDISC_FREEM Undisclosed recipients + freemail reply-to
+        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
+        *      different freemails
+X-Spam-Level: *****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-__NR_getrlimit is defined only if __ARCH_WANT_SET_GET_RLIMIT is defined:
-
-  #ifdef __ARCH_WANT_SET_GET_RLIMIT
-  /* getrlimit and setrlimit are superseded with prlimit64 */
-  #define __NR_getrlimit 163
-  ...
-  #endif
-
-Some archs do not define __ARCH_WANT_SET_GET_RLIMIT, it should check
-__ARCH_WANT_SET_GET_RLIMIT before syscall(__NR_getrlimit) to fix the
-following build error:
-
-    TEST-OBJ [test_progs] user_ringbuf.test.o
-  tools/testing/selftests/bpf/prog_tests/user_ringbuf.c: In function 'kick_kernel_cb':
-  tools/testing/selftests/bpf/prog_tests/user_ringbuf.c:593:17: error: '__NR_getrlimit' undeclared (first use in this function)
-    593 |         syscall(__NR_getrlimit);
-        |                 ^~~~~~~~~~~~~~
-  tools/testing/selftests/bpf/prog_tests/user_ringbuf.c:593:17: note: each undeclared identifier is reported only once for each function it appears in
-  make: *** [Makefile:573: tools/testing/selftests/bpf/user_ringbuf.test.o] Error 1
-  make: Leaving directory 'tools/testing/selftests/bpf'
-
-Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
----
- tools/testing/selftests/bpf/prog_tests/user_ringbuf.c | 2 ++
- 1 file changed, 2 insertions(+)
-
-diff --git a/tools/testing/selftests/bpf/prog_tests/user_ringbuf.c b/tools/testing/selftests/bpf/prog_tests/user_ringbuf.c
-index 3a13e10..0550307 100644
---- a/tools/testing/selftests/bpf/prog_tests/user_ringbuf.c
-+++ b/tools/testing/selftests/bpf/prog_tests/user_ringbuf.c
-@@ -590,7 +590,9 @@ static void *kick_kernel_cb(void *arg)
- 	/* Kick the kernel, causing it to drain the ring buffer and then wake
- 	 * up the test thread waiting on epoll.
- 	 */
-+#ifdef __ARCH_WANT_SET_GET_RLIMIT
- 	syscall(__NR_getrlimit);
-+#endif
- 
- 	return NULL;
- }
--- 
-2.1.0
-
+Sprichst du ein wenig Englisch?
