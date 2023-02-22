@@ -2,131 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F073C69F958
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Feb 2023 17:53:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 72CA969F964
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Feb 2023 17:55:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232145AbjBVQxZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Feb 2023 11:53:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41976 "EHLO
+        id S232111AbjBVQzP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Feb 2023 11:55:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43546 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232111AbjBVQxY (ORCPT
+        with ESMTP id S229950AbjBVQzO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Feb 2023 11:53:24 -0500
-Received: from out30-101.freemail.mail.aliyun.com (out30-101.freemail.mail.aliyun.com [115.124.30.101])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB94C2279A
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Feb 2023 08:53:19 -0800 (PST)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R151e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045168;MF=guorui.yu@linux.alibaba.com;NM=1;PH=DS;RN=7;SR=0;TI=SMTPD_---0VcHOdvq_1677084795;
-Received: from localhost(mailfrom:GuoRui.Yu@linux.alibaba.com fp:SMTPD_---0VcHOdvq_1677084795)
-          by smtp.aliyun-inc.com;
-          Thu, 23 Feb 2023 00:53:16 +0800
-From:   "GuoRui.Yu" <GuoRui.Yu@linux.alibaba.com>
-To:     hch@lst.de, m.szyprowski@samsung.com
-Cc:     robin.murphy@arm.com, iommu@lists.linux.dev,
-        linux-kernel@vger.kernel.org, GuoRui.Yu@linux.alibaba.com,
-        linux-mm@kvack.org
-Subject: [PATCH v2] swiotlb: fix the deadlock in swiotlb_do_find_slots
-Date:   Thu, 23 Feb 2023 00:53:15 +0800
-Message-Id: <20230222165315.89135-1-GuoRui.Yu@linux.alibaba.com>
-X-Mailer: git-send-email 2.29.2.540.g3cf59784d4
+        Wed, 22 Feb 2023 11:55:14 -0500
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15B5634016;
+        Wed, 22 Feb 2023 08:55:13 -0800 (PST)
+Received: from pps.filterd (m0098396.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 31MGBxFf005450;
+        Wed, 22 Feb 2023 16:55:04 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ content-transfer-encoding : mime-version; s=pp1;
+ bh=qNaXY5aZLhTPbDWbbj6yK6XhwLtng0pp6xKbrCD/R3w=;
+ b=XqTci3SRB/Tsjd9aOkr2rO7tRx2HmQkTgPjBxEdD1AOwG6WS+8Mh3f08Twhig0id1IgD
+ /Quiwk0yO6hIzTckHLeKa7DiRxAwJ/I9PwRtizg+K8OV1/c0yLIMKwCOPv2ElcIrALh0
+ BRzPukwye62dXfyb+qOqNfJrI+Crdj8W9Zl2WzPKqgd2o0ZD19cLd6edqQ0HMXUsbLqE
+ oDfpL/aWPKs3P2kIZTiFW7grwltmsIkBGSfqkXML6YJ9AAUDhvie+nH3giBjD4kTdh/m
+ /MJ5ViyOrFLAiHxW8CW2D22hRQvqTgsvt8WcMQeXTg9q1uUQLtK+gDpHGb93CJ1T9Uqc 8g== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3nwm5k5esc-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 22 Feb 2023 16:55:03 +0000
+Received: from m0098396.ppops.net (m0098396.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 31MG07ii008643;
+        Wed, 22 Feb 2023 16:55:03 GMT
+Received: from ppma03fra.de.ibm.com (6b.4a.5195.ip4.static.sl-reverse.com [149.81.74.107])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3nwm5k5er1-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 22 Feb 2023 16:55:03 +0000
+Received: from pps.filterd (ppma03fra.de.ibm.com [127.0.0.1])
+        by ppma03fra.de.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 31MB41Oe020283;
+        Wed, 22 Feb 2023 16:55:00 GMT
+Received: from smtprelay07.fra02v.mail.ibm.com ([9.218.2.229])
+        by ppma03fra.de.ibm.com (PPS) with ESMTPS id 3ntpa648js-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 22 Feb 2023 16:55:00 +0000
+Received: from smtpav04.fra02v.mail.ibm.com (smtpav04.fra02v.mail.ibm.com [10.20.54.103])
+        by smtprelay07.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 31MGsveg55574942
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 22 Feb 2023 16:54:57 GMT
+Received: from smtpav04.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 0045820043;
+        Wed, 22 Feb 2023 16:54:57 +0000 (GMT)
+Received: from smtpav04.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 2E81120040;
+        Wed, 22 Feb 2023 16:54:56 +0000 (GMT)
+Received: from [9.171.87.157] (unknown [9.171.87.157])
+        by smtpav04.fra02v.mail.ibm.com (Postfix) with ESMTP;
+        Wed, 22 Feb 2023 16:54:56 +0000 (GMT)
+Message-ID: <1793b3cd12921b7a3fa8b3ee7e20b7cf1df1eca1.camel@linux.ibm.com>
+Subject: Re: [PATCH RESEND] PCI: s390: Fix use-after-free of PCI bus
+ resources with s390 per-function hotplug
+From:   Niklas Schnelle <schnelle@linux.ibm.com>
+To:     Bjorn Helgaas <helgaas@kernel.org>
+Cc:     Gerd Bayer <gbayer@linux.ibm.com>,
+        Gerald Schaefer <gerald.schaefer@linux.ibm.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Sven Schnelle <svens@linux.ibm.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Pierre Morel <pmorel@linux.ibm.com>,
+        Matthew Rosato <mjrosato@linux.ibm.com>,
+        linux-s390@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-pci@vger.kernel.org
+Date:   Wed, 22 Feb 2023 17:54:55 +0100
+In-Reply-To: <1a621a2b836d81d12b6f265f47d93b827e0a82df.camel@linux.ibm.com>
+References: <20230217231503.GA3425666@bhelgaas>
+         <1a621a2b836d81d12b6f265f47d93b827e0a82df.camel@linux.ibm.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.46.4 (3.46.4-1.fc37) 
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: mSPqSjbWkuASLouyegHMgEtQ5Kwz-jj2
+X-Proofpoint-GUID: a1hmJwYsil-bc-QBDZj1GGxFdhrqfe7i
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.170.22
+ definitions=2023-02-22_06,2023-02-22_02,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ impostorscore=0 suspectscore=0 clxscore=1015 mlxscore=0 mlxlogscore=620
+ adultscore=0 malwarescore=0 spamscore=0 bulkscore=0 lowpriorityscore=0
+ phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2302220145
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In general, if swiotlb is sufficient, the logic of index =
-wrap_area_index(mem, index + 1) is fine, it will quickly take a slot and
-release the area->lock; But if swiotlb is insufficient and the device
-has min_align_mask requirements, such as NVME, we may not be able to
-satisfy index == wrap and exit the loop properly. In this case, other
-kernel threads will not be able to acquire the area->lock and release
-the slot, resulting in a deadlock.
+On Mon, 2023-02-20 at 13:53 +0100, Niklas Schnelle wrote:
+> On Fri, 2023-02-17 at 17:15 -0600, Bjorn Helgaas wrote:
+> > On Tue, Feb 14, 2023 at 10:49:10AM +0100, Niklas Schnelle wrote:
+> >=20
+> >=20
+---8<---
+> > Other random questions unrelated to this patch:
+> >=20
+> >   - zpci_bus_create_pci_bus() calls pci_bus_add_devices().  Isn't that
+> >     pointless?  AFAICT, the bus->devices list is empty then.
+>=20
+> Yes I think you're right it does nothing and can be dropped.
+>=20
+> >=20
+> >   - What about zpci_bus_scan_device()?  Why does it call both
+> >     pci_bus_add_device() and pci_bus_add_devices()?  The latter will
+> >     just call the former, so it looks redundant.  And the latter is
+> >     locked but not the former?
+>=20
+> Hmm. great find. This seems to have been weird and redundant since I
+> first used that pattern in 3047766bc6ec ("s390/pci: fix enabling a
+> reserved PCI function"). I think maybe then the reason for this was
+> that prior to 960ac3626487 ("s390/pci: allow zPCI zbus without a
+> function zero") when the newly enabled is devfn =3D=3D 0 there could be
+> functions from the same bus which would not have been added yet. I'm
+> not sure though. That was definitely the idea behind the
+> zpci_bus_scan_bus() in zpci_scan_configured_devices() that is also
+> redundant now as we can now scan each function as it appears.
+>=20
+> This will definitely need to be cleaned up.
+>=20
 
-The current implementation of wrap_area_index does not involve a modulo
-operation, so adjusting the wrap to ensure the loop ends is not trivial.
-Introduce the index_nowrap variable to record the number of loops and
-exit the loop after completing the traversal.
+I'm working on cleaning this up but I'm a little confused by what
+exactly needs to be under the pci_rescan_remove lock. For example the
+pci_bus_add_device(virtfn) at the end of pci_iov_add_virtfn() doesn't
+seem to be under the lock while most calls to pci_bus_add_devices()
+are, most prominently the one in acpi_pci_root_add() which I assume is
+what is used on most x86 systems. Any hints?
 
-Backtraces:
-Other CPUs are waiting this core to exit the swiotlb_do_find_slots
-loop.
-[10199.924391] RIP: 0010:swiotlb_do_find_slots+0x1fe/0x3e0
-[10199.924403] Call Trace:
-[10199.924404]  <TASK>
-[10199.924405]  swiotlb_tbl_map_single+0xec/0x1f0
-[10199.924407]  swiotlb_map+0x5c/0x260
-[10199.924409]  ? nvme_pci_setup_prps+0x1ed/0x340
-[10199.924411]  dma_direct_map_page+0x12e/0x1c0
-[10199.924413]  nvme_map_data+0x304/0x370
-[10199.924415]  nvme_prep_rq.part.0+0x31/0x120
-[10199.924417]  nvme_queue_rq+0x77/0x1f0
-
-...
-[ 9639.596311] NMI backtrace for cpu 48
-[ 9639.596336] Call Trace:
-[ 9639.596337]
-[ 9639.596338] _raw_spin_lock_irqsave+0x37/0x40
-[ 9639.596341] swiotlb_do_find_slots+0xef/0x3e0
-[ 9639.596344] swiotlb_tbl_map_single+0xec/0x1f0
-[ 9639.596347] swiotlb_map+0x5c/0x260
-[ 9639.596349] dma_direct_map_sg+0x7a/0x280
-[ 9639.596352] __dma_map_sg_attrs+0x30/0x70
-[ 9639.596355] dma_map_sgtable+0x1d/0x30
-[ 9639.596356] nvme_map_data+0xce/0x370
-
-...
-[ 9639.595665] NMI backtrace for cpu 50
-[ 9639.595682] Call Trace:
-[ 9639.595682]
-[ 9639.595683] _raw_spin_lock_irqsave+0x37/0x40
-[ 9639.595686] swiotlb_release_slots.isra.0+0x86/0x180
-[ 9639.595688] dma_direct_unmap_sg+0xcf/0x1a0
-[ 9639.595690] nvme_unmap_data.part.0+0x43/0xc0
-
-Fixes: 1f221a0d0dbf ("swiotlb: respect min_align_mask")
-Signed-off-by: GuoRui.Yu <GuoRui.Yu@linux.alibaba.com>
-Signed-off-by: Xiaokang Hu <xiaokang.hxk@alibaba-inc.com>
----
- kernel/dma/swiotlb.c | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
-
-diff --git a/kernel/dma/swiotlb.c b/kernel/dma/swiotlb.c
-index a34c38bbe28f..638ba3ea94f4 100644
---- a/kernel/dma/swiotlb.c
-+++ b/kernel/dma/swiotlb.c
-@@ -632,7 +632,7 @@ static int swiotlb_do_find_slots(struct device *dev, int area_index,
- 	unsigned int iotlb_align_mask =
- 		dma_get_min_align_mask(dev) & ~(IO_TLB_SIZE - 1);
- 	unsigned int nslots = nr_slots(alloc_size), stride;
--	unsigned int index, wrap, count = 0, i;
-+	unsigned int index, index_nowrap = 0, wrap, count = 0, i;
- 	unsigned int offset = swiotlb_align_offset(dev, orig_addr);
- 	unsigned long flags;
- 	unsigned int slot_base;
-@@ -665,6 +665,7 @@ static int swiotlb_do_find_slots(struct device *dev, int area_index,
- 		    (slot_addr(tbl_dma_addr, slot_index) &
- 		     iotlb_align_mask) != (orig_addr & iotlb_align_mask)) {
- 			index = wrap_area_index(mem, index + 1);
-+			index_nowrap++;
- 			continue;
- 		}
- 
-@@ -680,7 +681,8 @@ static int swiotlb_do_find_slots(struct device *dev, int area_index,
- 				goto found;
- 		}
- 		index = wrap_area_index(mem, index + stride);
--	} while (index != wrap);
-+		index_nowrap += stride;
-+	} while (index_nowrap < mem->area_nslabs);
- 
- not_found:
- 	spin_unlock_irqrestore(&area->lock, flags);
--- 
-2.31.1
+Also I think my original thought here might have been a premature worry
+about PCI-to-PCI bridges thinking that adding the new device could lead
+to more devices appearing. Of course actually thinking about it a bit
+more there are quite a few other things that won't work without further
+changes if we wanted to add bridges e.g. we would need to create
+zpci_dev structs for these somewhere.
 
