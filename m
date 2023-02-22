@@ -2,103 +2,163 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E73AF69EEB2
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Feb 2023 07:15:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1D39869EEB9
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Feb 2023 07:25:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229672AbjBVGP0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Feb 2023 01:15:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36302 "EHLO
+        id S230049AbjBVGZP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Feb 2023 01:25:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41342 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229537AbjBVGPY (ORCPT
+        with ESMTP id S229546AbjBVGZN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Feb 2023 01:15:24 -0500
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0920311DD
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Feb 2023 22:15:23 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1677046523; x=1708582523;
-  h=date:from:to:cc:subject:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=ZeXJ7DB5YT2ntkxG4DK0XkeNPwdLeW8BHoIQ2ji0wqc=;
-  b=OiHME6xm6FpkkuV6GAK7KLRjVzRI7asdWMkiCOGSqGyWBgHlxiUKtsP2
-   0FAhIB0V0Uoqqy2btG7KVMFlXAWxCAEWzCPI30U1Wm9kp3uGHqqBv6Ku5
-   /eEY1b77YQUSOYrUEXJd4D78mRqpPVK0AY69Aqs4SpvpEft8EH/s25Nxi
-   Xt5fOLCjCSR0c5M2XN35PqJUwzXx1J1rbD/widQSdhsqQbyJt7dfn/LfD
-   hZXbkwYu7AeKyflw/SjxdjGmYlNaVdvo4iJC9AgtGAAqbR4HtSgQGdvYF
-   TuQBmw5PoMw/arWmsPwA2y42XhkRqqAstjkjI6zn2S2V6ndnl9b/gZHnp
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10628"; a="334210576"
-X-IronPort-AV: E=Sophos;i="5.97,318,1669104000"; 
-   d="scan'208";a="334210576"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Feb 2023 22:15:22 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10628"; a="1000881310"
-X-IronPort-AV: E=Sophos;i="5.97,318,1669104000"; 
-   d="scan'208";a="1000881310"
-Received: from jacob-builder.jf.intel.com (HELO jacob-builder) ([10.24.100.114])
-  by fmsmga005-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Feb 2023 22:15:21 -0800
-Date:   Tue, 21 Feb 2023 22:19:05 -0800
-From:   Jacob Pan <jacob.jun.pan@linux.intel.com>
-To:     "Tian, Kevin" <kevin.tian@intel.com>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        "iommu@lists.linux.dev" <iommu@lists.linux.dev>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        Lu Baolu <baolu.lu@linux.intel.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        "Jean-Philippe Brucker" <jean-philippe@linaro.com>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Will Deacon <will@kernel.org>,
-        "David Woodhouse" <dwmw2@infradead.org>,
-        "Raj, Ashok" <ashok.raj@intel.com>,
-        "Liu, Yi L" <yi.l.liu@intel.com>,
-        "Yu, Fenghua" <fenghua.yu@intel.com>,
-        "Hansen, Dave" <dave.hansen@intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        "X86 Kernel" <x86@kernel.org>,
-        "Jiang, Dave" <dave.jiang@intel.com>, jacob.jun.pan@linux.intel.com
-Subject: Re: [PATCH v3 3/5] iommu/sva: Stop using ioasid_set for SVA
-Message-ID: <20230221221905.4759b2ac@jacob-builder>
-In-Reply-To: <BN9PR11MB5276EC1F0926256D0E8F05F58CAA9@BN9PR11MB5276.namprd11.prod.outlook.com>
-References: <20230216235951.3573059-1-jacob.jun.pan@linux.intel.com>
-        <20230216235951.3573059-4-jacob.jun.pan@linux.intel.com>
-        <BN9PR11MB5276EC1F0926256D0E8F05F58CAA9@BN9PR11MB5276.namprd11.prod.outlook.com>
-Organization: OTC
-X-Mailer: Claws Mail 3.17.5 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+        Wed, 22 Feb 2023 01:25:13 -0500
+Received: from mail-pf1-x444.google.com (mail-pf1-x444.google.com [IPv6:2607:f8b0:4864:20::444])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A6EE305DD;
+        Tue, 21 Feb 2023 22:25:11 -0800 (PST)
+Received: by mail-pf1-x444.google.com with SMTP id fb30so3798047pfb.13;
+        Tue, 21 Feb 2023 22:25:11 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1677047111;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=ZUkSCOgP1pQ/sRF4XzTkmdJMDTT5vWZNyAKvDSz1t10=;
+        b=hLI46EWN7KGmRixgMRTVId+u3y/Tel42OaC4VAX16Yr/6z8v/9KQiZ5DXIwO19ylqr
+         RUpmopnsLWU/Kn4LbS7yORtlIDxa1n79idbyK5bm6owFKRKpRPfrsbX3qdqBOAcR/c1C
+         c1oFcu0dZKqt5a0Cj8nXBohaYRX01PI3Gmgyop8hexoSuxvELZlKGPUT5wGUeX5fZ7zt
+         699gGqLylIOqzaMpxpBFSbAR4+P3zEbxiUcCPk6PLGnetRInkpZXjXyxI0yWJFeEcfj9
+         kpIN12YyXUpvhUAejx05i4zmerxx4UhxbrAzP+Uxrzx44Zx1W1YqZVPYyXkqVqJ90QfC
+         Cpfg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1677047111;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=ZUkSCOgP1pQ/sRF4XzTkmdJMDTT5vWZNyAKvDSz1t10=;
+        b=U0Mrh+GiAsAR5v/TMHyA9HseSM1z4LmahtJPGuVjZJgoeTjI+kqNC8RRw8CQf6d9TD
+         zQ1xvPp5cjx99oOHqtMCZvUfIv0bNgho56QGO8TLg89BUG+8cLRH5peWbA1HgvB1yPF2
+         Uevj52QL3lhwcLy5KfW1SEJAMPtTYATdUDnJPztVSvKinBYY1NizWiiQ1IGtkDClPjny
+         MzQL22uTOhraZGq4Phryeo3XtYE6uwM9lgXSQ5Kw2ndb+I0TYKn38urqeoRJyS+gbEf/
+         WMqvixv+aJ3/wST5l0Z39fcxCWL2HzHou+86fxXIn6tOuDmcCO+SYvTwcm3K9vORzD02
+         F+EA==
+X-Gm-Message-State: AO0yUKW2kq2441sdJF0ajb0AW62gY8u9Y1UjZw7NiEfE4xsUfJL2PPX3
+        Sk65GK4GoXUSSa8SjlsuhwU=
+X-Google-Smtp-Source: AK7set84Y8A/lfsQN2SKJ4qey11jx5G1ybF0RVr3OjO0JbqTciiwRKmVtz7WDmfQlgj8zJGSkXaO9A==
+X-Received: by 2002:a05:6a00:23c3:b0:5a8:c179:7b02 with SMTP id g3-20020a056a0023c300b005a8c1797b02mr7736218pfc.1.1677047110766;
+        Tue, 21 Feb 2023 22:25:10 -0800 (PST)
+Received: from hbh25y.. ([129.227.150.140])
+        by smtp.gmail.com with ESMTPSA id x16-20020aa793b0000000b005a8de0f4c76sm5654758pff.17.2023.02.21.22.25.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 21 Feb 2023 22:25:10 -0800 (PST)
+From:   Hangyu Hua <hbh25y@gmail.com>
+To:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, gerrit@erg.abdn.ac.uk, ian.mcdonald@jandi.co.nz
+Cc:     dccp@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Hangyu Hua <hbh25y@gmail.com>
+Subject: [PATCH v2] net: dccp: delete redundant ackvec record in dccp_insert_options()
+Date:   Wed, 22 Feb 2023 14:24:57 +0800
+Message-Id: <20230222062457.630849-1-hbh25y@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Kevin,
+A useless record can be insert into av_records when dccp_insert_options()
+fails after dccp_insert_option_ackvec(). Repeated triggering may cause
+av_records to have a lot of useless record with the same avr_ack_seqno.
 
-On Wed, 22 Feb 2023 02:22:48 +0000, "Tian, Kevin" <kevin.tian@intel.com>
-wrote:
+Fixes: 8b7b6c75c638 ("dccp: Integrate feature-negotiation insertion code")
+Signed-off-by: Hangyu Hua <hbh25y@gmail.com>
+---
 
-> > From: Jacob Pan <jacob.jun.pan@linux.intel.com>
-> > Sent: Friday, February 17, 2023 8:00 AM
-> >
-> > +	ret = ida_alloc_range(&iommu_global_pasid_ida, min, max,
-> > GFP_KERNEL);
-> > +	if (ret < min)
-> > +		goto out;  
-> 
-> ioasid_alloc() currently uses GFP_ATOMIC.
-> 
-> since this is kind of a replacement w/o functional impact, it'd be cleaner
-> from bisect p.o.v. to have a separate patch changing GFP_ATOMIC
-> to GFP_KERNEL in ioasid_alloc() and then this patch.
-> 
-makes sense,
+	v2: add a new function to delete the redundant ackvec record
 
-Thanks,
+ net/dccp/ackvec.c  | 17 +++++++++++++++++
+ net/dccp/ackvec.h  |  1 +
+ net/dccp/options.c |  8 ++++++--
+ 3 files changed, 24 insertions(+), 2 deletions(-)
 
-Jacob
+diff --git a/net/dccp/ackvec.c b/net/dccp/ackvec.c
+index c4bbac99740d..59b7209c6194 100644
+--- a/net/dccp/ackvec.c
++++ b/net/dccp/ackvec.c
+@@ -273,6 +273,23 @@ void dccp_ackvec_input(struct dccp_ackvec *av, struct sk_buff *skb)
+ 	}
+ }
+ 
++/**
++ * dccp_ackvec_delete  -  delete an Ack Vector record
++ * @av: Ack Vector records to delete
++ * @ackno: Ack Vector which needs to be deleted
++ */
++void dccp_ackvec_delete(struct dccp_ackvec *av, const u64 ackno)
++{
++	struct dccp_ackvec_record *avr;
++
++	avr = dccp_ackvec_lookup(&av->av_records, ackno);
++	if (!avr)
++		return;
++
++	list_del(&avr->avr_node);
++	kmem_cache_free(dccp_ackvec_record_slab, avr);
++}
++
+ /**
+  * dccp_ackvec_clear_state  -  Perform house-keeping / garbage-collection
+  * @av: Ack Vector record to clean
+diff --git a/net/dccp/ackvec.h b/net/dccp/ackvec.h
+index d2c4220fb377..73636971448e 100644
+--- a/net/dccp/ackvec.h
++++ b/net/dccp/ackvec.h
+@@ -106,6 +106,7 @@ struct dccp_ackvec *dccp_ackvec_alloc(const gfp_t priority);
+ void dccp_ackvec_free(struct dccp_ackvec *av);
+ 
+ void dccp_ackvec_input(struct dccp_ackvec *av, struct sk_buff *skb);
++void dccp_ackvec_delete(struct dccp_ackvec *av, const u64 ackno);
+ int dccp_ackvec_update_records(struct dccp_ackvec *av, u64 seq, u8 sum);
+ void dccp_ackvec_clear_state(struct dccp_ackvec *av, const u64 ackno);
+ u16 dccp_ackvec_buflen(const struct dccp_ackvec *av);
+diff --git a/net/dccp/options.c b/net/dccp/options.c
+index d24cad05001e..88c966111662 100644
+--- a/net/dccp/options.c
++++ b/net/dccp/options.c
+@@ -549,6 +549,7 @@ static void dccp_insert_option_padding(struct sk_buff *skb)
+ int dccp_insert_options(struct sock *sk, struct sk_buff *skb)
+ {
+ 	struct dccp_sock *dp = dccp_sk(sk);
++	struct dccp_ackvec *av = dp->dccps_hc_rx_ackvec;
+ 
+ 	DCCP_SKB_CB(skb)->dccpd_opt_len = 0;
+ 
+@@ -577,16 +578,19 @@ int dccp_insert_options(struct sock *sk, struct sk_buff *skb)
+ 
+ 	if (dp->dccps_hc_rx_insert_options) {
+ 		if (ccid_hc_rx_insert_options(dp->dccps_hc_rx_ccid, sk, skb))
+-			return -1;
++			goto delete_ackvec;
+ 		dp->dccps_hc_rx_insert_options = 0;
+ 	}
+ 
+ 	if (dp->dccps_timestamp_echo != 0 &&
+ 	    dccp_insert_option_timestamp_echo(dp, NULL, skb))
+-		return -1;
++		goto delete_ackvec;
+ 
+ 	dccp_insert_option_padding(skb);
+ 	return 0;
++delete_ackvec:
++	dccp_ackvec_delete(av, DCCP_SKB_CB(skb)->dccpd_seq);
++	return -1;
+ }
+ 
+ int dccp_insert_options_rsk(struct dccp_request_sock *dreq, struct sk_buff *skb)
+-- 
+2.34.1
+
