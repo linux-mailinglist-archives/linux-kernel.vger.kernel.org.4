@@ -2,216 +2,190 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 59D6E69FCDF
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Feb 2023 21:13:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 82BAC69FCE8
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Feb 2023 21:14:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232133AbjBVUNv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Feb 2023 15:13:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57566 "EHLO
+        id S232533AbjBVUOF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Feb 2023 15:14:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57832 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231764AbjBVUNs (ORCPT
+        with ESMTP id S232409AbjBVUN5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Feb 2023 15:13:48 -0500
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7926D360A4
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Feb 2023 12:13:37 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1677096817; x=1708632817;
-  h=date:from:to:cc:subject:message-id:references:
-   in-reply-to:mime-version;
-  bh=+mQuEzIwOH6syZI866sXbqnLLdQDokrmjbDbLMwiZrw=;
-  b=SDGCLMeDeJNB3t+MFt5iDboYFxFbrb/iRGXUDRCdKDAcvazxMQ8qnPyA
-   ovgyIpogm91RXRQqf3i6+3Gt9hAaKGjOrEBXsDUv3XL3e3B5TMMEze6o/
-   sarYljV9Ujcir2/f8XsaCf+E/xN6udEjUzq4hzPKIAFwLrduMSJHdIVfe
-   petue1ZuF4bqWsozSvDoqJMhS1P4k1T8/1YQVgcBld2cPsBsC2K4HsQD9
-   2DxF2sZTJ4Io2TF8YfUEETMsyNOq1LPCIC6Vg8UNzWNs6N9mzFmhBkwLL
-   6Wslk21vwqqwAnECzhG9MqNkSAOAofmNKF+vbH+UrvS6J1tPQG0yNFoWR
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10629"; a="321174423"
-X-IronPort-AV: E=Sophos;i="5.97,319,1669104000"; 
-   d="scan'208";a="321174423"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Feb 2023 12:13:36 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10629"; a="649686927"
-X-IronPort-AV: E=Sophos;i="5.97,319,1669104000"; 
-   d="scan'208";a="649686927"
-Received: from orsmsx602.amr.corp.intel.com ([10.22.229.15])
-  by orsmga006.jf.intel.com with ESMTP; 22 Feb 2023 12:13:35 -0800
-Received: from orsmsx612.amr.corp.intel.com (10.22.229.25) by
- ORSMSX602.amr.corp.intel.com (10.22.229.15) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.16; Wed, 22 Feb 2023 12:13:33 -0800
-Received: from orsmsx610.amr.corp.intel.com (10.22.229.23) by
- ORSMSX612.amr.corp.intel.com (10.22.229.25) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.16; Wed, 22 Feb 2023 12:13:33 -0800
-Received: from ORSEDG601.ED.cps.intel.com (10.7.248.6) by
- orsmsx610.amr.corp.intel.com (10.22.229.23) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.16 via Frontend Transport; Wed, 22 Feb 2023 12:13:33 -0800
-Received: from NAM11-CO1-obe.outbound.protection.outlook.com (104.47.56.172)
- by edgegateway.intel.com (134.134.137.102) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.16; Wed, 22 Feb 2023 12:13:33 -0800
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=IzCzMwAuIwnsFL4dqxhLdk9e59AuM5Z7clYLcsSpJvP71IRPcjS9WqhL7D9A3UgRRV1vyk2/FGNNZR4AF9ISnr4pI5TvL+v0eL8nMpRy4CvEUxnhonKEIjwoC49214GXNPXVowcg2vjK2ghgjw+zmJfezmB7O0YhJOndhS1vIYbxkkMcncFMm0nkM01NOPA2EivbOhz694bneB3EuihBjUalYyxLgcmZ15gtUONeUiVGocrbjJG623IqWRcBopNjSPfhfx11BG7Rab5dWPw303enndjtu/frqWu5sz2XuBZas5mblSrIhN1ulr2tWNzfrwNDMD4P/arhKMuqdATazQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=KsNN53pfPKfpugilCejF7HZYktP/+FMP4LNO7zoJjBw=;
- b=XTEngew9M1/oV7zr0FRn+3lNi8Yp/hQfDKBosbylQL9oYLmoVSt6zv2UGc2RdvUfk0QRxhK4wA9cYTIWybPSzjKILXMCUZ9I2kGHqUmzsRT+JeYjZTBD1YE65WtowInlLEjiP3M2r0Jv9S89k84RKYRqHM2m7EUNwZ+ZACKF4fDyPPfSxxcZyY5QAXypOeYTFOlETWgEVR0yLO4LIda573U/9D2BN8Tlu368JhLs1QaBj4QOP7PMc63ygi/U2LSHoCGFBFH42ub+UxDrHUFK6krCOAlCy/Sfn0sEbv/Jm6deOLrCDMyOCP4FSnf8PGpb6tjdmYzwNjRe7nQsymPg1Q==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from MN0PR11MB6059.namprd11.prod.outlook.com (2603:10b6:208:377::9)
- by CO1PR11MB5123.namprd11.prod.outlook.com (2603:10b6:303:94::13) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6111.21; Wed, 22 Feb
- 2023 20:13:30 +0000
-Received: from MN0PR11MB6059.namprd11.prod.outlook.com
- ([fe80::3bd5:710c:ebab:6158]) by MN0PR11MB6059.namprd11.prod.outlook.com
- ([fe80::3bd5:710c:ebab:6158%9]) with mapi id 15.20.6111.020; Wed, 22 Feb 2023
- 20:13:30 +0000
-Date:   Wed, 22 Feb 2023 15:13:24 -0500
-From:   Rodrigo Vivi <rodrigo.vivi@intel.com>
-To:     Werner Sembach <wse@tuxedocomputers.com>
-CC:     <jani.nikula@linux.intel.com>, <joonas.lahtinen@linux.intel.com>,
-        <tvrtko.ursulin@linux.intel.com>, <airlied@gmail.com>,
-        <daniel@ffwll.ch>, <jose.souza@intel.com>,
-        <jouni.hogander@intel.com>, <mika.kahola@intel.com>,
-        <ville.syrjala@linux.intel.com>, <lucas.demarchi@intel.com>,
-        <Diego.SantaCruz@spinetix.com>, <intel-gfx@lists.freedesktop.org>,
-        <dri-devel@lists.freedesktop.org>, <linux-kernel@vger.kernel.org>
-Subject: Re: [Intel-gfx] [PATCH 2/2] Apply quirk to disable PSR 2 on Tongfang
- PHxTxX1 and PHxTQx1
-Message-ID: <Y/Z3ZJjYQIKb2LQ0@intel.com>
-References: <20230222141755.1060162-1-wse@tuxedocomputers.com>
- <20230222141755.1060162-3-wse@tuxedocomputers.com>
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <20230222141755.1060162-3-wse@tuxedocomputers.com>
-X-ClientProxiedBy: SJ0PR13CA0119.namprd13.prod.outlook.com
- (2603:10b6:a03:2c5::34) To MN0PR11MB6059.namprd11.prod.outlook.com
- (2603:10b6:208:377::9)
+        Wed, 22 Feb 2023 15:13:57 -0500
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 5E63859E3
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Feb 2023 12:13:45 -0800 (PST)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id B3A89FEC;
+        Wed, 22 Feb 2023 12:14:27 -0800 (PST)
+Received: from [192.168.178.6] (unknown [172.31.20.19])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 920343F703;
+        Wed, 22 Feb 2023 12:13:41 -0800 (PST)
+Message-ID: <36bfd828-5af7-3bcb-d642-3361820c6071@arm.com>
+Date:   Wed, 22 Feb 2023 21:13:35 +0100
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: MN0PR11MB6059:EE_|CO1PR11MB5123:EE_
-X-MS-Office365-Filtering-Correlation-Id: cd95df63-3d6b-4678-e4b5-08db15114401
-X-LD-Processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: lTef+FFgxdWUUqU6Vr4Y0jSvjDhFZxNlYqsUkp62Hg3m3HlVP7KkyDO/Qm+GdVbqOUIxBNR/ZUE5iHocauTKAZqJJT+IEGvdcII2+IEK0o/4vPFUIxV+FQq0o3pED5bNSstMCggoEMSdHUlIojwNzlgl2b9hOpvwJg3sv4GwlutBpfWgQht8VYkOqItvPmxCz/Oryh4SiHAa2dAYLLc7H4SoTIHpWKUmUaq0hr56aPzbbQ15hTVEFbPxd7NG5neB89+b7y3IzVGprh89Nrafzibjn8gINRkUuXy727OXGRecAJDDOCUwN0nOCK6XxWCOxM16vllMX6T+VOMdGxpOpN82oiJWRj4NUGfq57agUg85EzA6Zr2S3NWsoZvehr3rQGU0SJSJgAMdls6eCzWvWKVAQK830s56JBkbGEdfBLVzwb/4LY41zk3NSlZqodxMPrERh0W7EU0ACKyl2XkrIuaswhabznEENWpwjGNJrdvijWnS6FhrjHGzT1K4ObgnOlCXDTIZu3OqQJ+W0LMVfEynreCgHHJ2Bm/v2peRRzlpcOhJ9NIUqYebzx2IymzTpg8ACQYj/oH53EwVX4QXiREAvcaMIT6+MwRzoJiRoaUekEj3q3re5IZvy/DR8aLZfO4jH45jZ25Vow6ffkqYHQ==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN0PR11MB6059.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(6029001)(366004)(346002)(396003)(376002)(39860400002)(136003)(451199018)(36756003)(83380400001)(2616005)(316002)(6666004)(6486002)(478600001)(6512007)(26005)(7416002)(186003)(41300700001)(6506007)(44832011)(2906002)(86362001)(8936002)(5660300002)(38100700002)(8676002)(66946007)(66556008)(4326008)(82960400001)(66476007)(6916009);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?7eS7+D+lIZwJezEx1LGpJFJco5oMEnic4rvGkN3RyKMGrajlWUjBEGMteQkr?=
- =?us-ascii?Q?JueVlTSg0PPtRVe1fzXDp2H/dxkVP75v1Xdlh/IFT9hlMX9D8+lJngdZ7RG/?=
- =?us-ascii?Q?lAsnmrHplwp95LsAdc42t7QUVhASOHmCMen3cJGzili2f6Hp7bYkliZaaZeU?=
- =?us-ascii?Q?TrIsLv2A3FkzSfXuIhnNDB/QKijl2QOGLti+3xyThkxVE5VDZkqv1D44oDDZ?=
- =?us-ascii?Q?KSE/bYoK4nkkrWh2V6pMhO1bTomIxYpEuinPDONwtHm0PAgdIr2/9RQtR5Mb?=
- =?us-ascii?Q?wHZG8/JEBYflo/uzABYAYFC0oCK2DerSlU+oQN7DlcZY+qZ/4jMnXWII/80Y?=
- =?us-ascii?Q?fCRQMGJYSp55XDjYT09T5R01Zh2ldtzUwPoQgOPkSKRYdb6MQdV17zFuysi5?=
- =?us-ascii?Q?JdWAIS2ZoY3NoE7m9KL9IqXRAowHeLdNeEWIyzZ9hLopObCA+sYmV64HHen4?=
- =?us-ascii?Q?kyiHg0BZ4q8vdF+GNDRVvh9RTqKqlrPP9lt7/ENjDp9xOTCY1vMut4k/nu1y?=
- =?us-ascii?Q?nuv8ZMZL51nWhuJsluDQsZHzh95wdNExZHOlVOapi7yaoTHGAW4l8WZsY6Lh?=
- =?us-ascii?Q?C374UhiTZ43dLWY6Ddy2WzRutkkK/7X9TtnejfW5TRviBLbDM1pFTSqXaW/F?=
- =?us-ascii?Q?ykoVWDTLkepEoe4t3bL4iOybSMH3s3xHsUxUgIfxuEsUwyRMj8Amh725SbcL?=
- =?us-ascii?Q?6xhQtCLkizO4tVIn1yQD3gHsRGbWhiaROLbJrPohpOfV/Yb2qaBdgu5TEkEs?=
- =?us-ascii?Q?/55Sdvu9LR3xm1hKSQjdnAGgGZNGSRxBfWY+2K82fnMSjGYJNTTHm/Rq1rjD?=
- =?us-ascii?Q?WVL7wQIbwNBW8eQurp6v8KBp3qe+Rx25LCuStQmpcgKbVy9F3BQ/7/n52xEl?=
- =?us-ascii?Q?EAuCTJK+n0AHz37IZVN9fjnl+gjJ81Clg1b/2xNxYeCz+9Hpsvqep8GcuIl7?=
- =?us-ascii?Q?O7JFi/idL14ZKRCy40SZS4wfAwBytY4xudVNp91l9u2WIh95CZoZzksw985Y?=
- =?us-ascii?Q?vVinIwCrGaPB1Yf8YpA0bQ2YZcx9oHdYXQeh4i+QpkUriuUsmWu1qmhtFzd8?=
- =?us-ascii?Q?AjlGYHSoQpJ8DiMNiDIefeGnpEkXs4VM6i4eTkx3QZwM8ULiN3lRq4AjPA0+?=
- =?us-ascii?Q?gh+XkdLEb6XMwuSlXz/r7I+eaCw4O9qoKa8RxfUVoiTNj7EQJGgCqbgSRsgA?=
- =?us-ascii?Q?LNpZMUTYjPL0Ho2pzFh6/atuwEbzNtTaMZhgbx5l7EbBVck7R8Hj21Vbm1tB?=
- =?us-ascii?Q?sT83QUw8jbtWuwu/yA2SIXGcl9YHlwRzO+Hq5giXNILFRjSYn+f4OhS7smS4?=
- =?us-ascii?Q?QqnPso0Ar5clmOAC64aQpT4PmAbv2fNdgGsNUweZM1SK9dpEB/4Fl8XWZqrQ?=
- =?us-ascii?Q?4qrQZRRVgeq47djPQnOqTYfb3vHvNRTCn+T8AvhzB5fdoNwvNlqOsAbX/0+1?=
- =?us-ascii?Q?CTxJANyS+MXF90B3xuWrB+iMt1+dyUBygdvqAwcmuyKrDWxhjBvnTPzhjd4/?=
- =?us-ascii?Q?DaIV7ol9wQTxip3nW4oyDvyQ05tKdEgOiQuw/rzMW3HBlwIuUjPZrQqmoVUP?=
- =?us-ascii?Q?rEeRghHb3Jlqg5p9/+K3ObEPKl/dfJemzV/Xt4EFQ+6GvuYhqZzTvv+mEqrS?=
- =?us-ascii?Q?qw=3D=3D?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: cd95df63-3d6b-4678-e4b5-08db15114401
-X-MS-Exchange-CrossTenant-AuthSource: MN0PR11MB6059.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 22 Feb 2023 20:13:30.6422
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: I8C9OZ4lHNghSWcNIk/j5cxhBYO9BVHyZ4mozdZt6OJn12lDf3lqGqm6rJxBF6nTILz8JMwlBM+AltttwmjlgA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CO1PR11MB5123
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [RFC PATCH 0/1] sched/pelt: Change PELT halflife at runtime
+Content-Language: en-US
+To:     Vincent Guittot <vincent.guittot@linaro.org>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Qais Yousef <qyousef@layalina.io>,
+        Kajetan Puchalski <kajetan.puchalski@arm.com>,
+        Jian-Min Liu <jian-min.liu@mediatek.com>,
+        Ingo Molnar <mingo@kernel.org>,
+        Morten Rasmussen <morten.rasmussen@arm.com>,
+        Vincent Donnefort <vdonnefort@google.com>,
+        Quentin Perret <qperret@google.com>,
+        Patrick Bellasi <patrick.bellasi@matbug.net>,
+        Abhijeet Dharmapurikar <adharmap@quicinc.com>,
+        Qais Yousef <qais.yousef@arm.com>,
+        linux-kernel@vger.kernel.org,
+        Jonathan JMChen <jonathan.jmchen@mediatek.com>
+References: <20220829055450.1703092-1-dietmar.eggemann@arm.com>
+ <0f82011994be68502fd9833e499749866539c3df.camel@mediatek.com>
+ <YzVpqweg21yIn30A@hirez.programming.kicks-ass.net>
+ <YzV9Gejo/+DL3UjK@e126311.manchester.arm.com>
+ <YzV/yT6OYMgaq0kD@hirez.programming.kicks-ass.net>
+ <YzWuq5ShtJC6KWqe@e126311.manchester.arm.com>
+ <Y2kLA8x40IiBEPYg@hirez.programming.kicks-ass.net>
+ <20221108194843.i4qckcu7zwqstyis@airbuntu>
+ <Y2vMBWpPlIArwnI7@hirez.programming.kicks-ass.net>
+ <424e2c81-987d-f10e-106d-8b4c611768bc@arm.com>
+ <CAKfTPtD0ZOndFef3-JxBn3G9tcX=cZEObjHZ0iqiVTJz7+QrmQ@mail.gmail.com>
+ <249816c9-c2b5-8016-f9ce-dab7b7d384e4@arm.com>
+ <CAKfTPtA4gSZAmi3FtU2Y57cuqCzC5LCR=+7Q8Xh=VtkbfaQP5Q@mail.gmail.com>
+From:   Dietmar Eggemann <dietmar.eggemann@arm.com>
+In-Reply-To: <CAKfTPtA4gSZAmi3FtU2Y57cuqCzC5LCR=+7Q8Xh=VtkbfaQP5Q@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Feb 22, 2023 at 03:17:55PM +0100, Werner Sembach wrote:
-> On these Barebones PSR 2 is recognized as supported but is very buggy:
-> - Upper third of screen does sometimes not updated, resulting in
-> disappearing cursors or ghosts of already closed Windows saying behind.
-> - Approximately 40 px from the bottom edge a 3 pixel wide strip of randomly
-> colored pixels is flickering.
+On 20/02/2023 14:54, Vincent Guittot wrote:
+> On Fri, 17 Feb 2023 at 14:54, Dietmar Eggemann <dietmar.eggemann@arm.com> wrote:
+>>
+>> On 09/02/2023 17:16, Vincent Guittot wrote:
+>>> On Tue, 7 Feb 2023 at 11:29, Dietmar Eggemann <dietmar.eggemann@arm.com> wrote:
+>>>>
+>>>> On 09/11/2022 16:49, Peter Zijlstra wrote:
+>>>>> On Tue, Nov 08, 2022 at 07:48:43PM +0000, Qais Yousef wrote:
+>>>>>> On 11/07/22 14:41, Peter Zijlstra wrote:
+>>>>>>> On Thu, Sep 29, 2022 at 03:41:47PM +0100, Kajetan Puchalski wrote:
+
+[...]
+
+>>> Graphics Pipeline short task, hasn't uclamp_min been designed for and
+>>> a better solution ?
+>>
+>> Yes, it has. I'm not sure how feasible this is to do for all tasks
+>> involved. I'm thinking about the Binder threads here for instance.
 > 
-> PSR 1 is working fine however.
+> Yes, that can probably not help for all threads but some system
+> threads like surfaceflinger and graphic composer should probably
+> benefit from min uclamp
 
-I wonder if this is really about the panel's PSR2 or about the userspace
-there not marking the dirtyfb? I know I know... it is not userspace fault...
+Yes, and it looks like that the Android version I'm using
+SQ1D.220205.004 (Feb '22) (automatic system updates turned off) is
+already using uclamp_min != 0 for tasks like UI thread. It's not one
+particular value but different values  from [0 .. 512] over the runtime
+of a Jankbench iteration. I have to have a closer look.
 
-But I wonder if the case you got here highlights the fact that we have
-a substantial bug in the i915 itself in regards to PSR2 API.
+[...]
 
-Jose, Jouni, ideas on how to check what could be happening here?
-
-oh, btw, Werner, do we have an  open gilab issue for this?
-
-Thanks,
-Rodrigo.
-
+>> Max_frame_duration:
+>> +------------------------------------------+------------+
+>> |             kernel                       |    value   |
+>> +------------------------------------------+------------+
+>> |            base-a30b17f016b0             | 147.571352 |
+>> |                pelt-hl-m2                | 119.416351 |
+>> |                pelt-hl-m4                | 96.473412  |
+>> |       scaled_util_est_faster_freq        | 126.646506 |
+>> | max_util_scaled_util_est_faster_rbl_freq | 157.974501 | <-- !!!
+>> +------------------------------------------+------------+
+>>
+>> Mean_frame_duration:
+>> +------------------------------------------+-------+-----------+
+>> |                  kernel                  | value | perc_diff |
+>> +------------------------------------------+-------+-----------+
+>> |            base-a30b17f016b0             | 14.7  |   0.0%    |
+>> |                pelt-hl-m2                | 13.6  |   -7.5%   |
+>> |                pelt-hl-m4                | 13.0  |  -11.68%  |
+>> |       scaled_util_est_faster_freq        | 13.7  |  -6.81%   |
+>> | max_util_scaled_util_est_faster_rbl_freq | 12.1  |  -17.85%  |
+>> +------------------------------------------+-------+-----------+
+>>
+>> Jank percentage (Jank deadline 16ms):
+>> +------------------------------------------+-------+-----------+
+>> |                  kernel                  | value | perc_diff |
+>> +------------------------------------------+-------+-----------+
+>> |            base-a30b17f016b0             |  1.8  |   0.0%    |
+>> |                pelt-hl-m2                |  1.8  |  -4.91%   |
+>> |                pelt-hl-m4                |  1.2  |  -36.61%  |
+>> |       scaled_util_est_faster_freq        |  1.3  |  -27.63%  |
+>> | max_util_scaled_util_est_faster_rbl_freq |  0.8  |  -54.86%  |
+>> +------------------------------------------+-------+-----------+
+>>
+>> Power usage [mW] (total - all CPUs):
+>> +------------------------------------------+-------+-----------+
+>> |             kernel                       | value | perc_diff |
+>> +------------------------------------------+-------+-----------+
+>> |            base-a30b17f016b0             | 144.4 |   0.0%    |
+>> |                pelt-hl-m2                | 141.6 |  -1.97%   |
+>> |                pelt-hl-m4                | 163.2 |  12.99%   |
+>> |       scaled_util_est_faster_freq        | 132.3 |  -8.41%   |
+>> | max_util_scaled_util_est_faster_rbl_freq | 133.4 |  -7.67%   |
+>> +------------------------------------------+-------+-----------+
+>>
+>> There is a regression in `Max_frame_duration` but `Mean_frame_duration`,
+>> `Jank percentage` and `Power usage` are better.
 > 
-> Signed-off-by: Werner Sembach <wse@tuxedocomputers.com>
-> Cc: <stable@vger.kernel.org>
-> ---
->  drivers/gpu/drm/i915/display/intel_quirks.c | 8 ++++++++
->  1 file changed, 8 insertions(+)
-> 
-> diff --git a/drivers/gpu/drm/i915/display/intel_quirks.c b/drivers/gpu/drm/i915/display/intel_quirks.c
-> index ce6d0fe6448f5..eeb32d3189f5c 100644
-> --- a/drivers/gpu/drm/i915/display/intel_quirks.c
-> +++ b/drivers/gpu/drm/i915/display/intel_quirks.c
-> @@ -65,6 +65,10 @@ static void quirk_no_pps_backlight_power_hook(struct drm_i915_private *i915)
->  	drm_info(&i915->drm, "Applying no pps backlight power quirk\n");
->  }
->  
-> +/*
-> + * Tongfang PHxTxX1 and PHxTQx1 devices have support for PSR 2 but it is broken
-> + * on Linux. PSR 1 however works just fine.
-> + */
->  static void quirk_no_psr2(struct drm_i915_private *i915)
->  {
->  	intel_set_quirk(i915, QUIRK_NO_PSR2);
-> @@ -205,6 +209,10 @@ static struct intel_quirk intel_quirks[] = {
->  	/* ECS Liva Q2 */
->  	{ 0x3185, 0x1019, 0xa94d, quirk_increase_ddi_disabled_time },
->  	{ 0x3184, 0x1019, 0xa94d, quirk_increase_ddi_disabled_time },
-> +
-> +	/* Tongfang PHxTxX1 and PHxTQx1/TUXEDO InfinityBook 14 Gen6 */
-> +	{ 0x9a49, 0x1d05, 0x1105, quirk_no_psr2 },
-> +	{ 0x9a49, 0x1d05, 0x114c, quirk_no_psr2 },
->  };
->  
->  void intel_init_quirks(struct drm_i915_private *i915)
-> -- 
-> 2.34.1
-> 
+> The max frame duration is interesting. Could it be the very 1st frame
+> of the test ?
+> It's interesting that it's even worse than baseline whereas it should
+> take the max of baseline and runnable_avg
+
+Since you asked in the following email: I just used the boosting for CPU
+frequency selection (from sugov_get_util()). I added the the `_freq`
+suffix in the kernel name to indicate this.
+
+I don't have any helpful `ftrace` or `perfetto` data for these test runs
+though.
+
+That's why I ran another iteration with perfetto on
+`max_util_scaled_util_est_faster_rbl_freq`.
+
+`Max frame duration` = 121ms (< 158ms but this was over 10 iterations)
+happened at the beginning of the 3/8 `List View Fling` episode.
+
+The UI thread (com.android.benchmark) runs on CPU1. Just before the
+start of this episode the CPU freq is 0.3Ghz. It takes 43ms for the CPU
+freq to go up to 1.1Ghz.
+
+  oriole:/sys # cat devices/system/cpu/cpu1/cpu_capacity
+
+  124
+
+  oriole:/sys # cat devices/system/cpu/cpu1/cpufreq
+  /scaling_available_frequencies
+
+  300000 574000 738000 930000 1098000 1197000 1328000 1401000 1598000
+  1704000 1803000
+
+So the combination of little CPU and low CPU frequency is the reason
+why. But I can't see how using `max(max(util_avg, util_est.enq),
+rbl_avg) can make `max frame duration` worse?
+Don't understand how asking for higher CPU frequencies in contention
+favors the UI thread being scheduled on little CPUs at the beginning of
+an episode?
+
+Also the particular uclamp_min settings of the runnable tasks at this
+moment can have an influence on this `max frame duration` value.
+
+[...]
