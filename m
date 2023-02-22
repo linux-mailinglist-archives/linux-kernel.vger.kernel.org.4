@@ -2,85 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8366A69F248
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Feb 2023 10:56:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 97B9E69F20A
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Feb 2023 10:43:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231972AbjBVJ4E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Feb 2023 04:56:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57032 "EHLO
+        id S231376AbjBVJnM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Feb 2023 04:43:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41814 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230086AbjBVJzq (ORCPT
+        with ESMTP id S230507AbjBVJmt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Feb 2023 04:55:46 -0500
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6835759E9;
-        Wed, 22 Feb 2023 01:54:26 -0800 (PST)
-From:   Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1677058288;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=pDlMfmqhMdFX7PRz+dvs1mIXbK5q+u+WakKLZ5Y6UeM=;
-        b=MmTYkqREjEEVkGUJzQG0PK3n3AgJ/yU1gF+RJ0cEUZgk95syy3ZK1X59ygzmbsgETDzhXH
-        ev/b4jQ3MlmenDMU/FmI9nyKDj+1XeZfvKb6gJh8HYMo03pCq8Oez2rGCAKViHzMCpKlAC
-        IX5ySirflmqyzY6uBaZ11IgvIECuZy98GDFaSklh9kmC9A2kxwznYm6ZrBMZKxQSrfZ2xG
-        e+B3dclHUZHK0ONRdJjC3xcfJcxhUed+nmEts77bw6J9cHdqrCArOPRPuiBZj/kUm6NHfo
-        hxfOYP7Dqg4SuX+8LqZx0HxDE0vCBviVwdRY+fz2UvF5kw21P5qV3yAgcO/OSg==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1677058288;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=pDlMfmqhMdFX7PRz+dvs1mIXbK5q+u+WakKLZ5Y6UeM=;
-        b=kv7wrax4zru04yHnluN7jr8QGbNi+jU3yAL/uYV/E2z1GByScJiBknV8pkpN4XZqM6lOaS
-        28AW0waTgzK8uLAg==
-To:     David Woodhouse <dwmw2@infradead.org>,
-        Oleksandr Natalenko <oleksandr@natalenko.name>
-Cc:     Kim Phillips <kim.phillips@amd.com>,
-        Usama Arif <usama.arif@bytedance.com>, arjan@linux.intel.com,
-        mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
-        hpa@zytor.com, x86@kernel.org, pbonzini@redhat.com,
-        paulmck@kernel.org, linux-kernel@vger.kernel.org,
-        kvm@vger.kernel.org, rcu@vger.kernel.org, mimoja@mimoja.de,
-        hewenliang4@huawei.com, thomas.lendacky@amd.com, seanjc@google.com,
-        pmenzel@molgen.mpg.de, fam.zheng@bytedance.com,
-        punit.agrawal@bytedance.com, simon.evans@bytedance.com,
-        liangma@liangbit.com,
-        "Limonciello, Mario" <Mario.Limonciello@amd.com>,
-        Piotr Gorski <piotrgorski@cachyos.org>
-Subject: Re: [PATCH v9 0/8] Parallel CPU bringup for x86_64
-In-Reply-To: <aac036a17b1bcbabe8ee5a7c69fb2dfbc546d06e.camel@infradead.org>
-References: <20230215145425.420125-1-usama.arif@bytedance.com>
- <982e1d6140705414e8fd60b990bd259a@natalenko.name>
- <715CBABF-4017-4784-8F30-5386F1524830@infradead.org>
- <67dbc69f-b712-8971-f1c9-5d07f506a19c@amd.com>
- <42dc683e2846ae8fc1e09715aaf7884660e1a386.camel@infradead.org>
- <37c18c3aeea2e558633b6da6886111d0@natalenko.name>
- <5A3B7074-0C6D-472B-803B-D76541828C1F@infradead.org>
- <3d8ed6e157df10c5175c636de0e21849@natalenko.name>
- <5c557f9b6f55dc2a612ee89142971298e6ae12d8.camel@infradead.org>
- <ee0d0d971a3095d6a1e96ad4f1ba32d2@natalenko.name>
- <5b8f9c89f7015fa80c966c6c7f6fa259db6744f8.camel@infradead.org>
- <ce731b5a4a53680b4840467977b33d9a@natalenko.name>
- <85ceb3f92abf3c013924de2f025517372bed19c0.camel@infradead.org>
- <3e5944de08ef0d23584d19bad7bae66c@natalenko.name>
- <26E5DC9C-0F19-4E4F-9076-04506A197374@infradead.org>
- <f71275dc809cfb32df513023786c3faa@natalenko.name>
- <10CA27BB-ADC6-4421-86D2-A83BD7FA12E0@infradead.org>
- <9153284c37a79d303aa79dbf07c10329@natalenko.name>
- <e2e6616f691f1822035be245ec847f7c86a26367.camel@infradead.org>
- <87356yofw3.ffs@tglx>
- <aac036a17b1bcbabe8ee5a7c69fb2dfbc546d06e.camel@infradead.org>
-Date:   Wed, 22 Feb 2023 10:31:27 +0100
-Message-ID: <87fsaym4gg.ffs@tglx>
+        Wed, 22 Feb 2023 04:42:49 -0500
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C24A38EA1;
+        Wed, 22 Feb 2023 01:40:08 -0800 (PST)
+Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (No client certificate requested)
+        (Authenticated sender: kholk11)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 05EF2660215E;
+        Wed, 22 Feb 2023 09:31:50 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1677058312;
+        bh=1lE1OslcJ9wYx7+VSxskvVNIYTnaQOYKkobjRYQj4dU=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=fNqS92UtTTmnYL44uUoVOXGdbFhawrBTSQwnwKyKZ09UEG7V4dFp6jMil/WtZ6ahq
+         hc4KWcvlNnLOM+opaWBThffBDaRw0ywF66FK4qbN+DNWo4ABvqab1qq4JbUFeXqZfP
+         rid3K50NzV9nVVxRHyu9rw+q/ldFNm5GMM1FTA42SDS6TdSPSh933vmQv8TSjn9lvP
+         mmURzlSOCZGhEVI1V2t4oO9ebr/Y0dfuDKyMWu+ZsYzImYozCz6yDwfYJBJg+1+X4V
+         8nRALLTkyQ89KDYQwLmrcq5sZUsWvLjbPIkuZ9/nE5H5HLt5mwtfVUFSny9Nlhexkc
+         LuB1bOv1DTrlg==
+Message-ID: <11c4f142-793c-3ad4-bb58-1df5b0c5fc3c@collabora.com>
+Date:   Wed, 22 Feb 2023 10:31:48 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH v2 09/16] thermal: Do not access 'type' field, use the tz
+ id instead
+Content-Language: en-US
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>, rafael@kernel.org
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Ido Schimmel <idosch@nvidia.com>,
+        Zhang Rui <rui.zhang@intel.com>, Len Brown <lenb@kernel.org>,
+        Petr Machata <petrm@nvidia.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Amit Kucheria <amitk@kernel.org>,
+        Eduardo Valentin <edubezval@gmail.com>,
+        Keerthy <j-keerthy@ti.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Balsam CHIHI <bchihi@baylibre.com>,
+        Baolin Wang <baolin.wang@linux.alibaba.com>,
+        "open list:ACPI THERMAL DRIVER" <linux-acpi@vger.kernel.org>,
+        "open list:MELLANOX ETHERNET SWITCH DRIVERS" <netdev@vger.kernel.org>,
+        "open list:TI BANDGAP AND THERMAL DRIVER" 
+        <linux-omap@vger.kernel.org>,
+        "moderated list:ARM/Mediatek SoC support" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "moderated list:ARM/Mediatek SoC support" 
+        <linux-mediatek@lists.infradead.org>
+References: <20230221180710.2781027-1-daniel.lezcano@linaro.org>
+ <20230221180710.2781027-10-daniel.lezcano@linaro.org>
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <20230221180710.2781027-10-daniel.lezcano@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
         SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -88,30 +79,21 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 21 2023 at 23:18, David Woodhouse wrote:
-> On Tue, 2023-02-21 at 22:41 +0100, Thomas Gleixner wrote:
->> +
->> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0if (IS_ENABLED(CONFIG_64BIT) =
-&& IS_ENABLED(CONFIG_SMP))
->> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0smpboot_control =3D saved_smpboot_ctrl;
->> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0return 0;
->> =C2=A0}
->> =C2=A0
->
-> But wait, why is this giving it a dedicated temp_stack anyway? Why
-> can't it use that CPU's idle thread stack like we usually do? I already
-> made idle_thread_get() accessible from here. So we could do this...
+Il 21/02/23 19:07, Daniel Lezcano ha scritto:
+> The 'type' field is used as a name in the message. However we can have
+> multiple thermal zone with the same type. The information is not
+> accurate.
+> 
+> Moreover, the thermal zone device structure is directly accessed while
+> we want to improve the self-encapsulation of the code.
+> 
+> Replace the 'type' in the message by the thermal zone id.
+> 
+> Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
+> Reviewed-by: Ido Schimmel <idosch@nvidia.com> #mlxsw
 
-Because this very CPU is still online and from the kernels POV is does
-not go offline. It goes into the firmware blackhole and comes back
-magically through the startup code.
+Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com> 
+#MediaTek LVTS
 
-That means this very CPUs indle thread stack is in use and the resume
-path will scribble over it. Maybe you won't notice because it only
-clobbers top of stack which is never used again because the idle thread
-does not return. But correct is something different.
 
-Thanks,
 
-        tglx
