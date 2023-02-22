@@ -2,72 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B1C869FE75
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Feb 2023 23:26:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CDC8B69FE77
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Feb 2023 23:27:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233134AbjBVW0w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Feb 2023 17:26:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53594 "EHLO
+        id S233150AbjBVW06 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Feb 2023 17:26:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53770 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232969AbjBVW0t (ORCPT
+        with ESMTP id S232870AbjBVW05 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Feb 2023 17:26:49 -0500
-Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AAE1342BFF
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Feb 2023 14:26:48 -0800 (PST)
-Received: from zn.tnic (p5de8e9fe.dip0.t-ipconnect.de [93.232.233.254])
+        Wed, 22 Feb 2023 17:26:57 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C6502007D;
+        Wed, 22 Feb 2023 14:26:56 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 4E1AA1EC068E;
-        Wed, 22 Feb 2023 23:26:47 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1677104807;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=CckqgvvmPrDe6wflsMirPaSBLHFMgaErm6FSkK35NQY=;
-        b=Vf6VZCVwCO8GdbaE5luLsmQ16m/cABumBzdSLic+zQRnRzlMYq9amJydYEWi0/O6hPDVtS
-        f09GqyZI5HjEVyxDcd0gVHnMfP2q22yC5wHz4LsNe7lomCdRX5eDirkk/IXlat9FkcKHgG
-        FUvI/9fwQzQXOlP3RCDoMeJFpt7JBxw=
-Date:   Wed, 22 Feb 2023 23:26:46 +0100
-From:   Borislav Petkov <bp@alien8.de>
-To:     Andrew Cooper <andrew.cooper3@citrix.com>
-Cc:     Tavis Ormandy <taviso@gmail.com>, linux-kernel@vger.kernel.org,
-        x86@kernel.org
-Subject: Re: x86: AMD Zen2 ymm registers rolling back
-Message-ID: <Y/aWputqWVAN0cJt@zn.tnic>
-References: <Y/W4x7/KFqmDmmR7@thinkstation.cmpxchg8b.net>
- <Y/XTT59OrLw2as4R@zn.tnic>
- <Y/Xc+yMzI83WZ4V1@zn.tnic>
- <0371ec3d-0899-f94a-7f21-21d805df2927@citrix.com>
- <Y/Xp73KJe3c/1jrn@zn.tnic>
- <Y/aIjUr78yd9U+wl@thinkstation.cmpxchg8b.net>
- <f074e03d-a991-23cd-80d7-162067143034@citrix.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <f074e03d-a991-23cd-80d7-162067143034@citrix.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8FB95615C1;
+        Wed, 22 Feb 2023 22:26:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 098AAC433D2;
+        Wed, 22 Feb 2023 22:26:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1677104815;
+        bh=tODS6YIS+fbzOUespAdoE8trpFu1mTM23laVvhnpvWc=;
+        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+        b=ETDxMvToWldflhac/Lg5g4+W0qQ5HXtDpVb1qM9XeSQJ2195SeEUBWRzY5cJv8W7L
+         brMapdG060FR8rvq9Ua1lPW+M1u9B6Kpdi+jBcqrstQl9Apx0NK0qhuK0wqkCOVoOG
+         KtjTTJBThF72BkM/zQMQNojr/05h/fp+nFh/cmIFyvy8H6mzZgtRDjwmPWnDoA3wlY
+         2bWypmOKs2p7c9rD6j4D1tXj8N390tuNGczKmkjSQRa5uQB2Be05MpZWf5AZvPbVDJ
+         dxKvspIg+3tfNtZE9dYrpBN2eBEK5Xw5ypiVWn6o+fz6OWcFwkHc3PyYo6HUE39DZT
+         Fod9q3wJ4ON6Q==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id ED234C43157;
+        Wed, 22 Feb 2023 22:26:54 +0000 (UTC)
+Subject: Re: [GIT PULL] ksmbd server fixes
+From:   pr-tracker-bot@kernel.org
+In-Reply-To: <CAH2r5mv+jJK0AhCEo-gx_5cBcyk0RSHvrQv9irWisoVPnbV3jQ@mail.gmail.com>
+References: <CAH2r5mv+jJK0AhCEo-gx_5cBcyk0RSHvrQv9irWisoVPnbV3jQ@mail.gmail.com>
+X-PR-Tracked-List-Id: <linux-cifs.vger.kernel.org>
+X-PR-Tracked-Message-Id: <CAH2r5mv+jJK0AhCEo-gx_5cBcyk0RSHvrQv9irWisoVPnbV3jQ@mail.gmail.com>
+X-PR-Tracked-Remote: git://git.samba.org/ksmbd.git tags/6.3-rc-ksmbd-fixes
+X-PR-Tracked-Commit-Id: d3ca9f7aeba793d74361d88a8800b2f205c9236b
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: 25ac8c12ff7886e3d9b99feb85c53302a3cc5556
+Message-Id: <167710481496.21044.12712583419174453992.pr-tracker-bot@kernel.org>
+Date:   Wed, 22 Feb 2023 22:26:54 +0000
+To:     Steve French <smfrench@gmail.com>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Namjae Jeon <linkinjeon@kernel.org>,
+        CIFS <linux-cifs@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Feb 22, 2023 at 10:17:35PM +0000, Andrew Cooper wrote:
-> I don't see anything in your code which would cause a change in MXCSR. 
-> Which most likely means there's a path in the kernel modifying MXCSR and
-> that doesn't sound like a thing that ought to be happening by default.
+The pull request you sent on Tue, 21 Feb 2023 22:15:59 -0600:
 
-We were just talking about this internally too. We could trace it to see
-what fiddles with MXCSR but meh, bigger fish to fry.
+> git://git.samba.org/ksmbd.git tags/6.3-rc-ksmbd-fixes
+
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/25ac8c12ff7886e3d9b99feb85c53302a3cc5556
+
+Thank you!
 
 -- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html
