@@ -2,36 +2,36 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0EB8169F703
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Feb 2023 15:47:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CF8B169F704
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Feb 2023 15:47:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232231AbjBVOrr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Feb 2023 09:47:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59704 "EHLO
+        id S232285AbjBVOru (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Feb 2023 09:47:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59818 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232196AbjBVOrf (ORCPT
+        with ESMTP id S232239AbjBVOrf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 22 Feb 2023 09:47:35 -0500
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3AD222A2F
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Feb 2023 06:47:19 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A43C63B215
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Feb 2023 06:47:20 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id DD4DD61486
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Feb 2023 14:47:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2C18EC433D2;
-        Wed, 22 Feb 2023 14:47:01 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 85E1C6148E
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Feb 2023 14:47:07 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C9F62C4339E;
+        Wed, 22 Feb 2023 14:47:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1677077224;
-        bh=5sxyMTW09Kl3ct1nkcDaj+gcruIUS7UwkGWllRn6QWo=;
+        s=k20201202; t=1677077227;
+        bh=60UVPMKRBBZlhZputsHs6D/GUWH9jHmYFrcL5ldfROQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Sc66U+JeBvcIan2oTweypNsCy2L8Q2/rPUz6v+bXrFziNS6zAxmMtjoUctKljuRW5
-         59q297z8DODDV+4UtOB4+eFCzY4DcJO7esf/AF4bPFIy9gxqqrFX64DtVFKz2Hi73L
-         n+uuZcaGU40P4h0HRfuKyBmN4WO6ylbAmBn6d6vwVZ2dGLjgwYfpnbr3phSDVbTIf9
-         P9JJM92Z7sgM9Mk7/fOrst3iDJtN+i2ImK7gpXdihpHHdy1YIovXunR3SkSKR/odZn
-         pYDPMZqntFhTXNPrx41WL2rAOI+OlnhnEeGnjI9vbbChhMDztY2XoZwqdkBbG8/cX2
-         XTv0y2jKriNaQ==
+        b=freejV5546gLOuur9fYo+33buf40+Z96Mnn9j+UC1Jxp8s5/spdnEbt5zWmtjnFOc
+         QXWQeq1FBg88cz9a7m5Gy36Ckj9xyFCDnW4KgPvsM7XrwYmAjJ1a7+Jsz1LPdA5FdL
+         vH1yWwgm168Z5/4gQlURHesskOnAf4YQ3LQzCQ7F4B/yEKWx9uvjxJ5hMnNE+5xiqB
+         jVMtIzfw+iF9GWl+VU1vnLRyMsgCU3nCDtNcEsoAbNycgCVZSVELl2HPGL7I8nvY/c
+         fPG7t6B3IQLqPDmbHcRJ5RW1slecVqquDxO1pqOc1kSlvbmr2RZWPZQz+zETA6z6NN
+         czPhb1KyzQPPg==
 From:   Frederic Weisbecker <frederic@kernel.org>
 To:     Thomas Gleixner <tglx@linutronix.de>
 Cc:     LKML <linux-kernel@vger.kernel.org>,
@@ -42,9 +42,9 @@ Cc:     LKML <linux-kernel@vger.kernel.org>,
         Mirsad Goran Todorovac <mirsad.todorovac@alu.unizg.hr>,
         Yu Liao <liaoyu15@huawei.com>, Hillf Danton <hdanton@sina.com>,
         Ingo Molnar <mingo@kernel.org>
-Subject: [PATCH 3/8] timers/nohz: Protect idle/iowait sleep time under seqcount
-Date:   Wed, 22 Feb 2023 15:46:44 +0100
-Message-Id: <20230222144649.624380-4-frederic@kernel.org>
+Subject: [PATCH 4/8] timers/nohz: Add a comment about broken iowait counter update race
+Date:   Wed, 22 Feb 2023 15:46:45 +0100
+Message-Id: <20230222144649.624380-5-frederic@kernel.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230222144649.624380-1-frederic@kernel.org>
 References: <20230222144649.624380-1-frederic@kernel.org>
@@ -59,22 +59,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Reading idle/io sleep time (eg: from /proc/stat) can race with idle exit
-updates because the state machine handling the stats is not atomic and
-requires a coherent read batch.
+The per-cpu iowait task counter is incremented locally upon sleeping.
+But since the task can be woken to (and by) another CPU, the counter may
+then be decremented remotely. This is the source of a race involving
+readers VS writer of idle/iowait sleeptime.
 
-As a result reading the sleep time may report irrelevant or backward
-values.
+The following scenario shows an example where a /proc/stat reader
+observes a pending sleep time as IO whereas that pending sleep time
+later eventually gets accounted as non-IO.
 
-Fix this with protecting the simple state machine within a seqcount.
-This is expected to be cheap enough not to add measurable performance
-impact on the idle path.
+    CPU 0                       CPU  1                    CPU 2
+    -----                       -----                     ------
+    //io_schedule() TASK A
+    current->in_iowait = 1
+    rq(0)->nr_iowait++
+    //switch to idle
+                        // READ /proc/stat
+                        // See nr_iowait_cpu(0) == 1
+                        return ts->iowait_sleeptime +
+                               ktime_sub(ktime_get(), ts->idle_entrytime)
 
-Note this only fixes reader VS writer condition partitially. A race
-remains that involves remote updates of the CPU iowait task counter. It
-can hardly be fixed.
+                                                          //try_to_wake_up(TASK A)
+                                                          rq(0)->nr_iowait--
+    //idle exit
+    // See nr_iowait_cpu(0) == 0
+    ts->idle_sleeptime += ktime_sub(ktime_get(), ts->idle_entrytime)
 
-Reported-by: Yu Liao <liaoyu15@huawei.com>
+As a result subsequent reads on /proc/stat may expose backward progress.
+
+This is unfortunately hardly fixable. Just add a comment about that
+condition.
+
 Acked-by: Peter Zijlstra (Intel) <peterz@infradead.org>
 Cc: Hillf Danton <hdanton@sina.com>
 Cc: Yu Liao <liaoyu15@huawei.com>
@@ -85,85 +100,37 @@ Cc: Alexey Dobriyan <adobriyan@gmail.com>
 Cc: Mirsad Goran Todorovac <mirsad.todorovac@alu.unizg.hr>
 Signed-off-by: Frederic Weisbecker <frederic@kernel.org>
 ---
- kernel/time/tick-sched.c | 22 ++++++++++++++++------
- kernel/time/tick-sched.h |  1 +
- 2 files changed, 17 insertions(+), 6 deletions(-)
+ kernel/time/tick-sched.c | 10 ++++++++--
+ 1 file changed, 8 insertions(+), 2 deletions(-)
 
 diff --git a/kernel/time/tick-sched.c b/kernel/time/tick-sched.c
-index 9058b9eb8bc1..90d9b7b29875 100644
+index 90d9b7b29875..edd6e9f26d16 100644
 --- a/kernel/time/tick-sched.c
 +++ b/kernel/time/tick-sched.c
-@@ -646,6 +646,7 @@ static void tick_nohz_stop_idle(struct tick_sched *ts, ktime_t now)
- 
- 	delta = ktime_sub(now, ts->idle_entrytime);
- 
-+	write_seqcount_begin(&ts->idle_sleeptime_seq);
- 	if (nr_iowait_cpu(smp_processor_id()) > 0)
- 		ts->iowait_sleeptime = ktime_add(ts->iowait_sleeptime, delta);
- 	else
-@@ -653,14 +654,18 @@ static void tick_nohz_stop_idle(struct tick_sched *ts, ktime_t now)
- 
- 	ts->idle_entrytime = now;
- 	ts->idle_active = 0;
-+	write_seqcount_end(&ts->idle_sleeptime_seq);
- 
- 	sched_clock_idle_wakeup_event();
- }
- 
- static void tick_nohz_start_idle(struct tick_sched *ts)
- {
-+	write_seqcount_begin(&ts->idle_sleeptime_seq);
- 	ts->idle_entrytime = ktime_get();
- 	ts->idle_active = 1;
-+	write_seqcount_end(&ts->idle_sleeptime_seq);
-+
- 	sched_clock_idle_sleep_event();
- }
- 
-@@ -668,6 +673,7 @@ static u64 get_cpu_sleep_time_us(struct tick_sched *ts, ktime_t *sleeptime,
- 				 bool compute_delta, u64 *last_update_time)
- {
- 	ktime_t now, idle;
-+	unsigned int seq;
- 
- 	if (!tick_nohz_active)
- 		return -1;
-@@ -676,13 +682,17 @@ static u64 get_cpu_sleep_time_us(struct tick_sched *ts, ktime_t *sleeptime,
- 	if (last_update_time)
- 		*last_update_time = ktime_to_us(now);
- 
--	if (ts->idle_active && compute_delta) {
--		ktime_t delta = ktime_sub(now, ts->idle_entrytime);
-+	do {
-+		seq = read_seqcount_begin(&ts->idle_sleeptime_seq);
- 
--		idle = ktime_add(*sleeptime, delta);
--	} else {
--		idle = *sleeptime;
--	}
-+		if (ts->idle_active && compute_delta) {
-+			ktime_t delta = ktime_sub(now, ts->idle_entrytime);
-+
-+			idle = ktime_add(*sleeptime, delta);
-+		} else {
-+			idle = *sleeptime;
-+		}
-+	} while (read_seqcount_retry(&ts->idle_sleeptime_seq, seq));
- 
- 	return ktime_to_us(idle);
- 
-diff --git a/kernel/time/tick-sched.h b/kernel/time/tick-sched.h
-index c6663254d17d..5ed5a9d41d5a 100644
---- a/kernel/time/tick-sched.h
-+++ b/kernel/time/tick-sched.h
-@@ -75,6 +75,7 @@ struct tick_sched {
- 	ktime_t				idle_waketime;
- 
- 	/* Idle entry */
-+	seqcount_t			idle_sleeptime_seq;
- 	ktime_t				idle_entrytime;
- 
- 	/* Tick stop */
+@@ -705,7 +705,10 @@ static u64 get_cpu_sleep_time_us(struct tick_sched *ts, ktime_t *sleeptime,
+  * counters if NULL.
+  *
+  * Return the cumulative idle time (since boot) for a given
+- * CPU, in microseconds.
++ * CPU, in microseconds. Note this is partially broken due to
++ * the counter of iowait tasks that can be remotely updated without
++ * any synchronization. Therefore it is possible to observe backward
++ * values within two consecutive reads.
+  *
+  * This time is measured via accounting rather than sampling,
+  * and is as accurate as ktime_get() is.
+@@ -728,7 +731,10 @@ EXPORT_SYMBOL_GPL(get_cpu_idle_time_us);
+  * counters if NULL.
+  *
+  * Return the cumulative iowait time (since boot) for a given
+- * CPU, in microseconds.
++ * CPU, in microseconds. Note this is partially broken due to
++ * the counter of iowait tasks that can be remotely updated without
++ * any synchronization. Therefore it is possible to observe backward
++ * values within two consecutive reads.
+  *
+  * This time is measured via accounting rather than sampling,
+  * and is as accurate as ktime_get() is.
 -- 
 2.34.1
 
