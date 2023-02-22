@@ -2,120 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BA85269F532
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Feb 2023 14:22:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E2FE69F538
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Feb 2023 14:24:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231370AbjBVNWg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Feb 2023 08:22:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39954 "EHLO
+        id S231737AbjBVNYk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Feb 2023 08:24:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41662 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229749AbjBVNWd (ORCPT
+        with ESMTP id S229505AbjBVNYh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Feb 2023 08:22:33 -0500
-Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1F943A0AE
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Feb 2023 05:22:31 -0800 (PST)
-Received: by mail-wr1-x42c.google.com with SMTP id l1so7430810wry.10
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Feb 2023 05:22:31 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:references
-         :in-reply-to:subject:to:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=tmed1jeBZ5AybmMhwZvMFWvP/a/HwCGONjFVZMu41zE=;
-        b=i5RWhuySJGsDW5u4u/jrDVUZbkEsJFfC/M/mC//9GjfsjkJazoQiySRTK8sLCGlnmQ
-         GYS0VFwgu/bPirBC2MZO3iOheg8F7v8SxcGRb/Azwe/UoGJTFJgWWCJOUwcabhVzkeMp
-         FkCTCDJa8OM6OytqCZ9ErNJBvy9+xUehTvDutBxTxyitHO27FNViVgPGWXdL9HbjRc+9
-         fn8vPWtxMqwG6Ekkg2Z1ht1QOWmlnsBkKixH3jfwXjD/Xe0mqaiaIcx2rdEC9AUi2YmF
-         qcRbgwy/eWtrV60KsN6aOW21Lmk1kCp6MJBmpzsZuXwAKpXJ1CKc7IMUP9iPrjIf8jcW
-         9P6A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:references
-         :in-reply-to:subject:to:from:x-gm-message-state:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=tmed1jeBZ5AybmMhwZvMFWvP/a/HwCGONjFVZMu41zE=;
-        b=dFzaWVKUo9hWBuxiMPF8JKIP6HhUCnfc8vaiAUmlYU1UCYJFaBiu5qZewwQkosFBiH
-         NrsODq9uaQ5d4AaSIBm5TeQi0/daC2V0BlpyHBPCyUz1QgCBb6T3gKqUCiyVd2QkBNgJ
-         DUpg0HHIVRHfvXSow6wiX+67gIh/0ODGx/oJRGX+ygKS6/sMg/6zclTh+HlN3rOzPxD+
-         RAlTbDj71E9itQ+B/nBW5mIEEdf5n8LSmRCwbE7CII3fRX4BMntfE+Hg7x+zbmRcj48q
-         pXlAaT9CbitsvI72I93kq4pjVyz7jcB6Oj+rp89xvnMkL5+V+Sx7o634rss7Wk3HgdgH
-         g+Ag==
-X-Gm-Message-State: AO0yUKWlfO3W7HnD4p+mXsHtKVUId/K8JsYunp9zMRYt0m6vXxdTL/bh
-        jTEz+s+SDdT2st+0zPk5gaP9Rg==
-X-Google-Smtp-Source: AK7set83YHXEvsgL8aoSr/C3Ep9V9AvsQelC+QFyKa2M2Ln+SyAy7ut2BmyU7lCTP81l1gJfdgTM/g==
-X-Received: by 2002:a5d:6b81:0:b0:2c5:4ea7:a8e2 with SMTP id n1-20020a5d6b81000000b002c54ea7a8e2mr6563930wrx.33.1677072150228;
-        Wed, 22 Feb 2023 05:22:30 -0800 (PST)
-Received: from localhost ([2a01:cb19:85e6:1900:2bf7:7388:731d:c4e1])
-        by smtp.gmail.com with ESMTPSA id u3-20020adff883000000b002c703d59fa7sm5031553wrp.12.2023.02.22.05.22.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 22 Feb 2023 05:22:29 -0800 (PST)
-From:   Mattijs Korpershoek <mkorpershoek@baylibre.com>
-To:     Werner Sembach <wse@tuxedocomputers.com>,
-        dmitry.torokhov@gmail.com, hdegoede@redhat.com,
-        wse@tuxedocomputers.com, chenhuacai@kernel.org, tiwai@suse.de,
-        wsa+renesas@sang-engineering.com, linux-input@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] Fix strange behavior of touchpad on Clevo NS70PU
-In-Reply-To: <20230220183014.238432-1-wse@tuxedocomputers.com>
-References: <20230220183014.238432-1-wse@tuxedocomputers.com>
-Date:   Wed, 22 Feb 2023 14:22:29 +0100
-Message-ID: <878rgp4yy2.fsf@baylibre.com>
+        Wed, 22 Feb 2023 08:24:37 -0500
+Received: from out2-smtp.messagingengine.com (out2-smtp.messagingengine.com [66.111.4.26])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2FD02FCE9;
+        Wed, 22 Feb 2023 05:24:36 -0800 (PST)
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+        by mailout.nyi.internal (Postfix) with ESMTP id 37F165C013B;
+        Wed, 22 Feb 2023 08:24:36 -0500 (EST)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute3.internal (MEProxy); Wed, 22 Feb 2023 08:24:36 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; h=
+        cc:cc:content-transfer-encoding:date:date:from:from:in-reply-to
+        :message-id:mime-version:reply-to:sender:subject:subject:to:to;
+         s=fm2; t=1677072276; x=1677158676; bh=ZM1wKgNEbzttP80ykx2KdJ15q
+        gC/eZYBwqpxuFevkVA=; b=SQb+gxcoYAWBv+g/yNFmfNb3vsQqN7uKqNP72D87T
+        Da2fauFAxT5ULoNpAntMFqUo/VNjsVOBFVi3Uz81u8wGvNfEn414AGVDOvEFB6+m
+        1VQHP/1zv+V4veI+BxBWPdmLigbwjOnug1R5+0+faZFAJMnnVxkdmWrCg9VgMtD1
+        5N6mW3cvfN7rMCI5vHfBZbcCwLC3OAuDRwmKGkxdyBgvyDaqin62N5rM7x4nM+qt
+        1m1LGSotptrKieAthtKz++vURTEzz+4E+NKMZ5fCthd7y6yGNuAAheqmZ8Nxwjdz
+        sox1qjPUINUzkP2brUWOK7EC9oQ4s+540KYh1uFZnEVFA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding:date:date
+        :feedback-id:feedback-id:from:from:in-reply-to:message-id
+        :mime-version:reply-to:sender:subject:subject:to:to:x-me-proxy
+        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=
+        1677072276; x=1677158676; bh=ZM1wKgNEbzttP80ykx2KdJ15qgC/eZYBwqp
+        xuFevkVA=; b=IM8NjXIzTgck/ZMKbQG6QxlyiodR0CxujtYBz+OiO3IOewDcjEn
+        4/Niu/ZQxVzdw6hZTG7oS6JvBihRFy1uIdpkYzl/GmgTNZVL4UUbP7gzESZEDOSM
+        51pQDhn2rYjQQErqJYjEjc3PUW/RfIu4PUV+YDuwK4gKzdGySGpJfvA5l/tWxkWY
+        b5XtOct702wV2KvbSoKmTh+cMC7kv/76bgKn7Fx81j5yQZs2KY242obhAHUmgxU4
+        qhl4Mk8o331n9goauBeFFKcKkHunjQa73wNLLDzW3Qz9s1oDO6JuL+gkvOgTPhqf
+        FurlP2pYk6D4XlT3xtVjzseZQG2s/erhqtg==
+X-ME-Sender: <xms:lBf2Y7gqLQ9Gkc_b0L65mry5zpA0jPbpnfmagBAIXpSsCag5XdtPHw>
+    <xme:lBf2Y4CcMkSWDupoRETL7L5d9w_91ob6_X9nCUet-cFDgTNMYBLfp1CLiYFSq6JzV
+    6JtoujZ7_fksND9IvI>
+X-ME-Received: <xmr:lBf2Y7H6h78BMt-2x1sYR_VPgehbCyuO54JJ4dFyQyyazGx0QWlFxofHZxUN>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrudejledghedtucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucenucfjughrpefhvfevufffkffoggfgsedtkeertd
+    ertddtnecuhfhrohhmpeflihgrgihunhcujggrnhhguceojhhirgiguhhnrdihrghnghes
+    fhhlhihgohgrthdrtghomheqnecuggftrfgrthhtvghrnhephfetuddtudevieeljeejte
+    ffheeujeduhefgffejudfhueelleduffefgfffveeknecuvehluhhsthgvrhfuihiivgep
+    tdenucfrrghrrghmpehmrghilhhfrhhomhepjhhirgiguhhnrdihrghnghesfhhlhihgoh
+    grthdrtghomh
+X-ME-Proxy: <xmx:lBf2Y4QvMJbllcPB28ctXEpZbMaNw1ErP8FCn8loITKMogPWJ0Kmqw>
+    <xmx:lBf2Y4yXKL8MQvQ-brKKrODGaYHNRBpzm5E1f68WUIAKS5yPVNAy7g>
+    <xmx:lBf2Y-7qZnp2w0i1ESo896fL-UhJi08qRym70Y-TEnAEraYjivqb3A>
+    <xmx:lBf2Y0-APF_XIMTUEUH8QqZ5Y8-Wj6fsG5UjgwOYBzr8S8th4D47_g>
+Feedback-ID: ifd894703:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
+ 22 Feb 2023 08:24:34 -0500 (EST)
+From:   Jiaxun Yang <jiaxun.yang@flygoat.com>
+To:     linux-mips@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org, tsbogend@alpha.franken.de,
+        hch@lst.de, Jiaxun Yang <jiaxun.yang@flygoat.com>
+Subject: [PATCH v2 0/4] MIPS DMA coherence fixes
+Date:   Wed, 22 Feb 2023 13:24:21 +0000
+Message-Id: <20230222132425.7442-1-jiaxun.yang@flygoat.com>
+X-Mailer: git-send-email 2.37.1 (Apple Git-137.1)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On lun., f=C3=A9vr. 20, 2023 at 19:30, Werner Sembach <wse@tuxedocomputers.=
-com> wrote:
+Hi all,
 
-> When closing the laptop lid with an external screen connected, the mouse
-> pointer has a constant movement to the lower right corner. Opening the
-> lid again stops this movement, but after that the touchpad does no longer
-> register clicks.
->
-> The touchpad is connected both via i2c-hid and PS/2, the predecessor of
-> this device (NS70MU) has the same layout in this regard and also strange
-> behaviour caused by the psmouse and the i2c-hid driver fighting over
-> touchpad control. This fix is reusing the same workaround by just
-> disabling the PS/2 aux port, that is only used by the touchpad, to give t=
-he
-> i2c-hid driver the lone control over the touchpad.
->
-> Signed-off-by: Werner Sembach <wse@tuxedocomputers.com>
-> Cc: stable@vger.kernel.org
+This series fixes MIPS per-device DMA coherence support. It's mostly adjusting
+Kconfig options.
 
-Reviewed-by: Mattijs Korpershoek <mkorpershoek@baylibre.com>
+The v1 series had some extra patches that fixing default coherency settings
+for OF probing but I decided to send them as a dedicated series.
 
-> ---
->  drivers/input/serio/i8042-acpipnpio.h | 6 ++++++
->  1 file changed, 6 insertions(+)
->
-> diff --git a/drivers/input/serio/i8042-acpipnpio.h b/drivers/input/serio/=
-i8042-acpipnpio.h
-> index efc61736099b9..3a6640a11dd99 100644
-> --- a/drivers/input/serio/i8042-acpipnpio.h
-> +++ b/drivers/input/serio/i8042-acpipnpio.h
-> @@ -1156,6 +1156,12 @@ static const struct dmi_system_id i8042_dmi_quirk_=
-table[] __initconst =3D {
->  					SERIO_QUIRK_RESET_ALWAYS | SERIO_QUIRK_NOLOOP |
->  					SERIO_QUIRK_NOPNP)
->  	},
-> +	{
-> +		.matches =3D {
-> +			DMI_MATCH(DMI_BOARD_NAME, "NS5x_7xPU"),
-> +		},
-> +		.driver_data =3D (void *)(SERIO_QUIRK_NOAUX)
-> +	},
->  	{
->  		.matches =3D {
->  			DMI_MATCH(DMI_BOARD_NAME, "NJ50_70CU"),
-> --=20
-> 2.34.1
+Thanks.
+- Jiaxun
+
+Jiaxun Yang (4):
+  MIPS: Remove DMA_PERDEV_COHERENT
+  MIPS: Always select ARCH_HAS_SETUP_DMA_OPS
+  MIPS: Always select ARCH_HAS_SYNC_DMA_FOR_CPU for noncoherent
+    platforms
+  MIPS: c-r4k: Always install dma flush functions
+
+ arch/mips/Kconfig    | 16 ++--------------
+ arch/mips/mm/c-r4k.c | 12 +++---------
+ 2 files changed, 5 insertions(+), 23 deletions(-)
+
+-- 
+2.37.1 (Apple Git-137.1)
+
