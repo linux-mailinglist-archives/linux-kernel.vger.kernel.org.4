@@ -2,170 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B0CA369EDA6
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Feb 2023 04:52:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D1CC69EDAA
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Feb 2023 04:53:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231460AbjBVDwE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Feb 2023 22:52:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41524 "EHLO
+        id S231513AbjBVDxF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Feb 2023 22:53:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42528 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231334AbjBVDwC (ORCPT
+        with ESMTP id S231495AbjBVDxD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Feb 2023 22:52:02 -0500
-Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2050.outbound.protection.outlook.com [40.107.94.50])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3940231E00;
-        Tue, 21 Feb 2023 19:52:01 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=ABzH+s1EL4FkCZ71O1kSznfDcwm4SFxVSvePD+Eh7MAAPbOw3iWgwH95f1oCscgSudRwo/hj7scQxy/PVvbNxtrp+5q8dBmBDFD+j2J+BOQDSxBW0EYPfJCJGM9Q9qoqGV1AXTcln4Iy/S4qldWMoL74C97cNF2fsQWDTaBNj5doaDCgyFFM7uSS9SLlQtChGoYl/lJ8fnCCk83HEjzmX+ikMu1tV1hxqot3SaWAHTaeMOMlip16A58t0EIzS1Nf0ZLDKkYXaRPes+YaAw/zqOhh0a3GESzEVKC4qn/Qu9/B4yS+76/65tyad/03YjUCtwYgoxfC94R5DnGIYWwSgQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=CVRl6TtgOunY9KBtpnGGPkSPXKsvO0IN7+KVMe5kWtc=;
- b=BS83S2xAWm9MlrMQ2jux91p//flmZTMXBKxwh0MsWbUesrXv7YRepgEq9wrNvVzFhGRW7TqKcRRph+E7aLHxosYvKAUdzqN3qlxsPL2tHOHRkt8v22TLxTnDw+PXaz8oTSu6SbN6H/uezJVfa33XBsLxP6ZHKblEBIKp3M/6oiogDq2y+Dh67lP5Zle6ErP7krXqPUtmlpuPZvdtCn10ImNkBpLrMwPSKCWHB2/la3L5joUyPw6dxBD8H6lhhLzfi0JlQVygFLUWyJ4VOtLVtAh3pMdBB4vKlrmHxc05SYDuHJvaVB52KltgXkqidaEPXaRg1u0x9b91g8PpH1OiYw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=gpxsee.org smtp.mailfrom=amd.com; dmarc=pass
- (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=CVRl6TtgOunY9KBtpnGGPkSPXKsvO0IN7+KVMe5kWtc=;
- b=ZXzWNyfjOKIrFgV7skyH+E73+/AlJdXa9+Wu9mKjlwhGf+v3PXB2V/tkTu0GnOwFjs7Ff+U8yvvU0a69+2GHcPx6t147XWixc5+mo/ZTttROarYaVC/tV9ph1pmylwZ/TUXR96RxjghHbcDewjEgWWxXo7/+o50+cUUcT8ZPHdc=
-Received: from DM6PR07CA0043.namprd07.prod.outlook.com (2603:10b6:5:74::20) by
- PH7PR12MB7913.namprd12.prod.outlook.com (2603:10b6:510:27b::16) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6111.21; Wed, 22 Feb
- 2023 03:51:58 +0000
-Received: from DS1PEPF0000E639.namprd02.prod.outlook.com
- (2603:10b6:5:74:cafe::48) by DM6PR07CA0043.outlook.office365.com
- (2603:10b6:5:74::20) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6111.21 via Frontend
- Transport; Wed, 22 Feb 2023 03:51:58 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- DS1PEPF0000E639.mail.protection.outlook.com (10.167.17.71) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.6134.14 via Frontend Transport; Wed, 22 Feb 2023 03:51:57 +0000
-Received: from SATLEXMB04.amd.com (10.181.40.145) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Tue, 21 Feb
- 2023 21:51:57 -0600
-Received: from [172.19.74.144] (10.180.168.240) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server id 15.1.2375.34 via Frontend
- Transport; Tue, 21 Feb 2023 21:51:56 -0600
-Message-ID: <6da2e72c-661c-e4de-f563-e06f045414ae@amd.com>
-Date:   Tue, 21 Feb 2023 19:51:56 -0800
+        Tue, 21 Feb 2023 22:53:03 -0500
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B350C14F
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Feb 2023 19:53:01 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=dOYl3SjwxOmZgzkyta2mx+9MAywhcAllv7ncRUJlsRo=; b=TFBZF8n5EetVpuhq5Ay9jXh81s
+        iMvH0WX9mrGWA/JHLmdGblgTZNQ0cs3D38RvB4qdHh5RS1K3ZN/7Nmabi9gD4OM1Eif5KK/DzPyRH
+        oBSjdXY08Bxs2bw2WIad7XJgm/7wVOpt0V4ML7zYpauFpy70B6BVr29Lb8GNkTZxh0Xzurv/YAYY4
+        i0U+n29f+IQ6uSB4uDWqi3dMAWRLe4NUCJqjdW2pDD90rkb2mbz1rJWdjBHuPEJrHJOYNxNAyHO3p
+        /r1k0EM62tzlKdToqETEOZLf4yLkDm1ICN0LitVYTQU1aPgPLFGl5v+FiKuTsE5YZM3FcvvJP21N6
+        FD74bpPA==;
+Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1pUgBa-00DAKv-0O; Wed, 22 Feb 2023 03:52:54 +0000
+Date:   Wed, 22 Feb 2023 03:52:53 +0000
+From:   Matthew Wilcox <willy@infradead.org>
+To:     Yang Shi <shy828301@gmail.com>
+Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org
+Subject: Re: What size anonymous folios should we allocate?
+Message-ID: <Y/WRlX+MkmxelNbg@casper.infradead.org>
+References: <Y/U8bQd15aUO97vS@casper.infradead.org>
+ <CAHbLzkrkZmbVMkh-Y-bDxgy0T0ZRRd+T+o5y5-wKmjKmhN0NmA@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [RESEND PATCH V12 XDMA 1/2] dmaengine: xilinx: xdma: Add xilinx
- xdma driver
-Content-Language: en-US
-To:     =?UTF-8?Q?Martin_T=c5=afma?= <tumic@gpxsee.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>
-CC:     <vkoul@kernel.org>, <dmaengine@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <max.zhen@amd.com>,
-        <sonal.santan@amd.com>, <larry.liu@amd.com>, <brian.xu@amd.com>
-References: <1675969514-3137-1-git-send-email-lizhi.hou@amd.com>
- <1675969514-3137-2-git-send-email-lizhi.hou@amd.com>
- <CAMuHMdXsUPAW5zKrsaTR9Tgv7kFdkz8s_QUjLXq6zDpoo47fRA@mail.gmail.com>
- <0f1aafa2-7495-163b-523a-f634bacc4b1f@gpxsee.org>
- <CAMuHMdUVkbPf1a8cW+zY1HwD83tm_m0L7Ufy=GO-RQB-AF_15A@mail.gmail.com>
- <aeb43671-57fd-654a-8e8d-d14ebb7f4083@gpxsee.org>
-From:   Lizhi Hou <lizhi.hou@amd.com>
-In-Reply-To: <aeb43671-57fd-654a-8e8d-d14ebb7f4083@gpxsee.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DS1PEPF0000E639:EE_|PH7PR12MB7913:EE_
-X-MS-Office365-Filtering-Correlation-Id: 71accfcb-c39f-4f64-20b8-08db1488256e
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: IUhp3Q6lo4aOZ0kP0wu1+KP6Gi8gX6uHZ8Rs7S3eHZcGuTqQfSjH3QDpfZjyIGAcwYjks4OhSWRwxv+LK9eVuysEv7C68zyj2jTp4c1wmM+yzNoPTTJtoeemXNwZWf5FkqT6zzq8a7gie8zhT3JnzDuIOqsS8meReONdN+qWA1pesNtsxemr0Rk6w7O7uu+r8P7AcTp1gRofrgvweeLdYGHgr+/qRR63NGqgwoOP3+Vjm8BlREaQa/tPd3svqz0vCwu9Yklo9wuz3qCwMPgD/7Xk/QAW3mFFn02xiAg5pE3DzLjEKDvnpN16ZSvS0IQEonWqdKt9fbgrZ71mZTd57TSHvHQRzzghVtY2V1cdaEBx0eJ/aR2nXsKLdBJCGIke8/QKcQ+WZaAxE/6Q7WQ8aAXA2/75e4yIu9MDlnP2/3A1yqIlo3Ql9yU+TrcXJvXGDE8otOrNtNAkYcHNEAIwB+vh7QpyV0E1sZLx+tIEn0ZvUbb8gs7quCY2u4wGYGzkxIJTfhOtYfaH0V7R9iLo39wRQWzc6pu+XLVCmr/LZmE9dp2f33gQHxSjKrui0LEOpE9FfQS29i/IBsBxobaQnW0NaechnzP6W/7PQUrKM8Iuq2xyzDnvvUIocTplQgNh2enE1XoMRSnwgbZjdqnTZzq0s+SW4HUeEVEVzg7yukplDfvtczKiQPNnIpAsuV1T6L8vIHRAE01wgl53Cvr++igwKXNOCvRD91QTXYIPSk6cRNKkDCkzmw5Kih64gsYGawiAAJ8SJqKVu9RJPckoe4yxz0bvfFEMke+EmFdu5n0=
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230025)(4636009)(376002)(39860400002)(396003)(346002)(136003)(451199018)(40470700004)(36840700001)(46966006)(966005)(26005)(186003)(31686004)(4326008)(70586007)(40480700001)(8676002)(70206006)(5660300002)(8936002)(2616005)(53546011)(36756003)(336012)(426003)(66574015)(47076005)(478600001)(40460700003)(16576012)(356005)(41300700001)(54906003)(316002)(110136005)(44832011)(31696002)(86362001)(82740400003)(82310400005)(2906002)(81166007)(36860700001)(36900700001)(43740500002);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 22 Feb 2023 03:51:57.8201
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 71accfcb-c39f-4f64-20b8-08db1488256e
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: DS1PEPF0000E639.namprd02.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR12MB7913
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAHbLzkrkZmbVMkh-Y-bDxgy0T0ZRRd+T+o5y5-wKmjKmhN0NmA@mail.gmail.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Tue, Feb 21, 2023 at 03:05:33PM -0800, Yang Shi wrote:
+> On Tue, Feb 21, 2023 at 1:49 PM Matthew Wilcox <willy@infradead.org> wrote:
+> >
+> > In a sense this question is premature, because we don't have any code
+> > in place to handle folios which are any size but PMD_SIZE or PAGE_SIZE,
+> > but let's pretend that code already exists and is just waiting for us
+> > to answer this policy question.
+> >
+> > I'd like to reject three ideas up front: 1. a CONFIG option, 2. a boot
+> > option and 3. a sysfs tunable.  It is foolish to expect the distro
+> > packager or the sysadmin to be able to make such a decision.  The
+> > correct decision will depend upon the instantaneous workload of the
+> > entire machine and we'll want different answers for different VMAs.
+> 
+> Yeah, I agree those 3 options should be avoided. For some
+> architectures, there are a or multiple sweet size(s) benefiting from
+> hardware. For example, ARM64 contiguous PTE supports up to 16
+> consecutive 4K pages to form a 64K entry in TLB instead of 16 4K
+> entries. Some implementations may support intermediate sizes (for
+> example, 8K, 16K and 32K, but this may make the hardware design
+> harder), but some may not. AMD's coalesce PTE supports a different
+> size (128K if I remember correctly). So the multiple of the size
+> supported by hardware (64K or 128K) seems like the common ground from
+> maximizing hardware benefit point of view. Of course, nothing prevents
+> the kernel from allocating other orders.
 
-On 2/21/23 13:46, Martin Tůma wrote:
-> On 21. 02. 23 22:06, Geert Uytterhoeven wrote:
->> Hi Martin,
->>
->> On Tue, Feb 21, 2023 at 9:45 PM Martin Tůma <tumic@gpxsee.org> wrote:
->>> On 21. 02. 23 14:25, Geert Uytterhoeven wrote:
->>>> No platform dependencies at all, while this is a platform driver that
->>>> relies on some other not-yet-existing driver creating an "xdma"
->>>> platform device?
->>>
->>> There is at least one "already-existing" driver based on this driver
->>> that is waiting in the v4l2 queue for xdma - our MGB4 driver:
->>> https://patchwork.kernel.org/project/linux-media/patch/20230207150119.5542-2-tumic@gpxsee.org/ 
->>>
->>
->> Thanks for the link!
->>
->> As VIDEO_MGB4 selects XILINX_XDMA, perhaps XILINX_XDMA
->> can be made invisible, unless compile-testing?
->>
->>      config XILINX_XDMA
->>          tristate "Xilinx DMA/Bridge Subsystem DMA Engine" if 
->> COMPILE_TEST
->>
->> Gr{oetje,eeting}s,
->>
->>                          Geert
->>
->
-> Hi,
-> I think that the XDMA driver will always be used by a superior PCIe 
-> card driver like in our case (mgb4) and using it separately makes no 
-> sense/is not possible, so disabling it until some of the superior 
-> drivers selects it makes sense for me. But what about out-of-the-tree 
-> modules based on xdma? Making the module "invisible" will make compile 
-> them much harder I guess? And there will be proprietary drivers based 
-> on xdma, see Xilinx XRT: 
-> https://github.com/houlz0507/XRT-1/tree/xdma_v4_usage
->
-> The xdma authors from Xilinx will definitely give you a more 
-> authoritative answer. I'm just a "random" user of the xdma module. 
-> Originally our mgb4 driver was based on our own xdma sub-driver (in 
-> turn based on some old "test" driver from Xilinx) which I was glad we 
-> could abandon when this xdma driver has appeared. I helped the xdma 
-> module to become usable for PCIe cards like our v4l2 grabber, but the 
-> original intents of the xdma driver are unknown to me. If it is XRT, 
-> than Xilinx will probably like the module to stay visible.
->
-> M.
->
-There are PCIe devices which use the XDMA IP and would use this xdma 
-driver. Out of tree drivers for Xilinx/AMD Alveo devices can switch to 
-this in kernel xdma driver.
+All of this is true (although I think AMDs intermediate size is actually
+32kB, not 128kB), but irrelevant.  Software overhead is FAR more important
+than hardware overhead.  If we swap out the wrong page or have to run
+around doing reclaim, that absolutely dwarfs the performance impact of
+using small TLB entries.
 
+So we need to strike the right balance between using larger folios
+for efficiency and smaller folios for precision of knowing which
+pages are still part of the process working set.
 
-Thanks,
+> Actually I was thinking about the reverse, starting from the biggest
+> possible order, for example, 2M -> 1M -> ... 64K -> ... 4K. And the
+> page fault path should be able to use the same fallback order. But
+> excessive fallback tries may be harmful either.
 
-Lizhi
+What's your reasoning here?
+
+> > B. A further modification is that it will require three of the four
+> >    folios being combined to be on the active list.  If two (or more)
+> >    of the four folios are inactive, we should leave them alone; either
+> >    they will remain inactive and eventually be evicted, or they will be
+> >    activated and eligible for merging in a future pass of khugepaged.
+> 
+> If we use the fallback policy, we should be able to just leave it to
+> reclamation time. When checking reference we could tell what PTEs are
+> accessed, then split if there is significant internal fragmentation.
+
+I think it's going to lead to excessive memory usage.  There was data
+presented last LSFMM that we already have far too much memory tied up
+in THP for many workloads.
+
+> > C. We add a new wrinkle to the LRU handling code.  When our scan of the
+> >    active list examines a folio, we look to see how many of the PTEs
+> >    mapping the folio have been accessed.  If it is fewer than half, and
+> >    those half are all in either the first or last half of the folio, we
+> >    split it.  The active half stays on the active list and the inactive
+> >    half is moved to the inactive list.
+> 
+> With contiguous PTE, every PTE still maintains its own access bit (but
+> it is implementation defined, some implementations may just set access
+> bit once for one PTE in the contiguous region per arm arm IIUC). But
+> anyway this is definitely feasible.
+
+If a CPU doesn't have separate access bits for PTEs, then we should just
+not use the contiguous bits.  Knowing which parts of the folio are
+unused is more important than using the larger TLB entries.
+
+> > For the third case, in contrast, the parent had already established
+> > an appropriate size folio to use for this VMA before calling fork().
+> > Whether it is the parent or the child causing the COW, it should probably
+> > inherit that choice and we should default to the same size folio that
+> > was already found.
+> 
+> Actually this is not what THP does now. The current THP behavior is to
+> split the PMD then fallback to order-0 page fault. For smaller orders,
+> we may consider allocating a large folio.
+
+I know it's not what THP does now.  I think that's because the gap
+between PMD and PAGE size is too large and we end up wasting too much
+memory.  We also have very crude mechanisms for determining when to
+use THPs.  With the adaptive mechanism I described above, I think it's
+time to change that.
 
