@@ -2,87 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B7A4969FABB
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Feb 2023 19:06:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 362F969FAC0
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Feb 2023 19:07:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232331AbjBVSGF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Feb 2023 13:06:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45768 "EHLO
+        id S231127AbjBVSHP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Feb 2023 13:07:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46654 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232066AbjBVSGD (ORCPT
+        with ESMTP id S232066AbjBVSHM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Feb 2023 13:06:03 -0500
-Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B4A52A99C
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Feb 2023 10:06:01 -0800 (PST)
-Received: by mail-ed1-x533.google.com with SMTP id x10so33143139edd.13
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Feb 2023 10:06:01 -0800 (PST)
+        Wed, 22 Feb 2023 13:07:12 -0500
+Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97CF141B58;
+        Wed, 22 Feb 2023 10:07:11 -0800 (PST)
+Received: by mail-ed1-x52b.google.com with SMTP id f13so33432186edz.6;
+        Wed, 22 Feb 2023 10:07:11 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
+        d=gmail.com; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=cGpZFU2UcyLBydYiuqKlsQusqJUYTSHZymwHyqf4dkc=;
-        b=Xkx03R7iomk5nIEr8uA5j4kl8AmgbyUaJcMuYDQL6IMZAsqZk4vY7foqn3wxGQQMy1
-         NBVIwOkF82w3lG/JUIhE1hTT/K4ncaMS6R30z4+NAGQmt4eLAMVdYnty7qGBJrQl/zdI
-         PTANY91znSBzv2Rt0b/823er0ArDX1ilVOnjw=
+        bh=sg43hY4CJcWXv8RBvC/hzx01BE+SHCkZ4KVOapIBDjQ=;
+        b=Y5xAzVNB/kGCd65ejJ/sBetwRGQyPa3JiXfOJCA86buDtTNIj8px+Mz/sKTNTZ/6vr
+         ouqoQOao+7xo8eWqUGlrNXNWYdNbYtYGGUwVBKx0t3xpJJo0iNcLaAdQzepWMm9DNTaO
+         bhR4ZfLCALcwgHvMit6lTY0Y9PjxA4pnZZyXEPKmjZOG0cDN6rjEe4ChvN8ofTZN1d/I
+         m21SE15CVOnme4m3KZF3aObKe+KPX80MQ8XVQEJEn2RPpgiKWkEguEsWzyeTkr3JWK8c
+         WGkS3BdyjOK6jCYKu4+HydpN+d1IaJw8RgQ5fHuvOSoxQow4iVVbtVG8s4Gpu13j8bd9
+         +EPQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=cGpZFU2UcyLBydYiuqKlsQusqJUYTSHZymwHyqf4dkc=;
-        b=dnQ3Uvlb1DJM+mLIawZYTV76PdCY8CfjSJhv3YGgudOVMnqaanzSxWkG/WzU82m6lP
-         Yil8rsOdLEC9CSJTmVCIKhy4weFM7pddtSa0ITRT0LRPge4LCktHUC3ei8UfiKjBGI6z
-         fF1pKxRXB6QDgVrrRNC8HXsbZY6WP01mY29cEPUggdBscrZG7vGH+6IXGE0zDquoaxZn
-         yMNbb1uktqnoIk1wFOibMMZD4rsoq+Kc2EHfYSB83tiuBzoFHOsUsTWEkmPHTnZKORqp
-         SLAkmOvDfyvzOBb96AxobwUe5rcjDJyjfo4PyEJSf8XeyXQNPbbtNuv9nydKvBiV1oQq
-         X1pQ==
-X-Gm-Message-State: AO0yUKUKsYzkxT/XSXupiOBiK2g9UnItt3vk7u2nlYF6l6aja4S3QQeS
-        O72Njlngg/xVKAPto5v//nLqQ16B47WccUmXSJ4=
-X-Google-Smtp-Source: AK7set8SctDWFfDv+YzHkpep1R+tyILa70tLY1p4KAcMlu9cjNCmm2EAe7B5gBFDgRA2ZCzdp+kpkw==
-X-Received: by 2002:a17:906:869a:b0:8b1:3131:76e9 with SMTP id g26-20020a170906869a00b008b1313176e9mr16385993ejx.46.1677089159178;
-        Wed, 22 Feb 2023 10:05:59 -0800 (PST)
-Received: from mail-ed1-f50.google.com (mail-ed1-f50.google.com. [209.85.208.50])
-        by smtp.gmail.com with ESMTPSA id r10-20020a1709063d6a00b00882f9130eafsm8712176ejf.26.2023.02.22.10.05.58
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 22 Feb 2023 10:05:58 -0800 (PST)
-Received: by mail-ed1-f50.google.com with SMTP id cq23so33670050edb.1
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Feb 2023 10:05:58 -0800 (PST)
-X-Received: by 2002:a50:d619:0:b0:4ab:3a49:68b9 with SMTP id
- x25-20020a50d619000000b004ab3a4968b9mr4197830edi.5.1677089157879; Wed, 22 Feb
- 2023 10:05:57 -0800 (PST)
+        bh=sg43hY4CJcWXv8RBvC/hzx01BE+SHCkZ4KVOapIBDjQ=;
+        b=L25tXR+8N0as0hdZ634b36x0+Kq8LIUfqiXL8+lrq1iR8Y9DdSya03rchDhYcLTZlo
+         jNq48SXDvS/ZSbAPKb2DzmHbTit+LIWjAI9bp6r5EAz0HWrLRu7wUahr4cDV4IuYtwaO
+         S2+uLFYYYA/mkLKKUyt59mhxqOXPb3dfdLqYgvnZ9V7wNHmWokscLeopyQlT1GI5Jppo
+         208n4ZfuxZGti3PbfuDTP4PXKL42LndjzYnHPQekKk/YVL8Sk7sEb4F8XfmJ588/QMnO
+         WGEcoiNEtOS1iFfF+9s/to44JFklx61tdCpVzbtoUclQfK2rLYo0faeLy2Su1Xr4ej8k
+         ZORA==
+X-Gm-Message-State: AO0yUKUreostF3jfWCA/Nt2gJ9cw9eCpw4D7ktOmbQzYe4IluOKK4N0m
+        G7FeOSFzC3u80zZb7Ov3HwuYM8TN+6za791I5SM=
+X-Google-Smtp-Source: AK7set/vsgA6/MGZQ9iqrfcO5AldpGzfnzi6YcLPLLQoHIJy87BYFRt3PqqzWjoz9xq4aGU2BDj/bGTt0T7lg4KI6UM=
+X-Received: by 2002:a17:906:58cb:b0:88d:ba79:4315 with SMTP id
+ e11-20020a17090658cb00b0088dba794315mr9563122ejs.5.1677089230049; Wed, 22 Feb
+ 2023 10:07:10 -0800 (PST)
 MIME-Version: 1.0
-References: <9c476aa64c9588205817833dbaa622f87c0e0081.1677051600.git.viresh.kumar@linaro.org>
- <CAMuHMdXd3876o+petD51xfnJRBOOg=oqkO_pdsmcr8=Uec2KDg@mail.gmail.com>
- <7189da9a-f634-01ae-194d-a4d14a319a1c@intel.com> <CAADnVQKX0ZD=8Xu4U2H_vbyuNoXJv0UZ1OffUtqw3vs0v95ELQ@mail.gmail.com>
-In-Reply-To: <CAADnVQKX0ZD=8Xu4U2H_vbyuNoXJv0UZ1OffUtqw3vs0v95ELQ@mail.gmail.com>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Wed, 22 Feb 2023 10:05:40 -0800
-X-Gmail-Original-Message-ID: <CAHk-=wg8E68rT2X1fHjxxn0GQhmz7vSVOmmY4Kk1W0VEYjFjnA@mail.gmail.com>
-Message-ID: <CAHk-=wg8E68rT2X1fHjxxn0GQhmz7vSVOmmY4Kk1W0VEYjFjnA@mail.gmail.com>
-Subject: Re: [PATCH] bpf: Fix undeclared function 'barrier_nospec' warning
-To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc:     Dave Hansen <dave.hansen@intel.com>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Alexei Starovoitov <ast@kernel.org>,
+References: <1677066908-15224-1-git-send-email-yangtiezhu@loongson.cn> <1677066908-15224-4-git-send-email-yangtiezhu@loongson.cn>
+In-Reply-To: <1677066908-15224-4-git-send-email-yangtiezhu@loongson.cn>
+From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date:   Wed, 22 Feb 2023 10:06:58 -0800
+Message-ID: <CAADnVQLLborN3ABxRPUhSL5jQ1XcWNM9DBfjaEbvnF9qdE_CJA@mail.gmail.com>
+Subject: Re: [PATCH bpf-next 3/3] selftests/bpf: Check __ARCH_WANT_SET_GET_RLIMIT
+ before syscall(__NR_getrlimit)
+To:     Tiezhu Yang <yangtiezhu@loongson.cn>
+Cc:     Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        bpf <bpf@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>,
-        Huacai Chen <chenhuacai@loongson.cn>
+        Andrii Nakryiko <andrii@kernel.org>, bpf <bpf@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -90,14 +70,48 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Feb 22, 2023 at 8:29 AM Alexei Starovoitov
-<alexei.starovoitov@gmail.com> wrote:
+On Wed, Feb 22, 2023 at 3:55 AM Tiezhu Yang <yangtiezhu@loongson.cn> wrote:
 >
-> Linus,
-> Since the blast radius is big, may be apply the fix directly ?
+> __NR_getrlimit is defined only if __ARCH_WANT_SET_GET_RLIMIT is defined:
+>
+>   #ifdef __ARCH_WANT_SET_GET_RLIMIT
+>   /* getrlimit and setrlimit are superseded with prlimit64 */
+>   #define __NR_getrlimit 163
+>   ...
+>   #endif
+>
+> Some archs do not define __ARCH_WANT_SET_GET_RLIMIT, it should check
+> __ARCH_WANT_SET_GET_RLIMIT before syscall(__NR_getrlimit) to fix the
+> following build error:
+>
+>     TEST-OBJ [test_progs] user_ringbuf.test.o
+>   tools/testing/selftests/bpf/prog_tests/user_ringbuf.c: In function 'kick_kernel_cb':
+>   tools/testing/selftests/bpf/prog_tests/user_ringbuf.c:593:17: error: '__NR_getrlimit' undeclared (first use in this function)
+>     593 |         syscall(__NR_getrlimit);
+>         |                 ^~~~~~~~~~~~~~
+>   tools/testing/selftests/bpf/prog_tests/user_ringbuf.c:593:17: note: each undeclared identifier is reported only once for each function it appears in
+>   make: *** [Makefile:573: tools/testing/selftests/bpf/user_ringbuf.test.o] Error 1
+>   make: Leaving directory 'tools/testing/selftests/bpf'
+>
+> Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
+> ---
+>  tools/testing/selftests/bpf/prog_tests/user_ringbuf.c | 2 ++
+>  1 file changed, 2 insertions(+)
+>
+> diff --git a/tools/testing/selftests/bpf/prog_tests/user_ringbuf.c b/tools/testing/selftests/bpf/prog_tests/user_ringbuf.c
+> index 3a13e10..0550307 100644
+> --- a/tools/testing/selftests/bpf/prog_tests/user_ringbuf.c
+> +++ b/tools/testing/selftests/bpf/prog_tests/user_ringbuf.c
+> @@ -590,7 +590,9 @@ static void *kick_kernel_cb(void *arg)
+>         /* Kick the kernel, causing it to drain the ring buffer and then wake
+>          * up the test thread waiting on epoll.
+>          */
+> +#ifdef __ARCH_WANT_SET_GET_RLIMIT
+>         syscall(__NR_getrlimit);
+> +#endif
 
-Yup, done. Of the different patches I picked the same location you had
-taken so that there shouldn't be any conflicts if that ends making it
-to me later.
+This is clearly breaks user_ringbuf test on x86:
+https://github.com/kernel-patches/bpf/actions/runs/4242660318/jobs/7374845859
 
-                  Linus
+Please do not send patches that make selftest compile on your favorite arch.
+Make sure the patches work correctly on other archs too.
