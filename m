@@ -2,204 +2,199 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3BF9D69F6D0
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Feb 2023 15:41:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D43A069F6D4
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Feb 2023 15:41:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231235AbjBVOlh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Feb 2023 09:41:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50972 "EHLO
+        id S229887AbjBVOl4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Feb 2023 09:41:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51414 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229887AbjBVOle (ORCPT
+        with ESMTP id S231648AbjBVOlw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Feb 2023 09:41:34 -0500
-Received: from mail-qt1-f169.google.com (mail-qt1-f169.google.com [209.85.160.169])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95D8637B65;
-        Wed, 22 Feb 2023 06:41:32 -0800 (PST)
-Received: by mail-qt1-f169.google.com with SMTP id l12so7659642qtr.0;
-        Wed, 22 Feb 2023 06:41:32 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Lyg7tFXKKjj8PrnUvFEvHIekvmZr7jdKTCzqqNpQ8t4=;
-        b=p5mExyw1yIvrgSC/dLz49+AS1jcItTLT6qadDsCFEZUfGMOobv2mcwbqKUYauz4vcS
-         wGDnMIEjiTmWlLEI+x86O1BIBhkxhr/kN7o6L6b572yXYag0xduTcPddHdNftfd8gv5z
-         8AGeeeGaypiqI5KUNmwgTYMgSJ0apPBAK+9E/t4azQNw58HS+ueFQdloYu0st1Yr1ilh
-         H0Y5htnWosot0uDYFxaIyRhNuAinKXHFm9txzXirITYhkrO5QzKE+INzzB+VcuwTUqDu
-         7G0Go1MQVpABsx+5W2ncKmqD8SuMuwuJcGpWecq7t13gPkhWvjK5XbDJtl54xYopEhoJ
-         Rfug==
-X-Gm-Message-State: AO0yUKXFuQM1GWxT98iRMow0Q7+M9N09zcwkb9noJBYs7e5sGkElndOE
-        QJWBDtJBTKMatGNQh4ZAqZz0DGY/TieOCw==
-X-Google-Smtp-Source: AK7set/soV7qmOCZlWD7VTPeXURUe0DStM3tQPUpr6Y85feozQtnp+dRa4RN5p2FX6apfnQq9pjiyg==
-X-Received: by 2002:a05:622a:198d:b0:3ba:1c07:e472 with SMTP id u13-20020a05622a198d00b003ba1c07e472mr2496249qtc.51.1677076891323;
-        Wed, 22 Feb 2023 06:41:31 -0800 (PST)
-Received: from mail-yb1-f176.google.com (mail-yb1-f176.google.com. [209.85.219.176])
-        by smtp.gmail.com with ESMTPSA id d17-20020ac800d1000000b003bd0719cf20sm1889863qtg.39.2023.02.22.06.41.30
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 22 Feb 2023 06:41:30 -0800 (PST)
-Received: by mail-yb1-f176.google.com with SMTP id z95so8563256ybh.0;
-        Wed, 22 Feb 2023 06:41:30 -0800 (PST)
-X-Received: by 2002:a25:fb0e:0:b0:890:ac61:3ed9 with SMTP id
- j14-20020a25fb0e000000b00890ac613ed9mr850231ybe.540.1677076890300; Wed, 22
- Feb 2023 06:41:30 -0800 (PST)
+        Wed, 22 Feb 2023 09:41:52 -0500
+Received: from FRA01-MR2-obe.outbound.protection.outlook.com (mail-mr2fra01on2074.outbound.protection.outlook.com [40.107.9.74])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3CFD73A0A3
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Feb 2023 06:41:46 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=eb7iZNlXYtV/nOorOXHWG17WQvyLSZdDRhcD0+sfw9z6nBGXtIFz15MTtOFeDp0fbjap/R9enJn0Dz7eK4Qe76csPaj6yHg5qifabRlaOyG5bnG3+dHYgOrFc2sgeha46LDT/gzGkVBQD8q5qpOq7MC4AtJm3JpgchHlC4s3A+6d5sz0V986Z4B+EZlI4lsjjJ90vz24sGpnqBeIeobiFrgDDVfsw11W/shu3BwX8u37M1QGFBv/tnjHpRLINgoAKYRkZM7IoGg2sekqSwmZO0uWqR7XseDe/JSTj1d7rHFRPZNtSQzIHj3C8ExlZ5L5FQrbM2Xwb6I0+EF31UGvEA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=nLfiBiQfySJhLMcxW7NBxNq8jHv7P5DvTHTHBYUhSts=;
+ b=b5M089k/P19DPD6ckFoHYNHLfHNiRpSlPV07SbSjMW2eKufuRqAnEGViVXRSw/rwck/cec9J7GRnQeHc17m5tl3pbuRaYweHm5SYDPvfSuAn6PCVma0T/kRtxxsSUXec3EqfkUGUW/c5OdlO+a/qoPQFuNhzGj398hp6N8FDfarG0B4kKi7pR0ZFDA4DNJKvs7TAw5yWmZ5EFWYFw+d45/v8SrHF+K6V/5no7E6DyBhtTTAr2C0cw5QiKxeSZafteN0bfgwhG6tVFsyoZ04gFhnisbDE0ML2lEs8IdQ7WrocDSWRMUJM4duBXDK9zj4diqkMW8/tL5tUXDz2awCpkA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=csgroup.eu; dmarc=pass action=none header.from=csgroup.eu;
+ dkim=pass header.d=csgroup.eu; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=csgroup.eu;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=nLfiBiQfySJhLMcxW7NBxNq8jHv7P5DvTHTHBYUhSts=;
+ b=wEtyZ02NPUvG4/BjfwOQrhaPwfNbQ+/CJAXlx1iuBIAIJfR2XzDTT8qGq57ELXQXHzLM9+ARC2BuO1x9TPBxxPodr9Nb1VO6aKR9MHBJNOCWTIde0gm6AeDq/7CNfebf8sm+O8mAswITpCsDemI98inf2vLkizILB65hf98/z3UnIRQXY2FMpPw3tPyvdWasggTzHenOkR7y/kcVmzWAAQ8PwPgXAkCv1szTAxmrxLqpVScrbwu3G4yBoQo3WNRhImb6MDsqd1FPjb7+55Oz1ZH9JgeFs39AUszdY9QMEC7VXXIwdtLZFAFEUXKbj5eXdWg2whA4dogeb9EX4Y+NTA==
+Received: from MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM (2603:10a6:501:31::15)
+ by PR1P264MB1709.FRAP264.PROD.OUTLOOK.COM (2603:10a6:102:1b2::7) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6134.19; Wed, 22 Feb
+ 2023 14:41:43 +0000
+Received: from MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
+ ([fe80::2cfb:d4c:1932:b097]) by MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
+ ([fe80::2cfb:d4c:1932:b097%6]) with mapi id 15.20.6134.019; Wed, 22 Feb 2023
+ 14:41:43 +0000
+From:   Christophe Leroy <christophe.leroy@csgroup.eu>
+To:     =?utf-8?B?UGFsaSBSb2jDoXI=?= <pali@kernel.org>
+CC:     Michael Ellerman <mpe@ellerman.id.au>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Scott Wood <oss@buserror.net>, Sinan Akman <sinan@writeme.com>,
+        Martin Kennedy <hurricos@gmail.com>,
+        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v3 0/8] powerpc/85xx: p2020: Create one unified machine
+ description
+Thread-Topic: [PATCH v3 0/8] powerpc/85xx: p2020: Create one unified machine
+ description
+Thread-Index: AQHZQ4voiBHHMXLxIEOEExcEj19bG67Z+pwAgACPBYCAABRnAIAAcm4A
+Date:   Wed, 22 Feb 2023 14:41:43 +0000
+Message-ID: <90174bc7-c295-bd08-95a9-1e75b4b49e5a@csgroup.eu>
+References: <20230218111405.27688-1-pali@kernel.org>
+ <20230221220714.pm64kwsnf3erdjcm@pali>
+ <a692823b-eada-3072-c9e9-83877480454f@csgroup.eu>
+ <20230222075208.y2nxqttaxfwsd4ye@pali>
+In-Reply-To: <20230222075208.y2nxqttaxfwsd4ye@pali>
+Accept-Language: fr-FR, en-US
+Content-Language: fr-FR
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+user-agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=csgroup.eu;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: MRZP264MB2988:EE_|PR1P264MB1709:EE_
+x-ms-office365-filtering-correlation-id: 397389ab-98ad-42a1-9235-08db14e2ea7c
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: KZdF/N6nf9b267pMEdsjZxaQlIOr8HMcB99RMY43MFqQAGxdJrlm6qy8XLPCVPIDrEkv72hg8aY5lk1iC2EX4LXDFsMTrtUd/EfY5y34KfHciLNrCkFJN4jui7VIbwXpR39J/1yn2YzDkX1zga0RSS+Lh7Z38SHcLxA9XYTRjYc1Qw3oTUYWgP1iwrsybr4CMKymBwqMv6zGW5/PzzPVEVTiz2IbK4Wc7ajt/wmZqyKBt+Iy17QItTD30xiz++0EwhlgryX+NwxYT2qO2GeucwlklM3ia4Rq8gNYkIHqcZffIknFW0QLDJCsskrO6D0EVcGoMUcqBQ5goTY2wL/NEyzkkmoEzAdoWYRbpf7RoAkMt+rBuisgLdnvvENgp49IW7C8/+mVQc2+9f/3u1MVVv4TOOS2GmPE41Ktvtuloovrk9Rz9r4aDET6FHepPu8U5UARwhlnGjxm0/PsS1pIA3WlmipUEaIN0ClEDwspRA8y+9aX4Uo3uUPZXbSpzQesTWmE23M7bI2uvyrcjWjxNXg3drmQX7yyAAkPybwWEoEz2e/njT1hOSAAZnIQqI0/pV4nezJDwvCup0rhaCod1Ao5u3tJv+BOxv/sGumVCwhcXhi2ZoRskrcMwnTWHpaci29fQKyQwG0pKP+/wQk/J/oRUsPaW719IPJovn8kzBN8OWdIt0vRd56hR8AUjiexvxxxvX5kM2pdNFWCRFjQ7KWycMEn/REJBRB/6jDgGLMEYDxSu6AliW1uhYapVfKheOhVOkB/V2XGsE2+p/TJw+nqdJ223YQ9aFsIV8E5Hys=
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230025)(4636009)(376002)(136003)(39850400004)(346002)(396003)(366004)(451199018)(966005)(31686004)(6512007)(26005)(6486002)(186003)(8936002)(4326008)(91956017)(66446008)(76116006)(6916009)(64756008)(8676002)(66476007)(66946007)(66556008)(5660300002)(36756003)(83380400001)(6506007)(2616005)(71200400001)(478600001)(66574015)(316002)(41300700001)(54906003)(38100700002)(44832011)(86362001)(122000001)(31696002)(38070700005)(2906002)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?QnA3R1ZpRkkvQ29oTEVKZ0hBb1FnODhSYXErdC9KelRFc01qMVk3RExreEZa?=
+ =?utf-8?B?c2JzRW0ybFFFdVR5aksvWXpRNVFKZ3NCdVNrSEZiVG11U3dEUERiSWpRYk5J?=
+ =?utf-8?B?Rzc1RUxqZFJlSFlmS3Job1lGK2NGa2lNbG5PVUJXcE9JY0tudHpQUXk4eG5E?=
+ =?utf-8?B?OHQ5d2dvdG1JS3VGcjNENDMrQmc5YVd2Q1ZtT29SYmg3VUw0cWtXZHlnNUFK?=
+ =?utf-8?B?L0R5Wjlxcm5EaDFPZUFkZHJZbWE1ZUtzeU9sd2UvUjdHblEyRmYvOXpPcmlT?=
+ =?utf-8?B?cEU0eVR3dk1kMEhsWlVkNFNkQ2RVUGUxQUFraW5uV1o0cFRkUHZleVN1ek45?=
+ =?utf-8?B?enZrMDIwRzJWbTJFQlc1Z2Rnc25MemFYc2tYRTV4TDQwanM0dkUwUTh5TW5S?=
+ =?utf-8?B?TVhKd0hKa0x2dWpjU012RG9BZ1hpQmpaMks5U2lCbnNhcG1OcmFxWUo5aEg5?=
+ =?utf-8?B?YzVlZG12UCtuaEZzbi9ybm1aeFNJSFRpbnNrUndmKzRqMkFkMExNd2hwRWk4?=
+ =?utf-8?B?ek1yclZWamJqblZwMEhidFcyYnVIOGZxb2UyWmtyWHQyM0dWM1Y0eVNpV3g4?=
+ =?utf-8?B?eFkwYWc3ZVk0UG1TNXNhb1gwSkpGbDVFVzJvVDF2YXl0c1pZeVEzaWhuVC9W?=
+ =?utf-8?B?RFZhNGphdUYzbjJpclVISEJFZGc4aHJ0Um1sTGVZNVpKSndWZzJ6NzhFYnh4?=
+ =?utf-8?B?UzU0dGNmSVI1Yko1WHFqTUtUZVNnVExWM2RjU1Z0alRyczNqOG9FUHBLbFVy?=
+ =?utf-8?B?WGpGaGUrSU1oczJIVENSSFRTWkFid2phTG5QN25lK2dUeUM1RTdrWVpicFFK?=
+ =?utf-8?B?THhEM1p5VTlBZ2dDNUlPRUMwZW5qSTE5VWpGajFhVjAzU05pTDZnY1BtWFJE?=
+ =?utf-8?B?RGwwZlMrdDBuZGhJVUwzaUZrYmZuNkdmdlJuRHp1dS90amFob09Tb2FwWjZo?=
+ =?utf-8?B?VU1YOVhYOHhoUTJaQjdNZTN2bldMTGxHK1JIT2t5dkNBc0NHN0xMbWNJQlBP?=
+ =?utf-8?B?eG5KVlJ5Z2p6WmxKamR2VHBwOW0yMktCbmZyanZ2VjNFVDF3eW9TR3FhQkRV?=
+ =?utf-8?B?N1NnOUhmYUxhYmFYT2lsSloyVXhFU2dpRUxwelhRWUZ1WGZoOGVUdVRXTU83?=
+ =?utf-8?B?RWFlbGtha2xsMmhOOGNjRHdMbi8rMFdnb3VHVmh0Ylc1czFEK203TTNHZVVi?=
+ =?utf-8?B?ZXNlRDd6ZjZQN3ZUU0FpTFZWeUs2OFVZNDhYVFdLN09UUUVEa2RJTzJSN2Ev?=
+ =?utf-8?B?MDZYVGgzd2FDZ3pNUkxUbXI4cUVYOTBjblZOdjAvdjJGa3NuMVBhWlE5MXZh?=
+ =?utf-8?B?cUx5NGd1ampsWVU1aVVEV3o4VHU3czhGRldBUDJxRm1QOThBZlQzRDNXa0FE?=
+ =?utf-8?B?QzNSVkJOTWVGdGhIT3AwYkplNHhnWXRoZGlJdWRWNkNsaHZ3aFFNaURzemFr?=
+ =?utf-8?B?UzVkajdmeFdoYnBpNU82MVpaVmZZT0hlOVdHUkdKNFdkWkc1WUNwMjBibWZ6?=
+ =?utf-8?B?TVk3ODNKY1ovc3l3aU80M1BRRE0xU3N0MGpFWU5MY1krcnF4NmozclZidk13?=
+ =?utf-8?B?U1hPQzFQY1NNTklJRlVQS1ZwbXRBaGdPL21WVTJkdlRDZzlnNldFN2UvelZS?=
+ =?utf-8?B?bllPc3hkYlRZWXhSQm45ZHo1OHo5SFREbnZBWG1GMlQ4OEVXOVI0Vk1QTS93?=
+ =?utf-8?B?NGdlQjBjU0tKc2p4R2kvWWhlMVNCdjJRL25BK0NYZVZGMjc4YWRZTi9sWU5m?=
+ =?utf-8?B?WW1Cc0Z6S05NQzgyMmdaR0NhTEdSSFNLUmdiU1JIbDZsWUNPc1ZrOWNRTkps?=
+ =?utf-8?B?WFZNUDUzZ2VFSGxIYzdvbkg1M3lXS1A2bzRNZEV3VlNqUkJXZlYvNkdJOVhU?=
+ =?utf-8?B?d0VZMUFZbFJhV3JhZCtuU0RGV3g0OERDbGxIZklIZ2xWeG9sU241Sy9ybkNU?=
+ =?utf-8?B?R0xpdUhVdGUzWWZLVEJmaFkrRjFQUFUvNzFPd2YvRnEyTzZZaTZVNlRyTDQ4?=
+ =?utf-8?B?WlhWUUE5WEdRcUd4eXdSTUlheUpjVmdlYitIY2ovK0pmNHlndDl2bXYxVGJC?=
+ =?utf-8?B?LzlmcFdUSjY1djhicUlDTURZcHBlMHoycGxpT1lJVUJaeldEUXZadWU2ck0v?=
+ =?utf-8?B?NGVtV3V5RDhiS3VKa2NyZnRycEpjQXN2d0wrVmxETXRacHpPbENGcGd3V3Vs?=
+ =?utf-8?B?Nmc9PQ==?=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <6C39D91FBDFACD4785BE9B40ACF6CBAD@FRAP264.PROD.OUTLOOK.COM>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-References: <20230104013436.203427-1-neal_liu@aspeedtech.com> <20230104013436.203427-2-neal_liu@aspeedtech.com>
-In-Reply-To: <20230104013436.203427-2-neal_liu@aspeedtech.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Wed, 22 Feb 2023 15:41:18 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdVS_JF0+5CyNM6ivxqRLKkMte9=Xw5E-fc-OTHibwc5vw@mail.gmail.com>
-Message-ID: <CAMuHMdVS_JF0+5CyNM6ivxqRLKkMte9=Xw5E-fc-OTHibwc5vw@mail.gmail.com>
-Subject: Re: [PATCH v5 1/4] crypto: aspeed: Add ACRY RSA driver
-To:     Neal Liu <neal_liu@aspeedtech.com>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Joel Stanley <joel@jms.id.au>,
-        Andrew Jeffery <andrew@aj.id.au>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        "David S . Miller" <davem@davemloft.net>,
-        Chia-Wei Wang <chiawei_wang@aspeedtech.com>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-aspeed@lists.ozlabs.org, linux-kernel@vger.kernel.org,
-        linux-crypto@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+X-OriginatorOrg: csgroup.eu
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-Network-Message-Id: 397389ab-98ad-42a1-9235-08db14e2ea7c
+X-MS-Exchange-CrossTenant-originalarrivaltime: 22 Feb 2023 14:41:43.1629
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 9914def7-b676-4fda-8815-5d49fb3b45c8
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: LW+0FvlVYq7w0mFDcmWk4uH2YGQxtY7JXujFy0rf5cVSgTOxJwInTHD4EWuJUvbk9WoFPCSIS1R6aiLmsvu9bTJ4wj4jvxPiiGjMmU3eRGQ=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PR1P264MB1709
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Neal,
-
-On Wed, Jan 4, 2023 at 2:37 AM Neal Liu <neal_liu@aspeedtech.com> wrote:
-> ACRY Engine is designed to accelerate the throughput of
-> ECDSA/RSA signature and verification.
->
-> This patch aims to add ACRY RSA engine driver for hardware
-> acceleration.
->
-> Signed-off-by: Neal Liu <neal_liu@aspeedtech.com>
-
-Thanks for your patch, which is now commit 2f1cf4e50c956f88 ("crypto:
-aspeed - Add ACRY RSA driver").
-
-> --- /dev/null
-> +++ b/drivers/crypto/aspeed/aspeed-acry.c
-
-> +static int aspeed_acry_probe(struct platform_device *pdev)
-> +{
-> +       struct aspeed_acry_dev *acry_dev;
-> +       struct device *dev = &pdev->dev;
-> +       struct resource *res;
-> +       int rc;
-> +
-> +       acry_dev = devm_kzalloc(dev, sizeof(struct aspeed_acry_dev),
-> +                               GFP_KERNEL);
-> +       if (!acry_dev)
-> +               return -ENOMEM;
-> +
-> +       acry_dev->dev = dev;
-> +
-> +       platform_set_drvdata(pdev, acry_dev);
-> +
-> +       res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
-> +       acry_dev->regs = devm_ioremap_resource(dev, res);
-> +       if (IS_ERR(acry_dev->regs))
-> +               return PTR_ERR(acry_dev->regs);
-> +
-> +       res = platform_get_resource(pdev, IORESOURCE_MEM, 1);
-> +       acry_dev->acry_sram = devm_ioremap_resource(dev, res);
-> +       if (IS_ERR(acry_dev->acry_sram))
-> +               return PTR_ERR(acry_dev->acry_sram);
-> +
-> +       /* Get irq number and register it */
-> +       acry_dev->irq = platform_get_irq(pdev, 0);
-> +       if (acry_dev->irq < 0)
-> +               return -ENXIO;
-> +
-> +       rc = devm_request_irq(dev, acry_dev->irq, aspeed_acry_irq, 0,
-> +                             dev_name(dev), acry_dev);
-> +       if (rc) {
-> +               dev_err(dev, "Failed to request irq.\n");
-> +               return rc;
-> +       }
-> +
-> +       acry_dev->clk = devm_clk_get_enabled(dev, NULL);
-> +       if (IS_ERR(acry_dev->clk)) {
-> +               dev_err(dev, "Failed to get acry clk\n");
-> +               return PTR_ERR(acry_dev->clk);
-> +       }
-> +
-> +       acry_dev->ahbc = syscon_regmap_lookup_by_phandle(dev->of_node,
-> +                                                        "aspeed,ahbc");
-> +       if (IS_ERR(acry_dev->ahbc)) {
-> +               dev_err(dev, "Failed to get AHBC regmap\n");
-> +               return -ENODEV;
-> +       }
-> +
-> +       /* Initialize crypto hardware engine structure for RSA */
-> +       acry_dev->crypt_engine_rsa = crypto_engine_alloc_init(dev, true);
-> +       if (!acry_dev->crypt_engine_rsa) {
-> +               rc = -ENOMEM;
-> +               goto clk_exit;
-> +       }
-> +
-> +       rc = crypto_engine_start(acry_dev->crypt_engine_rsa);
-> +       if (rc)
-> +               goto err_engine_rsa_start;
-> +
-> +       tasklet_init(&acry_dev->done_task, aspeed_acry_done_task,
-> +                    (unsigned long)acry_dev);
-> +
-> +       /* Set Data Memory to AHB(CPU) Access Mode */
-> +       ast_acry_write(acry_dev, ACRY_CMD_DMEM_AHB, ASPEED_ACRY_DMA_CMD);
-> +
-> +       /* Initialize ACRY SRAM index */
-> +       aspeed_acry_sram_mapping(acry_dev);
-> +
-> +       acry_dev->buf_addr = dmam_alloc_coherent(dev, ASPEED_ACRY_BUFF_SIZE,
-> +                                                &acry_dev->buf_dma_addr,
-> +                                                GFP_KERNEL);
-> +       memzero_explicit(acry_dev->buf_addr, ASPEED_ACRY_BUFF_SIZE);
-
-When compile-testing with CONFIG_HAS_DMA=n:
-
-    error: argument 1 null where non-null expected [-Werror=nonnull]
-
-The call to dmam_alloc_coherent() lacks error handling, as the returned
-address may be NULL.
-
-Moreover, is it safe to allocate this buffer only after the call to
-crypto_engine_start()? I.e. could acry_dev->buf_addr be accessed
-before, causing a NULL pointer dereference?
-Is there any other initialization that should be done earlier?
-
-> +
-> +       aspeed_acry_register(acry_dev);
-> +
-> +       dev_info(dev, "Aspeed ACRY Accelerator successfully registered\n");
-> +
-> +       return 0;
-> +
-> +err_engine_rsa_start:
-> +       crypto_engine_exit(acry_dev->crypt_engine_rsa);
-> +clk_exit:
-> +       clk_disable_unprepare(acry_dev->clk);
-> +
-> +       return rc;
-> +}
-
-Gr{oetje,eeting}s,
-
-                        Geert
-
--- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+DQoNCkxlIDIyLzAyLzIwMjMgw6AgMDg6NTIsIFBhbGkgUm9ow6FyIGEgw6ljcml0wqA6DQo+IE9u
+IFdlZG5lc2RheSAyMiBGZWJydWFyeSAyMDIzIDA2OjM5OjA3IENocmlzdG9waGUgTGVyb3kgd3Jv
+dGU6DQo+PiBIaSwNCj4+DQo+PiBMZSAyMS8wMi8yMDIzIMOgIDIzOjA3LCBQYWxpIFJvaMOhciBh
+IMOpY3JpdMKgOg0KPj4+IEhlbGxvIENocmlzdG9waGUhIENvdWxkIHlvdSBsb29rIGF0IHRoaXMg
+djMgc2VyaWVzPw0KPj4+IEkgYWRkcmVzc2VkIHRob3NlIHNtYWxsIGlzc3VlcyBhbmQgaG9wZWZ1
+bGx5IGl0IHNob3VsZCBiZSByZWFkeS4NCj4+PiBJdCB3b3VsZCBiZSBncmVhdCB0byBoYXZlIHRo
+aXMgZmluYWxseSBpbiB2Ni4zIHJlbGVhc2UuDQo+Pg0KPj4gSSBzdGFydGVkIGxvb2tpbmcgYXQg
+eW91ciBzZXJpZXMgYW5kIEkgd2lsbCB0cnkgdG8gcHJvdmlkZSBhIGZlZWRiYWNrDQo+PiB3aXRo
+aW4gYSBmZXcgZGF5cy4NCj4+DQo+PiBCeSB0aGUgd2F5IEkgc2VlIHRoYXQgUGF1bCBHb3J0bWFr
+ZXIgaGFzIHN0YXJ0ZWQgcmVtb3ZhbCBvZiBzZXZlcmFsIDg1eHgNCj4+IGJvYXJkcy4gU2hvdWxk
+IHdlIGZpcnN0IHRha2UgUGF1bCdzIHJlbW92YWwgc2VyaWVzIHRoZW4gc2VlIHdoYXQgcmVtYWlu
+cw0KPj4gYmVmb3JlIGFwcGx5aW5nIHlvdXJzID8gVGhhdCB3b3VsZCBtYWtlIHlvdXIgc2VyaWVz
+IGV2ZW4gbW9yZSBlZmZpY2llbnQuDQo+IA0KPiBJIGhhdmUgYWxyZWFkeSByZXBsaWVkIHRvIFBh
+dWwgcGF0Y2ggc2VyaWVzLiBUaGUgaW1wb3J0YW50IHRoaW5nIGlzIHRoYXQNCj4gd2UgYXJlIHRv
+dWNoaW5nIGRpZmZlcmVudCBmaWxlcywgc28gcGF0Y2ggc2VyaWVzIHNob3VsZCBiZSBpbmRlcGVu
+ZGVudC4NCg0KT2suDQoNCkJlY2F1c2UgZXhlbXBsZXMgYXJlIGFsd2F5cyBiZXR0ZXIgdGhhbiBs
+b25nIHdyaXRpbmdzLCBJIGhhdmUgcHJlcGFyZWQgYSANCnY0IG9mIHlvdXIgc2VyaWVzIGFuZCB3
+aWxsIHNlbmQgaXQgb3V0IHNob3J0bHkuDQoNCklmIHRoYXQgYXBwcm9hY2ggaXMgb2sgZm9yIHlv
+dSwgZmVlbCBmcmVlIHRvIHJlc3RhcnQgZnJvbSB0aGVyZS4NCg0KQ2hyaXN0b3BoZQ0KDQo+IA0K
+Pj4gQ2hyaXN0b3BoDQo+Pg0KPj4+DQo+Pj4gT24gU2F0dXJkYXkgMTggRmVicnVhcnkgMjAyMyAx
+MjoxMzo1NyBQYWxpIFJvaMOhciB3cm90ZToNCj4+Pj4gVGhpcyBwYXRjaCBzZXJpZXMgdW5pZmll
+cyBhbGwgUDIwMjAgYm9hcmRzIGFuZCBtYWNoaW5lIGRlc2NyaXB0aW9ucyBpbnRvDQo+Pj4+IG9u
+ZSBnZW5lcmljIHVuaWZpZWQgUDIwMjAgbWFjaGluZSBkZXNjcmlwdGlvbi4gV2l0aCB0aGlzIGdl
+bmVyaWMgbWFjaGluZQ0KPj4+PiBkZXNjcmlwdGlvbiwga2VybmVsIGNhbiBib290IG9uIGFueSBQ
+MjAyMC1iYXNlZCBib2FyZCB3aXRoIGNvcnJlY3QgRFRTDQo+Pj4+IGZpbGUuDQo+Pj4+DQo+Pj4+
+IFRlc3RlZCBvbiBDWi5OSUMgVHVycmlzIDEuMSBib2FyZCB3aXRoIGhhcyBGcmVlc2NhbGUgUDIw
+MjAgcHJvY2Vzc29yLg0KPj4+PiBLZXJuZWwgZHVyaW5nIGJvb3RpbmcgY29ycmVjdGx5IGRldGVj
+dHMgUDIwMjAgYW5kIHByaW50czoNCj4+Pj4gWyAgICAwLjAwMDAwMF0gVXNpbmcgRnJlZXNjYWxl
+IFAyMDIwIG1hY2hpbmUgZGVzY3JpcHRpb24NCj4+Pj4NCj4+Pj4gQ2hhbmdlcyBpbiB2MzoNCj4+
+Pj4gKiBVc2UgJ2lmIChJU19FTkFCTEVEKENPTkZJR19QUENfSTgyNTkpKScgaW5zdGVhZCBvZiAn
+I2lmZGVmIENPTkZJR19QUENfSTgyNTknDQo+Pj4+ICogU2ltcGxpZnkgcDIwMjBfcHJvYmUoKQ0K
+Pj4+PiAqIFBhdGNoZXMgZ2VuZXJhdGVkIGJ5IC1NIGFuZCAtQyBnaXQgb3B0aW9ucw0KPj4+Pg0K
+Pj4+PiBMaW5rIHRvIHYyOiBodHRwczovL2xvcmUua2VybmVsLm9yZy9saW51eHBwYy1kZXYvMjAy
+MjEyMjQyMTE0MjUuMTQ5ODMtMS1wYWxpQGtlcm5lbC5vcmcvDQo+Pj4+DQo+Pj4+IENoYW5nZXMg
+aW4gdjI6DQo+Pj4+ICogQWRkZWQgcGF0Y2ggInAyMDIwOiBNb3ZlIGk4MjU5IGNvZGUgaW50byBv
+d24gZnVuY3Rpb24iIChzZXBhcmF0ZWQgZnJvbSB0aGUgbmV4dCBvbmUpDQo+Pj4+ICogUmVuYW1l
+ZCBDT05GSUdfUDIwMjAgdG8gQ09ORklHX1BQQ19QMjAyMA0KPj4+PiAqIEZpeGVkIGRlc2NyaXB0
+aW9ucw0KPj4+Pg0KPj4+PiBMaW5rIHRvIHYxOiBodHRwczovL2xvcmUua2VybmVsLm9yZy9saW51
+eHBwYy1kZXYvMjAyMjA4MTkxOTE1NTcuMjgxMTYtMS1wYWxpQGtlcm5lbC5vcmcvDQo+Pj4+DQo+
+Pj4+IFBhbGkgUm9ow6FyICg4KToNCj4+Pj4gICAgIHBvd2VycGMvODV4eDogTWFyayBtcGM4NXh4
+X3JkYl9waWNfaW5pdCgpIGFzIHN0YXRpYw0KPj4+PiAgICAgcG93ZXJwYy84NXh4OiBNYXJrIG1w
+Yzg1eHhfZHNfcGljX2luaXQoKSBhcyBzdGF0aWMNCj4+Pj4gICAgIHBvd2VycGMvODV4eDogcDIw
+MjA6IE1vdmUgYWxsIFAyMDIwIG1hY2hpbmUgZGVzY3JpcHRpb25zIHRvIHAyMDIwLmMNCj4+Pj4g
+ICAgIHBvd2VycGMvODV4eDogcDIwMjA6IE1vdmUgaTgyNTkgY29kZSBpbnRvIG93biBmdW5jdGlv
+bg0KPj4+PiAgICAgcG93ZXJwYy84NXh4OiBwMjAyMDogVW5pZnkgLnNldHVwX2FyY2ggYW5kIC5p
+bml0X0lSUSBjYWxsYmFja3MNCj4+Pj4gICAgIHBvd2VycGMvODV4eDogcDIwMjA6IERlZmluZSBq
+dXN0IG9uZSBtYWNoaW5lIGRlc2NyaXB0aW9uDQo+Pj4+ICAgICBwb3dlcnBjLzg1eHg6IHAyMDIw
+OiBFbmFibGUgYm9hcmRzIGJ5IG5ldyBjb25maWcgb3B0aW9uDQo+Pj4+ICAgICAgIENPTkZJR19Q
+UENfUDIwMjANCj4+Pj4gICAgIHBvd2VycGM6IGR0czogdHVycmlzMXguZHRzOiBSZW1vdmUgImZz
+bCxQMjAyMFJEQi1QQyIgY29tcGF0aWJsZSBzdHJpbmcNCj4+Pj4NCj4+Pj4gICAgYXJjaC9wb3dl
+cnBjL2Jvb3QvZHRzL3R1cnJpczF4LmR0cyAgICAgICAgICAgIHwgICAyICstDQo+Pj4+ICAgIGFy
+Y2gvcG93ZXJwYy9wbGF0Zm9ybXMvODV4eC9LY29uZmlnICAgICAgICAgICB8ICAyMiArKy0NCj4+
+Pj4gICAgYXJjaC9wb3dlcnBjL3BsYXRmb3Jtcy84NXh4L01ha2VmaWxlICAgICAgICAgIHwgICAx
+ICsNCj4+Pj4gICAgYXJjaC9wb3dlcnBjL3BsYXRmb3Jtcy84NXh4L21wYzg1eHhfZHMuYyAgICAg
+IHwgIDI1ICstLS0NCj4+Pj4gICAgYXJjaC9wb3dlcnBjL3BsYXRmb3Jtcy84NXh4L21wYzg1eHhf
+cmRiLmMgICAgIHwgIDQ2ICstLS0tLQ0KPj4+PiAgICAuLi4vcGxhdGZvcm1zLzg1eHgve21wYzg1
+eHhfZHMuYyA9PiBwMjAyMC5jfSAgfCAxMzUgKysrKysrLS0tLS0tLS0tLS0tDQo+Pj4+ICAgIDYg
+ZmlsZXMgY2hhbmdlZCwgNjggaW5zZXJ0aW9ucygrKSwgMTYzIGRlbGV0aW9ucygtKQ0KPj4+PiAg
+ICBjb3B5IGFyY2gvcG93ZXJwYy9wbGF0Zm9ybXMvODV4eC97bXBjODV4eF9kcy5jID0+IHAyMDIw
+LmN9ICg1MiUpDQo+Pj4+DQo+Pj4+IC0tIA0KPj4+PiAyLjIwLjENCj4+Pj4NCg==
