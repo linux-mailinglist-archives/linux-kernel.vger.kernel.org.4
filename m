@@ -2,145 +2,178 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B037569ECC2
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Feb 2023 03:13:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 72B1269ECC8
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Feb 2023 03:23:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230244AbjBVCNA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Feb 2023 21:13:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46016 "EHLO
+        id S230251AbjBVCW5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Feb 2023 21:22:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49192 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229880AbjBVCM5 (ORCPT
+        with ESMTP id S229561AbjBVCWz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Feb 2023 21:12:57 -0500
-Received: from mail-qt1-x841.google.com (mail-qt1-x841.google.com [IPv6:2607:f8b0:4864:20::841])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D8923ABC;
-        Tue, 21 Feb 2023 18:12:56 -0800 (PST)
-Received: by mail-qt1-x841.google.com with SMTP id ay9so6419489qtb.9;
-        Tue, 21 Feb 2023 18:12:56 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1677031975;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=v4lpwOHYzSxX5c6WRqSa/GkQgz2QeIYbbm22Xe8Te0w=;
-        b=pEDIEPw3gYH7ZaJUkisB9tmLdQ7teuqxxgEKcDeQQhbXHowsGl4Q6g68bU4GDWMEiD
-         v8uReP/oDn5uxTjeRWtPr9nlSqTqLFsqfteL0l1BAg5jNRZNhVChEKoyyBVjDqhHflmE
-         TAAme2jpirE7qbsXbkVvEorKhT+c+MIHZEOhqLO5tvwTxyiGsLnaMjnjS/ANqyDxAqVf
-         Cou+qX3YAIjxajoWb6rZiy9gdNHSRaVQnw8vdsMJTYVGdzuSTHd+yAGY2DFLn6H3gJ+n
-         seIootlUUI+i+63EQXpv8x6IWCWEjioOf03NDFUNGdIQRmBcssqWlWPYCyBEoBeFu5lF
-         QtpA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1677031975;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=v4lpwOHYzSxX5c6WRqSa/GkQgz2QeIYbbm22Xe8Te0w=;
-        b=bjBvKobtodb74evXWNboWW4zTgd0YYKzLA4MEArjYa7f1vhRUZCSWGCX/NJXjQTbce
-         Yih96EMvuS23iwgLy3C6G3/SqO0YbqhGTtBIO0xlQIodD2njGI484mTZlHUgGZb+Nzyn
-         uRZj99+075+Zw6aboZpVJ/FduDnEiHgOqGQd8qMXGjl7Y4JsTRRQ03oliFk+Fl2J6TDO
-         B6xo1kuoqejB+Te0A312KUOb4mpn10Y4B0SoV4YUn1pFZUlwTzc7saw8az+oyICVR7XS
-         IXOdDzs2iy7oLUaqVInwo5dq8s3viOng1ExLfdxDDm1zTUn9QRL+8pWvO+3LSFcbgG9T
-         PWqQ==
-X-Gm-Message-State: AO0yUKWnja/+1/0n8NvmWrO046KcfUgiHnMDE6eJwN5sIiQpQRsErYvu
-        x0uwJln0l+xl4IitAlXcPYI=
-X-Google-Smtp-Source: AK7set94RYPR0akbGu13MdyWZMtApnFSeK+yvGf5fCi1QUM0c7B0jPjngQ4uXN+CKqxVTrIEBJXxBQ==
-X-Received: by 2002:ac8:7d05:0:b0:3b9:a4d4:7f37 with SMTP id g5-20020ac87d05000000b003b9a4d47f37mr14756063qtb.3.1677031975238;
-        Tue, 21 Feb 2023 18:12:55 -0800 (PST)
-Received: from [127.0.0.1] ([103.152.220.17])
-        by smtp.gmail.com with ESMTPSA id t195-20020a3746cc000000b0073fe1056b00sm4474138qka.55.2023.02.21.18.12.50
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 21 Feb 2023 18:12:54 -0800 (PST)
-Message-ID: <a953cdd9-1cf6-f976-fb6f-4ce0c5d9f3b7@gmail.com>
-Date:   Wed, 22 Feb 2023 10:12:46 +0800
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH] net: dccp: delete redundant ackvec record in
- dccp_insert_options()
-To:     Eric Dumazet <edumazet@google.com>
-Cc:     davem@davemloft.net, kuba@kernel.org, pabeni@redhat.com,
-        ian.mcdonald@jandi.co.nz, gerrit@erg.abdn.ac.uk,
-        dccp@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20230221092206.39741-1-hbh25y@gmail.com>
- <CANn89iJmYoewECcRTDW-F5c=jJZRxwFGMMrOGYe6XBLOgohc6w@mail.gmail.com>
+        Tue, 21 Feb 2023 21:22:55 -0500
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38C806A48
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Feb 2023 18:22:54 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1677032574; x=1708568574;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=IAfw1PLhGD+EW3mZL0j7h92FJkwz7I8Z0Uc7RUg3Glo=;
+  b=TSdUVcgENuMn+Z9qLwMBhV3ddSgTusgTgk5f8zIfRlUl+jN2+OA7Nl7C
+   6Rc5ogJlqsXpi2Qk/PAT8sm7h2bIIOzEPeIqcz8t/+Ut3rE3HxYQCh1jm
+   k7NRKaY0EbZipRiA3vwsQwPN0t6uIp/a2WFD7BELUs3yg66Q8bUV9G5UL
+   MJ0V/64C3MMQSerr2vjmjticcG1g9ZOqzh9UlePSyr/KK4TOETmyEsD84
+   dQ4OEx75PlCwLF5dB7DmDn+J/vAe6PHcCnaYofXPPZ800c9UkJCbkNkIX
+   KqVgp+JiSCokAf/9iS8eybwsYrkdLPOBL6Is5CqLP/4XXGqShyJhl/1Sm
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10628"; a="312439014"
+X-IronPort-AV: E=Sophos;i="5.97,317,1669104000"; 
+   d="scan'208";a="312439014"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Feb 2023 18:22:53 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10628"; a="671903023"
+X-IronPort-AV: E=Sophos;i="5.97,317,1669104000"; 
+   d="scan'208";a="671903023"
+Received: from fmsmsx602.amr.corp.intel.com ([10.18.126.82])
+  by orsmga002.jf.intel.com with ESMTP; 21 Feb 2023 18:22:52 -0800
+Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
+ fmsmsx602.amr.corp.intel.com (10.18.126.82) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.16; Tue, 21 Feb 2023 18:22:52 -0800
+Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
+ fmsmsx610.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.16; Tue, 21 Feb 2023 18:22:51 -0800
+Received: from FMSEDG603.ED.cps.intel.com (10.1.192.133) by
+ fmsmsx610.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.16 via Frontend Transport; Tue, 21 Feb 2023 18:22:51 -0800
+Received: from NAM11-BN8-obe.outbound.protection.outlook.com (104.47.58.168)
+ by edgegateway.intel.com (192.55.55.68) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.16; Tue, 21 Feb 2023 18:22:51 -0800
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=BUEKj9HxD5qA74NGFTzVYGPjD2gV26vywXMnORv3RA285TGqMyHgyqByRSBUrYrXWf8AFjlyNxGMt/u6WONPf0cibtdVsKkmlkRIr2/LSUZZGwdQhbGiBJt7Vdbrdf06tNFvuvRGZuPV1qz7f/bWOhZEH8x9SfieiST632bVCNNv9oo5Ey5Ay/z7/1lzIUxyaRsJcrVa62icR62ma0HI1UdqDBKhHm85RyisTgdl6eRXjvEKC1bqtjvi2XpefHVWtI/c3jByqZlhFnVFJ+5o+CsPthgxLainSELQYOV3eGZ6ROmAFA4JW+hNIVl7CiZLi11S0T4c/rP0jACI0zp97Q==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=PXPc2i6PvCWty6/QiApeU2UE/HHsYBNhfGCCns1iBYI=;
+ b=AT6Z6YigO7KD7u4fg1TvRAzmvrLM3abgeimgnADda+81k0Hc8hSwnv5XYSCioACg6wHA8pF/o/1wYeTMxIXNfklFRRRePEuptW82e/Fd2r+ZXXgejcdyAqenDzTbNYQUHHTqJC7pp2khspcNzgjB5DGAciP1ZY3bvRBDML3FapGPQ1yOqktvaOLxi9KwZkEQ1BEER8en6tGtK62HBFP7MKRoiM/45CkMSuxMGMUtcN8+OFQLB+3cqgx3k2NrvanY9ZAUh4Z14aq0cSR6LorQajc4M/3LoS0HJVP5f2qCXxnj8vMTDAkiIqUukD3+G71cSFo7SRua6qyiTdbFTJt2fw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Received: from BN9PR11MB5276.namprd11.prod.outlook.com (2603:10b6:408:135::18)
+ by MW4PR11MB5797.namprd11.prod.outlook.com (2603:10b6:303:184::21) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6111.21; Wed, 22 Feb
+ 2023 02:22:49 +0000
+Received: from BN9PR11MB5276.namprd11.prod.outlook.com
+ ([fe80::6a8d:b95:e1b5:d79d]) by BN9PR11MB5276.namprd11.prod.outlook.com
+ ([fe80::6a8d:b95:e1b5:d79d%9]) with mapi id 15.20.6111.021; Wed, 22 Feb 2023
+ 02:22:49 +0000
+From:   "Tian, Kevin" <kevin.tian@intel.com>
+To:     Jacob Pan <jacob.jun.pan@linux.intel.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        "iommu@lists.linux.dev" <iommu@lists.linux.dev>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        Lu Baolu <baolu.lu@linux.intel.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        "Jean-Philippe Brucker" <jean-philippe@linaro.com>
+CC:     Robin Murphy <robin.murphy@arm.com>, Will Deacon <will@kernel.org>,
+        "David Woodhouse" <dwmw2@infradead.org>,
+        "Raj, Ashok" <ashok.raj@intel.com>,
+        "Liu, Yi L" <yi.l.liu@intel.com>,
+        "Yu, Fenghua" <fenghua.yu@intel.com>,
+        "Hansen, Dave" <dave.hansen@intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        "X86 Kernel" <x86@kernel.org>, "Jiang, Dave" <dave.jiang@intel.com>
+Subject: RE: [PATCH v3 3/5] iommu/sva: Stop using ioasid_set for SVA
+Thread-Topic: [PATCH v3 3/5] iommu/sva: Stop using ioasid_set for SVA
+Thread-Index: AQHZQmJEeru+grKOY0SemYkaViFtG67aQ+hA
+Date:   Wed, 22 Feb 2023 02:22:48 +0000
+Message-ID: <BN9PR11MB5276EC1F0926256D0E8F05F58CAA9@BN9PR11MB5276.namprd11.prod.outlook.com>
+References: <20230216235951.3573059-1-jacob.jun.pan@linux.intel.com>
+ <20230216235951.3573059-4-jacob.jun.pan@linux.intel.com>
+In-Reply-To: <20230216235951.3573059-4-jacob.jun.pan@linux.intel.com>
+Accept-Language: en-US
 Content-Language: en-US
-From:   Hangyu Hua <hbh25y@gmail.com>
-In-Reply-To: <CANn89iJmYoewECcRTDW-F5c=jJZRxwFGMMrOGYe6XBLOgohc6w@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: BN9PR11MB5276:EE_|MW4PR11MB5797:EE_
+x-ms-office365-filtering-correlation-id: 4904263a-1e75-4939-1885-08db147bb0fd
+x-ld-processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: RCeNkXFtGpMDaxXcU6kZQfsOvhUMgliW9q6szTXTCqtENuOvAblbZF7LAU5SF1Ig1vIIhTZng4skvroaU+zpTytodMKVu024qerwivfl6VGdrs7hjJ0uGYmyIYa0FbpaXA7azw2Pv6eHmR9Zz7XsllnzfQmmw+mlhLSXUJywYhfPgHmdgCY1z3v60DgxPDyKE+BTvQ7yIeihj4t2lzq1CwFH7VHROw3QwBbnHMkbmq3VWQ6pLcQk9HbrC9faRfPVURgLNLJtYfYJNFXh4J1a7TTCoDAQ4JQ6D7xGTnPlVv1WvVa6goIw1v7jvqDjj++yEmnCdzGh+ZjEj4olUWTWpr59JV4vasr4SY9kj9hjdN9gGN4QftwipeHJ5iZNBdPtxP2PV0veVnsfLm2E4G5b8pvQiXV2tQ9bFP4j8vZ1rzPNn0NKWM2TwxT4zjt83XDX4M0nVKylhGsWcxs0CMbzgtKNNxGUpHlleUKj24Whg1ARjfAhrrkAeZGEKAn1KDUtXfar6toTiYChIwiCi2v68XBNHd/vIAIXEyxiVJP44hWcLltJDkVkN+wVxc+QGRE2wh71gzUl7z+XhJdr5y2PVnSBxKLdmtA9GnmMSicEbKHbL03brmvSfYwEW2RtyrK7U604LEys6YT9cv5BLBP+NvOF/sfnmOPg2IknzwgoJAIDQqwXVU7I9caRF+JC71peQo+n8af/fpHVWmTZR1Z0gQ==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN9PR11MB5276.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(396003)(39860400002)(136003)(346002)(366004)(376002)(451199018)(110136005)(86362001)(71200400001)(54906003)(7696005)(316002)(9686003)(4326008)(55016003)(26005)(6506007)(186003)(38070700005)(7416002)(4744005)(41300700001)(38100700002)(64756008)(66556008)(8676002)(66946007)(66476007)(66446008)(5660300002)(33656002)(2906002)(76116006)(8936002)(52536014)(478600001)(82960400001)(122000001);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?tCpuzGtIQJuykmCd3f0QYFybXuNAdLFK3XvD9L2pp73xUfx7+bhuXQvNk/7g?=
+ =?us-ascii?Q?ZBUuR6pDuda0n64Q2JcdiJ0cI4pFsxF59r67n6z8x/bLG4rN7XlvP1Hfq5Wo?=
+ =?us-ascii?Q?/2ooYUqqEW6nWRYN5vrBz0jHJtM1dlU4fp0It2GeWGkuAHZYGThX04m3s/sK?=
+ =?us-ascii?Q?sHskIm1+lIw+IwLJ2oOYhESfvCpIWN6K2gV+y3EH+M/BgpGYLoteVVps9QbA?=
+ =?us-ascii?Q?jrlJ+aNS2bf2h5cvSROyQK7OhzEbL5pVmzHp7NhpBMudzAaUCQqDfJtAmyTf?=
+ =?us-ascii?Q?F1jl9E3rsFNCDEU1rMP6rutL7nxuhnPlwOKFA2Gd+oK8xWYQEdVwbPkgLYfj?=
+ =?us-ascii?Q?lHrm3nHBD/XdyQlM45k5IaQ4zbNiHQv8/T89AQshgYWFI1BUJcaJHDpJr8+t?=
+ =?us-ascii?Q?DiWpV36WbJWV1uQcwjPKggfw/tr5mHn/CWH3w4s5GGl0JBoAHL7rfckduC0P?=
+ =?us-ascii?Q?CEdLNZBaeOQmM1h+0vRGiJRSyvY6+xrw/W4tqncTFV1Hak+wUla0YkTcD3ld?=
+ =?us-ascii?Q?1N9QYy3KtiPOBDRTlLW6saXe98x3z0eAcBxqJ+pnDIws7/isx5FOX1l+Pd29?=
+ =?us-ascii?Q?aypet/zna1BVbgYh5l96CYXonV3VrGACcqiJXYtzxgNqENRPXk+wF/oXp9We?=
+ =?us-ascii?Q?8GGs07w2/dSQjUlJxV0dnRm+XVdbzVbLgLxkSJP2HUuse73rlBb6t/fDH3N/?=
+ =?us-ascii?Q?UITI+P41cUANKcwElYtMwxUFpytcpAC6W7UZzHmqaaDn5XG9FAcklfCmjHj9?=
+ =?us-ascii?Q?x6pDjx85VZwSGGBBTN6FISQ4SdpepqhLTigdLuAAJ6LNYzQouGiY6+iO04nU?=
+ =?us-ascii?Q?o+0giPLrQv//lmezUyXcVC3GJGzomvLyIWY/+2fi5SzisrSi+dYsau9w+8S+?=
+ =?us-ascii?Q?yrj7gdHf5MZyYFRy5UEQ2YGK/eX4mVPm6ozzteD7AHC/lC89vmwPoKtQ9AKS?=
+ =?us-ascii?Q?ox+ZBl9YwQbaKSn+EiaSZ/jwupu7pDqgBPplIqoU5mzJ2O9AoyeFOOUbKKkJ?=
+ =?us-ascii?Q?JwiDpFHoL8mybm+aIVhROUPkXSmODfAWdaEV6x2CG//1hVsRK8+SPlWFzwrF?=
+ =?us-ascii?Q?/78R+EfaNIlfrIUXHcjv+S9kTxJZOXNJOJBxC2ANcN1JK8iF7zDmT0GHTNWq?=
+ =?us-ascii?Q?WAyXuAGGTLqGCItQcALRF+0YWDKl/KpaQIfuYt8S5scL+kyVbdluwMqXKPaB?=
+ =?us-ascii?Q?bDIgHLPiYtqDTcZdHaOhNXL2eYVYO0Zfso3GXukqzTn2aaTzE5Az37N7myHZ?=
+ =?us-ascii?Q?3ZcZ5A4lQPf/C4mNPlEtL/f5UYGFi0v7PvP2LqPII/9TTAo3vUEsAacK1Hml?=
+ =?us-ascii?Q?B9mBGrQLy/QRAFNECtpFKpX0elsTgfIUG6ENzxvxYiw75cxP4/IrXHxjkRU8?=
+ =?us-ascii?Q?ttUTnLfC4dCtSZLUl2nftC5rsUKS3+3MNWm+BVRN79Kkfu13WbObEOdoA4D+?=
+ =?us-ascii?Q?CzP/4rinLrvMzwB3s/KJmk0c+Z6MAJzUhJvx6kTn1kZSMJnxJ+nn/Qxyohkq?=
+ =?us-ascii?Q?0wr072in+SNifQV6cJnUwHwx7lOOM36gYnoAn+0lBw/lY3RYfmhkQNIHaUu2?=
+ =?us-ascii?Q?vPgyqEjD3/r8SuzElcbEC6HuFbsABfg5cRaIiv98?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: BN9PR11MB5276.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 4904263a-1e75-4939-1885-08db147bb0fd
+X-MS-Exchange-CrossTenant-originalarrivaltime: 22 Feb 2023 02:22:48.5810
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: 1gv1qA3x1dYC3wRk3naiXnUtRjz5RIRBLRQnak0MMk7faVQyP5uX/SmyObrI3mG5Eb77/qEQ8BI1E4Zw5r4CVg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW4PR11MB5797
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 21/2/2023 20:46, Eric Dumazet wrote:
-> On Tue, Feb 21, 2023 at 10:22 AM Hangyu Hua <hbh25y@gmail.com> wrote:
->>
->> A useless record can be insert into av_records when dccp_insert_options()
->> fails after dccp_insert_option_ackvec(). Repeated triggering may cause
->> av_records to have a lot of useless record with the same avr_ack_seqno.
->>
->> Fixes: 8b7b6c75c638 ("dccp: Integrate feature-negotiation insertion code")
->> Signed-off-by: Hangyu Hua <hbh25y@gmail.com>
->> ---
->>   net/dccp/options.c | 12 ++++++++++--
->>   1 file changed, 10 insertions(+), 2 deletions(-)
->>
->> diff --git a/net/dccp/options.c b/net/dccp/options.c
->> index d24cad05001e..8aa4abeb15ea 100644
->> --- a/net/dccp/options.c
->> +++ b/net/dccp/options.c
->> @@ -549,6 +549,8 @@ static void dccp_insert_option_padding(struct sk_buff *skb)
->>   int dccp_insert_options(struct sock *sk, struct sk_buff *skb)
->>   {
->>          struct dccp_sock *dp = dccp_sk(sk);
->> +       struct dccp_ackvec *av = dp->dccps_hc_rx_ackvec;
->> +       struct dccp_ackvec_record *avr;
->>
->>          DCCP_SKB_CB(skb)->dccpd_opt_len = 0;
->>
->> @@ -577,16 +579,22 @@ int dccp_insert_options(struct sock *sk, struct sk_buff *skb)
->>
->>          if (dp->dccps_hc_rx_insert_options) {
->>                  if (ccid_hc_rx_insert_options(dp->dccps_hc_rx_ccid, sk, skb))
->> -                       return -1;
->> +                       goto delete_ackvec;
->>                  dp->dccps_hc_rx_insert_options = 0;
->>          }
->>
->>          if (dp->dccps_timestamp_echo != 0 &&
->>              dccp_insert_option_timestamp_echo(dp, NULL, skb))
->> -               return -1;
->> +               goto delete_ackvec;
->>
->>          dccp_insert_option_padding(skb);
->>          return 0;
->> +
->> +delete_ackvec:
->> +       avr = dccp_ackvec_lookup(&av->av_records, DCCP_SKB_CB(skb)->dccpd_seq);
-> 
-> Why avr would be not NULL ?
-> 
->> +       list_del(&avr->avr_node);
->> +       kmem_cache_free(dccp_ackvec_record_slab, avr);
->> +       return -1;
->>   }
-> 
-> Are you really using DCCP and/or how have you tested this patch ?
-> 
-> net/dccp/ackvec.c:15:static struct kmem_cache *dccp_ackvec_record_slab;
-> 
-> I doubt this patch has been compiled.
-> 
-> I would rather mark DCCP deprecated and stop trying to fix it.
+> From: Jacob Pan <jacob.jun.pan@linux.intel.com>
+> Sent: Friday, February 17, 2023 8:00 AM
+>
+> +	ret =3D ida_alloc_range(&iommu_global_pasid_ida, min, max,
+> GFP_KERNEL);
+> +	if (ret < min)
+> +		goto out;
 
-My bad. I will fix these problems.
+ioasid_alloc() currently uses GFP_ATOMIC.
 
-Thanks,
-Hangyu
+since this is kind of a replacement w/o functional impact, it'd be cleaner
+from bisect p.o.v. to have a separate patch changing GFP_ATOMIC
+to GFP_KERNEL in ioasid_alloc() and then this patch.
