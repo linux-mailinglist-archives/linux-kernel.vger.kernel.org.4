@@ -2,76 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9818F69EC6E
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Feb 2023 02:43:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EBE9069EC8A
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Feb 2023 02:48:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231176AbjBVBn1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Feb 2023 20:43:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52056 "EHLO
+        id S230010AbjBVBsJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Feb 2023 20:48:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56514 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231142AbjBVBnV (ORCPT
+        with ESMTP id S229503AbjBVBsH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Feb 2023 20:43:21 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 045B51449E
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Feb 2023 17:43:19 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 85CDD61236
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Feb 2023 01:43:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 00ADAC4339B;
-        Wed, 22 Feb 2023 01:43:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1677030198;
-        bh=uEiyLo26+Egm/YwwxBcmUfAJ+33dE9Vg7pwmB+1lVgE=;
-        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=mUSWlswW56DnVwdehEPRykXPpMWBufP73/6kOFNGt8x9CsFSeVPCR9CA4CIKRxlpP
-         utmqpMFvfHy28dkhs1aKR7ybTCnCk2IHf7dpltOVTZxskzTn8K212fRWWX2oT0Aq5+
-         Wdsex5TbBy/QjVReFmgYlO4pyQDuHKT0XVjem6opLCwOnBteDm32V+26p2wxSFDXnY
-         DiGxy3clN4rBGqVbeuQrqWF+jX8K44mKrbNwH9DqwKBRJLOdRzf0JTs91reS9/dnV0
-         04+4FeF8IIakWmu7h12GmaghnG0ITeCDwaW9MkNPHNTfIKAXfIvBaHYj80bG9y1LwU
-         /vthiDtkQ411A==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id E333BC43158;
-        Wed, 22 Feb 2023 01:43:17 +0000 (UTC)
-Subject: Re: [GIT PULL] platform-drivers-x86 for 6.3-1
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <9f696a6a-9161-ab4c-5304-dc2db865f5d8@redhat.com>
-References: <9f696a6a-9161-ab4c-5304-dc2db865f5d8@redhat.com>
-X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
-X-PR-Tracked-Message-Id: <9f696a6a-9161-ab4c-5304-dc2db865f5d8@redhat.com>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/pdx86/platform-drivers-x86.git tags/platform-drivers-x86-v6.3-1
-X-PR-Tracked-Commit-Id: 0d9bdd8a550170306c2021b8d6766c5343b870c2
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 69308402ca6f5b80a5a090ade0b13bd146891420
-Message-Id: <167703019792.10177.363943860068702319.pr-tracker-bot@kernel.org>
-Date:   Wed, 22 Feb 2023 01:43:17 +0000
-To:     Hans de Goede <hdegoede@redhat.com>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Andy Shevchenko <andy@infradead.org>,
-        Mark Gross <mark.gross@intel.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Tue, 21 Feb 2023 20:48:07 -0500
+Received: from fd01.gateway.ufhost.com (fd01.gateway.ufhost.com [61.152.239.71])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2718DEB50;
+        Tue, 21 Feb 2023 17:48:00 -0800 (PST)
+Received: from EXMBX166.cuchost.com (unknown [175.102.18.54])
+        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
+        (Client CN "EXMBX166", Issuer "EXMBX166" (not verified))
+        by fd01.gateway.ufhost.com (Postfix) with ESMTP id E426F24E1D1;
+        Wed, 22 Feb 2023 09:47:51 +0800 (CST)
+Received: from EXMBX061.cuchost.com (172.16.6.61) by EXMBX166.cuchost.com
+ (172.16.6.76) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Wed, 22 Feb
+ 2023 09:47:51 +0800
+Received: from [192.168.125.128] (113.72.147.165) by EXMBX061.cuchost.com
+ (172.16.6.61) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Wed, 22 Feb
+ 2023 09:47:50 +0800
+Message-ID: <7b3e09f0-a44f-0735-a049-eef7f0acec4c@starfivetech.com>
+Date:   Wed, 22 Feb 2023 09:48:12 +0800
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH v2 01/11] dt-bindings: clock: Add StarFive JH7110
+ System-Top-Group clock and reset generator
+Content-Language: en-US
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+CC:     <linux-riscv@lists.infradead.org>, <devicetree@vger.kernel.org>,
+        "Michael Turquette" <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Emil Renner Berthing <kernel@esmil.dk>,
+        Rob Herring <robh+dt@kernel.org>,
+        Conor Dooley <conor@kernel.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Hal Feng <hal.feng@starfivetech.com>,
+        <linux-kernel@vger.kernel.org>, <linux-clk@vger.kernel.org>
+References: <20230221083323.302471-1-xingyu.wu@starfivetech.com>
+ <20230221083323.302471-2-xingyu.wu@starfivetech.com>
+ <430318ed-5b30-e549-a5ce-df83aa18adf9@linaro.org>
+ <43d00fd9-ab24-442e-3f82-208edaf399d0@starfivetech.com>
+ <ae468e63-d8d3-dbfb-64da-75a147e1cd2d@linaro.org>
+From:   Xingyu Wu <xingyu.wu@starfivetech.com>
+In-Reply-To: <ae468e63-d8d3-dbfb-64da-75a147e1cd2d@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [113.72.147.165]
+X-ClientProxiedBy: EXCAS062.cuchost.com (172.16.6.22) To EXMBX061.cuchost.com
+ (172.16.6.61)
+X-YovoleRuleAgent: yovoleflag
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The pull request you sent on Mon, 20 Feb 2023 11:17:57 +0100:
+On 2023/2/21 21:37, Krzysztof Kozlowski wrote:
+> On 21/02/2023 14:01, Xingyu Wu wrote:
+>> On 2023/2/21 19:25, Krzysztof Kozlowski wrote:
+>>> On 21/02/2023 09:33, Xingyu Wu wrote:
+>>>> Add bindings for the System-Top-Group clock and reset generator (STGCRG)
+>>>> on the JH7110 RISC-V SoC by StarFive Ltd.
+>>>>
+>>>> Signed-off-by: Xingyu Wu <xingyu.wu@starfivetech.com>
+>>>
+>>>
+>>>> +    };
+>>>> diff --git a/MAINTAINERS b/MAINTAINERS
+>>>> index 93eb504c3b21..2e70c9f21989 100644
+>>>> --- a/MAINTAINERS
+>>>> +++ b/MAINTAINERS
+>>>> @@ -19914,6 +19914,7 @@ F:	arch/riscv/boot/dts/starfive/
+>>>>  STARFIVE JH71X0 CLOCK DRIVERS
+>>>>  M:	Emil Renner Berthing <kernel@esmil.dk>
+>>>>  M:	Hal Feng <hal.feng@starfivetech.com>
+>>>> +M:	Xingyu Wu <xingyu.wu@starfivetech.com>
+>>>
+>>> No improvements here. You add here new bindings for one device and then
+>>> - without explanation - add yourself to all Starfive clock bindings.
+>>> Either explain it or drop it or move it to separate patch.
+>>>
+>>> You already got comment for this.
+>>>
+>> 
+>> Sorry, I didn't understand what you meant before. Now my understanding is that, 
+>> If I improvements JH71X0 driver no JH7110 driver, I could add this here. Right?
+>> 
+>> Is it OK if I do it this way to move it to separate patch like this?:
+>> +STARFIVE JH7110 STG CLOCK DRIVERS
+>> +M:	Xingyu Wu <xingyu.wu@starfivetech.com>
+> 
+> If you want to be the maintainer of all drivers, add separate commit for
+> this, so this is obvious. Or at least explain this change in commit msg.
+> 
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/pdx86/platform-drivers-x86.git tags/platform-drivers-x86-v6.3-1
+OK, got it. Thanks.
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/69308402ca6f5b80a5a090ade0b13bd146891420
+Best regard,
+Xingyu Wu
 
-Thank you!
-
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
