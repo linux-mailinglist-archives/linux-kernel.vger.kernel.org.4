@@ -2,162 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DF66C69FA54
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Feb 2023 18:42:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 54C8869FA5D
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Feb 2023 18:47:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232099AbjBVRmk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Feb 2023 12:42:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54846 "EHLO
+        id S231500AbjBVRr0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Feb 2023 12:47:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57400 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230280AbjBVRmi (ORCPT
+        with ESMTP id S230190AbjBVRrY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Feb 2023 12:42:38 -0500
-Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11C133E092
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Feb 2023 09:42:36 -0800 (PST)
-Received: by mail-lf1-x12e.google.com with SMTP id i9so10911235lfc.6
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Feb 2023 09:42:35 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=rkvf2RmLW6rznz1HAgBefc/tK0jWR+Wupjni4KMu9Yo=;
-        b=WF28+J62nVWj+PoVKfoEZ0yrujyRavwV23LGwl6NYGp/3Y4muBY73poKlSGHhvhGvD
-         xRTDXW5/yuZDBSXMuVb6vpHWjNDW3JGYKmwJWFeeneiWK9NKrYsLSUVKbOEt0WiiKx+D
-         Cmxcx3haBhp9fL9/zVmRM2Je1MHqB7uxeL+wodNEXcSPyzTbFprgrYQ+MA8YTz+Uw3ki
-         2DxI1SOGAqk/nNpOmVcaKPzDMGSvFnpdcJ7CulMNVvnvy+tJHVk4iISGWAVBaDGwjCmd
-         wpW3SAefke3DYIdIJfZBcCOFrPWTuJmMXHOT8mbtL2qPlYYhZjBPalL9HPHxbU3SLl1A
-         RXZA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=rkvf2RmLW6rznz1HAgBefc/tK0jWR+Wupjni4KMu9Yo=;
-        b=MQKqnt/JNf6ApWK9cg92SzwMLoVLOHwVNwFU1+/oDmIjq2l1eWTywuR2nZfdN9DEAV
-         jOyqaX1tKF4ZCxbGxfoIGw75KODbcbvDXuLc+lbV+RJEgde19dpIy73w3UoeTNENtOb8
-         hLfaqHA82a6mwGDZmBTaAPAsaVG3kJMfsImbfwwX4rQE1TE5PDmqlW0c/SaKUdbgTRey
-         aXGtAw0QamVynjjXY/BN3Sn4PjB4PuX0gGO2p5kLkxE7BsXFRlIs4k965twe7Ygqnd9D
-         71qTR0heJj4qWkgthjjU2IWIfXHzVWLyYRwJ93NLcWPPhxVYYqgNPI4dprJ4WwlYJv+/
-         HGRg==
-X-Gm-Message-State: AO0yUKXIS4Zt+IyDthK56uLFz5U2OHZTRtngrhts0zC1raPlvbX9T9WR
-        35N8hy+plBVcPftlRL4tk42e+Q==
-X-Google-Smtp-Source: AK7set+1a8OF7jyLmkJooq/S6lNZXi6oR2S6E8K5SzBMN50//7c5b474aeDnO7YV/iNAj+lyBUEWlQ==
-X-Received: by 2002:ac2:43a7:0:b0:4dc:4b92:dbc4 with SMTP id t7-20020ac243a7000000b004dc4b92dbc4mr2749532lfl.14.1677087754284;
-        Wed, 22 Feb 2023 09:42:34 -0800 (PST)
-Received: from [192.168.1.101] (abxi151.neoplus.adsl.tpnet.pl. [83.9.2.151])
-        by smtp.gmail.com with ESMTPSA id t9-20020a19ad09000000b004db2bda9527sm972736lfc.121.2023.02.22.09.42.33
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 22 Feb 2023 09:42:33 -0800 (PST)
-Message-ID: <42b91fed-1f8c-b019-a1cc-32690b534dd9@linaro.org>
-Date:   Wed, 22 Feb 2023 18:42:32 +0100
+        Wed, 22 Feb 2023 12:47:24 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDEA2366B0
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Feb 2023 09:47:22 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 4E64CB815CF
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Feb 2023 17:47:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EB580C433D2;
+        Wed, 22 Feb 2023 17:47:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1677088040;
+        bh=9I7KWoSq6/peLkMkNptPqDdgYxCmYBYm3Szm50B41jA=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=hwnSWLm4zNHhA4NWmCQbvJvyi4NswIDoXr9WL1al+NEP3yIQKxjxuGmADuOAjV3dl
+         5oIWV3Zd690KwaIMk3PPQ0QZBnzerI83M2NrwPW7B14SBJWhjmZkp3dyBWxLWAHsHk
+         qPdCKG0AWJWdP/ObaDBCiX4zoJjEDjdp+Ez8R2I/l1hRIBv/LrY4L1jIlT9ifZcsxO
+         7JEm5fN+7zbRpI8UiNprdg6YX/ekIk3obpq6YnyTK7BAjyogrDkE2XyYAympFOYFM/
+         1WHrji1GinAghmbzzR+fnoGlKHxYOk0cDbPVIMQjLnTnMLrDGK3h3rVLUkRxY33TSL
+         OF+ve6zQTG7gw==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id 968D95C09C7; Wed, 22 Feb 2023 09:47:19 -0800 (PST)
+Date:   Wed, 22 Feb 2023 09:47:19 -0800
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     Kautuk Consul <kconsul@linux.vnet.ibm.com>
+Cc:     Michael Ellerman <mpe@ellerman.id.au>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Rohan McLure <rmclure@linux.ibm.com>,
+        linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] arch/powerpc/include/asm/barrier.h: redefine rmb and
+ wmb to  lwsync
+Message-ID: <20230222174719.GA1400185@paulmck-ThinkPad-P17-Gen-1>
+Reply-To: paulmck@kernel.org
+References: <20230222090344.189270-1-kconsul@linux.vnet.ibm.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH v4 3/3] arm64: dts: qcom: sdm845-oneplus: add alert-slider
-Content-Language: en-US
-To:     Gergo Koteles <soyer@irl.hu>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Jiri Kosina <jikos@kernel.org>,
-        Benjamin Tissoires <benjamin.tissoires@redhat.com>
-Cc:     linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        Caleb Connolly <caleb@connolly.tech>
-References: <cover.1677022414.git.soyer@irl.hu>
- <a8610cc5e16b63cd716e466d8edae54d97f5ae57.1677022414.git.soyer@irl.hu>
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <a8610cc5e16b63cd716e466d8edae54d97f5ae57.1677022414.git.soyer@irl.hu>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230222090344.189270-1-kconsul@linux.vnet.ibm.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 22.02.2023 01:10, Gergo Koteles wrote:
-> The alert-slider is a tri-state sound profile switch found on the OnePlus 6,
-> Android maps the states to "silent", "vibrate" and "ring". Expose them as
-> ABS_SND_PROFILE events.
-> The previous GPIO numbers were wrong. Update them to the correct
-> ones.
+On Wed, Feb 22, 2023 at 02:33:44PM +0530, Kautuk Consul wrote:
+> A link from ibm.com states:
+> "Ensures that all instructions preceding the call to __lwsync
+>  complete before any subsequent store instructions can be executed
+>  on the processor that executed the function. Also, it ensures that
+>  all load instructions preceding the call to __lwsync complete before
+>  any subsequent load instructions can be executed on the processor
+>  that executed the function. This allows you to synchronize between
+>  multiple processors with minimal performance impact, as __lwsync
+>  does not wait for confirmation from each processor."
 > 
-> Co-developed-by: Caleb Connolly <caleb@connolly.tech>
-> Signed-off-by: Caleb Connolly <caleb@connolly.tech>
-> Signed-off-by: Gergo Koteles <soyer@irl.hu>
+> Thats why smp_rmb() and smp_wmb() are defined to lwsync.
+> But this same understanding applies to parallel pipeline
+> execution on each PowerPC processor.
+> So, use the lwsync instruction for rmb() and wmb() on the PPC
+> architectures that support it.
+> 
+> Signed-off-by: Kautuk Consul <kconsul@linux.vnet.ibm.com>
 > ---
-Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
-
-Konrad
->  .../boot/dts/qcom/sdm845-oneplus-common.dtsi  | 39 ++++++++++++++++++-
->  1 file changed, 37 insertions(+), 2 deletions(-)
+>  arch/powerpc/include/asm/barrier.h | 7 +++++++
+>  1 file changed, 7 insertions(+)
 > 
-> diff --git a/arch/arm64/boot/dts/qcom/sdm845-oneplus-common.dtsi b/arch/arm64/boot/dts/qcom/sdm845-oneplus-common.dtsi
-> index 64638ea94db7..7567f5cf6e3f 100644
-> --- a/arch/arm64/boot/dts/qcom/sdm845-oneplus-common.dtsi
-> +++ b/arch/arm64/boot/dts/qcom/sdm845-oneplus-common.dtsi
-> @@ -20,6 +20,41 @@
->  /delete-node/ &rmtfs_mem;
+> diff --git a/arch/powerpc/include/asm/barrier.h b/arch/powerpc/include/asm/barrier.h
+> index b95b666f0374..e088dacc0ee8 100644
+> --- a/arch/powerpc/include/asm/barrier.h
+> +++ b/arch/powerpc/include/asm/barrier.h
+> @@ -36,8 +36,15 @@
+>   * heavy-weight sync, so smp_wmb() can be a lighter-weight eieio.
+>   */
+>  #define __mb()   __asm__ __volatile__ ("sync" : : : "memory")
+> +
+> +/* The sub-arch has lwsync. */
+> +#if defined(CONFIG_PPC64) || defined(CONFIG_PPC_E500MC)
+> +#define __rmb() __asm__ __volatile__ ("lwsync" : : : "memory")
+> +#define __wmb() __asm__ __volatile__ ("lwsync" : : : "memory")
+
+Hmmm...
+
+Does the lwsync instruction now order both cached and uncached accesses?
+Or have there been changes so that smp_rmb() and smp_wmb() get this
+definition, while rmb() and wmb() still get the sync instruction?
+(Not seeing this, but I could easily be missing something.)
+
+							Thanx, Paul
+
+> +#else
+>  #define __rmb()  __asm__ __volatile__ ("sync" : : : "memory")
+>  #define __wmb()  __asm__ __volatile__ ("sync" : : : "memory")
+> +#endif
 >  
->  / {
-> +	alert-slider {
-> +		compatible = "gpio-keys";
-> +		label = "Alert slider";
-> +
-> +		pinctrl-0 = <&alert_slider_default>;
-> +		pinctrl-names = "default";
-> +
-> +		switch-top {
-> +			label = "Silent";
-> +			linux,input-type = <EV_ABS>;
-> +			linux,code = <ABS_SND_PROFILE>;
-> +			linux,input-value = <SND_PROFILE_SILENT>;
-> +			gpios = <&tlmm 126 GPIO_ACTIVE_LOW>;
-> +			linux,can-disable;
-> +		};
-> +
-> +		switch-middle {
-> +			label = "Vibrate";
-> +			linux,input-type = <EV_ABS>;
-> +			linux,code = <ABS_SND_PROFILE>;
-> +			linux,input-value = <SND_PROFILE_VIBRATE>;
-> +			gpios = <&tlmm 52 GPIO_ACTIVE_LOW>;
-> +			linux,can-disable;
-> +		};
-> +
-> +		switch-bottom {
-> +			label = "Ring";
-> +			linux,input-type = <EV_ABS>;
-> +			linux,code = <ABS_SND_PROFILE>;
-> +			linux,input-value = <SND_PROFILE_RING>;
-> +			gpios = <&tlmm 24 GPIO_ACTIVE_LOW>;
-> +			linux,can-disable;
-> +		};
-> +	};
-> +
->  	aliases {
->  		serial0 = &uart9;
->  		serial1 = &uart6;
-> @@ -753,8 +788,8 @@ &usb_1_hsphy {
->  &tlmm {
->  	gpio-reserved-ranges = <0 4>, <81 4>;
->  
-> -	tri_state_key_default: tri-state-key-default-state {
-> -		pins = "gpio40", "gpio42", "gpio26";
-> +	alert_slider_default: alert-slider-default-state {
-> +		pins = "gpio126", "gpio52", "gpio24";
->  		function = "gpio";
->  		drive-strength = <2>;
->  		bias-disable;
+>  /* The sub-arch has lwsync */
+>  #if defined(CONFIG_PPC64) || defined(CONFIG_PPC_E500MC)
+> -- 
+> 2.31.1
+> 
