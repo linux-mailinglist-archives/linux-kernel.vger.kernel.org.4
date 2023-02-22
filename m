@@ -2,188 +2,610 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B7B7069F463
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Feb 2023 13:19:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5921469F41E
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Feb 2023 13:15:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231996AbjBVMTl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Feb 2023 07:19:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39992 "EHLO
+        id S231685AbjBVMPJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Feb 2023 07:15:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34346 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231992AbjBVMTh (ORCPT
+        with ESMTP id S229561AbjBVMPH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Feb 2023 07:19:37 -0500
-Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 281E9392A1;
-        Wed, 22 Feb 2023 04:18:56 -0800 (PST)
-Received: from pps.filterd (m0246627.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 31M8x8Hm011289;
-        Wed, 22 Feb 2023 12:17:05 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references :
- content-transfer-encoding : content-type : mime-version; s=corp-2022-7-12;
- bh=McxsJ7xw8hGURuOvqjqA3eAo2XMuU36PPRZmV55rBFE=;
- b=ZGyA4YikEVvtvisITt+QEvsznyRInBvHKH/hQ8565yKCm2MX4vpOLKrgD1sxh5t9YZh0
- kYmbQjbgNtFGzvGwl8xtXFSKSrP8+yMsoduyDvaajBbpgBjDN0mGUYYZpNExgh0bmUz2
- wavlmBW9fE/fy3/O3dlLc03edUsgYmPpienuKFTyT2LfRlBZMNzeo+2/PN/SmrnRHd2t
- 17tPBCsvFqdCFUnuFAi0hrOerIwkhHEG+gur8spcFVLE2AiiNzPs8DlULC3Elll4+q0w
- UdXiOIhpwwsvb6i4azNUPSSo8QmOLGSqjb5zI1ZSyvTIrVG6j33wA/81kq8FPSy3Ek9r EQ== 
-Received: from iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta01.appoci.oracle.com [130.35.100.223])
-        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3ntn90qqq7-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 22 Feb 2023 12:17:05 +0000
-Received: from pps.filterd (iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-        by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (8.17.1.5/8.17.1.5) with ESMTP id 31MBimc0006828;
-        Wed, 22 Feb 2023 12:17:04 GMT
-Received: from nam11-co1-obe.outbound.protection.outlook.com (mail-co1nam11lp2169.outbound.protection.outlook.com [104.47.56.169])
-        by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 3ntn4d21x5-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 22 Feb 2023 12:17:03 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=mo3WTV8jqiRhcVnEIVr8pQcohvy0VX7uqveJVFhVW1AQsrJz+8xITOEFpQkZOATLH0AgJsM7WH0HHnjJkfpt1Tr+0bGheZmmHPHrre9XIQcrCy3SkBKNVCwadDzmYJWCbtK8qR3jOHABqRuw8NnWc9FMv2hyknd/WSBM0YG3rwCnHFs+J8C/vZ2jtyBowFaLw6tUPTTO28p085jYyhx7boCybQTgbx67+0VrBuDrrEzFLJ3PY1fYnIIYqPu9vT2h6IdwqSAU04VGWf3R1suxfuzLbd738NvSMs96A5s1THT9XsTIj3KvHqVwFb9z0VZXT3OYUkFOTc+eMzCwwrJzAQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=McxsJ7xw8hGURuOvqjqA3eAo2XMuU36PPRZmV55rBFE=;
- b=I1DWHGf/CeV1bef2uwwNejWQ+F5Ei1fLF2JJXwxjjjj669hmZURMJbb3xG6Xj/ulEyurByWws523JChwe0tCDQn1A5MUILwWiOcj90uhj1XVlctNcA82Fy+xhGUeWVdOmS82MFiNbMwTsHosIwhkpKlBfnNa5xYE30ObmQ1XwcAsuXe7O1lzGeUUZCujqgEZx2fl2fTZMO0zTZt1H43xrIEK1e6jy5NEfbTw6h2J3hzwZpE7ObIKCIthDNaks3z/HwBQbEW0Hbpa8a1wye8c8PRtkZF6ws1SlgV8q3Z4UoTUMWW0TOh/lgVNbBTkJT9votc6LN5dGkIOKrQ2jXb37w==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
- dkim=pass header.d=oracle.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=McxsJ7xw8hGURuOvqjqA3eAo2XMuU36PPRZmV55rBFE=;
- b=KxRgZXoGSm4xoWUC10NThVXb71pJMGYPDq2UiPD3zryDoPDvtIaBWzbOt2HDU6/VoYBObHp3dJRDe0rRq0DzcTvUT27RGAk7XKUAYHLx3/CB9a2dxC/AYsuIeHvVFhbMwwvP2kssd0CXXT8i281wqy/xr7UIwQ8n/EF+emmlhqc=
-Received: from DS0PR10MB6798.namprd10.prod.outlook.com (2603:10b6:8:13c::20)
- by PH8PR10MB6412.namprd10.prod.outlook.com (2603:10b6:510:1c7::18) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6134.17; Wed, 22 Feb
- 2023 12:17:01 +0000
-Received: from DS0PR10MB6798.namprd10.prod.outlook.com
- ([fe80::d0f7:e4fd:bd4:b760]) by DS0PR10MB6798.namprd10.prod.outlook.com
- ([fe80::d0f7:e4fd:bd4:b760%3]) with mapi id 15.20.6134.019; Wed, 22 Feb 2023
- 12:17:01 +0000
-From:   Nick Alcock <nick.alcock@oracle.com>
-To:     mcgrof@kernel.org
-Cc:     linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Hitomi Hasegawa <hasegawa-hitomi@fujitsu.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Kishon Vijay Abraham I <kishon@kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        linux-phy@lists.infradead.org
-Subject: [PATCH 26/27] kbuild, phy: intel: remove MODULE_LICENSE in non-modules
-Date:   Wed, 22 Feb 2023 12:14:52 +0000
-Message-Id: <20230222121453.91915-27-nick.alcock@oracle.com>
-X-Mailer: git-send-email 2.39.1.268.g9de2f9a303
-In-Reply-To: <20230222121453.91915-1-nick.alcock@oracle.com>
-References: <20230222121453.91915-1-nick.alcock@oracle.com>
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: LO6P123CA0042.GBRP123.PROD.OUTLOOK.COM
- (2603:10a6:600:2fe::13) To DS0PR10MB6798.namprd10.prod.outlook.com
- (2603:10b6:8:13c::20)
+        Wed, 22 Feb 2023 07:15:07 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4432034C3B;
+        Wed, 22 Feb 2023 04:15:04 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id C4C08B81230;
+        Wed, 22 Feb 2023 12:15:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EDB8DC433D2;
+        Wed, 22 Feb 2023 12:15:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1677068101;
+        bh=KWFFo0Ir0++v8r71LEoYbFmQ2ZKgPuJEtDmpI6pogE4=;
+        h=From:To:Cc:Subject:Date:From;
+        b=YbJNBy+DXj39imQyxmX559VlcIrZacThn+NVcQKcxwn6Hn6V/Ptly/s2QiJ2hI0gH
+         T7lFcO9noRXlpIhLx/Lf2xrWxqtzPmJdFePMfAYOhNWb1PpdOlFe7mOnZbHnZmgihP
+         BTwuCQNBmRoG4MzEepvy/RmneXjuf5i+9rBLVnzw=
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     linux-kernel@vger.kernel.org, akpm@linux-foundation.org,
+        torvalds@linux-foundation.org, stable@vger.kernel.org
+Cc:     lwn@lwn.net, jslaby@suse.cz,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Subject: Linux 5.4.232
+Date:   Wed, 22 Feb 2023 13:14:57 +0100
+Message-Id: <167706809820092@kroah.com>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DS0PR10MB6798:EE_|PH8PR10MB6412:EE_
-X-MS-Office365-Filtering-Correlation-Id: e6dba15e-52e2-4f10-03d0-08db14ceb3af
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: wRk45MYoFv2S8w+HRg8Gedja6EZF3OI7Ortivyzx++ggJgYXG+y7lhLkzLDyNOQ2Fv+M1yaGcEvhZ1JVycFW0fadjisa4g/oxSDLMz+nbKH6C5kNDXx9jmvFb7XUWMFyIe8gNRzpWV34hipQKdAi7dBESRzIa0syJqR5aQhfsZvLXWznLjuW/loPwYO2AqVwYwrq1vDd+sdPadvTkB2NS5w/U60ctsbwuYHrwZyOGX/vewBkSx92k4ltPY3g6Lv9kU9IhOtO5PQr9f//r4WCm9gGwfhIGnZCgh/nRqTFY+ZJ/pNU/o70GRCCm472hznqrnfQ/mmlLTJwbfX3gWx1Ishq5Nmj/RI1YjIsxJDs34/Mc/Ez3B4rQy3dI0Hi1Rr/KV87mJ7mC56wtT/FLXadks00IAavym9RCgxk9XwrUvckdJ/QJBwNoUy/N1fhRn/tIUwzzr5oh0T2QW1Tw4HD/5cboiRN2sNeDPpxxP1gx2KoguilBE81LmGzXjPDiQgCZ6zDRYn/ZhyZ3lQyeV/O0Hi7lItnZw2O09Si0QZlDFMxSdvBastAQTiMH91eiL+KlHHclTR36A2qLplXo/xOfCn9nLuTvBge3YTybhdvE6xjI/KagM5UNqQFi84VjYe0tlsOeASE8oDXojP6ODTfaw==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DS0PR10MB6798.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(346002)(136003)(366004)(396003)(39860400002)(376002)(451199018)(478600001)(86362001)(54906003)(2616005)(6512007)(4326008)(316002)(6666004)(6486002)(1076003)(6506007)(186003)(44832011)(36756003)(5660300002)(8676002)(38100700002)(66556008)(66946007)(41300700001)(66476007)(8936002)(83380400001)(6916009)(2906002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?tqnB++FQfFN8JlnQxLlDmbQSu/+/nwcuoxIhFxcM+OLDn9TTVAAa5XBA90A+?=
- =?us-ascii?Q?JDtc9V/U/OsxuDhdRVgaSIaDpwdDSlNIsovjrxmmTHZqRhLnERIhPy7sEC0k?=
- =?us-ascii?Q?q3hok4HcXl5EG42kK1y0cWXR4HUsr9ueFVfboRgB9cYj6JNrY/FS6Ewlui8Y?=
- =?us-ascii?Q?o8I7TaC7TK1pvgBshP+MYAtCRvEnH2icWXT/M0YTlCWZsZli/grfpqg9MenN?=
- =?us-ascii?Q?i6BnVjJnpuJLncqucRljDvLHrq7l+zHIlbg6b3zo7PP14icznCyK2mIhzjhM?=
- =?us-ascii?Q?cU/vuPrS98aI+uAw4FLhS1gIs+gjqTD3UMRT8Sz8EaIRZoGPMkJsEKggXBdx?=
- =?us-ascii?Q?phdR+UMY1ZOSuxgoKlgCubqS6Q084ewiV5S2XZZbwQwEZVcgAt6MGTLPyHF9?=
- =?us-ascii?Q?mKfgRyGVzDWLGejImeVlOJGwdmJis/zv1rZSL1OgckxwMuHlEuov6pOQ0fx2?=
- =?us-ascii?Q?Es33SM8lhIggupWp7ecLbBwrcc9NLmJuLXYeusHDEMZNNMLIEWh3vUl2EBbU?=
- =?us-ascii?Q?x3PlN7IdT7RccB/UoGfu0AGOE3DBEVy7hApJNb+yX3S/sAtC0Fpvpuu7KqCd?=
- =?us-ascii?Q?3Y5tC3H3Ub9nHKiusoKErjJG6HnORb5xxF7IS/82empkZHx3cUvc30700pt5?=
- =?us-ascii?Q?YpfkMiAYcapcusLOD8TdmAJoRJlMubMG3BVeXcwwZR3nwsPyWtCkc524Byk2?=
- =?us-ascii?Q?mlw3pZTlIPXlK4dNL4mr6gBsSs7hk7Qmns7RYQlYppvY7F1F9uqY0XqfcOkg?=
- =?us-ascii?Q?6N2OJi+wGBc19IVNlC1fxLzMFpv/o5opusGuIPwEc5Piu7/5SH6lJ1bx4Xue?=
- =?us-ascii?Q?/PbVwtCRjMBvunWuIrS61MnrU7OLuw6rSnkPwoQRxtkS+uYpIJUcNxiIt4C4?=
- =?us-ascii?Q?5pkUjaBYyM2qOiLhydkVZPOl/nlSNc4XvX9ky3iqrck7xzFze3MW+tBb8g2l?=
- =?us-ascii?Q?aoPg2bAhocjbmcwKezPToY0nkVgfSyKGSJNzYMnBtr2NjlNfnLPVmH2awloh?=
- =?us-ascii?Q?4F7OBHdhKMZp+3Njr7/HAcc2juIe7C1vmavVgHq1oHkznn7o9pf/lJ8Es1mo?=
- =?us-ascii?Q?kIQA1QTg+0ytWpYR1QYemfNMBNWGsI+bSs3nn2nlyGl7NzsXeIwDl9efCuV+?=
- =?us-ascii?Q?eQujG9A5T7zpUYz7feh17mHBcg6dFAwevGgAaJ9IIpGluO9sGaV0M+72MLx2?=
- =?us-ascii?Q?hcMqL4Ns44bW9PMZ7t6yN83EpqjJMaUimMJhezkD1ijk5uk5Sm+DDGN7Ralr?=
- =?us-ascii?Q?O6GfcFuzby4mPwiprLu+puzeqJ1fCqnE9L3z/+wW/u3Zve2tcMrwmsnMLoVN?=
- =?us-ascii?Q?eXeh8nAGeIn5PFrYWRdSnXYtTRUXTkubxSZxocAPFn2GCh7vGRY54O4RdfzS?=
- =?us-ascii?Q?XhvtC36SjWjSyoGtQzlmkhHpx6AQck/UB1gYN55eMD+dqY6QBusvoJj2KAVj?=
- =?us-ascii?Q?XJKFS0ylEmbtFBF7N2LMD20Lrm3PyNMgoTPWMn1MjUuf8uv8bMNf/aEJm5Vy?=
- =?us-ascii?Q?Ub8M8PvSCQRNpoPAI8oa8nu0RMwu5ynPGDaFeg6PHysZYDDiCf59tkGCEZCe?=
- =?us-ascii?Q?uvTdFRElvHEoLGvmsJ1Acj6DnjyFnRvqIHmmmzjyI6ob/jli8LqBHaSmoB54?=
- =?us-ascii?Q?xH3NP21mxUCHrSQr0MFdMCY=3D?=
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0: ewgU839TBodQzdAHbMvga6u0QmvdQNZ49m5+xMQjG4isFeQr+91Q9Fn2dLjJq7/gJc48egDhDHEd4KhQwPnuqA9+Q2k2E9GogeoeirYzz495m5nB41JzOH6SYFBAo8+X89AQnOq4g294l3PgpL01qxR9z4c+CiBsIQyFljBcGOH9bJJTmP93/X1G573NRgmoOgYXJ39NZwordlhk6YF+3W8uH2fFbpGtnV1PqUMzKlmWSKBk1DXYQENTElKuG8NPOzR5RW0EldouQxQ6k4ic5etZsB5dOYro2CahbU01jooOr8o+Ww1Y5gYgdfz9KWiqWRI8NxweK6D9ybgoNH39tw1b9xAWrsJmifJuEwElmbKmCxlwzPbjjyFKVEnDOzEh7n8pyhuGkRXICRVdX/k0FEuuZV8DST95fcy/BjOknETlXV7iYIO47gMUOcX7025bJB96nNEIQb4RaVKTCrjW0NSR5DfKRashwSxbbnBnbRMIiqXhDnjeIl6WpbL0bzGepaMLjwTsG142B8oF5IkYSCxwVVhFzmuCWEanOFQN1WvXf9jdKDyh7uV74SsuhAhiOhpdPusTY7TE47yMaBsNOOlx8ioAM7d6tuhzEvpqQnPqScQvrTu5+kJWdcUTuDYr+EJI9Tv72s6wowzPVoGIu0K4TG1o/eziBhDjQxtNdpEeCFUfuE4qQITC6TTyg2hG/5raByZbEL9FD5hCXZ1uI0d4H0Sok1u1uMwjq8vS7fofgBGFemT5o/tEvPoE+fne9+92umIccIVU612oX4EKYIKvx0VzvHY4bpPhzlH2xsHJyNCxEU1+YHH3Er0wwUwe0Cz2aMoLTX4O5vT3U0LRCpLSI4Ilw0W77rmJeuA8KvTGxcMADNtnFnVRBFo9zM2/WN2lhrKXPS61U1iquViau+KLGP24HiQxi7JikhPy1RI=
-X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: e6dba15e-52e2-4f10-03d0-08db14ceb3af
-X-MS-Exchange-CrossTenant-AuthSource: DS0PR10MB6798.namprd10.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 22 Feb 2023 12:17:01.4717
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: QRkRHQNf8UIbJGeVrVaOqy+ERAtPEi/U8Om2B4kHipdAwCA+S7TmlV7yQQr2Drbg31pwtRDDHbvtdlvCuMCKoQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH8PR10MB6412
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.170.22
- definitions=2023-02-22_05,2023-02-22_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 spamscore=0 phishscore=0 suspectscore=0
- mlxlogscore=999 adultscore=0 mlxscore=0 bulkscore=0 malwarescore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2212070000
- definitions=main-2302220108
-X-Proofpoint-ORIG-GUID: sSmjl_qIziGg_7CNEb-H13KwTtk4Odse
-X-Proofpoint-GUID: sSmjl_qIziGg_7CNEb-H13KwTtk4Odse
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Since commit 8b41fc4454e ("kbuild: create modules.builtin without
-Makefile.modbuiltin or tristate.conf"), MODULE_LICENSE declarations
-are used to identify modules. As a consequence, uses of the macro
-in non-modules will cause modprobe to misidentify their containing
-object file as a module when it is not (false positives), and modprobe
-might succeed rather than failing with a suitable error message.
+I'm announcing the release of the 5.4.232 kernel.
 
-So remove it in the files in this commit, none of which can be built as
-modules.
+All users of the 5.4 kernel series must upgrade.
 
-Signed-off-by: Nick Alcock <nick.alcock@oracle.com>
-Suggested-by: Luis Chamberlain <mcgrof@kernel.org>
-Cc: Luis Chamberlain <mcgrof@kernel.org>
-Cc: linux-modules@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org
-Cc: Hitomi Hasegawa <hasegawa-hitomi@fujitsu.com>
-Cc: Vinod Koul <vkoul@kernel.org>
-Cc: Kishon Vijay Abraham I <kishon@kernel.org>
-Cc: Philipp Zabel <p.zabel@pengutronix.de>
-Cc: linux-phy@lists.infradead.org
----
- drivers/phy/intel/phy-intel-lgm-combo.c | 1 -
- 1 file changed, 1 deletion(-)
+The updated 5.4.y git tree can be found at:
+	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable.git linux-5.4.y
+and can be browsed at the normal kernel.org git web browser:
+	https://git.kernel.org/?p=linux/kernel/git/stable/linux-stable.git;a=summary
 
-diff --git a/drivers/phy/intel/phy-intel-lgm-combo.c b/drivers/phy/intel/phy-intel-lgm-combo.c
-index 6010e246d52e..8c764c457c1c 100644
---- a/drivers/phy/intel/phy-intel-lgm-combo.c
-+++ b/drivers/phy/intel/phy-intel-lgm-combo.c
-@@ -616,4 +616,3 @@ static struct platform_driver intel_cbphy_driver = {
- module_platform_driver(intel_cbphy_driver);
- 
- MODULE_DESCRIPTION("Intel Combo-phy driver");
--MODULE_LICENSE("GPL v2");
--- 
-2.39.1.268.g9de2f9a303
+thanks,
+
+greg k-h
+
+------------
+
+ Makefile                                                    |    2 
+ arch/arm64/boot/dts/amlogic/meson-axg.dtsi                  |    4 
+ arch/arm64/boot/dts/amlogic/meson-g12-common.dtsi           |    6 
+ arch/arm64/boot/dts/amlogic/meson-gx.dtsi                   |    6 
+ arch/arm64/boot/dts/freescale/imx8mm-pinfunc.h              |    2 
+ arch/parisc/kernel/firmware.c                               |    5 
+ arch/parisc/kernel/ptrace.c                                 |   15 
+ arch/powerpc/perf/imc-pmu.c                                 |   14 
+ arch/riscv/Makefile                                         |    3 
+ arch/riscv/mm/cacheflush.c                                  |    4 
+ arch/s390/boot/compressed/decompressor.c                    |    2 
+ arch/x86/kvm/x86.c                                          |    3 
+ drivers/ata/libata-core.c                                   |    2 
+ drivers/bus/sunxi-rsb.c                                     |    8 
+ drivers/firewire/core-cdev.c                                |    4 
+ drivers/firmware/efi/efi.c                                  |    2 
+ drivers/firmware/efi/memattr.c                              |    2 
+ drivers/fpga/stratix10-soc.c                                |    4 
+ drivers/fsi/fsi-sbefifo.c                                   |    6 
+ drivers/i2c/busses/i2c-rk3x.c                               |   44 
+ drivers/iio/accel/hid-sensor-accel-3d.c                     |    1 
+ drivers/iio/adc/berlin2-adc.c                               |    4 
+ drivers/iio/adc/stm32-dfsdm-adc.c                           |    1 
+ drivers/iio/adc/twl6030-gpadc.c                             |   32 
+ drivers/infiniband/hw/hfi1/file_ops.c                       |    7 
+ drivers/infiniband/hw/usnic/usnic_uiom.c                    |    8 
+ drivers/infiniband/ulp/ipoib/ipoib_main.c                   |    8 
+ drivers/input/serio/i8042-x86ia64io.h                       | 1188 ++++----
+ drivers/iommu/amd_iommu.c                                   |    5 
+ drivers/iommu/arm-smmu-v3.c                                 |    2 
+ drivers/iommu/arm-smmu.c                                    |    2 
+ drivers/iommu/dma-iommu.c                                   |    6 
+ drivers/iommu/exynos-iommu.c                                |    2 
+ drivers/iommu/intel-iommu.c                                 |    2 
+ drivers/iommu/iommu.c                                       |   43 
+ drivers/iommu/ipmmu-vmsa.c                                  |    2 
+ drivers/iommu/msm_iommu.c                                   |    2 
+ drivers/iommu/mtk_iommu.c                                   |    2 
+ drivers/iommu/mtk_iommu_v1.c                                |    2 
+ drivers/iommu/omap-iommu.c                                  |    2 
+ drivers/iommu/qcom_iommu.c                                  |    2 
+ drivers/iommu/rockchip-iommu.c                              |    2 
+ drivers/iommu/s390-iommu.c                                  |    2 
+ drivers/iommu/tegra-gart.c                                  |    2 
+ drivers/iommu/tegra-smmu.c                                  |    2 
+ drivers/iommu/virtio-iommu.c                                |    2 
+ drivers/mmc/core/sdio_bus.c                                 |   17 
+ drivers/mmc/core/sdio_cis.c                                 |   12 
+ drivers/mmc/host/mmc_spi.c                                  |    8 
+ drivers/net/bonding/bond_debugfs.c                          |    2 
+ drivers/net/ethernet/broadcom/bgmac-bcma.c                  |    6 
+ drivers/net/ethernet/broadcom/bnxt/bnxt.c                   |    8 
+ drivers/net/ethernet/intel/i40e/i40e_main.c                 |    4 
+ drivers/net/ethernet/intel/ice/ice_main.c                   |    2 
+ drivers/net/ethernet/intel/ixgbe/ixgbe.h                    |    2 
+ drivers/net/ethernet/intel/ixgbe/ixgbe_main.c               |   28 
+ drivers/net/ethernet/pensando/ionic/ionic_lif.c             |   15 
+ drivers/net/ethernet/stmicro/stmmac/dwmac-qcom-ethqos.c     |    2 
+ drivers/net/ethernet/stmicro/stmmac/dwmac5.c                |    3 
+ drivers/net/ethernet/stmicro/stmmac/stmmac_main.c           |    3 
+ drivers/net/ethernet/stmicro/stmmac/stmmac_platform.c       |    2 
+ drivers/net/phy/meson-gxl.c                                 |    4 
+ drivers/net/usb/kalmia.c                                    |    8 
+ drivers/net/usb/plusb.c                                     |    4 
+ drivers/net/virtio_net.c                                    |    2 
+ drivers/net/wireless/broadcom/brcm80211/brcmfmac/cfg80211.c |   17 
+ drivers/nvme/host/pci.c                                     |    3 
+ drivers/nvme/target/fc.c                                    |    4 
+ drivers/nvmem/core.c                                        |    3 
+ drivers/pinctrl/aspeed/pinctrl-aspeed.c                     |    2 
+ drivers/pinctrl/intel/pinctrl-intel.c                       |   16 
+ drivers/pinctrl/pinctrl-single.c                            |    2 
+ drivers/scsi/iscsi_tcp.c                                    |    9 
+ drivers/scsi/scsi_scan.c                                    |    7 
+ drivers/target/target_core_file.c                           |    4 
+ drivers/target/target_core_tmr.c                            |    4 
+ drivers/tty/serial/8250/8250_dma.c                          |   26 
+ drivers/tty/vt/vc_screen.c                                  |    9 
+ drivers/usb/core/quirks.c                                   |    3 
+ drivers/usb/dwc3/dwc3-qcom.c                                |   10 
+ drivers/usb/gadget/function/f_fs.c                          |    4 
+ drivers/usb/typec/altmodes/displayport.c                    |    8 
+ drivers/video/fbdev/core/fbcon.c                            |    7 
+ drivers/video/fbdev/smscufx.c                               |   46 
+ drivers/watchdog/diag288_wdt.c                              |   15 
+ drivers/xen/pvcalls-back.c                                  |    8 
+ fs/aio.c                                                    |    4 
+ fs/btrfs/volumes.c                                          |   18 
+ fs/btrfs/zlib.c                                             |    2 
+ fs/ceph/mds_client.c                                        |    6 
+ fs/f2fs/gc.c                                                |   18 
+ fs/nilfs2/ioctl.c                                           |    7 
+ fs/nilfs2/super.c                                           |    9 
+ fs/nilfs2/the_nilfs.c                                       |    8 
+ fs/proc/task_mmu.c                                          |    4 
+ fs/squashfs/squashfs_fs.h                                   |    2 
+ fs/squashfs/squashfs_fs_sb.h                                |    2 
+ fs/squashfs/xattr.h                                         |    4 
+ fs/squashfs/xattr_id.c                                      |    2 
+ fs/xfs/libxfs/xfs_defer.c                                   |  358 +-
+ fs/xfs/libxfs/xfs_defer.h                                   |   49 
+ fs/xfs/libxfs/xfs_inode_fork.c                              |    2 
+ fs/xfs/libxfs/xfs_trans_inode.c                             |    2 
+ fs/xfs/xfs_aops.c                                           |    4 
+ fs/xfs/xfs_bmap_item.c                                      |  238 -
+ fs/xfs/xfs_bmap_item.h                                      |    3 
+ fs/xfs/xfs_extfree_item.c                                   |  175 -
+ fs/xfs/xfs_extfree_item.h                                   |   18 
+ fs/xfs/xfs_icreate_item.c                                   |    1 
+ fs/xfs/xfs_inode.c                                          |    4 
+ fs/xfs/xfs_inode_item.c                                     |    2 
+ fs/xfs/xfs_inode_item.h                                     |    4 
+ fs/xfs/xfs_iwalk.c                                          |   27 
+ fs/xfs/xfs_log.c                                            |   68 
+ fs/xfs/xfs_log.h                                            |    3 
+ fs/xfs/xfs_log_cil.c                                        |    8 
+ fs/xfs/xfs_log_recover.c                                    |  160 -
+ fs/xfs/xfs_mount.c                                          |    3 
+ fs/xfs/xfs_refcount_item.c                                  |  173 -
+ fs/xfs/xfs_refcount_item.h                                  |    3 
+ fs/xfs/xfs_rmap_item.c                                      |  161 -
+ fs/xfs/xfs_rmap_item.h                                      |    3 
+ fs/xfs/xfs_stats.c                                          |    4 
+ fs/xfs/xfs_stats.h                                          |    1 
+ fs/xfs/xfs_super.c                                          |    8 
+ fs/xfs/xfs_trace.h                                          |    1 
+ fs/xfs/xfs_trans.h                                          |   10 
+ include/linux/hugetlb.h                                     |   18 
+ include/linux/iommu.h                                       |   21 
+ include/linux/stmmac.h                                      |    1 
+ include/net/sock.h                                          |   13 
+ kernel/sched/psi.c                                          |    7 
+ kernel/trace/trace.c                                        |    3 
+ mm/memblock.c                                               |    8 
+ mm/mempolicy.c                                              |    3 
+ mm/swapfile.c                                               |   13 
+ net/bridge/br_netfilter_hooks.c                             |    1 
+ net/can/j1939/address-claim.c                               |   40 
+ net/can/j1939/transport.c                                   |    4 
+ net/core/dev.c                                              |    2 
+ net/core/filter.c                                           |    3 
+ net/dccp/ipv6.c                                             |    7 
+ net/ipv6/datagram.c                                         |    2 
+ net/ipv6/tcp_ipv6.c                                         |   11 
+ net/mpls/af_mpls.c                                          |    4 
+ net/netfilter/nft_tproxy.c                                  |    8 
+ net/netrom/af_netrom.c                                      |    5 
+ net/openvswitch/datapath.c                                  |   12 
+ net/rds/message.c                                           |    6 
+ net/rose/af_rose.c                                          |    8 
+ net/sched/sch_htb.c                                         |    5 
+ net/sctp/diag.c                                             |    4 
+ net/sunrpc/xprtrdma/verbs.c                                 |    4 
+ net/x25/af_x25.c                                            |    6 
+ net/xfrm/xfrm_input.c                                       |    3 
+ sound/pci/hda/patch_conexant.c                              |    1 
+ sound/pci/hda/patch_realtek.c                               |    2 
+ sound/pci/hda/patch_via.c                                   |    3 
+ sound/pci/lx6464es/lx_core.c                                |   11 
+ sound/soc/codecs/cs42l56.c                                  |    6 
+ sound/soc/intel/boards/bytcr_rt5651.c                       |    2 
+ sound/soc/sof/intel/hda-dai.c                               |    8 
+ sound/synth/emux/emux_nrpn.c                                |    3 
+ tools/testing/selftests/bpf/verifier/search_pruning.c       |   36 
+ tools/testing/selftests/net/fib_tests.sh                    | 1727 ++++++++++++
+ tools/testing/selftests/net/forwarding/lib.sh               |    4 
+ tools/testing/selftests/net/udpgso_bench.sh                 |   24 
+ tools/testing/selftests/net/udpgso_bench_rx.c               |    4 
+ tools/testing/selftests/net/udpgso_bench_tx.c               |   36 
+ tools/virtio/linux/bug.h                                    |    8 
+ tools/virtio/linux/build_bug.h                              |    7 
+ tools/virtio/linux/cpumask.h                                |    7 
+ tools/virtio/linux/gfp.h                                    |    7 
+ tools/virtio/linux/kernel.h                                 |    1 
+ tools/virtio/linux/kmsan.h                                  |   12 
+ tools/virtio/linux/scatterlist.h                            |    1 
+ tools/virtio/linux/topology.h                               |    7 
+ 177 files changed, 4189 insertions(+), 1339 deletions(-)
+
+Aaron Thompson (1):
+      Revert "mm: Always release pages to the buddy allocator in memblock_free_late()."
+
+Al Viro (3):
+      WRITE is "data source", not destination...
+      fix iov_iter_bvec() "direction" argument
+      fix "direction" argument of iov_iter_kvec()
+
+Alan Stern (1):
+      net: USB: Fix wrong-direction WARNING in plusb.c
+
+Alexander Egorenkov (2):
+      watchdog: diag288_wdt: do not use stack buffers for hardware data
+      watchdog: diag288_wdt: fix __diag288() inline assembly
+
+Alexander Potapenko (1):
+      btrfs: zlib: zero-initialize zlib workspace
+
+Amit Engel (1):
+      nvme-fc: fix a missing queue put in nvmet_fc_ls_create_association
+
+Anand Jain (1):
+      btrfs: free device in btrfs_close_devices for a single device filesystem
+
+Andrea Righi (1):
+      mm: swap: properly update readahead statistics in unuse_pte_range()
+
+Andreas Kemnade (2):
+      iio:adc:twl6030: Enable measurements of VUSB, VBAT and others
+      iio:adc:twl6030: Enable measurement of VAC
+
+Andreas Schwab (1):
+      riscv: disable generation of unwind tables
+
+Andrei Gherzan (4):
+      selftests: net: udpgso_bench_rx: Fix 'used uninitialized' compiler warning
+      selftests: net: udpgso_bench_rx/tx: Stop when wrong CLI args are provided
+      selftests: net: udpgso_bench: Fix racing bug between the rx/tx programs
+      selftests: net: udpgso_bench_tx: Cater for pending datagrams zerocopy benchmarking
+
+Andrew Morton (1):
+      revert "squashfs: harden sanity check in squashfs_read_xattr_id_table"
+
+Andrey Konovalov (1):
+      net: stmmac: do not stop RX_CLK in Rx LPI state for qcs404 SoC
+
+Andy Shevchenko (3):
+      ASoC: Intel: bytcr_rt5651: Drop reference count of ACPI device after use
+      pinctrl: intel: Restore the pins that used to be in Direct IRQ mode
+      nvme-pci: Move enumeration by class to be last in the table
+
+Anirudh Venkataramanan (1):
+      ice: Do not use WQ_MEM_RECLAIM flag for workqueue
+
+Anton Gusev (1):
+      efi: fix potential NULL deref in efi_mem_reserve_persistent
+
+Ard Biesheuvel (1):
+      efi: Accept version 2 of memory attributes table
+
+Arnd Bergmann (1):
+      ASoC: cs42l56: fix DT probe
+
+Artemii Karasev (2):
+      ALSA: hda/via: Avoid potential array out-of-bound in add_secret_dac_path()
+      ALSA: emux: Avoid potential array out-of-bound in snd_emux_xg_control()
+
+Bo Liu (1):
+      ALSA: hda/conexant: add a new hda codec SN6180
+
+Brian Foster (1):
+      xfs: sync lazy sb accounting on quiesce of read-only mounts
+
+Chao Yu (1):
+      f2fs: fix to do sanity check on i_extra_isize in is_alive()
+
+Chris Healy (1):
+      net: phy: meson-gxl: Add generic dummy stubs for MMD register access
+
+Christian Hopps (1):
+      xfrm: fix bug with DSCP copy to v6 from v4 tunnel
+
+Christoph Hellwig (8):
+      xfs: remove the xfs_efi_log_item_t typedef
+      xfs: remove the xfs_efd_log_item_t typedef
+      xfs: remove the xfs_inode_log_item_t typedef
+      xfs: factor out a xfs_defer_create_intent helper
+      xfs: merge the ->log_item defer op into ->create_intent
+      xfs: merge the ->diff_items defer op into ->create_intent
+      xfs: turn dfp_intent into a xfs_log_item
+      xfs: refactor xfs_defer_finish_noroll
+
+Cristian Ciocaltea (1):
+      net: stmmac: Restrict warning on disabling DMA store and fwd mode
+
+Damien Le Moal (1):
+      ata: libata: Fix sata_down_spd_limit() when no link speed is reported
+
+Dan Carpenter (2):
+      ALSA: pci: lx6464es: fix a debug loop
+      net: sched: sch: Fix off by one in htb_activate_prios()
+
+Darrick J. Wong (15):
+      xfs: log new intent items created as part of finishing recovered intent items
+      xfs: proper replay of deferred ops queued during log recovery
+      xfs: xfs_defer_capture should absorb remaining block reservations
+      xfs: xfs_defer_capture should absorb remaining transaction reservation
+      xfs: clean up bmap intent item recovery checking
+      xfs: clean up xfs_bui_item_recover iget/trans_alloc/ilock ordering
+      xfs: fix an incore inode UAF in xfs_bui_recover
+      xfs: change the order in which child and parent defer ops are finished
+      xfs: periodically relog deferred intent items
+      xfs: expose the log push threshold
+      xfs: only relog deferred intent items if free space in the log gets low
+      xfs: fix missing CoW blocks writeback conversion retry
+      xfs: ensure inobt record walks always make forward progress
+      xfs: fix the forward progress assertion in xfs_iwalk_run_callbacks
+      xfs: prevent UAF in xfs_log_item_in_current_chkpt
+
+Dave Chinner (1):
+      xfs: fix finobt btree block recovery ordering
+
+Dean Luick (1):
+      IB/hfi1: Restore allocated resources on failed copyout
+
+Devid Antonio Filoni (1):
+      can: j1939: do not wait 250 ms if the same addr was already claimed
+
+Dmitry Perchanov (1):
+      iio: hid: fix the retval in accel_3d_capture_sample
+
+Dongliang Mu (1):
+      fbdev: smscufx: fix error handling code in ufx_usb_probe
+
+Dragos Tatulea (1):
+      IB/IPoIB: Fix legacy IPoIB due to wrong number of queues
+
+Eduard Zingerman (1):
+      selftests/bpf: Verify copy_register_state() preserves parent/live fields
+
+Fedor Pchelkin (2):
+      squashfs: harden sanity check in squashfs_read_xattr_id_table
+      net: openvswitch: fix flow memory leak in ovs_flow_cmd_new
+
+Felix Riemann (1):
+      net: Fix unwanted sign extension in netdev_stats_to_stats64()
+
+Florian Westphal (2):
+      netfilter: br_netfilter: disable sabotage_in hook after first suppression
+      netfilter: nft_tproxy: restrict to prerouting hook
+
+George Kennedy (1):
+      vc_screen: move load of struct vc_data pointer in vcs_read() to avoid UAF
+
+Greg Kroah-Hartman (2):
+      kvm: initialize all of the kvm_debugregs structure before sending it to userspace
+      Linux 5.4.232
+
+Guillaume Nault (2):
+      ipv6: Fix datagram socket connection with DSCP.
+      ipv6: Fix tcp socket connection with DSCP.
+
+Guo Ren (1):
+      riscv: Fixup race condition on PG_dcache_clean in flush_icache_pte
+
+Hangbin Liu (1):
+      selftests: forwarding: lib: quote the sysctl values
+
+Heiner Kallweit (4):
+      net: phy: meson-gxl: use MMD access dummy stubs for GXL, internal PHY
+      arm64: dts: meson-gx: Make mmc host controller interrupts level-sensitive
+      arm64: dts: meson-g12-common: Make mmc host controller interrupts level-sensitive
+      arm64: dts: meson-axg: Make mmc host controller interrupts level-sensitive
+
+Helge Deller (2):
+      parisc: Fix return code of pdc_iodc_print()
+      parisc: Wire up PTRACE_GETREGS/PTRACE_SETREGS for compat case
+
+Hyunwoo Kim (3):
+      netrom: Fix use-after-free caused by accept on already connected socket
+      net/x25: Fix to not accept on connected socket
+      net/rose: Fix to not accept on connected socket
+
+Ido Schimmel (1):
+      ipv4: Fix incorrect route flushing when source address is deleted
+
+Ilpo Järvinen (2):
+      serial: 8250_dma: Fix DMA Rx completion race
+      serial: 8250_dma: Fix DMA Rx rearm race
+
+Jakub Kicinski (1):
+      net: mpls: fix stale pointer if allocation fails during device rename
+
+Jason Xing (3):
+      ixgbe: allow to increase MTU to 3K with XDP enabled
+      i40e: add double of VLAN header when computing the max MTU
+      ixgbe: add double of VLAN header when computing the max MTU
+
+Joel Stanley (1):
+      pinctrl: aspeed: Fix confusing types in return value
+
+Joerg Roedel (1):
+      iommu/amd: Pass gfp flags to iommu_map_page() in amd_iommu_map()
+
+Johannes Zink (1):
+      net: stmmac: fix order of dwmac5 FlexPPS parametrization sequence
+
+Josef Bacik (1):
+      btrfs: limit device extents to the device size
+
+Kailang Yang (1):
+      ALSA: hda/realtek - fixed wrong gpio assigned
+
+Kees Cook (1):
+      net: sched: sch: Bounds check priority
+
+Kuniyuki Iwashima (1):
+      dccp/tcp: Avoid negative sk_forward_alloc by ipv6_pinfo.pktoptions.
+
+Longlong Xia (1):
+      mm/swapfile: add cond_resched() in get_swap_pages()
+
+Mark Pearson (1):
+      usb: core: add quirk for Alcor Link AK9563 smartcard reader
+
+Martin K. Petersen (1):
+      scsi: Revert "scsi: core: map PQ=1, PDT=other values to SCSI_SCAN_TARGET_PRESENT"
+
+Maurizio Lombardi (1):
+      scsi: target: core: Fix warning on RT kernels
+
+Maxim Korotkov (1):
+      pinctrl: single: fix potential NULL dereference
+
+Michael Chan (1):
+      bnxt_en: Fix mqprio and XDP ring checking logic
+
+Michael Ellerman (1):
+      powerpc/imc-pmu: Revert nest_init_lock to being a mutex
+
+Michael Walle (1):
+      nvmem: core: fix cell removal on error
+
+Mike Christie (1):
+      scsi: iscsi_tcp: Fix UAF during login when accessing the shost ipaddress
+
+Mike Kravetz (3):
+      mm: hugetlb: proc: check for hugetlb shared PMD in /proc/PID/smaps
+      migrate: hugetlb: check for hugetlb shared PMD in node migration
+      hugetlb: check for undefined shift on 32 bit architectures
+
+Miko Larsson (1):
+      net/usb: kalmia: Don't pass act_len in usb_bulk_msg error path
+
+Minsuk Kang (1):
+      wifi: brcmfmac: Check the count value of channel spec to prevent out-of-bounds reads
+
+Munehisa Kamata (1):
+      sched/psi: Fix use-after-free in ep_remove_wait_queue()
+
+Natalia Petrova (1):
+      i40e: Add checking for null for nlmsg_find_attr()
+
+Neel Patel (1):
+      ionic: clean interrupt before enabling queue to avoid credit race
+
+Neil Armstrong (1):
+      usb: dwc3: qcom: enable vbus override when in OTG dr-mode
+
+Olivier Moysan (1):
+      iio: adc: stm32-dfsdm: fill module aliases
+
+Parav Pandit (1):
+      virtio-net: Keep stop() to follow mirror sequence of open()
+
+Phillip Lougher (1):
+      Squashfs: fix handling and sanity checking of xattr_ids count
+
+Pierluigi Passaro (1):
+      arm64: dts: imx8mm: Fix pad control for UART1_DTE_RX
+
+Pierre-Louis Bossart (1):
+      ASoC: SOF: Intel: hda-dai: fix possible stream_tag leak
+
+Pietro Borrello (2):
+      rds: rds_rm_zerocopy_callback() use list_first_entry()
+      sctp: sctp_sock_filter(): avoid list_entry() on possibly empty list
+
+Prashant Malani (1):
+      usb: typec: altmodes/displayport: Fix probe pin assign check
+
+Qi Zheng (1):
+      bonding: fix error checking in bond_debug_reregister()
+
+Rafał Miłecki (1):
+      net: bgmac: fix BCM5358 support by setting correct flags
+
+Randy Dunlap (1):
+      i2c: rk3x: fix a bunch of kernel-doc warnings
+
+Ryusuke Konishi (1):
+      nilfs2: fix underflow in second superblock position calculations
+
+Samuel Thibault (1):
+      fbcon: Check font dimension limits
+
+Seth Jenkins (1):
+      aio: fix mremap after fork null-deref
+
+Shaoying Xu (1):
+      Revert "ipv4: Fix incorrect route flushing when source address is deleted"
+
+Shiju Jose (1):
+      tracing: Fix poll() and select() do not work on per_cpu trace_pipe and trace_pipe_raw
+
+Shunsuke Mie (1):
+      tools/virtio: fix the vringh test for virtio ring changes
+
+Takashi Sakamoto (1):
+      firewire: fix memory leak for payload of request subaction to IEC 61883-1 FCP region
+
+Toke Høiland-Jørgensen (1):
+      bpf: Always return target ifindex in bpf_fib_lookup
+
+Tom Murphy (1):
+      iommu: Add gfp parameter to iommu_ops::map
+
+Udipto Goswami (1):
+      usb: gadget: f_fs: Fix unbalanced spinlock in __ffs_ep0_queue_wait
+
+Vasily Gorbik (1):
+      s390/decompressor: specify __decompress() buf len to avoid overflow
+
+Werner Sembach (4):
+      Input: i8042 - move __initconst to fix code styling warning
+      Input: i8042 - merge quirk tables
+      Input: i8042 - add TUXEDO devices to i8042 quirk tables
+      Input: i8042 - add Clevo PCX0DX to i8042 quirk table
+
+Wesley Cheng (1):
+      usb: dwc3: dwc3-qcom: Fix typo in the dwc3 vbus override API
+
+Xiongfeng Wang (1):
+      iio: adc: berlin2-adc: Add missing of_node_put() in error path
+
+Xiubo Li (1):
+      ceph: flush cap releases when the session is flushed
+
+Yang Yingliang (3):
+      RDMA/usnic: use iommu_map_atomic() under spin_lock()
+      mmc: sdio: fix possible resource leaks in some error paths
+      mmc: mmc_spi: fix error handling in mmc_spi_probe()
+
+Yuan Can (1):
+      bus: sunxi-rsb: Fix error handling in sunxi_rsb_init()
+
+Zhang Xiaoxu (1):
+      xprtrdma: Fix regbuf data not freed in rpcrdma_req_create()
+
+Zheng Yongjun (1):
+      fpga: stratix10-soc: Fix return value check in s10_ops_write_init()
+
+Ziyang Xuan (1):
+      can: j1939: fix errant WARN_ON_ONCE in j1939_session_deactivate
 
