@@ -2,450 +2,197 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E58AD69FBB1
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Feb 2023 20:06:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2486869FBB2
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Feb 2023 20:07:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232177AbjBVTGc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Feb 2023 14:06:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41546 "EHLO
+        id S232215AbjBVTHY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Feb 2023 14:07:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41656 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231867AbjBVTGa (ORCPT
+        with ESMTP id S230298AbjBVTHX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Feb 2023 14:06:30 -0500
-Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCA9639CC9
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Feb 2023 11:06:26 -0800 (PST)
-Received: by mail-pj1-x1031.google.com with SMTP id il18-20020a17090b165200b0023127b2d602so9441109pjb.2
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Feb 2023 11:06:26 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=EDMnsmd/U9Y+tD0hMscf8EU7QEy6Kjxo9zv5MZIN7yI=;
-        b=NdMnYfSIlhPUej2FgOAonh0MOMsBx2lSilCD2s7OK5A82RHxcsik/Pgq6dRH85wEEH
-         djEvAr48IWNBUYvxoMkIpIBr3d3fXn8MWN3jWcthO8IrQGpVTBnnaie0VqTzoFCAlJeo
-         eVP1pxLlDN1TUW6pj+mpoeW28DVGaqymoI2NhWYgKWUkKLIMuA2QGMQLTbtf5Gdw1saM
-         XUIN+4lP7ncn2rnBfRmf4uWeu5XJz80piDqYciIxAvT3GE/ZTVMk23t1uXA7KxnIww0e
-         I+8cVoyFWf7rzMOuheXOMbNZGwnUer4hmMz7A+ry2/XO0v0Bip2/v0+zj4EV0xM35OJL
-         pAOg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=EDMnsmd/U9Y+tD0hMscf8EU7QEy6Kjxo9zv5MZIN7yI=;
-        b=eUHah6zCE9RIOAYnm7rW1hwvnkKpnHvLTS6jSr7RmKkqa00I3diq+kHV8/MdrVwiDL
-         aQVf24xxhCWIJ/rY1bDe0KrJMH2bmUGVpVl2DoHUTMMrX38bbBY2G6/vePu3nFhA71db
-         YIac1FHrLyDn8WQmBs4WkQV+xkK6eQcih1l63Q3tXdqOMWSxiS6Y3RKrbVs4cmhNMG6y
-         Lwceftq6WxMd6N9J6vRMBT6vShe6lMnVUWqTnyS1srBPfFfURh9pTSvH/j3DVzCfZtLi
-         6sVN7B2FpPTCIvt8+Zju0IV2bP5+zmcN/vbaimRtVMd70PdRA2jJfAU3N+N0oPvp4cxj
-         OLEQ==
-X-Gm-Message-State: AO0yUKUi5eX7RunxBj3PhMUpZns316xbPjg0+E03+Ps93bm6EG60MSUS
-        m01FyaOXl7VE07w6YQj7qYEo9Q==
-X-Google-Smtp-Source: AK7set+RcnSu3emQTD1wPiAb5U7bPyYDD9Mi/flhqqd93p+B6rkHBzyftrLENYqmXKeX5olu+0qHzA==
-X-Received: by 2002:a05:6a20:7da2:b0:cb:f5ab:3bd0 with SMTP id v34-20020a056a207da200b000cbf5ab3bd0mr1564777pzj.59.1677092786007;
-        Wed, 22 Feb 2023 11:06:26 -0800 (PST)
-Received: from p14s ([2604:3d09:148c:c800:78a7:1e00:32c7:e2c0])
-        by smtp.gmail.com with ESMTPSA id e8-20020a170902744800b0019a8468cbe7sm5928948plt.224.2023.02.22.11.06.24
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 22 Feb 2023 11:06:25 -0800 (PST)
-Date:   Wed, 22 Feb 2023 12:06:23 -0700
-From:   Mathieu Poirier <mathieu.poirier@linaro.org>
-To:     Tanmay Shah <tanmay.shah@amd.com>
-Cc:     michal.simek@amd.com, andersson@kernel.org,
-        jaswinder.singh@linaro.org, ben.levinsky@amd.com,
-        shubhrajyoti.datta@amd.com, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-remoteproc@vger.kernel.org
-Subject: Re: [PATCH v3 3/3] remoteproc: xilinx: add mailbox channels for rpmsg
-Message-ID: <20230222190623.GC909075@p14s>
-References: <20230213211825.3507034-1-tanmay.shah@amd.com>
- <20230213211825.3507034-4-tanmay.shah@amd.com>
+        Wed, 22 Feb 2023 14:07:23 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63792392A2
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Feb 2023 11:07:21 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 1A0C3B815FE
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Feb 2023 19:07:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B58EDC433EF;
+        Wed, 22 Feb 2023 19:07:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1677092838;
+        bh=MpXW9Ope+yu8/6cOTnva7D/ndsIiB3u5nSYzMITatCs=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=ihP3mw7oV9XN6omEkNTFrXXYmfFLDDmUjnRRgiF5JAfk92BFbQMULgvjXkFqFmeCq
+         SPsqGqkTL724SDJ8jkwT+bNQfa7chG/eVVv7o5IsUa1HaUdbwn46qu8sQ9h3+/fqnU
+         lXKCCRz/b8vP5X69Ws6JfjqZJ383GEdA5WkXtEFUon7Trg+SZSuZ/RO97ZtRwn3Sct
+         ELWchiKs+wDkFV3D+Ud6gI/GC6Ya2s9n5M2x9DEkI7iymXbmI4Y2Tg13QeMc0gZz/O
+         2jU8VuRUqVEFdNk1lHQxnqnsgrL3H0On1h7L/sxwClXkszRLJ+nLwtw6rCaIPFhMmZ
+         pwXd0/oqQr5cg==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id 5300D5C0C88; Wed, 22 Feb 2023 11:07:18 -0800 (PST)
+Date:   Wed, 22 Feb 2023 11:07:18 -0800
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     John Stultz <jstultz@google.com>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Davidlohr Bueso <dave@stgolabs.net>,
+        Josh Triplett <josh@joshtriplett.org>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Valentin Schneider <vschneid@redhat.com>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        kernel-team@android.com, Connor O'Brien <connoro@google.com>
+Subject: Re: [PATCH v4 1/4] locktorture: Add nested_[un]lock() hooks and
+ nlocks parameter
+Message-ID: <20230222190718.GR2948950@paulmck-ThinkPad-P17-Gen-1>
+Reply-To: paulmck@kernel.org
+References: <20230221190238.21285-1-jstultz@google.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230213211825.3507034-4-tanmay.shah@amd.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20230221190238.21285-1-jstultz@google.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 13, 2023 at 01:18:26PM -0800, Tanmay Shah wrote:
-> This patch makes each r5 core mailbox client and uses
-> tx and rx channels to send and receive data to/from
-> remote processor respectively. This is needed for rpmsg
-> communication to remote processor.
+On Tue, Feb 21, 2023 at 07:02:35PM +0000, John Stultz wrote:
+> In order to extend locktorture to support lock nesting, add
+> nested_lock() and nested_unlock() hooks to the torture ops.
 > 
-> Signed-off-by: Tanmay Shah <tanmay.shah@amd.com>
+> These take a 32bit lockset mask which is generated at random,
+> so some number of locks will be taken before the main lock is
+> taken and released afterwards.
+> 
+> Additionally, add nested_locks module parameter to allow
+> specifying the number of nested locks to be used.
+> 
+> This has been helpful to uncover issues in the proxy-exec
+> series development.
+> 
+> This was inspired by locktorture extensions originally implemented
+> by Connor O'Brien, for stress testing the proxy-execution series:
+>   https://lore.kernel.org/lkml/20221003214501.2050087-12-connoro@google.com/
+> 
+> Cc: Davidlohr Bueso <dave@stgolabs.net>
+> Cc: "Paul E. McKenney" <paulmck@kernel.org>
+> Cc: Josh Triplett <josh@joshtriplett.org>
+> Cc: Joel Fernandes <joel@joelfernandes.org>
+> Cc: Juri Lelli <juri.lelli@redhat.com>
+> Cc: Valentin Schneider <vschneid@redhat.com>
+> Cc: Dietmar Eggemann <dietmar.eggemann@arm.com>
+> Cc: kernel-team@android.com
+> Reviewed-by: Davidlohr Bueso <dave@stgolabs.net>
+> Co-developed-by: Connor O'Brien <connoro@google.com>
+> Signed-off-by: Connor O'Brien <connoro@google.com>
+> Signed-off-by: John Stultz <jstultz@google.com>
+
+I queued this series in place of its precedessor, thank you for the
+update!
+
+Given what I know now, I will set this up for the v6.4 merge window.
+
+							Thanx, Paul
+
 > ---
+> v3:
+> * Minor commit message tweaks and naming changes
+>   suggested by Davidlohr Bueso
+> v4:
+> * Add co-developed tag
+> ---
+>  kernel/locking/locktorture.c | 23 +++++++++++++++++++----
+>  1 file changed, 19 insertions(+), 4 deletions(-)
 > 
-> Changes in v3:
->   - fix multi-line comment format
->   - do not mixup mailbox information with memory-regions
->   - fix redundant dev_warn for split mode
->   - setting up mailboxes should return an error code
->   - redesign driver to move mailbox setup during driver probe
->   - add .kick function only if mailbox setup is success
-> 
-> v2: https://lore.kernel.org/all/20230126213154.1707300-1-tanmay.shah@amd.com/
-> 
->  drivers/remoteproc/xlnx_r5_remoteproc.c | 228 +++++++++++++++++++++++-
->  1 file changed, 226 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/remoteproc/xlnx_r5_remoteproc.c b/drivers/remoteproc/xlnx_r5_remoteproc.c
-> index 81af2dea56c2..f7131fe8fe7e 100644
-> --- a/drivers/remoteproc/xlnx_r5_remoteproc.c
-> +++ b/drivers/remoteproc/xlnx_r5_remoteproc.c
-> @@ -8,16 +8,23 @@
->  #include <linux/dma-mapping.h>
->  #include <linux/firmware/xlnx-zynqmp.h>
->  #include <linux/kernel.h>
-> +#include <linux/mailbox_client.h>
-> +#include <linux/mailbox/zynqmp-ipi-message.h>
->  #include <linux/module.h>
->  #include <linux/of_address.h>
->  #include <linux/of_platform.h>
->  #include <linux/of_reserved_mem.h>
->  #include <linux/platform_device.h>
->  #include <linux/remoteproc.h>
-> -#include <linux/slab.h>
+> diff --git a/kernel/locking/locktorture.c b/kernel/locking/locktorture.c
+> index 9c2fb613a55d..6fe046594868 100644
+> --- a/kernel/locking/locktorture.c
+> +++ b/kernel/locking/locktorture.c
+> @@ -48,6 +48,9 @@ torture_param(int, stat_interval, 60,
+>  torture_param(int, stutter, 5, "Number of jiffies to run/halt test, 0=disable");
+>  torture_param(int, verbose, 1,
+>  	     "Enable verbose debugging printk()s");
+> +torture_param(int, nested_locks, 0, "Number of nested locks (max = 8)");
+> +/* Going much higher trips "BUG: MAX_LOCKDEP_CHAIN_HLOCKS too low!" errors */
+> +#define MAX_NESTED_LOCKS 8
 >  
->  #include "remoteproc_internal.h"
+>  static char *torture_type = "spin_lock";
+>  module_param(torture_type, charp, 0444);
+> @@ -76,10 +79,12 @@ static void lock_torture_cleanup(void);
+>  struct lock_torture_ops {
+>  	void (*init)(void);
+>  	void (*exit)(void);
+> +	int (*nested_lock)(int tid, u32 lockset);
+>  	int (*writelock)(int tid);
+>  	void (*write_delay)(struct torture_random_state *trsp);
+>  	void (*task_boost)(struct torture_random_state *trsp);
+>  	void (*writeunlock)(int tid);
+> +	void (*nested_unlock)(int tid, u32 lockset);
+>  	int (*readlock)(int tid);
+>  	void (*read_delay)(struct torture_random_state *trsp);
+>  	void (*readunlock)(int tid);
+> @@ -669,6 +674,7 @@ static int lock_torture_writer(void *arg)
+>  	struct lock_stress_stats *lwsp = arg;
+>  	int tid = lwsp - cxt.lwsa;
+>  	DEFINE_TORTURE_RANDOM(rand);
+> +	u32 lockset_mask;
 >  
-> +/* IPI buffer MAX length */
-> +#define IPI_BUF_LEN_MAX	32U
-> +
-> +/* RX mailbox client buffer max length */
-> +#define MBOX_CLIENT_BUF_MAX	(IPI_BUF_LEN_MAX + \
-> +				 sizeof(struct zynqmp_ipi_message))
->  /*
->   * settings for RPU cluster mode which
->   * reflects possible values of xlnx,cluster-mode dt-property
-> @@ -43,6 +50,27 @@ struct mem_bank_data {
->  	char *bank_name;
->  };
+>  	VERBOSE_TOROUT_STRING("lock_torture_writer task started");
+>  	set_user_nice(current, MAX_NICE);
+> @@ -677,7 +683,10 @@ static int lock_torture_writer(void *arg)
+>  		if ((torture_random(&rand) & 0xfffff) == 0)
+>  			schedule_timeout_uninterruptible(1);
 >  
-> +/**
-> + * struct mbox_info
-> + *
-> + * @rx_mc_buf: to copy data from mailbox rx channel
-> + * @tx_mc_buf: to copy data to mailbox tx channel
-> + * @r5_core: this mailbox's corresponding r5_core pointer
-> + * @mbox_work: schedule work after receiving data from mailbox
-> + * @mbox_cl: mailbox client
-> + * @tx_chan: mailbox tx channel
-> + * @rx_chan: mailbox rx channel
-> + */
-> +struct mbox_info {
-> +	unsigned char rx_mc_buf[MBOX_CLIENT_BUF_MAX];
-> +	unsigned char tx_mc_buf[MBOX_CLIENT_BUF_MAX];
-> +	struct zynqmp_r5_core *r5_core;
-> +	struct work_struct mbox_work;
-> +	struct mbox_client mbox_cl;
-> +	struct mbox_chan *tx_chan;
-> +	struct mbox_chan *rx_chan;
-> +};
-> +
->  /*
->   * Hardcoded TCM bank values. This will be removed once TCM bindings are
->   * accepted for system-dt specifications and upstreamed in linux kernel
-> @@ -63,6 +91,7 @@ static const struct mem_bank_data zynqmp_tcm_banks[] = {
->   * @tcm_banks: array of each TCM bank data
->   * @rproc: rproc handle
->   * @pm_domain_id: RPU CPU power domain id
-> + * @ipi: pointer to mailbox information
->   */
->  struct zynqmp_r5_core {
->  	struct device *dev;
-> @@ -71,6 +100,7 @@ struct zynqmp_r5_core {
->  	struct mem_bank_data **tcm_banks;
->  	struct rproc *rproc;
->  	u32 pm_domain_id;
-> +	struct mbox_info *ipi;
->  };
+> +		lockset_mask = torture_random(&rand);
+>  		cxt.cur_ops->task_boost(&rand);
+> +		if (cxt.cur_ops->nested_lock)
+> +			cxt.cur_ops->nested_lock(tid, lockset_mask);
+>  		cxt.cur_ops->writelock(tid);
+>  		if (WARN_ON_ONCE(lock_is_write_held))
+>  			lwsp->n_lock_fail++;
+> @@ -690,6 +699,8 @@ static int lock_torture_writer(void *arg)
+>  		lock_is_write_held = false;
+>  		WRITE_ONCE(last_lock_release, jiffies);
+>  		cxt.cur_ops->writeunlock(tid);
+> +		if (cxt.cur_ops->nested_unlock)
+> +			cxt.cur_ops->nested_unlock(tid, lockset_mask);
 >  
->  /**
-> @@ -88,6 +118,178 @@ struct zynqmp_r5_cluster {
->  	struct zynqmp_r5_core **r5_cores;
->  };
->  
-> +/**
-> + * event_notified_idr_cb() - callback for vq_interrupt per notifyid
-> + * @id: rproc->notify id
-> + * @ptr: pointer to idr private data
-> + * @data: data passed to idr_for_each callback
-> + *
-> + * Pass notification to remoteproc virtio
-> + *
-> + * Return: 0. having return is to satisfy the idr_for_each() function
-> + *          pointer input argument requirement.
-> + **/
-> +static int event_notified_idr_cb(int id, void *ptr, void *data)
-> +{
-> +	struct rproc *rproc = data;
-> +
-> +	if (rproc_vq_interrupt(rproc, id) == IRQ_NONE)
-> +		dev_dbg(&rproc->dev, "data not found for vqid=%d\n", id);
-> +
-> +	return 0;
-> +}
-> +
-> +/**
-> + * handle_event_notified() - remoteproc notification work function
-> + * @work: pointer to the work structure
-> + *
-> + * It checks each registered remoteproc notify IDs.
-> + */
-> +static void handle_event_notified(struct work_struct *work)
-> +{
-> +	struct mbox_info *ipi;
-> +	struct rproc *rproc;
-> +
-> +	ipi = container_of(work, struct mbox_info, mbox_work);
-> +	rproc = ipi->r5_core->rproc;
-> +
-> +	/*
-> +	 * We only use IPI for interrupt. The RPU firmware side may or may
-> +	 * not write the notifyid when it trigger IPI.
-> +	 * And thus, we scan through all the registered notifyids and
-> +	 * find which one is valid to get the message.
-> +	 * Even if message from firmware is NULL, we attempt to get vqid
-> +	 */
-> +	idr_for_each(&rproc->notifyids, event_notified_idr_cb, rproc);
-> +}
-> +
-> +/**
-> + * zynqmp_r5_mb_rx_cb() - receive channel mailbox callback
-> + * @cl: mailbox client
-> + * @msg: message pointer
-> + *
-> + * Receive data from ipi buffer, ack interrupt and then
-> + * it will schedule the R5 notification work.
-> + */
-> +static void zynqmp_r5_mb_rx_cb(struct mbox_client *cl, void *msg)
-> +{
-> +	struct zynqmp_ipi_message *ipi_msg, *buf_msg;
-> +	struct mbox_info *ipi;
-> +	size_t len;
-> +
-> +	ipi = container_of(cl, struct mbox_info, mbox_cl);
-> +
-> +	/* copy data from ipi buffer to r5_core */
-> +	ipi_msg = (struct zynqmp_ipi_message *)msg;
-> +	buf_msg = (struct zynqmp_ipi_message *)ipi->rx_mc_buf;
-> +	len = ipi_msg->len;
-> +	if (len > IPI_BUF_LEN_MAX) {
-> +		dev_warn(cl->dev, "msg size exceeded than %d\n",
-> +			 IPI_BUF_LEN_MAX);
-> +		len = IPI_BUF_LEN_MAX;
-> +	}
-> +	buf_msg->len = len;
-> +	memcpy(buf_msg->data, ipi_msg->data, len);
-> +
-> +	/* received and processed interrupt ack */
-> +	if (mbox_send_message(ipi->rx_chan, NULL) < 0)
-> +		dev_err(cl->dev, "ack failed to mbox rx_chan\n");
-> +
-> +	schedule_work(&ipi->mbox_work);
-> +}
-> +
-> +/**
-> + * zynqmp_r5_setup_mbox() - Setup mailboxes related properties
-> + *			    this is used for each individual R5 core
-> + *
-> + * @cdev: child node device
-> + *
-> + * Function to setup mailboxes related properties
-> + * return : NULL if failed else pointer to mbox_info
-> + */
-> +static struct mbox_info *zynqmp_r5_setup_mbox(struct device *cdev)
-> +{
-> +	struct mbox_client *mbox_cl;
-> +	struct mbox_info *ipi;
-> +
-> +	ipi = kzalloc(sizeof(*ipi), GFP_KERNEL);
-> +	if (!ipi)
-> +		return NULL;
-> +
-> +	mbox_cl = &ipi->mbox_cl;
-> +	mbox_cl->rx_callback = zynqmp_r5_mb_rx_cb;
-> +	mbox_cl->tx_block = false;
-> +	mbox_cl->knows_txdone = false;
-> +	mbox_cl->tx_done = NULL;
-> +	mbox_cl->dev = cdev;
-> +
-> +	/* Request TX and RX channels */
-> +	ipi->tx_chan = mbox_request_channel_byname(mbox_cl, "tx");
-> +	if (IS_ERR(ipi->tx_chan)) {
-> +		ipi->tx_chan = NULL;
-> +		kfree(ipi);
-> +		dev_warn(cdev, "mbox tx channel request failed\n");
-> +		return NULL;
-> +	}
-> +
-> +	ipi->rx_chan = mbox_request_channel_byname(mbox_cl, "rx");
-> +	if (IS_ERR(ipi->rx_chan)) {
-> +		mbox_free_channel(ipi->tx_chan);
-> +		ipi->rx_chan = NULL;
-> +		ipi->tx_chan = NULL;
-> +		kfree(ipi);
-> +		dev_warn(cdev, "mbox rx channel request failed\n");
-> +		return NULL;
-> +	}
-> +
-> +	INIT_WORK(&ipi->mbox_work, handle_event_notified);
-> +
-> +	return ipi;
-> +}
-> +
-> +static void zynqmp_r5_free_mbox(struct mbox_info *ipi)
-> +{
-> +	if (!ipi)
-> +		return;
-> +
-> +	if (ipi->tx_chan) {
-> +		mbox_free_channel(ipi->tx_chan);
-> +		ipi->tx_chan = NULL;
-> +	}
-> +
-> +	if (ipi->rx_chan) {
-> +		mbox_free_channel(ipi->rx_chan);
-> +		ipi->rx_chan = NULL;
-> +	}
-> +
-> +	kfree(ipi);
-> +}
-> +
-> +/*
-> + * zynqmp_r5_core_kick() - kick a firmware if mbox is provided
-> + * @rproc: r5 core's corresponding rproc structure
-> + * @vqid: virtqueue ID
-> + */
-> +static void zynqmp_r5_rproc_kick(struct rproc *rproc, int vqid)
-> +{
-> +	struct zynqmp_r5_core *r5_core = rproc->priv;
-> +	struct device *dev = r5_core->dev;
-> +	struct zynqmp_ipi_message *mb_msg;
-> +	struct mbox_info *ipi;
-> +	int ret;
-> +
-> +	ipi = r5_core->ipi;
-> +	if (!ipi)
-> +		return;
-> +
-> +	mb_msg = (struct zynqmp_ipi_message *)ipi->tx_mc_buf;
-> +	memcpy(mb_msg->data, &vqid, sizeof(vqid));
-> +	mb_msg->len = sizeof(vqid);
-> +	ret = mbox_send_message(ipi->tx_chan, mb_msg);
-> +	if (ret < 0)
-> +		dev_warn(dev, "failed to send message\n");
-> +}
-> +
->  /*
->   * zynqmp_r5_set_mode()
->   *
-> @@ -617,7 +819,7 @@ static int zynqmp_r5_rproc_unprepare(struct rproc *rproc)
->  	return 0;
+>  		stutter_wait("lock_torture_writer");
+>  	} while (!torture_must_stop());
+> @@ -830,11 +841,11 @@ lock_torture_print_module_parms(struct lock_torture_ops *cur_ops,
+>  				const char *tag)
+>  {
+>  	pr_alert("%s" TORTURE_FLAG
+> -		 "--- %s%s: nwriters_stress=%d nreaders_stress=%d stat_interval=%d verbose=%d shuffle_interval=%d stutter=%d shutdown_secs=%d onoff_interval=%d onoff_holdoff=%d\n",
+> +		 "--- %s%s: nwriters_stress=%d nreaders_stress=%d nested_locks=%d stat_interval=%d verbose=%d shuffle_interval=%d stutter=%d shutdown_secs=%d onoff_interval=%d onoff_holdoff=%d\n",
+>  		 torture_type, tag, cxt.debug_lock ? " [debug]": "",
+> -		 cxt.nrealwriters_stress, cxt.nrealreaders_stress, stat_interval,
+> -		 verbose, shuffle_interval, stutter, shutdown_secs,
+> -		 onoff_interval, onoff_holdoff);
+> +		 cxt.nrealwriters_stress, cxt.nrealreaders_stress,
+> +		 nested_locks, stat_interval, verbose, shuffle_interval,
+> +		 stutter, shutdown_secs, onoff_interval, onoff_holdoff);
 >  }
 >  
-> -static const struct rproc_ops zynqmp_r5_rproc_ops = {
-> +static struct rproc_ops zynqmp_r5_rproc_ops = {
->  	.prepare	= zynqmp_r5_rproc_prepare,
->  	.unprepare	= zynqmp_r5_rproc_unprepare,
->  	.start		= zynqmp_r5_rproc_start,
-> @@ -642,6 +844,7 @@ static struct zynqmp_r5_core *zynqmp_r5_add_rproc_core(struct device *cdev)
->  {
->  	struct zynqmp_r5_core *r5_core;
->  	struct rproc *r5_rproc;
-> +	struct mbox_info *ipi;
->  	int ret;
->  
->  	/* Set up DMA mask */
-> @@ -649,12 +852,23 @@ static struct zynqmp_r5_core *zynqmp_r5_add_rproc_core(struct device *cdev)
->  	if (ret)
->  		return ERR_PTR(ret);
->  
-> +	/*
-> +	 * If mailbox nodes are disabled using "status" property then setting up
-> +	 * mailbox channels will be failed. In that case we don't really need
-> +	 * kick() operation. Include .kick() only if mbox channels are acquired
-> +	 * successfully.
-> +	 */
-> +	ipi = zynqmp_r5_setup_mbox(cdev);
-> +	if (ipi)
-> +		zynqmp_r5_rproc_ops.kick = zynqmp_r5_rproc_kick;
-> +
->  	/* Allocate remoteproc instance */
->  	r5_rproc = rproc_alloc(cdev, dev_name(cdev),
->  			       &zynqmp_r5_rproc_ops,
->  			       NULL, sizeof(struct zynqmp_r5_core));
->  	if (!r5_rproc) {
->  		dev_err(cdev, "failed to allocate memory for rproc instance\n");
-> +		zynqmp_r5_free_mbox(ipi);
->  		return ERR_PTR(-ENOMEM);
+>  static void lock_torture_cleanup(void)
+> @@ -1053,6 +1064,10 @@ static int __init lock_torture_init(void)
+>  		}
 >  	}
 >  
-> @@ -665,6 +879,7 @@ static struct zynqmp_r5_core *zynqmp_r5_add_rproc_core(struct device *cdev)
->  	if (!r5_core->np) {
->  		dev_err(cdev, "can't get device node for r5 core\n");
->  		ret = -EINVAL;
-> +		zynqmp_r5_free_mbox(ipi);
->  		goto free_rproc;
->  	}
->  
-> @@ -672,10 +887,17 @@ static struct zynqmp_r5_core *zynqmp_r5_add_rproc_core(struct device *cdev)
->  	ret = rproc_add(r5_rproc);
->  	if (ret) {
->  		dev_err(cdev, "failed to add r5 remoteproc\n");
-> +		zynqmp_r5_free_mbox(ipi);
->  		goto free_rproc;
->  	}
->  
-> +	if (ipi) {
-> +		r5_core->ipi = ipi;
-> +		ipi->r5_core = r5_core;
-> +	}
+> +	/* cap nested_locks to MAX_NESTED_LOCKS */
+> +	if (nested_locks > MAX_NESTED_LOCKS)
+> +		nested_locks = MAX_NESTED_LOCKS;
 > +
->  	r5_core->rproc = r5_rproc;
-> +
->  	return r5_core;
->  
->  free_rproc:
-> @@ -918,6 +1140,7 @@ static int zynqmp_r5_cluster_init(struct zynqmp_r5_cluster *cluster)
->  	while (i >= 0) {
->  		put_device(child_devs[i]);
->  		if (r5_cores[i]) {
-> +			zynqmp_r5_free_mbox(r5_cores[i]->ipi);
-
-The mailboxes are initialized in zynqmp_r5_add_rproc_core() but free'd here in
-case of trouble, which introduces coupling between the two functions.  I suggest
-moving zynqmp_r5_setup_mbox() in zynqmp_r5_cluster_init() and initialize both
-mailboxes in it.
-
-I am done reviewing this set.
-
-Thanks,
-Mathieu
-
-Thanks,
-Mathieu
-
->  			of_reserved_mem_device_release(r5_cores[i]->dev);
->  			rproc_del(r5_cores[i]->rproc);
->  			rproc_free(r5_cores[i]->rproc);
-> @@ -942,6 +1165,7 @@ static void zynqmp_r5_cluster_exit(void *data)
->  
->  	for (i = 0; i < cluster->core_count; i++) {
->  		r5_core = cluster->r5_cores[i];
-> +		zynqmp_r5_free_mbox(r5_core->ipi);
->  		of_reserved_mem_device_release(r5_core->dev);
->  		put_device(r5_core->dev);
->  		rproc_del(r5_core->rproc);
+>  	if (cxt.cur_ops->readlock) {
+>  		reader_tasks = kcalloc(cxt.nrealreaders_stress,
+>  				       sizeof(reader_tasks[0]),
 > -- 
-> 2.25.1
+> 2.39.2.637.g21b0678d19-goog
 > 
