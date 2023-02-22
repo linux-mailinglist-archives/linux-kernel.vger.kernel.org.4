@@ -2,136 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 06BD069EBF1
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Feb 2023 01:27:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D601B69EBF8
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Feb 2023 01:29:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229870AbjBVA1b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Feb 2023 19:27:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36006 "EHLO
+        id S229688AbjBVA3I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Feb 2023 19:29:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38028 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229451AbjBVA13 (ORCPT
+        with ESMTP id S229462AbjBVA3G (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Feb 2023 19:27:29 -0500
-Received: from EUR05-AM6-obe.outbound.protection.outlook.com (mail-am6eur05on2064.outbound.protection.outlook.com [40.107.22.64])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1ADDA1B5;
-        Tue, 21 Feb 2023 16:27:28 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=AGvaxQc8XXjcL+MKaOPYN/JqFquqCtv4tUczqQeeH1flwslpBjNNL6n5QB7AwhZWoVouMPlww1/x5fhkqvpPG1xOsz258k5QWwk/SjF8Zj9yo7BdZV566NAvT4/gs6CbPbrLRRhcZQF+A6+27R4w4umPnedpqAzfI9jFTsqdMryLE6Tyt6WkdcZHVnXpEQxotXlzwnn34f9NtF4ju78jkmmIJuDmPGvV65VS/WFxWo6eHNgL/T0juGRJuKMQeahz9VkjyWX1P0jsGuiwYO7QGs5KNJEcvY9vskrCTzQjs5wExeIIUb7WCU9TOwMuby3pzo/zzQN46pwx0qV7n87A7A==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=yYYtow5EiSL1LDfnW8HcgBVbmzo8QB4knVRwC192j5c=;
- b=Or3LoM2f7uRSxBu9pj/0GVSfq8TqDr0oT6mGcuAtRUQeQvDu9rfoFhBbyzTde1/MYkxUhSC2+BnCfFh6HO6r7j0yTaJxuyPaU6gT91QKIFPbdHA6/NxMfUphM4ESWqDMfPDrq6zT0sl5GCj1XM4zIF8NQFDoC+jwN2I7Q4EPyyEaIOg/NE0eMO2KbbM7aytwtfOothro02EmnaszAQksWqZzxUDxbrttwccrfi0Cqv96fwzbio3ckrGSxMMck15oVyJlXigxXDEp9cGXE8I3kxYQN7XiH3U75m4X3p4DekAjgLy6LGZm9Z8oP3GDDK/VZzyfKc69StOT0EMgUak06w==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=yYYtow5EiSL1LDfnW8HcgBVbmzo8QB4knVRwC192j5c=;
- b=dupY1iRbDUtCnXhFEeEp7Q+G86hNlgY1laOtyzcEZcOy7BbngyAjBTsuCd9oJJh5qPjI9VLf0TjHMxmR4PqRynqbxdHrECB0aLbsF0MAvCCkdGLcjkf1TpxH4DvDSnfBkjP09BO1AAjQon9sL30RkYff5peP7RejB7ZM90P2VnI=
-Received: from DU0PR04MB9417.eurprd04.prod.outlook.com (2603:10a6:10:358::11)
- by DU2PR04MB8631.eurprd04.prod.outlook.com (2603:10a6:10:2de::19) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6111.21; Wed, 22 Feb
- 2023 00:27:25 +0000
-Received: from DU0PR04MB9417.eurprd04.prod.outlook.com
- ([fe80::f55a:cf12:da08:6d2a]) by DU0PR04MB9417.eurprd04.prod.outlook.com
- ([fe80::f55a:cf12:da08:6d2a%3]) with mapi id 15.20.6111.019; Wed, 22 Feb 2023
- 00:27:25 +0000
-From:   Peng Fan <peng.fan@nxp.com>
-To:     Rob Herring <robh+dt@kernel.org>,
-        "Peng Fan (OSS)" <peng.fan@oss.nxp.com>
-CC:     "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-        "krzysztof.kozlowski+dt@linaro.org" 
-        <krzysztof.kozlowski+dt@linaro.org>,
-        "shawnguo@kernel.org" <shawnguo@kernel.org>,
-        "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>,
-        Xu Yang <xu.yang_2@nxp.com>,
-        "kernel@pengutronix.de" <kernel@pengutronix.de>,
-        "festevam@gmail.com" <festevam@gmail.com>,
-        dl-linux-imx <linux-imx@nxp.com>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>, Jun Li <jun.li@nxp.com>
-Subject: RE: [PATCH 2/2] dt-bindings: usb: usbmisc-imx: add i.MX8MM usbmisc
-Thread-Topic: [PATCH 2/2] dt-bindings: usb: usbmisc-imx: add i.MX8MM usbmisc
-Thread-Index: AQHZFnvkbVA7eIUDvEOOMY6gPO+/wK7Z1qoAgACkitA=
-Date:   Wed, 22 Feb 2023 00:27:25 +0000
-Message-ID: <DU0PR04MB9417BFF5F785C1C77904572388AA9@DU0PR04MB9417.eurprd04.prod.outlook.com>
-References: <20221223031012.92932-1-peng.fan@oss.nxp.com>
- <20221223031012.92932-2-peng.fan@oss.nxp.com>
- <CAL_JsqLW_YxC+S5Tp-gveHQpksKfzmrpEFXtcdLJ3xMJoX4+qw@mail.gmail.com>
-In-Reply-To: <CAL_JsqLW_YxC+S5Tp-gveHQpksKfzmrpEFXtcdLJ3xMJoX4+qw@mail.gmail.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nxp.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: DU0PR04MB9417:EE_|DU2PR04MB8631:EE_
-x-ms-office365-filtering-correlation-id: 2d230972-c5b5-46e6-3a1e-08db146b928f
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: DlzRJshkHooFbRlS/bhjY+ZgRKwY6nQafFzA+mCPldLve4wKUhNzb9Rnh6/5hK9rHca+CqQ/koDG15JRoJMlEjRRiTlQq8wDzjozLP4/tM92hQl38wnbFBw9vnwEbrovmx5Xn2z6Me0f8Cr9tGlvh712mT0GZJISMYyjnS32ip3clLEE2CwzhRvl25SWUHp1SzoXZgwgLymT+wCsotvm1CVGO22uGdMZD9pYt1iqSzeB091+amMZtZ+yOZ1sDyqTaiBEWTh/mKWeSxqqpMhruVCEz5eRh9C0Cy1cICQch0zxyA7EGZtcjDQPYwAPKY73T1XuIbEfDW6RXEZ/QkikU+nUpWuPrkVXoiKs+oQ5MZJnhOMcDLGtz3ngVqEMJ/rSPLHXXdK8ggMuKE3nzISuIh2icW9Roh26MjGZz3txip9ySB56bK+Jz0JhA2CVF14YwKWySDV11UlCPHYjx2Uc2n3czOHXnnknKYWM6rvwoIfXBR0q+Fu3cl8PAySvf9j+9LG/ALFtNglst6AOWen9wjl5eds+QfiZqXUwV2XvuiwSmKEd1pkPk1etCUU55ci1FbsMuoSEEtZB3QnLMqCiC05PQbx3qGzYb6zFXeRzeKFNmEGJULrA0DpB06dmeq4TjC+KE5rnv3DftaVSleKrIz/tYDz1+9OEviTU7JM1rzZiV70kMy1ZyYK/a9ujRZ/hEqzwClNKgyLVF7p3dV9cxQ==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DU0PR04MB9417.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(346002)(396003)(376002)(366004)(39860400002)(136003)(451199018)(122000001)(38100700002)(2906002)(52536014)(8936002)(44832011)(4744005)(5660300002)(7416002)(54906003)(9686003)(26005)(33656002)(186003)(83380400001)(41300700001)(64756008)(66556008)(66946007)(4326008)(66446008)(8676002)(76116006)(66476007)(55016003)(53546011)(7696005)(6506007)(478600001)(86362001)(110136005)(316002)(38070700005)(71200400001);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?WEFZbWRPVVVtZnlhZU4rNEplSkZSck5MWmIwb2dDTWhaRS9abUJFKzB4OWhS?=
- =?utf-8?B?UHhVMWtlcml1TkliME9VVEJIQy9pamxWUDlWc1MxeGZFeUlOZ2U0QVlzaFJF?=
- =?utf-8?B?NVhETlI1RGljTS9BUmNWdFN0dDEvUEtMa24rMkZVNW5OZXpFQ2tIZDNYa1ZN?=
- =?utf-8?B?S1YwbFFDN0hRVEZldXZUck9ORk5jODJVckxjT2VLM1Z3NW1iSkhVUm1uSEhO?=
- =?utf-8?B?SHNQSTkzTFBkTmo3TnhzMzZSVG9FQ3BlNVd2VTVCdDUwUDRNQlJNUEZwSEZX?=
- =?utf-8?B?dG92WTU1d1ZDMzg1VjE4WitRcHRpRXoyWmFVbUdkVGUxdWczY1YrWTUwVExp?=
- =?utf-8?B?ZTN6YjRKQUdzR2ZJeVJ0YVo5UTcvb1FZZFd6QjB1V04zNytJaVllSXQzNXN0?=
- =?utf-8?B?Yk1RWWNmL05nUHNnNklpQjBOVk9uMnUwOHFNKzdBWHhaRVNpS1VkbEpVK21N?=
- =?utf-8?B?Q1JSRm1nU09JSy9oS2x3YXpqOVRrb0lwR1hYdGRHcGVkblkzbk43ZlVFdjU2?=
- =?utf-8?B?NGpFYlpINER5WUltVmZVdTgrM1B1VEF2TWIyUVhqOEkwNzc1MktmOFptdWQ0?=
- =?utf-8?B?cUtMakZEZnJjTkxQcWkxZUF6cjR3OXIwLzJRK0FGNnhRTThqME5TRVR3dFF4?=
- =?utf-8?B?SktUY2ZyU2RXUVVvcFNYbmRDMVV3WnRBbGs1UHhtdmFLQkpiZzkxV1dLYzZQ?=
- =?utf-8?B?TUJCODVVN25JMnZydUwycFNhNFRXRGdoaWpLa0h4a2Flc0NqRzhCekZEb0hZ?=
- =?utf-8?B?a2hnWDN0cFZVU2pnY0UwdERJWitaUE8rV1JiQmU3dTVIOW0rWTg3MmN2UFBR?=
- =?utf-8?B?cmtzZllRMEpmRzkxLzJ6T0NWNDc5dXNUUml0MzVTUHpSL3FUS05JenR1Ukhm?=
- =?utf-8?B?cjhIOXJ0dS9zVUhBRUpWR3ZoOGJPVU1tQ1R3dU55ODNkL3JMOFdtWkRWZXNw?=
- =?utf-8?B?YTA1R2dFMW9MQ0JSbFM2YVBIM2Q4dEs0MFYxZ2hoc0FDbm9HbGQ1VUxkUXlu?=
- =?utf-8?B?blNHbE1GWXVtQ2x2ZnBCSW9mdXRmYVhDT2d1RjQzOHJiMjhtN21zdHBwMVls?=
- =?utf-8?B?RUxaM1lmUW9zT3pvOWEwcjRUTzlabDFONDNRSk9pVEhEbXp4UWpWYVliRXVk?=
- =?utf-8?B?SjR3aHZEc2dzb1JVZDQyMVFVMHF3OWJjUVkxM3F6V2FPSmhvaWFXUWlFRU9w?=
- =?utf-8?B?SWlEL2xJbkZLR1RWcytsVHRDOEtZdHJybVMwdmRnbXJpemRiTXZnTDdUbHk1?=
- =?utf-8?B?Wnd2Z3g0RzFlLyszZWFmbXVYQUhrSUVUOGhuSEVjQXlJbmY2N21JVzJ3NXNL?=
- =?utf-8?B?dUtkQVRGL2VvTnhJVEY0amx4Qmt1RmtMcUkvWWNIRm44RlBsRjdkY1ZxTkt4?=
- =?utf-8?B?UFdkY21qVXo1REFUdVR3WjNzMXd3NFQwZjdNYnlBUXNGWkNuZmtiYnRyakFZ?=
- =?utf-8?B?V1Npckp1Y0JleElYSFZsdW9PYWRFMmdaa1Vrd3M2WGRqVGZiNkRCU1YzNFUx?=
- =?utf-8?B?M3NGaldVeEx5YTRlMXh3WlI0RWl6K25Uamx0cFYweU91R1Rtc1pvSlFYazVL?=
- =?utf-8?B?RXpIeDhqLzN5QWJ1cVhsUVRZRDhRNXpiRnVZTGp4d2phR2lHRjl5OUJaTUZO?=
- =?utf-8?B?QVFsYThhUVBCU2NTWm9nQmMzU0Z5QnVWR2E5bE11N1dTTVdOT01EZmJ6RWJL?=
- =?utf-8?B?VWlrRmxiMmlNeWJGVUtQVzNNRHR0MERtSmV1MFh4M1liQ2t1WHd5QVhVNVh6?=
- =?utf-8?B?WXVUb1FWbExINStibE8zK1BCUk80T2xzVFJqWk5HblJSdWRjSjlaK1lTOXZr?=
- =?utf-8?B?ZE9Fd2FKdU1MZ0dnSFpKeS85c2pRSFRBQTBPUXpwMEJ5eERIZ3pqUW8vQUx5?=
- =?utf-8?B?NXdFeWZHb0xidktQWm45ekxGZHRhNVh0WERqSUtoTS9pU2hoclJuK2hHTDU2?=
- =?utf-8?B?RnlRUmJHbG4zM09EZTRJd1BvSy92VnhXVm1lTWlnR2twRU9SYVppSm1xbTcw?=
- =?utf-8?B?a2lpcjJYRFIzRTdpQ3lJbkxXZlVpUCtrcW9GaGllbmQvNThDTXFnODJSbWp1?=
- =?utf-8?B?c25ZcHVkajZLeW41SWRKZlZXRzZORDVobmR3bm8rUlJJWHV0cXU2a0U1L0gr?=
- =?utf-8?Q?BYq8=3D?=
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
-MIME-Version: 1.0
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: DU0PR04MB9417.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 2d230972-c5b5-46e6-3a1e-08db146b928f
-X-MS-Exchange-CrossTenant-originalarrivaltime: 22 Feb 2023 00:27:25.5817
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: xg7fZRg2mbBaXZyw+o6yIm/1/9yWudkN+vb7Mj4RMU//N//Y+e5UiT5h2OBnFWyLxbZ52JysuulOW1dF8yNhWw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DU2PR04MB8631
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        Tue, 21 Feb 2023 19:29:06 -0500
+Received: from mail-pf1-x449.google.com (mail-pf1-x449.google.com [IPv6:2607:f8b0:4864:20::449])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FE3CAD2F
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Feb 2023 16:29:03 -0800 (PST)
+Received: by mail-pf1-x449.google.com with SMTP id a23-20020a62bd17000000b0058db55a8d7aso2704474pff.21
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Feb 2023 16:29:03 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=uIDtQ32zJSVa9EXNJVGMsp6ZglA2e8zL695ZtssIiXs=;
+        b=G63UjEfJMICR92XTGkg/IByvVf+5OTGgW7MLAuV5i2ZP1/HdCfJcZXCL42kjG4TWnb
+         LXG68O9DzonOIqwczgoSpaBm2l3+gcBA85vnkF+yFdGa0CVX5R3Uxie6hpCafeWf/x0L
+         XJle5ehg8LuuXTWUTV8+dQQEQw9rPiqDHwWRxUzb+9/rKF1eqS/9z5A5qFitGaB31guo
+         0jT3vO3G834Iywki+Ss9Ew36XwLL5nMF9ySfjO7OegG7CRvN6IZL9DX0PXOTXSJBCPUl
+         8SgEQH6V4P4CLCS1dTEssjBGXd8LQqmVWAEsD2sLuSYNbh8jlaYtDDTlxnSCxAFfjT2S
+         pdzg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=uIDtQ32zJSVa9EXNJVGMsp6ZglA2e8zL695ZtssIiXs=;
+        b=haryLRDke7WSNLC3IqiWqhi0JzJccgKNx4xObXUmQsGHCCEtnn1P3zABVB334NsuFZ
+         QQac5Fnt7PSEWOoAOt6dOcVXCJNIUpwUWeJqKM94MaQxMOzOChmLQsnPW23OVrJX5TZ8
+         ybHjoVzqmczqt5pmbPRY78/bWMKkjW0kFT0EpOnFbhNgsUr/khDw4TZU1hPg/s30rFKz
+         TkVgeSZuev0smUYPjZMO+rBIGQKxt/mZuW5DFaKdcT24wGqC+gy3ngSlfaLxuGnvgPU3
+         s4nCyYbsyuz/oc96Ps/p5CeabtN7ap1Y9R5XSBZ6xqoMkBEfnAWGwYailszTURY178pF
+         YwcQ==
+X-Gm-Message-State: AO0yUKUhmHAOa4eDZLKI9Bs+PrXvxOZe1lovUcWBbVDb9rHP5ZF0xBYH
+        Xu4Q9vlV84+sXX/fW/hmCy9uaeMbkB0=
+X-Google-Smtp-Source: AK7set+T3V+JoyLjkC1wB/5qIdDzF62b7UTt81ngF/bZ+KGq7HO0b475fZgqRwLDPkif80j51AqtvEk7ZI4=
+X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
+ (user=seanjc job=sendgmr) by 2002:a17:90b:4f8d:b0:232:cc9a:db32 with SMTP id
+ qe13-20020a17090b4f8d00b00232cc9adb32mr1774010pjb.94.1677025742780; Tue, 21
+ Feb 2023 16:29:02 -0800 (PST)
+Date:   Tue, 21 Feb 2023 16:29:01 -0800
+In-Reply-To: <Y/AvSjsgLBWECLq2@google.com>
+Mime-Version: 1.0
+References: <20230217225449.811957-1-seanjc@google.com> <20230217225449.811957-3-seanjc@google.com>
+ <Y/AvSjsgLBWECLq2@google.com>
+Message-ID: <Y/VhzWCcC7LtGm4D@google.com>
+Subject: Re: [PATCH 2/2] Documentation/process: Add a maintainer handbook for
+ KVM x86
+From:   Sean Christopherson <seanjc@google.com>
+To:     Mingwei Zhang <mizhang@google.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Sagi Shahar <sagis@google.com>,
+        Erdem Aktas <erdemaktas@google.com>,
+        Peter Shier <pshier@google.com>,
+        Anish Ghulati <aghulati@google.com>,
+        Oliver Upton <oliver.upton@linux.dev>,
+        James Houghton <jthoughton@google.com>,
+        Anish Moorthy <amoorthy@google.com>,
+        Ben Gardon <bgardon@google.com>,
+        David Matlack <dmatlack@google.com>,
+        Ricardo Koller <ricarkol@google.com>,
+        Axel Rasmussen <axelrasmussen@google.com>,
+        Aaron Lewis <aaronlewis@google.com>,
+        Ashish Kalra <ashish.kalra@amd.com>,
+        Babu Moger <babu.moger@amd.com>, Chao Gao <chao.gao@intel.com>,
+        Chao Peng <chao.p.peng@linux.intel.com>,
+        Chenyi Qiang <chenyi.qiang@intel.com>,
+        David Woodhouse <dwmw@amazon.co.uk>,
+        Emanuele Giuseppe Esposito <eesposit@redhat.com>,
+        Gavin Shan <gshan@redhat.com>,
+        Guang Zeng <guang.zeng@intel.com>,
+        Hou Wenlong <houwenlong.hwl@antgroup.com>,
+        Jiaxi Chen <jiaxi.chen@linux.intel.com>,
+        Jim Mattson <jmattson@google.com>,
+        Jing Liu <jing2.liu@intel.com>,
+        Junaid Shahid <junaids@google.com>,
+        Kai Huang <kai.huang@intel.com>,
+        Leonardo Bras <leobras@redhat.com>,
+        Like Xu <like.xu.linux@gmail.com>,
+        Li RongQing <lirongqing@baidu.com>,
+        "Maciej S . Szmigiero" <maciej.szmigiero@oracle.com>,
+        Maxim Levitsky <mlevitsk@redhat.com>,
+        Michael Roth <michael.roth@amd.com>,
+        Michal Luczaj <mhal@rbox.co>,
+        Nikunj A Dadhania <nikunj@amd.com>,
+        Paul Durrant <pdurrant@amazon.com>,
+        Peng Hao <flyingpenghao@gmail.com>,
+        Peter Gonda <pgonda@google.com>, Peter Xu <peterx@redhat.com>,
+        Robert Hoo <robert.hu@linux.intel.com>,
+        Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        Vipin Sharma <vipinsh@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Wei Wang <wei.w.wang@intel.com>,
+        Xiaoyao Li <xiaoyao.li@intel.com>,
+        Yu Zhang <yu.c.zhang@linux.intel.com>,
+        Zhenzhong Duan <zhenzhong.duan@intel.com>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -139,20 +119,23 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-SGkgUm9iLA0KDQo+IFN1YmplY3Q6IFJlOiBbUEFUQ0ggMi8yXSBkdC1iaW5kaW5nczogdXNiOiB1
-c2JtaXNjLWlteDogYWRkIGkuTVg4TU0NCj4gdXNibWlzYw0KPiANCj4gT24gVGh1LCBEZWMgMjIs
-IDIwMjIgYXQgOTowOSBQTSBQZW5nIEZhbiAoT1NTKSA8cGVuZy5mYW5Ab3NzLm54cC5jb20+DQo+
-IHdyb3RlOg0KPiA+DQo+ID4gRnJvbTogUGVuZyBGYW4gPHBlbmcuZmFuQG54cC5jb20+DQo+ID4N
-Cj4gPiBBZGQgZnNsLGlteDhtbS11c2JtaXNjIGNvbXBhdGlibGUgZm9yIGkuTVg4TU0NCj4gPg0K
-PiA+IFNpZ25lZC1vZmYtYnk6IFBlbmcgRmFuIDxwZW5nLmZhbkBueHAuY29tPg0KPiA+IC0tLQ0K
-PiA+DQo+ID4gSSBoYWQgYSBWNCBwYXRjaHNldCB0byBjb252ZXJ0IHRoZSBiaW5kaW5nIHRvIGR0
-IHNjaGVtYSwgYnV0IHdlIGFyZSBpbg0KPiA+IHRoZSBwcm9jZXNzIG9mIEFSTSBTeXN0ZW0tUmVh
-ZHkgMi4wIGNlcnRpZmljYXRpb24sIGRpcmVjdGx5IHVwZGF0ZQ0KPiA+IHRoaXMgYmluZGluZyBk
-b2MgaXMgdGhlIGVhc2llc3Qgd2F5IGZvciBub3cuDQo+IA0KPiBUaGVyZSdzIGJlZW4gc29tZSBt
-aXN1bmRlcnN0YW5kaW5nICh3aXRoaW4gQXJtKSwgYnV0IHRoaXMgaXMgbm90IHN1ZmZpY2llbnQN
-Cj4gZm9yIGNlcnRpZmljYXRpb24uIA0KDQpZb3UgbWVhbiBTUi1JUiAyLjAgcmVxdWlyZXMgc2No
-ZW1hIGJpbmRpbmcgZG9jPw0KDQpUaGVyZSBtdXN0IGJlIGEgc2NoZW1hLiBCZXNpZGVzLCB5b3Un
-dmUgYWxyZWFkeSBkb25lIHRoZQ0KPiB3b3JrIHRvIGNvbnZlcnQgYW5kIHNwZW50IG1haW50YWlu
-ZXJzIHRpbWUgdG8gcmV2aWV3IHRoaXMuIFNvIGNhbiB5b3UNCj4gcGxlYXNlIHJlcG9zdCB0aGUg
-Y29udmVyc2lvbnMuDQoNCm9rLCBJIHdpbGwgcGljayB1cCB0aGUgdjQgYW5kIHByZXBhcmUgdjUu
-DQoNClRoYW5rcywNClBlbmcuDQoNCj4gDQo+IFJvYg0K
+On Sat, Feb 18, 2023, Mingwei Zhang wrote:
+> On Fri, Feb 17, 2023, Sean Christopherson wrote:
+> > +Coding Style
+> > +~~~~~~~~~~~~
+> > +When it comes to style, naming, patterns, etc., consistency is the number one
+> > +priority in KVM x86.  If all else fails, match what already exists.
+> > +
+> > +With a few caveats listed below, follow the tip tree maintainers' preferred
+> > +:ref:`maintainer-tip-coding-style`, as patches/series often touch both KVM and
+> > +non-KVM x86 files, i.e. draw the attention of KVM *and* tip tree maintainers.
+> > +
+> > +Using reverse fir tree for variable declarations isn't strictly required,
+> > +though it is still preferred.
+> 
+> What is the 'reverse fir tree'? Maybe, "Reverse Christmas Tree" is
+> better to understand.
+
+For some parts of the world, but not all.  For this, I want to follow whatever
+description the tip tree uses, which as of today is "reverse fir tree", as this
+is really a qualifier on the tip tree rules.
