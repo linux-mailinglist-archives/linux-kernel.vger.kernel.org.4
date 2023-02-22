@@ -2,125 +2,164 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ED68969F051
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Feb 2023 09:34:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9669C69F064
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Feb 2023 09:36:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231234AbjBVIeu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Feb 2023 03:34:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51206 "EHLO
+        id S229726AbjBVIgd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Feb 2023 03:36:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53256 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231386AbjBVIei (ORCPT
+        with ESMTP id S230207AbjBVIga (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Feb 2023 03:34:38 -0500
-Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8B7737577
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Feb 2023 00:34:23 -0800 (PST)
-Received: from pps.filterd (m0098419.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 31M7d8pv006691;
-        Wed, 22 Feb 2023 08:34:14 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
- subject : message-id : references : content-type : in-reply-to :
- content-transfer-encoding : mime-version; s=pp1;
- bh=4tix5s0pbD/oD7Zwax2s/3jrx8GJznKzO5Ypg1wsXDw=;
- b=HvPOSx+rdpbNBTj6usK0Q0ZQf8tIxfF078bbCuzpPE6SGfGsT0jEG5iqtu4aXNl5I1Ca
- HOHFEsS/1nddFMfcyH61aVv1VGGbi6f8kAb3vQp7M4fLmOpHBghzjHFypMLfayFHty4R
- 4Ylgw/K+ZGzm6EG+qusGa4wLjwIIEyu889HE2vo5zitU/HcOeoxktjHf/lWYTjieN/Eg
- OIoHxal/h5zTASaHKBp7JKPeS3aNc1cVPwokRof3hidj3VeYngg3qiIymHMw+RfVsbuR
- tKMFt5mFXFbtw/wvf6c3b+lmsOg9vN9Q2ghmHjYGcpwjEsBFYyVlfAXOCTjCuqi1tClM JA== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3nwct6v9b4-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 22 Feb 2023 08:34:14 +0000
-Received: from m0098419.ppops.net (m0098419.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 31M7uiDX007585;
-        Wed, 22 Feb 2023 08:34:14 GMT
-Received: from ppma01fra.de.ibm.com (46.49.7a9f.ip4.static.sl-reverse.com [159.122.73.70])
-        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3nwct6v9ad-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 22 Feb 2023 08:34:14 +0000
-Received: from pps.filterd (ppma01fra.de.ibm.com [127.0.0.1])
-        by ppma01fra.de.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 31LD00m4020893;
-        Wed, 22 Feb 2023 08:34:12 GMT
-Received: from smtprelay02.fra02v.mail.ibm.com ([9.218.2.226])
-        by ppma01fra.de.ibm.com (PPS) with ESMTPS id 3ntpa6bu1e-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 22 Feb 2023 08:34:12 +0000
-Received: from smtpav03.fra02v.mail.ibm.com (smtpav03.fra02v.mail.ibm.com [10.20.54.102])
-        by smtprelay02.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 31M8YA3g35455244
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 22 Feb 2023 08:34:10 GMT
-Received: from smtpav03.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id DD9D42004D;
-        Wed, 22 Feb 2023 08:34:09 +0000 (GMT)
-Received: from smtpav03.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 08D5220040;
-        Wed, 22 Feb 2023 08:34:07 +0000 (GMT)
-Received: from li-a450e7cc-27df-11b2-a85c-b5a9ac31e8ef.ibm.com (unknown [9.43.123.148])
-        by smtpav03.fra02v.mail.ibm.com (Postfix) with ESMTPS;
-        Wed, 22 Feb 2023 08:34:06 +0000 (GMT)
-Date:   Wed, 22 Feb 2023 14:04:00 +0530
-From:   Kautuk Consul <kconsul@linux.vnet.ibm.com>
-To:     Christophe Leroy <christophe.leroy@csgroup.eu>
-Cc:     Michael Ellerman <mpe@ellerman.id.au>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] arch/powerpc/include/asm/barrier.h: redefine rmb and wmb
- to lwsync
-Message-ID: <Y/XTeBNq1x+ZuyjZ@li-a450e7cc-27df-11b2-a85c-b5a9ac31e8ef.ibm.com>
-References: <20230222060107.70565-1-kconsul@linux.vnet.ibm.com>
- <896436d1-04e4-8019-0f89-f4d4938f9697@csgroup.eu>
- <Y/XPZl8V4/0Bjegy@li-a450e7cc-27df-11b2-a85c-b5a9ac31e8ef.ibm.com>
- <Y/XQdmeZ86Ivcy5x@li-a450e7cc-27df-11b2-a85c-b5a9ac31e8ef.ibm.com>
- <65a0303b-f4cc-f20c-d66a-c5037bad6791@csgroup.eu>
+        Wed, 22 Feb 2023 03:36:30 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 357352C64F
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Feb 2023 00:35:20 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1677054919;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=rmxOmW2Bi0X9FdGRBJxRliQUyu7bX3a5ch+5lNPbh68=;
+        b=ftydmFf1zAW3bh4a9vHDTgHxHxO899wVd0EjTomSQaj6pi9Q1TM10xAbA5znv5Gfijy6IW
+        QExuS3RsTkucEANXmQYejmShEn8fEr3tVZ+U6d5pVxMsLqQbV2LhI6zaQ2Cp/yqJrYZJTM
+        kdyNmeKB/XDBQdDSFTs8O7s4T3wr4UQ=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-3-MmktJbUpMh-UegbYJy6C9Q-1; Wed, 22 Feb 2023 03:35:14 -0500
+X-MC-Unique: MmktJbUpMh-UegbYJy6C9Q-1
+Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 39BDD858F0E;
+        Wed, 22 Feb 2023 08:35:13 +0000 (UTC)
+Received: from localhost (ovpn-13-7.pek2.redhat.com [10.72.13.7])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 223FB440D9;
+        Wed, 22 Feb 2023 08:35:11 +0000 (UTC)
+Date:   Wed, 22 Feb 2023 16:35:08 +0800
+From:   Baoquan He <bhe@redhat.com>
+To:     Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Arnd Bergmann <arnd@arndb.de>
+Cc:     Matthew Wilcox <willy@infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Christoph Hellwig <hch@infradead.org>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Kefeng Wang <wangkefeng.wang@huawei.com>,
+        Niklas Schnelle <schnelle@linux.ibm.com>,
+        David Laight <David.Laight@aculab.com>,
+        Stafford Horne <shorne@gmail.com>,
+        "James E . J . Bottomley" <James.Bottomley@hansenpartnership.com>,
+        Helge Deller <deller@gmx.de>,
+        "linux-parisc@vger.kernel.org" <linux-parisc@vger.kernel.org>
+Subject: Re: [PATCH v4 12/16] parisc: mm: Convert to GENERIC_IOREMAP
+Message-ID: <Y/XTvJRtZXKa6b/M@MiWiFi-R3L-srv>
+References: <20230216123419.461016-1-bhe@redhat.com>
+ <20230216123419.461016-13-bhe@redhat.com>
+ <Y+40p3oegc2Of9w2@casper.infradead.org>
+ <Y+5Fcc6wsbr0qmoN@MiWiFi-R3L-srv>
+ <bff4f286-ccf8-40bc-8fe5-d4041adf89f5@app.fastmail.com>
+ <Y++Bypsg9YCmUEcd@MiWiFi-R3L-srv>
+ <107be2c9-021b-85f6-d32d-ddb9e75ce24f@csgroup.eu>
+MIME-Version: 1.0
 Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <65a0303b-f4cc-f20c-d66a-c5037bad6791@csgroup.eu>
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: oxvSHxvwCnGw7hxY_EvumeAVH7RAIFda
-X-Proofpoint-GUID: 22Hlwyf-OV79KqNBFpdF7bS2UaXMJBfp
 Content-Transfer-Encoding: 8bit
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
-MIME-Version: 1.0
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.170.22
- definitions=2023-02-22_04,2023-02-20_02,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
- malwarescore=0 suspectscore=0 clxscore=1015 phishscore=0 bulkscore=0
- adultscore=0 mlxlogscore=792 mlxscore=0 impostorscore=0 spamscore=0
- priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2302220073
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <107be2c9-021b-85f6-d32d-ddb9e75ce24f@csgroup.eu>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.5
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Feb 22, 2023 at 08:28:19AM +0000, Christophe Leroy wrote:
+Hi Christophe, Arnd,
+
+On 02/17/23 at 01:46pm, Christophe Leroy wrote:
 > 
 > 
-> Le 22/02/2023 à 09:21, Kautuk Consul a écrit :
-> >> On Wed, Feb 22, 2023 at 07:02:34AM +0000, Christophe Leroy wrote:
-> >>>> +/* Redefine rmb() to lwsync. */
+> Le 17/02/2023 à 14:31, Baoquan He a écrit :
+> > On 02/16/23 at 04:18pm, Arnd Bergmann wrote:
+> >> On Thu, Feb 16, 2023, at 16:02, Baoquan He wrote:
+> >>> On 02/16/23 at 01:50pm, Matthew Wilcox wrote:
+> >>> It's not if including asm-generic/iomap.h. The ARCH_HAS_IOREMAP_xx is to
+> >>> avoid redefinition there.
 > >>>
-> >>> WHat's the added value of this comment ? Isn't it obvious in the line
-> >>> below that rmb() is being defined to lwsync ? Please avoid useless comments.
-> >> Sure.
-> > Sorry, forgot to add that I wasn't adding this useless comment.
-> > Its just that checkpatch.pl complains that the memory barrier #define
-> > doesn't have a comment for it.
-> >>>
+> >>> include/asm-generic/iomap.h:
+> >>> ----
+> >>> #ifndef ARCH_HAS_IOREMAP_WC
+> >>> #define ioremap_wc ioremap
+> >>> #endif
+> >>
+> >> I'd change that to the usual '#ifndef ioremap_wc' in that case.
+> > 
+> > Not sure if I got you. Kill all ARCH_HAS_IOREMAP_xxx in kernel? If yes,
+> > sounds like a good idea.
+> > 
 > 
-> See https://docs.kernel.org/dev-tools/checkpatch.html, it says:
-> 
-> Checkpatch is not always right. Your judgement takes precedence over 
-> checkpatch messages. If your code looks better with the violations, then 
-> its probably best left alone.
-> 
-> checkpatch wants a comment for uses of memory barriers. Here I think it 
-> is a false positive.
-Cool. I will make the changes you mentioned.
-Can you tell me which branch or git repo I should re-make this patch on ?
+> At least kill that one at the first place in your series, and then the 
+> other ones in a follow-up series maybe.
+
+I made a patch to remove all ARCH_HAS_IOREMAP_xx macros in architectures
+and the ifdeffery of ARCH_HAS_IOREMAP_xx in asm-generic/iomap.h.
+But the change will cause building error as below. Becuase we usually
+have '#include <asm-generic/iomap.h>' at the beginning of
+arch/xx/include/asm/io.h, and have '#include <asm-generic/io.h>' at the
+end of arch/xx/include/asm/io.h. For architecutres which has
+ARCH_HAS_IOREMAP_xx defining, we need move ''#include <asm-generic/iomap.h>
+dowe to below '#include <asm-generic/io.h>'. Please help check if it's
+still worth doing.
+
+
+***move '#include <asm-generic/iomap.h>' below '#include <asm-generic/io.h>' 
+***
+diff --git a/arch/x86/include/asm/io.h b/arch/x86/include/asm/io.h
+index 8ab68cde1f13..a8d55fc62959 100644
+--- a/arch/x86/include/asm/io.h
++++ b/arch/x86/include/asm/io.h
+@@ -209,8 +209,6 @@ void memset_io(volatile void __iomem *, int, size_t);
+ #define memcpy_toio memcpy_toio
+ #define memset_io memset_io
+ 
+-#include <asm-generic/iomap.h>
+-
+ /*
+  * ISA space is 'always mapped' on a typical x86 system, no need to
+  * explicitly ioremap() it. The fact that the ISA IO space is mapped
+@@ -329,6 +327,8 @@ extern bool is_early_ioremap_ptep(pte_t *ptep);
+ #include <asm-generic/io.h>
+ #undef PCI_IOBASE
+ 
++#include <asm-generic/iomap.h>
++
+ #ifdef CONFIG_MTRR
+ extern int __must_check arch_phys_wc_index(int handle);
+ #define arch_phys_wc_index arch_phys_wc_index
+
+
+***Building error after removing ARCH_HAS_IOREMAP_xx
+***
+In file included from ./include/linux/io.h:13,
+                 from ./include/linux/irq.h:20,
+                 from ./include/xen/events.h:6,
+                 from arch/x86/entry/common.c:25:
+./arch/x86/include/asm/io.h:321: warning: "ioremap_wc" redefined
+  321 | #define ioremap_wc ioremap_wc
+      | 
+In file included from ./arch/x86/include/asm/io.h:212:
+./include/asm-generic/iomap.h:97: note: this is the location of the previous definition
+   97 | #define ioremap_wc ioremap
+      | 
+./arch/x86/include/asm/io.h:323: warning: "ioremap_wt" redefined
+  323 | #define ioremap_wt ioremap_wt
+      | 
+./include/asm-generic/iomap.h:101: note: this is the location of the previous definition
+  101 | #define ioremap_wt ioremap
+
