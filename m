@@ -2,141 +2,286 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E29569FEA2
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Feb 2023 23:41:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BA5A169FEB4
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Feb 2023 23:47:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232937AbjBVWlC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Feb 2023 17:41:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34592 "EHLO
+        id S232996AbjBVWrm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Feb 2023 17:47:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39138 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232925AbjBVWk7 (ORCPT
+        with ESMTP id S232885AbjBVWrk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Feb 2023 17:40:59 -0500
-Received: from JPN01-OS0-obe.outbound.protection.outlook.com (mail-os0jpn01on2139.outbound.protection.outlook.com [40.107.113.139])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8A9C43930;
-        Wed, 22 Feb 2023 14:40:57 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=MaRJOhXGjHkPABsJwwBs8C/ZG8vtU2cEbHMU6/NqhJ39nL2PyCVJfBBFVGxfxGioh7+l7L9PTn3po0ksg0kqUXH8JnxTvvgHha1PW5aSxz0rJVJgRmZAJIe9bQ0hJaII/shFM5jaReKZxaV8jAFaqRouzwPRKeDxl4unDVajLR/opZXc1cjnweJsc7aoNEQakUJHu51wSO9wz3xhAPq3uT5NifV2AkmVj2fuh55w0N+lo0jI4ETe0fBw3/5Vkl0Z96xoxTd8h6D/0WpnmAPFLCp+8d2n1UDi7RxKyFSDW2ueqNIno5cVr2fwas+FpJ0DqGPiTgylatGuI/nP/umzhA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=q92Ik3LebLrMkO8JLUWuBFwdXGrIEAa5SkKsPOgp+4w=;
- b=Eilo3orMI2ow2gSyjmtSCxCtAR0N2zpoaZf8yDezqSd9Cr98bZYYkZZ9xmAsxJhH9nbRovRPKyZeG1jIZBlmXK9jiTK0a+NNdk/F5e2S+iVDINY284nV52Skk61eFAdw00uSg6mdKNnLOxwGE2D6LaXnh6Y+N++Gp0n8JJZjkxjXwsVcvMSYadbFny/054hvMTaYPlHwURHMyytJaNYJbdErV/qD3I0oe+d+WsTraqbg5tObyc7sf03M41Zx7iQeY97m33Fu8GiRDlHdn+JRfLRp03xYBJM16D0uKIrRap8fhWjpeYFagvrl/lU+KR6OBFNsWMK2ZS5ppe36O0fSlQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=dm.renesas.com; dmarc=pass action=none
- header.from=dm.renesas.com; dkim=pass header.d=dm.renesas.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=dm.renesas.com;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=q92Ik3LebLrMkO8JLUWuBFwdXGrIEAa5SkKsPOgp+4w=;
- b=T12dCpIM4u86DFTiv2RyV6+p7zsmV7C0QIJRJakBNo07EMJpGyM/TE+G77CgfmOs5jxF8Iwa4QDiL74SAeW4l0Jjlz1tWe/oUDJvL839vbfyC44c6N7XfeXzLL4L/sn2/Vy+wAJ11dTr2wyneX2fgwgFoYobaGhw91nz4vGthbE=
-Received: from OS3PR01MB8460.jpnprd01.prod.outlook.com (2603:1096:604:197::13)
- by OS0PR01MB5906.jpnprd01.prod.outlook.com (2603:1096:604:be::7) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6134.20; Wed, 22 Feb
- 2023 22:38:00 +0000
-Received: from OS3PR01MB8460.jpnprd01.prod.outlook.com
- ([fe80::e332:554a:7:7135]) by OS3PR01MB8460.jpnprd01.prod.outlook.com
- ([fe80::e332:554a:7:7135%5]) with mapi id 15.20.6111.021; Wed, 22 Feb 2023
- 22:38:00 +0000
-From:   DLG Adam Ward <DLG-Adam.Ward.opensource@dm.renesas.com>
-To:     Nick Alcock <nick.alcock@oracle.com>,
-        "mcgrof@kernel.org" <mcgrof@kernel.org>
-CC:     "linux-modules@vger.kernel.org" <linux-modules@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Hitomi Hasegawa <hasegawa-hitomi@fujitsu.com>,
-        Support Opensource <support.opensource@diasemi.com>,
-        Lee Jones <lee@kernel.org>
-Subject: RE: [PATCH 18/27] kbuild, mfd: remove MODULE_LICENSE in non-modules
-Thread-Topic: [PATCH 18/27] kbuild, mfd: remove MODULE_LICENSE in non-modules
-Thread-Index: AQHZRreG6t0UP/1OKUiYOQvTbD/Rt67bi/Bw
-Date:   Wed, 22 Feb 2023 22:38:00 +0000
-Message-ID: <OS3PR01MB8460D00B7C988DCC13173CAAC2AA9@OS3PR01MB8460.jpnprd01.prod.outlook.com>
-References: <20230222121453.91915-1-nick.alcock@oracle.com>
- <20230222121453.91915-19-nick.alcock@oracle.com>
-In-Reply-To: <20230222121453.91915-19-nick.alcock@oracle.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=dm.renesas.com;
-x-ms-exchange-messagesentrepresentingtype: 1
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: OS3PR01MB8460:EE_|OS0PR01MB5906:EE_
-x-ms-office365-filtering-correlation-id: 2c951b5d-f9a2-407b-ad73-08db152573f4
-x-ms-exchange-sharedmailbox-routingagent-processed: True
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: wgVLNNGFhUomnhSM1FDZF/os48Sbc73m/3XOYpRH8MS8/Citt7tRq40FU9ibZBy5rp20ufT5ZdRaJBHj9w+64Qb48h3IVbicNxyQIReFcE3PjsHmqMCBQrJs1kQ/x4P9xKjifOPc6Uk/orYmgN32texObRNXCsyBfOQD00PWLkbl42pN78tFpwuaJukBnNztPKkA96qD2PfQY6UuYn3iU82H+Jjm8ppvkQR2wJZKHsjLlVscFqdL8IWX4ghEDejpllgxcfIk6BKCkk6PDDOo45mmS2hqErEOqq3uqEefRUjr+GdFQUWw0b7zVcSXeUo4mL0kpSQhzsdwktGv87KNIrQQRXrfOsu8CYqxS4LNtNirYGO1Dtqc8mEXR+9wJPhLUBmMcltwfXMtEtoIadc8MnvIcyB7FC3KIbsBctugFbiWyCUH1E51VbSU99jElMGmeB5HPW2GAThxtUTdUPWDLSxD/mUTX/P3QnLeebjooyGHkJSZTjGJtGTT5mkNhG7eeWBuD/e0ooqxZbhon3ZcOg6mTh9ACnzTmro6sEpf/z+ufJMD3urNl3eThIHSnoCcbHnf7aRQzigd0Lzk+b2YCHWehG48NCZSFM5j6pk12C4OM5b2LVMy2EAzmx/NBGDXxiEGh/8yYNk/CLZix4w6VwPJwwKeZ6X+ocZlR11g7Q1NGVqkOXi9TbHWiDLOx8S3
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:OS3PR01MB8460.jpnprd01.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(136003)(346002)(376002)(366004)(39860400002)(396003)(451199018)(316002)(54906003)(4744005)(8936002)(2906002)(38070700005)(38100700002)(71200400001)(122000001)(9686003)(33656002)(53546011)(55236004)(6506007)(186003)(26005)(110136005)(478600001)(7696005)(966005)(86362001)(83380400001)(55016003)(41300700001)(4326008)(64756008)(66446008)(66476007)(8676002)(76116006)(66946007)(66556008)(5660300002)(52536014);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?dQoruAV6UYvDzDgWy+FpTSyXcVYtoYhEPWnVPryI3Cx4UB7JQNvc9FNHJrEZ?=
- =?us-ascii?Q?c/JjYVgoQSZNuNyiXdM0kvAi16AGMLD8jaPvsenPFI2ZedjSb6gBGVGaLlUy?=
- =?us-ascii?Q?mQbaM5NW1V1uR2cDZsfrp+cBgvErgSYCTY/hDmpmMSGGRBjLqpd4sUwwQdRl?=
- =?us-ascii?Q?/2XNbbtCqhTsOtVdCs2v2Rdko292y9s76MlBz/sE7shP5yk7G//IjUQaFWIx?=
- =?us-ascii?Q?kUkHa6D/sVbEBDSMwLdH64iOLObyA+sgqVnu2BAbUkPknZOXQ+NwzmtTVvnc?=
- =?us-ascii?Q?v24cJ7nk7rLlNJKzxPW8IR8QGy8K7qhsOycVzYLexL+DzATi7KCZi/8b9tTH?=
- =?us-ascii?Q?uw6Fn4s+akHofmp2JR89ydVqPVsewYFrRgunHstHtD8b+mj5pmD9LIVZ9NSh?=
- =?us-ascii?Q?BGLRglDhI/lEg2SzsJOxKDVX8kEUc7DTRVwNC69tLyz9WMlObcuPxDnqn5pM?=
- =?us-ascii?Q?M0XkD/1kZvcuOysGEz/mVlAFUcnAe+cSnHDHUVB8y34nlxOW5Nea/+iqONAP?=
- =?us-ascii?Q?RrEyvRw1VFHvmg7qOysRA0DPkRu8vzcXn/DfMzXy92olJ9W7lnFU0jujd7np?=
- =?us-ascii?Q?dBOUvmRhfk8LhcqlyTsIWWbBh+2rs8tVqxejgXoRQu9oCWMwrA23T4VLXij0?=
- =?us-ascii?Q?SvVLLyYmhlAoVAA0YusV8RL/9A6hZYn3kzDchVzLVvuWhIucjIk24BM5O7mL?=
- =?us-ascii?Q?CfpiPzHi9Gwsfoeom+exv7Z2nQNYNFpxV9Byj4cuLAqHC/S/ueNY3A6LKwDp?=
- =?us-ascii?Q?/s2EPBtMuLoE46B24TkULkvNoUHjSaeXdQmKnNETPjUJmsmKpxf6XajmjV61?=
- =?us-ascii?Q?OddkKonjhDsMCfkZ5O9YtOit05LsO0AoHUzC1HRLNTFt48aV72+5XTqzBRb5?=
- =?us-ascii?Q?cy//pXj9vdsPnAKBIJV4eur+VNV3oUL1rsFvU0LY3ljnzgLL6n/Q7RXgVuzZ?=
- =?us-ascii?Q?fj3na96fzHJBUnt/R8h2Hi7bOEy9R4Ak2x/74Q1cJdqdNtI3ze0mtb0pbCGk?=
- =?us-ascii?Q?qRCTubqyUhDaqK2AzVhW/MqTqtcH5yhDvdAMr6ou/3ss0naLWY3iHyj8nomg?=
- =?us-ascii?Q?fpDIKNOttHdA8x/pxywIFjY0UCsMMCg10thOIOKU1SBurkTNYrZyXEdp8WQb?=
- =?us-ascii?Q?+lR1OOieSjuQoEbAmd/afvryR6XxipCE0DIWJNDvxKYEDdI6IEgMXAD81Lq8?=
- =?us-ascii?Q?2O16FW+ez51ka1vm3/J0+I5IgQeF7gJw2ehD7AtK7JgFrEMwHFXKXXwyQoP+?=
- =?us-ascii?Q?y1wR6bC0bP8p6aZZzirBl1re4AKkoL6hX1pULqtg1KPYTeXsEhnbfAaS5NYS?=
- =?us-ascii?Q?pKDFfzAOLdEpY2FqYKMFAtxX4Sf/kzrOlZPfBaR9PAR3pzeqRmLyZlJAznRD?=
- =?us-ascii?Q?vsYhe6KjKEk+kZRuSpHqxIAcnDZ6ul9VzxFWzfp+Ej/ITbMtRM66EtxfZypL?=
- =?us-ascii?Q?EGV4xyGNrM411nOhwAR+2arCETYRguY+MC5/wTkpvIMBMvg0R1q3NPC27eq8?=
- =?us-ascii?Q?EotlJ5Kjs2VrgVL4G7i4zW0PIWDIKpI//O1wNT1AIiqCh1sNCi7N6Q/+yQgc?=
- =?us-ascii?Q?8GHVjioqg7IAi2uJ7de0vtFdd5YB55roIUXl+L0B?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        Wed, 22 Feb 2023 17:47:40 -0500
+Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3ECBE26A9
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Feb 2023 14:47:39 -0800 (PST)
+Received: by mail-ed1-x52b.google.com with SMTP id cy6so31154839edb.5
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Feb 2023 14:47:39 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=xIHu4nnAPPXUZ21UG6M9ym3VBtbvhwSrggQRQ13jdRg=;
+        b=XuJhiC5WJz54qRS5IMRp0Rfwd0Zng5/dmSLo333fzYyWTHXxEgozbnahSbpLRRs5rE
+         H5bqQxUGqwE4ZQ16CuQ4aH9wtwJCHyKgmf/WLfoec7ftWA81gei4zGreA88oZmnGAg2e
+         PNrD0IyNJ7zJycFUoJdoHdrWt+SFfHz2Dw2Vqv0hpxvRhRQ4oOACxjZzW0lwUeIUYBvp
+         FTPDjxLWKxOC8gTYzzHETYFucjej4pGebxorU/699Bm88/GqiQwdZej2TaNf2c5fB+Ij
+         X1/cJJxYXlBQvYZ/PLoLfM7ZAyCaXQ8dJvMuYvk4GxrphxQlpfEW34ArZ61gvebDUs6O
+         G8+w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=xIHu4nnAPPXUZ21UG6M9ym3VBtbvhwSrggQRQ13jdRg=;
+        b=hM1biE3I/RuJrnc/7VimmG3QK3kYpVrumjzfQp1ve3KJmp3ei8kmf8fEZvGw7oEsE0
+         AsZAoWw1h/HZdZ490uS36So53TWRiKgPrHybVoYtz6jYKywdiRZGRIGLENtJ0DZCv/UA
+         0S8U9+YcIft5OMsK+ODKpU0oivWKXwBxwkwn0JMtGePVMJTRWIfxTydIMUai1O90paH5
+         3ROr1qm99iw5oKS06E+8CDCpx9YUM4dmxfkKG58catuqsgDb6UXfVHuVb3sEw+F/9xcJ
+         MsaflxWgYsMaMMGgLszDUNH9Gv5Q8P0gCrNtfV4qkJM27Zjoptzz1elaKPlyqWvJ4EtZ
+         j0JQ==
+X-Gm-Message-State: AO0yUKWYOscDyi4Ha2v4s9JltHJIHfjM/qmUW/6Osc7/4/A78C0WIBR6
+        6jcT5uPv44mfHBop+k5qDUiuvmI6dnXZF/UA
+X-Google-Smtp-Source: AK7set95xsxdrSwWgw6OSNVj+Cw0OKJOfx4BDkdQQZ1WxKxVwOdM7ez2Z2jBQIpDXwgn9WUnh6fDkw==
+X-Received: by 2002:ac2:46d8:0:b0:4d5:6583:d2e4 with SMTP id p24-20020ac246d8000000b004d56583d2e4mr3275028lfo.29.1677105507634;
+        Wed, 22 Feb 2023 14:38:27 -0800 (PST)
+Received: from ?IPV6:2001:14ba:a085:4d00::8a5? (dzccz6yyyyyyyyyyybcwt-3.rev.dnainternet.fi. [2001:14ba:a085:4d00::8a5])
+        by smtp.gmail.com with ESMTPSA id a28-20020a056512021c00b004dc4becfcd6sm884888lfo.54.2023.02.22.14.38.26
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 22 Feb 2023 14:38:27 -0800 (PST)
+Message-ID: <6ff7aea6-6535-3f54-b8d2-718d9a38a1be@linaro.org>
+Date:   Thu, 23 Feb 2023 00:38:26 +0200
 MIME-Version: 1.0
-X-OriginatorOrg: dm.renesas.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: OS3PR01MB8460.jpnprd01.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 2c951b5d-f9a2-407b-ad73-08db152573f4
-X-MS-Exchange-CrossTenant-originalarrivaltime: 22 Feb 2023 22:38:00.5820
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 53d82571-da19-47e4-9cb4-625a166a4a2a
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: mR2QbAoz/UrifmeI7NBL3xng4uy9rwaP+PTLeac/A4wYlRuMyNVUIbFYcnrDq70yvHI/bILH4WyODjerM8OqcS9i0lR2ntRREA3EF5z/uCg=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: OS0PR01MB5906
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.2
+Subject: Re: [PATCH 1/5] drm/msm/adreno: Use OPP for every GPU generation
+Content-Language: en-GB
+To:     Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Rob Clark <robdclark@gmail.com>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>
+Cc:     linux-arm-msm@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        freedreno@lists.freedesktop.org, linux-kernel@vger.kernel.org
+References: <20230222-konrad-longbois-next-v1-0-01021425781b@linaro.org>
+ <20230222-konrad-longbois-next-v1-1-01021425781b@linaro.org>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+In-Reply-To: <20230222-konrad-longbois-next-v1-1-01021425781b@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 22/02/2023 12:15, Nick Alcock wrote:
->Since commit 8b41fc4454e ("kbuild: create modules.builtin without Makefile=
-.modbuiltin or tristate.conf"), MODULE_LICENSE declarations are used to ide=
-ntify modules. As a consequence, uses of the macro in non-modules will caus=
-e modprobe to misidentify their containing object file as a module when it =
-is not (false positives), and modprobe might succeed rather than failing wi=
-th a suitable error message.
->
->So remove it in the files in this commit, none of which can be built as mo=
-dules.
+On 22/02/2023 23:47, Konrad Dybcio wrote:
+> Some older GPUs (namely a2xx with no opp tables at all and a320 with
+> downstream-remnants gpu pwrlevels) used not to have OPP tables. They
+> both however had just one frequency defined, making it extremely easy
+> to construct such an OPP table from within the driver if need be.
+> 
+> Do so and switch all clk_set_rate calls on core_clk to their OPP
+> counterparts.
+> 
+> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+> ---
+>   drivers/gpu/drm/msm/adreno/adreno_gpu.c | 94 +++++++++++++++------------------
+>   drivers/gpu/drm/msm/msm_gpu.c           |  4 +-
+>   drivers/gpu/drm/msm/msm_gpu_devfreq.c   |  2 +-
+>   3 files changed, 45 insertions(+), 55 deletions(-)
+> 
+> diff --git a/drivers/gpu/drm/msm/adreno/adreno_gpu.c b/drivers/gpu/drm/msm/adreno/adreno_gpu.c
+> index ce6b76c45b6f..9b940c0f063f 100644
+> --- a/drivers/gpu/drm/msm/adreno/adreno_gpu.c
+> +++ b/drivers/gpu/drm/msm/adreno/adreno_gpu.c
+> @@ -922,73 +922,50 @@ void adreno_wait_ring(struct msm_ringbuffer *ring, uint32_t ndwords)
+>   			ring->id);
+>   }
+>   
+> -/* Get legacy powerlevels from qcom,gpu-pwrlevels and populate the opp table */
+> -static int adreno_get_legacy_pwrlevels(struct device *dev)
+> -{
+> -	struct device_node *child, *node;
+> -	int ret;
+> -
+> -	node = of_get_compatible_child(dev->of_node, "qcom,gpu-pwrlevels");
+> -	if (!node) {
+> -		DRM_DEV_DEBUG(dev, "Could not find the GPU powerlevels\n");
+> -		return -ENXIO;
+> -	}
+> -
+> -	for_each_child_of_node(node, child) {
+> -		unsigned int val;
+> -
+> -		ret = of_property_read_u32(child, "qcom,gpu-freq", &val);
+> -		if (ret)
+> -			continue;
+> -
+> -		/*
+> -		 * Skip the intentionally bogus clock value found at the bottom
+> -		 * of most legacy frequency tables
+> -		 */
+> -		if (val != 27000000)
+> -			dev_pm_opp_add(dev, val, 0);
+> -	}
+> -
+> -	of_node_put(node);
+> -
+> -	return 0;
+> -}
+> -
+> -static void adreno_get_pwrlevels(struct device *dev,
+> +static int adreno_get_pwrlevels(struct device *dev,
+>   		struct msm_gpu *gpu)
+>   {
+> +	struct adreno_gpu *adreno_gpu = to_adreno_gpu(gpu);
+>   	unsigned long freq = ULONG_MAX;
+>   	struct dev_pm_opp *opp;
+>   	int ret;
+>   
+>   	gpu->fast_rate = 0;
+>   
+> -	/* You down with OPP? */
+> -	if (!of_find_property(dev->of_node, "operating-points-v2", NULL))
+> -		ret = adreno_get_legacy_pwrlevels(dev);
+> -	else {
+> -		ret = devm_pm_opp_of_add_table(dev);
+> -		if (ret)
+> -			DRM_DEV_ERROR(dev, "Unable to set the OPP table\n");
+> -	}
+> -
+> -	if (!ret) {
+> +	/* devm_pm_opp_of_add_table may error out but will still create an OPP table */
+> +	ret = devm_pm_opp_of_add_table(dev);
+> +	if (ret == -ENODEV) {
+> +		/* Special cases for ancient hw with ancient DT bindings */
+> +		if (adreno_is_a2xx(adreno_gpu)) {
+> +			dev_warn(dev, "Unable to find the OPP table. Falling back to 200 MHz.\n");
+> +			dev_pm_opp_add(dev, 200000000, 0);
+> +			gpu->fast_rate = 200000000;
 
-Makes sense - but if you need to do a V2, would you mind removing the erron=
-eous claim on DA9055 at the same time?
-https://elixir.bootlin.com/linux/latest/source/drivers/mfd/Kconfig#L364=20
-Strangely, seems it was always there, yet always bool...
+We can skip setting the fast_rate, dev_pm_opp_find_freq_floor below will 
+get it from our freshly generated opp table.
 
-Reviewed-by: Adam Ward <DLG-Adam.Ward.opensource@dm.renesas.com>
+> +		} else if (adreno_is_a320(adreno_gpu)) {
+> +			dev_warn(dev, "Unable to find the OPP table. Falling back to 450 MHz.\n");
+> +			dev_pm_opp_add(dev, 450000000, 0);
+> +			gpu->fast_rate = 450000000;
+> +		} else {
+> +			DRM_DEV_ERROR(dev, "Unable to find the OPP table\n");
+> +			return -ENODEV;
+> +		}
+> +	} else if (ret) {
+> +		DRM_DEV_ERROR(dev, "Unable to set the OPP table\n");
+> +		return ret;
+> +	} else {
+>   		/* Find the fastest defined rate */
+>   		opp = dev_pm_opp_find_freq_floor(dev, &freq);
+> -		if (!IS_ERR(opp)) {
+> +
+> +		if (IS_ERR(opp))
+> +			return PTR_ERR(opp);
+> +		else {
+>   			gpu->fast_rate = freq;
+>   			dev_pm_opp_put(opp);
+>   		}
+>   	}
+>   
+> -	if (!gpu->fast_rate) {
+> -		dev_warn(dev,
+> -			"Could not find a clock rate. Using a reasonable default\n");
+> -		/* Pick a suitably safe clock speed for any target */
+> -		gpu->fast_rate = 200000000;
+> -	}
+> -
+>   	DBG("fast_rate=%u, slow_rate=27000000", gpu->fast_rate);
+> +
+> +	return 0;
+>   }
+>   
+>   int adreno_gpu_ocmem_init(struct device *dev, struct adreno_gpu *adreno_gpu,
+> @@ -1046,6 +1023,17 @@ int adreno_gpu_init(struct drm_device *drm, struct platform_device *pdev,
+>   	struct adreno_rev *rev = &config->rev;
+>   	const char *gpu_name;
+>   	u32 speedbin;
+> +	int ret;
+> +
+> +	/* This can only be done here, or devm_pm_opp_set_supported_hw will WARN_ON() */
+
+I'd rephrase this to '...done before devm_pm_opp_of_add_table(), or 
+dev_pm_opp_set_config() will...'. It took me a while to find correct 
+limitation.
+
+I wanted to move the code below to msm_gpu_init(), but after digging in 
+found that it's not possible.
+
+
+> +	if (IS_ERR(devm_clk_get(dev, "core"))) {
+> +		/*
+> +		 * If "core" is absent, go for the legacy clock name.
+> +		 * If we got this far in probing, it's a given one of them exists.
+> +		 */
+> +		devm_pm_opp_set_clkname(dev, "core_clk");
+> +	} else
+> +		devm_pm_opp_set_clkname(dev, "core");
+>   
+>   	adreno_gpu->funcs = funcs;
+>   	adreno_gpu->info = adreno_info(config->rev);
+> @@ -1070,7 +1058,9 @@ int adreno_gpu_init(struct drm_device *drm, struct platform_device *pdev,
+>   
+>   	adreno_gpu_config.nr_rings = nr_rings;
+>   
+> -	adreno_get_pwrlevels(dev, gpu);
+> +	ret = adreno_get_pwrlevels(dev, gpu);
+> +	if (ret)
+> +		return ret;
+>   
+>   	pm_runtime_set_autosuspend_delay(dev,
+>   		adreno_gpu->info->inactive_period);
+> diff --git a/drivers/gpu/drm/msm/msm_gpu.c b/drivers/gpu/drm/msm/msm_gpu.c
+> index 380249500325..cdcb00df3f25 100644
+> --- a/drivers/gpu/drm/msm/msm_gpu.c
+> +++ b/drivers/gpu/drm/msm/msm_gpu.c
+> @@ -59,7 +59,7 @@ static int disable_pwrrail(struct msm_gpu *gpu)
+>   static int enable_clk(struct msm_gpu *gpu)
+>   {
+>   	if (gpu->core_clk && gpu->fast_rate)
+> -		clk_set_rate(gpu->core_clk, gpu->fast_rate);
+> +		dev_pm_opp_set_rate(&gpu->pdev->dev, gpu->fast_rate);
+>   
+>   	/* Set the RBBM timer rate to 19.2Mhz */
+>   	if (gpu->rbbmtimer_clk)
+> @@ -78,7 +78,7 @@ static int disable_clk(struct msm_gpu *gpu)
+>   	 * will be rounded down to zero anyway so it all works out.
+>   	 */
+>   	if (gpu->core_clk)
+> -		clk_set_rate(gpu->core_clk, 27000000);
+> +		dev_pm_opp_set_rate(&gpu->pdev->dev, 27000000);
+>   
+>   	if (gpu->rbbmtimer_clk)
+>   		clk_set_rate(gpu->rbbmtimer_clk, 0);
+> diff --git a/drivers/gpu/drm/msm/msm_gpu_devfreq.c b/drivers/gpu/drm/msm/msm_gpu_devfreq.c
+> index e27dbf12b5e8..ea70c1c32d94 100644
+> --- a/drivers/gpu/drm/msm/msm_gpu_devfreq.c
+> +++ b/drivers/gpu/drm/msm/msm_gpu_devfreq.c
+> @@ -48,7 +48,7 @@ static int msm_devfreq_target(struct device *dev, unsigned long *freq,
+>   		gpu->funcs->gpu_set_freq(gpu, opp, df->suspended);
+>   		mutex_unlock(&df->lock);
+>   	} else {
+> -		clk_set_rate(gpu->core_clk, *freq);
+> +		dev_pm_opp_set_rate(dev, *freq);
+>   	}
+>   
+>   	dev_pm_opp_put(opp);
+> 
+
+-- 
+With best wishes
+Dmitry
 
