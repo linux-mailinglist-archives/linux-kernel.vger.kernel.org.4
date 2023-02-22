@@ -2,212 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F0F4069EBE0
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Feb 2023 01:18:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E79469EBE5
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Feb 2023 01:23:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230315AbjBVASF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Feb 2023 19:18:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58382 "EHLO
+        id S230341AbjBVAXE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Feb 2023 19:23:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60914 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230291AbjBVASD (ORCPT
+        with ESMTP id S229448AbjBVAXD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Feb 2023 19:18:03 -0500
-Received: from mail-pj1-x1049.google.com (mail-pj1-x1049.google.com [IPv6:2607:f8b0:4864:20::1049])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F748125A4
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Feb 2023 16:18:00 -0800 (PST)
-Received: by mail-pj1-x1049.google.com with SMTP id gf1-20020a17090ac7c100b002369bf87b7aso2705566pjb.8
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Feb 2023 16:18:00 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=J9BtaV1ZeQpd3OOnFLxf3faqs1oNxew2rIeqnER9uJo=;
-        b=EJEFUQAlfEKrvkYmyCpgmJInyPKTe3V/xDEINMW2a8e/zDFGP1uifrWMmX/1oEz9yn
-         dIrLF0ezYBTmuB1ZhyLXzf8MzF6M47TLn8caRR9Hbjxg7dp7gLgKOvRVSnVWs4LN3ocS
-         Jy4tR9tXYmbiSlw2ZJ5gLAaXvZVYzPSJvOuobOcThH9/PuLlX/l3vCoOBWSFrGUz2gXj
-         WqsAgsGgfpwR0zeNK4JRtx07N2Gff8Mj8xbcXLIvQJ7cEP3bjmCQ7eC5OT6sv84YoYi5
-         1qMNxE2fdQX2f1qhnporQuIbvCYgyoXnj4402MLDT/8eFGDeZ+QkMEGCifOWSaszxN1G
-         9x3A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=J9BtaV1ZeQpd3OOnFLxf3faqs1oNxew2rIeqnER9uJo=;
-        b=sxzwn8G6MxzQAQtDrGCqdmBCDfmfKcNejcmLy50WstQcLpYgGDNoZ7C/GnjSVEwqqS
-         H5W6WHvYfKcONJIDLke2Lfk7LzlQRnx5bvPpPitsVRhqKR5spBrDTknJ6nu/1u8fdNBZ
-         X5ePONgQDlym3keZJx/gMbYW/ilf9/T6TvhrLE7v62b7dGb9uYFG9czTLHwpWHV97N4O
-         GkEWTsROwAzoo+xR89oGDk23s+aTn9VFvyY62pdFYadZnRX6lRUTeKWjeEkkUydLPmBm
-         Y4NdNffGGk+AZkBgjZNYmZ5Lp+x5uQVlN0yvoe4Xp7lG9OlEuPWCtPyX6qO8DqR9yA30
-         vSEw==
-X-Gm-Message-State: AO0yUKXqQUDY7V1wuvh5G3MBcjecVFrC70xMNeOjiKgQKOx7EhnGvjNI
-        iKkrqVLVsirbD0JzHZkmP+DrfbT/lopi
-X-Google-Smtp-Source: AK7set9P0icS9gZWiqtyf29s3v0oNfvjc9iMbwFgLVbB1XpIQX3QBe+LqpUwZGAaPeqLKAe+WrEjgEX1W2Lg
-X-Received: from jiangzp-glinux-dev.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:4c52])
- (user=jiangzp job=sendgmr) by 2002:a63:340d:0:b0:4fb:3591:c608 with SMTP id
- b13-20020a63340d000000b004fb3591c608mr795589pga.4.1677025080009; Tue, 21 Feb
- 2023 16:18:00 -0800 (PST)
-Date:   Tue, 21 Feb 2023 16:17:56 -0800
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.39.2.637.g21b0678d19-goog
-Message-ID: <20230221161749.kernel.v3.1.Ibe4d3a42683381c1e78b8c3aa67b53fc74437ae9@changeid>
-Subject: [kernel PATCH v3] Bluetooth: hci_sync: Resume adv with no RPA when
- active scan
-From:   Zhengping Jiang <jiangzp@google.com>
-To:     linux-bluetooth@vger.kernel.org, marcel@holtmann.org,
-        luiz.dentz@gmail.com
-Cc:     chromeos-bluetooth-upstreaming@chromium.org,
-        Zhengping Jiang <jiangzp@google.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Johan Hedberg <johan.hedberg@gmail.com>,
-        Paolo Abeni <pabeni@redhat.com>, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        Tue, 21 Feb 2023 19:23:03 -0500
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1732825E3D;
+        Tue, 21 Feb 2023 16:23:01 -0800 (PST)
+Received: from pps.filterd (m0279868.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 31LNkrE9023676;
+        Wed, 22 Feb 2023 00:22:48 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=GSqS92vIwQB799pi53rSrb1ngxfts/lxtA22QEfZ/Rk=;
+ b=JLsEKJGAh/bi28x0DMUuK19FWhmJSNgj06XHZZm1i9Vyl4BY4eHXvq3RpgkFuf0EdYhn
+ sDkN3FuokqzEsvtHnXiM3bbnl5rbUhOSLkghTmeUwy3OBkZT629FZkYYqMQNyaZARDGF
+ Si/yy1sQZyMMyKtFqwvNQaIdC9C6gQKiXXhYf/4nNxaaxIi0j2RwBXibMufAcq+gqN6+
+ 4cvLLkGGUCKqKnflJ/yS5tmSyuL0q5gGiFFuuhm9s99H7UVKyMwLX43670SXu5VxOZGM
+ wS2Aj6pb9pAflGKnj7qMjfMrx9kuyP2noxbTMVC0T9lfov8mWmkWkXguhq5qnx9VFmkG fg== 
+Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3nvtbxa4we-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 22 Feb 2023 00:22:48 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 31M0Ml52023334
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 22 Feb 2023 00:22:47 GMT
+Received: from [10.253.74.210] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.41; Tue, 21 Feb
+ 2023 16:22:45 -0800
+Message-ID: <9ae693f2-b19e-ff1f-851c-c3d09db4d9d1@quicinc.com>
+Date:   Wed, 22 Feb 2023 08:22:43 +0800
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.13.1
+Subject: Re: [PATCH 1/2] wifi: cfg80211: Add beacon hint notifier support
+Content-Language: en-US
+To:     Johannes Berg <johannes@sipsolutions.net>,
+        "Youghandhar Chintala (Temp)" <quic_youghand@quicinc.com>,
+        <ath10k@lists.infradead.org>
+CC:     <linux-wireless@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <quic_mpubbise@quicinc.com>, Wen Gong <quic_wgong@quicinc.com>
+References: <20221222124221.30894-1-quic_youghand@quicinc.com>
+ <20221222124221.30894-2-quic_youghand@quicinc.com>
+ <1df59863e78e8ddbe7eb3a74e6dd4c8f0bd7f098.camel@sipsolutions.net>
+ <96cab5d9-9090-4cb2-ff17-eadc9da12f50@quicinc.com>
+ <0d4b99ab0a5bedc82f35bc1e548a611564b010e5.camel@sipsolutions.net>
+From:   Wen Gong <quic_wgong@quicinc.com>
+In-Reply-To: <0d4b99ab0a5bedc82f35bc1e548a611564b010e5.camel@sipsolutions.net>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: Dvi9KBhRlHTNhdqvYm6bry6T-3irrzVO
+X-Proofpoint-ORIG-GUID: Dvi9KBhRlHTNhdqvYm6bry6T-3irrzVO
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.170.22
+ definitions=2023-02-21_13,2023-02-20_02,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ lowpriorityscore=0 bulkscore=0 clxscore=1011 mlxscore=0 spamscore=0
+ phishscore=0 mlxlogscore=764 impostorscore=0 adultscore=0 malwarescore=0
+ suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2302220000
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The address resolution should be disabled during the active scan,
-so all the advertisements can reach the host. The advertising
-has to be paused before disabling the address resolution,
-because the advertising will prevent any changes to the resolving
-list and the address resolution status. Skipping this will cause
-the hci error and the discovery failure.
 
-According to the bluetooth specification:
-"7.8.44 LE Set Address Resolution Enable command
+On 2/15/2023 11:10 PM, Johannes Berg wrote:
+>>> Why is this even needed? You should always get reg_notifier after this
+>>> anyway?
+>> Currently when channel flag changed through the beacon hints are not
+>> informed to driver.
+>>
+>> reg_notifier will be triggered for regdomain changes but not for channel flag changes due to beacon hints.
+>>
+> So maybe triggering reg notifier once would be sufficient, a la Wen's
+> patch that I recently merged?
 
-This command shall not be used when:
-- Advertising (other than periodic advertising) is enabled,
-- Scanning is enabled, or
-- an HCI_LE_Create_Connection, HCI_LE_Extended_Create_Connection, or
-  HCI_LE_Periodic_Advertising_Create_Sync command is outstanding."
+My patch only take effect for this flag, not for all wiphy.
 
-If the host is using RPA, the controller needs to generate RPA for
-the advertising, so the advertising must remain paused during the
-active scan.
+if (wiphy->flags & WIPHY_FLAG_NOTIFY_REGDOM_BY_DRIVER)
 
-If the host is not using RPA, the advertising can be resumed after
-disabling the address resolution.
+https://git.kernel.org/pub/scm/linux/kernel/git/kvalo/ath.git/commit?id=d99975c4953eb79e389d4630e848435c700e2dfc
 
-Fixes: 9afc675edeeb ("Bluetooth: hci_sync: allow advertise when scan without RPA")
-Signed-off-by: Zhengping Jiang <jiangzp@google.com>
----
-
-Changes in v3:
-- Add a function to check the requirements to pause addr resolution
-- Pause and resume advertising in hci_pause_addr_resolution
-- Resume advertising if pausing addr resolution fails or privacy mode is
-  not used for advertising
-
-Changes in v2:
-- Commit message format
-
-Changes in v1:
-- With LL privacy, always pause advertising when active scan
-- Only resume the advertising if the host is not using RPA
-
- net/bluetooth/hci_sync.c | 64 +++++++++++++++++++++++++++-------------
- 1 file changed, 44 insertions(+), 20 deletions(-)
-
-diff --git a/net/bluetooth/hci_sync.c b/net/bluetooth/hci_sync.c
-index 117eedb6f709..37b002e1d576 100644
---- a/net/bluetooth/hci_sync.c
-+++ b/net/bluetooth/hci_sync.c
-@@ -2367,6 +2367,45 @@ static int hci_resume_advertising_sync(struct hci_dev *hdev)
- 	return err;
- }
- 
-+static int hci_pause_addr_resolution(struct hci_dev *hdev)
-+{
-+	int err;
-+
-+	if (!use_ll_privacy(hdev))
-+		return 0;
-+
-+	if (!hci_dev_test_flag(hdev, HCI_LL_RPA_RESOLUTION))
-+		return 0;
-+
-+	/* Cannot disable addr resolution if scanning is enabled or
-+	 * when initiating an LE connection.
-+	 */
-+	if (hci_dev_test_flag(hdev, HCI_LE_SCAN) ||
-+	    hci_lookup_le_connect(hdev)) {
-+		bt_dev_err(hdev, "Command not allowed when scan/LE connect");
-+		return -EPERM;
-+	}
-+
-+	// Cannot disable addr resolution if advertising is enabled.
-+	err = hci_pause_advertising_sync(hdev);
-+	if (err) {
-+		bt_dev_err(hdev, "Pause advertising failed: %d", err);
-+		return err;
-+	}
-+
-+	err = hci_le_set_addr_resolution_enable_sync(hdev, 0x00);
-+	if (err)
-+		bt_dev_err(hdev, "Unable to disable Address Resolution: %d",
-+			   err);
-+
-+	// Return if address resolution is disabled and RPA is not used.
-+	if (!err && scan_use_rpa(hdev))
-+		return err;
-+
-+	hci_resume_advertising_sync(hdev);
-+	return err;
-+}
-+
- struct sk_buff *hci_read_local_oob_data_sync(struct hci_dev *hdev,
- 					     bool extended, struct sock *sk)
- {
-@@ -2402,7 +2441,7 @@ static u8 hci_update_accept_list_sync(struct hci_dev *hdev)
- 	u8 filter_policy;
- 	int err;
- 
--	/* Pause advertising if resolving list can be used as controllers are
-+	/* Pause advertising if resolving list can be used as controllers
- 	 * cannot accept resolving list modifications while advertising.
- 	 */
- 	if (use_ll_privacy(hdev)) {
-@@ -5394,27 +5433,12 @@ static int hci_active_scan_sync(struct hci_dev *hdev, uint16_t interval)
- 
- 	cancel_interleave_scan(hdev);
- 
--	/* Pause advertising since active scanning disables address resolution
--	 * which advertising depend on in order to generate its RPAs.
--	 */
--	if (use_ll_privacy(hdev) && hci_dev_test_flag(hdev, HCI_PRIVACY)) {
--		err = hci_pause_advertising_sync(hdev);
--		if (err) {
--			bt_dev_err(hdev, "pause advertising failed: %d", err);
--			goto failed;
--		}
--	}
--
--	/* Disable address resolution while doing active scanning since the
--	 * accept list shall not be used and all reports shall reach the host
--	 * anyway.
-+	/* Pause address resolution for active scan and stop advertising if
-+	 * privacy is enabled.
- 	 */
--	err = hci_le_set_addr_resolution_enable_sync(hdev, 0x00);
--	if (err) {
--		bt_dev_err(hdev, "Unable to disable Address Resolution: %d",
--			   err);
-+	err = hci_pause_addr_resolution(hdev);
-+	if (err)
- 		goto failed;
--	}
- 
- 	/* All active scans will be done with either a resolvable private
- 	 * address (when privacy feature has been enabled) or non-resolvable
--- 
-2.39.2.637.g21b0678d19-goog
-
+>
+> johannes
+>
