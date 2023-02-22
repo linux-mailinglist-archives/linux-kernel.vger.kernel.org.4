@@ -2,69 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6479E69F02A
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Feb 2023 09:28:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6FF0D69F027
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Feb 2023 09:28:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231349AbjBVI2x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Feb 2023 03:28:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44314 "EHLO
+        id S230374AbjBVI21 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Feb 2023 03:28:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44586 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231268AbjBVI2k (ORCPT
+        with ESMTP id S229560AbjBVI2Z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Feb 2023 03:28:40 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA0C47A96
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Feb 2023 00:27:55 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1677054474;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=mdoO5s95Na4aAS2r09uUBGkI6PI2mKVEuOEm/TcR5jM=;
-        b=OJdnwNOHksb8RVQTKHucY9X38b3jGSfrQP+NCRk70PsMjBWSxviyR931IqsJY8SV0mLUn4
-        pckbeZWDLQrPEP30sq404QjODKmRwxogWBObcmILQAhY54XzOfWm2PyJQh+OPOgWkdNdRk
-        UgqsSUG8tD7ECuhzRWyRurnOI1EOuoQ=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-591-AwZy-EmxN16bppq_h_UWGg-1; Wed, 22 Feb 2023 03:27:53 -0500
-X-MC-Unique: AwZy-EmxN16bppq_h_UWGg-1
-Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 9B181280AA26;
-        Wed, 22 Feb 2023 08:27:52 +0000 (UTC)
-Received: from warthog.procyon.org.uk (unknown [10.33.36.18])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id D0B8D440DF;
-        Wed, 22 Feb 2023 08:27:50 +0000 (UTC)
-Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
-        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
-        Kingdom.
-        Registered in England and Wales under Company Registration No. 3798903
-From:   David Howells <dhowells@redhat.com>
-In-Reply-To: <20230222134927.459b036b@canb.auug.org.au>
-References: <20230222134927.459b036b@canb.auug.org.au> <20230221184225.0e734f0e@canb.auug.org.au> <20230221174401.7198357d@canb.auug.org.au> <20230220152933.1ab8fa4a@canb.auug.org.au> <Y/N8hVWeR3AjssUC@casper.infradead.org> <20230220190157.3b43b9a7@canb.auug.org.au> <Y/Pe2xHklSr1hDtz@casper.infradead.org> <2351091.1676963957@warthog.procyon.org.uk> <2885897.1676990364@warthog.procyon.org.uk>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     dhowells@redhat.com, Matthew Wilcox <willy@infradead.org>,
-        "Vishal Moola (Oracle)" <vishal.moola@gmail.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Steve French <smfrench@gmail.com>,
-        Steve French <stfrench@microsoft.com>,
-        Shyam Prasad N <nspmangalore@gmail.com>,
-        Rohith Surabattula <rohiths.msft@gmail.com>,
-        Tom Talpey <tom@talpey.com>, Paulo Alcantara <pc@cjr.nz>,
-        Jeff Layton <jlayton@kernel.org>, linux-cifs@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-next@vger.kernel.org
-Subject: Re: linux-next: manual merge of the mm-stable tree with the cifs tree
+        Wed, 22 Feb 2023 03:28:25 -0500
+Received: from FRA01-MR2-obe.outbound.protection.outlook.com (mail-mr2fra01on2088.outbound.protection.outlook.com [40.107.9.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FED323321
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Feb 2023 00:28:23 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=EyqK7wNhPxlgtahVDJRkdRVSv7oMe+9l/jKnvyCAoSdbD9+DdcknU0Z/MzjtMK11h5tKNoJl/Jn2QFfteq5aaSSCzVlUQfnQdiEOrey2+OOAMCIVYYVDwAFPu7saAGIsLrSJhPAs8tCaZ6++6mPXGCTUKECVGc0nPwV/1i8G5yun0BAyd8PfECvGWGVDE79rza+43LzX27aefMUdXnuv1p/xcHFYjxZfMf5RMVsxcg2tJp3I/YUIfE3TBi1ezBOYt4E5VOYpQ9+Nmn25UfTtEPAPtAxGwYQXpKINmNX3pGLd8vtIleOgy94kkHwuUDSFKC74joVoq8CKCgueVF8qYw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=3wJZ+VzLQ4AK9+TDpAOg8J0HCjZrw0Pu/ysRdKMWwJk=;
+ b=Q6e8olHbgu+S935+gYl5H9G+zyiN9Yjv1EFRmnv6gKas8uYosx5JbpO+jcsh+6IWlyMBYW1OC8HxRCLjZz/jO15syvb2BJbvxiLBI769Mn08dYVxYTJ7zfZdb72dp0Xi+iHwQvMRw5xPFWwwYnrJFUWGgO0E3Iay5pIrWXdTfEROCiUsCvUy6G5r67opOJ6DjpUEMw8fpd55HfdTLVmgYv6M646YtMx5bEL9Sp8G7/mFaaJ3MJyiRKNAAskJMKhKepovOll9veNIpAoCFx7Y2GFYfjKGHjwFTn54op7zA1+B19N4mhleXlD1A5iX8FFsekz8p9EUhJER1M6oH9j7qw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=csgroup.eu; dmarc=pass action=none header.from=csgroup.eu;
+ dkim=pass header.d=csgroup.eu; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=csgroup.eu;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=3wJZ+VzLQ4AK9+TDpAOg8J0HCjZrw0Pu/ysRdKMWwJk=;
+ b=mKXp6OBQLhtT4M1KilZuZzXYDCpfFKuQ7ZnoYG8anozvOWwa0/H0ssjUsMk4PeDYcyCA0Ey4jrzwsz4KaotpmKzIhD8lC2CzKbXaJkb8i79OdwQ3WiEnzKgWwz7IDCnmfhA5o7DXbxZDZB/knpW3J17CEmTEl80sBMqHZhPtWigjMt7BrAntXLSqItKEeOxzt8YEAqEYDaBxIj0f/LJoybEXFjZ/Yz6e9cqpLMIDkqyAQedGKonFw/KPIb00GIL3Idc0kkPv7DatyIe3hD6rWUgP0GqCCcxnCik5wLkepYXPr8o269qTIkEesVRNWRUN2fH5+mwBnJn4XRWOfS9u6w==
+Received: from MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM (2603:10a6:501:31::15)
+ by PR1P264MB3277.FRAP264.PROD.OUTLOOK.COM (2603:10a6:102:1a::6) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6134.19; Wed, 22 Feb
+ 2023 08:28:19 +0000
+Received: from MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
+ ([fe80::2cfb:d4c:1932:b097]) by MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
+ ([fe80::2cfb:d4c:1932:b097%6]) with mapi id 15.20.6134.019; Wed, 22 Feb 2023
+ 08:28:19 +0000
+From:   Christophe Leroy <christophe.leroy@csgroup.eu>
+To:     Kautuk Consul <kconsul@linux.vnet.ibm.com>
+CC:     Michael Ellerman <mpe@ellerman.id.au>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] arch/powerpc/include/asm/barrier.h: redefine rmb and wmb
+ to lwsync
+Thread-Topic: [PATCH] arch/powerpc/include/asm/barrier.h: redefine rmb and wmb
+ to lwsync
+Thread-Index: AQHZRoMefDxjCpO3tU+isLH8cV0K1a7aikAAgAAUsgCAAAFEAIAAAf4A
+Date:   Wed, 22 Feb 2023 08:28:19 +0000
+Message-ID: <65a0303b-f4cc-f20c-d66a-c5037bad6791@csgroup.eu>
+References: <20230222060107.70565-1-kconsul@linux.vnet.ibm.com>
+ <896436d1-04e4-8019-0f89-f4d4938f9697@csgroup.eu>
+ <Y/XPZl8V4/0Bjegy@li-a450e7cc-27df-11b2-a85c-b5a9ac31e8ef.ibm.com>
+ <Y/XQdmeZ86Ivcy5x@li-a450e7cc-27df-11b2-a85c-b5a9ac31e8ef.ibm.com>
+In-Reply-To: <Y/XQdmeZ86Ivcy5x@li-a450e7cc-27df-11b2-a85c-b5a9ac31e8ef.ibm.com>
+Accept-Language: fr-FR, en-US
+Content-Language: fr-FR
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+user-agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=csgroup.eu;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: MRZP264MB2988:EE_|PR1P264MB3277:EE_
+x-ms-office365-filtering-correlation-id: 973712b6-353e-4890-0f3c-08db14aec0ba
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: WpZ9i/05fu4WMoUJLGbt0i0t5mYN5c3EVryr2JzGwFkazf5b/GZzSSXugF5lSnNSbEhjeeUzuKwUzckF20j9WrDCgBS7AjljY0tjvChaIn/6GgwIm4ffDZof7C9LWMPNvNV6hwyjhkE8m+hhf1qOBLCmh6wh6GSvkqLoPomeBGJPNiryIonJL7lHxTLwIHyDLPYsu47Pw83n9ACk8+b35m7/hWdrVmo07oaGJDmIAiZXwhXYurx/68qpqRuoBZkeqtTcJVYe1CnVNT7Xun3aAZXeNoXAsuE+lFPCfwt85QjQ/65e16uhNvIpdYZ7MhzI1Oh+D0D9uFYGx6ipODU3u2X1nHGcPR+He0C6PcS58QNmovMjFzbend/Jvzrxxdu4pCbd291mTR3EsGKNmXjFRcPPFEdbqaaXBPpOiMBejXRfZy95iJ9dvbLILbRF7DSjkzBhCwMOjCswz3meHp6Gi5c5UCa9uFo5p64SYrsCJgXBLiyZoc8wVSDl9CE45MW3laEMatdBsA+J9e5k43unAby99yIW5kPQTEb2tEK6pqX5ZgUCIyPPCwdhaAf04aC9QLfcJ2EtXFZv6Y+tO63MPJNiZCnHyDMqPmKhhk/ALm0SIHobZMUcr8taaEcyWwDEG6aawVd4Lv3QtY3XjdukdjqfSqQrhCNXLt6oXZfHlL9viFDRcj0QtIecrH8/aibGoPfWaC4k57AtqtNHIfEHniNEMvNpPv6e1xzYp9bqhGKAvJdDpVU3RAPGsCqxWakl
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230025)(4636009)(136003)(366004)(346002)(396003)(376002)(39850400004)(451199018)(71200400001)(186003)(26005)(31686004)(5660300002)(2616005)(6486002)(966005)(6512007)(6506007)(54906003)(478600001)(316002)(83380400001)(38070700005)(8676002)(6916009)(4326008)(66446008)(8936002)(41300700001)(91956017)(64756008)(66556008)(66476007)(76116006)(66946007)(4744005)(36756003)(44832011)(122000001)(38100700002)(86362001)(31696002)(2906002)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?dWhEY1BVNEUxdU9lU3VGMWpxNFhHZ0YwYjJsVlZFTXNadkZseUpUMkNEUzNa?=
+ =?utf-8?B?N1ErKzNoZ1RGMXVXSmVOZ3haMk9GVWgwUnhWMDJZb0xlbTF2OHhLcEdRTXFH?=
+ =?utf-8?B?OWdPNWs4VnQxZGFPbWpPcDk4UXZXNk1IR0l2dWd1VURVcXNiSEdnbi9oS3NX?=
+ =?utf-8?B?WnJuWWx3emcrQWJCeHU3b3VEWW5EZzN4M3J0cFhnR3I2RkFXMmhlOHVhRmhQ?=
+ =?utf-8?B?aXpqTFJLem1zVGRpazMrRDR0WWwrWGZMUDdNdTUvOWtuYlQ5N0I0bkNhRnFV?=
+ =?utf-8?B?SkJ4RFM0dlhwOWU5TlZXVGZsYm1QVm9mY0t3c0Fvd0oyUXBlbmJUQloxbHVG?=
+ =?utf-8?B?SlFsdDV5clg0ZDVHakVYZ1Z0VkpXQmI1RlcxYTZMNkg2R3kyZktEdEpPclk1?=
+ =?utf-8?B?VlAzUG9uNlF0c21XbmNXUXlsVHNzcEtwWGRHMHZhVGY4dlNicXdZQXJwS0tQ?=
+ =?utf-8?B?OGZ5bElobmV3UkcyU0pUMFpJYjJxbVp4bmZQY01rSEJwZUxpQUlGRVA0eEhF?=
+ =?utf-8?B?akRZWVJBRkFndGZQcE5yN2R0anpYclV6Rm1KTFg3eXRSUnovRGNXUG4rMDJl?=
+ =?utf-8?B?dE1kSHh0SVZVL1BiTmdZUThvVFdlbHBaY0dHSUFYL2lQSjAyS1V0V2JNdDZV?=
+ =?utf-8?B?UEZ0R0FqbkI0NGlGUVdsa2hIM3U0L0dyNUVPaVJsZnFDRHl2dmV2TjljcjFC?=
+ =?utf-8?B?NEp5aVhsa3htOTNXNEd4SWdzZWNORVpNV3h4TmpaWlltQWdOTUNoNTh0V0tO?=
+ =?utf-8?B?d21UTFNGSERZZ3VTdk1wa3RPZ2c3Y0gwL2llV0w2ZVRnQmVBdlZxMG03NmNV?=
+ =?utf-8?B?T3QwTEVqTXIxQ3QwblRYWkx2bk5RbHBweEJUNFlFWi9vd2dLOFF2M2o2SCt0?=
+ =?utf-8?B?Vk5rdjNLMXBtNjBlNnB0Nm5OQ1ozNFJ1dCs0d1I3eVRHaWdybmZ6TjZKdTc4?=
+ =?utf-8?B?N2pOWjhzMVJZQWEwaHIxT3Q5QW1CNHRWeVhmZHNBazFML2ROb3BkeW5YdFd2?=
+ =?utf-8?B?WEFoc2N6bnVhUUhCM2h6dWJ1VkMzbWc1WlRGaGlRYmZDa2lBT1VhRlgyV0hE?=
+ =?utf-8?B?VE9CTmNqVkJBbFpyNThtaDI4UjRSZmp1SmdhNDJwS2kwbnlGUXdjQzdFMTd0?=
+ =?utf-8?B?Z3BrR0dvV09ySHoyQk9aL0x0czB0MWdrMUhmOC9WMnA5WEpyLzRBdkJIdExQ?=
+ =?utf-8?B?ZFY5L095SmdvSUJCbXVJTmNJczFHTzIyZkljU0w3U3YrNVNFYWJST2FhVEhl?=
+ =?utf-8?B?Z3ZWS3pnQk1Db3doaTlKN3ZPK2t5U0RveEU3ZVZwWUM2K09abnZuK3djUFhT?=
+ =?utf-8?B?U1BJV0FVNmJDcWlRUTZHZTBNZFZCR1NxSlJUNEwrZFNZazNsLzRLYXRscjAr?=
+ =?utf-8?B?K21IbDcyc3lpdHRNYWtUemozaDBaWnVyNEMrNDBPelVFa1FPR3R0ZFNvMEF3?=
+ =?utf-8?B?aGo0bHNyMWNvTmxUamFTYXZKWm5UVHUySlVLT1kxZVF2THpWbFo3ZDBLTWlj?=
+ =?utf-8?B?Y1NzN2lXbE00R2pRZmFjTGsxMWZIUEdaT0hQYXBHK1ZoQVljUnp4eHJYTnZ4?=
+ =?utf-8?B?S0RTc2tNWlAzUWFBL1J5UU9LTDNwaGlBZ0VDZmxHRkVVdTBMQzNpaDN2WDFJ?=
+ =?utf-8?B?RVlubk9LbkVxRmx0amNiK2NmWlJ2d3h4K2NrUWJKSWR1Z3BCUjF1ZkRsVy8y?=
+ =?utf-8?B?aTBYSFpkNjg4c2l1TVRqUUJWZEtHTnppenBIMEF3NUh3eTJrR0VjeER2MlVy?=
+ =?utf-8?B?SG82N1ZCTHRKNEozQ0hxT29nSlRiZEpoZy9Fb0dISytJdi9XeGlEdnJkQmYx?=
+ =?utf-8?B?c3hyNHZ2cStObVR2SWNjK0VoTzh3cnErN0hnazRFaGNRVVY1N0pHOHl3Sk92?=
+ =?utf-8?B?alNySHB2cGxOdjJDVEQxbStTTUw1Q3FuYUowYUVsUG03eG5lVjVnMHJHdGhU?=
+ =?utf-8?B?TkNsZ1FWYnhGTmQ0YlVqZVF5M213amZNYjVzV2NMdDlKSmE4eGk5L1lBRlJC?=
+ =?utf-8?B?dll5dFd4Yy9OTXhFY2pRWXp0Ty9zdThsYXNUNVk4TlUxYXRkYndWbk0zN0cy?=
+ =?utf-8?B?RkdxZ3ZFdW9TcnZ6M0hwWmhjOXhIOE9INWh1TjByaDNYMlRjNFdzdGlFUVpY?=
+ =?utf-8?B?NmVNL3hiRHhLZ3dtak9DTkhVS25VdWJxOURuN0xUYVpMN2FJb1l3NFFzWVY1?=
+ =?utf-8?B?QXc9PQ==?=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <DF8B175FB7D5074E8EF603455C5D1D79@FRAP264.PROD.OUTLOOK.COM>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <3325857.1677054470.1@warthog.procyon.org.uk>
-Date:   Wed, 22 Feb 2023 08:27:50 +0000
-Message-ID: <3325858.1677054470@warthog.procyon.org.uk>
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.5
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+X-OriginatorOrg: csgroup.eu
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-Network-Message-Id: 973712b6-353e-4890-0f3c-08db14aec0ba
+X-MS-Exchange-CrossTenant-originalarrivaltime: 22 Feb 2023 08:28:19.2716
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 9914def7-b676-4fda-8815-5d49fb3b45c8
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: eX+E6wDSzHkn1fjVG8QyJ4kSOMTa4jBn+ZBRax7uBrtKJ8s98meCLTC5/r8vAISVl2bJRYttHGxWS0/crr+jD/YoMilHDF787rkZD7EAzZo=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PR1P264MB3277
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,13 +136,19 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Stephen Rothwell <sfr@canb.auug.org.au> wrote:
-
-> OK, so in the merge of mm-stable, I used the cifs version of
-> fs/cifs/file.c with this patch applied.  The merge resolution for that
-> file looks like this:
-
-I checked it out and diffed it against mine.  Looks right, thanks!
-
-David
-
+DQoNCkxlIDIyLzAyLzIwMjMgw6AgMDk6MjEsIEthdXR1ayBDb25zdWwgYSDDqWNyaXTCoDoNCj4+
+IE9uIFdlZCwgRmViIDIyLCAyMDIzIGF0IDA3OjAyOjM0QU0gKzAwMDAsIENocmlzdG9waGUgTGVy
+b3kgd3JvdGU6DQo+Pj4+ICsvKiBSZWRlZmluZSBybWIoKSB0byBsd3N5bmMuICovDQo+Pj4NCj4+
+PiBXSGF0J3MgdGhlIGFkZGVkIHZhbHVlIG9mIHRoaXMgY29tbWVudCA/IElzbid0IGl0IG9idmlv
+dXMgaW4gdGhlIGxpbmUNCj4+PiBiZWxvdyB0aGF0IHJtYigpIGlzIGJlaW5nIGRlZmluZWQgdG8g
+bHdzeW5jID8gUGxlYXNlIGF2b2lkIHVzZWxlc3MgY29tbWVudHMuDQo+PiBTdXJlLg0KPiBTb3Jy
+eSwgZm9yZ290IHRvIGFkZCB0aGF0IEkgd2Fzbid0IGFkZGluZyB0aGlzIHVzZWxlc3MgY29tbWVu
+dC4NCj4gSXRzIGp1c3QgdGhhdCBjaGVja3BhdGNoLnBsIGNvbXBsYWlucyB0aGF0IHRoZSBtZW1v
+cnkgYmFycmllciAjZGVmaW5lDQo+IGRvZXNuJ3QgaGF2ZSBhIGNvbW1lbnQgZm9yIGl0Lg0KPj4+
+DQoNClNlZSBodHRwczovL2RvY3Mua2VybmVsLm9yZy9kZXYtdG9vbHMvY2hlY2twYXRjaC5odG1s
+LCBpdCBzYXlzOg0KDQpDaGVja3BhdGNoIGlzIG5vdCBhbHdheXMgcmlnaHQuIFlvdXIganVkZ2Vt
+ZW50IHRha2VzIHByZWNlZGVuY2Ugb3ZlciANCmNoZWNrcGF0Y2ggbWVzc2FnZXMuIElmIHlvdXIg
+Y29kZSBsb29rcyBiZXR0ZXIgd2l0aCB0aGUgdmlvbGF0aW9ucywgdGhlbiANCml0cyBwcm9iYWJs
+eSBiZXN0IGxlZnQgYWxvbmUuDQoNCmNoZWNrcGF0Y2ggd2FudHMgYSBjb21tZW50IGZvciB1c2Vz
+IG9mIG1lbW9yeSBiYXJyaWVycy4gSGVyZSBJIHRoaW5rIGl0IA0KaXMgYSBmYWxzZSBwb3NpdGl2
+ZS4NCg==
