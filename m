@@ -2,158 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 075FA69F736
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Feb 2023 15:59:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E5EA69F73C
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Feb 2023 16:00:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231727AbjBVO7z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Feb 2023 09:59:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45908 "EHLO
+        id S232114AbjBVPAc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Feb 2023 10:00:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46754 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232019AbjBVO7w (ORCPT
+        with ESMTP id S231821AbjBVPA3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Feb 2023 09:59:52 -0500
-Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0273279BF;
-        Wed, 22 Feb 2023 06:59:50 -0800 (PST)
-Received: by mail-wr1-x42f.google.com with SMTP id j2so7856221wrh.9;
-        Wed, 22 Feb 2023 06:59:50 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=user-agent:content-disposition:mime-version:message-id:subject:to
-         :from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=F2uUDqCey0ejVZ2OTJ3TUOX7iol+94MW1jyw6ifdRDs=;
-        b=FfifdVsUKna7DkVVqyOJ/L6GuEc5u8sbzd7oKmxHw+rLsrLJIcgkQu4eJ2Pe4DagBr
-         MEP+/jXFUkzm0r/cf81Wiq4LajzXn/CzPtLc7wAsJdT61ovwv3keSAEve4pDQ+f8yyjr
-         3PUnC6ELE7fa44K1WfsY5jZFePR8oro++3FDNiAixxtkgXSEJDUcOuWvKyKSGleoyeF0
-         zy0jbgDsj2Mq9QWNhgwLiMsHE8A0NtQ2wkt4lawIf+0S+SRR7M8Y6r8d8/8SHMHIcXMI
-         tPqj840WGod8dRNK78J23zx+BpSVB8YQbUITqSdegfMkze2NEGVU4zKJHZ6PlKWGdAzC
-         XYnw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=user-agent:content-disposition:mime-version:message-id:subject:to
-         :from:date:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=F2uUDqCey0ejVZ2OTJ3TUOX7iol+94MW1jyw6ifdRDs=;
-        b=iLOCKlXHw3TadPYXjlIgy3DugSPVCIOK4fA0/Gjaj+jBXyKQHyAAHxknB00S73WQqC
-         BIcROsWV+6hHggUuHnHyih8jx8aT/ReBfWMq/VMFQMo5gjQFJTeiAF+iW+VDJoOCRMVl
-         ikYnDkEWtrbWhGtohtUYfF1dFaldfoNzh9KgUwK/6OrmixH5SvKWu8JnQFhPsdCgExVW
-         7J7D/3+XsEdhPcMNFUziQAx9pp6h9AkEX/S55NWiYdPjrPIK06Id4FvDdXLZykEDHxZb
-         FcAaAF+J6GDQYzd5AHXMpT8jBroKkfit35zZhWAohwt5qgQ+dZ6kD2F/qSddymhjv6qJ
-         a39Q==
-X-Gm-Message-State: AO0yUKWv9o0kROJHePb83d+U3allLKcVkCpD+cKHMz89XvhKSOIT7p2S
-        2ZXWunt6NsCLbL535rJHCBo=
-X-Google-Smtp-Source: AK7set8X9S6SJvYAW0NF4Qt+SNHjb72WPlHcJGnuYHzukm0d7r6/w6+E/QrZBJgWpa8fjQOEnaI4jg==
-X-Received: by 2002:a5d:4308:0:b0:2c5:54a7:363f with SMTP id h8-20020a5d4308000000b002c554a7363fmr8384629wrq.63.1677077989260;
-        Wed, 22 Feb 2023 06:59:49 -0800 (PST)
-Received: from debian ([89.238.191.199])
-        by smtp.gmail.com with ESMTPSA id y16-20020a056000109000b002c596e4b3dasm7849154wrw.55.2023.02.22.06.59.38
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 22 Feb 2023 06:59:48 -0800 (PST)
-Date:   Wed, 22 Feb 2023 15:59:25 +0100
-From:   Richard Gobert <richardbgobert@gmail.com>
-To:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, dsahern@kernel.org, richardbgobert@gmail.com,
-        alexanderduyck@fb.com, lixiaoyan@google.com,
-        steffen.klassert@secunet.com, lucien.xin@gmail.com,
-        ye.xingchen@zte.com.cn, iwienand@redhat.com, leon@kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v2 0/2] gro: optimise redundant parsing of packets
-Message-ID: <20230222145917.GA12590@debian>
+        Wed, 22 Feb 2023 10:00:29 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 440FC38B74
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Feb 2023 07:00:23 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C9BD36149A
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Feb 2023 15:00:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 2CCC4C4339C;
+        Wed, 22 Feb 2023 15:00:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1677078022;
+        bh=0/hM32z/5MnMiEUWQJhkGpZLjabYOUrD9dJBCTHVHTM=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=uAwRy1qAVcfjITCYBE8umJfNQ1GRMlMscOEacIzUO+BxNjAOViiEc9dI9BitV0oTh
+         I2bY9m6QpIQQbdHYEvStxGO5Drxs7NWEUUVu0ZgnPWzA9loTZGMxm6Che9Pvnm71gP
+         nEUPg9RG+9G14/Q4O9+WLv9OuB4eZW+DR3LH57yWPfnoWpfqJhILmNWgBjsyZqX2Dt
+         oJrgyYr4DljW3XOC40C6Gl3sKIkTU0Zz7a3Z3YgbWtptGLQg05vEIcg3YzEqWEnDyE
+         JNpke7HdKD+PWRtN17kv1QhYlCzvYUD/3srnnsBYsuqdCee8pfGUtkMNw9X69bP74C
+         gAzfD4oSHc+aA==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id F261CC43157;
+        Wed, 22 Feb 2023 15:00:21 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH -next V3 0/2] riscv: jump_label: Fixup & Optimization
+From:   patchwork-bot+linux-riscv@kernel.org
+Message-Id: <167707802198.24438.1425894131434754650.git-patchwork-notify@kernel.org>
+Date:   Wed, 22 Feb 2023 15:00:21 +0000
+References: <20230126170607.1489141-1-guoren@kernel.org>
+In-Reply-To: <20230126170607.1489141-1-guoren@kernel.org>
+To:     Guo Ren <guoren@kernel.org>
+Cc:     linux-riscv@lists.infradead.org, palmer@dabbelt.com,
+        paul.walmsley@sifive.com, mhiramat@kernel.org,
+        conor.dooley@microchip.com, penberg@kernel.org,
+        mark.rutland@arm.com, jrtc27@jrtc27.com, andy.chiu@sifive.com,
+        zong.li@sifive.com, linux-kernel@vger.kernel.org,
+        guoren@linux.alibaba.com
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Currently the IPv6 extension headers are parsed twice: first in
-ipv6_gro_receive, and then again in ipv6_gro_complete.
+Hello:
 
-By using the new ->transport_proto field, and also storing the size of the
-network header, we can avoid parsing extension headers a second time in
-ipv6_gro_complete.
+This series was applied to riscv/linux.git (for-next)
+by Palmer Dabbelt <palmer@rivosinc.com>:
 
-The first commit frees up space in the GRO CB. The second commit reduces the
-redundant parsing during the complete phase, using the freed CB space.
+On Thu, 26 Jan 2023 12:06:05 -0500 you wrote:
+> From: Guo Ren <guoren@linux.alibaba.com>
+> 
+> Patch 1 is the fixup patch should be merged into stable-tree.
+> Patch 2 is a continuous optimization for jump_label patch_text
+> atomicity.
+> 
+> Changes in V3:
+>  - Correct the typo C.JAL -> C.J (Thx Jessica)
+>  - Fixup compile error when CONFIG_RISCV_ISA_C=n
+>  - Rebase on riscv for-next (20230127)
+> 
+> [...]
 
-In addition, the second commit contains a fix for a potential problem in BIG
-TCP, which is detailed in the commit message itself.
+Here is the summary with links:
+  - [-next,V3,1/2] riscv: jump_label: Fixup unaligned arch_static_branch function
+    https://git.kernel.org/riscv/c/9ddfc3cd8060
+  - [-next,V3,2/2] riscv: jump_label: Optimize the code size with compressed instruction
+    (no matching commit)
 
-Performance tests for TCP stream over IPv6 with extension headers demonstrate rx
-improvement of ~0.7%.
-
-For the benchmarks, I used 100Gbit NIC mlx5 single-core (power management off),
-turboboost off.
-
-Typical IPv6 traffic (zero extension headers):
-
-    for i in {1..5}; do netperf -t TCP_STREAM -H 2001:db8:2:2::2 -l 90 | tail -1; done
-    # before
-    131072  16384  16384    90.00    16391.20
-    131072  16384  16384    90.00    16403.50
-    131072  16384  16384    90.00    16403.30
-    131072  16384  16384    90.00    16397.84
-    131072  16384  16384    90.00    16398.00
-
-    # after
-    131072  16384  16384    90.00    16399.85
-    131072  16384  16384    90.00    16392.37
-    131072  16384  16384    90.00    16403.06
-    131072  16384  16384    90.00    16406.97
-    131072  16384  16384    90.00    16406.09
-
-IPv6 over IPv6 traffic:
-
-    for i in {1..5}; do netperf -t TCP_STREAM -H 4001:db8:2:2::2 -l 90 | tail -1; done
-    # before
-    131072  16384  16384    90.00    14791.61
-    131072  16384  16384    90.00    14791.66
-    131072  16384  16384    90.00    14783.47
-    131072  16384  16384    90.00    14810.17
-    131072  16384  16384    90.00    14806.15
-
-    # after
-    131072  16384  16384    90.00    14793.49
-    131072  16384  16384    90.00    14816.10
-    131072  16384  16384    90.00    14818.41
-    131072  16384  16384    90.00    14780.35
-    131072  16384  16384    90.00    14800.48
-
-IPv6 traffic with varying extension headers:
-
-    for i in {1..5}; do netperf -t TCP_STREAM -H 2001:db8:2:2::2 -l 90 | tail -1; done
-    # before
-    131072  16384  16384    90.00    14812.37
-    131072  16384  16384    90.00    14813.04
-    131072  16384  16384    90.00    14802.54
-    131072  16384  16384    90.00    14804.06
-    131072  16384  16384    90.00    14819.08
-
-    # after
-    131072  16384  16384    90.00    14927.11
-    131072  16384  16384    90.00    14910.45
-    131072  16384  16384    90.00    14917.36
-    131072  16384  16384    90.00    14916.53
-    131072  16384  16384    90.00    14928.88
-
-
-Richard Gobert (2):
-  gro: decrease size of CB
-  gro: optimise redundant parsing of packets
-
- include/net/gro.h      | 33 ++++++++++++++++++++++++---------
- net/core/gro.c         | 18 +++++++++++-------
- net/ethernet/eth.c     | 14 +++++++++++---
- net/ipv6/ip6_offload.c | 20 +++++++++++++++-----
- 4 files changed, 61 insertions(+), 24 deletions(-)
-
+You are awesome, thank you!
 -- 
-2.36.1
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
 
