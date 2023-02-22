@@ -2,86 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8BCB069FDA4
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Feb 2023 22:20:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5EEAF69FDA7
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Feb 2023 22:20:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232788AbjBVVUY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Feb 2023 16:20:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54254 "EHLO
+        id S232831AbjBVVUg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Feb 2023 16:20:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54586 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231984AbjBVVUW (ORCPT
+        with ESMTP id S232565AbjBVVUd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Feb 2023 16:20:22 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A84130EB9;
-        Wed, 22 Feb 2023 13:20:21 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 81D5ACE1EF2;
-        Wed, 22 Feb 2023 21:20:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id AE269C4339B;
-        Wed, 22 Feb 2023 21:20:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1677100817;
-        bh=VdBqIJRMLIk4EW2pSklQwLkjQJu/N6EZyOkdQDA0yzo=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=ZvyRe/TrpVPGEIvgK8WDEqhxitBTaeA3ZnFAse0yYacGalHqvlViutBuRnekH/lps
-         NeVZ3MByMJoC8evT8bylP/wKRfVhfnOMOek3XHmly56HBMdMjqjq2cs/4z+kQ3Vvj2
-         Ef6FtxgabaTTA80gvK3k/WyT8PUi0tFCebIgeQ0rNmImra0MfI6R6s03HnKCzNqD3I
-         rhlDXiwNgTB5m10mmvC7ZPJdjRJQdMM6SvpChx7DpeFOM97PgcEukDUTG+kzpVgqNI
-         IWyhs/orKYnJpNuaIXOFuinIZtGQJ9vzM1uZobLspP1PitJHhl6ZuTBkSJHr1/6KyT
-         YO0s9U4SUdRZg==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 8B210C395DF;
-        Wed, 22 Feb 2023 21:20:17 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        Wed, 22 Feb 2023 16:20:33 -0500
+Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59B1238EB0;
+        Wed, 22 Feb 2023 13:20:32 -0800 (PST)
+Received: by mail-ed1-x534.google.com with SMTP id da10so37156049edb.3;
+        Wed, 22 Feb 2023 13:20:32 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=JMMSmHe912RQvblGevXKqRKvjih/+Kh5utuEpNYnIfI=;
+        b=UyKkA8eOPcONc5JBguvchZ0OkPdUJAoPjZFLYswcWnAOwnH48WHE1vmiHhTiAJFS3P
+         CsJJNmEfsmtU5jHhJiosasHRnj2xDIb842L3g005sOpR9686i5WBqsTyBTdL+dsRF6Yw
+         QxvcnTgRo9pUftPBBW+Yngq880V27WRMTk4auC0+t/FIH/eSLZloQ7pCNchAsvLXJ9Rm
+         h1FY1dJza9xMT7C7fs2QkzvCzIODLGrFlBOh3xWlNNDvskzgSwYATI58+TVT3zUpQkyc
+         zvjgjebTS+B82wrVr0Bxp4QihojtF85BUYZvJJwIrxqVX71rR4VijDKX+P0Ssjl5/9yi
+         uSlQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=JMMSmHe912RQvblGevXKqRKvjih/+Kh5utuEpNYnIfI=;
+        b=JE13gwBJjJZsPKpI1nSe0VDyBqeSZONRkXq/qCV6iwEKUrr8UEPWXG09ONdLyehIIY
+         liAU+iRSyEKemtiyxOh3ELcfpzTASU5wZb6mRLOqoAFgpuUGf20sdrbPf9YUM18qr1xb
+         6ClRy0NRiqnra0K29UeYcX4Au39jnJ/hmcTgKdN/bdU65LE9/be5aodOCEhG+ElJcQf8
+         AFHxakRF2rMH1Y3BuVLwbpIbf7Mt1eTaBEVdjGscRqowN3j1/HZH+fWgeMFyKzTo8j/N
+         et6obRxknvKMm76hRXX8pnHWRwlys6gnPKzS/93wHaMBkAyTo5AlqcYX+8X9tjAakCnd
+         ijJQ==
+X-Gm-Message-State: AO0yUKU3/TacOwCXXFf61bZwIqIQQrWd3GGNy8lgJH6jeShVpIWh7AGV
+        N4tEV8R8TxJeEWVgq0ECRCURF4nUOWe4UfitzvY=
+X-Google-Smtp-Source: AK7set9OJHeC5ZH4wSlR5PXYLazKqODY9vCXdldP+gxc+StIlnZQAnXHlOYMSClz8ZxJMgP2Mt7lkBXrMLRC4B2cKM8=
+X-Received: by 2002:a17:906:5e42:b0:877:747d:4a85 with SMTP id
+ b2-20020a1709065e4200b00877747d4a85mr8679376eju.3.1677100830688; Wed, 22 Feb
+ 2023 13:20:30 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH bpf-next v3] riscv, bpf: Add kfunc support for RV64
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <167710081756.15608.10141066511588092218.git-patchwork-notify@kernel.org>
-Date:   Wed, 22 Feb 2023 21:20:17 +0000
-References: <20230221140656.3480496-1-pulehui@huaweicloud.com>
-In-Reply-To: <20230221140656.3480496-1-pulehui@huaweicloud.com>
-To:     Pu Lehui <pulehui@huaweicloud.com>
-Cc:     bpf@vger.kernel.org, linux-riscv@lists.infradead.org,
-        linux-kernel@vger.kernel.org, bjorn@kernel.org, ast@kernel.org,
-        daniel@iogearbox.net, andrii@kernel.org, martin.lau@linux.dev,
-        song@kernel.org, yhs@fb.com, john.fastabend@gmail.com,
-        kpsingh@kernel.org, sdf@google.com, haoluo@google.com,
-        jolsa@kernel.org, pulehui@huawei.com
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <Y/VA+jP0mB5cMZEz@slm.duckdns.org>
+In-Reply-To: <Y/VA+jP0mB5cMZEz@slm.duckdns.org>
+From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date:   Wed, 22 Feb 2023 13:20:19 -0800
+Message-ID: <CAADnVQL0Zf3Dq=6wCMmj+R9bz1B1J4b=mUkvkObKfPQprUjyag@mail.gmail.com>
+Subject: Re: [PATCH bpf-next] bpf: Add bpf_cgroup_from_id() kfunc
+To:     Tejun Heo <tj@kernel.org>
+Cc:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        bpf <bpf@vger.kernel.org>,
+        Dave Marchevsky <davemarchevsky@meta.com>,
+        David Vernet <void@manifault.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Kernel Team <kernel-team@meta.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
+On Tue, Feb 21, 2023 at 2:09 PM Tejun Heo <tj@kernel.org> wrote:
+>
+> cgroup ID is an userspace-visible 64bit value uniquely identifying a given
+> cgroup. As the IDs are used widely, it's useful to be able to look up the
+> matching cgroups. Add bpf_cgroup_from_id().
+>
+> Signed-off-by: Tejun Heo <tj@kernel.org>
+> ---
+>  Documentation/bpf/kfuncs.rst                  | 10 +++--
+>  kernel/bpf/helpers.c                          | 18 ++++++++
+>  .../selftests/bpf/prog_tests/cgrp_kfunc.c     |  1 +
+>  .../selftests/bpf/progs/cgrp_kfunc_common.h   |  1 +
+>  .../selftests/bpf/progs/cgrp_kfunc_success.c  | 42 +++++++++++++++++++
+>  5 files changed, 69 insertions(+), 3 deletions(-)
 
-This patch was applied to bpf/bpf-next.git (master)
-by Alexei Starovoitov <ast@kernel.org>:
-
-On Tue, 21 Feb 2023 22:06:56 +0800 you wrote:
-> From: Pu Lehui <pulehui@huawei.com>
-> 
-> This patch adds kernel function call support for RV64. Since the offset
-> from RV64 kernel and module functions to bpf programs is almost within
-> the range of s32, the current infrastructure of RV64 is already
-> sufficient for kfunc, so let's turn it on.
-> 
-> [...]
-
-Here is the summary with links:
-  - [bpf-next,v3] riscv, bpf: Add kfunc support for RV64
-    https://git.kernel.org/bpf/bpf-next/c/d40c3847b485
-
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+Looks great, but could you please split it into two patches:
+One for helpers.c and kfuncs.rst and another for selftests
+with [PATCH bpf-next] selftests/bpf: subject ?
+Doesn't matter much in this case, but it might ease backporting
+and easier to track patches grouped by subj.
