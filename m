@@ -2,132 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BA05D69FBFB
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Feb 2023 20:22:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C9B9569FBFE
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Feb 2023 20:23:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232331AbjBVTWc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Feb 2023 14:22:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53220 "EHLO
+        id S232461AbjBVTXQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Feb 2023 14:23:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54090 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229907AbjBVTWb (ORCPT
+        with ESMTP id S229907AbjBVTXO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Feb 2023 14:22:31 -0500
-Received: from mail-qv1-xf2a.google.com (mail-qv1-xf2a.google.com [IPv6:2607:f8b0:4864:20::f2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D8F53C7B8
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Feb 2023 11:22:29 -0800 (PST)
-Received: by mail-qv1-xf2a.google.com with SMTP id ks17so9455397qvb.6
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Feb 2023 11:22:29 -0800 (PST)
+        Wed, 22 Feb 2023 14:23:14 -0500
+Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E53069EE1;
+        Wed, 22 Feb 2023 11:23:13 -0800 (PST)
+Received: by mail-pj1-x102f.google.com with SMTP id d1-20020a17090a3b0100b00229ca6a4636so10240593pjc.0;
+        Wed, 22 Feb 2023 11:23:13 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cmpxchg-org.20210112.gappssmtp.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=NJWYEAAsYNz+CjPq0GlL9zUnfQnB8A7P/QP84KCSNwY=;
-        b=sqJ32RifrlWeoIMvFm2CCDN5Ubwhfnij9NOlKQtXmSuwFgR4ek1qWC6VC0HpIBzPiW
-         9QhLxHISdA9CtLJ3vBwIevz760Xv1kRjTI5fDVeMgFI9y+LUfp0QmJZfS80SFpsjAgdM
-         yYQreO2aksWfZFS2Y2hWoK4NBRD36gK1FNuF6kiRaxh4qBQkwtG4V0UQrczA8rlcx7N1
-         9BvJyalK7yYljMBU2U0MVgqEbEaMycTtcBujW4J93VqPHHIk2USVPWTQJanvJ8DmcA8i
-         Hj1Ej4vNAXwTuRmAhidvbOHLK10U18MQfMJ9q3wPF1zm9hnz6GT/7IaqINKvg34kHYIp
-         hIpA==
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=/+MihbsfqNGbC8V1xZOT+sAmGSmrwYI74wB0NYPcrY4=;
+        b=fgYbRBRouct5e35X/XBZCKpGh+JCXlFLESgc2L0lObjuiPt48EkY+XTx8CEeZYGplk
+         jPqiT77bsTikevGF8OG6yDpc5gghp6FrKp5tL3k+fA8aqqluCdTEyGSBCUVudJorCzcL
+         CA/YjM0LPdaRA/sn1aFPEMYAW35RG1RXOJeQdAbu2R4kSXy9DwC5Rxv0xNycLmMB0jB/
+         uz8dqanVZJ0Fd6FdlLbKlraLYGaW0HP1CWqIKn0nmiWzOklEJpMMWxlZnhkOkJy+PsR6
+         14C5nf+RqD0XKBkY4qv9QPY/jpTRqGDlW2mbUKD0OG3ByJoVNB+MrEG37blWg36kCu3q
+         9kUg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=NJWYEAAsYNz+CjPq0GlL9zUnfQnB8A7P/QP84KCSNwY=;
-        b=6J5k+Uzu150SI38zOyHRjG4R67wTcFjU28opi2lxf5j8umAKiLo2e2rjGW9gdkAxCj
-         +tFBmS44b9PRszD9IsdJtZXkqrTJ0LH5NEBLv75eC3eLlgizHYqJY9FpfSAlNXpTGLnm
-         UhWALzqJcDPH/RT672+qoQOcXNVIUv4HBaNwVZRPmgB06g6Svcw5XGTAmb9YBzhBdBHF
-         gTyunS96iCJ1lNZawcE81EC6GcPTBc7NdGPoSAyvEY/djK7RdoCTFyRLIVl6HBQCvkX9
-         9vFrqYcpScAvQltB75O9pNGWeTg/IqSsjgDjZH4HhSgmw6bIfg7VkXp9W4clRio1A/nE
-         lsAw==
-X-Gm-Message-State: AO0yUKXcbJUQl8VZjWDprjrZG20ZUvqaxCqpopraHi7kgeEl91fdP4HH
-        Y5ntVlTMxyrwNADT4WuyMTdRFQ==
-X-Google-Smtp-Source: AK7set9cYkEvkHFxOBz6FdfILUmIQjk+AAn5rEGd6MznXpR1z8qxvIBtI3T8ya5Tdlkd9UzITmOdVQ==
-X-Received: by 2002:a05:6214:4118:b0:56f:52ba:ccea with SMTP id kc24-20020a056214411800b0056f52bacceamr17150614qvb.20.1677093748368;
-        Wed, 22 Feb 2023 11:22:28 -0800 (PST)
-Received: from localhost ([2620:10d:c091:480::1:5e17])
-        by smtp.gmail.com with ESMTPSA id 11-20020a37060b000000b00741921f3f60sm3748694qkg.42.2023.02.22.11.22.27
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 22 Feb 2023 11:22:28 -0800 (PST)
-Date:   Wed, 22 Feb 2023 14:22:27 -0500
-From:   Johannes Weiner <hannes@cmpxchg.org>
-To:     Peter Xu <peterx@redhat.com>
-Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Yang Shi <shy828301@gmail.com>,
-        David Stevens <stevensd@chromium.org>, stable@vger.kernel.org
-Subject: Re: [PATCH] mm/khugepaged: alloc_charge_hpage() take care of mem
- charge errors
-Message-ID: <Y/Zrc5QSKQWnu9WU@cmpxchg.org>
-References: <20230221214344.609226-1-peterx@redhat.com>
- <Y/ZLjF9Xe1F6Mu76@cmpxchg.org>
- <Y/ZTHEACqwYUYGFP@x1n>
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=/+MihbsfqNGbC8V1xZOT+sAmGSmrwYI74wB0NYPcrY4=;
+        b=TGB9xoKiQosWUYLx3WTaqQPo748cdU1rWHUPqRisgXbA/e1k6SB508FxrGC54UIte7
+         JmdXXjAVeO9GgvGkKLnS6vKkRSzVvksmJwPjRQeFG4yhU17qSzGav/+8bOUBp3Pn/hkq
+         qyLbYQx/oQoLRCt5DvMPWz71PbtshtsOIZkVHpic7R5XnVYjM+zWiBCFm02bKSHDHL3V
+         O4zT7oV1iPZEj0PsvMOi84JkLfGf/AulvaJ3hGUdmGlgXYDOmUYi/9I1ALenGukOGLO3
+         urpTyoz8Wo+DA3LXkZ+kNj/qNZpnqX+mJ1KX9MEmTCpeOK/0tTPjarza+y3LG7QlI6et
+         yjrw==
+X-Gm-Message-State: AO0yUKVmHhHWhLLIokYMvfqNOm6XtsKL2+tNG/WYGpNCI3dzE5Wig2Il
+        FWnqYyJOLyEwWksEIlteRl4=
+X-Google-Smtp-Source: AK7set/0gigFPfWa6WnvSP0ECmk5QxKjVdXFrdckGdG+TDf0jf0PALdCxm+gyHLawinpwHxOF+3Oyw==
+X-Received: by 2002:a17:90b:164f:b0:234:6df2:3b4e with SMTP id il15-20020a17090b164f00b002346df23b4emr10335522pjb.6.1677093793145;
+        Wed, 22 Feb 2023 11:23:13 -0800 (PST)
+Received: from [10.67.48.245] ([192.19.223.252])
+        by smtp.googlemail.com with ESMTPSA id i6-20020a17090a138600b0022be36be19asm4875234pja.53.2023.02.22.11.23.08
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 22 Feb 2023 11:23:12 -0800 (PST)
+Message-ID: <57d37b74-a295-373c-16d4-644c4fa14e86@gmail.com>
+Date:   Wed, 22 Feb 2023 11:23:06 -0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y/ZTHEACqwYUYGFP@x1n>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH v2 03/16] thermal: Remove debug or error messages in
+ get_temp() ops
+Content-Language: en-US
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>, rafael@kernel.org
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Markus Mayer <mmayer@broadcom.com>,
+        Broadcom internal kernel review list 
+        <bcm-kernel-feedback-list@broadcom.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Heiko Stuebner <heiko@sntech.de>,
+        "moderated list:BROADCOM BCM7XXX ARM ARCHITECTURE" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "open list:ARM/Rockchip SoC support" 
+        <linux-rockchip@lists.infradead.org>
+References: <20230221180710.2781027-1-daniel.lezcano@linaro.org>
+ <20230221180710.2781027-4-daniel.lezcano@linaro.org>
+From:   Florian Fainelli <f.fainelli@gmail.com>
+In-Reply-To: <20230221180710.2781027-4-daniel.lezcano@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Feb 22, 2023 at 12:38:36PM -0500, Peter Xu wrote:
-> On Wed, Feb 22, 2023 at 12:06:20PM -0500, Johannes Weiner wrote:
-> > Hello,
-> > 
-> > On Tue, Feb 21, 2023 at 04:43:44PM -0500, Peter Xu wrote:
-> > > If memory charge failed, the caller shouldn't call mem_cgroup_uncharge().
-> > > Let alloc_charge_hpage() handle the error itself and clear hpage properly
-> > > if mem charge fails.
-> > 
-> > I'm a bit confused by this patch.
-> > 
-> > There isn't anything wrong with calling mem_cgroup_uncharge() on an
-> > uncharged page, functionally. It checks and bails out.
+On 2/21/23 10:06, Daniel Lezcano wrote:
+> Some get_temp() ops implementation are showing an error or a debug
+> message if the reading of the sensor fails.
 > 
-> Indeed, I didn't really notice there's zero side effect of calling that,
-> sorry.  In that case both "Fixes" and "Cc: stable" do not apply.
+> The debug message is already displayed from the call site of this
+> ops. So we can remove it.
 > 
-> > 
-> > It's an unnecessary call of course, but since it's an error path it's
-> > also not a cost issue, either.
-> > 
-> > I could see an argument for improving the code, but this is actually
-> > more code, and the caller still has the uncharge-and-put branch anyway
-> > for when the collapse fails later on.
-> > 
-> > So I'm not sure I understand the benefit of this change.
+> On the other side, the error should not be displayed because in
+> production that can raise tons of messages.
 > 
-> Yes, the benefit is having a clear interface for alloc_charge_hpage() with
-> no prone to leaking huge page.
+> Finally, some drivers are showing a debug message with the
+> temperature, this is also accessible through the trace from the core
+> code in the temperature_update() function.
 > 
-> The patch comes from a review for David's other patch here:
+> Another benefit is the dev_* messages are accessing the thermal zone
+> device field from the structure, so we encapsulate even more the code
+> by preventing these accesses.
 > 
-> https://lore.kernel.org/all/Y%2FU9fBxVJdhxiZ1v@x1n/
+> Remove those messages.
+> 
+> Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
+> Reviewed-by: Miquel Raynal <miquel.raynal@bootlin.com> #Armada
 
-Ah, that makes sense. Thanks for the context.
+Acked-by: Florian Fainelli <f.fainelli@gmail.com> #brcmstb_thermal.c
+-- 
+Florian
 
-> From 0595acbd688b60ff7b2821a073c0fe857a4ae0ee Mon Sep 17 00:00:00 2001
-> From: Peter Xu <peterx@redhat.com>
-> Date: Tue, 21 Feb 2023 16:43:44 -0500
-> Subject: [PATCH] mm/khugepaged: alloc_charge_hpage() take care of mem charge
->  errors
-> 
-> If memory charge failed, instead of returning the hpage but with an error,
-> allow the function to cleanup the folio properly, which is normally what a
-> function should do in this case - either return successfully, or return
-> with no side effect of partial runs with an indicated error.
-> 
-> This will also avoid the caller calling mem_cgroup_uncharge() unnecessarily
-> with either anon or shmem path (even if it's safe to do so).
-> 
-> Cc: Johannes Weiner <hannes@cmpxchg.org>
-> Cc: Yang Shi <shy828301@gmail.com>
-> Cc: David Stevens <stevensd@chromium.org>
-> Signed-off-by: Peter Xu <peterx@redhat.com>
-
-Acked-by: Johannes Weiner <hannes@cmpxchg.org>
