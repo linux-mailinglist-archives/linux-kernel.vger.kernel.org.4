@@ -2,272 +2,227 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F88569F7C3
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Feb 2023 16:28:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DC8B669F7C9
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Feb 2023 16:29:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232477AbjBVP2w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Feb 2023 10:28:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47042 "EHLO
+        id S232457AbjBVP34 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Feb 2023 10:29:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48262 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232441AbjBVP2u (ORCPT
+        with ESMTP id S232377AbjBVP3z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Feb 2023 10:28:50 -0500
-Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2064.outbound.protection.outlook.com [40.107.223.64])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58283268E;
-        Wed, 22 Feb 2023 07:28:49 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=H7osOSepGuE/9w9/bBWjI83YsxdOHIjaHjwPTZCqvoC7NXwfmKU+jOd7jQdxq6xcepVLLDFX14vIxSjLF+LxKj/eOO/bHxluyBHMhI4SkOFcVOUQti3kceOcaIdBOWACNKZi1dPZczdMRHIEVbIMdJyExz55pYyEyiEGPhf3egGo4r1Wiz+s3kJkbs/y3Jsby/rpY/29iVWVjCFmkiFoFFnY7FZ1/F5motYVW3dMpco1cLgiBIMOpo+YfuFnJMI2RcsFBvduzGU+a/kgR4dFq3vWZIIe6p6Oh8DYdlgkTSTN7qRNUDMD5xO/wQ2AxgqYdQ/NL9qPB/2oiEO9aiO1ow==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=f1jR+O8b046t7hiN0g/X0WPkUCDPTUm1nK7TmYintbk=;
- b=aaX1fPEF3yr7Wo6cQjxHI2Tx81I1MN+2w8rRcW2/iRMBFzU0QjUS2koWRJgITv11xOxlNeIP1TBHEFdc9kVg1b8wgY9YkBdE4aiAEn4hqup2fp+RCD0mVM0lnKWCMDVCMJcunUpP1vkXdJkmedOabShsQi2k5O5/x8n8Iwj//z/6bVeu7mTa3iJIHNuO6rMw9JjHpIINK8LRk30T2PAvAboIo/8vipqLAxTqTagcyqNzYskWlCA3AMmm/PeWqGjeiOQmr8D47n5M4iGJwpAsto+Rum74xGSS1GZGUcMuIn9z+oV0BWP8wcIInv3Xasyj5PzpcDiyr4GNFNq5uXbJpw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=f1jR+O8b046t7hiN0g/X0WPkUCDPTUm1nK7TmYintbk=;
- b=HQC1zpblxosiSSWMyTQhCoTjltm9KiQS/M0W6CzMTaWupyb9Q6yxJt88ykVddz7ShJ8t9C8e7AJthF3gIhnsiJw8zMi8L4iXXQeov/4LliCNnJwkf/LEuWODUiIXyMCKxThR/S8Ltp25lGIA0MiKch1jpIw8Y1eJB6ZRdLuF0+I=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from BN8PR12MB3587.namprd12.prod.outlook.com (2603:10b6:408:43::13)
- by SA1PR12MB6704.namprd12.prod.outlook.com (2603:10b6:806:254::6) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6111.20; Wed, 22 Feb
- 2023 15:28:46 +0000
-Received: from BN8PR12MB3587.namprd12.prod.outlook.com
- ([fe80::2e4f:4041:28be:ba7a]) by BN8PR12MB3587.namprd12.prod.outlook.com
- ([fe80::2e4f:4041:28be:ba7a%6]) with mapi id 15.20.6134.019; Wed, 22 Feb 2023
- 15:28:46 +0000
-Message-ID: <21f36640-3229-0b46-31a2-a47efc5be934@amd.com>
-Date:   Wed, 22 Feb 2023 16:28:40 +0100
+        Wed, 22 Feb 2023 10:29:55 -0500
+Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C1586A72
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Feb 2023 07:29:53 -0800 (PST)
+Received: by mail-ed1-x532.google.com with SMTP id f13so31406243edz.6
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Feb 2023 07:29:53 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:references:cc:to:from
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=YRpTGuARTRBMn36r7tlXq3qs+CoLxHqb66PgbsuqrJE=;
+        b=aFfhi1Q8liHmCDttqXt4BsRE4pKOyZ0BsLYT1rHW4sAf2cDnZaVnaOcNi9Srhgcri4
+         2weua2b9PjnHvF7A69aGjDs61at2sWlxZmigpK+jmJ4eCpM7a7WEeWr+XpLtekbFlpbZ
+         wRsPek9Mr2Mh4aACdHW4f4dYR9reJpqp5g2cvHoquprU9j2kexlgxVaQLFxX0aPfDcJ/
+         xMs3kLPlD6FGyc3s412vZaYpD2CCj1M4dXX7kW28PTf1/pEVmY66qa0XpVEqfzrfeqbr
+         MM00XJKfXUwonXSrZZNSoc1vDYVIQKUK8Cgw8EeZLsxrZVDuYVUSQ9F6Pdv0lPPvT1Fo
+         EAkQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:references:cc:to:from
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=YRpTGuARTRBMn36r7tlXq3qs+CoLxHqb66PgbsuqrJE=;
+        b=NKkppYZvgTQv/25jpsUe28Ld6g6Cit7LJ9C/i+E6nzf2lSdkJWAGZphDs2nbNgv0AN
+         ETDAxzoX3eY9yUZIswpHOd9e8X8/uRneyWBxZvOhP5+QuZ6lSIMKYPK/svBDfw9OqNmg
+         yK7R6vdfQh0IBSeqrCLnn0ldw7BZQRhQtCybMXez9aL2+b1kJQcVXwrZVISKUal1n73r
+         kTVpQWkppxn+4/eZnmCJEVFGnT1wn93iEO7ic1UlLiyl1gIsdCOaSfbMsQOSWEgAHgMA
+         rjOXdNjIcgQRxtiLeX1U1xUP8OkK9uQTiAjjzwuUv6lGKvD8ltEka8SXoijhdyADVkia
+         Pqdw==
+X-Gm-Message-State: AO0yUKXIar/+W5UtfBH+8PE29JRt6SZL9/rkaS1WRZJBKNTA0jdMPP9r
+        PAnHKkGF3UOymZC6cI4nnsWgYA==
+X-Google-Smtp-Source: AK7set8PzT2qWIgKTOfPggUjC00P2pwJYwx3QVR25wRd+rFFsKXlbkH/ugDvhVjFizuu6pcEOnFeaQ==
+X-Received: by 2002:aa7:c054:0:b0:4ae:f496:f32 with SMTP id k20-20020aa7c054000000b004aef4960f32mr10274813edo.26.1677079791760;
+        Wed, 22 Feb 2023 07:29:51 -0800 (PST)
+Received: from [192.168.0.109] ([82.77.80.204])
+        by smtp.gmail.com with ESMTPSA id c23-20020a50f617000000b004acde0a1ae5sm3650529edn.89.2023.02.22.07.29.50
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 22 Feb 2023 07:29:51 -0800 (PST)
+Message-ID: <68ed0578-f4e9-250d-9742-cbb7815b1d61@linaro.org>
+Date:   Wed, 22 Feb 2023 15:29:49 +0000
+MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.7.1
-Subject: Re: [PATCH v4 01/14] dma-buf/dma-fence: Add deadline awareness
+Subject: Re: [PATCH] ext4: fix another off-by-one fsmap error on 1k block
+ filesystems
 Content-Language: en-US
-To:     Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
-        Rob Clark <robdclark@gmail.com>,
-        dri-devel@lists.freedesktop.org
-Cc:     Rob Clark <robdclark@chromium.org>,
-        Gustavo Padovan <gustavo@padovan.org>,
-        Tvrtko Ursulin <tvrtko.ursulin@intel.com>,
-        =?UTF-8?Q?Michel_D=c3=a4nzer?= <michel@daenzer.net>,
-        open list <linux-kernel@vger.kernel.org>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        "moderated list:DMA BUFFER SHARING FRAMEWORK" 
-        <linaro-mm-sig@lists.linaro.org>,
-        Pekka Paalanen <ppaalanen@gmail.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        freedreno@lists.freedesktop.org,
-        =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
-        "open list:SYNC FILE FRAMEWORK" <linux-media@vger.kernel.org>
-References: <20230218211608.1630586-1-robdclark@gmail.com>
- <20230218211608.1630586-2-robdclark@gmail.com>
- <b65a2fe2-6f68-2116-9599-2940e66d166b@linux.intel.com>
-From:   =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>
-In-Reply-To: <b65a2fe2-6f68-2116-9599-2940e66d166b@linux.intel.com>
+From:   Tudor Ambarus <tudor.ambarus@linaro.org>
+To:     "Darrick J. Wong" <djwong@kernel.org>,
+        Theodore Ts'o <tytso@mit.edu>
+Cc:     Jun Nie <jun.nie@linaro.org>, adilger.kernel@dilger.ca,
+        linux-ext4@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Lee Jones <joneslee@google.com>
+References: <Y+58NPTH7VNGgzdd@magnolia>
+ <5da85766-65c7-107f-e525-2ae75b04750a@linaro.org>
+In-Reply-To: <5da85766-65c7-107f-e525-2ae75b04750a@linaro.org>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: FR0P281CA0093.DEUP281.PROD.OUTLOOK.COM
- (2603:10a6:d10:a9::7) To BN8PR12MB3587.namprd12.prod.outlook.com
- (2603:10b6:408:43::13)
-MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BN8PR12MB3587:EE_|SA1PR12MB6704:EE_
-X-MS-Office365-Filtering-Correlation-Id: 8404402b-733c-4e11-0ef4-08db14e97d45
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: l7pdVerbWbt3UqZoINsZ5ya9PPB45UFk2Ef/6Lu1TMu2xE8g52s+wvlMzq+IWmFfWiYQkolHKcPGESPJxAYrynaoZFYaSgsaWFPk3i47lIw6PxP39O3Bu0HO6ZsOt7uuADXnA6F5WxLM9aZZhaUJE9bEBtT4Qck+0n1vpEiq+ha/W9P/cgdYcHoZP1f7CA49C5PP4ReMuL41uePsYpd7RKD4K1wBkc4IH/Nlzw1Fd8W+GMmkwtlm58WxX2+QI8OrM6JEG1RTTafmdnv2pmVeUdIG1BFE+FluDLzIQeBHrM8ovdEsMu4x7wIjcMBnc1U9Ui6khlZ0p1f6MYhWpbPxo0H4G/4+rDfJyaUwECy1gmI0HFJn9mV8WyXgA88eTNkfeqjshtG0Q0hyD219Zq3MNyyi2s3FaKWqHETa+df9UefEE0u4sC1Mrt2tkVeym2+8zfia9AxMw81We+kg8/Gk6Psq78l8yNz5n9oRq/7zMwEB9MBjA/cE6G+U1vd0YcBUphqOS0Naz1a07ZNmQm6coPzennUZpR5P7gADKG48qsVCWAcABcVZuVO73mpAc1sqHoPf6cG6r8hXKj9wpdfJXHwvH5XBlXB3mYrOsnfWMr5d03tpQyDgkcDawtPJr3dtbRIxOu3is8rbHkdsQyuE6DwtEvL27qgVKU6XEOH0DB8rv2iN547POXBbJxk+HX1LKCaLX2Nr8C1RcUbcJACTLbFA7aLdXxBL0/Yt6lcnzNk=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN8PR12MB3587.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(396003)(39860400002)(366004)(136003)(346002)(376002)(451199018)(6666004)(86362001)(6486002)(83380400001)(5660300002)(8936002)(66574015)(41300700001)(7416002)(316002)(53546011)(110136005)(2906002)(186003)(66946007)(4326008)(6512007)(66556008)(66476007)(54906003)(8676002)(2616005)(478600001)(6506007)(38100700002)(36756003)(31696002)(31686004)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?WUhKR29FelBicWpsbW5kV05HRzdaV3NFdTZFQ2FtS3hOSFRyZHdRc2tURTNw?=
- =?utf-8?B?MHh1NHhRZ1JuUE41SmdVaWpkM1pXVW9IWXI5dzBIMFZLVVRHQ0NXVjJvaWJU?=
- =?utf-8?B?QkdlRGJXY1BIdTd6VjNtNWtjLyswUzJLK1R0RzVhRVNHbFEwS0dBTXcvelJF?=
- =?utf-8?B?RWc3aVh4SXRtM01mWTZSdWhyMlpWVXNUKzY5aTNlTjBBQWxGYXpoeFhRQUh2?=
- =?utf-8?B?ZVplSEErdHJrU0YxeEZmVVc0L1Z3ejJBekVrYzZScldXa1UwclpyM0Jqdm8x?=
- =?utf-8?B?MWNoTktLK2hRUDQyekZma3pxT0ZpakRjUDJ2ditRaTgyR092aVRDV0J3RGhn?=
- =?utf-8?B?SnRPOExucktvS2VUazFTN2k4UEU2a1RUQVVQckRST25NZ3laY1dzSWdVRUEv?=
- =?utf-8?B?SzVzb1RBbCtWblVXbFZlekJuT0hzcitYVUI5QnNZS3NjQ1Y5WXF0azAvVXMy?=
- =?utf-8?B?YWwzZmlEUitMemNqU09CRUFBNDZOUjNaanNXMTFzZEN0R0tCOG90Y3BRWWxw?=
- =?utf-8?B?QnFMSnh4YUJBY3pyM0tUWEtJNmJoSGJQbUhoWXMrREUrWDhSelVaeDZOVlVF?=
- =?utf-8?B?WTB5VXRPOE51bHNNWDZDemQ0SXpCdlFCSURzYmhaN1ZtOWUzRmorbmJqM3N4?=
- =?utf-8?B?QlVxbXdNK2g4N2V5b1c4a2s3eWJjRkJteGh2VnpaUUFDUjNITXhDWW5UcG8w?=
- =?utf-8?B?Y295WTAra1J3QS9vMExDVGVlRmRRbDBkcmpyZGhFSzl3ckZXUFVhTzR0UDYr?=
- =?utf-8?B?WHk3SHRvUEN4RWgvUDIwZDdNZC9SV1dBQVJMdU1TYk13KzhJYmVIUnB0V21j?=
- =?utf-8?B?QVByQ25xK1EvNjRkMTVqaE52NVV4YmFOK2Zpa2RnWFhIZlN4S09yazArY2F3?=
- =?utf-8?B?bWF1cjdtcFl4UmpPQTNUbXlsNVZ6ZU9RYkNScVNhazI2UnVLNmR1Ui9sN1Fp?=
- =?utf-8?B?eE05alVQOXM1NGcrbVVOQ2JjcjBHRW9McXEzUjRnRlJrbThFc1RNT1l1UXc1?=
- =?utf-8?B?KzBJRzE1VnRqZ05SMjFrU0JXeWxnU1h0UEpubXo0S05hSXlnZnBuVW1obWJm?=
- =?utf-8?B?Um5BYUdnelJBY2ZCdkxFL3dmK0xVeTJ1ZDRRUzBXVytKaGp0ekZxVE8wK0ZH?=
- =?utf-8?B?bEQrN0pkTy90N0ZKVmlyZGxRWUxXdUtiWGhlcUs0TllXMzZWUFJvMHVMQVpQ?=
- =?utf-8?B?WFdHQTJsTDJWNUtJUkpheWYrdkZiNERPN1RUYjhYcFRMZWlQaWhEWG81SE05?=
- =?utf-8?B?dDBtdm9LZktyYkNwbkFsTldlbjBUNVFZZzN6elBoNlhCSmYxTXBZNGU4bVMw?=
- =?utf-8?B?dlNRS0NNQVZzaW1zTkVqSFBmZVRJcy9MWGt6ZnlkZkNtYk5DN1I1aFJhQURB?=
- =?utf-8?B?TkJPODhDUGtzREQ5UnpHNjZhOVJLZnJaVUk5VGRORE9PdWxKa1l0VTJOQjla?=
- =?utf-8?B?OU1BMHlxc2szMWg4ZEZ3cXdDQ2p1aGQvQjl6NXFCcEhpaGJEb1ZIT2F2Y29F?=
- =?utf-8?B?TnVMblhKZ2RzcGwzdDMrUlAxdkVMOW9aUmwwLzFxZXBONWZpZG5pQW1QUUJo?=
- =?utf-8?B?cHpxem15dGZrZzZVQ056RCtPM1dJZmZhcVFKMGRxeTl5cEJOWld4Uk16bDRX?=
- =?utf-8?B?T0NxYmZUcWhKRWh3WGV0Mm0zb3YrMU8wek9Gd0xEM3JEVGRHY2RSZFo0WmYv?=
- =?utf-8?B?NkhQampXVnlqaDNldHdLemVXRFkyZG11aWRpWDYvVUtvRHVwZ3VQaHZ6VGFQ?=
- =?utf-8?B?VS8zWnJKZmlOYzl4bGFYWGhjUG9jSHB6R3BQd0tnVk9DQm9HalZFblZIeG1u?=
- =?utf-8?B?cGtoMjlzcWRGNVlZRndYR04wKzR4UDhpUTNOUy9pdUFPcCtuL2Vyb1dEMW1Y?=
- =?utf-8?B?d0lPWDYwUXdwODJub203QlNQZ0pWNzZYOXJ3YXlXTTBXcFZSblNaRWpGeG50?=
- =?utf-8?B?Y2RYbzg4Yzc5b2tvTGE2czJJL0kwN2o3bnBBd1pBUG1sVVRpSHhLTHcxMkJ6?=
- =?utf-8?B?SHlXRFZHMGJQb3hRUlBvcXlxMVBqNVBUZ2Y0T3hnWkJlbUF3alR0dS9vRy9p?=
- =?utf-8?B?c0tralUvTm5hcEpseVgwNHluZVhveTJYOXRuZ2pYYkFzVGtTWk9DSGxMbWxI?=
- =?utf-8?B?R2VRNmw1Y0M2NkdWaUhVbjlDYTAwZm13WGtVMkVYeUZyeWlWd01hV2E1aEZn?=
- =?utf-8?Q?9VeOCzRg3OOeu1UStEhE9zpbpoPjppc4UGLJpkaTUcCW?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 8404402b-733c-4e11-0ef4-08db14e97d45
-X-MS-Exchange-CrossTenant-AuthSource: BN8PR12MB3587.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 22 Feb 2023 15:28:46.7482
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: Nx0BGPbFpmDHghJUC/eY2kVuAhTxC4E0j1Ks/GTB56h6AfsGsOmTFZQrB3gokbzm
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA1PR12MB6704
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
-        autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Am 22.02.23 um 11:23 schrieb Tvrtko Ursulin:
->
-> On 18/02/2023 21:15, Rob Clark wrote:
->> From: Rob Clark <robdclark@chromium.org>
+Hi, Darrick,
+
+On 2/17/23 08:10, Tudor Ambarus wrote:
+> Hi, Darrick,
+> 
+> On 2/16/23 18:55, Darrick J. Wong wrote:
+>> From: Darrick J. Wong <djwong@kernel.org>
 >>
->> Add a way to hint to the fence signaler of an upcoming deadline, such as
->> vblank, which the fence waiter would prefer not to miss.  This is to aid
->> the fence signaler in making power management decisions, like boosting
->> frequency as the deadline approaches and awareness of missing deadlines
->> so that can be factored in to the frequency scaling.
+>> Apparently syzbot figured out that issuing this FSMAP call:
 >>
->> v2: Drop dma_fence::deadline and related logic to filter duplicate
->>      deadlines, to avoid increasing dma_fence size.  The fence-context
->>      implementation will need similar logic to track deadlines of all
->>      the fences on the same timeline.  [ckoenig]
->> v3: Clarify locking wrt. set_deadline callback
+>> struct fsmap_head cmd = {
+>>     .fmh_count    = ...;
+>>     .fmh_keys    = {
+>>         { .fmr_device = /* ext4 dev */, .fmr_physical = 0, },
+>>         { .fmr_device = /* ext4 dev */, .fmr_physical = 0, },
+>>     },
+>> ...
+>> };
+>> ret = ioctl(fd, FS_IOC_GETFSMAP, &cmd);
 >>
->> Signed-off-by: Rob Clark <robdclark@chromium.org>
->> Reviewed-by: Christian König <christian.koenig@amd.com>
+>> Produces this crash if the underlying filesystem is a 1k-block ext4
+>> filesystem:
+>>
+>> kernel BUG at fs/ext4/ext4.h:3331!
+>> invalid opcode: 0000 [#1] PREEMPT SMP
+>> CPU: 3 PID: 3227965 Comm: xfs_io Tainted: G        W  O       
+>> 6.2.0-rc8-achx
+>> Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS 1.15.0-1 
+>> 04/01/2014
+>> RIP: 0010:ext4_mb_load_buddy_gfp+0x47c/0x570 [ext4]
+>> RSP: 0018:ffffc90007c03998 EFLAGS: 00010246
+>> RAX: ffff888004978000 RBX: ffffc90007c03a20 RCX: ffff888041618000
+>> RDX: 0000000000000000 RSI: 00000000000005a4 RDI: ffffffffa0c99b11
+>> RBP: ffff888012330000 R08: ffffffffa0c2b7d0 R09: 0000000000000400
+>> R10: ffffc90007c03950 R11: 0000000000000000 R12: 0000000000000001
+>> R13: 00000000ffffffff R14: 0000000000000c40 R15: ffff88802678c398
+>> FS:  00007fdf2020c880(0000) GS:ffff88807e100000(0000) 
+>> knlGS:0000000000000000
+>> CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+>> CR2: 00007ffd318a5fe8 CR3: 000000007f80f001 CR4: 00000000001706e0
+>> Call Trace:
+>>   <TASK>
+>>   ext4_mballoc_query_range+0x4b/0x210 [ext4 
+>> dfa189daddffe8fecd3cdfd00564e0f265a8ab80]
+>>   ext4_getfsmap_datadev+0x713/0x890 [ext4 
+>> dfa189daddffe8fecd3cdfd00564e0f265a8ab80]
+>>   ext4_getfsmap+0x2b7/0x330 [ext4 
+>> dfa189daddffe8fecd3cdfd00564e0f265a8ab80]
+>>   ext4_ioc_getfsmap+0x153/0x2b0 [ext4 
+>> dfa189daddffe8fecd3cdfd00564e0f265a8ab80]
+>>   __ext4_ioctl+0x2a7/0x17e0 [ext4 
+>> dfa189daddffe8fecd3cdfd00564e0f265a8ab80]
+>>   __x64_sys_ioctl+0x82/0xa0
+>>   do_syscall_64+0x2b/0x80
+>>   entry_SYSCALL_64_after_hwframe+0x46/0xb0
+>> RIP: 0033:0x7fdf20558aff
+>> RSP: 002b:00007ffd318a9e30 EFLAGS: 00000246 ORIG_RAX: 0000000000000010
+>> RAX: ffffffffffffffda RBX: 00000000000200c0 RCX: 00007fdf20558aff
+>> RDX: 00007fdf1feb2010 RSI: 00000000c0c0583b RDI: 0000000000000003
+>> RBP: 00005625c0634be0 R08: 00005625c0634c40 R09: 0000000000000001
+>> R10: 0000000000000000 R11: 0000000000000246 R12: 00007fdf1feb2010
+>> R13: 00005625be70d994 R14: 0000000000000800 R15: 0000000000000000
+>>
+>> For GETFSMAP calls, the caller selects a physical block device by
+>> writing its block number into fsmap_head.fmh_keys[01].fmr_device.
+>> To query mappings for a subrange of the device, the starting byte of the
+>> range is written to fsmap_head.fmh_keys[0].fmr_physical and the last
+>> byte of the range goes in fsmap_head.fmh_keys[1].fmr_physical.
+>>
+>> IOWs, to query what mappings overlap with bytes 3-14 of /dev/sda, you'd
+>> set the inputs as follows:
+>>
+>>     fmh_keys[0] = { .fmr_device = major(8, 0), .fmr_physical = 3},
+>>     fmh_keys[1] = { .fmr_device = major(8, 0), .fmr_physical = 14},
+>>
+>> Which would return you whatever is mapped in the 12 bytes starting at
+>> physical offset 3.
+>>
+>> The crash is due to insufficient range validation of keys[1] in
+>> ext4_getfsmap_datadev.  On 1k-block filesystems, block 0 is not part of
+>> the filesystem, which means that s_first_data_block is nonzero.
+>> ext4_get_group_no_and_offset subtracts this quantity from the blocknr
+>> argument before cracking it into a group number and a block number
+>> within a group.  IOWs, block group 0 spans blocks 1-8192 (1-based)
+>> instead of 0-8191 (0-based) like what happens with larger blocksizes.
+>>
+>> The net result of this encoding is that blocknr < s_first_data_block is
+>> not a valid input to this function.  The end_fsb variable is set from
+>> the keys that are copied from userspace, which means that in the above
+>> example, its value is zero.  That leads to an underflow here:
+>>
+>>     blocknr = blocknr - le32_to_cpu(es->s_first_data_block);
+>>
+>> The division then operates on -1:
+>>
+>>     offset = do_div(blocknr, EXT4_BLOCKS_PER_GROUP(sb)) >>
+>>         EXT4_SB(sb)->s_cluster_bits;
+>>
+>> Leaving an impossibly large group number (2^32-1) in blocknr.
+>> ext4_getfsmap_check_keys checked that keys[0].fmr_physical and
+>> keys[1].fmr_physical are in increasing order, but
+>> ext4_getfsmap_datadev adjusts keys[0].fmr_physical to be at least
+>> s_first_data_block.  This implies that we have to check it again after
+>> the adjustment, which is the piece that I forgot.
+>>
+>> Fixes: 4a4956249dac ("ext4: fix off-by-one fsmap error on 1k block 
+>> filesystems")
+>> Link: 
+>> https://syzkaller.appspot.com/bug?id=79d5768e9bfe362911ac1a5057a36fc6b5c30002
+>> Signed-off-by: Darrick J. Wong <djwong@kernel.org>
 >> ---
->>   drivers/dma-buf/dma-fence.c | 20 ++++++++++++++++++++
->>   include/linux/dma-fence.h   | 20 ++++++++++++++++++++
->>   2 files changed, 40 insertions(+)
+>>   fs/ext4/fsmap.c |    2 ++
+>>   1 file changed, 2 insertions(+)
 >>
->> diff --git a/drivers/dma-buf/dma-fence.c b/drivers/dma-buf/dma-fence.c
->> index 0de0482cd36e..763b32627684 100644
->> --- a/drivers/dma-buf/dma-fence.c
->> +++ b/drivers/dma-buf/dma-fence.c
->> @@ -912,6 +912,26 @@ dma_fence_wait_any_timeout(struct dma_fence 
->> **fences, uint32_t count,
->>   }
->>   EXPORT_SYMBOL(dma_fence_wait_any_timeout);
->>   +
->> +/**
->> + * dma_fence_set_deadline - set desired fence-wait deadline
->> + * @fence:    the fence that is to be waited on
->> + * @deadline: the time by which the waiter hopes for the fence to be
->> + *            signaled
->> + *
->> + * Inform the fence signaler of an upcoming deadline, such as 
->> vblank, by
->> + * which point the waiter would prefer the fence to be signaled by.  
->> This
->> + * is intended to give feedback to the fence signaler to aid in power
->> + * management decisions, such as boosting GPU frequency if a periodic
->> + * vblank deadline is approaching.
->> + */
->> +void dma_fence_set_deadline(struct dma_fence *fence, ktime_t deadline)
->> +{
->> +    if (fence->ops->set_deadline && !dma_fence_is_signaled(fence))
->> +        fence->ops->set_deadline(fence, deadline);
->> +}
->> +EXPORT_SYMBOL(dma_fence_set_deadline);
->> +
->>   /**
->>    * dma_fence_describe - Dump fence describtion into seq_file
->>    * @fence: the 6fence to describe
->> diff --git a/include/linux/dma-fence.h b/include/linux/dma-fence.h
->> index 775cdc0b4f24..d77f6591c453 100644
->> --- a/include/linux/dma-fence.h
->> +++ b/include/linux/dma-fence.h
->> @@ -99,6 +99,7 @@ enum dma_fence_flag_bits {
->>       DMA_FENCE_FLAG_SIGNALED_BIT,
->>       DMA_FENCE_FLAG_TIMESTAMP_BIT,
->>       DMA_FENCE_FLAG_ENABLE_SIGNAL_BIT,
->> +    DMA_FENCE_FLAG_HAS_DEADLINE_BIT,
->
-> Would this bit be better left out from core implementation, given how 
-> the approach is the component which implements dma-fence has to track 
-> the actual deadline and all?
->
-> Also taking a step back - are we all okay with starting to expand the 
-> relatively simple core synchronisation primitive with side channel 
-> data like this? What would be the criteria for what side channel data 
-> would be acceptable? Taking note the thing lives outside drivers/gpu/.
+>> diff --git a/fs/ext4/fsmap.c b/fs/ext4/fsmap.c
+>> index 4493ef0c715e..cdf9bfe10137 100644
+>> --- a/fs/ext4/fsmap.c
+>> +++ b/fs/ext4/fsmap.c
+>> @@ -486,6 +486,8 @@ static int ext4_getfsmap_datadev(struct 
+>> super_block *sb,
+>>           keys[0].fmr_physical = bofs;
+>>       if (keys[1].fmr_physical >= eofs)
+>>           keys[1].fmr_physical = eofs - 1;
+>> +    if (keys[1].fmr_physical < keys[0].fmr_physical)
+>> +        return 0;
+> 
+> This is an indirect implication, we can be more straightforward. Also we
+> should stop the execution when high_key->fmr_physical == bofs. So maybe:
+> 
+> --- a/fs/ext4/fsmap.c
+> +++ b/fs/ext4/fsmap.c
+> @@ -479,6 +479,8 @@ static int ext4_getfsmap_datadev(struct super_block 
+> *sb,
+>          int error = 0;
+> 
+>          bofs = le32_to_cpu(sbi->s_es->s_first_data_block);
+> +       if (keys[1].fmr_physical <= bofs)
+> +               return 0;
+>          eofs = ext4_blocks_count(sbi->s_es);
+>          if (keys[0].fmr_physical >= eofs)
+>                  return 0;
 
-I had similar concerns and it took me a moment as well to understand the 
-background why this is necessary. I essentially don't see much other 
-approach we could do.
+Just wanted to let you know that I sent this patch together with two 
+others at:
+https://lore.kernel.org/linux-ext4/20230222131211.3898066-1-tudor.ambarus@linaro.org/T/
 
-Yes, this is GPU/CRTC specific, but we somehow need a common interface 
-for communicating it between drivers and that's the dma_fence object as 
-far as I can see.
-
-Regards,
-Christian.
-
->
-> Regards,
->
-> Tvrtko
->
->>       DMA_FENCE_FLAG_USER_BITS, /* must always be last member */
->>   };
->>   @@ -257,6 +258,23 @@ struct dma_fence_ops {
->>        */
->>       void (*timeline_value_str)(struct dma_fence *fence,
->>                      char *str, int size);
->> +
->> +    /**
->> +     * @set_deadline:
->> +     *
->> +     * Callback to allow a fence waiter to inform the fence signaler of
->> +     * an upcoming deadline, such as vblank, by which point the waiter
->> +     * would prefer the fence to be signaled by.  This is intended to
->> +     * give feedback to the fence signaler to aid in power management
->> +     * decisions, such as boosting GPU frequency.
->> +     *
->> +     * This is called without &dma_fence.lock held, it can be called
->> +     * multiple times and from any context.  Locking is up to the 
->> callee
->> +     * if it has some state to manage.
->> +     *
->> +     * This callback is optional.
->> +     */
->> +    void (*set_deadline)(struct dma_fence *fence, ktime_t deadline);
->>   };
->>     void dma_fence_init(struct dma_fence *fence, const struct 
->> dma_fence_ops *ops,
->> @@ -583,6 +601,8 @@ static inline signed long dma_fence_wait(struct 
->> dma_fence *fence, bool intr)
->>       return ret < 0 ? ret : 0;
->>   }
->>   +void dma_fence_set_deadline(struct dma_fence *fence, ktime_t 
->> deadline);
->> +
->>   struct dma_fence *dma_fence_get_stub(void);
->>   struct dma_fence *dma_fence_allocate_private_stub(void);
->>   u64 dma_fence_context_alloc(unsigned num);
-
+Cheers,
+ta
