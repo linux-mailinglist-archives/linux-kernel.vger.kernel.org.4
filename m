@@ -2,52 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0492169F9B7
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Feb 2023 18:11:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3D64969F9C6
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Feb 2023 18:16:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232515AbjBVRLV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Feb 2023 12:11:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57388 "EHLO
+        id S232515AbjBVRQi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Feb 2023 12:16:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60090 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229611AbjBVRLU (ORCPT
+        with ESMTP id S229611AbjBVRQh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Feb 2023 12:11:20 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3974A23322;
-        Wed, 22 Feb 2023 09:11:19 -0800 (PST)
+        Wed, 22 Feb 2023 12:16:37 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A64E23CE02
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Feb 2023 09:16:35 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 985BCCE1DF0;
-        Wed, 22 Feb 2023 17:11:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8FC35C433EF;
-        Wed, 22 Feb 2023 17:11:15 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 268D061483
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Feb 2023 17:16:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 994C7C433A4
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Feb 2023 17:16:34 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1677085875;
-        bh=4sGn3LZFddbDjgW7sklcZGxfWyx4lt6W3QkHf/G2mcQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=hlpkfE3LVCZLran1cNtI2bXRPA0GIFK84E06RFIZBIGXkzd64tx+xyLgZoQp0MA8w
-         omFi9+anIRGoqpDY1wrhypPVRnpJw/TR4eBSMYOTX8OJxbwEm3n6dd/Az0i6ADkK/s
-         9r+aLIWd4+FJJ9t83UReRHUb90nf6teGV2ztTNdeWGbIHVKd0AbWG1vmvMb9vKI/3r
-         7QA80wDpiXxTc/iY8VOs/oiz3IcFuAEHKL/XcW1LfZCvuYK2KixFS1PuyqEYlA51vP
-         CLNm7rU2LE7skcig9MBt1GdMJshOOB/i+QI7NWA6mb4L4oclKMiE1fe9R5KrRdI2BT
-         9hzXWoCQPpYDw==
-Date:   Wed, 22 Feb 2023 10:11:13 -0700
-From:   Nathan Chancellor <nathan@kernel.org>
-To:     Masahiro Yamada <masahiroy@kernel.org>
-Cc:     linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Nicolas Schier <nicolas@fjasle.eu>
-Subject: Re: [PATCH] kbuild: rpm-pkg: remove unneeded KERNELRELEASE from
- modules/headers_install
-Message-ID: <Y/ZMsX2gtnUZXlal@dev-arch.thelio-3990X>
-References: <20230222144730.3813421-1-masahiroy@kernel.org>
+        s=k20201202; t=1677086194;
+        bh=hrUmLp1ongRcWuDKKNDJfhcSjmKjfLzniRaBA7/JBIM=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=dTAUjW3QdM923jjVuc5KQqUk0fSYqTdct3QgGPJBN4AjaWf56vO3uGXfTawSJm2x+
+         yAKm3ORhJTDjCaGwk2P1ymtJCl9veswheAQSbaPdcq1mZGDjr6Of1mSlVCvZIX8/WG
+         2eczU3BYuq/2ieREtZQTQoSnHBauCcGw+1F6sSQwdG/cYpSEOJSKEWGLHWcCj7V9AI
+         Ypkq0WO6oUWs0rc0MA8hWdckZrcjz9suNQtypTu13aOCircSXS+eesylCfBZuVBdCk
+         UoKuXQAyvRsFzNkyQjh5NK/kilpQ0H9i3X5VuBYW4BTGtQ88EtEsZasjVlKnwj8bYJ
+         4CzQi5VfFABjg==
+Received: by mail-ed1-f46.google.com with SMTP id cq23so33079895edb.1
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Feb 2023 09:16:34 -0800 (PST)
+X-Gm-Message-State: AO0yUKW6KUnTbwQdBsYo0XNmAsYrlqGgVMMI4aypQ7ZtAAKh0fqm/CVO
+        bXB3FQ5tZRk8iChWNHaxVHU6UO4qH0brE2F9BgUzzQ==
+X-Google-Smtp-Source: AK7set+DybHw6otK+W5B3oVTKwQvIdsHNRWcJRAdtoU/CADQS4+k//kUCc9CsMPbeSD1AFrmu1eoewaXneQ2ql/lPnI=
+X-Received: by 2002:a05:6402:5484:b0:4ad:739c:b38e with SMTP id
+ fg4-20020a056402548400b004ad739cb38emr5459193edb.1.1677086192863; Wed, 22 Feb
+ 2023 09:16:32 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230222144730.3813421-1-masahiroy@kernel.org>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+References: <20230221184908.2349578-1-kpsingh@kernel.org> <Y/YJisQdorH1aAKV@zn.tnic>
+In-Reply-To: <Y/YJisQdorH1aAKV@zn.tnic>
+From:   KP Singh <kpsingh@kernel.org>
+Date:   Wed, 22 Feb 2023 09:16:21 -0800
+X-Gmail-Original-Message-ID: <CACYkzJ4cSA5xFScgS=WTc6tPis-vUCtYkh3LyEr8EkXoDCm-uA@mail.gmail.com>
+Message-ID: <CACYkzJ4cSA5xFScgS=WTc6tPis-vUCtYkh3LyEr8EkXoDCm-uA@mail.gmail.com>
+Subject: Re: [PATCH v2 1/2] x86/speculation: Allow enabling STIBP with legacy IBRS
+To:     Borislav Petkov <bp@alien8.de>
+Cc:     linux-kernel@vger.kernel.org, pjt@google.com, evn@google.com,
+        jpoimboe@kernel.org, tglx@linutronix.de, x86@kernel.org,
+        hpa@zytor.com, peterz@infradead.org,
+        pawan.kumar.gupta@linux.intel.com, kim.phillips@amd.com,
+        alexandre.chartre@oracle.com, daniel.sneddon@linux.intel.com,
+        corbet@lwn.net, bp@suse.de, linyujun809@huawei.com,
+        jmattson@google.com,
+        =?UTF-8?Q?Jos=C3=A9_Oliveira?= <joseloliveira11@gmail.com>,
+        Rodrigo Branco <rodrigo@kernelhacking.com>,
+        Alexandra Sandulescu <aesa@google.com>, stable@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -55,36 +70,176 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Feb 22, 2023 at 11:47:29PM +0900, Masahiro Yamada wrote:
-> There is no need to pass KERNELRELEASE to installation targets.
-> 
-> KERNELRELEASE used for building the kernel is saved in
-> include/config/kernel.release.
-> 
-> Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
+On Wed, Feb 22, 2023 at 4:24 AM Borislav Petkov <bp@alien8.de> wrote:
+>
+> On Tue, Feb 21, 2023 at 07:49:07PM +0100, KP Singh wrote:
+> > Setting the IBRS bit implicitly enables STIBP to protect against
+> > cross-thread branch target injection. With enhanced IBRS, the bit it se=
+t
+> > once and is not cleared again. However, on CPUs with just legacy IBRS,
+> > IBRS bit set on user -> kernel and cleared on kernel -> user (a.k.a
+> > KERNEL_IBRS). Clearing this bit also disables the implicitly enabled
+> > STIBP, thus requiring some form of cross-thread protection in userspace=
+.
+> >
+> > Enable STIBP, either opt-in via prctl or seccomp, or always on dependin=
+g
+> > on the choice of mitigation selected via spectre_v2_user.
+> >
+> > Reported-by: Jos=C3=A9 Oliveira <joseloliveira11@gmail.com>
+> > Reported-by: Rodrigo Branco <rodrigo@kernelhacking.com>
+> > Reviewed-by: Alexandra Sandulescu <aesa@google.com>
+> > Fixes: 7c693f54c873 ("x86/speculation: Add spectre_v2=3Dibrs option to =
+support Kernel IBRS")
+> > Cc: stable@vger.kernel.org
+> > Signed-off-by: KP Singh <kpsingh@kernel.org>
+> > ---
+> >  arch/x86/kernel/cpu/bugs.c | 33 ++++++++++++++++++++++-----------
+> >  1 file changed, 22 insertions(+), 11 deletions(-)
+>
+> Below is what I'd like to see. Holler if something's wrong.
 
-Reviewed-by: Nathan Chancellor <nathan@kernel.org>
+Thanks for iterating. I think your commit description and rewrite
+omits a few key subtleties which I have tried to reinforce in both the
+commit log and the comments.
 
+Q: What does STIBP have to do with IBRS?
+A: Setting the IBRS bit implicitly enables STIBP / some form of cross
+thread protection.
+
+Q: Why does it work with eIBRS?
+A: Because we set the IBRS bit once and leave it set when using eIBRS
+
+I think this subtlety should be reinforced in the commit description
+and code comments so that we don't get it wrong again. Your commit
+does answer this one (thanks!)
+
+Q: Why does it not work with the way the kernel currently implements
+legacy IBRS?
+A: Because the kernel clears the bit on returning to user space.
+
+>
+> It is totally untested ofc.
+>
 > ---
-> 
->  scripts/package/mkspec | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/scripts/package/mkspec b/scripts/package/mkspec
-> index 83a64d9d7372..3c550960dd39 100755
-> --- a/scripts/package/mkspec
-> +++ b/scripts/package/mkspec
-> @@ -99,8 +99,8 @@ $S
->  	%else
->  	cp \$($MAKE -s image_name) %{buildroot}/boot/vmlinuz-$KERNELRELEASE
->  	%endif
-> -$M	$MAKE %{?_smp_mflags} KERNELRELEASE=$KERNELRELEASE INSTALL_MOD_PATH=%{buildroot} modules_install
-> -	$MAKE %{?_smp_mflags} KERNELRELEASE=$KERNELRELEASE INSTALL_HDR_PATH=%{buildroot}/usr headers_install
-> +$M	$MAKE %{?_smp_mflags} INSTALL_MOD_PATH=%{buildroot} modules_install
-> +	$MAKE %{?_smp_mflags} INSTALL_HDR_PATH=%{buildroot}/usr headers_install
->  	cp System.map %{buildroot}/boot/System.map-$KERNELRELEASE
->  	cp .config %{buildroot}/boot/config-$KERNELRELEASE
->  $S$M	rm -f %{buildroot}/lib/modules/$KERNELRELEASE/build
-> -- 
-> 2.34.1
-> 
+> From: KP Singh <kpsingh@kernel.org>
+> Date: Tue, 21 Feb 2023 19:49:07 +0100
+> Subject: [PATCH] x86/speculation: Allow enabling STIBP with legacy IBRS
+> MIME-Version: 1.0
+> Content-Type: text/plain; charset=3DUTF-8
+> Content-Transfer-Encoding: 8bit
+>
+> When plain IBRS is enabled (not enhanced IBRS), the logic in
+> spectre_v2_user_select_mitigation() determines that STIBP is not needed.
+>
+> However, on return to userspace, the IBRS bit is cleared for performance
+> reasons. That leaves userspace threads vulnerable to cross-thread
+> predictions influence against which STIBP protects.
+>
+> Exclude IBRS from the spectre_v2_in_ibrs_mode() check to allow for
+> enabling STIBP through seccomp/prctl().
+>
+>   [ bp: Rewrite commit message and massage. ]
+>
+> Fixes: 7c693f54c873 ("x86/speculation: Add spectre_v2=3Dibrs option to su=
+pport Kernel IBRS")
+> Reported-by: Jos=C3=A9 Oliveira <joseloliveira11@gmail.com>
+> Reported-by: Rodrigo Branco <rodrigo@kernelhacking.com>
+> Signed-off-by: KP Singh <kpsingh@kernel.org>
+> Signed-off-by: Borislav Petkov (AMD) <bp@alien8.de>
+> Cc: stable@vger.kernel.org
+> Link: https://lore.kernel.org/r/20230221184908.2349578-1-kpsingh@kernel.o=
+rg
+> ---
+>  arch/x86/kernel/cpu/bugs.c | 25 ++++++++++++++++++-------
+>  1 file changed, 18 insertions(+), 7 deletions(-)
+>
+> diff --git a/arch/x86/kernel/cpu/bugs.c b/arch/x86/kernel/cpu/bugs.c
+> index cf81848b72f4..9a969ab0e62a 100644
+> --- a/arch/x86/kernel/cpu/bugs.c
+> +++ b/arch/x86/kernel/cpu/bugs.c
+> @@ -1133,14 +1133,18 @@ spectre_v2_parse_user_cmdline(void)
+>         return SPECTRE_V2_USER_CMD_AUTO;
+>  }
+>
+> -static inline bool spectre_v2_in_ibrs_mode(enum spectre_v2_mitigation mo=
+de)
+> +static inline bool spectre_v2_in_eibrs_mode(enum spectre_v2_mitigation m=
+ode)
+>  {
+> -       return mode =3D=3D SPECTRE_V2_IBRS ||
+> -              mode =3D=3D SPECTRE_V2_EIBRS ||
+> +       return mode =3D=3D SPECTRE_V2_EIBRS ||
+>                mode =3D=3D SPECTRE_V2_EIBRS_RETPOLINE ||
+>                mode =3D=3D SPECTRE_V2_EIBRS_LFENCE;
+>  }
+>
+> +static inline bool spectre_v2_in_ibrs_mode(enum spectre_v2_mitigation mo=
+de)
+> +{
+> +       return spectre_v2_in_eibrs_mode(mode) || mode =3D=3D SPECTRE_V2_I=
+BRS;
+> +}
+> +
+>  static void __init
+>  spectre_v2_user_select_mitigation(void)
+>  {
+> @@ -1203,12 +1207,19 @@ spectre_v2_user_select_mitigation(void)
+>         }
+>
+>         /*
+> -        * If no STIBP, IBRS or enhanced IBRS is enabled, or SMT impossib=
+le,
+> -        * STIBP is not required.
+> +        * If no STIBP, enhanced IBRS is enabled, or SMT impossible, STIB=
+P
+> +        * is not required.
+> +        *
+> +        * Enhanced IBRS protects also against user-mode attacks as the I=
+BRS bit
+> +        * remains always set which implicitly enables cross-thread prote=
+ctions.
+> +        * However, in legacy IBRS mode, the IBRS bit is set only on kern=
+el
+> +        * entry and cleared on return to userspace. This disables the im=
+plicit
+> +        * cross-thread protections so allow for STIBP to be selected in =
+that
+> +        * case.
+>          */
+>         if (!boot_cpu_has(X86_FEATURE_STIBP) ||
+>             !smt_possible ||
+> -           spectre_v2_in_ibrs_mode(spectre_v2_enabled))
+> +           spectre_v2_in_eibrs_mode(spectre_v2_enabled))
+>                 return;
+>
+>         /*
+> @@ -2340,7 +2351,7 @@ static ssize_t mmio_stale_data_show_state(char *buf=
+)
+>
+>  static char *stibp_state(void)
+>  {
+> -       if (spectre_v2_in_ibrs_mode(spectre_v2_enabled))
+> +       if (spectre_v2_in_eibrs_mode(spectre_v2_enabled))
+
+The reason why I refactored this into a separate helper was to
+document the subtleties I mentioned above and anchor them to one place
+as the function is used in 2 places. But this is a maintainer's
+choice, so it's your call :)
+
+I do agree with Pawan that it's worth adding a pr_info about what the
+kernel is doing about STIBP.
+
+- KP
+
+>                 return "";
+>
+>         switch (spectre_v2_user_stibp) {
+> --
+> 2.35.1
+>
+> --
+> Regards/Gruss,
+>     Boris.
+>
+> https://people.kernel.org/tglx/notes-about-netiquette
