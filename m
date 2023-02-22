@@ -2,150 +2,156 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4CA1069F924
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Feb 2023 17:39:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 372DD69F928
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Feb 2023 17:39:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231580AbjBVQjI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Feb 2023 11:39:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56818 "EHLO
+        id S232438AbjBVQjv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Feb 2023 11:39:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57968 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232477AbjBVQjF (ORCPT
+        with ESMTP id S231404AbjBVQjt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Feb 2023 11:39:05 -0500
-Received: from mail-pl1-x64a.google.com (mail-pl1-x64a.google.com [IPv6:2607:f8b0:4864:20::64a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A2D12A9A7
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Feb 2023 08:39:03 -0800 (PST)
-Received: by mail-pl1-x64a.google.com with SMTP id e9-20020a170902ed8900b0019ca3beda2dso1840773plj.14
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Feb 2023 08:39:03 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=kXgaJI/j9VqE32P3+P9vI0Zcemav11hNqQd2XHiyolg=;
-        b=jRJGnK4E2fY4GvsbcKBwGR7YXRVirER4oHtjA5fJF3UGZ9q6FZyFyIPiIHaFN2MHfT
-         6zjzuKOn2BOdPV0Ur4SqicZgIZ+ea7STJrTUIH8CB3FmYaVoEZUZa8Ead/Zg44msUt3R
-         Kg6cESWjAcu7ZUjHj9Ua/meVz9donOfSRbDqPWoZp2rHmOfmiTAmovV+STTertImDidB
-         G9zxBCv2SDYFkQlRHHFG8FiaSo+6c85J8FWSKnHhR3yh+yOjvCfLz6J25qWcQsqT06uj
-         bbqP8vYCehEkiVS2Fzk8Wl1oWs3WJPOIbgt7WuzNtIG6BYx+nfBFdLDG3Ec32nqEtYCP
-         vFaQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=kXgaJI/j9VqE32P3+P9vI0Zcemav11hNqQd2XHiyolg=;
-        b=kl2TJqcmAgcy/GKDBoTyF7mAv5biJZwMKkl85BMUb7sqxA8gzY+ZdpJFyAqC4d1oHa
-         4hQy9pu0foxsMF5du5fpAjDA+7wsJ+qM6Tkjdu4WRL9lo92pXoV3OLjweUSZpTmFogHU
-         QVtqdhoKKkALWjOk9wWYZ0+pTyWIKFNzzidJD+nbh/sF2BVzUAhHSj17aI2YiJ+G/ja1
-         J3AQNAoiksqnpY4zMYR2d4bKYiGJMZmGdTTMXOFIMl6STdzJz7rAjlz2lgCoP8FjqSB7
-         j1W8AQA8a2jcZo0c02LGosnTqMZc865LJsJjteOAmRm+0a0k0NVhI/Ulit1w2+4owgLd
-         oyBw==
-X-Gm-Message-State: AO0yUKXXNUhf6RXG5CSght/jwemxsShnxTb+Bq00/shhI5WQ2IvI3DxG
-        VfZRcG+mOELS4YC49LaefbiaJUddPQ8=
-X-Google-Smtp-Source: AK7set/e12i1snm1HK5N9SmoYRSKeJsIAJ000V9OqW6XjpY/L6IYgApozXDHfy8kanx3CGdwtgGVtdF/zvo=
-X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
- (user=seanjc job=sendgmr) by 2002:a63:3750:0:b0:4fb:be1a:2074 with SMTP id
- g16-20020a633750000000b004fbbe1a2074mr1159464pgn.12.1677083942861; Wed, 22
- Feb 2023 08:39:02 -0800 (PST)
-Date:   Wed, 22 Feb 2023 08:39:01 -0800
-In-Reply-To: <20230222064931.ppz6berhfr4edewf@linux.intel.com>
-Mime-Version: 1.0
-References: <20230217231022.816138-1-seanjc@google.com> <20230217231022.816138-9-seanjc@google.com>
- <20230221152349.ulcjtbnvziair7ff@linux.intel.com> <20230221153306.qubx7tfmasnvodeu@linux.intel.com>
- <Y/VYN3n/lHePiDxM@google.com> <20230222064931.ppz6berhfr4edewf@linux.intel.com>
-Message-ID: <Y/ZFJfspU6L2RmQS@google.com>
-Subject: Re: [PATCH 08/12] KVM: nSVM: Use KVM-governed feature framework to
- track "vVM{SAVE,LOAD} enabled"
-From:   Sean Christopherson <seanjc@google.com>
-To:     Yu Zhang <yu.c.zhang@linux.intel.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Maxim Levitsky <mlevitsk@redhat.com>
-Content-Type: text/plain; charset="us-ascii"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        Wed, 22 Feb 2023 11:39:49 -0500
+Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2076.outbound.protection.outlook.com [40.107.220.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A9AC1ABED
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Feb 2023 08:39:48 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Xbh8WEHQsfMB6bV9n+wXMv8MN2GLV3j79kFMyf3PgtzfF+RnhHtDL900q0wgLnkTvujDrs7/H4gZ6+PYE+vDEpnQheV7mjoWMtBZUf0Y+ilh/BlrWYPBZ4UFKHcK01yaxsCzLZPVTttrlXxhJmFvmOYdpl68xAhpmgcQcpQ40EZ95NnihMqN8vIzJzTeKkNRW6cipQN0YBum6i+KKVAZt25XbNkLhHRjP/6CF5g33I9bS6KdLyYJGiyEzSGH4K6jl6it9VIENoIqmvkWhVnr/Uj0DZS/3+P+HyfrbiuCPQRJaVS+CKc/YXAc/saWBFQiqlGYy0NNDKzxiJsOko3D2Q==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=VwEydBToq8Co1unhxLmDNXyQ32zu3cINZ5DdNvCi2qg=;
+ b=XugFA5wihLN0Oxo12a2UwhENwbrPzjQIQxfEIx/sFOFxzuJlGT3rfjL4Esll9wlRMfKmQ/clnR40BkyboiW/ZOLrIKVTWx7j4ntIjO7LZh7MHzy+gNdsXj3SU+eaLXZ+9BXRBt/A/KlkIHOygaJ7gK1ay7w1UvnngYtzs4NdzTXm2Iot40yVMZUDLfwR+oVTV1CJOpl6NtvqPzigNBIn8HzGDB4af9Sznlxbs15CDe3AbjjUV1YpgXoyHypzEyzk9s27/MU66MdAOmDvytKyt5XXovStyGDLqSCe06omCBFOWxNuSKPiooPu0vJwwTxKekAR4nkVrvEeiZmcu7oJZA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=amd.com;
+ dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
+ header.from=amd.com; dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=VwEydBToq8Co1unhxLmDNXyQ32zu3cINZ5DdNvCi2qg=;
+ b=2k4XRz1XHt4XiHNsIM+W+EhSQsNJqfOLh0shFJyWXmIumHioWL4sv/aXRMTBxX+iExxlYIMKjcRaAJI8EJjcc+11nwEgpq3VF1BcbqZSSDSBii9nfhseDfPgIzCzxLTd1JMyh011ZyKdsk09vB1aRpYedYu/krvpeYfuMlSuc58=
+Received: from BN8PR12CA0001.namprd12.prod.outlook.com (2603:10b6:408:60::14)
+ by DS0PR12MB6559.namprd12.prod.outlook.com (2603:10b6:8:d1::6) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6134.19; Wed, 22 Feb 2023 16:39:46 +0000
+Received: from BN8NAM11FT114.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:408:60:cafe::aa) by BN8PR12CA0001.outlook.office365.com
+ (2603:10b6:408:60::14) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6111.21 via Frontend
+ Transport; Wed, 22 Feb 2023 16:39:46 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ BN8NAM11FT114.mail.protection.outlook.com (10.13.177.46) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.6134.20 via Frontend Transport; Wed, 22 Feb 2023 16:39:45 +0000
+Received: from tlendack-t1.amdoffice.net (10.180.168.240) by
+ SATLEXMB04.amd.com (10.181.40.145) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.34; Wed, 22 Feb 2023 10:39:45 -0600
+From:   Tom Lendacky <thomas.lendacky@amd.com>
+To:     <linux-kernel@vger.kernel.org>, <x86@kernel.org>
+CC:     Borislav Petkov <bp@alien8.de>, Peter Gonda <pgonda@google.com>,
+        "Larry Dewey" <larry.dewey@amd.com>
+Subject: [RESEND PATCH] virt/sev-guest: Return -EIO if certificate buffer is not large enough
+Date:   Wed, 22 Feb 2023 10:39:39 -0600
+Message-ID: <2afbcae6daf13f7ad5a4296692e0a0fe1bc1e4ee.1677083979.git.thomas.lendacky@amd.com>
+X-Mailer: git-send-email 2.39.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.180.168.240]
+X-ClientProxiedBy: SATLEXMB04.amd.com (10.181.40.145) To SATLEXMB04.amd.com
+ (10.181.40.145)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BN8NAM11FT114:EE_|DS0PR12MB6559:EE_
+X-MS-Office365-Filtering-Correlation-Id: be801534-93a4-4a5f-e663-08db14f36825
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: ysSorce7bF90CstHYDvcEx2ROat9YkvGepGJ3dwGdl23pQVHDq3Xz7q6iL8HItCHtPhiD/Z7U+v7la2RQ5faIKSlxBwou0JbR9KG1V82Yv47KCi+OUj4jTVTI2QZc4i6KDW4wvKhdbkoHttNX4ZyDjS59H8UAYxxfHKYlVsBlOWOKbP12YySryMI1N5QkICoYRbSdqa0KKSiuoXvm5XkQmBaiiy3llYJ7/ZIZIvhRMIyQaAHhsirzMo7AEftWAzPXYZLLmZhc38T4ORBjd0BxlEqU7XAGrh0YywhApx9qrcMhCWpnTlHS4Pow3bAUZ2/5Q2cGlrNwNgTtwNmTN008OQn5uYCJwoLxwJnbR0GCBCrWDUFATgIOkxVwKLwWYnhm7rA7Arj6ASbtngYMC420qarczUgyo2dGwXAXJLDi6a/iDK6eGgQgfwgDNirScLzkTywzFczEUq+ZKHhFQ4R901doeBfKhoUcvnAknw9pZzwHQ1Bm8ewaaoyI2YEdRmUl+MCjbopdcT7fUovdwYXZ+pmkC0iGCTESHe/nYit5936uFxE+BGgwa/lE0f0lWM0Ig8nkkysPZlMHxD/WqIyQ5XRR9lsVXSff7C4ZfmkUU4DvcteDBkQo1iWCHjd0v60RnB4aN+IDt7KcZm0cv75k/A5yK7uCS9D2SHBp4wQfazs/6w9ny7iN93OMc87kjd+x0Q5ZzJFAur/Yg0Y1swgCzre4HoE/DMYZ5HQUnFeRcs=
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230025)(4636009)(39860400002)(346002)(396003)(136003)(376002)(451199018)(36840700001)(40470700004)(46966006)(356005)(40460700003)(82310400005)(86362001)(40480700001)(36756003)(336012)(316002)(83380400001)(426003)(47076005)(54906003)(478600001)(110136005)(6666004)(16526019)(186003)(26005)(2616005)(2906002)(36860700001)(81166007)(82740400003)(8676002)(8936002)(70586007)(4326008)(41300700001)(5660300002)(70206006)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 22 Feb 2023 16:39:45.9511
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: be801534-93a4-4a5f-e663-08db14f36825
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT114.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS0PR12MB6559
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-+Maxim
+Commit 47894e0fa6a5 ("virt/sev-guest: Prevent IV reuse in the SNP guest
+driver") changed the behavior associated with the return value when the
+caller does not supply a large enough certificate buffer. Prior to the
+commit a return value of -EIO was returned. Now a return value of 0 is
+returned. This breaks the established ABI with the user.
 
-On Wed, Feb 22, 2023, Yu Zhang wrote:
-> On Tue, Feb 21, 2023 at 03:48:07PM -0800, Sean Christopherson wrote:
-> > On Tue, Feb 21, 2023, Yu Zhang wrote:
-> > > > Sorry, why guest_cpuid_is_intel(vcpu)? Is it becasue that a AMD host with virtual
-> > > > VMSAVE/VMLOAD capability will always expose this feature for all AMD guests? 
-> > > 
-> > > Oh, sorry. I missed the guest_cpuid_has() in kvm_governed_feature_check_and_set().
-> > > So please just ignore my 2nd question.
-> > > 
-> > > As to the check of guest_cpuid_is_intel(), is it necessary?
-> > 
-> > Yes?  The comment in init_vmcb_after_set_cpuid() says:
-> > 
-> > 		/*
-> > 		 * We must intercept SYSENTER_EIP and SYSENTER_ESP
-> > 		 * accesses because the processor only stores 32 bits.
-> > 		 * For the same reason we cannot use virtual VMLOAD/VMSAVE.
-> > 		 */
-> > 
-> > but I'm struggling to connect the dots to SYSENTER.  I suspect the comment is
-> > misleading and has nothing to do 32-bit vs. 64-bit (or I'm reading it wrong) and
-> > should be something like:
-> > 
-> > 	/*
-> > 	 * Disable virtual VMLOAD/VMSAVE and intercept VMLOAD/VMSAVE if the
-> > 	 * guest CPU is Intel in order to inject #UD.
-> > 	 */
-> > 
-> > In other words, a non-SVM guest shouldn't be allowed to execute VMLOAD/VMSAVE.
-> 
-> Yes. Such interpretation makes sense. And vmload/vmsave shall be intercepted
-> if guest CPU is Intel and #UD shall be injected. I guess this is done indirectly
-> by judging the EFER_SVME not set in EFER in nested_svm_check_permissions()?
+Change the code to detect the buffer size error and return -EIO.
 
-Nope, my interpretation is wrong.  vmload_vmsave_interception() clears the upper
-bits of SYSENTER_{EIP,ESP}
+Fixes: 47894e0fa6a5 ("virt/sev-guest: Prevent IV reuse in the SNP guest driver")
+Reported-by: Larry Dewey <larry.dewey@amd.com>
+Signed-off-by: Tom Lendacky <thomas.lendacky@amd.com>
+---
+ drivers/virt/coco/sev-guest/sev-guest.c | 20 +++++++++++++++++---
+ 1 file changed, 17 insertions(+), 3 deletions(-)
 
-	if (vmload) {
-		svm_copy_vmloadsave_state(svm->vmcb, vmcb12);
-		svm->sysenter_eip_hi = 0;
-		svm->sysenter_esp_hi = 0;
-	} else {
-		svm_copy_vmloadsave_state(vmcb12, svm->vmcb);
-	}
-
-From commit adc2a23734ac ("KVM: nSVM: improve SYSENTER emulation on AMD"):
-    
-    3. Disable vmload/vmsave virtualization if vendor=GenuineIntel.
-       (It is somewhat insane to set vendor=GenuineIntel and still enable
-       SVM for the guest but well whatever).
-       Then zero the high 32 bit parts when kvm intercepts and emulates vmload.
-
-Presumably AMD hardware loads only the lower 32 bits, which would leave garbage
-in the upper bits and even leak state from L1 to L2 (again ignoring the fact that
-exposing SVM to an Intel vCPU is bonkers).
-
-I'll opportunistically massage the comment to make it more explicit about why
-VMLOAD needs to be intercepted.
+diff --git a/drivers/virt/coco/sev-guest/sev-guest.c b/drivers/virt/coco/sev-guest/sev-guest.c
+index 4ec4174e05a3..7b4e9009f335 100644
+--- a/drivers/virt/coco/sev-guest/sev-guest.c
++++ b/drivers/virt/coco/sev-guest/sev-guest.c
+@@ -377,9 +377,26 @@ static int handle_guest_request(struct snp_guest_dev *snp_dev, u64 exit_code, in
+ 		snp_dev->input.data_npages = certs_npages;
+ 	}
  
-That said, clearing the bits for this seems wrong.  That would corrupt the MSRs
-for 64-bit Intel guests.  The "target" of the fix was 32-bit L2s, i.e. I doubt
-anything would notice.
++	/*
++	 * Increment the message sequence number. There is no harm in doing
++	 * this now because decryption uses the value stored in the response
++	 * structure and any failure will wipe the VMPCK, preventing further
++	 * use anyway.
++	 */
++	snp_inc_msg_seqno(snp_dev);
++
+ 	if (fw_err)
+ 		*fw_err = err;
+ 
++	/*
++	 * If an extended guest request was issued and the supplied certificate
++	 * buffer was not large enough, a standard guest request was issued to
++	 * prevent IV reuse. If the standard request was successful, return -EIO
++	 * back to the caller as would have originally been returned.
++	 */
++	if (!rc && err == SNP_GUEST_REQ_INVALID_LEN)
++		return -EIO;
++
+ 	if (rc) {
+ 		dev_alert(snp_dev->dev,
+ 			  "Detected error from ASP request. rc: %d, fw_err: %llu\n",
+@@ -395,9 +412,6 @@ static int handle_guest_request(struct snp_guest_dev *snp_dev, u64 exit_code, in
+ 		goto disable_vmpck;
+ 	}
+ 
+-	/* Increment to new message sequence after payload decryption was successful. */
+-	snp_inc_msg_seqno(snp_dev);
+-
+ 	return 0;
+ 
+ disable_vmpck:
+-- 
+2.39.1
 
-    This patch fixes nested migration of 32 bit nested guests, that was
-    broken because incorrect cached values of SYSENTER msrs were stored in
-    the migration stream if L1 changed these msrs with
-    vmload prior to L2 entry.
-
-Maxim, would anything actually break if KVM let L1 load 64-bit values for the
-SYSENTER MSRs?
-
-> And as to X86_FEATURE_V_VMSAVE_VMLOAD, should the guest_cpuid_has() return true
-> at all for a Intel guest?
-
-Yes, because guest CPUID is userspace controlled.  Except for emulating architectural
-side effects, e.g. size of XSAVE area, KVM doesn't sanitize guest CPUID.
