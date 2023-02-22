@@ -2,136 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E3BE69FBC7
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Feb 2023 20:11:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AF3E469FBD1
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Feb 2023 20:15:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231660AbjBVTLP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Feb 2023 14:11:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45428 "EHLO
+        id S231897AbjBVTP4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Feb 2023 14:15:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48394 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230402AbjBVTLN (ORCPT
+        with ESMTP id S229561AbjBVTPz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Feb 2023 14:11:13 -0500
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D36B938B59;
-        Wed, 22 Feb 2023 11:11:11 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1677093071; x=1708629071;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=X4wQ+O3eBVoGDjrrVinp2PRl4OgU1Fc491UedwVGnKs=;
-  b=Qo46ycor//CApUGO0xcuccJo0vbrzwW4gvMugdUkZLOCa9uj5s38uQin
-   1++FKtO7b4wrxUJLCYCPHINdh8kVnMwOCTXI5pDLhYIkwoHlwMUzwdnJ2
-   23LWmO3x3m5qfLwFlydGExHD04raySoHIkyxbwSl3QZ1A2NpqwWMh1PD6
-   RhqwGO0DAXEdvz6+JC7E+mP539LqzugJbGPsi/IQcqSJVCypYcFKRk1md
-   qj/c5hwPV137ifBASsGfHHbUDpma5WWyyRD/kBmEgIEpEo9/0l36Gsv5p
-   NI1OG4i/hbxoayVFQXwU2MrjSRCFXXWbPdMs5BksCOPcMRbDNL/f6Djyr
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10629"; a="333022472"
-X-IronPort-AV: E=Sophos;i="5.97,319,1669104000"; 
-   d="scan'208";a="333022472"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Feb 2023 11:11:11 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10629"; a="761058560"
-X-IronPort-AV: E=Sophos;i="5.97,319,1669104000"; 
-   d="scan'208";a="761058560"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by FMSMGA003.fm.intel.com with ESMTP; 22 Feb 2023 11:11:08 -0800
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1pUuW9-00AaOx-30;
-        Wed, 22 Feb 2023 21:11:05 +0200
-Date:   Wed, 22 Feb 2023 21:11:05 +0200
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Robin van der Gracht <robin@protonic.nl>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>,
-        Raul E Rangel <rrangel@chromium.org>,
-        Wolfram Sang <wsa@kernel.org>, linux-kernel@vger.kernel.org,
-        linux-i2c@vger.kernel.org, linux-usb@vger.kernel.org,
-        Miguel Ojeda <ojeda@kernel.org>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        devicetree@vger.kernel.org
-Subject: Re: [PATCH v1 2/3] auxdisplay: ht16k33: Make use of
- device_get_match_data()
-Message-ID: <Y/ZoyaV10TCWhloT@smile.fi.intel.com>
-References: <20230221133307.20287-1-andriy.shevchenko@linux.intel.com>
- <20230221133307.20287-3-andriy.shevchenko@linux.intel.com>
- <Y/TJs+Arban0ats8@smile.fi.intel.com>
- <be203dfd290e67c8ce74d11c5c9478a4@protonic.nl>
- <Y/UD3HWNy8uKYShC@smile.fi.intel.com>
- <0235f0fed989a8b027db720663699f5d@protonic.nl>
- <Y/ZKdN4nuHcL4DgE@smile.fi.intel.com>
- <Y/ZOyGo8X7r258EC@smile.fi.intel.com>
- <06f29d66-f16a-039c-ecd0-155bdcce00c1@linaro.org>
+        Wed, 22 Feb 2023 14:15:55 -0500
+Received: from mail-il1-x129.google.com (mail-il1-x129.google.com [IPv6:2607:f8b0:4864:20::129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CEF33A0BD
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Feb 2023 11:15:50 -0800 (PST)
+Received: by mail-il1-x129.google.com with SMTP id b12so1151173ils.8
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Feb 2023 11:15:50 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=I2c3lg+eD0Vch4RpQWqcPIBMzqi7iy6PEw8ILtwvF7k=;
+        b=nM7f3kbWFpK5eMz3TP33DsONrx0dUPXyBQ9urgT0uhsqEzo5yKgunv8MjuMgEFPlFf
+         Ptkx6NTZkhwDeZBBChJ/2MHr8B3tJcNa1g2A/gly43vIZaqQK/owG6pe+hX24yAfHHAC
+         HGZ4Qwnw6Y2Xyjdz/rIFyQcajwP6BXzc353mU=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=I2c3lg+eD0Vch4RpQWqcPIBMzqi7iy6PEw8ILtwvF7k=;
+        b=kD1MtuHlkGAn/1eQ+jyJWt76P2z2UIhFx1sHgcBDLK0ABJhVY9AVLA3iMSmAj2AEe3
+         6l2kebQZl8ZHQU1cfbiijEAwZsW5osGIDAceih8O9euZ/OgjMQ4HQSbAtyWz39WcKuwY
+         4iKRklKMc/Wr4U2rPwMKqWs0mpldgyrnL03/CgvpDqBPDaK1LWew+NHbnT9VCcbcK9ut
+         WuPcgRcfHS7DPifih2+kkJGKuBveGD4uIpG2YQ0MYTv8l6wHvmR+O87db1v4QZPN2QaI
+         bNdIXFa0UeEF8GHigQ6qtLwzI3AVyO26t6Ejkh41UTSxfQFL+3zuLfDPe42HBHJC/eVa
+         xc0Q==
+X-Gm-Message-State: AO0yUKXJP5q2kfKnIx9Ps7jarJDVTOBqFAHrS1T/SkIZ4E/GaFozIlA6
+        OgItZYZSUbYMzDII6inW2TE/iw==
+X-Google-Smtp-Source: AK7set+Kx4qOBhb7aHna/RNkAittWxiCvUfJ+f6eh6nbB2r0zMDVL1NrXtJvFKZULmqbxQ9Ia+8UYQ==
+X-Received: by 2002:a92:7a06:0:b0:315:8bc0:1d85 with SMTP id v6-20020a927a06000000b003158bc01d85mr7077253ilc.11.1677093349797;
+        Wed, 22 Feb 2023 11:15:49 -0800 (PST)
+Received: from localhost (30.23.70.34.bc.googleusercontent.com. [34.70.23.30])
+        by smtp.gmail.com with UTF8SMTPSA id g2-20020a0566380c4200b003c4f55da7easm1403449jal.45.2023.02.22.11.15.49
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 22 Feb 2023 11:15:49 -0800 (PST)
+From:   Matthias Kaehlcke <mka@chromium.org>
+To:     Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>
+Cc:     Stephen Boyd <swboyd@chromium.org>,
+        Douglas Anderson <dianders@chromium.org>,
+        linux-kernel@vger.kernel.org, Matthias Kaehlcke <mka@chromium.org>
+Subject: [PATCH] regulator: core: Use ktime_get_boottime() to determine how long a regulator was off
+Date:   Wed, 22 Feb 2023 19:15:46 +0000
+Message-Id: <20230222191537.1.I9719661b8eb0a73b8c416f9c26cf5bd8c0563f99@changeid>
+X-Mailer: git-send-email 2.39.2.722.g9855ee24e9-goog
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <06f29d66-f16a-039c-ecd0-155bdcce00c1@linaro.org>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,TVD_PH_BODY_ACCOUNTS_PRE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Feb 22, 2023 at 07:46:25PM +0100, Krzysztof Kozlowski wrote:
-> On 22/02/2023 18:20, Andy Shevchenko wrote:
-> >>
-> >>> Which effectively breaks i.e. user-space instantiation for other display
-> >>> types which now do work due to i2c_of_match_device().
-> >>> (so my suggestion above is not sufficient).
-> >>>
-> >>> Are you proposing extending and searching the I2C ID table to work around
-> >>> that?
-> >>
-> >> See (1) above. This is the downside I have noticed after sending this series.
-> >> So, the I²C ID table match has to be restored, but the above mentioned issues
-> >> with existing table are not gone, hence they need to be addressed in the next
-> >> version.
-> > 
-> > I see now what you mean. So, we have even more issues in this driver:
-> > - I²C table is not in sync with all devices supported
-> 
-> Does anything actually rely on i2c_device_id table? ACPI would match
-> either via ACPI or OF tables. All modern ARM systems (e.g. imx6) are
-> DT-based. Maybe just drop the I2C ID table?
+For regulators with 'off-on-delay-us' the regulator framework currently
+uses ktime_get() to determine how long the regulator has been off
+before re-enabling it (after a delay if needed). A problem with using
+ktime_get() is that it doesn't account for the time the system is
+suspended. As a result a regulator with a longer 'off-on-delay' (e.g.
+500ms) that was switched off during suspend might still incurr in a
+delay on resume before it is re-enabled, even though the regulator
+might have been off for hours. ktime_get_boottime() accounts for
+suspend time, use it instead of ktime_get().
 
-For I²C it's still possible to enumerate the device via sysfs, which is ABI.
+Signed-off-by: Matthias Kaehlcke <mka@chromium.org>
+---
 
-> > - the OF ID table seems has something really badly formed for adafruit
-> >   (just a number after a comma)
-> 
-> Maybe it is a model number? It was documented:
-> Documentation/devicetree/bindings/auxdisplay/holtek,ht16k33.yaml
+ drivers/regulator/core.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-Yes, it's not a problem for ACPI/DT platforms, the problem is for the above
-way of enumeration, so if we have more than 1 manufacturer that uses plain
-numbers for the model, I²C framework may not distinguish which driver to use.
-
-I.o.w. the part after comma in the compatible strings of the I²C devices must
-be unique globally to make that enumeration disambiguous.
-
-> > The latter shows how broken it is. The I²C ID table mechanism is used as
-> > a backward compatibility to the OF. Unfortunately, user space may not provide
-> > the data except in form of DT overlays, so for the legacy enumeration we
-> > have only device name, which is a set of 4 digits for adafruit case.
-> > 
-> > Now imagine if by some reason we will get adafruit2 (you name it) with
-> > the same schema. How I²C framework can understand that you meant adafruit
-> > and not adafruit2? Or did I miss something?
-
+diff --git a/drivers/regulator/core.c b/drivers/regulator/core.c
+index ae69e493913d..4fcd36055b02 100644
+--- a/drivers/regulator/core.c
++++ b/drivers/regulator/core.c
+@@ -1584,7 +1584,7 @@ static int set_machine_constraints(struct regulator_dev *rdev)
+ 	}
+ 
+ 	if (rdev->desc->off_on_delay)
+-		rdev->last_off = ktime_get();
++		rdev->last_off = ktime_get_boottime();
+ 
+ 	/* If the constraints say the regulator should be on at this point
+ 	 * and we have control then make sure it is enabled.
+@@ -2673,7 +2673,7 @@ static int _regulator_do_enable(struct regulator_dev *rdev)
+ 		 * this regulator was disabled.
+ 		 */
+ 		ktime_t end = ktime_add_us(rdev->last_off, rdev->desc->off_on_delay);
+-		s64 remaining = ktime_us_delta(end, ktime_get());
++		s64 remaining = ktime_us_delta(end, ktime_get_boottime());
+ 
+ 		if (remaining > 0)
+ 			_regulator_delay_helper(remaining);
+@@ -2912,7 +2912,7 @@ static int _regulator_do_disable(struct regulator_dev *rdev)
+ 	}
+ 
+ 	if (rdev->desc->off_on_delay)
+-		rdev->last_off = ktime_get();
++		rdev->last_off = ktime_get_boottime();
+ 
+ 	trace_regulator_disable_complete(rdev_get_name(rdev));
+ 
 -- 
-With Best Regards,
-Andy Shevchenko
-
+2.39.2.722.g9855ee24e9-goog
 
