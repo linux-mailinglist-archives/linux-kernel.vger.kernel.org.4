@@ -2,67 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 361FD69FB98
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Feb 2023 19:57:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8409269FBA3
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Feb 2023 19:58:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230480AbjBVS4J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Feb 2023 13:56:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35120 "EHLO
+        id S232139AbjBVS5z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Feb 2023 13:57:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36530 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231386AbjBVS4H (ORCPT
+        with ESMTP id S231127AbjBVS5x (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Feb 2023 13:56:07 -0500
-Received: from mail-pl1-x64a.google.com (mail-pl1-x64a.google.com [IPv6:2607:f8b0:4864:20::64a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D1B02CFC1
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Feb 2023 10:56:07 -0800 (PST)
-Received: by mail-pl1-x64a.google.com with SMTP id q5-20020a170902788500b0019b0c60afa8so5153484pll.12
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Feb 2023 10:56:07 -0800 (PST)
+        Wed, 22 Feb 2023 13:57:53 -0500
+Received: from mail-oi1-x22c.google.com (mail-oi1-x22c.google.com [IPv6:2607:f8b0:4864:20::22c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C82D272C;
+        Wed, 22 Feb 2023 10:57:51 -0800 (PST)
+Received: by mail-oi1-x22c.google.com with SMTP id w7so8897291oik.13;
+        Wed, 22 Feb 2023 10:57:51 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=YG/yZ5MTiTnKi2W7bMShINtpnN93/lRwNEGmf8C47/k=;
-        b=i7NxihAfFbYYyyjyGZS5DuxZ+rdpbqpMY22wBJwiDd7BFosm05z+sDb9ryNRWqEp4m
-         4gmmFZM8bOZqjrLiO9iZwZmYN7QxeZkqJvXq3UNXdyTCNzpGPb1yaEIg7OJT8shdOpXV
-         faKw1iVPqQ0+iDqhlV/a3VUNKw4kUAWkRfe8qQ4tiNrHe+pdgk66DWqiWC87nVQJWs0p
-         KDNRGM/EGoHuNknc1iYNTESyY8gIcZr8upA+hLIjili0eyhK1ReJ/K2PRoXfc4pf16Af
-         pLmwmxDD9V5rScr7Spq5g+RbCRYQJw35sbY9cq/09K6mhCD0feN+tuiy+BmQGQ4/fcNX
-         j25Q==
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=UF7nR0RAhOzqdZkHDCQjiRJ4YI0fbLgTEln+9Hs89cc=;
+        b=GXPFdJPqHg34EbfZFQwsHqVl71NbwwnBvYtpxGkfSHAr+EM8MHBzktjfMX8YzYP0Th
+         ty3iR9sqxUi6OcJM5cAJp5tmM4BxeAT5Op2Z2a1yko0mhyhim/hBJ3zwc7FGOBwdeBsO
+         2y/WNoeQLWSfkdhJSdfJKQhu/cm7X/77Ncojseq07fUYIOYcP1B0BHPKGF11xrkBXb1s
+         ucXeJDwbXhbCYVICFSAn6nVUy20odf/WEVv+VQEV5nkncVtQTOvZhWfft+/XlrtQe+qW
+         PqwwV1J2EIMYS5bb0Nkzp0RCkGOKfPkC18E9/3A4/TzBa6e22Gt5L7o/pceG67QtBBH8
+         K+xA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=YG/yZ5MTiTnKi2W7bMShINtpnN93/lRwNEGmf8C47/k=;
-        b=r4bCUXhCu7kIee4yz+T/JIxaNt/Yw621VH6Po6Q/dHN9IN64nhG3yPFs7F/qyfNl3S
-         YJwS19Z7Q2UVyptk/uCjn9KyJWFe7byRzEqPWPPeAI9vNxzCzOz4wwsCzNw+oo++y7Jz
-         Z0du+p8IcfgkO0UCnDZOInv0FJfNFWue6u6HqRW8kBd5cinJ82/vH6Fla35MPwEcUhwL
-         0mGrHC3rQs5Iqvm8JcvuMcgyQB34WVDNdltg5Xail7Pl2PHCrgwLPCZFvLK4MPB1NymU
-         y5UaH6k7KBPmNGQB5vYzdKx5lPuX81ISGhRcTTy8OJIKKW2dl3g3ipFHODnPQKERGnWw
-         6zpg==
-X-Gm-Message-State: AO0yUKUy9cycdfE4TcGG+adpy4k1BmGxZblQNY7mxa7cqyh45jCWN7Dh
-        HmW/PRjz+WmuQ+Hd/+Lxjzux5msRJvE=
-X-Google-Smtp-Source: AK7set/nADglnCxuPPrBhMotCwjpTkh0FxC6vVPmRgUyX6Vl9bPXUNIGGPML4QUYJ+tjMjrKKd5pFf5u2MM=
-X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
- (user=seanjc job=sendgmr) by 2002:a63:7b58:0:b0:502:d7c8:882d with SMTP id
- k24-20020a637b58000000b00502d7c8882dmr848071pgn.3.1677092166518; Wed, 22 Feb
- 2023 10:56:06 -0800 (PST)
-Date:   Wed, 22 Feb 2023 10:56:04 -0800
-In-Reply-To: <20230221145610.ytlj5nkqsscc2yxo@linux.intel.com>
-Mime-Version: 1.0
-References: <20230217231022.816138-1-seanjc@google.com> <20230217231022.816138-6-seanjc@google.com>
- <20230221145610.ytlj5nkqsscc2yxo@linux.intel.com>
-Message-ID: <Y/ZlRDuRivMDKGwo@google.com>
-Subject: Re: [PATCH 05/12] KVM: x86: Use KVM-governed feature framework to
- track "XSAVES enabled"
-From:   Sean Christopherson <seanjc@google.com>
-To:     Yu Zhang <yu.c.zhang@linux.intel.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="us-ascii"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=UF7nR0RAhOzqdZkHDCQjiRJ4YI0fbLgTEln+9Hs89cc=;
+        b=G8QhMBicWESk6WgAIV+gfAv5hbmcweHhAxQDhbOUxSswbRaW079iHWbIZ6S8D29IpH
+         uCW5w1QWHu5IXbNRKPBkjoGZtmaT2u3DeOeDpZQlMMFtMekQ9fz14CYL8WEfVQ6wukBP
+         QAtXlEut37sjMINkheIuRURynA330p+lTThuIWk8YT0I82oYoL83vJIbTg7C/l3OXEKA
+         0tsxzm3TiiR3AgU1uxcxlM22d7+cgqbd9S1xAWyMMP3D+vOB0oFtGZytrNZcB9r8s8s+
+         lQlqklqVEk24CI2sQwB0/XnWBd4ib+EC/pLggOc+ktJZWIlSKjsDYBVDHoqxdPurIPcH
+         +d1g==
+X-Gm-Message-State: AO0yUKUBPtNM/pB5hiN3v9SXIjrTkAdj66sqf8D+fIqLar9B0Uji3+fD
+        I9Yd9acBjIsfgfZDSpk4RLLrVrFupFfkPYUc7kE=
+X-Google-Smtp-Source: AK7set8frmvxbkGuSlE/CZ3Cw8fhh0TWYwlF4WjVzZ12iA+f7NRi126FESxiqBxE2/sx2BJ0dkNHdIprSHLrN2hcU/w=
+X-Received: by 2002:a05:6808:16ab:b0:37d:81a9:5103 with SMTP id
+ bb43-20020a05680816ab00b0037d81a95103mr1454254oib.38.1677092270732; Wed, 22
+ Feb 2023 10:57:50 -0800 (PST)
+MIME-Version: 1.0
+References: <20230218211608.1630586-1-robdclark@gmail.com> <20230218211608.1630586-2-robdclark@gmail.com>
+ <b65a2fe2-6f68-2116-9599-2940e66d166b@linux.intel.com> <21f36640-3229-0b46-31a2-a47efc5be934@amd.com>
+ <b8a16579-4be7-8e14-01e4-9d17c1570c8b@linux.intel.com> <CAJs_Fx61OpgFo_kSLoy+2z8mS=wcdK8eZfQBA6dQm9p0=qLU2g@mail.gmail.com>
+ <d7b0614e-2cc3-1180-3571-409204ac5b00@linux.intel.com>
+In-Reply-To: <d7b0614e-2cc3-1180-3571-409204ac5b00@linux.intel.com>
+From:   Rob Clark <robdclark@gmail.com>
+Date:   Wed, 22 Feb 2023 10:57:39 -0800
+Message-ID: <CAF6AEGvyei6QcNGb-VEAuE5w4qJHavj+8TuirXwwcK7ydEXeSQ@mail.gmail.com>
+Subject: Re: [PATCH v4 01/14] dma-buf/dma-fence: Add deadline awareness
+To:     Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>
+Cc:     Rob Clark <robdclark@chromium.org>,
+        =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
+        dri-devel@lists.freedesktop.org,
+        Gustavo Padovan <gustavo@padovan.org>,
+        Tvrtko Ursulin <tvrtko.ursulin@intel.com>,
+        =?UTF-8?Q?Michel_D=C3=A4nzer?= <michel@daenzer.net>,
+        open list <linux-kernel@vger.kernel.org>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        "moderated list:DMA BUFFER SHARING FRAMEWORK" 
+        <linaro-mm-sig@lists.linaro.org>,
+        Pekka Paalanen <ppaalanen@gmail.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        freedreno@lists.freedesktop.org,
+        "open list:SYNC FILE FRAMEWORK" <linux-media@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,49 +85,154 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 21, 2023, Yu Zhang wrote:
-> On Fri, Feb 17, 2023 at 03:10:15PM -0800, Sean Christopherson wrote:
-> > Use the governed feature framework to track if XSAVES is "enabled", i.e.
-> > if XSAVES can be used by the guest.  Add a comment in the SVM code to
-> > explain the very unintuitive logic of deliberately NOT checking if XSAVES
-> > is enumerated in the guest CPUID model.
-> > 
-> > No functional change intended.
-> 
-> xsaves_enabled in struct kvm_vcpu_arch is no longer used. But instead of
-> just deleting it, maybe we could move 'bool load_eoi_exitmap_pending' to
-> its place, so 7 bytes can be saved for each struct kvm_vcpu_arch:
+On Wed, Feb 22, 2023 at 9:33 AM Tvrtko Ursulin
+<tvrtko.ursulin@linux.intel.com> wrote:
+>
+>
+> On 22/02/2023 17:16, Rob Clark wrote:
+> > On Wed, Feb 22, 2023 at 9:05 AM Tvrtko Ursulin
+> > <tvrtko.ursulin@linux.intel.com> wrote:
+> >>
+> >>
+> >> On 22/02/2023 15:28, Christian K=C3=B6nig wrote:
+> >>> Am 22.02.23 um 11:23 schrieb Tvrtko Ursulin:
+> >>>>
+> >>>> On 18/02/2023 21:15, Rob Clark wrote:
+> >>>>> From: Rob Clark <robdclark@chromium.org>
+> >>>>>
+> >>>>> Add a way to hint to the fence signaler of an upcoming deadline, su=
+ch as
+> >>>>> vblank, which the fence waiter would prefer not to miss.  This is t=
+o aid
+> >>>>> the fence signaler in making power management decisions, like boost=
+ing
+> >>>>> frequency as the deadline approaches and awareness of missing deadl=
+ines
+> >>>>> so that can be factored in to the frequency scaling.
+> >>>>>
+> >>>>> v2: Drop dma_fence::deadline and related logic to filter duplicate
+> >>>>>       deadlines, to avoid increasing dma_fence size.  The fence-con=
+text
+> >>>>>       implementation will need similar logic to track deadlines of =
+all
+> >>>>>       the fences on the same timeline.  [ckoenig]
+> >>>>> v3: Clarify locking wrt. set_deadline callback
+> >>>>>
+> >>>>> Signed-off-by: Rob Clark <robdclark@chromium.org>
+> >>>>> Reviewed-by: Christian K=C3=B6nig <christian.koenig@amd.com>
+> >>>>> ---
+> >>>>>    drivers/dma-buf/dma-fence.c | 20 ++++++++++++++++++++
+> >>>>>    include/linux/dma-fence.h   | 20 ++++++++++++++++++++
+> >>>>>    2 files changed, 40 insertions(+)
+> >>>>>
+> >>>>> diff --git a/drivers/dma-buf/dma-fence.c b/drivers/dma-buf/dma-fenc=
+e.c
+> >>>>> index 0de0482cd36e..763b32627684 100644
+> >>>>> --- a/drivers/dma-buf/dma-fence.c
+> >>>>> +++ b/drivers/dma-buf/dma-fence.c
+> >>>>> @@ -912,6 +912,26 @@ dma_fence_wait_any_timeout(struct dma_fence
+> >>>>> **fences, uint32_t count,
+> >>>>>    }
+> >>>>>    EXPORT_SYMBOL(dma_fence_wait_any_timeout);
+> >>>>>    +
+> >>>>> +/**
+> >>>>> + * dma_fence_set_deadline - set desired fence-wait deadline
+> >>>>> + * @fence:    the fence that is to be waited on
+> >>>>> + * @deadline: the time by which the waiter hopes for the fence to =
+be
+> >>>>> + *            signaled
+> >>>>> + *
+> >>>>> + * Inform the fence signaler of an upcoming deadline, such as
+> >>>>> vblank, by
+> >>>>> + * which point the waiter would prefer the fence to be signaled by=
+.
+> >>>>> This
+> >>>>> + * is intended to give feedback to the fence signaler to aid in po=
+wer
+> >>>>> + * management decisions, such as boosting GPU frequency if a perio=
+dic
+> >>>>> + * vblank deadline is approaching.
+> >>>>> + */
+> >>>>> +void dma_fence_set_deadline(struct dma_fence *fence, ktime_t deadl=
+ine)
+> >>>>> +{
+> >>>>> +    if (fence->ops->set_deadline && !dma_fence_is_signaled(fence))
+> >>>>> +        fence->ops->set_deadline(fence, deadline);
+> >>>>> +}
+> >>>>> +EXPORT_SYMBOL(dma_fence_set_deadline);
+> >>>>> +
+> >>>>>    /**
+> >>>>>     * dma_fence_describe - Dump fence describtion into seq_file
+> >>>>>     * @fence: the 6fence to describe
+> >>>>> diff --git a/include/linux/dma-fence.h b/include/linux/dma-fence.h
+> >>>>> index 775cdc0b4f24..d77f6591c453 100644
+> >>>>> --- a/include/linux/dma-fence.h
+> >>>>> +++ b/include/linux/dma-fence.h
+> >>>>> @@ -99,6 +99,7 @@ enum dma_fence_flag_bits {
+> >>>>>        DMA_FENCE_FLAG_SIGNALED_BIT,
+> >>>>>        DMA_FENCE_FLAG_TIMESTAMP_BIT,
+> >>>>>        DMA_FENCE_FLAG_ENABLE_SIGNAL_BIT,
+> >>>>> +    DMA_FENCE_FLAG_HAS_DEADLINE_BIT,
+> >>>>
+> >>>> Would this bit be better left out from core implementation, given ho=
+w
+> >>>> the approach is the component which implements dma-fence has to trac=
+k
+> >>>> the actual deadline and all?
+> >>>>
+> >>>> Also taking a step back - are we all okay with starting to expand th=
+e
+> >>>> relatively simple core synchronisation primitive with side channel
+> >>>> data like this? What would be the criteria for what side channel dat=
+a
+> >>>> would be acceptable? Taking note the thing lives outside drivers/gpu=
+/.
+> >>>
+> >>> I had similar concerns and it took me a moment as well to understand =
+the
+> >>> background why this is necessary. I essentially don't see much other
+> >>> approach we could do.
+> >>>
+> >>> Yes, this is GPU/CRTC specific, but we somehow need a common interfac=
+e
+> >>> for communicating it between drivers and that's the dma_fence object =
+as
+> >>> far as I can see.
+> >>
+> >> Yeah I also don't see any other easy options. Just wanted to raise thi=
+s
+> >> as something which probably needs some wider acks.
+> >>
+> >> Also what about the "low level" part of my question about the reason, =
+or
+> >> benefits, of defining the deadline bit in the common layer?
+> >
+> > We could leave DMA_FENCE_FLAG_HAS_DEADLINE_BIT out, but OTOH managing
+> > a bitmask that is partially defined in core enum and partially in
+> > backend-driver has it's own drawbacks, and it isn't like we are
+> > running out of bits.. :shrug:
+>
+> There is DMA_FENCE_FLAG_USER_BITS onwards which implementations could
+> use to store their stuff?
+>
+> And if we skip forward to "drm/scheduler: Add fence deadline support"
+> that's the only place bit is used, right? Would it simply work to look
+> at drm_sched_fence->deadline =3D=3D 0 as bit not set? Or you see a need t=
+o
+> interoperate with other fence implementations via that bit somehow?
 
-I prefer leaving load_eoi_exitmap_pending where it is so that it's co-located with
-ioapic_handled_vectors.  I agree wasting 7 bytes is unfortunate, but I don't want
-to take an ad hoc approach to shrinking per-vCPU structs.  See the link below for
-more discussion.
+Currently drm/scheduler is the only one using it.  I ended up dropping
+use of it in msm since the deadline is stored in the fence-context
+instead.  But I think it is better to try to avoid assuming that zero
+means not-set.
 
-https://lore.kernel.org/all/20230213163351.30704-1-minipli@grsecurity.net
+It could be moved to drm/sched.. I guess there are few enough
+implementations at this point to say whether it is something useful to
+other drivers or not.
 
-> 
-> diff --git a/arch/x86/include/asm/kvm_host.h b/arch/x86/include/asm/kvm_host.h
-> index cd660de02f7b..0eef5469c165 100644
-> --- a/arch/x86/include/asm/kvm_host.h
-> +++ b/arch/x86/include/asm/kvm_host.h
-> @@ -740,7 +740,6 @@ struct kvm_vcpu_arch {
->         u64 efer;
->         u64 apic_base;
->         struct kvm_lapic *apic;    /* kernel irqchip context */
-> -       bool load_eoi_exitmap_pending;
->         DECLARE_BITMAP(ioapic_handled_vectors, 256);
->         unsigned long apic_attention;
->         int32_t apic_arb_prio;
-> @@ -750,7 +749,7 @@ struct kvm_vcpu_arch {
->         u64 smi_count;
->         bool at_instruction_boundary;
->         bool tpr_access_reporting;
-> -       bool xsaves_enabled;
-> +       bool load_eoi_exitmap_pending;
->         bool xfd_no_write_intercept;
->         u64 ia32_xss;
->         u64 microcode_version;
-> 
-> B.R.
-> Yu
-> 
+BR,
+-R
+
+> Regards,
+>
+> Tvrtko
