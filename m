@@ -2,194 +2,260 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9ED4069EF01
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Feb 2023 07:56:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 617CB69EF08
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Feb 2023 07:59:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229870AbjBVG4e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Feb 2023 01:56:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60848 "EHLO
+        id S230300AbjBVG7x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Feb 2023 01:59:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34176 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229503AbjBVG4c (ORCPT
+        with ESMTP id S230135AbjBVG7t (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Feb 2023 01:56:32 -0500
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8267D1F4A7
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Feb 2023 22:56:30 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1677048990; x=1708584990;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=82jIRTqG/oCoc9diigbGRAEiGCekgnVu2ioPgEIZrMQ=;
-  b=JOf2RMIDgekrnl0I4Y9CFqp2KSuiLC54EsXTzyQGEIZIW7KjtZVtSpqX
-   phBZA5/UVsftafs0afqnoUhRgfnnwpl0o54T31WucpxpETE6ZldXsMIbL
-   DsyhJXhQOG5stphm4ZiVLOuSqiXcS2c86mdfFL1eBQieRumvwzVayvEeS
-   m5z9r0vGFnbLh/0ia40SH7W9RJVBtNb544d40/8SukRHFzVDUVgaN0gHT
-   /Z6j0k6TElbGD2tD3d/3H0mdvP4ox/bif2PIEvUc6VzokrK/Uw4o1PQp5
-   msYtX5qMvVGVwYAPs0Z+n3pQHfnI7Dq9H3brv+mQImwuh0ulV8SOdU0Y/
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10628"; a="331519484"
-X-IronPort-AV: E=Sophos;i="5.97,318,1669104000"; 
-   d="scan'208";a="331519484"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Feb 2023 22:56:04 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10628"; a="735771026"
-X-IronPort-AV: E=Sophos;i="5.97,318,1669104000"; 
-   d="scan'208";a="735771026"
-Received: from lkp-server01.sh.intel.com (HELO 3895f5c55ead) ([10.239.97.150])
-  by fmsmga008.fm.intel.com with ESMTP; 21 Feb 2023 22:56:00 -0800
-Received: from kbuild by 3895f5c55ead with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pUj2l-00005h-2b;
-        Wed, 22 Feb 2023 06:55:59 +0000
-Date:   Wed, 22 Feb 2023 14:55:47 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Evan Green <evan@rivosinc.com>,
-        Palmer Dabbelt <palmer@rivosinc.com>
-Cc:     oe-kbuild-all@lists.linux.dev, heiko@sntech.de,
-        Conor Dooley <conor@kernel.org>, slewis@rivosinc.com,
-        vineetg@rivosinc.com, Evan Green <evan@rivosinc.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Andrew Bresticker <abrestic@rivosinc.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Celeste Liu <coelacanthus@outlook.com>,
-        Guo Ren <guoren@kernel.org>,
-        Jisheng Zhang <jszhang@kernel.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org
-Subject: Re: [PATCH v3 7/7] RISC-V: Add hwprobe vDSO function and data
-Message-ID: <202302221419.SOkwfXfm-lkp@intel.com>
-References: <20230221190858.3159617-8-evan@rivosinc.com>
+        Wed, 22 Feb 2023 01:59:49 -0500
+Received: from mx0b-0016f401.pphosted.com (mx0b-0016f401.pphosted.com [67.231.156.173])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2AF8B2B293;
+        Tue, 21 Feb 2023 22:59:48 -0800 (PST)
+Received: from pps.filterd (m0045851.ppops.net [127.0.0.1])
+        by mx0b-0016f401.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 31M29rd2009933;
+        Tue, 21 Feb 2023 22:59:34 -0800
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=marvell.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-transfer-encoding :
+ content-type; s=pfpt0220; bh=wV3ld4V3YWdMk1V6jY3z7xaoQBKpJXzJI3ms5mic3xU=;
+ b=Z9+oHNO7RjRqr8x1T0/WXcJzRNG4TMbTNk4QqJnA7RJv9l845VZ4D6bU621h6oVEZNrF
+ dXkxouOvA8pDqXOVvGLdlI3i9HHU5D1pTBj6Jx6euxOQyPJomkOnudrPR2gaGLAG4lFO
+ jESDq0g0CKGpWN/WJe/MrqpnaLIMqc20On23351vx/kzyiFys0iMWj0p4peDIySxLydZ
+ +AlFfBC2dcmt2cTVmwCUZemv2dqhg/RHSsCJEE2vL6c//PShXeGHKzdNa8S5ihwB0dau
+ nDpbQ1OiA1BziaK4EU7qETVpA7bPWV+jUr+IC8GeK8co5RnCc1LDqGdN4NcZTftKEEkJ xQ== 
+Received: from dc5-exch01.marvell.com ([199.233.59.181])
+        by mx0b-0016f401.pphosted.com (PPS) with ESMTPS id 3nty308px9-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT);
+        Tue, 21 Feb 2023 22:59:34 -0800
+Received: from DC5-EXCH02.marvell.com (10.69.176.39) by DC5-EXCH01.marvell.com
+ (10.69.176.38) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Tue, 21 Feb
+ 2023 22:59:29 -0800
+Received: from maili.marvell.com (10.69.176.80) by DC5-EXCH02.marvell.com
+ (10.69.176.39) with Microsoft SMTP Server id 15.0.1497.42 via Frontend
+ Transport; Tue, 21 Feb 2023 22:59:29 -0800
+Received: from hyd1425.marvell.com (unknown [10.29.37.83])
+        by maili.marvell.com (Postfix) with ESMTP id 7BDAE3F706F;
+        Tue, 21 Feb 2023 22:59:26 -0800 (PST)
+From:   Sai Krishna <saikrishnag@marvell.com>
+To:     <davem@davemloft.net>, <edumazet@google.com>, <kuba@kernel.org>,
+        <pabeni@redhat.com>, <netdev@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <sgoutham@marvell.com>,
+        <sumang@marvell.com>
+CC:     Sai Krishna <saikrishnag@marvell.com>
+Subject: [net PATCH] octeontx2-af: Unlock contexts in the queue context cache in case of fault detection
+Date:   Wed, 22 Feb 2023 12:29:21 +0530
+Message-ID: <20230222065921.1852686-1-saikrishnag@marvell.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230221190858.3159617-8-evan@rivosinc.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Proofpoint-GUID: axAY4NMwjThl_EPzlZ7YgiNoek9vUxS8
+X-Proofpoint-ORIG-GUID: axAY4NMwjThl_EPzlZ7YgiNoek9vUxS8
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.170.22
+ definitions=2023-02-22_02,2023-02-20_02,2023-02-09_01
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Evan,
+From: Suman Ghosh <sumang@marvell.com>
 
-Thank you for the patch! Yet something to improve:
+NDC caches contexts of frequently used queue's (Rx and Tx queues)
+contexts. Due to a HW errata when NDC detects fault/poision while
+accessing contexts it could go into an illegal state where a cache
+line could get locked forever. To makesure all cache lines in NDC
+are available for optimum performance upon fault/lockerror/posion
+errors scan through all cache lines in NDC and clear the lock bit.
 
-[auto build test ERROR on shuah-kselftest/next]
-[also build test ERROR on shuah-kselftest/fixes robh/for-next soc/for-next linus/master v6.2]
-[cannot apply to next-20230222]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+Fixes: 4a3581cd5995 ("octeontx2-af: NPA AQ instruction enqueue support")
+Signed-off-by: Suman Ghosh <sumang@marvell.com>
+Signed-off-by: Sunil Kovvuri Goutham <sgoutham@marvell.com>
+Signed-off-by: Sai Krishna <saikrishnag@marvell.com>
+---
+ .../net/ethernet/marvell/octeontx2/af/rvu.h   |  8 +++
+ .../marvell/octeontx2/af/rvu_debugfs.c        |  3 -
+ .../ethernet/marvell/octeontx2/af/rvu_nix.c   | 16 +++++-
+ .../ethernet/marvell/octeontx2/af/rvu_npa.c   | 55 ++++++++++++++++++-
+ .../ethernet/marvell/octeontx2/af/rvu_reg.h   |  3 +
+ 5 files changed, 80 insertions(+), 5 deletions(-)
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Evan-Green/RISC-V-Move-struct-riscv_cpuinfo-to-new-header/20230222-031210
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest.git next
-patch link:    https://lore.kernel.org/r/20230221190858.3159617-8-evan%40rivosinc.com
-patch subject: [PATCH v3 7/7] RISC-V: Add hwprobe vDSO function and data
-config: riscv-rv32_defconfig (https://download.01.org/0day-ci/archive/20230222/202302221419.SOkwfXfm-lkp@intel.com/config)
-compiler: riscv32-linux-gcc (GCC) 12.1.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/3f47f3f920ffcb37a461d04a1ee0e245451c869e
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Evan-Green/RISC-V-Move-struct-riscv_cpuinfo-to-new-header/20230222-031210
-        git checkout 3f47f3f920ffcb37a461d04a1ee0e245451c869e
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=riscv olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=riscv prepare
-
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202302221419.SOkwfXfm-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
-   In file included from include/vdso/datapage.h:137,
-                    from arch/riscv/kernel/vdso/hwprobe.c:7:
-   arch/riscv/include/asm/vdso/gettimeofday.h: In function 'gettimeofday_fallback':
->> arch/riscv/include/asm/vdso/gettimeofday.h:21:38: error: '__NR_gettimeofday' undeclared (first use in this function)
-      21 |         register long nr asm("a7") = __NR_gettimeofday;
-         |                                      ^~~~~~~~~~~~~~~~~
-   arch/riscv/include/asm/vdso/gettimeofday.h:21:38: note: each undeclared identifier is reported only once for each function it appears in
-   arch/riscv/include/asm/vdso/gettimeofday.h: In function 'clock_gettime_fallback':
->> arch/riscv/include/asm/vdso/gettimeofday.h:37:38: error: '__NR_clock_gettime' undeclared (first use in this function)
-      37 |         register long nr asm("a7") = __NR_clock_gettime;
-         |                                      ^~~~~~~~~~~~~~~~~~
-   arch/riscv/include/asm/vdso/gettimeofday.h: In function 'clock_getres_fallback':
->> arch/riscv/include/asm/vdso/gettimeofday.h:53:38: error: '__NR_clock_getres' undeclared (first use in this function)
-      53 |         register long nr asm("a7") = __NR_clock_getres;
-         |                                      ^~~~~~~~~~~~~~~~~
-   arch/riscv/kernel/vdso/hwprobe.c: At top level:
-   arch/riscv/kernel/vdso/hwprobe.c:14:5: warning: no previous prototype for '__vdso_riscv_hwprobe' [-Wmissing-prototypes]
-      14 | int __vdso_riscv_hwprobe(struct riscv_hwprobe *pairs, long pair_count,
-         |     ^~~~~~~~~~~~~~~~~~~~
-   make[2]: *** [scripts/Makefile.build:252: arch/riscv/kernel/vdso/hwprobe.o] Error 1
-   make[2]: Target 'include/generated/vdso-offsets.h' not remade because of errors.
-   make[1]: *** [arch/riscv/Makefile:126: vdso_prepare] Error 2
-   make[1]: Target 'prepare' not remade because of errors.
-   make: *** [Makefile:242: __sub-make] Error 2
-   make: Target 'prepare' not remade because of errors.
-
-
-vim +/__NR_gettimeofday +21 arch/riscv/include/asm/vdso/gettimeofday.h
-
-ad5d1122b82fbd6 Vincent Chen 2020-06-09  13  
-ad5d1122b82fbd6 Vincent Chen 2020-06-09  14  static __always_inline
-ad5d1122b82fbd6 Vincent Chen 2020-06-09  15  int gettimeofday_fallback(struct __kernel_old_timeval *_tv,
-ad5d1122b82fbd6 Vincent Chen 2020-06-09  16  			  struct timezone *_tz)
-ad5d1122b82fbd6 Vincent Chen 2020-06-09  17  {
-ad5d1122b82fbd6 Vincent Chen 2020-06-09  18  	register struct __kernel_old_timeval *tv asm("a0") = _tv;
-ad5d1122b82fbd6 Vincent Chen 2020-06-09  19  	register struct timezone *tz asm("a1") = _tz;
-ad5d1122b82fbd6 Vincent Chen 2020-06-09  20  	register long ret asm("a0");
-ad5d1122b82fbd6 Vincent Chen 2020-06-09 @21  	register long nr asm("a7") = __NR_gettimeofday;
-ad5d1122b82fbd6 Vincent Chen 2020-06-09  22  
-ad5d1122b82fbd6 Vincent Chen 2020-06-09  23  	asm volatile ("ecall\n"
-ad5d1122b82fbd6 Vincent Chen 2020-06-09  24  		      : "=r" (ret)
-ad5d1122b82fbd6 Vincent Chen 2020-06-09  25  		      : "r"(tv), "r"(tz), "r"(nr)
-ad5d1122b82fbd6 Vincent Chen 2020-06-09  26  		      : "memory");
-ad5d1122b82fbd6 Vincent Chen 2020-06-09  27  
-ad5d1122b82fbd6 Vincent Chen 2020-06-09  28  	return ret;
-ad5d1122b82fbd6 Vincent Chen 2020-06-09  29  }
-ad5d1122b82fbd6 Vincent Chen 2020-06-09  30  
-ad5d1122b82fbd6 Vincent Chen 2020-06-09  31  static __always_inline
-ad5d1122b82fbd6 Vincent Chen 2020-06-09  32  long clock_gettime_fallback(clockid_t _clkid, struct __kernel_timespec *_ts)
-ad5d1122b82fbd6 Vincent Chen 2020-06-09  33  {
-ad5d1122b82fbd6 Vincent Chen 2020-06-09  34  	register clockid_t clkid asm("a0") = _clkid;
-ad5d1122b82fbd6 Vincent Chen 2020-06-09  35  	register struct __kernel_timespec *ts asm("a1") = _ts;
-ad5d1122b82fbd6 Vincent Chen 2020-06-09  36  	register long ret asm("a0");
-ad5d1122b82fbd6 Vincent Chen 2020-06-09 @37  	register long nr asm("a7") = __NR_clock_gettime;
-ad5d1122b82fbd6 Vincent Chen 2020-06-09  38  
-ad5d1122b82fbd6 Vincent Chen 2020-06-09  39  	asm volatile ("ecall\n"
-ad5d1122b82fbd6 Vincent Chen 2020-06-09  40  		      : "=r" (ret)
-ad5d1122b82fbd6 Vincent Chen 2020-06-09  41  		      : "r"(clkid), "r"(ts), "r"(nr)
-ad5d1122b82fbd6 Vincent Chen 2020-06-09  42  		      : "memory");
-ad5d1122b82fbd6 Vincent Chen 2020-06-09  43  
-ad5d1122b82fbd6 Vincent Chen 2020-06-09  44  	return ret;
-ad5d1122b82fbd6 Vincent Chen 2020-06-09  45  }
-ad5d1122b82fbd6 Vincent Chen 2020-06-09  46  
-ad5d1122b82fbd6 Vincent Chen 2020-06-09  47  static __always_inline
-ad5d1122b82fbd6 Vincent Chen 2020-06-09  48  int clock_getres_fallback(clockid_t _clkid, struct __kernel_timespec *_ts)
-ad5d1122b82fbd6 Vincent Chen 2020-06-09  49  {
-ad5d1122b82fbd6 Vincent Chen 2020-06-09  50  	register clockid_t clkid asm("a0") = _clkid;
-ad5d1122b82fbd6 Vincent Chen 2020-06-09  51  	register struct __kernel_timespec *ts asm("a1") = _ts;
-ad5d1122b82fbd6 Vincent Chen 2020-06-09  52  	register long ret asm("a0");
-ad5d1122b82fbd6 Vincent Chen 2020-06-09 @53  	register long nr asm("a7") = __NR_clock_getres;
-ad5d1122b82fbd6 Vincent Chen 2020-06-09  54  
-ad5d1122b82fbd6 Vincent Chen 2020-06-09  55  	asm volatile ("ecall\n"
-ad5d1122b82fbd6 Vincent Chen 2020-06-09  56  		      : "=r" (ret)
-ad5d1122b82fbd6 Vincent Chen 2020-06-09  57  		      : "r"(clkid), "r"(ts), "r"(nr)
-ad5d1122b82fbd6 Vincent Chen 2020-06-09  58  		      : "memory");
-ad5d1122b82fbd6 Vincent Chen 2020-06-09  59  
-ad5d1122b82fbd6 Vincent Chen 2020-06-09  60  	return ret;
-ad5d1122b82fbd6 Vincent Chen 2020-06-09  61  }
-ad5d1122b82fbd6 Vincent Chen 2020-06-09  62  
-
+diff --git a/drivers/net/ethernet/marvell/octeontx2/af/rvu.h b/drivers/net/ethernet/marvell/octeontx2/af/rvu.h
+index 7f0a64731c67..7de817446fc3 100644
+--- a/drivers/net/ethernet/marvell/octeontx2/af/rvu.h
++++ b/drivers/net/ethernet/marvell/octeontx2/af/rvu.h
+@@ -866,6 +866,12 @@ int rvu_cpt_lf_teardown(struct rvu *rvu, u16 pcifunc, int blkaddr, int lf,
+ 			int slot);
+ int rvu_cpt_ctx_flush(struct rvu *rvu, u16 pcifunc);
+ 
++/* NDC APIs */
++#define NDC_MAX_BANK(rvu, blk_addr) (rvu_read64(rvu, \
++					blk_addr, NDC_AF_CONST) & 0xFF)
++#define NDC_MAX_LINE_PER_BANK(rvu, blk_addr) ((rvu_read64(rvu, \
++					blk_addr, NDC_AF_CONST) & 0xFFFF0000) >> 16)
++
+ /* CN10K RVU */
+ int rvu_set_channels_base(struct rvu *rvu);
+ void rvu_program_channels(struct rvu *rvu);
+@@ -881,6 +887,8 @@ static inline void rvu_dbg_init(struct rvu *rvu) {}
+ static inline void rvu_dbg_exit(struct rvu *rvu) {}
+ #endif
+ 
++int rvu_ndc_fix_locked_cacheline(struct rvu *rvu, int blkaddr);
++
+ /* RVU Switch */
+ void rvu_switch_enable(struct rvu *rvu);
+ void rvu_switch_disable(struct rvu *rvu);
+diff --git a/drivers/net/ethernet/marvell/octeontx2/af/rvu_debugfs.c b/drivers/net/ethernet/marvell/octeontx2/af/rvu_debugfs.c
+index fa280ebd3052..fad83d1f84b0 100644
+--- a/drivers/net/ethernet/marvell/octeontx2/af/rvu_debugfs.c
++++ b/drivers/net/ethernet/marvell/octeontx2/af/rvu_debugfs.c
+@@ -198,9 +198,6 @@ enum cpt_eng_type {
+ 	CPT_IE_TYPE = 3,
+ };
+ 
+-#define NDC_MAX_BANK(rvu, blk_addr) (rvu_read64(rvu, \
+-						blk_addr, NDC_AF_CONST) & 0xFF)
+-
+ #define rvu_dbg_NULL NULL
+ #define rvu_dbg_open_NULL NULL
+ 
+diff --git a/drivers/net/ethernet/marvell/octeontx2/af/rvu_nix.c b/drivers/net/ethernet/marvell/octeontx2/af/rvu_nix.c
+index 6b8747ebc08c..bcce42cd1c24 100644
+--- a/drivers/net/ethernet/marvell/octeontx2/af/rvu_nix.c
++++ b/drivers/net/ethernet/marvell/octeontx2/af/rvu_nix.c
+@@ -790,6 +790,7 @@ static int nix_aq_enqueue_wait(struct rvu *rvu, struct rvu_block *block,
+ 	struct nix_aq_res_s *result;
+ 	int timeout = 1000;
+ 	u64 reg, head;
++	int ret;
+ 
+ 	result = (struct nix_aq_res_s *)aq->res->base;
+ 
+@@ -813,9 +814,22 @@ static int nix_aq_enqueue_wait(struct rvu *rvu, struct rvu_block *block,
+ 			return -EBUSY;
+ 	}
+ 
+-	if (result->compcode != NIX_AQ_COMP_GOOD)
++	if (result->compcode != NIX_AQ_COMP_GOOD) {
+ 		/* TODO: Replace this with some error code */
++		if (result->compcode == NIX_AQ_COMP_CTX_FAULT ||
++		    result->compcode == NIX_AQ_COMP_LOCKERR ||
++		    result->compcode == NIX_AQ_COMP_CTX_POISON) {
++			ret = rvu_ndc_fix_locked_cacheline(rvu, BLKADDR_NDC_NIX0_RX);
++			ret |= rvu_ndc_fix_locked_cacheline(rvu, BLKADDR_NDC_NIX0_TX);
++			ret |= rvu_ndc_fix_locked_cacheline(rvu, BLKADDR_NDC_NIX1_RX);
++			ret |= rvu_ndc_fix_locked_cacheline(rvu, BLKADDR_NDC_NIX1_TX);
++			if (ret)
++				dev_err(rvu->dev,
++					"%s: Not able to unlock cachelines\n", __func__);
++		}
++
+ 		return -EBUSY;
++	}
+ 
+ 	return 0;
+ }
+diff --git a/drivers/net/ethernet/marvell/octeontx2/af/rvu_npa.c b/drivers/net/ethernet/marvell/octeontx2/af/rvu_npa.c
+index 70bd036ed76e..6cd8cc8f3488 100644
+--- a/drivers/net/ethernet/marvell/octeontx2/af/rvu_npa.c
++++ b/drivers/net/ethernet/marvell/octeontx2/af/rvu_npa.c
+@@ -42,9 +42,18 @@ static int npa_aq_enqueue_wait(struct rvu *rvu, struct rvu_block *block,
+ 			return -EBUSY;
+ 	}
+ 
+-	if (result->compcode != NPA_AQ_COMP_GOOD)
++	if (result->compcode != NPA_AQ_COMP_GOOD) {
+ 		/* TODO: Replace this with some error code */
++		if (result->compcode == NPA_AQ_COMP_CTX_FAULT ||
++		    result->compcode == NPA_AQ_COMP_LOCKERR ||
++		    result->compcode == NPA_AQ_COMP_CTX_POISON) {
++			if (rvu_ndc_fix_locked_cacheline(rvu, BLKADDR_NDC_NPA0))
++				dev_err(rvu->dev,
++					"%s: Not able to unlock cachelines\n", __func__);
++		}
++
+ 		return -EBUSY;
++	}
+ 
+ 	return 0;
+ }
+@@ -545,3 +554,47 @@ void rvu_npa_lf_teardown(struct rvu *rvu, u16 pcifunc, int npalf)
+ 
+ 	npa_ctx_free(rvu, pfvf);
+ }
++
++/* Due to an Hardware errata, in some corner cases, AQ context lock
++ * operations can result in a NDC way getting into an illegal state
++ * of not valid but locked.
++ *
++ * This API solves the problem by clearing the lock bit of the NDC block.
++ * The operation needs to be done for each line of all the NDC banks.
++ */
++int rvu_ndc_fix_locked_cacheline(struct rvu *rvu, int blkaddr)
++{
++	int bank, max_bank, line, max_line, err;
++	u64 reg;
++
++	/* Set the ENABLE bit(63) to '0' */
++	reg = rvu_read64(rvu, blkaddr, NDC_AF_CAMS_RD_INTERVAL);
++	rvu_write64(rvu, blkaddr, NDC_AF_CAMS_RD_INTERVAL, reg & GENMASK_ULL(62, 0));
++
++	/* Poll until the BUSY bits(47:32) are set to '0' */
++	err = rvu_poll_reg(rvu, blkaddr, NDC_AF_CAMS_RD_INTERVAL, GENMASK_ULL(47, 32), true);
++	if (err) {
++		dev_err(rvu->dev, "Timed out while polling for NDC CAM busy bits.\n");
++		return err;
++	}
++
++	max_bank = NDC_MAX_BANK(rvu, blkaddr);
++	max_line = NDC_MAX_LINE_PER_BANK(rvu, blkaddr);
++	for (bank = 0; bank < max_bank; bank++) {
++		for (line = 0; line < max_line; line++) {
++			/* Check if 'cache line valid bit(63)' is not set
++			 * but 'cache line lock bit(60)' is set and on
++			 * success, reset the lock bit(60).
++			 */
++			reg = rvu_read64(rvu, blkaddr,
++					 NDC_AF_BANKX_LINEX_METADATA(bank, line));
++			if (!(reg & BIT_ULL(63)) && (reg & BIT_ULL(60))) {
++				rvu_write64(rvu, blkaddr,
++					    NDC_AF_BANKX_LINEX_METADATA(bank, line),
++					    reg & ~BIT_ULL(60));
++			}
++		}
++	}
++
++	return 0;
++}
+diff --git a/drivers/net/ethernet/marvell/octeontx2/af/rvu_reg.h b/drivers/net/ethernet/marvell/octeontx2/af/rvu_reg.h
+index 0e0d536645ac..9bd4b6eeb7d5 100644
+--- a/drivers/net/ethernet/marvell/octeontx2/af/rvu_reg.h
++++ b/drivers/net/ethernet/marvell/octeontx2/af/rvu_reg.h
+@@ -690,6 +690,7 @@
+ #define NDC_AF_INTR_ENA_W1S		(0x00068)
+ #define NDC_AF_INTR_ENA_W1C		(0x00070)
+ #define NDC_AF_ACTIVE_PC		(0x00078)
++#define NDC_AF_CAMS_RD_INTERVAL		(0x00080)
+ #define NDC_AF_BP_TEST_ENABLE		(0x001F8)
+ #define NDC_AF_BP_TEST(a)		(0x00200 | (a) << 3)
+ #define NDC_AF_BLK_RST			(0x002F0)
+@@ -705,6 +706,8 @@
+ 		(0x00F00 | (a) << 5 | (b) << 4)
+ #define NDC_AF_BANKX_HIT_PC(a)		(0x01000 | (a) << 3)
+ #define NDC_AF_BANKX_MISS_PC(a)		(0x01100 | (a) << 3)
++#define NDC_AF_BANKX_LINEX_METADATA(a, b) \
++		(0x10000 | (a) << 3 | (b) << 3)
+ 
+ /* LBK */
+ #define LBK_CONST			(0x10ull)
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+2.25.1
+
