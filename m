@@ -2,499 +2,157 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4C80E69EBF5
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Feb 2023 01:28:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 06BD069EBF1
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Feb 2023 01:27:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230136AbjBVA2C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Feb 2023 19:28:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36964 "EHLO
+        id S229870AbjBVA1b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Feb 2023 19:27:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36006 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229688AbjBVA2A (ORCPT
+        with ESMTP id S229451AbjBVA13 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Feb 2023 19:28:00 -0500
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E195A4;
-        Tue, 21 Feb 2023 16:27:48 -0800 (PST)
-Received: from pps.filterd (m0279864.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 31M0RS5p002955;
-        Wed, 22 Feb 2023 00:27:28 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=206/ENTYhpd8cRg/HRQOtIZa/mKOhxRJ+u795kVpeiQ=;
- b=Zr27zCvg8JKYoGzW/fp+UXjF1KxAcQFNI0YlIbtRm3v+ZPyHrYacO4JWRx/rrm1dJLnw
- DgKNByMMl7KpTZTe/w9nJuZB9EIiZ5ru61nn3KpMPH7WzUJMcSjTqmyqBPN5WrwtTJXX
- MjsOa3Bm6Jj3NNkqur1zeVqa123VbKZH1vpn3t8i/C5Vz0NNGGeKHoHJpbNJa1Fw69Nn
- m+PA2loU9kDGSS3/SX6BS+4MbLEc2+UEGGLrAgkPF4D0RVlMSQDDn5iS82bGZAbXJ/h/
- VZLvo+x1KzHC3SUlHC89jwdGlEfaFNIVk6Yv2hkxOQKsY98hJuNqvj2buL2vQH4yyNjf AQ== 
-Received: from nasanppmta01.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3nw8gnr02j-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 22 Feb 2023 00:27:28 +0000
-Received: from nasanex01b.na.qualcomm.com (nasanex01b.na.qualcomm.com [10.46.141.250])
-        by NASANPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 31M0RRoN025909
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 22 Feb 2023 00:27:27 GMT
-Received: from [10.110.71.80] (10.80.80.8) by nasanex01b.na.qualcomm.com
- (10.46.141.250) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.41; Tue, 21 Feb
- 2023 16:27:26 -0800
-Message-ID: <05c4aab8-2d26-b944-adb6-624d67e4a11d@quicinc.com>
-Date:   Tue, 21 Feb 2023 16:27:25 -0800
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH v10 10/26] gunyah: vm_mgr: Introduce basic VM Manager
+        Tue, 21 Feb 2023 19:27:29 -0500
+Received: from EUR05-AM6-obe.outbound.protection.outlook.com (mail-am6eur05on2064.outbound.protection.outlook.com [40.107.22.64])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1ADDA1B5;
+        Tue, 21 Feb 2023 16:27:28 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=AGvaxQc8XXjcL+MKaOPYN/JqFquqCtv4tUczqQeeH1flwslpBjNNL6n5QB7AwhZWoVouMPlww1/x5fhkqvpPG1xOsz258k5QWwk/SjF8Zj9yo7BdZV566NAvT4/gs6CbPbrLRRhcZQF+A6+27R4w4umPnedpqAzfI9jFTsqdMryLE6Tyt6WkdcZHVnXpEQxotXlzwnn34f9NtF4ju78jkmmIJuDmPGvV65VS/WFxWo6eHNgL/T0juGRJuKMQeahz9VkjyWX1P0jsGuiwYO7QGs5KNJEcvY9vskrCTzQjs5wExeIIUb7WCU9TOwMuby3pzo/zzQN46pwx0qV7n87A7A==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=yYYtow5EiSL1LDfnW8HcgBVbmzo8QB4knVRwC192j5c=;
+ b=Or3LoM2f7uRSxBu9pj/0GVSfq8TqDr0oT6mGcuAtRUQeQvDu9rfoFhBbyzTde1/MYkxUhSC2+BnCfFh6HO6r7j0yTaJxuyPaU6gT91QKIFPbdHA6/NxMfUphM4ESWqDMfPDrq6zT0sl5GCj1XM4zIF8NQFDoC+jwN2I7Q4EPyyEaIOg/NE0eMO2KbbM7aytwtfOothro02EmnaszAQksWqZzxUDxbrttwccrfi0Cqv96fwzbio3ckrGSxMMck15oVyJlXigxXDEp9cGXE8I3kxYQN7XiH3U75m4X3p4DekAjgLy6LGZm9Z8oP3GDDK/VZzyfKc69StOT0EMgUak06w==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=yYYtow5EiSL1LDfnW8HcgBVbmzo8QB4knVRwC192j5c=;
+ b=dupY1iRbDUtCnXhFEeEp7Q+G86hNlgY1laOtyzcEZcOy7BbngyAjBTsuCd9oJJh5qPjI9VLf0TjHMxmR4PqRynqbxdHrECB0aLbsF0MAvCCkdGLcjkf1TpxH4DvDSnfBkjP09BO1AAjQon9sL30RkYff5peP7RejB7ZM90P2VnI=
+Received: from DU0PR04MB9417.eurprd04.prod.outlook.com (2603:10a6:10:358::11)
+ by DU2PR04MB8631.eurprd04.prod.outlook.com (2603:10a6:10:2de::19) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6111.21; Wed, 22 Feb
+ 2023 00:27:25 +0000
+Received: from DU0PR04MB9417.eurprd04.prod.outlook.com
+ ([fe80::f55a:cf12:da08:6d2a]) by DU0PR04MB9417.eurprd04.prod.outlook.com
+ ([fe80::f55a:cf12:da08:6d2a%3]) with mapi id 15.20.6111.019; Wed, 22 Feb 2023
+ 00:27:25 +0000
+From:   Peng Fan <peng.fan@nxp.com>
+To:     Rob Herring <robh+dt@kernel.org>,
+        "Peng Fan (OSS)" <peng.fan@oss.nxp.com>
+CC:     "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+        "krzysztof.kozlowski+dt@linaro.org" 
+        <krzysztof.kozlowski+dt@linaro.org>,
+        "shawnguo@kernel.org" <shawnguo@kernel.org>,
+        "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>,
+        Xu Yang <xu.yang_2@nxp.com>,
+        "kernel@pengutronix.de" <kernel@pengutronix.de>,
+        "festevam@gmail.com" <festevam@gmail.com>,
+        dl-linux-imx <linux-imx@nxp.com>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>, Jun Li <jun.li@nxp.com>
+Subject: RE: [PATCH 2/2] dt-bindings: usb: usbmisc-imx: add i.MX8MM usbmisc
+Thread-Topic: [PATCH 2/2] dt-bindings: usb: usbmisc-imx: add i.MX8MM usbmisc
+Thread-Index: AQHZFnvkbVA7eIUDvEOOMY6gPO+/wK7Z1qoAgACkitA=
+Date:   Wed, 22 Feb 2023 00:27:25 +0000
+Message-ID: <DU0PR04MB9417BFF5F785C1C77904572388AA9@DU0PR04MB9417.eurprd04.prod.outlook.com>
+References: <20221223031012.92932-1-peng.fan@oss.nxp.com>
+ <20221223031012.92932-2-peng.fan@oss.nxp.com>
+ <CAL_JsqLW_YxC+S5Tp-gveHQpksKfzmrpEFXtcdLJ3xMJoX4+qw@mail.gmail.com>
+In-Reply-To: <CAL_JsqLW_YxC+S5Tp-gveHQpksKfzmrpEFXtcdLJ3xMJoX4+qw@mail.gmail.com>
+Accept-Language: en-US
 Content-Language: en-US
-To:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Alex Elder <elder@linaro.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Prakruthi Deepak Heragu <quic_pheragu@quicinc.com>
-CC:     Murali Nalajala <quic_mnalajal@quicinc.com>,
-        Trilok Soni <quic_tsoni@quicinc.com>,
-        Srivatsa Vaddagiri <quic_svaddagi@quicinc.com>,
-        Carl van Schaik <quic_cvanscha@quicinc.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        "Konrad Dybcio" <konrad.dybcio@linaro.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Bagas Sanjaya <bagasdotme@gmail.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Jassi Brar <jassisinghbrar@gmail.com>,
-        <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-doc@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>
-References: <20230214211229.3239350-1-quic_eberman@quicinc.com>
- <20230214212356.3313181-1-quic_eberman@quicinc.com>
- <dbcfa4e9-a1ad-0f24-77bf-05934ca26bb2@linaro.org>
-From:   Elliot Berman <quic_eberman@quicinc.com>
-In-Reply-To: <dbcfa4e9-a1ad-0f24-77bf-05934ca26bb2@linaro.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nasanex01b.na.qualcomm.com (10.46.141.250)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: HKKGuBqppjiiOzIkNHkllqlyyIafk3Jn
-X-Proofpoint-GUID: HKKGuBqppjiiOzIkNHkllqlyyIafk3Jn
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.170.22
- definitions=2023-02-21_13,2023-02-20_02,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0
- priorityscore=1501 adultscore=0 bulkscore=0 clxscore=1015
- lowpriorityscore=0 mlxlogscore=999 malwarescore=0 mlxscore=0 phishscore=0
- suspectscore=0 spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2302220000
-X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nxp.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: DU0PR04MB9417:EE_|DU2PR04MB8631:EE_
+x-ms-office365-filtering-correlation-id: 2d230972-c5b5-46e6-3a1e-08db146b928f
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: DlzRJshkHooFbRlS/bhjY+ZgRKwY6nQafFzA+mCPldLve4wKUhNzb9Rnh6/5hK9rHca+CqQ/koDG15JRoJMlEjRRiTlQq8wDzjozLP4/tM92hQl38wnbFBw9vnwEbrovmx5Xn2z6Me0f8Cr9tGlvh712mT0GZJISMYyjnS32ip3clLEE2CwzhRvl25SWUHp1SzoXZgwgLymT+wCsotvm1CVGO22uGdMZD9pYt1iqSzeB091+amMZtZ+yOZ1sDyqTaiBEWTh/mKWeSxqqpMhruVCEz5eRh9C0Cy1cICQch0zxyA7EGZtcjDQPYwAPKY73T1XuIbEfDW6RXEZ/QkikU+nUpWuPrkVXoiKs+oQ5MZJnhOMcDLGtz3ngVqEMJ/rSPLHXXdK8ggMuKE3nzISuIh2icW9Roh26MjGZz3txip9ySB56bK+Jz0JhA2CVF14YwKWySDV11UlCPHYjx2Uc2n3czOHXnnknKYWM6rvwoIfXBR0q+Fu3cl8PAySvf9j+9LG/ALFtNglst6AOWen9wjl5eds+QfiZqXUwV2XvuiwSmKEd1pkPk1etCUU55ci1FbsMuoSEEtZB3QnLMqCiC05PQbx3qGzYb6zFXeRzeKFNmEGJULrA0DpB06dmeq4TjC+KE5rnv3DftaVSleKrIz/tYDz1+9OEviTU7JM1rzZiV70kMy1ZyYK/a9ujRZ/hEqzwClNKgyLVF7p3dV9cxQ==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DU0PR04MB9417.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(346002)(396003)(376002)(366004)(39860400002)(136003)(451199018)(122000001)(38100700002)(2906002)(52536014)(8936002)(44832011)(4744005)(5660300002)(7416002)(54906003)(9686003)(26005)(33656002)(186003)(83380400001)(41300700001)(64756008)(66556008)(66946007)(4326008)(66446008)(8676002)(76116006)(66476007)(55016003)(53546011)(7696005)(6506007)(478600001)(86362001)(110136005)(316002)(38070700005)(71200400001);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?WEFZbWRPVVVtZnlhZU4rNEplSkZSck5MWmIwb2dDTWhaRS9abUJFKzB4OWhS?=
+ =?utf-8?B?UHhVMWtlcml1TkliME9VVEJIQy9pamxWUDlWc1MxeGZFeUlOZ2U0QVlzaFJF?=
+ =?utf-8?B?NVhETlI1RGljTS9BUmNWdFN0dDEvUEtMa24rMkZVNW5OZXpFQ2tIZDNYa1ZN?=
+ =?utf-8?B?S1YwbFFDN0hRVEZldXZUck9ORk5jODJVckxjT2VLM1Z3NW1iSkhVUm1uSEhO?=
+ =?utf-8?B?SHNQSTkzTFBkTmo3TnhzMzZSVG9FQ3BlNVd2VTVCdDUwUDRNQlJNUEZwSEZX?=
+ =?utf-8?B?dG92WTU1d1ZDMzg1VjE4WitRcHRpRXoyWmFVbUdkVGUxdWczY1YrWTUwVExp?=
+ =?utf-8?B?ZTN6YjRKQUdzR2ZJeVJ0YVo5UTcvb1FZZFd6QjB1V04zNytJaVllSXQzNXN0?=
+ =?utf-8?B?Yk1RWWNmL05nUHNnNklpQjBOVk9uMnUwOHFNKzdBWHhaRVNpS1VkbEpVK21N?=
+ =?utf-8?B?Q1JSRm1nU09JSy9oS2x3YXpqOVRrb0lwR1hYdGRHcGVkblkzbk43ZlVFdjU2?=
+ =?utf-8?B?NGpFYlpINER5WUltVmZVdTgrM1B1VEF2TWIyUVhqOEkwNzc1MktmOFptdWQ0?=
+ =?utf-8?B?cUtMakZEZnJjTkxQcWkxZUF6cjR3OXIwLzJRK0FGNnhRTThqME5TRVR3dFF4?=
+ =?utf-8?B?SktUY2ZyU2RXUVVvcFNYbmRDMVV3WnRBbGs1UHhtdmFLQkpiZzkxV1dLYzZQ?=
+ =?utf-8?B?TUJCODVVN25JMnZydUwycFNhNFRXRGdoaWpLa0h4a2Flc0NqRzhCekZEb0hZ?=
+ =?utf-8?B?a2hnWDN0cFZVU2pnY0UwdERJWitaUE8rV1JiQmU3dTVIOW0rWTg3MmN2UFBR?=
+ =?utf-8?B?cmtzZllRMEpmRzkxLzJ6T0NWNDc5dXNUUml0MzVTUHpSL3FUS05JenR1Ukhm?=
+ =?utf-8?B?cjhIOXJ0dS9zVUhBRUpWR3ZoOGJPVU1tQ1R3dU55ODNkL3JMOFdtWkRWZXNw?=
+ =?utf-8?B?YTA1R2dFMW9MQ0JSbFM2YVBIM2Q4dEs0MFYxZ2hoc0FDbm9HbGQ1VUxkUXlu?=
+ =?utf-8?B?blNHbE1GWXVtQ2x2ZnBCSW9mdXRmYVhDT2d1RjQzOHJiMjhtN21zdHBwMVls?=
+ =?utf-8?B?RUxaM1lmUW9zT3pvOWEwcjRUTzlabDFONDNRSk9pVEhEbXp4UWpWYVliRXVk?=
+ =?utf-8?B?SjR3aHZEc2dzb1JVZDQyMVFVMHF3OWJjUVkxM3F6V2FPSmhvaWFXUWlFRU9w?=
+ =?utf-8?B?SWlEL2xJbkZLR1RWcytsVHRDOEtZdHJybVMwdmRnbXJpemRiTXZnTDdUbHk1?=
+ =?utf-8?B?Wnd2Z3g0RzFlLyszZWFmbXVYQUhrSUVUOGhuSEVjQXlJbmY2N21JVzJ3NXNL?=
+ =?utf-8?B?dUtkQVRGL2VvTnhJVEY0amx4Qmt1RmtMcUkvWWNIRm44RlBsRjdkY1ZxTkt4?=
+ =?utf-8?B?UFdkY21qVXo1REFUdVR3WjNzMXd3NFQwZjdNYnlBUXNGWkNuZmtiYnRyakFZ?=
+ =?utf-8?B?V1Npckp1Y0JleElYSFZsdW9PYWRFMmdaa1Vrd3M2WGRqVGZiNkRCU1YzNFUx?=
+ =?utf-8?B?M3NGaldVeEx5YTRlMXh3WlI0RWl6K25Uamx0cFYweU91R1Rtc1pvSlFYazVL?=
+ =?utf-8?B?RXpIeDhqLzN5QWJ1cVhsUVRZRDhRNXpiRnVZTGp4d2phR2lHRjl5OUJaTUZO?=
+ =?utf-8?B?QVFsYThhUVBCU2NTWm9nQmMzU0Z5QnVWR2E5bE11N1dTTVdOT01EZmJ6RWJL?=
+ =?utf-8?B?VWlrRmxiMmlNeWJGVUtQVzNNRHR0MERtSmV1MFh4M1liQ2t1WHd5QVhVNVh6?=
+ =?utf-8?B?WXVUb1FWbExINStibE8zK1BCUk80T2xzVFJqWk5HblJSdWRjSjlaK1lTOXZr?=
+ =?utf-8?B?ZE9Fd2FKdU1MZ0dnSFpKeS85c2pRSFRBQTBPUXpwMEJ5eERIZ3pqUW8vQUx5?=
+ =?utf-8?B?NXdFeWZHb0xidktQWm45ekxGZHRhNVh0WERqSUtoTS9pU2hoclJuK2hHTDU2?=
+ =?utf-8?B?RnlRUmJHbG4zM09EZTRJd1BvSy92VnhXVm1lTWlnR2twRU9SYVppSm1xbTcw?=
+ =?utf-8?B?a2lpcjJYRFIzRTdpQ3lJbkxXZlVpUCtrcW9GaGllbmQvNThDTXFnODJSbWp1?=
+ =?utf-8?B?c25ZcHVkajZLeW41SWRKZlZXRzZORDVobmR3bm8rUlJJWHV0cXU2a0U1L0gr?=
+ =?utf-8?Q?BYq8=3D?=
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
+MIME-Version: 1.0
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: DU0PR04MB9417.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 2d230972-c5b5-46e6-3a1e-08db146b928f
+X-MS-Exchange-CrossTenant-originalarrivaltime: 22 Feb 2023 00:27:25.5817
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: xg7fZRg2mbBaXZyw+o6yIm/1/9yWudkN+vb7Mj4RMU//N//Y+e5UiT5h2OBnFWyLxbZ52JysuulOW1dF8yNhWw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DU2PR04MB8631
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 2/21/2023 2:46 AM, Srinivas Kandagatla wrote:
-> 
-> 
-> On 14/02/2023 21:23, Elliot Berman wrote:
->>
->> Gunyah VM manager is a kernel moduel which exposes an interface to
->> Gunyah userspace to load, run, and interact with other Gunyah virtual
->> machines. The interface is a character device at /dev/gunyah.
->>
->> Add a basic VM manager driver. Upcoming patches will add more ioctls
->> into this driver.
->>
->> Co-developed-by: Prakruthi Deepak Heragu <quic_pheragu@quicinc.com>
->> Signed-off-by: Prakruthi Deepak Heragu <quic_pheragu@quicinc.com>
->> Signed-off-by: Elliot Berman <quic_eberman@quicinc.com>
->> ---
->>   .../userspace-api/ioctl/ioctl-number.rst      |   1 +
->>   drivers/virt/gunyah/Makefile                  |   2 +-
->>   drivers/virt/gunyah/rsc_mgr.c                 |  37 +++++-
->>   drivers/virt/gunyah/vm_mgr.c                  | 118 ++++++++++++++++++
->>   drivers/virt/gunyah/vm_mgr.h                  |  22 ++++
->>   include/uapi/linux/gunyah.h                   |  23 ++++
->>   6 files changed, 201 insertions(+), 2 deletions(-)
->>   create mode 100644 drivers/virt/gunyah/vm_mgr.c
->>   create mode 100644 drivers/virt/gunyah/vm_mgr.h
->>   create mode 100644 include/uapi/linux/gunyah.h
->>
->> diff --git a/Documentation/userspace-api/ioctl/ioctl-number.rst 
->> b/Documentation/userspace-api/ioctl/ioctl-number.rst
->> index 0a1882e296ae..2513324ae7be 100644
->> --- a/Documentation/userspace-api/ioctl/ioctl-number.rst
->> +++ b/Documentation/userspace-api/ioctl/ioctl-number.rst
->> @@ -137,6 +137,7 @@ Code  Seq#    Include 
->> File                                           Comments
->>   'F'   DD     video/sstfb.h                                           
->> conflict!
->>   'G'   00-3F  drivers/misc/sgi-gru/grulib.h                           
->> conflict!
->>   'G'   00-0F  xen/gntalloc.h, xen/gntdev.h                            
->> conflict!
->> +'G'   00-0f  linux/gunyah.h                                          
->> conflict!
->>   'H'   00-7F  linux/hiddev.h                                          
->> conflict!
->>   'H'   00-0F  linux/hidraw.h                                          
->> conflict!
->>   'H'   01     linux/mei.h                                             
->> conflict!
->> diff --git a/drivers/virt/gunyah/Makefile b/drivers/virt/gunyah/Makefile
->> index de29769f2f3f..03951cf82023 100644
->> --- a/drivers/virt/gunyah/Makefile
->> +++ b/drivers/virt/gunyah/Makefile
->> @@ -2,5 +2,5 @@
->>   obj-$(CONFIG_GUNYAH) += gunyah.o
->> -gunyah_rsc_mgr-y += rsc_mgr.o rsc_mgr_rpc.o
->> +gunyah_rsc_mgr-y += rsc_mgr.o rsc_mgr_rpc.o vm_mgr.o
->>   obj-$(CONFIG_GUNYAH) += gunyah_rsc_mgr.o
->> diff --git a/drivers/virt/gunyah/rsc_mgr.c 
->> b/drivers/virt/gunyah/rsc_mgr.c
->> index 2a47139873a8..73c5a6b7cbbc 100644
->> --- a/drivers/virt/gunyah/rsc_mgr.c
->> +++ b/drivers/virt/gunyah/rsc_mgr.c
->> @@ -16,8 +16,10 @@
->>   #include <linux/completion.h>
->>   #include <linux/gunyah_rsc_mgr.h>
->>   #include <linux/platform_device.h>
->> +#include <linux/miscdevice.h>
->>   #include "rsc_mgr.h"
->> +#include "vm_mgr.h"
->>   #define RM_RPC_API_VERSION_MASK        GENMASK(3, 0)
->>   #define RM_RPC_HEADER_WORDS_MASK    GENMASK(7, 4)
->> @@ -103,6 +105,8 @@ struct gh_rm {
->>       struct kmem_cache *cache;
->>       struct mutex send_lock;
->>       struct blocking_notifier_head nh;
->> +
->> +    struct miscdevice miscdev;
->>   };
->>   static struct gh_rm_connection *gh_rm_alloc_connection(__le32 
->> msg_id, u8 type)
->> @@ -509,6 +513,21 @@ void put_gh_rm(struct gh_rm *rm)
->>   }
->>   EXPORT_SYMBOL_GPL(put_gh_rm);
->> +static long gh_dev_ioctl(struct file *filp, unsigned int cmd, 
->> unsigned long arg)
->> +{
->> +    struct miscdevice *miscdev = filp->private_data;
->> +    struct gh_rm *rm = container_of(miscdev, struct gh_rm, miscdev);
->> +
->> +    return gh_dev_vm_mgr_ioctl(rm, cmd, arg);
->> +}
->> +
->> +static const struct file_operations gh_dev_fops = {
->> +    .owner        = THIS_MODULE,
->> +    .unlocked_ioctl    = gh_dev_ioctl,
->> +    .compat_ioctl    = compat_ptr_ioctl,
->> +    .llseek        = noop_llseek,
->> +};
->> +
->>   static int gh_msgq_platform_probe_direction(struct platform_device 
->> *pdev,
->>                       bool tx, int idx, struct gunyah_resource *ghrsc)
->>   {
->> @@ -567,7 +586,22 @@ static int gh_rm_drv_probe(struct platform_device 
->> *pdev)
->>       rm->msgq_client.rx_callback = gh_rm_msgq_rx_data;
->>       rm->msgq_client.tx_done = gh_rm_msgq_tx_done;
->> -    return gh_msgq_init(&pdev->dev, &rm->msgq, &rm->msgq_client, 
->> &rm->tx_ghrsc, &rm->rx_ghrsc);
->> +    ret = gh_msgq_init(&pdev->dev, &rm->msgq, &rm->msgq_client, 
->> &rm->tx_ghrsc, &rm->rx_ghrsc);
->> +    if (ret)
->> +        goto err_cache;
->> +
->> +    rm->miscdev.name = "gunyah";
->> +    rm->miscdev.minor = MISC_DYNAMIC_MINOR;
->> +    rm->miscdev.fops = &gh_dev_fops;
->> +
->> +    ret = misc_register(&rm->miscdev);
->> +    if (ret)
->> +        goto err_msgq;
->> +
->> +    return 0;
->> +err_msgq:
->> +    mbox_free_channel(gh_msgq_chan(&rm->msgq));
->> +    gh_msgq_remove(&rm->msgq);
->>   err_cache:
->>       kmem_cache_destroy(rm->cache);
->>       return ret;
->> @@ -577,6 +611,7 @@ static int gh_rm_drv_remove(struct platform_device 
->> *pdev)
->>   {
->>       struct gh_rm *rm = platform_get_drvdata(pdev);
->> +    misc_deregister(&rm->miscdev);
->>       mbox_free_channel(gh_msgq_chan(&rm->msgq));
->>       gh_msgq_remove(&rm->msgq);
->>       kmem_cache_destroy(rm->cache);
->> diff --git a/drivers/virt/gunyah/vm_mgr.c b/drivers/virt/gunyah/vm_mgr.c
->> new file mode 100644
->> index 000000000000..fd890a57172e
->> --- /dev/null
->> +++ b/drivers/virt/gunyah/vm_mgr.c
->> @@ -0,0 +1,118 @@
->> +// SPDX-License-Identifier: GPL-2.0-only
->> +/*
->> + * Copyright (c) 2022-2023 Qualcomm Innovation Center, Inc. All 
->> rights reserved.
->> + */
->> +
->> +#define pr_fmt(fmt) "gh_vm_mgr: " fmt
->> +
->> +#include <linux/anon_inodes.h>
->> +#include <linux/file.h>
->> +#include <linux/gunyah_rsc_mgr.h>
->> +#include <linux/miscdevice.h>
->> +#include <linux/module.h>
->> +
->> +#include <uapi/linux/gunyah.h>
->> +
->> +#include "vm_mgr.h"
->> +
->> +static void gh_vm_free(struct work_struct *work)
->> +{
->> +    struct gh_vm *ghvm = container_of(work, struct gh_vm, free_work);
->> +    int ret;
->> +
->> +    ret = gh_rm_dealloc_vmid(ghvm->rm, ghvm->vmid);
->> +    if (ret)
->> +        pr_warn("Failed to deallocate vmid: %d\n", ret);
->> +
->> +    put_gh_rm(ghvm->rm);
->> +    kfree(ghvm);
->> +}
->> +
->> +static __must_check struct gh_vm *gh_vm_alloc(struct gh_rm *rm)
->> +{
->> +    struct gh_vm *ghvm;
->> +    int vmid;
->> +
->> +    vmid = gh_rm_alloc_vmid(rm, 0);
->> +    if (vmid < 0)
->> +        return ERR_PTR(vmid);
->> +
->> +    ghvm = kzalloc(sizeof(*ghvm), GFP_KERNEL);
->> +    if (!ghvm) {
->> +        gh_rm_dealloc_vmid(rm, vmid);
->> +        return ERR_PTR(-ENOMEM);
->> +    }
->> +
->> +    get_gh_rm(rm);
->> +
->> +    ghvm->vmid = vmid;
->> +    ghvm->rm = rm;
->> +
->> +    INIT_WORK(&ghvm->free_work, gh_vm_free);
->> +
->> +    return ghvm;
->> +}
->> +
->> +static int gh_vm_release(struct inode *inode, struct file *filp)
->> +{
->> +    struct gh_vm *ghvm = filp->private_data;
->> +
->> +    /* VM will be reset and make RM calls which can interruptible sleep.
->> +     * Defer to a work so this thread can receive signal.
->> +     */
->> +    schedule_work(&ghvm->free_work);
->> +    return 0;
->> +}
->> +
->> +static const struct file_operations gh_vm_fops = {
->> +    .release = gh_vm_release,
-> 
->> +    .compat_ioctl    = compat_ptr_ioctl,
-> 
-> This line should go with the patch that adds real ioctl
-> 
-
-Done.
-
->> +    .llseek = noop_llseek,
->> +};
->> +
->> +static long gh_dev_ioctl_create_vm(struct gh_rm *rm, unsigned long arg)
-> Not sure what is the gain of this multiple levels of redirection.
-> 
-> How about
-> 
-> long gh_dev_create_vm(struct gh_rm *rm, unsigned long arg)
-> {
-> ...
-> }
-> 
-> and rsc_mgr just call it as part of its ioctl call
-> 
-> static long gh_dev_ioctl(struct file *filp, unsigned int cmd, unsigned 
-> long arg)
-> {
->      struct miscdevice *miscdev = filp->private_data;
->      struct gh_rm *rm = container_of(miscdev, struct gh_rm, miscdev);
-> 
->      switch (cmd) {
->      case GH_CREATE_VM:
->          return gh_dev_create_vm(rm, arg);
->      default:
->          return -ENOIOCTLCMD;
->      }
-> }
-> 
-
-I'm anticipating we will add further /dev/gunyah ioctls and I thought it 
-would be cleaner to have all that in vm_mgr.c itself.
-
-> 
->> +{
->> +    struct gh_vm *ghvm;
->> +    struct file *file;
->> +    int fd, err;
->> +
->> +    /* arg reserved for future use. */
->> +    if (arg)
->> +        return -EINVAL;
-> 
-> The only code path I see here is via GH_CREATE_VM ioctl which obviously 
-> does not take any arguments, so if you are thinking of using the 
-> argument for architecture-specific VM flags.  Then this needs to be 
-> properly done by making the ABI aware of this.
-
-It is documented in Patch 17 (Document Gunyah VM Manager)
-
-+GH_CREATE_VM
-+~~~~~~~~~~~~
-+
-+Creates a Gunyah VM. The argument is reserved for future use and must be 0.
-
-> 
-> As you mentioned zero value arg imply an "unauthenticated VM" type, but 
-> this was not properly encoded in the userspace ABI. Why not make it 
-> future compatible. How about adding arguments to GH_CREATE_VM and pass 
-> the required information correctly.
-> Note that once the ABI is accepted then you will not be able to change 
-> it, other than adding a new one.
-> 
-
-Does this means adding #define GH_VM_DEFAULT_ARG 0 ? I am not sure yet 
-what arguments to add here.
-
-The ABI can add new "long" values to GH_CREATE_VM and that wouldn't 
-break compatibility with old kernels; old kernels reject it as -EINVAL.
-
->> +
->> +    ghvm = gh_vm_alloc(rm);
->> +    if (IS_ERR(ghvm))
->> +        return PTR_ERR(ghvm);
->> +
->> +    fd = get_unused_fd_flags(O_CLOEXEC);
->> +    if (fd < 0) {
->> +        err = fd;
->> +        goto err_destroy_vm;
->> +    }
->> +
->> +    file = anon_inode_getfile("gunyah-vm", &gh_vm_fops, ghvm, O_RDWR);
->> +    if (IS_ERR(file)) {
->> +        err = PTR_ERR(file);
->> +        goto err_put_fd;
->> +    }
->> +
->> +    fd_install(fd, file);
->> +
->> +    return fd;
->> +
->> +err_put_fd:
->> +    put_unused_fd(fd);
->> +err_destroy_vm:
->> +    kfree(ghvm);
->> +    return err;
->> +}
->> +
->> +long gh_dev_vm_mgr_ioctl(struct gh_rm *rm, unsigned int cmd, unsigned 
->> long arg)
->> +{
->> +    switch (cmd) {
->> +    case GH_CREATE_VM:
->> +        return gh_dev_ioctl_create_vm(rm, arg);
->> +    default:
->> +        return -ENOIOCTLCMD;
->> +    }
->> +}
->> diff --git a/drivers/virt/gunyah/vm_mgr.h b/drivers/virt/gunyah/vm_mgr.h
->> new file mode 100644
->> index 000000000000..76954da706e9
->> --- /dev/null
->> +++ b/drivers/virt/gunyah/vm_mgr.h
->> @@ -0,0 +1,22 @@
->> +/* SPDX-License-Identifier: GPL-2.0-only */
->> +/*
->> + * Copyright (c) 2022-2023 Qualcomm Innovation Center, Inc. All 
->> rights reserved.
->> + */
->> +
->> +#ifndef _GH_PRIV_VM_MGR_H
->> +#define _GH_PRIV_VM_MGR_H
->> +
->> +#include <linux/gunyah_rsc_mgr.h>
->> +
->> +#include <uapi/linux/gunyah.h>
->> +
->> +long gh_dev_vm_mgr_ioctl(struct gh_rm *rm, unsigned int cmd, unsigned 
->> long arg);
->> +
->> +struct gh_vm {
->> +    u16 vmid;
->> +    struct gh_rm *rm;
->> +
->> +    struct work_struct free_work;
->> +};
->> +
->> +#endif
->> diff --git a/include/uapi/linux/gunyah.h b/include/uapi/linux/gunyah.h
->> new file mode 100644
->> index 000000000000..10ba32d2b0a6
->> --- /dev/null
->> +++ b/include/uapi/linux/gunyah.h
->> @@ -0,0 +1,23 @@
->> +/* SPDX-License-Identifier: GPL-2.0-only WITH Linux-syscall-note */
->> +/*
->> + * Copyright (c) 2022-2023 Qualcomm Innovation Center, Inc. All 
->> rights reserved.
->> + */
->> +
->> +#ifndef _UAPI_LINUX_GUNYAH
->> +#define _UAPI_LINUX_GUNYAH
->> +
->> +/*
->> + * Userspace interface for /dev/gunyah - gunyah based virtual machine
->> + */
->> +
->> +#include <linux/types.h>
->> +#include <linux/ioctl.h>
->> +
->> +#define GH_IOCTL_TYPE            'G'
->> +
->> +/*
->> + * ioctls for /dev/gunyah fds:
->> + */
->> +#define GH_CREATE_VM            _IO(GH_IOCTL_TYPE, 0x0) /* Returns a 
->> Gunyah VM fd */
-> 
-> Can HLOS forcefully destroy a VM?
-> If so should we have a corresponding DESTROY IOCTL?
-
-It can forcefully destroy unauthenticated and protected virtual 
-machines. I don't have a userspace usecase for a DESTROY ioctl yet, 
-maybe this can be added later? By the way, the VM is forcefully 
-destroyed when VM refcount is dropped to 0 (close(vm_fd) and any other 
-relevant file descriptors).
-
-- Elliot
+SGkgUm9iLA0KDQo+IFN1YmplY3Q6IFJlOiBbUEFUQ0ggMi8yXSBkdC1iaW5kaW5nczogdXNiOiB1
+c2JtaXNjLWlteDogYWRkIGkuTVg4TU0NCj4gdXNibWlzYw0KPiANCj4gT24gVGh1LCBEZWMgMjIs
+IDIwMjIgYXQgOTowOSBQTSBQZW5nIEZhbiAoT1NTKSA8cGVuZy5mYW5Ab3NzLm54cC5jb20+DQo+
+IHdyb3RlOg0KPiA+DQo+ID4gRnJvbTogUGVuZyBGYW4gPHBlbmcuZmFuQG54cC5jb20+DQo+ID4N
+Cj4gPiBBZGQgZnNsLGlteDhtbS11c2JtaXNjIGNvbXBhdGlibGUgZm9yIGkuTVg4TU0NCj4gPg0K
+PiA+IFNpZ25lZC1vZmYtYnk6IFBlbmcgRmFuIDxwZW5nLmZhbkBueHAuY29tPg0KPiA+IC0tLQ0K
+PiA+DQo+ID4gSSBoYWQgYSBWNCBwYXRjaHNldCB0byBjb252ZXJ0IHRoZSBiaW5kaW5nIHRvIGR0
+IHNjaGVtYSwgYnV0IHdlIGFyZSBpbg0KPiA+IHRoZSBwcm9jZXNzIG9mIEFSTSBTeXN0ZW0tUmVh
+ZHkgMi4wIGNlcnRpZmljYXRpb24sIGRpcmVjdGx5IHVwZGF0ZQ0KPiA+IHRoaXMgYmluZGluZyBk
+b2MgaXMgdGhlIGVhc2llc3Qgd2F5IGZvciBub3cuDQo+IA0KPiBUaGVyZSdzIGJlZW4gc29tZSBt
+aXN1bmRlcnN0YW5kaW5nICh3aXRoaW4gQXJtKSwgYnV0IHRoaXMgaXMgbm90IHN1ZmZpY2llbnQN
+Cj4gZm9yIGNlcnRpZmljYXRpb24uIA0KDQpZb3UgbWVhbiBTUi1JUiAyLjAgcmVxdWlyZXMgc2No
+ZW1hIGJpbmRpbmcgZG9jPw0KDQpUaGVyZSBtdXN0IGJlIGEgc2NoZW1hLiBCZXNpZGVzLCB5b3Un
+dmUgYWxyZWFkeSBkb25lIHRoZQ0KPiB3b3JrIHRvIGNvbnZlcnQgYW5kIHNwZW50IG1haW50YWlu
+ZXJzIHRpbWUgdG8gcmV2aWV3IHRoaXMuIFNvIGNhbiB5b3UNCj4gcGxlYXNlIHJlcG9zdCB0aGUg
+Y29udmVyc2lvbnMuDQoNCm9rLCBJIHdpbGwgcGljayB1cCB0aGUgdjQgYW5kIHByZXBhcmUgdjUu
+DQoNClRoYW5rcywNClBlbmcuDQoNCj4gDQo+IFJvYg0K
