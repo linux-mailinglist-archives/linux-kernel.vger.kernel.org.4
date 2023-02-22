@@ -2,122 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 57EBF69EE9D
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Feb 2023 07:07:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E73AF69EEB2
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Feb 2023 07:15:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230048AbjBVGHj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Feb 2023 01:07:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59608 "EHLO
+        id S229672AbjBVGP0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Feb 2023 01:15:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36302 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229586AbjBVGHg (ORCPT
+        with ESMTP id S229537AbjBVGPY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Feb 2023 01:07:36 -0500
-Received: from mxout70.expurgate.net (mxout70.expurgate.net [194.37.255.70])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 705762D159;
-        Tue, 21 Feb 2023 22:07:35 -0800 (PST)
-Received: from [127.0.0.1] (helo=localhost)
-        by relay.expurgate.net with smtp (Exim 4.92)
-        (envelope-from <prvs=9431929e93=fe@dev.tdt.de>)
-        id 1pUiHd-000K5O-FA; Wed, 22 Feb 2023 07:07:17 +0100
-Received: from [195.243.126.94] (helo=securemail.tdt.de)
-        by relay.expurgate.net with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <fe@dev.tdt.de>)
-        id 1pUiHc-000K5D-C8; Wed, 22 Feb 2023 07:07:16 +0100
-Received: from securemail.tdt.de (localhost [127.0.0.1])
-        by securemail.tdt.de (Postfix) with ESMTP id CE2EB240049;
-        Wed, 22 Feb 2023 07:07:15 +0100 (CET)
-Received: from mail.dev.tdt.de (unknown [10.2.4.42])
-        by securemail.tdt.de (Postfix) with ESMTP id 2B019240040;
-        Wed, 22 Feb 2023 07:07:15 +0100 (CET)
-Received: from mail.dev.tdt.de (localhost [IPv6:::1])
-        by mail.dev.tdt.de (Postfix) with ESMTP id 846272CED9;
-        Wed, 22 Feb 2023 07:07:14 +0100 (CET)
+        Wed, 22 Feb 2023 01:15:24 -0500
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0920311DD
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Feb 2023 22:15:23 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1677046523; x=1708582523;
+  h=date:from:to:cc:subject:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=ZeXJ7DB5YT2ntkxG4DK0XkeNPwdLeW8BHoIQ2ji0wqc=;
+  b=OiHME6xm6FpkkuV6GAK7KLRjVzRI7asdWMkiCOGSqGyWBgHlxiUKtsP2
+   0FAhIB0V0Uoqqy2btG7KVMFlXAWxCAEWzCPI30U1Wm9kp3uGHqqBv6Ku5
+   /eEY1b77YQUSOYrUEXJd4D78mRqpPVK0AY69Aqs4SpvpEft8EH/s25Nxi
+   Xt5fOLCjCSR0c5M2XN35PqJUwzXx1J1rbD/widQSdhsqQbyJt7dfn/LfD
+   hZXbkwYu7AeKyflw/SjxdjGmYlNaVdvo4iJC9AgtGAAqbR4HtSgQGdvYF
+   TuQBmw5PoMw/arWmsPwA2y42XhkRqqAstjkjI6zn2S2V6ndnl9b/gZHnp
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10628"; a="334210576"
+X-IronPort-AV: E=Sophos;i="5.97,318,1669104000"; 
+   d="scan'208";a="334210576"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Feb 2023 22:15:22 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10628"; a="1000881310"
+X-IronPort-AV: E=Sophos;i="5.97,318,1669104000"; 
+   d="scan'208";a="1000881310"
+Received: from jacob-builder.jf.intel.com (HELO jacob-builder) ([10.24.100.114])
+  by fmsmga005-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Feb 2023 22:15:21 -0800
+Date:   Tue, 21 Feb 2023 22:19:05 -0800
+From:   Jacob Pan <jacob.jun.pan@linux.intel.com>
+To:     "Tian, Kevin" <kevin.tian@intel.com>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        "iommu@lists.linux.dev" <iommu@lists.linux.dev>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        Lu Baolu <baolu.lu@linux.intel.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        "Jean-Philippe Brucker" <jean-philippe@linaro.com>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Will Deacon <will@kernel.org>,
+        "David Woodhouse" <dwmw2@infradead.org>,
+        "Raj, Ashok" <ashok.raj@intel.com>,
+        "Liu, Yi L" <yi.l.liu@intel.com>,
+        "Yu, Fenghua" <fenghua.yu@intel.com>,
+        "Hansen, Dave" <dave.hansen@intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        "X86 Kernel" <x86@kernel.org>,
+        "Jiang, Dave" <dave.jiang@intel.com>, jacob.jun.pan@linux.intel.com
+Subject: Re: [PATCH v3 3/5] iommu/sva: Stop using ioasid_set for SVA
+Message-ID: <20230221221905.4759b2ac@jacob-builder>
+In-Reply-To: <BN9PR11MB5276EC1F0926256D0E8F05F58CAA9@BN9PR11MB5276.namprd11.prod.outlook.com>
+References: <20230216235951.3573059-1-jacob.jun.pan@linux.intel.com>
+        <20230216235951.3573059-4-jacob.jun.pan@linux.intel.com>
+        <BN9PR11MB5276EC1F0926256D0E8F05F58CAA9@BN9PR11MB5276.namprd11.prod.outlook.com>
+Organization: OTC
+X-Mailer: Claws Mail 3.17.5 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-Date:   Wed, 22 Feb 2023 07:07:14 +0100
-From:   Florian Eckert <fe@dev.tdt.de>
-To:     kernel test robot <lkp@intel.com>
-Cc:     u.kleine-koenig@pengutronix.de, gregkh@linuxfoundation.org,
-        jirislaby@kernel.org, pavel@ucw.cz, lee@kernel.org,
-        oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
-        linux-leds@vger.kernel.org, Eckert.Florian@googlemail.com
-Subject: Re: [PATCH v5 2/2] trigger: ledtrig-tty: add additional modes
-In-Reply-To: <202302220740.2RKDHnof-lkp@intel.com>
-References: <20230221081901.15557-3-fe@dev.tdt.de>
- <202302220740.2RKDHnof-lkp@intel.com>
-Message-ID: <deee30ef43e397233dd15d11b86ae91a@dev.tdt.de>
-X-Sender: fe@dev.tdt.de
-User-Agent: Roundcube Webmail/1.3.17
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_PASS,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-X-purgate-type: clean
-X-purgate: clean
-X-purgate-ID: 151534::1677046037-E4E6EA38-2A030915/0/0
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Kevin,
 
+On Wed, 22 Feb 2023 02:22:48 +0000, "Tian, Kevin" <kevin.tian@intel.com>
+wrote:
 
-On 2023-02-22 01:02, kernel test robot wrote:
-> Hi Florian,
+> > From: Jacob Pan <jacob.jun.pan@linux.intel.com>
+> > Sent: Friday, February 17, 2023 8:00 AM
+> >
+> > +	ret = ida_alloc_range(&iommu_global_pasid_ida, min, max,
+> > GFP_KERNEL);
+> > +	if (ret < min)
+> > +		goto out;  
 > 
-> Thank you for the patch! Perhaps something to improve:
+> ioasid_alloc() currently uses GFP_ATOMIC.
 > 
-> [auto build test WARNING on tty/tty-testing]
-> [also build test WARNING on tty/tty-next tty/tty-linus
-> staging/staging-testing staging/staging-next staging/staging-linus
-> pavel-leds/for-next linus/master v6.2 next-20230221]
-> [If your patch is applied to the wrong git tree, kindly drop us a note.
-> And when submitting patch, we suggest to use '--base' as documented in
-> https://git-scm.com/docs/git-format-patch#_base_tree_information]
+> since this is kind of a replacement w/o functional impact, it'd be cleaner
+> from bisect p.o.v. to have a separate patch changing GFP_ATOMIC
+> to GFP_KERNEL in ioasid_alloc() and then this patch.
 > 
-> url:
-> https://github.com/intel-lab-lkp/linux/commits/Florian-Eckert/tty-new-helper-function-tty_get_mget/20230221-162126
-> base:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/tty.git
-> tty-testing
-> patch link:    
-> https://lore.kernel.org/r/20230221081901.15557-3-fe%40dev.tdt.de
-> patch subject: [PATCH v5 2/2] trigger: ledtrig-tty: add additional 
-> modes
-> reproduce:
->         #
-> https://github.com/intel-lab-lkp/linux/commit/445b7555bccd279bf106995ee42f5dbef2e97c8b
->         git remote add linux-review 
-> https://github.com/intel-lab-lkp/linux
->         git fetch --no-tags linux-review
-> Florian-Eckert/tty-new-helper-function-tty_get_mget/20230221-162126
->         git checkout 445b7555bccd279bf106995ee42f5dbef2e97c8b
->         make menuconfig
->         # enable CONFIG_COMPILE_TEST, CONFIG_WARN_MISSING_DOCUMENTS,
-> CONFIG_WARN_ABI_ERRORS
->         make htmldocs
-> 
-> If you fix the issue, kindly add following tag where applicable
-> | Reported-by: kernel test robot <lkp@intel.com>
-> | Link:
-> https://lore.kernel.org/oe-kbuild-all/202302220740.2RKDHnof-lkp@intel.com/
-> 
-> All warnings (new ones prefixed by >>):
-> 
->>> Documentation/ABI/testing/sysfs-class-led-trigger-tty:9: WARNING: 
->>> Unexpected indentation.
->>> Documentation/ABI/testing/sysfs-class-led-trigger-tty:9: WARNING: 
->>> Block quote ends without a blank line; unexpected unindent.
-> 
-> vim +9 Documentation/ABI/testing/sysfs-class-led-trigger-tty
-> 
->    > 9	Date:		January 2023
+makes sense,
 
-I apologies for the question! But I don't know what the test buildbot 
-here wants from me.
-I've looked at the other files and I can't find anything that stands 
-out.
+Thanks,
 
---
-Regards Florian
+Jacob
