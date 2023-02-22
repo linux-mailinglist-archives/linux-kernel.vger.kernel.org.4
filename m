@@ -2,137 +2,273 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D163869FADC
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Feb 2023 19:13:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E7C869FAAD
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Feb 2023 19:01:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231297AbjBVSNk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Feb 2023 13:13:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52920 "EHLO
+        id S232274AbjBVSBl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Feb 2023 13:01:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41050 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229515AbjBVSNi (ORCPT
+        with ESMTP id S232213AbjBVSBh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Feb 2023 13:13:38 -0500
-Received: from IND01-MAX-obe.outbound.protection.outlook.com (mail-maxind01olkn2030.outbound.protection.outlook.com [40.92.102.30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7FFBD227B1;
-        Wed, 22 Feb 2023 10:13:36 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=e0kN2WVwQLl5hdnonh9eIvPWpDkNCXsybN/NqFU9GcQm664DMyGbuNaR4QEhYQQaysisWynGvh4jK7s8N6bhfpC8pMgeo+mdiJzMVccYsFOkpgX7f+lSpR3rgtMQQE3mr/JHWCMXNzViS8og0z5Qz45SId2IdDBVhJIXS9ORdlZVP280y/VrmqHaFX8aOHgNOQUD1mXk6qOJ6X4vqHREgA1m4kaxokzd6gWhPQXnwAQS3xDDEu74CVY3jnz5ZZu1cGuap3EstMjqAxjPRe41P5KNCXVgW/l8cSNSOnVp/9Lo6dlaF90o0g68nuT/ijtqWSmghU5ikr3rj35OgjBEbg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=Gcv896YmC+tEVEF8G+2S6Gi6RYWMqX1SfRgJtAF+njI=;
- b=ec/+bw18yxmGtcaU0s1uR1lfVrxlcKIGdYW20uhJT1fW5QYYfU3HL/PtJ065N/k5OlZj7mDYcgP2sNGfVCU6VKkz/Ako1Jact4kM4+WKcQNcCfEVawWtF6qnKeU48E0ERS3SiYvhampdwTipKaSefK1IHamSS0EmJMIpdF42GPS25F2R5bmMsMJvpBCvnlcwLi8k+5ltTdA7wudNeWO6eqbJJCf+iEfiDhvpx7BksW+or2n0fWvHAIEOOwa2jw46VY85fUIkyX41jRbR8eHqZC+NrEsRTAcuQ14u626NNsbpAJVKhc6w/StxNm4frXxtLDQNSj7+S0qKVA3nF/V4qw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
- dkim=none; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=live.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Gcv896YmC+tEVEF8G+2S6Gi6RYWMqX1SfRgJtAF+njI=;
- b=DN32qyyaJNLfL62vsslfbyBDmnFmqwbbiwR/MbreFkgmvf1fBXElqYDSiWtPAvnTV59EvZd9FaNeBL6ozZNHqUwmhB2/ml/9XkAl2Uja2ojyyIolPEwkiOm8NXJ+kRqrDU6MIQti/v23OrFGpOFz3ZFrIW9lJ7cb4MDx4c7BsFQi4sXtonuT0UQ2L94m3u8aZk5cyyXys0jmGZiG7k0Z+F3eBNc2sJ82AxOX8znsEQ7vXBVVfHfjosQQturdOqVLghxh2asTY5SVOiT62BlIaZEq2A6waGlL1P2aE4ZbFBIIISqhW3FmQ9qE7lHNQT6w/Z+jGRLuZj/0nmAo/D0G3A==
-Received: from BM1PR01MB0931.INDPRD01.PROD.OUTLOOK.COM (2603:1096:b00:2::9) by
- MA0PR01MB8180.INDPRD01.PROD.OUTLOOK.COM (2603:1096:a01:9c::5) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.6134.19; Wed, 22 Feb 2023 18:13:31 +0000
-Received: from BM1PR01MB0931.INDPRD01.PROD.OUTLOOK.COM
- ([fe80::f156:868f:a45b:aeee]) by BM1PR01MB0931.INDPRD01.PROD.OUTLOOK.COM
- ([fe80::f156:868f:a45b:aeee%11]) with mapi id 15.20.6134.019; Wed, 22 Feb
- 2023 18:13:31 +0000
-From:   Aditya Garg <gargaditya08@live.com>
-To:     Hans de Goede <hdegoede@redhat.com>
-CC:     Orlando Chamberlain <orlandoch.dev@gmail.com>,
-        Mark Gross <markgross@kernel.org>,
-        "platform-driver-x86@vger.kernel.org" 
-        <platform-driver-x86@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Lukas Wunner <lukas@wunner.de>,
-        Seth Forshee <sforshee@kernel.org>,
-        Aun-Ali Zaidi <admin@kodeit.net>,
-        Kerem Karabay <kekrby@gmail.com>
-Subject: Re: [PATCH v3 0/5] apple-gmux: support MMIO gmux type on T2 Macs
-Thread-Topic: [PATCH v3 0/5] apple-gmux: support MMIO gmux type on T2 Macs
-Thread-Index: AQHZRdZPnsOA0zlv+UikzIJmE+f5Ta7ZVTYAgABwQxiAAYGTnA==
-Date:   Wed, 22 Feb 2023 18:13:31 +0000
-Message-ID: <BM1PR01MB09310531DC4ED55B73764743B8AA9@BM1PR01MB0931.INDPRD01.PROD.OUTLOOK.COM>
-References: <BM1PR01MB0931B467250831916F7C55B3B8A59@BM1PR01MB0931.INDPRD01.PROD.OUTLOOK.COM>
- <60dad2c6-9f37-86af-5f37-aa5d45c33afa@redhat.com>
- <BM1PR01MB09313E8C98F63BD65CCD3362B8A59@BM1PR01MB0931.INDPRD01.PROD.OUTLOOK.COM>
-In-Reply-To: <BM1PR01MB09313E8C98F63BD65CCD3362B8A59@BM1PR01MB0931.INDPRD01.PROD.OUTLOOK.COM>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-messagesentrepresentingtype: 1
-x-tmn:  [X32L/uTL1RI+ThEkuNVVi6pMApVpqFjfksr++lWjDoT3V7+BYFTt52Ekpf2p0hqv]
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: BM1PR01MB0931:EE_|MA0PR01MB8180:EE_
-x-ms-office365-filtering-correlation-id: 3cfad8b7-2c62-49a7-e3e9-08db150080f2
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: o9OUBXzI41CsTm/y4Otn1UqtS8Qxy1RIdo2Pl73boyuBO55V+so7CjcPnpBgJMvv2sZVG8kixoaWUnwifvShyQv7APzX7NtyTj05HkscVxBkqlpQCDl1fWSVUKW/MgnRiq0kGCcVCy/3LHd5HSN6IZ0+pw2DV1/93Hv/Kkx0vyMajS7DocxA3ayL5IMarxs1+ztPn6/PXXcRtWFSc9qlYQrnj6d1LmKmWlkHl1howxKsob9yYO8j8nbjK+bA6bwIOMio0/6d1ThphIAspjbV3O9dVY/zGRPxfxMC+0eCO4NuqYPCYEZV/NJoFeopGNI9XJU1snJTYZKs+0cvk/HJw5IBGL4popcP+ltSeGkucH37WUe+repD/We+qS62/iowpag7PxQCGgazEKUeziRpbAVekuQPOwGM5pF3wF9wwp45IngFgJPWbgWvDMxZqUPb6hyZ1meJhsbzou0uMcn4LsU1EHzfao56CqQ885jXUrc1wJA7cTPIcY0BrkVkNaPL/PsFve/ivfkO+jd7qLK0ZE42TMZnkoOXadi/5jYpFs5n5TSvkQJeHwPv5bW2JKG3a+QpEvXDRfMZ/rZjkL2aEYegykWFWidRwfrP+jy+5s0hdRCG58UFwqfCF3LUwXWzio/Zna6wsGPJubnJIC2mHg==
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?U0E2b055Z09qSUNLOUdlbkJrSXVXd0swMVhEOFg1VzVjRGpuOTI2a3B4TUdJ?=
- =?utf-8?B?SEhCOEhsQXlPNXVFUFdUd1ZibXU2d2xvdXZWRjRCZi9ZZDZpSnNOaThZcDQw?=
- =?utf-8?B?WHdkaVV1T3IvQXFObG5reHh0U1NHSGRaK2ZVVUVENXFsRWdWMC9VK2U2Q2Ix?=
- =?utf-8?B?OW1oYmg3WjY2RGI0Y241OXd6ZXdGNVhlRU5nY3UrTTQ3cFNJN2o5Q1ZnL2M4?=
- =?utf-8?B?emwzSXYvajJqUEkxNXNwZDUyditoR0RUd0wwUnozMFJWcDBySXQzZk1qQ2ti?=
- =?utf-8?B?QjJhVVJrMmpJTnlDa2pUMXN5UWhpbjBmY3g0dDVPaHFQdGtSWW5jZlkrcnh5?=
- =?utf-8?B?WENmR2FHSDdzMjRIekY5RVVPZklOdXNjU0pkTVBaQXo4dFZJdVZrcnJVdlRS?=
- =?utf-8?B?UERoUm5VRW9JMWJYMXhjV3pnWDJod2FCT05OODlyRzh5NVFFRStlV1I0S3JE?=
- =?utf-8?B?N2ZSNkd4WWs5NGx5clY2clVpWk9YdFhZS1liMFJTczNheHhzbWltbVJKdEI5?=
- =?utf-8?B?UngvSW5BVFppTTRodTBtczVJQlQ4ZmlZSlREaEhiM3cwbDBMV3UwUUNuVVlo?=
- =?utf-8?B?eGIrSlVXaEp6Mmp1TS9IYjlENy9LbGtVZWZrMzJpL3NRRlovSE0vWDNLRUs4?=
- =?utf-8?B?ZXJWcjhrV1hnNkYySGZiaStxTHpVRmpDVWMxa1hnUUZsL1VBSHVxc2htMVVq?=
- =?utf-8?B?VHR0dDRwSlRzZXlYdVEwbW42bC9iZTgzNmtlVmtGQVc2N2YxYTNoNEJxVTJ6?=
- =?utf-8?B?WlJIMlRsNlREcjBVVmdwWTgyNjdRcGV1Y05GRWp4WDlDb2JsN0hobVlIR3ZM?=
- =?utf-8?B?Y0VJMjRGdnd3cFh2bkg5U2MvSGR6OXFNUVNIYVkwNXJka2lmbG4xcmdUTnVT?=
- =?utf-8?B?dnhBZ1ppWVVhQVlrUFhWcWQrSzlZRjBqd01ObzlCZ1JFSEE1dS93elZCS2RF?=
- =?utf-8?B?NnZQTlVOOVNVV1pXZXVmY2ZhekZHd1o3ZEkveGducy9GZGtIM1lQQ09yKzI4?=
- =?utf-8?B?dUpXTnVNUUlmTGZNZmRvMG1DeXhPam14TGlxaS96QjEyNG5Gd2JWQndIbEkz?=
- =?utf-8?B?N0pGZE5jNjNBTnJLS3F2b0Q3WElJeTIyeTlpVzZpdHpSdTkvdUt4aWJKamtj?=
- =?utf-8?B?L0E0QUZsQnNKWjYzZWlqaW02SUtxOGJlOXlmSjZyYXRTQjFBUVJzMU5SMjlw?=
- =?utf-8?B?YkZQTXRNcjdkektJdTJNdWUvbFlCZUhCQ0Z2MGJmQnNLb1NGNmZYRDhkOCta?=
- =?utf-8?B?WUZSRG0xZWkxbzlpTjhkQm5KV3llY2E1ZXJwQ0diM3dTQ2c3N0MydnQ3RHUz?=
- =?utf-8?B?MGx5ZHE0blFDK1BRSDBWMXphL0UwcTZiRzJubUFzZjM5VGJwMUs0L2hVcUI1?=
- =?utf-8?B?ajJRaEhQaEM2aWR5dEptY1ZCbkF6RzlHTi8xN3A3Ukh2M0kxck4wZXV3MGZa?=
- =?utf-8?B?YjBVOU15dnYxcnQ0SFByQzJRejNmZ05lb1g5ZXJnTmlKMGZIL3BOOVFEQVRH?=
- =?utf-8?B?YzRFeHlYTC9iMlA5SktIR005M1BHSzFsS1ZXYTFQeGUxdDQwK3NFemd1R01H?=
- =?utf-8?B?NXZ3clhrdFo4NWlYZmhCWGp4MVdIN0NvT0ZUUFBpMTEraUY4T0NLWTNzVEpJ?=
- =?utf-8?B?V3luVlZsSzBPQ1c2dWU1bHRWSi9jYmVzQUFQeGcrVVRpTlB2TVhzSUV5UWp4?=
- =?utf-8?B?MTRSdGdaMUJTK3JCMzU3ZnhGVWlzVVhQRlRhdHZYcUZUd0w1ZnU1NWF5eWh2?=
- =?utf-8?B?YVZsSjZKbXYwMjY0dlAxOUFNWDlqc2ErbFpCSkdZREFjZnpvZXRPVTFpRkxP?=
- =?utf-8?B?U2JxV1g4bEJCa3lCMUh5QT09?=
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        Wed, 22 Feb 2023 13:01:37 -0500
+Received: from mail-io1-xd2e.google.com (mail-io1-xd2e.google.com [IPv6:2607:f8b0:4864:20::d2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4673741B63
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Feb 2023 10:01:23 -0800 (PST)
+Received: by mail-io1-xd2e.google.com with SMTP id bf15so3920702iob.7
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Feb 2023 10:01:23 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=landley-net.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=qQaxwkGu19zmG1oPaifd/2cU8eOnGHG3LsAaYpWY8WI=;
+        b=x3Bnnkrch7R+fasmAk2g3UWj7eHzJpoh0LKROHA1hkaLZbgBtD1X3sZ6GgUe8UT178
+         Wa8lXgs7al7aAH8x18ktLvvyvD7TVWdcDebUB2D80Hp88V1fGb896//9Rr63c+3dEv/y
+         QE7UMvvzYUgMvQZkK09XaIxTiR86qPxl/UKK6qr27gX8Wx9OtmV+J49BiR5sf/b/BZkP
+         IIhsZg74119mXCRuZRhCNu+Bcxkh1mxOFMbNXCSQQBNbl2VAwtgmhCoweMPYvZAFTkeT
+         zX0B3464DzPJL6WCcVQBiAa/tuoc976jDqaZTTRZTNdHrQC4Ci039Y4k581O56HfKDcW
+         6wdA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=qQaxwkGu19zmG1oPaifd/2cU8eOnGHG3LsAaYpWY8WI=;
+        b=VizZYrQ1OrAaxpjby7nhflnDN5HE/IKh4vuvO7/ajGtH1XXWXMvfKSwAaniFJWpTZD
+         gcnBryrJ+ULsFRWc4oE9hgoPgjFbXkbK6vuT0UTYAQSM90xOIDcjnufh6urC8Y2kPI1+
+         +rYKSU7RytfwG60hdX8QoBlPYjeUGVBPCFbtDqp7RTlUzIqdYBYqw/kWHgMcuacq+XDF
+         ETS6+4HT4JdcizcZuZv8rXBcwzIDUmf/7gG/S2DLDV2/tqxKSecN2wq8ACGLRy4t76oy
+         +nVF1rdcCwbQjZWPkf6kIA28RkIGdlYxFvLbYEBoqpcxrpJJQZzcig0GpciiLE5dB6VH
+         xFdg==
+X-Gm-Message-State: AO0yUKVVl9idXtHdcC6NVXLdhvzY4eQAFUziiSlkRxTuCovFWKHoIN6C
+        aawnJk/QL8Y7XCIcXqd1rNXceg==
+X-Google-Smtp-Source: AK7set+SMqFmi66tovIROdq9i+VlUY2fAVI4/xHK+2PfXY1lkVh+l1xxP6iV9F/JFZDpBChCP0mzTw==
+X-Received: by 2002:a6b:db10:0:b0:74c:9d31:3190 with SMTP id t16-20020a6bdb10000000b0074c9d313190mr283263ioc.4.1677088882200;
+        Wed, 22 Feb 2023 10:01:22 -0800 (PST)
+Received: from [172.16.32.78] ([198.232.126.202])
+        by smtp.gmail.com with ESMTPSA id t11-20020a02ccab000000b003c2bca015d8sm2518851jap.140.2023.02.22.10.01.21
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 22 Feb 2023 10:01:21 -0800 (PST)
+Message-ID: <aee2c147-2993-c35e-436e-0d89a0e5aa8b@landley.net>
+Date:   Wed, 22 Feb 2023 12:14:44 -0600
 MIME-Version: 1.0
-X-OriginatorOrg: sct-15-20-4755-11-msonline-outlook-42ed3.templateTenant
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: BM1PR01MB0931.INDPRD01.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg: 00000000-0000-0000-0000-000000000000
-X-MS-Exchange-CrossTenant-Network-Message-Id: 3cfad8b7-2c62-49a7-e3e9-08db150080f2
-X-MS-Exchange-CrossTenant-originalarrivaltime: 22 Feb 2023 18:13:31.0329
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
-X-MS-Exchange-CrossTenant-rms-persistedconsumerorg: 00000000-0000-0000-0000-000000000000
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MA0PR01MB8180
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.0
+Subject: Re: [PATCH 2/5] X86-64 should not uniquely require a third ELF
+ package to build.
+Content-Language: en-US
+To:     Thomas Gleixner <tglx@linutronix.de>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Cc:     Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Josh Poimboeuf <jpoimboe@kernel.org>
+References: <b455394f-9faa-1f1a-f171-0b9d5e9ada35@landley.net>
+ <e184ece9-2779-675e-0c84-f0a62413c7fd@landley.net> <87wn4amx45.ffs@tglx>
+From:   Rob Landley <rob@landley.net>
+In-Reply-To: <87wn4amx45.ffs@tglx>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-0.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        URI_DOTEDU autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-PiANCj4gQWxzbywgYW5vdGhlciBpc3N1ZSwgSSBoYXZlIHBsdXltb3V0aCBlbmFibGVkIHdpdGgg
-RlJBTUVCVUZGRVI9eS4gQWZ0ZXIgdXNpbmcgdGhlIGdtdXggcGF0Y2hlcywgdGhlIHNpemUgb2Yg
-dGhlIHRoZW1lIGhhcyBiZWNvbWUgdG9vIHRpbnkgZm9yIGFuIGluaXRpYWwgZmV3IHNlY29uZHMs
-IHRoZW4gaXQgZ2V0cyBub3JtYWwuIEkgdGVzdGVkIHRoaXMgYnkgY29tcGlsaW5nIGEga2VybmVs
-IHdpdGhvdXQgdGhlc2UgcGF0Y2hlcywgYW5kIHRoZSBidWcgZ290IGZpeGVkLiBJIGFsc28gdHJp
-ZWQgdXNpbmcgYWNwaSBiYWNrbGlnaHQgdXNpbmcgY29tbWFuZCBsaW5lICh0aGF0IG1hZGUgbWUg
-ZGlzY292ZXIgdGhlIGBhY3BpX2JhY2tsaWdodD12aWRlb2Agbm90IHdvcmtpbmcgYnVnKS4gSXMg
-dGhhdCBhbHNvIHJlbGF0ZWQgdG8gc29tZSB1cHN0cmVhbSBidWc/DQoNCkhpIEhhbnMNCg0KSXQg
-dHVybnMgb3V0IHRoYXQgQXBwbGUtZ211eCBoYWQgdG8gYmUgbG9hZGVkIGluIHRoZSBpbml0cmFt
-ZnMgZm9yIFBseW1vdXRoIHRvIHdvcmsgcHJvcGVybHkuIFNvLCBpdCBhY3R1YWxseSB3YXMgbXkg
-bWlzdGFrZS4NCg0KQWxzbyBJIG5vdGljZWQgdGhhdCB0aGUgcmVzcG9uZCB0byB5b3VyIHBhdGNo
-IGZvciBtZSB0byB0ZXN0IGRpZG7igJl0IHJlYWNoIHNpbmNlIGl0IHdhcyBhbiBIVE1MIGVtYWls
-LiBTbywgeWVzLCB5b3VyIHBhdGNoIGhvbm91cnMgYGFjcGlfYmFja2xpZ2h0PXZpZGVvYA==
+On 2/21/23 17:12, Thomas Gleixner wrote:
+> Rob!
+
+Thomas!
+
+> On Tue, Feb 21 2023 at 14:56, Rob Landley wrote:
+> 
+> The subject line is not compliant to documentation. Please read and
+> follow Documentation/process/* especially submitting-patches.rst and
+> maintainer-tip.rst
+
+I've read them multiple times over the years, but I'm not good at remembering
+extensive bureaucracy over long periods. Let's see...
+
+Are you complaining it doesn't have "RESEND"? These apply to 6.2, not 6.1, and a
+couple things got tweaked. What's the "RESEND" threshold?
+
+Or is this a "subsystem:" prefix thing where I have to guess what subsystem the
+top level makefile or mktimeconst fall under? Is "init" a subsystem?
+
+$ grep -i subsystem MAINTAINERS  | wc
+     85     286    2216
+$ grep -i subsystem MAINTAINERS  | grep -i init
+$
+
+Apparently not. I would have thought get_maintainer.pl would emit this sort of
+info if it's important, but I guess I'm remembering back when Linux had
+hobbyists who worked on things that didn't require justifying the time on a
+spreadsheet to their boss in a budget allocation meeting before modifying any
+code...
+
+>> x86-64 is the only architecture that can't compile without an extra
+>> ELF library installed on the host. (The kernel already has multiple ELF
+>> parse implementations built-in, so requiring another one is questionable
+>> at best.)
+> 
+> How are ELF parsers in the kernel itself related to a build requirement
+> for a tool, which is part of the kernel build process?
+
+The project already has multiple instances of code that traverses ELF data
+structures. A definition of "code reuse" that pulls in an additional build
+dependency which the project was not already using is just "code use" without a
+"re".
+
+My response was "this doesn't need to be done at all, it's just being used for
+an optional stack unwinder, and even if you _want_ a stack unwinder there are
+multiple other implementations without this dependency".
+
+They just tangled up the kconfig plubmbing so even when nothing uses it, it
+still tries to build the tool it won't run. If I'd tried to FIX the tool,
+factoring out existing ELF code so it could be built on the host and used at
+build time might have made sense. But the thing it's being used to do is not a
+thing I need on the systems I'm building.
+
+> Next time you ask for removal of perl, python or whatever the kernel
+> requires to build.
+
+Kernel doesn't require python to build, my perl removal series got merged 10
+years ago, and other people have sent follow-up perl removal patches since.
+
+>> You can switch it back on in menuconfig if you want to, this
+>> just stops it being mandatory.
+> 
+> How do you switch on CONFIG_HAVE_OBJTOOL in menuconfig?
+> 
+> config HAVE_OBJTOOL
+>         bool
+> 
+> There is no knob.
+
+Sigh, I traced through all this stuff at one point. It's been a few releases
+since then (and the symbol got renamed), and it looks like it's developed some
+more dependencies off of it in kernel/trace/Kconfig.
+
+Alright, how about this:
+
+diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
+index 3604074a878b..70923305d596 100644
+--- a/arch/x86/Kconfig
++++ b/arch/x86/Kconfig
+@@ -243,7 +243,8 @@ config X86
+        select HAVE_NOINSTR_HACK                if HAVE_OBJTOOL
+        select HAVE_NMI
+        select HAVE_NOINSTR_VALIDATION          if HAVE_OBJTOOL
+-       select HAVE_OBJTOOL                     if X86_64
++       select HAVE_OBJTOOL                     if X86_64 && \
++         $(success,echo "#include <gelf.h>" | $(HOSTCC) -xc -o /dev/null -c -)
+        select HAVE_OPTPROBES
+        select HAVE_PCSPKR_PLATFORM
+        select HAVE_PERF_EVENTS
+
+Actually TEST if the build environment has it, and set the symbol appropriately.
+
+Would that with "test for optional build dependency" work? I'm aware people want
+to use this plumbing for more thorough spectre/meltdown style mitigations, but
+Linux has CONFIG_MULTIUSER which can remove support for non-root users. (I'm off
+at the embedded end of things: we're weird.)
+
+>> See https://lkml.iu.edu/hypermail/linux/kernel/2110.3/00402.html
+>> and https://lkml.iu.edu/hypermail/linux/kernel/2110.3/00278.html
+> 
+> Please use https://lore.kernel.org/lkml/ links.
+
+Yeah, check_patch.pl complained about that too. Google's getting unreliable
+enough it's not always easy to map between them, but I'll put it on the todo
+list for the 6.3 repost of the series...
+
+>> diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
+>> index 3604074a878b..b63510d79baf 100644
+>> --- a/arch/x86/Kconfig
+>> +++ b/arch/x86/Kconfig
+>> @@ -243,7 +243,6 @@ config X86
+>>  	select HAVE_NOINSTR_HACK		if HAVE_OBJTOOL
+>>  	select HAVE_NMI
+>>  	select HAVE_NOINSTR_VALIDATION		if HAVE_OBJTOOL
+>> -	select HAVE_OBJTOOL			if X86_64
+> 
+> This prevents runtime features, optimizations, mitigations and build
+> time validations rom being selected as you can see from your patch
+> context.
+> 
+> Just to be clear: objtool is mandatory for x86_64 builds.
+
+Because without this patch it's forced on, yes. Works fine without it in my testing?
+
+The llvm guys built a whole compiler to get away from GPLv3 and
+https://sourceware.org/elfutils is GPLv3, which is not _my_ motivation for
+trying to avoid it, but I can see it being "of interest". (If the goal is to
+push people away from x86-64 faster...)
+
+No other architecture I tested had this requirement. I admit I'm only building
+arm, arm64, x86, x86-64, m68k, mips, ppc32, ppc64, s390x, and superh kernels at
+the moment. I'm only doing a userspace version of hexagon because they didn't
+have qemu-system-hexagon working last I poked Taylor Simpson so I'd have nothing
+to test the kernel on. Musl-libc's xtensa support is not just an out of tree
+fork but _very_stale_ (the one I have, anyway). Musl doesn't support
+alpha/arc/csky/itanic/mips-looongarch/nios2/parisc/sparc yet. Microblaze
+binaries segfault in the ELF _start code for some reason (I should track down
+why). I'm halfway to a working cortex-m qemu config and need to get back to that
+(qemu SHOULD have a decent board, there's like 5 options now). Building or1k is
+on the todo list...
+
+> git grep 'select HAVE_OBJTOOL' will tell you that your claim about
+> x86_64 being the only architecture is slightly wrong.
+
+There's two hits, and the other is PPC32, which was building fine for me without
+this patch last I checked?
+
+Ah, commit e52ec98c5ab1 from 3 months ago. So 6.1 built fine without it but 6.2
+also requires... no, hang on, I test built 6.2 with this patch series more than
+once, and my patches don't modify the arch/powerpc directory? I still have the
+binaries:
+
+$ ./run-qemu.sh
+...
+Kernel memory protection not selected by kernel config.
+Run /init as init process
+Type exit when done.
+# cat /proc/version
+Linux version 6.2.0 (landley@driftwood) (powerpc-linux-musl-cc (GCC) 9.4.0, GNU
+ld (GNU Binutils) 2.33.1) #1 Tue Feb 21 14:07:21 CST 2023
+# cat /proc/cpuinfo
+processor	: 0
+cpu		: 740/750
+clock		: 266.000000MHz
+revision	: 3.1 (pvr 0008 0301)
+bogomips	: 33.20
+
+timebase	: 16603616
+platform	: PowerMac
+model		: Power Macintosh
+machine		: Power Macintosh
+motherboard	: AAPL,PowerMac G3 MacRISC
+detected as	: 49 (PowerMac G3 (Silk))
+pmac flags	: 00000000
+pmac-generation	: OldWorld
+Memory		: 256 MB
+# file /bin/toybox
+/bin/toybox: ELF executable, 32-bit MSB ppc, static, stripped
+
+
+That's 6.2, G3 was 7xx series which is 32 bit... Yup, powerpc 32 bit built and
+ran fine without this. I haven't got libelf-dev installed on my laptop, so it
+CAN'T have required it,the build would break if it tried...
+
+Which other architecture build breaks for you without libelf-dev installed?
+
+> Thanks,
+> 
+>         tglx
+
+Rob
