@@ -2,122 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 76BCF69FE13
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Feb 2023 23:02:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 638D069FE21
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Feb 2023 23:10:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231308AbjBVWCZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Feb 2023 17:02:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56138 "EHLO
+        id S231822AbjBVWKa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Feb 2023 17:10:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33124 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230114AbjBVWCY (ORCPT
+        with ESMTP id S229448AbjBVWK2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Feb 2023 17:02:24 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 587FE41B6D;
-        Wed, 22 Feb 2023 14:02:23 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C74B66157F;
-        Wed, 22 Feb 2023 22:02:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1FE7AC433D2;
-        Wed, 22 Feb 2023 22:02:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1677103342;
-        bh=XzoL6AJPYva3eF1pIbrO3aURgSEiWFHCISYaoJoffgw=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=FdR+QsQtWgojtn2yfU11p2o6Twy2ZZcKen49YhEwA1uFdMnMFs3xfQ4Jg2N7DhNdV
-         dW40QlH+EoVfkG9WKToPzubjrjgApQBJc0oHY4YDSNhoMpdfRRmogu0HQ3SNgzM6Xj
-         ouVMhAbdw8Bw6u3rZeVSlQ7BAqWLxln5M9IVX2e3dfDzWyS+PMPMyFHcGthKk6E8pO
-         fydfdFGpvHe9mNpaPqDllq7i7iQU71eyILVXwlYS81ez1JOlFxifidIf1D7ClY5AE9
-         tcJJj0+pj19lYvQesShox/J9vLviYv3COxqA2jpknn1Fd+nHxRU+U+xVfTgPMIcCs0
-         Q1VtIegIGxNIg==
-Date:   Wed, 22 Feb 2023 16:02:20 -0600
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Niklas Schnelle <schnelle@linux.ibm.com>
-Cc:     Gerd Bayer <gbayer@linux.ibm.com>,
-        Gerald Schaefer <gerald.schaefer@linux.ibm.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Sven Schnelle <svens@linux.ibm.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Pierre Morel <pmorel@linux.ibm.com>,
-        Matthew Rosato <mjrosato@linux.ibm.com>,
-        linux-s390@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-pci@vger.kernel.org
-Subject: Re: [PATCH RESEND] PCI: s390: Fix use-after-free of PCI bus
- resources with s390 per-function hotplug
-Message-ID: <20230222220220.GA3804275@bhelgaas>
+        Wed, 22 Feb 2023 17:10:28 -0500
+Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56BF7392BE
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Feb 2023 14:10:27 -0800 (PST)
+Received: by mail-pj1-x1036.google.com with SMTP id pt11so11311933pjb.1
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Feb 2023 14:10:27 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=rivosinc-com.20210112.gappssmtp.com; s=20210112;
+        h=to:from:cc:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:to:cc:subject:date:message-id:reply-to;
+        bh=+bvlqXAakwX2gdnOC29zT7CXrEv41Aaug8Y6u3C5RBA=;
+        b=DQNw/KI4e7T2/iVpxq/MsLgmGAFx6CBpljybLL84b6mP9D7C60q5Ao1gmBea3HALtV
+         TV9c0ZJWfuuCosaJlVVvindhasFMYvUCiFFsJNDjTZZb7AJpHEBC9l9d2pyaG8yxArPF
+         2p8XrFV78LWi6toXIbF0ZH2g6T0GdPl25lBW88k0GnSayz90tRkOrgnOnIQ0Y/MP5KIn
+         ghpRq+/yYPMTvsGthgBKNTq4VZ2ZTpvmQkwQrlGmz4484A4i4qg3at1DSTGDt9wtr3v9
+         6Sy4BQuQmQD0k79FkCvU7iG910OH/WFCYFyBStlBB6UlYYhw2xRxb7r5AAGUhYUUuByZ
+         xNlA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:from:cc:content-transfer-encoding:mime-version:message-id:date
+         :subject:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=+bvlqXAakwX2gdnOC29zT7CXrEv41Aaug8Y6u3C5RBA=;
+        b=0qDQnzQl36xTbYjA0T23mNZNa0Y6d56eEz4PFbrrB08/gV7YIDFFdfIOzigRL/Ufxm
+         hXKLOVuTIwmg6qCbZ1Kb2NfpSo0ws48sXdgRlJowee5uifcLHkiXkA72IlXu+p6YgrCe
+         Tfy6Erxcurfqa/4dSPgpFfYRKvfTDwSlgro+qo9U5fXne/35yF0sHl5janhUxOua40ip
+         xig7IoHTFPLhyJ98S5vm5PnjrKy9nD3T0vlsVomfyBG/e+NuF6be9/WdzBKdoEBfaTpr
+         WQRhsuwH8CNLc4n5IStPQxtmdHF4t5EaZJ8DRWA4iQCMVNNFGCTtvEkE5UA0gpwGh5pP
+         ricQ==
+X-Gm-Message-State: AO0yUKUxenBo2jzgR593NlOyErY4Z+Q6HD5iWYkEMQhCSxmNgqE0nXwE
+        s7XBoIPcOfZWz7WCGjaJIFqxSoh35A+GIwUx
+X-Google-Smtp-Source: AK7set9z2QVnvZgNtqRGxvJGA5quWz7GivpPeP6o43VdffO65fbplX3fXoRHOUlcxr9wyxYSbC2szA==
+X-Received: by 2002:a17:902:b286:b0:19c:a9b8:4349 with SMTP id u6-20020a170902b28600b0019ca9b84349mr3477658plr.32.1677103826529;
+        Wed, 22 Feb 2023 14:10:26 -0800 (PST)
+Received: from localhost ([50.221.140.188])
+        by smtp.gmail.com with ESMTPSA id jd7-20020a170903260700b0019956f23fc1sm12255748plb.302.2023.02.22.14.10.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 22 Feb 2023 14:10:26 -0800 (PST)
+Subject: [PATCH] lib/test_string.c: Add strncmp() tests
+Date:   Wed, 22 Feb 2023 14:04:35 -0800
+Message-Id: <20230222220435.10688-1-palmer@rivosinc.com>
+X-Mailer: git-send-email 2.39.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1a621a2b836d81d12b6f265f47d93b827e0a82df.camel@linux.ibm.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+Cc:     Palmer Dabbelt <palmer@rivosinc.com>
+From:   Palmer Dabbelt <palmer@rivosinc.com>
+To:     andy@kernel.org, linux-kernel@vger.kernel.org, heiko@sntech.de
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 20, 2023 at 01:53:34PM +0100, Niklas Schnelle wrote:
-> On Fri, 2023-02-17 at 17:15 -0600, Bjorn Helgaas wrote:
-> > On Tue, Feb 14, 2023 at 10:49:10AM +0100, Niklas Schnelle wrote:
-> > > ...
+The RISC-V strncmp() fails on some inputs, see the linked thread for
+more details.  It turns out there were no strncmp() calls in the self
+tests, this adds one.  It currently fails on RISC-V systems with Zbb
+enabled with
 
-> >     What happens when zpci_bus_release() calls
-> >     pci_free_resource_list() on &zbus->resources?  It looks like that
-> >     ultimately calls kfree(), which is OK for the
-> >     zpci_setup_bus_resources() stuff, but what about the
-> >     zbus->bus_resource that was not kalloc'ed?
-> 
-> As far as I can see pci_free_resource_list() only calls kfree() on the
-> entry not on entry->res. The resources set up in
-> zpci_setup_bus_resources() are freed in zpci_cleanup_bus_resources()
-> explicitly.
+    [    0.683479] String selftest failure 7.00001001
 
-So I guess the zbus->resources are allocated in zpci_bus_scan_device()
-where zpci_setup_bus_resources() adds a zbus resource for every
-zpci_dev BAR, and freed in zpci_bus_release() when the last zpci_dev
-is unregistered.
+Link: https://lore.kernel.org/all/2801162.88bMQJbFj6@diego/
+Reported-by: Heiko Stübner <heiko@sntech.de>
+Signed-off-by: Palmer Dabbelt <palmer@rivosinc.com>
+---
+This reports a checkpatch error for the __initconst, but I think it's
+spurious as I've just pattern matched the above test.
+---
+ lib/test_string.c | 39 +++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 39 insertions(+)
 
-Does that mean that if you add device A, add device B, and remove A,
-the zbus retains A's resources even though A is gone?  What if you
-then add device C whose resources partially overlap A's?
+diff --git a/lib/test_string.c b/lib/test_string.c
+index c5cb92fb710e..8420379963ba 100644
+--- a/lib/test_string.c
++++ b/lib/test_string.c
+@@ -207,6 +207,40 @@ static __init int strspn_selftest(void)
+ 	return 0;
+ }
+ 
++static __init int strncmp_selftest(void)
++{
++	static const struct strncmp_test {
++		const char *str_a;
++		const char *str_b;
++		unsigned long count;
++		unsigned long max_off;
++		size_t retval;
++	} tests[] __initconst = {
++		{ "/dev/vda", "/dev/",    5, 4, 0 },
++		{ "/dev/vda", "/dev/vdb", 5, 4, 0 },
++	};
++	size_t i;
++
++	for (i = 0; i < ARRAY_SIZE(tests); ++i) {
++		const struct strncmp_test *s = tests + i;
++		size_t off;
++
++		for (off = 0; off <= s->max_off; ++off) {
++			size_t res = strncmp(s->str_a + off,
++					     s->str_b + off,
++					     s->count - off);
++
++			if (res == 0 && s->retval != 0)
++				return 0x1000 + 0x100*off + 0x10*i + 0x0;
++			if (res > 0 && s->retval <= 0)
++				return 0x1000 + 0x100*off + 0x10*i + 0x1;
++			if (res < 0 && s->retval >= 0)
++				return 0x1000 + 0x100*off + 0x10*i + 0x2;
++		}
++	}
++	return 0;
++}
++
+ static __exit void string_selftest_remove(void)
+ {
+ }
+@@ -245,6 +279,11 @@ static __init int string_selftest_init(void)
+ 	if (subtest)
+ 		goto fail;
+ 
++	test = 7;
++	subtest = strncmp_selftest();
++	if (subtest)
++		goto fail;
++
+ 	pr_info("String selftests succeeded\n");
+ 	return 0;
+ fail:
+-- 
+2.39.1
 
-> > >  static void zpci_cleanup_bus_resources(struct zpci_dev *zdev)
-> > >  {
-> > > +	struct resource *res;
-> > >  	int i;
-> > >  
-> > > +	pci_lock_rescan_remove();
-> > 
-> > What exactly is this protecting?  This doesn't seem like quite the
-> > right place since we're not adding/removing a pci_dev here.  Is this
-> > to protect the bus->resources list in pci_bus_remove_resource()?
-> 
-> Yes I did not find a lock that is specifically for bus->resources but
-> it seemed to me that changes to resources would only affect things
-> running under the rescan/remove lock.
-
-Yeah, OK.
-
-> > >  	for (i = 0; i < PCI_STD_NUM_BARS; i++) {
-> > > -		if (!zdev->bars[i].size || !zdev->bars[i].res)
-> > > +		res = zdev->bars[i].res;
-> > > +		if (!res)
-> > >  			continue;
-> > >  
-> > > +		release_resource(res);
-> > > +		pci_bus_remove_resource(zdev->zbus->bus, res);
-> > >  		zpci_free_iomap(zdev, zdev->bars[i].map_idx);
-> > > -		release_resource(zdev->bars[i].res);
-> > > -		kfree(zdev->bars[i].res);
-> > > +		zdev->bars[i].res = NULL;
-> > > +		kfree(res);
-> > >  	}
-> > >  	zdev->has_resources = 0;
-> > > +	pci_unlock_rescan_remove();
