@@ -2,104 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9AAC769F470
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Feb 2023 13:22:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C2D169F4B6
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Feb 2023 13:37:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231313AbjBVMV7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Feb 2023 07:21:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43608 "EHLO
+        id S232019AbjBVMhs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Feb 2023 07:37:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36878 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231845AbjBVMV4 (ORCPT
+        with ESMTP id S230291AbjBVMhp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Feb 2023 07:21:56 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C492D3A87F;
-        Wed, 22 Feb 2023 04:21:29 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C00166137C;
-        Wed, 22 Feb 2023 12:20:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 19015C433EF;
-        Wed, 22 Feb 2023 12:19:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1677068403;
-        bh=2+2TJkgRXCmNd9+5BaM+df/ooQPJG0ZkV7NMD1G8dmY=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=q9cCrINsvRaurAABclGE1tp4NHVQiZKQmnFVGFXzs7GRUOv4LR2rs3J21i3NnFOXj
-         HDolACx62fgYzSX+zwTvOgzKKTdtVdC8T3zVqy/vNvu3fUQrp2dL8hEHY8csajFLUD
-         SSmlAsORmsbLTqwQhSRLEo2XHwP/EzjK2UdbKVVbqGXCDKsee2j6yOqHRBn3hYsOJJ
-         Cl6xTNCVMKwA7tZzoHHB6RDvTl0bjDtXJ2SZ39uBN2608NDicfNJ5rXpr0kFt3/4Bi
-         eud9XIpiy/p3K/PUua7FRqgIgEfGTV90bLaEnAepkgFnmD5xOdIIUd+32leCBYWHjc
-         kVmXw7zlsCyKg==
-Date:   Wed, 22 Feb 2023 12:19:56 +0000
-From:   Mark Brown <broonie@kernel.org>
-To:     Svyatoslav Ryhel <clamor95@gmail.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Wed, 22 Feb 2023 07:37:45 -0500
+Received: from fgw21-7.mail.saunalahti.fi (fgw21-7.mail.saunalahti.fi [62.142.5.82])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 849BA34C0A
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Feb 2023 04:37:40 -0800 (PST)
+Received: from localhost (88-113-24-128.elisa-laajakaista.fi [88.113.24.128])
+        by fgw21.mail.saunalahti.fi (Halon) with ESMTP
+        id 505041fe-b2ab-11ed-a2f4-005056bdd08f;
+        Wed, 22 Feb 2023 14:20:37 +0200 (EET)
+From:   andy.shevchenko@gmail.com
+Date:   Wed, 22 Feb 2023 14:20:37 +0200
+To:     Keguang Zhang <keguang.zhang@gmail.com>
+Cc:     linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
         Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>,
-        Maxim Schwalm <maxim.schwalm@gmail.com>,
-        Dmitry Osipenko <digetx@gmail.com>, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, alsa-devel@alsa-project.org,
-        linux-tegra@vger.kernel.org, linux-staging@lists.linux.dev
-Subject: Re: [PATCH v1 09/10] staging: dsp: add support for Fortemedia FM34NE
- DSP
-Message-ID: <Y/YIbHkKFcn+q7WN@sirena.org.uk>
-References: <20230221183211.21964-1-clamor95@gmail.com>
- <20230221183211.21964-10-clamor95@gmail.com>
- <Y/UbMH5tXDgsvSbD@kroah.com>
- <CAPVz0n2-giCF9Z9fMimTFQnGk73HAdfU4SitGn58iZapLjeuTQ@mail.gmail.com>
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Subject: Re: [PATCH 3/4] gpio: loongson1: Add DT support
+Message-ID: <Y/YIlb8axBVVW3VV@surfacebook>
+References: <20230222111213.2241633-1-keguang.zhang@gmail.com>
+ <20230222111213.2241633-4-keguang.zhang@gmail.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="1XiSMiZ0uGxQUzWO"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAPVz0n2-giCF9Z9fMimTFQnGk73HAdfU4SitGn58iZapLjeuTQ@mail.gmail.com>
-X-Cookie: My LESLIE GORE record is BROKEN ...
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230222111213.2241633-4-keguang.zhang@gmail.com>
+X-Spam-Status: No, score=0.7 required=5.0 tests=BAYES_00,DKIM_ADSP_CUSTOM_MED,
+        FORGED_GMAIL_RCVD,FREEMAIL_FROM,NML_ADSP_CUSTOM_MED,SPF_HELO_NONE,
+        SPF_SOFTFAIL autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Wed, Feb 22, 2023 at 07:12:12PM +0800, Keguang Zhang kirjoitti:
+> This patch adds DT support for Loongson-1 GPIO driver,
+> including the following changes.
+> - Add the of_match_table
+> - Parse the ngpios property
+> - Parse the alias id
 
---1XiSMiZ0uGxQUzWO
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Split!
 
-On Wed, Feb 22, 2023 at 10:19:47AM +0200, Svyatoslav Ryhel wrote:
+...
 
-> Because this driver sets up fm34 and switches it to bypass mode allowing
-> sound to work on the device. There is no dsp framework in kernel which could
-> be called to operate dsp from the actual sound codec. (If there is, I
-> would be glad
+> +	if (of_property_read_u32(dn, "ngpios", &ngpios)) {
+> +		dev_err(dev, "Missing ngpios OF property\n");
+> +		return -ENODEV;
+> +	}
 
-> if you show me). Fm34 must be active only on DMIC use, all other cases require
-> it to be in bypass.
+Why?! GPIO library has this already.
 
-Sure there is, like I said in my other reply it looks like an aux
-device.
+...
 
---1XiSMiZ0uGxQUzWO
-Content-Type: application/pgp-signature; name="signature.asc"
+> +	id = of_alias_get_id(dn, "gpio");
+> +	if (id < 0) {
+> +		dev_err(dev, "Couldn't get OF id\n");
+> +		return id;
+> +	}
 
------BEGIN PGP SIGNATURE-----
+What is this for?
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmP2CGwACgkQJNaLcl1U
-h9AXbgf+KDsG9jPazXe6+tb8ukkM1X7V3ZrGq0fbURStkTR6kLCBEGGhTvyq0YCT
-TtplQaXCon/i1wXlJuarC0gkQPxthZ2BkchS1qYUpVKGAWUCvB3mkbGLBL8F21gO
-VotkLaRgdg1JwIdPMMhCg+Sjm3r43pjQykfH37T5yNR93s2rkUZxstGE8rTGUcxc
-GSLHMLNq5btjF5GJMo4DY6oQG96hOwRurB0UyV3N6ju1RPYYyzxZGdIt0ucWtoXA
-AKkXkz1B3VSaGa0sdrl32PPEKbcn1eWlkmeaOpYIcbzxMh3re6NyAiQDFDjYfqxu
-lp/aY0N3/DiFvIXWhVN5RCWt1zfESQ==
-=a0mP
------END PGP SIGNATURE-----
+...
 
---1XiSMiZ0uGxQUzWO--
+> +	ls1x_gc->gc.base = pdev->id * BITS_PER_LONG;
+> -	ls1x_gc->gc.base = pdev->id * 32;
+
+No way. This is change makes me thing that initially it's simply wrong. Please,
+just use -1 for the base.
+
+...
+
+> +static const struct of_device_id ls1x_gpio_dt_ids[] = {
+> +	{ .compatible = "loongson,ls1x-gpio", },
+
+Inner comma is not needed.
+
+> +	{ /* sentinel */ }
+> +};
+
+You missed MODULE_DEVICE_TABLE().
+
+-- 
+With Best Regards,
+Andy Shevchenko
+
+
