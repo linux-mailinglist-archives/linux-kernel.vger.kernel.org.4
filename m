@@ -2,88 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C06D269EF15
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Feb 2023 08:04:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BBE9D69EF18
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Feb 2023 08:07:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230473AbjBVHER (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Feb 2023 02:04:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36624 "EHLO
+        id S229834AbjBVHHI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Feb 2023 02:07:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37760 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230300AbjBVHEO (ORCPT
+        with ESMTP id S229480AbjBVHHG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Feb 2023 02:04:14 -0500
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E747D24CBF
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Feb 2023 23:04:13 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-        MIME-Version:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:
-        Content-ID:Content-Description:In-Reply-To:References;
-        bh=MNjuw99R4HgS/gXxR2rjHmB3r482Mpv9GRPW/CNskZA=; b=1jOsEuWgQSmtMaFWKT/scfSbVT
-        lUFFM6ktVoaRkQFLyF2Dqnlavx3hi4StHJOm3DIiyzYMOpwbJ/WiD7wqWbLdQo8P/dysFa+u8qZ7/
-        1MvcLDhfikHckihLkREpGhA4gg5GQtI2db0kGet+cg5T+sz0sQ/ewjGxM9k9gaU3BwTUUiMH+KfqD
-        /s9h3kxBXjw459cZ0TTwSJpkRXO+OtKN2smJA1oX4s20l56bHONL4yKZUcHSqtuMVy0tWPTUh6Hu0
-        Nv4I0pQkkr9AiEsRjrUIOEJtPb0FW/mnpre2CKXICO+75bn2r2Nmd+jrHN9UoGutp3RNYMgq/aOZW
-        t6b7kSeg==;
-Received: from [2601:1c2:980:9ec0::df2f] (helo=bombadil.infradead.org)
-        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1pUjAi-00B17L-2z; Wed, 22 Feb 2023 07:04:12 +0000
-From:   Randy Dunlap <rdunlap@infradead.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     Randy Dunlap <rdunlap@infradead.org>,
-        Alexey Kardashevskiy <aik@amd.com>,
-        Christoph Hellwig <hch@lst.de>, iommu@lists.linux.dev,
-        Mike Rapoport <rppt@kernel.org>, linux-mm@kvack.org
-Subject: [PATCH] swiotlb: mark swiotlb_memblock_alloc() as __init
-Date:   Tue, 21 Feb 2023 23:04:11 -0800
-Message-Id: <20230222070411.6186-1-rdunlap@infradead.org>
-X-Mailer: git-send-email 2.39.2
+        Wed, 22 Feb 2023 02:07:06 -0500
+Received: from mail-ua1-x92f.google.com (mail-ua1-x92f.google.com [IPv6:2607:f8b0:4864:20::92f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F58531E22
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Feb 2023 23:07:05 -0800 (PST)
+Received: by mail-ua1-x92f.google.com with SMTP id f36so2227682uae.6
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Feb 2023 23:07:05 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=qlPwPykFYo8rhIVwD6mBB4FPi0U1mYPcwHgebQEUnaw=;
+        b=VXIAa7FunJm6q3CeB62nQ167gZdQVEQe2WuW1+KVUVZUKVfVSRrsFHRIuvLcvB+WAI
+         BkW2mPJ4C7KTo2uk2BNR5ieJykYAv4X+UkH3enEhjvEHcvm8VjYHwUjN7CBfiAFvp+r3
+         S/1r2W9l9+ur2AMr7PnVyAh/q4cfsy1OA2+z4=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=qlPwPykFYo8rhIVwD6mBB4FPi0U1mYPcwHgebQEUnaw=;
+        b=Q289egL4i3mZ7PzGE3m/G5nwuqzYopcXzuHighY0C5GU50iVNZWtRLobwS/kch0drZ
+         IniMAmbF+Do7XCw+fRg1xx0r/LikmIPTXdAIbYg8W3+NvNbeSRaTBJmtc1raiUbyzWVq
+         nGow87wwX+BkUdHKFZbI0UYtJd/ArRhx1QCe3PBf2FPMee3xBJy0yDQ8BcKzTKz4EBvv
+         yj/Lioq/lmjYlDsCKam/QXkyW6XgUkuOMLWT+6dXKfre25iFw8uaEmoUtFQ/d0rvBkj3
+         JKV8nj4HZ8p+THKlBvr84zlba4jJnppKL9slkue5pabwHZ2JGW6bj+8BuYoDradJBYLm
+         MaCw==
+X-Gm-Message-State: AO0yUKX2avitOSKKiM/pIvmXf0IqodT92tEnEY9zEN1nzEfqWT3watmB
+        mOLn15uOeH5l/JHsbobJKlnplknr90O9PHoN1DpxjA==
+X-Google-Smtp-Source: AK7set8LX05PaXjP97oF1G9cF2P3OWsBmaHQhbW//L1C7tUi+Z8JteajDRu6P6E5vLHDtTDlMdm48IpSEsLEbY4UVV4=
+X-Received: by 2002:a1f:208d:0:b0:3e8:66ce:a639 with SMTP id
+ g135-20020a1f208d000000b003e866cea639mr1283824vkg.2.1677049624519; Tue, 21
+ Feb 2023 23:07:04 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+References: <20230221153740.1620529-1-angelogioacchino.delregno@collabora.com> <20230221153740.1620529-11-angelogioacchino.delregno@collabora.com>
+In-Reply-To: <20230221153740.1620529-11-angelogioacchino.delregno@collabora.com>
+From:   Chen-Yu Tsai <wenst@chromium.org>
+Date:   Wed, 22 Feb 2023 15:06:53 +0800
+Message-ID: <CAGXv+5FqZPXaE8tyEFtejsYpKMLzUt5R_QnkbQrDSBM_u7rRYg@mail.gmail.com>
+Subject: Re: [PATCH v2 10/10] drm/panfrost: Add new compatible for Mali on the
+ MT8183 SoC
+To:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+Cc:     airlied@gmail.com, daniel@ffwll.ch, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, steven.price@arm.com,
+        alyssa.rosenzweig@collabora.com, matthias.bgg@gmail.com,
+        robh@kernel.org, dri-devel@lists.freedesktop.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-swiotlb_memblock_alloc() calls memblock_alloc(), which calls
-(__init) memblock_alloc_try_nid(). However, swiotlb_membloc_alloc()
-can be marked as __init since it is only called by swiotlb_init_remap(),
-which is already marked as __init. This prevents a modpost build
-warning/error:
+On Tue, Feb 21, 2023 at 11:37 PM AngeloGioacchino Del Regno
+<angelogioacchino.delregno@collabora.com> wrote:
+>
+> The "mediatek,mt8183-mali" compatible uses platform data that calls for
+> getting (and managing) two regulators ("mali" and "sram") but devfreq
+> does not support this usecase, resulting in DVFS not working.
+>
+> Since a lot of MediaTek SoCs need to set the voltages for the GPU SRAM
+> regulator in a specific relation to the GPU VCORE regulator, a MediaTek
+> SoC specific driver was introduced to automatically satisfy, through
+> coupling, these constraints: this means that there is at all no need to
+> manage both regulators in panfrost but to otherwise just manage the main
+> "mali" (-> gpu vcore) regulator instead.
+>
+> Keeping in mind that we cannot break the ABI, the most sensible route
+> (avoiding hacks and uselessly overcomplicated code) to get a MT8183
+> node with one power supply was to add a new "mediatek,mt8183b-mali"
+> compatible, which effectively deprecates the former.
+>
+> Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+> Reviewed-by: Steven Price <steven.price@arm.com>
 
-WARNING: modpost: vmlinux.o: section mismatch in reference: swiotlb_memblock_alloc (section: .text) -> memblock_alloc_try_nid (section: .init.text)
-WARNING: modpost: vmlinux.o: section mismatch in reference: swiotlb_memblock_alloc (section: .text) -> memblock_alloc_try_nid (section: .init.text)
-
-This fixes the build warning/error seen on ARM64, PPC64, S390, i386,
-and x86_64.
-
-Fixes: 8d58aa484920 ("swiotlb: reduce the swiotlb buffer size on allocation failure")
-Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
-Cc: Alexey Kardashevskiy <aik@amd.com>
-Cc: Christoph Hellwig <hch@lst.de>
-Cc: iommu@lists.linux.dev
-Cc: Mike Rapoport <rppt@kernel.org>
-Cc: linux-mm@kvack.org
----
- kernel/dma/swiotlb.c |    5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
-
-diff -- a/kernel/dma/swiotlb.c b/kernel/dma/swiotlb.c
---- a/kernel/dma/swiotlb.c
-+++ b/kernel/dma/swiotlb.c
-@@ -292,8 +292,9 @@ static void swiotlb_init_io_tlb_mem(stru
- 	return;
- }
- 
--static void *swiotlb_memblock_alloc(unsigned long nslabs, unsigned int flags,
--		int (*remap)(void *tlb, unsigned long nslabs))
-+static void __init *swiotlb_memblock_alloc(unsigned long nslabs,
-+			unsigned int flags,
-+			int (*remap)(void *tlb, unsigned long nslabs))
- {
- 	size_t bytes = PAGE_ALIGN(nslabs << IO_TLB_SHIFT);
- 	void *tlb;
+Reviewed-by: Chen-Yu Tsai <wenst@chromium.org>
