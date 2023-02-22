@@ -2,139 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BBBCE69F4FA
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Feb 2023 13:58:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6BC9D69F50A
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Feb 2023 14:01:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231808AbjBVM6g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Feb 2023 07:58:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51958 "EHLO
+        id S231931AbjBVNBE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Feb 2023 08:01:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54628 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231774AbjBVM6f (ORCPT
+        with ESMTP id S231511AbjBVNBB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Feb 2023 07:58:35 -0500
-Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10on2088.outbound.protection.outlook.com [40.107.92.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E4EC2B60F;
-        Wed, 22 Feb 2023 04:58:33 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=bhASGiviVLmlK1w91RodMIWqqwMFLWliJLbIbYYBFNCfR1I9h8pK3BxorpnZDJXt9DPYQagLIjbdRCzKK/o2WgFGiCZfw8VheFGrNSWSzC52BK35u3isb1+1yli17I0sK8aBV0GK+IYWyax1/yE6mIi/LbHHAFQk8Div8ZeU5QE5b8FW8K0wiJ11AoArCh0eBMj5Pbp9CofM1fkRgJL7RlNEjJ87/mIKUK3vWy14IwkF7bdN2y/bW5igT7tOxT6A1UB9S8ahbpudKkLNxjTwiGclErd5v1hlpcRDh+kIQy1eCZ7xmpH0e5oLom1nadbQrsVk3J93BOhopTwtBjjy2g==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=3CjzVzKASrnGuVBqZjp5q6hGLdXaemG88Vmk/mGVGfI=;
- b=gny0sYNBdPWgBopGGgT+V80cU65F6laSgeHnoAqYVH8Lk4SCOBHVnCru72UlsyC2+hEF7GQlfXoj7npA36UmenMKKjAgLok3dLqyMX5z1MIOuN3mPnJs8rORxW8S3hYYrd/YYMO32BxKbo6ksy9CJjbf+VkxRk/2ixyK1yJS2DWmBEwUeFd1CvDbj6IxfujJAQZ4VGpqnor8cAmqzsfgkSnVNBnRDisFgCJoGofU0aqli+rXqXcZXP05uq3nbt1MjQnXUeLtpHIFUmuL2zFoo7PJ996Z3gWnIksiVRfJE4VEhGzgZZCPIVnHSO3ZNdk2U80ZWMQy3+VL2Kc/rWteJg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=3CjzVzKASrnGuVBqZjp5q6hGLdXaemG88Vmk/mGVGfI=;
- b=QosqjJyHhZ/2b2oBlaZgNtetq28poHib0d1/N2UGrsv7FIwHF5ioClzzvRmUumdd3sGiga4kgrx2AXk1bOZPsR3pBjQPX0N/r7QpBGY2+0yoZwD0LKmAepCfnplCIgq26x/PijcYxm8Zqouty6W7wIZEp71Soj5iehDbFBAQJ7ZFo0xffQ8+u+jbmJjfDyX2xgzm0Ok+/KTRG8wDHnocb2AGSMX0I6cuh6pi9qE6vbycg83awZqNGLzwFT2iBr4zugfsb5188UVsKTBKaGjm4mi0FEjKGX27zhSk+oTSHtm9ephe4GPboYbWDX+14bTC1XEQznkbTCtlo6c9gCyYrw==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from LV2PR12MB5869.namprd12.prod.outlook.com (2603:10b6:408:176::16)
- by CH2PR12MB4038.namprd12.prod.outlook.com (2603:10b6:610:7b::19) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6111.21; Wed, 22 Feb
- 2023 12:58:31 +0000
-Received: from LV2PR12MB5869.namprd12.prod.outlook.com
- ([fe80::3cb3:2fce:5c8f:82ee]) by LV2PR12MB5869.namprd12.prod.outlook.com
- ([fe80::3cb3:2fce:5c8f:82ee%4]) with mapi id 15.20.6111.021; Wed, 22 Feb 2023
- 12:58:31 +0000
-Date:   Wed, 22 Feb 2023 08:58:30 -0400
-From:   Jason Gunthorpe <jgg@nvidia.com>
-To:     Yan Zhao <yan.y.zhao@intel.com>
-Cc:     alex.williamson@redhat.com, kevin.tian@intel.com,
-        yi.l.liu@intel.com, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] vfio: Fix NULL pointer dereference caused by
- uninitialized group->iommufd
-Message-ID: <Y/YRdkUQPG8Mli1H@nvidia.com>
-References: <20230222074938.13681-1-yan.y.zhao@intel.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230222074938.13681-1-yan.y.zhao@intel.com>
-X-ClientProxiedBy: MN2PR20CA0056.namprd20.prod.outlook.com
- (2603:10b6:208:235::25) To LV2PR12MB5869.namprd12.prod.outlook.com
- (2603:10b6:408:176::16)
+        Wed, 22 Feb 2023 08:01:01 -0500
+Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 533E63B22E
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Feb 2023 05:01:00 -0800 (PST)
+Received: from mail-pf1-f199.google.com (mail-pf1-f199.google.com [209.85.210.199])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id B1E7F3F176
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Feb 2023 13:00:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1677070857;
+        bh=C4QlkJoMBe7Zb07BzaU2hfX0+/7r6YQ7RN1cp6tdTkI=;
+        h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+         To:Cc:Content-Type;
+        b=kMMsKQnQoQ2yi9tzYr9mIRXnH+oyTJBJ7vtk1L8TfGmMKqU8qFE1CciHGbjDUcI51
+         f3xMfSDQg8lVb8Rha02QEr0UcOfC4cN71q4LzxSA4QHIbSaP0LriYjbDjsg0eyiCWD
+         ON9z6tCGODDosTd8tn020h/VYXgduXJjE755lz1qTEsxCDwWCtRYxhxsiullU9KqAb
+         xBVOWaBLeGlMipyxj6wUHEPLxhCllOsCOsHh5Zm8nlbTAC26A51hxic9ORu2mQGLKD
+         JSaN7IHarwCgYNZQSR0We0MSvvc7widcRJGcOlmi9d8P4OSgq8FI5mnKnK3jtmCDZ1
+         9pZdKspz5lb0Q==
+Received: by mail-pf1-f199.google.com with SMTP id h1-20020a62de01000000b005d943b97706so131275pfg.0
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Feb 2023 05:00:57 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=C4QlkJoMBe7Zb07BzaU2hfX0+/7r6YQ7RN1cp6tdTkI=;
+        b=7G4BaG3mL7oEaf+at6dz8rUegIyQss9Mo3I26dlk6ZHDjMlddgj0g/8LjzCN6TFdg8
+         eOEEHPFiko4vUAMRYd0GCqQYSAcZlKQC0beza4AUEHOCOOzvRJs5eRRj4f7UajUcbocb
+         n9YTtaTzchh9/b/Lj154wrwXDocjg3iwAdjOormesv8hi7dfJ5mOdtEXMhwGRVpkoNjc
+         kK02u+WhcC061gC90ycQv2GkUyRyv/5e4alrMU6rjTwgJRBONzOizykNeVPYeootBC0O
+         VlWLIngkTlkjX89ifYY8+RmK+Ak4G1nzDXbv1v4KBzWgddEWg4NBNJsM+kZoCI3JnVIw
+         Ei8w==
+X-Gm-Message-State: AO0yUKXTDzBlCctPejO7QDfWQcqodUNvNFeHDrhFZYoaYVRJzGzjvrw/
+        1psL/N7AflGDJCZOs3w64fgOr5+wBt/j10FOf+CsEwmWz1OSChUaFn8H2wf34hqeYziow7xuQ92
+        TVFkMJ62HL/6oi3nKgS5EMBLUwW14VVJxHoInPljmZfXAdasKhxTuKuJPFw==
+X-Received: by 2002:a17:90b:1f87:b0:237:1892:2548 with SMTP id so7-20020a17090b1f8700b0023718922548mr1309660pjb.44.1677070852631;
+        Wed, 22 Feb 2023 05:00:52 -0800 (PST)
+X-Google-Smtp-Source: AK7set+Hcu3PpBDVIEJrAMyn16xRp5IGRD9MfaoCbBE14JFRfyGRE20r++e6YnhsvorwYnP3mjsyR4szgSwPyCZs8Pg=
+X-Received: by 2002:a17:90b:1f87:b0:237:1892:2548 with SMTP id
+ so7-20020a17090b1f8700b0023718922548mr1309649pjb.44.1677070852230; Wed, 22
+ Feb 2023 05:00:52 -0800 (PST)
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: LV2PR12MB5869:EE_|CH2PR12MB4038:EE_
-X-MS-Office365-Filtering-Correlation-Id: 92c65351-aa0b-4f4f-bfb5-08db14d47f96
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: w0653HGaGwcFyhtTa+LCi/fmSRemNzvSm7LkBBPsTlYAJ1Guj2c4uvW3qW2CMPMUWXBEAqJPqm045jVD7KNlPPvt51xmwJENMwp2pPzkHEk1MoT3mO1FzqzzGwFgurnjb1T4JJpblEciN5p7OYfyAqseW76kq1aAmB2l3YJ6P06S61fo0N8Q4nqH6PAUZD8Y74O0dci3FeXutcpeK7pml7sYzrlBBqQePlBWcnUkYhFnT25rPxQCMnXU9W8Jq9/ks0RHDNd2Q+bDwwNZ0PIyAikR4bjryiAcIDMKx1QxCER6pjJzYGRtnhfcG1PGeap/aCNkdGK5nfW/r/KyIcawr/bwGfbsdU8hXxPX8mEtw4udjaHmVx2oyJT9WwzbjQau5hvPiWCIjaUupgMx/K7CgtUhpSMwRNiS2AeiDrNb0zd9s49WhqQ/Pj+yAzogLHhqLO8y6lF+UM20ZG0Kj6FLC6GhxC6ndNivnkAwEIpBVqVs/fIxthC63TZwJlmrUn/n7srJB2MOqbmEv6KD4mYJiAmTAF7cP5QqP/bCCE0KMXO3Ya1wtJ7VY+8yhNq/p40pWoH5NiZlRMvSLPw2MLWyqpV1KOW2c9BFS3iNoru0LFOd2KRDCb24Ly6QarA4ckzf0HdMhUUQU968wpIiKu0SWw==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LV2PR12MB5869.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(346002)(366004)(39860400002)(376002)(136003)(396003)(451199018)(36756003)(8936002)(41300700001)(316002)(8676002)(5660300002)(2616005)(186003)(66476007)(6916009)(4326008)(26005)(86362001)(6512007)(2906002)(6486002)(83380400001)(66556008)(66946007)(6506007)(478600001)(4744005)(38100700002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?7V9BE6jQUKjFnbf44zRHvSAdbCad/aV3+4sso4uETj9/DRSViroWYFQNr3Sa?=
- =?us-ascii?Q?rUqXSve/15l20xjP1EiXGLvQi8F9I3RnMIxYysorV+sRbBLonUpJ6z8ljhs5?=
- =?us-ascii?Q?DcxFlTjW4kr2cPWSkwATkody4w6VoPRCtCiPV/SJqSyC6leitrF8SigBS+An?=
- =?us-ascii?Q?j8FO+LUzkw6EfNPQJZFnyNiAlH94TMXUdC959rFhfjoJiGvrwRYfOqq9IDl3?=
- =?us-ascii?Q?Hd5Vis+4ME/ru7hkR2SjthLwUQFcTtCBSE8bc+gNMUyNBtyRmzcngoyaj9pj?=
- =?us-ascii?Q?tQidh9Q5OA96SZIhxuz2B9XtgsadETwCTDr66vUODFEMtmhaWcsIgyP+UvwH?=
- =?us-ascii?Q?9RSQuwg5/ZU21jdwVf/JW7yJeUsp4g99YmowFoNwy6aaixULxeff4+HIALgi?=
- =?us-ascii?Q?zcokZjBsatNIZRo7o1u13RHOEptQj71pKIvCP1jRtsC9fHFBorzGstCdQxpT?=
- =?us-ascii?Q?5Hb+zZC5qI9Hd+3GdY7UjJ7tMortTEUDiUqLHatVOP5gpgSA6OszVSqCiju8?=
- =?us-ascii?Q?YIY1lbvkQvJ5nFJh9nd2Pn/oEl+eklmcRdyUaWgaZHptdRWHHJp3l0cneC26?=
- =?us-ascii?Q?7vpPzw/bAhKNWyku+Nf5pTXilay0gWW5QFFeDEHKTBuku6djMNt3vhQAHYmU?=
- =?us-ascii?Q?7KUcZRLHYtXHhThNP3XPHT5mGr/LmBcjCXqg7k39pOwANhPgAmILd8CPHidS?=
- =?us-ascii?Q?fVzjvjd3tJJxwrDUKbWaYQLQ/+UIOf6WhBrLOCvCUWFMrif86v1MrT/eRhjk?=
- =?us-ascii?Q?GBSymzpKFtjWzjbDsthEbxeTB29PmCYUkyAnUkjf93dGW5T/bFtzdVSpwdf6?=
- =?us-ascii?Q?a4XXasMQScMLSCBFEHar2qHe3JJx2CzIxhaqU9vVftJpS4w6HPh7Oxvel9lB?=
- =?us-ascii?Q?n5SmyxzE02qy8k6uL6+X9RCJ4fqImLDByPim0xlf300ZKeEg1U9lQ6bIx0n+?=
- =?us-ascii?Q?B1oGTk/ap73sCYXp2650+RIMQaqYJ9XTKB80022SXYMoUnbKWzAEOLmB8/U0?=
- =?us-ascii?Q?npox7N+cPmfjhg813XuYlTIE6UXbWn6xCKC6RipDNYD6CkckgDMFE1wKHS1u?=
- =?us-ascii?Q?dXoRsO83Mul4xnOl5pkBYDMXsWGzvgbaqrzf1O211CSRosZPL/RziFxPTWXd?=
- =?us-ascii?Q?mq6QX5ShWa6+7CWB/zEfgPt7DWraDp7fPIcUZLLEuxnizpD4M//5/mFzILfl?=
- =?us-ascii?Q?FQTSulLoy+a9OmgZkEysCIMiPM8KMlMjfSstd/s62gUDLsPgct/lD6jO5/Pm?=
- =?us-ascii?Q?UhhhL4nnHgc/AYPKFRttebYqAOLomzBoC0DV13Gw3qXi9PWa/HMkeLbumc9f?=
- =?us-ascii?Q?RLoBImhTgllBtjC7IQNNcLV0XyEaH3ujMhkmMBewmbL10XCdmNc22SLstBlx?=
- =?us-ascii?Q?xfomhIBxOEfSlzU8sxeMg0B9ZKNi20VxfUED8gRMy20KEW8JrGSUWuPDCN7d?=
- =?us-ascii?Q?VxbfXS1fE90C9l8MJ+QkNMgDfq77U1no8ScUNHILWdfMZ56+HB4FBo2LY9TU?=
- =?us-ascii?Q?eF7pAscrSHqvkrWSMHdCW0iW4vN++CukFmHtDDKk80C/aViCISD1ib1e9o/W?=
- =?us-ascii?Q?Fg/CwPfq5wC2ne2WWZtQ6Y50rTHIP2SyDIzfbhw0?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 92c65351-aa0b-4f4f-bfb5-08db14d47f96
-X-MS-Exchange-CrossTenant-AuthSource: LV2PR12MB5869.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 22 Feb 2023 12:58:31.0338
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: x8+Vd/sgyBOmjm8aV+ueNuI2dwDEKOuwz5CQP8JHoPriVdBPPHx8tgdknm4TseSC
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH2PR12MB4038
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
-        autolearn=no autolearn_force=no version=3.4.6
+References: <20230221023849.1906728-1-kai.heng.feng@canonical.com>
+ <20230221023849.1906728-2-kai.heng.feng@canonical.com> <86136114-a451-c485-ade2-cfa79d5124e1@gmail.com>
+In-Reply-To: <86136114-a451-c485-ade2-cfa79d5124e1@gmail.com>
+From:   Kai-Heng Feng <kai.heng.feng@canonical.com>
+Date:   Wed, 22 Feb 2023 21:00:41 +0800
+Message-ID: <CAAd53p4L3eUWH183RJAfcQ1vDrwuMJ4pL--w9OgAJzg0ghnpwA@mail.gmail.com>
+Subject: Re: [PATCH v8 RESEND 1/6] r8169: Disable ASPM L1.1 on 8168h
+To:     Heiner Kallweit <hkallweit1@gmail.com>
+Cc:     nic_swsd@realtek.com, bhelgaas@google.com, koba.ko@canonical.com,
+        acelan.kao@canonical.com, davem@davemloft.net, edumazet@google.com,
+        kuba@kernel.org, pabeni@redhat.com,
+        sathyanarayanan.kuppuswamy@linux.intel.com, vidyas@nvidia.com,
+        rafael.j.wysocki@intel.com, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-pci@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Feb 22, 2023 at 03:49:38PM +0800, Yan Zhao wrote:
-> group->iommufd is not initialized for the iommufd_ctx_put()
-> 
-> [20018.331541] BUG: kernel NULL pointer dereference, address: 0000000000000000
-> [20018.377508] RIP: 0010:iommufd_ctx_put+0x5/0x10 [iommufd]
-> ...
-> [20018.476483] Call Trace:
-> [20018.479214]  <TASK>
-> [20018.481555]  vfio_group_fops_unl_ioctl+0x506/0x690 [vfio]
-> [20018.487586]  __x64_sys_ioctl+0x6a/0xb0
-> [20018.491773]  ? trace_hardirqs_on+0xc5/0xe0
-> [20018.496347]  do_syscall_64+0x67/0x90
-> [20018.500340]  entry_SYSCALL_64_after_hwframe+0x4b/0xb5
-> 
-> Fixes: 9eefba8002c2 ("vfio: Move vfio group specific code into group.c")
-> Signed-off-by: Yan Zhao <yan.y.zhao@intel.com>
-> ---
->  drivers/vfio/group.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+On Tue, Feb 21, 2023 at 7:09 PM Heiner Kallweit <hkallweit1@gmail.com> wrote:
+>
+> On 21.02.2023 03:38, Kai-Heng Feng wrote:
+> > ASPM L1/L1.1 gets enabled based on [0], but ASPM L1.1 was actually
+> > disabled too [1].
+> >
+> > So also disable L1.1 for better compatibility.
+> >
+> > [0] https://bugs.launchpad.net/bugs/1942830
+> > [1] https://git.launchpad.net/~canonical-kernel/ubuntu/+source/linux-oem/+git/focal/commit/?id=c9b3736de48fd419d6699045d59a0dd1041da014
+> >
+> These references are about problems with L1.2 (which is disabled
+> per default in mainline). They don't allow any statement about whether
+> L1.1 is problematic too (and under which circumstances).
+> At least on my system with RTL8168h there's no problem with L1.1
+> when running iperf.
 
-Reviewed-by: Jason Gunthorpe <jgg@nvidia.com>
+There are some systems have performance issue with L1.1 too.
+But since the series will disable chip-side ASPM during NAPI poll,
+maybe we can keep both L1.1 and L1.2 enabled?
 
-Jason
+Kai-Heng
+
+>
+> > Signed-off-by: Kai-Heng Feng <kai.heng.feng@canonical.com>
+> > ---
+> > v8:
+> >  - New patch.
+> >
+> >  drivers/net/ethernet/realtek/r8169_main.c | 6 +++---
+> >  1 file changed, 3 insertions(+), 3 deletions(-)
+> >
+> >
+> > diff --git a/drivers/net/ethernet/realtek/r8169_main.c b/drivers/net/ethernet/realtek/r8169_main.c
+> > index 45147a1016bec..1c949822661ae 100644
+> > --- a/drivers/net/ethernet/realtek/r8169_main.c
+> > +++ b/drivers/net/ethernet/realtek/r8169_main.c
+> > @@ -5224,13 +5224,13 @@ static int rtl_init_one(struct pci_dev *pdev, const struct pci_device_id *ent)
+> >
+> >       /* Disable ASPM L1 as that cause random device stop working
+> >        * problems as well as full system hangs for some PCIe devices users.
+> > -      * Chips from RTL8168h partially have issues with L1.2, but seem
+> > -      * to work fine with L1 and L1.1.
+> > +      * Chips from RTL8168h partially have issues with L1.1 and L1.2, but
+> > +      * seem to work fine with L1.
+> >        */
+> >       if (rtl_aspm_is_safe(tp))
+> >               rc = 0;
+> >       else if (tp->mac_version >= RTL_GIGA_MAC_VER_46)
+> > -             rc = pci_disable_link_state(pdev, PCIE_LINK_STATE_L1_2);
+> > +             rc = pci_disable_link_state(pdev, PCIE_LINK_STATE_L1_1 | PCIE_LINK_STATE_L1_2);
+> >       else
+> >               rc = pci_disable_link_state(pdev, PCIE_LINK_STATE_L1);
+> >       tp->aspm_manageable = !rc;
+>
