@@ -2,345 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 12DDA69ED61
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Feb 2023 04:17:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D217069ED64
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Feb 2023 04:17:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231224AbjBVDRJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Feb 2023 22:17:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44136 "EHLO
+        id S230374AbjBVDRb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Feb 2023 22:17:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44254 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230135AbjBVDQy (ORCPT
+        with ESMTP id S230327AbjBVDRY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Feb 2023 22:16:54 -0500
-Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 92416303E9
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Feb 2023 19:16:51 -0800 (PST)
-Received: from loongson.cn (unknown [113.200.148.30])
-        by gateway (Coremail) with SMTP id _____8AxJPQhifVjX28DAA--.1468S3;
-        Wed, 22 Feb 2023 11:16:49 +0800 (CST)
-Received: from bogon.localdomain (unknown [113.200.148.30])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8DxUuUbifVj9l84AA--.2774S7;
-        Wed, 22 Feb 2023 11:16:48 +0800 (CST)
-From:   Youling Tang <tangyouling@loongson.cn>
-To:     Huacai Chen <chenhuacai@kernel.org>,
-        Xi Ruoyao <xry111@xry111.site>,
-        Jinyang He <hejinyang@loongson.cn>
-Cc:     Xuerui Wang <kernel@xen0n.name>, loongarch@lists.linux.dev,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v6 5/5] LoongArch: Add support for kernel address space layout randomization (KASLR)
-Date:   Wed, 22 Feb 2023 11:16:43 +0800
-Message-Id: <1677035803-7932-6-git-send-email-tangyouling@loongson.cn>
-X-Mailer: git-send-email 2.1.0
-In-Reply-To: <1677035803-7932-1-git-send-email-tangyouling@loongson.cn>
-References: <1677035803-7932-1-git-send-email-tangyouling@loongson.cn>
-X-CM-TRANSID: AQAAf8DxUuUbifVj9l84AA--.2774S7
-X-CM-SenderInfo: 5wdqw5prxox03j6o00pqjv00gofq/
-X-Coremail-Antispam: 1Uk129KBjvJXoW3XFyxJr1kJry8Wr18Wr1kAFb_yoW3ZFW5pr
-        ZxAw4Utr43GF17GrsFq34kury5Aws7W343WFsxKryru3W2qF1rXFykuryDXFy8t3yvgr4S
-        qFy5Kaya9w4UAaDanT9S1TB71UUUUUDqnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
-        qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
-        b28YFVCjjxCrM7AC8VAFwI0_Jr0_Gr1l1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s
-        1l1IIY67AEw4v_JF0_JFyl8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xv
-        wVC0I7IYx2IY67AKxVW7JVWDJwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwA2z4
-        x0Y4vEx4A2jsIE14v26r4UJVWxJr1l84ACjcxK6I8E87Iv6xkF7I0E14v26r4UJVWxJr1l
-        e2I262IYc4CY6c8Ij28IcVAaY2xG8wAqjxCEc2xF0cIa020Ex4CE44I27wAqx4xG64xvF2
-        IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_Wrv_ZF1lYx0Ex4A2jsIE14v26r4j6F4U
-        McvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvY0x0EwIxGrwCF04k20xvY0x0EwIxGrwCFx2
-        IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v2
-        6r106r1rMI8E67AF67kF1VAFwI0_JF0_Jw1lIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67
-        AKxVW5JVW7JwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1lIxAIcVCF04k26cxKx2IY
-        s7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r4j6F4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr
-        0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07j3GYdUUUUU=
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Tue, 21 Feb 2023 22:17:24 -0500
+X-Greylist: delayed 56440 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 21 Feb 2023 19:17:03 PST
+Received: from out-43.mta1.migadu.com (out-43.mta1.migadu.com [95.215.58.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CFD5A34C30
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Feb 2023 19:17:03 -0800 (PST)
+Message-ID: <06e1cc6b-8bf7-d2c4-f7de-3cc055f1c866@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+        t=1677035821;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=AlCqFyRXR87fMMJnatrMQs6RG0BLM7Ph0KJRn89LrAI=;
+        b=wdod7o6veTf4Bj9vgrtn5+Imv5R8edJL817NInWX61jRzKL0+jfjVc94G7ooCCiv0W/oSL
+        DoodIUY0s9xYYgnv4aHfQ+4zCzjY1cYhH1qBpsEFqGRySgksEpF9iqCdsmGkR7CAmWomUo
+        tTNAWUupasexqA0Kxb5EkSEOQxv1ftQ=
+Date:   Wed, 22 Feb 2023 11:16:55 +0800
+MIME-Version: 1.0
+Subject: Re: [PATCH] drm/amdkfd: Fix an illegal memory access
+To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Cc:     Felix.Kuehling@amd.com, Xinhui.Pan@amd.com, airlied@gmail.com,
+        alexander.deucher@amd.com, amd-gfx@lists.freedesktop.org,
+        christian.koenig@amd.com, daniel@ffwll.ch,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
+References: <eb49be7c44ae95c4d18e66b59874ef1c@linux.dev>
+ <48e5eae7-4848-3aa2-2cb4-5c7ba32a9848@amd.com>
+ <c16136b3-d6d6-392e-7d58-cd81bcf426f6@wanadoo.fr>
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From:   Qu Huang <qu.huang@linux.dev>
+In-Reply-To: <c16136b3-d6d6-392e-7d58-cd81bcf426f6@wanadoo.fr>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This patch adds support for relocating the kernel to a random address.
+On 2023/2/22 3:17, Christophe JAILLET wrote:
+> Le 21/02/2023 à 17:26, Felix Kuehling a écrit :
+>>
+>> On 2023-02-21 06:35, qu.huang-fxUVXftIFDnyG1zEObXtfA@public.gmane.org wrote:
+>>> From: Qu Huang <qu.huang-fxUVXftIFDnyG1zEObXtfA@public.gmane.org>
+>>>
+>>> In the kfd_wait_on_events() function, the kfd_event_waiter structure is
+>>> allocated by alloc_event_waiters(), but the event field of the waiter
+>>> structure is not initialized; When copy_from_user() fails in the
+>>> kfd_wait_on_events() function, it will enter exception handling to
+>>> release the previously allocated memory of the waiter structure;
+>>> Due to the event field of the waiters structure being accessed
+>>> in the free_waiters() function, this results in illegal memory access
+>>> and system crash, here is the crash log:
+>>>
+>>> localhost kernel: RIP: 0010:native_queued_spin_lock_slowpath+0x185/0x1e0
+>>> localhost kernel: RSP: 0018:ffffaa53c362bd60 EFLAGS: 00010082
+>>> localhost kernel: RAX: ff3d3d6bff4007cb RBX: 0000000000000282 RCX: 00000000002c0000
+>>> localhost kernel: RDX: ffff9e855eeacb80 RSI: 000000000000279c RDI: ffffe7088f6a21d0
+>>> localhost kernel: RBP: ffffe7088f6a21d0 R08: 00000000002c0000 R09: ffffaa53c362be64
+>>> localhost kernel: R10: ffffaa53c362bbd8 R11: 0000000000000001 R12: 0000000000000002
+>>> localhost kernel: R13: ffff9e7ead15d600 R14: 0000000000000000 R15: ffff9e7ead15d698
+>>> localhost kernel: FS:  0000152a3d111700(0000) GS:ffff9e855ee80000(0000) knlGS:0000000000000000
+>>> localhost kernel: CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+>>> localhost kernel: CR2: 0000152938000010 CR3: 000000044d7a4000 CR4: 00000000003506e0
+>>> localhost kernel: Call Trace:
+>>> localhost kernel: _raw_spin_lock_irqsave+0x30/0x40
+>>> localhost kernel: remove_wait_queue+0x12/0x50
+>>> localhost kernel: kfd_wait_on_events+0x1b6/0x490 [hydcu]
+>>> localhost kernel: ? ftrace_graph_caller+0xa0/0xa0
+>>> localhost kernel: kfd_ioctl+0x38c/0x4a0 [hydcu]
+>>> localhost kernel: ? kfd_ioctl_set_trap_handler+0x70/0x70 [hydcu]
+>>> localhost kernel: ? kfd_ioctl_create_queue+0x5a0/0x5a0 [hydcu]
+>>> localhost kernel: ? ftrace_graph_caller+0xa0/0xa0
+>>> localhost kernel: __x64_sys_ioctl+0x8e/0xd0
+>>> localhost kernel: ? syscall_trace_enter.isra.18+0x143/0x1b0
+>>> localhost kernel: do_syscall_64+0x33/0x80
+>>> localhost kernel: entry_SYSCALL_64_after_hwframe+0x44/0xa9
+>>> localhost kernel: RIP: 0033:0x152a4dff68d7
+>>>
+>>> Signed-off-by: Qu Huang <qu.huang-fxUVXftIFDnyG1zEObXtfA@public.gmane.org>
+>>> ---
+>>>   drivers/gpu/drm/amd/amdkfd/kfd_events.c | 1 +
+>>>   1 file changed, 1 insertion(+)
+>>>
+>>> diff --git a/drivers/gpu/drm/amd/amdkfd/kfd_events.c b/drivers/gpu/drm/amd/amdkfd/kfd_events.c
+>>> index 729d26d..e5faaad 100644
+>>> --- a/drivers/gpu/drm/amd/amdkfd/kfd_events.c
+>>> +++ b/drivers/gpu/drm/amd/amdkfd/kfd_events.c
+>>> @@ -787,6 +787,7 @@ static struct kfd_event_waiter *alloc_event_waiters(uint32_t num_events)
+>>>       for (i = 0; (event_waiters) && (i < num_events) ; i++) {
+>>>           init_wait(&event_waiters[i].wait);
+>>>           event_waiters[i].activated = false;
+>>> +        event_waiters[i].event = NULL;
+>>
+>> Thank you for catching this. We're often lazy about initializing things to NULL or 0 because most of our data structures are allocated with kzalloc or similar. I'm not sure why we're not doing this here. If we allocated event_waiters with kcalloc, we could also remove the initialization of activated. I think that would be the cleaner and safer solution.
+>
+> Hi,
+>
+> I think that the '(event_waiters) &&' in the 'for' can also be removed.
+> 'event_waiters' is already NULL tested a few lines above
+>
+>
+> Just my 2c.
+>
+> CJ
+>
 
-Entropy is derived from the banner, which will change every build and
-random_get_entropy() which should provide additional runtime entropy.
+Thanks for the suggestions from Felix and CJ, I have re-submitted patch v2, please review it：
 
-The kernel is relocated by up to RANDOMIZE_BASE_MAX_OFFSET bytes from
-its link address. Because relocation happens so early in the kernel boot,
-the amount of physical memory has not yet been determined. This means
-the only way to limit relocation within the available memory is via
-Kconfig. Limit the maximum value of RANDOMIZE_BASE_MAX_OFFSET to
-256M(0x10000000) because our memory layout has many holes.
+https://lore.kernel.org/all/ea5b997309825b21e406f9bad2ce8779@linux.dev/
 
-Signed-off-by: Youling Tang <tangyouling@loongson.cn>
-Signed-off-by: Xi Ruoyao <xry111@xry111.site> # Fix compiler warnings
----
- arch/loongarch/Kconfig             |  23 +++++
- arch/loongarch/include/asm/setup.h |   2 +
- arch/loongarch/kernel/head.S       |  14 ++-
- arch/loongarch/kernel/relocate.c   | 145 ++++++++++++++++++++++++++++-
- 4 files changed, 179 insertions(+), 5 deletions(-)
+Regards,
 
-diff --git a/arch/loongarch/Kconfig b/arch/loongarch/Kconfig
-index 406a28758a52..ab4c2ab146ab 100644
---- a/arch/loongarch/Kconfig
-+++ b/arch/loongarch/Kconfig
-@@ -530,6 +530,29 @@ config RELOCATABLE
- 	  kernel binary at runtime to a different virtual address than the
- 	  address it was linked at.
- 
-+config RANDOMIZE_BASE
-+	bool "Randomize the address of the kernel image (KASLR)"
-+	depends on RELOCATABLE
-+	help
-+	   Randomizes the physical and virtual address at which the
-+	   kernel image is loaded, as a security feature that
-+	   deters exploit attempts relying on knowledge of the location
-+	   of kernel internals.
-+
-+	   The kernel will be offset by up to RANDOMIZE_BASE_MAX_OFFSET.
-+
-+	   If unsure, say N.
-+
-+config RANDOMIZE_BASE_MAX_OFFSET
-+	hex "Maximum KASLR offset" if EXPERT
-+	depends on RANDOMIZE_BASE
-+	range 0x0 0x10000000 if 64BIT
-+	default "0x01000000"
-+	help
-+	  When KASLR is active, this provides the maximum offset that will
-+	  be applied to the kernel image.
-+
-+
- config SECCOMP
- 	bool "Enable seccomp to safely compute untrusted bytecode"
- 	depends on PROC_FS
-diff --git a/arch/loongarch/include/asm/setup.h b/arch/loongarch/include/asm/setup.h
-index 68b5b5a1fe8a..8d2a9d7a4356 100644
---- a/arch/loongarch/include/asm/setup.h
-+++ b/arch/loongarch/include/asm/setup.h
-@@ -33,6 +33,8 @@ extern void *__la_abs_begin;
- extern void *__la_abs_end;
- 
- extern void __init relocate_kernel(void);
-+extern void *__init do_kaslr(void);
-+
- #endif
- 
- #endif /* __SETUP_H */
-diff --git a/arch/loongarch/kernel/head.S b/arch/loongarch/kernel/head.S
-index 499edc80d8ab..b12f459ad73a 100644
---- a/arch/loongarch/kernel/head.S
-+++ b/arch/loongarch/kernel/head.S
-@@ -87,10 +87,22 @@ SYM_CODE_START(kernel_entry)			# kernel entry point
- 	set_saved_sp	sp, t0, t1
- 
- #ifdef CONFIG_RELOCATABLE
-+#ifdef CONFIG_RANDOMIZE_BASE
-+	bl		do_kaslr
-+
-+	/* Repoint the sp into the new kernel image */
-+	PTR_LI		sp, (_THREAD_SIZE - PT_SIZE)
-+	PTR_ADD		sp, sp, tp
-+	set_saved_sp	sp, t0, t1
-+
-+	/* do_kaslr returns the new kernel image entry point */
-+	jr		a0
-+	ASM_BUG()
-+#else
- 	/* Apply the relocations */
- 	bl		relocate_kernel
- #endif
--
-+#endif
- 	bl		start_kernel
- 	ASM_BUG()
- 
-diff --git a/arch/loongarch/kernel/relocate.c b/arch/loongarch/kernel/relocate.c
-index feeba0730875..73faf7505140 100644
---- a/arch/loongarch/kernel/relocate.c
-+++ b/arch/loongarch/kernel/relocate.c
-@@ -9,11 +9,15 @@
- #include <linux/kernel.h>
- #include <linux/printk.h>
- #include <linux/panic_notifier.h>
-+#include <linux/start_kernel.h>
-+#include <asm/bootinfo.h>
-+#include <asm/early_ioremap.h>
- #include <asm/inst.h>
- #include <asm/sections.h>
- #include <asm/setup.h>
- 
- #define RELOCATED(x) ((void *)((long)x + reloc_offset))
-+#define RELOCATED_KASLR(x) ((void *)((long)x + offset))
- 
- static unsigned long reloc_offset;
- 
-@@ -38,13 +42,13 @@ static inline __init void relocate_relative(void)
- 	}
- }
- 
--static inline void __init relocate_la_abs(void)
-+static inline void __init relocate_la_abs(long offset)
- {
- 	struct rela_la_abs *p;
- 	void *start, *end;
- 
--	start = &__la_abs_begin;
--	end = &__la_abs_end;
-+	start = RELOCATED_KASLR((unsigned long)&__la_abs_begin);
-+	end = RELOCATED_KASLR((unsigned long)&__la_abs_end);
- 
- 	for (p = start; (void *)p < end; p++) {
- 		long v = p->symvalue;
-@@ -63,6 +67,139 @@ static inline void __init relocate_la_abs(void)
- 	}
- }
- 
-+#ifdef CONFIG_RANDOMIZE_BASE
-+static inline __init unsigned long rotate_xor(unsigned long hash,
-+					      const void *area, size_t size)
-+{
-+	size_t i;
-+	unsigned long *ptr = (unsigned long *)area;
-+
-+	for (i = 0; i < size / sizeof(hash); i++) {
-+		/* Rotate by odd number of bits and XOR. */
-+		hash = (hash << ((sizeof(hash) * 8) - 7)) | (hash >> 7);
-+		hash ^= ptr[i];
-+	}
-+
-+	return hash;
-+}
-+
-+static inline __init unsigned long get_random_boot(void)
-+{
-+	unsigned long entropy = random_get_entropy();
-+	unsigned long hash = 0;
-+
-+	/* Attempt to create a simple but unpredictable starting entropy. */
-+	hash = rotate_xor(hash, linux_banner, strlen(linux_banner));
-+
-+	/* Add in any runtime entropy we can get */
-+	hash = rotate_xor(hash, &entropy, sizeof(entropy));
-+
-+	return hash;
-+}
-+
-+static inline __init bool kaslr_disabled(void)
-+{
-+	char *str;
-+
-+	str = strstr(boot_command_line, "nokaslr");
-+	if (str == boot_command_line || (str > boot_command_line && *(str - 1) == ' '))
-+		return true;
-+
-+	return false;
-+}
-+
-+/* Choose a new address for the kernel */
-+static inline void __init *determine_relocation_address(void)
-+{
-+	unsigned long kernel_length;
-+	void *dest = _text;
-+	unsigned long offset;
-+
-+	if (kaslr_disabled())
-+		return dest;
-+
-+	kernel_length = (long)_end - (long)_text;
-+
-+	offset = get_random_boot() << 16;
-+	offset &= (CONFIG_RANDOMIZE_BASE_MAX_OFFSET - 1);
-+	if (offset < kernel_length)
-+		offset += ALIGN(kernel_length, 0xffff);
-+
-+	return RELOCATED_KASLR(dest);
-+}
-+
-+static inline int __init relocation_addr_valid(void *loc_new)
-+{
-+	if ((unsigned long)loc_new & 0x00000ffff) {
-+		/* Inappropriately aligned new location */
-+		return 0;
-+	}
-+	if ((unsigned long)loc_new < (unsigned long)_end) {
-+		/* New location overlaps original kernel */
-+		return 0;
-+	}
-+	return 1;
-+}
-+
-+static inline void __init update_reloc_offset(unsigned long *addr, long offset)
-+{
-+	unsigned long *new_addr = (unsigned long *)RELOCATED_KASLR(addr);
-+
-+	*new_addr = (unsigned long)offset;
-+}
-+
-+void *__init do_kaslr(void)
-+{
-+	void *loc_new;
-+	unsigned long kernel_length;
-+	long offset = 0;
-+	/* Default to original kernel entry point */
-+	void *kernel_entry = start_kernel;
-+	char *cmdline = early_ioremap(fw_arg1, COMMAND_LINE_SIZE);
-+
-+	/* Boot command line was passed in fw_arg1 */
-+	strscpy(boot_command_line, cmdline, COMMAND_LINE_SIZE);
-+
-+	kernel_length = (long)(_end) - (long)(_text);
-+
-+	loc_new = determine_relocation_address();
-+
-+	/* Sanity check relocation address */
-+	if (relocation_addr_valid(loc_new))
-+		offset = (unsigned long)loc_new - (unsigned long)(_text);
-+
-+	reloc_offset = (unsigned long)_text - VMLINUX_LOAD_ADDRESS;
-+
-+	if (offset) {
-+		/* Copy the kernel to it's new location */
-+		memcpy(loc_new, _text, kernel_length);
-+
-+		/* Sync the caches ready for execution of new kernel */
-+		__asm__ __volatile__ (
-+			"ibar 0 \t\n"
-+			"dbar 0 \t\n"
-+			::: "memory");
-+
-+		reloc_offset += offset;
-+
-+		/* The current thread is now within the relocated image */
-+		__current_thread_info = RELOCATED_KASLR(__current_thread_info);
-+
-+		/* Return the new kernel's entry point */
-+		kernel_entry = RELOCATED_KASLR(start_kernel);
-+
-+		update_reloc_offset(&reloc_offset, offset);
-+	}
-+
-+	if (reloc_offset)
-+		relocate_relative();
-+
-+	relocate_la_abs(offset);
-+
-+	return kernel_entry;
-+}
-+#endif
-+
- void __init relocate_kernel(void)
- {
- 	reloc_offset = (unsigned long)_text - VMLINUX_LOAD_ADDRESS;
-@@ -70,7 +207,7 @@ void __init relocate_kernel(void)
- 	if (reloc_offset)
- 		relocate_relative();
- 
--	relocate_la_abs();
-+	relocate_la_abs(0);
- }
- 
- /*
--- 
-2.37.3
+Qu
 
+
+>>
+>> Regards,
+>>    Felix
+>>
+>>
+>>>       }
+>>>
+>>>       return event_waiters;
+>>> -- 
+>>> 1.8.3.1
+>>
+>
