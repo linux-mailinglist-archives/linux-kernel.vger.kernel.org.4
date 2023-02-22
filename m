@@ -2,52 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1962969F744
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Feb 2023 16:01:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 88AE469F742
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Feb 2023 16:00:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232281AbjBVPA5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Feb 2023 10:00:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46752 "EHLO
+        id S232305AbjBVPAr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Feb 2023 10:00:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46804 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231954AbjBVPAc (ORCPT
+        with ESMTP id S231994AbjBVPAb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Feb 2023 10:00:32 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB9E92CFC1
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Feb 2023 07:00:29 -0800 (PST)
+        Wed, 22 Feb 2023 10:00:31 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19B6E3345F
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Feb 2023 07:00:26 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 65A2C6148E
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Feb 2023 15:00:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 7649AC43326;
+        by sin.source.kernel.org (Postfix) with ESMTPS id 82C73CE1DE0
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Feb 2023 15:00:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 5A438C43444;
         Wed, 22 Feb 2023 15:00:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1677078022;
-        bh=gFfjgz0Q8tMCqC/g+ibd4XRnh3poCdRXJ7SYTaiiMGk=;
+        bh=//0EBuofToROe4aHx0Fig7UklG17tIZf4rPh6uYWYYA=;
         h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=iUc07ou9jr7xs7FuduwDLvvw0KikIv8SlZP1q1piXXUzcMoPtu3WuD3PH48O5QbYm
-         L0as6vtkohdapB/UNVtj0ISsMuXtiXh1COxdB8Gu+LtEzGtPvTzQw5nouXApk1k8jA
-         HoOMjuPQTtVlNFKNMyQmnc97UntHwZ/8foqGvWikA0hIiLNMv3c+dt7uUToS8WwtAu
-         8/ZfdprXYt/wKJ7J0Mv//j2S3YBZ7uVfQ2ytGs0869oCXLNEeX5N1IHpSAHaDaH2Vg
-         gUqkuu4urOWFr2Ay0iQLMCo6NZaQQDaz9zx6gMQgNqD+ZmmChUeZh2Lh1TyN12bS3+
-         1l6WXTUhCXroQ==
+        b=bp1WJT9+8TdJIp4pxW+sPJBmJ55lT8100WwM5ZxC+gAf7r3EurN/X2Zehztmit/j5
+         t8oa5P3QZd595iAym+M3wW4eC6DAQ7TNWAgL9//+LwHja5miR+O7yvXxoUiu/tFWDN
+         K/zJstFnZ/C0jRO9TztJ2mYGWMOm0KzhR+aK2woFIHWI5ken3A6BGmFkk5ELMTzOWS
+         zd4rj1PSq7ATxoWgN/JH1sAWgJk7pbiDV3OtKTYPTmxEViJGBu4nPh9YRSO//JYubD
+         Om6KLuww+DwTXpMAfoKbrX8VKQCIqZrCMLdac8rQW8M/YB4uJRPZ27Oe8dEn1r+Kfo
+         Vd25wOcK2CWCQ==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 5DE11C395DF;
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 3888BC73FF5;
         Wed, 22 Feb 2023 15:00:22 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH v3 0/2] riscv: Dump faulting instructions in oops handler
+Subject: Re: [PATCH v2 0/5] riscv: improve link and support
+ ARCH_WANT_LD_ORPHAN_WARN
 From:   patchwork-bot+linux-riscv@kernel.org
-Message-Id: <167707802237.24438.17153104207129769364.git-patchwork-notify@kernel.org>
+Message-Id: <167707802222.24438.1548732675746244127.git-patchwork-notify@kernel.org>
 Date:   Wed, 22 Feb 2023 15:00:22 +0000
-References: <20230119074738.708301-1-bjorn@kernel.org>
-In-Reply-To: <20230119074738.708301-1-bjorn@kernel.org>
-To:     =?utf-8?b?QmrDtnJuIFTDtnBlbCA8Ympvcm5Aa2VybmVsLm9yZz4=?=@ci.codeaurora.org
+References: <20230119155417.2600-1-jszhang@kernel.org>
+In-Reply-To: <20230119155417.2600-1-jszhang@kernel.org>
+To:     Jisheng Zhang <jszhang@kernel.org>
 Cc:     linux-riscv@lists.infradead.org, paul.walmsley@sifive.com,
-        palmer@dabbelt.com, aou@eecs.berkeley.edu, bjorn@rivosinc.com,
-        schwab@linux-m68k.org, geert@linux-m68k.org,
+        palmer@dabbelt.com, aou@eecs.berkeley.edu, masahiroy@kernel.org,
+        keescook@chromium.org, nathan@kernel.org, conor@kernel.org,
         linux-kernel@vger.kernel.org
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
@@ -63,23 +64,29 @@ Hello:
 This series was applied to riscv/linux.git (for-next)
 by Palmer Dabbelt <palmer@rivosinc.com>:
 
-On Thu, 19 Jan 2023 08:47:36 +0100 you wrote:
-> From: Björn Töpel <bjorn@rivosinc.com>
+On Thu, 19 Jan 2023 23:54:12 +0800 you wrote:
+> This series tries to improve link time handling of riscv:
+> patch1 adds the missing RUNTIME_DISCARD_EXIT as suggested by Masahiro.
 > 
-> RISC-V does not dump faulting instructions in the oops handler. This
-> series adds "Code:" dumps to the oops output together with
-> scripts/decodecode support.
-> 
-> Thanks,
-> Björn
+> Similar as other architectures such as x86, arm64 and so on, enable
+> ARCH_WANT_LD_ORPHAN_WARN to enable linker orphan warnings to prevent
+> from missing any new sections in future. So the following two patches
+> are preparation ones, and the last patch finally selects
+> ARCH_WANT_LD_ORPHAN_WARN
 > 
 > [...]
 
 Here is the summary with links:
-  - [v3,1/2] riscv: Add instruction dump to RISC-V splats
-    https://git.kernel.org/riscv/c/eb165bfa8eaf
-  - [v3,2/2] scripts/decodecode: Add support for RISC-V
-    https://git.kernel.org/riscv/c/00b242509c8f
+  - [v2,1/5] riscv: lds: define RUNTIME_DISCARD_EXIT
+    https://git.kernel.org/riscv/c/7e92586c28a5
+  - [v2,2/5] riscv: vmlinux.lds.S: explicitly catch .rela.dyn symbols
+    https://git.kernel.org/riscv/c/e5973191a8e3
+  - [v2,3/5] riscv: vmlinux.lds.S: explicitly catch .riscv.attributes sections
+    https://git.kernel.org/riscv/c/b13e64d94149
+  - [v2,4/5] riscv: vmlinux.lds.S: explicitly catch .init.bss sections from EFI stub
+    https://git.kernel.org/riscv/c/0ed0031b093b
+  - [v2,5/5] riscv: select ARCH_WANT_LD_ORPHAN_WARN for !XIP_KERNEL
+    https://git.kernel.org/riscv/c/f4b71bff8d85
 
 You are awesome, thank you!
 -- 
