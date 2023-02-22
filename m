@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B02969FE2D
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Feb 2023 23:11:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 37AC569FE2E
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Feb 2023 23:11:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232143AbjBVWLw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Feb 2023 17:11:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34708 "EHLO
+        id S232177AbjBVWLz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Feb 2023 17:11:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34736 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232129AbjBVWLo (ORCPT
+        with ESMTP id S232139AbjBVWLo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 22 Feb 2023 17:11:44 -0500
-Received: from mail-qv1-xf2d.google.com (mail-qv1-xf2d.google.com [IPv6:2607:f8b0:4864:20::f2d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B80E47409;
-        Wed, 22 Feb 2023 14:11:25 -0800 (PST)
-Received: by mail-qv1-xf2d.google.com with SMTP id y12so9692072qvt.8;
-        Wed, 22 Feb 2023 14:11:25 -0800 (PST)
+Received: from mail-qv1-xf36.google.com (mail-qv1-xf36.google.com [IPv6:2607:f8b0:4864:20::f36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CF49392BE;
+        Wed, 22 Feb 2023 14:11:26 -0800 (PST)
+Received: by mail-qv1-xf36.google.com with SMTP id op8so10266175qvb.11;
+        Wed, 22 Feb 2023 14:11:26 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=Dl7cNlq6eol+0bH4dQvHPF1M13TBElOJT4S6JzbFEnE=;
-        b=otSWXLMpVnu/w9Ts2rhP77qUs76W600jIBMS4chIZaFCNsEKyVLt7+V9zzs7mue0Po
-         pEgZUm71GgO4IxvgSkAfRyI/8ytWjYSshoYxBi3TDh1FjsYSKQE03ioW0eavDoPTSMc8
-         HUgvpAtGJK8n8xObNGq1D8HEvm2aNWHqw8QXE0Nn95f3Hv00+iX3z3kI+fkk+LshsA4+
-         9jwatkHNNAkGxEXEf0A3g0lF35zcXt0+pJXXjNy4ul0wHLaYKVX5F9DoQ+udcPMW4gRK
-         +nUhQXN6SyreDBb0QA0mNkZ9EQI/M/aUYU6jrh88VuOPV4DL8tCLtTL+B4OSwz+9eK2a
-         e+kA==
+        bh=RisiUnTKxh0SthJdKQRZqo4o/ROREVq/nJM+wr/YiyI=;
+        b=gkgOt5jnP0EGkBSRBVDtWTyRrxk4P+ulLM6orh8qwdEObuAEmgxpTS8mrl7Sy1vbOp
+         3lTRsAYmS+l4Q10AW7HHk+WtspQ9vHaHUr+gl2zcEeScU/SoCRen6vpA84C5BpVyC2/n
+         VDoYG1tfdy+Nc6+ROysdMV37oYFJBwSX7203pO0MJng4Voe089c+UoHPUSAypvAmvUkk
+         8ow3mJqzCcH8esL/MGfR1IdTF7QabUFveqh0HMI4vVkhBavvnqn93RtsrJtFW+3fhD8c
+         lSg8Dxjiq6z1Qh6Fl8YWJ4cjWK5VlRj1UQMIIIc8db/xW1Q0SgsuHh0to4y52sv5j/fp
+         fMcg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=Dl7cNlq6eol+0bH4dQvHPF1M13TBElOJT4S6JzbFEnE=;
-        b=3ZoqQL5x96O+vsaj4UUnB9aWwCmN/kU56RlorF7uHApZC1gaQAYMjfcg4g8BQ48Mgh
-         XV/c8V3cHtMaeBnU11+Y7kQysYaxbeH6nz4L9uQ/IiBFUWnhaFgTaE2xqou1uCIsiIgV
-         0fIG19WIeuO6e4urX3FqSXqIzSbNm7Bjx2B4Tjxk5+KUQI713z+Nk6uxtTGis3F4sJt/
-         rwui30+f9kMymaoZU0CR0RV7FtQp20j15mugrNW1bDEZmDgSnqGEt0ho/2KNlbqANpl6
-         DCHa5sYbqFFZ9aPIZ4XGBOapfyuh9D1gXLoFDp6Ojm0LRw/vXR4yotkLrXOTjxgfSj7/
-         wxKQ==
-X-Gm-Message-State: AO0yUKXMCdQAUwQBrcO+zp45mvgi0720cf/fVMbxeY3poJorbs8ofy/m
-        28ikCvYie75oElLmDRK6mII=
-X-Google-Smtp-Source: AK7set92+bjfzsIZ/iXFtsD7t7Tsxrpsi+B/xRjizhtDl3di9ptSiB6RiaAQVHMbfHPr5eGJhojOuA==
-X-Received: by 2002:a05:6214:5010:b0:56e:a96a:2be1 with SMTP id jo16-20020a056214501000b0056ea96a2be1mr16477643qvb.48.1677103884191;
-        Wed, 22 Feb 2023 14:11:24 -0800 (PST)
+        bh=RisiUnTKxh0SthJdKQRZqo4o/ROREVq/nJM+wr/YiyI=;
+        b=CFKff1F5vR50ePVd8TdUJLfjRqt4e7SEwsFHv6RONqYSpLc/A1zuBVQOzZqMZeT60s
+         CTcHUcR9nv5I6MbLwWlJczMlyEA81Lpz34rY3xT/h9bphtgbfmMz887FMXrDs6t5yClP
+         aJ2ofsQ0ey2QVBwW0ETG6oaxM9HE+a82UmsO6BqilLtWADdaO4Mb4zHHGZGiFW0KJTb4
+         rtFQAIA3oteysqomm7baRKo1fXXIKrssm6+mTCfa0d2tbi1TSN2mx6NA5JqHGVfV5STC
+         Q1uaOx3vhzsIorY6wRA1aM0sdZc6MgVXQUTY31g+Mog/dOfjncbsxtComxbIQgqSGg+R
+         03Fg==
+X-Gm-Message-State: AO0yUKUlGmiHl9llTu5LKonnfM+zbFZOLlCYjCsJv3GuvulgDg4XycOk
+        ZIPhFFgsZfbyiW6eVOB5Uss=
+X-Google-Smtp-Source: AK7set8dsFE9wYnrnZaQVj3UcXkC7O2c4gQSgT2qmjPqM1k0HqXuboFp1KI+P1SJ6xUaVjKf/eBQ7Q==
+X-Received: by 2002:a05:6214:c22:b0:56c:858:6c00 with SMTP id a2-20020a0562140c2200b0056c08586c00mr15649929qvd.32.1677103885021;
+        Wed, 22 Feb 2023 14:11:25 -0800 (PST)
 Received: from xps8900.attlocal.net ([2600:1700:2442:6db0:70ac:b1e4:53db:3994])
-        by smtp.gmail.com with ESMTPSA id a83-20020ae9e856000000b0073f7f1618e8sm6334294qkg.51.2023.02.22.14.11.23
+        by smtp.gmail.com with ESMTPSA id a83-20020ae9e856000000b0073f7f1618e8sm6334294qkg.51.2023.02.22.14.11.24
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 22 Feb 2023 14:11:23 -0800 (PST)
+        Wed, 22 Feb 2023 14:11:24 -0800 (PST)
 From:   Frank Rowand <frowand.list@gmail.com>
 To:     Rob Herring <robh+dt@kernel.org>,
         =?UTF-8?q?Cl=C3=A9ment=20L=C3=A9ger?= <clement.leger@bootlin.com>
@@ -59,9 +59,9 @@ Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
         Horatiu Vultur <horatiu.vultur@microchip.com>,
         Steen Hegelund <steen.hegelund@microchip.com>,
         Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Subject: [PATCH v2 1/2] of: create of_root if no dtb provided
-Date:   Wed, 22 Feb 2023 16:10:50 -0600
-Message-Id: <20230222221051.809091-2-frowand.list@gmail.com>
+Subject: [PATCH v2 2/2] of: unittest: treat missing of_root as error instead of fixing up
+Date:   Wed, 22 Feb 2023 16:10:51 -0600
+Message-Id: <20230222221051.809091-3-frowand.list@gmail.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20230222221051.809091-1-frowand.list@gmail.com>
 References: <20230222221051.809091-1-frowand.list@gmail.com>
@@ -77,177 +77,52 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When enabling CONFIG_OF on a platform where of_root is not populated by
-firmware, we end up without a root node. In order to apply overlays and
-create subnodes of the root node, we need one. Create this root node
-by unflattening an empty builtin dtb.
-
-If firmware provides a flattened device tree (FDT) then the FDT is
-unflattened via setup_arch().  Otherwise, setup_of() which is called
-immediately after setup_arch(), and will create the default root node
-if it does not exist.
+setup_of() now ensures that of_root node is populated with the
+root of a default devicetree. Remove the unittest code that
+created of_root if it was missing.  Verify that of_root is
+valid before attempting to attach the testcase-data subtree.
 
 Signed-off-by: Frank Rowand <frowand.list@gmail.com>
 ---
-
-There are checkpatch warnings.  I have reviewed them and feel
-they can be ignored.
-
 Changes since version 1:
   - refresh for 6.2-rc1
   - update Signed-off-by
-  - fix typo in of_fdt.h: s/of_setup/setup_of
-  - unflatten_device_tree(): validate size in header field dtb_empty_root
-    that will be used to copy dtb_empty_root
-  - add Kconfig option to manually select CONFIG_OF_EARLY_FLATTREE
+  - fix formatting error (leading space) in patch comment
 
- drivers/of/Kconfig        |  7 ++++++-
- drivers/of/Makefile       |  2 +-
- drivers/of/empty_root.dts |  6 ++++++
- drivers/of/fdt.c          | 27 ++++++++++++++++++++++++++-
- include/linux/of_fdt.h    |  2 ++
- init/main.c               |  2 ++
- 6 files changed, 43 insertions(+), 3 deletions(-)
- create mode 100644 drivers/of/empty_root.dts
+ drivers/of/unittest.c | 16 ++++++----------
+ 1 file changed, 6 insertions(+), 10 deletions(-)
 
-diff --git a/drivers/of/Kconfig b/drivers/of/Kconfig
-index 80b5fd44ab1c..591cfe386727 100644
---- a/drivers/of/Kconfig
-+++ b/drivers/of/Kconfig
-@@ -42,9 +42,14 @@ config OF_FLATTREE
- 	select CRC32
+diff --git a/drivers/of/unittest.c b/drivers/of/unittest.c
+index bc0f1e50a4be..006713511c53 100644
+--- a/drivers/of/unittest.c
++++ b/drivers/of/unittest.c
+@@ -1469,20 +1469,16 @@ static int __init unittest_data_add(void)
+ 		return -EINVAL;
+ 	}
  
- config OF_EARLY_FLATTREE
--	bool
-+	bool "Functions for accessing Flat Devicetree (FDT) early in boot"
- 	select DMA_DECLARE_COHERENT if HAS_DMA
- 	select OF_FLATTREE
-+	help
-+	  Normally selected by platforms that process an FDT that has been
-+	  passed to the kernel by the bootloader.  If the bootloader does not
-+	  pass an FDT to the kernel and you need an empty devicetree that
-+	  contains only a root node to exist, then say Y here.
+-	if (!of_root) {
+-		of_root = unittest_data_node;
+-		for_each_of_allnodes(np)
+-			__of_attach_node_sysfs(np);
+-		of_aliases = of_find_node_by_path("/aliases");
+-		of_chosen = of_find_node_by_path("/chosen");
+-		of_overlay_mutex_unlock();
+-		return 0;
+-	}
+-
+ 	EXPECT_BEGIN(KERN_INFO,
+ 		     "Duplicate name in testcase-data, renamed to \"duplicate-name#1\"");
  
- config OF_PROMTREE
- 	bool
-diff --git a/drivers/of/Makefile b/drivers/of/Makefile
-index e0360a44306e..cbae92c5ed02 100644
---- a/drivers/of/Makefile
-+++ b/drivers/of/Makefile
-@@ -2,7 +2,7 @@
- obj-y = base.o device.o platform.o property.o
- obj-$(CONFIG_OF_KOBJ) += kobj.o
- obj-$(CONFIG_OF_DYNAMIC) += dynamic.o
--obj-$(CONFIG_OF_FLATTREE) += fdt.o
-+obj-$(CONFIG_OF_FLATTREE) += fdt.o empty_root.dtb.o
- obj-$(CONFIG_OF_EARLY_FLATTREE) += fdt_address.o
- obj-$(CONFIG_OF_PROMTREE) += pdt.o
- obj-$(CONFIG_OF_ADDRESS)  += address.o
-diff --git a/drivers/of/empty_root.dts b/drivers/of/empty_root.dts
-new file mode 100644
-index 000000000000..cf9e97a60f48
---- /dev/null
-+++ b/drivers/of/empty_root.dts
-@@ -0,0 +1,6 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+/dts-v1/;
-+
-+/ {
-+
-+};
-diff --git a/drivers/of/fdt.c b/drivers/of/fdt.c
-index b2272bccf85c..0d2f6d016b7e 100644
---- a/drivers/of/fdt.c
-+++ b/drivers/of/fdt.c
-@@ -33,6 +33,13 @@
- 
- #include "of_private.h"
- 
-+/*
-+ * __dtb_empty_root_begin[] and __dtb_empty_root_end[] magically created by
-+ * cmd_dt_S_dtb in scripts/Makefile.lib
-+ */
-+extern void *__dtb_empty_root_begin;
-+extern void *__dtb_empty_root_end;
-+
- /*
-  * of_fdt_limit_memory - limit the number of regions in the /memory node
-  * @limit: maximum entries
-@@ -1326,8 +1333,19 @@ bool __init early_init_dt_scan(void *params)
-  */
- void __init unflatten_device_tree(void)
- {
--	__unflatten_device_tree(initial_boot_params, NULL, &of_root,
-+	if (!initial_boot_params) {
-+		initial_boot_params = (void *) __dtb_empty_root_begin;
-+		/* fdt_totalsize() will be used for copy size */
-+		if (fdt_totalsize(initial_boot_params) >
-+		    __dtb_empty_root_end - __dtb_empty_root_begin) {
-+			pr_err("invalid size in dtb_empty_root\n");
-+			return;
-+		}
-+		unflatten_and_copy_device_tree();
-+	} else {
-+		__unflatten_device_tree(initial_boot_params, NULL, &of_root,
- 				early_init_dt_alloc_memory_arch, false);
+ 	/* attach the sub-tree to live tree */
++	if (!of_root) {
++		pr_warn("%s: no live tree to attach sub-tree\n", __func__);
++		kfree(unittest_data);
++		return -ENODEV;
 +	}
- 
- 	/* Get pointer to "/chosen" and "/aliases" nodes for use everywhere */
- 	of_alias_scan(early_init_dt_alloc_memory_arch);
-@@ -1367,6 +1385,13 @@ void __init unflatten_and_copy_device_tree(void)
- 	unflatten_device_tree();
- }
- 
-+void __init setup_of(void)
-+{
-+	/* if architecture did not unflatten devicetree, do it now */
-+	if (!of_root)
-+		unflatten_device_tree();
-+}
 +
- #ifdef CONFIG_SYSFS
- static ssize_t of_fdt_raw_read(struct file *filp, struct kobject *kobj,
- 			       struct bin_attribute *bin_attr,
-diff --git a/include/linux/of_fdt.h b/include/linux/of_fdt.h
-index d69ad5bb1eb1..f0dc46d576da 100644
---- a/include/linux/of_fdt.h
-+++ b/include/linux/of_fdt.h
-@@ -81,6 +81,7 @@ extern const void *of_flat_dt_match_machine(const void *default_match,
- /* Other Prototypes */
- extern void unflatten_device_tree(void);
- extern void unflatten_and_copy_device_tree(void);
-+extern void setup_of(void);
- extern void early_init_devtree(void *);
- extern void early_get_first_memblock_info(void *, phys_addr_t *);
- #else /* CONFIG_OF_EARLY_FLATTREE */
-@@ -91,6 +92,7 @@ static inline void early_init_fdt_reserve_self(void) {}
- static inline const char *of_flat_dt_get_machine_name(void) { return NULL; }
- static inline void unflatten_device_tree(void) {}
- static inline void unflatten_and_copy_device_tree(void) {}
-+static inline void setup_of(void) {}
- #endif /* CONFIG_OF_EARLY_FLATTREE */
- 
- #endif /* __ASSEMBLY__ */
-diff --git a/init/main.c b/init/main.c
-index e1c3911d7c70..31e0931b5134 100644
---- a/init/main.c
-+++ b/init/main.c
-@@ -101,6 +101,7 @@
- #include <linux/init_syscalls.h>
- #include <linux/stackdepot.h>
- #include <linux/randomize_kstack.h>
-+#include <linux/of_fdt.h>
- #include <net/net_namespace.h>
- 
- #include <asm/io.h>
-@@ -961,6 +962,7 @@ asmlinkage __visible void __init __no_sanitize_address start_kernel(void)
- 	pr_notice("%s", linux_banner);
- 	early_security_init();
- 	setup_arch(&command_line);
-+	setup_of();
- 	setup_boot_config();
- 	setup_command_line(command_line);
- 	setup_nr_cpu_ids();
+ 	np = unittest_data_node->child;
+ 	while (np) {
+ 		struct device_node *next = np->sibling;
 -- 
 Frank Rowand <frowand.list@gmail.com>
 
