@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D45369F539
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Feb 2023 14:24:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 451F969F53B
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Feb 2023 14:24:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231869AbjBVNYn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Feb 2023 08:24:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41670 "EHLO
+        id S231985AbjBVNYp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Feb 2023 08:24:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41694 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231689AbjBVNYj (ORCPT
+        with ESMTP id S231799AbjBVNYk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Feb 2023 08:24:39 -0500
+        Wed, 22 Feb 2023 08:24:40 -0500
 Received: from out2-smtp.messagingengine.com (out2-smtp.messagingengine.com [66.111.4.26])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45E3F2FCE9;
-        Wed, 22 Feb 2023 05:24:38 -0800 (PST)
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-        by mailout.nyi.internal (Postfix) with ESMTP id B47D45C011B;
-        Wed, 22 Feb 2023 08:24:37 -0500 (EST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C25543431E;
+        Wed, 22 Feb 2023 05:24:39 -0800 (PST)
+Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
+        by mailout.nyi.internal (Postfix) with ESMTP id 394115C0132;
+        Wed, 22 Feb 2023 08:24:39 -0500 (EST)
 Received: from mailfrontend1 ([10.202.2.162])
-  by compute5.internal (MEProxy); Wed, 22 Feb 2023 08:24:37 -0500
+  by compute2.internal (MEProxy); Wed, 22 Feb 2023 08:24:39 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; h=
         cc:cc:content-transfer-encoding:date:date:from:from:in-reply-to
         :in-reply-to:message-id:mime-version:references:reply-to:sender
-        :subject:subject:to:to; s=fm2; t=1677072277; x=1677158677; bh=EP
-        SSc8zmdPgI05TJa3CUPRSOx9d1h71CZw1l3kq4OlU=; b=hgDPnHyaWtUSE6sxDt
-        xymQ9ErJ1eijmW28BrMxDDjmTXuJH2ekWMiAMlL4luAtwFrhiwbNE6Zgxkqgz5Xn
-        IgfUUuPXh6/CZVe2NyNZ9FbyJRaWiKeAqETJtOF2mEyWcb2TCHMOz5kwKBKv1bjk
-        4f/a9hV1MNM31Zk6Z4GtUEDTbhaUBu16TDP346fcLERld52lSDUcHLkG/kZoQ+AN
-        nXgSQMTFqROStx4NFztlWHuuKJQTFZQF4dVuYvLK6jZ2vykhYULH/7ZoJHzRTOEK
-        BhiIV9vf3aH9YDK/sY9ptH25+eLDIyrXFDhqugiDZgFCa+yS+foJ6vE5Uknb9zcy
-        rtAw==
+        :subject:subject:to:to; s=fm2; t=1677072279; x=1677158679; bh=p1
+        V6c2YQKPdBi091Tqa4iPFzeD9QI7L6DP4eQYxxvFM=; b=wI4nXPl2zfm3ZUxD1K
+        H9K0JWhjrFZJNb393iyBS0bApQ4Rs0/iqOh0kxXo4NXH3ludGeV03Ran/+wFdYQH
+        TU3ojIs/rxtBHUSHBCyjTKEkjF72W+Dmo0pczskCbNg3//T8jFyT6mAEwWFhCGa6
+        Cz7PdIWyJMwFP61oIURw+45OAaFxFJcfrLGZjmV4vKiwcHh4phC0jxdZ9l2GuHEB
+        F9d4JMrEnJllna5HAGOypUuQGdGCx6CbU8VdOeGAAguBTTZOkDLevicD8bCS1Hk5
+        P6gLA3imLk6WJAAZ29rbkoPGdMIasqaR4z3VU3WlZ8MppWQDYT8rC07LnBmY1zeE
+        USlA==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
         messagingengine.com; h=cc:cc:content-transfer-encoding:date:date
         :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
         :message-id:mime-version:references:reply-to:sender:subject
         :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm1; t=1677072277; x=1677158677; bh=EPSSc8zmdPgI0
-        5TJa3CUPRSOx9d1h71CZw1l3kq4OlU=; b=pnO03XCQw9tLQOxImyoJIpW1OulUD
-        evwXHGkX/68qg93M9FLe9ueBGB7GWNv2GvL7QR6axfNbsFyZuYCmYqAOeF48xmdn
-        wwjNBS5QjchW7P91L5AQslWkDQZF83CcPhbnuq/gr0ms9t5XFY30LjTAN2Jq3FL/
-        M0dqVYAmNs3bJMFD4MPlAIBHAtlIRXWAPnIFW3yvlxQ7RbmpR9mq9z/3/zi+diQQ
-        lv7Bl+vXyuEDEVXtSjgiOTZDo2X3UWsPE9fIOh39ndlXCE2Ftjdn6OQ3l7vU8y9f
-        HK3qRlbYjwsehMYfRd6IgUqtalUaEV14jud7J06N06mQLJHGzOAP7gPMw==
-X-ME-Sender: <xms:lRf2Y2pVq3Mu8W-AreGEFWzrIIrpC7PJ32nrlX2CAIqdXRYIXbbeaQ>
-    <xme:lRf2Y0q2XiCGiS7fw-NF--SfjpmnElHljpJxkQSPMSUfxcKjh2NtAmBSRG7AuAQ9J
-    4t38HSIOgkyQCELc1k>
-X-ME-Received: <xmr:lRf2Y7Nxsg8Z08uzqZS5IqyT41OdsIkWqKI-8nj89_wCOS1CBWGAtYGQZ43P>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrudejledghedtucetufdoteggodetrfdotf
+        :x-sasl-enc; s=fm1; t=1677072279; x=1677158679; bh=p1V6c2YQKPdBi
+        091Tqa4iPFzeD9QI7L6DP4eQYxxvFM=; b=Y5ehZbXZlmfaJ6YtJUwqm0nl69Q9y
+        TpPisx3hhMiNXqoZjp28cMEBraOz1SJPKdxjUKYQxSpfL3sG9q98PSsF2sZbqOAm
+        wHFU6ZsISGm2o1UTxGnSMZWkGOt09EJhJ6r12iDXF9pUj3sEpoNnt3oBrSqIoZ51
+        U1Zkbc8wgN8PfnemAEikR8xwnME1IUhq5G41fjJ8G+mrJ6kE/EPDSsEJWQxs1r3B
+        2oN4WwLf88mp8HBj/e9rCkdgVS19/CIbX8j9vA8Qf50tpwTLFLQUmDfeknWciYkd
+        zYLoZ27h3eEWzJfPeXY/ZgDeo1Wjugzw0pwB7+xKPArD3pVDmdC9sFO9g==
+X-ME-Sender: <xms:lxf2Y8vhaRnh9eMDLG0Gt6mwyRNqXzuo4P7bRJMOOS-wEgyIA7FgdQ>
+    <xme:lxf2Y5ehC2xeQ1Xnvx_GXXqc_lhX1CUjEFQCM-W0QulcSeU0uGoDDya0E_z5WA9Uu
+    tZ47FhAOlz-8KObEbY>
+X-ME-Received: <xmr:lxf2Y3zPtVSCUofUngq1W-svpUvx-JHM-9OQGpOlIwI2MbH6zlE3GrSOPOz9>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrudejledgheduucetufdoteggodetrfdotf
     fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
     uceurghilhhouhhtmecufedttdenucenucfjughrpefhvfevufffkffojghfggfgsedtke
     ertdertddtnecuhfhrohhmpeflihgrgihunhcujggrnhhguceojhhirgiguhhnrdihrghn
@@ -55,20 +55,20 @@ X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrudejledghedtucetufdoteggod
     dvgeekgfdvtdettdelieeihfegtedugeekhfdvhfejfedtnecuvehluhhsthgvrhfuihii
     vgeptdenucfrrghrrghmpehmrghilhhfrhhomhepjhhirgiguhhnrdihrghnghesfhhlhi
     hgohgrthdrtghomh
-X-ME-Proxy: <xmx:lRf2Y16nCFEyxdZFeY_orV_X_ktqHL8uQtV1XWnSaXKDtlwREaJWag>
-    <xmx:lRf2Y157-VE7f415HizSLF9AnAzvx5OD2TfNeAcpLFmi0Kf6gWTCnA>
-    <xmx:lRf2Y1iXnsvGA0KfXmFGxwBocPIBrkOdhUVjFzy4dzNdi-5R6rMkEA>
-    <xmx:lRf2Y_mP0Syf5A5-VBtetzmKwgmHS3Jk6vLFOU4DSZFvBpOUSfn0Ag>
+X-ME-Proxy: <xmx:lxf2Y_MrBn3vbunqIvrUSlLdbkDWN2QdAWsQf6HmUg0f_kezdemL4Q>
+    <xmx:lxf2Y8_MZEHdXUBoKITZrftVLr3mFOnfOruoCanL3bkwrMLQdG-qVA>
+    <xmx:lxf2Y3XKpzkKXuCjM0dKmRlKpUV4RR9zRqjZa0B00ZRav86gcMnbCA>
+    <xmx:lxf2Y7Yp8XjlzYTDiiyg9j1M4tc31ugkl0Cd8eRvjVEAeeNTfLyJlA>
 Feedback-ID: ifd894703:Fastmail
 Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
- 22 Feb 2023 08:24:36 -0500 (EST)
+ 22 Feb 2023 08:24:37 -0500 (EST)
 From:   Jiaxun Yang <jiaxun.yang@flygoat.com>
 To:     linux-mips@vger.kernel.org
 Cc:     linux-kernel@vger.kernel.org, tsbogend@alpha.franken.de,
         hch@lst.de, Jiaxun Yang <jiaxun.yang@flygoat.com>
-Subject: [PATCH v2 1/4] MIPS: Remove DMA_PERDEV_COHERENT
-Date:   Wed, 22 Feb 2023 13:24:22 +0000
-Message-Id: <20230222132425.7442-2-jiaxun.yang@flygoat.com>
+Subject: [PATCH v2 2/4] MIPS: Always select ARCH_HAS_SETUP_DMA_OPS
+Date:   Wed, 22 Feb 2023 13:24:23 +0000
+Message-Id: <20230222132425.7442-3-jiaxun.yang@flygoat.com>
 X-Mailer: git-send-email 2.37.1 (Apple Git-137.1)
 In-Reply-To: <20230222132425.7442-1-jiaxun.yang@flygoat.com>
 References: <20230222132425.7442-1-jiaxun.yang@flygoat.com>
@@ -84,33 +84,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-As now we are always managing DMA coherence on per dev bias,
-there is no need to have such option. And it's not selected
-by any platform.
+arch_setup_dma_ops on MIPS sets coherency information in struct device.
+It's essential for per-device coherency to work.
+
+Select it for all non-coherent platforms.
 
 Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
 ---
-v2: Remove unrelated change.
----
- arch/mips/Kconfig | 5 -----
- 1 file changed, 5 deletions(-)
+ arch/mips/Kconfig | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/arch/mips/Kconfig b/arch/mips/Kconfig
-index 37072e15b263..a1170f0a0c04 100644
+index a1170f0a0c04..dae894b7d857 100644
 --- a/arch/mips/Kconfig
 +++ b/arch/mips/Kconfig
-@@ -1080,11 +1080,6 @@ config FW_CFE
- config ARCH_SUPPORTS_UPROBES
- 	bool
+@@ -134,7 +134,6 @@ choice
  
--config DMA_PERDEV_COHERENT
--	bool
+ config MIPS_GENERIC_KERNEL
+ 	bool "Generic board-agnostic MIPS kernel"
 -	select ARCH_HAS_SETUP_DMA_OPS
--	select DMA_NONCOHERENT
--
- config DMA_NONCOHERENT
- 	bool
+ 	select MIPS_GENERIC
+ 	select BOOT_RAW
+ 	select BUILTIN_DTB
+@@ -1089,6 +1088,7 @@ config DMA_NONCOHERENT
+ 	# by pgprot_writcombine can be mixed, and the latter sometimes provides
+ 	# significant advantages.
  	#
++	select ARCH_HAS_SETUP_DMA_OPS
+ 	select ARCH_HAS_DMA_WRITE_COMBINE
+ 	select ARCH_HAS_DMA_PREP_COHERENT
+ 	select ARCH_HAS_SYNC_DMA_FOR_DEVICE
 -- 
 2.37.1 (Apple Git-137.1)
 
