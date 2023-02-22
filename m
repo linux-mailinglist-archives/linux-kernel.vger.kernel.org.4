@@ -2,186 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5353069F8DA
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Feb 2023 17:17:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EDFFB69F8DE
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Feb 2023 17:18:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231234AbjBVQRV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Feb 2023 11:17:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38860 "EHLO
+        id S232577AbjBVQSx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Feb 2023 11:18:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40618 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232555AbjBVQRT (ORCPT
+        with ESMTP id S231151AbjBVQSq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Feb 2023 11:17:19 -0500
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 663483D922
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Feb 2023 08:17:12 -0800 (PST)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 06C4020629;
-        Wed, 22 Feb 2023 16:17:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1677082631; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=zNoRjmK/6b6p+tMaBE1nK/wJKeAnzp3Jf3E5BDeYjR0=;
-        b=TJkYfK3HGKG1PaVmDv9Dl8Gx8yLzkmmJso6UV0YNWL6PY399duoo7Nr0usB5VvHFSReAvM
-        vNTEONwGJIwZLxyNsNCsWM1pXDbbSUS12laisZUSS6YoVdAHEw2fpJZJkpt2nna/rKaFy7
-        V9snqZmM6+qPatUgSuW33pWSk4QLF7E=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1677082631;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=zNoRjmK/6b6p+tMaBE1nK/wJKeAnzp3Jf3E5BDeYjR0=;
-        b=+m6EftINa9XM7V5R3DlkBN22y0JpzeeG/SHC8wdFJp09j5mtoLmKHwX+z2XhxZzlUdK/ti
-        9GBIPJ+xwLccS6Bg==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id E38AA133E0;
-        Wed, 22 Feb 2023 16:17:10 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id f87+NgZA9mP/SAAAMHmgww
-        (envelope-from <vbabka@suse.cz>); Wed, 22 Feb 2023 16:17:10 +0000
-Message-ID: <ad91d62b-37eb-4b73-707a-3c45c9e16256@suse.cz>
-Date:   Wed, 22 Feb 2023 17:17:10 +0100
+        Wed, 22 Feb 2023 11:18:46 -0500
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8306E1B30B;
+        Wed, 22 Feb 2023 08:18:43 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+        Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
+        Message-ID:Sender:Reply-To:Content-ID:Content-Description;
+        bh=HfJCJvs/vmINR8JlrJ4yvua1FzzDNAFMvusMr/l33Og=; b=f6p/RpPWtzVHAZ7tcf4tY8uHkO
+        SxPEB2cpaRGZajOpxQupqPmwVeXadjJ2AQppRGareITjyaIb4+OndAQT7EpaLpW34xi5JwAgtljHU
+        oJhN1a57W5VLzjSB7WqQbdOMo3mcTRmmtO2EM9IKbly7f9M30GEfDVT0+b3Ov0XpAxMe3FsejfWkw
+        +77sRU3gQ/kxjSG+GhaRmGp7kTU61NcZY4/tI9sfcbdRweOmBLQZBApCCPfumcWo/qNdfoezIU/eL
+        0npSR8O3yIn2mgYg5/X9C8C8R0xIsLED45rCeIcHnYWWCACcuLZZgaJ5+tISX/3Xv3EI2H7jvbmiN
+        68GZWong==;
+Received: from [2601:1c2:980:9ec0::df2f]
+        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1pUrpK-00D0EZ-Rt; Wed, 22 Feb 2023 16:18:42 +0000
+Message-ID: <b69b7e54-4af4-be81-63f7-14d20e7973b5@infradead.org>
+Date:   Wed, 22 Feb 2023 08:18:40 -0800
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH v4 48/49] mm/mmap: Remove __vma_adjust()
+ Thunderbird/102.7.2
+Subject: Re: [PATCH] KVM: SVM: hyper-v: placate modpost section mismatch error
 Content-Language: en-US
-To:     "Liam R. Howlett" <Liam.Howlett@oracle.com>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        maple-tree@lists.infradead.org
-References: <20230120162650.984577-1-Liam.Howlett@oracle.com>
- <20230120162650.984577-49-Liam.Howlett@oracle.com>
-From:   Vlastimil Babka <vbabka@suse.cz>
-In-Reply-To: <20230120162650.984577-49-Liam.Howlett@oracle.com>
+To:     Vitaly Kuznetsov <vkuznets@redhat.com>,
+        linux-kernel@vger.kernel.org
+Cc:     Vineeth Pillai <viremana@linux.microsoft.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Sean Christopherson <seanjc@google.com>, kvm@vger.kernel.org
+References: <20230222073315.9081-1-rdunlap@infradead.org>
+ <87k0094wib.fsf@redhat.com>
+From:   Randy Dunlap <rdunlap@infradead.org>
+In-Reply-To: <87k0094wib.fsf@redhat.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/20/23 17:26, Liam R. Howlett wrote:
-> From: "Liam R. Howlett" <Liam.Howlett@Oracle.com>
+
+
+On 2/22/23 06:15, Vitaly Kuznetsov wrote:
+> Randy Dunlap <rdunlap@infradead.org> writes:
 > 
-> Inline the work of __vma_adjust() into vma_merge().  This reduces code
-> size and has the added benefits of the comments for the cases being
-> located with the code.
+>> modpost reports section mismatch errors/warnings:
+>> WARNING: modpost: vmlinux.o: section mismatch in reference: svm_hv_hardware_setup (section: .text) -> (unknown) (section: .init.data)
+>> WARNING: modpost: vmlinux.o: section mismatch in reference: svm_hv_hardware_setup (section: .text) -> (unknown) (section: .init.data)
+>> WARNING: modpost: vmlinux.o: section mismatch in reference: svm_hv_hardware_setup (section: .text) -> (unknown) (section: .init.data)
+>>
+>> Marking svm_hv_hardware_setup() as __init fixes the warnings.
+>>
+>> I don't know why this should be needed -- it seems like a compiler
+>> problem to me since the calling function is marked as __init.
+>>
+>> This "(unknown) (section: .init.data)" all refer to svm_x86_ops.
+>>
+>> Fixes: 1e0c7d40758b ("KVM: SVM: hyper-v: Remote TLB flush for SVM")
+>> Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+>> Cc: Vineeth Pillai <viremana@linux.microsoft.com>
+>> Cc: Paolo Bonzini <pbonzini@redhat.com>
+>> Cc: Vitaly Kuznetsov <vkuznets@redhat.com>
+>> Cc: Sean Christopherson <seanjc@google.com>
+>> Cc: kvm@vger.kernel.org
+>> ---
+>>  arch/x86/kvm/svm/svm_onhyperv.h |    2 +-
+>>  1 file changed, 1 insertion(+), 1 deletion(-)
+>>
+>> diff -- a/arch/x86/kvm/svm/svm_onhyperv.h b/arch/x86/kvm/svm/svm_onhyperv.h
+>> --- a/arch/x86/kvm/svm/svm_onhyperv.h
+>> +++ b/arch/x86/kvm/svm/svm_onhyperv.h
+>> @@ -30,7 +30,7 @@ static inline void svm_hv_init_vmcb(stru
+>>  		hve->hv_enlightenments_control.msr_bitmap = 1;
+>>  }
+>>  
+>> -static inline void svm_hv_hardware_setup(void)
+>> +static inline __init void svm_hv_hardware_setup(void)
+>>  {
+>>  	if (npt_enabled &&
+>>  	    ms_hyperv.nested_features & HV_X64_NESTED_ENLIGHTENED_TLB) {
+>>
 > 
-> Change the comments referencing vma_adjust() accordingly.
+> There's a second empty svm_hv_hardware_setup() implementation 50 lines
+> below in the same file for !if IS_ENABLED(CONFIG_HYPERV) case and I
+> think it needs to be marked as '__init' as well.
 > 
-> Signed-off-by: Liam R. Howlett <Liam.Howlett@oracle.com>
 
-...
+I saw that. I can make that change also. I was optimistic that since it is
+empty, gcc would not be fooled by it.
 
-> @@ -1054,32 +945,85 @@ struct vm_area_struct *vma_merge(struct vma_iterator *vmi, struct mm_struct *mm,
->  					     vm_userfaultfd_ctx, anon_name)) {
->  		merge_next = true;
->  	}
-> +
-> +	remove = remove2 = adjust = NULL;
->  	/* Can we merge both the predecessor and the successor? */
->  	if (merge_prev && merge_next &&
-> -			is_mergeable_anon_vma(prev->anon_vma,
-> -				next->anon_vma, NULL)) {	 /* cases 1, 6 */
-> -		err = __vma_adjust(vmi, prev, prev->vm_start,
-> -					next->vm_end, prev->vm_pgoff, prev);
-> -		res = prev;
-> -	} else if (merge_prev) {			/* cases 2, 5, 7 */
-> -		err = __vma_adjust(vmi, prev, prev->vm_start,
-> -					end, prev->vm_pgoff, prev);
-> -		res = prev;
-> +	    is_mergeable_anon_vma(prev->anon_vma, next->anon_vma, NULL)) {
-> +		remove = mid;				/* case 1 */
-> +		vma_end = next->vm_end;
-> +		err = dup_anon_vma(res, remove);
-> +		if (mid != next) {			/* case 6 */
-> +			remove2 = next;
-> +			if (!remove->anon_vma)
-> +				err = dup_anon_vma(res, remove2);
-> +		}
-> +	} else if (merge_prev) {
-> +		err = 0;				/* case 2 */
-> +		if (mid && end > mid->vm_start) {
-> +			err = dup_anon_vma(res, mid);
-> +			if (end == mid->vm_end) {	/* case 7 */
-> +				remove = mid;
-> +			} else {			/* case 5 */
-> +				adjust = mid;
-> +				adj_next = (end - mid->vm_start);
-> +			}
-> +		}
->  	} else if (merge_next) {
-> -		if (prev && addr < prev->vm_end)	/* case 4 */
-> -			err = __vma_adjust(vmi, prev, prev->vm_start,
-> -					addr, prev->vm_pgoff, next);
-> -		else					/* cases 3, 8 */
-> -			err = __vma_adjust(vmi, mid, addr, next->vm_end,
-> -					next->vm_pgoff - pglen, next);
->  		res = next;
-> +		if (prev && addr < prev->vm_end) {	/* case 4 */
-> +			vma_end = addr;
-> +			adjust = mid;
-> +			adj_next = -(vma->vm_end - addr);
-> +			err = dup_anon_vma(res, adjust);
+v2 later today.
 
-I think this one is wrong, and should be fixed as below. I'm not
-exactly sure about user visible effects, but shouldn't matter if
-we fix before rc1? I guess what can happen is we end up with pages
-becoming part of 'prev' that have anon_vma originally from 'mid'
-which is not connected to 'prev', so eventually some rmap operation
-will fail to do the right thing etc. Or 'mid' is unmapped, its
-anon_vma freed and we have a use-after free. Probably rare to happen,
-but nasty enough.
-
-----8<----
-From 854f4cef0fecde9a0a89ff1a5beb0a1e2115363f Mon Sep 17 00:00:00 2001
-From: Vlastimil Babka <vbabka@suse.cz>
-Date: Wed, 22 Feb 2023 16:51:46 +0100
-Subject: [PATCH urgent for 6.3-rc1] mm/mremap: fix dup_anon_vma() in vma_merge() case 4
-
-In case 4, we are shrinking 'prev' (PPPP in the comment) and expanding
-'mid' (NNNN). So we need to make sure 'mid' clones the anon_vma from
-'prev', if it doesn't have any. After commit 0503ea8f5ba7 ("mm/mmap:
-remove __vma_adjust()") we can fail to do that due to wrong parameters
-for dup_anon_vma(). The call is a no-op because res == next, adjust ==
-mid and mid == next. Fix it.
-
-Fixes: 0503ea8f5ba7 ("mm/mmap: remove __vma_adjust()")
-Signed-off-by: Vlastimil Babka <vbabka@suse.cz>
----
- mm/mmap.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/mm/mmap.c b/mm/mmap.c
-index 20f21f0949dd..740b54be3ed4 100644
---- a/mm/mmap.c
-+++ b/mm/mmap.c
-@@ -973,7 +973,7 @@ struct vm_area_struct *vma_merge(struct vma_iterator *vmi, struct mm_struct *mm,
- 			vma_end = addr;
- 			adjust = mid;
- 			adj_next = -(vma->vm_end - addr);
--			err = dup_anon_vma(res, adjust);
-+			err = dup_anon_vma(adjust, prev);
- 		} else {
- 			vma = next;			/* case 3 */
- 			vma_start = addr;
+thanks.
 -- 
-2.39.2
-
-
-
+~Randy
