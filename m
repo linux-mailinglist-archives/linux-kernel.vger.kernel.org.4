@@ -2,36 +2,36 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 042B669F1B9
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Feb 2023 10:30:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 17BC469F1C1
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Feb 2023 10:31:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232112AbjBVJaT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Feb 2023 04:30:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45406 "EHLO
+        id S232206AbjBVJbU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Feb 2023 04:31:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45380 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232013AbjBVJ3k (ORCPT
+        with ESMTP id S231801AbjBVJax (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Feb 2023 04:29:40 -0500
+        Wed, 22 Feb 2023 04:30:53 -0500
 Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C08A339CD7;
-        Wed, 22 Feb 2023 01:27:41 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FC6D38655;
+        Wed, 22 Feb 2023 01:29:04 -0800 (PST)
 Received: from IcarusMOD.eternityproject.eu (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
         (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 38AF366021A4;
-        Wed, 22 Feb 2023 09:27:01 +0000 (GMT)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 8013366021E9;
+        Wed, 22 Feb 2023 09:27:02 +0000 (GMT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1677058022;
-        bh=vITA8pfGXYKDdKrUwz0Dra2Zfgr6mfRhj1G5AbxCjJA=;
+        s=mail; t=1677058023;
+        bh=G39BkrHiy8UDI2+jdX1lg0zn/2dAssLXNfESAl+XYlU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=AFzrq43esV97qlLLvszx+MmK4XAh0EfIQ0NaCXcT8CeBuYgI7Vcf4Tyqv6MBSXrSW
-         EI+raKU+/NmiFP9egZAsS/ezqeVZQySdrJ3t5ri1vOczECJEvohcKcbWwlKuUc2lLd
-         DyNdh4jHP56GYN0mChlNMrbHzHrv7C06k4XeCxjpOJxzcp/XSLvbugcKn+ncYzLW4u
-         tLeUMSuvEg9/zjFKU89tUfNELPcIWSQak4MjD9QE/yxi3gdLasEExFLpqRVgEUI36N
-         oDaG8bxIiO9p3p/AZAZd7HMLeCHIgWrwBqdQcWDdGPZw1+/+oDU/S7zDGvkeljIjSp
-         7c42Kw1JtMXnA==
+        b=g5AYqRBygUyPm3Y05igGdToRr37p4+IpDXf98PB3KlWU9jdUfvdQb/P5+RctkLe1c
+         BFhgVuBbjqfmSz1IyC0gkdb09sGuoI1WdbteLL40pSSbmmjh8SsO8uQqL+rNDojvaH
+         v1ISsfV0JTl1oqY5dhRnWFSfHuTI3DE+c6ntv62g+5F8ZUNTymqq1NfIV3siOt2uTD
+         x8c8DhH2nVtVONnvnxReiE3oULewZykP/LCSF7u+WNgwHzix8KgCzsFf8Q8rDOot48
+         9VgE4jZ2HGtyc0RCJ3y/W81Zud+nwzL5cwhszSlc83fhtkcE4Ub/LMvyYf4j9/FvPo
+         cE3JLrg5x3pOQ==
 From:   AngeloGioacchino Del Regno 
         <angelogioacchino.delregno@collabora.com>
 To:     mturquette@baylibre.com
@@ -47,9 +47,9 @@ Cc:     sboyd@kernel.org, matthias.bgg@gmail.com,
         chen.zhong@mediatek.com, linux-kernel@vger.kernel.org,
         linux-clk@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         linux-mediatek@lists.infradead.org
-Subject: [PATCH v5 51/54] clk: mediatek: mt8135: Properly use CLK_IS_CRITICAL flag
-Date:   Wed, 22 Feb 2023 10:25:40 +0100
-Message-Id: <20230222092543.19187-52-angelogioacchino.delregno@collabora.com>
+Subject: [PATCH v5 52/54] clk: mediatek: mt8135-apmixedsys: Convert to platform_driver and module
+Date:   Wed, 22 Feb 2023 10:25:41 +0100
+Message-Id: <20230222092543.19187-53-angelogioacchino.delregno@collabora.com>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230222092543.19187-1-angelogioacchino.delregno@collabora.com>
 References: <20230222092543.19187-1-angelogioacchino.delregno@collabora.com>
@@ -64,76 +64,87 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Instead of calling clk_prepare_enable() for clocks that shall stay
-enabled, use the CLK_IS_CRITICAL flag, which purpose is exactly that.
+Convert apmixedsys clocks to be a platform driver; while at it, also
+add necessary error handling to the probe function, add a remove
+callback and provide a MODULE_DESCRIPTION().
 
-Fixes: a8aede794843 ("clk: mediatek: Add basic clocks for Mediatek MT8135.")
+This driver is now compatible with an eventual module build.
+
 Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 Reviewed-by: Chen-Yu Tsai <wenst@chromium.org>
 ---
- drivers/clk/mediatek/clk-mt8135.c | 14 ++++++++------
- 1 file changed, 8 insertions(+), 6 deletions(-)
+ drivers/clk/mediatek/clk-mt8135-apmixedsys.c | 53 ++++++++++++++++++--
+ 1 file changed, 48 insertions(+), 5 deletions(-)
 
-diff --git a/drivers/clk/mediatek/clk-mt8135.c b/drivers/clk/mediatek/clk-mt8135.c
-index 2a9405b552c6..1c76c0003f99 100644
---- a/drivers/clk/mediatek/clk-mt8135.c
-+++ b/drivers/clk/mediatek/clk-mt8135.c
-@@ -2,6 +2,8 @@
- /*
-  * Copyright (c) 2014 MediaTek Inc.
-  * Author: James Liao <jamesjj.liao@mediatek.com>
-+ * Copyright (c) 2023 Collabora, Ltd.
-+ *               AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-  */
- 
- #include <linux/clk.h>
-@@ -390,7 +392,7 @@ static const struct mtk_composite top_muxes[] __initconst = {
- 	MUX_GATE(CLK_TOP_GCPU_SEL, "gcpu_sel", gcpu_parents, 0x0164, 24, 3, 31),
- 	/* CLK_CFG_9 */
- 	MUX_GATE(CLK_TOP_DPI1_SEL, "dpi1_sel", dpi1_parents, 0x0168, 0, 2, 7),
--	MUX_GATE(CLK_TOP_CCI_SEL, "cci_sel", cci_parents, 0x0168, 8, 3, 15),
-+	MUX_GATE_FLAGS(CLK_TOP_CCI_SEL, "cci_sel", cci_parents, 0x0168, 8, 3, 15, CLK_IS_CRITICAL),
- 	MUX_GATE(CLK_TOP_APLL_SEL, "apll_sel", apll_parents, 0x0168, 16, 3, 23),
- 	MUX_GATE(CLK_TOP_HDMIPLL_SEL, "hdmipll_sel", hdmipll_parents, 0x0168, 24, 2, 31),
+diff --git a/drivers/clk/mediatek/clk-mt8135-apmixedsys.c b/drivers/clk/mediatek/clk-mt8135-apmixedsys.c
+index 2b4d379300fc..744aae092281 100644
+--- a/drivers/clk/mediatek/clk-mt8135-apmixedsys.c
++++ b/drivers/clk/mediatek/clk-mt8135-apmixedsys.c
+@@ -47,16 +47,59 @@ static const struct mtk_pll_data plls[] = {
+ 	PLL(CLK_APMIXED_VDECPLL, "vdecpll", 0x304, 0x31c, 0x80000000, 0, 21, 0x2b0, 6, 0x0, 0x308, 0),
  };
-@@ -404,6 +406,10 @@ static const struct mtk_gate_regs infra_cg_regs = {
- #define GATE_ICG(_id, _name, _parent, _shift)	\
- 	GATE_MTK(_id, _name, _parent, &infra_cg_regs, _shift, &mtk_clk_gate_ops_setclr)
  
-+#define GATE_ICG_AO(_id, _name, _parent, _shift)	\
-+	GATE_MTK_FLAGS(_id, _name, _parent, &infra_cg_regs, _shift,	\
-+		       &mtk_clk_gate_ops_setclr, CLK_IS_CRITICAL)
+-static void __init mtk_apmixedsys_init(struct device_node *node)
++static int clk_mt8135_apmixed_probe(struct platform_device *pdev)
+ {
+ 	struct clk_hw_onecell_data *clk_data;
++	struct device_node *node = pdev->dev.of_node;
++	int ret;
+ 
+ 	clk_data = mtk_alloc_clk_data(CLK_APMIXED_NR_CLK);
+ 	if (!clk_data)
+-		return;
++		return -ENOMEM;
+ 
+-	mtk_clk_register_plls(node, plls, ARRAY_SIZE(plls), clk_data);
++	ret = mtk_clk_register_plls(node, plls, ARRAY_SIZE(plls), clk_data);
++	if (ret)
++		return ret;
 +
- static const struct mtk_gate infra_clks[] __initconst = {
- 	GATE_ICG(CLK_INFRA_PMIC_WRAP, "pmic_wrap_ck", "axi_sel", 23),
- 	GATE_ICG(CLK_INFRA_PMICSPI, "pmicspi_ck", "pmicspi_sel", 22),
-@@ -411,7 +417,7 @@ static const struct mtk_gate infra_clks[] __initconst = {
- 	GATE_ICG(CLK_INFRA_CCIF0_AP_CTRL, "ccif0_ap_ctrl", "axi_sel", 20),
- 	GATE_ICG(CLK_INFRA_KP, "kp_ck", "axi_sel", 16),
- 	GATE_ICG(CLK_INFRA_CPUM, "cpum_ck", "cpum_tck_in", 15),
--	GATE_ICG(CLK_INFRA_M4U, "m4u_ck", "mem_sel", 8),
-+	GATE_ICG_AO(CLK_INFRA_M4U, "m4u_ck", "mem_sel", 8),
- 	GATE_ICG(CLK_INFRA_MFGAXI, "mfgaxi_ck", "axi_sel", 7),
- 	GATE_ICG(CLK_INFRA_DEVAPC, "devapc_ck", "axi_sel", 6),
- 	GATE_ICG(CLK_INFRA_AUDIO, "audio_ck", "aud_intbus_sel", 5),
-@@ -534,8 +540,6 @@ static void __init mtk_topckgen_init(struct device_node *node)
- 				    ARRAY_SIZE(top_muxes), base,
- 				    &mt8135_clk_lock, clk_data);
- 
--	clk_prepare_enable(clk_data->hws[CLK_TOP_CCI_SEL]->clk);
--
- 	r = of_clk_add_hw_provider(node, of_clk_hw_onecell_get, clk_data);
- 	if (r)
- 		pr_err("%s(): could not register clock provider: %d\n",
-@@ -553,8 +557,6 @@ static void __init mtk_infrasys_init(struct device_node *node)
- 	mtk_clk_register_gates(NULL, node, infra_clks,
- 			       ARRAY_SIZE(infra_clks), clk_data);
- 
--	clk_prepare_enable(clk_data->hws[CLK_INFRA_M4U]->clk);
--
- 	r = of_clk_add_hw_provider(node, of_clk_hw_onecell_get, clk_data);
- 	if (r)
- 		pr_err("%s(): could not register clock provider: %d\n",
++	ret = of_clk_add_hw_provider(node, of_clk_hw_onecell_get, clk_data);
++	if (ret)
++		goto unregister_plls;
++
++	return 0;
++
++unregister_plls:
++	mtk_clk_unregister_plls(plls, ARRAY_SIZE(plls), clk_data);
++
++	return ret;
++}
++
++static int clk_mt8135_apmixed_remove(struct platform_device *pdev)
++{
++	struct device_node *node = pdev->dev.of_node;
++	struct clk_hw_onecell_data *clk_data = platform_get_drvdata(pdev);
++
++	of_clk_del_provider(node);
++	mtk_clk_unregister_plls(plls, ARRAY_SIZE(plls), clk_data);
++	mtk_free_clk_data(clk_data);
++
++	return 0;
+ }
+-CLK_OF_DECLARE(mtk_apmixedsys, "mediatek,mt8135-apmixedsys",
+-		mtk_apmixedsys_init);
++
++static const struct of_device_id of_match_clk_mt8135_apmixed[] = {
++	{ .compatible = "mediatek,mt8135-apmixedsys" },
++	{ /* sentinel */ }
++};
++MODULE_DEVICE_TABLE(of, of_match_clk_mt8135_apmixed);
++
++static struct platform_driver clk_mt8135_apmixed_drv = {
++	.probe = clk_mt8135_apmixed_probe,
++	.remove = clk_mt8135_apmixed_remove,
++	.driver = {
++		.name = "clk-mt8135-apmixed",
++		.of_match_table = of_match_clk_mt8135_apmixed,
++	},
++};
++module_platform_driver(clk_mt8135_apmixed_drv)
++
++MODULE_DESCRIPTION("MediaTek MT8135 apmixedsys clocks driver");
+ MODULE_LICENSE("GPL");
 -- 
 2.39.2
 
