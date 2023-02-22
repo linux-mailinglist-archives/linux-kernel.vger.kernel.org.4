@@ -2,335 +2,160 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EF88D69FF2B
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 00:02:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C69C69FF40
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 00:11:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232220AbjBVXCb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Feb 2023 18:02:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52148 "EHLO
+        id S231849AbjBVXLA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Feb 2023 18:11:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60056 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233126AbjBVXCR (ORCPT
+        with ESMTP id S229604AbjBVXK6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Feb 2023 18:02:17 -0500
-Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D6CE48E1D;
-        Wed, 22 Feb 2023 15:01:57 -0800 (PST)
-Received: by mail-pl1-x62b.google.com with SMTP id u14so6806178ple.7;
-        Wed, 22 Feb 2023 15:01:57 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:sender:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=JeUWBhLW9UEfXClGsCYcSnbwn1laPPTpl7/9EDR9mlA=;
-        b=YyN5ucEHQCE3xIozsr2Sf1mEhDtK/7aBzTn7KzNP9sB2X5l1xtua2MqQqNuqaS5Yt/
-         x4kyyi2hxFQTeRupCl7JL2AQBPvN+gckP8Ob9mLvrJuvujAsBKCves+RgLBhPiRHU/sY
-         D+L492weuGsvE1O+3kPtRTK+jeRUkPF29PLKgdrAHoeJSlfIxpZM7ReOcaiJrY83f3zg
-         jtkJxtxcoxQxC0JtpiNUcPsPmaskxkgB8t7m6uZFZBQNFRRt4FDsNd8LRtrOGgJM7V58
-         CT/5M30DTMY7gkkQjlDQqVly+3rdKijglAanZ0URGfTbVR4W1e/cdUppH74OV9JGZV1+
-         DnRA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:sender:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=JeUWBhLW9UEfXClGsCYcSnbwn1laPPTpl7/9EDR9mlA=;
-        b=6/02uU08uPNJvtJumug1b5iCIiPs8AM2pl+6EROvryKDNVEVz276skeSPrxY3CGB+l
-         M4K8Xq1pqHfUTA1EW12+R2c67uce9BZA4r1jcAjLcg8uic1mgmeyst5W3tovT2hGwM2Y
-         AGFY0W9Dn6jBmyemgWvKxvZI3PTJ3av6vrN5NBu1pNPX5GQmpAuVEptBZ6Vb8yMTneP/
-         RwytgmcMPxFKm0J7RJDb6LAntGgybzfE/VlC0QTXgu+K/Y6nqlQTWHr79DcaAW6P//yL
-         vPJL8olUkTjF4vFuoY0we864eNXkvtGfax79Q0jsXnp0MEynKVLElOYAtCclDlViJ4RV
-         hskA==
-X-Gm-Message-State: AO0yUKW56TPg3D9JfY1tBsWbDJYL7dYNk2L2vQG/bMOi/ptmO29/CjZ4
-        Arhhe/hL2tsPO8Uor468KS4=
-X-Google-Smtp-Source: AK7set9yy3llN3Qtt1utABc/Y5VJD9uwMJuQfCmROOyrVrYnVIzlTUiGdAY/RPtD6Www1ZN07wOESA==
-X-Received: by 2002:a05:6a20:8402:b0:bd:ce7:22d2 with SMTP id c2-20020a056a20840200b000bd0ce722d2mr13812221pzd.25.1677106916546;
-        Wed, 22 Feb 2023 15:01:56 -0800 (PST)
-Received: from moohyul.svl.corp.google.com ([2620:15c:2d4:203:8f76:587d:f250:fecf])
-        by smtp.gmail.com with ESMTPSA id s1-20020aa78281000000b005ccbe5346ebsm3895127pfm.163.2023.02.22.15.01.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 22 Feb 2023 15:01:56 -0800 (PST)
-Sender: Namhyung Kim <namhyung@gmail.com>
-From:   Namhyung Kim <namhyung@kernel.org>
-To:     Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Jiri Olsa <jolsa@kernel.org>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@kernel.org>,
-        Ian Rogers <irogers@google.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Andi Kleen <ak@linux.intel.com>,
-        Kan Liang <kan.liang@linux.intel.com>,
-        Song Liu <song@kernel.org>,
-        Stephane Eranian <eranian@google.com>,
-        Ravi Bangoria <ravi.bangoria@amd.com>,
-        Leo Yan <leo.yan@linaro.org>,
-        James Clark <james.clark@arm.com>, Hao Luo <haoluo@google.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        linux-perf-users@vger.kernel.org, bpf@vger.kernel.org
-Subject: [PATCH 8/8] perf bpf filter: Add logical OR operator
-Date:   Wed, 22 Feb 2023 15:01:41 -0800
-Message-Id: <20230222230141.1729048-9-namhyung@kernel.org>
-X-Mailer: git-send-email 2.39.2.637.g21b0678d19-goog
-In-Reply-To: <20230222230141.1729048-1-namhyung@kernel.org>
-References: <20230222230141.1729048-1-namhyung@kernel.org>
+        Wed, 22 Feb 2023 18:10:58 -0500
+Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2064.outbound.protection.outlook.com [40.107.243.64])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55D7322793;
+        Wed, 22 Feb 2023 15:10:57 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Ob+wSQelyppV/Dro35f+4B0AO+1cjHc67KApPoHbcMZhc4AXWtYbo91ZZ8mvb3hVwOib9ug2F4m7u5ML323Hz3qQCAo2NFPCTh98LaXfc0Y1iPvYhgn4pxBVTT7k2uG9Tq/obJg/okZWPBIvVjl9a3GTQO0T3uVkjk9IV1cckloipQeGKSNZHlWuDq+UfGNH/yVbSfOc5zgugGoSRxC3KQO+bqqz1OxWFoo/wzgh65nPwygHiZL67dbLwhZyD451j8m7yUODxRkOScSZ0Wv1vONcgOEee1ZYRqaMeQCXGEp76iof2G1QDoNc2KF47MzhugYQT//OHu6Ngbqt4T7BAw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=aEkgqc8O5bXpNrc9NPq8zjyGAtxzYq4xZ0g7ZP0VIYU=;
+ b=nqcL3zgh01D2I+WHKYHgWG59XoahvxsebrmbF40FPDAiIz48eQTjca4TwfHQvuVJK1i/cdF0qHp87qtyJsnL5Nr8jrg6Nat3qcZ1QOC8Te6AwTIRi0mLwnMEr6VUFcRwSttlR5b1IyRl4NAc4xWXCdg2hUJ4HnB9td3iYRfO+KDxP6heTU8bkJ7Xu+u5zKEh/AUkY0+Rqy4oC9tr+U0WPrXsmv4a3buWhaCgblrGH45AC0OuAXUwCbwp/qkAC6NMnqevlntg3wLZcfL6RRKCZSCkbscuppkky8Wd2ROxBkNbdGIYG4dwJKr9wGEJAmWxhI80ul3gVSOmJL6l/dXglg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=aEkgqc8O5bXpNrc9NPq8zjyGAtxzYq4xZ0g7ZP0VIYU=;
+ b=K4ce+te2PjmL/TZR19WKv6RqyhnPZ2vtQhFLo6Mc2cPp6KGmH7/jxwRJRrMXVqbP1jKPYBMtOZKLiPlrebaXEQdg7X/bnRXTiSDZPswLcUXXbWi0dJDOFyTUzmn/qhXCtylnsmya3c+YDwIikyLyR0U+UOt6evaN2ZDU2C9YXlJBd0RpSs7bTpvPdJm9QSS5Wyl2TVU4tLzJ7d7i9zkW+awl6ut7ou+rjs/92oWMsZRTo5xILzhrLtBiv7lwhItkontTl+zbZp/wsAHcIMEVOrl9Ma7/MHRl3qJDixKKMqSVq9TVV8QT+ziZPpKP+euX1Lsour1OvBEaX1x//lGFjQ==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from BYAPR12MB3176.namprd12.prod.outlook.com (2603:10b6:a03:134::26)
+ by PH0PR12MB5465.namprd12.prod.outlook.com (2603:10b6:510:ec::11) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6111.20; Wed, 22 Feb
+ 2023 23:10:55 +0000
+Received: from BYAPR12MB3176.namprd12.prod.outlook.com
+ ([fe80::4bd4:de67:b676:67df]) by BYAPR12MB3176.namprd12.prod.outlook.com
+ ([fe80::4bd4:de67:b676:67df%6]) with mapi id 15.20.6111.021; Wed, 22 Feb 2023
+ 23:10:55 +0000
+References: <Y+4lcq4Fge27TQIn@nvidia.com> <Y/T2pNQ70eMAl1sX@slm.duckdns.org>
+ <Y/T+pw25oGmKqz1k@nvidia.com> <Y/T/bkcYc9Krw4rE@slm.duckdns.org>
+ <Y/UEkNn0O65Pfi4e@nvidia.com> <Y/UIURDjR9pv+gzx@slm.duckdns.org>
+ <Y/Ua6VcNe/DFh7X4@nvidia.com> <Y/UfS8TDIXhUlJ/I@slm.duckdns.org>
+ <Y/UiQmuVwh2eqrfA@nvidia.com> <87o7pmnd0p.fsf@nvidia.com>
+ <Y/YRJNwwvqp7nKKt@nvidia.com>
+User-agent: mu4e 1.8.10; emacs 28.2
+From:   Alistair Popple <apopple@nvidia.com>
+To:     Jason Gunthorpe <jgg@nvidia.com>
+Cc:     Tejun Heo <tj@kernel.org>, Michal Hocko <mhocko@suse.com>,
+        Yosry Ahmed <yosryahmed@google.com>, linux-mm@kvack.org,
+        cgroups@vger.kernel.org, linux-kernel@vger.kernel.org,
+        jhubbard@nvidia.com, tjmercier@google.com, hannes@cmpxchg.org,
+        surenb@google.com, mkoutny@suse.com, daniel@ffwll.ch,
+        "Daniel P . Berrange" <berrange@redhat.com>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        Zefan Li <lizefan.x@bytedance.com>,
+        Andrew Morton <akpm@linux-foundation.org>
+Subject: Re: [PATCH 14/19] mm: Introduce a cgroup for pinned memory
+Date:   Thu, 23 Feb 2023 09:59:35 +1100
+In-reply-to: <Y/YRJNwwvqp7nKKt@nvidia.com>
+Message-ID: <87k009nvnr.fsf@nvidia.com>
+Content-Type: text/plain
+X-ClientProxiedBy: SY6PR01CA0044.ausprd01.prod.outlook.com
+ (2603:10c6:10:e9::13) To BYAPR12MB3176.namprd12.prod.outlook.com
+ (2603:10b6:a03:134::26)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BYAPR12MB3176:EE_|PH0PR12MB5465:EE_
+X-MS-Office365-Filtering-Correlation-Id: 86650f56-c5ba-4a19-5841-08db152a0cd1
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: qiFZvzySp7B8+Ygy1nOQav/W8CAPRV742jER+K5IHocXpvz4UQJy7NJoy5F+R6WZeai4r2RLLOoD4mbXcnYEtfGb8rtJ9DpdoHKWeYv8Quu2WOfErRGThKQyC5Lw56E8GQLb6Ec74pFDh+Q3AqBCFMCyYatJ7B8CZx3s5Aib/6+wLm1RdtdKOrQHECegUvfPOGC6ekZZEv+8KXedk7Kadar/JetVcDAxp4hGicqfELmGHayjsfXSaDZuhk9fobtyMQuRGT/9txX6PvXtp61W4y5DPrUDAZ6dZ6Y/eMPiLmhfL3qn87sThw5+PXTas7daED5w7vODu/cvLtS0qmDmKpGeq7VRs0RQyImGL5ewK6u+15ORaReBLTzn4j9POC+AivwULgXMDGvvF1270hCKBjfr3V+WUYBEv+mNvJ+Hm2LTD/es8iEkmLtskZadVoOzfd725w2MjQzgzVg33We8rjsIn7NVH4Qy7AfSsC2xzbR/FUR+ZnkLD2OO1w68P3mVgv6fXFHKxMoNLIMvJfGxpkqNVwapdQqagle2UUpH2sR/wRgqD2IRNmGIlFp5rdVS/ghHORRwg78nzaBT9i2ilmI6VG93urrXaHrh7RXebcMEYBBCYLgWxhgebWxeBX6LH9OYtsMqf6qMMWSQjr8frw==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR12MB3176.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(366004)(39860400002)(136003)(376002)(396003)(346002)(451199018)(2906002)(7416002)(6862004)(5660300002)(36756003)(83380400001)(6506007)(6666004)(6512007)(2616005)(8936002)(186003)(26005)(6486002)(37006003)(86362001)(66946007)(38100700002)(54906003)(41300700001)(66476007)(66556008)(316002)(478600001)(4326008)(6636002)(8676002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?U3r/eDftl9wv29+Uxj90QSrqNG+qh7Ry4ZA2SF5Sqt0yOzdzOlNJYiDx8nPU?=
+ =?us-ascii?Q?qxEy9zuR4D1n6+6z5GtFN7PUaLMFwIAQz1A1T/jIapKvKeeXhqgnCP8HdOwj?=
+ =?us-ascii?Q?7wfX+XSf2uurUc92pZxVEv88CEfbD9qEGX6+G+iJKjwiFgj2Ta/dmDtPL6Pz?=
+ =?us-ascii?Q?4sjiAtAAt23kshFTxOMeob+fktY+SgHn/ypWhZXUsAgGpF03W93IvjeEadsL?=
+ =?us-ascii?Q?GRCFpj7CYwxyEKJOD39yTGZSD5FnXfSk8PZ6Cu41cb0r8PkJ5pMPGEzRRHh0?=
+ =?us-ascii?Q?aXjmE4R9a+9OTHNXLbYjohGTiL6AR3aCJD0mz1c73sbOfRaGOM2TU89dRFOn?=
+ =?us-ascii?Q?F0yJxcyHMogwf2GFKJSDWoU0biVi4zhCiq96fBXUp9eg14QJnLZm+W87de+E?=
+ =?us-ascii?Q?Ps3ttJOwNj/ON1gtDEU2HT8pOiCQYXQ3PUbxh5nLE/pNCyKF7hjzQC3bdfvX?=
+ =?us-ascii?Q?lS/uRs+vLUM234Tqh1pS6NuM6zyg+jeSl8JMqmiLuewKxVERFQmfXCcUHFn6?=
+ =?us-ascii?Q?V7eiv4a9lq5APZtADpPTIlPk7EJWJCnMWJ78+f3dCDqxCKkPSx6oWG/NtcDS?=
+ =?us-ascii?Q?L0KmCjdoLmZytxK9KS2JAzhqzoXFPZuAAkyce7ln4RDLZ75KZJmLYgPyoRIU?=
+ =?us-ascii?Q?ALEgdBNpkuI+0fnGGoNlBDx8syUs1t9TluOZGYr++v3Pi6T/fbaIUb7hvcQO?=
+ =?us-ascii?Q?CjIrHtMFFMr6kv5QmnRDme5xwF3sSDtpEfmmcudWOK/qk2Csg53QVxNxi1BU?=
+ =?us-ascii?Q?tLQ6mlPoHUp+SWenHkdByUnsLRrdN0yt732DWAiPDwqMtuJxo0BMPJFaoKeb?=
+ =?us-ascii?Q?Hlxhx/IyBLJVVXS2WlXI4cPgBCoGwBxYvWwvLVJPur3zE4Y3WxTycOHrfa37?=
+ =?us-ascii?Q?zgbCLecIJKN1FRZ65LLCVzY11sWKRMr6QjqUzFKTBmrdOGpkXhrpUvrxtoW5?=
+ =?us-ascii?Q?jjt0MOlvk8KR5a3V6hd4/FHKV0wt+oLXHDM3R7VPVct+POv0Zevom+AqB3JE?=
+ =?us-ascii?Q?jItFVCCMzjVhwo2WLWJYZnoItzy7JrJN8E6f9oXZOUuzxnyl16jmabx1qlnO?=
+ =?us-ascii?Q?LQStPCeUMtdbFY6QS8KIuwfDN2YZ7sZ/Ndg6m+TB02VYd8xujQz0FJLhOPOT?=
+ =?us-ascii?Q?ja/YH+kTF4uLkpkKiPfOMVEIs50lsS/DXwoKIAoRGO0J7HA8KBetTXRJ9JEc?=
+ =?us-ascii?Q?7kwFopHaPrs4yVjJwCS1wZl6/qe47zlLGuPIfYrYq2VOEwPu/DqtH1SbmbIc?=
+ =?us-ascii?Q?UFUd/V164egvWky/fNkWlv6s7JFuvYPaAKlnBvjjZ/9+e6/0N+xVxkzdSxNR?=
+ =?us-ascii?Q?BJJXZIFjs99z2bFoSBevd05+F8HWIoAG67wizHg3m6OstWkBLJEkH0RtOxZk?=
+ =?us-ascii?Q?z2TxcE3JQQXS+AdWmbExWzKLJIeRItZiZ5XgJdH8EsTd5y4VJQfWPzPNQ1KD?=
+ =?us-ascii?Q?pR64siy56wjMN07MN4QEG0Clr1UIcPyWGday+5ePa5IthGlv1xWA4knjqTDn?=
+ =?us-ascii?Q?F29BiMxIAaWQtfDghUWltlu4pP39ubCDAXkX7TUBwCOf6xtYwaVNjpbYsdoj?=
+ =?us-ascii?Q?Ez28TG6EZlVeRRSzr4h7C/esYTHgbx2uGjP27Cgu?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 86650f56-c5ba-4a19-5841-08db152a0cd1
+X-MS-Exchange-CrossTenant-AuthSource: BYAPR12MB3176.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 22 Feb 2023 23:10:55.2631
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: pj3cAbMvyRjUg6Zl04BDzj+cUT+3uOIM51grHxnpQM8We8AexG74gPJHXsGLgbaO09aGQO8ppFx0zxpEUMxDkQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR12MB5465
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-It supports two or more expressions connected as a group and the group
-result is considered true when one of them returns true.  The new group
-operators (GROUP_BEGIN and GROUP_END) are added to setup and check the
-condition.  As it doesn't allow nested groups, the condition is saved
-in local variables.
 
-For example, the following is to get samples only if the data source
-memory level is L2 cache or the weight value is greater than 30.
+Jason Gunthorpe <jgg@nvidia.com> writes:
 
-  $ sudo ./perf record -adW -e cpu/mem-loads/pp \
-  > --filter 'mem_lvl == l2 || weight > 30' -- sleep 1
+> On Wed, Feb 22, 2023 at 10:38:25PM +1100, Alistair Popple wrote:
+>> When a driver unpins a page we scan the pinners list and assign
+>> ownership to the next driver pinning the page by updating memcg_data and
+>> removing the vm_account from the list.
+>
+> I don't see how this works with just the data structure you outlined??
+> Every unique page needs its own list_head in the vm_account, it is
+> doable just incredibly costly.
 
-  $ sudo ./perf script -F data_src,weight
-     10668100842 |OP LOAD|LVL L3 or L3 hit|SNP None|TLB L1 or L2 hit|LCK No|BLK  N/A		    47
-     11868100242 |OP LOAD|LVL LFB/MAB or LFB/MAB hit|SNP None|TLB L1 or L2 hit|LCK No|BLK  N/A      57
-     10668100842 |OP LOAD|LVL L3 or L3 hit|SNP None|TLB L1 or L2 hit|LCK No|BLK  N/A                56
-     10650100842 |OP LOAD|LVL L3 or L3 hit|SNP None|TLB L2 miss|LCK No|BLK  N/A                    144
-     10468100442 |OP LOAD|LVL L2 or L2 hit|SNP None|TLB L1 or L2 hit|LCK No|BLK  N/A                16
-     10468100442 |OP LOAD|LVL L2 or L2 hit|SNP None|TLB L1 or L2 hit|LCK No|BLK  N/A                20
-     11868100242 |OP LOAD|LVL LFB/MAB or LFB/MAB hit|SNP None|TLB L1 or L2 hit|LCK No|BLK  N/A     189
-     1026a100142 |OP LOAD|LVL L1 or L1 hit|SNP None|TLB L1 or L2 hit|LCK Yes|BLK  N/A              193
-     10468100442 |OP LOAD|LVL L2 or L2 hit|SNP None|TLB L1 or L2 hit|LCK No|BLK  N/A                18
-     ...
+The idea was every driver already needs to allocate a pages array to
+pass to pin_user_pages(), and by necessity drivers have to keep a
+reference to the contents of that in one form or another. So
+conceptually the equivalent of:
 
-Signed-off-by: Namhyung Kim <namhyung@kernel.org>
----
- tools/perf/util/bpf-filter.c                 | 25 +++++++++++++
- tools/perf/util/bpf-filter.h                 |  1 +
- tools/perf/util/bpf-filter.l                 |  1 +
- tools/perf/util/bpf-filter.y                 | 25 +++++++++++--
- tools/perf/util/bpf_skel/sample-filter.h     |  6 ++--
- tools/perf/util/bpf_skel/sample_filter.bpf.c | 38 +++++++++++++-------
- 6 files changed, 79 insertions(+), 17 deletions(-)
+struct vm_account {
+       struct list_head possible_pinners;
+       struct mem_cgroup *memcg;
+       struct pages **pages;
+       [...]
+};
 
-diff --git a/tools/perf/util/bpf-filter.c b/tools/perf/util/bpf-filter.c
-index 3501c7cc4d32..d62d901f6c7b 100644
---- a/tools/perf/util/bpf-filter.c
-+++ b/tools/perf/util/bpf-filter.c
-@@ -42,8 +42,32 @@ int perf_bpf_filter__prepare(struct evsel *evsel)
- 		};
- 		bpf_map_update_elem(fd, &i, &entry, BPF_ANY);
- 		i++;
-+
-+		if (expr->op == PBF_OP_GROUP_BEGIN) {
-+			struct perf_bpf_filter_expr *group;
-+
-+			list_for_each_entry(group, &expr->groups, list) {
-+				struct perf_bpf_filter_entry group_entry = {
-+					.op = group->op,
-+					.part = group->part,
-+					.flags = group->sample_flags,
-+					.value = group->val,
-+				};
-+				bpf_map_update_elem(fd, &i, &group_entry, BPF_ANY);
-+				i++;
-+			}
-+
-+			memset(&entry, 0, sizeof(entry));
-+			entry.op = PBF_OP_GROUP_END;
-+			bpf_map_update_elem(fd, &i, &entry, BPF_ANY);
-+			i++;
-+		}
- 	}
- 
-+	if (i > MAX_FILTERS) {
-+		pr_err("Too many filters: %d (max = %d)\n", i, MAX_FILTERS);
-+		return -1;
-+	}
- 	prog = skel->progs.perf_sample_filter;
- 	for (x = 0; x < xyarray__max_x(evsel->core.fd); x++) {
- 		for (y = 0; y < xyarray__max_y(evsel->core.fd); y++) {
-@@ -89,6 +113,7 @@ struct perf_bpf_filter_expr *perf_bpf_filter_expr__new(unsigned long sample_flag
- 		expr->part = part;
- 		expr->op = op;
- 		expr->val = val;
-+		INIT_LIST_HEAD(&expr->groups);
- 	}
- 	return expr;
- }
-diff --git a/tools/perf/util/bpf-filter.h b/tools/perf/util/bpf-filter.h
-index 4fb33d296d9c..cf2b605e9121 100644
---- a/tools/perf/util/bpf-filter.h
-+++ b/tools/perf/util/bpf-filter.h
-@@ -8,6 +8,7 @@
- 
- struct perf_bpf_filter_expr {
- 	struct list_head list;
-+	struct list_head groups;
- 	enum perf_bpf_filter_op op;
- 	int part;
- 	unsigned long sample_flags;
-diff --git a/tools/perf/util/bpf-filter.l b/tools/perf/util/bpf-filter.l
-index 3e66b7a0215e..d4ff0f1345cd 100644
---- a/tools/perf/util/bpf-filter.l
-+++ b/tools/perf/util/bpf-filter.l
-@@ -151,6 +151,7 @@ hops2		{ return constant(PERF_MEM_HOPS_2); }
- hops3		{ return constant(PERF_MEM_HOPS_3); }
- 
- ","		{ return ','; }
-+"||"		{ return BFT_LOGICAL_OR; }
- 
- {ident}		{ return error("ident"); }
- .		{ return error("input"); }
-diff --git a/tools/perf/util/bpf-filter.y b/tools/perf/util/bpf-filter.y
-index 0ca6532afd8d..07d6c7926c13 100644
---- a/tools/perf/util/bpf-filter.y
-+++ b/tools/perf/util/bpf-filter.y
-@@ -28,8 +28,8 @@ static void perf_bpf_filter_error(struct list_head *expr __maybe_unused,
- 	struct perf_bpf_filter_expr *expr;
- }
- 
--%token BFT_SAMPLE BFT_OP BFT_ERROR BFT_NUM
--%type <expr> filter_term
-+%token BFT_SAMPLE BFT_OP BFT_ERROR BFT_NUM BFT_LOGICAL_OR
-+%type <expr> filter_term filter_expr
- %destructor { free ($$); } <expr>
- %type <sample> BFT_SAMPLE
- %type <op> BFT_OP
-@@ -49,6 +49,27 @@ filter_term
- }
- 
- filter_term:
-+filter_term BFT_LOGICAL_OR filter_expr
-+{
-+	struct perf_bpf_filter_expr *expr;
-+
-+	if ($1->op == PBF_OP_GROUP_BEGIN) {
-+		expr = $1;
-+	} else {
-+		expr = perf_bpf_filter_expr__new(0, 0, PBF_OP_GROUP_BEGIN, 1);
-+		list_add_tail(&$1->list, &expr->groups);
-+	}
-+	expr->val++;
-+	list_add_tail(&$3->list, &expr->groups);
-+	$$ = expr;
-+}
-+|
-+filter_expr
-+{
-+	$$ = $1;
-+}
-+
-+filter_expr:
- BFT_SAMPLE BFT_OP BFT_NUM
- {
- 	$$ = perf_bpf_filter_expr__new($1.type, $1.part, $2, $3);
-diff --git a/tools/perf/util/bpf_skel/sample-filter.h b/tools/perf/util/bpf_skel/sample-filter.h
-index 6b9fd554ad7b..2e96e1ab084a 100644
---- a/tools/perf/util/bpf_skel/sample-filter.h
-+++ b/tools/perf/util/bpf_skel/sample-filter.h
-@@ -1,7 +1,7 @@
- #ifndef PERF_UTIL_BPF_SKEL_SAMPLE_FILTER_H
- #define PERF_UTIL_BPF_SKEL_SAMPLE_FILTER_H
- 
--#define MAX_FILTERS  32
-+#define MAX_FILTERS  64
- 
- /* supported filter operations */
- enum perf_bpf_filter_op {
-@@ -11,7 +11,9 @@ enum perf_bpf_filter_op {
- 	PBF_OP_GE,
- 	PBF_OP_LT,
- 	PBF_OP_LE,
--	PBF_OP_AND
-+	PBF_OP_AND,
-+	PBF_OP_GROUP_BEGIN,
-+	PBF_OP_GROUP_END,
- };
- 
- /* BPF map entry for filtering */
-diff --git a/tools/perf/util/bpf_skel/sample_filter.bpf.c b/tools/perf/util/bpf_skel/sample_filter.bpf.c
-index 88dbc788d257..57e3c67d6d37 100644
---- a/tools/perf/util/bpf_skel/sample_filter.bpf.c
-+++ b/tools/perf/util/bpf_skel/sample_filter.bpf.c
-@@ -99,6 +99,14 @@ static inline __u64 perf_get_sample(struct bpf_perf_event_data_kern *kctx,
- 	return 0;
- }
- 
-+#define CHECK_RESULT(data, op, val)			\
-+	if (!(data op val)) {				\
-+		if (!in_group)				\
-+			goto drop;			\
-+	} else if (in_group) {				\
-+		group_result = 1;			\
-+	}
-+
- /* BPF program to be called from perf event overflow handler */
- SEC("perf_event")
- int perf_sample_filter(void *ctx)
-@@ -106,6 +114,8 @@ int perf_sample_filter(void *ctx)
- 	struct bpf_perf_event_data_kern *kctx;
- 	struct perf_bpf_filter_entry *entry;
- 	__u64 sample_data;
-+	int in_group = 0;
-+	int group_result = 0;
- 	int i;
- 
- 	kctx = bpf_cast_to_kern_ctx(ctx);
-@@ -120,32 +130,34 @@ int perf_sample_filter(void *ctx)
- 
- 		switch (entry->op) {
- 		case PBF_OP_EQ:
--			if (!(sample_data == entry->value))
--				goto drop;
-+			CHECK_RESULT(sample_data, ==, entry->value)
- 			break;
- 		case PBF_OP_NEQ:
--			if (!(sample_data != entry->value))
--				goto drop;
-+			CHECK_RESULT(sample_data, !=, entry->value)
- 			break;
- 		case PBF_OP_GT:
--			if (!(sample_data > entry->value))
--				goto drop;
-+			CHECK_RESULT(sample_data, >, entry->value)
- 			break;
- 		case PBF_OP_GE:
--			if (!(sample_data >= entry->value))
--				goto drop;
-+			CHECK_RESULT(sample_data, >=, entry->value)
- 			break;
- 		case PBF_OP_LT:
--			if (!(sample_data < entry->value))
--				goto drop;
-+			CHECK_RESULT(sample_data, <, entry->value)
- 			break;
- 		case PBF_OP_LE:
--			if (!(sample_data <= entry->value))
--				goto drop;
-+			CHECK_RESULT(sample_data, <=, entry->value)
- 			break;
- 		case PBF_OP_AND:
--			if (!(sample_data & entry->value))
-+			CHECK_RESULT(sample_data, &, entry->value)
-+			break;
-+		case PBF_OP_GROUP_BEGIN:
-+			in_group = 1;
-+			group_result = 0;
-+			break;
-+		case PBF_OP_GROUP_END:
-+			if (group_result == 0)
- 				goto drop;
-+			in_group = 0;
- 			break;
- 		}
- 	}
--- 
-2.39.2.637.g21b0678d19-goog
+Unpinnig involves finding a new owner by traversing the list of
+page->memcg_data->possible_pinners and iterating over *pages[] to figure
+out if that vm_account actually has this page pinned or not and could
+own it.
+
+Agree this is costly though. And I don't think all drivers keep the
+array around so "iterating over *pages[]" may need to be a callback.
+
+> Jason
 
