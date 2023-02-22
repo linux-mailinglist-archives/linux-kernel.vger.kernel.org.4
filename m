@@ -2,152 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EC4FF69F9A5
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Feb 2023 18:09:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1080869F9AB
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Feb 2023 18:09:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232573AbjBVRJK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Feb 2023 12:09:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55098 "EHLO
+        id S232501AbjBVRJm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Feb 2023 12:09:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55750 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232616AbjBVRJH (ORCPT
+        with ESMTP id S232261AbjBVRJk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Feb 2023 12:09:07 -0500
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FD7F1D91D;
-        Wed, 22 Feb 2023 09:08:58 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=0TAvvo14Qx7KmfBZu7UsxLB837fK9qdKtlwvM4WjoiQ=; b=oP8oBokRtn2LCXWRP7DV1gOWJU
-        jjxl+fYdrXqlx+oMTq8mBhyY45N51W5QEpV/cIBwyvn6mFg+ylHyUPnNV9lM+u5LgYA5x9Kl35dgD
-        34VHGwbZNXPgIQ4t7i+V4Kfycfim/kHR0bIg8CqH76F0E9YK4JMflPe7L6JMLzxtqTnGZqTfui7WZ
-        64HH11bV4DyJEC5GE4IZ2naTfZds8GTxamSHwgJEDwDzAkMJH2TyzNppXRkplgD8qyzFM1mbDiCwE
-        qdnPq/stpCjXDisQWruDWhN9BnXjHRMo0uZl2dgx+SjRQbjYWnmDTpX2vhWT/loyFyf1A/U/Z1RYd
-        R05a76qw==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
-        id 1pUsbb-00CbSp-2G;
-        Wed, 22 Feb 2023 17:08:35 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id E022C30013F;
-        Wed, 22 Feb 2023 18:08:33 +0100 (CET)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id C722720DD8076; Wed, 22 Feb 2023 18:08:33 +0100 (CET)
-Date:   Wed, 22 Feb 2023 18:08:33 +0100
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Zeng Heng <zengheng4@huawei.com>
-Cc:     alexander.shishkin@linux.intel.com, tglx@linutronix.de,
-        tiwai@suse.de, jolsa@kernel.org, vbabka@suse.cz,
-        keescook@chromium.org, mingo@redhat.com, acme@kernel.org,
-        namhyung@kernel.org, bp@alien8.de, bhe@redhat.com,
-        eric.devolder@oracle.com, hpa@zytor.com, jroedel@suse.de,
-        dave.hansen@linux.intel.com, linux-perf-users@vger.kernel.org,
-        linux-kernel@vger.kernel.org, liwei391@huawei.com, x86@kernel.org,
-        xiexiuqi@huawei.com
-Subject: Re: [RFC PATCH v4] x86/kdump: terminate watchdog NMI interrupt to
- avoid kdump crashes
-Message-ID: <Y/ZMEesgPnRR3LsG@hirez.programming.kicks-ass.net>
-References: <20230217120604.435608-1-zengheng4@huawei.com>
+        Wed, 22 Feb 2023 12:09:40 -0500
+Received: from mail-qt1-x834.google.com (mail-qt1-x834.google.com [IPv6:2607:f8b0:4864:20::834])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DA1120D1B;
+        Wed, 22 Feb 2023 09:09:39 -0800 (PST)
+Received: by mail-qt1-x834.google.com with SMTP id fp16so8194781qtb.10;
+        Wed, 22 Feb 2023 09:09:39 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=iBcq0pmdAn/4XG8y13P0hgBjKjCgMSw8ZQ/buDOWOcQ=;
+        b=Ecisn3UPa5hbrjZq8naUJ19FdbaKZfJv+4vT343wn7TCgqsXpRVQO8sdQu00WlyeHZ
+         myWJHj1VnX5owpSgg/shf2m9g8ng01QFyeCWAntXVnJBFADkVk1yd0oyPxsNhSvqOHzV
+         pHt9B2SLuLw7gzeX0il8kGSVzAsRTu4PBFdZJ68HmYNXgYicb605rw4p2dBvQjlmHUH9
+         RQq1Od3iuImF2AKc6VC8akbpvbTb8QL36idiYs0N0ucl6fBwjn5lGW6pgX5xMUd5qJ5k
+         NEkN8b/NafOKRuXDUDfQd7PvCal+Ls9rijvpqxMuIvoc4kLbV3ttYOdkqD/IDE8UUKW+
+         s30g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=iBcq0pmdAn/4XG8y13P0hgBjKjCgMSw8ZQ/buDOWOcQ=;
+        b=b7es7fVKOxv5Puu1cBy6RfMb7BG+Ly//2okXsn6jqUqs4TNFVM2elG1UAMN7rDDJrJ
+         cBTB5TCQA/OOXunZHrDrkXGZ79f5Lys9k9BKRophBlqn7BcYL/SKqWemtG42q/KOt44h
+         UWwb9rgInYPQmulO1vqgK1pcgrFNbD/o5NBXoZJpnLW/Fr7efOFqv8vC2kam5MHOx0JJ
+         6tSSMCgH63twEVq5JO+JTlUgiIwTzY1Vni26csb+nlcym0yHBWtuZUa4xUkUYlgC8UuB
+         K6aKj7co3qte9COi6WQlY62te1ilDGZgT4wYeVvsskr0r8+qyZcFK973Th+RK08qOFsK
+         SW/g==
+X-Gm-Message-State: AO0yUKVQgvR1F1J0dBJ3tQkJ+29sc/rK9pN8GdkkT0ts9V3zOHG5v91E
+        KB2ViaVaHKte+nF6U+hb4pg=
+X-Google-Smtp-Source: AK7set8hnf9n6oN7lBKzmccUzRS7VG7Q6re6nuyehgVa8mijSeEfP+U5mo3VUWW5lKy5O/daqXOPRg==
+X-Received: by 2002:a05:622a:414:b0:3ba:247a:3fbc with SMTP id n20-20020a05622a041400b003ba247a3fbcmr1183592qtx.39.1677085778299;
+        Wed, 22 Feb 2023 09:09:38 -0800 (PST)
+Received: from localhost (pool-173-73-95-180.washdc.fios.verizon.net. [173.73.95.180])
+        by smtp.gmail.com with UTF8SMTPSA id s190-20020a372cc7000000b007422fa6376bsm2484074qkh.77.2023.02.22.09.09.37
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 22 Feb 2023 09:09:37 -0800 (PST)
+From:   Sean Anderson <seanga2@gmail.com>
+To:     "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org,
+        Rolf Eike Beer <eike-kernel@sf-tec.de>,
+        Sean Anderson <seanga2@gmail.com>,
+        kernel test robot <lkp@intel.com>,
+        Dan Carpenter <error27@gmail.com>
+Subject: [PATCH net] net: sunhme: Return an error when we are out of slots
+Date:   Wed, 22 Feb 2023 12:09:35 -0500
+Message-Id: <20230222170935.1820939-1-seanga2@gmail.com>
+X-Mailer: git-send-email 2.37.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230217120604.435608-1-zengheng4@huawei.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Feb 17, 2023 at 08:06:04PM +0800, Zeng Heng wrote:
-> If the cpu panics within the NMI interrupt context, there could be
-> unhandled NMI interrupts in the background which are blocked by processor
-> until next IRET instruction executes. Since that, it prevents nested
-> NMI handler execution.
-> 
-> In case of IRET execution during kdump reboot and no proper NMIs handler
-> registered at that point (such as during EFI loader), we need to ensure
-> watchdog no work any more, or kdump would crash later. So call
-> perf_event_exit_cpu() at the very last moment in the panic shutdown.
-> 
-> !! Here I know it's not allowed to call perf_event_exit_cpu() within nmi
-> context, because of mutex_lock, smp_call_function and so on.
-> Is there any experts know about the similar function which allowed to call
-> within atomic context (Neither x86_pmu_disable() nor x86_pmu_disable_all()
-> do work after my practice)?
-> 
-> Thank you in advance.
-> 
-> Here provide one of test case to reproduce the concerned issue:
->   1. # cat uncorrected
->      CPU 1 BANK 4
->      STATUS uncorrected 0xc0
->      MCGSTATUS  EIPV MCIP
->      ADDR 0x1234
->      RIP 0xdeadbabe
->      RAISINGCPU 0
->      MCGCAP SER CMCI TES 0x6
->   2. # modprobe mce_inject
->   3. # mce-inject uncorrected
-> 
-> Mce-inject would trigger kernel panic under NMI interrupt context. In
-> addition, we need another NMI interrupt raise (such as from watchdog)
-> during panic process. Set proper watchdog threshold value and/or add an
-> artificial delay to make sure watchdog interrupt raise during the panic
-> procedure and the involved issue would occur.
-> 
-> Fixes: ca0e22d4f011 ("x86/boot/compressed/64: Always switch to own page table")
-> Signed-off-by: Zeng Heng <zengheng4@huawei.com>
-> ---
->   v1: add dummy NMI interrupt handler in EFI loader
->   v2: tidy up changelog, add comments (by Ingo Molnar)
->   v3: add iret_to_self() to deal with blocked NMIs in advance
->   v4: call perf_event_exit_cpu() to terminate watchdog in panic shutdown
-> 
->  arch/x86/kernel/crash.c | 10 ++++++++++
->  1 file changed, 10 insertions(+)
-> 
-> diff --git a/arch/x86/kernel/crash.c b/arch/x86/kernel/crash.c
-> index 305514431f26..f46df94bbdad 100644
-> --- a/arch/x86/kernel/crash.c
-> +++ b/arch/x86/kernel/crash.c
-> @@ -25,6 +25,7 @@
->  #include <linux/slab.h>
->  #include <linux/vmalloc.h>
->  #include <linux/memblock.h>
-> +#include <linux/perf_event.h>
-> 
->  #include <asm/processor.h>
->  #include <asm/hardirq.h>
-> @@ -170,6 +171,15 @@ void native_machine_crash_shutdown(struct pt_regs *regs)
->  #ifdef CONFIG_HPET_TIMER
->  	hpet_disable();
->  #endif
-> +
-> +	/*
-> +	 * If the cpu panics within the NMI interrupt context,
-> +	 * we need to ensure no more NMI interrupts blocked by
-> +	 * processor. In case of IRET execution during kdump
-> +	 * path and no proper NMIs handler registered at that
-> +	 * point, here terminate watchdog in panic shutdown.
-> +	 */
-> +	perf_event_exit_cpu(smp_processor_id());
+We only allocate enough space for four devices when the parent is a QFE. If
+we couldn't find a spot (because five devices were created for whatever
+reason), we would not return an error from probe(). Return ENODEV, which
+was what we did before.
 
-This kills all of perf, including but not limited to the hardware
-watchdog. However, it does nothing to external NMI sources like the NMI
-button found on some HP machines.
+Fixes: 96c6e9faecf1 ("sunhme: forward the error code from pci_enable_device()")
+Reported-by: kernel test robot <lkp@intel.com>
+Reported-by: Dan Carpenter <error27@gmail.com>
+Signed-off-by: Sean Anderson <seanga2@gmail.com>
+---
 
-Still I suppose it is sufficient for the normal case.
+ drivers/net/ethernet/sun/sunhme.c | 7 ++++---
+ 1 file changed, 4 insertions(+), 3 deletions(-)
 
->  	crash_save_cpu(regs, safe_smp_processor_id());
->  }
-> 
-> --
-> 2.25.1
-> 
+diff --git a/drivers/net/ethernet/sun/sunhme.c b/drivers/net/ethernet/sun/sunhme.c
+index 1c16548415cd..523e26653ec8 100644
+--- a/drivers/net/ethernet/sun/sunhme.c
++++ b/drivers/net/ethernet/sun/sunhme.c
+@@ -2861,12 +2861,13 @@ static int happy_meal_pci_probe(struct pci_dev *pdev,
+ 
+ 		for (qfe_slot = 0; qfe_slot < 4; qfe_slot++)
+ 			if (!qp->happy_meals[qfe_slot])
+-				break;
++				goto found_slot;
+ 
+-		if (qfe_slot == 4)
+-			goto err_out;
++		err = -ENODEV;
++		goto err_out;
+ 	}
+ 
++found_slot:
+ 	dev = devm_alloc_etherdev(&pdev->dev, sizeof(struct happy_meal));
+ 	if (!dev) {
+ 		err = -ENOMEM;
+-- 
+2.37.1
+
