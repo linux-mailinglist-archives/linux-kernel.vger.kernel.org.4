@@ -2,117 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 24F3469F253
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Feb 2023 10:57:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9691469F23A
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Feb 2023 10:52:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231697AbjBVJ54 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Feb 2023 04:57:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57376 "EHLO
+        id S232221AbjBVJwk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Feb 2023 04:52:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56664 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232420AbjBVJ5e (ORCPT
+        with ESMTP id S231648AbjBVJwW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Feb 2023 04:57:34 -0500
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F46A126
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Feb 2023 01:57:33 -0800 (PST)
-Received: from pps.filterd (m0127361.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 31M99ZFW034158;
-        Wed, 22 Feb 2023 09:49:44 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
- subject : message-id : references : mime-version : content-type :
- content-transfer-encoding : in-reply-to; s=pp1;
- bh=7THA7fgQPcuOQl5J8UxHvs99n3N1+C8jrau/mPrc9ss=;
- b=MiZDBDfkvIXqOD7aANqfG75gjd1Q7LVabc3Z51Uzs9iTA+D4tZnLd77OzZiqS4XbKlHm
- +Nn/ttUO60lfaJtTHBcF9FBxRlU80lfy0WD3R5R3NvDvKSbbzrNeMvk0Zx6qqOkfOcf2
- dg7daOo3WRmVVHP2HkyP1gQ+B1Nw2U8Kx0P5EmW8Mbozt77NjTgGNgSIf5qJ5BY2sWF8
- dIwXroy6vQ8fEgxwduQiZqnYieR7qLKDSgMyRS40rorcq6qFsfKTzXS9dopnmqbJARPF
- AEwwQ0wuyi+eY8a+m48+TrB3sRTPY3cZ6ljVtk7CcEOGr4+J0hR7FidL9GGcZgA6yvo3 fg== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3nwd5sdmga-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 22 Feb 2023 09:49:43 +0000
-Received: from m0127361.ppops.net (m0127361.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 31M9QJMT012579;
-        Wed, 22 Feb 2023 09:49:43 GMT
-Received: from ppma04fra.de.ibm.com (6a.4a.5195.ip4.static.sl-reverse.com [149.81.74.106])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3nwd5sdmfn-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 22 Feb 2023 09:49:43 +0000
-Received: from pps.filterd (ppma04fra.de.ibm.com [127.0.0.1])
-        by ppma04fra.de.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 31LCtVAb014278;
-        Wed, 22 Feb 2023 09:49:41 GMT
-Received: from smtprelay03.fra02v.mail.ibm.com ([9.218.2.224])
-        by ppma04fra.de.ibm.com (PPS) with ESMTPS id 3ntpa63whh-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 22 Feb 2023 09:49:41 +0000
-Received: from smtpav04.fra02v.mail.ibm.com (smtpav04.fra02v.mail.ibm.com [10.20.54.103])
-        by smtprelay03.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 31M9nc1240698168
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 22 Feb 2023 09:49:38 GMT
-Received: from smtpav04.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id BC12020040;
-        Wed, 22 Feb 2023 09:49:38 +0000 (GMT)
-Received: from smtpav04.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 575732004B;
-        Wed, 22 Feb 2023 09:49:35 +0000 (GMT)
-Received: from li-a450e7cc-27df-11b2-a85c-b5a9ac31e8ef.ibm.com (unknown [9.43.123.148])
-        by smtpav04.fra02v.mail.ibm.com (Postfix) with ESMTPS;
-        Wed, 22 Feb 2023 09:49:34 +0000 (GMT)
-Date:   Wed, 22 Feb 2023 15:19:31 +0530
-From:   Kautuk Consul <kconsul@linux.vnet.ibm.com>
-To:     Christophe Leroy <christophe.leroy@csgroup.eu>
-Cc:     Michael Ellerman <mpe@ellerman.id.au>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Rohan McLure <rmclure@linux.ibm.com>,
-        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v2] arch/powerpc/include/asm/barrier.h: redefine rmb and
- wmb to lwsync
-Message-ID: <Y/XlK8G7seIrcNGZ@li-a450e7cc-27df-11b2-a85c-b5a9ac31e8ef.ibm.com>
-References: <20230222090344.189270-1-kconsul@linux.vnet.ibm.com>
- <Y/XgrU9RhuaGCLHp@li-a450e7cc-27df-11b2-a85c-b5a9ac31e8ef.ibm.com>
- <b20a6e0e-f421-6b83-dbec-c0177e60db16@csgroup.eu>
+        Wed, 22 Feb 2023 04:52:22 -0500
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D746BDE5;
+        Wed, 22 Feb 2023 01:50:39 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=CWnrS8yusi1BbXO3lj0HE+nO+dxFdr1sf7powIMllnY=; b=cAGdOrQ9sFBf37tCEgl6JuUGL3
+        iK9sm/2HKSHxtzRUn8qnaECcfw8/wBTVlfDYtvVYXzhZLQLbDWglTmNSS/9RsLSBo+Ol/LMcHlAKj
+        lSdAvSwVnmEJFv7b9SOayYsW7JkQsyuZODB38BOwRSbdM4HiHHO7QbkXARPLiixd2uAaeGRUSlk8X
+        aXNfLIJfaa1H4u0VP813dp4RR+45ADixf8fthhiG4KfGONHheHKj207fiOv6VmNHPkRMv4ALJPzWm
+        bI8h92yMiDD37+FPSKbRGhQHlvCZ+INjWW58m1dHCkWQdthArbbYa8E9Jr33A0uqZvvFd6P7OzFIb
+        GQqF0KZQ==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by desiato.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
+        id 1pUllB-00CUYF-1u;
+        Wed, 22 Feb 2023 09:50:01 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id D64EF300446;
+        Wed, 22 Feb 2023 10:49:59 +0100 (CET)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id B4FD820EF499E; Wed, 22 Feb 2023 10:49:59 +0100 (CET)
+Date:   Wed, 22 Feb 2023 10:49:59 +0100
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Vincent Guittot <vincent.guittot@linaro.org>
+Cc:     mingo@redhat.com, juri.lelli@redhat.com, dietmar.eggemann@arm.com,
+        rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de,
+        bristot@redhat.com, vschneid@redhat.com,
+        linux-kernel@vger.kernel.org, parth@linux.ibm.com,
+        cgroups@vger.kernel.org, qyousef@layalina.io,
+        chris.hyser@oracle.com, patrick.bellasi@matbug.net,
+        David.Laight@aculab.com, pjt@google.com, pavel@ucw.cz,
+        tj@kernel.org, qperret@google.com, tim.c.chen@linux.intel.com,
+        joshdon@google.com, timj@gnu.org, kprateek.nayak@amd.com,
+        yu.c.chen@intel.com, youssefesmat@chromium.org,
+        joel@joelfernandes.org
+Subject: Re: [PATCH v10 8/9] sched/fair: Add latency list
+Message-ID: <Y/XlR+wLtn54CkE4@hirez.programming.kicks-ass.net>
+References: <20230113141234.260128-1-vincent.guittot@linaro.org>
+ <20230113141234.260128-9-vincent.guittot@linaro.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <b20a6e0e-f421-6b83-dbec-c0177e60db16@csgroup.eu>
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: GNooz-r5EO1MU_XnfjkqZg0gTUfM4I0g
-X-Proofpoint-ORIG-GUID: u98-ngY8FXQXLHi9-bTTRqMvXhoUOKS3
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.170.22
- definitions=2023-02-22_05,2023-02-20_02,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0
- priorityscore=1501 mlxlogscore=980 impostorscore=0 clxscore=1015
- bulkscore=0 malwarescore=0 phishscore=0 lowpriorityscore=0 suspectscore=0
- mlxscore=0 spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2302220083
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230113141234.260128-9-vincent.guittot@linaro.org>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Feb 22, 2023 at 09:44:54AM +0000, Christophe Leroy wrote:
-> 
-> 
-> Le 22/02/2023 à 10:30, Kautuk Consul a écrit :
-> > Again, could some IBM/non-IBM employees do basic sanity kernel load
-> > testing on PPC64 UP and SMP systems for this patch?
-> > would deeply appreciate it! :-)
-> 
-> And can 'non-IBM' 'non employees' do something ? :)
-Anyone can help! :-)
-> 
-> > 
-> > Thanks again!
-> > 
-> 
-> Did you try on QEMU ?
-I am a new IBM employee so I don't have any setup with cross-compiler
-and rootfs, etc. with me at the moment.
-Thats why I requested this from the mailing list.
+On Fri, Jan 13, 2023 at 03:12:33PM +0100, Vincent Guittot wrote:
+
+> +static void __enqueue_latency(struct cfs_rq *cfs_rq, struct sched_entity *se, int flags)
+> +{
+> +
+> +	/* Only latency sensitive entity can be added to the list */
+> +	if (se->latency_offset >= 0)
+> +		return;
+> +
+> +	if (!RB_EMPTY_NODE(&se->latency_node))
+> +		return;
+> +
+> +	/*
+> +	 * An execution time less than sysctl_sched_min_granularity means that
+> +	 * the entity has been preempted by a higher sched class or an entity
+> +	 * with higher latency constraint.
+> +	 * Put it back in the list so it gets a chance to run 1st during the
+> +	 * next slice.
+> +	 */
+> +	if (!(flags & ENQUEUE_WAKEUP)) {
+> +		u64 delta_exec = se->sum_exec_runtime - se->prev_sum_exec_runtime;
+> +
+> +		if (delta_exec >= sysctl_sched_min_granularity)
+> +			return;
+> +	}
+
+I'm not a big fan of this dynamic enqueueing condition; it makes it
+rather hard to interpret the below addition to pick_next_entity().
+
+Let me think about this more... at the very least the comment with
+__pick_first_latency() use below needs to be expanded upon if we keep it
+like so.
+
+> +
+> +	rb_add_cached(&se->latency_node, &cfs_rq->latency_timeline, __latency_less);
+> +}
+
+> @@ -4966,7 +5040,7 @@ static struct sched_entity *
+>  pick_next_entity(struct cfs_rq *cfs_rq, struct sched_entity *curr)
+>  {
+>  	struct sched_entity *left = __pick_first_entity(cfs_rq);
+> -	struct sched_entity *se;
+> +	struct sched_entity *latency, *se;
+>  
+>  	/*
+>  	 * If curr is set we have to see if its left of the leftmost entity
+> @@ -5008,6 +5082,12 @@ pick_next_entity(struct cfs_rq *cfs_rq, struct sched_entity *curr)
+>  		se = cfs_rq->last;
+>  	}
+>  
+> +	/* Check for latency sensitive entity waiting for running */
+> +	latency = __pick_first_latency(cfs_rq);
+> +	if (latency && (latency != se) &&
+> +	    wakeup_preempt_entity(latency, se) < 1)
+> +		se = latency;
+
+I'm not quite sure why this condition isn't sufficient on it's own.
+After all, if a task does a 'spurious' nanosleep it can get around the
+'restriction' in __enqueue_latency() without any great penalty to it's
+actual bandwidth consumption.
