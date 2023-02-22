@@ -2,260 +2,319 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 617CB69EF08
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Feb 2023 07:59:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 073D169EF0D
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Feb 2023 08:01:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230300AbjBVG7x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Feb 2023 01:59:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34176 "EHLO
+        id S230440AbjBVHBU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Feb 2023 02:01:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34748 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230135AbjBVG7t (ORCPT
+        with ESMTP id S230135AbjBVHBS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Feb 2023 01:59:49 -0500
-Received: from mx0b-0016f401.pphosted.com (mx0b-0016f401.pphosted.com [67.231.156.173])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2AF8B2B293;
-        Tue, 21 Feb 2023 22:59:48 -0800 (PST)
-Received: from pps.filterd (m0045851.ppops.net [127.0.0.1])
-        by mx0b-0016f401.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 31M29rd2009933;
-        Tue, 21 Feb 2023 22:59:34 -0800
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=marvell.com; h=from : to : cc :
- subject : date : message-id : mime-version : content-transfer-encoding :
- content-type; s=pfpt0220; bh=wV3ld4V3YWdMk1V6jY3z7xaoQBKpJXzJI3ms5mic3xU=;
- b=Z9+oHNO7RjRqr8x1T0/WXcJzRNG4TMbTNk4QqJnA7RJv9l845VZ4D6bU621h6oVEZNrF
- dXkxouOvA8pDqXOVvGLdlI3i9HHU5D1pTBj6Jx6euxOQyPJomkOnudrPR2gaGLAG4lFO
- jESDq0g0CKGpWN/WJe/MrqpnaLIMqc20On23351vx/kzyiFys0iMWj0p4peDIySxLydZ
- +AlFfBC2dcmt2cTVmwCUZemv2dqhg/RHSsCJEE2vL6c//PShXeGHKzdNa8S5ihwB0dau
- nDpbQ1OiA1BziaK4EU7qETVpA7bPWV+jUr+IC8GeK8co5RnCc1LDqGdN4NcZTftKEEkJ xQ== 
-Received: from dc5-exch01.marvell.com ([199.233.59.181])
-        by mx0b-0016f401.pphosted.com (PPS) with ESMTPS id 3nty308px9-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT);
-        Tue, 21 Feb 2023 22:59:34 -0800
-Received: from DC5-EXCH02.marvell.com (10.69.176.39) by DC5-EXCH01.marvell.com
- (10.69.176.38) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Tue, 21 Feb
- 2023 22:59:29 -0800
-Received: from maili.marvell.com (10.69.176.80) by DC5-EXCH02.marvell.com
- (10.69.176.39) with Microsoft SMTP Server id 15.0.1497.42 via Frontend
- Transport; Tue, 21 Feb 2023 22:59:29 -0800
-Received: from hyd1425.marvell.com (unknown [10.29.37.83])
-        by maili.marvell.com (Postfix) with ESMTP id 7BDAE3F706F;
-        Tue, 21 Feb 2023 22:59:26 -0800 (PST)
-From:   Sai Krishna <saikrishnag@marvell.com>
-To:     <davem@davemloft.net>, <edumazet@google.com>, <kuba@kernel.org>,
-        <pabeni@redhat.com>, <netdev@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <sgoutham@marvell.com>,
-        <sumang@marvell.com>
-CC:     Sai Krishna <saikrishnag@marvell.com>
-Subject: [net PATCH] octeontx2-af: Unlock contexts in the queue context cache in case of fault detection
-Date:   Wed, 22 Feb 2023 12:29:21 +0530
-Message-ID: <20230222065921.1852686-1-saikrishnag@marvell.com>
-X-Mailer: git-send-email 2.25.1
+        Wed, 22 Feb 2023 02:01:18 -0500
+Received: from mx0a-00230701.pphosted.com (mx0a-00230701.pphosted.com [148.163.156.19])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D66E52B60F;
+        Tue, 21 Feb 2023 23:01:14 -0800 (PST)
+Received: from pps.filterd (m0297266.ppops.net [127.0.0.1])
+        by mx0a-00230701.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 31M5C83n014367;
+        Tue, 21 Feb 2023 23:01:04 -0800
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=synopsys.com; h=from : to : cc :
+ subject : date : message-id : references : in-reply-to : content-type :
+ content-transfer-encoding : mime-version; s=pfptdkimsnps;
+ bh=JPpWsmJUrudFprMVstceLNzPQnqUWrPloaqXNUYB8g8=;
+ b=BieArcOGlR+HmZZwjg9tR7eKvFw2ih5Uc/EZCVXPzO2HR18bS2WVGoJyZZJwliKdKrno
+ ALYhn5z5DzpYA50Tdvdx483IduiihRKTmpJpev8AJJbY0I291cAKucOAsHgYVM+aEmql
+ swwDY/ckT/1/GJC1VigToBJ6PXTvFnFHYCJIezHOQhivqyoHmDgp2wMDx6ezcji3LPz6
+ IJdEB7QpXqGjdm7nhnsP25gB3Ew3aHmaxLyxCeAW9gQV/H3PQP/uNI4gBHhOVAJHrBae
+ t/olO8/g2/FouShT1AU1eImDCfYvS+1pupwg6RLGnHhaVE6xPDazxKuT5AisgqyBZD1d 6g== 
+Received: from smtprelay-out1.synopsys.com (smtprelay-out1.synopsys.com [149.117.87.133])
+        by mx0a-00230701.pphosted.com (PPS) with ESMTPS id 3ntxtd0u09-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 21 Feb 2023 23:01:04 -0800
+Received: from mailhost.synopsys.com (badc-mailhost1.synopsys.com [10.192.0.17])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
+        (Client CN "mailhost.synopsys.com", Issuer "SNPSica2" (verified OK))
+        by smtprelay-out1.synopsys.com (Postfix) with ESMTPS id CD399C00AF;
+        Wed, 22 Feb 2023 07:01:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=synopsys.com; s=mail;
+        t=1677049263; bh=To8rahEXb3TPRVdVl+TZhjDL+hvupuhlw9elzPiEq5w=;
+        h=From:To:CC:Subject:Date:References:In-Reply-To:From;
+        b=HKHnBghJsAc/H/Cw1TtE2OTi/Rl0HLLuu2iQLSsV6Fe58gaFKtoFNb3SJjA1yf5sr
+         3hSf324r8ub+eTMZQw56pn2R2O3nhgcFy6xwZ2Gj7DsvHi+3cYMT+zWSM8NSAzcus2
+         OOaYjBqCFGebzTGoAwor317zfXZo7A3kLl+DeoxbfY0sQuGliH3z1yRi+CzoncbZyg
+         6erdv5Uj8QGiTKU6Q8Dk/dABnGjB7USCucPMz5lMYgz2jDDDC6ZMFIaACQretesOHX
+         TOGSXtmCqgpR4TvkmRmB2XOChNy8jnxLhZ5BNBO9FVgnVYlUSN0D0WUhmlNAm1n433
+         sXbnT1hemEUlA==
+Received: from o365relay-in.synopsys.com (sv2-o365relay5.synopsys.com [10.202.1.141])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
+        (Client CN "o365relay-in.synopsys.com", Issuer "Entrust Certification Authority - L1K" (verified OK))
+        by mailhost.synopsys.com (Postfix) with ESMTPS id 4D05AA005A;
+        Wed, 22 Feb 2023 07:01:02 +0000 (UTC)
+Received: from NAM04-MW2-obe.outbound.protection.outlook.com (mail-mw2nam04lp2174.outbound.protection.outlook.com [104.47.73.174])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (Client CN "mail.protection.outlook.com", Issuer "DigiCert Cloud Services CA-1" (verified OK))
+        by o365relay-in.synopsys.com (Postfix) with ESMTPS id 67291A016E;
+        Wed, 22 Feb 2023 07:01:01 +0000 (UTC)
+Authentication-Results: o365relay-in.synopsys.com; dmarc=pass (p=reject dis=none) header.from=synopsys.com
+Authentication-Results: o365relay-in.synopsys.com; spf=pass smtp.mailfrom=hminas@synopsys.com
+Authentication-Results: o365relay-in.synopsys.com;
+        dkim=pass (1024-bit key; unprotected) header.d=synopsys.com header.i=@synopsys.com header.b="jQuY4FLj";
+        dkim-atps=neutral
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=FTb4/gA16K3nRxDWzZMYMScmk0HKUGNoK4nVe9T8vpEhG+aVeNcp4a9Q6wSfPTUoxCtWcqDnTXPAKjseWaaj3njwnPfmLaqCbP0cRZ0jijTBLlHyDf+4UtXCsypJn4ufLHPfF8eOHg05edkPnpu/HvXujWoqHHpGD5/s58ABigkWM6VGS36wmZVKUZOJcMSVgwWMha4Qx7PV2qdL7Jg03bMuLkrCxG/TdTVGRA5OTNN1eaU3BEPJfGylShyCEUCODiDSHagsvUJ+oo1Q8qJUrSiAlnf8EggJj30tdth7lmYPxLyZhjWYG0+CjfYJ41Pcw6vv4LByLzhdYoeixJgLvg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=JPpWsmJUrudFprMVstceLNzPQnqUWrPloaqXNUYB8g8=;
+ b=ZmjI68nZAQySGXtC2sj3lSorBKZDZH5Cl1eB7wUY2/3mEqVya819zviAhlcD4MBoPICNV4B151rQmoLHZGMMpmy2QobNOvMGwdIBF4suBlalHz1UhHyb/7QxtLpGVYgJHEA6oEMaj5vCTpRrLKdUm7IkACMGZCDCrXIIkEu2FtpTANPEcaTESXku7TdjbeA0iUtpAUDoHPAYNjidO45vntTSwa9TCEqkIsWPnqmhk/G4H0njAkc5fSyrkNyI0yJkuDWGwIdU3d6o5DG8mg4aMGcFb8n3Ul/SdpvINQakkKpcY1jwaiUgah/3v7WqwmDo+BP0wGCyA9qrBVYI9OOPGQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=synopsys.com; dmarc=pass action=none header.from=synopsys.com;
+ dkim=pass header.d=synopsys.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=synopsys.com;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=JPpWsmJUrudFprMVstceLNzPQnqUWrPloaqXNUYB8g8=;
+ b=jQuY4FLjjeaKcPZckUgarAZy4rDTfVYwp73x8Rg7ZppRvCfy+ZMdL7ZzJAcqPo/tQfRZMbk+ownuRa0JCcKim3DZOX69m4m69jGz1biNGtDL5IplTYd7u5oHgNhScGi/8n5PFk/iFuXP5U4Q3H73Lfdl23rW3ABpTso4uyzfmeU=
+Received: from BYAPR12MB3399.namprd12.prod.outlook.com (2603:10b6:a03:ad::22)
+ by DS0PR12MB7927.namprd12.prod.outlook.com (2603:10b6:8:147::11) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6111.21; Wed, 22 Feb
+ 2023 07:00:29 +0000
+Received: from BYAPR12MB3399.namprd12.prod.outlook.com
+ ([fe80::b864:207b:e50f:2ffe]) by BYAPR12MB3399.namprd12.prod.outlook.com
+ ([fe80::b864:207b:e50f:2ffe%4]) with mapi id 15.20.6111.019; Wed, 22 Feb 2023
+ 07:00:29 +0000
+X-SNPS-Relay: synopsys.com
+From:   Minas Harutyunyan <Minas.Harutyunyan@synopsys.com>
+To:     Ziyang Huang <hzyitc@outlook.com>,
+        "amelie.delaunay@foss.st.com" <amelie.delaunay@foss.st.com>
+CC:     "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+        "fabrice.gasnier@foss.st.com" <fabrice.gasnier@foss.st.com>,
+        "amelie.delaunay@foss.st.com" <amelie.delaunay@foss.st.com>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: RE: [PATCH v2] usb: dwc2: drd: fix inconsistent mode if
+ role-switch-default-mode="host"
+Thread-Topic: [PATCH v2] usb: dwc2: drd: fix inconsistent mode if
+ role-switch-default-mode="host"
+Thread-Index: AQHZRd+knSYE4gin9E6iCq3Lba7rya7aiagg
+Date:   Wed, 22 Feb 2023 07:00:28 +0000
+Message-ID: <BYAPR12MB33996D70422B24DE982F3B4AA7AA9@BYAPR12MB3399.namprd12.prod.outlook.com>
+References: <SG2PR01MB204837BF68EDB0E343D2A375C9A59@SG2PR01MB2048.apcprd01.prod.exchangelabs.com>
+In-Reply-To: <SG2PR01MB204837BF68EDB0E343D2A375C9A59@SG2PR01MB2048.apcprd01.prod.exchangelabs.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-dg-ref: =?us-ascii?Q?PG1ldGE+PGF0IG5tPSJib2R5LnR4dCIgcD0iYzpcdXNlcnNcaG1pbmFzXGFw?=
+ =?us-ascii?Q?cGRhdGFccm9hbWluZ1wwOWQ4NDliNi0zMmQzLTRhNDAtODVlZS02Yjg0YmEy?=
+ =?us-ascii?Q?OWUzNWJcbXNnc1xtc2ctOTU0NWIwM2ItYjI3ZS0xMWVkLWIwNjktNWM1ZjY3?=
+ =?us-ascii?Q?NjdkNDhiXGFtZS10ZXN0XDk1NDViMDNkLWIyN2UtMTFlZC1iMDY5LTVjNWY2?=
+ =?us-ascii?Q?NzY3ZDQ4YmJvZHkudHh0IiBzej0iMjM4NSIgdD0iMTMzMjE1MjI4MjY4NzM4?=
+ =?us-ascii?Q?MzQwIiBoPSJOWnhJTU1EWUtLcGNqb0dnczV1ekdWd2gwTXc9IiBpZD0iIiBi?=
+ =?us-ascii?Q?bD0iMCIgYm89IjEiIGNpPSJjQUFBQUVSSFUxUlNSVUZOQ2dVQUFIWUlBQUFr?=
+ =?us-ascii?Q?ZDZGWGkwYlpBZFM3d0dhaSt3aEkxTHZBWnFMN0NFZ05BQUFBQUFBQUFBQUFB?=
+ =?us-ascii?Q?QUFBQUFBQUFBQUFBSEFBQUFBR0NBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
+ =?us-ascii?Q?RUFBUUFCQUFBQTJXMC9vZ0FBQUFBQUFBQUFBQUFBQUo0QUFBQm1BR2tBYmdC?=
+ =?us-ascii?Q?aEFHNEFZd0JsQUY4QWNBQnNBR0VBYmdCdUFHa0FiZ0JuQUY4QWR3QmhBSFFB?=
+ =?us-ascii?Q?WlFCeUFHMEFZUUJ5QUdzQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
+ =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
+ =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFF?=
+ =?us-ascii?Q?QUFBQUFBQUFBQWdBQUFBQUFuZ0FBQUdZQWJ3QjFBRzRBWkFCeUFIa0FYd0J3?=
+ =?us-ascii?Q?QUdFQWNnQjBBRzRBWlFCeUFITUFYd0JuQUdZQUFBQUFBQUFBQUFBQUFBQUFB?=
+ =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
+ =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
+ =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBUUFBQUFBQUFBQUNBQUFB?=
+ =?us-ascii?Q?QUFDZUFBQUFaZ0J2QUhVQWJnQmtBSElBZVFCZkFIQUFZUUJ5QUhRQWJnQmxB?=
+ =?us-ascii?Q?SElBY3dCZkFITUFZUUJ0QUhNQWRRQnVBR2NBWHdCakFHOEFiZ0JtQUFBQUFB?=
+ =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
+ =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
+ =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQkFBQUFBQUFBQUFJQUFBQUFBSjRBQUFCbUFHOEFk?=
+ =?us-ascii?Q?UUJ1QUdRQWNnQjVBRjhBY0FCaEFISUFkQUJ1QUdVQWNnQnpBRjhBY3dCdEFH?=
+ =?us-ascii?Q?a0FZd0FBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
+ =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
+ =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
+ =?us-ascii?Q?QUVBQUFBQUFBQUFBZ0FBQUFBQW5nQUFBR1lBYndCMUFHNEFaQUJ5QUhrQVh3?=
+ =?us-ascii?Q?QndBR0VBY2dCMEFHNEFaUUJ5QUhNQVh3QnpBSFFBQUFBQUFBQUFBQUFBQUFB?=
+ =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
+ =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
+ =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFRQUFBQUFBQUFBQ0FB?=
+ =?us-ascii?Q?QUFBQUNlQUFBQVpnQnZBSFVBYmdCa0FISUFlUUJmQUhBQVlRQnlBSFFBYmdC?=
+ =?us-ascii?Q?bEFISUFjd0JmQUhRQWN3QnRBR01BQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
+ =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
+ =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
+ =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFCQUFBQUFBQUFBQUlBQUFBQUFKNEFBQUJtQUc4?=
+ =?us-ascii?Q?QWRRQnVBR1FBY2dCNUFGOEFjQUJoQUhJQWRBQnVBR1VBY2dCekFGOEFkUUJ0?=
+ =?us-ascii?Q?QUdNQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
+ =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
+ =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
+ =?us-ascii?Q?QUFBRUFBQUFBQUFBQUFnQUFBQUFBbmdBQUFHY0FkQUJ6QUY4QWNBQnlBRzhB?=
+ =?us-ascii?Q?WkFCMUFHTUFkQUJmQUhRQWNnQmhBR2tBYmdCcEFHNEFad0FBQUFBQUFBQUFB?=
+ =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
+ =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
+ =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQVFBQUFBQUFBQUFD?=
+ =?us-ascii?Q?QUFBQUFBQ2VBQUFBY3dCaEFHd0FaUUJ6QUY4QVlRQmpBR01BYndCMUFHNEFk?=
+ =?us-ascii?Q?QUJmQUhBQWJBQmhBRzRBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
+ =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
+ =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
+ =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUJBQUFBQUFBQUFBSUFBQUFBQUo0QUFBQnpB?=
+ =?us-ascii?Q?R0VBYkFCbEFITUFYd0J4QUhVQWJ3QjBBR1VBQUFBQUFBQUFBQUFBQUFBQUFB?=
+ =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
+ =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
+ =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
+ =?us-ascii?Q?QUFBQUFFQUFBQUFBQUFBQWdBQUFBQUFuZ0FBQUhNQWJnQndBSE1BWHdCc0FH?=
+ =?us-ascii?Q?a0FZd0JsQUc0QWN3QmxBRjhBZEFCbEFISUFiUUJmQURFQUFBQUFBQUFBQUFB?=
+ =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
+ =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
+ =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBUUFBQUFBQUFB?=
+ =?us-ascii?Q?QUNBQUFBQUFDZUFBQUFjd0J1QUhBQWN3QmZBR3dBYVFCakFHVUFiZ0J6QUdV?=
+ =?us-ascii?Q?QVh3QjBBR1VBY2dCdEFGOEFjd0IwQUhVQVpBQmxBRzRBZEFBQUFBQUFBQUFB?=
+ =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
+ =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
+ =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQkFBQUFBQUFBQUFJQUFBQUFBSjRBQUFC?=
+ =?us-ascii?Q?MkFHY0FYd0JyQUdVQWVRQjNBRzhBY2dCa0FBQUFBQUFBQUFBQUFBQUFBQUFB?=
+ =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
+ =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
+ =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
+ =?us-ascii?Q?QUFBQUFBQUVBQUFBQUFBQUFBZ0FBQUFBQSIvPjwvbWV0YT4=3D?=
+x-dg-rorf: true
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: BYAPR12MB3399:EE_|DS0PR12MB7927:EE_
+x-ms-office365-filtering-correlation-id: f3958752-f44f-4145-00ef-08db14a27b52
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: 55OquVsMMqVlGtK27Bvo3lju6UIGhDnu/SetSAzPuveO50BExaU48N1f4kXwuIYJbIE96RV+y3rlzE0F2f0f8C7l8kF1PlEFrg/MwWOL0qQo/4xpV3vZwZ+TNW+pJkwNqGDa1kduBZgdQ3hWCPNIuBWOIUNbjAw4+Rf4ZJVH4AwJ0Pu3mX1xGQRcb1bQpZe2bYP60R9fS7jympWAJB7rL8AWdr7s7QKeUMXtzQkGhipWUf9i1EItEzCqtXPq81FLttrzU4EXpv5RFu95z8NBIGSP6bytfDFx8JGp/mA4xlyGGbhNDD4qdpSVu0H98oqQMHo9aX5WNRQJ/kWnFghU5TRg/kLBwl2NWDz4p+h6ePllPJKfXG722x6QzpglTvFO0z63CE+R1JgSfmH6T3fMMh5fUmKglUUSiHndQROijwVbsa3nelOfBTpk17banpKsZlFFmu2KsW1/Wguw09arwF2w7+rnkEHCjNL/vcslQbl7uWI2RbqNdhIyZcn3fcuM0zG04eTpfJxtFAPyJtx8/29Leg5luhcluFao8vUZzuGVv50VZjuW/RPEd2/vLojBxAG0ib9dMOIqVezXU9Znmh7K0N6sM1O+oqy9cPm9quzAfvHSoA82qyWI6IA1oFKXPaArDr8iTf6941rDebjIsqpvcr8Yjo6BAj2Joi9XCRKJ+5fA6y1tASvZ+YLL6uiiC0inWHYi87RWhHOmxMNFvA==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR12MB3399.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(376002)(39860400002)(366004)(396003)(346002)(136003)(451199018)(122000001)(38100700002)(41300700001)(110136005)(316002)(54906003)(76116006)(38070700005)(53546011)(6506007)(26005)(9686003)(186003)(33656002)(55016003)(478600001)(86362001)(64756008)(8676002)(66476007)(66946007)(66556008)(4326008)(71200400001)(66446008)(52536014)(8936002)(83380400001)(7696005)(5660300002)(2906002);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?y5Zk/GL188fkINAW6r2PehzaoX6EDdEJb+FHaGCyJscsaQshP8YQlnXv2QpO?=
+ =?us-ascii?Q?g7I5gS3IYS9qFvSSm4m86X268Li/BdZgrg57AjLakHhNbZu9w6+9yjHyekzT?=
+ =?us-ascii?Q?b353kcUXnK9vjI2Jc3F/rG37odf2OCcVaSBMkGF/Aihtw0r3M7ynv/w2wXqc?=
+ =?us-ascii?Q?i2r+IAa8knRnCnU8NoYGssCqB2IBDOevkBs2tP5EHcCrHgTrDMTsVdXHBE8r?=
+ =?us-ascii?Q?6y4djWdkwWU//SAIumNmGO8SGBA8A7CRbJWc1IZTkaUDqPh+SYR15TjKMzOv?=
+ =?us-ascii?Q?LpS1Ipg8m/0QvEN7TaYDwoNNLE0I/ZcXp6ygtuFEc3BeLcXMTYzo7ldyYUzP?=
+ =?us-ascii?Q?rAuAynz/gg6YtrQH/n9voTL4izI147kEy9bEFIXglvBmYjokdhaDdBXR3jye?=
+ =?us-ascii?Q?AJCzHtDoOWYZZ8E0UYORsojDWPVc7uLZiXIzdPtKHOO4gGpiV0jyVVpE8v7U?=
+ =?us-ascii?Q?zTwzC8UR2I2Rl/8SBqLJNLoB0SA8wiK5Dw8LWtSrS9DggNpQATR2J5TKy4p1?=
+ =?us-ascii?Q?xbenIWmVPBVCQc3bGqnKbpIwKc6Kn3OYk5Dki5hLl9/ajk2q2Wg/Ve30Ael3?=
+ =?us-ascii?Q?w9jps1mexRSy2vVdKBa/G2PjLom0/Hb8tsPSZTLhuUoBAbLLctP5VBR4LnfC?=
+ =?us-ascii?Q?SI3YrwWCMrRmtOIbg/JDamkM43y36Urfwp0Xc+jLJDA021ZEblJfHRyXgM1o?=
+ =?us-ascii?Q?FHx/BrbodfKX801Yn/FkDp52J9BjwGIOUg2/OhoPDNaEYz+O4bgKA2yIgkFX?=
+ =?us-ascii?Q?soeFiq/Dn6c7nrCWNaI3mj/JTlMCvfpbADIhmGBlSiljLZDSfQrbDGxU3Dzu?=
+ =?us-ascii?Q?M1yfIMQ6jtrGCMpla2U2fWoOd0lnQ4gS5FH8zjU3zcBtHm9tzcTmFoaae+OY?=
+ =?us-ascii?Q?UHGVP7e9dsAHAg8Rx8/7pHPXWRt149BaMtb0o25KScqHV5V5IBYWcB58ZZFt?=
+ =?us-ascii?Q?Bm3A4QvD+wQzCg+GsEqvY8LkVj92AN0QBViTXAdkJ3Sy1BEdh3nm6b3bclDG?=
+ =?us-ascii?Q?gzTfJgtX8l4XoQU5oTzewRsHWFihFpMYSRGV7xntF0InKOZUpjLoZLZHlAXi?=
+ =?us-ascii?Q?ua0KtQP1k4xc7/DUuJSgHvOkzNAi6WKU9IvBwqAIx3gjHfIsOZw4sFMq1/Q1?=
+ =?us-ascii?Q?nXzZUckRbu662aRZxOOSNtGXZdxoUFYaVz2C882v3k8g4RP2TgvCswEZIsya?=
+ =?us-ascii?Q?VRfV8hF9eW9uZzuKdS+9t6OMtGxvwlJLHoNIe8mbekG4KCXvR/YCBK9Twg4f?=
+ =?us-ascii?Q?TLqZ58CUq8qDRwKFdJWckuumL/TE3ttftIaISzMKo2pEfmcTK5igdYT3DaAX?=
+ =?us-ascii?Q?S3ba0hkwe7AFC6FztRE/uP7pZKOpuKtvUv0u4j9nQ3+BtMj5B6qLquZQWkHt?=
+ =?us-ascii?Q?Cd6pJboPe1ja91Dc9Odov0Y0EhIfWSaw5IRLQyQImvyCnvdg1mZk3NeDxGpl?=
+ =?us-ascii?Q?g569ndxkcyS3t/wVrzJO21kJfuInLwRNdvr0gXDcaG8rQPQz21sOEq4Mn953?=
+ =?us-ascii?Q?Nqn4LpISWZv5ALp5BJJmTlhU1Au3V4Xb6plAVGpu3xo27HVZ7uZVkWIRQZiI?=
+ =?us-ascii?Q?NbjLmFD9zXYMsSknamdNL9I/j+Y5T6jCG9kYIoWd?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Proofpoint-GUID: axAY4NMwjThl_EPzlZ7YgiNoek9vUxS8
-X-Proofpoint-ORIG-GUID: axAY4NMwjThl_EPzlZ7YgiNoek9vUxS8
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0: glz29UAy31B1RT3/0C+fjarNwN2bkAvkJ1IkB3gLTpXc5BQGcveXjYOs2CPaFfQeWzppKKdJ2cokBdue8YMHG/lbKskOTgSaFWL2X7busin3SoOWtdd4B5gXp1En1iUFAwx51ySJHynOJfYkb0TF9VTfTAuaicFATREPOYeVY2+Z5NpCzzLqZgLbLCnMHsT/yWFspHvumWlKP/i1JPijTPpzxMl2d48kK/EtfyVtLxgLLqCuU9CU9CleKb7Cm4lxYNf8k4cycOR76aRmrXNw2JCcemSc9o1si9UsL12X+qmnCfhvyX7ueEd3wbzAYogc0F2FXNyLDuLzvIixzEBSHhxlvbaPkj8JcA6MsFNNr+E8cJ75efvPJobPro6g5qE6ILC4hBCwYtfi5RRi55AWLqwC1FwlfoYQToY+INgiCCkbUDAT/pjhivB/4b78SikRsL9lnWB4Ft+rMssH/duazkZ2KbwCBQUtj4nFR9CmQuCn+GH4oC2+dR5KT3+v+6UTHqhG101ZeiryVQuCISCBZfzKukc/x96iWkZeh7YvWQpAcIkj5e3UvfC3dT1nLeHQUDVIDLLSkPERxCA1SQJV1C6RCO4nRbYcOWPRvkI+z9hmpMmXqZ0KK37DjWG6v2Wn/tw2xbu1fi5W8t0zjd7MYswgc00tp5P8HXjcHgzvcexeUr5KpkvV7vDdC5KKebe3wV0N434MBWmWahwai9TsPbT5FLm18GbRReraGxF++qDOsBe2Fe/IQXYriGyZTiLUFYo6/dYErW+uhD86HukM5urX931SNPFIYs8dqv+f09oStJvONKC31gDRtbycOclbnJrHiAURXK5497yuOhRjom8izkM4GR47MsHAIm7o+vr5jr3o0/HP8ijoq2HJN2li6smXFdsiCvp31NO2pyZivt/4gw3WaTmY/P5Bc/AKhCg=
+X-OriginatorOrg: synopsys.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: BYAPR12MB3399.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: f3958752-f44f-4145-00ef-08db14a27b52
+X-MS-Exchange-CrossTenant-originalarrivaltime: 22 Feb 2023 07:00:28.8973
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: c33c9f88-1eb7-4099-9700-16013fd9e8aa
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: 81pQ9bgOh35LtFJIdvFummp3ycvLi7jWXyl+T481J9fmafnb9lPnON1AVLuEhTPG584UZG0h3+fOCPJ0OkK7Lg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS0PR12MB7927
+X-Proofpoint-GUID: NvfjtlooI6jIXRPGEZdW-m3GKPLVO5ey
+X-Proofpoint-ORIG-GUID: NvfjtlooI6jIXRPGEZdW-m3GKPLVO5ey
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.170.22
  definitions=2023-02-22_02,2023-02-20_02,2023-02-09_01
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-Proofpoint-Spam-Details: rule=outbound_active_cloned_notspam policy=outbound_active_cloned score=0
+ impostorscore=0 mlxscore=0 bulkscore=0 clxscore=1011 spamscore=0
+ priorityscore=1501 malwarescore=0 adultscore=0 mlxlogscore=999
+ phishscore=0 suspectscore=0 lowpriorityscore=0 classifier=spam adjust=0
+ reason=mlx scancount=1 engine=8.12.0-2212070000
+ definitions=main-2302220058
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Suman Ghosh <sumang@marvell.com>
+Hi Amelie,
 
-NDC caches contexts of frequently used queue's (Rx and Tx queues)
-contexts. Due to a HW errata when NDC detects fault/poision while
-accessing contexts it could go into an illegal state where a cache
-line could get locked forever. To makesure all cache lines in NDC
-are available for optimum performance upon fault/lockerror/posion
-errors scan through all cache lines in NDC and clear the lock bit.
+Could you please review and test this patch on your setup.
+Doesn't broke anything.
 
-Fixes: 4a3581cd5995 ("octeontx2-af: NPA AQ instruction enqueue support")
-Signed-off-by: Suman Ghosh <sumang@marvell.com>
-Signed-off-by: Sunil Kovvuri Goutham <sgoutham@marvell.com>
-Signed-off-by: Sai Krishna <saikrishnag@marvell.com>
----
- .../net/ethernet/marvell/octeontx2/af/rvu.h   |  8 +++
- .../marvell/octeontx2/af/rvu_debugfs.c        |  3 -
- .../ethernet/marvell/octeontx2/af/rvu_nix.c   | 16 +++++-
- .../ethernet/marvell/octeontx2/af/rvu_npa.c   | 55 ++++++++++++++++++-
- .../ethernet/marvell/octeontx2/af/rvu_reg.h   |  3 +
- 5 files changed, 80 insertions(+), 5 deletions(-)
+Thanks,
+Minas
 
-diff --git a/drivers/net/ethernet/marvell/octeontx2/af/rvu.h b/drivers/net/ethernet/marvell/octeontx2/af/rvu.h
-index 7f0a64731c67..7de817446fc3 100644
---- a/drivers/net/ethernet/marvell/octeontx2/af/rvu.h
-+++ b/drivers/net/ethernet/marvell/octeontx2/af/rvu.h
-@@ -866,6 +866,12 @@ int rvu_cpt_lf_teardown(struct rvu *rvu, u16 pcifunc, int blkaddr, int lf,
- 			int slot);
- int rvu_cpt_ctx_flush(struct rvu *rvu, u16 pcifunc);
- 
-+/* NDC APIs */
-+#define NDC_MAX_BANK(rvu, blk_addr) (rvu_read64(rvu, \
-+					blk_addr, NDC_AF_CONST) & 0xFF)
-+#define NDC_MAX_LINE_PER_BANK(rvu, blk_addr) ((rvu_read64(rvu, \
-+					blk_addr, NDC_AF_CONST) & 0xFFFF0000) >> 16)
-+
- /* CN10K RVU */
- int rvu_set_channels_base(struct rvu *rvu);
- void rvu_program_channels(struct rvu *rvu);
-@@ -881,6 +887,8 @@ static inline void rvu_dbg_init(struct rvu *rvu) {}
- static inline void rvu_dbg_exit(struct rvu *rvu) {}
- #endif
- 
-+int rvu_ndc_fix_locked_cacheline(struct rvu *rvu, int blkaddr);
-+
- /* RVU Switch */
- void rvu_switch_enable(struct rvu *rvu);
- void rvu_switch_disable(struct rvu *rvu);
-diff --git a/drivers/net/ethernet/marvell/octeontx2/af/rvu_debugfs.c b/drivers/net/ethernet/marvell/octeontx2/af/rvu_debugfs.c
-index fa280ebd3052..fad83d1f84b0 100644
---- a/drivers/net/ethernet/marvell/octeontx2/af/rvu_debugfs.c
-+++ b/drivers/net/ethernet/marvell/octeontx2/af/rvu_debugfs.c
-@@ -198,9 +198,6 @@ enum cpt_eng_type {
- 	CPT_IE_TYPE = 3,
- };
- 
--#define NDC_MAX_BANK(rvu, blk_addr) (rvu_read64(rvu, \
--						blk_addr, NDC_AF_CONST) & 0xFF)
--
- #define rvu_dbg_NULL NULL
- #define rvu_dbg_open_NULL NULL
- 
-diff --git a/drivers/net/ethernet/marvell/octeontx2/af/rvu_nix.c b/drivers/net/ethernet/marvell/octeontx2/af/rvu_nix.c
-index 6b8747ebc08c..bcce42cd1c24 100644
---- a/drivers/net/ethernet/marvell/octeontx2/af/rvu_nix.c
-+++ b/drivers/net/ethernet/marvell/octeontx2/af/rvu_nix.c
-@@ -790,6 +790,7 @@ static int nix_aq_enqueue_wait(struct rvu *rvu, struct rvu_block *block,
- 	struct nix_aq_res_s *result;
- 	int timeout = 1000;
- 	u64 reg, head;
-+	int ret;
- 
- 	result = (struct nix_aq_res_s *)aq->res->base;
- 
-@@ -813,9 +814,22 @@ static int nix_aq_enqueue_wait(struct rvu *rvu, struct rvu_block *block,
- 			return -EBUSY;
- 	}
- 
--	if (result->compcode != NIX_AQ_COMP_GOOD)
-+	if (result->compcode != NIX_AQ_COMP_GOOD) {
- 		/* TODO: Replace this with some error code */
-+		if (result->compcode == NIX_AQ_COMP_CTX_FAULT ||
-+		    result->compcode == NIX_AQ_COMP_LOCKERR ||
-+		    result->compcode == NIX_AQ_COMP_CTX_POISON) {
-+			ret = rvu_ndc_fix_locked_cacheline(rvu, BLKADDR_NDC_NIX0_RX);
-+			ret |= rvu_ndc_fix_locked_cacheline(rvu, BLKADDR_NDC_NIX0_TX);
-+			ret |= rvu_ndc_fix_locked_cacheline(rvu, BLKADDR_NDC_NIX1_RX);
-+			ret |= rvu_ndc_fix_locked_cacheline(rvu, BLKADDR_NDC_NIX1_TX);
-+			if (ret)
-+				dev_err(rvu->dev,
-+					"%s: Not able to unlock cachelines\n", __func__);
-+		}
-+
- 		return -EBUSY;
-+	}
- 
- 	return 0;
- }
-diff --git a/drivers/net/ethernet/marvell/octeontx2/af/rvu_npa.c b/drivers/net/ethernet/marvell/octeontx2/af/rvu_npa.c
-index 70bd036ed76e..6cd8cc8f3488 100644
---- a/drivers/net/ethernet/marvell/octeontx2/af/rvu_npa.c
-+++ b/drivers/net/ethernet/marvell/octeontx2/af/rvu_npa.c
-@@ -42,9 +42,18 @@ static int npa_aq_enqueue_wait(struct rvu *rvu, struct rvu_block *block,
- 			return -EBUSY;
- 	}
- 
--	if (result->compcode != NPA_AQ_COMP_GOOD)
-+	if (result->compcode != NPA_AQ_COMP_GOOD) {
- 		/* TODO: Replace this with some error code */
-+		if (result->compcode == NPA_AQ_COMP_CTX_FAULT ||
-+		    result->compcode == NPA_AQ_COMP_LOCKERR ||
-+		    result->compcode == NPA_AQ_COMP_CTX_POISON) {
-+			if (rvu_ndc_fix_locked_cacheline(rvu, BLKADDR_NDC_NPA0))
-+				dev_err(rvu->dev,
-+					"%s: Not able to unlock cachelines\n", __func__);
-+		}
-+
- 		return -EBUSY;
-+	}
- 
- 	return 0;
- }
-@@ -545,3 +554,47 @@ void rvu_npa_lf_teardown(struct rvu *rvu, u16 pcifunc, int npalf)
- 
- 	npa_ctx_free(rvu, pfvf);
- }
-+
-+/* Due to an Hardware errata, in some corner cases, AQ context lock
-+ * operations can result in a NDC way getting into an illegal state
-+ * of not valid but locked.
-+ *
-+ * This API solves the problem by clearing the lock bit of the NDC block.
-+ * The operation needs to be done for each line of all the NDC banks.
-+ */
-+int rvu_ndc_fix_locked_cacheline(struct rvu *rvu, int blkaddr)
-+{
-+	int bank, max_bank, line, max_line, err;
-+	u64 reg;
-+
-+	/* Set the ENABLE bit(63) to '0' */
-+	reg = rvu_read64(rvu, blkaddr, NDC_AF_CAMS_RD_INTERVAL);
-+	rvu_write64(rvu, blkaddr, NDC_AF_CAMS_RD_INTERVAL, reg & GENMASK_ULL(62, 0));
-+
-+	/* Poll until the BUSY bits(47:32) are set to '0' */
-+	err = rvu_poll_reg(rvu, blkaddr, NDC_AF_CAMS_RD_INTERVAL, GENMASK_ULL(47, 32), true);
-+	if (err) {
-+		dev_err(rvu->dev, "Timed out while polling for NDC CAM busy bits.\n");
-+		return err;
-+	}
-+
-+	max_bank = NDC_MAX_BANK(rvu, blkaddr);
-+	max_line = NDC_MAX_LINE_PER_BANK(rvu, blkaddr);
-+	for (bank = 0; bank < max_bank; bank++) {
-+		for (line = 0; line < max_line; line++) {
-+			/* Check if 'cache line valid bit(63)' is not set
-+			 * but 'cache line lock bit(60)' is set and on
-+			 * success, reset the lock bit(60).
-+			 */
-+			reg = rvu_read64(rvu, blkaddr,
-+					 NDC_AF_BANKX_LINEX_METADATA(bank, line));
-+			if (!(reg & BIT_ULL(63)) && (reg & BIT_ULL(60))) {
-+				rvu_write64(rvu, blkaddr,
-+					    NDC_AF_BANKX_LINEX_METADATA(bank, line),
-+					    reg & ~BIT_ULL(60));
-+			}
-+		}
-+	}
-+
-+	return 0;
-+}
-diff --git a/drivers/net/ethernet/marvell/octeontx2/af/rvu_reg.h b/drivers/net/ethernet/marvell/octeontx2/af/rvu_reg.h
-index 0e0d536645ac..9bd4b6eeb7d5 100644
---- a/drivers/net/ethernet/marvell/octeontx2/af/rvu_reg.h
-+++ b/drivers/net/ethernet/marvell/octeontx2/af/rvu_reg.h
-@@ -690,6 +690,7 @@
- #define NDC_AF_INTR_ENA_W1S		(0x00068)
- #define NDC_AF_INTR_ENA_W1C		(0x00070)
- #define NDC_AF_ACTIVE_PC		(0x00078)
-+#define NDC_AF_CAMS_RD_INTERVAL		(0x00080)
- #define NDC_AF_BP_TEST_ENABLE		(0x001F8)
- #define NDC_AF_BP_TEST(a)		(0x00200 | (a) << 3)
- #define NDC_AF_BLK_RST			(0x002F0)
-@@ -705,6 +706,8 @@
- 		(0x00F00 | (a) << 5 | (b) << 4)
- #define NDC_AF_BANKX_HIT_PC(a)		(0x01000 | (a) << 3)
- #define NDC_AF_BANKX_MISS_PC(a)		(0x01100 | (a) << 3)
-+#define NDC_AF_BANKX_LINEX_METADATA(a, b) \
-+		(0x10000 | (a) << 3 | (b) << 3)
- 
- /* LBK */
- #define LBK_CONST			(0x10ull)
--- 
-2.25.1
+On 2/21/2023 2:30 PM, Ziyang Huang <hzyitc@outlook.com> wrote:
+>From: Ziyang Huang <hzyitc@outlook.com>
+>Sent: Tuesday, February 21, 2023 2:30 PM
+>To: Minas Harutyunyan <hminas@synopsys.com>
+>Cc: gregkh@linuxfoundation.org; fabrice.gasnier@foss.st.com;
+>amelie.delaunay@foss.st.com; linux-usb@vger.kernel.org; linux-
+>kernel@vger.kernel.org; Ziyang Huang <hzyitc@outlook.com>
+>Subject: [PATCH v2] usb: dwc2: drd: fix inconsistent mode if role-switch-
+>default-mode=3D"host"
+>
+>Some boards might use USB-A female connector for USB ports, however, the
+>port could be connected to a dual-mode USB controller, making it also
+>behaves as a peripheral device if male-to-male cable is connected.
+>
+>In this case, the dts looks like this:
+>
+>	&usb0 {
+>		status =3D "okay";
+>		dr_mode =3D "otg";
+>		usb-role-switch;
+>		role-switch-default-mode =3D "host";
+>	};
+>
+>After boot, dwc2_ovr_init() sets GOTGCTL to GOTGCTL_AVALOVAL and call
+>dwc2_force_mode() with parameter host=3Dfalse, which causes inconsistent m=
+ode
+>- The hardware is in peripheral mode while the kernel status is in host
+>mode.
+>
+>What we can do now is to call dwc2_drd_role_sw_set() to switch to device
+>mode, and everything should work just fine now, even switching back to
+>none(default) mode afterwards.
+>
+>Fixes: e14acb876985 ("usb: dwc2: drd: add role-switch-default-node support=
+")
+>Signed-off-by: Ziyang Huang <hzyitc@outlook.com>
+>---
+>Changes since v1
+>- Use corrent name in Signed-off-by
+>
+> drivers/usb/dwc2/drd.c | 3 ++-
+> 1 file changed, 2 insertions(+), 1 deletion(-)
+>
+>diff --git a/drivers/usb/dwc2/drd.c b/drivers/usb/dwc2/drd.c index
+>d8d6493bc457..a8605b02115b 100644
+>--- a/drivers/usb/dwc2/drd.c
+>+++ b/drivers/usb/dwc2/drd.c
+>@@ -35,7 +35,8 @@ static void dwc2_ovr_init(struct dwc2_hsotg *hsotg)
+>
+> 	spin_unlock_irqrestore(&hsotg->lock, flags);
+>
+>-	dwc2_force_mode(hsotg, (hsotg->dr_mode =3D=3D USB_DR_MODE_HOST));
+>+	dwc2_force_mode(hsotg, (hsotg->dr_mode =3D=3D USB_DR_MODE_HOST) ||
+>+				(hsotg->role_sw_default_mode =3D=3D USB_DR_MODE_HOST));
+> }
+>
+> static int dwc2_ovr_avalid(struct dwc2_hsotg *hsotg, bool valid)
+>--
+>2.34.1
 
