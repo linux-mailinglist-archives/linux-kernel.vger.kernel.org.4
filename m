@@ -2,36 +2,36 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 81BD569F236
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Feb 2023 10:52:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5CBE869F22E
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Feb 2023 10:50:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232354AbjBVJwR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Feb 2023 04:52:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49942 "EHLO
+        id S231720AbjBVJug (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Feb 2023 04:50:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50520 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232305AbjBVJvz (ORCPT
+        with ESMTP id S231464AbjBVJuL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Feb 2023 04:51:55 -0500
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4CC33756A
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Feb 2023 01:50:09 -0800 (PST)
+        Wed, 22 Feb 2023 04:50:11 -0500
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B580F3608D
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Feb 2023 01:48:03 -0800 (PST)
 Received: from IcarusMOD.eternityproject.eu (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
         (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id ECD2B66021B6;
-        Wed, 22 Feb 2023 09:42:59 +0000 (GMT)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 9D6D966021B8;
+        Wed, 22 Feb 2023 09:43:00 +0000 (GMT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1677058980;
-        bh=ZVUGUSkQPIkJqJdXlquYlMTH70M4rX6hh28fX2ZpB5Q=;
+        s=mail; t=1677058981;
+        bh=rAHk+6D4DP7ZKavkjU3OoAIsoPs/edVh3yg1JAxrz8Q=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=icQqmQC1NwhnkaUQUa+HJKbglRLmbx/Cj2SKtRtzcRiAcaZ6bhD1Me/eThlsET4+i
-         ujYA1sNyAbC9oPZFJYpa9XFob5Sx/YjCt4ShTyTalCwsz2Er43whYGhep8a2lvMUUH
-         RyGA+0aIlYplbyCeYhJGCZ15xq/YKNHkZvkZNmAwwiDj5hAtK6901UscTnn1KpS865
-         S9bZSHyzPYmPHneLMLyiUwBFEEO2/IJPz4qE7tZTzZHGDdA944Hwwowg+WftffoDX6
-         nft5SV61zPfGuvYbc23A5utu3uh/YnAq0yL3fSR7UgphZZV1u2sJ93YcCnYJF9oBpi
-         5G644Bm21xEWw==
+        b=g4g6Jf22hidJPXb/h9Wa8OCLtlftHXym9YpMsWyHjgCb/rbi6ZzmyzhoatYtDv+M/
+         ihQFLLNEDnRriFk+ZSh0F7EwjqEwx9LXoFmd9Yxyy5gUPeYst0TAO0dkLwPT5eeLJT
+         NfHzhiOR8BGZshr6QZkR6kRtEax+109UdlzzCbW1pkLCi0G4qxTghDNLoTotkBcspL
+         aQ2WGmrWRozR4mXpxGchvduT7502ivAoW6+7JqSDwESi/EUJTxvjhKoeLKh6Qh7qbs
+         BqClANiOO9XNowtXBLIiBHUenXd6W3zpbdP9YvuJMZuOGAYOkSdBUNG5UEzVHGiPsP
+         ESxOlbKporAZQ==
 From:   AngeloGioacchino Del Regno 
         <angelogioacchino.delregno@collabora.com>
 To:     matthias.bgg@gmail.com
@@ -41,9 +41,9 @@ Cc:     jason-jh.lin@mediatek.com, chunkuang.hu@kernel.org,
         AngeloGioacchino Del Regno 
         <angelogioacchino.delregno@collabora.com>,
         Chen-Yu Tsai <wenst@chromium.org>
-Subject: [PATCH v2 1/9] soc: mediatek: mtk-mmsys: Add .remove() callback
-Date:   Wed, 22 Feb 2023 10:42:45 +0100
-Message-Id: <20230222094253.23678-2-angelogioacchino.delregno@collabora.com>
+Subject: [PATCH v2 2/9] soc: mediatek: mtk-mmsys: Use module_platform_driver() macro
+Date:   Wed, 22 Feb 2023 10:42:46 +0100
+Message-Id: <20230222094253.23678-3-angelogioacchino.delregno@collabora.com>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230222094253.23678-1-angelogioacchino.delregno@collabora.com>
 References: <20230222094253.23678-1-angelogioacchino.delregno@collabora.com>
@@ -58,67 +58,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add a .remove() callback to correctly unregister the multimedia clocks
-and DRM drivers.
+Instead of open-coding init/exit calls, switch to using the
+module_platform_driver() macro instead, doing the exact same.
 
 Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 Reviewed-by: Chen-Yu Tsai <wenst@chromium.org>
 ---
- drivers/soc/mediatek/mtk-mmsys.c | 15 +++++++++++++++
- 1 file changed, 15 insertions(+)
+ drivers/soc/mediatek/mtk-mmsys.c | 14 +-------------
+ 1 file changed, 1 insertion(+), 13 deletions(-)
 
 diff --git a/drivers/soc/mediatek/mtk-mmsys.c b/drivers/soc/mediatek/mtk-mmsys.c
-index eb4c7e57896c..af22f3490034 100644
+index af22f3490034..1a574de9484d 100644
 --- a/drivers/soc/mediatek/mtk-mmsys.c
 +++ b/drivers/soc/mediatek/mtk-mmsys.c
-@@ -121,6 +121,8 @@ static const struct mtk_mmsys_driver_data mt8365_mmsys_driver_data = {
- struct mtk_mmsys {
- 	void __iomem *regs;
- 	const struct mtk_mmsys_driver_data *data;
-+	struct platform_device *clks_pdev;
-+	struct platform_device *drm_pdev;
- 	spinlock_t lock; /* protects mmsys_sw_rst_b reg */
- 	struct reset_controller_dev rcdev;
- 	struct cmdq_client_reg cmdq_base;
-@@ -342,6 +344,7 @@ static int mtk_mmsys_probe(struct platform_device *pdev)
- 					     PLATFORM_DEVID_AUTO, NULL, 0);
- 	if (IS_ERR(clks))
- 		return PTR_ERR(clks);
-+	mmsys->clks_pdev = clks;
- 
- 	if (mmsys->data->is_vppsys)
- 		goto out_probe_done;
-@@ -352,11 +355,22 @@ static int mtk_mmsys_probe(struct platform_device *pdev)
- 		platform_device_unregister(clks);
- 		return PTR_ERR(drm);
- 	}
-+	mmsys->drm_pdev = drm;
- 
- out_probe_done:
- 	return 0;
- }
- 
-+static int mtk_mmsys_remove(struct platform_device *pdev)
-+{
-+	struct mtk_mmsys *mmsys = platform_get_drvdata(pdev);
-+
-+	platform_device_unregister(mmsys->drm_pdev);
-+	platform_device_unregister(mmsys->clks_pdev);
-+
-+	return 0;
-+}
-+
- static const struct of_device_id of_match_mtk_mmsys[] = {
- 	{
- 		.compatible = "mediatek,mt2701-mmsys",
-@@ -431,6 +445,7 @@ static struct platform_driver mtk_mmsys_drv = {
- 		.of_match_table = of_match_mtk_mmsys,
- 	},
+@@ -447,19 +447,7 @@ static struct platform_driver mtk_mmsys_drv = {
  	.probe = mtk_mmsys_probe,
-+	.remove = mtk_mmsys_remove,
+ 	.remove = mtk_mmsys_remove,
  };
+-
+-static int __init mtk_mmsys_init(void)
+-{
+-	return platform_driver_register(&mtk_mmsys_drv);
+-}
+-
+-static void __exit mtk_mmsys_exit(void)
+-{
+-	platform_driver_unregister(&mtk_mmsys_drv);
+-}
+-
+-module_init(mtk_mmsys_init);
+-module_exit(mtk_mmsys_exit);
++module_platform_driver(mtk_mmsys_drv);
  
- static int __init mtk_mmsys_init(void)
+ MODULE_AUTHOR("Yongqiang Niu <yongqiang.niu@mediatek.com>");
+ MODULE_DESCRIPTION("MediaTek SoC MMSYS driver");
 -- 
 2.39.2
 
