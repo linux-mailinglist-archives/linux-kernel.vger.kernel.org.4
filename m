@@ -2,241 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 16ACA69FAF6
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Feb 2023 19:28:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E427269FB01
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Feb 2023 19:30:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232365AbjBVS15 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Feb 2023 13:27:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32964 "EHLO
+        id S232405AbjBVSaX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Feb 2023 13:30:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35794 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232348AbjBVS1v (ORCPT
+        with ESMTP id S232324AbjBVSaV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Feb 2023 13:27:51 -0500
-Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E7F11BDA
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Feb 2023 10:27:48 -0800 (PST)
-Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-538116920c3so31619807b3.15
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Feb 2023 10:27:48 -0800 (PST)
+        Wed, 22 Feb 2023 13:30:21 -0500
+Received: from mail-il1-x12a.google.com (mail-il1-x12a.google.com [IPv6:2607:f8b0:4864:20::12a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D12539CE3
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Feb 2023 10:30:17 -0800 (PST)
+Received: by mail-il1-x12a.google.com with SMTP id o8so1168905ilt.13
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Feb 2023 10:30:17 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1677090468;
-        h=content-transfer-encoding:cc:to:from:subject:message-id:references
-         :mime-version:in-reply-to:date:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=rf3BcpYRnNocfULVZrlv+SsLV8IiqQH10bFhbtuKzq8=;
-        b=slKBtTJP9E56Rj0B06ol2b9pwSpOno6v2BR47w5yY4N3nMvUd/BbJ76E0SBCnKTUa2
-         nJB9+6E53RVrzrEsIZYVtZbylanhHqGo1jucsLRuR6Pys6/LATui6Bz5uwqYQUOa1JA3
-         AY8HGbpDPoEAtDaxkOXcZEWN+Qk7d5fOe70WuI3VKYFczy4sjkLpeRbqZsC0aRUptuzP
-         3pNPr+jPZ+kWF36sJoyx5BUtQgkUrr18s+4MJwoYOmkjuko54SjNT8TCnKBJCdRO3iga
-         vlC+vXomp+c5skqhfwo3nXAuDL3QVFdlyRbWOqfVm4dvHQ2tTdCYuxjIf4zmdiLiI/UV
-         I5zQ==
+        d=kernel-dk.20210112.gappssmtp.com; s=20210112; t=1677090617;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=/OiGxXdhMijif1OrnbqcE7MLbFzI92LPmx4R6TbKMMc=;
+        b=W+vuxZLUd+mJ/F8W+ZcBVKYcXbuIEKmpD5s5pnEKXDFW9CLflCZRp6TF47PIZwBAmJ
+         M7nTySzgGanAsSVnGZB8jiSW2AEN4oUhGQjCRv53nW/KD/nWIC42gQQ/ZxhS2GBfrG+R
+         7kJZgPoe1A4PbbXRTV0oFKciryCmH7ZYVewL6Pw5CUAlZ3QSLkbiUf7HMejD2sgD/BtY
+         47MPGZF7R9msLMlSO64M4zFyu1OQrZ18kkE8b9v3kXhGVrEMvhOWXMPtEHw4v6d6LNSq
+         i5oW6858mcF3gSuOInrQ4cfPx69Z9WkQeJaWV67zjxPR6xjzRJQtCOWRpo0U4BHVSpvl
+         PgTw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1677090468;
-        h=content-transfer-encoding:cc:to:from:subject:message-id:references
-         :mime-version:in-reply-to:date:x-gm-message-state:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=rf3BcpYRnNocfULVZrlv+SsLV8IiqQH10bFhbtuKzq8=;
-        b=VjFND+eRF5x8lN21qxpKPr9kdXsOSiWD58fto+8KWYF7wSzCwJ9qgENsgZPkdBeARG
-         djQXz2TGjCrLpfA+YJ4yeJXjUrhYkuc8eZiY4nkTN66nsL4jjminVmAUfAjpUaOVIy/h
-         b8EhBHHvWXPWu5p3eW9NAerWz6ShWNa0a5w4f3cF5BOk/s0Ahjinwxjq5xl1d5/W2Gya
-         Mixh9e+3GplSysp5WjNGn5KmfKNB2gWjbcdJPYa8TYouDsTgrFH0sPgchjyJmNkB6Kng
-         JDqLjEcMIj3gzhWCW5b6VA+Jw0LCko8drGFEeIRao5AGxNc59Ha6j9W5ivY8xEJcQg4Q
-         C8iw==
-X-Gm-Message-State: AO0yUKW8HHqHoiKHtRWBiBUd3RbKmvLFzfGouMqzm7LMz8WzibB5nRjO
-        Rbl5rVMgk+f7vsZlFpLuYopFlG0Uwg==
-X-Google-Smtp-Source: AK7set+up8SZo9f1D1JYAm0RClpHObD3m1kW1D63qwRaI2gtNXdko+2KfGPc07xygYlmBfWccxarOhk1yA==
-X-Received: from rmoar-specialist.c.googlers.com ([fda3:e722:ac3:cc00:2b:7d90:c0a8:45d3])
- (user=rmoar job=sendgmr) by 2002:a5b:d48:0:b0:995:c60:38ca with SMTP id
- f8-20020a5b0d48000000b009950c6038camr876065ybr.3.1677090467798; Wed, 22 Feb
- 2023 10:27:47 -0800 (PST)
-Date:   Wed, 22 Feb 2023 18:27:40 +0000
-In-Reply-To: <20230222182740.254087-1-rmoar@google.com>
-Mime-Version: 1.0
-References: <20230222182740.254087-1-rmoar@google.com>
-X-Mailer: git-send-email 2.39.2.637.g21b0678d19-goog
-Message-ID: <20230222182740.254087-3-rmoar@google.com>
-Subject: [PATCH v2 3/3] kunit: fix bug of extra newline characters in debugfs logs
-From:   Rae Moar <rmoar@google.com>
-To:     brendanhiggins@google.com, davidgow@google.com, dlatypov@google.com
-Cc:     skhan@linuxfoundation.org, kunit-dev@googlegroups.com,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        Rae Moar <rmoar@google.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+        d=1e100.net; s=20210112; t=1677090617;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=/OiGxXdhMijif1OrnbqcE7MLbFzI92LPmx4R6TbKMMc=;
+        b=NSC0QYPn0xE9sEnEmxtbomxwAb6XFRHpekXZ+DBVw26AXi2zWI/xp1HiGUtXm/+AMt
+         i5OcbZY2ZJEBOYViLFvACSxDaQY9xVIWwS0/RXNmL09yrtefaz1D/PAxUJ3ZZ+BU0ptp
+         E7Ftoklf/WrcitAp53JpEIF/JhbHnpZxKM2M4bGeHuujt+WxODE2zLXbUhskVRP/ZJlG
+         C6eZrgiX1eyU4Sds5ltb3o+67i1D3JgtIQmZJ0aaczt9tKTeDRF2TOlHF+gKAWZ4zExO
+         9RzKLoJFIUBxpx78gTu3jFAcDT4MxGPWfR0Zcv2o/lsaGc/Z2H7F7KaYkcJZmHD2UYUJ
+         YtEA==
+X-Gm-Message-State: AO0yUKX3wCRCNQ10KjknWjWya/onj1auhBSVOyUMcMBfZ6pUnIGYzoCl
+        ON2DEyF272s1CN0MhMK2h2csKg==
+X-Google-Smtp-Source: AK7set/e1iwBIhPd5GBJKzX/zo+fr7RQssIJpTzPLRJTrJallE9NEohMFmQMhtKpGONDG2YzmQu8nw==
+X-Received: by 2002:a05:6e02:d08:b0:316:e2ee:3a15 with SMTP id g8-20020a056e020d0800b00316e2ee3a15mr2621798ilj.1.1677090617221;
+        Wed, 22 Feb 2023 10:30:17 -0800 (PST)
+Received: from [192.168.1.94] ([96.43.243.2])
+        by smtp.gmail.com with ESMTPSA id g14-20020a056e021a2e00b00313d86cd988sm2579889ile.49.2023.02.22.10.30.16
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 22 Feb 2023 10:30:16 -0800 (PST)
+Message-ID: <b0c82199-fb96-08a2-6158-cb1655b6ba3d@kernel.dk>
+Date:   Wed, 22 Feb 2023 11:30:15 -0700
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.2
+Subject: Re: [PATCH v2 2/2] io_uring: Add KASAN support for alloc_caches
+Content-Language: en-US
+To:     Breno Leitao <leitao@debian.org>, asml.silence@gmail.com,
+        io-uring@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org, gustavold@meta.com, leit@meta.com,
+        kasan-dev@googlegroups.com, Breno Leitao <leit@fb.com>
+References: <20230222180035.3226075-1-leitao@debian.org>
+ <20230222180035.3226075-3-leitao@debian.org>
+From:   Jens Axboe <axboe@kernel.dk>
+In-Reply-To: <20230222180035.3226075-3-leitao@debian.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Fix bug of the extra newline characters in debugfs logs. When a line is
-added to debugfs with a newline character at the end, an extra line appears
-in the debugfs log.
+On 2/22/23 11:00?AM, Breno Leitao wrote:
+> -static inline struct io_cache_entry *io_alloc_cache_get(struct io_alloc_cache *cache)
+> +static inline struct io_cache_entry *io_alloc_cache_get(struct io_alloc_cache *cache,
+> +							size_t size)
+>  {
+>  	if (cache->list.next) {
+>  		struct io_cache_entry *entry;
+>  		entry = container_of(cache->list.next, struct io_cache_entry, node);
+> +		kasan_unpoison_range(entry, size);
+>  		cache->list.next = cache->list.next->next;
+>  		return entry;
+>  	}
 
-This is due to a discrepancy between how the lines are printed and how they
-are added to the logs. Remove this discrepancy by checking if the a newline
-character is present before adding a newline character to the log. This
-should closely match the printk behavior.
+Does this generate the same code if KASAN isn't enabled? Since there's a
+4-byte hole in struct io_alloc_cache(), might be cleaner to simply add
+the 'size' argument to io_alloc_cache_init() and store it in the cache.
+Then the above just becomes:
 
-Add kunit_log_newline_test to provide test coverage for this issue. (Also,
-move kunit_log_test above suite definition to remove the unnecessary
-declaration prior to the suite definition)
+	kasan_unpoison_range(entry, cache->elem_size);
 
-As an example, say we add these two lines to the log:
+instead and that'd definitely generate the same code as before if KASAN
+isn't enabled.
 
-kunit_log(..., =E2=80=9CKTAP version 1\n=E2=80=9D);
-kunit_log(..., =E2=80=9C1..1=E2=80=9D);
-
-The debugfs log before this fix:
-
- KTAP version 1
-
- 1..1
-
-The debugfs log after this fix:
-
- KTAP version 1
- 1..1
-
-Signed-off-by: Rae Moar <rmoar@google.com>
----
-
-Changes from v1 -> v2:
-- Changed the way extra newlines are removed. Instead of removing extra
-  newline characters, add a newline if one is not present. This is a bit
-  cleaner.
-- Add before and after results to the commit message.
-- Note: I looked into using KERN_CONT to match the printk behavior to
-  vsnprintf but this could cause issues with KTAP printing on the same line
-  as interrupting kernel messages. I also looked at adding KERN_CONT
-  functionality to kunit_log and I did get this to work but it was a bit
-  messy because it required a few calls to kunit_log_newline in
-  kunit_run_tests. If this is very desired functionality, happy to add this
-  to version 3.
-
- include/kunit/test.h   |  9 ++++++++-
- lib/kunit/kunit-test.c | 35 +++++++++++++++++++++++------------
- lib/kunit/test.c       | 14 ++++++++++++++
- 3 files changed, 45 insertions(+), 13 deletions(-)
-
-diff --git a/include/kunit/test.h b/include/kunit/test.h
-index 0668d29f3453..3031ad29718b 100644
---- a/include/kunit/test.h
-+++ b/include/kunit/test.h
-@@ -375,6 +375,13 @@ static inline void *kunit_kcalloc(struct kunit *test, =
-size_t n, size_t size, gfp
-=20
- void kunit_cleanup(struct kunit *test);
-=20
-+/**
-+ * kunit_log_newline() - Add newline to the end of log if not already
-+ * present at the end of the log.
-+ * @log: The log to add the newline to.
-+ */
-+void kunit_log_newline(char *log);
-+
- void __printf(2, 3) kunit_log_append(char *log, const char *fmt, ...);
-=20
- /**
-@@ -420,7 +427,7 @@ void __printf(2, 3) kunit_log_append(char *log, const c=
-har *fmt, ...);
- #define kunit_log(lvl, test_or_suite, fmt, ...)				\
- 	do {								\
- 		printk(lvl fmt, ##__VA_ARGS__);				\
--		kunit_log_append((test_or_suite)->log,	fmt "\n",	\
-+		kunit_log_append((test_or_suite)->log,	fmt,	\
- 				 ##__VA_ARGS__);			\
- 	} while (0)
-=20
-diff --git a/lib/kunit/kunit-test.c b/lib/kunit/kunit-test.c
-index 4df0335d0d06..b63595d3e241 100644
---- a/lib/kunit/kunit-test.c
-+++ b/lib/kunit/kunit-test.c
-@@ -443,18 +443,6 @@ static struct kunit_suite kunit_resource_test_suite =
-=3D {
- 	.test_cases =3D kunit_resource_test_cases,
- };
-=20
--static void kunit_log_test(struct kunit *test);
--
--static struct kunit_case kunit_log_test_cases[] =3D {
--	KUNIT_CASE(kunit_log_test),
--	{}
--};
--
--static struct kunit_suite kunit_log_test_suite =3D {
--	.name =3D "kunit-log-test",
--	.test_cases =3D kunit_log_test_cases,
--};
--
- static void kunit_log_test(struct kunit *test)
- {
- 	struct kunit_suite suite;
-@@ -481,6 +469,29 @@ static void kunit_log_test(struct kunit *test)
- #endif
- }
-=20
-+static void kunit_log_newline_test(struct kunit *test)
-+{
-+	kunit_info(test, "Add newline\n");
-+	if (test->log) {
-+		KUNIT_ASSERT_NOT_NULL_MSG(test, strstr(test->log, "Add newline\n"),
-+			"Missing log line, full log:\n%s", test->log);
-+		KUNIT_EXPECT_NULL(test, strstr(test->log, "Add newline\n\n"));
-+	} else {
-+		kunit_skip(test, "only useful when debugfs is enabled");
-+	}
-+}
-+
-+static struct kunit_case kunit_log_test_cases[] =3D {
-+	KUNIT_CASE(kunit_log_test),
-+	KUNIT_CASE(kunit_log_newline_test),
-+	{}
-+};
-+
-+static struct kunit_suite kunit_log_test_suite =3D {
-+	.name =3D "kunit-log-test",
-+	.test_cases =3D kunit_log_test_cases,
-+};
-+
- static void kunit_status_set_failure_test(struct kunit *test)
- {
- 	struct kunit fake;
-diff --git a/lib/kunit/test.c b/lib/kunit/test.c
-index fb6b39cca0ae..1ea981392af3 100644
---- a/lib/kunit/test.c
-+++ b/lib/kunit/test.c
-@@ -108,6 +108,17 @@ static void kunit_print_test_stats(struct kunit *test,
- 		  stats.total);
- }
-=20
-+void kunit_log_newline(char *log)
-+{
-+	int log_len, len_left;
-+
-+	log_len =3D strlen(log);
-+	len_left =3D KUNIT_LOG_SIZE - log_len - 1;
-+
-+	if (log_len > 0 && log[log_len - 1] !=3D '\n')
-+		strncat(log, "\n", len_left);
-+}
-+
- /*
-  * Append formatted message to log, size of which is limited to
-  * KUNIT_LOG_SIZE bytes (including null terminating byte).
-@@ -134,6 +145,9 @@ void kunit_log_append(char *log, const char *fmt, ...)
- 	va_start(args, fmt);
- 	vsnprintf(log + log_len, min(len, len_left), fmt, args);
- 	va_end(args);
-+
-+	/* Add newline to end of log if not already present. */
-+	kunit_log_newline(log);
- }
- EXPORT_SYMBOL_GPL(kunit_log_append);
-=20
---=20
-2.39.2.637.g21b0678d19-goog
+-- 
+Jens Axboe
 
