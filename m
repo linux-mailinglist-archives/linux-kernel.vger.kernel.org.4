@@ -2,193 +2,190 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 959E969FAAA
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Feb 2023 19:00:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 85A7B69FAB1
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Feb 2023 19:03:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232201AbjBVSAq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Feb 2023 13:00:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39818 "EHLO
+        id S232213AbjBVSDK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Feb 2023 13:03:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42568 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232145AbjBVSAn (ORCPT
+        with ESMTP id S231236AbjBVSDH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Feb 2023 13:00:43 -0500
-Received: from mail-wm1-f46.google.com (mail-wm1-f46.google.com [209.85.128.46])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4D0838B6D;
-        Wed, 22 Feb 2023 10:00:41 -0800 (PST)
-Received: by mail-wm1-f46.google.com with SMTP id l2-20020a05600c1d0200b003e1f6dff952so7120033wms.1;
-        Wed, 22 Feb 2023 10:00:41 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=xNEnafHq9H7B13AnAe5txqBr7aKjs9xFRkNpLXSLW18=;
-        b=rYesFRYSeEwu7aVyceL6VPAdNSkdlVRydPxAhVeCv9wSn4Zpr8DCobYYNXt8fTA3k/
-         GqdUT+Wa7hJjbDv5ZnU+TDibA8/YTX3jTccMBYbMra//pvVyMUop6xGt8S80Hf+T5vwG
-         p2WKGZJnoVn62FPNEF6KuuEkkKx/KqXyQ49PlToCGN/4P3U/SM589j3Z0J7IBTzHx2XS
-         Tgf0KUfGL1TnuEA+Up5ivpVWn/x18V7NfXiZvYjIiso7kpm/v70mxjAdakqwZLfP+sEo
-         c1/fxd1CX84JKp6egiqTq1h2b5N75x5zCMHcucwXZ0sWggmds4ZA9zvQzQ8EqwpvrEsB
-         lAGg==
-X-Gm-Message-State: AO0yUKV9vCmSdJ0es/yxSJXLaRJpQkuEJKqu3ecMMxWjvebyOC3TqIAp
-        yPMbj7msdGlIXZshoZTKbfA=
-X-Google-Smtp-Source: AK7set8rfsohKcf7wPp02rpSUpY/f0i6Yf0vmQu2AEMjQgrWYu+GIzB/oMWGqoZwV8IapTdF9GMkeQ==
-X-Received: by 2002:a05:600c:4e41:b0:3e1:feb9:5a2f with SMTP id e1-20020a05600c4e4100b003e1feb95a2fmr7846372wmq.2.1677088840397;
-        Wed, 22 Feb 2023 10:00:40 -0800 (PST)
-Received: from localhost (fwdproxy-cln-023.fbsv.net. [2a03:2880:31ff:17::face:b00c])
-        by smtp.gmail.com with ESMTPSA id 1-20020a05600c274100b003dfe549da4fsm9179448wmw.18.2023.02.22.10.00.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 22 Feb 2023 10:00:40 -0800 (PST)
-From:   Breno Leitao <leitao@debian.org>
-To:     axboe@kernel.dk, asml.silence@gmail.com, io-uring@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, gustavold@meta.com, leit@meta.com,
-        kasan-dev@googlegroups.com, Breno Leitao <leit@fb.com>
-Subject: [PATCH v2 2/2] io_uring: Add KASAN support for alloc_caches
-Date:   Wed, 22 Feb 2023 10:00:35 -0800
-Message-Id: <20230222180035.3226075-3-leitao@debian.org>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20230222180035.3226075-1-leitao@debian.org>
-References: <20230222180035.3226075-1-leitao@debian.org>
+        Wed, 22 Feb 2023 13:03:07 -0500
+Received: from fudo.makrotopia.org (fudo.makrotopia.org [IPv6:2a07:2ec0:3002::71])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDA85FF11;
+        Wed, 22 Feb 2023 10:03:04 -0800 (PST)
+Received: from local
+        by fudo.makrotopia.org with esmtpsa (TLS1.3:TLS_AES_256_GCM_SHA384:256)
+         (Exim 4.96)
+        (envelope-from <daniel@makrotopia.org>)
+        id 1pUtRz-0008DW-1e;
+        Wed, 22 Feb 2023 19:02:43 +0100
+Date:   Wed, 22 Feb 2023 18:02:40 +0000
+From:   Daniel Golle <daniel@makrotopia.org>
+To:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+Cc:     mturquette@baylibre.com, sboyd@kernel.org, matthias.bgg@gmail.com,
+        wenst@chromium.org, johnson.wang@mediatek.com,
+        miles.chen@mediatek.com, chun-jie.chen@mediatek.com,
+        fparent@baylibre.com, msp@baylibre.com, nfraprado@collabora.com,
+        rex-bc.chen@mediatek.com, zhaojh329@gmail.com,
+        sam.shih@mediatek.com, edward-jw.yang@mediatek.com,
+        yangyingliang@huawei.com, granquet@baylibre.com,
+        pablo.sun@mediatek.com, sean.wang@mediatek.com,
+        chen.zhong@mediatek.com, linux-kernel@vger.kernel.org,
+        linux-clk@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org
+Subject: Re: [PATCH v5 34/54] clk: mediatek: mt7986-eth: Migrate to common
+ probe mechanism
+Message-ID: <Y/ZYwOoHhO0328qY@makrotopia.org>
+References: <20230222092543.19187-1-angelogioacchino.delregno@collabora.com>
+ <20230222092543.19187-35-angelogioacchino.delregno@collabora.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230222092543.19187-35-angelogioacchino.delregno@collabora.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Breno Leitao <leit@fb.com>
+On Wed, Feb 22, 2023 at 10:25:23AM +0100, AngeloGioacchino Del Regno wrote:
+> Convert this driver to use the common mtk_clk_simple_probe() mechanism.
+> While at it, also remove __initconst annotations (as these structures
+> are used also at runtime).
+> 
+> Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+> Reviewed-by: Chen-Yu Tsai <wenst@chromium.org>
 
-Add support for KASAN in the alloc_caches (apoll and netmsg_cache).
-Thus, if something touches the unused caches, it will raise a KASAN
-warning/exception.
+Tested-by: Daniel Golle <daniel@makrotopia.org>
+(on BananaPi BPi-R3)
 
-It poisons the object when the object is put to the cache, and unpoisons
-it when the object is gotten or freed.
-
-Signed-off-by: Breno Leitao <leitao@debian.org>
----
- io_uring/alloc_cache.h | 11 ++++++++---
- io_uring/io_uring.c    | 14 ++++++++++++--
- io_uring/net.c         |  2 +-
- io_uring/net.h         |  4 ----
- io_uring/poll.c        |  2 +-
- 5 files changed, 22 insertions(+), 11 deletions(-)
-
-diff --git a/io_uring/alloc_cache.h b/io_uring/alloc_cache.h
-index ae61eb383cae..6c6bdde6306b 100644
---- a/io_uring/alloc_cache.h
-+++ b/io_uring/alloc_cache.h
-@@ -16,16 +16,20 @@ static inline bool io_alloc_cache_put(struct io_alloc_cache *cache,
- 	if (cache->nr_cached < IO_ALLOC_CACHE_MAX) {
- 		cache->nr_cached++;
- 		wq_stack_add_head(&entry->node, &cache->list);
-+		/* KASAN poisons object */
-+		kasan_slab_free_mempool(entry);
- 		return true;
- 	}
- 	return false;
- }
- 
--static inline struct io_cache_entry *io_alloc_cache_get(struct io_alloc_cache *cache)
-+static inline struct io_cache_entry *io_alloc_cache_get(struct io_alloc_cache *cache,
-+							size_t size)
- {
- 	if (cache->list.next) {
- 		struct io_cache_entry *entry;
- 		entry = container_of(cache->list.next, struct io_cache_entry, node);
-+		kasan_unpoison_range(entry, size);
- 		cache->list.next = cache->list.next->next;
- 		return entry;
- 	}
-@@ -40,10 +44,11 @@ static inline void io_alloc_cache_init(struct io_alloc_cache *cache)
- }
- 
- static inline void io_alloc_cache_free(struct io_alloc_cache *cache,
--					void (*free)(struct io_cache_entry *))
-+					void (*free)(struct io_cache_entry *),
-+					size_t size)
- {
- 	while (1) {
--		struct io_cache_entry *entry = io_alloc_cache_get(cache);
-+		struct io_cache_entry *entry = io_alloc_cache_get(cache, size);
- 		if (!entry)
- 			break;
- 		free(entry);
-diff --git a/io_uring/io_uring.c b/io_uring/io_uring.c
-index 80b6204769e8..01367145689b 100644
---- a/io_uring/io_uring.c
-+++ b/io_uring/io_uring.c
-@@ -2766,6 +2766,17 @@ static void io_req_caches_free(struct io_ring_ctx *ctx)
- 	mutex_unlock(&ctx->uring_lock);
- }
- 
-+static __cold void io_uring_acache_free(struct io_ring_ctx *ctx)
-+{
-+
-+	io_alloc_cache_free(&ctx->apoll_cache, io_apoll_cache_free,
-+			    sizeof(struct async_poll));
-+#ifdef CONFIG_NET
-+	io_alloc_cache_free(&ctx->netmsg_cache, io_netmsg_cache_free,
-+			    sizeof(struct io_async_msghdr));
-+#endif
-+}
-+
- static __cold void io_ring_ctx_free(struct io_ring_ctx *ctx)
- {
- 	io_sq_thread_finish(ctx);
-@@ -2781,8 +2792,7 @@ static __cold void io_ring_ctx_free(struct io_ring_ctx *ctx)
- 		__io_sqe_files_unregister(ctx);
- 	io_cqring_overflow_kill(ctx);
- 	io_eventfd_unregister(ctx);
--	io_alloc_cache_free(&ctx->apoll_cache, io_apoll_cache_free);
--	io_alloc_cache_free(&ctx->netmsg_cache, io_netmsg_cache_free);
-+	io_uring_acache_free(ctx);
- 	mutex_unlock(&ctx->uring_lock);
- 	io_destroy_buffers(ctx);
- 	if (ctx->sq_creds)
-diff --git a/io_uring/net.c b/io_uring/net.c
-index fbc34a7c2743..8dc67b23b030 100644
---- a/io_uring/net.c
-+++ b/io_uring/net.c
-@@ -139,7 +139,7 @@ static struct io_async_msghdr *io_msg_alloc_async(struct io_kiocb *req,
- 	struct io_async_msghdr *hdr;
- 
- 	if (!(issue_flags & IO_URING_F_UNLOCKED)) {
--		entry = io_alloc_cache_get(&ctx->netmsg_cache);
-+		entry = io_alloc_cache_get(&ctx->netmsg_cache, sizeof(struct io_async_msghdr));
- 		if (entry) {
- 			hdr = container_of(entry, struct io_async_msghdr, cache);
- 			hdr->free_iov = NULL;
-diff --git a/io_uring/net.h b/io_uring/net.h
-index 5ffa11bf5d2e..d8359de84996 100644
---- a/io_uring/net.h
-+++ b/io_uring/net.h
-@@ -62,8 +62,4 @@ int io_send_zc_prep(struct io_kiocb *req, const struct io_uring_sqe *sqe);
- void io_send_zc_cleanup(struct io_kiocb *req);
- 
- void io_netmsg_cache_free(struct io_cache_entry *entry);
--#else
--static inline void io_netmsg_cache_free(struct io_cache_entry *entry)
--{
--}
- #endif
-diff --git a/io_uring/poll.c b/io_uring/poll.c
-index 8339a92b4510..295d59875f00 100644
---- a/io_uring/poll.c
-+++ b/io_uring/poll.c
-@@ -661,7 +661,7 @@ static struct async_poll *io_req_alloc_apoll(struct io_kiocb *req,
- 		apoll = req->apoll;
- 		kfree(apoll->double_poll);
- 	} else if (!(issue_flags & IO_URING_F_UNLOCKED)) {
--		entry = io_alloc_cache_get(&ctx->apoll_cache);
-+		entry = io_alloc_cache_get(&ctx->apoll_cache, sizeof(struct async_poll));
- 		if (entry == NULL)
- 			goto alloc_apoll;
- 		apoll = container_of(entry, struct async_poll, cache);
--- 
-2.30.2
-
+> ---
+>  drivers/clk/mediatek/clk-mt7986-eth.c | 83 +++++++++++----------------
+>  1 file changed, 32 insertions(+), 51 deletions(-)
+> 
+> diff --git a/drivers/clk/mediatek/clk-mt7986-eth.c b/drivers/clk/mediatek/clk-mt7986-eth.c
+> index e04bc6845ea6..138ba0a47221 100644
+> --- a/drivers/clk/mediatek/clk-mt7986-eth.c
+> +++ b/drivers/clk/mediatek/clk-mt7986-eth.c
+> @@ -25,7 +25,7 @@ static const struct mtk_gate_regs sgmii0_cg_regs = {
+>  #define GATE_SGMII0(_id, _name, _parent, _shift)		\
+>  	GATE_MTK(_id, _name, _parent, &sgmii0_cg_regs, _shift, &mtk_clk_gate_ops_no_setclr_inv)
+>  
+> -static const struct mtk_gate sgmii0_clks[] __initconst = {
+> +static const struct mtk_gate sgmii0_clks[] = {
+>  	GATE_SGMII0(CLK_SGMII0_TX250M_EN, "sgmii0_tx250m_en", "top_xtal", 2),
+>  	GATE_SGMII0(CLK_SGMII0_RX250M_EN, "sgmii0_rx250m_en", "top_xtal", 3),
+>  	GATE_SGMII0(CLK_SGMII0_CDR_REF, "sgmii0_cdr_ref", "top_xtal", 4),
+> @@ -41,7 +41,7 @@ static const struct mtk_gate_regs sgmii1_cg_regs = {
+>  #define GATE_SGMII1(_id, _name, _parent, _shift)		\
+>  	GATE_MTK(_id, _name, _parent, &sgmii1_cg_regs, _shift, &mtk_clk_gate_ops_no_setclr_inv)
+>  
+> -static const struct mtk_gate sgmii1_clks[] __initconst = {
+> +static const struct mtk_gate sgmii1_clks[] = {
+>  	GATE_SGMII1(CLK_SGMII1_TX250M_EN, "sgmii1_tx250m_en", "top_xtal", 2),
+>  	GATE_SGMII1(CLK_SGMII1_RX250M_EN, "sgmii1_rx250m_en", "top_xtal", 3),
+>  	GATE_SGMII1(CLK_SGMII1_CDR_REF, "sgmii1_cdr_ref", "top_xtal", 4),
+> @@ -57,7 +57,7 @@ static const struct mtk_gate_regs eth_cg_regs = {
+>  #define GATE_ETH(_id, _name, _parent, _shift)			\
+>  	GATE_MTK(_id, _name, _parent, &eth_cg_regs, _shift, &mtk_clk_gate_ops_no_setclr_inv)
+>  
+> -static const struct mtk_gate eth_clks[] __initconst = {
+> +static const struct mtk_gate eth_clks[] = {
+>  	GATE_ETH(CLK_ETH_FE_EN, "eth_fe_en", "netsys_2x_sel", 6),
+>  	GATE_ETH(CLK_ETH_GP2_EN, "eth_gp2_en", "sgm_325m_sel", 7),
+>  	GATE_ETH(CLK_ETH_GP1_EN, "eth_gp1_en", "sgm_325m_sel", 8),
+> @@ -65,56 +65,37 @@ static const struct mtk_gate eth_clks[] __initconst = {
+>  	GATE_ETH(CLK_ETH_WOCPU0_EN, "eth_wocpu0_en", "netsys_mcu_sel", 15),
+>  };
+>  
+> -static void __init mtk_sgmiisys_0_init(struct device_node *node)
+> -{
+> -	struct clk_hw_onecell_data *clk_data;
+> -	int r;
+> -
+> -	clk_data = mtk_alloc_clk_data(ARRAY_SIZE(sgmii0_clks));
+> -
+> -	mtk_clk_register_gates(NULL, node, sgmii0_clks,
+> -			       ARRAY_SIZE(sgmii0_clks), clk_data);
+> -
+> -	r = of_clk_add_hw_provider(node, of_clk_hw_onecell_get, clk_data);
+> -	if (r)
+> -		pr_err("%s(): could not register clock provider: %d\n",
+> -		       __func__, r);
+> -}
+> -CLK_OF_DECLARE(mtk_sgmiisys_0, "mediatek,mt7986-sgmiisys_0",
+> -	       mtk_sgmiisys_0_init);
+> -
+> -static void __init mtk_sgmiisys_1_init(struct device_node *node)
+> -{
+> -	struct clk_hw_onecell_data *clk_data;
+> -	int r;
+> -
+> -	clk_data = mtk_alloc_clk_data(ARRAY_SIZE(sgmii1_clks));
+> -
+> -	mtk_clk_register_gates(NULL, node, sgmii1_clks,
+> -			       ARRAY_SIZE(sgmii1_clks), clk_data);
+> -
+> -	r = of_clk_add_hw_provider(node, of_clk_hw_onecell_get, clk_data);
+> -
+> -	if (r)
+> -		pr_err("%s(): could not register clock provider: %d\n",
+> -		       __func__, r);
+> -}
+> -CLK_OF_DECLARE(mtk_sgmiisys_1, "mediatek,mt7986-sgmiisys_1",
+> -	       mtk_sgmiisys_1_init);
+> +static const struct mtk_clk_desc eth_desc = {
+> +	.clks = eth_clks,
+> +	.num_clks = ARRAY_SIZE(eth_clks),
+> +};
+>  
+> -static void __init mtk_ethsys_init(struct device_node *node)
+> -{
+> -	struct clk_hw_onecell_data *clk_data;
+> -	int r;
+> +static const struct mtk_clk_desc sgmii0_desc = {
+> +	.clks = sgmii0_clks,
+> +	.num_clks = ARRAY_SIZE(sgmii0_clks),
+> +};
+>  
+> -	clk_data = mtk_alloc_clk_data(ARRAY_SIZE(eth_clks));
+> +static const struct mtk_clk_desc sgmii1_desc = {
+> +	.clks = sgmii1_clks,
+> +	.num_clks = ARRAY_SIZE(sgmii1_clks),
+> +};
+>  
+> -	mtk_clk_register_gates(NULL, node, eth_clks, ARRAY_SIZE(eth_clks), clk_data);
+> +static const struct of_device_id of_match_clk_mt7986_eth[] = {
+> +	{ .compatible = "mediatek,mt7986-ethsys", .data = &eth_desc },
+> +	{ .compatible = "mediatek,mt7986-sgmiisys_0", .data = &sgmii0_desc },
+> +	{ .compatible = "mediatek,mt7986-sgmiisys_1", .data = &sgmii1_desc },
+> +	{ /* sentinel */ }
+> +};
+>  
+> -	r = of_clk_add_hw_provider(node, of_clk_hw_onecell_get, clk_data);
+> +static struct platform_driver clk_mt7986_eth_drv = {
+> +	.driver = {
+> +		.name = "clk-mt7986-eth",
+> +		.of_match_table = of_match_clk_mt7986_eth,
+> +	},
+> +	.probe = mtk_clk_simple_probe,
+> +	.remove = mtk_clk_simple_remove,
+> +};
+> +module_platform_driver(clk_mt7986_eth_drv);
+>  
+> -	if (r)
+> -		pr_err("%s(): could not register clock provider: %d\n",
+> -		       __func__, r);
+> -}
+> -CLK_OF_DECLARE(mtk_ethsys, "mediatek,mt7986-ethsys", mtk_ethsys_init);
+> +MODULE_DESCRIPTION("MediaTek MT7986 Ethernet clocks driver");
+> +MODULE_LICENSE("GPL");
+> -- 
+> 2.39.2
+> 
+> 
