@@ -2,64 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D9F369FA5E
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Feb 2023 18:47:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E5AA69FA62
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Feb 2023 18:48:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231765AbjBVRrs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Feb 2023 12:47:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57626 "EHLO
+        id S231961AbjBVRse (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Feb 2023 12:48:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58810 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229504AbjBVRrq (ORCPT
+        with ESMTP id S229504AbjBVRsc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Feb 2023 12:47:46 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 143973D93C
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Feb 2023 09:47:45 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8B9E7614B1
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Feb 2023 17:47:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4F193C433D2;
-        Wed, 22 Feb 2023 17:47:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1677088064;
-        bh=m40C9QeJ6/wlTN5ZtUc+UTmZXUkrUn5xfLFQsUdChJM=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=HowCyPqms5/CcljG7F11Mf1oVd4SeVDbyqZgcsk6vHWlyPJSUhzJbiS2i39Q8E4Zv
-         GOTpDCI//2q71f8ip8a37EUsYqZ7RgomdYe3zctvtDndbVzdtl3LWic9ZSiLzs85C8
-         6L57vJOZwjRQA7lO5nSfNAtKNnBGMNcPWFZPlNLjbHG9F++MYAdxau8frql1RYerE0
-         ZR6jtspYQr/6aStURtsTyhO1YQL/VYsj4+az0SmuRtl13CAIVNRfnTACR9sl1K7pX5
-         n4wLQDn2sv/L5z8oQAlkD0hMT640BHmxPdKBUaXL4zMYXPatmgD4yUwMPaOsX+eDvl
-         jJPgiDFSk2Wrw==
-Date:   Wed, 22 Feb 2023 17:47:37 +0000
-From:   Mark Brown <broonie@kernel.org>
-To:     Saravana Kannan <saravanak@google.com>
-Cc:     Liam Girdwood <lgirdwood@gmail.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Tony Lindgren <tony@atomide.com>,
-        Doug Anderson <dianders@chromium.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Luca Weiss <luca.weiss@fairphone.com>, kernel-team@android.com,
-        linux-kernel@vger.kernel.org
-Subject: Re: [RFC v1 2/4] regulator: core: Add sysfs class backward
- compatibility
-Message-ID: <Y/ZVOfaApSo/Dslf@sirena.org.uk>
-References: <20230218083252.2044423-1-saravanak@google.com>
- <20230218083252.2044423-3-saravanak@google.com>
+        Wed, 22 Feb 2023 12:48:32 -0500
+Received: from mail-io1-xd36.google.com (mail-io1-xd36.google.com [IPv6:2607:f8b0:4864:20::d36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 882041B30B
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Feb 2023 09:48:31 -0800 (PST)
+Received: by mail-io1-xd36.google.com with SMTP id f9so4326468iox.2
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Feb 2023 09:48:31 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernel-dk.20210112.gappssmtp.com; s=20210112; t=1677088111;
+        h=content-transfer-encoding:mime-version:date:message-id:subject
+         :references:in-reply-to:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=MimG2CC7XI+xnSukS469ABX7/F4IMdTNNw9CfOi9O/Y=;
+        b=0tmeqmX8+Wg5duoe+V4dUFkiq3S+jxhY4ftJOaEHzGhztyRfum83E5MwabaFYNraKJ
+         TEFdLdtVmtvj1WdJX6+35hJH+hY6js2CMlpNvBnzHhM6lYmCGF97PPl/v0dMk63394oZ
+         LTDAHBkmcZj8iNe8HlhfO6sP7ZBUdkXZkc0LjL5D3/ltIqkFsex7mdAW25bNdcJdVpm5
+         3DAqYKyEU+ZFBSLHlhGfzf0vv67iY3QPLtvEh/JhQ6IfwZVtEP5BlGJY9Qr6zjj9gV2W
+         bBQQ5l14kii+bcGvOVRtN/Pi7sq32RcyWltVffdguxKzk6P7kNl7gRS8jaxHHL/r/rDU
+         zJHA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1677088111;
+        h=content-transfer-encoding:mime-version:date:message-id:subject
+         :references:in-reply-to:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=MimG2CC7XI+xnSukS469ABX7/F4IMdTNNw9CfOi9O/Y=;
+        b=yTS3T7oM7ToAt1tn97OO1MvGK6P6rnuYbuaJTLeUl6tqQ6DNFeVNUBKLNZXVcYRQWn
+         57tga1S2tYbhOjFWtExm3/X6sc7ITI5t46OZd76+6JF1PUcxmo0sLDzhy/mmYsmqh3FO
+         +K6W/jkBrNs7GitX8HXAX8xPfieyCo8J258AwOtfXLw/bxzqDLYeBM4iAUM4nRUxuX6S
+         DuAQYmm2kDcXvUrV23+JyuPd2cydDfCxYkfFka0SNKsrGohnJzkStYnp0K/Q7yDCOViM
+         GKnP/q6Dp2YDztmtCCO3oa5flUs1ADSKuR0FBg+gyObWvmP0baR+/iH7nyqjgKUQm3iq
+         6xOg==
+X-Gm-Message-State: AO0yUKUpdNpSdBO3uZJ2FTvLBfzJs4ndvQMFxIXzdU4c8VvNGXvHnbD9
+        iTjRd09sgPHQ7RhKM/8peLcoLw==
+X-Google-Smtp-Source: AK7set/e1YM/12VxyvRllTM9Khpqhg6/GmIeUcMUXgcNxYgKMR5t7TjblPLA8FnTUGI9DwIekhWwvg==
+X-Received: by 2002:a6b:8d52:0:b0:72c:f57a:a37b with SMTP id p79-20020a6b8d52000000b0072cf57aa37bmr4419126iod.2.1677088110861;
+        Wed, 22 Feb 2023 09:48:30 -0800 (PST)
+Received: from [127.0.0.1] ([96.43.243.2])
+        by smtp.gmail.com with ESMTPSA id x8-20020a02ac88000000b003e44371702fsm508426jan.67.2023.02.22.09.48.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 22 Feb 2023 09:48:30 -0800 (PST)
+From:   Jens Axboe <axboe@kernel.dk>
+To:     io-uring@vger.kernel.org, Pavel Begunkov <asml.silence@gmail.com>
+Cc:     linux-kernel@vger.kernel.org
+In-Reply-To: <cover.1677041932.git.asml.silence@gmail.com>
+References: <cover.1677041932.git.asml.silence@gmail.com>
+Subject: Re: (subset) [PATCH for-next 0/4] io_uring: registered huge buffer
+ optimisations
+Message-Id: <167708810999.98463.17204153980405354169.b4-ty@kernel.dk>
+Date:   Wed, 22 Feb 2023 10:48:29 -0700
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="/MITqH4ok7qcVPFa"
-Content-Disposition: inline
-In-Reply-To: <20230218083252.2044423-3-saravanak@google.com>
-X-Cookie: My LESLIE GORE record is BROKEN ...
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Mailer: b4 0.13-dev-ada30
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -67,32 +73,29 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
---/MITqH4ok7qcVPFa
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+On Wed, 22 Feb 2023 14:36:47 +0000, Pavel Begunkov wrote:
+> Improve support for registered buffers consisting of huge pages by
+> keeping them as a single element bvec instead of chunking them into
+> 4K pages. It improves performance quite a bit cutting CPU cycles on
+> dma-mapping and promoting a more efficient use of hardware.
+> 
+> With a custom fio/t/io_uring 64K reads benchmark with multiple Optanes
+> I've got 671 -> 736 KIOPS improvement (~10%).
+> 
+> [...]
 
-On Sat, Feb 18, 2023 at 12:32:49AM -0800, Saravana Kannan wrote:
-> A regulator device's sysfs directory used to be created under
-> /sys/class/regulator when it is added to a class. Since the device is
-> now moved to be under a bus, add symlinks from /sys/class/regulator to
-> the real device sysfs directory.
+Applied, thanks!
 
-Shouldn't this be squashed into the previous patch given that it creates
-a bisection issue?
+[1/4] io_uring/rsrc: disallow multi-source reg buffers
+      commit: edd478269640b360c6f301f2baa04abdda563ef3
+[3/4] io_uring/rsrc: optimise single entry advance
+      commit: b000ae0ec2d709046ac1a3c5722fea417f8a067e
+[4/4] io_uring/rsrc: optimise registered huge pages
+      commit: 57bebf807e2abcf87d96b9de1266104ee2d8fc2f
 
---/MITqH4ok7qcVPFa
-Content-Type: application/pgp-signature; name="signature.asc"
+Best regards,
+-- 
+Jens Axboe
 
------BEGIN PGP SIGNATURE-----
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmP2VTkACgkQJNaLcl1U
-h9BjDAf9EO1OIkNrmQQBuy0lDw2uI1NVp+pjGzFNBDHwHUYX6FC/cFnbsLWG7oTR
-9WQaCzAprfPbaOimbJXsFvWIBSJXDi5zecuNPJSczEKj0T4jHvxTff2WrinupBe9
-mN0BrUS3t02Xnvu+0zJYja7+qfRU6gWYbIbkIiboGFQrCHH1nOG+K5Y5KklF7sfc
-lqWaV5Wb8aRtat0nlnWCKowoP+xefkEZsdX1EyzhEMw6wSh2bTcrPpiFDC22EbZ7
-EkhOXBxNxWTJHopRvnhjnjmks9kCpH7yTos/XQGiapWgNX5I3rW+3swzAls9A4AY
-oByoqg+f64vkl9nRX5axA7fji/+HIA==
-=FCLb
------END PGP SIGNATURE-----
 
---/MITqH4ok7qcVPFa--
