@@ -2,109 +2,203 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D45F69F24B
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Feb 2023 10:56:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1350269F250
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Feb 2023 10:57:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232413AbjBVJ4s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Feb 2023 04:56:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58502 "EHLO
+        id S231960AbjBVJ5o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Feb 2023 04:57:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58184 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232282AbjBVJ4a (ORCPT
+        with ESMTP id S232321AbjBVJ5Z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Feb 2023 04:56:30 -0500
-Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3849838B59
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Feb 2023 01:55:39 -0800 (PST)
-Received: from pps.filterd (m0098420.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 31M9fULa030027;
-        Wed, 22 Feb 2023 09:55:30 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
- subject : message-id : references : mime-version : content-type :
- in-reply-to; s=pp1; bh=5OGqgH80gHCoiKIEMEs48G9KwUl+uQ2pzTd5TIgNoa0=;
- b=tCAFhD21QqCmf2BRQOfu5WYlRveq/TWKB1eyT1hvHJnOIJI7doSxbi7EIgHAHZC0ZAuX
- WusSHHWat6PIrjsfGGHgBXOXEJPtqSLq8cyx5iV8jmtBJwbMcE+9UqI+JqwEA1MSDze0
- 1F/LvSZQ+WF4sc4nImgIxsqxy1wMXuDg4PfE0AJkyoqQCSlD0eD5U9mbeYb06irGs1UM
- u8MdCxIV0Bmoo4mK9A6CPD4KiD7ubJmXlGD+peKO5tPC8JtvtO00ArhfN3G/57rO3S76
- ZfwZsurOsBNuFlcm5HFbz1iG0rf/H3PpthLj2IOiuiOQwW/83SefqCkKwJLmGqQ4JfKn Lg== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3nwgmtgbeg-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 22 Feb 2023 09:55:29 +0000
-Received: from m0098420.ppops.net (m0098420.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 31M9fiBs030573;
-        Wed, 22 Feb 2023 09:55:29 GMT
-Received: from ppma02fra.de.ibm.com (47.49.7a9f.ip4.static.sl-reverse.com [159.122.73.71])
-        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3nwgmtgbdq-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 22 Feb 2023 09:55:29 +0000
-Received: from pps.filterd (ppma02fra.de.ibm.com [127.0.0.1])
-        by ppma02fra.de.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 31LDGv5v001655;
-        Wed, 22 Feb 2023 09:55:27 GMT
-Received: from smtprelay05.fra02v.mail.ibm.com ([9.218.2.225])
-        by ppma02fra.de.ibm.com (PPS) with ESMTPS id 3ntpa63w71-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 22 Feb 2023 09:55:27 +0000
-Received: from smtpav01.fra02v.mail.ibm.com (smtpav01.fra02v.mail.ibm.com [10.20.54.100])
-        by smtprelay05.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 31M9tOtj32309688
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 22 Feb 2023 09:55:25 GMT
-Received: from smtpav01.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id D0F442004D;
-        Wed, 22 Feb 2023 09:55:24 +0000 (GMT)
-Received: from smtpav01.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 3DD9520040;
-        Wed, 22 Feb 2023 09:55:22 +0000 (GMT)
-Received: from li-a450e7cc-27df-11b2-a85c-b5a9ac31e8ef.ibm.com (unknown [9.43.123.148])
-        by smtpav01.fra02v.mail.ibm.com (Postfix) with ESMTPS;
-        Wed, 22 Feb 2023 09:55:21 +0000 (GMT)
-Date:   Wed, 22 Feb 2023 15:25:18 +0530
-From:   Kautuk Consul <kconsul@linux.vnet.ibm.com>
-To:     Christophe Leroy <christophe.leroy@csgroup.eu>
-Cc:     Michael Ellerman <mpe@ellerman.id.au>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Rohan McLure <rmclure@linux.ibm.com>,
-        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v2] arch/powerpc/include/asm/barrier.h: redefine rmb and
- wmb to lwsync
-Message-ID: <Y/XmhjbbD58wi49B@li-a450e7cc-27df-11b2-a85c-b5a9ac31e8ef.ibm.com>
-References: <20230222090344.189270-1-kconsul@linux.vnet.ibm.com>
- <c4dcf969-0836-cc78-63d9-db83b9ebfa1d@csgroup.eu>
- <Y/XkjobvDPFErM7J@li-a450e7cc-27df-11b2-a85c-b5a9ac31e8ef.ibm.com>
- <2cf06ae7-b3cb-8d17-afef-df1834a84dce@csgroup.eu>
+        Wed, 22 Feb 2023 04:57:25 -0500
+Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 850EE30E3
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Feb 2023 01:57:06 -0800 (PST)
+Received: by mail-lf1-x12d.google.com with SMTP id k14so8279324lfj.7
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Feb 2023 01:57:06 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:message-id:subject:cc:to:from
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=kuN6LRtkGhbHCZ4da3565uxXphJdjdeuFluVUGowqGg=;
+        b=WzSI+KiBBC3jAwxezARla8d2Qgyg2/BCu7x2e1gD+5Jt4tRGT+idGqXhy0My7enpiR
+         Ua1cAPdIZnzSId9ICavmEXeK8iFOw3DGaqW4OYkO7MDswSvgFUbxSV5RyQZBUp+NhAQb
+         H8vdQ/F9CEAuJezxVXz04ov3TF2viRO4torx1qvHDQE0WJIRISPv+eh7cd1EN73lZA3n
+         JsKEcGIsy4s/paQ5UYsH224lxsmc4QZADdOn9R7ZeTkiyYyiKRlo4rgXxuxUHS8TEYO9
+         JGnAYqpnNnEwP51sp0CqYMxuLFILsepb4PCkI85v0dQmphKzAZ5kbMXyycVq4F1ixaVT
+         5TAQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=mime-version:references:in-reply-to:message-id:subject:cc:to:from
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=kuN6LRtkGhbHCZ4da3565uxXphJdjdeuFluVUGowqGg=;
+        b=6vxbfXi42WyNdYtBKg51pMPE98peNxeiNv+kYap1adbe/lI8X7cuPuwc9EE2w577Z7
+         RMD1acPdYe2CGfrG7zsMy8ma04WwBMP8cl7NEC4GyvsgRiWm8uW5MCMxeFiyFBJtXUNT
+         C9C7Q+LNmoKid0iymE6Id9l8vxOF0cNH1OJQHKwjvCHly8QbPXnPljD7+a4Da8LFy1s0
+         kqoNaArsuwLTkeFmRBw0FSLmh3kGwHbIFcxBwUU4EHTucaa9winO11GeKI34BCOpytLr
+         2FMxRAHnfO/paYjYKjxTXKO5XrWxZ3Hj1EH0OAENulTNGmvCOG4bD8GD6l4gmjZtqhLG
+         Vwcg==
+X-Gm-Message-State: AO0yUKUuXXtmErWj8VqcEfN02+mASaOsvAQ8/Eam6kicz8yjGp777bVJ
+        mm76Bv0fWBjwYkiNVGPs+H4=
+X-Google-Smtp-Source: AK7set9YnqmGQK8ML+0jSk2KZBE93SkmbSxyMIEtQf8JQcY7ljpNvNJihBoD9Rmdd2N6ye0t55trEg==
+X-Received: by 2002:ac2:491d:0:b0:4c0:2ddc:4559 with SMTP id n29-20020ac2491d000000b004c02ddc4559mr2677307lfi.69.1677059824617;
+        Wed, 22 Feb 2023 01:57:04 -0800 (PST)
+Received: from eldfell ([194.136.85.206])
+        by smtp.gmail.com with ESMTPSA id b14-20020ac25e8e000000b004cb1e2f8f4dsm292734lfq.152.2023.02.22.01.57.03
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 22 Feb 2023 01:57:04 -0800 (PST)
+Date:   Wed, 22 Feb 2023 11:57:00 +0200
+From:   Pekka Paalanen <ppaalanen@gmail.com>
+To:     Rob Clark <robdclark@gmail.com>
+Cc:     Ville =?UTF-8?B?U3lyasOkbMOk?= <ville.syrjala@linux.intel.com>,
+        Rob Clark <robdclark@chromium.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Tvrtko Ursulin <tvrtko.ursulin@intel.com>,
+        Christian =?UTF-8?B?S8O2bmln?= <ckoenig.leichtzumerken@gmail.com>,
+        Michel =?UTF-8?B?RMOkbnplcg==?= <michel@daenzer.net>,
+        open list <linux-kernel@vger.kernel.org>,
+        dri-devel@lists.freedesktop.org,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        freedreno@lists.freedesktop.org
+Subject: Re: [PATCH v4 10/14] drm/vblank: Add helper to get next vblank time
+Message-ID: <20230222115700.138d824c@eldfell>
+In-Reply-To: <CAF6AEGumfEeGQQaEoEm4hzJajCOBBTrWxPQ9MTh7jt-Mov2FEQ@mail.gmail.com>
+References: <20230218211608.1630586-1-robdclark@gmail.com>
+        <20230218211608.1630586-11-robdclark@gmail.com>
+        <20230220110820.595cfa37@eldfell>
+        <CAF6AEGuo-vmW4Va9=RH+kH9KgNvR2vzjJ8meO-oty56xjDhjgg@mail.gmail.com>
+        <20230221104551.60d44d1c@eldfell>
+        <Y/TAr64SpxO712RB@intel.com>
+        <CAF6AEGumfEeGQQaEoEm4hzJajCOBBTrWxPQ9MTh7jt-Mov2FEQ@mail.gmail.com>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <2cf06ae7-b3cb-8d17-afef-df1834a84dce@csgroup.eu>
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: wJAxgxaPMl-NbaeYu--xRpk17MQ_HNmI
-X-Proofpoint-ORIG-GUID: 6ZqWpA3jyRnJp-cXIQfdhfp2O2NTuThU
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.170.22
- definitions=2023-02-22_04,2023-02-20_02,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=878
- priorityscore=1501 mlxscore=0 clxscore=1015 malwarescore=0 spamscore=0
- phishscore=0 adultscore=0 impostorscore=0 bulkscore=0 suspectscore=0
- lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2302220083
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/M7W=iwvhn=7CJcrxtPxEHVQ";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> >> I'd have preferred with 'asm volatile' though.
-> > Sorry about that! That wasn't the intent of this patch.
-> > Probably another patch series should change this manner of #defining
-> > assembly.
-> 
-> Why adding new line wrong then have to have another patch to make them 
-> right ?
-> 
-> When you build a new house in an old village, you first build your house 
-> with old materials and then you replace everything with new material ?
-Sorry Christophe. I will take care next time to adhere to new
-conventions.
+--Sig_/M7W=iwvhn=7CJcrxtPxEHVQ
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+
+On Tue, 21 Feb 2023 09:50:20 -0800
+Rob Clark <robdclark@gmail.com> wrote:
+
+> On Tue, Feb 21, 2023 at 5:01 AM Ville Syrj=C3=A4l=C3=A4
+> <ville.syrjala@linux.intel.com> wrote:
+> >
+> > On Tue, Feb 21, 2023 at 10:45:51AM +0200, Pekka Paalanen wrote: =20
+> > > On Mon, 20 Feb 2023 07:55:41 -0800
+> > > Rob Clark <robdclark@gmail.com> wrote:
+> > > =20
+> > > > On Mon, Feb 20, 2023 at 1:08 AM Pekka Paalanen <ppaalanen@gmail.com=
+> wrote: =20
+> > > > >
+> > > > > On Sat, 18 Feb 2023 13:15:53 -0800
+> > > > > Rob Clark <robdclark@gmail.com> wrote:
+> > > > > =20
+> > > > > > From: Rob Clark <robdclark@chromium.org>
+> > > > > >
+> > > > > > Will be used in the next commit to set a deadline on fences tha=
+t an
+> > > > > > atomic update is waiting on.
+> > > > > >
+> > > > > > Signed-off-by: Rob Clark <robdclark@chromium.org>
+> > > > > > ---
+> > > > > >  drivers/gpu/drm/drm_vblank.c | 32 ++++++++++++++++++++++++++++=
+++++
+> > > > > >  include/drm/drm_vblank.h     |  1 +
+> > > > > >  2 files changed, 33 insertions(+)
+> > > > > >
+> > > > > > diff --git a/drivers/gpu/drm/drm_vblank.c b/drivers/gpu/drm/drm=
+_vblank.c
+> > > > > > index 2ff31717a3de..caf25ebb34c5 100644
+> > > > > > --- a/drivers/gpu/drm/drm_vblank.c
+> > > > > > +++ b/drivers/gpu/drm/drm_vblank.c
+> > > > > > @@ -980,6 +980,38 @@ u64 drm_crtc_vblank_count_and_time(struct =
+drm_crtc *crtc,
+> > > > > >  }
+> > > > > >  EXPORT_SYMBOL(drm_crtc_vblank_count_and_time);
+> > > > > >
+> > > > > > +/**
+> > > > > > + * drm_crtc_next_vblank_time - calculate the time of the next =
+vblank
+> > > > > > + * @crtc: the crtc for which to calculate next vblank time
+> > > > > > + * @vblanktime: pointer to time to receive the next vblank tim=
+estamp.
+> > > > > > + *
+> > > > > > + * Calculate the expected time of the next vblank based on tim=
+e of previous
+> > > > > > + * vblank and frame duration =20
+> > > > >
+> > > > > Hi,
+> > > > >
+> > > > > for VRR this targets the highest frame rate possible for the curr=
+ent
+> > > > > VRR mode, right?
+> > > > > =20
+> > > >
+> > > > It is based on vblank->framedur_ns which is in turn based on
+> > > > mode->crtc_clock.  Presumably for VRR that ends up being a maximum?=
+ =20
+> > >
+> > > I don't know. :-) =20
+> >
+> > At least for i915 this will give you the maximum frame
+> > duration. =20
+>=20
+> I suppose one could argue that maximum frame duration is the actual
+> deadline.  Anything less is just moar fps, but not going to involve
+> stalling until vblank N+1, AFAIU
+>=20
+> > Also this does not calculate the the start of vblank, it
+> > calculates the start of active video. =20
+>=20
+> Probably something like end of previous frame's video..  might not be
+> _exactly_ correct (because some buffering involved), but OTOH on the
+> GPU side, I expect the driver to set a timer for a few ms or so before
+> the deadline.  So there is some wiggle room.
+
+The vblank timestamp is defined to be the time of the first active
+pixel of the frame in the video signal. At least that's the one that
+UAPI carries (when not tearing?). It is not the start of vblank period.
+
+With VRR, the front porch before the first active pixel can be multiple
+milliseconds. The difference between 144 Hz and 60 Hz is 9.7 ms for
+example.
+
+
+Thanks,
+pq
+
+--Sig_/M7W=iwvhn=7CJcrxtPxEHVQ
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAEBCAAdFiEEJQjwWQChkWOYOIONI1/ltBGqqqcFAmP15uwACgkQI1/ltBGq
+qqcTQQ/+JY9jIHrwOwFSVTo8dQnuLQIKytAtICMIYTksqoyp6zncsjOUCjcrwHT7
+9y+inchbzV67ojc2FwtwSIy8VhprChwqYIWPIoHuEnqLWj5KWpTj6IDx3j1bYSS+
+w5bNtoW5D3Uzqrh56wv9TatDde21d++KWQSIwsUqGIg1YGibTv6Kxq+aUqUrpOOx
+wIWQ7vOW5NW7EHd++EoSy4k5hdpOfPeO+D2ioDDAepnSxz/KCImL5/RYcSNXV3Yn
+hDrgIdV1wELvrqawBMdZMp2mg3fZlzD2j3uz3D98o4/KVqi6A9m8JdKqVlVVeBVq
+R95ExwNR1qaLT9DXISJ94bN/SzKUXWKFKp0Ne0aDYbcOE4FnKL9Ue4/XHRen2Qnk
+f9ElTe/gf837i5wcSMW2LR64x5rvXuDZacQTM3o2r79j+CgWq4DuLHMLaTqrSBKa
+OP6+m6US4OuTW3/Dfhj/kFDDKPmb1LR7lOfzTMDc/E+mmr/7zr3idL9XKboW3gqN
+eQeKLQKSPaGQvJe3QPadil2tKUuGHSZO5njCmPKkrs7IRF10GYvRtiD/qcgSC3kC
+xIeniTr8MbNlUvJAlyWr1BB+Fqo6V7du0ZbBUAAatcvjEvSNkfbjxe/h2Oycavgq
+pPTX7fqdv0T4bMdYa2pwrIUvqNM1CQyFL8h4PsjiX2nFQnJJ0sw=
+=iEiR
+-----END PGP SIGNATURE-----
+
+--Sig_/M7W=iwvhn=7CJcrxtPxEHVQ--
