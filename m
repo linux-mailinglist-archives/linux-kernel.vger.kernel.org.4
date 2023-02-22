@@ -2,142 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2071269F388
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Feb 2023 12:40:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A38769F399
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Feb 2023 12:44:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231432AbjBVLkL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Feb 2023 06:40:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59220 "EHLO
+        id S231258AbjBVLov (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Feb 2023 06:44:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35204 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231334AbjBVLkJ (ORCPT
+        with ESMTP id S231618AbjBVLor (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Feb 2023 06:40:09 -0500
-Received: from mx0b-001ae601.pphosted.com (mx0b-001ae601.pphosted.com [67.231.152.168])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AEDDA2597E
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Feb 2023 03:40:07 -0800 (PST)
-Received: from pps.filterd (m0077474.ppops.net [127.0.0.1])
-        by mx0b-001ae601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 31M5p7nS021743;
-        Wed, 22 Feb 2023 05:39:57 -0600
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cirrus.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=PODMain02222019;
- bh=8Cf3KNGkOMEhD/Ly1wRoBa9bRE0Q3kmnvH6kbXboTKg=;
- b=X/ui0Ck4b++Q9LafIpP6H6qkJllhePcPnQcJQvt0Cr+0KKmtkxj3TszkUd/6uQyis0g8
- TnJEWeDpdlSFTzkaz/TZvAu7e/19/dauPKkHiko4/emqS9KfBYYBO0F6DNCY5f6B9g0d
- aWGXQi5DlOJC6zr0ITDyndsHRS+elOz30b7n7ELvCVbbpurarxIuRccp+eyUO5Hlq8tJ
- GjlA5zFXmQagW7pPG0LZyrpUAHK0tKYZ57pa9apMSQyS0nVUUNiIwI5Jdo6i3CDVL8LI
- cMPEgDzafkJhP8sUmYzTvcMhdjDZelQ1wsb3aPT7mZOEhfLLLZp6YDTSp1cbiXIJTx7t 0A== 
-Received: from ediex01.ad.cirrus.com ([84.19.233.68])
-        by mx0b-001ae601.pphosted.com (PPS) with ESMTPS id 3nvmnqt0ar-1
+        Wed, 22 Feb 2023 06:44:47 -0500
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 051E725E34;
+        Wed, 22 Feb 2023 03:44:46 -0800 (PST)
+Received: from pps.filterd (m0279872.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 31MBEI2H011797;
+        Wed, 22 Feb 2023 11:43:59 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id; s=qcppdkim1;
+ bh=6Jb/HhgDkTHs53HEkoSPSvpG8IYEg7M1HjhELiPXmTU=;
+ b=cx+ntzwnNGXtaZmwHvYrvuFGr7YyPkdxZEXeqt0KNuhBs6F5pIoHxCZkddy7jb+Rljsi
+ kj6Kb8WJzAUKnKd6GAjFpvp4lbHYlT0l6FiWPq5NugaoJDukob8ElI5HiTRdSyVwEvbA
+ nmN3u41AB86djjQweJ7d+/c/iLu+2WAydbfT5KeOTJRnlJ+itKiExnZIYNbByG0pwPue
+ MybDXPJ7q5D8VJNILzL4UAYA2VuOanK5UlzsNssL9JE0XPOE9JPHsr7Qcp8dJhKW2VZ1
+ pwXt7vPRjdMOy98NWjjWLi/HynvOWKh4GEV4iYSAq4wOwdLN9H2eGr0E6VTVkmRnRu1P SA== 
+Received: from apblrppmta02.qualcomm.com (blr-bdr-fw-01_GlobalNAT_AllZones-Outside.qualcomm.com [103.229.18.19])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3nvn8rc94x-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 22 Feb 2023 05:39:57 -0600
-Received: from ediex01.ad.cirrus.com (198.61.84.80) by ediex01.ad.cirrus.com
- (198.61.84.80) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.21; Wed, 22 Feb
- 2023 05:39:55 -0600
-Received: from ediswmail.ad.cirrus.com (198.61.86.93) by ediex01.ad.cirrus.com
- (198.61.84.80) with Microsoft SMTP Server id 15.2.1118.21 via Frontend
- Transport; Wed, 22 Feb 2023 05:39:55 -0600
-Received: from [198.90.251.127] (edi-sw-dsktp-006.ad.cirrus.com [198.90.251.127])
-        by ediswmail.ad.cirrus.com (Postfix) with ESMTP id A75D6475;
-        Wed, 22 Feb 2023 11:39:55 +0000 (UTC)
-Message-ID: <3d4f89e8-ce41-f4eb-8e1b-b05c962bcea7@opensource.cirrus.com>
-Date:   Wed, 22 Feb 2023 11:39:55 +0000
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: Re: [PATCH 09/10] ASoC: Intel: sof_sdw: Add support for Cirrus Logic
- CS35L56
-Content-Language: en-US
-To:     Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
-        <broonie@kernel.org>, <cezary.rojewski@intel.com>,
-        <peter.ujfalusi@linux.intel.com>,
-        <yung-chuan.liao@linux.intel.com>, <kai.vehmanen@linux.intel.com>
-CC:     <alsa-devel@alsa-project.org>, <linux-kernel@vger.kernel.org>,
-        <patches@opensource.cirrus.com>
-References: <20230217161410.915202-1-rf@opensource.cirrus.com>
- <20230217161410.915202-10-rf@opensource.cirrus.com>
- <dfebabad-4777-b5e3-8f58-1301faf97f7e@linux.intel.com>
- <f3d70939-49e5-1da2-c104-11b370888d7c@opensource.cirrus.com>
- <273e1484-0285-29b6-4852-9f5bc2d24e2a@linux.intel.com>
-From:   Richard Fitzgerald <rf@opensource.cirrus.com>
-In-Reply-To: <273e1484-0285-29b6-4852-9f5bc2d24e2a@linux.intel.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Proofpoint-ORIG-GUID: oaYPCD2qwVlbi2weeaKuAL2yc7UKaOs8
-X-Proofpoint-GUID: oaYPCD2qwVlbi2weeaKuAL2yc7UKaOs8
-X-Proofpoint-Spam-Reason: safe
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Wed, 22 Feb 2023 11:43:58 +0000
+Received: from pps.filterd (APBLRPPMTA02.qualcomm.com [127.0.0.1])
+        by APBLRPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTP id 31MBhtDO018205;
+        Wed, 22 Feb 2023 11:43:55 GMT
+Received: from pps.reinject (localhost [127.0.0.1])
+        by APBLRPPMTA02.qualcomm.com (PPS) with ESMTP id 3ntqrkwas7-1;
+        Wed, 22 Feb 2023 11:43:55 +0000
+Received: from APBLRPPMTA02.qualcomm.com (APBLRPPMTA02.qualcomm.com [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 31MBhsTG018200;
+        Wed, 22 Feb 2023 11:43:54 GMT
+Received: from hu-sgudaval-hyd.qualcomm.com (hu-vpernami-hyd.qualcomm.com [10.213.107.240])
+        by APBLRPPMTA02.qualcomm.com (PPS) with ESMTP id 31MBhsQp018199;
+        Wed, 22 Feb 2023 11:43:54 +0000
+Received: by hu-sgudaval-hyd.qualcomm.com (Postfix, from userid 2370923)
+        id DB3541570; Wed, 22 Feb 2023 17:13:53 +0530 (+0530)
+From:   Vivek Pernamitta <quic_vpernami@quicinc.com>
+To:     mhi@lists.linux.dev
+Cc:     quic_qianyu@quicinc.com, manivannan.sadhasivam@linaro.org,
+        quic_vbadigan@quicinc.com, quic_krichai@quicinc.com,
+        quic_skananth@quicinc.com,
+        Vivek Pernamitta <quic_vpernami@quicinc.com>,
+        Manivannan Sadhasivam <mani@kernel.org>,
+        Alex Elder <elder@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Hemant Kumar <hemantk@codeaurora.org>,
+        Jeffrey Hugo <quic_jhugo@quicinc.com>,
+        Paul Davey <paul.davey@alliedtelesis.co.nz>,
+        linux-arm-msm@vger.kernel.org (open list:MHI BUS),
+        linux-kernel@vger.kernel.org (open list)
+Subject: [PATCH v4] bus: mhi: host: Avoid ringing EV DB if there is no elements to process
+Date:   Wed, 22 Feb 2023 17:13:49 +0530
+Message-Id: <1677066231-14931-1-git-send-email-quic_vpernami@quicinc.com>
+X-Mailer: git-send-email 2.7.4
+X-QCInternal: smtphost
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: tWF58_1seZiuV5KdiCYtrfrZ7Niq6o7B
+X-Proofpoint-ORIG-GUID: tWF58_1seZiuV5KdiCYtrfrZ7Niq6o7B
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.170.22
+ definitions=2023-02-22_05,2023-02-22_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 phishscore=0
+ mlxlogscore=696 bulkscore=0 adultscore=0 mlxscore=0 clxscore=1015
+ impostorscore=0 spamscore=0 priorityscore=1501 lowpriorityscore=0
+ malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2302220103
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_NONE,
+        SPF_NONE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 21/02/2023 18:03, Pierre-Louis Bossart wrote:
-> 
->>>> +                      card->components);
->>>> +    if (!card->components)
->>>> +        return -ENOMEM;
->>>> +
->>>> +    ret = snd_soc_dapm_new_controls(&card->dapm,
->>>> +                    cs35l56_sof_widgets,
->>>> ARRAY_SIZE(cs35l56_sof_widgets));
->>>> +    if (ret) {
->>>> +        dev_err(card->dev, "Widgets add failed: %d\n", ret);
->>>> +        return ret;
->>>> +    }
->>>> +
->>>> +    ret = snd_soc_dapm_add_routes(&card->dapm, cs35l56_sof_map, count);
->>>> +    if (ret) {
->>>> +        dev_err(card->dev, "Map add %d failed: %d\n", count, ret);
->>>> +        return ret;
->>>> +    }
->>>> +
->>>> +    /* Enable one feedback TX per amp on different slots */
->>>> +    for_each_rtd_codec_dais(rtd, i, codec_dai) {
->>>> +        ret = snd_soc_dai_set_tdm_slot(codec_dai, 0x3, 1 << i, 4, 16);
->>>
->>> TDM slots? Not getting how this would work with SoundWire?
->>>
->>
->> Strictly speaking Soundwire is TDM (the frame time is divided up into
->> slots for each sample...).
->>
->> The problem is if you have N amps on the dailink all feeding back audio
->> on the same bus. Their DP slots are all programmed to the same positions
->> in the frame, same as for the playback. So you have 4 amps all trying to
->> send 6 audio channels in the same positions in the frame and you'll just
->> get a ton of bus clash interrupts.
->>
->> So we use the set_tdm_slot() like we do with I2S TDM to set which slots
->> are active for each amp.
->>
->> I can't see that there's any obvious "generic" way that the manager code
->> can automatically figure out how many channels to enable on each amp and
->> what order to map them, so we do it here. Just as with I2S TDM - you
->> have many slots and many codecs but the machine driver has to tell it
->> how to map those.
-> 
-> IIRC Bard did the same thing recently, and the order of the feedback
-> channels is really defined by the order in which the peripheral devices
-> are added in the dailink. See
-> https://github.com/thesofproject/linux/pull/4108
-> 
+Avoid ringing Event DB if there is no elements to process.
+As mhi_poll function can be called by mhi client drivers
+which will call process_event, which will ring DB even if
+there no ring elements to process.
 
-I don't really see how it is determining how to split the channels.
-I see there is a discussion about that but I didn't see any explanation
-that I could understand.
+Signed-off-by: Vivek Pernamitta <quic_vpernami@quicinc.com>
 
-Also that only seems to have been done for IPCv4. What if my system
-uses IPCv3 ?
+---
+changes since v3:
+	- Updating commit text for multiple versions of patches.
+changes since v2:
+	- Updated comments in code.
+changes since v1:
+	- Add an check to avoid ringing EV DB in mhi_process_ctrl_ev_ring().
+---
+ drivers/bus/mhi/host/main.c | 8 ++++++--
+ 1 file changed, 6 insertions(+), 2 deletions(-)
 
-Anyway, I'll drop the machine driver patches for now until the IPC code
-is stable and consistent behavior for v3 and v4.
+diff --git a/drivers/bus/mhi/host/main.c b/drivers/bus/mhi/host/main.c
+index df0fbfe..1bbdb75 100644
+--- a/drivers/bus/mhi/host/main.c
++++ b/drivers/bus/mhi/host/main.c
+@@ -961,7 +961,9 @@ int mhi_process_ctrl_ev_ring(struct mhi_controller *mhi_cntrl,
+ 	}
+ 
+ 	read_lock_bh(&mhi_cntrl->pm_lock);
+-	if (likely(MHI_DB_ACCESS_VALID(mhi_cntrl)))
++
++	/* Ring EV DB only if there is any pending element to process */
++	if (likely(MHI_DB_ACCESS_VALID(mhi_cntrl)) && count)
+ 		mhi_ring_er_db(mhi_event);
+ 	read_unlock_bh(&mhi_cntrl->pm_lock);
+ 
+@@ -1031,7 +1033,9 @@ int mhi_process_data_event_ring(struct mhi_controller *mhi_cntrl,
+ 		count++;
+ 	}
+ 	read_lock_bh(&mhi_cntrl->pm_lock);
+-	if (likely(MHI_DB_ACCESS_VALID(mhi_cntrl)))
++
++	/* Ring EV DB only if there is any pending element to process */
++	if (likely(MHI_DB_ACCESS_VALID(mhi_cntrl)) && count)
+ 		mhi_ring_er_db(mhi_event);
+ 	read_unlock_bh(&mhi_cntrl->pm_lock);
+ 
+-- 
+2.7.4
 
-> There's also another open related to the number of channels, we need to
-> patch what the CPU DAI can handle, see
-> https://github.com/thesofproject/linux/pull/4136 or
-> https://github.com/thesofproject/linux/pull/4134
