@@ -2,88 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E50C469F5BE
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Feb 2023 14:36:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3AE0C69F5C2
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Feb 2023 14:37:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231621AbjBVNgf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Feb 2023 08:36:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56260 "EHLO
+        id S231636AbjBVNhV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Feb 2023 08:37:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56832 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229901AbjBVNge (ORCPT
+        with ESMTP id S229901AbjBVNhT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Feb 2023 08:36:34 -0500
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D379B3ABE
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Feb 2023 05:36:32 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=6Qd62Z9xyLIVfwSbP4xLMelOZ06oP0/w0wP8oeqN4vA=; b=DzcAM3/U49ghmdaUAF6wI6ys7j
-        dbCU2CMrJKpnhJI8aEGS5mMFMuM/MNzzX+GTDsDLfR3/ipkC7tQ+3RVERoZw+Is/yfBn3mSei3qUr
-        kDp2ZlT3C8Hn90a8WaYwIsLkPIOfnAnmku41ifoMHWhMkNoY2Ff1DVHhKhqn+7GCMapVmKH9qPspK
-        ytIz2gz9HWeZMstj9oekVlyjeWLOuSacN5aCQ7K5MItxKPocAJNHjFFytRrq12sebrXqlyGaPXqga
-        pFBB90HwABkb/ort4vWR/nFaDDLf58u6Iv4G11NmvNf/VojY7gvs98eo/ROwt1cRQ7X6YeAjxAT11
-        ns1Kf6Jg==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
-        id 1pUpI8-00CYLy-12;
-        Wed, 22 Feb 2023 13:36:16 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 60D16300033;
-        Wed, 22 Feb 2023 14:36:14 +0100 (CET)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 2F8E220DD8093; Wed, 22 Feb 2023 14:36:14 +0100 (CET)
-Date:   Wed, 22 Feb 2023 14:36:14 +0100
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-Cc:     linux-kernel@vger.kernel.org, Ben Segall <bsegall@google.com>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Mel Gorman <mgorman@suse.de>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Valentin Schneider <vschneid@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>
-Subject: Re: [PATCH] sched: Consider task_struct::saved_state in
- wait_task_inactive().
-Message-ID: <Y/YaTojZ1stY2fAO@hirez.programming.kicks-ass.net>
-References: <Y++UzubyNavLKFDP@linutronix.de>
+        Wed, 22 Feb 2023 08:37:19 -0500
+Received: from out2-smtp.messagingengine.com (out2-smtp.messagingengine.com [66.111.4.26])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC162193CD;
+        Wed, 22 Feb 2023 05:37:18 -0800 (PST)
+Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
+        by mailout.nyi.internal (Postfix) with ESMTP id 406245C012E;
+        Wed, 22 Feb 2023 08:37:18 -0500 (EST)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute4.internal (MEProxy); Wed, 22 Feb 2023 08:37:18 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; h=
+        cc:cc:content-transfer-encoding:date:date:from:from:in-reply-to
+        :message-id:mime-version:reply-to:sender:subject:subject:to:to;
+         s=fm2; t=1677073038; x=1677159438; bh=q47+CVQ8qOOPo855ergJq8EIk
+        +6dfpBuSgP6iPw22CI=; b=opYVZpd/XF5J/eKbesKxrOtpEWftP+G4hLgGtKgtj
+        HcHnwYNu3YC+k5hIC72K73quoO2l+1p2KNmN59U9pvIKFkSTlnTWBag/LesrY5vz
+        7t7ryjM71pbSRV/Gwu/ziBpPeDKyHBYiQk0cO/TTfVS8YZmUjdJoBsRk7Cet/mFm
+        /A6n/f1UZMcCjk3gs4Ogc8HQ5FPHQRSqjNiuS1O6narB35j+xKdJaZx56JMO/Wag
+        3x8fSeNTYJBvMLRv61fl6S9CBTYBxW/+bupn8V1o6C444CQ65lVkK7ecZ0qJoqV2
+        lYvSLd/knUOqT+PVxmBaMBNQgAWencw2CuNka3r6K5auQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding:date:date
+        :feedback-id:feedback-id:from:from:in-reply-to:message-id
+        :mime-version:reply-to:sender:subject:subject:to:to:x-me-proxy
+        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=
+        1677073038; x=1677159438; bh=q47+CVQ8qOOPo855ergJq8EIk+6dfpBuSgP
+        6iPw22CI=; b=t8Al4EAn4K1+5pIsWvTQP1KCpr07Sn43gwo4L43VhWY97zwuk/Y
+        O3rUzQTuOC+s5SMyzu67kTYKJvlgB+6MMUe3G5yf4KNwoY1LyLwRXBOWDdjkJKRm
+        1GpY728Zav4aHK1cZ1xIwYgfNidOeapqPW5MYCI3y83MnmS+P1hbQmomDD7M/xQg
+        6I/7vDIiNJAUsxyGEsZZwHoE0+91xVM+N1RFKPh/oBV+p3iZr+Jczd2g4Kr56whN
+        LGuVfh84frqQLfIhvUWfgh9IAYfBUXWiIsYS5bKH2hGMZAPPcIhJLkmg/PmNI9Dp
+        nsUQohL2uuN51ZGPDldHETle9i/6XD6JQGA==
+X-ME-Sender: <xms:jRr2Y4gEYHl6JEtJG7gMX2DKvChE_vQTHW6C0yq62jrSOn94aSPfig>
+    <xme:jRr2YxA6SlfPH4XT4o_Ql2G3JPJyzq36Jf-bXiiHGQZ99fVhnX-JCVZuqPcwduTGo
+    Pdfn9xeHJ-Y8sod_Pw>
+X-ME-Received: <xmr:jRr2YwFx5TgFJYPPMo9ZG1Z_o7OPKHCfhBWUVJ39YBPdeVA_l6SStMimWG9J>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrudejledgheefucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucenucfjughrpefhvfevufffkffoggfgsedtkeertd
+    ertddtnecuhfhrohhmpeflihgrgihunhcujggrnhhguceojhhirgiguhhnrdihrghnghes
+    fhhlhihgohgrthdrtghomheqnecuggftrfgrthhtvghrnhephfetuddtudevieeljeejte
+    ffheeujeduhefgffejudfhueelleduffefgfffveeknecuvehluhhsthgvrhfuihiivgep
+    tdenucfrrghrrghmpehmrghilhhfrhhomhepjhhirgiguhhnrdihrghnghesfhhlhihgoh
+    grthdrtghomh
+X-ME-Proxy: <xmx:jRr2Y5RvB610Is-2kxRvdGjpcxp0QlhByDehDQrwerFEtQBIyshGZw>
+    <xmx:jRr2Y1w-Hct9lqqbRUyed-Zshsfgt96p1vlT5K3dD_ARspZ1h9uz5w>
+    <xmx:jRr2Y37RMIcOFVluOV1zM6OmfPjsxzwhxGt50H225TPnN3JCi4U3KQ>
+    <xmx:jhr2Y74_tiDsOk4So97qWM7it4ZmSEOZlJNx8Y8r9EiByIh_2IbJ0A>
+Feedback-ID: ifd894703:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
+ 22 Feb 2023 08:37:15 -0500 (EST)
+From:   Jiaxun Yang <jiaxun.yang@flygoat.com>
+To:     linux-mips@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        tsbogend@alpha.franken.de, mpe@ellerman.id.au,
+        paul.walmsley@sifive.com, palmer@dabbelt.com, robh+dt@kernel.org,
+        hch@lst.de, m.szyprowski@samsung.com, robin.murphy@arm.com,
+        linux-riscv@lists.infradead.org,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>
+Subject: [PATCH 0/3] Use dma_default_coherent for devicetree default coherency
+Date:   Wed, 22 Feb 2023 13:37:09 +0000
+Message-Id: <20230222133712.8079-1-jiaxun.yang@flygoat.com>
+X-Mailer: git-send-email 2.37.1 (Apple Git-137.1)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y++UzubyNavLKFDP@linutronix.de>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Feb 17, 2023 at 03:53:02PM +0100, Sebastian Andrzej Siewior wrote:
-> wait_task_inactive() waits for thread to unschedule in a certain task state.
-> On PREEMPT_RT that state may be stored in task_struct::saved_state while the
-> thread, that is being waited for, blocks on a sleeping lock and
-> task_struct::__state is set to TASK_RTLOCK_WAIT.
-> It is not possible to check only for TASK_RTLOCK_WAIT to be sure that the task
-> is blocked on a sleeping lock because during wake up (after the sleeping lock
-> has been acquired) the task state is set TASK_RUNNING. After the task in on CPU
-> and acquired the pi_lock it will reset the state accordingly but until then
-> TASK_RUNNING will be observed (with the desired state is saved in saved_state).
-> 
-> Check also for task_struct::saved_state if the desired match was not found in
-> task_struct::__state on PREEMPT_RT. If the state was found in saved_state, wait
-> until the task is idle and state is visible in task_struct::__state.
-> 
-> Signed-off-by: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-> Reviewed-by: Valentin Schneider <vschneid@redhat.com>
-> ---
+Hi all,
 
-Which if the very few wait_task_inactive() users requires this?
+This series split out second half of my previous series
+"[PATCH 0/4] MIPS DMA coherence fixes".
+
+It intends to use dma_default_coherent to determine the default coherency of
+devicetree probed devices instead of hardcoding it with Kconfig options.
+
+For some MIPS systems, dma_default_coherent is determined with either
+bootloader or hardware registers in platform initilization code, and devicetree
+does not explicility specify the coherency of the device, so we need the ability
+to change the default coherency of devicetree probed devices.
+
+For other platforms that supports noncoherent, dma_default_coherent is a fixed
+value set by arch code. It's defaulted to false for most archs except RISC-V.
+
+Thanks
+- Jiaxun
+
+
+Jiaxun Yang (3):
+  dma-mapping: Provide a fallback dma_default_coherent
+  riscv: Set dma_default_coherent to true
+  of: address: Use dma_default_coherent to determine default coherency
+
+ arch/powerpc/Kconfig        | 1 -
+ arch/riscv/Kconfig          | 1 -
+ arch/riscv/kernel/setup.c   | 3 +++
+ drivers/of/Kconfig          | 4 ----
+ drivers/of/address.c        | 2 +-
+ include/linux/dma-map-ops.h | 1 +
+ kernel/dma/mapping.c        | 4 ++++
+ 7 files changed, 9 insertions(+), 7 deletions(-)
+
+-- 
+2.37.1 (Apple Git-137.1)
+
