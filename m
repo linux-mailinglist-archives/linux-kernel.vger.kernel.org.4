@@ -2,73 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9EDC169F89F
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Feb 2023 17:06:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 123A669F8A4
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Feb 2023 17:09:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231765AbjBVQGz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Feb 2023 11:06:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56440 "EHLO
+        id S231234AbjBVQJp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Feb 2023 11:09:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58074 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229975AbjBVQGw (ORCPT
+        with ESMTP id S229836AbjBVQJo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Feb 2023 11:06:52 -0500
-Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C19E3CE28
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Feb 2023 08:06:51 -0800 (PST)
-Received: by mail-lf1-x12d.google.com with SMTP id g8so6955567lfj.2
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Feb 2023 08:06:51 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=8USIxg/ch7FSV86aq2IWnMVmX2lOYDkkYcIurOZq368=;
-        b=EMWzDHhPFmWX6K1h4sWnl4efdISDePX4QMzUIzv91ih43FiBsgeKUyXXsLw8aqRj/f
-         YFx0yomB7J7X3XVqL957/pZXG7RYdtW31SY1ve4Y9vIiGHxP1ZtwRq8NmCj20F6gj5pV
-         0oDUiLmJi2ydK7Lfux2cj5J5Og8AFuR8D9lHagVRSezna/+E2OdHwreTT9mhQiTHJrGO
-         c37DJgcjZHDevUZhr3wnIWXuMXsI+WfA0FuonExgJvircWhyb/yiZBrleXNBzTtvCn1B
-         21JmyNLsLiCEUZ+hi9Ienb8OAQ8L9903f13qYys2dF6TsccTifYfeovi2fM1zgEgpib6
-         PlwQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=8USIxg/ch7FSV86aq2IWnMVmX2lOYDkkYcIurOZq368=;
-        b=c5oZ0ovdT2LsckeLSnSL3OnV4ixHSM3onEB+C2AMO7JJNR3xa03bs1ufRczjx4eO7Y
-         sFIXAhLs/Fd27rz8uHL+JBqgn26OyKx6xBfHoJq7bRANb7ZBfB++KGwHWl6d6zGyj/es
-         gYxxo8YT0abxtR8T33tZxOhGzaFercghNDkcYbz1GACk1fq8bYjvzr4c1tDR+krtOtrd
-         q0RQvE1ScWLnGTP9UNiO6PQfptG2bKPu6yS+4hT4DV0uixD0Th/8If5JfNeYTsyyUAnj
-         8EHOJNxFhEwSx/7npgTTVG6L92tnSr7o/8vNIdWKI6c7tjec7PmFWURadY9sXKsqCyba
-         dMuw==
-X-Gm-Message-State: AO0yUKWfBef/PaDkyxDkjekIOlVevssmoIRlYaMh9ZWkClfl7ANanAv6
-        ++U/IvmEm3hcYwGJn0UsMi+eoQ==
-X-Google-Smtp-Source: AK7set90zq0pUixr/vnRmsiQGKP735fINZmlrvTRuNAivKuiwFZsainImmoqZg2zjT58hixUQD4V0Q==
-X-Received: by 2002:ac2:5383:0:b0:4dc:4c53:4460 with SMTP id g3-20020ac25383000000b004dc4c534460mr2813784lfh.16.1677082009120;
-        Wed, 22 Feb 2023 08:06:49 -0800 (PST)
-Received: from [192.168.1.101] (abxi151.neoplus.adsl.tpnet.pl. [83.9.2.151])
-        by smtp.gmail.com with ESMTPSA id x23-20020ac24897000000b004b564e1a4e0sm282007lfc.76.2023.02.22.08.06.48
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 22 Feb 2023 08:06:48 -0800 (PST)
-Message-ID: <8259f4e1-3ab0-0ac2-f717-7dca72ea4170@linaro.org>
-Date:   Wed, 22 Feb 2023 17:06:47 +0100
+        Wed, 22 Feb 2023 11:09:44 -0500
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3599367D1;
+        Wed, 22 Feb 2023 08:09:42 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 622E42070D;
+        Wed, 22 Feb 2023 16:09:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1677082181; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=UnlWzOjsvHFym+8/oV1/3UC3iLCVK7y0jY+xZK0uwO0=;
+        b=Ys/Ee8nKKA06ngkS/Telib9jsbgI9efxI212/NPfanNR2rIRzSvZ5qvBzrbrIJ0iGlTH5z
+        KSjT0NutywlA5tXWWwt/KuGKX1usoqqoCalV7KeCNRoGs8Ii7El8GueHjVYF5CYaEmmB7w
+        vUjMoYU28yZwIG8ziGAZleFY5KUFlwM=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1677082181;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=UnlWzOjsvHFym+8/oV1/3UC3iLCVK7y0jY+xZK0uwO0=;
+        b=+iYq3uqqsPd6GGVnlW3dwzsJ+xE5eY5Ubovd2BmP6REYw8zT3dRyOH4vyI9w1IdquIHr8/
+        p1q4c3hLV0VTtPBw==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 1AFBC139DB;
+        Wed, 22 Feb 2023 16:09:41 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id xIOnBUU+9mNKRQAAMHmgww
+        (envelope-from <tzimmermann@suse.de>); Wed, 22 Feb 2023 16:09:41 +0000
+Message-ID: <8f4a18d7-3477-5af0-605d-27098cc7e02c@suse.de>
+Date:   Wed, 22 Feb 2023 17:09:40 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH v3] arm64: dts: qcom: sm8450: Add IMEM and PIL info region
+ Thunderbird/102.7.2
+Subject: Re: [PATCH] drm/msm: return early when allocating fbdev fails
 Content-Language: en-US
-To:     Mukesh Ojha <quic_mojha@quicinc.com>, agross@kernel.org,
-        andersson@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, elder@linaro.org
-Cc:     linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <1677079845-17650-1-git-send-email-quic_mojha@quicinc.com>
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <1677079845-17650-1-git-send-email-quic_mojha@quicinc.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+To:     Tom Rix <trix@redhat.com>, robdclark@gmail.com,
+        quic_abhinavk@quicinc.com, dmitry.baryshkov@linaro.org,
+        sean@poorly.run, airlied@gmail.com, daniel@ffwll.ch,
+        nathan@kernel.org, ndesaulniers@google.com, javierm@redhat.com
+Cc:     linux-arm-msm@vger.kernel.org, llvm@lists.linux.dev,
+        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        freedreno@lists.freedesktop.org
+References: <20230222155649.2001467-1-trix@redhat.com>
+From:   Thomas Zimmermann <tzimmermann@suse.de>
+In-Reply-To: <20230222155649.2001467-1-trix@redhat.com>
+Content-Type: multipart/signed; micalg=pgp-sha256;
+ protocol="application/pgp-signature";
+ boundary="------------SQ90Z4oS8ujHiGUv24PFSrcn"
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,49 +76,77 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
+--------------SQ90Z4oS8ujHiGUv24PFSrcn
+Content-Type: multipart/mixed; boundary="------------F5IVgm3PBZcllElL50P0fLmj";
+ protected-headers="v1"
+From: Thomas Zimmermann <tzimmermann@suse.de>
+To: Tom Rix <trix@redhat.com>, robdclark@gmail.com,
+ quic_abhinavk@quicinc.com, dmitry.baryshkov@linaro.org, sean@poorly.run,
+ airlied@gmail.com, daniel@ffwll.ch, nathan@kernel.org,
+ ndesaulniers@google.com, javierm@redhat.com
+Cc: linux-arm-msm@vger.kernel.org, llvm@lists.linux.dev,
+ linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
+ freedreno@lists.freedesktop.org
+Message-ID: <8f4a18d7-3477-5af0-605d-27098cc7e02c@suse.de>
+Subject: Re: [PATCH] drm/msm: return early when allocating fbdev fails
+References: <20230222155649.2001467-1-trix@redhat.com>
+In-Reply-To: <20230222155649.2001467-1-trix@redhat.com>
 
+--------------F5IVgm3PBZcllElL50P0fLmj
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: base64
 
-On 22.02.2023 16:30, Mukesh Ojha wrote:
-> Add a simple-mfd representing IMEM on SM8450 and define the PIL
-> relocation info region, so that post mortem tools will be able
-> to locate the loaded remoteprocs.
-> 
-> Signed-off-by: Mukesh Ojha <quic_mojha@quicinc.com>
-> ---
-Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+SGkNCg0KQW0gMjIuMDIuMjMgdW0gMTY6NTYgc2NocmllYiBUb20gUml4Og0KPiBidWlsZGlu
+ZyB3aXRoIGNsYW5nIGFuZCBXPTEgcmVwb3J0cw0KPiBkcml2ZXJzL2dwdS9kcm0vbXNtL21z
+bV9mYmRldi5jOjE0NDo2OiBlcnJvcjogdmFyaWFibGUgJ2hlbHBlcicgaXMgdXNlZA0KPiAg
+ICB1bmluaXRpYWxpemVkIHdoZW5ldmVyICdpZicgY29uZGl0aW9uIGlzIHRydWUgWy1XZXJy
+b3IsLVdzb21ldGltZXMtdW5pbml0aWFsaXplZF0NCj4gICAgaWYgKCFmYmRldikNCj4gICAg
+ICAgIF5+fn5+fg0KPiANCj4gaGVscGVyIGlzIG9ubHkgaW5pdGlhbGl6ZWQgYWZ0ZXIgZmJk
+ZXYgc3VjY2VlZHMsIHNvIGlzIGluIGEgZ2FyYmFnZSBzdGF0ZSBhdA0KPiB0aGUgZmFpbDog
+bGFiZWwuICBUaGVyZSBpcyBub3RoaW5nIHRvIHVud2luZGVkIGlmIGZiZGV2IGFsbG9hY3Rp
+b24gZmFpbHMsDQo+IHJldHVybiBOVUxMLg0KPiANCj4gRml4ZXM6IDNmYjFmNjJmODBhMSAo
+ImRybS9mYi1oZWxwZXI6IFJlbW92ZSBkcm1fZmJfaGVscGVyX3VucHJlcGFyZSgpIGZyb20g
+ZHJtX2ZiX2hlbHBlcl9maW5pKCkiKQ0KPiBTaWduZWQtb2ZmLWJ5OiBUb20gUml4IDx0cml4
+QHJlZGhhdC5jb20+DQoNCkFscmVhZHkgZml4ZWQgaGVyZTogDQpodHRwczovL2xvcmUua2Vy
+bmVsLm9yZy9kcmktZGV2ZWwvMDhlMzM0MGUtYjQ1OS0wZTYwLTRiYmEtMzA3MTZiNjc1ZTA1
+QHN1c2UuZGUvVC8jdA0KDQpCZXN0IHJlZ2FyZHMNClRob21hcw0KDQo+IC0tLQ0KPiAgIGRy
+aXZlcnMvZ3B1L2RybS9tc20vbXNtX2ZiZGV2LmMgfCAyICstDQo+ICAgMSBmaWxlIGNoYW5n
+ZWQsIDEgaW5zZXJ0aW9uKCspLCAxIGRlbGV0aW9uKC0pDQo+IA0KPiBkaWZmIC0tZ2l0IGEv
+ZHJpdmVycy9ncHUvZHJtL21zbS9tc21fZmJkZXYuYyBiL2RyaXZlcnMvZ3B1L2RybS9tc20v
+bXNtX2ZiZGV2LmMNCj4gaW5kZXggYzgwNGU1YmE2ODJhLi5jMTM1NmFmZjg3ZGEgMTAwNjQ0
+DQo+IC0tLSBhL2RyaXZlcnMvZ3B1L2RybS9tc20vbXNtX2ZiZGV2LmMNCj4gKysrIGIvZHJp
+dmVycy9ncHUvZHJtL21zbS9tc21fZmJkZXYuYw0KPiBAQCAtMTQyLDcgKzE0Miw3IEBAIHN0
+cnVjdCBkcm1fZmJfaGVscGVyICptc21fZmJkZXZfaW5pdChzdHJ1Y3QgZHJtX2RldmljZSAq
+ZGV2KQ0KPiAgIA0KPiAgIAlmYmRldiA9IGt6YWxsb2Moc2l6ZW9mKCpmYmRldiksIEdGUF9L
+RVJORUwpOw0KPiAgIAlpZiAoIWZiZGV2KQ0KPiAtCQlnb3RvIGZhaWw7DQo+ICsJCXJldHVy
+biBOVUxMOw0KPiAgIA0KPiAgIAloZWxwZXIgPSAmZmJkZXYtPmJhc2U7DQo+ICAgDQoNCi0t
+IA0KVGhvbWFzIFppbW1lcm1hbm4NCkdyYXBoaWNzIERyaXZlciBEZXZlbG9wZXINClNVU0Ug
+U29mdHdhcmUgU29sdXRpb25zIEdlcm1hbnkgR21iSA0KTWF4ZmVsZHN0ci4gNSwgOTA0MDkg
+TsO8cm5iZXJnLCBHZXJtYW55DQooSFJCIDM2ODA5LCBBRyBOw7xybmJlcmcpDQpHZXNjaMOk
+ZnRzZsO8aHJlcjogSXZvIFRvdGV2DQo=
 
-Konrad
-> Change in v3:
->  - Sorted by address.
-> 
-> Changes in v2:
->  -  put ranges after regs and corrected the sram node position.
-> 
->  arch/arm64/boot/dts/qcom/sm8450.dtsi | 14 ++++++++++++++
->  1 file changed, 14 insertions(+)
-> 
-> diff --git a/arch/arm64/boot/dts/qcom/sm8450.dtsi b/arch/arm64/boot/dts/qcom/sm8450.dtsi
-> index 1a744a3..7671f15 100644
-> --- a/arch/arm64/boot/dts/qcom/sm8450.dtsi
-> +++ b/arch/arm64/boot/dts/qcom/sm8450.dtsi
-> @@ -3689,6 +3689,20 @@
->  			};
->  		};
->  
-> +		sram@146aa000 {
-> +			compatible = "qcom,sm8450-imem", "syscon", "simple-mfd";
-> +			reg = <0 0x146aa000 0 0x1000>;
-> +			ranges = <0 0 0x146aa000 0x1000>;
-> +
-> +			#address-cells = <1>;
-> +			#size-cells = <1>;
-> +
-> +			pil-reloc@94c {
-> +				compatible = "qcom,pil-reloc-info";
-> +				reg = <0x94c 0xc8>;
-> +			};
-> +		};
-> +
->  		apps_smmu: iommu@15000000 {
->  			compatible = "qcom,sm8450-smmu-500", "arm,mmu-500";
->  			reg = <0 0x15000000 0 0x100000>;
+--------------F5IVgm3PBZcllElL50P0fLmj--
+
+--------------SQ90Z4oS8ujHiGUv24PFSrcn
+Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="OpenPGP_signature"
+
+-----BEGIN PGP SIGNATURE-----
+
+wsF5BAABCAAjFiEExndm/fpuMUdwYFFolh/E3EQov+AFAmP2PkQFAwAAAAAACgkQlh/E3EQov+D+
+MxAAzTy/dxFBP/tdwP5qdKJiLkKg2qI9ibBnpvteu2RH+tvtKysCWjqiuD2tl14FL28VWIEUBeJg
+d/LXLgRJpur5Ea+ZlKxpx33PRzQxGVOUzSatngJqv1SPQ5N0zBNRqz7gyJV717c01jh1RnfpnYSa
+osUP9kTsuR+dSqwWBZM7iCeUuA/3NCFS7o2eQhVkTh1BaaRV4lUNLnfYTClRwuseL1Uazu6SY9L1
+rD/GUJuU/yOyAzChBCf8ebC/9NlOon+nsaciVZifrl3NqgPYVLmKZSErCvK206bjefhlZrvSfho+
+WgPbDS63kTY82Tft9wgDyvDILzYUhNOgaCj57W2PcJlzxyHXWXycJkC8KZMyLY13PHxFG6gnOS/6
+wqf7LThkQRjhNbYMch6c0PSm9uVomgU2jwCwgG4+CBESj3/K8dsG0/Ne0Y5g77k048/EZKezvZSw
+l2jLjZSWrXuGKfWyjKvFqz/fs2oPPsBASbKqgO2buNpD8LBJWdfksflz/9xCdSODRM8SNyZW3Q5d
+eNhJq6kpBEsFywfkNnDxAiLYfp1npn2zV0cUVxNf9XsKBoNyCUx+52eEme88o4I2/XlVOV94nErW
+8yEja6NsWMw7dy4JjlqYuSELN+rFToy2qJkomeKal6esXCHjKkTqYMuW/GGpNL2ajsUgJ2XuEoQM
+8+8=
+=Gind
+-----END PGP SIGNATURE-----
+
+--------------SQ90Z4oS8ujHiGUv24PFSrcn--
