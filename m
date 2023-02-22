@@ -2,69 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E7F3269ECCE
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Feb 2023 03:30:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EF68669ECD3
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Feb 2023 03:33:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230403AbjBVCa1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Feb 2023 21:30:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53034 "EHLO
+        id S230267AbjBVCdB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Feb 2023 21:33:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55420 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229547AbjBVCaZ (ORCPT
+        with ESMTP id S229468AbjBVCc7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Feb 2023 21:30:25 -0500
-Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AAC3F2CFDF
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Feb 2023 18:30:20 -0800 (PST)
-Received: by mail-pj1-x102d.google.com with SMTP id m3-20020a17090ade0300b00229eec90a7fso731654pjv.0
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Feb 2023 18:30:20 -0800 (PST)
+        Tue, 21 Feb 2023 21:32:59 -0500
+Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 102128A6D;
+        Tue, 21 Feb 2023 18:32:59 -0800 (PST)
+Received: by mail-pl1-x62f.google.com with SMTP id e5so8269494plg.8;
+        Tue, 21 Feb 2023 18:32:59 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=A5Usk2zh2d56JbIkR9PgoRuWTNRvbBfAHpW5O8vuwb4=;
-        b=pg0m7tMA86j2PAdj3NSg1wXBlPlzu7UefoYFolOBUGAWY4syYaw/Fej8MvQ+t3GjFI
-         IW48Hnrj/8eqaDdtmZJP2g0Sp8dcSNgB4ycyb5v8nDn6sRfNLPRl9aXPGIZsTS5a8o4m
-         OCSh8tHFt+YqCunRx95mmaFNcxUdWD3A1AQDu3WD4Ybm3YufTmT4EDHSCdJGDbyelBRH
-         YwmEvKFhlEHTnOupeAnDy/fLjmvCbyYmjOXJxUq0KmOdmBhDWw6nSc3w64nK9Ii3WqTC
-         +1vT2tr465e/3/lHuJ2ckmRb9G2GV/ohEbCQBN7XAS24/0vKZvatUGpNtOsV+97yzszn
-         I87Q==
+        bh=9cDSGjsZLxrrxEWh0LEAOx0oKYxUvAtDpQKo93C1IX8=;
+        b=hXtiawoKnL/qVSN+y9Grm7UP6aFZ8wR5vr7shuKHWJmOEp+ymU9ZL0Oprc4lGfPgo0
+         DAvR2n+wvi3bDvW1Yrhqaf1jh8VWuR4k8TqzMbaed5W4bDuDw9Y7QkcmQ/GNxh9cKRt8
+         LBrho171SdCVr3FaZ2hSsAk5c/FTP4BsQpG7LJxg+DaPOUwbD0cYitYL53tMcVrfv4px
+         Fd8S183ABH7mYNl3jYNrXJwj+JGgB8ehZyhldCoFAfrIyh4M6ozY+Tza7zQVd89LNGxi
+         S4vExBOdjpnlAy8fX50Url7Vus1AV+r+/2XE6nplaVCkEOUPftJ53wlV6IR7uOZM1ucX
+         WRBQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=A5Usk2zh2d56JbIkR9PgoRuWTNRvbBfAHpW5O8vuwb4=;
-        b=N2iSedKeWoawDZIoa69HUhM1s3gUq4c6KDygpYBvSzMl8TYzzxxqE1Nh9DP3JPVC1+
-         2ky7lLdukRHOPRmX4qy6oP0cnq+QyZ+UxO+n2eGzsRdI0Nc9WI842668phU/LrJozoPU
-         sKB+w92H6A0jqz6h+5IOs0UiiojyOKyfOZ/yDrZx743r2qEgikiZrufAbtSc8YxxplLB
-         6ZHG/8j4ThsZpRmhV66/BnhvzXeeNlLz2KvGFB2RCJNzqW2RMonv+iSWG0tEIbd3YgKT
-         ReX+7+aopGfItqlPNyZguVTM7AR63IbEUFKqT8zq3xFyQBEQk8cKHkaNVJMU5TkC+hBE
-         slTw==
-X-Gm-Message-State: AO0yUKUljVRmphWHcFAbd7WxVXSEq4gXE3utRYO0Z2Y12+C0gubFyRVy
-        R2/Rff5DsYNJoz2oWPJUunAbMS2St1Y=
-X-Google-Smtp-Source: AK7set/HLNWQF1q3TUaLP1hvIf1HMr0yRlvJSvwOrpbPtrTfP6wE+1APkphv0WA7TXELx72o9IDffQ==
-X-Received: by 2002:a05:6a20:3d8d:b0:c7:40a1:ac1b with SMTP id s13-20020a056a203d8d00b000c740a1ac1bmr9404003pzi.50.1677033019877;
-        Tue, 21 Feb 2023 18:30:19 -0800 (PST)
+        bh=9cDSGjsZLxrrxEWh0LEAOx0oKYxUvAtDpQKo93C1IX8=;
+        b=HyzdArXLVJsZRScG4fYwd16XpJkd3SMGhx4RMtfVG2kxg6VYkS81e1SvNse7P1+fQE
+         b/AKanq+/GxUTUZLVN6h3XKZjskrXidwWOAAqtM9heLNnhqHLGTuJkCr2jaMO63Wv3wH
+         3iQB3Ub+Ek5ZzCbFRQRuQLx1NaHSUrJgVkGynRBQn7rHQsrbvOAsZBsofo5W2HYVXG9p
+         ez/JVTxrIlt+MBRHDrzo1eV8SiCOaqWeIEeBi7+fO0O1Zm659ZYG6WfQIEIRminI7LQk
+         KnlC8CMjGbktt9qg/YFCwYJXaRqqKuIZW6TR57YDP/wDm5C9EWw3vcW2uWLG89DRERpq
+         96MQ==
+X-Gm-Message-State: AO0yUKXrPK7TVNbykeAmvPW1mURU1fe3g2UNGndLkcBb0gwdRAtCX/Mz
+        eTax0VevN7WYxIKSvzsXkTof/9QPbkA=
+X-Google-Smtp-Source: AK7set+CH4IPKvPhCyIUAZh8En9SGRNdOZNRv7oO+4wZHHyuwrtzZArEZpbhWgKKKvMxLZNr4mObYQ==
+X-Received: by 2002:a17:903:234b:b0:19a:7f4b:3ef6 with SMTP id c11-20020a170903234b00b0019a7f4b3ef6mr8627410plh.3.1677033178474;
+        Tue, 21 Feb 2023 18:32:58 -0800 (PST)
 Received: from [192.168.43.80] (subs32-116-206-28-13.three.co.id. [116.206.28.13])
-        by smtp.gmail.com with ESMTPSA id p13-20020a63fe0d000000b00499a90cce5bsm3974101pgh.50.2023.02.21.18.30.17
+        by smtp.gmail.com with ESMTPSA id t9-20020a170902a5c900b00196896d6d04sm4245747plq.258.2023.02.21.18.32.56
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 21 Feb 2023 18:30:19 -0800 (PST)
-Message-ID: <8e18d412-b1f2-1a80-810c-a69683815edb@gmail.com>
-Date:   Wed, 22 Feb 2023 09:30:15 +0700
+        Tue, 21 Feb 2023 18:32:58 -0800 (PST)
+Message-ID: <a1635643-a4a8-61e1-7798-af7455668878@gmail.com>
+Date:   Wed, 22 Feb 2023 09:32:54 +0700
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.8.0
-Subject: Re: [PATCH] kernel/sched/core.c: Modified prio_less().
+Subject: Re: [PATCH] Update documentation of vfs_tmpfile
 Content-Language: en-US
-To:     JaeJoon Jung <rgbi3307@gmail.com>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org
-References: <CAHOvCC7yjceArav9Ps0v1EP4CjfkrxbfXFgABK54cdFKNoE8iw@mail.gmail.com>
- <Y/TEcdIDqGjwH+2f@debian.me>
- <CAHOvCC544e8fuEvP6bSm7j0C5SQu6nd+StMcUhh_+aWBcPhNAQ@mail.gmail.com>
+To:     "Hok Chun NG (Ben)" <me@benbenng.net>
+Cc:     "viro@zeniv.linux.org.uk" <viro@zeniv.linux.org.uk>,
+        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "skhan@linuxfoundation.org" <skhan@linuxfoundation.org>
+References: <20230221035528.10529-1-me@benbenng.net>
+ <01000186721d17f8-ab0c64f0-a6ae-4e43-99a3-a44e6dba95b6-000000@email.amazonses.com>
+ <Y/TFdmhvrLu1h8Kl@debian.me>
+ <346A4D50-E68E-4D03-B06B-4949F5640197@benbenng.net>
+ <0100018676b0882f-5895463a-0af2-4fae-9e0b-8d4676347b1f-000000@email.amazonses.com>
 From:   Bagas Sanjaya <bagasdotme@gmail.com>
-In-Reply-To: <CAHOvCC544e8fuEvP6bSm7j0C5SQu6nd+StMcUhh_+aWBcPhNAQ@mail.gmail.com>
+In-Reply-To: <0100018676b0882f-5895463a-0af2-4fae-9e0b-8d4676347b1f-000000@email.amazonses.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-0.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -77,18 +81,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/22/23 07:51, JaeJoon Jung wrote:
-> I'm sorry for the inconvenience caused by my carelessness.
-> I had the problem you pointed out by copying and sending the contents
-> generated by git patch as text.
-> I will learn the git-send-email method you shared and send it again.
+On 2/22/23 08:15, Hok Chun NG (Ben) wrote:
+> Hi Bagas,
+> 
+>> On Feb 21, 2023, at 8:21 AM, Bagas Sanjaya <bagasdotme@gmail.com> wrote:
+>>
+>> On Tue, Feb 21, 2023 at 03:55:54AM +0000, Hok Chun NG (Ben) wrote:
+>>> On function vfs_tmpfile, documentation is updated according to function signature update.
+>>>
+>>> Description for 'dentry' and 'open_flag' removed.
+>>> Description for 'parentpath' and 'file' added.
+>>
+>> What commit did vfs_tmpfile() change its signature?
+> 
+> Changes of the function signature is from 9751b338656f05a0ce918befd5118fcd970c71c6
+> vfs: move open right after ->tmpfile() by Miklos Szeredi mszeredi@redhat.com
 > 
 
-OK but please don't top-post your reply in the future. Doing so, other
-people (like me) don't see the context you write (hence I delete
-it).
+Nice.
 
-Thanks!
+The preferred git pretty format when referring to existing commit is
+"%h (\"%s\")". Make sure that you set core.abbrev to at least 12.
+ 
+>>
+>> For the patch description, I'd like to write "Commit <commit> changes
+>> function signature for vfs_tmpfile(). Catch the function documentation
+>> up with the change."
+> 
+> I agree. Thank you for the suggestion.
+> 
+
+OK, thanks!
 
 -- 
 An old man doll... just what I always wanted! - Clara
