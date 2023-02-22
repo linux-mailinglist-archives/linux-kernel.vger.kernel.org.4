@@ -2,201 +2,217 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5137A69F2E5
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Feb 2023 11:44:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9380969F2E8
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Feb 2023 11:46:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229836AbjBVKom (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Feb 2023 05:44:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44522 "EHLO
+        id S231292AbjBVKqv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Feb 2023 05:46:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46146 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231651AbjBVKoe (ORCPT
+        with ESMTP id S229950AbjBVKqt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Feb 2023 05:44:34 -0500
-Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0839A37F02
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Feb 2023 02:44:32 -0800 (PST)
-Received: by mail-ed1-x534.google.com with SMTP id f13so27986968edz.6
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Feb 2023 02:44:31 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=dzO36xcFKCsDz9emB0ii8Ix0nj2SnY6adDGqiFZxsWA=;
-        b=FOFjqxzv7otNb/Bhs32onm+cVr3Z+HSHluN5DyMdMFFxMUGsZm/A917jXTKgFCommA
-         LhyEY07JyaXO2PbcIb1P8MpPyJwujzsS/dbdxq4bWe7Fs2vWrl00ZjNoeR8N+5oYLLkQ
-         KGqpBZb53tBQGLUqkADf0IfRakmtC2lMr+IV0an+x1lT66CGlh5EouSsBnLoBnBBWrqI
-         42EuvieUePBQaoR6cvY0bGfuWDqntr8PgSSVNsGNdCgQmOyuuQ3pE36mtT4ITYENA3pv
-         mr9cHUAPJZ5T2iLXyZkWoAHBkDHXgk/jOR06wbPBLZA1aGpdURn1PSgFwn5CuM0AAVKY
-         gNFw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=dzO36xcFKCsDz9emB0ii8Ix0nj2SnY6adDGqiFZxsWA=;
-        b=gGICFapCRpjpT8pCcIlrdi1mdpEd0NHqbPL19nYgQ83aVmuisgB+WR6Guyuqx7yCoU
-         CMBjM8KtxzKDUgax8lwJpGONPv61KLdgccp4Fp6DocwbagSMAnq36+wPtq5uEK2EoOKV
-         uECVL1/mo+GKlHHH3k351KV6XXND71kasqc4sg1U2iV+lMkXw6CxSEPJP1p0cu5h3H5C
-         uo4p9kz5LENsvhRKtHrbaZXZDaC9bjFaqCDr8IpQ5JRr7vYOLwjEcPc2wyDPzoUbq9ct
-         QLGBa7X/ZairavtPnQ/6Yv5wF4dyg2k5A+9KcvV7uojaiG/Fm1b7XgQQ8JbUUmgftfM1
-         UcZA==
-X-Gm-Message-State: AO0yUKVP+7ysd4krdNGWkHqa5iLyyiYH/F91ZnjB8uonI9b+3jZgIFzd
-        SaXa2vTahQhLU7eADvuhR3fP8yPOlg9mrRmPE+LaSQ==
-X-Google-Smtp-Source: AK7set8JsoC+HI/BdAzA/PhGKp9VlBhkwwnETeYznXMWZQSuX9dNWeeM54IT78n6bi2eZkg4hBzTXniZ9OKPO7ic9Ew=
-X-Received: by 2002:a50:f619:0:b0:4ac:b74b:a6a3 with SMTP id
- c25-20020a50f619000000b004acb74ba6a3mr3415436edn.0.1677062670271; Wed, 22 Feb
- 2023 02:44:30 -0800 (PST)
+        Wed, 22 Feb 2023 05:46:49 -0500
+Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2052.outbound.protection.outlook.com [40.107.223.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0E7937B66
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Feb 2023 02:46:47 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=dunOBNYRO0X4roEkZSNRrfPSIYwEeBdfwnLeppYHxvKDE3sBaYoK/608R5NLzQOT0HTaaKfeAomSW90on2gb9K/P2zGzjTuZrzAgqdHnGDGXQhQiJ42IMY8BcD/Z7hxJNsgK9LOz441Plexgjd0Wpmr4L24YfmrZw22W2UidI4J21/qJ1c+4Bq+QTsHfKPgq+P8DmdIoEpZ5/CmyRwMsSVJtR951XLBmF7Ip9KwM2fpEwG2x+ffEyoPvjetGVRkweKAtHPrEGMFyc/txyiS6Bwj+7hZKGte1m8BQgXjh2earTJdUf7lyRMvzvuMlRvQNlf/xn5AoGuFJFNEebcXY8w==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=IocLp5Si+wHCKSufOnqhKpMrx2BJh9lWuBD+7R/o210=;
+ b=CSM//U2h/2AW7gc5kzJXB9OuE1DvYIZM/OdptA1BcspBj3CaMLr23R86sQAfs+y/nkD6xgrI+VfXE3bn5YCEayy/+an3ZIlJQGXZhdcYBQdUYXEk2hQNkCx2AysMPCGZke49u3dp131lnhRMYBxVDdtKeoFuerJEU2kFUbWGeFVhffpHrEdNXBt8Qzd6tnRBOHvwcMfa1Yqw04BkktVFUi7vugkjEgG32sgy6Dl+WW139vULqz1Rmg3b+2rwNAhXJv3l+2JZBI7IEKWNoddCKG28EQ139db7oNQjHih9dL9sNH1AudMnTicKGHVEOgENkhyUXX7uCPHwMZIPkIcMiQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=IocLp5Si+wHCKSufOnqhKpMrx2BJh9lWuBD+7R/o210=;
+ b=4Mg/Mu63oX3rA25ZzqgONxgQ+SenFDlV/yrjXFghyB1LKUm3vwj+Mz6rkAAlMuoN53L5qwso6UbIS5lYAZBMmrvYuRNOavovqc/NJlX0wq4U2fScSHtlx/lqwBz7jpGoKoTn+yyRKsEzhh7K2L26Gy8LSiptfV/5dSHpp15ZeH4=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from DM6PR12MB3370.namprd12.prod.outlook.com (2603:10b6:5:38::25) by
+ DS0PR12MB7945.namprd12.prod.outlook.com (2603:10b6:8:153::19) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6111.21; Wed, 22 Feb 2023 10:46:46 +0000
+Received: from DM6PR12MB3370.namprd12.prod.outlook.com
+ ([fe80::4df2:b32a:e628:c57e]) by DM6PR12MB3370.namprd12.prod.outlook.com
+ ([fe80::4df2:b32a:e628:c57e%7]) with mapi id 15.20.6134.019; Wed, 22 Feb 2023
+ 10:46:46 +0000
+Message-ID: <a4a72b25-2db3-21c4-c8c0-bb027db59d61@amd.com>
+Date:   Wed, 22 Feb 2023 05:46:43 -0500
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Content-Language: en-CA
+To:     Rob Clark <robdclark@gmail.com>, dri-devel@lists.freedesktop.org
+Cc:     Rob Clark <robdclark@chromium.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Tvrtko Ursulin <tvrtko.ursulin@intel.com>,
+        =?UTF-8?Q?Christian_K=c3=b6nig?= <ckoenig.leichtzumerken@gmail.com>,
+        =?UTF-8?Q?Michel_D=c3=a4nzer?= <michel@daenzer.net>,
+        open list <linux-kernel@vger.kernel.org>,
+        Daniel Vetter <daniel.vetter@ffwll.ch>,
+        Pekka Paalanen <ppaalanen@gmail.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        freedreno@lists.freedesktop.org
+References: <20230218211608.1630586-1-robdclark@gmail.com>
+ <20230218211608.1630586-12-robdclark@gmail.com>
+From:   Luben Tuikov <luben.tuikov@amd.com>
+Subject: Re: [PATCH v4 11/14] drm/atomic-helper: Set fence deadline for vblank
+In-Reply-To: <20230218211608.1630586-12-robdclark@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: YT3PR01CA0041.CANPRD01.PROD.OUTLOOK.COM
+ (2603:10b6:b01:82::21) To DM6PR12MB3370.namprd12.prod.outlook.com
+ (2603:10b6:5:38::25)
 MIME-Version: 1.0
-References: <20230202112915.867409-1-usama.anjum@collabora.com>
- <20230202112915.867409-4-usama.anjum@collabora.com> <CABb0KFEgsk+YidSXBYQ9mM8nVV6PuEOQf=bbNn7hsoG1hUeLZg@mail.gmail.com>
- <36ddfd75-5c58-197b-16c9-9f819099ea6d@collabora.com> <CABb0KFGWi0dtgXZ-AeUuHb55EgnwTu3JfJ9cW3ftCqezKi8dAQ@mail.gmail.com>
- <6d2b40c6-bed9-69a6-e198-537b50953acd@collabora.com>
-In-Reply-To: <6d2b40c6-bed9-69a6-e198-537b50953acd@collabora.com>
-From:   =?UTF-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <emmir@google.com>
-Date:   Wed, 22 Feb 2023 11:44:18 +0100
-Message-ID: <CABb0KFF+AEKijaXMjDpQLKyAdueJ93kf9QLfOouKHaPPwvfw_w@mail.gmail.com>
-Subject: Re: [PATCH v10 3/6] fs/proc/task_mmu: Implement IOCTL to get and/or
- the clear info about PTEs
-To:     Muhammad Usama Anjum <usama.anjum@collabora.com>
-Cc:     Andrei Vagin <avagin@gmail.com>, Mike Rapoport <rppt@kernel.org>,
-        Nadav Amit <namit@vmware.com>,
-        David Hildenbrand <david@redhat.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Paul Gofman <pgofman@codeweavers.com>,
-        Cyrill Gorcunov <gorcunov@gmail.com>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Shuah Khan <shuah@kernel.org>,
-        Christian Brauner <brauner@kernel.org>,
-        Yang Shi <shy828301@gmail.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        "Liam R . Howlett" <Liam.Howlett@oracle.com>,
-        Yun Zhou <yun.zhou@windriver.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Alex Sierra <alex.sierra@amd.com>,
-        Peter Xu <peterx@redhat.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Pasha Tatashin <pasha.tatashin@soleen.com>,
-        Axel Rasmussen <axelrasmussen@google.com>,
-        "Gustavo A . R . Silva" <gustavoars@kernel.org>,
-        Dan Williams <dan.j.williams@intel.com>,
-        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
-        Greg KH <gregkh@linuxfoundation.org>, kernel@collabora.com,
-        Danylo Mocherniuk <mdanylo@google.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DM6PR12MB3370:EE_|DS0PR12MB7945:EE_
+X-MS-Office365-Filtering-Correlation-Id: 9915105c-e387-4e41-8601-08db14c217ca
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: ZTjmXxUL0NABcOuThM7M9Yi+ilRgOHRs7YPP/bcUJhYTa+uNj1YsC5/qRA0bYDdqGdvEUBAbJcfUVO7FqJjsbbY01HKcgpsj59vOXKsqpYIjSQijnAcf+0XQzg8j/32KUA0WkJjb8FLU7IVV8NpbKszaS0d6IljUT490goG+1t7RG9nWre/Ygn3R+GWlqsMjWA14f2fqNtdoAXSHiq8S0MBRlAnXvAneXXEoTbS0FBJu67fw1FejdwLIk50iBJBbc+RYB/TOcz6vvpZ6m2k7Zm9nueEzOKBhqxUv7hsAEV7A31Nde3SKDAsfscyVetxCdJrCpIITJkP19dew2niJ9QMpqgyvlvHkB0OP2PgX27EdEtrbdu6LaUS/R7QJTc0Wcv+SBjHjVkzeLJvMrCyowxAIUkz2yxDOQkRj7MV23+v77AgxJtuh4rcsbhQEdL9L5uZqQ4Oag353XDIDP48NUV5JQbL91fCHEls8rjMUnuSPTQnTh2m1mtA4tNOmhbeCubOwoLYpOappjtFDGcp5NFgYo/MASje8rSg8yAXGC4aPMVS3//Id73LOHAXd+1VkM3Go4AKeKN5tTdxRuCHrw52D+N/VVLyg/4lVRCaL2FkdCQUHagOBzMAHiLyTMGH3VDFfbOPTQqvq0JS5BcRddt5HTMWpen1s/ox8ymBEcE0yItO5MetqAIFzMR3kYl5LvFsldJPCmmL9SwXFVuCzkdUv4/ECslVVhsW9QlwP7Qk=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR12MB3370.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(39860400002)(346002)(396003)(366004)(376002)(136003)(451199018)(66476007)(83380400001)(66556008)(478600001)(6512007)(186003)(53546011)(55236004)(86362001)(6666004)(6506007)(26005)(44832011)(31696002)(36756003)(316002)(66946007)(8676002)(54906003)(2616005)(6486002)(38100700002)(41300700001)(2906002)(8936002)(5660300002)(31686004)(7416002)(4326008)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?aEovRFFSL0FINEZPV3F5MHBCSVdQZGhOdXRiZDIwQlNNcGlJNC8rWHpTdFhN?=
+ =?utf-8?B?STdHU3ByTmMwck1SbWJDU2pSU3lwSDNvMjZjUksxajFSclpJTUFDT3dCUDdP?=
+ =?utf-8?B?MUMyM1ZMS2dFYVdkeTExZXAwZnBvWUd2bi93YUVXVkExczVBMlhrd0Q3N1No?=
+ =?utf-8?B?ZVNiUUNpN0RHb2JHdnhGbFNWbUZnR08rcE5yOVdjamRaTWcyVldvWWZ1VkhV?=
+ =?utf-8?B?OEViQ2JVWUNudFBRd1VZZWZyazNKOG9iRHBsZjJFZXN6eHhxSnIrcVlNNitQ?=
+ =?utf-8?B?U2JjMnlxcUVkeXBueFlnKy9IbXZrcU45VEZDdXhGZ3hsRCs3Y1RwU3lMU2wx?=
+ =?utf-8?B?UDZBeSswYVVpb3ZwelYwZjhyeFVkN0FrbGc2ZlBObFZDWVhJUDYrMkd3MGUw?=
+ =?utf-8?B?elE3c3dXRldRb1NQam5Kb3ArckNYOWFabzdsOUZrRy90V3pobVRYWGFTZDVS?=
+ =?utf-8?B?NE1iZXlkeXFRakVaRWJCZzdma3d6TWFrL3BDd0ZQQXp6UXd0NHNmYzFKNVl3?=
+ =?utf-8?B?MEd4czh2MXU2c051R01FbUpvRWNnUmdCcGFpaG15MDFYa3REY29vd3BjU3dN?=
+ =?utf-8?B?a0Zhd3NkY1U2ZFpzVnNicExFMithMmF3QitYTW1nY0hldFJwSXRsamYrbk1L?=
+ =?utf-8?B?Vm5rak1nc0lJNGJQYlRnOXdaLzE5Q1llVVd5R0xoeGpjYm42ckVkdTVGbnE1?=
+ =?utf-8?B?TENmTlpmbWtMTUFUYUlWaHZKOFY0ZndqaWo5endFS1ppRk53S1JvdlVKNzJq?=
+ =?utf-8?B?aEwvcGFWOFZZbFNRUHdEUFRwRlFNbEZuNy9zQ1ozQ0dpQWZ1UEluNFIwU2Zn?=
+ =?utf-8?B?dER2Q3dub2xOSnFlcnhVa0hZaUxDL0xYUTk0YlRoVHV6c1ViY3cvd2QwSFJU?=
+ =?utf-8?B?dGJMaUFkRWJadFlJemNPSU11NW1OVUVnWU1lQjRNVEh1RFZwTi81bXBPRzVt?=
+ =?utf-8?B?eXl4aHBYU21ibkVlZnF2YkRpU3N0ejZQZzJ5N1YvZWoyN3BXNWRVQ0xGZnNo?=
+ =?utf-8?B?cFVZS1E3Nkw0MENzZzhOUURFK0pieTVpdUFZRVRYaEJ5N2lpSE5JL1NqK2ND?=
+ =?utf-8?B?WXdzcTJaY2d6RVo5RjZPUFkrYmtMd3phSktqckIrTTIraExVaWlSSldMelFz?=
+ =?utf-8?B?MTVoQ3h1N2w4SEx6S2tpT3F3VWVBcW1kUzdrQkNrRkRkd0N6Q1Y1QUZ1OHdL?=
+ =?utf-8?B?K3JwRXl1UDJRMWxFQ2MyN0FOZWVxZVZCcnpKdHhUL1IxTTVBbllhMndQa09z?=
+ =?utf-8?B?Z2FHRDJNcjNwdEo4NmdFMklzOUxIMGQ2cUh0Nk9LV3NtQVNqK0ZpQ0lPZ3BO?=
+ =?utf-8?B?aHRtWnhneUtJT05oN0RWeTdKSVlkZ3JwN292bmtyL3l1SGljcTJDdWlpRG1k?=
+ =?utf-8?B?NHJYOXpMaFZEYlVrbS9TYzk3bWlsdUVSZC80cit5YlEydE5nZVlqdmJNSVkw?=
+ =?utf-8?B?REVpdExaNGlROVF6YjNLckYrbXd3Y2dhU2ZxNE1HM2FPRmxMUFIySUdNNUJE?=
+ =?utf-8?B?MmNMeTlzbzRya3BNdytqeEY5TUpMRE5YcXR0VWsxNGVsUXF0RUo1VjJYMXlh?=
+ =?utf-8?B?RC9aMmJzd1RFTFZmV1lwSW9HVUZzN1QrZHkzS2o0b1FwK28yWDVmalJWYnQy?=
+ =?utf-8?B?WFlHRzJGZVhSREN4Sm5QdnQvQk84cWJkZHVjVFV4Y24reEtCUmJvaCtiVURr?=
+ =?utf-8?B?dTEzdzlkYWU2UlJEa203MERnQXNUanhlK2RQcFVFdUFzVVdBSTJpQWJ3OE5k?=
+ =?utf-8?B?WUpubG8ya1RhTWJyUnRHZjR4elZEYTNwWnRrOW9icTBLL2xPRjBDMmk5VjRW?=
+ =?utf-8?B?NnNKSDh5M3ppbTZ1OXVIeHNtTmcyblNWQ2VaOFNxQStEUzUxa0IyWm1Ha0Y1?=
+ =?utf-8?B?ZUQ0LzNvZStpNldqUzd2aWpFWDdrbWxyKzJ3aktPaXN3WTVXY2ppYStacFhQ?=
+ =?utf-8?B?ajdHRHR3eG90enBBRVdlRmN1dHZ6RzNqZ0tsTHpFcG4wN3NLYkJXaVJMNWxD?=
+ =?utf-8?B?WWZ4dkxPd3VlVXFFU2pPUTludUFtL0JMRDZ0bFlmTDdRbDNZaDg4WUpaMU84?=
+ =?utf-8?B?YjNWYzhnR2tzbWZKMVduWlBxUDdBUVVsZmk4TkxBOWMwWmJuRzg5QUd6VGMr?=
+ =?utf-8?Q?zNbIjeoxec9C33FiL/EIk2Mbf?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 9915105c-e387-4e41-8601-08db14c217ca
+X-MS-Exchange-CrossTenant-AuthSource: DM6PR12MB3370.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 22 Feb 2023 10:46:46.0291
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: /PqekLzisNGgT7TQm4A5Xg122uu+GrF0nmK7uOQvlsQCB66L70/Yy9y43ps8kwJ0
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS0PR12MB7945
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 22 Feb 2023 at 11:11, Muhammad Usama Anjum
-<usama.anjum@collabora.com> wrote:
-> On 2/21/23 5:42=E2=80=AFPM, Micha=C5=82 Miros=C5=82aw wrote:
-> > On Tue, 21 Feb 2023 at 11:28, Muhammad Usama Anjum
-> > <usama.anjum@collabora.com> wrote:
-> >>
-> >> Hi Micha=C5=82,
-> >>
-> >> Thank you so much for comment!
-> >>
-> >> On 2/17/23 8:18=E2=80=AFPM, Micha=C5=82 Miros=C5=82aw wrote:
-> > [...]
-> >>> For the page-selection mechanism, currently required_mask and
-> >>> excluded_mask have conflicting
-> >> They are opposite of each other:
-> >> All the set bits in required_mask must be set for the page to be selec=
-ted.
-> >> All the set bits in excluded_mask must _not_ be set for the page to be
-> >> selected.
-> >>
-> >>> responsibilities. I suggest to rework that to:
-> >>> 1. negated_flags: page flags which are to be negated before applying
-> >>> the page selection using following masks;
-> >> Sorry I'm unable to understand the negation (which is XOR?). Lets look=
- at
-> >> the truth table:
-> >> Page Flag       negated_flags
-> >> 0               0                       0
-> >> 0               1                       1
-> >> 1               0                       1
-> >> 1               1                       0
-> >>
-> >> If a page flag is 0 and negated_flag is 1, the result would be 1 which=
- has
-> >> changed the page flag. It isn't making sense to me. Why the page flag =
-bit
-> >> is being fliped?
-> >>
-> >> When Anrdei had proposed these masks, they seemed like a fancy way of
-> >> filtering inside kernel and it was straight forward to understand. The=
-se
-> >> masks would help his use cases for CRIU. So I'd included it. Please ca=
-n you
-> >> elaborate what is the purpose of negation?
-> >
-> > The XOR is a way to invert the tested value of a flag (from positive
-> > to negative and the other way) without having the API with invalid
-> > values (with required_flags and excluded_flags you need to define a
-> > rule about what happens if a flag is present in both of the masks -
-> > either prioritise one mask over the other or reject the call).
-> At minimum, one mask (required, any or excluded) must be specified. For a
-> page to get selected, the page flags must fulfill the criterion of all th=
-e
-> specified masks.
+On 2023-02-18 16:15, Rob Clark wrote:
+> From: Rob Clark <robdclark@chromium.org>
+> 
+> For an atomic commit updating a single CRTC (ie. a pageflip) calculate
+> the next vblank time, and inform the fence(s) of that deadline.
+> 
+> v2: Comment typo fix (danvet)
+> 
+> Signed-off-by: Rob Clark <robdclark@chromium.org>
+> Reviewed-by: Daniel Vetter <daniel.vetter@ffwll.ch>
+> Signed-off-by: Rob Clark <robdclark@chromium.org>
+> ---
+>  drivers/gpu/drm/drm_atomic_helper.c | 36 +++++++++++++++++++++++++++++
+>  1 file changed, 36 insertions(+)
+> 
+> diff --git a/drivers/gpu/drm/drm_atomic_helper.c b/drivers/gpu/drm/drm_atomic_helper.c
+> index d579fd8f7cb8..35a4dc714920 100644
+> --- a/drivers/gpu/drm/drm_atomic_helper.c
+> +++ b/drivers/gpu/drm/drm_atomic_helper.c
+> @@ -1511,6 +1511,40 @@ void drm_atomic_helper_commit_modeset_enables(struct drm_device *dev,
+>  }
+>  EXPORT_SYMBOL(drm_atomic_helper_commit_modeset_enables);
+>  
+> +/*
+> + * For atomic updates which touch just a single CRTC, calculate the time of the
+> + * next vblank, and inform all the fences of the deadline.
+> + */
+> +static void set_fence_deadline(struct drm_device *dev,
+> +			       struct drm_atomic_state *state)
+> +{
+> +	struct drm_crtc *crtc, *wait_crtc = NULL;
+> +	struct drm_crtc_state *new_crtc_state;
+> +	struct drm_plane *plane;
+> +	struct drm_plane_state *new_plane_state;
+> +	ktime_t vbltime;
 
-[Please see the comment below.]
+I've not looked at the latest language spec, but is AFAIR "vbltime"
+would be uninitialized here. Has this changed?
 
-[...]
-> Lets translate words into table:
-[Yes, those tables captured the intent correctly.]
+> +	int i;
+> +
+> +	for_each_new_crtc_in_state (state, crtc, new_crtc_state, i) {
+> +		if (wait_crtc)
+> +			return;
+> +		wait_crtc = crtc;
+> +	}
+> +
+> +	/* If no CRTCs updated, then nothing to do: */
+> +	if (!wait_crtc)
+> +		return;
+> +
+> +	if (drm_crtc_next_vblank_time(wait_crtc, &vbltime))
+> +		return;
 
-> > BTW, I think I assumed that both conditions (all flags in
-> > required_flags and at least one in anyof_flags is present) need to be
-> > true for the page to be selected - is this your intention?
-> All the masks are optional. If all or any of the 3 masks are specified, t=
-he
-> page flags must pass these masks to get selected.
+We have a problem here in that we're adding the time remaining to the next
+vblank event to an uninitialized local variable. As per my comment on patch 10,
+I'd rather drm_crtc_next_vblank_time() yield the time remaining to the vblank event,
+and we can do the arithmetic locally here in this function.
+-- 
+Regards,
+Luben
 
-This explanation contradicts in part the introductory paragraph, but
-this version seems more useful as you can pass all masks zero to have
-all pages selected.
+> +
+> +	for_each_new_plane_in_state (state, plane, new_plane_state, i) {
+> +		if (!new_plane_state->fence)
+> +			continue;
+> +		dma_fence_set_deadline(new_plane_state->fence, vbltime);
+> +	}
+> +}
+> +
+>  /**
+>   * drm_atomic_helper_wait_for_fences - wait for fences stashed in plane state
+>   * @dev: DRM device
+> @@ -1540,6 +1574,8 @@ int drm_atomic_helper_wait_for_fences(struct drm_device *dev,
+>  	struct drm_plane_state *new_plane_state;
+>  	int i, ret;
+>  
+> +	set_fence_deadline(dev, state);
+> +
+>  	for_each_new_plane_in_state(state, plane, new_plane_state, i) {
+>  		if (!new_plane_state->fence)
+>  			continue;
 
-> > The example
-> > code has a bug though, in that if anyof_flags is zero it will never
-> > match. Let me fix the selection part:
-> >
-> > // calc. a mask of flags that have expected ("active") values
-> > tested_flags =3D page_flags ^ negated_flags;
-> > // are all required flags in "active" state? [=3D=3D all zero when nega=
-ted]
-> > if (~tested_flags & required_mask)
-> >   skip page;
-> > // is any extra flag "active"?
-> > if (anyof_flags && !(tested_flags & anyof_flags))
-> >   skip page;
-> >
-> After taking a while to understand this and compare with already present
-> flag system, `negated flags` is comparatively difficult to understand whi=
-le
-> already present flags seem easier.
-
-Maybe replacing negated_flags in the API with matched_values =3D
-~negated_flags would make this better?
-
-We compare having to understand XOR vs having to understand ordering
-of required_flags and excluded_flags.
-IOW my proposal is to replace branches in the masks interpretation (if
-in one set then matches but if in another set then doesn't; if flags
-match ... ) with plain calculation (flag is matching when equals
-~negated_flags; if flags match the masks ...).
-
-Best Regards
-Micha=C5=82 Miros=C5=82aw
