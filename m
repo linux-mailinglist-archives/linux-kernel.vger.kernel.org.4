@@ -2,99 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 79C9069F1F8
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Feb 2023 10:39:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 45DA769F1FE
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Feb 2023 10:40:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231845AbjBVJjw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Feb 2023 04:39:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33884 "EHLO
+        id S232239AbjBVJkm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Feb 2023 04:40:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33620 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230190AbjBVJj0 (ORCPT
+        with ESMTP id S229669AbjBVJkO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Feb 2023 04:39:26 -0500
-Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57A093B651
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Feb 2023 01:36:34 -0800 (PST)
-Received: by mail-wr1-x432.google.com with SMTP id c12so7053015wrw.1
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Feb 2023 01:36:34 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=NRk5F+0/KBJtXy1UGgffMDC3lUYcUK9POoNTTNzoa24=;
-        b=u+urDYkiChNW/YI0+mNXcxcwazZf2oOYqiBgCEV2QRhM9Bj6bxgttGAPIfrpBsmZxB
-         F/vzmmCmy0CmXzapu9KDPiLA9pY7S1B1GBW680gB1ZUGoMoUy99YDtiK57CeqAaY2HDG
-         0K6bgiYCumaL/dEN8e2MSENFFfv0PQ9lP8dbpE6nD1ZEyuCRN6nDMhxiua2p5l7kkJgh
-         7fxk/bcZzDt3idskr7rGCw0S6Js/HSnwDHdjcNFVO3Tdji5NuQ4PprVdhfl0lRLFdIbN
-         nBWs7kKgv2X0JbhP42VvRIC5GiSY67juoj1zkN5gTEpZF3ZSitEAYHdksPGLvld9I7Aj
-         k8mQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=NRk5F+0/KBJtXy1UGgffMDC3lUYcUK9POoNTTNzoa24=;
-        b=37osI1iRhcw3iENsr0OkUijGIzBCtx2ik2txBbXdpRkIdMcfmCPBZEH+DM0pWanbuZ
-         Ly+d0577GbR8r46YfyDFdJll1XlLrxx7GdZPPLoDpPz6A2ODMp0QAOf7WRkUf27jwacQ
-         XhXyxzzMMrA5EgLVnLHRsE8EsLYdoqdY74KtH5Wg2Av9BAWyWuswvUt9JE8BJYwJHAE+
-         pEl7E3NO/82YmNCi56lPWb4B2PqbMskYtuyhmC1t7eHOjHM0ilUV896wVrL4JUOQ2POq
-         5805lOhg3K4vWi32FXOUZu9vSHyF5uTnA+3tcJZCmgySTSy6Pdw+e7w6rhD9gHh9pRLp
-         RkqQ==
-X-Gm-Message-State: AO0yUKVnv8vlb5OHzYbmBxG8K10TrAJjNtFR29ZGZRGzOrGjV1NyC+TY
-        4EpzUp9LZGXXJ1qsWqEn14ZFrg==
-X-Google-Smtp-Source: AK7set8hSrDxe9qvKyM2TLqTXl2UDNEIhR+MHKT7cLtR99WMCh22GQotZ3MUmWOEuM4/zk8YKoN/yQ==
-X-Received: by 2002:a5d:4d01:0:b0:2c5:4ca0:1abb with SMTP id z1-20020a5d4d01000000b002c54ca01abbmr7295022wrt.60.1677058490952;
-        Wed, 22 Feb 2023 01:34:50 -0800 (PST)
-Received: from [192.168.1.109] ([178.197.216.144])
-        by smtp.gmail.com with ESMTPSA id e16-20020adfe390000000b002c54c8e70b1sm7061642wrm.9.2023.02.22.01.34.49
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 22 Feb 2023 01:34:50 -0800 (PST)
-Message-ID: <f6f91c5f-5013-3c1a-9eac-e87fb7071031@linaro.org>
-Date:   Wed, 22 Feb 2023 10:34:48 +0100
+        Wed, 22 Feb 2023 04:40:14 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D17D138EA6;
+        Wed, 22 Feb 2023 01:37:15 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 05B6A612B2;
+        Wed, 22 Feb 2023 09:36:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 40FFEC433A0;
+        Wed, 22 Feb 2023 09:36:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1677058570;
+        bh=rFQ08XqnmKgreYK0T/xvGGP3R+J2JrSfW9FfpliUaPs=;
+        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+        b=pwlyWK4iVjR8tABgAOltE1OFLX1vmDwB78exTdCb8OeRE1K1yKo+IdVYeUL/BqESA
+         BaHGSBUTf4J92Ev884CbXmqm0FjFiaUB7dloSaBYrO4PQzVH5jClJX6ASp/sWYG6O4
+         w39i5ctPyuQwvEr7Eo7VNTFzFDSghetuEhMCR7XBmDCoyQc2HfT9mUmeYb9EkbXrsQ
+         dQN6yUkONs0CKUHvaL8FORav4HxEJqfNeQjHFjZgyCnqEu7xpybLrTt9modqFtUlgA
+         SqMfnHxXTzoIiHwYRApL+jYPOm92N8U7N9vQkAB1sDlFNjyQhfDwmsf7T9sDZkq1bh
+         8ujIbE/PxEMvg==
+From:   Kalle Valo <kvalo@kernel.org>
+To:     Abhishek Kumar <kuabhs@chromium.org>
+Cc:     davem@davemloft.net, ath10k@lists.infradead.org,
+        quic_mpubbise@quicinc.com, netdev@vger.kernel.org, kuba@kernel.org,
+        linux-wireless@vger.kernel.org, pabeni@redhat.com,
+        linux-kernel@vger.kernel.org, Eric Dumazet <edumazet@google.com>
+Subject: Re: [PATCH v2] ath10k: snoc: enable threaded napi on WCN3990
+In-Reply-To: <CACTWRws334p0qpsZrDBULgS124Zye9D7YC3F9hzJpaFzSmn1CQ@mail.gmail.com>
+        (Abhishek Kumar's message of "Tue, 21 Feb 2023 23:09:24 -0800")
+References: <20230203000116.v2.1.I5bb9c164a2d2025655dee810b983e01ecd81c14e@changeid>
+        <CACTWRws334p0qpsZrDBULgS124Zye9D7YC3F9hzJpaFzSmn1CQ@mail.gmail.com>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
+Date:   Wed, 22 Feb 2023 11:36:03 +0200
+Message-ID: <878rgqt530.fsf@kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH v2 1/2] dt-bindings: display: panel: Add Novatek NT36523
- bindings
-Content-Language: en-US
-To:     Jianhua Lu <lujianhua000@gmail.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc:     dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org
-References: <20230220121258.10727-1-lujianhua000@gmail.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230220121258.10727-1-lujianhua000@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 20/02/2023 13:12, Jianhua Lu wrote:
-> Novatek NT36523 is a display driver IC used to drive DSI panels.
-> 
-> Signed-off-by: Jianhua Lu <lujianhua000@gmail.com>
-> ---
-> Changes in v2:
->   - Drop unnecessary description
->   - dsi0 -> dsi
+Abhishek Kumar <kuabhs@chromium.org> writes:
 
+> Gentle reminder for your comments.
 
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+A gentle reminder to avoid sending gentle reminders :) For example, I
+currently have 103 patches in patchwork and if everyone send gentle
+reminders that's a lot of unnecessary email. So please avoid sending
+unnecessary emails. "gentle reminders" don't help, quite the opposite.
 
-Best regards,
-Krzysztof
+Unfortunately sometimes it takes time before I'm able to look at
+patches, but if the patch is in patchwork in an active state I will look
+at them eventually. More info here:
 
+https://wireless.wiki.kernel.org/en/developers/documentation/submittingpatches#checking_state_of_patches_from_patchwork
+
+-- 
+https://patchwork.kernel.org/project/linux-wireless/list/
+
+https://wireless.wiki.kernel.org/en/developers/documentation/submittingpatches
