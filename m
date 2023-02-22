@@ -2,99 +2,201 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 396FA69F29F
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Feb 2023 11:23:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 837B869F1D4
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Feb 2023 10:36:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231893AbjBVKXx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Feb 2023 05:23:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59078 "EHLO
+        id S231384AbjBVJf6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Feb 2023 04:35:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55520 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231435AbjBVKXv (ORCPT
+        with ESMTP id S232085AbjBVJer (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Feb 2023 05:23:51 -0500
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C39DCBDD3
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Feb 2023 02:23:50 -0800 (PST)
-Received: from pps.filterd (m0098410.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 31M7swp3001996;
-        Wed, 22 Feb 2023 09:30:34 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
- subject : message-id : references : mime-version : content-type :
- in-reply-to; s=pp1; bh=svo4OkxrZOj9zmT2dhiixCt1CjU9CxKLUbyR70g6ERk=;
- b=OfqK6fjmTB1uBpL2H2XoOS1FRdEFh2Ak813o56jiDmEmSQChCBLddRIqDdbMW2F/cx2r
- BolMl1EUXL5iOEfFOLDKzfeRruMcPuVI4HaNTZWRBj3lP01qIDR3yDVP/HTxAyOeqYjq
- i+nddlvNH9Zh6CvkWAeBdW+AKpZxC9LHCZCgyqcETopQqb675IiNYe6Yow4KSrVvx8+d
- L24wcYnEIDYpYAAHLjeiqwbbnsTy6itn+pj8jfcYikk/+7wsQo9tA5LzhGM+uMYb7cdJ
- Oqj2DHiIfh/FB5MfaFR0E9Uo6/JYmu+CdKMWZ3NVHAMFIcrs5zgf+p4aMVQSzVAcgydn Jw== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3nwf2ttesj-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 22 Feb 2023 09:30:33 +0000
-Received: from m0098410.ppops.net (m0098410.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 31M8xsar018693;
-        Wed, 22 Feb 2023 09:30:33 GMT
-Received: from ppma01fra.de.ibm.com (46.49.7a9f.ip4.static.sl-reverse.com [159.122.73.70])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3nwf2tterc-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 22 Feb 2023 09:30:33 +0000
-Received: from pps.filterd (ppma01fra.de.ibm.com [127.0.0.1])
-        by ppma01fra.de.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 31LDHsAM020937;
-        Wed, 22 Feb 2023 09:30:31 GMT
-Received: from smtprelay07.fra02v.mail.ibm.com ([9.218.2.229])
-        by ppma01fra.de.ibm.com (PPS) with ESMTPS id 3ntpa6bvex-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 22 Feb 2023 09:30:30 +0000
-Received: from smtpav01.fra02v.mail.ibm.com (smtpav01.fra02v.mail.ibm.com [10.20.54.100])
-        by smtprelay07.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 31M9USYc41288004
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 22 Feb 2023 09:30:28 GMT
-Received: from smtpav01.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 25C482005A;
-        Wed, 22 Feb 2023 09:30:28 +0000 (GMT)
-Received: from smtpav01.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 319CD2004B;
-        Wed, 22 Feb 2023 09:30:25 +0000 (GMT)
-Received: from li-a450e7cc-27df-11b2-a85c-b5a9ac31e8ef.ibm.com (unknown [9.43.123.148])
-        by smtpav01.fra02v.mail.ibm.com (Postfix) with ESMTPS;
-        Wed, 22 Feb 2023 09:30:24 +0000 (GMT)
-Date:   Wed, 22 Feb 2023 15:00:21 +0530
-From:   Kautuk Consul <kconsul@linux.vnet.ibm.com>
-To:     Michael Ellerman <mpe@ellerman.id.au>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Rohan McLure <rmclure@linux.ibm.com>
-Cc:     linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] arch/powerpc/include/asm/barrier.h: redefine rmb and
- wmb to  lwsync
-Message-ID: <Y/XgrU9RhuaGCLHp@li-a450e7cc-27df-11b2-a85c-b5a9ac31e8ef.ibm.com>
-References: <20230222090344.189270-1-kconsul@linux.vnet.ibm.com>
+        Wed, 22 Feb 2023 04:34:47 -0500
+Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B55F99EF0;
+        Wed, 22 Feb 2023 01:32:48 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=RZxqWOtOiY463rPgMWomV6862Rwqvyak5+4JgTBIxcE=; b=zolW4tU4QDEFF7t28e1uyOMJ87
+        QfEpv0FnARRQ59zu5uQF0lrxl1jhqrBewUylyy8cmfCxAA3mD7EqQkZng30DJeg+2XSPEXzx2MYg4
+        lmiyLax98k7zjNjou+e3o3DobITCUxO0aEXvve+slkaGtEuXDkPVamVb2LHL+tVpHB44RQ7TH1f35
+        0zUg00FbngPdCHr334Ioi8oFbrT5V/CZRaQ1afRa1YlZ0Z/WWJshJu+JpkSQ45jwc5N8epezwJu8/
+        kzY+UnrxvopsXckpkZat7J4NtyHtUoSgJR4x7Mh6hU+vatM7f3h4FJh9Ak5bL4HgQZycQu1j9J0QB
+        fULZdLxw==;
+Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:48670)
+        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <linux@armlinux.org.uk>)
+        id 1pUlT3-0006ka-Cy; Wed, 22 Feb 2023 09:31:17 +0000
+Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
+        (envelope-from <linux@shell.armlinux.org.uk>)
+        id 1pUlSz-00035v-JI; Wed, 22 Feb 2023 09:31:13 +0000
+Date:   Wed, 22 Feb 2023 09:31:13 +0000
+From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
+To:     Clark Wang <xiaoning.wang@nxp.com>
+Cc:     peppe.cavallaro@st.com, alexandre.torgue@foss.st.com,
+        joabreu@synopsys.com, davem@davemloft.net, edumazet@google.com,
+        kuba@kernel.org, pabeni@redhat.com, mcoquelin.stm32@gmail.com,
+        andrew@lunn.ch, hkallweit1@gmail.com, netdev@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-imx@nxp.com
+Subject: Re: [PATCH net-next V4 1/2] net: phylink: add a function to resume
+ PHY alone to fix resume issue with WoL enabled
+Message-ID: <Y/Xg4T+Zw3jW0/Lb@shell.armlinux.org.uk>
+References: <20230222092636.1984847-1-xiaoning.wang@nxp.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230222090344.189270-1-kconsul@linux.vnet.ibm.com>
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: rAyNtmiPovEBwWta77iV5yzA1_-8P4kP
-X-Proofpoint-ORIG-GUID: hgBMPb_kkcVt6bXslrvlq8M2JfZGnhU7
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.170.22
- definitions=2023-02-22_04,2023-02-20_02,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0
- suspectscore=0 phishscore=0 mlxlogscore=870 mlxscore=0 spamscore=0
- malwarescore=0 clxscore=1015 priorityscore=1501 bulkscore=0 adultscore=0
- lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2302220078
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20230222092636.1984847-1-xiaoning.wang@nxp.com>
+Sender: Russell King (Oracle) <linux@armlinux.org.uk>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Again, could some IBM/non-IBM employees do basic sanity kernel load
-testing on PPC64 UP and SMP systems for this patch?
-would deeply appreciate it! :-)
+net-next is closed due to the merge window. Please resubmit after
+6.3-rc1. Thanks.
 
-Thanks again!
+On Wed, Feb 22, 2023 at 05:26:35PM +0800, Clark Wang wrote:
+> Issue we met:
+> On some platforms, MAC cannot work after resumed from the suspend with WoL
+> enabled.
+> 
+> The cause of the issue:
+> 1. phylink_resolve() is in a workqueue which will not be executed immediately.
+>    This is the call sequence:
+>        phylink_resolve()->phylink_link_up()->pl->mac_ops->mac_link_up()
+>    For stmmac driver, mac_link_up() will set the correct speed/duplex...
+>    values which are from link_state.
+> 2. In stmmac_resume(), it will call stmmac_hw_setup() after called the
+>    phylink_resume(), because MAC need PHY rx_clk to do the reset.
+>    stmmac_core_init() is called in function stmmac_hw_setup(), which will
+>    reset the MAC and set the speed/duplex... to default value.
+> Conclusion: Because phylink_resolve() cannot determine when it is called, it
+>             cannot be guaranteed to be called after stmmac_core_init().
+> 	    Once stmmac_core_init() is called after phylink_resolve(),
+> 	    the MAC will be misconfigured and cannot be used.
+> 
+> In order to avoid this problem, add a function called phylink_phy_resume()
+> to resume PHY separately. This eliminates the need to call phylink_resume()
+> before stmmac_hw_setup().
+> 
+> Add another judgement before called phy_start() in phylink_start(). This way
+> phy_start() will not be called multiple times when resumes. At the same time,
+> it may not affect other drivers that do not use phylink_phy_resume().
+> 
+> Signed-off-by: Clark Wang <xiaoning.wang@nxp.com>
+> ---
+> V2 change:
+>  - add mac_resume_phy_separately flag to struct phylink to mark if the MAC
+>    driver uses the phylink_phy_resume() first.
+> V3 change:
+>  - add brace to avoid ambiguous 'else'
+>    Reported-by: kernel test robot <lkp@intel.com>
+> V4:
+> Many thanks to Jakub and Russel for their suggestions, here are the changes for V4.
+>  - Unify MAC and PHY in comments and subject to uppercase.
+>  - Add subject of the sentence.
+>  - Move && to the end of the line
+>  - Add notice in the comment of function phylink_phy_resume()
+> ---
+>  drivers/net/phy/phylink.c | 35 +++++++++++++++++++++++++++++++++--
+>  include/linux/phylink.h   |  1 +
+>  2 files changed, 34 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/net/phy/phylink.c b/drivers/net/phy/phylink.c
+> index ea8fcce5b2d9..0be57e9463d9 100644
+> --- a/drivers/net/phy/phylink.c
+> +++ b/drivers/net/phy/phylink.c
+> @@ -80,6 +80,8 @@ struct phylink {
+>  	DECLARE_PHY_INTERFACE_MASK(sfp_interfaces);
+>  	__ETHTOOL_DECLARE_LINK_MODE_MASK(sfp_support);
+>  	u8 sfp_port;
+> +
+> +	bool mac_resume_phy_separately;
+>  };
+>  
+>  #define phylink_printk(level, pl, fmt, ...) \
+> @@ -1509,6 +1511,7 @@ struct phylink *phylink_create(struct phylink_config *config,
+>  		return ERR_PTR(-EINVAL);
+>  	}
+>  
+> +	pl->mac_resume_phy_separately = false;
+>  	pl->using_mac_select_pcs = using_mac_select_pcs;
+>  	pl->phy_state.interface = iface;
+>  	pl->link_interface = iface;
+> @@ -1942,8 +1945,12 @@ void phylink_start(struct phylink *pl)
+>  	}
+>  	if (poll)
+>  		mod_timer(&pl->link_poll, jiffies + HZ);
+> -	if (pl->phydev)
+> -		phy_start(pl->phydev);
+> +	if (pl->phydev) {
+> +		if (!pl->mac_resume_phy_separately)
+> +			phy_start(pl->phydev);
+> +		else
+> +			pl->mac_resume_phy_separately = false;
+> +	}
+>  	if (pl->sfp_bus)
+>  		sfp_upstream_start(pl->sfp_bus);
+>  }
+> @@ -2023,6 +2030,30 @@ void phylink_suspend(struct phylink *pl, bool mac_wol)
+>  }
+>  EXPORT_SYMBOL_GPL(phylink_suspend);
+>  
+> +/**
+> + * phylink_phy_resume() - resume PHY alone
+> + * @pl: a pointer to a &struct phylink returned from phylink_create()
+> + *
+> + * In the MAC driver using phylink, if the MAC needs the clock of the PHY
+> + * when it resumes, it can call this function to resume the PHY separately.
+> + * Then proceed to MAC resume operations.
+> + * 
+> + * Note: This function MUST ONLY be called before calling phylink_start()
+> + *       in the MAC resume function.
+> + */
+> +void phylink_phy_resume(struct phylink *pl)
+> +{
+> +	ASSERT_RTNL();
+> +
+> +	if (!test_bit(PHYLINK_DISABLE_MAC_WOL, &pl->phylink_disable_state) &&
+> +	    pl->phydev) {
+> +		phy_start(pl->phydev);
+> +		pl->mac_resume_phy_separately = true;
+> +	}
+> +
+> +}
+> +EXPORT_SYMBOL_GPL(phylink_phy_resume);
+> +
+>  /**
+>   * phylink_resume() - handle a network device resume event
+>   * @pl: a pointer to a &struct phylink returned from phylink_create()
+> diff --git a/include/linux/phylink.h b/include/linux/phylink.h
+> index c492c26202b5..6edfab5f754c 100644
+> --- a/include/linux/phylink.h
+> +++ b/include/linux/phylink.h
+> @@ -589,6 +589,7 @@ void phylink_stop(struct phylink *);
+>  
+>  void phylink_suspend(struct phylink *pl, bool mac_wol);
+>  void phylink_resume(struct phylink *pl);
+> +void phylink_phy_resume(struct phylink *pl);
+>  
+>  void phylink_ethtool_get_wol(struct phylink *, struct ethtool_wolinfo *);
+>  int phylink_ethtool_set_wol(struct phylink *, struct ethtool_wolinfo *);
+> -- 
+> 2.34.1
+> 
+> 
 
+-- 
+RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
+FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!
