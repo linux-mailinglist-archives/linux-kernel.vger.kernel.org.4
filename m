@@ -2,83 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A6FC69FA47
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Feb 2023 18:38:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 67CE069FA4A
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Feb 2023 18:39:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231384AbjBVRip (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Feb 2023 12:38:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52426 "EHLO
+        id S231854AbjBVRje (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Feb 2023 12:39:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52452 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229950AbjBVRio (ORCPT
+        with ESMTP id S229950AbjBVRjc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Feb 2023 12:38:44 -0500
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40DC028213;
-        Wed, 22 Feb 2023 09:38:39 -0800 (PST)
-Received: from pps.filterd (m0279864.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 31MAxwtO017419;
-        Wed, 22 Feb 2023 17:38:00 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id; s=qcppdkim1;
- bh=0P+R+juQHlHNSwC5b6RqqeVMFPtdxal5F6AkMRzCLp8=;
- b=T0JMim8zUGsXQd+reBxoHnWgO/c6+JdbtwUp35P2lR18iAxowlOgrq2eECOw1Y5Sw6Q/
- 1I2Dd9zIKm4fz6zYRSs2cZpI7A8m8vRCb69BRswDJfHC5Xd7MXHPIE1d1U+G9zCg4kJt
- XTfcZ+022rYM525QK46TjoPTEhkmJzhNVPaBBl1ox7vmyQ5z6YXSLeygRQsZg3lRTpef
- YxykI+ZViUKlLj3GM9bdXzKKiFYuKagqrxLPl9tl8Xt5Qtj2x6lzzU+VIn5fk62IDN59
- OW+O8BOK/B1CtZbA1V4dTwZIvhV/QEp1Spp/HqutXVYhwErlfR+6C7ba6YGFUuw7/dum 2Q== 
-Received: from apblrppmta02.qualcomm.com (blr-bdr-fw-01_GlobalNAT_AllZones-Outside.qualcomm.com [103.229.18.19])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3nw8gntbkn-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 22 Feb 2023 17:37:59 +0000
-Received: from pps.filterd (APBLRPPMTA02.qualcomm.com [127.0.0.1])
-        by APBLRPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTP id 31MHbtdf021923;
-        Wed, 22 Feb 2023 17:37:55 GMT
-Received: from pps.reinject (localhost [127.0.0.1])
-        by APBLRPPMTA02.qualcomm.com (PPS) with ESMTP id 3ntqrkxfsa-1;
-        Wed, 22 Feb 2023 17:37:55 +0000
-Received: from APBLRPPMTA02.qualcomm.com (APBLRPPMTA02.qualcomm.com [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 31MHbt27021918;
-        Wed, 22 Feb 2023 17:37:55 GMT
-Received: from hu-sgudaval-hyd.qualcomm.com (hu-vpernami-hyd.qualcomm.com [10.213.107.240])
-        by APBLRPPMTA02.qualcomm.com (PPS) with ESMTP id 31MHbslX021916;
-        Wed, 22 Feb 2023 17:37:55 +0000
-Received: by hu-sgudaval-hyd.qualcomm.com (Postfix, from userid 2370923)
-        id 0FE3A157C; Wed, 22 Feb 2023 23:07:54 +0530 (+0530)
-From:   Vivek Pernamitta <quic_vpernami@quicinc.com>
-To:     mhi@lists.linux.dev
-Cc:     quic_qianyu@quicinc.com, manivannan.sadhasivam@linaro.org,
-        quic_vbadigan@quicinc.com, quic_krichai@quicinc.com,
-        quic_skananth@quicinc.com, mrana@quicinc.com,
-        Vivek Pernamitta <quic_vpernami@quicinc.com>,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        Alex Elder <elder@linaro.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jeffrey Hugo <quic_jhugo@quicinc.com>,
-        Hemant Kumar <hemantk@codeaurora.org>,
-        Bhaumik Bhatt <bbhatt@codeaurora.org>,
-        linux-arm-msm@vger.kernel.org (open list:MHI BUS),
-        linux-kernel@vger.kernel.org (open list)
-Subject: [PATCH v5] bus: mhi: host: Avoid ringing EV DB if there is no elements to process
-Date:   Wed, 22 Feb 2023 23:07:48 +0530
-Message-Id: <1677087470-7004-1-git-send-email-quic_vpernami@quicinc.com>
-X-Mailer: git-send-email 2.7.4
-X-QCInternal: smtphost
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: jqmkLrMG69aIoaxkjaEBeR2sWAHnU43p
-X-Proofpoint-GUID: jqmkLrMG69aIoaxkjaEBeR2sWAHnU43p
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.170.22
- definitions=2023-02-22_06,2023-02-22_02,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0
- priorityscore=1501 adultscore=0 bulkscore=0 clxscore=1015
- lowpriorityscore=0 mlxlogscore=999 malwarescore=0 mlxscore=0 phishscore=0
- suspectscore=0 spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2302220154
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        Wed, 22 Feb 2023 12:39:32 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3113228D0E
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Feb 2023 09:38:41 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1677087520;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=xlZAfWTuJXkBs46DXI6mtkWkRzzW2ABpGzcojN9g6uo=;
+        b=AIzwnXBBcZBTME/983Qgz3Cm0BMREnAbxIK6hhlGNrIyO5OdpL8Ec6Nd77hiMR56zMhSbu
+        XsN0Qs6Eay6m7g3LQxpw009s5hJbK5gLi9CJU15u2tJdGxBo3cDpTRJYbOLrZTPuqhauRV
+        XFL363mL+FykT0PkKi033rfTRO/03+s=
+Received: from mail-qt1-f198.google.com (mail-qt1-f198.google.com
+ [209.85.160.198]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-671-bBKbBE4GOWiQYy7HyZLBig-1; Wed, 22 Feb 2023 12:38:38 -0500
+X-MC-Unique: bBKbBE4GOWiQYy7HyZLBig-1
+Received: by mail-qt1-f198.google.com with SMTP id e17-20020ac85dd1000000b003ba2d72f98aso4282001qtx.10
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Feb 2023 09:38:38 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1677087518;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=xlZAfWTuJXkBs46DXI6mtkWkRzzW2ABpGzcojN9g6uo=;
+        b=LJDnboA3r1IkhfeLka2TJ04T322nx23DpfYPDRJv5FN/u6V0nL6mrQeQKZvg3F06Wm
+         NK3KXt05lDROiC4RzNErNyUIv8O9362tXDM+X6tknlfA16CXwp+VzlCbAFFC9Buv2B+4
+         Uds11cjFaRRHb4H7UMTsbi40OcTU7Qhzxpo0MSww7k+v+xxDJ0YX6p9Uy7I04U53z0Fu
+         RQXJcXQ+FWhXgAUah+7iycWSA0tGuSTStAp5SKitiPdhNc07BKuoC/zol28kZZY+zSr7
+         c8f0SwplSr8oKxtRAmAKH7VFGFWuLnpAG4d71XiEcj1mLOqABodeuzzb3PbCA+RgWa6w
+         ogRQ==
+X-Gm-Message-State: AO0yUKVEm4c/eJHaaKsx4k+iC2FTnmdKhQMkw7ARlSvzlkUibFGw8eba
+        gXCVbyGH+rHYRRajcTzN5i3hxl/AX1X/vPgXnRCgw8I1Nw91VBEJWAcZlr22I0CR1Cxh6oRC7gO
+        atRhqlyQJZMXs2xv8OX1NqL9M
+X-Received: by 2002:ac8:58d6:0:b0:3bd:1647:160b with SMTP id u22-20020ac858d6000000b003bd1647160bmr19096802qta.2.1677087518245;
+        Wed, 22 Feb 2023 09:38:38 -0800 (PST)
+X-Google-Smtp-Source: AK7set8cvK6Lhac8CLf7MjNiS0kkrtU05xWHkW5wbZo6gEjGoD1r7QQMMDIClIyubuIcHlBBqiWx5w==
+X-Received: by 2002:ac8:58d6:0:b0:3bd:1647:160b with SMTP id u22-20020ac858d6000000b003bd1647160bmr19096769qta.2.1677087517965;
+        Wed, 22 Feb 2023 09:38:37 -0800 (PST)
+Received: from x1n (bras-base-aurron9127w-grc-56-70-30-145-63.dsl.bell.ca. [70.30.145.63])
+        by smtp.gmail.com with ESMTPSA id a184-20020a3798c1000000b007423caef02fsm700845qke.122.2023.02.22.09.38.36
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 22 Feb 2023 09:38:37 -0800 (PST)
+Date:   Wed, 22 Feb 2023 12:38:36 -0500
+From:   Peter Xu <peterx@redhat.com>
+To:     Johannes Weiner <hannes@cmpxchg.org>
+Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Yang Shi <shy828301@gmail.com>,
+        David Stevens <stevensd@chromium.org>, stable@vger.kernel.org
+Subject: Re: [PATCH] mm/khugepaged: alloc_charge_hpage() take care of mem
+ charge errors
+Message-ID: <Y/ZTHEACqwYUYGFP@x1n>
+References: <20230221214344.609226-1-peterx@redhat.com>
+ <Y/ZLjF9Xe1F6Mu76@cmpxchg.org>
+MIME-Version: 1.0
+Content-Type: multipart/mixed; boundary="Vmaj7Dywv+8d4uMP"
+Content-Disposition: inline
+In-Reply-To: <Y/ZLjF9Xe1F6Mu76@cmpxchg.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -86,56 +81,107 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-As mhi_poll function can be called by mhi client drivers
-which will call process_event, which will ring DB even if
-there no ring elements to process. This could cause
-doorbell event to be processed by MHI device to check for
-any ring elements even it is none and also it will occupy
-lot of bandwidth on peripheral when mhi_poll() is called in
-aggressive loop.
 
-Signed-off-by: Vivek Pernamitta <quic_vpernami@quicinc.com>
-Reviewed-by: Jeffrey Hugo <quic_jhugo@quicinc.com>
+--Vmaj7Dywv+8d4uMP
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 
+On Wed, Feb 22, 2023 at 12:06:20PM -0500, Johannes Weiner wrote:
+> Hello,
+> 
+> On Tue, Feb 21, 2023 at 04:43:44PM -0500, Peter Xu wrote:
+> > If memory charge failed, the caller shouldn't call mem_cgroup_uncharge().
+> > Let alloc_charge_hpage() handle the error itself and clear hpage properly
+> > if mem charge fails.
+> 
+> I'm a bit confused by this patch.
+> 
+> There isn't anything wrong with calling mem_cgroup_uncharge() on an
+> uncharged page, functionally. It checks and bails out.
+
+Indeed, I didn't really notice there's zero side effect of calling that,
+sorry.  In that case both "Fixes" and "Cc: stable" do not apply.
+
+> 
+> It's an unnecessary call of course, but since it's an error path it's
+> also not a cost issue, either.
+> 
+> I could see an argument for improving the code, but this is actually
+> more code, and the caller still has the uncharge-and-put branch anyway
+> for when the collapse fails later on.
+> 
+> So I'm not sure I understand the benefit of this change.
+
+Yes, the benefit is having a clear interface for alloc_charge_hpage() with
+no prone to leaking huge page.
+
+The patch comes from a review for David's other patch here:
+
+https://lore.kernel.org/all/Y%2FU9fBxVJdhxiZ1v@x1n/
+
+I've attached a new version just to reword and remove the inproper tags.
+Do you think that's acceptable?
+
+Thanks,
+
+-- 
+Peter Xu
+
+--Vmaj7Dywv+8d4uMP
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: attachment;
+	filename="0001-mm-khugepaged-alloc_charge_hpage-take-care-of-mem-ch.patch"
+
+From 0595acbd688b60ff7b2821a073c0fe857a4ae0ee Mon Sep 17 00:00:00 2001
+From: Peter Xu <peterx@redhat.com>
+Date: Tue, 21 Feb 2023 16:43:44 -0500
+Subject: [PATCH] mm/khugepaged: alloc_charge_hpage() take care of mem charge
+ errors
+
+If memory charge failed, instead of returning the hpage but with an error,
+allow the function to cleanup the folio properly, which is normally what a
+function should do in this case - either return successfully, or return
+with no side effect of partial runs with an indicated error.
+
+This will also avoid the caller calling mem_cgroup_uncharge() unnecessarily
+with either anon or shmem path (even if it's safe to do so).
+
+Cc: Johannes Weiner <hannes@cmpxchg.org>
+Cc: Yang Shi <shy828301@gmail.com>
+Cc: David Stevens <stevensd@chromium.org>
+Signed-off-by: Peter Xu <peterx@redhat.com>
 ---
-changes since v4:
-	updating the commit text with more information.
-changes since v3:
-	- Updating commit text for multiple versions of patches.
-changes since v2:
-	- Updated comments in code.
-changes since v1:
-	- Add an check to avoid ringing EV DB in mhi_process_ctrl_ev_ring().
----
- drivers/bus/mhi/host/main.c | 8 ++++++--
- 1 file changed, 6 insertions(+), 2 deletions(-)
+ mm/khugepaged.c | 9 ++++++++-
+ 1 file changed, 8 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/bus/mhi/host/main.c b/drivers/bus/mhi/host/main.c
-index df0fbfe..1bbdb75 100644
---- a/drivers/bus/mhi/host/main.c
-+++ b/drivers/bus/mhi/host/main.c
-@@ -961,7 +961,9 @@ int mhi_process_ctrl_ev_ring(struct mhi_controller *mhi_cntrl,
- 	}
+diff --git a/mm/khugepaged.c b/mm/khugepaged.c
+index 8dbc39896811..941d1c7ea910 100644
+--- a/mm/khugepaged.c
++++ b/mm/khugepaged.c
+@@ -1063,12 +1063,19 @@ static int alloc_charge_hpage(struct page **hpage, struct mm_struct *mm,
+ 	gfp_t gfp = (cc->is_khugepaged ? alloc_hugepage_khugepaged_gfpmask() :
+ 		     GFP_TRANSHUGE);
+ 	int node = hpage_collapse_find_target_node(cc);
++	struct folio *folio;
  
- 	read_lock_bh(&mhi_cntrl->pm_lock);
--	if (likely(MHI_DB_ACCESS_VALID(mhi_cntrl)))
+ 	if (!hpage_collapse_alloc_page(hpage, gfp, node, &cc->alloc_nmask))
+ 		return SCAN_ALLOC_HUGE_PAGE_FAIL;
+-	if (unlikely(mem_cgroup_charge(page_folio(*hpage), mm, gfp)))
 +
-+	/* Ring EV DB only if there is any pending element to process */
-+	if (likely(MHI_DB_ACCESS_VALID(mhi_cntrl)) && count)
- 		mhi_ring_er_db(mhi_event);
- 	read_unlock_bh(&mhi_cntrl->pm_lock);
- 
-@@ -1031,7 +1033,9 @@ int mhi_process_data_event_ring(struct mhi_controller *mhi_cntrl,
- 		count++;
- 	}
- 	read_lock_bh(&mhi_cntrl->pm_lock);
--	if (likely(MHI_DB_ACCESS_VALID(mhi_cntrl)))
++	folio = page_folio(*hpage);
++	if (unlikely(mem_cgroup_charge(folio, mm, gfp))) {
++		folio_put(folio);
++		*hpage = NULL;
+ 		return SCAN_CGROUP_CHARGE_FAIL;
++	}
+ 	count_memcg_page_event(*hpage, THP_COLLAPSE_ALLOC);
 +
-+	/* Ring EV DB only if there is any pending element to process */
-+	if (likely(MHI_DB_ACCESS_VALID(mhi_cntrl)) && count)
- 		mhi_ring_er_db(mhi_event);
- 	read_unlock_bh(&mhi_cntrl->pm_lock);
+ 	return SCAN_SUCCEED;
+ }
  
 -- 
-2.7.4
+2.39.1
+
+
+--Vmaj7Dywv+8d4uMP--
 
