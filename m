@@ -2,133 +2,170 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7159B69FD06
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Feb 2023 21:33:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DEDF169FD09
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Feb 2023 21:34:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232575AbjBVUdf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Feb 2023 15:33:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42326 "EHLO
+        id S232614AbjBVUd7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Feb 2023 15:33:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42886 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229603AbjBVUde (ORCPT
+        with ESMTP id S229603AbjBVUd5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Feb 2023 15:33:34 -0500
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02191298F3
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Feb 2023 12:33:32 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1677098012; x=1708634012;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=Ag4ZqHO80giNF7SmvbaB75bOhLVmOTB34bIaKAEaUHk=;
-  b=ekTNexmiel8Wjil10njn+glwnKBHB2crv4L6mi2sNMgZu6R1CWErfc6F
-   dvWzJ2pfXI8YAaA6t0RF6X3Wyx0QA0BFwatmXixyYLRKRpQH7DKnUp7lI
-   +eVAUaYMWG0JNhDxxG6kjGQpoTGSpBuXgAP7N6ibaMU2HyO+GAM4y5rue
-   1pGSRcoGb7uY1jWnSFMaP41SKPcr9X8VFCLlxLxqsUNRZ2Aj3wT8N6Z1e
-   R2E9ZkJCOR1yR8UCvNcumS4VVcolsHTS9G+TgjGYv+m8Ch0wAqYVraGKu
-   iT+72g3Ndkvs8vuiXn1t1E0W1el7IrMKAf3bdi/OdVXMTN6nKQ2dwyK2L
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10629"; a="419261789"
-X-IronPort-AV: E=Sophos;i="5.97,319,1669104000"; 
-   d="scan'208";a="419261789"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Feb 2023 12:33:32 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10629"; a="674238794"
-X-IronPort-AV: E=Sophos;i="5.97,319,1669104000"; 
-   d="scan'208";a="674238794"
-Received: from lkp-server01.sh.intel.com (HELO 3895f5c55ead) ([10.239.97.150])
-  by fmsmga007.fm.intel.com with ESMTP; 22 Feb 2023 12:33:31 -0800
-Received: from kbuild by 3895f5c55ead with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pUvnu-0000hh-1v;
-        Wed, 22 Feb 2023 20:33:30 +0000
-Date:   Thu, 23 Feb 2023 04:32:41 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Mark Rutland <mark.rutland@arm.com>
-Cc:     oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
-        Catalin Marinas <catalin.marinas@arm.com>
-Subject: include/acpi/actypes.h:525:42: warning: 'strncpy' specified bound 4
- equals destination size
-Message-ID: <202302230414.sQbDHtiC-lkp@intel.com>
+        Wed, 22 Feb 2023 15:33:57 -0500
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8199B37F2A;
+        Wed, 22 Feb 2023 12:33:52 -0800 (PST)
+Received: from pps.filterd (m0279869.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 31MEJom3024513;
+        Wed, 22 Feb 2023 20:33:34 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=Mcyr/qacCOtUX0wSyyB4kPLw3dj7SgQhbe0s9XCqdao=;
+ b=AytJsX4rL22s16TUFoYkKGujF6t3ARFe2IBPkhH0iMA3MPf0Pt9UHBGZekWZEJi08eau
+ RZW6a0JmVyfuQbf6AMndn35y1UxhNBD21doSPPHUVf8ripey1ypr1+jRtIUp1lCSjOFT
+ ahFXBtcjtw1UowWS7cUUAxdGtmSsO4FWTuPBN75dQprn1b8a71FHASOaWVrGYGdn+bj4
+ JS5stMB2+CbbFmvc88Og5+mMOtB8kytgF2oKgV7/OYI1ahHoalv0KnYxjgyH462I/07u
+ ywvlFq1pS+Yb7TQ0AG1Vq+jANXNyboAGB4xiFfYLkGFJvDrS79i8Pg4J38rcaGDrUz/E QA== 
+Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3nvvrrmqjj-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 22 Feb 2023 20:33:33 +0000
+Received: from nalasex01c.na.qualcomm.com (nalasex01c.na.qualcomm.com [10.47.97.35])
+        by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 31MKXWnD031975
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 22 Feb 2023 20:33:32 GMT
+Received: from [10.110.20.97] (10.80.80.8) by nalasex01c.na.qualcomm.com
+ (10.47.97.35) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.41; Wed, 22 Feb
+ 2023 12:33:30 -0800
+Message-ID: <f10b5d1f-4260-2b20-107a-9dbb8bc0e65f@quicinc.com>
+Date:   Wed, 22 Feb 2023 12:33:29 -0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [PATCH RESEND 1/1] check-uapi: Introduce check-uapi.sh
+Content-Language: en-US
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Randy Dunlap <rdunlap@infradead.org>
+CC:     Masahiro Yamada <masahiroy@kernel.org>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        "Nicolas Schier" <nicolas@fjasle.eu>,
+        <linux-kbuild@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@vger.kernel.org>,
+        <linux-arm-msm@vger.kernel.org>,
+        Trilok Soni <quic_tsoni@quicinc.com>,
+        "Bjorn Andersson" <andersson@kernel.org>,
+        Todd Kjos <tkjos@google.com>,
+        "Matthias Maennich" <maennich@google.com>,
+        Giuliano Procida <gprocida@google.com>,
+        <kernel-team@android.com>, Jordan Crouse <jorcrous@amazon.com>
+References: <20230217202234.32260-1-quic_johmoo@quicinc.com>
+ <20230217202234.32260-2-quic_johmoo@quicinc.com> <Y/CJhzSJ5YKvD7my@kroah.com>
+From:   John Moon <quic_johmoo@quicinc.com>
+In-Reply-To: <Y/CJhzSJ5YKvD7my@kroah.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01c.na.qualcomm.com (10.47.97.35)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: oJ3UkuPUoNihPNO34DoKHj7_nk7IcfjG
+X-Proofpoint-ORIG-GUID: oJ3UkuPUoNihPNO34DoKHj7_nk7IcfjG
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.170.22
+ definitions=2023-02-22_08,2023-02-22_02,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 impostorscore=0
+ bulkscore=0 phishscore=0 mlxscore=0 suspectscore=0 lowpriorityscore=0
+ mlxlogscore=439 priorityscore=1501 adultscore=0 clxscore=1011
+ malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2302220177
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Mark,
+On 2/18/2023 12:17 AM, Greg Kroah-Hartman wrote:
+> On Fri, Feb 17, 2023 at 12:22:34PM -0800, John Moon wrote:
+>> While the kernel community has been good at maintaining backwards
+>> compatibility with kernel UAPIs, it would be helpful to have a tool
+>> to check if a patch introduces changes that break backwards
+>> compatibility.
+>>
+>> To that end, introduce check-uapi.sh: a simple shell script that
+>> checks for changes to UAPI headers using libabigail.
+>>
+>> libabigail is "a framework which aims at helping developers and
+>> software distributors to spot some ABI-related issues like interface
+>> incompatibility in ELF shared libraries by performing a static
+>> analysis of the ELF binaries at hand."
+>>
+>> The script uses one of libabigail's tools, "abidiff", to compile the
+>> changed header before and after the patch to detect any changes.
+>>
+>> abidiff "compares the ABI of two shared libraries in ELF format. It
+>> emits a meaningful report describing the differences between the two
+>> ABIs."
+>>
+>> Signed-off-by: John Moon <quic_johmoo@quicinc.com>
+>> ---
+>>   scripts/check-uapi.sh | 245 ++++++++++++++++++++++++++++++++++++++++++
+>>   1 file changed, 245 insertions(+)
+>>   create mode 100755 scripts/check-uapi.sh
+> 
+> Ok, this is very cool, thank you so much for doing this.
+> 
+> I know Randy Dunlap was also looking into this previously, so I've cc:ed
+> him and bounced him the original.
+> 
 
-FYI, the error/warning still remains.
+Okay, will keep him in the loop!
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   70756b49be4ea8bf36a664322df6e7e89895fa60
-commit: 8f9e0a52810dd83406c768972d022c37e7a18f1f ACPI: Don't build ACPICA with '-Os'
-date:   4 weeks ago
-config: ia64-defconfig (https://download.01.org/0day-ci/archive/20230223/202302230414.sQbDHtiC-lkp@intel.com/config)
-compiler: ia64-linux-gcc (GCC) 12.1.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=8f9e0a52810dd83406c768972d022c37e7a18f1f
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout 8f9e0a52810dd83406c768972d022c37e7a18f1f
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=ia64 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=ia64 SHELL=/bin/bash drivers/acpi/acpica/
+> I tried this out, and at first glance, this felt like it was just "too
+> fast" in that nothing actually was being tested.  So I manually added a
+> field to a structure I know would break the abi, and:
+> 
+> 	$ ./scripts/check-uapi.sh
+> 	!!! ABI differences detected in include/uapi/linux/usb/ch9.h (compared to file at HEAD^1) !!!
+> 
+> 	    [C] 'struct usb_ctrlrequest' changed:
+> 	      type size changed from 64 to 72 (in bits)
+> 	      1 data member insertion:
+> 		'__u8 abi_break', at offset 16 (in bits) at ch9.h:216:1
+> 	      3 data member changes:
+> 		'__le16 wValue' offset changed from 16 to 24 (in bits) (by +8 bits)
+> 		'__le16 wIndex' offset changed from 32 to 40 (in bits) (by +8 bits)
+> 		'__le16 wLength' offset changed from 48 to 56 (in bits) (by +8 bits)
+> 
+> 	0/1 UAPI header file changes are backwards compatible
+> 	UAPI header ABI check failed
+> 
+> So it worked!
+> 
+> There is a mismatch of different bash coding styles in the document, which
+> isn't a big deal, and one warning produced by the `shellcheck` tool, but that
+> can all be fixed up later.  I'll go queue this up now, as a starting point for
+> people to play with, thanks!
+> 
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202302230414.sQbDHtiC-lkp@intel.com/
+Will resolve all shellcheck warnings in next rev. Not sure about the 
+coding style differences you're referring to - is there a shell script 
+coding style document?
 
-All warnings (new ones prefixed by >>):
+> Also, it would be nice to be able to check if the current tree with changes in
+> it (not checked in, just modified) breaks the abi, without having to go and
+> check the change in.  But again, future fixups for people to do!
+> 
 
-   In file included from include/acpi/acpi.h:24,
-                    from drivers/acpi/acpica/tbfind.c:10:
-   drivers/acpi/acpica/tbfind.c: In function 'acpi_tb_find_table':
->> include/acpi/actypes.h:525:42: warning: 'strncpy' specified bound 4 equals destination size [-Wstringop-truncation]
-     525 | #define ACPI_COPY_NAMESEG(dest,src)     (strncpy (ACPI_CAST_PTR (char, (dest)), ACPI_CAST_PTR (char, (src)), ACPI_NAMESEG_SIZE))
-         |                                         ~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/acpi/acpica/tbfind.c:59:9: note: in expansion of macro 'ACPI_COPY_NAMESEG'
-      59 |         ACPI_COPY_NAMESEG(header.signature, signature);
-         |         ^~~~~~~~~~~~~~~~~
---
-   In file included from include/acpi/acpi.h:24,
-                    from drivers/acpi/acpica/utstring.c:8:
-   drivers/acpi/acpica/utstring.c: In function 'acpi_ut_repair_name':
->> include/acpi/actypes.h:525:42: warning: 'strncpy' specified bound 4 equals destination size [-Wstringop-truncation]
-     525 | #define ACPI_COPY_NAMESEG(dest,src)     (strncpy (ACPI_CAST_PTR (char, (dest)), ACPI_CAST_PTR (char, (src)), ACPI_NAMESEG_SIZE))
-         |                                         ~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/acpi/acpica/utstring.c:148:9: note: in expansion of macro 'ACPI_COPY_NAMESEG'
-     148 |         ACPI_COPY_NAMESEG(&original_name, &name[0]);
-         |         ^~~~~~~~~~~~~~~~~
+Should be straightforward to add. Since I'm making another rev, I'll 
+take care of this as well.
 
-
-vim +/strncpy +525 include/acpi/actypes.h
-
-ff60027174cf94 Bob Moore 2012-10-31  519  
-50df4d8b0f6e19 Bob Moore 2008-12-31  520  #ifndef ACPI_MISALIGNMENT_NOT_SUPPORTED
-5599fb69355d7a Bob Moore 2019-04-08  521  #define ACPI_COMPARE_NAMESEG(a,b)       (*ACPI_CAST_PTR (u32, (a)) == *ACPI_CAST_PTR (u32, (b)))
-a3ce7a8e0dd9ba Bob Moore 2019-04-08  522  #define ACPI_COPY_NAMESEG(dest,src)     (*ACPI_CAST_PTR (u32, (dest)) = *ACPI_CAST_PTR (u32, (src)))
-50df4d8b0f6e19 Bob Moore 2008-12-31  523  #else
-3278675567dfb9 Bob Moore 2019-04-08  524  #define ACPI_COMPARE_NAMESEG(a,b)       (!strncmp (ACPI_CAST_PTR (char, (a)), ACPI_CAST_PTR (char, (b)), ACPI_NAMESEG_SIZE))
-3278675567dfb9 Bob Moore 2019-04-08 @525  #define ACPI_COPY_NAMESEG(dest,src)     (strncpy (ACPI_CAST_PTR (char, (dest)), ACPI_CAST_PTR (char, (src)), ACPI_NAMESEG_SIZE))
-50df4d8b0f6e19 Bob Moore 2008-12-31  526  #endif
-50df4d8b0f6e19 Bob Moore 2008-12-31  527  
-
-:::::: The code at line 525 was first introduced by commit
-:::::: 3278675567dfb901d831d46849c386a4f932905e ACPICA: Rename nameseg length macro/define for clarity
-
-:::::: TO: Bob Moore <robert.moore@intel.com>
-:::::: CC: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+> thanks,
+> 
+> greg k-h
