@@ -2,158 +2,162 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 25EE469FA18
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Feb 2023 18:25:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B34D469FA24
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Feb 2023 18:26:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231722AbjBVRZT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Feb 2023 12:25:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40732 "EHLO
+        id S231276AbjBVR0l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Feb 2023 12:26:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42766 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229672AbjBVRZR (ORCPT
+        with ESMTP id S229515AbjBVR0i (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Feb 2023 12:25:17 -0500
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9FC6D410B1;
-        Wed, 22 Feb 2023 09:24:47 -0800 (PST)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 996D41063;
-        Wed, 22 Feb 2023 09:25:28 -0800 (PST)
-Received: from [10.57.16.42] (unknown [10.57.16.42])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id CE2E83F881;
-        Wed, 22 Feb 2023 09:24:43 -0800 (PST)
-Message-ID: <e9d882f4-d57d-f6b4-7ae0-bbfea0f5aa59@arm.com>
-Date:   Wed, 22 Feb 2023 17:24:36 +0000
+        Wed, 22 Feb 2023 12:26:38 -0500
+Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::222])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33BF541B56;
+        Wed, 22 Feb 2023 09:26:02 -0800 (PST)
+Received: from booty.fritz.box (unknown [77.244.183.192])
+        (Authenticated sender: luca.ceresoli@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPA id 9323A4000B;
+        Wed, 22 Feb 2023 17:25:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1677086759;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=liyc04uOfojNPzcXlOkF1rgtORQMcNRHYaWkiDbA6a0=;
+        b=mvjWs1Z5miVuBFhQ2lrmffWQEUftHKgpfdmtOtiNOKutAM7No18k/KwnwSTsSxOXe2aUms
+        XNs3u/bdFz07d8XJFz4Mf1mNL8e+7xXuH+D7aWyN/p4UdW9i9FIEB+Fe34Zd9g1y3d5ES7
+        0tyava2uy+oe6FI+3Id5/4DEcCgSvbj8R4DnJQjD1Ur6KNaVw0kbNZ6xiG+eoHhg9Xz0ap
+        JE18X0lYrp9C5qHwspz3T3h1JfBl8A9pM1tDRiP6MIr2/qVdKh3TTeQhtozxzs1SidYIAJ
+        J2PVlp6SBl7i8ex/TODZ2wV1tzELjcC/S+f/Ha/y+g6UMaDKy42WH8csXWp65A==
+From:   Luca Ceresoli <luca.ceresoli@bootlin.com>
+To:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Luca Ceresoli <luca.ceresoli@bootlin.com>,
+        Martyn Welch <martyn.welch@collabora.com>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, Marek Vasut <marex@denx.de>,
+        Abel Vesa <abel.vesa@nxp.com>, Jacky Bai <ping.bai@nxp.com>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Lucas Stach <l.stach@pengutronix.de>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Subject: [PATCH] arm64: dts: imx8mp-msc-sm2s: Add sound card
+Date:   Wed, 22 Feb 2023 18:25:52 +0100
+Message-Id: <20230222172552.1545519-1-luca.ceresoli@bootlin.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20230222182252.2ad6d82b@booty>
+References: <20230222182252.2ad6d82b@booty>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:102.0) Gecko/20100101
- Thunderbird/102.7.2
-Subject: Re: [PATCH 3/3] of: address: Use dma_default_coherent to determine
- default coherency
-Content-Language: en-GB
-To:     Jiaxun Yang <jiaxun.yang@flygoat.com>, linux-mips@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        tsbogend@alpha.franken.de, mpe@ellerman.id.au,
-        paul.walmsley@sifive.com, palmer@dabbelt.com, robh+dt@kernel.org,
-        hch@lst.de, m.szyprowski@samsung.com,
-        linux-riscv@lists.infradead.org
-References: <20230222133712.8079-1-jiaxun.yang@flygoat.com>
- <20230222133712.8079-4-jiaxun.yang@flygoat.com>
-From:   Robin Murphy <robin.murphy@arm.com>
-In-Reply-To: <20230222133712.8079-4-jiaxun.yang@flygoat.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023-02-22 13:37, Jiaxun Yang wrote:
-> As for now all arches have dma_default_coherent matched with default
-> DMA coherency for of devices, so there is no need to have a standalone
-> config option.
-> 
-> This also fixes a case that for some MIPS platforms, coherency information
-> is not carried in devicetree and kernel will override dma_default_coherent
-> at early boot.
-> 
-> Note for PowerPC: CONFIG_OF_DMA_DEFUALT_COHERENT was only selected when
-> CONFIG_NOT_COHERENT_CACHE is false, in this case dma_default_coherent will
-> be true, so it still matches present behavior.
-> 
-> Note for RISC-V: dma_default_coherent is set to true at init code in this
-> series.
+The MSC SM2-MB-EP1 carrier board for the SM2S-IMX8PLUS SMARC module has an
+NXPP SGTL5000 audio codec connected to I2S-0 (sai2).
 
-OK, so the fundamental problem here is that we have two slightly 
-different conflicting mechanisms, the ex-PowerPC config option, and the 
-ex-MIPS dma_default_coherent for which of_dma_is_coherent() has 
-apparently been broken forever.
+This requires to:
 
-I'd agree that it's worth consolidating the two, but please separate out 
-the fix as below, so it's feasible to backport without having to muck 
-about in arch code.
+ * add the power supplies (always on)
+ * enable sai2 with pinmuxes
+ * reparent the CLKOUT1 clock that feeds the codec SYS_MCLK to
+   IMX8MP_CLK_24M in order it to generate an accurate 24 MHz rate
 
-> Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
-> ---
->   arch/powerpc/Kconfig | 1 -
->   arch/riscv/Kconfig   | 1 -
->   drivers/of/Kconfig   | 4 ----
->   drivers/of/address.c | 2 +-
->   4 files changed, 1 insertion(+), 7 deletions(-)
-> 
-> diff --git a/arch/powerpc/Kconfig b/arch/powerpc/Kconfig
-> index 2c9cdf1d8761..c67e5da714f7 100644
-> --- a/arch/powerpc/Kconfig
-> +++ b/arch/powerpc/Kconfig
-> @@ -272,7 +272,6 @@ config PPC
->   	select NEED_PER_CPU_PAGE_FIRST_CHUNK	if PPC64
->   	select NEED_SG_DMA_LENGTH
->   	select OF
-> -	select OF_DMA_DEFAULT_COHERENT		if !NOT_COHERENT_CACHE
->   	select OF_EARLY_FLATTREE
->   	select OLD_SIGACTION			if PPC32
->   	select OLD_SIGSUSPEND
-> diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
-> index 1d46a268ce16..406c6816d289 100644
-> --- a/arch/riscv/Kconfig
-> +++ b/arch/riscv/Kconfig
-> @@ -119,7 +119,6 @@ config RISCV
->   	select MODULES_USE_ELF_RELA if MODULES
->   	select MODULE_SECTIONS if MODULES
->   	select OF
-> -	select OF_DMA_DEFAULT_COHERENT
->   	select OF_EARLY_FLATTREE
->   	select OF_IRQ
->   	select PCI_DOMAINS_GENERIC if PCI
-> diff --git a/drivers/of/Kconfig b/drivers/of/Kconfig
-> index 644386833a7b..e40f10bf2ba4 100644
-> --- a/drivers/of/Kconfig
-> +++ b/drivers/of/Kconfig
-> @@ -102,8 +102,4 @@ config OF_OVERLAY
->   config OF_NUMA
->   	bool
->   
-> -config OF_DMA_DEFAULT_COHERENT
-> -	# arches should select this if DMA is coherent by default for OF devices
-> -	bool
-> -
->   endif # OF
-> diff --git a/drivers/of/address.c b/drivers/of/address.c
-> index 4c0b169ef9bf..23ade4919853 100644
-> --- a/drivers/of/address.c
-> +++ b/drivers/of/address.c
-> @@ -1103,7 +1103,7 @@ phys_addr_t __init of_dma_get_max_cpu_address(struct device_node *np)
->   bool of_dma_is_coherent(struct device_node *np)
->   {
->   	struct device_node *node;
-> -	bool is_coherent = IS_ENABLED(CONFIG_OF_DMA_DEFAULT_COHERENT);
-> +	bool is_coherent = dma_default_coherent;
+Signed-off-by: Luca Ceresoli <luca.ceresoli@bootlin.com>
+---
+ .../dts/freescale/imx8mp-msc-sm2s-ep1.dts     | 60 +++++++++++++++++++
+ 1 file changed, 60 insertions(+)
 
-AFAICS, all you should actually need is a single self-contained addition 
-here, something like:
+diff --git a/arch/arm64/boot/dts/freescale/imx8mp-msc-sm2s-ep1.dts b/arch/arm64/boot/dts/freescale/imx8mp-msc-sm2s-ep1.dts
+index 470ff8e31e32..894d9809f76d 100644
+--- a/arch/arm64/boot/dts/freescale/imx8mp-msc-sm2s-ep1.dts
++++ b/arch/arm64/boot/dts/freescale/imx8mp-msc-sm2s-ep1.dts
+@@ -14,6 +14,57 @@ / {
+ 	compatible = "avnet,sm2s-imx8mp-14N0600E-ep1",
+ 		     "avnet,sm2s-imx8mp-14N0600E", "avnet,sm2s-imx8mp",
+ 		     "fsl,imx8mp";
++
++	reg_vcc_3v3_audio: 3v3_audio_regulator {
++		compatible = "regulator-fixed";
++		regulator-name = "VCC_3V3_AUD";
++		regulator-min-microvolt = <3300000>;
++		regulator-max-microvolt = <3300000>;
++	};
++
++	reg_vcc_1v8_audio: 1v8_audio_regulator {
++		compatible = "regulator-fixed";
++		regulator-name = "VCC_1V8_AUD";
++		regulator-min-microvolt = <1800000>;
++		regulator-max-microvolt = <1800000>;
++	};
++
++	sgtl5000-sound {
++		compatible = "fsl,imx-audio-sgtl5000";
++		model = "imx-sgtl5000";
++		audio-cpu = <&sai2>;
++		audio-codec = <&sgtl5000_codec>;
++	};
++};
++
++&i2c1 {
++	sgtl5000_codec: sgtl5000@a {
++		compatible = "fsl,sgtl5000";
++		reg = <0x0a>;
++
++		assigned-clocks = <&clk IMX8MP_CLK_CLKOUT1_SEL>;
++		assigned-clock-parents = <&clk IMX8MP_CLK_24M>;
++		assigned-clock-rates = <24000000>;
++		clocks = <&clk IMX8MP_CLK_CLKOUT1>;
++		clock-names = "mclk";
++
++		VDDA-supply  = <&reg_vcc_3v3_audio>;
++		VDDD-supply  = <&reg_vcc_1v8_audio>;
++		VDDIO-supply = <&reg_vcc_1v8_audio>;
++	};
++};
++
++/* I2S-0 = sai2 */
++&sai2 {
++	pinctrl-names = "default";
++	pinctrl-0 = <&pinctrl_sai2>;
++
++	assigned-clocks = <&clk IMX8MP_CLK_SAI2>;
++	assigned-clock-parents = <&clk IMX8MP_AUDIO_PLL1_OUT>;
++	assigned-clock-rates = <12288000>;
++
++	fsl,sai-mclk-direction-output;
++	status = "okay";
+ };
+ 
+ &flexcan1 {
+@@ -49,4 +100,13 @@ pinctrl_smarc_gpio: smarcgpiosgrp {
+ 			<MX8MP_IOMUXC_SAI1_TXD7__GPIO4_IO19	0x19>, /* GPIO12 */
+ 			<MX8MP_IOMUXC_SAI1_RXFS__GPIO4_IO00	0x19>; /* GPIO13 */
+ 	};
++
++	pinctrl_sai2: sai2grp {
++		fsl,pins = <
++			MX8MP_IOMUXC_SAI2_TXFS__AUDIOMIX_SAI2_TX_SYNC   0xd6
++			MX8MP_IOMUXC_SAI2_TXC__AUDIOMIX_SAI2_TX_BCLK    0xd6
++			MX8MP_IOMUXC_SAI2_RXD0__AUDIOMIX_SAI2_RX_DATA00 0xd6
++			MX8MP_IOMUXC_SAI2_TXD0__AUDIOMIX_SAI2_TX_DATA00 0xd6
++		>;
++	};
+ };
+-- 
+2.34.1
 
-+	/*
-+	 * DT-based MIPS doesn't use OF_DMA_DEFAULT_COHERENT, but
-+	 * might override the system-wide default at runtime.
-+	 */
-+#if defined(CONFIG_ARCH_HAS_SYNC_DMA_FOR_DEVICE) || \
-+	defined(CONFIG_ARCH_HAS_SYNC_DMA_FOR_CPU) || \
-+	defined(CONFIG_ARCH_HAS_SYNC_DMA_FOR_CPU_ALL)
-+	is_coherent = dma_default_coherent;
-+#endif
-
->   
->   	node = of_node_get(np);
->   
-
-Then *after* that's fixed, we can do a more comprehensive refactoring to 
-merge the two mechanisms properly. FWIW I think I'd prefer an approach 
-closer to the first one, where config options control the initial value 
-of dma_default_coherent rather than architectures having to override it 
-unconditionally (and TBH I'd also like to have a generic config symbol 
-for whether an arch supports per-device coherency or not).
-
-Thanks,
-Robin.
