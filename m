@@ -2,90 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 05B2B69F73D
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Feb 2023 16:00:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 22BA269F792
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Feb 2023 16:20:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232194AbjBVPAg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Feb 2023 10:00:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46752 "EHLO
+        id S231961AbjBVPUQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Feb 2023 10:20:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37020 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231911AbjBVPA3 (ORCPT
+        with ESMTP id S232050AbjBVPUM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Feb 2023 10:00:29 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40C9138030
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Feb 2023 07:00:23 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C678B61496
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Feb 2023 15:00:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 30970C433D2;
-        Wed, 22 Feb 2023 15:00:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1677078022;
-        bh=Yi3u5Nak6osibQzcfwjNbC7RplCrm3Sc03yEPeaYTPY=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=YHoxUi/oxGi3akT53+zNV7IFx8pNNqOa2WMcuRqjlMjxepTxHm8oYyfBFHIHpfkHN
-         6ZDH/l6NLrG2nCkGtST9QJCGEs8gf8tjFTaO80KGYadLy0awP0V/tDbT6f0/czvMz8
-         MMc5WLsQB6NcYB33Jj8oCXS9QAe/4gmyoIH+vym4Oq9N2osmBjZ1Drt656AT9jiwl0
-         IYrCjT+7XZuxiPP08rqtFjRD5ffDVR99j3+w9HjOgnHIqtew09Wjqu0O2ZiAFPwDrK
-         Z5M3La1yONKs8K/wBI4G0E3CAk/EZZh9GgK/k6s6VnO9V8vVNoiMQzF1hML/29YAbq
-         QYRiDETqoxADg==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 0C1E6C59A4C;
-        Wed, 22 Feb 2023 15:00:22 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        Wed, 22 Feb 2023 10:20:12 -0500
+Received: from pegase2.c-s.fr (pegase2.c-s.fr [93.17.235.10])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 898882D161
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Feb 2023 07:20:11 -0800 (PST)
+Received: from localhost (mailhub3.si.c-s.fr [172.26.127.67])
+        by localhost (Postfix) with ESMTP id 4PMJnB12Kbz9sTg;
+        Wed, 22 Feb 2023 15:43:42 +0100 (CET)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from pegase2.c-s.fr ([172.26.127.65])
+        by localhost (pegase2.c-s.fr [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id aWaEFULo5Z-Q; Wed, 22 Feb 2023 15:43:42 +0100 (CET)
+Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
+        by pegase2.c-s.fr (Postfix) with ESMTP id 4PMJmx17JYz9sTh;
+        Wed, 22 Feb 2023 15:43:29 +0100 (CET)
+Received: from localhost (localhost [127.0.0.1])
+        by messagerie.si.c-s.fr (Postfix) with ESMTP id 05DD98B77B;
+        Wed, 22 Feb 2023 15:43:29 +0100 (CET)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from messagerie.si.c-s.fr ([127.0.0.1])
+        by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
+        with ESMTP id 9RNyldFIo-oW; Wed, 22 Feb 2023 15:43:28 +0100 (CET)
+Received: from PO20335.IDSI0.si.c-s.fr (unknown [172.25.230.108])
+        by messagerie.si.c-s.fr (Postfix) with ESMTP id A20AF8B790;
+        Wed, 22 Feb 2023 15:43:28 +0100 (CET)
+Received: from PO20335.IDSI0.si.c-s.fr (localhost [127.0.0.1])
+        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.16.1) with ESMTPS id 31MEhLjX1187105
+        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
+        Wed, 22 Feb 2023 15:43:21 +0100
+Received: (from chleroy@localhost)
+        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.17.1/Submit) id 31MEhLDg1187104;
+        Wed, 22 Feb 2023 15:43:21 +0100
+X-Authentication-Warning: PO20335.IDSI0.si.c-s.fr: chleroy set sender to christophe.leroy@csgroup.eu using -f
+From:   Christophe Leroy <christophe.leroy@csgroup.eu>
+To:     =?UTF-8?q?Pali=20Roh=C3=A1r?= <pali@kernel.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Nicholas Piggin <npiggin@gmail.com>
+Cc:     Christophe Leroy <christophe.leroy@csgroup.eu>,
+        linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org
+Subject: [PATCH v4 05/17] powerpc/85xx: mpc85xx_{ds/rdb} compact the call to mpic_alloc()
+Date:   Wed, 22 Feb 2023 15:42:52 +0100
+Message-Id: <140762117c761ae01a2af5fadb188f4954c45e04.1677076552.git.christophe.leroy@csgroup.eu>
+X-Mailer: git-send-email 2.39.1
+In-Reply-To: <cover.1677076552.git.christophe.leroy@csgroup.eu>
+References: <cover.1677076552.git.christophe.leroy@csgroup.eu>
 MIME-Version: 1.0
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1677076979; l=2290; s=20211009; h=from:subject:message-id; bh=Hjk5ZcAbV8BioWqMJJGLsAg35wIlaIiZSdBaLte+aDY=; b=ZtR8PoqCDWhPaZZIzz1IX7PDiKlg2VCbwqdEos7OC7xErsM9XNpzPsv2XHVG9G7VucD+39fiiIlz jUFNgNZrDyXDiMvdtf4CfPoOII3MGvq5RKrtQS64gGLGcA2MTMes
+X-Developer-Key: i=christophe.leroy@csgroup.eu; a=ed25519; pk=HIzTzUj91asvincQGOFx6+ZF5AoUuP9GdOtQChs7Mm0=
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH RESEND] riscv: jump_label: Fixup unaligned arch_static_branch
- function
-From:   patchwork-bot+linux-riscv@kernel.org
-Message-Id: <167707802203.24438.3366600866397687013.git-patchwork-notify@kernel.org>
-Date:   Wed, 22 Feb 2023 15:00:22 +0000
-References: <20230206090440.1255001-1-guoren@kernel.org>
-In-Reply-To: <20230206090440.1255001-1-guoren@kernel.org>
-To:     Guo Ren <guoren@kernel.org>
-Cc:     linux-riscv@lists.infradead.org, palmer@dabbelt.com,
-        paul.walmsley@sifive.com, mhiramat@kernel.org,
-        conor.dooley@microchip.com, penberg@kernel.org,
-        mark.rutland@arm.com, jrtc27@jrtc27.com, andy.chiu@sifive.com,
-        zong.li@sifive.com, greentime.hu@sifive.com, bjorn@kernel.org,
-        linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
+Reduce number of lines in the call to mpic_alloc().
 
-This patch was applied to riscv/linux.git (for-next)
-by Palmer Dabbelt <palmer@rivosinc.com>:
+Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
+---
+ arch/powerpc/platforms/85xx/mpc85xx_ds.c  | 18 ++++++------------
+ arch/powerpc/platforms/85xx/mpc85xx_rdb.c | 16 +++++-----------
+ 2 files changed, 11 insertions(+), 23 deletions(-)
 
-On Mon,  6 Feb 2023 04:04:40 -0500 you wrote:
-> From: Andy Chiu <andy.chiu@sifive.com>
-> 
-> Runtime code patching must be done at a naturally aligned address, or we
-> may execute on a partial instruction.
-> 
-> We have encountered problems traced back to static jump functions during
-> the test. We switched the tracer randomly for every 1~5 seconds on a
-> dual-core QEMU setup and found the kernel sucking at a static branch
-> where it jumps to itself.
-> 
-> [...]
-
-Here is the summary with links:
-  - [RESEND] riscv: jump_label: Fixup unaligned arch_static_branch function
-    https://git.kernel.org/riscv/c/9ddfc3cd8060
-
-You are awesome, thank you!
+diff --git a/arch/powerpc/platforms/85xx/mpc85xx_ds.c b/arch/powerpc/platforms/85xx/mpc85xx_ds.c
+index f385cd288a76..1e6e89136948 100644
+--- a/arch/powerpc/platforms/85xx/mpc85xx_ds.c
++++ b/arch/powerpc/platforms/85xx/mpc85xx_ds.c
+@@ -50,23 +50,17 @@ static void mpc85xx_8259_cascade(struct irq_desc *desc)
+ void __init mpc85xx_ds_pic_init(void)
+ {
+ 	struct mpic *mpic;
++	int flags = MPIC_BIG_ENDIAN | MPIC_SINGLE_DEST_CPU;
+ #ifdef CONFIG_PPC_I8259
+ 	struct device_node *np;
+ 	struct device_node *cascade_node = NULL;
+ 	int cascade_irq;
+ #endif
+-	if (of_machine_is_compatible("fsl,MPC8572DS-CAMP")) {
+-		mpic = mpic_alloc(NULL, 0,
+-			MPIC_NO_RESET |
+-			MPIC_BIG_ENDIAN |
+-			MPIC_SINGLE_DEST_CPU,
+-			0, 256, " OpenPIC  ");
+-	} else {
+-		mpic = mpic_alloc(NULL, 0,
+-			  MPIC_BIG_ENDIAN |
+-			  MPIC_SINGLE_DEST_CPU,
+-			0, 256, " OpenPIC  ");
+-	}
++
++	if (of_machine_is_compatible("fsl,MPC8572DS-CAMP"))
++		flags |= MPIC_NO_RESET;
++
++	mpic = mpic_alloc(NULL, 0, flags, 0, 256, " OpenPIC  ");
+ 
+ 	BUG_ON(mpic == NULL);
+ 	mpic_init(mpic);
+diff --git a/arch/powerpc/platforms/85xx/mpc85xx_rdb.c b/arch/powerpc/platforms/85xx/mpc85xx_rdb.c
+index b5e9a6374edb..110365d7b997 100644
+--- a/arch/powerpc/platforms/85xx/mpc85xx_rdb.c
++++ b/arch/powerpc/platforms/85xx/mpc85xx_rdb.c
+@@ -32,18 +32,12 @@
+ void __init mpc85xx_rdb_pic_init(void)
+ {
+ 	struct mpic *mpic;
++	int flags = MPIC_BIG_ENDIAN | MPIC_SINGLE_DEST_CPU;
+ 
+-	if (of_machine_is_compatible("fsl,MPC85XXRDB-CAMP")) {
+-		mpic = mpic_alloc(NULL, 0, MPIC_NO_RESET |
+-			MPIC_BIG_ENDIAN |
+-			MPIC_SINGLE_DEST_CPU,
+-			0, 256, " OpenPIC  ");
+-	} else {
+-		mpic = mpic_alloc(NULL, 0,
+-		  MPIC_BIG_ENDIAN |
+-		  MPIC_SINGLE_DEST_CPU,
+-		  0, 256, " OpenPIC  ");
+-	}
++	if (of_machine_is_compatible("fsl,MPC85XXRDB-CAMP"))
++		flags |= MPIC_NO_RESET;
++
++	mpic = mpic_alloc(NULL, 0, flags, 0, 256, " OpenPIC  ");
+ 
+ 	BUG_ON(mpic == NULL);
+ 	mpic_init(mpic);
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
+2.39.1
 
