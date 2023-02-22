@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5BFA669F828
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Feb 2023 16:34:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E5D0469F827
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Feb 2023 16:34:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232622AbjBVPew (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Feb 2023 10:34:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54266 "EHLO
+        id S232583AbjBVPen (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Feb 2023 10:34:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53990 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232636AbjBVPea (ORCPT
+        with ESMTP id S232635AbjBVPea (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 22 Feb 2023 10:34:30 -0500
-Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 567DF3801A
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Feb 2023 07:33:59 -0800 (PST)
-Received: by mail-pl1-x62e.google.com with SMTP id e9so4136095plh.2
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Feb 2023 07:33:59 -0800 (PST)
+Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B04D43CE19
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Feb 2023 07:34:03 -0800 (PST)
+Received: by mail-pj1-x1030.google.com with SMTP id q31-20020a17090a17a200b0023750b69614so938881pja.5
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Feb 2023 07:34:03 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=RqG9xtTBiKFFqs7nudeShHVEmZgSa7/qeDhwUVoJ0gI=;
-        b=YqOgmH/92BWDJ43zxxahEmhM/3mAYmnI6cdgrfMWf1SiZQTRPDDUICuSv6JmVCLpQX
-         Ir8CDKGTQVmpXPpkDbiHRIfDzAbqpMpC7zXnXkA5l6ZdK9xfyLs3+K5bT6CZpUl/cEch
-         t6E1mi4Hk+YMi5iSXO9ZNe89qIasGKTPMJDMQbd6/kf1JKHK2LBNWfQDYb+yRPgeSs+Q
-         D6lgcTrFSbIeTkgS/qs0QHAbg6gqEUu7g0+yBKA3JrOyhmBXKRo7YVS/3EvW55RAbDsB
-         vdWIA80MYx6v65gNv60uTlWk8CUMzkW/gAWIMishs2opVJZmlu1T4zfKM+7NN2/7EsTv
-         3bEQ==
+        bh=GDe2OfCLNRaJ6CRURKr3KlmzCsataxU7y19XTJRsk+A=;
+        b=dOIV/WhuSheLaQhlWxlj+3+T37sWs0Un6jvwS3pqTS1r44qMPZoR5sHKnaeFt3+Sld
+         nU8fLlIhzDveRVkmFJIH+7MBdxBwz6X/Si+ABbNOIyiGWudOvWEg1/l5bgWFERZEYdYl
+         B7aAI4GwhI+Qzk1kfmvv0ogR5a0+OwywlAES1vSGmmjBnh4Ui2qCNC85F+lfD1hS8HuO
+         Ft8n9ha5kHL0rFdCP00hiaxRUbgsIVr6AF2L1Cxe4qEYuA5PoeHMeuqCxhj9a8g0+ITf
+         IiGS4jR4hzEqp9HtjEU6aXnMdV6DhVCLxuvMj417l1+aN3yE/iABUrtXiwevjEtCDtCi
+         eCVg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=RqG9xtTBiKFFqs7nudeShHVEmZgSa7/qeDhwUVoJ0gI=;
-        b=UfgZHeFG0P694Q0QwhEA2EkZwLwwD4y8zvbP67P1NO2hSCYYu9+d1tbxcbFpznfibr
-         oxdTRD785VqA/CJ4R65cFT6rrT1F/BFFUf/qIk5ncvG16keH/aj5c07VoZeYxDZftD5K
-         w3Ns+HWRIXQB/iynUPRTOz70SQ13SuB7B9zOoZM1NnkGMa9Yf0ZzKMJtSOZclr21KMp8
-         3i2kF1ChAt4Zb/1vo1jvup5rSOtUsuSKvcKrd2USnVhjdCLTBR1pO7ADIVUGvJIeP3Qr
-         aUV0nUjTxQpMKBCWFEbOibKC+D7oNapPxnAVysOzEvNzhGW2nDKkKujGqRmuHBeLz3Zb
-         r3fA==
-X-Gm-Message-State: AO0yUKVvp50Rq2xN+dEY3smzPO6FfxxUbwMYVjuV/ne+Xuy8bb4VdjPB
-        aWofSPu9CebFSIKfzmuoonew
-X-Google-Smtp-Source: AK7set9XYmm8vI9O37l/Qf9lKiFrBKryqh30IwYRA6xiWoa1/0bmOU10jLnFsZLm+bfb2alXxkR2cA==
-X-Received: by 2002:a05:6a20:429d:b0:b9:6932:7d71 with SMTP id o29-20020a056a20429d00b000b969327d71mr11445271pzj.26.1677080034856;
-        Wed, 22 Feb 2023 07:33:54 -0800 (PST)
+        bh=GDe2OfCLNRaJ6CRURKr3KlmzCsataxU7y19XTJRsk+A=;
+        b=fZE4wKSzn3BOF1vsNpSxoQH75YINjJZ8qnXWn9sFk8m3KsEam1lH3xgvI3ZwsuxkTv
+         fC0x7umxhg7rGhJrl9wUBVxI6L84TXSXOiOVXPP3EBrAj2wt8FUwUsoGVvuAfwzEif68
+         k/CN6iXvqsKEL9PeIvCTqTfu196yqDpQltgb35/8ygM46w7MmEXjGfGSC9S2cw2T7+Ki
+         R5bpA2aGdkkjXkgzQeD1YFcAYrSWCGe8eRHZnJaPypuHO6LCwOOTKDD1Fo3Cd768MLR3
+         2odIC4joKTxUm9FyuD8soV1gZOjalDpEVZPWwLfmSydvrxg/UngR6U6BGl1c9wkTXej3
+         VpTQ==
+X-Gm-Message-State: AO0yUKUJ9KehYXsmZgEPsd5K23Xr7UCrFTyCi2yoHWlgaThM66n2YX7P
+        aB4VCRdnaGjBgcAwKkqqyjnX
+X-Google-Smtp-Source: AK7set9PlENPw4Ytv0VFDNBE8oCx8oqoTB1WqxubBssAiajhFfz9or54IW4C+NgfFKUQWVfsUWeixA==
+X-Received: by 2002:a05:6a20:b559:b0:cb:cb17:eac6 with SMTP id ev25-20020a056a20b55900b000cbcb17eac6mr2322262pzb.32.1677080039431;
+        Wed, 22 Feb 2023 07:33:59 -0800 (PST)
 Received: from localhost.localdomain ([117.216.123.15])
-        by smtp.gmail.com with ESMTPSA id f15-20020aa78b0f000000b005ac419804d3sm5222482pfd.186.2023.02.22.07.33.50
+        by smtp.gmail.com with ESMTPSA id f15-20020aa78b0f000000b005ac419804d3sm5222482pfd.186.2023.02.22.07.33.55
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 22 Feb 2023 07:33:54 -0800 (PST)
+        Wed, 22 Feb 2023 07:33:58 -0800 (PST)
 From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
 To:     andersson@kernel.org, lpieralisi@kernel.org, robh@kernel.org,
         kw@linux.com, krzysztof.kozlowski+dt@linaro.org, vkoul@kernel.org
@@ -58,9 +58,9 @@ Cc:     konrad.dybcio@linaro.org, bhelgaas@google.com, kishon@kernel.org,
         linux-kernel@vger.kernel.org, linux-pci@vger.kernel.org,
         devicetree@vger.kernel.org,
         Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-Subject: [PATCH 10/11] phy: qcom-qmp-pcie: Add RC init sequence for SDX55
-Date:   Wed, 22 Feb 2023 21:02:50 +0530
-Message-Id: <20230222153251.254492-11-manivannan.sadhasivam@linaro.org>
+Subject: [PATCH 11/11] PCI: qcom: Add support for SDX55 SoC
+Date:   Wed, 22 Feb 2023 21:02:51 +0530
+Message-Id: <20230222153251.254492-12-manivannan.sadhasivam@linaro.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20230222153251.254492-1-manivannan.sadhasivam@linaro.org>
 References: <20230222153251.254492-1-manivannan.sadhasivam@linaro.org>
@@ -76,110 +76,45 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add PCIe RC init sequence making use of the common init sequence. The RC
-mode additionally requires REFCLK_DRV_DSBL bit to set during powerup and
-powerdown.
+Add support for SDX55 SoC reusing the 1.9.0 config. The PCIe controller is
+of version 1.10.0 but it is compatible with the 1.9.0 config. This SoC also
+requires "sleep" clock which is added as an optional clock in the driver,
+since it is not required on other SoCs.
 
 Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
 ---
- drivers/phy/qualcomm/phy-qcom-qmp-pcie.c      | 49 ++++++++++++++++++-
- .../qualcomm/phy-qcom-qmp-pcs-pcie-v4_20.h    |  2 +
- 2 files changed, 50 insertions(+), 1 deletion(-)
+ drivers/pci/controller/dwc/pcie-qcom.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/phy/qualcomm/phy-qcom-qmp-pcie.c b/drivers/phy/qualcomm/phy-qcom-qmp-pcie.c
-index f526f73f76ef..9d92facd47a6 100644
---- a/drivers/phy/qualcomm/phy-qcom-qmp-pcie.c
-+++ b/drivers/phy/qualcomm/phy-qcom-qmp-pcie.c
-@@ -1138,6 +1138,41 @@ static const struct qmp_phy_init_tbl sdx55_qmp_pcie_serdes_tbl[] = {
- 	QMP_PHY_INIT_CFG(QSERDES_V4_COM_BIN_VCOCAL_HSCLK_SEL, 0x22),
- };
+diff --git a/drivers/pci/controller/dwc/pcie-qcom.c b/drivers/pci/controller/dwc/pcie-qcom.c
+index 77e5dc7b88ad..659df73114dd 100644
+--- a/drivers/pci/controller/dwc/pcie-qcom.c
++++ b/drivers/pci/controller/dwc/pcie-qcom.c
+@@ -182,7 +182,7 @@ struct qcom_pcie_resources_2_3_3 {
  
-+static const struct qmp_phy_init_tbl sdx55_qmp_pcie_rc_serdes_tbl[] = {
-+	QMP_PHY_INIT_CFG(QSERDES_V4_COM_SSC_EN_CENTER, 0x01),
-+	QMP_PHY_INIT_CFG(QSERDES_V4_COM_SSC_PER1, 0x31),
-+	QMP_PHY_INIT_CFG(QSERDES_V4_COM_SSC_PER2, 0x01),
-+	QMP_PHY_INIT_CFG(QSERDES_V4_COM_SSC_STEP_SIZE1_MODE0, 0xce),
-+	QMP_PHY_INIT_CFG(QSERDES_V4_COM_SSC_STEP_SIZE2_MODE0, 0x0b),
-+	QMP_PHY_INIT_CFG(QSERDES_V4_COM_SSC_STEP_SIZE1_MODE1, 0x97),
-+	QMP_PHY_INIT_CFG(QSERDES_V4_COM_SSC_STEP_SIZE2_MODE1, 0x0c),
-+	QMP_PHY_INIT_CFG(QSERDES_V4_COM_CLK_ENABLE1, 0x90),
-+	QMP_PHY_INIT_CFG(QSERDES_V4_COM_CLK_EP_DIV_MODE0, 0x0a),
-+	QMP_PHY_INIT_CFG(QSERDES_V4_COM_CLK_EP_DIV_MODE1, 0x10),
-+	QMP_PHY_INIT_CFG(QSERDES_V4_COM_CP_CTRL_MODE0, 0x06),
-+	QMP_PHY_INIT_CFG(QSERDES_V4_COM_CP_CTRL_MODE1, 0x06),
-+	QMP_PHY_INIT_CFG(QSERDES_V4_COM_PLL_RCTRL_MODE0, 0x16),
-+	QMP_PHY_INIT_CFG(QSERDES_V4_COM_PLL_RCTRL_MODE1, 0x16),
-+	QMP_PHY_INIT_CFG(QSERDES_V4_COM_PLL_CCTRL_MODE0, 0x36),
-+	QMP_PHY_INIT_CFG(QSERDES_V4_COM_PLL_CCTRL_MODE1, 0x36),
-+	QMP_PHY_INIT_CFG(QSERDES_V4_COM_SYSCLK_EN_SEL, 0x08),
-+	QMP_PHY_INIT_CFG(QSERDES_V4_COM_LOCK_CMP1_MODE0, 0x04),
-+	QMP_PHY_INIT_CFG(QSERDES_V4_COM_LOCK_CMP2_MODE0, 0x0d),
-+	QMP_PHY_INIT_CFG(QSERDES_V4_COM_LOCK_CMP1_MODE1, 0x0a),
-+	QMP_PHY_INIT_CFG(QSERDES_V4_COM_LOCK_CMP2_MODE1, 0x1a),
-+	QMP_PHY_INIT_CFG(QSERDES_V4_COM_DEC_START_MODE0, 0xc3),
-+	QMP_PHY_INIT_CFG(QSERDES_V4_COM_DEC_START_MODE1, 0xd0),
-+	QMP_PHY_INIT_CFG(QSERDES_V4_COM_DIV_FRAC_START3_MODE0, 0x05),
-+	QMP_PHY_INIT_CFG(QSERDES_V4_COM_DIV_FRAC_START1_MODE1, 0x55),
-+	QMP_PHY_INIT_CFG(QSERDES_V4_COM_DIV_FRAC_START2_MODE1, 0x55),
-+	QMP_PHY_INIT_CFG(QSERDES_V4_COM_DIV_FRAC_START3_MODE1, 0x05),
-+	QMP_PHY_INIT_CFG(QSERDES_V4_COM_CLK_SELECT, 0x34),
-+	QMP_PHY_INIT_CFG(QSERDES_V4_COM_BIN_VCOCAL_CMP_CODE1_MODE0, 0xca),
-+	QMP_PHY_INIT_CFG(QSERDES_V4_COM_BIN_VCOCAL_CMP_CODE2_MODE0, 0x1e),
-+	QMP_PHY_INIT_CFG(QSERDES_V4_COM_BIN_VCOCAL_CMP_CODE1_MODE1, 0xd8),
-+	QMP_PHY_INIT_CFG(QSERDES_V4_COM_BIN_VCOCAL_CMP_CODE2_MODE1, 0x20),
-+};
-+
- static const struct qmp_phy_init_tbl sdx55_qmp_pcie_ep_serdes_tbl[] = {
- 	QMP_PHY_INIT_CFG(QSERDES_V4_COM_BG_TIMER, 0x02),
- 	QMP_PHY_INIT_CFG(QSERDES_V4_COM_SYS_CLK_CTRL, 0x07),
-@@ -1217,6 +1252,11 @@ static const struct qmp_phy_init_tbl sdx55_qmp_pcie_pcs_misc_tbl[] = {
- 	QMP_PHY_INIT_CFG(QPHY_V4_20_PCS_PCIE_G4_EQ_CONFIG5, 0x02),
- };
+ /* 6 clocks typically, 7 for sm8250 */
+ struct qcom_pcie_resources_2_7_0 {
+-	struct clk_bulk_data clks[12];
++	struct clk_bulk_data clks[13];
+ 	int num_clks;
+ 	struct regulator_bulk_data supplies[2];
+ 	struct reset_control *pci_reset;
+@@ -1208,6 +1208,7 @@ static int qcom_pcie_get_resources_2_7_0(struct qcom_pcie *pcie)
+ 	res->clks[idx++].id = "noc_aggr_4";
+ 	res->clks[idx++].id = "noc_aggr_south_sf";
+ 	res->clks[idx++].id = "cnoc_qx";
++	res->clks[idx++].id = "sleep";
  
-+static const struct qmp_phy_init_tbl sdx55_qmp_pcie_rc_pcs_misc_tbl[] = {
-+	QMP_PHY_INIT_CFG(QPHY_V4_20_PCS_PCIE_ENDPOINT_REFCLK_DRIVE, 0xc1),
-+	QMP_PHY_INIT_CFG(QPHY_V4_20_PCS_PCIE_OSC_DTCT_ACTIONS, 0x00),
-+};
-+
- static const struct qmp_phy_init_tbl sdx55_qmp_pcie_ep_pcs_misc_tbl[] = {
- 	QMP_PHY_INIT_CFG(QPHY_V4_20_PCS_LANE1_INSIG_SW_CTRL2, 0x00),
- 	QMP_PHY_INIT_CFG(QPHY_V4_20_PCS_LANE1_INSIG_MX_CTRL2, 0x00),
-@@ -2010,6 +2050,13 @@ static const struct qmp_phy_cfg sdx55_qmp_pciephy_cfg = {
- 		.pcs_misc_num	= ARRAY_SIZE(sdx55_qmp_pcie_pcs_misc_tbl),
- 	},
- 
-+	.tbls_rc = &(const struct qmp_phy_cfg_tbls) {
-+		.serdes		= sdx55_qmp_pcie_rc_serdes_tbl,
-+		.serdes_num	= ARRAY_SIZE(sdx55_qmp_pcie_rc_serdes_tbl),
-+		.pcs_misc	= sdx55_qmp_pcie_rc_pcs_misc_tbl,
-+		.pcs_misc_num	= ARRAY_SIZE(sdx55_qmp_pcie_rc_pcs_misc_tbl),
-+	},
-+
- 	.tbls_ep = &(const struct qmp_phy_cfg_tbls) {
- 		.serdes		= sdx55_qmp_pcie_ep_serdes_tbl,
- 		.serdes_num	= ARRAY_SIZE(sdx55_qmp_pcie_ep_serdes_tbl),
-@@ -2025,7 +2072,7 @@ static const struct qmp_phy_cfg sdx55_qmp_pciephy_cfg = {
- 	.num_vregs		= ARRAY_SIZE(qmp_phy_vreg_l),
- 	.regs			= sm8250_pcie_regs_layout,
- 
--	.pwrdn_ctrl		= SW_PWRDN,
-+	.pwrdn_ctrl		= SW_PWRDN | REFCLK_DRV_DSBL,
- 	.phy_status		= PHYSTATUS_4_20,
- };
- 
-diff --git a/drivers/phy/qualcomm/phy-qcom-qmp-pcs-pcie-v4_20.h b/drivers/phy/qualcomm/phy-qcom-qmp-pcs-pcie-v4_20.h
-index af273602998e..ac872a9eff9a 100644
---- a/drivers/phy/qualcomm/phy-qcom-qmp-pcs-pcie-v4_20.h
-+++ b/drivers/phy/qualcomm/phy-qcom-qmp-pcs-pcie-v4_20.h
-@@ -6,6 +6,8 @@
- #ifndef QCOM_PHY_QMP_PCS_PCIE_V4_20_H_
- #define QCOM_PHY_QMP_PCS_PCIE_V4_20_H_
- 
-+#define QPHY_V4_20_PCS_PCIE_ENDPOINT_REFCLK_DRIVE	0x01c
-+#define QPHY_V4_20_PCS_PCIE_OSC_DTCT_ACTIONS		0x090
- #define QPHY_V4_20_PCS_PCIE_EQ_CONFIG1			0x0a0
- #define QPHY_V4_20_PCS_PCIE_G3_RXEQEVAL_TIME		0x0f0
- #define QPHY_V4_20_PCS_PCIE_G4_RXEQEVAL_TIME		0x0f4
+ 	num_opt_clks = idx - num_clks;
+ 	res->num_clks = idx;
+@@ -1824,6 +1825,7 @@ static const struct of_device_id qcom_pcie_match[] = {
+ 	{ .compatible = "qcom,pcie-sc8180x", .data = &cfg_1_9_0 },
+ 	{ .compatible = "qcom,pcie-sc8280xp", .data = &cfg_1_9_0 },
+ 	{ .compatible = "qcom,pcie-sdm845", .data = &cfg_2_7_0 },
++	{ .compatible = "qcom,pcie-sdx55", .data = &cfg_1_9_0 },
+ 	{ .compatible = "qcom,pcie-sm8150", .data = &cfg_1_9_0 },
+ 	{ .compatible = "qcom,pcie-sm8250", .data = &cfg_1_9_0 },
+ 	{ .compatible = "qcom,pcie-sm8450-pcie0", .data = &cfg_1_9_0 },
 -- 
 2.25.1
 
