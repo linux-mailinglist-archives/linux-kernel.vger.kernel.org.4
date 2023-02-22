@@ -2,147 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A47CC69F529
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Feb 2023 14:15:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2182C69F52C
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Feb 2023 14:16:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231219AbjBVNPE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Feb 2023 08:15:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36198 "EHLO
+        id S231778AbjBVNQX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Feb 2023 08:16:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37148 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229747AbjBVNPC (ORCPT
+        with ESMTP id S230246AbjBVNQV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Feb 2023 08:15:02 -0500
-Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8845738E8B
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Feb 2023 05:15:00 -0800 (PST)
-Received: by mail-pj1-x1030.google.com with SMTP id qa18-20020a17090b4fd200b0023750b675f5so633850pjb.3
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Feb 2023 05:15:00 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=LXwDDYUk3+Q4/nNJtasmLY4w5AET06sCuMInR3j34Fk=;
-        b=WVUUpyjOVVsoYXGoEZoyfG1Mdqsy+Exa2PxS+69m0zj35qS5THqNyXOfJtB0m5eCY+
-         dGp0oHsLLr2vWjikDNF2/YRZNgBg5aRPV3dpW2KdjaOsK7E7UHpBcaDjWA9JYyJS7YA9
-         2kIyhkYv8OqfnXcY2sXz+p/qhUSkiOqKu4jTw=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=LXwDDYUk3+Q4/nNJtasmLY4w5AET06sCuMInR3j34Fk=;
-        b=2klWXr51aMk5GFlyzKPB9IS4EETLU9i+jOTi0oh14L9q9TjTsvraxFfmKECfmiZpLU
-         K0Hzf0AlnUJxwO0fHOWzvRhQip2V6fJo4h6ffbR00U548kT/ocWQ5Yt0ULgv71eTbwkC
-         cd8egKw9wUPTQWEClSdlQU7PZvIjnG7DAKPj/nIX4f7q5Mu837bs1JJBDBOqaxILunkm
-         o4PQmKqw1HCOFMaBmvm6eznKABsBbm9DdaAZ7367jfvFAJA7m/Xuj35xPYusAGOQhcy0
-         vrq8Zb/OCH6mOSH/vKIAsfHbafTzeUgz+5ziDMwYnl5KtaPxHMMSbqz9UMcSIT21AXm1
-         BmpQ==
-X-Gm-Message-State: AO0yUKVyMz9zdCRwWIxbWa4M+A6hgc2mcZyIw0DWMFCy4KKP3nnmKu9+
-        FDn75DS5Hq/tocBgKAmpXlB3CduCGsS0950s
-X-Google-Smtp-Source: AK7set8ghI8iXqpjhMQ//Cyexs4/VsbHQ0yJc5VZVjs5PppE8Rl6di4RgB0wB2V1tCR+V3DMcX23MA==
-X-Received: by 2002:a17:902:facd:b0:19a:a647:1881 with SMTP id ld13-20020a170902facd00b0019aa6471881mr7551300plb.62.1677071699463;
-        Wed, 22 Feb 2023 05:14:59 -0800 (PST)
-Received: from mail-pf1-f175.google.com (mail-pf1-f175.google.com. [209.85.210.175])
-        by smtp.gmail.com with ESMTPSA id c2-20020a170902d90200b00199193e5ea1sm8008142plz.61.2023.02.22.05.14.58
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 22 Feb 2023 05:14:58 -0800 (PST)
-Received: by mail-pf1-f175.google.com with SMTP id b20so5111506pfo.6
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Feb 2023 05:14:58 -0800 (PST)
-X-Received: by 2002:a62:c143:0:b0:593:d4cb:dba2 with SMTP id
- i64-20020a62c143000000b00593d4cbdba2mr1125866pfg.13.1677071697448; Wed, 22
- Feb 2023 05:14:57 -0800 (PST)
+        Wed, 22 Feb 2023 08:16:21 -0500
+Received: from fllv0016.ext.ti.com (fllv0016.ext.ti.com [198.47.19.142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C502739BB4;
+        Wed, 22 Feb 2023 05:16:17 -0800 (PST)
+Received: from fllv0035.itg.ti.com ([10.64.41.0])
+        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 31MDFxnp113410;
+        Wed, 22 Feb 2023 07:15:59 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1677071759;
+        bh=hD52NgGyIxcH+/PIi7CS0t2PfjHjhrKYf0n1At3rXj4=;
+        h=Date:From:To:CC:Subject:References:In-Reply-To;
+        b=A6kApQgYAguYcRVJXgjC/uQ5wT3p1B8YFodt7GXl1iUHprmZPlNa49YnCapg7FOmX
+         sEGvO+g3rgVvY4LGmHcXK72AUZBH3q1X9VAHZp5/sS1QPz9Q5oLOf22YMT7fh0la1s
+         HhbNFECRMa7kmY3sePI17pRDlrLJhkr5mLGaVJ/k=
+Received: from DFLE108.ent.ti.com (dfle108.ent.ti.com [10.64.6.29])
+        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 31MDFx3T083692
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Wed, 22 Feb 2023 07:15:59 -0600
+Received: from DFLE110.ent.ti.com (10.64.6.31) by DFLE108.ent.ti.com
+ (10.64.6.29) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Wed, 22
+ Feb 2023 07:15:59 -0600
+Received: from fllv0040.itg.ti.com (10.64.41.20) by DFLE110.ent.ti.com
+ (10.64.6.31) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
+ Frontend Transport; Wed, 22 Feb 2023 07:15:59 -0600
+Received: from localhost (ileaxei01-snat.itg.ti.com [10.180.69.5])
+        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 31MDFxVx104054;
+        Wed, 22 Feb 2023 07:15:59 -0600
+Date:   Wed, 22 Feb 2023 07:15:59 -0600
+From:   Nishanth Menon <nm@ti.com>
+To:     Ravi Gunasekaran <r-gunasekaran@ti.com>
+CC:     <afd@ti.com>, <vigneshr@ti.com>, <kristo@kernel.org>,
+        <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
+        <s-vadapalli@ti.com>, <linux-arm-kernel@lists.infradead.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v10 2/9] arm64: dts: ti: k3-j721s2-main: Add support for
+ USB
+Message-ID: <20230222131559.day4frfvjuje25i4@suffrage>
+References: <20230221120612.27366-1-r-gunasekaran@ti.com>
+ <20230221120612.27366-3-r-gunasekaran@ti.com>
+ <20230221135852.n3yukx55q7jmqbgk@chowder>
+ <a74bf007-40b5-3d92-ba30-c50a2bf4a3c0@ti.com>
 MIME-Version: 1.0
-References: <20230106061659.never.817-kees@kernel.org> <CANiDSCtTz4mpTz4RHBzNXL=yBvXNXHBZQ-HYMFegLytoScW4eA@mail.gmail.com>
- <202301061217.816FC0313D@keescook> <Y7jODnbUqCwfwwHI@pendragon.ideasonboard.com>
- <CANiDSCvB8vRp43A1J4BpNZveCvG66XbDmnkKZykbWSFCLX1XUQ@mail.gmail.com> <Y+LLeYF7CtLjeLbt@smile.fi.intel.com>
-In-Reply-To: <Y+LLeYF7CtLjeLbt@smile.fi.intel.com>
-From:   Ricardo Ribalda <ribalda@chromium.org>
-Date:   Wed, 22 Feb 2023 14:14:46 +0100
-X-Gmail-Original-Message-ID: <CANiDSCtjX6+xZn=YkSfqY8xTi7e=OZWbUNtuJ_d=OreFbrgaog@mail.gmail.com>
-Message-ID: <CANiDSCtjX6+xZn=YkSfqY8xTi7e=OZWbUNtuJ_d=OreFbrgaog@mail.gmail.com>
-Subject: Re: [PATCH] media: uvcvideo: Silence memcpy() run-time false positive warnings
-To:     Andy Shevchenko <andriy.shevchenko@intel.com>
-Cc:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Kees Cook <keescook@chromium.org>, ionut_n2001@yahoo.com,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-hardening@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <a74bf007-40b5-3d92-ba30-c50a2bf4a3c0@ti.com>
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Andy
+On 10:21-20230222, Ravi Gunasekaran wrote:
+[...]
+> >> +	usbss0: cdns-usb@4104000 {
+> >> +		compatible = "ti,j721e-usb";
+> >> +		reg = <0x00 0x04104000 0x00 0x100>;
+> >> +		clocks = <&k3_clks 360 16>, <&k3_clks 360 15>;
+> >> +		clock-names = "ref", "lpm";
+> >> +		assigned-clocks = <&k3_clks 360 16>; /* USB2_REFCLK */
+> >> +		assigned-clock-parents = <&k3_clks 360 17>;
+> >> +		power-domains = <&k3_pds 360 TI_SCI_PD_EXCLUSIVE>;
+> >> +		#address-cells = <2>;
+> >> +		#size-cells = <2>;
+> >> +		ranges;
+> >> +		dma-coherent;
+> >> +
+> >> +		status = "disabled";
+> > 
+> > Why disabled by default?
+> 
+> One of the comment received in the v9 series was to disable the node in
+> the include file and then enable it in the board specific DTS file.
+> Changes in this series addressed that comment.
 
-On Tue, 7 Feb 2023 at 23:07, Andy Shevchenko
-<andriy.shevchenko@intel.com> wrote:
->
-> On Mon, Jan 09, 2023 at 11:46:00AM +0100, Ricardo Ribalda wrote:
-> > Hi Laurent
-> >
-> > I was thinking about something on the line of the attached patch,
-> >
-> > uvc_frame_header->data could also be replaced with a union.
-> >
-> > Warning, not tested ;)
->
-> ...
->
-> > +struct uvc_frame_header {
-> > +     u8 length;
-> > +     u8 flags;
-> > +     u8 data[];
-> > +} __packed;
->
-> __packed! (See below)
->
-> ...
->
-> > +             pts = (u32 *) header->data;
->
-> Ai-ai-ai.
-> Here is just a yellow flag...
->
-> ...
->
-> >       uvc_dbg(stream->dev, FRAME,
-> >               "%s(): t-sys %lluns, SOF %u, len %u, flags 0x%x, PTS %u, STC %u frame SOF %u\n",
-> >               __func__, ktime_to_ns(time), meta->sof, meta->length,
-> >               meta->flags,
-> > +             has_pts ? *pts : 0,
->
-> ...and here is a red flag. What you need to have is
-
-Thanks! you are absolutely right :)
-
-Luckily  Laurent merged the original patch not mine.
-
-Regards!
-
->
->         void *pts;
->         u32 pts_val;
->
->         pts_val = get_unaligned_be32(); // or le32
->
->         ...use pts_val...
->
-> > +             has_scr ? scr->scr : 0,
-> > +             has_scr ? scr->frame_sof & 0x7ff : 0);
->
->
-> --
-> With Best Regards,
-> Andy Shevchenko
->
->
-
+Document in the node why it is disabled by default. Also do make sure
+All K3 SoCs dtsi nodes follow the same argument.
 
 -- 
-Ricardo Ribalda
+Regards,
+Nishanth Menon
+Key (0xDDB5849D1736249D) / Fingerprint: F8A2 8693 54EB 8232 17A3  1A34 DDB5 849D 1736 249D
