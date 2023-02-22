@@ -2,163 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 28E1B69F50F
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Feb 2023 14:03:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2223869F515
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Feb 2023 14:05:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231815AbjBVNDW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Feb 2023 08:03:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56218 "EHLO
+        id S231781AbjBVNFG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Feb 2023 08:05:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57952 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231256AbjBVNDU (ORCPT
+        with ESMTP id S231149AbjBVNFE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Feb 2023 08:03:20 -0500
-Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2326D367CE
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Feb 2023 05:03:18 -0800 (PST)
-Received: from mail-pl1-f200.google.com (mail-pl1-f200.google.com [209.85.214.200])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 8D81F3F57F
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Feb 2023 13:03:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1677070996;
-        bh=vDl8+hjfMfY7KUo2hxAOUC4kT84OFjznnoyN+yHSR7c=;
-        h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-         To:Cc:Content-Type;
-        b=EMlsesxQc8Kw3BGiVwKwGamGXmPvP9sBuyk+5MXKC4k9j1Kqmxr6ZEr828nqKf8E9
-         naR8UQlSw3rxzPwbul1lJThDTAxwtfy+prFNBj8yFlp/BhlDP/99AQKBhogHJL1nC6
-         grGTVRjc35PW2HK/pt3hfpi32eHU4TmMRkQefEMkux+C113H/vOZtSr/V53pcuf8XP
-         gAyyOtzASVn7e1Dr2YieCtU5/VdPfg0uLG284PgsGQTAj1u9kfLEvuREwMBEjB9qBW
-         KJ/pIlqtCdWQR1e3HYpmySjH80Wp+M7xDWC9GSI+oA6smoSd0sWeofT16wsl6gKQKA
-         699R8+tx1ju+w==
-Received: by mail-pl1-f200.google.com with SMTP id e4-20020a170902cf4400b00199148d00f2so3755864plg.17
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Feb 2023 05:03:16 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=vDl8+hjfMfY7KUo2hxAOUC4kT84OFjznnoyN+yHSR7c=;
-        b=iDnbL2cZ3j5+pLK1ssvcQ2Vo1JNsfPDY0y17XFxe03PjBXjxcA9Os1+iV/LTvCJZKK
-         mqZvjq/sqQC/ZzQwPkDDAtWNlneaYusonebrGSIpP7GfxwJA7V5qlnzGO+UfSvhRYObH
-         KTo472Rbgzto80JfQva3VGl1zQJEVR7mgO1m93TqdmQ50mwRjRPEs3reupdmSsl3dyRu
-         LigCDbMgKv4Cr8pReS7YHhLmWx697vpWPAK73ssRrAQCoCDQk8MfByvh45oTO/vPn0tQ
-         O0v62wEXJzX4gdWNezUBQwH7vQutKxbi1lgomCS1/MB4gv9qFsOvHZcioHsigMju/2hu
-         tblQ==
-X-Gm-Message-State: AO0yUKVrHc03bJe5i9BGHGVEMB1ScZVfGq9vYmJfy0w6KdeR93bJaXZz
-        1/FNe8/I1vrXPfOmFq/nEFECr/xE3SeNKZJ8raVvrX6n1aewT4bhroFc6xSFXcKuHqyUsNZzR6j
-        cjolQhLFgins0aCNoaFnYmiOUYYdeVNslCEki+6d2JbJaizCy1ZvGIi4jyQ==
-X-Received: by 2002:a17:90b:1f87:b0:237:1892:2548 with SMTP id so7-20020a17090b1f8700b0023718922548mr1311105pjb.44.1677070993466;
-        Wed, 22 Feb 2023 05:03:13 -0800 (PST)
-X-Google-Smtp-Source: AK7set8YbQqmzpzq5/1//FaF6k+HETVuHWe7YKJkndlhhZiyXSUpczFRV7U8PwaK551Xg7ch6DjXBMeH4OCU3YJo3B8=
-X-Received: by 2002:a17:90b:1f87:b0:237:1892:2548 with SMTP id
- so7-20020a17090b1f8700b0023718922548mr1311091pjb.44.1677070993144; Wed, 22
- Feb 2023 05:03:13 -0800 (PST)
-MIME-Version: 1.0
-References: <20230221023849.1906728-1-kai.heng.feng@canonical.com>
- <20230221023849.1906728-7-kai.heng.feng@canonical.com> <b2bae4bb-0dbe-be80-3849-f46395c05cd2@gmail.com>
-In-Reply-To: <b2bae4bb-0dbe-be80-3849-f46395c05cd2@gmail.com>
-From:   Kai-Heng Feng <kai.heng.feng@canonical.com>
-Date:   Wed, 22 Feb 2023 21:03:01 +0800
-Message-ID: <CAAd53p79Of-ZPBFGtBZCSnST+oTT5AwGkRo_Z57Gm9XDOBmi_A@mail.gmail.com>
-Subject: Re: [PATCH v8 RESEND 6/6] r8169: Disable ASPM while doing NAPI poll
-To:     Heiner Kallweit <hkallweit1@gmail.com>
-Cc:     nic_swsd@realtek.com, bhelgaas@google.com, koba.ko@canonical.com,
-        acelan.kao@canonical.com, davem@davemloft.net, edumazet@google.com,
-        kuba@kernel.org, pabeni@redhat.com,
-        sathyanarayanan.kuppuswamy@linux.intel.com, vidyas@nvidia.com,
-        rafael.j.wysocki@intel.com, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-pci@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Wed, 22 Feb 2023 08:05:04 -0500
+Received: from out2-smtp.messagingengine.com (out2-smtp.messagingengine.com [66.111.4.26])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D3B9367CB;
+        Wed, 22 Feb 2023 05:05:03 -0800 (PST)
+Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
+        by mailout.nyi.internal (Postfix) with ESMTP id 81EDD5C007A;
+        Wed, 22 Feb 2023 08:05:01 -0500 (EST)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute4.internal (MEProxy); Wed, 22 Feb 2023 08:05:01 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; h=
+        cc:cc:content-transfer-encoding:content-type:date:date:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to; s=fm2; t=1677071101; x=
+        1677157501; bh=zTBhSHg2Z1fhQW2zMWScuLvC8roK+JvNcm0QshCfxFI=; b=s
+        6pXHfROnOELLc+Cn5s7R2d0Nrk8bJ25Klu/V07fr30hYpaie61vExlYSQ0G7zgfN
+        OMUzIiFHAf2PzVWgmnCnGaHgxNUBlvJzTt/k2TJ+ThmhLNhNCghqt/C9WEMlzdTI
+        ji3cgkZYTMebvOEvim3ODU0qKu8DRPzGG+qsR7cJMLL5Fclbs1RiMr8dkfaGzn9Z
+        t/sC66teOmxX0KnAEPYg/jjsStKHKcW0SkVEwc8eRptpVfYBmOncXay/kaz6hVK2
+        mumMkRYzc2BpdkweCLZ1HMo9d1E4RV40N2HJweayMAupo4w1R5j9be8ISI3I4/Bc
+        ykQp0uk/soMnRzkKOCB7w==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding
+        :content-type:date:date:feedback-id:feedback-id:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
+        :x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1677071101; x=
+        1677157501; bh=zTBhSHg2Z1fhQW2zMWScuLvC8roK+JvNcm0QshCfxFI=; b=C
+        UUs1Zuoz5XkoMOm4gnwKBSRt3KrYWEX4vIDIx6LibNfmjODvs4M8QKVlRQpJCRgY
+        xGwWZvtZS7MDrWjJtx31I7n3pFOjbaECr/6aWcgxK28zyzppWUxC2diDCQwOqt1q
+        UQlviLT3yyKXlVGVIrxkCj4JlZGG3fk0yWnqbLxeqqrkWHELEKWsBxDeTTr07P7x
+        XCD3jgq9SyFt4h61XIydzgEVDKmfG5nNwHYuMq+rEedrrQg3Ibz8OJsX/vMor3vR
+        Nyqzwoq4Rq5+6fLyqO3wiJm1sSGzFiL4skYcVr5WEgM/oLg6EJcj4PRJaRnnuH/L
+        NhZxxvybMJ4WinSrceEzw==
+X-ME-Sender: <xms:_BL2Y4cbTKB3egLQG9iHK2kjKujrBo7PlmPiR36iD6h0BrdMvZ5c5A>
+    <xme:_BL2Y6MejVu9vjLYcIrPSX28rBjftuHQt16e5GfJavGQPB4a3MqLzNOW9EzOVtCDc
+    sVnu71PI2iXT7FTI4w>
+X-ME-Received: <xmr:_BL2Y5jVQFSR8RddGDPikwmRIua3y3P8Hu1zuH9h00Rw3vW_IM5fJyhGVPZFb50580Ac>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrudejledggeeiucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurheptggguffhjgffvefgkfhfvffosehtqhhmtdhhtdejnecuhfhrohhmpeflihgr
+    gihunhcujggrnhhguceojhhirgiguhhnrdihrghnghesfhhlhihgohgrthdrtghomheqne
+    cuggftrfgrthhtvghrnhepuddtjeffteetfeekjeeiheefueeigeeutdevieejveeihfff
+    ledvgfduiefhvddtnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilh
+    hfrhhomhepjhhirgiguhhnrdihrghnghesfhhlhihgohgrthdrtghomh
+X-ME-Proxy: <xmx:_BL2Y9_thBwi4MQagwUStSLBWX_AC_ElTF8lVZRH4KmWWQZDiXdnig>
+    <xmx:_BL2Y0tmJ3pnRQOAXcIoTOFFdHZi7yqurNnwqE12koyJWErZbMILBA>
+    <xmx:_BL2Y0GMuEDjSm8mG6yenGtEMs0GwVVpheQihqGnW9on60eMSQeC5w>
+    <xmx:_RL2Y2JEvc1HdaC_4PRfTWKAkQ07C6sj79I2FVKEVyb5KlvpTe5yrg>
+Feedback-ID: ifd894703:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
+ 22 Feb 2023 08:04:58 -0500 (EST)
+Content-Type: text/plain;
+        charset=utf-8
+Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3731.300.101.1.3\))
+Subject: Re: [PATCH 0/7] MIPS DMA coherence fixes
+From:   Jiaxun Yang <jiaxun.yang@flygoat.com>
+In-Reply-To: <a46e1840-89be-de8f-6a91-3e4a16fa17c2@arm.com>
+Date:   Wed, 22 Feb 2023 13:04:47 +0000
+Cc:     Christoph Hellwig <hch@lst.de>,
+        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
+        linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        mpe@ellerman.id.au, paul.walmsley@sifive.com, palmer@dabbelt.com,
+        Rob Herring <robh+dt@kernel.org>, m.szyprowski@samsung.com
+Content-Transfer-Encoding: quoted-printable
+Message-Id: <CBE3717B-E49A-4BAA-9CD0-FFD2462B9CE0@flygoat.com>
+References: <20230221124613.2859-1-jiaxun.yang@flygoat.com>
+ <20230221175423.GA15247@lst.de>
+ <A8AC22A0-E883-4D9B-A629-5A3721B976C5@flygoat.com>
+ <ed2d7750-786d-82a1-5e79-1f216a682b20@arm.com>
+ <34578218-DC7A-4C8B-A01A-AD64831CCB43@flygoat.com>
+ <a46e1840-89be-de8f-6a91-3e4a16fa17c2@arm.com>
+To:     Robin Murphy <robin.murphy@arm.com>
+X-Mailer: Apple Mail (2.3731.300.101.1.3)
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 21, 2023 at 7:09 PM Heiner Kallweit <hkallweit1@gmail.com> wrote:
->
-> On 21.02.2023 03:38, Kai-Heng Feng wrote:
-> > NAPI poll of Realtek NICs don't seem to perform well ASPM is enabled.
-> > The vendor driver uses a mechanism called "dynamic ASPM" to toggle ASPM
-> > based on the packet number in given time period.
-> >
-> > Instead of implementing "dynamic ASPM", use a more straightforward way
-> > by disabling ASPM during NAPI poll, as a similar approach was
-> > implemented to solve slow performance on Realtek wireless NIC, see
-> > commit 24f5e38a13b5 ("rtw88: Disable PCIe ASPM while doing NAPI poll on
-> > 8821CE").
-> >
-> > Since NAPI poll should be handled as fast as possible, also remove the
-> > delay in rtl_hw_aspm_clkreq_enable() which was added by commit
-> > 94235460f9ea ("r8169: Align ASPM/CLKREQ setting function with vendor
-> > driver").
-> >
-> > Signed-off-by: Kai-Heng Feng <kai.heng.feng@canonical.com>
-> > ---
-> > v8:
-> >  - New patch.
-> >
-> >  drivers/net/ethernet/realtek/r8169_main.c | 14 ++++++++++++--
-> >  1 file changed, 12 insertions(+), 2 deletions(-)
-> >
-> > diff --git a/drivers/net/ethernet/realtek/r8169_main.c b/drivers/net/ethernet/realtek/r8169_main.c
-> > index 897f90b48bba6..4d4a802346ae3 100644
-> > --- a/drivers/net/ethernet/realtek/r8169_main.c
-> > +++ b/drivers/net/ethernet/realtek/r8169_main.c
-> > @@ -2711,8 +2711,6 @@ static void rtl_hw_aspm_clkreq_enable(struct rtl8169_private *tp, bool enable)
-> >               RTL_W8(tp, Config2, RTL_R8(tp, Config2) & ~ClkReqEn);
-> >               RTL_W8(tp, Config5, RTL_R8(tp, Config5) & ~ASPM_en);
-> >       }
-> > -
-> > -     udelay(10);
-> >  }
-> >
-> >  static void rtl_set_fifo_size(struct rtl8169_private *tp, u16 rx_stat,
-> > @@ -4577,6 +4575,12 @@ static int rtl8169_poll(struct napi_struct *napi, int budget)
-> >       struct net_device *dev = tp->dev;
-> >       int work_done;
-> >
-> > +     if (tp->aspm_manageable) {
-> > +             rtl_unlock_config_regs(tp);
->
-> NAPI poll runs in softirq context (except for threaded NAPI).
-> Therefore you should use a spinlock instead of a mutex.
 
-You are right. Will change it in next revision.
 
->
-> > +             rtl_hw_aspm_clkreq_enable(tp, false);
-> > +             rtl_lock_config_regs(tp);
-> > +     }
-> > +
-> >       rtl_tx(dev, tp, budget);
-> >
-> >       work_done = rtl_rx(dev, tp, budget);
-> > @@ -4584,6 +4588,12 @@ static int rtl8169_poll(struct napi_struct *napi, int budget)
-> >       if (work_done < budget && napi_complete_done(napi, work_done))
-> >               rtl_irq_enable(tp);
-> >
-> > +     if (tp->aspm_manageable) {
-> > +             rtl_unlock_config_regs(tp);
-> > +             rtl_hw_aspm_clkreq_enable(tp, true);
-> > +             rtl_lock_config_regs(tp);
->
-> Why not moving lock/unlock into rtl_hw_aspm_clkreq_enable()?
+> 2023=E5=B9=B42=E6=9C=8822=E6=97=A5 12:55=EF=BC=8CRobin Murphy =
+<robin.murphy@arm.com> =E5=86=99=E9=81=93=EF=BC=9A
+>=20
+> On 2023-02-21 19:55, Jiaxun Yang wrote:
+>>> 2023=E5=B9=B42=E6=9C=8821=E6=97=A5 19:46=EF=BC=8CRobin Murphy =
+<robin.murphy@arm.com> =E5=86=99=E9=81=93=EF=BC=9A
+>>>=20
+>>> On 2023-02-21 18:15, Jiaxun Yang wrote:
+>>>>> 2023=E5=B9=B42=E6=9C=8821=E6=97=A5 17:54=EF=BC=8CChristoph Hellwig =
+<hch@lst.de> =E5=86=99=E9=81=93=EF=BC=9A
+>>>>>=20
+>>>>> Can you explain the motivation here?  Also why riscv patches are =
+at
+>>>>> the end of a mips f=D1=96xes series?
+>>>> Ah sorry for any confusion.
+>>>> So the main purpose of this patch is to fix MIPS=E2=80=99s broken =
+per-device coherency.
+>>>> To be more precise, we want to be able to control the default =
+coherency for all devices probed from
+>>>> devicetree in early boot code.
+>>>=20
+>>> Including the patch which actually does that would be helpful. As it =
+is, patches 4-7 here just appear to be moving an option around for no =
+practical effect.
+>> Well the affect is default coherency of devicetree probed devices are =
+now following dma_default_coherent
+>> instead of a static Kconfig option. For MIPS platform, =
+dma_default_coherent will be determined by boot code.
+>=20
+> "Will be" is the issue I'm getting at. We can't review some future =
+promise of a patch, we can only review actual patches. And it's hard to =
+meaningfully review preparatory patches for some change without the full =
+context of that change.
 
-Because where it gets called at other places don't need the lock.
-But yes this will make it easier to read, will do in next revision.
+Actually this already present in current MIPS platform code.
 
-Kai-Heng
+arch/mips/mti-malta is setting dma_default_coherent on boot, and it=E2=80=99=
+s devicetree does not explicitly specify coherency.
 
->
-> > +     }
-> > +
-> >       return work_done;
-> >  }
-> >
->
+
+Thanks
+- Jiaxun
+
+
+
+>=20
+> Thanks,
+> Robin.
+
+
