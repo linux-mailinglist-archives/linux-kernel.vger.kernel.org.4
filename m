@@ -2,72 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DEC8E69F899
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Feb 2023 17:04:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9EDC169F89F
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Feb 2023 17:06:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232321AbjBVQE4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Feb 2023 11:04:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55008 "EHLO
+        id S231765AbjBVQGz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Feb 2023 11:06:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56440 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232726AbjBVQEw (ORCPT
+        with ESMTP id S229975AbjBVQGw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Feb 2023 11:04:52 -0500
-Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65A662A6CE
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Feb 2023 08:04:48 -0800 (PST)
-Received: by mail-lf1-x131.google.com with SMTP id i9so10503278lfc.6
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Feb 2023 08:04:48 -0800 (PST)
+        Wed, 22 Feb 2023 11:06:52 -0500
+Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C19E3CE28
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Feb 2023 08:06:51 -0800 (PST)
+Received: by mail-lf1-x12d.google.com with SMTP id g8so6955567lfj.2
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Feb 2023 08:06:51 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=BvtXsgYaNMgfCwPa3NcjCA/fALryuRunmE0yTYigCgo=;
-        b=qoW4bUeWwS3k/GeJaiLUn+XPhE41MVVyIyPtGkL2v5O83xBjix2Li2DkYmR1Ku3+V0
-         6pZ4CHdTYNIxyAV4MxYwmrCKG9yvLX2uPBgEmz/EEpWva9Gngw36j5MLkX50UAG/phaV
-         orIrc8mVF8QtEI7vBIROBOQwHU/l/0938GUTpX20WIXFLnhwl2ujow0uJkBomUFAEhT6
-         aqIWpsGuUQMRZlKET39VjpzeuREyMxAHynJFxpMPW0v1wLFqI2/+z+GpqNVZz230UXIU
-         8p3fyxSTQNKRsUniIGrRo2fm1meAtoCveeLqYAi1UGsKO8RZgbB/pUYO9AS9+jqN9npv
-         n3xg==
+        bh=8USIxg/ch7FSV86aq2IWnMVmX2lOYDkkYcIurOZq368=;
+        b=EMWzDHhPFmWX6K1h4sWnl4efdISDePX4QMzUIzv91ih43FiBsgeKUyXXsLw8aqRj/f
+         YFx0yomB7J7X3XVqL957/pZXG7RYdtW31SY1ve4Y9vIiGHxP1ZtwRq8NmCj20F6gj5pV
+         0oDUiLmJi2ydK7Lfux2cj5J5Og8AFuR8D9lHagVRSezna/+E2OdHwreTT9mhQiTHJrGO
+         c37DJgcjZHDevUZhr3wnIWXuMXsI+WfA0FuonExgJvircWhyb/yiZBrleXNBzTtvCn1B
+         21JmyNLsLiCEUZ+hi9Ienb8OAQ8L9903f13qYys2dF6TsccTifYfeovi2fM1zgEgpib6
+         PlwQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=BvtXsgYaNMgfCwPa3NcjCA/fALryuRunmE0yTYigCgo=;
-        b=6bMvkDWzqbGAG7tG0L5mcEdysSkBzwoBmUq3jo0sUvqliF77w3kceaU/s2I++CS/0q
-         gH+cuxR31v42w6k4PrKFLEBg4zWiAwPYLU+AK2E0QqV++fwVvTfumZEWbD7v4YangE9p
-         AFa4aXUY4CyECeP1FyNvtgSzVKZlCINWtv54uwh1lcNd4b+ifyVaTqWmxfpyn1SuWpER
-         2DeA2GS1IdZweMUiEhdtf/qP0bEoL6UslYXqfX05sSJGehaG6FNwMhb4mk/Drn/DC2nq
-         ZBaq8lEEbZAxjU3Oq/Ngiyho/+RZiww0j1GEiUwEPjMQ+2YBUkfPDqFNE3wKMCN2nhhU
-         S9gA==
-X-Gm-Message-State: AO0yUKWLNz/7sZtUkmn05kXsR1h1NnmuvjtFgluVIptntIFO454AMNp2
-        6kM/0RVfb+X70fkn100yUY1yHw==
-X-Google-Smtp-Source: AK7set9PDpRvUR4ICYarWP/6Zlh9mGyGPgoNTdoaMGmA0Ed4tTtpS9C8shCpz0IFX+FNFdEYYwfy+w==
-X-Received: by 2002:a19:f609:0:b0:4b5:b06d:4300 with SMTP id x9-20020a19f609000000b004b5b06d4300mr2917956lfe.29.1677081886617;
-        Wed, 22 Feb 2023 08:04:46 -0800 (PST)
+        bh=8USIxg/ch7FSV86aq2IWnMVmX2lOYDkkYcIurOZq368=;
+        b=c5oZ0ovdT2LsckeLSnSL3OnV4ixHSM3onEB+C2AMO7JJNR3xa03bs1ufRczjx4eO7Y
+         sFIXAhLs/Fd27rz8uHL+JBqgn26OyKx6xBfHoJq7bRANb7ZBfB++KGwHWl6d6zGyj/es
+         gYxxo8YT0abxtR8T33tZxOhGzaFercghNDkcYbz1GACk1fq8bYjvzr4c1tDR+krtOtrd
+         q0RQvE1ScWLnGTP9UNiO6PQfptG2bKPu6yS+4hT4DV0uixD0Th/8If5JfNeYTsyyUAnj
+         8EHOJNxFhEwSx/7npgTTVG6L92tnSr7o/8vNIdWKI6c7tjec7PmFWURadY9sXKsqCyba
+         dMuw==
+X-Gm-Message-State: AO0yUKWfBef/PaDkyxDkjekIOlVevssmoIRlYaMh9ZWkClfl7ANanAv6
+        ++U/IvmEm3hcYwGJn0UsMi+eoQ==
+X-Google-Smtp-Source: AK7set90zq0pUixr/vnRmsiQGKP735fINZmlrvTRuNAivKuiwFZsainImmoqZg2zjT58hixUQD4V0Q==
+X-Received: by 2002:ac2:5383:0:b0:4dc:4c53:4460 with SMTP id g3-20020ac25383000000b004dc4c534460mr2813784lfh.16.1677082009120;
+        Wed, 22 Feb 2023 08:06:49 -0800 (PST)
 Received: from [192.168.1.101] (abxi151.neoplus.adsl.tpnet.pl. [83.9.2.151])
-        by smtp.gmail.com with ESMTPSA id f14-20020ac251ae000000b004db3eff4b12sm2203398lfk.171.2023.02.22.08.04.45
+        by smtp.gmail.com with ESMTPSA id x23-20020ac24897000000b004b564e1a4e0sm282007lfc.76.2023.02.22.08.06.48
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 22 Feb 2023 08:04:46 -0800 (PST)
-Message-ID: <ac05fec4-138c-2f1e-a953-8d498d3bb598@linaro.org>
-Date:   Wed, 22 Feb 2023 17:04:44 +0100
+        Wed, 22 Feb 2023 08:06:48 -0800 (PST)
+Message-ID: <8259f4e1-3ab0-0ac2-f717-7dca72ea4170@linaro.org>
+Date:   Wed, 22 Feb 2023 17:06:47 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.8.0
-Subject: Re: [PATCH 08/11] ARM: dts: qcom: sdx55-t55: Enable PCIe RC support
+Subject: Re: [PATCH v3] arm64: dts: qcom: sm8450: Add IMEM and PIL info region
 Content-Language: en-US
-To:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-        andersson@kernel.org, lpieralisi@kernel.org, robh@kernel.org,
-        kw@linux.com, krzysztof.kozlowski+dt@linaro.org, vkoul@kernel.org
-Cc:     bhelgaas@google.com, kishon@kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-pci@vger.kernel.org,
-        devicetree@vger.kernel.org
-References: <20230222153251.254492-1-manivannan.sadhasivam@linaro.org>
- <20230222153251.254492-9-manivannan.sadhasivam@linaro.org>
+To:     Mukesh Ojha <quic_mojha@quicinc.com>, agross@kernel.org,
+        andersson@kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, elder@linaro.org
+Cc:     linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <1677079845-17650-1-git-send-email-quic_mojha@quicinc.com>
 From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <20230222153251.254492-9-manivannan.sadhasivam@linaro.org>
+In-Reply-To: <1677079845-17650-1-git-send-email-quic_mojha@quicinc.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -81,78 +78,47 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 
 
-On 22.02.2023 16:32, Manivannan Sadhasivam wrote:
-> Enable PCIe RC support on Thundercomm T55 board.
+On 22.02.2023 16:30, Mukesh Ojha wrote:
+> Add a simple-mfd representing IMEM on SM8450 and define the PIL
+> relocation info region, so that post mortem tools will be able
+> to locate the loaded remoteprocs.
 > 
-> Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+> Signed-off-by: Mukesh Ojha <quic_mojha@quicinc.com>
 > ---
->  arch/arm/boot/dts/qcom-sdx55-t55.dts | 42 ++++++++++++++++++++++++++++
->  1 file changed, 42 insertions(+)
-> 
-> diff --git a/arch/arm/boot/dts/qcom-sdx55-t55.dts b/arch/arm/boot/dts/qcom-sdx55-t55.dts
-> index 7ed8feb99afb..fb5b9264077c 100644
-> --- a/arch/arm/boot/dts/qcom-sdx55-t55.dts
-> +++ b/arch/arm/boot/dts/qcom-sdx55-t55.dts
-> @@ -242,6 +242,23 @@ &ipa {
->  	memory-region = <&ipa_fw_mem>;
->  };
->  
-> +&pcie_phy {
-> +	status = "okay";
-'status' should go last. Since you're introducing new nodes,
-changing the order in the existing ones would be appreciated.
-
-> +
-> +	vdda-phy-supply = <&vreg_l1e_bb_1p2>;
-> +	vdda-pll-supply = <&vreg_l4e_bb_0p875>;
-> +};
-> +
-> +&pcie_rc {
-> +	status = "okay";
-> +
-> +	perst-gpios = <&tlmm 57 GPIO_ACTIVE_LOW>;
-> +	wake-gpios = <&tlmm 53 GPIO_ACTIVE_HIGH>;
-> +
-> +	pinctrl-names = "default";
-> +	pinctrl-0 = <&pcie_default>;
-property-
-property-names
+Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
 
 Konrad
-> +};
-> +
->  &qpic_bam {
->  	status = "ok";
->  };
-> @@ -265,6 +282,31 @@ &remoteproc_mpss {
->  	memory-region = <&mpss_adsp_mem>;
->  };
+> Change in v3:
+>  - Sorted by address.
+> 
+> Changes in v2:
+>  -  put ranges after regs and corrected the sram node position.
+> 
+>  arch/arm64/boot/dts/qcom/sm8450.dtsi | 14 ++++++++++++++
+>  1 file changed, 14 insertions(+)
+> 
+> diff --git a/arch/arm64/boot/dts/qcom/sm8450.dtsi b/arch/arm64/boot/dts/qcom/sm8450.dtsi
+> index 1a744a3..7671f15 100644
+> --- a/arch/arm64/boot/dts/qcom/sm8450.dtsi
+> +++ b/arch/arm64/boot/dts/qcom/sm8450.dtsi
+> @@ -3689,6 +3689,20 @@
+>  			};
+>  		};
 >  
-> +&tlmm {
-> +	pcie_default: pcie-default-state {
-> +		clkreq-pins {
-> +			pins = "gpio56";
-> +			function = "pcie_clkreq";
-> +			drive-strength = <2>;
-> +			bias-pull-up;
+> +		sram@146aa000 {
+> +			compatible = "qcom,sm8450-imem", "syscon", "simple-mfd";
+> +			reg = <0 0x146aa000 0 0x1000>;
+> +			ranges = <0 0 0x146aa000 0x1000>;
+> +
+> +			#address-cells = <1>;
+> +			#size-cells = <1>;
+> +
+> +			pil-reloc@94c {
+> +				compatible = "qcom,pil-reloc-info";
+> +				reg = <0x94c 0xc8>;
+> +			};
 > +		};
 > +
-> +		perst-pins {
-> +			pins = "gpio57";
-> +			function = "gpio";
-> +			drive-strength = <2>;
-> +			bias-pull-down;
-> +		};
-> +
-> +		wake-pins {
-> +		       pins = "gpio53";
-> +		       function = "gpio";
-> +		       drive-strength = <2>;
-> +		       bias-pull-up;
-> +	       };
-> +	};
-> +};
-> +
->  &usb_hsphy {
->  	status = "okay";
->  	vdda-pll-supply = <&vreg_l4e_bb_0p875>;
+>  		apps_smmu: iommu@15000000 {
+>  			compatible = "qcom,sm8450-smmu-500", "arm,mmu-500";
+>  			reg = <0 0x15000000 0 0x100000>;
