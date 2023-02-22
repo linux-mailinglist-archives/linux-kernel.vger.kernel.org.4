@@ -2,196 +2,172 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5BFA269FA3A
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Feb 2023 18:34:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ED42669FA43
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Feb 2023 18:34:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232136AbjBVRd6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Feb 2023 12:33:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49236 "EHLO
+        id S231726AbjBVRey (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Feb 2023 12:34:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50276 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229515AbjBVRd4 (ORCPT
+        with ESMTP id S230129AbjBVRew (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Feb 2023 12:33:56 -0500
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 292F82D14C;
-        Wed, 22 Feb 2023 09:33:54 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1677087235; x=1708623235;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=dBfK1f9SoIdQd//p3pK+J5jmUGdNq+Hb8SM5LrvByCw=;
-  b=nqXyNJyShezFT07hRqpypcwPJicHLGglaYiqo5TFpQFjLHso+Idef8OB
-   YWcHlcMLPIakg4DuvFWzd0llRKYz5SxATtopMVZi+o88w3rTd5imkvPpb
-   rHmAsgg33nmfQz0BeaAzYMYfIv4NxXNjJsp34pXGgqH/CC4YE1sX1JtoG
-   3NzqOsAijMnuZlOLNT9jtpx9X1MHARDuWOxazVoWhc0rN4C7P5fd4vxlm
-   S7WVpOKU1G+1fzT2CQjXrr0BN/307nNh312OsrcFEWsUVeGQmRGnS+dhi
-   K3cMqj/ZQIRPdbI5M6qg0r0HWB5sbvFy3ETUtQxSdlJy6vuiw13s08EO+
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10629"; a="321129860"
-X-IronPort-AV: E=Sophos;i="5.97,319,1669104000"; 
-   d="scan'208";a="321129860"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Feb 2023 09:33:47 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10629"; a="704541133"
-X-IronPort-AV: E=Sophos;i="5.97,319,1669104000"; 
-   d="scan'208";a="704541133"
-Received: from hhammad-mobl1.ger.corp.intel.com (HELO [10.213.231.87]) ([10.213.231.87])
-  by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Feb 2023 09:33:43 -0800
-Message-ID: <d7b0614e-2cc3-1180-3571-409204ac5b00@linux.intel.com>
-Date:   Wed, 22 Feb 2023 17:33:41 +0000
+        Wed, 22 Feb 2023 12:34:52 -0500
+Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8496E32513
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Feb 2023 09:34:51 -0800 (PST)
+Received: by mail-pj1-x102f.google.com with SMTP id il18-20020a17090b165200b0023127b2d602so9136423pjb.2
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Feb 2023 09:34:51 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=o7U+t+Gc+7OzDL0N0Nz2SZTtKF2LyQ8HQk4KawwAcVY=;
+        b=UQympwq9khmtuoIahuhHnVYg8yWLI/Ccy089IB7ENnPwppZSVoIGpBx10AY/dUxxob
+         P7kIFERKdf33vJ65d31LmJOxY7WLf6ULMQG9+VZNV+EaCaN03H0bqWXKUzBiiCe8DZWs
+         5qesLpjdhlLEtMX78MXu1qJyBKQ47lPMXOxikn35br0EsFXa/S0L5RJTtr8zEpIQT+Eo
+         27IhrRJ1yzQUQ8hdkf3smBH3ZcVSkjvmL8ARrVI6AkhuC2UkbOBIfH5rrdjw31HVk5DJ
+         il5Jitw/eAf9c6suwKouOdCerVkjiavCiK448egsdf5hpUZi2V0OGJ84ISTrgdsTOm0+
+         fZvQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=o7U+t+Gc+7OzDL0N0Nz2SZTtKF2LyQ8HQk4KawwAcVY=;
+        b=ErcF8tL0NFm4TkyJamPQxEKvgOytW20wR1M3b7HLUqOX/7ghrN1YngVU1NTfptf4s/
+         oQMxKUeMtabKj6sUUHhOnUcwLODXJEi7BmbeEi+mZOWVOlhbsjrEazM9OLuqMLsIvzVw
+         WO4NAwmBjfyi3si62kd+i4m8eXL15Mzzo/ix2lyNe1RrmGipzrhkfPA36dl+lCQBzzkq
+         18rfe5EsdNIsNXeYp+UlvFJZ2V7Rq3tVSpxgsZQA53CoNjHZVwV/VRbDtRF1HMXRdrX9
+         gIwpNSZ+SKnIiaXe8PlqNg6zB6PyyfQI3WmU6ch/At3/wBSiVa2sXjHh/H7T8tYeIT4Y
+         sCxA==
+X-Gm-Message-State: AO0yUKUm5yeBA8e0euxXO1TkDWjh5rbe4CNyaXXCpRRuCxaOQ3WQBeH8
+        Mce0ryZNG3Hl3rFyfogT8q5pbdbp5rLcvnqy
+X-Google-Smtp-Source: AK7set9Huz4RS9qq84kMwHR4AdXiV3qcTdIp4c/IF1x/zsGT1wVtsqKLZrzoIUglIHlI5SGQw/PdGw==
+X-Received: by 2002:a17:902:d481:b0:19a:b033:2bb1 with SMTP id c1-20020a170902d48100b0019ab0332bb1mr10846957plg.44.1677087290899;
+        Wed, 22 Feb 2023 09:34:50 -0800 (PST)
+Received: from p14s ([2604:3d09:148c:c800:78a7:1e00:32c7:e2c0])
+        by smtp.gmail.com with ESMTPSA id 10-20020a170902c14a00b0019aa6bf4450sm6693173plj.188.2023.02.22.09.34.49
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 22 Feb 2023 09:34:50 -0800 (PST)
+Date:   Wed, 22 Feb 2023 10:34:48 -0700
+From:   Mathieu Poirier <mathieu.poirier@linaro.org>
+To:     Tanmay Shah <tanmay.shah@amd.com>
+Cc:     michal.simek@amd.com, andersson@kernel.org,
+        jaswinder.singh@linaro.org, ben.levinsky@amd.com,
+        shubhrajyoti.datta@amd.com, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-remoteproc@vger.kernel.org
+Subject: Re: [PATCH v3 1/3] drivers: mailbox: zynqmp: handle multiple child
+ nodes
+Message-ID: <20230222173448.GA909075@p14s>
+References: <20230213211825.3507034-1-tanmay.shah@amd.com>
+ <20230213211825.3507034-2-tanmay.shah@amd.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH v4 01/14] dma-buf/dma-fence: Add deadline awareness
-Content-Language: en-US
-To:     Rob Clark <robdclark@chromium.org>
-Cc:     =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
-        Rob Clark <robdclark@gmail.com>,
-        dri-devel@lists.freedesktop.org,
-        Gustavo Padovan <gustavo@padovan.org>,
-        Tvrtko Ursulin <tvrtko.ursulin@intel.com>,
-        =?UTF-8?Q?Michel_D=c3=a4nzer?= <michel@daenzer.net>,
-        open list <linux-kernel@vger.kernel.org>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        "moderated list:DMA BUFFER SHARING FRAMEWORK" 
-        <linaro-mm-sig@lists.linaro.org>,
-        Pekka Paalanen <ppaalanen@gmail.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        freedreno@lists.freedesktop.org,
-        "open list:SYNC FILE FRAMEWORK" <linux-media@vger.kernel.org>
-References: <20230218211608.1630586-1-robdclark@gmail.com>
- <20230218211608.1630586-2-robdclark@gmail.com>
- <b65a2fe2-6f68-2116-9599-2940e66d166b@linux.intel.com>
- <21f36640-3229-0b46-31a2-a47efc5be934@amd.com>
- <b8a16579-4be7-8e14-01e4-9d17c1570c8b@linux.intel.com>
- <CAJs_Fx61OpgFo_kSLoy+2z8mS=wcdK8eZfQBA6dQm9p0=qLU2g@mail.gmail.com>
-From:   Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>
-Organization: Intel Corporation UK Plc
-In-Reply-To: <CAJs_Fx61OpgFo_kSLoy+2z8mS=wcdK8eZfQBA6dQm9p0=qLU2g@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,HK_RANDOM_ENVFROM,HK_RANDOM_FROM,
-        NICE_REPLY_A,RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230213211825.3507034-2-tanmay.shah@amd.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-On 22/02/2023 17:16, Rob Clark wrote:
-> On Wed, Feb 22, 2023 at 9:05 AM Tvrtko Ursulin
-> <tvrtko.ursulin@linux.intel.com> wrote:
->>
->>
->> On 22/02/2023 15:28, Christian König wrote:
->>> Am 22.02.23 um 11:23 schrieb Tvrtko Ursulin:
->>>>
->>>> On 18/02/2023 21:15, Rob Clark wrote:
->>>>> From: Rob Clark <robdclark@chromium.org>
->>>>>
->>>>> Add a way to hint to the fence signaler of an upcoming deadline, such as
->>>>> vblank, which the fence waiter would prefer not to miss.  This is to aid
->>>>> the fence signaler in making power management decisions, like boosting
->>>>> frequency as the deadline approaches and awareness of missing deadlines
->>>>> so that can be factored in to the frequency scaling.
->>>>>
->>>>> v2: Drop dma_fence::deadline and related logic to filter duplicate
->>>>>       deadlines, to avoid increasing dma_fence size.  The fence-context
->>>>>       implementation will need similar logic to track deadlines of all
->>>>>       the fences on the same timeline.  [ckoenig]
->>>>> v3: Clarify locking wrt. set_deadline callback
->>>>>
->>>>> Signed-off-by: Rob Clark <robdclark@chromium.org>
->>>>> Reviewed-by: Christian König <christian.koenig@amd.com>
->>>>> ---
->>>>>    drivers/dma-buf/dma-fence.c | 20 ++++++++++++++++++++
->>>>>    include/linux/dma-fence.h   | 20 ++++++++++++++++++++
->>>>>    2 files changed, 40 insertions(+)
->>>>>
->>>>> diff --git a/drivers/dma-buf/dma-fence.c b/drivers/dma-buf/dma-fence.c
->>>>> index 0de0482cd36e..763b32627684 100644
->>>>> --- a/drivers/dma-buf/dma-fence.c
->>>>> +++ b/drivers/dma-buf/dma-fence.c
->>>>> @@ -912,6 +912,26 @@ dma_fence_wait_any_timeout(struct dma_fence
->>>>> **fences, uint32_t count,
->>>>>    }
->>>>>    EXPORT_SYMBOL(dma_fence_wait_any_timeout);
->>>>>    +
->>>>> +/**
->>>>> + * dma_fence_set_deadline - set desired fence-wait deadline
->>>>> + * @fence:    the fence that is to be waited on
->>>>> + * @deadline: the time by which the waiter hopes for the fence to be
->>>>> + *            signaled
->>>>> + *
->>>>> + * Inform the fence signaler of an upcoming deadline, such as
->>>>> vblank, by
->>>>> + * which point the waiter would prefer the fence to be signaled by.
->>>>> This
->>>>> + * is intended to give feedback to the fence signaler to aid in power
->>>>> + * management decisions, such as boosting GPU frequency if a periodic
->>>>> + * vblank deadline is approaching.
->>>>> + */
->>>>> +void dma_fence_set_deadline(struct dma_fence *fence, ktime_t deadline)
->>>>> +{
->>>>> +    if (fence->ops->set_deadline && !dma_fence_is_signaled(fence))
->>>>> +        fence->ops->set_deadline(fence, deadline);
->>>>> +}
->>>>> +EXPORT_SYMBOL(dma_fence_set_deadline);
->>>>> +
->>>>>    /**
->>>>>     * dma_fence_describe - Dump fence describtion into seq_file
->>>>>     * @fence: the 6fence to describe
->>>>> diff --git a/include/linux/dma-fence.h b/include/linux/dma-fence.h
->>>>> index 775cdc0b4f24..d77f6591c453 100644
->>>>> --- a/include/linux/dma-fence.h
->>>>> +++ b/include/linux/dma-fence.h
->>>>> @@ -99,6 +99,7 @@ enum dma_fence_flag_bits {
->>>>>        DMA_FENCE_FLAG_SIGNALED_BIT,
->>>>>        DMA_FENCE_FLAG_TIMESTAMP_BIT,
->>>>>        DMA_FENCE_FLAG_ENABLE_SIGNAL_BIT,
->>>>> +    DMA_FENCE_FLAG_HAS_DEADLINE_BIT,
->>>>
->>>> Would this bit be better left out from core implementation, given how
->>>> the approach is the component which implements dma-fence has to track
->>>> the actual deadline and all?
->>>>
->>>> Also taking a step back - are we all okay with starting to expand the
->>>> relatively simple core synchronisation primitive with side channel
->>>> data like this? What would be the criteria for what side channel data
->>>> would be acceptable? Taking note the thing lives outside drivers/gpu/.
->>>
->>> I had similar concerns and it took me a moment as well to understand the
->>> background why this is necessary. I essentially don't see much other
->>> approach we could do.
->>>
->>> Yes, this is GPU/CRTC specific, but we somehow need a common interface
->>> for communicating it between drivers and that's the dma_fence object as
->>> far as I can see.
->>
->> Yeah I also don't see any other easy options. Just wanted to raise this
->> as something which probably needs some wider acks.
->>
->> Also what about the "low level" part of my question about the reason, or
->> benefits, of defining the deadline bit in the common layer?
+On Mon, Feb 13, 2023 at 01:18:24PM -0800, Tanmay Shah wrote:
+> As of now only one child node is handled by zynqmp-ipi
+> mailbox driver. Upon introducing remoteproc r5 core mailbox
+> nodes, found few enhancements in Xilinx zynqmp mailbox driver
+> as following:
 > 
-> We could leave DMA_FENCE_FLAG_HAS_DEADLINE_BIT out, but OTOH managing
-> a bitmask that is partially defined in core enum and partially in
-> backend-driver has it's own drawbacks, and it isn't like we are
-> running out of bits.. :shrug:
+> - fix mailbox child node counts
+>   If child mailbox node status is disabled it causes
+>   crash in interrupt handler. Fix this by assigning
+>   only available child node during driver probe.
+> 
+> - fix typo in IPI documentation %s/12/32/
+>   Xilinx IPI message buffers allows 32-byte data transfer.
+>   Fix documentation that says 12 bytes
+> 
+> - fix bug in zynqmp-ipi isr handling
+>   Multiple IPI channels are mapped to same interrupt handler.
+>   Current isr implementation handles only one channel per isr.
+>   Fix this behavior by checking isr status bit of all child
+>   mailbox nodes.
+> 
+> Fixes: 4981b82ba2ff ("mailbox: ZynqMP IPI mailbox controller")
+> Signed-off-by: Tanmay Shah <tanmay.shah@amd.com>
+> ---
+> 
+> Changelog:
+>   - This is first version of this change, however posting as part of the series
+>     that has version v3.
+> 
+> v2: https://lore.kernel.org/all/20230126213154.1707300-1-tanmay.shah@amd.com/
+> 
+>  drivers/mailbox/zynqmp-ipi-mailbox.c       | 8 ++++----
+>  include/linux/mailbox/zynqmp-ipi-message.h | 2 +-
+>  2 files changed, 5 insertions(+), 5 deletions(-)
+> 
+> diff --git a/drivers/mailbox/zynqmp-ipi-mailbox.c b/drivers/mailbox/zynqmp-ipi-mailbox.c
+> index 12e004ff1a14..b1498f6f06e1 100644
+> --- a/drivers/mailbox/zynqmp-ipi-mailbox.c
+> +++ b/drivers/mailbox/zynqmp-ipi-mailbox.c
+> @@ -152,7 +152,7 @@ static irqreturn_t zynqmp_ipi_interrupt(int irq, void *data)
+>  	struct zynqmp_ipi_message *msg;
+>  	u64 arg0, arg3;
+>  	struct arm_smccc_res res;
+> -	int ret, i;
+> +	int ret, i, status = IRQ_NONE;
+>  
+>  	(void)irq;
+>  	arg0 = SMC_IPI_MAILBOX_STATUS_ENQUIRY;
+> @@ -170,11 +170,11 @@ static irqreturn_t zynqmp_ipi_interrupt(int irq, void *data)
+>  				memcpy_fromio(msg->data, mchan->req_buf,
+>  					      msg->len);
+>  				mbox_chan_received_data(chan, (void *)msg);
+> -				return IRQ_HANDLED;
+> +				status = IRQ_HANDLED;
+>  			}
+>  		}
+>  	}
+> -	return IRQ_NONE;
+> +	return status;
+>  }
+>  
+>  /**
+> @@ -634,7 +634,7 @@ static int zynqmp_ipi_probe(struct platform_device *pdev)
+>  	struct zynqmp_ipi_mbox *mbox;
+>  	int num_mboxes, ret = -EINVAL;
+>  
+> -	num_mboxes = of_get_child_count(np);
+> +	num_mboxes = of_get_available_child_count(np);
+>  	pdata = devm_kzalloc(dev, sizeof(*pdata) + (num_mboxes * sizeof(*mbox)),
+>  			     GFP_KERNEL);
+>  	if (!pdata)
+> diff --git a/include/linux/mailbox/zynqmp-ipi-message.h b/include/linux/mailbox/zynqmp-ipi-message.h
+> index 35ce84c8ca02..31d8046d945e 100644
+> --- a/include/linux/mailbox/zynqmp-ipi-message.h
+> +++ b/include/linux/mailbox/zynqmp-ipi-message.h
+> @@ -9,7 +9,7 @@
+>   * @data: message payload
+>   *
+>   * This is the structure for data used in mbox_send_message
+> - * the maximum length of data buffer is fixed to 12 bytes.
+> + * the maximum length of data buffer is fixed to 32 bytes.
+>   * Client is supposed to be aware of this.
 
-There is DMA_FENCE_FLAG_USER_BITS onwards which implementations could 
-use to store their stuff?
+I agree that this should be split in 3 patches but the fixes are so small that
+it is hardly required.  I'll leave it up to Michal to decide.
 
-And if we skip forward to "drm/scheduler: Add fence deadline support" 
-that's the only place bit is used, right? Would it simply work to look 
-at drm_sched_fence->deadline == 0 as bit not set? Or you see a need to 
-interoperate with other fence implementations via that bit somehow?
+Split or not:
 
-Regards,
+Acked-by: Mathieu Poirier <mathieu.poirier@linaro.org>
 
-Tvrtko
+>   */
+>  struct zynqmp_ipi_message {
+> -- 
+> 2.25.1
+> 
