@@ -2,129 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ECBB769F34D
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Feb 2023 12:13:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C3DAD69F34E
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Feb 2023 12:14:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231820AbjBVLNu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Feb 2023 06:13:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38924 "EHLO
+        id S231788AbjBVLOd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Feb 2023 06:14:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39882 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231773AbjBVLNr (ORCPT
+        with ESMTP id S231816AbjBVLO2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Feb 2023 06:13:47 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B58732201B;
-        Wed, 22 Feb 2023 03:13:11 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6446F6133D;
-        Wed, 22 Feb 2023 11:13:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5C1EAC433EF;
-        Wed, 22 Feb 2023 11:13:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1677064387;
-        bh=GvAz75RpNZIIMsht3uClU2dTBKOmBuR7h7BuGl65Zps=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=NC7iXhe2B6n+V3jQuXjFSTL71WFfxw/X/cKheG0ihlyXKx44lm9mvhQB2u4/6O6Qo
-         qLdSn8W0thykKEyeaxVVakXqIBI92mN1YQFW5Z2watNjHfH8jZ3Ak/mAlTE1U4g2Jb
-         yj6m6UEUk1VAQkvgRHpPvVjA0OiLvcQf4+hDbYFs=
-Date:   Wed, 22 Feb 2023 12:13:05 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Vivek Pernamitta <quic_vpernami@quicinc.com>
-Cc:     mhi@lists.linux.dev, quic_qianyu@quicinc.com,
-        manivannan.sadhasivam@linaro.org, quic_vbadigan@quicinc.com,
-        quic_krichai@quicinc.com, quic_skananth@quicinc.com,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        Alex Elder <elder@linaro.org>,
-        Hemant Kumar <hemantk@codeaurora.org>,
-        Jeffrey Hugo <quic_jhugo@quicinc.com>,
-        Bhaumik Bhatt <bbhatt@codeaurora.org>,
-        Paul Davey <paul.davey@alliedtelesis.co.nz>,
-        "open list:MHI BUS" <linux-arm-msm@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH V3] bus: mhi: host: Avoid ringing EV DB if there is no
- elements to process
-Message-ID: <Y/X4wSSjkPCotvlC@kroah.com>
-References: <1677063601-28083-1-git-send-email-quic_vpernami@quicinc.com>
+        Wed, 22 Feb 2023 06:14:28 -0500
+Received: from mail-lj1-x242.google.com (mail-lj1-x242.google.com [IPv6:2a00:1450:4864:20::242])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E67D6252A9
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Feb 2023 03:13:55 -0800 (PST)
+Received: by mail-lj1-x242.google.com with SMTP id f16so7341006ljq.10
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Feb 2023 03:13:55 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:to:subject:message-id:date:from:reply-to
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=HQ/K0kowGbY6g3dbyCcscwj1fTfVd2AMEZkWTtT+UnQ=;
+        b=I6FGzcHrKIfpVkE6j1KCBbRu0sB9jjTfQooeNhVVrdJ+rGe3Cy4dEzIAT86i7nQNFo
+         Inodhk+2fYCdkRFv7lb0QkQWwgoXLc0fk24fEkk1+zX2Z0aURWj/oD/mnuF6wpUk3TYA
+         O4M2u04fZx4HxWnpWUOdx1IFunspPzWSY+M7UlY1f4zz9INA7Ep5HAhsEBwu1FyMISdQ
+         dBwLrSGSieoGvnB638HJ4MYmAdWPcwtTImlZAoLxKZwFduCFNv/bMOdlp1GS52a4IO1O
+         alK3uIcl0SXXTwuKKuwuR+tpB8qF5yVQr6Y9JyuMRE87ugYVdqZxdeqXQN9T8FFhcUIA
+         uqOg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:to:subject:message-id:date:from:reply-to
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=HQ/K0kowGbY6g3dbyCcscwj1fTfVd2AMEZkWTtT+UnQ=;
+        b=1W16bqX0CNrwfngCaMfIURT0vmfR92ySFD8VJCaqEH2UV7FU2jM8ldw+MtISqFWFyA
+         uyFvUtkSObCHSwT3FtTVvHhL81LoRjejMzE6rs9EyIOA4pngCZmwVWNGe9firVasCqli
+         RmoP1QjldZRNK7gH7IRcv1Nndkr6Ks0sgfbFAZB0fjT3DJh8BTZppPtvHYwaXNVsZZpw
+         toDmygbHDf5AxyNdDMyraF179SwaAwWX1ox5dmUkYQnaVuwaY+7NxAMfJE1aS7w3bHYv
+         02NavAAzMUeizEkfX2XeobCac4rcJBY/DkcaQkfLmc/Suih7n2NObLigpadufS6Y6VyE
+         Pl7Q==
+X-Gm-Message-State: AO0yUKVlaFkSR3j0GhMpmA5wQGboAyrts/p2YdAiNQymU73bKNjfJE2R
+        7rXrWmIc8GwlSxObKOkP8e2KlsbUSnB6z3Fbk9A=
+X-Google-Smtp-Source: AK7set+0ayrpZ2zpUSZolocEbaypMOlpf+RjKp5J8NA/QuOgY5ikWjIaqCUL21j1IaKXH37sb3XiNuLMkSx69ON0JS4=
+X-Received: by 2002:a2e:bc16:0:b0:294:69ba:6288 with SMTP id
+ b22-20020a2ebc16000000b0029469ba6288mr2911858ljf.4.1677064431550; Wed, 22 Feb
+ 2023 03:13:51 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1677063601-28083-1-git-send-email-quic_vpernami@quicinc.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Received: by 2002:a05:651c:901:0:0:0:0 with HTTP; Wed, 22 Feb 2023 03:13:50
+ -0800 (PST)
+Reply-To: stefanopessia755@hotmail.com
+From:   Stefano Pessina <syengodavid17@gmail.com>
+Date:   Wed, 22 Feb 2023 14:13:50 +0300
+Message-ID: <CACKzJBueX6KOsM0u4c3XGo7oWo7Wb6xnrQk+W9zSZc3sSDnP+g@mail.gmail.com>
+Subject: denarna donacija
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: Yes, score=5.1 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,UNDISC_FREEM autolearn=no
+        autolearn_force=no version=3.4.6
+X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
+        *      https://www.dnswl.org/, no trust
+        *      [2a00:1450:4864:20:0:0:0:242 listed in]
+        [list.dnswl.org]
+        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.5568]
+        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
+        *      provider
+        *      [syengodavid17[at]gmail.com]
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
+        *      digit
+        *      [stefanopessia755[at]hotmail.com]
+        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
+        *       in digit
+        *      [syengodavid17[at]gmail.com]
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        *  3.0 UNDISC_FREEM Undisclosed recipients + freemail reply-to
+        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
+        *      different freemails
+X-Spam-Level: *****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Feb 22, 2023 at 04:29:59PM +0530, Vivek Pernamitta wrote:
-> Avoid ringing Event DB if there is no elements to process.
-> As mhi_poll function can be called by mhi client drivers
-> which will call process_event, which will ring DB even if
-> there no ring elements to process.
-> 
-> Signed-off-by: Vivek Pernamitta <quic_vpernami@quicinc.com>
-> ---
->  drivers/bus/mhi/host/main.c | 8 ++++++--
->  1 file changed, 6 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/bus/mhi/host/main.c b/drivers/bus/mhi/host/main.c
-> index df0fbfe..1bbdb75 100644
-> --- a/drivers/bus/mhi/host/main.c
-> +++ b/drivers/bus/mhi/host/main.c
-> @@ -961,7 +961,9 @@ int mhi_process_ctrl_ev_ring(struct mhi_controller *mhi_cntrl,
->  	}
->  
->  	read_lock_bh(&mhi_cntrl->pm_lock);
-> -	if (likely(MHI_DB_ACCESS_VALID(mhi_cntrl)))
-> +
-> +	/* Ring EV DB only if there is any pending element to process */
-> +	if (likely(MHI_DB_ACCESS_VALID(mhi_cntrl)) && count)
->  		mhi_ring_er_db(mhi_event);
->  	read_unlock_bh(&mhi_cntrl->pm_lock);
->  
-> @@ -1031,7 +1033,9 @@ int mhi_process_data_event_ring(struct mhi_controller *mhi_cntrl,
->  		count++;
->  	}
->  	read_lock_bh(&mhi_cntrl->pm_lock);
-> -	if (likely(MHI_DB_ACCESS_VALID(mhi_cntrl)))
-> +
-> +	/* Ring EV DB only if there is any pending element to process */
-> +	if (likely(MHI_DB_ACCESS_VALID(mhi_cntrl)) && count)
->  		mhi_ring_er_db(mhi_event);
->  	read_unlock_bh(&mhi_cntrl->pm_lock);
->  
-> -- 
-> 2.7.4
-> 
+--=20
+Znesek 1.000.000,00 =E2=82=AC vam je podaril STEFANO PESSINA. Za ve=C4=8D
+informacij se vrnite na stefanopessia755@hotmail.com
 
-Hi,
-
-This is the friendly patch-bot of Greg Kroah-Hartman.  You have sent him
-a patch that has triggered this response.  He used to manually respond
-to these common problems, but in order to save his sanity (he kept
-writing the same thing over and over, yet to different people), I was
-created.  Hopefully you will not take offence and will fix the problem
-in your patch and resubmit it so that it can be accepted into the Linux
-kernel tree.
-
-You are receiving this message because of the following common error(s)
-as indicated below:
-
-- This looks like a new version of a previously submitted patch, but you
-  did not list below the --- line any changes from the previous version.
-  Please read the section entitled "The canonical patch format" in the
-  kernel file, Documentation/process/submitting-patches.rst for what
-  needs to be done here to properly describe this.
-
-If you wish to discuss this problem further, or you have questions about
-how to resolve this issue, please feel free to respond to this email and
-Greg will reply once he has dug out from the pending patches received
-from other developers.
-
-thanks,
-
-greg k-h's patch email bot
+The sum of =E2=82=AC1,000,000.00 has been donated to you by STEFANO PESSINA=
+.
+Kindly get back for more info via stefanopessia755@hotmail.com
