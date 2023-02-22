@@ -2,83 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F8F369FEC3
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Feb 2023 23:54:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 927C169FEC9
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Feb 2023 23:54:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233007AbjBVWyV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Feb 2023 17:54:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45760 "EHLO
+        id S233023AbjBVWy4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Feb 2023 17:54:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46538 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229869AbjBVWyU (ORCPT
+        with ESMTP id S233084AbjBVWyv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Feb 2023 17:54:20 -0500
-Received: from mail-vs1-xe29.google.com (mail-vs1-xe29.google.com [IPv6:2607:f8b0:4864:20::e29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E66AF10CA
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Feb 2023 14:54:18 -0800 (PST)
-Received: by mail-vs1-xe29.google.com with SMTP id d20so4330021vsf.11
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Feb 2023 14:54:18 -0800 (PST)
+        Wed, 22 Feb 2023 17:54:51 -0500
+Received: from mail-pf1-x44a.google.com (mail-pf1-x44a.google.com [IPv6:2607:f8b0:4864:20::44a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 705CE33449
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Feb 2023 14:54:50 -0800 (PST)
+Received: by mail-pf1-x44a.google.com with SMTP id h1-20020a62de01000000b005d943b97706so809046pfg.0
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Feb 2023 14:54:50 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1677106458;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=vwXFOqgMuy52mReBM7YJtW0wWXswYMcjcxrkPg4Wbpk=;
-        b=C4u1m+qj59yTXcFhECr+gLA8EE3O3Y42cUVexpZHT2IK/W9JYY+qiTKdFl70rnDcPc
-         8AEX1VXCVpnKRyQIaGQsEbxUPn9aa0bRoCVyrQEEEy5s53/MfVT4hiIggvzQclHrmBOB
-         eMsjTVOv6nynaOFNalhqbHEfCXA+58L5VfCIzErJ/0Hag9SCfG/No3lrSna2RZXuc7Ks
-         rkZA93dqgkUMZBFWkP2elM3P+cUkve2qeUgdbhjneXL3FLxkU3w7As4INVYIfWYGD1WV
-         3nLn/EEbSDb0f3hlM4V4unI1tqTHwLN07lS1kZVzyxNhMD2Pcvb3kfRv+gmNQ5nEcMw9
-         EBzg==
+        d=google.com; s=20210112;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=t1rUxcsEzgzkuc81EHAiSJThwOfOiPUl0WEkc2IML/M=;
+        b=p4sXIDbjE4Nc/nRU1X8iV1XYE4jomrb+UJhtC7J+xEm7INBfiDn27gs/eoHnGlzmRT
+         92NbvCgseDZ0JsQv3XF/gwcMtKevWDZckWffhhm1iVJQBk+R5lUHI6CKSOloHvmr5SXD
+         BvdY7F8b50dcNqhHzIYk3cub1ZEBEA8+kXj+nWZ5dvUznAb22X/ufd/HOqJW5U4x5C4B
+         JQ1TG20xtnMqed4yXHC4Ock+whPxUyHQMHZjkt/JIt8uxh8Qe/UOObrTwEnXqaCLC3js
+         c4oFz5cV9DaUM/VtN6S58luTPLE4WRjwkm5QlSNnfO16B01aCPeJv7rypyvXDzgyxkMp
+         sLnQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1677106458;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=vwXFOqgMuy52mReBM7YJtW0wWXswYMcjcxrkPg4Wbpk=;
-        b=C0lSBQLaZI+fPJAQW8N0CArnX1mwJA+4XqJ5ZhJNdf6pJ9/wyXbsgUMyhMjTuhNcwr
-         feSZa1hUDm9UnU8kyRePiqm6h0QFKN1rA+SPbM8SuxnW/MaOxLOJl53E8tiuVb3wCMka
-         KzL9qzwdZNharZEgk3m+2NMJxfJNMUbXf7rU5aRTITBz3E9lZPQESEloZmr29oZoxfjp
-         PpR6t94iVh2cvpDaLocyASS0qJVHwmTTkLltkk5pO1KRVKCMV0Gs3npJBhwrvVAYxwfV
-         IuzUWUD/Lo449eknQqLHig7x+JgT2sjSPcv1lysivjv19aGNXdRi4OdUpFvtnqekuUiL
-         w8bw==
-X-Gm-Message-State: AO0yUKUlfjkrEePYOe4Py8/hcRhOZ0TJdiNE2c5QhZpx1Q14I51O79j6
-        OyCNxYeaIEph082iY2Z1IY9GkmkQK71hhQbtjsTpKQ==
-X-Google-Smtp-Source: AK7set8/28U69HPGUVsZOSqq2mG7uy8Ii3ibCWRXbJfiC/xiMdhOy1uOz48V38C7m+VeqUXgLFLiGCesuq9On+Q0RGk=
-X-Received: by 2002:a05:6122:1692:b0:401:42f3:fe4d with SMTP id
- 18-20020a056122169200b0040142f3fe4dmr1971940vkl.42.1677106457981; Wed, 22 Feb
- 2023 14:54:17 -0800 (PST)
-MIME-Version: 1.0
-References: <20230218002819.1486479-1-jthoughton@google.com>
- <20230218002819.1486479-16-jthoughton@google.com> <CAHS8izPAcFSn-TyZyGr0C3b7Q-0t3GUUjHdB2Q=Z79F8USa5RA@mail.gmail.com>
-In-Reply-To: <CAHS8izPAcFSn-TyZyGr0C3b7Q-0t3GUUjHdB2Q=Z79F8USa5RA@mail.gmail.com>
-From:   James Houghton <jthoughton@google.com>
-Date:   Wed, 22 Feb 2023 14:53:42 -0800
-Message-ID: <CADrL8HWJW-QYe9RnsLCH_0zqo3Wn4sHvDaoBdf4WeA11AnMgbQ@mail.gmail.com>
-Subject: Re: [PATCH v2 15/46] hugetlb: add make_huge_pte_with_shift
-To:     Mina Almasry <almasrymina@google.com>
-Cc:     Mike Kravetz <mike.kravetz@oracle.com>,
-        Muchun Song <songmuchun@bytedance.com>,
-        Peter Xu <peterx@redhat.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        David Hildenbrand <david@redhat.com>,
-        David Rientjes <rientjes@google.com>,
-        Axel Rasmussen <axelrasmussen@google.com>,
-        "Zach O'Keefe" <zokeefe@google.com>,
-        Manish Mishra <manish.mishra@nutanix.com>,
-        Naoya Horiguchi <naoya.horiguchi@nec.com>,
-        "Dr . David Alan Gilbert" <dgilbert@redhat.com>,
-        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Baolin Wang <baolin.wang@linux.alibaba.com>,
-        Miaohe Lin <linmiaohe@huawei.com>,
-        Yang Shi <shy828301@gmail.com>,
-        Frank van der Linden <fvdl@google.com>,
-        Jiaqi Yan <jiaqiyan@google.com>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        d=1e100.net; s=20210112;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=t1rUxcsEzgzkuc81EHAiSJThwOfOiPUl0WEkc2IML/M=;
+        b=HaifYHubIAjtQaxrO0+IHFGR3t7brK8peXrOWDc5LvApU16zfYZ+5PLeCPKMZPM/5w
+         iUduxI880lTfa6+01K5mdwIhIbfU9uZoSujwbx6Rk6b7Ia3WNcw/I2HG1Sq1+NKi/ggs
+         OcT7lM9T8d+fih/hoDZcjSJiqtGKPn2iA7IcDju3BKWlQ10uK9FN10v1Txs3HSBtKFhb
+         9or+VUXV+nCY7fY0AVZdkgE5jHu7nVo777hZaFRQeAQ/S4mjQne1CqotPZssrv/72usc
+         x+M5eWz6JoGSoaIehWUlpN8ZOUTz2mbdRAuS2VB9haAeGBF8LWrtsq2z1wZkzsXyXnU0
+         Bt7Q==
+X-Gm-Message-State: AO0yUKXJM+RZHcOwYEij6AEpjpgKbB/wQitbmzwqPhCz4kTlhWFrRN+r
+        XsaFpB/ln8CLjtLS2bEygC6FL1VgOlc=
+X-Google-Smtp-Source: AK7set/sQOffs0k3s7KounKG129lsIZ65HRvR+ia/A/0i253S1K0NbH2/JiaGq46cARK3kvQ+iKylGsp5hE=
+X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
+ (user=seanjc job=sendgmr) by 2002:a62:864e:0:b0:5d6:4f73:9ad with SMTP id
+ x75-20020a62864e000000b005d64f7309admr454083pfd.2.1677106489373; Wed, 22 Feb
+ 2023 14:54:49 -0800 (PST)
+Date:   Wed, 22 Feb 2023 14:54:47 -0800
+In-Reply-To: <Y/aYQlQzRSEH5II/@zn.tnic>
+Mime-Version: 1.0
+References: <Y+av0SVUHBLCVdWE@google.com> <BYAPR21MB168864EF662ABC67B19654CCD7DE9@BYAPR21MB1688.namprd21.prod.outlook.com>
+ <Y+bXjxUtSf71E5SS@google.com> <Y+4wiyepKU8IEr48@zn.tnic> <BYAPR21MB168853FD0676CCACF7C249B0D7A09@BYAPR21MB1688.namprd21.prod.outlook.com>
+ <Y+5immKTXCsjSysx@zn.tnic> <BYAPR21MB16880EC9C85EC9343F9AF178D7A19@BYAPR21MB1688.namprd21.prod.outlook.com>
+ <Y++VSZNAX9Cstbqo@zn.tnic> <Y/aTmL5Y8DtOJu9w@google.com> <Y/aYQlQzRSEH5II/@zn.tnic>
+Message-ID: <Y/adN3GQJTdDPmS8@google.com>
+Subject: Re: [PATCH v5 06/14] x86/ioremap: Support hypervisor specified range
+ to map as encrypted
+From:   Sean Christopherson <seanjc@google.com>
+To:     Borislav Petkov <bp@alien8.de>
+Cc:     "Michael Kelley (LINUX)" <mikelley@microsoft.com>,
+        Dave Hansen <dave.hansen@intel.com>,
+        "hpa@zytor.com" <hpa@zytor.com>, KY Srinivasan <kys@microsoft.com>,
+        Haiyang Zhang <haiyangz@microsoft.com>,
+        "wei.liu@kernel.org" <wei.liu@kernel.org>,
+        Dexuan Cui <decui@microsoft.com>,
+        "luto@kernel.org" <luto@kernel.org>,
+        "peterz@infradead.org" <peterz@infradead.org>,
+        "davem@davemloft.net" <davem@davemloft.net>,
+        "edumazet@google.com" <edumazet@google.com>,
+        "kuba@kernel.org" <kuba@kernel.org>,
+        "pabeni@redhat.com" <pabeni@redhat.com>,
+        "lpieralisi@kernel.org" <lpieralisi@kernel.org>,
+        "robh@kernel.org" <robh@kernel.org>, "kw@linux.com" <kw@linux.com>,
+        "bhelgaas@google.com" <bhelgaas@google.com>,
+        "arnd@arndb.de" <arnd@arndb.de>, "hch@lst.de" <hch@lst.de>,
+        "m.szyprowski@samsung.com" <m.szyprowski@samsung.com>,
+        "robin.murphy@arm.com" <robin.murphy@arm.com>,
+        "thomas.lendacky@amd.com" <thomas.lendacky@amd.com>,
+        "brijesh.singh@amd.com" <brijesh.singh@amd.com>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+        Tianyu Lan <Tianyu.Lan@microsoft.com>,
+        "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>,
+        "sathyanarayanan.kuppuswamy@linux.intel.com" 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        "ak@linux.intel.com" <ak@linux.intel.com>,
+        "isaku.yamahata@intel.com" <isaku.yamahata@intel.com>,
+        "dan.j.williams@intel.com" <dan.j.williams@intel.com>,
+        "jane.chu@oracle.com" <jane.chu@oracle.com>,
+        "tony.luck@intel.com" <tony.luck@intel.com>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
+        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
+        "iommu@lists.linux.dev" <iommu@lists.linux.dev>
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -86,64 +108,18 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Feb 22, 2023 at 1:15 PM Mina Almasry <almasrymina@google.com> wrote:
->
-> On Fri, Feb 17, 2023 at 4:28 PM James Houghton <jthoughton@google.com> wrote:
-> >
-> > This allows us to make huge PTEs at shifts other than the hstate shift,
-> > which will be necessary for high-granularity mappings.
-> >
-> > Acked-by: Mike Kravetz <mike.kravetz@oracle.com>
-> > Signed-off-by: James Houghton <jthoughton@google.com>
-> >
->
-> Reviewed-by: Mina Almasry <almasrymina@google.com>
+On Wed, Feb 22, 2023, Borislav Petkov wrote:
+> On Wed, Feb 22, 2023 at 02:13:44PM -0800, Sean Christopherson wrote:
+> > Because vTOM is a hardware feature, whereas the IO-APIC and vTPM being accessible
+> > via private memory are software features.  It's very possible to emulate the
+> > IO-APIC in trusted code without vTOM.
+> 
+> I know, but their use case is dictated by the fact that they're using
+> a SNP guest *with* vTOM as a SEV feature. And so their guest does
+> IO-APIC and vTPM *with* the vTOM SEV feature. That's what I'm trying to
+> model.
 
-Thank you :)
-
->
-> > diff --git a/mm/hugetlb.c b/mm/hugetlb.c
-> > index f74183acc521..ed1d806020de 100644
-> > --- a/mm/hugetlb.c
-> > +++ b/mm/hugetlb.c
-> > @@ -5110,11 +5110,11 @@ const struct vm_operations_struct hugetlb_vm_ops = {
-> >         .pagesize = hugetlb_vm_op_pagesize,
-> >  };
-> >
-> > -static pte_t make_huge_pte(struct vm_area_struct *vma, struct page *page,
-> > -                               int writable)
-> > +static pte_t make_huge_pte_with_shift(struct vm_area_struct *vma,
-> > +                                     struct page *page, int writable,
-> > +                                     int shift)
->
-> Nit: can this be 'unsigned int shift'. Because you're actually passing
-> it an unsigned int below and there is an implicit cast there. Yes it
-> will never matter, I know...
-
-Yes I think it should be unsigned int. Thanks for the catch.
-
->
-> >  {
-> >         pte_t entry;
-> > -       unsigned int shift = huge_page_shift(hstate_vma(vma));
-> >
-> >         if (writable) {
-> >                 entry = huge_pte_mkwrite(huge_pte_mkdirty(mk_pte(page,
-> > @@ -5128,6 +5128,14 @@ static pte_t make_huge_pte(struct vm_area_struct *vma, struct page *page,
-> >         return entry;
-> >  }
-> >
-> > +static pte_t make_huge_pte(struct vm_area_struct *vma, struct page *page,
-> > +                          int writable)
-> > +{
-> > +       unsigned int shift = huge_page_shift(hstate_vma(vma));
-> > +
-> > +       return make_huge_pte_with_shift(vma, page, writable, shift);
-> > +}
-> > +
-> >  static void set_huge_ptep_writable(struct vm_area_struct *vma,
-> >                                    unsigned long address, pte_t *ptep)
-> >  {
-> > --
-> > 2.39.2.637.g21b0678d19-goog
-> >
+Why?  I genuinely don't understand the motivation for bundling all of this stuff
+under a single "feature".  To me, that's like saying Haswell or Zen2 is a "feature",
+but outside of a very few cases where the exact uarch truly matters, nothing pivots
+on FMS because the CPU type is not a single feature.
