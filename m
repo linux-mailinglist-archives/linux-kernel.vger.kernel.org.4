@@ -2,159 +2,170 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B118C69EDA2
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Feb 2023 04:48:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B0CA369EDA6
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Feb 2023 04:52:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231494AbjBVDr7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Feb 2023 22:47:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38740 "EHLO
+        id S231460AbjBVDwE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Feb 2023 22:52:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41524 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231441AbjBVDrz (ORCPT
+        with ESMTP id S231334AbjBVDwC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Feb 2023 22:47:55 -0500
-Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F270A2DE66;
-        Tue, 21 Feb 2023 19:47:44 -0800 (PST)
-Received: by mail-ed1-x533.google.com with SMTP id f13so24705636edz.6;
-        Tue, 21 Feb 2023 19:47:44 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=JTsXlkDchbsVNM/nwNQgg0wYui/RKX5XK9Zb2Km8MwE=;
-        b=V7/W1hgfvDAONcno96OpT6N8A4alYpITdl6yNt3D6Du105mXOO9iJDWUca1CaI/1K/
-         PtFGI9r/YaT3SyeNQlE7O3hCy6LsvyUEOnWc2CDvQs9QOHSx7qANwoUP/1UCpIv6sMcr
-         ctFhlLIeyWMx3vX0BdeGF3R5HO8iX96EHn+CEFqhopmDep+X9WanFWS/mD909T1JzJAe
-         2xy4jMhrgo4d7f4eldJrqIY1qHCHIbr0kwX1myas17Ech1UqN/8mAl4rMeRN7ax7+hvN
-         AsU1XagJzG9296HFLhl/yaCXBroyVWiaPb+4Glm5NP9+9D5qyB5xPfvYfLCX2PZGLdRF
-         B4FQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=JTsXlkDchbsVNM/nwNQgg0wYui/RKX5XK9Zb2Km8MwE=;
-        b=ly5QMt6+FGDlKS1O7T84YRtExQENghjqRPt/+j0udiPPEb7WU6fDAc5oyQTkLcHSfM
-         csG+cEiAW6Et+nYa+kR4MXuRt3H6487wqBkUCfqFNi2790Uwx2hErTycFJ6NVJ0paJgE
-         kwGTbNfLDxh2ev2Jn4kR05ImqQgVFQYkjt74UkFFhCIY2NJ0nT3LVztc1kDlEkziKvmW
-         n/ephBp4LZ85uG7N03oN2wuDj2LJmMQB87oJuPomAZ7fjaTSYf2Pc0aSxy+rz1qTHl9g
-         G2nqkuc73GTFK886v7+m+OGj+iKPW2uU07nUWhoih9dmFqfBF5n8cxTVO9iuOtdJKZM/
-         Te6g==
-X-Gm-Message-State: AO0yUKWyb7PoPF92NQwp5p9J+iA5ALEVznvOrIWTbxUcU2irqDTtPMFC
-        nl3IRB2N44sfiIBZXial/PqoVGxTvA8sTzMxOII=
-X-Google-Smtp-Source: AK7set/RhKw0VVjD4gRGKEN6BevelxlvRv1gKfP1doPNzdzG4PYgYnMJRTXhRZ9KLvEl86zfMhRWGc+uG0efyeEi2CE=
-X-Received: by 2002:a50:c052:0:b0:4ac:20b:96b7 with SMTP id
- u18-20020a50c052000000b004ac020b96b7mr3183468edd.8.1677037663301; Tue, 21 Feb
- 2023 19:47:43 -0800 (PST)
+        Tue, 21 Feb 2023 22:52:02 -0500
+Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2050.outbound.protection.outlook.com [40.107.94.50])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3940231E00;
+        Tue, 21 Feb 2023 19:52:01 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=ABzH+s1EL4FkCZ71O1kSznfDcwm4SFxVSvePD+Eh7MAAPbOw3iWgwH95f1oCscgSudRwo/hj7scQxy/PVvbNxtrp+5q8dBmBDFD+j2J+BOQDSxBW0EYPfJCJGM9Q9qoqGV1AXTcln4Iy/S4qldWMoL74C97cNF2fsQWDTaBNj5doaDCgyFFM7uSS9SLlQtChGoYl/lJ8fnCCk83HEjzmX+ikMu1tV1hxqot3SaWAHTaeMOMlip16A58t0EIzS1Nf0ZLDKkYXaRPes+YaAw/zqOhh0a3GESzEVKC4qn/Qu9/B4yS+76/65tyad/03YjUCtwYgoxfC94R5DnGIYWwSgQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=CVRl6TtgOunY9KBtpnGGPkSPXKsvO0IN7+KVMe5kWtc=;
+ b=BS83S2xAWm9MlrMQ2jux91p//flmZTMXBKxwh0MsWbUesrXv7YRepgEq9wrNvVzFhGRW7TqKcRRph+E7aLHxosYvKAUdzqN3qlxsPL2tHOHRkt8v22TLxTnDw+PXaz8oTSu6SbN6H/uezJVfa33XBsLxP6ZHKblEBIKp3M/6oiogDq2y+Dh67lP5Zle6ErP7krXqPUtmlpuPZvdtCn10ImNkBpLrMwPSKCWHB2/la3L5joUyPw6dxBD8H6lhhLzfi0JlQVygFLUWyJ4VOtLVtAh3pMdBB4vKlrmHxc05SYDuHJvaVB52KltgXkqidaEPXaRg1u0x9b91g8PpH1OiYw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=gpxsee.org smtp.mailfrom=amd.com; dmarc=pass
+ (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=CVRl6TtgOunY9KBtpnGGPkSPXKsvO0IN7+KVMe5kWtc=;
+ b=ZXzWNyfjOKIrFgV7skyH+E73+/AlJdXa9+Wu9mKjlwhGf+v3PXB2V/tkTu0GnOwFjs7Ff+U8yvvU0a69+2GHcPx6t147XWixc5+mo/ZTttROarYaVC/tV9ph1pmylwZ/TUXR96RxjghHbcDewjEgWWxXo7/+o50+cUUcT8ZPHdc=
+Received: from DM6PR07CA0043.namprd07.prod.outlook.com (2603:10b6:5:74::20) by
+ PH7PR12MB7913.namprd12.prod.outlook.com (2603:10b6:510:27b::16) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6111.21; Wed, 22 Feb
+ 2023 03:51:58 +0000
+Received: from DS1PEPF0000E639.namprd02.prod.outlook.com
+ (2603:10b6:5:74:cafe::48) by DM6PR07CA0043.outlook.office365.com
+ (2603:10b6:5:74::20) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6111.21 via Frontend
+ Transport; Wed, 22 Feb 2023 03:51:58 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ DS1PEPF0000E639.mail.protection.outlook.com (10.167.17.71) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.6134.14 via Frontend Transport; Wed, 22 Feb 2023 03:51:57 +0000
+Received: from SATLEXMB04.amd.com (10.181.40.145) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Tue, 21 Feb
+ 2023 21:51:57 -0600
+Received: from [172.19.74.144] (10.180.168.240) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server id 15.1.2375.34 via Frontend
+ Transport; Tue, 21 Feb 2023 21:51:56 -0600
+Message-ID: <6da2e72c-661c-e4de-f563-e06f045414ae@amd.com>
+Date:   Tue, 21 Feb 2023 19:51:56 -0800
 MIME-Version: 1.0
-References: <20230221110344.82818-1-kerneljasonxing@gmail.com>
- <48429c16fdaee59867df5ef487e73d4b1bf099af.camel@redhat.com>
- <CAL+tcoD8PzL4khHq44z27qSHHGkcC4YUa91E3h+ki7O0u3SshQ@mail.gmail.com>
- <aaf3d11ea5b247ab03d117dadae682fe2180d38a.camel@redhat.com> <CAL+tcoBZFFwOnUqzcDtSsNyfPgHENAOv0bPcvncxuMPwCn40+Q@mail.gmail.com>
-In-Reply-To: <CAL+tcoBZFFwOnUqzcDtSsNyfPgHENAOv0bPcvncxuMPwCn40+Q@mail.gmail.com>
-From:   Jason Xing <kerneljasonxing@gmail.com>
-Date:   Wed, 22 Feb 2023 11:47:06 +0800
-Message-ID: <CAL+tcoBGFkXea-GyzbO41Ve8_wUF3PT=YF43TxuzgM+adVa8gw@mail.gmail.com>
-Subject: Re: [PATCH net] udp: fix memory schedule error
-To:     Paolo Abeni <pabeni@redhat.com>
-Cc:     willemdebruijn.kernel@gmail.com, davem@davemloft.net,
-        dsahern@kernel.org, edumazet@google.com, kuba@kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        bpf@vger.kernel.org, Jason Xing <kernelxing@tencent.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [RESEND PATCH V12 XDMA 1/2] dmaengine: xilinx: xdma: Add xilinx
+ xdma driver
+Content-Language: en-US
+To:     =?UTF-8?Q?Martin_T=c5=afma?= <tumic@gpxsee.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>
+CC:     <vkoul@kernel.org>, <dmaengine@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <max.zhen@amd.com>,
+        <sonal.santan@amd.com>, <larry.liu@amd.com>, <brian.xu@amd.com>
+References: <1675969514-3137-1-git-send-email-lizhi.hou@amd.com>
+ <1675969514-3137-2-git-send-email-lizhi.hou@amd.com>
+ <CAMuHMdXsUPAW5zKrsaTR9Tgv7kFdkz8s_QUjLXq6zDpoo47fRA@mail.gmail.com>
+ <0f1aafa2-7495-163b-523a-f634bacc4b1f@gpxsee.org>
+ <CAMuHMdUVkbPf1a8cW+zY1HwD83tm_m0L7Ufy=GO-RQB-AF_15A@mail.gmail.com>
+ <aeb43671-57fd-654a-8e8d-d14ebb7f4083@gpxsee.org>
+From:   Lizhi Hou <lizhi.hou@amd.com>
+In-Reply-To: <aeb43671-57fd-654a-8e8d-d14ebb7f4083@gpxsee.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DS1PEPF0000E639:EE_|PH7PR12MB7913:EE_
+X-MS-Office365-Filtering-Correlation-Id: 71accfcb-c39f-4f64-20b8-08db1488256e
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: IUhp3Q6lo4aOZ0kP0wu1+KP6Gi8gX6uHZ8Rs7S3eHZcGuTqQfSjH3QDpfZjyIGAcwYjks4OhSWRwxv+LK9eVuysEv7C68zyj2jTp4c1wmM+yzNoPTTJtoeemXNwZWf5FkqT6zzq8a7gie8zhT3JnzDuIOqsS8meReONdN+qWA1pesNtsxemr0Rk6w7O7uu+r8P7AcTp1gRofrgvweeLdYGHgr+/qRR63NGqgwoOP3+Vjm8BlREaQa/tPd3svqz0vCwu9Yklo9wuz3qCwMPgD/7Xk/QAW3mFFn02xiAg5pE3DzLjEKDvnpN16ZSvS0IQEonWqdKt9fbgrZ71mZTd57TSHvHQRzzghVtY2V1cdaEBx0eJ/aR2nXsKLdBJCGIke8/QKcQ+WZaAxE/6Q7WQ8aAXA2/75e4yIu9MDlnP2/3A1yqIlo3Ql9yU+TrcXJvXGDE8otOrNtNAkYcHNEAIwB+vh7QpyV0E1sZLx+tIEn0ZvUbb8gs7quCY2u4wGYGzkxIJTfhOtYfaH0V7R9iLo39wRQWzc6pu+XLVCmr/LZmE9dp2f33gQHxSjKrui0LEOpE9FfQS29i/IBsBxobaQnW0NaechnzP6W/7PQUrKM8Iuq2xyzDnvvUIocTplQgNh2enE1XoMRSnwgbZjdqnTZzq0s+SW4HUeEVEVzg7yukplDfvtczKiQPNnIpAsuV1T6L8vIHRAE01wgl53Cvr++igwKXNOCvRD91QTXYIPSk6cRNKkDCkzmw5Kih64gsYGawiAAJ8SJqKVu9RJPckoe4yxz0bvfFEMke+EmFdu5n0=
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230025)(4636009)(376002)(39860400002)(396003)(346002)(136003)(451199018)(40470700004)(36840700001)(46966006)(966005)(26005)(186003)(31686004)(4326008)(70586007)(40480700001)(8676002)(70206006)(5660300002)(8936002)(2616005)(53546011)(36756003)(336012)(426003)(66574015)(47076005)(478600001)(40460700003)(16576012)(356005)(41300700001)(54906003)(316002)(110136005)(44832011)(31696002)(86362001)(82740400003)(82310400005)(2906002)(81166007)(36860700001)(36900700001)(43740500002);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 22 Feb 2023 03:51:57.8201
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 71accfcb-c39f-4f64-20b8-08db1488256e
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource: DS1PEPF0000E639.namprd02.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR12MB7913
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 21, 2023 at 11:46 PM Jason Xing <kerneljasonxing@gmail.com> wrote:
->
-> On Tue, Feb 21, 2023 at 10:46 PM Paolo Abeni <pabeni@redhat.com> wrote:
-> >
-> > On Tue, 2023-02-21 at 21:39 +0800, Jason Xing wrote:
-> > > On Tue, Feb 21, 2023 at 8:27 PM Paolo Abeni <pabeni@redhat.com> wrote:
-> > > >
-> > > > On Tue, 2023-02-21 at 19:03 +0800, Jason Xing wrote:
-> > > > > From: Jason Xing <kernelxing@tencent.com>
-> > > > >
-> > > > > Quoting from the commit 7c80b038d23e ("net: fix sk_wmem_schedule()
-> > > > > and sk_rmem_schedule() errors"):
-> > > > >
-> > > > > "If sk->sk_forward_alloc is 150000, and we need to schedule 150001 bytes,
-> > > > > we want to allocate 1 byte more (rounded up to one page),
-> > > > > instead of 150001"
-> > > >
-> > > > I'm wondering if this would cause measurable (even small) performance
-> > > > regression? Specifically under high packet rate, with BH and user-space
-> > > > processing happening on different CPUs.
-> > > >
-> > > > Could you please provide the relevant performance figures?
-> > >
-> > > Sure, I've done some basic tests on my machine as below.
-> > >
-> > > Environment: 16 cpus, 60G memory
-> > > Server: run "iperf3 -s -p [port]" command and start 500 processes.
-> > > Client: run "iperf3 -u -c 127.0.0.1 -p [port]" command and start 500 processes.
-> >
-> > Just for the records, with the above command each process will send
-> > pkts at 1mbs - not very relevant performance wise.
-> >
-> > Instead you could do:
-> >
->
-> > taskset 0x2 iperf -s &
-> > iperf -u -c 127.0.0.1 -b 0 -l 64
-> >
->
-> Thanks for your guidance.
->
-> Here're some numbers according to what you suggested, which I tested
-> several times.
-> ----------|IFACE   rxpck/s   txpck/s    rxkB/s    txkB/s
-> Before: lo 411073.41 411073.41  36932.38  36932.38
-> After:   lo 410308.73 410308.73  36863.81  36863.81
->
-> Above is one of many results which does not mean that the original
-> code absolutely outperforms.
-> The output is not that constant and stable, I think.
 
-Today, I ran the same test on other servers, it looks the same as
-above. Those results fluctuate within ~2%.
+On 2/21/23 13:46, Martin Tůma wrote:
+> On 21. 02. 23 22:06, Geert Uytterhoeven wrote:
+>> Hi Martin,
+>>
+>> On Tue, Feb 21, 2023 at 9:45 PM Martin Tůma <tumic@gpxsee.org> wrote:
+>>> On 21. 02. 23 14:25, Geert Uytterhoeven wrote:
+>>>> No platform dependencies at all, while this is a platform driver that
+>>>> relies on some other not-yet-existing driver creating an "xdma"
+>>>> platform device?
+>>>
+>>> There is at least one "already-existing" driver based on this driver
+>>> that is waiting in the v4l2 queue for xdma - our MGB4 driver:
+>>> https://patchwork.kernel.org/project/linux-media/patch/20230207150119.5542-2-tumic@gpxsee.org/ 
+>>>
+>>
+>> Thanks for the link!
+>>
+>> As VIDEO_MGB4 selects XILINX_XDMA, perhaps XILINX_XDMA
+>> can be made invisible, unless compile-testing?
+>>
+>>      config XILINX_XDMA
+>>          tristate "Xilinx DMA/Bridge Subsystem DMA Engine" if 
+>> COMPILE_TEST
+>>
+>> Gr{oetje,eeting}s,
+>>
+>>                          Geert
+>>
+>
+> Hi,
+> I think that the XDMA driver will always be used by a superior PCIe 
+> card driver like in our case (mgb4) and using it separately makes no 
+> sense/is not possible, so disabling it until some of the superior 
+> drivers selects it makes sense for me. But what about out-of-the-tree 
+> modules based on xdma? Making the module "invisible" will make compile 
+> them much harder I guess? And there will be proprietary drivers based 
+> on xdma, see Xilinx XRT: 
+> https://github.com/houlz0507/XRT-1/tree/xdma_v4_usage
+>
+> The xdma authors from Xilinx will definitely give you a more 
+> authoritative answer. I'm just a "random" user of the xdma module. 
+> Originally our mgb4 driver was based on our own xdma sub-driver (in 
+> turn based on some old "test" driver from Xilinx) which I was glad we 
+> could abandon when this xdma driver has appeared. I helped the xdma 
+> module to become usable for PCIe cards like our v4l2 grabber, but the 
+> original intents of the xdma driver are unknown to me. If it is XRT, 
+> than Xilinx will probably like the module to stay visible.
+>
+> M.
+>
+There are PCIe devices which use the XDMA IP and would use this xdma 
+driver. Out of tree drivers for Xilinx/AMD Alveo devices can switch to 
+this in kernel xdma driver.
 
-Oh, one more thing I forgot to say is the output of iperf itself which
-doesn't show any difference.
-Before: Bitrate is 211 - 212 Mbits/sec
-After: Bitrate is 211 - 212 Mbits/sec
-So this result is relatively constant especially if we keep running
-the test over 2 minutes.
 
-Jason
+Thanks,
 
->
-> Please help me review those numbers.
->
-> >
-> > > In theory, I have no clue about why it could cause some regression?
-> > > Maybe the memory allocation is not that enough compared to the
-> > > original code?
-> >
-> > As Eric noted, for UDP traffic, due to the expected average packet
-> > size, sk_forward_alloc is touched quite frequently, both with and
-> > without this patch, so there is little chance it will have any
-> > performance impact.
->
-> Well, I see.
->
-> Thanks,
-> Jason
->
-> >
-> > Cheers,
-> >
-> > Paolo
-> >
+Lizhi
+
