@@ -2,160 +2,152 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D48169F095
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Feb 2023 09:45:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7BE0169F09C
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Feb 2023 09:47:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231264AbjBVIo7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Feb 2023 03:44:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33762 "EHLO
+        id S231126AbjBVIrg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Feb 2023 03:47:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36088 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230262AbjBVIoz (ORCPT
+        with ESMTP id S229557AbjBVIrc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Feb 2023 03:44:55 -0500
-Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D2BF311C2
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Feb 2023 00:44:53 -0800 (PST)
-Received: by mail-wr1-x429.google.com with SMTP id t15so7025245wrz.7
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Feb 2023 00:44:53 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=Ja0PIExg7QtVH8CkMZQt+gow5bQ/IjTXAb1rvOQO5SE=;
-        b=n3aTRm08QWqkCXP6vWRdaQXRkdjlZsw1/FZSbNhF5J2z38ZrYuFSqUuDpdsxR6Rl9U
-         4ln0hp9gHLzfu91SseG8N2Fmmmdd0uoRNqJl8LrmS2mYCSGPUvdqjwL/Un1kbTjwYUdQ
-         ckCovcEjCdsmNVQVuB23xCWDuQASxGOCB9x2KFWxyEvqxOOmnyRMzuPoigQJ/bCBbycD
-         7o30YI4FgReuJWZuSjZImRX2Pb+DYHPg2ENcUAd5nuEAgz72e3jtG1/5wIZrqiNmzaTO
-         LULu8Ai4TeFabQ+clEZqlOhMdlsh+5rzg+uu95PBNi5J8p5ad/1pG2JhIDSv/E0V4ChW
-         q0mA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Ja0PIExg7QtVH8CkMZQt+gow5bQ/IjTXAb1rvOQO5SE=;
-        b=qXbsM4pkeeFRD6e8sYRJ4bJNbnyh52NYHI+lesSrIPvXwPPyeVt1G9mtl686PCXFaU
-         x47vmnlS/RWuGbrl//esMx05MMOwsxfIaNn1Qnl3EP9H4spfcuLyMV4iSFur9ZaZQsZh
-         7g7b3x6xIUA0cM3Jbq4/4hJLdNt+c7vHKirl8NrN4rfKhWYk3br/Gbwxtbb99rNqp9uu
-         kHlqWidlXUs8ZeAQVjF8uGvCzju1RrmL31W1okmyZXncuYIxrSJgWkahDOr34Qd0N0RQ
-         ES/73vaNSaQOlufkx8EpFV0kMl2N9YEYtwMsD4GHhvknS2np1B0fMS60YHA5TgLp+OxD
-         rK3Q==
-X-Gm-Message-State: AO0yUKX4n53iVs7MfBVvxeimodxjQNrjHUJKuau33Hk/K5ysPjT7GPH7
-        9Ra/7cmRu549EUgWvVBwWD91gw==
-X-Google-Smtp-Source: AK7set/INtiIeiEqLq31GfS7NEouC9iSfOFGLmINDVsTxUJtiLClf3hIlMhSpnkMFZiPKAEgx/xM/w==
-X-Received: by 2002:adf:fe07:0:b0:2c3:f0ed:4beb with SMTP id n7-20020adffe07000000b002c3f0ed4bebmr4635634wrr.70.1677055492115;
-        Wed, 22 Feb 2023 00:44:52 -0800 (PST)
-Received: from [192.168.1.109] ([178.197.216.144])
-        by smtp.gmail.com with ESMTPSA id a5-20020a05600c224500b003dc1a525f22sm4428625wmm.25.2023.02.22.00.44.49
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 22 Feb 2023 00:44:51 -0800 (PST)
-Message-ID: <ef019382-61a8-c663-773b-21791413889d@linaro.org>
-Date:   Wed, 22 Feb 2023 09:44:48 +0100
+        Wed, 22 Feb 2023 03:47:32 -0500
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69763367F2
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Feb 2023 00:47:31 -0800 (PST)
+Received: from pps.filterd (m0127361.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 31M8Hr3F031916;
+        Wed, 22 Feb 2023 08:47:22 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
+ subject : message-id : references : content-type : in-reply-to :
+ mime-version; s=pp1; bh=CCRx9fyuYDhkAycHEafQMjxmFOwYzeLo+5/QAk2x5xw=;
+ b=qsR6KoMVZiTHeuHA0kiUQHFDaWzwuuPQnPxUgKrglJzkGQHsAdWhwqjEtVVnVoYkqGBo
+ WUEvrMSUy5q7DZ3O33l5RMSVL+AF7FlgulOFyZ2RyYs05CgQZI0MNqeUBjSVSBFCIduu
+ A19OnqNxdLhp90VpAETGBRO1XF0l5IdHY0RtK0ass8t9Ez9mlzMdIFVzH25CJklBrjPI
+ Di8qm0ZobbzpYWMU7rua/RCJBcE08voRVRwV5Kj9ICiFQHMLGIYf1WQ2N2cagFbeK7Zb
+ KXGYH3fIDB/Jtw264QwIiEC+kz8rnMfmx0svF2pAGDzE1Mr+uUrOIc6N005KGfK7YonI kw== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3nwd5sc85v-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 22 Feb 2023 08:47:22 +0000
+Received: from m0127361.ppops.net (m0127361.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 31M8cwZf015187;
+        Wed, 22 Feb 2023 08:47:21 GMT
+Received: from ppma06fra.de.ibm.com (48.49.7a9f.ip4.static.sl-reverse.com [159.122.73.72])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3nwd5sc853-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 22 Feb 2023 08:47:21 +0000
+Received: from pps.filterd (ppma06fra.de.ibm.com [127.0.0.1])
+        by ppma06fra.de.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 31LDgFDt008477;
+        Wed, 22 Feb 2023 08:47:20 GMT
+Received: from smtprelay06.fra02v.mail.ibm.com ([9.218.2.230])
+        by ppma06fra.de.ibm.com (PPS) with ESMTPS id 3ntnxf3up9-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 22 Feb 2023 08:47:19 +0000
+Received: from smtpav03.fra02v.mail.ibm.com (smtpav03.fra02v.mail.ibm.com [10.20.54.102])
+        by smtprelay06.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 31M8lHQm21168472
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 22 Feb 2023 08:47:17 GMT
+Received: from smtpav03.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 7001820043;
+        Wed, 22 Feb 2023 08:47:17 +0000 (GMT)
+Received: from smtpav03.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id D994F20040;
+        Wed, 22 Feb 2023 08:47:14 +0000 (GMT)
+Received: from li-a450e7cc-27df-11b2-a85c-b5a9ac31e8ef.ibm.com (unknown [9.43.123.148])
+        by smtpav03.fra02v.mail.ibm.com (Postfix) with ESMTPS;
+        Wed, 22 Feb 2023 08:47:14 +0000 (GMT)
+Date:   Wed, 22 Feb 2023 14:17:11 +0530
+From:   Kautuk Consul <kconsul@linux.vnet.ibm.com>
+To:     Christophe Leroy <christophe.leroy@csgroup.eu>
+Cc:     Michael Ellerman <mpe@ellerman.id.au>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] arch/powerpc/include/asm/barrier.h: redefine rmb and wmb
+ to lwsync
+Message-ID: <Y/XWjysGYHIzhfoc@li-a450e7cc-27df-11b2-a85c-b5a9ac31e8ef.ibm.com>
+References: <20230222060107.70565-1-kconsul@linux.vnet.ibm.com>
+ <896436d1-04e4-8019-0f89-f4d4938f9697@csgroup.eu>
+ <Y/XPZl8V4/0Bjegy@li-a450e7cc-27df-11b2-a85c-b5a9ac31e8ef.ibm.com>
+ <b02ddb1b-393f-16f7-1d06-caa99bfd3d20@csgroup.eu>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <b02ddb1b-393f-16f7-1d06-caa99bfd3d20@csgroup.eu>
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: v3mONZh2Kq3z7AgRA5O0ZB9p4qrV6M7s
+X-Proofpoint-ORIG-GUID: SgX91qG7nYjc3Txsf5gMuYm4uEc4NJpv
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH v4 2/3] dt-bindings: net: bluetooth: Add NXP bluetooth
- support
-Content-Language: en-US
-To:     Neeraj Sanjay Kale <neeraj.sanjaykale@nxp.com>,
-        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, marcel@holtmann.org,
-        johan.hedberg@gmail.com, luiz.dentz@gmail.com,
-        gregkh@linuxfoundation.org, jirislaby@kernel.org,
-        alok.a.tiwari@oracle.com, hdanton@sina.com,
-        ilpo.jarvinen@linux.intel.com, leon@kernel.org
-Cc:     netdev@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-bluetooth@vger.kernel.org,
-        linux-serial@vger.kernel.org, amitkumar.karwar@nxp.com,
-        rohit.fule@nxp.com, sherry.sun@nxp.com
-References: <20230221162541.3039992-1-neeraj.sanjaykale@nxp.com>
- <20230221162541.3039992-3-neeraj.sanjaykale@nxp.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230221162541.3039992-3-neeraj.sanjaykale@nxp.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.170.22
+ definitions=2023-02-22_04,2023-02-20_02,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0
+ priorityscore=1501 mlxlogscore=999 impostorscore=0 clxscore=1015
+ bulkscore=0 malwarescore=0 phishscore=0 lowpriorityscore=0 suspectscore=0
+ mlxscore=0 spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2302220073
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 21/02/2023 17:25, Neeraj Sanjay Kale wrote:
-> Add binding document for NXP bluetooth chipsets attached over UART.
+ 
+> No, I don't mean to use the existing #ifdef/elif/else.
 > 
-> Signed-off-by: Neeraj Sanjay Kale <neeraj.sanjaykale@nxp.com>
-> ---
-> v2: Resolved dt_binding_check errors. (Rob Herring)
-> v2: Modified description, added specific compatibility devices, corrected indentations. (Krzysztof Kozlowski)
-> v3: Modified description, renamed file (Krzysztof Kozlowski)
-> v4: Resolved dt_binding_check errors, corrected indentation. (Rob
-> Herring, Krzysztof Kozlowski)
-> ---
->  .../bindings/net/bluetooth/nxp,w8987-bt.yaml  | 38 +++++++++++++++++++
->  MAINTAINERS                                   |  6 +++
->  2 files changed, 44 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/net/bluetooth/nxp,w8987-bt.yaml
+> Define an #ifdef /#else dedicated to xmb macros.
 > 
-> diff --git a/Documentation/devicetree/bindings/net/bluetooth/nxp,w8987-bt.yaml b/Documentation/devicetree/bindings/net/bluetooth/nxp,w8987-bt.yaml
-> new file mode 100644
-> index 000000000000..de361ce4ab73
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/net/bluetooth/nxp,w8987-bt.yaml
-> @@ -0,0 +1,38 @@
-> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/net/bluetooth/nxp,w8987-bt.yaml#
+> Something like that:
+> 
+> @@ -35,9 +35,15 @@
+>    * However, on CPUs that don't support lwsync, lwsync actually maps to a
+>    * heavy-weight sync, so smp_wmb() can be a lighter-weight eieio.
+>    */
+> +#if defined(CONFIG_PPC64) || defined(CONFIG_PPC_E500MC)
+> +#define __mb()   asm volatile ("lwsync" : : : "memory")
+> +#define __rmb()  asm volatile ("lwsync" : : : "memory")
+> +#define __wmb()  asm volatile ("lwsync" : : : "memory")
+> +#else
+>   #define __mb()   __asm__ __volatile__ ("sync" : : : "memory")
+>   #define __rmb()  __asm__ __volatile__ ("sync" : : : "memory")
+>   #define __wmb()  __asm__ __volatile__ ("sync" : : : "memory")
+> +#endif
+Ok. Got it. Will do.
 
-I think list of compatibles changed... now they are nxp,88w8987-bt, so
-shouldn't the filename be "nxp,88w8987-bt.yaml"?
-
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: NXP Bluetooth chips
-> +
-> +description:
-> +  This binding describes UART-attached NXP bluetooth chips.
-> +  These chips are dual-radio chips supporting WiFi and Bluetooth.
-> +  The bluetooth works on standard H4 protocol over 4-wire UART.
-> +  The RTS and CTS lines are used during FW download.
-> +  To enable power save mode, the host asserts break signal
-> +  over UART-TX line to put the chip into power save state.
-> +  De-asserting break wakes-up the BT chip.
-> +
-> +maintainers:
-> +  - Neeraj Sanjay Kale <neeraj.sanjaykale@nxp.com>
-> +
-> +properties:
-> +  compatible:
-> +    enum:
-> +      - nxp,88w8987-bt
-> +      - nxp,88w8997-bt
-> +
-> +required:
-> +  - compatible
-> +
-> +additionalProperties: false
-> +
-> +examples:
-> +  - |
-> +    uart2 {
-
-This is a friendly reminder during the review process.
-
-It seems my previous comments were not fully addressed. Maybe my
-feedback got lost between the quotes, maybe you just forgot to apply it.
-Please go back to the previous discussion and either implement all
-requested changes or keep discussing them.
-
-Thank you.
-
-Best regards,
-Krzysztof
-
+> >> Shouldn't you also consider the same for mb() ?
+> > My change wasn't meant to address newer usages of as volatile
+> > #defines. I just wanted to redefine the rmb and wmb #defines
+> > to lwsync.
+> 
+> That's my point, why not also redefine mb to lwsync ?
+That would be incorrect. lwsync will only work for one: load or store.
+mb() is meant for barriering both loads as well as stores so the sync
+instruction is correct for that one.
+> 
+> >>
+> >> Note that your series will conflict with b6e259297a6b ("powerpc/kcsan:
+> >> Memory barriers semantics") in powerpc/next tree.
+> > I thought of defining the __rmb and __wmb macros but I decided against
+> > it because I didn't understand kcsan completely.
+> > I used the standard Linus' tree, not powerpc/next.
+> > Can you tell me which branch or git repo I should make this patch on ?
+> 
+> https://git.kernel.org/pub/scm/linux/kernel/git/powerpc/linux.git
+> 
+> 'merge' branch is a merge of branches 'master', 'fixes' and 'next'.
+> 
+> That's the branch to use, allthough it is not always in sync with fixes 
+> and next, in that case all you have to do is to locally merge 'next' and 
+> 'fixes' branch until it's done remotely.
+> 
+> But just using 'next' branch also works most of the time.
+> 
+> Note that 'next' branch should already be part of linux-next so you may 
+> also use linux-next if you prefer.
+> 
+Will send another patch on this.
+Thanks. Will use linux-next branch on this git repo.
