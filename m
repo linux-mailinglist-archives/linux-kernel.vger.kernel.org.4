@@ -2,159 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 97F2D69F944
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Feb 2023 17:46:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BBCD569F945
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Feb 2023 17:46:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231901AbjBVQqP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Feb 2023 11:46:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35726 "EHLO
+        id S232313AbjBVQqs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Feb 2023 11:46:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36270 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232133AbjBVQqN (ORCPT
+        with ESMTP id S231356AbjBVQqp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Feb 2023 11:46:13 -0500
-Received: from smtp16.bhosted.nl (smtp16.bhosted.nl [IPv6:2a02:9e0:8000::27])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD7E23D922
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Feb 2023 08:46:04 -0800 (PST)
+        Wed, 22 Feb 2023 11:46:45 -0500
+Received: from mail-pl1-x64a.google.com (mail-pl1-x64a.google.com [IPv6:2607:f8b0:4864:20::64a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57FEF3B67C
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Feb 2023 08:46:44 -0800 (PST)
+Received: by mail-pl1-x64a.google.com with SMTP id p14-20020a170902e74e00b0019ad833d8a4so3924151plf.15
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Feb 2023 08:46:44 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=protonic.nl; s=202111;
-        h=message-id:references:in-reply-to:reply-to:subject:cc:to:from:date:
-         content-transfer-encoding:content-type:mime-version:from;
-        bh=v/6hTyPtYjejMluCOgghiXVypyxn1rjiX7XM4MA27ic=;
-        b=gcNK/CN1ejlKs7laAktj1Kf3IQC5n0IF4kC4o/Hr5QQuVgajkp0BEf30urFQm6hTtIBMcXYx304CD
-         L2USJFLjHoP/0XeL8TVgjLZOsZzYNVGntEswB0xAroA8a8eFvKVIrtahC5N2c41wzpSkBAO64/HsVT
-         yeniFOv2v1NEFVNDE6a/kopaZuzD5Yiq/I7HWPM6DIGaeun0YWaQZswaXaNJ1Ub89op2kvCl2/nix6
-         ig2SIvF5Hs3xPtk2aBcknBfo8VOZBHo1zW/4NTbM4lEocjbR7iC3/L4SUUa09IjTSWnv6Fmk9cspwe
-         bWTAL/WK8t6J1y4FS+nLsLTgrmDW1iw==
-X-MSG-ID: 6376de7c-b2d0-11ed-829c-0050569d2c73
-MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8;
- format=flowed
-Content-Transfer-Encoding: 8bit
-Date:   Wed, 22 Feb 2023 17:46:00 +0100
-From:   Robin van der Gracht <robin@protonic.nl>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>,
-        Raul E Rangel <rrangel@chromium.org>,
-        Wolfram Sang <wsa@kernel.org>, linux-kernel@vger.kernel.org,
-        linux-i2c@vger.kernel.org, linux-usb@vger.kernel.org,
-        Miguel Ojeda <ojeda@kernel.org>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Subject: Re: [PATCH v1 2/3] auxdisplay: ht16k33: Make use of
- device_get_match_data()
-Organization: Protonic Holland
-Reply-To: robin@protonic.nl
-Mail-Reply-To: robin@protonic.nl
-In-Reply-To: <Y/UD3HWNy8uKYShC@smile.fi.intel.com>
-References: <20230221133307.20287-1-andriy.shevchenko@linux.intel.com>
- <20230221133307.20287-3-andriy.shevchenko@linux.intel.com>
- <Y/TJs+Arban0ats8@smile.fi.intel.com>
- <be203dfd290e67c8ce74d11c5c9478a4@protonic.nl>
- <Y/UD3HWNy8uKYShC@smile.fi.intel.com>
-Message-ID: <0235f0fed989a8b027db720663699f5d@protonic.nl>
-X-Sender: robin@protonic.nl
-User-Agent: Roundcube Webmail/1.3.1 
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        d=google.com; s=20210112;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=+QiiW3N8MUbaTaxsJfApLiTX1buSoqhASLC/z4dapy4=;
+        b=GobH1TaO+hYYJacM6Zcvpe66sOC21cqykazSq1J2VfB2XNkfb8K4cNmC52EfF6Z37B
+         X/l+vH0NKlIokAokN2fXuTFzzWhDTEKr7tMXYW3pa7hSQOmKfbAhJNUbcB2jjoTwXzp6
+         0xLALS7YWBhjLRhxGN4q//qHxIsoxv4DfkbQc6QMnX6XvoK5g6T6DBxuZsOV8PFm2iPc
+         72xnsXo1pe9eLjdfopbVKdv14jkZ/WOabj8F6bRV4Csjv/BYNrLVkA1roRJyk5zG84+N
+         ni3li+3bYraWKXhBBMTFlSagZ5sGcL5sbjpijXsSNxvXzWJ3TUKJ4RmM6O0s/QOPiI1q
+         lFTg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=+QiiW3N8MUbaTaxsJfApLiTX1buSoqhASLC/z4dapy4=;
+        b=Rq5vIsaP+aMvrXV/BwdJ2TCJlrmuRzqWY60atI7ro7hHT2dE7eNjGNvNrZ7+p5VNkp
+         qNUX/RUVKr7Kxxt8hQ/Frrm86cMWSLbxdujWpNdrVWuBjjhhTWdyK8kZa3N8Iq9EHHMc
+         f8+f2q0BtnNVm6jqsNqqU5iuHtxi7jG2kt7CSQfkpsURrv6hqgSw4PPU0ogok4UR2/yp
+         jFdktXhLakpZ8JaO7jOdkiHgbHKKJRKco6BJvoQHjpuXmb24m122nGJ47L/clmDIzuzG
+         YM+R3su2/eQFDqtWtdXD+QSOaMVD/3gvOJBjix4lPkQy1EURJFL0O90Y0zUukb3Nx2n2
+         mT2Q==
+X-Gm-Message-State: AO0yUKVcHATTblg7S1i9CIfqAPa/vShTuXBFpMgGJzFhIOMQ5dGiQefe
+        bTSxVO4E9867IlkcKYSuy4wYcDfywV0=
+X-Google-Smtp-Source: AK7set9R2NDRkVHaXW1B/ByU6rTiQWFnudxLqy4CssEn+ehoejPBUN4E1Wtt4AllhbB1WTLfsFep+7k793Q=
+X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
+ (user=seanjc job=sendgmr) by 2002:a63:7556:0:b0:4fb:9902:fc4a with SMTP id
+ f22-20020a637556000000b004fb9902fc4amr1146164pgn.10.1677084403857; Wed, 22
+ Feb 2023 08:46:43 -0800 (PST)
+Date:   Wed, 22 Feb 2023 08:46:42 -0800
+In-Reply-To: <20230222162511.7964-1-rdunlap@infradead.org>
+Mime-Version: 1.0
+References: <20230222162511.7964-1-rdunlap@infradead.org>
+Message-ID: <Y/ZG8u6/aUtpsVDa@google.com>
+Subject: Re: [PATCH v2] KVM: SVM: hyper-v: placate modpost section mismatch error
+From:   Sean Christopherson <seanjc@google.com>
+To:     Randy Dunlap <rdunlap@infradead.org>
+Cc:     linux-kernel@vger.kernel.org,
+        Vineeth Pillai <viremana@linux.microsoft.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>, kvm@vger.kernel.org
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023-02-21 18:48, Andy Shevchenko wrote:
-> On Tue, Feb 21, 2023 at 05:10:00PM +0100, Robin van der Gracht wrote:
->> On 2023-02-21 14:40, Andy Shevchenko wrote:
->> > On Tue, Feb 21, 2023 at 03:33:06PM +0200, Andy Shevchenko wrote:
->> > > Switching to use device_get_match_data() helps getting of
->> > > i2c_of_match_device() API.
+On Wed, Feb 22, 2023, Randy Dunlap wrote:
+> modpost reports section mismatch errors/warnings:
+> WARNING: modpost: vmlinux.o: section mismatch in reference: svm_hv_hardware_setup (section: .text) -> (unknown) (section: .init.data)
+> WARNING: modpost: vmlinux.o: section mismatch in reference: svm_hv_hardware_setup (section: .text) -> (unknown) (section: .init.data)
+> WARNING: modpost: vmlinux.o: section mismatch in reference: svm_hv_hardware_setup (section: .text) -> (unknown) (section: .init.data)
 > 
-> ...
+> Marking svm_hv_hardware_setup() as __init fixes the warnings.
 > 
->> > > -	id = i2c_of_match_device(dev->driver->of_match_table, client);
->> > > -	if (id)
->> > > -		priv->type = (uintptr_t)id->data;
->> > > +	priv->type = (uintptr_t)device_get_match_data(dev);
->> >
->> > Looking closer the I²C ID table should provide DISP_MATRIX to keep
->> > default and this needs to be not dropped.
->> >
->> > So, the question is what to do with unknown type then, return -EINVAL
->> > from probe()?
->> 
->> If you leave out your addition of the DISP_UNKNOWN type, the default 
->> type
->> will be DISP_MATRIX if no match is found, which is as it is now.
->> 
->> In that case the following change should suffice:
->> 
->> @@ -713,7 +715,6 @@ static int ht16k33_seg_probe(struct device *dev, 
->> struct
->> ht16k33_priv *priv,
->>  static int ht16k33_probe(struct i2c_client *client)
->>  {
->>      struct device *dev = &client->dev;
->> -    const struct of_device_id *id;
->>      struct ht16k33_priv *priv;
->>      uint32_t dft_brightness;
->>      int err;
->> @@ -728,9 +729,8 @@ static int ht16k33_probe(struct i2c_client 
->> *client)
->>          return -ENOMEM;
->> 
->>      priv->client = client;
->> -    id = i2c_of_match_device(dev->driver->of_match_table, client);
->> -    if (id)
->> -        priv->type = (uintptr_t)id->data;
->> +    priv->type = (uintptr_t)device_get_match_data(dev);
->> +
->>      i2c_set_clientdata(client, priv);
->> 
->>      err = ht16k33_initialize(priv);
->> 
->> Or do you think falling back to DISP_MATRIX if no match is found is 
->> wrong?
+> I don't know why this should be needed -- it seems like a compiler
+> problem to me since the calling function is marked as __init.
+
+It's not a compiler issue.  __initdata is freed after init and so must not be
+accessed by __init-less functions.
+
+This as a changelog?
+
+  Tag svm_hv_hardware_setup() with __init to fix a modpost warning as the
+  non-stub implementation accesses __initdata (svm_x86_ops), i.e. would
+  generate a use-after-free if svm_hv_hardware_setup() were actually invoked
+  post-init.  The helper is only called from svm_hardware_setup(), which is
+  also __init, i.e. other than the modpost warning, lack of __init is benign.
+
+With that (in case Paolo grabs this directly):
+
+Reviewed-by: Sean Christopherson <seanjc@google.com>
+  
+> This "(unknown) (section: .init.data)" all refer to svm_x86_ops.
 > 
-> First of all, the I²C ID table should actually use DISP_MATRIX.
+> Fixes: 1e0c7d40758b ("KVM: SVM: hyper-v: Remote TLB flush for SVM")
+> Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+> Cc: Vineeth Pillai <viremana@linux.microsoft.com>
+> Cc: Paolo Bonzini <pbonzini@redhat.com>
+> Cc: Vitaly Kuznetsov <vkuznets@redhat.com>
+> Cc: Sean Christopherson <seanjc@google.com>
+> Cc: kvm@vger.kernel.org
+> ---
+> v2: also make the empty stub function be __init (Vitaly)
 > 
-> Second, there are two points:
+>  arch/x86/kvm/svm/svm_onhyperv.h |    4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
 > 
-> - It would be nice to check if the OF ID table doesn't provide a 
-> setting
->   (shouldn't we try I²C ID table and then, if still nothing, bail out?)
+> diff -- a/arch/x86/kvm/svm/svm_onhyperv.h b/arch/x86/kvm/svm/svm_onhyperv.h
+> --- a/arch/x86/kvm/svm/svm_onhyperv.h
+> +++ b/arch/x86/kvm/svm/svm_onhyperv.h
+> @@ -30,7 +30,7 @@ static inline void svm_hv_init_vmcb(stru
+>  		hve->hv_enlightenments_control.msr_bitmap = 1;
+>  }
+>  
+> -static inline void svm_hv_hardware_setup(void)
+> +static inline __init void svm_hv_hardware_setup(void)
+>  {
+>  	if (npt_enabled &&
+>  	    ms_hyperv.nested_features & HV_X64_NESTED_ENLIGHTENED_TLB) {
+> @@ -84,7 +84,7 @@ static inline void svm_hv_init_vmcb(stru
+>  {
+>  }
+>  
+> -static inline void svm_hv_hardware_setup(void)
+> +static inline __init void svm_hv_hardware_setup(void)
+>  {
+>  }
+>  
 > 
-> - The I²C ID table can be extended in the future with another entry 
-> which
->   may want to have different default
-
-For my understanding, please correct me if I'm wrong;
-
-For all methods of instantiation during ht16k33 probe, 
-i2c_of_match_device()
-matches the compatible strings in the OF ID table due to a call to
-i2c_of_match_device_sysfs().
-
-device_get_match_data() only matches the compatible strings in the OF ID
-table for devicetree instantiation because of_match_device() won't match
-is there is no actual of_node.
-
-So with only device_get_match_data() and a non devicetree instantiation,
-priv->type will always be (uintptr_t)NULL = 0 = DISP_MATRIX.
-
-Which effectively breaks i.e. user-space instantiation for other display
-types which now do work due to i2c_of_match_device().
-(so my suggestion above is not sufficient).
-
-Are you proposing extending and searching the I2C ID table to work 
-around that?
-
-Kind regards,
-
--- 
-Robin van der Gracht
-Protonic Holland
-Factorij 36
-1689AL Zwaag
-+31 (0)229 212928
-https://www.protonic.nl
