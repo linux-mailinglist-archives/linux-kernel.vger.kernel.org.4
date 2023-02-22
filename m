@@ -2,114 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 86B3E69FE37
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Feb 2023 23:13:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B6E7569FE3B
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Feb 2023 23:13:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232260AbjBVWNa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Feb 2023 17:13:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37172 "EHLO
+        id S232556AbjBVWNp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Feb 2023 17:13:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37342 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229673AbjBVWN1 (ORCPT
+        with ESMTP id S232476AbjBVWNi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Feb 2023 17:13:27 -0500
-Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFCDC1D938
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Feb 2023 14:12:55 -0800 (PST)
-Received: by mail-lf1-x135.google.com with SMTP id s22so11854875lfi.9
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Feb 2023 14:12:55 -0800 (PST)
+        Wed, 22 Feb 2023 17:13:38 -0500
+Received: from mail-qt1-x830.google.com (mail-qt1-x830.google.com [IPv6:2607:f8b0:4864:20::830])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D38CD43903
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Feb 2023 14:13:18 -0800 (PST)
+Received: by mail-qt1-x830.google.com with SMTP id h19so6385473qtk.7
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Feb 2023 14:13:18 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=hGZr4GB37okt9ns/7m+dFk/oY3FVz2qC1daXRw1yuJ0=;
-        b=p0OnXRAlhWxfboCKRQVVAEGT0BLMcjKThuGG4IznwRspSxUpT5OS/qbA6o3bccRBlH
-         MGs2a1Ev1Ob/eFQJ6TXPG26A2nZDYaWPL99/XG3HM+Ndbf5YOW3Ow0S75H69HMpiYjO7
-         h5tfm8UzlrDMi9I7+My8MIo9V4SrLTw14eKlaeZ+sewiUiezM9dcymUKcCjlaKiYbvht
-         k1SHx/T+uajghDgRuvS3CD1i+Og9LlBbLbYDkKZWmPqdkaWUl0nUf6fS7Ha7XFOaGF1Q
-         vXJkr4IZ3wbslNp1SH8H80Ckivs2xqlCQMZfY47FCSI+BO4+5T/GVHDPHZ09j13WdjYR
-         hPhg==
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=z6qTlZo0B5zwmjrQDNbY8GBoG16wNTWMqzL5FJPT030=;
+        b=NiEIN87upqy8gWiOjlONI8p1m9+YLoABx6IeL3vcJW6HzL6S0t5vwIvH7vj7ymAaqZ
+         bMjOCPRgaC9CwV6NzmbXn3Q1Qr40MGYyld8bqrF1DEIIk3GWRrAOIhHQ/iOO7dmFfC+V
+         yYpNWsJ36tpfeebDFUvfY38aj3EZ1DQSKI5qN9QsxUxPGWg53YjMQ6Avpiy3GR0m6sRg
+         TFpYJi/J1KJAzWzy6XTjGN/BElUxf4HMf3NbiCcRkt6j/7HBYQt3hs1CnqM6mMshuodY
+         lBuW9brYGoLqvQy7+MBMFsg8KVyyOcGWk6gl9zT3Jrf/sHzBqiGDIdnbD/OBLiggFhPu
+         vT4Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=hGZr4GB37okt9ns/7m+dFk/oY3FVz2qC1daXRw1yuJ0=;
-        b=yuQ6V446Pf58sSBGs/5/7tErqo2Ek5FGEBHuiXncSu5bAg59oQiufuL9+cpFEL6308
-         dRUCqwfn/UhosSPYcTTYaMnJVJPIeKFBgWerhc6gHwAzRljFmRq1ynv+B/pgLzpxb61e
-         c3kc2OXtzOR2+l5o3jNenyFpcBKTJKgrQsfTlZJIImLTqge3ite/so+3U0EwENHv4bWj
-         KEEJIkhKJGT21d4+5pmyqlNb2VFe4D3RrTlz8o8Hhnc/TPYepaH8jTaahssRWD28vzaS
-         STGnD6OiVNBCSyssNY2r5S7k6BPnW1c92gESgXilKjqzEiAFKe9UsLivxkyZA/mcpFCO
-         n7VQ==
-X-Gm-Message-State: AO0yUKUKZIxfo7aQlBm5zuHmcphDnurKKJWEXTflF+1JrRh59cIAymxi
-        WbkI43InYkspMp8jeByQxgkdeA==
-X-Google-Smtp-Source: AK7set9TRNdjF5tyidrvhYqKAA784Ti8Hwk1puhQzfAnq9RFgTuW55KmHTiMvXqomFgwEPzc96xTyw==
-X-Received: by 2002:ac2:5615:0:b0:4a4:68b8:f4bd with SMTP id v21-20020ac25615000000b004a468b8f4bdmr3282585lfd.3.1677103974194;
-        Wed, 22 Feb 2023 14:12:54 -0800 (PST)
-Received: from ?IPV6:2001:14ba:a085:4d00::8a5? (dzccz6yyyyyyyyyyybcwt-3.rev.dnainternet.fi. [2001:14ba:a085:4d00::8a5])
-        by smtp.gmail.com with ESMTPSA id u20-20020ac243d4000000b004d575f56227sm837784lfl.114.2023.02.22.14.12.53
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 22 Feb 2023 14:12:53 -0800 (PST)
-Message-ID: <4b9145e0-0526-dd08-2d92-05a49e50e3bc@linaro.org>
-Date:   Thu, 23 Feb 2023 00:12:53 +0200
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=z6qTlZo0B5zwmjrQDNbY8GBoG16wNTWMqzL5FJPT030=;
+        b=uDhpuKzWI2Uc0nAEuLckP/iGrn3z1MdS2hwIDESy8fOtP0wMvsN0j4mtgMJfrj1TBr
+         ICEx3YHKayzwYwL1Pmys0OR8gVoMcQx20c3WMnxfsVlsTS78bhxLq6r8+A4x3RVZ3Pgx
+         1C3NdempHG1iU+hpIaffXxKzAJVbyfQR5P7GB9jgZ3PvfJOzXbFzrEL3ELPzgE11LmS7
+         V1hMx2JUaLK2j+UdT5wV9EnzyHkEz2pM6XHWhgpt866gPLKCoTRzPEVnkCOFSOYKJfN0
+         A6A9eQliC0/Tmwo4y/FyuYZT+yoi4bsrRxh/oDh2dcaPoVR56awtuAA1i2dqcu7E+QP9
+         G/7w==
+X-Gm-Message-State: AO0yUKUehrhQG3n6/lSo/qbZpcR3saBypPhQbzwn39ro1feg8T9IP9TS
+        mjPfYZDbIEfQXyFqh/PnmwwIpntFnQ==
+X-Google-Smtp-Source: AK7set8Yo6rLPh8jELoV7w6B8Y/16hGTNwnlcvKhtsuepxNT3aL0pG9xHSj4CT7L58/chEMai1qVJg==
+X-Received: by 2002:a05:622a:1190:b0:3bb:7875:1bd7 with SMTP id m16-20020a05622a119000b003bb78751bd7mr18738945qtk.5.1677103997629;
+        Wed, 22 Feb 2023 14:13:17 -0800 (PST)
+Received: from citadel.. (075-129-116-198.res.spectrum.com. [75.129.116.198])
+        by smtp.gmail.com with ESMTPSA id ey17-20020a05622a4c1100b003b86b088755sm4902460qtb.15.2023.02.22.14.13.16
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 22 Feb 2023 14:13:17 -0800 (PST)
+From:   Brian Gerst <brgerst@gmail.com>
+To:     linux-kernel@vger.kernel.org, x86@kernel.org
+Cc:     David Woodhouse <dwmw2@infradead.org>,
+        Usama Arif <usama.arif@bytedance.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Borislav Petkov <bp@alien8.de>,
+        "H . Peter Anvin" <hpa@zytor.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Andy Lutomirski <luto@kernel.org>,
+        Ingo Molnar <mingo@kernel.org>, Brian Gerst <brgerst@gmail.com>
+Subject: [PATCH 0/6] x86-64: Remove global variables from boot
+Date:   Wed, 22 Feb 2023 17:12:55 -0500
+Message-Id: <20230222221301.245890-1-brgerst@gmail.com>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.2
-Subject: Re: [PATCH 5/5] drm/msm/a5xx: Enable optional icc voting from OPP
- tables
-Content-Language: en-GB
-To:     Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Rob Clark <robdclark@gmail.com>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>
-Cc:     linux-arm-msm@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        freedreno@lists.freedesktop.org, linux-kernel@vger.kernel.org
-References: <20230222-konrad-longbois-next-v1-0-01021425781b@linaro.org>
- <20230222-konrad-longbois-next-v1-5-01021425781b@linaro.org>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-In-Reply-To: <20230222-konrad-longbois-next-v1-5-01021425781b@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 22/02/2023 23:47, Konrad Dybcio wrote:
-> Add the dev_pm_opp_of_find_icc_paths() call to let the OPP framework
-> handle bus voting as part of power level setting.
+This is on top of the parallel boot v10 series.
 
-This can probably go to the generic code path rather than sticking it 
-into a5xx only.
+Remove the global variables initial_gs, initial_stack, and
+early_gdt_descr from the 64-bit boot code.  The stack, GDT, and GSBASE
+can be determined from the CPU number.
 
-> 
-> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
-> ---
->   drivers/gpu/drm/msm/adreno/a5xx_gpu.c | 4 ++++
->   1 file changed, 4 insertions(+)
-> 
-> diff --git a/drivers/gpu/drm/msm/adreno/a5xx_gpu.c b/drivers/gpu/drm/msm/adreno/a5xx_gpu.c
-> index d09221f97f71..a33af0cc27b6 100644
-> --- a/drivers/gpu/drm/msm/adreno/a5xx_gpu.c
-> +++ b/drivers/gpu/drm/msm/adreno/a5xx_gpu.c
-> @@ -1775,5 +1775,9 @@ struct msm_gpu *a5xx_gpu_init(struct drm_device *dev)
->   	/* Set up the preemption specific bits and pieces for each ringbuffer */
->   	a5xx_preempt_init(gpu);
->   
-> +	ret = dev_pm_opp_of_find_icc_paths(&pdev->dev, NULL);
-> +	if (ret)
-> +		return ERR_PTR(ret);
-> +
->   	return gpu;
->   }
-> 
+Brian Gerst (6):
+  x86/smpboot: Use CPU number instead of APIC ID for single CPU startup
+  x86/smpboot: Use current_task to get idle thread
+  x86/smpboot: Remove initial_stack on 64-bit
+  x86/smpbppt: Remove early_gdt_descr on 64-bit
+  x86/smpboot: Remove initial_gs
+  x86/smpboot: Simplify boot CPU setup
+
+ arch/x86/include/asm/processor.h |   6 +-
+ arch/x86/include/asm/realmode.h  |   1 -
+ arch/x86/include/asm/smp.h       |   1 -
+ arch/x86/kernel/acpi/sleep.c     |   5 +-
+ arch/x86/kernel/asm-offsets.c    |   1 +
+ arch/x86/kernel/head_64.S        | 108 ++++++++++++-------------------
+ arch/x86/kernel/smpboot.c        |   6 +-
+ arch/x86/xen/xen-head.S          |   2 +-
+ kernel/smpboot.c                 |   2 +-
+ 9 files changed, 53 insertions(+), 79 deletions(-)
 
 -- 
-With best wishes
-Dmitry
+2.39.2
 
