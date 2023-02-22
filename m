@@ -2,120 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4910D69FB3E
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Feb 2023 19:48:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F09F69FB18
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Feb 2023 19:40:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232763AbjBVSmA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Feb 2023 13:42:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45116 "EHLO
+        id S232437AbjBVSjm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Feb 2023 13:39:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42588 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232691AbjBVSlZ (ORCPT
+        with ESMTP id S231474AbjBVSjh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Feb 2023 13:41:25 -0500
-Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 912E943461;
-        Wed, 22 Feb 2023 10:40:56 -0800 (PST)
-Received: by mail-wr1-x42e.google.com with SMTP id 6so8346688wrb.11;
-        Wed, 22 Feb 2023 10:40:56 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=PeXXWoYtcN7Md4fHV+U+ymSCKklKj3szjzv05DFaWBc=;
-        b=CSWzu0RDifPIC5mVxgRnFfoFU8+34A0WTuQKE35mzW/6ggRyLHF3l6iM1+kgmTXwCu
-         oCZS7EVL3DR/F5WVbsc5h/HkBDQ4ldhlfPPAq6fD45M6m5tbIGX4H0M3vtHvYoT/CSen
-         sz4kd819EHvEaKI3aslUVvNWnqUDABjbGwIc0Hsge/5GBEmvdHvRAjJIhDHCb3JcqZnz
-         E3t9NlAKw0VbYlt2CSdN0SCF5PvZ5MCDMn7q2slkvbNTQBExh/qsagyjOCYNzkBP8DbU
-         nD1sWl3EL3jCc2o3CqrjKreER41SXYBR/X4ywF1wHtcfB4qb7TcoBLpgjqiz+CcAH7J8
-         YICQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=PeXXWoYtcN7Md4fHV+U+ymSCKklKj3szjzv05DFaWBc=;
-        b=Lb0BimT2+1FemgmughZrcMbtPnahoP5r5NSOvyaJNxW7jyi1qrTgUQR/GRMP6gWofv
-         Hmdd0eeETpX9mHi78t/ExRgPHcQeGsn919fpb35cYIrDKVFanrRjdhQJC9E4wWNqAw0Q
-         CaMP/O5v+9pU5NFQ8A5NEsWnf3xeazsrRr5XjkE5wQGoLiCjm2f2YLZ7JcQ1o5Ge0ZET
-         yTStm5Zt42s8YcUWnyQmUh+aOFr0n8yU2NATowXznvRdTy1ZS5P/SdE62IEI2CHwld4M
-         pTqNeobCa4t9BocTg8uorkoH5a0Z1T8Q1sL5N/v9V3NTqaiHtXWEs/vkUmBADbauiwa4
-         CbiA==
-X-Gm-Message-State: AO0yUKUKWqexq0fYcBHjr0goDoiXCPcJkj5o7InRLabfJF4aKIXtkc02
-        g4dnkJKQVqcveTxkEZYlg+0=
-X-Google-Smtp-Source: AK7set8Uz83OUsrFm9m3xtosfJbhI2niwL6prvque1JZYsakJ64OCWj+zmdlRdhG4BeR7sPUaUU1tg==
-X-Received: by 2002:a5d:5486:0:b0:2c6:1482:33fa with SMTP id h6-20020a5d5486000000b002c6148233famr6770139wrv.59.1677091238565;
-        Wed, 22 Feb 2023 10:40:38 -0800 (PST)
-Received: from arinc9-PC.lan ([37.120.152.236])
-        by smtp.gmail.com with ESMTPSA id l18-20020a5d4112000000b002c56179d39esm9372845wrp.44.2023.02.22.10.40.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 22 Feb 2023 10:40:38 -0800 (PST)
-From:   arinc9.unal@gmail.com
-X-Google-Original-From: arinc.unal@arinc9.com
-To:     Sergio Paracuellos <sergio.paracuellos@gmail.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc:     =?UTF-8?q?Ar=C4=B1n=C3=A7=20=C3=9CNAL?= <arinc.unal@arinc9.com>,
-        linux-mediatek@lists.infradead.org, linux-mips@vger.kernel.org,
-        linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Sean Wang <sean.wang@kernel.org>,
-        William Dean <williamsukatube@gmail.com>,
-        Daniel Golle <daniel@makrotopia.org>,
-        Daniel Santos <daniel.santos@pobox.com>,
-        Luiz Angelo Daros de Luca <luizluca@gmail.com>,
-        Frank Wunderlich <frank-w@public-files.de>,
-        Landen Chao <Landen.Chao@mediatek.com>,
-        DENG Qingfang <dqfext@gmail.com>,
-        Sean Wang <sean.wang@mediatek.com>, erkin.bozoglu@xeront.com
-Subject: [RFC PATCH 15/16] dt-bindings: pinctrl: mediatek: mt8195: rename to mediatek,mt8195-pinctrl
-Date:   Wed, 22 Feb 2023 21:39:31 +0300
-Message-Id: <20230222183932.33267-16-arinc.unal@arinc9.com>
-X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20230222183932.33267-1-arinc.unal@arinc9.com>
-References: <20230222183932.33267-1-arinc.unal@arinc9.com>
+        Wed, 22 Feb 2023 13:39:37 -0500
+Received: from phobos.denx.de (phobos.denx.de [85.214.62.61])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12AEA3E634;
+        Wed, 22 Feb 2023 10:39:35 -0800 (PST)
+Received: from [127.0.0.1] (p578adb1c.dip0.t-ipconnect.de [87.138.219.28])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits))
+        (No client certificate requested)
+        (Authenticated sender: marex@denx.de)
+        by phobos.denx.de (Postfix) with ESMTPSA id 86D2380BA3;
+        Wed, 22 Feb 2023 19:39:32 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=denx.de;
+        s=phobos-20191101; t=1677091173;
+        bh=ZUvpfxONC+skiqBf9Viy1W40fjIvV4a6eK4VerO+wEw=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=i65BGifxuos5G94EIx/GSuwWFq8WX1FjuYEffwHKLxJMCfAJ2soUfxaHEdaVDZI0A
+         o3HblrhlfKtk3Iyf88E66j7emwt4vAHyosAO8AdXTUi6RN1tBV2YcRkxydrUv5yuT0
+         Vu6z89KgDwpCwimmxlE3EV5gBUJHVlYPSCpuRi3rY+oIANNPAPDrc5UVOhTQkqHqxg
+         hhSiZhXvurGFeWSEi4S2/MtKP69BnZgIJ62uIoHhJrMUZNDTrstv6PyHs8+Q7QDHtx
+         mraBp378cfDibCTxBard75eVhBgmSTOCX6yhepS/dcoJKVuFtK97mDwN/gKiC4e74C
+         KLYYU8NRq+eiw==
+Message-ID: <10394cf6-70f0-638a-15d3-5a14615dad44@denx.de>
+Date:   Wed, 22 Feb 2023 19:39:31 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH] arm64: dts: imx8mp-msc-sm2s: Add sound card
+To:     Marco Felsch <m.felsch@pengutronix.de>,
+        Luca Ceresoli <luca.ceresoli@bootlin.com>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Martyn Welch <martyn.welch@collabora.com>,
+        devicetree@vger.kernel.org, Abel Vesa <abel.vesa@nxp.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        linux-kernel@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        Lucas Stach <l.stach@pengutronix.de>,
+        linux-arm-kernel@lists.infradead.org, Jacky Bai <ping.bai@nxp.com>
+References: <20230222182252.2ad6d82b@booty>
+ <20230222172552.1545519-1-luca.ceresoli@bootlin.com>
+ <20230222175941.7pdi7yg5am3ws4gp@pengutronix.de>
+Content-Language: en-US
+From:   Marek Vasut <marex@denx.de>
+In-Reply-To: <20230222175941.7pdi7yg5am3ws4gp@pengutronix.de>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Virus-Scanned: clamav-milter 0.103.6 at phobos.denx.de
+X-Virus-Status: Clean
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Arınç ÜNAL <arinc.unal@arinc9.com>
+On 2/22/23 18:59, Marco Felsch wrote:
+> Hi Luca,
+> 
+> On 23-02-22, Luca Ceresoli wrote:
+>> The MSC SM2-MB-EP1 carrier board for the SM2S-IMX8PLUS SMARC module has an
+>> NXPP SGTL5000 audio codec connected to I2S-0 (sai2).
+>>
+>> This requires to:
+>>
+>>   * add the power supplies (always on)
+>>   * enable sai2 with pinmuxes
+>>   * reparent the CLKOUT1 clock that feeds the codec SYS_MCLK to
+>>     IMX8MP_CLK_24M in order it to generate an accurate 24 MHz rate
+>>
+>> Signed-off-by: Luca Ceresoli <luca.ceresoli@bootlin.com>
+>> ---
+>>   .../dts/freescale/imx8mp-msc-sm2s-ep1.dts     | 60 +++++++++++++++++++
+>>   1 file changed, 60 insertions(+)
+>>
+>> diff --git a/arch/arm64/boot/dts/freescale/imx8mp-msc-sm2s-ep1.dts b/arch/arm64/boot/dts/freescale/imx8mp-msc-sm2s-ep1.dts
+>> index 470ff8e31e32..894d9809f76d 100644
+>> --- a/arch/arm64/boot/dts/freescale/imx8mp-msc-sm2s-ep1.dts
+>> +++ b/arch/arm64/boot/dts/freescale/imx8mp-msc-sm2s-ep1.dts
+>> @@ -14,6 +14,57 @@ / {
+>>   	compatible = "avnet,sm2s-imx8mp-14N0600E-ep1",
+>>   		     "avnet,sm2s-imx8mp-14N0600E", "avnet,sm2s-imx8mp",
+>>   		     "fsl,imx8mp";
+> 
+> ...
+> 
+>> +/* I2S-0 = sai2 */
+>> +&sai2 {
+>> +	pinctrl-names = "default";
+>> +	pinctrl-0 = <&pinctrl_sai2>;
+>> +
+>> +	assigned-clocks = <&clk IMX8MP_CLK_SAI2>;
+>> +	assigned-clock-parents = <&clk IMX8MP_AUDIO_PLL1_OUT>;
+>> +	assigned-clock-rates = <12288000>;
+>> +
+>> +	fsl,sai-mclk-direction-output;
+>> +	status = "okay";
+>>   };
+> 
+> Do you have some downstream patches for the sai interfaces? AFAIR Marek
+> worked on this but the patches are not mainlien yet.
 
-Rename pinctrl-mt8195.yaml to mediatek,mt8195-pinctrl.yaml to be on par
-with the compatible string and other mediatek dt-binding schemas.
-
-Signed-off-by: Arınç ÜNAL <arinc.unal@arinc9.com>
----
- .../{pinctrl-mt8195.yaml => mediatek,mt8195-pinctrl.yaml}       | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
- rename Documentation/devicetree/bindings/pinctrl/{pinctrl-mt8195.yaml => mediatek,mt8195-pinctrl.yaml} (99%)
-
-diff --git a/Documentation/devicetree/bindings/pinctrl/pinctrl-mt8195.yaml b/Documentation/devicetree/bindings/pinctrl/mediatek,mt8195-pinctrl.yaml
-similarity index 99%
-rename from Documentation/devicetree/bindings/pinctrl/pinctrl-mt8195.yaml
-rename to Documentation/devicetree/bindings/pinctrl/mediatek,mt8195-pinctrl.yaml
-index 66fe17e9e4d3..7b3dfc14eedc 100644
---- a/Documentation/devicetree/bindings/pinctrl/pinctrl-mt8195.yaml
-+++ b/Documentation/devicetree/bindings/pinctrl/mediatek,mt8195-pinctrl.yaml
-@@ -1,7 +1,7 @@
- # SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
- %YAML 1.2
- ---
--$id: http://devicetree.org/schemas/pinctrl/pinctrl-mt8195.yaml#
-+$id: http://devicetree.org/schemas/pinctrl/mediatek,mt8195-pinctrl.yaml#
- $schema: http://devicetree.org/meta-schemas/core.yaml#
- 
- title: Mediatek MT8195 Pin Controller
--- 
-2.37.2
-
+I guess it is time to resubmit these.
