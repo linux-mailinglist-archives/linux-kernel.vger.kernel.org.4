@@ -2,110 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CFDB669EBAD
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Feb 2023 01:09:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B41969EBC3
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Feb 2023 01:11:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229712AbjBVAJh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Feb 2023 19:09:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50452 "EHLO
+        id S230262AbjBVALn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Feb 2023 19:11:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52610 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230234AbjBVAJe (ORCPT
+        with ESMTP id S229949AbjBVALm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Feb 2023 19:09:34 -0500
-Received: from mail-pf1-x449.google.com (mail-pf1-x449.google.com [IPv6:2607:f8b0:4864:20::449])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3F1130B14
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Feb 2023 16:09:26 -0800 (PST)
-Received: by mail-pf1-x449.google.com with SMTP id j19-20020aa783d3000000b005b9ac633454so3389265pfn.0
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Feb 2023 16:09:26 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=ZCzl63HJ+kqOaqrd0SKFlWgpIbxPIOYTA/3AaIJbOmU=;
-        b=DMsAdrwlOWOh+lDWt6KAWAmHY+xU0+Wppx7ZSEqrbMPVOJo75bTAz0oE7rAU5aScHL
-         y3yRUJsXtkYzzZyQCaOYNHrLFlMcOW2iUhOoIwZww8hfseI/xNxZFeAvDBvsoxiVbruD
-         GWVsEGPSv+JOxpaf7yocT6lph9F3h+7uoiaTY1atlpnAtHCmBgyUmPSxSR1yQ8OM9x66
-         XfSmyIr5ycJiPjHdu+x8jE7aVqmZ/+bxMfq19a0xWq8an8UwG9GpYt6hBi1mNOpe1pFZ
-         jjDSX5Yzmg9fpbpkD/OQDNYSRIc61CHYFDo/RZpLVBh3dl35ntqK1+zX9WQLbdowlf2V
-         zbuA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ZCzl63HJ+kqOaqrd0SKFlWgpIbxPIOYTA/3AaIJbOmU=;
-        b=EvIktuotvqfN8Nvs/CV6iTeDCy7QMIHAKuCwGWNBL8JNxUIkDzbVH7Gz7Lv5Nd0D+N
-         diHR4g+jX8EJ9LIoKJylLgiEAEJ1MTR40m/NOs8M8SrGuamh6A9TO+TtVAIfROJ4dvWr
-         Dny87jyxQd2RKFr+IO34v29c/Y8ysxAGkfGInfcRjvZF3OLDigQ9kBNBcHFb+pHqIbNT
-         SlIgEcrixqNeDqxYJ+uoRTNMW47nIkEqk9hiMldDwUMLcFG2x8kXOpOqazR6djW0F6UY
-         WE/uz9QrfXPx0bZkccE9ioh8c20WtH03SVlRT2hu3AsrW2VuBl1QoHq+Eqj6KJJjhc8R
-         qYOQ==
-X-Gm-Message-State: AO0yUKUXyal1GS8go2hkEZlpNL40UZrDUHJd8VsO6uGnKft/CYOH05Vt
-        nNIlUVcBA50WaIzKSoHoP8C9eTY1PtJZ
-X-Google-Smtp-Source: AK7set9P8J2ZMVQnExTEr/f8yGKCAK1D2UMzTZK1yMvW4ey7FBf9mZbCeF6GCykBrVwQhj4fHaO1Y6PuOEwY
-X-Received: from jiangzp-glinux-dev.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:4c52])
- (user=jiangzp job=sendgmr) by 2002:a63:3c58:0:b0:4fb:933a:91d with SMTP id
- i24-20020a633c58000000b004fb933a091dmr874838pgn.11.1677024566128; Tue, 21 Feb
- 2023 16:09:26 -0800 (PST)
-Date:   Tue, 21 Feb 2023 16:09:14 -0800
-In-Reply-To: <20230222000915.2843208-1-jiangzp@google.com>
+        Tue, 21 Feb 2023 19:11:42 -0500
+Received: from irl.hu (irl.hu [95.85.9.111])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42DA3265B2;
+        Tue, 21 Feb 2023 16:11:40 -0800 (PST)
+Received: from fedori.lan (bc065635.dsl.pool.telekom.hu [::ffff:188.6.86.53])
+  (AUTH: CRAM-MD5 soyer@irl.hu, )
+  by irl.hu with ESMTPSA
+  id 000000000006FA81.0000000063F55DBA.002C9F55; Wed, 22 Feb 2023 01:11:38 +0100
+From:   Gergo Koteles <soyer@irl.hu>
+To:     Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Jiri Kosina <jikos@kernel.org>,
+        Benjamin Tissoires <benjamin.tissoires@redhat.com>
+Cc:     linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        Caleb Connolly <caleb@connolly.tech>,
+        Gergo Koteles <soyer@irl.hu>
+Subject: [PATCH v4 0/3] Add alert-slider for OnePlus6
+Date:   Wed, 22 Feb 2023 01:10:31 +0100
+Message-Id: <cover.1677022414.git.soyer@irl.hu>
+X-Mailer: git-send-email 2.39.2
 Mime-Version: 1.0
-References: <20230222000915.2843208-1-jiangzp@google.com>
-X-Mailer: git-send-email 2.39.2.637.g21b0678d19-goog
-Message-ID: <20230221160910.kernel.v1.1.If0578b001c1f12567f2ebcac5856507f1adee745@changeid>
-Subject: [kernel PATCH v1 1/1] Bluetooth: hci_sync: clear workqueue before
- clear mgmt cmd
-From:   Zhengping Jiang <jiangzp@google.com>
-To:     linux-bluetooth@vger.kernel.org, marcel@holtmann.org,
-        luiz.dentz@gmail.com
-Cc:     chromeos-bluetooth-upstreaming@chromium.org, mmandlik@google.com,
-        Zhengping Jiang <jiangzp@google.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Johan Hedberg <johan.hedberg@gmail.com>,
-        Paolo Abeni <pabeni@redhat.com>, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 7bit
+X-Mime-Autoconverted: from 8bit to 7bit by courier 1.0
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Clear cmd_sync_work queue before clearing the mgmt cmd list to avoid
-racing conditions which cause use-after-free.
+V1 -> V2: rebase to qcom/for-next
+V2 -> V3: rename tri-state-key to alert-slider, fix DTS warnings,
+add SND_PROFILE_* identifiers to input-event-codes.h
+V3 -> V4: DTS: use default debounce-interval, order alphabetically
 
-When powering off the adapter, the mgmt cmd list will be cleared. If a
-work is queued in the cmd_sync_work queue at the same time, it will
-cause the risk of use-after-free, as the cmd pointer is not checked
-before use.
+Gergo Koteles (3):
+  Input: gpio-keys - add support for linux,input-value DTS property
+  Input: add ABS_SND_PROFILE
+  arm64: dts: qcom: sdm845-oneplus: add alert-slider
 
-Signed-off-by: Zhengping Jiang <jiangzp@google.com>
----
+ Documentation/input/event-codes.rst           |  6 +++
+ .../boot/dts/qcom/sdm845-oneplus-common.dtsi  | 39 ++++++++++++++++++-
+ drivers/hid/hid-debug.c                       |  1 +
+ drivers/input/keyboard/gpio_keys.c            |  3 ++
+ include/uapi/linux/input-event-codes.h        |  9 +++++
+ 5 files changed, 56 insertions(+), 2 deletions(-)
 
-Changes in v1:
-- Clear cmd_sync_work queue before clearing the mgmt cmd list
 
- net/bluetooth/hci_sync.c | 2 ++
- 1 file changed, 2 insertions(+)
-
-diff --git a/net/bluetooth/hci_sync.c b/net/bluetooth/hci_sync.c
-index 117eedb6f709..6609434e3125 100644
---- a/net/bluetooth/hci_sync.c
-+++ b/net/bluetooth/hci_sync.c
-@@ -4840,6 +4840,8 @@ int hci_dev_close_sync(struct hci_dev *hdev)
- 
- 	auto_off = hci_dev_test_and_clear_flag(hdev, HCI_AUTO_OFF);
- 
-+	hci_cmd_sync_clear(hdev);
-+
- 	if (!auto_off && hdev->dev_type == HCI_PRIMARY &&
- 	    !hci_dev_test_flag(hdev, HCI_USER_CHANNEL) &&
- 	    hci_dev_test_flag(hdev, HCI_MGMT))
+base-commit: 02ac8d2a011b630481d959298a1cc76ca0717f3e
 -- 
-2.39.2.637.g21b0678d19-goog
+2.39.2
 
