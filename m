@@ -2,221 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 29E1769F249
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Feb 2023 10:56:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D45F69F24B
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Feb 2023 10:56:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232353AbjBVJ4P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Feb 2023 04:56:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58594 "EHLO
+        id S232413AbjBVJ4s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Feb 2023 04:56:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58502 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232336AbjBVJz4 (ORCPT
+        with ESMTP id S232282AbjBVJ4a (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Feb 2023 04:55:56 -0500
-Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 034ABDBEE
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Feb 2023 01:54:42 -0800 (PST)
-Received: from loongson.cn (unknown [192.168.200.1])
-        by gateway (Coremail) with SMTP id _____8CxEZRh5vVja4oDAA--.1727S3;
-        Wed, 22 Feb 2023 17:54:41 +0800 (CST)
-Received: from [0.0.0.0] (unknown [192.168.200.1])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8CxF71g5vVjeqg4AA--.37796S3;
-        Wed, 22 Feb 2023 17:54:41 +0800 (CST)
-Subject: Re: [PATCH 1/2] LoongArch: kdump: Add the same binary implementation
-To:     WANG Xuerui <kernel@xen0n.name>
-References: <1677048791-26951-1-git-send-email-tangyouling@loongson.cn>
- <1677048791-26951-2-git-send-email-tangyouling@loongson.cn>
- <6d71e063-8e18-dd08-ac40-36b41ccfcfdb@xen0n.name>
-Cc:     Huacai Chen <chenhuacai@kernel.org>, loongarch@lists.linux.dev,
-        linux-kernel@vger.kernel.org
-From:   Youling Tang <tangyouling@loongson.cn>
-Message-ID: <3ec77f64-55b2-5549-52f8-b875392d992e@loongson.cn>
-Date:   Wed, 22 Feb 2023 17:54:40 +0800
-User-Agent: Mozilla/5.0 (X11; Linux mips64; rv:45.0) Gecko/20100101
- Thunderbird/45.4.0
+        Wed, 22 Feb 2023 04:56:30 -0500
+Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3849838B59
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Feb 2023 01:55:39 -0800 (PST)
+Received: from pps.filterd (m0098420.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 31M9fULa030027;
+        Wed, 22 Feb 2023 09:55:30 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
+ subject : message-id : references : mime-version : content-type :
+ in-reply-to; s=pp1; bh=5OGqgH80gHCoiKIEMEs48G9KwUl+uQ2pzTd5TIgNoa0=;
+ b=tCAFhD21QqCmf2BRQOfu5WYlRveq/TWKB1eyT1hvHJnOIJI7doSxbi7EIgHAHZC0ZAuX
+ WusSHHWat6PIrjsfGGHgBXOXEJPtqSLq8cyx5iV8jmtBJwbMcE+9UqI+JqwEA1MSDze0
+ 1F/LvSZQ+WF4sc4nImgIxsqxy1wMXuDg4PfE0AJkyoqQCSlD0eD5U9mbeYb06irGs1UM
+ u8MdCxIV0Bmoo4mK9A6CPD4KiD7ubJmXlGD+peKO5tPC8JtvtO00ArhfN3G/57rO3S76
+ ZfwZsurOsBNuFlcm5HFbz1iG0rf/H3PpthLj2IOiuiOQwW/83SefqCkKwJLmGqQ4JfKn Lg== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3nwgmtgbeg-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 22 Feb 2023 09:55:29 +0000
+Received: from m0098420.ppops.net (m0098420.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 31M9fiBs030573;
+        Wed, 22 Feb 2023 09:55:29 GMT
+Received: from ppma02fra.de.ibm.com (47.49.7a9f.ip4.static.sl-reverse.com [159.122.73.71])
+        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3nwgmtgbdq-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 22 Feb 2023 09:55:29 +0000
+Received: from pps.filterd (ppma02fra.de.ibm.com [127.0.0.1])
+        by ppma02fra.de.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 31LDGv5v001655;
+        Wed, 22 Feb 2023 09:55:27 GMT
+Received: from smtprelay05.fra02v.mail.ibm.com ([9.218.2.225])
+        by ppma02fra.de.ibm.com (PPS) with ESMTPS id 3ntpa63w71-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 22 Feb 2023 09:55:27 +0000
+Received: from smtpav01.fra02v.mail.ibm.com (smtpav01.fra02v.mail.ibm.com [10.20.54.100])
+        by smtprelay05.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 31M9tOtj32309688
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 22 Feb 2023 09:55:25 GMT
+Received: from smtpav01.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id D0F442004D;
+        Wed, 22 Feb 2023 09:55:24 +0000 (GMT)
+Received: from smtpav01.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 3DD9520040;
+        Wed, 22 Feb 2023 09:55:22 +0000 (GMT)
+Received: from li-a450e7cc-27df-11b2-a85c-b5a9ac31e8ef.ibm.com (unknown [9.43.123.148])
+        by smtpav01.fra02v.mail.ibm.com (Postfix) with ESMTPS;
+        Wed, 22 Feb 2023 09:55:21 +0000 (GMT)
+Date:   Wed, 22 Feb 2023 15:25:18 +0530
+From:   Kautuk Consul <kconsul@linux.vnet.ibm.com>
+To:     Christophe Leroy <christophe.leroy@csgroup.eu>
+Cc:     Michael Ellerman <mpe@ellerman.id.au>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Rohan McLure <rmclure@linux.ibm.com>,
+        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v2] arch/powerpc/include/asm/barrier.h: redefine rmb and
+ wmb to lwsync
+Message-ID: <Y/XmhjbbD58wi49B@li-a450e7cc-27df-11b2-a85c-b5a9ac31e8ef.ibm.com>
+References: <20230222090344.189270-1-kconsul@linux.vnet.ibm.com>
+ <c4dcf969-0836-cc78-63d9-db83b9ebfa1d@csgroup.eu>
+ <Y/XkjobvDPFErM7J@li-a450e7cc-27df-11b2-a85c-b5a9ac31e8ef.ibm.com>
+ <2cf06ae7-b3cb-8d17-afef-df1834a84dce@csgroup.eu>
 MIME-Version: 1.0
-In-Reply-To: <6d71e063-8e18-dd08-ac40-36b41ccfcfdb@xen0n.name>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-CM-TRANSID: AQAAf8CxF71g5vVjeqg4AA--.37796S3
-X-CM-SenderInfo: 5wdqw5prxox03j6o00pqjv00gofq/
-X-Coremail-Antispam: 1Uk129KBjvJXoWxuw45Xr4xXw4rZr4rWF1ftFb_yoW7ur48pr
-        93AF4kKF4kGr1rK3y8t3s3ury8Jws7GFyagF1Dta4FyrnrZw1xZrnYkrnrWFyjq39Yg3y0
-        qF95Wa4ava17A37anT9S1TB71UUUUUDqnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
-        qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
-        bOxFc2x0x2IEx4CE42xK8VAvwI8IcIk0rVWrJVCq3wA2ocxC64kIII0Yj41l84x0c7CEw4
-        AK67xGY2AK021l84ACjcxK6xIIjxv20xvE14v26r4j6ryUM28EF7xvwVC0I7IYx2IY6xkF
-        7I0E14v26r4j6F4UM28EF7xvwVC2z280aVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIEc7
-        CjxVAFwI0_Cr1j6rxdM2AIxVAIcxkEcVAq07x20xvEncxIr21l57IF6xkI12xvs2x26I8E
-        6xACxx1l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6x8ErcxFaVAv8VWrMcvjeVCFs4IE7x
-        kEbVWUJVW8JwACjcxG0xvEwIxGrwCYjI0SjxkI62AI1cAE67vIY487MxAIw28IcxkI7VAK
-        I48JMxAIw28IcVCjz48v1sIEY20_WwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F4
-        0E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_JF0_Jw1l
-        IxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxV
-        AFwI0_Jr0_Gr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r4j
-        6F4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x0zRVWl
-        kUUUUU=
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <2cf06ae7-b3cb-8d17-afef-df1834a84dce@csgroup.eu>
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: wJAxgxaPMl-NbaeYu--xRpk17MQ_HNmI
+X-Proofpoint-ORIG-GUID: 6ZqWpA3jyRnJp-cXIQfdhfp2O2NTuThU
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.170.22
+ definitions=2023-02-22_04,2023-02-20_02,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=878
+ priorityscore=1501 mlxscore=0 clxscore=1015 malwarescore=0 spamscore=0
+ phishscore=0 adultscore=0 impostorscore=0 bulkscore=0 suspectscore=0
+ lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2302220083
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, Xuerui
-
-On 02/22/2023 05:05 PM, WANG Xuerui wrote:
-> On 2023/2/22 14:53, Youling Tang wrote:
->> This feature depends on the relocation function, so the relocation
->> configuration
->> CONFIG_RELOCATABLE will be enabled.
->
-> In general try to describe things briefly: "This depends on the kernel
-> being relocatable" would be enough in this case.
-OK.
-
->
->>
->> Add the same set of binary implementations for kdump, and then no
->> longer need to
->> compile two kernels (the production kernel and the capture kernel
->> share the same
->> binary).
->
-> Sorry but what do you mean by "same set of binary implementation",
-> where's the "first set of binary implementation"?
-
-kdump requires two kernels, the production kernel and the capture
-kernel, which made the final link address different through different
-configuration options in the previous implementation. Now it is
-possible to share a kernel, and after entering the capture kernel, it
-can be corrected by relocation.
-
->
-> Judging from the patch content, I guess it's kinda wrong translation,
-> and what you actually mean is something like "enable using the same
-> image for crashkernel"?
-
-Or "LoongArch: kdump: Add support for using a single image" ?
-
->
->>
->> CONFIG_CRASH_DUMP is enabled by default (CONFIG_RELOCATABLE is also
->> enabled).
->
-> No it's not: you didn't add "default y" anywhere. What you actually did
-> is to enable it *in the defconfig*. And the latter part about
-> CONFIG_RELOCATABLE shouldn't be necessary, it's implementation detail
-> after all, and the users likely don't have to be aware of it.
->
-> Better reword a little bit, like "Also enable CONFIG_CRASH_DUMP in
-> loongson3_defconfig".
-
-Thanks, I'll rewrite the commit message.
-
->
->>
->> Signed-off-by: Youling Tang <tangyouling@loongson.cn>
->> ---
->>   arch/loongarch/Kconfig                     | 12 +-----------
->>   arch/loongarch/Makefile                    |  4 ----
->>   arch/loongarch/configs/loongson3_defconfig |  1 +
->>   arch/loongarch/include/asm/addrspace.h     |  2 ++
->>   arch/loongarch/kernel/head.S               |  2 +-
->>   5 files changed, 5 insertions(+), 16 deletions(-)
->>
->> diff --git a/arch/loongarch/Kconfig b/arch/loongarch/Kconfig
->> index ab4c2ab146ab..84f220273296 100644
->> --- a/arch/loongarch/Kconfig
->> +++ b/arch/loongarch/Kconfig
->> @@ -502,6 +502,7 @@ config KEXEC
->>     config CRASH_DUMP
->>       bool "Build kdump crash kernel"
->> +    select RELOCATABLE
->>       help
->>         Generate crash dump after being started by kexec. This should
->>         be normally only set in special crash dump kernels which are
->> @@ -511,17 +512,6 @@ config CRASH_DUMP
->>           For more details see Documentation/admin-guide/kdump/kdump.rst
->>   -config PHYSICAL_START
->> -    hex "Physical address where the kernel is loaded"
->> -    default "0x90000000a0000000"
->> -    depends on CRASH_DUMP
->> -    help
->> -      This gives the XKPRANGE address where the kernel is loaded.
->> -      If you plan to use kernel for capturing the crash dump change
->> -      this value to start of the reserved region (the "X" value as
->> -      specified in the "crashkernel=YM@XM" command line boot parameter
->> -      passed to the panic-ed kernel).
->> -
->>   config RELOCATABLE
->>       bool "Relocatable kernel"
->>       help
->> diff --git a/arch/loongarch/Makefile b/arch/loongarch/Makefile
->> index 2aba6ff30436..8304fed7aa42 100644
->> --- a/arch/loongarch/Makefile
->> +++ b/arch/loongarch/Makefile
->> @@ -79,11 +79,7 @@ endif
->>   cflags-y += -ffreestanding
->>   cflags-y += $(call cc-option, -mno-check-zero-division)
->>   -ifndef CONFIG_PHYSICAL_START
->>   load-y        = 0x9000000000200000
->> -else
->> -load-y        = $(CONFIG_PHYSICAL_START)
->> -endif
->>   bootvars-y    = VMLINUX_LOAD_ADDRESS=$(load-y)
->
-> Both load-y and VMLINUX_LOAD_ADDRESS are kinda LoongArch-ism (stemming
-> from similar usage in arch/mips apparently), so why not just drop load-y
-> and fold the constant into the bootvars-y definition? So we have one
-> piece of "special" definition instead of two.
-
-This series of patches will not modify it, perhaps it can be submitted
-and discussed separately later.
-
-Thanks,
-Youling.
-
->
->>     drivers-$(CONFIG_PCI)        += arch/loongarch/pci/
->> diff --git a/arch/loongarch/configs/loongson3_defconfig
->> b/arch/loongarch/configs/loongson3_defconfig
->> index cb52774c80e8..7885f6e5de93 100644
->> --- a/arch/loongarch/configs/loongson3_defconfig
->> +++ b/arch/loongarch/configs/loongson3_defconfig
->> @@ -48,6 +48,7 @@ CONFIG_HOTPLUG_CPU=y
->>   CONFIG_NR_CPUS=64
->>   CONFIG_NUMA=y
->>   CONFIG_KEXEC=y
->> +CONFIG_CRASH_DUMP=y
->>   CONFIG_SUSPEND=y
->>   CONFIG_HIBERNATION=y
->>   CONFIG_ACPI=y
->> diff --git a/arch/loongarch/include/asm/addrspace.h
->> b/arch/loongarch/include/asm/addrspace.h
->> index d342935e5a72..4edcb3c21cf5 100644
->> --- a/arch/loongarch/include/asm/addrspace.h
->> +++ b/arch/loongarch/include/asm/addrspace.h
->> @@ -125,4 +125,6 @@ extern unsigned long vm_map_base;
->>   #define ISA_IOSIZE    SZ_16K
->>   #define IO_SPACE_LIMIT    (PCI_IOSIZE - 1)
->>   +#define PHYS_LINK_ADDR    PHYSADDR(VMLINUX_LOAD_ADDRESS)
->> +
->>   #endif /* _ASM_ADDRSPACE_H */
->> diff --git a/arch/loongarch/kernel/head.S b/arch/loongarch/kernel/head.S
->> index b12f459ad73a..57962ff08f6d 100644
->> --- a/arch/loongarch/kernel/head.S
->> +++ b/arch/loongarch/kernel/head.S
->> @@ -24,7 +24,7 @@ _head:
->>       .org    0x8
->>       .dword    kernel_entry        /* Kernel entry point */
->>       .dword    _end - _text        /* Kernel image effective size */
->> -    .quad    0            /* Kernel image load offset from start of
->> RAM */
->> +    .quad    PHYS_LINK_ADDR        /* Kernel image load offset from
->> start of RAM */
->>       .org    0x38            /* 0x20 ~ 0x37 reserved */
->>       .long    LINUX_PE_MAGIC
->>       .long    pe_header - _head    /* Offset to the PE header */
->
-
+> >> I'd have preferred with 'asm volatile' though.
+> > Sorry about that! That wasn't the intent of this patch.
+> > Probably another patch series should change this manner of #defining
+> > assembly.
+> 
+> Why adding new line wrong then have to have another patch to make them 
+> right ?
+> 
+> When you build a new house in an old village, you first build your house 
+> with old materials and then you replace everything with new material ?
+Sorry Christophe. I will take care next time to adhere to new
+conventions.
