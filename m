@@ -2,85 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 796EE69EC54
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Feb 2023 02:20:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0259569EC33
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Feb 2023 02:04:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230402AbjBVBUq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Feb 2023 20:20:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39352 "EHLO
+        id S230232AbjBVBE3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Feb 2023 20:04:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59022 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230365AbjBVBUo (ORCPT
+        with ESMTP id S229674AbjBVBE0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Feb 2023 20:20:44 -0500
-X-Greylist: delayed 4347 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 21 Feb 2023 17:20:34 PST
-Received: from mail.peterfykh.hu (mail.peterfykh.hu [84.206.67.96])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3522831E09;
-        Tue, 21 Feb 2023 17:20:34 -0800 (PST)
-Received: from mail.peterfykh.hu (localhost [127.0.0.1])
-        by mail.peterfykh.hu (Postfix) with ESMTP id 47E71BB2;
-        Tue, 21 Feb 2023 23:54:15 +0100 (CET)
+        Tue, 21 Feb 2023 20:04:26 -0500
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4052C93F1;
+        Tue, 21 Feb 2023 17:04:25 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1677027865; x=1708563865;
+  h=from:to:cc:subject:references:date:in-reply-to:
+   message-id:mime-version;
+  bh=LOZAvauTBVXSHkNwf9NULS0f0XiM5osi+19XTZiW0Jg=;
+  b=l0wzCfqxz4SflglolfhDlrfvlAqhDXMdCbpeExCeQ2sINQcrCHoazjUG
+   KTfXMytTgoan/BAD82/RWRIuD/IybYZLqD/wsHN5IAzDs+9PAN51IXP+5
+   g/vAb6oGzpaqLtvYfrU+NmU77xnroaZeDkgP43petYVgOua9BY0NVZuGB
+   Pa6LjdfDAwix4bI+pATeB3H1FSj+JRyWkvzTzjWiS7Jhy/FsCT77Bt7l0
+   7/OoD1w5lvvpOj7XTVV/Wkw0wn1RqEcmimPgDfaUWIqcYCWXPgnLG7EDN
+   gih2jjrwp30gCSHs8AHYEITEqAxsaSTH+1L8d9tJQU8HYo7gi1WsMdYOn
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10628"; a="332803712"
+X-IronPort-AV: E=Sophos;i="5.97,317,1669104000"; 
+   d="scan'208";a="332803712"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Feb 2023 17:03:50 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10628"; a="704271120"
+X-IronPort-AV: E=Sophos;i="5.97,317,1669104000"; 
+   d="scan'208";a="704271120"
+Received: from yhuang6-desk2.sh.intel.com (HELO yhuang6-desk2.ccr.corp.intel.com) ([10.238.208.55])
+  by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Feb 2023 17:03:44 -0800
+From:   "Huang, Ying" <ying.huang@intel.com>
+To:     Hugh Dickins <hughd@google.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>, Jan Kara <jack@suse.cz>,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, Zi Yan <ziy@nvidia.com>,
+        Yang Shi <shy828301@gmail.com>,
+        Baolin Wang <baolin.wang@linux.alibaba.com>,
+        Oscar Salvador <osalvador@suse.de>,
+        Matthew Wilcox <willy@infradead.org>,
+        Bharata B Rao <bharata@amd.com>,
+        Alistair Popple <apopple@nvidia.com>,
+        Xin Hao <xhao@linux.alibaba.com>,
+        Minchan Kim <minchan@kernel.org>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Hyeonggon Yoo <42.hyeyoo@gmail.com>,
+        "Xu, Pengfei" <pengfei.xu@intel.com>,
+        Christoph Hellwig <hch@lst.de>,
+        Stefan Roesch <shr@devkernel.io>, Tejun Heo <tj@kernel.org>
+Subject: Re: [PATCH -v5 0/9] migrate_pages(): batch TLB flushing
+References: <20230213123444.155149-1-ying.huang@intel.com>
+        <87a6c8c-c5c1-67dc-1e32-eb30831d6e3d@google.com>
+        <874jrg7kke.fsf@yhuang6-desk2.ccr.corp.intel.com>
+        <2ab4b33e-f570-a6ff-6315-7d5a4614a7bd@google.com>
+        <871qmjdsj0.fsf@yhuang6-desk2.ccr.corp.intel.com>
+        <20f1628e-96a7-3a5d-fef5-dae31f8eb196@google.com>
+Date:   Wed, 22 Feb 2023 09:02:41 +0800
+In-Reply-To: <20f1628e-96a7-3a5d-fef5-dae31f8eb196@google.com> (Hugh Dickins's
+        message of "Tue, 21 Feb 2023 14:25:41 -0800 (PST)")
+Message-ID: <87wn4acy1a.fsf@yhuang6-desk2.ccr.corp.intel.com>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8;
- format=flowed
-Content-Transfer-Encoding: 8bit
-Date:   Tue, 21 Feb 2023 23:54:15 +0100
-From:   Charles <kiss.zsuzsa@peterfykh.hu>
-To:     undisclosed-recipients:;
-Subject: heb je mijn vorige bericht ontvangen
-Reply-To: Charlesjackson@bahnhof.se
-Mail-Reply-To: Charlesjackson@bahnhof.se
-Message-ID: <3965a3117fc08113495d761b6813a60b@peterfykh.hu>
-X-Sender: kiss.zsuzsa@peterfykh.hu
-User-Agent: Roundcube Webmail/1.2.3
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=peterfykh.hu; s=mail; t=1677020062; bh=jZ0F9oV/97woQPA1twDz7BsItT1xNtdTLObeu/lWEm0=; h=MIME-Version:Content-Type:Content-Transfer-Encoding:Date:From:To:Subject:Reply-To:Message-ID; b=BfdfRWi5VfjhLtim4g0Ud1pCa5mNBzZqTuyg9+qqUnGb6Ved44BaNys+wnmtQG1X+C3kZK7ChNCEWWsm/Q9T9dJzVgdfOZCeU5wlQ3ssK5wEkfF2Yo0IZmioVHFDV373bD7SJSxp/bqqkROU89Q8ZjC61/NVsVMw7IFw0305wvA=
-X-Spam-Status: No, score=0.6 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=ascii
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Beste gebruiker,
+Hugh Dickins <hughd@google.com> writes:
 
-Hallo mijn gelukkige vriend, ik ben Charles W. Jackson Jr., de 
-megawinnaar van $ 344,6 miljoen Mega Millions Jackpot, ik doneer aan 5 
-willekeurige individuen, als je deze e-mail ontvangt, is je e-mail 
-geselecteerd na een draaibal. Ik heb het grootste deel van mijn vermogen 
-verdeeld over een aantal goede doelen en organisaties. Ik heb vrijwillig 
-besloten om de som van $ 3 miljoen USD aan jou of je organisatie te 
-doneren als een van de geselecteerde 5, je kunt mijn winst verifiëren 
-via de onderstaande YouTube-pagina.
+> On Tue, 21 Feb 2023, Huang, Ying wrote:
+>> 
+>> On second thought, I think that it may be better to provide a fix as
+>> simple as possible firstly.  Then we can work on a more complex fix as
+>> we discussed above.  The simple fix is easy to review now.  And, we will
+>> have more time to test and review the complex fix.
+>> 
+>> In the following fix, I disabled the migration batching except for the
+>> MIGRATE_ASYNC mode, or the split folios of a THP folio.  After that, I
+>> will work on the complex fix to enable migration batching for all modes.
+>> 
+>> What do you think about that?
+>
+> I don't think there's a need to rush in the wrong fix so quickly.
+> Your series was in (though sometimes out of) linux-next for some
+> while, without causing any widespread problems.  Andrew did send
+> it to Linus yesterday, I expect he'll be pushing it out later today
+> or tomorrow, but I don't think it's going to cause big problems.
+> Aiming for a fix in -rc2 would be good.
 
+Sure, I will target to fix in -rc2.  Thanks for suggestion!
 
-BEKIJK MIJ HIER: https://www.youtube.com/watch?v=0MUR8QEIMQI
+> Why would it be complex?
 
+Now, I think the big picture could be,
 
-Deze donatie van $ 3 miljoen USD is gedaan om u in staat te stellen uw 
-persoonlijke problemen te versterken en genereus de hand te reiken aan 
-de minst bevoorrechte, verweesde en liefdadigheidsorganisaties in uw 
-gemeenschap.
-Wat voor mij het belangrijkste is, is dat u de gedoneerde fondsen op de 
-beste manier toewijst die u, uw familie, vrienden ten goede komt en om 
-de behoeftigen in uw directe gemeenschap te helpen.
+if (MIGRATE_ASYNC) {
+        migrate_pages_batch(from,);
+} else {
+        migrate_pages_batch(from,, MIGRATE_ASYNC,);
+        list_for_each_entry_safe (folio,, from) {
+                migrate_pages_batch(one_folio, , MIGRATE_SYNC,);
+        }
+}
 
+That is, for synchronous migration, try asynchronous batched migration
+firstly, then fall back to synchronous migration one by one.  This will
+make the retry logic easier to be understood.
 
-DIT IS JE DONATIECODE: DON207152
+This needs some code change.  Anyway, I will try to do that and show the
+code.
 
-
-Stuur uw DONATIECODE zo snel mogelijk naar onderstaand e-mailadres, 
-zodat we de donatieprocedure snel kunnen afronden.
-
-E-mail contact: charlesjacksonj1@hotmail.com
-
-                  charlesjackson06@bahnhof.se
-
-
-Ik hoop u en uw gezin dit jaar gelukkig te maken, ik wens u het beste en 
-gefeliciteerd.
-
-
-Groeten,
-
-Charles W.Jackson Jr
+Best Regards,
+Huang, Ying
