@@ -2,37 +2,38 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5364B69F957
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Feb 2023 17:53:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F073C69F958
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Feb 2023 17:53:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231912AbjBVQxG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Feb 2023 11:53:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41416 "EHLO
+        id S232145AbjBVQxZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Feb 2023 11:53:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41976 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232136AbjBVQxC (ORCPT
+        with ESMTP id S232111AbjBVQxY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Feb 2023 11:53:02 -0500
-Received: from out30-99.freemail.mail.aliyun.com (out30-99.freemail.mail.aliyun.com [115.124.30.99])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0001BDC6
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Feb 2023 08:52:56 -0800 (PST)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R381e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046059;MF=guorui.yu@linux.alibaba.com;NM=1;PH=DS;RN=7;SR=0;TI=SMTPD_---0VcHP-D1_1677084772;
-Received: from localhost(mailfrom:GuoRui.Yu@linux.alibaba.com fp:SMTPD_---0VcHP-D1_1677084772)
+        Wed, 22 Feb 2023 11:53:24 -0500
+Received: from out30-101.freemail.mail.aliyun.com (out30-101.freemail.mail.aliyun.com [115.124.30.101])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB94C2279A
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Feb 2023 08:53:19 -0800 (PST)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R151e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045168;MF=guorui.yu@linux.alibaba.com;NM=1;PH=DS;RN=7;SR=0;TI=SMTPD_---0VcHOdvq_1677084795;
+Received: from localhost(mailfrom:GuoRui.Yu@linux.alibaba.com fp:SMTPD_---0VcHOdvq_1677084795)
           by smtp.aliyun-inc.com;
-          Thu, 23 Feb 2023 00:52:52 +0800
+          Thu, 23 Feb 2023 00:53:16 +0800
 From:   "GuoRui.Yu" <GuoRui.Yu@linux.alibaba.com>
 To:     hch@lst.de, m.szyprowski@samsung.com
 Cc:     robin.murphy@arm.com, iommu@lists.linux.dev,
         linux-kernel@vger.kernel.org, GuoRui.Yu@linux.alibaba.com,
         linux-mm@kvack.org
-Subject: [PATCH] swiotlb: fix the deadlock in swiotlb_do_find_slots
-Date:   Thu, 23 Feb 2023 00:52:51 +0800
-Message-Id: <20230222165251.88700-1-GuoRui.Yu@linux.alibaba.com>
+Subject: [PATCH v2] swiotlb: fix the deadlock in swiotlb_do_find_slots
+Date:   Thu, 23 Feb 2023 00:53:15 +0800
+Message-Id: <20230222165315.89135-1-GuoRui.Yu@linux.alibaba.com>
 X-Mailer: git-send-email 2.29.2.540.g3cf59784d4
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,
-        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
