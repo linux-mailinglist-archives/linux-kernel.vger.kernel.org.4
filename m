@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B1F2F69FE3A
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Feb 2023 23:13:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9675B69FE3C
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Feb 2023 23:13:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232463AbjBVWNm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Feb 2023 17:13:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37372 "EHLO
+        id S232576AbjBVWNt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Feb 2023 17:13:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37652 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232484AbjBVWNi (ORCPT
+        with ESMTP id S232500AbjBVWNi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 22 Feb 2023 17:13:38 -0500
-Received: from mail-qt1-x832.google.com (mail-qt1-x832.google.com [IPv6:2607:f8b0:4864:20::832])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A0FA43915
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Feb 2023 14:13:20 -0800 (PST)
-Received: by mail-qt1-x832.google.com with SMTP id w23so9165420qtn.6
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Feb 2023 14:13:20 -0800 (PST)
+Received: from mail-qt1-x82b.google.com (mail-qt1-x82b.google.com [IPv6:2607:f8b0:4864:20::82b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4AE0A43918
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Feb 2023 14:13:21 -0800 (PST)
+Received: by mail-qt1-x82b.google.com with SMTP id s12so9171653qtq.11
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Feb 2023 14:13:21 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=bKnaLUvz03dzH+Nhj/4CLV2CqW7kem3zsIr+xE7cWbY=;
-        b=AONcsGL41TxiV4/KM1Lw+I8z3tLBaN6k8vDTCGI67ULKsXkkIpp8kCvU0dB+BdMMJ7
-         SW7DoLHR17TNCN/1kaxclzarB29h1EkSJsRHu4P+OuW0cT8nXrY8aSN11AYI5E2lFKy5
-         FxbLfKgD7BV409f/JMdV9vV6CpH+VfC/eHyFTtn6fWhPxbOlUa0VkBHI3yr7g6WWbvaI
-         1/gusrGcYubP+PhFw68RDc5HbjzhJUTNQHiLg76WjU71ApLE57O1ODFlnpjfy5LE+EEn
-         nLRMpbnwI5cs0LQ2F/U5rx4NraeDIFY8ng/Y4Z11duInSTaN9XzsHI1sT+rsdxuj+f1K
-         e8nw==
+        bh=iNsRaJl4d7YqZipc65JwWHSPo1qnkcWEe8GKRqSMg+M=;
+        b=p+blT5c7UnqpDedKTJuaegL1xV7yBrj4SNpVyJiV5ClFgm62zbf0U4JcZYroD3+yna
+         kauHCJSdSFg6+mbCOLzNn6rUbrZ4ArOA87BLXPSEoZk22VjR9Fq17STuHPO2OvAtB/M2
+         HxT39jqgo+CPMRhiRziypJXvHMi3CMdju9U5E+WvI4ek5Xt8PSAwnCCkE112fvVtyTuc
+         wxDekild1aWJArG4mF4o2QaM+Vv2V4aoqFWBn7BovANvDJCFQNOfsQ2C2ajafOLcFep1
+         Mg8szLLDW/LtRqKHFLkyFeKjC36P5rMK0I0a770zvcFWbqzGqn349RrQ164qs3o5SB1f
+         K5tw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=bKnaLUvz03dzH+Nhj/4CLV2CqW7kem3zsIr+xE7cWbY=;
-        b=m65+zuAEIa/rWL5GmRDf4BB+QY0PP0ManAsJ/YHDdU59QQnvFpFSdljIDz9Nl1MxCI
-         KKA7jkYj/WC2g1bdokqeoOxMHToLZSLfifHrnLcI/YkwmcbtqvyunEzWBA9509vL67v8
-         NImBRClljaC3eADXBq33vE1te58NEIxVel8ee7NHzZL6m+fDXlpWqMija2DkNBVfcY/v
-         S6szTUTGZe9SYdrV23xupySypBMiZPwsqFYYtWy72RoIhUzqxEvZJMAoWjAhU/iqVWKn
-         hcCUqhC40B0vHCURCcyIvTS/ffP7i4F5irVYEFWyLaBVOB8208yR01GFRkKJWsKcm0Q4
-         ylJw==
-X-Gm-Message-State: AO0yUKXWxPXD6auL+VkFxNJ+6LydXJ8UiJv5QR3VTsS89LJZWqtSda7L
-        NNl+PECKUbV6Sy3ggnc4uuUtmcs4rg==
-X-Google-Smtp-Source: AK7set8x+RkH/L+AxiVbtTj+82I3i49ILT32qjT9hzgsdtOg8ieeGbtootox4fxrFSemgif9Rjmu9A==
-X-Received: by 2002:ac8:5fc7:0:b0:3b9:a60f:b2bb with SMTP id k7-20020ac85fc7000000b003b9a60fb2bbmr18333081qta.56.1677103998855;
-        Wed, 22 Feb 2023 14:13:18 -0800 (PST)
+        bh=iNsRaJl4d7YqZipc65JwWHSPo1qnkcWEe8GKRqSMg+M=;
+        b=ubnj52I/Oc0UV3g/R7MNXmhOVdaaILhxAkOrheiuov+hyfp0N58QoBmGdygm+T7J3W
+         8/Il5wA1CPTgop+qhVy1sSd4pdn5HDi0CpyxcFYpWr+SFsPri0O+MaCYiT9rkYKKeExS
+         6aSQIE6Ca1YzRDnh1OCCbayeyWDY8Q6MMujqnHgafzpgT5xsfZVrrG1Bic6tIG4rD62c
+         D8uLByEC4EOdmIKkNO+KGMUVnoBPhdrBiHGuMGvs4SbPZ4d3vqOX0PZtp/Dbxv7g/9G5
+         znAPMJxiSGcZlkIh45VdrPdkxZM1JJBszm0kIl8vRl/Ov2sgJzvtj+lb7fRUSo+AxAaF
+         Gxmw==
+X-Gm-Message-State: AO0yUKWcAfrcW2DHICdQsXBq3t5j8wueGiX+vHg7KqtGgJczsDYwuBKZ
+        tueLfEeXpmkfxu6jCO+JBtfJBLtHTA==
+X-Google-Smtp-Source: AK7set/Q+P3G4wNM4qm7CNiRH01c4Y/gAoXOPpr4ceI8RVBHNiXP3dxMPuirIpKWyRa6c3CHgHNvBw==
+X-Received: by 2002:ac8:5952:0:b0:3b8:6c68:e6d with SMTP id 18-20020ac85952000000b003b86c680e6dmr17469894qtz.13.1677104000049;
+        Wed, 22 Feb 2023 14:13:20 -0800 (PST)
 Received: from citadel.. (075-129-116-198.res.spectrum.com. [75.129.116.198])
-        by smtp.gmail.com with ESMTPSA id ey17-20020a05622a4c1100b003b86b088755sm4902460qtb.15.2023.02.22.14.13.17
+        by smtp.gmail.com with ESMTPSA id ey17-20020a05622a4c1100b003b86b088755sm4902460qtb.15.2023.02.22.14.13.19
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 22 Feb 2023 14:13:18 -0800 (PST)
+        Wed, 22 Feb 2023 14:13:19 -0800 (PST)
 From:   Brian Gerst <brgerst@gmail.com>
 To:     linux-kernel@vger.kernel.org, x86@kernel.org
 Cc:     David Woodhouse <dwmw2@infradead.org>,
@@ -60,9 +60,9 @@ Cc:     David Woodhouse <dwmw2@infradead.org>,
         Peter Zijlstra <peterz@infradead.org>,
         Andy Lutomirski <luto@kernel.org>,
         Ingo Molnar <mingo@kernel.org>, Brian Gerst <brgerst@gmail.com>
-Subject: [PATCH 1/6] x86/smpboot: Use CPU number instead of APIC ID for single CPU startup
-Date:   Wed, 22 Feb 2023 17:12:56 -0500
-Message-Id: <20230222221301.245890-2-brgerst@gmail.com>
+Subject: [PATCH 2/6] x86/smpboot: Use current_task to get idle thread
+Date:   Wed, 22 Feb 2023 17:12:57 -0500
+Message-Id: <20230222221301.245890-3-brgerst@gmail.com>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230222221301.245890-1-brgerst@gmail.com>
 References: <20230222221301.245890-1-brgerst@gmail.com>
@@ -78,62 +78,73 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Encoding the CPU number directly in smpboot_control skips the APIC ID
-lookup when booting a single CPU.  This will enable the boot CPU to use
-the same code as secondaries, since the APIC ID array is not populated
-during early boot.
+The idle_threads array is not populated during early boot.  Use
+current_task instead, which is initialized to init_task for the boot
+CPU.
+
+Also simplify start_cpu0().  Since the boot CPU never really goes
+offline, the GSBASE is still set up and can be used for per-cpu
+accesses.
 
 Signed-off-by: Brian Gerst <brgerst@gmail.com>
 ---
- arch/x86/kernel/head_64.S | 12 +++++++-----
- arch/x86/kernel/smpboot.c |  2 +-
- 2 files changed, 8 insertions(+), 6 deletions(-)
+ arch/x86/kernel/asm-offsets.c | 1 +
+ arch/x86/kernel/head_64.S     | 7 ++-----
+ kernel/smpboot.c              | 2 +-
+ 3 files changed, 4 insertions(+), 6 deletions(-)
 
+diff --git a/arch/x86/kernel/asm-offsets.c b/arch/x86/kernel/asm-offsets.c
+index 8650f29387e0..445bce086717 100644
+--- a/arch/x86/kernel/asm-offsets.c
++++ b/arch/x86/kernel/asm-offsets.c
+@@ -114,6 +114,7 @@ static void __used common(void)
+ 	OFFSET(TSS_sp1, tss_struct, x86_tss.sp1);
+ 	OFFSET(TSS_sp2, tss_struct, x86_tss.sp2);
+ 	OFFSET(X86_top_of_stack, pcpu_hot, top_of_stack);
++	OFFSET(X86_current_task, pcpu_hot, current_task);
+ #ifdef CONFIG_CALL_DEPTH_TRACKING
+ 	OFFSET(X86_call_depth, pcpu_hot, call_depth);
+ #endif
 diff --git a/arch/x86/kernel/head_64.S b/arch/x86/kernel/head_64.S
-index 0e4e53d231db..c1253aa737ca 100644
+index c1253aa737ca..c32e5b06a9ce 100644
 --- a/arch/x86/kernel/head_64.S
 +++ b/arch/x86/kernel/head_64.S
-@@ -252,20 +252,22 @@ SYM_INNER_LABEL(secondary_startup_64_no_verify, SYM_L_GLOBAL)
- 	jz	.Lsetup_cpu
+@@ -315,7 +315,7 @@ SYM_INNER_LABEL(secondary_startup_64_no_verify, SYM_L_GLOBAL)
+ 	movq	%rcx, early_gdt_descr_base(%rip)
  
- 	/*
--	 * Secondary CPUs find out the offsets via the APIC ID. For parallel
--	 * boot the APIC ID is retrieved from CPUID, otherwise it's encoded
--	 * in smpboot_control:
-+	 * For parallel boot, the APIC ID is retrieved from CPUID, and then
-+	 * used to look up the CPU number.  For booting a single CPU, the
-+	 * CPU number is encoded in smpboot_control.
-+	 *
- 	 * Bit 31	STARTUP_SECONDARY flag (checked above)
- 	 * Bit 30	STARTUP_APICID_CPUID_0B flag (use CPUID 0x0b)
- 	 * Bit 29	STARTUP_APICID_CPUID_01 flag (use CPUID 0x01)
--	 * Bit 0-24	APIC ID if STARTUP_APICID_CPUID_xx flags are not set
-+	 * Bit 0-24	CPU# if STARTUP_APICID_CPUID_xx flags are not set
- 	 */
- 	testl	$STARTUP_APICID_CPUID_0B, %edx
- 	jnz	.Luse_cpuid_0b
- 	testl	$STARTUP_APICID_CPUID_01, %edx
- 	jnz	.Luse_cpuid_01
- 	andl	$0x0FFFFFFF, %edx
--	jmp	.Lsetup_AP
-+	movl	%edx, %ecx
-+	jmp	.Linit_cpu_data
+ 	/* Find the idle task stack */
+-	movq	idle_threads(%rbx), %rcx
++	movq	pcpu_hot + X86_current_task(%rbx), %rcx
+ 	movq	TASK_threadsp(%rcx), %rcx
+ 	movq	%rcx, initial_stack(%rip)
+ #endif /* CONFIG_SMP */
+@@ -460,12 +460,9 @@ SYM_CODE_END(secondary_startup_64)
+ SYM_CODE_START(start_cpu0)
+ 	ANNOTATE_NOENDBR
+ 	UNWIND_HINT_EMPTY
+-	/* Load the per-cpu base for CPU#0 */
+-	leaq	__per_cpu_offset(%rip), %rbx
+-	movq	(%rbx), %rbx
  
- .Luse_cpuid_01:
- 	mov	$0x01, %eax
-diff --git a/arch/x86/kernel/smpboot.c b/arch/x86/kernel/smpboot.c
-index 5b6d72b3d14b..e1a2843c2841 100644
---- a/arch/x86/kernel/smpboot.c
-+++ b/arch/x86/kernel/smpboot.c
-@@ -1140,7 +1140,7 @@ static int do_boot_cpu(int apicid, int cpu, struct task_struct *idle,
- 		early_gdt_descr.address = (unsigned long)get_cpu_gdt_rw(cpu);
- 		initial_stack  = idle->thread.sp;
- 	} else if (!do_parallel_bringup) {
--		smpboot_control = STARTUP_SECONDARY | apicid;
-+		smpboot_control = STARTUP_SECONDARY | cpu;
- 	}
+ 	/* Find the idle task stack */
+-	movq	idle_threads(%rbx), %rcx
++	movq	PER_CPU_VAR(pcpu_hot) + X86_current_task, %rcx
+ 	movq	TASK_threadsp(%rcx), %rsp
  
- 	/* Enable the espfix hack for this CPU */
+ 	jmp	.Ljump_to_C_code
+diff --git a/kernel/smpboot.c b/kernel/smpboot.c
+index a18a21dff9bc..2c7396da470c 100644
+--- a/kernel/smpboot.c
++++ b/kernel/smpboot.c
+@@ -25,7 +25,7 @@
+  * For the hotplug case we keep the task structs around and reuse
+  * them.
+  */
+-DEFINE_PER_CPU(struct task_struct *, idle_threads);
++static DEFINE_PER_CPU(struct task_struct *, idle_threads);
+ 
+ struct task_struct *idle_thread_get(unsigned int cpu)
+ {
 -- 
 2.39.2
 
