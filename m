@@ -2,120 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3738A69F10E
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Feb 2023 10:13:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6587C69F110
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Feb 2023 10:13:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229870AbjBVJN0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Feb 2023 04:13:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59768 "EHLO
+        id S231636AbjBVJNx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Feb 2023 04:13:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60352 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231625AbjBVJNY (ORCPT
+        with ESMTP id S231149AbjBVJNv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Feb 2023 04:13:24 -0500
-Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0DD2C1554B
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Feb 2023 01:13:23 -0800 (PST)
-Received: by mail-wr1-x430.google.com with SMTP id t13so6918722wrv.13
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Feb 2023 01:13:22 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=zkY3+fA5exA5Ft5hxJp+6msoshzayibJtkPbdEoBQjA=;
-        b=iX1FgI4n78XMb3xWIvCi6aaiDmyMYym3I/GjFQMirsg6gjzLdzXb0gScQs9JQb7LXj
-         ZSzMvaSkGIBawDHrdVHCUg/e9P79wolm2spyoNWR8kFDawL4RkOVJzIHEEX/WFSWdf/M
-         eKEZ/zN+U2JIv+FAjLhVJYN6DtguRSH0DhEwoOk8ZarsZWBjTXacFHggHFNsuDekx8JS
-         xbHflz5Vh0obbQZNAyCUM1zzVB8rajon/nqu5nuK81LMh8kI9OMjoyIhHuyfhFjoVGgq
-         FaDN+KCKCw78nDJFR+L6guVXQxltuIjAUKA4O3oO7z9LK1h/nrVk9b2GVaWJ0U0FBIHJ
-         Bggg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=zkY3+fA5exA5Ft5hxJp+6msoshzayibJtkPbdEoBQjA=;
-        b=65MjDcs4c9DCrIC2DaW7M1+/iHuJgtdLR241RCJpniCqteEjY05vwfrvxaD/EowHal
-         si9dq0WtXeM131v28mzhwcp4gnfcHT3RmMzk83seg+y3t/n35UC429zEZk93JoL4rvL0
-         UNdyKUFYHWUKq3hq7FCvZ5bpXIeTJB7awB6OOSTYolmIG6uKAyLZx0WX4p0M9inK13CU
-         bZopliAwDN4XHjb7/YzCP5huPoaDcvw23Fc8pVSPiYfdv3x1FW7SIpJyrTfj0SM52BO2
-         xH5nmkI/p3gj+Qv8fWzXZ+D5vToIfWtBzGGIG6x91p8H3pRTieY3c4cam6yvoyZgkF45
-         WjNQ==
-X-Gm-Message-State: AO0yUKUoI589v26wQJMgzg3KyBBvJNoA0lL5iRUs/E9hMZnf8nDO01fN
-        5SP9C9lS16BbknkgPrZshKorBQ==
-X-Google-Smtp-Source: AK7set9NdN0jgccs0XCvI84qLhB/QtaTW7Q1bVfwm/0xYU+1PLcj/iDaoh0n6AnhTu7COH1UYeqHIw==
-X-Received: by 2002:adf:f70b:0:b0:2c6:67c9:860a with SMTP id r11-20020adff70b000000b002c667c9860amr7122152wrp.44.1677057201532;
-        Wed, 22 Feb 2023 01:13:21 -0800 (PST)
-Received: from [192.168.1.109] ([178.197.216.144])
-        by smtp.gmail.com with ESMTPSA id x4-20020adfdd84000000b002c556a4f1casm6329920wrl.42.2023.02.22.01.13.20
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 22 Feb 2023 01:13:21 -0800 (PST)
-Message-ID: <e4c2b711-7953-821b-4281-04e4b40154ea@linaro.org>
-Date:   Wed, 22 Feb 2023 10:13:19 +0100
+        Wed, 22 Feb 2023 04:13:51 -0500
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1D851B56B;
+        Wed, 22 Feb 2023 01:13:49 -0800 (PST)
+Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (No client certificate requested)
+        (Authenticated sender: kholk11)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 9623A66021CF;
+        Wed, 22 Feb 2023 09:13:47 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1677057228;
+        bh=EQcPbGfJMfRIei4Am5Ga2lgUV4SqL9FM6hrNSYWP81M=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=Ci/5xPZofV2WGWkOXFeQ2oVFhVnJmStDnJ+1lB2glB7h3NKKb0bfohtHXtJKXc2yX
+         JWVnuiF69Z+OHcCJRhnNa2ACiMYCzBSOy8zvnn6pooaRWfMSZnpSOazVeZdqClc+0G
+         y25SprcuQ75Uh659VUCmWtbl16GzOd1vQwSZ126q0a97ymt/Bno/rmABd5HTPjHFej
+         tiNgim+asQkJ4eXmwVfXy9ow8OgyZX/OAWJw2eQd1I8sHZf5MJcjSXa4wxJT8r7mqb
+         PXbcpQlG+VbDWbC6B4pSwrVwbVGuk1hsDT0ukfvwzMBfUkrryQJxDBqZx/qx7uR7HC
+         Bzqd0ggFXVjHg==
+Message-ID: <88a3fa09-60cb-bb3c-c392-286efd983627@collabora.com>
+Date:   Wed, 22 Feb 2023 10:13:45 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.8.0
-Subject: Re: [PATCH v4 09/19] dt-bindings: clock: Add StarFive JH7110 system
- clock and reset generator
+Subject: Re: [PATCH v2 06/10] dt-bindings: gpu: mali-bifrost: Add a compatible
+ for MediaTek MT8186
 Content-Language: en-US
-To:     Hal Feng <hal.feng@starfivetech.com>, linux-clk@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-riscv@lists.infradead.org
-Cc:     Stephen Boyd <sboyd@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor@kernel.org>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Ben Dooks <ben.dooks@sifive.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>,
-        Emil Renner Berthing <emil.renner.berthing@canonical.com>,
-        linux-kernel@vger.kernel.org
-References: <20230221024645.127922-1-hal.feng@starfivetech.com>
- <20230221024645.127922-10-hal.feng@starfivetech.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230221024645.127922-10-hal.feng@starfivetech.com>
-Content-Type: text/plain; charset=UTF-8
+To:     Chen-Yu Tsai <wenst@chromium.org>
+Cc:     airlied@gmail.com, daniel@ffwll.ch, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, steven.price@arm.com,
+        alyssa.rosenzweig@collabora.com, matthias.bgg@gmail.com,
+        robh@kernel.org, dri-devel@lists.freedesktop.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org
+References: <20230221153740.1620529-1-angelogioacchino.delregno@collabora.com>
+ <20230221153740.1620529-7-angelogioacchino.delregno@collabora.com>
+ <CAGXv+5Ed-5Nq0zNzCGzez3fnW2yxW7zFx9B6k58Y4yb8P+hvpw@mail.gmail.com>
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <CAGXv+5Ed-5Nq0zNzCGzez3fnW2yxW7zFx9B6k58Y4yb8P+hvpw@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 21/02/2023 03:46, Hal Feng wrote:
-> From: Emil Renner Berthing <kernel@esmil.dk>
+Il 22/02/23 09:37, Chen-Yu Tsai ha scritto:
+> On Tue, Feb 21, 2023 at 11:37 PM AngeloGioacchino Del Regno
+> <angelogioacchino.delregno@collabora.com> wrote:
+>>
+>> Get GPU support on MT8186 by adding its compatible.
+>>
+>> Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+>> ---
+>>   Documentation/devicetree/bindings/gpu/arm,mali-bifrost.yaml | 5 +++++
+>>   1 file changed, 5 insertions(+)
+>>
+>> diff --git a/Documentation/devicetree/bindings/gpu/arm,mali-bifrost.yaml b/Documentation/devicetree/bindings/gpu/arm,mali-bifrost.yaml
+>> index be18b161959b..43a841d4e94d 100644
+>> --- a/Documentation/devicetree/bindings/gpu/arm,mali-bifrost.yaml
+>> +++ b/Documentation/devicetree/bindings/gpu/arm,mali-bifrost.yaml
+>> @@ -15,6 +15,11 @@ properties:
+>>
+>>     compatible:
+>>       oneOf:
+>> +      - items:
+>> +          - enum:
+>> +              - mediatek,mt8186-mali
+>> +          - const: mediatek,mt8183b-mali
+>> +          - const: arm,mali-bifrost # Mali Bifrost GPU model/revision is fully discoverable
 > 
-> Add bindings for the system clock and reset generator (SYSCRG) on the
-> JH7110 RISC-V SoC by StarFive Ltd.
+> The MT8186 has Mali-G52 MC2 2EE, while the MT8183 has Mali-G72 MP3.
+
+Keeping in mind the obvious - which is that G52 and G72 are both Bifrost....
+
+> So we actually need a new entry with two power domains.
 > 
-> Reviewed-by: Rob Herring <robh@kernel.org>
-> Signed-off-by: Emil Renner Berthing <kernel@esmil.dk>
-> Signed-off-by: Hal Feng <hal.feng@starfivetech.com>
 
-I don't know what is happening here as neither this nor other patchset
-explains anything. Please stop writing what you do in the patches, but
-explain why. What is easy to get.
+...This is my node for MT8186:
 
-(...)
+		gpu: gpu@13040000 {
+			compatible = "mediatek,mt8186-mali",
+				     "mediatek,mt8183b-mali",
+				     "arm,mali-bifrost";
+			reg = <0 0x13040000 0 0x4000>;
 
+			clocks = <&mfgsys CLK_MFG_BG3D>;
+			interrupts = <GIC_SPI 276 IRQ_TYPE_LEVEL_HIGH 0>,
+				     <GIC_SPI 275 IRQ_TYPE_LEVEL_HIGH 0>,
+				     <GIC_SPI 274 IRQ_TYPE_LEVEL_HIGH 0>;
+			interrupt-names = "job", "mmu", "gpu";
+			power-domains = <&spm MT8186_POWER_DOMAIN_MFG1>,
+					<&spm MT8186_POWER_DOMAIN_MFG2>,
+					<&spm MT8186_POWER_DOMAIN_MFG3>;
+			power-domain-names = "core0", "core1", "core2";
 
-> +
-> +#define JH7110_SYSCLK_PLL0_OUT			190
-> +#define JH7110_SYSCLK_PLL1_OUT			191
-> +#define JH7110_SYSCLK_PLL2_OUT			192
+			/* Please ignore speedbin, that's for another time :-) */
+			nvmem-cells = <&gpu_volt_bin>;
+			nvmem-cell-names = "speed-bin";
+			#cooling-cells = <2>;
+		};
 
-NAK. Do not add incorrect bindings just to remove it THE SAME TIME.
+There are three MFG power domains... MFG2 and MFG3 are parents of MFG1, on that
+I agree, but we can avoid adding a new entry just for MT8186 and use the MT8183-b
+one while still being technically correct.
 
+Besides, Mali G52 and Mali G72 are both Bifrost... so I don't think that this
+commit is incorrect. For the sake of simplicity, I would push on getting this
+one picked.
 
-Best regards,
-Krzysztof
+Unless there are any real-strong opinions against...
+
+Regards,
+Angelo
+
+> Our downstream Mali driver & DT use just that.
+> 
+> ChenYu
+
 
