@@ -2,75 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C2F369FDFA
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Feb 2023 22:50:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B90C969FE6B
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Feb 2023 23:23:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232959AbjBVVuJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Feb 2023 16:50:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49340 "EHLO
+        id S232727AbjBVWXq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Feb 2023 17:23:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49554 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233116AbjBVVuG (ORCPT
+        with ESMTP id S232470AbjBVWXp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Feb 2023 16:50:06 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06E4F39BB2;
-        Wed, 22 Feb 2023 13:50:03 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4E4636159B;
-        Wed, 22 Feb 2023 21:48:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id C30E1C4339C;
-        Wed, 22 Feb 2023 21:48:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1677102532;
-        bh=kY7XANNZ04WNvAIiht7tgIRWTGT6/TYlpHWeOAtwcUg=;
-        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=jv7Bc1Y6q6en3AWz74Rt9YkLTFErSjbWnvwMgEiDfXSr4U7gw6Dqvs6wef1FuvSr7
-         LwN5aThdbja4OdaJtj3S5rTf30rH6JKY4aROhD9nsqJ6toXfQz7OwFm9FUG5ZBQO/N
-         MM7VaNFyozXzyAUeiuZsKeLLyW5L/C/8HQv7O4sZb8TaXzbxzO5sRVsWnmYoqQqF8t
-         eYLocNyN+g7+V+WcGj8T4IPR7iFbya5RiRNIKUdGVZwQ2PDorAbI2r93uC2g4Q7Vta
-         LKkTMwGQs5MsQqRGAaqFXGJ3PrbVwuWFexMsGEFAXPxC6wZ1QNeRzaRcSYtEFb6Yd4
-         U/YCWr36d+hKQ==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id B21D2C43151;
-        Wed, 22 Feb 2023 21:48:52 +0000 (UTC)
-Subject: Re: [GIT PULL] first round of SCSI updates for the 6.2+ merge window
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <838f8d602c321a86f829344f07c5681d371134f1.camel@HansenPartnership.com>
-References: <838f8d602c321a86f829344f07c5681d371134f1.camel@HansenPartnership.com>
-X-PR-Tracked-List-Id: <linux-scsi.vger.kernel.org>
-X-PR-Tracked-Message-Id: <838f8d602c321a86f829344f07c5681d371134f1.camel@HansenPartnership.com>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/jejb/scsi.git scsi-misc
-X-PR-Tracked-Commit-Id: 833f7d4819a88f027033e0033ea44f7ae3e45a9b
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 8762069330316392331e693befd8a5b632833618
-Message-Id: <167710253272.31368.499027829627073151.pr-tracker-bot@kernel.org>
-Date:   Wed, 22 Feb 2023 21:48:52 +0000
-To:     James Bottomley <James.Bottomley@HansenPartnership.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-scsi <linux-scsi@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Wed, 22 Feb 2023 17:23:45 -0500
+X-Greylist: delayed 904 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 22 Feb 2023 14:23:40 PST
+Received: from matoro.tk (unknown [IPv6:2600:1700:4b10:9d80::2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DAE128A71;
+        Wed, 22 Feb 2023 14:23:39 -0800 (PST)
+DKIM-Signature: a=rsa-sha256; bh=VS1HHbC0iO2PhRUGrVGHMgzgjQpr4xymHa7Uw4M10ho=;
+ c=relaxed/relaxed; d=matoro.tk;
+ h=Subject:Subject:Sender:To:To:Cc:Cc:From:From:Date:Date:MIME-Version:MIME-Version:Content-Type:Content-Type:Content-Transfer-Encoding:Content-Transfer-Encoding:Reply-To:In-Reply-To:In-Reply-To:Message-Id:Message-Id:References:References:Autocrypt:Openpgp;
+ i=@matoro.tk; s=20221223; t=1677102747; v=1; x=1677534747;
+ b=kHy0L+6PSCGXbbCQrkUJJSQowAkx1/SguKsqaxuLitimADUym+pMI4IAH+DgVRWkw19dG+48
+ APcKIAfPxczX79TfXx/LOk1T4Iw/hwbZRTeMiTSPYLLwVKecYP84HobDAPSmaDE7TD1JCy/F4XD
+ uJwMwUhnpr/XrV6LBFWX3sbByYObIyuWAaAhg77U1Ao9xUKQcanHjdxTaEkVg+X7BAi+RObRDDk
+ 7flKmHTQf8Y9uWMHzMwUZCu8ucGZTjUjEFf/7OuRwAkMaGnv8mVoLKMlRpvTGRp1M03RhFv9Je5
+ UPXr8ZHm3GzYuWwsJlg+6DZvYhXzJ+AHWIkIR1hmf1AcmMylQphdch6XRrGaiVaaIdC0D0FtzaR
+ PXZ9nW85XJPA2XlGvcQ6nWkAbtHaSuihZYMEvMFDPOP0EcH9r+JAg52ZB1GiNDs2uHUBvzHToes
+ NfWzDzieRRP+7v5OjKU5si4Te8uYfA/38+FEJEZOVmm7uVeBLTYfibFmc+NNDUO7+CTcDLj/IFu
+ tooLJbJ8cLBKx17BV0c0Q9ZU1uZQmlrlBKI0gc9Nm9kdg/XiQqnRl4BD1Z0jcESaVtis/JUU+GF
+ jcWbFMeb4wpyRNtjOF6433YTFgq1DZEHF3cYUVchhGP6Of4NyG32c7tOBzCwDiYyDCifHn5xwiy
+ cqkPKZj22xY=
+Received: by matoro.tk (envelope-sender
+ <matoro_mailinglist_kernel@matoro.tk>) with ESMTPS id 10abfbb5; Wed, 22 Feb
+ 2023 16:52:27 -0500
+MIME-Version: 1.0
+Date:   Wed, 22 Feb 2023 16:52:27 -0500
+From:   matoro <matoro_mailinglist_kernel@matoro.tk>
+To:     John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        "Luck, Tony" <tony.luck@intel.com>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Ard Biesheuvel <ardb@kernel.org>, linux-kernel@vger.kernel.org,
+        Jonathan Corbet <corbet@lwn.net>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Jessica Clarke <jrtc27@jrtc27.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Marc Zyngier <maz@kernel.org>,
+        Guenter Roeck <linux@roeck-us.net>, linux-ia64@vger.kernel.org
+Subject: Re: [RFC PATCH 0/5] Retire IA64/Itanium support
+In-Reply-To: <77ff2776d99286eac6eefecb1903b96899d0ff62.camel@physik.fu-berlin.de>
+References: <20230215100008.2565237-1-ardb@kernel.org>
+ <534469b750e1847e1645f9ae5ed19dcc80b82be6.camel@physik.fu-berlin.de>
+ <CAHk-=wjEmZ19T4XpVb0_Hacm53xJG_w5ygcuorwC0xBoT-myUA@mail.gmail.com>
+ <SJ1PR11MB6083F7F30FE9ED8F39FA1F85FCA39@SJ1PR11MB6083.namprd11.prod.outlook.com>
+ <CAHk-=wj9RkLN+GpYcFmsd8tze6zYL7MMkNpvdKbETQnqYm+Hwg@mail.gmail.com>
+ <77ff2776d99286eac6eefecb1903b96899d0ff62.camel@physik.fu-berlin.de>
+Message-ID: <1d5b903ef5e5b5f83feee241fb0cbcca@matoro.tk>
+X-Sender: matoro_mailinglist_kernel@matoro.tk
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RDNS_NONE,SPF_HELO_PASS,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The pull request you sent on Wed, 22 Feb 2023 15:31:12 -0500:
+On 2023-02-15 18:13, John Paul Adrian Glaubitz wrote:
+> On Wed, 2023-02-15 at 12:08 -0800, Linus Torvalds wrote:
+>> But when it's actively known to be broken and nobody has time or
+>> interest to look at it, at that point the "it doesn't look any more
+>> painful than other architectures" becomes kind of moot.
+> 
+> Let me look after it in the weekend and let's see whether we can 
+> unbreak
+> it. I don't think there is really a big issue. The last time we had a
+> similar issue was the regression introduced by 974b9b2c68f3 which got 
+> fixed
+> with the simple fix in bd05220c7be3.
+> 
+> It's probably similarly trivial to fix the current regression.
+> 
+> Adrian
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/jejb/scsi.git scsi-misc
+Just for reference, this specific bug does not seem to be universal, but 
+possibly only applies to a specific configuration.  I have observed no 
+problems with 6.1 on my rx 2800 i2 and just booted 6.2 with no issues.  
+Please feel free to try out my kernel config here:  
+https://dpaste.com/43CACUUG8.txt
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/8762069330316392331e693befd8a5b632833618
-
-Thank you!
-
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+A possible guess is initramfs-related, as according to your logs on the 
+Debian ML the hang happens shortly after initramfs unpacking, and I do 
+not use an initramfs.
