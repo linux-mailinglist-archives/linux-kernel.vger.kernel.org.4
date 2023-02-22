@@ -2,44 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B3B869EF4C
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Feb 2023 08:27:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C4A5A69F066
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Feb 2023 09:36:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231200AbjBVH1L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Feb 2023 02:27:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50546 "EHLO
+        id S230511AbjBVIgi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Feb 2023 03:36:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54114 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231175AbjBVH1I (ORCPT
+        with ESMTP id S230223AbjBVIge (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Feb 2023 02:27:08 -0500
-Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47D0D3668F;
-        Tue, 21 Feb 2023 23:27:06 -0800 (PST)
-Received: from kwepemi500015.china.huawei.com (unknown [172.30.72.56])
-        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4PM6zm5rnczKmS2;
-        Wed, 22 Feb 2023 15:22:12 +0800 (CST)
-Received: from huawei.com (10.175.101.6) by kwepemi500015.china.huawei.com
- (7.221.188.92) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.17; Wed, 22 Feb
- 2023 15:27:03 +0800
-From:   Lu Wei <luwei32@huawei.com>
-To:     <davem@davemloft.net>, <dsahern@kernel.org>, <edumazet@google.com>,
-        <kuba@kernel.org>, <pabeni@redhat.com>, <netdev@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: [PATCH net,v4,2/2] selftests: fib_tests: Add test cases for IPv4/IPv6 in route notify
-Date:   Wed, 22 Feb 2023 16:36:29 +0800
-Message-ID: <20230222083629.335683-3-luwei32@huawei.com>
-X-Mailer: git-send-email 2.31.1
-In-Reply-To: <20230222083629.335683-1-luwei32@huawei.com>
-References: <20230222083629.335683-1-luwei32@huawei.com>
+        Wed, 22 Feb 2023 03:36:34 -0500
+Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B5932E0FA
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Feb 2023 00:36:33 -0800 (PST)
+Received: by mail-wm1-x332.google.com with SMTP id az11-20020a05600c600b00b003dc4fd6e61dso5555828wmb.5
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Feb 2023 00:36:33 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=xb/tDVxWKhj2uVd6k40rS8jR5dYMCSgdBjdPB4tRE4c=;
+        b=LGFC8n2veMJ3dCqA10bxu0OUsB3VKyJkTMmM3WjdGoIh32sKTk/GLOv1C/ZFoe8zMZ
+         A1EQ9XaNVfwf+uAmCCb4+asw7zqhL7TiR22+1TlFqmxynmvD9NDVw8neh/oC+I3P0TxM
+         FDd8TB6WoTR4wZXIHipdlNH/VdcMwnxWs3HUi9kOJx/G6qtCe2zhsse1AKJTABVAKDA6
+         66AQtCzDT8GzTouTxJaFkPKlHGchKBtu1OQOL4UDv613UH7D4gVAglfdkMzChz420tEo
+         1nzwCf3jm6UoaMeQs6c0ZXu276HGYt51IkNPQL+lnhuJZ49IYXCye4+FcNLTv4OW7g3N
+         229A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=xb/tDVxWKhj2uVd6k40rS8jR5dYMCSgdBjdPB4tRE4c=;
+        b=pmPlOdKn3+mXsxPLCHHfnKuU8kHOQct8QaF8MI5c3lkrB/qf8DlhmByaDaBbiZ4QX8
+         Vw/vxz1zOF75P8bQTe5gUV+beNZGKl+9bZz6c98vgZL2VaMrq2SEqyI80g4uHiyaiqSJ
+         Ph5LWl8hIOGUZnCHbI4KszP1dTHg0tFM/q2Q8RVI6UxoJR0dB/pNajr1PkPe8sS+o2Dc
+         4UTOR2Kb51yoz24xF4+P6JryD1F4W3ohnHVvxgjFE+q9P+Rmj/FHZ5QEIS0J6q+JMEZt
+         MVL2S9m7FtMwLTH6AlDjb460vJdJp26NqwOWv9Uq3kfKNfeQ2UweOOtgYfAJvVjc43xc
+         a4YQ==
+X-Gm-Message-State: AO0yUKXDfWuwKSRMTuLIBw0W2iU+j+Cv5kMUEVxX/FcTkfJgLhBvPfEP
+        ElnC/GM+xLKIj55w4FjJLa1chA==
+X-Google-Smtp-Source: AK7set+CXwYu0dZDS5ncauHRnqWd+eXxDWdlmg3wPkw4yl5GW5yku8xX2H+ET0W1Hih0UasI6c2ISg==
+X-Received: by 2002:a05:600c:4918:b0:3db:2063:425d with SMTP id f24-20020a05600c491800b003db2063425dmr11392100wmp.2.1677054991865;
+        Wed, 22 Feb 2023 00:36:31 -0800 (PST)
+Received: from [192.168.1.109] ([178.197.216.144])
+        by smtp.gmail.com with ESMTPSA id k18-20020a05600c409200b003db06224953sm7866120wmh.41.2023.02.22.00.36.30
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 22 Feb 2023 00:36:31 -0800 (PST)
+Message-ID: <4bb6d810-8297-f91b-c757-fd34c4f9cb0d@linaro.org>
+Date:   Wed, 22 Feb 2023 09:36:29 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.101.6]
-X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
- kwepemi500015.china.huawei.com (7.221.188.92)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH 1/2] ASoC: tas571x: add tas5733 compatible
+Content-Language: en-US
+To:     Kamel Bouhara <kamel.bouhara@bootlin.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Kevin Cernekee <cernekee@chromium.org>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Crt Mori <cmo@melexis.com>, alsa-devel@alsa-project.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230222083300.218523-1-kamel.bouhara@bootlin.com>
+ <20230222083300.218523-2-kamel.bouhara@bootlin.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230222083300.218523-2-kamel.bouhara@bootlin.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -47,135 +83,16 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add tests to check whether the total fib info length is calculated
-corretly in route notify process.
+On 22/02/2023 09:32, Kamel Bouhara wrote:
+> This adds the tas5733 to the TAS571X binding.
 
-Signed-off-by: Lu Wei <luwei32@huawei.com>
----
- tools/testing/selftests/net/fib_tests.sh | 96 +++++++++++++++++++++++-
- 1 file changed, 95 insertions(+), 1 deletion(-)
+Do not use "This ". Use imperative.
+https://elixir.bootlin.com/linux/v5.17.1/source/Documentation/process/submitting-patches.rst#L95
 
-diff --git a/tools/testing/selftests/net/fib_tests.sh b/tools/testing/selftests/net/fib_tests.sh
-index 70ea8798b1f6..7da8ec838c63 100755
---- a/tools/testing/selftests/net/fib_tests.sh
-+++ b/tools/testing/selftests/net/fib_tests.sh
-@@ -9,7 +9,7 @@ ret=0
- ksft_skip=4
- 
- # all tests in this script. Can be overridden with -t option
--TESTS="unregister down carrier nexthop suppress ipv6_rt ipv4_rt ipv6_addr_metric ipv4_addr_metric ipv6_route_metrics ipv4_route_metrics ipv4_route_v6_gw rp_filter ipv4_del_addr ipv4_mangle ipv6_mangle ipv4_bcast_neigh"
-+TESTS="unregister down carrier nexthop suppress ipv6_notify ipv4_notify ipv6_rt ipv4_rt ipv6_addr_metric ipv4_addr_metric ipv6_route_metrics ipv4_route_metrics ipv4_route_v6_gw rp_filter ipv4_del_addr ipv4_mangle ipv6_mangle ipv4_bcast_neigh"
- 
- VERBOSE=0
- PAUSE_ON_FAIL=no
-@@ -655,6 +655,98 @@ fib_nexthop_test()
- 	cleanup
- }
- 
-+fib6_notify_test()
-+{
-+	setup
-+
-+	echo
-+	echo "Fib6 info length calculation in route notify test"
-+	set -e
-+
-+	for i in 10 20 30 40 50 60 70;
-+	do
-+		$IP link add dummy_$i type dummy
-+		$IP link set dev dummy_$i up
-+		$IP -6 address add 2001:$i::1/64 dev dummy_$i
-+	done
-+
-+	$NS_EXEC ip monitor route &> errors.txt &
-+	sleep 2
-+
-+	$IP -6 route add 2001::/64 \
-+                nexthop via 2001:10::2 dev dummy_10 \
-+                nexthop encap ip6 dst 2002::20 via 2001:20::2 dev dummy_20 \
-+                nexthop encap ip6 dst 2002::30 via 2001:30::2 dev dummy_30 \
-+                nexthop encap ip6 dst 2002::40 via 2001:40::2 dev dummy_40 \
-+                nexthop encap ip6 dst 2002::50 via 2001:50::2 dev dummy_50 \
-+                nexthop encap ip6 dst 2002::60 via 2001:60::2 dev dummy_60 \
-+                nexthop encap ip6 dst 2002::70 via 2001:70::2 dev dummy_70
-+
-+	set +e
-+
-+	err=`cat errors.txt |grep "Message too long"`
-+	if [ -z "$err" ];then
-+		ret=0
-+	else
-+		ret=1
-+	fi
-+
-+	log_test $ret 0 "ipv6 route add notify"
-+
-+	{ kill %% && wait %%; } 2>/dev/null
-+
-+	#rm errors.txt
-+
-+	cleanup &> /dev/null
-+}
-+
-+
-+fib_notify_test()
-+{
-+	setup
-+
-+	echo
-+	echo "Fib4 info length calculation in route notify test"
-+
-+	set -e
-+
-+	for i in 10 20 30 40 50 60 70;
-+	do
-+		$IP link add dummy_$i type dummy
-+		$IP link set dev dummy_$i up
-+		$IP address add 20.20.$i.2/24 dev dummy_$i
-+	done
-+
-+	$NS_EXEC ip monitor route &> errors.txt &
-+	sleep 2
-+
-+        $IP route add 10.0.0.0/24 \
-+                nexthop via 20.20.10.1 dev dummy_10 \
-+                nexthop encap ip dst 192.168.10.20 via 20.20.20.1 dev dummy_20 \
-+                nexthop encap ip dst 192.168.10.30 via 20.20.30.1 dev dummy_30 \
-+                nexthop encap ip dst 192.168.10.40 via 20.20.40.1 dev dummy_40 \
-+                nexthop encap ip dst 192.168.10.50 via 20.20.50.1 dev dummy_50 \
-+                nexthop encap ip dst 192.168.10.60 via 20.20.60.1 dev dummy_60 \
-+                nexthop encap ip dst 192.168.10.70 via 20.20.70.1 dev dummy_70
-+
-+	set +e
-+
-+	err=`cat errors.txt |grep "Message too long"`
-+	if [ -z "$err" ];then
-+		ret=0
-+	else
-+		ret=1
-+	fi
-+
-+	log_test $ret 0 "ipv4 route add notify"
-+
-+	{ kill %% && wait %%; } 2>/dev/null
-+
-+	rm  errors.txt
-+
-+	cleanup &> /dev/null
-+}
-+
- fib_suppress_test()
- {
- 	echo
-@@ -2111,6 +2203,8 @@ do
- 	fib_carrier_test|carrier)	fib_carrier_test;;
- 	fib_rp_filter_test|rp_filter)	fib_rp_filter_test;;
- 	fib_nexthop_test|nexthop)	fib_nexthop_test;;
-+	fib_notify_test|ipv4_notify)	fib_notify_test;;
-+	fib6_notify_test|ipv6_notify)	fib6_notify_test;;
- 	fib_suppress_test|suppress)	fib_suppress_test;;
- 	ipv6_route_test|ipv6_rt)	ipv6_route_test;;
- 	ipv4_route_test|ipv4_rt)	ipv4_route_test;;
--- 
-2.31.1
+
+Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+
+
+Best regards,
+Krzysztof
 
