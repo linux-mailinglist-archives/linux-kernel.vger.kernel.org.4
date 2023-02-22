@@ -2,56 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DBBD269F605
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Feb 2023 15:00:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B645C69F60F
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Feb 2023 15:03:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231558AbjBVOAr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Feb 2023 09:00:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46038 "EHLO
+        id S231533AbjBVODL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Feb 2023 09:03:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47218 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231297AbjBVOAo (ORCPT
+        with ESMTP id S229631AbjBVODJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Feb 2023 09:00:44 -0500
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BCFB38B5D;
-        Wed, 22 Feb 2023 06:00:40 -0800 (PST)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out2.suse.de (Postfix) with ESMTP id 2E8671FF7D;
-        Wed, 22 Feb 2023 14:00:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1677074439; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
+        Wed, 22 Feb 2023 09:03:09 -0500
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3AAD21D92B;
+        Wed, 22 Feb 2023 06:03:08 -0800 (PST)
+From:   Kurt Kanzenbach <kurt@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1677074585;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=WSDQiRA2AYzsxlloYerB5tA2IBPaY4XYdKty9gtQYyw=;
-        b=PGgsj8L18mYbSW5wamy0ofQk8SRjVRXXrHZaAyZRgzZYKqOc8AdqcPzAf6IPDlcxE3emoW
-        8yOQntrSAwDIAWWWnVoIqoB6zkZSS0szZbOX9caAws0E7kktbtFq5KA9WTCwzCYWTFPgON
-        2pVEafI++qGgdPSFfZlLW8ssQMsS1ro=
-Received: from suse.cz (pmladek.tcp.ovpn2.prg.suse.de [10.100.208.146])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id 6B2662C141;
-        Wed, 22 Feb 2023 14:00:37 +0000 (UTC)
-Date:   Wed, 22 Feb 2023 15:00:33 +0100
-From:   Petr Mladek <pmladek@suse.com>
-To:     Josh Poimboeuf <jpoimboe@kernel.org>
-Cc:     live-patching@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Seth Forshee <sforshee@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Song Liu <song@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Joe Lawrence <joe.lawrence@redhat.com>,
-        Miroslav Benes <mbenes@suse.cz>,
-        Jiri Kosina <jikos@kernel.org>, Ingo Molnar <mingo@redhat.com>,
-        Rik van Riel <riel@surriel.com>
-Subject: Re: [PATCH v2 2/3] livepatch,sched: Add livepatch task switching to
- cond_resched()
-Message-ID: <Y/YgARbqsyvzebAl@alley>
-References: <cover.1676672328.git.jpoimboe@kernel.org>
- <9f09bff809fc026618108e8bbaac67ef2f8e6d3d.1676672328.git.jpoimboe@kernel.org>
+        bh=Hh6CS8qKUrPHMn/iWoZ8r5ZGcNwlXhMeO8uYUYMXcp8=;
+        b=njTt9NYq2UkXjEvv/iTHiJZuCTZwmtbNID9BGGOd2BB2HVa5PBG65mNPI746nxpK4sgwFh
+        w6TkeNMwZOUXXvI3tYJJSXKb7EMM/1Xc0Ai4mYRA2NBT/89Zw0FYyY/Vg7JVh/aWB0YlHG
+        Hw3yGbo7HtLMoFgA/RyZH5CxYsmFJ2M+o0ZsXRmEtDNemhFyS40ewMkJWe5XFYcs2A0pMU
+        iJYt/SgoXuDRKrG2SECPMbn1ixKqviz/jImmUyJTcv68vjeqsc561iBP8qtlDKlc2ppveZ
+        bIbprj0xQpNiqjIqx1hsyexY6ys+tUxvfZ4oHOjw++pUpuN8uGwuz6xzagYbbQ==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1677074585;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=Hh6CS8qKUrPHMn/iWoZ8r5ZGcNwlXhMeO8uYUYMXcp8=;
+        b=Wc8QvhRRh7UNaSixqqG4puaiJrokuOBJjxW+w3ten2kLzqIGqDHXccLaHy9p7XGS3ogwK6
+        y9K8CRjNBwC1XICg==
+To:     Vladimir Oltean <vladimir.oltean@nxp.com>, netdev@vger.kernel.org
+Cc:     Vinicius Costa Gomes <vinicius.gomes@intel.com>,
+        Jamal Hadi Salim <jhs@mojatatu.com>,
+        Cong Wang <xiyou.wangcong@gmail.com>,
+        Jiri Pirko <jiri@resnulli.us>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Voon Weifeng <weifeng.voon@intel.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        linux-kernel@vger.kernel.org,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+Subject: Re: [PATCH v2 net 2/2] net/sched: taprio: make qdisc_leaf() see the
+ per-netdev-queue pfifo child qdiscs
+In-Reply-To: <20220915100802.2308279-3-vladimir.oltean@nxp.com>
+References: <20220915100802.2308279-1-vladimir.oltean@nxp.com>
+ <20220915100802.2308279-3-vladimir.oltean@nxp.com>
+Date:   Wed, 22 Feb 2023 15:03:04 +0100
+Message-ID: <874jrdvluv.fsf@kurt>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <9f09bff809fc026618108e8bbaac67ef2f8e6d3d.1676672328.git.jpoimboe@kernel.org>
+Content-Type: multipart/signed; boundary="=-=-=";
+        micalg=pgp-sha512; protocol="application/pgp-signature"
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
         SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -61,91 +67,126 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri 2023-02-17 14:22:55, Josh Poimboeuf wrote:
-> There have been reports [1][2] of live patches failing to complete
-> within a reasonable amount of time due to CPU-bound kthreads.
-> 
-> Fix it by patching tasks in cond_resched().
-> 
-> There are four different flavors of cond_resched(), depending on the
-> kernel configuration.  Hook into all of them.
-> 
-> A more elegant solution might be to use a preempt notifier.  However,
-> non-ORC unwinders can't unwind a preempted task reliably.
-> 
-> [1] https://lore.kernel.org/lkml/20220507174628.2086373-1-song@kernel.org/
-> [2] https://lkml.kernel.org/lkml/20230120-vhost-klp-switching-v1-0-7c2b65519c43@kernel.org
-> 
-> --- a/kernel/livepatch/transition.c
-> +++ b/kernel/livepatch/transition.c
-> @@ -588,14 +641,10 @@ void klp_reverse_transition(void)
->  		 klp_target_state == KLP_PATCHED ? "patching to unpatching" :
->  						   "unpatching to patching");
->  
-> -	klp_transition_patch->enabled = !klp_transition_patch->enabled;
-> -
-> -	klp_target_state = !klp_target_state;
-> -
->  	/*
->  	 * Clear all TIF_PATCH_PENDING flags to prevent races caused by
-> -	 * klp_update_patch_state() running in parallel with
-> -	 * klp_start_transition().
-> +	 * klp_update_patch_state() or __klp_sched_try_switch() running in
-> +	 * parallel with the reverse transition.
->  	 */
->  	read_lock(&tasklist_lock);
->  	for_each_process_thread(g, task)
-> @@ -605,9 +654,16 @@ void klp_reverse_transition(void)
->  	for_each_possible_cpu(cpu)
->  		clear_tsk_thread_flag(idle_task(cpu), TIF_PATCH_PENDING);
->  
-> -	/* Let any remaining calls to klp_update_patch_state() complete */
-> +	/*
-> +	 * Make sure all existing invocations of klp_update_patch_state() and
-> +	 * __klp_sched_try_switch() see the cleared TIF_PATCH_PENDING before
-> +	 * starting the reverse transition.
-> +	 */
->  	klp_synchronize_transition();
->  
-> +	/* All patching has stopped, now start the reverse transition. */
-> +	klp_transition_patch->enabled = !klp_transition_patch->enabled;
-> +	klp_target_state = !klp_target_state;
+--=-=-=
+Content-Type: text/plain
+Content-Transfer-Encoding: quoted-printable
 
-I have double checked the synchronization and we need here:
+Hi Vladimir,
 
-	/*
-	 * Make sure klp_update_patch_state() and __klp_sched_try_switch()
-	 * see the updated klp_target_state before TIF_PATCH_PENDING
-	 * is set again in klp_start_transition().
-	 */
-	smp_wmb();
+On Thu Sep 15 2022, Vladimir Oltean wrote:
+> taprio can only operate as root qdisc, and to that end, there exists the
+> following check in taprio_init(), just as in mqprio:
+>
+> 	if (sch->parent !=3D TC_H_ROOT)
+> 		return -EOPNOTSUPP;
+>
+> And indeed, when we try to attach taprio to an mqprio child, it fails as
+> expected:
+>
+> $ tc qdisc add dev swp0 root handle 1: mqprio num_tc 8 \
+> 	map 0 1 2 3 4 5 6 7 \
+> 	queues 1@0 1@1 1@2 1@3 1@4 1@5 1@6 1@7 hw 0
+> $ tc qdisc replace dev swp0 parent 1:2 taprio num_tc 8 \
+> 	map 0 1 2 3 4 5 6 7 \
+> 	queues 1@0 1@1 1@2 1@3 1@4 1@5 1@6 1@7 \
+> 	base-time 0 sched-entry S 0x7f 990000 sched-entry S 0x80 100000 \
+> 	flags 0x0 clockid CLOCK_TAI
+> Error: sch_taprio: Can only be attached as root qdisc.
+>
+> (extack message added by me)
+>
+> But when we try to attach a taprio child to a taprio root qdisc,
+> surprisingly it doesn't fail:
+>
+> $ tc qdisc replace dev swp0 root handle 1: taprio num_tc 8 \
+> 	map 0 1 2 3 4 5 6 7 queues 1@0 1@1 1@2 1@3 1@4 1@5 1@6 1@7 \
+> 	base-time 0 sched-entry S 0x7f 990000 sched-entry S 0x80 100000 \
+> 	flags 0x0 clockid CLOCK_TAI
+> $ tc qdisc replace dev swp0 parent 1:2 taprio num_tc 8 \
+> 	map 0 1 2 3 4 5 6 7 \
+> 	queues 1@0 1@1 1@2 1@3 1@4 1@5 1@6 1@7 \
+> 	base-time 0 sched-entry S 0x7f 990000 sched-entry S 0x80 100000 \
+> 	flags 0x0 clockid CLOCK_TAI
+>
+> This is because tc_modify_qdisc() behaves differently when mqprio is
+> root, vs when taprio is root.
+>
+> In the mqprio case, it finds the parent qdisc through
+> p =3D qdisc_lookup(dev, TC_H_MAJ(clid)), and then the child qdisc through
+> q =3D qdisc_leaf(p, clid). This leaf qdisc q has handle 0, so it is
+> ignored according to the comment right below ("It may be default qdisc,
+> ignore it"). As a result, tc_modify_qdisc() goes through the
+> qdisc_create() code path, and this gives taprio_init() a chance to check
+> for sch_parent !=3D TC_H_ROOT and error out.
+>
+> Whereas in the taprio case, the returned q =3D qdisc_leaf(p, clid) is
+> different. It is not the default qdisc created for each netdev queue
+> (both taprio and mqprio call qdisc_create_dflt() and keep them in
+> a private q->qdiscs[], or priv->qdiscs[], respectively). Instead, taprio
+> makes qdisc_leaf() return the _root_ qdisc, aka itself.
+>
+> When taprio does that, tc_modify_qdisc() goes through the qdisc_change()
+> code path, because the qdisc layer never finds out about the child qdisc
+> of the root. And through the ->change() ops, taprio has no reason to
+> check whether its parent is root or not, just through ->init(), which is
+> not called.
+>
+> The problem is the taprio_leaf() implementation. Even though code wise,
+> it does the exact same thing as mqprio_leaf() which it is copied from,
+> it works with different input data. This is because mqprio does not
+> attach itself (the root) to each device TX queue, but one of the default
+> qdiscs from its private array.
+>
+> In fact, since commit 13511704f8d7 ("net: taprio offload: enforce qdisc
+> to netdev queue mapping"), taprio does this too, but just for the full
+> offload case. So if we tried to attach a taprio child to a fully
+> offloaded taprio root qdisc, it would properly fail too; just not to a
+> software root taprio.
+>
+> To fix the problem, stop looking at the Qdisc that's attached to the TX
+> queue, and instead, always return the default qdiscs that we've
+> allocated (and to which we privately enqueue and dequeue, in software
+> scheduling mode).
+>
+> Since Qdisc_class_ops :: leaf  is only called from tc_modify_qdisc(),
+> the risk of unforeseen side effects introduced by this change is
+> minimal.
+>
+> Fixes: 5a781ccbd19e ("tc: Add support for configuring the taprio schedule=
+r")
+> Signed-off-by: Vladimir Oltean <vladimir.oltean@nxp.com>
 
-The same is achieved by smp_wmb() in klp_init_transition().
+This commit was backported to v5.15-LTS which results in NULL pointer
+dereferences e.g., when attaching an ETF child qdisc to taprio.
 
-Note that the extra barrier was missing here because klp_target_state
-was set before klp_synchronize_transition(). It was fine because
-klp_update_patch_state() was called on locations where a transition
-in any direction was always safe.
+From=20what I can see is, that the issue was reported back then and this
+commit was reverted [1]. However, the revert didn't make it into
+v5.15-LTS? Is there a reason for it? I'm testing 5.15.94-rt59 here.
 
-Just for record. We need to modify @klp_target_state after
-klp_synchronize_transition() now. The value is used by
-__klp_sched_try_switch() to decide when the transition
-is safe. It defines what functions must not be on the stack.
+Thanks,
+Kurt
 
-I am sorry that I missed this when reviewing v1. I think that I needed
-to see the new code with a fresh head.
+[1] - https://lore.kernel.org/all/20221004220100.1650558-1-vladimir.oltean@=
+nxp.com/
 
->  	klp_start_transition();
->  }
+--=-=-=
+Content-Type: application/pgp-signature; name="signature.asc"
 
-I do not see any other problem. With the above barrier added,
-feel free to use:
+-----BEGIN PGP SIGNATURE-----
 
-Reviewed-by: Petr Mladek <pmladek@suse.com>
-
-It is for the livepatching part. I checked also the scheduler
-code and it looked fine but I would not put my hand in the fire
-for it.
-
-Best Regards,
-Petr
+iQJHBAEBCgAxFiEEvLm/ssjDfdPf21mSwZPR8qpGc4IFAmP2IJgTHGt1cnRAbGlu
+dXRyb25peC5kZQAKCRDBk9HyqkZzgh66D/9EOgu+l1QTGKaS9GE+386iD4FBb7Q6
+KFx7dJBmTYD3C7vJ1pVk7aYyNmTiRA5YA41c3Qdl4X1KgruVLUoEZ5kCJLyEbbCZ
+YJfkbGAJDskyu6tumJ3JMnnCEBr6qgorh5OD7okQytlR3dk0yxFkYD/Wh+LB069f
+GF7QOv7tB6qfbW9w00K4zY3zMiQrDKE3O0tSUA9EgsA3EiRtM9XP2OlQ1/aq2BAX
+0+HYrq7Dhokj/7pCQxKoLmCxkD/1jXF0WXnSvFWlsMTfytYNhAYyaMVcZEEfltD7
+UExThY/ujT+fGx819mSvOf8Kt0AKgbeNw+nDi4fHnX6hFVbH223MbAoQv3tFQNCD
+Lv8IykI3jns2evnPog2MvYY25QP1IJYFJHzLZqdCOIEnT+yZJ8pQ3cNDtN0D1cRo
+xvU53POWCH2dEH1n3eiEMFBniYsLpR4TsRM2HDkCfi8UvBjxXTLbWLW7MxzUYasw
+cNIaov0N52mdUDG2RCcjdkUkJCcKDg0878K/o1Cm9ahh+QG87mPFrwH5H0JQ1yls
+f9ScDR57jUwCyB1quEbGzbPSCQ0JEOOd10VNuuvZfLhQcf8OlWNb9+d8MTFM/zv+
+oXsFSR9gVtUA/m5D0THaRVm4gW0620XAK9aJ12DoTZLdWB4vp5uhOWWMdDpd2XHv
+CUWl3IZaz9luFw==
+=Bqsh
+-----END PGP SIGNATURE-----
+--=-=-=--
