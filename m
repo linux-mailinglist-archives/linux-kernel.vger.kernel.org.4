@@ -2,69 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9281969F651
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Feb 2023 15:18:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7969969F67E
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Feb 2023 15:23:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231265AbjBVOSa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Feb 2023 09:18:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60810 "EHLO
+        id S231963AbjBVOXV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Feb 2023 09:23:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37532 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231911AbjBVOSZ (ORCPT
+        with ESMTP id S231601AbjBVOXQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Feb 2023 09:18:25 -0500
-Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDEDE3771D
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Feb 2023 06:18:18 -0800 (PST)
-Received: by mail-wm1-x331.google.com with SMTP id o38-20020a05600c512600b003e8320d1c11so1040243wms.1
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Feb 2023 06:18:18 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=/9AYv4MZ0PVdleCTLJmIdfXhLpHP301LVOycmvvAP8k=;
-        b=MEZmwJwuozbgU2BGHEe6dTjKLaFjN2r0XVnwx90M1y0zW1HAbrl2S5ba/42kntuO5W
-         FCOD3KcgaT7O/cKD3iymSEmo+42I0qpvzrv9oXrWZ+oyp1sa59hHKtydyN8RX8BLoIEq
-         KqsfxbtvGIy1aF5AShWqaXdcwD4cCdQiTBV6CpFXXxKsGcWot5wBqMFtsSR6Je61wUGt
-         Cct+Jxr4Pc3kQ+haKOXeS6hKijXyUmqIZNDg27K9MZ/46HRXicMlo7NtCpE1b84zeUor
-         YwwTYN/qOPj+jitlxNBArAdZ2PBIRt7iC8mfl4wQgWWSn8wTz6GL++i2NWVcADmQgTrL
-         U8IA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=/9AYv4MZ0PVdleCTLJmIdfXhLpHP301LVOycmvvAP8k=;
-        b=OO9hdSwFCy+TPMs2RRRSEjw5KYq4mvlReQBFbkcxoqDaRkfjxncBGGRHWAM9MfKbR/
-         10Ymn1XxSN8k40an90qu0+U4WlQKN2TxSEUS3ufhScSJB7VJEQxgny0u9mQbTqYukTXC
-         nJZVn8n6IjkOx6Qg9UGx+l34Zas9bW9Jg96w2f1mL/HrkV93cLbI1/QYivJw9oV9h+ml
-         VMkd3TGeliz4QzfqDVBPhM3FylmQTI2mRVWafTM7dB9kTQI1+whjz7ZfQZ6DX83pnWjB
-         30VVWDhwsr+c92vOWykPAQOPEd6o/9xz+zFBeYd67seuuwR9KVezXOhMH6blGz23zpbH
-         HEYw==
-X-Gm-Message-State: AO0yUKXtMHRAsXW7TpM2WnZGsbi+gMC0fjtYJsBah3pJ0tz0lYQVDFZB
-        9Sh9+jPsQB5lxg+PoIIXAcQwSZqNK19+XA==
-X-Google-Smtp-Source: AK7set+CmRx93TMsiUA4vCV6SODXbE8jzm5WDn5sIGkpTrZ+gi3QeUMO7ui5hmhh8w0HklpUx/VN1A==
-X-Received: by 2002:a05:600c:4b30:b0:3e2:147f:ac1a with SMTP id i48-20020a05600c4b3000b003e2147fac1amr4335527wmp.21.1677075497154;
-        Wed, 22 Feb 2023 06:18:17 -0800 (PST)
-Received: from localhost ([102.36.222.112])
-        by smtp.gmail.com with ESMTPSA id d1-20020a5d4f81000000b002c5526234d2sm7025740wru.8.2023.02.22.06.18.16
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 22 Feb 2023 06:18:16 -0800 (PST)
-Date:   Wed, 22 Feb 2023 17:18:13 +0300
-From:   Dan Carpenter <error27@gmail.com>
-To:     oe-kbuild@lists.linux.dev, Geetha sowjanya <gakula@marvell.com>
-Cc:     lkp@intel.com, oe-kbuild-all@lists.linux.dev,
-        linux-kernel@vger.kernel.org,
-        Vamsi Attunuru <vattunuru@marvell.com>,
-        Sunil Goutham <sgoutham@marvell.com>,
-        Subbaraya Sundeep <sbhatta@marvell.com>
-Subject: drivers/net/ethernet/marvell/octeontx2/af/mcs_rvu_if.c:29
- rvu_mcs_set_lmac_bmap() error: uninitialized symbol 'lmac_bmap'.
-Message-ID: <202302191621.sVquZwLz-lkp@intel.com>
+        Wed, 22 Feb 2023 09:23:16 -0500
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E11A046BC;
+        Wed, 22 Feb 2023 06:22:50 -0800 (PST)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 7596E139F;
+        Wed, 22 Feb 2023 06:23:33 -0800 (PST)
+Received: from [10.57.16.42] (unknown [10.57.16.42])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id D72D93F881;
+        Wed, 22 Feb 2023 06:22:48 -0800 (PST)
+Message-ID: <732cab3d-e03e-f201-d4ec-aa8c0f7cece7@arm.com>
+Date:   Wed, 22 Feb 2023 14:22:44 +0000
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.2
+Subject: Re: [PATCH 0/7] MIPS DMA coherence fixes
+Content-Language: en-GB
+To:     Jiaxun Yang <jiaxun.yang@flygoat.com>
+Cc:     Christoph Hellwig <hch@lst.de>,
+        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
+        linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        mpe@ellerman.id.au, paul.walmsley@sifive.com, palmer@dabbelt.com,
+        Rob Herring <robh+dt@kernel.org>, m.szyprowski@samsung.com
+References: <20230221124613.2859-1-jiaxun.yang@flygoat.com>
+ <20230221175423.GA15247@lst.de>
+ <A8AC22A0-E883-4D9B-A629-5A3721B976C5@flygoat.com>
+ <ed2d7750-786d-82a1-5e79-1f216a682b20@arm.com>
+ <34578218-DC7A-4C8B-A01A-AD64831CCB43@flygoat.com>
+ <a46e1840-89be-de8f-6a91-3e4a16fa17c2@arm.com>
+ <CBE3717B-E49A-4BAA-9CD0-FFD2462B9CE0@flygoat.com>
+From:   Robin Murphy <robin.murphy@arm.com>
+In-Reply-To: <CBE3717B-E49A-4BAA-9CD0-FFD2462B9CE0@flygoat.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,42 +55,55 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   925cf0457d7e62ce08878ffb789189ac08ca8677
-commit: ca7f49ff884677f97858c3934806e0e666425af0 octeontx2-af: cn10k: Introduce driver for macsec block.
-config: s390-randconfig-m031-20230219 (https://download.01.org/0day-ci/archive/20230219/202302191621.sVquZwLz-lkp@intel.com/config)
-compiler: s390-linux-gcc (GCC) 12.1.0
+On 2023-02-22 13:04, Jiaxun Yang wrote:
+> 
+> 
+>> 2023年2月22日 12:55，Robin Murphy <robin.murphy@arm.com> 写道：
+>>
+>> On 2023-02-21 19:55, Jiaxun Yang wrote:
+>>>> 2023年2月21日 19:46，Robin Murphy <robin.murphy@arm.com> 写道：
+>>>>
+>>>> On 2023-02-21 18:15, Jiaxun Yang wrote:
+>>>>>> 2023年2月21日 17:54，Christoph Hellwig <hch@lst.de> 写道：
+>>>>>>
+>>>>>> Can you explain the motivation here?  Also why riscv patches are at
+>>>>>> the end of a mips fіxes series?
+>>>>> Ah sorry for any confusion.
+>>>>> So the main purpose of this patch is to fix MIPS’s broken per-device coherency.
+>>>>> To be more precise, we want to be able to control the default coherency for all devices probed from
+>>>>> devicetree in early boot code.
+>>>>
+>>>> Including the patch which actually does that would be helpful. As it is, patches 4-7 here just appear to be moving an option around for no practical effect.
+>>> Well the affect is default coherency of devicetree probed devices are now following dma_default_coherent
+>>> instead of a static Kconfig option. For MIPS platform, dma_default_coherent will be determined by boot code.
+>>
+>> "Will be" is the issue I'm getting at. We can't review some future promise of a patch, we can only review actual patches. And it's hard to meaningfully review preparatory patches for some change without the full context of that change.
+> 
+> Actually this already present in current MIPS platform code.
+> 
+> arch/mips/mti-malta is setting dma_default_coherent on boot, and it’s devicetree does not explicitly specify coherency.
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Reported-by: Dan Carpenter <error27@gmail.com>
-| Link: https://lore.kernel.org/r/202302191621.sVquZwLz-lkp@intel.com/
+OK, this really needs to be explained much more clearly. I read this 
+series as 3 actual fix patches, then 3 patches adding a new option to 
+replace an existing one on the grounds that it "can be useful" for 
+unspecified purposes, then a final cleanup patch removing the old option 
+that has now been superseded.
 
-smatch warnings:
-drivers/net/ethernet/marvell/octeontx2/af/mcs_rvu_if.c:29 rvu_mcs_set_lmac_bmap() error: uninitialized symbol 'lmac_bmap'.
+Going back and looking closely I see there is actually a brief mention 
+in the cleanup patch that it also happens to fix some issue, but even 
+then it doesn't clearly explain what the issue really is or how and why 
+the fix works and is appropriate.
 
-vim +/lmac_bmap +29 drivers/net/ethernet/marvell/octeontx2/af/mcs_rvu_if.c
+Ideally, functional fixes and cleanup should be in distinct patches 
+whenever that is reasonable. Sometimes the best fix is inherently a 
+cleanup, but in such cases the patch should always be presented as the 
+fix being its primary purpose. Please also use the cover letter to give 
+reviewers an overview of the whole series if it's not merely a set of 
+loosely-related patches that just happened to be convenient so send all 
+together.
 
-ca7f49ff884677 Geetha sowjanya 2022-10-01  16  static void rvu_mcs_set_lmac_bmap(struct rvu *rvu)
-ca7f49ff884677 Geetha sowjanya 2022-10-01  17  {
-ca7f49ff884677 Geetha sowjanya 2022-10-01  18  	struct mcs *mcs = mcs_get_pdata(0);
-ca7f49ff884677 Geetha sowjanya 2022-10-01  19  	unsigned long lmac_bmap;
-ca7f49ff884677 Geetha sowjanya 2022-10-01  20  	int cgx, lmac, port;
-ca7f49ff884677 Geetha sowjanya 2022-10-01  21  
-ca7f49ff884677 Geetha sowjanya 2022-10-01  22  	for (port = 0; port < mcs->hw->lmac_cnt; port++) {
-ca7f49ff884677 Geetha sowjanya 2022-10-01  23  		cgx = port / rvu->hw->lmac_per_cgx;
-ca7f49ff884677 Geetha sowjanya 2022-10-01  24  		lmac = port % rvu->hw->lmac_per_cgx;
-ca7f49ff884677 Geetha sowjanya 2022-10-01  25  		if (!is_lmac_valid(rvu_cgx_pdata(cgx, rvu), lmac))
-ca7f49ff884677 Geetha sowjanya 2022-10-01  26  			continue;
-ca7f49ff884677 Geetha sowjanya 2022-10-01  27  		set_bit(port, &lmac_bmap);
+I think I do at least now understand the underlying problem well enough 
+to have a think about whether this is the best way to address it.
 
-This doesn't work.  lmac_bmap needs to be initialized to zero.
-
-ca7f49ff884677 Geetha sowjanya 2022-10-01  28  	}
-ca7f49ff884677 Geetha sowjanya 2022-10-01 @29  	mcs->hw->lmac_bmap = lmac_bmap;
-ca7f49ff884677 Geetha sowjanya 2022-10-01  30  }
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
-
+Thanks,
+Robin.
