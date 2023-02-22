@@ -2,142 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BED7869F0D8
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Feb 2023 10:02:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 017AA69F0D7
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Feb 2023 10:02:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231508AbjBVJCk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Feb 2023 04:02:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49568 "EHLO
+        id S231495AbjBVJCP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Feb 2023 04:02:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49032 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230457AbjBVJCi (ORCPT
+        with ESMTP id S229975AbjBVJCM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Feb 2023 04:02:38 -0500
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F83334F49
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Feb 2023 01:02:33 -0800 (PST)
-Received: from pps.filterd (m0098404.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 31M8QXUq027042;
-        Wed, 22 Feb 2023 09:02:23 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
- : date : message-id : mime-version : content-transfer-encoding; s=pp1;
- bh=Wcw5U9usVW0jSpUTwgc+fcPdSplu62KQeKvS/wONcM8=;
- b=pbHHtrECsXb9y2BUnOMKh1X9REHJK02Zx8DjXES8efOlWFlTllOLHtBVtBik/Qn9R0Cl
- Itawjj7+onswD5JPLBr+B8bVyoBjQmHavk1y94M/tmfhhg7vaAc84p2AGtbCn+5j3SqO
- HBw7467JMun2EAzm3SLP8uR+EKN5deZYx+WYQkdDKoBluI5Ad61VL4Fw2YXdqC/Zcygw
- tE/gzJArsiFji4/QHh8Q+LAvS1VDQMMWMbTIxm1Y5RuR53ZfasqxLF2kwLPNbFdKwpiM
- Hsa6RJfmSILefiTmvd2XqNbXd6/jJ+QU8QqNHPnW182TXCvWIR/Zz5aK/1Eq3SrhH9IL 7g== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3nwfhvgsns-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 22 Feb 2023 09:02:23 +0000
-Received: from m0098404.ppops.net (m0098404.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 31M8bVc9001222;
-        Wed, 22 Feb 2023 09:02:22 GMT
-Received: from ppma01fra.de.ibm.com (46.49.7a9f.ip4.static.sl-reverse.com [159.122.73.70])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3nwfhvgs6s-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 22 Feb 2023 09:02:22 +0000
-Received: from pps.filterd (ppma01fra.de.ibm.com [127.0.0.1])
-        by ppma01fra.de.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 31LDHs8u020937;
-        Wed, 22 Feb 2023 09:01:27 GMT
-Received: from smtprelay06.fra02v.mail.ibm.com ([9.218.2.230])
-        by ppma01fra.de.ibm.com (PPS) with ESMTPS id 3ntpa6buq6-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 22 Feb 2023 09:01:26 +0000
-Received: from smtpav04.fra02v.mail.ibm.com (smtpav04.fra02v.mail.ibm.com [10.20.54.103])
-        by smtprelay06.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 31M91O6226280682
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 22 Feb 2023 09:01:24 GMT
-Received: from smtpav04.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 5CDA12004B;
-        Wed, 22 Feb 2023 09:01:23 +0000 (GMT)
-Received: from smtpav04.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 5C24F20040;
-        Wed, 22 Feb 2023 09:01:20 +0000 (GMT)
-Received: from li-a450e7cc-27df-11b2-a85c-b5a9ac31e8ef.ibm.com (unknown [9.43.123.148])
-        by smtpav04.fra02v.mail.ibm.com (Postfix) with ESMTP;
-        Wed, 22 Feb 2023 09:01:19 +0000 (GMT)
-From:   Kautuk Consul <kconsul@linux.vnet.ibm.com>
-To:     Michael Ellerman <mpe@ellerman.id.au>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Rohan McLure <rmclure@linux.ibm.com>
-Cc:     linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org,
-        Kautuk Consul <kconsul@linux.vnet.ibm.com>
-Subject: [PATCH] arch/powerpc/include/asm/barrier.h: redefine rmb and wmb to lwsync
-Date:   Wed, 22 Feb 2023 14:31:12 +0530
-Message-Id: <20230222090112.187583-1-kconsul@linux.vnet.ibm.com>
-X-Mailer: git-send-email 2.31.1
+        Wed, 22 Feb 2023 04:02:12 -0500
+Received: from mail.netfilter.org (mail.netfilter.org [217.70.188.207])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1FBBC36697;
+        Wed, 22 Feb 2023 01:02:11 -0800 (PST)
+Date:   Wed, 22 Feb 2023 10:02:07 +0100
+From:   Pablo Neira Ayuso <pablo@netfilter.org>
+To:     Pavel Tikhomirov <ptikhomirov@virtuozzo.com>
+Cc:     Jozsef Kadlecsik <kadlec@netfilter.org>,
+        Florian Westphal <fw@strlen.de>,
+        netfilter-devel@vger.kernel.org, coreteam@netfilter.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kernel@openvz.org
+Subject: Re: [PATCH] netfilter: fix percpu counter block leak on error path
+ when creating new netns
+Message-ID: <Y/XaD3Dt0tiO2yuT@salvia>
+References: <20230213042505.334898-1-ptikhomirov@virtuozzo.com>
+ <Y/VS7okXF1c6rN/I@salvia>
+ <4c6e6b8e-1d0c-2893-f4b9-ea40170cacd6@virtuozzo.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: QSyD09S1KL2OukIdwsFLPU76kYkEd2ei
-X-Proofpoint-ORIG-GUID: zGfMT4bp9Ocw1RK_BS4iUcheaR5QJK7k
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.170.22
- definitions=2023-02-22_04,2023-02-20_02,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
- clxscore=1015 malwarescore=0 adultscore=0 phishscore=0 suspectscore=0
- mlxlogscore=774 impostorscore=0 mlxscore=0 bulkscore=0 priorityscore=1501
- spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2302220078
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <4c6e6b8e-1d0c-2893-f4b9-ea40170cacd6@virtuozzo.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-A link from ibm.com states:
-"Ensures that all instructions preceding the call to __lwsync
- complete before any subsequent store instructions can be executed
- on the processor that executed the function. Also, it ensures that
- all load instructions preceding the call to __lwsync complete before
- any subsequent load instructions can be executed on the processor
- that executed the function. This allows you to synchronize between
- multiple processors with minimal performance impact, as __lwsync
- does not wait for confirmation from each processor."
+On Wed, Feb 22, 2023 at 10:11:03AM +0800, Pavel Tikhomirov wrote:
+> On 22.02.2023 07:25, Pablo Neira Ayuso wrote:
+> > Hi,
+> > 
+> > On Mon, Feb 13, 2023 at 12:25:05PM +0800, Pavel Tikhomirov wrote:
+> > > Here is the stack where we allocate percpu counter block:
+> > > 
+> > >    +-< __alloc_percpu
+> > >      +-< xt_percpu_counter_alloc
+> > >        +-< find_check_entry # {arp,ip,ip6}_tables.c
+> > >          +-< translate_table
+> > > 
+> > > And it can be leaked on this code path:
+> > > 
+> > >    +-> ip6t_register_table
+> > >      +-> translate_table # allocates percpu counter block
+> > >      +-> xt_register_table # fails
+> > > 
+> > > there is no freeing of the counter block on xt_register_table fail.
+> > > Note: xt_percpu_counter_free should be called to free it like we do in
+> > > do_replace through cleanup_entry helper (or in __ip6t_unregister_table).
+> > > 
+> > > Probability of hitting this error path is low AFAICS (xt_register_table
+> > > can only return ENOMEM here, as it is not replacing anything, as we are
+> > > creating new netns, and it is hard to imagine that all previous
+> > > allocations succeeded and after that one in xt_register_table failed).
+> > > But it's worth fixing even the rare leak.
+> > 
+> > Any suggestion as Fixes: tag here? This issue seems to be rather old?
+> 
+> 
+> If I'm correct:
+> 
+> 1) we have this exact percpu leak since commit 71ae0dff02d7
+> ("netfilter: xtables: use percpu rule counters") which introduced
+> the percpu allocation.
+> 
+> 2) but we don't call cleanup_entry on this path at least since
+> commit 1da177e4c3f4 ("Linux-2.6.12-rc2") which is really old.
+> 
+> 3) I also see the same thing here https://github.com/mpe/linux-fullhistory/blame/1ab7e5ccf454483fb78998854dddd0bab398c3de/net/ipv4/netfilter/arp_tables.c#L1169
+> which is probably the initiall commit which introduced
+> net/ipv4/netfilter/arp_tables.c file.
+> 
+> So I'm not sure about Fixes: tag, probably one of those three commits.
 
-Thats why smp_rmb() and smp_wmb() are defined to lwsync.
-But this same understanding applies to parallel pipeline
-execution on each PowerPC processor.
-So, use the lwsync instruction for rmb() and wmb() on the PPC
-architectures that support it.
-
-Also removed some useless spaces.
-
-Signed-off-by: Kautuk Consul <kconsul@linux.vnet.ibm.com>
----
- arch/powerpc/include/asm/barrier.h | 12 +++++++++---
- 1 file changed, 9 insertions(+), 3 deletions(-)
-
-diff --git a/arch/powerpc/include/asm/barrier.h b/arch/powerpc/include/asm/barrier.h
-index e80b2c0e9315..553f5a5d20bd 100644
---- a/arch/powerpc/include/asm/barrier.h
-+++ b/arch/powerpc/include/asm/barrier.h
-@@ -41,11 +41,17 @@
- 
- /* The sub-arch has lwsync */
- #if defined(CONFIG_PPC64) || defined(CONFIG_PPC_E500MC)
--#    define SMPWMB      LWSYNC
-+#undef rmb
-+#undef wmb
-+/* Redefine rmb() to lwsync. */
-+#define rmb()	({__asm__ __volatile__ ("lwsync" : : : "memory"); })
-+/* Redefine wmb() to lwsync. */
-+#define wmb()	({__asm__ __volatile__ ("lwsync" : : : "memory"); })
-+#define SMPWMB      LWSYNC
- #elif defined(CONFIG_BOOKE)
--#    define SMPWMB      mbar
-+#define SMPWMB      mbar
- #else
--#    define SMPWMB      eieio
-+#define SMPWMB      eieio
- #endif
- 
- /* clang defines this macro for a builtin, which will not work with runtime patching */
--- 
-2.31.1
-
+Thanks, I will pick #1 as Fixes: tag.
