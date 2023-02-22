@@ -2,81 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E79469EBE5
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Feb 2023 01:23:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6DD5369EBE8
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Feb 2023 01:25:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230341AbjBVAXE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Feb 2023 19:23:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60914 "EHLO
+        id S230351AbjBVAY6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Feb 2023 19:24:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34038 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229448AbjBVAXD (ORCPT
+        with ESMTP id S229560AbjBVAY4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Feb 2023 19:23:03 -0500
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1732825E3D;
-        Tue, 21 Feb 2023 16:23:01 -0800 (PST)
-Received: from pps.filterd (m0279868.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 31LNkrE9023676;
-        Wed, 22 Feb 2023 00:22:48 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=GSqS92vIwQB799pi53rSrb1ngxfts/lxtA22QEfZ/Rk=;
- b=JLsEKJGAh/bi28x0DMUuK19FWhmJSNgj06XHZZm1i9Vyl4BY4eHXvq3RpgkFuf0EdYhn
- sDkN3FuokqzEsvtHnXiM3bbnl5rbUhOSLkghTmeUwy3OBkZT629FZkYYqMQNyaZARDGF
- Si/yy1sQZyMMyKtFqwvNQaIdC9C6gQKiXXhYf/4nNxaaxIi0j2RwBXibMufAcq+gqN6+
- 4cvLLkGGUCKqKnflJ/yS5tmSyuL0q5gGiFFuuhm9s99H7UVKyMwLX43670SXu5VxOZGM
- wS2Aj6pb9pAflGKnj7qMjfMrx9kuyP2noxbTMVC0T9lfov8mWmkWkXguhq5qnx9VFmkG fg== 
-Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3nvtbxa4we-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 22 Feb 2023 00:22:48 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 31M0Ml52023334
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 22 Feb 2023 00:22:47 GMT
-Received: from [10.253.74.210] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.41; Tue, 21 Feb
- 2023 16:22:45 -0800
-Message-ID: <9ae693f2-b19e-ff1f-851c-c3d09db4d9d1@quicinc.com>
-Date:   Wed, 22 Feb 2023 08:22:43 +0800
+        Tue, 21 Feb 2023 19:24:56 -0500
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F615311C6;
+        Tue, 21 Feb 2023 16:24:55 -0800 (PST)
+From:   Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1677025494;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=RFxbMXXmu1KSWmkyS7CNaBdRPgAJukHwXn3uC7mnL08=;
+        b=Nt9NCiwE+E85SFvkEKjZghHHoGFdoJzJZFovt6bf0Svcxsq/6HikW4zCdeKhLNPh+JqDLh
+        MdEnHXVBVtEkc2Si84GNYmIsOh+k4Meqegjnh56KfIYFibKprJkfMpVEPCtE4ewixknoUL
+        KBVWDT30DpTzj4Hpfthp9jyVrrK9Y+xc26vE/3yFanSd4elbDn+WARhvqO5IA1LVhZ27zN
+        2bYEjsO/bT8FgElwLUqg1zQyqSeU1o7NUA8TjKzpOxY0fGtR7/d9WpGTIrWVpB+qZCcAJs
+        BXrbW6nDl+n6z7+tN4tKgrm/xlcegCxOH+fhAFHA8Yv3ZL4vMW8Fz4z2fiwlDA==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1677025494;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=RFxbMXXmu1KSWmkyS7CNaBdRPgAJukHwXn3uC7mnL08=;
+        b=bPACesJRTqkEvI7v6VwG5UPWY6UuHlhFP3pfLOwSNlH2AszNtq10x52yRx7m2JRdXjqXrJ
+        6pKXsh75FtmgEDBg==
+To:     Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Cc:     Asahi Lina <lina@asahilina.net>, Boqun Feng <boqun.feng@gmail.com>,
+        Miguel Ojeda <ojeda@kernel.org>,
+        Alex Gaynor <alex.gaynor@gmail.com>,
+        Wedson Almeida Filho <wedsonaf@gmail.com>,
+        Gary Guo <gary@garyguo.net>,
+        =?utf-8?Q?Bj=C3=B6rn?= Roy Baron <bjorn3_gh@protonmail.com>,
+        John Stultz <jstultz@google.com>,
+        Stephen Boyd <sboyd@kernel.org>, linux-kernel@vger.kernel.org,
+        rust-for-linux@vger.kernel.org, asahi@lists.linux.dev,
+        Heghedus Razvan <heghedus.razvan@protonmail.com>
+Subject: Re: [PATCH] rust: time: New module for timekeeping functions
+In-Reply-To: <CANiq72n-++roTv3yDNOA=Mi_sscBZX3xPdZ6RZ0Oxx+T82pf5A@mail.gmail.com>
+References: <20230221-gpu-up-time-v1-1-bf8fe74b7f55@asahilina.net>
+ <87v8jvnqq4.ffs@tglx> <Y/TP6as7qqwfcI42@boqun-archlinux>
+ <87h6vfnh0f.ffs@tglx> <7b93bf74-abdc-f8c1-9a12-7c7f080f9e19@asahilina.net>
+ <87edqioo1e.ffs@tglx>
+ <CANiq72n-++roTv3yDNOA=Mi_sscBZX3xPdZ6RZ0Oxx+T82pf5A@mail.gmail.com>
+Date:   Wed, 22 Feb 2023 01:24:53 +0100
+Message-ID: <87o7pmmtre.ffs@tglx>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.13.1
-Subject: Re: [PATCH 1/2] wifi: cfg80211: Add beacon hint notifier support
-Content-Language: en-US
-To:     Johannes Berg <johannes@sipsolutions.net>,
-        "Youghandhar Chintala (Temp)" <quic_youghand@quicinc.com>,
-        <ath10k@lists.infradead.org>
-CC:     <linux-wireless@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <quic_mpubbise@quicinc.com>, Wen Gong <quic_wgong@quicinc.com>
-References: <20221222124221.30894-1-quic_youghand@quicinc.com>
- <20221222124221.30894-2-quic_youghand@quicinc.com>
- <1df59863e78e8ddbe7eb3a74e6dd4c8f0bd7f098.camel@sipsolutions.net>
- <96cab5d9-9090-4cb2-ff17-eadc9da12f50@quicinc.com>
- <0d4b99ab0a5bedc82f35bc1e548a611564b010e5.camel@sipsolutions.net>
-From:   Wen Gong <quic_wgong@quicinc.com>
-In-Reply-To: <0d4b99ab0a5bedc82f35bc1e548a611564b010e5.camel@sipsolutions.net>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: Dvi9KBhRlHTNhdqvYm6bry6T-3irrzVO
-X-Proofpoint-ORIG-GUID: Dvi9KBhRlHTNhdqvYm6bry6T-3irrzVO
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.170.22
- definitions=2023-02-21_13,2023-02-20_02,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- lowpriorityscore=0 bulkscore=0 clxscore=1011 mlxscore=0 spamscore=0
- phishscore=0 mlxlogscore=764 impostorscore=0 adultscore=0 malwarescore=0
- suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2302220000
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
         SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -84,24 +66,51 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Miguel!
 
-On 2/15/2023 11:10 PM, Johannes Berg wrote:
->>> Why is this even needed? You should always get reg_notifier after this
->>> anyway?
->> Currently when channel flag changed through the beacon hints are not
->> informed to driver.
+On Tue, Feb 21 2023 at 23:29, Miguel Ojeda wrote:
+> On Tue, Feb 21, 2023 at 7:45 PM Thomas Gleixner <tglx@linutronix.de> wrote:
 >>
->> reg_notifier will be triggered for regdomain changes but not for channel flag changes due to beacon hints.
->>
-> So maybe triggering reg notifier once would be sufficient, a la Wen's
-> patch that I recently merged?
-
-My patch only take effect for this flag, not for all wiphy.
-
-if (wiphy->flags & WIPHY_FLAG_NOTIFY_REGDOM_BY_DRIVER)
-
-https://git.kernel.org/pub/scm/linux/kernel/git/kvalo/ath.git/commit?id=d99975c4953eb79e389d4630e848435c700e2dfc
-
+>> But xb abd xr are the same datatype because they represent a time delta.
 >
-> johannes
->
+> In principle, one could also have different duration types too. For
+> instance, C++'s `std::chrono::duration` type is parametrized on the
+> representation type and the tick period, and thus an operation between
+> two time points like t1 - t0 returns a duration type that depends on
+> the type of the time points, i.e. which clock they were obtained from.
+
+Correct, but for practical purposes I'd assume that the timestamps
+retrieved via ktime_get*() have the same granularity, i.e. 1ns.
+
+TBH, that's not entirely correct because:
+
+    - the underlying hardware clocksource might not have a 1ns
+      resolution
+
+    - the CLOCK_*_COARSE implementations are only advanced once per
+      tick, but are executing significantly faster because they avoid
+      the hardware counter access.
+
+But that's an assumption which has proven to be workable and correct
+with the full zoo of hardware supported by the kernel.
+
+The point is that all CLOCK_* variants, except CLOCK_REALTIME and
+CLOCK_TAI are guaranteed to never go backwards.
+
+CLOCK_REALTIME and CLOCK_TAI are special as they can be set by user
+space and CLOCK_REALTIME has the extra oddities of leap seconds.  But
+that's a well understood issue and is not specific to the kernel.
+
+Back to time deltas (or duration types). Independent of the above it
+might make sense to be type strict about these as well. Especially if we
+go one step further and have timers based on CLOCK_* which need to be
+armed by either timestamps for absolute expiry or time deltas for
+relative to now expiry. I definitely can see a point for requiring
+matching time delta types there.
+
+That said, I have no strong opinions about this particular detail and
+leave it to the Rusties to agree on something sensible.
+
+Thanks,
+
+        tglx
