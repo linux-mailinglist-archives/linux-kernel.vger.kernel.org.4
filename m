@@ -2,125 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 25FC669F70B
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Feb 2023 15:48:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8214369F715
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Feb 2023 15:50:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231664AbjBVOsR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Feb 2023 09:48:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60230 "EHLO
+        id S232054AbjBVOuN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Feb 2023 09:50:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60102 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232196AbjBVOrs (ORCPT
+        with ESMTP id S232371AbjBVOtz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Feb 2023 09:47:48 -0500
-Received: from mail-lj1-x230.google.com (mail-lj1-x230.google.com [IPv6:2a00:1450:4864:20::230])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 722B938E9E
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Feb 2023 06:47:27 -0800 (PST)
-Received: by mail-lj1-x230.google.com with SMTP id h3so2008317lja.12
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Feb 2023 06:47:27 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=JsfYZbZTcH3AGBn/UIvjg51JaY99ziTDUPxRNM8kMPg=;
-        b=wDz3kMMjHapiCiaEAYT158xP5zG/O4p5xL09bvgPuTGB1Y/myR5GXZfwdgWBc/LMQc
-         Rwby7x9GxRr/0DpzzFJE4xqU4GC5IiWD4dEQhG+MnP3o5yPbUyrSUv3a7giW6/YC5itX
-         99aJnQ51VGiftf84jFkU5vB9VRuk7xhMAER6+qpv0pb163LVK43xIK2W0T5sokrpwhhn
-         c5agMKwlAubSEHP+jX64M9Vt9QVnfPcooQ9Zgi/CfzI45l6OjjEcYdA/3z+lAXDRMsNu
-         DPGhxMr2zv/xhfjlvlh4jshqqZSXkvVdIoliWr4eiJ+ZqeGeD9yBP8WOyDWSoBgY+EQ8
-         EKsA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=JsfYZbZTcH3AGBn/UIvjg51JaY99ziTDUPxRNM8kMPg=;
-        b=OfHHg5hbwUf1OKVLu2fC9SmYVz/gdkleLQKEa9M2gRXS8QPW7UQrtCcU/YEFR6rQFU
-         rjOuANvvheES60CdWmW/m3M4C/8k6JBr5TvTkedqSWJ2JqvKw1RRNMC95qeWp9zGuoCE
-         qeHnlzlrToLyIiMOyIGOavdvYItyHlDILbqQoe/QqigCHQzgURwNaA95p5UrqEYE/yAH
-         w/ywkBWfB18Ri1sBK02ilw9cwZEKJ5KYn9cYlycGBaKehg8eT/EySxsuLvcGXzsiiGQU
-         6Wr0Uc6hLMAqwS4i0AJ8nMTnyMnmLZsB3JSwG/TiI0893P74Kv9XQmaGZvf0o7xv8sPx
-         sCMQ==
-X-Gm-Message-State: AO0yUKU8TEcsagcu1ohn7F2cQImDJwfPz/k5ZYCMbrPXp2MvEr30LdCB
-        DCTmN6M0ZAXDRxHBiclWeL8oXUjKjjiTwOrm
-X-Google-Smtp-Source: AK7set+5epA/wJFXcFA8AfQy+dzMhWWm13BX2dxUNOkmKLV4wg9xt3YxvKO23nI9zvgvYTleO8N1OA==
-X-Received: by 2002:a05:651c:510:b0:293:4b8e:f7e9 with SMTP id o16-20020a05651c051000b002934b8ef7e9mr4380059ljp.23.1677077245109;
-        Wed, 22 Feb 2023 06:47:25 -0800 (PST)
-Received: from [192.168.1.101] (abxi151.neoplus.adsl.tpnet.pl. [83.9.2.151])
-        by smtp.gmail.com with ESMTPSA id a18-20020a2eb552000000b002935899fe3fsm390848ljn.116.2023.02.22.06.47.23
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 22 Feb 2023 06:47:24 -0800 (PST)
-Message-ID: <dc544641-b9f1-96b4-95a1-30fafc0712e5@linaro.org>
-Date:   Wed, 22 Feb 2023 15:47:23 +0100
+        Wed, 22 Feb 2023 09:49:55 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 079014C12;
+        Wed, 22 Feb 2023 06:49:27 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 61B62CE1DDB;
+        Wed, 22 Feb 2023 14:48:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 57FB1C433D2;
+        Wed, 22 Feb 2023 14:48:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1677077308;
+        bh=yfGB7wkl3+UVIAj3h3HfdZVfdpzFWH0CMmxedu0oZTM=;
+        h=From:To:Cc:Subject:Date:From;
+        b=unolfEpo3XY6bLDU5npar61VWM3jC4W/1XssF6IiK2h9L/rN/26yENZYAbZ2E3Fg6
+         UiW+PdeG8XgLBijUuoQ8p4rFCWXCvclPhEA5feBkZd0Oe0KeUPZhMrWx+oH011ruh1
+         5rcTRLGaAyEI2qJCzqVsi11OK3gzWweTqrflg6BjX+a4+cfl62PRKhlFbPhZTIfqlo
+         8SjpuxBIM30ulYyxU9srDeikm1Y9sqq/agEgfzX2P11F/8BA1CYrBE3RmikzJA9IIR
+         pBdIjgyZgNi+7Y0DXu2AQ/01iz+QwDbWNuBhFoJK6XpzG8pbYXOuOZQBNb+7mK0zwL
+         KYQngtYH9LvKw==
+From:   Masahiro Yamada <masahiroy@kernel.org>
+To:     linux-kbuild@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Nicolas Schier <nicolas@fjasle.eu>
+Subject: [PATCH] kbuild: rpm-pkg: remove unneeded KERNELRELEASE from modules/headers_install
+Date:   Wed, 22 Feb 2023 23:47:29 +0900
+Message-Id: <20230222144730.3813421-1-masahiroy@kernel.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH 2/2] soundwire: qcom: gracefully handle too many ports in
- DT
-Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Vinod Koul <vkoul@kernel.org>,
-        Bard Liao <yung-chuan.liao@linux.intel.com>,
-        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
-        Sanyog Kale <sanyog.r.kale@intel.com>,
-        linux-arm-msm@vger.kernel.org, alsa-devel@alsa-project.org,
-        linux-kernel@vger.kernel.org
-References: <20230222144412.237832-1-krzysztof.kozlowski@linaro.org>
- <20230222144412.237832-2-krzysztof.kozlowski@linaro.org>
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <20230222144412.237832-2-krzysztof.kozlowski@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+There is no need to pass KERNELRELEASE to installation targets.
 
+KERNELRELEASE used for building the kernel is saved in
+include/config/kernel.release.
 
-On 22.02.2023 15:44, Krzysztof Kozlowski wrote:
-> There are two issues related to the number of ports coming from
-> Devicetree when exceeding in total QCOM_SDW_MAX_PORTS.  Both lead to
-> incorrect memory accesses:
-> 1. With DTS having too big value of input or output ports, the driver,
->    when copying port parameters from local/stack arrays into 'pconfig'
->    array in 'struct qcom_swrm_ctrl', will iterate over their sizes.
-> 
-> 2. If DTS also has too many parameters for these ports (e.g.
->    qcom,ports-sinterval-low), the driver will overflow buffers on the
->    stack when reading these properties from DTS.
-> 
-> Add a sanity check so incorrect DTS will not cause kernel memory
-> corruption.
-> 
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> ---
-Fixes: 02efb49aa805 ("soundwire: qcom: add support for SoundWire controller")
+Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
+---
 
-Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+ scripts/package/mkspec | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-Konrad
->  drivers/soundwire/qcom.c | 3 +++
->  1 file changed, 3 insertions(+)
-> 
-> diff --git a/drivers/soundwire/qcom.c b/drivers/soundwire/qcom.c
-> index 79bebcecde6d..c296e0bf897b 100644
-> --- a/drivers/soundwire/qcom.c
-> +++ b/drivers/soundwire/qcom.c
-> @@ -1218,6 +1218,9 @@ static int qcom_swrm_get_port_config(struct qcom_swrm_ctrl *ctrl)
->  	ctrl->num_dout_ports = val;
->  
->  	nports = ctrl->num_dout_ports + ctrl->num_din_ports;
-> +	if (nports > QCOM_SDW_MAX_PORTS)
-> +		return -EINVAL;
-> +
->  	/* Valid port numbers are from 1-14, so mask out port 0 explicitly */
->  	set_bit(0, &ctrl->dout_port_mask);
->  	set_bit(0, &ctrl->din_port_mask);
+diff --git a/scripts/package/mkspec b/scripts/package/mkspec
+index 83a64d9d7372..3c550960dd39 100755
+--- a/scripts/package/mkspec
++++ b/scripts/package/mkspec
+@@ -99,8 +99,8 @@ $S
+ 	%else
+ 	cp \$($MAKE -s image_name) %{buildroot}/boot/vmlinuz-$KERNELRELEASE
+ 	%endif
+-$M	$MAKE %{?_smp_mflags} KERNELRELEASE=$KERNELRELEASE INSTALL_MOD_PATH=%{buildroot} modules_install
+-	$MAKE %{?_smp_mflags} KERNELRELEASE=$KERNELRELEASE INSTALL_HDR_PATH=%{buildroot}/usr headers_install
++$M	$MAKE %{?_smp_mflags} INSTALL_MOD_PATH=%{buildroot} modules_install
++	$MAKE %{?_smp_mflags} INSTALL_HDR_PATH=%{buildroot}/usr headers_install
+ 	cp System.map %{buildroot}/boot/System.map-$KERNELRELEASE
+ 	cp .config %{buildroot}/boot/config-$KERNELRELEASE
+ $S$M	rm -f %{buildroot}/lib/modules/$KERNELRELEASE/build
+-- 
+2.34.1
+
