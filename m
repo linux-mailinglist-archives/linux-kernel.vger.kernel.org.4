@@ -2,115 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 360E969F4C6
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Feb 2023 13:41:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2259569F4C8
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Feb 2023 13:42:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232171AbjBVMl4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Feb 2023 07:41:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40406 "EHLO
+        id S232179AbjBVMmX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Feb 2023 07:42:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40846 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230440AbjBVMlz (ORCPT
+        with ESMTP id S232176AbjBVMmV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Feb 2023 07:41:55 -0500
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 625FA38E97;
-        Wed, 22 Feb 2023 04:41:54 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1677069715; x=1708605715;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=cv362uPUr3jCMhErDyLuuhUYC3pM4pKuPc2EB1jEUxY=;
-  b=PGKsOX4VorEbUx/aU+v/gFOqc3RHf6Z8FQ+/XIha/P/rihGcm7liokrJ
-   5jtaAvdPhUAvu9WGI4sTEcm8jiIRtDjyVvfeldDwZzi0cfaghwXvl/yuk
-   Iu5xgMebkbniJSFFBgaZ0C6n2BqT0Unr1NRwpqIPAdrZcQ+Yt/50mU1+q
-   gcompj6U4hUC8IHQHiFEgp672UPFMUzJ5n9910PBh0WYN7eRLEboRsuEQ
-   Zv4YRKedj8wVs5UD4dXMv1QJDIDV3ZCL5anltUu7Q+GaQPYU3sufw3B5X
-   f3ThQ04fWMnuv15qfMSGIyL7IAMy+8np6ghEK6lkM41Rr9Kk73ERWUYy1
-   Q==;
-X-IronPort-AV: E=Sophos;i="5.97,318,1669100400"; 
-   d="asc'?scan'208";a="202069183"
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa5.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 22 Feb 2023 05:41:54 -0700
-Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
- chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.16; Wed, 22 Feb 2023 05:41:53 -0700
-Received: from wendy (10.10.115.15) by chn-vm-ex03.mchp-main.com
- (10.10.85.151) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.16 via Frontend
- Transport; Wed, 22 Feb 2023 05:41:52 -0700
-Date:   Wed, 22 Feb 2023 12:41:25 +0000
-From:   Conor Dooley <conor.dooley@microchip.com>
-To:     Nick Alcock <nick.alcock@oracle.com>
-CC:     <mcgrof@kernel.org>, <linux-modules@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        Hitomi Hasegawa <hasegawa-hitomi@fujitsu.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>, <linux-clk@vger.kernel.org>
-Subject: Re: [PATCH 12/27] kbuild, clk: remove MODULE_LICENSE in non-modules
-Message-ID: <Y/YNdSkRnafr9Vg3@wendy>
-References: <20230222121453.91915-1-nick.alcock@oracle.com>
- <20230222121453.91915-13-nick.alcock@oracle.com>
+        Wed, 22 Feb 2023 07:42:21 -0500
+Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9FDC38E9A
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Feb 2023 04:42:19 -0800 (PST)
+Received: by mail-ed1-x52b.google.com with SMTP id da10so31037938edb.3
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Feb 2023 04:42:19 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=YrzMakcOOzZUVFm4JbVcFgj1K440KfwGhI4SW59K+OI=;
+        b=bQ2HpWZ9B+PCUcf4/YZOLKZWOYmH5rZUdEl/DIha3BPOImbopbhwhJQpcSKSZdW5Yv
+         WpBX37Duc9+JC6Y/aDCXEyY5NUq4sF3yfXc6avmaLWqUkpTTrQ7dkhnnD8autQD39jUa
+         1oc54E1b+B1uMWzdV3pLVyuoeSLXPSspFDsq9VZCR/dQ1tmQhNAygUxDXg+BpvZpLVmc
+         7DEwFY6261GjSwmewUTbdh4IZJ4I3xq2ergB+EVJWwGwUqsZRvfOKWYoTW9t7KQ6imby
+         BWeaJ8dLadBBafh5DyaivsoqpbLhtzve574wpK4Kkr6KAnsf2OljEhQX/cnHZiefFlDP
+         Um4Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=YrzMakcOOzZUVFm4JbVcFgj1K440KfwGhI4SW59K+OI=;
+        b=H9awyorqMFFwnTOfe8b4u7sBX1uo/QH6fbN14xps1W21N9TamHyArpIsFKrcOIxNTn
+         sEB8HpBHccf9UAIY2FAGLkmJdTkuBljVMHBIuT04zLZSs+gksVfkB4M447FnPNdW1YbK
+         v2KYM8LTWKzIeybpVLkPbMdd8tyro7OBT4jySE97Yc04QXg4CtG7hnIVR+zlobTGa4ki
+         2oFNjWi965sOywNOFUd5ySiiQ2+7RRBTEdb0SVW0myZKr/ohltO8R54RaTDi3OrgxvU1
+         pPdzUwYZBnbdU8we0HHPHlADYM59TQbrso3qR1o6e7nmqKubfQqgUhA3qReRUtpa6uEg
+         x0rA==
+X-Gm-Message-State: AO0yUKUu3cTEKRoMuFRg8CqRVm0gO0N9TQCvKflv7sAYYLrzrPkNVzLe
+        Lik24RslDqzz5aITrPXxDblpsw==
+X-Google-Smtp-Source: AK7set+Osxu3f3jN7fxzKcBM4yGQLcOKGxAn0fzmJemEkNsgcp7K4ihSod8UT6RPaLf/MzCWkBPXMg==
+X-Received: by 2002:a17:906:4081:b0:878:72d0:2817 with SMTP id u1-20020a170906408100b0087872d02817mr14835920ejj.29.1677069738302;
+        Wed, 22 Feb 2023 04:42:18 -0800 (PST)
+Received: from [192.168.1.109] ([178.197.216.144])
+        by smtp.gmail.com with ESMTPSA id bw10-20020a170906c1ca00b008b133f9b33dsm8347517ejb.169.2023.02.22.04.42.17
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 22 Feb 2023 04:42:17 -0800 (PST)
+Message-ID: <506f92cd-7cf5-4fd5-a930-9af086732f84@linaro.org>
+Date:   Wed, 22 Feb 2023 13:42:16 +0100
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="A6MmvpIR+3s5tp96"
-Content-Disposition: inline
-In-Reply-To: <20230222121453.91915-13-nick.alcock@oracle.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH 2/4] ASoC: dt-bindings: wlf,wm8524: Add a property to
+ specify power up sequency time
+Content-Language: en-US
+To:     Chancel Liu <chancel.liu@nxp.com>, lgirdwood@gmail.com,
+        broonie@kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, perex@perex.cz, tiwai@suse.com,
+        ckeepax@opensource.cirrus.com, patches@opensource.cirrus.com,
+        alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org
+References: <20230222113945.3390672-1-chancel.liu@nxp.com>
+ <20230222113945.3390672-2-chancel.liu@nxp.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230222113945.3390672-2-chancel.liu@nxp.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---A6MmvpIR+3s5tp96
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+On 22/02/2023 12:39, Chancel Liu wrote:
+> This property specifies power up to audio out time. It's necessary
+> beacause this device has to wait some time before ready to output audio
 
-On Wed, Feb 22, 2023 at 12:14:38PM +0000, Nick Alcock wrote:
-> Since commit 8b41fc4454e ("kbuild: create modules.builtin without
-> Makefile.modbuiltin or tristate.conf"), MODULE_LICENSE declarations
-> are used to identify modules. As a consequence, uses of the macro
-> in non-modules will cause modprobe to misidentify their containing
-> object file as a module when it is not (false positives), and modprobe
-> might succeed rather than failing with a suitable error message.
->=20
-> So remove it in the files in this commit, none of which can be built as
-> modules.
->=20
-> Signed-off-by: Nick Alcock <nick.alcock@oracle.com>
-> Suggested-by: Luis Chamberlain <mcgrof@kernel.org>
-> Cc: Luis Chamberlain <mcgrof@kernel.org>
-> Cc: linux-modules@vger.kernel.org
-> Cc: linux-kernel@vger.kernel.org
-> Cc: Hitomi Hasegawa <hasegawa-hitomi@fujitsu.com>
-> Cc: Michael Turquette <mturquette@baylibre.com>
-> Cc: Stephen Boyd <sboyd@kernel.org>
-> Cc: linux-clk@vger.kernel.org
+typo... run spellcheck, also on the subject
 
->  drivers/clk/microchip/clk-mpfs-ccc.c | 1 -
+> after MCLK, BCLK and MUTE=1 are enabled. For more details about the
+> timing constraints, please refer to WTN0302 on
+> https://www.cirrus.com/products/wm8524/
+> 
+> Signed-off-by: Chancel Liu <chancel.liu@nxp.com>
+> ---
+>  .../devicetree/bindings/sound/wlf,wm8524.yaml          | 10 ++++++++++
+>  1 file changed, 10 insertions(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/sound/wlf,wm8524.yaml b/Documentation/devicetree/bindings/sound/wlf,wm8524.yaml
+> index 09c54cc7de95..54b4da5470e4 100644
+> --- a/Documentation/devicetree/bindings/sound/wlf,wm8524.yaml
+> +++ b/Documentation/devicetree/bindings/sound/wlf,wm8524.yaml
+> @@ -21,6 +21,15 @@ properties:
+>      description:
+>        a GPIO spec for the MUTE pin.
+>  
+> +  wlf,power-up-delay-ms:
+> +    maximum: 1500
 
-Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
-And since there's no reason to have this split via the at91 tree:
-Acked-by: Conor Dooley <conor.dooley@microchip.com>
+maximum is 1003. Where do you see 1500?
 
-Clearly there's a hole in my maintainers entry for this driver, I'll go
-fix that.
+minimum: 82
 
---A6MmvpIR+3s5tp96
-Content-Type: application/pgp-signature; name="signature.asc"
+> +    default: 100
+> +    description:
+> +      Power up sequency delay time in millisecond. It specifies power up to
 
------BEGIN PGP SIGNATURE-----
+typo: sequence?
 
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCY/YNdQAKCRB4tDGHoIJi
-0uToAQDS4jBN3ip9omamYeZl5YP5ggkJm0CAeeoGkzKlh6wuogEAgAfej0BJ1oqM
-0zAVz7zCgpejdxMqS4X0dgrCRtMWLAM=
-=PLRl
------END PGP SIGNATURE-----
+> +      audio out time. For more details about the timing constraints of this
+> +      device, please refer to WTN0302 on
+> +      https://www.cirrus.com/products/wm8524/.
 
---A6MmvpIR+3s5tp96--
+According to WTN0302 this might or might not include regulator
+ramp-up-delay. You should clearly indicate which part of it this delay
+is to not mix up with ramp up. IOW, mention exactly from where the value
+comes (e.g. Δt POWER UP TO AUDIO OUT TIMING table, depending on sampling
+clock rate). Otherwise you introduce quite loose property which will be
+including regulator ramp up in some cases...
+
+Best regards,
+Krzysztof
+
