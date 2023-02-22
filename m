@@ -2,80 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D53969FFBC
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 00:43:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3638669FFC0
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 00:44:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232664AbjBVXny (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Feb 2023 18:43:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53788 "EHLO
+        id S232788AbjBVXoY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Feb 2023 18:44:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54406 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230454AbjBVXnw (ORCPT
+        with ESMTP id S232823AbjBVXoM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Feb 2023 18:43:52 -0500
-Received: from mail-il1-x12b.google.com (mail-il1-x12b.google.com [IPv6:2607:f8b0:4864:20::12b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A709137729;
-        Wed, 22 Feb 2023 15:43:50 -0800 (PST)
-Received: by mail-il1-x12b.google.com with SMTP id z5so798375ilq.0;
-        Wed, 22 Feb 2023 15:43:50 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=w615umHxEk17AwNmh6Rkv++nzAZUwayUgTAtwm+Vzf4=;
-        b=oAWVAveDB8TmLjZhNFrVTh5UbQoHVtkmR/M7meKoRyd8sksCgrdzLuZJQtLwLv4hXs
-         CBlDWJGdV1++tuShfYkxOppLUjqMladX60zIyfvdaG2kyw00xz+vfZNiguqI84yyUrB5
-         3cD8y5v4eNaotid3HAJeEbTWF/TtBFVhJwmsqRko/S9awePxKOr+LXGZEQg9pLy1s03l
-         jzPU7EP9+0orU02IlkPBpDAPEuUok6d2lOfMv41TsCabYiD79ZDpCsr9iz+APoeUDQ35
-         pvUnopWu5TSwAUYI7Mdyo/HS/LHoyyr3sT4tACpK1kxkiEgFpCi91LyCN2IsCXFY5wBL
-         eksQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=w615umHxEk17AwNmh6Rkv++nzAZUwayUgTAtwm+Vzf4=;
-        b=O5q9SsDWCJBNHxBiZO2z+fHWyvb9EKeLHJIKa9b4mLWFQKWb47cadl3P7aQsosXMej
-         UrUcXuTOQAcPOb6ef5dt2jgIrr1elo7IoVLyJp2hgUhPbpDmVPChqeS5Z42XgluDMALQ
-         A09xFKZJNi+Fw8uu9Hd220Rb9Huh8EDFM5MD0lmtJN/hKMFrUSpO1nHsjUuCf3i4o/eO
-         hTbGnCk/uhBK7bW5PCV4P1iUO8h0CcXvGuW+rHylxmDFhntArF5OmO1/lfoxKKse8hty
-         LH7QE8S152xCDLHxd6zfSgXQ26iL5vaF+sRDcGFNahk1MPrTmmv/UZYPXSbtoonMq5WE
-         xkig==
-X-Gm-Message-State: AO0yUKVkHmH1qahDUMMoMd7amzNIMW1LSqYFMS2i+/lzC6mw5bn3Las5
-        B1j/gfy5jmOfVOXfkKy7xtk=
-X-Google-Smtp-Source: AK7set9zoOCU1uIvr79S0/3UQJYEVqaU/WG1dobXEzOMPPQ/se28I4qpUymBHk9y8d6eyaxg7eTI/w==
-X-Received: by 2002:a05:6e02:1d10:b0:315:9749:7a25 with SMTP id i16-20020a056e021d1000b0031597497a25mr8616953ila.17.1677109429922;
-        Wed, 22 Feb 2023 15:43:49 -0800 (PST)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id l25-20020a02cd99000000b003af2cdde559sm2002892jap.35.2023.02.22.15.43.48
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 22 Feb 2023 15:43:49 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <b1b1b9db-8356-a43e-a01b-73bbef32d3ce@roeck-us.net>
-Date:   Wed, 22 Feb 2023 15:43:47 -0800
+        Wed, 22 Feb 2023 18:44:12 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A34A8298CC;
+        Wed, 22 Feb 2023 15:43:59 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id B8ECBB817C2;
+        Wed, 22 Feb 2023 23:43:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 46B87C4339B;
+        Wed, 22 Feb 2023 23:43:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1677109436;
+        bh=05zuIHUF2Jxq95BD3FXQmm8A1Va+9D4oc5j0eOsqeqA=;
+        h=In-Reply-To:References:From:Cc:To:Date:From;
+        b=GY9/KgHF+h9kBqfhUIkifXPZGMMzLXOxSO4GCaH+oCYE6msOoKyI7twbkamyiGU9w
+         kZOPaQvoReuQQL4+xjFyQE5CqsxEHz1HwYmFNxI2Yo0SES9cEpVez0gvGxXVtC0Ruj
+         vFNAiuoUu0kr3X0GJSTLfA/BwcMR5+SC8ia2t+Einn8H95x4rK/XesVSNh+yR/8Oow
+         73bmS5gIsRCqhTn3EiPN5IYnwBAsGpsqpfcnb+4+QsuE61mnYPSktf60AE4m6I0kO7
+         0l+3CzLlX55MgPpyUkttDKlAuryHIrdL2coPrJcrQOjR1FIfHoDbSTf9/vWBeGMs/H
+         1/29LHn56q+PA==
+Message-ID: <494290a9c80db9976fa8943210cd0cd5.sboyd@kernel.org>
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: linux-next: manual merge of the hwmon-staging tree with the i2c
- tree
-Content-Language: en-US
-To:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Wolfram Sang <wsa@the-dreams.de>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Nick Hawkins <nick.hawkins@hpe.com>,
-        Wolfram Sang <wsa@kernel.org>
-References: <20230220090724.6c3d6f87@canb.auug.org.au>
- <20230223103018.08088e0c@canb.auug.org.au>
-From:   Guenter Roeck <linux@roeck-us.net>
-In-Reply-To: <20230223103018.08088e0c@canb.auug.org.au>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20230222121453.91915-13-nick.alcock@oracle.com>
+References: <20230222121453.91915-1-nick.alcock@oracle.com> <20230222121453.91915-13-nick.alcock@oracle.com>
+@ubject: Re: [PATCH 12/27] kbuild, clk: remove MODULE_LICENSE in non-modules
+From:   Stephen Boyd <sboyd@kernel.org>
+Cc:     linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Hitomi Hasegawa <hasegawa-hitomi@fujitsu.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        linux-clk@vger.kernel.org
+To:     Nick Alcock <nick.alcock@oracle.com>, mcgrof@kernel.org
+Date:   Wed, 22 Feb 2023 15:43:54 -0800
+User-Agent: alot/0.10
+X-Spam-Status: No, score=-5.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,MISSING_SUBJECT,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -83,65 +57,26 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/22/23 15:30, Stephen Rothwell wrote:
-> Hi all,
-> 
-> On Mon, 20 Feb 2023 09:07:24 +1100 Stephen Rothwell <sfr@canb.auug.org.au> wrote:
->>
->> Today's linux-next merge of the hwmon-staging tree got a conflict in:
->>
->>    MAINTAINERS
->>
->> between commit:
->>
->>    e8444bb9fd77 ("MAINTAINERS: Add HPE GXP I2C Support")
->>
->> from the i2c tree and commit:
->>
->>    d5f80ff774d1 ("MAINTAINERS: add gxp fan controller and documents")
->>
->> from the hwmon-staging tree.
->>
->> I fixed it up (see below) and can carry the fix as necessary. This
->> is now fixed as far as linux-next is concerned, but any non trivial
->> conflicts should be mentioned to your upstream maintainer when your tree
->> is submitted for merging.  You may also want to consider cooperating
->> with the maintainer of the conflicting tree to minimise any particularly
->> complex conflicts.
->>
->> -- 
->> Cheers,
->> Stephen Rothwell
->>
->> diff --cc MAINTAINERS
->> index a58c22a7adc8,98e16168d6e9..000000000000
->> --- a/MAINTAINERS
->> +++ b/MAINTAINERS
->> @@@ -2232,15 -2280,16 +2232,18 @@@ ARM/HPE GXP ARCHITECTUR
->>    M:	Jean-Marie Verdun <verdun@hpe.com>
->>    M:	Nick Hawkins <nick.hawkins@hpe.com>
->>    S:	Maintained
->> + F:	Documentation/hwmon/gxp-fan-ctrl.rst
->>    F:	Documentation/devicetree/bindings/arm/hpe,gxp.yaml
->> + F:	Documentation/devicetree/bindings/hwmon/hpe,gxp-fan-ctrl.yaml
->>   +F:	Documentation/devicetree/bindings/i2c/hpe,gxp-i2c.yaml
->>    F:	Documentation/devicetree/bindings/spi/hpe,gxp-spifi.yaml
->>    F:	Documentation/devicetree/bindings/timer/hpe,gxp-timer.yaml
->>    F:	arch/arm/boot/dts/hpe-bmc*
->>    F:	arch/arm/boot/dts/hpe-gxp*
->>    F:	arch/arm/mach-hpe/
->>    F:	drivers/clocksource/timer-gxp.c
->> + F:	drivers/hwmon/gxp-fan-ctrl.c
->>   +F:	drivers/i2c/busses/i2c-gxp.c
->>    F:	drivers/spi/spi-gxp.c
->>    F:	drivers/watchdog/gxp-wdt.c
->>    
-> 
-> This is now a conflict between the i2c tree and Linus' tree.
-> 
+Quoting Nick Alcock (2023-02-22 04:14:38)
+> Since commit 8b41fc4454e ("kbuild: create modules.builtin without
+> Makefile.modbuiltin or tristate.conf"), MODULE_LICENSE declarations
+> are used to identify modules. As a consequence, uses of the macro
+> in non-modules will cause modprobe to misidentify their containing
+> object file as a module when it is not (false positives), and modprobe
+> might succeed rather than failing with a suitable error message.
+>=20
+> So remove it in the files in this commit, none of which can be built as
+> modules.
+>=20
+> Signed-off-by: Nick Alcock <nick.alcock@oracle.com>
+> Suggested-by: Luis Chamberlain <mcgrof@kernel.org>
+> Cc: Luis Chamberlain <mcgrof@kernel.org>
+> Cc: linux-modules@vger.kernel.org
+> Cc: linux-kernel@vger.kernel.org
+> Cc: Hitomi Hasegawa <hasegawa-hitomi@fujitsu.com>
+> Cc: Michael Turquette <mturquette@baylibre.com>
+> Cc: Stephen Boyd <sboyd@kernel.org>
+> Cc: linux-clk@vger.kernel.org
+> ---
 
-I mentioned the potential conflict in my pull request, so Linus should
-be aware of it when he applies the i2c changes.
-
-Guenter
-
+Acked-by: Stephen Boyd <sboyd@kernel.org>
