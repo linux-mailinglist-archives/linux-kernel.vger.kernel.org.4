@@ -2,52 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7969969F67E
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Feb 2023 15:23:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C8E8869F68C
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Feb 2023 15:25:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231963AbjBVOXV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Feb 2023 09:23:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37532 "EHLO
+        id S231310AbjBVOZO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Feb 2023 09:25:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39298 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231601AbjBVOXQ (ORCPT
+        with ESMTP id S229749AbjBVOZM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Feb 2023 09:23:16 -0500
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E11A046BC;
-        Wed, 22 Feb 2023 06:22:50 -0800 (PST)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 7596E139F;
-        Wed, 22 Feb 2023 06:23:33 -0800 (PST)
-Received: from [10.57.16.42] (unknown [10.57.16.42])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id D72D93F881;
-        Wed, 22 Feb 2023 06:22:48 -0800 (PST)
-Message-ID: <732cab3d-e03e-f201-d4ec-aa8c0f7cece7@arm.com>
-Date:   Wed, 22 Feb 2023 14:22:44 +0000
+        Wed, 22 Feb 2023 09:25:12 -0500
+Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 928BB39BA6;
+        Wed, 22 Feb 2023 06:25:11 -0800 (PST)
+Received: by mail-ed1-x532.google.com with SMTP id ec43so30567873edb.8;
+        Wed, 22 Feb 2023 06:25:11 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=8FTKxI5GTkk6G+V8HdGQeQBIGx4Htz/By6GXYlaLPco=;
+        b=bjYTIbRkGAS10bVTtw1VkAQJClHIfta8/6RM2+YwxS3LAx9xuV5wtntyCD1s7dyK5J
+         h2NoS4l/Jgn1h+ruCTPvaicYTSbQFf1bBm+uCJnlAqc+jFNW+ojA7IBLTRy+tzZJPk3b
+         7hUSiPM7LpioEb2id0BFs4ElcS2JclwodPaRO83stbTg0dISG6NimuX3e6rgrmSrFW2a
+         0hEPcwByyJbczaf3oX9K7uNr98flSpBNLE3D6bvjOWBy17XcqZcoebRbRyLeh6H1OrLc
+         dYYJdh1VHFHimgHZi/ldAQ2abs54HZt+xMM7jiNjSQ/0KOhNBGCE5joHgZHBKcrhe4Sn
+         zUgw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=8FTKxI5GTkk6G+V8HdGQeQBIGx4Htz/By6GXYlaLPco=;
+        b=Qy6ZIKkwtIN8OZDZE8I8+YRa8m08NuaQgTopkIxiwxluXtS+CJfrrG4JB4LqAB7cH3
+         qwlejQuL7dDvmhZ4FP8XdxZbC/I5o7RSjOMMVkLdPJlXiTV09TbeT43xBmP3D6YSvqd8
+         z7bFGQvmmtcUBrdVwjrdPQeQOuV1l6oExWB5eg9iEObE+68a0jId2pfqNpkH10CkYehy
+         37qbIG/CZzqWEBVxNAv+QWt/2wE/7+ynnwkz6XyaoHVYr9V3RUP8+VOTtlFCmxTdpsmF
+         +Ifk/tuNNVuU3N26lg05MU6EdE+LrN2JnOYe0w7P1gZw6nsuZ64D9u9oY5JPd2AEV3WZ
+         a7hg==
+X-Gm-Message-State: AO0yUKXJRs2OuzVaoZhEx9WMlOM8BSfQeP2xGGYEItHop9y69G/fpoch
+        mh02+w7SIW8orxFKur+kGpo=
+X-Google-Smtp-Source: AK7set+rCxeDuhHvx/K9eolv2F9Zu6Xy4q+5nCQxCX9nX4qIRj9kQ7yUxqIbR/fPG0isrOEhz+CuIw==
+X-Received: by 2002:a17:907:75cf:b0:884:930:b017 with SMTP id jl15-20020a17090775cf00b008840930b017mr18023663ejc.60.1677075909844;
+        Wed, 22 Feb 2023 06:25:09 -0800 (PST)
+Received: from skbuf ([188.27.184.189])
+        by smtp.gmail.com with ESMTPSA id kv7-20020a17090778c700b008e53874f8d8sm1178768ejc.180.2023.02.22.06.25.08
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 22 Feb 2023 06:25:09 -0800 (PST)
+Date:   Wed, 22 Feb 2023 16:25:07 +0200
+From:   Vladimir Oltean <olteanv@gmail.com>
+To:     Kurt Kanzenbach <kurt@linutronix.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Sasha Levin <sashal@kernel.org>
+Cc:     Vladimir Oltean <vladimir.oltean@nxp.com>, netdev@vger.kernel.org,
+        Vinicius Costa Gomes <vinicius.gomes@intel.com>,
+        Jamal Hadi Salim <jhs@mojatatu.com>,
+        Cong Wang <xiyou.wangcong@gmail.com>,
+        Jiri Pirko <jiri@resnulli.us>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Voon Weifeng <weifeng.voon@intel.com>,
+        linux-kernel@vger.kernel.org,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+Subject: Re: [PATCH v2 net 2/2] net/sched: taprio: make qdisc_leaf() see the
+ per-netdev-queue pfifo child qdiscs
+Message-ID: <20230222142507.hapqjfhswhlq42ay@skbuf>
+References: <20220915100802.2308279-1-vladimir.oltean@nxp.com>
+ <20220915100802.2308279-3-vladimir.oltean@nxp.com>
+ <874jrdvluv.fsf@kurt>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:102.0) Gecko/20100101
- Thunderbird/102.7.2
-Subject: Re: [PATCH 0/7] MIPS DMA coherence fixes
-Content-Language: en-GB
-To:     Jiaxun Yang <jiaxun.yang@flygoat.com>
-Cc:     Christoph Hellwig <hch@lst.de>,
-        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
-        linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        mpe@ellerman.id.au, paul.walmsley@sifive.com, palmer@dabbelt.com,
-        Rob Herring <robh+dt@kernel.org>, m.szyprowski@samsung.com
-References: <20230221124613.2859-1-jiaxun.yang@flygoat.com>
- <20230221175423.GA15247@lst.de>
- <A8AC22A0-E883-4D9B-A629-5A3721B976C5@flygoat.com>
- <ed2d7750-786d-82a1-5e79-1f216a682b20@arm.com>
- <34578218-DC7A-4C8B-A01A-AD64831CCB43@flygoat.com>
- <a46e1840-89be-de8f-6a91-3e4a16fa17c2@arm.com>
- <CBE3717B-E49A-4BAA-9CD0-FFD2462B9CE0@flygoat.com>
-From:   Robin Murphy <robin.murphy@arm.com>
-In-Reply-To: <CBE3717B-E49A-4BAA-9CD0-FFD2462B9CE0@flygoat.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <874jrdvluv.fsf@kurt>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -55,55 +86,33 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023-02-22 13:04, Jiaxun Yang wrote:
++Greg, Sasha.
+
+Hi Kurt,
+
+On Wed, Feb 22, 2023 at 03:03:04PM +0100, Kurt Kanzenbach wrote:
+> This commit was backported to v5.15-LTS which results in NULL pointer
+> dereferences e.g., when attaching an ETF child qdisc to taprio.
 > 
+> From what I can see is, that the issue was reported back then and this
+> commit was reverted [1]. However, the revert didn't make it into
+> v5.15-LTS? Is there a reason for it? I'm testing 5.15.94-rt59 here.
 > 
->> 2023年2月22日 12:55，Robin Murphy <robin.murphy@arm.com> 写道：
->>
->> On 2023-02-21 19:55, Jiaxun Yang wrote:
->>>> 2023年2月21日 19:46，Robin Murphy <robin.murphy@arm.com> 写道：
->>>>
->>>> On 2023-02-21 18:15, Jiaxun Yang wrote:
->>>>>> 2023年2月21日 17:54，Christoph Hellwig <hch@lst.de> 写道：
->>>>>>
->>>>>> Can you explain the motivation here?  Also why riscv patches are at
->>>>>> the end of a mips fіxes series?
->>>>> Ah sorry for any confusion.
->>>>> So the main purpose of this patch is to fix MIPS’s broken per-device coherency.
->>>>> To be more precise, we want to be able to control the default coherency for all devices probed from
->>>>> devicetree in early boot code.
->>>>
->>>> Including the patch which actually does that would be helpful. As it is, patches 4-7 here just appear to be moving an option around for no practical effect.
->>> Well the affect is default coherency of devicetree probed devices are now following dma_default_coherent
->>> instead of a static Kconfig option. For MIPS platform, dma_default_coherent will be determined by boot code.
->>
->> "Will be" is the issue I'm getting at. We can't review some future promise of a patch, we can only review actual patches. And it's hard to meaningfully review preparatory patches for some change without the full context of that change.
+> Thanks,
+> Kurt
 > 
-> Actually this already present in current MIPS platform code.
-> 
-> arch/mips/mti-malta is setting dma_default_coherent on boot, and it’s devicetree does not explicitly specify coherency.
+> [1] - https://lore.kernel.org/all/20221004220100.1650558-1-vladimir.oltean@nxp.com/
 
-OK, this really needs to be explained much more clearly. I read this 
-series as 3 actual fix patches, then 3 patches adding a new option to 
-replace an existing one on the grounds that it "can be useful" for 
-unspecified purposes, then a final cleanup patch removing the old option 
-that has now been superseded.
+You are right; the patchwork-bot clearly says that the revert was
+applied to net.git as commit af7b29b1deaa ("Revert "net/sched: taprio:
+make qdisc_leaf() see the per-netdev-queue pfifo child qdiscs""), but
+the revert never made it to stable.
 
-Going back and looking closely I see there is actually a brief mention 
-in the cleanup patch that it also happens to fix some issue, but even 
-then it doesn't clearly explain what the issue really is or how and why 
-the fix works and is appropriate.
+OTOH, the original patch did make it to, and still is in, linux-stable.
+I have backport notification emails of the original to 5.4, 5.10, 5.15, 5.19.
 
-Ideally, functional fixes and cleanup should be in distinct patches 
-whenever that is reasonable. Sometimes the best fix is inherently a 
-cleanup, but in such cases the patch should always be presented as the 
-fix being its primary purpose. Please also use the cover letter to give 
-reviewers an overview of the whole series if it's not merely a set of 
-loosely-related patches that just happened to be convenient so send all 
-together.
+Greg, Sasha, can you please pick up and backport commit af7b29b1deaa
+("Revert "net/sched: taprio: make qdisc_leaf() see the per-netdev-queue
+pfifo child qdiscs"") to the currently maintained stable kernels?
 
-I think I do at least now understand the underlying problem well enough 
-to have a think about whether this is the best way to address it.
-
-Thanks,
-Robin.
+Thanks.
