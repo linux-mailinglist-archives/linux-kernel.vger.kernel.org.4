@@ -2,148 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 16CF869F8D3
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Feb 2023 17:16:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EBDBE69F8D8
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Feb 2023 17:17:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232741AbjBVQQd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Feb 2023 11:16:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37642 "EHLO
+        id S232749AbjBVQRF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Feb 2023 11:17:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38372 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232734AbjBVQQb (ORCPT
+        with ESMTP id S232195AbjBVQRE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Feb 2023 11:16:31 -0500
-Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 452C13D925;
-        Wed, 22 Feb 2023 08:16:25 -0800 (PST)
-Received: by mail-lf1-x12f.google.com with SMTP id x24so10840941lfr.1;
-        Wed, 22 Feb 2023 08:16:25 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=B9YMLBYcPz/4Hlblq1d7hFRHt4s8YknOklPReJ3GiyY=;
-        b=b1xBoyvL2h5smGjmn94Ham0JSyYLz8r2UnWaGNSQONcCY9PuAzhG/nJE8V1/+kg5em
-         97DVyp+687d7Ig4+iHDslu9bnDBr9q1UoBDHGnf6N63BRuEI1t9o831id2QmSwHYwDfr
-         7bAkslkNRa1vtIaKIHqm84MR0sl7uxH48LkgqMLNvYGvepcpk3N8zcD1V84bW0qSxO7d
-         tGn0cGXkskLBPYX/W9a0oIhCRXPcobfSQRnqd+Sqk/ksI8D4BfhpRvwUtZO6/4Mk4tQD
-         KZw39GDY8cs/poPxF11lPUCM+TLMouBbDkGGi4LJwaPTVg//KOaXBefhEjjEwMxerKeH
-         W2jA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=B9YMLBYcPz/4Hlblq1d7hFRHt4s8YknOklPReJ3GiyY=;
-        b=hz18BNHtAc2CZ4PSQPa8AYdqMS7/qWBIrKsuVHa9WGWnfEhkP/0aIy+e0OffArgNh6
-         xDX8tb9j+e5AgnTu0uaGI4iU/b8SVBrnBw+PrUX8s18Y/EbCPcEmJ8LtksoAOVgf4N3K
-         BVzerWPcvNB/c7BfhlG8tdFdU2SgxUxHmOksj7/LO4Vw93K5EHh+uoo5NxnZwLBegj3R
-         JM0AuSvN0CR2mV1PG4Hk6ydOrMymH3CIUJOWjK5h9TGnkmvfNED6cun4bbZvT5LnfzTi
-         zhVLqN0DzZ01DH+3qLBD9cI2qCW9xbCm4UfF2gq3gzMMHEHZrTQd9xhvUga+C01yJloE
-         xliQ==
-X-Gm-Message-State: AO0yUKUtnWtcak3qrOD9RyOdfZvIy2oX4v3IKvEezh3vwQzbrTU4IGyK
-        ynN1R1zqzv0SxUsxP4I+1LU=
-X-Google-Smtp-Source: AK7set/VuHemzuZuwIMi2PoQLRysxBPaa9lJAZXaeL3TFucxHl9nNqqCwNbM+Ex4gdZbddqGtL3HDA==
-X-Received: by 2002:ac2:5613:0:b0:4d6:ef7f:fc53 with SMTP id v19-20020ac25613000000b004d6ef7ffc53mr3252689lfd.34.1677082583575;
-        Wed, 22 Feb 2023 08:16:23 -0800 (PST)
-Received: from dc75zzyyyyyyyyyyyyyyt-3.rev.dnainternet.fi (dc75zzyyyyyyyyyyyyyyt-3.rev.dnainternet.fi. [2001:14ba:16f3:4a00::1])
-        by smtp.gmail.com with ESMTPSA id p1-20020a19f001000000b004d57ca1c96csm359052lfc.172.2023.02.22.08.16.22
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 22 Feb 2023 08:16:22 -0800 (PST)
-Date:   Wed, 22 Feb 2023 18:16:18 +0200
-From:   Matti Vaittinen <mazziesaccount@gmail.com>
-To:     Matti Vaittinen <mazziesaccount@gmail.com>,
-        Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
-Cc:     Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Matti Vaittinen <mazziesaccount@gmail.com>,
-        Shreeya Patel <shreeya.patel@collabora.com>,
-        Zhigang Shi <Zhigang.Shi@liteon.com>,
-        Paul Gazzillo <paul@pgazz.com>,
-        Dmitry Osipenko <dmitry.osipenko@collabora.com>,
-        Liam Beguin <liambeguin@gmail.com>,
-        Peter Rosin <peda@axentia.se>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        linux-iio@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [RFC PATCH 6/6] MAINTAINERS: Add ROHM BU27034
-Message-ID: <8dbdf68749389605cc4dff396ddd66d27fdb2a0d.1677080089.git.mazziesaccount@gmail.com>
-References: <cover.1677080089.git.mazziesaccount@gmail.com>
+        Wed, 22 Feb 2023 11:17:04 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4E563D92D;
+        Wed, 22 Feb 2023 08:16:41 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 6BC30B815FE;
+        Wed, 22 Feb 2023 16:16:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 56F13C4339B;
+        Wed, 22 Feb 2023 16:16:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1677082599;
+        bh=oSY7Y9Zfx4h7Oesy7kW3oqZLMo+eNjfwJ8NKRdJV7P8=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=rgt10Cg3vw91PKKDI8NVq1IUBtcIwA4nFqncr6kVdagud6EGFgXr8SREpdFYxKwXW
+         QvSy9okHFWIIj4P3TnGT1Kqlm8mE+pXi53LYDimtAIfq1ctqXwDumvS339Dg9MSrFj
+         Gg0CYteekRxFGmVux453qmLav9Ccwpr8dxJbnpRTYijjToVcozliL01mZPOokvlWue
+         VfriYexDmJILzCE0kxwq/Zo9VO3bvRfJgkdP0j5bkNRoGCW3N23FDWUhbwlySznhOx
+         Xlt46N3FreZ4eMBjP9TB13wLJFQ5BARH73eC/+bZOxHWpb54SbGrFSfaMBtKKcW792
+         K9N/nWVOl+05Q==
+Date:   Wed, 22 Feb 2023 21:46:35 +0530
+From:   Vinod Koul <vkoul@kernel.org>
+To:     Bjorn Helgaas <helgaas@kernel.org>
+Cc:     Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
+        Rob Herring <robh@kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Cai Huoqing <cai.huoqing@linux.dev>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Jingoo Han <jingoohan1@gmail.com>, Frank Li <Frank.Li@nxp.com>,
+        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+        Serge Semin <fancer.lancer@gmail.com>,
+        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
+        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
+        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+        caihuoqing <caihuoqing@baidu.com>,
+        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
+        linux-pci@vger.kernel.org, dmaengine@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Serge Semin <Sergey.Semin@baikalelectronics.ru>
+Subject: Re: [PATCH v9 23/27] dmaengine: dw-edma: Add mem-mapped LL-entries
+ support
+Message-ID: <Y/Y/48E/8lYFTo2D@matsya>
+References: <20230113171409.30470-24-Sergey.Semin@baikalelectronics.ru>
+ <20230221230054.GA3736402@bhelgaas>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="qOVCSwgf+lSCy3A0"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <cover.1677080089.git.mazziesaccount@gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20230221230054.GA3736402@bhelgaas>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 21-02-23, 17:00, Bjorn Helgaas wrote:
+> On Fri, Jan 13, 2023 at 08:14:05PM +0300, Serge Semin wrote:
+> > Currently the DW eDMA driver only supports the linked lists memory
+> > allocated locally with respect to the remote eDMA engine setup. It means
+> > the linked lists will be accessible by the CPU via the MMIO space only. If
+> > eDMA is embedded into the DW PCIe Root Ports or local End-points (which
+> > support will be added in one of the following up commits) the linked lists
+> > are supposed to be allocated in the CPU memory. In that case the
+> > LL-entries can be directly accessed meanwhile the former case implies
+> > using the MMIO-accessors for that.
+> > 
+> > In order to have both cases supported by the driver the dw_edma_region
+> > descriptor should be fixed to contain the MMIO-backed and just
+> > memory-based virtual addresses. The linked lists initialization procedure
+> > will use one of them depending on the eDMA device nature. If the eDMA
+> > engine is embedded into the local DW PCIe RP/EP controllers then the list
+> > entries will be directly accessed by referencing the corresponding
+> > structure fields.  Otherwise the MMIO accessors usage will be preserved.
+> > 
+> > Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
+> 
+> Hi Vinod, I just realized that I didn't solicit your ack for this
+> patch and the following one (which I ended up splitting into two), and
+> I hate to ask Linus to pull them without your OK.
+> 
+> Here are the current versions in the PCI tree:
+> 
+>   https://git.kernel.org/pub/scm/linux/kernel/git/pci/pci.git/commit/?id=b47364a83054
+>   https://git.kernel.org/pub/scm/linux/kernel/git/pci/pci.git/commit/?id=157ce95927c1
+>   https://git.kernel.org/pub/scm/linux/kernel/git/pci/pci.git/commit/?id=536e6529e975
+> 
+> If you ack them, I will update them to reflect that.
 
---qOVCSwgf+lSCy3A0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Thanks for letting me know:
 
-Add myself as a maintainer for ROHM BU27034 ALS driver.
+Acked-by: Vinod Koul <vkoul@kernel.org>
 
-Signed-off-by: Matti Vaittinen <mazziesaccount@gmail.com>
----
- MAINTAINERS | 5 +++++
- 1 file changed, 5 insertions(+)
-
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 43f5a024daa2..8d31ef852372 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -18090,6 +18090,11 @@ S:	Maintained
- F:	Documentation/devicetree/bindings/iio/light/bh1750.yaml
- F:	drivers/iio/light/bh1750.c
-=20
-+ROHM BU27034 AMBIENT LIGHT SENSOR DRIVER
-+M:	Matti Vaittinen <mazziesaccount@gmail.com>
-+S:	Supported
-+F:	drivers/iio/light/rohm-bu27034.c
-+
- ROHM MULTIFUNCTION BD9571MWV-M PMIC DEVICE DRIVERS
- M:	Marek Vasut <marek.vasut+renesas@gmail.com>
- L:	linux-kernel@vger.kernel.org
---=20
-2.39.2
-
-
---=20
-Matti Vaittinen, Linux device drivers
-ROHM Semiconductors, Finland SWDC
-Kiviharjunlenkki 1E
-90220 OULU
-FINLAND
-
-~~~ "I don't think so," said Rene Descartes. Just then he vanished ~~~
-Simon says - in Latin please.
-~~~ "non cogito me" dixit Rene Descarte, deinde evanescavit ~~~
-Thanks to Simon Glass for the translation =3D]=20
-
---qOVCSwgf+lSCy3A0
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEEIx+f8wZb28fLKEhTeFA3/03aocUFAmP2P9IACgkQeFA3/03a
-ocWKGwf+NYZPx7+q1bS8S0Nsm1l1Rvjcs4LfPWyq+Of5pwQyWLUrZC+RuFuEULX4
-/V1BiX6BoKCN9rpbX2NTPWquaN4qrNUa+o4qL9vNbfGEqv8bis2RxVmOfzyQeu+a
-rmsFG1vtyQY0AkRhAIbHgwWmgIkuPCFPkXfcR+qh5CIPmgKkK6n6ciQQZwJP12vV
-THIYElmdYEgWRxsnDB28sXtpxgHKE0bx6aQI4TvR9JSESfDbfKa0MexxxxDtkx5W
-qfRb+LNAnAFXXsNYPddPy4c3ciDSSDhGtav0vHSCeyvqi3Y5LAaauuVVkm+HES4v
-fwrWO6HovI5VDqnnLZ51o3HDzFDp2w==
-=VWJH
------END PGP SIGNATURE-----
-
---qOVCSwgf+lSCy3A0--
+-- 
+~Vinod
