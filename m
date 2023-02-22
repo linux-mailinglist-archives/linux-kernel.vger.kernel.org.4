@@ -2,231 +2,374 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7650F69F150
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Feb 2023 10:24:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F56669F159
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Feb 2023 10:26:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230109AbjBVJY0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Feb 2023 04:24:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42812 "EHLO
+        id S231621AbjBVJ0J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Feb 2023 04:26:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44442 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229653AbjBVJYW (ORCPT
+        with ESMTP id S231370AbjBVJ0B (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Feb 2023 04:24:22 -0500
-Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6504437F0B
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Feb 2023 01:24:08 -0800 (PST)
-Received: by mail-wm1-x32f.google.com with SMTP id c18so557345wmr.3
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Feb 2023 01:24:08 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=sTaaRe/E/+knc/ZOJd8lQkzuYDsta684+WarNPI7Vrs=;
-        b=tk718+tUffNlmJA0hYjuR0RbAd9tJ/gmKYFf5y0xhF6qxgnHnsYrblsIDdLOctdan+
-         N4nWveueUkEOzX3d7nvUd30EsbWzg99D3D8LjwO5E0WB3MJ+8Lnej84Rhz+V6qqRWVHO
-         frlVGBvCvuivRQwXZtFwe8ao0XQVMvdxC1qdjnS9raLLNZ6laIXX/bEw8+uQeEDu3Omh
-         fGyggUtmJWQzQcMWOCQaOcsm2VbUU+DLrFLqamjFhDsO3TN9h74CeOIu0ZOtYYCk2K3H
-         Q3Qjg4O7Ypound17GjbMFzozim3JiVurs6nzRSvaT3ORjc6N7fFighZi9lApoWJniBD4
-         ITmQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=sTaaRe/E/+knc/ZOJd8lQkzuYDsta684+WarNPI7Vrs=;
-        b=Dewx+cYrkqih9/UPJgQuJxqp4IjstILYULJmsQJgUVDDmjqWV54oShKCm0jdDBm81g
-         yBVL1yFSfR81JlO+HGXUzzGWkyd2Pqh39Dh58zdAGdbVJC7/WAK41++S/yC35y5l4a5s
-         sFbCGdPcWtn+bPnobxOkcbywnMxuZ0/aGFaquv1LeBA0yoUI+oSA4Vv+qlmtp2ZhZJaH
-         JGJgO15wRmr7oD47dAVjlbdAs4zG1fC5sozYbJm+7JOyF3+nuu6H5WSbxVxQefOwnxD2
-         TVPx5vaEmp+c+NJ+Z7USLhO6Bg15JRyqaK2HBMPbvhvGHa7/zFg4RzekMhCYaxHMVebg
-         wPnQ==
-X-Gm-Message-State: AO0yUKXSA+DRSpdHJFcKH+znPYRn83QqGmOrMXncHEpTNT/krRLziZDk
-        NPSRK8VJQgF8C5yK5GWmEAE45g==
-X-Google-Smtp-Source: AK7set/e6MoaKe5anwN9nUyHZ3KwQMSrSgfz4cJRifcgmweVwSqwvoChZcu/UyVV+zWrcDok+BN9tw==
-X-Received: by 2002:a05:600c:907:b0:3e2:636:24ac with SMTP id m7-20020a05600c090700b003e2063624acmr4898836wmp.14.1677057846858;
-        Wed, 22 Feb 2023 01:24:06 -0800 (PST)
-Received: from [192.168.1.109] ([178.197.216.144])
-        by smtp.gmail.com with ESMTPSA id bd9-20020a05600c1f0900b003e1202744f2sm15978800wmb.31.2023.02.22.01.24.05
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 22 Feb 2023 01:24:06 -0800 (PST)
-Message-ID: <4ce186aa-2cf3-a36c-a5c5-923029b12a29@linaro.org>
-Date:   Wed, 22 Feb 2023 10:24:05 +0100
+        Wed, 22 Feb 2023 04:26:01 -0500
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CB4324120;
+        Wed, 22 Feb 2023 01:25:57 -0800 (PST)
+Received: from IcarusMOD.eternityproject.eu (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: kholk11)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 665AC660215E;
+        Wed, 22 Feb 2023 09:25:55 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1677057956;
+        bh=0CEvI9MAOWckED08z998n13fsoOR0kXAlcZZZ+SP7qc=;
+        h=From:To:Cc:Subject:Date:From;
+        b=FvhqqDJpiJftjYw15GvsPW4tVTfXFeg3wt9rLPJ0Krvztmz4P2oSc8SdnoWcBzFGd
+         HrUJSDvgFCcdTho2HVbuuv7DW+8AAoZwc2yH7emeOwcJ2bvzq3iEocz94ZOculGWmz
+         2LxCnxaJumjf3nDfdKrzVmuxw7r5q30T4cpavq3TIbOczSfKoCMFi4UJBGrCKqS+5p
+         5dnr42Xda21MSQFwdtMhVwaAFZU6lsD2qV+Q5t4zNCwMrokr5349HdVRwv8dwmHj1k
+         2lEBfRzEZKQB3yKeYn07doLzOIQV0QFbdd279GN5/NWOJ7Kk1QK9DXpXDOXWjTAMkR
+         /VHjFIXXlCjiA==
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+To:     mturquette@baylibre.com
+Cc:     sboyd@kernel.org, matthias.bgg@gmail.com,
+        angelogioacchino.delregno@collabora.com, wenst@chromium.org,
+        johnson.wang@mediatek.com, miles.chen@mediatek.com,
+        chun-jie.chen@mediatek.com, daniel@makrotopia.org,
+        fparent@baylibre.com, msp@baylibre.com, nfraprado@collabora.com,
+        rex-bc.chen@mediatek.com, zhaojh329@gmail.com,
+        sam.shih@mediatek.com, edward-jw.yang@mediatek.com,
+        yangyingliang@huawei.com, granquet@baylibre.com,
+        pablo.sun@mediatek.com, sean.wang@mediatek.com,
+        chen.zhong@mediatek.com, linux-kernel@vger.kernel.org,
+        linux-clk@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org
+Subject: [PATCH v5 00/54] MediaTek clocks: full module build and cleanups
+Date:   Wed, 22 Feb 2023 10:24:49 +0100
+Message-Id: <20230222092543.19187-1-angelogioacchino.delregno@collabora.com>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH v2] dt-bindings: fpga: xilinx-pr-decoupler: convert
- bindings to json-schema
-Content-Language: en-US
-To:     Nava kishore Manne <nava.kishore.manne@amd.com>, mdf@kernel.org,
-        hao.wu@intel.com, yilun.xu@intel.com, trix@redhat.com,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        michal.simek@xilinx.com, linux-fpga@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-References: <20230221115012.3468798-1-nava.kishore.manne@amd.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230221115012.3468798-1-nava.kishore.manne@amd.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 21/02/2023 12:50, Nava kishore Manne wrote:
-> Convert xilinx-pr-decoupler bindings to DT schema format using json-schema
-> 
-> Signed-off-by: Nava kishore Manne <nava.kishore.manne@amd.com>
-> ---
-> Changes for v2:
->               - Updated the description and addressed some minor comments
->                 as suggested by Krzysztof.
-> 
->  .../bindings/fpga/xilinx-pr-decoupler.txt     | 54 --------------
->  .../bindings/fpga/xlnx,pr-decoupler.yaml      | 71 +++++++++++++++++++
->  2 files changed, 71 insertions(+), 54 deletions(-)
->  delete mode 100644 Documentation/devicetree/bindings/fpga/xilinx-pr-decoupler.txt
->  create mode 100644 Documentation/devicetree/bindings/fpga/xlnx,pr-decoupler.yaml
-> 
-> diff --git a/Documentation/devicetree/bindings/fpga/xilinx-pr-decoupler.txt b/Documentation/devicetree/bindings/fpga/xilinx-pr-decoupler.txt
-> deleted file mode 100644
-> index 0acdfa6d62a4..000000000000
-> --- a/Documentation/devicetree/bindings/fpga/xilinx-pr-decoupler.txt
-> +++ /dev/null
-> @@ -1,54 +0,0 @@
-> -Xilinx LogiCORE Partial Reconfig Decoupler Softcore
-> -
-> -The Xilinx LogiCORE Partial Reconfig Decoupler manages one or more
-> -decouplers / fpga bridges.
-> -The controller can decouple/disable the bridges which prevents signal
-> -changes from passing through the bridge.  The controller can also
-> -couple / enable the bridges which allows traffic to pass through the
-> -bridge normally.
-> -
-> -Xilinx LogiCORE Dynamic Function eXchange(DFX) AXI shutdown manager
-> -Softcore is compatible with the Xilinx LogiCORE pr-decoupler.
-> -
-> -The Dynamic Function eXchange AXI shutdown manager prevents AXI traffic
-> -from passing through the bridge. The controller safely handles AXI4MM
-> -and AXI4-Lite interfaces on a Reconfigurable Partition when it is
-> -undergoing dynamic reconfiguration, preventing the system deadlock
-> -that can occur if AXI transactions are interrupted by DFX
-> -
-> -The Driver supports only MMIO handling. A PR region can have multiple
-> -PR Decouplers which can be handled independently or chained via decouple/
-> -decouple_status signals.
-> -
-> -Required properties:
-> -- compatible		: Should contain "xlnx,pr-decoupler-1.00" followed by
-> -                          "xlnx,pr-decoupler" or
-> -                          "xlnx,dfx-axi-shutdown-manager-1.00" followed by
-> -                          "xlnx,dfx-axi-shutdown-manager"
-> -- regs			: base address and size for decoupler module
-> -- clocks		: input clock to IP
-> -- clock-names		: should contain "aclk"
-> -
-> -See Documentation/devicetree/bindings/fpga/fpga-region.txt and
-> -Documentation/devicetree/bindings/fpga/fpga-bridge.txt for generic bindings.
-> -
-> -Example:
-> -Partial Reconfig Decoupler:
-> -	fpga-bridge@100000450 {
-> -		compatible = "xlnx,pr-decoupler-1.00",
-> -			     "xlnx-pr-decoupler";
-> -		regs = <0x10000045 0x10>;
-> -		clocks = <&clkc 15>;
-> -		clock-names = "aclk";
-> -		bridge-enable = <0>;
-> -	};
-> -
-> -Dynamic Function eXchange AXI shutdown manager:
-> -	fpga-bridge@100000450 {
-> -		compatible = "xlnx,dfx-axi-shutdown-manager-1.00",
-> -			     "xlnx,dfx-axi-shutdown-manager";
-> -		regs = <0x10000045 0x10>;
-> -		clocks = <&clkc 15>;
-> -		clock-names = "aclk";
-> -		bridge-enable = <0>;
-> -	};
-> diff --git a/Documentation/devicetree/bindings/fpga/xlnx,pr-decoupler.yaml b/Documentation/devicetree/bindings/fpga/xlnx,pr-decoupler.yaml
-> new file mode 100644
-> index 000000000000..4a08d4bfa20d
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/fpga/xlnx,pr-decoupler.yaml
-> @@ -0,0 +1,71 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/fpga/xlnx,pr-decoupler.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Xilinx LogiCORE Partial Reconfig Decoupler/AXI shutdown manager Softcore
-> +
-> +maintainers:
-> +  - Nava kishore Manne <nava.kishore.manne@amd.com>
-> +
-> +description: The Xilinx LogiCORE Partial Reconfig Decoupler manages one or more
+Changes in v5:
+ - Fixed typo in MODULE_DEVICE_TABLE() for clk-mt8195-vpp0/vpp1
 
-Blank line before text... don't use your own style. Use style consistent
-with the project.
+Changes in v4:
+ - Rebased over clk-next branch as of 21/02/2023
+ - MT8135: Squashed removal of __initconst annotation with conversion
+   to platform drivers as suggested by Chen-Yu
+ - MT8135: Added mention of the introduction of the dummy clock in
+   the commit description of patch [54/54]
+ - Fixed Kconfig ordering issue for MT8195 IMGSYS dependant option
 
-> +  decouplers / fpga bridges. The controller can decouple/disable the bridges
-> +  which prevents signal changes from passing through the bridge.  The controller
-> +  can also couple / enable the bridges which allows traffic to pass through the
-> +  bridge normally.
-> +  Xilinx LogiCORE Dynamic Function eXchange(DFX) AXI shutdown manager Softcore
-> +  is compatible with the Xilinx LogiCORE pr-decoupler. The Dynamic Function
-> +  eXchange AXI shutdown manager prevents AXI traffic from passing through the
-> +  bridge. The controller safely handles AXI4MM and AXI4-Lite interfaces on a
-> +  Reconfigurable Partition when it is undergoing dynamic reconfiguration,
-> +  preventing the system deadlock that can occur if AXI transactions are
-> +  interrupted by DFX.
-> +  Please refer to fpga-region.txt and fpga-bridge.txt in this directory for
-> +  common binding part and usage.
-> +
-> +properties:
-> +  compatible:
-> +    oneOf:
-> +      - items:
-> +          - const: xlnx,pr-decoupler-1.00 #For PR-Decoupler.
+Changes in v3:
+ - Added conversion to simple_probe for MT8135 clocks
+ - Reordered added Kconfig options for MT8195, MT8186
+ - Additional config options for MT8195, MT8186 are now default
+   enabled if parent COMMON_CLK_MT81{95,86} is enabled
+ - Added .remove() callback to MT2712 and MT7622 apmixedsys drivers
+   to avoid resource leakage on unbind/removal
+ - Dropped unwanted and useless change on mt7629-eth.c
 
-Drop the comment, it duplicates the compatible. There is no point in it.
+Changes in v2:
+ - Fixed issues on MT8183 (thanks Chen-Yu!)
+ - Changed builtin_platform_driver() -> module_platform_driver() for
+   MT8167 vdecsys clocks (as that was a mistake!)
+ - Some patches were split, some others were reordered
+ - Summarized: applied changes from Chen-Yu's review
 
-> +          - const: xlnx,pr-decoupler
-> +      - items:
-> +          - const: xlnx,dfx-axi-shutdown-manager-1.00 #For AXI shutdown manager.
+This is part 2 of the "MediaTek clocks cleanups and improvements" series,
+which was already picked.
 
-Ditto
+If reading this full cover letter is too boring for you, here's a short
+summary of the changes of this series:
+ - Added mtk_clk_pdev_probe() for mtk-mmsys probed clocks;
+ - Added divider clock support to common probe mechanism;
+ - Various cleanups here and there;
+ - Converted most clock drivers to platform_driver;
+ - MediaTek clocks can now be built as modules.
 
-> +          - const: xlnx,dfx-axi-shutdown-manager
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +  clocks:
-> +    maxItems: 1
-> +
-> +  clock-names:
-> +    items:
-> +      - const: aclk
-> +
-> +  bridge-enable:
-> +    $ref: /schemas/types.yaml#/definitions/uint32
-> +    enum: [0, 1]
-> +    description:
-> +      Zero if driver should disable bridge at startup. One if driver should
-> +      enable bridge at startup. Default is to leave bridge in current state.
-
-This property wasn't in original binding. Even though it is
-fpga-bridge.txt, why do you need it? It's not used. Also, do not
-describe driver but rather hardware.
+NOTE: Applies on top of [1] and [2].
 
 
-Best regards,
-Krzysztof
+Full blurb:
+
+This huge series adds more cleanups on top, reducing size and adding more
+commonization for clock drivers probe/remove, which also includes a new
+common probe mechanism for multimedia clock drivers that are usually
+probed by mtk-mmsys instead of a dt clock node: thanks to this, it was
+finally possible to convert almost all clock drivers to the common probe
+mechanism, which *finally again* makes us able to build all these drivers
+as modules!
+
+Since this looked like being *the* way forward, I went on converting some
+more drivers away from OF_CLK_DECLARE_DRIVER to full platform_driver(s),
+allowing for more (actually, almost all!) drivers to be built as modules.
+
+While at it, I also added some more consistency in macros usage by
+removing all of the duplicated full macro declaration for MediaTek gate
+clocks and replacing all of those with using the GATE_MTK macro instead,
+producing a nice reduction in amount of lines per file but, more
+importantly, improving readability and eventual future batch changes.
+
+This amount of commonization will also, in my opinion, greatly improve
+the review process for new clock drivers, as they will be mostly just a
+list of clocks and won't contain much new code, as it's all going to be
+handled in the common places, which also reduces chances to see new clock
+driver related bugs emerging on one SoC or the other.
+
+Since I don't own devices with all of the supported MediaTek SoCs, I
+could not test some of the conversions on real hardware... but I am
+confident that this will work as the drivers are *very* similar on a
+per-generation basis.
+
+This series was build-tested for all (both module and built-in build)
+and was manually tested on MT6795, MT8173, MT8192, MT8195.
+
+[1]: https://patchwork.kernel.org/project/linux-mediatek/list/?series=719067
+[2]: https://patchwork.kernel.org/project/linux-mediatek/patch/20230207014800.7619-2-moudy.ho@mediatek.com/
+
+AngeloGioacchino Del Regno (54):
+  clk: mediatek: clk-mtk: Switch to device_get_match_data()
+  clk: mediatek: clk-mtk: Introduce clk_mtk_pdev_{probe,remove}()
+  clk: mediatek: Migrate to mtk_clk_pdev_probe() for multimedia clocks
+  clk: mediatek: Add divider clocks to mtk_clk_simple_{probe,remove}()
+  clk: mediatek: mt2712: Migrate topckgen/mcucfg to
+    mtk_clk_simple_probe()
+  clk: mediatek: mt2712: Compress clock arrays entries to 90 columns
+  clk: mediatek: mt2712: Add error handling to
+    clk_mt2712_apmixed_probe()
+  clk: mediatek: mt2712: Move apmixedsys clock driver to its own file
+  clk: mediatek: mt2712-apmixedsys: Add .remove() callback for module
+    build
+  clk: mediatek: mt2712: Change to use module_platform_driver macro
+  clk: mediatek: mt8365: Move apmixedsys clock driver to its own file
+  clk: mediatek: mt8365: Convert simple_gate to mtk_gate clocks
+  clk: mediatek: mt8365: Join top_misc_mux_gates and top_misc_muxes
+    arrays
+  clk: mediatek: mt8365: Convert to mtk_clk_simple_{probe,remove}()
+  clk: mediatek: mt8167: Compress GATE_TOPx macros
+  clk: mediatek: mt8167: Move apmixedsys as platform_driver in new file
+  clk: mediatek: mt8167: Remove __initconst annotation from arrays
+  clk: mediatek: mt8167: Convert to mtk_clk_simple_{probe,remove}()
+  clk: mediatek: mt8183: Move apmixedsys clock driver to its own file
+  clk: mediatek: mt8183: Compress clocks arrays entries where possible
+  clk: mediatek: mt8183: Convert all remaining clocks to common probe
+  clk: mediatek: Consistently use GATE_MTK() macro
+  clk: mediatek: mt7622: Properly use CLK_IS_CRITICAL flag
+  clk: mediatek: mt7622: Move apmixedsys clock driver to its own file
+  clk: mediatek: mt7622-apmixedsys: Add .remove() callback for module
+    build
+  clk: mediatek: mt7622: Move infracfg to clk-mt7622-infracfg.c
+  clk: mediatek: mt7622: Convert to platform driver and simple probe
+  clk: mediatek: mt8516: Move apmixedsys clock driver to its own file
+  clk: mediatek: mt8516: Convert to platform driver and simple probe
+  clk: mediatek: mt8516: Allow building clock drivers as modules
+  clk: mediatek: Propagate struct device with
+    mtk_clk_register_dividers()
+  clk: mediatek: mt7986-apmixed: Use PLL_AO flag to set critical clock
+  clk: mediatek: mt7986-infracfg: Migrate to common probe mechanism
+  clk: mediatek: mt7986-eth: Migrate to common probe mechanism
+  clk: mediatek: mt8186-mcu: Migrate to common probe mechanism
+  clk: mediatek: Switch to module_platform_driver() where possible
+  clk: mediatek: Add MODULE_LICENSE() where missing
+  clk: mediatek: mt2712: Change Kconfig options to allow module build
+  clk: mediatek: Split MT8195 clock drivers and allow module build
+  clk: mediatek: Allow building MT8192 non-critical clocks as modules
+  clk: mediatek: Allow MT7622 clocks to be built as modules
+  clk: mediatek: Allow all MT8167 clocks to be built as modules
+  clk: mediatek: Allow all MT8183 clocks to be built as modules
+  clk: mediatek: Allow building most MT6765 clock drivers as modules
+  clk: mediatek: Allow building most MT6797 clock drivers as modules
+  clk: mediatek: Split configuration options for MT8186 clock drivers
+  clk: mediatek: mt8192: Move apmixedsys clock driver to its own file
+  clk: mediatek: Kconfig: Allow module build for core mt8192 clocks
+  clk: mediatek: Add MODULE_DEVICE_TABLE() where appropriate
+  clk: mediatek: mt8135: Move apmixedsys to its own file
+  clk: mediatek: mt8135: Properly use CLK_IS_CRITICAL flag
+  clk: mediatek: mt8135-apmixedsys: Convert to platform_driver and
+    module
+  clk: mediatek: mt8135: Join root_clk_alias and top_divs arrays
+  clk: mediatek: mt8135: Convert to simple probe and enable module build
+
+ drivers/clk/mediatek/Kconfig                  |  309 +++--
+ drivers/clk/mediatek/Makefile                 |   55 +-
+ drivers/clk/mediatek/clk-mt2701-aud.c         |   45 +-
+ drivers/clk/mediatek/clk-mt2701-bdp.c         |   25 +-
+ drivers/clk/mediatek/clk-mt2701-eth.c         |   15 +-
+ drivers/clk/mediatek/clk-mt2701-g3d.c         |   15 +-
+ drivers/clk/mediatek/clk-mt2701-hif.c         |   15 +-
+ drivers/clk/mediatek/clk-mt2701-img.c         |   15 +-
+ drivers/clk/mediatek/clk-mt2701-mm.c          |   56 +-
+ drivers/clk/mediatek/clk-mt2701-vdec.c        |   25 +-
+ drivers/clk/mediatek/clk-mt2701.c             |   44 +-
+ drivers/clk/mediatek/clk-mt2712-apmixedsys.c  |  168 +++
+ drivers/clk/mediatek/clk-mt2712-bdp.c         |   15 +-
+ drivers/clk/mediatek/clk-mt2712-img.c         |   15 +-
+ drivers/clk/mediatek/clk-mt2712-jpgdec.c      |   15 +-
+ drivers/clk/mediatek/clk-mt2712-mfg.c         |   15 +-
+ drivers/clk/mediatek/clk-mt2712-mm.c          |   66 +-
+ drivers/clk/mediatek/clk-mt2712-vdec.c        |   25 +-
+ drivers/clk/mediatek/clk-mt2712-venc.c        |   15 +-
+ drivers/clk/mediatek/clk-mt2712.c             | 1010 +++++------------
+ drivers/clk/mediatek/clk-mt6765-audio.c       |   25 +-
+ drivers/clk/mediatek/clk-mt6765-cam.c         |   15 +-
+ drivers/clk/mediatek/clk-mt6765-img.c         |   15 +-
+ drivers/clk/mediatek/clk-mt6765-mipi0a.c      |   15 +-
+ drivers/clk/mediatek/clk-mt6765-mm.c          |   15 +-
+ drivers/clk/mediatek/clk-mt6765-vcodec.c      |   15 +-
+ drivers/clk/mediatek/clk-mt6765.c             |   82 +-
+ drivers/clk/mediatek/clk-mt6779-aud.c         |    1 +
+ drivers/clk/mediatek/clk-mt6779-cam.c         |    1 +
+ drivers/clk/mediatek/clk-mt6779-img.c         |    1 +
+ drivers/clk/mediatek/clk-mt6779-ipe.c         |    1 +
+ drivers/clk/mediatek/clk-mt6779-mfg.c         |    1 +
+ drivers/clk/mediatek/clk-mt6779-mm.c          |   25 +-
+ drivers/clk/mediatek/clk-mt6779-vdec.c        |    1 +
+ drivers/clk/mediatek/clk-mt6779-venc.c        |    1 +
+ drivers/clk/mediatek/clk-mt6779.c             |    1 +
+ drivers/clk/mediatek/clk-mt6795-apmixedsys.c  |    1 +
+ drivers/clk/mediatek/clk-mt6795-infracfg.c    |    1 +
+ drivers/clk/mediatek/clk-mt6795-mfg.c         |    1 +
+ drivers/clk/mediatek/clk-mt6795-mm.c          |   56 +-
+ drivers/clk/mediatek/clk-mt6795-pericfg.c     |    1 +
+ drivers/clk/mediatek/clk-mt6795-topckgen.c    |    1 +
+ drivers/clk/mediatek/clk-mt6795-vdecsys.c     |    1 +
+ drivers/clk/mediatek/clk-mt6795-vencsys.c     |    1 +
+ drivers/clk/mediatek/clk-mt6797-img.c         |   15 +-
+ drivers/clk/mediatek/clk-mt6797-mm.c          |   56 +-
+ drivers/clk/mediatek/clk-mt6797-vdec.c        |   25 +-
+ drivers/clk/mediatek/clk-mt6797-venc.c        |   15 +-
+ drivers/clk/mediatek/clk-mt6797.c             |   44 +-
+ drivers/clk/mediatek/clk-mt7622-apmixedsys.c  |  152 +++
+ drivers/clk/mediatek/clk-mt7622-aud.c         |   45 +-
+ drivers/clk/mediatek/clk-mt7622-eth.c         |   25 +-
+ drivers/clk/mediatek/clk-mt7622-hif.c         |   25 +-
+ drivers/clk/mediatek/clk-mt7622-infracfg.c    |  128 +++
+ drivers/clk/mediatek/clk-mt7622.c             |  371 +-----
+ drivers/clk/mediatek/clk-mt7629-eth.c         |   22 +-
+ drivers/clk/mediatek/clk-mt7629-hif.c         |   25 +-
+ drivers/clk/mediatek/clk-mt7629.c             |   42 +-
+ drivers/clk/mediatek/clk-mt7981-apmixed.c     |    2 +
+ drivers/clk/mediatek/clk-mt7981-eth.c         |    3 +-
+ drivers/clk/mediatek/clk-mt7981-infracfg.c    |    4 +-
+ drivers/clk/mediatek/clk-mt7981-topckgen.c    |    4 +-
+ drivers/clk/mediatek/clk-mt7986-apmixed.c     |    8 +-
+ drivers/clk/mediatek/clk-mt7986-eth.c         |  112 +-
+ drivers/clk/mediatek/clk-mt7986-infracfg.c    |   90 +-
+ drivers/clk/mediatek/clk-mt7986-topckgen.c    |    4 +-
+ drivers/clk/mediatek/clk-mt8135-apmixedsys.c  |  105 ++
+ drivers/clk/mediatek/clk-mt8135.c             |  268 ++---
+ drivers/clk/mediatek/clk-mt8167-apmixedsys.c  |  145 +++
+ drivers/clk/mediatek/clk-mt8167-aud.c         |   46 +-
+ drivers/clk/mediatek/clk-mt8167-img.c         |   50 +-
+ drivers/clk/mediatek/clk-mt8167-mfgcfg.c      |   50 +-
+ drivers/clk/mediatek/clk-mt8167-mm.c          |   69 +-
+ drivers/clk/mediatek/clk-mt8167-vdec.c        |   57 +-
+ drivers/clk/mediatek/clk-mt8167.c             |  382 ++-----
+ drivers/clk/mediatek/clk-mt8173-apmixedsys.c  |    1 +
+ drivers/clk/mediatek/clk-mt8173-img.c         |    1 +
+ drivers/clk/mediatek/clk-mt8173-infracfg.c    |    1 +
+ drivers/clk/mediatek/clk-mt8173-mm.c          |   82 +-
+ drivers/clk/mediatek/clk-mt8173-pericfg.c     |    1 +
+ drivers/clk/mediatek/clk-mt8173-topckgen.c    |    1 +
+ drivers/clk/mediatek/clk-mt8173-vdecsys.c     |    1 +
+ drivers/clk/mediatek/clk-mt8173-vencsys.c     |    1 +
+ drivers/clk/mediatek/clk-mt8183-apmixedsys.c  |  195 ++++
+ drivers/clk/mediatek/clk-mt8183-audio.c       |    5 +-
+ drivers/clk/mediatek/clk-mt8183-cam.c         |    5 +-
+ drivers/clk/mediatek/clk-mt8183-img.c         |    5 +-
+ drivers/clk/mediatek/clk-mt8183-ipu0.c        |    5 +-
+ drivers/clk/mediatek/clk-mt8183-ipu1.c        |    5 +-
+ drivers/clk/mediatek/clk-mt8183-ipu_adl.c     |    5 +-
+ drivers/clk/mediatek/clk-mt8183-ipu_conn.c    |    5 +-
+ drivers/clk/mediatek/clk-mt8183-mfgcfg.c      |    5 +-
+ drivers/clk/mediatek/clk-mt8183-mm.c          |   29 +-
+ drivers/clk/mediatek/clk-mt8183-vdec.c        |    5 +-
+ drivers/clk/mediatek/clk-mt8183-venc.c        |    5 +-
+ drivers/clk/mediatek/clk-mt8183.c             |  771 +++----------
+ drivers/clk/mediatek/clk-mt8186-apmixedsys.c  |    4 +-
+ drivers/clk/mediatek/clk-mt8186-cam.c         |    4 +-
+ drivers/clk/mediatek/clk-mt8186-img.c         |    4 +-
+ .../clk/mediatek/clk-mt8186-imp_iic_wrap.c    |    4 +-
+ drivers/clk/mediatek/clk-mt8186-infra_ao.c    |    4 +-
+ drivers/clk/mediatek/clk-mt8186-ipe.c         |    4 +-
+ drivers/clk/mediatek/clk-mt8186-mcu.c         |   69 +-
+ drivers/clk/mediatek/clk-mt8186-mdp.c         |    4 +-
+ drivers/clk/mediatek/clk-mt8186-mfg.c         |    4 +-
+ drivers/clk/mediatek/clk-mt8186-mm.c          |   59 +-
+ drivers/clk/mediatek/clk-mt8186-topckgen.c    |    4 +-
+ drivers/clk/mediatek/clk-mt8186-vdec.c        |    4 +-
+ drivers/clk/mediatek/clk-mt8186-venc.c        |    4 +-
+ drivers/clk/mediatek/clk-mt8186-wpe.c         |    4 +-
+ drivers/clk/mediatek/clk-mt8192-apmixedsys.c  |  215 ++++
+ drivers/clk/mediatek/clk-mt8192-aud.c         |    5 +-
+ drivers/clk/mediatek/clk-mt8192-cam.c         |    5 +-
+ drivers/clk/mediatek/clk-mt8192-img.c         |    5 +-
+ .../clk/mediatek/clk-mt8192-imp_iic_wrap.c    |    5 +-
+ drivers/clk/mediatek/clk-mt8192-ipe.c         |    5 +-
+ drivers/clk/mediatek/clk-mt8192-mdp.c         |    5 +-
+ drivers/clk/mediatek/clk-mt8192-mfg.c         |    5 +-
+ drivers/clk/mediatek/clk-mt8192-mm.c          |   34 +-
+ drivers/clk/mediatek/clk-mt8192-msdc.c        |    5 +-
+ drivers/clk/mediatek/clk-mt8192-scp_adsp.c    |    5 +-
+ drivers/clk/mediatek/clk-mt8192-vdec.c        |    5 +-
+ drivers/clk/mediatek/clk-mt8192-venc.c        |    5 +-
+ drivers/clk/mediatek/clk-mt8192.c             |  223 +---
+ drivers/clk/mediatek/clk-mt8195-apmixedsys.c  |    4 +-
+ drivers/clk/mediatek/clk-mt8195-apusys_pll.c  |    4 +-
+ drivers/clk/mediatek/clk-mt8195-cam.c         |    4 +-
+ drivers/clk/mediatek/clk-mt8195-ccu.c         |    4 +-
+ drivers/clk/mediatek/clk-mt8195-img.c         |    4 +-
+ .../clk/mediatek/clk-mt8195-imp_iic_wrap.c    |    4 +-
+ drivers/clk/mediatek/clk-mt8195-infra_ao.c    |    4 +-
+ drivers/clk/mediatek/clk-mt8195-ipe.c         |    4 +-
+ drivers/clk/mediatek/clk-mt8195-mfg.c         |    4 +-
+ drivers/clk/mediatek/clk-mt8195-peri_ao.c     |    4 +-
+ drivers/clk/mediatek/clk-mt8195-scp_adsp.c    |    4 +-
+ drivers/clk/mediatek/clk-mt8195-topckgen.c    |    4 +-
+ drivers/clk/mediatek/clk-mt8195-vdec.c        |    4 +-
+ drivers/clk/mediatek/clk-mt8195-vdo0.c        |   59 +-
+ drivers/clk/mediatek/clk-mt8195-vdo1.c        |   61 +-
+ drivers/clk/mediatek/clk-mt8195-venc.c        |    4 +-
+ drivers/clk/mediatek/clk-mt8195-vpp0.c        |   58 +-
+ drivers/clk/mediatek/clk-mt8195-vpp1.c        |   58 +-
+ drivers/clk/mediatek/clk-mt8195-wpe.c         |    4 +-
+ drivers/clk/mediatek/clk-mt8365-apmixedsys.c  |  166 +++
+ drivers/clk/mediatek/clk-mt8365-apu.c         |    3 +-
+ drivers/clk/mediatek/clk-mt8365-cam.c         |    3 +-
+ drivers/clk/mediatek/clk-mt8365-mfg.c         |    3 +-
+ drivers/clk/mediatek/clk-mt8365-mm.c          |   42 +-
+ drivers/clk/mediatek/clk-mt8365-vdec.c        |    3 +-
+ drivers/clk/mediatek/clk-mt8365-venc.c        |    3 +-
+ drivers/clk/mediatek/clk-mt8365.c             |  606 +++-------
+ drivers/clk/mediatek/clk-mt8516-apmixedsys.c  |  122 ++
+ drivers/clk/mediatek/clk-mt8516-aud.c         |   46 +-
+ drivers/clk/mediatek/clk-mt8516.c             |  240 +---
+ drivers/clk/mediatek/clk-mtk.c                |   82 +-
+ drivers/clk/mediatek/clk-mtk.h                |    7 +-
+ 156 files changed, 3479 insertions(+), 4610 deletions(-)
+ create mode 100644 drivers/clk/mediatek/clk-mt2712-apmixedsys.c
+ create mode 100644 drivers/clk/mediatek/clk-mt7622-apmixedsys.c
+ create mode 100644 drivers/clk/mediatek/clk-mt7622-infracfg.c
+ create mode 100644 drivers/clk/mediatek/clk-mt8135-apmixedsys.c
+ create mode 100644 drivers/clk/mediatek/clk-mt8167-apmixedsys.c
+ create mode 100644 drivers/clk/mediatek/clk-mt8183-apmixedsys.c
+ create mode 100644 drivers/clk/mediatek/clk-mt8192-apmixedsys.c
+ create mode 100644 drivers/clk/mediatek/clk-mt8365-apmixedsys.c
+ create mode 100644 drivers/clk/mediatek/clk-mt8516-apmixedsys.c
+
+-- 
+2.39.2
 
