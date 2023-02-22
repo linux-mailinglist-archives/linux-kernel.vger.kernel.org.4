@@ -2,185 +2,184 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 461A46A0C6C
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 16:02:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 23E8A6A0D6D
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 16:59:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234575AbjBWPCB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Feb 2023 10:02:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41214 "EHLO
+        id S234854AbjBWP7q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Feb 2023 10:59:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38772 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229502AbjBWPB7 (ORCPT
+        with ESMTP id S229791AbjBWP7o (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Feb 2023 10:01:59 -0500
-Received: from IND01-BMX-obe.outbound.protection.outlook.com (mail-bmxind01olkn2035.outbound.protection.outlook.com [40.92.103.35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B29D311E5;
-        Thu, 23 Feb 2023 07:01:57 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=PC2B5ems2m55Jsl11su6niZ1QF2fe5z187d3KUjkcHjG0CM6sIRHOG5ICRGwAFGCX4ToE8r6VysfEng9MxwxucjQrzfwqAqtvv27z00nikZpYFw0sM6wYUuMKDMgMhUKr8/gnmoNMaGBdi4p+2tjlY2it42GYwRIJK5DLb+gZ54CWDJiwEQXqc6rkBTmABzSHFgLfURNnWyHBWnc9brUS3ecgnPmnj5YvRSG52Y978KRz+feXR+hZo+v3GPGwYuac7EGsb7Gg3Rnfa7Yf9cKnh9SUw+z1C+mJCjRZsbEpHW7U8acyxpSMbE6KpXgJHRYGJSeQHsQxOhbGTZysyeLlQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=sTbYqBC8FAUIBzj7tk/iPo72DsiVvLEfgZa1iSrltB0=;
- b=ASMrfnN+obnfKj2vpGcVAkQowcJxNK4coM3tR/6iD8vEr9O65bUYSrSPwQhKIkmh6s6txfHTAj0IBDhT0Lo8icdQav4VrNVwUEdY7dlF47R9C3iCbrDGj8LXSK8wws17f238x4nh6lulDEDnIu0UDA59kNbQTDlTNXc7EXAHFKhSgvLLwYqDuer8vsTgudVwXPK1iVmQ/Ae1C3574Nhjyndw+4U9yD6mvno+NUxwCytONMElbj/YlVomIlIWL5Is83rySDfOI47r5zt7va7abvdZhNl/zBSeMsw4YjzTQNUugXdnuAxwhzsgJCefqWyf5C1x+6xhKpAEER00vxAwzQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
- dkim=none; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=live.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=sTbYqBC8FAUIBzj7tk/iPo72DsiVvLEfgZa1iSrltB0=;
- b=C5FXD3yma10dhxhMNpbVpC7x5CAq3/BpY1aouutFiRxCC00EHEJzx6DWVwd+a0S1e1aCNVfMMHZdNlolCe1UrJs7QX37S7Sg/g00NeuBm1/BwNWCaKLEvq6xhjX2NYBNorS5fhqNgaNteqWZ5yrQwSTAnqraCw/veVzjl3nvoAuKgWA4WjD98K9e8z9USotgYMlwe6/gOe2TPL1TE3aaMxrMUpmr2R1vcf5pepKha5QIUy//kRPwoi6oGqwZXLYLlBuQjraJnCEHg6WDEV4Qt9Q84elWdKksEl69gAC5fVgA1wzy1lqVO343ETdB5LpsFGYNleyowyU06/RHk21ysA==
-Received: from BM1PR01MB0931.INDPRD01.PROD.OUTLOOK.COM (2603:1096:b00:2::9) by
- MAZPR01MB8968.INDPRD01.PROD.OUTLOOK.COM (2603:1096:a01:d0::13) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.6134.19; Thu, 23 Feb 2023 15:01:49 +0000
-Received: from BM1PR01MB0931.INDPRD01.PROD.OUTLOOK.COM
- ([fe80::f156:868f:a45b:aeee]) by BM1PR01MB0931.INDPRD01.PROD.OUTLOOK.COM
- ([fe80::f156:868f:a45b:aeee%11]) with mapi id 15.20.6156.007; Thu, 23 Feb
- 2023 15:01:49 +0000
-From:   Aditya Garg <gargaditya08@live.com>
-To:     Hector Martin <marcan@marcan.st>
-CC:     Arend van Spriel <aspriel@gmail.com>,
-        Franky Lin <franky.lin@broadcom.com>,
-        Hante Meuleman <hante.meuleman@broadcom.com>,
-        Kalle Valo <kvalo@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Sven Peter <sven@svenpeter.dev>,
-        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        "asahi@lists.linux.dev" <asahi@lists.linux.dev>,
-        "linux-wireless@vger.kernel.org" <linux-wireless@vger.kernel.org>,
-        "brcm80211-dev-list.pdl@broadcom.com" 
-        <brcm80211-dev-list.pdl@broadcom.com>,
-        "SHA-cyfmac-dev-list@infineon.com" <SHA-cyfmac-dev-list@infineon.com>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 0/2] Apple T2 platform support
-Thread-Topic: [PATCH 0/2] Apple T2 platform support
-Thread-Index: AQHZR5fA6B2arN4fj02dzTxrW7w7KA==
-Date:   Thu, 23 Feb 2023 15:01:48 +0000
-Message-ID: <379F9C6D-F98D-4940-A336-F5356F9C1898@live.com>
-References: <20230214080034.3828-1-marcan@marcan.st>
-In-Reply-To: <20230214080034.3828-1-marcan@marcan.st>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-messagesentrepresentingtype: 1
-x-tmn:  [rMVh0onSZI3JfMFM/stkEBlpCw6tqmNW]
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: BM1PR01MB0931:EE_|MAZPR01MB8968:EE_
-x-ms-office365-filtering-correlation-id: 53e35224-b17c-4a25-1cb3-08db15aee35b
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: B7Wr0sfZK/1EWwUl2aNmVN9zHY68J2fgkIFoFESGz9RO4Ks1VSN125K1YEvYpOPGx4/21h8Q1AKpfMvpnJp0iOvTfHFpWNAViDMJ2KcnB7kTdP64/7e1aeBU87IvYQLtTg/sb5M2ST4xZxthojS1kqqTHksdYjc2IRRS2m05v4TaP3Coo+FqRRBGi8HD6KBLQdOTHjjH+dT7COTG+CqxEmSo3kd1tltdLF5FPl+skBkCNb4Vm2SHbPw/0WTVJhegnB62TIs0HYpfnBlZEKrcfuuDNx4cdhtMT+3JyxGyq1sE8RBuFB9dNFx5z7Pg9VD+JSQTI5pdgGA7fjBakR2X54kP7B9nVd6ZQmOSUkwWU7QwWt1qsLRxcLK834EVk23WAykuctR/eGH4Wk6SIuOlecQMvnLw3zYR0K06sqnhyUCsu1FP5jqJ45X6nJQLnSEcjCnilwtVnWzIr4aNFdzVGeIyJFz004bZETvTNtcI2ZDPAcVuqywn5fVBxkyUXpXexE5E9JEmnAVjrZOXafI/6XUEYsvq5WgGDH3H1+DFzhSifFdu0SNZ1CsRwEE7rnmSVaVQYan2n98R11C+1WQYaABX0YXmV6+CSS6jpR+HLAu2wmAQn339HxTQV62wBgzWxvOfO+sxL7ouyPkxVvM/8w==
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?L1JHVlBZWGg5TlF1U2MrV29SenpJWkZKdkdBYWVHVnd1bXRGTEYvY2NTcHBx?=
- =?utf-8?B?MnFsMWxlRGd2UXdBbnNFcjVPWnVlUEZiUFk1VlBubUdsZzV1T2tPUE1yUU9W?=
- =?utf-8?B?Ym1oUnQ4NXVRSW45ME5GamRDaXJGT1dMclFxc2tFK3JFNng1ajJIYnlUVDJl?=
- =?utf-8?B?RmprRk1QVUpXeXVSRldjMVZHd1ZEb1g1N1p0RG8rS09sM1VWekZ1NXQ5bkxF?=
- =?utf-8?B?cmE2OTJXZW00YUsza09PMVkwb3hvQ2ZmcG5CWmxoNTc3Tk5SMTNiTGtod2xT?=
- =?utf-8?B?WmNzeUt6QnhEQ1hKN25qL2h0T05ia2xUNTN1bk4rR1ZJaDZTK2NWcUU1MkZN?=
- =?utf-8?B?bzZEMWQyNjNWYm5aa0ZHR2t3WGFtV1Y3ZEwvYXF5YjJjR1A5MmNNYnczUzVl?=
- =?utf-8?B?UkJUWmxSRWNpVFpJcGZrVDJiQk44RU5BTHFpdDRoajlIVjByYzM0MlZtUUtR?=
- =?utf-8?B?UTBRck5JcDV5eGVvUkpDUXBwZER4eHJyZ2d6SnZiN0pUTFFiVURyUHZEQ3U5?=
- =?utf-8?B?OVFWQlBwNm14aGdnbnBrSW94NC9VOHdhUUJHOFR4ckNnN2d3WS9FL0JrVmVT?=
- =?utf-8?B?TmMzN0tIZDB2a09LUjBoYWt6UktCTWJkQ2Fza0poR0NlQ3F0RFcxVnhSZS9V?=
- =?utf-8?B?czNmRDlBK0RseHJoRkNhS2tsc0FZaDdsRGo5eUZIY2dVSTVHM0ZDSjV4QzJL?=
- =?utf-8?B?NURiU2hBYVBvZUsxdnFSRDJVemlOWFJ4SUhQWUN0VkgzMkJHN2NwWFJmdGdJ?=
- =?utf-8?B?L1pLQnNWWXozYlgvNGxJa2NmMHdPWFJQbHBSdElyTTVkVmVRYjhacTM4c3Bx?=
- =?utf-8?B?RGZLOUcxSEZsNW9DQ0dxcXNiMThuSHZkK2RNQjdkM1ZpcDZCSEkzQ2dUWFVY?=
- =?utf-8?B?TXNrS3QzZmsxM3p1THBjZmhzUnYvemorNlZzaXRKcHdIRGhYdTN2aGhhNDV4?=
- =?utf-8?B?NEpCazBNMjhubUQvYzVpL2k5emYyS1lOb3dTM0tLWWVDOE0rT1FJd3JWbEg1?=
- =?utf-8?B?Vmd5d0hzNzB4UmJNWXU0RFo4RXFyUHdWZ2tRWTVKTndtblVmM3piRmNOaTBa?=
- =?utf-8?B?bGJkelhxdkhidEt2bW9xbC90dXZwK0Y1Q3JvYmhCSzZsUzlCQTE3RlZ3ejI5?=
- =?utf-8?B?TGI5ODIxOGdham9JRzJFT2J3K3dFcy9hU0t6enFZR3ZwZ0NTNEdZcG10RjNE?=
- =?utf-8?B?U3BLNDQ4WE1lMk5nUGhJVWI3V0huWVVLbzVOcVRCaXY5RUxiKzl4cFBhbUho?=
- =?utf-8?B?aUdSRUsyTE5LcSt2SWplaGltUWlyS1BvbVZ1SkI5bDBjeEtDWVhUU0U2Vytk?=
- =?utf-8?B?YnJXWTM3THlXcEFiYlM4QmNHclZiSVVsSHo1N3hKVHVkKzUxalJ2UWMzSzIv?=
- =?utf-8?B?VldQTkpsZ2pRSWdkdjBDU2s3V2w4Wnd4WWtYZVI5d2VnZkdUUGlVOFJ3UEZ3?=
- =?utf-8?B?WFB4SkxJbWY5aEhIcTBkZVdLS2t3ZDJ2K3BvRWJlRk14RGRuS2ZiR0JDaDRG?=
- =?utf-8?B?M1ZMcVNZZDVVNHVUTENiSGJENmRpQXAvWFNVVWZVb3lvdHJYQUh2WmtsOFJz?=
- =?utf-8?B?NDhLeGNrUzZiT2FEd2d5Vi9YYzVEZ3ZVOUNJSWF5S2ZzUTFtWHpkQk9tVHdm?=
- =?utf-8?B?WTBHdW1tWmhVV3Nld1NPZWdRZFZVNzVPd2tIY0pPeDQrTjJYT1Njdmp5aEgy?=
- =?utf-8?B?RTd0STNNSnM1b05jODhPemJSck9IamdIYnFyM1pKU1l3RU9waHgxQ2p3PT0=?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <40675B01EA5D794E887D6BA8C5E75222@INDPRD01.PROD.OUTLOOK.COM>
-Content-Transfer-Encoding: base64
+        Thu, 23 Feb 2023 10:59:44 -0500
+Received: from mail-qt1-x82c.google.com (mail-qt1-x82c.google.com [IPv6:2607:f8b0:4864:20::82c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 486BB18B26
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Feb 2023 07:59:43 -0800 (PST)
+Received: by mail-qt1-x82c.google.com with SMTP id c19so886984qtn.13
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Feb 2023 07:59:43 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=6btNxmPTA9mFQHtoTcPKUI3lR43VlkT+xc7DS18jvNI=;
+        b=GoOcq8BONrLPlKqCYRfk7T6PYpQQ4FwaeF3Nq4wWTWq4rpe5qyd6EXPxvJbFuYgAtW
+         9U3h7hWcVyTyloSb+kPhtg1A49WcSlZmmG+KaE4ZDLD6dpMFT5yGULhKF2E4bv0BDyEz
+         ZSjlLMdzPxCBU0iNA26btRn7+MxtFa3wPndwHJTUjrfjo/Q4IDpEyacUt0wXR7xhjJ0r
+         HrUzbpQleJuchyEmPjYgls7014UwIFf/i6EUw4L91Edh4T5uPqSI4Re2z5DxjUU/eb1K
+         rLJUGNir+Th4pMafvUwe5E9NJ3WzcQ3CtVmAwQC/IBKjZaZxg1caxSH5oZUdRb0S53+a
+         3QPg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=6btNxmPTA9mFQHtoTcPKUI3lR43VlkT+xc7DS18jvNI=;
+        b=7XIXtom8t1SpXdaeyUTIimISEj2WO31erbGavSWek6MR27Wm6wupxp6ufm4AkrG5KH
+         58NgNJW4QZ5UoIdMmNgnUqCmnSax+ezD8/TRhjmB29KtHrooc54RpgRMmGguRFHHCCqD
+         lBRzzocNbIfeCOI5elFLHmuMfVemKvjDLwoV/+DkQtYLg8WcjfA/8weSn4jqfGlWLzZ5
+         gJ1eu09Ntp4mBI3nyL59kxVpBWBi1pi5IMu70dq4zg7smaGSr++yg/f0BmVgJgScmVvK
+         FwyK8FMP/H3RwASSvc+o/M/xffe4opzCSbHnv1rKDFCEP6Il9VNaBDv2GNXmoAC7R48r
+         gw7g==
+X-Gm-Message-State: AO0yUKUbpZYyUuHG5hsM+rgCbwEgbDMFq0aYXp/4NWhegHejujAa82Jh
+        JQqpkMR8ZZSrMgxufXx18LNSqBsu2BnpsWmn
+X-Google-Smtp-Source: AK7set8dEE6rVuQ7r5OUj0cZfYhECEQL9icEk2cth6CTRhdt3mKhJU7iPbbm0VokAbVDlhn7tITKrA==
+X-Received: by 2002:a05:622a:170a:b0:3b8:6aff:9b58 with SMTP id h10-20020a05622a170a00b003b86aff9b58mr23466107qtk.35.1677167982344;
+        Thu, 23 Feb 2023 07:59:42 -0800 (PST)
+Received: from fedora (69-109-179-158.lightspeed.dybhfl.sbcglobal.net. [69.109.179.158])
+        by smtp.gmail.com with ESMTPSA id o16-20020a374110000000b0074266529b50sm489651qka.94.2023.02.23.07.59.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 23 Feb 2023 07:59:41 -0800 (PST)
+Date:   Wed, 22 Feb 2023 11:43:28 -0500
+From:   William Breathitt Gray <william.gray@linaro.org>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     Mark Brown <broonie@kernel.org>,
+        Aidan MacDonald <aidanmacdonald.0x0@gmail.com>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 1/1] regmap-irq: Place kernel doc of struct
+ regmap_irq_chip in order
+Message-ID: <Y/ZGMDI9wcOwMUWI@fedora>
+References: <20230220153334.87049-1-andriy.shevchenko@linux.intel.com>
 MIME-Version: 1.0
-X-OriginatorOrg: sct-15-20-4755-11-msonline-outlook-42ed3.templateTenant
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: BM1PR01MB0931.INDPRD01.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg: 00000000-0000-0000-0000-000000000000
-X-MS-Exchange-CrossTenant-Network-Message-Id: 53e35224-b17c-4a25-1cb3-08db15aee35b
-X-MS-Exchange-CrossTenant-originalarrivaltime: 23 Feb 2023 15:01:48.5792
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
-X-MS-Exchange-CrossTenant-rms-persistedconsumerorg: 00000000-0000-0000-0000-000000000000
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MAZPR01MB8968
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="QZuyeSJ5jh8ff65q"
+Content-Disposition: inline
+In-Reply-To: <20230220153334.87049-1-andriy.shevchenko@linux.intel.com>
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DATE_IN_PAST_12_24,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-SGkgSGVjdG9yDQoNCknigJl2ZSBhcHBsaWVkIHRoZSBmb2xsb3dpbmcgcGF0Y2hzZXQgKGFycmFu
-Z2VkIGluIGNocm9ub2xvZ2ljYWwgb3JkZXIpIHRvIGxpbnV4IDYuMiwNCmFuZCB3aWZpIHNlZW1z
-IHRvIGhhdmUgYnJva2VuIG9uIE1hY0Jvb2tQcm8xNiwxIChicmNtZm1hYzQzNjRiMykNCg0KaHR0
-cHM6Ly9sb3JlLmtlcm5lbC5vcmcvYXNhaGkvMjAyMzAyMTIwNjM4MTMuMjc2MjItMS1tYXJjYW5A
-bWFyY2FuLnN0L1QvI3QgKEJDTTQzNTUvNDM2NC80Mzc3IHN1cHBvcnQgJiBpZGVudGlmaWNhdGlv
-biBmaXhlcykNCg0KaHR0cHM6Ly9sb3JlLmtlcm5lbC5vcmcvYXNhaGkvMjAyMzAyMTQwODAwMzQu
-MzgyOC0xLW1hcmNhbkBtYXJjYW4uc3QvVC8jdCAoQXBwbGUgVDIgcGxhdGZvcm0gc3VwcG9ydCkN
-Cg0KaHR0cHM6Ly9sb3JlLmtlcm5lbC5vcmcvYXNhaGkvMjAyMzAyMTQwOTE2NTEuMTAxNzgtMS1t
-YXJjYW5AbWFyY2FuLnN0L1QvI3QgKEJDTTQzODcgLyBBcHBsZSBNMSBwbGF0Zm9ybSBzdXBwb3J0
-KQ0KDQpodHRwczovL2xvcmUua2VybmVsLm9yZy9hc2FoaS9iNDQ4OWUyNC1lMjI2LTRmOTktMTMy
-Mi1jYWI2YzEyNjlmMDlAYnJvYWRjb20uY29tL1QvI3QgKGJyY21mbWFjOiBjZmc4MDIxMTogVXNl
-IFdTRUMgdG8gc2V0IFNBRSBwYXNzd29yZCkNCg0KDQpUaGUgbG9ncyBzaG93Og0KDQpGZWIgMjMg
-MjA6MDg6NTcgTWFjQm9vayBrZXJuZWw6IHVzYmNvcmU6IHJlZ2lzdGVyZWQgbmV3IGludGVyZmFj
-ZSBkcml2ZXIgYnJjbWZtYWMNCkZlYiAyMyAyMDowODo1NyBNYWNCb29rIGtlcm5lbDogYnJjbWZt
-YWMgMDAwMDowNTowMC4wOiBlbmFibGluZyBkZXZpY2UgKDAwMDAgLT4gMDAwMikNCkZlYiAyMyAy
-MDowODo1NyBNYWNCb29rIGtlcm5lbDogYnJjbWZtYWM6IGJyY21mX2Z3X2FsbG9jX3JlcXVlc3Q6
-IHVzaW5nIGJyY20vYnJjbWZtYWM0MzY0YjMtcGNpZSBmb3IgY2hpcCBCQ000MzY0LzQNCkZlYiAy
-MyAyMDowODo1NyBNYWNCb29rIGtlcm5lbDogYnJjbWZtYWMgMDAwMDowNTowMC4wOiBEaXJlY3Qg
-ZmlybXdhcmUgbG9hZCBmb3IgYnJjbS9icmNtZm1hYzQzNjRiMy1wY2llLkFwcGxlIEluYy4tTWFj
-Qm9va1BybzE2LDEuYmluIGZhaWxlZCB3aXRoIGVycm9yIC0yDQpGZWIgMjMgMjA6MDg6NTcgTWFj
-Qm9vayBrZXJuZWw6IGJyY21mbWFjIDAwMDA6MDU6MDAuMDogRGlyZWN0IGZpcm13YXJlIGxvYWQg
-Zm9yIGJyY20vYnJjbWZtYWM0MzY0YjMtcGNpZS5iaW4gZmFpbGVkIHdpdGggZXJyb3IgLTINCkZl
-YiAyMyAyMDowODo1NyBNYWNCb29rIGtlcm5lbDogYnJjbWZtYWMgMDAwMDowNTowMC4wOiBicmNt
-Zl9wY2llX3NldHVwOiBEb25nbGUgc2V0dXAgZmFpbGVkDQoNCkkgYWxzbyB0ZXN0ZWQgdGhlIHBh
-dGNoaWVzdCBpbiB0aGUgZm9sbG93aW5nIGxpbmssIGFuZCB3aWZpIG1vc3RseSB3b3JrZWQgdGhl
-cmUgKG9jY2FzaW9uYWxseSBpdCBjb21wbGFpbmVkIGFib3V0IHNvbWUgcGljIGVycm9yLCBJ4oCZ
-bGwgc2F2ZSB0aGUgbG9ncyBuZXh0IHRpbWUgSSBlbmNvdW50ZXIgdGhhdCkgOg0KDQpodHRwczov
-L2dpdGh1Yi5jb20vdDJsaW51eC9saW51eC10Mi1wYXRjaGVzL2Jsb2IvbWFpbi84MDAxLWFzYWhp
-bGludXgtd2lmaS1wYXRjaHNldC5wYXRjaA0KDQpUaGFua3MNCkFkaXR5YQ0KDQo+IE9uIDE0LUZl
-Yi0yMDIzLCBhdCAxOjMwIFBNLCBIZWN0b3IgTWFydGluIDxtYXJjYW5AbWFyY2FuLnN0PiB3cm90
-ZToNCj4gDQo+IEhpIGFsbCwNCj4gDQo+IFRoaXMgc2hvcnQgc2VyaWVzIGFkZHMgdGhlIG1pc3Np
-bmcgYml0cyB0byBzdXBwb3J0IEFwcGxlIFQyIHBsYXRmb3Jtcy4NCj4gDQo+IFRoZXJlIGFyZSB0
-d28gcXVpcmtzOiB0aGVzZSBkZXZpY2VzIGhhdmUgZmlybXdhcmUgdGhhdCByZXF1aXJlcyB0aGUN
-Cj4gaG9zdCB0byBwcm92aWRlIGEgYmxvYiBvZiByYW5kb21uZXNzIGFzIGEgc2VlZCAocHJlc3Vt
-YWJseSBiZWNhdXNlIHRoZQ0KPiBjaGlwc2V0cyBsYWNrIGEgcHJvcGVyIFJORyksIGFuZCB0aGUg
-bW9kdWxlL2FudGVubmEgaW5mb3JtYXRpb24gdGhhdA0KPiBpcyB1c2VkIGZvciBBcHBsZSBmaXJt
-d2FyZSBzZWxlY3Rpb24gYW5kIGNvbWVzIGZyb20gdGhlIERldmljZSBUcmVlDQo+IG9uIEFSTTY0
-IHN5c3RlbXMgKGFscmVhZHkgdXBzdHJlYW0pIG5lZWRzIHRvIGNvbWUgZnJvbSBBQ1BJIG9uIHRo
-ZXNlDQo+IGluc3RlYWQuDQo+IA0KPiBDaGFuZ2VzIHNpbmNlIHRoZSBtZWdhc2VyaWVzIGZyb20g
-YSB+eWVhciBhZ286IG1hZGUgdGhlIEFDUEkgY29kZSBiYWlsDQo+IGlmIHRoZXJlIGlzIG5vIG1v
-ZHVsZS1pbnN0YW5jZSwgc28gd2UgZG9uJ3QgdHJ5IHRvIGdldCB0aGUgYW50ZW5uYQ0KPiBpbmZv
-IGF0IGFsbCBpbiB0aGF0IGNhc2UgKGFzIHN1Z2dlc3RlZCBieSBBcmVuZCkuIE1hZGUgdGhlIHJh
-bmRvbW5lc3MNCj4gY29uZGl0aW9uYWwgb24gYW4gQXBwbGUgT1RQIGJlaW5nIHByZXNlbnQsIHNp
-bmNlIGl0J3Mgbm90IGtub3duIHRvIGJlDQo+IG5lZWRlZCBvbiBub24tQXBwbGUgZmlybXdhcmUu
-DQo+IA0KPiBIZWN0b3IgTWFydGluICgyKToNCj4gIGJyY21mbWFjOiBhY3BpOiBBZGQgc3VwcG9y
-dCBmb3IgZmV0Y2hpbmcgQXBwbGUgQUNQSSBwcm9wZXJ0aWVzDQo+ICBicmNtZm1hYzogcGNpZTog
-UHJvdmlkZSBhIGJ1ZmZlciBvZiByYW5kb20gYnl0ZXMgdG8gdGhlIGRldmljZQ0KPiANCj4gLi4u
-L2Jyb2FkY29tL2JyY204MDIxMS9icmNtZm1hYy9NYWtlZmlsZSAgICAgIHwgIDIgKw0KPiAuLi4v
-YnJvYWRjb20vYnJjbTgwMjExL2JyY21mbWFjL2FjcGkuYyAgICAgICAgfCA1MSArKysrKysrKysr
-KysrKysrKysrDQo+IC4uLi9icm9hZGNvbS9icmNtODAyMTEvYnJjbWZtYWMvY29tbW9uLmMgICAg
-ICB8ICAxICsNCj4gLi4uL2Jyb2FkY29tL2JyY204MDIxMS9icmNtZm1hYy9jb21tb24uaCAgICAg
-IHwgIDkgKysrKw0KPiAuLi4vYnJvYWRjb20vYnJjbTgwMjExL2JyY21mbWFjL3BjaWUuYyAgICAg
-ICAgfCAzMiArKysrKysrKysrKysNCj4gNSBmaWxlcyBjaGFuZ2VkLCA5NSBpbnNlcnRpb25zKCsp
-DQo+IGNyZWF0ZSBtb2RlIDEwMDY0NCBkcml2ZXJzL25ldC93aXJlbGVzcy9icm9hZGNvbS9icmNt
-ODAyMTEvYnJjbWZtYWMvYWNwaS5jDQo+IA0KPiAtLSANCj4gMi4zNS4xDQo+IA0KPiANCg0K
+
+--QZuyeSJ5jh8ff65q
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+On Mon, Feb 20, 2023 at 05:33:34PM +0200, Andy Shevchenko wrote:
+> It seems that a couple of members got lost theirorder, put them back.
+
+Looks like a typographical error here: "theirorder".
+
+> Besides that, split field descriptions into groups in the same way
+> as it's done in the structure definition.
+>=20
+> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> ---
+> v2: rebased on the latest Linux Next (Mark)
+>  include/linux/regmap.h | 11 +++++++----
+>  1 file changed, 7 insertions(+), 4 deletions(-)
+>=20
+> diff --git a/include/linux/regmap.h b/include/linux/regmap.h
+> index 4d10790adeb0..1c777566fb7d 100644
+> --- a/include/linux/regmap.h
+> +++ b/include/linux/regmap.h
+> @@ -1551,6 +1551,7 @@ struct regmap_irq_chip_data;
+>   * @use_ack:     Use @ack register even if it is zero.
+>   * @ack_invert:  Inverted ack register: cleared bits for ack.
+>   * @clear_ack:  Use this to set 1 and 0 or vice-versa to clear interrupt=
+s.
+> + * @status_invert: Inverted status register: cleared bits are active int=
+errupts.
+>   * @wake_invert: Inverted wake register: cleared bits are wake enabled.
+>   * @type_in_mask: Use the mask registers for controlling irq type. Use t=
+his if
+>   *		  the hardware provides separate bits for rising/falling edge
+> @@ -1560,18 +1561,19 @@ struct regmap_irq_chip_data;
+>   * @clear_on_unmask: For chips with interrupts cleared on read: read the=
+ status
+>   *                   registers before unmasking interrupts to clear any =
+bits
+>   *                   set when they were masked.
+> + * @runtime_pm:  Hold a runtime PM lock on the device when accessing it.
+>   * @not_fixed_stride: Used when chip peripherals are not laid out with f=
+ixed
+>   *		      stride. Must be used with sub_reg_offsets containing the
+>   *		      offsets to each peripheral. Deprecated; the same thing
+>   *		      can be accomplished with a @get_irq_reg callback, without
+>   *		      the need for a @sub_reg_offsets table.
+> - * @status_invert: Inverted status register: cleared bits are active int=
+errupts.
+> - * @runtime_pm:  Hold a runtime PM lock on the device when accessing it.
+>   *
+>   * @num_regs:    Number of registers in each control bank.
+> + *
+>   * @irqs:        Descriptors for individual IRQs.  Interrupt numbers are
+>   *               assigned based on the index in the array of the interru=
+pt.
+>   * @num_irqs:    Number of descriptors.
+> + *
+>   * @num_type_reg:    Number of type registers. Deprecated, use config re=
+gisters
+>   *		     instead.
+>   * @num_virt_regs:   Number of non-standard irq configuration registers.
+> @@ -1579,6 +1581,7 @@ struct regmap_irq_chip_data;
+>   *		     instead.
+>   * @num_config_bases:	Number of config base registers.
+>   * @num_config_regs:	Number of config registers for each config base reg=
+ister.
+> + *
+>   * @handle_pre_irq:  Driver specific callback to handle interrupt from d=
+evice
+>   *		     before regmap_irq_handler process the interrupts.
+>   * @handle_post_irq: Driver specific callback to handle interrupt from d=
+evice
+> @@ -1625,12 +1628,12 @@ struct regmap_irq_chip {
+>  	unsigned int use_ack:1;
+>  	unsigned int ack_invert:1;
+>  	unsigned int clear_ack:1;
+> +	unsigned int status_invert:1;
+>  	unsigned int wake_invert:1;
+> -	unsigned int runtime_pm:1;
+>  	unsigned int type_in_mask:1;
+>  	unsigned int clear_on_unmask:1;
+> +	unsigned int runtime_pm:1;
+>  	unsigned int not_fixed_stride:1;
+> -	unsigned int status_invert:1;
+
+These don't look alphabetical, so what is the order for these?
+
+William Breathitt Gray
+
+> =20
+>  	int num_regs;
+> =20
+> --=20
+> 2.39.1
+>=20
+
+--QZuyeSJ5jh8ff65q
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEARYKAB0WIQSNN83d4NIlKPjon7a1SFbKvhIjKwUCY/ZGMAAKCRC1SFbKvhIj
+K0RVAP4115MuM9UpsVt5YhzZLGrZqzO2wxd3tdW/Q8Ekq8kBlgEA/AL2+yMaYMjR
+WkbDTKSY97gjSK5no7rDItNXiNbwjwo=
+=mrgx
+-----END PGP SIGNATURE-----
+
+--QZuyeSJ5jh8ff65q--
