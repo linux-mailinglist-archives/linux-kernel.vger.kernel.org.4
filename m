@@ -2,119 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 25F9069FDAF
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Feb 2023 22:25:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5939C69FDB3
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Feb 2023 22:27:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232553AbjBVVZ0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Feb 2023 16:25:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58018 "EHLO
+        id S232300AbjBVV10 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Feb 2023 16:27:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59134 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232455AbjBVVZY (ORCPT
+        with ESMTP id S229603AbjBVV1Z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Feb 2023 16:25:24 -0500
-Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 495414391F
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Feb 2023 13:25:22 -0800 (PST)
-Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-536c6ce8d74so84375487b3.9
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Feb 2023 13:25:22 -0800 (PST)
+        Wed, 22 Feb 2023 16:27:25 -0500
+Received: from mail-pg1-x534.google.com (mail-pg1-x534.google.com [IPv6:2607:f8b0:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C76524391F
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Feb 2023 13:27:23 -0800 (PST)
+Received: by mail-pg1-x534.google.com with SMTP id d10so1444828pgt.12
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Feb 2023 13:27:23 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=content-transfer-encoding:cc:to:from:subject:message-id:references
-         :mime-version:in-reply-to:date:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=VCAEO323b86BbB7XtvnH+rG3EP2w0C3Dqq7NI+H9LE0=;
-        b=rzW4oiBSJ63i/anFjhOay2GibzgaSIcPlhs4icaZXWt5tih/osT60UF5e1mwSVULhr
-         JA10nXn/Y6ES/XMfobF3rXA0+xT8tqci00AYfMRUEKHVUxG6JbSqI9dpiBOiOKsrLbee
-         bYfLIVa2BYR+spMxhwdoUyja2LlL+Mut0U/wnb3uo6zTUNO+QbmpWgddUexwhQjv1HXV
-         zoLD7Nt5c/165lbrdfRGyO8N0FXIlW/zx8x2Ec3Omk9D8TqW3ZfghlgsWa2lUSnTeGOM
-         9sxnd67n4MCSx7otekA5PPlVXRqMI+iWtlHIKZrBzcfZ3JxTRhsjCjR6AQ6bjByIMLKG
-         /Vnw==
+        d=gmail.com; s=20210112;
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=zTTPkpp8HiEDZfin9IXmA/ivbYPnpkr3GltvteYe5Ic=;
+        b=OY0nLNi548oPHpKpzfOspnlIb0GAb5kMphdhpyLClWJ0I3sCl7pWw3CLSNyzW9W3eA
+         FMySXA5wh3kKCqKJmKuiTjobqS/7Hg/yKifOWfT1tpawy96n5A9YfGxBZMpq75zUcEEB
+         v3oMoXYzMulv+Kv0FAv465kLC8UB2O9Z/OJ8kVJajiFUuLZelmTpVw4aPirysT1edKL/
+         pz8LCudDDc0sC0qnyw25mB4Iml9v/i/FPBtVGRIHvzzv3J1Wu+qbdhhH/2ol6ykOBkZR
+         CUIz2F0SiyhZOFsTQ5M+7kzvW1jK3SMqxXmAlZujYXSnB6p/pHLv3sXbki/hptPvNYuV
+         Td7g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:from:subject:message-id:references
-         :mime-version:in-reply-to:date:x-gm-message-state:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=VCAEO323b86BbB7XtvnH+rG3EP2w0C3Dqq7NI+H9LE0=;
-        b=Yb0rIG7abI4I0B64bZu8AYkf2NIzxTcoX41JfzVDmVszQ429l5uHlA4l6K4Hvv5pVM
-         TusxDUZG/ey6AA3FzppiIJ4IcLctLsHkLvWQUlvUy3mhWSq51+WDUirQ6Nehj8EDzSHU
-         e9zWrWyDwnVxl+YtX52jrOpYTzrr5PGdxz2q3fv2t2Y3Kbvmkt+qEoYEihM2mXq860i4
-         2IFPSYeJXpnIgnePq+GiV8bk0pYZSob1PVXJRXfaqC0a5T1ZhRcqnRUh+cN59M9/T0Sb
-         hOV2lSE14z08TV1pC4uVxFdZalVk8CTr3i6kn6Syqh+AoG2NOoRONcO4+LuIP5d5qUdn
-         TMtA==
-X-Gm-Message-State: AO0yUKUaYl3i6qrxNV7fGE+cuLKxpJP+w60504iiHW8dMIyVFEIayrqA
-        mu8Fp4rrXpkfl5GDgB2b5RFN8Z3/0WI=
-X-Google-Smtp-Source: AK7set9wDZXbRc6wLa992mDcUcum92VMWfB8kgedycpfygyX7MXQMXDLL4D76H3UAiAg1sC8Z7wuyTwxayc=
-X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
- (user=seanjc job=sendgmr) by 2002:a05:6902:1028:b0:a27:3ecd:6 with SMTP id
- x8-20020a056902102800b00a273ecd0006mr438895ybt.1.1677101121372; Wed, 22 Feb
- 2023 13:25:21 -0800 (PST)
-Date:   Wed, 22 Feb 2023 13:25:19 -0800
-In-Reply-To: <2dfae61c-6ac7-7686-ebd1-6ad4448b2bf8@maciej.szmigiero.name>
-Mime-Version: 1.0
-References: <20230217225449.811957-1-seanjc@google.com> <20230217225449.811957-3-seanjc@google.com>
- <2dfae61c-6ac7-7686-ebd1-6ad4448b2bf8@maciej.szmigiero.name>
-Message-ID: <Y/aIP4aCxTVOU/ZC@google.com>
-Subject: Re: [PATCH 2/2] Documentation/process: Add a maintainer handbook for
- KVM x86
-From:   Sean Christopherson <seanjc@google.com>
-To:     "Maciej S. Szmigiero" <mail@maciej.szmigiero.name>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Sagi Shahar <sagis@google.com>,
-        Erdem Aktas <erdemaktas@google.com>,
-        Peter Shier <pshier@google.com>,
-        Anish Ghulati <aghulati@google.com>,
-        Oliver Upton <oliver.upton@linux.dev>,
-        James Houghton <jthoughton@google.com>,
-        Anish Moorthy <amoorthy@google.com>,
-        Ben Gardon <bgardon@google.com>,
-        David Matlack <dmatlack@google.com>,
-        Ricardo Koller <ricarkol@google.com>,
-        Axel Rasmussen <axelrasmussen@google.com>,
-        Aaron Lewis <aaronlewis@google.com>,
-        Ashish Kalra <ashish.kalra@amd.com>,
-        Babu Moger <babu.moger@amd.com>, Chao Gao <chao.gao@intel.com>,
-        Chao Peng <chao.p.peng@linux.intel.com>,
-        Chenyi Qiang <chenyi.qiang@intel.com>,
-        David Woodhouse <dwmw@amazon.co.uk>,
-        Emanuele Giuseppe Esposito <eesposit@redhat.com>,
-        Gavin Shan <gshan@redhat.com>,
-        Guang Zeng <guang.zeng@intel.com>,
-        Hou Wenlong <houwenlong.hwl@antgroup.com>,
-        Jiaxi Chen <jiaxi.chen@linux.intel.com>,
-        Jim Mattson <jmattson@google.com>,
-        Jing Liu <jing2.liu@intel.com>,
-        Junaid Shahid <junaids@google.com>,
-        Kai Huang <kai.huang@intel.com>,
-        Leonardo Bras <leobras@redhat.com>,
-        Like Xu <like.xu.linux@gmail.com>,
-        Li RongQing <lirongqing@baidu.com>,
-        Maxim Levitsky <mlevitsk@redhat.com>,
-        Michael Roth <michael.roth@amd.com>,
-        Michal Luczaj <mhal@rbox.co>,
-        Mingwei Zhang <mizhang@google.com>,
-        Nikunj A Dadhania <nikunj@amd.com>,
-        Paul Durrant <pdurrant@amazon.com>,
-        Peng Hao <flyingpenghao@gmail.com>,
-        Peter Gonda <pgonda@google.com>, Peter Xu <peterx@redhat.com>,
-        Robert Hoo <robert.hu@linux.intel.com>,
-        Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        Vipin Sharma <vipinsh@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Wei Wang <wei.w.wang@intel.com>,
-        Xiaoyao Li <xiaoyao.li@intel.com>,
-        Yu Zhang <yu.c.zhang@linux.intel.com>,
-        Zhenzhong Duan <zhenzhong.duan@intel.com>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=zTTPkpp8HiEDZfin9IXmA/ivbYPnpkr3GltvteYe5Ic=;
+        b=JFCIsyhmoqyUOa6A7mG7hW0sKlDzquWwuX/PE/+/0dplla8OyrnIHXMUdF0CcHq/c6
+         LggvvDvpl6FiQGHbvbOATh4TX5WxlnaTzUHuzOSAbMClzU3pBkuZL4uuTCT4wRP1VqPV
+         8cDlHRzjD8sETNxZQk4biJmvVpAjXrDq91T3V6ysmFjQQiICPxo4Jdfg+p9EiWlv5f+z
+         9p5CFwPuUzPWcQe86WgbRP947UbBp7aQ03uW4opOvYUpgjbqFyS5EHvmgE+0BlYqffmS
+         YZ9aSgjYgrr2ALxhclc516eHygLWoyvEsP4WiNeae18MFG4d8sKpmJY8x5SCECmbBnQX
+         NEIA==
+X-Gm-Message-State: AO0yUKXCEv+jgAaq0ZgZi7+/bgAT0vgPejx82nFlN3gCSKniVsjBGt2+
+        cHlpjbfoWG3dhFBo/8YSF/QPyu5dBLVhaA==
+X-Google-Smtp-Source: AK7set9ZZEJgNaG5IeCRPfBRxSBDWkzFtylZ7vm2qLu65zcaf05II6bf0CTwIj2CuRXH1vMofEUG7Q==
+X-Received: by 2002:a62:4e8e:0:b0:5d6:4ef8:8c6f with SMTP id c136-20020a624e8e000000b005d64ef88c6fmr2532880pfb.34.1677101242966;
+        Wed, 22 Feb 2023 13:27:22 -0800 (PST)
+Received: from thinkstation.cmpxchg8b.net ([76.133.164.192])
+        by smtp.gmail.com with ESMTPSA id p10-20020a62ab0a000000b005a8a9950363sm6942239pff.105.2023.02.22.13.26.38
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 22 Feb 2023 13:26:58 -0800 (PST)
+Date:   Wed, 22 Feb 2023 13:26:37 -0800
+From:   Tavis Ormandy <taviso@gmail.com>
+To:     Borislav Petkov <bp@alien8.de>
+Cc:     Andrew Cooper <andrew.cooper3@citrix.com>,
+        linux-kernel@vger.kernel.org, x86@kernel.org
+Subject: Re: x86: AMD Zen2 ymm registers rolling back
+Message-ID: <Y/aIjUr78yd9U+wl@thinkstation.cmpxchg8b.net>
+References: <Y/W4x7/KFqmDmmR7@thinkstation.cmpxchg8b.net>
+ <Y/XTT59OrLw2as4R@zn.tnic>
+ <Y/Xc+yMzI83WZ4V1@zn.tnic>
+ <0371ec3d-0899-f94a-7f21-21d805df2927@citrix.com>
+ <Y/Xp73KJe3c/1jrn@zn.tnic>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y/Xp73KJe3c/1jrn@zn.tnic>
+User-Agent: Mutt/2.2.7 (2022-08-07)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -122,148 +77,29 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Feb 22, 2023, Maciej S. Szmigiero wrote:
-> On 17.02.2023 23:54, Sean Christopherson wrote:
-> > +SDM and APM References
-> > +~~~~~~~~~~~~~~~~~~~~~~
-> > +Much of KVM's code base is directly tied to architectural behavior def=
-ined in
-> > +Intel's Software Development Manual (SDM) and AMD's Architecture Progr=
-ammer=E2=80=99s
-> > +Manual (APM).  Use of "Intel's SDM" and "AMD's APM", or even just "SDM=
-" or
-> > +"APM", without additional context is a-ok.
-> > +
-> > +Do not reference specific sections, tables, figures, etc. by number, e=
-specially
-> > +not in comments.  Instead, copy-paste the relevant snippet (if warrant=
-ed), and
-> > +reference sections/tables/figures by name.
->=20
-> This says do "copy-paste the relevant snippet"...
->=20
-> > The layouts of the SDM and APM are
-> > +constantly changing, and so the numbers/labels aren't stable/consisten=
-t.
-> > +
-> > +Generally speaking, do not copy-paste SDM or APM snippets into
-> > comments.
->=20
-> ...but this seems to say "don't do that".
+On Wed, Feb 22, 2023 at 11:09:51AM +0100, Borislav Petkov wrote:
+> On Wed, Feb 22, 2023 at 09:38:09AM +0000, Andrew Cooper wrote:
+> > This sounds suspiciously like an errata which was fixed with a ucode
+> > update last year.
+> 
+> Yes, it looks like it.
+> 
+> Alternatively, you can try booting with "clearcpuid=xsaves" - that
+> should take care of your observation too but yeah, you should rather
+> update your microcode.
+> 
 
-Yeah, that didn't come out right.
+Thanks - confirmed, it *doesn't* repro with 0x8301055, but does repro
+with 0x830104d.
 
-> More specific guidance would probably help here.
+Annoyingly, I thought I was using the most recent microcode, but it seems
+like there is some bug and debian wasn't applying it at boot.
 
-Is this better?
+That seems like a scary errata :-/
 
-  Do not reference specific sections, tables, figures, etc. by number, espe=
-cially
-  not in comments.  Instead, if necessary (see below), copy-paste the relev=
-ant
-  snippet and reference sections/tables/figures by name.  The layouts of th=
-e SDM
-  and APM are constantly changing, and so the numbers/labels aren't stable.
- =20
-  Generally speaking, do not explicitly reference or copy-paste from the SD=
-M or
-  APM in comments.  With few exceptions, KVM *must* honor architectural beh=
-avior,
-  therefore it's implied that KVM behavior is emulating SDM and/or APM beha=
-vior.
-  Note, referencing the SDM/APM in changelogs to justify the change and pro=
-vide
-  context is perfectly ok and encouraged.
+Tavis.
 
-> > +If a patch touches multiple topics, traverse up the conceptual tree to=
- find the
-> > +first common parent (which is often simply ``x86``).  When in doubt,
-> > +``git log path/to/file`` should provide a reasonable hint.
-> > +
-> > +New topics do occasionally pop up, but please start an on-list discuss=
-ion if
-> > +you want to propose introducing a new topic, i.e. don't go rogue.
-> > +
-> > +Do not use file names or complete file paths as the subject/shortlog p=
-refix.
->=20
-> Do we strictly obey the "75 characters max" rule for the subject/shortlog
-> or do we prefer to be more flexible here if it results in a more
-> descriptive patch subject?
-
-I prefer to be a little flexible, I'll expand this section to clarify that.
-
-> (...)
-> > +Testing
-> > +-------
-> > +At a bare minimum, *all* patches in a series must build cleanly for KV=
-M_INTEL=3Dm
-> > +KVM_AMD=3Dm, and KVM_WERROR=3Dy.  Building every possible combination =
-of Kconfigs
-> > +isn't feasible, but the more the merrier.  KVM_SMM, KVM_XEN, PROVE_LOC=
-KING, and
-> > +X86_64 are particularly interesting knobs to turn.
-> > +
-> > +Running KVM selftests and KVM-unit-tests is also mandatory (and statin=
-g the
-> > +obvious, the tests need to pass).
->=20
-> I would add an exception here from mandatory testing for changes that
-> obviously have negligible probability of affecting runtime behavior.
->=20
-> For example: patches that modify just code comments or documentation.
-
-Agreed, will add.
-
-Regarding documentation, I think I'll also add a requirement of 'make htmld=
-ocs'
-without warnings for non-trivial docs changes.  It's all too easy to write =
-buggy
-ReST "code" that looks correct as raw text, e.g. the whole double-colon thi=
-ng.
-
-> > When possible and relevant, testing on both
-> > +Intel and AMD is strongly preferred.  Booting an actual VM is encourag=
-ed, but
-> > +not mandatory.
-> > +
-> > +For changes that touch KVM's shadow paging code, running with TDP (EPT=
-/NPT)
-> > +disabled is mandatory.  For changes that affect common KVM MMU code, r=
-unning
-> > +with TDP disabled is strongly encouraged.  For all other changes, if t=
-he code
-> > +being modified depends on and/or interacts with a module param, testin=
-g with
-> > +the relevant settings is mandatory.
-> > +
-> > +Note, KVM selftests and KVM-unit-tests do have known failures.  If you=
- suspect
-> > +a failure is not due to your changes, verify that the *exact same* fai=
-lure
-> > +occurs with and without your changes.
-> > +
-> > +If you can't fully test a change, e.g. due to lack of hardware, clearl=
-y state
-> > +what level of testing you were able to do, e.g. in the cover letter.
-> > +
-> (...)
->=20
-> Thanks for preparing such a detailed handbook Sean.
->=20
-> However, having so many rules might seem intimidating for newcomers, and
-> deter them from contributing out of fear that they'll be screamed at for
-> accidentally breaking some obscure rule.
->=20
-> That's especially true for unpaid volunteers that might become
-> professional kernel developers one day if their learning curve isn't
-> made too steep.
->=20
-> Maybe have a paragraph or two that, despite all these rules, KVM x86
-> strives to be a welcome community, encouraging newcomers and understandin=
-g
-> their beginner mistakes (or so)?
-
-I like that idea a lot, I'll add a section at the very top.
-
-Thanks much!
+-- 
+ _o)            $ lynx lock.cmpxchg8b.com
+ /\\  _o)  _o)  $ finger taviso@sdf.org
+_\_V _( ) _( )  @taviso
