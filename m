@@ -2,216 +2,499 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7DF8B69EBEB
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Feb 2023 01:25:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C80E69EBF5
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Feb 2023 01:28:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229647AbjBVAZt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Feb 2023 19:25:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34914 "EHLO
+        id S230136AbjBVA2C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Feb 2023 19:28:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36964 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229540AbjBVAZq (ORCPT
+        with ESMTP id S229688AbjBVA2A (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Feb 2023 19:25:46 -0500
-Received: from mail-pf1-x44a.google.com (mail-pf1-x44a.google.com [IPv6:2607:f8b0:4864:20::44a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19AD8311C6
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Feb 2023 16:25:45 -0800 (PST)
-Received: by mail-pf1-x44a.google.com with SMTP id t21-20020a056a00139500b005a8534314aeso2985471pfg.17
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Feb 2023 16:25:45 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=cP2ew6CLjXLwbUzw33eDZCu1tkKWOTKqUIfWPUJr4xs=;
-        b=evR/eee/sPFktGs2L5YTEL1xpZlZ5B4s/G6zF/DTpYDe62OnpBslnL2QMrh9jaXfpB
-         RV3oEiOQ3SvSDTcjtfnoH8ACQ0h04FrS24VIq766+fFWRXAZFO3E81/4alWmJIGHoKwp
-         1t7Vmjxc5eixktyA262IOgNE2pKjefigjDayfzds8BLribLvmIPaa9MyYMFKwmbbl96Q
-         2tQHzteUNzXLCJ11jHWSA3COoEKWhoRzd5LVJtMLzqT9ZKW29FqchM5MJ60MprYndval
-         0ZqRUtjh+MaDU5HQIL3pMMJUa7sOLlQoz64Zio6JmG6G1+EVI1Fkyvrx+YE3n/Hkoh2d
-         +Iqw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=cP2ew6CLjXLwbUzw33eDZCu1tkKWOTKqUIfWPUJr4xs=;
-        b=kgiwgtPq0EIgUbBl5AUpMAF5XNZkKkoatpYs2U2oZuDEB9lW/yNDjWlcKn0dKoD9M8
-         ZiKilLtx7Q1IR7NdUen3Ssq9bO2tHBPI6Xn+5/MQQhNZm06kj2dQdWMqOeZZbbHun8JF
-         7jlfI4L6G9ThoZNqfhbJw8EE3zXMbPxz5nQMo1yPCOQ2aZuoRd3AwxOI4H5nz9vXS6IS
-         MyqYzWzYdrFSQS3BO+CNQSJLDjhEWYfL1Lk5U/59V9edtL5ypBxafYvm5ENx6YTfPabO
-         UTFDRgt4pS1HyqTLwq+gLWPXqArqt2vb3fh/E74ltZoEODQnIUP2TJ5e2O7mUkpohqKq
-         nYzg==
-X-Gm-Message-State: AO0yUKW6EL0ZRhiuRrdk6tgIkalb6BH/yBWDM6gSlSMTYQGCCLP4zk6l
-        EMrUXJ9TBbMzCMsOMNO4bQBQ7IHYKbs=
-X-Google-Smtp-Source: AK7set9A/IZ8Qw6vWduy1ghx2o17N/VxPHoIRiTbP32aJuqzL1MyVeAd0Xgp5y2TgVFKKUlpxmp9BeHCVfI=
-X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
- (user=seanjc job=sendgmr) by 2002:a63:3750:0:b0:4fb:be1a:2074 with SMTP id
- g16-20020a633750000000b004fbbe1a2074mr863138pgn.12.1677025544369; Tue, 21 Feb
- 2023 16:25:44 -0800 (PST)
-Date:   Tue, 21 Feb 2023 16:25:42 -0800
-In-Reply-To: <20230221110607.6wvrgpqip3njrkwu@linux.intel.com>
-Mime-Version: 1.0
-References: <20230217225449.811957-1-seanjc@google.com> <20230217225449.811957-3-seanjc@google.com>
- <20230221110607.6wvrgpqip3njrkwu@linux.intel.com>
-Message-ID: <Y/VhBo9ek1PPBEb5@google.com>
-Subject: Re: [PATCH 2/2] Documentation/process: Add a maintainer handbook for
- KVM x86
-From:   Sean Christopherson <seanjc@google.com>
-To:     Yu Zhang <yu.c.zhang@linux.intel.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Sagi Shahar <sagis@google.com>,
-        Erdem Aktas <erdemaktas@google.com>,
-        Peter Shier <pshier@google.com>,
-        Anish Ghulati <aghulati@google.com>,
-        Oliver Upton <oliver.upton@linux.dev>,
-        James Houghton <jthoughton@google.com>,
-        Anish Moorthy <amoorthy@google.com>,
-        Ben Gardon <bgardon@google.com>,
-        David Matlack <dmatlack@google.com>,
-        Ricardo Koller <ricarkol@google.com>,
-        Axel Rasmussen <axelrasmussen@google.com>,
-        Aaron Lewis <aaronlewis@google.com>,
-        Ashish Kalra <ashish.kalra@amd.com>,
-        Babu Moger <babu.moger@amd.com>, Chao Gao <chao.gao@intel.com>,
-        Chao Peng <chao.p.peng@linux.intel.com>,
-        Chenyi Qiang <chenyi.qiang@intel.com>,
-        David Woodhouse <dwmw@amazon.co.uk>,
-        Emanuele Giuseppe Esposito <eesposit@redhat.com>,
-        Gavin Shan <gshan@redhat.com>,
-        Guang Zeng <guang.zeng@intel.com>,
-        Hou Wenlong <houwenlong.hwl@antgroup.com>,
-        Jiaxi Chen <jiaxi.chen@linux.intel.com>,
-        Jim Mattson <jmattson@google.com>,
-        Jing Liu <jing2.liu@intel.com>,
-        Junaid Shahid <junaids@google.com>,
-        Kai Huang <kai.huang@intel.com>,
-        Leonardo Bras <leobras@redhat.com>,
-        Like Xu <like.xu.linux@gmail.com>,
-        Li RongQing <lirongqing@baidu.com>,
-        "Maciej S . Szmigiero" <maciej.szmigiero@oracle.com>,
-        Maxim Levitsky <mlevitsk@redhat.com>,
-        Michael Roth <michael.roth@amd.com>,
-        Michal Luczaj <mhal@rbox.co>,
-        Mingwei Zhang <mizhang@google.com>,
-        Nikunj A Dadhania <nikunj@amd.com>,
-        Paul Durrant <pdurrant@amazon.com>,
-        Peng Hao <flyingpenghao@gmail.com>,
-        Peter Gonda <pgonda@google.com>, Peter Xu <peterx@redhat.com>,
-        Robert Hoo <robert.hu@linux.intel.com>,
-        Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        Vipin Sharma <vipinsh@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Wei Wang <wei.w.wang@intel.com>,
-        Xiaoyao Li <xiaoyao.li@intel.com>,
-        Zhenzhong Duan <zhenzhong.duan@intel.com>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="us-ascii"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+        Tue, 21 Feb 2023 19:28:00 -0500
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E195A4;
+        Tue, 21 Feb 2023 16:27:48 -0800 (PST)
+Received: from pps.filterd (m0279864.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 31M0RS5p002955;
+        Wed, 22 Feb 2023 00:27:28 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=206/ENTYhpd8cRg/HRQOtIZa/mKOhxRJ+u795kVpeiQ=;
+ b=Zr27zCvg8JKYoGzW/fp+UXjF1KxAcQFNI0YlIbtRm3v+ZPyHrYacO4JWRx/rrm1dJLnw
+ DgKNByMMl7KpTZTe/w9nJuZB9EIiZ5ru61nn3KpMPH7WzUJMcSjTqmyqBPN5WrwtTJXX
+ MjsOa3Bm6Jj3NNkqur1zeVqa123VbKZH1vpn3t8i/C5Vz0NNGGeKHoHJpbNJa1Fw69Nn
+ m+PA2loU9kDGSS3/SX6BS+4MbLEc2+UEGGLrAgkPF4D0RVlMSQDDn5iS82bGZAbXJ/h/
+ VZLvo+x1KzHC3SUlHC89jwdGlEfaFNIVk6Yv2hkxOQKsY98hJuNqvj2buL2vQH4yyNjf AQ== 
+Received: from nasanppmta01.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3nw8gnr02j-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 22 Feb 2023 00:27:28 +0000
+Received: from nasanex01b.na.qualcomm.com (nasanex01b.na.qualcomm.com [10.46.141.250])
+        by NASANPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 31M0RRoN025909
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 22 Feb 2023 00:27:27 GMT
+Received: from [10.110.71.80] (10.80.80.8) by nasanex01b.na.qualcomm.com
+ (10.46.141.250) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.41; Tue, 21 Feb
+ 2023 16:27:26 -0800
+Message-ID: <05c4aab8-2d26-b944-adb6-624d67e4a11d@quicinc.com>
+Date:   Tue, 21 Feb 2023 16:27:25 -0800
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [PATCH v10 10/26] gunyah: vm_mgr: Introduce basic VM Manager
+Content-Language: en-US
+To:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Alex Elder <elder@linaro.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Prakruthi Deepak Heragu <quic_pheragu@quicinc.com>
+CC:     Murali Nalajala <quic_mnalajal@quicinc.com>,
+        Trilok Soni <quic_tsoni@quicinc.com>,
+        Srivatsa Vaddagiri <quic_svaddagi@quicinc.com>,
+        Carl van Schaik <quic_cvanscha@quicinc.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        "Konrad Dybcio" <konrad.dybcio@linaro.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Bagas Sanjaya <bagasdotme@gmail.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Jassi Brar <jassisinghbrar@gmail.com>,
+        <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-doc@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>
+References: <20230214211229.3239350-1-quic_eberman@quicinc.com>
+ <20230214212356.3313181-1-quic_eberman@quicinc.com>
+ <dbcfa4e9-a1ad-0f24-77bf-05934ca26bb2@linaro.org>
+From:   Elliot Berman <quic_eberman@quicinc.com>
+In-Reply-To: <dbcfa4e9-a1ad-0f24-77bf-05934ca26bb2@linaro.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nasanex01b.na.qualcomm.com (10.46.141.250)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: HKKGuBqppjiiOzIkNHkllqlyyIafk3Jn
+X-Proofpoint-GUID: HKKGuBqppjiiOzIkNHkllqlyyIafk3Jn
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.170.22
+ definitions=2023-02-21_13,2023-02-20_02,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0
+ priorityscore=1501 adultscore=0 bulkscore=0 clxscore=1015
+ lowpriorityscore=0 mlxlogscore=999 malwarescore=0 mlxscore=0 phishscore=0
+ suspectscore=0 spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2302220000
+X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 21, 2023, Yu Zhang wrote:
-> Thank you so much, Sean, for such a detailed guidance!
-> 
-> Some questions below:
-> 
-> On Fri, Feb 17, 2023 at 02:54:49PM -0800, Sean Christopherson wrote:
-> > Add a KVM x86 doc to the subsystem/maintainer handbook section to explain
-> > how KVM x86 (currently) operates as a sub-subsystem, and to soapbox on
-> > the rules and expectations for contributing to KVM x86.
-> 
-> It's a fantastic doc! Also, many good requirements can be common in KVM, not
-> just KVM x86(e.g. the comment, changelog format, the testing requirement
-> etc.). Could we be greedier to ask our KVM maintainers for a generic handbook
-> of KVM, and maybe different sections for specific arches, which describe their
-> specific requirements(the base trees and branches, the maintaining processes
-> etc.)? :)
 
-At some point, yes, but my strong preference is to document the x86 side of things
-and then work from there.  For KVM x86, I can mostly just say "these are the rules".
-Same goes for the other KVM arch maintainers (for their areas).
 
-Incorporating all of KVM would require a much more collaborative effort, which isn't
-a bad thing, but it will take more time and effort.  And IMO, KVM x86 needs this
-typ eof documentation a lot more than the other KVM architectures, i.e. pushing out
-KVM x86 documentation in order to go for more comprehensive documentation is not a
-good tradeoff.
-
-> > +Trees
-> > +-----
-> > +KVM x86 is currently in a transition period from being part of the main KVM
-> > +tree, to being "just another KVM arch".  As such, KVM x86 is split across the
-> > +main KVM tree, ``git.kernel.org/pub/scm/virt/kvm/kvm.git``, and a KVM x86
-> > +specific tree, ``github.com/kvm-x86/linux.git``.
-> 
-> Does other arch also have a specific tree?
-
-Yes.
-
-> If a patch series touches multiple archs(though the chance could be very
-> low), I guess that patch set should still be based on the main KVM tree? The
-> master branch or the next branch?
-
-Hmm, good question.  Using kvm-86/next is likely the best answer in most cases.
-kvm/master is usually a bad choice because it won't have _any_ changes for the next
-release, i.e. using it as a base is more likely to yield conflicts.  Similarly,
-kvm/queue and kvm/next are unlikely to have more relevant changes than kvm-x86/next.
-
-If there are non-trivial conflicts with multiple architectures then coordination
-between maintainers will be required no matter what base is used.  And I would
-expect people sending those types of series to have enough experience to be able
-to make a judgment call and/or engage with maintainers to figure out the best solution.
-
-I'll rework the "Base Tree/Branch" to explicitly state that any series that primarily
-targets x86 should be based on kvm-x86/next, but with a "use common sense" qualifier.
-
-> > +Co-Posting Tests
-> > +~~~~~~~~~~~~~~~~
-> > +KVM selftests that are associated with KVM changes, e.g. regression tests for
-> > +bug fixes, should be posted along with the KVM changes as a single series.
-> > +
-> > +KVM-unit-tests should *always* be posted separately.  Tools, e.g. b4 am, don't
-> > +know that KVM-unit-tests is a separate repository and get confused when patches
-> > +in a series apply on different trees.  To tie KVM-unit-tests patches back to
-> > +KVM patches, first post the KVM changes and then provide a lore Link: to the
-> > +KVM patch/series in the KVM-unit-tests patch(es).
-> 
-> I wonder, for KVM bugzilla to report a bug, or for our QAs to perform regular
-> tests using KVM selftests/KVM-unit-tests, which tree/branch is more reasonable
-> to be based on?
-> 
-> E.g., I saw some bugzilla issues earlier, reporting failures of some unit tests,
-> did some investigation, yet to find those failures were just because the corresponding
-> KVM patches had not been merged yet. 
-> 
-> Maybe we also should take care of the timings of the merging of KVM patches and
-> the test patches?
-
-I really don't want to hold up KVM-unit-test patches waiting for KVM fixes to be
-merged.  KUT is already woefully under-maintained, artificially holding up patches
-will only make things worse.  And simply waiting for patches to land in KVM doesn't
-necessarily solve things either, e.g. if the fixes land in kvm/master mid-cycle
-then running against kvm/next will continue to fail.  Waiting also doesn't help
-people running KUT against older kernels, e.g. for qualifying stable kernels.
-
-I completely understand the pain, but unfortunately no one has come up with an
-elegant, low-maintenance solution (this problem has been discussed multiple times
-in the past).
-
-> Two examples(I'm sure there're more :)): 
-> 1> https://bugzilla.kernel.org/show_bug.cgi?id=216812
-> 2> https://bugzilla.kernel.org/show_bug.cgi?id=216725
+On 2/21/2023 2:46 AM, Srinivas Kandagatla wrote:
 > 
 > 
-> B.R.
-> Yu
+> On 14/02/2023 21:23, Elliot Berman wrote:
+>>
+>> Gunyah VM manager is a kernel moduel which exposes an interface to
+>> Gunyah userspace to load, run, and interact with other Gunyah virtual
+>> machines. The interface is a character device at /dev/gunyah.
+>>
+>> Add a basic VM manager driver. Upcoming patches will add more ioctls
+>> into this driver.
+>>
+>> Co-developed-by: Prakruthi Deepak Heragu <quic_pheragu@quicinc.com>
+>> Signed-off-by: Prakruthi Deepak Heragu <quic_pheragu@quicinc.com>
+>> Signed-off-by: Elliot Berman <quic_eberman@quicinc.com>
+>> ---
+>>   .../userspace-api/ioctl/ioctl-number.rst      |   1 +
+>>   drivers/virt/gunyah/Makefile                  |   2 +-
+>>   drivers/virt/gunyah/rsc_mgr.c                 |  37 +++++-
+>>   drivers/virt/gunyah/vm_mgr.c                  | 118 ++++++++++++++++++
+>>   drivers/virt/gunyah/vm_mgr.h                  |  22 ++++
+>>   include/uapi/linux/gunyah.h                   |  23 ++++
+>>   6 files changed, 201 insertions(+), 2 deletions(-)
+>>   create mode 100644 drivers/virt/gunyah/vm_mgr.c
+>>   create mode 100644 drivers/virt/gunyah/vm_mgr.h
+>>   create mode 100644 include/uapi/linux/gunyah.h
+>>
+>> diff --git a/Documentation/userspace-api/ioctl/ioctl-number.rst 
+>> b/Documentation/userspace-api/ioctl/ioctl-number.rst
+>> index 0a1882e296ae..2513324ae7be 100644
+>> --- a/Documentation/userspace-api/ioctl/ioctl-number.rst
+>> +++ b/Documentation/userspace-api/ioctl/ioctl-number.rst
+>> @@ -137,6 +137,7 @@ Code  Seq#    Include 
+>> File                                           Comments
+>>   'F'   DD     video/sstfb.h                                           
+>> conflict!
+>>   'G'   00-3F  drivers/misc/sgi-gru/grulib.h                           
+>> conflict!
+>>   'G'   00-0F  xen/gntalloc.h, xen/gntdev.h                            
+>> conflict!
+>> +'G'   00-0f  linux/gunyah.h                                          
+>> conflict!
+>>   'H'   00-7F  linux/hiddev.h                                          
+>> conflict!
+>>   'H'   00-0F  linux/hidraw.h                                          
+>> conflict!
+>>   'H'   01     linux/mei.h                                             
+>> conflict!
+>> diff --git a/drivers/virt/gunyah/Makefile b/drivers/virt/gunyah/Makefile
+>> index de29769f2f3f..03951cf82023 100644
+>> --- a/drivers/virt/gunyah/Makefile
+>> +++ b/drivers/virt/gunyah/Makefile
+>> @@ -2,5 +2,5 @@
+>>   obj-$(CONFIG_GUNYAH) += gunyah.o
+>> -gunyah_rsc_mgr-y += rsc_mgr.o rsc_mgr_rpc.o
+>> +gunyah_rsc_mgr-y += rsc_mgr.o rsc_mgr_rpc.o vm_mgr.o
+>>   obj-$(CONFIG_GUNYAH) += gunyah_rsc_mgr.o
+>> diff --git a/drivers/virt/gunyah/rsc_mgr.c 
+>> b/drivers/virt/gunyah/rsc_mgr.c
+>> index 2a47139873a8..73c5a6b7cbbc 100644
+>> --- a/drivers/virt/gunyah/rsc_mgr.c
+>> +++ b/drivers/virt/gunyah/rsc_mgr.c
+>> @@ -16,8 +16,10 @@
+>>   #include <linux/completion.h>
+>>   #include <linux/gunyah_rsc_mgr.h>
+>>   #include <linux/platform_device.h>
+>> +#include <linux/miscdevice.h>
+>>   #include "rsc_mgr.h"
+>> +#include "vm_mgr.h"
+>>   #define RM_RPC_API_VERSION_MASK        GENMASK(3, 0)
+>>   #define RM_RPC_HEADER_WORDS_MASK    GENMASK(7, 4)
+>> @@ -103,6 +105,8 @@ struct gh_rm {
+>>       struct kmem_cache *cache;
+>>       struct mutex send_lock;
+>>       struct blocking_notifier_head nh;
+>> +
+>> +    struct miscdevice miscdev;
+>>   };
+>>   static struct gh_rm_connection *gh_rm_alloc_connection(__le32 
+>> msg_id, u8 type)
+>> @@ -509,6 +513,21 @@ void put_gh_rm(struct gh_rm *rm)
+>>   }
+>>   EXPORT_SYMBOL_GPL(put_gh_rm);
+>> +static long gh_dev_ioctl(struct file *filp, unsigned int cmd, 
+>> unsigned long arg)
+>> +{
+>> +    struct miscdevice *miscdev = filp->private_data;
+>> +    struct gh_rm *rm = container_of(miscdev, struct gh_rm, miscdev);
+>> +
+>> +    return gh_dev_vm_mgr_ioctl(rm, cmd, arg);
+>> +}
+>> +
+>> +static const struct file_operations gh_dev_fops = {
+>> +    .owner        = THIS_MODULE,
+>> +    .unlocked_ioctl    = gh_dev_ioctl,
+>> +    .compat_ioctl    = compat_ptr_ioctl,
+>> +    .llseek        = noop_llseek,
+>> +};
+>> +
+>>   static int gh_msgq_platform_probe_direction(struct platform_device 
+>> *pdev,
+>>                       bool tx, int idx, struct gunyah_resource *ghrsc)
+>>   {
+>> @@ -567,7 +586,22 @@ static int gh_rm_drv_probe(struct platform_device 
+>> *pdev)
+>>       rm->msgq_client.rx_callback = gh_rm_msgq_rx_data;
+>>       rm->msgq_client.tx_done = gh_rm_msgq_tx_done;
+>> -    return gh_msgq_init(&pdev->dev, &rm->msgq, &rm->msgq_client, 
+>> &rm->tx_ghrsc, &rm->rx_ghrsc);
+>> +    ret = gh_msgq_init(&pdev->dev, &rm->msgq, &rm->msgq_client, 
+>> &rm->tx_ghrsc, &rm->rx_ghrsc);
+>> +    if (ret)
+>> +        goto err_cache;
+>> +
+>> +    rm->miscdev.name = "gunyah";
+>> +    rm->miscdev.minor = MISC_DYNAMIC_MINOR;
+>> +    rm->miscdev.fops = &gh_dev_fops;
+>> +
+>> +    ret = misc_register(&rm->miscdev);
+>> +    if (ret)
+>> +        goto err_msgq;
+>> +
+>> +    return 0;
+>> +err_msgq:
+>> +    mbox_free_channel(gh_msgq_chan(&rm->msgq));
+>> +    gh_msgq_remove(&rm->msgq);
+>>   err_cache:
+>>       kmem_cache_destroy(rm->cache);
+>>       return ret;
+>> @@ -577,6 +611,7 @@ static int gh_rm_drv_remove(struct platform_device 
+>> *pdev)
+>>   {
+>>       struct gh_rm *rm = platform_get_drvdata(pdev);
+>> +    misc_deregister(&rm->miscdev);
+>>       mbox_free_channel(gh_msgq_chan(&rm->msgq));
+>>       gh_msgq_remove(&rm->msgq);
+>>       kmem_cache_destroy(rm->cache);
+>> diff --git a/drivers/virt/gunyah/vm_mgr.c b/drivers/virt/gunyah/vm_mgr.c
+>> new file mode 100644
+>> index 000000000000..fd890a57172e
+>> --- /dev/null
+>> +++ b/drivers/virt/gunyah/vm_mgr.c
+>> @@ -0,0 +1,118 @@
+>> +// SPDX-License-Identifier: GPL-2.0-only
+>> +/*
+>> + * Copyright (c) 2022-2023 Qualcomm Innovation Center, Inc. All 
+>> rights reserved.
+>> + */
+>> +
+>> +#define pr_fmt(fmt) "gh_vm_mgr: " fmt
+>> +
+>> +#include <linux/anon_inodes.h>
+>> +#include <linux/file.h>
+>> +#include <linux/gunyah_rsc_mgr.h>
+>> +#include <linux/miscdevice.h>
+>> +#include <linux/module.h>
+>> +
+>> +#include <uapi/linux/gunyah.h>
+>> +
+>> +#include "vm_mgr.h"
+>> +
+>> +static void gh_vm_free(struct work_struct *work)
+>> +{
+>> +    struct gh_vm *ghvm = container_of(work, struct gh_vm, free_work);
+>> +    int ret;
+>> +
+>> +    ret = gh_rm_dealloc_vmid(ghvm->rm, ghvm->vmid);
+>> +    if (ret)
+>> +        pr_warn("Failed to deallocate vmid: %d\n", ret);
+>> +
+>> +    put_gh_rm(ghvm->rm);
+>> +    kfree(ghvm);
+>> +}
+>> +
+>> +static __must_check struct gh_vm *gh_vm_alloc(struct gh_rm *rm)
+>> +{
+>> +    struct gh_vm *ghvm;
+>> +    int vmid;
+>> +
+>> +    vmid = gh_rm_alloc_vmid(rm, 0);
+>> +    if (vmid < 0)
+>> +        return ERR_PTR(vmid);
+>> +
+>> +    ghvm = kzalloc(sizeof(*ghvm), GFP_KERNEL);
+>> +    if (!ghvm) {
+>> +        gh_rm_dealloc_vmid(rm, vmid);
+>> +        return ERR_PTR(-ENOMEM);
+>> +    }
+>> +
+>> +    get_gh_rm(rm);
+>> +
+>> +    ghvm->vmid = vmid;
+>> +    ghvm->rm = rm;
+>> +
+>> +    INIT_WORK(&ghvm->free_work, gh_vm_free);
+>> +
+>> +    return ghvm;
+>> +}
+>> +
+>> +static int gh_vm_release(struct inode *inode, struct file *filp)
+>> +{
+>> +    struct gh_vm *ghvm = filp->private_data;
+>> +
+>> +    /* VM will be reset and make RM calls which can interruptible sleep.
+>> +     * Defer to a work so this thread can receive signal.
+>> +     */
+>> +    schedule_work(&ghvm->free_work);
+>> +    return 0;
+>> +}
+>> +
+>> +static const struct file_operations gh_vm_fops = {
+>> +    .release = gh_vm_release,
 > 
+>> +    .compat_ioctl    = compat_ptr_ioctl,
+> 
+> This line should go with the patch that adds real ioctl
+> 
+
+Done.
+
+>> +    .llseek = noop_llseek,
+>> +};
+>> +
+>> +static long gh_dev_ioctl_create_vm(struct gh_rm *rm, unsigned long arg)
+> Not sure what is the gain of this multiple levels of redirection.
+> 
+> How about
+> 
+> long gh_dev_create_vm(struct gh_rm *rm, unsigned long arg)
+> {
+> ...
+> }
+> 
+> and rsc_mgr just call it as part of its ioctl call
+> 
+> static long gh_dev_ioctl(struct file *filp, unsigned int cmd, unsigned 
+> long arg)
+> {
+>      struct miscdevice *miscdev = filp->private_data;
+>      struct gh_rm *rm = container_of(miscdev, struct gh_rm, miscdev);
+> 
+>      switch (cmd) {
+>      case GH_CREATE_VM:
+>          return gh_dev_create_vm(rm, arg);
+>      default:
+>          return -ENOIOCTLCMD;
+>      }
+> }
+> 
+
+I'm anticipating we will add further /dev/gunyah ioctls and I thought it 
+would be cleaner to have all that in vm_mgr.c itself.
+
+> 
+>> +{
+>> +    struct gh_vm *ghvm;
+>> +    struct file *file;
+>> +    int fd, err;
+>> +
+>> +    /* arg reserved for future use. */
+>> +    if (arg)
+>> +        return -EINVAL;
+> 
+> The only code path I see here is via GH_CREATE_VM ioctl which obviously 
+> does not take any arguments, so if you are thinking of using the 
+> argument for architecture-specific VM flags.  Then this needs to be 
+> properly done by making the ABI aware of this.
+
+It is documented in Patch 17 (Document Gunyah VM Manager)
+
++GH_CREATE_VM
++~~~~~~~~~~~~
++
++Creates a Gunyah VM. The argument is reserved for future use and must be 0.
+
+> 
+> As you mentioned zero value arg imply an "unauthenticated VM" type, but 
+> this was not properly encoded in the userspace ABI. Why not make it 
+> future compatible. How about adding arguments to GH_CREATE_VM and pass 
+> the required information correctly.
+> Note that once the ABI is accepted then you will not be able to change 
+> it, other than adding a new one.
+> 
+
+Does this means adding #define GH_VM_DEFAULT_ARG 0 ? I am not sure yet 
+what arguments to add here.
+
+The ABI can add new "long" values to GH_CREATE_VM and that wouldn't 
+break compatibility with old kernels; old kernels reject it as -EINVAL.
+
+>> +
+>> +    ghvm = gh_vm_alloc(rm);
+>> +    if (IS_ERR(ghvm))
+>> +        return PTR_ERR(ghvm);
+>> +
+>> +    fd = get_unused_fd_flags(O_CLOEXEC);
+>> +    if (fd < 0) {
+>> +        err = fd;
+>> +        goto err_destroy_vm;
+>> +    }
+>> +
+>> +    file = anon_inode_getfile("gunyah-vm", &gh_vm_fops, ghvm, O_RDWR);
+>> +    if (IS_ERR(file)) {
+>> +        err = PTR_ERR(file);
+>> +        goto err_put_fd;
+>> +    }
+>> +
+>> +    fd_install(fd, file);
+>> +
+>> +    return fd;
+>> +
+>> +err_put_fd:
+>> +    put_unused_fd(fd);
+>> +err_destroy_vm:
+>> +    kfree(ghvm);
+>> +    return err;
+>> +}
+>> +
+>> +long gh_dev_vm_mgr_ioctl(struct gh_rm *rm, unsigned int cmd, unsigned 
+>> long arg)
+>> +{
+>> +    switch (cmd) {
+>> +    case GH_CREATE_VM:
+>> +        return gh_dev_ioctl_create_vm(rm, arg);
+>> +    default:
+>> +        return -ENOIOCTLCMD;
+>> +    }
+>> +}
+>> diff --git a/drivers/virt/gunyah/vm_mgr.h b/drivers/virt/gunyah/vm_mgr.h
+>> new file mode 100644
+>> index 000000000000..76954da706e9
+>> --- /dev/null
+>> +++ b/drivers/virt/gunyah/vm_mgr.h
+>> @@ -0,0 +1,22 @@
+>> +/* SPDX-License-Identifier: GPL-2.0-only */
+>> +/*
+>> + * Copyright (c) 2022-2023 Qualcomm Innovation Center, Inc. All 
+>> rights reserved.
+>> + */
+>> +
+>> +#ifndef _GH_PRIV_VM_MGR_H
+>> +#define _GH_PRIV_VM_MGR_H
+>> +
+>> +#include <linux/gunyah_rsc_mgr.h>
+>> +
+>> +#include <uapi/linux/gunyah.h>
+>> +
+>> +long gh_dev_vm_mgr_ioctl(struct gh_rm *rm, unsigned int cmd, unsigned 
+>> long arg);
+>> +
+>> +struct gh_vm {
+>> +    u16 vmid;
+>> +    struct gh_rm *rm;
+>> +
+>> +    struct work_struct free_work;
+>> +};
+>> +
+>> +#endif
+>> diff --git a/include/uapi/linux/gunyah.h b/include/uapi/linux/gunyah.h
+>> new file mode 100644
+>> index 000000000000..10ba32d2b0a6
+>> --- /dev/null
+>> +++ b/include/uapi/linux/gunyah.h
+>> @@ -0,0 +1,23 @@
+>> +/* SPDX-License-Identifier: GPL-2.0-only WITH Linux-syscall-note */
+>> +/*
+>> + * Copyright (c) 2022-2023 Qualcomm Innovation Center, Inc. All 
+>> rights reserved.
+>> + */
+>> +
+>> +#ifndef _UAPI_LINUX_GUNYAH
+>> +#define _UAPI_LINUX_GUNYAH
+>> +
+>> +/*
+>> + * Userspace interface for /dev/gunyah - gunyah based virtual machine
+>> + */
+>> +
+>> +#include <linux/types.h>
+>> +#include <linux/ioctl.h>
+>> +
+>> +#define GH_IOCTL_TYPE            'G'
+>> +
+>> +/*
+>> + * ioctls for /dev/gunyah fds:
+>> + */
+>> +#define GH_CREATE_VM            _IO(GH_IOCTL_TYPE, 0x0) /* Returns a 
+>> Gunyah VM fd */
+> 
+> Can HLOS forcefully destroy a VM?
+> If so should we have a corresponding DESTROY IOCTL?
+
+It can forcefully destroy unauthenticated and protected virtual 
+machines. I don't have a userspace usecase for a DESTROY ioctl yet, 
+maybe this can be added later? By the way, the VM is forcefully 
+destroyed when VM refcount is dropped to 0 (close(vm_fd) and any other 
+relevant file descriptors).
+
+- Elliot
