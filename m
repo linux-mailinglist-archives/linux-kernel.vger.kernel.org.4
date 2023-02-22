@@ -2,511 +2,244 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7270969F1BA
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Feb 2023 10:30:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A4F6969F1D0
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Feb 2023 10:35:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232129AbjBVJaX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Feb 2023 04:30:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46808 "EHLO
+        id S229880AbjBVJeu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Feb 2023 04:34:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54516 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232159AbjBVJ3p (ORCPT
+        with ESMTP id S231895AbjBVJeb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Feb 2023 04:29:45 -0500
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7FED1BA;
-        Wed, 22 Feb 2023 01:27:49 -0800 (PST)
-Received: from IcarusMOD.eternityproject.eu (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 1975F66021C8;
-        Wed, 22 Feb 2023 09:27:05 +0000 (GMT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1677058026;
-        bh=6RsoMSUKbuFrGrHciY1yya3bkWjwkg0jDVxNFiChlXE=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Wf+/EstLDGNPs3Qebzozf037vK1zAqMAhTylWcN5zOf3PlcDQShfg1NF8RjgFVno7
-         olIVoF3bNZDMF+t4OX1I3xHJ0J9bnhVkdLAyPv6GOr8PThjum8rcMhdASooJvsLxoM
-         rF9dfN+r9BGJX6HtT6FJ5s7hNsBN+cRCjfqjfW3XCr1HD+FGpFJGD/3POFsL6cYNBH
-         EfknXTT4t0j+E0rBR7SHRRkKmR/fdgX37c5NWKT5Z1lNsBR5VRfq3T6mVcmOTQBYjP
-         QUG9YbzwKTxwU8TTkZsqr5VvwbDst62X8jbY08cpD4jc6H6KQ6Rj+j7TFxpgBL0hP1
-         +2YB/Z8x2bLSg==
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-To:     mturquette@baylibre.com
-Cc:     sboyd@kernel.org, matthias.bgg@gmail.com,
-        angelogioacchino.delregno@collabora.com, wenst@chromium.org,
-        johnson.wang@mediatek.com, miles.chen@mediatek.com,
-        chun-jie.chen@mediatek.com, daniel@makrotopia.org,
-        fparent@baylibre.com, msp@baylibre.com, nfraprado@collabora.com,
-        rex-bc.chen@mediatek.com, zhaojh329@gmail.com,
-        sam.shih@mediatek.com, edward-jw.yang@mediatek.com,
-        yangyingliang@huawei.com, granquet@baylibre.com,
-        pablo.sun@mediatek.com, sean.wang@mediatek.com,
-        chen.zhong@mediatek.com, linux-kernel@vger.kernel.org,
-        linux-clk@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org
-Subject: [PATCH v5 54/54] clk: mediatek: mt8135: Convert to simple probe and enable module build
-Date:   Wed, 22 Feb 2023 10:25:43 +0100
-Message-Id: <20230222092543.19187-55-angelogioacchino.delregno@collabora.com>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230222092543.19187-1-angelogioacchino.delregno@collabora.com>
-References: <20230222092543.19187-1-angelogioacchino.delregno@collabora.com>
-MIME-Version: 1.0
+        Wed, 22 Feb 2023 04:34:31 -0500
+Received: from EUR01-DB5-obe.outbound.protection.outlook.com (mail-db5eur01on062e.outbound.protection.outlook.com [IPv6:2a01:111:f400:fe02::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E6F639B9D;
+        Wed, 22 Feb 2023 01:32:23 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=WdaXSbt+xbaIRS9D9gsjqAE7Gpqs7UzaNM9jEO2g0kQ54TXoycQ8G//VjlxsGAe3EPeFd8pCd9KkQi1gruLGvUn8/TFG6EFqiNlc5xYDSapN0HHOXkVjsdxyIE0KQn0g97VLQNQovioMJc0bTAFOz92987C369MlxDwwiT76eSSPY3x7cCPc7gRUgwzcwXOS8DAviIU0cg6ianQEgwOh3IrmfVz2ZMKDHmXwavo+yQHgSzwWnoHFJwqkJKtccwiC4aXEA1hA7slpy1CKqWLgCOhQPe1SovShD4pkvm/U4rVxcHE8BS0WaxZ2w/12LeGsSRjZsqu1lr6W/oYWcJxOGA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=Y5BEMGpCgypVwzO05HwJfPKZLn/JDJHAsZ62nxCzaE8=;
+ b=jG6OLuU2zfKOsR5uHZoDi9LP1awYw/gUyobPt64IsnmlWuBEdEJ6+WBHE3np7T/2tUPkstypgl8RX/BfzC+Yrh3PztcaKTzS6OHQDoKo/mzW9Z85qWdrQwoKGUMYhLoq8VlzrZHn4URg6jYNku1A0QfBthzy8XOSwHRls53hEx+vK+a9RrBHnIQzbd9pA2aioVY0xvhHDCHwD9AH/0ZBjxNu5Qqm8zWxjGcgGpO6USByhTpbQwCkhED1vR3FvTdftvwtc2wdPeQYKLn9Vt/qvpML8oa+E+YOCeIc33DFhRS1XIPd6hQZTjShCUNIuv1DhE1w9uW9Qx5sAz9ZtByPLQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=Y5BEMGpCgypVwzO05HwJfPKZLn/JDJHAsZ62nxCzaE8=;
+ b=HgdTFZ7jHk8wSlF5BarY0tVfKWn9rAIg9kZgQ7gzNvoHW0mD4vSUhAL080pqEVKDcOtnQhz4fPPzvyg5nmISqe0Ha3duQ0ouUDAlTX5Im/0JUQ9YuuuDlA9Yzr5CG2ShZIi7PxQegV1zSNhQl9N7V67L0LrEIaenz/hnsIvBIXI=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nxp.com;
+Received: from HE1PR0402MB2939.eurprd04.prod.outlook.com (2603:10a6:3:db::18)
+ by AS8PR04MB8468.eurprd04.prod.outlook.com (2603:10a6:20b:34b::14) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6134.18; Wed, 22 Feb
+ 2023 09:28:42 +0000
+Received: from HE1PR0402MB2939.eurprd04.prod.outlook.com
+ ([fe80::4980:91ae:a2a8:14e1]) by HE1PR0402MB2939.eurprd04.prod.outlook.com
+ ([fe80::4980:91ae:a2a8:14e1%4]) with mapi id 15.20.6134.018; Wed, 22 Feb 2023
+ 09:28:42 +0000
+From:   Clark Wang <xiaoning.wang@nxp.com>
+To:     peppe.cavallaro@st.com, alexandre.torgue@foss.st.com,
+        joabreu@synopsys.com, davem@davemloft.net, edumazet@google.com,
+        kuba@kernel.org, pabeni@redhat.com, mcoquelin.stm32@gmail.com,
+        linux@armlinux.org.uk, andrew@lunn.ch, hkallweit1@gmail.com
+Cc:     netdev@vger.kernel.org, linux-stm32@st-md-mailman.stormreply.com,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-imx@nxp.com
+Subject: [PATCH net-next V4 1/2] net: phylink: add a function to resume PHY alone to fix resume issue with WoL enabled
+Date:   Wed, 22 Feb 2023 17:26:35 +0800
+Message-Id: <20230222092636.1984847-1-xiaoning.wang@nxp.com>
+X-Mailer: git-send-email 2.34.1
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-ClientProxiedBy: SI2PR06CA0001.apcprd06.prod.outlook.com
+ (2603:1096:4:186::21) To HE1PR0402MB2939.eurprd04.prod.outlook.com
+ (2603:10a6:3:db::18)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: HE1PR0402MB2939:EE_|AS8PR04MB8468:EE_
+X-MS-Office365-Filtering-Correlation-Id: 580a852a-76f6-4bcf-7821-08db14b7303c
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: oEe+7Agp4nq6EQHGi/pjzaLgWNU+8HVHZE321hjAo+IbNDHMPd0+lA+vx1kt7Ry2BKG12uJeqwpZ1w5/g4JGGfYsXzZRPo9XDT9O3NCRWNucnylCZ0ZvTgnig1ta7UwCh2V284kkJilby+xo755A6O8O7Dd9dv9RvG+WE5ZfMJgMKI4jjAZjSbylm07kjeOQZR7GjiXhyVIQMML5ls+4rLeyCHaFlidQKIT/kPHdKQfl5NUb4YPeWi34kSee2LpjNSgBMvW5KzRJuoRfR8HY37+TqtPlmQZH9WKP3VXBb2HWL8ZIEwwAg2F0389+PW61N7efKCFkng7ZFcWBkWIXcL8Lei1CVFpEldGkqCW6yRIuA5b7yGKR9KUU7sc2/iqAdMOldmQTfEBxe50XGEpxQ12TtYvsO5cVsxlDWgTqIGoMDZg2lJZFvpgFRP1d7DCHF5PA675Xd+p5CtTY5r4RoQcVX78k1oaActeEIf7/DhsXQmPLJuaghYakNoXpNcZgJDQzl2fyDI8pEfNUDVnR94Q9owP3TcwdfqWB6dZmIDzOU6Zw8OD/1gTBLOzrRxwY8YjTxdnIfVZnQX/OBylrUiRAdW4QP5Gtwztrxpk/yNjKYlxHi4FW/pP3rk2tEVEthb2YWcycWXXHVXAx0L+tnX/3o4KefMiFqEsB9B8mPYgjGMaJn0CFt9MnexfL1qjMIpDiBmNyLDnOYxEQvtn43X3QzJ1pMInD7r7/sbGPtKk=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:HE1PR0402MB2939.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(396003)(136003)(376002)(366004)(346002)(39860400002)(451199018)(86362001)(36756003)(8676002)(6512007)(6506007)(4326008)(186003)(66946007)(1076003)(66556008)(8936002)(26005)(52116002)(41300700001)(2616005)(6486002)(6666004)(316002)(478600001)(38100700002)(2906002)(921005)(38350700002)(83380400001)(5660300002)(7416002)(66476007);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?Jpih2v6KDhT7ZlkF0ddcydYpd/VKJ6FWD4f26T2ByuK97y0ucgvtianWH2Dd?=
+ =?us-ascii?Q?+wzJXtGjcT4gTjdXE0YRhOOQg+WfbmWGvpiTdw7XbzI6Y4l6yFn2JtGaJ8/+?=
+ =?us-ascii?Q?4br8Ou5iqqdyzGnURp/QKS74hnxnZUHWl4wgYzTk28TmR/oDQMc5euVlJow+?=
+ =?us-ascii?Q?ehyn7iXpOdy8BP09JJ8ibvm4A0qBTinO4X6M8V/tK4EBc57NBEb0P5tBtiyM?=
+ =?us-ascii?Q?YpaSS/Pcs8/kUJTuMpyDrEJNmmYX2vmES2k6iNRhzpAzj3ZzuZWSnQgN2IKX?=
+ =?us-ascii?Q?wLqI15ZtXd8RwHqn12Ex5aZhfNGOsOoEUZoTwdhvzTnhnRotcgNzP9+AGiHc?=
+ =?us-ascii?Q?NNiXARaZTK50gBHXl0kL0TMZuVhznqTy4Jm2B7nm+Sq2HN44Q2++PxV8c/j8?=
+ =?us-ascii?Q?KhrhcOPsukGrnLqsPPtBkX8W5eBxug13fTHtj/kvKXYroT6TLyo0r2AQuP9B?=
+ =?us-ascii?Q?TSt/kYr/sjKydjroITC9wd/fr7zOhtv+xBCMJrzjWy976F1+7Yi3uiiaUI2F?=
+ =?us-ascii?Q?baK3Rsay2SBUW6puZKi5UiLZ7q9JoSSxf5rluOM2SXVFgGCp/jNILsF64oO+?=
+ =?us-ascii?Q?kjhz3WwWLWw94XUtd6d5WQuB9/+nfu3v9PORlWD11Z86VtpYjuIYGzY3Gq2r?=
+ =?us-ascii?Q?bIQvbz33QpS7PXsx/c1e54WOG85xqDJrgslQ6C01jalGNG2YA3xiqZy2OwAd?=
+ =?us-ascii?Q?VHtaJhL5/QGE2TuVr5GeUy/wuOY3UVeWOnY9FiOLUlwaFVrwJLCDtdnVeGfx?=
+ =?us-ascii?Q?hBGcRQoZuB2E7fuE9fzDaSU225HFq/JgO4Hi9Bi9nTmxFYjdKCXbRDBdpGYL?=
+ =?us-ascii?Q?ys8C5FLe6mD+qAM3yJ3Fdt8EzueEsuvPG6eS/nhX9ZpoFQ1kgyI6bsbHYm0N?=
+ =?us-ascii?Q?DZf2U8mlWpT+RcHtIR08eHnzURmlMG4+s9gftKDjs3gHcLdc6UxcefIvGJqR?=
+ =?us-ascii?Q?tQvt6fq9erFyIiHB5lGNLsMT0B4XG9dfgG5Fp7xurYCjilWN7hnEkBDhw5fe?=
+ =?us-ascii?Q?25bKaTMduOc8WFV2LJExEwpp/2///5i1US6ANkjaRTFZ6kPU9WlcI0Z4AD0Y?=
+ =?us-ascii?Q?p40CYIxQymzNPzRapl76HjRaMZB8aYDE5DgrHQQz0R5EaAevB8ZZf8MKaaOd?=
+ =?us-ascii?Q?gH0EQk01THhkwn2tkwYl2qC7BMLxWe9pb9+s2/Q+UVK984EYE6Kb2sa1u8zk?=
+ =?us-ascii?Q?9a5/pRJjlyMi3cb31a5pj2ZW0dYi6LGWGxAk6m0FIvUNn3cNoYLI/0KjnuQ+?=
+ =?us-ascii?Q?YtY7Q6anW7lVOkg0MD0lOny89tLrH/qj+QNRFuLpliFnokYOyu+1oF8V5sVG?=
+ =?us-ascii?Q?JL5PHl8MalXm4ryFbFGtG3KQTBeV3CBzrhTg2bohiS/UGJB8KSjNOmmtilfS?=
+ =?us-ascii?Q?HASIqNWr0wKr5nnJsUG7R6Qc1IQ68zC2CMFyI5fdMsL9/W0Q8W0q9rPSeJRa?=
+ =?us-ascii?Q?F251KTudqd+S4QFVOLsSASe9DgO/WA++hXngvaZz+19uY6w+Ymc9h8x7ZAix?=
+ =?us-ascii?Q?tvkgVT37ZhKh1G2f02cuZW8NX0x0a2SiHZKdIA+tDjhOk/QgjXjiSWcAzkiY?=
+ =?us-ascii?Q?AVMuU4INLODty4MO+KDbqdKaVlCoNckk2joBoplHeswe/DWWoQbFqPEq6Lda?=
+ =?us-ascii?Q?4w=3D=3D?=
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 580a852a-76f6-4bcf-7821-08db14b7303c
+X-MS-Exchange-CrossTenant-AuthSource: HE1PR0402MB2939.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 22 Feb 2023 09:28:42.6553
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: ACjK4Xp5cfPJWFQ1B38asbTlZ9mKOIxw7lWSZT5gaD8+WZch1SwGSEWQalNALGimkYRJ4P++tQoweLGMkLXcqw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AS8PR04MB8468
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,SPF_HELO_PASS,
+        T_SPF_PERMERROR autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Convert the MT8135 clock drivers to platform_driver using the common
-simple probe mechanism; special note goes to the introduction of
-dummy clocks with ID 0 (where 0 is the first entry of a clock array)
-for each clock controller: this was necessary because of a mistake
-in the bindings for all MT8135 clock controllers, where the first
-clock has ID 1 (hence, array would start from element 1) instead of
-zero.
+Issue we met:
+On some platforms, MAC cannot work after resumed from the suspend with WoL
+enabled.
 
-Now that all of the MT8135 clock drivers (including apmixedsys) can
-be compiled as modules, change the COMMON_CLK_MT8135 configuration
-option to tristate to enable module build.
+The cause of the issue:
+1. phylink_resolve() is in a workqueue which will not be executed immediately.
+   This is the call sequence:
+       phylink_resolve()->phylink_link_up()->pl->mac_ops->mac_link_up()
+   For stmmac driver, mac_link_up() will set the correct speed/duplex...
+   values which are from link_state.
+2. In stmmac_resume(), it will call stmmac_hw_setup() after called the
+   phylink_resume(), because MAC need PHY rx_clk to do the reset.
+   stmmac_core_init() is called in function stmmac_hw_setup(), which will
+   reset the MAC and set the speed/duplex... to default value.
+Conclusion: Because phylink_resolve() cannot determine when it is called, it
+            cannot be guaranteed to be called after stmmac_core_init().
+	    Once stmmac_core_init() is called after phylink_resolve(),
+	    the MAC will be misconfigured and cannot be used.
 
-While at it, also remove the __initconst annotation from all of the
-clock arrays as they are not only used during init anymore, but also
-during runtime.
+In order to avoid this problem, add a function called phylink_phy_resume()
+to resume PHY separately. This eliminates the need to call phylink_resume()
+before stmmac_hw_setup().
 
-Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-Reviewed-by: Chen-Yu Tsai <wenst@chromium.org>
+Add another judgement before called phy_start() in phylink_start(). This way
+phy_start() will not be called multiple times when resumes. At the same time,
+it may not affect other drivers that do not use phylink_phy_resume().
+
+Signed-off-by: Clark Wang <xiaoning.wang@nxp.com>
 ---
- drivers/clk/mediatek/Kconfig      |   2 +-
- drivers/clk/mediatek/clk-mt8135.c | 176 +++++++++++++-----------------
- 2 files changed, 76 insertions(+), 102 deletions(-)
+V2 change:
+ - add mac_resume_phy_separately flag to struct phylink to mark if the MAC
+   driver uses the phylink_phy_resume() first.
+V3 change:
+ - add brace to avoid ambiguous 'else'
+   Reported-by: kernel test robot <lkp@intel.com>
+V4:
+Many thanks to Jakub and Russel for their suggestions, here are the changes for V4.
+ - Unify MAC and PHY in comments and subject to uppercase.
+ - Add subject of the sentence.
+ - Move && to the end of the line
+ - Add notice in the comment of function phylink_phy_resume()
+---
+ drivers/net/phy/phylink.c | 35 +++++++++++++++++++++++++++++++++--
+ include/linux/phylink.h   |  1 +
+ 2 files changed, 34 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/clk/mediatek/Kconfig b/drivers/clk/mediatek/Kconfig
-index 02093996ccc3..7a12aefb1d0b 100644
---- a/drivers/clk/mediatek/Kconfig
-+++ b/drivers/clk/mediatek/Kconfig
-@@ -423,7 +423,7 @@ config COMMON_CLK_MT7986_ETHSYS
- 	  required on MediaTek MT7986 SoC.
- 
- config COMMON_CLK_MT8135
--	bool "Clock driver for MediaTek MT8135"
-+	tristate "Clock driver for MediaTek MT8135"
- 	depends on (ARCH_MEDIATEK && ARM) || COMPILE_TEST
- 	select COMMON_CLK_MEDIATEK
- 	default ARCH_MEDIATEK && ARM
-diff --git a/drivers/clk/mediatek/clk-mt8135.c b/drivers/clk/mediatek/clk-mt8135.c
-index 8785d58cb3a5..084e48a554c2 100644
---- a/drivers/clk/mediatek/clk-mt8135.c
-+++ b/drivers/clk/mediatek/clk-mt8135.c
-@@ -5,8 +5,10 @@
-  */
- 
- #include <linux/clk.h>
-+#include <linux/module.h>
- #include <linux/of.h>
- #include <linux/of_address.h>
-+#include <linux/platform_device.h>
- #include <linux/slab.h>
- #include <linux/mfd/syscon.h>
- #include <dt-bindings/clock/mt8135-clk.h>
-@@ -17,7 +19,8 @@
- 
- static DEFINE_SPINLOCK(mt8135_clk_lock);
- 
--static const struct mtk_fixed_factor top_divs[] __initconst = {
-+static const struct mtk_fixed_factor top_divs[] = {
-+	FACTOR(CLK_DUMMY, "top_divs_dummy", "clk_null", 1, 1),
- 	FACTOR(CLK_TOP_DSI0_LNTC_DSICLK, "dsi0_lntc_dsiclk", "clk_null", 1, 1),
- 	FACTOR(CLK_TOP_HDMITX_CLKDIG_CTS, "hdmitx_clkdig_cts", "clk_null", 1, 1),
- 	FACTOR(CLK_TOP_CLKPH_MCK, "clkph_mck", "clk_null", 1, 1),
-@@ -98,7 +101,7 @@ static const struct mtk_fixed_factor top_divs[] __initconst = {
- 	FACTOR(CLK_TOP_MEMPLL_MCK_D4, "mempll_mck_d4", "clkph_mck", 1, 4),
+diff --git a/drivers/net/phy/phylink.c b/drivers/net/phy/phylink.c
+index ea8fcce5b2d9..0be57e9463d9 100644
+--- a/drivers/net/phy/phylink.c
++++ b/drivers/net/phy/phylink.c
+@@ -80,6 +80,8 @@ struct phylink {
+ 	DECLARE_PHY_INTERFACE_MASK(sfp_interfaces);
+ 	__ETHTOOL_DECLARE_LINK_MODE_MASK(sfp_support);
+ 	u8 sfp_port;
++
++	bool mac_resume_phy_separately;
  };
  
--static const char * const axi_parents[] __initconst = {
-+static const char * const axi_parents[] = {
- 	"clk26m",
- 	"syspll_d3",
- 	"syspll_d4",
-@@ -108,7 +111,7 @@ static const char * const axi_parents[] __initconst = {
- 	"syspll_d3p5"
- };
- 
--static const char * const smi_parents[] __initconst = {
-+static const char * const smi_parents[] = {
- 	"clk26m",
- 	"clkph_mck",
- 	"syspll_d2p5",
-@@ -126,7 +129,7 @@ static const char * const smi_parents[] __initconst = {
- 	"lvdspll"
- };
- 
--static const char * const mfg_parents[] __initconst = {
-+static const char * const mfg_parents[] = {
- 	"clk26m",
- 	"univpll1_d4",
- 	"syspll_d2",
-@@ -142,13 +145,13 @@ static const char * const mfg_parents[] __initconst = {
- 	"mmpll_d7"
- };
- 
--static const char * const irda_parents[] __initconst = {
-+static const char * const irda_parents[] = {
- 	"clk26m",
- 	"univpll2_d8",
- 	"univpll1_d6"
- };
- 
--static const char * const cam_parents[] __initconst = {
-+static const char * const cam_parents[] = {
- 	"clk26m",
- 	"syspll_d3",
- 	"syspll_d3p5",
-@@ -159,13 +162,13 @@ static const char * const cam_parents[] __initconst = {
- 	"univpll1_d4"
- };
- 
--static const char * const aud_intbus_parents[] __initconst = {
-+static const char * const aud_intbus_parents[] = {
- 	"clk26m",
- 	"syspll_d6",
- 	"univpll_d10"
- };
- 
--static const char * const jpg_parents[] __initconst = {
-+static const char * const jpg_parents[] = {
- 	"clk26m",
- 	"syspll_d5",
- 	"syspll_d4",
-@@ -175,7 +178,7 @@ static const char * const jpg_parents[] __initconst = {
- 	"univpll_d5"
- };
- 
--static const char * const disp_parents[] __initconst = {
-+static const char * const disp_parents[] = {
- 	"clk26m",
- 	"syspll_d3p5",
- 	"syspll_d3",
-@@ -186,7 +189,7 @@ static const char * const disp_parents[] __initconst = {
- 	"vdecpll"
- };
- 
--static const char * const msdc30_parents[] __initconst = {
-+static const char * const msdc30_parents[] = {
- 	"clk26m",
- 	"syspll_d6",
- 	"syspll_d5",
-@@ -195,13 +198,13 @@ static const char * const msdc30_parents[] __initconst = {
- 	"msdcpll"
- };
- 
--static const char * const usb20_parents[] __initconst = {
-+static const char * const usb20_parents[] = {
- 	"clk26m",
- 	"univpll2_d6",
- 	"univpll1_d10"
- };
- 
--static const char * const venc_parents[] __initconst = {
-+static const char * const venc_parents[] = {
- 	"clk26m",
- 	"syspll_d3",
- 	"syspll_d8",
-@@ -212,7 +215,7 @@ static const char * const venc_parents[] __initconst = {
- 	"mmpll_d6"
- };
- 
--static const char * const spi_parents[] __initconst = {
-+static const char * const spi_parents[] = {
- 	"clk26m",
- 	"syspll_d6",
- 	"syspll_d8",
-@@ -221,17 +224,17 @@ static const char * const spi_parents[] __initconst = {
- 	"univpll1_d8"
- };
- 
--static const char * const uart_parents[] __initconst = {
-+static const char * const uart_parents[] = {
- 	"clk26m",
- 	"univpll2_d8"
- };
- 
--static const char * const mem_parents[] __initconst = {
-+static const char * const mem_parents[] = {
- 	"clk26m",
- 	"clkph_mck"
- };
- 
--static const char * const camtg_parents[] __initconst = {
-+static const char * const camtg_parents[] = {
- 	"clk26m",
- 	"univpll_d26",
- 	"univpll1_d6",
-@@ -239,12 +242,12 @@ static const char * const camtg_parents[] __initconst = {
- 	"syspll_d8"
- };
- 
--static const char * const audio_parents[] __initconst = {
-+static const char * const audio_parents[] = {
- 	"clk26m",
- 	"syspll_d24"
- };
- 
--static const char * const fix_parents[] __initconst = {
-+static const char * const fix_parents[] = {
- 	"rtc32k",
- 	"clk26m",
- 	"univpll_d5",
-@@ -255,7 +258,7 @@ static const char * const fix_parents[] __initconst = {
- 	"univpll1_d8"
- };
- 
--static const char * const vdec_parents[] __initconst = {
-+static const char * const vdec_parents[] = {
- 	"clk26m",
- 	"vdecpll",
- 	"clkph_mck",
-@@ -274,13 +277,13 @@ static const char * const vdec_parents[] __initconst = {
- 	"lvdspll"
- };
- 
--static const char * const ddrphycfg_parents[] __initconst = {
-+static const char * const ddrphycfg_parents[] = {
- 	"clk26m",
- 	"axi_sel",
- 	"syspll_d12"
- };
- 
--static const char * const dpilvds_parents[] __initconst = {
-+static const char * const dpilvds_parents[] = {
- 	"clk26m",
- 	"lvdspll",
- 	"lvdspll_d2",
-@@ -288,7 +291,7 @@ static const char * const dpilvds_parents[] __initconst = {
- 	"lvdspll_d8"
- };
- 
--static const char * const pmicspi_parents[] __initconst = {
-+static const char * const pmicspi_parents[] = {
- 	"clk26m",
- 	"univpll2_d6",
- 	"syspll_d8",
-@@ -299,14 +302,14 @@ static const char * const pmicspi_parents[] __initconst = {
- 	"syspll_d24"
- };
- 
--static const char * const smi_mfg_as_parents[] __initconst = {
-+static const char * const smi_mfg_as_parents[] = {
- 	"clk26m",
- 	"smi_sel",
- 	"mfg_sel",
- 	"mem_sel"
- };
- 
--static const char * const gcpu_parents[] __initconst = {
-+static const char * const gcpu_parents[] = {
- 	"clk26m",
- 	"syspll_d4",
- 	"univpll_d7",
-@@ -314,14 +317,14 @@ static const char * const gcpu_parents[] __initconst = {
- 	"syspll_d6"
- };
- 
--static const char * const dpi1_parents[] __initconst = {
-+static const char * const dpi1_parents[] = {
- 	"clk26m",
- 	"tvhdmi_h_ck",
- 	"tvhdmi_d2",
- 	"tvhdmi_d4"
- };
- 
--static const char * const cci_parents[] __initconst = {
-+static const char * const cci_parents[] = {
- 	"clk26m",
- 	"mainpll_537p3m",
- 	"univpll_d3",
-@@ -330,7 +333,7 @@ static const char * const cci_parents[] __initconst = {
- 	"syspll_d5"
- };
- 
--static const char * const apll_parents[] __initconst = {
-+static const char * const apll_parents[] = {
- 	"clk26m",
- 	"apll_ck",
- 	"apll_d4",
-@@ -339,14 +342,14 @@ static const char * const apll_parents[] __initconst = {
- 	"apll_d24"
- };
- 
--static const char * const hdmipll_parents[] __initconst = {
-+static const char * const hdmipll_parents[] = {
- 	"clk26m",
- 	"hdmitx_clkdig_cts",
- 	"hdmitx_clkdig_d2",
- 	"hdmitx_clkdig_d3"
- };
- 
--static const struct mtk_composite top_muxes[] __initconst = {
-+static const struct mtk_composite top_muxes[] = {
- 	/* CLK_CFG_0 */
- 	MUX_GATE(CLK_TOP_AXI_SEL, "axi_sel", axi_parents,
- 		0x0140, 0, 3, INVALID_MUX_GATE_BIT),
-@@ -406,7 +409,8 @@ static const struct mtk_gate_regs infra_cg_regs = {
- 	GATE_MTK_FLAGS(_id, _name, _parent, &infra_cg_regs, _shift,	\
- 		       &mtk_clk_gate_ops_setclr, CLK_IS_CRITICAL)
- 
--static const struct mtk_gate infra_clks[] __initconst = {
-+static const struct mtk_gate infra_clks[] = {
-+	GATE_DUMMY(CLK_DUMMY, "infra_dummy"),
- 	GATE_ICG(CLK_INFRA_PMIC_WRAP, "pmic_wrap_ck", "axi_sel", 23),
- 	GATE_ICG(CLK_INFRA_PMICSPI, "pmicspi_ck", "pmicspi_sel", 22),
- 	GATE_ICG(CLK_INFRA_CCIF1_AP_CTRL, "ccif1_ap_ctrl", "axi_sel", 21),
-@@ -440,7 +444,8 @@ static const struct mtk_gate_regs peri1_cg_regs = {
- #define GATE_PERI1(_id, _name, _parent, _shift)	\
- 	GATE_MTK(_id, _name, _parent, &peri1_cg_regs, _shift, &mtk_clk_gate_ops_setclr)
- 
--static const struct mtk_gate peri_gates[] __initconst = {
-+static const struct mtk_gate peri_gates[] = {
-+	GATE_DUMMY(CLK_DUMMY, "peri_dummy"),
- 	/* PERI0 */
- 	GATE_PERI0(CLK_PERI_I2C5, "i2c5_ck", "axi_sel", 31),
- 	GATE_PERI0(CLK_PERI_I2C4, "i2c4_ck", "axi_sel", 30),
-@@ -486,12 +491,12 @@ static const struct mtk_gate peri_gates[] __initconst = {
- 	GATE_PERI1(CLK_PERI_I2C6, "i2c6_ck", "axi_sel", 0),
- };
- 
--static const char * const uart_ck_sel_parents[] __initconst = {
-+static const char * const uart_ck_sel_parents[] = {
- 	"clk26m",
- 	"uart_sel",
- };
- 
--static const struct mtk_composite peri_clks[] __initconst = {
-+static const struct mtk_composite peri_clks[] = {
- 	MUX(CLK_PERI_UART0_SEL, "uart0_ck_sel", uart_ck_sel_parents, 0x40c, 0, 1),
- 	MUX(CLK_PERI_UART1_SEL, "uart1_ck_sel", uart_ck_sel_parents, 0x40c, 1, 1),
- 	MUX(CLK_PERI_UART2_SEL, "uart2_ck_sel", uart_ck_sel_parents, 0x40c, 2, 1),
-@@ -516,77 +521,46 @@ static const struct mtk_clk_rst_desc clk_rst_desc[] = {
+ #define phylink_printk(level, pl, fmt, ...) \
+@@ -1509,6 +1511,7 @@ struct phylink *phylink_create(struct phylink_config *config,
+ 		return ERR_PTR(-EINVAL);
  	}
- };
  
--static void __init mtk_topckgen_init(struct device_node *node)
--{
--	struct clk_hw_onecell_data *clk_data;
--	void __iomem *base;
--	int r;
--
--	base = of_iomap(node, 0);
--	if (!base) {
--		pr_err("%s(): ioremap failed\n", __func__);
--		return;
--	}
-+static const struct mtk_clk_desc infra_desc = {
-+	.clks = infra_clks,
-+	.num_clks = ARRAY_SIZE(infra_clks),
-+	.rst_desc = &clk_rst_desc[0],
-+};
++	pl->mac_resume_phy_separately = false;
+ 	pl->using_mac_select_pcs = using_mac_select_pcs;
+ 	pl->phy_state.interface = iface;
+ 	pl->link_interface = iface;
+@@ -1942,8 +1945,12 @@ void phylink_start(struct phylink *pl)
+ 	}
+ 	if (poll)
+ 		mod_timer(&pl->link_poll, jiffies + HZ);
+-	if (pl->phydev)
+-		phy_start(pl->phydev);
++	if (pl->phydev) {
++		if (!pl->mac_resume_phy_separately)
++			phy_start(pl->phydev);
++		else
++			pl->mac_resume_phy_separately = false;
++	}
+ 	if (pl->sfp_bus)
+ 		sfp_upstream_start(pl->sfp_bus);
+ }
+@@ -2023,6 +2030,30 @@ void phylink_suspend(struct phylink *pl, bool mac_wol)
+ }
+ EXPORT_SYMBOL_GPL(phylink_suspend);
  
--	clk_data = mtk_alloc_clk_data(CLK_TOP_NR_CLK);
--
--	mtk_clk_register_factors(top_divs, ARRAY_SIZE(top_divs), clk_data);
--	mtk_clk_register_composites(NULL, top_muxes,
--				    ARRAY_SIZE(top_muxes), base,
--				    &mt8135_clk_lock, clk_data);
--
--	r = of_clk_add_hw_provider(node, of_clk_hw_onecell_get, clk_data);
--	if (r)
--		pr_err("%s(): could not register clock provider: %d\n",
--			__func__, r);
--}
--CLK_OF_DECLARE(mtk_topckgen, "mediatek,mt8135-topckgen", mtk_topckgen_init);
--
--static void __init mtk_infrasys_init(struct device_node *node)
--{
--	struct clk_hw_onecell_data *clk_data;
--	int r;
--
--	clk_data = mtk_alloc_clk_data(CLK_INFRA_NR_CLK);
--
--	mtk_clk_register_gates(NULL, node, infra_clks,
--			       ARRAY_SIZE(infra_clks), clk_data);
--
--	r = of_clk_add_hw_provider(node, of_clk_hw_onecell_get, clk_data);
--	if (r)
--		pr_err("%s(): could not register clock provider: %d\n",
--			__func__, r);
--
--	mtk_register_reset_controller(node, &clk_rst_desc[0]);
--}
--CLK_OF_DECLARE(mtk_infrasys, "mediatek,mt8135-infracfg", mtk_infrasys_init);
--
--static void __init mtk_pericfg_init(struct device_node *node)
--{
--	struct clk_hw_onecell_data *clk_data;
--	int r;
--	void __iomem *base;
--
--	base = of_iomap(node, 0);
--	if (!base) {
--		pr_err("%s(): ioremap failed\n", __func__);
--		return;
--	}
-+static const struct mtk_clk_desc peri_desc = {
-+	.clks = peri_gates,
-+	.num_clks = ARRAY_SIZE(peri_gates),
-+	.composite_clks = peri_clks,
-+	.num_composite_clks = ARRAY_SIZE(peri_clks),
-+	.clk_lock = &mt8135_clk_lock,
-+	.rst_desc = &clk_rst_desc[1],
-+};
++/**
++ * phylink_phy_resume() - resume PHY alone
++ * @pl: a pointer to a &struct phylink returned from phylink_create()
++ *
++ * In the MAC driver using phylink, if the MAC needs the clock of the PHY
++ * when it resumes, it can call this function to resume the PHY separately.
++ * Then proceed to MAC resume operations.
++ * 
++ * Note: This function MUST ONLY be called before calling phylink_start()
++ *       in the MAC resume function.
++ */
++void phylink_phy_resume(struct phylink *pl)
++{
++	ASSERT_RTNL();
++
++	if (!test_bit(PHYLINK_DISABLE_MAC_WOL, &pl->phylink_disable_state) &&
++	    pl->phydev) {
++		phy_start(pl->phydev);
++		pl->mac_resume_phy_separately = true;
++	}
++
++}
++EXPORT_SYMBOL_GPL(phylink_phy_resume);
++
+ /**
+  * phylink_resume() - handle a network device resume event
+  * @pl: a pointer to a &struct phylink returned from phylink_create()
+diff --git a/include/linux/phylink.h b/include/linux/phylink.h
+index c492c26202b5..6edfab5f754c 100644
+--- a/include/linux/phylink.h
++++ b/include/linux/phylink.h
+@@ -589,6 +589,7 @@ void phylink_stop(struct phylink *);
  
--	clk_data = mtk_alloc_clk_data(CLK_PERI_NR_CLK);
-+static const struct mtk_clk_desc topck_desc = {
-+	.factor_clks = top_divs,
-+	.num_factor_clks = ARRAY_SIZE(top_divs),
-+	.composite_clks = top_muxes,
-+	.num_composite_clks = ARRAY_SIZE(top_muxes),
-+	.clk_lock = &mt8135_clk_lock,
-+};
+ void phylink_suspend(struct phylink *pl, bool mac_wol);
+ void phylink_resume(struct phylink *pl);
++void phylink_phy_resume(struct phylink *pl);
  
--	mtk_clk_register_gates(NULL, node, peri_gates,
--			       ARRAY_SIZE(peri_gates), clk_data);
--	mtk_clk_register_composites(NULL, peri_clks,
--				    ARRAY_SIZE(peri_clks), base,
--				    &mt8135_clk_lock, clk_data);
-+static const struct of_device_id of_match_clk_mt8135[] = {
-+	{ .compatible = "mediatek,mt8135-infracfg", .data = &infra_desc },
-+	{ .compatible = "mediatek,mt8135-pericfg", .data = &peri_desc },
-+	{ .compatible = "mediatek,mt8135-topckgen", .data = &topck_desc },
-+	{ /* sentinel */ }
-+};
-+MODULE_DEVICE_TABLE(of, of_match_clk_mt8135);
- 
--	r = of_clk_add_hw_provider(node, of_clk_hw_onecell_get, clk_data);
--	if (r)
--		pr_err("%s(): could not register clock provider: %d\n",
--			__func__, r);
-+static struct platform_driver clk_mt8135_drv = {
-+	.driver = {
-+		.name = "clk-mt8135",
-+		.of_match_table = of_match_clk_mt8135,
-+	},
-+	.probe = mtk_clk_simple_probe,
-+	.remove = mtk_clk_simple_remove,
-+};
-+module_platform_driver(clk_mt8135_drv);
- 
--	mtk_register_reset_controller(node, &clk_rst_desc[1]);
--}
--CLK_OF_DECLARE(mtk_pericfg, "mediatek,mt8135-pericfg", mtk_pericfg_init);
-+MODULE_DESCRIPTION("MediaTek MT8135 clocks driver");
- MODULE_LICENSE("GPL");
+ void phylink_ethtool_get_wol(struct phylink *, struct ethtool_wolinfo *);
+ int phylink_ethtool_set_wol(struct phylink *, struct ethtool_wolinfo *);
 -- 
-2.39.2
+2.34.1
 
