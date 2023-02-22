@@ -2,147 +2,172 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7BDA269FA2B
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Feb 2023 18:28:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D108F69FA33
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Feb 2023 18:29:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231896AbjBVR2e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Feb 2023 12:28:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43730 "EHLO
+        id S232225AbjBVR30 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Feb 2023 12:29:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44672 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229564AbjBVR2b (ORCPT
+        with ESMTP id S229564AbjBVR3Z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Feb 2023 12:28:31 -0500
+        Wed, 22 Feb 2023 12:29:25 -0500
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 413F523127
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Feb 2023 09:27:42 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 734522006F
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Feb 2023 09:28:38 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1677086861;
+        s=mimecast20190719; t=1677086917;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=SzSur+FSaYUJcIGyahlfWtEgRpcKvg8gms7yhet56SU=;
-        b=Wgm7JyRqDs5f1EStE2oFY5wJdMM4WJrD9nTBsCGHgAgt2VngnRY3rvEyL/esSiocFMpqiW
-        k+tydI6PUL5zatREzFX5ICxnJskGOlqz+Sw+4prVOlLb3vDAmeSfVKJ9X9nc7v/d10+1qK
-        Y84EPS5vjMzu3hiJCoFNSLtdCoEKa3g=
-Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
- [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=lQEMvrvrwWUFc87bAMj47uqR0LzAryMK3MqNTl4bkt8=;
+        b=dSedYZt6aLf5XOhiLyiNdcULTnakCpGLAouoWNzJtiGB5+59Z18oNEYMAurbTVt5oijBDK
+        IxpjBntfGs3o4pR5wr9gDJDO2IxNdCCKbUxCEeXZUN/O8ats9bMPfibCbunpsCxe9FzU+a
+        Kc2OWq1FczU7OPBOWl/+Da3kbtIi+d4=
+Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com
+ [209.85.208.71]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-274-y9jk1l4RMKOE9ByXXMA2ZA-1; Wed, 22 Feb 2023 12:27:40 -0500
-X-MC-Unique: y9jk1l4RMKOE9ByXXMA2ZA-1
-Received: by mail-wm1-f70.google.com with SMTP id e22-20020a05600c219600b003e000facbb1so3758880wme.9
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Feb 2023 09:27:39 -0800 (PST)
+ us-mta-452-91ywzdvUP7C3GF7f7IF_1A-1; Wed, 22 Feb 2023 12:28:33 -0500
+X-MC-Unique: 91ywzdvUP7C3GF7f7IF_1A-1
+Received: by mail-ed1-f71.google.com with SMTP id ee6-20020a056402290600b004ad51f8fc36so11622184edb.22
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Feb 2023 09:28:33 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:in-reply-to:organization:from:references
          :cc:to:content-language:subject:user-agent:mime-version:date
          :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=SzSur+FSaYUJcIGyahlfWtEgRpcKvg8gms7yhet56SU=;
-        b=oF+RWiaKrh1ymlnPxYsvHuJ32VdmQ7jSewmo3P//s/c/LTWwoHJv2z46MFudQg5UOS
-         uaKBiFpdPepdPAubnLaKtxa1spv7NkGF1dfFsW/VdoWe5waqZU6Za4UAAu/xqru/DUwd
-         4eO7KQjE7QorlLAEpSwe0/VUDXeeHMbKLtjTNdA+IqD4gHZ1Qp/vSyr3pOdh7jQMI21W
-         3ILp5HvdEx3jcF1OqC3ZC+YNWyjrYwBty0lCUBa89VVi3RdoVOUfuXnOwg5oT19KZqUG
-         1PGmzjCZhv42qSBrFiPM+Yd7Lc+ZlQLeBooiInuffwkJnDFOJmDjIx8o+zfr/pshDJ67
-         CgQQ==
-X-Gm-Message-State: AO0yUKXFnX5BD6YynQZYrPoOteccL5ra+7EVEqNXz50OXVfxsRCdXVnW
-        moinH+lwP4aT+S1oWJShCM3NAZFwWe1ew1NnwHcxv2+tVdpscPW20whCqn6rjFQzGjvrL+ZnZYp
-        v4avsEvYzGPlqiEAcRrIObJ6K
-X-Received: by 2002:a05:600c:2b0f:b0:3dc:4633:9844 with SMTP id y15-20020a05600c2b0f00b003dc46339844mr6416547wme.17.1677086858686;
-        Wed, 22 Feb 2023 09:27:38 -0800 (PST)
-X-Google-Smtp-Source: AK7set+2ColwpBX2YIJ7Q58//QCtiLzANp/eE+ZgjuRgvuBMvs+hGqRsuXh8po64HNr5TiB7HD48GA==
-X-Received: by 2002:a05:600c:2b0f:b0:3dc:4633:9844 with SMTP id y15-20020a05600c2b0f00b003dc46339844mr6416496wme.17.1677086858276;
-        Wed, 22 Feb 2023 09:27:38 -0800 (PST)
-Received: from ?IPV6:2003:cb:c704:a100:95ad:6325:131:6b1d? (p200300cbc704a10095ad632501316b1d.dip0.t-ipconnect.de. [2003:cb:c704:a100:95ad:6325:131:6b1d])
-        by smtp.gmail.com with ESMTPSA id ay14-20020a05600c1e0e00b003e20cf0408esm9612340wmb.40.2023.02.22.09.27.36
+        bh=lQEMvrvrwWUFc87bAMj47uqR0LzAryMK3MqNTl4bkt8=;
+        b=NWpua6PXlf9pX+WB0Zn5/oVFj8Ax6lJcgMfpCWWgOeHoTbofl4tgagu0eMwaFPxTrl
+         OFGbr7c6XUxg79VyxBwGPrrx8J9ApvUurdh0vtI24zsqvb4IaVgkqVtCuTqFSH00XCd3
+         Og6RGTqPil/esDynbbSDoG8nlJpN7f7Y9vVTwYYaVD0MJsSjIsv7X83yfB0iRyxyd2vK
+         i+OBXD05YYP8p+uCTZyTmy7ir0YSxViZO1GWrWOVuuBcW91uZKhOg7pdQ/JtdED0qsTa
+         dV5v+Gy0hozg75s4kHK2NAROdZaf/M+i1uQHLAJtYicIA/MFnQKc1AlOrt9iI/lTg5i6
+         wnnw==
+X-Gm-Message-State: AO0yUKX+y330jx1ue2NLnP+G0uFfmTacqk/7Yk6t1vjlV9S/YZpL4rvR
+        wFbQgcnkPeeHvnP1nCdp8UT81gx/vwS1XXrW+Qios+I3z+iu86XRM78LDkNEJ6m/Xs1N7dE+Ij+
+        lw/moKpWV/kQeo8odsvp4jxYg
+X-Received: by 2002:a17:907:9849:b0:8b2:37b5:cc9 with SMTP id jj9-20020a170907984900b008b237b50cc9mr18174565ejc.17.1677086912700;
+        Wed, 22 Feb 2023 09:28:32 -0800 (PST)
+X-Google-Smtp-Source: AK7set94oya+ivN5E0zBN+ZdUeHEWzDxgBB5z1krpgZihRLpdYMOicX3tApmaLmAqifgXi7BlCrlcA==
+X-Received: by 2002:a17:907:9849:b0:8b2:37b5:cc9 with SMTP id jj9-20020a170907984900b008b237b50cc9mr18174547ejc.17.1677086912440;
+        Wed, 22 Feb 2023 09:28:32 -0800 (PST)
+Received: from ?IPV6:2a02:810d:4b3f:de78:642:1aff:fe31:a15c? ([2a02:810d:4b3f:de78:642:1aff:fe31:a15c])
+        by smtp.gmail.com with ESMTPSA id z10-20020a17090674ca00b008ec43ae626csm16880ejl.167.2023.02.22.09.28.30
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 22 Feb 2023 09:27:37 -0800 (PST)
-Message-ID: <62b48389-0e61-17da-6a72-d4a16e003352@redhat.com>
-Date:   Wed, 22 Feb 2023 18:27:35 +0100
+        Wed, 22 Feb 2023 09:28:31 -0800 (PST)
+Message-ID: <99d72837-894a-44c0-4be5-e20755ebab10@redhat.com>
+Date:   Wed, 22 Feb 2023 18:28:28 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.2
-Subject: Re: [PATCH v6 14/41] x86/mm: Introduce _PAGE_SAVED_DIRTY
+ Thunderbird/102.7.1
+Subject: Re: [PATCH drm-next v2 04/16] maple_tree: add flag MT_FLAGS_LOCK_NONE
 Content-Language: en-US
-To:     Dave Hansen <dave.hansen@intel.com>,
-        "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>,
-        "bsingharora@gmail.com" <bsingharora@gmail.com>,
-        "hpa@zytor.com" <hpa@zytor.com>,
-        "Syromiatnikov, Eugene" <esyr@redhat.com>,
-        "peterz@infradead.org" <peterz@infradead.org>,
-        "rdunlap@infradead.org" <rdunlap@infradead.org>,
-        "keescook@chromium.org" <keescook@chromium.org>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>,
-        "Eranian, Stephane" <eranian@google.com>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "fweimer@redhat.com" <fweimer@redhat.com>,
-        "nadav.amit@gmail.com" <nadav.amit@gmail.com>,
-        "jannh@google.com" <jannh@google.com>,
-        "dethoma@microsoft.com" <dethoma@microsoft.com>,
-        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
-        "kcc@google.com" <kcc@google.com>, "pavel@ucw.cz" <pavel@ucw.cz>,
-        "oleg@redhat.com" <oleg@redhat.com>,
-        "hjl.tools@gmail.com" <hjl.tools@gmail.com>,
-        "bp@alien8.de" <bp@alien8.de>,
-        "Lutomirski, Andy" <luto@kernel.org>,
-        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-        "arnd@arndb.de" <arnd@arndb.de>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "Schimpe, Christina" <christina.schimpe@intel.com>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "mike.kravetz@oracle.com" <mike.kravetz@oracle.com>,
-        "Yang, Weijiang" <weijiang.yang@intel.com>,
-        "debug@rivosinc.com" <debug@rivosinc.com>,
-        "jamorris@linux.microsoft.com" <jamorris@linux.microsoft.com>,
-        "john.allen@amd.com" <john.allen@amd.com>,
-        "rppt@kernel.org" <rppt@kernel.org>,
-        "andrew.cooper3@citrix.com" <andrew.cooper3@citrix.com>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "corbet@lwn.net" <corbet@lwn.net>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-api@vger.kernel.org" <linux-api@vger.kernel.org>,
-        "gorcunov@gmail.com" <gorcunov@gmail.com>,
-        "akpm@linux-foundation.org" <akpm@linux-foundation.org>
-Cc:     "Yu, Yu-cheng" <yu-cheng.yu@intel.com>
-References: <20230218211433.26859-1-rick.p.edgecombe@intel.com>
- <20230218211433.26859-15-rick.p.edgecombe@intel.com>
- <70681787-0d33-a9ed-7f2a-747be1490932@redhat.com>
- <6f19d7c7ad9f61fa8f6c9bd09d24524dbe17463f.camel@intel.com>
- <6e1201f5-da25-6040-8230-c84856221838@redhat.com>
- <273414f5-2a7c-3cc0-dc27-d07baaa5787b@intel.com>
- <52f001ef-a409-4f33-f28f-02e806ef305a@redhat.com>
- <74b91f3e-17f7-6d89-a7d1-7373101bf8b7@intel.com>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-In-Reply-To: <74b91f3e-17f7-6d89-a7d1-7373101bf8b7@intel.com>
+To:     Matthew Wilcox <willy@infradead.org>
+Cc:     matthew.brost@intel.com, dri-devel@lists.freedesktop.org,
+        corbet@lwn.net, nouveau@lists.freedesktop.org, ogabbay@kernel.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, boris.brezillon@collabora.com,
+        bskeggs@redhat.com, tzimmermann@suse.de, Liam.Howlett@oracle.com,
+        bagasdotme@gmail.com, christian.koenig@amd.com,
+        jason@jlekstrand.net
+References: <20230217134422.14116-1-dakr@redhat.com>
+ <20230217134422.14116-5-dakr@redhat.com>
+ <Y+/Xn11dfdn7SfBD@casper.infradead.org>
+ <3bb02ec3-4d19-9135-cabc-26ed210f7396@redhat.com>
+ <Y/ONYhyDCPEYH1ml@casper.infradead.org>
+ <e43f6acc-175d-1031-c4a2-67a6f1741866@redhat.com>
+ <Y/PZH/q2Xsr3od9m@casper.infradead.org> <Y/TXPasvkhtGiR+w@pollux>
+ <Y/UN50hCaRe+8ZCg@casper.infradead.org>
+ <91d34e47-10f6-8278-ef4c-72cdfa24e038@redhat.com>
+ <Y/ZDjJmc4aGRGyVn@casper.infradead.org>
+From:   Danilo Krummrich <dakr@redhat.com>
+Organization: RedHat
+In-Reply-To: <Y/ZDjJmc4aGRGyVn@casper.infradead.org>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
         RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 22.02.23 18:23, Dave Hansen wrote:
-> On 2/22/23 01:05, David Hildenbrand wrote:
->> This series wasn't in -next and we're in the merge window. Is the plan
->> to still include it into this merge window?
+On 2/22/23 17:32, Matthew Wilcox wrote:
+> On Wed, Feb 22, 2023 at 05:11:34PM +0100, Danilo Krummrich wrote:
+>> On 2/21/23 19:31, Matthew Wilcox wrote:
+>>> on tue, feb 21, 2023 at 03:37:49pm +0100, danilo krummrich wrote:
+>>>> It feels a bit weird that I, as a user of the API, would need to lock certain
+>>>> (or all?) mas_*() functions with the internal spinlock in order to protect
+>>>> (future) internal features of the tree, such as the slab cache defragmentation
+>>>> you mentioned. Because from my perspective, as the generic component that tells
+>>>> it's users (the drivers) to take care of locking VA space operations (and hence
+>>>> tree operations) I don't have an own purpose of this internal spinlock, right?
+>>>
+>>> You don't ... but we can't know that.
+>>
+>> Thanks for the clarification. I think I should now know what to for the
+>> GPUVA manager in terms of locking the maple tree in general.
+>>
+>> Though I still have very limited insights on the maple tree I want to share
+>> some further thoughts.
+>>
+>>  From what I got so far it really seems to me that it would be better to just
+>> take the internal spinlock for both APIs (normal and advanced) whenever you
+>> need to internally.
 > 
-> No way.  It's 6.4 material at the earliest.
+> No.  Really, no.  The point of the advanced API is that it's a toolbox
+> for doing the operation you want, but isn't a generic enough operation
+> to be part of the normal API.
+
+Again the disclaimer, I'm just sharing my thoughts from the perspective 
+of a user from a generic tree API.
+
+For me it feels like - and this purely is an assumption, hence please 
+correct me if I'm wrong on that - you consider the advanced API to be 
+more of a collection of internal functions not *really* being meant to 
+be used by arbitrary users and maybe even being slightly tied to mm 
+since it originated there?
+
+However, from my external perspective I see it the following way.
+
+Even if an operation is not part of the 'normal API', but an API called 
+'advanced API', it still is a generic API operation being exposed to 
+arbitrary users. However, my point is not (at least not exclusively) 
+that I do not consider this to be safe enough or something.
+
+Its just that I think that when the API *enforces* the user to take an 
+internal lock at certain places it can also just take the lock itself no 
+matter what the API is being called. Especially when one can't rely on 
+this lock at all for other (external) purposes anyways because the 
+implementation behind the API is free to drop the lock whenever it needs to.
+
+> To take an example from the radix
+> tree days, in the page cache, we need to walk a range of the tree,
+> looking for any entries that are marked as DIRTY, clear the DIRTY
+> mark and set the TOWRITE mark.  There was a horrendous function called
+> radix_tree_range_tag_if_tagged() which did exactly this.  Now look at
+> the implementation of tag_pages_for_writeback(); it's a simple loop over
+> a range with an occasional pause to check whether we need to reschedule.
 > 
-> I'm just saying to Rick not to worry _too_ much about earlier feedback
-> from me if folks have more recent review feedback.
+> But that means you need to know how to use the toolbox.  Some of the
+> tools are dangerous and you can cut yourself on them.
+> 
+>> Another plus would probably be maintainability. Once you got quite a few
+>> maple tree users using external locks (either in the sense of calling
+> 
+> I don't want maple tree users using external locks.  That exists
+> because it was the only reasonable way of converting the VMA tree
+> from the rbtree to the maple tree.  I intend to get rid of
+> mt_set_external_lock().  The VMAs are eventually going to be protected
+> by the internal spinlock.
+> 
 
-Great. So I hope we can get this into -next soon and that we'll only get 
-non-earth-shattering feedback so this can land in 6.4.
-
--- 
-Thanks,
-
-David / dhildenb
+But the argument also holds for the case of using the advanced API and 
+using the internal spinlock. If your requirements on locking change in 
+the future every user implementation must be re-validated.
 
