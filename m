@@ -2,159 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6CB3369F84D
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Feb 2023 16:49:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E73E769F85B
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Feb 2023 16:54:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232494AbjBVPtm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Feb 2023 10:49:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42346 "EHLO
+        id S232665AbjBVPyl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Feb 2023 10:54:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45616 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231764AbjBVPtl (ORCPT
+        with ESMTP id S232494AbjBVPyj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Feb 2023 10:49:41 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9977C31E36
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Feb 2023 07:49:02 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1677080941;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=GVZBOKGD+V7dnhmBUhnfKIR5wlVaDW+yBjCOv4O7PbE=;
-        b=Mh78JGukovE6zBFCTleVgkAKsid+TDEa/kJszmjqjpLL6x35m4cA3XtHEYaPwFRhc7UHVr
-        B32xnnwUZBQe1v1rH3967+v5MYfMBCh3Gu4RpINYg5o7gzDT3DIk9mBMzQGvvP6ilpCA5b
-        uVU3nQyIXbJ63a7KnZVDAt5sGtAvk0w=
-Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
- [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-613-f99Q36ioNYWIWMSA6LCkGA-1; Wed, 22 Feb 2023 10:49:00 -0500
-X-MC-Unique: f99Q36ioNYWIWMSA6LCkGA-1
-Received: by mail-wm1-f71.google.com with SMTP id c7-20020a7bc847000000b003e00be23a70so3685635wml.2
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Feb 2023 07:48:59 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:organization:from:references
-         :cc:to:content-language:subject:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=GVZBOKGD+V7dnhmBUhnfKIR5wlVaDW+yBjCOv4O7PbE=;
-        b=UJcyMvN7fG8ke6LR5uQikpU5Fxe+M8zHXlQXtg52TOSTJ2ccbIfpGk4MGwGqzIF91M
-         Fyscdr2MiStc2qD+4HWGJRnqS2HH6WfpKnBSLktoKYxtftvBJY5R4kSCQNQnZ2TYIHoc
-         ECibMS+kM/JNrkmALhHcGougYMz5LIBQuNNY3YFDaCk0g6oFSEtY8sibTt3aFaO8ANJq
-         m+Ut05bNOVshXSzjgiPXiwCidW3lZnXDAPLRdsY0FWozZk71AKl5+AkwoYrmn+tTkeru
-         tyaaGYSjb3Y1qCtM+294a24FAt+99CfP3lAGvIHwKrDzVyC6pg0A1Rkri+c/Itgo8p0S
-         mBYQ==
-X-Gm-Message-State: AO0yUKXmXuMBUMRerZDDpgmz4AgKOdpL9kLM04cNKfzZ6cKdU4W6wERQ
-        YdzVXMwzJfncZjiBQ75JvZnIbcniXdc3WpCB3xLHwkX28Mhd3yfSwhoy5Vra2ht2SSishcMtf4j
-        le4Vu0X6f/eyc+N+nSkN63WVX
-X-Received: by 2002:adf:e505:0:b0:2c5:56ab:ee5b with SMTP id j5-20020adfe505000000b002c556abee5bmr7765716wrm.48.1677080938434;
-        Wed, 22 Feb 2023 07:48:58 -0800 (PST)
-X-Google-Smtp-Source: AK7set/2d8R8uayDlkM/vphgzaY3W11nRhaJF1cal3UEr+GSyZKqWne3weKffIQjki6hs0rJ/X8gKQ==
-X-Received: by 2002:adf:e505:0:b0:2c5:56ab:ee5b with SMTP id j5-20020adfe505000000b002c556abee5bmr7765692wrm.48.1677080937997;
-        Wed, 22 Feb 2023 07:48:57 -0800 (PST)
-Received: from ?IPV6:2003:cb:c704:a100:95ad:6325:131:6b1d? (p200300cbc704a10095ad632501316b1d.dip0.t-ipconnect.de. [2003:cb:c704:a100:95ad:6325:131:6b1d])
-        by smtp.gmail.com with ESMTPSA id o24-20020a5d58d8000000b002c7066a6f77sm4586083wrf.31.2023.02.22.07.48.56
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 22 Feb 2023 07:48:57 -0800 (PST)
-Message-ID: <28a7208c-939c-19ea-1cf0-298444dffe85@redhat.com>
-Date:   Wed, 22 Feb 2023 16:48:56 +0100
+        Wed, 22 Feb 2023 10:54:39 -0500
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E32A3B3EA;
+        Wed, 22 Feb 2023 07:54:38 -0800 (PST)
+Received: from maxwell ([109.42.114.8]) by mrelayeu.kundenserver.de (mreue012
+ [213.165.67.97]) with ESMTPSA (Nemesis) id 1MxYT3-1ocJz31HJ3-00xpU3; Wed, 22
+ Feb 2023 16:52:28 +0100
+References: <87y1oq5es0.fsf@henneberg-systemdesign.com>
+ <Y/XbXwKYpy3+pTah@corigine.com>
+User-agent: mu4e 1.8.14; emacs 28.2
+From:   Henneberg - Systemdesign <lists@henneberg-systemdesign.com>
+To:     Simon Horman <simon.horman@corigine.com>
+Cc:     Giuseppe Cavallaro <peppe.cavallaro@st.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Jose Abreu <joabreu@synopsys.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Ong Boon Leong <boon.leong.ong@intel.com>,
+        netdev@vger.kernel.org, linux-stm32@st-md-mailman.stormreply.com,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH net V3] net: stmmac: Premature loop termination check
+ was ignored
+Date:   Wed, 22 Feb 2023 16:49:55 +0100
+In-reply-to: <Y/XbXwKYpy3+pTah@corigine.com>
+Message-ID: <87lekp66ko.fsf@henneberg-systemdesign.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.2
-Subject: Re: [PATCH v2 00/46] hugetlb: introduce HugeTLB high-granularity
- mapping
-Content-Language: en-US
-To:     Mike Kravetz <mike.kravetz@oracle.com>,
-        James Houghton <jthoughton@google.com>
-Cc:     Muchun Song <songmuchun@bytedance.com>,
-        Peter Xu <peterx@redhat.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        David Rientjes <rientjes@google.com>,
-        Axel Rasmussen <axelrasmussen@google.com>,
-        Mina Almasry <almasrymina@google.com>,
-        Zach O'Keefe <zokeefe@google.com>,
-        Manish Mishra <manish.mishra@nutanix.com>,
-        Naoya Horiguchi <naoya.horiguchi@nec.com>,
-        "Dr . David Alan Gilbert" <dgilbert@redhat.com>,
-        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Baolin Wang <baolin.wang@linux.alibaba.com>,
-        Miaohe Lin <linmiaohe@huawei.com>,
-        Yang Shi <shy828301@gmail.com>,
-        Frank van der Linden <fvdl@google.com>,
-        Jiaqi Yan <jiaqiyan@google.com>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-References: <20230218002819.1486479-1-jthoughton@google.com>
- <Y/U7ngTyPlg2XCRj@monkey>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-In-Reply-To: <Y/U7ngTyPlg2XCRj@monkey>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Provags-ID: V03:K1:EUGFsK4XpAaH7yDm8YNyP0ASKdEARzN+x2SV1AiBuR+LhHCnNaO
+ uQLIPRzr4vwnDQWs/T02m1FrIcZs6wX8ji5EkKXoTyqemxilayzw8e4dPQxNNvDH5F6hhRJ
+ WLPY46dmsHwxpUYcn1KzoXBWo/XbQEQf6TYQNP/H783B9J0FaH7CllbNW6zDbpqlqtNxrIA
+ EovVJLBeRYmf1/+FE/Sgw==
+UI-OutboundReport: notjunk:1;M01:P0:SPFQol5nWp4=;6conbKbuDxwgu7b+mEolyujyQQh
+ 7nEdfqVUyRLezt7Q/BnlStJ1iWpj2h7vbYL4l+gA/g0pchlMhk76uu1iDS/MD/8CYhHUtmGlM
+ un+71UbKucAjzz248yfz+nqetwn5gtmmZ541QT5Cxy3ROGP21+TYIY9VvekKdiOJYDhxSbp1I
+ LCUOhiFW+sI2XlWlO73WgnCwNgse9fuvkCBs0PxDrRLV2gCeFhkKJMPOEPtN02EQwihgIoWb/
+ Odx0rQw5XwNT7x7PNHuLxgujs2t9GfBGtfnArWLhZV3keMKBaupn8PXODPsthtDMboZBfLjLI
+ GdqUaKP4+mucSbnN7jce/2gkwlPKcrm/hxMqxsnoW4I0o7+RSXv6qW7ySofu1PxCb0uuMkFjd
+ 2M+T9K4/+0n00il0+gvQQwcsmgQpcDjjGGlrIqglZg/OULvw1quChWL74+ogItGZok6+5IAJv
+ gpaLVgkOGeHfD0OuUhAsInjJ6+yJ8c4ie3FeB7TdoaVtj8IoZURMxkqB2shQit7IUv57W6iok
+ pFzd0u/uFcN/wCGAXx6+qqdukfrscRjOf5dG9Sy03Tr0L75/hRkS3XBbtzSf1f3fLZt6Xy1+f
+ FM/OoW0uPrVXP4+GH9aBDv35hQrY/SIgEBbpZeVCZDgEkTVohsXJgIzNB/2DVIe0Dg9PuTv9Z
+ 18XhBGxVQ7P2Ycfpi1rfhrDBEEzMRGuyNZsX2IQ35g==
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 21.02.23 22:46, Mike Kravetz wrote:
-> On 02/18/23 00:27, James Houghton wrote:
->> This series introduces the concept of HugeTLB high-granularity mapping
->> (HGM). This series teaches HugeTLB how to map HugeTLB pages at
->> high-granularity, similar to how THPs can be PTE-mapped.
->>
->> Support for HGM in this series is for MAP_SHARED VMAs on x86_64 only. Other
->> architectures and (some) support for MAP_PRIVATE will come later.
->>
->> This series is based on latest mm-unstable (ccd6a73daba9).
->>
->> Notable changes with this series
->> ================================
->>
->>   - hugetlb_add_file_rmap / hugetlb_remove_rmap are added to handle
->>     mapcounting for non-anon hugetlb.
->>   - The mapcounting scheme uses subpages' mapcounts for high-granularity
->>     mappings, but it does not use subpages_mapcount(). This scheme
->>     prevents the HugeTLB VMEMMAP optimization from being used, so it
->>     will be improved in a later series.
->>   - page_add_file_rmap and page_remove_rmap are updated so they can be
->>     used by hugetlb_add_file_rmap / hugetlb_remove_rmap.
->>   - MADV_SPLIT has been added to enable the userspace API changes that
->>     HGM allows for: high-granularity UFFDIO_CONTINUE (and maybe other
->>     changes in the future). MADV_SPLIT does NOT force all the mappings to
->>     be PAGE_SIZE.
->>   - MADV_COLLAPSE is expanded to include HugeTLB mappings.
->>
->> Old versions:
->> v1: https://lore.kernel.org/linux-mm/20230105101844.1893104-1-jthoughton@google.com/
->> RFC v2: https://lore.kernel.org/linux-mm/20221021163703.3218176-1-jthoughton@google.com/
->> RFC v1: https://lore.kernel.org/linux-mm/20220624173656.2033256-1-jthoughton@google.com/
->>
->> Changelog:
->> v1 -> v2 (thanks Peter for all your suggestions!):
->> - Changed mapcount to be more THP-like, and make HGM incompatible with
->>    HVO.
->> - HGM is now disabled by default to leave HVO enabled by default.
-> 
-> I understand the reasoning behind the move to THP-like mapcounting, and the
-> incompatibility with HVO.  However, I just got to patch 5 and realized either
-> HGM or HVO will need to be chosen at kernel build time.  That may not be an
-> issue for cloud providers or others building their own kernels for internal
-> use.  However, distro kernels will need to pick one option or the other.
-> Right now, my Fedora desktop has HVO enabled so it would likely not have
-> HGM enabled.  That is not a big deal for a desktop.
-> 
-> Just curious, do we have distro kernel users that want to use HGM?
 
-Most certainly I would say :)
+Simon Horman <simon.horman@corigine.com> writes:
+
+> On Wed, Feb 22, 2023 at 08:38:28AM +0100, Jochen Henneberg wrote:
+>> 
+>> The premature loop termination check makes sense only in case of the
+>> jump to read_again where the count may have been updated. But
+>> read_again did not include the check.
+>> 
+>> Fixes: bba2556efad6 ("net: stmmac: Enable RX via AF_XDP zero-copy")
+>
+> This commit was included in v5.13
+>
+>> Fixes: ec222003bd94 ("net: stmmac: Prepare to add Split Header support")
+>
+> While this one was included in v5.4
+>
+> It seems to me that each of the above commits correspond to one
+> of the two hunks below. I don't know if that means this
+> patch should be split in two to assist backporting.
+>
+
+I was thinking about this already but the change was so trivial that I
+hesitated to split it into two commits. I wanted I will surely change
+this.
+
+>> Signed-off-by: Jochen Henneberg <jh@henneberg-systemdesign.com>
+>
+> That aside, this looks good to me.
+>
+> Reviewed-by: Simon Horman <simon.horman@corigine.com>
+>
+>> ---
+>> V2: Added fixes tags
+>> V3: Fixed fixes tag format
+>> 
+>>  drivers/net/ethernet/stmicro/stmmac/stmmac_main.c | 4 ++--
+>>  1 file changed, 2 insertions(+), 2 deletions(-)
+>> 
+>> diff --git a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
+>> index 1a5b8dab5e9b..de98c009866a 100644
+>> --- a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
+>> +++ b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
+>> @@ -5031,10 +5031,10 @@ static int stmmac_rx_zc(struct stmmac_priv *priv, int limit, u32 queue)
+>>  			len = 0;
+>>  		}
+>>  
+>> +read_again:
+>>  		if (count >= limit)
+>>  			break;
+>>  
+>> -read_again:
+>>  		buf1_len = 0;
+>>  		entry = next_entry;
+>>  		buf = &rx_q->buf_pool[entry];
+>> @@ -5221,10 +5221,10 @@ static int stmmac_rx(struct stmmac_priv *priv, int limit, u32 queue)
+>>  			len = 0;
+>>  		}
+>>  
+>> +read_again:
+>>  		if (count >= limit)
+>>  			break;
+>>  
+>> -read_again:
+>>  		buf1_len = 0;
+>>  		buf2_len = 0;
+>>  		entry = next_entry;
+>> -- 
+>> 2.39.2
+>> 
+
 
 -- 
-Thanks,
-
-David / dhildenb
-
+Henneberg - Systemdesign
+Jochen Henneberg
+Loehnfeld 26
+21423 Winsen (Luhe)
+--
+Fon: +49 172 160 14 69
+Url: https://www.henneberg-systemdesign.com
