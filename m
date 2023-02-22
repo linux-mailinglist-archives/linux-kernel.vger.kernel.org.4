@@ -2,62 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B646269F5EF
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Feb 2023 14:54:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7981269F5F5
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Feb 2023 14:56:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231147AbjBVNyD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Feb 2023 08:54:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40732 "EHLO
+        id S231206AbjBVN4R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Feb 2023 08:56:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42122 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229615AbjBVNyA (ORCPT
+        with ESMTP id S229615AbjBVN4Q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Feb 2023 08:54:00 -0500
-Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 139A01B56B
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Feb 2023 05:53:59 -0800 (PST)
-Received: by mail-wm1-x32a.google.com with SMTP id o4-20020a05600c4fc400b003e1f5f2a29cso6419685wmq.4
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Feb 2023 05:53:59 -0800 (PST)
+        Wed, 22 Feb 2023 08:56:16 -0500
+Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95E9F34318
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Feb 2023 05:56:13 -0800 (PST)
+Received: by mail-wr1-x434.google.com with SMTP id bt28so1152907wrb.8
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Feb 2023 05:56:13 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-disposition:mime-version:message-id:subject:cc:to:from:date
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=p9RB48KEAWbHAtCefbOrjQ1m5aljxgCXAYZywn/lFIM=;
-        b=PLzHbO3h35jRkYwW/EHAj6BMoqKxrRxiKjxgsIMU5mA11YKLrUby39FipTzQ4DS+3H
-         N5GVR8SnZiVGDOoTVloKjz50DVUWDkk4bmbyUo40YkMeltzeES1avuhX/UYHX3x5wB1J
-         bcYcnFNuGGWg8znml5BY8FUDUO05elTRjAH1DbS33xWGfAO9xfo8aW0zpBJelO1gx/CO
-         N17+WRcCjrRRE5oNBhETja0IhWgk+6frsPHfUbAaYVHAvQ1XKfFvbTfNAyuYWintAPYy
-         c+fFDOYCx9RSGGHpT2ebOgrJ30/88nJBetJQ27fT8tfi1V7bsw0OphCYY2Rw3fAuCA0+
-         or2Q==
+        bh=pfx9GIQthScNznDFCqzH5flRQGeg4eShNoLLTObVoqA=;
+        b=Ha643dO7qOiXprayRf0OAdAt/+8RG80sykrJEsfP9GWJt8VQeVB4fmFnwVCIwAwtdP
+         +KNCzM/C1wuEDeHxEhQ5BFPmOiv3TlJ9l2zcwDLtlI2vkS9/d+BCdQbxBj/zFNOrTix/
+         TOd+VSkQjuBxGyHbEwcMRioKmorTeRuwqyewWEbVzOVTIQzwu/IPRvQhw6KY/Dh9LrL3
+         JmPQyEnw9Ij8mAIiXtmx7DNQRNBLfXd1GXfNyRJ4v7Y1OfCKNZ0CBrR5KrqIHOaJxs8v
+         GTgdKBy6t0ZK0IqxUTphw6APtCGyLm38tXwPU5QAxL1iCFFYRPExfjamJs+8wG/LCxkV
+         MIlQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-disposition:mime-version:message-id:subject:cc:to:from:date
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=p9RB48KEAWbHAtCefbOrjQ1m5aljxgCXAYZywn/lFIM=;
-        b=R9xef2WrKPh/mzxvhAFQNhdoJFYc+UeGwTnrM1iehYY0z1FyRVsp2xG/ZQAM+lMbFz
-         MmApexQepMk1v4Z+SbwOFIUA1tOF5wGG4G7D33fGaF/pzHuYAgpiKF8/CXI3gd3olkRF
-         1aPthbHZcWqTkKzpVa8VH9zrMD81/iGEmkFYQqHn1kZxu2HG0YdrqXilJ7WZCJSP+6Tr
-         le21aFZDDT2Hr0x+dMAbFaQtG6mGqqiXJr0FmAzwkXIWzj+4r6M/0kFuj08bGz/dik/9
-         z7wPpQ/pjholYak+k/EL54VA4yrEoBnHyOABquX2HYcGnbH4IoyYSWStxLiXVTZh/NM5
-         +R7g==
-X-Gm-Message-State: AO0yUKW1NZb2Mh43VnqqWZlGSoiII2xm2yRwUQfeJuiYU89q0xjFEQF9
-        zW4gvUAQop7nNyv3/LC1E68=
-X-Google-Smtp-Source: AK7set9ccwdpRMP992urQgI3oh4x7bVKRvDfDvwGPDIhpMjVMdHkHgjKnsb8bsjTR2L2/tevLzN9KQ==
-X-Received: by 2002:a05:600c:2ed3:b0:3e0:b1:c118 with SMTP id q19-20020a05600c2ed300b003e000b1c118mr6780291wmn.5.1677074037530;
-        Wed, 22 Feb 2023 05:53:57 -0800 (PST)
+        bh=pfx9GIQthScNznDFCqzH5flRQGeg4eShNoLLTObVoqA=;
+        b=zL+fH5lBUt5v7s31pZPQBed3CXg2lwf+9ZPjUZdhSyOm1jqw8u0QUpSWbaRAWeW6Nk
+         kFOqchtD3oo7dEnkbBWUdcc3FX3nfaTOEhMMmjEjqX0gZlodBOQGG4kGSIrj43UJkYza
+         imJpvnvI6tIsp0KhMtYxfIyl/hg5EQpWlk4KiaH/SQV9G8W3OLrIVtltrniLJokswLyL
+         2spTWlcNsti/qLsubq1itArFXj2d3vd6QtsqetYV1VIf6NB5PyL5LgpIVIJu2wykNSTH
+         gyS1VnqB9NdjDj9A2eAAdB23CURKTDe3PVtaxk1m6ta4cO/R9QCq4o5w/bygED00WI8g
+         JSQw==
+X-Gm-Message-State: AO0yUKWXvLVL5ln4bNpgWcSwVW5rReHTIaEFOiYhPHAMcEzmQeoz+cVY
+        CVvJq9M3C2v04PzIgcPALIk=
+X-Google-Smtp-Source: AK7set/BZUgjOOWNxLFNSLaMwtt4XeAzoHzo3TtmzM8CLiXfvOuloxjE/JqxKdWQIMBs/BXixCtbiQ==
+X-Received: by 2002:a5d:5141:0:b0:2c5:9fc4:8844 with SMTP id u1-20020a5d5141000000b002c59fc48844mr7525389wrt.9.1677074172064;
+        Wed, 22 Feb 2023 05:56:12 -0800 (PST)
 Received: from localhost ([102.36.222.112])
-        by smtp.gmail.com with ESMTPSA id v9-20020a05600c444900b003e21f01c426sm7853653wmn.9.2023.02.22.05.53.56
+        by smtp.gmail.com with ESMTPSA id b15-20020a5d4b8f000000b002c561805a4csm9490203wrt.45.2023.02.22.05.56.10
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 22 Feb 2023 05:53:56 -0800 (PST)
-Date:   Wed, 22 Feb 2023 16:53:53 +0300
+        Wed, 22 Feb 2023 05:56:11 -0800 (PST)
+Date:   Wed, 22 Feb 2023 16:56:07 +0300
 From:   Dan Carpenter <error27@gmail.com>
-To:     oe-kbuild@lists.linux.dev, Besar Wicaksono <bwicaksono@nvidia.com>
+To:     oe-kbuild@lists.linux.dev, "Rafael J. Wysocki" <rjw@rjwysocki.net>
 Cc:     lkp@intel.com, oe-kbuild-all@lists.linux.dev,
-        linux-kernel@vger.kernel.org, Will Deacon <will@kernel.org>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>
-Subject: drivers/perf/arm_cspmu/arm_cspmu.c:1075
- arm_cspmu_find_cpu_container() warn: variable dereferenced before check
- 'cpu_dev' (see line 1073)
-Message-ID: <202302191227.kc0V8fM7-lkp@intel.com>
+        linux-kernel@vger.kernel.org
+Subject: arch/arm64/kernel/acpi.c:443 acpi_ffh_address_space_arch_setup()
+ warn: possible memory leak of 'ffh_ctxt'
+Message-ID: <202302191417.dAl9NuE8-lkp@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
@@ -73,47 +71,60 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
 head:   925cf0457d7e62ce08878ffb789189ac08ca8677
-commit: e37dfd65731dc4f001fa7dfa7f705e6840017d5a perf: arm_cspmu: Add support for ARM CoreSight PMU driver
-config: arm64-randconfig-m031-20230219 (https://download.01.org/0day-ci/archive/20230219/202302191227.kc0V8fM7-lkp@intel.com/config)
+commit: 45494d77f279d0420f06376dcf105b23e300c5a4 Merge branches 'acpi-scan', 'acpi-bus', 'acpi-tables' and 'acpi-sysfs'
+config: arm64-randconfig-m031-20230219 (https://download.01.org/0day-ci/archive/20230219/202302191417.dAl9NuE8-lkp@intel.com/config)
 compiler: aarch64-linux-gcc (GCC) 12.1.0
 
 If you fix the issue, kindly add following tag where applicable
 | Reported-by: kernel test robot <lkp@intel.com>
 | Reported-by: Dan Carpenter <error27@gmail.com>
-| Link: https://lore.kernel.org/r/202302191227.kc0V8fM7-lkp@intel.com/
+| Link: https://lore.kernel.org/r/202302191417.dAl9NuE8-lkp@intel.com/
 
-smatch warnings:
-drivers/perf/arm_cspmu/arm_cspmu.c:1075 arm_cspmu_find_cpu_container() warn: variable dereferenced before check 'cpu_dev' (see line 1073)
+New smatch warnings:
+arch/arm64/kernel/acpi.c:443 acpi_ffh_address_space_arch_setup() warn: possible memory leak of 'ffh_ctxt'
 
-vim +/cpu_dev +1075 drivers/perf/arm_cspmu/arm_cspmu.c
+Old smatch warnings:
+arch/arm64/kernel/acpi.c:448 acpi_ffh_address_space_arch_setup() warn: possible memory leak of 'ffh_ctxt'
 
-e37dfd65731dc4 Besar Wicaksono 2022-11-11  1069  static inline int arm_cspmu_find_cpu_container(int cpu, u32 container_uid)
-e37dfd65731dc4 Besar Wicaksono 2022-11-11  1070  {
-e37dfd65731dc4 Besar Wicaksono 2022-11-11  1071  	u32 acpi_uid;
-e37dfd65731dc4 Besar Wicaksono 2022-11-11  1072  	struct device *cpu_dev = get_cpu_device(cpu);
-e37dfd65731dc4 Besar Wicaksono 2022-11-11 @1073  	struct acpi_device *acpi_dev = ACPI_COMPANION(cpu_dev);
-                                                                                                      ^^^^^^^
-Dereference
+vim +/ffh_ctxt +443 arch/arm64/kernel/acpi.c
 
-e37dfd65731dc4 Besar Wicaksono 2022-11-11  1074  
-e37dfd65731dc4 Besar Wicaksono 2022-11-11 @1075  	if (!cpu_dev)
-                                                             ^^^^^^^
-Checked too late.
+1d280ce099db39 Sudeep Holla 2022-11-10  433  int acpi_ffh_address_space_arch_setup(void *handler_ctxt, void **region_ctxt)
+1d280ce099db39 Sudeep Holla 2022-11-10  434  {
+1d280ce099db39 Sudeep Holla 2022-11-10  435  	enum arm_smccc_conduit conduit;
+1d280ce099db39 Sudeep Holla 2022-11-10  436  	struct acpi_ffh_data *ffh_ctxt;
+1d280ce099db39 Sudeep Holla 2022-11-10  437  
+1d280ce099db39 Sudeep Holla 2022-11-10  438  	ffh_ctxt = kzalloc(sizeof(*ffh_ctxt), GFP_KERNEL);
+1d280ce099db39 Sudeep Holla 2022-11-10  439  	if (!ffh_ctxt)
+1d280ce099db39 Sudeep Holla 2022-11-10  440  		return -ENOMEM;
+1d280ce099db39 Sudeep Holla 2022-11-10  441  
+1d280ce099db39 Sudeep Holla 2022-11-10  442  	if (arm_smccc_get_version() < ARM_SMCCC_VERSION_1_2)
+1d280ce099db39 Sudeep Holla 2022-11-10 @443  		return -EOPNOTSUPP;
 
-e37dfd65731dc4 Besar Wicaksono 2022-11-11  1076  		return -ENODEV;
-e37dfd65731dc4 Besar Wicaksono 2022-11-11  1077  
-e37dfd65731dc4 Besar Wicaksono 2022-11-11  1078  	while (acpi_dev) {
-e37dfd65731dc4 Besar Wicaksono 2022-11-11  1079  		if (!strcmp(acpi_device_hid(acpi_dev),
-e37dfd65731dc4 Besar Wicaksono 2022-11-11  1080  			    ACPI_PROCESSOR_CONTAINER_HID) &&
-e37dfd65731dc4 Besar Wicaksono 2022-11-11  1081  		    !kstrtouint(acpi_device_uid(acpi_dev), 0, &acpi_uid) &&
-e37dfd65731dc4 Besar Wicaksono 2022-11-11  1082  		    acpi_uid == container_uid)
-e37dfd65731dc4 Besar Wicaksono 2022-11-11  1083  			return 0;
-e37dfd65731dc4 Besar Wicaksono 2022-11-11  1084  
-e37dfd65731dc4 Besar Wicaksono 2022-11-11  1085  		acpi_dev = acpi_dev_parent(acpi_dev);
-e37dfd65731dc4 Besar Wicaksono 2022-11-11  1086  	}
-e37dfd65731dc4 Besar Wicaksono 2022-11-11  1087  
-e37dfd65731dc4 Besar Wicaksono 2022-11-11  1088  	return -ENODEV;
-e37dfd65731dc4 Besar Wicaksono 2022-11-11  1089  }
+Do these checks before the ffh_ctxt = kzalloc()?
+
+1d280ce099db39 Sudeep Holla 2022-11-10  444  
+1d280ce099db39 Sudeep Holla 2022-11-10  445  	conduit = arm_smccc_1_1_get_conduit();
+1d280ce099db39 Sudeep Holla 2022-11-10  446  	if (conduit == SMCCC_CONDUIT_NONE) {
+1d280ce099db39 Sudeep Holla 2022-11-10  447  		pr_err("%s: invalid SMCCC conduit\n", __func__);
+1d280ce099db39 Sudeep Holla 2022-11-10  448  		return -EOPNOTSUPP;
+
+Same
+
+1d280ce099db39 Sudeep Holla 2022-11-10  449  	}
+1d280ce099db39 Sudeep Holla 2022-11-10  450  
+1d280ce099db39 Sudeep Holla 2022-11-10  451  	if (conduit == SMCCC_CONDUIT_SMC) {
+1d280ce099db39 Sudeep Holla 2022-11-10  452  		ffh_ctxt->invoke_ffh_fn = __arm_smccc_smc;
+1d280ce099db39 Sudeep Holla 2022-11-10  453  		ffh_ctxt->invoke_ffh64_fn = arm_smccc_1_2_smc;
+1d280ce099db39 Sudeep Holla 2022-11-10  454  	} else {
+1d280ce099db39 Sudeep Holla 2022-11-10  455  		ffh_ctxt->invoke_ffh_fn = __arm_smccc_hvc;
+1d280ce099db39 Sudeep Holla 2022-11-10  456  		ffh_ctxt->invoke_ffh64_fn = arm_smccc_1_2_hvc;
+1d280ce099db39 Sudeep Holla 2022-11-10  457  	}
+1d280ce099db39 Sudeep Holla 2022-11-10  458  
+1d280ce099db39 Sudeep Holla 2022-11-10  459  	memcpy(ffh_ctxt, handler_ctxt, sizeof(ffh_ctxt->info));
+1d280ce099db39 Sudeep Holla 2022-11-10  460  
+1d280ce099db39 Sudeep Holla 2022-11-10  461  	*region_ctxt = ffh_ctxt;
+1d280ce099db39 Sudeep Holla 2022-11-10  462  	return AE_OK;
+1d280ce099db39 Sudeep Holla 2022-11-10  463  }
 
 -- 
 0-DAY CI Kernel Test Service
