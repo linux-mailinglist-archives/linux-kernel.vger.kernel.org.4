@@ -2,164 +2,234 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 39B0D69F37A
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Feb 2023 12:33:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6812269F37D
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Feb 2023 12:36:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230028AbjBVLdO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Feb 2023 06:33:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54252 "EHLO
+        id S230316AbjBVLgd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Feb 2023 06:36:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56072 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229505AbjBVLdM (ORCPT
+        with ESMTP id S229505AbjBVLgb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Feb 2023 06:33:12 -0500
-Received: from lahtoruutu.iki.fi (lahtoruutu.iki.fi [185.185.170.37])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48E34BDD3;
-        Wed, 22 Feb 2023 03:33:11 -0800 (PST)
-Received: from meesny.iki.fi (meesny.iki.fi [IPv6:2001:67c:2b0:1c1::201])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by lahtoruutu.iki.fi (Postfix) with ESMTPS id 7A0221B000EF;
-        Wed, 22 Feb 2023 13:33:08 +0200 (EET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=iki.fi; s=lahtoruutu;
-        t=1677065588;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=CcIvoKjfBTRbIIqYyMX0XFzcIbMfENOSK0nzO975d+Q=;
-        b=h76KPf57YBboQX5pjTosmDgXqFigwhJJb0oobn9Xg7thJEu/IjVoQaiZzWvYUA0mJtiR3X
-        45Kr6bwCqfzAL6V+4IDGtcA39EC23e9taHOMxGDHfFnoPVoMffyFoSasjXgySDcPt61+tg
-        misAmGrLm8wOqbLqDK4xnADqYDvMGZ3q73e7MTGiOCxEFt/qufXHUXOAoue+W/qfejBzeB
-        5Eg8FXFVOY2Sx95qfSiqVJKKP5EzduDBpp/GJsf9kR7ip9J3ACsIiJPoRwaFLQsNLqq7yh
-        jqiijNC89gSB/jI0wCRaThJO3x7pB2h/1ddo+doExNiDYJNW6ijn35IDsLN05A==
-Received: from hillosipuli.retiisi.eu (dkzbhx1tyyyyyyyyyyyyt-3.rev.dnainternet.fi [IPv6:2001:14ba:4502:69d6::1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: sailus)
-        by meesny.iki.fi (Postfix) with ESMTPSA id 9240E20173;
-        Wed, 22 Feb 2023 13:33:03 +0200 (EET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=iki.fi; s=meesny;
-        t=1677065583;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=CcIvoKjfBTRbIIqYyMX0XFzcIbMfENOSK0nzO975d+Q=;
-        b=eNbYLOja9Ul8ZGBAaAyE5e7wria8q0u++2b+5b6ReuZiBWAuI8W68hEodeLDAiX3cUvfUJ
-        3rozgKFqW8whIx7Gmy0WfVSy8JWyEH5ErO3xwfAkY9kYRvO3o/rMssZ4JgwdKjuD8Yx3Zk
-        4AVhFFbRBIQXKLJ6Lf4mqcSGOEd4XFM=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=iki.fi;
-        s=meesny; t=1677065583;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=CcIvoKjfBTRbIIqYyMX0XFzcIbMfENOSK0nzO975d+Q=;
-        b=KsYVC4JaVKB/nIVlZmpNNvXmhDI8QlhljNCbUeaYkOxKbpBToPYSjbBO+v+B77WBHGdoHP
-        dKlvXkdKDaw06yvqE8jGylZppX+0owMqOWtzwp7qL/wqPuYqzoH4eA86i1d7QAcROZLQQL
-        ien8FXUoHzme2MBYG7pwVvSmnZcvHjE=
-ARC-Seal: i=1; s=meesny; d=iki.fi; t=1677065583; a=rsa-sha256; cv=none;
-        b=nHWESDN6LiLuYyOnJ7oz1tQUUBvmAvHLbmc6nNsJuAi7pe8aNj1xT217zAwJDmkhHZLL6f
-        n+bx5vXHjdpjU1gfS72zGCV1o8WQzXbM1gS/bse/cNzfoP+QZxP2UMAjYtm3Ya6u2Qs6ow
-        XYxt2NzDaI0MAqrlDetzhLmdnL5P2Aw=
-ARC-Authentication-Results: i=1;
-        ORIGINATING;
-        auth=pass smtp.auth=sailus smtp.mailfrom=sakari.ailus@iki.fi
-Received: from valkosipuli.retiisi.eu (valkosipuli.localdomain [192.168.4.2])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by hillosipuli.retiisi.eu (Postfix) with ESMTPS id 39806634C91;
-        Wed, 22 Feb 2023 13:32:50 +0200 (EET)
-Date:   Wed, 22 Feb 2023 13:32:50 +0200
-From:   Sakari Ailus <sakari.ailus@iki.fi>
-To:     Shravan.Chippa@microchip.com
-Cc:     Conor.Dooley@microchip.com, paul.j.murphy@intel.com,
-        daniele.alessandrelli@intel.com, mchehab@kernel.org,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        shawnguo@kernel.org, s.hauer@pengutronix.de, kernel@pengutronix.de,
-        festevam@gmail.com, linux-imx@nxp.com, linux-media@vger.kernel.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        jacopo.mondi@ideasonboard.com, Prakash.Battu@microchip.com
-Subject: Re: [PATCH v11 3/5] media: i2c: imx334: support lower bandwidth mode
-Message-ID: <Y/X9YiLJxDfLPNUX@valkosipuli.retiisi.eu>
-References: <20230208050915.1958183-1-shravan.chippa@microchip.com>
- <20230208050915.1958183-4-shravan.chippa@microchip.com>
- <Y/Xc9RCmO8P8eKtL@valkosipuli.retiisi.eu>
- <Y/XnWOomz2N9fCvc@wendy>
- <Y/XoXZJUKKGzGVVL@valkosipuli.retiisi.eu>
- <Y/XpClyi9KMtLKcF@valkosipuli.retiisi.eu>
- <PH0PR11MB5611D8EE3F896FC0BE9A842E81AA9@PH0PR11MB5611.namprd11.prod.outlook.com>
+        Wed, 22 Feb 2023 06:36:31 -0500
+Received: from mx0b-0016f401.pphosted.com (mx0a-0016f401.pphosted.com [67.231.148.174])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C5CE34C00;
+        Wed, 22 Feb 2023 03:36:29 -0800 (PST)
+Received: from pps.filterd (m0045849.ppops.net [127.0.0.1])
+        by mx0a-0016f401.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 31M9BioV011352;
+        Wed, 22 Feb 2023 03:36:16 -0800
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=marvell.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-transfer-encoding :
+ content-type; s=pfpt0220; bh=Jq4/HESP0+AyN1dCRyKIttgQLJy5HimRr476wl/SbWE=;
+ b=M1CuKTU7UWWBBEzppEu6GmVz/MNK4fxWcSOxd6YPhWQCqCMG92KD4NTMfhYKRsA9xosU
+ ta+yMbPozMLh19NEi45RwBMLiG9Xl0V9o8dg9glyzGWzfPqhWPk5QjhLZ7w1yiPG7/mp
+ ZvNBPy2iEYSuHHU8sF86cTBBs/wrXD2pM4YxC3DBlrmD9woG/ZPfkhX/uo7r/8enOszi
+ LsXHJ58PclP2/zVP84tEB7PAIR71P4oBV29xzH2PYmBM7QmVcpaWSDRQJ49LS6FblXay
+ JVSaKO9+pEDeqRo3FsbgOs1fFgZdhbbvK26QpJmV2c1V2XC5uh0MwZxE2NGQT689h38u 4g== 
+Received: from dc5-exch01.marvell.com ([199.233.59.181])
+        by mx0a-0016f401.pphosted.com (PPS) with ESMTPS id 3nwfad0fg6-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT);
+        Wed, 22 Feb 2023 03:36:16 -0800
+Received: from DC5-EXCH01.marvell.com (10.69.176.38) by DC5-EXCH01.marvell.com
+ (10.69.176.38) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Wed, 22 Feb
+ 2023 03:36:14 -0800
+Received: from maili.marvell.com (10.69.176.80) by DC5-EXCH01.marvell.com
+ (10.69.176.38) with Microsoft SMTP Server id 15.0.1497.42 via Frontend
+ Transport; Wed, 22 Feb 2023 03:36:14 -0800
+Received: from hyd1425.marvell.com (unknown [10.29.37.83])
+        by maili.marvell.com (Postfix) with ESMTP id 369123F709D;
+        Wed, 22 Feb 2023 03:36:10 -0800 (PST)
+From:   Sai Krishna <saikrishnag@marvell.com>
+To:     <davem@davemloft.net>, <edumazet@google.com>, <kuba@kernel.org>,
+        <pabeni@redhat.com>, <netdev@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <sgoutham@marvell.com>,
+        <gakula@marvell.com>, <richardcochran@gmail.com>
+CC:     Hariprasad Kelam <hkelam@marvell.com>,
+        Sai Krishna <saikrishnag@marvell.com>
+Subject: [net PATCH v2] octeontx2-pf: Recalculate UDP checksum for ptp 1-step sync packet
+Date:   Wed, 22 Feb 2023 17:06:00 +0530
+Message-ID: <20230222113600.1965116-1-saikrishnag@marvell.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <PH0PR11MB5611D8EE3F896FC0BE9A842E81AA9@PH0PR11MB5611.namprd11.prod.outlook.com>
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Proofpoint-GUID: 2b3iapURpHGo8CTRxmF1aH8uWx82o6V4
+X-Proofpoint-ORIG-GUID: 2b3iapURpHGo8CTRxmF1aH8uWx82o6V4
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.170.22
+ definitions=2023-02-22_05,2023-02-22_01,2023-02-09_01
 X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Feb 22, 2023 at 10:20:56AM +0000, Shravan.Chippa@microchip.com wrote:
-> Hi Sakari,
-> 
-> > -----Original Message-----
-> > From: Sakari Ailus <sakari.ailus@iki.fi>
-> > Sent: 22 February 2023 03:36 PM
-> > To: Conor Dooley - M52691 <Conor.Dooley@microchip.com>
-> > Cc: shravan Chippa - I35088 <Shravan.Chippa@microchip.com>;
-> > paul.j.murphy@intel.com; daniele.alessandrelli@intel.com;
-> > mchehab@kernel.org; robh+dt@kernel.org;
-> > krzysztof.kozlowski+dt@linaro.org; shawnguo@kernel.org;
-> > s.hauer@pengutronix.de; kernel@pengutronix.de; festevam@gmail.com;
-> > linux-imx@nxp.com; linux-media@vger.kernel.org; linux-
-> > kernel@vger.kernel.org; devicetree@vger.kernel.org; linux-arm-
-> > kernel@lists.infradead.org; Jacopo Mondi
-> > <jacopo.mondi@ideasonboard.com>; Battu Prakash Reddy - I30399
-> > <Prakash.Battu@microchip.com>
-> > Subject: Re: [PATCH v11 3/5] media: i2c: imx334: support lower bandwidth
-> > mode
-> > 
-> > EXTERNAL EMAIL: Do not click links or open attachments unless you know the
-> > content is safe
-> > 
-> > On Wed, Feb 22, 2023 at 12:03:10PM +0200, Sakari Ailus wrote:
-> > > On Wed, Feb 22, 2023 at 09:58:48AM +0000, Conor Dooley wrote:
-> > > > On Wed, Feb 22, 2023 at 11:14:29AM +0200, Sakari Ailus wrote:
-> > > > > On Wed, Feb 08, 2023 at 10:39:13AM +0530, shravan kumar wrote:
-> > > > > > From: Shravan Chippa <shravan.chippa@microchip.com>
-> > > >
-> > > > > > @@ -666,11 +885,26 @@ static int imx334_init_pad_cfg(struct
-> > v4l2_subdev *sd,
-> > > > > >         struct v4l2_subdev_format fmt = { 0 };
-> > > > > >
-> > > > > >         fmt.which = sd_state ? V4L2_SUBDEV_FORMAT_TRY :
-> > V4L2_SUBDEV_FORMAT_ACTIVE;
-> > > > > > -       imx334_fill_pad_format(imx334, &supported_mode, &fmt);
-> > > > > > +       imx334_fill_pad_format(imx334, &supported_modes[0],
-> > > > > > + &fmt);
-> > > > >
-> > > > > Now that there are multiple modes supported, this would appear to
-> > > > > get the width, height as well as the other fields (apart from mbus
-> > > > > code) from the first mode.
-> > > >
-> > > > Is this statement supposed to be a request to change something, or
-> > > > just a throwaway comment? It's a little hard for me to understand
-> > > > your intention here, sorry.
-> > >
-> > > Just pointing to what looks like a bug.
-> > 
-> > Ah, my bad. Please ignore the comment.
-> > 
-> > This is indeed about init_cfg(), not s_fmt().
-> > 
-> 
-> I will try to fix init_cfg()
+From: Geetha sowjanya <gakula@marvell.com>
 
-There's no problem with it. Please ignore my original comment on this.
+When checksum offload is disabled in the driver via ethtool,
+the PTP 1-step sync packets contain incorrect checksum, since
+the stack calculates the checksum before driver updates
+PTP timestamp field in the packet. This results in PTP packets
+getting dropped at the other end. This patch fixes the issue by
+re-calculating the UDP checksum after updating PTP
+timestamp field in the driver.
 
+Fixes: 2958d17a8984 ("octeontx2-pf: Add support for ptp 1-step mode on CN10K silicon")
+Signed-off-by: Geetha sowjanya <gakula@marvell.com>
+Signed-off-by: Hariprasad Kelam <hkelam@marvell.com>
+Signed-off-by: Sunil Kovvuri Goutham <sgoutham@marvell.com>
+Signed-off-by: Sai Krishna <saikrishnag@marvell.com>
+---
+v2 changes:
+    - Addressed review comments for code optimization
+
+ .../marvell/octeontx2/nic/otx2_txrx.c         | 76 ++++++++++++++-----
+ 1 file changed, 57 insertions(+), 19 deletions(-)
+
+diff --git a/drivers/net/ethernet/marvell/octeontx2/nic/otx2_txrx.c b/drivers/net/ethernet/marvell/octeontx2/nic/otx2_txrx.c
+index ef10aef3cda0..7045fedfd73a 100644
+--- a/drivers/net/ethernet/marvell/octeontx2/nic/otx2_txrx.c
++++ b/drivers/net/ethernet/marvell/octeontx2/nic/otx2_txrx.c
+@@ -10,6 +10,7 @@
+ #include <net/tso.h>
+ #include <linux/bpf.h>
+ #include <linux/bpf_trace.h>
++#include <net/ip6_checksum.h>
+ 
+ #include "otx2_reg.h"
+ #include "otx2_common.h"
+@@ -699,7 +700,7 @@ static void otx2_sqe_add_ext(struct otx2_nic *pfvf, struct otx2_snd_queue *sq,
+ 
+ static void otx2_sqe_add_mem(struct otx2_snd_queue *sq, int *offset,
+ 			     int alg, u64 iova, int ptp_offset,
+-			     u64 base_ns, int udp_csum)
++			     u64 base_ns, bool udp_csum_crt)
+ {
+ 	struct nix_sqe_mem_s *mem;
+ 
+@@ -711,7 +712,7 @@ static void otx2_sqe_add_mem(struct otx2_snd_queue *sq, int *offset,
+ 
+ 	if (ptp_offset) {
+ 		mem->start_offset = ptp_offset;
+-		mem->udp_csum_crt = udp_csum;
++		mem->udp_csum_crt = !!udp_csum_crt;
+ 		mem->base_ns = base_ns;
+ 		mem->step_type = 1;
+ 	}
+@@ -986,10 +987,11 @@ static bool otx2_validate_network_transport(struct sk_buff *skb)
+ 	return false;
+ }
+ 
+-static bool otx2_ptp_is_sync(struct sk_buff *skb, int *offset, int *udp_csum)
++static bool otx2_ptp_is_sync(struct sk_buff *skb, int *offset, bool *udp_csum_crt)
+ {
+ 	struct ethhdr *eth = (struct ethhdr *)(skb->data);
+ 	u16 nix_offload_hlen = 0, inner_vhlen = 0;
++	bool udp_hdr_present = false, is_sync;
+ 	u8 *data = skb->data, *msgtype;
+ 	__be16 proto = eth->h_proto;
+ 	int network_depth = 0;
+@@ -1029,45 +1031,81 @@ static bool otx2_ptp_is_sync(struct sk_buff *skb, int *offset, int *udp_csum)
+ 		if (!otx2_validate_network_transport(skb))
+ 			return false;
+ 
+-		*udp_csum = 1;
+ 		*offset = nix_offload_hlen + skb_transport_offset(skb) +
+ 			  sizeof(struct udphdr);
++		udp_hdr_present = true;
++
+ 	}
+ 
+ 	msgtype = data + *offset;
+-
+ 	/* Check PTP messageId is SYNC or not */
+-	return (*msgtype & 0xf) == 0;
++	is_sync = !(*msgtype & 0xf);
++	if (is_sync)
++		*udp_csum_crt = udp_hdr_present;
++	else
++		*offset = 0;
++
++	return is_sync;
+ }
+ 
+ static void otx2_set_txtstamp(struct otx2_nic *pfvf, struct sk_buff *skb,
+ 			      struct otx2_snd_queue *sq, int *offset)
+ {
++	struct ethhdr	*eth = (struct ethhdr *)(skb->data);
+ 	struct ptpv2_tstamp *origin_tstamp;
+-	int ptp_offset = 0, udp_csum = 0;
++	bool udp_csum_crt = false;
++	unsigned int udphoff;
+ 	struct timespec64 ts;
++	int ptp_offset = 0;
++	__wsum skb_csum;
+ 	u64 iova;
+ 
+ 	if (unlikely(!skb_shinfo(skb)->gso_size &&
+ 		     (skb_shinfo(skb)->tx_flags & SKBTX_HW_TSTAMP))) {
+-		if (unlikely(pfvf->flags & OTX2_FLAG_PTP_ONESTEP_SYNC)) {
+-			if (otx2_ptp_is_sync(skb, &ptp_offset, &udp_csum)) {
+-				origin_tstamp = (struct ptpv2_tstamp *)
+-						((u8 *)skb->data + ptp_offset +
+-						 PTP_SYNC_SEC_OFFSET);
+-				ts = ns_to_timespec64(pfvf->ptp->tstamp);
+-				origin_tstamp->seconds_msb = htons((ts.tv_sec >> 32) & 0xffff);
+-				origin_tstamp->seconds_lsb = htonl(ts.tv_sec & 0xffffffff);
+-				origin_tstamp->nanoseconds = htonl(ts.tv_nsec);
+-				/* Point to correction field in PTP packet */
+-				ptp_offset += 8;
++		if (unlikely(pfvf->flags & OTX2_FLAG_PTP_ONESTEP_SYNC &&
++			     otx2_ptp_is_sync(skb, &ptp_offset, &udp_csum_crt))) {
++			origin_tstamp = (struct ptpv2_tstamp *)
++					((u8 *)skb->data + ptp_offset +
++					 PTP_SYNC_SEC_OFFSET);
++			ts = ns_to_timespec64(pfvf->ptp->tstamp);
++			origin_tstamp->seconds_msb = htons((ts.tv_sec >> 32) & 0xffff);
++			origin_tstamp->seconds_lsb = htonl(ts.tv_sec & 0xffffffff);
++			origin_tstamp->nanoseconds = htonl(ts.tv_nsec);
++			/* Point to correction field in PTP packet */
++			ptp_offset += 8;
++
++			/* When user disables hw checksum, stack calculates the csum,
++			 * but it does not cover ptp timestamp which is added later.
++			 * Recalculate the checksum manually considering the timestamp.
++			 */
++			if (udp_csum_crt) {
++				struct udphdr *uh = udp_hdr(skb);
++
++				if (skb->ip_summed != CHECKSUM_PARTIAL && uh->check != 0) {
++					udphoff = skb_transport_offset(skb);
++					uh->check = 0;
++					skb_csum = skb_checksum(skb, udphoff, skb->len - udphoff,
++								0);
++					if (ntohs(eth->h_proto) == ETH_P_IPV6)
++						uh->check = csum_ipv6_magic(&ipv6_hdr(skb)->saddr,
++									    &ipv6_hdr(skb)->daddr,
++									    skb->len - udphoff,
++									    ipv6_hdr(skb)->nexthdr,
++									    skb_csum);
++					else
++						uh->check = csum_tcpudp_magic(ip_hdr(skb)->saddr,
++									      ip_hdr(skb)->daddr,
++									      skb->len - udphoff,
++									      IPPROTO_UDP,
++									      skb_csum);
++				}
+ 			}
+ 		} else {
+ 			skb_shinfo(skb)->tx_flags |= SKBTX_IN_PROGRESS;
+ 		}
+ 		iova = sq->timestamps->iova + (sq->head * sizeof(u64));
+ 		otx2_sqe_add_mem(sq, offset, NIX_SENDMEMALG_E_SETTSTMP, iova,
+-				 ptp_offset, pfvf->ptp->base_ns, udp_csum);
++				 ptp_offset, pfvf->ptp->base_ns, udp_csum_crt);
+ 	} else {
+ 		skb_tx_timestamp(skb);
+ 	}
 -- 
-Sakari Ailus
+2.25.1
+
