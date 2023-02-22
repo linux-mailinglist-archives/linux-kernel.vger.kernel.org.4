@@ -2,85 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D56AE69FBA1
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Feb 2023 19:58:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A5D8D69FBAD
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Feb 2023 20:03:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232340AbjBVS6K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Feb 2023 13:58:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36896 "EHLO
+        id S230406AbjBVTDE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Feb 2023 14:03:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39710 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232391AbjBVS6F (ORCPT
+        with ESMTP id S230480AbjBVTDB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Feb 2023 13:58:05 -0500
-Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43487125A4
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Feb 2023 10:58:04 -0800 (PST)
-Received: by mail-wm1-x335.google.com with SMTP id l2-20020a05600c1d0200b003e1f6dff952so7283022wms.1
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Feb 2023 10:58:04 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=kZExv16LneJdJojxchxyl8kHM1ihqG5eeGh+aD+CDB8=;
-        b=XesKCxOtC6YIaWHD4mg2rAnro0pj3DqnIlLJmusRMCM1rKT4maaoKLEOAjqrK2X6TJ
-         nmrzxsoINL2Vz8EwumJ6IQazQ97ME1T23Y9gQEGIM6DkkI8y3LERzJVJcK2PpDgVYKgW
-         XN8y4L9zOX2KHj4SjW6X3u8y1vfTrR8TkUD4SOquixxaajLT6MZqQdt8EXRC2dN7nQcO
-         gHfGaeVAV7DnBxnu3B5jHLP367O7tpc65SFQg1DwImC7JQb81vU0RbT+qhYsDh9UqXhj
-         hhrbf9RZhN/2yQpYFBt1tveu1o0/KSuVB9Iqn/qFkNYe9+XO8C+7Ui0oFkfnh79MaYSr
-         hL0g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=kZExv16LneJdJojxchxyl8kHM1ihqG5eeGh+aD+CDB8=;
-        b=PujCZdf7gjhLP/UMncDCKcMoe6xdjmrmMChqYI7mFWtZT2w1Ia57Z+S2uyb3ABHlah
-         YjmbiGXU5izt4WtbseJwmKsljTavgyjcgwhZhjtDVdbHsHUxbsvAz6NsP7Vs6nMgWb9w
-         2SvMMuaDLCI0zsQHu38ymj5UnyGDLt47TQ+fKs5HXyKJGRx0n+yPmRj1ZMWeKMYpRZE5
-         okeoJ/6h6ofS5ZD2ZrQZTjOBd4dYCcRe42m0AEBhs8z3Q9fuURjTkphOZUuWnDYqbmvI
-         L+/F+78pIag+BwFY7XqG0vmb772baQ5G45/zjQRRW/YSG2sWbR5j1Lz2XEU1qUH6izVV
-         bSRg==
-X-Gm-Message-State: AO0yUKWXTbbAKQE/xqBgHhY3jub0cYGTMwKNGsm1itWj3Mrln05QAmjh
-        7pmoq9sk1l+tU1Tv7pPoU1pPTQ==
-X-Google-Smtp-Source: AK7set9xOyM/dCt/cz/X48ePaa+6DCGe05eitjZbvtPxZdqVp2/OG8ogIQc4Hu4YGKAOEvJeOyG3nQ==
-X-Received: by 2002:a05:600c:32a7:b0:3db:15b1:fb28 with SMTP id t39-20020a05600c32a700b003db15b1fb28mr7423858wmp.19.1677092282743;
-        Wed, 22 Feb 2023 10:58:02 -0800 (PST)
-Received: from [192.168.1.109] ([178.197.216.144])
-        by smtp.gmail.com with ESMTPSA id bh21-20020a05600c3d1500b003e2052bad94sm2790414wmb.33.2023.02.22.10.57.59
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 22 Feb 2023 10:58:02 -0800 (PST)
-Message-ID: <e6b2a6f4-d710-7f74-e85d-1cd3f5b96460@linaro.org>
-Date:   Wed, 22 Feb 2023 19:57:57 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [RFC PATCH 1/6] dt-bindings: iio: light: Support ROHM BU27034
-Content-Language: en-US
-To:     Matti Vaittinen <mazziesaccount@gmail.com>,
-        Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
-Cc:     Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
+        Wed, 22 Feb 2023 14:03:01 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46F99E055
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Feb 2023 11:02:59 -0800 (PST)
+Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mfe@pengutronix.de>)
+        id 1pUuO8-0003LX-IK; Wed, 22 Feb 2023 20:02:48 +0100
+Received: from mfe by ptx.hi.pengutronix.de with local (Exim 4.92)
+        (envelope-from <mfe@pengutronix.de>)
+        id 1pUuO6-0007Pj-P2; Wed, 22 Feb 2023 20:02:46 +0100
+Date:   Wed, 22 Feb 2023 20:02:46 +0100
+From:   Marco Felsch <m.felsch@pengutronix.de>
+To:     Marek Vasut <marex@denx.de>
+Cc:     Luca Ceresoli <luca.ceresoli@bootlin.com>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Shreeya Patel <shreeya.patel@collabora.com>,
-        Zhigang Shi <Zhigang.Shi@liteon.com>,
-        Paul Gazzillo <paul@pgazz.com>,
-        Dmitry Osipenko <dmitry.osipenko@collabora.com>,
-        Liam Beguin <liambeguin@gmail.com>,
-        Peter Rosin <peda@axentia.se>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        linux-iio@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <cover.1677080089.git.mazziesaccount@gmail.com>
- <af211ec180d91a13862630e635019ebe03d4be31.1677080089.git.mazziesaccount@gmail.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <af211ec180d91a13862630e635019ebe03d4be31.1677080089.git.mazziesaccount@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Martyn Welch <martyn.welch@collabora.com>,
+        devicetree@vger.kernel.org, Abel Vesa <abel.vesa@nxp.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        linux-kernel@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        Lucas Stach <l.stach@pengutronix.de>,
+        linux-arm-kernel@lists.infradead.org, Jacky Bai <ping.bai@nxp.com>
+Subject: Re: [PATCH] arm64: dts: imx8mp-msc-sm2s: Add sound card
+Message-ID: <20230222190246.ihknh2tgjb2w3qmf@pengutronix.de>
+References: <20230222182252.2ad6d82b@booty>
+ <20230222172552.1545519-1-luca.ceresoli@bootlin.com>
+ <20230222175941.7pdi7yg5am3ws4gp@pengutronix.de>
+ <10394cf6-70f0-638a-15d3-5a14615dad44@denx.de>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <10394cf6-70f0-638a-15d3-5a14615dad44@denx.de>
+User-Agent: NeoMutt/20180716
+X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
+X-SA-Exim-Mail-From: mfe@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -89,45 +68,152 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 22/02/2023 17:14, Matti Vaittinen wrote:
-> ROHM BU27034 is an ambient light sesnor with 3 channels and 3 photo diodes
-> capable of detecting a very wide range of illuminance. Typical application
-> is adjusting LCD and backlight power of TVs and mobile phones.
+On 23-02-22, Marek Vasut wrote:
+> On 2/22/23 18:59, Marco Felsch wrote:
+> > Hi Luca,
+> > 
+> > On 23-02-22, Luca Ceresoli wrote:
+> > > The MSC SM2-MB-EP1 carrier board for the SM2S-IMX8PLUS SMARC module has an
+> > > NXPP SGTL5000 audio codec connected to I2S-0 (sai2).
+> > > 
+> > > This requires to:
+> > > 
+> > >   * add the power supplies (always on)
+> > >   * enable sai2 with pinmuxes
+> > >   * reparent the CLKOUT1 clock that feeds the codec SYS_MCLK to
+> > >     IMX8MP_CLK_24M in order it to generate an accurate 24 MHz rate
+> > > 
+> > > Signed-off-by: Luca Ceresoli <luca.ceresoli@bootlin.com>
+> > > ---
+> > >   .../dts/freescale/imx8mp-msc-sm2s-ep1.dts     | 60 +++++++++++++++++++
+> > >   1 file changed, 60 insertions(+)
+> > > 
+> > > diff --git a/arch/arm64/boot/dts/freescale/imx8mp-msc-sm2s-ep1.dts b/arch/arm64/boot/dts/freescale/imx8mp-msc-sm2s-ep1.dts
+> > > index 470ff8e31e32..894d9809f76d 100644
+> > > --- a/arch/arm64/boot/dts/freescale/imx8mp-msc-sm2s-ep1.dts
+> > > +++ b/arch/arm64/boot/dts/freescale/imx8mp-msc-sm2s-ep1.dts
+> > > @@ -14,6 +14,57 @@ / {
+> > >   	compatible = "avnet,sm2s-imx8mp-14N0600E-ep1",
+> > >   		     "avnet,sm2s-imx8mp-14N0600E", "avnet,sm2s-imx8mp",
+> > >   		     "fsl,imx8mp";
+> > 
+> > ...
+> > 
+> > > +/* I2S-0 = sai2 */
+> > > +&sai2 {
+> > > +	pinctrl-names = "default";
+> > > +	pinctrl-0 = <&pinctrl_sai2>;
+> > > +
+> > > +	assigned-clocks = <&clk IMX8MP_CLK_SAI2>;
+> > > +	assigned-clock-parents = <&clk IMX8MP_AUDIO_PLL1_OUT>;
+> > > +	assigned-clock-rates = <12288000>;
+> > > +
+> > > +	fsl,sai-mclk-direction-output;
+> > > +	status = "okay";
+> > >   };
+> > 
+> > Do you have some downstream patches for the sai interfaces? AFAIR Marek
+> > worked on this but the patches are not mainlien yet.
 > 
-> Add initial dt-bindings.
+> I guess it is time to resubmit these.
 
-Driver can be "initial", but bindings better to be closer to complete,
-even if not used by the driver currently.
+I would have two patches for your series first is necessary the other is
+changing the sound-card to make use of the simple-audio-card.
 
-> 
-> Signed-off-by: Matti Vaittinen <mazziesaccount@gmail.com>
-> ---
->  .../bindings/iio/light/rohm-bu27034.yaml      | 46 +++++++++++++++++++
->  1 file changed, 46 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/iio/light/rohm-bu27034.yaml
-> 
-> diff --git a/Documentation/devicetree/bindings/iio/light/rohm-bu27034.yaml b/Documentation/devicetree/bindings/iio/light/rohm-bu27034.yaml
-> new file mode 100644
-> index 000000000000..a3a642c259e8
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/iio/light/rohm-bu27034.yaml
+Regards,
+  Marco
 
+8<-----------------------------------------------------------------------------------------
+[1]
 
-Comma as a separator, so:
-rohm,bu27034.yaml
+diff --git a/drivers/clk/imx/clk-imx8mp-audiomix.c b/drivers/clk/imx/clk-imx8mp-audiomix.c
+index 2d5d8255c7fa2..32eb29ae8f71f 100644
+--- a/drivers/clk/imx/clk-imx8mp-audiomix.c
++++ b/drivers/clk/imx/clk-imx8mp-audiomix.c
+@@ -18,7 +18,7 @@
+ 
+ #define CLKEN0                 0x000
+ #define CLKEN1                 0x004
+-#define SAI_MCLK_SEL(n)                (300 + 4 * (n)) /* n in 0..5 */
++#define SAI_MCLK_SEL(n)                (0x300 + 4 * (n))       /* n in 0..5 */
+ #define PDM_SEL                        0x318
+ #define SAI_PLL_GNRL_CTL       0x400
 
+8<-----------------------------------------------------------------------------------------
+[2]
 
-> @@ -0,0 +1,46 @@
-> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/iio/light/rohm-bu27034.yaml#
-
-With filename and $id fix:
-
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-
-
-Best regards,
-Krzysztof
-
+diff --git a/arch/arm64/boot/dts/freescale/imx8mp-evk.dts b/arch/arm64/boot/dts/freescale/imx8mp-evk.dts
+index 8547391d9cbbf..3b38ec7bb47be 100644
+--- a/arch/arm64/boot/dts/freescale/imx8mp-evk.dts
++++ b/arch/arm64/boot/dts/freescale/imx8mp-evk.dts
+@@ -47,7 +47,6 @@ reg_audio_pwr: regulator-audio-pwr {
+ 		regulator-max-microvolt = <3300000>;
+ 		gpio = <&gpio4 29 GPIO_ACTIVE_HIGH>;
+ 		enable-active-high;
+-		regulator-always-on;
+ 	};
+ 
+ 	reg_can1_stby: regulator-can1-stby {
+@@ -94,21 +93,34 @@ reg_usdhc2_vmmc: regulator-usdhc2 {
+ 		enable-active-high;
+ 	};
+ 
+-	sound-wm8960 {
+-		compatible = "fsl,imx-audio-wm8960";
+-		model = "wm8960-audio";
+-		audio-cpu = <&sai3>;
+-		audio-codec = <&codec>;
+-		audio-routing =
++	sound-wm8524 {
++		compatible = "simple-audio-card";
++		simple-audio-card,name = "wm8960-audio";
++		simple-audio-card,format = "i2s";
++		simple-audio-card,frame-master = <&cpudai>;
++		simple-audio-card,bitclock-master = <&cpudai>;
++		simple-audio-card,widgets =
++			"Headphone", "Headphone Jack",
++			"Speaker", "External Speaker",
++			"Microphone", "Mic Jack";
++		simple-audio-card,routing =
+ 			"Headphone Jack", "HP_L",
+ 			"Headphone Jack", "HP_R",
+-			"Ext Spk", "SPK_LP",
+-			"Ext Spk", "SPK_LN",
+-			"Ext Spk", "SPK_RP",
+-			"Ext Spk", "SPK_RN",
++			"External Speaker", "SPK_LP",
++			"External Speaker", "SPK_LN",
++			"External Speaker", "SPK_RP",
++			"External Speaker", "SPK_RN",
+ 			"LINPUT1", "Mic Jack",
+ 			"LINPUT3", "Mic Jack",
+ 			"Mic Jack", "MICB";
++
++		cpudai: simple-audio-card,cpu {
++			sound-dai = <&sai3>;
++		};
++
++		simple-audio-card,codec {
++			sound-dai = <&wm8960>;
++		};
+ 	};
+ };
+ 
+@@ -364,7 +376,7 @@ &i2c3 {
+ 	pinctrl-0 = <&pinctrl_i2c3>;
+ 	status = "okay";
+ 
+-	codec: wm8960@1a {
++	wm8960: codec@1a {
+ 		compatible = "wlf,wm8960";
+ 		reg = <0x1a>;
+ 		clocks = <&audio_blk_ctrl IMX8MP_CLK_AUDIOMIX_SAI3_MCLK1>;
+@@ -373,6 +385,7 @@ codec: wm8960@1a {
+ 		wlf,hp-cfg = <3 2 3>;
+ 		wlf,gpio-cfg = <1 3>;
+ 		SPKVDD1-supply = <&reg_audio_pwr>;
++		#sound-dai-cells = <0>;
+ 	};
+ 
+ 	pca6416: gpio@20 {
+8<-----------------------------------------------------------------------------------------
