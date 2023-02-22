@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5FA1F69FAEA
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Feb 2023 19:21:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D47E69FAEE
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Feb 2023 19:22:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231835AbjBVSVe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Feb 2023 13:21:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57386 "EHLO
+        id S231905AbjBVSWk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Feb 2023 13:22:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57992 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229598AbjBVSVc (ORCPT
+        with ESMTP id S230511AbjBVSWj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Feb 2023 13:21:32 -0500
+        Wed, 22 Feb 2023 13:22:39 -0500
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BC4D3B87F;
-        Wed, 22 Feb 2023 10:21:31 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B940B3C78B
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Feb 2023 10:22:37 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id C1BADB811D9;
-        Wed, 22 Feb 2023 18:21:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AF001C433EF;
-        Wed, 22 Feb 2023 18:21:27 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 6C2D3B81649
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Feb 2023 18:22:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B57A0C433D2;
+        Wed, 22 Feb 2023 18:22:34 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1677090088;
-        bh=HXn80E9p8LKWYpzTx+X49SWBVTLtIFgizXhoT9554kI=;
+        s=k20201202; t=1677090155;
+        bh=CzIR8pGHHiNEiEpf6Yh2H8j5zj5EVQGwTE29uy1k9eg=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Fs2BUHjrEssaXYTE7+er1dEFxbr/2lKW9EVA0YRw7uh/ahvRj8NKl+E3Gt9C0oMBD
-         PB+iOUc3pzLrj0RpKjJ4feWqdCiTH4sMOMtNrrjUPNRPF3J7scVe1krq0HgT6Sdsfb
-         ZdXJTriGg9ZhuQNeUz81r9k+TOdGgNfrEcBspwggS5s04dDnMhhVUvss6yJ5yrX09r
-         UpuHARuL0xLjkQQn67r0RCgHQ3nAUkzaW8fmp/QHEt7wgItvwb0/rgO1Csh47j89vW
-         vY+GpwTPK/Fm2rooe5RgXmNy/lTHLLR/fJqAykOD4G2YXIWSjvZi6/Olv0oulDJR16
-         K0V0n4kIsnWmQ==
-Date:   Wed, 22 Feb 2023 11:21:25 -0700
-From:   Nathan Chancellor <nathan@kernel.org>
-To:     Thomas Zimmermann <tzimmermann@suse.de>
-Cc:     Tom Rix <trix@redhat.com>, robdclark@gmail.com,
-        quic_abhinavk@quicinc.com, dmitry.baryshkov@linaro.org,
-        sean@poorly.run, airlied@gmail.com, daniel@ffwll.ch,
-        ndesaulniers@google.com, javierm@redhat.com,
-        linux-arm-msm@vger.kernel.org, llvm@lists.linux.dev,
-        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        freedreno@lists.freedesktop.org
-Subject: Re: [PATCH] drm/msm: return early when allocating fbdev fails
-Message-ID: <Y/ZdJW3dxMVMGYlp@dev-arch.thelio-3990X>
-References: <20230222155649.2001467-1-trix@redhat.com>
- <8f4a18d7-3477-5af0-605d-27098cc7e02c@suse.de>
+        b=okC9wkxZB+0MdfKesGUBqtFLaECvBpkOWvsCxp2//TFTiQ16yo+mukiMxWlnkSbDL
+         HUiJ4OtDUo7R3zc1OrkS+K/uroN3BSrxCzefijQTNcCo0x/pr+cnQHU/EeIwBssz3+
+         sPVBsxK5Esl/1m/x7rXE1J/fBu4NiquwLuNSDz3DfR/A+aivKEGK08DHDWeQA18qku
+         aVmsK+KdGBgk6eFR2qfgx5K+46v31/97+rRFCDu/0dhJJXuej1ArcFP/exU5a9ZxSm
+         UA9LTI3DWavrfd+Jl8VsVsGK3LNH47f3wu5OQrw3U0V26x6k9LsqZ9Hu3nKOk2jkTR
+         XZb+lby9aS5mA==
+Received: by pali.im (Postfix)
+        id 1CD0172C; Wed, 22 Feb 2023 19:22:32 +0100 (CET)
+Date:   Wed, 22 Feb 2023 19:22:32 +0100
+From:   Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>
+To:     Christophe Leroy <christophe.leroy@csgroup.eu>
+Cc:     Michael Ellerman <mpe@ellerman.id.au>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org
+Subject: Re: [PATCH v4 00/17] powerpc/85xx: p2020: Create one unified machine
+ description
+Message-ID: <20230222182232.uiiwy5pd5n5xc5kl@pali>
+References: <cover.1677076552.git.christophe.leroy@csgroup.eu>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <8f4a18d7-3477-5af0-605d-27098cc7e02c@suse.de>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <cover.1677076552.git.christophe.leroy@csgroup.eu>
+User-Agent: NeoMutt/20180716
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -59,43 +59,82 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Feb 22, 2023 at 05:09:40PM +0100, Thomas Zimmermann wrote:
-> Hi
+On Wednesday 22 February 2023 15:42:47 Christophe Leroy wrote:
+> This patch series unifies all P2020 boards and machine descriptions into
+> one generic unified P2020 machine description. With this generic machine
+> description, kernel can boot on any P2020-based board with correct DTS
+> file.
 > 
-> Am 22.02.23 um 16:56 schrieb Tom Rix:
-> > building with clang and W=1 reports
-> > drivers/gpu/drm/msm/msm_fbdev.c:144:6: error: variable 'helper' is used
-> >    uninitialized whenever 'if' condition is true [-Werror,-Wsometimes-uninitialized]
-> >    if (!fbdev)
-> >        ^~~~~~
-> > 
-> > helper is only initialized after fbdev succeeds, so is in a garbage state at
-> > the fail: label.  There is nothing to unwinded if fbdev alloaction fails,
-> > return NULL.
-> > 
-> > Fixes: 3fb1f62f80a1 ("drm/fb-helper: Remove drm_fb_helper_unprepare() from drm_fb_helper_fini()")
-> > Signed-off-by: Tom Rix <trix@redhat.com>
+> Tested on CZ.NIC Turris 1.1 board with has Freescale P2020 processor.
+> Kernel during booting correctly detects P2020 and prints:
+> [    0.000000] Using Freescale P2020 machine description
 > 
-> Already fixed here: https://lore.kernel.org/dri-devel/08e3340e-b459-0e60-4bba-30716b675e05@suse.de/T/#t
+> Changes in v4:
+> * Added several preparatory cleanup patchs
+> * Minimised churn by not duplicating helpers at the first place
+> * Split main patch in two
+> * Dropped patchs 1 and 2
+> * Untested beyond basic build test
 
-There is also:
+Changes looks good. I'm happy with them. You can add my:
 
-../drivers/gpu/drm/omapdrm/omap_fbdev.c:235:6: error: variable 'helper' is used uninitialized whenever 'if' condition is true [-Werror,-Wsometimes-uninitialized]
-        if (!fbdev)
-            ^~~~~~
-../drivers/gpu/drm/omapdrm/omap_fbdev.c:259:26: note: uninitialized use occurs here
-        drm_fb_helper_unprepare(helper);
-                                ^~~~~~
-../drivers/gpu/drm/omapdrm/omap_fbdev.c:235:2: note: remove the 'if' if its condition is always false
-        if (!fbdev)
-        ^~~~~~~~~~~
-../drivers/gpu/drm/omapdrm/omap_fbdev.c:228:30: note: initialize the variable 'helper' to silence this warning
-        struct drm_fb_helper *helper;
-                                    ^
-                                     = NULL
-1 error generated.
+Reviewed-by: Pali Rohár <pali@kernel.org>
 
-Is the fix the same as the one you have linked above?
-
-Cheers,
-Nathan
+> Changes in v3:
+> * Use 'if (IS_ENABLED(CONFIG_PPC_I8259))' instead of '#ifdef CONFIG_PPC_I8259'
+> * Simplify p2020_probe()
+> * Patches generated by -M and -C git options
+> 
+> Link to v2: https://lore.kernel.org/linuxppc-dev/20221224211425.14983-1-pali@kernel.org/
+> 
+> Changes in v2:
+> * Added patch "p2020: Move i8259 code into own function" (separated from the next one)
+> * Renamed CONFIG_P2020 to CONFIG_PPC_P2020
+> * Fixed descriptions
+> 
+> Link to v1: https://lore.kernel.org/linuxppc-dev/20220819191557.28116-1-pali@kernel.org/
+> 
+> Christophe Leroy (9):
+>   powerpc/fsl_uli1575: Misc cleanup
+>   powerpc/85xx: Rename setup_arch and pic_init on p1023
+>   powerpc/85xx: Remove DBG() macro
+>   powerpc/85xx: Remove #ifdefs CONFIG_PCI in mpc85xx_ds
+>   powerpc/85xx: mpc85xx_{ds/rdb} compact the call to mpic_alloc()
+>   powerpc/85xx: mpc85xx_{ds/rdb} replace BUG_ON() by WARN_ON()
+>   powerpc/85xx: mpc85xx_{ds/rdb} replace prink by pr_xxx macro
+>   powerpc/85xx: Remove #ifdefs CONFIG_PPC_I8259 in mpc85xx_ds
+>   powerpc/85xx: Remove #ifdef CONFIG_QUICC_ENGINE in mpc85xx_rdb
+> 
+> Pali Rohár (8):
+>   powerpc/85xx: p2020: Move all P2020 DS machine descriptions to p2020.c
+>   powerpc/85xx: p2020: Move all P2020 RDB machine descriptions to
+>     p2020.c
+>   powerpc/85xx: p2020: Move i8259 code into own function
+>   powerpc/85xx: mpc85xx_ds: Move PCI code into own file
+>   powerpc/85xx: p2020: Unify .setup_arch and .init_IRQ callbacks
+>   powerpc/85xx: p2020: Define just one machine description
+>   powerpc/85xx: p2020: Enable boards by new config option
+>     CONFIG_PPC_P2020
+>   powerpc: dts: turris1x.dts: Remove "fsl,P2020RDB-PC" compatible string
+> 
+>  arch/powerpc/boot/dts/turris1x.dts         |   2 +-
+>  arch/powerpc/include/asm/ppc-pci.h         |   2 +
+>  arch/powerpc/platforms/85xx/Kconfig        |  22 +++-
+>  arch/powerpc/platforms/85xx/Makefile       |   5 +-
+>  arch/powerpc/platforms/85xx/mpc85xx.h      |  12 ++
+>  arch/powerpc/platforms/85xx/mpc85xx_8259.c |  78 ++++++++++++
+>  arch/powerpc/platforms/85xx/mpc85xx_ds.c   | 133 ++-------------------
+>  arch/powerpc/platforms/85xx/mpc85xx_mds.c  |   7 --
+>  arch/powerpc/platforms/85xx/mpc85xx_rdb.c  |  79 ++----------
+>  arch/powerpc/platforms/85xx/mpc85xx_uli.c  |  64 ++++++++++
+>  arch/powerpc/platforms/85xx/p1023_rdb.c    |   8 +-
+>  arch/powerpc/platforms/85xx/p2020.c        |  95 +++++++++++++++
+>  arch/powerpc/platforms/fsl_uli1575.c       |   6 +-
+>  13 files changed, 301 insertions(+), 212 deletions(-)
+>  create mode 100644 arch/powerpc/platforms/85xx/mpc85xx_8259.c
+>  create mode 100644 arch/powerpc/platforms/85xx/mpc85xx_uli.c
+>  create mode 100644 arch/powerpc/platforms/85xx/p2020.c
+> 
+> -- 
+> 2.39.1
+> 
