@@ -2,67 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D64969F9C6
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Feb 2023 18:16:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 90D7369F9C8
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Feb 2023 18:16:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232515AbjBVRQi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Feb 2023 12:16:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60090 "EHLO
+        id S232602AbjBVRQk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Feb 2023 12:16:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60100 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229611AbjBVRQh (ORCPT
+        with ESMTP id S232501AbjBVRQi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Feb 2023 12:16:37 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A64E23CE02
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Feb 2023 09:16:35 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 268D061483
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Feb 2023 17:16:35 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 994C7C433A4
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Feb 2023 17:16:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1677086194;
-        bh=hrUmLp1ongRcWuDKKNDJfhcSjmKjfLzniRaBA7/JBIM=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=dTAUjW3QdM923jjVuc5KQqUk0fSYqTdct3QgGPJBN4AjaWf56vO3uGXfTawSJm2x+
-         yAKm3ORhJTDjCaGwk2P1ymtJCl9veswheAQSbaPdcq1mZGDjr6Of1mSlVCvZIX8/WG
-         2eczU3BYuq/2ieREtZQTQoSnHBauCcGw+1F6sSQwdG/cYpSEOJSKEWGLHWcCj7V9AI
-         Ypkq0WO6oUWs0rc0MA8hWdckZrcjz9suNQtypTu13aOCircSXS+eesylCfBZuVBdCk
-         UoKuXQAyvRsFzNkyQjh5NK/kilpQ0H9i3X5VuBYW4BTGtQ88EtEsZasjVlKnwj8bYJ
-         4CzQi5VfFABjg==
-Received: by mail-ed1-f46.google.com with SMTP id cq23so33079895edb.1
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Feb 2023 09:16:34 -0800 (PST)
-X-Gm-Message-State: AO0yUKW6KUnTbwQdBsYo0XNmAsYrlqGgVMMI4aypQ7ZtAAKh0fqm/CVO
-        bXB3FQ5tZRk8iChWNHaxVHU6UO4qH0brE2F9BgUzzQ==
-X-Google-Smtp-Source: AK7set+DybHw6otK+W5B3oVTKwQvIdsHNRWcJRAdtoU/CADQS4+k//kUCc9CsMPbeSD1AFrmu1eoewaXneQ2ql/lPnI=
-X-Received: by 2002:a05:6402:5484:b0:4ad:739c:b38e with SMTP id
- fg4-20020a056402548400b004ad739cb38emr5459193edb.1.1677086192863; Wed, 22 Feb
- 2023 09:16:32 -0800 (PST)
+        Wed, 22 Feb 2023 12:16:38 -0500
+Received: from mail-il1-x132.google.com (mail-il1-x132.google.com [IPv6:2607:f8b0:4864:20::132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E83E3CE08
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Feb 2023 09:16:37 -0800 (PST)
+Received: by mail-il1-x132.google.com with SMTP id x6so3793517ilm.11
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Feb 2023 09:16:37 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=mhU+BNsquktEtbi/RkYY/MGXDA5v+Q/WUyCHkUYFULs=;
+        b=lQDgNkKYm7Kw/9Gqs1sd5jf2/jdTGlJTWv+Qjn++DHaoy2a3+xCayICJe/deXw4GDd
+         GKZphll2rGzmsO/otYEyDEBBGtBm0Jz9hP5hf7qC0XFRs8meCXNRsNMxeJQA7l2shvmv
+         GZUJmxSCvtrwEvMM/gXOpc9PjlNu+3AwLg1cw=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=mhU+BNsquktEtbi/RkYY/MGXDA5v+Q/WUyCHkUYFULs=;
+        b=u2c6dBE3e1SiG1Rax57uAKWqhGWHO2PsJQpe7mFXeZF2zkvup6DTDddrOkLxH9CyK1
+         niMmilbE23DMioAKhVkElyCVd9PqfPdaBs0FsXUHquyqRkd3PcnJP1XioVETpZDMjULb
+         KsUJKS5REgDEXqvJe+XlPrM/tWBSI2M28lYGThapqMC16VXiELCxHciNTFu+jxUHrK+1
+         P9rkRvTO1P/tSybgm7sR8Ye7gwT84uu6FrI0TSG/9rbRB7coEEZ7EV9rMXH47afMFUkf
+         FgIeGnE114QSQhbpmkKRHmdOGfFFI7GTXWuN1hi5SvUG+ZqOgffD0ET5sD7OUs9ZzpnQ
+         PkGg==
+X-Gm-Message-State: AO0yUKVGcrE98LtHkg9nfVd1FO+Jud6oqY4cppG856/GpuY83RiFmUkX
+        SHyWEFC/BITnEVUM38Pj4wnqF/ayqSJBbwo6TvVL9w==
+X-Google-Smtp-Source: AK7set/AvczuuV/MFcXVOCegpHdTpxULr+lm3D7Z1vYckYZ9NKPGNbBTDklJzM7XygKZ0V+MDmS0YVm+hHB5Gb1lfDE=
+X-Received: by 2002:a05:6e02:1a2e:b0:313:af46:81ba with SMTP id
+ g14-20020a056e021a2e00b00313af4681bamr2377996ile.3.1677086196661; Wed, 22 Feb
+ 2023 09:16:36 -0800 (PST)
 MIME-Version: 1.0
-References: <20230221184908.2349578-1-kpsingh@kernel.org> <Y/YJisQdorH1aAKV@zn.tnic>
-In-Reply-To: <Y/YJisQdorH1aAKV@zn.tnic>
-From:   KP Singh <kpsingh@kernel.org>
-Date:   Wed, 22 Feb 2023 09:16:21 -0800
-X-Gmail-Original-Message-ID: <CACYkzJ4cSA5xFScgS=WTc6tPis-vUCtYkh3LyEr8EkXoDCm-uA@mail.gmail.com>
-Message-ID: <CACYkzJ4cSA5xFScgS=WTc6tPis-vUCtYkh3LyEr8EkXoDCm-uA@mail.gmail.com>
-Subject: Re: [PATCH v2 1/2] x86/speculation: Allow enabling STIBP with legacy IBRS
-To:     Borislav Petkov <bp@alien8.de>
-Cc:     linux-kernel@vger.kernel.org, pjt@google.com, evn@google.com,
-        jpoimboe@kernel.org, tglx@linutronix.de, x86@kernel.org,
-        hpa@zytor.com, peterz@infradead.org,
-        pawan.kumar.gupta@linux.intel.com, kim.phillips@amd.com,
-        alexandre.chartre@oracle.com, daniel.sneddon@linux.intel.com,
-        corbet@lwn.net, bp@suse.de, linyujun809@huawei.com,
-        jmattson@google.com,
-        =?UTF-8?Q?Jos=C3=A9_Oliveira?= <joseloliveira11@gmail.com>,
-        Rodrigo Branco <rodrigo@kernelhacking.com>,
-        Alexandra Sandulescu <aesa@google.com>, stable@vger.kernel.org
+References: <20230218211608.1630586-1-robdclark@gmail.com> <20230218211608.1630586-2-robdclark@gmail.com>
+ <b65a2fe2-6f68-2116-9599-2940e66d166b@linux.intel.com> <21f36640-3229-0b46-31a2-a47efc5be934@amd.com>
+ <b8a16579-4be7-8e14-01e4-9d17c1570c8b@linux.intel.com>
+In-Reply-To: <b8a16579-4be7-8e14-01e4-9d17c1570c8b@linux.intel.com>
+From:   Rob Clark <robdclark@chromium.org>
+Date:   Wed, 22 Feb 2023 09:16:25 -0800
+Message-ID: <CAJs_Fx61OpgFo_kSLoy+2z8mS=wcdK8eZfQBA6dQm9p0=qLU2g@mail.gmail.com>
+Subject: Re: [PATCH v4 01/14] dma-buf/dma-fence: Add deadline awareness
+To:     Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>
+Cc:     =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
+        Rob Clark <robdclark@gmail.com>,
+        dri-devel@lists.freedesktop.org,
+        Gustavo Padovan <gustavo@padovan.org>,
+        Tvrtko Ursulin <tvrtko.ursulin@intel.com>,
+        =?UTF-8?Q?Michel_D=C3=A4nzer?= <michel@daenzer.net>,
+        open list <linux-kernel@vger.kernel.org>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        "moderated list:DMA BUFFER SHARING FRAMEWORK" 
+        <linaro-mm-sig@lists.linaro.org>,
+        Pekka Paalanen <ppaalanen@gmail.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        freedreno@lists.freedesktop.org,
+        "open list:SYNC FILE FRAMEWORK" <linux-media@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,176 +80,119 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Feb 22, 2023 at 4:24 AM Borislav Petkov <bp@alien8.de> wrote:
+On Wed, Feb 22, 2023 at 9:05 AM Tvrtko Ursulin
+<tvrtko.ursulin@linux.intel.com> wrote:
 >
-> On Tue, Feb 21, 2023 at 07:49:07PM +0100, KP Singh wrote:
-> > Setting the IBRS bit implicitly enables STIBP to protect against
-> > cross-thread branch target injection. With enhanced IBRS, the bit it se=
-t
-> > once and is not cleared again. However, on CPUs with just legacy IBRS,
-> > IBRS bit set on user -> kernel and cleared on kernel -> user (a.k.a
-> > KERNEL_IBRS). Clearing this bit also disables the implicitly enabled
-> > STIBP, thus requiring some form of cross-thread protection in userspace=
-.
-> >
-> > Enable STIBP, either opt-in via prctl or seccomp, or always on dependin=
+>
+> On 22/02/2023 15:28, Christian K=C3=B6nig wrote:
+> > Am 22.02.23 um 11:23 schrieb Tvrtko Ursulin:
+> >>
+> >> On 18/02/2023 21:15, Rob Clark wrote:
+> >>> From: Rob Clark <robdclark@chromium.org>
+> >>>
+> >>> Add a way to hint to the fence signaler of an upcoming deadline, such=
+ as
+> >>> vblank, which the fence waiter would prefer not to miss.  This is to =
+aid
+> >>> the fence signaler in making power management decisions, like boostin=
 g
-> > on the choice of mitigation selected via spectre_v2_user.
+> >>> frequency as the deadline approaches and awareness of missing deadlin=
+es
+> >>> so that can be factored in to the frequency scaling.
+> >>>
+> >>> v2: Drop dma_fence::deadline and related logic to filter duplicate
+> >>>      deadlines, to avoid increasing dma_fence size.  The fence-contex=
+t
+> >>>      implementation will need similar logic to track deadlines of all
+> >>>      the fences on the same timeline.  [ckoenig]
+> >>> v3: Clarify locking wrt. set_deadline callback
+> >>>
+> >>> Signed-off-by: Rob Clark <robdclark@chromium.org>
+> >>> Reviewed-by: Christian K=C3=B6nig <christian.koenig@amd.com>
+> >>> ---
+> >>>   drivers/dma-buf/dma-fence.c | 20 ++++++++++++++++++++
+> >>>   include/linux/dma-fence.h   | 20 ++++++++++++++++++++
+> >>>   2 files changed, 40 insertions(+)
+> >>>
+> >>> diff --git a/drivers/dma-buf/dma-fence.c b/drivers/dma-buf/dma-fence.=
+c
+> >>> index 0de0482cd36e..763b32627684 100644
+> >>> --- a/drivers/dma-buf/dma-fence.c
+> >>> +++ b/drivers/dma-buf/dma-fence.c
+> >>> @@ -912,6 +912,26 @@ dma_fence_wait_any_timeout(struct dma_fence
+> >>> **fences, uint32_t count,
+> >>>   }
+> >>>   EXPORT_SYMBOL(dma_fence_wait_any_timeout);
+> >>>   +
+> >>> +/**
+> >>> + * dma_fence_set_deadline - set desired fence-wait deadline
+> >>> + * @fence:    the fence that is to be waited on
+> >>> + * @deadline: the time by which the waiter hopes for the fence to be
+> >>> + *            signaled
+> >>> + *
+> >>> + * Inform the fence signaler of an upcoming deadline, such as
+> >>> vblank, by
+> >>> + * which point the waiter would prefer the fence to be signaled by.
+> >>> This
+> >>> + * is intended to give feedback to the fence signaler to aid in powe=
+r
+> >>> + * management decisions, such as boosting GPU frequency if a periodi=
+c
+> >>> + * vblank deadline is approaching.
+> >>> + */
+> >>> +void dma_fence_set_deadline(struct dma_fence *fence, ktime_t deadlin=
+e)
+> >>> +{
+> >>> +    if (fence->ops->set_deadline && !dma_fence_is_signaled(fence))
+> >>> +        fence->ops->set_deadline(fence, deadline);
+> >>> +}
+> >>> +EXPORT_SYMBOL(dma_fence_set_deadline);
+> >>> +
+> >>>   /**
+> >>>    * dma_fence_describe - Dump fence describtion into seq_file
+> >>>    * @fence: the 6fence to describe
+> >>> diff --git a/include/linux/dma-fence.h b/include/linux/dma-fence.h
+> >>> index 775cdc0b4f24..d77f6591c453 100644
+> >>> --- a/include/linux/dma-fence.h
+> >>> +++ b/include/linux/dma-fence.h
+> >>> @@ -99,6 +99,7 @@ enum dma_fence_flag_bits {
+> >>>       DMA_FENCE_FLAG_SIGNALED_BIT,
+> >>>       DMA_FENCE_FLAG_TIMESTAMP_BIT,
+> >>>       DMA_FENCE_FLAG_ENABLE_SIGNAL_BIT,
+> >>> +    DMA_FENCE_FLAG_HAS_DEADLINE_BIT,
+> >>
+> >> Would this bit be better left out from core implementation, given how
+> >> the approach is the component which implements dma-fence has to track
+> >> the actual deadline and all?
+> >>
+> >> Also taking a step back - are we all okay with starting to expand the
+> >> relatively simple core synchronisation primitive with side channel
+> >> data like this? What would be the criteria for what side channel data
+> >> would be acceptable? Taking note the thing lives outside drivers/gpu/.
 > >
-> > Reported-by: Jos=C3=A9 Oliveira <joseloliveira11@gmail.com>
-> > Reported-by: Rodrigo Branco <rodrigo@kernelhacking.com>
-> > Reviewed-by: Alexandra Sandulescu <aesa@google.com>
-> > Fixes: 7c693f54c873 ("x86/speculation: Add spectre_v2=3Dibrs option to =
-support Kernel IBRS")
-> > Cc: stable@vger.kernel.org
-> > Signed-off-by: KP Singh <kpsingh@kernel.org>
-> > ---
-> >  arch/x86/kernel/cpu/bugs.c | 33 ++++++++++++++++++++++-----------
-> >  1 file changed, 22 insertions(+), 11 deletions(-)
+> > I had similar concerns and it took me a moment as well to understand th=
+e
+> > background why this is necessary. I essentially don't see much other
+> > approach we could do.
+> >
+> > Yes, this is GPU/CRTC specific, but we somehow need a common interface
+> > for communicating it between drivers and that's the dma_fence object as
+> > far as I can see.
 >
-> Below is what I'd like to see. Holler if something's wrong.
+> Yeah I also don't see any other easy options. Just wanted to raise this
+> as something which probably needs some wider acks.
+>
+> Also what about the "low level" part of my question about the reason, or
+> benefits, of defining the deadline bit in the common layer?
 
-Thanks for iterating. I think your commit description and rewrite
-omits a few key subtleties which I have tried to reinforce in both the
-commit log and the comments.
+We could leave DMA_FENCE_FLAG_HAS_DEADLINE_BIT out, but OTOH managing
+a bitmask that is partially defined in core enum and partially in
+backend-driver has it's own drawbacks, and it isn't like we are
+running out of bits.. :shrug:
 
-Q: What does STIBP have to do with IBRS?
-A: Setting the IBRS bit implicitly enables STIBP / some form of cross
-thread protection.
+BR,
+-R
 
-Q: Why does it work with eIBRS?
-A: Because we set the IBRS bit once and leave it set when using eIBRS
-
-I think this subtlety should be reinforced in the commit description
-and code comments so that we don't get it wrong again. Your commit
-does answer this one (thanks!)
-
-Q: Why does it not work with the way the kernel currently implements
-legacy IBRS?
-A: Because the kernel clears the bit on returning to user space.
-
+> Regards,
 >
-> It is totally untested ofc.
->
-> ---
-> From: KP Singh <kpsingh@kernel.org>
-> Date: Tue, 21 Feb 2023 19:49:07 +0100
-> Subject: [PATCH] x86/speculation: Allow enabling STIBP with legacy IBRS
-> MIME-Version: 1.0
-> Content-Type: text/plain; charset=3DUTF-8
-> Content-Transfer-Encoding: 8bit
->
-> When plain IBRS is enabled (not enhanced IBRS), the logic in
-> spectre_v2_user_select_mitigation() determines that STIBP is not needed.
->
-> However, on return to userspace, the IBRS bit is cleared for performance
-> reasons. That leaves userspace threads vulnerable to cross-thread
-> predictions influence against which STIBP protects.
->
-> Exclude IBRS from the spectre_v2_in_ibrs_mode() check to allow for
-> enabling STIBP through seccomp/prctl().
->
->   [ bp: Rewrite commit message and massage. ]
->
-> Fixes: 7c693f54c873 ("x86/speculation: Add spectre_v2=3Dibrs option to su=
-pport Kernel IBRS")
-> Reported-by: Jos=C3=A9 Oliveira <joseloliveira11@gmail.com>
-> Reported-by: Rodrigo Branco <rodrigo@kernelhacking.com>
-> Signed-off-by: KP Singh <kpsingh@kernel.org>
-> Signed-off-by: Borislav Petkov (AMD) <bp@alien8.de>
-> Cc: stable@vger.kernel.org
-> Link: https://lore.kernel.org/r/20230221184908.2349578-1-kpsingh@kernel.o=
-rg
-> ---
->  arch/x86/kernel/cpu/bugs.c | 25 ++++++++++++++++++-------
->  1 file changed, 18 insertions(+), 7 deletions(-)
->
-> diff --git a/arch/x86/kernel/cpu/bugs.c b/arch/x86/kernel/cpu/bugs.c
-> index cf81848b72f4..9a969ab0e62a 100644
-> --- a/arch/x86/kernel/cpu/bugs.c
-> +++ b/arch/x86/kernel/cpu/bugs.c
-> @@ -1133,14 +1133,18 @@ spectre_v2_parse_user_cmdline(void)
->         return SPECTRE_V2_USER_CMD_AUTO;
->  }
->
-> -static inline bool spectre_v2_in_ibrs_mode(enum spectre_v2_mitigation mo=
-de)
-> +static inline bool spectre_v2_in_eibrs_mode(enum spectre_v2_mitigation m=
-ode)
->  {
-> -       return mode =3D=3D SPECTRE_V2_IBRS ||
-> -              mode =3D=3D SPECTRE_V2_EIBRS ||
-> +       return mode =3D=3D SPECTRE_V2_EIBRS ||
->                mode =3D=3D SPECTRE_V2_EIBRS_RETPOLINE ||
->                mode =3D=3D SPECTRE_V2_EIBRS_LFENCE;
->  }
->
-> +static inline bool spectre_v2_in_ibrs_mode(enum spectre_v2_mitigation mo=
-de)
-> +{
-> +       return spectre_v2_in_eibrs_mode(mode) || mode =3D=3D SPECTRE_V2_I=
-BRS;
-> +}
-> +
->  static void __init
->  spectre_v2_user_select_mitigation(void)
->  {
-> @@ -1203,12 +1207,19 @@ spectre_v2_user_select_mitigation(void)
->         }
->
->         /*
-> -        * If no STIBP, IBRS or enhanced IBRS is enabled, or SMT impossib=
-le,
-> -        * STIBP is not required.
-> +        * If no STIBP, enhanced IBRS is enabled, or SMT impossible, STIB=
-P
-> +        * is not required.
-> +        *
-> +        * Enhanced IBRS protects also against user-mode attacks as the I=
-BRS bit
-> +        * remains always set which implicitly enables cross-thread prote=
-ctions.
-> +        * However, in legacy IBRS mode, the IBRS bit is set only on kern=
-el
-> +        * entry and cleared on return to userspace. This disables the im=
-plicit
-> +        * cross-thread protections so allow for STIBP to be selected in =
-that
-> +        * case.
->          */
->         if (!boot_cpu_has(X86_FEATURE_STIBP) ||
->             !smt_possible ||
-> -           spectre_v2_in_ibrs_mode(spectre_v2_enabled))
-> +           spectre_v2_in_eibrs_mode(spectre_v2_enabled))
->                 return;
->
->         /*
-> @@ -2340,7 +2351,7 @@ static ssize_t mmio_stale_data_show_state(char *buf=
-)
->
->  static char *stibp_state(void)
->  {
-> -       if (spectre_v2_in_ibrs_mode(spectre_v2_enabled))
-> +       if (spectre_v2_in_eibrs_mode(spectre_v2_enabled))
-
-The reason why I refactored this into a separate helper was to
-document the subtleties I mentioned above and anchor them to one place
-as the function is used in 2 places. But this is a maintainer's
-choice, so it's your call :)
-
-I do agree with Pawan that it's worth adding a pr_info about what the
-kernel is doing about STIBP.
-
-- KP
-
->                 return "";
->
->         switch (spectre_v2_user_stibp) {
-> --
-> 2.35.1
->
-> --
-> Regards/Gruss,
->     Boris.
->
-> https://people.kernel.org/tglx/notes-about-netiquette
+> Tvrtko
