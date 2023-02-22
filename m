@@ -2,133 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E4B0D69EECF
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Feb 2023 07:39:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4ACAE69EED1
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Feb 2023 07:40:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229493AbjBVGjR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Feb 2023 01:39:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48290 "EHLO
+        id S229961AbjBVGkO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Feb 2023 01:40:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49262 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229561AbjBVGjO (ORCPT
+        with ESMTP id S229672AbjBVGkL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Feb 2023 01:39:14 -0500
-Received: from FRA01-PR2-obe.outbound.protection.outlook.com (mail-pr2fra01on2072.outbound.protection.outlook.com [40.107.12.72])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FFB92887F
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Feb 2023 22:39:11 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=RfAIx6hU4vYCYINhgekjUXzCuSM61qEKDOdxtM+UG5J5Hus05MEI6ync3dIzP2hdU9qXnUZWbiR7T1mEUzo8s4q+qvs1icrjm3iVLdQOa610sToP5ZZ2l3f4iGAcCv7jW++lEB2cer7UwftIxRxaYhFGNvcBOciu1V+xi4bt8H7sprKz94JXh3AMYfv6+TmuGy5UOQMCBPR1/9VDlGAZ/JEdOnoSfTJNUHGsiw9Hw6keXRbGiKW/xbrDoRzGAedwc2Rf+0UZTWd0a/8OwyKwQhuxaP2O+14sHzmv4SYv0WUrgZwDzBOiFzBCrSBzLVWtxOtuk6Rxo7wzI2+VdApzXQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=MkiR4Dm1WPr3w+b/pfZI0Ra2XAKcn0Zm7PXMsHbUTy4=;
- b=gvxwdsTnhvv6CakNGIloxq9Qjan1E2oVCnRV2nzt1drvTLdpq7o/f8dHfbLNDspLeRK+U0/7Y1WijORYF5I8UNnKVkUYSdGL0VxIRB16jICVe0KcQOVq896nO93nztugjwdsmCWSY6UFn/rv9USPXOwImuo/YOmeZA+Synz0ATSqcwX0Z/G0EiG86GmN8YD+qk9DM72MefhFdtFzR1BKoP7pS3BB0mvsgEcE6IQzYujsvx8ghNiyz49nA2gdsSKIxCN2vnKVqj8uImafG+7ZOmtkmNOcZGPJk4XNs+JY/N4Oi97GIILNBqwQC0xxlZwoj9CECouvqZHboVD1IxduAA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=csgroup.eu; dmarc=pass action=none header.from=csgroup.eu;
- dkim=pass header.d=csgroup.eu; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=csgroup.eu;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=MkiR4Dm1WPr3w+b/pfZI0Ra2XAKcn0Zm7PXMsHbUTy4=;
- b=lHIOILtsC0n7l+CEog6ed8EwmIXfkhfoVLMZ+cnHxJ927xYmKCQ8k27TwnUjuiblDS4zAjZmQraShMlRwGOxRdjsPBJgcta61lsOvJUsohgj5Po24I3lF8MAMWdmr64eyL7L1FiKzlEQ3i3IeeRZcs2r+W0rIq0VxUkorsz2+LHO+eRbWQW0udIYpiGsod+n9N9NMQA7E3tQAalPaMxsLrs+jpZNMXxFPGT6c7i8qfMdwbha2paj/AXTMJULFVSVnl/rFANbmUZsctya804Pau3A5x1d1lqXJaRMrl6RQ5aQ/VLX41zu46BiJI1f0669mM4RJPqaEnQawxzWvfrU0Q==
-Received: from MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM (2603:10a6:501:31::15)
- by PR1P264MB3429.FRAP264.PROD.OUTLOOK.COM (2603:10a6:102:180::12) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6134.19; Wed, 22 Feb
- 2023 06:39:07 +0000
-Received: from MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
- ([fe80::2cfb:d4c:1932:b097]) by MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
- ([fe80::2cfb:d4c:1932:b097%6]) with mapi id 15.20.6134.019; Wed, 22 Feb 2023
- 06:39:07 +0000
-From:   Christophe Leroy <christophe.leroy@csgroup.eu>
-To:     =?utf-8?B?UGFsaSBSb2jDoXI=?= <pali@kernel.org>
-CC:     Michael Ellerman <mpe@ellerman.id.au>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Scott Wood <oss@buserror.net>, Sinan Akman <sinan@writeme.com>,
-        Martin Kennedy <hurricos@gmail.com>,
-        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v3 0/8] powerpc/85xx: p2020: Create one unified machine
- description
-Thread-Topic: [PATCH v3 0/8] powerpc/85xx: p2020: Create one unified machine
- description
-Thread-Index: AQHZQ4voiBHHMXLxIEOEExcEj19bG67Z+pwAgACPBYA=
-Date:   Wed, 22 Feb 2023 06:39:07 +0000
-Message-ID: <a692823b-eada-3072-c9e9-83877480454f@csgroup.eu>
-References: <20230218111405.27688-1-pali@kernel.org>
- <20230221220714.pm64kwsnf3erdjcm@pali>
-In-Reply-To: <20230221220714.pm64kwsnf3erdjcm@pali>
-Accept-Language: fr-FR, en-US
-Content-Language: fr-FR
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-user-agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=csgroup.eu;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: MRZP264MB2988:EE_|PR1P264MB3429:EE_
-x-ms-office365-filtering-correlation-id: edf88736-a737-4b61-ba2a-08db149f7f8a
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: fhiGgkDTBqGaoovTcMs5XFZMW5LW7zyEbt/Yl013XrlftTf5hrhhczo71roMr2kGRt/FVA6rer1YU53mvTBe94rvQj1jIOilZFCz9Dan1sXW3f/jHjpsKD+pL/rVqdlbmKEkGLPbHXS9OleTcxu7vbfytAUtjIbGVkWbbdvCSBpxV6U3HSCZrUYCiICMzjA7yf6hdBt7EP1kJL4OuOTgHtGqe7C9UrNXd1gTCrQG4aiH22U0Hnybg7/AKFDP3XplWPE70I2U1Zjh4H1JV2m8wSSdKuXJB2/s+JpcxLq9MQJi4ypWMAVLauMUFbBmTXjhNiaovQInAeECtH5cv51vi9GJ9VjBn9teDL/n4XfMMtonU0+tCeupYtCS3U0XCpqyXRavr4U6qR6i784Ph/Aurv+ov+ArMjjwYA1lpag7BZ2UFWoN9mlyJunnwhGglp8VMjQngdR5hhrjgUNppZY1k4BZLs0eszPmkMvnvWk7dfr5PqzwJXPZpZV0Dz6s17mK4PuyDE+/g4fxc5gVjiwbsXLyQXp9mXn//IoeeB/YwXqi/793grqLocMwzIv2Ma8OROVS3pA/PxFXtBgWorukme8U5klO19xwp93VNxdYRmwGC0713DjpUqFVu83njIdc9sZ6lki2yjC6eJj4mnStWkkil+QtFjT5iT0NrN2xD2MESC2n0w3fxeqfEaNFgS4fqUFjtWs2RxVQeChNQarx9Fq00zxB31pB9j0hK/HHW1hP/d9Ul2RqRXSxcpdrTYsd7uItKqXpEnQorKJmbwBeBTFHVzj9e821OozhE3jKct0=
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230025)(4636009)(396003)(376002)(366004)(346002)(39860400002)(136003)(451199018)(966005)(31686004)(26005)(186003)(6486002)(6916009)(4326008)(76116006)(66946007)(66556008)(66476007)(64756008)(8676002)(66446008)(5660300002)(36756003)(83380400001)(8936002)(91956017)(2616005)(6506007)(6512007)(71200400001)(478600001)(66574015)(54906003)(41300700001)(316002)(38100700002)(86362001)(122000001)(31696002)(38070700005)(44832011)(2906002)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?UjNjZjEzMXhkYnZaN1grUTN3c1didmprRS83TngzSjdZVWh2Skpsb0R5dTE0?=
- =?utf-8?B?RnpYaVRaVkc2YmZIMFdMazdqTnZKR0FCbHN5YVNsRVV4d1hEWmNTYkdLcmtr?=
- =?utf-8?B?Z29mUG5IVnMrQUpENG8yQlFHQUVWcnBhR285QjVqbnhtNm02TzVnZi8xWXRG?=
- =?utf-8?B?ZS9FU0RoMGFibnJ5SlVMZWkwUFFiTklxbGFrU3JheUo2b3hRMVloNE9LSTl2?=
- =?utf-8?B?Qk9kcFF2aEI1MnhoTkZoK3BlaDRIQTE5QngvTUkxNnNhYlM1cHhDazgyMGls?=
- =?utf-8?B?NDVzOE4zdzc5dmp1Mk1IbmIraEE2c3RsWCtHRnB2UGRIa0t6d3NRdXZRMUJP?=
- =?utf-8?B?STd3enZKU0dTSUdVMEdqMHVCUEtZbUZFUDFWdCsyYTdSS1JOU1BnTUNibkpP?=
- =?utf-8?B?QjJSRW54YlRwbDl3eHRueTJhT000R0doU2l3QmFBWm9FZkdoR2dSZXVwUlEr?=
- =?utf-8?B?QlRIc21HMzlNT0RXaXd1WkRzSkxaUlRVUWd3VkphSTNkWUJBbkRtVmw1R3V5?=
- =?utf-8?B?NzI1cldaOXFtaE1DTHZaeHBKcWh0SlNmQnBSeXB1dXBIMVhsenl3NzA2Wjdn?=
- =?utf-8?B?NFBiUjlkckQxdU5RaUdab3lva3QyVk1BbkY0NnQ5NmxMcDk3ZGNveURXQ05I?=
- =?utf-8?B?YitoelpzZ20yVHRic1RJbXB1eWJzbnZ6aXgra2ZlaHZUZVdXMGowbHBnVklH?=
- =?utf-8?B?VFBtRWVXZ1l4SGVWZVYzZXFlNFpFWGJGelM0R3oxSDRjSTVmVzVLcWI2dFpB?=
- =?utf-8?B?TGZDak5ZOGZyWlZJZmcvWTVJR245dFF1YmdkUFFNS2E3UnFJZGd2ZG1ma2FV?=
- =?utf-8?B?enExaldIS2VMVkY0ZU9rYm44TG1NTERFaVE4QWxISjk4Vmp4UlFJenZHVUlV?=
- =?utf-8?B?RUN3ZGVPRU5pWXJxTEcvOVNLaTMwQ1oyVGQ0T2JFLzN2VHcwT04zTFFEYUJ0?=
- =?utf-8?B?S3FkS2ZaRVE0MGxjWElaQWc3Z3pBV3dTMzh0T2hIaWJ4NVRsNm11NThPVE15?=
- =?utf-8?B?b2V6aEtGbWpycE9naW1IZ1I3Z0FuT1BLRlEwanp0eGQzaUZ2eitxU1dQemNr?=
- =?utf-8?B?bURxelJ5RFNTWHl3NXNiRTJ2eXdpajFYS09CWG55YU5vMThBeGliVjNjYnZ4?=
- =?utf-8?B?bFUrK25uM0ZHeUJZOStqVzE2TVZHYXdHUml6ODRobmlub1VjRDRmZzFqSms5?=
- =?utf-8?B?T1Q4Ujd1UDNSWFhrV1ArM29DQWovako5S1ZJUlJOOXc5OEpoNDZXUzhWZzRH?=
- =?utf-8?B?Z2trRUxMSGI5U25VL0lKTmNwdlFuYnlCcEJEb2xNcXQybGs1blRLTTFKMWU5?=
- =?utf-8?B?ZTY0LzZqeDhJQnVqdG41UWpodGlVQ0NDZE1lQ2ljbm5qOWhCV1g3dU96Ty9q?=
- =?utf-8?B?cVArWUdGR1RGZTF5UEdRNmhCY2VveGI4eEJ3TDh2ZkU1NHdrWGt0ZlNOaVlr?=
- =?utf-8?B?enU2WVQ4QmFWRy8wbHNKQkZlR0I4ejIvUnowd01rRlRIaWpGWEJKWms5WFhq?=
- =?utf-8?B?NXhZTkxOeHpRM3c5WmVISlVqaktBSmxEMnQvRkViSHhKdGtJWkY2a1g1WDMx?=
- =?utf-8?B?R0YvUStaVWxnYkZ3d0tDNTJxSTVQeTlhTnBxMGZZQklwYzc0RUliWHJwcHZ0?=
- =?utf-8?B?UGJtZ2FOSldQcHJFVnZSVUk4VTNVUzZPTkpWeC9CR2hWMU1zaUpLN1NLYnFE?=
- =?utf-8?B?YUpsTVVBNjFOdlpUY2RVeTE0ajRIOWxhZmtGd2VDK21jdk5pd3QzQjN4NXJI?=
- =?utf-8?B?SmNJeGRmWDFyVjVWOGdlNmNEVlptVEpsNURaSjcwdzNpRGpwZ3JTU2REU2l2?=
- =?utf-8?B?dEpYazBPTHpzTVJzVi9QbHlMZ0xGZzNTaytScVRlQVAvSlJ2TGFUU2tBNXFM?=
- =?utf-8?B?Yko3T1dXU0lVZlIvaHpoTzZIeWE2RHVSeU95NDVYbmg0RWpaVUhnL3lBdUNP?=
- =?utf-8?B?ZktqZHVvUG9GMnJPdGVQR0ZsaDd4cGNHV0h4dFI4RWlNcElRUDlMNjZFdk1s?=
- =?utf-8?B?SWR0d2JVdG0xRnIvL1cxOEF5RDh4aUVva2pUWXM0MytZVG40aVh2YnJTM0xm?=
- =?utf-8?B?WFgwRDJieWx6RnZOdmRoVUt3M0pRTnkxSjZkN3ZrbGVpMExEdi9lRENZTTZB?=
- =?utf-8?B?d3pTRUQ4RGhncVlvdU5QY0o4czZSQjRUeVFEbUZkY2FXdGZhT0dldW5nRERh?=
- =?utf-8?B?d1E9PQ==?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <F72C8D26F40B2748A37908E6662E5FB3@FRAP264.PROD.OUTLOOK.COM>
-Content-Transfer-Encoding: base64
+        Wed, 22 Feb 2023 01:40:11 -0500
+Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27F4034C33
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Feb 2023 22:40:10 -0800 (PST)
+Received: by mail-pj1-x1032.google.com with SMTP id x20-20020a17090a8a9400b00233ba727724so812514pjn.1
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Feb 2023 22:40:10 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=user-agent:content-disposition:mime-version:message-id:subject:cc
+         :to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=j9L0mH+e4qGXynwfcfo7mfSRluQF/M6jwhm1ScZI2Yk=;
+        b=E/7txbfN1aKxEm1l3tyXuKGDNBWM/14U+I2b3FLilbVnH/07gtGIlDzcnsOlR9szYc
+         7h9unIj6fskGPkOspbqmvvddUGXVZsQVX+b3VHY260Lybyp1SE39CIaHEBcuH8Xc45ou
+         v/Xaz2TXbn/j2GZKcvqM4PzusnyEVMdmBbeTqMGS2ePSPGC9M8t++qJ08Ixf/0PGdGkG
+         z34oT5lla+coDJ/pfy9/lVIUUioAw9BP+2uW0iPQiQQYqRQ6rUEKA926Odi7v1pQ0vJh
+         mOadYSHjaHcFKnZ7B417nNts8mzJgyAdwIt5oRsJXLcEmVv6sC1s7rrZUroD+IkJJsTA
+         341Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=user-agent:content-disposition:mime-version:message-id:subject:cc
+         :to:from:date:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=j9L0mH+e4qGXynwfcfo7mfSRluQF/M6jwhm1ScZI2Yk=;
+        b=NkmCsx/18g5zDk1cmIlrqRiO52FbrpvQA8gRBzKkFsaXaMZuta4yAg9ddoI8VsmZI3
+         sM0G4evZuRdylFUgJGjvkPUV0IdC91sl6y+RE1mdBXQZWCLG5BQCjD6oQM+ufXRyxt+j
+         q2DkMi4F/IpOi0YBO021X1QhME9zHoUV6cTBaBmKBquQ2pbGKcZNuki5ZAAeGwViJLLU
+         UhO2tItwlREPd5TgSCdzDtCzqLdIVjUQSoFMSCLfjSlfM7QdtN9c33Q5BgduHJWe/cK1
+         2tbbibjYcMps93hUdRl38Ur5oJH6cJR1cppwLGi+3KrV7VP0nsrm7g+7i8L2+DfAFOfT
+         tbtA==
+X-Gm-Message-State: AO0yUKU7REAAPFckE/KwqwxbmdAsBJhvMf1ECNeCBIYgHcf0wG+ThI6o
+        TOPyJCRU2HoPHfeqbly8OdECJytCPUeq/A==
+X-Google-Smtp-Source: AK7set/WCTgLw/l7qwIez8Tm1S//HU4sfklD/3oKTx2m7C3UwAx5kzT7Evmfe81Q555sBzcaTcWxpA==
+X-Received: by 2002:a05:6a21:329c:b0:c7:2c6c:b37a with SMTP id yt28-20020a056a21329c00b000c72c6cb37amr9263580pzb.13.1677048009040;
+        Tue, 21 Feb 2023 22:40:09 -0800 (PST)
+Received: from thinkstation.cmpxchg8b.net ([76.133.164.192])
+        by smtp.gmail.com with ESMTPSA id y186-20020a638ac3000000b00476d1385265sm4187923pgd.25.2023.02.21.22.40.08
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 21 Feb 2023 22:40:08 -0800 (PST)
+Date:   Tue, 21 Feb 2023 22:40:07 -0800
+From:   Tavis Ormandy <taviso@gmail.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     x86@kernel.org
+Subject: x86: AMD Zen2 ymm registers rolling back
+Message-ID: <Y/W4x7/KFqmDmmR7@thinkstation.cmpxchg8b.net>
 MIME-Version: 1.0
-X-OriginatorOrg: csgroup.eu
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-Network-Message-Id: edf88736-a737-4b61-ba2a-08db149f7f8a
-X-MS-Exchange-CrossTenant-originalarrivaltime: 22 Feb 2023 06:39:07.5054
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 9914def7-b676-4fda-8815-5d49fb3b45c8
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: sfD+t5h+ELnnXnWOvaXRntd7KFrYWfgAISDVzT+Ohl2790ngh4X2I8XDenVYltYFYneITDbZW8JezucV1lTGonweRejReoqCQBg4//dakXI=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PR1P264MB3429
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+Content-Type: multipart/mixed; boundary="FomKkfK23h1eei7S"
+Content-Disposition: inline
+User-Agent: Mutt/2.2.7 (2022-08-07)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -136,52 +69,163 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-SGksDQoNCkxlIDIxLzAyLzIwMjMgw6AgMjM6MDcsIFBhbGkgUm9ow6FyIGEgw6ljcml0wqA6DQo+
-IEhlbGxvIENocmlzdG9waGUhIENvdWxkIHlvdSBsb29rIGF0IHRoaXMgdjMgc2VyaWVzPw0KPiBJ
-IGFkZHJlc3NlZCB0aG9zZSBzbWFsbCBpc3N1ZXMgYW5kIGhvcGVmdWxseSBpdCBzaG91bGQgYmUg
-cmVhZHkuDQo+IEl0IHdvdWxkIGJlIGdyZWF0IHRvIGhhdmUgdGhpcyBmaW5hbGx5IGluIHY2LjMg
-cmVsZWFzZS4NCg0KSSBzdGFydGVkIGxvb2tpbmcgYXQgeW91ciBzZXJpZXMgYW5kIEkgd2lsbCB0
-cnkgdG8gcHJvdmlkZSBhIGZlZWRiYWNrIA0Kd2l0aGluIGEgZmV3IGRheXMuDQoNCkJ5IHRoZSB3
-YXkgSSBzZWUgdGhhdCBQYXVsIEdvcnRtYWtlciBoYXMgc3RhcnRlZCByZW1vdmFsIG9mIHNldmVy
-YWwgODV4eCANCmJvYXJkcy4gU2hvdWxkIHdlIGZpcnN0IHRha2UgUGF1bCdzIHJlbW92YWwgc2Vy
-aWVzIHRoZW4gc2VlIHdoYXQgcmVtYWlucyANCmJlZm9yZSBhcHBseWluZyB5b3VycyA/IFRoYXQg
-d291bGQgbWFrZSB5b3VyIHNlcmllcyBldmVuIG1vcmUgZWZmaWNpZW50Lg0KDQpDaHJpc3RvcGgN
-Cg0KPiANCj4gT24gU2F0dXJkYXkgMTggRmVicnVhcnkgMjAyMyAxMjoxMzo1NyBQYWxpIFJvaMOh
-ciB3cm90ZToNCj4+IFRoaXMgcGF0Y2ggc2VyaWVzIHVuaWZpZXMgYWxsIFAyMDIwIGJvYXJkcyBh
-bmQgbWFjaGluZSBkZXNjcmlwdGlvbnMgaW50bw0KPj4gb25lIGdlbmVyaWMgdW5pZmllZCBQMjAy
-MCBtYWNoaW5lIGRlc2NyaXB0aW9uLiBXaXRoIHRoaXMgZ2VuZXJpYyBtYWNoaW5lDQo+PiBkZXNj
-cmlwdGlvbiwga2VybmVsIGNhbiBib290IG9uIGFueSBQMjAyMC1iYXNlZCBib2FyZCB3aXRoIGNv
-cnJlY3QgRFRTDQo+PiBmaWxlLg0KPj4NCj4+IFRlc3RlZCBvbiBDWi5OSUMgVHVycmlzIDEuMSBi
-b2FyZCB3aXRoIGhhcyBGcmVlc2NhbGUgUDIwMjAgcHJvY2Vzc29yLg0KPj4gS2VybmVsIGR1cmlu
-ZyBib290aW5nIGNvcnJlY3RseSBkZXRlY3RzIFAyMDIwIGFuZCBwcmludHM6DQo+PiBbICAgIDAu
-MDAwMDAwXSBVc2luZyBGcmVlc2NhbGUgUDIwMjAgbWFjaGluZSBkZXNjcmlwdGlvbg0KPj4NCj4+
-IENoYW5nZXMgaW4gdjM6DQo+PiAqIFVzZSAnaWYgKElTX0VOQUJMRUQoQ09ORklHX1BQQ19JODI1
-OSkpJyBpbnN0ZWFkIG9mICcjaWZkZWYgQ09ORklHX1BQQ19JODI1OScNCj4+ICogU2ltcGxpZnkg
-cDIwMjBfcHJvYmUoKQ0KPj4gKiBQYXRjaGVzIGdlbmVyYXRlZCBieSAtTSBhbmQgLUMgZ2l0IG9w
-dGlvbnMNCj4+DQo+PiBMaW5rIHRvIHYyOiBodHRwczovL2xvcmUua2VybmVsLm9yZy9saW51eHBw
-Yy1kZXYvMjAyMjEyMjQyMTE0MjUuMTQ5ODMtMS1wYWxpQGtlcm5lbC5vcmcvDQo+Pg0KPj4gQ2hh
-bmdlcyBpbiB2MjoNCj4+ICogQWRkZWQgcGF0Y2ggInAyMDIwOiBNb3ZlIGk4MjU5IGNvZGUgaW50
-byBvd24gZnVuY3Rpb24iIChzZXBhcmF0ZWQgZnJvbSB0aGUgbmV4dCBvbmUpDQo+PiAqIFJlbmFt
-ZWQgQ09ORklHX1AyMDIwIHRvIENPTkZJR19QUENfUDIwMjANCj4+ICogRml4ZWQgZGVzY3JpcHRp
-b25zDQo+Pg0KPj4gTGluayB0byB2MTogaHR0cHM6Ly9sb3JlLmtlcm5lbC5vcmcvbGludXhwcGMt
-ZGV2LzIwMjIwODE5MTkxNTU3LjI4MTE2LTEtcGFsaUBrZXJuZWwub3JnLw0KPj4NCj4+IFBhbGkg
-Um9ow6FyICg4KToNCj4+ICAgIHBvd2VycGMvODV4eDogTWFyayBtcGM4NXh4X3JkYl9waWNfaW5p
-dCgpIGFzIHN0YXRpYw0KPj4gICAgcG93ZXJwYy84NXh4OiBNYXJrIG1wYzg1eHhfZHNfcGljX2lu
-aXQoKSBhcyBzdGF0aWMNCj4+ICAgIHBvd2VycGMvODV4eDogcDIwMjA6IE1vdmUgYWxsIFAyMDIw
-IG1hY2hpbmUgZGVzY3JpcHRpb25zIHRvIHAyMDIwLmMNCj4+ICAgIHBvd2VycGMvODV4eDogcDIw
-MjA6IE1vdmUgaTgyNTkgY29kZSBpbnRvIG93biBmdW5jdGlvbg0KPj4gICAgcG93ZXJwYy84NXh4
-OiBwMjAyMDogVW5pZnkgLnNldHVwX2FyY2ggYW5kIC5pbml0X0lSUSBjYWxsYmFja3MNCj4+ICAg
-IHBvd2VycGMvODV4eDogcDIwMjA6IERlZmluZSBqdXN0IG9uZSBtYWNoaW5lIGRlc2NyaXB0aW9u
-DQo+PiAgICBwb3dlcnBjLzg1eHg6IHAyMDIwOiBFbmFibGUgYm9hcmRzIGJ5IG5ldyBjb25maWcg
-b3B0aW9uDQo+PiAgICAgIENPTkZJR19QUENfUDIwMjANCj4+ICAgIHBvd2VycGM6IGR0czogdHVy
-cmlzMXguZHRzOiBSZW1vdmUgImZzbCxQMjAyMFJEQi1QQyIgY29tcGF0aWJsZSBzdHJpbmcNCj4+
-DQo+PiAgIGFyY2gvcG93ZXJwYy9ib290L2R0cy90dXJyaXMxeC5kdHMgICAgICAgICAgICB8ICAg
-MiArLQ0KPj4gICBhcmNoL3Bvd2VycGMvcGxhdGZvcm1zLzg1eHgvS2NvbmZpZyAgICAgICAgICAg
-fCAgMjIgKystDQo+PiAgIGFyY2gvcG93ZXJwYy9wbGF0Zm9ybXMvODV4eC9NYWtlZmlsZSAgICAg
-ICAgICB8ICAgMSArDQo+PiAgIGFyY2gvcG93ZXJwYy9wbGF0Zm9ybXMvODV4eC9tcGM4NXh4X2Rz
-LmMgICAgICB8ICAyNSArLS0tDQo+PiAgIGFyY2gvcG93ZXJwYy9wbGF0Zm9ybXMvODV4eC9tcGM4
-NXh4X3JkYi5jICAgICB8ICA0NiArLS0tLS0NCj4+ICAgLi4uL3BsYXRmb3Jtcy84NXh4L3ttcGM4
-NXh4X2RzLmMgPT4gcDIwMjAuY30gIHwgMTM1ICsrKysrKy0tLS0tLS0tLS0tLQ0KPj4gICA2IGZp
-bGVzIGNoYW5nZWQsIDY4IGluc2VydGlvbnMoKyksIDE2MyBkZWxldGlvbnMoLSkNCj4+ICAgY29w
-eSBhcmNoL3Bvd2VycGMvcGxhdGZvcm1zLzg1eHgve21wYzg1eHhfZHMuYyA9PiBwMjAyMC5jfSAo
-NTIlKQ0KPj4NCj4+IC0tIA0KPj4gMi4yMC4xDQo+Pg0K
+
+--FomKkfK23h1eei7S
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+
+Hello, I'm experiencing a serious bug on AMD Zen2 that is causing
+registers to "roll back" to previous values after a context switch.
+
+I know that sounds unbelievable - but I have a reliable reproducer!
+
+$ grep -m1 'model name' /proc/cpuinfo
+model name : AMD Ryzen Threadripper PRO 3945WX 12-Cores
+
+The bug occurs when there is a context switch after a ucomiss
+instruction. The YMM registers are "rolled back" to some previous state.
+
+It's not clear to me how or why this is happening, or if it can happen
+across a process boundary.
+
+To reproduce:
+
+$ nasm -felf64 -O0 zenymmasm.asm
+$ ld -o zenymmasm zenymmasm.o
+
+If you run it it should just print some nuls:
+
+$ ./zenymmasm
+$
+
+That is the expected, correct result.
+
+However, if you run the attached program hammer.c (it just runs
+sched_yield() in a loop), and then pin this testcase to the same core as
+that:
+
+$ taskset -c 1 ./zenymmasm
+SECRETSECRET
+
+The previous register values are restored.
+
+I think this should be impossible.
+
+The code does this:
+
+    vmovdqu         ymm0, [rel secret]      <--- put SECRET into ymm0
+    mov             rax, SYS_sched_yield
+    syscall
+    vpxor           ymm0, ymm0, ymm0        <--- Here the value of ymm0 should be lost
+
+It's not related to to VPXOR, you can use VZEROALL or whatever else.
+
+    ucomiss         xmm0, dword [rel space]
+    mov             rax, SYS_sched_yield
+    syscall
+
+It's the UCOMISS r128,m32 instruction that triggers the bug, the value
+of the m32 must be < 0x80000. As far as I know, this should only ever
+change condition flags, but if we dump the value of ymm0:
+
+    mov             rax, SYS_write
+    mov             rdi, 1
+    lea             rsi, [rel regstate]
+    mov             rdx, 32
+    syscall
+
+It will have reverted back to the pre-vpxor SECRET value !?!?
+
+In the original C program, we were seeing register values randomly
+restored from significantly earlier in the program execution (like, from
+ld.so), sometimes values we don't recognize and can't explain.
+
+We've reproduced on multiple Zen2 machines.
+
+Obviously, not great if your registers are randomly time travelling :)
+
+Thanks, Tavis.
+
+-- 
+ _o)            $ lynx lock.cmpxchg8b.com
+ /\\  _o)  _o)  $ finger taviso@sdf.org
+_\_V _( ) _( )  @taviso
+
+--FomKkfK23h1eei7S
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: attachment; filename="hammer.c"
+
+#define _GNU_SOURCE
+#include <stdint.h>
+#include <stdlib.h>
+#include <string.h>
+#include <stdio.h>
+#include <unistd.h>
+#include <stdbool.h>
+#include <sched.h>
+#include <syscall.h>
+#include <x86intrin.h>
+#include <sys/random.h>
+
+#include <err.h>
+
+int main(int argc, char **argv)
+{
+    cpu_set_t set;
+
+    CPU_ZERO(&set);
+    CPU_SET(1, &set);
+
+    if (sched_setaffinity(0, sizeof(set), &set) != 0) {
+        err(EXIT_FAILURE, "failed to set cpu affinity");
+    }
+
+    while (true) {
+        asm volatile ("syscall" :: "a"(SYS_sched_yield) : "rcx", "r11");
+    }
+
+    return 0;
+}
+
+--FomKkfK23h1eei7S
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: attachment; filename="zenymmasm.asm"
+
+BITS 64
+
+global _start
+
+%define SYS_sched_yield 0x18
+%define SYS_write 0x01
+%define SYS_exit 0x3c
+
+section .data
+    align 32
+    secret:     times 4 dq 'SECRET'
+    align 32
+    regstate:   dq 0,0,0,0
+    align 32
+    space:      dd 1
+section .text
+_start:
+    vmovdqu         ymm0, [rel secret]
+    mov             rax, SYS_sched_yield
+    syscall
+    vpxor           ymm0, ymm0, ymm0
+    mov             rax, SYS_sched_yield
+    syscall
+    ucomiss         xmm0, dword [rel space]
+    mov             rax, SYS_sched_yield
+    syscall
+    vmovdqu         [rel regstate], ymm0
+    mov             rax, SYS_write
+    mov             rdi, 1
+    lea             rsi, [rel regstate]
+    mov             rdx, 32
+    syscall
+    mov             rax, SYS_exit
+    mov             rdi, 0
+    syscall
+    int3
+
+--FomKkfK23h1eei7S--
