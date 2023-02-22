@@ -2,76 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CEDCF69FE39
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Feb 2023 23:13:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EE89969FE3E
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Feb 2023 23:13:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232320AbjBVWNd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Feb 2023 17:13:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37206 "EHLO
+        id S232797AbjBVWN5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Feb 2023 17:13:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37248 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232217AbjBVWN3 (ORCPT
+        with ESMTP id S232457AbjBVWNj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Feb 2023 17:13:29 -0500
-Received: from mail-ot1-x32f.google.com (mail-ot1-x32f.google.com [IPv6:2607:f8b0:4864:20::32f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5FA922D176;
-        Wed, 22 Feb 2023 14:12:59 -0800 (PST)
-Received: by mail-ot1-x32f.google.com with SMTP id v1-20020a9d6041000000b0068d4a8a8d2dso1843743otj.12;
-        Wed, 22 Feb 2023 14:12:59 -0800 (PST)
+        Wed, 22 Feb 2023 17:13:39 -0500
+Received: from mail-qt1-x834.google.com (mail-qt1-x834.google.com [IPv6:2607:f8b0:4864:20::834])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69F4291
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Feb 2023 14:13:22 -0800 (PST)
+Received: by mail-qt1-x834.google.com with SMTP id b6so2958961qtb.1
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Feb 2023 14:13:22 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:references:cc:to:from
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=adprV6tEj+TovGrXWEy89UTylRMHMYVXMFhKg7qo/Fo=;
-        b=QEU8n9ZE0dM2OFOYGeOuEkzpYN1G8AEx/lVIt0TuCuc0zcWgREiOrDie5z+kxY8SgI
-         xgysWpV6ZDVC1RpoFzKG3wNvUyRn/CdAkKrCFJhs7vZXH6LOr8bJa9AwO4W/e5/n6ZQc
-         yruEM3iH7diF4FEURgHs+rkvMh5CO2Y+BpGYv5lTZfOT18GA7dxt5WwHYXFJh149X3yZ
-         PK3i72ZbN6o7pPbGnPmvBhqLGViswIbARsXGZfwBXzHHOwukvo61ZGKZJZ4+9HGMHXSv
-         F9+U+Msbn6XMQLoXc5mgDxUn24pF/bRbJOMs+LqLCEDsXFhxM9NS0ZGix9VHrg0pewD5
-         +jqg==
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=aTZtaHujjzboIBxRswwzZg+kJeIkZN07DRxgFsYXLxo=;
+        b=V/Mk3ffQteBbNJV3TTjZlY2uoV9u5vqGBg9SrvRB6qP0XE7IgPIyqTNImL2lw0q8in
+         XP/vGzUzZ85JuLFSxAn7McTz/vGaXDDngNLCuQuBhMxyuHSM37z3ZhoSvbXN9VeZDK6x
+         hAg2Z6OO59lv0p62k/SFHfl2CPu4i0h8ZWdfawP8Hun75JcYhxyy8kzdKJIXWypMc44s
+         CwRDhmExAcAvYqkQGqcJlBhnLcEJLtlxx7z934iZh18VKVjq68eSyONDcS+faioD8RjO
+         gA5mpFeDIVzVTGsLWSYjrp9W+jsJ4UF6NKYTxMbeWxvu5uxaTdLhn5nfiyLlT910nNJL
+         oRaw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:references:cc:to:from
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=adprV6tEj+TovGrXWEy89UTylRMHMYVXMFhKg7qo/Fo=;
-        b=SUw1yIOY7+q+ejoTET+7P+g7HtHzCFSG3hl4SkBlJHhJLVtjyjkUzy+lQNEJzyA7uZ
-         yTna1soLy7MD32+QabhzDwYIV375hfkS1vS7ixfUe5dNKSHf0+R2eG+HtwwBdhUhrJyU
-         U7+90mvlIn+hZUXxqwapA2HkzllXg7Be+i2sMw56yIEANiALtVeHS8NKJ2phxZcFEqkT
-         GBpw4iBA0goMoh5r0HfTJPMmS05+054M+yWSaSoRlEbekH8pSjUTlkUM4CiDoQExTsOW
-         G75+ZIuil30Yh+l/dOieTJy4ZO4bHEcP6LMaDA1c5Iti1yU8nTx4msx2YzXUmBW8bVcq
-         7laA==
-X-Gm-Message-State: AO0yUKW4CRzher5ypdmGwjv7rQNvWSVDLXp7WhqO1XM+LjladgFTsVtg
-        RldnhYgKdg9wxUgb5q2QKqI1Dmaq23c=
-X-Google-Smtp-Source: AK7set9YJHuhFilf/KVSqse3uwpPRC/5CBRLxt2U4xG69Vkqi0o8q0i7yKTjqK5DPJ2H76lcSY8SwQ==
-X-Received: by 2002:a9d:86f:0:b0:690:e457:a69 with SMTP id 102-20020a9d086f000000b00690e4570a69mr5159384oty.0.1677103978579;
-        Wed, 22 Feb 2023 14:12:58 -0800 (PST)
-Received: from ?IPV6:2600:1700:2442:6db0:456:5512:fbf3:df92? ([2600:1700:2442:6db0:456:5512:fbf3:df92])
-        by smtp.gmail.com with ESMTPSA id z15-20020a9d468f000000b0068bbc9e7cc9sm1720641ote.53.2023.02.22.14.12.57
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 22 Feb 2023 14:12:58 -0800 (PST)
-Message-ID: <db732d8a-b90b-ccf9-ad9b-a9a6455ed841@gmail.com>
-Date:   Wed, 22 Feb 2023 16:12:57 -0600
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=aTZtaHujjzboIBxRswwzZg+kJeIkZN07DRxgFsYXLxo=;
+        b=Fw2lRzBM71tLwRSRns2AjS82PQlROHUo1TpiotLohaEzamx+mBn2eldhaqh2zZ8OIc
+         x+AnOye69mkKPrz2YlnASHsDv+l2z0cnsKD//F5kiccISBSTOY2Xn9Pkl8Tqp47Gr7lp
+         BmFMA49F6JogTE4NKfuD5xBf02SnHnvKcmCf0a0G7mupzSwDaV+lWedof4AXOvrmQKh8
+         hz4sWHs30eIgKOICcyXmeotylVun9EF9h4gTkrwttK6ReXiqmovIJJp5+AKbJYTQrAkC
+         HmVPDA4Nf7zPQGjGJ/kxC1qtZmr1i/H3p6Npx7EfHCJpWCOYolUlhWzWtEJrPMMen6i0
+         hbyw==
+X-Gm-Message-State: AO0yUKW7MlAXs+bGsm9iTY+LW9vNlKB4bxtgPHdX1sV78p0BHAgwxNJS
+        6flZ9kKTFb1n3GYAIoYzuWEV80wsKQ==
+X-Google-Smtp-Source: AK7set8lNvS9WvOjXR8PkYKgn+VaKLp8tEnXjAgPLtOybsWh1FUKc8plyT/GBKsPLEl2HFn4pnhJFg==
+X-Received: by 2002:a05:622a:118a:b0:3b2:1003:37e5 with SMTP id m10-20020a05622a118a00b003b2100337e5mr18518163qtk.55.1677104001194;
+        Wed, 22 Feb 2023 14:13:21 -0800 (PST)
+Received: from citadel.. (075-129-116-198.res.spectrum.com. [75.129.116.198])
+        by smtp.gmail.com with ESMTPSA id ey17-20020a05622a4c1100b003b86b088755sm4902460qtb.15.2023.02.22.14.13.20
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 22 Feb 2023 14:13:20 -0800 (PST)
+From:   Brian Gerst <brgerst@gmail.com>
+To:     linux-kernel@vger.kernel.org, x86@kernel.org
+Cc:     David Woodhouse <dwmw2@infradead.org>,
+        Usama Arif <usama.arif@bytedance.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Borislav Petkov <bp@alien8.de>,
+        "H . Peter Anvin" <hpa@zytor.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Andy Lutomirski <luto@kernel.org>,
+        Ingo Molnar <mingo@kernel.org>, Brian Gerst <brgerst@gmail.com>
+Subject: [PATCH 3/6] x86/smpboot: Remove initial_stack on 64-bit
+Date:   Wed, 22 Feb 2023 17:12:58 -0500
+Message-Id: <20230222221301.245890-4-brgerst@gmail.com>
+X-Mailer: git-send-email 2.39.2
+In-Reply-To: <20230222221301.245890-1-brgerst@gmail.com>
+References: <20230222221301.245890-1-brgerst@gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH 0/2] of: populate of_root_node if not set (alternate)
-Content-Language: en-US
-From:   Frank Rowand <frowand.list@gmail.com>
-To:     Rob Herring <robh+dt@kernel.org>,
-        =?UTF-8?B?Q2zDqW1lbnQgTMOpZ2Vy?= <clement.leger@bootlin.com>
-Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Lizhi Hou <lizhi.hou@xilinx.com>,
-        Allan Nielsen <allan.nielsen@microchip.com>,
-        Horatiu Vultur <horatiu.vultur@microchip.com>,
-        Steen Hegelund <steen.hegelund@microchip.com>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-References: <20230222035452.803375-1-frowand.list@gmail.com>
-In-Reply-To: <20230222035452.803375-1-frowand.list@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -80,47 +78,146 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/21/23 21:54, Frank Rowand wrote:
-> This series is a different implementation to achieve the goals of
-> https://lore.kernel.org/r/20220623105044.152832-1-clement.leger@bootlin.com
-> 
-> In order to apply overlays or create new nodes under the root node, the
-> kernel expects of_root to be set. On some system where a device-tree was
-> not provided by firmware (x86 for instance) if CONFIG_OF is enabled,
-> then we will end up with a null of_root. This series adds support to
-> create this root node using a builtin dtb and removes the manual
-> creation of the root node done in unittests.c.
-> 
-> Changes since version 1: (patch 1/2)
+Load RSP from current_task->thread.sp instead.
 
-Email subject lines should have said "v2".  I resent the series with the "v2".
+Signed-off-by: Brian Gerst <brgerst@gmail.com>
+---
+ arch/x86/include/asm/processor.h |  6 +++++-
+ arch/x86/kernel/acpi/sleep.c     |  2 +-
+ arch/x86/kernel/head_64.S        | 35 ++++++++++++++++++--------------
+ arch/x86/xen/xen-head.S          |  2 +-
+ 4 files changed, 27 insertions(+), 18 deletions(-)
 
--Frank
-
->   - refresh for 6.2-rc1
->   - update Signed-off-by
->   - fix typo in of_fdt.h: s/of_setup/setup_of
->   - unflatten_device_tree(): validate size in header field dtb_empty_root
->     that will be used to copy dtb_empty_root
->   - add Kconfig option to manually select CONFIG_OF_EARLY_FLATTREE
-> 
-> Changes since version 1: (patch 2/2)
->   - refresh for 6.2-rc1
->   - update Signed-off-by
->   - fix formatting error (leading space) in patch comment
-> 
-> Frank Rowand (2):
->   of: create of_root if no dtb provided
->   of: unittest: treat missing of_root as error instead of fixing up
-> 
->  drivers/of/Kconfig        |  7 ++++++-
->  drivers/of/Makefile       |  2 +-
->  drivers/of/empty_root.dts |  6 ++++++
->  drivers/of/fdt.c          | 27 ++++++++++++++++++++++++++-
->  drivers/of/unittest.c     | 16 ++++++----------
->  include/linux/of_fdt.h    |  2 ++
->  init/main.c               |  2 ++
->  7 files changed, 49 insertions(+), 13 deletions(-)
->  create mode 100644 drivers/of/empty_root.dts
-> 
+diff --git a/arch/x86/include/asm/processor.h b/arch/x86/include/asm/processor.h
+index 8d73004e4cac..7f64b69c2b0e 100644
+--- a/arch/x86/include/asm/processor.h
++++ b/arch/x86/include/asm/processor.h
+@@ -647,7 +647,11 @@ static inline void spin_lock_prefetch(const void *x)
+ #define KSTK_ESP(task)		(task_pt_regs(task)->sp)
+ 
+ #else
+-#define INIT_THREAD { }
++extern unsigned long __end_init_task[];
++
++#define INIT_THREAD {							\
++	.sp	= (unsigned long)&__end_init_task - PTREGS_SIZE,	\
++}
+ 
+ extern unsigned long KSTK_ESP(struct task_struct *task);
+ 
+diff --git a/arch/x86/kernel/acpi/sleep.c b/arch/x86/kernel/acpi/sleep.c
+index 47e75c056cb5..008fda8b1982 100644
+--- a/arch/x86/kernel/acpi/sleep.c
++++ b/arch/x86/kernel/acpi/sleep.c
+@@ -113,7 +113,7 @@ int x86_acpi_suspend_lowlevel(void)
+ 	saved_magic = 0x12345678;
+ #else /* CONFIG_64BIT */
+ #ifdef CONFIG_SMP
+-	initial_stack = (unsigned long)temp_stack + sizeof(temp_stack);
++	current->thread.sp = (unsigned long)temp_stack + sizeof(temp_stack);
+ 	early_gdt_descr.address =
+ 			(unsigned long)get_cpu_gdt_rw(smp_processor_id());
+ 	initial_gs = per_cpu_offset(smp_processor_id());
+diff --git a/arch/x86/kernel/head_64.S b/arch/x86/kernel/head_64.S
+index c32e5b06a9ce..f7905ba4b992 100644
+--- a/arch/x86/kernel/head_64.S
++++ b/arch/x86/kernel/head_64.S
+@@ -62,8 +62,8 @@ SYM_CODE_START_NOALIGN(startup_64)
+ 	 * tables and then reload them.
+ 	 */
+ 
+-	/* Set up the stack for verify_cpu(), similar to initial_stack below */
+-	leaq	(__end_init_task - FRAME_SIZE)(%rip), %rsp
++	/* Set up the stack for verify_cpu() */
++	leaq	(__end_init_task - PTREGS_SIZE)(%rip), %rsp
+ 
+ 	leaq	_text(%rip), %rdi
+ 
+@@ -245,11 +245,11 @@ SYM_INNER_LABEL(secondary_startup_64_no_verify, SYM_L_GLOBAL)
+ #ifdef CONFIG_SMP
+ 	/*
+ 	 * Is this the boot CPU coming up? If so everything is available
+-	 * in initial_gs, initial_stack and early_gdt_descr.
++	 * in initial_gs and early_gdt_descr.
+ 	 */
+ 	movl	smpboot_control(%rip), %edx
+ 	testl	$STARTUP_SECONDARY, %edx
+-	jz	.Lsetup_cpu
++	jz	.Linit_cpu0_data
+ 
+ 	/*
+ 	 * For parallel boot, the APIC ID is retrieved from CPUID, and then
+@@ -302,6 +302,10 @@ SYM_INNER_LABEL(secondary_startup_64_no_verify, SYM_L_GLOBAL)
+ 	hlt
+ 	jmp	1b
+ 
++.Linit_cpu0_data:
++	movq	__per_cpu_offset(%rip), %rdx
++	jmp	.Lsetup_cpu
++
+ .Linit_cpu_data:
+ 	/* Get the per cpu offset for the given CPU# which is in ECX */
+ 	leaq	__per_cpu_offset(%rip), %rbx
+@@ -314,13 +318,21 @@ SYM_INNER_LABEL(secondary_startup_64_no_verify, SYM_L_GLOBAL)
+ 	addq	%rbx, %rcx
+ 	movq	%rcx, early_gdt_descr_base(%rip)
+ 
+-	/* Find the idle task stack */
+-	movq	pcpu_hot + X86_current_task(%rbx), %rcx
+-	movq	TASK_threadsp(%rcx), %rcx
+-	movq	%rcx, initial_stack(%rip)
++	movq	%rbx, %rdx
++#else
++	xorl	%edx, %edx
+ #endif /* CONFIG_SMP */
+ 
+ .Lsetup_cpu:
++	/*
++	 * Setup a boot time stack - Any secondary CPU will have lost its stack
++	 * by now because the cr3-switch above unmaps the real-mode stack
++	 *
++	 * RDX contains the per-cpu offset
++	 */
++	movq	pcpu_hot + X86_current_task(%rdx), %rax
++	movq	TASK_threadsp(%rax), %rsp
++
+ 	/*
+ 	 * We must switch to a new descriptor in kernel space for the GDT
+ 	 * because soon the kernel won't have access anymore to the userspace
+@@ -355,12 +367,6 @@ SYM_INNER_LABEL(secondary_startup_64_no_verify, SYM_L_GLOBAL)
+ 	movl	initial_gs+4(%rip),%edx
+ 	wrmsr
+ 
+-	/*
+-	 * Setup a boot time stack - Any secondary CPU will have lost its stack
+-	 * by now because the cr3-switch above unmaps the real-mode stack
+-	 */
+-	movq initial_stack(%rip), %rsp
+-
+ 	/* Drop the realmode protection. For the boot CPU the pointer is NULL! */
+ 	movq	trampoline_lock(%rip), %rax
+ 	testq	%rax, %rax
+@@ -517,7 +523,6 @@ SYM_DATA(initial_vc_handler,	.quad handle_vc_boot_ghcb)
+  * The FRAME_SIZE gap is a convention which helps the in-kernel unwinder
+  * reliably detect the end of the stack.
+  */
+-SYM_DATA(initial_stack, .quad init_thread_union + THREAD_SIZE - FRAME_SIZE)
+ SYM_DATA(trampoline_lock, .quad 0);
+ 	__FINITDATA
+ 
+diff --git a/arch/x86/xen/xen-head.S b/arch/x86/xen/xen-head.S
+index e36ea4268bd2..91f7a53519a7 100644
+--- a/arch/x86/xen/xen-head.S
++++ b/arch/x86/xen/xen-head.S
+@@ -49,7 +49,7 @@ SYM_CODE_START(startup_xen)
+ 	ANNOTATE_NOENDBR
+ 	cld
+ 
+-	mov initial_stack(%rip), %rsp
++	leaq	(__end_init_task - PTREGS_SIZE)(%rip), %rsp
+ 
+ 	/* Set up %gs.
+ 	 *
+-- 
+2.39.2
 
