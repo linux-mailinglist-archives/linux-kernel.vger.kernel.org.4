@@ -2,23 +2,23 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4329D69EBC7
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Feb 2023 01:11:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3816D69EBCE
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Feb 2023 01:11:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230264AbjBVALu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Feb 2023 19:11:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52800 "EHLO
+        id S230300AbjBVALz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Feb 2023 19:11:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52926 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229870AbjBVALs (ORCPT
+        with ESMTP id S230281AbjBVALw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Feb 2023 19:11:48 -0500
+        Tue, 21 Feb 2023 19:11:52 -0500
 Received: from irl.hu (irl.hu [95.85.9.111])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A3BE301AA;
-        Tue, 21 Feb 2023 16:11:47 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17F6D2A6EA;
+        Tue, 21 Feb 2023 16:11:49 -0800 (PST)
 Received: from fedori.lan (bc065635.dsl.pool.telekom.hu [::ffff:188.6.86.53])
   (AUTH: CRAM-MD5 soyer@irl.hu, )
   by irl.hu with ESMTPSA
-  id 000000000006FA8A.0000000063F55DC2.002C9F56; Wed, 22 Feb 2023 01:11:39 +0100
+  id 000000000006FA8C.0000000063F55DC3.002C9F6F; Wed, 22 Feb 2023 01:11:46 +0100
 From:   Gergo Koteles <soyer@irl.hu>
 To:     Dmitry Torokhov <dmitry.torokhov@gmail.com>,
         Jonathan Corbet <corbet@lwn.net>,
@@ -33,9 +33,9 @@ Cc:     linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
         Caleb Connolly <caleb@connolly.tech>,
         Gergo Koteles <soyer@irl.hu>
-Subject: [PATCH v4 1/3] Input: gpio-keys - add support for linux,input-value DTS property
-Date:   Wed, 22 Feb 2023 01:10:32 +0100
-Message-Id: <3519a11b0ef5324a2befbd137cd2aa0cb8fd057d.1677022414.git.soyer@irl.hu>
+Subject: [PATCH v4 2/3] Input: add ABS_SND_PROFILE
+Date:   Wed, 22 Feb 2023 01:10:33 +0100
+Message-Id: <1a4752739568afbdbaaff48436d2bb595d2bda0d.1677022414.git.soyer@irl.hu>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <cover.1677022414.git.soyer@irl.hu>
 References: <cover.1677022414.git.soyer@irl.hu>
@@ -51,29 +51,74 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Allows setting the value of EV_ABS events from DTS.
-This property is included in the gpio-keys.yaml scheme, but was only
-implemented for gpio-keys-polled.
+ABS_SND_PROFILE used to describe the state of a multi-value sound profile
+switch. This will be used for the alert-slider on OnePlus phones or other
+phones.
+
+Profile values added as SND_PROFLE_(SILENT|VIBRATE|RING) identifiers
+to input-event-codes.h so they can be used from DTS.
 
 Signed-off-by: Gergo Koteles <soyer@irl.hu>
 ---
- drivers/input/keyboard/gpio_keys.c | 3 +++
- 1 file changed, 3 insertions(+)
+ Documentation/input/event-codes.rst    | 6 ++++++
+ drivers/hid/hid-debug.c                | 1 +
+ include/uapi/linux/input-event-codes.h | 9 +++++++++
+ 3 files changed, 16 insertions(+)
 
-diff --git a/drivers/input/keyboard/gpio_keys.c b/drivers/input/keyboard/gpio_keys.c
-index 5496482a38c1..c42f86ad0766 100644
---- a/drivers/input/keyboard/gpio_keys.c
-+++ b/drivers/input/keyboard/gpio_keys.c
-@@ -770,6 +770,9 @@ gpio_keys_get_devtree_pdata(struct device *dev)
- 					     &button->type))
- 			button->type = EV_KEY;
+diff --git a/Documentation/input/event-codes.rst b/Documentation/input/event-codes.rst
+index b4557462edd7..d43336e64d6a 100644
+--- a/Documentation/input/event-codes.rst
++++ b/Documentation/input/event-codes.rst
+@@ -241,6 +241,12 @@ A few EV_ABS codes have special meanings:
+     emitted only when the selected profile changes, indicating the newly
+     selected profile value.
  
-+		fwnode_property_read_u32(child, "linux,input-value",
-+					 (u32 *)&button->value);
++* ABS_SND_PROFILE:
 +
- 		button->wakeup =
- 			fwnode_property_read_bool(child, "wakeup-source") ||
- 			/* legacy name */
++  - Used to describe the state of a multi-value sound profile switch.
++    An event is emitted only when the selected profile changes,
++    indicating the newly selected profile value.
++
+ * ABS_MT_<name>:
+ 
+   - Used to describe multitouch input events. Please see
+diff --git a/drivers/hid/hid-debug.c b/drivers/hid/hid-debug.c
+index e213bdde543a..76fb2ecbbc51 100644
+--- a/drivers/hid/hid-debug.c
++++ b/drivers/hid/hid-debug.c
+@@ -1018,6 +1018,7 @@ static const char *absolutes[ABS_CNT] = {
+ 	[ABS_DISTANCE] = "Distance",	[ABS_TILT_X] = "XTilt",
+ 	[ABS_TILT_Y] = "YTilt",		[ABS_TOOL_WIDTH] = "ToolWidth",
+ 	[ABS_VOLUME] = "Volume",	[ABS_PROFILE] = "Profile",
++	[ABS_SND_PROFILE] = "SoundProfile",
+ 	[ABS_MISC] = "Misc",
+ 	[ABS_MT_TOUCH_MAJOR] = "MTMajor",
+ 	[ABS_MT_TOUCH_MINOR] = "MTMinor",
+diff --git a/include/uapi/linux/input-event-codes.h b/include/uapi/linux/input-event-codes.h
+index 022a520e31fc..e8d5ee027b40 100644
+--- a/include/uapi/linux/input-event-codes.h
++++ b/include/uapi/linux/input-event-codes.h
+@@ -866,6 +866,7 @@
+ 
+ #define ABS_VOLUME		0x20
+ #define ABS_PROFILE		0x21
++#define ABS_SND_PROFILE		0x22
+ 
+ #define ABS_MISC		0x28
+ 
+@@ -974,4 +975,12 @@
+ #define SND_MAX			0x07
+ #define SND_CNT			(SND_MAX+1)
+ 
++/*
++ * ABS_SND_PROFILE values
++ */
++
++#define SND_PROFILE_SILENT	0x00
++#define SND_PROFILE_VIBRATE	0x01
++#define SND_PROFILE_RING	0x02
++
+ #endif
 -- 
 2.39.2
 
