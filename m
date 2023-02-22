@@ -2,146 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F1D569F4AF
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Feb 2023 13:37:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4CF5869F4C2
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Feb 2023 13:40:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231710AbjBVMhE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Feb 2023 07:37:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35958 "EHLO
+        id S232103AbjBVMkg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Feb 2023 07:40:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39544 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231807AbjBVMhB (ORCPT
+        with ESMTP id S230440AbjBVMke (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Feb 2023 07:37:01 -0500
-Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 517853A87C
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Feb 2023 04:36:53 -0800 (PST)
-Received: by mail-ed1-x52a.google.com with SMTP id cy6so24257856edb.5
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Feb 2023 04:36:53 -0800 (PST)
+        Wed, 22 Feb 2023 07:40:34 -0500
+Received: from mail-qv1-xf32.google.com (mail-qv1-xf32.google.com [IPv6:2607:f8b0:4864:20::f32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0057327D7F
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Feb 2023 04:40:33 -0800 (PST)
+Received: by mail-qv1-xf32.google.com with SMTP id o3so7816045qvr.1
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Feb 2023 04:40:33 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=rWfO3bHN/QEhS+Xs0UzkJUsUmv76YTb0jgQPn6Hkz8U=;
-        b=ogVriWu9pImQoFQu6bo/zNCC8eZ0Duy+7bRXnFrKEdX/j/4s2vUWCcAKYZfQkJAiTD
-         /02ZY3Psih2fZrLmQFw6SlEdNK31kCqtEEELWpHYe/cacSbLcRgZtYmpkkjU4/mvYe9C
-         G1kmVKF49UuLhb/ry/6NSlXBGCj0NXjoGFYwIIip8THXSWK7KeSQo8vs9csFiXSEaXxL
-         VOn5sNWrt1Voc4gucYEq8RkJ8E2VUSqSf9t/qHiYajoCztVx6xvAIv7xAOMjTyzUP+g9
-         Q2TFH6pBbUI8zxGPdOgiIhcPcmqgwqYXg0TNZVsuU0u5rc0FST+suYhpqDSrVjSWYsjL
-         rgLg==
+        d=gmail.com; s=20210112;
+        h=content-disposition:mime-version:reply-to:message-id:subject:cc:to
+         :from:date:sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=H+J7csv9d0zQxAb8tY6wlt0M8ymU6BQrT3Z560sOxYY=;
+        b=aJKU4pHi8S+qc/GwJhn5RC7a3akluPcUv+J0afviPBtwoxPUYvXdUH5ahBuCvdVXSj
+         XNopNQ3GVHoXDKWQIDKzhBXeIYBqqdCsL6vk8MQ3f9Fca5rXFxbo2HsGpiEhess0qhD/
+         Mu4geppG4vjCDe6TqMpNHOes1MYV+XjAFRn/J/PfPKsSwOfIG0OyFA76kv0qH+j3W7Fw
+         acBFOIEx9MYP+Wn0ooJUlWIh4wzo0zb7ZmR/EE1UNJLvgWMsHwUPxaTDZUGfioI0FDIo
+         6c5T2sM+oLpfVyuHwIQkj7XdhuI4qlHQVScH1zMyXhYhfMo4v3mgcB1rpsH5e9l/CM30
+         YNXA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=rWfO3bHN/QEhS+Xs0UzkJUsUmv76YTb0jgQPn6Hkz8U=;
-        b=DtDgeVRJCBAgG36etDT5uRRKbQCqRmtvbHJ3+BS2jPg0Beprf1DqBH8QWjSRCfzcAB
-         HJBCv0AOv+NziVYnwSogRH8IfxiSDMkgwS+zJBHtEztpH7TQ/c9pl7lLsQhht4tTn1Ec
-         1184q+4I76DMv667pqQ/TV21zG47jcpKGCLop2pjcFpvY3eRCyjpqv6G2CdK8p0bn7tf
-         ipqR4wpzeEO3rGLbtnyAp4rrp6voRIDOG4W6b4uzfgkNCZXQz+bpm4dW1pGUCRjKl/JE
-         m4N/Pqh7K/rirl77Z03Yc43K1MdJ0x4dbF5Q3AOJBjyTI+Y2poCg5AMac7wLd0nLi1dS
-         Z9GA==
-X-Gm-Message-State: AO0yUKUYn0f7GPODD/Zbfax1lKiCV5oq99IohJLc+msZA0kuvDtdJavA
-        putTiymRUN/dqbyhCJ5gWaGkJtxg7KJT57x4
-X-Google-Smtp-Source: AK7set/v1HvDm7IY1V+42v11cvnsliWIfG7RseOCxxbVQCy4vucFFgoP7tyDKRoeQOO3T7cz/WInrw==
-X-Received: by 2002:a17:906:fca5:b0:878:42af:aa76 with SMTP id qw5-20020a170906fca500b0087842afaa76mr14505727ejb.54.1677069411749;
-        Wed, 22 Feb 2023 04:36:51 -0800 (PST)
-Received: from [192.168.1.109] ([178.197.216.144])
-        by smtp.gmail.com with ESMTPSA id fp16-20020a1709069e1000b008e22978b98bsm1640150ejc.61.2023.02.22.04.36.50
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 22 Feb 2023 04:36:51 -0800 (PST)
-Message-ID: <fd395ae4-d182-c637-e4b7-6d166ebc1b21@linaro.org>
-Date:   Wed, 22 Feb 2023 13:36:49 +0100
+        h=content-disposition:mime-version:reply-to:message-id:subject:cc:to
+         :from:date:sender:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=H+J7csv9d0zQxAb8tY6wlt0M8ymU6BQrT3Z560sOxYY=;
+        b=sL7X65ppG9NcAGCiMvI2A7p51L35rLDxCQhwh0amj8he5NJDAgCfsCNnLCOUH/1aXx
+         4+0w/jw6RKEf759rr1pAEyPXMVUuCMBd+iAqFK/t3ajEtOC7nzelhql3F5R5ZCLWlDq9
+         1twaWln2nUC0vsOGCC0MVsSq1oo3McgVDt1BwOul0gv7SeqHZVdtBxjhoTOQ56siGtKg
+         Ox51h5xfPUHESIj6Mojx7F2yRZRpDFcjjvSjgVJK9gjDfxymcBs/RjiXylbdnLLA1IKG
+         qYp/Slb21KofNnQZH+rYIabCN3s/aEwJSBANKfCvJv2PsfqJE00lq6CcX2NM+oMo0jH6
+         bK2g==
+X-Gm-Message-State: AO0yUKWpjsPLf7NVzxiWxoUGzl3j7F2sGBUajGZNVYfMUgAuCzjbilaH
+        Dp+r3ZKZgx9ojiXZaLBX+xXitBUgKA==
+X-Google-Smtp-Source: AK7set/ZIRxqvGdxyTZwn5bY1BYVK9pRmyYORHlYi3gekvW2n1ZgEgd+Xsbr3UauedlOzLXNAQJLbg==
+X-Received: by 2002:a05:6214:2429:b0:56e:f05c:9c70 with SMTP id gy9-20020a056214242900b0056ef05c9c70mr13981872qvb.44.1677069632915;
+        Wed, 22 Feb 2023 04:40:32 -0800 (PST)
+Received: from serve.minyard.net (serve.minyard.net. [2001:470:b8f6:1b::1])
+        by smtp.gmail.com with ESMTPSA id t71-20020a37aa4a000000b00741d87eb5d1sm2711962qke.105.2023.02.22.04.40.31
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 22 Feb 2023 04:40:32 -0800 (PST)
+Sender: Corey Minyard <tcminyard@gmail.com>
+Received: from minyard.net (unknown [IPv6:2001:470:b8f6:1b:ffd5:a2e0:f643:870f])
+        by serve.minyard.net (Postfix) with ESMTPSA id A5C141800BA;
+        Wed, 22 Feb 2023 12:40:30 +0000 (UTC)
+Date:   Wed, 22 Feb 2023 06:40:29 -0600
+From:   Corey Minyard <minyard@acm.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     linux-kernel <linux-kernel@vger.kernel.org>,
+        openipmi-developer@lists.sourceforge.net
+Subject: [GIT PULL] IPMI bug fixes for 6.3
+Message-ID: <Y/YNPWfyZE4KteG2@minyard.net>
+Reply-To: minyard@acm.org
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH 1/4] ASoC: dt-bindings: wlf,wm8524: Convert to json-schema
-Content-Language: en-US
-To:     Chancel Liu <chancel.liu@nxp.com>, lgirdwood@gmail.com,
-        broonie@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, perex@perex.cz, tiwai@suse.com,
-        ckeepax@opensource.cirrus.com, patches@opensource.cirrus.com,
-        alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org
-References: <20230222113945.3390672-1-chancel.liu@nxp.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230222113945.3390672-1-chancel.liu@nxp.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 22/02/2023 12:39, Chancel Liu wrote:
-> Convert the Wolfson WM8524 24-bit 192KHz Stereo DAC device tree
-> binding documentation to json-schema.
-> 
-> Signed-off-by: Chancel Liu <chancel.liu@nxp.com>
-> ---
->  .../devicetree/bindings/sound/wlf,wm8524.yaml | 37 +++++++++++++++++++
->  .../devicetree/bindings/sound/wm8524.txt      | 16 --------
->  2 files changed, 37 insertions(+), 16 deletions(-)
->  create mode 100644 Documentation/devicetree/bindings/sound/wlf,wm8524.yaml
->  delete mode 100644 Documentation/devicetree/bindings/sound/wm8524.txt
-> 
-> diff --git a/Documentation/devicetree/bindings/sound/wlf,wm8524.yaml b/Documentation/devicetree/bindings/sound/wlf,wm8524.yaml
-> new file mode 100644
-> index 000000000000..09c54cc7de95
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/sound/wlf,wm8524.yaml
-> @@ -0,0 +1,37 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/sound/wlf,wm8524.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Wolfson WM8524 24-bit 192KHz Stereo DAC
-> +
-> +maintainers:
-> +  - patches@opensource.cirrus.com
-> +
+The following changes since commit 041fae9c105ae342a4245cf1e0dc56a23fbb9d3c:
 
-$ref to dai-common.yaml
+  Merge tag 'f2fs-for-6.2-rc1' of git://git.kernel.org/pub/scm/linux/kernel/git/jaegeuk/f2fs (2022-12-14 15:27:57 -0800)
 
-> +properties:
-> +  compatible:
-> +    const: wlf,wm8524
-> +
-> +  "#sound-dai-cells":
-> +    const: 0
-> +
-> +  wlf,mute-gpios:
-> +    maxItems: 1
-> +    description:
-> +      a GPIO spec for the MUTE pin.
-> +
-> +required:
-> +  - compatible
-> +  - wlf,mute-gpios
-> +
-> +additionalProperties: false
+are available in the Git repository at:
 
-and then this should be unevaluatedProperties: false
+  https://github.com/cminyard/linux-ipmi.git tags/for-linus-6.3-1
 
-> +
-> +examples:
-> +  - |
-> +    #include <dt-bindings/gpio/gpio.h>
-> +
-> +    wm8524: codec {
-> +            compatible = "wlf,wm8524";
+for you to fetch changes up to befb28f2676a65a5a4cc4626ae224461d8785af6:
 
-Use 4 spaces for example indentation.
+  ipmi: ipmb: Fix the MODULE_PARM_DESC associated to 'retry_time_ms' (2023-02-10 07:38:18 -0600)
 
+----------------------------------------------------------------
+Small fixes to the SMBus IPMI and IPMB driver
 
+Nothing big, cleanups, fixing names, and one small deviation from the
+specification fixed.
 
-Best regards,
-Krzysztof
+----------------------------------------------------------------
+Christophe JAILLET (1):
+      ipmi: ipmb: Fix the MODULE_PARM_DESC associated to 'retry_time_ms'
+
+Corey Minyard (4):
+      ipmi:ssif: resend_msg() cannot fail
+      ipmi_ssif: Rename idle state and check
+      ipmi:ssif: Remove rtc_us_timer
+      ipmi:ssif: Add a timer between request retries
+
+ drivers/char/ipmi/ipmi_ipmb.c |   2 +-
+ drivers/char/ipmi/ipmi_ssif.c | 113 ++++++++++++++++++++----------------------
+ 2 files changed, 56 insertions(+), 59 deletions(-)
 
