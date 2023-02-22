@@ -2,176 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BC71C69F992
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Feb 2023 18:05:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4105B69F996
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Feb 2023 18:06:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232523AbjBVRF0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Feb 2023 12:05:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51344 "EHLO
+        id S232538AbjBVRG1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Feb 2023 12:06:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52298 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232458AbjBVRFY (ORCPT
+        with ESMTP id S232433AbjBVRGZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Feb 2023 12:05:24 -0500
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 478D13B0EE;
-        Wed, 22 Feb 2023 09:05:23 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1677085523; x=1708621523;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=8hDmCGq7I1JUjuDBsU4hREcG+XK+gpxWQjZaUra9H4c=;
-  b=LFxQRo3DOdt/Zb3YttcN5O0ypEiIx7QrZtLRc6ric7asnLvGPWgwrG46
-   3KnX1GgseDcVZk7tp1n5bnBQ9LIuJsrTWZtugh03uFWssRuRXhW+BhvPj
-   439OjsH4CR3lwkqBzGEjKRPiOuqGBWM8ekr2c6usxC3JJ7hZmfQQYTDg5
-   v1hbBTBqUWzPUH+0wwJy2JevKUjVaUE3NFnlT5X1G315OK6UCoxmBK5oq
-   YoZxgdMvWjeoIwPFn1v72YysNZNEwDBuzgAqU+mRKiGJh6sg/hs9H0FcJ
-   F1r7wzVk4+1CwnVjOE0Pj1YatIqMTETwQbmSlaF1xvFQmqISTYfyADOiO
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10629"; a="316705982"
-X-IronPort-AV: E=Sophos;i="5.97,319,1669104000"; 
-   d="scan'208";a="316705982"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Feb 2023 09:04:49 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10629"; a="702454693"
-X-IronPort-AV: E=Sophos;i="5.97,319,1669104000"; 
-   d="scan'208";a="702454693"
-Received: from hhammad-mobl1.ger.corp.intel.com (HELO [10.213.231.87]) ([10.213.231.87])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Feb 2023 09:04:45 -0800
-Message-ID: <b8a16579-4be7-8e14-01e4-9d17c1570c8b@linux.intel.com>
-Date:   Wed, 22 Feb 2023 17:04:42 +0000
+        Wed, 22 Feb 2023 12:06:25 -0500
+Received: from mail-yw1-x112a.google.com (mail-yw1-x112a.google.com [IPv6:2607:f8b0:4864:20::112a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DB043CE27
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Feb 2023 09:06:22 -0800 (PST)
+Received: by mail-yw1-x112a.google.com with SMTP id 00721157ae682-536b7ffdd34so125186647b3.6
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Feb 2023 09:06:22 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=cmpxchg-org.20210112.gappssmtp.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=11XupW6wyPZ/HYxPwYJLRczn0yGQLt5DSos6YX/pwXo=;
+        b=qMSvxuebcg+DHsJ0AXEYFbkdy9T43JzTD/TCNTmJaGWhl4F/U2tGSieR0d/B8fk30n
+         AJ6o0Hr+vSYilcTAKacUru/BJw2N7S6ds3+QlLMke1UWFUI5bzQe4kwdBFF1OiZ6de6r
+         v/KTvSi6TPyZjisXV3JgFSD8p9DyAkagWvkIdckJUCrzKAOvxsZbW2dDFVcUOwLJJayb
+         oXXvq8C9azMPtEO7WBWOlU9UgBzcURTpWRq7JjuswRKgBZ5H9tERec+z/ZSMGH4CMVje
+         grXVadLzluQGvY4He46Pv3dBSDH+lCf90iPw4OSr4Ipk69Sl6RjlCTfOZCHzGla21kiz
+         0D7A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=11XupW6wyPZ/HYxPwYJLRczn0yGQLt5DSos6YX/pwXo=;
+        b=JWwlWKsEFOiZqt/otwQkTDaUj53MbZQIooSZLTh4HicRGHhxc18ULzYYLbZOnyp5JQ
+         gs1HN3YCNYXFWV0cCoOFwQqebPJxU2HWI9zAdn2EE5Jao+FCkWD1CDaEaqxQecv+TnFX
+         Xmu96c5DjFA9Xa7ZeTebtkQgJrI6zSTQEa53k0o3LpNZToCLFUgzZO1Gaby/mutLDfRE
+         KZ4mn2dZRIlH0Qqw9k/c+cv/Ul7Mik6tlnt0K/Y+KkItz6VIud6eVBJzCkUi3gePgJ9M
+         DdTWiK4xwcVfPnPUBCY21GDy3bogXC1yW/l48nF+pbFdqTYLVcFh3SfnBjYZuZCr+mMd
+         qLDA==
+X-Gm-Message-State: AO0yUKWGObHIUsejWgc7//8nMEdQU22b9ZsuH+zDZ/WwqLRaibG32WFP
+        LLjK1pKhtDC2ZojpNXcKOHH1iA==
+X-Google-Smtp-Source: AK7set/Ay5Wa5yGAu/9VyfLHZBGglZthPpOXII0dRVMRwRBwdo1mpClz7fcQBvrQBEik5MFtQh+3kg==
+X-Received: by 2002:a05:7500:7204:b0:f7:f55b:6f27 with SMTP id kf4-20020a057500720400b000f7f55b6f27mr272212gab.1.1677085581219;
+        Wed, 22 Feb 2023 09:06:21 -0800 (PST)
+Received: from localhost ([2620:10d:c091:480::1:5e17])
+        by smtp.gmail.com with ESMTPSA id a186-20020a3798c3000000b0073b878e3f30sm2751844qke.59.2023.02.22.09.06.20
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 22 Feb 2023 09:06:20 -0800 (PST)
+Date:   Wed, 22 Feb 2023 12:06:20 -0500
+From:   Johannes Weiner <hannes@cmpxchg.org>
+To:     Peter Xu <peterx@redhat.com>
+Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Yang Shi <shy828301@gmail.com>,
+        David Stevens <stevensd@chromium.org>, stable@vger.kernel.org
+Subject: Re: [PATCH] mm/khugepaged: alloc_charge_hpage() take care of mem
+ charge errors
+Message-ID: <Y/ZLjF9Xe1F6Mu76@cmpxchg.org>
+References: <20230221214344.609226-1-peterx@redhat.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH v4 01/14] dma-buf/dma-fence: Add deadline awareness
-Content-Language: en-US
-To:     =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
-        Rob Clark <robdclark@gmail.com>,
-        dri-devel@lists.freedesktop.org
-Cc:     Rob Clark <robdclark@chromium.org>,
-        Gustavo Padovan <gustavo@padovan.org>,
-        Tvrtko Ursulin <tvrtko.ursulin@intel.com>,
-        =?UTF-8?Q?Michel_D=c3=a4nzer?= <michel@daenzer.net>,
-        open list <linux-kernel@vger.kernel.org>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        "moderated list:DMA BUFFER SHARING FRAMEWORK" 
-        <linaro-mm-sig@lists.linaro.org>,
-        Pekka Paalanen <ppaalanen@gmail.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        freedreno@lists.freedesktop.org,
-        "open list:SYNC FILE FRAMEWORK" <linux-media@vger.kernel.org>
-References: <20230218211608.1630586-1-robdclark@gmail.com>
- <20230218211608.1630586-2-robdclark@gmail.com>
- <b65a2fe2-6f68-2116-9599-2940e66d166b@linux.intel.com>
- <21f36640-3229-0b46-31a2-a47efc5be934@amd.com>
-From:   Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>
-Organization: Intel Corporation UK Plc
-In-Reply-To: <21f36640-3229-0b46-31a2-a47efc5be934@amd.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,HK_RANDOM_ENVFROM,HK_RANDOM_FROM,
-        NICE_REPLY_A,SPF_HELO_NONE,SPF_NONE autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230221214344.609226-1-peterx@redhat.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hello,
 
-On 22/02/2023 15:28, Christian König wrote:
-> Am 22.02.23 um 11:23 schrieb Tvrtko Ursulin:
->>
->> On 18/02/2023 21:15, Rob Clark wrote:
->>> From: Rob Clark <robdclark@chromium.org>
->>>
->>> Add a way to hint to the fence signaler of an upcoming deadline, such as
->>> vblank, which the fence waiter would prefer not to miss.  This is to aid
->>> the fence signaler in making power management decisions, like boosting
->>> frequency as the deadline approaches and awareness of missing deadlines
->>> so that can be factored in to the frequency scaling.
->>>
->>> v2: Drop dma_fence::deadline and related logic to filter duplicate
->>>      deadlines, to avoid increasing dma_fence size.  The fence-context
->>>      implementation will need similar logic to track deadlines of all
->>>      the fences on the same timeline.  [ckoenig]
->>> v3: Clarify locking wrt. set_deadline callback
->>>
->>> Signed-off-by: Rob Clark <robdclark@chromium.org>
->>> Reviewed-by: Christian König <christian.koenig@amd.com>
->>> ---
->>>   drivers/dma-buf/dma-fence.c | 20 ++++++++++++++++++++
->>>   include/linux/dma-fence.h   | 20 ++++++++++++++++++++
->>>   2 files changed, 40 insertions(+)
->>>
->>> diff --git a/drivers/dma-buf/dma-fence.c b/drivers/dma-buf/dma-fence.c
->>> index 0de0482cd36e..763b32627684 100644
->>> --- a/drivers/dma-buf/dma-fence.c
->>> +++ b/drivers/dma-buf/dma-fence.c
->>> @@ -912,6 +912,26 @@ dma_fence_wait_any_timeout(struct dma_fence 
->>> **fences, uint32_t count,
->>>   }
->>>   EXPORT_SYMBOL(dma_fence_wait_any_timeout);
->>>   +
->>> +/**
->>> + * dma_fence_set_deadline - set desired fence-wait deadline
->>> + * @fence:    the fence that is to be waited on
->>> + * @deadline: the time by which the waiter hopes for the fence to be
->>> + *            signaled
->>> + *
->>> + * Inform the fence signaler of an upcoming deadline, such as 
->>> vblank, by
->>> + * which point the waiter would prefer the fence to be signaled by. 
->>> This
->>> + * is intended to give feedback to the fence signaler to aid in power
->>> + * management decisions, such as boosting GPU frequency if a periodic
->>> + * vblank deadline is approaching.
->>> + */
->>> +void dma_fence_set_deadline(struct dma_fence *fence, ktime_t deadline)
->>> +{
->>> +    if (fence->ops->set_deadline && !dma_fence_is_signaled(fence))
->>> +        fence->ops->set_deadline(fence, deadline);
->>> +}
->>> +EXPORT_SYMBOL(dma_fence_set_deadline);
->>> +
->>>   /**
->>>    * dma_fence_describe - Dump fence describtion into seq_file
->>>    * @fence: the 6fence to describe
->>> diff --git a/include/linux/dma-fence.h b/include/linux/dma-fence.h
->>> index 775cdc0b4f24..d77f6591c453 100644
->>> --- a/include/linux/dma-fence.h
->>> +++ b/include/linux/dma-fence.h
->>> @@ -99,6 +99,7 @@ enum dma_fence_flag_bits {
->>>       DMA_FENCE_FLAG_SIGNALED_BIT,
->>>       DMA_FENCE_FLAG_TIMESTAMP_BIT,
->>>       DMA_FENCE_FLAG_ENABLE_SIGNAL_BIT,
->>> +    DMA_FENCE_FLAG_HAS_DEADLINE_BIT,
->>
->> Would this bit be better left out from core implementation, given how 
->> the approach is the component which implements dma-fence has to track 
->> the actual deadline and all?
->>
->> Also taking a step back - are we all okay with starting to expand the 
->> relatively simple core synchronisation primitive with side channel 
->> data like this? What would be the criteria for what side channel data 
->> would be acceptable? Taking note the thing lives outside drivers/gpu/.
-> 
-> I had similar concerns and it took me a moment as well to understand the 
-> background why this is necessary. I essentially don't see much other 
-> approach we could do.
-> 
-> Yes, this is GPU/CRTC specific, but we somehow need a common interface 
-> for communicating it between drivers and that's the dma_fence object as 
-> far as I can see.
+On Tue, Feb 21, 2023 at 04:43:44PM -0500, Peter Xu wrote:
+> If memory charge failed, the caller shouldn't call mem_cgroup_uncharge().
+> Let alloc_charge_hpage() handle the error itself and clear hpage properly
+> if mem charge fails.
 
-Yeah I also don't see any other easy options. Just wanted to raise this 
-as something which probably needs some wider acks.
+I'm a bit confused by this patch.
 
-Also what about the "low level" part of my question about the reason, or 
-benefits, of defining the deadline bit in the common layer?
+There isn't anything wrong with calling mem_cgroup_uncharge() on an
+uncharged page, functionally. It checks and bails out.
 
-Regards,
+It's an unnecessary call of course, but since it's an error path it's
+also not a cost issue, either.
 
-Tvrtko
+I could see an argument for improving the code, but this is actually
+more code, and the caller still has the uncharge-and-put branch anyway
+for when the collapse fails later on.
+
+So I'm not sure I understand the benefit of this change.
