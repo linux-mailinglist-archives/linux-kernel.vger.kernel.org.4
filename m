@@ -2,213 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E95569F0BC
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Feb 2023 09:54:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 89AC469F0BF
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Feb 2023 09:54:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231266AbjBVIx6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Feb 2023 03:53:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42142 "EHLO
+        id S231206AbjBVIyT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Feb 2023 03:54:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42730 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231255AbjBVIxz (ORCPT
+        with ESMTP id S231255AbjBVIyQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Feb 2023 03:53:55 -0500
-Received: from mail-io1-xd33.google.com (mail-io1-xd33.google.com [IPv6:2607:f8b0:4864:20::d33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A51D51C590
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Feb 2023 00:53:53 -0800 (PST)
-Received: by mail-io1-xd33.google.com with SMTP id bf15so3290355iob.7
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Feb 2023 00:53:53 -0800 (PST)
+        Wed, 22 Feb 2023 03:54:16 -0500
+Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3CDB91C7EF;
+        Wed, 22 Feb 2023 00:54:15 -0800 (PST)
+Received: by mail-pl1-x636.google.com with SMTP id c1so8229993plg.4;
+        Wed, 22 Feb 2023 00:54:15 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=WhYDKiCMl5Zg3kFJ82aJeKZFheHJkDNcW1JK/FBeLIU=;
-        b=S46TMnd79hmJMjHu6YHoyiQ+If7OYb6jqppE2/V2/h32wVWi6nWdac/dC+ud2JAX82
-         ngXeec568GkKEt7Pym7Jw3Ur53NqHZxEiqsqSgImaIuxbIIedIDCislExEzkuJ8FGR8w
-         BLGw0ITffNiuHi9XD817RG27FpP7nMDzxmEb8=
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=/FteTCAip9xec+DoZhdjjZs+92JNbzqUwYicxVMsGlQ=;
+        b=aGoCgjDcarCa2PmjCeN0YxhNrhetOWe6yl+VSyd4aMdwnvyZHRYJIdQKVWyJrzvx8n
+         tPtWk22yr+zN4LZhh1+C4iB+YBN9ThwqMK2nkbC4OPQqSXfPeqYcCvHvPHqBhvKB7mCi
+         9NW20uhPz69uCrl/OS+I6hv5kinGrVl1SLaNW8XXjSYsYAcdcQG2dI4Yt2yYHqIfpXBl
+         OFI04XwukOQm01iB3TVRSe5EeN41w0h9m02jtvNRdHzMKdLwjncDikdKcbyUQ44XRFdT
+         /xk/uMWdqc9U8fnRubMnD+CYEc8r/i3VsV5mqMXdOco5iwzWHHO1YrH8fSleE2t4rrOq
+         zdoA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=WhYDKiCMl5Zg3kFJ82aJeKZFheHJkDNcW1JK/FBeLIU=;
-        b=XJZGN1KRNT4OW9Eyf7ipNbMoR2CHAYYX/tCsArGp4VHWl3HecM/n/BmjFDOXjQieTd
-         83BqRL04ZqOXCSwsm3nAg5ujknf1RMHhbgOL6iMEIQ2r5P4m0wF+FIbc7w7seYeA7a4Q
-         3vd70au1lWm0yfOCOQLTbCRp5drGDGfYmuAUraJerzwib6IDxDur4yZ28zmQyPmEcs39
-         Lq7my1ElUd7T/psFv4r2ewCVU2xEhi+sgZgS3kQyQS6M/SNt+LbSxd8XIkPE+/IgyFtc
-         ih5UkPB2vakwpy/Lm69GYIZBP3Sj3P96/w7XqYrHKm+CLmL7UUNFFXtPgDT5lcKj1hy9
-         QTKg==
-X-Gm-Message-State: AO0yUKVrSpLdH0M0KNJ0U8t+lkicc6xKfWE6ujZIJ1urCfAhbHe0/nPj
-        8OLDzdS7LifTSDQ/B+Zad+J/ZCFVnp5yZgmSIzKE0g==
-X-Google-Smtp-Source: AK7set95UIcEr36Pn+YUoHAt17RL/o3ns/Gdh3WG/t/+JidyKPagtbyfa6npb7tZMS4Qzo8ChxlIppfGbWczTO72XBY=
-X-Received: by 2002:a5d:80da:0:b0:71a:5a1f:544c with SMTP id
- h26-20020a5d80da000000b0071a5a1f544cmr4867722ior.5.1677056033042; Wed, 22 Feb
- 2023 00:53:53 -0800 (PST)
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=/FteTCAip9xec+DoZhdjjZs+92JNbzqUwYicxVMsGlQ=;
+        b=OKXHormsD49aA6cccbXz2rET6ATuCDb+rWzoW2197qvg5JJ5DthBgiCP4ecPm520QM
+         GgxA2Z9anPhMfjJCikVRF/qEIL2R36wn1x/2tFsaE4PKXVn9lojPyEuMD3eHSOPJAPYU
+         ZaATlGTMLZbao14sHOLQJzoUL+j8n8EGXGeCm5zJAz2FQye1vWW+QH3C6dz75j5kHLpy
+         ILdmfannJ7NyY3c5t5cpKBVAXgubcu8m219zNNL3keSv+hxiRn7WfqhOwUIK4LU9FZ0D
+         9dAMw7EWtKKWBN7CRqjmo+XxzAaKjitTORya4xYvurmJlAPsOjinQZ1uIYALIdz05xlZ
+         n1rg==
+X-Gm-Message-State: AO0yUKX+Xjb+C+QfgPbRj8ohKXxxUNgSW8RjtISqX134pVB/1yJ5cZYT
+        hwIDSKt9MqjSeW3zXA1VaZQ=
+X-Google-Smtp-Source: AK7set/FmSi0IMiSyGTOnCHsihnPA9q2RCOSxAJ7nTp9KPMf7YWExnxSyvdgWeVK7d3VqQgH0Bpkxg==
+X-Received: by 2002:a05:6a20:1452:b0:cb:c8f7:1140 with SMTP id a18-20020a056a20145200b000cbc8f71140mr1559512pzi.21.1677056054579;
+        Wed, 22 Feb 2023 00:54:14 -0800 (PST)
+Received: from debian.me (subs02-180-214-232-84.three.co.id. [180.214.232.84])
+        by smtp.gmail.com with ESMTPSA id t8-20020a1709028c8800b001994a7a662esm6355882plo.201.2023.02.22.00.54.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 22 Feb 2023 00:54:13 -0800 (PST)
+Received: by debian.me (Postfix, from userid 1000)
+        id 2C79A10561D; Wed, 22 Feb 2023 15:54:11 +0700 (WIB)
+Date:   Wed, 22 Feb 2023 15:54:11 +0700
+From:   Bagas Sanjaya <bagasdotme@gmail.com>
+To:     Tiezhu Yang <yangtiezhu@loongson.cn>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>
+Cc:     bpf@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] docs/bpf: Fix invalid link of "Documentation/bpf/btf.rst"
+Message-ID: <Y/XYM4D1SW/zyhNJ@debian.me>
+References: <1677035401-3628-1-git-send-email-yangtiezhu@loongson.cn>
 MIME-Version: 1.0
-References: <20230221095054.1868277-1-treapking@chromium.org>
- <20230221095054.1868277-4-treapking@chromium.org> <Y/SvhxgjTM2cYZa+@smile.fi.intel.com>
-In-Reply-To: <Y/SvhxgjTM2cYZa+@smile.fi.intel.com>
-From:   Pin-yen Lin <treapking@chromium.org>
-Date:   Wed, 22 Feb 2023 16:53:41 +0800
-Message-ID: <CAEXTbpcOA06Cf-niurjM4_3Rx6xa9Pi+fuJHUQCKmwaJL2ibmA@mail.gmail.com>
-Subject: Re: [PATCH v12 03/10] drm/display: Add Type-C switch helpers
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     Andrzej Hajda <andrzej.hajda@intel.com>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Robert Foss <rfoss@kernel.org>,
-        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
-        Jonas Karlman <jonas@kwiboo.se>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Daniel Scally <djrscally@gmail.com>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Prashant Malani <pmalani@chromium.org>,
-        Benson Leung <bleung@chromium.org>,
-        Guenter Roeck <groeck@chromium.org>,
-        linux-kernel@vger.kernel.org, Hsin-Yi Wang <hsinyi@chromium.org>,
-        Marek Vasut <marex@denx.de>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        dri-devel@lists.freedesktop.org, Xin Ji <xji@analogixsemi.com>,
-        Lyude Paul <lyude@redhat.com>,
-        Allen Chen <allen.chen@ite.com.tw>, devicetree@vger.kernel.org,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        =?UTF-8?B?TsOtY29sYXMgRiAuIFIgLiBBIC4gUHJhZG8=?= 
-        <nfraprado@collabora.com>, chrome-platform@lists.linux.dev,
-        Javier Martinez Canillas <javierm@redhat.com>,
-        linux-acpi@vger.kernel.org, Stephen Boyd <swboyd@chromium.org>,
-        Douglas Anderson <dianders@chromium.org>,
-        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
-        Imre Deak <imre.deak@intel.com>,
-        Jani Nikula <jani.nikula@intel.com>,
-        Kees Cook <keescook@chromium.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="zZnDlUkIXd7iZ9Tf"
+Content-Disposition: inline
+In-Reply-To: <1677035401-3628-1-git-send-email-yangtiezhu@loongson.cn>
+X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Andy,
 
-Thanks for the review.
+--zZnDlUkIXd7iZ9Tf
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-On Tue, Feb 21, 2023 at 7:48 PM Andy Shevchenko
-<andriy.shevchenko@linux.intel.com> wrote:
->
-> On Tue, Feb 21, 2023 at 05:50:47PM +0800, Pin-yen Lin wrote:
-> > Add helpers to register and unregister Type-C "switches" for bridges
-> > capable of switching their output between two downstream devices.
-> >
-> > The helper registers USB Type-C mode switches when the "mode-switch"
-> > and the "reg" properties are available in Device Tree.
-> >
-> > Signed-off-by: Pin-yen Lin <treapking@chromium.org>
->
-> ...
->
-> > +     fwnode_for_each_typec_mode_switch(port, sw)
-> > +             switch_desc->num_typec_switches++;
-> > +
-> > +     if (!switch_desc->num_typec_switches) {
-> > +             dev_dbg(dev, "No Type-C switches node found\n");
-> > +             return 0;
-> > +     }
->
-> What about
->
-> static inline unsigned int typec_mode_switch_node_count(... *port)
-> {
->         ... *sw;
->         unsigned int count = 0;
->
->         for_each_typec_mode_switch_node(port, sw)
->                 count++;
->
->         return count;
-> }
->
->
-> And then it seems something like
->
->         unsigned int count;
->
->         count = typec_mode_switch_node_count(port);
->         if (!count) {
->                 ...
->         }
->
->         _switches = count;
->
-> ...
->
-> > +     switch_desc->typec_ports = devm_kcalloc(
-> > +             dev, switch_desc->num_typec_switches,
->
-> Strange indentation.
->
-> > +             sizeof(struct drm_dp_typec_port_data), GFP_KERNEL);
->
-> > +
->
-> Redundant blank line.
->
-> > +     if (!switch_desc->typec_ports)
-> > +             return -ENOMEM;
->
-> ...
->
-> > +void drm_dp_unregister_typec_switches(struct drm_dp_typec_switch_desc *switch_desc)
-> > +{
-> > +     int i;
->
-> unsigned?
->
-> > +     for (i = 0; i < switch_desc->num_typec_switches; i++)
-> > +             typec_mux_unregister(switch_desc->typec_ports[i].typec_mux);
-> > +}
->
-> ...
->
-> >  #include <linux/delay.h>
-> >  #include <linux/i2c.h>
-> > +#include <linux/usb/typec_mux.h>
->
-> I don't see users of this.
-> But a few forward declarations are missing.
+On Wed, Feb 22, 2023 at 11:10:01AM +0800, Tiezhu Yang wrote:
+> "Documentation/bpf/btf.rst" is linked to the following invalid web page:
+>=20
+> https://www.kernel.org/doc/html/latest/bpf/btf.rst
+>=20
+> The correct link should be:
+>=20
+> https://www.kernel.org/doc/html/latest/bpf/btf.html
+>=20
+> Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
 
-I can put a `struct typec_mux_dev;` here, but there is also a usage of
-typec_mux_set_fn_t.
+Hi,
 
-Should I add the typedef into this header file as well?
+I have already submitted a different fix to the same problem at [1] (v2
+at [2]). Please take a look at there.
 
-Regards,
-Pin-yen
->
-> >  #include <drm/display/drm_dp.h>
-> >  #include <drm/drm_connector.h>
->
-> ...
->
-> > +#define fwnode_for_each_typec_mode_switch(port, sw)  \
-> > +     fwnode_for_each_child_node((port), (sw))        \
-> > +             for_each_if(fwnode_property_present((sw), "mode-switch"))
->
-> Please don't use fwnode namespace (see above), something like
->
-> #define for_each_typec_mode_switch_node(port, sw)       \
->         ...
->
-> --
-> With Best Regards,
-> Andy Shevchenko
->
->
+[1]: https://lore.kernel.org/linux-doc/20230219030956.22662-1-bagasdotme@gm=
+ail.com/
+[2]: https://lore.kernel.org/linux-doc/20230222083530.26136-1-bagasdotme@gm=
+ail.com/
+
+> diff --git a/Documentation/bpf/bpf_devel_QA.rst b/Documentation/bpf/bpf_d=
+evel_QA.rst
+> index 03d4993..f54c328 100644
+> --- a/Documentation/bpf/bpf_devel_QA.rst
+> +++ b/Documentation/bpf/bpf_devel_QA.rst
+> @@ -690,6 +690,7 @@ when:
+>     https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tr=
+ee/tools/testing/selftests/bpf/
+>  .. _Documentation/dev-tools/kselftest.rst:
+>     https://www.kernel.org/doc/html/latest/dev-tools/kselftest.html
+> -.. _Documentation/bpf/btf.rst: btf.rst
+> +.. _Documentation/bpf/btf.rst:
+> +   https://www.kernel.org/doc/html/latest/bpf/btf.html
+> =20
+>  Happy BPF hacking!
+
+For consistency with my fix above, can you please convert these in-tree lin=
+ks
+=66rom using external link to simply write the doc path instead?=20
+
+Thanks.
+
+--=20
+An old man doll... just what I always wanted! - Clara
+
+--zZnDlUkIXd7iZ9Tf
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYKAB0WIQSSYQ6Cy7oyFNCHrUH2uYlJVVFOowUCY/XYLwAKCRD2uYlJVVFO
+o5iFAQC8pJCj/VFWlPFK/YFAkCc2//kK9QkP0m9kOCGBdbAikQEA5BWum972U2Tb
+L8rX+lZL3R20C1dBg/2vxcJL3fS4kQQ=
+=lRJM
+-----END PGP SIGNATURE-----
+
+--zZnDlUkIXd7iZ9Tf--
