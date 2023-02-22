@@ -2,92 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AFD9169FE84
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Feb 2023 23:29:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 08A0569FE8E
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Feb 2023 23:33:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232969AbjBVW3H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Feb 2023 17:29:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57142 "EHLO
+        id S232888AbjBVWdo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Feb 2023 17:33:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59768 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230435AbjBVW3G (ORCPT
+        with ESMTP id S232083AbjBVWdm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Feb 2023 17:29:06 -0500
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29E05619D;
-        Wed, 22 Feb 2023 14:29:04 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1677104944; x=1708640944;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=tb0CU1hOIcF8YfLnEGDkQsq99wv6qzkZVCjQBnACc0s=;
-  b=gfm9OcsUGi1BHbQN32X/VpkUhIyCtGXeL0nDWpUkycHdxYOZXGvXjN4p
-   a+WB8ahH+1W5I4KLndfKBmpVVm+qu0BeIA8xBCCB/lbSAV1IDQCCk8HOC
-   AfWqtSBaElGycYnDw/0CiXegXyiRHbl+taoU9+h6XV2pi9nWuQZdlyLuC
-   PLj9qG8pK+CruNqPQNRyWgRBAYpZ/seo2M3tlRp++pj58w7xcdOOsTQeL
-   NZxOAVf7vrqLaub14FHodEkw78zpnqdYFOpNAAaWnktxICNzB29Peyujs
-   nHoWU3mhbdh4O1CFh4NmdBDOdOS2UiiEKnM5fK241C6EeNA+WVMIxC76Y
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10629"; a="334418936"
-X-IronPort-AV: E=Sophos;i="5.97,319,1669104000"; 
-   d="scan'208";a="334418936"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Feb 2023 14:28:56 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10629"; a="665511550"
-X-IronPort-AV: E=Sophos;i="5.97,319,1669104000"; 
-   d="scan'208";a="665511550"
-Received: from tzinser-mobl.amr.corp.intel.com (HELO [10.209.49.182]) ([10.209.49.182])
-  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Feb 2023 14:28:56 -0800
-Message-ID: <8fb5ebbf-d468-169d-5603-b267e7b42516@intel.com>
-Date:   Wed, 22 Feb 2023 14:28:55 -0800
+        Wed, 22 Feb 2023 17:33:42 -0500
+Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D4F728D1B;
+        Wed, 22 Feb 2023 14:33:40 -0800 (PST)
+Received: from zn.tnic (p5de8e9fe.dip0.t-ipconnect.de [93.232.233.254])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 0ADBF1EC068E;
+        Wed, 22 Feb 2023 23:33:39 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1677105219;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=KNxniYfnv/Wqlv/O7839+WaF1/8EwE+WSa7eOziAI2U=;
+        b=rS3In1x0ygiA49jl10PLWw9kPeg6B8zKJ0gOPDWrBpNGLk/CN4dBn9mL1L5Y/8kpDbS4En
+        N1bEIHB1P8XtFBrgJNQHZMvWdNoFLIZNq06heRMKIuQ5wECm6IEz6amGGz6g6YvsHfLFwc
+        2oCZcHzx9nAg72ejGoq2zFJ43e9O/RE=
+Date:   Wed, 22 Feb 2023 23:33:38 +0100
+From:   Borislav Petkov <bp@alien8.de>
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     "Michael Kelley (LINUX)" <mikelley@microsoft.com>,
+        Dave Hansen <dave.hansen@intel.com>,
+        "hpa@zytor.com" <hpa@zytor.com>, KY Srinivasan <kys@microsoft.com>,
+        Haiyang Zhang <haiyangz@microsoft.com>,
+        "wei.liu@kernel.org" <wei.liu@kernel.org>,
+        Dexuan Cui <decui@microsoft.com>,
+        "luto@kernel.org" <luto@kernel.org>,
+        "peterz@infradead.org" <peterz@infradead.org>,
+        "davem@davemloft.net" <davem@davemloft.net>,
+        "edumazet@google.com" <edumazet@google.com>,
+        "kuba@kernel.org" <kuba@kernel.org>,
+        "pabeni@redhat.com" <pabeni@redhat.com>,
+        "lpieralisi@kernel.org" <lpieralisi@kernel.org>,
+        "robh@kernel.org" <robh@kernel.org>, "kw@linux.com" <kw@linux.com>,
+        "bhelgaas@google.com" <bhelgaas@google.com>,
+        "arnd@arndb.de" <arnd@arndb.de>, "hch@lst.de" <hch@lst.de>,
+        "m.szyprowski@samsung.com" <m.szyprowski@samsung.com>,
+        "robin.murphy@arm.com" <robin.murphy@arm.com>,
+        "thomas.lendacky@amd.com" <thomas.lendacky@amd.com>,
+        "brijesh.singh@amd.com" <brijesh.singh@amd.com>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+        Tianyu Lan <Tianyu.Lan@microsoft.com>,
+        "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>,
+        "sathyanarayanan.kuppuswamy@linux.intel.com" 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        "ak@linux.intel.com" <ak@linux.intel.com>,
+        "isaku.yamahata@intel.com" <isaku.yamahata@intel.com>,
+        "dan.j.williams@intel.com" <dan.j.williams@intel.com>,
+        "jane.chu@oracle.com" <jane.chu@oracle.com>,
+        "tony.luck@intel.com" <tony.luck@intel.com>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
+        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
+        "iommu@lists.linux.dev" <iommu@lists.linux.dev>
+Subject: Re: [PATCH v5 06/14] x86/ioremap: Support hypervisor specified range
+ to map as encrypted
+Message-ID: <Y/aYQlQzRSEH5II/@zn.tnic>
+References: <Y+auMQ88In7NEc30@google.com>
+ <Y+av0SVUHBLCVdWE@google.com>
+ <BYAPR21MB168864EF662ABC67B19654CCD7DE9@BYAPR21MB1688.namprd21.prod.outlook.com>
+ <Y+bXjxUtSf71E5SS@google.com>
+ <Y+4wiyepKU8IEr48@zn.tnic>
+ <BYAPR21MB168853FD0676CCACF7C249B0D7A09@BYAPR21MB1688.namprd21.prod.outlook.com>
+ <Y+5immKTXCsjSysx@zn.tnic>
+ <BYAPR21MB16880EC9C85EC9343F9AF178D7A19@BYAPR21MB1688.namprd21.prod.outlook.com>
+ <Y++VSZNAX9Cstbqo@zn.tnic>
+ <Y/aTmL5Y8DtOJu9w@google.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH v2 4/7] platform/x86/intel/ifs: Implement Array BIST test
-Content-Language: en-US
-To:     "Joseph, Jithu" <jithu.joseph@intel.com>, hdegoede@redhat.com,
-        markgross@kernel.org
-Cc:     tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
-        dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
-        gregkh@linuxfoundation.org, rostedt@goodmis.org,
-        ashok.raj@intel.com, tony.luck@intel.com,
-        linux-kernel@vger.kernel.org, platform-driver-x86@vger.kernel.org,
-        patches@lists.linux.dev, ravi.v.shankar@intel.com,
-        thiago.macieira@intel.com, athenas.jimenez.gonzalez@intel.com,
-        sohil.mehta@intel.com
-References: <20230131234302.3997223-1-jithu.joseph@intel.com>
- <20230214234426.344960-1-jithu.joseph@intel.com>
- <20230214234426.344960-5-jithu.joseph@intel.com>
- <a24c65f8-978d-8968-7874-6b83e14b01ba@intel.com>
- <d9d18954-8434-4c85-88b8-8e1d99cd6a4b@intel.com>
- <dd501d6a-e7e9-be82-24fb-33b18fb6192b@intel.com>
- <b67d2125-4075-4eac-4cad-8e315b866144@intel.com>
- <5d57f42a-1bfc-5e6a-bb49-556ecb7402af@intel.com>
- <9c55a34b-c17e-2a62-9989-902ce940dde5@intel.com>
- <42ac85ea-0ffe-55fc-57c2-6f4555e8dc5b@intel.com>
-From:   Dave Hansen <dave.hansen@intel.com>
-In-Reply-To: <42ac85ea-0ffe-55fc-57c2-6f4555e8dc5b@intel.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <Y/aTmL5Y8DtOJu9w@google.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/22/23 14:07, Joseph, Jithu wrote:
-> Since the trace has to be explicitly enabled (I thought it is okay to
-> add a more convenient custom one only to be enabled for detailed
-> analysis when required).
+On Wed, Feb 22, 2023 at 02:13:44PM -0800, Sean Christopherson wrote:
+> Because vTOM is a hardware feature, whereas the IO-APIC and vTPM being accessible
+> via private memory are software features.  It's very possible to emulate the
+> IO-APIC in trusted code without vTOM.
 
-	man perf-script
+I know, but their use case is dictated by the fact that they're using
+a SNP guest *with* vTOM as a SEV feature. And so their guest does
+IO-APIC and vTPM *with* the vTOM SEV feature. That's what I'm trying to
+model.
 
-You should be able to write one to do exactly what you need in about 10
-minutes.  No new tracepoints, no new kernel code to maintain.  Knock
-yourself out with whatever conveniences you want.  Just do it in userspace.
+> > If the access method to the IO-APIC and vTPM are specific to the
+> > HyperV's vTOM implementation, then I don't mind if this were called
+> > 
+> > 	cc_platform_has(CC_ATTR_GUEST_HYPERV_VTOM);
+> 
+> I still think that's likely to caused problems in the future, e.g. if Hyper-V
+> moves more stuff into the paravisor or if Hyper-V ends up with similar functionality
+> for TDX.
 
-I still think this patch should go away.
+Yah, reportedly, TDX folks are not very interested in this case.
+
+> But it's not a sticking point, the only thing I'm fiercely resistant to
+> is conflating hardware features with software features.
+
+So you and I need to find a common ground...
+
+-- 
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette
