@@ -2,72 +2,158 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9DB9A69F0E1
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Feb 2023 10:04:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4317669F0EC
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Feb 2023 10:06:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231517AbjBVJEW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Feb 2023 04:04:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51746 "EHLO
+        id S231575AbjBVJGO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Feb 2023 04:06:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53100 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231474AbjBVJEU (ORCPT
+        with ESMTP id S231584AbjBVJGK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Feb 2023 04:04:20 -0500
-Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E792036697
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Feb 2023 01:04:17 -0800 (PST)
-Received: by mail-pl1-x636.google.com with SMTP id u14so4086406ple.7
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Feb 2023 01:04:17 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:to:subject:message-id:date:from:reply-to
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=T/k2bZk3h898qo4BHG2NarX/QNDeGHa0qpnKbc5O6Cg=;
-        b=Rt8sW1ClIDgUNVFxLzcgva1Yy7lGzSG5DXFXzNQ+eqyvqVhB7KsP99gFgfVv5wSGcU
-         bueVJtdi7um4mWXxnc8hMtlqynqPQGDlVkx3nRuawdu64AQkULPJQmPfopcvO56/ru8V
-         kDdM86HS7Zk66bbivcMAIZH26WDn6g7fiqhvPJbzkTc8MSx12b2vlMBTvAHJ0c3YS+Vc
-         cPZj8jMiClaz6iQjTtblSevf4XtTk87Q3g8deK3eS274FSHjr5jzuUwh0xMa4w07PJdf
-         qjMaVJxrpkdZgXB2YZcGvioWBlrXsXEU+Elovy8yaCkPRT8l28lsTqsZ4A6jhZzqLIVj
-         FPuQ==
+        Wed, 22 Feb 2023 04:06:10 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB66234308
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Feb 2023 01:05:24 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1677056724;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=9LjUQ9O0HnvcxKh2XAsUTz7YC8LaZ/FmXdZBrCkpK+Q=;
+        b=gp94UvynWjLHKaBrvchyc7+0jNIWaXfVsyUoZe+0HrLxvZDW6icMi8B5lqfXnHTp2HwoSt
+        31iELknuxqb5AXtQ8vroImlZRnR0e1GaaUgaXc5hrEw+SUtX/ve8b96TqxwWwoiO+8jAmA
+        aMB4I8ShVpIg3+mqck9S/jrBPrZ7QBk=
+Received: from mail-wr1-f69.google.com (mail-wr1-f69.google.com
+ [209.85.221.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-135-ky8IuXp8MY-8eQHrTAqPxA-1; Wed, 22 Feb 2023 04:05:22 -0500
+X-MC-Unique: ky8IuXp8MY-8eQHrTAqPxA-1
+Received: by mail-wr1-f69.google.com with SMTP id g6-20020adfa486000000b002c55ef1ec94so1444349wrb.0
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Feb 2023 01:05:22 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:to:subject:message-id:date:from:reply-to
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+        h=content-transfer-encoding:in-reply-to:subject:organization:from
+         :content-language:references:cc:to:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=T/k2bZk3h898qo4BHG2NarX/QNDeGHa0qpnKbc5O6Cg=;
-        b=78sdCe616OfsibnDrchpbnPqK+Jo7O2l7ZqbD+koysHGqmtpF5xhkFXhyb+Kidj8MD
-         u597VWAxjiSKNDjTt/A9imfyxr4oBHASE9on7iXcshA/Ps5IB28rgUTkMoSfXYHIJZFh
-         cBEPep09R5g3h7Em4wQxvcR8n5iBZ3fQpL9gHQ8L0EhLuK+9cBcH/tawFiSMcKI9IVtu
-         CEaKjhfdr5UfEW8MNZbjSTDlyaWrfjCSIkkncJp1cIUTGHOPFhNI/qNqLjRgknOGyDFR
-         MgsbGCMqVV/vePsnnsUjXAiatukMepqKjSOR37GN/RHexF+Zte1+AjohrpjF0J3rBGEb
-         3YmQ==
-X-Gm-Message-State: AO0yUKVOU/B0n3zP07gPj9QZ8wqBWp1JzX5GELJvg4KFxb8GMNXXRE6a
-        0X+TAVDKr5y1FZlVlHfvOy25rqso0D4qdITZFmk=
-X-Google-Smtp-Source: AK7set9M/KhyeSnVPPt7BD0ppoepq17ZhhJB+MgC8Mbj+Ms7qC4rf0S4hphZ57IOegecXd5/3JEeNhr3ZcqbRpbHCr0=
-X-Received: by 2002:a17:90b:1e03:b0:233:bc13:2cbb with SMTP id
- pg3-20020a17090b1e0300b00233bc132cbbmr3132264pjb.39.1677056657419; Wed, 22
- Feb 2023 01:04:17 -0800 (PST)
+        bh=9LjUQ9O0HnvcxKh2XAsUTz7YC8LaZ/FmXdZBrCkpK+Q=;
+        b=Cpn0hzdC04PM7MW4Tj+nHXUHmbgFmCURoD3rB5UyJYP15SH5JLQG7DLpSxgtygQGSi
+         q861qGBRZixK6E6Gke9MXyOJxgrOZOI7Bg8ttIuM39Fbl7FMKKc2jbl549FzEMX5LYM5
+         B+qZPyFwIrRd2C7c42p92pITwpK3FrQPGL+07evYZz/05z7Zos/o6Vc7uvFBsHMEScoU
+         I54aPP4pBAv/7Z4nnto6VKPOlJH7m72K7Tirse9+yIDCJ7q7cAm6q0qYc9IpCmSVzI+g
+         LERkgHOuujU0+InwCSeh5g3tv/dLPZ8MyFFbq1uzoTTp1FBIBb/1GYEOGdSsehQ6Y8M6
+         vCzA==
+X-Gm-Message-State: AO0yUKWpSyHtD9vPRWjHn8WypY08Nq2ikOw2yTB0n8fuaAx5xTs7r87r
+        UNVYTLvjEskL4ytA7jgkEu7cToJuz8g3OzY1x+ksVOoZC/OrznkjZe04G0ghQ4DbPD1kAP+eAos
+        Jrd7JnaKkGBFj9u4sSP2/vFFI
+X-Received: by 2002:a05:600c:80f:b0:3db:fc3:6de4 with SMTP id k15-20020a05600c080f00b003db0fc36de4mr5069690wmp.35.1677056721235;
+        Wed, 22 Feb 2023 01:05:21 -0800 (PST)
+X-Google-Smtp-Source: AK7set9SGBIryzMFukKmMVx5ow2JjCNOU/7I00r/woNcU3wsCpyUfsO529XXrVJjBQAVq81y0YSzRQ==
+X-Received: by 2002:a05:600c:80f:b0:3db:fc3:6de4 with SMTP id k15-20020a05600c080f00b003db0fc36de4mr5069668wmp.35.1677056720798;
+        Wed, 22 Feb 2023 01:05:20 -0800 (PST)
+Received: from ?IPV6:2003:cb:c704:a100:95ad:6325:131:6b1d? (p200300cbc704a10095ad632501316b1d.dip0.t-ipconnect.de. [2003:cb:c704:a100:95ad:6325:131:6b1d])
+        by smtp.gmail.com with ESMTPSA id c22-20020a7bc856000000b003e01493b136sm7194166wml.43.2023.02.22.01.05.18
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 22 Feb 2023 01:05:20 -0800 (PST)
+Message-ID: <52f001ef-a409-4f33-f28f-02e806ef305a@redhat.com>
+Date:   Wed, 22 Feb 2023 10:05:18 +0100
 MIME-Version: 1.0
-Received: by 2002:a05:6a10:a486:b0:419:7fd:e8b3 with HTTP; Wed, 22 Feb 2023
- 01:04:17 -0800 (PST)
-Reply-To: sgtkaylam28@gmail.com
-From:   sgtkayla manthey <abdulhadiidrisabdulrazak@gmail.com>
-Date:   Wed, 22 Feb 2023 09:04:17 +0000
-Message-ID: <CANEyRew1uo2aY1izyPyggxHy2zqY_GQDN-bKX=s7-vqpABx_aA@mail.gmail.com>
-Subject: 
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=4.8 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,FREEMAIL_REPLYTO,
-        FREEMAIL_REPLYTO_END_DIGIT,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        UNDISC_FREEM autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: ****
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.2
+To:     Dave Hansen <dave.hansen@intel.com>,
+        "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>,
+        "bsingharora@gmail.com" <bsingharora@gmail.com>,
+        "hpa@zytor.com" <hpa@zytor.com>,
+        "Syromiatnikov, Eugene" <esyr@redhat.com>,
+        "peterz@infradead.org" <peterz@infradead.org>,
+        "rdunlap@infradead.org" <rdunlap@infradead.org>,
+        "keescook@chromium.org" <keescook@chromium.org>,
+        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+        "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>,
+        "Eranian, Stephane" <eranian@google.com>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "fweimer@redhat.com" <fweimer@redhat.com>,
+        "nadav.amit@gmail.com" <nadav.amit@gmail.com>,
+        "jannh@google.com" <jannh@google.com>,
+        "dethoma@microsoft.com" <dethoma@microsoft.com>,
+        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
+        "kcc@google.com" <kcc@google.com>, "pavel@ucw.cz" <pavel@ucw.cz>,
+        "oleg@redhat.com" <oleg@redhat.com>,
+        "hjl.tools@gmail.com" <hjl.tools@gmail.com>,
+        "bp@alien8.de" <bp@alien8.de>,
+        "Lutomirski, Andy" <luto@kernel.org>,
+        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+        "arnd@arndb.de" <arnd@arndb.de>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "Schimpe, Christina" <christina.schimpe@intel.com>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "mike.kravetz@oracle.com" <mike.kravetz@oracle.com>,
+        "Yang, Weijiang" <weijiang.yang@intel.com>,
+        "debug@rivosinc.com" <debug@rivosinc.com>,
+        "jamorris@linux.microsoft.com" <jamorris@linux.microsoft.com>,
+        "john.allen@amd.com" <john.allen@amd.com>,
+        "rppt@kernel.org" <rppt@kernel.org>,
+        "andrew.cooper3@citrix.com" <andrew.cooper3@citrix.com>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "corbet@lwn.net" <corbet@lwn.net>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-api@vger.kernel.org" <linux-api@vger.kernel.org>,
+        "gorcunov@gmail.com" <gorcunov@gmail.com>,
+        "akpm@linux-foundation.org" <akpm@linux-foundation.org>
+Cc:     "Yu, Yu-cheng" <yu-cheng.yu@intel.com>
+References: <20230218211433.26859-1-rick.p.edgecombe@intel.com>
+ <20230218211433.26859-15-rick.p.edgecombe@intel.com>
+ <70681787-0d33-a9ed-7f2a-747be1490932@redhat.com>
+ <6f19d7c7ad9f61fa8f6c9bd09d24524dbe17463f.camel@intel.com>
+ <6e1201f5-da25-6040-8230-c84856221838@redhat.com>
+ <273414f5-2a7c-3cc0-dc27-d07baaa5787b@intel.com>
+Content-Language: en-US
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+Subject: Re: [PATCH v6 14/41] x86/mm: Introduce _PAGE_SAVED_DIRTY
+In-Reply-To: <273414f5-2a7c-3cc0-dc27-d07baaa5787b@intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---=20
-Zdravo,
-Molim vas jeste li primili moje prethodno pismo? napi=C5=A1i mi
+On 21.02.23 21:13, Dave Hansen wrote:
+> On 2/21/23 00:38, David Hildenbrand wrote:> Sure, for my taste this is
+> (1) too repetitive (2) too verbose (3) to
+>> specialized. But whatever x86 maintainers prefer.
+> 
+> At this point, I'm not going to be too nitpicky.  I personally think we
+> need to get _something_ merged.  We can then nitpick it to death once
+> its in the tree.
+
+Yes, but ... do we have to rush right now?
+
+This series wasn't in -next and we're in the merge window. Is the plan 
+to still include it into this merge window?
+
+Also, I think concise patch descriptions and comments are not 
+necessarily nitpicking like "please rename that variable".
+
+> 
+> So I prefer whatever will move the set along. ;)
+
+If the plan is to merge it in the next merge window (which I suspect, 
+but I might be wrong), I suggest including it in -next fairly soonish, 
+and in the meantime, polish the remaining bits.
+
+Knowing the plan would be good ;)
+
+-- 
+Thanks,
+
+David / dhildenb
+
