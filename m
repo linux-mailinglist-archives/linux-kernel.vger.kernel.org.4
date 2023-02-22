@@ -2,109 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D1B8469F071
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Feb 2023 09:38:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0CC2169F075
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Feb 2023 09:38:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231297AbjBVIiH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Feb 2023 03:38:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55742 "EHLO
+        id S230511AbjBVIi4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Feb 2023 03:38:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56856 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231202AbjBVIiF (ORCPT
+        with ESMTP id S229672AbjBVIix (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Feb 2023 03:38:05 -0500
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2D6CF769;
-        Wed, 22 Feb 2023 00:38:04 -0800 (PST)
-From:   Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1677055083;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=/RKaCpls8Odbi3oV698IL/0TrdRJgRn7YhMcmkSP5B0=;
-        b=Re7dkeVVUAQRrQts01fCXShDHCTHFiMvZajuuy4bqUEuKtDjvOWYN7fL9kR+ZVNigBc8wY
-        L/BvO5qcsi7mewALM7sED/xAx3xfLDQswZT084iWp9t+LJaxfJrMVXG+j92UU6EIxKFGJJ
-        TfezCfTLDYaUCUWaL5a7JRzLsSYZfGIXklSfeos7qGmBXJuc4rr7+UWWF7jHH9B0ALAlvP
-        m4wh6Ky0SZsUO6jj8ucUIXt/R9VoV53wyHNe63rQpczsFowy33tyBTX3fygzbNA7PuhqhI
-        5QwYy192TilS9RBp1A1p1XjWmMf9GRtKD4rjR7eu2uPYSBWCVg5sb6q48c0QnQ==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1677055083;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=/RKaCpls8Odbi3oV698IL/0TrdRJgRn7YhMcmkSP5B0=;
-        b=j6kw18pML4ZOMKTYLW/Oxk5r7hIJPZ90KzUT/pyIAPxMWHCHVuGtSB+vZ83ysPfTlyUcHU
-        mvf3qS1vYJnvuNBQ==
-To:     "Chang S. Bae" <chang.seok.bae@intel.com>,
-        Mingwei Zhang <mizhang@google.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Paolo Bonzini <pbonzini@redhat.com>
-Cc:     "H. Peter Anvin" <hpa@zytor.com>, linux-kernel@vger.kernel.org,
-        kvm@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        Jim Mattson <jmattson@google.com>,
-        Venkatesh Srinivas <venkateshs@google.com>,
-        Aaron Lewis <aaronlewis@google.com>,
-        Chao Gao <chao.gao@intel.com>
-Subject: Re: [PATCH v3 01/13] x86/fpu/xstate: Avoid getting xstate address
- of init_fpstate if fpstate contains the component
-In-Reply-To: <e91b9172-8a2e-e299-a84f-1e9331c51cb7@intel.com>
-References: <20230221163655.920289-1-mizhang@google.com>
- <20230221163655.920289-2-mizhang@google.com>
- <e91b9172-8a2e-e299-a84f-1e9331c51cb7@intel.com>
-Date:   Wed, 22 Feb 2023 09:38:02 +0100
-Message-ID: <87ilfum6xh.ffs@tglx>
+        Wed, 22 Feb 2023 03:38:53 -0500
+Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C09BAD2C
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Feb 2023 00:38:52 -0800 (PST)
+Received: by mail-ed1-x529.google.com with SMTP id i34so1891925eda.7
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Feb 2023 00:38:52 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=VGYrvXKx730j8waNg6kc6q9n1QzZ6m03dBYS2j7HOQw=;
+        b=ikQu+qovo7VzH2uaNVKQF4awl/fxax4qj1G6kByJSoCI4aiiAnzx5WPzEZGCSXn75K
+         7hxlTaQwBvFnSZVsdBK+0X0et14eVzTaMw/KSxO7SVaxNBKroRDGyRGwZRsMPIQVh/Sl
+         J5jqAdLyNst0fPoKLPZX8ksKjM/IA+lLOoc01lRXl5eSBRwFMqOcOoe8DpHJSpOPZrPl
+         7gXcCX3AxMyS8q5n3oz3booaV57u4zDb5swg9nxlguwirS9L6uxEMIAJjd844htJP+QZ
+         5/+jPdWcJxPTp7MIexOWRbFEGMyy+wbXsjlSFyUnOkI+B1eDHLDT/T5kHKX6u+GeBir8
+         +pQQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=VGYrvXKx730j8waNg6kc6q9n1QzZ6m03dBYS2j7HOQw=;
+        b=RpW8dya3Qql51amsovDu3i8zExNkKX9+HI9LJlV7Bsz4QDZd1HIdYNLObc8p9KxGyr
+         sfF1j6JLiBfTH1UiR0oFPAPyU7Ttq6jEyll2U67sS0A11dWD5OVOK/H/Szq0+jvChxq8
+         rirGfNEfXcIerTG0iIJweemBLBSBuH1Bfl1MwEZeAcResQa6wsobZXzSIDBQoeSxxeOh
+         Y/fxOwTFp58QVzYdEBbkthS9mVGRbXn5v3SlNdrVJCIkJZ9oxGKL7ZZg4AEMuZPZBxQQ
+         ZyouH4pM/JM5V+zGPHyZuqJqRCgbzrkHnS/F/As5JuM3Pk2Q5M8Y9sDYT4GZkG8uXkHf
+         /d/w==
+X-Gm-Message-State: AO0yUKURJ3Wfwx4GsxmcXQ+nXaUs/trf18wzIsiwTp4Ialj3Mx+rWgxI
+        sG28yqhnTbstKFAa0K/FUmKSHw==
+X-Google-Smtp-Source: AK7set/ZWj3Inch8FESqr8vZe3PV7J6tCfOU4ycr20w9XgWAqWr8t7mtTcZYAg6wYekGNYxhb7NjHA==
+X-Received: by 2002:a17:906:9c85:b0:8af:2e78:ac2b with SMTP id fj5-20020a1709069c8500b008af2e78ac2bmr19914255ejc.3.1677055130718;
+        Wed, 22 Feb 2023 00:38:50 -0800 (PST)
+Received: from [192.168.1.109] ([178.197.216.144])
+        by smtp.gmail.com with ESMTPSA id u13-20020a1709063b8d00b008e45d7055f8sm1025458ejf.198.2023.02.22.00.38.49
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 22 Feb 2023 00:38:50 -0800 (PST)
+Message-ID: <5f2bebad-5c9d-41bd-63c1-043f1d8c6c16@linaro.org>
+Date:   Wed, 22 Feb 2023 09:38:48 +0100
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH v3] dt-bindings: ata: Add UniPhier controller binding
+Content-Language: en-US
+To:     Kunihiko Hayashi <hayashi.kunihiko@socionext.com>,
+        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Jens Axboe <axboe@kernel.dk>
+Cc:     linux-ide@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20230220054711.4584-1-hayashi.kunihiko@socionext.com>
+ <8a4042fd-02a3-261e-4126-7a3090850fda@linaro.org>
+ <7e19d3f4-a3bc-dc9d-35a0-9bfc05f22b2c@socionext.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <7e19d3f4-a3bc-dc9d-35a0-9bfc05f22b2c@socionext.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 21 2023 at 19:05, Chang S. Bae wrote:
-> On 2/21/2023 8:36 AM, Mingwei Zhang wrote:
->> @@ -1151,10 +1152,11 @@ void __copy_xstate_to_uabi_buf(struct membuf to, struct fpstate *fpstate,
->>   			pkru.pkru = pkru_val;
->>   			membuf_write(&to, &pkru, sizeof(pkru));
->>   		} else {
->> -			copy_feature(header.xfeatures & BIT_ULL(i), &to,
->> -				     __raw_xsave_addr(xsave, i),
->> -				     __raw_xsave_addr(xinit, i),
->> -				     xstate_sizes[i]);
->> +			xsave_addr = (header.xfeatures & BIT_ULL(i)) ?
->> +				__raw_xsave_addr(xsave, i) :
->> +				__raw_xsave_addr(xinit, i);
->> +
->> +			membuf_write(&to, xsave_addr, xstate_sizes[i]);
->>   		}
->>   		/*
->>   		 * Keep track of the last copied state in the non-compacted
->
-> So this hunk is under for_each_extended_xfeature(i, mask) -- it skips 
-> the copy routine if mask[i] == 0; instead, it fills zeros.
->
-> We have this [1]:
->
-> 	if (fpu_state_size_dynamic())
-> 		mask &= (header.xfeatures | xinit->header.xcomp_bv);
->
-> If header.xfeatures[18] = 0 then mask[18] = 0 because 
-> xinit->header.xcomp_bv[18] = 0. Then, it won't hit that code. So, I'm 
-> confused about the problem that you described here.
+On 22/02/2023 02:03, Kunihiko Hayashi wrote:
+>>> -  resets:
+>>> -    maxItems: 1
+>>
+>> Why moving it?
+> 
+> Sorry for my mistake. I should fix it.
+> 
+>>> +allOf:
+>>
+>> This goes to the same place as in example-schema.
+> 
+> I can see "allOf" next to "required" in example-schema,
 
-Read the suggested changelog I wrote in my reply to Mingwei.
+Are you agreeing or disagreeing here (thus I should explain that it's
+not the same place)? If the first, sometimes it's enough to say "ack" or
+"sure".
 
-TLDR:
+> 
 
-        xsave.header.xfeatures[18] = 1
-        xinit.header.xfeatures[18] = 0
-    ->  mask[18] = 1
-    ->  __raw_xsave_addr(xsave, 18)     <- Success
-    ->  __raw_xsave_addr(xinit, 18)     <- WARN
 
-Thanks,
+Best regards,
+Krzysztof
 
-        tglx
