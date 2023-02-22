@@ -2,343 +2,205 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8720169ED86
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Feb 2023 04:32:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B01069ED75
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Feb 2023 04:31:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231418AbjBVDca (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Feb 2023 22:32:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54716 "EHLO
+        id S230104AbjBVDbC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Feb 2023 22:31:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53386 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229561AbjBVDcS (ORCPT
+        with ESMTP id S229493AbjBVDa7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Feb 2023 22:32:18 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1000434C2F;
-        Tue, 21 Feb 2023 19:31:46 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 56CDACE1CE7;
-        Wed, 22 Feb 2023 03:31:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1DAEEC433A1;
-        Wed, 22 Feb 2023 03:31:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1677036695;
-        bh=BCEF9tz3PqpoLVNs6mBcgcViy7YzFnU5Zx1xRtgtCrQ=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=R1RpW8UtqtmM0PPoFbekx/WGniM1mqrmVKT6pQwhNBM/+wrXaF8TEO80rZvYIhh99
-         M9UWU9bnquG4jnW60wmVL87IFH4ZjOgilCHMwFpxm+k6XuYdt/TDY7DfMKwl2dBgmT
-         QN5hwPLd+EyLlEkLM9jXEeNH+ixcUjHwqeOlFXUrOUzBVfFpEpYpjcQLVR2sU1w7Iz
-         F+W1miBt+iwAu1KXzY0BnERMYnMGt2cQDVTgiSYG8Gp4e+rw5maWwH8g5OVmEy2Dld
-         guJ1Fzr01mHt/KnaR3obPBKg8GVUMCBZxpzm11vt0xlUC3gZkjNyK3kjjNKX2fhLgt
-         lYtdnhlgt7LYw==
-From:   guoren@kernel.org
-To:     arnd@arndb.de, guoren@kernel.org, palmer@rivosinc.com,
-        tglx@linutronix.de, peterz@infradead.org, luto@kernel.org,
-        conor.dooley@microchip.com, heiko@sntech.de, jszhang@kernel.org,
-        lazyparser@gmail.com, falcon@tinylab.org, chenhuacai@kernel.org,
-        apatel@ventanamicro.com, atishp@atishpatra.org,
-        mark.rutland@arm.com, ben@decadent.org.uk, bjorn@kernel.org,
-        palmer@dabbelt.com
-Cc:     linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-riscv@lists.infradead.org,
-        =?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn@rivosinc.com>
-Subject: [PATCH -next V17 7/7] riscv: entry: Consolidate general regs saving/restoring
-Date:   Tue, 21 Feb 2023 22:30:21 -0500
-Message-Id: <20230222033021.983168-8-guoren@kernel.org>
-X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20230222033021.983168-1-guoren@kernel.org>
-References: <20230222033021.983168-1-guoren@kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+        Tue, 21 Feb 2023 22:30:59 -0500
+Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2041.outbound.protection.outlook.com [40.107.220.41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5AC0B30EB5
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Feb 2023 19:30:57 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=mqh3SBV+oWw+L9ANr9o5EKEUwDYvQlHrm2uWGv3C6rve38+L7wpQee6uJLXkFtVGv4XqRmsKcHJmugBttDWkjDVzcyaVBTFBbcIPHnGrkUpEV7NdLd0798d2AdRVKacY7A/dSV825h8VT1/eQ9aQ/FTNfD39hxV91aWNbyisbx068Ei83ROXervqRJAJQOjxxOLRPBWOI6rngUgIswpcTb1mIWs+gHbMhujP77EIIkXNkuykI+VKBOZidCyUNq92QaB3UY2qy5ZzEhqS3xWxRZld34NuipVLO4hNEvSpV9IJuW9GrgQ1/rt8amO/s0nQTEgzRdQzvFxtcNyFEvdeig==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=DtVIca4aVGubJFnwGaMoyvp7Hwfd/xdHzo2YM4Z1qOI=;
+ b=ZCwGZSFCFxdgE9dsNXS9F6nhcTnWXGNFQYko67J3BbP99B7pc9gq+/5MhfaRTmSSrnXKV4OU7rSdMdBNU6BNo2NkUtKagAztfS2sdOta2v8hV9G6Z62JOAkYQoMo6avYUgaNKtfJooobNvsaQeyrWcNxkr580QKH/f2wCmJjRb2N6YLFeMiDc1hZ6PUsnzKD9mKBS6CKDxs50X+h4mKLQzrlQ2z9hB+RJubxejMdOcqzCH3k4m22pueyrJYFOYwhSppW7EgkqGck80UMN0vHxDYahJmbvFqbYojpfJOA9wr+P+xqiz4ZjdIiHDotPOiM85GalEK/vrBBxKcQqcLqaQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=DtVIca4aVGubJFnwGaMoyvp7Hwfd/xdHzo2YM4Z1qOI=;
+ b=hJ73aL86ThjRYxe/nVXjdOG4jGSDMjsEkO6w8zrCxSMODVVHxArDYijaYtHLs5DeSONstHcGkXIsgGIuJSAQSXMLM4FlmEB2NXbGZNI5IMEDcZ7yDfpSGehg9SyE62qVdj8qYSybN7lFFjJPRD352Y2BGqHaj8pFXLqlj29OIhM=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from BN9PR12MB5115.namprd12.prod.outlook.com (2603:10b6:408:118::14)
+ by DS7PR12MB8419.namprd12.prod.outlook.com (2603:10b6:8:e9::20) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6134.19; Wed, 22 Feb
+ 2023 03:30:54 +0000
+Received: from BN9PR12MB5115.namprd12.prod.outlook.com
+ ([fe80::e6ea:9231:6d39:93da]) by BN9PR12MB5115.namprd12.prod.outlook.com
+ ([fe80::e6ea:9231:6d39:93da%5]) with mapi id 15.20.6111.021; Wed, 22 Feb 2023
+ 03:30:54 +0000
+Message-ID: <5e2a1bf0-5a21-a4e8-22b7-8345049335a3@amd.com>
+Date:   Tue, 21 Feb 2023 22:30:51 -0500
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH v2] drm/amdkfd: Fix an illegal memory access
+To:     qu.huang@linux.dev, alexander.deucher@amd.com,
+        christian.koenig@amd.com, Xinhui.Pan@amd.com, airlied@gmail.com,
+        daniel@ffwll.ch
+Cc:     amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org
+References: <ea5b997309825b21e406f9bad2ce8779@linux.dev>
+Content-Language: en-US
+From:   Felix Kuehling <felix.kuehling@amd.com>
+In-Reply-To: <ea5b997309825b21e406f9bad2ce8779@linux.dev>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-ClientProxiedBy: YT4PR01CA0294.CANPRD01.PROD.OUTLOOK.COM
+ (2603:10b6:b01:10e::18) To BN9PR12MB5115.namprd12.prod.outlook.com
+ (2603:10b6:408:118::14)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BN9PR12MB5115:EE_|DS7PR12MB8419:EE_
+X-MS-Office365-Filtering-Correlation-Id: 7efb0f33-bb27-4b46-da5b-08db14853418
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 2A0h6GrCLPmYnE/GcLZmkul0sA7rHMnZjEvFp8Pkjcj1kvSg5rFFDe5WFX0Uk2NP5qNKDqlLnBN0otA93iy4Csij4CQwD3brJFpDf6MlysHnampk+V/EWdsusiu54aplooGRbqvSHlwozIMZJ091XxFNgTe31OhK8+hSR2Nl2ymTQj2e4hsR9iI5TqGEAd5As+FWuYokopOvo7kzWFy05QwqO4ImrMAu2H81/2m4Vut2rZGwzhRJIumDQJpvfuXTLcpAGkFZbPYQ/tfodYzwBPDYVcVRTZZgZ/cQLGAGiIN2opvRJXpZxGoxZWzojdTHisyBW8kDB3mHwdRxstkC0XE9nDiNeg8tSGWoIfNHibbrQF4PZJBPqhQQseMAdZJ+KQv31hfTnKo23tatnhD0wn25kr6nKRzQ8lb5BgrTfSF2gqYMxCOzijeL+wfZtWaVTijlYMsTlUL1S7JzjYGA+ElPXgrfGT4jkcNR0qJXTYryW2dFEDiXFOtV/kfDB42x++3b9vpx5XHdoD5lHh4HBt9sWZHMPy+VNVbPlAhs0Pg/8qLpLe/oSwq0sFvC6OdfMYrW0yKmBM3sJngSm6gRgPQ4Yl47G8IGRBOMUnLg9C4ddbb9qsM0u5L5d4C0MG8KyrBAfR5UmCCoP0uIRm56gySjyNtuixxpsJ901ETNuowmQ+jzIYu+/PquicQTzOTkWoc27YQUrko8Sb+R6rYNO0HIIIRS44boF5OcvI5IZcY=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN9PR12MB5115.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(39860400002)(136003)(346002)(366004)(396003)(376002)(451199018)(31686004)(186003)(6486002)(26005)(4326008)(66946007)(66556008)(8676002)(66476007)(5660300002)(36756003)(8936002)(83380400001)(6512007)(2616005)(6666004)(6506007)(478600001)(41300700001)(316002)(38100700002)(86362001)(31696002)(44832011)(2906002)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?N0MvZU15SWJtNFM5dEQ1QW1SUVYvVmZiUjNRTVZnWXBxblZsak51UldQdm83?=
+ =?utf-8?B?djBoZnNqN3lXOFZWVUZYM1llZFJzZmIxUHJqdllCWWIwM0hka29WYjRDeDBN?=
+ =?utf-8?B?Y3BZWW5DWmZuVytNbU40MVpwbFJSYW8xYXFiNTBuZlBTZGE1QXFnM09pdVM3?=
+ =?utf-8?B?QVZEamNUczJUMWwwTkFYS0ZCc1MzRFhJNG16Q3dpb1dXMWRCekpBZTRnZnlM?=
+ =?utf-8?B?bEI2VFVCNFFwWTNneU1GZG5LQ3RYL21ub3dYWHNRbFJHejF1RWhwcVhoYmRQ?=
+ =?utf-8?B?MnpKZXB5WDNYK3VBUHFNZGV1NGFIL1FXbXZYOGRvUENlaTVibHVtaW1xbjRE?=
+ =?utf-8?B?bVlqdm5RY1JXVHVpMmxGYnVnYmJ4WitEazBoczhmSG82UzZGaVJUN2QzVGds?=
+ =?utf-8?B?MFlqZEtpa3VCaGI1TXdOMi93MEZUV0Z4dXpkTjNZLzZXcmZhbkpRbWt2ekxB?=
+ =?utf-8?B?bmFwUzBmejdCQysrT1FJeFRyc3JmN2lrZUJkcFI1U2FucTU1cUxLQVVUMWtK?=
+ =?utf-8?B?ZWRDVmpyV29hTDRBRTF1ZS8rZXl2VFRLSkJjd2ZVVzNlcE5xK0c0NXMyOGZC?=
+ =?utf-8?B?WmpxWml2UDZCTXhIUEhjb3VlTFlzTFNFNU1RdDltdGgzUkhpQ3Q4eFR1RXNq?=
+ =?utf-8?B?Y0p6cnZVekxZNCtNWGZIakVKdUV3NjhreTNNTlo3Y1RINVlFam1ROTJhREVT?=
+ =?utf-8?B?MzMyMmFlL3VxNDhJYVpaYmE5TDI1NkkvMWxCWjJXQzBYQ2VyQU1pdXBRTndG?=
+ =?utf-8?B?VUJ0N1RWZW9kQ3BGemUyN3FLdENzem1TcmZBZEJhT2ZnbWxUV3VzUG1SYXpy?=
+ =?utf-8?B?bFE0TzRaVks0OFFUZVNpZ3VqUmZYeXdUc0FhZUlHTWo0ZG5PTThTRlVtS3ZS?=
+ =?utf-8?B?L1lpYS9XRjJzeU4xQStIV3c0T3VQZG13cVhrcEtaZEVJZDEzdUNpVkxOcXBP?=
+ =?utf-8?B?R3I3QTBOSmV1RXdsaTM5cGNsSVl0SzUzN3c3QWN5ZlZjSWRzK0p4by9sdmlS?=
+ =?utf-8?B?b01QVTVvaklmd2RlTjc0V0E4OWYvTFQxbHV4cHhQMklIaWVFZmxEQ045RkpK?=
+ =?utf-8?B?NGxsVHViaDJZKzlJZ2szRHN4eW5iVldlQlZPaFg4K3BqUUUzT0xCM0hPSmhR?=
+ =?utf-8?B?WXd3L2lBdkVzTFI2NFJVK3RrcHZUdVJzd2lnR2NTS0FxdXllVmtIVlFTY1ps?=
+ =?utf-8?B?UWtQT0JqaGV5UlBvZ3hLZ2ZCVERqakFvTTRCRkgxMDhWWFhFVUVKSld0V3Ev?=
+ =?utf-8?B?UlQ5OXYyQjFWSEpkamVmVjBWanQ0b3ZLaDZPZWlnRTA1d09aRVNWOTFHei96?=
+ =?utf-8?B?RE9oN1Bla1M3c3JzV1lDL1ZJMi9QeU9FVW1lT2Y3Z2VUVmEzTzd3MGJlSFIx?=
+ =?utf-8?B?UWhyWWJKeDhXTDF3b3phUzYxbkVzM2RQQytLUEFFeElnQ0dIb2ovSW1RN2xh?=
+ =?utf-8?B?SVF2MWFINHRwcndFQnVIVmFWUHVwWlF2REJsdldFaTRHMmoyMWQ3UTRRdWQr?=
+ =?utf-8?B?ZHB2ektuNktqVUFIczQzZjQveW4zOG1Xbm9uVUJzWEpoSmJsL0FhZS9CVzVK?=
+ =?utf-8?B?UXp0Y2VTUjBpbnNqNmI5aFpkOE9tT2ZubFRxMWRpcTJRbnA2N0pZQ21PaFh4?=
+ =?utf-8?B?MG0wTVg1QXgrV1VjTHRGMG45ZzN4Njd6bVdXQnFNRmVvYlpqaXZNbjF3OFl0?=
+ =?utf-8?B?NTRvMGU4dVF6eEVleFBzb1dsbWp3ZkJJaTlPb3lrSk4zWEwxWVJtTStDQ0JE?=
+ =?utf-8?B?aEh6Y2R6ZGJGMG5QYW5oTDZOZXdndGx1UVFwS2N0M1ByRnh3MnR1VDRaNGR4?=
+ =?utf-8?B?TlBjRHk4M2VUVjl1OW9idVh5OGpaUTF6Wk5lYUcwT3l4dHhLSnByNkFZN09o?=
+ =?utf-8?B?UWlLUkZaaThCQkdMQ1hKQU5BdFhQOXBBSjZEOUp4UVhLeG84WTJ5RXZFRUZO?=
+ =?utf-8?B?YThmRE1LQW8raWJEbkNuMVFrdUIwem5UMDg0Q2lqaHk1U1hNajhRd3ZhRStD?=
+ =?utf-8?B?TWllNXRNUTgzSkN2Z0tlNEhoR2IveFhGUVI5R3Exem1RMEMwakZ6UFhOeDM2?=
+ =?utf-8?B?RS9NVW9Pb3NBbEl2bk96ZnI0OGVBeW1Wck41a0xBeC9SOTJjMFZWNmYwcEZF?=
+ =?utf-8?Q?C+36xCYufyKNluLghZmKMf4Ov?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 7efb0f33-bb27-4b46-da5b-08db14853418
+X-MS-Exchange-CrossTenant-AuthSource: BN9PR12MB5115.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 22 Feb 2023 03:30:54.1870
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: xu9+Bgv7Fz4TMTANvX6KEYCUCMmJLf7Gp0r2Yy1sCj0tu4aWB1rPzPj1OCwtxV3FYyXzCjVENaj+CcbIcIpnoQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS7PR12MB8419
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jisheng Zhang <jszhang@kernel.org>
 
-Consolidate the saving/restoring GPs (except zero, ra, sp, gp,
-tp and t0) into save_from_x6_to_x31/restore_from_x6_to_x31 macros.
+Am 2023-02-21 um 22:05 schrieb qu.huang@linux.dev:
+> In the kfd_wait_on_events() function, the kfd_event_waiter structure is
+> allocated by alloc_event_waiters(), but the event field of the waiter
+> structure is not initialized; When copy_from_user() fails in the
+> kfd_wait_on_events() function, it will enter exception handling to
+> release the previously allocated memory of the waiter structure;
+> Due to the event field of the waiters structure being accessed
+> in the free_waiters() function, this results in illegal memory access
+> and system crash, here is the crash log:
+>
+> localhost kernel: RIP: 0010:native_queued_spin_lock_slowpath+0x185/0x1e0
+> localhost kernel: RSP: 0018:ffffaa53c362bd60 EFLAGS: 00010082
+> localhost kernel: RAX: ff3d3d6bff4007cb RBX: 0000000000000282 RCX: 00000000002c0000
+> localhost kernel: RDX: ffff9e855eeacb80 RSI: 000000000000279c RDI: ffffe7088f6a21d0
+> localhost kernel: RBP: ffffe7088f6a21d0 R08: 00000000002c0000 R09: ffffaa53c362be64
+> localhost kernel: R10: ffffaa53c362bbd8 R11: 0000000000000001 R12: 0000000000000002
+> localhost kernel: R13: ffff9e7ead15d600 R14: 0000000000000000 R15: ffff9e7ead15d698
+> localhost kernel: FS:  0000152a3d111700(0000) GS:ffff9e855ee80000(0000) knlGS:0000000000000000
+> localhost kernel: CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> localhost kernel: CR2: 0000152938000010 CR3: 000000044d7a4000 CR4: 00000000003506e0
+> localhost kernel: Call Trace:
+> localhost kernel: _raw_spin_lock_irqsave+0x30/0x40
+> localhost kernel: remove_wait_queue+0x12/0x50
+> localhost kernel: kfd_wait_on_events+0x1b6/0x490 [hydcu]
+> localhost kernel: ? ftrace_graph_caller+0xa0/0xa0
+> localhost kernel: kfd_ioctl+0x38c/0x4a0 [hydcu]
+> localhost kernel: ? kfd_ioctl_set_trap_handler+0x70/0x70 [hydcu]
+> localhost kernel: ? kfd_ioctl_create_queue+0x5a0/0x5a0 [hydcu]
+> localhost kernel: ? ftrace_graph_caller+0xa0/0xa0
+> localhost kernel: __x64_sys_ioctl+0x8e/0xd0
+> localhost kernel: ? syscall_trace_enter.isra.18+0x143/0x1b0
+> localhost kernel: do_syscall_64+0x33/0x80
+> localhost kernel: entry_SYSCALL_64_after_hwframe+0x44/0xa9
+> localhost kernel: RIP: 0033:0x152a4dff68d7
+>
+> Changes since v1:
+>    * Allocate the waiter structure using kzalloc, removing the initialization of activated;
+>    * '(event_waiters) &&' in the 'for' loop has also been removed.
+>
+> Signed-off-by: Qu Huang <qu.huang@linux.dev>
+> ---
+>   drivers/gpu/drm/amd/amdkfd/kfd_events.c | 5 ++---
+>   1 file changed, 2 insertions(+), 3 deletions(-)
+>
+> diff --git a/drivers/gpu/drm/amd/amdkfd/kfd_events.c b/drivers/gpu/drm/amd/amdkfd/kfd_events.c
+> index 729d26d..bb54f6c 100644
+> --- a/drivers/gpu/drm/amd/amdkfd/kfd_events.c
+> +++ b/drivers/gpu/drm/amd/amdkfd/kfd_events.c
+> @@ -780,13 +780,12 @@ static struct kfd_event_waiter *alloc_event_waiters(uint32_t num_events)
+>
+>   	event_waiters = kmalloc_array(num_events,
+>   					sizeof(struct kfd_event_waiter),
+> -					GFP_KERNEL);
+> +					GFP_KERNEL | __GFP_ZERO);
 
-No functional change intended.
+This is basically the same as kcalloc. Why not just use that? No need to 
+send another patch. I'll fix it up on my end and apply the patch to 
+amd-staging-drm-next.
 
-Signed-off-by: Jisheng Zhang <jszhang@kernel.org>
-Reviewed-by: Guo Ren <guoren@kernel.org>
-Reviewed-by: Björn Töpel <bjorn@rivosinc.com>
-Tested-by: Guo Ren <guoren@kernel.org>
-Signed-off-by: Guo Ren <guoren@kernel.org>
----
- arch/riscv/include/asm/asm.h   | 61 +++++++++++++++++++++++++
- arch/riscv/kernel/entry.S      | 81 ++--------------------------------
- arch/riscv/kernel/mcount-dyn.S | 57 ++----------------------
- 3 files changed, 68 insertions(+), 131 deletions(-)
+Reviewed-by: Felix Kuehling <Felix.Kuehling@amd.com>
 
-diff --git a/arch/riscv/include/asm/asm.h b/arch/riscv/include/asm/asm.h
-index 816e753de636..114bbadaef41 100644
---- a/arch/riscv/include/asm/asm.h
-+++ b/arch/riscv/include/asm/asm.h
-@@ -69,6 +69,7 @@
- #endif
- 
- #ifdef __ASSEMBLY__
-+#include <asm/asm-offsets.h>
- 
- /* Common assembly source macros */
- 
-@@ -81,6 +82,66 @@
- 	.endr
- .endm
- 
-+	/* save all GPs except x1 ~ x5 */
-+	.macro save_from_x6_to_x31
-+	REG_S x6,  PT_T1(sp)
-+	REG_S x7,  PT_T2(sp)
-+	REG_S x8,  PT_S0(sp)
-+	REG_S x9,  PT_S1(sp)
-+	REG_S x10, PT_A0(sp)
-+	REG_S x11, PT_A1(sp)
-+	REG_S x12, PT_A2(sp)
-+	REG_S x13, PT_A3(sp)
-+	REG_S x14, PT_A4(sp)
-+	REG_S x15, PT_A5(sp)
-+	REG_S x16, PT_A6(sp)
-+	REG_S x17, PT_A7(sp)
-+	REG_S x18, PT_S2(sp)
-+	REG_S x19, PT_S3(sp)
-+	REG_S x20, PT_S4(sp)
-+	REG_S x21, PT_S5(sp)
-+	REG_S x22, PT_S6(sp)
-+	REG_S x23, PT_S7(sp)
-+	REG_S x24, PT_S8(sp)
-+	REG_S x25, PT_S9(sp)
-+	REG_S x26, PT_S10(sp)
-+	REG_S x27, PT_S11(sp)
-+	REG_S x28, PT_T3(sp)
-+	REG_S x29, PT_T4(sp)
-+	REG_S x30, PT_T5(sp)
-+	REG_S x31, PT_T6(sp)
-+	.endm
-+
-+	/* restore all GPs except x1 ~ x5 */
-+	.macro restore_from_x6_to_x31
-+	REG_L x6,  PT_T1(sp)
-+	REG_L x7,  PT_T2(sp)
-+	REG_L x8,  PT_S0(sp)
-+	REG_L x9,  PT_S1(sp)
-+	REG_L x10, PT_A0(sp)
-+	REG_L x11, PT_A1(sp)
-+	REG_L x12, PT_A2(sp)
-+	REG_L x13, PT_A3(sp)
-+	REG_L x14, PT_A4(sp)
-+	REG_L x15, PT_A5(sp)
-+	REG_L x16, PT_A6(sp)
-+	REG_L x17, PT_A7(sp)
-+	REG_L x18, PT_S2(sp)
-+	REG_L x19, PT_S3(sp)
-+	REG_L x20, PT_S4(sp)
-+	REG_L x21, PT_S5(sp)
-+	REG_L x22, PT_S6(sp)
-+	REG_L x23, PT_S7(sp)
-+	REG_L x24, PT_S8(sp)
-+	REG_L x25, PT_S9(sp)
-+	REG_L x26, PT_S10(sp)
-+	REG_L x27, PT_S11(sp)
-+	REG_L x28, PT_T3(sp)
-+	REG_L x29, PT_T4(sp)
-+	REG_L x30, PT_T5(sp)
-+	REG_L x31, PT_T6(sp)
-+	.endm
-+
- #endif /* __ASSEMBLY__ */
- 
- #endif /* _ASM_RISCV_ASM_H */
-diff --git a/arch/riscv/kernel/entry.S b/arch/riscv/kernel/entry.S
-index 5ccef259498d..3fbb100bc9e4 100644
---- a/arch/riscv/kernel/entry.S
-+++ b/arch/riscv/kernel/entry.S
-@@ -42,32 +42,7 @@ _save_context:
- 	REG_S x1,  PT_RA(sp)
- 	REG_S x3,  PT_GP(sp)
- 	REG_S x5,  PT_T0(sp)
--	REG_S x6,  PT_T1(sp)
--	REG_S x7,  PT_T2(sp)
--	REG_S x8,  PT_S0(sp)
--	REG_S x9,  PT_S1(sp)
--	REG_S x10, PT_A0(sp)
--	REG_S x11, PT_A1(sp)
--	REG_S x12, PT_A2(sp)
--	REG_S x13, PT_A3(sp)
--	REG_S x14, PT_A4(sp)
--	REG_S x15, PT_A5(sp)
--	REG_S x16, PT_A6(sp)
--	REG_S x17, PT_A7(sp)
--	REG_S x18, PT_S2(sp)
--	REG_S x19, PT_S3(sp)
--	REG_S x20, PT_S4(sp)
--	REG_S x21, PT_S5(sp)
--	REG_S x22, PT_S6(sp)
--	REG_S x23, PT_S7(sp)
--	REG_S x24, PT_S8(sp)
--	REG_S x25, PT_S9(sp)
--	REG_S x26, PT_S10(sp)
--	REG_S x27, PT_S11(sp)
--	REG_S x28, PT_T3(sp)
--	REG_S x29, PT_T4(sp)
--	REG_S x30, PT_T5(sp)
--	REG_S x31, PT_T6(sp)
-+	save_from_x6_to_x31
- 
- 	/*
- 	 * Disable user-mode memory access as it should only be set in the
-@@ -182,32 +157,7 @@ SYM_CODE_START_NOALIGN(ret_from_exception)
- 	REG_L x3,  PT_GP(sp)
- 	REG_L x4,  PT_TP(sp)
- 	REG_L x5,  PT_T0(sp)
--	REG_L x6,  PT_T1(sp)
--	REG_L x7,  PT_T2(sp)
--	REG_L x8,  PT_S0(sp)
--	REG_L x9,  PT_S1(sp)
--	REG_L x10, PT_A0(sp)
--	REG_L x11, PT_A1(sp)
--	REG_L x12, PT_A2(sp)
--	REG_L x13, PT_A3(sp)
--	REG_L x14, PT_A4(sp)
--	REG_L x15, PT_A5(sp)
--	REG_L x16, PT_A6(sp)
--	REG_L x17, PT_A7(sp)
--	REG_L x18, PT_S2(sp)
--	REG_L x19, PT_S3(sp)
--	REG_L x20, PT_S4(sp)
--	REG_L x21, PT_S5(sp)
--	REG_L x22, PT_S6(sp)
--	REG_L x23, PT_S7(sp)
--	REG_L x24, PT_S8(sp)
--	REG_L x25, PT_S9(sp)
--	REG_L x26, PT_S10(sp)
--	REG_L x27, PT_S11(sp)
--	REG_L x28, PT_T3(sp)
--	REG_L x29, PT_T4(sp)
--	REG_L x30, PT_T5(sp)
--	REG_L x31, PT_T6(sp)
-+	restore_from_x6_to_x31
- 
- 	REG_L x2,  PT_SP(sp)
- 
-@@ -287,32 +237,7 @@ restore_caller_reg:
- 	REG_S x1,  PT_RA(sp)
- 	REG_S x3,  PT_GP(sp)
- 	REG_S x5,  PT_T0(sp)
--	REG_S x6,  PT_T1(sp)
--	REG_S x7,  PT_T2(sp)
--	REG_S x8,  PT_S0(sp)
--	REG_S x9,  PT_S1(sp)
--	REG_S x10, PT_A0(sp)
--	REG_S x11, PT_A1(sp)
--	REG_S x12, PT_A2(sp)
--	REG_S x13, PT_A3(sp)
--	REG_S x14, PT_A4(sp)
--	REG_S x15, PT_A5(sp)
--	REG_S x16, PT_A6(sp)
--	REG_S x17, PT_A7(sp)
--	REG_S x18, PT_S2(sp)
--	REG_S x19, PT_S3(sp)
--	REG_S x20, PT_S4(sp)
--	REG_S x21, PT_S5(sp)
--	REG_S x22, PT_S6(sp)
--	REG_S x23, PT_S7(sp)
--	REG_S x24, PT_S8(sp)
--	REG_S x25, PT_S9(sp)
--	REG_S x26, PT_S10(sp)
--	REG_S x27, PT_S11(sp)
--	REG_S x28, PT_T3(sp)
--	REG_S x29, PT_T4(sp)
--	REG_S x30, PT_T5(sp)
--	REG_S x31, PT_T6(sp)
-+	save_from_x6_to_x31
- 
- 	REG_L s0, TASK_TI_KERNEL_SP(tp)
- 	csrr s1, CSR_STATUS
-diff --git a/arch/riscv/kernel/mcount-dyn.S b/arch/riscv/kernel/mcount-dyn.S
-index 125de818d1ba..669b8697aa38 100644
---- a/arch/riscv/kernel/mcount-dyn.S
-+++ b/arch/riscv/kernel/mcount-dyn.S
-@@ -66,66 +66,17 @@
- 	REG_S x3,  PT_GP(sp)
- 	REG_S x4,  PT_TP(sp)
- 	REG_S x5,  PT_T0(sp)
--	REG_S x6,  PT_T1(sp)
--	REG_S x7,  PT_T2(sp)
--	REG_S x8,  PT_S0(sp)
--	REG_S x9,  PT_S1(sp)
--	REG_S x10, PT_A0(sp)
--	REG_S x11, PT_A1(sp)
--	REG_S x12, PT_A2(sp)
--	REG_S x13, PT_A3(sp)
--	REG_S x14, PT_A4(sp)
--	REG_S x15, PT_A5(sp)
--	REG_S x16, PT_A6(sp)
--	REG_S x17, PT_A7(sp)
--	REG_S x18, PT_S2(sp)
--	REG_S x19, PT_S3(sp)
--	REG_S x20, PT_S4(sp)
--	REG_S x21, PT_S5(sp)
--	REG_S x22, PT_S6(sp)
--	REG_S x23, PT_S7(sp)
--	REG_S x24, PT_S8(sp)
--	REG_S x25, PT_S9(sp)
--	REG_S x26, PT_S10(sp)
--	REG_S x27, PT_S11(sp)
--	REG_S x28, PT_T3(sp)
--	REG_S x29, PT_T4(sp)
--	REG_S x30, PT_T5(sp)
--	REG_S x31, PT_T6(sp)
-+	save_from_x6_to_x31
- 	.endm
- 
- 	.macro RESTORE_ALL
--	REG_L t0,  PT_EPC(sp)
- 	REG_L x1,  PT_RA(sp)
- 	REG_L x2,  PT_SP(sp)
- 	REG_L x3,  PT_GP(sp)
- 	REG_L x4,  PT_TP(sp)
--	REG_L x6,  PT_T1(sp)
--	REG_L x7,  PT_T2(sp)
--	REG_L x8,  PT_S0(sp)
--	REG_L x9,  PT_S1(sp)
--	REG_L x10, PT_A0(sp)
--	REG_L x11, PT_A1(sp)
--	REG_L x12, PT_A2(sp)
--	REG_L x13, PT_A3(sp)
--	REG_L x14, PT_A4(sp)
--	REG_L x15, PT_A5(sp)
--	REG_L x16, PT_A6(sp)
--	REG_L x17, PT_A7(sp)
--	REG_L x18, PT_S2(sp)
--	REG_L x19, PT_S3(sp)
--	REG_L x20, PT_S4(sp)
--	REG_L x21, PT_S5(sp)
--	REG_L x22, PT_S6(sp)
--	REG_L x23, PT_S7(sp)
--	REG_L x24, PT_S8(sp)
--	REG_L x25, PT_S9(sp)
--	REG_L x26, PT_S10(sp)
--	REG_L x27, PT_S11(sp)
--	REG_L x28, PT_T3(sp)
--	REG_L x29, PT_T4(sp)
--	REG_L x30, PT_T5(sp)
--	REG_L x31, PT_T6(sp)
-+	/* Restore t0 with PT_EPC */
-+	REG_L x5,  PT_EPC(sp)
-+	restore_from_x6_to_x31
- 
- 	addi	sp, sp, PT_SIZE_ON_STACK
- 	.endm
--- 
-2.36.1
+Thanks,
+   Felix
 
+
+>   	if (!event_waiters)
+>   		return NULL;
+>
+> -	for (i = 0; (event_waiters) && (i < num_events) ; i++) {
+> +	for (i = 0; i < num_events; i++) {
+>   		init_wait(&event_waiters[i].wait);
+> -		event_waiters[i].activated = false;
+>   	}
+>
+>   	return event_waiters;
+> --
+> 1.8.3.1
