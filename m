@@ -2,72 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EE0FA69ED0E
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Feb 2023 03:50:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5DB5169ED1D
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Feb 2023 03:54:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231754AbjBVCut (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Feb 2023 21:50:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40404 "EHLO
+        id S232647AbjBVCyg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Feb 2023 21:54:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46782 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231714AbjBVCuo (ORCPT
+        with ESMTP id S232622AbjBVCyd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Feb 2023 21:50:44 -0500
-Received: from mail-ot1-x333.google.com (mail-ot1-x333.google.com [IPv6:2607:f8b0:4864:20::333])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 479EB33471
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Feb 2023 18:50:35 -0800 (PST)
-Received: by mail-ot1-x333.google.com with SMTP id v1-20020a9d6041000000b0068d4a8a8d2dso1271923otj.12
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Feb 2023 18:50:35 -0800 (PST)
+        Tue, 21 Feb 2023 21:54:33 -0500
+Received: from mail-qt1-x82a.google.com (mail-qt1-x82a.google.com [IPv6:2607:f8b0:4864:20::82a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7906B2114;
+        Tue, 21 Feb 2023 18:54:27 -0800 (PST)
+Received: by mail-qt1-x82a.google.com with SMTP id b6so428520qtb.1;
+        Tue, 21 Feb 2023 18:54:27 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:feedback-id:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=McQi89uTbN7DF8jJyCgZeVyYtI7bAf8jLzdMMiV8l3U=;
-        b=c1xI3XHKGohwQIKFk42Xysj7ExmK5WzvEV05vtimmkIeaaEzd0hMCiE/obU2RZT0Or
-         fVE+TI0pYtvIqwYTWtdw5ca8EW5qdCJ6dKI7otBYNiOkOtim/vyLA7ze80BY+4MUGWcW
-         m6oHEPFivR5zv3hS/2h/tRHTZkQmHJWIZRhgKNA4+bMY9KDfsJahZg3unsQVNu83BTPj
-         f8Lvvcovbx9rMNFB0CQeDZL/BlRlG/FlIm/U/35kCMA5h66CV/KPyaYt7OZh9iv8agF/
-         2PfXk0lI+8H1GyUEh0sPj4eeOJO7gOCDTKMC00oKioeclPwHhOGAKHoY+T25MW5kELTr
-         HGSg==
+        bh=rHRgFDjdCNtxsMXTHo3oNRXzpcc2Lih+Urp2I1rPznE=;
+        b=C99udQt2AY4jNQWut5o1gOfr2s+GSniAFcc3Ck38w/oDosFdN7exbHbfD+9UpqST93
+         12pcPYcjChJkIQO2XNXo3jHBWN0doJhl3Ws9HWp3F6AWTU79agWeSHUwr661cXqmGsFA
+         aTHY0fuupi2Qz6FZ5IuOkV8z6gYOaEIaCQp/a1ZGEiMxR9bsvqNvy5a09aYwMKHmqh26
+         wzE0uB3KgX+8AaaDe2TaXX5jDf6BFaiVgVdcJgnsbuKPnEgwR5rmzZmOpe/kWJpinRjp
+         XMZa8fxW0BqA07De5ac40FhDHj0+h6AgYVKhn8DLv2w/oh5np+HC4/k90yG3J/6vIo8Y
+         2aPA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:feedback-id:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=McQi89uTbN7DF8jJyCgZeVyYtI7bAf8jLzdMMiV8l3U=;
-        b=iYQczpT79PTbEjGIzJvPn9MrBX8x3jsr9V1QdIDBFYgUczCrHNtZeS6lexsbL6saay
-         +e/EYKfY/h2CTWAwEngaISqSAd9x0vupeGcKJrlOJIFKyqU0Znkhv+Jz2l6fu68fRZwr
-         4BvC6AApEuYpEMvlHDeiPZqLWYURzOzCxm5NEZNu1GiKc2E0XmMosJIH6415wehjj5so
-         tA5rE/LYm4GBRglmlyIBp2CX9AmLbinT5g5hfPgSNzYCIyvPE5C1Rpeiz8hK9m29GlCO
-         5Oc6E9tN1UvqV4OZxTAIFLKA9bld6FcGF2FZ+QTX9WMZq31IXmRNTeS1RRaJ7OystEQx
-         WX9w==
-X-Gm-Message-State: AO0yUKXL7H9uWV0SSv1pzG3drU4MmzW0+G228H8zXKkzSBzU52ZOTT+k
-        4fw7W0PndHr0f2AJEulv42k=
-X-Google-Smtp-Source: AK7set+ZgpgMCsnbEoZOPq/ABD4/QpKNx4uG/xScyv0xZvSeje/L+YyfRFjn6mXEkahnuvnyBw4Uog==
-X-Received: by 2002:a9d:60c1:0:b0:68d:53d5:f7d2 with SMTP id b1-20020a9d60c1000000b0068d53d5f7d2mr7853269otk.31.1677034234476;
-        Tue, 21 Feb 2023 18:50:34 -0800 (PST)
-Received: from localhost ([12.97.180.36])
-        by smtp.gmail.com with ESMTPSA id 90-20020a9d06e3000000b0068abc8e786fsm333298otx.10.2023.02.21.18.50.33
+        bh=rHRgFDjdCNtxsMXTHo3oNRXzpcc2Lih+Urp2I1rPznE=;
+        b=zjWjQyg98Wtiwj5dcpU4VyvuSWqaRImO4WMt2EiHok4vg+T2CpWWNmY9YqHcKlMVBO
+         Mq28EW+pZN9we0Ky/FaVeunhpvZbExrh5bT/gY1+7a2C+nPubM5/6KubI9Jy3+3/vy+9
+         Dd2fo/V7qUXx3FnKUuRDltsRubZWdkxYBfmlFVYPB8IdsCB5Cla9sy13OdIt3fXdiKSj
+         4RQ68QROHEw1L8j3Aej5LtnIqgWI/UEqGkqGo1de9XE0z4DnEra/ScSbiq4ttp8u9r+l
+         N5cQLPv3UBpHT65pAVZiVay3DS/nYrw2yzgdnWZojgHpGFvK4olAPh4DSBq8YM7YYc1m
+         O12A==
+X-Gm-Message-State: AO0yUKXvW8J4zi7rz6M0hIbrRXTpATNDyyvP64qud1zFTO1Tsnj3RYo6
+        wr8/dd31RjqVlZv1PVUO4ik=
+X-Google-Smtp-Source: AK7set+07P0JGkGIY6ECNvu+wXWIQIkmpirlk+SWN8qjq/J67G2GUnwvDDExW7bQF9Y0QPBiqG/RYA==
+X-Received: by 2002:ac8:7f01:0:b0:3be:5727:cda6 with SMTP id f1-20020ac87f01000000b003be5727cda6mr12532240qtk.58.1677034466528;
+        Tue, 21 Feb 2023 18:54:26 -0800 (PST)
+Received: from auth1-smtp.messagingengine.com (auth1-smtp.messagingengine.com. [66.111.4.227])
+        by smtp.gmail.com with ESMTPSA id p81-20020a374254000000b0073b275607f0sm2978930qka.65.2023.02.21.18.54.25
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 21 Feb 2023 18:50:34 -0800 (PST)
-From:   Yury Norov <yury.norov@gmail.com>
-To:     linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org
-Cc:     Yury Norov <yury.norov@gmail.com>, Arnd Bergmann <arnd@arndb.de>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Jeremy Kerr <jk@ozlabs.org>, Jakub Kicinski <kuba@kernel.org>,
-        Valentin Schneider <vschneid@redhat.com>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Barry Song <baohua@kernel.org>
-Subject: [PATCH 2/2] powerpc: use node_has_cpus() instead of nr_cpus_node()
-Date:   Tue, 21 Feb 2023 18:50:29 -0800
-Message-Id: <20230222025029.453834-2-yury.norov@gmail.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230222025029.453834-1-yury.norov@gmail.com>
-References: <20230222025029.453834-1-yury.norov@gmail.com>
+        Tue, 21 Feb 2023 18:54:25 -0800 (PST)
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+        by mailauth.nyi.internal (Postfix) with ESMTP id 4538827C0054;
+        Tue, 21 Feb 2023 21:54:24 -0500 (EST)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute3.internal (MEProxy); Tue, 21 Feb 2023 21:54:25 -0500
+X-ME-Sender: <xms:4IP1Y3H-EH6fuCOFWg7Y3TWwib-GfQ5Oc0h5uAsJe8o0pL1h9EIDwA>
+    <xme:4IP1Y0X498dwmuJ9q6rCVXMu4Bp1a9mSLgABZ3kzsKDfViHmx_5EoyuTP10A-brZs
+    cek0ppmr45_tlf5KA>
+X-ME-Received: <xmr:4IP1Y5ILn5psbyhxaDPjpH_1EfwBvZfzJmDaFwIIchmT2DMCTBf9gpjGqV8>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrudejkedghedtucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepfffhvfevuffkfhggtggujgesthdtredttddtvdenucfhrhhomhepuehoqhhu
+    nhcuhfgvnhhguceosghoqhhunhdrfhgvnhhgsehgmhgrihhlrdgtohhmqeenucggtffrrg
+    htthgvrhhnpeehudfgudffffetuedtvdehueevledvhfelleeivedtgeeuhfegueeviedu
+    ffeivdenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
+    gsohhquhhnodhmvghsmhhtphgruhhthhhpvghrshhonhgrlhhithihqdeiledvgeehtdei
+    gedqudejjeekheehhedvqdgsohhquhhnrdhfvghngheppehgmhgrihhlrdgtohhmsehfih
+    igmhgvrdhnrghmvg
+X-ME-Proxy: <xmx:4IP1Y1GFmEWy2T1DFC8L2Y5UpYfuFQTur_-vtTksp6Oish3Pwx2y3A>
+    <xmx:4IP1Y9VNpwonrEr2-8PwsxV9BY5g8WKdl5lJZgJvAHnvdY3G7drNzg>
+    <xmx:4IP1YwMebNDcjgrzGzQhsVqYAN2Ztpgf5ErNjp-v4GSqCyrbUk7hQQ>
+    <xmx:4IP1YyVDsEE4TWtefq3n8b8oInPPeFX4CTUZoURR5kpFujnxOiekew>
+Feedback-ID: iad51458e:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
+ 21 Feb 2023 21:54:23 -0500 (EST)
+Date:   Tue, 21 Feb 2023 18:54:07 -0800
+From:   Boqun Feng <boqun.feng@gmail.com>
+To:     Thomas Gleixner <tglx@linutronix.de>
+Cc:     Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>,
+        Asahi Lina <lina@asahilina.net>,
+        Miguel Ojeda <ojeda@kernel.org>,
+        Alex Gaynor <alex.gaynor@gmail.com>,
+        Wedson Almeida Filho <wedsonaf@gmail.com>,
+        Gary Guo <gary@garyguo.net>,
+        =?iso-8859-1?Q?Bj=F6rn?= Roy Baron <bjorn3_gh@protonmail.com>,
+        John Stultz <jstultz@google.com>,
+        Stephen Boyd <sboyd@kernel.org>, linux-kernel@vger.kernel.org,
+        rust-for-linux@vger.kernel.org, asahi@lists.linux.dev,
+        Heghedus Razvan <heghedus.razvan@protonmail.com>
+Subject: Re: [PATCH] rust: time: New module for timekeeping functions
+Message-ID: <Y/WDz013yBIfQPDq@boqun-archlinux>
+References: <20230221-gpu-up-time-v1-1-bf8fe74b7f55@asahilina.net>
+ <87v8jvnqq4.ffs@tglx>
+ <Y/TP6as7qqwfcI42@boqun-archlinux>
+ <87h6vfnh0f.ffs@tglx>
+ <7b93bf74-abdc-f8c1-9a12-7c7f080f9e19@asahilina.net>
+ <87edqioo1e.ffs@tglx>
+ <CANiq72n-++roTv3yDNOA=Mi_sscBZX3xPdZ6RZ0Oxx+T82pf5A@mail.gmail.com>
+ <87o7pmmtre.ffs@tglx>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <87o7pmmtre.ffs@tglx>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
@@ -78,41 +114,81 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Use node_has_cpus() as more efficient alternative to nr_cpus_node()
-where possible.
+On Wed, Feb 22, 2023 at 01:24:53AM +0100, Thomas Gleixner wrote:
+> Miguel!
+> 
+> On Tue, Feb 21 2023 at 23:29, Miguel Ojeda wrote:
+> > On Tue, Feb 21, 2023 at 7:45 PM Thomas Gleixner <tglx@linutronix.de> wrote:
+> >>
+> >> But xb abd xr are the same datatype because they represent a time delta.
+> >
+> > In principle, one could also have different duration types too. For
+> > instance, C++'s `std::chrono::duration` type is parametrized on the
+> > representation type and the tick period, and thus an operation between
+> > two time points like t1 - t0 returns a duration type that depends on
+> > the type of the time points, i.e. which clock they were obtained from.
+> 
+> Correct, but for practical purposes I'd assume that the timestamps
+> retrieved via ktime_get*() have the same granularity, i.e. 1ns.
+> 
+> TBH, that's not entirely correct because:
+> 
+>     - the underlying hardware clocksource might not have a 1ns
+>       resolution
+> 
+>     - the CLOCK_*_COARSE implementations are only advanced once per
+>       tick, but are executing significantly faster because they avoid
+>       the hardware counter access.
+> 
+> But that's an assumption which has proven to be workable and correct
+> with the full zoo of hardware supported by the kernel.
+> 
+> The point is that all CLOCK_* variants, except CLOCK_REALTIME and
+> CLOCK_TAI are guaranteed to never go backwards.
+> 
+> CLOCK_REALTIME and CLOCK_TAI are special as they can be set by user
+> space and CLOCK_REALTIME has the extra oddities of leap seconds.  But
+> that's a well understood issue and is not specific to the kernel.
+> 
+> Back to time deltas (or duration types). Independent of the above it
+> might make sense to be type strict about these as well. Especially if we
+> go one step further and have timers based on CLOCK_* which need to be
+> armed by either timestamps for absolute expiry or time deltas for
+> relative to now expiry. I definitely can see a point for requiring
+> matching time delta types there.
+> 
+> That said, I have no strong opinions about this particular detail and
+> leave it to the Rusties to agree on something sensible.
+> 
 
-Signed-off-by: Yury Norov <yury.norov@gmail.com>
----
- arch/powerpc/platforms/cell/spu_priv1_mmio.c | 2 +-
- arch/powerpc/platforms/cell/spufs/sched.c    | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+I'd like to propose something below to make thing forward quickly:
 
-diff --git a/arch/powerpc/platforms/cell/spu_priv1_mmio.c b/arch/powerpc/platforms/cell/spu_priv1_mmio.c
-index d150e3987304..55b5024b256b 100644
---- a/arch/powerpc/platforms/cell/spu_priv1_mmio.c
-+++ b/arch/powerpc/platforms/cell/spu_priv1_mmio.c
-@@ -64,7 +64,7 @@ static void cpu_affinity_set(struct spu *spu, int cpu)
- 	u64 target;
- 	u64 route;
- 
--	if (nr_cpus_node(spu->node)) {
-+	if (node_has_cpus(spu->node)) {
- 		const struct cpumask *spumask = cpumask_of_node(spu->node),
- 			*cpumask = cpumask_of_node(cpu_to_node(cpu));
- 
-diff --git a/arch/powerpc/platforms/cell/spufs/sched.c b/arch/powerpc/platforms/cell/spufs/sched.c
-index 99bd027a7f7c..9d29cc2c6bcb 100644
---- a/arch/powerpc/platforms/cell/spufs/sched.c
-+++ b/arch/powerpc/platforms/cell/spufs/sched.c
-@@ -154,7 +154,7 @@ void spu_update_sched_info(struct spu_context *ctx)
- 
- static int __node_allowed(struct spu_context *ctx, int node)
- {
--	if (nr_cpus_node(node)) {
-+	if (node_has_cpus(node)) {
- 		const struct cpumask *mask = cpumask_of_node(node);
- 
- 		if (cpumask_intersects(mask, &ctx->cpus_allowed))
--- 
-2.34.1
+Given Lina only uses CLOCK_BOOTTIME and CLOCK_MONOTONIC, I'd say we
+reuse core::time::Duration and probably remain its ">=0" semantics even
+in the future we change its internal representation to u64.
 
+For timestamp type, use Instant semantics and use different types for
+different clocks, i.e. similar to the implementation from Heghedus (much
+better than mine!). But we can avoid implementing a fully version of
+Instant, and focus on just the piece that Lina needs, which I believe
+it's elapsed()?
+
+For the future, if we were to support non-monotonic timestamp, maybe we
+use the different type name like TimeStamp and TimeDelta.
+
+In short:
+
+*	For monotonic clocks, Instant + Duration, and keep them similar
+	to std semantics.
+
+*	For non-monotonic clocks, don't worry it right now, and
+	probably different types for both stamps and deltas.
+
+Thoughts?
+
+Regards,
+Boqun
+
+> Thanks,
+> 
+>         tglx
