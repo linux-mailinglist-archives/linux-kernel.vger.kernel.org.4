@@ -2,221 +2,250 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E70DB69F31C
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Feb 2023 12:02:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6019969F31A
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Feb 2023 12:02:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231633AbjBVLCh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Feb 2023 06:02:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56246 "EHLO
+        id S231601AbjBVLCE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Feb 2023 06:02:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55816 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231386AbjBVLCe (ORCPT
+        with ESMTP id S229907AbjBVLCC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Feb 2023 06:02:34 -0500
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3805C38E98
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Feb 2023 03:02:21 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1677063741; x=1708599741;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=RrW1Q6oWcVpnMdKJ1V3iFevgdjdLDN/lg9gJTCYPX3s=;
-  b=N6hgPt7iQxk6y9kzFRsCFoNS+N4HutU9cYhwCPE8FAKU3UBLdpS2ttg4
-   BD06ui8/oENC/4S4KWqwOShSyP/Vfmb2Ue71gPWxJ+gJV9d/qo7ICYcy1
-   Ufd17IwxMszuhDNayN9dBiwgJKOutdtZozDLpc36XxTADQ8erjsoAUhae
-   W7Auk5yhcg628oDSMDi6INXOIwgWdHXsJKvOow5cYqnCT5oVSI3VoXCoF
-   pVPrz2jceLuel5l7ssgPcebPqNeffvEa7b1V3x9vVu1Ld384wiHbnKT0T
-   XRUY7OA4vtk8Qhd5ZBCsuXxbqMICiHgYwcqzdD4C+9hqc4pISGThl5DEy
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10628"; a="395376916"
-X-IronPort-AV: E=Sophos;i="5.97,318,1669104000"; 
-   d="scan'208";a="395376916"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Feb 2023 03:02:12 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10628"; a="735866279"
-X-IronPort-AV: E=Sophos;i="5.97,318,1669104000"; 
-   d="scan'208";a="735866279"
-Received: from lkp-server01.sh.intel.com (HELO 3895f5c55ead) ([10.239.97.150])
-  by fmsmga008.fm.intel.com with ESMTP; 22 Feb 2023 03:02:10 -0800
-Received: from kbuild by 3895f5c55ead with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pUmsz-0000HZ-2g;
-        Wed, 22 Feb 2023 11:02:09 +0000
-Date:   Wed, 22 Feb 2023 19:01:12 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Karsten Graul <kgraul@linux.ibm.com>
-Cc:     oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: net/smc/smc_llc.c:40:1: warning: alignment 1 of 'struct smc_llc_hdr'
- is less than 4
-Message-ID: <202302221942.MupxsxQU-lkp@intel.com>
+        Wed, 22 Feb 2023 06:02:02 -0500
+Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2064.outbound.protection.outlook.com [40.107.93.64])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD47D37F3D;
+        Wed, 22 Feb 2023 03:02:00 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=hBSOf4gDDg4VEA+0v9nqivzlVuZqmm4Uj5xF5W7NjHazkHxwPTycjLZjOsRxksA429DbiB1745j7YmaJx6NDLK1U05GnLO22u2uZh3cgwAGluu+aGjGEp0aGFOeBGXBW4GFPtXTaRK9jVWUnLFPt/pCqjOAd/03oRQnIKENiY0/UtPuKL4s9RE8opi4zZ7rjYCLZToVI0/HU+X43xHWiJulSwlRmLLYMNp3/6eq+ryzWmK8shPVDVVY4mLOMp4AAHERW3IJKIzYo6ke6wXTPmFus2+eGadl22sKCa3lcwfanVwS83lU21fZ9qNY+RTs2Qth18rwXD/m2XhMyogap7A==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=3jlfcYPUTSLmU+Hm+u46D5s/HQSMBjI3mN8gB8KisP0=;
+ b=EpZ72gOq8NlMG0kFb/3LL9IwDEDrxF0ikq9yTfyobCry/i87G+RhQ8YQhKfMv80ZA463VcbH/eUhFFiopXQjrXXnMWCnFJrjA/v/0xXG56KYkfAqezsKVSRZl6DLbRzoK6wYZuyiOO/Aom5qdV23CJ7lFV0erNAvRDRTSRVSzAK2t1SBRPELAxsDy+v18IYzJKqR4pGUr36JfiMrUo0vosNEe9E3y8+hDs7TBQKhxLHfrYKHr4B2MEVmzRBWHGZJx0RI5xZC4uv/s7IbIc642j9PwfyUbFBxGITKANyd3EFQVilPRpG8qI9O2rxA5fueFg6s8AXR55W7EXuyPuVqhg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=3jlfcYPUTSLmU+Hm+u46D5s/HQSMBjI3mN8gB8KisP0=;
+ b=ek65xw3DudBOk5Mk7OB5gebDPHoNXiULKDCsrW8wP1Kf1MOaXhGrsqJZuLJC5VlMflh1c5afPGXgpYYQZwOsu1W6nFlCV0H+GVKudGh0RCYtsHF+Q+XXc0UKy2eHnHbrJP5WNJA8JFbou56UWx1jM9rx+RbNYjZUhkc72+f1Ggw=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from DM6PR12MB3370.namprd12.prod.outlook.com (2603:10b6:5:38::25) by
+ SJ0PR12MB7082.namprd12.prod.outlook.com (2603:10b6:a03:4ae::12) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6134.19; Wed, 22 Feb
+ 2023 11:01:58 +0000
+Received: from DM6PR12MB3370.namprd12.prod.outlook.com
+ ([fe80::4df2:b32a:e628:c57e]) by DM6PR12MB3370.namprd12.prod.outlook.com
+ ([fe80::4df2:b32a:e628:c57e%7]) with mapi id 15.20.6134.019; Wed, 22 Feb 2023
+ 11:01:58 +0000
+Message-ID: <7e158702-19fe-594d-6c94-5b5378848521@amd.com>
+Date:   Wed, 22 Feb 2023 06:01:55 -0500
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Content-Language: en-CA
+To:     Rob Clark <robdclark@gmail.com>, dri-devel@lists.freedesktop.org
+Cc:     Rob Clark <robdclark@chromium.org>,
+        Gustavo Padovan <gustavo@padovan.org>,
+        Tvrtko Ursulin <tvrtko.ursulin@intel.com>,
+        =?UTF-8?Q?Christian_K=c3=b6nig?= <ckoenig.leichtzumerken@gmail.com>,
+        =?UTF-8?Q?Michel_D=c3=a4nzer?= <michel@daenzer.net>,
+        open list <linux-kernel@vger.kernel.org>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        "moderated list:DMA BUFFER SHARING FRAMEWORK" 
+        <linaro-mm-sig@lists.linaro.org>,
+        Pekka Paalanen <ppaalanen@gmail.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        freedreno@lists.freedesktop.org,
+        =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
+        "open list:SYNC FILE FRAMEWORK" <linux-media@vger.kernel.org>
+References: <20230218211608.1630586-1-robdclark@gmail.com>
+ <20230218211608.1630586-2-robdclark@gmail.com>
+From:   Luben Tuikov <luben.tuikov@amd.com>
+Subject: Re: [PATCH v4 01/14] dma-buf/dma-fence: Add deadline awareness
+In-Reply-To: <20230218211608.1630586-2-robdclark@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: YT4PR01CA0139.CANPRD01.PROD.OUTLOOK.COM
+ (2603:10b6:b01:d5::6) To DM6PR12MB3370.namprd12.prod.outlook.com
+ (2603:10b6:5:38::25)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DM6PR12MB3370:EE_|SJ0PR12MB7082:EE_
+X-MS-Office365-Filtering-Correlation-Id: 8382c51c-1521-455a-b117-08db14c4372f
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: WiT+SMuIZguggGauLnBVv1RAzuzHIJXcXOupMcuAJOF2NLnioQPLIbFKvOu7tlDS2xkDWEdBPWJpsv0NRZ5kgTw34qk8wkU2RPPoyRDaM1g/rS+2z1Ckr1vYTFutWj2HQfy3xSBoRT0UulFZoI8UDFLaeG0oIuVnfOCfaeFsL3aj3NosIQllrY1bMdAe0pMRmDr4+fcjIebu5ce9TlxUlf0hlI42rN1aDHMlmWP22oGq9NfAUkHLGPT5G5c+7GDN0AIEgEuyfPcXLbAnvEePnsoQklIUHZ7WbyhnqQqQlRKCgVbULE32UJyBT3Ai4FCBD1+VtJD/5rSgK1IVHMp+YvKkDPpWgM6rnC7ITW3x/I0CXt/+gPfeGrILG+J5TBKKLlLnvW/UOOlSoGVOpRydV5Heo2jkz7t4fE967MYPSO01jcSwL+xpew/t71mv9KEZjXZmA6DFcBLQ9GJ8xIunzezbigv497gJ3mKzFzSdKK0ACY1vAxs7wxEua1u+Fvf2Z8q2rvZyY3aQMzxJMD+UZo4QfNgJGUdcSJF1GHJ3e6I620Gpn1kpNxiOx0b47LRO0IWBHlUwtSvdT8oUaka35Y/dS1LKJv10fFgTTfwxJj6ux7JX3hpM2J8WDWHK6FGnsBtRxkzGQK43CJVc9gLxyMxWpgzkt8xOska9k9pFwtcRpQ7mE6lUhnielObVsrAEB3aH/vsxX+NB8Lr4JB9Ep8jmuDy/hCmr22tI9Wuicmo=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR12MB3370.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(346002)(396003)(366004)(39860400002)(376002)(136003)(451199018)(31686004)(66574015)(36756003)(5660300002)(2906002)(44832011)(7416002)(83380400001)(6486002)(6506007)(6512007)(55236004)(53546011)(54906003)(31696002)(478600001)(86362001)(41300700001)(6666004)(2616005)(38100700002)(186003)(26005)(66556008)(8676002)(66476007)(316002)(4326008)(8936002)(66946007)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?andCU1Jnc252dTBxd09Fc0RueGhPL2RNODhQNlIyT2dYeCs2WWxucHN0K3Fu?=
+ =?utf-8?B?ZEc2ck1XNXpMY0tvRE1leVJPQkhBblNIZC9lWHFQYVZ5OC9DSjNPdkUxOENa?=
+ =?utf-8?B?L0RlOU96Y0JEdE9saWpIdmdxN3hpM2w0M3dEYm1XTjZROE9UYTcwUExDMkRO?=
+ =?utf-8?B?cGRoNkxsaEhvUkFud2dmMTNyZXBNMkdGdzF4c1ZFc2g1YTJwUW5zRFRramFK?=
+ =?utf-8?B?SlJyOW1sKzhWcWdiN2dJV2huNjFpNlVYNUFreDZIazc3RkR3akFOSkpJeVAw?=
+ =?utf-8?B?UG9xcmx2R0x4NFd2ajBDL0I3QVQ0aWpnWUV0OGdONlEzTXR0UWYzM2Q5VElN?=
+ =?utf-8?B?UzdBamNxeXU2eStPS2dsT1dFRHl4bkV4dU5PNTcxVFp3eU1YMjJOZXJNY3ZZ?=
+ =?utf-8?B?WjhWNTR0OFhkR1Z6M0RNOHNuWk5QcjkrSFYrRUtzVU1SK1RlSFFBTm9hL1Nv?=
+ =?utf-8?B?YjgrU1BlbjZDUHdENVgxbzhCQ1NJN3NsMnpkaGU4dEhxUTlBRlUwSG1VL1JD?=
+ =?utf-8?B?R0hyTHNiamVGRDg1dUcvNWRkWnFNN056cmx2OGdGYzdhUG05cXdoN2ozUkwv?=
+ =?utf-8?B?Y2MzMUZQMmVWZW4vc3g2alNOQ1hzSHJMblo0QlhmSE1SckxiYXJaL1poUmtt?=
+ =?utf-8?B?SmNlSDJIbXBmUm5yYnBqdStjYVZUZUIrTG5WczdPUlcwcTZ0UVJnM3lzQTB1?=
+ =?utf-8?B?UWQ1RlNhRTZsTzlIMHJpUnY4YndhYUlxYkU5dzdKZEZma1dXR3I3QnRUejh0?=
+ =?utf-8?B?VG1KbkdTanE5clgrV3pLdUVndStsUC9TOGVQUWluSXFEcFhDdXhvZ0oxaGx4?=
+ =?utf-8?B?bTYrOENRWFB5Sk1RMkUydnZzcWRad2Z0a1hxYW5WZmdkWHYyNGtNYTE5WkY0?=
+ =?utf-8?B?SGI3bm55bjBBOXZabGtxWVlRWXdNNVJieUxmMVVYOVBhdmFUamZXdUQ0VGlS?=
+ =?utf-8?B?UHpnMi9oUkdrUXNHbmllMmdtU3NENnZsQjlaSFlkVGQ5eGFHeCtLMkJBRHhp?=
+ =?utf-8?B?ZXJ1TjYxWlc2RDQrSWRicFdkVUhZWFRyWGY2UmFNbWd5Vzd5WW1YV25nRlF3?=
+ =?utf-8?B?ZDZ1RmdkdVRteHZpK1FLS3JZN2dmRzhKUS9zWHZrSFpjamVmWmNzUjUzaHo4?=
+ =?utf-8?B?bmRiTWlhQkxEaEpZY0Z4ZjhPS2svS3BnU28rckNYZURTQ0VHYmFlYWNicFp4?=
+ =?utf-8?B?d281U21nOXpSWFNSVDZCOUJLTFNJbTFKdy8vR25JcGxmOWRSSUM1bzg5RWtC?=
+ =?utf-8?B?NlI2ZFg4UTZWKzdpamphWDZuTGlZNkJ3bjFsVHI5YVQvWHhIRHZuNkRLYlFG?=
+ =?utf-8?B?UUNkbnduczRGYVdad1pEWC92blNMOXZkSXJmR3BVdW5WdFBHNGxETENUWmJv?=
+ =?utf-8?B?N1VvM3kwbjVWWWRWd3NyOG9nL2J3SkQ4Q2Q5MmZTZ2ZMUnp1V2NyYlBQZW9V?=
+ =?utf-8?B?WVBUNmtxS3MvYXU4c3ZWanhsRnRMZTJQeHkwYkxseFNFSjRHeWhUQVFlRmZD?=
+ =?utf-8?B?RjlpU1ZSWHdxUDl3OWI3SmgvQ2V1Q2o1UDM5V3MwY2xzbThMdHNBb3ZmRkVJ?=
+ =?utf-8?B?REtQaGlCdWlJVFV1ZWFHNktiMVpnMlV2Z2FtUXB2NzJNTm1pd0diOXhEeHRq?=
+ =?utf-8?B?RjdJUGZqU25JQVhEOWtLQmx6ZWhUTWhvbHZJNFpWMHdpdFA2cytScVUrOXhy?=
+ =?utf-8?B?aHNPUTJsZ09jcS83UGd4ZHBlWnRlcldFdVQwNWlZdjBhUlF0RUdnNldqeHlX?=
+ =?utf-8?B?TEI0MXhOSGVTWVlOaHJybm40c0lrckdvV0h4akk4dWVyUE50aGw3VDBuQ0Fu?=
+ =?utf-8?B?SGtQM3NESDVLcy84L0ZKdG1BNEtRZWdEckdkSGQ3OXc5T3JsYmlWZmRZWVE4?=
+ =?utf-8?B?VC9MTVgxcDdtamlwZDAvbVNhN0hYRlFraVRrZWxzSmZwdVVxWk1paUQrTm1R?=
+ =?utf-8?B?RjBvdmF1cFJUdE5DK1o2RE95S0g3ckxUOTJpUmt3ZktrQ045cmdiWHRHczFt?=
+ =?utf-8?B?cFM0UngwV0pidlFhbmx2emRCQ2hGLzZYaDVoWjVIQmE3bkZTL3Z3dDM4cFkz?=
+ =?utf-8?B?aHhsNUZqd3ZVUjAxNlRSUzFxcmwxQmRmRVJZS0tGeXFzSk9WN1doYTAxeHNK?=
+ =?utf-8?Q?ad7hZ95luVnnt4XdQ/TeG2/ka?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 8382c51c-1521-455a-b117-08db14c4372f
+X-MS-Exchange-CrossTenant-AuthSource: DM6PR12MB3370.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 22 Feb 2023 11:01:57.8824
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: jvPbPrYnOXOMX0pbPG+9VwOtueSZgrAKnJ9aPmNwGMdQ5s7+0WBRuCJ/KNNo5hbd
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR12MB7082
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Karsten,
+On 2023-02-18 16:15, Rob Clark wrote:
+> From: Rob Clark <robdclark@chromium.org>
+> 
+> Add a way to hint to the fence signaler of an upcoming deadline, such as
+> vblank, which the fence waiter would prefer not to miss.  This is to aid
+> the fence signaler in making power management decisions, like boosting
+> frequency as the deadline approaches and awareness of missing deadlines
+> so that can be factored in to the frequency scaling.
+> 
+> v2: Drop dma_fence::deadline and related logic to filter duplicate
+>     deadlines, to avoid increasing dma_fence size.  The fence-context
+>     implementation will need similar logic to track deadlines of all
+>     the fences on the same timeline.  [ckoenig]
+> v3: Clarify locking wrt. set_deadline callback
+> 
+> Signed-off-by: Rob Clark <robdclark@chromium.org>
+> Reviewed-by: Christian König <christian.koenig@amd.com>
+> ---
+>  drivers/dma-buf/dma-fence.c | 20 ++++++++++++++++++++
+>  include/linux/dma-fence.h   | 20 ++++++++++++++++++++
+>  2 files changed, 40 insertions(+)
+> 
+> diff --git a/drivers/dma-buf/dma-fence.c b/drivers/dma-buf/dma-fence.c
+> index 0de0482cd36e..763b32627684 100644
+> --- a/drivers/dma-buf/dma-fence.c
+> +++ b/drivers/dma-buf/dma-fence.c
+> @@ -912,6 +912,26 @@ dma_fence_wait_any_timeout(struct dma_fence **fences, uint32_t count,
+>  }
+>  EXPORT_SYMBOL(dma_fence_wait_any_timeout);
+>  
+> +
+> +/**
 
-FYI, the error/warning still remains.
+The added empty line above creates a problem for scripts/checkpatch.pl--and
+there's a few others here and there. It'd be a good idea to run this series
+through checkpatch.pl, if at least informatively.
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   5b7c4cabbb65f5c469464da6c5f614cbd7f730f2
-commit: b4ba4652b3f8b7c9bbb5786f8acf4724bdab2196 net/smc: extend LLC layer for SMC-Rv2
-date:   1 year, 4 months ago
-config: arm-buildonly-randconfig-r003-20230222 (https://download.01.org/0day-ci/archive/20230222/202302221942.MupxsxQU-lkp@intel.com/config)
-compiler: arm-linux-gnueabi-gcc (GCC) 12.1.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=b4ba4652b3f8b7c9bbb5786f8acf4724bdab2196
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout b4ba4652b3f8b7c9bbb5786f8acf4724bdab2196
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=arm olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash arch/arm/mach-pxa/ drivers/net/ethernet/google/gve/ drivers/net/ethernet/intel/i40e/ drivers/net/ethernet/intel/iavf/ net/smc/
-
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202302221942.MupxsxQU-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
->> net/smc/smc_llc.c:40:1: warning: alignment 1 of 'struct smc_llc_hdr' is less than 4 [-Wpacked-not-aligned]
-      40 | } __packed;             /* format defined in
-         | ^
-   In file included from <command-line>:
-   In function 'smc_llc_add_pending_send',
-       inlined from 'smc_llc_send_message' at net/smc/smc_llc.c:760:7:
-   include/linux/compiler_types.h:322:45: error: call to '__compiletime_assert_550' declared with attribute error: must increase SMC_WR_BUF_SIZE to at least sizeof(struct smc_llc_msg)
-     322 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
-         |                                             ^
-   include/linux/compiler_types.h:303:25: note: in definition of macro '__compiletime_assert'
-     303 |                         prefix ## suffix();                             \
-         |                         ^~~~~~
-   include/linux/compiler_types.h:322:9: note: in expansion of macro '_compiletime_assert'
-     322 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
-         |         ^~~~~~~~~~~~~~~~~~~
-   include/linux/build_bug.h:39:37: note: in expansion of macro 'compiletime_assert'
-      39 | #define BUILD_BUG_ON_MSG(cond, msg) compiletime_assert(!(cond), msg)
-         |                                     ^~~~~~~~~~~~~~~~~~
-   net/smc/smc_llc.c:409:9: note: in expansion of macro 'BUILD_BUG_ON_MSG'
-     409 |         BUILD_BUG_ON_MSG(
-         |         ^~~~~~~~~~~~~~~~
-   include/linux/compiler_types.h:322:45: error: call to '__compiletime_assert_551' declared with attribute error: must adapt SMC_WR_TX_SIZE to sizeof(struct smc_llc_msg); if not all smc_wr upper layer protocols use the same message size any more, must start to set link->wr_tx_sges[i].length on each individual smc_wr_tx_send()
-     322 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
-         |                                             ^
-   include/linux/compiler_types.h:303:25: note: in definition of macro '__compiletime_assert'
-     303 |                         prefix ## suffix();                             \
-         |                         ^~~~~~
-   include/linux/compiler_types.h:322:9: note: in expansion of macro '_compiletime_assert'
-     322 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
-         |         ^~~~~~~~~~~~~~~~~~~
-   include/linux/build_bug.h:39:37: note: in expansion of macro 'compiletime_assert'
-      39 | #define BUILD_BUG_ON_MSG(cond, msg) compiletime_assert(!(cond), msg)
-         |                                     ^~~~~~~~~~~~~~~~~~
-   net/smc/smc_llc.c:412:9: note: in expansion of macro 'BUILD_BUG_ON_MSG'
-     412 |         BUILD_BUG_ON_MSG(
-         |         ^~~~~~~~~~~~~~~~
-   In function 'smc_llc_add_pending_send',
-       inlined from 'smc_llc_send_confirm_rkey' at net/smc/smc_llc.c:492:7:
-   include/linux/compiler_types.h:322:45: error: call to '__compiletime_assert_550' declared with attribute error: must increase SMC_WR_BUF_SIZE to at least sizeof(struct smc_llc_msg)
-     322 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
-         |                                             ^
-   include/linux/compiler_types.h:303:25: note: in definition of macro '__compiletime_assert'
-     303 |                         prefix ## suffix();                             \
-         |                         ^~~~~~
-   include/linux/compiler_types.h:322:9: note: in expansion of macro '_compiletime_assert'
-     322 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
-         |         ^~~~~~~~~~~~~~~~~~~
-   include/linux/build_bug.h:39:37: note: in expansion of macro 'compiletime_assert'
-      39 | #define BUILD_BUG_ON_MSG(cond, msg) compiletime_assert(!(cond), msg)
-         |                                     ^~~~~~~~~~~~~~~~~~
-   net/smc/smc_llc.c:409:9: note: in expansion of macro 'BUILD_BUG_ON_MSG'
-     409 |         BUILD_BUG_ON_MSG(
-         |         ^~~~~~~~~~~~~~~~
-   include/linux/compiler_types.h:322:45: error: call to '__compiletime_assert_551' declared with attribute error: must adapt SMC_WR_TX_SIZE to sizeof(struct smc_llc_msg); if not all smc_wr upper layer protocols use the same message size any more, must start to set link->wr_tx_sges[i].length on each individual smc_wr_tx_send()
-     322 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
-         |                                             ^
-   include/linux/compiler_types.h:303:25: note: in definition of macro '__compiletime_assert'
-     303 |                         prefix ## suffix();                             \
-         |                         ^~~~~~
-   include/linux/compiler_types.h:322:9: note: in expansion of macro '_compiletime_assert'
-     322 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
-         |         ^~~~~~~~~~~~~~~~~~~
-   include/linux/build_bug.h:39:37: note: in expansion of macro 'compiletime_assert'
-      39 | #define BUILD_BUG_ON_MSG(cond, msg) compiletime_assert(!(cond), msg)
-         |                                     ^~~~~~~~~~~~~~~~~~
-   net/smc/smc_llc.c:412:9: note: in expansion of macro 'BUILD_BUG_ON_MSG'
-     412 |         BUILD_BUG_ON_MSG(
-         |         ^~~~~~~~~~~~~~~~
-   In function 'smc_llc_add_pending_send',
-       inlined from 'smc_llc_add_link_cont' at net/smc/smc_llc.c:833:7:
-   include/linux/compiler_types.h:322:45: error: call to '__compiletime_assert_550' declared with attribute error: must increase SMC_WR_BUF_SIZE to at least sizeof(struct smc_llc_msg)
-     322 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
-         |                                             ^
-   include/linux/compiler_types.h:303:25: note: in definition of macro '__compiletime_assert'
-     303 |                         prefix ## suffix();                             \
-         |                         ^~~~~~
-   include/linux/compiler_types.h:322:9: note: in expansion of macro '_compiletime_assert'
-     322 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
-         |         ^~~~~~~~~~~~~~~~~~~
-   include/linux/build_bug.h:39:37: note: in expansion of macro 'compiletime_assert'
-      39 | #define BUILD_BUG_ON_MSG(cond, msg) compiletime_assert(!(cond), msg)
-         |                                     ^~~~~~~~~~~~~~~~~~
-   net/smc/smc_llc.c:409:9: note: in expansion of macro 'BUILD_BUG_ON_MSG'
-     409 |         BUILD_BUG_ON_MSG(
-         |         ^~~~~~~~~~~~~~~~
-   include/linux/compiler_types.h:322:45: error: call to '__compiletime_assert_551' declared with attribute error: must adapt SMC_WR_TX_SIZE to sizeof(struct smc_llc_msg); if not all smc_wr upper layer protocols use the same message size any more, must start to set link->wr_tx_sges[i].length on each individual smc_wr_tx_send()
-     322 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
-         |                                             ^
-   include/linux/compiler_types.h:303:25: note: in definition of macro '__compiletime_assert'
-     303 |                         prefix ## suffix();                             \
-         |                         ^~~~~~
-   include/linux/compiler_types.h:322:9: note: in expansion of macro '_compiletime_assert'
-     322 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
-         |         ^~~~~~~~~~~~~~~~~~~
-   include/linux/build_bug.h:39:37: note: in expansion of macro 'compiletime_assert'
-      39 | #define BUILD_BUG_ON_MSG(cond, msg) compiletime_assert(!(cond), msg)
-         |                                     ^~~~~~~~~~~~~~~~~~
-   net/smc/smc_llc.c:412:9: note: in expansion of macro 'BUILD_BUG_ON_MSG'
-     412 |         BUILD_BUG_ON_MSG(
-         |         ^~~~~~~~~~~~~~~~
-   In function 'smc_llc_add_pending_send',
-
-
-vim +40 net/smc/smc_llc.c
-
-    23	
-    24	struct smc_llc_hdr {
-    25		struct smc_wr_rx_hdr common;
-    26		union {
-    27			struct {
-    28				u8 length;	/* 44 */
-    29		#if defined(__BIG_ENDIAN_BITFIELD)
-    30				u8 reserved:4,
-    31				   add_link_rej_rsn:4;
-    32	#elif defined(__LITTLE_ENDIAN_BITFIELD)
-    33				u8 add_link_rej_rsn:4,
-    34				   reserved:4;
-    35	#endif
-    36			};
-    37			u16 length_v2;	/* 44 - 8192*/
-    38		};
-    39		u8 flags;
-  > 40	} __packed;		/* format defined in
-    41				 * IBM Shared Memory Communications Version 2
-    42				 * (https://www.ibm.com/support/pages/node/6326337)
-    43				 */
-    44	
-
+I wasn't able to apply patch 13 to drm-misc-next or any other known to me
+branch, and I didn't see base tree information in the cover letter. I skipped
+it and it compiled okay without it.
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+Regards,
+Luben
+
+> + * dma_fence_set_deadline - set desired fence-wait deadline
+> + * @fence:    the fence that is to be waited on
+> + * @deadline: the time by which the waiter hopes for the fence to be
+> + *            signaled
+> + *
+> + * Inform the fence signaler of an upcoming deadline, such as vblank, by
+> + * which point the waiter would prefer the fence to be signaled by.  This
+> + * is intended to give feedback to the fence signaler to aid in power
+> + * management decisions, such as boosting GPU frequency if a periodic
+> + * vblank deadline is approaching.
+> + */
+> +void dma_fence_set_deadline(struct dma_fence *fence, ktime_t deadline)
+> +{
+> +	if (fence->ops->set_deadline && !dma_fence_is_signaled(fence))
+> +		fence->ops->set_deadline(fence, deadline);
+> +}
+> +EXPORT_SYMBOL(dma_fence_set_deadline);
+> +
+>  /**
+>   * dma_fence_describe - Dump fence describtion into seq_file
+>   * @fence: the 6fence to describe
+> diff --git a/include/linux/dma-fence.h b/include/linux/dma-fence.h
+> index 775cdc0b4f24..d77f6591c453 100644
+> --- a/include/linux/dma-fence.h
+> +++ b/include/linux/dma-fence.h
+> @@ -99,6 +99,7 @@ enum dma_fence_flag_bits {
+>  	DMA_FENCE_FLAG_SIGNALED_BIT,
+>  	DMA_FENCE_FLAG_TIMESTAMP_BIT,
+>  	DMA_FENCE_FLAG_ENABLE_SIGNAL_BIT,
+> +	DMA_FENCE_FLAG_HAS_DEADLINE_BIT,
+>  	DMA_FENCE_FLAG_USER_BITS, /* must always be last member */
+>  };
+>  
+> @@ -257,6 +258,23 @@ struct dma_fence_ops {
+>  	 */
+>  	void (*timeline_value_str)(struct dma_fence *fence,
+>  				   char *str, int size);
+> +
+> +	/**
+> +	 * @set_deadline:
+> +	 *
+> +	 * Callback to allow a fence waiter to inform the fence signaler of
+> +	 * an upcoming deadline, such as vblank, by which point the waiter
+> +	 * would prefer the fence to be signaled by.  This is intended to
+> +	 * give feedback to the fence signaler to aid in power management
+> +	 * decisions, such as boosting GPU frequency.
+> +	 *
+> +	 * This is called without &dma_fence.lock held, it can be called
+> +	 * multiple times and from any context.  Locking is up to the callee
+> +	 * if it has some state to manage.
+> +	 *
+> +	 * This callback is optional.
+> +	 */
+> +	void (*set_deadline)(struct dma_fence *fence, ktime_t deadline);
+>  };
+>  
+>  void dma_fence_init(struct dma_fence *fence, const struct dma_fence_ops *ops,
+> @@ -583,6 +601,8 @@ static inline signed long dma_fence_wait(struct dma_fence *fence, bool intr)
+>  	return ret < 0 ? ret : 0;
+>  }
+>  
+> +void dma_fence_set_deadline(struct dma_fence *fence, ktime_t deadline);
+> +
+>  struct dma_fence *dma_fence_get_stub(void);
+>  struct dma_fence *dma_fence_allocate_private_stub(void);
+>  u64 dma_fence_context_alloc(unsigned num);
+
