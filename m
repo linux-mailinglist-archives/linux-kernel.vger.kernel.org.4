@@ -2,145 +2,183 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C5FC569F841
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Feb 2023 16:43:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D4AF969F847
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Feb 2023 16:45:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231571AbjBVPno (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Feb 2023 10:43:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37998 "EHLO
+        id S232611AbjBVPo7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Feb 2023 10:44:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39070 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231235AbjBVPnm (ORCPT
+        with ESMTP id S231235AbjBVPoz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Feb 2023 10:43:42 -0500
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D2CA1E5DE;
-        Wed, 22 Feb 2023 07:43:41 -0800 (PST)
-Received: from pps.filterd (m0279863.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 31MF7tUI012996;
-        Wed, 22 Feb 2023 15:43:30 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=JnxcFNqst959AUn2rOTT4yjbmqPZ4cda06QUPBhLYgA=;
- b=ENozoSh+C0oYoTdXt0nl3JoUXdF7+1/Fivob4/M62VUm+rO0x10MeZWEdSFB75/Ce9x8
- q+sUT+avwdfk7s+3ekouvkc2w9qYewdDEMUt44TBj/5ofvz24/ooDqNBRBf/mvYGE006
- hq+M3n7YKhYeEQQ4eXC1QK9zVUvt052nUbuYuKL0w+UQfAO/OevJOckAw/hc6N3yyjtH
- sNSfhtXGElhZYtje/nNCLIDasd8h8hQ5b2tw2Veb+y4+WjfhlXrv+HcANhMLVenv+fyq
- roDPnJRCAWhvNKCS5YcfrQ/6u2Oe7Y7rjqlnN1EkDTZeXwShPikmjAy7bd8A6kCwwjLn iQ== 
-Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3nw75ta6da-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 22 Feb 2023 15:43:29 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 31MFhTEU007299
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 22 Feb 2023 15:43:29 GMT
-Received: from [10.226.59.182] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.41; Wed, 22 Feb
- 2023 07:43:28 -0800
-Message-ID: <88b46bcf-04c0-009a-db9f-4a39b8344dcd@quicinc.com>
-Date:   Wed, 22 Feb 2023 08:43:27 -0700
+        Wed, 22 Feb 2023 10:44:55 -0500
+Received: from mail-oa1-x34.google.com (mail-oa1-x34.google.com [IPv6:2001:4860:4864:20::34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F64934C23
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Feb 2023 07:44:54 -0800 (PST)
+Received: by mail-oa1-x34.google.com with SMTP id 586e51a60fabf-1720600a5f0so10340004fac.11
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Feb 2023 07:44:54 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=bw/o2d2K7rGx8jIRXoMyh485ogBh3CzQ8lHjHQHgP88=;
+        b=nVtplwpYOrpmv5auHphbThsB5vUI0Ms3ZskUvJ5lbu1bIFUs5qUoFjhQTperidUve1
+         qkG6ep1wQh8TVXb6pD0amaDuhJtZV/bE1KauKv3c47O547/gyeePedUjF+vp26chdjCU
+         40vUbKDpkkxBVku3mGZcuuj77kzSFMsYuj/rnCgUut7CtyVk4XMq/mOZ9dDrRYQlMGjM
+         E+kybYipPTshCzloe6tzbxCsSb5pTldvUwqfmvbRDYOt9UqDlBZrtMtHZeJTt+YU/B7O
+         nL38eEKt3L5d3z31wWvYYd8UiXeHUDPmEXyNirUrk3n25ZPBqsIzVNk5FhfpQ5e2homG
+         mGOw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=bw/o2d2K7rGx8jIRXoMyh485ogBh3CzQ8lHjHQHgP88=;
+        b=icUCfjpgOlyW44p68lXudfil62gbCZ9yyU8FbZOH8rrFGpG4hAMKZjwmojQZvJPOYX
+         MaUyJLzIdOsc+fMJRK/7LDkAZNemhLQonQgaHyz6/Lli/KtHPhIWfRWQ9Ec/QwPLV7+Z
+         ouOywCP+1o3AHoMqvMFm6RI3Hg3evXHoJuSUOC2QHIUb4tT4FY9kxHvMQnKK5lG227rF
+         cdsFLrgnVEQM/LdLPJd8TDvgH6AE+oX87uVbcOzWR+f+0JIsySVhWI5r4UBQi445DaRn
+         DXTy0GKQPR72QxrXjQd6STfs0xn+jxq6l/IiQoRQRM7EjPjeOKlyKUb7h9QoPOBinOJz
+         NvQQ==
+X-Gm-Message-State: AO0yUKWAjltSBpz9T91ivhELijQ+ZmV1oPaZjigv92Uig+ofcTU8rppr
+        KIRkPwPZ7yYAuySFx2FcACxlEeWrM+ocKaGI/As=
+X-Google-Smtp-Source: AK7set8HctSnN91X1d+M6rIyfQjt2yhgJ7jTxiClAmw/r44291CstgYZiuPPwA1K5zp2sg+pYAvmX8Bhb4Hlrw+N0Qg=
+X-Received: by 2002:a05:6870:808d:b0:16e:8a56:d0d2 with SMTP id
+ q13-20020a056870808d00b0016e8a56d0d2mr1362645oab.38.1677080693513; Wed, 22
+ Feb 2023 07:44:53 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.0
-Subject: Re: [PATCH v4] bus: mhi: host: Avoid ringing EV DB if there is no
- elements to process
-Content-Language: en-US
-To:     Vivek Pernamitta <quic_vpernami@quicinc.com>, <mhi@lists.linux.dev>
-CC:     <quic_qianyu@quicinc.com>, <manivannan.sadhasivam@linaro.org>,
-        <quic_vbadigan@quicinc.com>, <quic_krichai@quicinc.com>,
-        <quic_skananth@quicinc.com>,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        "Alex Elder" <elder@linaro.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Paul Davey <paul.davey@alliedtelesis.co.nz>,
-        "open list:MHI BUS" <linux-arm-msm@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>
-References: <1677066231-14931-1-git-send-email-quic_vpernami@quicinc.com>
-From:   Jeffrey Hugo <quic_jhugo@quicinc.com>
-In-Reply-To: <1677066231-14931-1-git-send-email-quic_vpernami@quicinc.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: x_fwL7FU5oPyizJGgE8MgY8huVqJF82h
-X-Proofpoint-ORIG-GUID: x_fwL7FU5oPyizJGgE8MgY8huVqJF82h
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.170.22
- definitions=2023-02-22_05,2023-02-22_02,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 phishscore=0
- adultscore=0 priorityscore=1501 mlxscore=0 bulkscore=0 suspectscore=0
- clxscore=1015 impostorscore=0 mlxlogscore=999 lowpriorityscore=0
- malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2302220136
-X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20230218211608.1630586-1-robdclark@gmail.com> <20230218211608.1630586-11-robdclark@gmail.com>
+ <20230220110820.595cfa37@eldfell> <CAF6AEGuo-vmW4Va9=RH+kH9KgNvR2vzjJ8meO-oty56xjDhjgg@mail.gmail.com>
+ <20230221104551.60d44d1c@eldfell> <Y/TAr64SpxO712RB@intel.com>
+ <CAF6AEGumfEeGQQaEoEm4hzJajCOBBTrWxPQ9MTh7jt-Mov2FEQ@mail.gmail.com> <20230222115700.138d824c@eldfell>
+In-Reply-To: <20230222115700.138d824c@eldfell>
+From:   Rob Clark <robdclark@gmail.com>
+Date:   Wed, 22 Feb 2023 07:44:42 -0800
+Message-ID: <CAF6AEGuK0_GtgXS7REAN=u4YZ7x11FrAxVW4iQcqV7bJdJFv6g@mail.gmail.com>
+Subject: Re: [PATCH v4 10/14] drm/vblank: Add helper to get next vblank time
+To:     Pekka Paalanen <ppaalanen@gmail.com>
+Cc:     =?UTF-8?B?VmlsbGUgU3lyasOkbMOk?= <ville.syrjala@linux.intel.com>,
+        Rob Clark <robdclark@chromium.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Tvrtko Ursulin <tvrtko.ursulin@intel.com>,
+        =?UTF-8?Q?Christian_K=C3=B6nig?= <ckoenig.leichtzumerken@gmail.com>,
+        =?UTF-8?Q?Michel_D=C3=A4nzer?= <michel@daenzer.net>,
+        open list <linux-kernel@vger.kernel.org>,
+        dri-devel@lists.freedesktop.org,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        freedreno@lists.freedesktop.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/22/2023 4:43 AM, Vivek Pernamitta wrote:
-> Avoid ringing Event DB if there is no elements to process.
+On Wed, Feb 22, 2023 at 1:57 AM Pekka Paalanen <ppaalanen@gmail.com> wrote:
+>
+> On Tue, 21 Feb 2023 09:50:20 -0800
+> Rob Clark <robdclark@gmail.com> wrote:
+>
+> > On Tue, Feb 21, 2023 at 5:01 AM Ville Syrj=C3=A4l=C3=A4
+> > <ville.syrjala@linux.intel.com> wrote:
+> > >
+> > > On Tue, Feb 21, 2023 at 10:45:51AM +0200, Pekka Paalanen wrote:
+> > > > On Mon, 20 Feb 2023 07:55:41 -0800
+> > > > Rob Clark <robdclark@gmail.com> wrote:
+> > > >
+> > > > > On Mon, Feb 20, 2023 at 1:08 AM Pekka Paalanen <ppaalanen@gmail.c=
+om> wrote:
+> > > > > >
+> > > > > > On Sat, 18 Feb 2023 13:15:53 -0800
+> > > > > > Rob Clark <robdclark@gmail.com> wrote:
+> > > > > >
+> > > > > > > From: Rob Clark <robdclark@chromium.org>
+> > > > > > >
+> > > > > > > Will be used in the next commit to set a deadline on fences t=
+hat an
+> > > > > > > atomic update is waiting on.
+> > > > > > >
+> > > > > > > Signed-off-by: Rob Clark <robdclark@chromium.org>
+> > > > > > > ---
+> > > > > > >  drivers/gpu/drm/drm_vblank.c | 32 ++++++++++++++++++++++++++=
+++++++
+> > > > > > >  include/drm/drm_vblank.h     |  1 +
+> > > > > > >  2 files changed, 33 insertions(+)
+> > > > > > >
+> > > > > > > diff --git a/drivers/gpu/drm/drm_vblank.c b/drivers/gpu/drm/d=
+rm_vblank.c
+> > > > > > > index 2ff31717a3de..caf25ebb34c5 100644
+> > > > > > > --- a/drivers/gpu/drm/drm_vblank.c
+> > > > > > > +++ b/drivers/gpu/drm/drm_vblank.c
+> > > > > > > @@ -980,6 +980,38 @@ u64 drm_crtc_vblank_count_and_time(struc=
+t drm_crtc *crtc,
+> > > > > > >  }
+> > > > > > >  EXPORT_SYMBOL(drm_crtc_vblank_count_and_time);
+> > > > > > >
+> > > > > > > +/**
+> > > > > > > + * drm_crtc_next_vblank_time - calculate the time of the nex=
+t vblank
+> > > > > > > + * @crtc: the crtc for which to calculate next vblank time
+> > > > > > > + * @vblanktime: pointer to time to receive the next vblank t=
+imestamp.
+> > > > > > > + *
+> > > > > > > + * Calculate the expected time of the next vblank based on t=
+ime of previous
+> > > > > > > + * vblank and frame duration
+> > > > > >
+> > > > > > Hi,
+> > > > > >
+> > > > > > for VRR this targets the highest frame rate possible for the cu=
+rrent
+> > > > > > VRR mode, right?
+> > > > > >
+> > > > >
+> > > > > It is based on vblank->framedur_ns which is in turn based on
+> > > > > mode->crtc_clock.  Presumably for VRR that ends up being a maximu=
+m?
+> > > >
+> > > > I don't know. :-)
+> > >
+> > > At least for i915 this will give you the maximum frame
+> > > duration.
+> >
+> > I suppose one could argue that maximum frame duration is the actual
+> > deadline.  Anything less is just moar fps, but not going to involve
+> > stalling until vblank N+1, AFAIU
+> >
+> > > Also this does not calculate the the start of vblank, it
+> > > calculates the start of active video.
+> >
+> > Probably something like end of previous frame's video..  might not be
+> > _exactly_ correct (because some buffering involved), but OTOH on the
+> > GPU side, I expect the driver to set a timer for a few ms or so before
+> > the deadline.  So there is some wiggle room.
+>
+> The vblank timestamp is defined to be the time of the first active
+> pixel of the frame in the video signal. At least that's the one that
+> UAPI carries (when not tearing?). It is not the start of vblank period.
+>
+> With VRR, the front porch before the first active pixel can be multiple
+> milliseconds. The difference between 144 Hz and 60 Hz is 9.7 ms for
+> example.
 
-This is almost exactly identical to $SUBJECT and therefore redundant.
+What we really want is the deadline for the hw to latch for the next
+frame.. which as Ville pointed out is definitely before the end of
+vblank.
 
-> As mhi_poll function can be called by mhi client drivers
-> which will call process_event, which will ring DB even if
-> there no ring elements to process.
+Honestly this sort of feature is a lot more critical for the non-VRR
+case, and VRR is kind of a minority edge case.  So I'd prefer not to
+get too hung up on VRR.  If there is an easy way for the helpers to
+detect VRR, I'd be perfectly fine not setting a deadline hint in that
+case, and let someone who actually has a VRR display figure out how to
+handle that case.
 
-I think that you could be more clear on why this is a problem that 
-should be addressed.  Perhaps add a sentence like "These doorbell events 
-needlessly interrupt the MHI device to checked for ring elements when 
-there are none."
-
-With the commit text updated, you can add
-Reviewed-by: Jeffrey Hugo <quic_jhugo@quicinc.com>
-
-> 
-> Signed-off-by: Vivek Pernamitta <quic_vpernami@quicinc.com>
-> 
-> ---
-> changes since v3:
-> 	- Updating commit text for multiple versions of patches.
-> changes since v2:
-> 	- Updated comments in code.
-> changes since v1:
-> 	- Add an check to avoid ringing EV DB in mhi_process_ctrl_ev_ring().
-> ---
->   drivers/bus/mhi/host/main.c | 8 ++++++--
->   1 file changed, 6 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/bus/mhi/host/main.c b/drivers/bus/mhi/host/main.c
-> index df0fbfe..1bbdb75 100644
-> --- a/drivers/bus/mhi/host/main.c
-> +++ b/drivers/bus/mhi/host/main.c
-> @@ -961,7 +961,9 @@ int mhi_process_ctrl_ev_ring(struct mhi_controller *mhi_cntrl,
->   	}
->   
->   	read_lock_bh(&mhi_cntrl->pm_lock);
-> -	if (likely(MHI_DB_ACCESS_VALID(mhi_cntrl)))
-> +
-> +	/* Ring EV DB only if there is any pending element to process */
-> +	if (likely(MHI_DB_ACCESS_VALID(mhi_cntrl)) && count)
->   		mhi_ring_er_db(mhi_event);
->   	read_unlock_bh(&mhi_cntrl->pm_lock);
->   
-> @@ -1031,7 +1033,9 @@ int mhi_process_data_event_ring(struct mhi_controller *mhi_cntrl,
->   		count++;
->   	}
->   	read_lock_bh(&mhi_cntrl->pm_lock);
-> -	if (likely(MHI_DB_ACCESS_VALID(mhi_cntrl)))
-> +
-> +	/* Ring EV DB only if there is any pending element to process */
-> +	if (likely(MHI_DB_ACCESS_VALID(mhi_cntrl)) && count)
->   		mhi_ring_er_db(mhi_event);
->   	read_unlock_bh(&mhi_cntrl->pm_lock);
->   
-
+BR,
+-R
