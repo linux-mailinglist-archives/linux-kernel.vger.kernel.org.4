@@ -2,150 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 72CA969F964
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Feb 2023 17:55:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 96DCD69F96A
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Feb 2023 17:55:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232111AbjBVQzP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Feb 2023 11:55:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43546 "EHLO
+        id S232415AbjBVQza (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Feb 2023 11:55:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43884 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229950AbjBVQzO (ORCPT
+        with ESMTP id S232410AbjBVQzX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Feb 2023 11:55:14 -0500
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15B5634016;
-        Wed, 22 Feb 2023 08:55:13 -0800 (PST)
-Received: from pps.filterd (m0098396.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 31MGBxFf005450;
-        Wed, 22 Feb 2023 16:55:04 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : cc : date : in-reply-to : references : content-type :
- content-transfer-encoding : mime-version; s=pp1;
- bh=qNaXY5aZLhTPbDWbbj6yK6XhwLtng0pp6xKbrCD/R3w=;
- b=XqTci3SRB/Tsjd9aOkr2rO7tRx2HmQkTgPjBxEdD1AOwG6WS+8Mh3f08Twhig0id1IgD
- /Quiwk0yO6hIzTckHLeKa7DiRxAwJ/I9PwRtizg+K8OV1/c0yLIMKwCOPv2ElcIrALh0
- BRzPukwye62dXfyb+qOqNfJrI+Crdj8W9Zl2WzPKqgd2o0ZD19cLd6edqQ0HMXUsbLqE
- oDfpL/aWPKs3P2kIZTiFW7grwltmsIkBGSfqkXML6YJ9AAUDhvie+nH3giBjD4kTdh/m
- /MJ5ViyOrFLAiHxW8CW2D22hRQvqTgsvt8WcMQeXTg9q1uUQLtK+gDpHGb93CJ1T9Uqc 8g== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3nwm5k5esc-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 22 Feb 2023 16:55:03 +0000
-Received: from m0098396.ppops.net (m0098396.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 31MG07ii008643;
-        Wed, 22 Feb 2023 16:55:03 GMT
-Received: from ppma03fra.de.ibm.com (6b.4a.5195.ip4.static.sl-reverse.com [149.81.74.107])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3nwm5k5er1-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 22 Feb 2023 16:55:03 +0000
-Received: from pps.filterd (ppma03fra.de.ibm.com [127.0.0.1])
-        by ppma03fra.de.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 31MB41Oe020283;
-        Wed, 22 Feb 2023 16:55:00 GMT
-Received: from smtprelay07.fra02v.mail.ibm.com ([9.218.2.229])
-        by ppma03fra.de.ibm.com (PPS) with ESMTPS id 3ntpa648js-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 22 Feb 2023 16:55:00 +0000
-Received: from smtpav04.fra02v.mail.ibm.com (smtpav04.fra02v.mail.ibm.com [10.20.54.103])
-        by smtprelay07.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 31MGsveg55574942
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 22 Feb 2023 16:54:57 GMT
-Received: from smtpav04.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 0045820043;
-        Wed, 22 Feb 2023 16:54:57 +0000 (GMT)
-Received: from smtpav04.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 2E81120040;
-        Wed, 22 Feb 2023 16:54:56 +0000 (GMT)
-Received: from [9.171.87.157] (unknown [9.171.87.157])
-        by smtpav04.fra02v.mail.ibm.com (Postfix) with ESMTP;
-        Wed, 22 Feb 2023 16:54:56 +0000 (GMT)
-Message-ID: <1793b3cd12921b7a3fa8b3ee7e20b7cf1df1eca1.camel@linux.ibm.com>
-Subject: Re: [PATCH RESEND] PCI: s390: Fix use-after-free of PCI bus
- resources with s390 per-function hotplug
-From:   Niklas Schnelle <schnelle@linux.ibm.com>
-To:     Bjorn Helgaas <helgaas@kernel.org>
-Cc:     Gerd Bayer <gbayer@linux.ibm.com>,
-        Gerald Schaefer <gerald.schaefer@linux.ibm.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Sven Schnelle <svens@linux.ibm.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Pierre Morel <pmorel@linux.ibm.com>,
-        Matthew Rosato <mjrosato@linux.ibm.com>,
-        linux-s390@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-pci@vger.kernel.org
-Date:   Wed, 22 Feb 2023 17:54:55 +0100
-In-Reply-To: <1a621a2b836d81d12b6f265f47d93b827e0a82df.camel@linux.ibm.com>
-References: <20230217231503.GA3425666@bhelgaas>
-         <1a621a2b836d81d12b6f265f47d93b827e0a82df.camel@linux.ibm.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.46.4 (3.46.4-1.fc37) 
+        Wed, 22 Feb 2023 11:55:23 -0500
+Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 14B7634016;
+        Wed, 22 Feb 2023 08:55:18 -0800 (PST)
+Received: from loongson.cn (unknown [10.20.42.133])
+        by gateway (Coremail) with SMTP id _____8CxC9r0SPZjeKYDAA--.7809S3;
+        Thu, 23 Feb 2023 00:55:16 +0800 (CST)
+Received: from openarena.loongson.cn (unknown [10.20.42.133])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8BxTL7ySPZjRes4AA--.38394S2;
+        Thu, 23 Feb 2023 00:55:14 +0800 (CST)
+From:   suijingfeng <suijingfeng@loongson.cn>
+To:     Thomas Zimmermann <tzimmermann@suse.de>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Rob Herring <robh+dt@kernel.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        suijingfeng <suijingfeng@loongson.cn>
+Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, dri-devel@lists.freedesktop.org
+Subject: [PATCH 1/2] Mips: ls2k1000: dts: add the display controller device node
+Date:   Thu, 23 Feb 2023 00:55:13 +0800
+Message-Id: <20230222165514.684729-1-suijingfeng@loongson.cn>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: mSPqSjbWkuASLouyegHMgEtQ5Kwz-jj2
-X-Proofpoint-GUID: a1hmJwYsil-bc-QBDZj1GGxFdhrqfe7i
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.170.22
- definitions=2023-02-22_06,2023-02-22_02,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- impostorscore=0 suspectscore=0 clxscore=1015 mlxscore=0 mlxlogscore=620
- adultscore=0 malwarescore=0 spamscore=0 bulkscore=0 lowpriorityscore=0
- phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2302220145
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: AQAAf8BxTL7ySPZjRes4AA--.38394S2
+X-CM-SenderInfo: xvxlyxpqjiv03j6o00pqjv00gofq/
+X-Coremail-Antispam: 1Uk129KBjvJXoW7ZrW5Kw47Gr1UWrykKryxGrg_yoW8GF4Up3
+        WDAay7Kr4rWF1Iqws5JFy8Jr4fZF95AF97GrsFyr1UWwn2v3Wqvr4fJF1ftF4aqrWUJa4j
+        vF18GrWxKF1xCw7anT9S1TB71UUUUj7qnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
+        qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
+        bfxYFVCjjxCrM7AC8VAFwI0_Jr0_Gr1l1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s
+        1l1IIY67AEw4v_Jrv_JF1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xv
+        wVC0I7IYx2IY67AKxVWUCVW8JwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwA2z4
+        x0Y4vEx4A2jsIE14v26r4j6F4UM28EF7xvwVC2z280aVCY1x0267AKxVW8JVW8Jr1ln4kS
+        14v26r126r1DM2AIxVAIcxkEcVAq07x20xvEncxIr21l57IF6xkI12xvs2x26I8E6xACxx
+        1l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r126r1DMcIj6I8E87Iv
+        67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41lc7CjxVAaw2
+        AFwI0_JF0_Jw1l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1l4IxYO2xF
+        xVAFwI0_JF0_Jw1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWw
+        C2zVAF1VAY17CE14v26r1q6r43MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_JFI_
+        Gr1lIxAIcVC0I7IYx2IY6xkF7I0E14v26r1j6r4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJV
+        WUCwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r1j6r4UYxBI
+        daVFxhVjvjDU0xZFpf9x07j5o7tUUUUU=
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 2023-02-20 at 13:53 +0100, Niklas Schnelle wrote:
-> On Fri, 2023-02-17 at 17:15 -0600, Bjorn Helgaas wrote:
-> > On Tue, Feb 14, 2023 at 10:49:10AM +0100, Niklas Schnelle wrote:
-> >=20
-> >=20
----8<---
-> > Other random questions unrelated to this patch:
-> >=20
-> >   - zpci_bus_create_pci_bus() calls pci_bus_add_devices().  Isn't that
-> >     pointless?  AFAICT, the bus->devices list is empty then.
->=20
-> Yes I think you're right it does nothing and can be dropped.
->=20
-> >=20
-> >   - What about zpci_bus_scan_device()?  Why does it call both
-> >     pci_bus_add_device() and pci_bus_add_devices()?  The latter will
-> >     just call the former, so it looks redundant.  And the latter is
-> >     locked but not the former?
->=20
-> Hmm. great find. This seems to have been weird and redundant since I
-> first used that pattern in 3047766bc6ec ("s390/pci: fix enabling a
-> reserved PCI function"). I think maybe then the reason for this was
-> that prior to 960ac3626487 ("s390/pci: allow zPCI zbus without a
-> function zero") when the newly enabled is devfn =3D=3D 0 there could be
-> functions from the same bus which would not have been added yet. I'm
-> not sure though. That was definitely the idea behind the
-> zpci_bus_scan_bus() in zpci_scan_configured_devices() that is also
-> redundant now as we can now scan each function as it appears.
->=20
-> This will definitely need to be cleaned up.
->=20
+The display controller is a pci device, it's pci vendor id is
+0x0014, it's pci device id is 0x7a06.
 
-I'm working on cleaning this up but I'm a little confused by what
-exactly needs to be under the pci_rescan_remove lock. For example the
-pci_bus_add_device(virtfn) at the end of pci_iov_add_virtfn() doesn't
-seem to be under the lock while most calls to pci_bus_add_devices()
-are, most prominently the one in acpi_pci_root_add() which I assume is
-what is used on most x86 systems. Any hints?
+Signed-off-by: suijingfeng <suijingfeng@loongson.cn>
+---
+ .../boot/dts/loongson/loongson64-2k1000.dtsi  | 21 +++++++++++++++++++
+ 1 file changed, 21 insertions(+)
 
-Also I think my original thought here might have been a premature worry
-about PCI-to-PCI bridges thinking that adding the new device could lead
-to more devices appearing. Of course actually thinking about it a bit
-more there are quite a few other things that won't work without further
-changes if we wanted to add bridges e.g. we would need to create
-zpci_dev structs for these somewhere.
+diff --git a/arch/mips/boot/dts/loongson/loongson64-2k1000.dtsi b/arch/mips/boot/dts/loongson/loongson64-2k1000.dtsi
+index 8143a61111e3..a528af3977d9 100644
+--- a/arch/mips/boot/dts/loongson/loongson64-2k1000.dtsi
++++ b/arch/mips/boot/dts/loongson/loongson64-2k1000.dtsi
+@@ -31,6 +31,18 @@ memory@200000 {
+ 			<0x00000001 0x10000000 0x00000001 0xb0000000>; /* 6912 MB at 4352MB */
+ 	};
+ 
++	reserved-memory {
++		#address-cells = <2>;
++		#size-cells = <2>;
++		ranges;
++
++		display_reserved: framebuffer@30000000 {
++			compatible = "shared-dma-pool";
++			reg = <0x0 0x30000000 0x0 0x04000000>; /* 64M */
++			linux,cma-default;
++		};
++	};
++
+ 	cpu_clk: cpu_clk {
+ 		#clock-cells = <0>;
+ 		compatible = "fixed-clock";
+@@ -198,6 +210,15 @@ sata@8,0 {
+ 				interrupt-parent = <&liointc0>;
+ 			};
+ 
++			display-controller@6,0 {
++				compatible = "loongson,ls2k1000-dc";
++
++				reg = <0x3000 0x0 0x0 0x0 0x0>;
++				interrupts = <28 IRQ_TYPE_LEVEL_LOW>;
++				interrupt-parent = <&liointc0>;
++				memory-region = <&display_reserved>;
++			};
++
+ 			pci_bridge@9,0 {
+ 				compatible = "pci0014,7a19.0",
+ 						   "pci0014,7a19",
+-- 
+2.34.1
 
