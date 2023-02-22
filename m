@@ -2,188 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DA33B69FD7C
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Feb 2023 22:07:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EF36969FD80
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Feb 2023 22:08:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232532AbjBVVHw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Feb 2023 16:07:52 -0500
+        id S232633AbjBVVIQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Feb 2023 16:08:16 -0500
 Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42614 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232772AbjBVVHr (ORCPT
+        with ESMTP id S232867AbjBVVII (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Feb 2023 16:07:47 -0500
-Received: from mail-qt1-x82f.google.com (mail-qt1-x82f.google.com [IPv6:2607:f8b0:4864:20::82f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D44747408;
-        Wed, 22 Feb 2023 13:07:20 -0800 (PST)
-Received: by mail-qt1-x82f.google.com with SMTP id w42so8938017qtc.2;
-        Wed, 22 Feb 2023 13:07:20 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=M6JRb2xlXQj/RRrO0uwKMW7L+mxBKNZwN1+yHQmPmUE=;
-        b=pbQSamF14WH+da0JGNN5z+VAwcCRJR9v6B6/asOVRtKGgHRu7LEEuxxKUUVkD1NCE3
-         B95d1uLOYZzWrt3+hVwwcwb9eYvWMexSsJMyzxU6T350DR2FWhmZQhFTI/NcGw7txWCp
-         0vUvQJQWsI/sFjunobfDYjLRi+mk0TYM+IO/GpY2f7UXxZKF+syD6NV+goS8qdYiMCYw
-         ss365axFoNaHRc/PtZt8cO4DI/5+xUCvtfPYd8Sg+9C0aPe1PWjG+fVJmTwlta2l7L+Z
-         Tuu/M4CSf3EKue9XteZXWertyFwFWY85eqlCjy4nxJm1jK/hKTgX55tvpiQk72+fbyvt
-         87Tw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=M6JRb2xlXQj/RRrO0uwKMW7L+mxBKNZwN1+yHQmPmUE=;
-        b=0fuZd6i42SUUX7bwUHWbttL+4WA9zHHQRvhl5ZewksOeave3PxI9ix4Z5ejZg77xOY
-         mdzu57CBDl85jG5LZOX4I+NQUvGJCid452+PQMEu8wMqoILLLfrfRZ2YxI6sz2hn/Gf3
-         0acq6QUHMN6LbzP4nTZW1JMfpJrWiHMzReREUisJ6BjKpY5z2ffU4+zlS931kezJWy8f
-         1/DtW8y/S+a3StqzMY6WDmoOJ7aDXZN3FGGQ7WNVM1Qutl4yH5WVT80DfThICxn2qvJG
-         iHB+uR5sz9RSWdXJNo+iAc/h1bbucrYkyIu2u+lEf1SYjFgtGmBYuxNu5GdYHjq+UtJy
-         vqyQ==
-X-Gm-Message-State: AO0yUKWKz4JyZHfGLici0ElOxA33I+oW4kUnvIiKNQf0tiBGwQ8pWk5o
-        vnTfV75EHhgYG0p26oSaW2M=
-X-Google-Smtp-Source: AK7set9vPSu5tbODFDwrVaNryqyr+xbbtE7FlTl1RH9DwsPCWbgw/ARkk8nAvShfPRliysADO3ZlrQ==
-X-Received: by 2002:a05:622a:1447:b0:3b9:ba24:4f38 with SMTP id v7-20020a05622a144700b003b9ba244f38mr19251709qtx.56.1677100037417;
-        Wed, 22 Feb 2023 13:07:17 -0800 (PST)
-Received: from [192.168.1.201] (pool-173-73-95-180.washdc.fios.verizon.net. [173.73.95.180])
-        by smtp.gmail.com with ESMTPSA id 129-20020a370687000000b007423ccd892csm964323qkg.47.2023.02.22.13.07.15
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 22 Feb 2023 13:07:16 -0800 (PST)
-Message-ID: <ef539bfa-d9f7-5977-03f4-1fcf20c7ef65@gmail.com>
-Date:   Wed, 22 Feb 2023 16:07:15 -0500
+        Wed, 22 Feb 2023 16:08:08 -0500
+Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2060.outbound.protection.outlook.com [40.107.220.60])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95F2546150;
+        Wed, 22 Feb 2023 13:07:43 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=IEws8k0OXV/S37b5ei7BAGE81kVR60XH+GR1Y1PLsVy8dZbto3/iP3rL754A5jJb/9tPJcitwYUBUB4phq6QI1zhkMWw6jrsg5WehYKJY9ft2qUHzZv0yhOda4zMyTfQRrwBqRh4gD0A6HfCYeQLHB6BOCB707RfUYIEK6INF1QVvT4lYVcVX27T4tOJicZwriAu4XWO14QKKyKK61qEmxCWA3z0boD14J2KDv0enEKXIBrk2lN1He1NfNGSBctu/BLrbWOXsM+cLYFrFz7UyjuW4JtDDWVLZlh1pGKffPJonJEIc/Koa0QjeQqPfDeeXuM3JbNyP+Gaj+OIOys6mg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=dQRZ6Nl22+3XdCRB5n88HRIDKaDRFW5MHEYwCdnJJHU=;
+ b=AVe1MGo/bHX1NtBLWGdcezcqxjy+7CK1ToaV9jw0Pc28XpwhHFjE7/R3su2SEYZpU26IL0lZdi03MgGY2Lu5et52ZGIrlz3C3UMaZVrdj3pjwb1hfNe80QIJ3TF+0JWe+jsS17W/M2lFudlGy9JUGDPod7AoiMfKkmMrBbWiO3MHmLt7lc59OtW7k9wzzxURWcTv7EkbC5aUlzwZtxOwIuqMXXz8ZDR/NFGpRl6VK19d37oHKvHqqotniq2v1PIIkEi15sl/NSzBDNLNo1CbC1vLsaf2auXIdKhpOM9Jr6Psp6MURsZRcJB6G1t/3g8k7xoJFQhB9G8KevNylSSVeg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=dQRZ6Nl22+3XdCRB5n88HRIDKaDRFW5MHEYwCdnJJHU=;
+ b=GrWz1mbgHbOcFVXd5nt4e3WFuos7oWEI8Zifo0A7DYRVzs3MpIO81Rbsr/o+yrxgk3YDcEIn8BJJkX1084p4DM5MpkvjdEnd/ycFe05nFo07xunoUGQbcvMlUYVw3wGpQWmRXVCHD9Iwlb/yZL97P53C61ps4GfIZjdF3A+tUii4TLeHss/swjl14+neKIRyRdtf+H0cftYhc1R9RKIpG4ww1nTSdIDsjELL+woqdnHvAxBb7XUKqPMn8wz5WqVFohMrJT6VoFlcNCmL6MqLEMmL0u3vdcLTTYTRkB7JSyxKHn8LnrwFFXIjJJGoT/QwPeZGCBfAdKH8RULrlebrbg==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from LV2PR12MB5869.namprd12.prod.outlook.com (2603:10b6:408:176::16)
+ by DS7PR12MB6213.namprd12.prod.outlook.com (2603:10b6:8:97::13) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6134.19; Wed, 22 Feb
+ 2023 21:07:21 +0000
+Received: from LV2PR12MB5869.namprd12.prod.outlook.com
+ ([fe80::3cb3:2fce:5c8f:82ee]) by LV2PR12MB5869.namprd12.prod.outlook.com
+ ([fe80::3cb3:2fce:5c8f:82ee%4]) with mapi id 15.20.6111.021; Wed, 22 Feb 2023
+ 21:07:21 +0000
+Date:   Wed, 22 Feb 2023 17:07:20 -0400
+From:   Jason Gunthorpe <jgg@nvidia.com>
+To:     Yi Liu <yi.l.liu@intel.com>
+Cc:     joro@8bytes.org, alex.williamson@redhat.com, kevin.tian@intel.com,
+        robin.murphy@arm.com, cohuck@redhat.com, eric.auger@redhat.com,
+        nicolinc@nvidia.com, kvm@vger.kernel.org, mjrosato@linux.ibm.com,
+        chao.p.peng@linux.intel.com, yi.y.sun@linux.intel.com,
+        peterx@redhat.com, jasowang@redhat.com,
+        shameerali.kolothum.thodi@huawei.com, lulu@redhat.com,
+        suravee.suthikulpanit@amd.com, iommu@lists.linux.dev,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        baolu.lu@linux.intel.com
+Subject: Re: [PATCH 0/6] iommufd: Add iommu capability reporting
+Message-ID: <Y/aECHpCo4LJ1Rw2@nvidia.com>
+References: <20230209041642.9346-1-yi.l.liu@intel.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230209041642.9346-1-yi.l.liu@intel.com>
+X-ClientProxiedBy: MN2PR01CA0010.prod.exchangelabs.com (2603:10b6:208:10c::23)
+ To LV2PR12MB5869.namprd12.prod.outlook.com (2603:10b6:408:176::16)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH net] net: sunhme: Return an error when we are out of slots
-Content-Language: en-US
-To:     Simon Horman <simon.horman@corigine.com>
-Cc:     "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Rolf Eike Beer <eike-kernel@sf-tec.de>,
-        kernel test robot <lkp@intel.com>,
-        Dan Carpenter <error27@gmail.com>
-References: <20230222170935.1820939-1-seanga2@gmail.com>
- <Y/aCNSlx2p62iDYk@corigine.com>
-From:   Sean Anderson <seanga2@gmail.com>
-In-Reply-To: <Y/aCNSlx2p62iDYk@corigine.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: LV2PR12MB5869:EE_|DS7PR12MB6213:EE_
+X-MS-Office365-Filtering-Correlation-Id: 5a33f696-4aed-45f9-5ac3-08db1518c9e7
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: RfMB3HoQIHqWkk5iqyBTcOfNwp91L24gsps2ZLe5wN/X5QZ5v+Mqp2XCdzqvkKtOsp+JCGD+gFDCoh5Obla6IFvnBoZLVqIYoUldFZQl0Q99zWZzZ30YhgiSK0F8f4Q6GbmyjBBtaXy9uJRbmH5e7/t05NKeohcltNUCg3NevskgRGBd73MBmftA8kpQ12XLrlY4Enjfv6kH8DaK1jTMKCNWNhlQxnmSjfCRFMWLZ6Py5adKtXq2smfh2ltiVE90GZhF0rWMnTYy7lKRmSdSxobEtiP6gHvWNi0HwzK8SaQd1v4jg5aOZQ7y9c97ItSsnevdtHuHuVVTpCjUB0/GFuTQToObEZ2An5G7++lhu3cpYJH+TdsLG/mxcsntAqADRlw3T5EhuhI8TNTj0tMaICwKDFnRCaLBb4dEL+c/lJAWrB/0cv3UdXbnt3pFnX3oNiDCzsiGklXWW4vLz40UdF4dLyK2+yU3mmJwFoQLUAvgOjS/faM7HfxTKWB/gRgpWrKRh4Pq9V2nC8T6eHu0+ggMuCujXBWW9XTZbuuziML5RFiNLLB3V4W0yMFOg/nEdY7Oy52R0PiAaJ6yrizzihvF3+whfgibibu3nv7dTB1VRMn5nP9NjVNh/xBD+oTH9mXIGRjcmPza9B1QsiXXSRzcV76KRLwdcwJN6SrRnskz+JmgK0AmcxJuxfxAighjux3FwQnIsIPweiiqzJJRNvkDCyFDtnrC5fkcwxEB2lA=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LV2PR12MB5869.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(346002)(366004)(396003)(136003)(376002)(39860400002)(451199018)(38100700002)(2906002)(2616005)(83380400001)(36756003)(186003)(6506007)(6512007)(41300700001)(5660300002)(316002)(26005)(966005)(4326008)(6916009)(8676002)(66946007)(6486002)(66476007)(66556008)(86362001)(478600001)(7416002)(8936002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?9z3qYQyJZrsGPV/Mm+iOAqscA+4JAa02np99J3Zc/lW7gGNJeN5TXHiQEsCh?=
+ =?us-ascii?Q?hXi/5XGZCUWCG1lRyQ+hmp2HVkkfrPwGEViosfsK+qP0BCg9l58AsSYU69lr?=
+ =?us-ascii?Q?4fhL2BhaYGV434asPpoL91U/cD2QUbfx+cGDAkbIWoV1jadjyfGCecCEs/9k?=
+ =?us-ascii?Q?4FZZ49OfCrwK9/HX3OdcdV8DyUWMdfmR0FN/T+euy202BL2XDNQbMwEaD0w/?=
+ =?us-ascii?Q?9pFZwvKID4Rnn3mH+QsonwCAZH2ys5g9pm9DIcd51MRC1o7fRZQF+MNGhQe5?=
+ =?us-ascii?Q?MOcETgdoMB2N16ezgAAlroJcU1PLmJglsY2lOrPOMUqeLJ/oZwAPxnFBEfYU?=
+ =?us-ascii?Q?kxATM+CvbTEDxhb6IqxqWIqm3j90cDAYiz7R0wmppCZqOVlSNlSHnRrZUnNy?=
+ =?us-ascii?Q?oOGXms9CIb4CXzqhWxNTt3H9isWs6ynUrN+a7yyL3B8NHhDBuZOaAIJeUrNu?=
+ =?us-ascii?Q?k+hLBtm3af6O2lkxz6fGlArSlXKzz1GWTjb/XLaEuTCCQp+wrhDSHwUoWpjY?=
+ =?us-ascii?Q?2AB9oUhFm9yNbcKVNvXHkoEQjEAQN4xfRms+PkfvzPDcFQWjFk/DECjbNXKQ?=
+ =?us-ascii?Q?ktIaLsPdeCKx1mnQtGicLhC0TnXRu60WjmXDQmN6yHSbJ6VKHNO/Xq4uKxig?=
+ =?us-ascii?Q?sjqq+zDtCj+vjGGyqKoJKX3CeeBPbNNkL1UKj/2lJfcF4YVDCoRjzHvhyAvE?=
+ =?us-ascii?Q?WG9ZLjnCnlru9R0YGzxH/kIEuUDuZ1Gr1v14Bp+MmQFP6X2uepL10C9PyrRI?=
+ =?us-ascii?Q?206HSb15n27YgAS8tCGyKV3qMpki4DHm9ZgrX9v+sn3eC3rByVsBcbkMgD02?=
+ =?us-ascii?Q?gZmVkKn9QfNcGL06DhBLz0Foz2C6kjWeA87ofqtRTNaGTDclgRfVwaLvRz2C?=
+ =?us-ascii?Q?eU1akJvyqj3KEJJALLGu8r1qF1N+XwfzoAk5RRv78nx/iIKnPv0kZJRw32W7?=
+ =?us-ascii?Q?cCGwMHCcPsAK1KlNxy0hTQDKkzJcmoMGPZJIdTY9Bk08atOtvbc2phlNH0EI?=
+ =?us-ascii?Q?s4qTnKUmVKOYnrRDic+YTkqCVFwh8wqtmFUGgE5niUb+JvSJL7vczZ7DikPl?=
+ =?us-ascii?Q?LEHM/X328Q2yrIzBeAZLwP/3yfkBfsT/xn9r4OXVx/kiqv28uJkmz0jMNAxl?=
+ =?us-ascii?Q?lBWYTMULqUnZ7pY3nWAy+NtKbtkmBiIdCwtFf3ooZVBAJ/k45EWJr9DL4vsM?=
+ =?us-ascii?Q?isREGogY5o4zeOWrKjVea56+r2RD2QOJplWDLo+eC/PNq0pGqqrZyfXJ8Cbg?=
+ =?us-ascii?Q?GBFotNwZWZ16d1fKkLe3ZaxJ8lD2oVO3IeiMep9GkKwoyVjylLLAcrxci5y7?=
+ =?us-ascii?Q?jO3yhsW5yT9azq/PYv2OYJGoSAmNxKz+8b6NIhNFHcytCxVUP6D49RUhrFS9?=
+ =?us-ascii?Q?2h0pRF9r6t6Ler2BSBeX0PcK7q+Pq9xsnZJK30XikPkuHzovCkgKJONT84jq?=
+ =?us-ascii?Q?d8+NLjS7DkgqCtH4MX4ZPOaIiXJ8xtPZsKIvUsLe9YmsmqFW5N4mhK5XTLcS?=
+ =?us-ascii?Q?9bnwKY3Z0FnlS5+6mH92YOQKzm4QctjQSHYrcvtHF9GhPLin+gTPTIZMkDeq?=
+ =?us-ascii?Q?bng5HVOdcwyuWzW2bp06QvDHPcTn+XZDZ6A9iSoi?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 5a33f696-4aed-45f9-5ac3-08db1518c9e7
+X-MS-Exchange-CrossTenant-AuthSource: LV2PR12MB5869.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 22 Feb 2023 21:07:21.6337
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 6L1aL4UDdMaUSvtAc/IXpqeoBxoXI/CUxFCriodd6SKW8sjYR4yhpatblU8vIIC2
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS7PR12MB6213
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/22/23 15:59, Simon Horman wrote:
-> On Wed, Feb 22, 2023 at 12:09:35PM -0500, Sean Anderson wrote:
->> We only allocate enough space for four devices when the parent is a QFE. If
->> we couldn't find a spot (because five devices were created for whatever
->> reason), we would not return an error from probe(). Return ENODEV, which
->> was what we did before.
->>
->> Fixes: 96c6e9faecf1 ("sunhme: forward the error code from pci_enable_device()")
+On Wed, Feb 08, 2023 at 08:16:36PM -0800, Yi Liu wrote:
+> iommufd gives userspace the capabilty to manipulating iommu subsytem.
+> e.g. DMA map/unmap etc. In the near future, it will also support iommu
+> nested translation. Different platform vendors have different implementation
+> for the nested translation. So before set up nested translation, userspace
+> needs to know the hardware iommu capabilities. For example, Intel platform
+> supports guest I/O page table to be the first stage translation structure.
 > 
-> I think the hash for that commit is acb3f35f920b.
-
-Ah, sorry that's my local copy. The upstream commit is as you noted.
-
+> This series reports the iommu capability for a given iommufd_device which
+> has been bound to iommufd. It is a preparation work for nested translation
+> support[1]. In this series, Intel VT-d capability reporting is added. Other
+> vendors may add their own reporting based on this series.
 > 
-> However, I also think this problem was introduced by the first hunk of
-> 5b3dc6dda6b1 ("sunhme: Regularize probe errors").
-> 
-> Which is:
-> 
-> --- a/drivers/net/ethernet/sun/sunhme.c
-> +++ b/drivers/net/ethernet/sun/sunhme.c
-> @@ -2945,7 +2945,6 @@ static int happy_meal_pci_probe(struct pci_dev *pdev,
->   	if (err)
->   		goto err_out;
->   	pci_set_master(pdev);
-> -	err = -ENODEV;
->   
->   	if (!strcmp(prom_name, "SUNW,qfe") || !strcmp(prom_name, "qfe")) {
->   		qp = quattro_pci_find(pdev);
-> 
+> [1] https://github.com/yiliu1765/iommufd/tree/iommufd_nesting_vtd_v1
 
-Yes. That's the one I should have blamed.
+Let's have the comments addressed and this rebased on top of
+ https://github.com/jgunthorpe/linux/commits/iommufd_hwpt
 
-> Which leads me to wonder if simpler fixes would be either:
-> 
-> 1) Reverting the hunk above
-> 2) Or, more in keeping with the rest of that patch,
->     explicitly setting err before branching to err_out,
->     as you your patch does, but without other logic changes.
+Which should address eg the selftest issue
 
->     Something like this (*compile tested only!*:
-> 
-> diff --git a/drivers/net/ethernet/sun/sunhme.c b/drivers/net/ethernet/sun/sunhme.c
-> index 1c16548415cd..2409e7d6c29e 100644
-> --- a/drivers/net/ethernet/sun/sunhme.c
-> +++ b/drivers/net/ethernet/sun/sunhme.c
-> @@ -2863,8 +2863,10 @@ static int happy_meal_pci_probe(struct pci_dev *pdev,
->   			if (!qp->happy_meals[qfe_slot])
->   				break;
->   
-> -		if (qfe_slot == 4)
-> +		if (qfe_slot == 4) {
-> +			err = -ENOMEM;
->   			goto err_out;
-> +		}
->   	}
->   
->   	dev = devm_alloc_etherdev(&pdev->dev, sizeof(struct happy_meal));
+I want to start chipping away at bits of the nesting patch pile and
+this part looks close
 
-That's of course simpler, but this also does some cleanup to make it more
-obvious what's going on.
-
-> Also, I am curious why happy_meal_pci_probe() doesn't just return instaed
-> of branching to err_out. As err_out only returns err.  I guess there is a
-> reason for it. But simply returning would probably simplify error handling.
-> (I'm not suggesting that approach for this fix.)
-
-I think it's because there used to be cleanup in err_out. But you're right,
-we can just return directly and avoid a goto.
-
---Sean
-
->> Reported-by: kernel test robot <lkp@intel.com>
->> Reported-by: Dan Carpenter <error27@gmail.com>
->> Signed-off-by: Sean Anderson <seanga2@gmail.com>
->> ---
->>
->>   drivers/net/ethernet/sun/sunhme.c | 7 ++++---
->>   1 file changed, 4 insertions(+), 3 deletions(-)
->>
->> diff --git a/drivers/net/ethernet/sun/sunhme.c b/drivers/net/ethernet/sun/sunhme.c
->> index 1c16548415cd..523e26653ec8 100644
->> --- a/drivers/net/ethernet/sun/sunhme.c
->> +++ b/drivers/net/ethernet/sun/sunhme.c
->> @@ -2861,12 +2861,13 @@ static int happy_meal_pci_probe(struct pci_dev *pdev,
->>   
->>   		for (qfe_slot = 0; qfe_slot < 4; qfe_slot++)
->>   			if (!qp->happy_meals[qfe_slot])
->> -				break;
->> +				goto found_slot;
->>   
->> -		if (qfe_slot == 4)
->> -			goto err_out;
->> +		err = -ENODEV;
->> +		goto err_out;
->>   	}
->>   
->> +found_slot:
->>   	dev = devm_alloc_etherdev(&pdev->dev, sizeof(struct happy_meal));
->>   	if (!dev) {
->>   		err = -ENOMEM;
->> -- 
->> 2.37.1
->>
-
+Thanks,
+Jason
