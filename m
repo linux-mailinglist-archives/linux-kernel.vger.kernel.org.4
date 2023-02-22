@@ -2,206 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4666869EC17
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Feb 2023 01:52:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7421369EC1B
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Feb 2023 01:52:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230049AbjBVAwJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Feb 2023 19:52:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50978 "EHLO
+        id S230064AbjBVAwh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Feb 2023 19:52:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51400 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229674AbjBVAwG (ORCPT
+        with ESMTP id S230028AbjBVAwf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Feb 2023 19:52:06 -0500
-Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98B791C590
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Feb 2023 16:52:05 -0800 (PST)
-Received: by mail-ed1-x52a.google.com with SMTP id ec43so23652748edb.8
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Feb 2023 16:52:05 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=CgeK9T5wVPpxeWS32SJD2FynVvweV8FP5+U4tJ6cF74=;
-        b=aFxpmkVYAoA4okkYXenjN0aySJx7MDhX8efc4Fz1pJMXtuWY+p0vbua21WQulRsgEU
-         cMIXV/zXPVEy087YfkOEfj245u3j5Y5CMNafZq2Klc09J2IeDNN9PHov1qrb9EX9so0i
-         CXARQ6yFwq8JBaoaAG8GBBv+cFZp/bqCnXdsf1/QqaBcrxQuPUvpXYBbedzL+sG325pY
-         k0MYsm8hm33xwfG0vIZ5fsx3o8dVqrIqeVXtwgSWYbE1M/TGj+p2NOyPvk5hYCWx17hk
-         Is9RSm4UudueobS54ynt9D3BW9TltYcQfI1B1ygBUXWG39S5geZLetBWAeYS0d7kgi30
-         MSfQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=CgeK9T5wVPpxeWS32SJD2FynVvweV8FP5+U4tJ6cF74=;
-        b=RkBpUxdUxj2fiTQBvoxRtDJ/iLKmRANEAxaXknozi5x2gAl8H3iwVMGc/ic1+92pdz
-         a9l9C4V9NZ/S2f++9/AqA+9bXI8FUmHbnLN+TJn3COHFHIkgmXJU1Bs8E6/AXVhZRl14
-         IJk9zJh/4xbimQUr3/tX/qvZPEjYua0PEbDr6FxHlmmj2VV4xKxGTD3xHD53Cql3xnP8
-         spcNDi9NwZHiRvSa56wCGOiAS/j2Z633NpfJxnRiRyV3/X99zu9saAf4j9LU2FwMIu3B
-         PX+twxkyqhd3aSVMDJwJs953a4tyTYwBjJ44ScvRS4Zvgv/eKWEWIL4FI5o662TIeaeE
-         2S3Q==
-X-Gm-Message-State: AO0yUKVmMXGXJnNCyqceKvkiMEPBghoLMjpB1ARoc/2ORdyK/Zeam2FM
-        nQJUgV8wdETWKzk+plEn8om5Z1hFtwKkrCkQoeg=
-X-Google-Smtp-Source: AK7set9D1jjrY27gHuJ/35GzN2SKx+7h2B9Xbm+fvPy23HKLsPjYYls7BZ5cQ8KITPIHeUWJ5Txz/Vbb1gWiMRQqL8I=
-X-Received: by 2002:a50:d701:0:b0:4ad:7265:82db with SMTP id
- t1-20020a50d701000000b004ad726582dbmr2908128edi.1.1677027123944; Tue, 21 Feb
- 2023 16:52:03 -0800 (PST)
+        Tue, 21 Feb 2023 19:52:35 -0500
+Received: from gate2.alliedtelesis.co.nz (gate2.alliedtelesis.co.nz [IPv6:2001:df5:b000:5::4])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1F4930E90
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Feb 2023 16:52:30 -0800 (PST)
+Received: from svr-chch-seg1.atlnz.lc (mmarshal3.atlnz.lc [10.32.18.43])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by gate2.alliedtelesis.co.nz (Postfix) with ESMTPS id C65992C0488;
+        Wed, 22 Feb 2023 13:52:28 +1300 (NZDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alliedtelesis.co.nz;
+        s=mail181024; t=1677027148;
+        bh=keNdBvr9szQdnT+AOaLT/I7jh4u91DA9dfek36nMTaU=;
+        h=From:To:Cc:Subject:Date:From;
+        b=NhaVvxXq4IJBVtcIM7NVUBkS2myVCTzKpwuXKjrRCTzw+cHdv+VfX+fO+x3qV6XqY
+         +MKS0i2/iqSrmWeI6j2ZKHWzRGLXrEKQZk2A6Wc2wZDvAGj2PsG3uBTEzGcW2/Ql98
+         xOsBo3wqRAnR3z2P/KDCBrE0mvsBH/Bp6Xq0oJVaeuebbA2NKy+TbgCHfT5W9rvk0h
+         4GzXu8NtkwtE2KuaVrRfN0nBVlOWcY2/kd/wjUcPwamOSAiPQQoIjMXUJfBYQuaOzq
+         GQ/IFsnuzzt9/bBJOlCRDpjxXMvZxlaEguaVNKe4G973V8bmbp3A18fLggToAr4FLn
+         D7srmZ3W5T/Lg==
+Received: from pat.atlnz.lc (Not Verified[10.32.16.33]) by svr-chch-seg1.atlnz.lc with Trustwave SEG (v8,2,6,11305)
+        id <B63f5674c0000>; Wed, 22 Feb 2023 13:52:28 +1300
+Received: from tonyo-dl.ws.atlnz.lc (tonyo-dl.ws.atlnz.lc [10.33.12.31])
+        by pat.atlnz.lc (Postfix) with ESMTP id 7B82213ED6B;
+        Wed, 22 Feb 2023 13:52:28 +1300 (NZDT)
+Received: by tonyo-dl.ws.atlnz.lc (Postfix, from userid 1161)
+        id 7776CA0083; Wed, 22 Feb 2023 13:52:28 +1300 (NZDT)
+From:   Tony O'Brien <tony.obrien@alliedtelesis.co.nz>
+To:     jdelvare@suse.com, linux@roeck-us.net, linux-hwmon@vger.kernel.org
+Cc:     chris.packham@alliedtelesis.co.nz, hdegoede@redhat.com,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v2 0/2] hwmon: (adt7475) Fixes for acoustics and hysteresis
+Date:   Wed, 22 Feb 2023 13:52:26 +1300
+Message-Id: <20230222005228.158661-1-tony.obrien@alliedtelesis.co.nz>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-References: <CAHOvCC7yjceArav9Ps0v1EP4CjfkrxbfXFgABK54cdFKNoE8iw@mail.gmail.com>
- <Y/TEcdIDqGjwH+2f@debian.me>
-In-Reply-To: <Y/TEcdIDqGjwH+2f@debian.me>
-From:   JaeJoon Jung <rgbi3307@gmail.com>
-Date:   Wed, 22 Feb 2023 09:51:51 +0900
-Message-ID: <CAHOvCC544e8fuEvP6bSm7j0C5SQu6nd+StMcUhh_+aWBcPhNAQ@mail.gmail.com>
-Subject: Re: [PATCH] kernel/sched/core.c: Modified prio_less().
-To:     Bagas Sanjaya <bagasdotme@gmail.com>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-SEG-SpamProfiler-Analysis: v=2.3 cv=GdlpYjfL c=1 sm=1 tr=0 a=KLBiSEs5mFS1a/PbTCJxuA==:117 a=m04uMKEZRckA:10 a=lM6UcDNat5HMF8i9s88A:9
+X-SEG-SpamProfiler-Score: 0
+x-atlnz-ls: pat
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-I'm sorry for the inconvenience caused by my carelessness.
-I had the problem you pointed out by copying and sending the contents
-generated by git patch as text.
-I will learn the git-send-email method you shared and send it again.
+The patches contained herein fix the ADT7475 driver.  The first fixes
+the reading of the Enhanced Acoustics Register 2, and the second fixes th=
+e
+setting of the hysteresis registers.
 
-Thanks.
+Tony O'Brien (2):
+  hwmon: (adt7475) Display smoothing attributes in correct order
+    changes in v2:
+    - None
+  hwmon: (adt7475) Fix masking of hysteresis registers
+    changes in v2:
+    - Removed erroneous fix for clamping the hysteresis value. It
+      should be an absolute value and not a relative value.
 
-On Tue, 21 Feb 2023 at 22:17, Bagas Sanjaya <bagasdotme@gmail.com> wrote:
->
-> On Tue, Feb 21, 2023 at 05:24:27PM +0900, JaeJoon Jung wrote:
-> > The sched_class structure is defined to be sorted by pointer size.
-> > You can see it in the macro definition like this:
-> >
-> > kernel/sched/sched.h
-> > #define DEFINE_SCHED_CLASS(name)
-> > const struct sched_class name##_sched_class \
-> >         __aligned(__alignof__(struct sched_class)) \
-> >         __section("__" #name "_sched_class")
-> >
-> > include/asm-generic/vmlinux.lds.h
-> > #define SCHED_DATA \
-> > STRUCT_ALIGN(); \
-> > __sched_class_highest = .; \
-> > *(__stop_sched_class) \
-> > *(__dl_sched_class) \
-> > *(__rt_sched_class) \
-> > *(__fair_sched_class) \
-> > *(__idle_sched_class) \
-> > __sched_class_lowest = .;
-> >
-> > And in the System.map file,
-> > you can see that they are arranged in memory address order.
-> >
-> > System.map
-> > ----------------------------------------------------------------
-> > ffffffff8260d520 R __sched_class_highest
-> > ffffffff8260d520 R stop_sched_class
-> > ffffffff8260d5f0 R dl_sched_class
-> > ffffffff8260d6c0 R rt_sched_class
-> > ffffffff8260d790 R fair_sched_class
-> > ffffffff8260d860 R idle_sched_class
-> > ffffffff8260d930 R __sched_class_lowest
-> > ----------------------------------------------------------------
-> >
-> > This matches the sched class priority.
-> > In the prio_less() function in kernel/sched/core.c,
-> > the less value can be determined by pointer operation as follows.
-> >
-> > If the prio_less() function is modified as follows,
-> > the __task_prio() function is not required.
->
-> By what?
->
-> >
-> > Thanks,
-> >
-> >
-> > Signed-off-by: JaeJoon Jung <rgbi3307@gmail.com>
-> > ---
-> >  kernel/sched/core.c | 42 +++++++++++-------------------------------
-> >  1 file changed, 11 insertions(+), 31 deletions(-)
-> >
-> > diff --git a/kernel/sched/core.c b/kernel/sched/core.c
-> > index 2a4918a1faa9..75075d92a198 100644
-> > --- a/kernel/sched/core.c
-> > +++ b/kernel/sched/core.c
-> > @@ -151,21 +151,6 @@ __read_mostly int scheduler_running;
-> >
-> >  DEFINE_STATIC_KEY_FALSE(__sched_core_enabled);
-> >
-> > -/* kernel prio, less is more */
-> > -static inline int __task_prio(struct task_struct *p)
-> > -{
-> > - if (p->sched_class == &stop_sched_class) /* trumps deadline */
-> > - return -2;
-> > -
-> > - if (rt_prio(p->prio)) /* includes deadline */
-> > - return p->prio; /* [-1, 99] */
-> > -
-> > - if (p->sched_class == &idle_sched_class)
-> > - return MAX_RT_PRIO + NICE_WIDTH; /* 140 */
-> > -
-> > - return MAX_RT_PRIO + MAX_NICE; /* 120, squash fair */
-> > -}
-> > -
-> >  /*
-> >   * l(a,b)
-> >   * le(a,b) := !l(b,a)
-> > @@ -176,22 +161,17 @@ static inline int __task_prio(struct task_struct *p)
-> >  /* real prio, less is less */
-> >  static inline bool prio_less(struct task_struct *a, struct
-> > task_struct *b, bool in_fi)
-> >  {
-> > -
-> > - int pa = __task_prio(a), pb = __task_prio(b);
-> > -
-> > - if (-pa < -pb)
-> > - return true;
-> > -
-> > - if (-pb < -pa)
-> > - return false;
-> > -
-> > - if (pa == -1) /* dl_prio() doesn't work because of stop_class above */
-> > - return !dl_time_before(a->dl.deadline, b->dl.deadline);
-> > -
-> > - if (pa == MAX_RT_PRIO + MAX_NICE) /* fair */
-> > - return cfs_prio_less(a, b, in_fi);
-> > -
-> > - return false;
-> > +        int less = a->sched_class - b->sched_class;
-> > +        if (less == 0) {
-> > +                if (a->sched_class == &dl_sched_class)
-> > +                        return !dl_time_before(a->dl.deadline, b->dl.deadline);
-> > +
-> > +                else if (a->sched_class == &fair_sched_class)
-> > +                        return cfs_prio_less(a, b, in_fi);
-> > +                else
-> > +                        return false;
-> > +        } else
-> > +                return (less > 0) ? true : false;
-> >  }
->
-> I smell indentation-corrupted patch here. Please use git-send-email(1)
-> to submit patches.
->
-> For the patch subject, I can't imagine what are you doing since you
-> wrote too generic subject ("Modified foo") without clearly describe in
-> the patch description what are you doing. How can maintainers accept
-> your patch if you don't take care of how to describe it?
->
-> Last but not least, don't top-post when replying; reply inline with
-> appropriate context instead.
->
-> Thanks.
->
-> --
-> An old man doll... just what I always wanted! - Clara
+ drivers/hwmon/adt7475.c | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
+
+--=20
+2.39.2
+
