@@ -2,250 +2,194 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6019969F31A
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Feb 2023 12:02:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 584AF69F47F
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Feb 2023 13:27:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231601AbjBVLCE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Feb 2023 06:02:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55816 "EHLO
+        id S231707AbjBVM1P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Feb 2023 07:27:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51168 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229907AbjBVLCC (ORCPT
+        with ESMTP id S232014AbjBVM1M (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Feb 2023 06:02:02 -0500
-Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2064.outbound.protection.outlook.com [40.107.93.64])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD47D37F3D;
-        Wed, 22 Feb 2023 03:02:00 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=hBSOf4gDDg4VEA+0v9nqivzlVuZqmm4Uj5xF5W7NjHazkHxwPTycjLZjOsRxksA429DbiB1745j7YmaJx6NDLK1U05GnLO22u2uZh3cgwAGluu+aGjGEp0aGFOeBGXBW4GFPtXTaRK9jVWUnLFPt/pCqjOAd/03oRQnIKENiY0/UtPuKL4s9RE8opi4zZ7rjYCLZToVI0/HU+X43xHWiJulSwlRmLLYMNp3/6eq+ryzWmK8shPVDVVY4mLOMp4AAHERW3IJKIzYo6ke6wXTPmFus2+eGadl22sKCa3lcwfanVwS83lU21fZ9qNY+RTs2Qth18rwXD/m2XhMyogap7A==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=3jlfcYPUTSLmU+Hm+u46D5s/HQSMBjI3mN8gB8KisP0=;
- b=EpZ72gOq8NlMG0kFb/3LL9IwDEDrxF0ikq9yTfyobCry/i87G+RhQ8YQhKfMv80ZA463VcbH/eUhFFiopXQjrXXnMWCnFJrjA/v/0xXG56KYkfAqezsKVSRZl6DLbRzoK6wYZuyiOO/Aom5qdV23CJ7lFV0erNAvRDRTSRVSzAK2t1SBRPELAxsDy+v18IYzJKqR4pGUr36JfiMrUo0vosNEe9E3y8+hDs7TBQKhxLHfrYKHr4B2MEVmzRBWHGZJx0RI5xZC4uv/s7IbIc642j9PwfyUbFBxGITKANyd3EFQVilPRpG8qI9O2rxA5fueFg6s8AXR55W7EXuyPuVqhg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=3jlfcYPUTSLmU+Hm+u46D5s/HQSMBjI3mN8gB8KisP0=;
- b=ek65xw3DudBOk5Mk7OB5gebDPHoNXiULKDCsrW8wP1Kf1MOaXhGrsqJZuLJC5VlMflh1c5afPGXgpYYQZwOsu1W6nFlCV0H+GVKudGh0RCYtsHF+Q+XXc0UKy2eHnHbrJP5WNJA8JFbou56UWx1jM9rx+RbNYjZUhkc72+f1Ggw=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from DM6PR12MB3370.namprd12.prod.outlook.com (2603:10b6:5:38::25) by
- SJ0PR12MB7082.namprd12.prod.outlook.com (2603:10b6:a03:4ae::12) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6134.19; Wed, 22 Feb
- 2023 11:01:58 +0000
-Received: from DM6PR12MB3370.namprd12.prod.outlook.com
- ([fe80::4df2:b32a:e628:c57e]) by DM6PR12MB3370.namprd12.prod.outlook.com
- ([fe80::4df2:b32a:e628:c57e%7]) with mapi id 15.20.6134.019; Wed, 22 Feb 2023
- 11:01:58 +0000
-Message-ID: <7e158702-19fe-594d-6c94-5b5378848521@amd.com>
-Date:   Wed, 22 Feb 2023 06:01:55 -0500
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Content-Language: en-CA
-To:     Rob Clark <robdclark@gmail.com>, dri-devel@lists.freedesktop.org
-Cc:     Rob Clark <robdclark@chromium.org>,
-        Gustavo Padovan <gustavo@padovan.org>,
-        Tvrtko Ursulin <tvrtko.ursulin@intel.com>,
-        =?UTF-8?Q?Christian_K=c3=b6nig?= <ckoenig.leichtzumerken@gmail.com>,
-        =?UTF-8?Q?Michel_D=c3=a4nzer?= <michel@daenzer.net>,
-        open list <linux-kernel@vger.kernel.org>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        "moderated list:DMA BUFFER SHARING FRAMEWORK" 
-        <linaro-mm-sig@lists.linaro.org>,
-        Pekka Paalanen <ppaalanen@gmail.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        freedreno@lists.freedesktop.org,
-        =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
-        "open list:SYNC FILE FRAMEWORK" <linux-media@vger.kernel.org>
-References: <20230218211608.1630586-1-robdclark@gmail.com>
- <20230218211608.1630586-2-robdclark@gmail.com>
-From:   Luben Tuikov <luben.tuikov@amd.com>
-Subject: Re: [PATCH v4 01/14] dma-buf/dma-fence: Add deadline awareness
-In-Reply-To: <20230218211608.1630586-2-robdclark@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: YT4PR01CA0139.CANPRD01.PROD.OUTLOOK.COM
- (2603:10b6:b01:d5::6) To DM6PR12MB3370.namprd12.prod.outlook.com
- (2603:10b6:5:38::25)
+        Wed, 22 Feb 2023 07:27:12 -0500
+Received: from mailout4.samsung.com (mailout4.samsung.com [203.254.224.34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54AE037712
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Feb 2023 04:26:50 -0800 (PST)
+Received: from epcas5p3.samsung.com (unknown [182.195.41.41])
+        by mailout4.samsung.com (KnoxPortal) with ESMTP id 20230222121732epoutp04062c244c27f8d3a21d114f129bce7946~GJLCi7b8w0046600466epoutp042
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Feb 2023 12:17:32 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout4.samsung.com 20230222121732epoutp04062c244c27f8d3a21d114f129bce7946~GJLCi7b8w0046600466epoutp042
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1677068252;
+        bh=PSfpRN1ZrrDiozNhb/4WL/U0F9Nyc66kIfC4wuUaWIY=;
+        h=From:To:Cc:In-Reply-To:Subject:Date:References:From;
+        b=W6Zzjc59QZV4mw3Cwu4oVkauCKscjlMjHCvjm5Em/zbp4abDwOpbx3d3FTwGcMMkI
+         lAo3nIzMjv5w+NJjtam9vDc/dy1rGPUj4vZn5B3TnMpjtnqySYBe5Q/vpX3Xu8sNIA
+         wC6IesTfrWiqNefeCReE92Jyd+mb1yHkTjebh+vY=
+Received: from epsnrtp2.localdomain (unknown [182.195.42.163]) by
+        epcas5p2.samsung.com (KnoxPortal) with ESMTP id
+        20230222121731epcas5p2b3d75265b03c429bb449141e873cd028~GJLB1kR_92233922339epcas5p2v;
+        Wed, 22 Feb 2023 12:17:31 +0000 (GMT)
+Received: from epsmges5p3new.samsung.com (unknown [182.195.38.181]) by
+        epsnrtp2.localdomain (Postfix) with ESMTP id 4PMFXT6MjMz4x9Q1; Wed, 22 Feb
+        2023 12:17:29 +0000 (GMT)
+Received: from epcas5p2.samsung.com ( [182.195.41.40]) by
+        epsmges5p3new.samsung.com (Symantec Messaging Gateway) with SMTP id
+        0B.70.06765.9D706F36; Wed, 22 Feb 2023 21:17:29 +0900 (KST)
+Received: from epsmtrp2.samsung.com (unknown [182.195.40.14]) by
+        epcas5p1.samsung.com (KnoxPortal) with ESMTPA id
+        20230222091248epcas5p106a21c53641daa6173ed8b0c4d907f61~GGpwZ9b4f1901919019epcas5p14;
+        Wed, 22 Feb 2023 09:12:48 +0000 (GMT)
+Received: from epsmgms1p2.samsung.com (unknown [182.195.42.42]) by
+        epsmtrp2.samsung.com (KnoxPortal) with ESMTP id
+        20230222091248epsmtrp268eb4412e36cc41aada52e410bb65f1f~GGpwXhG2Y1700217002epsmtrp2-;
+        Wed, 22 Feb 2023 09:12:48 +0000 (GMT)
+X-AuditID: b6c32a4b-20fff70000011a6d-88-63f607d99d3e
+Received: from epsmtip2.samsung.com ( [182.195.34.31]) by
+        epsmgms1p2.samsung.com (Symantec Messaging Gateway) with SMTP id
+        8E.FD.17995.09CD5F36; Wed, 22 Feb 2023 18:12:48 +0900 (KST)
+Received: from FDSFTE308 (unknown [107.122.81.79]) by epsmtip2.samsung.com
+        (KnoxPortal) with ESMTPA id
+        20230222091245epsmtip267f5ba70273187d55ca7a71fd7f626ae~GGptSVn_70245402454epsmtip2H;
+        Wed, 22 Feb 2023 09:12:45 +0000 (GMT)
+From:   "Aakarsh Jain" <aakarsh.jain@samsung.com>
+To:     "'Krzysztof Kozlowski'" <krzysztof.kozlowski@linaro.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-media@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <devicetree@vger.kernel.org>
+Cc:     <m.szyprowski@samsung.com>, <andrzej.hajda@intel.com>,
+        <mchehab@kernel.org>, <hverkuil-cisco@xs4all.nl>,
+        <ezequiel@vanguardiasur.com.ar>, <jernej.skrabec@gmail.com>,
+        <benjamin.gaignard@collabora.com>, <stanimir.varbanov@linaro.org>,
+        <dillon.minfei@gmail.com>, <david.plowman@raspberrypi.com>,
+        <mark.rutland@arm.com>, <robh+dt@kernel.org>, <krzk+dt@kernel.org>,
+        <andi@etezian.org>, <alim.akhtar@samsung.com>,
+        <aswani.reddy@samsung.com>, <pankaj.dubey@samsung.com>,
+        <linux-fsd@tesla.com>
+In-Reply-To: <1c5eae73-04fa-722c-b6b2-8a39576ad1c5@linaro.org>
+Subject: RE: [Patch v3 01/15] dt-bindings: media: s5p-mfc: Add new DT schema
+ for MFC
+Date:   Wed, 22 Feb 2023 14:42:43 +0530
+Message-ID: <000001d9469d$d537bd30$7fa73790$@samsung.com>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DM6PR12MB3370:EE_|SJ0PR12MB7082:EE_
-X-MS-Office365-Filtering-Correlation-Id: 8382c51c-1521-455a-b117-08db14c4372f
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: WiT+SMuIZguggGauLnBVv1RAzuzHIJXcXOupMcuAJOF2NLnioQPLIbFKvOu7tlDS2xkDWEdBPWJpsv0NRZ5kgTw34qk8wkU2RPPoyRDaM1g/rS+2z1Ckr1vYTFutWj2HQfy3xSBoRT0UulFZoI8UDFLaeG0oIuVnfOCfaeFsL3aj3NosIQllrY1bMdAe0pMRmDr4+fcjIebu5ce9TlxUlf0hlI42rN1aDHMlmWP22oGq9NfAUkHLGPT5G5c+7GDN0AIEgEuyfPcXLbAnvEePnsoQklIUHZ7WbyhnqQqQlRKCgVbULE32UJyBT3Ai4FCBD1+VtJD/5rSgK1IVHMp+YvKkDPpWgM6rnC7ITW3x/I0CXt/+gPfeGrILG+J5TBKKLlLnvW/UOOlSoGVOpRydV5Heo2jkz7t4fE967MYPSO01jcSwL+xpew/t71mv9KEZjXZmA6DFcBLQ9GJ8xIunzezbigv497gJ3mKzFzSdKK0ACY1vAxs7wxEua1u+Fvf2Z8q2rvZyY3aQMzxJMD+UZo4QfNgJGUdcSJF1GHJ3e6I620Gpn1kpNxiOx0b47LRO0IWBHlUwtSvdT8oUaka35Y/dS1LKJv10fFgTTfwxJj6ux7JX3hpM2J8WDWHK6FGnsBtRxkzGQK43CJVc9gLxyMxWpgzkt8xOska9k9pFwtcRpQ7mE6lUhnielObVsrAEB3aH/vsxX+NB8Lr4JB9Ep8jmuDy/hCmr22tI9Wuicmo=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR12MB3370.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(346002)(396003)(366004)(39860400002)(376002)(136003)(451199018)(31686004)(66574015)(36756003)(5660300002)(2906002)(44832011)(7416002)(83380400001)(6486002)(6506007)(6512007)(55236004)(53546011)(54906003)(31696002)(478600001)(86362001)(41300700001)(6666004)(2616005)(38100700002)(186003)(26005)(66556008)(8676002)(66476007)(316002)(4326008)(8936002)(66946007)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?andCU1Jnc252dTBxd09Fc0RueGhPL2RNODhQNlIyT2dYeCs2WWxucHN0K3Fu?=
- =?utf-8?B?ZEc2ck1XNXpMY0tvRE1leVJPQkhBblNIZC9lWHFQYVZ5OC9DSjNPdkUxOENa?=
- =?utf-8?B?L0RlOU96Y0JEdE9saWpIdmdxN3hpM2w0M3dEYm1XTjZROE9UYTcwUExDMkRO?=
- =?utf-8?B?cGRoNkxsaEhvUkFud2dmMTNyZXBNMkdGdzF4c1ZFc2g1YTJwUW5zRFRramFK?=
- =?utf-8?B?SlJyOW1sKzhWcWdiN2dJV2huNjFpNlVYNUFreDZIazc3RkR3akFOSkpJeVAw?=
- =?utf-8?B?UG9xcmx2R0x4NFd2ajBDL0I3QVQ0aWpnWUV0OGdONlEzTXR0UWYzM2Q5VElN?=
- =?utf-8?B?UzdBamNxeXU2eStPS2dsT1dFRHl4bkV4dU5PNTcxVFp3eU1YMjJOZXJNY3ZZ?=
- =?utf-8?B?WjhWNTR0OFhkR1Z6M0RNOHNuWk5QcjkrSFYrRUtzVU1SK1RlSFFBTm9hL1Nv?=
- =?utf-8?B?YjgrU1BlbjZDUHdENVgxbzhCQ1NJN3NsMnpkaGU4dEhxUTlBRlUwSG1VL1JD?=
- =?utf-8?B?R0hyTHNiamVGRDg1dUcvNWRkWnFNN056cmx2OGdGYzdhUG05cXdoN2ozUkwv?=
- =?utf-8?B?Y2MzMUZQMmVWZW4vc3g2alNOQ1hzSHJMblo0QlhmSE1SckxiYXJaL1poUmtt?=
- =?utf-8?B?SmNlSDJIbXBmUm5yYnBqdStjYVZUZUIrTG5WczdPUlcwcTZ0UVJnM3lzQTB1?=
- =?utf-8?B?UWQ1RlNhRTZsTzlIMHJpUnY4YndhYUlxYkU5dzdKZEZma1dXR3I3QnRUejh0?=
- =?utf-8?B?VG1KbkdTanE5clgrV3pLdUVndStsUC9TOGVQUWluSXFEcFhDdXhvZ0oxaGx4?=
- =?utf-8?B?bTYrOENRWFB5Sk1RMkUydnZzcWRad2Z0a1hxYW5WZmdkWHYyNGtNYTE5WkY0?=
- =?utf-8?B?SGI3bm55bjBBOXZabGtxWVlRWXdNNVJieUxmMVVYOVBhdmFUamZXdUQ0VGlS?=
- =?utf-8?B?UHpnMi9oUkdrUXNHbmllMmdtU3NENnZsQjlaSFlkVGQ5eGFHeCtLMkJBRHhp?=
- =?utf-8?B?ZXJ1TjYxWlc2RDQrSWRicFdkVUhZWFRyWGY2UmFNbWd5Vzd5WW1YV25nRlF3?=
- =?utf-8?B?ZDZ1RmdkdVRteHZpK1FLS3JZN2dmRzhKUS9zWHZrSFpjamVmWmNzUjUzaHo4?=
- =?utf-8?B?bmRiTWlhQkxEaEpZY0Z4ZjhPS2svS3BnU28rckNYZURTQ0VHYmFlYWNicFp4?=
- =?utf-8?B?d281U21nOXpSWFNSVDZCOUJLTFNJbTFKdy8vR25JcGxmOWRSSUM1bzg5RWtC?=
- =?utf-8?B?NlI2ZFg4UTZWKzdpamphWDZuTGlZNkJ3bjFsVHI5YVQvWHhIRHZuNkRLYlFG?=
- =?utf-8?B?UUNkbnduczRGYVdad1pEWC92blNMOXZkSXJmR3BVdW5WdFBHNGxETENUWmJv?=
- =?utf-8?B?N1VvM3kwbjVWWWRWd3NyOG9nL2J3SkQ4Q2Q5MmZTZ2ZMUnp1V2NyYlBQZW9V?=
- =?utf-8?B?WVBUNmtxS3MvYXU4c3ZWanhsRnRMZTJQeHkwYkxseFNFSjRHeWhUQVFlRmZD?=
- =?utf-8?B?RjlpU1ZSWHdxUDl3OWI3SmgvQ2V1Q2o1UDM5V3MwY2xzbThMdHNBb3ZmRkVJ?=
- =?utf-8?B?REtQaGlCdWlJVFV1ZWFHNktiMVpnMlV2Z2FtUXB2NzJNTm1pd0diOXhEeHRq?=
- =?utf-8?B?RjdJUGZqU25JQVhEOWtLQmx6ZWhUTWhvbHZJNFpWMHdpdFA2cytScVUrOXhy?=
- =?utf-8?B?aHNPUTJsZ09jcS83UGd4ZHBlWnRlcldFdVQwNWlZdjBhUlF0RUdnNldqeHlX?=
- =?utf-8?B?TEI0MXhOSGVTWVlOaHJybm40c0lrckdvV0h4akk4dWVyUE50aGw3VDBuQ0Fu?=
- =?utf-8?B?SGtQM3NESDVLcy84L0ZKdG1BNEtRZWdEckdkSGQ3OXc5T3JsYmlWZmRZWVE4?=
- =?utf-8?B?VC9MTVgxcDdtamlwZDAvbVNhN0hYRlFraVRrZWxzSmZwdVVxWk1paUQrTm1R?=
- =?utf-8?B?RjBvdmF1cFJUdE5DK1o2RE95S0g3ckxUOTJpUmt3ZktrQ045cmdiWHRHczFt?=
- =?utf-8?B?cFM0UngwV0pidlFhbmx2emRCQ2hGLzZYaDVoWjVIQmE3bkZTL3Z3dDM4cFkz?=
- =?utf-8?B?aHhsNUZqd3ZVUjAxNlRSUzFxcmwxQmRmRVJZS0tGeXFzSk9WN1doYTAxeHNK?=
- =?utf-8?Q?ad7hZ95luVnnt4XdQ/TeG2/ka?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 8382c51c-1521-455a-b117-08db14c4372f
-X-MS-Exchange-CrossTenant-AuthSource: DM6PR12MB3370.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 22 Feb 2023 11:01:57.8824
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: jvPbPrYnOXOMX0pbPG+9VwOtueSZgrAKnJ9aPmNwGMdQ5s7+0WBRuCJ/KNNo5hbd
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR12MB7082
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Mailer: Microsoft Outlook 16.0
+Thread-Index: AQIjXZOHgvokXGuofbg3rWbxTFZEMQGGfBLcASb/h3kBi+ufA64koKHw
+Content-Language: en-in
+X-Brightmail-Tracker: H4sIAAAAAAAAA02Te0xTdxTH8+u9fUBSuBQXfsNp8C7MAQFaLHAxoGYacuOTxWwamJam3FBC
+        X+str+0PkMEYL4eKOjsEBewSxsCV90sZlDCq0TEcFVMQeQQLUVnrGCjOtVzY+O9zzvme3/ec
+        3y8/HiK4zPXlpah0lFYlVeAcd7S1P+DD4DHukkx45o2QmKxs5RA1y3Ms4nGNAyX6mlq4RPOD
+        7xHih8FeNlFluscm2n6ZQomfnzqrw1fGUWKuqgEQNv0Eh+hZcIqN06Ns4sn8CWKks4JDlNxs
+        YRM/mca5xA3LMIswGFdZRHXLSy6R32PiEnlfm1j7fMj6ynpAto/XAtJSa0fIDv04l6zptrFI
+        Y10hh7SOdnPIptpsMn/gFUqeba4D5D+5V7lkkcnCIR3G7aT5Lwc3ziM+NVpOSZMorR+lkqmT
+        UlTJMfih45L9kvAIoShYFEVE4n4qqZKKwQ8cjguOTVE4bwD3S5cq0pypOClN46F7orXqNB3l
+        J1fTuhic0iQpNGJNCC1V0mmq5BAVpdstEgrDwp3CxFT5865ioJnFMntt4hzQ5lEE3HgQE8Pi
+        W3ZQBNx5AqwLwJwxA4cJ7ABO/lGwHjgAbBtZARst95YWWUyhE8DesQ6UCeYAPNv4O8ul4mCh
+        8LG5hO0qbMEGnGc1P0FcAYL9jcDZ2zMcl8oN2wPLLxoQF3tjn8I80zLbxSjmD5vba1AX87Eo
+        aL7QjzDsBYeuzKzlESwIGq4vIMxMfnBl1uDs5TndYuHL3COMxAcOrJSs+ULM7AYf3TGzGf0B
+        aDYZuQx7w/nB5nX2hY7nPRyGZXC62rZ+vgI2dpejDO+FvQ8qUJcXggXAxs5QJr0NXjQ3sBhf
+        D1j6eobF5PmwvXKDP4AV1uX1Ed6D/T/eAGUA12/aTL9pM/2mFfT/u10DaB14l9LQymSKDtfs
+        UlEZ/724TK00grUfEnioHUxNLob0ARYP9AHIQ/At/Ld8h0zAT5JmfUFp1RJtmoKi+0C487rP
+        Ib7vyNTOL6bSSUTiKKE4IiJCHLUrQoT78HfGDMkEWLJUR6VSlIbSbvSxeG6+OSw0aMq/7M/f
+        jIlxSxhujpymLa2+NrF5+JrBUrWt3i3jk5GDUSdjKuRTdx3zBZJsTuwdIt0+MTf7ML+ksvZ1
+        mOC74+MvrGOeixcsGQfPdJ/KLl0+r2rKP7bT8Kz6m6O7T7eshnWdTsp6dL7ae9Tff6utZOEg
+        cvNzi+jbvMzQrUjrxEOl5wv3Nzs6qFuGu5F7g6LjvT5buF+u2N53tGLxtl3u8Wtzof1kPftZ
+        gZK+9PY6bHg/5NxS3qR1VS6wDkg8yxJPTSasNg6+uhRwOHDo457ZBZxbuiPL+jSBvf+jI/ov
+        ky1kenz5sVzrWCzsirXts1/t0qKF90985SXrNA8X1ydkXsZRWi4VBSJaWvovFT6ouKoEAAA=
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFvrPIsWRmVeSWpSXmKPExsWy7bCSvO6EO1+TDZ7dMrV4MG8bm8XiH8+Z
+        LO4v/sxicWjzVnaLLVdmM1ssP36A1WL+kXOsFtsPPmKx2PgCKHtx5l0Wi+fz1zFavJx1j81i
+        72ug4k2Pr7FaPHwVbnF51xw2i54NW1kt1h65y26x9PpFJotlm/4wWSza+oXdonXvEXaLlrYj
+        TA7iHmvmrWH02HF3CaPH9SWfmD12zrrL7rF4z0smj02rOtk87lzbw+axeUm9R+vRXywefVtW
+        MXr8a5rL7tF15Dqbx+dNch6nvn5mD+CL4rJJSc3JLEst0rdL4Mo4eXgCU8F8gYq9m44wNzB+
+        5O1i5OSQEDCROPftA1MXIxeHkMAORon+DztZIBIyEv/bjrFD2MISK/89Z4coesooMXPWEyaQ
+        BJuAvsT9Uz2sIAkRgZNA3WdawBxmgW4WicZXrVBzPzNKnDx8HWwWp4CdxJSpy5i7GDk4hAVC
+        JHZ/qwMJswioSmzZsRhsNa+ApcSpyYeZIWxBiZMzn4DFmQW0JZ7efApnL1v4mhniPAWJn0+X
+        sYKMFBFwk/jS5AtRIi5x9GcP8wRG4VlIJs1CMmkWkkmzkLQsYGRZxSiZWlCcm55bbFhglJda
+        rlecmFtcmpeul5yfu4kRnEa0tHYw7ln1Qe8QIxMH4yFGCQ5mJRHe/7yfk4V4UxIrq1KL8uOL
+        SnNSiw8xSnOwKInzXug6GS8kkJ5YkpqdmlqQWgSTZeLglGpgurgvOTr1JtPGc0XT35rPZZ+2
+        +OIPiSS9nBitncF/714tPxLfr+w6/f5a3/Ctn15vbW5+72rmcczL7KN4EZ+t/dlcdc1Uybjk
+        a37iKZN2+Wtwm1dVMfC8vbHt9dSse1svdVRuT2h1NVm+/Ur5efWnnHy3y/yKi212x+7fF2Sa
+        oKW9cqf6IyGPx5yXrNa5Lvw5T7BL09Qu28en9IWb+Z1b5pr2cv/3PD7kXL1j7ufl2k8CpH6t
+        OfP2LK+mhcqH1Ql2AY4WhbzCXEbP/21udL3Ktzv9VbffZeYuZaaV5Yn3fj2Y22Wka3Dxme9h
+        /uJX3FnR9/VvLptzcdICsw2LnD5+9LM0PNjgneHN/JopRDhZiaU4I9FQi7moOBEADCwZnpID
+        AAA=
+X-CMS-MailID: 20230222091248epcas5p106a21c53641daa6173ed8b0c4d907f61
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+X-Sendblock-Type: REQ_APPROVE
+CMS-TYPE: 105P
+DLP-Filter: Pass
+X-CFilter-Loop: Reflected
+X-CMS-RootMailID: 20221011125142epcas5p13c858a5f27830fb1de50fa51e9730eca
+References: <20221011122516.32135-1-aakarsh.jain@samsung.com>
+        <CGME20221011125142epcas5p13c858a5f27830fb1de50fa51e9730eca@epcas5p1.samsung.com>
+        <20221011122516.32135-2-aakarsh.jain@samsung.com>
+        <1c5eae73-04fa-722c-b6b2-8a39576ad1c5@linaro.org>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        PDS_BAD_THREAD_QP_64,RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023-02-18 16:15, Rob Clark wrote:
-> From: Rob Clark <robdclark@chromium.org>
-> 
-> Add a way to hint to the fence signaler of an upcoming deadline, such as
-> vblank, which the fence waiter would prefer not to miss.  This is to aid
-> the fence signaler in making power management decisions, like boosting
-> frequency as the deadline approaches and awareness of missing deadlines
-> so that can be factored in to the frequency scaling.
-> 
-> v2: Drop dma_fence::deadline and related logic to filter duplicate
->     deadlines, to avoid increasing dma_fence size.  The fence-context
->     implementation will need similar logic to track deadlines of all
->     the fences on the same timeline.  [ckoenig]
-> v3: Clarify locking wrt. set_deadline callback
-> 
-> Signed-off-by: Rob Clark <robdclark@chromium.org>
-> Reviewed-by: Christian König <christian.koenig@amd.com>
-> ---
->  drivers/dma-buf/dma-fence.c | 20 ++++++++++++++++++++
->  include/linux/dma-fence.h   | 20 ++++++++++++++++++++
->  2 files changed, 40 insertions(+)
-> 
-> diff --git a/drivers/dma-buf/dma-fence.c b/drivers/dma-buf/dma-fence.c
-> index 0de0482cd36e..763b32627684 100644
-> --- a/drivers/dma-buf/dma-fence.c
-> +++ b/drivers/dma-buf/dma-fence.c
-> @@ -912,6 +912,26 @@ dma_fence_wait_any_timeout(struct dma_fence **fences, uint32_t count,
->  }
->  EXPORT_SYMBOL(dma_fence_wait_any_timeout);
->  
-> +
-> +/**
 
-The added empty line above creates a problem for scripts/checkpatch.pl--and
-there's a few others here and there. It'd be a good idea to run this series
-through checkpatch.pl, if at least informatively.
 
-I wasn't able to apply patch 13 to drm-misc-next or any other known to me
-branch, and I didn't see base tree information in the cover letter. I skipped
-it and it compiled okay without it.
--- 
-Regards,
-Luben
+> -----Original Message-----
+> From: Krzysztof Kozlowski =5Bmailto:krzysztof.kozlowski=40linaro.org=5D
+> Sent: 21 February 2023 21:56
+> To: aakarsh jain <aakarsh.jain=40samsung.com>; linux-arm-
+> kernel=40lists.infradead.org; linux-media=40vger.kernel.org; linux-
+> kernel=40vger.kernel.org; devicetree=40vger.kernel.org
+> Cc: m.szyprowski=40samsung.com; andrzej.hajda=40intel.com;
+> mchehab=40kernel.org; hverkuil-cisco=40xs4all.nl;
+> ezequiel=40vanguardiasur.com.ar; jernej.skrabec=40gmail.com;
+> benjamin.gaignard=40collabora.com; stanimir.varbanov=40linaro.org;
+> dillon.minfei=40gmail.com; david.plowman=40raspberrypi.com;
+> mark.rutland=40arm.com; robh+dt=40kernel.org; krzk+dt=40kernel.org;
+> andi=40etezian.org; alim.akhtar=40samsung.com; aswani.reddy=40samsung.com=
+;
+> pankaj.dubey=40samsung.com; linux-fsd=40tesla.com; smitha.t=40samsung.com
+> Subject: Re: =5BPatch v3 01/15=5D dt-bindings: media: s5p-mfc: Add new DT
+> schema for MFC
+>=20
+> On 11/10/2022 14:25, aakarsh jain wrote:
+> > From: Smitha T Murthy <smitha.t=40samsung.com>
+> >
+> > Convert DT schema for s5p-mfc in yaml format
+> >
+> > Cc: linux-fsd=40tesla.com
+> > Signed-off-by: Smitha T Murthy <smitha.t=40samsung.com>
+> > Signed-off-by: Aakarsh Jain <aakarsh.jain=40samsung.com>
+> > ---
+> >  .../devicetree/bindings/media/s5p-mfc.txt     =7C  75 --------
+> >  .../bindings/media/samsung,s5p-mfc.yaml       =7C 163
+> ++++++++++++++++++
+>=20
+> Hi Aakarsh,
+>=20
+> Any plans for new version of this DT schema conversion? The Samsung MFC
+> is one of last remaining bigger pieces for conversion. We already have 10=
+0%
+> bindings compliance for ARM64 but the MFC is missing for ARMv7:
+>=20
+> https://protect2.fireeye.com/v1/url?k=3D9661b377-f7eaa63c-96603838-
+> 74fe485fb305-bc4c89dbd0204557&q=3D1&e=3D1485ea1d-43e8-4541-8078-
+> 4d13ff6cc42f&u=3Dhttps%3A%2F%2Fpastebin.com%2FD8jXnjEe
+> (that's on my pending branch with all patches from LKML collected).
+>=20
+> Best regards,
+> Krzysztof
 
-> + * dma_fence_set_deadline - set desired fence-wait deadline
-> + * @fence:    the fence that is to be waited on
-> + * @deadline: the time by which the waiter hopes for the fence to be
-> + *            signaled
-> + *
-> + * Inform the fence signaler of an upcoming deadline, such as vblank, by
-> + * which point the waiter would prefer the fence to be signaled by.  This
-> + * is intended to give feedback to the fence signaler to aid in power
-> + * management decisions, such as boosting GPU frequency if a periodic
-> + * vblank deadline is approaching.
-> + */
-> +void dma_fence_set_deadline(struct dma_fence *fence, ktime_t deadline)
-> +{
-> +	if (fence->ops->set_deadline && !dma_fence_is_signaled(fence))
-> +		fence->ops->set_deadline(fence, deadline);
-> +}
-> +EXPORT_SYMBOL(dma_fence_set_deadline);
-> +
->  /**
->   * dma_fence_describe - Dump fence describtion into seq_file
->   * @fence: the 6fence to describe
-> diff --git a/include/linux/dma-fence.h b/include/linux/dma-fence.h
-> index 775cdc0b4f24..d77f6591c453 100644
-> --- a/include/linux/dma-fence.h
-> +++ b/include/linux/dma-fence.h
-> @@ -99,6 +99,7 @@ enum dma_fence_flag_bits {
->  	DMA_FENCE_FLAG_SIGNALED_BIT,
->  	DMA_FENCE_FLAG_TIMESTAMP_BIT,
->  	DMA_FENCE_FLAG_ENABLE_SIGNAL_BIT,
-> +	DMA_FENCE_FLAG_HAS_DEADLINE_BIT,
->  	DMA_FENCE_FLAG_USER_BITS, /* must always be last member */
->  };
->  
-> @@ -257,6 +258,23 @@ struct dma_fence_ops {
->  	 */
->  	void (*timeline_value_str)(struct dma_fence *fence,
->  				   char *str, int size);
-> +
-> +	/**
-> +	 * @set_deadline:
-> +	 *
-> +	 * Callback to allow a fence waiter to inform the fence signaler of
-> +	 * an upcoming deadline, such as vblank, by which point the waiter
-> +	 * would prefer the fence to be signaled by.  This is intended to
-> +	 * give feedback to the fence signaler to aid in power management
-> +	 * decisions, such as boosting GPU frequency.
-> +	 *
-> +	 * This is called without &dma_fence.lock held, it can be called
-> +	 * multiple times and from any context.  Locking is up to the callee
-> +	 * if it has some state to manage.
-> +	 *
-> +	 * This callback is optional.
-> +	 */
-> +	void (*set_deadline)(struct dma_fence *fence, ktime_t deadline);
->  };
->  
->  void dma_fence_init(struct dma_fence *fence, const struct dma_fence_ops *ops,
-> @@ -583,6 +601,8 @@ static inline signed long dma_fence_wait(struct dma_fence *fence, bool intr)
->  	return ret < 0 ? ret : 0;
->  }
->  
-> +void dma_fence_set_deadline(struct dma_fence *fence, ktime_t deadline);
-> +
->  struct dma_fence *dma_fence_get_stub(void);
->  struct dma_fence *dma_fence_allocate_private_stub(void);
->  u64 dma_fence_context_alloc(unsigned num);
+Hi Krzysztof,
+
+I was little occupied with other stuff. I will fix all warnings and errors.=
+ Will post the patch soon.
+
+Thanks,
+Aakarsh
+
 
