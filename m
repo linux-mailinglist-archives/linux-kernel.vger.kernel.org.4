@@ -2,119 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A139069F27D
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Feb 2023 11:08:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7FCFA69F279
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Feb 2023 11:07:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231630AbjBVKIJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Feb 2023 05:08:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46946 "EHLO
+        id S232238AbjBVKHg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Feb 2023 05:07:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45846 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231357AbjBVKIG (ORCPT
+        with ESMTP id S231272AbjBVKHf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Feb 2023 05:08:06 -0500
-Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B7A5F525B;
-        Wed, 22 Feb 2023 02:08:02 -0800 (PST)
-Received: from loongson.cn (unknown [113.200.148.30])
-        by gateway (Coremail) with SMTP id _____8BxttiB6fVjT4sDAA--.6824S3;
-        Wed, 22 Feb 2023 18:08:01 +0800 (CST)
-Received: from [10.130.0.149] (unknown [113.200.148.30])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8BxtOV+6fVjeas4AA--.4362S3;
-        Wed, 22 Feb 2023 18:07:58 +0800 (CST)
-Subject: Re: [PATCH] docs/bpf: Fix invalid link of "Documentation/bpf/btf.rst"
-To:     Bagas Sanjaya <bagasdotme@gmail.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>
-References: <1677035401-3628-1-git-send-email-yangtiezhu@loongson.cn>
- <Y/XYM4D1SW/zyhNJ@debian.me>
-Cc:     bpf@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-From:   Tiezhu Yang <yangtiezhu@loongson.cn>
-Message-ID: <566b4d43-f952-8038-ec2f-988be014274f@loongson.cn>
-Date:   Wed, 22 Feb 2023 18:06:55 +0800
-User-Agent: Mozilla/5.0 (X11; Linux mips64; rv:45.0) Gecko/20100101
- Thunderbird/45.4.0
+        Wed, 22 Feb 2023 05:07:35 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E2E226CE1;
+        Wed, 22 Feb 2023 02:07:34 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E927161312;
+        Wed, 22 Feb 2023 10:07:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 39269C433EF;
+        Wed, 22 Feb 2023 10:07:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1677060453;
+        bh=UQvctXk/GLWwF1i1WLEHlMRX57m9FXDXBJWODixJVXM=;
+        h=From:To:Cc:Subject:References:Date:In-Reply-To:From;
+        b=LStlCqseFqHzo7ep3cx14uhZ6oJcIRoj9O15AUv5oqgnmERcIb7n+QtI0tloQntU/
+         PVyUhvJXT3mJ9sOOV5ZeS467VW020RjWHspw/PzksWb5fft749RM06t6FOiNll27Ww
+         mioIw5BVSh3ZdFimuVgJ6xNp/trBja+olvIEVz42kYOeezDBZ1t68D/NMJColEpJPM
+         wtS5149nGSybPRxbvkfRxUNCy/mF3C04BVp2a9iWkPOfFHN7oABGjxtoLKspHZgY4l
+         7KSmF4gieBCBTqRj1yVfYb1lZqYhE9at+aKzczj2T8mKRsUVFkKMUnBrTts/5Wnbcr
+         wNZ4X/2zRdpzA==
+From:   Kalle Valo <kvalo@kernel.org>
+To:     Christian Marangi <ansuelsmth@gmail.com>
+Cc:     "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, ath11k@lists.infradead.org,
+        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Dan Carpenter <error27@gmail.com>
+Subject: Re: [PATCH] wifi: ath11k: fix SAC bug on peer addition with sta band migration
+References: <20230209222622.1751-1-ansuelsmth@gmail.com>
+        <167688346963.21606.5485334408823363188.kvalo@kernel.org>
+        <63f3c697.5d0a0220.8f9f5.c859@mx.google.com>
+Date:   Wed, 22 Feb 2023 12:07:29 +0200
+In-Reply-To: <63f3c697.5d0a0220.8f9f5.c859@mx.google.com> (Christian Marangi's
+        message of "Mon, 20 Feb 2023 14:51:05 +0100")
+Message-ID: <874jret3mm.fsf@kernel.org>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
 MIME-Version: 1.0
-In-Reply-To: <Y/XYM4D1SW/zyhNJ@debian.me>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-CM-TRANSID: AQAAf8BxtOV+6fVjeas4AA--.4362S3
-X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
-X-Coremail-Antispam: 1Uk129KBjvJXoW7KFW7Ww15tF43Gr1fWw45Jrb_yoW8Aw13pa
-        18JF4a9rsrKryrW3ykGa1UZF4SvayrX3W7C34DJw18Zrn8ZF95Zr1S9r45WanxtFykCFW7
-        A3ZakF909r17Z37anT9S1TB71UUUUUDqnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
-        qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
-        bIxYFVCjjxCrM7AC8VAFwI0_Jr0_Gr1l1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s
-        1l1IIY67AEw4v_Jrv_JF1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xv
-        wVC0I7IYx2IY67AKxVW8JVW5JwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwA2z4
-        x0Y4vEx4A2jsIE14v26r4UJVWxJr1l84ACjcxK6I8E87Iv6xkF7I0E14v26F4UJVW0owAS
-        0I0E0xvYzxvE52x082IY62kv0487Mc804VCY07AIYIkI8VC2zVCFFI0UMc02F40EFcxC0V
-        AKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUXVWUAwAv7VC2z280aVAFwI0_Cr0_Gr1U
-        McvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvEwIxGrwCYjI0SjxkI62AI1cAE67vIY487Mx
-        AIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_
-        Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUtVW8ZwCIc40Y0x0EwI
-        xGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVWUJVW8
-        JwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcV
-        C2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7IU1A9N7UUUUU==
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Christian Marangi <ansuelsmth@gmail.com> writes:
 
+> On Mon, Feb 20, 2023 at 08:57:51AM +0000, Kalle Valo wrote:
+>> Christian Marangi <ansuelsmth@gmail.com> wrote:
+>> 
+>> > Fix sleep in atomic context warning detected by Smatch static checker
+>> > analyzer.
+>> > 
+>> > Following the locking pattern for peer_rhash_add lock tbl_mtx_lock mutex
+>> > always even if sta is not transitioning to another band.
+>> > This is peer_add function and a more secure locking should not cause
+>> > performance regression.
+>> > 
+>> > Fixes: d673cb6fe6c0 ("wifi: ath11k: fix peer addition/deletion
+>> > error on sta band migration")
+>> > Reported-by: Dan Carpenter <error27@gmail.com>
+>> > Signed-off-by: Christian Marangi <ansuelsmth@gmail.com>
+>> > Signed-off-by: Kalle Valo <quic_kvalo@quicinc.com>
+>> 
+>> I assume you only compile tested this and I'll add that to the commit log. It's
+>> always good to know how the patch was tested.
+>> 
+>
+> Hi, I just got time to test this and works correctly on my Xiaomi
+> AX3600.
+>
+> Tested-on: IPQ8074 hw2.0 AHB WLAN.HK.2.5.0.1-01208-QCAHKSWPL_SILICONZ-1
 
-On 02/22/2023 04:54 PM, Bagas Sanjaya wrote:
-> On Wed, Feb 22, 2023 at 11:10:01AM +0800, Tiezhu Yang wrote:
->> "Documentation/bpf/btf.rst" is linked to the following invalid web page:
->>
->> https://www.kernel.org/doc/html/latest/bpf/btf.rst
->>
->> The correct link should be:
->>
->> https://www.kernel.org/doc/html/latest/bpf/btf.html
->>
->> Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
->
-> Hi,
->
-> I have already submitted a different fix to the same problem at [1] (v2
-> at [2]). Please take a look at there.
+Thanks, I'll add this to the commit log.
 
-Oh, I am sorry, I did not notice these patches, I found this issue when
-I read the bpf doc.
+-- 
+https://patchwork.kernel.org/project/linux-wireless/list/
 
->
-> [1]: https://lore.kernel.org/linux-doc/20230219030956.22662-1-bagasdotme@gmail.com/
-> [2]: https://lore.kernel.org/linux-doc/20230222083530.26136-1-bagasdotme@gmail.com/
->
->> diff --git a/Documentation/bpf/bpf_devel_QA.rst b/Documentation/bpf/bpf_devel_QA.rst
->> index 03d4993..f54c328 100644
->> --- a/Documentation/bpf/bpf_devel_QA.rst
->> +++ b/Documentation/bpf/bpf_devel_QA.rst
->> @@ -690,6 +690,7 @@ when:
->>     https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/tools/testing/selftests/bpf/
->>  .. _Documentation/dev-tools/kselftest.rst:
->>     https://www.kernel.org/doc/html/latest/dev-tools/kselftest.html
->> -.. _Documentation/bpf/btf.rst: btf.rst
->> +.. _Documentation/bpf/btf.rst:
->> +   https://www.kernel.org/doc/html/latest/bpf/btf.html
->>
->>  Happy BPF hacking!
->
-> For consistency with my fix above, can you please convert these in-tree links
-> from using external link to simply write the doc path instead?
->
-> Thanks.
->
-
-Please ignore my patch, you can go on to modify your changes.
-Please let me know if there is anything I need to do.
-
-Thanks,
-Tiezhu
-
+https://wireless.wiki.kernel.org/en/developers/documentation/submittingpatches
