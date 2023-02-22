@@ -2,155 +2,207 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 97F2169FC5E
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Feb 2023 20:42:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3C0FB69FC61
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Feb 2023 20:43:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231820AbjBVTmS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Feb 2023 14:42:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47192 "EHLO
+        id S232355AbjBVTnE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Feb 2023 14:43:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47976 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231263AbjBVTmO (ORCPT
+        with ESMTP id S231585AbjBVTnC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Feb 2023 14:42:14 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6BE12B297
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Feb 2023 11:42:13 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4FC0461548
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Feb 2023 19:42:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BC49AC433A1
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Feb 2023 19:42:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1677094932;
-        bh=vl0l+s6Au0VrCtGm/qqHU/k7GVH6k2EtTrSSl0Zhot0=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=AoBtCha7XHGGEGXhBihl0q0FjheYkXmMDXIDQeyCqq9e4j3QVsq8kSi3SwqtJ4Dfu
-         YpkKLwiDnjdZRBpbnAIDaKPgIXZLsoOO71euJ3cp+C90Qx+iuwB0BNose8YDv9Z7ma
-         IN+0tFHauTP4+f50SqxjhNZOXO9u0jztk7s5am+dDHZXnvD/mMA3QTU3bhCfxEgSD8
-         niGpbGcL7q7LikbR6r+2kxUuKzc+iq2LPx00sEPp+4YkCmsNStwRx3dmS+TIUKE0Nu
-         ogaBkDxgywS9BJyjnnpb17iy9XyR3oK/fcEtkn8O9PdYbk2Mtf96VuuHueREbdyC0O
-         +Myzu4oaIDbRA==
-Received: by mail-ed1-f50.google.com with SMTP id s26so34929734edw.11
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Feb 2023 11:42:12 -0800 (PST)
-X-Gm-Message-State: AO0yUKX76SvTIqYRZpKnnGO84B7hxgPJpaoYtjrd+1fMoioondrLa50W
-        3NLx/gqScCUO8X2imkK075O3pD/nPFzPiGanP3rn3g==
-X-Google-Smtp-Source: AK7set+EnDQ5ZGD9YF1803eOIardxXn8qqmslC28OZkVXj4gOrukCpvFPR+mCaohzwS1cm99m6zxj6fd/cGZXNhTiTo=
-X-Received: by 2002:a17:906:938b:b0:8a5:c8bd:4ac4 with SMTP id
- l11-20020a170906938b00b008a5c8bd4ac4mr7737884ejx.15.1677094930921; Wed, 22
- Feb 2023 11:42:10 -0800 (PST)
+        Wed, 22 Feb 2023 14:43:02 -0500
+Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 906E610A90
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Feb 2023 11:43:00 -0800 (PST)
+Received: by mail-pl1-x634.google.com with SMTP id q11so10428859plx.5
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Feb 2023 11:43:00 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=0kRmAPGwQXO+tCQzgAIz/+MxdpLOLdUGFrnqf04p6lc=;
+        b=WuFqT5PWyBDjW6lxMbo6or7xz51H+DWmyWugdCzi0nk3l/XAsdqqNu54ZAuJ9akFLb
+         wPzifLp0IsUpB9eeIRBxOHPw1S1moAyQCarz10apS5P1WTaidK6bYejTxyhZMrjlFgUA
+         oAvZI43UmlqvJy57MTE1+RPapJYu+s28WF0GiaaIEMxQyGiFItSoO97NLFE+ULzGL+Nv
+         OuVpsKXFjFsqyt8oIn/WbOA9oc1ulXyLG1iOKSfKTbtYKNGtyRhQybLg2U6/WdmLtN59
+         eawFUyL7qVH2bWE1IBjksTUxYfPXkPHvnwA6sf06Vpp1ouF2Vf6spk9CuO3bMdBJ1OXw
+         uXKQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=0kRmAPGwQXO+tCQzgAIz/+MxdpLOLdUGFrnqf04p6lc=;
+        b=2aa7+kL0ct2pjzBPQsLm/V08nX4vjG1Im5UAeYy8Gx+RbBy4BX7K0jwiHMGPmfMN16
+         vjqcIkMwTFpAExD5T8Y1hMWRH/uc5gCUirD1UbZENnBj8WDt8v/zusTr+95W2MoTHgoI
+         GwWl8Qg6xK3VNPRQI2HP8SvySm0PrIehsQcPirM1WvN/R/Shs0g3s/mP6GbN1Yx8MNP8
+         7X0IokdLW8lq1LpuKVnfq+BTBJ5hdwPY37QyYF6kKm5V6ldq48MoJkdrx5d5JtmxbXYP
+         ve33NvSb4o68V+xjdTaCO0tuWpnQsma/EoFbqekgSfYOLfKvT2xFOSZwL3yUgwgDnYze
+         JdRA==
+X-Gm-Message-State: AO0yUKXkJQSWxQTBN3Mvw3IPZyIVLKH85ySR8F5CMypT9xx7tN/zoQJl
+        rKoUXVTC4eAcbq2OlxWrmitboQ==
+X-Google-Smtp-Source: AK7set98xCRgixr2FUHfjzR8eq4vP7HzQF0eRb4HHjomtotU6ysixTKHdkPQimI/grPPwzDlU9ZKlQ==
+X-Received: by 2002:a05:6a20:7f8e:b0:c7:7afa:5016 with SMTP id d14-20020a056a207f8e00b000c77afa5016mr3517083pzj.9.1677094979855;
+        Wed, 22 Feb 2023 11:42:59 -0800 (PST)
+Received: from google.com (223.103.125.34.bc.googleusercontent.com. [34.125.103.223])
+        by smtp.gmail.com with ESMTPSA id p13-20020a63fe0d000000b00499a90cce5bsm5423599pgh.50.2023.02.22.11.42.59
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 22 Feb 2023 11:42:59 -0800 (PST)
+Date:   Wed, 22 Feb 2023 11:42:55 -0800
+From:   David Matlack <dmatlack@google.com>
+To:     Vipin Sharma <vipinsh@google.com>
+Cc:     seanjc@google.com, pbonzini@redhat.com, bgardon@google.com,
+        kvm@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [Patch v3 7/7] KVM: x86/mmu: Merge all handle_changed_pte*
+ functions.
+Message-ID: <Y/ZwP18nw/PIHGsK@google.com>
+References: <20230211014626.3659152-1-vipinsh@google.com>
+ <20230211014626.3659152-8-vipinsh@google.com>
 MIME-Version: 1.0
-References: <20230221184908.2349578-1-kpsingh@kernel.org> <Y/YJisQdorH1aAKV@zn.tnic>
- <CACYkzJ4cSA5xFScgS=WTc6tPis-vUCtYkh3LyEr8EkXoDCm-uA@mail.gmail.com> <Y/ZVaBKwbWUbF7u+@zn.tnic>
-In-Reply-To: <Y/ZVaBKwbWUbF7u+@zn.tnic>
-From:   KP Singh <kpsingh@kernel.org>
-Date:   Wed, 22 Feb 2023 11:41:59 -0800
-X-Gmail-Original-Message-ID: <CACYkzJ4WigzaOCR4V9=e60ka=NNncWRB-j78DLRuzdSOZXvwrA@mail.gmail.com>
-Message-ID: <CACYkzJ4WigzaOCR4V9=e60ka=NNncWRB-j78DLRuzdSOZXvwrA@mail.gmail.com>
-Subject: Re: [PATCH v2 1/2] x86/speculation: Allow enabling STIBP with legacy IBRS
-To:     Borislav Petkov <bp@alien8.de>
-Cc:     linux-kernel@vger.kernel.org, pjt@google.com, evn@google.com,
-        jpoimboe@kernel.org, tglx@linutronix.de, x86@kernel.org,
-        hpa@zytor.com, peterz@infradead.org,
-        pawan.kumar.gupta@linux.intel.com, kim.phillips@amd.com,
-        alexandre.chartre@oracle.com, daniel.sneddon@linux.intel.com,
-        corbet@lwn.net, bp@suse.de, linyujun809@huawei.com,
-        jmattson@google.com,
-        =?UTF-8?Q?Jos=C3=A9_Oliveira?= <joseloliveira11@gmail.com>,
-        Rodrigo Branco <rodrigo@kernelhacking.com>,
-        Alexandra Sandulescu <aesa@google.com>, stable@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230211014626.3659152-8-vipinsh@google.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Feb 22, 2023 at 9:48 AM Borislav Petkov <bp@alien8.de> wrote:
->
-> On Wed, Feb 22, 2023 at 09:16:21AM -0800, KP Singh wrote:
-> > Thanks for iterating. I think your commit description and rewrite
-> > omits a few key subtleties which I have tried to reinforce in both the
-> > commit log and the comments.
-> >
-> > Q: What does STIBP have to do with IBRS?
-> > A: Setting the IBRS bit implicitly enables STIBP / some form of cross
-> > thread protection.
->
-> That belongs in the docs, if you want to explain this properly.
->
-> > Q: Why does it work with eIBRS?
-> > A: Because we set the IBRS bit once and leave it set when using eIBRS
->
-> Also docs.
->
-> > I think this subtlety should be reinforced in the commit description
-> > and code comments so that we don't get it wrong again. Your commit
-> > does answer this one (thanks!)
->
-> Commit messages are fine when explaining *why* a change is being done.
-> What is even finer is when you put a lenghtier explanation in our
-> documentation so that people can actually find it. Finding text in
-> commit messages is harder...
+On Fri, Feb 10, 2023 at 05:46:26PM -0800, Vipin Sharma wrote:
+> __handle_changed_pte() and handle_changed_spte_acc_track() are always
+> used together. Merge these two functions and name the new function
 
-Sure, I think the docs do already cover it, but I sort of disagree
-with your statement around the commit message. I feel the more context
-you can add in the commit message, the better it is. When I am looking
-at the change log, it would be helpful to have the information that I
-mentioned in the Q&A. Small things like, "eIBRS needs the IBRS bit set
-which also enables cross-thread protections" is a very important
-context for this patch IMHO. Without this one is just left head
-scratching and scrambling to read lengthy docs and processor manuals.
+nit: State what the patch does first.
 
-But again, totally your call. Others, feel free to chime in.
+> handle_changed_pte(). Remove the existing handle_changed_pte() function
+> which just calls __handle_changed_pte and
+> handle_changed_spte_acc_track().
 
->
-> > Q: Why does it not work with the way the kernel currently implements
-> > legacy IBRS?
-> > A: Because the kernel clears the bit on returning to user space.
->
-> From the commit message:
->
->     However, on return to userspace, the IBRS bit is cleared for performance
->     reasons. That leaves userspace threads vulnerable to cross-thread
->     predictions influence against which STIBP protects.
+s/_pte/_spte/
 
-This sort of loosely implies that the IBRS bit also enables
-cross-thread protections. Can you atleast add this one explicitly?
+> 
+> This converges SPTEs change handling code to a single place.
+> 
+> Signed-off-by: Vipin Sharma <vipinsh@google.com>
+> Reviewed-by: Ben Gardon <bgardon@google.com>
 
-"Setting the IBRS bit also enables cross thread protections"
+Nice cleanup! Commit message nits aside,
 
->
-> > The reason why I refactored this into a separate helper was to
-> > document the subtleties I mentioned above and anchor them to one place
-> > as the function is used in 2 places. But this is a maintainer's
-> > choice, so it's your call :)
->
-> The less code gets added in that thing, the better. Not yet another
-> helper pls.
+Reviewed-by: David Matlack <dmatlack@google.com>
 
-Sure, your call.
-
->
-> > I do agree with Pawan that it's worth adding a pr_info about what the
-> > kernel is doing about STIBP.
->
-> STIBP status gets dumped through stibp_state().
-
-Not at the stage when the kernel decides to drop the STIBP protection
-when eIBRS is enabled. If we had this information when we had a
-positive POC, it would have been much easier to figure out what's
-going on here.
-
-- KP
-
->
-> --
-> Regards/Gruss,
->     Boris.
->
-> https://people.kernel.org/tglx/notes-about-netiquette
+> ---
+>  arch/x86/kvm/mmu/tdp_mmu.c | 42 +++++++++++---------------------------
+>  1 file changed, 12 insertions(+), 30 deletions(-)
+> 
+> diff --git a/arch/x86/kvm/mmu/tdp_mmu.c b/arch/x86/kvm/mmu/tdp_mmu.c
+> index 0c031319e901..67538ec48ce5 100644
+> --- a/arch/x86/kvm/mmu/tdp_mmu.c
+> +++ b/arch/x86/kvm/mmu/tdp_mmu.c
+> @@ -334,17 +334,6 @@ static void handle_changed_spte(struct kvm *kvm, int as_id, gfn_t gfn,
+>  				u64 old_spte, u64 new_spte, int level,
+>  				bool shared);
+>  
+> -static void handle_changed_spte_acc_track(u64 old_spte, u64 new_spte, int level)
+> -{
+> -	if (!is_shadow_present_pte(old_spte) || !is_last_spte(old_spte, level))
+> -		return;
+> -
+> -	if (is_accessed_spte(old_spte) &&
+> -	    (!is_shadow_present_pte(new_spte) || !is_accessed_spte(new_spte) ||
+> -	     spte_to_pfn(old_spte) != spte_to_pfn(new_spte)))
+> -		kvm_set_pfn_accessed(spte_to_pfn(old_spte));
+> -}
+> -
+>  static void tdp_account_mmu_page(struct kvm *kvm, struct kvm_mmu_page *sp)
+>  {
+>  	kvm_account_pgtable_pages((void *)sp->spt, +1);
+> @@ -487,7 +476,7 @@ static void handle_removed_pt(struct kvm *kvm, tdp_ptep_t pt, bool shared)
+>  }
+>  
+>  /**
+> - * __handle_changed_spte - handle bookkeeping associated with an SPTE change
+> + * handle_changed_spte - handle bookkeeping associated with an SPTE change
+>   * @kvm: kvm instance
+>   * @as_id: the address space of the paging structure the SPTE was a part of
+>   * @gfn: the base GFN that was mapped by the SPTE
+> @@ -501,9 +490,9 @@ static void handle_removed_pt(struct kvm *kvm, tdp_ptep_t pt, bool shared)
+>   * Handle bookkeeping that might result from the modification of a SPTE.
+>   * This function must be called for all TDP SPTE modifications.
+>   */
+> -static void __handle_changed_spte(struct kvm *kvm, int as_id, gfn_t gfn,
+> -				  u64 old_spte, u64 new_spte, int level,
+> -				  bool shared)
+> +static void handle_changed_spte(struct kvm *kvm, int as_id, gfn_t gfn,
+> +				u64 old_spte, u64 new_spte, int level,
+> +				bool shared)
+>  {
+>  	bool was_present = is_shadow_present_pte(old_spte);
+>  	bool is_present = is_shadow_present_pte(new_spte);
+> @@ -587,15 +576,10 @@ static void __handle_changed_spte(struct kvm *kvm, int as_id, gfn_t gfn,
+>  	if (was_present && !was_leaf &&
+>  	    (is_leaf || !is_present || WARN_ON_ONCE(pfn_changed)))
+>  		handle_removed_pt(kvm, spte_to_child_pt(old_spte, level), shared);
+> -}
+>  
+> -static void handle_changed_spte(struct kvm *kvm, int as_id, gfn_t gfn,
+> -				u64 old_spte, u64 new_spte, int level,
+> -				bool shared)
+> -{
+> -	__handle_changed_spte(kvm, as_id, gfn, old_spte, new_spte, level,
+> -			      shared);
+> -	handle_changed_spte_acc_track(old_spte, new_spte, level);
+> +	if (was_leaf && is_accessed_spte(old_spte) &&
+> +	    (!is_present || !is_accessed_spte(new_spte) || pfn_changed))
+> +		kvm_set_pfn_accessed(spte_to_pfn(old_spte));
+>  }
+>  
+>  /*
+> @@ -638,9 +622,8 @@ static inline int tdp_mmu_set_spte_atomic(struct kvm *kvm,
+>  	if (!try_cmpxchg64(sptep, &iter->old_spte, new_spte))
+>  		return -EBUSY;
+>  
+> -	__handle_changed_spte(kvm, iter->as_id, iter->gfn, iter->old_spte,
+> -			      new_spte, iter->level, true);
+> -	handle_changed_spte_acc_track(iter->old_spte, new_spte, iter->level);
+> +	handle_changed_spte(kvm, iter->as_id, iter->gfn, iter->old_spte,
+> +			    new_spte, iter->level, true);
+>  
+>  	return 0;
+>  }
+> @@ -705,8 +688,7 @@ static u64 tdp_mmu_set_spte(struct kvm *kvm, int as_id, tdp_ptep_t sptep,
+>  
+>  	old_spte = kvm_tdp_mmu_write_spte(sptep, old_spte, new_spte, level);
+>  
+> -	__handle_changed_spte(kvm, as_id, gfn, old_spte, new_spte, level, false);
+> -	handle_changed_spte_acc_track(old_spte, new_spte, level);
+> +	handle_changed_spte(kvm, as_id, gfn, old_spte, new_spte, level, false);
+>  	return old_spte;
+>  }
+>  
+> @@ -1276,7 +1258,7 @@ static bool set_spte_gfn(struct kvm *kvm, struct tdp_iter *iter,
+>  	 * Note, when changing a read-only SPTE, it's not strictly necessary to
+>  	 * zero the SPTE before setting the new PFN, but doing so preserves the
+>  	 * invariant that the PFN of a present * leaf SPTE can never change.
+> -	 * See __handle_changed_spte().
+> +	 * See handle_changed_spte().
+>  	 */
+>  	tdp_mmu_iter_set_spte(kvm, iter, 0);
+>  
+> @@ -1301,7 +1283,7 @@ bool kvm_tdp_mmu_set_spte_gfn(struct kvm *kvm, struct kvm_gfn_range *range)
+>  	/*
+>  	 * No need to handle the remote TLB flush under RCU protection, the
+>  	 * target SPTE _must_ be a leaf SPTE, i.e. cannot result in freeing a
+> -	 * shadow page.  See the WARN on pfn_changed in __handle_changed_spte().
+> +	 * shadow page. See the WARN on pfn_changed in handle_changed_spte().
+>  	 */
+>  	return kvm_tdp_mmu_handle_gfn(kvm, range, set_spte_gfn);
+>  }
+> -- 
+> 2.39.1.581.gbfd45094c4-goog
+> 
