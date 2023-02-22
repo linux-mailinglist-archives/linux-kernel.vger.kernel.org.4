@@ -2,98 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 097C369ECE4
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Feb 2023 03:37:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F37F469ECFD
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Feb 2023 03:38:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229566AbjBVChD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Feb 2023 21:37:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57996 "EHLO
+        id S230099AbjBVCiv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Feb 2023 21:38:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59734 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229451AbjBVChC (ORCPT
+        with ESMTP id S229485AbjBVCir (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Feb 2023 21:37:02 -0500
-Received: from mail-oi1-x231.google.com (mail-oi1-x231.google.com [IPv6:2607:f8b0:4864:20::231])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B366B33468
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Feb 2023 18:36:59 -0800 (PST)
-Received: by mail-oi1-x231.google.com with SMTP id bq17so6627365oib.8
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Feb 2023 18:36:59 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxtx.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=SKmcGsNQ4fhRrMcdXSSRjVajCI4KB45b/EODQuEUJ6o=;
-        b=EiBnREc+YVTdZou6w9ZUQ+E1ddVihBHRah8AACvFOaSKA+k3uOiJ2iWls/5bmzGYGy
-         Ko33dd0T0sq4VFyvmbj0FfX2dG3pzb9bVqa8T0tTjn3tYkr2WkzKtIvddfryWtrgSLeL
-         sbV1h4XlxAUJNf4OoJji/wnV2Y9KjwnXQGdNU=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=SKmcGsNQ4fhRrMcdXSSRjVajCI4KB45b/EODQuEUJ6o=;
-        b=NZYgV1wr3dRP58zbg4FTHnnOLbePUU9lffoBEBxuPe7Myn1sOj4sSzQnpvtBkb8zBu
-         03EKMYS/IbVPr7QGAVpEhyLhYolQv/aD8paSfRsW7dk2Tz02PL8snm6herTa8ccy/UUy
-         m/UOvrseDQQNGpe+EX3gFqUJ86KY+kJy1C7nETN9rH1xgbD5jjUADwK+hwZqps6oFlTr
-         jqTJlqMtg7MefmTu6F28onOg6PbDjWo6bjPVxtsfb6KI4y+IOYzaLl/KASkQNk+iLwGY
-         r+lxZNGswqOCpw/yy4inUryR9HGaytufwHQIDqYCNc4FVQArva8FGHDmKhYkNAXxaL0P
-         AFKA==
-X-Gm-Message-State: AO0yUKX+lZ3ubMT8BqNlLVfwquAGOORfZObmHh5/DmWmlaCQMh0W1q9n
-        juASCcvA6oPziWXSBJHXB2hclQ==
-X-Google-Smtp-Source: AK7set9ywrkVYLikZ7VBGdXshHd74At4agEypcKsPCYfCyAxbVz5UaR4M3Nm7uYG2rSL8VNixzM95Q==
-X-Received: by 2002:a05:6808:347:b0:378:8516:5c80 with SMTP id j7-20020a056808034700b0037885165c80mr7524686oie.43.1677033418886;
-        Tue, 21 Feb 2023 18:36:58 -0800 (PST)
-Received: from fedora64.linuxtx.org (99-47-93-78.lightspeed.rcsntx.sbcglobal.net. [99.47.93.78])
-        by smtp.gmail.com with ESMTPSA id w187-20020acadfc4000000b00383b371f2a7sm1456578oig.42.2023.02.21.18.36.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 21 Feb 2023 18:36:58 -0800 (PST)
-Sender: Justin Forbes <jmforbes@linuxtx.org>
-Date:   Tue, 21 Feb 2023 20:36:56 -0600
-From:   Justin Forbes <jforbes@fedoraproject.org>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
-        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, f.fainelli@gmail.com,
-        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de
-Subject: Re: [PATCH 6.1 000/118] 6.1.13-rc1 review
-Message-ID: <Y/V/yFI7N3BlvZ/k@fedora64.linuxtx.org>
-References: <20230220133600.368809650@linuxfoundation.org>
+        Tue, 21 Feb 2023 21:38:47 -0500
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13CB522A2F;
+        Tue, 21 Feb 2023 18:38:47 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1677033527; x=1708569527;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=80pqe+/Y5KZdKDUpKtIOSJ6so1hrC3LQZrJH5osRxt0=;
+  b=k+NQHW/DvGLmtm9zt5LI2XNG4GVr+BQEKhy3eanEeTv1srQOBXKIaLJg
+   rvhNVI/OOtbHyGqsXARIHFeX5FshYg2HIFpnVX+ixnSnrkGfGvNJeyKaP
+   V5w3i+b/RTqlWu26NLkE2f0KcozkD13pZ+NIclSoXo0hGbEvczlgQdE8Y
+   VBLrveV0mNF0wp/YWkUlt9zGxLpL7EHaDbP3+AMBkqetyo9sdxdhKwRwH
+   GGB6/UYJ77wt9eUgnxWTf2kor7j4ehZQln+EWcIgjELQTCbVqIbHyMH7/
+   IJl4zYIGQLiT96DmDwi/Snq/lEZR6jT8CvKFXKvXovWpG0u4rXoWamzqG
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10628"; a="316541445"
+X-IronPort-AV: E=Sophos;i="5.97,317,1669104000"; 
+   d="scan'208";a="316541445"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Feb 2023 18:38:46 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10628"; a="1000829027"
+X-IronPort-AV: E=Sophos;i="5.97,317,1669104000"; 
+   d="scan'208";a="1000829027"
+Received: from binbinwu-mobl.ccr.corp.intel.com (HELO [10.238.10.94]) ([10.238.10.94])
+  by fmsmga005-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Feb 2023 18:38:44 -0800
+Message-ID: <46eb6fe5-0885-2537-099b-33d8bcfde1d3@linux.intel.com>
+Date:   Wed, 22 Feb 2023 10:38:43 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230220133600.368809650@linuxfoundation.org>
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.2
+Subject: Re: [PATCH] KVM: x86: Remove duplicated calls of
+ reverse_cpuid_check()
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        pbonzini@redhat.com
+References: <20230221032156.791-1-binbin.wu@linux.intel.com>
+ <Y/TpLMRiNwGt2dhY@google.com>
+From:   Binbin Wu <binbin.wu@linux.intel.com>
+In-Reply-To: <Y/TpLMRiNwGt2dhY@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 20, 2023 at 02:35:16PM +0100, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 6.1.13 release.
-> There are 118 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
-> 
-> Responses should be made by Wed, 22 Feb 2023 13:35:35 +0000.
-> Anything received after that time might be too late.
-> 
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v6.x/stable-review/patch-6.1.13-rc1.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-6.1.y
-> and the diffstat can be found below.
-> 
-> thanks,
-> 
-> greg k-h
 
-Tested rc1 against the Fedora build system (aarch64, armv7, ppc64le,
-s390x, x86_64), and boot tested x86_64. No regressions noted.
+On 2/21/2023 11:54 PM, Sean Christopherson wrote:
+> On Tue, Feb 21, 2023, Binbin Wu wrote:
+>> Remove duplicated calls of reverse_cpuid_check() in __kvm_cpu_cap_mask()
+>> and kvm_cpu_cap_{clear, set, get}().
+> I want to keep the checks even though they are redundant.  There is no runtime
+> cost, and the intent of the direct calls in the "upper" helpers is as much to
+> document their usage constraints (input feature must be a compile-time constant)
+> as it is to enforce correctness.
 
-Tested-by: Justin M. Forbes <jforbes@fedoraproject.org>
+Got it.
+
