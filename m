@@ -2,56 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DB1F669F740
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Feb 2023 16:00:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1962969F744
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Feb 2023 16:01:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232201AbjBVPAp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Feb 2023 10:00:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46792 "EHLO
+        id S232281AbjBVPA5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Feb 2023 10:00:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46752 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231985AbjBVPAb (ORCPT
+        with ESMTP id S231954AbjBVPAc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Feb 2023 10:00:31 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5A2738B7E
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Feb 2023 07:00:23 -0800 (PST)
+        Wed, 22 Feb 2023 10:00:32 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB9E92CFC1
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Feb 2023 07:00:29 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id EE63F6149E
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Feb 2023 15:00:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 55601C43442;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 65A2C6148E
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Feb 2023 15:00:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 7649AC43326;
         Wed, 22 Feb 2023 15:00:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1677078022;
-        bh=sAD41qlfpUmeVTbNrsaNBRxCTKKHTpb6EbOTUc1nL0c=;
+        bh=gFfjgz0Q8tMCqC/g+ibd4XRnh3poCdRXJ7SYTaiiMGk=;
         h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=V0GT9cQpOdFsMVan0RIVmmJO+AJk4l/zpz/IuknM0eLQAWsPzL5hKHWyYPotVvWC/
-         iExM48uAxvBH+w+0Jq78YGe4QyD1XXSYMfoCpk5izibz/MCysGVp+193+kKHKA2rtr
-         /YJeUHHnmY79nLNHzWfK3un7fSEDdaiYta01V6q1RYfD1FxgWUzyDqhSvSWHaPkzvC
-         QHLNMeHCPDgpFGYkFFt5Aq/Met4mYxXT9hVHw5VquKkiontLPESjEZgJayccvGT9fW
-         9uw/s10f3er9LoaawnufdN6uDtuTiVSZB4sz2uGojc6kMt1Q8mQ12fU6V8/x6mBJ/6
-         OOoq+Z+g37U7Q==
+        b=iUc07ou9jr7xs7FuduwDLvvw0KikIv8SlZP1q1piXXUzcMoPtu3WuD3PH48O5QbYm
+         L0as6vtkohdapB/UNVtj0ISsMuXtiXh1COxdB8Gu+LtEzGtPvTzQw5nouXApk1k8jA
+         HoOMjuPQTtVlNFKNMyQmnc97UntHwZ/8foqGvWikA0hIiLNMv3c+dt7uUToS8WwtAu
+         8/ZfdprXYt/wKJ7J0Mv//j2S3YBZ7uVfQ2ytGs0869oCXLNEeX5N1IHpSAHaDaH2Vg
+         gUqkuu4urOWFr2Ay0iQLMCo6NZaQQDaz9zx6gMQgNqD+ZmmChUeZh2Lh1TyN12bS3+
+         1l6WXTUhCXroQ==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 2DCB4C691DE;
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 5DE11C395DF;
         Wed, 22 Feb 2023 15:00:22 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH] riscv: Add header include guards to insn.h
+Subject: Re: [PATCH v3 0/2] riscv: Dump faulting instructions in oops handler
 From:   patchwork-bot+linux-riscv@kernel.org
-Message-Id: <167707802217.24438.17901281821213780885.git-patchwork-notify@kernel.org>
+Message-Id: <167707802237.24438.17153104207129769364.git-patchwork-notify@kernel.org>
 Date:   Wed, 22 Feb 2023 15:00:22 +0000
-References: <20230129094242.282620-1-liaochang1@huawei.com>
-In-Reply-To: <20230129094242.282620-1-liaochang1@huawei.com>
-To:     liaochang (A) <liaochang1@huawei.com>
+References: <20230119074738.708301-1-bjorn@kernel.org>
+In-Reply-To: <20230119074738.708301-1-bjorn@kernel.org>
+To:     =?utf-8?b?QmrDtnJuIFTDtnBlbCA8Ympvcm5Aa2VybmVsLm9yZz4=?=@ci.codeaurora.org
 Cc:     linux-riscv@lists.infradead.org, paul.walmsley@sifive.com,
-        palmer@dabbelt.com, aou@eecs.berkeley.edu, heiko.stuebner@vrull.eu,
-        ajones@ventanamicro.com, prabhakar.mahadev-lad.rj@bp.renesas.com,
-        conor.dooley@microchip.com, jszhang@kernel.org,
-        vincent.chen@sifive.com, linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        palmer@dabbelt.com, aou@eecs.berkeley.edu, bjorn@rivosinc.com,
+        schwab@linux-m68k.org, geert@linux-m68k.org,
+        linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -61,22 +60,26 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 Hello:
 
-This patch was applied to riscv/linux.git (for-next)
+This series was applied to riscv/linux.git (for-next)
 by Palmer Dabbelt <palmer@rivosinc.com>:
 
-On Sun, 29 Jan 2023 17:42:42 +0800 you wrote:
-> Add header include guards to insn.h to prevent repeating declaration of
-> any identifiers in insn.h.
+On Thu, 19 Jan 2023 08:47:36 +0100 you wrote:
+> From: Björn Töpel <bjorn@rivosinc.com>
 > 
-> Fixes: edde5584c7ab ("riscv: Add SW single-step support for KDB")
-> Signed-off-by: Liao Chang <liaochang1@huawei.com>
-> ---
->  arch/riscv/include/asm/insn.h | 4 ++++
->  1 file changed, 4 insertions(+)
+> RISC-V does not dump faulting instructions in the oops handler. This
+> series adds "Code:" dumps to the oops output together with
+> scripts/decodecode support.
+> 
+> Thanks,
+> Björn
+> 
+> [...]
 
 Here is the summary with links:
-  - riscv: Add header include guards to insn.h
-    https://git.kernel.org/riscv/c/8ac6e619d9d5
+  - [v3,1/2] riscv: Add instruction dump to RISC-V splats
+    https://git.kernel.org/riscv/c/eb165bfa8eaf
+  - [v3,2/2] scripts/decodecode: Add support for RISC-V
+    https://git.kernel.org/riscv/c/00b242509c8f
 
 You are awesome, thank you!
 -- 
