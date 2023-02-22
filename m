@@ -2,133 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EE1A869F507
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Feb 2023 14:00:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 360E969F4C6
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Feb 2023 13:41:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231740AbjBVNA5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Feb 2023 08:00:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54488 "EHLO
+        id S232171AbjBVMl4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Feb 2023 07:41:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40406 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230310AbjBVNAz (ORCPT
+        with ESMTP id S230440AbjBVMlz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Feb 2023 08:00:55 -0500
-X-Greylist: delayed 719 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 22 Feb 2023 05:00:52 PST
-Received: from corp-front07-corp.i.nease.net (corp-front07-corp.i.nease.net [59.111.134.157])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9924636FE3
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Feb 2023 05:00:52 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=corp.netease.com; s=s210401; h=Received:Message-ID:Date:
-        MIME-Version:User-Agent:Content-Language:From:Subject:To:Cc:
-        Content-Type:Content-Transfer-Encoding; bh=pnxyCL47frXTed1ME3Xje
-        GSh2dyB5+454H2B7JzowSg=; b=WWZJWulpJeXLn54L8IdAtc9fnj21LPDa9CzsP
-        7jvVj2tYuOBiq/9A6gNvesF3PJBjqfPcSN4KWx7eC02TbAQEZULddOnH7OpZ6Jtm
-        oaIOFmr0vBQtH6t4hyvLlEfLh/5pVPpVV4cS8Vhbgb2hlD3HkH11Pmf0PTuO9x1C
-        wShkL0=
-Received: from [10.219.192.244] (unknown [183.136.182.140])
-        by corp-front07-corp.i.nease.net (Coremail) with SMTP id nRDICgD3wrhUDfZjVY8HAA--.31745S2;
-        Wed, 22 Feb 2023 20:40:52 +0800 (HKT)
-Message-ID: <4f5e51dc-6116-aad6-de8b-7a1bf7c17656@corp.netease.com>
-Date:   Wed, 22 Feb 2023 20:40:52 +0800
+        Wed, 22 Feb 2023 07:41:55 -0500
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 625FA38E97;
+        Wed, 22 Feb 2023 04:41:54 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1677069715; x=1708605715;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=cv362uPUr3jCMhErDyLuuhUYC3pM4pKuPc2EB1jEUxY=;
+  b=PGKsOX4VorEbUx/aU+v/gFOqc3RHf6Z8FQ+/XIha/P/rihGcm7liokrJ
+   5jtaAvdPhUAvu9WGI4sTEcm8jiIRtDjyVvfeldDwZzi0cfaghwXvl/yuk
+   Iu5xgMebkbniJSFFBgaZ0C6n2BqT0Unr1NRwpqIPAdrZcQ+Yt/50mU1+q
+   gcompj6U4hUC8IHQHiFEgp672UPFMUzJ5n9910PBh0WYN7eRLEboRsuEQ
+   Zv4YRKedj8wVs5UD4dXMv1QJDIDV3ZCL5anltUu7Q+GaQPYU3sufw3B5X
+   f3ThQ04fWMnuv15qfMSGIyL7IAMy+8np6ghEK6lkM41Rr9Kk73ERWUYy1
+   Q==;
+X-IronPort-AV: E=Sophos;i="5.97,318,1669100400"; 
+   d="asc'?scan'208";a="202069183"
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa5.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 22 Feb 2023 05:41:54 -0700
+Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
+ chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.16; Wed, 22 Feb 2023 05:41:53 -0700
+Received: from wendy (10.10.115.15) by chn-vm-ex03.mchp-main.com
+ (10.10.85.151) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.16 via Frontend
+ Transport; Wed, 22 Feb 2023 05:41:52 -0700
+Date:   Wed, 22 Feb 2023 12:41:25 +0000
+From:   Conor Dooley <conor.dooley@microchip.com>
+To:     Nick Alcock <nick.alcock@oracle.com>
+CC:     <mcgrof@kernel.org>, <linux-modules@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        Hitomi Hasegawa <hasegawa-hitomi@fujitsu.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>, <linux-clk@vger.kernel.org>
+Subject: Re: [PATCH 12/27] kbuild, clk: remove MODULE_LICENSE in non-modules
+Message-ID: <Y/YNdSkRnafr9Vg3@wendy>
+References: <20230222121453.91915-1-nick.alcock@oracle.com>
+ <20230222121453.91915-13-nick.alcock@oracle.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Content-Language: en-US
-From:   Yacan Liu <liuyacan@corp.netease.com>
-Subject: An issue of kernel stall caused by infiniband mad packet
-To:     jgg@ziepe.ca, leon@kernel.org, linux-rdma@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-CM-TRANSID: nRDICgD3wrhUDfZjVY8HAA--.31745S2
-X-Coremail-Antispam: 1UD129KBjvJXoWxuF4kWrWUKF18Jw1UCFyUZFb_yoW5ArWkpF
-        WYkrWfJFW8Jrn0y3y8A3y8Ja45WFs3CF13KF4rJry5ArnxXrZ3WFyxt34jgF48urWkZry5
-        Cw1vkr98KrZru3DanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUHKb7IF0VCFI7km07C26c804VAKzcIF0wAYjsxI4VWkKwAYFVCj
-        jxCrM7CY07I20VC2zVCF04k26cxKx2IYs7xG6rWj6s0DM28lY4IEw2IIxxk0rwA2F7IY1V
-        AKz4vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_tr0E3s1l84ACjcxK6xIIjxv20xvE
-        c7CjxVAFwI0_Cr1j6rxdM28EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6x
-        kF7I0E14v26rxl6s0DM2kK67kvxFCE548m6r1fGryUXwAawVAFpfBj4fn0lVCYm3Zqqf92
-        6ryUJw1UKr1v6r18M2kK6xCIbVAIwIAEc20F6c8GOVW8Jr15Jr4le2I262IYc4CY6c8Ij2
-        8IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E74AGY7Cv6cx26r48Ar1UJr1U
-        McvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvEwIxGrwCjxxvEa2IrMxk0xIA0c2IEe2xFo4
-        CEbIxvr21lc2IjII80xcxEwVAKI48JMxAIw28IcxkI7VAKI48JMxAIw28IcVCjz48v1sIE
-        Y20_Gr48tr1UJr1l4x8a64kIII0Yj41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1l4IxY624lx2
-        IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v2
-        6r126r1DMIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2
-        IY6xkF7I0E14v26r1j6r4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv
-        67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r1j6r4UYxBIdaVFxhVjvjDU0xZFpf
-        9x07jgZ2fUUUUU=
-X-CM-SenderInfo: 5olx5txfdqquhrush05hwht23hof0z/1tbiBQAKCVt79MucBwAAsC
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="A6MmvpIR+3s5tp96"
+Content-Disposition: inline
+In-Reply-To: <20230222121453.91915-13-nick.alcock@oracle.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi folks:
+--A6MmvpIR+3s5tp96
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-   We recently encountered a kernel stall issue related to infiniband 
-mad packet. We believe this is caused by some abnormal operations of 
-user-level programs.But I am not sure if the kernel driver needs to do 
-some protection.
+On Wed, Feb 22, 2023 at 12:14:38PM +0000, Nick Alcock wrote:
+> Since commit 8b41fc4454e ("kbuild: create modules.builtin without
+> Makefile.modbuiltin or tristate.conf"), MODULE_LICENSE declarations
+> are used to identify modules. As a consequence, uses of the macro
+> in non-modules will cause modprobe to misidentify their containing
+> object file as a module when it is not (false positives), and modprobe
+> might succeed rather than failing with a suitable error message.
+>=20
+> So remove it in the files in this commit, none of which can be built as
+> modules.
+>=20
+> Signed-off-by: Nick Alcock <nick.alcock@oracle.com>
+> Suggested-by: Luis Chamberlain <mcgrof@kernel.org>
+> Cc: Luis Chamberlain <mcgrof@kernel.org>
+> Cc: linux-modules@vger.kernel.org
+> Cc: linux-kernel@vger.kernel.org
+> Cc: Hitomi Hasegawa <hasegawa-hitomi@fujitsu.com>
+> Cc: Michael Turquette <mturquette@baylibre.com>
+> Cc: Stephen Boyd <sboyd@kernel.org>
+> Cc: linux-clk@vger.kernel.org
 
-In our cluster, multiple nodes will establish multiple RDMA connections 
-with each other. Then, when we start the program, the kernel prompts the 
-following error after one minute:
+>  drivers/clk/microchip/clk-mpfs-ccc.c | 1 -
 
-[ 5489.530125] rcu: INFO: rcu_sched self-detected stall on CPU
-[ 5489.535714] rcu:     55-....: (19027 ticks this GP) 
-idle=236/1/0x4000000000000000 softirq=13510/13510 fqs=4359
-[ 5489.545554]  (t=21015 jiffies g=279845 q=701559)
-[ 5489.545557] NMI backtrace for cpu 55
-[ 5489.545559] CPU: 55 PID: 44979 Comm: kworker/u196:1 Tainted: G    OE 
-    5.10.91-netease3-1 #2
-[ 5489.545560] Hardware name: Inspur SA5212M5/YZMB-00882-10T, BIOS 
-4.1.21 08/25/2021
-[ 5489.545582] Workqueue: ib-comp-unb-wq ib_cq_poll_work [ib_core]
-[ 5489.545584] Call Trace:
-[ 5489.545586]
-[ 5489.545590]  dump_stack+0x6b/0x83
-[ 5489.545593]  nmi_cpu_backtrace.cold+0x32/0x69
-[ 5489.545596]  ? lapic_can_unplug_cpu+0x80/0x80
-[ 5489.545599]  nmi_trigger_cpumask_backtrace+0xd7/0xe0
-[ 5489.545602]  rcu_dump_cpu_stacks+0xa2/0xd0
-[ 5489.545604]  rcu_sched_clock_irq.cold+0x1ff/0x3d6
-[ 5489.545607]  ? trigger_load_balance+0x5a/0x240
-[ 5489.545610]  update_process_times+0x8c/0xc0
-[ 5489.545613]  tick_sched_handle+0x22/0x60
-[ 5489.545615]  tick_sched_timer+0x7c/0xb0
-[ 5489.545617]  ? tick_do_update_jiffies64.part.0+0xc0/0xc0
-[ 5489.545619]  __hrtimer_run_queues+0x12a/0x270
-[ 5489.545621]  hrtimer_interrupt+0x110/0x2c0
-[ 5489.545623]  __sysvec_apic_timer_interrupt+0x5f/0xd0
-[ 5489.545627]  asm_call_irq_on_stack+0xf/0x20
-[ 5489.545627]
-[ 5489.545629]  sysvec_apic_timer_interrupt+0x72/0x80
-[ 5489.545631]  asm_sysvec_apic_timer_interrupt+0x12/0x20
+Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
+And since there's no reason to have this split via the at91 tree:
+Acked-by: Conor Dooley <conor.dooley@microchip.com>
 
-OS:  Debian 11
-Kernel: 5.10.91
-ofed: MLNX_OFED_LINUX-5.5-1.0.3.2
+Clearly there's a hole in my maintainers entry for this driver, I'll go
+fix that.
 
-PS. Thread worker/u196:2+ib-comp-unb-w is consuming 100% CPU.
+--A6MmvpIR+3s5tp96
+Content-Type: application/pgp-signature; name="signature.asc"
 
-After some investigations, We found that the kernel thread spends too 
-much time in the function wait_for_response(). We know that in the 
-process of establishing an RDMA connection, when the local side sends 
-out a MAD request, it will wait for the response packet from the remote 
-side within a limited time, and it is in the wait_list at this time. 
-This wait_list is sorted according to the timeout time, which means the 
-complexity of insertion or search is O(n). When the remote application 
-does not call rdma_accept() for some reason, it will not send the 
-response packet. In this way, the entry will not be cleared from the 
-wait_list on the local side for a long time. And the local application 
-continues to initiate connections outward, which makes the elements in 
-the wait_list more and more, and the wait_for_response() longer and longer.
+-----BEGIN PGP SIGNATURE-----
 
-Regard,
-Yacan
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCY/YNdQAKCRB4tDGHoIJi
+0uToAQDS4jBN3ip9omamYeZl5YP5ggkJm0CAeeoGkzKlh6wuogEAgAfej0BJ1oqM
+0zAVz7zCgpejdxMqS4X0dgrCRtMWLAM=
+=PLRl
+-----END PGP SIGNATURE-----
 
+--A6MmvpIR+3s5tp96--
