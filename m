@@ -2,123 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 69B6269F120
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Feb 2023 10:17:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1610869F123
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Feb 2023 10:18:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231670AbjBVJRl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Feb 2023 04:17:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35478 "EHLO
+        id S231674AbjBVJSe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Feb 2023 04:18:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36478 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231667AbjBVJRj (ORCPT
+        with ESMTP id S230135AbjBVJSc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Feb 2023 04:17:39 -0500
-Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DBE5367E6
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Feb 2023 01:17:37 -0800 (PST)
-Received: by mail-ed1-x530.google.com with SMTP id h16so27739220edz.10
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Feb 2023 01:17:37 -0800 (PST)
+        Wed, 22 Feb 2023 04:18:32 -0500
+Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3AA3227D48;
+        Wed, 22 Feb 2023 01:18:31 -0800 (PST)
+Received: by mail-ed1-x534.google.com with SMTP id h16so27749954edz.10;
+        Wed, 22 Feb 2023 01:18:31 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=ZYNjYpqa0bbdp+1kEQD5S997SVtcSN1lChO27iPiDpw=;
-        b=TtNO99vDyF+FOnem7oAHDn6G30PaKs+x4inAVoGOhs7iEdKofnLJfFq/AkS8dPiEwx
-         /PkhPY4UXDKdVYirGGfovlv5KC+4uNDt8VlWMt8t28weTC2EwAACd1RRywYBV+dIEM6n
-         9ZzSCRJsx+pZfNOh1Q9JysagGFcfD619jHXGFC6gPZU6+udyEAM+vA45x74asaho3lRy
-         20tcPipMSNmQ9b6PftCcoMC9rqL5/JMAuffUr2g3l2URHjozHwBM+NcqlP1f6zNHOEXr
-         TUZGXy+2yhIR8C3ryg3A/WVW3XEIyCeUKxhLqQ62iKpRdLBLOgNkcF9L4ZOjmUE3aZjm
-         NcQA==
+        d=gmail.com; s=20210112;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=bDXcsUPRL4UT1twN0Ir2xjoXiwcVYl6Jo6QwftXXn0Q=;
+        b=jD2O3mypAIhVO2lUG6fBf60jp6G71KHISNKTa/WE8crJIqS+ZJtRettQw6AA8TAtKn
+         rUdvi+hW2rroToXBaiyT0ngE9qAWNxUAhU0ndO1ko+PsSd1aBpBxyEtGz+QlK7WqDITM
+         hQhPaIIq3PU3y16VhfUoTnf+GbbktUKGXRyvmMYBeUVdZuxE+5RJEuwx3oS6p8DWPUyj
+         Re0vjwlQ36twccACor2l4HR3GnC4Lnlk9Wzn9MVNtoN0eB1B9e03/Ayq1fLiETUEA5ft
+         7PlChqRIDpQQAzr3+U7uLgVCAlUjf5Q/35CHX9yVeIuRd84YSa9k7Aqnowg+kLD/VX/f
+         zMGw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ZYNjYpqa0bbdp+1kEQD5S997SVtcSN1lChO27iPiDpw=;
-        b=mNid7WkZtvMxUi3aJcnem+05GLopbqVBIjdcKXVO7FI6gKZW8ObHs6AsHwnjO4LPgr
-         tX35Cs9KzhPG4d9AUt6JMg+dlEiUoC/GxNeBvmx6qk+QREdJxXQlXz6Oj0eTlYy9X3eV
-         YBsKnY6RYwy+qdnl1bon5XFcdXJvy8yn/hK+rPO09GU07mVKqq9yGZqx9WfrkQCh8hz/
-         zssKoWXXSoUm/GPoKCpknSLHNhdvEuh762laMD1h5ZFUmARpZokvX4wwkctvqxxt8MWj
-         kXNC39Xtj9+5dRCkFr/S5rM/zjPeoRfTPL2B5sut3Pzp9F0GoDwS2TiFwH99Io2kY+JQ
-         Vy5Q==
-X-Gm-Message-State: AO0yUKVg6k0tiZ+ioo9CBPcJNAK4PMFe4GXF0ucmK1ZUsacQagjGgdnO
-        H4Njt5hrKVt0nVfdlXGtrIxEpg==
-X-Google-Smtp-Source: AK7set+CzHz42sMYy4A1TLOMRmQ4V5WpNodweBdRk+BFWC+9HSDi+OuobpSTPV5LkXlKNQH7omU9/g==
-X-Received: by 2002:a05:6402:1850:b0:4ac:c5c1:e1ed with SMTP id v16-20020a056402185000b004acc5c1e1edmr8412849edy.12.1677057455723;
-        Wed, 22 Feb 2023 01:17:35 -0800 (PST)
-Received: from [192.168.1.109] ([178.197.216.144])
-        by smtp.gmail.com with ESMTPSA id g16-20020a50d0d0000000b004ad1d3cf195sm3031904edf.95.2023.02.22.01.17.34
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 22 Feb 2023 01:17:35 -0800 (PST)
-Message-ID: <1467f7c5-07eb-97db-c6f2-573a4208cc28@linaro.org>
-Date:   Wed, 22 Feb 2023 10:17:34 +0100
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=bDXcsUPRL4UT1twN0Ir2xjoXiwcVYl6Jo6QwftXXn0Q=;
+        b=Ygnp5CANDPih1wIcsVCKIRpLp3Fu6naNEzKwE5Hfo9IbE8XAIWWgSAkOmvVEzcdBPF
+         EDu5SCnKT5OqgDWmgchtxZ3mtZdMywrIf+46atAU9gzLDKoN8fHHzypyV10VJzpKGlOv
+         oRAIDd6OivayxfxdXmdsFMlLs017Z4Sub2KYuygAnSj14LTxlbLR2HjPT0V3OZ1wYYch
+         pVXYm49/ly2XQqfd2N6rSEFZllNzxIiF/nqg3G5UD6Xxe8gbv2YyFFDPna388tq4DYt1
+         Xs0YQfSJ19fnK2KrqiDw68IPWfH9ZILDgy3vQr73bZfsk5mXrR/Dd5k6z2ktA0Tnvu7L
+         YoSA==
+X-Gm-Message-State: AO0yUKUqvE2n1JJofhjjFJZHrrR+JXS/QymiKikOHu4owpFtaor+Wl7Y
+        E6I6wNXMBusXPBOJ/o6jyIs=
+X-Google-Smtp-Source: AK7set/h7Vr1dqG5wxIxvwcQ1QGoNKpvOIrdzM9OBVTBU38biCpAWbjmbsEkZhdaexjNQtmY94+4mQ==
+X-Received: by 2002:aa7:de13:0:b0:4ae:eb0f:4258 with SMTP id h19-20020aa7de13000000b004aeeb0f4258mr7980618edv.30.1677057509656;
+        Wed, 22 Feb 2023 01:18:29 -0800 (PST)
+Received: from sakura.myxoz.lan (81-230-97-204-no2390.tbcn.telia.com. [81.230.97.204])
+        by smtp.gmail.com with ESMTPSA id l1-20020a50c101000000b004ad79733ac4sm3134404edf.40.2023.02.22.01.18.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 22 Feb 2023 01:18:29 -0800 (PST)
+Message-ID: <a4ad3fd15d41feda354ed50feaaccbe73e945d16.camel@gmail.com>
+Subject: Re: [PATCH] vfio: Fix NULL pointer dereference caused by
+ uninitialized group->iommufd
+From:   Miko Larsson <mikoxyzzz@gmail.com>
+To:     Yan Zhao <yan.y.zhao@intel.com>, alex.williamson@redhat.com,
+        jgg@nvidia.com, kevin.tian@intel.com
+Cc:     yi.l.liu@intel.com, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Date:   Wed, 22 Feb 2023 10:18:28 +0100
+In-Reply-To: <20230222074938.13681-1-yan.y.zhao@intel.com>
+References: <20230222074938.13681-1-yan.y.zhao@intel.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.46.3 (3.46.3-1.module_f37+15877+cf3308f9) 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH v2 1/3] dt-bindings: dma: snps,dw-axi-dmac: Add reset
- items
-Content-Language: en-US
-To:     Walker Chen <walker.chen@starfivetech.com>,
-        Eugeniy Paltsev <Eugeniy.Paltsev@synopsys.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor@kernel.org>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Emil Renner Berthing <kernel@esmil.dk>,
-        Emil Renner Berthing <emil.renner.berthing@canonical.com>
-Cc:     dmaengine@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org
-References: <20230221140424.719-1-walker.chen@starfivetech.com>
- <20230221140424.719-2-walker.chen@starfivetech.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230221140424.719-2-walker.chen@starfivetech.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 21/02/2023 15:04, Walker Chen wrote:
-> This DMA controller needs to be reset before being used on JH7110 SoC,
-> so add reset items to support this chip.
-
-There is reset already. The DMA controller is reset already. Your commit
-msg and commit subject do not match commit at all.
-
-> 
-> Signed-off-by: Walker Chen <walker.chen@starfivetech.com>
+On Wed, 2023-02-22 at 15:49 +0800, Yan Zhao wrote:
+> group->iommufd is not initialized for the iommufd_ctx_put()
+>=20
+> [20018.331541] BUG: kernel NULL pointer dereference, address:
+> 0000000000000000
+> [20018.377508] RIP: 0010:iommufd_ctx_put+0x5/0x10 [iommufd]
+> ...
+> [20018.476483] Call Trace:
+> [20018.479214]=C2=A0 <TASK>
+> [20018.481555]=C2=A0 vfio_group_fops_unl_ioctl+0x506/0x690 [vfio]
+> [20018.487586]=C2=A0 __x64_sys_ioctl+0x6a/0xb0
+> [20018.491773]=C2=A0 ? trace_hardirqs_on+0xc5/0xe0
+> [20018.496347]=C2=A0 do_syscall_64+0x67/0x90
+> [20018.500340]=C2=A0 entry_SYSCALL_64_after_hwframe+0x4b/0xb5
+>=20
+> Fixes: 9eefba8002c2 ("vfio: Move vfio group specific code into
+> group.c")
+> Signed-off-by: Yan Zhao <yan.y.zhao@intel.com>
 > ---
->  .../devicetree/bindings/dma/snps,dw-axi-dmac.yaml         | 8 +++++++-
->  1 file changed, 7 insertions(+), 1 deletion(-)
-> 
-> diff --git a/Documentation/devicetree/bindings/dma/snps,dw-axi-dmac.yaml b/Documentation/devicetree/bindings/dma/snps,dw-axi-dmac.yaml
-> index ad107a4d3b33..c2247c65a22f 100644
-> --- a/Documentation/devicetree/bindings/dma/snps,dw-axi-dmac.yaml
-> +++ b/Documentation/devicetree/bindings/dma/snps,dw-axi-dmac.yaml
-> @@ -20,6 +20,7 @@ properties:
->      enum:
->        - snps,axi-dma-1.01a
->        - intel,kmb-axi-dma
-> +      - starfive,jh7110-axi-dma
->  
->    reg:
->      minItems: 1
-> @@ -58,7 +59,12 @@ properties:
->      maximum: 8
->  
->    resets:
-> -    maxItems: 1
-> +    maxItems: 2
+> =C2=A0drivers/vfio/group.c | 2 +-
+> =C2=A01 file changed, 1 insertion(+), 1 deletion(-)
+>=20
+> diff --git a/drivers/vfio/group.c b/drivers/vfio/group.c
+> index 57ebe5e1a7e6..8649f85f3be4 100644
+> --- a/drivers/vfio/group.c
+> +++ b/drivers/vfio/group.c
+> @@ -137,7 +137,7 @@ static int vfio_group_ioctl_set_container(struct
+> vfio_group *group,
+> =C2=A0
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0ret =3D iommufd_vfio_compat_ioas_id(iommufd, &ioas_=
+id);
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0if (ret) {
+> -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0iommufd_c=
+tx_put(group->iommufd);
+> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0iommufd_c=
+tx_put(iommufd);
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0got=
+o out_unlock;
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0}
+> =C2=A0
 
-This breaks ABI and all other users. Test your changes before sending.
-
-Best regards,
-Krzysztof
-
+Might want to Cc this to the stable mailing list.
+--=20
+~miko
