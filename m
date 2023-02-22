@@ -2,161 +2,180 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 09F4A69F971
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Feb 2023 17:59:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6BE6269F976
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Feb 2023 18:02:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231926AbjBVQ7u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Feb 2023 11:59:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46758 "EHLO
+        id S232216AbjBVRCV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Feb 2023 12:02:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47958 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232334AbjBVQ7p (ORCPT
+        with ESMTP id S229504AbjBVRCT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Feb 2023 11:59:45 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5A1038008;
-        Wed, 22 Feb 2023 08:59:43 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 75339B811EA;
-        Wed, 22 Feb 2023 16:59:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8C971C433D2;
-        Wed, 22 Feb 2023 16:59:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1677085181;
-        bh=05pnDDaGSd/n9BoMAzcvuoBw0s4bNC2y1LFQEokKBb0=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=V+uFDfDIRLI1AfecAWJjAZ5A0Zkm7piM/TEzBTKpVWGwx7Fq/EMnQlSiUyz0TtDHY
-         CNsgE6iwRF4PRrjXV8QMJUSvaH/q1McGj2NYwYQQ4py4oViUILpx0HvCFL72fD864D
-         0Dfy7P9LA0BQHG0pSjTHNxptBTfpbmc5BTx8MAEqDQQ46QIsSA2z1q3DO0VgEY9JjG
-         M5ZyxadkbhXfxRJncn95G16RfEeO1Y/usqoKXSuNxYznig686RZ0Ej+4MvGxiTWyG8
-         fZTKYrFMZJHnrpcAZ4ckFpQT2zr5QoyGXOW1XS2F3eKYXScRkZidMDJcA18Yal5gpU
-         9ubEJ0TFCiOCA==
-Date:   Wed, 22 Feb 2023 16:59:36 +0000
-From:   Conor Dooley <conor@kernel.org>
-To:     Jiaxun Yang <jiaxun.yang@flygoat.com>
-Cc:     "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
-        linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        mpe@ellerman.id.au, paul.walmsley@sifive.com, palmer@dabbelt.com,
-        Rob Herring <robh+dt@kernel.org>,
-        Christoph Hellwig <hch@lst.de>, m.szyprowski@samsung.com,
-        robin.murphy@arm.com, linux-riscv@lists.infradead.org
-Subject: Re: [PATCH 2/3] riscv: Set dma_default_coherent to true
-Message-ID: <Y/ZJ+N4m6UUmIpL0@spud>
-References: <20230222133712.8079-1-jiaxun.yang@flygoat.com>
- <20230222133712.8079-3-jiaxun.yang@flygoat.com>
- <Y/YrvDBJcYUQt4WC@spud>
- <6BBA7BEA-8595-436D-B4BF-D7DB95069C53@flygoat.com>
- <Y/Y8lEndecMfD+Ur@spud>
- <E46E0161-24E3-4185-B408-9357C49F1B51@flygoat.com>
+        Wed, 22 Feb 2023 12:02:19 -0500
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF3AE38B6A;
+        Wed, 22 Feb 2023 09:02:17 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1677085338; x=1708621338;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=H6sgHyH1BF+t+Pph+yN1fdkk4hRr7/Fbwj3Oh7bSCsQ=;
+  b=ZKWzvipQtPSaWTVBHFPywhgiqdVkQOlV/7lqitrtOqnODR0OF2ZxlO26
+   COmIXYo3vK0/5jPhSg4jbDL9xFA0WO75INsPpIsjDwlqLADdsjjjPeCS4
+   Q0iveBiSWk+59WjiRNmqU5R2034e1cIJNEbpf4GTnTZ3FrSJq8Y3YL73y
+   dRNTeeeUx5tzKDreiej1M4EdN1C20TPtwqh4+ONmOr9XqTFaLbue4ns3m
+   epsZSnp7dsfDpqTlML/rGu6zFvsF3+DxpME9fesslQuCLX8EKUuc1AMJF
+   pliSt2AsklH6OITMxCzg+9jRctajYtUkit34RNZEnUc06SeXVqja1XY1U
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10629"; a="397665251"
+X-IronPort-AV: E=Sophos;i="5.97,319,1669104000"; 
+   d="scan'208";a="397665251"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Feb 2023 09:01:45 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10629"; a="649634418"
+X-IronPort-AV: E=Sophos;i="5.97,319,1669104000"; 
+   d="scan'208";a="649634418"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by orsmga006.jf.intel.com with ESMTP; 22 Feb 2023 09:01:42 -0800
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1pUsUu-00AWZN-1Y;
+        Wed, 22 Feb 2023 19:01:40 +0200
+Date:   Wed, 22 Feb 2023 19:01:40 +0200
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Robin van der Gracht <robin@protonic.nl>
+Cc:     "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>,
+        Raul E Rangel <rrangel@chromium.org>,
+        Wolfram Sang <wsa@kernel.org>, linux-kernel@vger.kernel.org,
+        linux-i2c@vger.kernel.org, linux-usb@vger.kernel.org,
+        Miguel Ojeda <ojeda@kernel.org>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Subject: Re: [PATCH v1 2/3] auxdisplay: ht16k33: Make use of
+ device_get_match_data()
+Message-ID: <Y/ZKdN4nuHcL4DgE@smile.fi.intel.com>
+References: <20230221133307.20287-1-andriy.shevchenko@linux.intel.com>
+ <20230221133307.20287-3-andriy.shevchenko@linux.intel.com>
+ <Y/TJs+Arban0ats8@smile.fi.intel.com>
+ <be203dfd290e67c8ce74d11c5c9478a4@protonic.nl>
+ <Y/UD3HWNy8uKYShC@smile.fi.intel.com>
+ <0235f0fed989a8b027db720663699f5d@protonic.nl>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="DDJ+GjGaXN0PLxMy"
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <E46E0161-24E3-4185-B408-9357C49F1B51@flygoat.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <0235f0fed989a8b027db720663699f5d@protonic.nl>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Wed, Feb 22, 2023 at 05:46:00PM +0100, Robin van der Gracht wrote:
+> On 2023-02-21 18:48, Andy Shevchenko wrote:
+> > On Tue, Feb 21, 2023 at 05:10:00PM +0100, Robin van der Gracht wrote:
+> > > On 2023-02-21 14:40, Andy Shevchenko wrote:
+> > > > On Tue, Feb 21, 2023 at 03:33:06PM +0200, Andy Shevchenko wrote:
 
---DDJ+GjGaXN0PLxMy
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+...
 
-On Wed, Feb 22, 2023 at 04:20:16PM +0000, Jiaxun Yang wrote:
-> > 2023=E5=B9=B42=E6=9C=8822=E6=97=A5 16:02=EF=BC=8CConor Dooley <conor@ke=
-rnel.org> =E5=86=99=E9=81=93=EF=BC=9A
-> > On Wed, Feb 22, 2023 at 03:55:19PM +0000, Jiaxun Yang wrote:
-> >>> 2023=E5=B9=B42=E6=9C=8822=E6=97=A5 14:50=EF=BC=8CConor Dooley <conor@=
-kernel.org> =E5=86=99=E9=81=93=EF=BC=9A
-> >>> On Wed, Feb 22, 2023 at 01:37:11PM +0000, Jiaxun Yang wrote:
-> >>>> For riscv our assumption is unless a device states it is non-coheren=
-t,
-> >>>> we take it to be DMA coherent.
-> >>>>=20
-> >>>> For devicetree probed devices that have been true since very begining
-> >>>> with OF_DMA_DEFAULT_COHERENT selected.
-> >>>>=20
-> >>>> Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
-> >>>> ---
-> >>>> arch/riscv/kernel/setup.c | 3 +++
-> >>>> 1 file changed, 3 insertions(+)
-> >>>>=20
-> >>>> diff --git a/arch/riscv/kernel/setup.c b/arch/riscv/kernel/setup.c
-> >>>> index 376d2827e736..34b371180976 100644
-> >>>> --- a/arch/riscv/kernel/setup.c
-> >>>> +++ b/arch/riscv/kernel/setup.c
-> >>>> @@ -300,6 +300,9 @@ void __init setup_arch(char **cmdline_p)
-> >>>> riscv_init_cbom_blocksize();
-> >>>> riscv_fill_hwcap();
-> >>>> apply_boot_alternatives();
-> >>>> +#ifdef CONFIG_RISCV_DMA_NONCOHERENT
-> >>>> + dma_default_coherent =3D true;
-> >>>> +#endif
-> >>>=20
-> >>> Do we really need to add ifdeffery for this here?
-> >>> It's always coherent by default, so why do we need to say set it in
-> >>> setup_arch() when we know that, regardless of options, it is true?
-> >>=20
-> >> Because this symbol is only a variable when:
-> >>=20
-> >> defined(CONFIG_ARCH_HAS_SYNC_DMA_FOR_DEVICE) || \
-> >> defined(CONFIG_ARCH_HAS_SYNC_DMA_FOR_CPU) || \
-> >> defined(CONFIG_ARCH_HAS_SYNC_DMA_FOR_CPU_ALL)
-> >>=20
-> >> Which is only true if  CONFIG_RISCV_DMA_NONCOHERENT is selected.
-> >>=20
-> >> Otherwise this symbol is defined to true and we can=E2=80=99t make a a=
-ssignment to it.
+> > > > > -	id = i2c_of_match_device(dev->driver->of_match_table, client);
+> > > > > -	if (id)
+> > > > > -		priv->type = (uintptr_t)id->data;
+> > > > > +	priv->type = (uintptr_t)device_get_match_data(dev);
+> > > >
+> > > > Looking closer the I²C ID table should provide DISP_MATRIX to keep
+> > > > default and
 
-> > Maybe I am just slow today, but I don't get why you need to add
-> > ifdeffery to setup_arch() to do something that is always true.
-> > Why can't you just set this in riscv/mm/dma-noncoherent.c? What am I
-> > missing?
->=20
-> Hmm that sounds like a good idea but I was unable to find a place for thi=
-s.
->=20
-> riscv/mm/dma-noncoherent.c are just a bunch of callbacks, there is no ini=
-tialisation
-> function that will always run on every boot. riscv_noncoherent_supported =
-is only
-> called conditionally.
+> > > > this needs to be not dropped.
 
-Right, that's fair. riscv_noncoherent_supported() is for when we know we
-can support non-coherent DMA, not to detect whether we can, hence the
-conditional nature.
-Apologies for sending you on a wild goose chase there.
+^^^^^ (1)
 
-> Perhaps I can add a initcall in dma-noncoherent.c but it seems to be a li=
-ttle bit
-> overkilling.
+> > > > So, the question is what to do with unknown type then, return -EINVAL
+> > > > from probe()?
+> > > 
+> > > If you leave out your addition of the DISP_UNKNOWN type, the default
+> > > type
+> > > will be DISP_MATRIX if no match is found, which is as it is now.
+> > > 
+> > > In that case the following change should suffice:
+> > > 
+> > > @@ -713,7 +715,6 @@ static int ht16k33_seg_probe(struct device *dev,
+> > > struct
+> > > ht16k33_priv *priv,
+> > >  static int ht16k33_probe(struct i2c_client *client)
+> > >  {
+> > >      struct device *dev = &client->dev;
+> > > -    const struct of_device_id *id;
+> > >      struct ht16k33_priv *priv;
+> > >      uint32_t dft_brightness;
+> > >      int err;
+> > > @@ -728,9 +729,8 @@ static int ht16k33_probe(struct i2c_client
+> > > *client)
+> > >          return -ENOMEM;
+> > > 
+> > >      priv->client = client;
+> > > -    id = i2c_of_match_device(dev->driver->of_match_table, client);
+> > > -    if (id)
+> > > -        priv->type = (uintptr_t)id->data;
+> > > +    priv->type = (uintptr_t)device_get_match_data(dev);
+> > > +
+> > >      i2c_set_clientdata(client, priv);
+> > > 
+> > >      err = ht16k33_initialize(priv);
+> > > 
+> > > Or do you think falling back to DISP_MATRIX if no match is found is
+> > > wrong?
+> > 
+> > First of all, the I²C ID table should actually use DISP_MATRIX.
+> > 
+> > Second, there are two points:
+> > 
+> > - It would be nice to check if the OF ID table doesn't provide a setting
+> >   (shouldn't we try I²C ID table and then, if still nothing, bail out?)
+> > 
+> > - The I²C ID table can be extended in the future with another entry
+> > which
+> >   may want to have different default
+> 
+> For my understanding, please correct me if I'm wrong;
+> 
+> For all methods of instantiation during ht16k33 probe, i2c_of_match_device()
+> matches the compatible strings in the OF ID table due to a call to
+> i2c_of_match_device_sysfs().
+> 
+> device_get_match_data() only matches the compatible strings in the OF ID
+> table for devicetree instantiation because of_match_device() won't match
+> is there is no actual of_node.
 
-Yah, probably would be.
+That's half-true. On ACPI based platforms we may have no of_node and match
+against OF ID table.
 
-> Actually I=E2=80=99d prefer to have a config option for the default value=
- but it seems like
-> it=E2=80=99s not in Christoph=E2=80=99s flavour.
+> So with only device_get_match_data() and a non devicetree instantiation,
+> priv->type will always be (uintptr_t)NULL = 0 = DISP_MATRIX.
 
-We already have a config option that sets things up nicely for RISC-V
-that you're getting rid of! ;)
+Yes.
 
---DDJ+GjGaXN0PLxMy
-Content-Type: application/pgp-signature; name="signature.asc"
+> Which effectively breaks i.e. user-space instantiation for other display
+> types which now do work due to i2c_of_match_device().
+> (so my suggestion above is not sufficient).
+> 
+> Are you proposing extending and searching the I2C ID table to work around
+> that?
 
------BEGIN PGP SIGNATURE-----
+See (1) above. This is the downside I have noticed after sending this series.
+So, the I²C ID table match has to be restored, but the above mentioned issues
+with existing table are not gone, hence they need to be addressed in the next
+version.
 
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCY/ZJ9wAKCRB4tDGHoIJi
-0qO+AP0TUzGgL8wcTkrt9H19B7SAYoCE0ZZtKTmEp6bWgR/zGAD8Ckvf3sAHVPCu
-+k9dqAZE4SyR7ZcmrNr2SezV/436agk=
-=K9OI
------END PGP SIGNATURE-----
+-- 
+With Best Regards,
+Andy Shevchenko
 
---DDJ+GjGaXN0PLxMy--
+
