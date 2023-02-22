@@ -2,81 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C523B69F83A
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Feb 2023 16:39:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C35B969F83F
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Feb 2023 16:42:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232525AbjBVPjz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Feb 2023 10:39:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34808 "EHLO
+        id S231969AbjBVPmJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Feb 2023 10:42:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36670 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232746AbjBVPjv (ORCPT
+        with ESMTP id S232302AbjBVPmG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Feb 2023 10:39:51 -0500
-Received: from srv6.fidu.org (srv6.fidu.org [159.69.62.71])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00F616EBC
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Feb 2023 07:39:21 -0800 (PST)
-Received: from localhost (localhost.localdomain [127.0.0.1])
-        by srv6.fidu.org (Postfix) with ESMTP id 5E251C800A1;
-        Wed, 22 Feb 2023 16:39:08 +0100 (CET)
-X-Virus-Scanned: Debian amavisd-new at srv6.fidu.org
-Received: from srv6.fidu.org ([127.0.0.1])
-        by localhost (srv6.fidu.org [127.0.0.1]) (amavisd-new, port 10024)
-        with LMTP id omRYXuwRoT6b; Wed, 22 Feb 2023 16:39:08 +0100 (CET)
-Received: from [192.168.176.165] (host-88-217-226-44.customer.m-online.net [88.217.226.44])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: wse@tuxedocomputers.com)
-        by srv6.fidu.org (Postfix) with ESMTPSA id B3F6FC800A0;
-        Wed, 22 Feb 2023 16:39:06 +0100 (CET)
-Message-ID: <647c8ea1-4f3d-1538-a78f-b71122e9c4f9@tuxedocomputers.com>
-Date:   Wed, 22 Feb 2023 16:39:06 +0100
+        Wed, 22 Feb 2023 10:42:06 -0500
+Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 982D24ECB
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Feb 2023 07:42:05 -0800 (PST)
+Received: by mail-wm1-x333.google.com with SMTP id j3so4063426wms.2
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Feb 2023 07:42:05 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Nw8f5byG/F3YoGbalXU1EaTBTMj3y23p7phZ4xgScHY=;
+        b=cEInI9spwQdEs3MyGHgBWa58a6MbNbdxHkepCIhKWGKUpYBoKtUgzZLW3bll2qtUdU
+         d23Q7LZPpKWFniX/AQ8gCEq/5c6hB++2nZEIEvZbxohDvI3GJ/qgfmGeY0PBd3/HtnXv
+         38cVs8HmaeyC0N2SaZotUcjV1TEtyhuH6n3x/5WlcWZ/Hdj2dK9QqgrmusOIOj2Todoj
+         xv9TCc+0ii5uqk9se+2jtFV419gwjcrwzGUSDv2CB5XDwQxXltDcyCI9ZrTLkRQvKUEr
+         1JQqxz8Rkak+bBGEoC7zc8MJMZLvrBN2lX1rBe2sJCIqeO22JB7vJI78QSye4il9EJ18
+         LPXQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Nw8f5byG/F3YoGbalXU1EaTBTMj3y23p7phZ4xgScHY=;
+        b=g6eUMVTRwuUd8BEHjtqt0Ql7HV6hpKjo69BlIYZKkWJF5rZL53F51u9T7++TcP+1Bh
+         xyWFZG7tfoK0wfHqmFkxbo9xoO8pM5OVA2BeDNASr7unkzm24H60Wf9dO1IwOaxcV3fx
+         3zS+UCrugusFmQ9MuyGIdVHH5kqiJ1WOmE1qMUvecxzaHmLjzQ10ZyWn+t2ygKyxLnIC
+         QqmrGCAgeF0vDGXeRoU/MHOW3cUBfyazkGfbeVdogsBm41POauhuZaCzV7Z7W+5c0Hzy
+         mngRVrLPX6dng8Gzj+qekzUzo6CMsjFRYseevrwk3Yzrb0iY768vIJiNLTLH/41jCd6G
+         qwGA==
+X-Gm-Message-State: AO0yUKWLtbjVe+f3LUb3PvRHHPdbmR0IiZgfQJWltnNn62fv492L57Sg
+        HL6wykymzJOKJgdq4+fKZtNL/7eIDbLzDC6AQ5vnLw==
+X-Google-Smtp-Source: AK7set/6GY33gcZOehd3qRAMZkQvnMhOfpkjzHnwTOT4RXEXkWNqVrTnxHUqu8NYnAyrOqqUTO19S2s3O6YGzej9ltU=
+X-Received: by 2002:a05:600c:4e44:b0:3df:f862:fe42 with SMTP id
+ e4-20020a05600c4e4400b003dff862fe42mr2347395wmq.10.1677080523815; Wed, 22 Feb
+ 2023 07:42:03 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH 0/2] Add quirk to disable PSR 2 on Tongfang PHxTxX1 and
- PHxTQx1
-To:     jani.nikula@linux.intel.com, joonas.lahtinen@linux.intel.com,
-        rodrigo.vivi@intel.com, tvrtko.ursulin@linux.intel.com,
-        airlied@gmail.com, daniel@ffwll.ch, jose.souza@intel.com,
-        jouni.hogander@intel.com, mika.kahola@intel.com,
-        ville.syrjala@linux.intel.com, lucas.demarchi@intel.com,
-        Diego.SantaCruz@spinetix.com, intel-gfx@lists.freedesktop.org,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
-References: <20230222141755.1060162-1-wse@tuxedocomputers.com>
-Content-Language: en-US
-From:   Werner Sembach <wse@tuxedocomputers.com>
-In-Reply-To: <20230222141755.1060162-1-wse@tuxedocomputers.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20230222145917.GA12590@debian> <20230222151236.GB12658@debian>
+In-Reply-To: <20230222151236.GB12658@debian>
+From:   Eric Dumazet <edumazet@google.com>
+Date:   Wed, 22 Feb 2023 16:41:51 +0100
+Message-ID: <CANn89iK03mcdu=dn+kj-St27Y2OvSzQ5G=VzqwutR0Khn1cSUg@mail.gmail.com>
+Subject: Re: [PATCH v2 2/2] gro: optimise redundant parsing of packets
+To:     Richard Gobert <richardbgobert@gmail.com>
+Cc:     davem@davemloft.net, kuba@kernel.org, pabeni@redhat.com,
+        dsahern@kernel.org, alexanderduyck@fb.com, lixiaoyan@google.com,
+        steffen.klassert@secunet.com, lucien.xin@gmail.com,
+        ye.xingchen@zte.com.cn, iwienand@redhat.com, leon@kernel.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Wed, Feb 22, 2023 at 4:13=E2=80=AFPM Richard Gobert <richardbgobert@gmai=
+l.com> wrote:
+>
+> Currently the IPv6 extension headers are parsed twice: first in
+> ipv6_gro_receive, and then again in ipv6_gro_complete.
+>
+> By using the new ->transport_proto field, and also storing the size of th=
+e
+> network header, we can avoid parsing extension headers a second time in
+> ipv6_gro_complete (which saves multiple memory dereferences and condition=
+al
+> checks inside ipv6_exthdrs_len for a varying amount of extension headers =
+in IPv6
+> packets).
+>
+> The implementation had to handle both inner and outer layers in case of
+> encapsulation (as they can't use the same field).
+>
+> Performance tests for TCP stream over IPv6 with a varying amount of exten=
+sion
+> headers demonstrate throughput improvement of ~0.7%.
+>
+> In addition, I fixed a potential existing problem:
+>  - The call to skb_set_inner_network_header at the beginning of
+>    ipv6_gro_complete calculates inner_network_header based on skb->data b=
+y
+>    calling skb_set_inner_network_header, and setting it to point to the b=
+eginning
+>    of the ip header.
+>  - If a packet is going to be handled by BIG TCP, the following code bloc=
+k is
+>    going to shift the packet header, and skb->data is going to be changed=
+ as
+>    well.
+>
+> When the two flows are combined, inner_network_header will point to the w=
+rong
+> place.
 
-Am 22.02.23 um 15:17 schrieb Werner Sembach:
-> On these Barebones PSR 2 is recognized as supported but is very buggy:
-> - Upper third of screen does sometimes not updated, resulting in
-> disappearing cursors or ghosts of already closed Windows saying behind.
-> - Approximately 40 px from the bottom edge a 3 pixel wide strip of randomly
-> colored pixels is flickering.
->
-> PSR 1 is working fine however.
->
-> This patchset introduces a new quirk to disable PSR 2 specifically on known
-> buggy devices and applies it to the Tongfang PHxTxX1 and PHxTQx1 barebones.
->
-> Signed-off-by: Werner Sembach <wse@tuxedocomputers.com>
-> Cc: <stable@vger.kernel.org>
->
->
-Parralel to this there is a patch fixing the root cause of this issue: 
-https://gitlab.freedesktop.org/drm/intel/-/issues/7347#note_1785094
+net-next is closed.
 
-So this quirk might only be relevant for stable kernels, depending on when that 
-other patch gets merged.
+If you think a fix is needed, please send a stand-alone and minimal
+patch so that we can discuss its merit.
 
+Note :
+
+BIG TCP only supports native IPv6, not encapsulated traffic,
+so we should not bother with inner_network_header yet.
