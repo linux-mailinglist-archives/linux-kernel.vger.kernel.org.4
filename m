@@ -2,169 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7F23E69EF1C
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Feb 2023 08:08:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8EB3E69EF1F
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Feb 2023 08:09:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230477AbjBVHIc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Feb 2023 02:08:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39190 "EHLO
+        id S230509AbjBVHJj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Feb 2023 02:09:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40346 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230171AbjBVHIa (ORCPT
+        with ESMTP id S230498AbjBVHJh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Feb 2023 02:08:30 -0500
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6C6A29161
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Feb 2023 23:08:28 -0800 (PST)
-Received: from kwepemi500026.china.huawei.com (unknown [172.30.72.53])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4PM6dY3m1XzKpx7;
-        Wed, 22 Feb 2023 15:06:25 +0800 (CST)
-Received: from [10.67.111.232] (10.67.111.232) by
- kwepemi500026.china.huawei.com (7.221.188.247) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.6; Wed, 22 Feb 2023 15:08:17 +0800
-Message-ID: <b6f596c9-b246-e1d8-0020-64e9b56c3914@huawei.com>
-Date:   Wed, 22 Feb 2023 15:08:16 +0800
+        Wed, 22 Feb 2023 02:09:37 -0500
+Received: from mail-io1-xd2f.google.com (mail-io1-xd2f.google.com [IPv6:2607:f8b0:4864:20::d2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E7682BF0D
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Feb 2023 23:09:36 -0800 (PST)
+Received: by mail-io1-xd2f.google.com with SMTP id m13so1282048ioq.13
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Feb 2023 23:09:36 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=mopGGJRWyF6lhmZLijInHJpk0iqSNEh7TvfY6xu4PPI=;
+        b=MV5ydonJf5couW8XWZh3Os3P5xphPi7lmCUVxsm9irpj5pGp+T0Wh/8DJOhjZGOYZh
+         Q56nUiQNIlapJCBxPC9MF6el7nh8lItNDjUWEmCxSx8hoO2SHn2kFnO1X9Ci8+1tp/6Z
+         MxHK+3CHr5aAuWZQmbGxPZliuD7LTRIqyG0uM=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=mopGGJRWyF6lhmZLijInHJpk0iqSNEh7TvfY6xu4PPI=;
+        b=z737HBvrhKHTneC13+NczuoGGv/H2K73Xexxx7j/L6qrxtJGfrU8AYe91aRLJniGsj
+         Si9JhcLbENFVlgR88xrYyAf0yoQcWR6gaKI2zQl6Uo3K1g7CA+JG6tMKvPb28hA2DaLY
+         ijN9lWCxj2mIQ+70d8wdjlOHAqJy/L0sw0lkgX0poUzajIktQqxwaCIHxqXWVf1QPaeB
+         pX6ujrXK68D95++JB+iwRCdzPQqpGVW5C5zUChqFgbp1mukK9ZOvsMlFikyf7lw2FucL
+         OnrcJS/E6O3MkJFn4sW2adXhJM6f2/YnN73PShz8A3FugRQByV0msRdsPTcg7jWNU9ln
+         HaCg==
+X-Gm-Message-State: AO0yUKWbhjZLPIVIxyshmVhC4DeLIe250C6bNe7JAPw6/1hWprAPXcTY
+        jFkJ03t2Fg3m1KyGqrAywFTIogZuvK0kce8M0XNQHQ==
+X-Google-Smtp-Source: AK7set+tqFM6R9VNoRneOI95BWuxBGUxEVAwGo2e4OEi8THxSuZWMYnxR5HVyRIFUqGgpXQhecv7XYy9KnG7BYIS8FA=
+X-Received: by 2002:a5d:990e:0:b0:71e:2d29:aa48 with SMTP id
+ x14-20020a5d990e000000b0071e2d29aa48mr4437709iol.29.1677049775507; Tue, 21
+ Feb 2023 23:09:35 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH -next] arm64: Optimize the comparison of unsigned
- expressions to avoid compiling error
-To:     Ard Biesheuvel <ardb@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>
-CC:     <catalin.marinas@arm.com>, <will@kernel.org>, <broonie@kernel.org>,
-        <kristina.martsenko@arm.com>, <james.morse@arm.com>,
-        <maz@kernel.org>, <samitolvanen@google.com>,
-        <andreyknvl@gmail.com>, <masahiroy@kernel.org>,
-        <joey.gouly@arm.com>, <anshuman.khandual@arm.com>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <wanghai38@huawei.com>
-References: <20230221012740.2929481-1-linyujun809@huawei.com>
- <Y/SewFthY/rGct7C@FVFF77S0Q05N>
- <CAMj1kXHyv1_56-CdX-egQTxnJn5ob15=TrfSOGmp+s019EfT2w@mail.gmail.com>
-From:   "linyujun (C)" <linyujun809@huawei.com>
-In-Reply-To: <CAMj1kXHyv1_56-CdX-egQTxnJn5ob15=TrfSOGmp+s019EfT2w@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.67.111.232]
-X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
- kwepemi500026.china.huawei.com (7.221.188.247)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20230203000116.v2.1.I5bb9c164a2d2025655dee810b983e01ecd81c14e@changeid>
+In-Reply-To: <20230203000116.v2.1.I5bb9c164a2d2025655dee810b983e01ecd81c14e@changeid>
+From:   Abhishek Kumar <kuabhs@chromium.org>
+Date:   Tue, 21 Feb 2023 23:09:24 -0800
+Message-ID: <CACTWRws334p0qpsZrDBULgS124Zye9D7YC3F9hzJpaFzSmn1CQ@mail.gmail.com>
+Subject: Re: [PATCH v2] ath10k: snoc: enable threaded napi on WCN3990
+To:     kvalo@kernel.org
+Cc:     davem@davemloft.net, ath10k@lists.infradead.org,
+        quic_mpubbise@quicinc.com, netdev@vger.kernel.org, kuba@kernel.org,
+        linux-wireless@vger.kernel.org, pabeni@redhat.com,
+        linux-kernel@vger.kernel.org, Eric Dumazet <edumazet@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Thanks for your advice
+Hi Kale,
 
+Gentle reminder for your comments.
 
-在 2023/2/21 23:10, Ard Biesheuvel 写道:
-> On Tue, 21 Feb 2023 at 11:37, Mark Rutland <mark.rutland@arm.com> wrote:
->> On Tue, Feb 21, 2023 at 09:27:40AM +0800, Lin Yujun wrote:
->>> while compile arch/arm64/include/asm/cpufeature.h with
->>> -Werror=type-limits enabled, errors shown as below:
->>>
->>> ./arch/arm64/include/asm/cpufeature.h: In function 'system_supports_4kb_granule':
->>> ./arch/arm64/include/asm/cpufeature.h:653:14: error: comparison of unsigned expression >= 0 is always true [-Werror=type-limits]
->>>    return (val >= ID_AA64MMFR0_TGRAN4_SUPPORTED_MIN) &&
->>>                ^~
->>> ./arch/arm64/include/asm/cpufeature.h: In function 'system_supports_64kb_granule':
->>> ./arch/arm64/include/asm/cpufeature.h:666:14: error: comparison of unsigned expression >= 0 is always true [-Werror=type-limits]
->>>    return (val >= ID_AA64MMFR0_TGRAN64_SUPPORTED_MIN) &&
->>>                ^~
-> The usefulness of this diagnostic is debatable even when the right
-> hand is a literal '0' but warning about symbolic constants like this
-> is actively evil.
+Thanks
+Abhishek
+
+On Thu, Feb 2, 2023 at 4:02 PM Abhishek Kumar <kuabhs@chromium.org> wrote:
 >
-> In general, preprocessor #defined values can depend on Kconfig
-> settings or other build configuration switches, and this warning
-> encourages us to remove the expression altogether, which could mean
-> introducing a bug if the macro may assume values >0 in other
-> configurations.
+> NAPI poll can be done in threaded context along with soft irq
+> context. Threaded context can be scheduled efficiently, thus
+> creating less of bottleneck during Rx processing. This patch is
+> to enable threaded NAPI on ath10k driver.
 >
-> Ergo, we must ignore -Wtype-limits until it is fixed, and can at least
-> distinguish literal 0 constants from ones instantiated by a CPP macro.
+> Based on testing, it was observed that on WCN3990, the CPU0 reaches
+> 100% utilization when napi runs in softirq context. At the same
+> time the other CPUs are at low consumption percentage. This
+> does not allow device to reach its maximum throughput potential.
+> After enabling threaded napi, CPU load is balanced across all CPUs
+> and following improvments were observed:
+> - UDP_RX increase by ~22-25%
+> - TCP_RX increase by ~15%
 >
+> Here are some of the additional raw data with and without threaded napi:
+> ==================================================
+> udp_rx(Without threaded NAPI)
+> 435.98+-5.16 : Channel 44
+> 439.06+-0.66 : Channel 157
 >
->> When is the `-Werror=type-limits` flag enabled by the build system?
->>
->> We have patterns like this all over the kernel, and I don't think this is
->> indicative of a real problem, and I don't think that we need to change code to
->> make this warning disappear.
->>
->>> Modify the return judgment statement, use
->>> "((val - min) < (val - max - 1))" to confirm that returns
->>> true in “min <= val <= max” cases, false in other cases.
->> That expression is far less clear than the existing code, so I do not think
->> that is a good idea.
->>
->>> Fixes: 79d82cbcbb3d ("arm64/kexec: Test page size support with new TGRAN range values")
->> What functional error does this fix?
->>
->> What configuration is broken?
->>
->> Thanks,
->> Mark.
->>
->>> Signed-off-by: Lin Yujun <linyujun809@huawei.com>
->>> ---
->>>   arch/arm64/include/asm/cpufeature.h | 18 ++++++++++++------
->>>   1 file changed, 12 insertions(+), 6 deletions(-)
->>>
->>> diff --git a/arch/arm64/include/asm/cpufeature.h b/arch/arm64/include/asm/cpufeature.h
->>> index 03d1c9d7af82..0a6bda025141 100644
->>> --- a/arch/arm64/include/asm/cpufeature.h
->>> +++ b/arch/arm64/include/asm/cpufeature.h
->>> @@ -54,6 +54,9 @@ enum ftr_type {
->>>   #define FTR_VISIBLE_IF_IS_ENABLED(config)            \
->>>        (IS_ENABLED(config) ? FTR_VISIBLE : FTR_HIDDEN)
->>>
->>> +#define IN_RANGE_INCLUSIVE(val, min, max)            \
->>> +     (((val) - (min)) < ((val) - (max) - 1))
->>> +
->>>   struct arm64_ftr_bits {
->>>        bool            sign;   /* Value is signed ? */
->>>        bool            visible;
->>> @@ -693,8 +696,9 @@ static inline bool system_supports_4kb_granule(void)
->>>        val = cpuid_feature_extract_unsigned_field(mmfr0,
->>>                                                ID_AA64MMFR0_EL1_TGRAN4_SHIFT);
->>>
->>> -     return (val >= ID_AA64MMFR0_EL1_TGRAN4_SUPPORTED_MIN) &&
->>> -            (val <= ID_AA64MMFR0_EL1_TGRAN4_SUPPORTED_MAX);
->>> +     return IN_RANGE_INCLUSIVE(val,
->>> +             ID_AA64MMFR0_EL1_TGRAN4_SUPPORTED_MIN,
->>> +             ID_AA64MMFR0_EL1_TGRAN4_SUPPORTED_MAX);
->>>   }
->>>
->>>   static inline bool system_supports_64kb_granule(void)
->>> @@ -706,8 +710,9 @@ static inline bool system_supports_64kb_granule(void)
->>>        val = cpuid_feature_extract_unsigned_field(mmfr0,
->>>                                                ID_AA64MMFR0_EL1_TGRAN64_SHIFT);
->>>
->>> -     return (val >= ID_AA64MMFR0_EL1_TGRAN64_SUPPORTED_MIN) &&
->>> -            (val <= ID_AA64MMFR0_EL1_TGRAN64_SUPPORTED_MAX);
->>> +     return IN_RANGE_INCLUSIVE(val,
->>> +             ID_AA64MMFR0_EL1_TGRAN64_SUPPORTED_MIN,
->>> +             ID_AA64MMFR0_EL1_TGRAN64_SUPPORTED_MAX);
->>>   }
->>>
->>>   static inline bool system_supports_16kb_granule(void)
->>> @@ -719,8 +724,9 @@ static inline bool system_supports_16kb_granule(void)
->>>        val = cpuid_feature_extract_unsigned_field(mmfr0,
->>>                                                ID_AA64MMFR0_EL1_TGRAN16_SHIFT);
->>>
->>> -     return (val >= ID_AA64MMFR0_EL1_TGRAN16_SUPPORTED_MIN) &&
->>> -            (val <= ID_AA64MMFR0_EL1_TGRAN16_SUPPORTED_MAX);
->>> +     return IN_RANGE_INCLUSIVE(val,
->>> +             ID_AA64MMFR0_EL1_TGRAN16_SUPPORTED_MIN,
->>> +             ID_AA64MMFR0_EL1_TGRAN16_SUPPORTED_MAX);
->>>   }
->>>
->>>   static inline bool system_supports_mixed_endian_el0(void)
->>> --
->>> 2.34.1
->>>
-> .
+> udp_rx(With threaded NAPI)
+> 509.73+-41.03 : Channel 44
+> 549.97+-7.62 : Channel 157
+> ===================================================
+> udp_tx(Without threaded NAPI)
+> 461.31+-0.69  : Channel 44
+> 461.46+-0.78 : Channel 157
+>
+> udp_tx(With threaded NAPI)
+> 459.20+-0.77 : Channel 44
+> 459.78+-1.08 : Channel 157
+> ===================================================
+> tcp_rx(Without threaded NAPI)
+> 472.63+-2.35 : Channel 44
+> 469.29+-6.31 : Channel 157
+>
+> tcp_rx(With threaded NAPI)
+> 498.49+-2.44 : Channel 44
+> 541.14+-40.65 : Channel 157
+> ===================================================
+> tcp_tx(Without threaded NAPI)
+> 317.34+-2.37 : Channel 44
+> 317.01+-2.56 : Channel 157
+>
+> tcp_tx(With threaded NAPI)
+> 371.34+-2.36 : Channel 44
+> 376.95+-9.40 : Channel 157
+> ===================================================
+>
+> Tested-on: WCN3990 hw1.0 SNOC WLAN.HL.3.2.2-00696-QCAHLSWMTPL-1
+> Signed-off-by: Abhishek Kumar <kuabhs@chromium.org>
+> ---
+>
+> Changes in v2:
+> - Removed the hw param checks to add dev_set_threaded() to snoc.c
+> - Added some more test data in the commit message.
+>
+>  drivers/net/wireless/ath/ath10k/snoc.c | 1 +
+>  1 file changed, 1 insertion(+)
+>
+> diff --git a/drivers/net/wireless/ath/ath10k/snoc.c b/drivers/net/wireless/ath/ath10k/snoc.c
+> index cfcb759a87de..0f6d2f67ff6b 100644
+> --- a/drivers/net/wireless/ath/ath10k/snoc.c
+> +++ b/drivers/net/wireless/ath/ath10k/snoc.c
+> @@ -927,6 +927,7 @@ static int ath10k_snoc_hif_start(struct ath10k *ar)
+>
+>         bitmap_clear(ar_snoc->pending_ce_irqs, 0, CE_COUNT_MAX);
+>
+> +       dev_set_threaded(&ar->napi_dev, true);
+>         ath10k_core_napi_enable(ar);
+>         ath10k_snoc_irq_enable(ar);
+>         ath10k_snoc_rx_post(ar);
+> --
+> 2.39.1.519.gcb327c4b5f-goog
+>
