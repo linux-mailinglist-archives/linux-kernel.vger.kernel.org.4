@@ -2,114 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1080869F9AB
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Feb 2023 18:09:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0492169F9B7
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Feb 2023 18:11:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232501AbjBVRJm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Feb 2023 12:09:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55750 "EHLO
+        id S232515AbjBVRLV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Feb 2023 12:11:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57388 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232261AbjBVRJk (ORCPT
+        with ESMTP id S229611AbjBVRLU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Feb 2023 12:09:40 -0500
-Received: from mail-qt1-x834.google.com (mail-qt1-x834.google.com [IPv6:2607:f8b0:4864:20::834])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DA1120D1B;
-        Wed, 22 Feb 2023 09:09:39 -0800 (PST)
-Received: by mail-qt1-x834.google.com with SMTP id fp16so8194781qtb.10;
-        Wed, 22 Feb 2023 09:09:39 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=iBcq0pmdAn/4XG8y13P0hgBjKjCgMSw8ZQ/buDOWOcQ=;
-        b=Ecisn3UPa5hbrjZq8naUJ19FdbaKZfJv+4vT343wn7TCgqsXpRVQO8sdQu00WlyeHZ
-         myWJHj1VnX5owpSgg/shf2m9g8ng01QFyeCWAntXVnJBFADkVk1yd0oyPxsNhSvqOHzV
-         pHt9B2SLuLw7gzeX0il8kGSVzAsRTu4PBFdZJ68HmYNXgYicb605rw4p2dBvQjlmHUH9
-         RQq1Od3iuImF2AKc6VC8akbpvbTb8QL36idiYs0N0ucl6fBwjn5lGW6pgX5xMUd5qJ5k
-         NEkN8b/NafOKRuXDUDfQd7PvCal+Ls9rijvpqxMuIvoc4kLbV3ttYOdkqD/IDE8UUKW+
-         s30g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=iBcq0pmdAn/4XG8y13P0hgBjKjCgMSw8ZQ/buDOWOcQ=;
-        b=b7es7fVKOxv5Puu1cBy6RfMb7BG+Ly//2okXsn6jqUqs4TNFVM2elG1UAMN7rDDJrJ
-         cBTB5TCQA/OOXunZHrDrkXGZ79f5Lys9k9BKRophBlqn7BcYL/SKqWemtG42q/KOt44h
-         UWwb9rgInYPQmulO1vqgK1pcgrFNbD/o5NBXoZJpnLW/Fr7efOFqv8vC2kam5MHOx0JJ
-         6tSSMCgH63twEVq5JO+JTlUgiIwTzY1Vni26csb+nlcym0yHBWtuZUa4xUkUYlgC8UuB
-         K6aKj7co3qte9COi6WQlY62te1ilDGZgT4wYeVvsskr0r8+qyZcFK973Th+RK08qOFsK
-         SW/g==
-X-Gm-Message-State: AO0yUKVQgvR1F1J0dBJ3tQkJ+29sc/rK9pN8GdkkT0ts9V3zOHG5v91E
-        KB2ViaVaHKte+nF6U+hb4pg=
-X-Google-Smtp-Source: AK7set8hnf9n6oN7lBKzmccUzRS7VG7Q6re6nuyehgVa8mijSeEfP+U5mo3VUWW5lKy5O/daqXOPRg==
-X-Received: by 2002:a05:622a:414:b0:3ba:247a:3fbc with SMTP id n20-20020a05622a041400b003ba247a3fbcmr1183592qtx.39.1677085778299;
-        Wed, 22 Feb 2023 09:09:38 -0800 (PST)
-Received: from localhost (pool-173-73-95-180.washdc.fios.verizon.net. [173.73.95.180])
-        by smtp.gmail.com with UTF8SMTPSA id s190-20020a372cc7000000b007422fa6376bsm2484074qkh.77.2023.02.22.09.09.37
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 22 Feb 2023 09:09:37 -0800 (PST)
-From:   Sean Anderson <seanga2@gmail.com>
-To:     "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org,
-        Rolf Eike Beer <eike-kernel@sf-tec.de>,
-        Sean Anderson <seanga2@gmail.com>,
-        kernel test robot <lkp@intel.com>,
-        Dan Carpenter <error27@gmail.com>
-Subject: [PATCH net] net: sunhme: Return an error when we are out of slots
-Date:   Wed, 22 Feb 2023 12:09:35 -0500
-Message-Id: <20230222170935.1820939-1-seanga2@gmail.com>
-X-Mailer: git-send-email 2.37.1
+        Wed, 22 Feb 2023 12:11:20 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3974A23322;
+        Wed, 22 Feb 2023 09:11:19 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 985BCCE1DF0;
+        Wed, 22 Feb 2023 17:11:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8FC35C433EF;
+        Wed, 22 Feb 2023 17:11:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1677085875;
+        bh=4sGn3LZFddbDjgW7sklcZGxfWyx4lt6W3QkHf/G2mcQ=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=hlpkfE3LVCZLran1cNtI2bXRPA0GIFK84E06RFIZBIGXkzd64tx+xyLgZoQp0MA8w
+         omFi9+anIRGoqpDY1wrhypPVRnpJw/TR4eBSMYOTX8OJxbwEm3n6dd/Az0i6ADkK/s
+         9r+aLIWd4+FJJ9t83UReRHUb90nf6teGV2ztTNdeWGbIHVKd0AbWG1vmvMb9vKI/3r
+         7QA80wDpiXxTc/iY8VOs/oiz3IcFuAEHKL/XcW1LfZCvuYK2KixFS1PuyqEYlA51vP
+         CLNm7rU2LE7skcig9MBt1GdMJshOOB/i+QI7NWA6mb4L4oclKMiE1fe9R5KrRdI2BT
+         9hzXWoCQPpYDw==
+Date:   Wed, 22 Feb 2023 10:11:13 -0700
+From:   Nathan Chancellor <nathan@kernel.org>
+To:     Masahiro Yamada <masahiroy@kernel.org>
+Cc:     linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Nicolas Schier <nicolas@fjasle.eu>
+Subject: Re: [PATCH] kbuild: rpm-pkg: remove unneeded KERNELRELEASE from
+ modules/headers_install
+Message-ID: <Y/ZMsX2gtnUZXlal@dev-arch.thelio-3990X>
+References: <20230222144730.3813421-1-masahiroy@kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230222144730.3813421-1-masahiroy@kernel.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-We only allocate enough space for four devices when the parent is a QFE. If
-we couldn't find a spot (because five devices were created for whatever
-reason), we would not return an error from probe(). Return ENODEV, which
-was what we did before.
+On Wed, Feb 22, 2023 at 11:47:29PM +0900, Masahiro Yamada wrote:
+> There is no need to pass KERNELRELEASE to installation targets.
+> 
+> KERNELRELEASE used for building the kernel is saved in
+> include/config/kernel.release.
+> 
+> Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
 
-Fixes: 96c6e9faecf1 ("sunhme: forward the error code from pci_enable_device()")
-Reported-by: kernel test robot <lkp@intel.com>
-Reported-by: Dan Carpenter <error27@gmail.com>
-Signed-off-by: Sean Anderson <seanga2@gmail.com>
----
+Reviewed-by: Nathan Chancellor <nathan@kernel.org>
 
- drivers/net/ethernet/sun/sunhme.c | 7 ++++---
- 1 file changed, 4 insertions(+), 3 deletions(-)
-
-diff --git a/drivers/net/ethernet/sun/sunhme.c b/drivers/net/ethernet/sun/sunhme.c
-index 1c16548415cd..523e26653ec8 100644
---- a/drivers/net/ethernet/sun/sunhme.c
-+++ b/drivers/net/ethernet/sun/sunhme.c
-@@ -2861,12 +2861,13 @@ static int happy_meal_pci_probe(struct pci_dev *pdev,
- 
- 		for (qfe_slot = 0; qfe_slot < 4; qfe_slot++)
- 			if (!qp->happy_meals[qfe_slot])
--				break;
-+				goto found_slot;
- 
--		if (qfe_slot == 4)
--			goto err_out;
-+		err = -ENODEV;
-+		goto err_out;
- 	}
- 
-+found_slot:
- 	dev = devm_alloc_etherdev(&pdev->dev, sizeof(struct happy_meal));
- 	if (!dev) {
- 		err = -ENOMEM;
--- 
-2.37.1
-
+> ---
+> 
+>  scripts/package/mkspec | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/scripts/package/mkspec b/scripts/package/mkspec
+> index 83a64d9d7372..3c550960dd39 100755
+> --- a/scripts/package/mkspec
+> +++ b/scripts/package/mkspec
+> @@ -99,8 +99,8 @@ $S
+>  	%else
+>  	cp \$($MAKE -s image_name) %{buildroot}/boot/vmlinuz-$KERNELRELEASE
+>  	%endif
+> -$M	$MAKE %{?_smp_mflags} KERNELRELEASE=$KERNELRELEASE INSTALL_MOD_PATH=%{buildroot} modules_install
+> -	$MAKE %{?_smp_mflags} KERNELRELEASE=$KERNELRELEASE INSTALL_HDR_PATH=%{buildroot}/usr headers_install
+> +$M	$MAKE %{?_smp_mflags} INSTALL_MOD_PATH=%{buildroot} modules_install
+> +	$MAKE %{?_smp_mflags} INSTALL_HDR_PATH=%{buildroot}/usr headers_install
+>  	cp System.map %{buildroot}/boot/System.map-$KERNELRELEASE
+>  	cp .config %{buildroot}/boot/config-$KERNELRELEASE
+>  $S$M	rm -f %{buildroot}/lib/modules/$KERNELRELEASE/build
+> -- 
+> 2.34.1
+> 
