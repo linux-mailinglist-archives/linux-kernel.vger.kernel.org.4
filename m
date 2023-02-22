@@ -2,139 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D47E69FAEE
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Feb 2023 19:22:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1ADFE69FAF2
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Feb 2023 19:27:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231905AbjBVSWk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Feb 2023 13:22:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57992 "EHLO
+        id S231268AbjBVS1C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Feb 2023 13:27:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60394 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230511AbjBVSWj (ORCPT
+        with ESMTP id S229515AbjBVS1A (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Feb 2023 13:22:39 -0500
+        Wed, 22 Feb 2023 13:27:00 -0500
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B940B3C78B
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Feb 2023 10:22:37 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC7AA39CC5;
+        Wed, 22 Feb 2023 10:26:58 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 6C2D3B81649
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Feb 2023 18:22:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B57A0C433D2;
-        Wed, 22 Feb 2023 18:22:34 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 9C06CB8164A;
+        Wed, 22 Feb 2023 18:26:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 424DBC433EF;
+        Wed, 22 Feb 2023 18:26:55 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1677090155;
-        bh=CzIR8pGHHiNEiEpf6Yh2H8j5zj5EVQGwTE29uy1k9eg=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=okC9wkxZB+0MdfKesGUBqtFLaECvBpkOWvsCxp2//TFTiQ16yo+mukiMxWlnkSbDL
-         HUiJ4OtDUo7R3zc1OrkS+K/uroN3BSrxCzefijQTNcCo0x/pr+cnQHU/EeIwBssz3+
-         sPVBsxK5Esl/1m/x7rXE1J/fBu4NiquwLuNSDz3DfR/A+aivKEGK08DHDWeQA18qku
-         aVmsK+KdGBgk6eFR2qfgx5K+46v31/97+rRFCDu/0dhJJXuej1ArcFP/exU5a9ZxSm
-         UA9LTI3DWavrfd+Jl8VsVsGK3LNH47f3wu5OQrw3U0V26x6k9LsqZ9Hu3nKOk2jkTR
-         XZb+lby9aS5mA==
-Received: by pali.im (Postfix)
-        id 1CD0172C; Wed, 22 Feb 2023 19:22:32 +0100 (CET)
-Date:   Wed, 22 Feb 2023 19:22:32 +0100
-From:   Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>
-To:     Christophe Leroy <christophe.leroy@csgroup.eu>
-Cc:     Michael Ellerman <mpe@ellerman.id.au>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org
-Subject: Re: [PATCH v4 00/17] powerpc/85xx: p2020: Create one unified machine
- description
-Message-ID: <20230222182232.uiiwy5pd5n5xc5kl@pali>
-References: <cover.1677076552.git.christophe.leroy@csgroup.eu>
+        s=k20201202; t=1677090416;
+        bh=xBFAtQy7H9IEzhN6tiCIgW4YKmQxOgfi228DV4+IAOU=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=gyy8EWcwUoDh5Qjanib5yUoXbwdJ3E933glFTOrgDTICp8tQxuZZkdBWdCGE3GP5L
+         IxTfwN+Fh1JdZsKTXuH3jKRJEB9zy2LO/NH1jbTZ7E/EOY4q1FNVRzyJjAoBxvmdDu
+         MVV+eDn0AMPxdnL8Q0FRbrW2+coXXNG5QDtWh3vppgE5oVBaBvMuflomt+yJYgElsD
+         MlPWYQGEs//RgjLSUiJywp5dwIEHNFErsiKFuvoqUa/G+n4gVnIs1G6MkBP917I6I1
+         Ekzw/9EtI+E+SdRK5UvkWyfFnnXBWppvc+L5Lm48S6NxOuPYko2N/twjqZwm5QpX26
+         VmfP0U9PyOClQ==
+From:   SeongJae Park <sj@kernel.org>
+Cc:     SeongJae Park <sj@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        wsd_upstream@mediatek.com, casper.li@mediatek.com,
+        "andrew . yang" <andrew.yang@mediatek.com>, stable@vger.kernel.org,
+        damon@lists.linux.dev, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org
+Subject: Re: [PATCH v3] mm/damon/paddr: fix missing folio_put()
+Date:   Wed, 22 Feb 2023 18:26:53 +0000
+Message-Id: <20230222182653.156921-1-sj@kernel.org>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20230222064223.6735-1-andrew.yang@mediatek.com>
+References: 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <cover.1677076552.git.christophe.leroy@csgroup.eu>
-User-Agent: NeoMutt/20180716
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wednesday 22 February 2023 15:42:47 Christophe Leroy wrote:
-> This patch series unifies all P2020 boards and machine descriptions into
-> one generic unified P2020 machine description. With this generic machine
-> description, kernel can boot on any P2020-based board with correct DTS
-> file.
-> 
-> Tested on CZ.NIC Turris 1.1 board with has Freescale P2020 processor.
-> Kernel during booting correctly detects P2020 and prints:
-> [    0.000000] Using Freescale P2020 machine description
-> 
-> Changes in v4:
-> * Added several preparatory cleanup patchs
-> * Minimised churn by not duplicating helpers at the first place
-> * Split main patch in two
-> * Dropped patchs 1 and 2
-> * Untested beyond basic build test
+Hi Andrew,
 
-Changes looks good. I'm happy with them. You can add my:
 
-Reviewed-by: Pali Rohár <pali@kernel.org>
+Thank you for revising this patch!
 
-> Changes in v3:
-> * Use 'if (IS_ENABLED(CONFIG_PPC_I8259))' instead of '#ifdef CONFIG_PPC_I8259'
-> * Simplify p2020_probe()
-> * Patches generated by -M and -C git options
+> From: "andrew.yang" <andrew.yang@mediatek.com>
 > 
-> Link to v2: https://lore.kernel.org/linuxppc-dev/20221224211425.14983-1-pali@kernel.org/
+> damon_get_folio() would always increase folio _refcount and
+> folio_isolate_lru() would increase folio _refcount if the folio's lru
+> flag is set.
 > 
-> Changes in v2:
-> * Added patch "p2020: Move i8259 code into own function" (separated from the next one)
-> * Renamed CONFIG_P2020 to CONFIG_PPC_P2020
-> * Fixed descriptions
+> If an unevictable folio isolated successfully, there will be two more
+> _refcount. The one from folio_isolate_lru() will be decreased in
+> folio_puback_lru(), but the other one from damon_get_folio() will be
+> left behind. This causes a pin page.
 > 
-> Link to v1: https://lore.kernel.org/linuxppc-dev/20220819191557.28116-1-pali@kernel.org/
+> Whatever the case, the _refcount from damon_get_folio() should be
+> decreased.
 > 
-> Christophe Leroy (9):
->   powerpc/fsl_uli1575: Misc cleanup
->   powerpc/85xx: Rename setup_arch and pic_init on p1023
->   powerpc/85xx: Remove DBG() macro
->   powerpc/85xx: Remove #ifdefs CONFIG_PCI in mpc85xx_ds
->   powerpc/85xx: mpc85xx_{ds/rdb} compact the call to mpic_alloc()
->   powerpc/85xx: mpc85xx_{ds/rdb} replace BUG_ON() by WARN_ON()
->   powerpc/85xx: mpc85xx_{ds/rdb} replace prink by pr_xxx macro
->   powerpc/85xx: Remove #ifdefs CONFIG_PPC_I8259 in mpc85xx_ds
->   powerpc/85xx: Remove #ifdef CONFIG_QUICC_ENGINE in mpc85xx_rdb
+> Signed-off-by: andrew.yang <andrew.yang@mediatek.com>
+> Fixes: 57223ac29584 ("mm/damon/paddr: support the pageout scheme")
+> Cc: <stable@vger.kernel.org> # 5.16.x
+
+Reviewed-by: SeongJae Park <sj@kernel.org>
+
+This may not cleanly applicable on 6.1.y and 6.2.y.  I would post backports
+once this is merged in the mainline, unless others do earlier than me.
+
+
+Thanks,
+SJ
+
+> ---
+> v3:
+>   add fixes tag and cc stable
+> v2:
+>   according to David's suggestion
+>     1. revise subject
+>   according to SeongJae's suggestions
+>     1. rebase to mm-unstable tree 
+>     2. remove braces for th single statements
+> ---
+>  mm/damon/paddr.c | 7 +++----
+>  1 file changed, 3 insertions(+), 4 deletions(-)
 > 
-> Pali Rohár (8):
->   powerpc/85xx: p2020: Move all P2020 DS machine descriptions to p2020.c
->   powerpc/85xx: p2020: Move all P2020 RDB machine descriptions to
->     p2020.c
->   powerpc/85xx: p2020: Move i8259 code into own function
->   powerpc/85xx: mpc85xx_ds: Move PCI code into own file
->   powerpc/85xx: p2020: Unify .setup_arch and .init_IRQ callbacks
->   powerpc/85xx: p2020: Define just one machine description
->   powerpc/85xx: p2020: Enable boards by new config option
->     CONFIG_PPC_P2020
->   powerpc: dts: turris1x.dts: Remove "fsl,P2020RDB-PC" compatible string
-> 
->  arch/powerpc/boot/dts/turris1x.dts         |   2 +-
->  arch/powerpc/include/asm/ppc-pci.h         |   2 +
->  arch/powerpc/platforms/85xx/Kconfig        |  22 +++-
->  arch/powerpc/platforms/85xx/Makefile       |   5 +-
->  arch/powerpc/platforms/85xx/mpc85xx.h      |  12 ++
->  arch/powerpc/platforms/85xx/mpc85xx_8259.c |  78 ++++++++++++
->  arch/powerpc/platforms/85xx/mpc85xx_ds.c   | 133 ++-------------------
->  arch/powerpc/platforms/85xx/mpc85xx_mds.c  |   7 --
->  arch/powerpc/platforms/85xx/mpc85xx_rdb.c  |  79 ++----------
->  arch/powerpc/platforms/85xx/mpc85xx_uli.c  |  64 ++++++++++
->  arch/powerpc/platforms/85xx/p1023_rdb.c    |   8 +-
->  arch/powerpc/platforms/85xx/p2020.c        |  95 +++++++++++++++
->  arch/powerpc/platforms/fsl_uli1575.c       |   6 +-
->  13 files changed, 301 insertions(+), 212 deletions(-)
->  create mode 100644 arch/powerpc/platforms/85xx/mpc85xx_8259.c
->  create mode 100644 arch/powerpc/platforms/85xx/mpc85xx_uli.c
->  create mode 100644 arch/powerpc/platforms/85xx/p2020.c
-> 
+> diff --git a/mm/damon/paddr.c b/mm/damon/paddr.c
+> index 607bb69e526c..6c655d9b5639 100644
+> --- a/mm/damon/paddr.c
+> +++ b/mm/damon/paddr.c
+> @@ -250,12 +250,11 @@ static unsigned long damon_pa_pageout(struct damon_region *r, struct damos *s)
+>  			folio_put(folio);
+>  			continue;
+>  		}
+> -		if (folio_test_unevictable(folio)) {
+> +		if (folio_test_unevictable(folio))
+>  			folio_putback_lru(folio);
+> -		} else {
+> +		else
+>  			list_add(&folio->lru, &folio_list);
+> -			folio_put(folio);
+> -		}
+> +		folio_put(folio);
+>  	}
+>  	applied = reclaim_pages(&folio_list);
+>  	cond_resched();
 > -- 
-> 2.39.1
+> 2.18.0
+> 
 > 
