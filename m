@@ -2,124 +2,169 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 47B3169EF1A
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Feb 2023 08:07:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F23E69EF1C
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Feb 2023 08:08:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230264AbjBVHHN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Feb 2023 02:07:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37854 "EHLO
+        id S230477AbjBVHIc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Feb 2023 02:08:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39190 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229480AbjBVHHK (ORCPT
+        with ESMTP id S230171AbjBVHIa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Feb 2023 02:07:10 -0500
-Received: from mail-ua1-x935.google.com (mail-ua1-x935.google.com [IPv6:2607:f8b0:4864:20::935])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 112CD36681
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Feb 2023 23:07:09 -0800 (PST)
-Received: by mail-ua1-x935.google.com with SMTP id f20so2247263uam.3
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Feb 2023 23:07:09 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1677049628;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=swo/AVRGoOMfKCuHRg1QypMC/toJqloCtmfqbfFX1yE=;
-        b=UR3daz9+LDL6M2fVY4jjBENnMayiPhWT6h6ZsS+Zga6e/L2rj118PB4PSnb6i45Z1o
-         A0N8NV0y9VHkoAIdLjWj3wiDouo+Ulw/gQbBXTpAc3DMeqKjd+qG5ZCW/cu4ff/klRUO
-         Or4T/q1OU+RaNv3ej7KqDuRNwrEh3Wbf92/HGnKExqw7/Es6D3XAqrBmJSrQHPkV3Vxs
-         bojHRnkpwgY24NBGdlRthGAn/oTy9dmFXkmtpSLxxLSzyrgjK7oBAzwF4MfRu6TUoQ3K
-         FwhygeKz5ITsP+6cM3vhATXlIdpYUjHQhml5E+9lGZAM/81gd/U1TbvToJHDpnEK+0jA
-         UI4w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1677049628;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=swo/AVRGoOMfKCuHRg1QypMC/toJqloCtmfqbfFX1yE=;
-        b=piQaaaawKh/gR8VkITTrjpsr/NFVLycLjP3pD9gNik7DsabimZGITI6FZW3I/sLjA+
-         Zmg+dq/y37dq7eHgmEN/NIPBLkTNifa7h94p8K4LuZZxZvCQS+6ek2Xb6AeQM+OlMHtV
-         IPCoEdWFP44QnF37GpWQwZFpmw0S8oO75QrKk/hGFGajFgscmtPPL8Y/okWEr1qlrQeH
-         9uxiwR6avYcEhdwlCEoZ6J+LDIlfMCXRqIFDsq2IylrZuYiHL0o91cWchU/0AXtsB1hV
-         OLJXYaAzEVbrTJEBjwNQG0xrbPdIwdwmEioOlltAopDEZ9uN65NDMgCwXC66vdHy3sRW
-         s0xQ==
-X-Gm-Message-State: AO0yUKWn14yG28qpBuVYh45lkMvq71Oq+820XmbE/tZ8nrB2KqxBQ4fN
-        yYtoWD+Eh8xXWTwBGqLK/msZh3Ey8q6R9KB4VLeljA==
-X-Google-Smtp-Source: AK7set95TR3c8U46sH0ZY0kZjohLy02UfcaSbSVOPVr0aKJXD5TWClylFBY/nVZk3XmY1zOLnMg72Uv0nz0qaIhmz4Y=
-X-Received: by 2002:a05:6122:1435:b0:3e1:f8b0:e35d with SMTP id
- o21-20020a056122143500b003e1f8b0e35dmr1463080vkp.35.1677049628100; Tue, 21
- Feb 2023 23:07:08 -0800 (PST)
+        Wed, 22 Feb 2023 02:08:30 -0500
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6C6A29161
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Feb 2023 23:08:28 -0800 (PST)
+Received: from kwepemi500026.china.huawei.com (unknown [172.30.72.53])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4PM6dY3m1XzKpx7;
+        Wed, 22 Feb 2023 15:06:25 +0800 (CST)
+Received: from [10.67.111.232] (10.67.111.232) by
+ kwepemi500026.china.huawei.com (7.221.188.247) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.6; Wed, 22 Feb 2023 15:08:17 +0800
+Message-ID: <b6f596c9-b246-e1d8-0020-64e9b56c3914@huawei.com>
+Date:   Wed, 22 Feb 2023 15:08:16 +0800
 MIME-Version: 1.0
-References: <20230202073148.657746-1-sumit.garg@linaro.org>
-In-Reply-To: <20230202073148.657746-1-sumit.garg@linaro.org>
-From:   Sumit Garg <sumit.garg@linaro.org>
-Date:   Wed, 22 Feb 2023 12:36:57 +0530
-Message-ID: <CAFA6WYPOx2EWFL8zGXvjqYhQap+v26TWxQ1Pg8k4DiZupfZvCQ@mail.gmail.com>
-Subject: Re: [PATCH v6 0/2] arm64: Fix pending single-step debugging issues
-To:     will@kernel.org
-Cc:     catalin.marinas@arm.com, mark.rutland@arm.com,
-        daniel.thompson@linaro.org, dianders@chromium.org,
-        liwei391@huawei.com, mhiramat@kernel.org, maz@kernel.org,
-        ardb@kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH -next] arm64: Optimize the comparison of unsigned
+ expressions to avoid compiling error
+To:     Ard Biesheuvel <ardb@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>
+CC:     <catalin.marinas@arm.com>, <will@kernel.org>, <broonie@kernel.org>,
+        <kristina.martsenko@arm.com>, <james.morse@arm.com>,
+        <maz@kernel.org>, <samitolvanen@google.com>,
+        <andreyknvl@gmail.com>, <masahiroy@kernel.org>,
+        <joey.gouly@arm.com>, <anshuman.khandual@arm.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <wanghai38@huawei.com>
+References: <20230221012740.2929481-1-linyujun809@huawei.com>
+ <Y/SewFthY/rGct7C@FVFF77S0Q05N>
+ <CAMj1kXHyv1_56-CdX-egQTxnJn5ob15=TrfSOGmp+s019EfT2w@mail.gmail.com>
+From:   "linyujun (C)" <linyujun809@huawei.com>
+In-Reply-To: <CAMj1kXHyv1_56-CdX-egQTxnJn5ob15=TrfSOGmp+s019EfT2w@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.67.111.232]
+X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
+ kwepemi500026.china.huawei.com (7.221.188.247)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Will,
+Thanks for your advice
 
-On Thu, 2 Feb 2023 at 13:02, Sumit Garg <sumit.garg@linaro.org> wrote:
->
-> This patch-set reworks pending fixes from Wei's series [1] to make
-> single-step debugging via kgdb/kdb on arm64 work as expected. There was
-> a prior discussion on ML [2] regarding if we should keep the interrupts
-> enabled during single-stepping. So patch #1 follows suggestion from Will
-> [3] to not disable interrupts during single stepping but rather skip
-> single stepping within interrupt handler.
->
-> [1] https://lore.kernel.org/all/20200509214159.19680-1-liwei391@huawei.com/
-> [2] https://lore.kernel.org/all/CAD=FV=Voyfq3Qz0T3RY+aYWYJ0utdH=P_AweB=13rcV8GDBeyQ@mail.gmail.com/
-> [3] https://lore.kernel.org/all/20200626095551.GA9312@willie-the-truck/
->
-> Changes in v6:
-> - Fix incorrect rescheduling check introduced by rework for v5.
-> - Patch #2: s/kernel_regs_reset_single_step/kernel_rewind_single_step/
-> - Collected Daniel's tags.
->
 
-Would you be happy to pick up patch #2 independently? Also, it would
-be great if you can provide some guidance regarding patch #1 which
-certainly fixes single stepping on arm64 but I am not sure how it
-would have side-effects.
-
--Sumit
-
-> Changes in v5:
-> - Incorporated misc. comments from Mark.
+在 2023/2/21 23:10, Ard Biesheuvel 写道:
+> On Tue, 21 Feb 2023 at 11:37, Mark Rutland <mark.rutland@arm.com> wrote:
+>> On Tue, Feb 21, 2023 at 09:27:40AM +0800, Lin Yujun wrote:
+>>> while compile arch/arm64/include/asm/cpufeature.h with
+>>> -Werror=type-limits enabled, errors shown as below:
+>>>
+>>> ./arch/arm64/include/asm/cpufeature.h: In function 'system_supports_4kb_granule':
+>>> ./arch/arm64/include/asm/cpufeature.h:653:14: error: comparison of unsigned expression >= 0 is always true [-Werror=type-limits]
+>>>    return (val >= ID_AA64MMFR0_TGRAN4_SUPPORTED_MIN) &&
+>>>                ^~
+>>> ./arch/arm64/include/asm/cpufeature.h: In function 'system_supports_64kb_granule':
+>>> ./arch/arm64/include/asm/cpufeature.h:666:14: error: comparison of unsigned expression >= 0 is always true [-Werror=type-limits]
+>>>    return (val >= ID_AA64MMFR0_TGRAN64_SUPPORTED_MIN) &&
+>>>                ^~
+> The usefulness of this diagnostic is debatable even when the right
+> hand is a literal '0' but warning about symbolic constants like this
+> is actively evil.
 >
-> Changes in v4:
-> - Rebased to the tip of mainline.
-> - Picked up Doug's Tested-by tag.
+> In general, preprocessor #defined values can depend on Kconfig
+> settings or other build configuration switches, and this warning
+> encourages us to remove the expression altogether, which could mean
+> introducing a bug if the macro may assume values >0 in other
+> configurations.
 >
-> Changes in v3:
-> - Reword commit descriptions as per Daniel's suggestions.
+> Ergo, we must ignore -Wtype-limits until it is fixed, and can at least
+> distinguish literal 0 constants from ones instantiated by a CPP macro.
 >
-> Changes in v2:
-> - Replace patch #1 to rather follow Will's suggestion.
 >
-> Sumit Garg (2):
->   arm64: entry: Skip single stepping into interrupt handlers
->   arm64: kgdb: Set PSTATE.SS to 1 to re-enable single-step
->
->  arch/arm64/include/asm/debug-monitors.h |  1 +
->  arch/arm64/kernel/debug-monitors.c      |  5 +++++
->  arch/arm64/kernel/entry-common.c        | 22 ++++++++++++++++++++--
->  arch/arm64/kernel/kgdb.c                |  2 ++
->  4 files changed, 28 insertions(+), 2 deletions(-)
->
-> --
-> 2.34.1
->
+>> When is the `-Werror=type-limits` flag enabled by the build system?
+>>
+>> We have patterns like this all over the kernel, and I don't think this is
+>> indicative of a real problem, and I don't think that we need to change code to
+>> make this warning disappear.
+>>
+>>> Modify the return judgment statement, use
+>>> "((val - min) < (val - max - 1))" to confirm that returns
+>>> true in “min <= val <= max” cases, false in other cases.
+>> That expression is far less clear than the existing code, so I do not think
+>> that is a good idea.
+>>
+>>> Fixes: 79d82cbcbb3d ("arm64/kexec: Test page size support with new TGRAN range values")
+>> What functional error does this fix?
+>>
+>> What configuration is broken?
+>>
+>> Thanks,
+>> Mark.
+>>
+>>> Signed-off-by: Lin Yujun <linyujun809@huawei.com>
+>>> ---
+>>>   arch/arm64/include/asm/cpufeature.h | 18 ++++++++++++------
+>>>   1 file changed, 12 insertions(+), 6 deletions(-)
+>>>
+>>> diff --git a/arch/arm64/include/asm/cpufeature.h b/arch/arm64/include/asm/cpufeature.h
+>>> index 03d1c9d7af82..0a6bda025141 100644
+>>> --- a/arch/arm64/include/asm/cpufeature.h
+>>> +++ b/arch/arm64/include/asm/cpufeature.h
+>>> @@ -54,6 +54,9 @@ enum ftr_type {
+>>>   #define FTR_VISIBLE_IF_IS_ENABLED(config)            \
+>>>        (IS_ENABLED(config) ? FTR_VISIBLE : FTR_HIDDEN)
+>>>
+>>> +#define IN_RANGE_INCLUSIVE(val, min, max)            \
+>>> +     (((val) - (min)) < ((val) - (max) - 1))
+>>> +
+>>>   struct arm64_ftr_bits {
+>>>        bool            sign;   /* Value is signed ? */
+>>>        bool            visible;
+>>> @@ -693,8 +696,9 @@ static inline bool system_supports_4kb_granule(void)
+>>>        val = cpuid_feature_extract_unsigned_field(mmfr0,
+>>>                                                ID_AA64MMFR0_EL1_TGRAN4_SHIFT);
+>>>
+>>> -     return (val >= ID_AA64MMFR0_EL1_TGRAN4_SUPPORTED_MIN) &&
+>>> -            (val <= ID_AA64MMFR0_EL1_TGRAN4_SUPPORTED_MAX);
+>>> +     return IN_RANGE_INCLUSIVE(val,
+>>> +             ID_AA64MMFR0_EL1_TGRAN4_SUPPORTED_MIN,
+>>> +             ID_AA64MMFR0_EL1_TGRAN4_SUPPORTED_MAX);
+>>>   }
+>>>
+>>>   static inline bool system_supports_64kb_granule(void)
+>>> @@ -706,8 +710,9 @@ static inline bool system_supports_64kb_granule(void)
+>>>        val = cpuid_feature_extract_unsigned_field(mmfr0,
+>>>                                                ID_AA64MMFR0_EL1_TGRAN64_SHIFT);
+>>>
+>>> -     return (val >= ID_AA64MMFR0_EL1_TGRAN64_SUPPORTED_MIN) &&
+>>> -            (val <= ID_AA64MMFR0_EL1_TGRAN64_SUPPORTED_MAX);
+>>> +     return IN_RANGE_INCLUSIVE(val,
+>>> +             ID_AA64MMFR0_EL1_TGRAN64_SUPPORTED_MIN,
+>>> +             ID_AA64MMFR0_EL1_TGRAN64_SUPPORTED_MAX);
+>>>   }
+>>>
+>>>   static inline bool system_supports_16kb_granule(void)
+>>> @@ -719,8 +724,9 @@ static inline bool system_supports_16kb_granule(void)
+>>>        val = cpuid_feature_extract_unsigned_field(mmfr0,
+>>>                                                ID_AA64MMFR0_EL1_TGRAN16_SHIFT);
+>>>
+>>> -     return (val >= ID_AA64MMFR0_EL1_TGRAN16_SUPPORTED_MIN) &&
+>>> -            (val <= ID_AA64MMFR0_EL1_TGRAN16_SUPPORTED_MAX);
+>>> +     return IN_RANGE_INCLUSIVE(val,
+>>> +             ID_AA64MMFR0_EL1_TGRAN16_SUPPORTED_MIN,
+>>> +             ID_AA64MMFR0_EL1_TGRAN16_SUPPORTED_MAX);
+>>>   }
+>>>
+>>>   static inline bool system_supports_mixed_endian_el0(void)
+>>> --
+>>> 2.34.1
+>>>
+> .
