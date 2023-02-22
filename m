@@ -2,168 +2,178 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 947BA69F832
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Feb 2023 16:38:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 445E769F830
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Feb 2023 16:38:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232569AbjBVPiJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Feb 2023 10:38:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59362 "EHLO
+        id S232484AbjBVPiF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Feb 2023 10:38:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59348 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232633AbjBVPh5 (ORCPT
+        with ESMTP id S232684AbjBVPh4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Feb 2023 10:37:57 -0500
-Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12EAC2E806
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Feb 2023 07:37:38 -0800 (PST)
-Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com [209.85.208.70])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 30E473F4A6
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Feb 2023 15:37:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1677080242;
-        bh=8JWkkKuY/mBsg2CPf/80E/i9Tneo0oqJt3Gz/3GLDP0=;
-        h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-         Content-Type:In-Reply-To;
-        b=W6JsaxrrKqSy2vwHXxTliRjOCidyVFfMr9JkWWaizxLNWk5hq5nWa8hwhdX+hL8qQ
-         MpssmPbmaHUe/I8Fj8ik/ue37VEnDEOooTh70dxVnNjrmIgVpkqjbjI/o503qP9JX2
-         oetHfD0s5VtLv7eS5CNgVeDP5cm9ZMxGPiw3iNB2SvURSxmECPMz+vE8SgJSlKkve9
-         yMl98aLj+k5cdKVQzBRPIx56kP7mkRbuLnD2IQSccc1HMp1TdGUc+b4fNsV/E3a58C
-         DEXIOjohCtMjtpmCaJ524KXd8BY+oKd0ErFfYjdNrb9m8pnSfegtt/p+4je8wZhxFB
-         46c6fBaTZx/Ew==
-Received: by mail-ed1-f70.google.com with SMTP id q13-20020a5085cd000000b004af50de0bcfso8805923edh.15
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Feb 2023 07:37:22 -0800 (PST)
+        Wed, 22 Feb 2023 10:37:56 -0500
+Received: from mail-oi1-x232.google.com (mail-oi1-x232.google.com [IPv6:2607:f8b0:4864:20::232])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C08A038E9A;
+        Wed, 22 Feb 2023 07:37:38 -0800 (PST)
+Received: by mail-oi1-x232.google.com with SMTP id c11so8794422oiw.2;
+        Wed, 22 Feb 2023 07:37:38 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=WywXApvBffh1ctyHLIw8PG0A91F5vwxm/kGgQV9IacY=;
+        b=YyGaMffCjHmeb7oKxQ/AjwDRPC3vooJ1hX7KULsqIMrny4Y/ywlqW1K1z0JtQh3GwC
+         97s0FyywTYTm4lkIxOzjKPqpDpYyNJVdABy708UFF+Tq8xpFeevUCxrlwK9gKxtxTYnj
+         ml/GZk+0PSjXV+nZcQ+EqeFZf3t2YwrK8ukjJM3QWmnbl0HLn4J6p9bNSGDJBk2i+Kni
+         gsM4bVRXRo8uxZ+6jnt9VZrPN60sdmAoiWAMsXCdSi+jGbyOlDwwPoz0hoWG9RWWDq2o
+         rPyhTFvUxgJSOd8LYXiIZnxR4ESA7m34m4+L6jWECPNtD4n+2myWFHygI9HBbNCxbkYM
+         32gA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=8JWkkKuY/mBsg2CPf/80E/i9Tneo0oqJt3Gz/3GLDP0=;
-        b=4gF3xP5sSeRXRuj3SB4ZIfiDStCtSv/Gl6LZXJJ2P8dqPMunJHGH344gy7guO2Lz5+
-         98t8QyVZ3HxRqRA6CAxut4mR90JdXVVJNkeWhXboEUE++0q7IVe9w7pHbtDnlvzQgd+Q
-         p0SVG+HEb6MFyNL3ls2mK8tEwt4dlu8RN4EuNPyhlUOcnslc3z1y4K6Nl6W7EYOEjURz
-         edpJIBaxYfm5RULe8+ftoSbgKB/0W5sghh0+HWH5uLmfPYfpWWV+z9XaD3HRJEYXvVX+
-         6sUAsBO9ljzmbFH2MoqG04cc9SuPBSX7umu9+s8n9gokRvoU//ov8Mpm1hDffwfazieb
-         CWDA==
-X-Gm-Message-State: AO0yUKW3Mifj2YL824Y+EVBv0geixn7QJlVH7SN4kJBqhjg9DFlfmyGC
-        2t1U0ANsj4i4z9DXagcyR6UOmV8h4m7boSBCcmRZ1+a3YVzumY/lXKzQpj5D+thhhN3G9fPK5Uc
-        sB4wA2vq76yN0TRtBkQXFkOplWhgnzyNvKoNAX0/6Mg==
-X-Received: by 2002:aa7:d88f:0:b0:4ac:cb71:42c with SMTP id u15-20020aa7d88f000000b004accb71042cmr9373002edq.37.1677080241837;
-        Wed, 22 Feb 2023 07:37:21 -0800 (PST)
-X-Google-Smtp-Source: AK7set8nplrbIbgKrRBuUUF6Neaqb+KCYt+AJHeHCvX+8WacNd7VJXttTkv6+JQA5aVbfqHpGQxCeA==
-X-Received: by 2002:aa7:d88f:0:b0:4ac:cb71:42c with SMTP id u15-20020aa7d88f000000b004accb71042cmr9372978edq.37.1677080241536;
-        Wed, 22 Feb 2023 07:37:21 -0800 (PST)
-Received: from localhost (host-79-44-179-55.retail.telecomitalia.it. [79.44.179.55])
-        by smtp.gmail.com with ESMTPSA id co10-20020a0564020c0a00b004aab66d34c7sm4286713edb.7.2023.02.22.07.37.20
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 22 Feb 2023 07:37:21 -0800 (PST)
-Date:   Wed, 22 Feb 2023 16:37:20 +0100
-From:   Andrea Righi <andrea.righi@canonical.com>
-To:     Tudor Ambarus <tudor.ambarus@linaro.org>
-Cc:     Pratyush Yadav <pratyush@kernel.org>,
-        Michael Walle <michael@walle.cc>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Cristian Birsan <cristian.birsan@microchip.com>,
-        Boris Brezillon <bbrezillon@kernel.org>,
-        Emil Renner Berthing <emil.renner.berthing@canonical.com>,
-        linux-mtd@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] mtd: spi-nor: fix shift-out-of-bounds in
- spi_nor_set_erase_type()
-Message-ID: <Y/Y2sEZ5Ojos9fpg@righiandr-XPS-13-7390>
-References: <20230221111346.34268-1-andrea.righi@canonical.com>
- <d87efbd8-5290-b462-beb3-c2d3be267ade@linaro.org>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=WywXApvBffh1ctyHLIw8PG0A91F5vwxm/kGgQV9IacY=;
+        b=1fqvuYBKIfuI2pHrQGnPYnklkm0kbvAM8RGvu7EmGn/IIfprJBGveEPPggJIMmj00Z
+         wFiiweBtDY1I6URddy6k/jyVTq8m4V55mpySbUczPdhvhi3IaBOb4FIovjiKFT+xt/Bp
+         mjfRCK15BMA6/cZ16pS2VXGH7H/AnR9/J33ZJ9u2E0dZ2UyiGv5YxIg1DtzDhaZj1hxH
+         UdD0CtCXkWn7aGhXMsiQGVT8VRz9FJdwMeixtXAscL4M/K/KdTScQHSxH1mtSUy1wsjv
+         quBuvCetz3FbhX7CqQ25aW9U0LbAykWAlKwulSXSJZknDgwBZEoxSjbGDTAUaMLG19cG
+         eedA==
+X-Gm-Message-State: AO0yUKVG3B7iPrx4Xbu0eZA6oO1XNnfw6Z+PVuBaloJJSoa7r3DXIZU1
+        +YXj0IIenR/rSwiGrQwa9oiqLajba3qgqRw/SnI=
+X-Google-Smtp-Source: AK7set+ghT43kUTQU5CnG5qlnodVTbwtuuqgXrxj3sUQu1yp05OKsNhdEtnaHeVnQZ1YffZWQpnePgdKuPg3/NzktWY=
+X-Received: by 2002:a05:6808:16ab:b0:37d:81a9:5103 with SMTP id
+ bb43-20020a05680816ab00b0037d81a95103mr1413444oib.38.1677080257694; Wed, 22
+ Feb 2023 07:37:37 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <d87efbd8-5290-b462-beb3-c2d3be267ade@linaro.org>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20230218211608.1630586-1-robdclark@gmail.com> <20230218211608.1630586-7-robdclark@gmail.com>
+ <20230220105345.70e46fa5@eldfell> <CAF6AEGv9fLQCD65ytRTGp=EkNB1QoZYH5ArphgGQALV9J08Cmw@mail.gmail.com>
+ <cdd5f892-49b9-1e22-4dc1-95a8a733c453@amd.com> <CAF6AEGuMn3FywPkEtfJ7oZ16A0Bk2aiaRvj4si4od1d3wzXkPw@mail.gmail.com>
+ <20230222114900.1b6baf95@eldfell>
+In-Reply-To: <20230222114900.1b6baf95@eldfell>
+From:   Rob Clark <robdclark@gmail.com>
+Date:   Wed, 22 Feb 2023 07:37:26 -0800
+Message-ID: <CAF6AEGs1_75gg+LCBj6=PH8Jn60PXiE+Kx_2636nP-+pajN8Hg@mail.gmail.com>
+Subject: Re: [PATCH v4 06/14] dma-buf/sync_file: Support (E)POLLPRI
+To:     Pekka Paalanen <ppaalanen@gmail.com>
+Cc:     Luben Tuikov <luben.tuikov@amd.com>,
+        Rob Clark <robdclark@chromium.org>,
+        Gustavo Padovan <gustavo@padovan.org>,
+        Tvrtko Ursulin <tvrtko.ursulin@intel.com>,
+        =?UTF-8?Q?Christian_K=C3=B6nig?= <ckoenig.leichtzumerken@gmail.com>,
+        =?UTF-8?Q?Michel_D=C3=A4nzer?= <michel@daenzer.net>,
+        open list <linux-kernel@vger.kernel.org>,
+        dri-devel@lists.freedesktop.org,
+        =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
+        "moderated list:DMA BUFFER SHARING FRAMEWORK" 
+        <linaro-mm-sig@lists.linaro.org>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        freedreno@lists.freedesktop.org,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        "open list:SYNC FILE FRAMEWORK" <linux-media@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Feb 22, 2023 at 02:50:42PM +0000, Tudor Ambarus wrote:
-> Hi!
-> 
-> This should be fixed by:
-> https://git.kernel.org/pub/scm/linux/kernel/git/mtd/linux.git/commit/?h=spi-nor/next&id=f0f0cfdc3a024e21161714f2e05f0df3b84d42ad
+On Wed, Feb 22, 2023 at 1:49 AM Pekka Paalanen <ppaalanen@gmail.com> wrote:
+>
+> On Tue, 21 Feb 2023 09:53:56 -0800
+> Rob Clark <robdclark@gmail.com> wrote:
+>
+> > On Tue, Feb 21, 2023 at 8:48 AM Luben Tuikov <luben.tuikov@amd.com> wrote:
+> > >
+> > > On 2023-02-20 11:14, Rob Clark wrote:
+> > > > On Mon, Feb 20, 2023 at 12:53 AM Pekka Paalanen <ppaalanen@gmail.com> wrote:
+> > > >>
+> > > >> On Sat, 18 Feb 2023 13:15:49 -0800
+> > > >> Rob Clark <robdclark@gmail.com> wrote:
+> > > >>
+> > > >>> From: Rob Clark <robdclark@chromium.org>
+> > > >>>
+> > > >>> Allow userspace to use the EPOLLPRI/POLLPRI flag to indicate an urgent
+> > > >>> wait (as opposed to a "housekeeping" wait to know when to cleanup after
+> > > >>> some work has completed).  Usermode components of GPU driver stacks
+> > > >>> often poll() on fence fd's to know when it is safe to do things like
+> > > >>> free or reuse a buffer, but they can also poll() on a fence fd when
+> > > >>> waiting to read back results from the GPU.  The EPOLLPRI/POLLPRI flag
+> > > >>> lets the kernel differentiate these two cases.
+> > > >>>
+> > > >>> Signed-off-by: Rob Clark <robdclark@chromium.org>
+> > > >>
+> > > >> Hi,
+> > > >>
+> > > >> where would the UAPI documentation of this go?
+> > > >> It seems to be missing.
+> > > >
+> > > > Good question, I am not sure.  The poll() man page has a description,
+> > > > but my usage doesn't fit that _exactly_ (but OTOH the description is a
+> > > > bit vague).
+> > > >
+> > > >> If a Wayland compositor is polling application fences to know which
+> > > >> client buffer to use in its rendering, should the compositor poll with
+> > > >> PRI or not? If a compositor polls with PRI, then all fences from all
+> > > >> applications would always be PRI. Would that be harmful somehow or
+> > > >> would it be beneficial?
+> > > >
+> > > > I think a compositor would rather use the deadline ioctl and then poll
+> > > > without PRI.  Otherwise you are giving an urgency signal to the fence
+> > > > signaller which might not necessarily be needed.
+> > > >
+> > > > The places where I expect PRI to be useful is more in mesa (things
+> > > > like glFinish(), readpix, and other similar sorts of blocking APIs)
+> > > Hi,
+> > >
+> > > Hmm, but then user-space could do the opposite, namely, submit work as usual--never
+> > > using the SET_DEADLINE ioctl, and then at the end, poll using (E)POLLPRI. That seems
+> > > like a possible usage pattern, unintended--maybe, but possible. Do we want to discourage
+> > > this? Wouldn't SET_DEADLINE be enough? I mean, one can call SET_DEADLINE with the current
+> > > time, and then wouldn't that be equivalent to (E)POLLPRI?
+> >
+> > Yeah, (E)POLLPRI isn't strictly needed if we have SET_DEADLINE.  It is
+> > slightly more convenient if you want an immediate deadline (single
+> > syscall instead of two), but not strictly needed.  OTOH it piggy-backs
+> > on existing UABI.
+>
+> In that case, I would be conservative, and not add the POLLPRI
+> semantics. An UAPI addition that is not strictly needed and somewhat
+> unclear if it violates any design principles is best not done, until it
+> is proven to be beneficial.
+>
+> Besides, a Wayland compositor does not necessary need to add the fd
+> to its main event loop for poll. It could just SET_DEADLINE, and then
+> when it renders simply check if the fence passed or not already. Not
+> polling means the compositor does not need to wake up at the moment the
+> fence signals to just record a flag.
 
-Ah yes, this should definitely fix it.
+poll(POLLPRI) isn't intended for wayland.. but is a thing I want in
+mesa for fence waits.  I _could_ use SET_DEADLINE but it is two
+syscalls and correspondingly more code ;-)
 
-It'd still like to do a check like is_power_of_2(size) in
-spi_nor_set_erase_type(), to make sure we don't silently set size to
-something non-standard, but I can send another patch for that, so for
-now you can ignore this patch.
+> On another matter, if the application uses SET_DEADLINE with one
+> timestamp, and the compositor uses SET_DEADLINE on the same thing with
+> another timestamp, what should happen?
 
-> 
-> Which base did you use?
+The expectation is that many deadline hints can be set on a fence.
+The fence signaller should track the soonest deadline.
 
-I used the latest git from Linus' repository that doesn't have this
-commit yet.
+BR,
+-R
 
-Thanks,
--Andrea
-
-> 
-> Cheers,
-> ta
-> 
-> On 2/21/23 11:13, Andrea Righi wrote:
-> > It seems that according to JEDEC JESD216B Standard erase size needs to
-> > be a power of 2, but sometimes we set the size to 0 (e.g., in
-> > spi_nor_parse_4bait()) causing UBSAN warnings like the following:
-> > 
-> >    UBSAN: shift-out-of-bounds in drivers/mtd/spi-nor/core.c:2026:24
-> >    shift exponent 4294967295 is too large for 32-bit type 'int'
-> >    Hardware name: Dell Inc. XPS 13 9300/077Y9N, BIOS 1.11.0 03/22/2022
-> >    Call Trace:
-> >     <TASK>
-> >     show_stack+0x4e/0x61
-> >     dump_stack_lvl+0x4a/0x6f
-> >     dump_stack+0x10/0x18
-> >     ubsan_epilogue+0x9/0x3a
-> >     __ubsan_handle_shift_out_of_bounds.cold+0x61/0xef
-> >     spi_nor_set_erase_type.cold+0x16/0x1e [spi_nor]
-> >     spi_nor_parse_4bait+0x270/0x380 [spi_nor]
-> >     spi_nor_parse_sfdp+0x47f/0x610 [spi_nor]
-> > 
-> > Fix by checking if size is a power when setting struct
-> > spi_nor_erase_type, otherwise consider size, mask and shift as invalid.
-> > 
-> > Fixes: 5390a8df769e ("mtd: spi-nor: add support to non-uniform SFDP SPI NOR flash memories")
-> > Reported-by: Emil Renner Berthing <emil.renner.berthing@canonical.com>
-> > Signed-off-by: Andrea Righi <andrea.righi@canonical.com>
-> > ---
-> >   drivers/mtd/spi-nor/core.c | 12 +++++++++---
-> >   1 file changed, 9 insertions(+), 3 deletions(-)
-> > 
-> > diff --git a/drivers/mtd/spi-nor/core.c b/drivers/mtd/spi-nor/core.c
-> > index d67c926bca8b..3c5b5bf9cbd1 100644
-> > --- a/drivers/mtd/spi-nor/core.c
-> > +++ b/drivers/mtd/spi-nor/core.c
-> > @@ -2019,11 +2019,17 @@ spi_nor_spimem_adjust_hwcaps(struct spi_nor *nor, u32 *hwcaps)
-> >   void spi_nor_set_erase_type(struct spi_nor_erase_type *erase, u32 size,
-> >   			    u8 opcode)
-> >   {
-> > -	erase->size = size;
-> >   	erase->opcode = opcode;
-> >   	/* JEDEC JESD216B Standard imposes erase sizes to be power of 2. */
-> > -	erase->size_shift = ffs(erase->size) - 1;
-> > -	erase->size_mask = (1 << erase->size_shift) - 1;
-> > +	if (likely(is_power_of_2(size))) {
-> > +		erase->size = size;
-> > +		erase->size_shift = ffs(erase->size) - 1;
-> > +		erase->size_mask = (1 << erase->size_shift) - 1;
-> > +	} else {
-> > +		erase->size = 0u;
-> > +		erase->size_shift = ~0u;
-> > +		erase->size_mask = ~0u;
-> > +	}
-> >   }
-> >   /**
+> Maybe it's a soft-realtime app whose primary goal is not display, and
+> it needs the result faster than the window server?
+>
+> Maybe SET_DEADLINE should set the deadline only to an earlier timestamp
+> and never later?
+>
+>
+> Thanks,
+> pq
