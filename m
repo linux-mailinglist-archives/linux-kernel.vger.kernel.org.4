@@ -2,95 +2,196 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6980069FA34
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Feb 2023 18:30:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5BFA269FA3A
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Feb 2023 18:34:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232302AbjBVRaR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Feb 2023 12:30:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45778 "EHLO
+        id S232136AbjBVRd6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Feb 2023 12:33:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49236 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229515AbjBVRaQ (ORCPT
+        with ESMTP id S229515AbjBVRd4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Feb 2023 12:30:16 -0500
-Received: from fx303.security-mail.net (mxout.security-mail.net [85.31.212.46])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69DB630B30
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Feb 2023 09:30:14 -0800 (PST)
-Received: from localhost (fx303.security-mail.net [127.0.0.1])
-        by fx303.security-mail.net (Postfix) with ESMTP id A4FB330EE18
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Feb 2023 18:30:12 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kalray.eu;
-        s=sec-sig-email; t=1677087012;
-        bh=hvMHSNOcZ3wkrNvaq+KD/UxVGOPU3jQ1KwZs1+GUHhA=;
-        h=From:To:Cc:Subject:Date;
-        b=fiwVnfrpFIfbcLc75ZSAdQZYqC/PJU8OulQfxSXbYorlGwkYCoDWZhsRoekBMTVUc
-         bAHdWTfH64hr+kLgvHdPN8QkaR6JvNN5mXxn/v6obYFzjTMHhOPHEa4JBPxBYAo5y+
-         g97y8OTCr2vBmaR2Em9CuInqUU0m9TwasQEk/SxI=
-Received: from fx303 (fx303.security-mail.net [127.0.0.1])
-        by fx303.security-mail.net (Postfix) with ESMTP id 6264030EF20;
-        Wed, 22 Feb 2023 18:30:12 +0100 (CET)
-X-Virus-Scanned: E-securemail
-Secumail-id: <e4ac.63f65123.51269.0>
-Received: from zimbra2.kalray.eu (unknown [217.181.231.53])
-        by fx303.security-mail.net (Postfix) with ESMTPS id 5559330ED31;
-        Wed, 22 Feb 2023 18:30:11 +0100 (CET)
-Received: from zimbra2.kalray.eu (localhost [127.0.0.1])
-        by zimbra2.kalray.eu (Postfix) with ESMTPS id 25CD127E0540;
-        Wed, 22 Feb 2023 18:30:11 +0100 (CET)
-Received: from localhost (localhost [127.0.0.1])
-        by zimbra2.kalray.eu (Postfix) with ESMTP id 0CAB227E0542;
-        Wed, 22 Feb 2023 18:30:11 +0100 (CET)
-DKIM-Filter: OpenDKIM Filter v2.10.3 zimbra2.kalray.eu 0CAB227E0542
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kalray.eu;
-        s=32AE1B44-9502-11E5-BA35-3734643DEF29; t=1677087011;
-        bh=FUlqQSuqsNRDjtlEMolaSOdEgIELsQ6R4GrRAZrZgUU=;
-        h=From:To:Date:Message-Id;
-        b=pbfBt0CjHK5+s9/YhhY38aTuA1J7Vw/ofqRzNpnxAmjTzYUmZqbEnSBmDE1+inTMm
-         14xnTIyz+sH6KER7lY7jWiqhG+O+OhGkTBc4k3LwzZP0CgmFQWgv2YzWD60k84KyPf
-         OhIdxvGMhFpZfeUsCpA40dNWDg7dkcOMbY9AUDms=
-Received: from zimbra2.kalray.eu ([127.0.0.1])
-        by localhost (zimbra2.kalray.eu [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id RB7bXPHl4yta; Wed, 22 Feb 2023 18:30:10 +0100 (CET)
-Received: from tellis.lin.mbt.kalray.eu (unknown [192.168.36.206])
-        by zimbra2.kalray.eu (Postfix) with ESMTPSA id E1DAB27E0540;
-        Wed, 22 Feb 2023 18:30:10 +0100 (CET)
-From:   Jules Maselbas <jmaselbas@kalray.eu>
-To:     Jens Wiklander <jens.wiklander@linaro.org>,
-        Sumit Garg <sumit.garg@linaro.org>
-Cc:     op-tee@lists.trustedfirmware.org, linux-kernel@vger.kernel.org,
-        Jules Maselbas <jmaselbas@kalray.eu>
-Subject: [PATCH] tee: optee: Fix typo Unuspported -> Unsupported
-Date:   Wed, 22 Feb 2023 18:30:09 +0100
-Message-Id: <20230222173009.19874-1-jmaselbas@kalray.eu>
-X-Mailer: git-send-email 2.17.1
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Wed, 22 Feb 2023 12:33:56 -0500
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 292F82D14C;
+        Wed, 22 Feb 2023 09:33:54 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1677087235; x=1708623235;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=dBfK1f9SoIdQd//p3pK+J5jmUGdNq+Hb8SM5LrvByCw=;
+  b=nqXyNJyShezFT07hRqpypcwPJicHLGglaYiqo5TFpQFjLHso+Idef8OB
+   YWcHlcMLPIakg4DuvFWzd0llRKYz5SxATtopMVZi+o88w3rTd5imkvPpb
+   rHmAsgg33nmfQz0BeaAzYMYfIv4NxXNjJsp34pXGgqH/CC4YE1sX1JtoG
+   3NzqOsAijMnuZlOLNT9jtpx9X1MHARDuWOxazVoWhc0rN4C7P5fd4vxlm
+   S7WVpOKU1G+1fzT2CQjXrr0BN/307nNh312OsrcFEWsUVeGQmRGnS+dhi
+   K3cMqj/ZQIRPdbI5M6qg0r0HWB5sbvFy3ETUtQxSdlJy6vuiw13s08EO+
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10629"; a="321129860"
+X-IronPort-AV: E=Sophos;i="5.97,319,1669104000"; 
+   d="scan'208";a="321129860"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Feb 2023 09:33:47 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10629"; a="704541133"
+X-IronPort-AV: E=Sophos;i="5.97,319,1669104000"; 
+   d="scan'208";a="704541133"
+Received: from hhammad-mobl1.ger.corp.intel.com (HELO [10.213.231.87]) ([10.213.231.87])
+  by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Feb 2023 09:33:43 -0800
+Message-ID: <d7b0614e-2cc3-1180-3571-409204ac5b00@linux.intel.com>
+Date:   Wed, 22 Feb 2023 17:33:41 +0000
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH v4 01/14] dma-buf/dma-fence: Add deadline awareness
+Content-Language: en-US
+To:     Rob Clark <robdclark@chromium.org>
+Cc:     =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
+        Rob Clark <robdclark@gmail.com>,
+        dri-devel@lists.freedesktop.org,
+        Gustavo Padovan <gustavo@padovan.org>,
+        Tvrtko Ursulin <tvrtko.ursulin@intel.com>,
+        =?UTF-8?Q?Michel_D=c3=a4nzer?= <michel@daenzer.net>,
+        open list <linux-kernel@vger.kernel.org>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        "moderated list:DMA BUFFER SHARING FRAMEWORK" 
+        <linaro-mm-sig@lists.linaro.org>,
+        Pekka Paalanen <ppaalanen@gmail.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        freedreno@lists.freedesktop.org,
+        "open list:SYNC FILE FRAMEWORK" <linux-media@vger.kernel.org>
+References: <20230218211608.1630586-1-robdclark@gmail.com>
+ <20230218211608.1630586-2-robdclark@gmail.com>
+ <b65a2fe2-6f68-2116-9599-2940e66d166b@linux.intel.com>
+ <21f36640-3229-0b46-31a2-a47efc5be934@amd.com>
+ <b8a16579-4be7-8e14-01e4-9d17c1570c8b@linux.intel.com>
+ <CAJs_Fx61OpgFo_kSLoy+2z8mS=wcdK8eZfQBA6dQm9p0=qLU2g@mail.gmail.com>
+From:   Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>
+Organization: Intel Corporation UK Plc
+In-Reply-To: <CAJs_Fx61OpgFo_kSLoy+2z8mS=wcdK8eZfQBA6dQm9p0=qLU2g@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,HK_RANDOM_ENVFROM,HK_RANDOM_FROM,
+        NICE_REPLY_A,RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Fix typo Unuspported -> Unsupported
 
-Signed-off-by: Jules Maselbas <jmaselbas@kalray.eu>
----
- drivers/tee/optee/call.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+On 22/02/2023 17:16, Rob Clark wrote:
+> On Wed, Feb 22, 2023 at 9:05 AM Tvrtko Ursulin
+> <tvrtko.ursulin@linux.intel.com> wrote:
+>>
+>>
+>> On 22/02/2023 15:28, Christian König wrote:
+>>> Am 22.02.23 um 11:23 schrieb Tvrtko Ursulin:
+>>>>
+>>>> On 18/02/2023 21:15, Rob Clark wrote:
+>>>>> From: Rob Clark <robdclark@chromium.org>
+>>>>>
+>>>>> Add a way to hint to the fence signaler of an upcoming deadline, such as
+>>>>> vblank, which the fence waiter would prefer not to miss.  This is to aid
+>>>>> the fence signaler in making power management decisions, like boosting
+>>>>> frequency as the deadline approaches and awareness of missing deadlines
+>>>>> so that can be factored in to the frequency scaling.
+>>>>>
+>>>>> v2: Drop dma_fence::deadline and related logic to filter duplicate
+>>>>>       deadlines, to avoid increasing dma_fence size.  The fence-context
+>>>>>       implementation will need similar logic to track deadlines of all
+>>>>>       the fences on the same timeline.  [ckoenig]
+>>>>> v3: Clarify locking wrt. set_deadline callback
+>>>>>
+>>>>> Signed-off-by: Rob Clark <robdclark@chromium.org>
+>>>>> Reviewed-by: Christian König <christian.koenig@amd.com>
+>>>>> ---
+>>>>>    drivers/dma-buf/dma-fence.c | 20 ++++++++++++++++++++
+>>>>>    include/linux/dma-fence.h   | 20 ++++++++++++++++++++
+>>>>>    2 files changed, 40 insertions(+)
+>>>>>
+>>>>> diff --git a/drivers/dma-buf/dma-fence.c b/drivers/dma-buf/dma-fence.c
+>>>>> index 0de0482cd36e..763b32627684 100644
+>>>>> --- a/drivers/dma-buf/dma-fence.c
+>>>>> +++ b/drivers/dma-buf/dma-fence.c
+>>>>> @@ -912,6 +912,26 @@ dma_fence_wait_any_timeout(struct dma_fence
+>>>>> **fences, uint32_t count,
+>>>>>    }
+>>>>>    EXPORT_SYMBOL(dma_fence_wait_any_timeout);
+>>>>>    +
+>>>>> +/**
+>>>>> + * dma_fence_set_deadline - set desired fence-wait deadline
+>>>>> + * @fence:    the fence that is to be waited on
+>>>>> + * @deadline: the time by which the waiter hopes for the fence to be
+>>>>> + *            signaled
+>>>>> + *
+>>>>> + * Inform the fence signaler of an upcoming deadline, such as
+>>>>> vblank, by
+>>>>> + * which point the waiter would prefer the fence to be signaled by.
+>>>>> This
+>>>>> + * is intended to give feedback to the fence signaler to aid in power
+>>>>> + * management decisions, such as boosting GPU frequency if a periodic
+>>>>> + * vblank deadline is approaching.
+>>>>> + */
+>>>>> +void dma_fence_set_deadline(struct dma_fence *fence, ktime_t deadline)
+>>>>> +{
+>>>>> +    if (fence->ops->set_deadline && !dma_fence_is_signaled(fence))
+>>>>> +        fence->ops->set_deadline(fence, deadline);
+>>>>> +}
+>>>>> +EXPORT_SYMBOL(dma_fence_set_deadline);
+>>>>> +
+>>>>>    /**
+>>>>>     * dma_fence_describe - Dump fence describtion into seq_file
+>>>>>     * @fence: the 6fence to describe
+>>>>> diff --git a/include/linux/dma-fence.h b/include/linux/dma-fence.h
+>>>>> index 775cdc0b4f24..d77f6591c453 100644
+>>>>> --- a/include/linux/dma-fence.h
+>>>>> +++ b/include/linux/dma-fence.h
+>>>>> @@ -99,6 +99,7 @@ enum dma_fence_flag_bits {
+>>>>>        DMA_FENCE_FLAG_SIGNALED_BIT,
+>>>>>        DMA_FENCE_FLAG_TIMESTAMP_BIT,
+>>>>>        DMA_FENCE_FLAG_ENABLE_SIGNAL_BIT,
+>>>>> +    DMA_FENCE_FLAG_HAS_DEADLINE_BIT,
+>>>>
+>>>> Would this bit be better left out from core implementation, given how
+>>>> the approach is the component which implements dma-fence has to track
+>>>> the actual deadline and all?
+>>>>
+>>>> Also taking a step back - are we all okay with starting to expand the
+>>>> relatively simple core synchronisation primitive with side channel
+>>>> data like this? What would be the criteria for what side channel data
+>>>> would be acceptable? Taking note the thing lives outside drivers/gpu/.
+>>>
+>>> I had similar concerns and it took me a moment as well to understand the
+>>> background why this is necessary. I essentially don't see much other
+>>> approach we could do.
+>>>
+>>> Yes, this is GPU/CRTC specific, but we somehow need a common interface
+>>> for communicating it between drivers and that's the dma_fence object as
+>>> far as I can see.
+>>
+>> Yeah I also don't see any other easy options. Just wanted to raise this
+>> as something which probably needs some wider acks.
+>>
+>> Also what about the "low level" part of my question about the reason, or
+>> benefits, of defining the deadline bit in the common layer?
+> 
+> We could leave DMA_FENCE_FLAG_HAS_DEADLINE_BIT out, but OTOH managing
+> a bitmask that is partially defined in core enum and partially in
+> backend-driver has it's own drawbacks, and it isn't like we are
+> running out of bits.. :shrug:
 
-diff --git a/drivers/tee/optee/call.c b/drivers/tee/optee/call.c
-index 290b1bb0e9cd..df5fb5410b72 100644
---- a/drivers/tee/optee/call.c
-+++ b/drivers/tee/optee/call.c
-@@ -488,7 +488,7 @@ static bool is_normal_memory(pgprot_t p)
- #elif defined(CONFIG_ARM64)
- 	return (pgprot_val(p) & PTE_ATTRINDX_MASK) == PTE_ATTRINDX(MT_NORMAL);
- #else
--#error "Unuspported architecture"
-+#error "Unsupported architecture"
- #endif
- }
- 
--- 
-2.17.1
+There is DMA_FENCE_FLAG_USER_BITS onwards which implementations could 
+use to store their stuff?
 
+And if we skip forward to "drm/scheduler: Add fence deadline support" 
+that's the only place bit is used, right? Would it simply work to look 
+at drm_sched_fence->deadline == 0 as bit not set? Or you see a need to 
+interoperate with other fence implementations via that bit somehow?
+
+Regards,
+
+Tvrtko
