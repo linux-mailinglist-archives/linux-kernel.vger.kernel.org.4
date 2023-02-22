@@ -2,119 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E0FC169F7D7
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Feb 2023 16:31:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 59ACD69F7D2
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Feb 2023 16:31:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231786AbjBVPbc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Feb 2023 10:31:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49854 "EHLO
+        id S232490AbjBVPb0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Feb 2023 10:31:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49702 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232489AbjBVPb3 (ORCPT
+        with ESMTP id S232489AbjBVPbT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Feb 2023 10:31:29 -0500
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F36437737;
-        Wed, 22 Feb 2023 07:31:28 -0800 (PST)
-Received: from pps.filterd (m0279866.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 31MDhds4009847;
-        Wed, 22 Feb 2023 15:31:20 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id : mime-version : content-type; s=qcppdkim1;
- bh=dAOCZOsYVVepy4K+yZq5topHeb+2XsuowkObHwWs6hM=;
- b=mAVwliA2R3alNzvFS4QxEinFX9bpe5hQVE+0tf1yQfmGPme3ZV1vIhjxpSCUO9CsoQ0a
- wgK7X3yLqXxN4dCt32KS9k8I5i9BBGOYVis59k7wDWXCkOr8TFecN5N7+UvnCCwJtk9W
- TSKQgZLlkIUTW62bhvKg0d4Pl7+eXQst5REyr0dePBhsjRWYcvOIt+pwrcaKj0lNW/G/
- /AtRucA28gF6cZsWkN1J9NQuS6Y2vM0QCW7WwmZXveNxo9YAA5xL6QfjSuTFjGDI1IX+
- bQDZGOuZ9/dzL8am1ZbUTg7qG5QKe8mODVv/BNlZuzYOPA4oQRbBBUDd3dmgG523cGW7 0A== 
-Received: from nasanppmta02.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3nwfh011ux-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 22 Feb 2023 15:31:20 +0000
-Received: from nasanex01c.na.qualcomm.com (nasanex01c.na.qualcomm.com [10.45.79.139])
-        by NASANPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 31MFVJ4O003953
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 22 Feb 2023 15:31:19 GMT
-Received: from hu-mojha-hyd.qualcomm.com (10.80.80.8) by
- nasanex01c.na.qualcomm.com (10.45.79.139) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.41; Wed, 22 Feb 2023 07:31:16 -0800
-From:   Mukesh Ojha <quic_mojha@quicinc.com>
-To:     <agross@kernel.org>, <andersson@kernel.org>,
-        <konrad.dybcio@linaro.org>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>, <elder@linaro.org>
-CC:     <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        Mukesh Ojha <quic_mojha@quicinc.com>
-Subject: [PATCH v3] arm64: dts: qcom: sm8450: Add IMEM and PIL info region
-Date:   Wed, 22 Feb 2023 21:00:45 +0530
-Message-ID: <1677079845-17650-1-git-send-email-quic_mojha@quicinc.com>
-X-Mailer: git-send-email 2.7.4
+        Wed, 22 Feb 2023 10:31:19 -0500
+Received: from mail-qt1-x835.google.com (mail-qt1-x835.google.com [IPv6:2607:f8b0:4864:20::835])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F5BF37F38
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Feb 2023 07:31:17 -0800 (PST)
+Received: by mail-qt1-x835.google.com with SMTP id h16so7743108qta.8
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Feb 2023 07:31:17 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ndufresne-ca.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=fh6C77quFgb0sbEQJQh7U6O2ztcGG8ZW3pjGX3oErHE=;
+        b=JUcKVHkK/pw3xPAHb2WhFwz9wUMoQ9J7CeRSJs3iHDNBfb0jpxBe28aMi9ZE9pEkb3
+         VhW+w+R5ozM5s0DSWokvK0WclfvzU/QEiQq/wi//XUIVDK9I3HJBmT57ysp0QG4NdSnx
+         BjntMWeRmzV2fXtzzhetQ8/jfJPCNVILrPacXSx/rjEA3qJqD4iSu+b1EnC3yKfM8rIo
+         9LEIksD8Qn+sivTwdlnH817B6YN/mHsq1ZHprhCjt3VAIiNPjGWqOeF3POkmM4TWD37B
+         JwD7OKbhlU3qmc/Wzbo3N/bgV6gZU+91LjNFG4vdMpd5xai9TFq4sxLLapBu+j7WDuEq
+         /89w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=fh6C77quFgb0sbEQJQh7U6O2ztcGG8ZW3pjGX3oErHE=;
+        b=Faz9hatx7b2kGWpZvCPp7WlADIpEqm0UbXotzgxE5ISfo5BPh1lP96XgBfPTMPYI62
+         ptrA+PrH2lxwHuhKRwSWq18waQHZQPuutH7WkJcRhb1HN5KcagyXtT7PU/3WluV93xhr
+         qjvrV55HjZ8oRgIQiflP3axYqziUfLBV5DwSui1nG9RQTeWFzwT6vSgwsGzxEtvC3VxF
+         A09PmQhf5noNQeDOjqXD8CyyurcFz7tUT3Prc26dbg3pWKGTWXVr26jK/XBYnSqkEwVi
+         iSqj2uOE2aI57/iZ4Eg1JUeuw3+SkRmoLry9/Of8wNAc1b7Ku/blfh1afiGQLMyWU21F
+         BVeQ==
+X-Gm-Message-State: AO0yUKW27eoYEOIgchAeRFrt/aMhxBUxSH0MoH8ZzIJ9pmR5upvfG1Tr
+        6t8IJAruVIrIb3UBZPRQZWmDYQ==
+X-Google-Smtp-Source: AK7set9O1fcF76S2nN5PHnfyp44+JWGYAs9/CQV3wl4gIeHjeJV7w23jjvq6MRKAU47RXwWoO7vppQ==
+X-Received: by 2002:a05:622a:2c2:b0:3b8:6b23:4fc2 with SMTP id a2-20020a05622a02c200b003b86b234fc2mr388260qtx.15.1677079876510;
+        Wed, 22 Feb 2023 07:31:16 -0800 (PST)
+Received: from nicolas-tpx395.localdomain (192-222-136-102.qc.cable.ebox.net. [192.222.136.102])
+        by smtp.gmail.com with ESMTPSA id ew10-20020a05622a514a00b003b8484fdfccsm4297942qtb.42.2023.02.22.07.31.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 22 Feb 2023 07:31:15 -0800 (PST)
+Message-ID: <605689aa181770ad6c7fca2a55967ab5fc5a3699.camel@ndufresne.ca>
+Subject: Re: [PATCH 03/10] media: Add Y212 video format
+From:   Nicolas Dufresne <nicolas@ndufresne.ca>
+To:     Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Ming Qian <ming.qian@nxp.com>, mchehab@kernel.org,
+        mirela.rabulea@oss.nxp.com
+Cc:     shawnguo@kernel.org, s.hauer@pengutronix.de, kernel@pengutronix.de,
+        festevam@gmail.com, xiahong.bao@nxp.com, linux-imx@nxp.com,
+        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+Date:   Wed, 22 Feb 2023 10:31:14 -0500
+In-Reply-To: <93c8ae69-c765-f88e-23c3-9c6b8cf67b40@xs4all.nl>
+References: <cover.1671071730.git.ming.qian@nxp.com>
+         <9aa51224d2c37cca5f1283532cb99f3c8251b120.1671071730.git.ming.qian@nxp.com>
+         <93c8ae69-c765-f88e-23c3-9c6b8cf67b40@xs4all.nl>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.46.3 (3.46.3-1.fc37) 
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nasanex01c.na.qualcomm.com (10.45.79.139)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: jiOSnL87XoKb1ecIFxT3SJgq3fC4X-gb
-X-Proofpoint-GUID: jiOSnL87XoKb1ecIFxT3SJgq3fC4X-gb
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.170.22
- definitions=2023-02-22_05,2023-02-22_02,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015
- priorityscore=1501 bulkscore=0 mlxlogscore=555 phishscore=0
- impostorscore=0 mlxscore=0 adultscore=0 suspectscore=0 lowpriorityscore=0
- spamscore=0 malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2302220135
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add a simple-mfd representing IMEM on SM8450 and define the PIL
-relocation info region, so that post mortem tools will be able
-to locate the loaded remoteprocs.
+Hi Hans, Ming,
 
-Signed-off-by: Mukesh Ojha <quic_mojha@quicinc.com>
----
-Change in v3:
- - Sorted by address.
+Le vendredi 27 janvier 2023 =C3=A0 15:37 +0100, Hans Verkuil a =C3=A9crit=
+=C2=A0:
+> On 20/12/2022 04:11, Ming Qian wrote:
+> > Y212 is a YUV format with 12-bits per component like YUYV,
+> > expanded to 16bits.
+> > Data in the 12 high bits, zeros in the 4 low bits,
+> > arranged in little endian order.
+> >=20
+> >=20
 
-Changes in v2:
- -  put ranges after regs and corrected the sram node position.
+[...]
 
- arch/arm64/boot/dts/qcom/sm8450.dtsi | 14 ++++++++++++++
- 1 file changed, 14 insertions(+)
+> > @@ -618,6 +618,7 @@ struct v4l2_pix_format {
+> >  #define V4L2_PIX_FMT_YUVA32  v4l2_fourcc('Y', 'U', 'V', 'A') /* 32  YU=
+VA-8-8-8-8  */
+> >  #define V4L2_PIX_FMT_YUVX32  v4l2_fourcc('Y', 'U', 'V', 'X') /* 32  YU=
+VX-8-8-8-8  */
+> >  #define V4L2_PIX_FMT_M420    v4l2_fourcc('M', '4', '2', '0') /* 12  YU=
+V 4:2:0 2 lines y, 1 line uv interleaved */
+> > +#define V4L2_PIX_FMT_Y212    v4l2_fourcc('Y', '2', '1', '2') /* 32  YU=
+YV 12-bit per component */
+>=20
+> This definitely needs to be renamed to prevent repeating the 'P010' mista=
+ke.
+>=20
+> It's a YUYV format, so perhaps: _YUYV_12?
+>=20
+> You definitely need to have 'YUYV' in the name in order to deal with diff=
+erent
+> YUV orders.
 
-diff --git a/arch/arm64/boot/dts/qcom/sm8450.dtsi b/arch/arm64/boot/dts/qcom/sm8450.dtsi
-index 1a744a3..7671f15 100644
---- a/arch/arm64/boot/dts/qcom/sm8450.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sm8450.dtsi
-@@ -3689,6 +3689,20 @@
- 			};
- 		};
- 
-+		sram@146aa000 {
-+			compatible = "qcom,sm8450-imem", "syscon", "simple-mfd";
-+			reg = <0 0x146aa000 0 0x1000>;
-+			ranges = <0 0 0x146aa000 0x1000>;
-+
-+			#address-cells = <1>;
-+			#size-cells = <1>;
-+
-+			pil-reloc@94c {
-+				compatible = "qcom,pil-reloc-info";
-+				reg = <0x94c 0xc8>;
-+			};
-+		};
-+
- 		apps_smmu: iommu@15000000 {
- 			compatible = "qcom,sm8450-smmu-500", "arm,mmu-500";
- 			reg = <0 0x15000000 0 0x100000>;
--- 
-2.7.4
+Hans, it seems you already accepted this exact same format from=20
+Tomi Valkeinen <tomi.valkeinen+renesas@ideasonboard.com> / [PATCH v3 2/7] m=
+edia:
+Add Y210, Y212 and Y216 formats.
 
+Tomi omitted to update v4l2-common.c file. Ming, do you mind keeping this p=
+art
+of your patch (adding Y210/Y216 support), this way we'd get that properly
+implemented.
+
+Nicolas
+
+p.s. We can alternatively change our mind as this is not final yet I think.
+
+[...]
