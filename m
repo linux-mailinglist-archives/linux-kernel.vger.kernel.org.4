@@ -2,155 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8DF5B69F044
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Feb 2023 09:33:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AF31969F03F
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Feb 2023 09:33:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230314AbjBVIdT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Feb 2023 03:33:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48728 "EHLO
+        id S231202AbjBVIdN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Feb 2023 03:33:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48714 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231349AbjBVIdM (ORCPT
+        with ESMTP id S230190AbjBVIdK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Feb 2023 03:33:12 -0500
-Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net [217.70.183.201])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5501234F2;
-        Wed, 22 Feb 2023 00:33:10 -0800 (PST)
-Received: (Authenticated sender: kamel.bouhara@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id D91C81BF20B;
-        Wed, 22 Feb 2023 08:33:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1677054789;
+        Wed, 22 Feb 2023 03:33:10 -0500
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A62CF1D907;
+        Wed, 22 Feb 2023 00:33:07 -0800 (PST)
+From:   Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1677054784;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=1qvG7uT+bYylpQqr8tYFzGZu06/xIT+ZSuYxbWKYKlc=;
-        b=odrhX/rwYXXfvgN6lbMS3e3MhmDwAzB8WOQBjOvIRTYXM3WpLjWZfojMzDV/0td5BHtcJi
-        zA+/2BG7s6teXPd5rPaBNouV3wlWwB/cREjT3VLNVB4huyuysI04hZo56DFll/XiFADQ9M
-        wGRPESHvl81EvqZMktwlQVTwSvUMf7b8ppfYzbvqL+4rtE3evM2EHz+xZShTG/MVGCq6T/
-        xLlm1DGrcgfZctM2pyD5WU3xRoUHDX+kQwX5tEj7UQvwbAGYqKAkkV4tnyqH5JyW1J9CcK
-        h0KVi++8g4FSOPsXY5ywk3tUSP+hLOFi+8uoPLcc92/6Udbq/Hw4AnSH6EGsDA==
-From:   Kamel Bouhara <kamel.bouhara@bootlin.com>
-To:     Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Kevin Cernekee <cernekee@chromium.org>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Crt Mori <cmo@melexis.com>, alsa-devel@alsa-project.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Kamel Bouhara <kamel.bouhara@bootlin.com>
-Subject: [PATCH 2/2] ASoC: tas571x: add support for TAS5733
-Date:   Wed, 22 Feb 2023 09:33:00 +0100
-Message-Id: <20230222083300.218523-3-kamel.bouhara@bootlin.com>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20230222083300.218523-1-kamel.bouhara@bootlin.com>
-References: <20230222083300.218523-1-kamel.bouhara@bootlin.com>
+        bh=4Vi0hyCmETvO266sIihn2iEfnC+waPbsYfKs7U90/uU=;
+        b=KsZfcpE+jZ3CcraoQykrDMrguuCa8oeL7pD5UMapAwCF7/BeF5ce+IeBujSKrb/bObtJEe
+        mfoDdLu0uw3i0a1ciULvrwi4RGwUiOsi6VTVFVKbsnBjQkc20fjBSecSjrMz/lzhlIV9Bt
+        UuUxFIOtLOXvYglH8AyYm68IjR0apmBphaHw9QeQsAIgozLdB2ri+iPyHmt8PNqwvwuCwf
+        qRP73sq2zd9myBrggnpa4P7r2UwzEauTCnWMc3Guhk0CvAXhOXpgM+FVG2TLQQcxWwzRs5
+        el/4yozlEK+cnDPJGFi0jOcenm5qYs4vSFT038UehohkM2zMtoNtu+lLnhup3w==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1677054784;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=4Vi0hyCmETvO266sIihn2iEfnC+waPbsYfKs7U90/uU=;
+        b=TfTnEicpwBjyS9gA7fZpVKA6kDubSILcMFW0M8PSVFHuul62H5KG/fVGqGX/zHZ2JSdeuU
+        ZT0Q5G4hzFwzDfAg==
+To:     Asahi Lina <lina@asahilina.net>, Boqun Feng <boqun.feng@gmail.com>
+Cc:     Miguel Ojeda <ojeda@kernel.org>,
+        Alex Gaynor <alex.gaynor@gmail.com>,
+        Wedson Almeida Filho <wedsonaf@gmail.com>,
+        Gary Guo <gary@garyguo.net>,
+        =?utf-8?Q?Bj=C3=B6rn?= Roy Baron <bjorn3_gh@protonmail.com>,
+        John Stultz <jstultz@google.com>,
+        Stephen Boyd <sboyd@kernel.org>, linux-kernel@vger.kernel.org,
+        rust-for-linux@vger.kernel.org, asahi@lists.linux.dev
+Subject: Re: [PATCH] rust: time: New module for timekeeping functions
+In-Reply-To: <98de1e48-085b-6edb-f1cc-2bf85180196f@asahilina.net>
+References: <20230221-gpu-up-time-v1-1-bf8fe74b7f55@asahilina.net>
+ <87v8jvnqq4.ffs@tglx> <Y/TP6as7qqwfcI42@boqun-archlinux>
+ <6aa15295-219b-225c-607d-e87e3d51d048@asahilina.net> <87bklmonbv.ffs@tglx>
+ <98de1e48-085b-6edb-f1cc-2bf85180196f@asahilina.net>
+Date:   Wed, 22 Feb 2023 09:33:03 +0100
+Message-ID: <87lekqm75s.ffs@tglx>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This adds support for TAS5733.
+Lina !
 
-Signed-off-by: Kamel Bouhara <kamel.bouhara@bootlin.com>
----
- sound/soc/codecs/tas571x.c | 59 ++++++++++++++++++++++++++++++++++++++
- 1 file changed, 59 insertions(+)
+On Wed, Feb 22 2023 at 13:56, Asahi Lina wrote:
+> On 22/02/2023 04.00, Thomas Gleixner wrote:
+>> Be aware that my Rust foo is not even rusty it's close to non-existant.
+>> That's probaly true for many maintainers you need to interact with.
+>
+> Please do feel free to reach out and ask any questions about all this
+> crazy Rust stuff stuff! We're here to help and I know this is all new to
+> a lot of maintainers. I want people to be comfortable that we aren't
+> just creating more maintenance burden for everyone else.
 
-diff --git a/sound/soc/codecs/tas571x.c b/sound/soc/codecs/tas571x.c
-index 84ec1b527646..f39c3273b2fd 100644
---- a/sound/soc/codecs/tas571x.c
-+++ b/sound/soc/codecs/tas571x.c
-@@ -718,6 +718,63 @@ static const struct regmap_config tas5721_regmap_config = {
- 	.volatile_table			= &tas571x_volatile_regs,
- };
- 
-+static const char *const tas5733_supply_names[] = {
-+	"AVDD",
-+	"DVDD",
-+	"PVDD",
-+};
-+
-+static const struct reg_default tas5733_reg_defaults[] = {
-+	{TAS571X_CLK_CTRL_REG,          0x6c},
-+	{TAS571X_DEV_ID_REG,            0x00},
-+	{TAS571X_ERR_STATUS_REG,        0x00},
-+	{TAS571X_SYS_CTRL_1_REG,        0xa0},
-+	{TAS571X_SDI_REG,               0x05},
-+	{TAS571X_SYS_CTRL_2_REG,        0x40},
-+	{TAS571X_SOFT_MUTE_REG,         0x07},
-+	{TAS571X_MVOL_REG,              0x03ff},
-+	{TAS571X_CH1_VOL_REG,           0x00c0},
-+	{TAS571X_CH2_VOL_REG,           0x00c0},
-+	{TAS571X_CH3_VOL_REG,           0x00c0},
-+	{TAS571X_VOL_CFG_REG,           0xf0},
-+	{TAS571X_MODULATION_LIMIT_REG,  0x07},
-+	{TAS571X_IC_DELAY_CH1_REG,      0xb8},
-+	{TAS571X_IC_DELAY_CH2_REG,      0x60},
-+	{TAS571X_IC_DELAY_CH3_REG,      0xa0},
-+	{TAS571X_IC_DELAY_CH4_REG,      0x48},
-+	{TAS571X_PWM_CH_SDN_GROUP_REG,  0x30},
-+	{TAS571X_START_STOP_PERIOD_REG, 0x68},
-+	{TAS571X_OSC_TRIM_REG,          0x82},
-+	{TAS571X_BKND_ERR_REG,          0x02},
-+	{TAS571X_INPUT_MUX_REG,         0x00897772},
-+	{TAS571X_PWM_MUX_REG,           0x01021345},
-+	{TAS5717_CH1_RIGHT_CH_MIX_REG,  0x00},
-+	{TAS5717_CH1_LEFT_CH_MIX_REG,   0x800000},
-+	{TAS5717_CH2_LEFT_CH_MIX_REG,   0x00},
-+	{TAS5717_CH2_RIGHT_CH_MIX_REG,  0x800000},
-+};
-+
-+static const struct regmap_config tas5733_regmap_config = {
-+	.reg_bits                       = 8,
-+	.val_bits                       = 32,
-+	.max_register                   = 0xff,
-+	.reg_read                       = tas571x_reg_read,
-+	.reg_write                      = tas571x_reg_write,
-+	.reg_defaults                   = tas5733_reg_defaults,
-+	.num_reg_defaults               = ARRAY_SIZE(tas5733_reg_defaults),
-+	.cache_type                     = REGCACHE_RBTREE,
-+	.wr_table                       = &tas571x_write_regs,
-+	.volatile_table                 = &tas571x_volatile_regs,
-+};
-+
-+static const struct tas571x_chip tas5733_chip = {
-+	.supply_names                   = tas5733_supply_names,
-+	.num_supply_names               = ARRAY_SIZE(tas5733_supply_names),
-+	.controls                       = tas5717_controls,
-+	.num_controls                   = ARRAY_SIZE(tas5717_controls),
-+	.regmap_config                  = &tas5733_regmap_config,
-+	.vol_reg_size                   = 2,
-+};
- 
- static const struct tas571x_chip tas5721_chip = {
- 	.supply_names			= tas5721_supply_names,
-@@ -897,6 +954,7 @@ static const struct of_device_id tas571x_of_match[] __maybe_unused = {
- 	{ .compatible = "ti,tas5717", .data = &tas5717_chip, },
- 	{ .compatible = "ti,tas5719", .data = &tas5717_chip, },
- 	{ .compatible = "ti,tas5721", .data = &tas5721_chip, },
-+	{ .compatible = "ti,tas5733", .data = &tas5733_chip, },
- 	{ }
- };
- MODULE_DEVICE_TABLE(of, tas571x_of_match);
-@@ -907,6 +965,7 @@ static const struct i2c_device_id tas571x_i2c_id[] = {
- 	{ "tas5717", (kernel_ulong_t) &tas5717_chip },
- 	{ "tas5719", (kernel_ulong_t) &tas5717_chip },
- 	{ "tas5721", (kernel_ulong_t) &tas5721_chip },
-+	{ "tas5733", (kernel_ulong_t) &tas5733_chip },
- 	{ }
- };
- MODULE_DEVICE_TABLE(i2c, tas571x_i2c_id);
--- 
-2.35.1
+I can only speak for myself. I'm comfortable and sufficiently curious
+about this particular flavour of crazy.
+
+I don't think these abstractions are a huge burden as long as the folks
+who implement them talk to the relevant maintainers so we don't end
+up with Rust inflicted burdens or ill defined abstractions.
+
+> That's also another conversation that we probably need to have, how do
+> we handle maintainership of Rust abstractions? I think Miguel mentioned
+> that ideally existing subsystem maintainers take over their bits of the
+> Rust side too over time, but of course a lot of people aren't going to
+> be comfortable with that if they don't have a lot of Rust experience
+> yet... personally I'm happy to sign up as co-maintainer or supporter of
+> the abstractions I contribute, or maybe we can just pool resources and
+> have people interested in Rust agree to help support this stuff for
+> every subsystem?
+
+Having subsystem maintainer teams supplemented with a Rust wizard, is
+probably the best option at the moment. Time will tell as always.
+
+Thanks,
+
+        tglx
+
 
