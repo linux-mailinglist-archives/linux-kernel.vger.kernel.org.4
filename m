@@ -2,76 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F37F469ECFD
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Feb 2023 03:38:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D1C3369ED07
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Feb 2023 03:46:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230099AbjBVCiv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Feb 2023 21:38:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59734 "EHLO
+        id S230443AbjBVCqs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Feb 2023 21:46:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34840 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229485AbjBVCir (ORCPT
+        with ESMTP id S229591AbjBVCqr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Feb 2023 21:38:47 -0500
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13CB522A2F;
-        Tue, 21 Feb 2023 18:38:47 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1677033527; x=1708569527;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=80pqe+/Y5KZdKDUpKtIOSJ6so1hrC3LQZrJH5osRxt0=;
-  b=k+NQHW/DvGLmtm9zt5LI2XNG4GVr+BQEKhy3eanEeTv1srQOBXKIaLJg
-   rvhNVI/OOtbHyGqsXARIHFeX5FshYg2HIFpnVX+ixnSnrkGfGvNJeyKaP
-   V5w3i+b/RTqlWu26NLkE2f0KcozkD13pZ+NIclSoXo0hGbEvczlgQdE8Y
-   VBLrveV0mNF0wp/YWkUlt9zGxLpL7EHaDbP3+AMBkqetyo9sdxdhKwRwH
-   GGB6/UYJ77wt9eUgnxWTf2kor7j4ehZQln+EWcIgjELQTCbVqIbHyMH7/
-   IJl4zYIGQLiT96DmDwi/Snq/lEZR6jT8CvKFXKvXovWpG0u4rXoWamzqG
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10628"; a="316541445"
-X-IronPort-AV: E=Sophos;i="5.97,317,1669104000"; 
-   d="scan'208";a="316541445"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Feb 2023 18:38:46 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10628"; a="1000829027"
-X-IronPort-AV: E=Sophos;i="5.97,317,1669104000"; 
-   d="scan'208";a="1000829027"
-Received: from binbinwu-mobl.ccr.corp.intel.com (HELO [10.238.10.94]) ([10.238.10.94])
-  by fmsmga005-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Feb 2023 18:38:44 -0800
-Message-ID: <46eb6fe5-0885-2537-099b-33d8bcfde1d3@linux.intel.com>
-Date:   Wed, 22 Feb 2023 10:38:43 +0800
+        Tue, 21 Feb 2023 21:46:47 -0500
+Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0822930286
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Feb 2023 18:46:46 -0800 (PST)
+Received: by mail-ed1-x52f.google.com with SMTP id da10so26108321edb.3
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Feb 2023 18:46:45 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=F8ZMRR/VKK1etFEaNA4kZ31IdkR8BQTcd8mKo/APEoo=;
+        b=dKfDhIrBWZAURfU4m2VIJbn6ahKZ8/o22VdHh2amKZqRd5nBmWzfA8cGFrQgNHYhH8
+         7/OPw5zpITj5qixxCb7SiXEf+xqjjbr4aAIKHOe4ZuQteBRqyD33loARcbsn6GXvcgVZ
+         UKVx62mI6CyCmh495kHVrFG4dKbklcIQw1gMs=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=F8ZMRR/VKK1etFEaNA4kZ31IdkR8BQTcd8mKo/APEoo=;
+        b=nVHwuXzHDp7k5/Jgbn8spbC58oC8fO1JgzrXZqpn7Uiibye5SV90b9q6k0JrfmECLG
+         DBR5UpJuUjyBGxZl19dpLWefRlFFqzqJJckKY4dIq59OvZrsQ/YN+q4cyJRBsdQ5yo4b
+         KsILmrOXsB7hJ69y3yHetrUTX52JeihH7NR3Lg7gfleIgkEzWRj9viBsnWMLUBXQzKHZ
+         7WPtqnz3BTiSWmC2pkYofCrzda2I32cZKUVUOQl195egFw3x6gAa9x1umJjPrVNnC7Mi
+         y2rnluuTKETR5BhgYYBZrn69u2+IJRGDy+puk6JjtLklOu490HdsKLZJk9tjl6nDvTox
+         Jv4Q==
+X-Gm-Message-State: AO0yUKWUOMpydtg5kyqjh2HwI8d8476/ex+IdHIBC91YitLDpKrRhLrk
+        apx3nAw0zWywjJGYM3DHzJsqxMTxqe2qeF+Pw/s=
+X-Google-Smtp-Source: AK7set8+cLs4VycmVu4hbz3OnuM81ykoozzC9yse61Vty9/8mAZRvNlBCbSAIfwjQE1qPUxwLcVDjQ==
+X-Received: by 2002:a17:906:2993:b0:881:23a:aba5 with SMTP id x19-20020a170906299300b00881023aaba5mr13074800eje.11.1677034003959;
+        Tue, 21 Feb 2023 18:46:43 -0800 (PST)
+Received: from mail-ed1-f52.google.com (mail-ed1-f52.google.com. [209.85.208.52])
+        by smtp.gmail.com with ESMTPSA id b24-20020a170906491800b008dd2db45c0bsm1906901ejq.105.2023.02.21.18.46.43
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 21 Feb 2023 18:46:43 -0800 (PST)
+Received: by mail-ed1-f52.google.com with SMTP id ec43so24363845edb.8
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Feb 2023 18:46:43 -0800 (PST)
+X-Received: by 2002:a17:906:8508:b0:8d0:2c55:1aa with SMTP id
+ i8-20020a170906850800b008d02c5501aamr4252043ejx.0.1677034003068; Tue, 21 Feb
+ 2023 18:46:43 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.2
-Subject: Re: [PATCH] KVM: x86: Remove duplicated calls of
- reverse_cpuid_check()
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        pbonzini@redhat.com
-References: <20230221032156.791-1-binbin.wu@linux.intel.com>
- <Y/TpLMRiNwGt2dhY@google.com>
-From:   Binbin Wu <binbin.wu@linux.intel.com>
-In-Reply-To: <Y/TpLMRiNwGt2dhY@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+References: <20230221233808.1565509-1-kuba@kernel.org>
+In-Reply-To: <20230221233808.1565509-1-kuba@kernel.org>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Tue, 21 Feb 2023 18:46:26 -0800
+X-Gmail-Original-Message-ID: <CAHk-=wi_410KZqHwF-WL5U7QYxnpHHHNP-3xL=g_y89XnKc-uw@mail.gmail.com>
+Message-ID: <CAHk-=wi_410KZqHwF-WL5U7QYxnpHHHNP-3xL=g_y89XnKc-uw@mail.gmail.com>
+Subject: Re: [PULL] Networking for v6.3
+To:     Jakub Kicinski <kuba@kernel.org>,
+        Arkadiusz Kubalewski <arkadiusz.kubalewski@intel.com>
+Cc:     davem@davemloft.net, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, pabeni@redhat.com,
+        bpf@vger.kernel.org, ast@kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Tue, Feb 21, 2023 at 3:38 PM Jakub Kicinski <kuba@kernel.org> wrote:
+>
+>   git://git.kernel.org/pub/scm/linux/kernel/git/netdev/net-next.git tags/net-next-6.3
 
-On 2/21/2023 11:54 PM, Sean Christopherson wrote:
-> On Tue, Feb 21, 2023, Binbin Wu wrote:
->> Remove duplicated calls of reverse_cpuid_check() in __kvm_cpu_cap_mask()
->> and kvm_cpu_cap_{clear, set, get}().
-> I want to keep the checks even though they are redundant.  There is no runtime
-> cost, and the intent of the direct calls in the "upper" helpers is as much to
-> document their usage constraints (input feature must be a compile-time constant)
-> as it is to enforce correctness.
+Ok, so this is a bit nitpicky, but commit c7ef8221ca7d ("ice: use GNSS
+subsystem instead of TTY") ends up doing odd things to kernel configs.
 
-Got it.
+My local configuration suddenly grew this:
 
+    CONFIG_ICE_GNSS=y
+
+which is pretty much nonsensical.
+
+The reason? It's defined as
+
+    config ICE_GNSS
+            def_bool GNSS = y || GNSS = ICE
+
+and so it gets set even when both GNSS and ICE are both disabled,
+because 'n' = 'n'.
+
+Does it end up *mattering*? No. It's only used in the ICE driver, but
+it really looks all kinds of odd, and it makes the resulting .config
+files illogical.
+
+Maybe I'm the only one who looks at those things. I do it because I
+think they are sometimes easier to just edit directly, but also
+because for me it's a quick way to see if somebody has sneaked in new
+config options that are on by default when they shouldn't be.
+
+I'd really prefer to not have the resulting config files polluted with
+nonsensical config options.
+
+I suspect it would be as simple as adding a
+
+        depends on ICE != n
+
+to that thing, but I didn't get around to testing that. I thought it
+would be better to notify the guilty parties.
+
+Anyway, this has obviously not held up me pulling the networking
+changes, and you should just see this as (yet another) sign of "yeah,
+Linus cares about those config files to a somewhat unhealthy degree".
+
+                      Linus
