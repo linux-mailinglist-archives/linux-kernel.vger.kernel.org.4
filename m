@@ -2,118 +2,294 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 84A1B69FF1A
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 00:01:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B92CD69FF1E
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 00:01:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233076AbjBVXB2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Feb 2023 18:01:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50946 "EHLO
+        id S232075AbjBVXBu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Feb 2023 18:01:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51280 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230000AbjBVXBX (ORCPT
+        with ESMTP id S231844AbjBVXBr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Feb 2023 18:01:23 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04035410AE;
-        Wed, 22 Feb 2023 15:01:22 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id B3C46B818D1;
-        Wed, 22 Feb 2023 23:01:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CD3A3C433D2;
-        Wed, 22 Feb 2023 23:01:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1677106879;
-        bh=5Epr+Sg2dMQsZpAgQsCxMuhd2oNEoAwQFrpqJFEYeHQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=MY985pim1F7QnE9UtW2aav5FRQV7YnpLQsq1byMYrO5o6NAx1vVPl1Bo7sVO3FkV2
-         gVUP681jbVZ1WGmp30SyrUMAFeyU4ZJ0zs1cTe8ROURO7erdAsgxNcEjTlB1dTfY5Y
-         sAX2oIWZcPXg9tpHOiY9K8gqg5C6YhSKBcd+FGTO4rodVCrVzU6arm6k6mrSfw6bWs
-         4FFSp9tCi1PIvmCjfS5+hIGOF+Xagwy9qCjy9oHKls/H3GjftrmikVfgiwPna/rSd1
-         aWO97sSRj1goxAGWjdVPjokhM92/S7+/HzNSmE6U1OUkPY7SaRSEBenf/DkOyR8q1t
-         6+DYDMaMbJl4g==
-Date:   Wed, 22 Feb 2023 23:01:15 +0000
-From:   Mark Brown <broonie@kernel.org>
-To:     Konrad Dybcio <konrad.dybcio@linaro.org>
-Cc:     Devi Priya <quic_devipriy@quicinc.com>, agross@kernel.org,
-        andersson@kernel.org, lgirdwood@gmail.com, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        quic_srichara@quicinc.com, quic_gokulsri@quicinc.com,
-        quic_sjaganat@quicinc.com, quic_kathirav@quicinc.com,
-        quic_arajkuma@quicinc.com, quic_anusha@quicinc.com,
-        quic_ipkumar@quicinc.com
-Subject: Re: [PATCH V2 4/6] regulator: qcom_smd: Add support to define the
- bootup voltage
-Message-ID: <Y/aeu5ua7cY5cGON@sirena.org.uk>
-References: <20230217142030.16012-1-quic_devipriy@quicinc.com>
- <20230217142030.16012-5-quic_devipriy@quicinc.com>
- <907628d1-b88d-5ac6-ed9d-7f63e2875738@linaro.org>
+        Wed, 22 Feb 2023 18:01:47 -0500
+Received: from mail-pg1-x530.google.com (mail-pg1-x530.google.com [IPv6:2607:f8b0:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7ADE4410AE;
+        Wed, 22 Feb 2023 15:01:45 -0800 (PST)
+Received: by mail-pg1-x530.google.com with SMTP id z10so4975754pgr.8;
+        Wed, 22 Feb 2023 15:01:45 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=UINcpy434SfhopxdYyHr2G9QMCc2YVPa4kQ0VAtxtDE=;
+        b=JPCEuOTAnInQd+Bhfd+BxAc8MI1m9hn+jQD7fQkEpJNaZo4yiAspAYYSAY0A4rU20d
+         7PAv4mO4QMWTB5+HQap0F/NaAytB3aDAwfI/D99hPE/VXOkpHc1cxft8cNqrX9/lP3cZ
+         BQjVCuL+mP9mu1lEUkW07xOcU8AiIxDHEN7ZxIKu9CgXPnY8fLcAK/gqznJmGTmepHKv
+         GliqaQ7FjIjOryPQZygqWzhhMNdIjV3OY4lhGJDWC9uuUp8Bm0GejkzTpVmeKrFe/4uU
+         hs7wYoS1eEuWkA7d9vW1xJFvmwrMb+jQJy3HQ8YUlvES3aisLGv3f1dhou7wM2mGpuNr
+         WP7w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:sender:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=UINcpy434SfhopxdYyHr2G9QMCc2YVPa4kQ0VAtxtDE=;
+        b=YxhhUbIqcOnoGaWyoKhFtWXhzQbDH3GHmC2dElF+zMYtrnD5ixhjUtApwGYykz1cHz
+         eC/pShv81dVZScXaOXvRz2pGXmrSsz/gUcJlS0dqr0sXoOSkrrbsHs4hYyvX5dSzqtc6
+         Zj3ja5Wz8RAAWpPevXHWrgbj3lx8J9kQ1nP7RslXajNLcEsKVNYRV1QZ7bRWBNpbCxf1
+         17LpbqpnVFLV9fy6BZ7eY9is1N3SgRBdSq05yT2PAalectNhQqIJY0w+noXhHTzTz5tR
+         RUzIoqNJT1cZAQeYcRDWt2aNBQEckpWPLKz5yJhXViRFx2PiGujTwKXnBJ8MYHGx+xMb
+         2lnw==
+X-Gm-Message-State: AO0yUKUk1u2mGzaoBFJnQro5sXM66YUVTs8N7JM2++ng3jUc01yGIOx9
+        TXLv1zwCcHMVh7UcaBn3YRo=
+X-Google-Smtp-Source: AK7set94wsCqhcUOg601Zmcr0TbdbA01IviNTaS7o0wvyVvMhpYSZswHaeagU+HlWV3JTIHI9nz+Lw==
+X-Received: by 2002:aa7:96c9:0:b0:5a9:c682:831d with SMTP id h9-20020aa796c9000000b005a9c682831dmr9003149pfq.13.1677106904735;
+        Wed, 22 Feb 2023 15:01:44 -0800 (PST)
+Received: from moohyul.svl.corp.google.com ([2620:15c:2d4:203:8f76:587d:f250:fecf])
+        by smtp.gmail.com with ESMTPSA id s1-20020aa78281000000b005ccbe5346ebsm3895127pfm.163.2023.02.22.15.01.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 22 Feb 2023 15:01:44 -0800 (PST)
+Sender: Namhyung Kim <namhyung@gmail.com>
+From:   Namhyung Kim <namhyung@kernel.org>
+To:     Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Jiri Olsa <jolsa@kernel.org>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@kernel.org>,
+        Ian Rogers <irogers@google.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Andi Kleen <ak@linux.intel.com>,
+        Kan Liang <kan.liang@linux.intel.com>,
+        Song Liu <song@kernel.org>,
+        Stephane Eranian <eranian@google.com>,
+        Ravi Bangoria <ravi.bangoria@amd.com>,
+        Leo Yan <leo.yan@linaro.org>,
+        James Clark <james.clark@arm.com>, Hao Luo <haoluo@google.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        linux-perf-users@vger.kernel.org, bpf@vger.kernel.org
+Subject: [RFC/PATCHSET 0/8] perf record: Implement BPF sample filter (v3)
+Date:   Wed, 22 Feb 2023 15:01:33 -0800
+Message-Id: <20230222230141.1729048-1-namhyung@kernel.org>
+X-Mailer: git-send-email 2.39.2.637.g21b0678d19-goog
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="dRZIuVS8T/5W7hxa"
-Content-Disposition: inline
-In-Reply-To: <907628d1-b88d-5ac6-ed9d-7f63e2875738@linaro.org>
-X-Cookie: Serving suggestion.
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hello,
 
---dRZIuVS8T/5W7hxa
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+There have been requests for more sophisticated perf event sample
+filtering based on the sample data.  Recently the kernel added BPF
+programs can access perf sample data and this is the userspace part
+to enable such a filtering.
 
-On Wed, Feb 22, 2023 at 11:11:42PM +0100, Konrad Dybcio wrote:
+This still has some rough edges and needs more improvements.  But
+I'd like to share the current work and get some feedback for the
+directions and idea for further improvements.
 
-> Thinking about it again, this seems like something that could be
-> generalized and introduced into regulator core.. Hardcoding this
-> will not end well.. Not to mention it'll affect all mp5496-using
-> boards that are already upstream.
+v3 changes)
+ * fix build error on old kernels/vmlinux  (Arnaldo)
+ * move the logic to evlist__apply_filters  (Jiri)
+ * improve error message for bad input
 
-> WDYT about regulator-init-microvolts Mark?
+v2 changes)
+ * fix build error with the misc field  (Jiri)
+ * add a destructor for filter expr  (Ian)
+ * remove 'bpf:' prefix  (Arnaldo)
+ * add '||' operator
 
-The overwhelming majority of devices that have variable voltages
-support readback, these Qualcomm firmware devices are pretty much
-unique in this regard.  We don't want a general property to set a
-specific voltage since normally we should be using the
-constraints and don't normally need to adjust things immediately
-since we can tell what the current voltage is.=20
+The required kernel changes are now in the mainline tree (for v6.3).
+perf record has --filter option to set filters on the last specified
+event in the command line.  It worked only for tracepoints and Intel
+PT events so far.  This patchset extends it to use BPF in order to
+enable the general sample filters for any events.
 
-This is pretty much just going to be a device specific bodge,
-ideally something that does know what the voltage is would be
-able to tell us at runtime but if that's not possible then
-there's no good options.  If the initial voltage might vary based
-on board then a device specific DT property might be less
-terrible, if it's determined by the regulator the current code
-seems fine.  Or just leave the current behavour, if the
-constraints are accurate then hopefully a temporary dip in
-voltage is just inelegant rather than an issue.  Indeed the
-current behaviour might well save power if you've got a voltage
-range configured and nothing actually ever gets round to setting
-the voltage (which is depressingly common, people seem keen on
-setting voltage ranges even when the voltage is never varied in
-practice).
+A new filter expression parser was added (using flex/bison) to process
+the filter string.  Right now, it only accepts very simple expressions
+separated by comma.  I'd like to keep the filter expression as simple
+as possible.
 
---dRZIuVS8T/5W7hxa
-Content-Type: application/pgp-signature; name="signature.asc"
+It requires samples satisfy all the filter expressions otherwise it'd
+drop the sample.  IOW filter expressions are connected with logical AND
+operations unless they used "||" explicitly.  So if user has something
+like 'A, B || C, D', then BOTH A and D should be true AND either B or C
+also needs to be true.
 
------BEGIN PGP SIGNATURE-----
+Essentially the BPF filter expression is:
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmP2nrsACgkQJNaLcl1U
-h9BSYAgAg7R+LoNCsEJBpg9GBF0QWNVI+uDSXvbYm2PlkJChzl7FRWdyOCaRBrA4
-xXb6lqs5PxU3aNBvpIFeSxfsLgb1zvjLPA+xSIUVvn/nYrijd58CgU9mp3+iCyzs
-2+O+WPJZuZaNcc3FzS6t9PxPVRg0uYby6H0BJ6ZdRe0GgNhznx2tq1M+Em517w90
-u8eiSfdQEfbE0woSFIGTH+scvTmWJAfcMRU3m1nEJcjd2PBL/TX7P4QciGEsGT66
-wAPeb8uGUKWDTqZsJNN2i3/S5q/TRRfTo7piotQVrJPS6nnJvAQL17mz3NjAf9bP
-7Ig1FRDtI4GJOBiBkwOwOMnlX25AMw==
-=zYTX
------END PGP SIGNATURE-----
+  <term> <operator> <value> (("," | "||") <term> <operator> <value>)*
 
---dRZIuVS8T/5W7hxa--
+The <term> can be one of:
+  ip, id, tid, pid, cpu, time, addr, period, txn, weight, phys_addr,
+  code_pgsz, data_pgsz, weight1, weight2, weight3, ins_lat, retire_lat,
+  p_stage_cyc, mem_op, mem_lvl, mem_snoop, mem_remote, mem_lock,
+  mem_dtlb, mem_blk, mem_hops
+
+The <operator> can be one of:
+  ==, !=, >, >=, <, <=, &
+
+The <value> can be one of:
+  <number> (for any term)
+  na, load, store, pfetch, exec (for mem_op)
+  l1, l2, l3, l4, cxl, io, any_cache, lfb, ram, pmem (for mem_lvl)
+  na, none, hit, miss, hitm, fwd, peer (for mem_snoop)
+  remote (for mem_remote)
+  na, locked (for mem_locked)
+  na, l1_hit, l1_miss, l2_hit, l2_miss, any_hit, any_miss, walk, fault (for mem_dtlb)
+  na, by_data, by_addr (for mem_blk)
+  hops0, hops1, hops2, hops3 (for mem_hops)
+
+I plan to improve it with range expressions like for ip or addr and it
+should support symbols like the existing addr-filters.  Also cgroup
+should understand and convert cgroup names to IDs.
+
+Let's take a look at some examples.  The following is to profile a user
+program on the command line.  When the frequency mode is used, it starts
+with a very small period (i.e. 1) and adjust it on every interrupt (NMI)
+to catch up the given frequency.
+
+  $ ./perf record -- ./perf test -w noploop
+  [ perf record: Woken up 1 times to write data ]
+  [ perf record: Captured and wrote 0.263 MB perf.data (4006 samples) ]
+
+  $ ./perf script -F pid,period,event,ip,sym | head
+  36695          1 cycles:  ffffffffbab12ddd perf_event_exec
+  36695          1 cycles:  ffffffffbab12ddd perf_event_exec
+  36695          5 cycles:  ffffffffbab12ddd perf_event_exec
+  36695         46 cycles:  ffffffffbab12de5 perf_event_exec
+  36695       1163 cycles:  ffffffffba80a0eb x86_pmu_disable_all
+  36695       1304 cycles:  ffffffffbaa19507 __hrtimer_get_next_event
+  36695       8143 cycles:  ffffffffbaa186f9 __run_timers
+  36695      69040 cycles:  ffffffffbaa0c393 rcu_segcblist_ready_cbs
+  36695     355117 cycles:            4b0da4 noploop
+  36695     321861 cycles:            4b0da4 noploop
+
+If you want to skip the first few samples that have small periods, you
+can do like this (note it requires root due to BPF).
+
+  $ sudo ./perf record -e cycles --filter 'period > 10000' -- ./perf test -w noploop
+  [ perf record: Woken up 1 times to write data ]
+  [ perf record: Captured and wrote 0.262 MB perf.data (3990 samples) ]
+
+  $ sudo ./perf script -F pid,period,event,ip,sym | head
+  39524      58253 cycles:  ffffffffba97dac0 update_rq_clock
+  39524     232657 cycles:            4b0da2 noploop
+  39524     210981 cycles:            4b0da2 noploop
+  39524     282882 cycles:            4b0da4 noploop
+  39524     392180 cycles:            4b0da4 noploop
+  39524     456058 cycles:            4b0da4 noploop
+  39524     415196 cycles:            4b0da2 noploop
+  39524     462721 cycles:            4b0da4 noploop
+  39524     526272 cycles:            4b0da2 noploop
+  39524     565569 cycles:            4b0da4 noploop
+
+Maybe more useful example is when it deals with precise memory events.
+On AMD processors with IBS, you can filter only memory load with L1
+dTLB is missed like below.
+
+  $ sudo ./perf record -ad -e ibs_op//p \
+  > --filter 'mem_op == load, mem_dtlb > l1_hit' sleep 1
+  [ perf record: Woken up 1 times to write data ]
+  [ perf record: Captured and wrote 1.338 MB perf.data (15 samples) ]
+
+  $ sudo ./perf script -F data_src | head
+          51080242 |OP LOAD|LVL LFB/MAB hit|SNP N/A|TLB L2 miss|LCK N/A|BLK  N/A
+          49080142 |OP LOAD|LVL L1 hit|SNP N/A|TLB L2 hit|LCK N/A|BLK  N/A
+          51080242 |OP LOAD|LVL LFB/MAB hit|SNP N/A|TLB L2 miss|LCK N/A|BLK  N/A
+          51080242 |OP LOAD|LVL LFB/MAB hit|SNP N/A|TLB L2 miss|LCK N/A|BLK  N/A
+          51088842 |OP LOAD|LVL L3 or Remote Cache (1 hop) hit|SNP N/A|TLB L2 miss|LCK N/A|BLK  N/A
+          51080242 |OP LOAD|LVL LFB/MAB hit|SNP N/A|TLB L2 miss|LCK N/A|BLK  N/A
+          51080242 |OP LOAD|LVL LFB/MAB hit|SNP N/A|TLB L2 miss|LCK N/A|BLK  N/A
+          51080242 |OP LOAD|LVL LFB/MAB hit|SNP N/A|TLB L2 miss|LCK N/A|BLK  N/A
+          49080442 |OP LOAD|LVL L2 hit|SNP N/A|TLB L2 hit|LCK N/A|BLK  N/A
+          51080242 |OP LOAD|LVL LFB/MAB hit|SNP N/A|TLB L2 miss|LCK N/A|BLK  N/A
+
+You can also check the number of dropped samples in LOST_SAMPLES events
+using perf report --stat command.
+
+  $ sudo ./perf report --stat
+
+  Aggregated stats:
+             TOTAL events:      16066
+              MMAP events:         22  ( 0.1%)
+              COMM events:       4166  (25.9%)
+              EXIT events:          1  ( 0.0%)
+          THROTTLE events:        816  ( 5.1%)
+        UNTHROTTLE events:        613  ( 3.8%)
+              FORK events:       4165  (25.9%)
+            SAMPLE events:         15  ( 0.1%)
+             MMAP2 events:       6133  (38.2%)
+      LOST_SAMPLES events:          1  ( 0.0%)
+           KSYMBOL events:         69  ( 0.4%)
+         BPF_EVENT events:         57  ( 0.4%)
+    FINISHED_ROUND events:          3  ( 0.0%)
+          ID_INDEX events:          1  ( 0.0%)
+        THREAD_MAP events:          1  ( 0.0%)
+           CPU_MAP events:          1  ( 0.0%)
+         TIME_CONV events:          1  ( 0.0%)
+     FINISHED_INIT events:          1  ( 0.0%)
+  ibs_op//p stats:
+            SAMPLE events:         15
+      LOST_SAMPLES events:       3991
+
+Note that the total aggregated stats show 1 LOST_SAMPLES event but
+per event stats show 3991 events because it's the actual number of
+dropped samples while the aggregated stats has the number of record.
+Maybe we need to change the per-event stats to 'LOST_SAMPLES count'
+to avoid the confusion.
+
+The code is available at 'perf/bpf-filter-v3' branch in my tree.
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/namhyung/linux-perf.git
+
+Any feedback is welcome.
+
+Thanks,
+Namhyung
+
+Namhyung Kim (8):
+  perf bpf filter: Introduce basic BPF filter expression
+  perf bpf filter: Implement event sample filtering
+  perf record: Add BPF event filter support
+  perf record: Record dropped sample count
+  perf bpf filter: Add 'pid' sample data support
+  perf bpf filter: Add more weight sample data support
+  perf bpf filter: Add data_src sample data support
+  perf bpf filter: Add logical OR operator
+
+ tools/lib/perf/include/perf/event.h          |   2 +
+ tools/perf/Documentation/perf-record.txt     |  15 +-
+ tools/perf/Makefile.perf                     |   2 +-
+ tools/perf/builtin-record.c                  |  38 ++--
+ tools/perf/util/Build                        |  16 ++
+ tools/perf/util/bpf-filter.c                 | 135 +++++++++++++++
+ tools/perf/util/bpf-filter.h                 |  49 ++++++
+ tools/perf/util/bpf-filter.l                 | 159 +++++++++++++++++
+ tools/perf/util/bpf-filter.y                 |  78 +++++++++
+ tools/perf/util/bpf_counter.c                |   3 +-
+ tools/perf/util/bpf_skel/sample-filter.h     |  27 +++
+ tools/perf/util/bpf_skel/sample_filter.bpf.c | 172 +++++++++++++++++++
+ tools/perf/util/evlist.c                     |  25 ++-
+ tools/perf/util/evsel.c                      |   2 +
+ tools/perf/util/evsel.h                      |   7 +-
+ tools/perf/util/parse-events.c               |   8 +-
+ tools/perf/util/session.c                    |   3 +-
+ 17 files changed, 706 insertions(+), 35 deletions(-)
+ create mode 100644 tools/perf/util/bpf-filter.c
+ create mode 100644 tools/perf/util/bpf-filter.h
+ create mode 100644 tools/perf/util/bpf-filter.l
+ create mode 100644 tools/perf/util/bpf-filter.y
+ create mode 100644 tools/perf/util/bpf_skel/sample-filter.h
+ create mode 100644 tools/perf/util/bpf_skel/sample_filter.bpf.c
+
+
+base-commit: f9fa0778ee7349a9aa3d2ea10e9f2ab843a0b44e
+-- 
+2.39.2.637.g21b0678d19-goog
+
