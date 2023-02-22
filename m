@@ -2,313 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6C21E69EFAE
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Feb 2023 08:56:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0175369EFA9
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Feb 2023 08:56:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231268AbjBVH4I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Feb 2023 02:56:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43146 "EHLO
+        id S231230AbjBVHz7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Feb 2023 02:55:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43140 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230316AbjBVHz6 (ORCPT
+        with ESMTP id S230048AbjBVHz5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Feb 2023 02:55:58 -0500
-Received: from mxout70.expurgate.net (mxout70.expurgate.net [91.198.224.70])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE8522BF15;
-        Tue, 21 Feb 2023 23:55:56 -0800 (PST)
-Received: from [127.0.0.1] (helo=localhost)
-        by relay.expurgate.net with smtp (Exim 4.92)
-        (envelope-from <prvs=9431929e93=fe@dev.tdt.de>)
-        id 1pUjyg-0008b8-Qy; Wed, 22 Feb 2023 08:55:50 +0100
-Received: from [195.243.126.94] (helo=securemail.tdt.de)
-        by relay.expurgate.net with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <fe@dev.tdt.de>)
-        id 1pUjyg-0005nT-41; Wed, 22 Feb 2023 08:55:50 +0100
-Received: from securemail.tdt.de (localhost [127.0.0.1])
-        by securemail.tdt.de (Postfix) with ESMTP id C1821240049;
-        Wed, 22 Feb 2023 08:55:49 +0100 (CET)
-Received: from mail.dev.tdt.de (unknown [10.2.4.42])
-        by securemail.tdt.de (Postfix) with ESMTP id 3382024004D;
-        Wed, 22 Feb 2023 08:55:49 +0100 (CET)
-Received: from localhost.localdomain (unknown [10.2.3.40])
-        by mail.dev.tdt.de (Postfix) with ESMTPSA id C56692B933;
-        Wed, 22 Feb 2023 08:55:48 +0100 (CET)
-From:   Florian Eckert <fe@dev.tdt.de>
-To:     u.kleine-koenig@pengutronix.de, gregkh@linuxfoundation.org,
-        jirislaby@kernel.org, pavel@ucw.cz, lee@kernel.org
-Cc:     linux-kernel@vger.kernel.org, linux-leds@vger.kernel.org,
-        Eckert.Florian@googlemail.com
-Subject: [PATCH v6 2/2] trigger: ledtrig-tty: add additional modes
-Date:   Wed, 22 Feb 2023 08:55:39 +0100
-Message-ID: <20230222075539.484878-3-fe@dev.tdt.de>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20230222075539.484878-1-fe@dev.tdt.de>
-References: <20230222075539.484878-1-fe@dev.tdt.de>
+        Wed, 22 Feb 2023 02:55:57 -0500
+Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C17522BEF2
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Feb 2023 23:55:55 -0800 (PST)
+Received: by mail-pl1-x62e.google.com with SMTP id l15so9000920pls.1
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Feb 2023 23:55:55 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=oBgzLfkXpKOGfd/1eNx8Vyt8q2pJnQcGFP33kaJSZLo=;
+        b=bKcnv4mE5FYO28aQVhL4l7jvPYfuxRvwJx4aDOMpVX7i7lTxPjZ2zeB/msNGjCoAUS
+         9BWfwGlpf4nOVynX5qpqDIcuFnNCx1ZYDUxfE0cP0TsmymLnw467Im4PI/aPWvfGTOTq
+         fYnOFo4Nyhdr7Pzf7P3ljnJxv/HDvkXFr7eog=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=oBgzLfkXpKOGfd/1eNx8Vyt8q2pJnQcGFP33kaJSZLo=;
+        b=We3KkIhLijzkfBMZFOrVhf3T7VefX+hsv/wNAiKLak1zr1Ue9AvY+Zod16fkTlYDaZ
+         S0dbVEcs+lm521AARHZstKOn3b2hXTvkeH25iBhEv+84wEg+cBpZGZHfL9TInF3d5rgE
+         nQiVUpRAcQfnwcz20A6ahpyLcNJoRF1yNSJYtyLXeD+hrm+ddL87u6BwVF65XvPNNATq
+         /PdOqMcoMim/2CVBnuk4oj1dKpKbMexgJooX1kY5RD4jfcu8p3xjzEtCIcXbJzplJSt/
+         t3vdx4zyQhuSyXWKPm2kqjMzT77oRkbBwZhOW6zV1HVBUmApBfABtyMi9/2e4FFy4SE+
+         2eMA==
+X-Gm-Message-State: AO0yUKWTETLSheSQBlHSphqxDAcCRxZrXK3PZX7jSIX3Wg/g6EvbgP3o
+        u4R5Ixo3U2h046v7ySEv5ab/TA==
+X-Google-Smtp-Source: AK7set+DvRSC/UTE3/Bo65NIi9ejlfvJh5OTnIy8q82XRhMInMhg/LrhSdfTTPAcfKctZav/mMZuWQ==
+X-Received: by 2002:a17:903:110e:b0:19c:ac96:223b with SMTP id n14-20020a170903110e00b0019cac96223bmr509904plh.40.1677052555089;
+        Tue, 21 Feb 2023 23:55:55 -0800 (PST)
+Received: from google.com ([2401:fa00:1:10:ddae:8a07:7ed9:423d])
+        by smtp.gmail.com with ESMTPSA id x24-20020a170902821800b001947222676csm5009278pln.249.2023.02.21.23.55.52
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 21 Feb 2023 23:55:54 -0800 (PST)
+Date:   Wed, 22 Feb 2023 15:55:50 +0800
+From:   Chen-Yu Tsai <wenst@chromium.org>
+To:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+Cc:     airlied@gmail.com, daniel@ffwll.ch, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, steven.price@arm.com,
+        alyssa.rosenzweig@collabora.com, matthias.bgg@gmail.com,
+        robh@kernel.org, dri-devel@lists.freedesktop.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org
+Subject: Re: [PATCH v2 00/10] Panfrost: Improve and add MediaTek SoCs support
+Message-ID: <Y/XKhg+wultVbEWW@google.com>
+References: <20230221153740.1620529-1-angelogioacchino.delregno@collabora.com>
 MIME-Version: 1.0
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_PASS,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230221153740.1620529-1-angelogioacchino.delregno@collabora.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-Content-Transfer-Encoding: quoted-printable
-X-purgate-ID: 151534::1677052550-30FFD51F-56BB060F/0/0
-X-purgate: clean
-X-purgate-type: clean
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add additional modes to trigger the selected LED.
-The following modes are supported:
+On Tue, Feb 21, 2023 at 04:37:30PM +0100, AngeloGioacchino Del Regno wrote:
+> Changes in v2:
+>  - Add power-domain-names commit from Chen-Yu to the series
+>  - Kept sram-supply in base schema, overridden for non-MediaTek
+>  - Added Reviewed-by tags from Steven Price to the driver commits
+>    (as released in reply to v1's cover letter - thanks!)
+> 
+> This series adds support for new MediaTek SoCs (MT8186/MT8192/MT8195)
+> and improves MT8183 support: since the mtk-regulator-coupler driver
+> was picked, it is now useless for Panfrost to look for, and manage,
+> two regulators (GPU Vcore and GPU SRAM) on MediaTek;
+> 
+> The aforementioned driver will take care of keeping the voltage
+> relation (/constraints) of the two regulators on its own when a
+> voltage change request is sent to the Vcore, solving the old time
+> issue with not working DVFS on Panfrost+MediaTek (due to devfreq
+> supporting only single regulator).
+> 
+> In the specific case of MT8183, in order to not break the ABI, it
+> was necessary to add a new compatible for enabling DVFS.
+> 
+> Alyssa Rosenzweig (3):
+>   drm/panfrost: Increase MAX_PM_DOMAINS to 5
+>   drm/panfrost: Add the MT8192 GPU ID
+>   drm/panfrost: Add mediatek,mt8192-mali compatible
+> 
+> AngeloGioacchino Del Regno (6):
+>   dt-bindings: gpu: mali-bifrost: Split out MediaTek power-domains
+>     variation
+>   dt-bindings: gpu: mali-bifrost: Allow up to 5 power domains for MT8192
+>   dt-bindings: gpu: mali-bifrost: Add compatible for MT8195 SoC
+>   dt-bindings: gpu: mali-bifrost: Add new MT8183 compatible
+>   dt-bindings: gpu: mali-bifrost: Add a compatible for MediaTek MT8186
+>   drm/panfrost: Add new compatible for Mali on the MT8183 SoC
+> 
+> Chen-Yu Tsai (1):
+>   dt-bindings: gpu: mali-bifrost: Add power-domain-names to base schema
+> 
+>  .../bindings/gpu/arm,mali-bifrost.yaml        | 67 ++++++++++++++++++-
+>  drivers/gpu/drm/panfrost/panfrost_device.h    |  2 +-
+>  drivers/gpu/drm/panfrost/panfrost_drv.c       | 28 ++++++++
+>  drivers/gpu/drm/panfrost/panfrost_gpu.c       |  8 +++
+>  4 files changed, 101 insertions(+), 4 deletions(-)
 
-Tx/Rx:	Flash LED on data transmission (default)
-CTS:	DCE Ready to accept data from the DTE.
-DSR:	DCE is ready to receive and send data.
-CAR:	DCE is receiving a carrier from a remote DTE.
-RNG:	DCE has detected an incoming ring signal.
+Tested-by: Chen-Yu Tsai <wenst@chromium.org>
 
-The mode can be changed for example with the following command:
-echo "CTS" > /sys/class/leds/<led>/mode
-
-This would turn on the LED, when the DTE(modem) signals the DCE that it
-is ready to accept data.
-
-Signed-off-by: Florian Eckert <fe@dev.tdt.de>
----
- .../ABI/testing/sysfs-class-led-trigger-tty   |  16 ++
- drivers/leds/trigger/ledtrig-tty.c            | 145 ++++++++++++++++--
- 2 files changed, 146 insertions(+), 15 deletions(-)
-
-diff --git a/Documentation/ABI/testing/sysfs-class-led-trigger-tty b/Docu=
-mentation/ABI/testing/sysfs-class-led-trigger-tty
-index 2bf6b24e781b..4023585d3acf 100644
---- a/Documentation/ABI/testing/sysfs-class-led-trigger-tty
-+++ b/Documentation/ABI/testing/sysfs-class-led-trigger-tty
-@@ -4,3 +4,19 @@ KernelVersion:	5.10
- Contact:	linux-leds@vger.kernel.org
- Description:
- 		Specifies the tty device name of the triggering tty
-+
-+What:		/sys/class/leds/<led>/mode
-+Date:		January 2023
-+KernelVersion:	6.3
-+Description:
-+		Specifies the operating to trigger the LED.
-+		The following operating modes are supported:
-+		* Tx/Rx: Flash LED on data transmission (default)
-+		* CTS:   DCE Ready to accept data from the DTE.
-+		  LED on if line is high.
-+		* DSR:   DCE is ready to receive and send data.
-+		  LED on if line is high.
-+		* CAR:   DCE has detected a carrier from a remote DTE.
-+		  LED on if line is high.
-+		* RNG:   DCE has detected an incoming ring signal.
-+		  LED on if line is high.
-diff --git a/drivers/leds/trigger/ledtrig-tty.c b/drivers/leds/trigger/le=
-dtrig-tty.c
-index f62db7e520b5..7c4c171c8745 100644
---- a/drivers/leds/trigger/ledtrig-tty.c
-+++ b/drivers/leds/trigger/ledtrig-tty.c
-@@ -7,6 +7,15 @@
- #include <linux/tty.h>
- #include <uapi/linux/serial.h>
-=20
-+enum tty_led_mode {
-+	TTY_LED_CNT,
-+	TTY_LED_CTS,
-+	TTY_LED_DSR,
-+	TTY_LED_CAR,
-+	TTY_LED_RNG,
-+	__TTY_LED_LAST =3D TTY_LED_RNG
-+};
-+
- struct ledtrig_tty_data {
- 	struct led_classdev *led_cdev;
- 	struct delayed_work dwork;
-@@ -14,6 +23,15 @@ struct ledtrig_tty_data {
- 	const char *ttyname;
- 	struct tty_struct *tty;
- 	int rx, tx;
-+	enum tty_led_mode mode;
-+};
-+
-+static const char * const mode[] =3D {
-+	[TTY_LED_CNT] =3D "Tx/Rx", // Trasmit Data / Receive Data
-+	[TTY_LED_CTS] =3D "CTS", // CTS Clear To Send
-+	[TTY_LED_DSR] =3D "DSR", // DSR Data Set Ready
-+	[TTY_LED_CAR] =3D "CAR", // CAR Data Carrier Detect (DCD)
-+	[TTY_LED_RNG] =3D "RNG", // RNG Ring Indicator (RI)
- };
-=20
- static void ledtrig_tty_restart(struct ledtrig_tty_data *trigger_data)
-@@ -21,6 +39,70 @@ static void ledtrig_tty_restart(struct ledtrig_tty_dat=
-a *trigger_data)
- 	schedule_delayed_work(&trigger_data->dwork, 0);
- }
-=20
-+static ssize_t ledtrig_tty_mode_show(char *buf, enum tty_led_mode tty_mo=
-de)
-+{
-+	int len =3D 0;
-+	int i;
-+
-+	for (i =3D 0; i <=3D __TTY_LED_LAST; i++) {
-+		bool hit =3D tty_mode =3D=3D i;
-+		bool last =3D i =3D=3D __TTY_LED_LAST;
-+
-+		len +=3D sysfs_emit_at(buf, len, "%s%s%s%s",
-+				  hit ? "[" : "",
-+				  mode[i],
-+				  hit ? "]" : "",
-+				  last ? "" : " ");
-+	}
-+
-+	len +=3D sysfs_emit_at(buf, len, "\n");
-+
-+	return len;
-+}
-+
-+static ssize_t tty_led_mode_show(struct device *dev,
-+			 struct device_attribute *attr, char *buf)
-+{
-+	struct ledtrig_tty_data *trigger_data =3D led_trigger_get_drvdata(dev);
-+	enum tty_led_mode tty_mode;
-+
-+	mutex_lock(&trigger_data->mutex);
-+	tty_mode =3D trigger_data->mode;
-+	mutex_unlock(&trigger_data->mutex);
-+
-+	return ledtrig_tty_mode_show(buf, tty_mode);
-+}
-+
-+static ssize_t tty_led_mode_store(struct device *dev,
-+			  struct device_attribute *attr, const char *buf,
-+			  size_t size)
-+{
-+	struct ledtrig_tty_data *trigger_data =3D led_trigger_get_drvdata(dev);
-+	ssize_t ret =3D size;
-+	enum tty_led_mode tty_mode =3D __TTY_LED_LAST;
-+	int i;
-+
-+	/* Check for new line in string*/
-+	if (size > 0 && buf[size - 1] =3D=3D '\n')
-+		size -=3D 1;
-+
-+	for (i =3D 0; i <=3D __TTY_LED_LAST; i++)
-+		if (strncmp(buf, mode[i], size) =3D=3D 0) {
-+			tty_mode =3D i;
-+			break;
-+		}
-+
-+	if (i > __TTY_LED_LAST)
-+		return -EINVAL;
-+
-+	mutex_lock(&trigger_data->mutex);
-+	trigger_data->mode =3D tty_mode;
-+	mutex_unlock(&trigger_data->mutex);
-+
-+	return ret;
-+}
-+static DEVICE_ATTR_RW(tty_led_mode);
-+
- static ssize_t ttyname_show(struct device *dev,
- 			    struct device_attribute *attr, char *buf)
- {
-@@ -76,6 +158,18 @@ static ssize_t ttyname_store(struct device *dev,
- }
- static DEVICE_ATTR_RW(ttyname);
-=20
-+static void ledtrig_tty_flags(struct ledtrig_tty_data *trigger_data,
-+		unsigned int flag)
-+{
-+	unsigned int status;
-+
-+	status =3D tty_get_mget(trigger_data->tty);
-+	if (status & flag)
-+		led_set_brightness_sync(trigger_data->led_cdev, LED_ON);
-+	else
-+		led_set_brightness_sync(trigger_data->led_cdev, LED_OFF);
-+}
-+
- static void ledtrig_tty_work(struct work_struct *work)
- {
- 	struct ledtrig_tty_data *trigger_data =3D
-@@ -113,21 +207,38 @@ static void ledtrig_tty_work(struct work_struct *wo=
-rk)
- 		trigger_data->tty =3D tty;
- 	}
-=20
--	ret =3D tty_get_icount(trigger_data->tty, &icount);
--	if (ret) {
--		dev_info(trigger_data->tty->dev, "Failed to get icount, stopped pollin=
-g\n");
--		mutex_unlock(&trigger_data->mutex);
--		return;
--	}
--
--	if (icount.rx !=3D trigger_data->rx ||
--	    icount.tx !=3D trigger_data->tx) {
--		led_set_brightness_sync(trigger_data->led_cdev, LED_ON);
--
--		trigger_data->rx =3D icount.rx;
--		trigger_data->tx =3D icount.tx;
--	} else {
--		led_set_brightness_sync(trigger_data->led_cdev, LED_OFF);
-+	switch (trigger_data->mode) {
-+	case TTY_LED_CTS:
-+		ledtrig_tty_flags(trigger_data, TIOCM_CTS);
-+		break;
-+	case TTY_LED_DSR:
-+		ledtrig_tty_flags(trigger_data, TIOCM_DSR);
-+		break;
-+	case TTY_LED_CAR:
-+		ledtrig_tty_flags(trigger_data, TIOCM_CAR);
-+		break;
-+	case TTY_LED_RNG:
-+		ledtrig_tty_flags(trigger_data, TIOCM_RNG);
-+		break;
-+	case TTY_LED_CNT:
-+	default:
-+		ret =3D tty_get_icount(trigger_data->tty, &icount);
-+		if (ret) {
-+			dev_info(trigger_data->tty->dev, "Failed to get icount, stopped polli=
-ng\n");
-+			mutex_unlock(&trigger_data->mutex);
-+			return;
-+		}
-+
-+		if (icount.rx !=3D trigger_data->rx ||
-+		    icount.tx !=3D trigger_data->tx) {
-+			led_set_brightness_sync(trigger_data->led_cdev, LED_ON);
-+
-+			trigger_data->rx =3D icount.rx;
-+			trigger_data->tx =3D icount.tx;
-+		} else {
-+			led_set_brightness_sync(trigger_data->led_cdev, LED_OFF);
-+		}
-+		break;
- 	}
-=20
- out:
-@@ -137,6 +248,7 @@ static void ledtrig_tty_work(struct work_struct *work=
-)
-=20
- static struct attribute *ledtrig_tty_attrs[] =3D {
- 	&dev_attr_ttyname.attr,
-+	&dev_attr_tty_led_mode.attr,
- 	NULL
- };
- ATTRIBUTE_GROUPS(ledtrig_tty);
-@@ -149,6 +261,9 @@ static int ledtrig_tty_activate(struct led_classdev *=
-led_cdev)
- 	if (!trigger_data)
- 		return -ENOMEM;
-=20
-+	/* set default mode */
-+	trigger_data->mode =3D TTY_LED_CNT;
-+
- 	led_set_trigger_data(led_cdev, trigger_data);
-=20
- 	INIT_DELAYED_WORK(&trigger_data->dwork, ledtrig_tty_work);
---=20
-2.30.2
-
+on MT8183, MT8186, MT8192, MT8195 with glmark2.
