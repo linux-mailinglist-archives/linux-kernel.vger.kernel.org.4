@@ -2,126 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0839169EFEB
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Feb 2023 09:13:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E48D69EFF0
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Feb 2023 09:14:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230291AbjBVIN2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Feb 2023 03:13:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59048 "EHLO
+        id S231303AbjBVIOV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Feb 2023 03:14:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60404 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229557AbjBVIN1 (ORCPT
+        with ESMTP id S231168AbjBVIOT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Feb 2023 03:13:27 -0500
-Received: from mail-ed1-f45.google.com (mail-ed1-f45.google.com [209.85.208.45])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE89C7EE8;
-        Wed, 22 Feb 2023 00:13:25 -0800 (PST)
-Received: by mail-ed1-f45.google.com with SMTP id ec43so26461734edb.8;
-        Wed, 22 Feb 2023 00:13:25 -0800 (PST)
+        Wed, 22 Feb 2023 03:14:19 -0500
+Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD6DB1B540;
+        Wed, 22 Feb 2023 00:14:14 -0800 (PST)
+Received: by mail-ed1-x529.google.com with SMTP id cq23so26721998edb.1;
+        Wed, 22 Feb 2023 00:14:14 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=xj/6AyELfHI0tKgaBGNk0fyFVeR5csP7/YL61ZGE4Xk=;
+        b=eyrVUqnER8VYc2JyypJRTTLZWi2RuVoKQT8Xm298bWSpuBvRedvo6MZEcHXbdwUJdD
+         FP94ARAJ4ey3XJTfTaXLkh8GTSxTzplteXVI6Xt8JmkeEtqo/8BLFl77N/WA7QX5P5wF
+         FmXN6+J0VeqrYXjgwL7DsIf1jXDwluv2alBbRanVpC7TDD4KHhlPy0WZCGtl2BXNrMmY
+         DIyqE7xqBqsjACJfjzzmMRXX5Zl/ID+U+olV3MwR91v+7TMOFTcq8V791ZEzfPTmn0QC
+         f8kKfXcHcdwlkUoVe4sjjYh6b5HZ9xbCbn/aGfpiZv8cz1eKOD1lPfl2q4lYfmix7q+I
+         G5Jg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=2ag/3Atz7wSqimNQuEYxkpDd8W3Ip2Hw0Id13QQyP6Y=;
-        b=4MRcp1rZ/hULrX66ZvMbgZT0B6o46Doae/7KIFxUdVxAvuRTj7vCoCpT9N9Ro5r/CR
-         hc0enZmObSPh7efW2QZgnOmCDwOonyWchpPOAqO9V3VdSOpzVBXvSIAsnUxMuPFbrGI1
-         +DyU/aDkHXD55sAmsoHNFJvvOziCanN7TnUwtI6nCC5wIIgTxwuwh+1CvkLqRLaMbW3R
-         3jgHSneBV50woe9IhWcXd5ay1JCYN1GY0s/cH9+WN0Ip+Tah7v5YPhvtcFHdaGw12tCy
-         zVAXMr9X1XfHB45hetVQcIZ1EbYS1O0nn7+kGRg4ZHmJ0SD0Gl4SKHKYh2KQ+vXVUZPS
-         YOrA==
-X-Gm-Message-State: AO0yUKXVt49GpmsCJHxHF0L6B4NSROvYgukjef6+de3VbDaI0cWYFrk2
-        bu+LVYgBDdVieyMBthGnOcM=
-X-Google-Smtp-Source: AK7set9oplvMl8GCEhp9DiS+4AxXl974OCPXw13AJ1xiZkOaqsCohxZTk5cgMevIshWN/aqlye8fUQ==
-X-Received: by 2002:a17:906:5a4c:b0:8b1:811e:cd30 with SMTP id my12-20020a1709065a4c00b008b1811ecd30mr17582554ejc.22.1677053604132;
-        Wed, 22 Feb 2023 00:13:24 -0800 (PST)
-Received: from ?IPV6:2a0b:e7c0:0:107::aaaa:49? ([2a0b:e7c0:0:107::aaaa:49])
-        by smtp.gmail.com with ESMTPSA id p20-20020a1709060dd400b008be5b97ca49sm5490164eji.150.2023.02.22.00.13.23
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 22 Feb 2023 00:13:23 -0800 (PST)
-Message-ID: <7b942109-bbad-cbda-ad9c-b10bfb5f6dbf@kernel.org>
-Date:   Wed, 22 Feb 2023 09:13:22 +0100
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=xj/6AyELfHI0tKgaBGNk0fyFVeR5csP7/YL61ZGE4Xk=;
+        b=47j4kvxko3eJR7Y3tgxGgEkOydTPH4ek5uWLpLWbN5M0BBBN/wYZ49Dnnepho77W43
+         czk51Bgc8JElMC951iZAQVA4EgEMpkoFzqBfeOyZ6wK0akan7Fa/aRmW7kxRfZOkDDvk
+         2muLM3TSdqIvXYUSsfpWsla/hVulqFmife/9mIY5cMKr/nuJhhMg4nORSRcAtWt6M3Yw
+         WZWk9NyNn2TCh4LmIGCsH3XrIHli1CzV1/oO4rNPuWW6HhZQDB/lxXKMDk9RISCgqSf7
+         HIRLPt/17kk8sXevYir4pKkzjHI/bktpelHzbesXTclw/56eBqrjlbXNZdla+JAWB6WQ
+         wXrA==
+X-Gm-Message-State: AO0yUKU0F3UNNJaAMnjY3CQjeZo1WejwHjVQUdbui4SFgIQS1OUctzGF
+        WWbCK1VYMdEXHHNIw2gEBhl8xxV1IzLNn5ke5h0=
+X-Google-Smtp-Source: AK7set+vh8ZSYnSuxrULngtfrZiKENvscmdFhJ7qS/OrAXSltDPmE4QBQ5fNy+vQLDfu9owooRq4qarjYjxuDzJnk08=
+X-Received: by 2002:a50:9fa8:0:b0:4ac:b8aa:3ffc with SMTP id
+ c37-20020a509fa8000000b004acb8aa3ffcmr3264891edf.4.1677053653220; Wed, 22 Feb
+ 2023 00:14:13 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH v6 2/2] trigger: ledtrig-tty: add additional modes
-Content-Language: en-US
-To:     Florian Eckert <fe@dev.tdt.de>, u.kleine-koenig@pengutronix.de,
-        gregkh@linuxfoundation.org, pavel@ucw.cz, lee@kernel.org
-Cc:     linux-kernel@vger.kernel.org, linux-leds@vger.kernel.org,
-        Eckert.Florian@googlemail.com
-References: <20230222075539.484878-1-fe@dev.tdt.de>
- <20230222075539.484878-3-fe@dev.tdt.de>
-From:   Jiri Slaby <jirislaby@kernel.org>
-In-Reply-To: <20230222075539.484878-3-fe@dev.tdt.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+References: <20230221183211.21964-1-clamor95@gmail.com> <20230221183211.21964-10-clamor95@gmail.com>
+ <Y/VIpVwFu5gUUcsz@sirena.org.uk>
+In-Reply-To: <Y/VIpVwFu5gUUcsz@sirena.org.uk>
+From:   Svyatoslav Ryhel <clamor95@gmail.com>
+Date:   Wed, 22 Feb 2023 10:14:02 +0200
+Message-ID: <CAPVz0n34MMs-AeHfuxpC3dL=0MKSqrSn3zgrCHbjozR183CWnA@mail.gmail.com>
+Subject: Re: [PATCH v1 09/10] staging: dsp: add support for Fortemedia FM34NE DSP
+To:     Mark Brown <broonie@kernel.org>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>,
+        Maxim Schwalm <maxim.schwalm@gmail.com>,
+        Dmitry Osipenko <digetx@gmail.com>, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, alsa-devel@alsa-project.org,
+        linux-tegra@vger.kernel.org, linux-staging@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 22. 02. 23, 8:55, Florian Eckert wrote:
-> Add additional modes to trigger the selected LED.
-> The following modes are supported:
-> 
-> Tx/Rx:	Flash LED on data transmission (default)
-> CTS:	DCE Ready to accept data from the DTE.
-> DSR:	DCE is ready to receive and send data.
-> CAR:	DCE is receiving a carrier from a remote DTE.
-> RNG:	DCE has detected an incoming ring signal.
-> 
-> The mode can be changed for example with the following command:
-> echo "CTS" > /sys/class/leds/<led>/mode
-> 
-> This would turn on the LED, when the DTE(modem) signals the DCE that it
-> is ready to accept data.
-> 
-> Signed-off-by: Florian Eckert <fe@dev.tdt.de>
-> ---
->   .../ABI/testing/sysfs-class-led-trigger-tty   |  16 ++
->   drivers/leds/trigger/ledtrig-tty.c            | 145 ++++++++++++++++--
->   2 files changed, 146 insertions(+), 15 deletions(-)
-> 
-> diff --git a/Documentation/ABI/testing/sysfs-class-led-trigger-tty b/Documentation/ABI/testing/sysfs-class-led-trigger-tty
-> index 2bf6b24e781b..4023585d3acf 100644
-> --- a/Documentation/ABI/testing/sysfs-class-led-trigger-tty
-> +++ b/Documentation/ABI/testing/sysfs-class-led-trigger-tty
-> @@ -4,3 +4,19 @@ KernelVersion:	5.10
->   Contact:	linux-leds@vger.kernel.org
->   Description:
->   		Specifies the tty device name of the triggering tty
-> +
-> +What:		/sys/class/leds/<led>/mode
-> +Date:		January 2023
-> +KernelVersion:	6.3
-> +Description:
-> +		Specifies the operating to trigger the LED.
-> +		The following operating modes are supported:
+=D1=81=D1=80, 22 =D0=BB=D1=8E=D1=82. 2023 =D1=80. =D0=BE 00:41 Mark Brown <=
+broonie@kernel.org> =D0=BF=D0=B8=D1=88=D0=B5:
+>
+> On Tue, Feb 21, 2023 at 08:32:10PM +0200, Svyatoslav Ryhel wrote:
+> > FM34NE is digital sound processing chip used for active
+> > noise suppression mainly on ASUS Transformers.
+>
+> This looks like it should be fairly straightforward to support
+> within ASoC without too much work, and since it's in the audio
+> path it should probably be referenced from the sound card it'll
+> end up having an ABI impact on the card.  Take a look at wm9090
 
-Here, you should add a \n. Otherwise it won't start the list properly. 
-Check the output e.g. by:
-make htmldocs SPHINXDIRS="admin-guide"
+wm9090 is a sound codec, like rt5631 or wm8903 while fm34 is NOT a
+sound codec. It is sound processing device which must be active only
+when DMIC is used. In all other cases it has to be bypassed. At the same ti=
+me,
+it has to be set up because else there will be no sound on the actual devic=
+e.
+In the current state the driver sets up DSP and sets in constant bypass mod=
+e.
 
-then open the built result in a browser:
-Documentation/output/admin-guide/abi-testing.html#abi-sys-class-leds-led-mode
-
-> +		* Tx/Rx: Flash LED on data transmission (default)
-> +		* CTS:   DCE Ready to accept data from the DTE.
-> +		  LED on if line is high.
-> +		* DSR:   DCE is ready to receive and send data.
-> +		  LED on if line is high.
-> +		* CAR:   DCE has detected a carrier from a remote DTE.
-> +		  LED on if line is high.
-> +		* RNG:   DCE has detected an incoming ring signal.
-> +		  LED on if line is high.
-
-
--- 
-js
-suse labs
-
+> for a moderately complex example of an analogue only device
+> (which this appears to be in terms of system integration).
