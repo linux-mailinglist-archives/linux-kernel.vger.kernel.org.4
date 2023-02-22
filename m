@@ -2,92 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DDE3169F9DF
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Feb 2023 18:20:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0417E69FA0C
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Feb 2023 18:23:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232515AbjBVRU1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Feb 2023 12:20:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35268 "EHLO
+        id S232695AbjBVRX0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Feb 2023 12:23:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37524 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231571AbjBVRUZ (ORCPT
+        with ESMTP id S232558AbjBVRXR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Feb 2023 12:20:25 -0500
-Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2086A3D089
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Feb 2023 09:20:23 -0800 (PST)
-Received: by mail-wm1-x335.google.com with SMTP id j3so4292632wms.2
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Feb 2023 09:20:23 -0800 (PST)
+        Wed, 22 Feb 2023 12:23:17 -0500
+Received: from mail-lj1-x22f.google.com (mail-lj1-x22f.google.com [IPv6:2a00:1450:4864:20::22f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73693124;
+        Wed, 22 Feb 2023 09:23:15 -0800 (PST)
+Received: by mail-lj1-x22f.google.com with SMTP id e9so8563861ljn.9;
+        Wed, 22 Feb 2023 09:23:15 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=ZVi4Wirs0e/17ik8W0xDMJgrb4uTDy85Bz2aeRFW/hc=;
-        b=t75YkVIC2DZjLqm9BpjhIGF8T9pmK/zO0NA0dYuyop58C7cPNrnCC0FyYOXOj38dR4
-         Th1+F1PcXaovr40hbRCTNMZXgb6SZHs0SKfE+WGhbkOiwD8CMMf+LYuIP5yBAIp+nihs
-         XsexyVV09n71It80X/oIhW80NlZhzrUf+3I9+M0+VJi3dIamLEAGrYoBoBK0ARJrNT45
-         3rC5/616tDu2lDREreG864MnBJSy7UdbbrqsF33Ql/DEghZV5sKqAG0YC3SbGYGvhzMo
-         V3u/c72J4z0MCIp5JeZmqGg9q/TIeYK13KgpasnMfYpPT3v7CB5bqfr+AwO1vKQENfs3
-         rk5Q==
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=LgHb4LTNou/T4gwWZDZG1bAr2SS3s1D2HvmIKlyTtyo=;
+        b=cuqTIWse5qx2sN8ejcmchMPEuaSlrGt9z4HkUkR65iRc/Ex4L8YE8Xc0SHh6GqLY2K
+         RNVAEGeb5nWU9hg6IXeT2PECD1/8btD7B0wtugdnholzLaNVZifh9cnZwZVUHVjvNIvS
+         LGPNS4EQuF6BgueXdQo7/LG4Rju+LTTfeNnDLwVJNmIPv1ZD6W6hH+vBmMjqcQfpIxnw
+         7Y92P/bxVPQeYXGLh92Geo74JtO3qYOGnvOteoqifJuWCRGrf1mIPnrMUrOCICMyI9bi
+         IMgg8GyvCf5+7si1LU2zV/GLh3kOD6yVkebYjpYy0k9CnJaSwRBG9zwKdtmSV78NBGKP
+         AlUw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ZVi4Wirs0e/17ik8W0xDMJgrb4uTDy85Bz2aeRFW/hc=;
-        b=l00ncrT1vh7LLngQYAW2LViUZul65nmohhIlqUczygoHCk+xxyAl9212WXXK8H3n98
-         ypf82w7SAXxVWSaqz5PkkUzagPKRyWwtHLEs5Yq8FwS3p4COMB81Z0ebpRWdgepGIB7Z
-         DRaDI4/QzRpSdkG+cjrJGyqkKvwSplQ73hSzOlJoe0SWYpluR/DBYChSRur7ewsXmgqK
-         fVunowd+3RxYXuFA4fTOcKnB5y3NsYf2IBXIadA2kDqDKj+qhiCTEM5Ck5GxWVozBeGT
-         b+mdO1YxKaQ0P1+f4aS0LSbEPlYUpN33Z+xEQ4RUbKs6s2rQZAon3FR6Nl6amQZtqV3p
-         0Ufw==
-X-Gm-Message-State: AO0yUKX0qza3x6A9l/LC8VvyK+bjgSDJhVuro6RekD+t7W1EnEm3tiMf
-        h+c8bKpdXirwYwDWGXKqYVlmXw==
-X-Google-Smtp-Source: AK7set8TllcV+8dKebiEcH0GOIDcwlJbsApHyh128agZkDk70uRojafplxAcp46qxWfAbzvdAyVeFg==
-X-Received: by 2002:a05:600c:331b:b0:3dc:4318:d00d with SMTP id q27-20020a05600c331b00b003dc4318d00dmr6624700wmp.11.1677086421630;
-        Wed, 22 Feb 2023 09:20:21 -0800 (PST)
-Received: from [192.168.0.162] (188-141-3-169.dynamic.upc.ie. [188.141.3.169])
-        by smtp.gmail.com with ESMTPSA id ja14-20020a05600c556e00b003dfefe115b9sm6010747wmb.0.2023.02.22.09.20.20
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 22 Feb 2023 09:20:21 -0800 (PST)
-Message-ID: <b42af293-3dd0-008e-819f-676d79ff96d0@linaro.org>
-Date:   Wed, 22 Feb 2023 17:20:20 +0000
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=LgHb4LTNou/T4gwWZDZG1bAr2SS3s1D2HvmIKlyTtyo=;
+        b=hpBToqMl5YWhKZp0yQ4opSlUPvkmds8JqQQznwyYEclbPcYJXQEN/sA05ss/8zhtxp
+         zUFoFqO5Dn8AtBwIncl/ugdE9Wa+gKMQ6z10utPqwGL0LHBoFOZgY63BGQZdn84eDepb
+         3E7tvKDZ7V1ugUcXUUPMi1A+GbiCgfcolGtZUkQflSdKRc6Q930O99uLE/oGCZuCJhNK
+         xjGNpimjmXkcUcREvrDWSZH5yq1HFRfhWvTSbmYtmKAXl/Qpbd24+PW9/CydhNA+BR0B
+         2J9bOpSqE5fNPb11ppZWXgdfSoHYcVU7ap4bxa3Dp3HVVqmE0OeE/c5cdfkW8hl9O9Gl
+         LjfA==
+X-Gm-Message-State: AO0yUKWbxzW8ksRIOZkat3OQPGwFuDYKXqWatx/ULfe3E5Nos7h5BpiT
+        dEDya4/McqIjAYllXzx7W0E=
+X-Google-Smtp-Source: AK7set/KWDvPSuMOkojBZB4RaqhrJysKCZKevJPXANsg0HBsYaa6OJZG6Ye7zg0PxpTbLNyKiuY/1g==
+X-Received: by 2002:a05:651c:2051:b0:295:74f5:fcaa with SMTP id t17-20020a05651c205100b0029574f5fcaamr3070632ljo.32.1677086593514;
+        Wed, 22 Feb 2023 09:23:13 -0800 (PST)
+Received: from localhost.lan (ip-194-187-74-233.konfederacka.maverick.com.pl. [194.187.74.233])
+        by smtp.gmail.com with ESMTPSA id p2-20020a2e93c2000000b0029477417d80sm721513ljh.85.2023.02.22.09.23.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 22 Feb 2023 09:23:13 -0800 (PST)
+From:   =?UTF-8?q?Rafa=C5=82=20Mi=C5=82ecki?= <zajec5@gmail.com>
+To:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Michael Walle <michael@walle.cc>, gregkh@linuxfoundation.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, u-boot@lists.denx.de,
+        =?UTF-8?q?Rafa=C5=82=20Mi=C5=82ecki?= <rafal@milecki.pl>
+Subject: [PATCH 0/4] nvmem: cell post-processing & U-Boot env MAC support
+Date:   Wed, 22 Feb 2023 18:22:41 +0100
+Message-Id: <20230222172245.6313-1-zajec5@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.0
-Subject: Re: [PATCH v6 3/5] arm64: dts: qcom: Add msm8939-pm8916.dtsi include
-Content-Language: en-US
-To:     Konrad Dybcio <konrad.dybcio@linaro.org>, agross@kernel.org,
-        andersson@kernel.org, djakov@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org
-Cc:     linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        benl@squareup.com, shawn.guo@linaro.org, fabien.parent@linaro.org,
-        leo.yan@linaro.org, dmitry.baryshkov@linaro.org,
-        stephan@gerhold.net
-References: <20230222120411.55197-1-bryan.odonoghue@linaro.org>
- <20230222120411.55197-4-bryan.odonoghue@linaro.org>
- <39e69f3c-5b81-d04f-c89c-a8173622493a@linaro.org>
-From:   Bryan O'Donoghue <bryan.odonoghue@linaro.org>
-In-Reply-To: <39e69f3c-5b81-d04f-c89c-a8173622493a@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 22/02/2023 17:18, Konrad Dybcio wrote:
-> Reviewed-by: Konrad Dybcio<konrad.dybcio@linaro.org>
-> 
-> Konrad
+From: Rafał Miłecki <rafal@milecki.pl>
 
-Oops sorry I think you already gave an RB and I forgot to add it.
+U-Boot environment variables are stored using ASCII format. One of
+important entries is "ethaddr" which contains base MAC address.
 
----
-bod
+That NVMEM cell requires some extra processing when reading:
+1. ASCII needs translating into binary MAC format
+2. Final MAC needs to be calculated depending on cell index
+
+This patchset was originally based on top of layouts implementation
+which sadly ended up dropped for now. To proceed I rebased it on top of
+the current NVMEM subsystem code. Michael's patch has applied cleanly
+and this approach *will not* make U-Boot env transition to layouts any
+harder so I believe it's fine to take those patches without waiting for
+layouts updated implementation.
+
+Michael Walle (1):
+  nvmem: core: add per-cell post processing
+
+Rafał Miłecki (3):
+  nvmem: core: allow nvmem_cell_post_process_t callbacks to adjust
+    buffer
+  dt-bindings: nvmem: u-boot,env: add MAC's #nvmem-cell-cells
+  nvmem: u-boot-env: post-process "ethaddr" env variable
+
+ .../devicetree/bindings/nvmem/u-boot,env.yaml |  7 +++-
+ drivers/nvmem/Kconfig                         |  1 +
+ drivers/nvmem/core.c                          | 38 +++++++++++++++----
+ drivers/nvmem/imx-ocotp.c                     |  8 ++--
+ drivers/nvmem/u-boot-env.c                    | 25 ++++++++++++
+ include/linux/nvmem-provider.h                |  7 +++-
+ 6 files changed, 71 insertions(+), 15 deletions(-)
+
+-- 
+2.34.1
+
