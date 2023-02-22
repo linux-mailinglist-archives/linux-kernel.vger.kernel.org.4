@@ -2,276 +2,655 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AF15969F61A
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Feb 2023 15:06:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E379969F620
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Feb 2023 15:08:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231602AbjBVOGd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Feb 2023 09:06:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50092 "EHLO
+        id S231777AbjBVOIW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Feb 2023 09:08:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51380 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230406AbjBVOGa (ORCPT
+        with ESMTP id S231802AbjBVOIQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Feb 2023 09:06:30 -0500
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93DB922DDD
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Feb 2023 06:06:28 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1677074788; x=1708610788;
-  h=date:from:to:cc:subject:message-id:references:
-   in-reply-to:mime-version;
-  bh=6ejl8O43sXjG63dQ8URuMWKTNITxYTaHBmq0UMbFQtA=;
-  b=XT0IDnCS9287QSd/Y+u3L/3nqIeCLZpvN1JLvwqZKlLRNxZUymKXzQI0
-   ucLXmUFICIsXvLFEtBb3fBgkfPqwDeLtuEWGqsqdOrxQOH+ZiVXfLSQpA
-   wmvHyvL0h8ZSCXCqRCTnkNJqp7wtNH187rFpTicWi4pOgrBI3hWcZo8cr
-   MA7q9IwYMERR58Kh+8gcxe7ZcF7lB3xE+NK2n3ZWSmP7KlSSuHFFE4IlQ
-   mKmG0ru5umFuZfNBCy9zDRNSq88r9uv7dxlt8TUxJGZ2Kk4/EY2PPUld5
-   4JFNfhi0xLaOWym9dOuMz/JACy3pUQAZxl70Mal1DFWL+3TuihfEi1Hl5
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10629"; a="331599529"
-X-IronPort-AV: E=Sophos;i="5.97,318,1669104000"; 
-   d="scan'208";a="331599529"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Feb 2023 06:05:45 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10629"; a="665353779"
-X-IronPort-AV: E=Sophos;i="5.97,318,1669104000"; 
-   d="scan'208";a="665353779"
-Received: from orsmsx602.amr.corp.intel.com ([10.22.229.15])
-  by orsmga007.jf.intel.com with ESMTP; 22 Feb 2023 06:05:45 -0800
-Received: from orsmsx611.amr.corp.intel.com (10.22.229.24) by
- ORSMSX602.amr.corp.intel.com (10.22.229.15) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.16; Wed, 22 Feb 2023 06:05:44 -0800
-Received: from orsmsx603.amr.corp.intel.com (10.22.229.16) by
- ORSMSX611.amr.corp.intel.com (10.22.229.24) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.16; Wed, 22 Feb 2023 06:05:44 -0800
-Received: from ORSEDG602.ED.cps.intel.com (10.7.248.7) by
- orsmsx603.amr.corp.intel.com (10.22.229.16) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.16 via Frontend Transport; Wed, 22 Feb 2023 06:05:44 -0800
-Received: from NAM10-DM6-obe.outbound.protection.outlook.com (104.47.58.102)
- by edgegateway.intel.com (134.134.137.103) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.16; Wed, 22 Feb 2023 06:05:43 -0800
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=cjnLlgKpZrJTyAtfdeJBFdPz2s4YDBow2R1ji54x/apTrsrXuQM5XyISrLgtZ8WKcovB2I6wqn+UWP82Olc2o+vaboZ3dvS/HEOuLcfcEY7SAts+n9UB/7iV84/HHv2+ja1TaZdMEbtLZh55Ts70Snp4mHggHR6LKve9f6pAraMPSwEqGqoIIqj2BLLSfWYhhE3fY9Fu4K51sd5uN9/BfgPuC87gac4TqXKagBQu95OzODN4zKbq3pTtDH41zTVfpj5sY7I+HvSLRA9qhZaIxT8sJz6l0aJYhpwqR3o9qy8cmM3/oEea3//Qz60iD2qqLamcq9zzj8dHLT7JyKuApA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=UF1WMjTEcPyWKSG8rS+aa1/AQxAifeUdsHbH/rpiGco=;
- b=R9aiKnbMzKRfw0FRR/MR6dJYpGhcd+cgH4nJY91QQTQQb32BsIefCYNmX+7gkG4u1KY8cy6kjSdjUH6gFJaRtoghoeG1rDb15rHto+xZIloPCnXbOthyTEDFr+HuPSPACTYsAI0XQUtwQ5caN+2MeHSHT33w3sM/uzsdFyU2Z79KPG17SnV5TspKd3nkk6K7U+ApdtPot3olN499ogZLeha4QoQzw35iuR1WIMY5yeTSD+ybXrpAqcypaHsdk44UP4EKyU4Un84VD1TZtqxHchyvJ18nzt1HH0lfYTyA7j53StmyluevjMJzGz8Tw38khpFOWKsc4FsF3JiSx4UdSw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from MN0PR11MB6059.namprd11.prod.outlook.com (2603:10b6:208:377::9)
- by MN6PR11MB8170.namprd11.prod.outlook.com (2603:10b6:208:47c::10) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6111.21; Wed, 22 Feb
- 2023 14:05:37 +0000
-Received: from MN0PR11MB6059.namprd11.prod.outlook.com
- ([fe80::3bd5:710c:ebab:6158]) by MN0PR11MB6059.namprd11.prod.outlook.com
- ([fe80::3bd5:710c:ebab:6158%9]) with mapi id 15.20.6111.020; Wed, 22 Feb 2023
- 14:05:36 +0000
-Date:   Wed, 22 Feb 2023 09:05:30 -0500
-From:   Rodrigo Vivi <rodrigo.vivi@intel.com>
-To:     Pekka Paalanen <ppaalanen@gmail.com>
-CC:     Rob Clark <robdclark@gmail.com>, <dri-devel@lists.freedesktop.org>,
-        <freedreno@lists.freedesktop.org>, Daniel Vetter <daniel@ffwll.ch>,
-        Christian =?iso-8859-1?Q?K=F6nig?= 
-        <ckoenig.leichtzumerken@gmail.com>,
-        Michel =?iso-8859-1?Q?D=E4nzer?= <michel@daenzer.net>,
-        Tvrtko Ursulin <tvrtko.ursulin@intel.com>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        "Simon Ser" <contact@emersion.fr>,
-        Rob Clark <robdclark@chromium.org>,
-        "Maarten Lankhorst" <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        David Airlie <airlied@gmail.com>,
-        open list <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v5 09/14] drm/syncobj: Add deadline support for syncobj
- waits
-Message-ID: <Y/YhKiuOHiX2LcyL@intel.com>
-References: <20230220201916.1822214-1-robdclark@gmail.com>
- <20230220201916.1822214-10-robdclark@gmail.com>
- <20230221105307.7430c301@eldfell>
- <CAF6AEGtd_9JYtPU-AGmZY0My_d48rSSWQiD-efbR2KFxD-+tTA@mail.gmail.com>
- <20230222120904.5c281652@eldfell>
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <20230222120904.5c281652@eldfell>
-X-ClientProxiedBy: SJ0PR03CA0228.namprd03.prod.outlook.com
- (2603:10b6:a03:39f::23) To MN0PR11MB6059.namprd11.prod.outlook.com
- (2603:10b6:208:377::9)
+        Wed, 22 Feb 2023 09:08:16 -0500
+Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFBC328841
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Feb 2023 06:08:09 -0800 (PST)
+Received: by mail-wm1-x335.google.com with SMTP id m14-20020a7bce0e000000b003e00c739ce4so5439372wmc.5
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Feb 2023 06:08:09 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=OCENAKCxdnYu03qdSgmB5yfA4khFgB8eSNsiuNR7DOM=;
+        b=bNYl3h05AdQvIuSKKW7Taa0YjE5noHAQ1HNNVt0UrYS9f1yCALXMTroKEHhVWwCo6s
+         OszE0zo4j4r3AxnvhVjzk60cQcROH4bWzqw7JWvqryUKNhs/CCJsmpXMQT0kcZrgXijr
+         HC87AbCbZrvp9X6pO/Lml+Ghim3dKu+G5YtCtc9RYnpaPeJwwwiC195UYxs4rci4Vtmg
+         m9AU48O5NekdiAwLgU2aWkMm3N8Q7Up+HRCDPb8aI7tCrBmdPdtiE+OMgSYf4EBvtRHU
+         VSM5axe1KufZIos/mZ86JS+NoRfJ9MfwA05hG306ljSN9EJSsjBYmJf7Zc0N0qQ5ZUc4
+         5aAQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=OCENAKCxdnYu03qdSgmB5yfA4khFgB8eSNsiuNR7DOM=;
+        b=LOtCYKZYkO/YROr4IPrD2oWnOtY5W+OY0gdZ4m3EpIYBh/BbAvwbfIZRIeO2uTTxaU
+         hEsSKDyZZQ7XtP3p487sUtrOdncx4S1Dn165WnQHvmz8PCezByf0x9MqUfzaNcXZvsEQ
+         RnA7i4JYHtTJOo6y4ep5v3JqWQhCCcl4plXeHOdnIh6TANuHUolwoqev6VC3JCYDeFH+
+         ESLhkbofdVz0+WMHjB45MFBg5r7jsAAz3wDO2XxPcA3EqQJXlnm+ZWV+K99MA4iqmM+o
+         adHcttkfR8qaO/2jq3WnegZUEuuGNdzxP4rRPknbAfOaNPODqNhrjj6StridW8ZFfldK
+         w8Qw==
+X-Gm-Message-State: AO0yUKVD6vSh1T3g6Da/+Ro43iI1r4f9gQPyPSjETbFGHCovuhupeu0R
+        RArvDx+mc6nw5i9iXqWAqBm5ag==
+X-Google-Smtp-Source: AK7set9eKzgt53uEwuzrnZRTHEUDqe98qtmezGP4dVdHmbtF6oo1nrf+2c9tWROUhEzr5w9K4ufHXA==
+X-Received: by 2002:a05:600c:2b0f:b0:3dc:1054:3acd with SMTP id y15-20020a05600c2b0f00b003dc10543acdmr5954386wme.17.1677074888258;
+        Wed, 22 Feb 2023 06:08:08 -0800 (PST)
+Received: from [192.168.1.195] ([5.133.47.210])
+        by smtp.googlemail.com with ESMTPSA id n15-20020a05600c3b8f00b003e224ff61a8sm8150853wms.43.2023.02.22.06.08.06
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 22 Feb 2023 06:08:07 -0800 (PST)
+Message-ID: <2cd83439-8518-f2a1-42b5-c5936f3e4548@linaro.org>
+Date:   Wed, 22 Feb 2023 14:08:06 +0000
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: MN0PR11MB6059:EE_|MN6PR11MB8170:EE_
-X-MS-Office365-Filtering-Correlation-Id: c4041bd2-b55e-41ed-697a-08db14dddec9
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: npALK68Z7jm1hos3ISyvXomN2EG1BvqCk7WzkCuHVafWFzwM2+3UBZj4GLpjUZoM1savj5ej5x8/nH/Gb6INSBxIke7rewQXBZnAZnA97S0knheGnKFMGqAn2MNI4sA+a76YhCmuj2NTme1SdnnBWntqnoSsbo25Pclc04qLy+i8RZH/vMNT8bVSY4eCrBZ7Ai4fdI0fXEEUPt13ViR2abP3CqyF7wfDGLkbUfwtQUYT6X/dqgLBNJbztoPZcLK4KPqNsznYID/zcBKb09CB3m95905Z3caIngKa9ltckTbabCJ2OCIxqqeVU2z3jjGI959rfpNu1jwohBFoBylAityGl0oP3hIlYuXEgkp8AbqQhjACILMJcc6aobog6uVoEyFE/ou21O4DmwD8S8rCO92YbWZuMKVdhv4J0mcju6Sn3ld0TAQdOmAmB23SAb3Nw1FIvfUGCXd52uWgE3BeOUSOhmIsqOHjppCBXNjY5jGv/PegTkQvNUI4TGkrqf8TR/soVZIuDPDlPj3jhsT2LPmVp89HImaq9wrEWopmW11c+8sqzpcsItYfRtevuCQ/BVH4xQqUaeobk+nJsYj1v06rSu/G+GSnnJq5HV3gz0Pnr+w3Q2gy5w65hS7TjfBJ+gzqDMjVuzpmxyXW8GeeDJCE88XZhyYDu2G/UFDzpGQ=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN0PR11MB6059.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(366004)(376002)(396003)(39860400002)(346002)(136003)(451199018)(82960400001)(2616005)(54906003)(86362001)(478600001)(26005)(83380400001)(6916009)(2906002)(8936002)(5660300002)(38100700002)(8676002)(66556008)(66946007)(66476007)(41300700001)(966005)(6506007)(4326008)(53546011)(6486002)(186003)(6512007)(316002)(6666004)(7416002)(36756003)(44832011);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?+BIOzLUB+JRBlslkfJRUZ+RFdZwRurtJdOE0fATxWcvETYkeBb3olRDmA0FX?=
- =?us-ascii?Q?H1XTUxUTHNIKuEFCbKdNe8Len1dzhfUC6i30Nq98H2Mb4kKGxHiply+L1prF?=
- =?us-ascii?Q?KMYH0/pWNsDkAAWIz4EudOIumAZvwzqPlMcj5P6wG8w8gX0DpPBGf0PN/xD/?=
- =?us-ascii?Q?1OkB3KTXFehuUE8/qhDaivpgcPfRNRoJcAo5toprCRH/oXwMc/95RJcHQ6/f?=
- =?us-ascii?Q?nZnMeBEbB3epz/M8LnglAaZUNuBFZGq7PLSq/a2AbOncBT7c97xawpeSJdlG?=
- =?us-ascii?Q?9TdyMdfQzlLhtub5khdFoqIY7du9cTnMB+nOB8XH/4dCQ97anhkrCCrA0a9t?=
- =?us-ascii?Q?7ZrGCnGvVV5imePm2JyuC1Wd2IRuMTjntpH0OR+YMeVJQG8ij+nLdDA5rm44?=
- =?us-ascii?Q?eHiO7BDD16LJx8Tea6ZConQbjY5dJMHmlYQgyCURwo7I55RaXgVzs0pMqLwk?=
- =?us-ascii?Q?el99O7p5+m56MACb2BJ/36U/0wUSfT2i1BMiZguYwZFN91f6OVOOgax4/mGO?=
- =?us-ascii?Q?b50A5Jac1RUyyo84BVkNqAjLhVfXJZD0GgC3Hh7Y5NFG6gXk+q8u/xdgbrvR?=
- =?us-ascii?Q?BCFvFYZBYZ/MPai/vLsMCTbXv46E29c8t9dZgBdGcFJWv91kQFaihOJoS8Vk?=
- =?us-ascii?Q?DqhgCChDK3hvlNoorbBC0ryaRodIzlO8qkI7wAsUdTbjHMs2hMrMEsE/n1Dk?=
- =?us-ascii?Q?QkIt88CI9wVpwoXVuBsd0Ou0ce1+Z+BiZR7sEZwP4qW0TUSLI1gA/eOeS+NU?=
- =?us-ascii?Q?2U+pt0feMratmLhmN9O3hn6H0mSJGNBesjnxbnREp0Vp7l3OHoKefBytPFTp?=
- =?us-ascii?Q?v5GlzYsnAaYop4dYLr3c3wsvKywysZBW/jHtbtx1wRLSMlf7Zd4KTCBp5LcK?=
- =?us-ascii?Q?s9edMEg4ll8eSwNvFyaFt5lFeOh7TUiQNv3fPrV7w3vsn0zG888Fb1wRwa66?=
- =?us-ascii?Q?wEOM8SokUqS9FF4fjWBSYY/foA1XBdeGOV8OifbKVspGfRpUJtcvqhlDbpdc?=
- =?us-ascii?Q?Vxgec/2HqQsuW5CnAl5V9gmX9+p6r/y8lwYGUxN9mQI1QtwICozI7m99idYt?=
- =?us-ascii?Q?vyPQmrTgG218qY7iP50R1X8x+xA1zUdElVsqOYQySfro8jGMthBuAGH3XXrd?=
- =?us-ascii?Q?YWFn9SdJmG0U34jWKUaLxW9eDbdoLSZSopQUQ0uNCdDOHK+i4YaPrOepzFUy?=
- =?us-ascii?Q?QLpOaap64YZp6+JDenyNmx80s2i3kVrxf5WkIn//aAtcQ/lDf5f/0V5Mljy0?=
- =?us-ascii?Q?3w6gVynZGQOkAOXuoQ3osZbEh+6mQjZsCPxh2Pcuc9sZTHRNS31yydo4DlqX?=
- =?us-ascii?Q?oo3KsEnYpl7cLmoHVHhLmzy6DjWBenXdSc04jRe5/BPSQUpd5/k5aJvXCTov?=
- =?us-ascii?Q?uuvOtdncHEiNKGLgBbenF+be7RNIw6nt4mlebFSqNjr19RRFbXGgNDI3p9xe?=
- =?us-ascii?Q?N50RlfxjgMzsjdh9RJMSPzzNMFnxad1r0mZCxw0Y7QCfolm2Q0lbLFJ+4rns?=
- =?us-ascii?Q?OATxLXyEyR2Qfo1Z162QSkJmL9BFIbGKlt8ZztXZJwcLIqmiarXTayZ8NdZZ?=
- =?us-ascii?Q?gAXlggdNDVwcBYlW+1ULyw4FWQuCSNt82+vrA1FEj9EkQTocwvfkROlnUTOl?=
- =?us-ascii?Q?dw=3D=3D?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: c4041bd2-b55e-41ed-697a-08db14dddec9
-X-MS-Exchange-CrossTenant-AuthSource: MN0PR11MB6059.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 22 Feb 2023 14:05:36.7063
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 6Ja+na1AJt7qyO0I7t2W9wt1dGf9BNx0VVxwbGqs5tI9UBFf0AixunfHarrByWuBVXcHhf2l3NLYI/gor94KOw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN6PR11MB8170
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH v10 19/26] gunyah: vm_mgr: Add framework to add VM
+ Functions
+Content-Language: en-US
+To:     Elliot Berman <quic_eberman@quicinc.com>,
+        Alex Elder <elder@linaro.org>,
+        Prakruthi Deepak Heragu <quic_pheragu@quicinc.com>,
+        Jonathan Corbet <corbet@lwn.net>
+Cc:     Murali Nalajala <quic_mnalajal@quicinc.com>,
+        Trilok Soni <quic_tsoni@quicinc.com>,
+        Srivatsa Vaddagiri <quic_svaddagi@quicinc.com>,
+        Carl van Schaik <quic_cvanscha@quicinc.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Bagas Sanjaya <bagasdotme@gmail.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Jassi Brar <jassisinghbrar@gmail.com>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+References: <20230214211229.3239350-1-quic_eberman@quicinc.com>
+ <20230214212531.3323284-1-quic_eberman@quicinc.com>
+From:   Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+In-Reply-To: <20230214212531.3323284-1-quic_eberman@quicinc.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Feb 22, 2023 at 12:09:04PM +0200, Pekka Paalanen wrote:
-> On Tue, 21 Feb 2023 09:25:18 -0800
-> Rob Clark <robdclark@gmail.com> wrote:
+
+
+On 14/02/2023 21:25, Elliot Berman wrote:
 > 
-> > On Tue, Feb 21, 2023 at 12:53 AM Pekka Paalanen <ppaalanen@gmail.com> wrote:
-> > >
-> > > On Mon, 20 Feb 2023 12:18:56 -0800
-> > > Rob Clark <robdclark@gmail.com> wrote:
-> > >  
-> > > > From: Rob Clark <robdclark@chromium.org>
-> > > >
-> > > > Add a new flag to let userspace provide a deadline as a hint for syncobj
-> > > > and timeline waits.  This gives a hint to the driver signaling the
-> > > > backing fences about how soon userspace needs it to compete work, so it
-> > > > can addjust GPU frequency accordingly.  An immediate deadline can be
-> > > > given to provide something equivalent to i915 "wait boost".
-> > > >
-> > > > v2: Use absolute u64 ns value for deadline hint, drop cap and driver
-> > > >     feature flag in favor of allowing count_handles==0 as a way for
-> > > >     userspace to probe kernel for support of new flag
-> > > >
-> > > > Signed-off-by: Rob Clark <robdclark@chromium.org>
-> > > > ---
-> > > >  drivers/gpu/drm/drm_syncobj.c | 59 +++++++++++++++++++++++++++--------
-> > > >  include/uapi/drm/drm.h        |  5 +++
-> > > >  2 files changed, 51 insertions(+), 13 deletions(-)  
-> > >
-> > > ...
-> > >  
-> > > > diff --git a/include/uapi/drm/drm.h b/include/uapi/drm/drm.h
-> > > > index 642808520d92..aefc8cc743e0 100644
-> > > > --- a/include/uapi/drm/drm.h
-> > > > +++ b/include/uapi/drm/drm.h
-> > > > @@ -887,6 +887,7 @@ struct drm_syncobj_transfer {
-> > > >  #define DRM_SYNCOBJ_WAIT_FLAGS_WAIT_ALL (1 << 0)
-> > > >  #define DRM_SYNCOBJ_WAIT_FLAGS_WAIT_FOR_SUBMIT (1 << 1)
-> > > >  #define DRM_SYNCOBJ_WAIT_FLAGS_WAIT_AVAILABLE (1 << 2) /* wait for time point to become available */
-> > > > +#define DRM_SYNCOBJ_WAIT_FLAGS_WAIT_DEADLINE (1 << 3) /* set fence deadline based to deadline_nsec/sec */  
-> > >
-> > > Hi,
-> > >
-> > > where is the UAPI documentation explaining what is a "fence deadline"
-> > > and what setting it does here?  
-> > 
-> > It's with the rest of the drm_syncobj UAPI docs ;-)
+> Introduce a framework for Gunyah userspace to install VM functions. VM
+> functions are optional interfaces to the virtual machine. vCPUs,
+> ioeventfs, and irqfds are examples of such VM functions and are
+> implemented in subsequent patches.
 > 
-> Is that https://www.kernel.org/doc/html/latest/driver-api/dma-buf.html#dma-fence-uabi-sync-file ?
+> A generic framework is implemented instead of individual ioctls to
+> create vCPUs, irqfds, etc., in order to simplify the VM manager core
+> implementation and allow dynamic loading of VM function modules.
 > 
-> That whole page never mentions e.g. WAIT_AVAILABLE, so at least the
-> flags are not there. Does not mention syncobj_wait either.
-
-probably this:
-https://docs.kernel.org/gpu/drm-mm.html
-
-the new one needs to be added there as well.
-
+> Signed-off-by: Elliot Berman <quic_eberman@quicinc.com>
+> ---
+>   Documentation/virt/gunyah/vm-manager.rst |  18 ++
+>   drivers/virt/gunyah/vm_mgr.c             | 240 ++++++++++++++++++++++-
+>   drivers/virt/gunyah/vm_mgr.h             |   3 +
+>   include/linux/gunyah_vm_mgr.h            |  80 ++++++++
+>   include/uapi/linux/gunyah.h              |  17 ++
+>   5 files changed, 353 insertions(+), 5 deletions(-)
+>   create mode 100644 include/linux/gunyah_vm_mgr.h
 > 
-> I could ask where the real non-IGT userspace is or the plan for it,
-> too, since this is new DRM UAPI.
+> diff --git a/Documentation/virt/gunyah/vm-manager.rst b/Documentation/virt/gunyah/vm-manager.rst
+> index c0126cfeadc7..5272a6e9145c 100644
+> --- a/Documentation/virt/gunyah/vm-manager.rst
+> +++ b/Documentation/virt/gunyah/vm-manager.rst
+> @@ -17,6 +17,24 @@ sharing userspace memory with a VM is done via the GH_VM_SET_USER_MEM_REGION
+>   ioctl. The VM itself is configured to use the memory region via the
+>   devicetree.
+>   
+> +Gunyah Functions
+> +================
+> +
+> +Components of a Gunyah VM's configuration that need kernel configuration are
+> +called "functions" and are built on top of a framework. Functions are identified
+> +by a string and have some argument(s) to configure them. They are typically
+> +created by the `GH_VM_ADD_FUNCTION` ioctl.
+> +
+> +Functions typically will always do at least one of these operations:
+> +
+> +1. Create resource ticket(s). Resource tickets allow a function to register
+> +   itself as the client for a Gunyah resource (e.g. doorbell or vCPU) and
+> +   the function is given the pointer to the `struct gunyah_resource` when the
+> +   VM is starting.
+> +
+> +2. Register IO handler(s). IO handlers allow a function to handle stage-2 faults
+> +   from the virtual machine.
+> +
+>   Sample Userspace VMM
+>   ====================
+>   
+> diff --git a/drivers/virt/gunyah/vm_mgr.c b/drivers/virt/gunyah/vm_mgr.c
+> index fa324385ade5..e9c55e7dd1b3 100644
+> --- a/drivers/virt/gunyah/vm_mgr.c
+> +++ b/drivers/virt/gunyah/vm_mgr.c
+> @@ -6,8 +6,10 @@
+>   #define pr_fmt(fmt) "gh_vm_mgr: " fmt
+>   
+>   #include <linux/anon_inodes.h>
+> +#include <linux/compat.h>
+>   #include <linux/file.h>
+>   #include <linux/gunyah_rsc_mgr.h>
+> +#include <linux/gunyah_vm_mgr.h>
+>   #include <linux/miscdevice.h>
+>   #include <linux/mm.h>
+>   #include <linux/module.h>
+> @@ -16,6 +18,177 @@
+>   
+>   #include "vm_mgr.h"
+>   
+> +static DEFINE_MUTEX(functions_lock);
+> +static DEFINE_IDR(functions);
+Why are these global? Can these be not part of struc gh_rm?
+Not to mention please move idr to xarrays.
 
-yeap, it looks like we need to close on this...
-https://gitlab.freedesktop.org/drm/intel/-/issues/8014
+> +
+> +int gh_vm_function_register(struct gh_vm_function *drv)
+> +{
+> +	int ret = 0;
+> +
+> +	if (!drv->bind || !drv->unbind)
+> +		return -EINVAL;
+> +
+> +	mutex_lock(&functions_lock);
+> +	if (idr_find(&functions, drv->type)) {
+> +		ret = -EEXIST;
+> +		goto out;
+> +	}
+> +
+> +	INIT_LIST_HEAD(&drv->instances);
+> +	ret = idr_alloc(&functions, drv, drv->type, drv->type + 1, GFP_KERNEL);
+> +	if (ret > 0)
+> +		ret = 0;
+> +out:
+> +	mutex_unlock(&functions_lock);
+> +	return ret;
+> +}
+> +EXPORT_SYMBOL_GPL(gh_vm_function_register);
+> +
+> +static void gh_vm_remove_function_instance(struct gh_vm_function_instance *inst)
+> +	__must_hold(functions_lock)
+> +{
+> +	inst->fn->unbind(inst);
+> +	list_del(&inst->vm_list);
+> +	list_del(&inst->fn_list);
+> +	module_put(inst->fn->mod);
+> +	if (inst->arg_size)
+> +		kfree(inst->argp);
+> +	kfree(inst);
+> +}
+> +
+> +void gh_vm_function_unregister(struct gh_vm_function *fn)
+> +{
+> +	struct gh_vm_function_instance *inst, *iter;
+> +
+> +	mutex_lock(&functions_lock);
+> +	list_for_each_entry_safe(inst, iter, &fn->instances, fn_list)
+> +		gh_vm_remove_function_instance(inst);
 
-I confess I got lost on the many discussions and on how this will
-be used. Is mesa going to set the deadline based on the vk priority?
+We should never have any instances as we have refcounted the module.
 
-Will this continue to be internal? I didn't get the broader picture
-I'm afraid...
-
-> 
-> 
-> Thanks,
-> pq
-> 
-> > 
-> > BR,
-> > -R
-> > 
-> > > btw. no nsec/sec anymore.
-> > >
-> > >
-> > > Thanks,
-> > > pq
-> > >
-> > >  
-> > > >  struct drm_syncobj_wait {
-> > > >       __u64 handles;
-> > > >       /* absolute timeout */
-> > > > @@ -895,6 +896,8 @@ struct drm_syncobj_wait {
-> > > >       __u32 flags;
-> > > >       __u32 first_signaled; /* only valid when not waiting all */
-> > > >       __u32 pad;
-> > > > +     /* Deadline hint to set on backing fence(s) in CLOCK_MONOTONIC: */
-> > > > +     __u64 deadline_ns;
-> > > >  };
-> > > >
-> > > >  struct drm_syncobj_timeline_wait {
-> > > > @@ -907,6 +910,8 @@ struct drm_syncobj_timeline_wait {
-> > > >       __u32 flags;
-> > > >       __u32 first_signaled; /* only valid when not waiting all */
-> > > >       __u32 pad;
-> > > > +     /* Deadline hint to set on backing fence(s) in CLOCK_MONOTONIC: */
-> > > > +     __u64 deadline_ns;
-> > > >  };
-> > > >
-> > > >  
-> > >  
-> 
+If there are any instances then its clearly a bug, as this will pull out 
+function under the hood while userspace is using it.
 
 
+> +	idr_remove(&functions, fn->type);
+> +	mutex_unlock(&functions_lock);
+> +}
+> +EXPORT_SYMBOL_GPL(gh_vm_function_unregister);
+> +
+> +static long gh_vm_add_function(struct gh_vm *ghvm, struct gh_fn_desc *f)
+> +{
+> +	struct gh_vm_function_instance *inst;
+> +	void __user *argp;
+> +	long r = 0;
+> +
+> +	if (f->arg_size > GH_FN_MAX_ARG_SIZE)
+
+lets print some useful error message to user.
+
+> +		return -EINVAL;
+> +
+> +	inst = kzalloc(sizeof(*inst), GFP_KERNEL);
+> +	if (!inst)
+> +		return -ENOMEM;
+> +
+> +	inst->arg_size = f->arg_size;
+> +	if (inst->arg_size) {
+> +		inst->argp = kzalloc(inst->arg_size, GFP_KERNEL);
+> +		if (!inst->arg) {
+> +			r = -ENOMEM;
+> +			goto free;
+> +		}
+> +
+> +		argp = is_compat_task() ? compat_ptr(f->arg) : (void __user *) f->arg;
+
+hmm, arg is not a data pointer it is a fixed size variable (__u64 arg), 
+so why are using compat_ptr() here?
+
+you should be able to do
+
+argp = u64_to_user_ptr(f->arg);
+
+> +		if (copy_from_user(inst->argp, argp, f->arg_size)) {
+> +			r = -EFAULT;
+> +			goto free_arg;
+> +		}
+> +	} else {
+> +		inst->arg = f->arg;
+bit lost here, so, we treat the arg as both pointer and value in cases 
+where size is zero.
+
+> +	}
+> +
+<---
+> +	mutex_lock(&functions_lock);
+> +	inst->fn = idr_find(&functions, f->type);
+> +	if (!inst->fn) {
+> +		mutex_unlock(&functions_lock);
+> +		r = request_module("ghfunc:%d", f->type);
+> +		if (r)
+> +			goto unlock_free;
+> +
+> +		mutex_lock(&functions_lock);
+> +		inst->fn = idr_find(&functions, f->type);
+> +	}
+> +
+> +	if (!inst->fn) {
+> +		r = -ENOENT;
+> +		goto unlock_free;
+> +	}
+> +
+> +	if (!try_module_get(inst->fn->mod)) {
+> +		r = -ENOENT;
+> +		inst->fn = NULL;
+> +		goto unlock_free;
+> +	}
+> +
+--->
+can we do this snippet as a gh_vm_get_function() and corresponding 
+gh_vm_put_function(). that should make the code more cleaner.
+
+
+> +	inst->ghvm = ghvm;
+> +	inst->rm = ghvm->rm;
+> +
+> +	r = inst->fn->bind(inst);
+> +	if (r < 0) {
+> +		module_put(inst->fn->mod);
+> +		goto unlock_free;
+> +	}
+> +
+> +	list_add(&inst->vm_list, &ghvm->functions);
+
+I guess its possible to add same functions with same argumentso to this 
+list, how are we preventing this to happen?
+
+Is it a valid usecase?
+
+> +	list_add(&inst->fn_list, &inst->fn->instances);
+> +	mutex_unlock(&functions_lock);
+> +	return r;
+> +unlock_free:
+> +	mutex_unlock(&functions_lock);
+> +free_arg:
+> +	if (inst->arg_size)
+> +		kfree(inst->argp);
+> +free:
+> +	kfree(inst);
+> +	return r;
+> +}
+> +
+> +static long gh_vm_rm_function(struct gh_vm *ghvm, struct gh_fn_desc *f)
+> +{
+> +	struct gh_vm_function_instance *inst, *iter;
+> +	void __user *user_argp;
+> +	void *argp;
+> +	long r = 0;
+> +
+> +	r = mutex_lock_interruptible(&functions_lock);
+> +	if (r)
+> +		return r;
+> +
+> +	if (f->arg_size) {
+> +		argp = kzalloc(f->arg_size, GFP_KERNEL);
+> +		if (!argp) {
+> +			r = -ENOMEM;
+> +			goto out;
+> +		}
+> +
+> +		user_argp = is_compat_task() ? compat_ptr(f->arg) : (void __user *) f->arg;
+
+same comment as add;
+
+> +		if (copy_from_user(argp, user_argp, f->arg_size)) {
+> +			r = -EFAULT;
+> +			kfree(argp);
+> +			goto out;
+> +		}
+> +
+> +		list_for_each_entry_safe(inst, iter, &ghvm->functions, vm_list) {
+> +			if (inst->fn->type == f->type &&
+> +				f->arg_size == inst->arg_size &&
+> +				!memcmp(argp, inst->argp, f->arg_size))
+> +				gh_vm_remove_function_instance(inst);
+> +		}
+
+leaking argp;
+
+> +	} else {
+> +		list_for_each_entry_safe(inst, iter, &ghvm->functions, vm_list) {
+> +			if (inst->fn->type == f->type &&
+> +				f->arg_size == inst->arg_size &&
+> +				inst->arg == f->arg)
+> +				gh_vm_remove_function_instance(inst);
+> +		}
+> +	}
+> +
+> +out:
+> +	mutex_unlock(&functions_lock);
+> +	return r;
+> +}
+> +
+>   static int gh_vm_rm_notification_status(struct gh_vm *ghvm, void *data)
+>   {
+>   	struct gh_rm_vm_status_payload *payload = data;
+> @@ -80,6 +253,7 @@ static void gh_vm_stop(struct gh_vm *ghvm)
+>   static void gh_vm_free(struct work_struct *work)
+>   {
+>   	struct gh_vm *ghvm = container_of(work, struct gh_vm, free_work);
+> +	struct gh_vm_function_instance *inst, *iiter;
+>   	struct gh_vm_mem *mapping, *tmp;
+>   	int ret;
+>   
+> @@ -90,7 +264,13 @@ static void gh_vm_free(struct work_struct *work)
+>   		fallthrough;
+>   	case GH_RM_VM_STATUS_INIT_FAILED:
+>   	case GH_RM_VM_STATUS_LOAD:
+> -	case GH_RM_VM_STATUS_LOAD_FAILED:
+> +	case GH_RM_VM_STATUS_EXITED:
+> +		mutex_lock(&functions_lock);
+> +		list_for_each_entry_safe(inst, iiter, &ghvm->functions, vm_list) {
+> +			gh_vm_remove_function_instance(inst);
+> +		}
+> +		mutex_unlock(&functions_lock);
+> +
+>   		mutex_lock(&ghvm->mm_lock);
+>   		list_for_each_entry_safe(mapping, tmp, &ghvm->memory_mappings, list) {
+>   			gh_vm_mem_reclaim(ghvm, mapping);
+> @@ -113,6 +293,28 @@ static void gh_vm_free(struct work_struct *work)
+>   	}
+>   }
+>   
+> +static void _gh_vm_put(struct kref *kref)
+> +{
+> +	struct gh_vm *ghvm = container_of(kref, struct gh_vm, kref);
+> +
+> +	/* VM will be reset and make RM calls which can interruptible sleep.
+> +	 * Defer to a work so this thread can receive signal.
+> +	 */
+> +	schedule_work(&ghvm->free_work);
+> +}
+> +
+> +int __must_check gh_vm_get(struct gh_vm *ghvm)
+> +{
+> +	return kref_get_unless_zero(&ghvm->kref);
+> +}
+> +EXPORT_SYMBOL_GPL(gh_vm_get);
+> +
+> +void gh_vm_put(struct gh_vm *ghvm)
+> +{
+> +	kref_put(&ghvm->kref, _gh_vm_put);
+> +}
+> +EXPORT_SYMBOL_GPL(gh_vm_put);
+> +
+>   static __must_check struct gh_vm *gh_vm_alloc(struct gh_rm *rm)
+>   {
+>   	struct gh_vm *ghvm;
+> @@ -147,6 +349,8 @@ static __must_check struct gh_vm *gh_vm_alloc(struct gh_rm *rm)
+>   	INIT_LIST_HEAD(&ghvm->memory_mappings);
+>   	init_rwsem(&ghvm->status_lock);
+>   	INIT_WORK(&ghvm->free_work, gh_vm_free);
+> +	kref_init(&ghvm->kref);
+> +	INIT_LIST_HEAD(&ghvm->functions);
+>   	ghvm->vm_status = GH_RM_VM_STATUS_LOAD;
+>   
+>   	return ghvm;
+> @@ -291,6 +495,35 @@ static long gh_vm_ioctl(struct file *filp, unsigned int cmd, unsigned long arg)
+>   		r = gh_vm_ensure_started(ghvm);
+>   		break;
+>   	}
+> +	case GH_VM_ADD_FUNCTION: {
+> +		struct gh_fn_desc *f;
+> +
+> +		f = kzalloc(sizeof(*f), GFP_KERNEL);
+> +		if (!f)
+> +			return -ENOMEM;
+> +
+> +		if (copy_from_user(f, argp, sizeof(*f)))
+> +			return -EFAULT;
+> +
+> +		r = gh_vm_add_function(ghvm, f);
+> +		if (r < 0)
+> +			kfree(f);
+
+
+we are memory leaking f here, we should free it irrespective of return 
+value. or I see no reason not to use this small struct from stack.
+
+
+> +		break;
+> +	}
+> +	case GH_VM_REMOVE_FUNCTION: {
+> +		struct gh_fn_desc *f;
+> +
+> +		f = kzalloc(sizeof(*f), GFP_KERNEL);
+> +		if (!f)
+> +			return -ENOMEM;
+> +
+> +		if (copy_from_user(f, argp, sizeof(*f)))
+> +			return -EFAULT;
+> +
+> +		r = gh_vm_rm_function(ghvm, f);
+> +		kfree(f);
+> +		break;
+> +	}
+>   	default:
+>   		r = -ENOTTY;
+>   		break;
+> @@ -303,10 +536,7 @@ static int gh_vm_release(struct inode *inode, struct file *filp)
+>   {
+>   	struct gh_vm *ghvm = filp->private_data;
+>   
+> -	/* VM will be reset and make RM calls which can interruptible sleep.
+> -	 * Defer to a work so this thread can receive signal.
+> -	 */
+> -	schedule_work(&ghvm->free_work);
+> +	gh_vm_put(ghvm);
+>   	return 0;
+>   }
+>   
+> diff --git a/drivers/virt/gunyah/vm_mgr.h b/drivers/virt/gunyah/vm_mgr.h
+> index e9cf56647cc2..4750d56c1297 100644
+> --- a/drivers/virt/gunyah/vm_mgr.h
+> +++ b/drivers/virt/gunyah/vm_mgr.h
+> @@ -8,6 +8,7 @@
+>   
+>   #include <linux/gunyah_rsc_mgr.h>
+>   #include <linux/list.h>
+> +#include <linux/kref.h>
+>   #include <linux/miscdevice.h>
+>   #include <linux/mutex.h>
+>   #include <linux/rwsem.h>
+> @@ -44,8 +45,10 @@ struct gh_vm {
+>   	struct rw_semaphore status_lock;
+>   
+>   	struct work_struct free_work;
+> +	struct kref kref;
+>   	struct mutex mm_lock;
+>   	struct list_head memory_mappings;
+> +	struct list_head functions;
+>   };
+>   
+>   int gh_vm_mem_alloc(struct gh_vm *ghvm, struct gh_userspace_memory_region *region);
+> diff --git a/include/linux/gunyah_vm_mgr.h b/include/linux/gunyah_vm_mgr.h
+> new file mode 100644
+> index 000000000000..f0a95af50b2e
+> --- /dev/null
+> +++ b/include/linux/gunyah_vm_mgr.h
+> @@ -0,0 +1,80 @@
+> +/* SPDX-License-Identifier: GPL-2.0-only */
+> +/*
+> + * Copyright (c) 2022-2023 Qualcomm Innovation Center, Inc. All rights reserved.
+> + */
+> +
+> +#ifndef _GUNYAH_VM_MGR_H
+> +#define _GUNYAH_VM_MGR_H
+> +
+> +#include <linux/compiler_types.h>
+> +#include <linux/gunyah.h>
+> +#include <linux/gunyah_rsc_mgr.h>
+> +#include <linux/list.h>
+> +#include <linux/mod_devicetable.h>
+??
+
+> +#include <linux/notifier.h>
+
+??
+
+> +
+> +#include <uapi/linux/gunyah.h>
+> +
+> +struct gh_vm;
+> +
+> +int __must_check gh_vm_get(struct gh_vm *ghvm);
+> +void gh_vm_put(struct gh_vm *ghvm);
+> +
+> +struct gh_vm_function_instance;
+> +struct gh_vm_function {
+> +	u32 type; > +	const char *name;
+> +	struct module *mod;
+> +	long (*bind)(struct gh_vm_function_instance *f);
+> +	void (*unbind)(struct gh_vm_function_instance *f);
+> +	struct mutex instances_lock;
+> +	struct list_head instances;
+> +};
+> +
+> +/**
+> + * struct gh_vm_function_instance - Represents one function instance
+> + * @arg_size: size of user argument
+> + * @arg: user argument to describe the function instance; arg_size is 0
+> + * @argp: pointer to user argument
+> + * @ghvm: Pointer to VM instance
+> + * @rm: Pointer to resource manager for the VM instance
+> + * @fn: The ops for the function
+> + * @data: Private data for function
+> + * @vm_list: for gh_vm's functions list
+> + * @fn_list: for gh_vm_function's instances list
+> + */
+> +struct gh_vm_function_instance {
+> +	size_t arg_size;
+> +	union {
+> +		u64 arg;
+> +		void *argp;
+> +	};
+> +	struct gh_vm *ghvm;
+> +	struct gh_rm *rm;
+> +	struct gh_vm_function *fn;
+> +	void *data;
+> +	struct list_head vm_list;
+> +	struct list_head fn_list;
+Am not seeing any advantage of storing the instance in two different 
+list, they look redundant to me. storing the function instances in vm 
+should be good IMO.
+
+
+> +};
+> +
+> +int gh_vm_function_register(struct gh_vm_function *f);
+> +void gh_vm_function_unregister(struct gh_vm_function *f);
+> +
+> +#define DECLARE_GUNYAH_VM_FUNCTION(_name, _type, _bind, _unbind)	\
+> +	static struct gh_vm_function _name = {		\
+> +		.type = _type,						\
+> +		.name = __stringify(_name),				\
+> +		.mod = THIS_MODULE,					\
+> +		.bind = _bind,						\
+> +		.unbind = _unbind,					\
+> +	};								\
+> +	MODULE_ALIAS("ghfunc:"__stringify(_type))
+> +
+> +#define module_gunyah_vm_function(__gf)					\
+> +	module_driver(__gf, gh_vm_function_register, gh_vm_function_unregister)
+> +
+> +#define DECLARE_GUNYAH_VM_FUNCTION_INIT(_name, _type, _bind, _unbind)	\
+> +	DECLARE_GUNYAH_VM_FUNCTION(_name, _type, _bind, _unbind);	\
+> +	module_gunyah_vm_function(_name)
+> +
+> +#endif
+> diff --git a/include/uapi/linux/gunyah.h b/include/uapi/linux/gunyah.h
+> index d899bba6a4c6..8df455a2a293 100644
+> --- a/include/uapi/linux/gunyah.h
+> +++ b/include/uapi/linux/gunyah.h
+> @@ -66,4 +66,21 @@ struct gh_vm_dtb_config {
+>   
+>   #define GH_VM_START		_IO(GH_IOCTL_TYPE, 0x3)
+>   
+> +#define GH_FN_MAX_ARG_SIZE		256
+> +
+> +/**
+> + * struct gh_fn_desc - Arguments to create a VM function
+> + * @type: Type of the function. See GH_FN_* macro for supported types
+> + * @arg_size: Size of argument to pass to the function
+
+a note on max arg size  of 256 bytes would be useful.
+
+> + * @arg: Value or pointer to argument given to the function
+
+Treating this as value when arg_size == 0 is really confusing abi.
+how about just use as arg as ptr to data along with arg_size;
+
+--srini
+> + */
+> +struct gh_fn_desc {
+> +	__u32 type;
+> +	__u32 arg_size;
+> +	__u64 arg;
+> +};
+> +
+> +#define GH_VM_ADD_FUNCTION	_IOW(GH_IOCTL_TYPE, 0x4, struct gh_fn_desc)
+> +#define GH_VM_REMOVE_FUNCTION	_IOW(GH_IOCTL_TYPE, 0x7, struct gh_fn_desc)
+
+Do you have an example of how add and rm ioctls are used w.r.t to arg, i 
+see that we check correcteness of arg in between add and remove.
+
+--srini
+> +
+>   #endif
