@@ -2,368 +2,244 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A417A69FF64
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 00:21:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6592C69FF6A
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 00:27:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232260AbjBVXVd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Feb 2023 18:21:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39664 "EHLO
+        id S232578AbjBVX1b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Feb 2023 18:27:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42340 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231424AbjBVXVa (ORCPT
+        with ESMTP id S229506AbjBVX13 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Feb 2023 18:21:30 -0500
-Received: from mail-oa1-x2b.google.com (mail-oa1-x2b.google.com [IPv6:2001:4860:4864:20::2b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8030123673;
-        Wed, 22 Feb 2023 15:21:22 -0800 (PST)
-Received: by mail-oa1-x2b.google.com with SMTP id 586e51a60fabf-172663f1956so2872646fac.12;
-        Wed, 22 Feb 2023 15:21:22 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=TBQjWreD5YceHGAm3SljA5uXbeQChUwHxJ9vgJBly4g=;
-        b=BIUqtXs6ZC4lcSzsCiRtjlqqmnfD+oVi3pNQXD/lrRwGLfGpnxlsteLZZitjNAAdl/
-         HB1/0mXen40LmBLk9zgl/OodDsXk2aepm2SNgbffvKVyOYnw8ODgLOiBSnILYzTVxehK
-         57EUW2FPNM/mk7MelBxTuQsLquaSAgnCIVLnE6pkmuWMEB+cIFmyJOzWnNVbYUbS8sCR
-         TiFhjNXik8wyPtw0Y4QJtJTbIr0cv15HxWv1F0X6hZoU3sGHpSJS1Z+FluHhOjd5la+o
-         Stl7c+jLcl5RKLurfpXTDx5SFG7GvXchENKKfTeMps+YkjGGPDQnT5HIu3RKhdW94hfC
-         l2SA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=TBQjWreD5YceHGAm3SljA5uXbeQChUwHxJ9vgJBly4g=;
-        b=OEnB9Q1cpiKPbI/CmQ5uDEtMe0kkfhyvhjM+JSrcb5F3Ij2JrwPTboj3Dsn7Y+rAWX
-         8MvDEFvK1eA1cmU+3I1AsLcwQ93Ab6tk6J0d9Z4PuIZzBbzbXuqK6/akhMOU+cL1bWNC
-         FwBM5tdLaldnLyinIBBhQKL+XjvTwLPLJ/yfPlXlsOLOWXVRp9ju9QMo23Pswzhh74to
-         UqV6LMGtaW3R19ppFMxKVHRypR95vuAb5ii9NsfxTv2ScT24VAbD0zb/q/P/0DSMA2Cf
-         /wTiOCBnucKEjbzdjeAHGYQUXrDdHAGZfI9b8zDvnqMZV51j3NTl72EhGIXe9WEwDltM
-         owJA==
-X-Gm-Message-State: AO0yUKXr6Zm4FtIEYVANZqgJB+x4rsk7mLX9IFXbsNxfy/vBfvU2x9yE
-        eQU+7DMiEezalG+Z37MNVf1WBHsRefwkxBhJ/IY=
-X-Google-Smtp-Source: AK7set8Vn9OcME7Hn72aIHIFRq64owG0Eqv9emogmG1BJgmD5Zi85rMaudzShrlI/k0Eg3hVMrCA5DH9pi6YtaX7lhg=
-X-Received: by 2002:a05:6870:808d:b0:16e:8a56:d0d2 with SMTP id
- q13-20020a056870808d00b0016e8a56d0d2mr1458724oab.38.1677108081698; Wed, 22
- Feb 2023 15:21:21 -0800 (PST)
+        Wed, 22 Feb 2023 18:27:29 -0500
+Received: from NAM04-DM6-obe.outbound.protection.outlook.com (mail-dm6nam04on2087.outbound.protection.outlook.com [40.107.102.87])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F898460A0;
+        Wed, 22 Feb 2023 15:27:27 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=I5dp9wcV6/tu/CXlnhzjvxYIxTEcVSQNcEsGPJh4Auyp/UaPvSJc3/RAuMAC+a0ZNI7WgVZ4w/o3WiI1qWw/Lkb0sJlTA8Kve0y7aC69e2aKwA7D9Hw6KAXJ5fyEo3Jy33JAZEK9nmZEUcYq8W0b1nm1abNji4QxbWbzBdtmvXZ9KMRx+aTGn+3Q5CkQB/b/M8a4CpfHPbaxW74Bczmr6aCQBhnmoFLSTeq7cAtPjCfStNVe0q9cIJEEwq4AMVA9z6eCsXYkxsAPxDp84uoMrFdsUWPGgEkDsOWDZ6eng9R+cnPQh/RTyE37qbSw5UjNDrMq5fI+LZul2Fy4DD6drg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=CjnxTOTnWfHD4VMqEEOJ/wG2ku05IRUYrD1CwLJcWuM=;
+ b=inKMvf00IC+gUiXL8t4RG3qcA08XlaGbP3TpccTzaSsuiyfistjQcFA0A2iQ6LnnA6G9UpWKbI3asSXaHEf3HHl1Kl/tJHN6depI9N9u6ZvWm3JM7xlIBLLMEUfsaI0e8J2QKaenEDeX3cqQTeECgqlKAueX5r1hv+HqjVl5l5aP4r5usao3+ampAOLPmSG8cdww7auGrpVN72sHvLtYBULgo0MQXlwhE1hTh6UvElSBvnf51hSfCr06jOdtuC1S+WboomVwTKA9/0mM7cmZwuY7ByRviasS4E45Bfe2GtRviH44PKuMZW93kf+MUh0YMoQdSOcdG0PL0fqSGABBvA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=CjnxTOTnWfHD4VMqEEOJ/wG2ku05IRUYrD1CwLJcWuM=;
+ b=CrzpnZUOOa+lBBnUhMsqPdC4imzesSysCE1xjE2gM5YLcCHJyvSrSJYbdSTXy5wRLyEPEJCThI5iI4olXIDG3lbJeWjBPzpCMc0hx1DoJCcwedGlezhNLIXUxegyN/qUEeU8moYsYg34vn/78ak5Izmi5BDzOedTu6Z22ph30ic=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from SN6PR12MB2767.namprd12.prod.outlook.com (2603:10b6:805:75::23)
+ by DM4PR12MB5770.namprd12.prod.outlook.com (2603:10b6:8:61::16) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6134.19; Wed, 22 Feb
+ 2023 23:27:25 +0000
+Received: from SN6PR12MB2767.namprd12.prod.outlook.com
+ ([fe80::dc5d:6248:1c13:4a3]) by SN6PR12MB2767.namprd12.prod.outlook.com
+ ([fe80::dc5d:6248:1c13:4a3%7]) with mapi id 15.20.6134.019; Wed, 22 Feb 2023
+ 23:27:25 +0000
+Message-ID: <a5e18a33-3012-de13-705d-9c69c9acedab@amd.com>
+Date:   Wed, 22 Feb 2023 17:27:18 -0600
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.2.1
+Subject: Re: [PATCH RFC v8 10/56] x86/cpufeatures: Add SEV-SNP CPU feature
+Content-Language: en-US
+To:     Sathyanarayanan Kuppuswamy 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        Michael Roth <michael.roth@amd.com>, kvm@vger.kernel.org
+Cc:     linux-coco@lists.linux.dev, linux-mm@kvack.org,
+        linux-crypto@vger.kernel.org, x86@kernel.org,
+        linux-kernel@vger.kernel.org, tglx@linutronix.de, mingo@redhat.com,
+        jroedel@suse.de, thomas.lendacky@amd.com, hpa@zytor.com,
+        ardb@kernel.org, pbonzini@redhat.com, seanjc@google.com,
+        vkuznets@redhat.com, jmattson@google.com, luto@kernel.org,
+        dave.hansen@linux.intel.com, slp@redhat.com, pgonda@google.com,
+        peterz@infradead.org, srinivas.pandruvada@linux.intel.com,
+        rientjes@google.com, dovmurik@linux.ibm.com, tobin@ibm.com,
+        bp@alien8.de, vbabka@suse.cz, kirill@shutemov.name,
+        ak@linux.intel.com, tony.luck@intel.com, marcorr@google.com,
+        alpergun@google.com, dgilbert@redhat.com, jarkko@kernel.org,
+        nikunj.dadhania@amd.com, Brijesh Singh <brijesh.singh@amd.com>,
+        Jarkko Sakkinen <jarkko@profian.com>
+References: <20230220183847.59159-1-michael.roth@amd.com>
+ <20230220183847.59159-11-michael.roth@amd.com>
+ <856ded9e-facd-fe6d-2f71-bb0cf5b1d546@linux.intel.com>
+From:   "Kalra, Ashish" <ashish.kalra@amd.com>
+In-Reply-To: <856ded9e-facd-fe6d-2f71-bb0cf5b1d546@linux.intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: CH2PR20CA0005.namprd20.prod.outlook.com
+ (2603:10b6:610:58::15) To SN6PR12MB2767.namprd12.prod.outlook.com
+ (2603:10b6:805:75::23)
 MIME-Version: 1.0
-References: <20230216111214.3489223-1-daniel.vetter@ffwll.ch> <CAF6AEGvFN-9_cr2EyGxuW5NVgk8CA99rVuv_Y80M+gvMviPcuA@mail.gmail.com>
-In-Reply-To: <CAF6AEGvFN-9_cr2EyGxuW5NVgk8CA99rVuv_Y80M+gvMviPcuA@mail.gmail.com>
-From:   Rob Clark <robdclark@gmail.com>
-Date:   Wed, 22 Feb 2023 15:21:10 -0800
-Message-ID: <CAF6AEGs63gz_ja8gV_CYwG1jd912BrgKXz+kJH++Vc8oLYWOPA@mail.gmail.com>
-Subject: Re: [PATCH] drm/atomic-helpers: remove legacy_cursor_update hacks
-To:     Daniel Vetter <daniel.vetter@ffwll.ch>
-Cc:     DRI Development <dri-devel@lists.freedesktop.org>,
-        Intel Graphics Development <intel-gfx@lists.freedesktop.org>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Maxime Ripard <maxime@cerno.tech>, mikita.lipski@amd.com,
-        =?UTF-8?Q?Michel_D=C3=A4nzer?= <michel@daenzer.net>,
-        harry.wentland@amd.com,
-        "Kazlauskas, Nicholas" <nicholas.kazlauskas@amd.com>,
-        Dmitry Osipenko <dmitry.osipenko@collabora.com>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Sean Paul <sean@poorly.run>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        =?UTF-8?B?VmlsbGUgU3lyasOkbMOk?= <ville.syrjala@linux.intel.com>,
-        Jani Nikula <jani.nikula@intel.com>,
-        Lucas De Marchi <lucas.demarchi@intel.com>,
-        Imre Deak <imre.deak@intel.com>,
-        Manasi Navare <manasi.d.navare@intel.com>,
-        linux-arm-msm@vger.kernel.org, freedreno@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org,
-        Daniel Vetter <daniel.vetter@intel.com>,
-        Rob Clark <robdclark@chromium.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: SN6PR12MB2767:EE_|DM4PR12MB5770:EE_
+X-MS-Office365-Filtering-Correlation-Id: ad76a276-08e3-441c-8a3b-08db152c5a9a
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: nuCbzd6Tg7MPedAInA3Mq0zxzHN/DSdeJ8BqhaAtR5bVbTAeyLCn8FsWxmOvERhJUT7tbWMlt7z+6m/+OXSg6TUj06K+4pkU/Qg7UrA3Bq+ppJ3RvGjv6pP9Eqm2PhlyuiT5B4Fep+X1o0OS5TRu4G6OkuszXb/DcgERA8AhF5m6SXQOAoh8VF9FpazgRPgWqLyhF2L7Cm4oqfPPAvyrulPJdoh7TcqlvS0nPdY1bNCfip4BeSa14VepZ8YVWCwziru3/MiUac0oYj/CcXgMKg3JSs5Cmw8gRdjiXsSstwb7saC2SAUqELNzse6l39gSZV6AIJ5JTaak8YnBfD5dAuH1YDQ57let+RyamnGECpeFAxcf+gxXM/G4cWDjs5d+aHenOOziAVRwFkdMdQ2KAQYyEwVcf7AbrUUUYA07rKy309na+K5AHGAd8v3kHqDVc3leVRoKHVZx4jhX2LLbKnKhCPnRY3IDICFnrcBctWx8r7MPSKmtiFvFqqY2xXSIRgt798hfrxojxWw5jOqvTRkiTKmZOKz4Xe9dtIZwbI6BPeWxYTRQEZZn93MnDt5yBSKakrQa0yDgR74Gn+aA5FIrDj+X78BFLlD8oDfRTAW0TYnlxG0TtHWji2llL3PGlnEgwqUa0c91urTS681dWVeOhoAoNJVHPnuRYjzz48Y+TItx1ffjUUUMc9jQwts45XdBPhNHYdmmDxVUBRWIxRQME+rSpzG0K8xP5qYUj8U=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SN6PR12MB2767.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(39860400002)(366004)(376002)(396003)(346002)(136003)(451199018)(31696002)(31686004)(316002)(54906003)(110136005)(41300700001)(5660300002)(26005)(86362001)(478600001)(966005)(6486002)(8936002)(7406005)(7416002)(66476007)(4326008)(66946007)(8676002)(66556008)(2906002)(38100700002)(6512007)(6506007)(53546011)(6666004)(83380400001)(2616005)(36756003)(186003)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?S3UzNVdiMUVRUFBpK0JubHltMXNtd2ZFSi92ZXJJRDBXdUwrVTVoWWQ5ZDVG?=
+ =?utf-8?B?anBhTHVVdEE2Z1lXN1RuUnlSVHBiemNMN0RJUGpzczRRRXk3d3N2bWRweVVi?=
+ =?utf-8?B?WC9XM0ZzSEVKU3Uva2dVOEtQUGdWZGlKVnRyQkxuTUNwK2VVVU90Mk9ZbDlU?=
+ =?utf-8?B?dVpjY3BrckV4djdJYlN1UzhFbVdyKzVWeFl5WWh4emdPZEZ3ZlNhV1RLazgv?=
+ =?utf-8?B?cTdFYzhZbDQxRXpjT1YyS2g1Z0RBaHo2dGJaZ1JsSEROSm5HYllKN2VWaC9X?=
+ =?utf-8?B?V3NtQzV3YmNML3IwQ0x1M0xFa3VTekRnclpCOHFwZExpcGVxUXd0L2FUem1Q?=
+ =?utf-8?B?QWErV0ZLa0ZhNytmQjVsejVxTGFIK2x5MnUwTUFmTG91Q1lGQ0loL0hyanBR?=
+ =?utf-8?B?eE5nNXhXMExmRHN0ZTdQUjFXVUpTUzg5aEl3bFFJUkY5MmlQUjNqTkdoSCt1?=
+ =?utf-8?B?OTNyZnMzTDhIOEJhMmVIOUd6NFk3cDNwVTQzNDhQNHFFYXZqZGFTbnRMMGZE?=
+ =?utf-8?B?L2xVK2w0UVEwSzZ5S3R6UElKNmNrNU9wY243TER6SUxNYzJPa09tOTFsSk1W?=
+ =?utf-8?B?ODRUTnl5Uzhrb2lORDhQM20zZnlSRjNaN3p2WWFjZXpUMXhrYzEvSGF3d2Rp?=
+ =?utf-8?B?VnJENUtqcExoekJEMTFTU1V2QUx2NlM0NDk1bHFiblA0YWcydkRQSDlFWFdV?=
+ =?utf-8?B?WkNibEdwNUVKcGlSR3I3Rk1mL2dPSVB1YTUrcFZqWnFPdXJEM1ZZdU1hZnVp?=
+ =?utf-8?B?NVFBMUIzc1d2ZTEzeXdVZ3NCNGJqU3BIMFY2UXkveVpTUGh0TTFGeXVCWjlG?=
+ =?utf-8?B?K2tka2VPaVhRcXZKU2RvZWlMcFRTanVibXNqVU5aRWZnOFppYXZrT0h6Zkt3?=
+ =?utf-8?B?VkcwODBTOW8wTlZmalovZGZuZUNtb0hINnlXM0E5R3ZQUEVOa0xNdmp3aE5n?=
+ =?utf-8?B?NUdDREVGclM5R3ZOeHhVcVQ2RXN5MGpBbERVenhPMUlMZlhTK3hXbTJaaFVP?=
+ =?utf-8?B?eGFiVHNXMFRTWDQ3UExDMTNUZEJQYzVBR0tDZEtKcEU0Z2hPWUVTbFU2OUp1?=
+ =?utf-8?B?VFFRU3pOUWlHUXI1TXA5Q2M1MWVHaFNkeWJNWVNjOFFYKzQyOVVZM21pdjJX?=
+ =?utf-8?B?blFsRTRnM2kybWpkbWhObGF3UGpTb3hvdk9TdkRDZlc3ZkFEckc0bDRxbFI1?=
+ =?utf-8?B?OWpKWjFhemF2cHZlenk0emk3dFZ6Y1pkUEp6SlcxS0FJWCsrZ0FKNVRyeXJI?=
+ =?utf-8?B?QmtYbWJnNE9GeGdFVEs2azkvclBYclYwV3Buc2F4aHlidys5cWp0cHJTVXd0?=
+ =?utf-8?B?ME44bnJzWTZyQkQ0dVVNYU1HSmlzWUhST3BSOW5kRHBxcW9HcWlGR0VTS2R3?=
+ =?utf-8?B?Q0dBTFdHRkw1NnAyNU4rY3JqNmhBWXhCbjJxQ1pIWEd0ZU1sU2ZJODJoYnN2?=
+ =?utf-8?B?Q1Q3Vlc2RlBOY3pRYkEvRjhpWVFGSWozN3NjYVUvdE5DdUUyR25MbnpTWEtU?=
+ =?utf-8?B?YnF1TVM3UGs2M20wMlJCV0dUU3JQaCtIaEdCQmdBeHgzQm5hWG16WlNBWFJQ?=
+ =?utf-8?B?YkowWnd0MkdqM2hWeXY0ZFkvQUlzQWZFbW4vbGhJRjAxVmg3dXIyalpSOGND?=
+ =?utf-8?B?TWE5RnJrVFZ2NGlyem5oYTU3bFhiMjBXSmNUV01sQkNDMUtac0U0dVB0M0xN?=
+ =?utf-8?B?SFRvOFFkR21rcWp2L2QzUGhZRUtkdGp4Znk1UjAyMXlTTm8zY1ZKVzU3WUNQ?=
+ =?utf-8?B?Q2k4T2Fwb3ZJRGJ4UVdNSW5EOEhZZ1lmY0Z1Z3FMVm1OZnp5RmxqY2F4VGVt?=
+ =?utf-8?B?dEdxVTEyM21xa3IrSm9COStoTloxbDRra3dCYVR3QkdhendkUjQ5MHBtQ2R3?=
+ =?utf-8?B?cFk0UUVFMnM4UFZBYUFsRTcrTGxoRC81TDNHd0ZKUGVCMHQwWFNsYWEwMk1m?=
+ =?utf-8?B?QWcvR3dvT09NNzlmdUVSTVZaem9FUU8vQ3l3dEZ3TWRhM0xJY2YyakR5Si9m?=
+ =?utf-8?B?b0MvNndwY0NXQmR5d1hXbVBPcTM3cHNMK1pVWCtTakh0eEJUTEVsZkZ0Sm1l?=
+ =?utf-8?B?UjQ2WXIxUHgxWUhCWGY4dTlwK3FzNXdQU0ozTDgzTWNJenBnY3plZUZtNTk2?=
+ =?utf-8?Q?9ouPWzbdtx3e21f1URKJ6HzWy?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: ad76a276-08e3-441c-8a3b-08db152c5a9a
+X-MS-Exchange-CrossTenant-AuthSource: SN6PR12MB2767.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 22 Feb 2023 23:27:24.7910
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: FWQpkmzfZjTb91RPK1qy7Ixo/ZyBOv79AJUrloVt5KA3uZB7f28BEhuI9i7mBb/hDu7+jsMh8cMj24S5NqW+Xg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR12MB5770
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Feb 22, 2023 at 3:14 PM Rob Clark <robdclark@gmail.com> wrote:
->
-> On Thu, Feb 16, 2023 at 3:12 AM Daniel Vetter <daniel.vetter@ffwll.ch> wr=
-ote:
-> >
-> > The stuff never really worked, and leads to lots of fun because it
-> > out-of-order frees atomic states. Which upsets KASAN, among other
-> > things.
-> >
-> > For async updates we now have a more solid solution with the
-> > ->atomic_async_check and ->atomic_async_commit hooks. Support for that
-> > for msm and vc4 landed. nouveau and i915 have their own commit
-> > routines, doing something similar.
-> >
-> > For everyone else it's probably better to remove the use-after-free
-> > bug, and encourage folks to use the async support instead. The
-> > affected drivers which register a legacy cursor plane and don't either
-> > use the new async stuff or their own commit routine are: amdgpu,
-> > atmel, mediatek, qxl, rockchip, sti, sun4i, tegra, virtio, and vmwgfx.
-> >
-> > Inspired by an amdgpu bug report.
-> >
-> > v2: Drop RFC, I think with amdgpu converted over to use
-> > atomic_async_check/commit done in
-> >
-> > commit 674e78acae0dfb4beb56132e41cbae5b60f7d662
-> > Author: Nicholas Kazlauskas <nicholas.kazlauskas@amd.com>
-> > Date:   Wed Dec 5 14:59:07 2018 -0500
-> >
-> >     drm/amd/display: Add fast path for cursor plane updates
-> >
-> > we don't have any driver anymore where we have userspace expecting
-> > solid legacy cursor support _and_ they are using the atomic helpers in
-> > their fully glory. So we can retire this.
-> >
-> > v3: Paper over msm and i915 regression. The complete_all is the only
-> > thing missing afaict.
-> >
-> > v4: Fixup i915 fixup ...
-> >
-> > v5: Unallocate the crtc->event in msm to avoid hitting a WARN_ON in
-> > dpu_crtc_atomic_flush(). This is a bit a hack, but simplest way to
-> > untangle this all. Thanks to Abhinav Kumar for the debug help.
->
-> Hmm, are you sure about that double-put?
->
-> [  +0.501263] ------------[ cut here ]------------
-> [  +0.000032] refcount_t: underflow; use-after-free.
-> [  +0.000033] WARNING: CPU: 6 PID: 1854 at lib/refcount.c:28
-> refcount_warn_saturate+0xf8/0x134
-> [  +0.000043] Modules linked in: uinput rfcomm algif_hash
-> algif_skcipher af_alg veth venus_dec venus_enc xt_cgroup xt_MASQUERADE
-> qcom_spmi_temp_alarm qcom_spmi_adc_tm5 qcom_spmi_adc5 qcom_vadc_common
-> cros_ec_typec typec 8021q hci_uart btqca qcom_stats venus_core
-> coresight_etm4x coresight_tmc snd_soc_lpass_sc7180
-> coresight_replicator coresight_funnel coresight snd_soc_sc7180
-> ip6table_nat fuse ath10k_snoc ath10k_core ath mac80211 iio_trig_sysfs
-> bluetooth cros_ec_sensors cfg80211 cros_ec_sensors_core
-> industrialio_triggered_buffer kfifo_buf ecdh_generic ecc
-> cros_ec_sensorhub lzo_rle lzo_compress r8153_ecm cdc_ether usbnet
-> r8152 mii zram hid_vivaldi hid_google_hammer hid_vivaldi_common joydev
-> [  +0.000189] CPU: 6 PID: 1854 Comm: DrmThread Not tainted
-> 5.15.93-16271-g5ecce40dbcd4 #46
-> cf9752a1c9e5b13fd13216094f52d77fa5a5f8f3
-> [  +0.000016] Hardware name: Google Wormdingler rev1+ INX panel board (DT=
-)
-> [  +0.000008] pstate: 60400009 (nZCv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=
-=3D--)
-> [  +0.000013] pc : refcount_warn_saturate+0xf8/0x134
-> [  +0.000011] lr : refcount_warn_saturate+0xf8/0x134
-> [  +0.000011] sp : ffffffc012e43930
-> [  +0.000008] x29: ffffffc012e43930 x28: ffffff80d31aa300 x27: 0000000000=
-00024e
-> [  +0.000017] x26: 00000000000003bd x25: 0000000000000040 x24: 0000000000=
-000040
-> [  +0.000014] x23: ffffff8083eb1000 x22: 0000000000000002 x21: ffffff8084=
-5bc800
-> [  +0.000013] x20: 0000000000000040 x19: ffffff80d0cecb00 x18: 0000000060=
-014024
-> [  +0.000012] x17: 0000000000000000 x16: 000000000000003c x15: ffffffd97e=
-21a1c0
-> [  +0.000012] x14: 0000000000000003 x13: 0000000000000004 x12: 0000000000=
-000001
-> [  +0.000014] x11: c0000000ffffdfff x10: ffffffd97f560f50 x9 : 5749cdb403=
-550d00
-> [  +0.000014] x8 : 5749cdb403550d00 x7 : 0000000000000000 x6 : 372e313320=
-20205b
-> [  +0.000012] x5 : ffffffd97f7b8b24 x4 : 0000000000000000 x3 : ffffffc012=
-e43588
-> [  +0.000013] x2 : ffffffc012e43590 x1 : 00000000ffffdfff x0 : 0000000000=
-000026
-> [  +0.000014] Call trace:
-> [  +0.000008]  refcount_warn_saturate+0xf8/0x134
-> [  +0.000013]  drm_crtc_commit_put+0x54/0x74
-> [  +0.000013]  __drm_atomic_helper_plane_destroy_state+0x64/0x68
-> [  +0.000013]  dpu_plane_destroy_state+0x24/0x3c
-> [  +0.000017]  drm_atomic_state_default_clear+0x13c/0x2d8
-> [  +0.000015]  __drm_atomic_state_free+0x88/0xa0
-> [  +0.000015]  drm_atomic_helper_update_plane+0x158/0x188
-> [  +0.000014]  __setplane_atomic+0xf4/0x138
-> [  +0.000012]  drm_mode_cursor_common+0x2e8/0x40c
-> [  +0.000009]  drm_mode_cursor_ioctl+0x48/0x70
-> [  +0.000008]  drm_ioctl_kernel+0xe0/0x158
-> [  +0.000014]  drm_ioctl+0x214/0x480
-> [  +0.000012]  __arm64_sys_ioctl+0x94/0xd4
-> [  +0.000010]  invoke_syscall+0x4c/0x100
-> [  +0.000013]  do_el0_svc+0xa4/0x168
-> [  +0.000012]  el0_svc+0x20/0x50
-> [  +0.000009]  el0t_64_sync_handler+0x20/0x110
-> [  +0.000008]  el0t_64_sync+0x1a4/0x1a8
-> [  +0.000010] ---[ end trace 35bb2d245a684c9a ]---
+On 2/21/2023 3:21 PM, Sathyanarayanan Kuppuswamy wrote:
+> 
+> 
+> On 2/20/23 10:38 AM, Michael Roth wrote:
+>> From: Brijesh Singh <brijesh.singh@amd.com>
+>>
+>> Add CPU feature detection for Secure Encrypted Virtualization with
+>> Secure Nested Paging. This feature adds a strong memory integrity
+>> protection to help prevent malicious hypervisor-based attacks like
+>> data replay, memory re-mapping, and more.
+>>
+>> Signed-off-by: Brijesh Singh <brijesh.singh@amd.com>
+>> Signed-off-by: Jarkko Sakkinen <jarkko@profian.com>
+>> Signed-off-by: Ashish Kalra <Ashish.Kalra@amd.com>
+> 
+> Too many signed-off-by's. Are you missing Co-developed-by?
+> 
+>> Signed-off-by: Michael Roth <michael.roth@amd.com>
+>> ---
+>>   arch/x86/include/asm/cpufeatures.h       | 1 +
+>>   arch/x86/kernel/cpu/amd.c                | 5 +++--
+>>   tools/arch/x86/include/asm/cpufeatures.h | 1 +
+>>   3 files changed, 5 insertions(+), 2 deletions(-)
+>>
+>> diff --git a/arch/x86/include/asm/cpufeatures.h b/arch/x86/include/asm/cpufeatures.h
+>> index 1419c4e04d45..480b4eaef310 100644
+>> --- a/arch/x86/include/asm/cpufeatures.h
+>> +++ b/arch/x86/include/asm/cpufeatures.h
+>> @@ -420,6 +420,7 @@
+>>   #define X86_FEATURE_SEV			(19*32+ 1) /* AMD Secure Encrypted Virtualization */
+>>   #define X86_FEATURE_VM_PAGE_FLUSH	(19*32+ 2) /* "" VM Page Flush MSR is supported */
+>>   #define X86_FEATURE_SEV_ES		(19*32+ 3) /* AMD Secure Encrypted Virtualization - Encrypted State */
+>> +#define X86_FEATURE_SEV_SNP		(19*32+ 4) /* AMD Secure Encrypted Virtualization - Secure Nested Paging */
+>>   #define X86_FEATURE_V_TSC_AUX		(19*32+ 9) /* "" Virtual TSC_AUX */
+>>   #define X86_FEATURE_SME_COHERENT	(19*32+10) /* "" AMD hardware-enforced cache coherency */
+>>   
+>> diff --git a/arch/x86/kernel/cpu/amd.c b/arch/x86/kernel/cpu/amd.c
+>> index 860b60273df3..c7884198ad5b 100644
+>> --- a/arch/x86/kernel/cpu/amd.c
+>> +++ b/arch/x86/kernel/cpu/amd.c
+>> @@ -558,8 +558,8 @@ static void early_detect_mem_encrypt(struct cpuinfo_x86 *c)
+>>   	 *	      SME feature (set in scattered.c).
+>>   	 *	      If the kernel has not enabled SME via any means then
+>>   	 *	      don't advertise the SME feature.
+>> -	 *   For SEV: If BIOS has not enabled SEV then don't advertise the
+>> -	 *            SEV and SEV_ES feature (set in scattered.c).
+> 
+> Did you remove the related scattered.c code mentioned above in a different patch?
 >
 
-without the double-put it "works" (as in doesn't immediately crash)
-but we are queuing up a _lot_ of updates (ie. cursor is lagging
-somewhat behind)
+That is part of the following commit:
 
-BR,
--R
+commit fb35d30fe5b06cc24444f0405da8fbe0be5330d1
+Author: Sean Christopherson <seanjc@google.com>
+Date:   Fri Jan 22 12:40:46 2021 -0800
 
->
-> BR,
-> -R
->
->
->
-> > Cc: Abhinav Kumar <quic_abhinavk@quicinc.com>
-> > Cc: Thomas Zimmermann <tzimmermann@suse.de>
-> > Cc: Maxime Ripard <maxime@cerno.tech>
-> > References: https://bugzilla.kernel.org/show_bug.cgi?id=3D199425
-> > References: https://lore.kernel.org/all/20220221134155.125447-9-maxime@=
-cerno.tech/
-> > References: https://bugzilla.kernel.org/show_bug.cgi?id=3D199425
-> > Cc: Maxime Ripard <maxime@cerno.tech>
-> > Tested-by: Maxime Ripard <maxime@cerno.tech>
-> > Cc: mikita.lipski@amd.com
-> > Cc: Michel D=C3=A4nzer <michel@daenzer.net>
-> > Cc: harry.wentland@amd.com
-> > Cc: Rob Clark <robdclark@gmail.com>
-> > Cc: "Kazlauskas, Nicholas" <nicholas.kazlauskas@amd.com>
-> > Cc: Dmitry Osipenko <dmitry.osipenko@collabora.com>
-> > Cc: Maarten Lankhorst <maarten.lankhorst@linux.intel.com>
-> > Cc: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-> > Cc: Sean Paul <sean@poorly.run>
-> > Cc: Matthias Brugger <matthias.bgg@gmail.com>
-> > Cc: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com=
->
-> > Cc: "Ville Syrj=C3=A4l=C3=A4" <ville.syrjala@linux.intel.com>
-> > Cc: Jani Nikula <jani.nikula@intel.com>
-> > Cc: Lucas De Marchi <lucas.demarchi@intel.com>
-> > Cc: Imre Deak <imre.deak@intel.com>
-> > Cc: Manasi Navare <manasi.d.navare@intel.com>
-> > Cc: linux-arm-msm@vger.kernel.org
-> > Cc: freedreno@lists.freedesktop.org
-> > Cc: linux-kernel@vger.kernel.org
-> > Cc: linux-arm-kernel@lists.infradead.org
-> > Cc: linux-mediatek@lists.infradead.org
-> > Signed-off-by: Daniel Vetter <daniel.vetter@intel.com>
-> > ---
-> >  drivers/gpu/drm/drm_atomic_helper.c          | 13 -------------
-> >  drivers/gpu/drm/i915/display/intel_display.c | 14 ++++++++++++++
-> >  drivers/gpu/drm/msm/msm_atomic.c             | 15 +++++++++++++++
-> >  3 files changed, 29 insertions(+), 13 deletions(-)
-> >
-> > diff --git a/drivers/gpu/drm/drm_atomic_helper.c b/drivers/gpu/drm/drm_=
-atomic_helper.c
-> > index d579fd8f7cb8..f6b4c3a00684 100644
-> > --- a/drivers/gpu/drm/drm_atomic_helper.c
-> > +++ b/drivers/gpu/drm/drm_atomic_helper.c
-> > @@ -1587,13 +1587,6 @@ drm_atomic_helper_wait_for_vblanks(struct drm_de=
-vice *dev,
-> >         int i, ret;
-> >         unsigned int crtc_mask =3D 0;
-> >
-> > -        /*
-> > -         * Legacy cursor ioctls are completely unsynced, and userspace
-> > -         * relies on that (by doing tons of cursor updates).
-> > -         */
-> > -       if (old_state->legacy_cursor_update)
-> > -               return;
-> > -
-> >         for_each_oldnew_crtc_in_state(old_state, crtc, old_crtc_state, =
-new_crtc_state, i) {
-> >                 if (!new_crtc_state->active)
-> >                         continue;
-> > @@ -2244,12 +2237,6 @@ int drm_atomic_helper_setup_commit(struct drm_at=
-omic_state *state,
-> >                         continue;
-> >                 }
-> >
-> > -               /* Legacy cursor updates are fully unsynced. */
-> > -               if (state->legacy_cursor_update) {
-> > -                       complete_all(&commit->flip_done);
-> > -                       continue;
-> > -               }
-> > -
-> >                 if (!new_crtc_state->event) {
-> >                         commit->event =3D kzalloc(sizeof(*commit->event=
-),
-> >                                                 GFP_KERNEL);
-> > diff --git a/drivers/gpu/drm/i915/display/intel_display.c b/drivers/gpu=
-/drm/i915/display/intel_display.c
-> > index 3479125fbda6..2454451fcf95 100644
-> > --- a/drivers/gpu/drm/i915/display/intel_display.c
-> > +++ b/drivers/gpu/drm/i915/display/intel_display.c
-> > @@ -7651,6 +7651,20 @@ static int intel_atomic_commit(struct drm_device=
- *dev,
-> >                 intel_runtime_pm_put(&dev_priv->runtime_pm, state->wake=
-ref);
-> >                 return ret;
-> >         }
-> > +
-> > +       /*
-> > +        * FIXME: Cut over to (async) commit helpers instead of hand-ro=
-lling
-> > +        * everything.
-> > +        */
-> > +       if (state->base.legacy_cursor_update) {
-> > +               struct intel_crtc_state *new_crtc_state;
-> > +               struct intel_crtc *crtc;
-> > +               int i;
-> > +
-> > +               for_each_new_intel_crtc_in_state(state, crtc, new_crtc_=
-state, i)
-> > +                       complete_all(&new_crtc_state->uapi.commit->flip=
-_done);
-> > +       }
-> > +
-> >         intel_shared_dpll_swap_state(state);
-> >         intel_atomic_track_fbs(state);
-> >
-> > diff --git a/drivers/gpu/drm/msm/msm_atomic.c b/drivers/gpu/drm/msm/msm=
-_atomic.c
-> > index 1686fbb611fd..b7151767b567 100644
-> > --- a/drivers/gpu/drm/msm/msm_atomic.c
-> > +++ b/drivers/gpu/drm/msm/msm_atomic.c
-> > @@ -189,6 +189,19 @@ void msm_atomic_commit_tail(struct drm_atomic_stat=
-e *state)
-> >         bool async =3D kms->funcs->vsync_time &&
-> >                         can_do_async(state, &async_crtc);
-> >
-> > +       /*
-> > +        * FIXME: Convert to async plane helpers and remove the various=
- hacks to
-> > +        * keep the old legacy_cursor_way of doing async commits workin=
-g for the
-> > +        * dpu code, like the expectation that these don't have a crtc-=
->event.
-> > +        */
-> > +       if (async) {
-> > +               /* both ->event itself and the pointer hold a reference=
-! */
-> > +               drm_crtc_commit_put(async_crtc->state->commit);
-> > +               drm_crtc_commit_put(async_crtc->state->commit);
-> > +               kfree(async_crtc->state->event);
-> > +               async_crtc->state->event =3D NULL;
-> > +       }
-> > +
-> >         trace_msm_atomic_commit_tail_start(async, crtc_mask);
-> >
-> >         kms->funcs->enable_commit(kms);
-> > @@ -222,6 +235,8 @@ void msm_atomic_commit_tail(struct drm_atomic_state=
- *state)
-> >                 /* async updates are limited to single-crtc updates: */
-> >                 WARN_ON(crtc_mask !=3D drm_crtc_mask(async_crtc));
-> >
-> > +               complete_all(&async_crtc->state->commit->flip_done);
-> > +
-> >                 /*
-> >                  * Start timer if we don't already have an update pendi=
-ng
-> >                  * on this crtc:
-> > --
-> > 2.39.0
-> >
+     x86/cpufeatures: Assign dedicated feature word for 
+CPUID_0x8000001F[EAX]
+
+     Collect the scattered SME/SEV related feature flags into a dedicated
+     word.  There are now five recognized features in CPUID.0x8000001F.EAX,
+     with at least one more on the horizon (SEV-SNP).  Using a dedicated 
+word
+     allows KVM to use its automagic CPUID adjustment logic when reporting
+     the set of supported features to userspace.
+
+     No functional change intended.
+
+     Signed-off-by: Sean Christopherson <seanjc@google.com>
+     Signed-off-by: Borislav Petkov <bp@suse.de>
+     Reviewed-by: Brijesh Singh <brijesh.singh@amd.com>
+     Link: 
+https://lkml.kernel.org/r/20210122204047.2860075-2-seanjc@google.com
+
+Thanks,
+Ashish
+
+>> +	 *   For SEV: If BIOS has not enabled SEV then don't advertise SEV and
+>> +	 *	      any additional functionality based on it.
+>>   	 *
+>>   	 *   In all cases, since support for SME and SEV requires long mode,
+>>   	 *   don't advertise the feature under CONFIG_X86_32.
+>> @@ -594,6 +594,7 @@ static void early_detect_mem_encrypt(struct cpuinfo_x86 *c)
+>>   clear_sev:
+>>   		setup_clear_cpu_cap(X86_FEATURE_SEV);
+>>   		setup_clear_cpu_cap(X86_FEATURE_SEV_ES);
+>> +		setup_clear_cpu_cap(X86_FEATURE_SEV_SNP);
+>>   	}
+>>   }
+>>   
+>> diff --git a/tools/arch/x86/include/asm/cpufeatures.h b/tools/arch/x86/include/asm/cpufeatures.h
+>> index b71f4f2ecdd5..e81606fcd2ab 100644
+>> --- a/tools/arch/x86/include/asm/cpufeatures.h
+>> +++ b/tools/arch/x86/include/asm/cpufeatures.h
+>> @@ -417,6 +417,7 @@
+>>   #define X86_FEATURE_SEV			(19*32+ 1) /* AMD Secure Encrypted Virtualization */
+>>   #define X86_FEATURE_VM_PAGE_FLUSH	(19*32+ 2) /* "" VM Page Flush MSR is supported */
+>>   #define X86_FEATURE_SEV_ES		(19*32+ 3) /* AMD Secure Encrypted Virtualization - Encrypted State */
+>> +#define X86_FEATURE_SEV_SNP		(19*32+ 4) /* AMD Secure Encrypted Virtualization - Secure Nested Paging */
+>>   #define X86_FEATURE_V_TSC_AUX		(19*32+ 9) /* "" Virtual TSC_AUX */
+>>   #define X86_FEATURE_SME_COHERENT	(19*32+10) /* "" AMD hardware-enforced cache coherency */
+>>   
+> 
