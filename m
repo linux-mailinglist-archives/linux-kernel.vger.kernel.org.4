@@ -2,55 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 23EA269FECB
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Feb 2023 23:58:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 84A1B69FF1A
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 00:01:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233060AbjBVW6B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Feb 2023 17:58:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48740 "EHLO
+        id S233076AbjBVXB2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Feb 2023 18:01:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50946 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231726AbjBVW57 (ORCPT
+        with ESMTP id S230000AbjBVXBX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Feb 2023 17:57:59 -0500
+        Wed, 22 Feb 2023 18:01:23 -0500
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5AE97CA28
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Feb 2023 14:57:58 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04035410AE;
+        Wed, 22 Feb 2023 15:01:22 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 06B5AB818CE
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Feb 2023 22:57:57 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 95AF7C433D2;
-        Wed, 22 Feb 2023 22:57:55 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id B3C46B818D1;
+        Wed, 22 Feb 2023 23:01:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CD3A3C433D2;
+        Wed, 22 Feb 2023 23:01:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1677106675;
-        bh=9tE/wgpXvogiaeLXJQodhfnLaFOmj/Lz3sBgGnYP3gY=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=OTt/hY67JW3Y64FbX8Vsh1Oh16R0atqvHWNRqKjLlNDtLyICywIPhdcxXCiphR4Im
-         V3ljGKWxyoaj+/x+4mwdtWpmrvRGmza2k0xUYJsGOFjuzc1MHjMKhpYPsM/YH6JUgn
-         +ms9yTGCIZgSkZSWuA2PJzCu3l3708szxdtGEyho0stvriNP/8gDeAgb567szZ9KuR
-         TZXgi01j0q+52aXI84409DY2/zidFmTE+Hr3kb784N2q2whip9GuD4IOJHFo+O2HDj
-         HTlR9VEwIzmwRN6IrtzvZCb7+A7/nFy7TDtHCnRDbHXuYI41G0daLWdfDu8zfkidoL
-         Y077uLFQx9nMw==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id 327C85C0C88; Wed, 22 Feb 2023 14:57:55 -0800 (PST)
-Date:   Wed, 22 Feb 2023 14:57:55 -0800
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     "Zhang, Qiang1" <qiang1.zhang@intel.com>
-Cc:     "dave@stgolabs.net" <dave@stgolabs.net>,
-        "josh@joshtriplett.org" <josh@joshtriplett.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] locktorture: Add raw_spinlock* torture tests for
- PREEMPT_RT kernels
-Message-ID: <20230222225755.GW2948950@paulmck-ThinkPad-P17-Gen-1>
-Reply-To: paulmck@kernel.org
-References: <20230215061035.1534950-1-qiang1.zhang@intel.com>
- <20230218193438.GE2948950@paulmck-ThinkPad-P17-Gen-1>
- <PH0PR11MB5880CD867814DFAAF8930E5BDAA79@PH0PR11MB5880.namprd11.prod.outlook.com>
+        s=k20201202; t=1677106879;
+        bh=5Epr+Sg2dMQsZpAgQsCxMuhd2oNEoAwQFrpqJFEYeHQ=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=MY985pim1F7QnE9UtW2aav5FRQV7YnpLQsq1byMYrO5o6NAx1vVPl1Bo7sVO3FkV2
+         gVUP681jbVZ1WGmp30SyrUMAFeyU4ZJ0zs1cTe8ROURO7erdAsgxNcEjTlB1dTfY5Y
+         sAX2oIWZcPXg9tpHOiY9K8gqg5C6YhSKBcd+FGTO4rodVCrVzU6arm6k6mrSfw6bWs
+         4FFSp9tCi1PIvmCjfS5+hIGOF+Xagwy9qCjy9oHKls/H3GjftrmikVfgiwPna/rSd1
+         aWO97sSRj1goxAGWjdVPjokhM92/S7+/HzNSmE6U1OUkPY7SaRSEBenf/DkOyR8q1t
+         6+DYDMaMbJl4g==
+Date:   Wed, 22 Feb 2023 23:01:15 +0000
+From:   Mark Brown <broonie@kernel.org>
+To:     Konrad Dybcio <konrad.dybcio@linaro.org>
+Cc:     Devi Priya <quic_devipriy@quicinc.com>, agross@kernel.org,
+        andersson@kernel.org, lgirdwood@gmail.com, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        quic_srichara@quicinc.com, quic_gokulsri@quicinc.com,
+        quic_sjaganat@quicinc.com, quic_kathirav@quicinc.com,
+        quic_arajkuma@quicinc.com, quic_anusha@quicinc.com,
+        quic_ipkumar@quicinc.com
+Subject: Re: [PATCH V2 4/6] regulator: qcom_smd: Add support to define the
+ bootup voltage
+Message-ID: <Y/aeu5ua7cY5cGON@sirena.org.uk>
+References: <20230217142030.16012-1-quic_devipriy@quicinc.com>
+ <20230217142030.16012-5-quic_devipriy@quicinc.com>
+ <907628d1-b88d-5ac6-ed9d-7f63e2875738@linaro.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="dRZIuVS8T/5W7hxa"
 Content-Disposition: inline
-In-Reply-To: <PH0PR11MB5880CD867814DFAAF8930E5BDAA79@PH0PR11MB5880.namprd11.prod.outlook.com>
+In-Reply-To: <907628d1-b88d-5ac6-ed9d-7f63e2875738@linaro.org>
+X-Cookie: Serving suggestion.
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -60,123 +64,56 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Feb 19, 2023 at 05:04:41AM +0000, Zhang, Qiang1 wrote:
-> 
-> >On Wed, Feb 15, 2023 at 02:10:35PM +0800, Zqiang wrote:
-> > For PREEMPT_RT kernel, the spin_lock, spin_lock_irq will converted
-> > to sleepable rt_spin_lock and the interrupt related suffix for
-> > spin_lock/unlock(_irq, irqsave/irqrestore) do not affect CPU's
-> > interrupt state. this commit therefore add raw_spin_lock torture
-> > tests, this is a strict spin lock implementation in RT kernels.
-> > 
-> > Signed-off-by: Zqiang <qiang1.zhang@intel.com>
-> >
-> >A nice addition!  Is this something you will be testing regularly?
-> >If not, should there be additional locktorture scenarios, perhaps prefixed
-> >by "RT-" to hint that they are not normally available?
-> >
-> >Or did you have some other plan for making use of these?
-> 
-> Hi Paul
-> 
-> Thanks for reply,  in fact, I want to enrich the test of locktorture, 
-> after all, under the PREEMPT_RT kernel, we lost the test of the
-> real spin lock. 
 
-Very well, how does the following look?
+--dRZIuVS8T/5W7hxa
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-							Thanx, Paul
+On Wed, Feb 22, 2023 at 11:11:42PM +0100, Konrad Dybcio wrote:
 
-------------------------------------------------------------------------
+> Thinking about it again, this seems like something that could be
+> generalized and introduced into regulator core.. Hardcoding this
+> will not end well.. Not to mention it'll affect all mp5496-using
+> boards that are already upstream.
 
-commit edc9d419ee8c22821ffd664466a5cf19208c3f02
-Author: Zqiang <qiang1.zhang@intel.com>
-Date:   Wed Feb 15 14:10:35 2023 +0800
+> WDYT about regulator-init-microvolts Mark?
 
-    locktorture: Add raw_spinlock* torture tests for PREEMPT_RT kernels
-    
-    In PREEMPT_RT kernels, both spin_lock() and spin_lock_irq() are converted
-    to sleepable rt_spin_lock().  This means that the interrupt related suffix
-    for spin_lock/unlock(_irq, irqsave/irqrestore) do not affect the CPU's
-    interrupt state. This commit therefore adds raw spin-lock torture tests.
-    This in turn permits pure spin locks to be tested in PREEMPT_RT kernels.
-    
-    Signed-off-by: Zqiang <qiang1.zhang@intel.com>
-    Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
+The overwhelming majority of devices that have variable voltages
+support readback, these Qualcomm firmware devices are pretty much
+unique in this regard.  We don't want a general property to set a
+specific voltage since normally we should be using the
+constraints and don't normally need to adjust things immediately
+since we can tell what the current voltage is.=20
 
-diff --git a/kernel/locking/locktorture.c b/kernel/locking/locktorture.c
-index 9425aff089365..ed8e5baafe49f 100644
---- a/kernel/locking/locktorture.c
-+++ b/kernel/locking/locktorture.c
-@@ -257,6 +257,61 @@ static struct lock_torture_ops spin_lock_irq_ops = {
- 	.name		= "spin_lock_irq"
- };
- 
-+#ifdef CONFIG_PREEMPT_RT
-+static DEFINE_RAW_SPINLOCK(torture_raw_spinlock);
-+
-+static int torture_raw_spin_lock_write_lock(int tid __maybe_unused)
-+__acquires(torture_raw_spinlock)
-+{
-+	raw_spin_lock(&torture_raw_spinlock);
-+	return 0;
-+}
-+
-+static void torture_raw_spin_lock_write_unlock(int tid __maybe_unused)
-+__releases(torture_raw_spinlock)
-+{
-+	raw_spin_unlock(&torture_raw_spinlock);
-+}
-+
-+static struct lock_torture_ops raw_spin_lock_ops = {
-+	.writelock	= torture_raw_spin_lock_write_lock,
-+	.write_delay	= torture_spin_lock_write_delay,
-+	.task_boost	= torture_rt_boost,
-+	.writeunlock	= torture_raw_spin_lock_write_unlock,
-+	.readlock	= NULL,
-+	.read_delay	= NULL,
-+	.readunlock	= NULL,
-+	.name		= "raw_spin_lock"
-+};
-+
-+static int torture_raw_spin_lock_write_lock_irq(int tid __maybe_unused)
-+__acquires(torture_raw_spinlock)
-+{
-+	unsigned long flags;
-+
-+	raw_spin_lock_irqsave(&torture_raw_spinlock, flags);
-+	cxt.cur_ops->flags = flags;
-+	return 0;
-+}
-+
-+static void torture_raw_spin_lock_write_unlock_irq(int tid __maybe_unused)
-+__releases(torture_raw_spinlock)
-+{
-+	raw_spin_unlock_irqrestore(&torture_raw_spinlock, cxt.cur_ops->flags);
-+}
-+
-+static struct lock_torture_ops raw_spin_lock_irq_ops = {
-+	.writelock	= torture_raw_spin_lock_write_lock_irq,
-+	.write_delay	= torture_spin_lock_write_delay,
-+	.task_boost	= torture_rt_boost,
-+	.writeunlock	= torture_raw_spin_lock_write_unlock_irq,
-+	.readlock	= NULL,
-+	.read_delay	= NULL,
-+	.readunlock	= NULL,
-+	.name		= "raw_spin_lock_irq"
-+};
-+#endif // #ifdef CONFIG_PREEMPT_RT
-+
- static DEFINE_RWLOCK(torture_rwlock);
- 
- static int torture_rwlock_write_lock(int tid __maybe_unused)
-@@ -1017,6 +1072,9 @@ static int __init lock_torture_init(void)
- 	static struct lock_torture_ops *torture_ops[] = {
- 		&lock_busted_ops,
- 		&spin_lock_ops, &spin_lock_irq_ops,
-+#ifdef CONFIG_PREEMPT_RT
-+		&raw_spin_lock_ops, &raw_spin_lock_irq_ops,
-+#endif // #ifdef CONFIG_PREEMPT_RT
- 		&rw_lock_ops, &rw_lock_irq_ops,
- 		&mutex_lock_ops,
- 		&ww_mutex_lock_ops,
+This is pretty much just going to be a device specific bodge,
+ideally something that does know what the voltage is would be
+able to tell us at runtime but if that's not possible then
+there's no good options.  If the initial voltage might vary based
+on board then a device specific DT property might be less
+terrible, if it's determined by the regulator the current code
+seems fine.  Or just leave the current behavour, if the
+constraints are accurate then hopefully a temporary dip in
+voltage is just inelegant rather than an issue.  Indeed the
+current behaviour might well save power if you've got a voltage
+range configured and nothing actually ever gets round to setting
+the voltage (which is depressingly common, people seem keen on
+setting voltage ranges even when the voltage is never varied in
+practice).
+
+--dRZIuVS8T/5W7hxa
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmP2nrsACgkQJNaLcl1U
+h9BSYAgAg7R+LoNCsEJBpg9GBF0QWNVI+uDSXvbYm2PlkJChzl7FRWdyOCaRBrA4
+xXb6lqs5PxU3aNBvpIFeSxfsLgb1zvjLPA+xSIUVvn/nYrijd58CgU9mp3+iCyzs
+2+O+WPJZuZaNcc3FzS6t9PxPVRg0uYby6H0BJ6ZdRe0GgNhznx2tq1M+Em517w90
+u8eiSfdQEfbE0woSFIGTH+scvTmWJAfcMRU3m1nEJcjd2PBL/TX7P4QciGEsGT66
+wAPeb8uGUKWDTqZsJNN2i3/S5q/TRRfTo7piotQVrJPS6nnJvAQL17mz3NjAf9bP
+7Ig1FRDtI4GJOBiBkwOwOMnlX25AMw==
+=zYTX
+-----END PGP SIGNATURE-----
+
+--dRZIuVS8T/5W7hxa--
