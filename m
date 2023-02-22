@@ -2,184 +2,234 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1AD2069F778
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Feb 2023 16:14:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DD5B569F77D
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Feb 2023 16:14:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231236AbjBVPOP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Feb 2023 10:14:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32938 "EHLO
+        id S232385AbjBVPOl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Feb 2023 10:14:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33570 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231653AbjBVPON (ORCPT
+        with ESMTP id S232375AbjBVPOj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Feb 2023 10:14:13 -0500
-Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDD5125E34;
-        Wed, 22 Feb 2023 07:14:02 -0800 (PST)
-Received: by mail-wm1-x32c.google.com with SMTP id l2-20020a05600c1d0200b003e1f6dff952so6596617wms.1;
-        Wed, 22 Feb 2023 07:14:02 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:message-id:subject:cc
-         :to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=HkaxeYhyJCWKI+iCl7pvg7H2rt01JeowCIL7n4FAO0Q=;
-        b=AguK+BWlwz3zrXlQyvM2aiRghQwbl5dyMcNVkMjmecRjnOHdoL/QIXr8OoqFTLfalY
-         1VYfvve8fefZrlGO0rouPRQvXyLe6W/NjA0tw+n4/mzrLrm5lNfBj6x2ar8wQ+A3OMHH
-         XOcSNMryFp336zqTbVWuFoGBX6DzK93mkUmUW37CUiVLbYP7uyAdo+03E/J6bblXQECk
-         oH4E/x7eDThJkimkOtww0d6EpQcxg/MiBxVq2hxMB1/M1hO3pRctDinIuYPlIuskNPTd
-         cNZdX5Y75u+w+UfexlvZv64fxvshX4zwFliJWpxXVmRaqgC0wQD++h7g7TMJvPw8UbUk
-         EPfA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:message-id:subject:cc
-         :to:from:date:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=HkaxeYhyJCWKI+iCl7pvg7H2rt01JeowCIL7n4FAO0Q=;
-        b=GFL+d6J2tQGM6K036nrKc9i25EiGumTKgxkIe1A+LAxipP4u1LS5apgL6VB2QX6WGZ
-         p0E3gkGMpiX3aWco4Ucd4GXD7X1ETl28O2cqRNriIyrKDjY64mGdDG5QJLKQacBJStk+
-         5dPbpNv8j4rv0XmziFPEwJNj3ScvAOhfzoNLVUN2iPXoV8t9+K/eNdFr8NtyYJxyLDSp
-         U85qAIb2baArLr5N6EEKfHMi42kZjZ49ihm+zXx6Qm4+98yN6CGXjHOVztv5mXPTfANr
-         3tzhFAG7MWukp1ekx5she9PScjvNBEGiM8bC7D7CseE2Ky1phLbmttyNIzfFfJoAKGbq
-         KZ4g==
-X-Gm-Message-State: AO0yUKWeTurtx4zBBFWj1i/gI5e69W9iXLiWlqh1fDarGZ9HIoy0Aj8G
-        ooGBCFd8YN1Z6HRn9qrrD7o=
-X-Google-Smtp-Source: AK7set+ltF+ZntzbSmcyHqL7HMnw2q2Vf54UvAMiQB932c0IKSyLIFdRxk3wK9yrEfB8UMHAmDWDaQ==
-X-Received: by 2002:a05:600c:755:b0:3dc:59ee:7978 with SMTP id j21-20020a05600c075500b003dc59ee7978mr6944055wmn.38.1677078841354;
-        Wed, 22 Feb 2023 07:14:01 -0800 (PST)
-Received: from localhost ([102.36.222.112])
-        by smtp.gmail.com with ESMTPSA id j7-20020a05600c42c700b003db012d49b7sm2630173wme.2.2023.02.22.07.13.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 22 Feb 2023 07:14:00 -0800 (PST)
-Date:   Wed, 22 Feb 2023 18:13:55 +0300
-From:   Dan Carpenter <error27@gmail.com>
-To:     oe-kbuild@lists.linux.dev, Kemeng Shi <shikemeng@huaweicloud.com>,
-        tytso@mit.edu, adilger.kernel@dilger.ca
-Cc:     lkp@intel.com, oe-kbuild-all@lists.linux.dev,
-        linux-ext4@vger.kernel.org, linux-kernel@vger.kernel.org,
-        shikemeng@huaweicloud.com
-Subject: Re: [PATCH 7/7] ext4: improve inode table blocks counting in
- ext4_num_overhead_clusters
-Message-ID: <202302222219.u328sqfs-lkp@intel.com>
+        Wed, 22 Feb 2023 10:14:39 -0500
+Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2081.outbound.protection.outlook.com [40.107.220.81])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7591020D25;
+        Wed, 22 Feb 2023 07:14:34 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=WikdilMnbFC0i+1veefBKThOn0M4vaArzgvgT0r/mEawI2ydYVTzM1cxg97yBk+h46QrHdYZ73RBZfuNuuCfQTvetNyf6SUZe93FxSCHG/IdBWYzeVJScAaxgiT5REzPnB41wS0bLOSAOIN1n6rgcMR2Ry4X5+cVTvNo2fQ86kr/it+6kZib75bGEPhpImlUnnZAm6lOy26in4JzNb9cNo7Zuoq5JhdRm4ziaiLHOmOn49CIxTg8K4KcGQyeCFWTq1BWfJC4ALt68OK9BqnJV6w9sQ+XqkIqOk442EQvyqMkcbIo3N28Ju+jhxjn3a82TRxxVEsMUEWK/AxaeG4lOg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=Jvapx6aY8UVoU2bouqBbKh0o9CmfLYVTQ/xgjDEQzjo=;
+ b=D7rATxpPa4pkeVFd16Yg8ooBD68lP7fWBjjI9JDzmWbxwWdjVY0pZlu01PwiFrv1fhAH9YwuViuaSUmEc+OZwh0Ii1EIiPIwfRWX4EkUsNNjo7OhCyXYzodCFeAgrx/oY8kLs009GZDo+DRNT9g863fQb+WHVHiMIP/2gG5FzpcbEQ1MmwGmMGVMa2w7OV/w+uNyagCLdTxksaCaqrJeTmDWtoIjpP3urbodjbXDhbUh8hBVDhmNspO/zWsi6KuTzZcjc6dvBlxIY+HwxyrBT8vWVxolV5RnD4LGfjpe+vWtV629VwGRiB0deauLM9YTKtdKzYOnWa9uReoNhImi3g==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=Jvapx6aY8UVoU2bouqBbKh0o9CmfLYVTQ/xgjDEQzjo=;
+ b=22Jn9KuV7R8ebNcmDfTpSM55XxmCDc2xJo1nhiqeG+OLEw4h1zO2Cuev9L+8ETX5gosxJlgTOoKBW0XnVz8yPM4I0+4Qtypb9ndMtaubPaPmfrkTH4HOUfwm2MIuUp/T9xTYTch2QlPeOSGBSYzocRG3iiBY5Aq8HnPyv6WltfM=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from BN8PR12MB3587.namprd12.prod.outlook.com (2603:10b6:408:43::13)
+ by CH0PR12MB5234.namprd12.prod.outlook.com (2603:10b6:610:d1::24) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6134.19; Wed, 22 Feb
+ 2023 15:14:32 +0000
+Received: from BN8PR12MB3587.namprd12.prod.outlook.com
+ ([fe80::2e4f:4041:28be:ba7a]) by BN8PR12MB3587.namprd12.prod.outlook.com
+ ([fe80::2e4f:4041:28be:ba7a%6]) with mapi id 15.20.6134.019; Wed, 22 Feb 2023
+ 15:14:31 +0000
+Message-ID: <29ea3705-5634-c204-c1da-d356b6dfbafc@amd.com>
+Date:   Wed, 22 Feb 2023 16:14:25 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH drm-next v2 05/16] drm: manager to keep track of GPUs VA
+ mappings
+Content-Language: en-US
+To:     Danilo Krummrich <dakr@redhat.com>
+Cc:     airlied@gmail.com, daniel@ffwll.ch, tzimmermann@suse.de,
+        mripard@kernel.org, corbet@lwn.net, bskeggs@redhat.com,
+        Liam.Howlett@oracle.com, matthew.brost@intel.com,
+        boris.brezillon@collabora.com, alexdeucher@gmail.com,
+        ogabbay@kernel.org, bagasdotme@gmail.com, willy@infradead.org,
+        jason@jlekstrand.net, linux-doc@vger.kernel.org,
+        nouveau@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, linux-mm@kvack.org,
+        Dave Airlie <airlied@redhat.com>
+References: <20230217134422.14116-1-dakr@redhat.com>
+ <20230217134422.14116-6-dakr@redhat.com>
+ <70ba382f-1559-289a-4922-ca9c371aaf59@amd.com>
+ <cc8eeaf4-31e7-98e4-a712-012fc604e985@redhat.com>
+From:   =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>
+In-Reply-To: <cc8eeaf4-31e7-98e4-a712-012fc604e985@redhat.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: FR0P281CA0008.DEUP281.PROD.OUTLOOK.COM
+ (2603:10a6:d10:15::13) To BN8PR12MB3587.namprd12.prod.outlook.com
+ (2603:10b6:408:43::13)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230221115919.1918161-8-shikemeng@huaweicloud.com>
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        TVD_PH_BODY_ACCOUNTS_PRE autolearn=ham autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BN8PR12MB3587:EE_|CH0PR12MB5234:EE_
+X-MS-Office365-Filtering-Correlation-Id: 5d4f2792-b799-4fa6-f3c0-08db14e77fa5
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: /PDRqFgsSaOP77DaCNTPuforgsZt+IcXNoTeNr5JxDsb48bT9nEAy4MYeLm42PFGxqC3gHJKgTWWIK+HY2C+2XrgUwdozEP+YbDE8/Uku+KQAShfjKfaln102sIO82JQAwKRRbpcOtcPQzxI+naVDVmXP0VdGJC5NYFrPnHRFZlch3DkaGsdfvfzmlJ73xfWHVUmazduAsCXeXzVpMIUnlpu9XJAufc7YkRVzg86/yTtg2xTbgADOYcsCyyeXxz1uflFv4uVpSTG+hCxirGyb7Hzur17j6+ig3gDJO1TTFLv4zqjWet9CcOrKUAaA2a6ZpbPpruVObj5QyII2/xNY2HrtsF2aE/oynyiJ0rBqrKtWYKSHW9NOnvYrsUalFrvHqaVTHhFM7c0g9hrtopYlc/eU6IcB0qQe+NUMQ8HDrOqAIyimkkZAPFKjOM6nUw8jfatgFZkKbUy4559c7Lg7R4AAnb3lgWQTsCfbPo3IECrI3ua9DBtBMr6F3NPjjfGzyFnJf+Z8mPNYHTrMXUsxjvHaMj+CSXz+S3uYBCDY3D4wPbqqlRDp41BeklkM8rUgvzWOZVydQ73tZxZJE2p2Splfgj/784heUnp4kiKB1znT+dyzM0tvYG1QwXLaDC/b1JBpzl/FvEhYcDdA83Z/36wKB3jmjnSXX4e25gqi00k/htvGDsTOAUCvepx6B9KyjdtPqCtQG9FGQVj2Eij8iSbPEVqVTA8j/wsD0nSXAU=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN8PR12MB3587.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(136003)(376002)(39860400002)(396003)(346002)(366004)(451199018)(31696002)(86362001)(36756003)(6512007)(66476007)(66946007)(53546011)(6916009)(4326008)(8936002)(66556008)(186003)(41300700001)(2616005)(316002)(38100700002)(6666004)(6506007)(6486002)(478600001)(2906002)(8676002)(66574015)(83380400001)(7416002)(5660300002)(31686004)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?UU12bjNBT3V1aVdQS3pnblR0RkJDMFIxd2F4T3o1dElTUjJTcjREcHRFN2or?=
+ =?utf-8?B?UWtRVUlXdXNWM1MwRXlSSWV0NXlNeU9jM3RjOXlTYlZrMjlHNWMvRlNxZURx?=
+ =?utf-8?B?WWdET0w2cHNjdTBvU2dFMlBHTGt3NkcrZlh6QXZUYVBBalgyK2VCUlJhOUlE?=
+ =?utf-8?B?bmZTUWdrVVFDSlNJSUlHb0lFNG1qOWxhNUhvL0hhZENaUTY4RTVHNHVjRnJ5?=
+ =?utf-8?B?cUVVUVB0RnFpaFFFbkdFMVl4Z253dER4dkFMWGRTM2c1SU5OWGxTbXE0ejI3?=
+ =?utf-8?B?WXl4Um96d25GRFdDK29JR2c3bjRyWUlaN3NuMUtvZ2drOGVzcVdsSjZVQkpO?=
+ =?utf-8?B?UUJJMjg5ZVFUbWRDNG1PK3U5dVpTOC92UGJvaTgvY01oL3pDMG01RHJraTRm?=
+ =?utf-8?B?d1NrYy8yMkxRa2xSeFgrMnNyM2RJWmlveVpwbkIyMkxqR21BdWNBdGtPdWxV?=
+ =?utf-8?B?K2ZBYk41WDA3VjkyZGY3QW90OGUyb2VsTUNCLzVTc3Bua2dVeFZ4VW5CcmFJ?=
+ =?utf-8?B?R3lGM28rQU5BdDFid2psMkZwbW9haFFKc0VTZis4Q2ZscmRDRXIzMzE2Q0hH?=
+ =?utf-8?B?dUNXL3JyM0Q1SG1sZkpUbEgvK0hzdHF5S0tpWTNjRTE4bWFnOFNVbEtaREE0?=
+ =?utf-8?B?SEs4V0xUTjBBb2EwaUQzOG1LUXhTbkFpM1ptMDdNUllHZWVHdlVOWXNLa0Fj?=
+ =?utf-8?B?Wkd5OEY1N0JjdVZDRis3UGpiTENHbjFEN3dlQUp3b2FSUGN5aVZZdCtPL0hu?=
+ =?utf-8?B?bm45UGhkS1YvRXArZFh6eEw4RENGOFQzK2p4MXJ2RDMxZEg3amFCNDkwNWZ5?=
+ =?utf-8?B?eGN1UWpRR084dmx4WU94U1ppblo3bVpZVmRDUHJHUURWcHgyUVZjMFk2Zkpz?=
+ =?utf-8?B?VVpUKzZScGpwQVE0K242K0I4VzJ5dnBQV3VvVG1ubFdSc2IxQmw4RVJPVU1m?=
+ =?utf-8?B?c2xBQ2lSelZOVVMxM0RHd001MGlRaWd1cFVtRStLcVRCb2VLVHBNbWVNQUM0?=
+ =?utf-8?B?TFd5OVdzMUVVUmQvZ1J6a2JQVDg3MVJDRHAyaVR6Ymd6ZE9iTnZUb2EwRkhO?=
+ =?utf-8?B?dlQvd2hpdTRTR3RReko3N0RmTWRCZE9tTnBMdDVYNWhVVzNBVDQ5OGtad200?=
+ =?utf-8?B?M2Z4VEdhV1hpZWNBa2JoeWVyWS9SMnZFSjdMS1VrSFNUdC9XUms1aFZYRDRT?=
+ =?utf-8?B?eUllOERhWHpUbjFsb2l3SlRrSmdGMDNzMFZoN0szSzEzYTZ1Q0lWMHd6azZ0?=
+ =?utf-8?B?M1VlK3ZFR2NGSDk0OTYwbXM5SnhDd2IrWTV0R3d0TGpXaGxydDhuZk9UNWZu?=
+ =?utf-8?B?djBGSkJkQlZpUmJZa2loWHJlMkh1UnZLOE1oa3RYMEI4bUFEWXQ2bXVXbGtm?=
+ =?utf-8?B?OU44UUZhNFk4VzU3YjFFaldpMDZLYXIyblQxejg1clJTaXd4cTQ5RW1NS3R0?=
+ =?utf-8?B?MjJ5Uld0R0grdG9udWhYODNkR2JpWkFHMFZxZnArSXlPM3lWZWlCdDAvc2tV?=
+ =?utf-8?B?MUNRQlRueXRuTVVGby9aY0tIY3UyZU5WdEhLcE5VT29LM1FxYUEzQkxaczcv?=
+ =?utf-8?B?bjAwSzFCUlRieVFzc2RyOXFpY2o0TDNPVHNVSGQvR29zdS9sdnJtR1JtR0gy?=
+ =?utf-8?B?MkZqM29DQ2F2Nmh5VjNvS2ZnT0JQSVAzZzZSeUh3S2RDb1E0OXVURHk2MWpZ?=
+ =?utf-8?B?NkVWdGFCa1JOVSt5MVpLa01jWHBGRzA3dnZPUE9ocm5pL3lGUlpIbjlsQnln?=
+ =?utf-8?B?UzNPTHo4N0o3L0R1SW5QWEkwMGdNZlVMeHFGaTlQa0I2dGxiMVZBVlhtT3N1?=
+ =?utf-8?B?ajRteC9tV21wK1hndzBOcTF3NjZaMDJRemludURNMHoxd3pNVEJ5OU8wbEov?=
+ =?utf-8?B?QlZTVXhKVWlyS2VBS3Y4aDZMdlpEd3QrZThnajNyS3FZSDgzcWI4OXg1L01u?=
+ =?utf-8?B?bjNGYm55T1pBKzk4S1hRK0ludWgrZzNDa2luRndOa1pGSlBTRndoa3N0MVIv?=
+ =?utf-8?B?YmVqWDVaMGFBSDQ4NE1CL0tLdnBBa0RGZ0g4dy9vVDM0bFk4K095NDRXMS9s?=
+ =?utf-8?B?bXFPTXlET3N0Wnk5aGVTay9GOE4vN2dHSHBETHJHM3RXQy9NVGZPelgyelBU?=
+ =?utf-8?B?NllDdjNIMTZjdEErOU9KYkVDSlI5bFhtSUtkSDh0TCtzYnA0emdxbnU0SDh3?=
+ =?utf-8?Q?gMQbxXmrtwGLRmKz7P87SEgTr489F7dLMirW2Eqerpmt?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 5d4f2792-b799-4fa6-f3c0-08db14e77fa5
+X-MS-Exchange-CrossTenant-AuthSource: BN8PR12MB3587.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 22 Feb 2023 15:14:31.6671
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 345VGiA10iftcGENcMj4XLr/sZVpsA815b/MkB9eRSUSnimiHMXwZSw9t3cVLEi4
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH0PR12MB5234
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Kemeng,
+Am 22.02.23 um 16:07 schrieb Danilo Krummrich:
+> On 2/22/23 11:25, Christian König wrote:
+>> Am 17.02.23 um 14:44 schrieb Danilo Krummrich:
+>
+> <snip>
+>
+>>> +/**
+>>> + * DOC: Overview
+>>> + *
+>>> + * The DRM GPU VA Manager, represented by struct drm_gpuva_manager 
+>>> keeps track
+>>> + * of a GPU's virtual address (VA) space and manages the 
+>>> corresponding virtual
+>>> + * mappings represented by &drm_gpuva objects. It also keeps track 
+>>> of the
+>>> + * mapping's backing &drm_gem_object buffers.
+>>> + *
+>>> + * &drm_gem_object buffers maintain a list (and a corresponding 
+>>> list lock) of
+>>> + * &drm_gpuva objects representing all existent GPU VA mappings 
+>>> using this
+>>> + * &drm_gem_object as backing buffer.
+>>> + *
+>>> + * If the &DRM_GPUVA_MANAGER_REGIONS feature is enabled, a GPU VA 
+>>> mapping can
+>>> + * only be created within a previously allocated &drm_gpuva_region, 
+>>> which
+>>> + * represents a reserved portion of the GPU VA space. GPU VA 
+>>> mappings are not
+>>> + * allowed to span over a &drm_gpuva_region's boundary.
+>>> + *
+>>> + * GPU VA regions can also be flagged as sparse, which allows 
+>>> drivers to create
+>>> + * sparse mappings for a whole GPU VA region in order to support 
+>>> Vulkan
+>>> + * 'Sparse Resources'.
+>>
+>> Well since we have now found that there is absolutely no technical 
+>> reason for having those regions could we please drop them?
+>
+> I disagree this was the outcome of our previous discussion.
+>
+> In nouveau I still need them to track the separate sparse page tables 
+> and, as you confirmed previously, Nvidia cards are not the only cards 
+> supporting this feature.
+>
+> The second reason is that with regions we can avoid merging between 
+> buffers, which saves some effort. However, I agree that this argument 
+> by itself probably doesn't hold too much, since you've pointed out in 
+> a previous mail that:
+>
+> <cite>
+> 1) If we merge and decide to only do that inside certain boundaries 
+> then those boundaries needs to be provided and checked against. This 
+> burns quite some CPU cycles
+>
+> 2) If we just merge what we can we might have extra page table updates 
+> which cost time and could result in undesired side effects.
+>
+> 3) If we don't merge at all we have additional housekeeping for the 
+> mappings and maybe hw restrictions.
+> </cite>
+>
+> However, if a driver uses regions to track its separate sparse page 
+> tables anyway it gets 1) for free, which is a nice synergy.
+>
+> I totally agree that regions aren't for everyone though. Hence, I made 
+> them an optional feature and by default regions are disabled. In order 
+> to use them drm_gpuva_manager_init() must be called with the 
+> DRM_GPUVA_MANAGER_REGIONS feature flag.
+>
+> I really would not want to open code regions or have two GPUVA manager 
+> instances in nouveau to track sparse page tables. That would be really 
+> messy, hence I hope we can agree on this to be an optional feature.
 
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+I absolutely don't think that this is a good idea then. This separate 
+handling of sparse page tables is completely Nouveau specific.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Kemeng-Shi/ext4-properly-handle-error-of-ext4_init_block_bitmap-in-ext4_read_block_bitmap_nowait/20230221-115830
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/tytso/ext4.git dev
-patch link:    https://lore.kernel.org/r/20230221115919.1918161-8-shikemeng%40huaweicloud.com
-patch subject: [PATCH 7/7] ext4: improve inode table blocks counting in ext4_num_overhead_clusters
-config: riscv-randconfig-m031-20230219 (https://download.01.org/0day-ci/archive/20230222/202302222219.u328sqfs-lkp@intel.com/config)
-compiler: riscv32-linux-gcc (GCC) 12.1.0
+Even when it's optional feature mixing this into the common handling is 
+exactly what I pointed out as not properly separating between hardware 
+specific and hardware agnostic functionality.
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Reported-by: Dan Carpenter <error27@gmail.com>
-| Link: https://lore.kernel.org/r/202302222219.u328sqfs-lkp@intel.com/
+This is exactly the problem we ran into with TTM as well and I've spend 
+a massive amount of time to clean that up again.
 
-New smatch warnings:
-fs/ext4/balloc.c:153 ext4_num_overhead_clusters() error: uninitialized symbol 'block_cluster'.
+Regards,
+Christian.
 
-vim +/block_cluster +153 fs/ext4/balloc.c
-
-c197855ea14175 Stephen Hemminger 2014-05-12   87  static unsigned ext4_num_overhead_clusters(struct super_block *sb,
-e187c6588d6ef3 Theodore Ts'o     2009-02-06   88  					   ext4_group_t block_group,
-e187c6588d6ef3 Theodore Ts'o     2009-02-06   89  					   struct ext4_group_desc *gdp)
-0bf7e8379ce7e0 Jose R. Santos    2008-06-03   90  {
-2b59a2fd93873a Kemeng Shi        2023-02-21   91  	unsigned base_clusters, num_clusters;
-2b59a2fd93873a Kemeng Shi        2023-02-21   92  	int block_cluster, inode_cluster;
-2b59a2fd93873a Kemeng Shi        2023-02-21   93  	int itbl_cluster_start = -1, itbl_cluster_end = -1;
-d5b8f31007a937 Theodore Ts'o     2011-09-09   94  	ext4_fsblk_t start = ext4_group_first_block_no(sb, block_group);
-2b59a2fd93873a Kemeng Shi        2023-02-21   95  	ext4_fsblk_t end = start + EXT4_BLOCKS_PER_GROUP(sb) - 1;
-2b59a2fd93873a Kemeng Shi        2023-02-21   96  	ext4_fsblk_t itbl_blk_start, itbl_blk_end;
-0bf7e8379ce7e0 Jose R. Santos    2008-06-03   97  	struct ext4_sb_info *sbi = EXT4_SB(sb);
-0bf7e8379ce7e0 Jose R. Santos    2008-06-03   98  
-d5b8f31007a937 Theodore Ts'o     2011-09-09   99  	/* This is the number of clusters used by the superblock,
-d5b8f31007a937 Theodore Ts'o     2011-09-09  100  	 * block group descriptors, and reserved block group
-d5b8f31007a937 Theodore Ts'o     2011-09-09  101  	 * descriptor blocks */
-2b59a2fd93873a Kemeng Shi        2023-02-21  102  	base_clusters = ext4_num_base_meta_clusters(sb, block_group);
-2b59a2fd93873a Kemeng Shi        2023-02-21  103  	num_clusters = base_clusters;
-2b59a2fd93873a Kemeng Shi        2023-02-21  104  
-2b59a2fd93873a Kemeng Shi        2023-02-21  105  	/*
-2b59a2fd93873a Kemeng Shi        2023-02-21  106  	 * Account and record inode table clusters if any cluster
-2b59a2fd93873a Kemeng Shi        2023-02-21  107  	 * is in the block group, or inode table cluster range is
-2b59a2fd93873a Kemeng Shi        2023-02-21  108  	 * [-1, -1] and won't overlap with block/inode bitmap cluster
-2b59a2fd93873a Kemeng Shi        2023-02-21  109  	 * accounted below.
-2b59a2fd93873a Kemeng Shi        2023-02-21  110  	 */
-2b59a2fd93873a Kemeng Shi        2023-02-21  111  	itbl_blk_start = ext4_inode_table(sb, gdp);
-2b59a2fd93873a Kemeng Shi        2023-02-21  112  	itbl_blk_end = itbl_blk_start + sbi->s_itb_per_group - 1;
-2b59a2fd93873a Kemeng Shi        2023-02-21  113  	if (itbl_blk_start <= end && itbl_blk_end >= start) {
-2b59a2fd93873a Kemeng Shi        2023-02-21  114  		itbl_blk_start = itbl_blk_start >= start ?
-2b59a2fd93873a Kemeng Shi        2023-02-21  115  			itbl_blk_start : start;
-2b59a2fd93873a Kemeng Shi        2023-02-21  116  		itbl_blk_end = itbl_blk_end <= end ?
-2b59a2fd93873a Kemeng Shi        2023-02-21  117  			itbl_blk_end : end;
-2b59a2fd93873a Kemeng Shi        2023-02-21  118  
-2b59a2fd93873a Kemeng Shi        2023-02-21  119  		itbl_cluster_start = EXT4_B2C(sbi, itbl_blk_start - start);
-2b59a2fd93873a Kemeng Shi        2023-02-21  120  		itbl_cluster_end = EXT4_B2C(sbi, itbl_blk_end - start);
-2b59a2fd93873a Kemeng Shi        2023-02-21  121  
-2b59a2fd93873a Kemeng Shi        2023-02-21  122  		num_clusters += itbl_cluster_end - itbl_cluster_start + 1;
-2b59a2fd93873a Kemeng Shi        2023-02-21  123  		/* check if border cluster is overlapped */
-2b59a2fd93873a Kemeng Shi        2023-02-21  124  		if (itbl_cluster_start == base_clusters - 1)
-2b59a2fd93873a Kemeng Shi        2023-02-21  125  			num_clusters--;
-2b59a2fd93873a Kemeng Shi        2023-02-21  126  	}
-0bf7e8379ce7e0 Jose R. Santos    2008-06-03  127  
-d5b8f31007a937 Theodore Ts'o     2011-09-09  128  	/*
-2b59a2fd93873a Kemeng Shi        2023-02-21  129  	 * For the allocation bitmaps, we first need to check to see
-2b59a2fd93873a Kemeng Shi        2023-02-21  130  	 * if the block is in the block group.  If it is, then check
-2b59a2fd93873a Kemeng Shi        2023-02-21  131  	 * to see if the cluster is already accounted for in the clusters
-2b59a2fd93873a Kemeng Shi        2023-02-21  132  	 * used for the base metadata cluster and inode tables cluster.
-d5b8f31007a937 Theodore Ts'o     2011-09-09  133  	 * Normally all of these blocks are contiguous, so the special
-d5b8f31007a937 Theodore Ts'o     2011-09-09  134  	 * case handling shouldn't be necessary except for *very*
-d5b8f31007a937 Theodore Ts'o     2011-09-09  135  	 * unusual file system layouts.
-d5b8f31007a937 Theodore Ts'o     2011-09-09  136  	 */
-d5b8f31007a937 Theodore Ts'o     2011-09-09  137  	if (ext4_block_in_group(sb, ext4_block_bitmap(sb, gdp), block_group)) {
-b0dd6b70f0fda1 Theodore Ts'o     2012-06-07  138  		block_cluster = EXT4_B2C(sbi,
-b0dd6b70f0fda1 Theodore Ts'o     2012-06-07  139  					 ext4_block_bitmap(sb, gdp) - start);
-2b59a2fd93873a Kemeng Shi        2023-02-21  140  		if (block_cluster >= base_clusters &&
-2b59a2fd93873a Kemeng Shi        2023-02-21  141  		    (block_cluster < itbl_cluster_start ||
-2b59a2fd93873a Kemeng Shi        2023-02-21  142  		    block_cluster > itbl_cluster_end))
-d5b8f31007a937 Theodore Ts'o     2011-09-09  143  			num_clusters++;
-d5b8f31007a937 Theodore Ts'o     2011-09-09  144  	}
-d5b8f31007a937 Theodore Ts'o     2011-09-09  145  
-d5b8f31007a937 Theodore Ts'o     2011-09-09  146  	if (ext4_block_in_group(sb, ext4_inode_bitmap(sb, gdp), block_group)) {
-
-These two conditions are exactly the same so I don't see why they can't
-be combined into one condition.  I have read the comment, but I guess I
-don't understand ext4 well enough to really understand it.
-
-d5b8f31007a937 Theodore Ts'o     2011-09-09  147  		inode_cluster = EXT4_B2C(sbi,
-b0dd6b70f0fda1 Theodore Ts'o     2012-06-07  148  					 ext4_inode_bitmap(sb, gdp) - start);
-2b59a2fd93873a Kemeng Shi        2023-02-21  149  		/*
-2b59a2fd93873a Kemeng Shi        2023-02-21  150  		 * Additional check if inode bitmap is in just accounted
-2b59a2fd93873a Kemeng Shi        2023-02-21  151  		 * block_cluster
-2b59a2fd93873a Kemeng Shi        2023-02-21  152  		 */
-2b59a2fd93873a Kemeng Shi        2023-02-21 @153  		if (inode_cluster != block_cluster &&
-
-So this seems like a false positive to me.  But the code is puzzling for
-a human or for a static checker.
-
-2b59a2fd93873a Kemeng Shi        2023-02-21  154  		    inode_cluster >= base_clusters &&
-2b59a2fd93873a Kemeng Shi        2023-02-21  155  		    (inode_cluster < itbl_cluster_start ||
-2b59a2fd93873a Kemeng Shi        2023-02-21  156  		    inode_cluster > itbl_cluster_end))
-d5b8f31007a937 Theodore Ts'o     2011-09-09  157  			num_clusters++;
-0bf7e8379ce7e0 Jose R. Santos    2008-06-03  158  	}
-d5b8f31007a937 Theodore Ts'o     2011-09-09  159  
-d5b8f31007a937 Theodore Ts'o     2011-09-09  160  	return num_clusters;
-0bf7e8379ce7e0 Jose R. Santos    2008-06-03  161  }
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+>
+>>
+>> I don't really see a need for them any more.
+>>
+>> Regards,
+>> Christian.
+>>
+>
 
