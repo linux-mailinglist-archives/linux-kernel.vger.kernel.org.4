@@ -2,210 +2,209 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D177869F818
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Feb 2023 16:34:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BC29269F7CE
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Feb 2023 16:30:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232588AbjBVPe1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Feb 2023 10:34:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53970 "EHLO
+        id S232480AbjBVPax (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Feb 2023 10:30:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49200 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232573AbjBVPeW (ORCPT
+        with ESMTP id S231272AbjBVPav (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Feb 2023 10:34:22 -0500
-Received: from mail-oa1-x34.google.com (mail-oa1-x34.google.com [IPv6:2001:4860:4864:20::34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B240E34308
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Feb 2023 07:33:49 -0800 (PST)
-Received: by mail-oa1-x34.google.com with SMTP id 586e51a60fabf-172094e10e3so10170125fac.10
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Feb 2023 07:33:49 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=1nu6rCRx8BzPVvb2CWdzEElkPQah8+J88HELeld+YLA=;
-        b=Wphc6qJobqFKX/R9hxLWSRqUYLqCIkBJ9BNT3j7BIJPCaqPpD5iqF5q7gBYESFDmuR
-         P4KfGycReyfa77pDknmdWebo6pO0H7/1JnxEDMRkVyAPcoRzQeVfulTcTdKnSVkngPiD
-         m0fUIhEw1wgJ0kPtkA7ciybkV8eLzNr06i+6SMV/vfhkGh8bvq2ScmkXqtinejdaywaa
-         Exr121oKnAUI1x74ead9IgiWgAz8wXpubPB41OqBPLCWW6yxqb3qG/2J+1RK/Cd8hDEY
-         D1w2Wow+hBkgqI5vsVbuC+ee/gAET+FqqAM6SFOl0Gl4EMDbQfQB3l/4POydv0aeQW5i
-         utdA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=1nu6rCRx8BzPVvb2CWdzEElkPQah8+J88HELeld+YLA=;
-        b=alYa/4am0BEQPbj3mjPcHtT3PTkC/nySsIp53Gu/EDWpss+9WkfNhAAku2uZyyjRiN
-         CKqDn6R7yI4fas5HTx0Lsbv3LCIKraQ0cTjSSu6XhN8tZ38HI7XhSCevCEUUaHN6kclw
-         CykxYlMs5DNXJQTzlNZh0zeTYXT/5+ucPU8hfDt9F4obQ+vSGcHYIJcKiiBj6p6MIjcw
-         2lDnZAV7IhhQc/a+qZCEkK8Go8kODzQqQqKqiP4lyTbrAwn93gyoM2LdLOIXMB3W21rM
-         WSIbaPNGNBOZef3n1EINshP/R+Be3RYUxoTfEKdFQgBOrPROapAvi0TMgFYlrq5UqYP9
-         C79w==
-X-Gm-Message-State: AO0yUKXWeGSMhE+uerncxUgKjiHNAqlh7Mk/rIT/WaVzcv8U8WGAAWo0
-        IgirDIlcmdOrSSzFsyjhCvKviC8piBPdys9F+dg=
-X-Google-Smtp-Source: AK7set+gQuDbWafhDm7u6AliJCO35H5q1p5/4Hk9MdyuvDjF06gmwwiuIqwaHVjevQFkdWNAtpfBcKvLTxoDDkTiGfM=
-X-Received: by 2002:a05:6870:808d:b0:16e:8a56:d0d2 with SMTP id
- q13-20020a056870808d00b0016e8a56d0d2mr1360092oab.38.1677080028314; Wed, 22
- Feb 2023 07:33:48 -0800 (PST)
+        Wed, 22 Feb 2023 10:30:51 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D7C837717;
+        Wed, 22 Feb 2023 07:30:50 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 3FB59B815C8;
+        Wed, 22 Feb 2023 15:30:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3D24DC433EF;
+        Wed, 22 Feb 2023 15:30:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1677079848;
+        bh=sVA1o6wuZ1GuHVS6IClOur8oHR2t+TgMPfwchaZ/ukY=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=HFT/uVzgMAdaFzkRP6JDiqxxeeMAdaXOg08SZpb2Kd9YlbMkzwMySkFidRt1+4aNx
+         Z2s7XATzX5My3+jVmMjgjuczcRS+HQPIaK6LaD8Sno5ciT2jOH99IzqkUXuVhBMCMl
+         d9aD+jtLVyBOklarS2abWH0t4PkpfZx22wy/+oXSvCtCrr680zkghGjPFb7Iaxf/m7
+         O1ztmVAp8LXoc+evmDRcZ9iwTTxvS9/gNVe1VWDha7Spudl1Dv5IYOTJHMXwh0zwZI
+         UBj47MJ1y27tg1ZKQQCAkBrufe5moTGG4QJOTqJByenQlxPL09XLCBxmNZdL5NVqIm
+         p+M/lApgtcoRA==
+Date:   Wed, 22 Feb 2023 07:34:15 -0800
+From:   Bjorn Andersson <andersson@kernel.org>
+To:     Stephen Boyd <sboyd@kernel.org>
+Cc:     Abel Vesa <abel.vesa@linaro.org>, Andy Gross <agross@kernel.org>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Mike Turquette <mturquette@baylibre.com>,
+        linux-clk@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-arm-msm@vger.kernel.org, mka@chromium.org,
+        Saravana Kannan <saravanak@google.com>
+Subject: Re: [PATCH v3 1/2] clk: Add generic sync_state callback for
+ disabling unused clocks
+Message-ID: <20230222153415.5npe4axg4mupzvw4@ripper>
+References: <20221227204528.1899863-1-abel.vesa@linaro.org>
+ <ebc257025ebd641e624ef506ea09c800.sboyd@kernel.org>
+ <20230220162137.xjeowlc4qd3rtzc2@ripper>
+ <6a3204bcd2a192c866c0fc66fed9786f.sboyd@kernel.org>
 MIME-Version: 1.0
-References: <20230220201916.1822214-1-robdclark@gmail.com> <20230220201916.1822214-10-robdclark@gmail.com>
- <20230221105307.7430c301@eldfell> <CAF6AEGtd_9JYtPU-AGmZY0My_d48rSSWQiD-efbR2KFxD-+tTA@mail.gmail.com>
- <20230222120904.5c281652@eldfell> <Y/YhKiuOHiX2LcyL@intel.com>
-In-Reply-To: <Y/YhKiuOHiX2LcyL@intel.com>
-From:   Rob Clark <robdclark@gmail.com>
-Date:   Wed, 22 Feb 2023 07:33:37 -0800
-Message-ID: <CAF6AEGsEVFPTfUWQtw1B=QgdusgdqhsU+neShgT5iQn-UrdwjA@mail.gmail.com>
-Subject: Re: [PATCH v5 09/14] drm/syncobj: Add deadline support for syncobj waits
-To:     Rodrigo Vivi <rodrigo.vivi@intel.com>
-Cc:     Pekka Paalanen <ppaalanen@gmail.com>,
-        dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org,
-        Daniel Vetter <daniel@ffwll.ch>,
-        =?UTF-8?Q?Christian_K=C3=B6nig?= <ckoenig.leichtzumerken@gmail.com>,
-        =?UTF-8?Q?Michel_D=C3=A4nzer?= <michel@daenzer.net>,
-        Tvrtko Ursulin <tvrtko.ursulin@intel.com>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        Simon Ser <contact@emersion.fr>,
-        Rob Clark <robdclark@chromium.org>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        David Airlie <airlied@gmail.com>,
-        open list <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <6a3204bcd2a192c866c0fc66fed9786f.sboyd@kernel.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Feb 22, 2023 at 6:06 AM Rodrigo Vivi <rodrigo.vivi@intel.com> wrote:
->
-> On Wed, Feb 22, 2023 at 12:09:04PM +0200, Pekka Paalanen wrote:
-> > On Tue, 21 Feb 2023 09:25:18 -0800
-> > Rob Clark <robdclark@gmail.com> wrote:
-> >
-> > > On Tue, Feb 21, 2023 at 12:53 AM Pekka Paalanen <ppaalanen@gmail.com> wrote:
-> > > >
-> > > > On Mon, 20 Feb 2023 12:18:56 -0800
-> > > > Rob Clark <robdclark@gmail.com> wrote:
-> > > >
-> > > > > From: Rob Clark <robdclark@chromium.org>
-> > > > >
-> > > > > Add a new flag to let userspace provide a deadline as a hint for syncobj
-> > > > > and timeline waits.  This gives a hint to the driver signaling the
-> > > > > backing fences about how soon userspace needs it to compete work, so it
-> > > > > can addjust GPU frequency accordingly.  An immediate deadline can be
-> > > > > given to provide something equivalent to i915 "wait boost".
-> > > > >
-> > > > > v2: Use absolute u64 ns value for deadline hint, drop cap and driver
-> > > > >     feature flag in favor of allowing count_handles==0 as a way for
-> > > > >     userspace to probe kernel for support of new flag
-> > > > >
-> > > > > Signed-off-by: Rob Clark <robdclark@chromium.org>
-> > > > > ---
-> > > > >  drivers/gpu/drm/drm_syncobj.c | 59 +++++++++++++++++++++++++++--------
-> > > > >  include/uapi/drm/drm.h        |  5 +++
-> > > > >  2 files changed, 51 insertions(+), 13 deletions(-)
-> > > >
-> > > > ...
-> > > >
-> > > > > diff --git a/include/uapi/drm/drm.h b/include/uapi/drm/drm.h
-> > > > > index 642808520d92..aefc8cc743e0 100644
-> > > > > --- a/include/uapi/drm/drm.h
-> > > > > +++ b/include/uapi/drm/drm.h
-> > > > > @@ -887,6 +887,7 @@ struct drm_syncobj_transfer {
-> > > > >  #define DRM_SYNCOBJ_WAIT_FLAGS_WAIT_ALL (1 << 0)
-> > > > >  #define DRM_SYNCOBJ_WAIT_FLAGS_WAIT_FOR_SUBMIT (1 << 1)
-> > > > >  #define DRM_SYNCOBJ_WAIT_FLAGS_WAIT_AVAILABLE (1 << 2) /* wait for time point to become available */
-> > > > > +#define DRM_SYNCOBJ_WAIT_FLAGS_WAIT_DEADLINE (1 << 3) /* set fence deadline based to deadline_nsec/sec */
-> > > >
-> > > > Hi,
-> > > >
-> > > > where is the UAPI documentation explaining what is a "fence deadline"
-> > > > and what setting it does here?
-> > >
-> > > It's with the rest of the drm_syncobj UAPI docs ;-)
-> >
-> > Is that https://www.kernel.org/doc/html/latest/driver-api/dma-buf.html#dma-fence-uabi-sync-file ?
-> >
-> > That whole page never mentions e.g. WAIT_AVAILABLE, so at least the
-> > flags are not there. Does not mention syncobj_wait either.
+On Tue, Feb 21, 2023 at 11:24:36AM -0800, Stephen Boyd wrote:
+> Quoting Bjorn Andersson (2023-02-20 08:21:37)
+> > On Fri, Feb 17, 2023 at 09:38:22PM -0800, Stephen Boyd wrote:
+> > > Quoting Abel Vesa (2022-12-27 12:45:27)
+> > > > There are unused clocks that need to remain untouched by clk_disable_unused,
+> > > > and most likely could be disabled later on sync_state. So provide a generic
+> > > > sync_state callback for the clock providers that register such clocks.
+> > > > Then, use the same mechanism as clk_disable_unused from that generic
+> > > > callback, but pass the device to make sure only the clocks belonging to
+> > > > the current clock provider get disabled, if unused. Also, during the
+> > > > default clk_disable_unused, if the driver that registered the clock has
+> > > > the generic clk_sync_state_disable_unused callback set for sync_state,
+> > > > skip disabling its clocks.
+> > > 
+> > > How does that avoid disabling clks randomly in the clk tree? I'm
+> > > concerned about disabling an unused clk in the middle of the tree
+> > > because it doesn't have a driver using sync state, while the clk is the
+> > > parent of an unused clk that is backed by sync state.
+> > > 
+> > >    clk A -->  clk B 
+> > > 
+> > > clk A: No sync state
+> > > clk B: sync state
+> > > 
+> > > clk B is left on by the bootloader. __clk_disable_unused(NULL) is called
+> > > from late init. Imagine clk A is the root of the tree.
+> > > 
+> > >       clk_disable_unused_subtree(clk_core A)
+> > >         clk_disable_unused_subtree(clk_core B)
+> > >           if (from_sync_state && core->dev != dev)
+> > >             return;
+> > >         ...
+> > >         clk core A->ops->disable()
+> > > 
+> > > clk core B is off now?
+> > > 
+> > 
+> > I will have to give this some more thought. But this is exactly what we
+> > have today; consider A being any builtin clock driver and B being any
+> > clock driver built as modules, with relationship to A.
+> > 
+> > clk_disable_unused() will take down A without waiting for B, possibly
+> > locking up parts of the clock hardware of B; or turning off the clocks
+> > to IP blocks that rely on those clocks (e.g. display).
+> 
+> Oh, thanks for clarifying! Yes, the disabling of unused clks with
+> respect to modules is broken in the same way. This makes that brokenness
+> equally apply to builtin drivers, making the situation worse, not better.
+> 
 
-Sorry, that was a snarky reference to thin UABI docs about syncobj.
-The kernel side of it is better documented.
+It does indeed improve the situation, because it allow us to have clock
+drivers and consumers as modules without having their clocks disabled
+prematurely (or by chance not be disabled ever).
 
-> probably this:
-> https://docs.kernel.org/gpu/drm-mm.html
->
-> the new one needs to be added there as well.
->
-> >
-> > I could ask where the real non-IGT userspace is or the plan for it,
-> > too, since this is new DRM UAPI.
->
-> yeap, it looks like we need to close on this...
-> https://gitlab.freedesktop.org/drm/intel/-/issues/8014
->
-> I confess I got lost on the many discussions and on how this will
-> be used. Is mesa going to set the deadline based on the vk priority?
->
-> Will this continue to be internal? I didn't get the broader picture
-> I'm afraid...
+But it does come at the cost of disabling unused clocks later, or if the
+system doesn't probe all enabled devices, possibly never.
 
-Yes, the plan is to use it from mesa vk-common helpers (and elsewhere
-in mesa if needed).  There is a separate discussion[1] about
-limiting/allowing boost (perhaps based on ctx flag or cgroups) but
-that is more about how drivers react to the deadline hint.  The
-immediate goal of this patch is just to fix the regression mentioned
-in that gitlab issue when using syncobj waits instead of
-DRM_IOCTL_I915_GEM_WAIT
+[..]
+> > 
+> > Presumably this list should not be a manually maintained list of display
+> > clocks, and that means the bootloader would need to go in and  build
+> > this list of all enabled clocks. I don't think this is practical.
+> 
+> Why does the bootloader need to do that? The devicetree author can list
+> out the clks that they want to keep on for the display driver until the
+> display driver can acquire them.
+> 
 
-BR,
--R
+I don't think maintaining this list is either necessary or the solution
+to our problem. But if we need it, I don't think the list of clock which
+happens to be needed for the author to boot his particular build of
+Linux is sufficient "hardware description".
 
-[1] https://www.spinics.net/lists/dri-devel/msg383075.html
+We need to solve the ordering issue, because we do want as many clock
+drivers built as modules as possible, and anything shutting down
+seemingly unused clocks at late_initcall() is causing problems, beyond
+display.
 
-> >
-> >
-> > Thanks,
-> > pq
-> >
-> > >
-> > > BR,
-> > > -R
-> > >
-> > > > btw. no nsec/sec anymore.
-> > > >
-> > > >
-> > > > Thanks,
-> > > > pq
-> > > >
-> > > >
-> > > > >  struct drm_syncobj_wait {
-> > > > >       __u64 handles;
-> > > > >       /* absolute timeout */
-> > > > > @@ -895,6 +896,8 @@ struct drm_syncobj_wait {
-> > > > >       __u32 flags;
-> > > > >       __u32 first_signaled; /* only valid when not waiting all */
-> > > > >       __u32 pad;
-> > > > > +     /* Deadline hint to set on backing fence(s) in CLOCK_MONOTONIC: */
-> > > > > +     __u64 deadline_ns;
-> > > > >  };
-> > > > >
-> > > > >  struct drm_syncobj_timeline_wait {
-> > > > > @@ -907,6 +910,8 @@ struct drm_syncobj_timeline_wait {
-> > > > >       __u32 flags;
-> > > > >       __u32 first_signaled; /* only valid when not waiting all */
-> > > > >       __u32 pad;
-> > > > > +     /* Deadline hint to set on backing fence(s) in CLOCK_MONOTONIC: */
-> > > > > +     __u64 deadline_ns;
-> > > > >  };
-> > > > >
-> > > > >
-> > > >
-> >
->
->
+> > 
+> > > Then mark those as "critical/don't turn off" all the way up the clk tree
+> > > when the clk driver probes by essentially incrementing the
+> > > prepare/enable count but not actually touching the hardware, and when
+> > > the clks are acquired by clk_get() for that device that's using them
+> > > from boot we make the first clk_prepare_enable() do nothing and not
+> > > increment the count at all. We can probably stick some flag into the
+> > > 'struct clk' for this when we create the handle in clk_get() so that the
+> > > prepare and enable functions can special case and skip over.
+> > > 
+> > 
+> > The benefit of sync_state is that it kicks when the client drivers has
+> > probed. As such, you can have e.g. the display driver clk_get(), then
+> > probe defer on some other resource, and the clock state can remain
+> > untouched.
+> 
+> Ok. I think this spitball design would do that still. It's not like we
+> would go and disable the clks that are handed to the display driver even
+> if it probe defers. The clk would be marked as enabled until the display
+> driver enables the clk, and then it wouldn't be disabled during late
+> init (or later) because the clk would be enabled either by the core or
+> by the display driver. The point where we transfer ownership of the
+> enable state is when the consumer calls clk_enable().
+> 
+
+You're right, and if a driver where to acquire a clock enable/disable it
+and then probe defer, the sync_state mechanism wouldn't help us anyways.
+
+But we need something that kicks in and disables unused clocks whenever
+there will be no more consumers. Regardless if the list of resources to
+do this with is defined my human, machine or derived from something.
+
+> > 
+> > > The sync_state hook operates on a driver level, which is too large when
+> > > you consider that a single clk driver may register hundreds of clks that
+> > > are not related. We want to target a solution at the clk level so that
+> > > any damage from keeping on all the clks provided by the controller is
+> > > limited to just the drivers that aren't probed and ready to handle their
+> > > clks. If sync_state could be called whenever a clk consumer consumes a
+> > > clk it may work? Technically we already have that by the clk_hw_provider
+> > > function but there isn't enough information being passed there, like the
+> > > getting device.
+> > > 
+> > 
+> > The current solution already operates on all clocks of all drivers, that
+> > happens to be probed at late_initcall(). This patch removes the
+> > subordinate clause from this, allowing clock drivers and their clients
+> > to be built as modules.
+> > 
+> > So while it still operates on all clocks of a driver, it moves that
+> > point to a later stage, where that is more reasonable to do.
+> > 
+> 
+> When we have clk drivers that provide clks to many different device
+> drivers, they all have to probe for any unused clks to be disabled.
+> 
+
+I would prefer that we go to a mechanism where we disable all unused
+clocks per provider, based on sync_state, and then from there try to
+optimize that to disable subsets of those clocks a few seconds
+earlier. Because upstream is broken by design right now.
+
+I've reverted the applies patches, and sent a new pull request. Let's
+try to make some progress on Saravana's proposal.
+
+Regards,
+Bjorn
