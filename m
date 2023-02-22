@@ -2,119 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7285669FB71
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Feb 2023 19:48:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9365669FB68
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Feb 2023 19:48:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232509AbjBVSqW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Feb 2023 13:46:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52520 "EHLO
+        id S232277AbjBVSrg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Feb 2023 13:47:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54490 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230280AbjBVSqT (ORCPT
+        with ESMTP id S230310AbjBVSre (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Feb 2023 13:46:19 -0500
-Received: from mail-oa1-x34.google.com (mail-oa1-x34.google.com [IPv6:2001:4860:4864:20::34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D8822D7E
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Feb 2023 10:45:37 -0800 (PST)
-Received: by mail-oa1-x34.google.com with SMTP id 586e51a60fabf-1720433ba75so11228506fac.5
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Feb 2023 10:45:37 -0800 (PST)
+        Wed, 22 Feb 2023 13:47:34 -0500
+Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D719741B67
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Feb 2023 10:46:55 -0800 (PST)
+Received: by mail-wm1-x335.google.com with SMTP id d41-20020a05600c4c2900b003e9e066550fso635543wmp.4
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Feb 2023 10:46:55 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=uMFWkfYuZ+XsQ/RW5Q/H+9yxE1eeW1/UMaA6UQW9FRk=;
-        b=WJ9WcTYPOd+/YeHTdtphgt2Fo5wduO3XThXUr0ynUiXiQDBlgJXEo5rb0RATPLhVFm
-         XDJNDdkbHYZ04SqqggIuEfL2+AzrA8s1WxYVcGN8Z6J8ZFCL3JYWZlnCUsdnflLe9PVG
-         S7ij9ehPkZeo4VB6KJ5f2iLkY5MpCOWNvj0szuUjKHlKaEL7jPNpU09v8EiGXgKyBsKq
-         xEDRp3dF/dFVZF2BPTR/W2hzhqTZAZirARjNytlcjdenUF1JqCA8YvG9Qxha5uqxNMvC
-         Es8FdlVJ9/f03HQDrqvuDKl/z7zpuieSwCKZjw3ldALPLznfE6UGP94uooIO7ovyL4Ko
-         S76w==
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=skuCIMzdXVRwoYI+VmugGgits0upO5wf/eyqFb3T6p0=;
+        b=ZRVz9U8eOgOEdv9yLJQJC9zAil69EdrhWJT9TuFbvf8r9kE2tIwdmF5Oy5d98mYnXa
+         sDK1BjxsSP49nTHhvFlr/fwV0qcVQbYE1u/VuKH1u4LHc4WwDN8SdtRsbdFT+ijVXE04
+         4k8fEfWO8SByWXviMlERIjWJF/ud+GOHUNvaV6ld5W0TkbMleggjJj+zkOxxSazNW5E4
+         3br8kRp+aasBSQOyuG2fyjee+po5ajeuLg094pyZg14QcXc4RckisHauGy9z7uh9nI+W
+         ac/wja/VbT1+vECtjfCyDLTaF8P3Ia1ncXCa/wjRQNrbGZALuYIkwDWFyzrnBA+/0zCH
+         1UWA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=uMFWkfYuZ+XsQ/RW5Q/H+9yxE1eeW1/UMaA6UQW9FRk=;
-        b=RTJWr3aZqBoOsVxUE5KmwB1v1L4MsDd/MeAdhET+fY0of+HLEwlwVE1cYI01qyUj6r
-         8s3ilmdpRrYGsCCjihgEOhqdv+x3D/QrrS7YDvq59b2pPcp+3KmoQ4FNZ6Agvh8FzFO7
-         haMVPCpK+0K3ed9Rk8W63M2kgxezKul5dSYAmtzQdqGUnKWdVSK2gajGmihPoRXYKe4y
-         +hprmfEPIPz1d2XsH3+fiLdFnnJAPoeA6305dCL3gQs9oYpAg2jaFqpktoSUntiIljwd
-         XEF06JxP9ZzvbKEni0N8iGNA3WeFIoqhnrNI6iDxj8hJeml11yN8xS3GBlOHmQq7GbcH
-         7U5g==
-X-Gm-Message-State: AO0yUKVICbQ2ihb7dKXuZR76WtfAJuSChLGkxP7vRd282rzTJCpCrf/j
-        3++jQxwoYFw+Z3et9e4yhBUMjWXMoymWEZsoUPbFYQ==
-X-Google-Smtp-Source: AK7set8APk8r2qxx34EP7woOLA19L1Dvu/KebzEGebLqWzFbjDFzsgcGUif9arfZslcjcNAPC5kKBx3Rt+ZhzO2A58U=
-X-Received: by 2002:a05:6870:14d2:b0:16e:30ac:b7a1 with SMTP id
- l18-20020a05687014d200b0016e30acb7a1mr1456284oab.44.1677091460998; Wed, 22
- Feb 2023 10:44:20 -0800 (PST)
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=skuCIMzdXVRwoYI+VmugGgits0upO5wf/eyqFb3T6p0=;
+        b=Es53ZIwsDAh0DkWQdha/XfzTahetpbE4FSYs1j2Q5hIbU3ae4wOiE/kBfhywrSvHkE
+         M5Nze0Q8dJXck9HXbFU6EQC5AEEX83k4C4SBLulO7sbQmG/swIou6vLKH1KjYG1rgwlk
+         xsMdqBBNZw6TPStLfuJ/qKK74mYo1L/VBAfmj7IjK+JxtS225Ol7hn59SMYzmsioXGqD
+         YLrngQFzIos9bdanhQ+5vLccSYXAPZDXdDLuqoND1Td84zQ6ObLvUpmfTpn5CiMDW7H7
+         zA/ac8jI/RTsqvK0XNJnfqYj2PjZJFgsgn9Ue4FQ8C0wyjNaIAmPkNEMGqs+hDEMqrq7
+         cVAg==
+X-Gm-Message-State: AO0yUKV9PGBKwR2dIFKlho9I3VXCRfvUJRUx3/R/YJr5Vi8KcHOsRAmd
+        AEsQA4sYsVCqi+kfqnJC6blgEQ==
+X-Google-Smtp-Source: AK7set9+LFmeEbLy5YAz6Ze7EnEQPH7JVkRV7xkmNU+cJ2jCtT0NaFWu+u650El0GShdrYOP4Dz91A==
+X-Received: by 2002:a05:600c:3196:b0:3da:acb1:2f09 with SMTP id s22-20020a05600c319600b003daacb12f09mr6996815wmp.19.1677091587670;
+        Wed, 22 Feb 2023 10:46:27 -0800 (PST)
+Received: from [192.168.1.109] ([178.197.216.144])
+        by smtp.gmail.com with ESMTPSA id e7-20020adffc47000000b002c70f5627d5sm210876wrs.63.2023.02.22.10.46.26
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 22 Feb 2023 10:46:27 -0800 (PST)
+Message-ID: <06f29d66-f16a-039c-ecd0-155bdcce00c1@linaro.org>
+Date:   Wed, 22 Feb 2023 19:46:25 +0100
 MIME-Version: 1.0
-References: <20230222000915.2843208-1-jiangzp@google.com> <20230221160910.kernel.v1.1.If0578b001c1f12567f2ebcac5856507f1adee745@changeid>
-In-Reply-To: <20230221160910.kernel.v1.1.If0578b001c1f12567f2ebcac5856507f1adee745@changeid>
-From:   Zhengping Jiang <jiangzp@google.com>
-Date:   Wed, 22 Feb 2023 10:44:09 -0800
-Message-ID: <CAB4PzUp327-efiARXhsE6Ep+1Lf2T501CexBqhWAhPzMQiEYVQ@mail.gmail.com>
-Subject: Re: [kernel PATCH v1 1/1] Bluetooth: hci_sync: clear workqueue before
- clear mgmt cmd
-To:     linux-bluetooth@vger.kernel.org, marcel@holtmann.org,
-        luiz.dentz@gmail.com
-Cc:     chromeos-bluetooth-upstreaming@chromium.org, mmandlik@google.com,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Johan Hedberg <johan.hedberg@gmail.com>,
-        Paolo Abeni <pabeni@redhat.com>, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH v1 2/3] auxdisplay: ht16k33: Make use of
+ device_get_match_data()
+Content-Language: en-US
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Robin van der Gracht <robin@protonic.nl>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>,
+        Raul E Rangel <rrangel@chromium.org>,
+        Wolfram Sang <wsa@kernel.org>, linux-kernel@vger.kernel.org,
+        linux-i2c@vger.kernel.org, linux-usb@vger.kernel.org,
+        Miguel Ojeda <ojeda@kernel.org>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        devicetree@vger.kernel.org
+References: <20230221133307.20287-1-andriy.shevchenko@linux.intel.com>
+ <20230221133307.20287-3-andriy.shevchenko@linux.intel.com>
+ <Y/TJs+Arban0ats8@smile.fi.intel.com>
+ <be203dfd290e67c8ce74d11c5c9478a4@protonic.nl>
+ <Y/UD3HWNy8uKYShC@smile.fi.intel.com>
+ <0235f0fed989a8b027db720663699f5d@protonic.nl>
+ <Y/ZKdN4nuHcL4DgE@smile.fi.intel.com> <Y/ZOyGo8X7r258EC@smile.fi.intel.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <Y/ZOyGo8X7r258EC@smile.fi.intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On 22/02/2023 18:20, Andy Shevchenko wrote:
+>>
+>>> Which effectively breaks i.e. user-space instantiation for other display
+>>> types which now do work due to i2c_of_match_device().
+>>> (so my suggestion above is not sufficient).
+>>>
+>>> Are you proposing extending and searching the I2C ID table to work around
+>>> that?
+>>
+>> See (1) above. This is the downside I have noticed after sending this series.
+>> So, the I²C ID table match has to be restored, but the above mentioned issues
+>> with existing table are not gone, hence they need to be addressed in the next
+>> version.
+> 
+> I see now what you mean. So, we have even more issues in this driver:
+> - I²C table is not in sync with all devices supported
 
-We need to revise this patch after a local test failure. I will update
-after finding the cause.
+Does anything actually rely on i2c_device_id table? ACPI would match
+either via ACPI or OF tables. All modern ARM systems (e.g. imx6) are
+DT-based. Maybe just drop the I2C ID table?
 
-Thanks,
-Zhengping
+> - the OF ID table seems has something really badly formed for adafruit
+>   (just a number after a comma)
 
-On Tue, Feb 21, 2023 at 4:09 PM Zhengping Jiang <jiangzp@google.com> wrote:
->
-> Clear cmd_sync_work queue before clearing the mgmt cmd list to avoid
-> racing conditions which cause use-after-free.
->
-> When powering off the adapter, the mgmt cmd list will be cleared. If a
-> work is queued in the cmd_sync_work queue at the same time, it will
-> cause the risk of use-after-free, as the cmd pointer is not checked
-> before use.
->
-> Signed-off-by: Zhengping Jiang <jiangzp@google.com>
-> ---
->
-> Changes in v1:
-> - Clear cmd_sync_work queue before clearing the mgmt cmd list
->
->  net/bluetooth/hci_sync.c | 2 ++
->  1 file changed, 2 insertions(+)
->
-> diff --git a/net/bluetooth/hci_sync.c b/net/bluetooth/hci_sync.c
-> index 117eedb6f709..6609434e3125 100644
-> --- a/net/bluetooth/hci_sync.c
-> +++ b/net/bluetooth/hci_sync.c
-> @@ -4840,6 +4840,8 @@ int hci_dev_close_sync(struct hci_dev *hdev)
->
->         auto_off = hci_dev_test_and_clear_flag(hdev, HCI_AUTO_OFF);
->
-> +       hci_cmd_sync_clear(hdev);
-> +
->         if (!auto_off && hdev->dev_type == HCI_PRIMARY &&
->             !hci_dev_test_flag(hdev, HCI_USER_CHANNEL) &&
->             hci_dev_test_flag(hdev, HCI_MGMT))
-> --
-> 2.39.2.637.g21b0678d19-goog
->
+Maybe it is a model number? It was documented:
+Documentation/devicetree/bindings/auxdisplay/holtek,ht16k33.yaml
+
+> 
+> The latter shows how broken it is. The I²C ID table mechanism is used as
+> a backward compatibility to the OF. Unfortunately, user space may not provide
+> the data except in form of DT overlays, so for the legacy enumeration we
+> have only device name, which is a set of 4 digits for adafruit case.
+> 
+> Now imagine if by some reason we will get adafruit2 (you name it) with
+> the same schema. How I²C framework can understand that you meant adafruit
+> and not adafruit2? Or did I miss something?
+> 
+
+Best regards,
+Krzysztof
+
