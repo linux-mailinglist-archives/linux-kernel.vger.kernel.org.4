@@ -2,141 +2,226 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8445769F952
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Feb 2023 17:52:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9271D69F954
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Feb 2023 17:52:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231174AbjBVQwB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Feb 2023 11:52:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39946 "EHLO
+        id S229950AbjBVQwI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Feb 2023 11:52:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40086 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229950AbjBVQv7 (ORCPT
+        with ESMTP id S231912AbjBVQwF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Feb 2023 11:51:59 -0500
-Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0EFF38B6A
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Feb 2023 08:51:57 -0800 (PST)
-Received: by mail-lf1-x12d.google.com with SMTP id k14so9881783lfj.7
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Feb 2023 08:51:57 -0800 (PST)
+        Wed, 22 Feb 2023 11:52:05 -0500
+Received: from mail-pg1-x52c.google.com (mail-pg1-x52c.google.com [IPv6:2607:f8b0:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 933A63E0A4
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Feb 2023 08:52:04 -0800 (PST)
+Received: by mail-pg1-x52c.google.com with SMTP id d10so1044664pgt.12
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Feb 2023 08:52:04 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
+        d=linaro.org; s=google;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=u8a+6i/8kWloQPBl29m7e9d5jTRMV0KvfLP6PWCz06A=;
-        b=iFCDSGes+2EvEYKVfe1X4fB4LlWwoKAScLJfZxDzkgown1bZad2MSFQFV27vrcQkcW
-         LdWwzZaQl4DHh2qG4P2oG0qhBaxmBFg9zVAIbKDb5bDX1yROn/TCt6bIVUsp32HwcGp+
-         XFnyAZti8+3gxddbyIqTV4nAOUQC1HktdRqtQ/J8EO/AxNeeY/Ix0CTup6lZT8ADdglf
-         N8mfVh+RZo/KwUgYhL7LEpcXy2DdOvj21ll5/yUgWfp9A00S1DPelBIHaEmAElS8ULZj
-         GE/LTFBpZ+jN7CE0m/W90aSUhOQ/pAYRSB//PXGA+3CuUppCgIaS81gEk8kUXd82cvbX
-         b13g==
+        bh=OgFGKCHcPpSicwmjtvQ4xeUm3FP6DvBHB7jDiI5J/2M=;
+        b=TH679C3csg8+gq6s8byilYneKQcEqmMLkaju8zvbdGa5wu5h1n41SMYKg09Y5apmIH
+         C3M1d7dJrJXlMcPgqNaGnHXHK02VuWHo5E0miIYoR64PGGPo+AsASkwyCulkxiaeJ7L9
+         5rDMn9esmz02vNCSNq7bQREv7+PFFiHzh+BKvDYyicx/s6LwDA5lAEZ4rF73xELmVJhD
+         dPmxgVubHDM7Va9GLEqtwtnWQEyMBCgRqT4A7uy4gooTahSeOlVUBDcwsl74rg6qV2Ow
+         sxSCqlwKBFom5CGpLnY4kf83TF+aAJGDePs0i3xygsjUc747h8YCt4yCJsC5eVnczNGc
+         JmkQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=u8a+6i/8kWloQPBl29m7e9d5jTRMV0KvfLP6PWCz06A=;
-        b=yOGmACDZpf2ISFFjBnonormCaD/Vh1kbwc5+WHFmEk39DKb7nR8Rc7bereLzuXcdRz
-         3Al79MY4gzrbgIimFCJryI9GjFLWPyTATgvnnYV2IUS7XZX6zMQHxNOOjQ9mV3fCYi2y
-         SNhRUJMKtHzwsqb3sw2Kmt98ulJ1Moq/Zu+0VUXScrWzYYbOvb2F3PO9vvfWd/nRnPxl
-         WQGl1wuc8Yh81DxK/DUgjhqu5uNe+JE0mpRsDB16NQ07Y2SbN50NmLsOFVmMl03pR7Yq
-         KzG/0e1NPsKV3bBwu5Yt87xxZCEQ3skBxUJESAsEG7PiSxEsXa+cdFYVdivOSi07SJzZ
-         SLzw==
-X-Gm-Message-State: AO0yUKWcRf3LPPQx3GDCFQdWDI+eUKvgIVFdzgNmyEw11ekIf0zo3KRb
-        drEDNgYgyOKJj1dNZ4OrwHx3ib1Dv1643UoSjPBMZ02eVoJY0fCY374=
-X-Google-Smtp-Source: AK7set+a0qMW+s6yEhzLNtGP+lyaAJ1ls3bkDAJHzNZ+mynszom6vOWyjRCymhG7pMasmKizrvNdcleHniso67ihKGA=
-X-Received: by 2002:a19:c209:0:b0:4d5:ca43:703d with SMTP id
- l9-20020a19c209000000b004d5ca43703dmr2891742lfc.0.1677084715742; Wed, 22 Feb
- 2023 08:51:55 -0800 (PST)
+        bh=OgFGKCHcPpSicwmjtvQ4xeUm3FP6DvBHB7jDiI5J/2M=;
+        b=0Kk8xQTYqZBtLKnFT/XAvaify42lSyrJ1a7C38Pl0SPFdPn/NNSJAonTzaMPSS1Jun
+         TQLxKYLsqHJXWPLiB959y09Yscej0biPmFGIuIG0nojE3YvLsKUDVE/Na3aRoQGrYMka
+         cJ6KuctAXGW1zho8PgeUDJYTDEZa9UMakw3gP05ZveiexUg1wMfI946suqSgCjL/YaSu
+         28UF3ChV/rFt5QGkS+AVxtVbojpNJNpZ3ItynTirX7VkMlhSj47dPZOGzFu8vasI2hEi
+         X55+LV1JICqj7L/C9ax/UXNuQtet3yq4Ym1TquSCHXdZKtYYOCiSB4gRn1BQ+ey4NInD
+         AcTA==
+X-Gm-Message-State: AO0yUKXLT4OvI8wrhhVE17luFqIKgrEmJbCwSknxBP6gNrSdMr5yZrcz
+        CcLL3eQCjBmIrQ5IJkgr5DOAYcdOPF+ZOhLf8i3hyg==
+X-Google-Smtp-Source: AK7set85QDn+lIBvpfAllfvA+/HkfOgtbrBtrdoZtd65RCR9vp91odZAfLLxlmekBnO0HwlcvRBubFCi/XUsbDBqeVw=
+X-Received: by 2002:a05:6a00:be3:b0:5a9:b27e:af42 with SMTP id
+ x35-20020a056a000be300b005a9b27eaf42mr1405058pfu.6.1677084723962; Wed, 22 Feb
+ 2023 08:52:03 -0800 (PST)
 MIME-Version: 1.0
-References: <2afbcae6daf13f7ad5a4296692e0a0fe1bc1e4ee.1677083979.git.thomas.lendacky@amd.com>
-In-Reply-To: <2afbcae6daf13f7ad5a4296692e0a0fe1bc1e4ee.1677083979.git.thomas.lendacky@amd.com>
-From:   Peter Gonda <pgonda@google.com>
-Date:   Wed, 22 Feb 2023 09:51:44 -0700
-Message-ID: <CAMkAt6pqyOqVd_etLVfwrihEoc6XtS+BaVsV8x934rr4LmOCgw@mail.gmail.com>
-Subject: Re: [RESEND PATCH] virt/sev-guest: Return -EIO if certificate buffer
- is not large enough
-To:     Tom Lendacky <thomas.lendacky@amd.com>
-Cc:     linux-kernel@vger.kernel.org, x86@kernel.org,
-        Borislav Petkov <bp@alien8.de>,
-        Larry Dewey <larry.dewey@amd.com>
+References: <113e81f6-b349-97c0-4cec-d90087e7e13b@nvidia.com>
+ <CAKfTPtCO=GFm6nKU0DVa-aa3f1pTQ5vBEF+9hJeTR9C_RRRZ9A@mail.gmail.com>
+ <8f95150d-db0d-d9e5-4eff-2196d5e8de05@gmail.com> <6f90f500-ed4c-0650-0044-1cd1e3a632c3@gmail.com>
+In-Reply-To: <6f90f500-ed4c-0650-0044-1cd1e3a632c3@gmail.com>
+From:   Vincent Guittot <vincent.guittot@linaro.org>
+Date:   Wed, 22 Feb 2023 17:51:52 +0100
+Message-ID: <CAKfTPtCSw4QL6F7sR+JVSJE2+_zhZ4eNdBtyQx6KZSD_b2kdhw@mail.gmail.com>
+Subject: Re: Bug report: UDP ~20% degradation
+To:     Tariq Toukan <ttoukan.linux@gmail.com>
+Cc:     Tariq Toukan <tariqt@nvidia.com>,
+        David Chen <david.chen@nutanix.com>,
+        Zhang Qiao <zhangqiao22@huawei.com>,
+        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
+        Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Valentin Schneider <vschneid@redhat.com>,
+        linux-kernel@vger.kernel.org,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Saeed Mahameed <saeedm@nvidia.com>,
+        Network Development <netdev@vger.kernel.org>,
+        Gal Pressman <gal@nvidia.com>, Malek Imam <mimam@nvidia.com>,
+        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
+        David Ahern <dsahern@kernel.org>,
+        Talat Batheesh <talatb@nvidia.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Feb 22, 2023 at 9:39 AM Tom Lendacky <thomas.lendacky@amd.com> wrote:
+On Wed, 22 Feb 2023 at 09:49, Tariq Toukan <ttoukan.linux@gmail.com> wrote:
 >
-> Commit 47894e0fa6a5 ("virt/sev-guest: Prevent IV reuse in the SNP guest
-> driver") changed the behavior associated with the return value when the
-> caller does not supply a large enough certificate buffer. Prior to the
-> commit a return value of -EIO was returned. Now a return value of 0 is
-> returned. This breaks the established ABI with the user.
 >
-> Change the code to detect the buffer size error and return -EIO.
 >
-> Fixes: 47894e0fa6a5 ("virt/sev-guest: Prevent IV reuse in the SNP guest driver")
-> Reported-by: Larry Dewey <larry.dewey@amd.com>
-> Signed-off-by: Tom Lendacky <thomas.lendacky@amd.com>
+> On 12/02/2023 13:50, Tariq Toukan wrote:
+> >
+> >
+> > On 08/02/2023 16:12, Vincent Guittot wrote:
+> >> Hi Tariq,
+> >>
+> >> On Wed, 8 Feb 2023 at 12:09, Tariq Toukan <tariqt@nvidia.com> wrote:
+> >>>
+> >>> Hi all,
+> >>>
+> >>> Our performance verification team spotted a degradation of up to ~20% in
+> >>> UDP performance, for a specific combination of parameters.
+> >>>
+> >>> Our matrix covers several parameters values, like:
+> >>> IP version: 4/6
+> >>> MTU: 1500/9000
+> >>> Msg size: 64/1452/8952 (only when applicable while avoiding ip
+> >>> fragmentation).
+> >>> Num of streams: 1/8/16/24.
+> >>> Num of directions: unidir/bidir.
+> >>>
+> >>> Surprisingly, the issue exists only with this specific combination:
+> >>> 8 streams,
+> >>> MTU 9000,
+> >>> Msg size 8952,
+> >>> both ipv4/6,
+> >>> bidir.
+> >>> (in unidir it repros only with ipv4)
+> >>>
+> >>> The reproduction is consistent on all the different setups we tested
+> >>> with.
+> >>>
+> >>> Bisect [2] was done between these two points, v5.19 (Good), and v6.0-rc1
+> >>> (Bad), with ConnectX-6DX NIC.
+> >>>
+> >>> c82a69629c53eda5233f13fc11c3c01585ef48a2 is the first bad commit [1].
+> >>>
+> >>> We couldn't come up with a good explanation how this patch causes this
+> >>> issue. We also looked for related changes in the networking/UDP stack,
+> >>> but nothing looked suspicious.
+> >>>
+> >>> Maybe someone here can help with this.
+> >>> We can provide more details or do further tests/experiments to progress
+> >>> with the debug.
+> >>
+> >> Could you share more details about your system and the cpu topology ?
+> >>
+> >
+> > output for 'lscpu':
+> >
+> > Architecture:                    x86_64
+> > CPU op-mode(s):                  32-bit, 64-bit
+> > Address sizes:                   40 bits physical, 57 bits virtual
+> > Byte Order:                      Little Endian
+> > CPU(s):                          24
+> > On-line CPU(s) list:             0-23
+> > Vendor ID:                       GenuineIntel
+> > BIOS Vendor ID:                  QEMU
+> > Model name:                      Intel(R) Xeon(R) Platinum 8380 CPU @
+> > 2.30GHz
+> > BIOS Model name:                 pc-q35-5.0
+> > CPU family:                      6
+> > Model:                           106
+> > Thread(s) per core:              1
+> > Core(s) per socket:              1
+> > Socket(s):                       24
+> > Stepping:                        6
+> > BogoMIPS:                        4589.21
+> > Flags:                           fpu vme de pse tsc msr pae mce cx8 apic
+> > sep mtrr pge mca cmov pat pse36 clflush mmx fxsr sse sse2 ss syscall nx
+> > pdpe1gb rdtscp lm constant_tsc arch_perfmon rep_good nopl xtopology
+> > cpuid tsc_known_freq pni pclmulqdq vmx ssse3 fma cx16 pdcm pcid sse4_1
+> > sse4_2 x2apic movbe popcnt tsc_deadline_timer aes xsave avx f16c rdrand
+> > hypervisor lahf_lm abm 3dnowprefetch cpuid_fault invpcid_single ssbd
+> > ibrs ibpb stibp ibrs_enhanced tpr_shadow vnmi flexpriority ept vpid
+> > ept_ad fsgsbase tsc_adjust bmi1 avx2 smep bmi2 erms invpcid avx512f
+> > avx512dq rdseed adx smap avx512ifma clflushopt clwb avx512cd sha_ni
+> > avx512bw avx512vl xsaveopt xsavec xgetbv1 xsaves wbnoinvd arat
+> > avx512vbmi umip pku ospke avx512_vbmi2 gfni vaes vpclmulqdq avx512_vnni
+> > avx512_bitalg avx512_vpopcntdq rdpid md_clear arch_capabilities
+> > Virtualization:                  VT-x
+> > Hypervisor vendor:               KVM
+> > Virtualization type:             full
+> > L1d cache:                       768 KiB (24 instances)
+> > L1i cache:                       768 KiB (24 instances)
+> > L2 cache:                        96 MiB (24 instances)
+> > L3 cache:                        384 MiB (24 instances)
+> > NUMA node(s):                    1
+> > NUMA node0 CPU(s):               0-23
+> > Vulnerability Itlb multihit:     Not affected
+> > Vulnerability L1tf:              Not affected
+> > Vulnerability Mds:               Not affected
+> > Vulnerability Meltdown:          Not affected
+> > Vulnerability Mmio stale data:   Vulnerable: Clear CPU buffers
+> > attempted, no microcode; SMT Host state unknown
+> > Vulnerability Retbleed:          Not affected
+> > Vulnerability Spec store bypass: Mitigation; Speculative Store Bypass
+> > disabled via prctl
+> > Vulnerability Spectre v1:        Mitigation; usercopy/swapgs barriers
+> > and __user pointer sanitization
+> > Vulnerability Spectre v2:        Vulnerable: eIBRS with unprivileged eBPF
+> > Vulnerability Srbds:             Not affected
+> > Vulnerability Tsx async abort:   Not affected
+> >
+> >> The commit  c82a69629c53 migrates a task on an idle cpu when the task
+> >> is the only one running on local cpu but the time spent by this local
+> >> cpu under interrupt or RT context becomes significant (10%-17%)
+> >> I can imagine that 16/24 stream overload your system so load_balance
+> >> doesn't end up in this case and the cpus are busy with several
+> >> threads. On the other hand, 1 stream is small enough to keep your
+> >> system lightly loaded but 8 streams make your system significantly
+> >> loaded to trigger the reduced capacity case but still not overloaded.
+> >>
+> >
+> > I see. Makes sense.
+> > 1. How do you check this theory? Any suggested tests/experiments?
 
-My bad. I wasn't testing the return value in this case.
+Could you get some statistics about the threads involved in your tests
+? Like the number of migrations as an example.
 
-Should Boris take this patch into the retry series?
+Or a trace but that might be a lot of data. I haven't tried to
+reproduce this on a local system yet.
 
-> ---
->  drivers/virt/coco/sev-guest/sev-guest.c | 20 +++++++++++++++++---
->  1 file changed, 17 insertions(+), 3 deletions(-)
->
-> diff --git a/drivers/virt/coco/sev-guest/sev-guest.c b/drivers/virt/coco/sev-guest/sev-guest.c
-> index 4ec4174e05a3..7b4e9009f335 100644
-> --- a/drivers/virt/coco/sev-guest/sev-guest.c
-> +++ b/drivers/virt/coco/sev-guest/sev-guest.c
-> @@ -377,9 +377,26 @@ static int handle_guest_request(struct snp_guest_dev *snp_dev, u64 exit_code, in
->                 snp_dev->input.data_npages = certs_npages;
->         }
->
-> +       /*
-> +        * Increment the message sequence number. There is no harm in doing
-> +        * this now because decryption uses the value stored in the response
-> +        * structure and any failure will wipe the VMPCK, preventing further
-> +        * use anyway.
-> +        */
-> +       snp_inc_msg_seqno(snp_dev);
-> +
->         if (fw_err)
->                 *fw_err = err;
->
-> +       /*
-> +        * If an extended guest request was issued and the supplied certificate
-> +        * buffer was not large enough, a standard guest request was issued to
-> +        * prevent IV reuse. If the standard request was successful, return -EIO
-> +        * back to the caller as would have originally been returned.
-> +        */
-> +       if (!rc && err == SNP_GUEST_REQ_INVALID_LEN)
-> +               return -EIO;
-> +
+You can fall in the situation where the tasks of your bench are
+periodically moved to the next cpu becoming idle.
 
-Why not set 'ret = -EIO' and use disable_vmpck directly? That seems
-more clear to me instead of failing on the next call.
+Which cpufreq driver and governor are you using ? Could you also check
+the average frequency of your cpu ? Another cause could be that we
+spread tasks and irq on different cpus which then trigger a freq
+decrease
 
->         if (rc) {
->                 dev_alert(snp_dev->dev,
->                           "Detected error from ASP request. rc: %d, fw_err: %llu\n",
-> @@ -395,9 +412,6 @@ static int handle_guest_request(struct snp_guest_dev *snp_dev, u64 exit_code, in
->                 goto disable_vmpck;
->         }
+> > 2. How do you suggest this degradation should be fixed?
+> >
 >
-> -       /* Increment to new message sequence after payload decryption was successful. */
-> -       snp_inc_msg_seqno(snp_dev);
-> -
->         return 0;
->
->  disable_vmpck:
-> --
-> 2.39.1
->
+> Hi,
+> A kind reminder.
