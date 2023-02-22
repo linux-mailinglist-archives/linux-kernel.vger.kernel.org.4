@@ -2,136 +2,270 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5922369EFDA
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Feb 2023 09:04:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 30FD069EFE2
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Feb 2023 09:06:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231308AbjBVIEB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Feb 2023 03:04:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53626 "EHLO
+        id S230048AbjBVIGj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Feb 2023 03:06:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56254 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229557AbjBVID7 (ORCPT
+        with ESMTP id S229557AbjBVIGh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Feb 2023 03:03:59 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1F4B1EBD0;
-        Wed, 22 Feb 2023 00:03:56 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 4E02EB811D5;
-        Wed, 22 Feb 2023 08:03:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E5DF3C433D2;
-        Wed, 22 Feb 2023 08:03:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1677053034;
-        bh=2dFmx76LSc1nkfQUy0U1ICQ491CjQLf/H4jR4PZN1eQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=WOM8cH+ZIsNbVpT5XGPUoqNzs/hB/34MhPqlRByLZFALd/Z9NPEtETfhD2lBdADBj
-         BojqeVcZiTTkM643cBAtmBM/ekbxsQwWNPXxZr7MKiXuCfewg1pBOybKOEm6ZmMyt5
-         Biago2NtVOxAcCFFxIQGuvDBRLb87vJo9toRL+AyChzTZ66xfk6E+yyOlAolWfFYd5
-         4DgTZ63aKsSe4N27hviWZETKouwwMCSi1kVggJTDZufMTkvtktw1q+39MANOd+yZZb
-         4Al8n5mtgaEPlOkM1rYtnD6N2O9LLQm/w0CAySmGKcoxONs+zPmHkJhLhwql4bZhHd
-         15b3enz3cM9wg==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan@kernel.org>)
-        id 1pUk6Y-0003hx-LJ; Wed, 22 Feb 2023 09:03:58 +0100
-Date:   Wed, 22 Feb 2023 09:03:58 +0100
-From:   Johan Hovold <johan@kernel.org>
-To:     Steev Klimaszewski <steev@kali.org>
-Cc:     "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Marcel Holtmann <marcel@holtmann.org>,
-        Johan Hedberg <johan.hedberg@gmail.com>,
-        Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
-        Sven Peter <sven@svenpeter.dev>, netdev@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-bluetooth@vger.kernel.org,
-        Mark Pearson <markpearson@lenovo.com>,
-        Tim Jiang <quic_tjiang@quicinc.com>
-Subject: Re: [PATCH v5 2/4] Bluetooth: hci_qca: Add support for QTI Bluetooth
- chip wcn6855
-Message-ID: <Y/XMbhIgF8veIIdl@hovoldconsulting.com>
-References: <20230209020916.6475-1-steev@kali.org>
- <20230209020916.6475-3-steev@kali.org>
+        Wed, 22 Feb 2023 03:06:37 -0500
+Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86CF228222;
+        Wed, 22 Feb 2023 00:06:36 -0800 (PST)
+Received: by mail-ed1-x536.google.com with SMTP id h16so27100627edz.10;
+        Wed, 22 Feb 2023 00:06:36 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=YPMa5Qux65YRcCMublZr2rs9cvXhmKdyVQIJVbnVWT4=;
+        b=QIeyGVdiU5LBwkf9RJSeOssfXCPXfc+n9snEgrYXKBb8NenyI0boW/xxfZU1R+DpMj
+         l2cBJRA3pB8DbWMZCWxOcwyP72h+4cDxOZZ06qwWke++yReExxdF91Ugu+NzpSO3KJRz
+         hW2zewosI9BBVJw8iV1jvyR7C1mdJ7xVk78WBEyesMuuZbuq76C9I/JUQiXNfftVgniZ
+         S41iZXacxL29FrSsyHP7uyUI+owC4ehc/4NiLAftGjYdMI1jnYk5vA4WyZbipApXOi/L
+         bvOQNg1aVvCCCqR7E14zVk2b8mJcr0l06UV/tRgkkxzscxKfY7+1fFTP2N3lETJuF/g3
+         TtsA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=YPMa5Qux65YRcCMublZr2rs9cvXhmKdyVQIJVbnVWT4=;
+        b=jqHiR+MG/c23KEfBoKHj3Q7uS0fIgf+vrVnl5phRUpl8++aSvcXMG8uVGtxdk7lxc/
+         wwniiatIW/pEQDAoSwyclCuy3RFkrZOkIqgcqfWJYKZ+aLlaXLHs8Xo1tpZUZWBK/dSy
+         xvtxkLUufBGCgMKrrJoOEqoIrS6z1zqM806OH91L7sOl/k2fQ26tr6kO8vqGPHWweCWX
+         AkUe/QA+3jyCnpeePzyYcAk3Qf2WwrqnEfkkEljearv/1wdSCrsb4GAujDTj+oLAZLGo
+         +FBwQRdZvNW3TpRZUuCLgGX3IsX54QjLw0SWb6E+KekzJc0kDwomlKMCRc53hfVL41BE
+         cCyQ==
+X-Gm-Message-State: AO0yUKUE+I8U3bGZhd2JizMyxcAp5A3dIm0p5LpdKmKRughCf1cgIlEp
+        /yJdz5mfv//xGfLKZVeDxewdBRY7H8RSpAv7WB/KifYBAH4=
+X-Google-Smtp-Source: AK7set/+WSzCMMWSjAe/irqAayrxMoHG+PYHghqCVMxKunpmYfeihdWw0Wggr/PON9OUA12Vev6VplAxdW0pvv4Z/hA=
+X-Received: by 2002:a17:906:4c49:b0:87b:fa21:7953 with SMTP id
+ d9-20020a1709064c4900b0087bfa217953mr7250522ejw.8.1677053194946; Wed, 22 Feb
+ 2023 00:06:34 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230209020916.6475-3-steev@kali.org>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20230221183211.21964-1-clamor95@gmail.com> <20230221183211.21964-10-clamor95@gmail.com>
+ <Y/Ud1bn+LExxLb/Q@kadam>
+In-Reply-To: <Y/Ud1bn+LExxLb/Q@kadam>
+From:   Svyatoslav Ryhel <clamor95@gmail.com>
+Date:   Wed, 22 Feb 2023 10:06:23 +0200
+Message-ID: <CAPVz0n3T-SiTbDyQTTE4L==OGkpSQrfBAP5gRjEevt4ozZLB-g@mail.gmail.com>
+Subject: Re: [PATCH v1 09/10] staging: dsp: add support for Fortemedia FM34NE DSP
+To:     Dan Carpenter <error27@gmail.com>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>,
+        Maxim Schwalm <maxim.schwalm@gmail.com>,
+        Dmitry Osipenko <digetx@gmail.com>, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, alsa-devel@alsa-project.org,
+        linux-tegra@vger.kernel.org, linux-staging@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Feb 08, 2023 at 08:09:14PM -0600, Steev Klimaszewski wrote:
-> Added regulators,GPIOs and changes required to power on/off wcn6855.
-> Added support for firmware download for wcn6855.
-> 
-> Signed-off-by: Steev Klimaszewski <steev@kali.org>
-> ---
+=D0=B2=D1=82, 21 =D0=BB=D1=8E=D1=82. 2023 =D1=80. =D0=BE 21:39 Dan Carpente=
+r <error27@gmail.com> =D0=BF=D0=B8=D1=88=D0=B5:
+>
+> On Tue, Feb 21, 2023 at 08:32:10PM +0200, Svyatoslav Ryhel wrote:
+> > +static int fm34ne_dsp_set_config(struct fm34ne_dsp_data *fm34, int sta=
+te)
+> > +{
+> > +     struct device *dev =3D &fm34->client->dev;
+> > +
+> > +     const u8 *enable_ns_parameter =3D fm34->data->enable_noise_suppre=
+ssion;
+> > +     int enable_ns_length =3D fm34->data->enable_ns_length;
+> > +
+> > +     const u8 *disable_ns_parameter =3D fm34->data->disable_noise_supp=
+ression;
+> > +     int disable_ns_length =3D fm34->data->disable_ns_length;
+> > +
+> > +     int ret;
+> > +
+> > +     gpiod_set_value_cansleep(fm34->bypass_gpio, 1);
+> > +     msleep(20);
+> > +
+> > +     switch (state) {
+> > +     case FM34NE_NS_ENABLE:
+> > +             ret =3D fm34ne_dsp_write_config(fm34->client, enable_para=
+meter,
+> > +                                           sizeof(enable_parameter));
+> > +             if (ret < 0) {
+> > +                     dev_err(dev, "failed to set DSP enable with %d\n"=
+, ret);
+> > +                     goto exit;
+> > +             }
+> > +
+> > +             ret =3D fm34ne_dsp_write_config(fm34->client, enable_ns_p=
+arameter,
+> > +                                           enable_ns_length);
+> > +             if (ret < 0) {
+> > +                     dev_err(dev, "failed to enable DSP noise suppress=
+ion with %d\n", ret);
+> > +                     goto exit;
+> > +             }
+> > +
+> > +             dev_info(dev, "noise suppression enable DSP parameter wri=
+tten\n");
+>
+> Delete this type of debug code.
+>
+> > +             break;
+> > +
+> > +     case FM34NE_NS_DISABLE:
+> > +             ret =3D fm34ne_dsp_write_config(fm34->client, enable_para=
+meter,
+> > +                                           sizeof(enable_parameter));
+> > +             if (ret < 0) {
+> > +                     dev_err(dev, "failed to set DSP enable with %d\n"=
+, ret);
+> > +                     goto exit;
+> > +             }
+> > +
+> > +             ret =3D fm34ne_dsp_write_config(fm34->client, disable_ns_=
+parameter,
+> > +                                           disable_ns_length);
+> > +             if (ret < 0) {
+> > +                     dev_err(dev, "failed to disable DSP noise suppres=
+sion with %d\n", ret);
+> > +                     goto exit;
+> > +             }
+> > +
+> > +             dev_info(dev, "noise suppression disable DSP parameter wr=
+itten\n");
+>
+> Same etc.
+>
+> > +             break;
+> > +
+> > +     case FM34NE_BYPASS:
+> > +     default:
+> > +             ret =3D fm34ne_dsp_write_config(fm34->client, bypass_para=
+meter,
+> > +                                           sizeof(bypass_parameter));
+> > +             if (ret < 0) {
+> > +                     dev_err(dev, "failed to set DSP bypass with %d\n"=
+, ret);
+> > +                     goto exit;
+> > +             }
+> > +
+> > +             dev_info(dev, "bypass DSP parameter written\n");
+> > +             break;
+> > +     }
+> > +
+> > +exit:
+> > +     gpiod_set_value_cansleep(fm34->bypass_gpio, 0);
+> > +
+> > +     return ret;
+> > +}
+> > +
+> > +static int fm34ne_dsp_set_hw(struct fm34ne_dsp_data *fm34)
+> > +{
+> > +     struct device *dev =3D &fm34->client->dev;
+> > +     int ret;
+> > +
+> > +     ret =3D clk_prepare_enable(fm34->dap_mclk);
+> > +     if (ret) {
+> > +             dev_err(dev, "failed to enable the DSP MCLK: %d\n", ret);
+> > +             return ret;
+> > +     }
+> > +
+> > +     ret =3D regulator_enable(fm34->vdd_supply);
+> > +     if (ret < 0) {
+> > +             dev_err(dev, "failed to enable vdd power supply\n");
+>
+> clk_disable_unprepare(fm34->dap_mclk);
 
->  drivers/bluetooth/btqca.c   |  9 ++++++-
->  drivers/bluetooth/btqca.h   | 10 ++++++++
->  drivers/bluetooth/hci_qca.c | 50 ++++++++++++++++++++++++++++---------
->  3 files changed, 56 insertions(+), 13 deletions(-)
-> 
-> diff --git a/drivers/bluetooth/btqca.c b/drivers/bluetooth/btqca.c
-> index c9064d34d830..2f9d8bd27c38 100644
-> --- a/drivers/bluetooth/btqca.c
-> +++ b/drivers/bluetooth/btqca.c
- 
-> +static const struct qca_device_data qca_soc_data_wcn6855 = {
-> +	.soc_type = QCA_WCN6855,
-> +	.vregs = (struct qca_vreg []) {
-> +		{ "vddio", 5000 },
-> +		{ "vddbtcxmx", 126000 },
-> +		{ "vddrfacmn", 12500 },
-> +		{ "vddrfa0p8", 102000 },
-> +		{ "vddrfa1p7", 302000 },
-> +		{ "vddrfa1p2", 257000 },
-> +	},
-> +	.num_vregs = 6,
-> +	.capabilities = QCA_CAP_WIDEBAND_SPEECH | QCA_CAP_VALID_LE_STATES,
-> +};
-> +
->  static void qca_power_shutdown(struct hci_uart *hu)
->  {
->  	struct qca_serdev *qcadev;
+No, dap_mclk has to be on, else there will be no sound on the device.
 
-As I just mentioned IRC, you forgot to update qca_power_shutdown() here
-so the regulators are currently never disabled (e.g. when closing the
-device or on module unload).
+> > +             return ret;
+> > +     }
+> > +
+> > +     return 0;
+> > +}
+> > +
+> > +static void fm34ne_dsp_reset(struct fm34ne_dsp_data *fm34)
+> > +{
+> > +     gpiod_set_value_cansleep(fm34->reset_gpio, 1);
+> > +     msleep(20);
+> > +
+> > +     gpiod_set_value_cansleep(fm34->reset_gpio, 0);
+> > +     msleep(100);
+> > +}
+> > +
+> > +static int fm34ne_dsp_init_chip(struct fm34ne_dsp_data *fm34)
+> > +{
+> > +     const u8 *input_parameter =3D fm34->data->input_parameter;
+> > +     int input_parameter_length =3D fm34->data->input_parameter_length=
+;
+> > +     int ret;
+> > +
+> > +     ret =3D fm34ne_dsp_set_hw(fm34);
+> > +     if (ret)
+> > +             return ret;
+> > +
+> > +     fm34ne_dsp_reset(fm34);
+> > +
+> > +     gpiod_set_value_cansleep(fm34->bypass_gpio, 1);
+> > +     msleep(20);
+> > +
+> > +     ret =3D i2c_smbus_write_byte(fm34->client, FM34NE_I2C_CHECK);
+> > +     if (ret < 0) {
+> > +             dev_info(&fm34->client->dev, "initial write failed\n");
+>
+> dev_warn()?
+>
+> > +             msleep(50);
+> > +
+> > +             fm34ne_dsp_reset(fm34);
+> > +             gpiod_set_value_cansleep(fm34->bypass_gpio, 0);
+> > +
+> > +             return ret;
+> > +     }
+> > +
+> > +     ret =3D fm34ne_dsp_write_config(fm34->client, input_parameter,
+> > +                                   input_parameter_length);
+> > +     if (ret < 0)
+> > +             return -EINVAL;
+>
+> Why not propagate the error code from fm34ne_dsp_write_config()?
+>
+> > +
+> > +     msleep(100);
+> > +     gpiod_set_value_cansleep(fm34->bypass_gpio, 0);
+> > +
+> > +     dev_info(&fm34->client->dev, "%s detected\n", fm34->data->model);
+> > +
+> > +     /* Constantly set DSP to bypass mode for now */
+> > +     ret =3D fm34ne_dsp_set_config(fm34, FM34NE_BYPASS);
+> > +     if (ret)
+> > +             return ret;
+> > +
+> > +     return 0;
+> > +}
+>
+> regards,
+> dan carpenter
 
-> @@ -2047,7 +2066,8 @@ static int qca_serdev_probe(struct serdev_device *serdev)
->  
->  	if (data &&
->  	    (qca_is_wcn399x(data->soc_type) ||
-> -	    qca_is_wcn6750(data->soc_type))) {
-> +	    qca_is_wcn6750(data->soc_type) ||
-> +	    qca_is_wcn6855(data->soc_type))) {
->  		qcadev->btsoc_type = data->soc_type;
->  		qcadev->bt_power = devm_kzalloc(&serdev->dev,
->  						sizeof(struct qca_power),
+All other notes are reasonable. Thanks
 
-> @@ -2150,7 +2174,8 @@ static void qca_serdev_remove(struct serdev_device *serdev)
->  	struct qca_power *power = qcadev->bt_power;
->  
->  	if ((qca_is_wcn399x(qcadev->btsoc_type) ||
-> -	     qca_is_wcn6750(qcadev->btsoc_type)) &&
-> +	     qca_is_wcn6750(qcadev->btsoc_type) ||
-> +	     qca_is_wcn6855(qcadev->btsoc_type)) &&
->  	     power->vregs_on)
->  		qca_power_shutdown(&qcadev->serdev_hu);
->  	else if (qcadev->susclk)
-
-Johan
+Best regards,
+Svyatoslav R.
