@@ -2,97 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A587569F48E
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Feb 2023 13:30:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7960269F491
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Feb 2023 13:30:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232113AbjBVMaC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Feb 2023 07:30:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55640 "EHLO
+        id S231749AbjBVMah (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Feb 2023 07:30:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56428 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231194AbjBVMaA (ORCPT
+        with ESMTP id S232067AbjBVMaa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Feb 2023 07:30:00 -0500
-Received: from mail-yb1-xb29.google.com (mail-yb1-xb29.google.com [IPv6:2607:f8b0:4864:20::b29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F32C24107;
-        Wed, 22 Feb 2023 04:29:41 -0800 (PST)
-Received: by mail-yb1-xb29.google.com with SMTP id cf8so8117709ybb.11;
-        Wed, 22 Feb 2023 04:29:41 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=W+y6jYXWsto0YHDByl1yTKE6KOcfbkoNMI/hyUMcuvE=;
-        b=hKd+3ILDn5umqyh3E+tUNyNXuU97ZBYVgCxEd/hL1bp5/i2R3ww9Rl8ETcvWq5EbFQ
-         mK2kWKdUQuvJRUWY+yXWw2bLA6wXVt9MFu9phfUyLwMkeS4+yEYc1RmbvGW7ak1NP52Q
-         7MBkM1ID9GctLiXC7H2LgyctX5pbCL/TtdOcXRnH28w7eann/7Q4JlAV23qjhSktMwaj
-         WXTJoPzyxobebTg+4uz2JmAcTh/mAxuP2rG9bYCDPYeqb7GDMPVDUyCxayt9qre2UEnq
-         vQHngphFvWmPJhaltMZcormFomcFpx7qEF5QeKrqWyJezP7L3zD5z5ofbLM6LUsvo36P
-         BG3A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=W+y6jYXWsto0YHDByl1yTKE6KOcfbkoNMI/hyUMcuvE=;
-        b=LhBWDmZmQfR2S8+43fZt2lKjHLVZyt/68j7+ZlHNXn5ZcNSwy0L9eYaSVROgWgE2Ef
-         PpyrcOcOmhvSp4R2qtXgyfkbTpxxNfsJ2fRCdf6Wxirweqm+cVRuGd1KOSpjXRVW5JCj
-         l884t4JiT/ukQvkiraL7FYqsMorkI+YkmnhLq3TffV4mVL0/TG7frmHhHr0D8WbiV0cF
-         5EGHnGbpxE3feYffra5bpHuR1r1zG3EhLtpZ/mTe0SgqOFbIqVEg9ah3e0W8Ptq2qZIL
-         CwP40NkgG/qKy00/asOqR5aWZDf/ce1IZ1s/7UAe6jFVDw/VN85+RqN04U+iD6UfB1ta
-         MGnA==
-X-Gm-Message-State: AO0yUKU2L618ow5nlxP8ikwnpZtntL7NhUYW8Wr49pHiyzNE38oraBf2
-        i7mOG9tQekD+TpmwAgjJ6m2kyovCDAu31TBqN1s=
-X-Google-Smtp-Source: AK7set/qV8h6RC3N11l2G4jmnq+35W3WK18sceJQ4Nu3CSuN3W9Z9TOL4G5XhbVHDmm4uIHggKG0+UTrgzqh0kzdV84=
-X-Received: by 2002:a5b:c82:0:b0:8e3:28a8:bb5c with SMTP id
- i2-20020a5b0c82000000b008e328a8bb5cmr648282ybq.154.1677068980827; Wed, 22 Feb
- 2023 04:29:40 -0800 (PST)
+        Wed, 22 Feb 2023 07:30:30 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38A552313B;
+        Wed, 22 Feb 2023 04:30:17 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id A98E1B8125F;
+        Wed, 22 Feb 2023 12:30:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 13F41C433EF;
+        Wed, 22 Feb 2023 12:30:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1677069014;
+        bh=tkoEGy62ppDmmm4ymendbNyJ8TLlOAHfYLvaP+StFJc=;
+        h=Subject:From:In-Reply-To:References:To:Cc:Date:From;
+        b=MIG66V4ikNdcT8Me/J4Oe0yrRMrUHZES9A9Hc751Qv6eYKppkFguaa7s9xyPBWACp
+         U9OTm6Ky+pWrZ5vHRtOT09BPfneej7Fv0egCf1U+0VRwQrwQUbCZedP7RcOF/roxZc
+         Yx09CCX7UigSKOP68gGlNktMqYMClQVmwI301ZR6KnQrTsj7Enz0OgVz0fNSJJznru
+         Be1kgKc4c6Lz0aQhB3AXfvNdOB/ADaJx41q5TriT5yr+Uk+cwlVwbBv4cXf1AOHKOa
+         b1svuLgWCKGD33YUzVlB8TayyMbInWmv/nlMS8XKJuvlKJPIp2qTsj0dCqZY7aLdk9
+         QRJ9SKCxvSQ6g==
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-References: <20230221-gpu-up-time-v1-1-bf8fe74b7f55@asahilina.net>
- <87v8jvnqq4.ffs@tglx> <Y/TP6as7qqwfcI42@boqun-archlinux> <87h6vfnh0f.ffs@tglx>
- <7b93bf74-abdc-f8c1-9a12-7c7f080f9e19@asahilina.net> <87edqioo1e.ffs@tglx>
- <CANiq72n-++roTv3yDNOA=Mi_sscBZX3xPdZ6RZ0Oxx+T82pf5A@mail.gmail.com>
- <87o7pmmtre.ffs@tglx> <Y/WDz013yBIfQPDq@boqun-archlinux> <03e9af69-3fea-032d-6dc3-ac0ea8e57471@asahilina.net>
-In-Reply-To: <03e9af69-3fea-032d-6dc3-ac0ea8e57471@asahilina.net>
-From:   Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Date:   Wed, 22 Feb 2023 13:29:29 +0100
-Message-ID: <CANiq72kyULg=rPzK3QDqCJny3zjrOKzrH=v2PCTY_pUae-ODgw@mail.gmail.com>
-Subject: Re: [PATCH] rust: time: New module for timekeeping functions
-To:     Asahi Lina <lina@asahilina.net>
-Cc:     Boqun Feng <boqun.feng@gmail.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Miguel Ojeda <ojeda@kernel.org>,
-        Alex Gaynor <alex.gaynor@gmail.com>,
-        Wedson Almeida Filho <wedsonaf@gmail.com>,
-        Gary Guo <gary@garyguo.net>,
-        =?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
-        John Stultz <jstultz@google.com>,
-        Stephen Boyd <sboyd@kernel.org>, linux-kernel@vger.kernel.org,
-        rust-for-linux@vger.kernel.org, asahi@lists.linux.dev,
-        Heghedus Razvan <heghedus.razvan@protonmail.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+Subject: Re: wifi: rtlwifi: rtl8192de: Remove the unused variable
+ bcnfunc_enable
+From:   Kalle Valo <kvalo@kernel.org>
+In-Reply-To: <20230217092529.105899-1-jiapeng.chong@linux.alibaba.com>
+References: <20230217092529.105899-1-jiapeng.chong@linux.alibaba.com>
+To:     Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
+Cc:     pkshih@realtek.com, davem@davemloft.net, edumazet@google.com,
+        kuba@kernel.org, pabeni@redhat.com, linux-wireless@vger.kernel.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Jiapeng Chong <jiapeng.chong@linux.alibaba.com>,
+        Abaci Robot <abaci@linux.alibaba.com>
+User-Agent: pwcli/0.1.1-git (https://github.com/kvalo/pwcli/) Python/3.7.3
+Message-ID: <167706901023.20055.833795751773606339.kvalo@kernel.org>
+Date:   Wed, 22 Feb 2023 12:30:11 +0000 (UTC)
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Feb 22, 2023 at 5:46 AM Asahi Lina <lina@asahilina.net> wrote:
->
-> For the actual Instant type, I was thinking it makes sense to just
-> internally represent it as a newtype of Duration as well. Then all the
-> math becomes trivial based on Duration operations, and when we replace
-> Duration with a new u64 type it'll all work out the same. Fundamentally
-> that means Instant types are internally stored as the Duration between
-> the epoch (e.g. system boot) subject to the way that clock ticks, which
-> I think is a reasonable internal representation?
+Jiapeng Chong <jiapeng.chong@linux.alibaba.com> wrote:
 
-Yeah, I think that is the way to go -- that is also how C++ represents
-time points as well (including libstdc++, libc++ and STL from a quick
-look), as well as Abseil too.
+> Variable bcnfunc_enable is not effectively used, so delete it.
+> 
+> drivers/net/wireless/realtek/rtlwifi/rtl8192de/hw.c:1050:5: warning: variable 'bcnfunc_enable' set but not used.
+> 
+> Reported-by: Abaci Robot <abaci@linux.alibaba.com>
+> Link: https://bugzilla.openanolis.cn/show_bug.cgi?id=4110
+> Signed-off-by: Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
+> Acked-by: Ping-Ke Shih <pkshih@realtek.com>
 
-Cheers,
-Miguel
+Patch applied to wireless-next.git, thanks.
+
+db5e4b364553 wifi: rtlwifi: rtl8192de: Remove the unused variable bcnfunc_enable
+
+-- 
+https://patchwork.kernel.org/project/linux-wireless/patch/20230217092529.105899-1-jiapeng.chong@linux.alibaba.com/
+
+https://wireless.wiki.kernel.org/en/developers/documentation/submittingpatches
+
