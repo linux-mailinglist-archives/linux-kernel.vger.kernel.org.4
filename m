@@ -2,67 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BBE9D69EF18
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Feb 2023 08:07:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 47B3169EF1A
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Feb 2023 08:07:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229834AbjBVHHI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Feb 2023 02:07:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37760 "EHLO
+        id S230264AbjBVHHN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Feb 2023 02:07:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37854 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229480AbjBVHHG (ORCPT
+        with ESMTP id S229480AbjBVHHK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Feb 2023 02:07:06 -0500
-Received: from mail-ua1-x92f.google.com (mail-ua1-x92f.google.com [IPv6:2607:f8b0:4864:20::92f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F58531E22
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Feb 2023 23:07:05 -0800 (PST)
-Received: by mail-ua1-x92f.google.com with SMTP id f36so2227682uae.6
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Feb 2023 23:07:05 -0800 (PST)
+        Wed, 22 Feb 2023 02:07:10 -0500
+Received: from mail-ua1-x935.google.com (mail-ua1-x935.google.com [IPv6:2607:f8b0:4864:20::935])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 112CD36681
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Feb 2023 23:07:09 -0800 (PST)
+Received: by mail-ua1-x935.google.com with SMTP id f20so2247263uam.3
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Feb 2023 23:07:09 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
+        d=linaro.org; s=google; t=1677049628;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=qlPwPykFYo8rhIVwD6mBB4FPi0U1mYPcwHgebQEUnaw=;
-        b=VXIAa7FunJm6q3CeB62nQ167gZdQVEQe2WuW1+KVUVZUKVfVSRrsFHRIuvLcvB+WAI
-         BkW2mPJ4C7KTo2uk2BNR5ieJykYAv4X+UkH3enEhjvEHcvm8VjYHwUjN7CBfiAFvp+r3
-         S/1r2W9l9+ur2AMr7PnVyAh/q4cfsy1OA2+z4=
+        bh=swo/AVRGoOMfKCuHRg1QypMC/toJqloCtmfqbfFX1yE=;
+        b=UR3daz9+LDL6M2fVY4jjBENnMayiPhWT6h6ZsS+Zga6e/L2rj118PB4PSnb6i45Z1o
+         A0N8NV0y9VHkoAIdLjWj3wiDouo+Ulw/gQbBXTpAc3DMeqKjd+qG5ZCW/cu4ff/klRUO
+         Or4T/q1OU+RaNv3ej7KqDuRNwrEh3Wbf92/HGnKExqw7/Es6D3XAqrBmJSrQHPkV3Vxs
+         bojHRnkpwgY24NBGdlRthGAn/oTy9dmFXkmtpSLxxLSzyrgjK7oBAzwF4MfRu6TUoQ3K
+         FwhygeKz5ITsP+6cM3vhATXlIdpYUjHQhml5E+9lGZAM/81gd/U1TbvToJHDpnEK+0jA
+         UI4w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
+        d=1e100.net; s=20210112; t=1677049628;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=qlPwPykFYo8rhIVwD6mBB4FPi0U1mYPcwHgebQEUnaw=;
-        b=Q289egL4i3mZ7PzGE3m/G5nwuqzYopcXzuHighY0C5GU50iVNZWtRLobwS/kch0drZ
-         IniMAmbF+Do7XCw+fRg1xx0r/LikmIPTXdAIbYg8W3+NvNbeSRaTBJmtc1raiUbyzWVq
-         nGow87wwX+BkUdHKFZbI0UYtJd/ArRhx1QCe3PBf2FPMee3xBJy0yDQ8BcKzTKz4EBvv
-         yj/Lioq/lmjYlDsCKam/QXkyW6XgUkuOMLWT+6dXKfre25iFw8uaEmoUtFQ/d0rvBkj3
-         JKV8nj4HZ8p+THKlBvr84zlba4jJnppKL9slkue5pabwHZ2JGW6bj+8BuYoDradJBYLm
-         MaCw==
-X-Gm-Message-State: AO0yUKX2avitOSKKiM/pIvmXf0IqodT92tEnEY9zEN1nzEfqWT3watmB
-        mOLn15uOeH5l/JHsbobJKlnplknr90O9PHoN1DpxjA==
-X-Google-Smtp-Source: AK7set8LX05PaXjP97oF1G9cF2P3OWsBmaHQhbW//L1C7tUi+Z8JteajDRu6P6E5vLHDtTDlMdm48IpSEsLEbY4UVV4=
-X-Received: by 2002:a1f:208d:0:b0:3e8:66ce:a639 with SMTP id
- g135-20020a1f208d000000b003e866cea639mr1283824vkg.2.1677049624519; Tue, 21
- Feb 2023 23:07:04 -0800 (PST)
+        bh=swo/AVRGoOMfKCuHRg1QypMC/toJqloCtmfqbfFX1yE=;
+        b=piQaaaawKh/gR8VkITTrjpsr/NFVLycLjP3pD9gNik7DsabimZGITI6FZW3I/sLjA+
+         Zmg+dq/y37dq7eHgmEN/NIPBLkTNifa7h94p8K4LuZZxZvCQS+6ek2Xb6AeQM+OlMHtV
+         IPCoEdWFP44QnF37GpWQwZFpmw0S8oO75QrKk/hGFGajFgscmtPPL8Y/okWEr1qlrQeH
+         9uxiwR6avYcEhdwlCEoZ6J+LDIlfMCXRqIFDsq2IylrZuYiHL0o91cWchU/0AXtsB1hV
+         OLJXYaAzEVbrTJEBjwNQG0xrbPdIwdwmEioOlltAopDEZ9uN65NDMgCwXC66vdHy3sRW
+         s0xQ==
+X-Gm-Message-State: AO0yUKWn14yG28qpBuVYh45lkMvq71Oq+820XmbE/tZ8nrB2KqxBQ4fN
+        yYtoWD+Eh8xXWTwBGqLK/msZh3Ey8q6R9KB4VLeljA==
+X-Google-Smtp-Source: AK7set95TR3c8U46sH0ZY0kZjohLy02UfcaSbSVOPVr0aKJXD5TWClylFBY/nVZk3XmY1zOLnMg72Uv0nz0qaIhmz4Y=
+X-Received: by 2002:a05:6122:1435:b0:3e1:f8b0:e35d with SMTP id
+ o21-20020a056122143500b003e1f8b0e35dmr1463080vkp.35.1677049628100; Tue, 21
+ Feb 2023 23:07:08 -0800 (PST)
 MIME-Version: 1.0
-References: <20230221153740.1620529-1-angelogioacchino.delregno@collabora.com> <20230221153740.1620529-11-angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20230221153740.1620529-11-angelogioacchino.delregno@collabora.com>
-From:   Chen-Yu Tsai <wenst@chromium.org>
-Date:   Wed, 22 Feb 2023 15:06:53 +0800
-Message-ID: <CAGXv+5FqZPXaE8tyEFtejsYpKMLzUt5R_QnkbQrDSBM_u7rRYg@mail.gmail.com>
-Subject: Re: [PATCH v2 10/10] drm/panfrost: Add new compatible for Mali on the
- MT8183 SoC
-To:     AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-Cc:     airlied@gmail.com, daniel@ffwll.ch, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, steven.price@arm.com,
-        alyssa.rosenzweig@collabora.com, matthias.bgg@gmail.com,
-        robh@kernel.org, dri-devel@lists.freedesktop.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org
+References: <20230202073148.657746-1-sumit.garg@linaro.org>
+In-Reply-To: <20230202073148.657746-1-sumit.garg@linaro.org>
+From:   Sumit Garg <sumit.garg@linaro.org>
+Date:   Wed, 22 Feb 2023 12:36:57 +0530
+Message-ID: <CAFA6WYPOx2EWFL8zGXvjqYhQap+v26TWxQ1Pg8k4DiZupfZvCQ@mail.gmail.com>
+Subject: Re: [PATCH v6 0/2] arm64: Fix pending single-step debugging issues
+To:     will@kernel.org
+Cc:     catalin.marinas@arm.com, mark.rutland@arm.com,
+        daniel.thompson@linaro.org, dianders@chromium.org,
+        liwei391@huawei.com, mhiramat@kernel.org, maz@kernel.org,
+        ardb@kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,26 +69,57 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 21, 2023 at 11:37 PM AngeloGioacchino Del Regno
-<angelogioacchino.delregno@collabora.com> wrote:
->
-> The "mediatek,mt8183-mali" compatible uses platform data that calls for
-> getting (and managing) two regulators ("mali" and "sram") but devfreq
-> does not support this usecase, resulting in DVFS not working.
->
-> Since a lot of MediaTek SoCs need to set the voltages for the GPU SRAM
-> regulator in a specific relation to the GPU VCORE regulator, a MediaTek
-> SoC specific driver was introduced to automatically satisfy, through
-> coupling, these constraints: this means that there is at all no need to
-> manage both regulators in panfrost but to otherwise just manage the main
-> "mali" (-> gpu vcore) regulator instead.
->
-> Keeping in mind that we cannot break the ABI, the most sensible route
-> (avoiding hacks and uselessly overcomplicated code) to get a MT8183
-> node with one power supply was to add a new "mediatek,mt8183b-mali"
-> compatible, which effectively deprecates the former.
->
-> Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-> Reviewed-by: Steven Price <steven.price@arm.com>
+Hi Will,
 
-Reviewed-by: Chen-Yu Tsai <wenst@chromium.org>
+On Thu, 2 Feb 2023 at 13:02, Sumit Garg <sumit.garg@linaro.org> wrote:
+>
+> This patch-set reworks pending fixes from Wei's series [1] to make
+> single-step debugging via kgdb/kdb on arm64 work as expected. There was
+> a prior discussion on ML [2] regarding if we should keep the interrupts
+> enabled during single-stepping. So patch #1 follows suggestion from Will
+> [3] to not disable interrupts during single stepping but rather skip
+> single stepping within interrupt handler.
+>
+> [1] https://lore.kernel.org/all/20200509214159.19680-1-liwei391@huawei.com/
+> [2] https://lore.kernel.org/all/CAD=FV=Voyfq3Qz0T3RY+aYWYJ0utdH=P_AweB=13rcV8GDBeyQ@mail.gmail.com/
+> [3] https://lore.kernel.org/all/20200626095551.GA9312@willie-the-truck/
+>
+> Changes in v6:
+> - Fix incorrect rescheduling check introduced by rework for v5.
+> - Patch #2: s/kernel_regs_reset_single_step/kernel_rewind_single_step/
+> - Collected Daniel's tags.
+>
+
+Would you be happy to pick up patch #2 independently? Also, it would
+be great if you can provide some guidance regarding patch #1 which
+certainly fixes single stepping on arm64 but I am not sure how it
+would have side-effects.
+
+-Sumit
+
+> Changes in v5:
+> - Incorporated misc. comments from Mark.
+>
+> Changes in v4:
+> - Rebased to the tip of mainline.
+> - Picked up Doug's Tested-by tag.
+>
+> Changes in v3:
+> - Reword commit descriptions as per Daniel's suggestions.
+>
+> Changes in v2:
+> - Replace patch #1 to rather follow Will's suggestion.
+>
+> Sumit Garg (2):
+>   arm64: entry: Skip single stepping into interrupt handlers
+>   arm64: kgdb: Set PSTATE.SS to 1 to re-enable single-step
+>
+>  arch/arm64/include/asm/debug-monitors.h |  1 +
+>  arch/arm64/kernel/debug-monitors.c      |  5 +++++
+>  arch/arm64/kernel/entry-common.c        | 22 ++++++++++++++++++++--
+>  arch/arm64/kernel/kgdb.c                |  2 ++
+>  4 files changed, 28 insertions(+), 2 deletions(-)
+>
+> --
+> 2.34.1
+>
