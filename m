@@ -2,61 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 28E9E69EE06
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Feb 2023 05:49:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B10BB69EE0A
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Feb 2023 05:51:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230477AbjBVEtz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Feb 2023 23:49:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45560 "EHLO
+        id S230511AbjBVEvn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Feb 2023 23:51:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46492 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229451AbjBVEtx (ORCPT
+        with ESMTP id S229451AbjBVEvm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Feb 2023 23:49:53 -0500
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D10C2BF17
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Feb 2023 20:49:52 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1677041392; x=1708577392;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=maUBP8ex60oZlc84gtmVchdjM+H8Wg/fR68H9mqr+eQ=;
-  b=kP46zGNXk7+c3HMqp80xoyC458Rj82s1Wa/m5N/SZgsUDHoNkzQ2bN8K
-   lozrXJJkfkoN4aQiD1pux5dlrhVzbY2Aa1H3t1SkYaCgo1BoduJu+KhnR
-   jsGMr/HVWeP75uXBDCKnycqxcAH7vM9mZSN475b6BE80KD6N95Fi3VOt/
-   IFn5EfFgdfWiNNdG0mkIf4DwRauGJET2NPp2/PwVQv5mZIGTS6xD/vbwa
-   pP26fJ+tGJElJfthghV9Qh8L+qEvzkuNaQWyoaZDxo7ESqaY2qJ6VuWiV
-   lxm1SQF4JhprUF2mf+bpp4+UhlR0Wh3Aunkpjp7brycujajom8uSwfDhs
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10628"; a="419062415"
-X-IronPort-AV: E=Sophos;i="5.97,317,1669104000"; 
-   d="scan'208";a="419062415"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Feb 2023 20:49:52 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10628"; a="673966558"
-X-IronPort-AV: E=Sophos;i="5.97,317,1669104000"; 
-   d="scan'208";a="673966558"
-Received: from lkp-server01.sh.intel.com (HELO 598f84d49bc7) ([10.239.97.150])
-  by fmsmga007.fm.intel.com with ESMTP; 21 Feb 2023 20:49:51 -0800
-Received: from kbuild by 598f84d49bc7 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pUh4g-00000z-19;
-        Wed, 22 Feb 2023 04:49:50 +0000
-Date:   Wed, 22 Feb 2023 12:49:45 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "x86-ml" <x86@kernel.org>
-Cc:     linux-kernel@vger.kernel.org
-Subject: [tip:master] BUILD SUCCESS
- c5a864380fe8ffd54621d60ab162671962a43f7f
-Message-ID: <63f59ee9.H0DAUVsT0lfa+BJl%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        Tue, 21 Feb 2023 23:51:42 -0500
+Received: from fllv0016.ext.ti.com (fllv0016.ext.ti.com [198.47.19.142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F17D2CFE0;
+        Tue, 21 Feb 2023 20:51:40 -0800 (PST)
+Received: from fllv0035.itg.ti.com ([10.64.41.0])
+        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 31M4pVov008548;
+        Tue, 21 Feb 2023 22:51:31 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1677041491;
+        bh=GZ2F7R5667Lye5CFgpg6mK7+8fGz7Cc5bqG+FUXmV8s=;
+        h=Date:Subject:To:CC:References:From:In-Reply-To;
+        b=AFaGNSL9FSIqFVIegfDbbhRqSJjTvig07+XYOGq/MyPrh/PGih6zVGI5vCmpNvKzM
+         Klw7+54Th4Bxs2L42p/3OwELj7fcXUalHsodPwUEbDcj4X6W0gqzBp5raaRc2mEeAq
+         UF8Z2W4taCcCtaIeZNnQyq01DKOCVRPhAfIHAOLA=
+Received: from DFLE114.ent.ti.com (dfle114.ent.ti.com [10.64.6.35])
+        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 31M4pViT108034
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Tue, 21 Feb 2023 22:51:31 -0600
+Received: from DFLE109.ent.ti.com (10.64.6.30) by DFLE114.ent.ti.com
+ (10.64.6.35) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Tue, 21
+ Feb 2023 22:51:31 -0600
+Received: from lelv0327.itg.ti.com (10.180.67.183) by DFLE109.ent.ti.com
+ (10.64.6.30) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
+ Frontend Transport; Tue, 21 Feb 2023 22:51:31 -0600
+Received: from [10.24.69.79] (ileaxei01-snat.itg.ti.com [10.180.69.5])
+        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 31M4pR6f047514;
+        Tue, 21 Feb 2023 22:51:28 -0600
+Message-ID: <a74bf007-40b5-3d92-ba30-c50a2bf4a3c0@ti.com>
+Date:   Wed, 22 Feb 2023 10:21:27 +0530
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH v10 2/9] arm64: dts: ti: k3-j721s2-main: Add support for
+ USB
+Content-Language: en-US
+To:     Nishanth Menon <nm@ti.com>
+CC:     <afd@ti.com>, <vigneshr@ti.com>, <kristo@kernel.org>,
+        <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
+        <s-vadapalli@ti.com>, <linux-arm-kernel@lists.infradead.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+References: <20230221120612.27366-1-r-gunasekaran@ti.com>
+ <20230221120612.27366-3-r-gunasekaran@ti.com>
+ <20230221135852.n3yukx55q7jmqbgk@chowder>
+From:   Ravi Gunasekaran <r-gunasekaran@ti.com>
+In-Reply-To: <20230221135852.n3yukx55q7jmqbgk@chowder>
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,LONGWORDS,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -64,106 +71,128 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git master
-branch HEAD: c5a864380fe8ffd54621d60ab162671962a43f7f  Merge branch into tip/master: 'objtool/core'
 
-elapsed time: 772m
 
-configs tested: 85
-configs skipped: 3
+On 21/02/23 7:28 pm, Nishanth Menon wrote:
+> On 17:36-20230221, Ravi Gunasekaran wrote:
+>> From: Aswath Govindraju <a-govindraju@ti.com>
+>>
+>> Add support for single instance of USB 3.0 controller in J721S2 SoC.
+>>
+>> Signed-off-by: Aswath Govindraju <a-govindraju@ti.com>
+>> Signed-off-by: Matt Ranostay <mranostay@ti.com>
+>> Link: https://lore.kernel.org/r/20221122101616.770050-2-mranostay@ti.com
+> 
+> Is the link supposed to signify some reference we need to keep for ever?
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+No. I will remove the reference to the link. I picked up the v7 series from
+previous submitter through "b4" and maintained the Link tag as-is since then.
+I will remove the reference to the link in the next series.
 
-gcc tested configs:
-alpha                            allyesconfig
-alpha                               defconfig
-arc                              allyesconfig
-arc                                 defconfig
-arc                  randconfig-r043-20230219
-arc                  randconfig-r043-20230220
-arc                  randconfig-r043-20230221
-arm                              allmodconfig
-arm                              allyesconfig
-arm                                 defconfig
-arm                  randconfig-r046-20230220
-arm64                            allyesconfig
-arm64                               defconfig
-csky                                defconfig
-i386                             allyesconfig
-i386                              debian-10.3
-i386                                defconfig
-i386                 randconfig-a001-20230220
-i386                 randconfig-a002-20230220
-i386                 randconfig-a003-20230220
-i386                 randconfig-a004-20230220
-i386                 randconfig-a005-20230220
-i386                 randconfig-a006-20230220
-ia64                             allmodconfig
-ia64                                defconfig
-loongarch                        allmodconfig
-loongarch                         allnoconfig
-loongarch                           defconfig
-m68k                             allmodconfig
-m68k                                defconfig
-mips                             allmodconfig
-mips                             allyesconfig
-nios2                               defconfig
-parisc                              defconfig
-parisc64                            defconfig
-powerpc                          allmodconfig
-powerpc                           allnoconfig
-riscv                            allmodconfig
-riscv                             allnoconfig
-riscv                               defconfig
-riscv                randconfig-r042-20230219
-riscv                randconfig-r042-20230221
-riscv                          rv32_defconfig
-s390                             allmodconfig
-s390                             allyesconfig
-s390                                defconfig
-s390                 randconfig-r044-20230219
-s390                 randconfig-r044-20230221
-sh                               allmodconfig
-sparc                               defconfig
-um                             i386_defconfig
-um                           x86_64_defconfig
-x86_64                            allnoconfig
-x86_64                           allyesconfig
-x86_64                              defconfig
-x86_64                                  kexec
-x86_64               randconfig-a001-20230220
-x86_64               randconfig-a002-20230220
-x86_64               randconfig-a003-20230220
-x86_64               randconfig-a004-20230220
-x86_64               randconfig-a005-20230220
-x86_64               randconfig-a006-20230220
-x86_64                               rhel-8.3
+> 
+>> Signed-off-by: Ravi Gunasekaran <r-gunasekaran@ti.com>
+>> ---
+>> I had reviewed this patch in the v5 series [1].
+>> Since I'm taking over upstreaming this series, I removed the self
+>> Reviewed-by tag.
+>>
+>> Links:
+>>
+>> [1] - https://lore.kernel.org/all/134c28a0-2d49-549c-dc8d-0887d8fd29c3@ti.com/
+> 
+> 
+> What changed in this rev of the patch?
 
-clang tested configs:
-arm                  randconfig-r046-20230219
-arm                  randconfig-r046-20230221
-hexagon              randconfig-r041-20230219
-hexagon              randconfig-r041-20230220
-hexagon              randconfig-r041-20230221
-hexagon              randconfig-r045-20230219
-hexagon              randconfig-r045-20230220
-hexagon              randconfig-r045-20230221
-i386                 randconfig-a011-20230220
-i386                 randconfig-a012-20230220
-i386                 randconfig-a013-20230220
-i386                 randconfig-a014-20230220
-i386                 randconfig-a015-20230220
-i386                 randconfig-a016-20230220
-riscv                randconfig-r042-20230220
-s390                 randconfig-r044-20230220
-x86_64               randconfig-a011-20230220
-x86_64               randconfig-a012-20230220
-x86_64               randconfig-a013-20230220
-x86_64               randconfig-a014-20230220
-x86_64               randconfig-a015-20230220
-x86_64               randconfig-a016-20230220
+Only one change in the patch since v5; Status of the some nodes introduced
+in this patch is set to disabled.
+
+> 
+>>
+>>  arch/arm64/boot/dts/ti/k3-j721s2-main.dtsi | 46 ++++++++++++++++++++++
+>>  1 file changed, 46 insertions(+)
+>>
+>> diff --git a/arch/arm64/boot/dts/ti/k3-j721s2-main.dtsi b/arch/arm64/boot/dts/ti/k3-j721s2-main.dtsi
+>> index 8915132efcc1..84e5689fff9f 100644
+>> --- a/arch/arm64/boot/dts/ti/k3-j721s2-main.dtsi
+>> +++ b/arch/arm64/boot/dts/ti/k3-j721s2-main.dtsi
+>> @@ -26,6 +26,20 @@
+>>  		};
+>>  	};
+>>  
+>> +	scm_conf: syscon@104000 {
+>> +		compatible = "ti,j721e-system-controller", "syscon", "simple-mfd";
+>> +		reg = <0x00 0x00104000 0x00 0x18000>;
+>> +		#address-cells = <1>;
+>> +		#size-cells = <1>;
+>> +		ranges = <0x00 0x00 0x00104000 0x18000>;
+>> +
+>> +		usb_serdes_mux: mux-controller@0 {
+>> +			compatible = "mmio-mux";
+>> +			#mux-control-cells = <1>;
+>> +			mux-reg-masks = <0x0 0x8000000>; /* USB0 to SERDES0 lane 1/3 mux */
+>> +		};
+>> +	};
+>> +
+>>  	gic500: interrupt-controller@1800000 {
+>>  		compatible = "arm,gic-v3";
+>>  		#address-cells = <2>;
+>> @@ -745,6 +759,38 @@
+>>  		};
+>>  	};
+>>  
+>> +	usbss0: cdns-usb@4104000 {
+>> +		compatible = "ti,j721e-usb";
+>> +		reg = <0x00 0x04104000 0x00 0x100>;
+>> +		clocks = <&k3_clks 360 16>, <&k3_clks 360 15>;
+>> +		clock-names = "ref", "lpm";
+>> +		assigned-clocks = <&k3_clks 360 16>; /* USB2_REFCLK */
+>> +		assigned-clock-parents = <&k3_clks 360 17>;
+>> +		power-domains = <&k3_pds 360 TI_SCI_PD_EXCLUSIVE>;
+>> +		#address-cells = <2>;
+>> +		#size-cells = <2>;
+>> +		ranges;
+>> +		dma-coherent;
+>> +
+>> +		status = "disabled";
+> 
+> Why disabled by default?
+
+One of the comment received in the v9 series was to disable the node in
+the include file and then enable it in the board specific DTS file.
+Changes in this series addressed that comment.
+
+> 
+>> +
+>> +		usb0: usb@6000000 {
+>> +			compatible = "cdns,usb3";
+>> +			reg = <0x00 0x06000000 0x00 0x10000>,
+>> +			      <0x00 0x06010000 0x00 0x10000>,
+>> +			      <0x00 0x06020000 0x00 0x10000>;
+>> +			reg-names = "otg", "xhci", "dev";
+>> +			interrupts = <GIC_SPI 96 IRQ_TYPE_LEVEL_HIGH>,
+>> +				     <GIC_SPI 102 IRQ_TYPE_LEVEL_HIGH>,
+>> +				     <GIC_SPI 120 IRQ_TYPE_LEVEL_HIGH>;
+>> +			interrupt-names = "host", "peripheral", "otg";
+>> +			maximum-speed = "super-speed";
+>> +			dr_mode = "otg";
+>> +
+>> +			status = "disabled";
+> 
+> Why disabled by default?
+
+See above.
+
+> 
+>> +		};
+>> +	};
+>> +
+>>  	main_mcan0: can@2701000 {
+>>  		compatible = "bosch,m_can";
+>>  		reg = <0x00 0x02701000 0x00 0x200>,
+>> -- 
+>> 2.17.1
+>>
 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+Regards,
+Ravi
