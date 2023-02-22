@@ -2,127 +2,167 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C6E9869FA88
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Feb 2023 18:54:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B6E7369FA8A
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Feb 2023 18:54:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231558AbjBVRyo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Feb 2023 12:54:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34608 "EHLO
+        id S231989AbjBVRyz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Feb 2023 12:54:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34762 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229756AbjBVRyn (ORCPT
+        with ESMTP id S232000AbjBVRyu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Feb 2023 12:54:43 -0500
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0093537F1A;
-        Wed, 22 Feb 2023 09:54:41 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1677088482; x=1708624482;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=M12BjQLqEYzHJwO6ma963tynHN4v+JrRV2MFQkyV3mQ=;
-  b=kGB2nsC+ZfvslNREx5zt6Do1ffpc/I5Leb4z85NzDBpTgbpPaY+7sahq
-   XbD2kX4eOWzzVupef312r1NQMNJ8ijAstBClwksXM6YK0o6ybjVZDdzxR
-   e4ObBQUdiNDzahCeXyNgdu4iI+w29mWgiAsOtTwN9XXl2tPpZrnxQ56oO
-   gF9nMadJaSskwXwUNb+RyBnu0M+wmHBlL8GnHvcVHdlHX8JSPmHdjR0XA
-   /HsvMsgUmnUt/zWreNIVDPoLEIWijyDuHvsbMc7au1Xdafj4ydw/ERrdE
-   Bst2v1/5r4F8VWa6iYSyj9esNApwq8jgAKKpne1AuvLSCpKvZBPsFyein
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10629"; a="334356519"
-X-IronPort-AV: E=Sophos;i="5.97,319,1669104000"; 
-   d="scan'208";a="334356519"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Feb 2023 09:54:40 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10629"; a="917641246"
-X-IronPort-AV: E=Sophos;i="5.97,319,1669104000"; 
-   d="scan'208";a="917641246"
-Received: from tzinser-mobl.amr.corp.intel.com (HELO [10.209.49.182]) ([10.209.49.182])
-  by fmsmga006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Feb 2023 09:54:37 -0800
-Message-ID: <b09efb91-d41c-012e-7d99-fdbcf3e92661@intel.com>
-Date:   Wed, 22 Feb 2023 09:54:36 -0800
+        Wed, 22 Feb 2023 12:54:50 -0500
+Received: from bee.birch.relay.mailchannels.net (bee.birch.relay.mailchannels.net [23.83.209.14])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B38203CE10
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Feb 2023 09:54:49 -0800 (PST)
+X-Sender-Id: dreamhost|x-authsender|kjlx@templeofstupid.com
+Received: from relay.mailchannels.net (localhost [127.0.0.1])
+        by relay.mailchannels.net (Postfix) with ESMTP id 7ADD85C20EC
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Feb 2023 17:54:47 +0000 (UTC)
+Received: from pdx1-sub0-mail-a306.dreamhost.com (unknown [127.0.0.6])
+        (Authenticated sender: dreamhost)
+        by relay.mailchannels.net (Postfix) with ESMTPA id 1B0A25C220A
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Feb 2023 17:54:47 +0000 (UTC)
+ARC-Seal: i=1; s=arc-2022; d=mailchannels.net; t=1677088487; a=rsa-sha256;
+        cv=none;
+        b=nctrzUK76VOvXeO7zHsAKPayMCSKTL7CKSXUViMaTmhWtI1HHpw41CLL9tdtT+x0J6EqnJ
+        ixAQJWbmCgL/lG7WwuASmkan4sEXRK33kkOTDcm15GdXSgpUwoKOrCKfRHtc9ruNfP9f2R
+        +eLINy21XKajNeTmjBRKW+M+2mMdH/LA6Sx9RyTpk8RTPZOKEG8RaC50ndLf7gUGqHakOG
+        /R8/jDoGe1/XChR8gU4oY8AI50CJfklFN2LuRjFwl+VRwfB9z1Sr6Fm+pJdAE+zXelmfR6
+        DlBSvZdpfZaxhOpgwcz5kgiGAkRqCR0Y+oXVVUjOSmjQbTea6rSAiucyCZrAdg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=mailchannels.net;
+        s=arc-2022; t=1677088487;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references:dkim-signature;
+        bh=jPLOaJx1XC+xepUu7FtXLYzyt2YPI1cX/q7Jp4OSr1s=;
+        b=TgQVHRddwVMproX+4/ztTf4A2wTDDMNKZyEmYD1NaY66Al0OGkr8oxFgE5TXQOPfjJBU3H
+        hRx2YB5ZKcY5FJRxr81o07dPwop6Y21lOg8AYvcjjq3YkMX1/0sRTO28TY+DKbwCHl7cqh
+        QpMUUUJ7aGV5s5g5Gr0twH6BzEGr9v8X4VzSoXJkD967OeOVhFVa1cBEZTglAnQptkHnCa
+        JbKS29MYPbTuaghLTkw/5YGCaEfve1960o+q4Y6Gk+dhycTtazEHexjfJm3/oFe5dgl+jb
+        xm96M4EHrROxNRmZUkOdCWKqXPqhUPfkZ0HRfcEU9t16UxTuAhoApVVlVY17hQ==
+ARC-Authentication-Results: i=1;
+        rspamd-9788b98bc-ngd69;
+        auth=pass smtp.auth=dreamhost smtp.mailfrom=kjlx@templeofstupid.com
+X-Sender-Id: dreamhost|x-authsender|kjlx@templeofstupid.com
+X-MC-Relay: Neutral
+X-MailChannels-SenderId: dreamhost|x-authsender|kjlx@templeofstupid.com
+X-MailChannels-Auth-Id: dreamhost
+X-Fumbling-Shelf: 27a17fbf61ced001_1677088487351_811464493
+X-MC-Loop-Signature: 1677088487351:901770116
+X-MC-Ingress-Time: 1677088487351
+Received: from pdx1-sub0-mail-a306.dreamhost.com (pop.dreamhost.com
+ [64.90.62.162])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384)
+        by 100.97.48.87 (trex/6.7.1);
+        Wed, 22 Feb 2023 17:54:47 +0000
+Received: from kmjvbox (c-76-102-200-71.hsd1.ca.comcast.net [76.102.200.71])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: kjlx@templeofstupid.com)
+        by pdx1-sub0-mail-a306.dreamhost.com (Postfix) with ESMTPSA id 4PMP1f0223z1Nt
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Feb 2023 09:54:45 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=templeofstupid.com;
+        s=dreamhost; t=1677088486;
+        bh=jPLOaJx1XC+xepUu7FtXLYzyt2YPI1cX/q7Jp4OSr1s=;
+        h=Date:From:To:Cc:Subject:Content-Type;
+        b=PfqaKgwb9Q4qCwAI1hyYXJ6QTsFQmaVjcqQhOuxkDWs6+Lc5zIuwbbdBrcC/TRPby
+         Ar73uyNbaXjOlnoBre1syBaNtMH30moy0JonO+0NnnIZ875rLx06BR4iwgvqoSr09Q
+         7ksNIwhFpnxWrhxMICs3B/fqy9DDqAS2Ah8+3XUo=
+Received: from johansen (uid 1000)
+        (envelope-from kjlx@templeofstupid.com)
+        id e004a
+        by kmjvbox (DragonFly Mail Agent v0.12);
+        Wed, 22 Feb 2023 09:54:42 -0800
+Date:   Wed, 22 Feb 2023 09:54:42 -0800
+From:   Krister Johansen <kjlx@templeofstupid.com>
+To:     xen-devel@lists.xenproject.org, linux-kernel@vger.kernel.org
+Cc:     Juergen Gross <jgross@suse.com>, Jan Beulich <jbeulich@suse.com>,
+        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Marcelo Tosatti <mtosatti@redhat.com>,
+        Anthony Liguori <aliguori@amazon.com>,
+        David Reaver <me@davidreaver.com>,
+        Brendan Gregg <brendan@intel.com>
+Subject: [PATCH linux-next v2 1/2] xen: update
+ arch/x86/include/asm/xen/cpuid.h
+Message-ID: <94b9046dd0db3794f0633d134b7108508957758d.1677038165.git.kjlx@templeofstupid.com>
+References: <cover.1677038165.git.kjlx@templeofstupid.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH v6 14/41] x86/mm: Introduce _PAGE_SAVED_DIRTY
-Content-Language: en-US
-To:     Kees Cook <kees@kernel.org>, David Hildenbrand <david@redhat.com>,
-        "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>,
-        "bsingharora@gmail.com" <bsingharora@gmail.com>,
-        "hpa@zytor.com" <hpa@zytor.com>,
-        "Syromiatnikov, Eugene" <esyr@redhat.com>,
-        "peterz@infradead.org" <peterz@infradead.org>,
-        "rdunlap@infradead.org" <rdunlap@infradead.org>,
-        "keescook@chromium.org" <keescook@chromium.org>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>,
-        "Eranian, Stephane" <eranian@google.com>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "fweimer@redhat.com" <fweimer@redhat.com>,
-        "nadav.amit@gmail.com" <nadav.amit@gmail.com>,
-        "jannh@google.com" <jannh@google.com>,
-        "dethoma@microsoft.com" <dethoma@microsoft.com>,
-        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
-        "kcc@google.com" <kcc@google.com>, "pavel@ucw.cz" <pavel@ucw.cz>,
-        "oleg@redhat.com" <oleg@redhat.com>,
-        "hjl.tools@gmail.com" <hjl.tools@gmail.com>,
-        "bp@alien8.de" <bp@alien8.de>,
-        "Lutomirski, Andy" <luto@kernel.org>,
-        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-        "arnd@arndb.de" <arnd@arndb.de>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "Schimpe, Christina" <christina.schimpe@intel.com>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "mike.kravetz@oracle.com" <mike.kravetz@oracle.com>,
-        "Yang, Weijiang" <weijiang.yang@intel.com>,
-        "debug@rivosinc.com" <debug@rivosinc.com>,
-        "jamorris@linux.microsoft.com" <jamorris@linux.microsoft.com>,
-        "john.allen@amd.com" <john.allen@amd.com>,
-        "rppt@kernel.org" <rppt@kernel.org>,
-        "andrew.cooper3@citrix.com" <andrew.cooper3@citrix.com>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "corbet@lwn.net" <corbet@lwn.net>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-api@vger.kernel.org" <linux-api@vger.kernel.org>,
-        "gorcunov@gmail.com" <gorcunov@gmail.com>,
-        "akpm@linux-foundation.org" <akpm@linux-foundation.org>
-Cc:     "Yu, Yu-cheng" <yu-cheng.yu@intel.com>
-References: <20230218211433.26859-1-rick.p.edgecombe@intel.com>
- <20230218211433.26859-15-rick.p.edgecombe@intel.com>
- <70681787-0d33-a9ed-7f2a-747be1490932@redhat.com>
- <6f19d7c7ad9f61fa8f6c9bd09d24524dbe17463f.camel@intel.com>
- <6e1201f5-da25-6040-8230-c84856221838@redhat.com>
- <273414f5-2a7c-3cc0-dc27-d07baaa5787b@intel.com>
- <52f001ef-a409-4f33-f28f-02e806ef305a@redhat.com>
- <74b91f3e-17f7-6d89-a7d1-7373101bf8b7@intel.com>
- <62b48389-0e61-17da-6a72-d4a16e003352@redhat.com>
- <279E91DE-D152-4996-BBD2-BB310AD38620@kernel.org>
-From:   Dave Hansen <dave.hansen@intel.com>
-In-Reply-To: <279E91DE-D152-4996-BBD2-BB310AD38620@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <cover.1677038165.git.kjlx@templeofstupid.com>
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
+        DKIM_SIGNED,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS,UNPARSEABLE_RELAY autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/22/23 09:42, Kees Cook wrote:
-> On February 22, 2023 9:27:35 AM PST, David Hildenbrand <david@redhat.com> wrote:
->> On 22.02.23 18:23, Dave Hansen wrote:
->>> On 2/22/23 01:05, David Hildenbrand wrote:
->>>> This series wasn't in -next and we're in the merge window. Is the plan
->>>> to still include it into this merge window?
->>> No way.  It's 6.4 material at the earliest.
->>>
->>> I'm just saying to Rick not to worry _too_ much about earlier feedback
->>> from me if folks have more recent review feedback.
->> Great. So I hope we can get this into -next soon and that we'll only get non-earth-shattering feedback so this can land in 6.4.
-> Yes please. Who's going to take it? 😄
+Update arch/x86/include/asm/xen/cpuid.h from the Xen tree to get newest
+definitions.  This picks up some TSC mode definitions and comment
+formatting changes.
 
-I'm more than happy to queue it in x86/mm.  I'll plan to queue Rick's
-next version that he posts and then we can do any fixes or minor changes
-on top of that.
+Signed-off-by: Krister Johansen <kjlx@templeofstupid.com>
+---
+ arch/x86/include/asm/xen/cpuid.h | 22 ++++++++++++++++++----
+ 1 file changed, 18 insertions(+), 4 deletions(-)
+
+diff --git a/arch/x86/include/asm/xen/cpuid.h b/arch/x86/include/asm/xen/cpuid.h
+index 6daa9b0c8d11..a3c29b1496c8 100644
+--- a/arch/x86/include/asm/xen/cpuid.h
++++ b/arch/x86/include/asm/xen/cpuid.h
+@@ -89,11 +89,21 @@
+  * Sub-leaf 2: EAX: host tsc frequency in kHz
+  */
+ 
++#define XEN_CPUID_TSC_EMULATED               (1u << 0)
++#define XEN_CPUID_HOST_TSC_RELIABLE          (1u << 1)
++#define XEN_CPUID_RDTSCP_INSTR_AVAIL         (1u << 2)
++
++#define XEN_CPUID_TSC_MODE_DEFAULT           (0)
++#define XEN_CPUID_TSC_MODE_ALWAYS_EMULATE    (1u)
++#define XEN_CPUID_TSC_MODE_NEVER_EMULATE     (2u)
++#define XEN_CPUID_TSC_MODE_PVRDTSCP          (3u)
++
+ /*
+  * Leaf 5 (0x40000x04)
+  * HVM-specific features
+  * Sub-leaf 0: EAX: Features
+  * Sub-leaf 0: EBX: vcpu id (iff EAX has XEN_HVM_CPUID_VCPU_ID_PRESENT flag)
++ * Sub-leaf 0: ECX: domain id (iff EAX has XEN_HVM_CPUID_DOMID_PRESENT flag)
+  */
+ #define XEN_HVM_CPUID_APIC_ACCESS_VIRT (1u << 0) /* Virtualized APIC registers */
+ #define XEN_HVM_CPUID_X2APIC_VIRT      (1u << 1) /* Virtualized x2APIC accesses */
+@@ -102,12 +112,16 @@
+ #define XEN_HVM_CPUID_VCPU_ID_PRESENT  (1u << 3) /* vcpu id is present in EBX */
+ #define XEN_HVM_CPUID_DOMID_PRESENT    (1u << 4) /* domid is present in ECX */
+ /*
+- * Bits 55:49 from the IO-APIC RTE and bits 11:5 from the MSI address can be
+- * used to store high bits for the Destination ID. This expands the Destination
+- * ID field from 8 to 15 bits, allowing to target APIC IDs up 32768.
++ * With interrupt format set to 0 (non-remappable) bits 55:49 from the
++ * IO-APIC RTE and bits 11:5 from the MSI address can be used to store
++ * high bits for the Destination ID. This expands the Destination ID
++ * field from 8 to 15 bits, allowing to target APIC IDs up 32768.
+  */
+ #define XEN_HVM_CPUID_EXT_DEST_ID      (1u << 5)
+-/* Per-vCPU event channel upcalls */
++/*
++ * Per-vCPU event channel upcalls work correctly with physical IRQs
++ * bound to event channels.
++ */
+ #define XEN_HVM_CPUID_UPCALL_VECTOR    (1u << 6)
+ 
+ /*
+-- 
+2.25.1
+
