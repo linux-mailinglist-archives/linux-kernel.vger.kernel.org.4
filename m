@@ -2,212 +2,218 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7FB1369EE22
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Feb 2023 06:05:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9282369EE2C
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Feb 2023 06:09:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230005AbjBVFFi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Feb 2023 00:05:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54416 "EHLO
+        id S230084AbjBVFJk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Feb 2023 00:09:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56372 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229834AbjBVFFe (ORCPT
+        with ESMTP id S229561AbjBVFJi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Feb 2023 00:05:34 -0500
-Received: from mail-io1-xd33.google.com (mail-io1-xd33.google.com [IPv6:2607:f8b0:4864:20::d33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58C0A35260
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Feb 2023 21:05:25 -0800 (PST)
-Received: by mail-io1-xd33.google.com with SMTP id b16so2167878iof.11
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Feb 2023 21:05:25 -0800 (PST)
+        Wed, 22 Feb 2023 00:09:38 -0500
+Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCDF430B14;
+        Tue, 21 Feb 2023 21:09:36 -0800 (PST)
+Received: by mail-ed1-x534.google.com with SMTP id cy6so20219104edb.5;
+        Tue, 21 Feb 2023 21:09:36 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=Fnu1EJD881ilgzbXP/u2M6qiohAhxhnaJqCCnJN+Tk8=;
-        b=FubYbTKjUQHr3cEQiX3cMJOQw4FfCE/OMOouqh/l8wKE33FVwKwsXJcZPCVlJOgruk
-         TwqXvfjx8dAxXtopRpr/7I3tGJw6wGnLplPO44Jf7qPfUZiBkStTGzavNICWu6K4/ijQ
-         t56/tUtwbEDOBpuFgeHcQRqgq9PseVi3JLl2E=
+        d=gmail.com; s=20210112;
+        h=to:subject:message-id:date:from:mime-version:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=QV2BQKnKvx83DtaQMTdOYH8bbYAylqUFBUTurFa+qSc=;
+        b=EaKhc2GiKSi4cpmcbvAM46W4ctY0NKxgkcuiGtSuY69PCdVrwrXvLnZ8njnCVY4BRl
+         2v7sO/W40xNV5hhZDEFdaADjryTnRwL4yPxLiGiS9bE2T2HExDmooDhs9fYvcAwBX/57
+         Bx7uh5pkubsNkOTzFUGhuR9WGyXgU+U6ru4t5/OUpKGukiQLOMljZBHr6W86yR2FQQtw
+         X9tKqY0QybL2p4lnuP3YwEvK52mEgraqJvbJUwwPzq4KYAu6o8pRPA5MgNaJgb4Egx71
+         wDUepxs2t/6qvIMR7PaxTunN1DqzSmhvAEpNuhD0JpNz2lM5uOCx77i9WXXvK/h2EkHV
+         3zMQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Fnu1EJD881ilgzbXP/u2M6qiohAhxhnaJqCCnJN+Tk8=;
-        b=CF9YzO2g9WoS2u4g5EJOuv5/+2iB9nxKpvMUsbWkpD6+O3iEbcFdI3BKndIMBCgPSS
-         Jq9uuq26vZKKVpWR2A7Ekh3tCdoAoYrhpOnURTFIXenjh2c7G4grZ2/VFVaS8YUKcoiB
-         dunfuYy9gO7MMwZKahmUkzl+5Qa/b2mMaAhIB/+mXT106C75SSqPb26hQpFoOYRqUcUN
-         ZheIL4eaBnWD1KTy7VhqSUwZR6uG05Y7wWZjqOCXyd/0nYUkbY8+iXn3+46/9qd4Gul4
-         u+VmKjPtTJrhBRdhB93XWJqddJxQfX8JQPeHGSK7M/l44Le/r+OFxbimVCPrP1jOLdMn
-         T1YA==
-X-Gm-Message-State: AO0yUKV95x2w2bMU3+ol48TPYB06mhrLB4Vk+65siIsmc4aEXwVEYnSt
-        fOHI1RliQPlXtHRm0yH13acms3YYithsItopAxPrQarFGAaCHQ==
-X-Google-Smtp-Source: AK7set9WiTsncAk01hPHPcRR1sXgR4N/+7kuisg+5cf5ZRp0qNCei8CeQdAbEZCvfHwnyW5W1nH1RQwFgy87puMdlp0=
-X-Received: by 2002:a5d:80da:0:b0:71a:5a1f:544c with SMTP id
- h26-20020a5d80da000000b0071a5a1f544cmr4719763ior.5.1677042324712; Tue, 21 Feb
- 2023 21:05:24 -0800 (PST)
+        h=to:subject:message-id:date:from:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=QV2BQKnKvx83DtaQMTdOYH8bbYAylqUFBUTurFa+qSc=;
+        b=7HWOWJSgWJoxQq1YVMBwvlhrmadEk9rXSpDass9Uzo/4l+PG9PSkjDKe5zNKcxRBbh
+         tKCHO3SyCoD9xF6vlPibzwsB788lhAJtGRmfRLMEvEE4zKmwLVDHeLH64naMpyDv4Dps
+         gPq+j+iwPV55KFNC5wy2sz3JQG11X0t7b5g2GfSVTFSCYrBepk0I6+79aEDKfvOU1yRw
+         R5QUu/Yh9Yvw2Mcp2qCbU8RVs2z3uImN+XDFRtJYTbQj+uPwlpED/8KdGt2WkUBjhnv+
+         W/q60UMoQPMKsUF6TEmKEsh3B+7fdrJtWSCakwGPYSR2VTD4U/U7gh9hAPgFZ+Nbhm4R
+         0OVA==
+X-Gm-Message-State: AO0yUKUWO8t1IChY5//M4MKUv3hCeBpAoIcbm73bICqEMCEITW/qRYMx
+        PKzvV3QvTWhykHxbK3wET9ncyQpahhzn9aHvAHH5rn4wWA6XYA==
+X-Google-Smtp-Source: AK7set+SYitTue04U27BGvAjKJkKfTCQ19o9WWS316VsBdtJeOFCz/KSZFNCcDf1SMCKauyqJqsWN5VVMFNovRE4wjk=
+X-Received: by 2002:a17:906:db04:b0:88d:ba79:4317 with SMTP id
+ xj4-20020a170906db0400b0088dba794317mr7971273ejb.7.1677042574702; Tue, 21 Feb
+ 2023 21:09:34 -0800 (PST)
 MIME-Version: 1.0
-References: <20230221095054.1868277-1-treapking@chromium.org>
- <20230221095054.1868277-8-treapking@chromium.org> <Y/SstDfugez4/Qx4@smile.fi.intel.com>
-In-Reply-To: <Y/SstDfugez4/Qx4@smile.fi.intel.com>
-From:   Pin-yen Lin <treapking@chromium.org>
-Date:   Wed, 22 Feb 2023 13:05:13 +0800
-Message-ID: <CAEXTbpeObyd1uKd3Qp9c3A9z9BX8R_SiH7okVrgmV+fMfaRaYQ@mail.gmail.com>
-Subject: Re: [PATCH v12 07/10] drm/bridge: anx7625: Register Type C mode switches
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     Andrzej Hajda <andrzej.hajda@intel.com>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Robert Foss <rfoss@kernel.org>,
-        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
-        Jonas Karlman <jonas@kwiboo.se>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Daniel Scally <djrscally@gmail.com>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Prashant Malani <pmalani@chromium.org>,
-        Benson Leung <bleung@chromium.org>,
-        Guenter Roeck <groeck@chromium.org>,
-        linux-kernel@vger.kernel.org, Hsin-Yi Wang <hsinyi@chromium.org>,
-        Marek Vasut <marex@denx.de>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        dri-devel@lists.freedesktop.org, Xin Ji <xji@analogixsemi.com>,
-        Lyude Paul <lyude@redhat.com>,
-        Allen Chen <allen.chen@ite.com.tw>, devicetree@vger.kernel.org,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        =?UTF-8?B?TsOtY29sYXMgRiAuIFIgLiBBIC4gUHJhZG8=?= 
-        <nfraprado@collabora.com>, chrome-platform@lists.linux.dev,
-        Javier Martinez Canillas <javierm@redhat.com>,
-        linux-acpi@vger.kernel.org, Stephen Boyd <swboyd@chromium.org>,
-        =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>
+From:   Palash Oswal <oswalpalash@gmail.com>
+Date:   Tue, 21 Feb 2023 21:09:23 -0800
+Message-ID: <CAGyP=7fWFjioc7ok0SZ7kBNh6_MAk1keL4BKPvUNdmpGjnsZOA@mail.gmail.com>
+Subject: KASAN: use-after-free Read in inode_cgwb_move_to_attached
+To:     linux-fsdevel@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
+        syzkaller-bugs <syzkaller-bugs@googlegroups.com>,
+        Al Viro <viro@zeniv.linux.org.uk>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Andy,
+Hello,
+I found the following issue using syzkaller on:
+HEAD commit : e60276b8c11ab4a8be23807bc67b04
+8cfb937dfa (v6.0.8)
+git tree: stable
 
-Thanks for the review.
+C Reproducer : https://gist.github.com/oswalpalash/bed0eba75def3cdd34a285428e9bcdc4
+Kernel .config :
+https://gist.github.com/oswalpalash/0962c70d774e5ec736a047bba917cecb
 
-On Tue, Feb 21, 2023 at 7:36 PM Andy Shevchenko
-<andriy.shevchenko@linux.intel.com> wrote:
->
-> On Tue, Feb 21, 2023 at 05:50:51PM +0800, Pin-yen Lin wrote:
-> > Register USB Type-C mode switches when the "mode-switch" property and
-> > relevant ports are available in Device Tree. Configure the crosspoint
-> > switch based on the entered alternate mode for a specific Type-C
-> > connector.
-> >
-> > Crosspoint switch can also be used for switching the output signal for
-> > different orientations of a single USB Type-C connector, but the
-> > orientation switch is not implemented yet. A TODO is added for this.
->
-> ...
->
-> > +static void anx7625_typec_two_ports_update(struct anx7625_data *ctx)
-> > +{
-> > +     int i;
->
-> unsigned?
->
-> + Blank line.
->
-> > +     /* Check if both ports available and do nothing to retain the current one */
-> > +     if (ctx->port_data[0].dp_connected && ctx->port_data[1].dp_connected)
-> > +             return;
-> > +
-> > +     for (i = 0; i < 2; i++) {
-> > +             if (ctx->port_data[i].dp_connected)
-> > +                     anx7625_set_crosspoint_switch(ctx,
-> > +                                                   ctx->port_data[i].orientation);
-> > +     }
-> > +}
->
-> ...
->
-> > +     ctx->port_data[port->port_num].dp_connected =
-> > +             state->alt && state->alt->svid == USB_TYPEC_DP_SID &&
->
-> I would move the first parameter of && to the separate line for slightly better
-> readability.
->
-> > +             state->alt->mode == USB_TYPEC_DP_MODE;
->
-> ...
->
-> > +     for (i = 0; i < switch_desc->num_typec_switches; i++) {
-> > +             struct drm_dp_typec_port_data *port = &switch_desc->typec_ports[i];
-> > +             struct fwnode_handle *fwnode = port->fwnode;
-> > +
-> > +             num_lanes = fwnode_property_count_u32(fwnode, "data-lanes");
->
-> > +
->
-> Redundant blank line.
->
-> > +             if (num_lanes < 0) {
-> > +                     dev_err(dev,
-> > +                             "Error on getting data lanes count from %pfwP: %d\n",
-> > +                             fwnode, num_lanes);
->
-> > +                     ret = num_lanes;
->
-> Can be written differently:
->
-> > +                     goto unregister_mux;
-> > +             }
->
->                 ret = ...
->                 if (ret < 0) {
->                         ...
->                 }
->                 num_lanes = ret;
->
->
-> What if it's 0?
+Console log :
 
-The binding does not allow that, so I don't think we should check it here.
+==================================================================
+BUG: KASAN: use-after-free in __list_del_entry_valid+0xf2/0x110
+Read of size 8 at addr ffff8880273c4358 by task syz-executor.1/6475
 
-I'll address other comments in the next version.
+CPU: 0 PID: 6475 Comm: syz-executor.1 Not tainted 6.0.8-pasta #2
+Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS
+1.13.0-1ubuntu1.1 04/01/2014
+Call Trace:
+ <TASK>
+ dump_stack_lvl+0xcd/0x134
+ print_report.cold+0xe5/0x63a
+ kasan_report+0x8a/0x1b0
+ __list_del_entry_valid+0xf2/0x110
+ inode_cgwb_move_to_attached+0x2ee/0x4e0
+ writeback_single_inode+0x3fa/0x510
+ write_inode_now+0x16a/0x1e0
+ blkdev_flush_mapping+0x168/0x220
+ blkdev_put_whole+0xd1/0xf0
+ blkdev_put+0x29b/0x700
+ deactivate_locked_super+0x8c/0xf0
+ deactivate_super+0xad/0xd0
+ cleanup_mnt+0x347/0x4b0
+ task_work_run+0xe0/0x1a0
+ exit_to_user_mode_prepare+0x25d/0x270
+ syscall_exit_to_user_mode+0x19/0x50
+ do_syscall_64+0x42/0xb0
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+RIP: 0033:0x7f22bd29143b
+Code: ff ff ff f7 d8 64 89 01 48 83 c8 ff c3 66 90 f3 0f 1e fa 31 f6
+e9 05 00 00 00 0f 1f 44 00 00 f3 0f 1e fa b8 a6 00 00 00 0f 05 <48> 3d
+01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007ffe505103b8 EFLAGS: 00000246 ORIG_RAX: 00000000000000a6
+RAX: 0000000000000000 RBX: 0000000000000000 RCX: 00007f22bd29143b
+RDX: 00007f22bd228a90 RSI: 000000000000000a RDI: 00007ffe50510480
+RBP: 00007ffe50510480 R08: 00007f22bd2fba1f R09: 00007ffe50510240
+R10: 00000000fffffffb R11: 0000000000000246 R12: 00007f22bd2fb9f8
+R13: 00007ffe50511520 R14: 0000555556f4bd90 R15: 0000000000000032
+ </TASK>
 
-Regards,
-Pin-yen
->
-> > +             ret = fwnode_property_read_u32_array(fwnode, "data-lanes",
-> > +                                                  dp_lanes, num_lanes);
-> > +             if (ret) {
-> > +                     dev_err(dev,
-> > +                             "Failed to read the data-lanes variable: %d\n",
-> > +                             ret);
-> > +                     goto unregister_mux;
-> > +             }
-> > +
-> > +             ctx->port_data[i].orientation = (dp_lanes[0] / 2 == 0) ?
-> > +                     TYPEC_ORIENTATION_REVERSE : TYPEC_ORIENTATION_NORMAL;
-> > +             ctx->port_data[i].dp_connected = false;
-> > +     }
-> > +     complete_all(&ctx->mux_register);
-> > +
-> > +     return 0;
-> > +
-> > +unregister_mux:
-> > +     complete_all(&ctx->mux_register);
-> > +     anx7625_unregister_typec_switches(ctx);
-> > +     return ret;
-> > +}
->
-> --
-> With Best Regards,
-> Andy Shevchenko
->
->
+Allocated by task 7810:
+ kasan_save_stack+0x1e/0x40
+ __kasan_slab_alloc+0x85/0xb0
+ kmem_cache_alloc_lru+0x25b/0xfb0
+ fat_alloc_inode+0x23/0x1e0
+ alloc_inode+0x61/0x1e0
+ new_inode_pseudo+0x13/0x80
+ new_inode+0x1b/0x40
+ fat_build_inode+0x146/0x2d0
+ vfat_create+0x249/0x390
+ lookup_open+0x10bc/0x1640
+ path_openat+0xa42/0x2840
+ do_filp_open+0x1ca/0x2a0
+ do_sys_openat2+0x61b/0x990
+ do_sys_open+0xc3/0x140
+ do_syscall_64+0x35/0xb0
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+
+Freed by task 16:
+ kasan_save_stack+0x1e/0x40
+ kasan_set_track+0x21/0x30
+ kasan_set_free_info+0x20/0x30
+ __kasan_slab_free+0xf5/0x180
+ kmem_cache_free.part.0+0xfc/0x4a0
+ i_callback+0x3f/0x70
+ rcu_core+0x785/0x1720
+ __do_softirq+0x1d0/0x908
+
+Last potentially related work creation:
+ kasan_save_stack+0x1e/0x40
+ __kasan_record_aux_stack+0x7e/0x90
+ call_rcu+0x99/0x740
+ destroy_inode+0x129/0x1b0
+ iput.part.0+0x5cd/0x800
+ iput+0x58/0x70
+ dentry_unlink_inode+0x2e2/0x4a0
+ __dentry_kill+0x374/0x5e0
+ dput+0x656/0xbe0
+ __fput+0x3cc/0xa90
+ task_work_run+0xe0/0x1a0
+ exit_to_user_mode_prepare+0x25d/0x270
+ syscall_exit_to_user_mode+0x19/0x50
+ do_syscall_64+0x42/0xb0
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+
+The buggy address belongs to the object at ffff8880273c4080
+ which belongs to the cache fat_inode_cache of size 1488
+The buggy address is located 728 bytes inside of
+ 1488-byte region [ffff8880273c4080, ffff8880273c4650)
+
+The buggy address belongs to the physical page:
+page:ffffea00009cf100 refcount:1 mapcount:0 mapping:0000000000000000
+index:0xffff8880273c4ffe pfn:0x273c4
+flags: 0xfff00000000200(slab|node=0|zone=1|lastcpupid=0x7ff)
+raw: 00fff00000000200 ffffea00009cf0c8 ffff88801820e450 ffff888103e00e00
+raw: ffff8880273c4ffe ffff8880273c4080 0000000100000002 0000000000000000
+page dumped because: kasan: bad access detected
+page_owner tracks the page as allocated
+page last allocated via order 0, migratetype Reclaimable, gfp_mask
+0x242050(__GFP_IO|__GFP_NOWARN|__GFP_COMP|__GFP_THISNODE|__GFP_RECLAIMABLE),
+pid 7810, tgid 7808 (syz-executor.1), ts 50543388569, free_ts
+21285403579
+ prep_new_page+0x2c6/0x350
+ get_page_from_freelist+0xae9/0x3a80
+ __alloc_pages+0x321/0x710
+ cache_grow_begin+0x75/0x360
+ kmem_cache_alloc_lru+0xe72/0xfb0
+ fat_alloc_inode+0x23/0x1e0
+ alloc_inode+0x61/0x1e0
+ new_inode_pseudo+0x13/0x80
+ new_inode+0x1b/0x40
+ fat_fill_super+0x1c37/0x3710
+ mount_bdev+0x34d/0x410
+ legacy_get_tree+0x105/0x220
+ vfs_get_tree+0x89/0x2f0
+ path_mount+0x121b/0x1cb0
+ do_mount+0xf3/0x110
+ __x64_sys_mount+0x18f/0x230
+page last free stack trace:
+ free_pcp_prepare+0x5ab/0xd00
+ free_unref_page+0x19/0x410
+ slab_destroy+0x14/0x50
+ slabs_destroy+0x6a/0x90
+ ___cache_free+0x1e3/0x3b0
+ qlist_free_all+0x51/0x1c0
+ kasan_quarantine_reduce+0x13d/0x180
+ __kasan_slab_alloc+0x97/0xb0
+ kmem_cache_alloc+0x204/0xcc0
+ getname_flags+0xd2/0x5b0
+ vfs_fstatat+0x73/0xb0
+ __do_sys_newlstat+0x8b/0x110
+ do_syscall_64+0x35/0xb0
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+
+Memory state around the buggy address:
+ ffff8880273c4200: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+ ffff8880273c4280: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+>ffff8880273c4300: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+                                                    ^
+ ffff8880273c4380: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+ ffff8880273c4400: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+==================================================================
