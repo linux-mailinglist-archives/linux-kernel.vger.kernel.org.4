@@ -2,94 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2223869F515
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Feb 2023 14:05:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4A7D569F518
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Feb 2023 14:08:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231781AbjBVNFG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Feb 2023 08:05:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57952 "EHLO
+        id S231822AbjBVNI3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Feb 2023 08:08:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59606 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231149AbjBVNFE (ORCPT
+        with ESMTP id S230402AbjBVNI2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Feb 2023 08:05:04 -0500
-Received: from out2-smtp.messagingengine.com (out2-smtp.messagingengine.com [66.111.4.26])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D3B9367CB;
-        Wed, 22 Feb 2023 05:05:03 -0800 (PST)
-Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
-        by mailout.nyi.internal (Postfix) with ESMTP id 81EDD5C007A;
-        Wed, 22 Feb 2023 08:05:01 -0500 (EST)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute4.internal (MEProxy); Wed, 22 Feb 2023 08:05:01 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; h=
-        cc:cc:content-transfer-encoding:content-type:date:date:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to; s=fm2; t=1677071101; x=
-        1677157501; bh=zTBhSHg2Z1fhQW2zMWScuLvC8roK+JvNcm0QshCfxFI=; b=s
-        6pXHfROnOELLc+Cn5s7R2d0Nrk8bJ25Klu/V07fr30hYpaie61vExlYSQ0G7zgfN
-        OMUzIiFHAf2PzVWgmnCnGaHgxNUBlvJzTt/k2TJ+ThmhLNhNCghqt/C9WEMlzdTI
-        ji3cgkZYTMebvOEvim3ODU0qKu8DRPzGG+qsR7cJMLL5Fclbs1RiMr8dkfaGzn9Z
-        t/sC66teOmxX0KnAEPYg/jjsStKHKcW0SkVEwc8eRptpVfYBmOncXay/kaz6hVK2
-        mumMkRYzc2BpdkweCLZ1HMo9d1E4RV40N2HJweayMAupo4w1R5j9be8ISI3I4/Bc
-        ykQp0uk/soMnRzkKOCB7w==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding
-        :content-type:date:date:feedback-id:feedback-id:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
-        :x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1677071101; x=
-        1677157501; bh=zTBhSHg2Z1fhQW2zMWScuLvC8roK+JvNcm0QshCfxFI=; b=C
-        UUs1Zuoz5XkoMOm4gnwKBSRt3KrYWEX4vIDIx6LibNfmjODvs4M8QKVlRQpJCRgY
-        xGwWZvtZS7MDrWjJtx31I7n3pFOjbaECr/6aWcgxK28zyzppWUxC2diDCQwOqt1q
-        UQlviLT3yyKXlVGVIrxkCj4JlZGG3fk0yWnqbLxeqqrkWHELEKWsBxDeTTr07P7x
-        XCD3jgq9SyFt4h61XIydzgEVDKmfG5nNwHYuMq+rEedrrQg3Ibz8OJsX/vMor3vR
-        Nyqzwoq4Rq5+6fLyqO3wiJm1sSGzFiL4skYcVr5WEgM/oLg6EJcj4PRJaRnnuH/L
-        NhZxxvybMJ4WinSrceEzw==
-X-ME-Sender: <xms:_BL2Y4cbTKB3egLQG9iHK2kjKujrBo7PlmPiR36iD6h0BrdMvZ5c5A>
-    <xme:_BL2Y6MejVu9vjLYcIrPSX28rBjftuHQt16e5GfJavGQPB4a3MqLzNOW9EzOVtCDc
-    sVnu71PI2iXT7FTI4w>
-X-ME-Received: <xmr:_BL2Y5jVQFSR8RddGDPikwmRIua3y3P8Hu1zuH9h00Rw3vW_IM5fJyhGVPZFb50580Ac>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrudejledggeeiucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurheptggguffhjgffvefgkfhfvffosehtqhhmtdhhtdejnecuhfhrohhmpeflihgr
-    gihunhcujggrnhhguceojhhirgiguhhnrdihrghnghesfhhlhihgohgrthdrtghomheqne
-    cuggftrfgrthhtvghrnhepuddtjeffteetfeekjeeiheefueeigeeutdevieejveeihfff
-    ledvgfduiefhvddtnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilh
-    hfrhhomhepjhhirgiguhhnrdihrghnghesfhhlhihgohgrthdrtghomh
-X-ME-Proxy: <xmx:_BL2Y9_thBwi4MQagwUStSLBWX_AC_ElTF8lVZRH4KmWWQZDiXdnig>
-    <xmx:_BL2Y0tmJ3pnRQOAXcIoTOFFdHZi7yqurNnwqE12koyJWErZbMILBA>
-    <xmx:_BL2Y0GMuEDjSm8mG6yenGtEMs0GwVVpheQihqGnW9on60eMSQeC5w>
-    <xmx:_RL2Y2JEvc1HdaC_4PRfTWKAkQ07C6sj79I2FVKEVyb5KlvpTe5yrg>
-Feedback-ID: ifd894703:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
- 22 Feb 2023 08:04:58 -0500 (EST)
-Content-Type: text/plain;
-        charset=utf-8
-Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3731.300.101.1.3\))
-Subject: Re: [PATCH 0/7] MIPS DMA coherence fixes
-From:   Jiaxun Yang <jiaxun.yang@flygoat.com>
-In-Reply-To: <a46e1840-89be-de8f-6a91-3e4a16fa17c2@arm.com>
-Date:   Wed, 22 Feb 2023 13:04:47 +0000
-Cc:     Christoph Hellwig <hch@lst.de>,
-        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
-        linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        mpe@ellerman.id.au, paul.walmsley@sifive.com, palmer@dabbelt.com,
-        Rob Herring <robh+dt@kernel.org>, m.szyprowski@samsung.com
-Content-Transfer-Encoding: quoted-printable
-Message-Id: <CBE3717B-E49A-4BAA-9CD0-FFD2462B9CE0@flygoat.com>
-References: <20230221124613.2859-1-jiaxun.yang@flygoat.com>
- <20230221175423.GA15247@lst.de>
- <A8AC22A0-E883-4D9B-A629-5A3721B976C5@flygoat.com>
- <ed2d7750-786d-82a1-5e79-1f216a682b20@arm.com>
- <34578218-DC7A-4C8B-A01A-AD64831CCB43@flygoat.com>
- <a46e1840-89be-de8f-6a91-3e4a16fa17c2@arm.com>
-To:     Robin Murphy <robin.murphy@arm.com>
-X-Mailer: Apple Mail (2.3731.300.101.1.3)
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        Wed, 22 Feb 2023 08:08:28 -0500
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91D262005C;
+        Wed, 22 Feb 2023 05:08:24 -0800 (PST)
+Received: from pps.filterd (m0187473.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 31MCdhuF007147;
+        Wed, 22 Feb 2023 13:08:20 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ subject : to : cc : references : from : in-reply-to : content-type :
+ content-transfer-encoding : mime-version; s=pp1;
+ bh=KUCHdQ10OuAnV3jMXM0raioOvgK0W0Crzhl/sFF96wg=;
+ b=dSW/tNVXmtVMHmDrIyHAgS1ECyu3IqIPZXf71W0hhJaEyKPEfRK4FzkuYkXakKxEmjWc
+ Sh0dA65MKwCbfJw0oAq7Q5r48p8Oc93PzLk+x5i68S+lCCTPmtk2Q119L5JKgPHZDTNb
+ qyy7cTZ7vD6IN9zXzk9y5wJffek61fFWNXmqqy4qNhh0xFy2FayW4nE5fmQ5F48c+dFC
+ bBlYMk2T4sQHVYoU5UU1huU/JZah635ISjDXX9xfXKTsxOjjmpWPqertZsvPZsKiwRYt
+ oKmW9eRZMIQQz7vlMh6lBaWgLp0XdhxRYtjVJD5ZaFfyHK7TqMSWavwmgCRymCK9TNO7 uw== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3nwj6cte5j-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 22 Feb 2023 13:08:19 +0000
+Received: from m0187473.ppops.net (m0187473.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 31MD36bH018911;
+        Wed, 22 Feb 2023 13:08:18 GMT
+Received: from ppma04dal.us.ibm.com (7a.29.35a9.ip4.static.sl-reverse.com [169.53.41.122])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3nwj6cte2d-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 22 Feb 2023 13:08:18 +0000
+Received: from pps.filterd (ppma04dal.us.ibm.com [127.0.0.1])
+        by ppma04dal.us.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 31MAP4Xi000556;
+        Wed, 22 Feb 2023 13:08:12 GMT
+Received: from smtprelay05.wdc07v.mail.ibm.com ([9.208.129.117])
+        by ppma04dal.us.ibm.com (PPS) with ESMTPS id 3ntpa7ecnr-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 22 Feb 2023 13:08:12 +0000
+Received: from smtpav01.dal12v.mail.ibm.com (smtpav01.dal12v.mail.ibm.com [10.241.53.100])
+        by smtprelay05.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 31MD8Ai666650456
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 22 Feb 2023 13:08:10 GMT
+Received: from smtpav01.dal12v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id E37755805D;
+        Wed, 22 Feb 2023 13:08:09 +0000 (GMT)
+Received: from smtpav01.dal12v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 37F4858058;
+        Wed, 22 Feb 2023 13:08:08 +0000 (GMT)
+Received: from [9.211.152.15] (unknown [9.211.152.15])
+        by smtpav01.dal12v.mail.ibm.com (Postfix) with ESMTP;
+        Wed, 22 Feb 2023 13:08:08 +0000 (GMT)
+Message-ID: <fbfdc4d0-7b66-efcb-b84d-d675fb484527@linux.ibm.com>
+Date:   Wed, 22 Feb 2023 14:08:07 +0100
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.8.0
+Subject: Re: [RFC PATCH net-next v3 0/9] net/smc: Introduce SMC-D-based OS
+ internal communication acceleration
+To:     Wen Gu <guwen@linux.alibaba.com>, kgraul@linux.ibm.com,
+        jaka@linux.ibm.com, davem@davemloft.net, edumazet@google.com,
+        kuba@kernel.org, pabeni@redhat.com
+Cc:     linux-s390@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Alexandra Winter <WINTERA@de.ibm.com>
+References: <1676477905-88043-1-git-send-email-guwen@linux.alibaba.com>
+ <06f1d098-724c-80ba-7efc-b9569593f1e6@linux.alibaba.com>
+From:   Wenjia Zhang <wenjia@linux.ibm.com>
+In-Reply-To: <06f1d098-724c-80ba-7efc-b9569593f1e6@linux.alibaba.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: rkMJ65xkhgvGLw9eFSCEjTQkIyKr1SL0
+X-Proofpoint-ORIG-GUID: j8y_LF9n0n54AQlal9dyCKFHIvAD0xoc
+Content-Transfer-Encoding: 8bit
+X-Proofpoint-UnRewURL: 5 URL's were un-rewritten
+MIME-Version: 1.0
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.170.22
+ definitions=2023-02-22_05,2023-02-22_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0
+ lowpriorityscore=0 suspectscore=0 bulkscore=0 mlxlogscore=999 spamscore=0
+ mlxscore=0 clxscore=1015 adultscore=0 malwarescore=0 priorityscore=1501
+ impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2302220115
+X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,NUMERIC_HTTP_ADDR,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -98,53 +99,292 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 
 
-> 2023=E5=B9=B42=E6=9C=8822=E6=97=A5 12:55=EF=BC=8CRobin Murphy =
-<robin.murphy@arm.com> =E5=86=99=E9=81=93=EF=BC=9A
->=20
-> On 2023-02-21 19:55, Jiaxun Yang wrote:
->>> 2023=E5=B9=B42=E6=9C=8821=E6=97=A5 19:46=EF=BC=8CRobin Murphy =
-<robin.murphy@arm.com> =E5=86=99=E9=81=93=EF=BC=9A
->>>=20
->>> On 2023-02-21 18:15, Jiaxun Yang wrote:
->>>>> 2023=E5=B9=B42=E6=9C=8821=E6=97=A5 17:54=EF=BC=8CChristoph Hellwig =
-<hch@lst.de> =E5=86=99=E9=81=93=EF=BC=9A
->>>>>=20
->>>>> Can you explain the motivation here?  Also why riscv patches are =
-at
->>>>> the end of a mips f=D1=96xes series?
->>>> Ah sorry for any confusion.
->>>> So the main purpose of this patch is to fix MIPS=E2=80=99s broken =
-per-device coherency.
->>>> To be more precise, we want to be able to control the default =
-coherency for all devices probed from
->>>> devicetree in early boot code.
->>>=20
->>> Including the patch which actually does that would be helpful. As it =
-is, patches 4-7 here just appear to be moving an option around for no =
-practical effect.
->> Well the affect is default coherency of devicetree probed devices are =
-now following dma_default_coherent
->> instead of a static Kconfig option. For MIPS platform, =
-dma_default_coherent will be determined by boot code.
->=20
-> "Will be" is the issue I'm getting at. We can't review some future =
-promise of a patch, we can only review actual patches. And it's hard to =
-meaningfully review preparatory patches for some change without the full =
-context of that change.
+On 22.02.23 13:00, Wen Gu wrote:
+> 
+> 
+> On 2023/2/16 00:18, Wen Gu wrote:
+> 
+>> Hi, all
+>>
+>> # Background
+>>
+>> The background and previous discussion can be referred from [1].
+>>
+>> We found SMC-D can be used to accelerate OS internal communication, 
+>> such as
+>> loopback or between two containers within the same OS instance. So 
+>> this patch
+>> set provides a kind of SMC-D dummy device (we call it the SMC-D 
+>> loopback device)
+>> to emulate an ISM device, so that SMC-D can also be used on architectures
+>> other than s390. The SMC-D loopback device are designed as a system 
+>> global
+>> device, visible to all containers.
+>>
+>> This version is implemented based on the generalized interface 
+>> provided by [2].
+>> And there is an open issue of this version, which will be mentioned 
+>> later.
+>>
+>> # Design
+>>
+>> This patch set basically follows the design of the previous version.
+>>
+>> Patch #1/9 ~ #3/9 attempt to decouple ISM-related structures from the 
+>> SMC-D
+>> generalized code and extract some helpers to make SMC-D protocol 
+>> compatible
+>> with devices other than s390 ISM device.
+>>
+>> Patch #4/9 introduces a kind of loopback device, which is defined as 
+>> SMC-D v2
+>> device and designed to provide communication between SMC sockets in 
+>> the same OS
+>> instance.
+>>
+>>   +-------------------------------------------+
+>>   |  +--------------+       +--------------+  |
+>>   |  | SMC socket A |       | SMC socket B |  |
+>>   |  +--------------+       +--------------+  |
+>>   |       ^                         ^         |
+>>   |       |    +----------------+   |         |
+>>   |       |    |   SMC stack    |   |         |
+>>   |       +--->| +------------+ |<--|         |
+>>   |            | |   dummy    | |             |
+>>   |            | |   device   | |             |
+>>   |            +-+------------+-+             |
+>>   |                   OS                      |
+>>   +-------------------------------------------+
+>>
+>> Patch #5/9 ~ #8/9 expand SMC-D protocol interface (smcd_ops) for 
+>> scenarios where
+>> SMC-D is used to communicate within VM (loopback here) or between VMs 
+>> on the same
+>> host (based on virtio-ism device, see [3]). What these scenarios have 
+>> in common
+>> is that the local sndbuf and peer RMB can be mapped to same physical 
+>> memory region,
+>> so the data copy between the local sndbuf and peer RMB can be omitted. 
+>> Performance
+>> improvement brought by this extension can be found in # Benchmark Test.
+>>
+>>   +----------+                     +----------+
+>>   | socket A |                     | socket B |
+>>   +----------+                     +----------+
+>>         |                               ^
+>>         |         +---------+           |
+>>    regard as      |         | ----------|
+>>    local sndbuf   |  B's    |     regard as
+>>         |         |  RMB    |     local RMB
+>>         |-------> |         |
+>>                   +---------+
+>>
+>> Patch #9/9 realizes the support of loopback device for the 
+>> above-mentioned expanded
+>> SMC-D protocol interface.
+>>
+>> # Benchmark Test
+>>
+>>   * Test environments:
+>>        - VM with Intel Xeon Platinum 8 core 2.50GHz, 16 GiB mem.
+>>        - SMC sndbuf/RMB size 1MB.
+>>
+>>   * Test object:
+>>        - TCP lo: run on TCP loopback.
+>>        - domain: run on UNIX domain.
+>>        - SMC lo: run on SMC loopback device with patch #1/9 ~ #4/9.
+>>        - SMC lo-nocpy: run on SMC loopback device with patch #1/9 ~ #9/9.
+>>
+>> 1. ipc-benchmark (see [4])
+>>
+>>   - ./<foo> -c 1000000 -s 100
+>>
+>>                      TCP-lo              domain              
+>> SMC-lo          SMC-lo-nocpy
+>> Message
+>> rate (msg/s)         79025      115736(+46.45%)    
+>> 146760(+85.71%)       149800(+89.56%)
+>>
+>> 2. sockperf
+>>
+>>   - serv: <smc_run> taskset -c <cpu> sockperf sr --tcp
+>>   - clnt: <smc_run> taskset -c <cpu> sockperf { tp | pp } --tcp 
+>> --msg-size={ 64000 for tp | 14 for pp } -i 127.0.0.1 -t 30
+>>
+>>                      TCP-lo                  SMC-lo             
+>> SMC-lo-nocpy
+>> Bandwidth(MBps)   4822.388        4940.918(+2.56%)         
+>> 8086.67(+67.69%)
+>> Latency(us)          6.298          3.352(-46.78%)            
+>> 3.35(-46.81%)
+>>
+>> 3. iperf3
+>>
+>>   - serv: <smc_run> taskset -c <cpu> iperf3 -s
+>>   - clnt: <smc_run> taskset -c <cpu> iperf3 -c 127.0.0.1 -t 15
+>>
+>>                      TCP-lo                  SMC-lo             
+>> SMC-lo-nocpy
+>> Bitrate(Gb/s)         40.7            40.5(-0.49%)            
+>> 72.4(+77.89%)
+>>
+>> 4. nginx/wrk
+>>
+>>   - serv: <smc_run> nginx
+>>   - clnt: <smc_run> wrk -t 8 -c 500 -d 30 http://127.0.0.1:80
+>>
+>>                      TCP-lo                  SMC-lo             
+>> SMC-lo-nocpy
+>> Requests/s       155994.57      214544.79(+37.53%)       
+>> 215538.55(+38.17%)
+>>
+>>
+>> # Open issue
+>>
+>> The open issue has not been resolved now is about how to detect that 
+>> the source
+>> and target of CLC proposal are within the same OS instance and can 
+>> communicate
+>> through the SMC-D loopback device. Similar issue also exists when 
+>> using virtio-ism
+>> devices (the background and details of virtio-ism device can be 
+>> referred from [3]).
+>> In previous discussions, multiple options were proposed (see [5]). 
+>> Thanks again for
+>> the help of the community. cc Alexandra Winter :)
+>>
+>> But as we discussed, these solutions have some imperfection. So this 
+>> version of RFC
+>> continues to use previous workaround, that is, a 64-bit random GID is 
+>> generated for
+>> SMC-D loopback device. If the GIDs of the devices found by two peers 
+>> are the same,
+>> then they are considered to be in the same OS instance and can 
+>> communicate with each
+>> other by the loopback device.
+>>
+>> This approach has very small risk. Assume the following situations:
+>>
+>> (1) Assume that the SMC-D loopback devices of the two OS instances 
+>> happen to
+>>      generate the same 64-bit GID.
+>>
+>>      For the convenience of description, we refer to the sockets on 
+>> these two
+>>      different OS instance as server A and client B.
+>>
+>>      A will misjudge that the two are on the same OS instance because 
+>> the same GID
+>>      in CLC proposal message. Then A creates its RMB and sends 64-bit 
+>> token-A to B
+>>      in CLC accept message.
+>>
+>>      B receives the CLC accept message. And according to patch #7/9, B 
+>> tries to
+>>      attach its sndbuf to A's RMB by token-A.
+>>
+>> (2) Assume that the OS instance where B is located happens to have an 
+>> unattached
+>>      RMB whose 64-bit token is same as token-A.
+>>
+>>      Then B successfully attaches its sndbuf to the wrong RMB, and 
+>> creates its RMB,
+>>      sends token-B to A in CLC confirm message.
+>>
+>>      Similarly, A receives the message and tries to attach its sndbuf 
+>> to B's RMB by
+>>      token-B.
+>>
+>> (3) Similar to (2), assume that the OS instance where A is located 
+>> happens to have
+>>      an unattached RMB whose 64-bit token is same as token-B.
+>>
+>>      Then A successfully attach its sndbuf to the wrong RMB. Both 
+>> sides mistakenly
+>>      believe that an SMC-D connection based on the loopback device is 
+>> established
+>>      between them.
+>>
+>> If the above 3 coincidences all happen, that is, 64-bit random number 
+>> conflicts occur
+>> 3 times, then an unreachable SMC-D connection will be established, 
+>> which is nasty.
+>> If one of above is not satisfied, it will safely fallback to TCP.
+>>
+>> Since the chances of these happening are very small, I wonder if this 
+>> risk of 1/2^(64*3)
+>> probability can be tolerated ?
+> 
+> Hi,
+> 
+> Any comments about this open issue or other parts of this RFC patch set? :)
+> 
+> Thanks,
+> Wen Gu
+> 
+Hi Wen,
 
-Actually this already present in current MIPS platform code.
-
-arch/mips/mti-malta is setting dma_default_coherent on boot, and it=E2=80=99=
-s devicetree does not explicitly specify coherency.
-
+I don't forget it ;) I'm trying to run it by myself. Please give us more 
+time for the trying and review.
 
 Thanks
-- Jiaxun
+Wenjia
 
-
-
->=20
-> Thanks,
-> Robin.
-
-
+>> Another way to solve this open issue is using a 128-bit UUID to 
+>> identify SMC-D loopback
+>> device or virtio-ism device, because the probability of a 128-bit UUID 
+>> collision is
+>> considered negligible. But it may need to extend the CLC message to 
+>> carry a longer GID,
+>> which is the last option.
+>>
+>> v3->v2
+>>   1. Adapt new generalized interface provided by [2];
+>>   2. Select loopback device through SMC-D v2 protocol;
+>>   3. Split the loopback-related implementation and generic 
+>> implementation into different
+>>      patches more reasonably.
+>>
+>> v1->v2
+>>   1. Fix some build WARNINGs complained by kernel test rebot
+>>      Reported-by: kernel test robot <lkp@intel.com>
+>>   2. Add iperf3 test data.
+>>
+>> [1] 
+>> https://lore.kernel.org/netdev/1671506505-104676-1-git-send-email-guwen@linux.alibaba.com/
+>> [2] 
+>> https://lore.kernel.org/netdev/20230123181752.1068-1-jaka@linux.ibm.com/
+>> [3] 
+>> https://lists.oasis-open.org/archives/virtio-comment/202302/msg00148.html
+>> [4] https://github.com/goldsborough/ipc-bench
+>> [5] 
+>> https://lore.kernel.org/netdev/b9867c7d-bb2b-16fc-feda-b79579aa833d@linux.ibm.com/
+>>
+>> Wen Gu (9):
+>>    net/smc: Decouple ism_dev from SMC-D device dump
+>>    net/smc: Decouple ism_dev from SMC-D DMB registration
+>>    net/smc: Extract v2 check helper from SMC-D device registration
+>>    net/smc: Introduce SMC-D loopback device
+>>    net/smc: Introduce an interface for getting DMB attribute
+>>    net/smc: Introudce interfaces for DMB attach and detach
+>>    net/smc: Avoid data copy from sndbuf to peer RMB in SMC-D
+>>    net/smc: Modify cursor update logic when using mappable DMB
+>>    net/smc: Add interface implementation of loopback device
+>>
+>>   drivers/s390/net/ism_drv.c |   5 +-
+>>   include/net/smc.h          |  18 +-
+>>   net/smc/Makefile           |   2 +-
+>>   net/smc/af_smc.c           |  26 ++-
+>>   net/smc/smc_cdc.c          |  59 ++++--
+>>   net/smc/smc_cdc.h          |   1 +
+>>   net/smc/smc_core.c         |  70 ++++++-
+>>   net/smc/smc_core.h         |   1 +
+>>   net/smc/smc_ism.c          |  79 ++++++--
+>>   net/smc/smc_ism.h          |   4 +
+>>   net/smc/smc_loopback.c     | 442 
+>> +++++++++++++++++++++++++++++++++++++++++++++
+>>   net/smc/smc_loopback.h     |  55 ++++++
+>>   12 files changed, 725 insertions(+), 37 deletions(-)
+>>   create mode 100644 net/smc/smc_loopback.c
+>>   create mode 100644 net/smc/smc_loopback.h
+>>
