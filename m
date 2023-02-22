@@ -2,100 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 14F9D69EFA0
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Feb 2023 08:53:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 83E0469EFAC
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Feb 2023 08:56:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231230AbjBVHxs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Feb 2023 02:53:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41076 "EHLO
+        id S231248AbjBVH4C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Feb 2023 02:56:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43142 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229673AbjBVHxq (ORCPT
+        with ESMTP id S229755AbjBVHz6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Feb 2023 02:53:46 -0500
-Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31AAE2BEF3;
-        Tue, 21 Feb 2023 23:53:41 -0800 (PST)
-Received: by mail-ed1-x52f.google.com with SMTP id s26so26769408edw.11;
-        Tue, 21 Feb 2023 23:53:41 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=s85ej20o57EVIAZFbWgvrgnN0SkPXWj9xUiifHsTHZg=;
-        b=AFb76RWl0qx095lTG9TFJYrGSOSHsEId33Ft2ZTbU4DUX7kfqyIOv+8xnezBuHPYa1
-         yCDyIMnOZridhY9SjLWjr1yuNZYnjaiDKIytq7JCdL+N8e506wpoMBmPQ+Nx2YMRsLCu
-         RRtl75WuqhpLkXGr0F0kndHrxQhk2RMlFm7xAokmbPGAm3S9VcVvTGXs8s0X7W6B3quc
-         iBAczBLHfa2OGqN+whJaqLMPDVyvjY+Rz82MsXi7wcio17ZKeVdqIP/uP8fX/9ulnnZo
-         UmNtML76sovEkZBCTsHM6GkdL1/9B01pBEx4vUno8bi3hdeCaOdoTyfq6hkTa34gmft4
-         03oA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=s85ej20o57EVIAZFbWgvrgnN0SkPXWj9xUiifHsTHZg=;
-        b=Kzl0AoT/KDL6l7nOeF5hIf9uLcqJpp982BAgCGq9CQ9nTDB4L17bbbCRwxM2v/MOo2
-         Kum28dTlKfDRCNZbLUfcZr140wc931/hPDuAb6jx2WbM8O7AtdqdA5c24ttBuV5XEhC2
-         OUaQkkC4ml3gIKU5UWYFDsld9ljQGNQ052uuViq7n7+PLvGQEHStdWtUpVpdlNii12tQ
-         1EibAJDJhA5tAvjaQ6cqMs3Dc/IOYtyeMMGN8q9zdc0WagwoL+N2oR2mJ8hnUUV1riix
-         kvDWN5Du3Eg7Z5NnqT2SXdm3/NOuhSZCvCfgP/W8pE9k0oe1jMxIc2pyPg4kpR1JwEQ6
-         pXHw==
-X-Gm-Message-State: AO0yUKVbrffgVicY0NAsC40ySbv/nTuZp/oGFLRrXbG/HleTxE+I05cB
-        Cr7i8XspyBfhIlfWoMeSYw88sR9l/GzqotPVnKM=
-X-Google-Smtp-Source: AK7set+0c5IFVbo5S3RjC5aOGFuL8Zs9WlbR6blsKJepl2XbT7Oc5hgv5WTV0x4z8gzWNJGZhNesPqm9d1b5s6s1HSQ=
-X-Received: by 2002:a17:907:6025:b0:877:7480:c568 with SMTP id
- fs37-20020a170907602500b008777480c568mr6954732ejc.8.1677052419551; Tue, 21
- Feb 2023 23:53:39 -0800 (PST)
+        Wed, 22 Feb 2023 02:55:58 -0500
+Received: from mxout70.expurgate.net (mxout70.expurgate.net [194.37.255.70])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6EAE2BEF3;
+        Tue, 21 Feb 2023 23:55:55 -0800 (PST)
+Received: from [127.0.0.1] (helo=localhost)
+        by relay.expurgate.net with smtp (Exim 4.92)
+        (envelope-from <prvs=9431929e93=fe@dev.tdt.de>)
+        id 1pUjyg-000UrY-Ce; Wed, 22 Feb 2023 08:55:50 +0100
+Received: from [195.243.126.94] (helo=securemail.tdt.de)
+        by relay.expurgate.net with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <fe@dev.tdt.de>)
+        id 1pUjyf-0002DS-Iu; Wed, 22 Feb 2023 08:55:49 +0100
+Received: from securemail.tdt.de (localhost [127.0.0.1])
+        by securemail.tdt.de (Postfix) with ESMTP id 29FFB24004B;
+        Wed, 22 Feb 2023 08:55:49 +0100 (CET)
+Received: from mail.dev.tdt.de (unknown [10.2.4.42])
+        by securemail.tdt.de (Postfix) with ESMTP id 93103240040;
+        Wed, 22 Feb 2023 08:55:48 +0100 (CET)
+Received: from localhost.localdomain (unknown [10.2.3.40])
+        by mail.dev.tdt.de (Postfix) with ESMTPSA id DEA272B933;
+        Wed, 22 Feb 2023 08:55:47 +0100 (CET)
+From:   Florian Eckert <fe@dev.tdt.de>
+To:     u.kleine-koenig@pengutronix.de, gregkh@linuxfoundation.org,
+        jirislaby@kernel.org, pavel@ucw.cz, lee@kernel.org
+Cc:     linux-kernel@vger.kernel.org, linux-leds@vger.kernel.org,
+        Eckert.Florian@googlemail.com
+Subject: [PATCH v6 0/2] leds: ledtrig-tty: add tty_led_mode xtension
+Date:   Wed, 22 Feb 2023 08:55:37 +0100
+Message-ID: <20230222075539.484878-1-fe@dev.tdt.de>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-References: <20230221183211.21964-1-clamor95@gmail.com> <20230221183211.21964-3-clamor95@gmail.com>
- <Y/VA3HK/jGVPbrqb@sirena.org.uk>
-In-Reply-To: <Y/VA3HK/jGVPbrqb@sirena.org.uk>
-From:   Svyatoslav Ryhel <clamor95@gmail.com>
-Date:   Wed, 22 Feb 2023 09:53:28 +0200
-Message-ID: <CAPVz0n2cHvKfez6=ydR8HQfAfM_bipmAzav76Gxmp6pF4wLuhw@mail.gmail.com>
-Subject: Re: [PATCH v1 02/10] sound: soc: jack: allow multiple interrupt per gpio
-To:     Mark Brown <broonie@kernel.org>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>,
-        Maxim Schwalm <maxim.schwalm@gmail.com>,
-        Dmitry Osipenko <digetx@gmail.com>, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, alsa-devel@alsa-project.org,
-        linux-tegra@vger.kernel.org, linux-staging@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_PASS,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+Content-Transfer-Encoding: quoted-printable
+X-purgate-ID: 151534::1677052550-7915299C-E60BD40E/0/0
+X-purgate-type: clean
+X-purgate: clean
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-=D1=81=D1=80, 22 =D0=BB=D1=8E=D1=82. 2023 =D1=80. =D0=BE 00:08 Mark Brown <=
-broonie@kernel.org> =D0=BF=D0=B8=D1=88=D0=B5:
->
-> On Tue, Feb 21, 2023 at 08:32:03PM +0200, Svyatoslav Ryhel wrote:
-> > This feature is required for coupled hp-mic quirk used
-> > by some Nvidia Tegra 3 based devices work properly.
->
-> Please submit this separately, there's no meaningful dependency
-> on the rest of the series.
+Hello,
 
-RT5631 by machine driver commit contains a coupled hp-mic quirk which
-requires this commit to work properly. In v2 RT5631 machine driver bringup
-and coupled hp-mic quirk may be split into separate commits.
+here commes v6 of this series to add additional tty_led_modes.
 
-> Please submit patches using subject lines reflecting the style for the
-> subsystem, this makes it easier for people to identify relevant patches.
-> Look at what existing commits in the area you're changing are doing and
-> make sure your subject lines visually resemble what they're doing.
-> There's no need to resubmit to fix this alone.
+v6:
+Changes compared to the v5 patchset with
+20230221081901.15557-1-fe@dev.tdt.de are.
+
+Addressed review comments by kernel test robot are:
+
+* fix Documentation/ABI/testing/sysfs-class-led-trigger-tty:9:
+  WARNING: Unexpected indentation.
+* fix Documentation/ABI/testing/sysfs-class-led-trigger-tty:9:
+  WARNING: Block quote ends without a blank line; unexpected unindent.
+
+Thanks to Jiri Slaby, who gave me the crucial hint of what I need to fix,
+to possibly make the 'Kernel test robot' happy.
+
+
+v5:
+Changes compared to the v4 patchset with
+20230220152038.3877596-1-fe@dev.tdt.de are.
+
+Sorry for the inconvenience, but I sent the wrong patch for
+ledtrig-tty.c in v4. The v5 patchset now includes all the changes I
+specified in the v4 patchset.
+
+
+v4:
+Changes compared to the v3 patchset with
+20230220093739.320478-1-fe@dev.tdt.de are.
+
+Addressed review comments by Jiri Slaby are:
+
+ledtrig-tty.c:
+- Do not use __TTY_LED_MAX pattern us instead __TTY_LED_LAST =3D TTY_LED_=
+RNG
+- Move declartion and assignment into one singel line
+- Use __TTY_LED_LAST pattern, to simplify tty_mode_show and
+  tty_mode_store handling
+
+
+v3:
+Changes compared to the v2 patchset with
+20230217094403.1574468-1-fe@dev.tdt.de are.
+
+Addressed review comments by Greg K-H are:
+
+tty.h:
+- Fix first comment line and remark -%ENOTTY for the new function
+  'tty_get_mget' to make a proper kernel doc.
+- Add the return value -%ENOTTY again, I thought it was no longer needed.
+
+
+v2:
+Changes compared to the initial patchset with
+20230213140638.620206-1-fe@dev.tdt.de are.
+
+Addressed review comments by Jiri Slaby are:
+
+tty.h:
+- Fix compilation error because of wrong rebaseing
+- Remove empty lines
+- Use new 'tty_get_mget' in 'tty_tiocmget'
+
+ledtrig-tty.c:
+- Update commit description
+- Use enum for tty_led_mod in struct ledtrig_tty_date
+- Rename sysfs file from 'mode' to 'tty_led_mode'
+- Change tty_led_mode show function to use loop instead of switch/case
+- Change tty_led_mode store function to use loop instead of switch/case
+- Check return value of function tty_get_mget
+
+
+Florian Eckert (2):
+  tty: new helper function tty_get_mget
+  trigger: ledtrig-tty: add additional modes
+
+ .../ABI/testing/sysfs-class-led-trigger-tty   |  16 ++
+ drivers/leds/trigger/ledtrig-tty.c            | 145 ++++++++++++++++--
+ drivers/tty/tty_io.c                          |  28 +++-
+ include/linux/tty.h                           |   1 +
+ 4 files changed, 169 insertions(+), 21 deletions(-)
+
+--=20
+2.30.2
+
