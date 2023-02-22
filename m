@@ -2,122 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C35B969F83F
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Feb 2023 16:42:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C5FC569F841
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Feb 2023 16:43:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231969AbjBVPmJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Feb 2023 10:42:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36670 "EHLO
+        id S231571AbjBVPno (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Feb 2023 10:43:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37998 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232302AbjBVPmG (ORCPT
+        with ESMTP id S231235AbjBVPnm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Feb 2023 10:42:06 -0500
-Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 982D24ECB
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Feb 2023 07:42:05 -0800 (PST)
-Received: by mail-wm1-x333.google.com with SMTP id j3so4063426wms.2
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Feb 2023 07:42:05 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Nw8f5byG/F3YoGbalXU1EaTBTMj3y23p7phZ4xgScHY=;
-        b=cEInI9spwQdEs3MyGHgBWa58a6MbNbdxHkepCIhKWGKUpYBoKtUgzZLW3bll2qtUdU
-         d23Q7LZPpKWFniX/AQ8gCEq/5c6hB++2nZEIEvZbxohDvI3GJ/qgfmGeY0PBd3/HtnXv
-         38cVs8HmaeyC0N2SaZotUcjV1TEtyhuH6n3x/5WlcWZ/Hdj2dK9QqgrmusOIOj2Todoj
-         xv9TCc+0ii5uqk9se+2jtFV419gwjcrwzGUSDv2CB5XDwQxXltDcyCI9ZrTLkRQvKUEr
-         1JQqxz8Rkak+bBGEoC7zc8MJMZLvrBN2lX1rBe2sJCIqeO22JB7vJI78QSye4il9EJ18
-         LPXQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Nw8f5byG/F3YoGbalXU1EaTBTMj3y23p7phZ4xgScHY=;
-        b=g6eUMVTRwuUd8BEHjtqt0Ql7HV6hpKjo69BlIYZKkWJF5rZL53F51u9T7++TcP+1Bh
-         xyWFZG7tfoK0wfHqmFkxbo9xoO8pM5OVA2BeDNASr7unkzm24H60Wf9dO1IwOaxcV3fx
-         3zS+UCrugusFmQ9MuyGIdVHH5kqiJ1WOmE1qMUvecxzaHmLjzQ10ZyWn+t2ygKyxLnIC
-         QqmrGCAgeF0vDGXeRoU/MHOW3cUBfyazkGfbeVdogsBm41POauhuZaCzV7Z7W+5c0Hzy
-         mngRVrLPX6dng8Gzj+qekzUzo6CMsjFRYseevrwk3Yzrb0iY768vIJiNLTLH/41jCd6G
-         qwGA==
-X-Gm-Message-State: AO0yUKWLtbjVe+f3LUb3PvRHHPdbmR0IiZgfQJWltnNn62fv492L57Sg
-        HL6wykymzJOKJgdq4+fKZtNL/7eIDbLzDC6AQ5vnLw==
-X-Google-Smtp-Source: AK7set/6GY33gcZOehd3qRAMZkQvnMhOfpkjzHnwTOT4RXEXkWNqVrTnxHUqu8NYnAyrOqqUTO19S2s3O6YGzej9ltU=
-X-Received: by 2002:a05:600c:4e44:b0:3df:f862:fe42 with SMTP id
- e4-20020a05600c4e4400b003dff862fe42mr2347395wmq.10.1677080523815; Wed, 22 Feb
- 2023 07:42:03 -0800 (PST)
+        Wed, 22 Feb 2023 10:43:42 -0500
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D2CA1E5DE;
+        Wed, 22 Feb 2023 07:43:41 -0800 (PST)
+Received: from pps.filterd (m0279863.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 31MF7tUI012996;
+        Wed, 22 Feb 2023 15:43:30 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=JnxcFNqst959AUn2rOTT4yjbmqPZ4cda06QUPBhLYgA=;
+ b=ENozoSh+C0oYoTdXt0nl3JoUXdF7+1/Fivob4/M62VUm+rO0x10MeZWEdSFB75/Ce9x8
+ q+sUT+avwdfk7s+3ekouvkc2w9qYewdDEMUt44TBj/5ofvz24/ooDqNBRBf/mvYGE006
+ hq+M3n7YKhYeEQQ4eXC1QK9zVUvt052nUbuYuKL0w+UQfAO/OevJOckAw/hc6N3yyjtH
+ sNSfhtXGElhZYtje/nNCLIDasd8h8hQ5b2tw2Veb+y4+WjfhlXrv+HcANhMLVenv+fyq
+ roDPnJRCAWhvNKCS5YcfrQ/6u2Oe7Y7rjqlnN1EkDTZeXwShPikmjAy7bd8A6kCwwjLn iQ== 
+Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3nw75ta6da-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 22 Feb 2023 15:43:29 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 31MFhTEU007299
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 22 Feb 2023 15:43:29 GMT
+Received: from [10.226.59.182] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.41; Wed, 22 Feb
+ 2023 07:43:28 -0800
+Message-ID: <88b46bcf-04c0-009a-db9f-4a39b8344dcd@quicinc.com>
+Date:   Wed, 22 Feb 2023 08:43:27 -0700
 MIME-Version: 1.0
-References: <20230222145917.GA12590@debian> <20230222151236.GB12658@debian>
-In-Reply-To: <20230222151236.GB12658@debian>
-From:   Eric Dumazet <edumazet@google.com>
-Date:   Wed, 22 Feb 2023 16:41:51 +0100
-Message-ID: <CANn89iK03mcdu=dn+kj-St27Y2OvSzQ5G=VzqwutR0Khn1cSUg@mail.gmail.com>
-Subject: Re: [PATCH v2 2/2] gro: optimise redundant parsing of packets
-To:     Richard Gobert <richardbgobert@gmail.com>
-Cc:     davem@davemloft.net, kuba@kernel.org, pabeni@redhat.com,
-        dsahern@kernel.org, alexanderduyck@fb.com, lixiaoyan@google.com,
-        steffen.klassert@secunet.com, lucien.xin@gmail.com,
-        ye.xingchen@zte.com.cn, iwienand@redhat.com, leon@kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.0
+Subject: Re: [PATCH v4] bus: mhi: host: Avoid ringing EV DB if there is no
+ elements to process
+Content-Language: en-US
+To:     Vivek Pernamitta <quic_vpernami@quicinc.com>, <mhi@lists.linux.dev>
+CC:     <quic_qianyu@quicinc.com>, <manivannan.sadhasivam@linaro.org>,
+        <quic_vbadigan@quicinc.com>, <quic_krichai@quicinc.com>,
+        <quic_skananth@quicinc.com>,
+        Manivannan Sadhasivam <mani@kernel.org>,
+        "Alex Elder" <elder@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Paul Davey <paul.davey@alliedtelesis.co.nz>,
+        "open list:MHI BUS" <linux-arm-msm@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>
+References: <1677066231-14931-1-git-send-email-quic_vpernami@quicinc.com>
+From:   Jeffrey Hugo <quic_jhugo@quicinc.com>
+In-Reply-To: <1677066231-14931-1-git-send-email-quic_vpernami@quicinc.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: x_fwL7FU5oPyizJGgE8MgY8huVqJF82h
+X-Proofpoint-ORIG-GUID: x_fwL7FU5oPyizJGgE8MgY8huVqJF82h
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.170.22
+ definitions=2023-02-22_05,2023-02-22_02,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 phishscore=0
+ adultscore=0 priorityscore=1501 mlxscore=0 bulkscore=0 suspectscore=0
+ clxscore=1015 impostorscore=0 mlxlogscore=999 lowpriorityscore=0
+ malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2302220136
+X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Feb 22, 2023 at 4:13=E2=80=AFPM Richard Gobert <richardbgobert@gmai=
-l.com> wrote:
->
-> Currently the IPv6 extension headers are parsed twice: first in
-> ipv6_gro_receive, and then again in ipv6_gro_complete.
->
-> By using the new ->transport_proto field, and also storing the size of th=
-e
-> network header, we can avoid parsing extension headers a second time in
-> ipv6_gro_complete (which saves multiple memory dereferences and condition=
-al
-> checks inside ipv6_exthdrs_len for a varying amount of extension headers =
-in IPv6
-> packets).
->
-> The implementation had to handle both inner and outer layers in case of
-> encapsulation (as they can't use the same field).
->
-> Performance tests for TCP stream over IPv6 with a varying amount of exten=
-sion
-> headers demonstrate throughput improvement of ~0.7%.
->
-> In addition, I fixed a potential existing problem:
->  - The call to skb_set_inner_network_header at the beginning of
->    ipv6_gro_complete calculates inner_network_header based on skb->data b=
-y
->    calling skb_set_inner_network_header, and setting it to point to the b=
-eginning
->    of the ip header.
->  - If a packet is going to be handled by BIG TCP, the following code bloc=
-k is
->    going to shift the packet header, and skb->data is going to be changed=
- as
->    well.
->
-> When the two flows are combined, inner_network_header will point to the w=
-rong
-> place.
+On 2/22/2023 4:43 AM, Vivek Pernamitta wrote:
+> Avoid ringing Event DB if there is no elements to process.
 
-net-next is closed.
+This is almost exactly identical to $SUBJECT and therefore redundant.
 
-If you think a fix is needed, please send a stand-alone and minimal
-patch so that we can discuss its merit.
+> As mhi_poll function can be called by mhi client drivers
+> which will call process_event, which will ring DB even if
+> there no ring elements to process.
 
-Note :
+I think that you could be more clear on why this is a problem that 
+should be addressed.  Perhaps add a sentence like "These doorbell events 
+needlessly interrupt the MHI device to checked for ring elements when 
+there are none."
 
-BIG TCP only supports native IPv6, not encapsulated traffic,
-so we should not bother with inner_network_header yet.
+With the commit text updated, you can add
+Reviewed-by: Jeffrey Hugo <quic_jhugo@quicinc.com>
+
+> 
+> Signed-off-by: Vivek Pernamitta <quic_vpernami@quicinc.com>
+> 
+> ---
+> changes since v3:
+> 	- Updating commit text for multiple versions of patches.
+> changes since v2:
+> 	- Updated comments in code.
+> changes since v1:
+> 	- Add an check to avoid ringing EV DB in mhi_process_ctrl_ev_ring().
+> ---
+>   drivers/bus/mhi/host/main.c | 8 ++++++--
+>   1 file changed, 6 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/bus/mhi/host/main.c b/drivers/bus/mhi/host/main.c
+> index df0fbfe..1bbdb75 100644
+> --- a/drivers/bus/mhi/host/main.c
+> +++ b/drivers/bus/mhi/host/main.c
+> @@ -961,7 +961,9 @@ int mhi_process_ctrl_ev_ring(struct mhi_controller *mhi_cntrl,
+>   	}
+>   
+>   	read_lock_bh(&mhi_cntrl->pm_lock);
+> -	if (likely(MHI_DB_ACCESS_VALID(mhi_cntrl)))
+> +
+> +	/* Ring EV DB only if there is any pending element to process */
+> +	if (likely(MHI_DB_ACCESS_VALID(mhi_cntrl)) && count)
+>   		mhi_ring_er_db(mhi_event);
+>   	read_unlock_bh(&mhi_cntrl->pm_lock);
+>   
+> @@ -1031,7 +1033,9 @@ int mhi_process_data_event_ring(struct mhi_controller *mhi_cntrl,
+>   		count++;
+>   	}
+>   	read_lock_bh(&mhi_cntrl->pm_lock);
+> -	if (likely(MHI_DB_ACCESS_VALID(mhi_cntrl)))
+> +
+> +	/* Ring EV DB only if there is any pending element to process */
+> +	if (likely(MHI_DB_ACCESS_VALID(mhi_cntrl)) && count)
+>   		mhi_ring_er_db(mhi_event);
+>   	read_unlock_bh(&mhi_cntrl->pm_lock);
+>   
+
