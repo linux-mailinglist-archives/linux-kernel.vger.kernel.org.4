@@ -2,80 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C4A5A69F066
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Feb 2023 09:36:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B4B1F69F06D
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Feb 2023 09:38:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230511AbjBVIgi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Feb 2023 03:36:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54114 "EHLO
+        id S230424AbjBVIiB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Feb 2023 03:38:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55516 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230223AbjBVIge (ORCPT
+        with ESMTP id S229954AbjBVIh7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Feb 2023 03:36:34 -0500
-Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B5932E0FA
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Feb 2023 00:36:33 -0800 (PST)
-Received: by mail-wm1-x332.google.com with SMTP id az11-20020a05600c600b00b003dc4fd6e61dso5555828wmb.5
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Feb 2023 00:36:33 -0800 (PST)
+        Wed, 22 Feb 2023 03:37:59 -0500
+Received: from mail-vs1-xe35.google.com (mail-vs1-xe35.google.com [IPv6:2607:f8b0:4864:20::e35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF97940C8
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Feb 2023 00:37:57 -0800 (PST)
+Received: by mail-vs1-xe35.google.com with SMTP id j14so7784406vse.3
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Feb 2023 00:37:57 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=xb/tDVxWKhj2uVd6k40rS8jR5dYMCSgdBjdPB4tRE4c=;
-        b=LGFC8n2veMJ3dCqA10bxu0OUsB3VKyJkTMmM3WjdGoIh32sKTk/GLOv1C/ZFoe8zMZ
-         A1EQ9XaNVfwf+uAmCCb4+asw7zqhL7TiR22+1TlFqmxynmvD9NDVw8neh/oC+I3P0TxM
-         FDd8TB6WoTR4wZXIHipdlNH/VdcMwnxWs3HUi9kOJx/G6qtCe2zhsse1AKJTABVAKDA6
-         66AQtCzDT8GzTouTxJaFkPKlHGchKBtu1OQOL4UDv613UH7D4gVAglfdkMzChz420tEo
-         1nzwCf3jm6UoaMeQs6c0ZXu276HGYt51IkNPQL+lnhuJZ49IYXCye4+FcNLTv4OW7g3N
-         229A==
+        d=chromium.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=sComzmbCpABMxGUkRsCiLtkyNheYwmjw48ljpFz3J24=;
+        b=lj5Wy8MK1mwapRAvUlPMKSor05OyZO5FDMUF3vmS3b4AA19H4/OTNnPn7urBRBWgNH
+         pDCjTxYoDNOOE7BuYRmNwu8P0aIwLJ3yduJkfc4bTH71uQwH93SttIJkswsYVXhj1J2Q
+         T6Ad3ZCsTfC91iXkA1tnIcoklpBf4kIODobuM=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=xb/tDVxWKhj2uVd6k40rS8jR5dYMCSgdBjdPB4tRE4c=;
-        b=pmPlOdKn3+mXsxPLCHHfnKuU8kHOQct8QaF8MI5c3lkrB/qf8DlhmByaDaBbiZ4QX8
-         Vw/vxz1zOF75P8bQTe5gUV+beNZGKl+9bZz6c98vgZL2VaMrq2SEqyI80g4uHiyaiqSJ
-         Ph5LWl8hIOGUZnCHbI4KszP1dTHg0tFM/q2Q8RVI6UxoJR0dB/pNajr1PkPe8sS+o2Dc
-         4UTOR2Kb51yoz24xF4+P6JryD1F4W3ohnHVvxgjFE+q9P+Rmj/FHZ5QEIS0J6q+JMEZt
-         MVL2S9m7FtMwLTH6AlDjb460vJdJp26NqwOWv9Uq3kfKNfeQ2UweOOtgYfAJvVjc43xc
-         a4YQ==
-X-Gm-Message-State: AO0yUKXDfWuwKSRMTuLIBw0W2iU+j+Cv5kMUEVxX/FcTkfJgLhBvPfEP
-        ElnC/GM+xLKIj55w4FjJLa1chA==
-X-Google-Smtp-Source: AK7set+CXwYu0dZDS5ncauHRnqWd+eXxDWdlmg3wPkw4yl5GW5yku8xX2H+ET0W1Hih0UasI6c2ISg==
-X-Received: by 2002:a05:600c:4918:b0:3db:2063:425d with SMTP id f24-20020a05600c491800b003db2063425dmr11392100wmp.2.1677054991865;
-        Wed, 22 Feb 2023 00:36:31 -0800 (PST)
-Received: from [192.168.1.109] ([178.197.216.144])
-        by smtp.gmail.com with ESMTPSA id k18-20020a05600c409200b003db06224953sm7866120wmh.41.2023.02.22.00.36.30
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 22 Feb 2023 00:36:31 -0800 (PST)
-Message-ID: <4bb6d810-8297-f91b-c757-fd34c4f9cb0d@linaro.org>
-Date:   Wed, 22 Feb 2023 09:36:29 +0100
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=sComzmbCpABMxGUkRsCiLtkyNheYwmjw48ljpFz3J24=;
+        b=mZd6v1FQYlsxmGGwxNRKd6WfSXcC/kOu50XDUFhOAi4+H3lx7hfRbUx9O6RrDtxjyU
+         k4jyR6KR/+MItU63mJxgxYqyggebf3qc1pLiRhp8yHXuFcFUjaJDuV2AP+G78c6d6V+e
+         dkJH4BwTZoZaPH2xWwt31N3zU0iyPPupXCIJ2AlpDo/7N8dz5B5q8XsRbwKEeU2kFVPq
+         h4oQEXOlac5N8IfVfmQkiyaexW2oFM/hJvy6TcsGcWsYV5nSZzCKKFWa6ZzSiBobAY+3
+         lpq98M6QPfQVdrO1u0VRhg7vyWZtpj+t/BiPCjyDN6kQXsa1ckw6sq9WvGnad0HmTHcL
+         6IDw==
+X-Gm-Message-State: AO0yUKXNrrr0L6bx4BlcElKirnebQInozM0xSx9vLlei9RRyl1Ondym8
+        gSl3wio3LNcQsQ8QmooIP4fcVtg48pSwS6rFbYEZCw==
+X-Google-Smtp-Source: AK7set9FVEBAsLpdo2AF0VsdpWJoDj/pIevIOUHBKq0lW8mgWZ/QSNKhLwdL5NxD1KgYlkJH1/ua8amP+kkHXYKWlsw=
+X-Received: by 2002:a05:6102:570b:b0:3fc:58d:f90f with SMTP id
+ dg11-20020a056102570b00b003fc058df90fmr1571526vsb.60.1677055076838; Wed, 22
+ Feb 2023 00:37:56 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH 1/2] ASoC: tas571x: add tas5733 compatible
-Content-Language: en-US
-To:     Kamel Bouhara <kamel.bouhara@bootlin.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Kevin Cernekee <cernekee@chromium.org>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Crt Mori <cmo@melexis.com>, alsa-devel@alsa-project.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20230222083300.218523-1-kamel.bouhara@bootlin.com>
- <20230222083300.218523-2-kamel.bouhara@bootlin.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230222083300.218523-2-kamel.bouhara@bootlin.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+References: <20230221153740.1620529-1-angelogioacchino.delregno@collabora.com> <20230221153740.1620529-7-angelogioacchino.delregno@collabora.com>
+In-Reply-To: <20230221153740.1620529-7-angelogioacchino.delregno@collabora.com>
+From:   Chen-Yu Tsai <wenst@chromium.org>
+Date:   Wed, 22 Feb 2023 16:37:45 +0800
+Message-ID: <CAGXv+5Ed-5Nq0zNzCGzez3fnW2yxW7zFx9B6k58Y4yb8P+hvpw@mail.gmail.com>
+Subject: Re: [PATCH v2 06/10] dt-bindings: gpu: mali-bifrost: Add a compatible
+ for MediaTek MT8186
+To:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+Cc:     airlied@gmail.com, daniel@ffwll.ch, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, steven.price@arm.com,
+        alyssa.rosenzweig@collabora.com, matthias.bgg@gmail.com,
+        robh@kernel.org, dri-devel@lists.freedesktop.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -83,16 +70,33 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 22/02/2023 09:32, Kamel Bouhara wrote:
-> This adds the tas5733 to the TAS571X binding.
+On Tue, Feb 21, 2023 at 11:37 PM AngeloGioacchino Del Regno
+<angelogioacchino.delregno@collabora.com> wrote:
+>
+> Get GPU support on MT8186 by adding its compatible.
+>
+> Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+> ---
+>  Documentation/devicetree/bindings/gpu/arm,mali-bifrost.yaml | 5 +++++
+>  1 file changed, 5 insertions(+)
+>
+> diff --git a/Documentation/devicetree/bindings/gpu/arm,mali-bifrost.yaml b/Documentation/devicetree/bindings/gpu/arm,mali-bifrost.yaml
+> index be18b161959b..43a841d4e94d 100644
+> --- a/Documentation/devicetree/bindings/gpu/arm,mali-bifrost.yaml
+> +++ b/Documentation/devicetree/bindings/gpu/arm,mali-bifrost.yaml
+> @@ -15,6 +15,11 @@ properties:
+>
+>    compatible:
+>      oneOf:
+> +      - items:
+> +          - enum:
+> +              - mediatek,mt8186-mali
+> +          - const: mediatek,mt8183b-mali
+> +          - const: arm,mali-bifrost # Mali Bifrost GPU model/revision is fully discoverable
 
-Do not use "This ". Use imperative.
-https://elixir.bootlin.com/linux/v5.17.1/source/Documentation/process/submitting-patches.rst#L95
+The MT8186 has Mali-G52 MC2 2EE, while the MT8183 has Mali-G72 MP3.
+So we actually need a new entry with two power domains.
 
+Our downstream Mali driver & DT use just that.
 
-Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-
-
-Best regards,
-Krzysztof
-
+ChenYu
