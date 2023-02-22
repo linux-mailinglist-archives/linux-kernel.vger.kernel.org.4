@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CEE6769F343
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Feb 2023 12:12:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C5B4C69F347
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Feb 2023 12:12:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231755AbjBVLMi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Feb 2023 06:12:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36548 "EHLO
+        id S231786AbjBVLMr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Feb 2023 06:12:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36900 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231230AbjBVLMf (ORCPT
+        with ESMTP id S231785AbjBVLMn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Feb 2023 06:12:35 -0500
-Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBC01211D6;
-        Wed, 22 Feb 2023 03:12:33 -0800 (PST)
-Received: by mail-pj1-x1031.google.com with SMTP id q31-20020a17090a17a200b0023750b69614so193052pja.5;
-        Wed, 22 Feb 2023 03:12:33 -0800 (PST)
+        Wed, 22 Feb 2023 06:12:43 -0500
+Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37B0B392B2;
+        Wed, 22 Feb 2023 03:12:38 -0800 (PST)
+Received: by mail-pl1-x629.google.com with SMTP id e9so3333642plh.2;
+        Wed, 22 Feb 2023 03:12:38 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=azrsxJplJ+DgLt389DwS68lqZLzLGhDWxaz1QQlD5Js=;
-        b=jlrCfPyouseNbDppeJ5IFeloNRVnhiC8a3VC41uf0HyVPqwLDfe2QHIDNGPjKmgXof
-         BuvKIAtVb5Qt4xHLLdO1zK970/o2Ejs01C5pe9qcZE7Z2l7fHOXsiIOHjzebK27g109U
-         cZ3DWSwUHL27o1DBCTJAI2eYYYgSIkGWa2Ot/squXRn3amq1u8ZI8gzIIGOsq5Q1iQ6v
-         gOg6ppDLhJR+EV38vXS9mtznCRX6GTQz2jbsf2jx6dh86mx3f/D9q0wGbm9vd37FNP6O
-         Riz3FqtmuShyNZqgp2cQ1n0IS1lNqNVgN7j0xSAFAtLtdqTg7SS5q7nwCdfmMv0KSTsQ
-         gXqQ==
+        bh=/59u0aFLCj7mAVvWdqbe9uXAbJQVQlHSWO1sFeKEmaM=;
+        b=Io6QEstP+tREfhiRZY4Ocgan+qroAozZmpSWtKekTone0wj/kjzebFvLtX8jDgdvQP
+         y4k8UjqMUKVJtfFZDCMTtR/W5dZmODnlOOaXJTpLkH1+0ILNl2CEMiGdxoj67Nl+UuwN
+         aVWLfQ3DnP5vF+oy+CHXsJZ0Dyb+CLubY6+761P3UgK4sf+BhBgP6GV9/X9rzb3dFLTG
+         1I2A44jclwYgEBKA4mu2JyUSnvwYpHtrsv4m9N89ESr6jVjS6w2V5Wy9pSYUG263GtDe
+         GnHLpJnQYaJHJPez5mSGk5+BwhLaOOfJ6+FVlv2sSncv7Hkq8DGMR6dVCbYmZHFrhgN+
+         3B4g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=azrsxJplJ+DgLt389DwS68lqZLzLGhDWxaz1QQlD5Js=;
-        b=yIHD3AlV2Yrjq5aQIduMzVtPh3/nbvgbxS0aL0UmBV4rlRyucfKAY7VEqnJM4MacOO
-         QhmJuDAnNSk2D65q3+nP98bqYXggHYSWVVrcu7/SoBO/ZEUiYpVpf4DzICLcF1sSndtp
-         dMmK6nXWW/Ij+iaydb3AZdmdCVAZPH2G5R0L1OX36xSDz/UCKcrOIgj/U3vORgXhJgi/
-         ejNn+ak8cjgweQs0pE2tZWjXSTlSmollLzGJ07XC/Dv9KGiCw1CjcK4SAw6S2mnFlr0A
-         Nl3FdeJrZBuFSY7DMq19dk0UESU4VYwjZXMq8s+haUAvuNF4XU5fVLnvlqiLCUL8Ovk8
-         eF6Q==
-X-Gm-Message-State: AO0yUKVQIvQvveJEf8X8TzPezjjqgjJCUg/bY3Oc0sVQgB6ihgVbnIJ2
-        X8hIxHprptOSDjZES6V9WGCM2TFjo8Q=
-X-Google-Smtp-Source: AK7set8gMx4PNKWM2ER+1oMD8et/3evsiduBobQ1yJDBpcbF1j5RyVXJolmLWHSzgPbF7+KJP476xA==
-X-Received: by 2002:a17:90a:4d88:b0:234:17b:ae2b with SMTP id m8-20020a17090a4d8800b00234017bae2bmr9789396pjh.13.1677064352955;
-        Wed, 22 Feb 2023 03:12:32 -0800 (PST)
+        bh=/59u0aFLCj7mAVvWdqbe9uXAbJQVQlHSWO1sFeKEmaM=;
+        b=V7GU8kgt3+I3pMhwea1pZ+dGdUfHXLWDf2czXOmrIfM153EwlrNPXURdb1kkMlcVNs
+         DsSNW0cKjfVp36XUbD/af159dIIibZXiIedppLj0KZtYoptRM784fyeNufpxE1N0D+t3
+         MFbLthynD2kfRm+igE19dlPksMAbbUJChfgUG2zgX8uaCUN7/+zympmv4L80rbLPKjtw
+         LDXLiQqE6XJN0Wk/EZRykFAqJPXB54eqUZg37JpIJjgdzxNnGPEXSnqcZUEBWeM7R4Iv
+         IsUZxHzpSlRtwD4LLMYUIpMUrdq5XRsiaIl67gcxAZ8Cr2oqPiyM2eaKW3reU9qUtGtQ
+         Qn7g==
+X-Gm-Message-State: AO0yUKXn5sQwm3GB79vpUfvqQjsb+SShgUNPV88FkLDY9n24gpzI9kuS
+        9j2Q9woSriMixd0RYUIUIHBch64tMb7RDA==
+X-Google-Smtp-Source: AK7set8ODvsg9PGkSOZ5l1lt3bU1KfULzoQsu2vqX7fW3MHOKZxbH7yrgsY3CAtZcFphuOyhFF/jew==
+X-Received: by 2002:a17:90b:388a:b0:235:82d0:3a36 with SMTP id mu10-20020a17090b388a00b0023582d03a36mr10664926pjb.41.1677064357358;
+        Wed, 22 Feb 2023 03:12:37 -0800 (PST)
 Received: from kelvin-ThinkPad-L14-Gen-1.. (94.130.220.35.bc.googleusercontent.com. [35.220.130.94])
-        by smtp.gmail.com with ESMTPSA id x7-20020a17090a294700b00234899c65e7sm4763228pjf.28.2023.02.22.03.12.28
+        by smtp.gmail.com with ESMTPSA id x7-20020a17090a294700b00234899c65e7sm4763228pjf.28.2023.02.22.03.12.33
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 22 Feb 2023 03:12:32 -0800 (PST)
+        Wed, 22 Feb 2023 03:12:36 -0800 (PST)
 From:   Keguang Zhang <keguang.zhang@gmail.com>
 To:     linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
         linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
@@ -58,9 +58,9 @@ Cc:     Linus Walleij <linus.walleij@linaro.org>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         Keguang Zhang <keguang.zhang@gmail.com>
-Subject: [PATCH 2/4] gpio: loongson1: Introduce ls1x_gpio_chip struct
-Date:   Wed, 22 Feb 2023 19:12:11 +0800
-Message-Id: <20230222111213.2241633-3-keguang.zhang@gmail.com>
+Subject: [PATCH 3/4] gpio: loongson1: Add DT support
+Date:   Wed, 22 Feb 2023 19:12:12 +0800
+Message-Id: <20230222111213.2241633-4-keguang.zhang@gmail.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230222111213.2241633-1-keguang.zhang@gmail.com>
 References: <20230222111213.2241633-1-keguang.zhang@gmail.com>
@@ -77,106 +77,92 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Introduce and allocate ls1x_gpio_chip struct containing
-gpio_chip and reg_base to avoid global gpio_reg_base.
-
-Use readl() & writel() instead of __raw_readl() & __raw_writel().
+This patch adds DT support for Loongson-1 GPIO driver,
+including the following changes.
+- Add the of_match_table
+- Parse the ngpios property
+- Parse the alias id
 
 Signed-off-by: Keguang Zhang <keguang.zhang@gmail.com>
 ---
- drivers/gpio/gpio-loongson1.c | 45 +++++++++++++++++++----------------
- 1 file changed, 25 insertions(+), 20 deletions(-)
+ drivers/gpio/gpio-loongson1.c | 31 ++++++++++++++++++++++++++++---
+ 1 file changed, 28 insertions(+), 3 deletions(-)
 
 diff --git a/drivers/gpio/gpio-loongson1.c b/drivers/gpio/gpio-loongson1.c
-index 7ecbc43f8b38..b950bcfd78ce 100644
+index b950bcfd78ce..92ad31f61bf0 100644
 --- a/drivers/gpio/gpio-loongson1.c
 +++ b/drivers/gpio/gpio-loongson1.c
-@@ -16,15 +16,19 @@
- #define GPIO_DATA		0x20
- #define GPIO_OUTPUT		0x30
- 
--static void __iomem *gpio_reg_base;
-+struct ls1x_gpio_chip {
-+	struct gpio_chip gc;
-+	void __iomem *reg_base;
-+};
- 
- static int ls1x_gpio_request(struct gpio_chip *gc, unsigned int offset)
- {
-+	struct ls1x_gpio_chip *ls1x_gc = gpiochip_get_data(gc);
- 	unsigned long flags;
- 
- 	raw_spin_lock_irqsave(&gc->bgpio_lock, flags);
--	__raw_writel(__raw_readl(gpio_reg_base + GPIO_CFG) | BIT(offset),
--		     gpio_reg_base + GPIO_CFG);
-+	writel(readl(ls1x_gc->reg_base + GPIO_CFG) | BIT(offset),
-+	       ls1x_gc->reg_base + GPIO_CFG);
- 	raw_spin_unlock_irqrestore(&gc->bgpio_lock, flags);
- 
- 	return 0;
-@@ -32,44 +36,45 @@ static int ls1x_gpio_request(struct gpio_chip *gc, unsigned int offset)
- 
- static void ls1x_gpio_free(struct gpio_chip *gc, unsigned int offset)
- {
-+	struct ls1x_gpio_chip *ls1x_gc = gpiochip_get_data(gc);
- 	unsigned long flags;
- 
- 	raw_spin_lock_irqsave(&gc->bgpio_lock, flags);
--	__raw_writel(__raw_readl(gpio_reg_base + GPIO_CFG) & ~BIT(offset),
--		     gpio_reg_base + GPIO_CFG);
-+	writel(readl(ls1x_gc->reg_base + GPIO_CFG) & ~BIT(offset),
-+	       ls1x_gc->reg_base + GPIO_CFG);
- 	raw_spin_unlock_irqrestore(&gc->bgpio_lock, flags);
- }
- 
+@@ -48,7 +48,10 @@ static void ls1x_gpio_free(struct gpio_chip *gc, unsigned int offset)
  static int ls1x_gpio_probe(struct platform_device *pdev)
  {
  	struct device *dev = &pdev->dev;
--	struct gpio_chip *gc;
-+	struct ls1x_gpio_chip *ls1x_gc;
++	struct device_node *dn = pdev->dev.of_node;
+ 	struct ls1x_gpio_chip *ls1x_gc;
++	unsigned int ngpios;
++	int id;
  	int ret;
  
--	gc = devm_kzalloc(dev, sizeof(*gc), GFP_KERNEL);
--	if (!gc)
-+	ls1x_gc = devm_kzalloc(dev, sizeof(*ls1x_gc), GFP_KERNEL);
-+	if (!ls1x_gc)
- 		return -ENOMEM;
+ 	ls1x_gc = devm_kzalloc(dev, sizeof(*ls1x_gc), GFP_KERNEL);
+@@ -59,34 +62,56 @@ static int ls1x_gpio_probe(struct platform_device *pdev)
+ 	if (IS_ERR(ls1x_gc->reg_base))
+ 		return PTR_ERR(ls1x_gc->reg_base);
  
--	gpio_reg_base = devm_platform_ioremap_resource(pdev, 0);
--	if (IS_ERR(gpio_reg_base))
--		return PTR_ERR(gpio_reg_base);
-+	ls1x_gc->reg_base = devm_platform_ioremap_resource(pdev, 0);
-+	if (IS_ERR(ls1x_gc->reg_base))
-+		return PTR_ERR(ls1x_gc->reg_base);
- 
--	ret = bgpio_init(gc, dev, 4, gpio_reg_base + GPIO_DATA,
--			 gpio_reg_base + GPIO_OUTPUT, NULL,
--			 NULL, gpio_reg_base + GPIO_DIR, 0);
-+	ret = bgpio_init(&ls1x_gc->gc, dev, 4, ls1x_gc->reg_base + GPIO_DATA,
-+			 ls1x_gc->reg_base + GPIO_OUTPUT, NULL,
-+			 NULL, ls1x_gc->reg_base + GPIO_DIR, 0);
++	if (of_property_read_u32(dn, "ngpios", &ngpios)) {
++		dev_err(dev, "Missing ngpios OF property\n");
++		return -ENODEV;
++	}
++
++	id = of_alias_get_id(dn, "gpio");
++	if (id < 0) {
++		dev_err(dev, "Couldn't get OF id\n");
++		return id;
++	}
++
+ 	ret = bgpio_init(&ls1x_gc->gc, dev, 4, ls1x_gc->reg_base + GPIO_DATA,
+ 			 ls1x_gc->reg_base + GPIO_OUTPUT, NULL,
+ 			 NULL, ls1x_gc->reg_base + GPIO_DIR, 0);
  	if (ret)
  		goto err;
  
--	gc->owner = THIS_MODULE;
--	gc->request = ls1x_gpio_request;
--	gc->free = ls1x_gpio_free;
--	gc->base = pdev->id * 32;
-+	ls1x_gc->gc.owner = THIS_MODULE;
-+	ls1x_gc->gc.request = ls1x_gpio_request;
-+	ls1x_gc->gc.free = ls1x_gpio_free;
-+	ls1x_gc->gc.base = pdev->id * 32;
++	ls1x_gc->gc.label = dev_name(&pdev->dev);
++	ls1x_gc->gc.ngpio = ngpios;
+ 	ls1x_gc->gc.owner = THIS_MODULE;
++	ls1x_gc->gc.parent = dev;
++	ls1x_gc->gc.base = pdev->id * BITS_PER_LONG;
+ 	ls1x_gc->gc.request = ls1x_gpio_request;
+ 	ls1x_gc->gc.free = ls1x_gpio_free;
+-	ls1x_gc->gc.base = pdev->id * 32;
  
--	ret = devm_gpiochip_add_data(dev, gc, NULL);
-+	ret = devm_gpiochip_add_data(dev, &ls1x_gc->gc, ls1x_gc);
+ 	ret = devm_gpiochip_add_data(dev, &ls1x_gc->gc, ls1x_gc);
  	if (ret)
  		goto err;
  
--	platform_set_drvdata(pdev, gc);
-+	platform_set_drvdata(pdev, ls1x_gc);
- 	dev_info(dev, "Loongson1 GPIO driver registered\n");
+ 	platform_set_drvdata(pdev, ls1x_gc);
+-	dev_info(dev, "Loongson1 GPIO driver registered\n");
++
++	dev_info(dev, "GPIO controller %d registered with %d pins\n", id,
++		 ngpios);
  
  	return 0;
+ err:
+-	dev_err(dev, "failed to register GPIO device\n");
++	dev_err(dev, "failed to register GPIO controller\n");
+ 	return ret;
+ }
+ 
++static const struct of_device_id ls1x_gpio_dt_ids[] = {
++	{ .compatible = "loongson,ls1x-gpio", },
++	{ /* sentinel */ }
++};
++
+ static struct platform_driver ls1x_gpio_driver = {
+ 	.probe	= ls1x_gpio_probe,
+ 	.driver	= {
+ 		.name	= "ls1x-gpio",
++		.of_match_table = ls1x_gpio_dt_ids,
+ 	},
+ };
+ 
 -- 
 2.34.1
 
