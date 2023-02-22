@@ -2,129 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D0A569FA89
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Feb 2023 18:54:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C6E9869FA88
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Feb 2023 18:54:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231962AbjBVRyt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Feb 2023 12:54:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34660 "EHLO
+        id S231558AbjBVRyo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Feb 2023 12:54:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34608 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229756AbjBVRyq (ORCPT
+        with ESMTP id S229756AbjBVRyn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Feb 2023 12:54:46 -0500
-Received: from crane.ash.relay.mailchannels.net (crane.ash.relay.mailchannels.net [23.83.222.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D493139BA8
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Feb 2023 09:54:44 -0800 (PST)
-X-Sender-Id: dreamhost|x-authsender|kjlx@templeofstupid.com
-Received: from relay.mailchannels.net (localhost [127.0.0.1])
-        by relay.mailchannels.net (Postfix) with ESMTP id C31EA8C102C
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Feb 2023 17:54:40 +0000 (UTC)
-Received: from pdx1-sub0-mail-a307.dreamhost.com (unknown [127.0.0.6])
-        (Authenticated sender: dreamhost)
-        by relay.mailchannels.net (Postfix) with ESMTPA id 5BE768C0696
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Feb 2023 17:54:40 +0000 (UTC)
-ARC-Seal: i=1; s=arc-2022; d=mailchannels.net; t=1677088480; a=rsa-sha256;
-        cv=none;
-        b=jmg76X9+FLQzb6lmU53wQqbxNZJgZTxqormwBuZyr4t3hAJ4PQhiZQv+MfmpmS7df23dYc
-        wXU3bUw+zJXcZ4oDgjl07MdPJxqIL3NJAeTRIz5XWDI/Tvl0FbfNA1eXX4fz8vuXOXWS48
-        IcXEFy6OI7IkJotk4VRvrlZfkt5mjCztrNERjJGG7kEe97Da2qq05AQwcej/Z2FLQkWba4
-        FKZcr+z7cNIqeHNqDz8SBI6hcHT3VBWRxgdU2fbrodCITo0J22da4IP3FYkKdoU7Jirtv/
-        43fjl0ppdQKHjKtYNaKYh/dpGqBoZ7CruRN1zUNIEc7kWzfORyZaclxzPhuE0w==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mailchannels.net;
-        s=arc-2022; t=1677088480;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         dkim-signature; bh=ukKEaiyitO8JgQ7lcfjsogM/CK+0CQFsiEgPLxhpECQ=;
-        b=JzfjlsIOhH2KkeyeN72yGiuFv60ZNGOT7F4TJ8VvD4YCHfqKMzc62Vw0mFWtN/G6DY+Yai
-        AB8k6RsB7CVSW+dXlNiS475fqsPvBFScaOoCaSApW8rzB392NSLIeMWq1XQ+9/WVnYj9Le
-        b+x/NOKEHgEp9TyrJY4MtdNFFEZPIBwZ08oamMUeF8v3StSQso1cSylIg4ugeA8uPz3cbw
-        LVLnjVqhplt6R2UePcOPewBGxHzo+O+5DjyZ34E4uewVRdcW09DpM6bygGqpPKwoV+JK2C
-        eTY9eU/FoEaD4oBs0s6G8EzIIip9Z5Ss8sedM4mFUxeYhpKvos52dLmQWuspww==
-ARC-Authentication-Results: i=1;
-        rspamd-9788b98bc-pxv92;
-        auth=pass smtp.auth=dreamhost smtp.mailfrom=kjlx@templeofstupid.com
-X-Sender-Id: dreamhost|x-authsender|kjlx@templeofstupid.com
-X-MC-Relay: Neutral
-X-MailChannels-SenderId: dreamhost|x-authsender|kjlx@templeofstupid.com
-X-MailChannels-Auth-Id: dreamhost
-X-Lonely-Exultant: 5de39a6360c8653b_1677088480647_2138549284
-X-MC-Loop-Signature: 1677088480647:830589782
-X-MC-Ingress-Time: 1677088480647
-Received: from pdx1-sub0-mail-a307.dreamhost.com (pop.dreamhost.com
- [64.90.62.162])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384)
-        by 100.109.196.241 (trex/6.7.1);
-        Wed, 22 Feb 2023 17:54:40 +0000
-Received: from kmjvbox (c-76-102-200-71.hsd1.ca.comcast.net [76.102.200.71])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: kjlx@templeofstupid.com)
-        by pdx1-sub0-mail-a307.dreamhost.com (Postfix) with ESMTPSA id 4PMP1W20Nrz2J
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Feb 2023 09:54:39 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=templeofstupid.com;
-        s=dreamhost; t=1677088479;
-        bh=ukKEaiyitO8JgQ7lcfjsogM/CK+0CQFsiEgPLxhpECQ=;
-        h=Date:From:To:Cc:Subject:Content-Type;
-        b=LxOvNo4dAzon93EELQlfV+Z2Pxcfjq4PdAWJUXTgikHJVB7rH00AsoqYzilxB1CcS
-         dn4Xn0pFuu5vAeEDxSOZvI4NiFR744p5iXreS7/JODUN4z0ur7mzq4jJKuVFQRMymL
-         ab3u4ZuH2SevO+R+ScPBnstQqTP3PrPmsih00/Us=
-Received: from johansen (uid 1000)
-        (envelope-from kjlx@templeofstupid.com)
-        id e004a
-        by kmjvbox (DragonFly Mail Agent v0.12);
-        Wed, 22 Feb 2023 09:54:29 -0800
-Date:   Wed, 22 Feb 2023 09:54:29 -0800
-From:   Krister Johansen <kjlx@templeofstupid.com>
-To:     xen-devel@lists.xenproject.org, linux-kernel@vger.kernel.org
-Cc:     Juergen Gross <jgross@suse.com>, Jan Beulich <jbeulich@suse.com>,
-        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Marcelo Tosatti <mtosatti@redhat.com>,
-        Anthony Liguori <aliguori@amazon.com>,
-        David Reaver <me@davidreaver.com>,
-        Brendan Gregg <brendan@intel.com>
-Subject: [PATCH linux-next v2 0/2] x86/xen TSC related cleanups
-Message-ID: <cover.1677038165.git.kjlx@templeofstupid.com>
+        Wed, 22 Feb 2023 12:54:43 -0500
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0093537F1A;
+        Wed, 22 Feb 2023 09:54:41 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1677088482; x=1708624482;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=M12BjQLqEYzHJwO6ma963tynHN4v+JrRV2MFQkyV3mQ=;
+  b=kGB2nsC+ZfvslNREx5zt6Do1ffpc/I5Leb4z85NzDBpTgbpPaY+7sahq
+   XbD2kX4eOWzzVupef312r1NQMNJ8ijAstBClwksXM6YK0o6ybjVZDdzxR
+   e4ObBQUdiNDzahCeXyNgdu4iI+w29mWgiAsOtTwN9XXl2tPpZrnxQ56oO
+   gF9nMadJaSskwXwUNb+RyBnu0M+wmHBlL8GnHvcVHdlHX8JSPmHdjR0XA
+   /HsvMsgUmnUt/zWreNIVDPoLEIWijyDuHvsbMc7au1Xdafj4ydw/ERrdE
+   Bst2v1/5r4F8VWa6iYSyj9esNApwq8jgAKKpne1AuvLSCpKvZBPsFyein
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10629"; a="334356519"
+X-IronPort-AV: E=Sophos;i="5.97,319,1669104000"; 
+   d="scan'208";a="334356519"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Feb 2023 09:54:40 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10629"; a="917641246"
+X-IronPort-AV: E=Sophos;i="5.97,319,1669104000"; 
+   d="scan'208";a="917641246"
+Received: from tzinser-mobl.amr.corp.intel.com (HELO [10.209.49.182]) ([10.209.49.182])
+  by fmsmga006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Feb 2023 09:54:37 -0800
+Message-ID: <b09efb91-d41c-012e-7d99-fdbcf3e92661@intel.com>
+Date:   Wed, 22 Feb 2023 09:54:36 -0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
-        DKIM_SIGNED,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        UNPARSEABLE_RELAY autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH v6 14/41] x86/mm: Introduce _PAGE_SAVED_DIRTY
+Content-Language: en-US
+To:     Kees Cook <kees@kernel.org>, David Hildenbrand <david@redhat.com>,
+        "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>,
+        "bsingharora@gmail.com" <bsingharora@gmail.com>,
+        "hpa@zytor.com" <hpa@zytor.com>,
+        "Syromiatnikov, Eugene" <esyr@redhat.com>,
+        "peterz@infradead.org" <peterz@infradead.org>,
+        "rdunlap@infradead.org" <rdunlap@infradead.org>,
+        "keescook@chromium.org" <keescook@chromium.org>,
+        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+        "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>,
+        "Eranian, Stephane" <eranian@google.com>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "fweimer@redhat.com" <fweimer@redhat.com>,
+        "nadav.amit@gmail.com" <nadav.amit@gmail.com>,
+        "jannh@google.com" <jannh@google.com>,
+        "dethoma@microsoft.com" <dethoma@microsoft.com>,
+        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
+        "kcc@google.com" <kcc@google.com>, "pavel@ucw.cz" <pavel@ucw.cz>,
+        "oleg@redhat.com" <oleg@redhat.com>,
+        "hjl.tools@gmail.com" <hjl.tools@gmail.com>,
+        "bp@alien8.de" <bp@alien8.de>,
+        "Lutomirski, Andy" <luto@kernel.org>,
+        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+        "arnd@arndb.de" <arnd@arndb.de>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "Schimpe, Christina" <christina.schimpe@intel.com>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "mike.kravetz@oracle.com" <mike.kravetz@oracle.com>,
+        "Yang, Weijiang" <weijiang.yang@intel.com>,
+        "debug@rivosinc.com" <debug@rivosinc.com>,
+        "jamorris@linux.microsoft.com" <jamorris@linux.microsoft.com>,
+        "john.allen@amd.com" <john.allen@amd.com>,
+        "rppt@kernel.org" <rppt@kernel.org>,
+        "andrew.cooper3@citrix.com" <andrew.cooper3@citrix.com>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "corbet@lwn.net" <corbet@lwn.net>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-api@vger.kernel.org" <linux-api@vger.kernel.org>,
+        "gorcunov@gmail.com" <gorcunov@gmail.com>,
+        "akpm@linux-foundation.org" <akpm@linux-foundation.org>
+Cc:     "Yu, Yu-cheng" <yu-cheng.yu@intel.com>
+References: <20230218211433.26859-1-rick.p.edgecombe@intel.com>
+ <20230218211433.26859-15-rick.p.edgecombe@intel.com>
+ <70681787-0d33-a9ed-7f2a-747be1490932@redhat.com>
+ <6f19d7c7ad9f61fa8f6c9bd09d24524dbe17463f.camel@intel.com>
+ <6e1201f5-da25-6040-8230-c84856221838@redhat.com>
+ <273414f5-2a7c-3cc0-dc27-d07baaa5787b@intel.com>
+ <52f001ef-a409-4f33-f28f-02e806ef305a@redhat.com>
+ <74b91f3e-17f7-6d89-a7d1-7373101bf8b7@intel.com>
+ <62b48389-0e61-17da-6a72-d4a16e003352@redhat.com>
+ <279E91DE-D152-4996-BBD2-BB310AD38620@kernel.org>
+From:   Dave Hansen <dave.hansen@intel.com>
+In-Reply-To: <279E91DE-D152-4996-BBD2-BB310AD38620@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
-Enclosed please find a pair of patches that perform some additional cleanup
-that was suggested by Boris, Jan and Thomas.
+On 2/22/23 09:42, Kees Cook wrote:
+> On February 22, 2023 9:27:35 AM PST, David Hildenbrand <david@redhat.com> wrote:
+>> On 22.02.23 18:23, Dave Hansen wrote:
+>>> On 2/22/23 01:05, David Hildenbrand wrote:
+>>>> This series wasn't in -next and we're in the merge window. Is the plan
+>>>> to still include it into this merge window?
+>>> No way.  It's 6.4 material at the earliest.
+>>>
+>>> I'm just saying to Rick not to worry _too_ much about earlier feedback
+>>> from me if folks have more recent review feedback.
+>> Great. So I hope we can get this into -next soon and that we'll only get non-earth-shattering feedback so this can land in 6.4.
+> Yes please. Who's going to take it? 😄
 
-Specifically: this resync's arch/x86/include/asm/xen/cpuid.h from its
-upstream source in the Xen tree, and then uses one of the new #define-s to
-replace a constant in x86/xen/time.c that was previously only numerically
-defined.  Pedantic code from v1 is dropped in favor of a more appropriate
-return statement.
-
-Changes from v1:
-
-- Coding style fixup in arch/x86/xen/time.c (Feedback from Thomas Gleixner)
-
-
-Krister Johansen (2):
-  xen: update arch/x86/include/asm/xen/cpuid.h
-  x86/xen/time: cleanup xen_tsc_safe_clocksource
-
- arch/x86/include/asm/xen/cpuid.h | 22 ++++++++++++++++++----
- arch/x86/xen/time.c              |  7 ++-----
- 2 files changed, 20 insertions(+), 9 deletions(-)
-
--- 
-2.25.1
-
+I'm more than happy to queue it in x86/mm.  I'll plan to queue Rick's
+next version that he posts and then we can do any fixes or minor changes
+on top of that.
