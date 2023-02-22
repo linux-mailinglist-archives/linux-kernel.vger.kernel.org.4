@@ -2,96 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C50669FBC3
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Feb 2023 20:11:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E3BE69FBC7
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Feb 2023 20:11:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231897AbjBVTLH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Feb 2023 14:11:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45284 "EHLO
+        id S231660AbjBVTLP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Feb 2023 14:11:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45428 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230402AbjBVTLG (ORCPT
+        with ESMTP id S230402AbjBVTLN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Feb 2023 14:11:06 -0500
-Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE8962A99E
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Feb 2023 11:11:03 -0800 (PST)
-Received: from zn.tnic (p5de8e9fe.dip0.t-ipconnect.de [93.232.233.254])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 42ECA1EC0688;
-        Wed, 22 Feb 2023 20:11:02 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1677093062;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:
-         content-transfer-encoding:content-transfer-encoding:in-reply-to:
-         references; bh=iMJjMd+hswT3hOigJvQ7teRpwWHUSDtS9HLQuxEDxjs=;
-        b=MMSQPCahpS0D1bVt/mq+6wal33RtHXxzi2fjFr+5DuyM4D3OtEKDH+RIdRKHLPOZKg43G6
-        DnxznJJ1yGbJOqZjkaFuagjOf4b3R/+SMlHoxpjfGTWzVlvDwUhiDcU4bKZp8QE6PcWApX
-        gnRRGL9+tJlxmcPWF3srNoLxboFeF+g=
-From:   Borislav Petkov <bp@alien8.de>
-To:     X86 ML <x86@kernel.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>
-Subject: [PATCH] x86/mce: Always inline old MCA stubs
-Date:   Wed, 22 Feb 2023 20:10:54 +0100
-Message-Id: <20230222191054.4701-1-bp@alien8.de>
-X-Mailer: git-send-email 2.35.1
+        Wed, 22 Feb 2023 14:11:13 -0500
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D36B938B59;
+        Wed, 22 Feb 2023 11:11:11 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1677093071; x=1708629071;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=X4wQ+O3eBVoGDjrrVinp2PRl4OgU1Fc491UedwVGnKs=;
+  b=Qo46ycor//CApUGO0xcuccJo0vbrzwW4gvMugdUkZLOCa9uj5s38uQin
+   1++FKtO7b4wrxUJLCYCPHINdh8kVnMwOCTXI5pDLhYIkwoHlwMUzwdnJ2
+   23LWmO3x3m5qfLwFlydGExHD04raySoHIkyxbwSl3QZ1A2NpqwWMh1PD6
+   RhqwGO0DAXEdvz6+JC7E+mP539LqzugJbGPsi/IQcqSJVCypYcFKRk1md
+   qj/c5hwPV137ifBASsGfHHbUDpma5WWyyRD/kBmEgIEpEo9/0l36Gsv5p
+   NI1OG4i/hbxoayVFQXwU2MrjSRCFXXWbPdMs5BksCOPcMRbDNL/f6Djyr
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10629"; a="333022472"
+X-IronPort-AV: E=Sophos;i="5.97,319,1669104000"; 
+   d="scan'208";a="333022472"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Feb 2023 11:11:11 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10629"; a="761058560"
+X-IronPort-AV: E=Sophos;i="5.97,319,1669104000"; 
+   d="scan'208";a="761058560"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by FMSMGA003.fm.intel.com with ESMTP; 22 Feb 2023 11:11:08 -0800
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1pUuW9-00AaOx-30;
+        Wed, 22 Feb 2023 21:11:05 +0200
+Date:   Wed, 22 Feb 2023 21:11:05 +0200
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Robin van der Gracht <robin@protonic.nl>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>,
+        Raul E Rangel <rrangel@chromium.org>,
+        Wolfram Sang <wsa@kernel.org>, linux-kernel@vger.kernel.org,
+        linux-i2c@vger.kernel.org, linux-usb@vger.kernel.org,
+        Miguel Ojeda <ojeda@kernel.org>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        devicetree@vger.kernel.org
+Subject: Re: [PATCH v1 2/3] auxdisplay: ht16k33: Make use of
+ device_get_match_data()
+Message-ID: <Y/ZoyaV10TCWhloT@smile.fi.intel.com>
+References: <20230221133307.20287-1-andriy.shevchenko@linux.intel.com>
+ <20230221133307.20287-3-andriy.shevchenko@linux.intel.com>
+ <Y/TJs+Arban0ats8@smile.fi.intel.com>
+ <be203dfd290e67c8ce74d11c5c9478a4@protonic.nl>
+ <Y/UD3HWNy8uKYShC@smile.fi.intel.com>
+ <0235f0fed989a8b027db720663699f5d@protonic.nl>
+ <Y/ZKdN4nuHcL4DgE@smile.fi.intel.com>
+ <Y/ZOyGo8X7r258EC@smile.fi.intel.com>
+ <06f29d66-f16a-039c-ecd0-155bdcce00c1@linaro.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <06f29d66-f16a-039c-ecd0-155bdcce00c1@linaro.org>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: "Borislav Petkov (AMD)" <bp@alien8.de>
+On Wed, Feb 22, 2023 at 07:46:25PM +0100, Krzysztof Kozlowski wrote:
+> On 22/02/2023 18:20, Andy Shevchenko wrote:
+> >>
+> >>> Which effectively breaks i.e. user-space instantiation for other display
+> >>> types which now do work due to i2c_of_match_device().
+> >>> (so my suggestion above is not sufficient).
+> >>>
+> >>> Are you proposing extending and searching the I2C ID table to work around
+> >>> that?
+> >>
+> >> See (1) above. This is the downside I have noticed after sending this series.
+> >> So, the I²C ID table match has to be restored, but the above mentioned issues
+> >> with existing table are not gone, hence they need to be addressed in the next
+> >> version.
+> > 
+> > I see now what you mean. So, we have even more issues in this driver:
+> > - I²C table is not in sync with all devices supported
+> 
+> Does anything actually rely on i2c_device_id table? ACPI would match
+> either via ACPI or OF tables. All modern ARM systems (e.g. imx6) are
+> DT-based. Maybe just drop the I2C ID table?
 
-The stubs for the ancient MCA support (CONFIG_X86_ANCIENT_MCE) are
-normally optimized away on 64-bit builds. However, an allmodconfig one
-causes the compiler to add sanitizer calls gunk into them and they exist
-as constprop calls. Which objtool then complains about:
+For I²C it's still possible to enumerate the device via sysfs, which is ABI.
 
-  vmlinux.o: warning: objtool: do_machine_check+0xad8: call to \
-    pentium_machine_check.constprop.0() leaves .noinstr.text section
+> > - the OF ID table seems has something really badly formed for adafruit
+> >   (just a number after a comma)
+> 
+> Maybe it is a model number? It was documented:
+> Documentation/devicetree/bindings/auxdisplay/holtek,ht16k33.yaml
 
-due to them missing noinstr. One could tag them "noinstr" but what
-should really happen is, they should be forcefully inlined so that all
-that gunk gets optimized away and the warning doesn't even have a chance
-to fire.
+Yes, it's not a problem for ACPI/DT platforms, the problem is for the above
+way of enumeration, so if we have more than 1 manufacturer that uses plain
+numbers for the model, I²C framework may not distinguish which driver to use.
 
-Do so.
+I.o.w. the part after comma in the compatible strings of the I²C devices must
+be unique globally to make that enumeration disambiguous.
 
-No functional changes.
+> > The latter shows how broken it is. The I²C ID table mechanism is used as
+> > a backward compatibility to the OF. Unfortunately, user space may not provide
+> > the data except in form of DT overlays, so for the legacy enumeration we
+> > have only device name, which is a set of 4 digits for adafruit case.
+> > 
+> > Now imagine if by some reason we will get adafruit2 (you name it) with
+> > the same schema. How I²C framework can understand that you meant adafruit
+> > and not adafruit2? Or did I miss something?
 
-Signed-off-by: Borislav Petkov (AMD) <bp@alien8.de>
----
- arch/x86/kernel/cpu/mce/internal.h | 10 +++++-----
- 1 file changed, 5 insertions(+), 5 deletions(-)
-
-diff --git a/arch/x86/kernel/cpu/mce/internal.h b/arch/x86/kernel/cpu/mce/internal.h
-index 91a415553c27..d2412ce2d312 100644
---- a/arch/x86/kernel/cpu/mce/internal.h
-+++ b/arch/x86/kernel/cpu/mce/internal.h
-@@ -244,11 +244,11 @@ noinstr void pentium_machine_check(struct pt_regs *regs);
- noinstr void winchip_machine_check(struct pt_regs *regs);
- static inline void enable_p5_mce(void) { mce_p5_enabled = 1; }
- #else
--static inline void intel_p5_mcheck_init(struct cpuinfo_x86 *c) {}
--static inline void winchip_mcheck_init(struct cpuinfo_x86 *c) {}
--static inline void enable_p5_mce(void) {}
--static inline void pentium_machine_check(struct pt_regs *regs) {}
--static inline void winchip_machine_check(struct pt_regs *regs) {}
-+static __always_inline void intel_p5_mcheck_init(struct cpuinfo_x86 *c) {}
-+static __always_inline void winchip_mcheck_init(struct cpuinfo_x86 *c) {}
-+static __always_inline void enable_p5_mce(void) {}
-+static __always_inline void pentium_machine_check(struct pt_regs *regs) {}
-+static __always_inline void winchip_machine_check(struct pt_regs *regs) {}
- #endif
- 
- noinstr u64 mce_rdmsrl(u32 msr);
 -- 
-2.35.1
+With Best Regards,
+Andy Shevchenko
+
 
