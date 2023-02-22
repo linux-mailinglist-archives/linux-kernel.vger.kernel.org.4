@@ -2,173 +2,314 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6DFF769EBDB
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Feb 2023 01:17:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0822469EBDD
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Feb 2023 01:17:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230112AbjBVARL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Feb 2023 19:17:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57322 "EHLO
+        id S230246AbjBVARt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Feb 2023 19:17:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57756 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229503AbjBVARI (ORCPT
+        with ESMTP id S229503AbjBVARq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Feb 2023 19:17:08 -0500
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 453B9305C1
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Feb 2023 16:17:07 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1677025027; x=1708561027;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=Ir0hsEIH89zQL2BTvDlYGoS1WFfBwOYehEGIYJVMwdc=;
-  b=KyGSgg1uKGq7bXnlD3yntFK296gY+ijTwSiVuJtZZU+Zr3OEJuKX3QZd
-   6TUpGK4xc4ZVtAW/TKhKDWRh2+RZQ/sRyyGpu6rAR/vFNAHiz+8OPPwkT
-   s+nfxG4u/KJA4k2pqQQNNvFrzW8e/+pdkI11aennKrV0Ydphy7SM6wO9D
-   ARnMiJ7VLasF2eKV9g7TVknepda1IKR7AAmYtisUqTyOHkJDoDc2ZEL9M
-   2i4RRvaCSDctv9zIxxEit2LLyelJUb+tIFdudThXMPg3w07Jds9B08zF+
-   e9RvcY6VXztKaWrFwA++ukzPkx3vwjW6LqlrgFuO9tmRUjFc72qtvrTzh
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10628"; a="397482954"
-X-IronPort-AV: E=Sophos;i="5.97,317,1669104000"; 
-   d="scan'208";a="397482954"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Feb 2023 16:17:06 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10628"; a="665158507"
-X-IronPort-AV: E=Sophos;i="5.97,317,1669104000"; 
-   d="scan'208";a="665158507"
-Received: from viggo.jf.intel.com (HELO ray2.sr71.net) ([10.54.77.144])
-  by orsmga007.jf.intel.com with ESMTP; 21 Feb 2023 16:17:06 -0800
-From:   Dave Hansen <dave.hansen@linux.intel.com>
-To:     torvalds@linux-foundation.org
-Cc:     kirill.shutemov@linux.intel.com, x86@kernel.org,
-        linux-kernel@vger.kernel.org,
-        Dave Hansen <dave.hansen@linux.intel.com>
-Subject: [GIT PULL] x86/tdx for 6.3
-Date:   Tue, 21 Feb 2023 16:16:36 -0800
-Message-Id: <20230222001636.211793-1-dave.hansen@linux.intel.com>
-X-Mailer: git-send-email 2.34.1
+        Tue, 21 Feb 2023 19:17:46 -0500
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A341D305E0;
+        Tue, 21 Feb 2023 16:17:45 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=In-Reply-To:From:Cc:References:To:
+        Subject:MIME-Version:Date:Message-ID:Content-Type:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=pzQDfru4JJCoWsO/XRCjYdUO9SXR3dHdbLemp64mhMg=; b=XqLPUz2cO5NB0IYb7FfQMthzoV
+        o645DAi2siHrTkqLygSJg2I5l0RTiy185asUtBO3D/h+PqeYFQSJXbxCHgNgoUj7quH0Q2I1Qy5ii
+        IPySQkxwBcDNA0ZiC8+ifr1iJriKf4Oyw4ddCK3ILTxVvPKLKGKG2wpRwj4rYe29dEVm5gevOq6uH
+        HciC9+ueDT48dmW8E/ROVpYOTbN7viqwXvHQDeIUiCUeaRuzASOXGOoFtrsbb6jZaJXzfMGTPVI/d
+        3CR/v0shuP6SFqEqx31pDbKyujVuFsoKQcOIZpJKCeQ7+jc70p8kvOXq7B/sAfOmv16HPPp7VBO4W
+        X6nNAg6g==;
+Received: from [2601:1c2:980:9ec0::df2f]
+        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1pUcpM-00ADRp-6i; Wed, 22 Feb 2023 00:17:44 +0000
+Content-Type: multipart/mixed; boundary="------------Mgy6DUrtLwqyLcxdknj6b30y"
+Message-ID: <1c1c0a3b-10d0-ef9c-e96c-a415bbe0bf33@infradead.org>
+Date:   Tue, 21 Feb 2023 16:17:43 -0800
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.2
+Subject: Re: .config and "make" / turning off all debug
+Content-Language: en-US
+To:     Hanasaki Jiji <hanasaki@gmail.com>,
+        LIST - Linux Kernel <linux-kernel@vger.kernel.org>
+References: <CAMr-kF1LxzoOShd7nkE1Pc0ZZgTusB42rDep5ROPirLK9xK55g@mail.gmail.com>
+Cc:     Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>
+From:   Randy Dunlap <rdunlap@infradead.org>
+In-Reply-To: <CAMr-kF1LxzoOShd7nkE1Pc0ZZgTusB42rDep5ROPirLK9xK55g@mail.gmail.com>
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Linus,
+This is a multi-part message in MIME format.
+--------------Mgy6DUrtLwqyLcxdknj6b30y
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-Please pull some x86/tdx changes for 6.3.  Other than a minor fixup,
-the content here is to ensure that TDX guests never see virtualization
-exceptions (#VE's) that might be induced by the untrusted VMM.
+Hi--
 
-This is a highly desirable property.  Without it, #VE exception
-handling would fall somewhere between NMIs, machine checks and
-total insanity.  With it, #VE handling remains pretty mundane.
+On 2/21/23 08:16, Hanasaki Jiji wrote:
+> Is there a command line parameter to Make that will disable anything
+> that results in a debuggable kernel?
 
-There is a conflict here with some cleanups which you already pulled
-via tip:sched/core.  I've appended a conflict resolution from Ingo
-that he used when merging these all together in tip/master.
+No.
 
---
+> Is there a tool that will modify .config removing anything that will
+> result in a debuggable kernel?
 
-The following changes since commit 5dc4c995db9eb45f6373a956eb1f69460e69e6d4:
+We don't have a nice, clean, packaged way to do this.
 
-  Linux 6.2-rc4 (2023-01-15 09:22:43 -0600)
+It also depends on what you mean by DEBUG. I would first disable
+CONFIG_COMPILE_TEST, then decide if you want TRACE/TRACING features
+disabled or enabled.  Also decide whether you want DEBUGFS
+options enabled or disabled.
 
-are available in the Git repository at:
+There are a couple of things that you can try. YMMV.
 
-  https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git tags/x86_tdx_for_6.3
+Neither of these is a complete solution; option 2 requires
+the user to update the list of config options that should be disabled
+as needed.
 
-for you to fetch changes up to 1e70c680375aa33cca97bff0bca68c0f82f5023c:
+(1) Use a script to convert all occurrences of
+/CONFIG.*DEBUG=y/ to /# CONFIG.*DEBUG is not set/.
 
-  x86/tdx: Do not corrupt frame-pointer in __tdx_hypercall() (2023-02-02 16:31:25 -0800)
+This misses a few CONFIG options where "DEBUG" is toward the middle
+of the CONFIG option, like CONFIG_DEBUG_RSEQ, CONFIG_DEBUG_TEST_DRIVER_REMOVE,
+CONFIG_C710_DEBUG_ASSUMPTIONS, CONFIG_DM_DEBUG_BLOCK_MANAGER_LOCKING,
+CONFIG_DRM_DEBUG_xyzzz (a few like this), CONFIG_DEBUG_KERNEL_DC,
+CONFIG_NOUVEAU_DEBUG_xyzzz (a few), CONFIG_DRM_I915_DEBUG_xyzzz (a few),
+CONFIG_SND_SOC_SOF_xyzzz (several), CONFIG_HFI1_DEBUG_SDMA_ORDER,
+CONFIG_AFS_DEBUG_CURSOR, CONFIG_DEBUG_NET, lots of entries in the
+Kernel Hacking menu. Then there are several SELFTEST config options,
+but they are not always spelled "SELFTEST"; they might just be spelled
+TEST or TESTS.
 
-----------------------------------------------------------------
- - Fixup comment typo
- - Prevent unexpected #VE's from:
-  - Hosts removing perfectly good guest mappings (SEPT_VE_DISABLE
-  - Excessive #VE notifications (NOTIFY_ENABLES) which are
-    delivered via a #VE.
+I'll attach a Perl script (from 2009) that begins the work on option 1,
+but I haven't used it since forever.
 
-----------------------------------------------------------------
-Kirill A. Shutemov (8):
-      x86/tdx: Fix typo in comment in __tdx_hypercall()
-      x86/tdx: Add more registers to struct tdx_hypercall_args
-      x86/tdx: Refactor __tdx_hypercall() to allow pass down more arguments
-      x86/tdx: Expand __tdx_hypercall() to handle more arguments
-      x86/tdx: Use ReportFatalError to report missing SEPT_VE_DISABLE
-      x86/tdx: Relax SEPT_VE_DISABLE check for debug TD
-      x86/tdx: Disable NOTIFY_ENABLES
-      x86/tdx: Do not corrupt frame-pointer in __tdx_hypercall()
+(2) Make a "mini.config" file that contains a list of all the options that you
+want to have set in a certain way (can be either enabled or disabled).
+Then use
+$ KCONFIG_ALLCONFIG=your.mini.config make allmodconfig
 
- arch/x86/coco/tdx/tdcall.S        | 83 ++++++++++++++++++++++++++++-----------
- arch/x86/coco/tdx/tdx.c           | 62 ++++++++++++++++++++++++++++-
- arch/x86/include/asm/shared/tdx.h |  6 +++
- arch/x86/kernel/asm-offsets.c     |  6 +++
- 4 files changed, 131 insertions(+), 26 deletions(-)
---
+This is the documented and supported way. It is documented in
+Documentation/kbuild/kconfig.rst:
 
-Author: Ingo Molnar <mingo@kernel.org>
-Date:   Tue Feb 21 09:30:27 2023 +0100
+<begin quote>
 
-    Merge branch 'x86/tdx'
-    
-    Conflicts:
-            arch/x86/coco/tdx/tdcall.S
-    
-    Signed-off-by: Ingo Molnar <mingo@kernel.org>
+KCONFIG_ALLCONFIG
+-----------------
+(partially based on lkml email from/by Rob Landley, re: miniconfig)
 
-diff --cc arch/x86/coco/tdx/tdcall.S
-index ad0d51f03cb4,2bd436a4790d..6a255e6809bc
---- a/arch/x86/coco/tdx/tdcall.S
-+++ b/arch/x86/coco/tdx/tdcall.S
-@@@ -27,12 -33,10 +33,12 @@@
-   * details can be found in TDX GHCI specification, section
-   * titled "TDCALL [TDG.VP.VMCALL] leaf".
-   */
-- #define TDVMCALL_EXPOSE_REGS_MASK	( TDX_R10 | TDX_R11 | \
-- 					  TDX_R12 | TDX_R13 | \
-- 					  TDX_R14 | TDX_R15 )
-+ #define TDVMCALL_EXPOSE_REGS_MASK	\
-+ 	( TDX_RDX | TDX_RBX | TDX_RSI | TDX_RDI | TDX_R8  | TDX_R9  | \
-+ 	  TDX_R10 | TDX_R11 | TDX_R12 | TDX_R13 | TDX_R14 | TDX_R15 )
-  
- +.section .noinstr.text, "ax"
- +
-  /*
-   * __tdx_module_call()  - Used by TDX guests to request services from
-   * the TDX module (does not include VMM services) using TDCALL instruction.
-@@@ -131,16 -156,21 +158,8 @@@ SYM_FUNC_START(__tdx_hypercall
-  	/* Set TDCALL leaf ID (TDVMCALL (0)) in RAX */
-  	xor %eax, %eax
-  
-- 	/* Copy hypercall registers from arg struct: */
-- 	movq TDX_HYPERCALL_r10(%rdi), %r10
-- 	movq TDX_HYPERCALL_r11(%rdi), %r11
-- 	movq TDX_HYPERCALL_r12(%rdi), %r12
-- 	movq TDX_HYPERCALL_r13(%rdi), %r13
-- 	movq TDX_HYPERCALL_r14(%rdi), %r14
-- 	movq TDX_HYPERCALL_r15(%rdi), %r15
-- 
-  	movl $TDVMCALL_EXPOSE_REGS_MASK, %ecx
-  
- -	/*
- -	 * For the idle loop STI needs to be called directly before the TDCALL
- -	 * that enters idle (EXIT_REASON_HLT case). STI instruction enables
- -	 * interrupts only one instruction later. If there is a window between
- -	 * STI and the instruction that emulates the HALT state, there is a
- -	 * chance for interrupts to happen in this window, which can delay the
- -	 * HLT operation indefinitely. Since this is the not the desired
- -	 * result, conditionally call STI before TDCALL.
- -	 */
- -	testq $TDX_HCALL_ISSUE_STI, 8(%rsp)
- -	jz .Lskip_sti
- -	sti
- -.Lskip_sti:
-  	tdcall
-  
-  	/*
+--------------------------------------------------
+
+The allyesconfig/allmodconfig/allnoconfig/randconfig variants can also
+use the environment variable KCONFIG_ALLCONFIG as a flag or a filename
+that contains config symbols that the user requires to be set to a
+specific value.  If KCONFIG_ALLCONFIG is used without a filename where
+KCONFIG_ALLCONFIG == "" or KCONFIG_ALLCONFIG == "1", `make *config`
+checks for a file named "all{yes/mod/no/def/random}.config"
+(corresponding to the `*config` command that was used) for symbol values
+that are to be forced.  If this file is not found, it checks for a
+file named "all.config" to contain forced values.
+
+This enables you to create "miniature" config (miniconfig) or custom
+config files containing just the config symbols that you are interested
+in.  Then the kernel config system generates the full .config file,
+including symbols of your miniconfig file.
+
+This 'KCONFIG_ALLCONFIG' file is a config file which contains
+(usually a subset of all) preset config symbols.  These variable
+settings are still subject to normal dependency checks.
+
+Examples::
+
+	KCONFIG_ALLCONFIG=custom-notebook.config make allnoconfig
+
+or::
+
+	KCONFIG_ALLCONFIG=mini.config make allnoconfig
+
+or::
+
+	make KCONFIG_ALLCONFIG=mini.config allnoconfig
+
+These examples will disable most options (allnoconfig) but enable or
+disable the options that are explicitly listed in the specified
+mini-config files.
+
+<end quote>
+
+Note that this only works with "make allyesconfig/allmodconfig/allnoconfig/randconfig"
+variants.  You could try it and see if it works for you.
+
+I'll also attach a sample "disable.all.debug.config" file for this option.
+You will need to update this CONFIG options list continually.
+
+HTH. Good luck.
+
+-- 
+~Randy
+--------------Mgy6DUrtLwqyLcxdknj6b30y
+Content-Type: text/plain; charset=UTF-8; name="config.debug.off"
+Content-Disposition: attachment; filename="config.debug.off"
+Content-Transfer-Encoding: base64
+
+IyEgL3Vzci9iaW4vcGVybAojIGNvbmZpZy5kZWJ1Zy5vZmY6IGNoYW5nZSBhbGwgL0NPTkZJ
+R194eXpfREVCVUc9eS8gdG8gLyMgQ09ORklHX3h5el9ERUJVRyBpcyBub3Qgc2V0LwojIFJh
+bmR5IER1bmxhcCwgQXByaWwtMjAwOQojCiRWRVIgPSAiMDAxIjsKCnVzZSBHZXRvcHQ6OlN0
+ZDsKCmdldG9wdHMoInYiKTsKCm15ICRjaGFuZ2Vjb3VudCA9IDA7CgpzdWIgdXNhZ2UoKSB7
+CglwcmludCAidXNhZ2U6IGNvbmZpZy5kZWJ1Zy5vZmYgWy12XSA8IGNvbmZpZy5maWxlMSA+
+IGNvbmZpZy5maWxlMiBbdmVyLiAkVkVSXVxuIjsKCXByaW50ICIgIC12IDogdmVyYm9zZVxu
+IjsKCWV4aXQgKDEpOwp9CgojI2lmICgkb3B0X3YpIHsgfQoKTElORTogd2hpbGUgKCRsaW5l
+ID0gPFNURElOPikgewoJY2hvbXAgJGxpbmU7CgoJaWYgKCRsaW5lID1+IC9eKENPTkZJRy4q
+X0RFQlVHKT15LykgewoJCXByaW50ICIjICQxIGlzIG5vdCBzZXRcbiI7CgkJJGNoYW5nZWNv
+dW50Kys7Cgl9CgllbHNlIHsKCQlwcmludCAiJGxpbmVcbiI7Cgl9Cn0KCnByaW50ZiBTVERF
+UlIgIiRjaGFuZ2Vjb3VudCBsaW5lcyBjaGFuZ2VkXG4iOwo=
+--------------Mgy6DUrtLwqyLcxdknj6b30y
+Content-Type: application/x-config; name="disable.all.debug.config"
+Content-Disposition: attachment; filename="disable.all.debug.config"
+Content-Transfer-Encoding: base64
+
+IyB0ZXN0OiBLQ09ORklHX0FMTENPTkZJRz1kaXNhYmxlLmFsbC5kZWJ1Zy5jb25maWcgbWFr
+ZSBhbGxtb2Rjb25maWcKIyBDT05GSUdfUE1fREVCVUcgaXMgbm90IHNldAojIENPTkZJR19G
+VFJBQ0UgaXMgbm90IHNldAojIGRpc2FibGUgb3RoZXIgZGVidWcvc2VsZi10ZXN0cy9mZWF0
+dXJlIHRlc3RpbmcKIyBDT05GSUdfQ0dST1VQX0RFQlVHIGlzIG5vdCBzZXQKIyBDT05GSUdf
+REVCVUdfQkxLX0NHUk9VUCBpcyBub3Qgc2V0CiMgQ09ORklHX0RFQlVHX1BFUkZfVVNFX1ZN
+QUxMT0MgaXMgbm90IHNldAojIENPTkZJR19MRE1fREVCVUcgaXMgbm90IHNldAojIENPTkZJ
+R19QQVJBVklSVF9ERUJVRyBpcyBub3Qgc2V0CiMgQ09ORklHX0NNQV9ERUJVRyBpcyBub3Qg
+c2V0CiMgQ09ORklHX0RFQlVHX0hPVFBMVUdfQ1BVMCBpcyBub3Qgc2V0CiMgQ09ORklHX0FD
+UElfREVCVUcgaXMgbm90IHNldAojIENPTkZJR19BQ1BJX0RFQlVHR0VSIGlzIG5vdCBzZXQK
+IyBDT05GSUdfQUNQSV9BUEVJX0VSU1RfREVCVUcgaXMgbm90IHNldAojIENPTkZJR19QQ0lF
+QVNQTV9ERUJVRyBpcyBub3Qgc2V0CiMgQ09ORklHX1BDSV9ERUJVRyBpcyBub3Qgc2V0CiMg
+Q09ORklHX1JBUElESU9fREVCVUcgaXMgbm90IHNldAojIENPTkZJR19ORVRGSUxURVJfREVC
+VUcgaXMgbm90IHNldAojIENPTkZJR19JUF9WU19ERUJVRyBpcyBub3Qgc2V0CiMgQ09ORklH
+X0lQX0RDQ1BfQ0NJRDJfREVCVUcgaXMgbm90IHNldAojIENPTkZJR19JUF9EQ0NQX0NDSUQz
+X0RFQlVHIGlzIG5vdCBzZXQKIyBDT05GSUdfSVBfRENDUF9URlJDX0RFQlVHIGlzIG5vdCBz
+ZXQKIyBDT05GSUdfSVBfRENDUF9ERUJVRyBpcyBub3Qgc2V0CiMgQ09ORklHX1JEU19ERUJV
+RyBpcyBub3Qgc2V0CiMgQ09ORklHX0JBVE1BTl9BRFZfREVCVUcgaXMgbm90IHNldAojIENP
+TkZJR19DQU5fREVCVUdfREVWSUNFUyBpcyBub3Qgc2V0CiMgQ09ORklHX0lSREFfREVCVUcg
+aXMgbm90IHNldAojIENPTkZJR19BRl9SWFJQQ19ERUJVRyBpcyBub3Qgc2V0CiMgQ09ORklH
+X0NGRzgwMjExX1JFR19ERUJVRyBpcyBub3Qgc2V0CiMgQ09ORklHX0xJQjgwMjExX0RFQlVH
+IGlzIG5vdCBzZXQKIyBDT05GSUdfTUFDODAyMTFfREVCVUdfTUVOVSBpcyBub3Qgc2V0CiMg
+Q09ORklHX05MODAyMTFfVEVTVE1PREUgaXMgbm90IHNldAojIENPTkZJR19ORVRfOVBfREVC
+VUcgaXMgbm90IHNldAojIENPTkZJR19DQUlGX0RFQlVHIGlzIG5vdCBzZXQKIyBDT05GSUdf
+Q0VQSF9MSUJfUFJFVFRZREVCVUcgaXMgbm90IHNldAojIENPTkZJR19ERUJVR19EUklWRVIg
+aXMgbm90IHNldAojIENPTkZJR19ERUJVR19ERVZSRVMgaXMgbm90IHNldAojIENPTkZJR19N
+VERfUE1DNTUxX0RFQlVHIGlzIG5vdCBzZXQKIyBDT05GSUdfTVREX1RFU1RTIGlzIG5vdCBz
+ZXQKIyBDT05GSUdfUE5QX0RFQlVHX01FU1NBR0VTIGlzIG5vdCBzZXQKIyBDT05GSUdfU0dJ
+X0dSVV9ERUJVRyBpcyBub3Qgc2V0CiMgQ09ORklHX0NCNzEwX0RFQlVHIGlzIG5vdCBzZXQK
+IyBDT05GSUdfQUlDN1hYWF9ERUJVR19FTkFCTEUgaXMgbm90IHNldAojIENPTkZJR19BSUM3
+OVhYX0RFQlVHX0VOQUJMRSBpcyBub3Qgc2V0CiMgQ09ORklHX0FJQzk0WFhfREVCVUcgaXMg
+bm90IHNldAojIENPTkZJR19TQ1NJX01WU0FTX0RFQlVHIGlzIG5vdCBzZXQKIyBDT05GSUdf
+U0NTSV9PU0RfREVCVUcgaXMgbm90IHNldAojIENPTkZJR19CQ0FDSEVfREVCVUcgaXMgbm90
+IHNldAojIENPTkZJR19CQ0FDSEVfRURFQlVHIGlzIG5vdCBzZXQKIyBDT05GSUdfQkNBQ0hF
+X0NMT1NVUkVTX0RFQlVHIGlzIG5vdCBzZXQKIyBDT05GSUdfRE1fREVCVUcgaXMgbm90IHNl
+dAojIENPTkZJR19ETV9ERUJVR19CTE9DS19TVEFDS19UUkFDSU5HIGlzIG5vdCBzZXQKIyBD
+T05GSUdfQVRNX0VOSV9ERUJVRyBpcyBub3Qgc2V0CiMgQ09ORklHX0FUTV9aQVRNX0RFQlVH
+IGlzIG5vdCBzZXQKIyBDT05GSUdfQVRNX0lEVDc3MjUyX0RFQlVHIGlzIG5vdCBzZXQKIyBD
+T05GSUdfQVRNX0FNQkFTU0FET1JfREVCVUcgaXMgbm90IHNldAojIENPTkZJR19BVE1fSE9S
+SVpPTl9ERUJVRyBpcyBub3Qgc2V0CiMgQ09ORklHX0FUTV9JQV9ERUJVRyBpcyBub3Qgc2V0
+CiMgQ09ORklHX0FUTV9GT1JFMjAwRV9ERUJVRyBpcyBub3Qgc2V0CiMgQ09ORklHX1ZYR0Vf
+REVCVUdfVFJBQ0VfQUxMIGlzIG5vdCBzZXQKIyBDT05GSUdfU0tHRV9ERUJVRyBpcyBub3Qg
+c2V0CiMgQ09ORklHX1NLWTJfREVCVUcgaXMgbm90IHNldAojIENPTkZJR19NTFg0X0RFQlVH
+IGlzIG5vdCBzZXQKIyBDT05GSUdfTElCRVJUQVNfVEhJTkZJUk1fREVCVUcgaXMgbm90IHNl
+dAojIENPTkZJR19BVEhfREVCVUcgaXMgbm90IHNldAojIENPTkZJR19BVEg1S19ERUJVRyBp
+cyBub3Qgc2V0CiMgQ09ORklHX0FUSDZLTF9ERUJVRyBpcyBub3Qgc2V0CiMgQ09ORklHX0FU
+SDEwS19ERUJVRyBpcyBub3Qgc2V0CiMgQ09ORklHX0I0M19ERUJVRyBpcyBub3Qgc2V0CiMg
+Q09ORklHX0I0M0xFR0FDWV9ERUJVRyBpcyBub3Qgc2V0CiMgQ09ORklHX0lQVzIxMDBfREVC
+VUcgaXMgbm90IHNldAojIENPTkZJR19JUFcyMjAwX0RFQlVHIGlzIG5vdCBzZXQKIyBDT05G
+SUdfTElCSVBXX0RFQlVHIGlzIG5vdCBzZXQKIyBDT05GSUdfSVdMV0lGSV9ERUJVRyBpcyBu
+b3Qgc2V0CiMgQ09ORklHX0lXTFdJRklfREVCVUdfRVhQRVJJTUVOVEFMX1VDT0RFIGlzIG5v
+dCBzZXQKIyBDT05GSUdfSVdMRUdBQ1lfREVCVUcgaXMgbm90IHNldAojIENPTkZJR19MSUJF
+UlRBU19ERUJVRyBpcyBub3Qgc2V0CiMgQ09ORklHX1JUMlgwMF9ERUJVRyBpcyBub3Qgc2V0
+CiMgQ09ORklHX1JUTFdJRklfREVCVUcgaXMgbm90IHNldAojIENPTkZJR19aRDEyMTFSV19E
+RUJVRyBpcyBub3Qgc2V0CiMgQ09ORklHX0hJU0FYX0RFQlVHIGlzIG5vdCBzZXQKIyBDT05G
+SUdfR0lHQVNFVF9ERUJVRyBpcyBub3Qgc2V0CiMgQ09ORklHX0kyQ19ERUJVR19DT1JFIGlz
+IG5vdCBzZXQKIyBDT05GSUdfSTJDX0RFQlVHX0FMR08gaXMgbm90IHNldAojIENPTkZJR19J
+MkNfREVCVUdfQlVTIGlzIG5vdCBzZXQKIyBDT05GSUdfU1BJX0RFQlVHIGlzIG5vdCBzZXQK
+IyBDT05GSUdfUFBTX0RFQlVHIGlzIG5vdCBzZXQKIyBDT05GSUdfREVCVUdfUElOQ1RSTCBp
+cyBub3Qgc2V0CiMgQ09ORklHX0RFQlVHX0dQSU8gaXMgbm90IHNldAojIENPTkZJR19QT1dF
+Ul9TVVBQTFlfREVCVUcgaXMgbm90IHNldAojIENPTkZJR19IV01PTl9ERUJVR19DSElQIGlz
+IG5vdCBzZXQKIyBDT05GSUdfQkNNQV9ERUJVRyBpcyBub3Qgc2V0CiMgQ09ORklHX1JFR1VM
+QVRPUl9ERUJVRyBpcyBub3Qgc2V0CiMgQ09ORklHX1ZJREVPX0FEVl9ERUJVRyBpcyBub3Qg
+c2V0CiMgQ09ORklHX1VTQl9QV0NfREVCVUcgaXMgbm90IHNldAojIENPTkZJR19WSURFT19Q
+VlJVU0IyX0RFQlVHSUZDIGlzIG5vdCBzZXQKIyBDT05GSUdfRFZCX1VTQl9ERUJVRyBpcyBu
+b3Qgc2V0CiMgQ09ORklHX0RWQl9CMkMyX0ZMRVhDT1BfVVNCX0RFQlVHIGlzIG5vdCBzZXQK
+IyBDT05GSUdfRFZCX0IyQzJfRkxFWENPUF9QQ0lfREVCVUcgaXMgbm90IHNldAojIENPTkZJ
+R19EVkJfQjJDMl9GTEVYQ09QX0RFQlVHIGlzIG5vdCBzZXQKIyBDT05GSUdfRkJfTlZJRElB
+X0RFQlVHIGlzIG5vdCBzZXQKIyBDT05GSUdfRkJfUklWQV9ERUJVRyBpcyBub3Qgc2V0CiMg
+Q09ORklHX0ZCX0lOVEVMX0RFQlVHIGlzIG5vdCBzZXQKIyBDT05GSUdfRkJfUkFERU9OX0RF
+QlVHIGlzIG5vdCBzZXQKIyBDT05GSUdfU05EX0RFQlVHIGlzIG5vdCBzZXQKIyBDT05GSUdf
+VVNCX0RFQlVHIGlzIG5vdCBzZXQKIyBDT05GSUdfVVNCX09UR19XSElURUxJU1QgaXMgbm90
+IHNldAojIENPTkZJR19VU0JfT1RHX0JMQUNLTElTVF9IVUIgaXMgbm90IHNldAojIENPTkZJ
+R19VU0JfV1VTQl9DQkFGX0RFQlVHIGlzIG5vdCBzZXQKIyBDT05GSUdfVVNCX0hDRF9URVNU
+X01PREUgaXMgbm90IHNldAojIENPTkZJR19VU0JfU1RPUkFHRV9ERUJVRyBpcyBub3Qgc2V0
+CiMgQ09ORklHX1VTQl9EV0MzX0RFQlVHIGlzIG5vdCBzZXQKIyBDT05GSUdfVVNCX0NISVBJ
+REVBX0RFQlVHIGlzIG5vdCBzZXQKIyBDT05GSUdfVVNCX0dBREdFVF9ERUJVRyBpcyBub3Qg
+c2V0CiMgQ09ORklHX1VTQl9HQURHRVRfREVCVUdfRklMRVMgaXMgbm90IHNldAojIENPTkZJ
+R19NTUNfREVCVUcgaXMgbm90IHNldAojIENPTkZJR19NRU1TVElDS19ERUJVRyBpcyBub3Qg
+c2V0CiMgQ09ORklHX0lORklOSUJBTkRfTVRIQ0FfREVCVUcgaXMgbm90IHNldAojIENPTkZJ
+R19JTkZJTklCQU5EX0FNU08xMTAwX0RFQlVHIGlzIG5vdCBzZXQKIyBDT05GSUdfSU5GSU5J
+QkFORF9DWEdCM19ERUJVRyBpcyBub3Qgc2V0CiMgQ09ORklHX0lORklOSUJBTkRfTkVTX0RF
+QlVHIGlzIG5vdCBzZXQKIyBDT05GSUdfSU5GSU5JQkFORF9JUE9JQl9ERUJVRyBpcyBub3Qg
+c2V0CiMgQ09ORklHX0VEQUNfREVCVUcgaXMgbm90IHNldAojIENPTkZJR19SVENfREVCVUcg
+aXMgbm90IHNldAojIENPTkZJR19ETUFERVZJQ0VTX0RFQlVHIGlzIG5vdCBzZXQKIyBDT05G
+SUdfRE1BVEVTVCBpcyBub3Qgc2V0CiMgQ09ORklHX1VTQklQX0RFQlVHIGlzIG5vdCBzZXQK
+IyBDT05GSUdfQ09NRURJX0RFQlVHIGlzIG5vdCBzZXQKIyBDT05GSUdfUlRTNTEzOV9ERUJV
+RyBpcyBub3Qgc2V0CiMgQ09ORklHX1pSQU1fREVCVUcgaXMgbm90IHNldAojIENPTkZJR19V
+U0JfRFdDMl9ERUJVRyBpcyBub3Qgc2V0CiMgQ09ORklHX0xVU1RSRV9ERUJVR19FWFBFTlNJ
+VkVfQ0hFQ0sgaXMgbm90IHNldAojIENPTkZJR19GVUpJVFNVX0xBUFRPUF9ERUJVRyBpcyBu
+b3Qgc2V0CiMgQ09ORklHX1RISU5LUEFEX0FDUElfREVCVUdGQUNJTElUSUVTIGlzIG5vdCBz
+ZXQKIyBDT05GSUdfVEhJTktQQURfQUNQSV9ERUJVRyBpcyBub3Qgc2V0CiMgQ09ORklHX0NP
+TU1PTl9DTEtfREVCVUcgaXMgbm90IHNldAojIENPTkZJR19FWFQ0X0RFQlVHIGlzIG5vdCBz
+ZXQKIyBDT05GSUdfSkJEX0RFQlVHIGlzIG5vdCBzZXQKIyBDT05GSUdfSkJEMl9ERUJVRyBp
+cyBub3Qgc2V0CiMgQ09ORklHX0pGU19ERUJVRyBpcyBub3Qgc2V0CiMgQ09ORklHX1hGU19E
+RUJVRyBpcyBub3Qgc2V0CiMgQ09ORklHX09DRlMyX0RFQlVHX01BU0tMT0cgaXMgbm90IHNl
+dAojIENPTkZJR19CVFJGU19ERUJVRyBpcyBub3Qgc2V0CiMgQ09ORklHX1FVT1RBX0RFQlVH
+IGlzIG5vdCBzZXQKIyBDT05GSUdfRlNDQUNIRV9ERUJVRyBpcyBub3Qgc2V0CiMgQ09ORklH
+X0NBQ0hFRklMRVNfREVCVUcgaXMgbm90IHNldAojIENPTkZJR19OVEZTX0RFQlVHIGlzIG5v
+dCBzZXQKIyBDT05GSUdfQkVGU19ERUJVRyBpcyBub3Qgc2V0CiMgQ09ORklHX1FOWDZGU19E
+RUJVRyBpcyBub3Qgc2V0CiMgQ09ORklHX1VGU19ERUJVRyBpcyBub3Qgc2V0CiMgQ09ORklH
+X0VYT0ZTX0RFQlVHIGlzIG5vdCBzZXQKIyBDT05GSUdfTkZTX0RFQlVHIGlzIG5vdCBzZXQK
+IyBDT05GSUdfU1VOUlBDX0RFQlVHIGlzIG5vdCBzZXQKIyBDT05GSUdfQ0lGU19ERUJVRyBp
+cyBub3Qgc2V0CiMgQ09ORklHX0NJRlNfREVCVUcyIGlzIG5vdCBzZXQKIyBDT05GSUdfQUZT
+X0RFQlVHIGlzIG5vdCBzZXQKIyBDT05GSUdfRExNX0RFQlVHIGlzIG5vdCBzZXQKIyBrZXJu
+ZWwgaGFja2luZy9UUkFDRS9ERUJVRyBzdHVmZiBpcyBhIG1lc3MKIyBDT05GSUdfREVCVUdf
+UEFHRUFMTE9DIGlzIG5vdCBzZXQKIyBDT05GSUdfRFJNX0k5MTVfREVCVUcgaXMgbm90IHNl
+dAojIENPTkZJR19EUk1fSTkxNV9TV19GRU5DRV9ERUJVR19PQkpFQ1RTIGlzIG5vdCBzZXQK
+IyBDT05GSUdfRFJNX0k5MTVfU0VMRlRFU1QgaXMgbm90IHNldAojIENPTkZJR19ERUJVR19P
+QkpFQ1RTIGlzIG5vdCBzZXQKIyBDT05GSUdfREVCVUdfS01FTUxFQUsgaXMgbm90IHNldAoj
+IENPTkZJR19ERUJVR19WTSBpcyBub3Qgc2V0CiMgQ09ORklHX0RFQlVHX1ZNX1JCIGlzIG5v
+dCBzZXQKIyBDT05GSUdfREVCVUdfUEVSX0NQVV9NQVBTIGlzIG5vdCBzZXQKIyBDT05GSUdf
+REVCVUdfUlRfTVVURVhFUyBpcyBub3Qgc2V0CiMgQ09ORklHX1JUX01VVEVYX1RFU1RFUiBp
+cyBub3Qgc2V0CiMgQ09ORklHX0RFQlVHX1dXX01VVEVYX1NMT1dQQVRIIGlzIG5vdCBzZXQK
+IyBDT05GSUdfUFJPVkVfTE9DS0lORyBpcyBub3Qgc2V0CiMgQ09ORklHX0RFQlVHX0xPQ0tE
+RVAgaXMgbm90IHNldAojIENPTkZJR19ERUJVR19MT0NLSU5HX0FQSV9TRUxGVEVTVFMgaXMg
+bm90IHNldAojIENPTkZJR19ERUJVR19LT0JKRUNUIGlzIG5vdCBzZXQKIyBDT05GSUdfREVC
+VUdfTElTVCBpcyBub3Qgc2V0CiMgQ09ORklHX0RFQlVHX1NHIGlzIG5vdCBzZXQKIyBDT05G
+SUdfREVCVUdfQ1JFREVOVElBTFMgaXMgbm90IHNldAojIENPTkZJR19ERUJVR19CTE9DS19F
+WFRfREVWVCBpcyBub3Qgc2V0CiMgQ09ORklHX05PVElGSUVSX0VSUk9SX0lOSkVDVElPTiBp
+cyBub3Qgc2V0CiMgQ09ORklHX0ZBVUxUX0lOSkVDVElPTiBpcyBub3Qgc2V0CiMgQ09ORklH
+X0RFQlVHX1NUUklDVF9VU0VSX0NPUFlfQ0hFQ0tTIGlzIG5vdCBzZXQKIyBDT05GSUdfUkNV
+X1RSQUNFIGlzIG5vdCBzZXQKIyBDT05GSUdfVFJBQ0VfQ0xPQ0sgaXMgbm90IHNldAojIENP
+TkZJR19ETUFfQVBJX0RFQlVHIGlzIG5vdCBzZXQKIyBDT05GSUdfS0dEQl9URVNUUyBpcyBu
+b3Qgc2V0CiMgQ09ORklHX0RFQlVHX1JPREFUQSBpcyBub3Qgc2V0CiMgQ09ORklHX0RFQlVH
+X1NFVF9NT0RVTEVfUk9OWCBpcyBub3Qgc2V0CiMgQ09ORklHX0RFQlVHX1RMQkZMVVNIIGlz
+IG5vdCBzZXQKIyBDT05GSUdfSU9NTVVfREVCVUcgaXMgbm90IHNldAojIENPTkZJR19JT01N
+VV9TVFJFU1MgaXMgbm90IHNldAojIENPTkZJR19DUEFfREVCVUcgaXMgbm90IHNldAojIENP
+TkZJR19LQVNBTiBpcyBub3Qgc2V0CiMgQ09ORklHX1VCU0FOIGlzIG5vdCBzZXQKIyBDT05G
+SUdfS0NPViBpcyBub3Qgc2V0CiMgQ09ORklHX0NPTVBJTEVfVEVTVCBpcyBub3Qgc2V0CiNF
+TkQjCg==
+
+--------------Mgy6DUrtLwqyLcxdknj6b30y--
