@@ -2,65 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 808C969F326
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Feb 2023 12:07:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D6C769F32C
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Feb 2023 12:07:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231712AbjBVLHF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Feb 2023 06:07:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58730 "EHLO
+        id S231721AbjBVLHS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Feb 2023 06:07:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59194 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231665AbjBVLHB (ORCPT
+        with ESMTP id S231717AbjBVLHL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Feb 2023 06:07:01 -0500
-Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7988838E8E
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Feb 2023 03:06:59 -0800 (PST)
-Received: by mail-pj1-x102f.google.com with SMTP id y2so4158399pjg.3
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Feb 2023 03:06:59 -0800 (PST)
+        Wed, 22 Feb 2023 06:07:11 -0500
+Received: from mail-pg1-x533.google.com (mail-pg1-x533.google.com [IPv6:2607:f8b0:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E93A6392B9
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Feb 2023 03:07:03 -0800 (PST)
+Received: by mail-pg1-x533.google.com with SMTP id q189so3858307pga.9
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Feb 2023 03:07:03 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=VTFmQMiqtUc7pwcWMY+qhhF7WdtAyTRbIisqm76H6qE=;
-        b=r4ALaOW2f7Akg1Mdcn3iw8u74rUnAqIkuefrRsyXjT1f3JQ1f8o9Cf+sRlMGMndhue
-         yt94gDP2i6As0UHAEILftMnAljUNFXdm7bhl4O0LRdzjOyw3EN3aT2hhhGJi6k0PTpYM
-         onDUTZzr/QJufxfzro5YS4CdKgNn/rou3baC6xS4Vkpj5NOU8VOjfLU8QS+jvsmAhD+V
-         o3WCZSipVs0jl+kVlVvq955378NoTUxuE/ycQvW0JxYpCYbn+xUFZDJvqZVKRmYF5QgD
-         9TK8vuwABItOoVsnMuxaSzHx5HPUrLxSALbFAXdeVOl8usZ06aMaSJHtbZ2YMX+9bXO8
-         Z8QA==
+        bh=pDg7lq2x44X37ra1GNdaDrKzjiETRuIzGhmCMqpU5cE=;
+        b=r1B1OjeRgYE2hqrawLKj4xpLJVqD/NOJn2YO5tpvGrJoVa63RKypdjpj7HIRczRaRq
+         4EJSObe8KfRHFxJGyQ/5jOv5SajH0HE7OCEeJuBmMwMUwQjgw96J13XWoBgSvhs68U4u
+         oMFV2k0JCMxS0aFax7sI1VqIq1Blgx2Z9M9xJAR3b5/N1z699TcZHAcRIYFDq5vzfm4E
+         oMRdVlhqbsVRnpS7qVtEJuDP0ffT/nlbbiryV/2HEPVWlknxa0uNTpfuQ2rDBjfyUdt3
+         wEgbEl7QURSywxkwf3cxQGTzx1qsPwfjyqxd5P+yeUUHcI1fZJ6eyAiJhDxzat3cRYM6
+         yz7A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=VTFmQMiqtUc7pwcWMY+qhhF7WdtAyTRbIisqm76H6qE=;
-        b=piHLIlyQvBvMKTiYIqxLatpNssZbWUIRZCMFopo+99vwJZLDTkOI1/0t7uFDH1YgxN
-         rExiQzNEU0Xv7hEPACUpSJ7MsawSGJotU4bUXXtky2FWVniu45Ultd02Oeqd9+qzuhys
-         mllif27rYLNLYfnn6ODqxiMXfRO5sKqSBT+DlLJ880kogFxQCyOF95EwKj/EPa4IHF2F
-         5KDQKznCoAtPCXeXrxr3xGbaaveZXbK/ppv4YAv24h531PyIcBHZx4Jy6/zF8y0/QIim
-         NnsNCXHf4VisYbH2UUk/GxunzoddUNS9T2R8AFvUzzjeRpVH+HHXIkFYUBLwAFKTAp1N
-         zMFw==
-X-Gm-Message-State: AO0yUKWpz7MoKCMkwyaqJrJO+BW4kkxYdsF23Aky/Q0pV5KvDzgpXSTn
-        xUlY8qx+NszQndQNIfq6GayhMQ==
-X-Google-Smtp-Source: AK7set8vGQfRcj16iAJunqMzpMJfxjoKAEB8ouCAx9vXeuU/NmWFp1+Rm93QxCZvsdR4kMTrGS+fJw==
-X-Received: by 2002:a17:902:f908:b0:19a:a2e7:64cf with SMTP id kw8-20020a170902f90800b0019aa2e764cfmr6332392plb.69.1677064018883;
-        Wed, 22 Feb 2023 03:06:58 -0800 (PST)
+        bh=pDg7lq2x44X37ra1GNdaDrKzjiETRuIzGhmCMqpU5cE=;
+        b=pRA51AyvKzlyNXXXg4dyH7k9Fpwt2j9wHnFXyv4PciIOYWZZ/1s5auRcp6m7DyUmbv
+         YwC4+yzRbrHlmy4d5E7xdtx3i+6EmRVWrhi644sdryEISL4QBnhzftdJcq2mVN+MLZXX
+         vMfCJQOAtz7YN4ycYDrxL8OpfFExuYDnynmP08kX55VlZ38vm6KMeX/2+NhL+MkzgJ5l
+         xg/DQei+jpN0pr9PNk0nB/Pw/l0KyISefK2p47pdKToVGLjqGIkp72rk6DkMDs1ZIGdp
+         4eQJkqZ2IXCLV2QvkYgw82SJXOPZrZAM7itijtK1O6QBsrHCk3q1R0VNzofFaKpk+Lqh
+         ozfQ==
+X-Gm-Message-State: AO0yUKUiyQ6jXxUpP2UPgFoq7hqob4gsqwDjHCNVn+/NqAa6PxgwvjdT
+        XJXggLQMOHa4USVaP0DY+HUmZw==
+X-Google-Smtp-Source: AK7set9fKC+RycmDf0F/GqylOk93+YTe3GQqwm+VQ6ERcOpZORV12Lo/ieqtt/fuMQqEOwm55GXHRw==
+X-Received: by 2002:a62:52d5:0:b0:5a8:ad9d:83f with SMTP id g204-20020a6252d5000000b005a8ad9d083fmr6289573pfb.24.1677064023416;
+        Wed, 22 Feb 2023 03:07:03 -0800 (PST)
 Received: from localhost ([122.172.83.155])
-        by smtp.gmail.com with ESMTPSA id y7-20020a170902d64700b0019926c7757asm4956737plh.289.2023.02.22.03.06.57
+        by smtp.gmail.com with ESMTPSA id f15-20020aa78b0f000000b005ac419804d3sm4822377pfd.186.2023.02.22.03.07.02
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 22 Feb 2023 03:06:58 -0800 (PST)
+        Wed, 22 Feb 2023 03:07:02 -0800 (PST)
 From:   Viresh Kumar <viresh.kumar@linaro.org>
 To:     Jun Nie <jun.nie@linaro.org>, Viresh Kumar <vireshk@kernel.org>,
-        Nishanth Menon <nm@ti.com>, Stephen Boyd <sboyd@kernel.org>
+        Nishanth Menon <nm@ti.com>, Stephen Boyd <sboyd@kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>
 Cc:     Viresh Kumar <viresh.kumar@linaro.org>, linux-pm@vger.kernel.org,
         Vincent Guittot <vincent.guittot@linaro.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
         Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
         linux-kernel@vger.kernel.org
-Subject: [PATCH 2/3] OPP: Move required opps configuration to specialized callback
-Date:   Wed, 22 Feb 2023 16:36:38 +0530
-Message-Id: <56b9926836652e9dbf56ca6b7628e836cddca351.1677063656.git.viresh.kumar@linaro.org>
+Subject: [PATCH 3/3] OPP: Allow platforms to add a set_required_opps() callback
+Date:   Wed, 22 Feb 2023 16:36:39 +0530
+Message-Id: <c71a39caa8f1c64c24ce0c4ba070fc8b5226747d.1677063656.git.viresh.kumar@linaro.org>
 X-Mailer: git-send-email 2.31.1.272.g89b43f80a514
 In-Reply-To: <cover.1677063656.git.viresh.kumar@linaro.org>
 References: <cover.1677063656.git.viresh.kumar@linaro.org>
@@ -68,195 +68,142 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The required-opps configuration is closely tied to genpd and performance
-states at the moment and it is not very obvious that required-opps can
-live without genpds. Though we don't support configuring required-opps
-for non-genpd cases currently.
-
-This commit aims at separating these parts, where configuring genpds
-would be a special case of configuring the required-opps.
-
-Add a specialized callback, set_required_opps(), to the opp table and
-set it to different callbacks accordingly.
-
-This shouldn't result in any functional changes for now.
+We currently configure required-opps only for genpds, as we aren't
+really sure what's required of the other use cases. This patch allows
+platforms to add their own set_required_opps() helper.
 
 Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
+
 ---
- drivers/opp/core.c | 69 ++++++++++++++++++++++++++++------------------
- drivers/opp/of.c   |  3 ++
- drivers/opp/opp.h  |  4 +++
- 3 files changed, 49 insertions(+), 27 deletions(-)
+Jun,
+
+I think this can replace the cpufreq notification from the devfreq driver
+(get_target_freq_with_cpufreq()), which is used currently only by
+mtk-cci-devfreq.c. Instead of the notification, the aggregation of the requests
+for the devfreq device can be done within this callback.
+
+What do you say ?
+---
+ drivers/opp/core.c     | 35 +++++++++++++++++++++++++++++++++++
+ drivers/opp/opp.h      |  4 ++--
+ include/linux/pm_opp.h |  5 +++++
+ 3 files changed, 42 insertions(+), 2 deletions(-)
 
 diff --git a/drivers/opp/core.c b/drivers/opp/core.c
-index 6d7016ce8c53..954c94865cf5 100644
+index 954c94865cf5..22985ad7af79 100644
 --- a/drivers/opp/core.c
 +++ b/drivers/opp/core.c
-@@ -935,8 +935,8 @@ static int _set_opp_bw(const struct opp_table *opp_table,
- 	return 0;
+@@ -2421,8 +2421,35 @@ static void _opp_detach_genpd(struct opp_table *opp_table)
+ 	mutex_unlock(&opp_table->genpd_virt_dev_lock);
  }
  
--static int _set_required_opp(struct device *dev, struct device *pd_dev,
--			     struct dev_pm_opp *opp, int i)
-+static int _set_performance_state(struct device *dev, struct device *pd_dev,
-+				  struct dev_pm_opp *opp, int i)
- {
- 	unsigned int pstate = likely(opp) ? opp->required_opps[i]->pstate : 0;
- 	int ret;
-@@ -953,33 +953,20 @@ static int _set_required_opp(struct device *dev, struct device *pd_dev,
- 	return ret;
- }
- 
--/* This is only called for PM domain for now */
--static int _set_required_opps(struct device *dev,
--			      struct opp_table *opp_table,
--			      struct dev_pm_opp *opp, bool up)
-+static int _opp_set_required_opps_generic(struct device *dev,
-+	struct opp_table *opp_table, struct dev_pm_opp *opp, bool scaling_down)
++/**
++ * _opp_set_required_opps_helper() - Register custom set required opps helper.
++ * @dev: Device for which the helper is getting registered.
++ * @set_required_opps: Custom set required opps helper.
++ *
++ * This must be called before any OPPs are initialized for the device.
++ */
++static void _opp_set_required_opps_helper(struct opp_table *opp_table,
++					  set_required_opps_t set_required_opps)
 +{
-+	dev_err(dev, "setting required-opps isn't supported for non-genpd devices\n");
-+	return -ENOENT;
++	opp_table->set_required_opps = set_required_opps;
 +}
 +
-+static int _opp_set_required_opps_genpd(struct device *dev,
-+	struct opp_table *opp_table, struct dev_pm_opp *opp, bool scaling_down)
- {
--	struct opp_table **required_opp_tables = opp_table->required_opp_tables;
- 	struct device **genpd_virt_devs =
- 		opp_table->genpd_virt_devs ? opp_table->genpd_virt_devs : &dev;
- 	int i, ret = 0;
- 
--	if (!required_opp_tables)
--		return 0;
--
--	/* required-opps not fully initialized yet */
--	if (lazy_linking_pending(opp_table))
--		return -EBUSY;
--
--	/*
--	 * We only support genpd's OPPs in the "required-opps" for now, as we
--	 * don't know much about other use cases. Error out if the required OPP
--	 * doesn't belong to a genpd.
--	 */
--	if (unlikely(!required_opp_tables[0]->is_genpd)) {
--		dev_err(dev, "required-opps don't belong to a genpd\n");
--		return -ENOENT;
--	}
--
- 	/*
- 	 * Acquire genpd_virt_dev_lock to make sure we don't use a genpd_dev
- 	 * after it is freed from another thread.
-@@ -987,15 +974,15 @@ static int _set_required_opps(struct device *dev,
- 	mutex_lock(&opp_table->genpd_virt_dev_lock);
- 
- 	/* Scaling up? Set required OPPs in normal order, else reverse */
--	if (up) {
-+	if (!scaling_down) {
- 		for (i = 0; i < opp_table->required_opp_count; i++) {
--			ret = _set_required_opp(dev, genpd_virt_devs[i], opp, i);
-+			ret = _set_performance_state(dev, genpd_virt_devs[i], opp, i);
- 			if (ret)
- 				break;
- 		}
- 	} else {
- 		for (i = opp_table->required_opp_count - 1; i >= 0; i--) {
--			ret = _set_required_opp(dev, genpd_virt_devs[i], opp, i);
-+			ret = _set_performance_state(dev, genpd_virt_devs[i], opp, i);
- 			if (ret)
- 				break;
- 		}
-@@ -1006,6 +993,34 @@ static int _set_required_opps(struct device *dev,
- 	return ret;
- }
- 
-+/* This is only called for PM domain for now */
-+static int _set_required_opps(struct device *dev, struct opp_table *opp_table,
-+			      struct dev_pm_opp *opp, bool up)
++/**
++ * _opp_put_required_opps_helper() - Releases resources blocked for
++ *					 required opps helper.
++ * @opp_table: OPP table returned from _opp_set_required_opps_helper().
++ *
++ * Release resources blocked for platform specific required opps helper.
++ */
++static void _opp_put_required_opps_helper(struct opp_table *opp_table)
 +{
-+	/* required-opps not fully initialized yet */
-+	if (lazy_linking_pending(opp_table))
-+		return -EBUSY;
-+
-+	if (opp_table->set_required_opps)
-+		return opp_table->set_required_opps(dev, opp_table, opp, up);
-+
-+	return 0;
++	opp_table->set_required_opps = NULL;
 +}
 +
-+/* Update set_required_opps handler */
-+void _update_set_required_opps(struct opp_table *opp_table)
-+{
-+	/* Already set */
-+	if (opp_table->set_required_opps)
-+		return;
-+
-+	/* All required OPPs will belong to genpd or none */
-+	if (opp_table->required_opp_tables[0]->is_genpd)
-+		opp_table->set_required_opps = _opp_set_required_opps_genpd;
-+	else
-+		opp_table->set_required_opps = _opp_set_required_opps_generic;
-+}
-+
- static void _find_current_opp(struct device *dev, struct opp_table *opp_table)
+ static void _opp_clear_config(struct opp_config_data *data)
  {
- 	struct dev_pm_opp *opp = ERR_PTR(-ENODEV);
-diff --git a/drivers/opp/of.c b/drivers/opp/of.c
-index e55c6095adf0..93da3c797afc 100644
---- a/drivers/opp/of.c
-+++ b/drivers/opp/of.c
-@@ -196,6 +196,8 @@ static void _opp_table_alloc_required_tables(struct opp_table *opp_table,
- 	/* Let's do the linking later on */
- 	if (lazy)
- 		list_add(&opp_table->lazy, &lazy_opp_tables);
-+	else
-+		_update_set_required_opps(opp_table);
++	if (data->flags & OPP_CONFIG_REQUIRED_OPPS)
++		_opp_put_required_opps_helper(data->opp_table);
+ 	if (data->flags & OPP_CONFIG_GENPD)
+ 		_opp_detach_genpd(data->opp_table);
+ 	if (data->flags & OPP_CONFIG_REGULATOR)
+@@ -2546,6 +2573,14 @@ int dev_pm_opp_set_config(struct device *dev, struct dev_pm_opp_config *config)
+ 		data->flags |= OPP_CONFIG_GENPD;
+ 	}
  
- 	goto put_np;
- 
-@@ -411,6 +413,7 @@ static void lazy_link_required_opp_table(struct opp_table *new_table)
- 
- 		/* All required opp-tables found, remove from lazy list */
- 		if (!lazy) {
-+			_update_set_required_opps(opp_table);
- 			list_del_init(&opp_table->lazy);
- 
- 			list_for_each_entry(opp, &opp_table->opp_list, node)
++	/* Required opps helper */
++	if (config->set_required_opps) {
++		_opp_set_required_opps_helper(opp_table,
++					      config->set_required_opps);
++
++		data->flags |= OPP_CONFIG_REQUIRED_OPPS;
++	}
++
+ 	ret = xa_alloc(&opp_configs, &id, data, XA_LIMIT(1, INT_MAX),
+ 		       GFP_KERNEL);
+ 	if (ret)
 diff --git a/drivers/opp/opp.h b/drivers/opp/opp.h
-index 3a6e077df386..2a057c42ddf4 100644
+index 2a057c42ddf4..54cfeb894f5d 100644
 --- a/drivers/opp/opp.h
 +++ b/drivers/opp/opp.h
-@@ -184,6 +184,7 @@ enum opp_table_access {
-  * @enabled: Set to true if the device's resources are enabled/configured.
-  * @genpd_performance_state: Device's power domain support performance state.
-  * @is_genpd: Marks if the OPP table belongs to a genpd.
-+ * @set_required_opps: Helper responsible to set required OPPs.
-  * @dentry:	debugfs dentry pointer of the real device directory (not links).
-  * @dentry_name: Name of the real dentry.
-  *
-@@ -234,6 +235,8 @@ struct opp_table {
+@@ -35,6 +35,7 @@ extern struct list_head opp_tables, lazy_opp_tables;
+ #define OPP_CONFIG_PROP_NAME		BIT(3)
+ #define OPP_CONFIG_SUPPORTED_HW		BIT(4)
+ #define OPP_CONFIG_GENPD		BIT(5)
++#define OPP_CONFIG_REQUIRED_OPPS	BIT(6)
+ 
+ /**
+  * struct opp_config_data - data for set config operations
+@@ -235,8 +236,7 @@ struct opp_table {
  	bool enabled;
  	bool genpd_performance_state;
  	bool is_genpd;
-+	int (*set_required_opps)(struct device *dev,
-+		struct opp_table *opp_table, struct dev_pm_opp *opp, bool scaling_down);
+-	int (*set_required_opps)(struct device *dev,
+-		struct opp_table *opp_table, struct dev_pm_opp *opp, bool scaling_down);
++	set_required_opps_t set_required_opps;
  
  #ifdef CONFIG_DEBUG_FS
  	struct dentry *dentry;
-@@ -257,6 +260,7 @@ void _dev_pm_opp_cpumask_remove_table(const struct cpumask *cpumask, int last_cp
- struct opp_table *_add_opp_table_indexed(struct device *dev, int index, bool getclk);
- void _put_opp_list_kref(struct opp_table *opp_table);
- void _required_opps_available(struct dev_pm_opp *opp, int count);
-+void _update_set_required_opps(struct opp_table *opp_table);
+diff --git a/include/linux/pm_opp.h b/include/linux/pm_opp.h
+index dc1fb5890792..5a8c0cc50c96 100644
+--- a/include/linux/pm_opp.h
++++ b/include/linux/pm_opp.h
+@@ -64,6 +64,9 @@ typedef int (*config_regulators_t)(struct device *dev,
+ typedef int (*config_clks_t)(struct device *dev, struct opp_table *opp_table,
+ 			struct dev_pm_opp *opp, void *data, bool scaling_down);
  
- static inline bool lazy_linking_pending(struct opp_table *opp_table)
- {
++typedef int (*set_required_opps_t)(struct device *dev, struct opp_table *opp_table,
++			struct dev_pm_opp *opp, bool scaling_down);
++
+ /**
+  * struct dev_pm_opp_config - Device OPP configuration values
+  * @clk_names: Clk names, NULL terminated array.
+@@ -76,6 +79,7 @@ typedef int (*config_clks_t)(struct device *dev, struct opp_table *opp_table,
+  * @genpd_names: Null terminated array of pointers containing names of genpd to
+  *		 attach.
+  * @virt_devs: Pointer to return the array of virtual devices.
++ * @set_required_opps: Custom set required opps helper.
+  *
+  * This structure contains platform specific OPP configurations for the device.
+  */
+@@ -90,6 +94,7 @@ struct dev_pm_opp_config {
+ 	const char * const *regulator_names;
+ 	const char * const *genpd_names;
+ 	struct device ***virt_devs;
++	set_required_opps_t set_required_opps;
+ };
+ 
+ #if defined(CONFIG_PM_OPP)
 -- 
 2.31.1.272.g89b43f80a514
 
