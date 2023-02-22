@@ -2,122 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4137C69F254
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Feb 2023 10:58:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CCB6069F257
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Feb 2023 10:58:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232306AbjBVJ57 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Feb 2023 04:57:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35282 "EHLO
+        id S232428AbjBVJ6J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Feb 2023 04:58:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36096 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232157AbjBVJ5q (ORCPT
+        with ESMTP id S232318AbjBVJ5x (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Feb 2023 04:57:46 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A99730E3;
-        Wed, 22 Feb 2023 01:57:44 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Wed, 22 Feb 2023 04:57:53 -0500
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D38384EC8;
+        Wed, 22 Feb 2023 01:57:51 -0800 (PST)
+Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B750D612AB;
-        Wed, 22 Feb 2023 09:57:43 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DF3A9C433EF;
-        Wed, 22 Feb 2023 09:57:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1677059863;
-        bh=fazYg7qTznisnA7g2km7hrq93t29unz91OkcRJ7inDU=;
-        h=Subject:From:In-Reply-To:References:To:Cc:Date:From;
-        b=hW8g7JbgkrzHrLoFa52q1sPdU/6b8fmnOeVE5TBpQ2KyuDUP+zL+Pm5dlqjNoW3j1
-         BcxaZquKk6x2pgJCBVRz4/RbyEA5m3ZI3L61yLS/V9oX/wQTBY8ZGegC0gxytf6ujz
-         AYm7iwzOz7lv6j39ubMSt7obke72yxOiq1zWYZPTKgZ/lg6HI+1EOvjvG1jylKBqgr
-         t4t1Q0jOspKQjKEFK11RZ9nrMzZU44+Jif3OMrxd9zBHt9FbEyBO2S4P/IE4B1z8Kv
-         OssPClXWs5HpfYvrpJ8V/H+Zf2CPTFRQV2KDuT5N2ukPtahT+5F60rRX8jmPVM+BNq
-         pwagfsZnqVGvw==
-Content-Type: text/plain; charset="utf-8"
+        (Authenticated sender: kholk11)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id A0B9B660215E;
+        Wed, 22 Feb 2023 09:57:49 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1677059870;
+        bh=iupWZw710RJlsDfuH6ZphQSX1uucYuxWxs1WrmnL4w8=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=kYas5w6Jegs2D/xpl1OhhLiy3FMEDgo+bWugL3ObzJ6yUfY8RVjdpWT0v3PMM8ROa
+         FbQt7XjJu6chr4H7X5bPZ3pBh1oKjYp0XDSyCIGhG/dx8hniNm4UAXzi6+iq+OFVQ9
+         ehdh4DPCjknbUjVL0u5Yn13Yhp+dLjY9TOw/P0lYAg16ZiWStTX1dPy9HWD7QPVx5D
+         WCwh3HvdC8/AzDe3fPs1Lzh7mTUqtH7No8/JHuysZpSHJvNEKcB4eZGh56xXNIBvWB
+         6lzBLMfag4WOstlYU8BPcGljCfPOPI8VM1Vuk+axO/gYCVpo3ss4n/AtA5AzGjFIsI
+         f+O0O8yI0VFrw==
+Message-ID: <254cfbb5-c8b8-0abc-e6bc-5007fe757004@collabora.com>
+Date:   Wed, 22 Feb 2023 10:57:47 +0100
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH v3 0/6] Add support for Qualcomm's legacy IOMMU v2
+Content-Language: en-US
+To:     agross@kernel.org
+Cc:     andersson@kernel.org, konrad.dybcio@linaro.org, joro@8bytes.org,
+        will@kernel.org, robin.murphy@arm.com, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, robdclark@gmail.com,
+        linux-arm-msm@vger.kernel.org, iommu@lists.linux.dev,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        marijn.suijten@somainline.org, kernel@collabora.com,
+        luca@z3ntu.xyz, a39.skl@gmail.com, phone-devel@vger.kernel.org,
+        ~postmarketos/upstreaming@lists.sr.ht
+References: <20221115101122.155440-1-angelogioacchino.delregno@collabora.com>
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <20221115101122.155440-1-angelogioacchino.delregno@collabora.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-Subject: Re: [PATCH v2] ath10k: snoc: enable threaded napi on WCN3990
-From:   Kalle Valo <kvalo@kernel.org>
-In-Reply-To: <20230203000116.v2.1.I5bb9c164a2d2025655dee810b983e01ecd81c14e@changeid>
-References: <20230203000116.v2.1.I5bb9c164a2d2025655dee810b983e01ecd81c14e@changeid>
-To:     Abhishek Kumar <kuabhs@chromium.org>
-Cc:     kuabhs@chromium.org, davem@davemloft.net,
-        ath10k@lists.infradead.org, quic_mpubbise@quicinc.com,
-        netdev@vger.kernel.org, kuba@kernel.org,
-        linux-wireless@vger.kernel.org, pabeni@redhat.com,
-        linux-kernel@vger.kernel.org, Eric Dumazet <edumazet@google.com>
-User-Agent: pwcli/0.1.1-git (https://github.com/kvalo/pwcli/) Python/3.7.3
-Message-ID: <167705985871.5928.5239693232532337781.kvalo@kernel.org>
-Date:   Wed, 22 Feb 2023 09:57:40 +0000 (UTC)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Abhishek Kumar <kuabhs@chromium.org> wrote:
+Il 15/11/22 11:11, AngeloGioacchino Del Regno ha scritto:
+> This series adds support for handling "v2" firmware's IOMMU, found
+> on at least MSM8956 and MSM8976 (some other SoCs also need the same
+> but I honestly don't remember which ones precisely).
+> 
+> This is strictly required to get functional IOMMUs on these SoCs.
+> 
+> I'm sorry for not performing a much needed schema conversion on
+> qcom,iommu.txt, but I really didn't have time to do that :-(
+> 
+> This series was tested on Sony Xperia X and X Compact (MSM8956):
+> ADSP, LPASS, Venus, MSS, MDP and GPU are happy :-)
+> 
+> 
 
-> NAPI poll can be done in threaded context along with soft irq
-> context. Threaded context can be scheduled efficiently, thus
-> creating less of bottleneck during Rx processing. This patch is
-> to enable threaded NAPI on ath10k driver.
-> 
-> Based on testing, it was observed that on WCN3990, the CPU0 reaches
-> 100% utilization when napi runs in softirq context. At the same
-> time the other CPUs are at low consumption percentage. This
-> does not allow device to reach its maximum throughput potential.
-> After enabling threaded napi, CPU load is balanced across all CPUs
-> and following improvments were observed:
-> - UDP_RX increase by ~22-25%
-> - TCP_RX increase by ~15%
-> 
-> Here are some of the additional raw data with and without threaded napi:
-> ==================================================
-> udp_rx(Without threaded NAPI)
-> 435.98+-5.16 : Channel 44
-> 439.06+-0.66 : Channel 157
-> 
-> udp_rx(With threaded NAPI)
-> 509.73+-41.03 : Channel 44
-> 549.97+-7.62 : Channel 157
-> ===================================================
-> udp_tx(Without threaded NAPI)
-> 461.31+-0.69  : Channel 44
-> 461.46+-0.78 : Channel 157
-> 
-> udp_tx(With threaded NAPI)
-> 459.20+-0.77 : Channel 44
-> 459.78+-1.08 : Channel 157
-> ===================================================
-> tcp_rx(Without threaded NAPI)
-> 472.63+-2.35 : Channel 44
-> 469.29+-6.31 : Channel 157
-> 
-> tcp_rx(With threaded NAPI)
-> 498.49+-2.44 : Channel 44
-> 541.14+-40.65 : Channel 157
-> ===================================================
-> tcp_tx(Without threaded NAPI)
-> 317.34+-2.37 : Channel 44
-> 317.01+-2.56 : Channel 157
-> 
-> tcp_tx(With threaded NAPI)
-> 371.34+-2.36 : Channel 44
-> 376.95+-9.40 : Channel 157
-> ===================================================
-> 
-> Tested-on: WCN3990 hw1.0 SNOC WLAN.HL.3.2.2-00696-QCAHLSWMTPL-1
-> Signed-off-by: Abhishek Kumar <kuabhs@chromium.org>
-> Signed-off-by: Kalle Valo <quic_kvalo@quicinc.com>
+Hello,
+this series is really old and got sent and resent many times.
+The first time I've sent this one was .. I think in 2019, then, at the
+end of 2022, I had some time to actually respin it and send another
+three versions. It's been 3 long years :-)
+The third version got the last comments addressed.
 
-Patch applied to ath-next branch of ath.git, thanks.
+Since this didn't get any more feedback for 3 months, I'm worried that it
+will be forgotten again, hence:
 
-8c68fe00344c wifi: ath10k: snoc: enable threaded napi on WCN3990
+Is there any more feedback? Anything else to fix?
+If not, can this be picked, please?
 
--- 
-https://patchwork.kernel.org/project/linux-wireless/patch/20230203000116.v2.1.I5bb9c164a2d2025655dee810b983e01ecd81c14e@changeid/
+Thank you.
 
-https://wireless.wiki.kernel.org/en/developers/documentation/submittingpatches
+Best regards,
+Angelo
+
+
+> Changes in v3:
+>   - Removed useless FSRRESTORE reset and definition as pointed
+>     out in Robin Murphy's review
+>   - Fixed qcom,iommu.txt changes: squashed MSM8976 compatible
+>     string addition with msm-iommu-v2 generics addition
+> 
+> Changes in v2:
+>   - Added back Marijn's notes (sorry man!)
+>   - Added ARM_SMMU_CB_FSRRESTORE definition
+>   - Changed context bank reset to properly set FSR and FSRRESTORE
+> 
+> AngeloGioacchino Del Regno (6):
+>    dt-bindings: iommu: qcom,iommu: Document qcom,ctx-num property
+>    iommu/qcom: Use the asid read from device-tree if specified
+>    iommu/qcom: Properly reset the IOMMU context
+>    iommu/qcom: Index contexts by asid number to allow asid 0
+>    dt-bindings: iommu: qcom,iommu: Document QSMMUv2 and MSM8976
+>      compatibles
+>    iommu/qcom: Add support for QSMMUv2 and QSMMU-500 secured contexts
+> 
+>   .../devicetree/bindings/iommu/qcom,iommu.txt  |  9 +++
+>   drivers/iommu/arm/arm-smmu/qcom_iommu.c       | 78 +++++++++++++++----
+>   2 files changed, 70 insertions(+), 17 deletions(-)
+> 
+
 
