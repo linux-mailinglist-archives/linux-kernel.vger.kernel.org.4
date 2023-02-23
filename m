@@ -2,39 +2,39 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 197726A0148
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 03:44:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B6F2D6A0145
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 03:44:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233008AbjBWCoj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Feb 2023 21:44:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57222 "EHLO
+        id S232992AbjBWCob (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Feb 2023 21:44:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57180 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233082AbjBWCo2 (ORCPT
+        with ESMTP id S232901AbjBWCo1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Feb 2023 21:44:28 -0500
+        Wed, 22 Feb 2023 21:44:27 -0500
 Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E98226CEC
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Feb 2023 18:44:23 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9540E279BF
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Feb 2023 18:44:22 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=infradead.org; s=bombadil.20210309; h=Sender:Content-Transfer-Encoding:
         MIME-Version:References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:
         Reply-To:Content-Type:Content-ID:Content-Description;
-        bh=Zf/VP5ikCHj8OLL6rer4hxqpVXK1ALaeitWH3YJJWGw=; b=K56am7J4RdGNuU6o8W0jdqS0ki
-        klpCVr4uB8PIfFhNoUaw6mxyic+kMZCAItqPxG3BiXoGQRqZaOocgPrH8mWw6CjcKST0X8JSSiCeA
-        QpOTOeoXX9qjWWrb0lLLZffp5U5PkWf0kMvODDM27SmUhugLUSV5VWCWJf97zZ+rLq0Ow8isJpKAD
-        TMwO2rPqOxnEnU+FpRlGvZZwYXSjTdYixOT0+ynh1x0slK5e1rlLbrccAEbpoTtEnfYzvg4bZcNGx
-        D9TolFbzyTqguOlMSvw5Qzrs2hGcv8k/0Y2R3MBKDoLHYT3zuIuEb9r6VtYKNR7qareuSz5A8lT/9
-        XlQqeXew==;
+        bh=vQjHgoe5Jm+n0b1ADMVciA5nvYNCQKcIEIUc76XY5yA=; b=nobDFyPW1FDWru83lnPC9EwGl6
+        R/FHdKwibKNjX3q9wvjpliuLql+NoQ9c0rhOKA0yrjL0c2fVAZ8p5RDkCW6T/uLryGWU6LLvIkYK3
+        H8ZiDSzxHfM1HiVyVJJIIX+A6Fs2dWqSFF4Mm8kGPxhMBXeV+81ZHgNBeGyY6UUKuDDPhMnjqGLO5
+        TABWOhP+CZw4oNP8VfJdPVbrNk70Mb5neyvgQ6W/IecffA3e/SrfwO1okz2f1jrhReSmm+2oITWqW
+        LBsLcoG8bQlb1BH852kJkU4dTTBSJiFZIiW9Bx4gy3pLT+qeSzmlOw0EHq2ID8LlnX29yOscwqVJd
+        SxirXIAw==;
 Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1pV1ah-00EmNA-7d; Thu, 23 Feb 2023 02:44:15 +0000
+        id 1pV1ah-00EmNC-8r; Thu, 23 Feb 2023 02:44:15 +0000
 From:   Luis Chamberlain <mcgrof@kernel.org>
 To:     hughd@google.com, akpm@linux-foundation.org, willy@infradead.org
 Cc:     linux-mm@kvack.org, p.raghav@samsung.com, dave@stgolabs.net,
         a.manzanares@samsung.com, yosryahmed@google.com, mcgrof@kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [RFC v2 2/5] shmem: set shmem_writepage() variables early
-Date:   Wed, 22 Feb 2023 18:44:09 -0800
-Message-Id: <20230223024412.3522465-3-mcgrof@kernel.org>
+Subject: [RFC v2 3/5] shmem: move reclaim check early on writepages()
+Date:   Wed, 22 Feb 2023 18:44:10 -0800
+Message-Id: <20230223024412.3522465-4-mcgrof@kernel.org>
 X-Mailer: git-send-email 2.37.1
 In-Reply-To: <20230223024412.3522465-1-mcgrof@kernel.org>
 References: <20230223024412.3522465-1-mcgrof@kernel.org>
@@ -51,46 +51,61 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-shmem_writepage() sets up variables typically used *after* a possible
-huge page split. However even if that does happen the address space
-mapping should not change, and the inode does not change either. So it
-should be safe to set that from the very beginning.
+i915_gem requires huge folios to be split when swapping.
+However we have  check for usage of writepages() to ensure
+it used only for swap purposes later. Avoid the splits if
+we're not being called for reclaim, even if they should in
+theory not happen.
 
-This commit makes no functional changes.
+This makes the conditions easier to follow on shem_writepage().
 
 Signed-off-by: Luis Chamberlain <mcgrof@kernel.org>
 ---
- mm/shmem.c | 9 +++------
- 1 file changed, 3 insertions(+), 6 deletions(-)
+ mm/shmem.c | 24 ++++++++++++------------
+ 1 file changed, 12 insertions(+), 12 deletions(-)
 
 diff --git a/mm/shmem.c b/mm/shmem.c
-index b3ad619328bf..1269482d0a5c 100644
+index 1269482d0a5c..626eb1a0856c 100644
 --- a/mm/shmem.c
 +++ b/mm/shmem.c
-@@ -1331,9 +1331,9 @@ int shmem_unuse(unsigned int type)
- static int shmem_writepage(struct page *page, struct writeback_control *wbc)
- {
- 	struct folio *folio = page_folio(page);
--	struct shmem_inode_info *info;
--	struct address_space *mapping;
--	struct inode *inode;
-+	struct address_space *mapping = folio->mapping;
-+	struct inode *inode = mapping->host;
-+	struct shmem_inode_info *info = SHMEM_I(inode);
+@@ -1337,6 +1337,18 @@ static int shmem_writepage(struct page *page, struct writeback_control *wbc)
  	swp_entry_t swap;
  	pgoff_t index;
  
-@@ -1351,10 +1351,7 @@ static int shmem_writepage(struct page *page, struct writeback_control *wbc)
- 		folio_clear_dirty(folio);
- 	}
- 
--	mapping = folio->mapping;
- 	index = folio->index;
--	inode = mapping->host;
--	info = SHMEM_I(inode);
- 	if (info->flags & VM_LOCKED)
- 		goto redirty;
++	/*
++	 * Our capabilities prevent regular writeback or sync from ever calling
++	 * shmem_writepage; but a stacking filesystem might use ->writepage of
++	 * its underlying filesystem, in which case tmpfs should write out to
++	 * swap only in response to memory pressure, and not for the writeback
++	 * threads or sync.
++	 */
++	if (!wbc->for_reclaim) {
++		WARN_ON_ONCE(1);	/* Still happens? Tell us about it! */
++		goto redirty;
++	}
++
+ 	/*
+ 	 * If /sys/kernel/mm/transparent_hugepage/shmem_enabled is "always" or
+ 	 * "force", drivers/gpu/drm/i915/gem/i915_gem_shmem.c gets huge pages,
+@@ -1357,18 +1369,6 @@ static int shmem_writepage(struct page *page, struct writeback_control *wbc)
  	if (!total_swap_pages)
+ 		goto redirty;
+ 
+-	/*
+-	 * Our capabilities prevent regular writeback or sync from ever calling
+-	 * shmem_writepage; but a stacking filesystem might use ->writepage of
+-	 * its underlying filesystem, in which case tmpfs should write out to
+-	 * swap only in response to memory pressure, and not for the writeback
+-	 * threads or sync.
+-	 */
+-	if (!wbc->for_reclaim) {
+-		WARN_ON_ONCE(1);	/* Still happens? Tell us about it! */
+-		goto redirty;
+-	}
+-
+ 	/*
+ 	 * This is somewhat ridiculous, but without plumbing a SWAP_MAP_FALLOC
+ 	 * value into swapfile.c, the only way we can correctly account for a
 -- 
 2.39.1
 
