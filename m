@@ -2,257 +2,365 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5A41069FFD4
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 01:02:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AF1F269FFD8
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 01:03:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232808AbjBWACr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Feb 2023 19:02:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35058 "EHLO
+        id S232645AbjBWADv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Feb 2023 19:03:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36252 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230478AbjBWACp (ORCPT
+        with ESMTP id S229461AbjBWADs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Feb 2023 19:02:45 -0500
-Received: from mail-lj1-x232.google.com (mail-lj1-x232.google.com [IPv6:2a00:1450:4864:20::232])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D186539B81;
-        Wed, 22 Feb 2023 16:02:42 -0800 (PST)
-Received: by mail-lj1-x232.google.com with SMTP id f16so9536518ljq.10;
-        Wed, 22 Feb 2023 16:02:42 -0800 (PST)
+        Wed, 22 Feb 2023 19:03:48 -0500
+Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF50B1557D
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Feb 2023 16:03:44 -0800 (PST)
+Received: by mail-pj1-x1035.google.com with SMTP id m3-20020a17090ade0300b00229eec90a7fso2927446pjv.0
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Feb 2023 16:03:44 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=HTqpIUSYGRFM/YbU8bpVwwd1UiA0bcO2B2Jv+esFV2Y=;
-        b=c6ndu+5+Y+rlfGnAb8GMn4JzhgTFRV0U5CC5LpxSUSSc8AfZvK+aSvj/7X9gN0QhH2
-         L3T223XNgg6G9n3bn1h1IeABa4LZLnTroqUFmvhD7AeNljMeDUV77riSMoM6gCkij+n7
-         iB+o9gjMw+wU+tFh/GZmRmk3UBJETUsu4aiL3qAf7jCx1XaDTQmM9nld/ihkIIa1bjrY
-         T+5CX3O/Nk6N/pAvgb2LXcg2jsMez9IsceDVRwCwRa0BF2ytnKxlMj54P3S1t+iWwbFD
-         /65Bsua+OQl57SvGbFXKH8SugbVbhsGO9aWPJEYHObHgxAzbAqMRsAM/M1CGHCgxpzDa
-         WteQ==
+        d=rivosinc-com.20210112.gappssmtp.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=xpOSkngFbo1xRTtoo3V6Dq6jqJDOtZ7GvHNIgSzFJq8=;
+        b=ZKI7PQElxLxanzxiQq3N1uJcH1n8ZFh6ppeN7hE+ChQ4sv6CQ3Qh3LgGBVp/whvm/i
+         litvp4kdKds0n0UcUo2eZwfFUOh5fLUeBJ9LxDNSkbtZk1XLrha3MouFDHEol1PM+Wtg
+         557hDziGFrLozJJTrTJ249E9d9d+CuJXHrA2D/FHQn4MhX5JFLLV0cvXCIelLZujupEa
+         Ac3MFbzLFYgKzEv1DEvnO/JLM1zH7q5gRSHUn5/kdkRJNyxGrw7MHSImO29UG2Xwiu8S
+         8C4133Zavh8fFtxCSA2kKSt6kvl79cL1cBWyRIyR5b/GlPdsZnriIwpmno8ZrFmrVQB/
+         O30Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=HTqpIUSYGRFM/YbU8bpVwwd1UiA0bcO2B2Jv+esFV2Y=;
-        b=xLTfn/H65lmNRAbXdpNHjfwlhjJS09iKgUM79WBJWCAqK/hHtJ1GE4kUNW4pAWm524
-         7uxSIIZHBdmHizgKu2+OF+HUgDzuE6pbKHBbprJkZYOy/yDr6YAQ5cgMQi/N8uRJq8bh
-         i4GQrnMuS16KIE3KTiUqROMppXC5dQOncosLKg1CkNlJeVsrmDdW+kgEKEbrpgBqF89M
-         o8gqSkT1oOsIDcAgS1n7CeyZqaz2twYmW0KO1rKBPciMK9XPU0uIahA6r3e9j4o0MiQ8
-         WhkvPsaleTwfP7902nDlp53hiriI4PKDOFYlq1vJSCGvAibmpfv+eNH5/EvES3SRi4vw
-         K6Xw==
-X-Gm-Message-State: AO0yUKVnuzHAxD4UAaW6z07IPLzpW02zgAxgEEDBbhG3LGKlCTOCcuYZ
-        fp4lulaPTUHUmsRp+j4eIw36AgKnrKuN2PzDBPWOFAA4l1E=
-X-Google-Smtp-Source: AK7set+LDFqiXNaqr1hI6UkxEuWSkrhTSrZIxjRjnRc6l8TEKnIkSB2kqPG1gqjjq6rqPUge2PyUR2nIJYxBuI+qO80=
-X-Received: by 2002:a05:651c:1699:b0:294:6f14:235b with SMTP id
- bd25-20020a05651c169900b002946f14235bmr3207367ljb.5.1677110560735; Wed, 22
- Feb 2023 16:02:40 -0800 (PST)
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=xpOSkngFbo1xRTtoo3V6Dq6jqJDOtZ7GvHNIgSzFJq8=;
+        b=x0f5g2+8nLGEgR83ooycEBYj2EYMZwW+vcDR7GxN7o3c2Tj0HPsRtMs0+Pwreh/hZM
+         wmzKhu1N0GdPYo3gfJRn6W59WDRWk+E1rAucRL2XqLdojdA1OKngL1Du3/LttNc6pXz/
+         k/8ayPcbeqsMHuzke8wf1Dv5QSxkoeRtfAbHWbcDNWqzuiUa4tk23uwCpDT+sXNgz3hg
+         kXHAS1TzzEQX8KwJbpfB/8gv1/amHRhmIYZcTqXE7W8kQz5tMFcqOkvUstZf6PqItTfe
+         aM0qY9Rakp5Yxxi1y1R0doDSbB1A40f+vX5NsX4ylqaos1tbrGsZBVZRIARdsP8ENH/g
+         w83g==
+X-Gm-Message-State: AO0yUKVyny4nz+YOgR+g8DAHgy6rMsEI32kNdEhfmHvjHopQNhtDm1gk
+        9/9YLNkiYg4dgP/K3JMcNlLNSg==
+X-Google-Smtp-Source: AK7set/6RZ1DrFP2FUeDUcZNGqTq38f856K4vOcIejvzUHF7MDUzNiKVUoHQ8fpiCBpy46ChYarefg==
+X-Received: by 2002:a17:902:f547:b0:19a:c65d:f93 with SMTP id h7-20020a170902f54700b0019ac65d0f93mr7915812plf.53.1677110624068;
+        Wed, 22 Feb 2023 16:03:44 -0800 (PST)
+Received: from debug.ba.rivosinc.com ([66.220.2.162])
+        by smtp.gmail.com with ESMTPSA id g12-20020a170902c38c00b0019c90f8c831sm4054817plg.242.2023.02.22.16.03.41
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 22 Feb 2023 16:03:43 -0800 (PST)
+Date:   Wed, 22 Feb 2023 16:03:40 -0800
+From:   Deepak Gupta <debug@rivosinc.com>
+To:     Rick Edgecombe <rick.p.edgecombe@intel.com>
+Cc:     x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-mm@kvack.org,
+        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
+        Arnd Bergmann <arnd@arndb.de>,
+        Andy Lutomirski <luto@kernel.org>,
+        Balbir Singh <bsingharora@gmail.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Cyrill Gorcunov <gorcunov@gmail.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Eugene Syromiatnikov <esyr@redhat.com>,
+        Florian Weimer <fweimer@redhat.com>,
+        "H . J . Lu" <hjl.tools@gmail.com>, Jann Horn <jannh@google.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Kees Cook <keescook@chromium.org>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Nadav Amit <nadav.amit@gmail.com>,
+        Oleg Nesterov <oleg@redhat.com>, Pavel Machek <pavel@ucw.cz>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Weijiang Yang <weijiang.yang@intel.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        John Allen <john.allen@amd.com>, kcc@google.com,
+        eranian@google.com, rppt@kernel.org, jamorris@linux.microsoft.com,
+        dethoma@microsoft.com, akpm@linux-foundation.org,
+        Andrew.Cooper3@citrix.com, christina.schimpe@intel.com,
+        david@redhat.com
+Subject: Re: [PATCH v6 33/41] x86/shstk: Introduce map_shadow_stack syscall
+Message-ID: <20230223000340.GB945966@debug.ba.rivosinc.com>
+References: <20230218211433.26859-1-rick.p.edgecombe@intel.com>
+ <20230218211433.26859-34-rick.p.edgecombe@intel.com>
 MIME-Version: 1.0
-From:   Steve French <smfrench@gmail.com>
-Date:   Wed, 22 Feb 2023 18:02:29 -0600
-Message-ID: <CAH2r5muxu2YppXOLhwJ7hHjhaUZmEUHyc7O8GKekNnH44nd1EA@mail.gmail.com>
-Subject: [GIT PULL] smb3 client fixes
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        David Howells <dhowells@redhat.com>,
-        CIFS <linux-cifs@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Disposition: inline
+In-Reply-To: <20230218211433.26859-34-rick.p.edgecombe@intel.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Please pull the following changes since commit
-c9c3395d5e3dcc6daee66c6908354d47bf98cb0c:
+On Sat, Feb 18, 2023 at 01:14:25PM -0800, Rick Edgecombe wrote:
+>When operating with shadow stacks enabled, the kernel will automatically
+>allocate shadow stacks for new threads, however in some cases userspace
+>will need additional shadow stacks. The main example of this is the
+>ucontext family of functions, which require userspace allocating and
+>pivoting to userspace managed stacks.
+>
+>Unlike most other user memory permissions, shadow stacks need to be
+>provisioned with special data in order to be useful. They need to be setup
+>with a restore token so that userspace can pivot to them via the RSTORSSP
+>instruction. But, the security design of shadow stack's is that they
+>should not be written to except in limited circumstances. This presents a
+>problem for userspace, as to how userspace can provision this special
+>data, without allowing for the shadow stack to be generally writable.
+>
+>Previously, a new PROT_SHADOW_STACK was attempted, which could be
+>mprotect()ed from RW permissions after the data was provisioned. This was
+>found to not be secure enough, as other thread's could write to the
+>shadow stack during the writable window.
+>
+>The kernel can use a special instruction, WRUSS, to write directly to
+>userspace shadow stacks. So the solution can be that memory can be mapped
+>as shadow stack permissions from the beginning (never generally writable
+>in userspace), and the kernel itself can write the restore token.
+>
+>First, a new madvise() flag was explored, which could operate on the
+>PROT_SHADOW_STACK memory. This had a couple downsides:
+>1. Extra checks were needed in mprotect() to prevent writable memory from
+>   ever becoming PROT_SHADOW_STACK.
+>2. Extra checks/vma state were needed in the new madvise() to prevent
+>   restore tokens being written into the middle of pre-used shadow stacks.
+>   It is ideal to prevent restore tokens being added at arbitrary
+>   locations, so the check was to make sure the shadow stack had never been
+>   written to.
+>3. It stood out from the rest of the madvise flags, as more of direct
+>   action than a hint at future desired behavior.
+>
+>So rather than repurpose two existing syscalls (mmap, madvise) that don't
+>quite fit, just implement a new map_shadow_stack syscall to allow
+>userspace to map and setup new shadow stacks in one step. While ucontext
+>is the primary motivator, userspace may have other unforeseen reasons to
+>setup it's own shadow stacks using the WRSS instruction. Towards this
+>provide a flag so that stacks can be optionally setup securely for the
+>common case of ucontext without enabling WRSS. Or potentially have the
+>kernel set up the shadow stack in some new way.
 
-  Linux 6.2 (2023-02-19 14:24:22 -0800)
+Was following ever attempted?
 
-are available in the Git repository at:
+void *shstk = mmap(0, size, PROT_SHADOWSTACK, ...);
+- limit PROT_SHADOWSTACK protection flag to only mmap (and thus mprotect can't
+   convert memory from shadow stack to non-shadow stack type or vice versa)
+- limit PROT_SHADOWSTACK protection flag to anonymous memory only.
+- top level mmap handler to put a token at the base using WRUSS if prot == PROT_SHADOWSTACK
 
-  git://git.samba.org/sfrench/cifs-2.6.git tags/6.3-rc-smb3-client-fixes
+You essentially would get shadow stack manufacturing with existing (single) syscall.
+Acting a bit selfish here, this allows other architectures as well to re-use this and 
+do their own implementation of mapping and placing the token at the base.
 
-for you to fetch changes up to fdbf807215250217c83f1cb715b883cd910102fa:
-
-  update internal module version number for cifs.ko (2023-02-21 01:25:44 -0600)
-
-----------------------------------------------------------------
-46 fs/cifs (smb3 client) changesets, 37 for the fs/cifs directory and 9
-outside (for related helper functions and cleanup of now unused
-functions) from David Howells and Willy.
-
-Note that there's a conflict with the mm tree with regard to the
-replacement of find_get_pages_range_tag() with
-filemap_get_folios_tag() which can be resolved by the patch David
-provided: https://lore.kernel.org/lkml/2885897.1676990364@warthog.procyon.org.uk/
-or what Stephen Rothwell did:
-https://lore.kernel.org/lkml/20230222134927.459b036b@canb.auug.org.au/
-in linux-next
-
-The largest subset of this P/R is from David Howells et al: making the cifs/smb3
-driver pass iov_iters down to the lowest layers, directly to the
-network transport rather than passing lists of pages around, helping
-multiple areas:
- (-) Pin user pages, thereby fixing the race between concurrent DIO read and
-     fork, where the pages containing the DIO read buffer may end up
-     belonging to the child process and not the parent - with the result
-     that the parent might not see the retrieved data.
- (-) cifs shouldn't take refs on pages extracted from non-user-backed
-     iterators (eg. KVEC).  With these changes, cifs will apply the
-     appropriate cleanup.
- (-) Making it easier to transition to using folios in cifs rather than
-     pages by dealing with them through BVEC and XARRAY iterators.
- (-) Allowing cifs to use the new splice function
-
-The remainder are:
-- ten fixes for stable, including various fixes for uninitialized
-memory, wrong length field causing mount issue to very old servers,
-important directory lease fixes and reconnect fixes
-- 9 cleanups (unused code removal, change one element array usage, and
-a change form strtobool to kstrtobool, and 2 Kconfig cleanups)
-- 6 SMBDIRECT (RDMA) fixes including iov_iter integration and UAF fixes
-- 2 reconnect fixes
-- 3 multichannel fixes, including improving channel allocation (to
-least used channel)
-- remove last use of lock_page_killable by moving to folio_lock_killable
-
-Also FYI there are additional important directory lease (metadata
-caching fixes) and multichannel fixes being tested that are not
-included in this P/R but should be ready next week.  And two small
-fixes to David's series were also identified that I can send next week
-(I also wanted to reduce risk of merge conflicts)
-----------------------------------------------------------------
-Andy Shevchenko (1):
-      cifs: Get rid of unneeded conditional in the smb2_get_aead_req()
-
-Christophe JAILLET (1):
-      cifs: Use kstrtobool() instead of strtobool()
-
-David Howells (17):
-      mm: Pass info, not iter, into filemap_get_pages()
-      splice: Add a func to do a splice from a buffered file without ITER_PIPE
-      splice: Add a func to do a splice from an O_DIRECT file without ITER_PIPE
-      iov_iter: Define flags to qualify page extraction.
-      iov_iter: Add a function to extract a page list from an iterator
-      splice: Export filemap/direct_splice_read()
-      cifs: Implement splice_read to pass down ITER_BVEC not ITER_PIPE
-      netfs: Add a function to extract a UBUF or IOVEC into a BVEC iterator
-      netfs: Add a function to extract an iterator into a scatterlist
-      cifs: Add a function to build an RDMA SGE list from an iterator
-      cifs: Add a function to Hash the contents of an iterator
-      cifs: Add some helper functions
-      cifs: Add a function to read into an iter from a socket
-      cifs: Change the I/O paths to use an iterator rather than a page list
-      cifs: Build the RDMA SGE list directly from an iterator
-      cifs: Remove unused code
-      cifs: DIO to/from KVEC-type iterators should now work
-
-Gustavo A. R. Silva (1):
-      cifs: Replace zero-length arrays with flexible-array members
-
-Kees Cook (3):
-      cifs: Convert struct fealist away from 1-element array
-      cifs: Replace remaining 1-element arrays
-      smb3: Replace smb2pdu 1-element arrays with flex-arrays
-
-Matthew Wilcox (Oracle) (2):
-      cifs: Use a folio in cifs_page_mkwrite()
-      filemap: Remove lock_page_killable()
-
-Namjae Jeon (1):
-      cifs: remove unneeded 2bytes of padding from smb2 tree connect
-
-Paulo Alcantara (4):
-      cifs: prevent data race in smb2_reconnect()
-      cifs: get rid of unneeded conditional in cifs_get_num_sgs()
-      cifs: fix mount on old smb servers
-      cifs: get rid of dns resolve worker
-
-Ronnie Sahlberg (2):
-      cifs: Check the lease context if we actually got a lease
-      cifs: return a single-use cfid if we did not get a lease
-
-Shyam Prasad N (4):
-      cifs: print last update time for interface list
-      cifs: use the least loaded channel for sending requests
-      cifs: use tcon allocation functions even for dummy tcon
-      cifs: update ip_addr for ses only for primary chan setup
-
-Stefan Metzmacher (3):
-      cifs: introduce cifs_io_parms in smb2_async_writev()
-      cifs: split out smb3_use_rdma_offload() helper
-      cifs: don't try to use rdma offload on encrypted connections
-
-Steve French (3):
-      cifs: update Kconfig description
-      cifs: fix indentation in make menuconfig options
-      update internal module version number for cifs.ko
-
-Volker Lendecke (2):
-      cifs: Fix uninitialized memory read in smb3_qfs_tcon()
-      cifs: Fix uninitialized memory reads for oparms.mode
-
-Zhang Xiaoxu (2):
-      cifs: Fix lost destroy smbd connection when MR allocate failed
-      cifs: Fix warning and UAF when destroy the MR list
-
- block/bio.c               |    6 +-
- block/blk-map.c           |    8 +-
- fs/cifs/Kconfig           |   66 ++--
- fs/cifs/cached_dir.c      |   43 ++-
- fs/cifs/cifs_debug.c      |   11 +-
- fs/cifs/cifs_spnego.h     |    2 +-
- fs/cifs/cifsacl.c         |   34 +-
- fs/cifs/cifsencrypt.c     |  172 ++++++++--
- fs/cifs/cifsfs.c          |   12 +-
- fs/cifs/cifsfs.h          |    8 +-
- fs/cifs/cifsglob.h        |   81 +++--
- fs/cifs/cifspdu.h         |   98 +++---
- fs/cifs/cifsproto.h       |   11 +-
- fs/cifs/cifssmb.c         |   48 ++-
- fs/cifs/connect.c         |  179 ++++------
- fs/cifs/dir.c             |   19 +-
- fs/cifs/file.c            | 1810
-+++++++++++++++++++++++++++++++++++++++++++-------------------------------------------------------
- fs/cifs/fscache.c         |   22 +-
- fs/cifs/fscache.h         |   10 +-
- fs/cifs/inode.c           |   53 +--
- fs/cifs/link.c            |   66 ++--
- fs/cifs/misc.c            |  128 +------
- fs/cifs/ntlmssp.h         |    4 +-
- fs/cifs/readdir.c         |    6 +-
- fs/cifs/sess.c            |    1 -
- fs/cifs/smb1ops.c         |   72 ++--
- fs/cifs/smb2file.c        |    2 +-
- fs/cifs/smb2inode.c       |   17 +-
- fs/cifs/smb2misc.c        |    2 +-
- fs/cifs/smb2ops.c         |  606 ++++++++++++++++-----------------
- fs/cifs/smb2pdu.c         |  291 +++++++++-------
- fs/cifs/smb2pdu.h         |    4 +-
- fs/cifs/smbdirect.c       |  539 +++++++++++++++++------------
- fs/cifs/smbdirect.h       |    7 +-
- fs/cifs/transport.c       |   87 ++---
- fs/ksmbd/smb2ops.c        |    8 +-
- fs/ksmbd/smb2pdu.c        |    6 +-
- fs/netfs/Makefile         |    1 +
- fs/netfs/iterator.c       |  371 ++++++++++++++++++++
- fs/smbfs_common/smb2pdu.h |   42 ++-
- fs/splice.c               |   93 +++++
- include/linux/fs.h        |    6 +
- include/linux/netfs.h     |    8 +
- include/linux/pagemap.h   |   10 -
- include/linux/pipe_fs_i.h |   20 ++
- include/linux/uio.h       |   35 +-
- lib/iov_iter.c            |  284 +++++++++++++++-
- mm/filemap.c              |  157 ++++++++-
- mm/internal.h             |    6 +
- mm/vmalloc.c              |    1 +
- 50 files changed, 3220 insertions(+), 2353 deletions(-)
- create mode 100644 fs/netfs/iterator.c
-
--- 
-Thanks,
-
-Steve
+>
+>The following example demonstrates how to create a new shadow stack with
+>map_shadow_stack:
+>void *shstk = map_shadow_stack(addr, stack_size, SHADOW_STACK_SET_TOKEN);
+>
+>Tested-by: Pengfei Xu <pengfei.xu@intel.com>
+>Tested-by: John Allen <john.allen@amd.com>
+>Reviewed-by: Kees Cook <keescook@chromium.org>
+>Signed-off-by: Rick Edgecombe <rick.p.edgecombe@intel.com>
+>
+>---
+>v5:
+> - Fix addr/mapped_addr (Kees)
+> - Switch to EOPNOTSUPP (Kees suggested ENOTSUPP, but checkpatch
+>   suggests this)
+> - Return error for addresses below 4G
+>
+>v3:
+> - Change syscall common -> 64 (Kees)
+> - Use bit shift notation instead of 0x1 for uapi header (Kees)
+> - Call do_mmap() with MAP_FIXED_NOREPLACE (Kees)
+> - Block unsupported flags (Kees)
+> - Require size >= 8 to set token (Kees)
+>
+>v2:
+> - Change syscall to take address like mmap() for CRIU's usage
+>
+>v1:
+> - New patch (replaces PROT_SHADOW_STACK).
+>---
+> arch/x86/entry/syscalls/syscall_64.tbl |  1 +
+> arch/x86/include/uapi/asm/mman.h       |  3 ++
+> arch/x86/kernel/shstk.c                | 59 ++++++++++++++++++++++----
+> include/linux/syscalls.h               |  1 +
+> include/uapi/asm-generic/unistd.h      |  2 +-
+> kernel/sys_ni.c                        |  1 +
+> 6 files changed, 58 insertions(+), 9 deletions(-)
+>
+>diff --git a/arch/x86/entry/syscalls/syscall_64.tbl b/arch/x86/entry/syscalls/syscall_64.tbl
+>index c84d12608cd2..f65c671ce3b1 100644
+>--- a/arch/x86/entry/syscalls/syscall_64.tbl
+>+++ b/arch/x86/entry/syscalls/syscall_64.tbl
+>@@ -372,6 +372,7 @@
+> 448	common	process_mrelease	sys_process_mrelease
+> 449	common	futex_waitv		sys_futex_waitv
+> 450	common	set_mempolicy_home_node	sys_set_mempolicy_home_node
+>+451	64	map_shadow_stack	sys_map_shadow_stack
+>
+> #
+> # Due to a historical design error, certain syscalls are numbered differently
+>diff --git a/arch/x86/include/uapi/asm/mman.h b/arch/x86/include/uapi/asm/mman.h
+>index 5a0256e73f1e..8148bdddbd2c 100644
+>--- a/arch/x86/include/uapi/asm/mman.h
+>+++ b/arch/x86/include/uapi/asm/mman.h
+>@@ -13,6 +13,9 @@
+> 		((key) & 0x8 ? VM_PKEY_BIT3 : 0))
+> #endif
+>
+>+/* Flags for map_shadow_stack(2) */
+>+#define SHADOW_STACK_SET_TOKEN	(1ULL << 0)	/* Set up a restore token in the shadow stack */
+>+
+> #include <asm-generic/mman.h>
+>
+> #endif /* _ASM_X86_MMAN_H */
+>diff --git a/arch/x86/kernel/shstk.c b/arch/x86/kernel/shstk.c
+>index 40f0a55762a9..0a3decab70ee 100644
+>--- a/arch/x86/kernel/shstk.c
+>+++ b/arch/x86/kernel/shstk.c
+>@@ -17,6 +17,7 @@
+> #include <linux/compat.h>
+> #include <linux/sizes.h>
+> #include <linux/user.h>
+>+#include <linux/syscalls.h>
+> #include <asm/msr.h>
+> #include <asm/fpu/xstate.h>
+> #include <asm/fpu/types.h>
+>@@ -71,19 +72,31 @@ static int create_rstor_token(unsigned long ssp, unsigned long *token_addr)
+> 	return 0;
+> }
+>
+>-static unsigned long alloc_shstk(unsigned long size)
+>+static unsigned long alloc_shstk(unsigned long addr, unsigned long size,
+>+				 unsigned long token_offset, bool set_res_tok)
+> {
+> 	int flags = MAP_ANONYMOUS | MAP_PRIVATE | MAP_ABOVE4G;
+> 	struct mm_struct *mm = current->mm;
+>-	unsigned long addr, unused;
+>+	unsigned long mapped_addr, unused;
+>
+>-	mmap_write_lock(mm);
+>-	addr = do_mmap(NULL, 0, size, PROT_READ, flags,
+>-		       VM_SHADOW_STACK | VM_WRITE, 0, &unused, NULL);
+>+	if (addr)
+>+		flags |= MAP_FIXED_NOREPLACE;
+>
+>+	mmap_write_lock(mm);
+>+	mapped_addr = do_mmap(NULL, addr, size, PROT_READ, flags,
+>+			      VM_SHADOW_STACK | VM_WRITE, 0, &unused, NULL);
+> 	mmap_write_unlock(mm);
+>
+>-	return addr;
+>+	if (!set_res_tok || IS_ERR_VALUE(mapped_addr))
+>+		goto out;
+>+
+>+	if (create_rstor_token(mapped_addr + token_offset, NULL)) {
+>+		vm_munmap(mapped_addr, size);
+>+		return -EINVAL;
+>+	}
+>+
+>+out:
+>+	return mapped_addr;
+> }
+>
+> static unsigned long adjust_shstk_size(unsigned long size)
+>@@ -134,7 +147,7 @@ static int shstk_setup(void)
+> 		return -EOPNOTSUPP;
+>
+> 	size = adjust_shstk_size(0);
+>-	addr = alloc_shstk(size);
+>+	addr = alloc_shstk(0, size, 0, false);
+> 	if (IS_ERR_VALUE(addr))
+> 		return PTR_ERR((void *)addr);
+>
+>@@ -178,7 +191,7 @@ int shstk_alloc_thread_stack(struct task_struct *tsk, unsigned long clone_flags,
+> 		return 0;
+>
+> 	size = adjust_shstk_size(stack_size);
+>-	addr = alloc_shstk(size);
+>+	addr = alloc_shstk(0, size, 0, false);
+> 	if (IS_ERR_VALUE(addr))
+> 		return PTR_ERR((void *)addr);
+>
+>@@ -371,6 +384,36 @@ static int shstk_disable(void)
+> 	return 0;
+> }
+>
+>+SYSCALL_DEFINE3(map_shadow_stack, unsigned long, addr, unsigned long, size, unsigned int, flags)
+>+{
+>+	bool set_tok = flags & SHADOW_STACK_SET_TOKEN;
+>+	unsigned long aligned_size;
+>+
+>+	if (!cpu_feature_enabled(X86_FEATURE_USER_SHSTK))
+>+		return -EOPNOTSUPP;
+>+
+>+	if (flags & ~SHADOW_STACK_SET_TOKEN)
+>+		return -EINVAL;
+>+
+>+	/* If there isn't space for a token */
+>+	if (set_tok && size < 8)
+>+		return -EINVAL;
+>+
+>+	if (addr && addr <= 0xFFFFFFFF)
+>+		return -EINVAL;
+>+
+>+	/*
+>+	 * An overflow would result in attempting to write the restore token
+>+	 * to the wrong location. Not catastrophic, but just return the right
+>+	 * error code and block it.
+>+	 */
+>+	aligned_size = PAGE_ALIGN(size);
+>+	if (aligned_size < size)
+>+		return -EOVERFLOW;
+>+
+>+	return alloc_shstk(addr, aligned_size, size, set_tok);
+>+}
+>+
+> long shstk_prctl(struct task_struct *task, int option, unsigned long features)
+> {
+> 	if (option == ARCH_SHSTK_LOCK) {
+>diff --git a/include/linux/syscalls.h b/include/linux/syscalls.h
+>index 33a0ee3bcb2e..392dc11e3556 100644
+>--- a/include/linux/syscalls.h
+>+++ b/include/linux/syscalls.h
+>@@ -1058,6 +1058,7 @@ asmlinkage long sys_memfd_secret(unsigned int flags);
+> asmlinkage long sys_set_mempolicy_home_node(unsigned long start, unsigned long len,
+> 					    unsigned long home_node,
+> 					    unsigned long flags);
+>+asmlinkage long sys_map_shadow_stack(unsigned long addr, unsigned long size, unsigned int flags);
+>
+> /*
+>  * Architecture-specific system calls
+>diff --git a/include/uapi/asm-generic/unistd.h b/include/uapi/asm-generic/unistd.h
+>index 45fa180cc56a..b12940ec5926 100644
+>--- a/include/uapi/asm-generic/unistd.h
+>+++ b/include/uapi/asm-generic/unistd.h
+>@@ -887,7 +887,7 @@ __SYSCALL(__NR_futex_waitv, sys_futex_waitv)
+> __SYSCALL(__NR_set_mempolicy_home_node, sys_set_mempolicy_home_node)
+>
+> #undef __NR_syscalls
+>-#define __NR_syscalls 451
+>+#define __NR_syscalls 452
+>
+> /*
+>  * 32 bit systems traditionally used different
+>diff --git a/kernel/sys_ni.c b/kernel/sys_ni.c
+>index 860b2dcf3ac4..cb9aebd34646 100644
+>--- a/kernel/sys_ni.c
+>+++ b/kernel/sys_ni.c
+>@@ -381,6 +381,7 @@ COND_SYSCALL(vm86old);
+> COND_SYSCALL(modify_ldt);
+> COND_SYSCALL(vm86);
+> COND_SYSCALL(kexec_file_load);
+>+COND_SYSCALL(map_shadow_stack);
+>
+> /* s390 */
+> COND_SYSCALL(s390_pci_mmio_read);
+>-- 
+>2.17.1
+>
