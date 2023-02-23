@@ -2,77 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A5C66A0052
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 01:58:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C6FF26A0055
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 01:58:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233075AbjBWA63 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Feb 2023 19:58:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41312 "EHLO
+        id S233117AbjBWA6w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Feb 2023 19:58:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41308 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233037AbjBWA6S (ORCPT
+        with ESMTP id S233062AbjBWA6T (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Feb 2023 19:58:18 -0500
-Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C468928234
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Feb 2023 16:58:11 -0800 (PST)
-Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-536eace862cso64295567b3.16
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Feb 2023 16:58:11 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=HVEpDKkiPqP2+7hkSYLnKAL7x6oJXvVC4LelYs0FclU=;
-        b=RIsIvNHWqJlFjwGMxEpMMi8c9SD1LMWqPwMba6tqRkM8zClhElkzYY/Bg5r4ntdJti
-         6n+mzOX9cd2MKENxQtWRykO75RdzCnVvPvYyWcrKXpBeKpu2Cm2FFbOZqNNSeZnvoG9i
-         t3N91/Ye2+2U4U3pZ1Oz6pwUBBJ7WaYEsatrwBR+v5BFNtR6iNiXRs0UHnrsG5p3YjWp
-         GozkMA5yhgcHWljPBoH9ZRTR74W3zmNKMUKjL5WUHmSzzRo28t1AeHLg02vpqyEGvapK
-         gjBJuSccU8cXw8LlIzu/vOCk5xpFwCq5vyCjLykVjGFoDKwQbB8T+AiowCpNiC5FvQZe
-         hRbQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=HVEpDKkiPqP2+7hkSYLnKAL7x6oJXvVC4LelYs0FclU=;
-        b=Ou6s/21GjJHtQ+fB4PNujAKvbMd4fYjWQoZX41AQryJO4OcLhBoIbMwiROuJu7TjcT
-         upTO1pQ4c4MbfP5Z/GyiaWtPH0mOUUpPuOIuVox/J5Z2GZaWlprfi1zphzH6Jj9gMgcG
-         nC2JdAOJZkU5r20U6B0JBMIezRkGFchm7C3SSFfeVb4IbaiCUfU6PCtnEfJsxjf8VkQ2
-         F8PTjjNXjC3knspDvvCCTsOmeDlFZ7+L2hSbb+NlhOKScSt6Cj3D9FPQR0z8SodBXnap
-         RxwpLYSi31ZDylK/2iwr7uZZ6VLtz73XOzM7lPOon2vLeC0xoyRj+0rDFBD2Bb5D5jUi
-         gwPg==
-X-Gm-Message-State: AO0yUKUCToEbx4eVJlu2EPI8UkWHoU8zMG4jlis+s84eIfZgrL2xzjJL
-        hjpCFOTqr/blDqFPpyXC6Ee7dmGyW//cJosK2Q8q
-X-Google-Smtp-Source: AK7set+TIJO70qFBQWJ2Mupda48bbmNTk3KYnmOour0IdK8ZN/UCPOHlLBM/9Hnk8mqw4mTZzFG6dK5NY8KDR5Bbda2m
-X-Received: from axel.svl.corp.google.com ([2620:15c:2d4:203:3e99:dd9e:9db9:449c])
- (user=axelrasmussen job=sendgmr) by 2002:a81:b714:0:b0:52f:23f5:4079 with
- SMTP id v20-20020a81b714000000b0052f23f54079mr1366675ywh.4.1677113891031;
- Wed, 22 Feb 2023 16:58:11 -0800 (PST)
-Date:   Wed, 22 Feb 2023 16:57:54 -0800
-In-Reply-To: <20230223005754.2700663-1-axelrasmussen@google.com>
-Mime-Version: 1.0
-References: <20230223005754.2700663-1-axelrasmussen@google.com>
-X-Mailer: git-send-email 2.39.2.637.g21b0678d19-goog
-Message-ID: <20230223005754.2700663-6-axelrasmussen@google.com>
-Subject: [PATCH v2 5/5] mm: userfaultfd: add UFFDIO_CONTINUE_MODE_WP to
- install WP PTEs
-From:   Axel Rasmussen <axelrasmussen@google.com>
-To:     Alexander Viro <viro@zeniv.linux.org.uk>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Hugh Dickins <hughd@google.com>, Jan Kara <jack@suse.cz>,
-        "Liam R. Howlett" <Liam.Howlett@Oracle.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Mike Rapoport <rppt@kernel.org>,
-        Muchun Song <muchun.song@linux.dev>,
-        Nadav Amit <namit@vmware.com>, Peter Xu <peterx@redhat.com>,
-        Shuah Khan <shuah@kernel.org>
-Cc:     James Houghton <jthoughton@google.com>,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
-        Axel Rasmussen <axelrasmussen@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
+        Wed, 22 Feb 2023 19:58:19 -0500
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83C5239CE9;
+        Wed, 22 Feb 2023 16:58:13 -0800 (PST)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4PMZQC3lF3z4x5d;
+        Thu, 23 Feb 2023 11:58:11 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1677113891;
+        bh=ztxbZdscDinWNA8JxkiaTpX0fD/X3cvFoxGXemclLVA=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=U1z+cqqeIrKmmpl7Db6MDKpBEhPYAkmm9+pXJvIV9SmtW1ivsBkjWmhPuzwOblA5e
+         T8GRl6Erj03r+sG0iOKhK1H6ztSc2w3gSgkfq8jRZ1GFEsRZAyN8NTcknJUtT31QH8
+         R9maTPaE1mIrRpaxKKx+h7mHWPVqGU27FI2fcSMMI3iQqotjf95OB1bliLeZl5ySAF
+         dgUpiSl04glTZ12FTi/B41dwg2qFwAqadeLvstkBDc0XSF1flNS6bD2MZ2Dgz2iDlc
+         Xv4hfZtW1QcIpZxe6HecPK7B5+r2B/Dm7S/Tc8j7V+bnjy1BePd7TB7bvBKtxPu81q
+         yHKDjooO7ppqg==
+Date:   Thu, 23 Feb 2023 11:58:10 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Wolfram Sang <wsa@the-dreams.de>
+Cc:     Mark Brown <broonie@kernel.org>, Alain Volmat <avolmat@me.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Wolfram Sang <wsa@kernel.org>
+Subject: Re: linux-next: manual merge of the spi tree with the i2c tree
+Message-ID: <20230223115810.56134cbe@canb.auug.org.au>
+In-Reply-To: <20230216113035.3050871a@canb.auug.org.au>
+References: <20230216113035.3050871a@canb.auug.org.au>
+MIME-Version: 1.0
+Content-Type: multipart/signed; boundary="Sig_/WkjcS3PsLpgLma5i_aEpZyB";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -80,126 +54,72 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-UFFDIO_COPY already has UFFDIO_COPY_MODE_WP, so when installing a new
-PTE to resolve a missing fault, one can install a write-protected one.
-This is useful when using UFFDIO_REGISTER_MODE_{MISSING,WP} in
-combination.
+--Sig_/WkjcS3PsLpgLma5i_aEpZyB
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-So, add an analogous UFFDIO_CONTINUE_MODE_WP, which does the same thing
-but for *minor* faults.
+Hi all,
 
-Update the selftest to do some very basic exercising of the new flag.
+On Thu, 16 Feb 2023 11:30:35 +1100 Stephen Rothwell <sfr@canb.auug.org.au> =
+wrote:
+>=20
+> Today's linux-next merge of the spi tree got a conflict in:
+>=20
+>   MAINTAINERS
+>=20
+> between commit:
+>=20
+>   b3de755d6041 ("dt-bindings: i2c: i2c-st: convert to DT schema")
+>=20
+> from the i2c tree and commit:
+>=20
+>   7ec844a2c753 ("spi: spi-st-ssc: convert to DT schema")
+>=20
+> from the spi tree.
+>=20
+> I fixed it up (see below) and can carry the fix as necessary. This
+> is now fixed as far as linux-next is concerned, but any non trivial
+> conflicts should be mentioned to your upstream maintainer when your tree
+> is submitted for merging.  You may also want to consider cooperating
+> with the maintainer of the conflicting tree to minimise any particularly
+> complex conflicts.
+>=20
+>=20
+> diff --cc MAINTAINERS
+> index 71e92d3c51c6,daa33e7bb457..000000000000
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@@ -2791,7 -2925,8 +2791,8 @@@ M:	Patrice Chotard <patrice.chotard@fos
+>   L:	linux-arm-kernel@lists.infradead.org (moderated for non-subscribers)
+>   S:	Maintained
+>   W:	http://www.stlinux.com
+> + F:	Documentation/devicetree/bindings/spi/st,ssc-spi.yaml
+>  -F:	Documentation/devicetree/bindings/i2c/i2c-st.txt
+>  +F:	Documentation/devicetree/bindings/i2c/st,sti-i2c.yaml
+>   F:	arch/arm/boot/dts/sti*
+>   F:	arch/arm/mach-sti/
+>   F:	drivers/ata/ahci_st.c
 
-Signed-off-by: Axel Rasmussen <axelrasmussen@google.com>
----
- fs/userfaultfd.c                         | 8 ++++++--
- include/linux/userfaultfd_k.h            | 2 +-
- include/uapi/linux/userfaultfd.h         | 7 +++++++
- mm/userfaultfd.c                         | 5 +++--
- tools/testing/selftests/vm/userfaultfd.c | 4 ++++
- 5 files changed, 21 insertions(+), 5 deletions(-)
+This is now a conflict between the i2c tree and Linus' tree.
 
-diff --git a/fs/userfaultfd.c b/fs/userfaultfd.c
-index f43d8b0ae47b..5ce4502737a1 100644
---- a/fs/userfaultfd.c
-+++ b/fs/userfaultfd.c
-@@ -1871,6 +1871,7 @@ static int userfaultfd_continue(struct userfaultfd_ctx *ctx, unsigned long arg)
- 	struct uffdio_continue uffdio_continue;
- 	struct uffdio_continue __user *user_uffdio_continue;
- 	struct uffdio_range range;
-+	int flags = 0;
- 
- 	user_uffdio_continue = (struct uffdio_continue __user *)arg;
- 
-@@ -1893,12 +1894,15 @@ static int userfaultfd_continue(struct userfaultfd_ctx *ctx, unsigned long arg)
- 	/* double check for wraparound just in case. */
- 	if (range.start + range.len <= range.start)
- 		goto out;
--	if (uffdio_continue.mode & ~UFFDIO_CONTINUE_MODE_DONTWAKE)
-+	if (uffdio_continue.mode & ~(UFFDIO_CONTINUE_MODE_DONTWAKE |
-+				     UFFDIO_CONTINUE_MODE_WP))
- 		goto out;
-+	if (uffdio_continue.mode & UFFDIO_CONTINUE_MODE_WP)
-+		flags |= MFILL_ATOMIC_WP;
- 
- 	if (mmget_not_zero(ctx->mm)) {
- 		ret = mfill_atomic_continue(ctx->mm, &range,
--					    &ctx->mmap_changing);
-+					    &ctx->mmap_changing, flags);
- 		mmput(ctx->mm);
- 	} else {
- 		return -ESRCH;
-diff --git a/include/linux/userfaultfd_k.h b/include/linux/userfaultfd_k.h
-index 3cf87f019db3..1e1229430f56 100644
---- a/include/linux/userfaultfd_k.h
-+++ b/include/linux/userfaultfd_k.h
-@@ -67,7 +67,7 @@ extern ssize_t mfill_atomic_zeropage(struct mm_struct *dst_mm,
- 				     atomic_t *mmap_changing);
- extern ssize_t mfill_atomic_continue(struct mm_struct *dst_mm,
- 				     const struct uffdio_range *dst,
--				    atomic_t *mmap_changing);
-+				    atomic_t *mmap_changing, int flags);
- extern int mwriteprotect_range(struct mm_struct *dst_mm,
- 			       const struct uffdio_range *range,
- 			       bool enable_wp, atomic_t *mmap_changing);
-diff --git a/include/uapi/linux/userfaultfd.h b/include/uapi/linux/userfaultfd.h
-index 005e5e306266..14059a0861bf 100644
---- a/include/uapi/linux/userfaultfd.h
-+++ b/include/uapi/linux/userfaultfd.h
-@@ -297,6 +297,13 @@ struct uffdio_writeprotect {
- struct uffdio_continue {
- 	struct uffdio_range range;
- #define UFFDIO_CONTINUE_MODE_DONTWAKE		((__u64)1<<0)
-+	/*
-+	 * UFFDIO_CONTINUE_MODE_WP will map the page write protected on
-+	 * the fly.  UFFDIO_CONTINUE_MODE_WP is available only if the
-+	 * write protected ioctl is implemented for the range
-+	 * according to the uffdio_register.ioctls.
-+	 */
-+#define UFFDIO_CONTINUE_MODE_WP			((__u64)1<<1)
- 	__u64 mode;
- 
- 	/*
-diff --git a/mm/userfaultfd.c b/mm/userfaultfd.c
-index ebbba2b9f687..03f388aaa405 100644
---- a/mm/userfaultfd.c
-+++ b/mm/userfaultfd.c
-@@ -706,10 +706,11 @@ ssize_t mfill_atomic_zeropage(struct mm_struct *dst_mm,
- 
- ssize_t mfill_atomic_continue(struct mm_struct *dst_mm,
- 			      const struct uffdio_range *dst,
--			      atomic_t *mmap_changing)
-+			      atomic_t *mmap_changing,
-+			      int flags)
- {
- 	return mfill_atomic(dst_mm, 0, dst,
--			    mmap_changing, MFILL_ATOMIC_CONTINUE);
-+			    mmap_changing, flags | MFILL_ATOMIC_CONTINUE);
- }
- 
- void uffd_wp_range(struct vm_area_struct *dst_vma,
-diff --git a/tools/testing/selftests/vm/userfaultfd.c b/tools/testing/selftests/vm/userfaultfd.c
-index 7f22844ed704..41c1f9abc481 100644
---- a/tools/testing/selftests/vm/userfaultfd.c
-+++ b/tools/testing/selftests/vm/userfaultfd.c
-@@ -585,6 +585,8 @@ static void continue_range(int ufd, __u64 start, __u64 len)
- 	req.range.start = start;
- 	req.range.len = len;
- 	req.mode = 0;
-+	if (test_uffdio_wp)
-+		req.mode |= UFFDIO_CONTINUE_MODE_WP;
- 
- 	if (ioctl(ufd, UFFDIO_CONTINUE, &req))
- 		err("UFFDIO_CONTINUE failed for address 0x%" PRIx64,
-@@ -1332,6 +1334,8 @@ static int userfaultfd_minor_test(void)
- 	uffdio_register.range.start = (unsigned long)area_dst_alias;
- 	uffdio_register.range.len = nr_pages * page_size;
- 	uffdio_register.mode = UFFDIO_REGISTER_MODE_MINOR;
-+	if (test_uffdio_wp)
-+		uffdio_register.mode |= UFFDIO_REGISTER_MODE_WP;
- 	if (ioctl(uffd, UFFDIO_REGISTER, &uffdio_register))
- 		err("register failure");
- 
--- 
-2.39.2.637.g21b0678d19-goog
+--=20
+Cheers,
+Stephen Rothwell
 
+--Sig_/WkjcS3PsLpgLma5i_aEpZyB
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmP2uiIACgkQAVBC80lX
+0GxgAwf/Vfg+WXMgrhRiP6qidy7pmaKmiI3QQcCVOTycLCTG5RGDQQoyYow3jtew
+PjHorCgiQKTliZKG10cQyxUAcXkgmUXguKvmm0P8qtM9ILJTp4tXlPTNQjTXU8df
+gLCz/EWv1j0XPSnzZDebAWUgKtGfCzvye7mf9vJEVDz+GH2xKmWj+tGeoJ6eJQsP
+g8d5RQRNVcmieRZ9mLX76EGzKLCQHLWumBtGfmVdWQG+V7nFPQCvFADnEXEHzWrR
+etmSiUhVCJlHHiVLo+s1nmrrzDUcF5PhdDFqQGHWnMNxJG7yMb85tWEwFaljPIMo
+MQ+WTFMJBa88seZ+USdCpHHLDksf5w==
+=7seG
+-----END PGP SIGNATURE-----
+
+--Sig_/WkjcS3PsLpgLma5i_aEpZyB--
