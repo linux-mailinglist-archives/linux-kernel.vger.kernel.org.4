@@ -2,142 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 773656A0C30
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 15:49:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DB1FC6A0C37
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 15:51:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234926AbjBWOtJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Feb 2023 09:49:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57470 "EHLO
+        id S234424AbjBWOvr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Feb 2023 09:51:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60122 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234711AbjBWOs5 (ORCPT
+        with ESMTP id S234237AbjBWOvn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Feb 2023 09:48:57 -0500
-Received: from mail-yw1-x112a.google.com (mail-yw1-x112a.google.com [IPv6:2607:f8b0:4864:20::112a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36AF5769B
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Feb 2023 06:48:48 -0800 (PST)
-Received: by mail-yw1-x112a.google.com with SMTP id 00721157ae682-536c02eea4dso187961857b3.4
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Feb 2023 06:48:48 -0800 (PST)
+        Thu, 23 Feb 2023 09:51:43 -0500
+Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B406672E62
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Feb 2023 06:51:42 -0800 (PST)
+Received: by mail-pl1-x62f.google.com with SMTP id c1so13420691plg.4
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Feb 2023 06:51:42 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=4pa8WhVoMTas4nD3mKBiwC/IIvOKuMqZMgApILYBrlg=;
-        b=sq2yEKIzAfYxhUjTGZscUcBKjbRg/XDm6/OwDMuFPcEmkYSC5SZuAHJTff953rBxec
-         LXLsNugN1pCBzThSfJuKLff6xwek+18mho5HTV7Faj9nXCmrf6il/5KmHnZsEES5UNBt
-         eTmKrtOonZITSNMLxOnPamdZEaODB4Xww/33QpFmi0aWhtDuS7c1gn6NQd3laKkB6FGe
-         rM8cIi09jTeip4eoTTIIOa/qTQO10Q2eNX6IY7E1S4Lff6byWPaH/8qwSu7FCUE6kj2a
-         hy4hlom66L8I40nNa9KzkVoJDtSzNybkpPR3SQ+ncXT6v3HMCM4M0JA8RWfKX9cRHBHp
-         BtXw==
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=AEUVY9QBnLvwF98etOxaJbhE4h++5n3g+trhyX9ajRk=;
+        b=kEJxBS9j71RwghpfwM+h/k5OW36kiC6Bau1D0zJJ3QwxCosQAEaUK7j8tlK41kc372
+         jK1AADV4wurJ2USeEy3Qb3IoZYz7jy9ouXXwQiZPIOzN/hnHXnim+gNwkN6josRZPdKE
+         zaRfSn3NnFGwiQk0EwXuHH+jFcCZgi9GSxH2IKqeJi43ijz+Inv/1bUpQb2rA+Gu9ZnD
+         BdNhk1Rrg4YRto9XmYSTecFdDBjr+OkX2yPagOmgcXXAMVOBd7ja+dnDxpopcXvHVdyn
+         uL/uyIVnexBrmXjc7Z4tOC4UdFSmA1l7Ga/SePzc4wptHfBfo+xOUElBSfukEMRbQAOn
+         wWtg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=4pa8WhVoMTas4nD3mKBiwC/IIvOKuMqZMgApILYBrlg=;
-        b=LbyWIAbfwMsIytEuXt1caflzpP/0XVF7JvBhNYMe6vmq4p0TVCBuUVN92kCORP1jvG
-         iHHqQZ8nc5aiiGcePgKv0f9/b4KpIFmTfoQ8thcY18buYulb62qZyjGvvXExUJmUM7jo
-         GHZCKBLShcWqYelaL5WBIk9pik8nVqYCqZ5PDdJCW9jWNPLlg5L5IYUF9F8/+8Lg5Xhn
-         5fL2SB3QukapYnpg7k6x7qQ06I1FLsXtvpTaM90w5/CvuCcvdeNyzf16wIAeDXfw43Sx
-         fYjHtUTH1zVc3HF9Jkgq29HMYp2EvlBYsLNEsU64bjyFL3KjjaDW8t9BvGUBQggoFQb+
-         dMFQ==
-X-Gm-Message-State: AO0yUKVJEKCRzwnRtXQ8iQs/hQP/F8AJAC8rfs5xcjDKqOeQQYn8x9Mk
-        hmU/XLk3VAc9OEvhMPoGdX0rmL6qcQ1sPNsBaXCSyg==
-X-Google-Smtp-Source: AK7set9VUZNRZCaLDXrLLy8mHGx5HocaLmAlWGX8los92wGIp1ZTneOSgYrN2Af2BE5NJykwArXcAFeSMswQ6RhmvHI=
-X-Received: by 2002:a25:9bc2:0:b0:9fe:195a:ce0d with SMTP id
- w2-20020a259bc2000000b009fe195ace0dmr1724279ybo.10.1677163727331; Thu, 23 Feb
- 2023 06:48:47 -0800 (PST)
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=AEUVY9QBnLvwF98etOxaJbhE4h++5n3g+trhyX9ajRk=;
+        b=qdrkcFf7O3cszieNSusMqTLbG/bfvNFoT61dOC10iHKeTw4ITJZylJ3+lFZXpTyEYL
+         5RFutjuNZ1OwrKetQs5d3gP1LPZJMjY0flmh27epHSnA+c9Mdmk8bJEGNE/aSn5AZCS2
+         THBP5fisB7Yt0PNLufzHLidNZvLwKVU0yaR+h1+3Yyu7YlsSryhhIltisHew5NER7qUW
+         D4l2LiaBNvrhyQWiH7Nmde76+QvoDp4howg9ZJr9nylKLIL5ATdTGgqP7o9wPempzb8A
+         1SEbzZ3Iz2/vnVVkuTB2n5ru9IHnUJ8NDCnDxP63YebG5Qqk37udm0Y3x3Eyt/l+6PTl
+         CtVA==
+X-Gm-Message-State: AO0yUKUwOTcUeGDw98zV50fS+TUMMmg1ROxVLEm7OFKvJlnkZzwo9lji
+        oIjvXUye/ZTEnrs3it04RBo=
+X-Google-Smtp-Source: AK7set+AXrDvurkmZHBIHkoQR4SlgO4/MpxUgUaKT4owdS7TPv/KoAYY+Ao1bQkwjxAqSPbEXm7qnQ==
+X-Received: by 2002:a17:902:c408:b0:19a:b869:f2ef with SMTP id k8-20020a170902c40800b0019ab869f2efmr16382793plk.15.1677163901908;
+        Thu, 23 Feb 2023 06:51:41 -0800 (PST)
+Received: from localhost ([2400:8902::f03c:93ff:fe27:642a])
+        by smtp.gmail.com with ESMTPSA id iz1-20020a170902ef8100b00195f0fb0c18sm966230plb.31.2023.02.23.06.51.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 23 Feb 2023 06:51:40 -0800 (PST)
+Date:   Thu, 23 Feb 2023 14:51:27 +0000
+From:   Hyeonggon Yoo <42.hyeyoo@gmail.com>
+To:     Suren Baghdasaryan <surenb@google.com>
+Cc:     akpm@linux-foundation.org, michel@lespinasse.org,
+        jglisse@google.com, mhocko@suse.com, vbabka@suse.cz,
+        hannes@cmpxchg.org, mgorman@techsingularity.net, dave@stgolabs.net,
+        willy@infradead.org, liam.howlett@oracle.com, peterz@infradead.org,
+        ldufour@linux.ibm.com, paulmck@kernel.org, mingo@redhat.com,
+        will@kernel.org, luto@kernel.org, songliubraving@fb.com,
+        peterx@redhat.com, david@redhat.com, dhowells@redhat.com,
+        hughd@google.com, bigeasy@linutronix.de, kent.overstreet@linux.dev,
+        punit.agrawal@bytedance.com, lstoakes@gmail.com,
+        peterjung1337@gmail.com, rientjes@google.com, chriscli@google.com,
+        axelrasmussen@google.com, joelaf@google.com, minchan@google.com,
+        rppt@kernel.org, jannh@google.com, shakeelb@google.com,
+        tatashin@google.com, edumazet@google.com, gthelen@google.com,
+        gurua@google.com, arjunroy@google.com, soheil@google.com,
+        leewalsh@google.com, posk@google.com,
+        michalechner92@googlemail.com, linux-mm@kvack.org,
+        linux-arm-kernel@lists.infradead.org,
+        linuxppc-dev@lists.ozlabs.org, x86@kernel.org,
+        linux-kernel@vger.kernel.org, kernel-team@android.com
+Subject: Re: [PATCH v3 16/35] mm/mmap: write-lock VMAs before merging,
+ splitting or expanding them
+Message-ID: <Y/d9b5Ev6vAEzzVO@localhost>
+References: <20230216051750.3125598-1-surenb@google.com>
+ <20230216051750.3125598-17-surenb@google.com>
 MIME-Version: 1.0
-References: <20230223-topic-gmuwrapper-v3-0-5be55a336819@linaro.org>
- <20230223-topic-gmuwrapper-v3-10-5be55a336819@linaro.org> <CAA8EJppi45K0hQ=1fZvf+Mps+4uEkXmLFeqdmyk-yk31CNvUsw@mail.gmail.com>
- <761e0aba-9364-557a-e6e5-e21494597dbc@linaro.org>
-In-Reply-To: <761e0aba-9364-557a-e6e5-e21494597dbc@linaro.org>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Date:   Thu, 23 Feb 2023 16:48:36 +0200
-Message-ID: <CAA8EJppvmojWnvwB1aKJ1M7CcoFHk9BLFR0U7CQGR9GexQckdw@mail.gmail.com>
-Subject: Re: [PATCH v3 10/15] drm/msm/a6xx: Fix A680 highest bank bit value
-To:     Konrad Dybcio <konrad.dybcio@linaro.org>
-Cc:     Rob Clark <robdclark@gmail.com>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Akhil P Oommen <quic_akhilpo@quicinc.com>,
-        linux-arm-msm@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        freedreno@lists.freedesktop.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Rob Clark <robdclark@chromium.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230216051750.3125598-17-surenb@google.com>
+X-Spam-Status: No, score=2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,HK_RANDOM_ENVFROM,
+        HK_RANDOM_FROM,RCVD_IN_DNSWL_NONE,RCVD_IN_SBL_CSS,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: **
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 23 Feb 2023 at 15:49, Konrad Dybcio <konrad.dybcio@linaro.org> wrote:
+On Wed, Feb 15, 2023 at 09:17:31PM -0800, Suren Baghdasaryan wrote:
+> Decisions about whether VMAs can be merged, split or expanded must be
+> made while VMAs are protected from the changes which can affect that
+> decision. For example, merge_vma uses vma->anon_vma in its decision
+
+Did you mean vma_merge()?
+
+> whether the VMA can be merged. Meanwhile, page fault handler changes
+> vma->anon_vma during COW operation.
+> Write-lock all VMAs which might be affected by a merge or split operation
+> before making decision how such operations should be performed.
 >
->
->
-> On 23.02.2023 14:06, Dmitry Baryshkov wrote:
-> > On Thu, 23 Feb 2023 at 14:07, Konrad Dybcio <konrad.dybcio@linaro.org> wrote:
-> >>
-> >> According to the vendor sources, it's equal to 16, which makes hbb_lo
-> >> equal to 3.
-> >
-> > I think we might be stricken with the ddr kind difference here, but I
-> > would not bet on it.
-> It totally is, but it also seems to be SoC-dependent..
-> I think all 8180x devices shipped with LPDDR4X FWIW
 
-I think so too. However sdmshrike dts uses LPDDR5.
+It doesn't make sense (to me) to update vma->anon_vma during COW fault.
 
->
-> Konrad
-> >
-> >>
-> >> Fixes: 840d10b64dad ("drm: msm: Add 680 gpu to the adreno gpu list")
-> >> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
-> >> ---
-> >>  drivers/gpu/drm/msm/adreno/a6xx_gpu.c | 8 +++++++-
-> >>  1 file changed, 7 insertions(+), 1 deletion(-)
-> >>
-> >> diff --git a/drivers/gpu/drm/msm/adreno/a6xx_gpu.c b/drivers/gpu/drm/msm/adreno/a6xx_gpu.c
-> >> index b5017c56fa1b..2c4afecdd213 100644
-> >> --- a/drivers/gpu/drm/msm/adreno/a6xx_gpu.c
-> >> +++ b/drivers/gpu/drm/msm/adreno/a6xx_gpu.c
-> >> @@ -885,12 +885,18 @@ static void a6xx_set_ubwc_config(struct msm_gpu *gpu)
-> >>                 hbb_lo = 2;
-> >>         }
-> >>
-> >> -       if (adreno_is_a640_family(adreno_gpu)) {
-> >> +       if (adreno_is_a640(adreno_gpu)) {
-> >>                 amsbc = 1;
-> >>                 /* HBB = 15 */
-> >>                 hbb_lo = 2;
-> >>         }
-> >>
-> >> +       if (adreno_is_a680(adreno_gpu)) {
-> >> +               amsbc = 1;
-> >> +               /* HBB = 16 */
-> >> +               hbb_lo = 3;
-> >> +       }
-> >> +
-> >>         if (adreno_is_a650(adreno_gpu) || adreno_is_a660(adreno_gpu)) {
-> >>                 amsbc = 1;
-> >>                 /* TODO: get ddr type from bootloader and use 2 for LPDDR4 */
-> >>
-> >> --
-> >> 2.39.2
-> >>
-> >
-> >
+AFAIK children's vma->anon_vma is allocated during fork() and
+page->anon_vma is updated on COW to reduce rmap walking because it's now
+unshared, no?
 
+As patch 26 just falls back to mmap_lock if no anon_vma is set,
+I think we can assume nothing updates vma->anon_vma (and its interval
+tree) if we are holding mmap_lock in write mode.
 
+Or am I missing something?
 
--- 
-With best wishes
-Dmitry
+--
+Regards,
+Hyeonggon
