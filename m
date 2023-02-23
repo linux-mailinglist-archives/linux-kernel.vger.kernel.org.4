@@ -2,127 +2,158 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7FFCF6A0607
+	by mail.lfdr.de (Postfix) with ESMTP id D55D76A0608
 	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 11:23:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233783AbjBWKXL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Feb 2023 05:23:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54560 "EHLO
+        id S233910AbjBWKXO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Feb 2023 05:23:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55228 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233910AbjBWKWg (ORCPT
+        with ESMTP id S234214AbjBWKW6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Feb 2023 05:22:36 -0500
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F7CB4FC84;
-        Thu, 23 Feb 2023 02:22:31 -0800 (PST)
-Received: from pps.filterd (m0279869.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 31N2R16e005929;
-        Thu, 23 Feb 2023 10:22:16 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=sSP+qmgsxXr2sGqfpiPkDCc3EDwwHf/hj8AkhCmtSKQ=;
- b=SFWSOibVLV6wWLUIJ6TG1mVDDj5kvMz1HfG/qGPTOA3m+Mu44s4nwAU3Sr9uVvD2akQn
- QyU0ulfkfLkd+Br9IzQddZPWoDzMZfYUur1Sq0LRHzdoA+e4LZ/dm/Bxb5DldZLXKFyo
- fhZfUh9IYIMtWkM79C1OUYZyBpszQgcVpr3ugx3VAvRunBu2vTtgSu2gVKNo6F/AyYJu
- 1Mzf5BjTYRZxBVc27FN//4uKHyZmCyIOW/PA9dvwkxutz45VB3+NFaF0bcrekORYFHFy
- VBke489vJNG6iJaS2xfWOtk1fJ0+5rtz718hSO0kDyS0ud6AYMZ8WjH3rTvq5O50th75 BA== 
-Received: from nasanppmta04.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3nwybm0yud-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 23 Feb 2023 10:22:16 +0000
-Received: from nasanex01a.na.qualcomm.com ([10.52.223.231])
-        by NASANPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 31NAMFlL008110
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 23 Feb 2023 10:22:15 GMT
-Received: from [10.239.155.136] (10.80.80.8) by nasanex01a.na.qualcomm.com
- (10.52.223.231) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.41; Thu, 23 Feb
- 2023 02:22:10 -0800
-Message-ID: <bb96b0c4-d1ef-c198-3e07-d83621010a7e@quicinc.com>
-Date:   Thu, 23 Feb 2023 18:22:08 +0800
+        Thu, 23 Feb 2023 05:22:58 -0500
+Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01DF12D66
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Feb 2023 02:22:54 -0800 (PST)
+Received: by mail-pj1-x1029.google.com with SMTP id k21-20020a17090aaa1500b002376652e160so1129116pjq.0
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Feb 2023 02:22:54 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=anyfinetworks-com.20210112.gappssmtp.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=8XdgTiTQNQEwsXE5pqovlVd84glWLCGpX2xXzua3LWo=;
+        b=VSUKpsgMMB3wW4V/PL/BsM/fogLl/13whlKI52Bd29FJSvDxaM+KHBEcBBJ0lf2Skt
+         s94Hco/mdtp9QSRaDMDdC2xam7ldKj1iYv0lWMBTkhBXalm3gBd0+C7/OeQ7vuVPb4Jr
+         sqFGryW442ZIWkxq/nTLDXmlX36nsrmzua2/sgzayKhVIIH9dZlQ3/b1ekO6AuOIFoQl
+         eb2tVsGAzmwNJQ6/eMSuWIym51Pma27tVy+R7RMCSvgU0zW8z/VSM3mcD75AwnsSlm3D
+         i7GwpYj1gyabBmXQP4sObtEh909yV64c1/GhKjjqFZhNeuD1BBIdSCAsVHSW0qQ19/QG
+         bxsQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=8XdgTiTQNQEwsXE5pqovlVd84glWLCGpX2xXzua3LWo=;
+        b=HrZasL5ts5g/MLDNEjSRUDv8kLPaLkxw2yWzCe+DAykPvsQDxxaBuvAk5m1P//ifX2
+         o922bJN8ueNKDq+1kCwnc+Hbt337RQ32NDLbnUjDJ90ZfrGcVmxQ6qAz+UMOn8eE9R6P
+         nT9CW5IS7rKnZD3DLHvOdHCbAhxMEp31RLXtgRzAncAWBjrZkypB2MI9aKLQYNnTQrdL
+         vye6Zcg0wiPV1WarRYE2R56kZrzpQBAThjMUblBTfore8U3LLP37o9GtxUdWwPKAV9nM
+         eGPxA6sJaeQ/cO7uVyj8x0a1ebLKUoxLpwpmKYiLQJXLxk7QogrLQqI+jFhumY/NAd62
+         gTgA==
+X-Gm-Message-State: AO0yUKUJD5byt8OB1GevRHzKCvHTqehLo26vbuDj1E3Vh0v57RXjKjTU
+        yPfvAdkoOT97sNn2UKc7WNutDsLYG48JFa80lt0zng==
+X-Google-Smtp-Source: AK7set9I0Pd1vzjhdIfJFuY1Qt1ZAEkjuKoYDYuiisbN1VUQrOG44GsRAR3GmjhiWJl7kyBTulghkDn8DFnffgIEDVs=
+X-Received: by 2002:a17:90b:384d:b0:237:50b6:983c with SMTP id
+ nl13-20020a17090b384d00b0023750b6983cmr1056123pjb.116.1677147774407; Thu, 23
+ Feb 2023 02:22:54 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Subject: Re: [PATCH v2 1/7] scsi: ufs: core: Fix mcq tag calcualtion
-Content-Language: en-US
-To:     Po-Wen Kao <powen.kao@mediatek.com>, <linux-scsi@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Avri Altman <avri.altman@wdc.com>,
-        Bart Van Assche <bvanassche@acm.org>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        <quic_cang@quicinc.com>, <quic_asutoshd@quicinc.com>
-CC:     <wsd_upstream@mediatek.com>, <peter.wang@mediatek.com>,
-        <stanley.chu@mediatek.com>, <alice.chao@mediatek.com>,
-        <naomi.chu@mediatek.com>, <chun-hung.wu@mediatek.com>,
-        <cc.chou@mediatek.com>, <eddie.huang@mediatek.com>,
-        <mason.zhang@mediatek.com>, <chaotian.jing@mediatek.com>,
-        <jiajie.hao@mediatek.com>
-References: <20230222030427.957-1-powen.kao@mediatek.com>
- <20230222030427.957-2-powen.kao@mediatek.com>
-From:   Ziqi Chen <quic_ziqichen@quicinc.com>
-In-Reply-To: <20230222030427.957-2-powen.kao@mediatek.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nasanex01a.na.qualcomm.com (10.52.223.231)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: 4gYogiX9VRbIXWwhX1NoQAqpeTHa_-uI
-X-Proofpoint-GUID: 4gYogiX9VRbIXWwhX1NoQAqpeTHa_-uI
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.170.22
- definitions=2023-02-23_06,2023-02-23_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=999
- suspectscore=0 phishscore=0 spamscore=0 priorityscore=1501 adultscore=0
- impostorscore=0 bulkscore=0 lowpriorityscore=0 malwarescore=0 mlxscore=0
- clxscore=1015 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2302230088
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20230222161222.11879-1-jiaxun.yang@flygoat.com> <20230222161222.11879-3-jiaxun.yang@flygoat.com>
+In-Reply-To: <20230222161222.11879-3-jiaxun.yang@flygoat.com>
+From:   Johan Almbladh <johan.almbladh@anyfinetworks.com>
+Date:   Thu, 23 Feb 2023 11:22:43 +0100
+Message-ID: <CAM1=_QTDkYJANgxYwkgPZB+hUX6Rr_Pvnn7cFwSJFHQtLrpQMA@mail.gmail.com>
+Subject: Re: [PATCH 2/2] MIPS: ebpf jit: Implement R4000 workarounds
+To:     Jiaxun Yang <jiaxun.yang@flygoat.com>
+Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+        tsbogend@alpha.franken.de, paulburton@kernel.org,
+        bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-On 2/22/2023 11:04 AM, Po-Wen Kao wrote:
-> Transfer command descriptor is allocated in ufshcd_memory_alloc()
-> and referenced by transfer request descriptor with stride size
-> sizeof_utp_transfer_cmd_desc()
-> instead of
-> sizeof(struct utp_transfer_cmd_desc).
+On Wed, Feb 22, 2023 at 5:12 PM Jiaxun Yang <jiaxun.yang@flygoat.com> wrote:
 >
-> Consequently, computing tag by address offset should also refer to the
-> same stride.
+> For R4000 erratas around multiplication and division instructions,
+> as our use of those instructions are always followed by mflo/mfhi
+> instructions, the only issue we need care is
 >
-> Signed-off-by: Po-Wen Kao <powen.kao@mediatek.com>
-> Reviewed-by: Bart Van Assche <bvanassche@acm.org>
-> Reviewed-by: Manivannan Sadhasivam <mani@kernel.org>
-> Reviewed-by: Stanley Chu <stanley.chu@mediatek.com>
-reviewed-by:  Ziqi Chen <quic_ziqichen@quicinc.com>
+> "MIPS R4000PC/SC Errata, Processor Revision 2.2 and 3.0" Errata 28:
+> "A double-word or a variable shift may give an incorrect result if
+> executed while an integer multiplication is in progress."
+>
+> We just emit a mfhi $0 to ensure the operation is completed after
+> every multiplication instruction accorading to workaround suggestion
+> in the document.
+>
+> Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
 > ---
->   drivers/ufs/core/ufs-mcq.c | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
+>  arch/mips/Kconfig              | 4 +---
+>  arch/mips/net/bpf_jit_comp32.c | 4 ++++
+>  arch/mips/net/bpf_jit_comp64.c | 3 +++
+>  3 files changed, 8 insertions(+), 3 deletions(-)
 >
-> diff --git a/drivers/ufs/core/ufs-mcq.c b/drivers/ufs/core/ufs-mcq.c
-> index 31df052fbc41..3a27fa4b0024 100644
-> --- a/drivers/ufs/core/ufs-mcq.c
-> +++ b/drivers/ufs/core/ufs-mcq.c
-> @@ -265,7 +265,7 @@ static int ufshcd_mcq_get_tag(struct ufs_hba *hba,
->   	addr = (le64_to_cpu(cqe->command_desc_base_addr) & CQE_UCD_BA) -
->   		hba->ucdl_dma_addr;
->   
-> -	return div_u64(addr, sizeof(struct utp_transfer_cmd_desc));
-> +	return div_u64(addr, sizeof_utp_transfer_cmd_desc(hba));
->   }
->   
->   static void ufshcd_mcq_process_cqe(struct ufs_hba *hba,
+> diff --git a/arch/mips/Kconfig b/arch/mips/Kconfig
+> index df0910e3895c..5ea07c833c5b 100644
+> --- a/arch/mips/Kconfig
+> +++ b/arch/mips/Kconfig
+> @@ -63,9 +63,7 @@ config MIPS
+>         select HAVE_DEBUG_STACKOVERFLOW
+>         select HAVE_DMA_CONTIGUOUS
+>         select HAVE_DYNAMIC_FTRACE
+> -       select HAVE_EBPF_JIT if !CPU_MICROMIPS && \
+> -                               !CPU_R4000_WORKAROUNDS && \
+> -                               !CPU_R4400_WORKAROUNDS
+
+Is the R4400 errata also covered by this workaround?
+
+> +       select HAVE_EBPF_JIT if !CPU_MICROMIPS
+>         select HAVE_EXIT_THREAD
+>         select HAVE_FAST_GUP
+>         select HAVE_FTRACE_MCOUNT_RECORD
+> diff --git a/arch/mips/net/bpf_jit_comp32.c b/arch/mips/net/bpf_jit_comp32.c
+> index ace5db3fbd17..fee334544d2f 100644
+> --- a/arch/mips/net/bpf_jit_comp32.c
+> +++ b/arch/mips/net/bpf_jit_comp32.c
+> @@ -446,6 +446,9 @@ static void emit_mul_i64(struct jit_context *ctx, const u8 dst[], s32 imm)
+>                 } else {
+>                         emit(ctx, multu, hi(dst), src);
+>                         emit(ctx, mflo, hi(dst));
+> +                       /* Ensure multiplication is completed */
+> +                       if (IS_ENABLED(CONFIG_CPU_R4000_WORKAROUNDS))
+> +                               emit(ctx, mfhi, MIPS_R_ZERO);
+>                 }
+>
+>                 /* hi(dst) = hi(dst) - lo(dst) */
+> @@ -504,6 +507,7 @@ static void emit_mul_r64(struct jit_context *ctx,
+>         } else {
+>                 emit(ctx, multu, lo(dst), lo(src));
+>                 emit(ctx, mflo, lo(dst));
+> +               /* No need for workaround because we have this mfhi */
+>                 emit(ctx, mfhi, tmp);
+>         }
+
+R4000 is a 64-bit CPU, so the 32-bit JIT implementation will not be
+used. From the Makefile:
+
+ifeq ($(CONFIG_32BIT),y)
+        obj-$(CONFIG_BPF_JIT) += bpf_jit_comp32.o
+else
+        obj-$(CONFIG_BPF_JIT) += bpf_jit_comp64.o
+endif
+
+>
+> diff --git a/arch/mips/net/bpf_jit_comp64.c b/arch/mips/net/bpf_jit_comp64.c
+> index 0e7c1bdcf914..5f5a93f997bc 100644
+> --- a/arch/mips/net/bpf_jit_comp64.c
+> +++ b/arch/mips/net/bpf_jit_comp64.c
+> @@ -228,6 +228,9 @@ static void emit_alu_r64(struct jit_context *ctx, u8 dst, u8 src, u8 op)
+>                 } else {
+>                         emit(ctx, dmultu, dst, src);
+>                         emit(ctx, mflo, dst);
+> +                       /* Ensure multiplication is completed */
+> +                       if (IS_ENABLED(CONFIG_CPU_R4000_WORKAROUNDS))
+> +                               emit(ctx, mfhi, MIPS_R_ZERO);
+>                 }
+>                 break;
+>         /* dst = dst / src */
+> --
+> 2.37.1 (Apple Git-137.1)
+>
