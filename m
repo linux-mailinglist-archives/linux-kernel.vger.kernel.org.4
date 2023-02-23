@@ -2,48 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6FDBC6A044E
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 09:59:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AAADB6A0455
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 10:01:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233784AbjBWI7u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Feb 2023 03:59:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57018 "EHLO
+        id S233495AbjBWJB1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Feb 2023 04:01:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58284 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233795AbjBWI7r (ORCPT
+        with ESMTP id S232992AbjBWJBZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Feb 2023 03:59:47 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84AAE9038
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Feb 2023 00:59:45 -0800 (PST)
+        Thu, 23 Feb 2023 04:01:25 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 677ED9038
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Feb 2023 01:01:24 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E03AF6162D
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Feb 2023 08:59:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DC9BBC433D2;
-        Thu, 23 Feb 2023 08:59:43 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id BA63861620
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Feb 2023 09:01:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B2DE5C433EF;
+        Thu, 23 Feb 2023 09:01:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1677142784;
-        bh=J8nnrBdWTIKTWddQki9KBEee0EDm+ZpWZVqy2Kac1JE=;
+        s=k20201202; t=1677142883;
+        bh=dz6gr3H9WtWPEo0tkI8j4/8XKd4WRZTWJZAJ1Gjjs/4=;
         h=Date:From:To:Cc:Subject:From;
-        b=Rf+9cWbesiWSrPKcxgLLdnbEs2aS8DcYi5nNsBLIA5TN3c+3XskaddaSAC8DbkX7e
-         eT8bY2e/4UGDXWT3jQZJ9XpCRfrmMZx9zu2XZ4SBdkldCSmVBc7XcvxUgt6Wyi9Wtf
-         vVu/bUG9jvlmIB1b4yfNHb2GyXJ0cZu8qHjTq/95TZ/eTBOVL6rx9wGX/Nuy0fL82G
-         UoQxY0UpaitwtJH4WPDxGFGB6bFbQR0apSNHKUsQV75rGs0Jg/VMALHlJy0Y2fVTcy
-         JckpAhtoApjUO8g700Oh2EfzhKr+sRimg5tXRcoxngBAKhB9s9S5+QVw9d8C2Tr3lg
-         H9R9lSvsItJjQ==
-Date:   Thu, 23 Feb 2023 08:59:40 +0000
+        b=pTsAHh9kNo2jyEcQv0qZPxXYbWtSkN0OqprO7sCay0JBTuxZ2XjSD15dfOGWmM/As
+         nv1l7IbxgDd6rgYgChqOgZrs86cVTRVuVea9uv++6HW4fLqaMSO1SoB7KTFt6LTzad
+         QN3r6IV6ITxverscFxeBRKmBVMt2ATroyzQTX4qZako2YCOgiYPwaehEhcQ+DhUdNt
+         oQ2SIj01xscnspnMZzjIQ0nIPuS+XkASaKn645bKMwBYHIbX3IW05pBxuA99UZvvAY
+         bA/ap3ETgBqDwzSRfYIaA/5F5GzEcmG661vtLdKSSjPMzwXmoZH/U8+fESTia0+H7C
+         AXHIIaew22Jtw==
+Date:   Thu, 23 Feb 2023 09:01:19 +0000
 From:   Lee Jones <lee@kernel.org>
 To:     Linus Torvalds <torvalds@linux-foundation.org>
 Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: [GIT PULL] MFD for v6.3
-Message-ID: <Y/cq/Im+leAX6XRn@google.com>
+Subject: [GIT PULL] Backlight for v6.3
+Message-ID: <Y/crX1pmBC0wBefi@google.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -59,199 +59,85 @@ The following changes since commit 1b929c02afd37871d5afb9d498426f83432e71c2:
 
 are available in the Git repository at:
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/lee/mfd.git tags/mfd-next-6.3
+  git://git.kernel.org/pub/scm/linux/kernel/git/lee/backlight.git tags/backlight-next-6.3
 
-for you to fetch changes up to 59c54c59974649b2e7bc92faae4a21e2b2408db2:
+for you to fetch changes up to ad614f81d2e8b9704478921935c75ccd4024b854:
 
-  dt-bindings: mfd: qcom,tcsr: Add compatible for IPQ5332 (2023-02-22 11:42:29 +0000)
+  backlight: ktz8866: Convert to i2c's .probe_new() (2023-02-22 10:55:28 +0000)
 
 ----------------------------------------------------------------
- - Core Frameworks
-   - Change MFD support status from Supported to Maintained
-
  - New Drivers
-   - Add support for the Intel Platform Management Component Interface (PMCI)
+   - Add support for Kinetic KTZ8866 Backlight
 
  - Remove Drivers
-   - HTC PASIC3 LED/DS1WM
-   - Toshiba T7L66XB, TC6387XB and TC6393XB TMIO
-
- - New Device Support
-   - Add support for N6000 Flash to Intel M10 BMC PMCI
-   - Add support for Lenovo Yoga Tab 3 to Intel CHTWC PMIC
-
- - New Functionality
-   - Provide Reset support to Syscon
+   - Toshiba Sharp SL-6000 LCD and Backlight
 
  - Fix-ups
-   - Explicitly provide missing include files
-   - Pass platform type data/info via the SPI/I2C/DT registration strategy
-   - Lots of DT documentation / adaptions
-   - Replace scnprintf() with preferred sysfs_emit()
-   - Remove unused / superfluous code
-   - Fix some trivial whitesspace / spelling / grammatical issues
-   - Replace pm_power_off with new and improved register_sys_off_handler() API
+   - Provide some profiling optimisations with respect to pwm_get_state() and pwm_apply_state()
+   - Make use of the dev_err_probe() API
+   - Provide some Device Tree documentation additions / adaptions
+   - Drop fall-back legacy PWM probing support
+   - Convert over to new I2C probing API
+   - Fix incorrect documentation
+   - Make use of backlight_get_brightness() API
 
  - Bug Fixes
-   - Reintroduce RK808-clkout registration - fixing Wi-Fi and Bluetooth
-   - Repair the order of AXPxxx IRQ PEK RISE/FALL definitions
-   - Refuse to build CS5535 on unsupported UML architectures
-   - Fix memory leaks in error return paths
-   - Prevent refcount leaks in error return paths
+   - Fix disabling backlight on i.MX6 when inverted PWMs are used
 
 ----------------------------------------------------------------
-Andreas Kemnade (2):
-      mfd: twl: Fix TWL6032 phy vbus detection
-      mfd: ntxec: Add version number for EC in Tolino Vision
-
-Aren Moynihan (1):
-      mfd: axp20x: Fix order of pek rise and fall events
-
 Arnd Bergmann (1):
-      mfd: Remove toshiba tmio drivers
+      backlight: Remove pxa tosa support
 
-Bernhard Rosenkränzer (1):
-      dt-bindings: mfd: syscon: Add mt8365-syscfg
+Jianhua Lu (2):
+      dt-bindings: leds: backlight: Add Kinetic KTZ8866 backlight
+      backlight: ktz8866: Add support for Kinetic KTZ8866 backlight
 
-Bhanu Prakash Maiya (1):
-      dt-bindings: mfd: cros-ec: Add compatible string for UART support
+Luca Weiss (1):
+      dt-bindings: backlight: qcom-wled: Add PMI8950 compatible
 
-Brad Larson (1):
-      dt-bindings: mfd: syscon: Add amd,pensando-elba-syscon compatible
-
-Geert Uytterhoeven (1):
-      mfd: core: Spelling s/compement/complement/
-
-Hans de Goede (3):
-      mfd: intel_soc_pmic_chtwc: Add Lenovo Yoga Tab 3 X90F to intel_cht_wc_models
-      i2c: cht-wc: Add charger-chip info for the Lenovo Yoga Tab 3 YT3-X90F
-      extcon: intel-cht-wc: Add support for Lenovo Yoga Tab 3 Pro YT3-X90F
-
-Ilpo Järvinen (11):
-      mfd: intel-m10-bmc: Add missing includes to header
-      mfd: intel-m10-bmc: Create m10bmc_platform_info for type specific info
-      mfd: intel-m10-bmc: Rename the local variables
-      mfd: intel-m10-bmc: Split into core and spi specific parts
-      mfd: intel-m10-bmc: Support multiple CSR register layouts
-      fpga: intel-m10-bmc: Rework flash read/write
-      mfd: intel-m10-bmc: Prefix register defines with M10BMC_N3000
-      fpga: m10bmc-sec: Create helpers for rsu status/progress checks
-      fpga: m10bmc-sec: Make rsu status type specific
-      mfd: intel-m10-bmc: Add PMCI driver
-      fpga: m10bmc-sec: Add support for N6000
-
-Jacky Bai (1):
-      dt-bindings: mfd: Add NXP BBNSM
-
-Jeremy Kerr (2):
-      dt-bindings: mfd/syscon: Add resets property
-      mfd: syscon: Allow reset control for syscon devices
-
-Jiapeng Chong (2):
-      mfd: qcom-pm8xxx: Remove set but unused variable 'rev'
-      mfd: max8925: Remove the unused function irq_to_max8925()
-
-Kathiravan T (1):
-      dt-bindings: mfd: qcom,tcsr: Add compatible for IPQ5332
-
-Lee Jones (3):
-      Merge tags 'ib-mfd-extcon-i2c-v6.3' and 'ib-mfd-fpga-hwmon-v6.3-1' into ibs-for-mfd-merged
-      MAINTAINERS: Move MFD from a Supported to Maintaied state
-      mfd: simple-mfd-i2c: Fix incoherent comment regarding DT registration
-
-Liang He (1):
-      mfd: arizona: Use pm_runtime_resume_and_get() to prevent refcnt leak
-
-Matti Lehtimäki (1):
-      dt-bindings: mfd: qcom,tcsr: Add compatible for MSM8226
-
-Neil Armstrong (1):
-      dt-bindings: mfd: qcom,spmi-pmic: Document PMICs bundled with SM8550
-
-Nick Hawkins (1):
-      dt-bindings: mfd: syscon: Document GXP register compatible
-
-Qiheng Lin (1):
-      mfd: pcf50633-adc: Fix potential memleak in pcf50633_adc_async_read()
+Miaoqian Lin (1):
+      backlight: backlight: Fix doc for backlight_device_get_by_name
 
 Randy Dunlap (1):
-      mfd: cs5535: Don't build on UML
+      backlight: sky81452: Fix sky81452_bl_platform_data kernel-doc
 
-Samuel Holland (1):
-      mfd: axp20x: Switch to the sys-off handler API
+Stephen Kitt (3):
+      backlight: arcxcnn: Use backlight helper
+      backlight: ipaq_micro: Use backlight helper
+      backlight: aat2870: Use backlight helper
 
-Tom Fitzhenry (1):
-      mfd: rk808: Re-add rk808-clkout to RK818
+Uwe Kleine-König (4):
+      backlight: pwm_bl: Drop support for legacy PWM probing
+      backlight: pwm_bl: Configure pwm only once per backlight toggle
+      backlight: pwm_bl: Don't rely on a disabled PWM emiting inactive state
+      backlight: ktz8866: Convert to i2c's .probe_new()
 
-Uwe Kleine-König (1):
-      mfd: twl4030-power: Drop empty platform remove function
+Yang Yingliang (1):
+      backlight: ktd253: Switch to use dev_err_probe() helper
 
-ye xingchen (1):
-      mfd: Use sysfs_emit() to instead of scnprintf()
-
- .../ABI/testing/sysfs-driver-intel-m10-bmc         |    8 +-
- .../devicetree/bindings/mfd/google,cros-ec.yaml    |   20 +
- .../devicetree/bindings/mfd/nxp,bbnsm.yaml         |  101 ++
- .../devicetree/bindings/mfd/qcom,spmi-pmic.yaml    |    7 +
- .../devicetree/bindings/mfd/qcom,tcsr.yaml         |    2 +
- Documentation/devicetree/bindings/mfd/syscon.yaml  |    6 +
- MAINTAINERS                                        |    4 +-
- drivers/extcon/extcon-intel-cht-wc.c               |    1 +
- drivers/fpga/Kconfig                               |    2 +-
- drivers/fpga/intel-m10-bmc-sec-update.c            |  415 +++++---
- drivers/hwmon/Kconfig                              |    2 +-
- drivers/i2c/busses/i2c-cht-wc.c                    |   46 +
- drivers/mfd/Kconfig                                |   71 +-
- drivers/mfd/Makefile                               |    9 +-
- drivers/mfd/arizona-core.c                         |    2 +-
- drivers/mfd/asic3.c                                | 1071 --------------------
- drivers/mfd/axp20x.c                               |   27 +-
- drivers/mfd/intel-m10-bmc-core.c                   |  122 +++
- drivers/mfd/intel-m10-bmc-pmci.c                   |  455 +++++++++
- drivers/mfd/intel-m10-bmc-spi.c                    |  168 +++
- drivers/mfd/intel-m10-bmc.c                        |  238 -----
- drivers/mfd/intel_soc_pmic_chtwc.c                 |    8 +
- drivers/mfd/kempld-core.c                          |    7 +-
- drivers/mfd/lm3533-core.c                          |    2 +-
- drivers/mfd/max8925-core.c                         |    6 -
- drivers/mfd/ntxec.c                                |    1 +
- drivers/mfd/pcf50633-adc.c                         |    7 +-
- drivers/mfd/qcom-pm8xxx.c                          |    3 -
- drivers/mfd/rk808.c                                |    1 +
- drivers/mfd/simple-mfd-i2c.c                       |    2 +-
- drivers/mfd/syscon.c                               |   27 +-
- drivers/mfd/t7l66xb.c                              |  427 --------
- drivers/mfd/tc6387xb.c                             |  228 -----
- drivers/mfd/tc6393xb.c                             |  907 -----------------
- drivers/mfd/tmio_core.c                            |   70 --
- drivers/mfd/twl-core.c                             |    9 +-
- drivers/mfd/twl4030-power.c                        |    6 -
- include/linux/mfd/asic3.h                          |  313 ------
- include/linux/mfd/axp20x.h                         |   15 +-
- include/linux/mfd/core.h                           |    2 +-
- include/linux/mfd/intel-m10-bmc.h                  |  205 +++-
- include/linux/mfd/intel_soc_pmic.h                 |    1 +
- include/linux/mfd/ntxec.h                          |    2 +-
- include/linux/mfd/t7l66xb.h                        |   29 -
- include/linux/mfd/tc6387xb.h                       |   19 -
- include/linux/mfd/tc6393xb.h                       |   53 -
- include/linux/mfd/tmio.h                           |    5 -
- include/linux/mfd/twl.h                            |    2 +
- 48 files changed, 1479 insertions(+), 3655 deletions(-)
- create mode 100644 Documentation/devicetree/bindings/mfd/nxp,bbnsm.yaml
- delete mode 100644 drivers/mfd/asic3.c
- create mode 100644 drivers/mfd/intel-m10-bmc-core.c
- create mode 100644 drivers/mfd/intel-m10-bmc-pmci.c
- create mode 100644 drivers/mfd/intel-m10-bmc-spi.c
- delete mode 100644 drivers/mfd/intel-m10-bmc.c
- delete mode 100644 drivers/mfd/t7l66xb.c
- delete mode 100644 drivers/mfd/tc6387xb.c
- delete mode 100644 drivers/mfd/tc6393xb.c
- delete mode 100644 drivers/mfd/tmio_core.c
- delete mode 100644 include/linux/mfd/asic3.h
- delete mode 100644 include/linux/mfd/t7l66xb.h
- delete mode 100644 include/linux/mfd/tc6387xb.h
- delete mode 100644 include/linux/mfd/tc6393xb.h
+ .../bindings/leds/backlight/kinetic,ktz8866.yaml   |  76 ++++++
+ .../bindings/leds/backlight/qcom-wled.yaml         |   1 +
+ MAINTAINERS                                        |   6 +
+ drivers/video/backlight/Kconfig                    |  22 +-
+ drivers/video/backlight/Makefile                   |   3 +-
+ drivers/video/backlight/aat2870_bl.c               |   7 +-
+ drivers/video/backlight/arcxcnn_bl.c               |   5 +-
+ drivers/video/backlight/backlight.c                |   2 +-
+ drivers/video/backlight/ipaq_micro_bl.c            |   7 +-
+ drivers/video/backlight/ktd253-backlight.c         |   9 +-
+ drivers/video/backlight/ktz8866.c                  | 208 +++++++++++++++
+ drivers/video/backlight/pwm_bl.c                   |  68 +++--
+ drivers/video/backlight/sky81452-backlight.c       |   2 +-
+ drivers/video/backlight/tosa_bl.c                  | 172 -------------
+ drivers/video/backlight/tosa_bl.h                  |   8 -
+ drivers/video/backlight/tosa_lcd.c                 | 284 ---------------------
+ include/linux/pwm_backlight.h                      |   1 -
+ 17 files changed, 339 insertions(+), 542 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/leds/backlight/kinetic,ktz8866.yaml
+ create mode 100644 drivers/video/backlight/ktz8866.c
+ delete mode 100644 drivers/video/backlight/tosa_bl.c
+ delete mode 100644 drivers/video/backlight/tosa_bl.h
+ delete mode 100644 drivers/video/backlight/tosa_lcd.c
 
 -- 
 Lee Jones [李琼斯]
