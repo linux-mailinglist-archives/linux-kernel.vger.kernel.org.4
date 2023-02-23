@@ -2,100 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 61AD96A08C4
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 13:42:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A5176A08BD
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 13:42:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234104AbjBWMmq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Feb 2023 07:42:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38686 "EHLO
+        id S234007AbjBWMmT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Feb 2023 07:42:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38870 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233795AbjBWMmn (ORCPT
+        with ESMTP id S229745AbjBWMmQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Feb 2023 07:42:43 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A672C54A25
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Feb 2023 04:41:55 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1677156114;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=o6Cqo7+PwcBu/zopx2C+yPrKMjZcg1DLK1AXw2nlKyc=;
-        b=a6GIX95aON4qxsNn24h1TixsoxqW62qO3FH+nH+wDwqqplInDpcF6wvXIQVevUyHLwjXLQ
-        gTAFDV7wnPHtQsEjkJ0qdKPgFnjQM/+/Lr9q3kQa2wdW6NSblIvkIIE6O2UX8LnznbJAu4
-        LkhSo+QMEU4AZl3fAy4+Hreousf7Va0=
-Received: from mail-qt1-f200.google.com (mail-qt1-f200.google.com
- [209.85.160.200]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-433-nrWhN8IvO5ulfAy-DoL2fg-1; Thu, 23 Feb 2023 07:41:53 -0500
-X-MC-Unique: nrWhN8IvO5ulfAy-DoL2fg-1
-Received: by mail-qt1-f200.google.com with SMTP id g10-20020ac8070a000000b003b849aa2cd6so4984028qth.15
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Feb 2023 04:41:53 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1677156113;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=o6Cqo7+PwcBu/zopx2C+yPrKMjZcg1DLK1AXw2nlKyc=;
-        b=iURmd5Q+dZYLt/+8/cJAHSbELthfGdD4YEx5Mwt2HBJQ7+unojD8N1vba0H/dG0RDF
-         mprzKLwsmxl1D4E4IhM/KtHPRIqOBAsI9y+pp/yOt8o9i9/pg5g65k4/xn812CLzmzB3
-         qteWG3X2IGTgxVuYQoHDoiBDdiwM9zC3L0UXncQE5Rp3GkRmowvqfsOhzUU9K2AWcwtR
-         NqYIsvI2WpHTpyUKIEihkmHqrYGeP7zbXHcZ1KBK8qqxL2Zoqy7LPtKY0766Lfaubf7/
-         qewsI0hVe2JijST3YWNKOCnxGtadnL24fwIH9DS1wlsoV5TsP9wKFs+T6GP8y3s/mfrs
-         xJOw==
-X-Gm-Message-State: AO0yUKUUG3BSlUb9Jz01hyX7crsw8+RNFC8aJ5ygzTS/Pg9/wIA7K/0y
-        4L7G0nT5BDg5iZIK1n9Unv0jfLGWva9lhIu9hMtfBVGTugFm2UKt8PgXlJ/UttlSCKFzuGRCVFw
-        sJjW6740Ig+CRdhqlq8j1j+nf
-X-Received: by 2002:ac8:5995:0:b0:3bd:1c0f:74f3 with SMTP id e21-20020ac85995000000b003bd1c0f74f3mr22366175qte.2.1677156113148;
-        Thu, 23 Feb 2023 04:41:53 -0800 (PST)
-X-Google-Smtp-Source: AK7set+3uyz3sDwb9LtJ6nGo8zOM1FUmyOWM05R8WPDJXKNnIAmw/Eq4Z7znxYxIlsfhpY9MqMwlIA==
-X-Received: by 2002:ac8:5995:0:b0:3bd:1c0f:74f3 with SMTP id e21-20020ac85995000000b003bd1c0f74f3mr22366144qte.2.1677156112856;
-        Thu, 23 Feb 2023 04:41:52 -0800 (PST)
-Received: from gerbillo.redhat.com (146-241-121-8.dyn.eolo.it. [146.241.121.8])
-        by smtp.gmail.com with ESMTPSA id ca26-20020a05622a1f1a00b003b62e8b77e7sm6158821qtb.68.2023.02.23.04.41.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 23 Feb 2023 04:41:52 -0800 (PST)
-Message-ID: <633f202d784a8c67fb846336941ef3e22877d1c7.camel@redhat.com>
-Subject: Re: [PATCH net-next v2 1/1] net: openvswitch: Use on stack
- sw_flow_key in ovs_packet_cmd_execute
-From:   Paolo Abeni <pabeni@redhat.com>
-To:     Eddy Tao <taoyuan_eddy@hotmail.com>, netdev@vger.kernel.org
-Cc:     Pravin B Shelar <pshelar@ovn.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>, dev@openvswitch.org,
-        linux-kernel@vger.kernel.org
-Date:   Thu, 23 Feb 2023 13:41:49 +0100
-In-Reply-To: <OS3P286MB22957CD400DAAAB7786FEF96F5AB9@OS3P286MB2295.JPNP286.PROD.OUTLOOK.COM>
-References: <OS3P286MB229572718C0B4E7229710062F5AB9@OS3P286MB2295.JPNP286.PROD.OUTLOOK.COM>
-         <OS3P286MB22957CD400DAAAB7786FEF96F5AB9@OS3P286MB2295.JPNP286.PROD.OUTLOOK.COM>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.46.4 (3.46.4-1.fc37) 
+        Thu, 23 Feb 2023 07:42:16 -0500
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1136D54A22;
+        Thu, 23 Feb 2023 04:42:14 -0800 (PST)
+Received: from pps.filterd (m0279870.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 31NBcPlF014748;
+        Thu, 23 Feb 2023 12:42:11 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-type; s=qcppdkim1;
+ bh=npYmGH4wMPz5aLRtLbn2HyhO0pC0Ed0vtXnCx3ApF5s=;
+ b=dzp4sKx3/8zGEuPTcMCyMh43EWHOjxk4cmVumtg3KeQJqgUUseIk9ULMmY1CSU9vkE4q
+ DyI3mqqFCfO3Ou8hk/dwD7TZ9NJTXULCLmwl0SCGmNRMHPJLTMAXBQuQuVtQLymHIKgG
+ nzvAV2PPjFUCEMMWiAWt020I/exiKle9ulMk0RbHlBwHvdzsn6IPqt4HP00h8MQFMzSN
+ 5ek7FfMzIM7FnmKU0Z7J/DUCCaDGXLVwHeL7s85NkNZjJh7JdhQ2rffpkmYPnGd0Wawn
+ s2dYuOHi/8vm8MmHeEjA8YfEXk4HKg9wsQMPY/Lw4BzNC2uMaFWMJj/o0qpGTDlGgo7j SQ== 
+Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3nwywd1852-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 23 Feb 2023 12:42:11 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 31NCg97o002458
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 23 Feb 2023 12:42:09 GMT
+Received: from hu-prashk-hyd.qualcomm.com (10.80.80.8) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.41; Thu, 23 Feb 2023 04:42:06 -0800
+From:   Prashanth K <quic_prashk@quicinc.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+        Jakob Koschel <jakobkoschel@gmail.com>,
+        =?UTF-8?q?J=C3=B3=20=C3=81gila=20Bitsch?= <jgilab@gmail.com>,
+        Alan Stern <stern@rowland.harvard.edu>
+CC:     Pratham Pratap <quic_ppratap@quicinc.com>,
+        Jack Pham <quic_jackp@quicinc.com>,
+        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        Prashanth K <quic_prashk@quicinc.com>
+Subject: [PATCH v3 0/2] Fix vbus draw of dwc3 gadget
+Date:   Thu, 23 Feb 2023 18:11:59 +0530
+Message-ID: <1677156121-30364-1-git-send-email-quic_prashk@quicinc.com>
+X-Mailer: git-send-email 2.7.4
 MIME-Version: 1.0
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: 67zeVVOYTYzQxPg2dJmnohv5baEdER09
+X-Proofpoint-ORIG-GUID: 67zeVVOYTYzQxPg2dJmnohv5baEdER09
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.170.22
+ definitions=2023-02-23_06,2023-02-23_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 malwarescore=0
+ clxscore=1015 impostorscore=0 mlxscore=0 bulkscore=0 suspectscore=0
+ phishscore=0 lowpriorityscore=0 priorityscore=1501 mlxlogscore=357
+ adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2302230103
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 2023-02-23 at 20:24 +0800, Eddy Tao wrote:
-> Sorry, there is a typo in the mail, i will resend shortly,
+Changes in v3
+ - Fixed minor syntax error and warnings
 
-please, don't do that.
+Changes in v2
+ - Added min() calculation against CONFIG_USB_GADGET_VBUS_DRAW in case
+  of unconfigured state.
 
-# Form letter - net-next is closed
+Currently dwc3 gadget processes the suspend interrupt event only
+if the device is in configured state. But consider a case where
+device is not configured and got suspend interrupt, in that case
+our gadget would still use 100mA as composite_suspend didn't happen.
+But battery charging specification (BC1.2) expects a downstream
+device to draw less than 2.5mA when unconnected OR suspended.
 
-The merge window for v6.3 has begun and therefore net-next is closed
-for new drivers, features, code refactoring and optimizations.
-We are currently accepting bug fixes only.
+And while resuming, the gadget can draw upto 100mA if its not
+configured, but the current implementation of composite_resume
+doesn't consider the case of unconfigured device. This series
+addresses the above mentioned issues.
 
-Please repost when net-next reopens after Mar 6th.
+Prashanth K (2):
+  usb: dwc3: gadget: Change condition for processing suspend event
+  usb: gadget: composite: Draw 100mA current if not configured
 
-RFC patches sent for review only are obviously welcome at any time.
+ drivers/usb/dwc3/gadget.c      | 11 ++---------
+ drivers/usb/gadget/composite.c |  4 ++++
+ 2 files changed, 6 insertions(+), 9 deletions(-)
+
+-- 
+2.7.4
 
