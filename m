@@ -2,264 +2,160 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E69006A001D
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 01:35:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 24EFC6A001F
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 01:36:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232930AbjBWAfv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Feb 2023 19:35:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56088 "EHLO
+        id S232956AbjBWAf7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Feb 2023 19:35:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56164 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229999AbjBWAft (ORCPT
+        with ESMTP id S232935AbjBWAfx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Feb 2023 19:35:49 -0500
-Received: from wout4-smtp.messagingengine.com (wout4-smtp.messagingengine.com [64.147.123.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23B1B41B7C
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Feb 2023 16:35:47 -0800 (PST)
-Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
-        by mailout.west.internal (Postfix) with ESMTP id E62DB32007CF;
-        Wed, 22 Feb 2023 19:35:43 -0500 (EST)
-Received: from imap42 ([10.202.2.92])
-  by compute2.internal (MEProxy); Wed, 22 Feb 2023 19:35:44 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vda.io; h=cc:cc
-        :content-transfer-encoding:content-type:date:date:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to; s=fm2; t=1677112543; x=
-        1677198943; bh=1LuL2lxAEZ3ioWWd3Sd7n024glI+DuhFSxQnwzdtBog=; b=N
-        pxGZxVS1vCgKCLCBMNfDJLhn0uBhD1DyvRweIjqSltbQHm3MBa5OyYtWjNG1d8qx
-        kQrXAzXTQk7SjrC4hWBx7zamNdrKFP36SXaOYhgDV1vqO4ug6xRSDPsDM6L101fV
-        pqh/vnFBOptOAqx3a1RPXhAlkhcThptueSzcatwNzE/zkRsL+S4zQY3veRCCdIPF
-        wBecKQEc2VtojRwNAdpfF92HRGwfyQRdmA+V0tG5onoyGSSEzVxDhNX6lY7PZFmI
-        zNeU6e1UcX/2jlK3zENWdlNqO4kpld6E/BQKZlZMfcbpWugapKb2gWfiisV/0ia2
-        30w6fP2+e/i0AhDrT269A==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding
-        :content-type:date:date:feedback-id:feedback-id:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
-        :x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1677112543; x=
-        1677198943; bh=1LuL2lxAEZ3ioWWd3Sd7n024glI+DuhFSxQnwzdtBog=; b=X
-        xqiMx3K6FHYfKqUzXmJg9pXeOty4WLhW0T/YNwC9/xZSJNBZySaGDeri+KpzaNMX
-        SfO/JB8voLUFJzXXHn7iGFYu7s6LWlApgHUZjX6mvqCmgBU9D265c+AS7qJ3vv1W
-        uRFOmx+A3rVMWH2AWabSJ798VPZtNE7wIUzTG8DgtbEkYctzfrBoVj+nyAirAJYS
-        fNdLI+rgys5ndQkMuO7DIqFZdTQyFoGinzXLKef0A1db08TWvO43B5/oVLQHXgWq
-        6Tp85V6CcGDDHFotcPI4aOuJChSgSGSWOp3e0DwyKXAbrK7GL9BuwDswuPnSHE5D
-        rnGD7RSKKbFLS1vV3r6sQ==
-X-ME-Sender: <xms:3rT2Y4yN3orLvFhuHbL6SqxFxfZz3wOcarStmz5L0Ft29Cs0AvUwEQ>
-    <xme:3rT2Y8Qo9EBmbLNRo9C6eV5QUUQA0Q7BocPYoSplPuDKX6UkbS04fexr8PS5c-BpC
-    X7mJt7Q-YElmuNhyKA>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrudektddgvdegucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepofgfggfkjghffffhvfevufgtgfesthhqredtreerjeenucfhrhhomhepfdgg
-    ihhntggvnhhtucffrghgohhnnhgvrghufdcuoehvsehvuggrrdhioheqnecuggftrfgrth
-    htvghrnhepueekffeitdekfffffedvudeileeihedvvdejveehffejheehjeevtefgkedv
-    udevnecuffhomhgrihhnpehophgvnhhgrhhouhhprdhorhhgnecuvehluhhsthgvrhfuih
-    iivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepvhesvhgurgdrihho
-X-ME-Proxy: <xmx:3rT2Y6XLpYijVRP9jdPyDiP6qQ-eGwQf1OqLyYc004FbVTO7_VtFkQ>
-    <xmx:3rT2Y2hfjTqD6ljWh8SODiPi4qq_954TChDgO44SGcqOL-bR3-KSUg>
-    <xmx:3rT2Y6DTDFKFIWTu_7Ook_kN4UMVMQ37dCJfbVznYaVdKdE6q2zFPQ>
-    <xmx:37T2Y1rYAKl4ihoqhlKpLsDWBKUg-5Aw0Rn2S9BDTlu4HXqPRZmB7Q>
-Feedback-ID: ic7094478:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id E388CBC0078; Wed, 22 Feb 2023 19:35:42 -0500 (EST)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.9.0-alpha0-172-g9a2dae1853-fm-20230213.001-g9a2dae18
-Mime-Version: 1.0
-Message-Id: <4eb0228b-53e6-41b2-8daa-d1d07885ca80@app.fastmail.com>
-In-Reply-To: <78f08587-7719-40fa-a676-2ba6c4b39b42@t-8ch.de>
-References: <20230220202010.37475-1-v@vda.io>
- <20230220202010.37475-3-v@vda.io>
- <78f08587-7719-40fa-a676-2ba6c4b39b42@t-8ch.de>
-Date:   Wed, 22 Feb 2023 19:35:17 -0500
-From:   "Vincent Dagonneau" <v@vda.io>
-To:     =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <thomas@t-8ch.de>
-Cc:     linux-kernel@vger.kernel.org, "Willy Tarreau" <w@1wt.eu>
-Subject: Re: [PATCH v5 2/4] tools/nolibc: add integer types and integer limit macros
-Content-Type: text/plain;charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Wed, 22 Feb 2023 19:35:53 -0500
+Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2042.outbound.protection.outlook.com [40.107.93.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2CC3D38E88;
+        Wed, 22 Feb 2023 16:35:52 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=T0Wcgg2T78J6pQP8cM8MH4B/QKXcavmDQpP3b91NSIYBHeV6r2FStHcW2DYSchXEkxWaw1EQ2VBRUgizUxVummLvgD6NVMbECbvAiCpQqrrtxqt8mkNwum9Mnn01v3ce+idh4ePlgj1a+P0ByX0f/TJbOgB88Om4x8YqJPJmlInJh1GHAwcWWHPrjmoZci3nIv+AUuELIS4Kh0kRZKy7pNzKlG6yWIKKCmD4eYV9UVVH8wlQli+c2oZhomz/Y8WWjEETfF9AQWBCcoKeSzJG9/cAEFEECONCziTuOgc/tsJ98Qdo+z87v6Imsa2bvPC7PsV/3q8CnYu6QtBMpFNMNg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=xmNiOyhFz9DXx43kKHbLedhcqXbiD2keDGvvn4lrLkQ=;
+ b=IjI/XYBeNkuSqCimnRUE/s7PPJYq5ujmFERFV4ikn/TQkL37s9QSz/z4uMA0syHXqxpbr4W3kcNB47qPaQJxsjQJEudR9qARl80F7TXFOjAeh9YVwmLO4tMknCJurRikVynUvVLYoEVSFRZ2nNedG+LXbhayXMoRsJPg+Zqpn61AJuaaIUlxNxBcdqWAt2fpErGlX8QWaelO7eP9uv0eAw/MJEBYxNe0DxKOF+dzpiE8nAL/Y3MEryHT3Q4mSaIUddNMbV0mEzua5vFwDCD3Nf/x5tz7iHFbAcvK4a+5KwfFZrpCvrk+FwyxcxfMViHPaPYvHTT3aw1ke3oRdD1djQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=xmNiOyhFz9DXx43kKHbLedhcqXbiD2keDGvvn4lrLkQ=;
+ b=ccCeo35i/KGpkyBRMJz2hbnyIED9fU4v7FHELHC54QHHM1VXL7Z1vZYdoR7VU/8Nfy+ANGbWyrI0SVpjN8bV7agWTYjeSt+1VuRlUjAU8+PuxxkmBVsmaKE6eKunrmjpkcEjcRf4vlkZrNWXjyrlPrSFrZH+N8XQzrTKKsqRHzjGYe1QLus6svQlq+7i/7v4WdcXe3eAI0CA1bcv5KbK2TwtZYQeXNXbXOkWb60sJRQ8SAV5RkBa0azDhe+vt9SDhc0bgZtF3lHQDW/XDSxDn1srr0LKy2zXASd/4yaGVWACBePQow/gx6fn/k6H9tOfp/bkngiGD8ubw2j8VclYRw==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from BYAPR12MB3176.namprd12.prod.outlook.com (2603:10b6:a03:134::26)
+ by CH3PR12MB8354.namprd12.prod.outlook.com (2603:10b6:610:12f::21) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6134.19; Thu, 23 Feb
+ 2023 00:35:49 +0000
+Received: from BYAPR12MB3176.namprd12.prod.outlook.com
+ ([fe80::4bd4:de67:b676:67df]) by BYAPR12MB3176.namprd12.prod.outlook.com
+ ([fe80::4bd4:de67:b676:67df%6]) with mapi id 15.20.6111.021; Thu, 23 Feb 2023
+ 00:35:49 +0000
+References: <Y/T+pw25oGmKqz1k@nvidia.com> <Y/T/bkcYc9Krw4rE@slm.duckdns.org>
+ <Y/UEkNn0O65Pfi4e@nvidia.com> <Y/UIURDjR9pv+gzx@slm.duckdns.org>
+ <Y/Ua6VcNe/DFh7X4@nvidia.com> <Y/UfS8TDIXhUlJ/I@slm.duckdns.org>
+ <Y/UiQmuVwh2eqrfA@nvidia.com> <87o7pmnd0p.fsf@nvidia.com>
+ <Y/YRJNwwvqp7nKKt@nvidia.com> <87k009nvnr.fsf@nvidia.com>
+ <Y/at3iYz/xBSPPM+@infradead.org>
+User-agent: mu4e 1.8.10; emacs 28.2
+From:   Alistair Popple <apopple@nvidia.com>
+To:     Christoph Hellwig <hch@infradead.org>
+Cc:     Jason Gunthorpe <jgg@nvidia.com>, Tejun Heo <tj@kernel.org>,
+        Michal Hocko <mhocko@suse.com>,
+        Yosry Ahmed <yosryahmed@google.com>, linux-mm@kvack.org,
+        cgroups@vger.kernel.org, linux-kernel@vger.kernel.org,
+        jhubbard@nvidia.com, tjmercier@google.com, hannes@cmpxchg.org,
+        surenb@google.com, mkoutny@suse.com, daniel@ffwll.ch,
+        "Daniel P . Berrange" <berrange@redhat.com>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        Zefan Li <lizefan.x@bytedance.com>,
+        Andrew Morton <akpm@linux-foundation.org>
+Subject: Re: [PATCH 14/19] mm: Introduce a cgroup for pinned memory
+Date:   Thu, 23 Feb 2023 11:35:54 +1100
+In-reply-to: <Y/at3iYz/xBSPPM+@infradead.org>
+Message-ID: <87fsaxnrqa.fsf@nvidia.com>
+Content-Type: text/plain
+X-ClientProxiedBy: SY5PR01CA0030.ausprd01.prod.outlook.com
+ (2603:10c6:10:1f9::8) To BYAPR12MB3176.namprd12.prod.outlook.com
+ (2603:10b6:a03:134::26)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BYAPR12MB3176:EE_|CH3PR12MB8354:EE_
+X-MS-Office365-Filtering-Correlation-Id: 0c808221-5ac3-4f02-64d9-08db1535e902
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: AzBNy3gmSSykF91Y2a90xhRwb6aUejeGJIdml9JnOV/dIsyoNtJEWEabP8Bwo+xUhbYff+OIV3/ty4cFCeLObMmHGnF1FLEA1ZxXTpdTR5sQlYcBAgSYM72FN3p+/a//U3KMIJPvHiL+HoCgaw7C/8IxomN7OMmJnIId4ZpVSOiRG4BfLQ2g79SIRxEfcIxhpSg9VrlfyQWpqOVDXhnKa6LK0fYULN6qiw+530vdfM9cRxdlsSosviijIkULw7X0XbZwvPJ4fpEol0rvEfGR0MGpfObyJx0EyAiRfASgALwwetqWZ/3DqooR1gQeGjoO5ZkA4QvJ+S2Ef6AaqetMwRExRUyUDZYmVbF+wnzkvLX5stcYKgGLyBTmet9inCOAg7/YO8bFlOwWY8WhxTuu7ugO4lhZTywxrkFvP8IoFjB4MeGW0RBcBguy7iYXtH4n++rTv8dH1JSQfcDgDvvowvFFDj7JIjAlUmhqWl+zmTZf1JYUXLLHFKf0kT7TGH4LeyuZoZDCN5djDfsRIHSdlzU4gQ4vpqIaEQ4oYtsMta36f/snwGa59x+i+3SOfsb0A6hY7ymKZ6+JFJxKPkCkiSoZ1qMq6pT3TGj335uW+PxSBA4mMSQZp/FlStX2Q+y4m7da1eofaAuUr8IfrBW4xw==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR12MB3176.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(366004)(396003)(39860400002)(376002)(136003)(346002)(451199018)(36756003)(5660300002)(7416002)(2906002)(83380400001)(26005)(186003)(2616005)(38100700002)(66556008)(4326008)(66946007)(316002)(8676002)(66476007)(6916009)(41300700001)(54906003)(6666004)(6486002)(8936002)(478600001)(6512007)(86362001)(6506007);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?yLgT7/XTqULLC/3pEsuI+WrzdM2G/7wITQ2gXngBf2UpYPdoArHSgW6xnv1U?=
+ =?us-ascii?Q?Rvsf8WlZZLXcyIy/Ge/9QoV6sR3dNG0h0Fd3UGsOVeHcJ1btdEZ2WoH0/iK9?=
+ =?us-ascii?Q?GrnSDs7F2TdOX1hrEvAOGbWbqpj80CAFw8jwlcvB83hKG/Zh8Q47S64ck3Pf?=
+ =?us-ascii?Q?sohDYw+nQIaaxaHBHYK544GGZSbC7NsKM8gpR5cPWqRHQRP4vUS7yTZojBzy?=
+ =?us-ascii?Q?XQqcgJTT3DfsHw99uyAM7+k9+hq4PISNluwPCub2/KAozcSNjWXAoDFViqd+?=
+ =?us-ascii?Q?qTdZy1g6Wdzjn0dnJezw5mId/LvfTOUgw4YW3hll+1hpV9/ZOucIo/JsMgy5?=
+ =?us-ascii?Q?0EDfE9HTmKxwOfc4LqyxMgsICkm4L519a8SwR+TXY2zvvkPXfeB8a3p0WwqY?=
+ =?us-ascii?Q?BEJDxKW7PuyCk7yNJDaXl23G/ArtEJbl+YTfw7YTdJBxxJ7YKb+uZrg2aGFD?=
+ =?us-ascii?Q?gOGvHq9phVDT1udmIz50gX7acJjGU8KE51S+ltvQGf9wy5kAFawneLUz0rYH?=
+ =?us-ascii?Q?THFoeykOnOSUteWFuj+Y22QvUpG4Aqzju2zMhwnx635ITRF7c+e+m5D/QddN?=
+ =?us-ascii?Q?jZNMNLwP+L2M30QbS+c204pmz66IC8Un8xB+qD3Z3RMjB/AoHbo/pVUMrS2x?=
+ =?us-ascii?Q?/VnoiJYWHcDUbc86UMw1oTuev88SAeRuil1m56fda7VQfI2mFdu6t5o4B0nO?=
+ =?us-ascii?Q?aQiSYTAQeKyN9sRqaU2DaPSbF2STNhzfrAtKvSTfVE7BrskkUHm/EcZlgqbV?=
+ =?us-ascii?Q?uTFs7Mg8/mGro43wJJM/F6l3hnQz8iUwbBVplD3Wh8qhPxFlBKKSsE3Dmek0?=
+ =?us-ascii?Q?8d+LTQ8SVF2Y4Dl9i5cb/+9+/FEnhaSZmB8Eqw37V7P50czCkG3aW6bdFvGj?=
+ =?us-ascii?Q?3OHRpk/atXKATp3YvU6A7TiYVgFxEtw+qtYhxtqy9f//zXf1aUJTu/Crpy1g?=
+ =?us-ascii?Q?arwNGLfBf+SALFWKAD83aYDG++lLHe8VxAg5gR+g468Nbn5Y64NO17E9wTPz?=
+ =?us-ascii?Q?jXowd0f2LvSN7pIVBaDX4JWrmK/5AbDaeULHMktke1F5dBv9hpd9/xbDmXCU?=
+ =?us-ascii?Q?R2LF+c6NzrR4/C6x7JGlXO/Gw9qdCfMAB7Kf9jPwf2y+rWVIhJPuThxeM4LQ?=
+ =?us-ascii?Q?ulF3hOHVLWBps4bImf/Bu381EEKseZbrwjcqI1O0O/1yT/SW3xyW070SCJaY?=
+ =?us-ascii?Q?JD3bKSHwZKzdt/s/ZUrZ40zcSUkCTg5o6yxrRzic3/QJpB6lRHyg2eGzqo4f?=
+ =?us-ascii?Q?oFil+vh5kaIaUlgrrpWBr0744NP+JLo9jvMVe4FRcOB6m+AIeUtRQ9PrxtWk?=
+ =?us-ascii?Q?ccyJXbrLMETNo32snaDL7WkW9qkN0PoXkXC0NNfQGFHwdBOgsVmPaAhaYye0?=
+ =?us-ascii?Q?UP+I2kHK/3PPrCylJ6Nf9mtSOiByn+STxSG3IqAvcBNQegehM+D7nCGJSUbe?=
+ =?us-ascii?Q?mJJYIfbGLbAASjFVXkcFgG26sNSkEfMYW7VJOwtat0mnS/P6BAKzpjqkvtj8?=
+ =?us-ascii?Q?89VdbOUdeMRoCRC9qORae5QB9sBD2zV1KTDt4mEFyCAFsDI+JhmpOBcEMtXm?=
+ =?us-ascii?Q?zWPZtYvhLK0CzlHx26/9TpnikPhaJWGOKcVU0c8I?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 0c808221-5ac3-4f02-64d9-08db1535e902
+X-MS-Exchange-CrossTenant-AuthSource: BYAPR12MB3176.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 23 Feb 2023 00:35:49.2411
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 46JxylTl6Wkb4IWfOuMnCidEJgvbxd3muLPpwSGRcpkHzf8wKQLFKlH2F7aYqoWH+Kh52d8Slny4R4Ldefwb8g==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH3PR12MB8354
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Thomas,
 
-On Tue, Feb 21, 2023, at 12:40, Thomas Wei=C3=9Fschuh wrote:
-> On Mon, Feb 20, 2023 at 03:20:08PM -0500, Vincent Dagonneau wrote:
->> This commit adds some of the missing integer types to stdint.h and ad=
-ds
->> limit macros (e.g. INTN_{MIN,MAX}).
->>=20
->> The reference used for adding these types is
->> https://pubs.opengroup.org/onlinepubs/009695399/basedefs/stdint.h.htm=
-l.
->>=20
->> We rely on the compiler-defined __LONG_MAX__ to get the right limits =
-for
->> ssize_t, size_t, intptr_t, uintptr_t and ptrdiff_t. This compiler
->> constant seem to have been defined at least since GCC 4.1.2 and clang
->> 3.0.0 on x86_64. It is also defined on ARM (32&64), mips and RISC-V.
->>=20
->> Note that the maximum size of size_t is implementation-defined (>6553=
-5),
->> in this case I chose to go with unsigned long on all platforms since
->> unsigned long =3D=3D unsigned int on all the platforms we care about.=
- Note
->> that the kernel uses either unsigned int or unsigned long in
->> linux/include/uapi/asm-generic/posix_types.h. These should be equival=
-ent
->> for the plaforms we are targeting.
->>=20
->> Also note that the 'fast*' flavor of the types have been chosen to be
->> always 1 byte for '*fast8*' and always long (a.k.a. size_t/ssize_t) f=
-or
->> the other variants. I have never seen the 'fast*' types in use in the=
- wild
->> but that seems to be what glibc does.
->>=20
->> Signed-off-by: Vincent Dagonneau <v@vda.io>
->> Signed-off-by: Willy Tarreau <w@1wt.eu>
->> ---
->>  tools/include/nolibc/stdint.h | 77 +++++++++++++++++++++++++++++++++=
-++
->>  1 file changed, 77 insertions(+)
->>=20
->> diff --git a/tools/include/nolibc/stdint.h b/tools/include/nolibc/std=
-int.h
->> index 4ba264031df9..f7179a583f61 100644
->> --- a/tools/include/nolibc/stdint.h
->> +++ b/tools/include/nolibc/stdint.h
->> @@ -21,4 +21,81 @@ typedef unsigned long     uintptr_t;
->>  typedef   signed long      intptr_t;
->>  typedef   signed long     ptrdiff_t;
->> =20
->> +typedef   int8_t       int_least8_t;
->> +typedef  uint8_t      uint_least8_t;
->> +typedef  int16_t      int_least16_t;
->> +typedef uint16_t     uint_least16_t;
->> +typedef  int32_t      int_least32_t;
->> +typedef uint32_t     uint_least32_t;
->> +typedef  int64_t      int_least64_t;
->> +typedef uint64_t     uint_least64_t;
->> +
->> +typedef   int8_t        int_fast8_t;
->> +typedef  uint8_t       uint_fast8_t;
->> +typedef  ssize_t       int_fast16_t;
->> +typedef   size_t      uint_fast16_t;
->> +typedef  ssize_t       int_fast32_t;
->> +typedef   size_t      uint_fast32_t;
->> +typedef  ssize_t       int_fast64_t;
->> +typedef   size_t      uint_fast64_t;
->> +
->> +typedef  int64_t           intmax_t;
->> +typedef uint64_t          uintmax_t;
->> +
->> +/* limits of integral types */
->> +
->> +#define        INT8_MIN  (-128)
->> +#define       INT16_MIN  (-32767-1)
->> +#define       INT32_MIN  (-2147483647-1)
->> +#define       INT64_MIN  (-9223372036854775807LL-1)
->> +
->> +#define        INT8_MAX  (127)
->> +#define       INT16_MAX  (32767)
->> +#define       INT32_MAX  (2147483647)
->> +#define       INT64_MAX  (9223372036854775807LL)
->> +
->> +#define       UINT8_MAX  (255)
->> +#define      UINT16_MAX  (65535)
->> +#define      UINT32_MAX  (4294967295U)
->> +#define      UINT64_MAX  (18446744073709551615ULL)
->> +
->> +#define  INT_LEAST8_MIN  INT8_MIN
->> +#define INT_LEAST16_MIN  INT16_MIN
->> +#define INT_LEAST32_MIN  INT32_MIN
->> +#define INT_LEAST64_MIN  INT64_MIN
->> +
->> +#define  INT_LEAST8_MAX  INT8_MAX
->> +#define INT_LEAST16_MAX  INT16_MAX
->> +#define INT_LEAST32_MAX  INT32_MAX
->> +#define INT_LEAST64_MAX  INT64_MAX
->> +
->> +#define  UINT_LEAST8_MAX UINT8_MAX
->> +#define UINT_LEAST16_MAX UINT16_MAX
->> +#define UINT_LEAST32_MAX UINT32_MAX
->> +#define UINT_LEAST64_MAX UINT64_MAX
->> +
->> +#define SIZE_MAX         ((size_t)(__LONG_MAX__) * 2 + 1)
->> +#define SSIZE_MIN        (-__LONG_MAX__ - 1)
->
-> SSIZE_MIN is not defined by a standard.
-> It also doesn't really make sense to have, as ssize_t is only supposed
-> to store [-1,SSIZE_MAX].
->
->> +#define SSIZE_MAX        __LONG_MAX__
->
-> Apparently SSIZE_MAX can also defined via the compilers <limits.h> as
-> used by nolibc-test.c leading to a warning.
-> Maybe wrap it in #ifndef SSIZE_MAX.
->
->     In file included from sysroot/x86/include/std.h:21,
-> 		     from sysroot/x86/include/stdio.h:12,
-> 		     from nolibc-test.c:15:
->     sysroot/x86/include/stdint.h:79: warning: "SSIZE_MAX" redefined
->        79 | #define SSIZE_MAX        __LONG_MAX__
-> 	  |=20
->     In file included from /usr/include/limits.h:195,
-> 		     from=20
-> /usr/lib/gcc/x86_64-pc-linux-gnu/12.2.1/include-fixed/limits.h:203,
-> 		     from=20
-> /usr/lib/gcc/x86_64-pc-linux-gnu/12.2.1/include-fixed/syslimits.h:7,
-> 		     from=20
-> /usr/lib/gcc/x86_64-pc-linux-gnu/12.2.1/include-fixed/limits.h:34,
-> 		     from nolibc-test.c:6:
->     /usr/include/bits/posix1_lim.h:169: note: this is the location of=20
-> the previous definition
->       169 | #  define SSIZE_MAX     LONG_MAX
-> 	  |=20
->
+Christoph Hellwig <hch@infradead.org> writes:
 
-Ok, I'll remove the SSIZE_MIN and SSIZE_MAX since neither seem to be in =
-the standards page anyway.
-
-Note that ssize_t is still defined in this file. It pre-dates my patch.
-
->> +#define INTPTR_MIN       SSIZE_MIN
->> +#define INTPTR_MAX       SSIZE_MAX
->> +#define PTRDIFF_MIN      SSIZE_MIN
->> +#define PTRDIFF_MAX      SSIZE_MAX
->> +#define UINTPTR_MAX       SIZE_MAX
->> +
->> +#define  INT_FAST8_MIN  INT8_MIN
->> +#define INT_FAST16_MIN  SSIZE_MIN
->> +#define INT_FAST32_MIN  SSIZE_MIN
->> +#define INT_FAST64_MIN  SSIZE_MIN
->> +
->> +#define  INT_FAST8_MAX  INT8_MAX
->> +#define INT_FAST16_MAX  SSIZE_MAX
->> +#define INT_FAST32_MAX  SSIZE_MAX
->> +#define INT_FAST64_MAX  SSIZE_MAX
->> +
->> +#define  UINT_FAST8_MAX UINT8_MAX
->> +#define UINT_FAST16_MAX SIZE_MAX
->> +#define UINT_FAST32_MAX SIZE_MAX
->> +#define UINT_FAST64_MAX SIZE_MAX
+> On Thu, Feb 23, 2023 at 09:59:35AM +1100, Alistair Popple wrote:
+>> The idea was every driver already needs to allocate a pages array to
+>> pass to pin_user_pages(), and by necessity drivers have to keep a
+>> reference to the contents of that in one form or another. So
+>> conceptually the equivalent of:
+>> 
+>> struct vm_account {
+>>        struct list_head possible_pinners;
+>>        struct mem_cgroup *memcg;
+>>        struct pages **pages;
+>>        [...]
+>> };
+>> 
+>> Unpinnig involves finding a new owner by traversing the list of
+>> page->memcg_data->possible_pinners and iterating over *pages[] to figure
+>> out if that vm_account actually has this page pinned or not and could
+>> own it.
+>> 
+>> Agree this is costly though. And I don't think all drivers keep the
+>> array around so "iterating over *pages[]" may need to be a callback.
 >
-> Alignment of values within lines is inconsistent.
->
+> Is pinning in this context referring to FOLL_LONGTERM pins or any
+> FOLL_PIN?  In the latter case block based direct I/O does not keep
+> the pages array around, and also is absolutely not willing to pay
+> for the overhead.
 
-Thanks, I did a whole lot of alignment in the latest version, hopefully =
-it should be ok now.
-
->> +
->>  #endif /* _NOLIBC_STDINT_H */
->> --=20
->> 2.39.2
->>
-
-Thanks for the review,
-Vincent.
+Good point. I was primarily targeting FOLL_LONGTERM users. I'm not too
+familiar with block based direct I/O but from what I can tell it
+currently doesn't respect any kind of RLIMIT anyway so I guess the
+requirment to limit pinned pages there isn't so revelant.
