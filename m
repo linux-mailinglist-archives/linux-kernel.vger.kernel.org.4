@@ -2,36 +2,36 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 94C456A0AEB
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 14:44:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0DCB76A0AEF
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 14:44:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234272AbjBWNoS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Feb 2023 08:44:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47630 "EHLO
+        id S234653AbjBWNoW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Feb 2023 08:44:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47668 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234338AbjBWNoB (ORCPT
+        with ESMTP id S233157AbjBWNoB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Thu, 23 Feb 2023 08:44:01 -0500
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A22652DDD;
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E38A55190B;
         Thu, 23 Feb 2023 05:44:00 -0800 (PST)
 Received: from IcarusMOD.eternityproject.eu (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
         (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 9AD21660220C;
-        Thu, 23 Feb 2023 13:43:58 +0000 (GMT)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 4182B660220D;
+        Thu, 23 Feb 2023 13:43:59 +0000 (GMT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
         s=mail; t=1677159839;
-        bh=MrIqGkrI7LujwoSZ7Bc2owhtRwNGguk3yNGZ02UZ6+Q=;
+        bh=xAp8H2hVhd7urTj86UlUSbK9LB5eP77m4/nFArJQr+s=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=S52oOLdwx8SJc0VrVkilY+Rm9h+xmcZeTq4RbGHI9TpY0AWNOgqbgGaqRDfeuwtP/
-         wkHnBsVMEx32STxRhX6Mmtw4HJNy5/CQ61urf5woc0yxJjtvWfj3x+Fk/s6wWYwv6J
-         akCS5IaxUgmY9+tDLAbapeT8I688LPCCUTsvwXjWnNGLZvcTcnO6d6a5eronVa96hz
-         tvsYpiQBvJM+q5LIDuzyMC7XuYCaB73Y/BHC67tN/cNplq3I7MhBWyF6PRMFTAd4q4
-         FxOmIzMofge19j+bHpg0K0VJHyeI+gm/LAkpJ04tP41UWc//yfd7WPdUDWgWCe5gti
-         CFuCkPSlo8EIA==
+        b=BXpHl2GJD8EjzIABLdfe2cxa8PVrmn5m/9ru9rR2XZoZODWb6nA3ZXAKqGJjUj7nC
+         2QGK97fbrcZKjxH58Ga9BfTOUwoC7nyNIHeAxGb5PGZGf5ERzlXuaCNuDP5VtEhhJp
+         gSqilcMZrkwT8UiWt16tTFcyrQla0DgtBx5Qrqn6OodDRadOZBgMDeUesPM/qbOmy/
+         Wy3NnOdRf00hpwaaiZ49dtAzvQZYALx27n+Fpu7//NGJ/X9Vw3i1ejC+99Ak9ujsIy
+         WXUk1euFgHXIoztqm6G5Ym7sKIUqPuwNDj89poW7JyLRZVEO6jrNdLcYqiYJLKleFf
+         t4vluZ/JK87Fw==
 From:   AngeloGioacchino Del Regno 
         <angelogioacchino.delregno@collabora.com>
 To:     matthias.bgg@gmail.com
@@ -40,9 +40,9 @@ Cc:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org,
         linux-mediatek@lists.infradead.org, wenst@chromium.org
-Subject: [PATCH v2 05/16] arm64: dts: mediatek: mt8183-evb: Couple VGPU and VSRAM_GPU regulators
-Date:   Thu, 23 Feb 2023 14:43:34 +0100
-Message-Id: <20230223134345.82625-6-angelogioacchino.delregno@collabora.com>
+Subject: [PATCH v2 06/16] arm64: dts: mediatek: mt8183: Use mediatek,mt8183b-mali as GPU compatible
+Date:   Thu, 23 Feb 2023 14:43:35 +0100
+Message-Id: <20230223134345.82625-7-angelogioacchino.delregno@collabora.com>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230223134345.82625-1-angelogioacchino.delregno@collabora.com>
 References: <20230223134345.82625-1-angelogioacchino.delregno@collabora.com>
@@ -57,43 +57,27 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add coupling for these regulators, as they have a strict voltage output
-relation to satisfy in order to ensure GPU stable operation.
+Use the new GPU related compatible to finally enable GPU DVFS on
+the MT8183 SoC.
 
 Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 ---
- arch/arm64/boot/dts/mediatek/mt8183-evb.dts | 11 ++++++++++-
- 1 file changed, 10 insertions(+), 1 deletion(-)
+ arch/arm64/boot/dts/mediatek/mt8183.dtsi | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/arch/arm64/boot/dts/mediatek/mt8183-evb.dts b/arch/arm64/boot/dts/mediatek/mt8183-evb.dts
-index 52dc4a50e34d..fd327437e932 100644
---- a/arch/arm64/boot/dts/mediatek/mt8183-evb.dts
-+++ b/arch/arm64/boot/dts/mediatek/mt8183-evb.dts
-@@ -52,7 +52,6 @@ &auxadc {
+diff --git a/arch/arm64/boot/dts/mediatek/mt8183.dtsi b/arch/arm64/boot/dts/mediatek/mt8183.dtsi
+index e01b96adef02..5169779d01df 100644
+--- a/arch/arm64/boot/dts/mediatek/mt8183.dtsi
++++ b/arch/arm64/boot/dts/mediatek/mt8183.dtsi
+@@ -1752,7 +1752,7 @@ mfgcfg: syscon@13000000 {
+ 		};
  
- &gpu {
- 	mali-supply = <&mt6358_vgpu_reg>;
--	sram-supply = <&mt6358_vsram_gpu_reg>;
- };
- 
- &i2c0 {
-@@ -138,6 +137,16 @@ &mmc1 {
- 	non-removable;
- };
- 
-+&mt6358_vgpu_reg {
-+	regulator-coupled-with = <&mt6358_vsram_gpu_reg>;
-+	regulator-coupled-max-spread = <100000>;
-+};
-+
-+&mt6358_vsram_gpu_reg {
-+	regulator-coupled-with = <&mt6358_vgpu_reg>;
-+	regulator-coupled-max-spread = <100000>;
-+};
-+
- &pio {
- 	i2c_pins_0: i2c0{
- 		pins_i2c{
+ 		gpu: gpu@13040000 {
+-			compatible = "mediatek,mt8183-mali", "arm,mali-bifrost";
++			compatible = "mediatek,mt8183b-mali", "arm,mali-bifrost";
+ 			reg = <0 0x13040000 0 0x4000>;
+ 			interrupts =
+ 				<GIC_SPI 280 IRQ_TYPE_LEVEL_LOW>,
 -- 
 2.39.2
 
