@@ -2,68 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 017D56A11D7
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 22:20:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BD5FC6A11DA
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 22:20:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229477AbjBWVUI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Feb 2023 16:20:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33570 "EHLO
+        id S229700AbjBWVUd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Feb 2023 16:20:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34270 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229505AbjBWVUF (ORCPT
+        with ESMTP id S229505AbjBWVUb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Feb 2023 16:20:05 -0500
-Received: from mail-pl1-x64a.google.com (mail-pl1-x64a.google.com [IPv6:2607:f8b0:4864:20::64a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 009A52F78A
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Feb 2023 13:20:04 -0800 (PST)
-Received: by mail-pl1-x64a.google.com with SMTP id k17-20020a170902d59100b0019abcf45d75so5376071plh.8
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Feb 2023 13:20:04 -0800 (PST)
+        Thu, 23 Feb 2023 16:20:31 -0500
+Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B5D75D476
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Feb 2023 13:20:21 -0800 (PST)
+Received: by mail-ed1-x52b.google.com with SMTP id i34so21945074eda.7
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Feb 2023 13:20:21 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=gNgxyf5ZIkce464IQDHHZkijTrv0R2pfEAseu26ip9E=;
-        b=EbhTZGxG3nziz49+s10XnqL/SmZQW6LUzAPCdULgIQtypbd7vDsyBxjHvPYzRUYdgI
-         L1/kb2+rwpfJcekrCwPeXI6n8Hv+my8NJWBc6gBCKQ4fkcb4ZqK1MVJVRZmDTTQpYUm8
-         IJO7fBKPgPdQhGKCMqXQoBz8drTGNkTmuFrm6z5inGGs3g9oswb8EvA1KvWakqcHWjaW
-         vY2R+D8YtYslFlObZQlyrYztXrnbv7Mvaj32eyBxdGKI1IHCWMhdxzIqyvdxT/SMMmBH
-         NZYojQN+BkBOwrxZEC0zvsp+tDun0IvIaX2hLZ2Rv1qwwrnYznRbj8grCIjBQuIK7zA0
-         F/aw==
+        d=rivosinc-com.20210112.gappssmtp.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=OGNK+81UETaPn0jcsEtslOWqhVdogFDF7Oyic4eRMC0=;
+        b=dZ0PmdnqNzzjl4gyodTo7Zb17UgRMZptHwXLBomZ/AvWARR5ZPd6XaTkwjBxJFuGaT
+         H0F3qnuxv3chDjD33jmtByO/Il4zihwWqNRj/EEYnB9Er7lIZ8MGu+au2KIEm8IkqdMt
+         WfEamdrk6xp1+wq8oDc1jQF3iNhV3+/x/+qKI21/MbCuhRW6FiaAU6cN2nBTZzvkDg9m
+         J0h8xSdbeOsGBxBQoM5VmCu+Xj2Pn3BiMhr9jxIsxQrgeI9plEFpVFpjTVHQqDV2PQ9P
+         IGrsG1Wtc/Y6sEBGu7yxprbHh6Ygufryb07uAYG0eTFXjd75azPNJX+kgrT9eVceeION
+         FccQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=gNgxyf5ZIkce464IQDHHZkijTrv0R2pfEAseu26ip9E=;
-        b=TAhDbZtHfA9exOklQF2ZozDqOCkBy9LZkndrMHwU/1Jchu1hyTqReWhB6OWfDlMnmU
-         IeQmR6LkayTXwEYYtzafSM1L8BRkFd/xVhPiAeqi+W1f98SJCUKeXggavLdVylrtJvPq
-         VbbKrtQwwJ0mzC6TfSQHM68EbFvD2I0OtLq7V8nKvMXPShlIC4rSWKbUOqGs8h64jVBA
-         ROumM61D+BNfWmFG9/hhlDOYymD/Ny+Oh1FHepdfNQPjMBUYlI6Ytax32Df1rvM2TtmH
-         f7z3t6NWrAJo7H5t+nLs+qKfYWpGvMt5Kf3qcqECW9d1xnCTQn3qzzD2aLwJgZlAP22r
-         VHTA==
-X-Gm-Message-State: AO0yUKU3IGxyZ3tB7wKkaa+TtBMSlsb0cN6E3URrEOwOnyZ99LWqfIon
-        RVjONK6WLsSJfgUedxz/FX1xr1H8YPY=
-X-Google-Smtp-Source: AK7set8dHi3Wk8rAFW1xUD9L5+LI9InhIbHn4QwDSPEAQUaGaVmvY+6bNISvRfmJTHjQc1J6PKpcIeFahkU=
-X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
- (user=seanjc job=sendgmr) by 2002:a17:90b:1494:b0:234:925b:7d61 with SMTP id
- js20-20020a17090b149400b00234925b7d61mr824826pjb.9.1677187204400; Thu, 23 Feb
- 2023 13:20:04 -0800 (PST)
-Date:   Thu, 23 Feb 2023 21:20:02 +0000
-In-Reply-To: <20230223231127.000045e2@gmail.com>
-Mime-Version: 1.0
-References: <20230222162511.7964-1-rdunlap@infradead.org> <Y/ZG8u6/aUtpsVDa@google.com>
- <27364a82-fa60-1454-e25d-15239905baf3@redhat.com> <20230223231127.000045e2@gmail.com>
-Message-ID: <Y/fYgvfifh5EJcwD@google.com>
-Subject: Re: [PATCH v2] KVM: SVM: hyper-v: placate modpost section mismatch error
-From:   Sean Christopherson <seanjc@google.com>
-To:     Zhi Wang <zhi.wang.linux@gmail.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        linux-kernel@vger.kernel.org,
-        Vineeth Pillai <viremana@linux.microsoft.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>, kvm@vger.kernel.org
-Content-Type: text/plain; charset="us-ascii"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=OGNK+81UETaPn0jcsEtslOWqhVdogFDF7Oyic4eRMC0=;
+        b=sBNT0inf+dX+nzG6f/0aLTlaaqzH5ZkR2yYMTWji6CfjKMJPgfG3cqswYJWd6aMYPx
+         YAajuvkMJ8WjUhf+ZwnMP0XcCvuTLnBGYLPPmrUNY5AAqLiYJ0UCO0OJXAdEkPlfW7jo
+         R+mGM8xRzcFu/odPQR6GxS6TA5EPWVqDd1tLdN4v5Ea1R7RR/etFwu1XQuVHI9iJOcla
+         j/+O3b3tA4OVVGVBOjqYHSu5V2Kgk01Ny3o/S41m46lnn5Ve47REA8JQQQQpKpzwhXfb
+         rhANQ+ubiuzNHHOQBptqUu7Pr8dAJxBx3KvCubyf+RDLJYkkB+8dakrpUaXkr/qVKv9f
+         BFlg==
+X-Gm-Message-State: AO0yUKXYnrNgVWAz37REb5rEx0lKU4wEkbJtJFzlPyDn1iuwRWHJbXZ6
+        LA8SL8Q3HoEQ5mlByQ3UmsAg+CcZaYpvUNNtgYA9Bg==
+X-Google-Smtp-Source: AK7set+KUUdbnyo5JRRHrV1ozmg6AbjBaYX0SdvoC+Bros6cRT/lBPSqwRJvMri7bJe/UlGznB+3heSzYzD8bnfAmKI=
+X-Received: by 2002:a17:907:2b09:b0:8b1:cd2e:177a with SMTP id
+ gc9-20020a1709072b0900b008b1cd2e177amr10778294ejc.6.1677187219479; Thu, 23
+ Feb 2023 13:20:19 -0800 (PST)
+MIME-Version: 1.0
+References: <20230218211433.26859-1-rick.p.edgecombe@intel.com>
+ <20230218211433.26859-34-rick.p.edgecombe@intel.com> <20230223000340.GB945966@debug.ba.rivosinc.com>
+ <49a151d5a704487d541e421699cf798c87a80ca5.camel@intel.com>
+In-Reply-To: <49a151d5a704487d541e421699cf798c87a80ca5.camel@intel.com>
+From:   Deepak Gupta <debug@rivosinc.com>
+Date:   Thu, 23 Feb 2023 13:20:06 -0800
+Message-ID: <CAKC1njSXDY_NUxLdrbJbF6zGaP4aifAh3g1ku0E5RkAxK4tqLA@mail.gmail.com>
+Subject: Re: [PATCH v6 33/41] x86/shstk: Introduce map_shadow_stack syscall
+To:     "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>
+Cc:     "david@redhat.com" <david@redhat.com>,
+        "bsingharora@gmail.com" <bsingharora@gmail.com>,
+        "hpa@zytor.com" <hpa@zytor.com>,
+        "Syromiatnikov, Eugene" <esyr@redhat.com>,
+        "peterz@infradead.org" <peterz@infradead.org>,
+        "rdunlap@infradead.org" <rdunlap@infradead.org>,
+        "keescook@chromium.org" <keescook@chromium.org>,
+        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+        "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>,
+        "Eranian, Stephane" <eranian@google.com>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "fweimer@redhat.com" <fweimer@redhat.com>,
+        "nadav.amit@gmail.com" <nadav.amit@gmail.com>,
+        "jannh@google.com" <jannh@google.com>,
+        "dethoma@microsoft.com" <dethoma@microsoft.com>,
+        "kcc@google.com" <kcc@google.com>,
+        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
+        "bp@alien8.de" <bp@alien8.de>, "oleg@redhat.com" <oleg@redhat.com>,
+        "hjl.tools@gmail.com" <hjl.tools@gmail.com>,
+        "pavel@ucw.cz" <pavel@ucw.cz>,
+        "Lutomirski, Andy" <luto@kernel.org>,
+        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+        "arnd@arndb.de" <arnd@arndb.de>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "Schimpe, Christina" <christina.schimpe@intel.com>,
+        "mike.kravetz@oracle.com" <mike.kravetz@oracle.com>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "Yang, Weijiang" <weijiang.yang@intel.com>,
+        "jamorris@linux.microsoft.com" <jamorris@linux.microsoft.com>,
+        "john.allen@amd.com" <john.allen@amd.com>,
+        "rppt@kernel.org" <rppt@kernel.org>,
+        "andrew.cooper3@citrix.com" <andrew.cooper3@citrix.com>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "corbet@lwn.net" <corbet@lwn.net>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-api@vger.kernel.org" <linux-api@vger.kernel.org>,
+        "gorcunov@gmail.com" <gorcunov@gmail.com>,
+        "akpm@linux-foundation.org" <akpm@linux-foundation.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,34 +104,151 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 23, 2023, Zhi Wang wrote:
-> On Wed, 22 Feb 2023 19:32:53 +0100
-> Paolo Bonzini <pbonzini@redhat.com> wrote:
-> 
-> Maybe we can use __always_inline? I just noticed this thread today by chance.
+On Wed, Feb 22, 2023 at 5:11 PM Edgecombe, Rick P
+<rick.p.edgecombe@intel.com> wrote:
+>
+> On Wed, 2023-02-22 at 16:03 -0800, Deepak Gupta wrote:
+> > On Sat, Feb 18, 2023 at 01:14:25PM -0800, Rick Edgecombe wrote:
+> > > When operating with shadow stacks enabled, the kernel will
+> > > automatically
+> > > allocate shadow stacks for new threads, however in some cases
+> > > userspace
+> > > will need additional shadow stacks. The main example of this is the
+> > > ucontext family of functions, which require userspace allocating
+> > > and
+> > > pivoting to userspace managed stacks.
+> > >
+> > > Unlike most other user memory permissions, shadow stacks need to be
+> > > provisioned with special data in order to be useful. They need to
+> > > be setup
+> > > with a restore token so that userspace can pivot to them via the
+> > > RSTORSSP
+> > > instruction. But, the security design of shadow stack's is that
+> > > they
+> > > should not be written to except in limited circumstances. This
+> > > presents a
+> > > problem for userspace, as to how userspace can provision this
+> > > special
+> > > data, without allowing for the shadow stack to be generally
+> > > writable.
+> > >
+> > > Previously, a new PROT_SHADOW_STACK was attempted, which could be
+> > > mprotect()ed from RW permissions after the data was provisioned.
+> > > This was
+> > > found to not be secure enough, as other thread's could write to the
+> > > shadow stack during the writable window.
+> > >
+> > > The kernel can use a special instruction, WRUSS, to write directly
+> > > to
+> > > userspace shadow stacks. So the solution can be that memory can be
+> > > mapped
+> > > as shadow stack permissions from the beginning (never generally
+> > > writable
+> > > in userspace), and the kernel itself can write the restore token.
+> > >
+> > > First, a new madvise() flag was explored, which could operate on
+> > > the
+> > > PROT_SHADOW_STACK memory. This had a couple downsides:
+> > > 1. Extra checks were needed in mprotect() to prevent writable
+> > > memory from
+> > >    ever becoming PROT_SHADOW_STACK.
+> > > 2. Extra checks/vma state were needed in the new madvise() to
+> > > prevent
+> > >    restore tokens being written into the middle of pre-used shadow
+> > > stacks.
+> > >    It is ideal to prevent restore tokens being added at arbitrary
+> > >    locations, so the check was to make sure the shadow stack had
+> > > never been
+> > >    written to.
+> > > 3. It stood out from the rest of the madvise flags, as more of
+> > > direct
+> > >    action than a hint at future desired behavior.
+> > >
+> > > So rather than repurpose two existing syscalls (mmap, madvise) that
+> > > don't
+> > > quite fit, just implement a new map_shadow_stack syscall to allow
+> > > userspace to map and setup new shadow stacks in one step. While
+> > > ucontext
+> > > is the primary motivator, userspace may have other unforeseen
+> > > reasons to
+> > > setup it's own shadow stacks using the WRSS instruction. Towards
+> > > this
+> > > provide a flag so that stacks can be optionally setup securely for
+> > > the
+> > > common case of ucontext without enabling WRSS. Or potentially have
+> > > the
+> > > kernel set up the shadow stack in some new way.
+> >
+> > Was following ever attempted?
+> >
+> > void *shstk = mmap(0, size, PROT_SHADOWSTACK, ...);
+> > - limit PROT_SHADOWSTACK protection flag to only mmap (and thus
+> > mprotect can't
+> >    convert memory from shadow stack to non-shadow stack type or vice
+> > versa)
+> > - limit PROT_SHADOWSTACK protection flag to anonymous memory only.
+> > - top level mmap handler to put a token at the base using WRUSS if
+> > prot == PROT_SHADOWSTACK
+> >
+> > You essentially would get shadow stack manufacturing with existing
+> > (single) syscall.
+> > Acting a bit selfish here, this allows other architectures as well to
+> > re-use this and
+> > do their own implementation of mapping and placing the token at the
+> > base.
+>
+> Yes, I looked at it. You end up with a pile of checks and hooks added
+> to mmap() and various other places as you outline. We also now have the
+> MAP_ABOVE4G limitation for x86 shadow stack that would need checking
+> for too. It's not exactly a clean fit. Then, callers would have to pass
+> special x86 flags in anyway.
 
-Using __always_inline will "fix" the problem, but it's not necessary in this case,
-and in some ways it's less correct.  The noinstr case you linked is different
-because the helpers in question can (and are) be used in noinstr and regular
-sections, i.e. shouldn't be tagged noinstr.  In this case, svm_hv_hardware_setup()
-must be called from __init functions, i.e. doesn't need to be unopinionated.
+riscv has mechanisms using which a 32bit app can run on 64bit kernel.
+So technically if there are 32bit and 64bit code in address space,
+MAP_ABOVE4G could be useful.
+Although I am not sure (or aware of) if there are such requirement
+from app/developers yet (to guarantee address mapping above 4G)
 
-And FWIW, svm_hv_hardware_setup() really doesn't need to be inlined.
+But I see this as orthogonal to memory protection flags.
 
-> https://lore.kernel.org/all/20210624095147.880513802@infradead.org/
-> 
-> > On 2/22/23 17:46, Sean Christopherson wrote:
-> > >    Tag svm_hv_hardware_setup() with __init to fix a modpost warning as the
-> > >    non-stub implementation accesses __initdata (svm_x86_ops), i.e. would
-> > >    generate a use-after-free if svm_hv_hardware_setup() were actually invoked
-> > >    post-init.  The helper is only called from svm_hardware_setup(), which is
-> > >    also __init, i.e. other than the modpost warning, lack of __init is benign.
-> > 
-> > Done.  It's caused by the compiler deciding not to inline the function, 
-> > probably.
-> > 
-> > Also Cc'ed stable.
-> > 
-> > Paolo
-> > 
-> 
+>
+> It doesn't seem like the complexity of the checks is worth saving the
+> tiny syscall. Is there some reason why riscv can't use the same syscall
+> stub? It doesn't need to live forever in x86 code. Not sure what the
+> savings are for riscv of the mmap+checks approach are either...
+
+I don't see a lot of extra complexity here.
+If `mprotect` and friends don't know about `PROT_SHADOWSTACK`, they'll
+just fail by default (which is desired)
+
+It's only `mmap` that needs to be enlightened. And it can just pass
+`VMA_SHADOW_STACK` to `do_mmap` if input is `PROT_SHADOWSTACK`.
+
+Adding a syscall just for mapping shadow stack is weird when it can be
+solved with existing system calls.
+As you say in your response below, it would be good to have such a
+syscall which serve larger purposes (e.g. provisioning special
+security-type memory)
+
+arm64's memory tagging is one such example. Not exactly security-type
+memory (but eventual application is security for this feature) .
+It adds extra meaning to virtual addresses (i.e. an address has tags).
+arm64 went about using a protection flag `PROT_MTE` instead of a
+special system call.
+
+Being said that since this patch has gone through multiple revisions
+and I am new to the party. If others dont have issues on this special
+system call,
+I think it's fine then. In case of riscv I can choose to use this
+mechanism or go via arm's route to define PROT_SHADOWSTACK which is
+arch specific.
+
+>
+> I did wonder if there could be some sort of more general syscall for
+> mapping and provisioning special security-type memory. But we probably
+> need a few more non-shadow stack examples to get an idea of what that
+> would look like.
+
+As I mentioned memory tagging and thus PROT_MTE is already such a use
+case which uses `mmap/mprotect` protection flags to designate special
+meaning to a virtual address.
