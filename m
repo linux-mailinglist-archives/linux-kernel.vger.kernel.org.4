@@ -2,40 +2,40 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 45D016A0192
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 04:43:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9DB226A0194
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 04:43:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233159AbjBWDnF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Feb 2023 22:43:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39814 "EHLO
+        id S233185AbjBWDnP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Feb 2023 22:43:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39932 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233133AbjBWDnD (ORCPT
+        with ESMTP id S233183AbjBWDnL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Feb 2023 22:43:03 -0500
+        Wed, 22 Feb 2023 22:43:11 -0500
 Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A53F7196B5;
-        Wed, 22 Feb 2023 19:42:59 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8D1D23D99;
+        Wed, 22 Feb 2023 19:43:10 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
         MIME-Version:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:
         Content-ID:Content-Description:In-Reply-To:References;
-        bh=hmo26Yaz4/OgIlJO+A/BSFuAnOExXDFqNGdQ3D4u0/I=; b=IMySeMlyjKvdxKPat0cMJbpSw5
-        gxT3HnID8AZscU/FBB25ZGvH7isezqZ93Z7VI8MUf4SvfZ5JjvVYPxOJjNSnxhhIdeuh9lIodWBL5
-        RomE/pjcI5EiBXwPQruC2KXIDxUFS3JAX3XzXCFoVYfAHjvj5bDJa1Hh5CbCd+OLotPWupbxW9G5j
-        1ulIZXsCOsVM8Ulh0Fb9gGxS29m6fJWpku84diJV6bOocYT6TuHJNOLAdQ46jgaMHrWg6SGcVIuS8
-        ZL2sDq0WbeeoIj0fyoQ+IZru9G1UvXjjy/9lNOKI8wZanlnUOE1GnzHM+YjoSviRjgHMkAt3OqYAS
-        sDjC84Zw==;
+        bh=R7WTQfbxyA/nZ6u/jgi+dMUNGV/ZDn1IV7U0hvkO7zE=; b=X83936MZHL0YWURGBhRB/h+Gu2
+        W8/Q8oBTa90i/nwEymp9dQrInHR6M+I8wMM8uPeEQ8C/8S062A8psUpwzcCDzw+f2tspUfo23bCvR
+        0gofqM3rlNkYeCqGFblotnnWAVEnL9kkF5DRZ+5lvxELjGJfT+2Xta8FFmnRjYriapgJAJ0Flsr1k
+        jNu+0j0jPeoUpZc9/NwEpWkhyNLCK0pPSBKfzcmmw+uKEMlFyRtmydk0DVepdTmXacfbNZXwLlXZs
+        cM++gD/euvNDrJ0wQQsmRCUzKnCN7m2xlM7phfrNmTHHP0Bk/LFxSTIwf955xOevyF5PLyD2+phAP
+        1z1knf1Q==;
 Received: from [2601:1c2:980:9ec0::df2f] (helo=bombadil.infradead.org)
         by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1pV2VX-00EtMS-5C; Thu, 23 Feb 2023 03:42:59 +0000
+        id 1pV2Vi-00EtNl-33; Thu, 23 Feb 2023 03:43:10 +0000
 From:   Randy Dunlap <rdunlap@infradead.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Randy Dunlap <rdunlap@infradead.org>,
         Andrew Morton <akpm@linux-foundation.org>,
-        Tony Luck <tony.luck@intel.com>, linux-ia64@vger.kernel.org
-Subject: [PATCH] ia64: mm/contig: fix section mismatch warning/error
-Date:   Wed, 22 Feb 2023 19:42:58 -0800
-Message-Id: <20230223034258.12917-1-rdunlap@infradead.org>
+        Christoph Hellwig <hch@lst.de>, linux-ia64@vger.kernel.org
+Subject: [PATCH] ia64: salinfo: placate defined-but-not-used warning
+Date:   Wed, 22 Feb 2023 19:43:09 -0800
+Message-Id: <20230223034309.13375-1-rdunlap@infradead.org>
 X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -48,30 +48,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-alloc_per_cpu_data() is called by find_memory(), which is marked
-as __init. Therefore alloc_per_cpu_data() can also be marked as
-__init to remedy this modpost problem.
+When CONFIG_PROC_FS is not set, proc_salinfo_show() is not used.
+Mark the function as __maybe_unused to quieten the warning message.
 
-WARNING: modpost: vmlinux.o: section mismatch in reference: alloc_per_cpu_data (section: .text) -> memblock_alloc_try_nid (section: .init.text)
+../arch/ia64/kernel/salinfo.c:584:12: warning: 'proc_salinfo_show' defined but not used [-Wunused-function]
+  584 | static int proc_salinfo_show(struct seq_file *m, void *v)
+      |            ^~~~~~~~~~~~~~~~~
 
-Fixes: 4b9ddc7cf272 ("[IA64] Fix section mismatch in contig.c version of per_cpu_init()")
+Fixes: 3f3942aca6da ("proc: introduce proc_create_single{,_data}")
 Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
 Cc: Andrew Morton <akpm@linux-foundation.org>
-Cc: Tony Luck <tony.luck@intel.com>
+Cc: Christoph Hellwig <hch@lst.de>
 Cc: linux-ia64@vger.kernel.org
 ---
- arch/ia64/mm/contig.c |    2 +-
+The entire salinfo.c file looks like it should be conditional on
+CONFIG_PROC_FS, but I'm just addressing warnings/errors here.
+
+ arch/ia64/kernel/salinfo.c |    2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff -- a/arch/ia64/mm/contig.c b/arch/ia64/mm/contig.c
---- a/arch/ia64/mm/contig.c
-+++ b/arch/ia64/mm/contig.c
-@@ -77,7 +77,7 @@ skip:
- 	return __per_cpu_start + __per_cpu_offset[smp_processor_id()];
- }
- 
--static inline void
-+static inline __init void
- alloc_per_cpu_data(void)
+diff -- a/arch/ia64/kernel/salinfo.c b/arch/ia64/kernel/salinfo.c
+--- a/arch/ia64/kernel/salinfo.c
++++ b/arch/ia64/kernel/salinfo.c
+@@ -581,7 +581,7 @@ static int salinfo_cpu_pre_down(unsigned
+  * 'data' contains an integer that corresponds to the feature we're
+  * testing
+  */
+-static int proc_salinfo_show(struct seq_file *m, void *v)
++static int __maybe_unused proc_salinfo_show(struct seq_file *m, void *v)
  {
- 	size_t size = PERCPU_PAGE_SIZE * num_possible_cpus();
+ 	unsigned long data = (unsigned long)v;
+ 	seq_puts(m, (sal_platform_features & data) ? "1\n" : "0\n");
