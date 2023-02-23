@@ -2,58 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AE2BA6A068F
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 11:48:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CAEE86A0691
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 11:49:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233798AbjBWKsT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Feb 2023 05:48:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52258 "EHLO
+        id S233379AbjBWKto (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Feb 2023 05:49:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53778 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233253AbjBWKsR (ORCPT
+        with ESMTP id S229583AbjBWKtm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Feb 2023 05:48:17 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E34C15572;
-        Thu, 23 Feb 2023 02:48:15 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2CC94616B5;
-        Thu, 23 Feb 2023 10:48:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0DD21C433D2;
-        Thu, 23 Feb 2023 10:48:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1677149294;
-        bh=JwmNI2Lo8sTrNWeiDTCxCHRZGl3QFUVJuHx58Vb1VyE=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Zz41rr1nqWB7VqrFwnMoaIzUun01+96F4nM2dXHVAyS1pN2Q87hoY7TSlqLlrPd5n
-         bGlekWuRVAcfqNlYYdSiKONnjL03aiUn54Dj6sfbLsbfxyCdn5FrWKnaejYhxjRArk
-         DXBlRslwfYkMWtbzhIvOwenPGWb1UbOzATFiOMgY=
-Date:   Thu, 23 Feb 2023 11:48:11 +0100
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Neeraj Sanjay Kale <neeraj.sanjaykale@nxp.com>
-Cc:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, marcel@holtmann.org,
-        johan.hedberg@gmail.com, luiz.dentz@gmail.com,
-        jirislaby@kernel.org, alok.a.tiwari@oracle.com, hdanton@sina.com,
-        ilpo.jarvinen@linux.intel.com, leon@kernel.org,
-        netdev@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-bluetooth@vger.kernel.org,
-        linux-serial@vger.kernel.org, amitkumar.karwar@nxp.com,
-        rohit.fule@nxp.com, sherry.sun@nxp.com
-Subject: Re: [PATCH v5] Bluetooth: NXP: Add protocol support for NXP
- Bluetooth chipsets
-Message-ID: <Y/dEa6UJ2pXWsyOV@kroah.com>
-References: <20230223103614.4137309-1-neeraj.sanjaykale@nxp.com>
- <20230223103614.4137309-4-neeraj.sanjaykale@nxp.com>
+        Thu, 23 Feb 2023 05:49:42 -0500
+Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 435634AFD2
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Feb 2023 02:49:41 -0800 (PST)
+Received: by mail-lf1-x12b.google.com with SMTP id r27so11154361lfe.10
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Feb 2023 02:49:41 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Yr0y3Qeq1u2rQWHyWs/rAaWs2NbdV1kuldEYjIeP4Nk=;
+        b=A8zyKDVpRiutSwh+lkjQojMtaRp6Q9e/j5stfHXOpWPC+xGjlPEEMznGrj5xDGAxwp
+         VnGEQUA0l5RZ3cuZW+LnnUA3iDBIyr2m3xV4R6aI0BPHXzPGkcI1UqcuxUGQgsZHSJIn
+         /ec7mDoOKbk53lvUIVtm4Ko4kzF8MfwyR3B+XxdLZ9gYMwFbj6Em78zykdc3h5iHoP3A
+         r0W7qnzo8wk3JllZ+BJYCUS/jsNNFE3hyWaQe3flkUpD0r0t/WSY2/o+Of9cFnYHVzYE
+         wYIQZKmxzxTXAHlIxO2rlD9HuxJbU1jxY7Xoi6j3KFpJTnnhavKsdsSjlLx4tlY66joP
+         Goow==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Yr0y3Qeq1u2rQWHyWs/rAaWs2NbdV1kuldEYjIeP4Nk=;
+        b=rx/oQd8+bkLLDn2zjF3rwJsENCPVf9TeGMH4ahlThTPRDAJuxYeCIoTXhBpyujQOIA
+         /4fEyDTjZ/57u9afQA0ji0JPwLiCk9kycIrQkHT3timZ31SWG2RPmH46FDlj/MUTB7be
+         CAz9bjY62CV+Tq2BYDOYWxTp+TpjBCbCl/eRkq096uaVMmM7Y24l68czyyUD/EeyfmL9
+         rYZ7t8q/jibX7+o1BKyJ9CIXbR0kdEMjl7lXQeDTsKlzzUeGT3JbD5CwS6zwyFEa5XOK
+         zQdPQYYylg5oO1/MYO5lud6ePH9zlxlZFdedPd8JNO49sAlOGzzG1+ZhCwbLglpkyiVg
+         kbpA==
+X-Gm-Message-State: AO0yUKXqU9dt1Q9GS51cNuE09v6qDAkT1KriwndUsg4lWqvJu2JkDPRg
+        KxXc8pLWdQ2nJYJA2H5o5C2HLw==
+X-Google-Smtp-Source: AK7set/L2xUtI4IPyfWEyjYzgLb/b9TgU6bEJpxccera2h9ihdfNGwynEZlDdSYQkGFc+eduSJPTsw==
+X-Received: by 2002:a19:ad0a:0:b0:4d5:978e:8bcf with SMTP id t10-20020a19ad0a000000b004d5978e8bcfmr3377845lfc.33.1677149379532;
+        Thu, 23 Feb 2023 02:49:39 -0800 (PST)
+Received: from [192.168.1.101] (abxi151.neoplus.adsl.tpnet.pl. [83.9.2.151])
+        by smtp.gmail.com with ESMTPSA id r28-20020ac25a5c000000b004db3890cb4bsm168085lfn.94.2023.02.23.02.49.37
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 23 Feb 2023 02:49:39 -0800 (PST)
+Message-ID: <a0a7df49-0cba-927e-8bcd-d42c040845d7@linaro.org>
+Date:   Thu, 23 Feb 2023 11:49:37 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230223103614.4137309-4-neeraj.sanjaykale@nxp.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH] arm: Drop CONFIG_MTD_M25P80 in various defconfig files
+Content-Language: en-US
+To:     Bin Meng <bmeng@tinylab.org>, linux-kernel@vger.kernel.org
+Cc:     Andrew Lunn <andrew@lunn.ch>, Andy Gross <agross@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Chuck Lever <chuck.lever@oracle.com>,
+        Dinh Nguyen <dinguyen@kernel.org>,
+        Fabio Estevam <festevam@gmail.com>,
+        Gregory Clement <gregory.clement@bootlin.com>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Robert Elliott <elliott@hpe.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Stefan Hansson <newbie13xd@gmail.com>,
+        Sudeep Holla <sudeep.holla@arm.com>, Zi Yan <ziy@nvidia.com>,
+        linux-arm-kernel@lists.infradead.org, linux-arm-msm@vger.kernel.org
+References: <20230210093224.689990-1-bmeng@tinylab.org>
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+In-Reply-To: <20230210093224.689990-1-bmeng@tinylab.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -61,363 +92,136 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 23, 2023 at 04:06:14PM +0530, Neeraj Sanjay Kale wrote:
-> This adds a driver based on serdev driver for the NXP BT serial protocol
-> based on running H:4, which can enable the built-in Bluetooth device
-> inside an NXP BT chip.
+
+
+On 10.02.2023 10:32, Bin Meng wrote:
+> Drop CONFIG_MTD_M25P80 that was removed in
+> commit b35b9a10362d ("mtd: spi-nor: Move m25p80 code in spi-nor.c")
 > 
-> This driver has Power Save feature that will put the chip into sleep state
-> whenever there is no activity for 2000ms, and will be woken up when any
-> activity is to be initiated over UART.
+> Signed-off-by: Bin Meng <bmeng@tinylab.org>
 > 
-> This driver enables the power save feature by default by sending the vendor
-> specific commands to the chip during setup.
-> 
-> During setup, the driver checks if a FW is already running on the chip
-> based on the CTS line, and downloads device specific FW file into the
-> chip over UART.
-> 
-> Signed-off-by: Neeraj Sanjay Kale <neeraj.sanjaykale@nxp.com>
 > ---
-> v2: Removed conf file support and added static data for each chip based on
-> compatibility devices mentioned in DT bindings. Handled potential memory
-> leaks and null pointer dereference issues, simplified FW download feature,
-> handled byte-order and few cosmetic changes. (Ilpo Järvinen, Alok Tiwari,
-> Hillf Danton)
-> v3: Added conf file support necessary to support different vendor modules,
-> moved .h file contents to .c, cosmetic changes. (Luiz Augusto von Dentz,
-> Rob Herring, Leon Romanovsky)
-> v4: Removed conf file support, optimized driver data, add logic to select
-> FW name based on chip signature (Greg KH, Ilpo Jarvinen, Sherry Sun)
-> v5: Replaced bt_dev_info() with bt_dev_dbg(), handled user-space cmd
-> parsing in nxp_enqueue() in a better way. (Greg KH, Luiz Augusto
-> von Dentz)
-> ---
->  MAINTAINERS                   |    1 +
->  drivers/bluetooth/Kconfig     |   11 +
->  drivers/bluetooth/Makefile    |    1 +
->  drivers/bluetooth/btnxpuart.c | 1312 +++++++++++++++++++++++++++++++++
->  4 files changed, 1325 insertions(+)
->  create mode 100644 drivers/bluetooth/btnxpuart.c
+Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+
+Konrad
 > 
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index 030ec6fe89df..fdb9b0788c89 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -22840,6 +22840,7 @@ M:	Amitkumar Karwar <amitkumar.karwar@nxp.com>
->  M:	Neeraj Kale <neeraj.sanjaykale@nxp.com>
->  S:	Maintained
->  F:	Documentation/devicetree/bindings/net/bluetooth/nxp,88w8987-bt.yaml
-> +F:	drivers/bluetooth/btnxpuart.c
->  
->  THE REST
->  M:	Linus Torvalds <torvalds@linux-foundation.org>
-> diff --git a/drivers/bluetooth/Kconfig b/drivers/bluetooth/Kconfig
-> index 5a1a7bec3c42..359a4833e31f 100644
-> --- a/drivers/bluetooth/Kconfig
-> +++ b/drivers/bluetooth/Kconfig
-> @@ -465,4 +465,15 @@ config BT_VIRTIO
->  	  Say Y here to compile support for HCI over Virtio into the
->  	  kernel or say M to compile as a module.
->  
-> +config BT_NXPUART
-> +	tristate "NXP protocol support"
-> +	depends on SERIAL_DEV_BUS
-> +	help
-> +	  NXP is serial driver required for NXP Bluetooth
-> +	  devices with UART interface.
-> +
-> +	  Say Y here to compile support for NXP Bluetooth UART device into
-> +	  the kernel, or say M here to compile as a module (btnxpuart).
-> +
-> +
->  endmenu
-> diff --git a/drivers/bluetooth/Makefile b/drivers/bluetooth/Makefile
-> index e0b261f24fc9..7a5967e9ac48 100644
-> --- a/drivers/bluetooth/Makefile
-> +++ b/drivers/bluetooth/Makefile
-> @@ -29,6 +29,7 @@ obj-$(CONFIG_BT_QCA)		+= btqca.o
->  obj-$(CONFIG_BT_MTK)		+= btmtk.o
->  
->  obj-$(CONFIG_BT_VIRTIO)		+= virtio_bt.o
-> +obj-$(CONFIG_BT_NXPUART)	+= btnxpuart.o
->  
->  obj-$(CONFIG_BT_HCIUART_NOKIA)	+= hci_nokia.o
->  
-> diff --git a/drivers/bluetooth/btnxpuart.c b/drivers/bluetooth/btnxpuart.c
-> new file mode 100644
-> index 000000000000..55f6bf7c5d87
-> --- /dev/null
-> +++ b/drivers/bluetooth/btnxpuart.c
-> @@ -0,0 +1,1312 @@
-> +// SPDX-License-Identifier: GPL-2.0-or-later
-> +/*
-> + *  NXP Bluetooth driver
-> + *  Copyright 2018-2023 NXP
-> + */
-> +
-> +#include <linux/module.h>
-> +#include <linux/kernel.h>
-> +
-> +#include <linux/serdev.h>
-> +#include <linux/of.h>
-> +#include <linux/skbuff.h>
-> +#include <asm/unaligned.h>
-> +#include <linux/firmware.h>
-> +#include <linux/string.h>
-> +#include <linux/crc8.h>
-> +
-> +#include <net/bluetooth/bluetooth.h>
-> +#include <net/bluetooth/hci_core.h>
-> +
-> +#include "h4_recv.h"
-> +
-> +#define MANUFACTURER_NXP		37
-> +
-> +#define BTNXPUART_TX_STATE_ACTIVE	1
-> +#define BTNXPUART_FW_DOWNLOADING	2
-> +
-> +#define FIRMWARE_W8987	"nxp/uartuart8987_bt.bin"
-> +#define FIRMWARE_W8997	"nxp/uartuart8997_bt_v4.bin"
-> +#define FIRMWARE_W9098	"nxp/uartuart9098_bt_v1.bin"
-> +#define FIRMWARE_IW416	"nxp/uartiw416_bt_v0.bin"
-> +#define FIRMWARE_IW612	"nxp/uartspi_n61x_v1.bin.se"
-> +
-> +#define CHIP_ID_W9098		0x5c03
-> +#define CHIP_ID_IW416		0x7201
-> +#define CHIP_ID_IW612		0x7601
-> +
-> +#define HCI_NXP_PRI_BAUDRATE	115200
-> +#define HCI_NXP_SEC_BAUDRATE	3000000
-> +
-> +#define MAX_FW_FILE_NAME_LEN    50
-> +
-> +/* Default ps timeout period in milli-second */
-> +#define PS_DEFAULT_TIMEOUT_PERIOD     2000
-> +
-> +/* wakeup methods */
-> +#define WAKEUP_METHOD_DTR       0
-> +#define WAKEUP_METHOD_BREAK     1
-> +#define WAKEUP_METHOD_EXT_BREAK 2
-> +#define WAKEUP_METHOD_RTS       3
-> +#define WAKEUP_METHOD_INVALID   0xff
-> +
-> +/* power save mode status */
-> +#define PS_MODE_DISABLE         0
-> +#define PS_MODE_ENABLE          1
-> +
-> +/* Power Save Commands to ps_work_func  */
-> +#define PS_CMD_EXIT_PS          1
-> +#define PS_CMD_ENTER_PS         2
-> +
-> +/* power save state */
-> +#define PS_STATE_AWAKE          0
-> +#define PS_STATE_SLEEP          1
-> +
-> +/* Bluetooth vendor command : Sleep mode */
-> +#define HCI_NXP_AUTO_SLEEP_MODE	0xfc23
-> +/* Bluetooth vendor command : Wakeup method */
-> +#define HCI_NXP_WAKEUP_METHOD	0xfc53
-> +/* Bluetooth vendor command : Set operational baudrate */
-> +#define HCI_NXP_SET_OPER_SPEED	0xfc09
-> +/* Bluetooth vendor command: Independent Reset */
-> +#define HCI_NXP_IND_RESET	0xfcfc
-> +
-> +/* Bluetooth Power State : Vendor cmd params */
-> +#define BT_PS_ENABLE			0x02
-> +#define BT_PS_DISABLE			0x03
-> +
-> +/* Bluetooth Host Wakeup Methods */
-> +#define BT_HOST_WAKEUP_METHOD_NONE      0x00
-> +#define BT_HOST_WAKEUP_METHOD_DTR       0x01
-> +#define BT_HOST_WAKEUP_METHOD_BREAK     0x02
-> +#define BT_HOST_WAKEUP_METHOD_GPIO      0x03
-> +
-> +/* Bluetooth Chip Wakeup Methods */
-> +#define BT_CTRL_WAKEUP_METHOD_DSR       0x00
-> +#define BT_CTRL_WAKEUP_METHOD_BREAK     0x01
-> +#define BT_CTRL_WAKEUP_METHOD_GPIO      0x02
-> +#define BT_CTRL_WAKEUP_METHOD_EXT_BREAK 0x04
-> +#define BT_CTRL_WAKEUP_METHOD_RTS       0x05
-> +
-> +#define MAX_USER_PARAMS			10
-> +
-> +struct ps_data {
-> +	u8    ps_mode;
-> +	u8    cur_psmode;
-> +	u8    ps_state;
-> +	u8    ps_cmd;
-> +	u8    h2c_wakeupmode;
-> +	u8    cur_h2c_wakeupmode;
-> +	u8    c2h_wakeupmode;
-> +	u8    c2h_wakeup_gpio;
-> +	bool  driver_sent_cmd;
-> +	bool  timer_on;
-> +	u32   interval;
-> +	struct hci_dev *hdev;
-> +	struct work_struct work;
-> +	struct timer_list ps_timer;
-> +};
-> +
-> +struct btnxpuart_data {
-> +	bool fw_dnld_use_high_baudrate;
-> +	const u8 *fw_name;
-> +};
-> +
-> +struct btnxpuart_dev {
-> +	struct hci_dev *hdev;
-> +	struct serdev_device *serdev;
-> +
-> +	struct work_struct tx_work;
-> +	unsigned long tx_state;
-> +	struct sk_buff_head txq;
-> +	struct sk_buff *rx_skb;
-> +
-> +	const struct firmware *fw;
-> +	u8 fw_name[MAX_FW_FILE_NAME_LEN];
-> +	u32 fw_dnld_v1_offset;
-> +	u32 fw_v1_sent_bytes;
-> +	u32 fw_v3_offset_correction;
-> +	u32 fw_v1_expected_len;
-> +	wait_queue_head_t suspend_wait_q;
-> +
-> +	u32 new_baudrate;
-> +	u32 current_baudrate;
-> +	bool timeout_changed;
-> +	bool baudrate_changed;
-> +
-> +	struct ps_data *psdata;
-> +	struct btnxpuart_data *nxp_data;
-> +};
-> +
-> +#define NXP_V1_FW_REQ_PKT	0xa5
-> +#define NXP_V1_CHIP_VER_PKT	0xaa
-> +#define NXP_V3_FW_REQ_PKT	0xa7
-> +#define NXP_V3_CHIP_VER_PKT	0xab
-> +
-> +#define NXP_ACK_V1		0x5a
-> +#define NXP_NAK_V1		0xbf
-> +#define NXP_ACK_V3		0x7a
-> +#define NXP_NAK_V3		0x7b
-> +#define NXP_CRC_ERROR_V3	0x7c
-> +
-> +#define HDR_LEN			16
-> +
-> +#define NXP_RECV_FW_REQ_V1 \
-> +	.type = NXP_V1_FW_REQ_PKT, \
-> +	.hlen = 4, \
-> +	.loff = 0, \
-> +	.lsize = 0, \
-> +	.maxlen = 4
-> +
-> +#define NXP_RECV_CHIP_VER_V3 \
-> +	.type = NXP_V3_CHIP_VER_PKT, \
-> +	.hlen = 4, \
-> +	.loff = 0, \
-> +	.lsize = 0, \
-> +	.maxlen = 4
-> +
-> +#define NXP_RECV_FW_REQ_V3 \
-> +	.type = NXP_V3_FW_REQ_PKT, \
-> +	.hlen = 9, \
-> +	.loff = 0, \
-> +	.lsize = 0, \
-> +	.maxlen = 9
-> +
-> +struct v1_data_req {
-> +	__le16 len;
-> +	__le16 len_comp;
-> +} __packed;
-> +
-> +struct v3_data_req {
-> +	__le16 len;
-> +	__le32 offset;
-> +	__le16 error;
-> +	u8 crc;
-> +} __packed;
-> +
-> +struct v3_start_ind {
-> +	__le16 chip_id;
-> +	u8 loader_ver;
-> +	u8 crc;
-> +} __packed;
-> +
-> +/* UART register addresses of BT chip */
-> +#define CLKDIVADDR	0x7f00008f
-> +#define UARTDIVADDR	0x7f000090
-> +#define UARTMCRADDR	0x7f000091
-> +#define UARTREINITADDR	0x7f000092
-> +#define UARTICRADDR	0x7f000093
-> +#define UARTFCRADDR	0x7f000094
-> +
-> +#define MCR		0x00000022
-> +#define INIT		0x00000001
-> +#define ICR		0x000000c7
-> +#define FCR		0x000000c7
-> +
-> +#define POLYNOMIAL8	0x07
-> +#define POLYNOMIAL32	0x04c11db7L
-> +
-> +struct uart_reg {
-> +	__le32 address;
-> +	__le32 value;
-> +} __packed;
-> +
-> +struct uart_config {
-> +	struct uart_reg clkdiv;
-> +	struct uart_reg uartdiv;
-> +	struct uart_reg mcr;
-> +	struct uart_reg re_init;
-> +	struct uart_reg icr;
-> +	struct uart_reg fcr;
-> +	__le32 crc;
-> +} __packed;
-> +
-> +struct nxp_bootloader_cmd {
-> +	__le32 header;
-> +	__le32 arg;
-> +	__le32 payload_len;
-> +	__le32 crc;
-> +} __packed;
-> +
-> +static u8 crc8_table[CRC8_TABLE_SIZE];
-
-Shouldn't this be initialized when the module is loaded and not at some
-random time later on?
-
-> +static unsigned long crc32_table[256];
-
-Why do you hand-create this, don't we have kernel functions for this?
-
-> +
-> +/* Default Power Save configuration */
-> +static int h2c_wakeupmode = WAKEUP_METHOD_BREAK;
-> +static int ps_mode = PS_MODE_ENABLE;
-
-This will not work.
-
-> +
-> +static int init_baudrate = 115200;
-
-and neither will this, as you need to support multiple devices in the
-system, your driver should never be only able to work with one device.
-Please make these device-specific things, not the same for the whole
-driver.
-
-> +static int ps_wakeup(struct btnxpuart_dev *nxpdev)
-> +{
-> +	struct ps_data *psdata = nxpdev->psdata;
-> +
-> +	if (psdata->ps_state == PS_STATE_AWAKE)
-> +		return 0;
-> +	psdata->ps_cmd = PS_CMD_EXIT_PS;
-> +	schedule_work(&psdata->work);
-> +
-> +	return 1;
-
-Why is this function returning anything (and what does 0 and 1 mean?)
-when you never actually check the return value of it?
-
-thanks,
-
-greg k-h
+>  arch/arm/configs/axm55xx_defconfig     | 2 +-
+>  arch/arm/configs/davinci_all_defconfig | 1 -
+>  arch/arm/configs/dove_defconfig        | 1 -
+>  arch/arm/configs/keystone_defconfig    | 1 -
+>  arch/arm/configs/mvebu_v5_defconfig    | 1 -
+>  arch/arm/configs/mxs_defconfig         | 1 -
+>  arch/arm/configs/pxa_defconfig         | 1 -
+>  arch/arm/configs/qcom_defconfig        | 1 -
+>  arch/arm/configs/socfpga_defconfig     | 1 -
+>  9 files changed, 1 insertion(+), 9 deletions(-)
+> 
+> diff --git a/arch/arm/configs/axm55xx_defconfig b/arch/arm/configs/axm55xx_defconfig
+> index bfbaa2df3be5..936aecbdc129 100644
+> --- a/arch/arm/configs/axm55xx_defconfig
+> +++ b/arch/arm/configs/axm55xx_defconfig
+> @@ -85,7 +85,7 @@ CONFIG_MTD_CFI_AMDSTD=y
+>  CONFIG_MTD_CFI_STAA=y
+>  CONFIG_MTD_PHYSMAP=y
+>  CONFIG_MTD_PHYSMAP_OF=y
+> -CONFIG_MTD_M25P80=y
+> +CONFIG_MTD_SPI_NOR=y
+>  CONFIG_PROC_DEVICETREE=y
+>  CONFIG_BLK_DEV_LOOP=y
+>  CONFIG_BLK_DEV_RAM=y
+> diff --git a/arch/arm/configs/davinci_all_defconfig b/arch/arm/configs/davinci_all_defconfig
+> index 821d966c95a5..cb7a03bce291 100644
+> --- a/arch/arm/configs/davinci_all_defconfig
+> +++ b/arch/arm/configs/davinci_all_defconfig
+> @@ -63,7 +63,6 @@ CONFIG_MTD_CFI=m
+>  CONFIG_MTD_CFI_INTELEXT=m
+>  CONFIG_MTD_CFI_AMDSTD=m
+>  CONFIG_MTD_PHYSMAP=m
+> -CONFIG_MTD_M25P80=m
+>  CONFIG_MTD_RAW_NAND=m
+>  CONFIG_MTD_NAND_DAVINCI=m
+>  CONFIG_MTD_SPI_NOR=m
+> diff --git a/arch/arm/configs/dove_defconfig b/arch/arm/configs/dove_defconfig
+> index ff37f46c82fb..3f90b4b241a9 100644
+> --- a/arch/arm/configs/dove_defconfig
+> +++ b/arch/arm/configs/dove_defconfig
+> @@ -43,7 +43,6 @@ CONFIG_MTD_CFI_GEOMETRY=y
+>  CONFIG_MTD_CFI_INTELEXT=y
+>  CONFIG_MTD_CFI_STAA=y
+>  CONFIG_MTD_PHYSMAP=y
+> -CONFIG_MTD_M25P80=y
+>  CONFIG_MTD_SPI_NOR=y
+>  CONFIG_BLK_DEV_LOOP=y
+>  CONFIG_BLK_DEV_RAM=y
+> diff --git a/arch/arm/configs/keystone_defconfig b/arch/arm/configs/keystone_defconfig
+> index 4a5b9adbf2a1..36692143dd3d 100644
+> --- a/arch/arm/configs/keystone_defconfig
+> +++ b/arch/arm/configs/keystone_defconfig
+> @@ -118,7 +118,6 @@ CONFIG_MTD=y
+>  CONFIG_MTD_CMDLINE_PARTS=y
+>  CONFIG_MTD_BLOCK=y
+>  CONFIG_MTD_PLATRAM=y
+> -CONFIG_MTD_M25P80=y
+>  CONFIG_MTD_RAW_NAND=y
+>  CONFIG_MTD_NAND_DAVINCI=y
+>  CONFIG_MTD_SPI_NOR=y
+> diff --git a/arch/arm/configs/mvebu_v5_defconfig b/arch/arm/configs/mvebu_v5_defconfig
+> index 2467afd32146..26c5724c409d 100644
+> --- a/arch/arm/configs/mvebu_v5_defconfig
+> +++ b/arch/arm/configs/mvebu_v5_defconfig
+> @@ -63,7 +63,6 @@ CONFIG_MTD_CFI_GEOMETRY=y
+>  CONFIG_MTD_CFI_INTELEXT=y
+>  CONFIG_MTD_CFI_STAA=y
+>  CONFIG_MTD_PHYSMAP=y
+> -CONFIG_MTD_M25P80=y
+>  CONFIG_MTD_RAW_NAND=y
+>  CONFIG_MTD_NAND_ORION=y
+>  CONFIG_MTD_SPI_NOR=y
+> diff --git a/arch/arm/configs/mxs_defconfig b/arch/arm/configs/mxs_defconfig
+> index feb38a94c1a7..0eeef6402952 100644
+> --- a/arch/arm/configs/mxs_defconfig
+> +++ b/arch/arm/configs/mxs_defconfig
+> @@ -45,7 +45,6 @@ CONFIG_MTD=y
+>  CONFIG_MTD_CMDLINE_PARTS=y
+>  CONFIG_MTD_BLOCK=y
+>  CONFIG_MTD_DATAFLASH=y
+> -CONFIG_MTD_M25P80=y
+>  CONFIG_MTD_SST25L=y
+>  CONFIG_MTD_RAW_NAND=y
+>  CONFIG_MTD_NAND_GPMI_NAND=y
+> diff --git a/arch/arm/configs/pxa_defconfig b/arch/arm/configs/pxa_defconfig
+> index 0a0f12df40b5..851a817b52c0 100644
+> --- a/arch/arm/configs/pxa_defconfig
+> +++ b/arch/arm/configs/pxa_defconfig
+> @@ -130,7 +130,6 @@ CONFIG_MTD_ROM=m
+>  CONFIG_MTD_COMPLEX_MAPPINGS=y
+>  CONFIG_MTD_PHYSMAP=y
+>  CONFIG_MTD_PXA2XX=m
+> -CONFIG_MTD_M25P80=m
+>  CONFIG_MTD_BLOCK2MTD=y
+>  CONFIG_MTD_DOCG3=m
+>  CONFIG_MTD_ONENAND=m
+> diff --git a/arch/arm/configs/qcom_defconfig b/arch/arm/configs/qcom_defconfig
+> index b41716c1ec64..fd5581edc310 100644
+> --- a/arch/arm/configs/qcom_defconfig
+> +++ b/arch/arm/configs/qcom_defconfig
+> @@ -63,7 +63,6 @@ CONFIG_DEVTMPFS_MOUNT=y
+>  CONFIG_MTD=y
+>  CONFIG_MTD_QCOMSMEM_PARTS=y
+>  CONFIG_MTD_BLOCK=y
+> -CONFIG_MTD_M25P80=y
+>  CONFIG_MTD_RAW_NAND=y
+>  CONFIG_MTD_NAND_QCOM=y
+>  CONFIG_MTD_SPI_NOR=y
+> diff --git a/arch/arm/configs/socfpga_defconfig b/arch/arm/configs/socfpga_defconfig
+> index 70739e09d0f4..9591af0441dd 100644
+> --- a/arch/arm/configs/socfpga_defconfig
+> +++ b/arch/arm/configs/socfpga_defconfig
+> @@ -41,7 +41,6 @@ CONFIG_DEVTMPFS=y
+>  CONFIG_DEVTMPFS_MOUNT=y
+>  CONFIG_MTD=y
+>  CONFIG_MTD_BLOCK=y
+> -CONFIG_MTD_M25P80=y
+>  CONFIG_MTD_RAW_NAND=y
+>  CONFIG_MTD_NAND_DENALI_DT=y
+>  CONFIG_MTD_SPI_NOR=y
