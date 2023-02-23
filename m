@@ -2,281 +2,206 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B468C6A0526
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 10:42:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0E18D6A052B
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 10:45:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233374AbjBWJma (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Feb 2023 04:42:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45600 "EHLO
+        id S234073AbjBWJpT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Feb 2023 04:45:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47794 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234024AbjBWJmY (ORCPT
+        with ESMTP id S233594AbjBWJpR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Feb 2023 04:42:24 -0500
-Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52785515CE
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Feb 2023 01:42:22 -0800 (PST)
-Received: by mail-ed1-x533.google.com with SMTP id eg37so36137160edb.12
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Feb 2023 01:42:22 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Ecq76MOyjJbouEEYrBGWIv8bJtN500LoCU0lJZ9XGak=;
-        b=eXToJJmIw51YrtYOygLqqPIeSzpSM2S5WHaK56xWG2I5QDaQToqq4NX0NdYMb7Mi4t
-         OTuIpaLudTWPja/vdYRVEQ/DHBiZXUYRn4TyHtBYnKTAu3jCl+HXCEzaSdhGaLMxrqXN
-         JxA1Kbg5ci1GgbgwOg4TdrG9eIG8QWEEJJToBCxOERyrzw/8A9UPr+1uU+dSQoFPNwUG
-         qiPMUZ6YNEXHglgKz9Y/A3lHwr/ctbmo5BvuxwnpWPf4Bsbg+e9qO98dFXYhJeC6Dt0P
-         joA2xZpxkvrrfbJvFygOKt7iF6gvn8k2BNfONQxjHmYS8nrlgzY6NjMMFuPvBezUYfGQ
-         jigw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Ecq76MOyjJbouEEYrBGWIv8bJtN500LoCU0lJZ9XGak=;
-        b=udiR/jAIcg3QKt+CLnPcEgv4cP6SHzYST+3fW9Yg2u90vyuuL0MqM3eZLo63lfubQT
-         v0scwc/txL99tFdTlU/BdwaOHnwgHZYuCH16P4YJED4a5fwtUh88IUixFYt5S549uVnL
-         gAc/gvYDP08gDt+0YKaWp5BdWZ8X/L4wjcRTW62jB8x1q1q0VGmwQRzSW/W3i8tw887k
-         2gubNhXA0VeMNUi8JmbmVGoHXyKQtHLJ08XM6z5Hf4DN4q9R6uF6GZtFA4Hm7sn8ZpBt
-         1NU3pVS45ht4MPnVZY6zRRmggPAIcUzI2KleEkTr+05WMc4udZ1go2K57LElwBgcPil8
-         hW3A==
-X-Gm-Message-State: AO0yUKWSZNtTIvqnlDEwtRsP/D/SdqoCph3ZTiFJ2lPfJ3V41U+da3lK
-        Rsw0uM+ioiYLWPPJdbW7lizVXN4+IFSMuXo8wm+Y7w==
-X-Google-Smtp-Source: AK7set8g3+NL8qMaNsG/P3D3VCYixxEJX8SEXwcgNz0g/mt9FnFBM8cKN/Y+zJ2o4H4P8mxzDQH5vHGQgfvmedL5IRA=
-X-Received: by 2002:a50:d086:0:b0:4ad:72b2:cf57 with SMTP id
- v6-20020a50d086000000b004ad72b2cf57mr4996730edd.0.1677145340537; Thu, 23 Feb
- 2023 01:42:20 -0800 (PST)
+        Thu, 23 Feb 2023 04:45:17 -0500
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E6854DBE5;
+        Thu, 23 Feb 2023 01:45:16 -0800 (PST)
+Received: from pps.filterd (m0279870.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 31N9Uwcj012832;
+        Thu, 23 Feb 2023 09:44:49 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=Gx3+mGmc7DFKhERodDYBVbeI5ialDo5msuhCKNGkjew=;
+ b=EmD8ryUNkf7lncbZnsBvUQ3wjuzkdYv7ooxf2ft2cTQg4PIprEZL/CyHMH+LhFXYnWXm
+ UWBcZCyIW66neSD5H/yaJ9ZZyHl0JrybuMGqvIwFXaGXwfW9y8UfGW4th/0S58j/zwKy
+ +YWbLTPeQhuSfPRxMWja1Ji17egF/eFFXr3JCEtBxRCrT8fKMK8SbeZ4eRz+hmraH+fF
+ +XTz1KoomCPzFUIBims52YveQzZcTXFU2LHB1Tc/AubDfFIZpR3le6r1kDsHp4uIO9ZV
+ Jkp4s8KVMbNiAgkyBBq/sqYlKMxg5kfQH5BG/KZuGZKJU5Ges4lP5j37i+qExFKZqA/m mg== 
+Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3nwywd0tnd-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 23 Feb 2023 09:44:49 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 31N9ilmo014950
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 23 Feb 2023 09:44:47 GMT
+Received: from [10.253.32.65] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.41; Thu, 23 Feb
+ 2023 01:44:43 -0800
+Message-ID: <d2b2f3c2-3e65-d98a-991d-40ae6fcddef9@quicinc.com>
+Date:   Thu, 23 Feb 2023 17:44:40 +0800
 MIME-Version: 1.0
-References: <20230202112915.867409-1-usama.anjum@collabora.com>
- <20230202112915.867409-4-usama.anjum@collabora.com> <CABb0KFEgsk+YidSXBYQ9mM8nVV6PuEOQf=bbNn7hsoG1hUeLZg@mail.gmail.com>
- <36ddfd75-5c58-197b-16c9-9f819099ea6d@collabora.com> <CABb0KFGWi0dtgXZ-AeUuHb55EgnwTu3JfJ9cW3ftCqezKi8dAQ@mail.gmail.com>
- <6d2b40c6-bed9-69a6-e198-537b50953acd@collabora.com> <CABb0KFF+AEKijaXMjDpQLKyAdueJ93kf9QLfOouKHaPPwvfw_w@mail.gmail.com>
- <a212c91e-b22a-c080-40ac-d2e909bb51c2@collabora.com> <CABb0KFEBpJTNF7V0XfuvbtaHUiN0Zpx6FqD+BRyXf2gjxiVgTA@mail.gmail.com>
- <473b32fd-24f9-88fd-602f-3ba11d725472@collabora.com> <CABb0KFFSUeu76O9K_Q7PTQVEXJaauyOc0yF-T1uubWsYAq8cOg@mail.gmail.com>
- <324564ba-2cdc-258e-1f57-d0a1d27e9da5@collabora.com>
-In-Reply-To: <324564ba-2cdc-258e-1f57-d0a1d27e9da5@collabora.com>
-From:   =?UTF-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <emmir@google.com>
-Date:   Thu, 23 Feb 2023 10:42:08 +0100
-Message-ID: <CABb0KFEcTpdUW9q8AVyyTu0erPdd8w4T+P8zV+T=wDk1x7fGqw@mail.gmail.com>
-Subject: Re: [PATCH v10 3/6] fs/proc/task_mmu: Implement IOCTL to get and/or
- the clear info about PTEs
-To:     Muhammad Usama Anjum <usama.anjum@collabora.com>
-Cc:     Andrei Vagin <avagin@gmail.com>,
-        Danylo Mocherniuk <mdanylo@google.com>,
-        Mike Rapoport <rppt@kernel.org>, Nadav Amit <namit@vmware.com>,
-        David Hildenbrand <david@redhat.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Paul Gofman <pgofman@codeweavers.com>,
-        Cyrill Gorcunov <gorcunov@gmail.com>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Shuah Khan <shuah@kernel.org>,
-        Christian Brauner <brauner@kernel.org>,
-        Yang Shi <shy828301@gmail.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        "Liam R . Howlett" <Liam.Howlett@oracle.com>,
-        Yun Zhou <yun.zhou@windriver.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Alex Sierra <alex.sierra@amd.com>,
-        Peter Xu <peterx@redhat.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Pasha Tatashin <pasha.tatashin@soleen.com>,
-        Axel Rasmussen <axelrasmussen@google.com>,
-        "Gustavo A . R . Silva" <gustavoars@kernel.org>,
-        Dan Williams <dan.j.williams@intel.com>,
-        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
-        Greg KH <gregkh@linuxfoundation.org>, kernel@collabora.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.0.3
+Subject: Re: [PATCH v3] scsi: ufs: core: Add trace event for MCQ
+To:     Ziqi Chen <quic_ziqichen@quicinc.com>, <quic_asutoshd@quicinc.com>,
+        <bvanassche@acm.org>, <mani@kernel.org>,
+        <stanley.chu@mediatek.com>, <adrian.hunter@intel.com>,
+        <beanhuo@micron.com>, <avri.altman@wdc.com>,
+        <junwoo80.lee@samsung.com>, <martin.petersen@oracle.com>
+CC:     <linux-scsi@vger.kernel.org>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        "open list:TRACING" <linux-trace-kernel@vger.kernel.org>
+References: <1677051569-81113-1-git-send-email-quic_ziqichen@quicinc.com>
+Content-Language: en-US
+From:   Can Guo <quic_cang@quicinc.com>
+In-Reply-To: <1677051569-81113-1-git-send-email-quic_ziqichen@quicinc.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: r3TlIyExX0722icxmLCJ93TqM887RsHb
+X-Proofpoint-ORIG-GUID: r3TlIyExX0722icxmLCJ93TqM887RsHb
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.170.22
+ definitions=2023-02-23_05,2023-02-22_02,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 malwarescore=0
+ clxscore=1011 impostorscore=0 mlxscore=0 bulkscore=0 suspectscore=0
+ phishscore=0 lowpriorityscore=0 priorityscore=1501 mlxlogscore=999
+ adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2302230084
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 23 Feb 2023 at 10:23, Muhammad Usama Anjum
-<usama.anjum@collabora.com> wrote:
+
+On 2/22/2023 3:39 PM, Ziqi Chen wrote:
+> Added a new trace event to record MCQ relevant information
+> for each request in MCQ mode, include hardware queue ID,
+> SQ tail slot, CQ head slot and CQ tail slot.
 >
-> On 2/23/23 1:41=E2=80=AFPM, Micha=C5=82 Miros=C5=82aw wrote:
-> > On Thu, 23 Feb 2023 at 07:44, Muhammad Usama Anjum
-> > <usama.anjum@collabora.com> wrote:
-> >>
-> >> On 2/22/23 4:48=E2=80=AFPM, Micha=C5=82 Miros=C5=82aw wrote:
-> >>> On Wed, 22 Feb 2023 at 12:06, Muhammad Usama Anjum
-> >>> <usama.anjum@collabora.com> wrote:
-> > [...]
-> >>>>>>> BTW, I think I assumed that both conditions (all flags in
-> >>>>>>> required_flags and at least one in anyof_flags is present) need t=
-o be
-> >>>>>>> true for the page to be selected - is this your intention?
-> >>>>>> All the masks are optional. If all or any of the 3 masks are speci=
-fied, the
-> >>>>>> page flags must pass these masks to get selected.
-> >>>>>
-> >>>>> This explanation contradicts in part the introductory paragraph, bu=
-t
-> >>>>> this version seems more useful as you can pass all masks zero to ha=
-ve
-> >>>>> all pages selected.
-> >>>> Sorry, I wrote it wrongly. (All the masks are not optional.) Let me
-> >>>> rephrase. All or at least any 1 of the 3 masks (required, any, exclu=
-de)
-> >>>> must be specified. The return_mask must always be specified. Error i=
-s
-> >>>> returned if all 3 masks (required, anyof, exclude) are zero or retur=
-n_mask
-> >>>> is zero.
-> >>>
-> >>> Why do you need those restrictions? I'd guess it is valid to request =
-a
-> >>> list of all pages with zero return_mask - this will return a compact
-> >>> list of used ranges of the virtual address space.
-> >> At the time, we are supporting 4 flags (PAGE_IS_WRITTEN, PAGE_IS_FILE,
-> >> PAGE_IS_PRESENT and PAGE_IS_SWAPPED). The idea is that user mention hi=
-s
-> >> flags of interest in the return_mask. If he wants only 1 flag, he'll
-> >> specify it. Definitely if user wants only 1 flag, initially it doesn't=
- make
-> >> any sense to mention in the return mask. But we want uniformity. If us=
-er
-> >> want, 2 or more flags in returned, return_mask becomes compulsory. So =
-to
-> >> keep things simple and generic for any number of flags of interest
-> >> returned, the return_mask must be specified even if the flag of intere=
-st is
-> >> only 1.
-> >
-> > I'm not sure why do we want uniformity in the case of 1 flag? If a
-> > user specifies a single required flag, I'd expect he doesn't need to
-> > look at the flags returned as those will duplicate the information
-> > from mere presence of a page. A user might also require a single flag,
-> > but want all of them returned. Both requests - return 1 flag and
-> > return 0 flags would give meaningful output, so why force one way or
-> > the other? Allowing two will also enable users to express the intent:
-> > they need either just a list of pages, or they need a list with
-> > per-page flags - the need would follow from the code structure or
-> > other factors.
-> We can add as much flexibility as much people ask by keeping code simple.
-> But it is going to be dirty to add error check which detects if return_ma=
-sk
-> =3D 0 and if there is only 1 flag of interest mentioned by the user. The
-> following mentioned error check is essential to return deterministic
-> output. Do you think this case is worth it to support and we don't want t=
-o
-> go with the generality for both 1 or more flag cases?
+> Signed-off-by: Ziqi Chen <quic_ziqichen@quicinc.com>
+reviewed-by:  Can Guo <quic_cang@quicinc.com>
 >
-> if (return_mask =3D=3D 0 && hweight_long(required_mask | any_mask) !=3D 1=
-)
->         return error;
-
-Why would you want to add this error check? If a user requires
-multiple flags but cares only about a list of matching pages, then it
-would be natural to express this intent as return_mask =3D 0.
-
-> >>>>>> After taking a while to understand this and compare with already p=
-resent
-> >>>>>> flag system, `negated flags` is comparatively difficult to underst=
-and while
-> >>>>>> already present flags seem easier.
-> >>>>>
-> >>>>> Maybe replacing negated_flags in the API with matched_values =3D
-> >>>>> ~negated_flags would make this better?
-> >>>>>
-> >>>>> We compare having to understand XOR vs having to understand orderin=
-g
-> >>>>> of required_flags and excluded_flags.
-> >>>> There is no ordering in current masks scheme. No mask is preferable.=
- For a
-> >>>> page to get selected, all the definitions of the masks must be fulfi=
-lled.
-> >>>> You have come up with good example that what if required_mask =3D
-> >>>> exclude_mask. In this case, no page will fulfill the criterion and h=
-ence no
-> >>>> page would be selected. It is user's fault that he isn't understandi=
-ng the
-> >>>> definitions of these masks correctly.
-> >>>>
-> >>>> Now thinking about it, I can add a error check which would return er=
-ror if
-> >>>> a bit in required and excluded masks matches. Would you like it? Let=
-s put
-> >>>> this check in place.
-> >>>> (Previously I'd left it for user's wisdom not to do this. If he'll s=
-pecify
-> >>>> same masks in them, he'll get no addresses out of the syscall.)
-> >>>
-> >>> This error case is (one of) the problems I propose avoiding. You also
-> >>> need much more text to describe the requred/excluded flags
-> >>> interactions and edge cases than saying that a flag must have a value
-> >>> equal to corresponding bit in ~negated_flags to be matched by
-> >>> requried/anyof masks.
-> >> I've found excluded_mask very intuitive as compared to negated_mask wh=
-ich
-> >> is so difficult to understand that I don't know how to use it correctl=
-y.
-> >> Lets take an example, I want pages which are PAGE_IS_WRITTEN and are n=
-ot
-> >> PAGE_IS_FILE. In addition, the pages must be PAGE_IS_PRESENT or
-> >> PAGE_IS_SWAPPED. This can be specified as:
-> >>
-> >> required_mask =3D PAGE_IS_WRITTEN
-> >> excluded_mask =3D PAGE_IS_FILE
-> >> anyof_mask =3D PAGE_IS_PRESETNT | PAGE_IS_SWAP
-> >>
-> >> (a) assume page_flags =3D 0b1111
-> >> skip page as 0b1111 & 0b0010 =3D true
-> >>
-> >> (b) assume page_flags =3D 0b1001
-> >> select page as 0b1001 & 0b0010 =3D false
-> >>
-> >> It seemed intuitive. Right? How would you achieve same thing with nega=
-ted_mask?
-> >>
-> >> required_mask =3D PAGE_IS_WRITTEN
-> >> negated_mask =3D PAGE_IS_FILE
-> >> anyof_mask =3D PAGE_IS_PRESETNT | PAGE_IS_SWAP
-> >>
-> >> (1) assume page_flags =3D 0b1111
-> >> tested_flags =3D 0b1111 ^ 0b0010 =3D 0b1101
-> >>
-> >> (2) assume page_flags =3D 0b1001
-> >> tested_flags =3D 0b1001 ^ 0b0010 =3D 0b1011
-> >>
-> >> In (1), we wanted to skip pages which have PAGE_IS_FILE set. But
-> >> negated_mask has just masked it and page is still getting tested if it
-> >> should be selected and it would get selected. It is wrong.
-> >>
-> >> In (2), the PAGE_IS_FILE bit of page_flags was 0 and got updated to 1 =
-or
-> >> PAGE_IS_FILE in tested_flags.
-> >
-> > I require flags PAGE_IS_WRITTEN=3D1, PAGE_IS_FILE=3D0, so:
-> >
-> > required_mask =3D PAGE_IS_WRITTEN | PAGE_IS_FILE;
-> > negated_flags =3D PAGE_IS_FILE; // flags I want zero
-> You want PAGE_IS_FILE to be zero and at the same time you are requiring t=
-he
-> PAGE_IS_FILE. It is confusing.
-
-Ok, I believe the misunderstanding comes from the naming. I "require"
-the flag to be a particular value - hence include it in
-"required_flags" and specify the required value in ~negated_flags. You
-"require" the flag to be set (equal 1) and so include it in
-"required_flags" and you "require" the flag to be clear (equal to 0)
-so include it in "excluded_flags". Both approaches are correct, but I
-would not consider one "easier" than the other. The former is more
-general, though - makes any_of also able to match on flags cleared and
-removes the possibility of a conflicting case of a flag present in
-both sets.
-
-Maybe considered_flags or matched_flags then would make the field
-better understandable?
-
-Best Regards
-Micha=C5=82 Miros=C5=82aw
+> ---
+> Changes to v2:
+> - Shorten printing strings.
+>
+> Changes to v1:
+> - Adjust the order of fileds to keep them aligned.
+> ---
+>   drivers/ufs/core/ufshcd.c  | 14 +++++++++++---
+>   include/trace/events/ufs.h | 48 ++++++++++++++++++++++++++++++++++++++++++++++
+>   2 files changed, 59 insertions(+), 3 deletions(-)
+>
+> diff --git a/drivers/ufs/core/ufshcd.c b/drivers/ufs/core/ufshcd.c
+> index 3b3cf78..67cb90d 100644
+> --- a/drivers/ufs/core/ufshcd.c
+> +++ b/drivers/ufs/core/ufshcd.c
+> @@ -426,6 +426,7 @@ static void ufshcd_add_command_trace(struct ufs_hba *hba, unsigned int tag,
+>   	struct ufshcd_lrb *lrbp = &hba->lrb[tag];
+>   	struct scsi_cmnd *cmd = lrbp->cmd;
+>   	struct request *rq = scsi_cmd_to_rq(cmd);
+> +	struct ufs_hw_queue *hwq;
+>   	int transfer_len = -1;
+>   
+>   	if (!cmd)
+> @@ -456,9 +457,16 @@ static void ufshcd_add_command_trace(struct ufs_hba *hba, unsigned int tag,
+>   	}
+>   
+>   	intr = ufshcd_readl(hba, REG_INTERRUPT_STATUS);
+> -	doorbell = ufshcd_readl(hba, REG_UTP_TRANSFER_REQ_DOOR_BELL);
+> -	trace_ufshcd_command(dev_name(hba->dev), str_t, tag,
+> -			doorbell, transfer_len, intr, lba, opcode, group_id);
+> +
+> +	if (is_mcq_enabled(hba)) {
+> +		hwq = ufshcd_mcq_req_to_hwq(hba, rq);
+> +		trace_ufshcd_command_mcq(dev_name(hba->dev), str_t, tag,
+> +				hwq, transfer_len, intr, lba, opcode, group_id);
+> +	} else {
+> +		doorbell = ufshcd_readl(hba, REG_UTP_TRANSFER_REQ_DOOR_BELL);
+> +		trace_ufshcd_command(dev_name(hba->dev), str_t, tag,
+> +				doorbell, transfer_len, intr, lba, opcode, group_id);
+> +	}
+>   }
+>   
+>   static void ufshcd_print_clk_freqs(struct ufs_hba *hba)
+> diff --git a/include/trace/events/ufs.h b/include/trace/events/ufs.h
+> index 599739e..604b2cd 100644
+> --- a/include/trace/events/ufs.h
+> +++ b/include/trace/events/ufs.h
+> @@ -10,6 +10,7 @@
+>   #define _TRACE_UFS_H
+>   
+>   #include <linux/tracepoint.h>
+> +#include <ufs/ufshcd.h>
+>   
+>   #define str_opcode(opcode)						\
+>   	__print_symbolic(opcode,					\
+> @@ -307,6 +308,53 @@ TRACE_EVENT(ufshcd_command,
+>   	)
+>   );
+>   
+> +TRACE_EVENT(ufshcd_command_mcq,
+> +	TP_PROTO(const char *dev_name, enum ufs_trace_str_t str_t,
+> +		unsigned int tag, struct ufs_hw_queue *hwq, int transfer_len,
+> +		u32 intr, u64 lba, u8 opcode, u8 group_id),
+> +
+> +	TP_ARGS(dev_name, str_t, tag, hwq, transfer_len, intr, lba, opcode, group_id),
+> +
+> +	TP_STRUCT__entry(
+> +		__string(dev_name, dev_name)
+> +		__field(enum ufs_trace_str_t, str_t)
+> +		__field(unsigned int, tag)
+> +		__field(u32, hwq_id)
+> +		__field(u32, sq_tail)
+> +		__field(u32, cq_head)
+> +		__field(u32, cq_tail)
+> +		__field(int, transfer_len)
+> +		__field(u32, intr)
+> +		__field(u64, lba)
+> +		__field(u8, opcode)
+> +		__field(u8, group_id)
+> +	),
+> +
+> +	TP_fast_assign(
+> +		__assign_str(dev_name, dev_name);
+> +		__entry->str_t = str_t;
+> +		__entry->tag = tag;
+> +		__entry->hwq_id = hwq->id;
+> +		__entry->sq_tail = hwq->sq_tail_slot;
+> +		__entry->cq_head = hwq->cq_head_slot;
+> +		__entry->cq_tail = hwq->cq_tail_slot;
+> +		__entry->transfer_len = transfer_len;
+> +		__entry->intr = intr;
+> +		__entry->lba = lba;
+> +		__entry->opcode = opcode;
+> +		__entry->group_id = group_id;
+> +	),
+> +
+> +	TP_printk(
+> +		"%s: %s: tag: %u, hqid: %d, size: %d, IS: %u, LBA: %llu, opcode: 0x%x (%s), group_id: 0x%x, sqt: %d, cqh: %d, cqt: %d",
+> +		show_ufs_cmd_trace_str(__entry->str_t), __get_str(dev_name),
+> +		__entry->tag, __entry->hwq_id, __entry->transfer_len,
+> +		__entry->intr, __entry->lba, (u32)__entry->opcode,
+> +		str_opcode(__entry->opcode), (u32)__entry->group_id,
+> +		__entry->sq_tail, __entry->cq_head,  __entry->cq_tail
+> +	)
+> +);
+> +
+>   TRACE_EVENT(ufshcd_uic_command,
+>   	TP_PROTO(const char *dev_name, enum ufs_trace_str_t str_t, u32 cmd,
+>   		 u32 arg1, u32 arg2, u32 arg3),
