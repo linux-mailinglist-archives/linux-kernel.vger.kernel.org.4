@@ -2,121 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 40D6E6A0D4F
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 16:48:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D7BC26A0D51
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 16:51:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234513AbjBWPsu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Feb 2023 10:48:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60168 "EHLO
+        id S233862AbjBWPvK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Feb 2023 10:51:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33368 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233862AbjBWPss (ORCPT
+        with ESMTP id S229509AbjBWPvJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Feb 2023 10:48:48 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7C91311C2;
-        Thu, 23 Feb 2023 07:48:47 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 561E1B81A53;
-        Thu, 23 Feb 2023 15:48:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BFCD1C433EF;
-        Thu, 23 Feb 2023 15:48:40 +0000 (UTC)
-Date:   Thu, 23 Feb 2023 21:18:36 +0530
-From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-To:     Vivek Pernamitta <quic_vpernami@quicinc.com>
-Cc:     mhi@lists.linux.dev, quic_qianyu@quicinc.com,
-        quic_vbadigan@quicinc.com, quic_krichai@quicinc.com,
-        quic_skananth@quicinc.com, mrana@quicinc.com,
-        Alex Elder <elder@linaro.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jeffrey Hugo <quic_jhugo@quicinc.com>,
-        Hemant Kumar <hemantk@codeaurora.org>,
-        Bhaumik Bhatt <bbhatt@codeaurora.org>,
-        "open list:MHI BUS" <linux-arm-msm@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v5] bus: mhi: host: Avoid ringing EV DB if there is no
- elements to process
-Message-ID: <20230223154836.GC6422@workstation>
-References: <1677087470-7004-1-git-send-email-quic_vpernami@quicinc.com>
+        Thu, 23 Feb 2023 10:51:09 -0500
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51BD13756E
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Feb 2023 07:51:04 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+        Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
+        Message-ID:Sender:Reply-To:Content-ID:Content-Description;
+        bh=gcaOWdjkRuwLLoyj6ZoLjXSkHlPAfZqEuB5/VEUD0fI=; b=Ot7dJ9+wvbJRfG4duiWBJQO6Oa
+        9LJgmKjMl5QrQb+AQ0DQmlwvXHBYSmEL2hkbvYXUZlxWKIaJ/GGwOcY4UZHicVUC/VU4zv4QvdJZs
+        779PJrDbLbfJlM6N2sP6Rw+j3ylct3XmdyAq4NXqp5hcpl+mSInonIDo1xaWZ/7lHcHB8zFfEqsen
+        UVY3sqGaaodSgnmFduiFHL9w1zZY8EaoWBoCYEl8rsQ099UofjDxTP2zjkeNTid0TwCdCDiBQskw/
+        z2J/tdaDa161SfEFmeYt3z+joic2U4Djt1isuaRUGUZg7VBk6uyGRGAbboHo194hRZCFOREMXFtAz
+        HSDHCsBg==;
+Received: from [2601:1c2:980:9ec0::df2f]
+        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1pVDs6-00H8rh-Eb; Thu, 23 Feb 2023 15:51:02 +0000
+Message-ID: <7e5c3c59-68c1-eb45-d462-bb093aee5da3@infradead.org>
+Date:   Thu, 23 Feb 2023 07:51:01 -0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1677087470-7004-1-git-send-email-quic_vpernami@quicinc.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.2
+Subject: Re: [PATCH] macintosh: via-pmu-led: *********************************
+Content-Language: en-US
+To:     Michael Ellerman <mpe@ellerman.id.au>, linux-kernel@vger.kernel.org
+Cc:     Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Elimar Riesebieter <riesebie@lxtec.de>,
+        linuxppc-dev@lists.ozlabs.org
+References: <20230223014151.19270-1-rdunlap@infradead.org>
+ <877cw8bvzv.fsf@mpe.ellerman.id.au>
+From:   Randy Dunlap <rdunlap@infradead.org>
+In-Reply-To: <877cw8bvzv.fsf@mpe.ellerman.id.au>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Feb 22, 2023 at 11:07:48PM +0530, Vivek Pernamitta wrote:
-> As mhi_poll function can be called by mhi client drivers
-> which will call process_event, which will ring DB even if
-> there no ring elements to process. This could cause
-> doorbell event to be processed by MHI device to check for
-> any ring elements even it is none and also it will occupy
-> lot of bandwidth on peripheral when mhi_poll() is called in
-> aggressive loop.
+
+
+On 2/23/23 00:56, Michael Ellerman wrote:
+> Randy Dunlap <rdunlap@infradead.org> writes:
+>> LEDS_TRIGGER_DISK depends on ATA, so selecting LEDS_TRIGGER_DISK
+>> when ATA is not set/enabled causes a Kconfig warning:
+>>
+>> WARNING: unmet direct dependencies detected for LEDS_TRIGGER_DISK
+>>   Depends on [n]: NEW_LEDS [=y] && LEDS_TRIGGERS [=y] && ATA [=n]
+>>   Selected by [y]:
+>>   - ADB_PMU_LED_DISK [=y] && MACINTOSH_DRIVERS [=y] && ADB_PMU_LED [=y] && LEDS_CLASS [=y]
+>>
+>> Fix this by making ADB_PMU_LED_DISK depend on ATA.
 > 
+> Should it just depend on LEDS_TRIGGER_DISK ?
 
-The change looks good to me but who is the actual in-kernel user of
-mhi_poll() API? It is being exported and if there is no upstream client
-driver making use of it, then it shouldn't be.
-
-I'm gonna submit a patch to remove this API altogether.
-
-> Signed-off-by: Vivek Pernamitta <quic_vpernami@quicinc.com>
-> Reviewed-by: Jeffrey Hugo <quic_jhugo@quicinc.com>
-
-Reviewed-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-
-Thanks,
-Mani
+Hmph. Yes, good idea. Thanks.
 
 > 
-> ---
-> changes since v4:
-> 	updating the commit text with more information.
-> changes since v3:
-> 	- Updating commit text for multiple versions of patches.
-> changes since v2:
-> 	- Updated comments in code.
-> changes since v1:
-> 	- Add an check to avoid ringing EV DB in mhi_process_ctrl_ev_ring().
-> ---
->  drivers/bus/mhi/host/main.c | 8 ++++++--
->  1 file changed, 6 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/bus/mhi/host/main.c b/drivers/bus/mhi/host/main.c
-> index df0fbfe..1bbdb75 100644
-> --- a/drivers/bus/mhi/host/main.c
-> +++ b/drivers/bus/mhi/host/main.c
-> @@ -961,7 +961,9 @@ int mhi_process_ctrl_ev_ring(struct mhi_controller *mhi_cntrl,
->  	}
->  
->  	read_lock_bh(&mhi_cntrl->pm_lock);
-> -	if (likely(MHI_DB_ACCESS_VALID(mhi_cntrl)))
-> +
-> +	/* Ring EV DB only if there is any pending element to process */
-> +	if (likely(MHI_DB_ACCESS_VALID(mhi_cntrl)) && count)
->  		mhi_ring_er_db(mhi_event);
->  	read_unlock_bh(&mhi_cntrl->pm_lock);
->  
-> @@ -1031,7 +1033,9 @@ int mhi_process_data_event_ring(struct mhi_controller *mhi_cntrl,
->  		count++;
->  	}
->  	read_lock_bh(&mhi_cntrl->pm_lock);
-> -	if (likely(MHI_DB_ACCESS_VALID(mhi_cntrl)))
-> +
-> +	/* Ring EV DB only if there is any pending element to process */
-> +	if (likely(MHI_DB_ACCESS_VALID(mhi_cntrl)) && count)
->  		mhi_ring_er_db(mhi_event);
->  	read_unlock_bh(&mhi_cntrl->pm_lock);
->  
-> -- 
-> 2.7.4
-> 
+>> Seen on both PPC32 and PPC64.
+>>
+>> Fixes: 0e865a80c135 ("macintosh: Remove dependency on IDE_GD_ATA if ADB_PMU_LED_DISK is selected")
+>> Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+>> Cc: Benjamin Herrenschmidt <benh@kernel.crashing.org>
+>> Cc: Paul Mackerras <paulus@samba.org>
+>> Cc: Elimar Riesebieter <riesebie@lxtec.de>
+>> Cc: Michael Ellerman <mpe@ellerman.id.au>
+>> Cc: linuxppc-dev@lists.ozlabs.org
+>> ---
+>>  drivers/macintosh/Kconfig |    1 +
+>>  1 file changed, 1 insertion(+)
+>>
+>> diff -- a/drivers/macintosh/Kconfig b/drivers/macintosh/Kconfig
+>> --- a/drivers/macintosh/Kconfig
+>> +++ b/drivers/macintosh/Kconfig
+>> @@ -86,6 +86,7 @@ config ADB_PMU_LED
+>>  
+>>  config ADB_PMU_LED_DISK
+>>  	bool "Use front LED as DISK LED by default"
+>> +	depends on ATA
+>>  	depends on ADB_PMU_LED
+>>  	depends on LEDS_CLASS
+>>  	select LEDS_TRIGGERS
+
+-- 
+~Randy
