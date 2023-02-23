@@ -2,139 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 70BFF6A04F9
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 10:35:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5AF2E6A04DC
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 10:32:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234143AbjBWJfM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Feb 2023 04:35:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35744 "EHLO
+        id S233957AbjBWJco (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Feb 2023 04:32:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59662 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234156AbjBWJes (ORCPT
+        with ESMTP id S233374AbjBWJcn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Feb 2023 04:34:48 -0500
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67F6053EF7
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Feb 2023 01:34:16 -0800 (PST)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 3796133893;
-        Thu, 23 Feb 2023 09:33:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1677144835; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=/LnG+vviZFEmSplserK7lU8lrYy0Xhh7tv0XqJyR/Mo=;
-        b=pYdRjd/L+Kxd+loKH4Y96MP+JlWfLYJ/7zuBCT0IJGcHMM8acCplbZCdyvqwkdlL0yBOXD
-        SHHutV4W4tzqxFbH1+aMFjwwwNpk5rq8VnLjxJqT7mtJk+HqaSNZESfPi4xQCn7ypduFG3
-        fTik8GRbmVVJBCjGYlOpv3g3Glj0Xxk=
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id DEFEE13928;
-        Thu, 23 Feb 2023 09:33:54 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id 7W6iNAIz92MDbQAAMHmgww
-        (envelope-from <jgross@suse.com>); Thu, 23 Feb 2023 09:33:54 +0000
-From:   Juergen Gross <jgross@suse.com>
-To:     linux-kernel@vger.kernel.org, x86@kernel.org
-Cc:     Juergen Gross <jgross@suse.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>
-Subject: [PATCH v3 12/12] x86/mm: only check uniform after calling mtrr_type_lookup()
-Date:   Thu, 23 Feb 2023 10:32:43 +0100
-Message-Id: <20230223093243.1180-13-jgross@suse.com>
-X-Mailer: git-send-email 2.35.3
-In-Reply-To: <20230223093243.1180-1-jgross@suse.com>
-References: <20230223093243.1180-1-jgross@suse.com>
+        Thu, 23 Feb 2023 04:32:43 -0500
+Received: from ex01.ufhost.com (ex01.ufhost.com [61.152.239.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4134D17159;
+        Thu, 23 Feb 2023 01:32:41 -0800 (PST)
+Received: from EXMBX165.cuchost.com (unknown [175.102.18.54])
+        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
+        (Client CN "EXMBX165", Issuer "EXMBX165" (not verified))
+        by ex01.ufhost.com (Postfix) with ESMTP id D85AB24E294;
+        Thu, 23 Feb 2023 17:32:39 +0800 (CST)
+Received: from EXMBX061.cuchost.com (172.16.6.61) by EXMBX165.cuchost.com
+ (172.16.6.75) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Thu, 23 Feb
+ 2023 17:32:39 +0800
+Received: from [192.168.125.128] (113.72.147.165) by EXMBX061.cuchost.com
+ (172.16.6.61) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Thu, 23 Feb
+ 2023 17:32:38 +0800
+Message-ID: <5e4007b7-6522-4c81-ca15-15a98c586aad@starfivetech.com>
+Date:   Thu, 23 Feb 2023 17:32:58 +0800
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH v1 2/3] clk: starfive: Add StarFive JH7110 PLL clock
+ driver
+Content-Language: en-US
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        <linux-riscv@lists.infradead.org>, <devicetree@vger.kernel.org>,
+        "Michael Turquette" <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Emil Renner Berthing <kernel@esmil.dk>
+CC:     Rob Herring <robh+dt@kernel.org>, Conor Dooley <conor@kernel.org>,
+        "Paul Walmsley" <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Hal Feng <hal.feng@starfivetech.com>,
+        <linux-kernel@vger.kernel.org>, <linux-clk@vger.kernel.org>
+References: <20230221141147.303642-1-xingyu.wu@starfivetech.com>
+ <20230221141147.303642-3-xingyu.wu@starfivetech.com>
+ <3f50066b-f967-b9fa-1e0d-5337ec1ed194@linaro.org>
+From:   Xingyu Wu <xingyu.wu@starfivetech.com>
+In-Reply-To: <3f50066b-f967-b9fa-1e0d-5337ec1ed194@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [113.72.147.165]
+X-ClientProxiedBy: EXCAS064.cuchost.com (172.16.6.24) To EXMBX061.cuchost.com
+ (172.16.6.61)
+X-YovoleRuleAgent: yovoleflag
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Today pud_set_huge() and pmd_set_huge() test for the MTRR type to be
-WB or INVALID after calling mtrr_type_lookup(). Those tests can be
-dropped, as the only reason to not use a large mapping would be
-uniform being 0. Any MTRR type can be accepted as long as it applies
-to the whole memory range covered by the mapping, as the alternative
-would only be to map the same region with smaller pages instead, using
-the same PAT type as for the large mapping.
+On 2023/2/23 16:56, Krzysztof Kozlowski wrote:
+> On 21/02/2023 15:11, Xingyu Wu wrote:
+>> Add driver for the StarFive JH7110 PLL clock controller and
+>> modify the JH7110 system clock driver to rely on this PLL clocks.
+>> 
+>> Signed-off-by: Xingyu Wu <xingyu.wu@starfivetech.com>
+>> ---
+> 
+> 
+>> +
+>> +static int jh7110_pll_clk_probe(struct platform_device *pdev)
+>> +{
+>> +	int ret;
+>> +	struct of_phandle_args args;
+>> +	struct regmap *pll_syscon_regmap;
+>> +	unsigned int idx;
+>> +	struct jh7110_clk_pll_priv *priv;
+>> +	struct jh7110_clk_pll_data *data;
+>> +	char *pll_name[JH7110_PLLCLK_END] = {
+>> +		"pll0_out",
+>> +		"pll1_out",
+>> +		"pll2_out"
+>> +	};
+>> +
+>> +	priv = devm_kzalloc(&pdev->dev,
+>> +			    struct_size(priv, data, JH7110_PLLCLK_END),
+>> +			    GFP_KERNEL);
+>> +	if (!priv)
+>> +		return -ENOMEM;
+>> +
+>> +	priv->dev = &pdev->dev;
+>> +	ret = of_parse_phandle_with_fixed_args(pdev->dev.of_node, "starfive,sysreg", 0, 0, &args);
+> 
+> 1. Wrong wrapping. Wrap code at 80 as coding style asks.
+> 
+> 2. Why you are using syscon for normal, device MMIO operation? Your DTS
+> also points that this is incorrect, hacky representation of hardware.
+> Don't add devices to DT to fake places and then overuse syscon to fix
+> that fake placement. The clock is in system registers, thus it must be
+> there.
+> 
+> 3. Even if this stays, why so complicated code instead of
+> syscon_regmap_lookup_by_phandle()?
+> 
 
-Suggested-by: Linus Torvalds <torvalds@linux-foundation.org>
-Signed-off-by: Juergen Gross <jgross@suse.com>
----
-V3:
-- adapt comment for pud_set_huge()
----
- arch/x86/mm/pgtable.c | 24 ++++++++----------------
- 1 file changed, 8 insertions(+), 16 deletions(-)
+Thanks for your advice. Will use syscon_regmap_lookup_by_phandle instead it
+and remove useless part.
 
-diff --git a/arch/x86/mm/pgtable.c b/arch/x86/mm/pgtable.c
-index e4f499eb0f29..15a8009a4480 100644
---- a/arch/x86/mm/pgtable.c
-+++ b/arch/x86/mm/pgtable.c
-@@ -702,14 +702,8 @@ void p4d_clear_huge(p4d_t *p4d)
-  * pud_set_huge - setup kernel PUD mapping
-  *
-  * MTRRs can override PAT memory types with 4KiB granularity. Therefore, this
-- * function sets up a huge page only if any of the following conditions are met:
-- *
-- * - MTRRs are disabled, or
-- *
-- * - MTRRs are enabled and the range is completely covered by a single MTRR, or
-- *
-- * - MTRRs are enabled and the corresponding MTRR memory type is WB, which
-- *   has no effect on the requested PAT memory type.
-+ * function sets up a huge page only if the complete range has the same MTRR
-+ * caching mode.
-  *
-  * Callers should try to decrease page size (1GB -> 2MB -> 4K) if the bigger
-  * page mapping attempt fails.
-@@ -718,11 +712,10 @@ void p4d_clear_huge(p4d_t *p4d)
-  */
- int pud_set_huge(pud_t *pud, phys_addr_t addr, pgprot_t prot)
- {
--	u8 mtrr, uniform;
-+	u8 uniform;
- 
--	mtrr = mtrr_type_lookup(addr, addr + PUD_SIZE, &uniform);
--	if ((mtrr != MTRR_TYPE_INVALID) && (!uniform) &&
--	    (mtrr != MTRR_TYPE_WRBACK))
-+	mtrr_type_lookup(addr, addr + PUD_SIZE, &uniform);
-+	if (!uniform)
- 		return 0;
- 
- 	/* Bail out if we are we on a populated non-leaf entry: */
-@@ -745,11 +738,10 @@ int pud_set_huge(pud_t *pud, phys_addr_t addr, pgprot_t prot)
-  */
- int pmd_set_huge(pmd_t *pmd, phys_addr_t addr, pgprot_t prot)
- {
--	u8 mtrr, uniform;
-+	u8 uniform;
- 
--	mtrr = mtrr_type_lookup(addr, addr + PMD_SIZE, &uniform);
--	if ((mtrr != MTRR_TYPE_INVALID) && (!uniform) &&
--	    (mtrr != MTRR_TYPE_WRBACK)) {
-+	mtrr_type_lookup(addr, addr + PMD_SIZE, &uniform);
-+	if (!uniform) {
- 		pr_warn_once("%s: Cannot satisfy [mem %#010llx-%#010llx] with a huge-page mapping due to MTRR override.\n",
- 			     __func__, addr, addr + PMD_SIZE);
- 		return 0;
--- 
-2.35.3
+> 
+>> +	if (ret) {
+>> +		dev_err(&pdev->dev, "Failed to parse starfive,sys-syscon : %d\n", ret);
+> 
+> dev_err_probe and in other places as well, if applicable.
+
+Will drop.
+
+Best regards,
+Xingyu Wu
 
