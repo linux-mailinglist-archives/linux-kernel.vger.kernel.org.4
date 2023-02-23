@@ -2,201 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BAD0A6A03B4
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 09:20:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B893B6A03B6
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 09:20:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233412AbjBWIUI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Feb 2023 03:20:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46170 "EHLO
+        id S233371AbjBWIUx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Feb 2023 03:20:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47206 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233508AbjBWIUF (ORCPT
+        with ESMTP id S232919AbjBWIUv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Feb 2023 03:20:05 -0500
-Received: from smtp15.bhosted.nl (smtp15.bhosted.nl [IPv6:2a02:9e0:8000::26])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67E7B4C6F0
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Feb 2023 00:20:02 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=protonic.nl; s=202111;
-        h=message-id:references:in-reply-to:reply-to:subject:cc:to:from:date:
-         content-transfer-encoding:content-type:mime-version:from;
-        bh=dq7QMb++ghVX0hglhWq4dxVA8wD/izUizUd3XT6OvEQ=;
-        b=COePPPmzUH4UN8knj1wE6FQ/2gp1MKJCXCF0Lzur9usYXiub/r14j88rymCi3gB3Z1I5Ed4ymU25B
-         HT9OPbbBn9J9BrvjjQMQ63tc6b8nZLLO6q8cAC2yzah4EQLYUGHMcenVgq0t2XiQzWCX8R4i9nzqi8
-         sj7YI7D6p8UYrYfGqjbtsmtrcWxJ3PpGPa82ZUXtpunsC3xZfPLet6qmMJWP+w2Ea6I8Y8xd8bHelO
-         0zt9yZeEyHffIi5HiC6fIECpL7LgHHgPIf8iFuYdIF4MECtDW1cRRyt5ByjlHXtOL/SQF09FqSXdRM
-         Z8XLfW+Ty5Tw9ceWESDcQeNN123c+jw==
-X-MSG-ID: dbf9e1f2-b352-11ed-8fb4-0050569d3a82
-MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8;
- format=flowed
-Content-Transfer-Encoding: 8bit
-Date:   Thu, 23 Feb 2023 09:19:57 +0100
-From:   Robin van der Gracht <robin@protonic.nl>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     Geert Uytterhoeven <geert@linux-m68k.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>,
-        Raul E Rangel <rrangel@chromium.org>,
-        Wolfram Sang <wsa@kernel.org>, linux-kernel@vger.kernel.org,
-        linux-i2c@vger.kernel.org, linux-usb@vger.kernel.org,
-        Miguel Ojeda <ojeda@kernel.org>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        devicetree@vger.kernel.org
-Subject: Re: [PATCH v1 2/3] auxdisplay: ht16k33: Make use of
- device_get_match_data()
-Organization: Protonic Holland
-Reply-To: robin@protonic.nl
-Mail-Reply-To: robin@protonic.nl
-In-Reply-To: <Y/ZOyGo8X7r258EC@smile.fi.intel.com>
-References: <20230221133307.20287-1-andriy.shevchenko@linux.intel.com>
- <20230221133307.20287-3-andriy.shevchenko@linux.intel.com>
- <Y/TJs+Arban0ats8@smile.fi.intel.com>
- <be203dfd290e67c8ce74d11c5c9478a4@protonic.nl>
- <Y/UD3HWNy8uKYShC@smile.fi.intel.com>
- <0235f0fed989a8b027db720663699f5d@protonic.nl>
- <Y/ZKdN4nuHcL4DgE@smile.fi.intel.com> <Y/ZOyGo8X7r258EC@smile.fi.intel.com>
-Message-ID: <e49fa56881c28901ae951742efbd7dad@protonic.nl>
-X-Sender: robin@protonic.nl
-User-Agent: Roundcube Webmail/1.3.1 
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        Thu, 23 Feb 2023 03:20:51 -0500
+Received: from out5-smtp.messagingengine.com (out5-smtp.messagingengine.com [66.111.4.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 660C52332E
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Feb 2023 00:20:50 -0800 (PST)
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
+        by mailout.nyi.internal (Postfix) with ESMTP id CB6AC5C0108;
+        Thu, 23 Feb 2023 03:20:49 -0500 (EST)
+Received: from imap51 ([10.202.2.101])
+  by compute6.internal (MEProxy); Thu, 23 Feb 2023 03:20:49 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to; s=fm3; t=1677140449; x=1677226849; bh=02AbWLrrCN
+        pDShXJ5QA4VOqofZs/r/twV5gBaABxXE8=; b=FOuQ7aDnBB05Q+RrO9L2puGpfE
+        X+HhFepduCiDOrWL7CUkSMd3GisDCAyLdDBfjUFXUcAp6pObXp+kKCv2DHUVPOD0
+        fAy7w2UZVjmMukGKXrwrdtlOUYqpHoI3SN8Lx49PkbA1i/vuh16c7Nj8CPPW5X21
+        OASPZZVzeBA4ti9FKd5Y4thmP0d4hJZqttGbwsMXVMRi/y96yUSihHrQX4Pw3RrV
+        WyzCwvKhq1U7JJGf9hPJJ4Ldp0vcUN5J8aXHvQCm76VaG/9KacAUfSMQxD+AEmTd
+        bwT2d93sq0akgrHgWdzCrLG9N3heBwXJJQ4+zfjLm/+sNJ5i+Gkxy16k950Q==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm1; t=1677140449; x=1677226849; bh=02AbWLrrCNpDShXJ5QA4VOqofZs/
+        r/twV5gBaABxXE8=; b=ptbk2MLW1gbHAxExty2xlv1Pm/vb/QrqYH29NnG2axP0
+        shr3h4pWv3WYhN8d8/CSjPLl7yRsv/RSN5c3pI9tbmbz7WUDsCFu8bNQy1kDcm+S
+        ADKZyquNhz7OFLqsv+j9Js0QC4g4c3Wle+rGl3d40KPLJcsGPV7UyBpq5KE0573N
+        RfDcyS8yrnH7uvqICnR77S5bMNP8MWiQBzgoEmjW036C2vk6nEYAsiU8SPIkyruI
+        cgO28Xt/4kbs8cKkPOFkkxRBabhBx86+7QENPaLIY6EDDoVo1BU618u54GKL8x+d
+        DEdgdRk6e5wdJ1NGbqiGi27vulbInqJJea3FZATzVQ==
+X-ME-Sender: <xms:4SH3YyjTxvClqvt2VC2fcYSlDPEIRsB8DvsYCjvvnMhFTR50rSZFWw>
+    <xme:4SH3YzD0M8cgU6AsDsaCKW5FjvDNaoxTcWAGOTKV7rTe_Nych68jIOrghibqDjUEh
+    a6Zsx_8nPJBgFDiRFk>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrudektddguddujecutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
+    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
+    enucfjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdet
+    rhhnugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrg
+    htthgvrhhnpeevhfffledtgeehfeffhfdtgedvheejtdfgkeeuvefgudffteettdekkeeu
+    feehudenucffohhmrghinhepkhgvrhhnvghlrdhorhhgnecuvehluhhsthgvrhfuihiivg
+    eptdenucfrrghrrghmpehmrghilhhfrhhomheprghrnhgusegrrhhnuggsrdguvg
+X-ME-Proxy: <xmx:4SH3Y6FwIjIvxu2V3Od38-3ATYpEcdq3rO_TgfQQpkhdGGEixv211w>
+    <xmx:4SH3Y7QGKgExZBmjWlmxIgneN3C4jQ2rNOCaQ-PgM1bb79cmvbNKyg>
+    <xmx:4SH3Y_xWHsO8NQevCUvRQyHYQQFzICET0FZVyB63_cKLtVUllLv-4g>
+    <xmx:4SH3Y_9IPTg6XqmBKWMOk5vJqeFF_TbxmVdQFBnRkLXv-RzKYEMWrQ>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id 79AF2B60086; Thu, 23 Feb 2023 03:20:49 -0500 (EST)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.9.0-alpha0-172-g9a2dae1853-fm-20230213.001-g9a2dae18
+Mime-Version: 1.0
+Message-Id: <86e99adb-eccd-4c78-8128-b3690aa559c9@app.fastmail.com>
+In-Reply-To: <20230222085013.32331-1-jirislaby@kernel.org>
+References: <20230222085013.32331-1-jirislaby@kernel.org>
+Date:   Thu, 23 Feb 2023 09:20:53 +0100
+From:   "Arnd Bergmann" <arnd@arndb.de>
+To:     "Jiri Slaby" <jirislaby@kernel.org>,
+        "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, "Jiri Kosina" <jikos@kernel.org>,
+        "David Sterba" <dsterba@suse.com>,
+        "Dominik Brodowski" <linux@dominikbrodowski.net>
+Subject: Re: [PATCH 1/2] tty: ipwireless: move Kconfig entry to tty
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023-02-22 18:20, Andy Shevchenko wrote:
-> + Cc: OF bindings people for the mess with the IDs.
-> 
-> On Wed, Feb 22, 2023 at 07:01:40PM +0200, Andy Shevchenko wrote:
->> On Wed, Feb 22, 2023 at 05:46:00PM +0100, Robin van der Gracht wrote:
->> > On 2023-02-21 18:48, Andy Shevchenko wrote:
->> > > On Tue, Feb 21, 2023 at 05:10:00PM +0100, Robin van der Gracht wrote:
->> > > > On 2023-02-21 14:40, Andy Shevchenko wrote:
->> > > > > On Tue, Feb 21, 2023 at 03:33:06PM +0200, Andy Shevchenko wrote:
-> 
-> ...
-> 
->> > > > > > -	id = i2c_of_match_device(dev->driver->of_match_table, client);
->> > > > > > -	if (id)
->> > > > > > -		priv->type = (uintptr_t)id->data;
->> > > > > > +	priv->type = (uintptr_t)device_get_match_data(dev);
->> > > > >
->> > > > > Looking closer the I²C ID table should provide DISP_MATRIX to keep
->> > > > > default and
->> 
->> > > > > this needs to be not dropped.
->> 
->> ^^^^^ (1)
->> 
->> > > > > So, the question is what to do with unknown type then, return -EINVAL
->> > > > > from probe()?
->> > > >
->> > > > If you leave out your addition of the DISP_UNKNOWN type, the default
->> > > > type
->> > > > will be DISP_MATRIX if no match is found, which is as it is now.
->> > > >
->> > > > In that case the following change should suffice:
->> > > >
->> > > > @@ -713,7 +715,6 @@ static int ht16k33_seg_probe(struct device *dev,
->> > > > struct
->> > > > ht16k33_priv *priv,
->> > > >  static int ht16k33_probe(struct i2c_client *client)
->> > > >  {
->> > > >      struct device *dev = &client->dev;
->> > > > -    const struct of_device_id *id;
->> > > >      struct ht16k33_priv *priv;
->> > > >      uint32_t dft_brightness;
->> > > >      int err;
->> > > > @@ -728,9 +729,8 @@ static int ht16k33_probe(struct i2c_client
->> > > > *client)
->> > > >          return -ENOMEM;
->> > > >
->> > > >      priv->client = client;
->> > > > -    id = i2c_of_match_device(dev->driver->of_match_table, client);
->> > > > -    if (id)
->> > > > -        priv->type = (uintptr_t)id->data;
->> > > > +    priv->type = (uintptr_t)device_get_match_data(dev);
->> > > > +
->> > > >      i2c_set_clientdata(client, priv);
->> > > >
->> > > >      err = ht16k33_initialize(priv);
->> > > >
->> > > > Or do you think falling back to DISP_MATRIX if no match is found is
->> > > > wrong?
->> > >
->> > > First of all, the I²C ID table should actually use DISP_MATRIX.
->> > >
->> > > Second, there are two points:
->> > >
->> > > - It would be nice to check if the OF ID table doesn't provide a setting
->> > >   (shouldn't we try I²C ID table and then, if still nothing, bail out?)
->> > >
->> > > - The I²C ID table can be extended in the future with another entry
->> > > which
->> > >   may want to have different default
->> >
->> > For my understanding, please correct me if I'm wrong;
->> >
->> > For all methods of instantiation during ht16k33 probe, i2c_of_match_device()
->> > matches the compatible strings in the OF ID table due to a call to
->> > i2c_of_match_device_sysfs().
->> >
->> > device_get_match_data() only matches the compatible strings in the OF ID
->> > table for devicetree instantiation because of_match_device() won't match
->> > is there is no actual of_node.
->> 
->> That's half-true. On ACPI based platforms we may have no of_node and 
->> match
->> against OF ID table.
->> 
->> > So with only device_get_match_data() and a non devicetree instantiation,
->> > priv->type will always be (uintptr_t)NULL = 0 = DISP_MATRIX.
->> 
->> Yes.
->> 
->> > Which effectively breaks i.e. user-space instantiation for other display
->> > types which now do work due to i2c_of_match_device().
->> > (so my suggestion above is not sufficient).
->> >
->> > Are you proposing extending and searching the I2C ID table to work around
->> > that?
->> 
->> See (1) above. This is the downside I have noticed after sending this 
->> series.
->> So, the I²C ID table match has to be restored, but the above mentioned 
->> issues
->> with existing table are not gone, hence they need to be addressed in 
->> the next
->> version.
-> 
-> I see now what you mean. So, we have even more issues in this driver:
-> - I²C table is not in sync with all devices supported
-> - the OF ID table seems has something really badly formed for adafruit
->   (just a number after a comma)
-> 
-> The latter shows how broken it is. The I²C ID table mechanism is used 
-> as
-> a backward compatibility to the OF. Unfortunately, user space may not 
-> provide
-> the data except in form of DT overlays, so for the legacy enumeration 
-> we
-> have only device name, which is a set of 4 digits for adafruit case.
-> 
-> Now imagine if by some reason we will get adafruit2 (you name it) with
-> the same schema. How I²C framework can understand that you meant 
-> adafruit
-> and not adafruit2? Or did I miss something?
+On Wed, Feb 22, 2023, at 09:50, Jiri Slaby (SUSE) wrote:
+> The ipwireless' Kconfig entry is currently sitting in char/pcmcia. But
+> the driver is in tty/. So move the entry to tty/ too.
+>
+> First, it makes sense to have the entry along the driver. Second, whole
+> char/pcmcia is about to pass away.
+>
+> Signed-off-by: Jiri Slaby (SUSE) <jirislaby@kernel.org>
+> Cc: Jiri Kosina <jikos@kernel.org>
+> Cc: David Sterba <dsterba@suse.com>
+> Cc: Arnd Bergmann <arnd@arndb.de>
+> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 
-I agree.
+This is clearly correct
 
-I've added Geert Uytterhoeven to the CC. He added support for the 
-adafruit
-segment displays. Maybe he has a comment on this.
+Reviewed-by: Arnd Bergmann <arnd@arndb.de>
 
-Kind regards,
-Robin van der Gracht
+In Dominik's list from
+https://lore.kernel.org/all/Y07d7rMvd5++85BJ@owl.dominikbrodowski.net/
+
+he had listed this driver as 'some activity in 2021', but all I can
+find are treewide cleanups (mostly from you) after some work by David
+in 2008 and Dominik's own PCMCIA rework in 2010. My guess is that
+most likely this driver can be removed entirely, but you and David
+are the ones who know if there are still users.
+
+     Arnd
