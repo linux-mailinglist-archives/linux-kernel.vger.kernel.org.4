@@ -2,200 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F7266A0A8A
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 14:32:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EC3BF6A0A8D
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 14:33:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233852AbjBWNc3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Feb 2023 08:32:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34414 "EHLO
+        id S233883AbjBWNdB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Feb 2023 08:33:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35264 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232110AbjBWNc1 (ORCPT
+        with ESMTP id S232110AbjBWNc7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Feb 2023 08:32:27 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 901DF4D613;
-        Thu, 23 Feb 2023 05:32:23 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 84995616E2;
-        Thu, 23 Feb 2023 13:32:24 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 74AF1C433EF;
-        Thu, 23 Feb 2023 13:32:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1677159142;
-        bh=3oLf3kVcXnmYyNl6ow6zYoGULEpaipXNptn4aFoyxkA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=RLC9W9DGbnuQvuUuHhnvvocTnCDXK1XzNnq+ctqyBkK2WuqqOfG8EI2vct/sY/qbK
-         D+3Uaqb935HCbQQoyvAzHt4zuody6PzvCoQ1YpPGcTAEryh7Sd8l5t/dy4gyp3ox3P
-         NNhOJpCLKldX23QznPfOmaPWmLNH8uIJCIO/ZOPt0KjI6XqylpHCM68jwf//2e44ex
-         e1gpvH6GRt4il93hwzscmqH1RGIfLGCUXhtElmP4GAybhDJB99yJd42bX9/2NcVXBh
-         EkpVe8rlfdP4QSqfzt//JNv3aB2rAXZ40ReZg5jU3Wiq8ReuuVjciBZvIR/OmndVQU
-         qkrmAC/versXQ==
-Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
-        id D910F4049F; Thu, 23 Feb 2023 10:32:19 -0300 (-03)
-Date:   Thu, 23 Feb 2023 10:32:19 -0300
-From:   Arnaldo Carvalho de Melo <acme@kernel.org>
-To:     Ian Rogers <irogers@google.com>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Claire Jensen <cjense@google.com>,
-        Thomas Richter <tmricht@linux.ibm.com>,
-        Sumanth Korikkar <sumanthk@linux.ibm.com>,
-        Athira Rajeev <atrajeev@linux.vnet.ibm.com>,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v1 1/2] perf tests stat+csv_output: Switch CSV separator
- to @
-Message-ID: <Y/dq4yO+zXYLCQ8d@kernel.org>
-References: <20230223071818.329671-1-irogers@google.com>
+        Thu, 23 Feb 2023 08:32:59 -0500
+Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3E2ECA29
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Feb 2023 05:32:57 -0800 (PST)
+Received: by mail-lf1-x12a.google.com with SMTP id t11so2822024lfr.1
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Feb 2023 05:32:57 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=eXSfRBLuMqFua2MZpV9G4Cg4Ju4L9Za2DVr8M7QmRxU=;
+        b=EauZMVoGlbIfZ9gek64NWvJXSZlJNS4Ni7B1SzeT4bSexNDB79YluikQY1jDnya1Hb
+         L5ix6ZTLOjxK55m0roFsvXBBdqZRwryi86JX7p+YJQkvuOywE0UiefJCN13fQyK35JwK
+         SP0Ewpk4wh107UdESFvUvf+aSDa6ai5bIVAGU575pjPDsQ3jnMJ/4WcMc1VypNO8nEsS
+         SjqdLDvSOdhm60kJU97+fS0zl9YAa3YW+neShTDUBMX9bUdHjAzBvOyqp4i4lmTP3fYq
+         2sY/E41yX4G56/ZoTeGUARPv6QdkByNVqcM3utAdyvZA3XjGdKplmEU5NBfh9l0yVxc4
+         rJcg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=eXSfRBLuMqFua2MZpV9G4Cg4Ju4L9Za2DVr8M7QmRxU=;
+        b=SpYOM0Fmuj18NMu5q0htRpq0c6M2daLhNgH1JMciw7SZooY+8hwS33w9nb26lCvT/C
+         Pe4ndW5nhbtx+UDogg5ZmFBJMC8SdUnc9NsCbfpm89rNtWU+HyfRaoZshLNyEFYGCeUr
+         sht5C+q218EPpVGixA7REBn5oBj/wre8SbVnsWDc5yvACQwpZ1Fxgjm8p4UnAvcTpB/I
+         9n3wiZd2lpDcJFljD7xPrMLwPIS4imywgJArSXpjba8D6qYSdEGhvFoGkA2IPKbHLhoE
+         K+zQZ05Hi9uR3RffI7d1JHo/v13lWlI2K0+VXmu8JjChrIKU8cVrXyLuwQpLhNqG2stm
+         VZkQ==
+X-Gm-Message-State: AO0yUKU2KldBGyTFMK18d7krSjXxnHXJ15P274YMXMyGRTIBCF7/ixq1
+        Lgt1eF65mIyId5RKnIqNPpagY5gR/46hYpimwmY=
+X-Google-Smtp-Source: AK7set8hx54qO9AF9kFGbn8rERbVyJmLHHWmAj3gIrsaR1aZTHYta7tKlaZm5HP7onXeHLZk9JfXqA==
+X-Received: by 2002:a19:f60f:0:b0:4b5:2ef3:fd2a with SMTP id x15-20020a19f60f000000b004b52ef3fd2amr4944777lfe.47.1677159175881;
+        Thu, 23 Feb 2023 05:32:55 -0800 (PST)
+Received: from fedora.. ([85.235.12.219])
+        by smtp.gmail.com with ESMTPSA id y14-20020ac24e6e000000b004dc48d91061sm772238lfs.304.2023.02.23.05.32.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 23 Feb 2023 05:32:55 -0800 (PST)
+From:   Linus Walleij <linus.walleij@linaro.org>
+To:     linux-kernel@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Arnd Bergmann <arnd@arndb.de>
+Cc:     Linus Walleij <linus.walleij@linaro.org>,
+        linux-gpio@vger.kernel.org, Marc Zyngier <maz@kernel.org>
+Subject: [PATCH] misc: microchip: pci1xxxx: Convert to immutable irqchip
+Date:   Thu, 23 Feb 2023 14:32:52 +0100
+Message-Id: <20230223133252.2257276-1-linus.walleij@linaro.org>
+X-Mailer: git-send-email 2.39.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230223071818.329671-1-irogers@google.com>
-X-Url:  http://acmel.wordpress.com
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Em Wed, Feb 22, 2023 at 11:18:17PM -0800, Ian Rogers escreveu:
-> Commas may appear in events like:
-> cpu/INT_MISC.RECOVERY_CYCLES,cmask=1,edge/
-> which causes the commachecker to see more fields than expected. Use @
-> as the CSV separator to avoid this.
+Convert the driver to immutable irq-chip with a bit of
+intuition.
 
-Thanks, applied both patches.
+Cc: linux-gpio@vger.kernel.org
+Cc: Marc Zyngier <maz@kernel.org>
+Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
+---
+Maybe this would have been caught in review if the GPIO maintainers
+were involved, but the process isn't perfect. Better to just fix
+it.
+---
+ drivers/misc/mchp_pci1xxxx/mchp_pci1xxxx_gpio.c | 10 ++++++++--
+ 1 file changed, 8 insertions(+), 2 deletions(-)
 
-- Arnaldo
-
+diff --git a/drivers/misc/mchp_pci1xxxx/mchp_pci1xxxx_gpio.c b/drivers/misc/mchp_pci1xxxx/mchp_pci1xxxx_gpio.c
+index 3389803cb281..e616e3ec2b42 100644
+--- a/drivers/misc/mchp_pci1xxxx/mchp_pci1xxxx_gpio.c
++++ b/drivers/misc/mchp_pci1xxxx/mchp_pci1xxxx_gpio.c
+@@ -175,9 +175,13 @@ static void pci1xxxx_gpio_irq_set_mask(struct irq_data *data, bool set)
+ 	unsigned int gpio = irqd_to_hwirq(data);
+ 	unsigned long flags;
  
-> Signed-off-by: Ian Rogers <irogers@google.com>
-> ---
->  tools/perf/tests/shell/stat+csv_output.sh | 23 ++++++++++++-----------
->  1 file changed, 12 insertions(+), 11 deletions(-)
-> 
-> diff --git a/tools/perf/tests/shell/stat+csv_output.sh b/tools/perf/tests/shell/stat+csv_output.sh
-> index b7f050aa6210..324fc9e6edd7 100755
-> --- a/tools/perf/tests/shell/stat+csv_output.sh
-> +++ b/tools/perf/tests/shell/stat+csv_output.sh
-> @@ -7,6 +7,7 @@
->  set -e
->  
->  skip_test=0
-> +csv_sep=@
->  
->  function commachecker()
->  {
-> @@ -34,7 +35,7 @@ function commachecker()
->  		[ "$x" = "Failed" ] && continue
->  
->  		# Count the number of commas
-> -		x=$(echo $line | tr -d -c ',')
-> +		x=$(echo $line | tr -d -c $csv_sep)
->  		cnt="${#x}"
->  		# echo $line $cnt
->  		[[ ! "$cnt" =~ $exp ]] && {
-> @@ -54,7 +55,7 @@ function ParanoidAndNotRoot()
->  check_no_args()
->  {
->  	echo -n "Checking CSV output: no args "
-> -	perf stat -x, true 2>&1 | commachecker --no-args
-> +	perf stat -x$csv_sep true 2>&1 | commachecker --no-args
->  	echo "[Success]"
->  }
->  
-> @@ -66,7 +67,7 @@ check_system_wide()
->  		echo "[Skip] paranoid and not root"
->  		return
->  	fi
-> -	perf stat -x, -a true 2>&1 | commachecker --system-wide
-> +	perf stat -x$csv_sep -a true 2>&1 | commachecker --system-wide
->  	echo "[Success]"
->  }
->  
-> @@ -79,14 +80,14 @@ check_system_wide_no_aggr()
->  		return
->  	fi
->  	echo -n "Checking CSV output: system wide no aggregation "
-> -	perf stat -x, -A -a --no-merge true 2>&1 | commachecker --system-wide-no-aggr
-> +	perf stat -x$csv_sep -A -a --no-merge true 2>&1 | commachecker --system-wide-no-aggr
->  	echo "[Success]"
->  }
->  
->  check_interval()
->  {
->  	echo -n "Checking CSV output: interval "
-> -	perf stat -x, -I 1000 true 2>&1 | commachecker --interval
-> +	perf stat -x$csv_sep -I 1000 true 2>&1 | commachecker --interval
->  	echo "[Success]"
->  }
->  
-> @@ -94,7 +95,7 @@ check_interval()
->  check_event()
->  {
->  	echo -n "Checking CSV output: event "
-> -	perf stat -x, -e cpu-clock true 2>&1 | commachecker --event
-> +	perf stat -x$csv_sep -e cpu-clock true 2>&1 | commachecker --event
->  	echo "[Success]"
->  }
->  
-> @@ -106,7 +107,7 @@ check_per_core()
->  		echo "[Skip] paranoid and not root"
->  		return
->  	fi
-> -	perf stat -x, --per-core -a true 2>&1 | commachecker --per-core
-> +	perf stat -x$csv_sep --per-core -a true 2>&1 | commachecker --per-core
->  	echo "[Success]"
->  }
->  
-> @@ -118,7 +119,7 @@ check_per_thread()
->  		echo "[Skip] paranoid and not root"
->  		return
->  	fi
-> -	perf stat -x, --per-thread -a true 2>&1 | commachecker --per-thread
-> +	perf stat -x$csv_sep --per-thread -a true 2>&1 | commachecker --per-thread
->  	echo "[Success]"
->  }
->  
-> @@ -130,7 +131,7 @@ check_per_die()
->  		echo "[Skip] paranoid and not root"
->  		return
->  	fi
-> -	perf stat -x, --per-die -a true 2>&1 | commachecker --per-die
-> +	perf stat -x$csv_sep --per-die -a true 2>&1 | commachecker --per-die
->  	echo "[Success]"
->  }
->  
-> @@ -142,7 +143,7 @@ check_per_node()
->  		echo "[Skip] paranoid and not root"
->  		return
->  	fi
-> -	perf stat -x, --per-node -a true 2>&1 | commachecker --per-node
-> +	perf stat -x$csv_sep --per-node -a true 2>&1 | commachecker --per-node
->  	echo "[Success]"
->  }
->  
-> @@ -154,7 +155,7 @@ check_per_socket()
->  		echo "[Skip] paranoid and not root"
->  		return
->  	fi
-> -	perf stat -x, --per-socket -a true 2>&1 | commachecker --per-socket
-> +	perf stat -x$csv_sep --per-socket -a true 2>&1 | commachecker --per-socket
->  	echo "[Success]"
->  }
->  
-> -- 
-> 2.39.2.637.g21b0678d19-goog
-> 
-
++	if (!set)
++		gpiochip_enable_irq(chip, gpio);
+ 	spin_lock_irqsave(&priv->lock, flags);
+ 	pci1xxx_assign_bit(priv->reg_base, INTR_MASK_OFFSET(gpio), (gpio % 32), set);
+ 	spin_unlock_irqrestore(&priv->lock, flags);
++	if (set)
++		gpiochip_disable_irq(chip, gpio);
+ }
+ 
+ static void pci1xxxx_gpio_irq_mask(struct irq_data *data)
+@@ -283,12 +287,14 @@ static irqreturn_t pci1xxxx_gpio_irq_handler(int irq, void *dev_id)
+ 	return IRQ_HANDLED;
+ }
+ 
+-static struct irq_chip pci1xxxx_gpio_irqchip = {
++static const struct irq_chip pci1xxxx_gpio_irqchip = {
+ 	.name = "pci1xxxx_gpio",
+ 	.irq_ack = pci1xxxx_gpio_irq_ack,
+ 	.irq_mask = pci1xxxx_gpio_irq_mask,
+ 	.irq_unmask = pci1xxxx_gpio_irq_unmask,
+ 	.irq_set_type = pci1xxxx_gpio_set_type,
++	.flags = IRQCHIP_IMMUTABLE,
++	GPIOCHIP_IRQ_RESOURCE_HELPERS,
+ };
+ 
+ static int pci1xxxx_gpio_suspend(struct device *dev)
+@@ -351,7 +357,7 @@ static int pci1xxxx_gpio_setup(struct pci1xxxx_gpio *priv, int irq)
+ 		return retval;
+ 
+ 	girq = &priv->gpio.irq;
+-	girq->chip = &pci1xxxx_gpio_irqchip;
++	gpio_irq_chip_set_chip(girq, &pci1xxxx_gpio_irqchip);
+ 	girq->parent_handler = NULL;
+ 	girq->num_parents = 0;
+ 	girq->parents = NULL;
 -- 
+2.34.1
 
-- Arnaldo
