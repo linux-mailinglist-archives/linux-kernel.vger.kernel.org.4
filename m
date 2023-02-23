@@ -2,59 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 682796A07C8
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 12:54:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B7556A07CB
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 12:54:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233855AbjBWLyE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Feb 2023 06:54:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52638 "EHLO
+        id S233876AbjBWLyL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Feb 2023 06:54:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52982 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233808AbjBWLyA (ORCPT
+        with ESMTP id S233862AbjBWLyI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Feb 2023 06:54:00 -0500
-Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E541D279A3
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Feb 2023 03:53:58 -0800 (PST)
-Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-536c8bcae3bso111716837b3.2
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Feb 2023 03:53:58 -0800 (PST)
+        Thu, 23 Feb 2023 06:54:08 -0500
+Received: from mail-wr1-x44a.google.com (mail-wr1-x44a.google.com [IPv6:2a00:1450:4864:20::44a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 610F84E5DC
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Feb 2023 03:54:02 -0800 (PST)
+Received: by mail-wr1-x44a.google.com with SMTP id bh3-20020a05600005c300b002c70d6e2014so971418wrb.10
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Feb 2023 03:54:02 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=cc:to:from:subject:references:mime-version:message-id:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=N8HNcqhgVSPQjofHY9HHdIOhJTzECil/jKWvuQznJ68=;
-        b=Z3UuFNSReuZnspRBUTXn6xA0XjsS6l9KP5XVnWEdr9dGHjRh1pl/bW1vjts/JQ0v3z
-         0319caZbtMTvuy3cW8JqhJ3jT92gRYutd7S+XmN8B8Z+dRbaTAbQtQ8Dv/kPuuMnUxty
-         alkzx7gAB7iqJ/lxcT0AS9VT1kyCAsVqRjafog2bRM6t9vrG+3Z92Htr9whhxOm8FaAI
-         g/9whJggh8+IxLCUYFNE1Kb5+0f/zYP7JGThoXcdqQagtbEY4VvSBI+JQuXk52vVF4Su
-         W7+WNUI1LG85bAyQZioDjBw/GNDgMP2ir2v+fHy8jyZ8stulAmicI6xBU+N9iaACdNoM
-         65/A==
+        bh=FE6DqTLa6oLIEcPK8T4wTKxiA51jr0clK07mi2rNw2M=;
+        b=PCA1tagJIsI7O+0Bx91eiRyRj2mKFxg7YgxeG2hiFjGAkBFhJObVBdaX5v3431ZEvi
+         QovW3mswBo0Dd4w+1Sv4M+dZfczp16Gn7Mz9NxP/t7fHurKot3MBQzldi8C6RdNScM0G
+         8TkJtO3v8/XSFVuN6CB8qbxamo1YbIspXY25ssxZuVbn+nXQb59erqHi0GEnBfTaArKz
+         0MpRsi+ZrngfSgMRwQgXbOusuOFa9Xxm0Q3AYvM6fFsw1KB71GawmE8BHB1dKkjQRdHj
+         j8KxAU3QkdAjzM21kiTIzDS+t5wXvLAH6KlFpew7ja9CWa+YIK2QUqVPdToMzinhXFWP
+         3Ptw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:from:subject:references:mime-version:message-id:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=N8HNcqhgVSPQjofHY9HHdIOhJTzECil/jKWvuQznJ68=;
-        b=4J8JRljnk/Z0fDQj1vqlLHRSOEz79Tel4OuWbVNBMFBoSmzIIrnUS2Wa6q17ORywsb
-         eEADNPUBjx2Xca5ua/lVcqPiK/hykhQHkZduhiQiB5fmmLlJzGq/0wn74cBNTPOfK5u/
-         2Q/MX2ekLlE7fF/lFLAJefBfw3PY3GaTkkAz5tlmc28cyBhB4ZMAVJAeDzZIII3to3cA
-         6dkli+ESaVPgfF7OdsXnRLlXucvq8pkiIASAiK/JGk/CALs3pSdLDUttCyfJmUHpDy+1
-         SfOWwU6maK6NGXxPnqBHZkOk9ajuYXGqRwioMaLUcialNPKspTW5fYfXZR1XvPnrTlm+
-         qqNg==
-X-Gm-Message-State: AO0yUKUhigvIgiHw+lynTi368NHLkwfM6caFCpl+5oBt/ZIrT7/g2bwO
-        v5rby9BQnmU2avYa1f/5N5oujZq8GtQxQguUQy5zUQGWbSOilyZGk7L/j5mwQkcRbfOri/RP/Mr
-        qnFgAqryAmmFGV6ZYhDxwjLdqqaVlB8Sv77Ibb3bQFXTdMSaTb63XOfX1KX/ZFZd2nAe8kpRWls
-        c=
-X-Google-Smtp-Source: AK7set+I4E8Ic9RobItVWKhwGewzOFBfJwr18n2356kXAEqAzOXFphfRQxMcgfc12aDp1ZnI6wg2wBpW2AzF/g==
+        bh=FE6DqTLa6oLIEcPK8T4wTKxiA51jr0clK07mi2rNw2M=;
+        b=QIy+KrgF5nOacekXtqQVsxMn4nhGr1M80YH60Xsvt7PdmZqyVTB86qU/fZ6Sp466od
+         UxrZwaLwQQXtywdH7SUi4xx6ke0cA0To5Nm0lrZ+LD9XHPgjRJLX3PMs0Zqooj9M8MID
+         0UkDaSi+Lr7hgTSGuHhQE5JXAN5eHePxPaofg38Q0vjInrVkd1apVUWFYl5pDGXcfc75
+         s0aYmb3h3xHgYgr/3928QzYgBW9QDyd+ILEfr2+yT4lPq4M9yVJp5IHAWEtzFod6jNed
+         wcOkVZIVhROOXTpLsTDvPhz/74oMC37Ga0Gu9rMY1hYbc/Xj07fwNCNiLezaPPt5CO9q
+         MsZA==
+X-Gm-Message-State: AO0yUKVlf/5+EE0C93tnN3zNijaUjODVLR8L59fqsbSZ2LzHwI31IspR
+        n35cUZ4opw+/2eeNe2np46pPv7hd3s+iLr9Lj+T/Q7rl2r03saOpchwkJz4v8Xl9jTb+0JroLWG
+        6KI2It1qgwfUqBHb6tpdNei3mjVdHeXbdfvpH/ASeMdI8XVBn2Pf+RFvATAvIWO/kKBZ2IDywk7
+        g=
+X-Google-Smtp-Source: AK7set+MzHKyhEA2oOA6t+AlfF6nP4ofet3+WO/YMFBvJ6teFYUWCd8hM7C3mV/3f3gi+7jzaSX8rRR7sv2Pcg==
 X-Received: from lux.lon.corp.google.com ([2a00:79e0:d:209:cf33:dc28:3e98:f5e9])
- (user=maennich job=sendgmr) by 2002:a0d:d503:0:b0:52e:d56b:18c3 with SMTP id
- x3-20020a0dd503000000b0052ed56b18c3mr1071272ywd.74.1677153237942; Thu, 23 Feb
- 2023 03:53:57 -0800 (PST)
-Date:   Thu, 23 Feb 2023 11:53:48 +0000
+ (user=maennich job=sendgmr) by 2002:a05:600c:1c04:b0:3dd:b278:27e9 with SMTP
+ id j4-20020a05600c1c0400b003ddb27827e9mr1415658wms.71.1677153240667; Thu, 23
+ Feb 2023 03:54:00 -0800 (PST)
+Date:   Thu, 23 Feb 2023 11:53:49 +0000
 In-Reply-To: <20220201205624.652313-1-nathan@kernel.org>
-Message-Id: <20230223115351.1241401-2-maennich@google.com>
+Message-Id: <20230223115351.1241401-3-maennich@google.com>
 Mime-Version: 1.0
 References: <20220201205624.652313-1-nathan@kernel.org>
 X-Mailer: git-send-email 2.39.2.637.g21b0678d19-goog
-Subject: [PATCH v5.15 v2 1/4] kbuild: Add CONFIG_PAHOLE_VERSION
+Subject: [PATCH v5.15 v2 2/4] scripts/pahole-flags.sh: Use pahole-version.sh
 From:   Matthias Maennich <maennich@google.com>
 To:     linux-kernel@vger.kernel.org
 Cc:     kernel-team@android.com, maennich@google.com,
@@ -76,76 +76,33 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Nathan Chancellor <nathan@kernel.org>
 
-[ Upstream commit 613fe169237785a4bb1d06397b52606b2967da53 ]
+[ Upstream commit 2d6c9810eb8915c4ddede707b8e167a1d919e1ca ]
 
-There are a few different places where pahole's version is turned into a
-three digit form with the exact same command. Move this command into
-scripts/pahole-version.sh to reduce the amount of duplication across the
-tree.
+Use pahole-version.sh to get pahole's version code to reduce the amount
+of duplication across the tree.
 
-Create CONFIG_PAHOLE_VERSION so the version code can be used in Kconfig
-to enable and disable configuration options based on the pahole version,
-which is already done in a couple of places.
-
-Change-Id: Id18c1808832cead0d32f6992a52eb35b0ec269bb
 Signed-off-by: Nathan Chancellor <nathan@kernel.org>
 Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
 Acked-by: Andrii Nakryiko <andrii@kernel.org>
-Link: https://lore.kernel.org/bpf/20220201205624.652313-3-nathan@kernel.org
+Link: https://lore.kernel.org/bpf/20220201205624.652313-4-nathan@kernel.org
 Signed-off-by: Matthias Maennich <maennich@google.com>
 ---
- MAINTAINERS               |  1 +
- init/Kconfig              |  4 ++++
- scripts/pahole-version.sh | 13 +++++++++++++
- 3 files changed, 18 insertions(+)
- create mode 100755 scripts/pahole-version.sh
+ scripts/pahole-flags.sh | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 4f50a453e18a..826e2ba7b09a 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -3407,6 +3407,7 @@ F:	net/sched/act_bpf.c
- F:	net/sched/cls_bpf.c
- F:	samples/bpf/
- F:	scripts/bpf_doc.py
-+F:	scripts/pahole-version.sh
- F:	tools/bpf/
- F:	tools/lib/bpf/
- F:	tools/testing/selftests/bpf/
-diff --git a/init/Kconfig b/init/Kconfig
-index a4144393717b..dafc3ba6fa7a 100644
---- a/init/Kconfig
-+++ b/init/Kconfig
-@@ -91,6 +91,10 @@ config CC_HAS_ASM_INLINE
- config CC_HAS_NO_PROFILE_FN_ATTR
- 	def_bool $(success,echo '__attribute__((no_profile_instrument_function)) int x();' | $(CC) -x c - -c -o /dev/null -Werror)
+diff --git a/scripts/pahole-flags.sh b/scripts/pahole-flags.sh
+index 7acee326aa6c..d38fa6d84d62 100755
+--- a/scripts/pahole-flags.sh
++++ b/scripts/pahole-flags.sh
+@@ -7,7 +7,7 @@ if ! [ -x "$(command -v ${PAHOLE})" ]; then
+ 	exit 0
+ fi
  
-+config PAHOLE_VERSION
-+	int
-+	default $(shell,$(srctree)/scripts/pahole-version.sh $(PAHOLE))
-+
- config CONSTRUCTORS
- 	bool
+-pahole_ver=$(${PAHOLE} --version | sed -E 's/v([0-9]+)\.([0-9]+)/\1\2/')
++pahole_ver=$($(dirname $0)/pahole-version.sh ${PAHOLE})
  
-diff --git a/scripts/pahole-version.sh b/scripts/pahole-version.sh
-new file mode 100755
-index 000000000000..f8a32ab93ad1
---- /dev/null
-+++ b/scripts/pahole-version.sh
-@@ -0,0 +1,13 @@
-+#!/bin/sh
-+# SPDX-License-Identifier: GPL-2.0
-+#
-+# Usage: $ ./pahole-version.sh pahole
-+#
-+# Prints pahole's version in a 3-digit form, such as 119 for v1.19.
-+
-+if [ ! -x "$(command -v "$@")" ]; then
-+	echo 0
-+	exit 1
-+fi
-+
-+"$@" --version | sed -E 's/v([0-9]+)\.([0-9]+)/\1\2/'
+ if [ "${pahole_ver}" -ge "118" ] && [ "${pahole_ver}" -le "121" ]; then
+ 	# pahole 1.18 through 1.21 can't handle zero-sized per-CPU vars
 -- 
 2.39.2.637.g21b0678d19-goog
 
