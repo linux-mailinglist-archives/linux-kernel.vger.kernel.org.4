@@ -2,168 +2,187 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E2756A0ABD
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 14:37:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5BDF96A0AC3
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 14:39:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233157AbjBWNhY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Feb 2023 08:37:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41512 "EHLO
+        id S233982AbjBWNjG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Feb 2023 08:39:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44000 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233532AbjBWNhW (ORCPT
+        with ESMTP id S234071AbjBWNi5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Feb 2023 08:37:22 -0500
-Received: from mail-io1-xd2a.google.com (mail-io1-xd2a.google.com [IPv6:2607:f8b0:4864:20::d2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59BDE57D01
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Feb 2023 05:36:39 -0800 (PST)
-Received: by mail-io1-xd2a.google.com with SMTP id f9so5657535iox.2
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Feb 2023 05:36:39 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=PljBaFwsOSiSajmSlW90uY5IAqYtGowFmvaV1Snd28o=;
-        b=aghVqa0j350UpMSo80F/OvikYrBe+DeIfqUhFuWit/Y3cFWt0d87987aGDYP1QY7th
-         dLAh1IxLwAL2KoWKKyY84gApMjNO2hRhr3zJ5NDCbGUoZEQscH+0cxlWxRVuDOVk2uGE
-         oGNmC97taMtCBsJJwx5X332w7LFW7fvpbxf1M=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=PljBaFwsOSiSajmSlW90uY5IAqYtGowFmvaV1Snd28o=;
-        b=NXEV/8CdKzmpe10ZjNJZUfY0hy5oyQ1Rk7qbiF5SYDLQJiUgbT/i4Wl0wA6PupcTlx
-         VpIiNeb7xYO+Xj89z+xhQn0+iGAgYFNwvMR6cC+suZvmPd02fnJtc3Va9qnbaxTYDHC1
-         lYN2ovAPsHb1TghKcrl8QC+rNkbsz+EWmsfF6+jPqUxf3R1exrOpJmp0gPAQTyQFrycS
-         qBS7ifs/eQpB7pAAtf8Kk0VrwatJyZfIfQAZHMAX5TiXV65c5Gp9Sm7v/NKgB34WfXCd
-         hyfCjBt9qGoUCxlT20uKw415mc5QF0+e559X6JpMBe8X3/4IRDl22zdCHf4OzL69dY5G
-         9uWA==
-X-Gm-Message-State: AO0yUKU8umKoCHQH9eokur90BTYsVuK11Y3ySiS/CVdvpx5IsNzwWY7J
-        EovHSJxpEdXVHTYIQhnkPys8MrskcLhwlrJG/Tosxg==
-X-Google-Smtp-Source: AK7set/mpYjZt1gR0m0p7QIkrMVPg+zxHDJsHk5bPOYLBOek2gQrZmEZtY4dYkIvYNlcS5eykCYem+K5vAxatmG+zfU=
-X-Received: by 2002:a6b:d205:0:b0:71a:5a1f:544c with SMTP id
- q5-20020a6bd205000000b0071a5a1f544cmr1188867iob.5.1677159370385; Thu, 23 Feb
- 2023 05:36:10 -0800 (PST)
+        Thu, 23 Feb 2023 08:38:57 -0500
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7793C37566
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Feb 2023 05:38:55 -0800 (PST)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 11AFFC14;
+        Thu, 23 Feb 2023 05:39:38 -0800 (PST)
+Received: from FVFF77S0Q05N.cambridge.arm.com (FVFF77S0Q05N.cambridge.arm.com [10.1.35.146])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 5EDAF3F881;
+        Thu, 23 Feb 2023 05:38:54 -0800 (PST)
+Date:   Thu, 23 Feb 2023 13:38:51 +0000
+From:   Mark Rutland <mark.rutland@arm.com>
+To:     Anshuman Khandual <anshuman.khandual@arm.com>
+Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>
+Subject: Re: [PATCH V7 6/6] arm64/perf: Enable branch stack events via
+ FEAT_BRBE
+Message-ID: <Y/dsaz2C6bnvFZOM@FVFF77S0Q05N.cambridge.arm.com>
+References: <20230105031039.207972-1-anshuman.khandual@arm.com>
+ <20230105031039.207972-7-anshuman.khandual@arm.com>
+ <Y8A6rsEXR/rmJY0N@FVFF77S0Q05N>
+ <37c41203-f131-91e7-c6bb-17f215d83eb1@arm.com>
+ <Y+QABvBaXdeU3Vf/@FVFF77S0Q05N.cambridge.arm.com>
+ <92690dd4-7d71-0beb-2157-b55e478fc281@arm.com>
 MIME-Version: 1.0
-References: <20230218111712.2380225-1-treapking@chromium.org>
- <20230218111712.2380225-2-treapking@chromium.org> <20230221154124.GA2584323-robh@kernel.org>
-In-Reply-To: <20230221154124.GA2584323-robh@kernel.org>
-From:   Pin-yen Lin <treapking@chromium.org>
-Date:   Thu, 23 Feb 2023 21:35:59 +0800
-Message-ID: <CAEXTbpctOtgE8uQJ7Bb8-ZRSjEwzQcQDegm1AuWfMmtDV0EbwA@mail.gmail.com>
-Subject: Re: [PATCH v3 1/5] dt-bindings: display: bridge: Add ddc-i2c-bus for anx7688
-To:     Rob Herring <robh@kernel.org>
-Cc:     Andrzej Hajda <andrzej.hajda@intel.com>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Robert Foss <rfoss@kernel.org>,
-        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
-        Jonas Karlman <jonas@kwiboo.se>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Benson Leung <bleung@chromium.org>,
-        Chun-Kuang Hu <chunkuang.hu@kernel.org>,
-        devicetree@vger.kernel.org,
-        Nicolas Boichat <drinkcat@chromium.org>,
-        chrome-platform@lists.linux.dev, linux-kernel@vger.kernel.org,
-        Guenter Roeck <groeck@chromium.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        dri-devel@lists.freedesktop.org,
-        linux-mediatek@lists.infradead.org,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        linux-arm-kernel@lists.infradead.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <92690dd4-7d71-0beb-2157-b55e478fc281@arm.com>
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-(Resend this with plaintext mode. Sorry for the previous spam.)
+Hi Anshuman,
 
-Hi Rob,
+Following up on some of the bits below, I've tried to read the BRBE section in
+the ARM ARM (ARM DDI 0487I.a), and explain my understanding below. Please let
+me know if I've misunderstood or missed something.
 
-After some internal discussions, we decided to drop this series
-because the driver is trying to do runtime routing of the display
-signals, which is not supported by the current DRM system, even if we
-can describe the design in the device tree. I'm explaining our use
-case as a record, and I can follow up on the mtk_hdmi.c change if
-anyone is interested.
+On Mon, Feb 20, 2023 at 02:08:39PM +0530, Anshuman Khandual wrote:
+> On 2/9/23 01:33, Mark Rutland wrote:
+> > On Thu, Jan 19, 2023 at 08:18:47AM +0530, Anshuman Khandual wrote:
+> >> On 1/12/23 22:21, Mark Rutland wrote:
+> >>> On Thu, Jan 05, 2023 at 08:40:39AM +0530, Anshuman Khandual wrote:
 
-The more detailed schematics looks like:
-   +----------+    +----------------+    +-----------+
-   |   MTK    |    |                |    |   HDMI    |
-   |   HDMI   +--->|    TS3DV642    +--->| connector |
-   |  bridge  |    |                |    +-----------+
-   +----------+    |                |
-                   |    HDMI MUX    |    +-------------+
-                   |                |    |  anx7688    |   +-----------+
-   +----------+    |                |    |  HDMI to DP |   |  USB-C    |
-   | cros EC  +--->|                +--->|  bridge     +-->| connector |
-   +----------+    +----------------+    +-------------+   +-----------+
+> >>>> +	/* Save and clear the privilege */
+> >>>> +	write_sysreg_s(brbcr & ~(BRBCR_EL1_E0BRE | BRBCR_EL1_E1BRE), SYS_BRBCR_EL1);
+> >>>
+> >>> Why? Later on we restore this, and AFAICT we don't modify it.
+> >>>
+> >>> If it's paused, why do we care about the privilege?
+> >>
+> >> This disables BRBE completely (not only pause) providing confidence that no
+> >> branch record can come in while the existing records are being processed.
+> > 
+> > I thought from earlier that it was automatically paused by HW upon raising the
+> > IRQ. Have I misunderstood, and we *must* stop it, or is this a belt-and-braces
+> > additional disable?
+> > 
+> > Is that not the case, or do we not trust the pause for some reason?
+> 
+> Yes, this is a belt-and-braces additional disable i.e putting the BRBE in prohibited
+> region, which is more effective than a pause.
 
-The TS3DV642 HDMI MUX is controlled by the CrOS EC to switch the HDMI
-signal between two output ports, and the generic-display-mux driver
-was trying to control the downstream bridges according to the GPIO
-status reported by EC. However, as far as I know, this kind of runtime
-routing is not supported by DRM.
+I'm afraid I don't understand what you mean by "more effective than a pause";
+AFAICT the pause should be sufficient for what we're doing.
 
-And, it can work fine if we only describe the following design in DT:
+If there's a particular property that a prohibited region ensures but pausing
+does not, could you please say what that property is specifically? e.g. as
+below I note some differences w.r.t. the BRB_FILTRATE PMU event, but I'm not
+sure if that's what you're referring to.
 
-  +---------+   +-------------+   +-----------+
-  |  MTK    |   |  anx7688    |   |  USB-C    |
-  |  HDMI   +-->|  HDMI to DP +-->| connector |
-  |  bridge |   |  bridge     |   +-----------+
-  +---------+   +-------------+
+Per ARM DDI 0487I.a, section D15.3 on pages D15-5511 and D15-5512, we have:
 
-This can work because the anx7688 driver won't reject any display
-modes when the DP lane count is 0 ([1]), which is true when the HDMI
-connector is used.
+  R_PYBRZ:
+  
+    Generation of Branch records is paused when BRBFCR_EL1.PAUSED is 1.
 
-Thanks for your time for reviewing this series and sorry for not
-explaining everything clearly at the beginning.
+  R_SRJND
 
-[1]: https://elixir.bootlin.com/linux/v6.2/source/drivers/gpu/drm/bridge/cros-ec-anx7688.c#L87
+    If a direct read of BRBFCR_EL1.PAUSED returns 1, then no operations ordered
+    after the direct read will generate further Branch records until
+    BRBFCR_EL1.PAUSED is cleared by software.
 
-Regards,
-Pin-yen
+    Note: The subsequent operations can be ordered by a Context synchronization
+    event.
 
+So if we read BRBFCR_EL1 and the PAUSED bit is set, then all we need is an ISB
+to ensure that no further records will be generated.
 
-On Tue, Feb 21, 2023 at 11:41 PM Rob Herring <robh@kernel.org> wrote:
->
-> On Sat, Feb 18, 2023 at 07:17:08PM +0800, Pin-yen Lin wrote:
-> > Introduce a optional "ddc-i2c-bus" property for anx7688 bridge. This
-> > allows the bridge to register a .get_edid callback.
->
-> What's .get_edid? This is a binding and is independent of Linux.
->
-> >
-> > Signed-off-by: Pin-yen Lin <treapking@chromium.org>
-> > ---
-> >
-> > Changes in v3:
-> > - New in v3
-> >
-> >  .../bindings/display/bridge/google,cros-ec-anx7688.yaml      | 5 +++++
-> >  1 file changed, 5 insertions(+)
-> >
-> > diff --git a/Documentation/devicetree/bindings/display/bridge/google,cros-ec-anx7688.yaml b/Documentation/devicetree/bindings/display/bridge/google,cros-ec-anx7688.yaml
-> > index a44d025d33bd..9d5ce8172e88 100644
-> > --- a/Documentation/devicetree/bindings/display/bridge/google,cros-ec-anx7688.yaml
-> > +++ b/Documentation/devicetree/bindings/display/bridge/google,cros-ec-anx7688.yaml
-> > @@ -25,6 +25,10 @@ properties:
-> >      maxItems: 1
-> >      description: I2C address of the device.
-> >
-> > +  ddc-i2c-bus:
-> > +    description: phandle link to the I2C controller used for DDC EDID probing
-> > +    $ref: /schemas/types.yaml#/definitions/phandle
-> > +
->
-> No, this belongs in the connector node. The DDC signals are routed to
-> the connector, not the bridge chip.
->
-> Rob
+Rules R_NXCWF, R_GXGWY, R_RPKTXQ mean that a freeze event is generated when
+PMOVSCLR_EL0 bits become set (i.e. when an overflow occurs), and we have:
+
+  R_BHYTD
+
+    On a BRBE freeze event:
+    * BRBFCR_EL1.PAUSED is set to 1.
+    * The current timestamp is captured in BRBTS_EL1.
+
+So any counter overflow will indirectly set BRBFCR_EL1.PAUSED, and stop the
+generation of records. The note in R_SRJND tells us that remains the case until
+we explicitly clear BRBFCR_EL1.PAUSED.
+
+The only thing that I can see that potentially justifies placing the BRBE into
+a prohibited region is the notes about BRB_FILTRATE, but I don't think that's
+all that useful anyway since it's not manipulated atomically w.r.t. the actual
+BRBE record management, and there are larger windows where BRBE will be paused
+but counters running (e.g. between overflow occurring and poking the BRBE in
+the overflow handler). So I think it'd be pointless to do that *just* for
+BRB_FILTRATE.
+
+Practically speaking, I expect that if we read PMOVSCLR and find any bits are
+set, then issue an ISB, then after that ISB all of the following should be
+true:
+
+ (a) BRBFCR_EL1.PAUSED will be set 
+ (b) No further records will be generated
+ (c) We can safely manipulate the existing records
+
+[...]
+
+> >>> That said, as above, do we actually need to pause/unpause it? Or is it already
+> >>> paused by virtue of the IRQ?
+> >>
+> >> Yes, it should be paused after an IRQ but it is also enforced before reading along
+> >> with privilege level disable.
+> > 
+> > I'm very confused as to why we're not trusting the HW to remain paused. Why do
+> > we need to enforce what the hardware should already be doing?
+> 
+> As have learned from the HW folks, there might be situations where the BRBE buffer has
+> been actually paused, ready for extraction in principle, but without BRBFCR_EL1_PAUSED
+> being set. 
+
+The ARM ARM is pretty clear that paused means BRBFCR_EL1.PAUSED==1, so I assume
+you mean there's a different scenario where it won't generate records (e.g.
+such as being in a prohibited region).
+
+Can you please give an example here?
+
+I'm happy to go talk with the HW folk with you for this.
+
+> Setting the bit here explicitly creates consistency across scenarios before
+> capturing the branch records. But please do note, that putting the BRBE in prohibited
+> region via clearing BRBCR_EL1_E0BRE/E1BRE is the primary construct which ensures that
+> no new branch records will make into the buffer while it's being processed.
+
+I agree that's sufficient, but as above I don't believe it's necessary, and all
+that we actually require is that no new records are generated.
+
+> >> Regardless the buffer needs to be un-paused and also
+> >> enabled for required privilege levels before exiting from here.
+> > 
+> > I agree this needs to be balanced, it just seems to me that we're doing
+> > redundant work here.
+> 
+> Extracting branch records for an user space only profile session might be faster as it
+> would require lesser context synchronization, might not even require prohibited region
+> change mechanism (will be already in there, upon a PMU interrupt) etc. I could try and
+> update IRQ branch records handling, based on whether current perf session was profiling
+> only the user space or not.
+
+For the IRQ handler I do not believe it matters which exception level(s) are
+being monitored; if BRBFCR_EL1.PAUSED is set no new records will be generated
+regardless. So I don't think that needs any special care.
+
+For the context-switch between tasks I believe we'll need to transiently enter
+a prohibited region, but that's a different path.
+
+Thanks,
+Mark.
