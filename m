@@ -2,57 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CE1756A0130
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 03:29:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F8BD6A0136
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 03:36:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233011AbjBWC3n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Feb 2023 21:29:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48968 "EHLO
+        id S232976AbjBWCgI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Feb 2023 21:36:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51640 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231214AbjBWC3l (ORCPT
+        with ESMTP id S229646AbjBWCgH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Feb 2023 21:29:41 -0500
-Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4D511258B;
-        Wed, 22 Feb 2023 18:29:39 -0800 (PST)
-Received: from kwepemi500024.china.huawei.com (unknown [172.30.72.53])
-        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4PMcL423BJzKmMd;
-        Thu, 23 Feb 2023 10:24:44 +0800 (CST)
-Received: from [10.174.179.163] (10.174.179.163) by
- kwepemi500024.china.huawei.com (7.221.188.100) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.17; Thu, 23 Feb 2023 10:29:34 +0800
-Message-ID: <81f5d521-bc8a-4d1a-fe7e-55487f3d25b3@huawei.com>
-Date:   Thu, 23 Feb 2023 10:29:33 +0800
+        Wed, 22 Feb 2023 21:36:07 -0500
+Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
+        by lindbergh.monkeyblade.net (Postfix) with SMTP id 82A782A994
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Feb 2023 18:36:05 -0800 (PST)
+Received: (qmail 1227900 invoked by uid 1000); 22 Feb 2023 21:36:04 -0500
+Date:   Wed, 22 Feb 2023 21:36:04 -0500
+From:   Alan Stern <stern@rowland.harvard.edu>
+To:     "Paul E. McKenney" <paulmck@kernel.org>
+Cc:     Joel Fernandes <joel@joelfernandes.org>,
+        linux-kernel@vger.kernel.org, Boqun Feng <boqun.feng@gmail.com>,
+        Jade Alglave <j.alglave@ucl.ac.uk>,
+        Luc Maranget <luc.maranget@inria.fr>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Will Deacon <will.deacon@arm.com>,
+        Akira Yokosawa <akiyks@gmail.com>,
+        Andrea Parri <parri.andrea@gmail.com>,
+        Daniel Lustig <dlustig@nvidia.com>,
+        David Howells <dhowells@redhat.com>,
+        Jonas Oberhauser <jonas.oberhauser@huawei.com>,
+        linux-arch@vger.kernel.org, Nicholas Piggin <npiggin@gmail.com>,
+        Paul =?iso-8859-1?Q?Heidekr=FCger?= <paul.heidekrueger@in.tum.de>,
+        Will Deacon <will@kernel.org>
+Subject: [PATCH] tools/memory-model: Add documentation about SRCU read-side
+ critical sections
+Message-ID: <Y/bRFNrzjIRjFgxz@rowland.harvard.edu>
+References: <20230213015506.778246-1-joel@joelfernandes.org>
+ <Y/JS5SYKPeeDQErL@rowland.harvard.edu>
+ <CAEXW_YQrFSiDEM9cuhkTT2_1+CZoGbg7vC9oL-D-Wd5OQ2mm2w@mail.gmail.com>
+ <CAEXW_YR6eKDCv+E8Xv2aX=Eo=H0667cqrXkMqKhc_QMZ4Vf59A@mail.gmail.com>
+ <Y/PgxRorDQZ7wPKU@rowland.harvard.edu>
+ <20230222195051.GT2948950@paulmck-ThinkPad-P17-Gen-1>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.1.2
-Subject: Re: [RFC PATCH v4] x86/kdump: terminate watchdog NMI interrupt to
- avoid kdump crashes
-Content-Language: en-US
-To:     "Eric W. Biederman" <ebiederm@xmission.com>,
-        Peter Zijlstra <peterz@infradead.org>
-CC:     <alexander.shishkin@linux.intel.com>, <tglx@linutronix.de>,
-        <tiwai@suse.de>, <jolsa@kernel.org>, <vbabka@suse.cz>,
-        <keescook@chromium.org>, <mingo@redhat.com>, <acme@kernel.org>,
-        <namhyung@kernel.org>, <bp@alien8.de>, <bhe@redhat.com>,
-        <eric.devolder@oracle.com>, <hpa@zytor.com>, <jroedel@suse.de>,
-        <dave.hansen@linux.intel.com>, <linux-perf-users@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <liwei391@huawei.com>,
-        <x86@kernel.org>, <xiexiuqi@huawei.com>, <liaochang1@huawei.com>
-References: <20230217120604.435608-1-zengheng4@huawei.com>
- <Y/ZMEesgPnRR3LsG@hirez.programming.kicks-ass.net>
- <87r0uh5yud.fsf@email.froward.int.ebiederm.org>
-From:   Zeng Heng <zengheng4@huawei.com>
-In-Reply-To: <87r0uh5yud.fsf@email.froward.int.ebiederm.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.174.179.163]
-X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
- kwepemi500024.china.huawei.com (7.221.188.100)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230222195051.GT2948950@paulmck-ThinkPad-P17-Gen-1>
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -60,49 +55,223 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Expand the discussion of SRCU and its read-side critical sections in
+the Linux Kernel Memory Model documentation file explanation.txt.  The
+new material discusses recent changes to the memory model made in
+commit 6cd244c87428 ("tools/memory-model: Provide exact SRCU
+semantics").
 
-在 2023/2/23 2:39, Eric W. Biederman 写道:
-> Peter Zijlstra <peterz@infradead.org> writes:
->
->> On Fri, Feb 17, 2023 at 08:06:04PM +0800, Zeng Heng wrote:
->>> If the cpu panics within the NMI interrupt context, there could be
->>> unhandled NMI interrupts in the background which are blocked by processor
->>> until next IRET instruction executes. Since that, it prevents nested
->>> NMI handler execution.
->>>
->>> In case of IRET execution during kdump reboot and no proper NMIs handler
->>> registered at that point (such as during EFI loader)
-> EFI loader?  kexec on panic is supposed to be kernel to kernel.
-> If someone is getting EFI involved that is a bug.
+Signed-off-by: Alan Stern <stern@rowland.harvard.edu>
+Cc: Andrea Parri <andrea.parri@amarulasolutions.com>
+Cc: Boqun Feng <boqun.feng@gmail.com>
+Cc: Jade Alglave <j.alglave@ucl.ac.uk>
+Cc: Luc Maranget <luc.maranget@inria.fr>
+Cc: "Paul E. McKenney" <paulmck@linux.ibm.com>
+Cc: Peter Zijlstra <peterz@infradead.org>
+Cc: Will Deacon <will.deacon@arm.com>
+Cc: Jonas Oberhauser <jonas.oberhauser@huawei.com>
 
-In kdump path, kexec would start purgatory to verify the secondary kernel by
+---
 
-sha256. If verify passed, it would turn the control to EFI loader, and 
-call the second
+Joel, please feel free to add your Co-developed-by and Signed-off-by
+tags to this patch.
 
-kernel to capture the environment as vmcore file.
+ tools/memory-model/Documentation/explanation.txt |  178 +++++++++++++++++++++--
+ 1 file changed, 167 insertions(+), 11 deletions(-)
 
-As the mail said, if panic appears within NMI context, we never exit 
-from that until
-
-EFI loader handles page fault exception and executes IRET instruction 
-when exit
-
-from PF. At this moment, processor would allow the blocked NMI interrupt 
-raise.
-
-
->> This kills all of perf, including but not limited to the hardware
->> watchdog. However, it does nothing to external NMI sources like the NMI
->> button found on some HP machines.
->>
->> Still I suppose it is sufficient for the normal case.
-> I can't think of one why we don't just leave
-> NMIs deliberately disabled
-
-How to just leave NMIs disabled, could you explain it with more details ?
-
-Zeng Heng
-
-> until the crash recover kernel figured out how to enable them safely.
->
+Index: usb-devel/tools/memory-model/Documentation/explanation.txt
+===================================================================
+--- usb-devel.orig/tools/memory-model/Documentation/explanation.txt
++++ usb-devel/tools/memory-model/Documentation/explanation.txt
+@@ -28,9 +28,10 @@ Explanation of the Linux-Kernel Memory C
+   20. THE HAPPENS-BEFORE RELATION: hb
+   21. THE PROPAGATES-BEFORE RELATION: pb
+   22. RCU RELATIONS: rcu-link, rcu-gp, rcu-rscsi, rcu-order, rcu-fence, and rb
+-  23. LOCKING
+-  24. PLAIN ACCESSES AND DATA RACES
+-  25. ODDS AND ENDS
++  23. SRCU READ-SIDE CRITICAL SECTIONS
++  24. LOCKING
++  25. PLAIN ACCESSES AND DATA RACES
++  26. ODDS AND ENDS
+ 
+ 
+ 
+@@ -1848,14 +1849,169 @@ section in P0 both starts before P1's gr
+ before it does, and the critical section in P2 both starts after P1's
+ grace period does and ends after it does.
+ 
+-Addendum: The LKMM now supports SRCU (Sleepable Read-Copy-Update) in
+-addition to normal RCU.  The ideas involved are much the same as
+-above, with new relations srcu-gp and srcu-rscsi added to represent
+-SRCU grace periods and read-side critical sections.  There is a
+-restriction on the srcu-gp and srcu-rscsi links that can appear in an
+-rcu-order sequence (the srcu-rscsi links must be paired with srcu-gp
+-links having the same SRCU domain with proper nesting); the details
+-are relatively unimportant.
++The LKMM supports SRCU (Sleepable Read-Copy-Update) in addition to
++normal RCU.  The ideas involved are much the same as above, with new
++relations srcu-gp and srcu-rscsi added to represent SRCU grace periods
++and read-side critical sections.  However, there are some important
++differences between RCU read-side critical sections and their SRCU
++counterparts, as described in the next section.
++
++
++SRCU READ-SIDE CRITICAL SECTIONS
++--------------------------------
++
++The LKMM models uses the srcu-rscsi relation to model SRCU read-side
++critical sections.  They are different from RCU read-side critical
++sections in the following respects:
++
++1.	Unlike the analogous RCU primitives, synchronize_srcu(),
++	srcu_read_lock(), and srcu_read_unlock() take a pointer to a
++	struct srcu_struct as an argument.  This structure is called
++	an SRCU domain, and calls linked by srcu-rscsi must have the
++	same domain.  Read-side critical sections and grace periods
++	associated with different domains are independent of one
++	another; the SRCU version of the RCU Guarantee applies only
++	to pairs of critical sections and grace periods having the
++	same domain.
++
++2.	srcu_read_lock() returns a value, called the index, which must
++	be passed to the matching srcu_read_unlock() call.  Unlike
++	rcu_read_lock() and rcu_read_unlock(), an srcu_read_lock()
++	call does not always have to match the next unpaired
++	srcu_read_unlock().  In fact, it is possible for two SRCU
++	read-side critical sections to overlap partially, as in the
++	following example (where s is an srcu_struct and idx1 and idx2
++	are integer variables):
++
++		idx1 = srcu_read_lock(&s);	// Start of first RSCS
++		idx2 = srcu_read_lock(&s);	// Start of second RSCS
++		srcu_read_unlock(&s, idx1);	// End of first RSCS
++		srcu_read_unlock(&s, idx2);	// End of second RSCS
++
++	The matching is determined entirely by the domain pointer and
++	index value.  By contrast, if the calls had been
++	rcu_read_lock() and rcu_read_unlock() then they would have
++	created two nested (fully overlapping) read-side critical
++	sections: an inner one and an outer one.
++
++3.	The srcu_down_read() and srcu_up_read() primitives work
++	exactly like srcu_read_lock() and srcu_read_unlock(), except
++	that matching calls don't have to execute on the same CPU.
++	(The names are meant to be suggestive of operations on
++	semaphores.)  Since the matching is determined by the domain
++	pointer and index value, these primitives make it possible for
++	an SRCU read-side critical section to start on one CPU and end
++	on another, so to speak.
++
++In order to account for these properties of SRCU, the LKMM models
++srcu_read_lock() as a special type of load event (which is
++appropriate, since it takes a memory location as argument and returns
++a value, just as a load does) and srcu_read_unlock() as a special type
++of store event (again appropriate, since it takes as arguments a
++memory location and a value).  These loads and stores are annotated as
++belonging to the "srcu-lock" and "srcu-unlock" event classes
++respectively.
++
++This approach allows the LKMM to tell whether two events are
++associated with the same SRCU domain, simply by checking whether they
++access the same memory location (i.e., they are linked by the loc
++relation).  It also gives a way to tell which unlock matches a
++particular lock, by checking for the presence of a data dependency
++from the load (srcu-lock) to the store (srcu-unlock).  For example,
++given the situation outlined earlier (with statement labels added):
++
++	A: idx1 = srcu_read_lock(&s);
++	B: idx2 = srcu_read_lock(&s);
++	C: srcu_read_unlock(&s, idx1);
++	D: srcu_read_unlock(&s, idx2);
++
++the LKMM will treat A and B as loads from s yielding values saved in
++idx1 and idx2 respectively.  Similarly, it will treat C and D as
++though they stored the values from idx1 and idx2 in s.  The end result
++is much as if we had written:
++
++	A: idx1 = READ_ONCE(s);
++	B: idx2 = READ_ONCE(s);
++	C: WRITE_ONCE(s, idx1);
++	D: WRITE_ONCE(s, idx2);
++
++except for the presence of the special srcu-lock and srcu-unlock
++annotations.  You can see at once that we have A ->data C and
++B ->data D.  These dependencies tell the LKMM that C is the
++srcu-unlock event matching srcu-lock event A, and D is the
++srcu-unlock event matching srcu-lock event B.
++
++This approach is admittedly a hack, and it has the potential to lead
++to problems.  For example, in:
++
++	idx1 = srcu_read_lock(&s);
++	srcu_read_unlock(&s, idx1);
++	idx2 = srcu_read_lock(&s);
++	srcu_read_unlock(&s, idx2);
++
++the LKMM will believe that idx2 must have the same value as idx1,
++since it reads from the immediately preceding store of idx1 in s.
++Fortunately this won't matter, assuming that litmus tests never do
++anything with SRCU index values other than pass them to
++srcu_read_unlock() or srcu_up_read() calls.
++
++However, sometimes it is necessary to store an index value in a
++shared variable temporarily.  In fact, this is the only way for
++srcu_down_read() to pass the index it gets to an srcu_up_read() call
++on a different CPU.  In more detail, we might have soething like:
++
++	struct srcu_struct s;
++	int x;
++
++	P0()
++	{
++		int r0;
++
++		A: r0 = srcu_down_read(&s);
++		B: WRITE_ONCE(x, r0);
++	}
++
++	P1()
++	{
++		int r1;
++
++		C: r1 = READ_ONCE(x);
++		D: srcu_up_read(&s, r1);
++	}
++
++Assuming that P1 executes after P0 and does read the index value
++stored in x, we can write this (using brackets to represent event
++annotations) as:
++
++	A[srcu-lock] ->data B[once] ->rf C[once] ->data D[srcu-unlock].
++
++The LKMM defines a carry-srcu-data relation to express this pattern;
++it permits an arbitrarily long sequence of
++
++	data ; rf
++
++pairs (that is, a data link followed by an rf link) to occur between
++an srcu-lock event and the final data dependency leading to the
++matching srcu-unlock event.  carry-srcu-data is complicated by the
++need to ensure that none of the intermediate store events in this
++sequence are instances of srcu-unlock.  This is necessary because in a
++pattern like the one above:
++
++	A: idx1 = srcu_read_lock(&s);
++	B: srcu_read_unlock(&s, idx1);
++	C: idx2 = srcu_read_lock(&s);
++	D: srcu_read_unlock(&s, idx2);
++
++the LKMM treats B as a store to the variable s and C as a load from
++that variable, creating an undesirable rf link from B to C:
++
++	A ->data B ->rf C ->data D.
++
++This would cause carry-srcu-data to mistakenly extend a data
++dependency from A to D, giving the impression that D was the
++srcu-unlock event matching A's srcu-lock.  To avoid such problems,
++carry-srcu-data does not accept sequences in which the ends of any of
++the intermediate ->data links (B above) is an srcu-unlock event.
+ 
+ 
+ LOCKING
