@@ -2,102 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 865836A0C64
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 16:00:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EFEF96A0BE7
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 15:32:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234890AbjBWPAP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Feb 2023 10:00:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39732 "EHLO
+        id S234780AbjBWOcd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Feb 2023 09:32:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40640 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234690AbjBWPAB (ORCPT
+        with ESMTP id S234619AbjBWOcb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Feb 2023 10:00:01 -0500
-Received: from bee.birch.relay.mailchannels.net (bee.birch.relay.mailchannels.net [23.83.209.14])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FEE918B2A
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Feb 2023 06:59:56 -0800 (PST)
-X-Sender-Id: dreamhost|x-authsender|dave@stgolabs.net
-Received: from relay.mailchannels.net (localhost [127.0.0.1])
-        by relay.mailchannels.net (Postfix) with ESMTP id 52DF2261815;
-        Thu, 23 Feb 2023 14:59:55 +0000 (UTC)
-Received: from pdx1-sub0-mail-a313.dreamhost.com (unknown [127.0.0.6])
-        (Authenticated sender: dreamhost)
-        by relay.mailchannels.net (Postfix) with ESMTPA id CE42C26109B;
-        Thu, 23 Feb 2023 14:59:54 +0000 (UTC)
-ARC-Seal: i=1; s=arc-2022; d=mailchannels.net; t=1677164394; a=rsa-sha256;
-        cv=none;
-        b=orDvW8180PN+7+UnM0a/7O3sVkpxzJ5trnDqjKm2pNTXS2WnyqaQBGMRCXKqVQGb5zdrgW
-        BxKUeFE55F7KIeckieb8AEePK85fpCg1Tue2hNVPMCjAGW4lpAE8K7O8U+toFJhGHCpEiH
-        d7jDWQZ4sODDZA6wXdBTknX2zLyTHxdGgzhnkFA/2bsArub03onG+E27s8vqdDBeLpsm+i
-        GStff8vvIwepYtWySq/IVo0VgHTS5mroUMCRjVZf6GR+Q9NpDbGq7uIScparrfRdnAxkmT
-        kXPtyto57Ji8fkXIHjgMvRYw1cdX3Sa6uiIaaqrgBIMeYeajN8iXmcJpAtVgMA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mailchannels.net;
-        s=arc-2022; t=1677164394;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references:dkim-signature;
-        bh=h6jsx5v4PpV6vzaULv4y0p9JanPgax7mq8sgQ5FafXM=;
-        b=pb1VvB7iQDfrcFU4GzoCHhEMWtDJweg5cLHFl1nARBkvGltEJktZTZhUCWOg6nTlJuO2UE
-        AiNc8AbOWnDanRqX5ZrMXJvAbuNXpUnO0Aqc1ccW6MpZ0qeL17w1wwIkBEU+KJRZUtOUj/
-        VQ9axtV9PbOM7r1Tvfmu6g7j5vA2EbnUJRMtLzII6pY0rymGgRBunSVTDLBqWrISsXVjex
-        HJOOg65ybhwXG0ZZ2sHk9FsafAw7DJJSMy94TD7jMRogbswlN4rYAV1SF5S/JcTDFHCDDE
-        lqsPvSdsFszg/drdlJPgzmfRVn03CNugIdkk2aAyvJ2/XZRJo3l2rOy9WZEsoA==
-ARC-Authentication-Results: i=1;
-        rspamd-5db48964c-ckdrb;
-        auth=pass smtp.auth=dreamhost smtp.mailfrom=dave@stgolabs.net
-X-Sender-Id: dreamhost|x-authsender|dave@stgolabs.net
-X-MC-Relay: Neutral
-X-MailChannels-SenderId: dreamhost|x-authsender|dave@stgolabs.net
-X-MailChannels-Auth-Id: dreamhost
-X-Arch-Harmony: 394007ff079e8c8d_1677164395121_1943540222
-X-MC-Loop-Signature: 1677164395121:855036862
-X-MC-Ingress-Time: 1677164395121
-Received: from pdx1-sub0-mail-a313.dreamhost.com (pop.dreamhost.com
- [64.90.62.162])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384)
-        by 100.107.134.126 (trex/6.7.1);
-        Thu, 23 Feb 2023 14:59:55 +0000
-Received: from offworld (ip72-199-50-187.sd.sd.cox.net [72.199.50.187])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: dave@stgolabs.net)
-        by pdx1-sub0-mail-a313.dreamhost.com (Postfix) with ESMTPSA id 4PMx5Q1qmQz88;
-        Thu, 23 Feb 2023 06:59:54 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=stgolabs.net;
-        s=dreamhost; t=1677164394;
-        bh=h6jsx5v4PpV6vzaULv4y0p9JanPgax7mq8sgQ5FafXM=;
-        h=Date:From:To:Cc:Subject:Content-Type;
-        b=J8b0BaXpn5lHsCOxSt8W244UcqjYt9+Ame4imJzDQPfUfYXTSk+4kK2PHFV516Nyf
-         4BIccGhOtaK/URIynRzAohJSeAp0JfZMGgXLMgHq2otMlkEuBOl+hJLVQTz830QcJk
-         QGtFHkyIKGIk8ZiOc9cYqMc3osjs7VOS8hxsNMeZzEzxooztxfFxZhNVvRsYvv7lEf
-         W48pB6TtwRaCCcf3Te78ZlJNkq5f4ACGTNLzPBflETNscSlQk8lA3xygoGbYed6E9S
-         FS9CFzKuhhIdwKE2YG+j99nl1RbR3smr/h8dT6Nq0E5JiSyaUw3jGyZk2orwsROTXq
-         pWyWb51b4Rydw==
-Date:   Thu, 23 Feb 2023 06:31:30 -0800
-From:   Davidlohr Bueso <dave@stgolabs.net>
-To:     "Zhang, Qiang1" <qiang1.zhang@intel.com>
-Cc:     "paulmck@kernel.org" <paulmck@kernel.org>,
-        "josh@joshtriplett.org" <josh@joshtriplett.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] locktorture: Add raw_spinlock* torture tests for
- PREEMPT_RT kernels
-Message-ID: <20230223143130.yw4v3fz5pm32p7x4@offworld>
-References: <20230215061035.1534950-1-qiang1.zhang@intel.com>
- <20230218193438.GE2948950@paulmck-ThinkPad-P17-Gen-1>
- <PH0PR11MB5880CD867814DFAAF8930E5BDAA79@PH0PR11MB5880.namprd11.prod.outlook.com>
- <20230222225755.GW2948950@paulmck-ThinkPad-P17-Gen-1>
- <20230223035359.6jgserikqtc3vnra@offworld>
- <20230223043411.GY2948950@paulmck-ThinkPad-P17-Gen-1>
- <PH0PR11MB58805C9797BEC218610C5145DAAB9@PH0PR11MB5880.namprd11.prod.outlook.com>
+        Thu, 23 Feb 2023 09:32:31 -0500
+Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F4FE55048;
+        Thu, 23 Feb 2023 06:32:30 -0800 (PST)
+Received: by mail-ed1-x535.google.com with SMTP id ck15so44041510edb.0;
+        Thu, 23 Feb 2023 06:32:29 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1677162748;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=4hI9AYfo2vkeh8LJLJ62ywUBp+xjNfPbHlFhXyS9ADk=;
+        b=If+KJkWnVnSQ0e8UH/zKyfMnfWUKBrxoVM4ziAgfhk/mNOmXLOc1/UEzg/JFMqgBOL
+         V10xZjxKXLIeprGB84JxlkCRFL/5ShOG0RvrJ0zhWNU/aXNhRfZumHAlwX9gQ0/BGdR7
+         XjPiDcyb6DJ8eQxzfnTeKgR9ANhASfq2msQfjEa4a9+bLAXB4jXXeXvzOZsPKIm5IHdx
+         j21kDf6JyzGvSGHRdHV9P93gWwx3b/wSD6YR/a45nEa7D25Rv1uiXThjkFjxtsL5fNPI
+         /KTVKodQmULZRuqyEo2TLQ54+ntTc/Q91Qnu7iDd+CRU9hpOkcv1D6OV/Zh6RKN89tFk
+         2MjQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1677162748;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=4hI9AYfo2vkeh8LJLJ62ywUBp+xjNfPbHlFhXyS9ADk=;
+        b=x6JXTki/bgGTCZC6OqOfFepHJ4ZLD7aboZFk3X0ta9C3QrEnjefG9knYa3PaWjCw/o
+         OMRNyeTHQr0BEgtNlJ6OWu+rPUcE+qXkFzEjbJUo4st7LJ37IKfp/fAR4DXaVrOkmkjq
+         xHYd3DZGB+u59WbMUDb5a40sjhrWUvdahJZLAGsCI5LruGYPdZ+UHUOZmP6kmT6Lr6XI
+         AG82XiH7n/Tmu1HX1LOS+COJ60Zq7cA5LlkQmxrpyXpoNSRc48flWnD/7c6hdfzbqSK+
+         jcmxXKLTn2OgEScCeRswcxjejwetgszRtpZuwQHWtC2npam671eoT2gkEkVO5V/l1wgy
+         +13Q==
+X-Gm-Message-State: AO0yUKVb7xeiNeoftRhqooVZRzZEaSX78Ao9vu12BzwhozlQ9iZnPbjk
+        4cq+guQHHQ4uO+ZPM3RfKQs=
+X-Google-Smtp-Source: AK7set8VR6mBMUFQbc8DS56GFmWhwsINpNhuXfNnC0hGJEn9VF27jsYJu58HVUwilxFVChJAlMpDvw==
+X-Received: by 2002:a05:6402:34d5:b0:4ae:e4d2:174b with SMTP id w21-20020a05640234d500b004aee4d2174bmr12747120edc.2.1677162748494;
+        Thu, 23 Feb 2023 06:32:28 -0800 (PST)
+Received: from mineorpe-virtual-machine.localdomain ([37.252.81.68])
+        by smtp.gmail.com with ESMTPSA id t29-20020a508d5d000000b004acb696a0f6sm3994603edt.91.2023.02.23.06.32.27
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 23 Feb 2023 06:32:28 -0800 (PST)
+From:   Ivan Orlov <ivan.orlov0322@gmail.com>
+To:     broonie@kernel.org, perex@perex.cz, tiwai@suse.com,
+        shuah@kernel.org
+Cc:     Ivan Orlov <ivan.orlov0322@gmail.com>, alsa-devel@alsa-project.org,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+        skhan@linuxfoundation.org
+Subject: [PATCH] Fix snprintf format warnings during 'alsa' kselftest compilation
+Date:   Thu, 23 Feb 2023 17:32:14 +0300
+Message-Id: <20230223143214.16564-1-ivan.orlov0322@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
-Content-Disposition: inline
-In-Reply-To: <PH0PR11MB58805C9797BEC218610C5145DAAB9@PH0PR11MB5880.namprd11.prod.outlook.com>
-User-Agent: NeoMutt/20220429
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -105,11 +71,65 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 23 Feb 2023, Zhang, Qiang1 wrote:
+Fix 'alsa' kselftest compilation warnings by making snprintf
+format correspond the actual parameters types.
 
->If I understand correctly, I should remove #ifdef statements, right?
+Signed-off-by: Ivan Orlov <ivan.orlov0322@gmail.com>
+---
+ tools/testing/selftests/alsa/pcm-test.c | 12 ++++++------
+ 1 file changed, 6 insertions(+), 6 deletions(-)
 
-Yes, but also please make torture_type default depend on PREEMPT_RT.
+diff --git a/tools/testing/selftests/alsa/pcm-test.c b/tools/testing/selftests/alsa/pcm-test.c
+index f293c7d81009..52b109a162c6 100644
+--- a/tools/testing/selftests/alsa/pcm-test.c
++++ b/tools/testing/selftests/alsa/pcm-test.c
+@@ -318,7 +318,7 @@ static void test_pcm_time1(struct pcm_data *data,
+ 		goto __close;
+ 	}
+ 	if (rchannels != channels) {
+-		snprintf(msg, sizeof(msg), "channels unsupported %ld != %ld", channels, rchannels);
++		snprintf(msg, sizeof(msg), "channels unsupported %ld != %u", channels, rchannels);
+ 		skip = true;
+ 		goto __close;
+ 	}
+@@ -329,7 +329,7 @@ static void test_pcm_time1(struct pcm_data *data,
+ 		goto __close;
+ 	}
+ 	if (rrate != rate) {
+-		snprintf(msg, sizeof(msg), "rate unsupported %ld != %ld", rate, rrate);
++		snprintf(msg, sizeof(msg), "rate unsupported %ld != %u", rate, rrate);
+ 		skip = true;
+ 		goto __close;
+ 	}
+@@ -393,24 +393,24 @@ static void test_pcm_time1(struct pcm_data *data,
+ 			frames = snd_pcm_writei(handle, samples, rate);
+ 			if (frames < 0) {
+ 				snprintf(msg, sizeof(msg),
+-					 "Write failed: expected %d, wrote %li", rate, frames);
++					 "Write failed: expected %ld, wrote %li", rate, frames);
+ 				goto __close;
+ 			}
+ 			if (frames < rate) {
+ 				snprintf(msg, sizeof(msg),
+-					 "expected %d, wrote %li", rate, frames);
++					 "expected %ld, wrote %li", rate, frames);
+ 				goto __close;
+ 			}
+ 		} else {
+ 			frames = snd_pcm_readi(handle, samples, rate);
+ 			if (frames < 0) {
+ 				snprintf(msg, sizeof(msg),
+-					 "expected %d, wrote %li", rate, frames);
++					 "expected %ld, wrote %li", rate, frames);
+ 				goto __close;
+ 			}
+ 			if (frames < rate) {
+ 				snprintf(msg, sizeof(msg),
+-					 "expected %d, wrote %li", rate, frames);
++					 "expected %ld, wrote %li", rate, frames);
+ 				goto __close;
+ 			}
+ 		}
+-- 
+2.34.1
 
-Thanks,
-Davidlohr
