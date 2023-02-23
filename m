@@ -2,77 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 716D76A122E
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 22:39:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 850006A1230
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 22:40:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229759AbjBWVjm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Feb 2023 16:39:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52150 "EHLO
+        id S229747AbjBWVkH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Feb 2023 16:40:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52786 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229525AbjBWVjl (ORCPT
+        with ESMTP id S229527AbjBWVkF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Feb 2023 16:39:41 -0500
-Received: from mail-oa1-x32.google.com (mail-oa1-x32.google.com [IPv6:2001:4860:4864:20::32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64CE55C152;
-        Thu, 23 Feb 2023 13:39:34 -0800 (PST)
-Received: by mail-oa1-x32.google.com with SMTP id 586e51a60fabf-1720887dfcdso17236686fac.6;
-        Thu, 23 Feb 2023 13:39:34 -0800 (PST)
+        Thu, 23 Feb 2023 16:40:05 -0500
+Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4657B5C155
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Feb 2023 13:40:02 -0800 (PST)
+Received: by mail-ed1-x52d.google.com with SMTP id cq23so47150764edb.1
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Feb 2023 13:40:02 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:references:cc:to:from
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=oiqYmKCBb6pTn9/ZoddN5NSvx6CSd4fhJNmnMHgMU9s=;
-        b=SDLNeS2gXdtg2gCn+3+QIpnO8NNDqnczHqToUUg7R81LvyrE0d/3mx3w29Sjd6gk65
-         +opeyqm+JqCOp3cRw0fjzyuSqf7BD41B6rhVsF/1LhNxKEGg8R7yA8nfMAckSGWLZNNY
-         FKVDVXcdU4/cp9hzPHRxYdnwwiR/AhkdTK7hji1FVfdIUh/RummZVmpiz4c0c7arGvOF
-         JMTz++TQyKmhJQPPt81bOSG15/pX7bPbrxQyy013pY/D85cHR073R5NKofIEYScFNT9H
-         Zbs/DMnYl693qcts3kBZbEZGUA84ykI3l7YbYVmu7HCZLMz7I6nFyoYGcnWJb0W/Q+5+
-         ZaGQ==
+        d=linux-foundation.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=eu4dlgDvM7BF/2CvEqDDQA7UHs/G9uWjlrCzs/6VT/8=;
+        b=OBJUot5ArA8AuZr5Am1iNpiGcg163grwYHt/S/lfdzEng2GEOmwCK61b4pdn9e1Rvz
+         9ZdxgOBLRiDoqtPUUEXz/Z1CFCLXAhoMCcyW2xMALKstCSjCh62EgVAkaFd3JSDOIfp4
+         63bQ2FerOD+OayzoALa+Mh6V67wCIFrWQjsEw=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:references:cc:to:from
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=oiqYmKCBb6pTn9/ZoddN5NSvx6CSd4fhJNmnMHgMU9s=;
-        b=lUFDSy5MMFENdLnSBsHoBouY1sfKIaXl6d8p+KMUreqYczxZwnMUpuKXoP2lDzh/x6
-         JLYHZzkcNq8yYCRM5iVOSuiPXJSX7d2uw/Lg3gF4hB0b8bX5CwTLcue7wOxWFAlCPmpO
-         tcbO/BKpumhc20Zolt2WFISGDuqimv5CjgbuJP6l+RWUuBSUru8MAKgk7kiXb3Ajhzn/
-         /iGSDUe1wCM5s65litwSTPwAJviw03ru9l0DEZhoC++mgsIDwsts1+Q48AKJSCUmRBGx
-         23aEAeP3/K56A87yi48EdHc14hE1EGmNbeLR5eYqMWUjHWW28m8+kliBmviYapg2bJa5
-         sieQ==
-X-Gm-Message-State: AO0yUKUKwXktfGgLLC0vFrNdHbbHEX0kaVm1sfLo3x2bilnsLuvYt7dr
-        4uejtAnxSn4L1Rxaj9pgqMsiUNqmKgg=
-X-Google-Smtp-Source: AK7set/A9A8K0Z+F/p9HhVeO46Gn31qPy7xM5/xVhS2qGOoJOSbAhmB1axNe+gYNOFcCv5+c8wR71Q==
-X-Received: by 2002:a05:6870:438e:b0:172:473c:5a1b with SMTP id r14-20020a056870438e00b00172473c5a1bmr4710501oah.15.1677188373479;
-        Thu, 23 Feb 2023 13:39:33 -0800 (PST)
-Received: from ?IPV6:2600:1700:2442:6db0:2586:7432:d181:902b? ([2600:1700:2442:6db0:2586:7432:d181:902b])
-        by smtp.gmail.com with ESMTPSA id o2-20020a4a84c2000000b0051d13098c54sm2612189oog.19.2023.02.23.13.39.32
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=eu4dlgDvM7BF/2CvEqDDQA7UHs/G9uWjlrCzs/6VT/8=;
+        b=LYSYkjftDBVB1a1m9RunEMBbofcr7d4F88zMZhYyr7meAOGD9FjdWxxvbPauyhGifh
+         Nd5Bmlwb9ZYSnbDrzJlNLhW7hSaBPGUaIn547usibXZqNrwg9L+2MQ+9C3e/WcO7vit/
+         uVSkJ5eVwyz1xvxXs1kkQc1pcPigorzxPdMf6r+x4kBJfhwUuhM+s9dRLUwUGYfIJqgx
+         5CTLX7kNv0THd6fDZ0XsD0Pd241IH8N0UzD+HLi5pqSlGalMgXQ7QPx0PKTpUdgoAETh
+         nD2IfjImSXzMhGcCMStZb80Az1qqnLUm/wDEA9xHUDcDmCwXdjpgkFwhJdCtV8f3o4zw
+         IFiw==
+X-Gm-Message-State: AO0yUKV0TwBtsPmijuG+eq/2Kho//EVdQWQ88xOe4YSRJQmXRptaQfA+
+        B9gnsgm0N9geigbsItpiLJopyde/kWi8XQv7DWPvZA==
+X-Google-Smtp-Source: AK7set/+I27tGYIvUSLtXmesKtB1q+SMrhOohTZzKofXUS/p2sRuZMMbWDD+tfxK5EQmgOP4l5KPOA==
+X-Received: by 2002:aa7:d692:0:b0:4af:64b8:27de with SMTP id d18-20020aa7d692000000b004af64b827demr5926249edr.9.1677188400574;
+        Thu, 23 Feb 2023 13:40:00 -0800 (PST)
+Received: from mail-ed1-f50.google.com (mail-ed1-f50.google.com. [209.85.208.50])
+        by smtp.gmail.com with ESMTPSA id k25-20020a50c099000000b004ad7c42a17esm5192805edf.25.2023.02.23.13.39.59
+        for <linux-kernel@vger.kernel.org>
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 23 Feb 2023 13:39:32 -0800 (PST)
-Message-ID: <12492b9f-1961-7d75-3197-41b4bce90b63@gmail.com>
-Date:   Thu, 23 Feb 2023 15:39:31 -0600
+        Thu, 23 Feb 2023 13:39:59 -0800 (PST)
+Received: by mail-ed1-f50.google.com with SMTP id ee7so32322837edb.2
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Feb 2023 13:39:59 -0800 (PST)
+X-Received: by 2002:a17:907:988c:b0:877:747e:f076 with SMTP id
+ ja12-20020a170907988c00b00877747ef076mr9516620ejc.0.1677188399093; Thu, 23
+ Feb 2023 13:39:59 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH v3 0/2] of: populate of_root_node if not set (alternate)
-Content-Language: en-US
-From:   Frank Rowand <frowand.list@gmail.com>
-To:     Rob Herring <robh+dt@kernel.org>,
-        =?UTF-8?B?Q2zDqW1lbnQgTMOpZ2Vy?= <clement.leger@bootlin.com>
-Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Lizhi Hou <lizhi.hou@xilinx.com>,
-        Allan Nielsen <allan.nielsen@microchip.com>,
-        Horatiu Vultur <horatiu.vultur@microchip.com>,
-        Steen Hegelund <steen.hegelund@microchip.com>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-References: <20230223213418.891942-1-frowand.list@gmail.com>
-In-Reply-To: <20230223213418.891942-1-frowand.list@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+References: <20230223141542.672463796@linuxfoundation.org> <adc1b0b7-f837-fbb4-332b-4ce18fc55709@roeck-us.net>
+ <Y/eVSi4ZTcOmPBTv@kroah.com> <cfd03ee0-b47a-644d-4364-79601025f35f@roeck-us.net>
+ <CAHk-=whCG1zudvDsqdFo89pHARvDv4=r6vaZ8GWc_Q9amxBM6Q@mail.gmail.com>
+ <Y/fC3d3RqoeawG0Y@dev-arch.thelio-3990X> <CAHk-=whkNnShBugM01Kzcypkp+f-uHeBWuAgtUiMpiSZuW+QDQ@mail.gmail.com>
+ <Y/fZbQEEPBNZQ2w7@kroah.com>
+In-Reply-To: <Y/fZbQEEPBNZQ2w7@kroah.com>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Thu, 23 Feb 2023 13:39:42 -0800
+X-Gmail-Original-Message-ID: <CAHk-=whiuJH_DYQZw1hPtibDQZcNy8QYf1cZJCsezuPobSXCKw@mail.gmail.com>
+Message-ID: <CAHk-=whiuJH_DYQZw1hPtibDQZcNy8QYf1cZJCsezuPobSXCKw@mail.gmail.com>
+Subject: Re: [PATCH 5.15 00/37] 5.15.96-rc2 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Nathan Chancellor <nathan@kernel.org>,
+        Guenter Roeck <linux@roeck-us.net>, stable@vger.kernel.org,
+        patches@lists.linux.dev, linux-kernel@vger.kernel.org,
+        akpm@linux-foundation.org, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        srw@sladewatkins.net, rwarsow@gmx.de
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -80,53 +83,20 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Clément,
+On Thu, Feb 23, 2023 at 1:24 PM Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
+>
+> Quilt should be depending on patch here, I think it's something in my
+> set of "turn this series of patches into a mbox, split the mbox up into
+> patches" sequence that is causing the problem.
 
-Can you please test this version of the patch series?
+Well, it might also be that quilt just re-generates the patch with
+'diff', and then in the process loses the information again.
 
-Thanks!
+We can happily continue to support the "we lost the executable bit",
+since it sounds like Nathan is willing to cook up a patch.
 
--Frank
+I'm just too lazy and personally unaffected to care (and too busy with
+merges - excuses, excuses).
 
-On 2/23/23 15:34, Frank Rowand wrote:
-> This series is a different implementation to achieve the goals of
-> https://lore.kernel.org/r/20220623105044.152832-1-clement.leger@bootlin.com
-> 
-> In order to apply overlays or create new nodes under the root node, the
-> kernel expects of_root to be set. On some system where a device-tree was
-> not provided by firmware (x86 for instance) if CONFIG_OF is enabled,
-> then we will end up with a null of_root. This series adds support to
-> create this root node using a builtin dtb and removes the manual
-> creation of the root node done in unittests.c.
-> 
-> Changes since version 2: (patch 1/2)
->   - change of __dtb_empty_root_* from "void *" to "uint8_t []"
-> 
-> Changes since version 1: (patch 1/2)
->   - refresh for 6.2-rc1
->   - update Signed-off-by
->   - fix typo in of_fdt.h: s/of_setup/setup_of
->   - unflatten_device_tree(): validate size in header field dtb_empty_root
->     that will be used to copy dtb_empty_root
->   - add Kconfig option to manually select CONFIG_OF_EARLY_FLATTREE
-> 
-> Changes since version 1: (patch 2/2)
->   - refresh for 6.2-rc1
->   - update Signed-off-by
->   - fix formatting error (leading space) in patch comment
-> 
-> Frank Rowand (2):
->   of: create of_root if no dtb provided
->   of: unittest: treat missing of_root as error instead of fixing up
-> 
->  drivers/of/Kconfig        |  7 ++++++-
->  drivers/of/Makefile       |  2 +-
->  drivers/of/empty_root.dts |  6 ++++++
->  drivers/of/fdt.c          | 27 ++++++++++++++++++++++++++-
->  drivers/of/unittest.c     | 16 ++++++----------
->  include/linux/of_fdt.h    |  2 ++
->  init/main.c               |  2 ++
->  7 files changed, 49 insertions(+), 13 deletions(-)
->  create mode 100644 drivers/of/empty_root.dts
-> 
-
+            Linus
