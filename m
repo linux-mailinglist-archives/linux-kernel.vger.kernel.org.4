@@ -2,148 +2,216 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5EDB26A126A
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 22:57:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AEFC16A1271
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 22:59:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229778AbjBWV5r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Feb 2023 16:57:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36166 "EHLO
+        id S229793AbjBWV7F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Feb 2023 16:59:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37600 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229468AbjBWV5o (ORCPT
+        with ESMTP id S229605AbjBWV7D (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Feb 2023 16:57:44 -0500
-Received: from gate2.alliedtelesis.co.nz (gate2.alliedtelesis.co.nz [IPv6:2001:df5:b000:5::4])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48A90196A6
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Feb 2023 13:57:42 -0800 (PST)
-Received: from svr-chch-seg1.atlnz.lc (mmarshal3.atlnz.lc [10.32.18.43])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by gate2.alliedtelesis.co.nz (Postfix) with ESMTPS id F15B72C0650;
-        Fri, 24 Feb 2023 10:57:38 +1300 (NZDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alliedtelesis.co.nz;
-        s=mail181024; t=1677189458;
-        bh=NanjMPGPESIK+CNTa6AmGEKImCFQUu+FEQ970rFagjo=;
-        h=From:To:CC:Subject:Date:References:In-Reply-To:From;
-        b=ymvdG4C3DtwEv4djMLJcFVdG3lw4LkZPZ96ImHG1kuiiOFNh7wFHNbnAwzu17QWKF
-         3wRZBtuLxo6Lw6sq8mKF5giUAxC8eiFgSLkgVoAaa/9SlVQUbmRDxYuX3rJ3mAKi7n
-         zKtnMuOiDQIm7E+HItLYoZAeTmP1HF3/FuHTKr4Mw4hTiGpoSXzyPn6XnHm244x2jv
-         o06mzVfjNLZgoezUe0HlK4qY8EmcWt0RZ1pNcP+4Y6HrtnhQzQ4daR9SKBxNTorb4S
-         mg882G0fEa5ZmEjA0cAwiTUWVGvezMAyEdIJTcTqiT2E/+a86EqYpQcrOV1wzrpCya
-         Ww78x0JLV3gcA==
-Received: from svr-chch-ex1.atlnz.lc (Not Verified[2001:df5:b000:bc8::77]) by svr-chch-seg1.atlnz.lc with Trustwave SEG (v8,2,6,11305)
-        id <B63f7e1520001>; Fri, 24 Feb 2023 10:57:38 +1300
-Received: from svr-chch-ex1.atlnz.lc (2001:df5:b000:bc8:409d:36f5:8899:92e8)
- by svr-chch-ex1.atlnz.lc (2001:df5:b000:bc8:409d:36f5:8899:92e8) with
- Microsoft SMTP Server (TLS) id 15.0.1497.47; Fri, 24 Feb 2023 10:57:38 +1300
-Received: from svr-chch-ex1.atlnz.lc ([fe80::409d:36f5:8899:92e8]) by
- svr-chch-ex1.atlnz.lc ([fe80::409d:36f5:8899:92e8%12]) with mapi id
- 15.00.1497.047; Fri, 24 Feb 2023 10:57:38 +1300
-From:   Tony O'Brien <Tony.OBrien@alliedtelesis.co.nz>
-To:     Guenter Roeck <linux@roeck-us.net>
-CC:     "jdelvare@suse.com" <jdelvare@suse.com>,
-        "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
-        Chris Packham <Chris.Packham@alliedtelesis.co.nz>,
-        "hdegoede@redhat.com" <hdegoede@redhat.com>,
-        "jordan.crouse@amd.com" <jordan.crouse@amd.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 2/2] hwmon: (adt7475) Fix setting of hysteresis registers
-Thread-Topic: [PATCH 2/2] hwmon: (adt7475) Fix setting of hysteresis registers
-Thread-Index: AQHZRTTMlkXNzCAiSUmyuIMWTHJwBq7Yy+0AgANzawA=
-Date:   Thu, 23 Feb 2023 21:57:38 +0000
-Message-ID: <57d90678-4d1f-2aa7-aca2-6218894a91c6@alliedtelesis.co.nz>
-References: <20230219232956.23784-1-tony.obrien@alliedtelesis.co.nz>
- <20230219232956.23784-3-tony.obrien@alliedtelesis.co.nz>
- <20230220140826.GA4009286@roeck-us.net>
- <628cd274-38a2-fd67-3cea-eef5837f58a5@roeck-us.net>
-In-Reply-To: <628cd274-38a2-fd67-3cea-eef5837f58a5@roeck-us.net>
-Accept-Language: en-NZ, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-messagesentrepresentingtype: 1
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.32.1.11]
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <D9A39EC6D03D334EA3B05A781A495635@atlnz.lc>
-Content-Transfer-Encoding: base64
+        Thu, 23 Feb 2023 16:59:03 -0500
+Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2EEDA1FFA
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Feb 2023 13:59:01 -0800 (PST)
+Received: by mail-pl1-x634.google.com with SMTP id ky4so15880008plb.3
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Feb 2023 13:59:01 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=s4Mr/rCIfznjMH6ZhmV4S/R+2E0ra9anHB7zT/P7eKw=;
+        b=fmoe7GqEAskBDcDzNZHbQZoj09JyGfUXYYKF5nEbfxEGliwyTZ78C8xVaf1Q5X8HJl
+         c2294rdMFOUVcTOP8Y2gbuHZY3Cn3197Pqoy1qcFdlpbO1ErMVeuKjjdUDlW6kICPt8K
+         xqzuhbgC6VvbLXb440TXkCn/hApWyobxQqgZ9OEY5ZkGor1G468/XaI1YePz/7mFn6/3
+         yke+cSm08fEsWLdvWGmGAHsQ50X+yxHCklgX/YHAuKNIgH3k/mxNjkZqPXZTlxYm6nsT
+         /O9jAsS/553PM2fsIgDltac4CNriIRC0nrWJzVfzkkJxNLd3kuK5NL7enclap6D/Djqk
+         5Riw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=s4Mr/rCIfznjMH6ZhmV4S/R+2E0ra9anHB7zT/P7eKw=;
+        b=BoukdHT4ezRv298x8H1wPyIYoLABlotLvE7ko19TO6oaRpF5tkvZnk8nB0Xj57hxiT
+         VcWKV3wmqFEfPevlJQwBf7c2rqiY5P5aDHIjIR77gmtVTxssSycvc3R/NFeFapyH32AJ
+         aR7OG62Z4F259GoGMjCj/KoYtBbTqse20CrmKPHRud9dJg6igL5RYbtL1Dwd4W3YWjt3
+         HtPrFTEmh1AGPuOb8vl7HMcEO5R4e9/IoSwj3OG8YQXamCISDudx8dfIsLzaHI76gJMy
+         l5/Ivrd0XpFs4ZvYu188jHNTNUvnoIkTl52E3S99oNfzRMfIHTxmeP9AcTu2Y6F3+rHt
+         p0SA==
+X-Gm-Message-State: AO0yUKXXgjXO/EH8S4WolLP6O47z/WbUqLzOYntk7g/Z7sY++JbfoGWW
+        DbxOm4Nt60uTcG2j4h28T7jgvg==
+X-Google-Smtp-Source: AK7set+IuofcGG5Kuc+wgMaj11Z8DA++Rd/x/pbYLU/+F/IK9///eNtuG5BrHiJykcQjod2gP5rnrA==
+X-Received: by 2002:a05:6a21:33a4:b0:cc:59b7:79e6 with SMTP id yy36-20020a056a2133a400b000cc59b779e6mr1112752pzb.24.1677189540582;
+        Thu, 23 Feb 2023 13:59:00 -0800 (PST)
+Received: from [10.211.55.3] (c-73-221-130-71.hsd1.wa.comcast.net. [73.221.130.71])
+        by smtp.gmail.com with ESMTPSA id x5-20020a654145000000b00502ecb91940sm3043520pgp.55.2023.02.23.13.58.59
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 23 Feb 2023 13:59:00 -0800 (PST)
+Message-ID: <5d67ee67-e63f-1393-1455-bfb6b2ddaeb5@linaro.org>
+Date:   Thu, 23 Feb 2023 15:58:58 -0600
 MIME-Version: 1.0
-X-SEG-SpamProfiler-Analysis: v=2.3 cv=GdlpYjfL c=1 sm=1 tr=0 a=Xf/6aR1Nyvzi7BryhOrcLQ==:117 a=xqWC_Br6kY4A:10 a=oKJsc7D3gJEA:10 a=IkcTkHD0fZMA:10 a=m04uMKEZRckA:10 a=1cIUIJCp_7cGnt0_jAgA:9 a=QEXdDO2ut3YA:10
-X-SEG-SpamProfiler-Score: 0
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH v10 03/26] gunyah: Common types and error codes for Gunyah
+ hypercalls
+Content-Language: en-US
+To:     Elliot Berman <quic_eberman@quicinc.com>,
+        Alex Elder <elder@linaro.org>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Prakruthi Deepak Heragu <quic_pheragu@quicinc.com>
+Cc:     Murali Nalajala <quic_mnalajal@quicinc.com>,
+        Trilok Soni <quic_tsoni@quicinc.com>,
+        Srivatsa Vaddagiri <quic_svaddagi@quicinc.com>,
+        Carl van Schaik <quic_cvanscha@quicinc.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Bagas Sanjaya <bagasdotme@gmail.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Jassi Brar <jassisinghbrar@gmail.com>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+References: <20230214211229.3239350-1-quic_eberman@quicinc.com>
+ <20230214211229.3239350-4-quic_eberman@quicinc.com>
+From:   Alex Elder <alex.elder@linaro.org>
+In-Reply-To: <20230214211229.3239350-4-quic_eberman@quicinc.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-T24gMjIvMDIvMjMgMDY6MTUsIEd1ZW50ZXIgUm9lY2sgd3JvdGU6DQo+IE9uIDIvMjAvMjMgMDY6
-MDgsIEd1ZW50ZXIgUm9lY2sgd3JvdGU6DQo+PiBPbiBNb24sIEZlYiAyMCwgMjAyMyBhdCAxMjoy
-OTo1NlBNICsxMzAwLCBUb255IE8nQnJpZW4gd3JvdGU6DQo+Pj4gSW4gdGVtcF9zdG9yZSgpLCBm
-b3IgdGhlIGh5c3RlcmVzaXMgc2V0dGluZyBjYWxjdWxhdGlvbiB0aGVyZSB3ZXJlIHR3bw0KPj4+
-IGVycm9ycy7CoCBUaGUgZmlyc3QgdHJpZXMgdG8gY2xhbXAgdGhlIGh5c3RlcmVzaXMgdmFsdWUg
-YnkgY29tcGFyaW5nIHRoZQ0KPj4+IHJlcXVpcmVkIGh5c3RlcmVzaXMgdmFsdWUgdG8gVEhFUk0g
-LSAxNUMuwqAgVGhpcyBpcyBpbmNvcnJlY3Qgc2luY2UgdGhlDQo+Pj4gaHlzdGVyZXNpcyB2YWx1
-ZSBpcyBhIHJlbGF0aXZlIHZhbHVlIHdoZXJlYXMgVEhFUk0gLSAxNUMgaXMgYW4gYWJzb2x1dGUN
-Cj4+DQo+PiBObywgaXQgaXNuJ3QuIFRoZSBoeXN0ZXJlc2lzIGF0dHJpYnV0ZSBpcyBhbiBhYnNv
-bHV0ZSB0ZW1wZXJhdHVyZS4NCj4+IFRoZSB2YWx1ZSB3cml0dGVuIGludG8gdGhlIGF0dHJpYnV0
-ZSBpcyBleHBlY3RlZCB0byBiZSBpbiB0aGUgcmFuZ2UNCj4+IFtUSEVSTSAtIDE1LCBUSEVSTV0g
-KGluIGRlZ3JlZXMgQykuIFRoZSB2YWx1ZSB3cml0dGVuIGludG8gdGhlIHJlZ2lzdGVyDQo+PiBp
-cyB0aGVuIGluIHRoZSByYW5nZSBbMTUsIDBdLiBJIHNlZSBub3RoaW5nIHdyb25nIHdpdGggdGhl
-IGN1cnJlbnQgY29kZS4NCj4+DQo+Pj4gdmFsdWUuIFRoaXMgY2F1c2VzIGl0IHRvIGFsd2F5cyBz
-ZWxlY3QgMTVDIGZvciBoeXN0ZXJlc2lzLsKgIENoYW5nZSB0aGUNCj4+PiBmaXJzdCBwYXJhbWV0
-ZXIgdG8gVEhFUk0gLSB2YWwgdG8gY29tcGFyZSB0d28gYWJzb2x1dGUgdGVtcGVyYXR1cmVzLg0K
-Pj4+IFRoZSBzZWNvbmQgZXJyb3IgbWFza3MgdGhlIHdyb25nIGJpdHMgaW4gdGhlIGh5c3RlcmVz
-aXMgcmVnaXN0ZXI7IA0KPj4+IGluZGljZXMNCj4+PiAwIGFuZCAyIHNob3VsZCB6ZXJvIGJpdHMg
-Wzc6NF0gYW5kIHByZXNlcnZlIGJpdHMgWzM6MF0sIGFuZCBpbmRleCAxIA0KPj4+IHNob3VsZA0K
-Pj4+IHplcm8gYml0cyBbMzowXSBhbmQgcHJlc2VydmUgYml0cyBbNzo0XS4NCj4+DQo+PiBJJ2xs
-IGhhdmUgdG8gdmVyaWZ5IHRoYXQgd2l0aCB0aGUgZGF0YXNoZWV0LiBFaXRoZXIgY2FzZSwgb25l
-IGxvZ2ljYWwgDQo+PiBjaGFuZ2UNCj4+IHBlciBwYXRjaCwgcGxlYXNlLg0KPj4NCj4gDQo+IEFj
-dHVhbGx5LCB0aGUgcHJvYmxlbSBpcyBvYnZpb3VzIGZyb20gdGhlIGNvZGUuIFN0aWxsLCBlaXRo
-ZXIgZHJvcCB0aGUgDQo+IGZpcnN0DQo+IHBhcnQgb2YgdGhlIHBhdGNoIG9yIHNlcGFyYXRlIGlu
-dG8gdHdvIHBhdGNoZXMgYW5kIGV4cGxhaW4gaW4gZGV0YWlsIHdoYXQNCj4geW91IHRoaW5rIGlz
-IHdyb25nIGluIHRoZSBmaXJzdCBwYXJ0LiBUaGVyZSBpcyBhIGNvbW1lbnQgaW4gdGhlIGNvZGUN
-Cj4gDQo+ICDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgLyoNCj4gIMKgwqDCoMKgwqDC
-oMKgwqDCoMKgwqDCoMKgwqDCoMKgICogVGhlIHZhbHVlIHdpbGwgYmUgZ2l2ZW4gYXMgYW4gYWJz
-b2x1dGUgdmFsdWUsIHR1cm4gaXQNCj4gIMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
-ICogaW50byBhbiBvZmZzZXQgYmFzZWQgb24gVEhFUk0NCj4gIMKgwqDCoMKgwqDCoMKgwqDCoMKg
-wqDCoMKgwqDCoMKgICovDQo+IA0KPiBNYXliZSBJIGFtIG1pc3Npbmcgc29tZXRoaW5nLCBidXQg
-SSB0aGluayB0aGF0IGlzIGV4YWN0bHkgd2hhdCB0aGUgY3VycmVudA0KPiBjb2RlIGlzIGRvaW5n
-Lg0KU29ycnkgZm9yIHRoZSBsYXRlIHJlcGx5LCBteSBlbWFpbCB3YXNuJ3Qgd29ya2luZyBwcm9w
-ZXJseS4NCg0KWW91IGFyZSBjb3JyZWN0LCBhbmQgc28gaXMgdGhlIGNvZGUuICBJIGFzc3VtZWQg
-dGhlIGh5c3RlcmVzaXMgd291bGQgYmUgDQp3cml0dGVuIHRvIHRoZSBzeXNmcyB0ZW1wI19jcml0
-X2h5c3QgZmlsZSBhcyBhIHJlbGF0aXZlIHRlbXBlcmF0dXJlLCANCihiZWluZyBjYWxsZWQgJ2h5
-c3QnKSBub3QgYW4gYWJzb2x1dGUgdmFsdWUuICBJIGhhdmUgZml4ZWQgb3VyIGhvc3QgY29kZSAN
-CnRvIHdyaXRlIHRoaXMgY29ycmVjdGx5IGFuZCBpdCB3b3JrcyBmaW5lIG5vdy4gIFRoaXMgcGFy
-dCBvZiB0aGUgcGF0Y2ggDQpoYXMgYmVlbiBkcm9wcGVkIGFuZCB2MiBoYXMgYmVlbiBzZW50LiAg
-VGhhbmtzIGZvciB5b3VyIGhlbHAuDQoNCkNoZWVycywNClRvbnkuDQo+IA0KPiBUaGFua3MsDQo+
-IEd1ZW50ZXINCj4gDQo+PiBUaGFua3MsDQo+PiBHdWVudGVyDQo+Pg0KPj4+DQo+Pj4gRml4ZXM6
-IDFjMzAxZmM1Mzk0ZiAoImh3bW9uOiBBZGQgYSBkcml2ZXIgZm9yIHRoZSBBRFQ3NDc1IGhhcmR3
-YXJlIA0KPj4+IG1vbml0b3JpbmcgY2hpcCIpDQo+Pj4gU2lnbmVkLW9mZi1ieTogVG9ueSBPJ0Jy
-aWVuIDx0b255Lm9icmllbkBhbGxpZWR0ZWxlc2lzLmNvLm56Pg0KPj4+IC0tLQ0KPj4+IMKgIGRy
-aXZlcnMvaHdtb24vYWR0NzQ3NS5jIHwgNiArKystLS0NCj4+PiDCoCAxIGZpbGUgY2hhbmdlZCwg
-MyBpbnNlcnRpb25zKCspLCAzIGRlbGV0aW9ucygtKQ0KPj4+DQo+Pj4gZGlmZiAtLWdpdCBhL2Ry
-aXZlcnMvaHdtb24vYWR0NzQ3NS5jIGIvZHJpdmVycy9od21vbi9hZHQ3NDc1LmMNCj4+PiBpbmRl
-eCA3NzIyMmMzNWEzOGUuLjY4MjMzMTkxNzk4ZSAxMDA2NDQNCj4+PiAtLS0gYS9kcml2ZXJzL2h3
-bW9uL2FkdDc0NzUuYw0KPj4+ICsrKyBiL2RyaXZlcnMvaHdtb24vYWR0NzQ3NS5jDQo+Pj4gQEAg
-LTQ4NCwxNCArNDg0LDE0IEBAIHN0YXRpYyBzc2l6ZV90IHRlbXBfc3RvcmUoc3RydWN0IGRldmlj
-ZSAqZGV2LCANCj4+PiBzdHJ1Y3QgZGV2aWNlX2F0dHJpYnV0ZSAqYXR0ciwNCj4+PiDCoMKgwqDC
-oMKgwqDCoMKgwqAgYWR0NzQ3NV9yZWFkX2h5c3RlcnNpcyhjbGllbnQpOw0KPj4+IMKgwqDCoMKg
-wqDCoMKgwqDCoCB0ZW1wID0gcmVnMnRlbXAoZGF0YSwgZGF0YS0+dGVtcFtUSEVSTV1bc2F0dHIt
-PmluZGV4XSk7DQo+Pj4gLcKgwqDCoMKgwqDCoMKgIHZhbCA9IGNsYW1wX3ZhbCh2YWwsIHRlbXAg
-LSAxNTAwMCwgdGVtcCk7DQo+Pj4gK8KgwqDCoMKgwqDCoMKgIHZhbCA9IGNsYW1wX3ZhbCh0ZW1w
-IC0gdmFsLCB0ZW1wIC0gMTUwMDAsIHRlbXApOw0KPj4+IMKgwqDCoMKgwqDCoMKgwqDCoCB2YWwg
-PSAodGVtcCAtIHZhbCkgLyAxMDAwOw0KPj4+IMKgwqDCoMKgwqDCoMKgwqDCoCBpZiAoc2F0dHIt
-PmluZGV4ICE9IDEpIHsNCj4+PiAtwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCBkYXRhLT50ZW1wW0hZ
-U1RFUlNJU11bc2F0dHItPmluZGV4XSAmPSAweEYwOw0KPj4+ICvCoMKgwqDCoMKgwqDCoMKgwqDC
-oMKgIGRhdGEtPnRlbXBbSFlTVEVSU0lTXVtzYXR0ci0+aW5kZXhdICY9IDB4MEY7DQo+Pj4gwqDC
-oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgZGF0YS0+dGVtcFtIWVNURVJTSVNdW3NhdHRyLT5pbmRl
-eF0gfD0gKHZhbCAmIDB4RikgPDwgNDsNCj4+PiDCoMKgwqDCoMKgwqDCoMKgwqAgfSBlbHNlIHsN
-Cj4+PiAtwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCBkYXRhLT50ZW1wW0hZU1RFUlNJU11bc2F0dHIt
-PmluZGV4XSAmPSAweDBGOw0KPj4+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIGRhdGEtPnRlbXBb
-SFlTVEVSU0lTXVtzYXR0ci0+aW5kZXhdICY9IDB4RjA7DQo+Pj4gwqDCoMKgwqDCoMKgwqDCoMKg
-wqDCoMKgwqAgZGF0YS0+dGVtcFtIWVNURVJTSVNdW3NhdHRyLT5pbmRleF0gfD0gKHZhbCAmIDB4
-Rik7DQo+Pj4gwqDCoMKgwqDCoMKgwqDCoMKgIH0NCj4+PiAtLSANCj4+PiAyLjM5LjINCj4+Pg0K
-PiANCg==
+On 2/14/23 3:12 PM, Elliot Berman wrote:
+> Add architecture-independent standard error codes, types, and macros for
+> Gunyah hypercalls.
+> 
+> Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+> Signed-off-by: Elliot Berman <quic_eberman@quicinc.com>
+> ---
+>   include/linux/gunyah.h | 82 ++++++++++++++++++++++++++++++++++++++++++
+>   1 file changed, 82 insertions(+)
+>   create mode 100644 include/linux/gunyah.h
+> 
+> diff --git a/include/linux/gunyah.h b/include/linux/gunyah.h
+> new file mode 100644
+> index 000000000000..59ef4c735ae8
+> --- /dev/null
+> +++ b/include/linux/gunyah.h
+> @@ -0,0 +1,82 @@
+> +/* SPDX-License-Identifier: GPL-2.0-only */
+> +/*
+> + * Copyright (c) 2022-2023 Qualcomm Innovation Center, Inc. All rights reserved.
+> + */
+> +
+> +#ifndef _LINUX_GUNYAH_H
+> +#define _LINUX_GUNYAH_H
+> +
+> +#include <linux/errno.h>
+> +#include <linux/limits.h>
+> +
+> +/******************************************************************************/
+> +/* Common arch-independent definitions for Gunyah hypercalls                  */
+> +#define GH_CAPID_INVAL	U64_MAX
+> +#define GH_VMID_ROOT_VM	0xff
+> +
+> +enum gh_error {
+> +	GH_ERROR_OK			= 0,
+> +	GH_ERROR_UNIMPLEMENTED		= -1,
+> +	GH_ERROR_RETRY			= -2,
+
+Do you expect this type to have a particular size?
+Since you specify negative values, it matters, and
+it's possible that this forces it to be a 4-byte value
+(though I'm not sure what the rules are).  In other
+words, UNIMPLEMENTED could conceivably have value 0xff
+or 0xffffffff.  I'm not even sure you can tell whether
+an enum is interpreted as signed or unsigned.
+
+It's not usually a good thing to do, but this *could*
+be a case where you do a typedef to represent this as
+a signed value of a certain bit width.  (But don't do
+that unless someone else says that's worth doing.)
+
+					-Alex
+
+> +
+> +	GH_ERROR_ARG_INVAL		= 1,
+> +	GH_ERROR_ARG_SIZE		= 2,
+> +	GH_ERROR_ARG_ALIGN		= 3,
+> +
+> +	GH_ERROR_NOMEM			= 10,
+> +
+> +	GH_ERROR_ADDR_OVFL		= 20,
+> +	GH_ERROR_ADDR_UNFL		= 21,
+> +	GH_ERROR_ADDR_INVAL		= 22,
+> +
+> +	GH_ERROR_DENIED			= 30,
+> +	GH_ERROR_BUSY			= 31,
+> +	GH_ERROR_IDLE			= 32,
+> +
+> +	GH_ERROR_IRQ_BOUND		= 40,
+> +	GH_ERROR_IRQ_UNBOUND		= 41,
+> +
+> +	GH_ERROR_CSPACE_CAP_NULL	= 50,
+> +	GH_ERROR_CSPACE_CAP_REVOKED	= 51,
+> +	GH_ERROR_CSPACE_WRONG_OBJ_TYPE	= 52,
+> +	GH_ERROR_CSPACE_INSUF_RIGHTS	= 53,
+> +	GH_ERROR_CSPACE_FULL		= 54,
+> +
+> +	GH_ERROR_MSGQUEUE_EMPTY		= 60,
+> +	GH_ERROR_MSGQUEUE_FULL		= 61,
+> +};
+> +
+> +/**
+> + * gh_remap_error() - Remap Gunyah hypervisor errors into a Linux error code
+> + * @gh_error: Gunyah hypercall return value
+> + */
+> +static inline int gh_remap_error(enum gh_error gh_error)
+> +{
+> +	switch (gh_error) {
+> +	case GH_ERROR_OK:
+> +		return 0;
+> +	case GH_ERROR_NOMEM:
+> +		return -ENOMEM;
+> +	case GH_ERROR_DENIED:
+> +	case GH_ERROR_CSPACE_CAP_NULL:
+> +	case GH_ERROR_CSPACE_CAP_REVOKED:
+> +	case GH_ERROR_CSPACE_WRONG_OBJ_TYPE:
+> +	case GH_ERROR_CSPACE_INSUF_RIGHTS:
+> +	case GH_ERROR_CSPACE_FULL:
+> +		return -EACCES;
+> +	case GH_ERROR_BUSY:
+> +	case GH_ERROR_IDLE:
+> +	case GH_ERROR_IRQ_BOUND:
+> +	case GH_ERROR_IRQ_UNBOUND:
+> +	case GH_ERROR_MSGQUEUE_FULL:
+> +	case GH_ERROR_MSGQUEUE_EMPTY:
+
+Is an empty message queue really busy?
+
+> +		return -EBUSY;
+> +	case GH_ERROR_UNIMPLEMENTED:
+> +	case GH_ERROR_RETRY:
+> +		return -EOPNOTSUPP;
+> +	default:
+> +		return -EINVAL;
+> +	}
+> +}
+> +
+> +#endif
+
