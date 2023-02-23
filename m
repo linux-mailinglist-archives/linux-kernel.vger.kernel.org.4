@@ -2,132 +2,166 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 655D26A0599
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 11:06:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 096336A0597
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 11:06:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231849AbjBWKG0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Feb 2023 05:06:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38792 "EHLO
+        id S233562AbjBWKGQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Feb 2023 05:06:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38720 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232110AbjBWKGS (ORCPT
+        with ESMTP id S231849AbjBWKGM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Feb 2023 05:06:18 -0500
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5010D38033;
-        Thu, 23 Feb 2023 02:06:17 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1677146777; x=1708682777;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=G1eyd6plZRhl7C9gSgBC4jqgdrPdoVIj9daKdi61y44=;
-  b=bST57cjvPhZ/OYofPSybTP7Zt9b8UcycIVHC68repCVQpb2zRviMBVv9
-   vjiFLkSZdRzx42jr+Ke5qrRfcW6xGq61XvBb7Znjuz+rB9+CNdmH++yWN
-   738HOYMcaZFi8/n6LHzN5n8GgClQJmq6JrCR3EQM+KGDdapSSxfgXKYfh
-   4DLVRmMYkKit7hPht3LeoRVH3PgqMWCNeB7SI5ytK8YNUheDGHszc4woC
-   KnWFVT65yS0nOG1B0dpLzF8axIj8BzID962mXxasNP8aIFi+oHBXHru9Q
-   +UbRmFsKMl4nJDYXW26C/ltQekV2NjAXe0Rt5aebmQuV8fT9Ndg5bAq1b
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10629"; a="312797173"
-X-IronPort-AV: E=Sophos;i="5.97,320,1669104000"; 
-   d="scan'208";a="312797173"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Feb 2023 02:05:58 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10629"; a="736302469"
-X-IronPort-AV: E=Sophos;i="5.97,320,1669104000"; 
-   d="scan'208";a="736302469"
-Received: from lkp-server01.sh.intel.com (HELO 3895f5c55ead) ([10.239.97.150])
-  by fmsmga008.fm.intel.com with ESMTP; 23 Feb 2023 02:05:56 -0800
-Received: from kbuild by 3895f5c55ead with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pV8U7-0001Ev-1P;
-        Thu, 23 Feb 2023 10:05:55 +0000
-Date:   Thu, 23 Feb 2023 18:05:12 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Johan Hovold <johan+linaro@kernel.org>,
-        Ard Biesheuvel <ardb@kernel.org>
-Cc:     llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-        Jeremy Kerr <jk@ozlabs.org>,
-        Maximilian Luz <luzmaximilian@gmail.com>,
-        linux-efi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Johan Hovold <johan+linaro@kernel.org>,
-        Steev Klimaszewski <steev@kali.org>
-Subject: Re: [PATCH] efivarfs: fix NULL-deref on mount when no efivars
-Message-ID: <202302231733.iymwHTPf-lkp@intel.com>
-References: <20230126112129.4602-1-johan+linaro@kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230126112129.4602-1-johan+linaro@kernel.org>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+        Thu, 23 Feb 2023 05:06:12 -0500
+Received: from out5-smtp.messagingengine.com (out5-smtp.messagingengine.com [66.111.4.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1370037726;
+        Thu, 23 Feb 2023 02:06:11 -0800 (PST)
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
+        by mailout.nyi.internal (Postfix) with ESMTP id 69D505C00F8;
+        Thu, 23 Feb 2023 05:06:10 -0500 (EST)
+Received: from imap51 ([10.202.2.101])
+  by compute6.internal (MEProxy); Thu, 23 Feb 2023 05:06:10 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to; s=fm3; t=1677146770; x=1677233170; bh=lqOjciWNUa
+        TbPpSK8T8cQbiQqBz956A9nanEyGupbck=; b=ljw/thsfIRiehOYm8HAtskNISx
+        kzERBwBxp1e1n1gj+Voqu5B6kbILBeXDeAYok9KkZcTEi+x1eZOZwETx4JW9CQad
+        7rUh6qHhd3hIeNhKLU3PGnqA3jekEJc04GvDsrlsUHOaV/RaTEZietG4OgZQwEJd
+        pByQPJS5kv05iNvniiiEnbSSwjkqF/PRwXDH4c2Amp23ajAnmrI/8PEIkGu4US2H
+        /NjCs/GTEAd3vu7DKOktRWxfYMiilqMzKSqw+O6V7MfkUyV6VhU4eX9w+8EWBxnU
+        xBfEXTtz5xGhFGXjvxBYx7S4NJpFZvZv3R5UJvoEpqDcTLfURZOAq6bvF15g==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm1; t=1677146770; x=1677233170; bh=lqOjciWNUaTbPpSK8T8cQbiQqBz9
+        56A9nanEyGupbck=; b=pmfFGQOYPCPVrNb7YXtteVcO/pXfx/iF8RMeyfvsgtNi
+        T+8Vg1CWTnGIBeDpRuwbozW4We4OabRfaHh6ZOSAcvDGyItI68X9soMg91tkFfKs
+        MxrtQizscSVJQtJe1i+HanJ/7gxgd9KN9p7GsR8WvJQhnYeav5SndvgvJdxjmrMK
+        Sj99TCF2JSNmdSg/4nYpjdeqNMP5Wj0u+yVBBoMptey2ebN3R78/fihLW/pdQ4aV
+        Nidu+J0wLwwjR/hCye59VUcUyPkhPmso+DXS0rrhsUTM0lFYo10NkYl/8uvrpfxO
+        e/e+WEcWLaCIPc/eNiD1R2cGnAx+LOlPoLXYzNTt/Q==
+X-ME-Sender: <xms:kTr3Y5APWDxGxO1x3t0YYzj8Ec9ZKZRDqcg5j69lmxnopFwtaC3Fiw>
+    <xme:kTr3Y3gcMFC1Pc6gpNdzpDrv5Mcu5smfSRiUfpmh-G8J7fMxuZ_hGfI9FA232tJNx
+    1IOtQ_fIcgNVPn3bxg>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrudekuddgudduucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehr
+    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
+    htvghrnhepffehueegteeihfegtefhjefgtdeugfegjeelheejueethfefgeeghfektdek
+    teffnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprg
+    hrnhgusegrrhhnuggsrdguvg
+X-ME-Proxy: <xmx:kTr3Y0lHEKTj2EQurzOdA-gyZyc0bcNO_prdbhdZN6zljBpXeX62ew>
+    <xmx:kTr3YzxcKcWciGMpR_e3ASgEsdx8e8ORKk1zQPAQA16Vf4QpmikAQQ>
+    <xmx:kTr3Y-TxDWfYrwAWmVga6OO1Fs4Vju5aRCLpyQ2SX8mz6O4YNVft9A>
+    <xmx:kjr3Y3CoVDqB_eZoZe10LaR2aRZJqCyMgdQHbKgx_cyaVgI_H5dNoQ>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id 9D021B60086; Thu, 23 Feb 2023 05:06:09 -0500 (EST)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.9.0-alpha0-172-g9a2dae1853-fm-20230213.001-g9a2dae18
+Mime-Version: 1.0
+Message-Id: <605fb2fd-bda2-4922-92bf-e3e416d54398@app.fastmail.com>
+In-Reply-To: <20230221190858.3159617-3-evan@rivosinc.com>
+References: <20230221190858.3159617-1-evan@rivosinc.com>
+ <20230221190858.3159617-3-evan@rivosinc.com>
+Date:   Thu, 23 Feb 2023 11:06:11 +0100
+From:   "Arnd Bergmann" <arnd@arndb.de>
+To:     "Evan Green" <evan@rivosinc.com>,
+        "Palmer Dabbelt" <palmer@rivosinc.com>
+Cc:     =?UTF-8?Q?Heiko_St=C3=BCbner?= <heiko@sntech.de>,
+        "Conor Dooley" <conor@kernel.org>, slewis@rivosinc.com,
+        "Vineet Gupta" <vineetg@rivosinc.com>,
+        "Albert Ou" <aou@eecs.berkeley.edu>,
+        "Andrew Bresticker" <abrestic@rivosinc.com>,
+        "Andrew Jones" <ajones@ventanamicro.com>,
+        "Anup Patel" <apatel@ventanamicro.com>,
+        "Atish Patra" <atishp@rivosinc.com>,
+        "Bagas Sanjaya" <bagasdotme@gmail.com>,
+        "Celeste Liu" <coelacanthus@outlook.com>,
+        "Conor.Dooley" <conor.dooley@microchip.com>,
+        guoren <guoren@kernel.org>, "Jonathan Corbet" <corbet@lwn.net>,
+        "Niklas Cassel" <niklas.cassel@wdc.com>,
+        "Palmer Dabbelt" <palmer@dabbelt.com>,
+        "Paul Walmsley" <paul.walmsley@sifive.com>,
+        "Randy Dunlap" <rdunlap@infradead.org>,
+        "Ruizhe Pan" <c141028@gmail.com>,
+        "Sunil V L" <sunilvl@ventanamicro.com>,
+        "Tobias Klauser" <tklauser@distanz.ch>, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org
+Subject: Re: [PATCH v3 2/7] RISC-V: Add a syscall for HW probing
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Johan,
+On Tue, Feb 21, 2023, at 20:08, Evan Green wrote:
+> We don't have enough space for these all in ELF_HWCAP{,2} and there's no
+> system call that quite does this, so let's just provide an arch-specific
+> one to probe for hardware capabilities.  This currently just provides
+> m{arch,imp,vendor}id, but with the key-value pairs we can pass more in
+> the future.
+>
+> Co-developed-by: Palmer Dabbelt <palmer@rivosinc.com>
+> Signed-off-by: Palmer Dabbelt <palmer@rivosinc.com>
+> Signed-off-by: Evan Green <evan@rivosinc.com>
 
-I love your patch! Yet something to improve:
+I'm still skeptical about the need for a custom syscall interface here.
+I had not looked at the interface so far, but there are a few things
+that stick out:
 
-[auto build test ERROR on v6.2-rc5]
-[also build test ERROR on linus/master]
-[cannot apply to efi/next next-20230223]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+> +RISC-V Hardware Probing Interface
+> +---------------------------------
+> +
+> +The RISC-V hardware probing interface is based around a single 
+> syscall, which
+> +is defined in <asm/hwprobe.h>::
+> +
+> +    struct riscv_hwprobe {
+> +        __s64 key;
+> +        __u64 value;
+> +    };
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Johan-Hovold/efivarfs-fix-NULL-deref-on-mount-when-no-efivars/20230128-094525
-patch link:    https://lore.kernel.org/r/20230126112129.4602-1-johan%2Blinaro%40kernel.org
-patch subject: [PATCH] efivarfs: fix NULL-deref on mount when no efivars
-config: i386-randconfig-a015 (https://download.01.org/0day-ci/archive/20230223/202302231733.iymwHTPf-lkp@intel.com/config)
-compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/da57163cc9d947884520240ec71c2806f48b8a64
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Johan-Hovold/efivarfs-fix-NULL-deref-on-mount-when-no-efivars/20230128-094525
-        git checkout da57163cc9d947884520240ec71c2806f48b8a64
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash fs/
+The way this is defined, the kernel will always have to know
+about the specific set of features, it can't just forward
+unknown features to user space after probing them from an
+architectured hardware interface or from DT.
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202302231733.iymwHTPf-lkp@intel.com/
+If 'key' is just an enumerated value with a small number of
+possible values, I don't see anything wrong with using elf
+aux data. I understand it's hard to know how many keys
+might be needed in the long run, from the way you define
+the key/value pairs here, I would expect it to have a lot
+of the same limitations that the aux data has, except for
+a few bytes to be copied.
 
-All errors (new ones prefixed by >>):
+> +    long sys_riscv_hwprobe(struct riscv_hwprobe *pairs, size_t 
+> pair_count,
+> +                           size_t cpu_count, cpu_set_t *cpus,
+> +                           unsigned long flags);
 
->> fs/efivarfs/super.c:246:7: error: implicit declaration of function 'efivar_is_available' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
-           if (!efivar_is_available())
-                ^
-   fs/efivarfs/super.c:246:7: note: did you mean 'slab_is_available'?
-   include/linux/slab.h:171:6: note: 'slab_is_available' declared here
-   bool slab_is_available(void);
-        ^
-   1 error generated.
+The cpu set argument worries me more: there should never be a
+need to optimize for broken hardware that has an asymmetric set
+of features. Just let the kernel figure out the minimum set
+of features that works across all CPUs and report that like we
+do with HWCAP. If there is a SoC that is so broken that it has
+important features on a subset of cores that some user might
+actually want to rely on, then have them go through the slow
+sysfs interface for probing the CPUs indidually, but don't make
+the broken case easier at the expense of normal users that
+run on working hardware.
 
+> +asmlinkage long sys_riscv_hwprobe(uintptr_t, uintptr_t, uintptr_t, 
+> uintptr_t,
+> +				  uintptr_t, uintptr_t);
 
-vim +/efivar_is_available +246 fs/efivarfs/super.c
+Why 'uintptr_t' rather than the correct type?
 
-   241	
-   242	static void efivarfs_kill_sb(struct super_block *sb)
-   243	{
-   244		kill_litter_super(sb);
-   245	
- > 246		if (!efivar_is_available())
-   247			return;
-   248	
-   249		/* Remove all entries and destroy */
-   250		efivar_entry_iter(efivarfs_destroy, &efivarfs_list, NULL);
-   251	}
-   252	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+       Arnd
