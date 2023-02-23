@@ -2,113 +2,346 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2DA7C6A0D0D
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 16:36:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 33EE66A0D13
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 16:37:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234855AbjBWPgq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Feb 2023 10:36:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47808 "EHLO
+        id S233711AbjBWPhF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Feb 2023 10:37:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48264 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233711AbjBWPgo (ORCPT
+        with ESMTP id S234881AbjBWPhD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Feb 2023 10:36:44 -0500
-Received: from mail-il1-x134.google.com (mail-il1-x134.google.com [IPv6:2607:f8b0:4864:20::134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A83B117166;
-        Thu, 23 Feb 2023 07:36:43 -0800 (PST)
-Received: by mail-il1-x134.google.com with SMTP id z5so2043375ilq.0;
-        Thu, 23 Feb 2023 07:36:43 -0800 (PST)
+        Thu, 23 Feb 2023 10:37:03 -0500
+Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6D145848F
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Feb 2023 07:36:59 -0800 (PST)
+Received: by mail-wm1-x330.google.com with SMTP id m25-20020a7bcb99000000b003e7842b75f2so6749871wmi.3
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Feb 2023 07:36:59 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=36iVwpCV67m9Prkpccx9jdmSBAdJURQNVTWbUuLnUCY=;
-        b=BNBb0KjMyeaKHRnNZ7WDhi75KijWDQMh8N6WQCf/Da2M5bwNApRq0nANHRIiNxNKMh
-         s3a7nWHBM7ERmCJ6SW3A5VaqmL4mJsqlN0r2aGAf8b1UFo71ejGmLUPGKayOD4R52M+W
-         U5UB9KRiWaIQLlOtV4ewfv8naNzKpoqVf3wgNE27maLBb19NcikXU+5vyY0qMd9lIfwH
-         jrD0J+XorA/GpgwJP3ohaKVGCD5SQOf4H5oOTn20H3VKoNiCPFZhYEh6UD0L4Q+BUHsS
-         UxFg8/Qo8VV3Bu7P2Sbd3CwR4gJLhUVKMpZMLdoqeoGjpRY4I3FTV0kPqh1LnXI8qUzI
-         eULA==
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=96a3e/X/lGyIgbTMTuv+utcIk+D4aG9Ngn1VnIeUGG0=;
+        b=NVLRgiv3L5TeG1j6xS9zoJMb5xC/OKgMneNWH7hFn6Di4pSSODxjIu9/yJtguA/she
+         uTjUU7TWpi8RIethHW0x1GRkIu9axBTIlsPdwVN8WP3a0mA32oY9RE3NsTobmqxUcsjD
+         IHTA414qSRNh10XLRCU+6FoUVlrhr4Nsv2YdCdaDFlkgPfHf1s+8EimX3NsYI5VlQjDT
+         Sf5uRXlu7QD6TrXyDGkO8fVtOVyaxFk1gCIpkb9jeMUz1HVAW5rIRdGDFw2AL8mhxsPA
+         9uBNzbjOAtbpd5OCQEpu0AMaBRqjXprBqiOLeQ4hn09wxbOu34F/VzdnEOXHP/rjmIZo
+         a+cg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=36iVwpCV67m9Prkpccx9jdmSBAdJURQNVTWbUuLnUCY=;
-        b=yIbZ31FbpZg2Wz5lb6vRWOPyqOyCG9xUdATzoY/Fhx+Brn2V2tJ0ZnccFR6WA7RFXp
-         Clg3To8W9tyrrqHy3M4ZnG5im4v4zNaT6tS/iil6Sfh05+iZcz8403PwoHoyJzdfaN8b
-         W25EaOoE/nSAhsvXBw2FJTl3kjg1xf3gAgfj3mPqpBeSIn6+fBGHapwcAR0n9vq+zalK
-         3hRJJvM5exliAdGW2uH/hEclvZBw6TEU7VmFOoZiZxAaoGQBlPZklpka7LDfB8tJwIS/
-         TdKZBQaJUipB7lKGonWc4oCPhjpENySB+XW8DfG2HixAHx8N0803o3m9p2cOAbV31NCL
-         x5cg==
-X-Gm-Message-State: AO0yUKXkfzapqz6TimbfAITjYffVbZdiV4TnynDDRK/ZFnRFHJ7NSMiZ
-        udKlFuSUV2ZobEt+rdqrx2Y=
-X-Google-Smtp-Source: AK7set/d8ce+nfx1wyPSU2mw0vavT9Dq+UFpy2YXezikwY4hedoZNNyao43+7ZYzg0jJvyuAATDYBA==
-X-Received: by 2002:a05:6e02:12c8:b0:316:fcbe:53c0 with SMTP id i8-20020a056e0212c800b00316fcbe53c0mr2230885ilm.6.1677166602642;
-        Thu, 23 Feb 2023 07:36:42 -0800 (PST)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id a22-20020a056638005600b003a9962a24d1sm1972834jap.122.2023.02.23.07.36.40
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 23 Feb 2023 07:36:41 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <adc1b0b7-f837-fbb4-332b-4ce18fc55709@roeck-us.net>
-Date:   Thu, 23 Feb 2023 07:36:39 -0800
+        bh=96a3e/X/lGyIgbTMTuv+utcIk+D4aG9Ngn1VnIeUGG0=;
+        b=b3XvuARFrNyWQUjCIgAWDMvpR+WNogjMZyh8QrqnXZP4QTpwCU/6PAqc1RqJG7paG/
+         eYT9Dv+I1Xw+v/V05eSFsRcfEiADeiX0wZLV67LrY2ujxwEgjNprROyE9/G+pVf8U6/f
+         VmxhDnRKiMB5o+caKZZAa6Vj6bFsZRNnHATzA5ECcRZ31xNUSlURWOypWahUgZIl8uWC
+         p6+e1zUpsbSt9sQU5/6fXuQXZdlRYaxY+zsfNOzkVV9loa8/V6Xl+FTAFccjw6+XKA3S
+         jqO6LIr6yPIxtoE+Ok5am8jr3sft0gNgwmUNy6lJbfqsljqie912nOMwTJ5C0icG0qsr
+         eTxA==
+X-Gm-Message-State: AO0yUKUUkZZUdfD6WP/d2ixeSOKpHo9sjMua8autLO1mArBlH2oNbcnF
+        C+Tk3f+HZ9MDXIaPx2aAvh1CWg==
+X-Google-Smtp-Source: AK7set8rZ5ExS7ytqNTBQCjpkp86I3+olDE/KURAD1E7gakQsketodE4+h36qUJ3Gra/1MhXaOmgSw==
+X-Received: by 2002:a05:600c:16c8:b0:3dc:5950:b358 with SMTP id l8-20020a05600c16c800b003dc5950b358mr3355959wmn.14.1677166618219;
+        Thu, 23 Feb 2023 07:36:58 -0800 (PST)
+Received: from sagittarius-a.chello.ie (188-141-3-169.dynamic.upc.ie. [188.141.3.169])
+        by smtp.gmail.com with ESMTPSA id c18-20020a05600c0a5200b003e733a973d2sm11076978wmq.39.2023.02.23.07.36.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 23 Feb 2023 07:36:57 -0800 (PST)
+From:   Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+To:     agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
+        djakov@kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org
+Cc:     bryan.odonoghue@linaro.org, linux-arm-msm@vger.kernel.org,
+        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, benl@squareup.com,
+        shawn.guo@linaro.org, fabien.parent@linaro.org, leo.yan@linaro.org,
+        dmitry.baryshkov@linaro.org, stephan@gerhold.net
+Subject: [PATCH v7 0/5] Add MSM8939 SoC support with two devices
+Date:   Thu, 23 Feb 2023 15:36:50 +0000
+Message-Id: <20230223153655.262783-1-bryan.odonoghue@linaro.org>
+X-Mailer: git-send-email 2.39.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH 5.15 00/37] 5.15.96-rc2 review
-Content-Language: en-US
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org
-Cc:     patches@lists.linux.dev, linux-kernel@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        srw@sladewatkins.net, rwarsow@gmx.de
-References: <20230223141542.672463796@linuxfoundation.org>
-From:   Guenter Roeck <linux@roeck-us.net>
-In-Reply-To: <20230223141542.672463796@linuxfoundation.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/23/23 06:16, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.15.96 release.
-> There are 37 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
-> 
-> Responses should be made by Sat, 25 Feb 2023 14:15:30 +0000.
-> Anything received after that time might be too late.
-> 
+V7:
+- Addresses all of Konrad's asks on V6
+- Adds Konrad's RB for patch #3
+Bootable: https://git.codelinaro.org/bryan.odonoghue/kernel/-/commits/linux-next-23-02-23-msm8939-nocpr
+Previous: https://lore.kernel.org/lkml/20230222120411.55197-2-bryan.odonoghue@linaro.org/T/
 
+V6:
+- Adds Krzysztof's Ack for Square vendor addition - Krzysztof
+- Incorporates all of Stephan's comments from V5, including
+  dropping CPR dummy given the dependent patch [1] has been merged, now.
 
-$ git describe
-v5.15.95-38-gd6f4f9746d40
-groeck@server:~/src/linux-stable$ !ls
-ls -l scripts/pahole-version.sh
--rw-rw-r-- 1 groeck groeck 269 Feb 23 07:33 scripts/pahole-version.sh
+Bootable: https://git.codelinaro.org/bryan.odonoghue/kernel/-/commits/linux-next-23-02-21-msm8939-nocpr
+Previous: https://lore.kernel.org/lkml/20230206012336.2130341-1-bryan.odonoghue@linaro.org/T/
+[1]: https://lore.kernel.org/linux-arm-msm/20230208153913.24436-2-ansuelsmth@gmail.com/
 
-This results in:
+V5:
+- Adds Square as a vendor - Krzysztof
 
-make[1]: Entering directory '/tmp/buildbot-builddir'
-scripts/pahole-flags.sh: 10: /opt/buildbot/slave/stable-queue-5.15/build/scripts/pahole-version.sh: Permission denied
-scripts/pahole-flags.sh: 12: [: Illegal number:
-scripts/pahole-flags.sh: 16: [: Illegal number:
-scripts/pahole-flags.sh: 20: [: Illegal number:
+- typec_pd: usb-pd@38 - Krzysztof
 
-and all builds fail for me.
+- Drops gcc clock controller extension. It looks like phy0 actually
+  provides a PLL to phy1 for its byte clock. - Bryan, Krzysztof, Stephan
 
-Guenter
+- Adds RB Konrad as indicated - Konrad
+
+- wcnss VDDMX_AO -> VDDMX - Bjorn
+
+- Adds dsi_phy0 as clock-parent to dsi1
+
+- mdss interconnect drops Androidism "register-mem" - Stephan
+
+- cpu power-domain. I've retained the "dummy" cpr reference to
+  satiate dtbs_check [1] but renamed &vreg_cpr_stub to remove any confusion
+  between now and when we finish off CPR on 8939.
+
+Bootable: https://git.codelinaro.org/bryan.odonoghue/kernel/-/commits/linux-next-23-02-02-msm8939-nocpr
+Previous: https://lore.kernel.org/linux-arm-msm/20230123023127.1186619-1-bryan.odonoghue@linaro.org/
+[1] https://lore.kernel.org/linux-arm-msm/20230126150026.14590-1-ansuelsmth@gmail.com/ 
+
+V4:
+- Adds Krzysztof's RB to snoc-mm
+- Re-orders alphabetically missed nodes in previous iteration - Bjorn
+- Adds LK address/size cells comment - Bjorn
+
+- Left _AO for wcnss as downstream reference uses this - Bjorn/Bryan
+- Uses qcom,ids.h and QCOM_ID_SOCNAME for qcom,msm-id - Bjorn
+- Revises comment from "Regulator" to "Power supply" - Bjorn
+- Leaves dummy power-domain reference in cpu defintion as this
+
+- Relabels "cpu" to "CPU" to be more consistent with other dtsi - Bryan
+- Moves msm8939 gcc to its own yaml file to capture 8939 specific form - Bryan
+
+  is a required property and the dt checker complains - Stephan/Bryan
+- Removes CPR entries from qfprom - Stephan
+- Left MDSS interconnects. I don't see a bug to fix here - Stephan/Bryan
+- power-domain in MDSS - dropped its not longer required after
+  commit a6f033938beb ("dt-bindings: msm: dsi-controller-main: Fix power-domain constraint") - Stephan
+- Adds gcc dsi1pll and dsi1pllbyte to gcc clock list.
+  Reviewing the silicon documentation we see dsi0_phy_pll is used to clock
+  GCC_BYTE1_CFG_RCGR : SRC_SEL
+  Root Source Select
+  000 : cxo
+  001 : dsi0_phy_pll_out_byteclk
+  010 : GPLL0_OUT_AUX
+  011 : gnd
+  100 : gnd
+  101 : gnd
+  110 : gnd
+  111 : reserved - Stephan/Bryan
+
+- pm8916_l16 -> pm8916_l6 in dsi definition, typo - Konrad
+- Moved regulator_set_load location - Konrad
+
+Previous: https://lore.kernel.org/lkml/20230118050948.bibhq26s6sgzullg@builder.lan/T/
+Bootable: https://git.linaro.org/people/bryan.odonoghue/kernel.git/log/?h=linux-next-23-01-23-msm8939-nocpr
+
+V3:
+- Happily I don't currently depend on any other series to be merged.
+  Bjorn and Chanwoo picked up everything I need to unblock this series. ＼(^o^)／
+
+- Moves xo_board to RPM/PMIC clock gated CXO, not including rpmcc: obvs - Konrad/Bjorn
+- qcom,msm-id = <239 0> - left as in V2 valid according to Sony references - bod
+- cpu-release-addr - as stated below we rely on lk2nd to take the second cluster
+  out of reset - bod
+- smem child node update - Konrad
+- Whitespace updates - Konrad
+- gpu no interconnect - Konrad - No bod
+- 19.2 MHz dropped from timer@b020000 - Konrad
+- Added vreg_dummy comment - Konrad
+- sdc_pins grouped - Konrad
+- startup-delay-us = <0> - left as is
+- bias - added no-bias - Konrad
+- :g/msmgpio/s//tlmm/g - Konrad
+- mdss/s//display-controller - Konrad
+- l11 set-load - Korad
+
+- l12 upper voltage raised to 3.3v since this is what the
+  downstream kernel says when I boot and interrogate it - bod
+
+- sdhc@address - Discussed with Krzysztof and implemented as discussed
+- snoc-mm fix - Discussed with Krzysztof implemented if:then:else:not
+- dtc -I dtb -fs apq8039-t2.dtb prodcues
+  /soc@0/i2c@78b5000: duplicate unit-address
+  as does every other component that uses this polymorphic dts node
+- Renamed type-c i2c port manager IC to "typec" - Krzysztof
+
+  /smsm/hexagon@1: Missing #address-cells in interrupt provider
+  Same output as other upstream and recently upstreamed SoCs
+  I left these alone for now
+
+link: https://lore.kernel.org/lkml/20230103010904.3201835-1-bryan.odonoghue@linaro.org/T/
+bootable: https://git.linaro.org/people/bryan.odonoghue/kernel.git/log/?h=linux-next-23-01-16-msm8939-nocpr
+
+V2:
+- Sorts core dtsi node list by address followed by alpahbetical sorting
+  within address sorted nodes - Bjorn
+- Drops use of 8916-pins - Bjorn
+- Adds msm8939-pm8916.dtsi - Stephan
+- Fixes every dts splat from previous submission minus non-converted
+  .txt compat strings [1] and one yaml error in Bjorn's tree not in -next yet
+- I haven't applied Dmitry's change for tsens since that's not been
+  picked up yet
+- Picks up a number of suggestions and fixes from Stephan Gerhold and Vincent Knecht
+
+- Depends on
+
+  Applied:
+  [PATCH v4 0/7] remoteproc: qcom_q6v5_mss: Add MSM8909 and MSM8953 
+  https://lore.kernel.org/linux-arm-msm/167216232800.738877.17567287056128563074.b4-ty@kernel.org/
+
+  [PATCH v6 0/5] remoteproc: qcom: Add support for pronto-v3
+  https://lore.kernel.org/linux-arm-msm/167216232801.738877.15895916910585144737.b4-ty@kernel.org/
+
+  [PATCH v6 00/18] mdss-dsi-ctrl binding and dts fixes
+  https://lore.kernel.org/linux-arm-msm/167233461766.1099840.17628700245792986354.b4-ty@kernel.org/
+
+  Awaiting application:
+  https://lore.kernel.org/linux-arm-msm/20221228133058.213886-1-bryan.odonoghue@linaro.org/
+
+- Previous
+  https://lore.kernel.org/linux-arm-msm/20220419010903.3109514-1-bryan.odonoghue@linaro.org/
+
+- Bootable tree
+  https://git.linaro.org/people/bryan.odonoghue/kernel.git/log/?h=linux-next-23-01-03-msm8939-no-cpr
+
+- [1] DTC_CHK arch/arm64/boot/dts/qcom/apq8039-t2.dtb
+
+  Documentation/devicetree/bindings/arm/msm/qcom,idle-state.txt
+  qcom/apq8039-t2.dtb: idle-states: cpu-sleep-0:compatible:0: 'qcom,idle-state-spc' is not one of ['arm,idle-state', 'riscv,idle-state']
+        From schema: Documentation/devicetree/bindings/cpu/idle-states.yaml
+  qcom/apq8039-t2.dtb: idle-states: cpu-sleep-0:compatible: ['qcom,idle-state-spc', 'arm,idle-state'] is too long
+        From schema: Documentation/devicetree/bindings/cpu/idle-states.yaml
+  arch/arm64/boot/dts/qcom/apq8039-t2.dtb:0:0: /cpus/idle-states/cpu-sleep-0: failed to match any schema with compatible: ['qcom,idle-state-spc', 'arm,idle-state']
+
+  Documentation/devicetree/bindings/iommu/qcom,iommu.txt
+  arch/arm64/boot/dts/qcom/apq8039-t2.dtb:0:0: /soc@0/iommu@1ef0000: failed to match any schema with compatible: ['qcom,msm8916-iommu', 'qcom,msm-iommu-v1']
+  arch/arm64/boot/dts/qcom/apq8039-t2.dtb:0:0: /soc@0/iommu@1ef0000/iommu-ctx@4000: failed to match any schema with compatible: ['qcom,msm-iommu-v1-ns']
+  arch/arm64/boot/dts/qcom/apq8039-t2.dtb:0:0: /soc@0/iommu@1ef0000/iommu-ctx@5000: failed to match any schema with compatible: ['qcom,msm-iommu-v1-sec']
+  arch/arm64/boot/dts/qcom/apq8039-t2.dtb:0:0: /soc@0/iommu@1f08000: failed to match any schema with compatible: ['qcom,msm8916-iommu', 'qcom,msm-iommu-v1']
+  arch/arm64/boot/dts/qcom/apq8039-t2.dtb:0:0: /soc@0/iommu@1f08000/iommu-ctx@1000: failed to match any schema with compatible: ['qcom,msm-iommu-v1-ns']
+  arch/arm64/boot/dts/qcom/apq8039-t2.dtb:0:0: /soc@0/iommu@1f08000/iommu-ctx@2000: failed to match any schema with compatible: ['qcom,msm-iommu-v1-ns']
+
+  arch/arm64/boot/dts/qcom/pm8916.dtsi f5d7bca55425c8
+  qcom/apq8039-t2.dtb: pmic@0: 'extcon@1300' does not match any of the regexes: '(.*)?(wled|leds)@[0-9a-f]+$', '^adc-tm@[0-9a-f]+$', '^adc@[0-9a-f]+$', '^audio-codec@[0-9a-f]+$', '^charger@[0-9a-f]+$', '^mpps@[0-9a-f]+$', '^rtc@[0-9a-f]+$', '^temp-alarm@[0-9a-f]+$', '^usb-detect@[0-9a-f]+$', '^usb-vbus-regulator@[0-9a-f]+$', '^vibrator@[0-9a-f]+$', 'gpio@[0-9a-f]+$', 'pinctrl-[0-9]+', 'pon@[0-9a-f]+$'
+        From schema: Documentation/devicetree/bindings/mfd/qcom,spmi-pmic.yaml
+
+  Documentation/devicetree/bindings/sound/qcom,msm8916-wcd-analog.txt
+  arch/arm64/boot/dts/qcom/apq8039-t2.dtb:0:0: /soc@0/spmi@200f000/pmic@1/audio-codec@f000: failed to match any schema with compatible: ['qcom,pm8916-wcd-analog-codec']
+
+  yaml documentation error not yet in -next
+  arm64/boot/dts/qcom/apq8039-t2.dtb: remoteproc@4080000: qcom,halt-regs:0: [33] is too short
+        From schema: Documentation/devicetree/bindings/remoteproc/qcom,msm8916-mss-pil.yaml
+
+  Documentation/devicetree/bindings/usb/ci-hdrc-usb2.txt
+  arch/arm64/boot/dts/qcom/apq8039-t2.dtb:0:0: /soc@0/usb@78d9000: failed to match any schema with compatible: ['qcom,ci-hdrc']
+
+  Documentation/devicetree/bindings/arm/msm/qcom,kpss-acc.txt:            compatible = "qcom,kpss-acc-v2";
+  arch/arm64/boot/dts/qcom/apq8039-t2.dtb:0:0: /soc@0/clock-controller@b088000: failed to match any schema with compatible: ['qcom,kpss-acc-v2']
+  arch/arm64/boot/dts/qcom/apq8039-t2.dtb:0:0: /soc@0/clock-controller@b098000: failed to match any schema with compatible: ['qcom,kpss-acc-v2']
+  arch/arm64/boot/dts/qcom/apq8039-t2.dtb:0:0: /soc@0/clock-controller@b0a8000: failed to match any schema with compatible: ['qcom,kpss-acc-v2']
+  arch/arm64/boot/dts/qcom/apq8039-t2.dtb:0:0: /soc@0/clock-controller@b0b8000: failed to match any schema with compatible: ['qcom,kpss-acc-v2']
+  arch/arm64/boot/dts/qcom/apq8039-t2.dtb:0:0: /soc@0/clock-controller@b188000: failed to match any schema with compatible: ['qcom,kpss-acc-v2']
+  arch/arm64/boot/dts/qcom/apq8039-t2.dtb:0:0: /soc@0/clock-controller@b198000: failed to match any schema with compatible: ['qcom,kpss-acc-v2']
+  arch/arm64/boot/dts/qcom/apq8039-t2.dtb:0:0: /soc@0/clock-controller@b1a8000: failed to match any schema with compatible: ['qcom,kpss-acc-v2']
+  arch/arm64/boot/dts/qcom/apq8039-t2.dtb:0:0: /soc@0/clock-controller@b1b8000: failed to match any schema with compatible: ['qcom,kpss-acc-v2']
+
+V1:
+This series adds in MSM8939 SoC support with two supported devices.
+
+- CPU
+  MSM8939 is a non-PSCI compliant device. As such in the downstreaming
+  shipped image custom code is used to bring non-boot cores out of reset.
+
+  This drop specifies the boot-method as spin-table instead and is
+  completely standard. To accomplish this, we rely on lk2nd.
+
+  https://github.com/msm8916-mainline/lk2nd/pull/142
+
+- Serial
+- i2c
+- USB
+- eMMC
+- MDP/DSI
+- WiFi
+- Bluetooth
+
+What's not included
+
+- CPR
+  We have CPR working in a 4.19 kernel quite well but for now it feels like
+  putting the cart before the horse to gate the SoC and boards on CPR.
+
+- Venus
+  I've been told this works but I haven't tried it myself and right now
+  consider it maybe working but probably not 100%.
+
+- Sound
+  We have a copy-exactly from the 4.19 kernel here in the DTS.
+  I haven't run the sound through any sort of reasonable test.
+  Vincent Knecht has some PostmarketOS kernels which use a 5.17 version of
+  this DTS to get sound up so, I think sound is in good shape.
+
+- CAMSS
+  There are slight differences between msm8916 and msm8939 for CAMSS. It
+  doesn't feel like tons of work but, right now it is work we haven't even
+  started.
+
+- Devices
+  I've booted on the Square device obviously and this is my regular
+  hardware for upstream development. I've also booted on the Sony Xperia M4
+  Aqua including mutli-core bring-up, WiFi and ADB.
+
+Dependencies for this drop:
+
+qcom-cpufreq-nvmem: Add msm8939 with some fixups
+link: https://lore.kernel.org/linux-arm-msm/20220418162226.2983117-1-bryan.odonoghue@linaro.org/T/#t
+
+Fix apq8016 compat string
+link: https://lore.kernel.org/linux-arm-msm/20220418230956.3059563-1-bryan.odonoghue@linaro.org/T/#t
+
+dt-bindings: soc: qcom: smd-rpm: Fix missing MSM8936 compatible
+link: https://lore.kernel.org/linux-arm-msm/20220418231857.3061053-1-bryan.odonoghue@linaro.org/T/#u
+
+Bootable tree here:
+https://git.linaro.org/people/bryan.odonoghue/kernel.git/log/?h=v5.18-rc2%2bapq8039-without-cpr
+
+Bryan O'Donoghue (4):
+  dt-bindings: vendor-prefixes: Add Square
+  arm64: dts: qcom: Add msm8939 SoC
+  arm64: dts: qcom: Add Square apq8039-t2 board
+  arm64: dts: qcom: Add msm8939 Sony Xperia M4 Aqua
+
+Stephan Gerhold (1):
+  arm64: dts: qcom: Add msm8939-pm8916.dtsi include
+
+ .../devicetree/bindings/vendor-prefixes.yaml  |    2 +
+ arch/arm64/boot/dts/qcom/Makefile             |    2 +
+ arch/arm64/boot/dts/qcom/apq8039-t2.dts       |  550 ++++
+ arch/arm64/boot/dts/qcom/msm8939-pm8916.dtsi  |   82 +
+ .../qcom/msm8939-sony-xperia-kanuti-tulip.dts |  457 +++
+ arch/arm64/boot/dts/qcom/msm8939.dtsi         | 2456 +++++++++++++++++
+ 6 files changed, 3549 insertions(+)
+ create mode 100644 arch/arm64/boot/dts/qcom/apq8039-t2.dts
+ create mode 100644 arch/arm64/boot/dts/qcom/msm8939-pm8916.dtsi
+ create mode 100644 arch/arm64/boot/dts/qcom/msm8939-sony-xperia-kanuti-tulip.dts
+ create mode 100644 arch/arm64/boot/dts/qcom/msm8939.dtsi
+
+-- 
+2.39.1
 
