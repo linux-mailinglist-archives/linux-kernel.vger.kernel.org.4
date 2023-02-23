@@ -2,113 +2,227 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 28C606A109D
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 20:36:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E3AE6A10A1
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 20:38:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230038AbjBWTgm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Feb 2023 14:36:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58414 "EHLO
+        id S231318AbjBWThj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Feb 2023 14:37:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58866 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229552AbjBWTgk (ORCPT
+        with ESMTP id S231354AbjBWThI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Feb 2023 14:36:40 -0500
-Received: from mail-lj1-x22a.google.com (mail-lj1-x22a.google.com [IPv6:2a00:1450:4864:20::22a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9461058B7B
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Feb 2023 11:36:38 -0800 (PST)
-Received: by mail-lj1-x22a.google.com with SMTP id e24so5679765ljj.3
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Feb 2023 11:36:38 -0800 (PST)
+        Thu, 23 Feb 2023 14:37:08 -0500
+Received: from mail-vs1-xe29.google.com (mail-vs1-xe29.google.com [IPv6:2607:f8b0:4864:20::e29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0DF7C59E51
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Feb 2023 11:37:06 -0800 (PST)
+Received: by mail-vs1-xe29.google.com with SMTP id o2so3875229vss.8
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Feb 2023 11:37:06 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=Qk+cDCcz2CVt0ThfX9BY25TGDL0RI1Xa6b4kLFjXY2o=;
-        b=QoSM0+1dwluesL8imzF5TA/C1dlhofcJJ982B2XLpjkuJOjOIXop0NaPfao9JJa5Wj
-         RJKQv1JU37jBGfMA3uCgwTUjjG0ko5NI6PV0gbGGmSy4DT6KTmpqvoFKW1bnArEqZnNh
-         OlUVIT5fglfoBZzc0JQWvJUqm3ZyaWddaeKtAhIknvGKteHq7sdMoj7Zjx5BQ6M9NahU
-         ynkrxpdlonGzBZAemFUsOcegS86ts7hSIRv9XXM4hbxxgi9MxcNngI/d9iEMB15yhvWm
-         UKAb0bA4I8QcY1FjeouakSqMGNHKVvafa7G+9GqOZ5LcEiN16Eey3D0pJq0Mc2qOEI0+
-         LtxA==
+        d=google.com; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=VQKTd1mzsg/pi2cH97hh9NzvK6Pa7c5BewHqL7hHt/g=;
+        b=WVsEQT6PPy34hEkjLZAQ1Q4pou3W21hsg4lj+Y9rlbMvhBUpDkgNnnyF1+9kH4FqAn
+         qTUy0r7+8+kyQgV0L8sMPzZ963+pTxRWWEu1N2Swdx0P+IVuT1Tp0Lq2NHGTYZZWsKf+
+         kCn6QOqveulzJ4bhrYdghA2c7pAlxBLF4NVOD75oVbMiMWgxJh7o5GeWiUK7cHiSmf6k
+         xSBQ0cwHc0NlX3NKUWdMRAPRU2xunE6JyEtgyJBIjQIEp+ql/nZZCSVk/HxaAL8d0g6r
+         sVBLv2wm5MgsxZft5qwDVO4U+vYcyEgqCLaG3xdWMDMWg1qZsODxo7jaPyxqfa+SdBtj
+         FkXQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Qk+cDCcz2CVt0ThfX9BY25TGDL0RI1Xa6b4kLFjXY2o=;
-        b=5g197zABlMPO5NWnBecUYP859nAFIjEu53T23JgPqMFyvP/Ilrw6otu555IIKKaUN8
-         CS2opAGrU/OnaU9a3MKMHc41q2IzmmKE5S0nBhulL6+dXME/EEgfaXx3YlHPGbwLa4CH
-         bmbr9OGJrQg8IZF5J4sU16Fpq4BnJBGBV//z+iNIHOv63zxXpY6i8+eS0SsmQsnU32gO
-         c2vWGsua5ejiiLUCIlx/sfKGlRhybTW9c60pemokVe7ILGz+paUEtU43+naDNLYjz/8X
-         3jG31ilt+7qqWbtLnL3YDWymaMHB3XddMeimyiwFmKxNN6kfwriIPy0PSNuOIsQ79otJ
-         S+CA==
-X-Gm-Message-State: AO0yUKXN4hMU4gaxyDO75uNP40bJVEcHe0uQWT5SJrguBppPuwx4hkvl
-        iNDcqPZwhlD1dUG7IeZ5sIT0ItWxLAYihvIL
-X-Google-Smtp-Source: AK7set/c6lm9czTl0xw0+ysZMiL6iurd+kFscmhxC7LVZXslMR9fEAOxekMYiiObSDDdcfL0fJutWg==
-X-Received: by 2002:a2e:b893:0:b0:293:4fda:22d1 with SMTP id r19-20020a2eb893000000b002934fda22d1mr6134008ljp.46.1677180996613;
-        Thu, 23 Feb 2023 11:36:36 -0800 (PST)
-Received: from localhost.localdomain ([2a00:1370:81ae:2572:38e9:e6ee:6827:29dd])
-        by smtp.gmail.com with ESMTPSA id f7-20020a2e3807000000b0029343fe58e3sm1422209lja.130.2023.02.23.11.36.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 23 Feb 2023 11:36:36 -0800 (PST)
-From:   Leonid Pershin <leonid.pershin@gmail.com>
-Cc:     Leonid Pershin <leonid.pershin@gmail.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Dan Carpenter <error27@gmail.com>,
-        Tong Zhang <ztong0001@gmail.com>,
-        Rebecca Mckeever <remckee0@gmail.com>,
-        Deepak R Varma <drv@mailo.com>,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: [PATCH v2] staging: rtl8192u: remove split in user-visible string
-Date:   Thu, 23 Feb 2023 22:35:57 +0300
-Message-Id: <20230223193559.157880-1-leonid.pershin@gmail.com>
-X-Mailer: git-send-email 2.39.2
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=VQKTd1mzsg/pi2cH97hh9NzvK6Pa7c5BewHqL7hHt/g=;
+        b=BBNASQeVAZ424BJ98ypW6u38doN7f8cnM8t+h9BH2POnMd5UUbVqP5DQ+8Ib5DMuKQ
+         Bu6ow/Rezbp7GShRGtQN5kzy5eSSC0uVdZhLTzc5eDttxcxJiCBSgyPvRa+lJnHi5M9y
+         /jxXIGKJfCGkpz+KkniWOUYOqJdAbHXZXHIF9V00b8UEhMyojy4bsl6pbPDTfZtYQIcI
+         IPqrngf6vPFbuME8rMG4nDRkeYfW030pDIji+vOx1AdThJdLAi4bSx6Ict/+QoQNovnl
+         Vo6JMIrYF6/diJYaEfTkoGwE6bSHmPbewAoROQ+sywNyapyw1TRsHof/bb4pcmjg9bZJ
+         RLjQ==
+X-Gm-Message-State: AO0yUKXJEcD5gEeSFl5mMyGZhwoZuaMHIyiAK1yN0uLo/+dqlOt4l643
+        4BgkuJPwZLNUHSj1/uP07R5TZQy9dWeGvgxOsOv5HQ==
+X-Google-Smtp-Source: AK7set8VQE1ZUs/DARz1uDJOtOd3y5APdCNGehQzmQqDg5Sq2V+KxGB+BR0gjpLPcgnhYR5yHSA4XUwuxFt6OaxzPsA=
+X-Received: by 2002:a05:6102:5d9:b0:415:74b4:6067 with SMTP id
+ v25-20020a05610205d900b0041574b46067mr658682vsf.6.1677181024793; Thu, 23 Feb
+ 2023 11:37:04 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+References: <20230217041230.2417228-1-yuzhao@google.com> <20230217041230.2417228-6-yuzhao@google.com>
+ <Y/elw7CTvVWt0Js6@google.com> <CAOUHufbAKpv95k6rVedstjD_7JzP0RrbOD652gyZh2vbAjGPOg@mail.gmail.com>
+ <Y/e6Z+KIl6sYJoRg@google.com>
+In-Reply-To: <Y/e6Z+KIl6sYJoRg@google.com>
+From:   Yu Zhao <yuzhao@google.com>
+Date:   Thu, 23 Feb 2023 12:36:26 -0700
+Message-ID: <CAOUHufbwcqx21T=zmvYpnX_Mnd2A0KkPORbtxnJEwKuUKVSPzA@mail.gmail.com>
+Subject: Re: [PATCH mm-unstable v1 5/5] mm: multi-gen LRU: use mmu_notifier_test_clear_young()
+To:     Sean Christopherson <seanjc@google.com>,
+        Johannes Weiner <hannes@cmpxchg.org>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Michael Larabel <michael@michaellarabel.com>,
+        kvmarm@lists.linux.dev, kvm@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, linuxppc-dev@lists.ozlabs.org, x86@kernel.org,
+        linux-mm@google.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-According to coding style, user-visible strings in printk()
-function calls cannot be split across multiple lines.
-Issue found with checkpatch.pl.
+On Thu, Feb 23, 2023 at 12:11=E2=80=AFPM Sean Christopherson <seanjc@google=
+.com> wrote:
+>
+> On Thu, Feb 23, 2023, Yu Zhao wrote:
+> > On Thu, Feb 23, 2023 at 10:43=E2=80=AFAM Sean Christopherson <seanjc@go=
+ogle.com> wrote:
+> > >
+> > > On Thu, Feb 16, 2023, Yu Zhao wrote:
+> > > >   kswapd (MGLRU before)
+> > > >     100.00%  balance_pgdat
+> > > >       100.00%  shrink_node
+> > > >         100.00%  shrink_one
+> > > >           99.97%  try_to_shrink_lruvec
+> > > >             99.06%  evict_folios
+> > > >               97.41%  shrink_folio_list
+> > > >                 31.33%  folio_referenced
+> > > >                   31.06%  rmap_walk_file
+> > > >                     30.89%  folio_referenced_one
+> > > >                       20.83%  __mmu_notifier_clear_flush_young
+> > > >                         20.54%  kvm_mmu_notifier_clear_flush_young
+> > > >   =3D>                      19.34%  _raw_write_lock
+> > > >
+> > > >   kswapd (MGLRU after)
+> > > >     100.00%  balance_pgdat
+> > > >       100.00%  shrink_node
+> > > >         100.00%  shrink_one
+> > > >           99.97%  try_to_shrink_lruvec
+> > > >             99.51%  evict_folios
+> > > >               71.70%  shrink_folio_list
+> > > >                 7.08%  folio_referenced
+> > > >                   6.78%  rmap_walk_file
+> > > >                     6.72%  folio_referenced_one
+> > > >                       5.60%  lru_gen_look_around
+> > > >   =3D>                    1.53%  __mmu_notifier_test_clear_young
+> > >
+> > > Do you happen to know how much of the improvement is due to batching,=
+ and how
+> > > much is due to using a walkless walk?
+> >
+> > No. I have three benchmarks running at the moment:
+> > 1. Windows SQL server guest on x86 host,
+> > 2. Apache Spark guest on arm64 host, and
+> > 3. Memcached guest on ppc64 host.
+> >
+> > If you are really interested in that, I can reprioritize -- I need to
+> > stop 1) and use that machine to get the number for you.
+>
+> After looking at the "MGLRU before" stack again, it's definitely worth ge=
+tting
+> those numbers.  The "before" isn't just taking mmu_lock, it's taking mmu_=
+lock for
+> write _and_ flushing remote TLBs on _every_ PTE.
 
-Signed-off-by: Leonid Pershin <leonid.pershin@gmail.com>
----
-Changes in v2:
-  - Replace printk(KERN_DEBUG...) with pr_debug()
+Correct.
 
- drivers/staging/rtl8192u/ieee80211/ieee80211_crypt_tkip.c | 6 ++----
- 1 file changed, 2 insertions(+), 4 deletions(-)
+> I suspect the batching is a
+> tiny percentage of the overall win (might be larger with RETPOLINE and fr=
+iends),
 
-diff --git a/drivers/staging/rtl8192u/ieee80211/ieee80211_crypt_tkip.c b/drivers/staging/rtl8192u/ieee80211/ieee80211_crypt_tkip.c
-index 9bfd24ad46b6..c378bdff453b 100644
---- a/drivers/staging/rtl8192u/ieee80211/ieee80211_crypt_tkip.c
-+++ b/drivers/staging/rtl8192u/ieee80211/ieee80211_crypt_tkip.c
-@@ -72,16 +72,14 @@ static void *ieee80211_tkip_init(int key_idx)
- 
- 	priv->tx_tfm_michael = crypto_alloc_shash("michael_mic", 0, 0);
- 	if (IS_ERR(priv->tx_tfm_michael)) {
--		printk(KERN_DEBUG "ieee80211_crypt_tkip: could not allocate "
--				"crypto API michael_mic\n");
-+		pr_debug("ieee80211_crypt_tkip: could not allocate crypto API michael_mic\n");
- 		priv->tx_tfm_michael = NULL;
- 		goto fail;
- 	}
- 
- 	priv->rx_tfm_michael = crypto_alloc_shash("michael_mic", 0, 0);
- 	if (IS_ERR(priv->rx_tfm_michael)) {
--		printk(KERN_DEBUG "ieee80211_crypt_tkip: could not allocate "
--				"crypto API michael_mic\n");
-+		pr_debug("ieee80211_crypt_tkip: could not allocate crypto API michael_mic\n");
- 		priv->rx_tfm_michael = NULL;
- 		goto fail;
- 	}
--- 
-2.39.2
+Same here.
 
+> and that the bulk of the improvement comes from avoiding the insanity of
+> kvm_mmu_notifier_clear_flush_young().
+>
+> Speaking of which, what would it take to drop mmu_notifier_clear_flush_yo=
+ung()
+> entirely?
+
+That's not my call :)
+
+Adding Johannes.
+
+> I.e. why can MGLRU tolerate stale information but !MGLRU cannot?
+
+Good question. The native clear API doesn't flush:
+
+  int ptep_clear_flush_young(struct vm_area_struct *vma,
+                             unsigned long address, pte_t *ptep)
+  {
+          /*
+           * On x86 CPUs, clearing the accessed bit without a TLB flush
+           * doesn't cause data corruption. [ It could cause incorrect
+           * page aging and the (mistaken) reclaim of hot pages, but the
+           * chance of that should be relatively low. ]
+           *
+           * So as a performance optimization don't flush the TLB when
+           * clearing the accessed bit, it will eventually be flushed by
+           * a context switch or a VM operation anyway. [ In the rare
+           * event of it not getting flushed for a long time the delay
+           * shouldn't really matter because there's no real memory
+           * pressure for swapout to react to. ]
+           */
+          return ptep_test_and_clear_young(vma, address, ptep);
+  }
+
+> If
+> we simply deleted mmu_notifier_clear_flush_young() and used mmu_notifier_=
+clear_young()
+> instead, would anyone notice, let alone care?
+
+I tend to agree.
+
+> > > > @@ -5699,6 +5797,9 @@ static ssize_t show_enabled(struct kobject *k=
+obj, struct kobj_attribute *attr, c
+> > > >       if (arch_has_hw_nonleaf_pmd_young() && get_cap(LRU_GEN_NONLEA=
+F_YOUNG))
+> > > >               caps |=3D BIT(LRU_GEN_NONLEAF_YOUNG);
+> > > >
+> > > > +     if (kvm_arch_has_test_clear_young() && get_cap(LRU_GEN_SPTE_W=
+ALK))
+> > > > +             caps |=3D BIT(LRU_GEN_SPTE_WALK);
+> > >
+> > > As alluded to in patch 1, unless batching the walks even if KVM does =
+_not_ support
+> > > a lockless walk is somehow _worse_ than using the existing mmu_notifi=
+er_clear_flush_young(),
+> > > I think batching the calls should be conditional only on LRU_GEN_SPTE=
+_WALK.  Or
+> > > if we want to avoid batching when there are no mmu_notifier listeners=
+, probe
+> > > mmu_notifiers.  But don't call into KVM directly.
+> >
+> > I'm not sure I fully understand. Let's present the problem on the MM
+> > side: assuming KVM supports lockless walks, batching can still be
+> > worse (very unlikely), because GFNs can exhibit no memory locality at
+> > all. So this option allows userspace to disable batching.
+>
+> I'm asking the opposite.  Is there a scenario where batching+lock is wors=
+e than
+> !batching+lock?  If not, then don't make batching depend on lockless walk=
+s.
+
+Yes, absolutely. batching+lock means we take/release mmu_lock for
+every single PTE in the entire VA space -- each small batch contains
+64 PTEs but the entire batch is the whole KVM.
+
+> > I fully understand why you don't want MM to call into KVM directly. No
+> > acceptable ways to set up a clear interface between MM and KVM other
+> > than the MMU notifier?
+>
+> There are several options I can think of, but before we go spend time des=
+igning
+> the best API, I'd rather figure out if we care in the first place.
+
+This is self serving -- MGLRU would be the only user in the near
+future. But I never assume there will be no common ground, at least it
+doesn't hurt to check.
