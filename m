@@ -2,74 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C0AD6A0295
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 06:53:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1BB306A029D
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 06:59:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233249AbjBWFx1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Feb 2023 00:53:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35250 "EHLO
+        id S233221AbjBWF7h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Feb 2023 00:59:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38740 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232470AbjBWFx0 (ORCPT
+        with ESMTP id S233133AbjBWF7f (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Feb 2023 00:53:26 -0500
-Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8E2F1A679;
-        Wed, 22 Feb 2023 21:53:24 -0800 (PST)
-Received: by mail-wm1-x330.google.com with SMTP id j3so5643559wms.2;
-        Wed, 22 Feb 2023 21:53:24 -0800 (PST)
+        Thu, 23 Feb 2023 00:59:35 -0500
+Received: from mail-vs1-xe34.google.com (mail-vs1-xe34.google.com [IPv6:2607:f8b0:4864:20::e34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6306812BD7
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Feb 2023 21:59:33 -0800 (PST)
+Received: by mail-vs1-xe34.google.com with SMTP id a3so300666vsi.0
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Feb 2023 21:59:33 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=EIE7hufsSbKuNwaFsaytTS8k6a2M1BYo5pYvgxLxqXE=;
-        b=I16GTOw4FM/vGX4+wCwDrLko7pcHTbGCtFJg8HBHe6UK5qOYL3PbXWr9IQNp0zauD3
-         WqYzVw4MLNEq5ppf/N1YGhdTGJZS6Upcpg0jGc9W/eWgvESX/o2p7qomB0BUct+8ktRl
-         7KL7lMzdlO7HGWQgbDD5sV2cf4tPR/eqB09irVAQ7u83RGvFhwQ1dHocuZLDO+HQogAq
-         i10HhXcYnLA5zqSs6JRg0fXy6oujq8roOj2lsgqejpeG/wX57AKxOpPKJomPlwhhRPzX
-         zieb9918GkfN5aNWQAaMymO2WDGQ+4RPztTDJ0fM5gJnaGaSZoLsJonzuVIQrROQ7oR2
-         j65w==
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=voGsAay0JFyPNio8rcBV6wtwoqCyfm2R0MRGDG4+I/0=;
+        b=Sqaq5lh2eaXDCN8btRTVSZgyL0HObVfsyAHIbkAC5IPrJvBu4OePPr88QW2SoSa6ep
+         +tV8JGytOa9EN6vAFMfVVakotTH8kruySr8d6LyQ8aZtJw8MVvFq6UGr2ihfJ+Sby12E
+         yEFq9ofnl/HzbGa+f/vvzGLPlVYlKR107c7BHjlb0/2AqFdXnlqia73cVnsPaJpneaVf
+         cyJwZr8Y/LPWFkwkR90uY+zyu0yC9uDSP6cqPUQJM0gtK7m7L3t0TTfaDvT9XjR0Jp96
+         z1+FsrLGy1fwgJo3UL8ogH6ZltcuoqAKUqeCwDDafL4G1L0fWx8W/MqKIuAnhoTcyQrf
+         7kxQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=EIE7hufsSbKuNwaFsaytTS8k6a2M1BYo5pYvgxLxqXE=;
-        b=qKfA/+aDoOXar619LnEFjKBIfZClCHOoCP7XCOIv6BATvb4ggOIEsekjtNawuYkc3N
-         UrGNhQGH2pzZ+/EcfZCSTa/Z6BAdloKCr5KIzRiwVIl2i5eCiijc9H/N8wxsAvhN3fQa
-         f5O+CyXFlCWaXYA3qQqCwfOFKVG73W27uevaYbx5jIaF5RyiRFKDsQqC7sYHc9naey+x
-         iw8b6KgG9lBoXVQqP2ZHJf/gPeWjAztFOAyHXajC15q9VmxJWk65apPCtja8vtkkT0CY
-         erLhiDDfKXZcCewyNpExa0yeNhd8fCfrl8ZVppIlZuCs03uI2j5BwqvCi6kWTobqYkQU
-         r2pQ==
-X-Gm-Message-State: AO0yUKUmLUmLKnRXyKPJ2lw6oKI4wScy+SmAtsrPRATDfJxQrp53mwk6
-        abtY7Ms5VMzWesGr9rzMmJQ=
-X-Google-Smtp-Source: AK7set/AKL3By9kKMpvCotw3uE4y086FOyp2pYHkH2A/CxhsuP3GBnXDtH2yipsiGG8Mh3hm+IZCwA==
-X-Received: by 2002:a05:600c:2e94:b0:3e0:6c4:6a38 with SMTP id p20-20020a05600c2e9400b003e006c46a38mr2149186wmn.33.1677131603059;
-        Wed, 22 Feb 2023 21:53:23 -0800 (PST)
-Received: from archbox.localnet (84-72-105-84.dclient.hispeed.ch. [84.72.105.84])
-        by smtp.gmail.com with ESMTPSA id v10-20020a05600c214a00b003e209186c07sm10039640wml.19.2023.02.22.21.53.22
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 22 Feb 2023 21:53:22 -0800 (PST)
-From:   Nicolas Frattaroli <frattaroli.nicolas@gmail.com>
-To:     Peter Geis <pgwipeout@gmail.com>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Heiko Stuebner <heiko@sntech.de>, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] arm64: dts: rockchip: Always enable sd regulator on SOQuartz
- CM4IO
-Date:   Thu, 23 Feb 2023 06:53:21 +0100
-Message-ID: <5650057.DvuYhMxLoT@archbox>
-In-Reply-To: <CAMdYzYrZvHLFdhn_qYadYbDDnnC+16pkM_kWXiU16u_6XNHEMg@mail.gmail.com>
-References: <20230215010914.104754-1-frattaroli.nicolas@gmail.com>
- <CAMdYzYrZvHLFdhn_qYadYbDDnnC+16pkM_kWXiU16u_6XNHEMg@mail.gmail.com>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=voGsAay0JFyPNio8rcBV6wtwoqCyfm2R0MRGDG4+I/0=;
+        b=TIRiNbwvFDe3wostBXP/orhcYF/4NMM1ENI2EJrfnc4POKwCReAPXn1ocDEj/vPWpV
+         8B5K7cKz/iqCkdjlnFID2rayA+BzMumNvo04HVOuwIfo+yu7IQycjngVp8EVng8S+grN
+         4AOqVdRLnYI1NPodZHRzTGXZiDgy4BLgZo2rffA3T/EB8T+1JyARGc0jc6ZUchqXvLYJ
+         rQPWqHrPDmTTAmWE1T3GwMriElpNd9/YO0A2BrrBAUrD5P1+3qibKJdcM2G8owrxekdP
+         8Mk4h9WWgxrFVnLW7Y/VcXLo8gYqDS557lU/1nbrvpTsKwEx1IzHp1I6nFAtKf07IjMi
+         /WuA==
+X-Gm-Message-State: AO0yUKUZS11aCsy132QDoqEnC9oB1aS5q9TWfNri3hVMxZYTg5ls0GDJ
+        fAz5f3f+l8MyrkYfmKkBDvqWi2jfdT3SIavxA1SwLw==
+X-Google-Smtp-Source: AK7set8VuRuV4VxywpIU3KkVLV5dhdtwJXtEFnsgQIUvofFMrP6yngToGpMhoAq4t4jKNWH2TZiaOGQVBfK1rFiYhoY=
+X-Received: by 2002:a05:6102:108f:b0:41e:d8b5:ee40 with SMTP id
+ s15-20020a056102108f00b0041ed8b5ee40mr558056vsr.26.1677131972255; Wed, 22 Feb
+ 2023 21:59:32 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+References: <20230217041230.2417228-1-yuzhao@google.com> <20230217041230.2417228-3-yuzhao@google.com>
+ <Y++q/lglE6FJBdjt@google.com>
+In-Reply-To: <Y++q/lglE6FJBdjt@google.com>
+From:   Yu Zhao <yuzhao@google.com>
+Date:   Wed, 22 Feb 2023 22:58:56 -0700
+Message-ID: <CAOUHufaK-BHdajDZJKjn_LU-gMkUTKa_9foMB8g-u9DyrVhPwg@mail.gmail.com>
+Subject: Re: [PATCH mm-unstable v1 2/5] kvm/x86: add kvm_arch_test_clear_young()
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Michael Larabel <michael@michaellarabel.com>,
+        kvmarm@lists.linux.dev, kvm@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, linuxppc-dev@lists.ozlabs.org, x86@kernel.org,
+        linux-mm@google.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,76 +75,227 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thursday, 23 February 2023 01:29:39 CET Peter Geis wrote:
-> On Tue, Feb 14, 2023 at 8:09 PM Nicolas Frattaroli
-> 
-> <frattaroli.nicolas@gmail.com> wrote:
-> > The 3.3V line coming from the SDMMC regulator is required for USB
-> > on the CM4IO board. Without it, the USB mux (U13 in the CM4IO
-> > schematic[1]) that's used likely remains unpowered, and no USB
-> > devices show up.
-> > 
-> > The consequence of this was the behaviour of an inserted SD card
-> > allowing USB to work, while pulling it out turned off all USB
-> > devices.
-> > 
-> > [1]: https://datasheets.raspberrypi.com/cm4io/cm4io-datasheet.pdf
-> 
-> I disagree with this. According to the datasheet u13 and half a dozen
-> other devices are powered by 3.3v sourced from the SOM. sdmmc_pwr
-> triggers SD_PWR_ON which serves only to provide an enable signal to
-> u18, the regulator that powers the sdmmc slot from the same 3.3v. If
-> you are having problems with USB working, you likely have something
-> else going wrong here.
-> 
-> Very Respectfully,
-> Peter Geis
+On Fri, Feb 17, 2023 at 9:27 AM Sean Christopherson <seanjc@google.com> wrote:
+>
+> On Thu, Feb 16, 2023, Yu Zhao wrote:
+> > diff --git a/arch/x86/include/asm/kvm_host.h b/arch/x86/include/asm/kvm_host.h
+> > index 6aaae18f1854..d2995c9e8f07 100644
+> > --- a/arch/x86/include/asm/kvm_host.h
+> > +++ b/arch/x86/include/asm/kvm_host.h
+> > @@ -1367,6 +1367,12 @@ struct kvm_arch {
+> >        *      the MMU lock in read mode + the tdp_mmu_pages_lock or
+> >        *      the MMU lock in write mode
+> >        *
+> > +      * kvm_arch_test_clear_young() is a special case. It relies on two
+>
+> No, it's not.  The TDP MMU already employs on RCU and CMPXCHG.
 
-Hello,
+It is -- you read it out of context :)
 
-I don't see how else the observed behaviour would be triggered.
-As far as I can tell, the sdmmc_pwr regulator is the name of the
-3.3V regulator on the SOM, which is what powers the 3.3V on the
-USB mux chip.
+         * For reads, this list is protected by:
+         *      the MMU lock in read mode + RCU or
+         *      the MMU lock in write mode
+         *
+         * For writes, this list is protected by:
+         *      the MMU lock in read mode + the tdp_mmu_pages_lock or
+         *      the MMU lock in write mode
+         *
+         * kvm_arch_test_clear_young() is a special case.
+         ...
 
-Do you have an alternate explanation for why this patch works?
+        struct list_head tdp_mmu_roots;
 
-Kind regards,
-Nicolas Frattaroli
+> Just drop the
+> entire comment.
 
-> 
-> > Fixes: 5859b5a9c3ac ("arm64: dts: rockchip: add SoQuartz CM4IO dts")
-> > Signed-off-by: Nicolas Frattaroli <frattaroli.nicolas@gmail.com>
-> > ---
-> > 
-> >  arch/arm64/boot/dts/rockchip/rk3566-soquartz-cm4.dts | 6 ++++++
-> >  1 file changed, 6 insertions(+)
-> > 
-> > diff --git a/arch/arm64/boot/dts/rockchip/rk3566-soquartz-cm4.dts
-> > b/arch/arm64/boot/dts/rockchip/rk3566-soquartz-cm4.dts index
-> > 263ce40770dd..88a61fa8a95c 100644
-> > --- a/arch/arm64/boot/dts/rockchip/rk3566-soquartz-cm4.dts
-> > +++ b/arch/arm64/boot/dts/rockchip/rk3566-soquartz-cm4.dts
-> > @@ -135,6 +135,12 @@ &sdmmc0 {
-> > 
-> >  };
-> >  
-> >  &sdmmc_pwr {
-> > 
-> > +       /*
-> > +        * USB also needs this regulator to work on this board, so just
-> > enable +        * it unconditionally.
-> > +        */
-> > +       regulator-always-on;
-> > +       regulator-boot-on;
-> > 
-> >         regulator-min-microvolt = <3300000>;
-> >         regulator-max-microvolt = <3300000>;
-> >         status = "okay";
-> > 
-> > --
-> > 2.39.1
+Let me move it into kvm_arch_test_clear_young().
 
+Also I want to be clear:
+1. We can't just focus on here and now; we need to consider the distant future.
+2. From my POV, "see the comments on ..." is like the index of a book.
 
+> > +      * techniques, RCU and cmpxchg, to safely test and clear the accessed
+> > +      * bit without taking the MMU lock. The former protects KVM page tables
+> > +      * from being freed while the latter clears the accessed bit atomically
+> > +      * against both the hardware and other software page table walkers.
+> > +      *
+> >        * Roots will remain in the list until their tdp_mmu_root_count
+> >        * drops to zero, at which point the thread that decremented the
+> >        * count to zero should removed the root from the list and clean
+> > @@ -2171,4 +2177,25 @@ int memslot_rmap_alloc(struct kvm_memory_slot *slot, unsigned long npages);
+> >        KVM_X86_QUIRK_FIX_HYPERCALL_INSN |     \
+> >        KVM_X86_QUIRK_MWAIT_NEVER_UD_FAULTS)
+> >
+> > +extern u64 __read_mostly shadow_accessed_mask;
+> > +
+> > +/*
+> > + * Returns true if A/D bits are supported in hardware and are enabled by KVM.
+> > + * When enabled, KVM uses A/D bits for all non-nested MMUs.  Because L1 can
+> > + * disable A/D bits in EPTP12, SP and SPTE variants are needed to handle the
+> > + * scenario where KVM is using A/D bits for L1, but not L2.
+> > + */
+> > +static inline bool kvm_ad_enabled(void)
+> > +{
+> > +     return shadow_accessed_mask;
+> > +}
+>
+> Absolutely not.  This information is not getting directly exposed outside of KVM.
 
+Will do.
 
+> > +
+> > +/* see the comments on the generic kvm_arch_has_test_clear_young() */
+> > +#define kvm_arch_has_test_clear_young kvm_arch_has_test_clear_young
+> > +static inline bool kvm_arch_has_test_clear_young(void)
+> > +{
+> > +     return IS_ENABLED(CONFIG_KVM) && IS_ENABLED(CONFIG_X86_64) &&
+> > +            (!IS_REACHABLE(CONFIG_KVM) || (kvm_ad_enabled() && tdp_enabled));
+> > +}
+>
+> Pending the justification for why this is KVM-only
+
+Nothing else has *_young()... IOW, KVM is the only user of *_young().
+
+> I would strongly prefer we
+> find a way to have the mmu_notifier framework track whether or not any listeners
+> have a test_clear_young().  E.g. have KVM nullify its hook during module load.
+
+It's already done that way. This function is just for the caller to
+avoid unnecessary trips into the MMU notifier on archs that don't
+support this capability. (The caller would find it unsupported.)
+
+> > +
+> >  #endif /* _ASM_X86_KVM_HOST_H */
+> > diff --git a/arch/x86/kvm/mmu/spte.h b/arch/x86/kvm/mmu/spte.h
+> > index 6f54dc9409c9..0dc7fed1f3fd 100644
+> > --- a/arch/x86/kvm/mmu/spte.h
+> > +++ b/arch/x86/kvm/mmu/spte.h
+> > @@ -153,7 +153,6 @@ extern u64 __read_mostly shadow_mmu_writable_mask;
+> >  extern u64 __read_mostly shadow_nx_mask;
+> >  extern u64 __read_mostly shadow_x_mask; /* mutual exclusive with nx_mask */
+> >  extern u64 __read_mostly shadow_user_mask;
+> > -extern u64 __read_mostly shadow_accessed_mask;
+> >  extern u64 __read_mostly shadow_dirty_mask;
+> >  extern u64 __read_mostly shadow_mmio_value;
+> >  extern u64 __read_mostly shadow_mmio_mask;
+> > @@ -247,17 +246,6 @@ static inline bool is_shadow_present_pte(u64 pte)
+> >       return !!(pte & SPTE_MMU_PRESENT_MASK);
+> >  }
+> >
+> > -/*
+> > - * Returns true if A/D bits are supported in hardware and are enabled by KVM.
+> > - * When enabled, KVM uses A/D bits for all non-nested MMUs.  Because L1 can
+> > - * disable A/D bits in EPTP12, SP and SPTE variants are needed to handle the
+> > - * scenario where KVM is using A/D bits for L1, but not L2.
+> > - */
+> > -static inline bool kvm_ad_enabled(void)
+> > -{
+> > -     return !!shadow_accessed_mask;
+> > -}
+>
+> As Oliver said in the ARM patch, _if_ this is justified, please do code movement
+> in a separate patch.
+
+I'll just drop this.
+
+> >  static inline bool sp_ad_disabled(struct kvm_mmu_page *sp)
+> >  {
+> >       return sp->role.ad_disabled;
+> > diff --git a/arch/x86/kvm/mmu/tdp_mmu.c b/arch/x86/kvm/mmu/tdp_mmu.c
+> > index d6df38d371a0..9028e09f1aab 100644
+> > --- a/arch/x86/kvm/mmu/tdp_mmu.c
+> > +++ b/arch/x86/kvm/mmu/tdp_mmu.c
+> > @@ -1309,6 +1309,47 @@ bool kvm_tdp_mmu_age_gfn_range(struct kvm *kvm, struct kvm_gfn_range *range)
+> >       return kvm_tdp_mmu_handle_gfn(kvm, range, age_gfn_range);
+> >  }
+> >
+> > +bool kvm_arch_test_clear_young(struct kvm *kvm, struct kvm_gfn_range *range,
+> > +                            gfn_t lsb_gfn, unsigned long *bitmap)
+> > +{
+> > +     struct kvm_mmu_page *root;
+> > +
+> > +     if (WARN_ON_ONCE(!kvm_arch_has_test_clear_young()))
+> > +             return false;
+> > +
+> > +     if (kvm_memslots_have_rmaps(kvm))
+>
+> This completely disables the API on VMs that have _ever_ run a nested VM.
+
+Ok, we definitely don't want this.
+
+> I doubt
+> that's the intended behavior.
+
+Good catch, thanks.
+
+> > +             return false;
+> > +
+> > +     /* see the comments on kvm_arch->tdp_mmu_roots */
+> > +     rcu_read_lock();
+> > +
+> > +     list_for_each_entry_rcu(root, &kvm->arch.tdp_mmu_roots, link) {
+> > +             struct tdp_iter iter;
+> > +
+> > +             if (kvm_mmu_page_as_id(root) != range->slot->as_id)
+> > +                     continue;
+>
+> for_each_tdp_mmu_root() does this for you.
+>
+> > +
+> > +             tdp_root_for_each_leaf_pte(iter, root, range->start, range->end) {
+> > +                     u64 *sptep = rcu_dereference(iter.sptep);
+>
+> kvm_tdp_mmu_read_spte(), thought it's not clear to me why this doesn't test+clear
+> the SPTE's accessed bit and then toggle the bitmap.
+>
+> > +                     u64 new_spte = iter.old_spte & ~shadow_accessed_mask;
+> > +
+> > +                     VM_WARN_ON_ONCE(!page_count(virt_to_page(sptep)));
+>
+> This doesn't do what I assume it's intended to do.
+
+This asserts the page table page is not freed, i.e., the memory we are
+modifying still belongs to someone.
+
+ If we forget to do RCU free, i.e., we free immediately, this can
+catch it, assuming no reuse.
+
+> The sptep points at a KVM,
+> a.k.a. kernel, allocated page, not at guest memory.  Assuming the intent is to
+> assert that the memory being aged has an elevated refcount, this would need to
+> extract the pfn out of the SPTE and get the struct page for that.  But that's
+> completely unsafe because KVM supports mapping VM_PFNMAP and VM_IO memory into
+> the guest.  Maybe the proposed caller only operates on struct page memory, but
+> I am not willing to make that assumption in KVM.
+>
+> TL;DR: drop this.
+>
+> > +                     VM_WARN_ON_ONCE(iter.gfn < range->start || iter.gfn >= range->end);
+>
+> This adds no value KVM is completely hosed if tdp_root_for_each_leaf_pte() botches
+> the ranges.
+
+Ok.
+
+> > +
+> > +                     if (new_spte == iter.old_spte)
+> > +                             continue;
+> > +
+> > +                     /* see the comments on the generic kvm_arch_has_test_clear_young() */
+>
+> No, "see xyz" for unintuitive logic is not acceptable.  Add a helper and document
+> the logic there, don't splatter "see XYZ" comments everywhere.
+>
+> > +                     if (__test_and_change_bit(lsb_gfn - iter.gfn, bitmap))
+> > +                             cmpxchg64(sptep, iter.old_spte, new_spte);
+>
+> Clearing a single bit doesn't need a CMPXCHG.  Please weigh in on a relevant series
+> that is modifying the aging flows[*], I want to have exactly one helper for aging
+> TDP MMU SPTEs.
+>
+> [*] https://lore.kernel.org/all/20230211014626.3659152-5-vipinsh@google.com
+
+I'll take a look at that series. clear_bit() probably won't cause any
+practical damage but is technically wrong because, for example, it can
+end up clearing the A-bit in a non-leaf PMD. (cmpxchg will just fail
+in this case, obviously.)
