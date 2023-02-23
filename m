@@ -2,110 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 243296A0449
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 09:58:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0938A6A044A
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Feb 2023 09:58:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233772AbjBWI6K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Feb 2023 03:58:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54376 "EHLO
+        id S233771AbjBWI6U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Feb 2023 03:58:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54636 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233763AbjBWI6G (ORCPT
+        with ESMTP id S233776AbjBWI6R (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Feb 2023 03:58:06 -0500
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B35564E5FD;
-        Thu, 23 Feb 2023 00:58:05 -0800 (PST)
-Received: from pps.filterd (m0279864.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 31N5A1hP023409;
-        Thu, 23 Feb 2023 08:58:02 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-type; s=qcppdkim1;
- bh=2K+C8HMS9npx4Hhjm7Ocj7wuGl6LtUkhYA+q3Bkv+oQ=;
- b=HH+d6JmLDWZ67zbCGKMIuiaMcl2DkdkbJjc4qmwqn50cb1Ag9ED8o5XoCJjblwgOskgA
- 1+ENU1FdX8e7It3QxBpTdbjFXo+z8Ph3UwkcT2/JvKmybtCeDProqw7EIMK3bS4z9iTm
- 4y2fhMlb6GF/bZTuXq39ctRJ5IVBgtGykPq3i7s7iJo5rZxXyNJH/DVsczX3gGoEE/NZ
- zo72UNB0XjAC47dCZy+H+mQAb1JaG7n+v039L/gSLy7vfNIP8pPSUxyiZCh2nGb5ITVx
- wSWkIytRfEzNKFGcQAVHAOl77r4b+ygLJyH5dOw+tckz0mW48RLNbtqvkRrSnDCBBMSi Fw== 
-Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3nwy9a0tku-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 23 Feb 2023 08:58:02 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 31N8w1Zn016477
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 23 Feb 2023 08:58:01 GMT
-Received: from hu-prashk-hyd.qualcomm.com (10.80.80.8) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.41; Thu, 23 Feb 2023 00:57:57 -0800
-From:   Prashanth K <quic_prashk@quicinc.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        Jakob Koschel <jakobkoschel@gmail.com>,
-        =?UTF-8?q?J=C3=B3=20=C3=81gila=20Bitsch?= <jgilab@gmail.com>,
-        Alan Stern <stern@rowland.harvard.edu>
-CC:     Pratham Pratap <quic_ppratap@quicinc.com>,
-        Jack Pham <quic_jackp@quicinc.com>,
-        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        Prashanth K <quic_prashk@quicinc.com>
-Subject: [PATCH v2 2/2] usb: gadget: composite: Draw 100mA current if not configured
-Date:   Thu, 23 Feb 2023 14:27:45 +0530
-Message-ID: <1677142665-8686-3-git-send-email-quic_prashk@quicinc.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1677142665-8686-1-git-send-email-quic_prashk@quicinc.com>
-References: <1677142665-8686-1-git-send-email-quic_prashk@quicinc.com>
+        Thu, 23 Feb 2023 03:58:17 -0500
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1EAA14ECEB
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Feb 2023 00:58:13 -0800 (PST)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4PMn433fr0z4x82;
+        Thu, 23 Feb 2023 19:58:11 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ellerman.id.au;
+        s=201909; t=1677142691;
+        bh=nCpFZnhvEThJfKDD4KV4npfc4XDyPq44O0sgRTBzi5s=;
+        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+        b=NXGuFKE1tPngr+TW6GzLjzZxnEvcSr6jtBdEtsuMSPMLlaPSI0Nx3hVo3ez2j4lLX
+         qojUS6P3T9tXflarxK5tFbvOUYF8iWRUiODNmBNI0lhPzw0OyTnQ/BS2SQCMWtUIbM
+         8l8Io4NJ3Xfh5glKrzLKBvje9aJ74lkEZDsLIMdS1g6n8Zqqp+cn33JZvHZUnxNQKR
+         6VsoA/Yk1aC/PBWqDVu0l1Qe0WPKZsxsJC5UuZ90+gWz38vA+Fu47HU/hSgcT6an+t
+         agCluqhB8qyUt7lXpDtkc2XqvLO5HIEU7JwunivyOlg7JCrOmExzDcaRZuDAMb9kZj
+         57Ug/zokqGpNw==
+From:   Michael Ellerman <mpe@ellerman.id.au>
+To:     Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Pali =?utf-8?Q?Roh?= =?utf-8?Q?=C3=A1r?= <pali@kernel.org>
+Cc:     Nicholas Piggin <npiggin@gmail.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>
+Subject: Re: [PATCH v4 00/17] powerpc/85xx: p2020: Create one unified
+ machine description
+In-Reply-To: <ad8e4adc-2efb-d93e-1221-3a829b454edf@csgroup.eu>
+References: <cover.1677076552.git.christophe.leroy@csgroup.eu>
+ <20230222182232.uiiwy5pd5n5xc5kl@pali>
+ <ad8e4adc-2efb-d93e-1221-3a829b454edf@csgroup.eu>
+Date:   Thu, 23 Feb 2023 19:58:11 +1100
+Message-ID: <874jrcbvx8.fsf@mpe.ellerman.id.au>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: 34TsFu1mA0ppEYHxSzBTPPcWCaIFQXn8
-X-Proofpoint-ORIG-GUID: 34TsFu1mA0ppEYHxSzBTPPcWCaIFQXn8
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.170.22
- definitions=2023-02-23_04,2023-02-22_02,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 clxscore=1015
- malwarescore=0 spamscore=0 priorityscore=1501 impostorscore=0
- lowpriorityscore=0 adultscore=0 phishscore=0 mlxscore=0 mlxlogscore=621
- suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2302230077
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Currently we don't change the current value if device isn't in
-configured state. But the battery charging specification says,
-device can draw up to 100mA of current if its in unconfigured
-state. Hence add a Vbus_draw work in composite_resume to draw
-100mA if the device isn't configured.
+Christophe Leroy <christophe.leroy@csgroup.eu> writes:
+> Le 22/02/2023 =C3=A0 19:22, Pali Roh=C3=A1r a =C3=A9crit=C2=A0:
+>> On Wednesday 22 February 2023 15:42:47 Christophe Leroy wrote:
+>>> This patch series unifies all P2020 boards and machine descriptions into
+>>> one generic unified P2020 machine description. With this generic machine
+>>> description, kernel can boot on any P2020-based board with correct DTS
+>>> file.
+>>>
+>>> Tested on CZ.NIC Turris 1.1 board with has Freescale P2020 processor.
+>>> Kernel during booting correctly detects P2020 and prints:
+>>> [    0.000000] Using Freescale P2020 machine description
+>>>
+>>> Changes in v4:
+>>> * Added several preparatory cleanup patchs
+>>> * Minimised churn by not duplicating helpers at the first place
+>>> * Split main patch in two
+>>> * Dropped patchs 1 and 2
+>>> * Untested beyond basic build test
+>>=20
+>> Changes looks good. I'm happy with them. You can add my:
+>>=20
+>> Reviewed-by: Pali Roh=C3=A1r <pali@kernel.org>
+>
+> Thanks.
+>
+> However this series doesn't have the shape for getting merged yet, I've=20
+> been very quick with the additional patches descriptions and I have not=20
+> revisited the descriptions of pre-existing patches.
+>
+> I was expecting you to take over. By the way there's no hurry I guess,=20
+> we are already in the middle of the merge window, Michael usually=20
+> doesn't take any more non-fixes patches once the merge window is open,=20
+> so that series will go in 6.4
 
-Signed-off-by: Prashanth K <quic_prashk@quicinc.com>
----
- drivers/usb/gadget/composite.c | 3 +++
- 1 file changed, 3 insertions(+)
+Correct.
 
-diff --git a/drivers/usb/gadget/composite.c b/drivers/usb/gadget/composite.c
-index 403563c..23b7347a8 100644
---- a/drivers/usb/gadget/composite.c
-+++ b/drivers/usb/gadget/composite.c
-@@ -2449,6 +2449,9 @@ void composite_resume(struct usb_gadget *gadget)
- 			usb_gadget_clear_selfpowered(gadget);
- 
- 		usb_gadget_vbus_draw(gadget, maxpower);
-+	} else {
-+		maxpower = min(CONFIG_USB_GADGET_VBUS_DRAW, 100U)
-+		usb_gadget_vbus_draw(gadget, maxpower);
- 	}
- 
- 	cdev->suspended = 0;
--- 
-2.7.4
+I'll open next for new patches around 6.3-rc2, so in ~2.5 weeks from now.
 
+cheers
